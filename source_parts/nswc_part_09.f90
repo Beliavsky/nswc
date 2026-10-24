@@ -301,11 +301,11 @@ IF (N .LT. 3) GO TO 200
 !     ELIMINATION, WITH S(I) ENDING UP IN A(I) FOR ALL I. A, B, C
 !     ARE USED INITIALLY FOR WORK SPACES.
 !
-do 10 M = 2,N
+DO M = 2,N
    B(M) = X(M) - X(M-1)
    IF (B(M) .LE. 0.0) GO TO 210
    C(M) = (Y(M) - Y(M-1))/B(M)
-10 CONTINUE
+END DO
 IERR = 0
 !
 !     CONSTRUCT THE FIRST EQUATION FROM THE BOUNDARY CONDITION, OF
@@ -340,11 +340,11 @@ A(1) = 3.0*C(2) - 0.5*ALPHA*B(2)
 !     M-TH EQUATION READS  C(M)*S(M) + B(M)*S(M+1) = A(M).
 !
 50 NM1 = N - 1
-do 51 M = 2,NM1
+DO M = 2,NM1
    T = -B(M+1)/C(M-1)
    A(M) = T*A(M-1) + 3.0*(B(M)*C(M+1) + B(M+1)*C(M))
    C(M) = T*B(M-1) + 2.0*(B(M) + B(M+1))
-51 CONTINUE
+END DO
 !
 !     IF THE SLOPE AT THE RIGHT END IS GIVEN, THEN SET A(N) TO THE
 !     SLOPE AND GO TO BACK SUBSTITUTION. OTHERWISE, CONSTRUCT THE
@@ -391,20 +391,20 @@ A(N) = (T*A(NM1) + A(N))/(T*B(NM1) + C(N))
 !
 !     CARRY OUT BACK SUBSTITUTION.
 !
-110 do 120 I = 1,NM1
+110 DO I = 1,NM1
    J = N - I
    A(J) = (A(J) - B(J)*A(J+1))/C(J)
-120 CONTINUE
+END DO
 !
 !     GENERATE THE CUBIC COEFFICIENTS B(I) AND C(I).
 !
-do 130 I = 1,NM1
+DO I = 1,NM1
    H = B(I+1)
    DEL = (Y(I+1) - Y(I))/H
    T = A(I) + A(I+1) - 2.0*DEL
    B(I) = (DEL - A(I) - T)/H
    C(I) = (T/H)/H
-130 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -590,10 +590,10 @@ WK(1) = BREAK(1)
 WK(2) = BREAK(1)
 WK(3) = BREAK(1)
 WK(4) = BREAK(1)
-do 10 J = 2,L
+DO J = 2,L
    IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
    WK(J + 3) = BREAK(J)
-10 CONTINUE
+END DO
 WK(L + 4) = BREAK(L)
 WK(L + 5) = BREAK(L)
 WK(L + 6) = BREAK(L)
@@ -661,10 +661,10 @@ WK(1) = BREAK(1)
 WK(2) = BREAK(1)
 WK(3) = BREAK(1)
 WK(4) = BREAK(1)
-do 10 J = 2,L
+DO J = 2,L
    IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
    WK(J + 3) = BREAK(J)
-10 CONTINUE
+END DO
 WK(L + 4) = BREAK(L)
 WK(L + 5) = BREAK(L)
 WK(L + 6) = BREAK(L)
@@ -1385,11 +1385,11 @@ SUM = (X(KP1) - A0)*SUM
 !
 IF (KP1 .EQ. L) GO TO 40
 LM1 = L - 1
-do 30 I = KP1,LM1
+DO I = KP1,LM1
    H = X(I + 1) - X(I)
    S = (((0.25*C(I)*H + B(I)/3.0)*H + 0.5*A(I))*H + Y(I))*H
    SUM = SUM + S
-30 CONTINUE
+END DO
 !
 !     INTEGRATE FROM X(L) TO B0
 !
@@ -1477,7 +1477,7 @@ SUM = (X(KP1) - A0)*SUM
 !
 IF (KP1 .EQ. L) GO TO 40
 LM1 = L - 1
-do 30 I = KP1,LM1
+DO I = KP1,LM1
    IP1 = I + 1
    H = X(IP1) - X(I)
    D = (Y(IP1) - Y(I))/H
@@ -1486,7 +1486,7 @@ do 30 I = KP1,LM1
    CI = (R - D - D)/(H*H)
    S = (((0.25*CI*H + BI/3.0)*H + 0.5*YP(I))*H + Y(I))*H
    SUM = SUM + S
-30 CONTINUE
+END DO
 !
 !     INTEGRATE FROM X(L) TO B0
 !
@@ -1578,13 +1578,13 @@ SUM = H*D*(0.5*R - H*H*D*S/24.0)
 !
 IF (KP1 .EQ. L) GO TO 40
 LM1 = L - 1
-do 30 I = KP1,LM1
+DO I = KP1,LM1
    IP1 = I + 1
    H = X(IP1) - X(I)
    R = Y(I) + Y(IP1)
    S = YPP(I) + YPP(IP1)
    SUM = SUM + H*(0.5*R - H*H*S/24.0)
-30 CONTINUE
+END DO
 !
 !     INTEGRATE FROM X(L) TO B0
 !
@@ -1650,7 +1650,7 @@ IF (N .EQ. 3) GO TO 20
 !
 !        A(I)*S(I) + B(I)*S(I+1) + C(I)*S(N-1) = T(I)
 !
-do 10 I = 2,NM2
+DO I = 2,NM2
    B(I) = H
    H = X(I+1) - X(I)
    IF (H .LE. 0.0) GO TO 110
@@ -1662,7 +1662,7 @@ do 10 I = 2,NM2
    DEL0 = DELI
    DELI = (Y(I+1) - Y(I))/H
    T(I) = 3.0*(H*DEL0 + B(I)*DELI) - E*T(I-1)
-10 CONTINUE
+END DO
 !
 20 IERR = 0
 B(NM1) = H
@@ -1687,12 +1687,12 @@ DELTA = 2.0*(H + B(1))
 R = 3.0*(B(1)*DELI + H*DEL)
 IF (N .EQ. 3) GO TO 40
 !
-do 30 I = 1,NM3
+DO I = 1,NM3
    E = ALPHA/A(I)
    ALPHA = - E*B(I)
    DELTA = DELTA - E*C(I)
    R = R - E*T(I)
-30 CONTINUE
+END DO
 !
 !     SOLVE THE LAST TWO EQUATIONS FOR S(N-1) AND S(N-2), AND
 !     STORE THESE SLOPES IN A.
@@ -1708,22 +1708,22 @@ IF (N .EQ. 3) GO TO 60
 !     THESE SLOPES ARE STORED IN A.
 !
 SI = A(NM2)
-do 50 J = 3,NM1
+DO J = 3,NM1
    I = N - J
    SI = (T(I) - B(I)*SI - C(I)*S)/A(I)
    A(I) = SI
-50 CONTINUE
+END DO
 !
 !     GENERATE THE CUBIC COEFFICIENTS B(I) AND C(I)
 !
 60 H = B(1)
-do 61 I = 1,NM2
+DO I = 1,NM2
    HI = B(I + 1)
    DELI = (Y(I+1) - Y(I))/HI
    W = A(I) + A(I+1) - 2.0*DELI
    B(I) = (DELI - A(I) - W)/HI
    C(I) = (W/HI)/HI
-61 CONTINUE
+END DO
 W = A(1) + A(NM1) - 2.0*DEL
 B(NM1) = (DEL - A(NM1) - W)/H
 C(NM1) = (W/H)/H
@@ -1764,10 +1764,10 @@ WK(1) = BREAK(1)
 WK(2) = BREAK(1)
 WK(3) = BREAK(1)
 WK(4) = BREAK(1)
-do 10 J = 2,L
+DO J = 2,L
    IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
    WK(J + 3) = BREAK(J)
-10 CONTINUE
+END DO
 WK(L + 4) = BREAK(L)
 WK(L + 5) = BREAK(L)
 WK(L + 6) = BREAK(L)
@@ -2031,26 +2031,26 @@ MM2 = M - 2
 !     THIS LAST KNOT IS NOT STORED.
 !
 T(1) = 0.0
-do 11 I = 2,M
+DO I = 2,M
    IM1 = I - 1
-   do 10 J = 1,N
+   DO J = 1,N
       DX(I,J) = X(I,J) - X(IM1,J)
-10 CONTINUE
+   END DO
    T(I) = T(IM1) + SNRM2(N,DX(I,1),KDX)
    R = T(I) - T(IM1)
    IF (R .EQ. 0.0) GO TO 200
-11 CONTINUE
+END DO
 !
-do 20 J = 1,N
+DO J = 1,N
    DX(1,J) = X(1,J) - X(M,J)
-20 CONTINUE
+END DO
 SUM = T(M) + SNRM2(N,DX(1,1),KDX)
 R = SUM - T(M)
 IF (R .EQ. 0.0) GO TO 210
 !
-do 30 I = 2,M
+DO I = 2,M
    T(I) = T(I)/SUM
-30 CONTINUE
+END DO
 IERR = 0
 !
 !     FOR J = 1,...,N, A DIAGONALLY DOMINANT SET OF EQUATIONS
@@ -2068,12 +2068,12 @@ B(1) = HM
 A(1) = 2.0*(H + HM)
 B(2) = H
 !
-do 40 J = 1,N
+DO J = 1,N
    DELM = DX(1,J)/HM
    DEL1 = DX(2,J)/H
    DX(1,J) = 3.0*(H*DELM + HM*DEL1)
    DX(2,J) = DEL1
-40 CONTINUE
+END DO
 IF (M .EQ. 2) GO TO 70
 !
 !     FOR THE KNOTS T(I) (I = 2,...M-1), GENERATE THE CORRESPOND-
@@ -2082,26 +2082,26 @@ IF (M .EQ. 2) GO TO 70
 !
 !        A(I)*S(I,J) + B(I)*S(I+1,J) + C(I)*S(M,J) = DX(I,J)
 !
-do 50 I = 2,MM1
+DO I = 2,MM1
    IM1 = I - 1
    B(I) = H
    H = T(I+1) - T(I)
    E(IM1) = H/A(IM1)
    C(I) = - E(IM1)*C(IM1)
    A(I) = 2.0*(B(I) + H) - E(IM1)*B(IM1)
-50 CONTINUE
+END DO
 B(M) = H
 !
-do 61 J = 1,N
+DO J = 1,N
    DELI = DX(2,J)
-   do 60 I = 2,MM1
+   DO I = 2,MM1
       H = B(I+1)
       DEL0 = DELI
       DELI = DX(I+1,J)/H
       DX(I,J) = 3.0*(H*DEL0 + B(I)*DELI) - E(I-1)*DX(I-1,J)
-60 CONTINUE
+   END DO
    DX(M,J) = DELI
-61 CONTINUE
+END DO
 !
 !     SINCE IT IS REQUIRED THAT THE SPLINE BE PERIODIC, THE
 !     EQUATION FOR THE KNOT T(M) HAS THE FORM ...
@@ -2120,47 +2120,47 @@ do 61 J = 1,N
 !
 70 ALPHA = H
 ETA = 2.0*(H + HM)
-do 71 J = 1,N
+DO J = 1,N
    DEL  = DX(M,J)
    DELM = (X(1,J) - X(M,J))/HM
    DX(M,J) = 3.0*(HM*DEL + H*DELM)
-71 CONTINUE
+END DO
 IF (M .EQ. 2) GO TO 90
 !
-do 81 I = 1,MM2
+DO I = 1,MM2
    P = ALPHA/A(I)
    ALPHA = - P*B(I)
    ETA = ETA - P*C(I)
-   do 80 J = 1,N
+   DO J = 1,N
       DX(M,J) = DX(M,J) - P*DX(I,J)
-80 CONTINUE
-81 CONTINUE
+   END DO
+END DO
 !
 !     SOLVE THE LAST TWO EQUATIONS FOR S(M,J) AND S(M-1,J),
 !     AND STORE THESE SLOPES IN DX.
 !
 90 P = (ALPHA + HM)/A(MM1)
 TAU = B(MM1) + C(MM1)
-do 91 J = 1,N
+DO J = 1,N
    SM = (DX(M,J) - P*DX(MM1,J))/(ETA - P*TAU)
    DX(M,J) = SM
    DX(MM1,J) = (DX(MM1,J) - TAU*SM)/A(MM1)
-91 CONTINUE
+END DO
 IF (M .EQ. 2) RETURN
 !
 !     BACK SUBSTITUTION TO OBTAIN THE REMAINING SLOPES S(I,J).
 !     THESE SLOPES ARE STORED IN DX.
 !
-do 101 J = 1,N
+DO J = 1,N
    SM = DX(M,J)
    SI = DX(MM1,J)
    I = MM1
-   do 100 L = 3,M
+   DO L = 3,M
       I = I - 1
       SI = (DX(I,J) - B(I)*SI - C(I)*SM)/A(I)
       DX(I,J) = SI
-100 CONTINUE
-101 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -2208,14 +2208,14 @@ GO TO 40
 !
 50 H = T(I+1) - T(I)
 DT = T0 - T(I)
-do 51 J = 1,N
+DO J = 1,N
    A = DX(I,J)
    D = (X(I+1,J) - X(I,J))/H
    W = A + DX(I+1,J)
    B = (-W - A + 3.0*D)/H
    C = ((W - D - D)/H)/H
    Z(K,J) = X(I,J) + DT*(A + DT*(B + DT*C))
-51 CONTINUE
+END DO
 GO TO 100
 !
 !     COMPUTATION WHEN T0 .GE. T(M)
@@ -2223,14 +2223,14 @@ GO TO 100
 60 I = M
 H = 1.0 - T(M)
 DT = T0 - T(M)
-do 61 J = 1,N
+DO J = 1,N
    A = DX(M,J)
    D = (X(1,J) - X(M,J))/H
    W = A + DX(1,J)
    B = (-W - A + 3.0*D)/H
    C = ((W - D - D)/H)/H
    Z(K,J) = X(M,J) + DT*(A + DT*(B + DT*C))
-61 CONTINUE
+END DO
 !
 !     NEXT POINT
 !
@@ -2278,7 +2278,7 @@ GO TO 10
 !
 40 H = T(I+1) - T(I)
 DT = T0 - T(I)
-do 41 J = 1,N
+DO J = 1,N
    A = DX(I,J)
    D = (X(I+1,J) - X(I,J))/H
    W = A + DX(I+1,J)
@@ -2289,14 +2289,14 @@ do 41 J = 1,N
    C = 3.0*C
    DZ(J) = A + DT*(B + C*DT)
    DDZ(J) = B + (C + C)*DT
-41 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTATION WHEN T0 .GE. T(M)
 !
 50 H = 1.0 - T(M)
 DT = T0 - T(M)
-do 51 J = 1,N
+DO J = 1,N
    A = DX(M,J)
    D = (X(1,J) - X(M,J))/H
    W = A + DX(1,J)
@@ -2307,7 +2307,7 @@ do 51 J = 1,N
    C = 3.0*C
    DZ(J) = A + DT*(B + C*DT)
    DDZ(J) = B + (C + C)*DT
-51 CONTINUE
+END DO
 RETURN
 END SUBROUTINE LOPDF
 
@@ -3948,52 +3948,52 @@ IF (IMK .GE. 0) GO TO 40
 !
    JCMIN = 1 - IMK
    L = I
-   do 20 J = 1,I
+   DO J = 1,I
       WK(J,2) = X - T(L)
       L = L - 1
-20 CONTINUE
-   do 30 J = I,KM1
+   END DO
+   DO J = I,KM1
       L = K - J
       WK(L,1) = 0.0
       WK(J,2) = WK(I,2)
-30 CONTINUE
+   END DO
    GO TO 60
 !
 40 L = I
-do 50 J = 1,KM1
+DO J = 1,KM1
    WK(J,2) = X - T(L)
    L = L - 1
-50 CONTINUE
+END DO
 !
 60 JCMAX = K
 NMI = N - I
 IF (NMI .GE. 0) GO TO 100
 !
    JCMAX = K + NMI
-   do 70 J = 1,JCMAX
+   DO J = 1,JCMAX
       IPJ = I + J
       WK(J,3) = T(IPJ) - X
-70 CONTINUE
-   do 80 J = JCMAX,KM1
+   END DO
+   DO J = JCMAX,KM1
       WK(J+1,1) = 0.0
       WK(J,3) = WK(JCMAX,3)
-80 CONTINUE
+   END DO
    GO TO 120
 !
-100 do 110 J = 1,KM1
+100 DO J = 1,KM1
    IPJ = I + J
    WK(J,3) = T(IPJ) - X
-110 CONTINUE
+END DO
 !
-120 do 130 JC = JCMIN,JCMAX
+120 DO JC = JCMIN,JCMAX
    L = IMK + JC
    WK(JC,1) = BCOEF(L)
-130 CONTINUE
+END DO
 !
 !               *** DIFFERENCE THE COEFFICIENTS  JDERIV  TIMES.
 !
 IF (JDERIV .EQ. 0) GO TO 170
-do 160 J = 1,JDERIV
+DO J = 1,JDERIV
    KMJ = K - J
    FKMJ = KMJ
    L = KMJ
@@ -4002,14 +4002,14 @@ do 160 J = 1,JDERIV
       DR = WK(JJ,3)
       WK(JJ,1) = ((WK(JJ+1,1) - WK(JJ,1))/(DL + DR))*FKMJ
 150 L = L - 1
-160 CONTINUE
+END DO
 !
 !  *** COMPUTE VALUE AT X IN (T(I),T(I+1)) OF JDERIV-TH DERIVATIVE,
 !     GIVEN ITS RELEVANT B-SPLINE COEFFS IN WK(1,1),...,WK(K-JDERIV,1).
 !
 170 IF (JDERIV .EQ. KM1) GO TO 200
 JDRVP1 = JDERIV + 1
-do 190 J = JDRVP1,KM1
+DO J = JDRVP1,KM1
    KMJ = K - J
    L = KMJ
    do 180 JJ = 1,KMJ
@@ -4017,7 +4017,7 @@ do 190 J = JDRVP1,KM1
       DR = WK(JJ,3)
       WK(JJ,1) = (WK(JJ+1,1)*DL + WK(JJ,1)*DR)/(DL + DR)
 180 L = L - 1
-190 CONTINUE
+END DO
 !
 200 W = WK(1,1)
 RETURN
@@ -4048,11 +4048,11 @@ IF (TLAST .GT.  0.0) TNEW = 1.1*TLAST
 !     COMPUTE THE FIRST N COEFFICIENTS OF THE ANTIDERIVATIVE
 !
 SUM = 0.0
-do 10 I = 1,N
+DO I = 1,N
    IPK = I + K
    SUM = SUM + BCOEFF(I)*(T(IPK) - T(I))
    WK(I) = SUM/K
-10 CONTINUE
+END DO
 !
 !     COMPUTE THE ANTIDERIVATIVE
 !
@@ -4110,39 +4110,39 @@ IF (IMK .GE. 0) GO TO 30
 !
    JCMIN = 1 - IMK
    L = I
-   do 10 J = 1,I
+   DO J = 1,I
       WK(J,2) = X - T(L)
       L = L - 1
-10 CONTINUE
-   do 20 J = I,KM1
+   END DO
+   DO J = I,KM1
       L = K - J
       WK(L,1) = 0.0
       WK(J,2) = WK(I,2)
-20 CONTINUE
+   END DO
    GO TO 50
 !
 30 L = I
-do 40 J = 1,KM1
+DO J = 1,KM1
    WK(J,2) = X - T(L)
    L = L - 1
-40 CONTINUE
+END DO
 !
-50 do 60 J = 1,KM1
+50 DO J = 1,KM1
    TIPJ = TNEW
    IPJ = I + J
    IF (IPJ .LE. M) TIPJ = T(IPJ)
    WK(J,3) = TIPJ - X
-60 CONTINUE
+END DO
 !
-do 70 JC = JCMIN,K
+DO JC = JCMIN,K
    L = MIN0(IMK + JC, N)
    WK(JC,1) = BCOEF(L)
-70 CONTINUE
+END DO
 !
 !  *** COMPUTE VALUE AT X IN (T(I),T(I+1)), GIVEN ITS RELEVANT
 !     B-SPLINE COEFFS IN WK(1,1),...,WK(K,1).
 !
-do 110 J = 1,KM1
+DO J = 1,KM1
    KMJ = K - J
    L = KMJ
    do 100 JJ = 1,KMJ
@@ -4150,7 +4150,7 @@ do 110 J = 1,KM1
       DR = WK(JJ,3)
       WK(JJ,1) = (WK(JJ+1,1)*DL + WK(JJ,1)*DR)/(DL + DR)
 100 L = L - 1
-110 CONTINUE
+END DO
 !
 W = WK(1,1)
 RETURN
@@ -4198,46 +4198,46 @@ do 60 LEFT = K,N
    IF (T(LEFT) .EQ. T(LEFT + 1)) GO TO 60
    L = L + 1
    BREAK(L + 1) = T(LEFT + 1)
-   do 10 J = 1,K
+   DO J = 1,K
       JJ = LEFT - K + J
       WK(J,1) = A(JJ)
-10 CONTINUE
+   END DO
 !
-   do 21 J = 1,KM1
+   DO J = 1,KM1
       JP1 = J + 1
       KMJ = K - J
-      do 20 I = 1,KMJ
+      DO I = 1,KMJ
          IL = I + LEFT
          ILKJ = IL - KMJ
          DIFF = T(IL) - T(ILKJ)
          WK(I,JP1) = (WK(I+1,J) - WK(I,J))/DIFF
-20 CONTINUE
-21 CONTINUE
+      END DO
+   END DO
 !
    WK(1,KP1) = 1.0
    X = T(LEFT)
    C(K,L) = WK(1,K)
    R = 1.0
-   do 50 J = 1,KM1
+   DO J = 1,KM1
       JP1 = J + 1
       S = 0.0
-      do 30 I = 1,J
+      DO I = 1,J
          IL = I + LEFT
          ILJ = IL - J
          TERM = WK(I,KP1)/(T(IL) - T(ILJ))
          WK(I,KP1) = S + (T(IL) - X)*TERM
          S = (X - T(ILJ))*TERM
-30 CONTINUE
+      END DO
       WK(JP1,KP1) = S
 !
       S = 0.0
       KMJ = K - J
-      do 40 I = 1,JP1
+      DO I = 1,JP1
          S = S + WK(I,KMJ)*WK(I,KP1)
-40 CONTINUE
+      END DO
       R = (R*FLOAT(KMJ))/FLOAT(J)
       C(KMJ,L) = R*S
-50 CONTINUE
+   END DO
 60 CONTINUE
 RETURN
 !
@@ -4321,10 +4321,10 @@ GO TO 100
 100 DX = XX - X(I)
 S = A(L,I)
 IF (L .EQ. 1) GO TO 120
-do 110 J = 1,LM1
+DO J = 1,LM1
    LMJ = L - J
    S = A(LMJ,I) + DX*S
-110 CONTINUE
+END DO
 120 YI(K) = S
 !
 !     NEXT POINT
@@ -4381,7 +4381,7 @@ IF (J .GT. 0) GO TO 10
    IF (J .GE. JHIGH) RETURN
 !
 10 S = 0.0
-do 20 L = 1,J
+DO L = 1,J
    I = LEFT + L
    IMJ = I - J
    TIMJ = T(IMJ)
@@ -4389,7 +4389,7 @@ do 20 L = 1,J
    TERM = BLIST(L)/(TI - TIMJ)
    BLIST(L) = S + (TI - X)*TERM
    S = (X - TIMJ)*TERM
-20 CONTINUE
+END DO
 J = J + 1
 BLIST(J) = S
 IF (J .LT. JHIGH) GO TO 10
@@ -4462,14 +4462,14 @@ IF (MHIGH .EQ. 1) RETURN
 !     HIGHER ORDER ON TOP OF IT.
 !
 IDERIV = MHIGH
-do 15 M = 2,MHIGH
+DO M = 2,MHIGH
    JP1MID = 1
    do 10 J = IDERIV,K
       DBIATX(J,IDERIV) = DBIATX(JP1MID,1)
 10 JP1MID = JP1MID + 1
    IDERIV = IDERIV - 1
    CALL BSPVB (T, K, KP1 - IDERIV, JJ, X, LEFT, DBIATX)
-15 CONTINUE
+END DO
 !
 !     AT THIS POINT, B(LEFT-K+I, K+1-J)(X) IS IN DBIATX(I,J) FOR
 !     I = J,...,K AND J = 1,...,MHIGH. IN PARTICULAR, THE FIRST
@@ -4487,7 +4487,7 @@ do 20 I = 1,K
 !     AT THIS POINT, A(.,J) CONTAINS THE B-COEFFS FOR THE J-TH OF THE
 !     K  B-SPLINES OF INTEREST HERE.
 !
-do 50 M = 2,MHIGH
+DO M = 2,MHIGH
    KP1MM = KP1 - M
    FKP1MM = FLOAT(KP1MM)
    IL = LEFT
@@ -4498,7 +4498,7 @@ do 50 M = 2,MHIGH
 !        AND STORE AGAIN IN  A(.,J) . THE FACT THAT  A(I,J) = 0  FOR
 !        I .LT. J  IS USED.
 !
-   do 30 LDUMMY = 1,KP1MM
+   DO LDUMMY = 1,KP1MM
       L = IL + KP1MM
       FACTOR = FKP1MM/(T(L) - T(IL))
 !
@@ -4509,7 +4509,7 @@ do 50 M = 2,MHIGH
 25 A(I,J) = (A(I,J) - A(I-1,J))*FACTOR
       IL = IL - 1
       I = I - 1
-30 CONTINUE
+   END DO
 !
 !        FOR I = 1,...,K, COMBINE B-COEFFS A(.,I) WITH B-SPLINE VALUES
 !        STORED IN DBIATX(.,M) TO GET VALUE OF  (M-1)ST  DERIVATIVE OF
@@ -4519,14 +4519,14 @@ do 50 M = 2,MHIGH
 !        IVES OF THE SAME ORDER DO NOT USE THIS VALUE DUE TO THE FACT
 !        THAT  A(J,I) = 0  FOR J .LT. I .
 !
-   do 40 I = 1,K
+   DO I = 1,K
       SUM = 0.0
       JLOW = MAX0(I,M)
       do 35 J = JLOW,K
 35 SUM = A(J,I)*DBIATX(J,M) + SUM
       DBIATX(I,M) = SUM
-40 CONTINUE
-50 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE BSPVD
 
@@ -4587,22 +4587,22 @@ IF (N .EQ. 1) GO TO 20
 !
 !        CHECK IF TAU(I) IS AN INCREASING SEQUENCE
 !
-do 10 I = 2,N
+DO I = 2,N
    IF (TAU(I) .LE. TAU(I-1)) GO TO 100
-10 CONTINUE
+END DO
 !
 !                ZERO OUT ALL ENTRIES OF Q
 !
 20 IF (TAU(N) .GT. T(NP1)) GO TO 100
 LENQ = N*(K + KM1)
-do 21 I = 1,LENQ
+DO I = 1,LENQ
    Q(I) = 0.0
-21 CONTINUE
+END DO
 !
 !  ***   LOOP OVER I TO CONSTRUCT THE N INTERPOLATION EQUATIONS
 !
 LEFT = K
-do 51 I = 1,N
+DO I = 1,N
    TAUI = TAU(I)
    ILP1MX = MIN0(I + K,NP1)
 !
@@ -4638,11 +4638,11 @@ do 51 I = 1,N
 !        OF  Q .
 !
    JJ = I - LEFT + 1 + (LEFT - K)*(K + KM1)
-   do 50 J = 1,K
+   DO J = 1,K
       JJ = JJ + KPKM2
       Q(JJ) = BCOEF(J)
-50 CONTINUE
-51 CONTINUE
+   END DO
+END DO
 !
 !     ***OBTAIN FACTORIZATION OF  A  , STORED AGAIN IN  Q.
 !
@@ -4652,9 +4652,9 @@ IF (IFLAG .NE. 0) RETURN
 !
 !     *** SOLVE  A*BCOEF = GTAU  BY BACKSUBSTITUTION
 !
-60 do 61 I = 1,N
+60 DO I = 1,N
    BCOEF(I) = GTAU(I)
-61 CONTINUE
+END DO
 CALL BANSLV (Q, K + KM1, N, KM1, KM1, BCOEF)
 RETURN
 !
@@ -4729,9 +4729,9 @@ NROWM1 = NROW - 1
 IF (NROWM1)                       999,900,1
 1 IF (NBANDL .GT. 0)                GO TO 10
 !                A IS UPPER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO .
-do 5 I = 1,NROWM1
+DO I=1,NROWM1
    IF (W(MIDDLE,I) .EQ. 0.)       GO TO 999
-5 CONTINUE
+   END DO
                                   GO TO 900
 10 IF (NBANDU .GT. 0)                GO TO 20
 !              A IS LOWER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO AND
@@ -4747,7 +4747,7 @@ do 15 I = 1,NROWM1
                                   GO TO 900
 !
 !        A  IS NOT JUST A TRIANGULAR MATRIX. CONSTRUCT LU FACTORIZATION
-20 do 50 I = 1,NROWM1
+20 DO I=1,NROWM1
 !                                  W(MIDDLE,I)  IS PIVOT FOR I-TH STEP .
    PIVOT = W(MIDDLE,I)
    IF (PIVOT .EQ. 0.)             GO TO 999
@@ -4772,7 +4772,7 @@ do 15 I = 1,NROWM1
          MJ = MIDDLE + J
          MDJ = MIDMK + J
 40 W(MDJ,IPK) = W(MDJ,IPK) - W(MJ,I)*FACTOR
-50 CONTINUE
+   END DO
 !                                       CHECK THE LAST DIAGONAL ENTRY .
 900 IF (W(MIDDLE,NROW) .NE. 0.)       RETURN
 999 IFLAG = 2
@@ -4875,19 +4875,19 @@ REAL T(*), A(N), WK(N), Q(K,N)
 IF (NTAU .LT. MAX0(2,K)) GO TO 100
 IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
 !
-do 10 I = 2,NTAU
+DO I = 2,NTAU
    IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
-10 CONTINUE
+END DO
 !
-do 21 J = 1,N
+DO J = 1,N
    A(J) = 0.0
-   do 20 I = 1,K
+   DO I = 1,K
       Q(I,J) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 !
 LEFT = K
-do 70 L = 1,NTAU
+DO L = 1,NTAU
 !
 !        *** FIND THE INDEX LEFT SUCH THAT
 !            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
@@ -4901,17 +4901,17 @@ do 70 L = 1,NTAU
    CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
 !
    LEFTMK = LEFT - K
-   do 61 MM = 1,K
+   DO MM = 1,K
       DW = WK(MM)*WGT(L)
       J = LEFTMK + MM
       A(J) = DW*GTAU(L) + A(J)
       I = 1
-      do 60 JJ = MM,K
+      DO JJ = MM,K
          Q(I,J) = WK(JJ)*DW + Q(I,J)
          I = I + 1
-60 CONTINUE
-61 CONTINUE
-70 CONTINUE
+      END DO
+   END DO
+END DO
 !
 !        SOLVE THE NORMAL EQUATIONS
 !
@@ -5003,9 +5003,9 @@ IF (N .GT. 1) GO TO 10
 !
 !     STORE THE DIAGONAL OF C IN DIAG
 !
-10 do 11 K = 1,N
+10 DO K = 1,N
    DIAG(K) = W(1,K)
-11 CONTINUE
+END DO
 !
 !     FACTORIZATION
 !
@@ -5014,9 +5014,9 @@ do 60 K = 1,N
    T = W(1,K) + DIAG(K)
    IF (T .NE. DIAG(K)) GO TO 30
       IFLAG = 1
-      do 20 J = 1,NB
+      DO J = 1,NB
          W(J,K) = 0.0
-20 CONTINUE
+      END DO
       GO TO 60
 !
 30 T = 1.0/W(1,K)
@@ -5024,16 +5024,16 @@ do 60 K = 1,N
    IMAX = MIN0(NB - 1,N - K)
    IF (IMAX .LT. 1) GO TO 60
    JMAX = IMAX
-   do 50 I = 1,IMAX
+   DO I = 1,IMAX
       RATIO = T*W(I+1,K)
       KPI = K + I
-      do 40 J = 1,JMAX
+      DO J = 1,JMAX
          IPJ = I + J
          W(J,KPI) = W(J,KPI) - W(IPJ,K)*RATIO
-40 CONTINUE
+      END DO
       JMAX = JMAX - 1
       W(I+1,K) = RATIO
-50 CONTINUE
+   END DO
 60 CONTINUE
 RETURN
 END SUBROUTINE BCHFAC
@@ -5073,10 +5073,10 @@ RETURN
 do 30 K = 1,N
    JMAX = MIN0(NBM1,N - K)
    IF (JMAX .LT. 1) GO TO 30
-   do 20 J = 1,JMAX
+   DO J = 1,JMAX
       JPK = J + K
       B(JPK) = B(JPK) - W(J + 1,K)*B(K)
-20 CONTINUE
+   END DO
 30 CONTINUE
 !                              T     -1
 !     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
@@ -5085,10 +5085,10 @@ K = N
 40 B(K) = B(K)*W(1,K)
    JMAX = MIN0(NBM1,N - K)
    IF (JMAX .LT. 1) GO TO 60
-   do 50 J = 1,JMAX
+   DO J = 1,JMAX
       JPK = J + K
       B(K) = B(K) - W(J + 1,K)*B(JPK)
-50 CONTINUE
+   END DO
 60 K = K - 1
    IF (K .GT. 0) GO TO 40
 RETURN
@@ -5372,9 +5372,9 @@ IF (NDATA .LT. 1 .OR. NCONST .LT. 0) GO TO 810
 !
 IF (MODE .NE. 0) GO TO 120
 M = NBKPT - 1
-do 110 I = 1,M
+DO I = 1,M
    IF (BKPT(I) .GT. BKPT(I+1)) GO TO 820
-110 CONTINUE
+END DO
 !
 !     AMOUNT OF STORAGE ALLOCATED FOR W(*),IW(*)
 !
@@ -5410,10 +5410,10 @@ INTW1 = NINCON + 2*L
 XMIN = BKPT(NORD)
 XMAX = BKPT(NP1)
 IF (NCONST .EQ. 0) GO TO 170
-do 160 I = 1,NCONST
+DO I = 1,NCONST
    IF (XCONST(I) .LT. XMIN .OR. XCONST(I) .GT. XMAX) &
 &GO TO 840
-160 CONTINUE
+END DO
 !
 !     INITIALIZE PARAMETERS
 !
@@ -5448,9 +5448,9 @@ IF (XDATA(1) .LT. XMIN .OR. XDATA(NDATA) .GT. XMAX) &
 IF (NDATA .EQ. 1) GO TO 200
 !
 M = NDATA - 1
-do 180 I = 1,M
+DO I = 1,M
    IF (XDATA(I) .GE. XDATA(I+1)) GO TO 830
-180 CONTINUE
+END DO
 !
 !     INITIALIZE PARAMETERS OF BANDED MATRIX PROCESSOR, BNDACC( )
 !
@@ -5510,9 +5510,9 @@ G(IR,1) = 0.0
 CALL SCOPY (NORDP1, G(IR,1), 0, G(IR,1), MDG)
 CALL BNDACC (G, MDG, NORD, IP, IR, 1, NP1)
 !
-260 do 270 I = 1,N
+260 DO I = 1,N
   BAND = BAND .AND. G(I,1) .NE. 0.0
-270 CONTINUE
+END DO
 GO TO 10
 !-----------------------------------------------------------------------
 !       ANALYZE CONSTRAINT INDICATORS FOR EQUALITY CONSTRAINTS
@@ -5560,13 +5560,13 @@ GO TO 310
 !-----------------------------------------------------------------------
 !                    TRANSFER-LEAST-SQUARES DATA
 !-----------------------------------------------------------------------
-400 do 410 I = 1,NP1
+400 DO I = 1,NP1
   IROW = I + NEQCON
   W(IROW,1) = 0.0
   CALL SCOPY (N, W(IROW,1), 0, W(IROW,1), MDW)
   CALL SCOPY (MIN0(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
   W(IROW,NP1) = G(I,NORDP1)
-410 CONTINUE
+END DO
 !-----------------------------------------------------------------------
 !      ANALYZE CONSTRAINT INDICATORS FOR INEQUALITY CONSTRAINTS
 !-----------------------------------------------------------------------
@@ -5785,61 +5785,61 @@ IF (JT .EQ. IP) GO TO 70
 !                                             ALG. STEPS 6-7
 IF (JT .LE. IR) GO TO 30
 !                                             ALG. STEPS 8-9
-do 11 I = 1,MT
+DO I = 1,MT
    IG1 = JT + MT - I
    IG2 = IR + MT - I
-   do 10 J = 1,NBP1
+   DO J = 1,NBP1
       G(IG1,J) = G(IG2,J)
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 !                                             ALG. STEP 10
 IE = JT - IR
-do 21 I = 1,IE
+DO I = 1,IE
    IG = IR + I - 1
-   do 20 J = 1,NBP1
+   DO J = 1,NBP1
      G(IG,J) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 !                                             ALG. STEP 11
 IR = JT
 !                                             ALG. STEP 12
 30 MU = MIN0(NB - 1, IR - IP - 1)
 IF (MU .EQ. 0) GO TO 60
 !                                             ALG. STEP 13
-do 50 L = 1,MU
+DO L = 1,MU
 !                                             ALG. STEP 14
    K = MIN0(L, JT - IP)
 !                                             ALG. STEP 15
    LP1 = L + 1
    IG = IP + L
-   do 40 I = LP1,NB
+   DO I = LP1,NB
       JG = I - K
       G(IG,JG) = G(IG,I)
-40 CONTINUE
+   END DO
 !                                             ALG. STEP 16
-   do 45 I = 1,K
+   DO I = 1,K
       JG = NBP1 - I
       G(IG,JG) = 0.0
-45 CONTINUE
-50 CONTINUE
+   END DO
+END DO
 !                                             ALG. STEP 17
 60 IP = JT
 !                                             ALG. STEPS 18-19
 70 MH = IR + MT - IP
 KH = MIN0(NBP1, MH)
 !                                             ALG. STEP 20
-do 80 I = 1,KH
+DO I = 1,KH
    CALL H12 (1,I,MAX0(I+1,IR-IP+1),MH,G(IP,I),1,RHO, &
 &G(IP,I+1),1,MDG,NBP1-I)
-80 CONTINUE
+END DO
 !                                             ALG. STEP 21
 IR = IP + KH
 !                                             ALG. STEP 22
 IF (KH .LT. NBP1) GO TO 100
 !                                             ALG. STEP 23
-do 90 I = 1,NB
+DO I = 1,NB
    G(IR-1,I) = 0.0
-90 CONTINUE
+END DO
 !                                             ALG. STEP 24
 100 CONTINUE
 !                                             ALG. STEP 25
@@ -5972,21 +5972,21 @@ RNORM = 0.0
 GO TO (10,90,50), MODE
 !                                   ********************* MODE = 1
 !                                   ALG. STEP 26
-10 do 20 J = 1,N
+10 DO J = 1,N
    X(J) = G(J, NB+1)
-20 CONTINUE
+END DO
 RSQ = 0.0
 NP1 = N + 1
 IRM1 = IR - 1
 IF (NP1 .GT. IRM1) GO TO 40
-   do 30 J = NP1,IRM1
+   DO J = NP1,IRM1
       RSQ = RSQ + G(J, NB+1)**2
-30 CONTINUE
+   END DO
    RNORM = SQRT(RSQ)
 40 CONTINUE
 !                                   ********************* MODE = 3
 !                                   ALG. STEP 27
-50 do 80 II = 1,N
+50 DO II = 1,N
    I = N + 1 - II
 !                                   ALG. STEP 28
    S = 0.0
@@ -5995,31 +5995,31 @@ IF (NP1 .GT. IRM1) GO TO 40
    IF (I .EQ. N) GO TO 70
 !                                   ALG. STEP 30
       IE = MIN0(N + 1 - I, NB)
-      do 60 J = 2,IE
+      DO J = 2,IE
          JG = J + L
          IX = I - 1 + J
          S = S + G(I,JG)*X(IX)
-60 CONTINUE
+      END DO
 !                                   ALG. STEP 31
 70 IF (G(I,L+1) .EQ. 0.0) GO TO 130
    X(I) = (X(I) - S)/G(I,L+1)
-80 CONTINUE
+END DO
 !                                   ALG. STEP 32
 RETURN
 !                                   ********************* MODE = 2
-90 do 120 J = 1,N
+90 DO J = 1,N
    S = 0.0
    IF (J .EQ. 1) GO TO 110
       I1 = MAX0(1, J - NB + 1)
       I2 = J - 1
-      do 100 I = I1,I2
+      DO I = I1,I2
          L = J - I + 1 + MAX0(0, I - IP)
          S = S + X(I)*G(I,L)
-100 CONTINUE
+      END DO
 110 L = MAX0(0, J - IP)
    IF (G(J,L+1) .EQ. 0.0) GO TO 130
    X(J) = (X(J) - S)/G(J,L+1)
-120 CONTINUE
+END DO
 RETURN
 !
 !            A ZERO DIAGONAL TERM OCCURS
@@ -6084,10 +6084,10 @@ S(1) = XBREAK(1)
 S(2) = XBREAK(1)
 S(3) = XBREAK(1)
 S(4) = XBREAK(1)
-do 10 I = 2,NX
+DO I = 2,NX
    IF (XBREAK(I - 1) .GE. XBREAK(I)) GO TO 100
    S(I + 3) = XBREAK(I)
-10 CONTINUE
+END DO
 S(NX + 4) = XBREAK(NX)
 S(NX + 5) = XBREAK(NX)
 S(NX + 6) = XBREAK(NX)
@@ -6096,10 +6096,10 @@ T(1) = YBREAK(1)
 T(2) = YBREAK(1)
 T(3) = YBREAK(1)
 T(4) = YBREAK(1)
-do 20 J = 2,NY
+DO J = 2,NY
    IF (YBREAK(J - 1) .GE. YBREAK(J)) GO TO 120
    T(J + 3) = YBREAK(J)
-20 CONTINUE
+END DO
 T(NY + 4) = YBREAK(NY)
 T(NY + 5) = YBREAK(NY)
 T(NY + 6) = YBREAK(NY)
@@ -6113,9 +6113,9 @@ IF (IERR .LT. 0) GO TO 110
 IERR = 0
 !
 L = M*N
-do 30 I = 1,L
+DO I = 1,L
    WK(I) = F(I)
-30 CONTINUE
+END DO
 !
 !     COMPUTE THE N CUBIC SPLINES G (X) AND THEIR FIRST
 !                                  J
@@ -6128,9 +6128,9 @@ L = 2*NU + 1
 CALL CSPP (S, WK, M, M, N, F(L), N, F(1), N)
 !
 IMAX = N*NX
-do 40 I = 1,IMAX
+DO I = 1,IMAX
    WK(I) = F(I)
-40 CONTINUE
+END DO
 !
 !     COMPUTE THE VALUES OF THE BISPLINE AND THEIR PARTIAL
 !     DERIVATIVES WITH RESPECT TO Y. THE RESULTS ARE STORED
@@ -6197,12 +6197,12 @@ REAL C(4), WK(4,5)
 !
 K = 4
 MP1 = M + 1
-do 70 MU = 1,N
+DO MU = 1,N
 !
 !        OBTAING THE VALUES FOR THE MU-TH CUBIC SPLINE
 !
    L = 0
-   do 60 LEFT = K,M
+   DO LEFT = K,M
       L = L + 1
 !
 !           COMPUTE THE COEFFICIENTS FOR THE L-TH
@@ -6210,53 +6210,53 @@ do 70 MU = 1,N
 !           COEFFICIENTS ARE STORED IN C. THIS CODE
 !           IS FROM THE SUBROUTINE BSPP.
 !
-      do 10 J = 1,K
+      DO J = 1,K
          JJ = LEFT - K + J
          WK(J,1) = A(JJ,MU)
-10 CONTINUE
+      END DO
 !
-      do 21 J = 1,3
+      DO J = 1,3
          JP1 = J + 1
          KMJ = K - J
-         do 20 I = 1,KMJ
+         DO I = 1,KMJ
             IL = I + LEFT
             ILKJ = IL - KMJ
             DIFF = T(IL) - T(ILKJ)
             WK(I,JP1) = (WK(I+1,J) - WK(I,J))/DIFF
-20 CONTINUE
-21 CONTINUE
+         END DO
+      END DO
 !
       WK(1,5) = 1.0
       X = T(LEFT)
       C(4) = WK(1,4)
       R = 1.0
-      do 50 J = 1,3
+      DO J = 1,3
          JP1 = J + 1
          S = 0.0
-         do 30 I = 1,J
+         DO I = 1,J
             IL = I + LEFT
             ILJ = IL - J
             TERM = WK(I,5)/(T(IL) - T(ILJ))
             WK(I,5) = S + (T(IL) - X)*TERM
             S = (X - T(ILJ))*TERM
-30 CONTINUE
+         END DO
          WK(JP1,5) = S
 !
          S = 0.0
          KMJ = K - J
-         do 40 I = 1,JP1
+         DO I = 1,JP1
             S = S + WK(I,KMJ)*WK(I,5)
-40 CONTINUE
+         END DO
          R = (R*FLOAT(KMJ))/FLOAT(J)
          C(KMJ) = R*S
-50 CONTINUE
+      END DO
 !
 !           STORE THE VALUE OF THE SPLINE AND ITS
 !           FIRST DERIVATIVE AT THE KNOT T(LEFT)
 !
       Z(MU,L) = C(1)
       DZ(MU,L) = C(2)
-60 CONTINUE
+   END DO
 !
 !        COMPUTE THE SPLINE AND ITS FIRST DERIVATIVE
 !                    AT THE KNOT T(M+1)
@@ -6265,7 +6265,7 @@ do 70 MU = 1,N
    DEL = T(MP1) - T(M)
    Z(MU,L) = ((C(4)*DEL + C(3))*DEL + C(2))*DEL + C(1)
    DZ(MU,L) = (3.0*C(4)*DEL + 2.0*C(3))*DEL + C(2)
-70 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CSPP
 
@@ -6286,7 +6286,7 @@ NM1 = N - 1
 !
 IOLD = 0
 JOLD = 0
-do 360 L = 1,MY
+DO L = 1,MY
    YY = Y(L)
    IF (YY .LT. T(2)) GO TO 10
    IF (YY .GE. T(NM1)) GO TO 20
@@ -6411,16 +6411,16 @@ do 360 L = 1,MY
 !
 350 CONTINUE
    JOLD = J
-360 CONTINUE
+END DO
 RETURN
 !
 !     CASE WHEN THE RESULTS ARE ZERO.
 !
-400 do 420 L = 1,MY
-   do 410 K = 1,MX
+400 DO L = 1,MY
+   DO K = 1,MX
       Z(K,L) = 0.0
-410 CONTINUE
-420 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CSURF
 
@@ -6456,7 +6456,7 @@ NM1 = N - 1
 !
 IOLD = 0
 JOLD = 0
-do 360 L = 1,MY
+DO L = 1,MY
    YY = Y(L)
    IF (YY .LT. T(2)) GO TO 10
    IF (YY .GE. T(NM1)) GO TO 20
@@ -6576,16 +6576,16 @@ do 360 L = 1,MY
 !
 350 CONTINUE
    JOLD = J
-360 CONTINUE
+END DO
 RETURN
 !
 !     CASE WHEN THE RESULTS ARE ZERO.
 !
-400 do 420 L = 1,MY
-   do 410 K = 1,MX
+400 DO L = 1,MY
+   DO K = 1,MX
       Z(K,L) = 0.0
-410 CONTINUE
-420 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CSRF
 
@@ -7371,19 +7371,19 @@ MP1 = M + 1
 CALL BSTRP (X, Z, T, M, K, WORK(1), WORK(MP1), IFLAG)
 IF (IFLAG .NE. 0) RETURN
 !
-do 10 I = 1,M
+DO I = 1,M
    A(1,I) = WORK(I)
-10 CONTINUE
+END DO
 IF (N .EQ. 1) RETURN
 !
 !     REMAINING DATA SETS
 !
-do 30 J = 2,N
+DO J = 2,N
    CALL BSTRP (X, Z(1,J), T, M, K, WORK(1), WORK(MP1), IFLAG)
-   do 20 I = 1,M
+   DO I = 1,M
       A(J,I) = WORK(I)
-20 CONTINUE
-30 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE BSTRP1
 
@@ -7492,24 +7492,24 @@ REAL T(*), A(KA,N), WK(N), Q(K,N)
 IF (NTAU .LT. MAX0(2,K)) GO TO 100
 IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
 !
-do 10 I = 2,NTAU
+DO I = 2,NTAU
    IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
-10 CONTINUE
+END DO
 !
-do 21 J = 1,N
-   do 20 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       A(I,J) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 !
-do 31 J = 1,N
-   do 30 I = 1,K
+DO J = 1,N
+   DO I = 1,K
       Q(I,J) = 0.0
-30 CONTINUE
-31 CONTINUE
+   END DO
+END DO
 !
 LEFT = K
-do 90 L = 1,NTAU
+DO L = 1,NTAU
 !
 !        *** FIND THE INDEX LEFT SUCH THAT
 !            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
@@ -7523,19 +7523,19 @@ do 90 L = 1,NTAU
    CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
 !
    LEFTMK = LEFT - K
-   do 80 MM = 1,K
+   DO MM = 1,K
       DW = WK(MM)*WGT(L)
       J = LEFTMK + MM
-      do 60 I = 1,M
+      DO I = 1,M
          A(I,J) = DW*Z(L,I) + A(I,J)
-60 CONTINUE
+      END DO
       I = 1
-      do 70 JJ = MM,K
+      DO JJ = MM,K
          Q(I,J) = WK(JJ)*DW + Q(I,J)
          I = I + 1
-70 CONTINUE
-80 CONTINUE
-90 CONTINUE
+      END DO
+   END DO
+END DO
 !
 !        SOLVE THE NORMAL EQUATIONS
 !
@@ -7584,9 +7584,9 @@ SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
 REAL W(NB,N), B(KB,N)
 !
 IF (N .GT. 1) GO TO 20
-do 10 I = 1,M
+DO I = 1,M
    B(I,1) = B(I,1)*W(1,1)
-10 CONTINUE
+END DO
 RETURN
 !
 !     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
@@ -7595,31 +7595,31 @@ RETURN
 do 40 K = 1,N
    JMAX = MIN0(NBM1,N - K)
    IF (JMAX .LT. 1) GO TO 40
-   do 31 J = 1,JMAX
+   DO J = 1,JMAX
       JPK = J + K
       T = W(J + 1,K)
-      do 30 I = 1,M
+      DO I = 1,M
          B(I,JPK) = B(I,JPK) - T*B(I,K)
-30 CONTINUE
-31 CONTINUE
+      END DO
+   END DO
 40 CONTINUE
 !                              T     -1
 !     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
 !
 K = N
 50 T = W(1,K)
-   do 60 I = 1,M
+   DO I = 1,M
       B(I,K) = T*B(I,K)
-60 CONTINUE
+   END DO
    JMAX = MIN0(NBM1,N - K)
    IF (JMAX .LT. 1) GO TO 80
-   do 71 J = 1,JMAX
+   DO J = 1,JMAX
       JPK = J + K
       T = W(J + 1,K)
-      do 70 I = 1,M
+      DO I = 1,M
          B(I,K) = B(I,K) - T*B(I,JPK)
-70 CONTINUE
-71 CONTINUE
+      END DO
+   END DO
 80 K = K - 1
    IF (K .GT. 0) GO TO 50
 RETURN
@@ -7655,19 +7655,19 @@ IF (J .GT. KY) GO TO 20
 !
 !     CASE WHEN  J .LE. KY
 !
-do 10 L = 1,J
+DO L = 1,J
    CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(L), WK(IW))
-10 CONTINUE
+END DO
 CALL BVAL (TY, WK(1), J, KY, Y0, IDY, F, WK(IW))
 RETURN
 !
 !     CASE WHEN  J .GT. KY
 !
 20 L = J - KY
-do 30 I = 1,KY
+DO I = 1,KY
    L = L + 1
    CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(I), WK(IW))
-30 CONTINUE
+END DO
 L = J - KY + 1
 CALL BVAL (TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
 RETURN
@@ -7859,12 +7859,12 @@ GO TO 2
 !   IS THE LEFTMOST NODE AS VIEWED FROM K.
 !
 6 KM1D2 = KM1/2
-do 7 I = 1,KM1D2
+DO I = 1,KM1D2
   KMI = K-I
   ITEMP = IEND(I)
   IEND(I) = IEND(KMI)
   IEND(KMI) = ITEMP
-7 CONTINUE
+  END DO
 !
 ! NODE K IS TO THE RIGHT OF NL-NR.  CREATE A TRIANGULATION
 !   CONSISTING OF NODES 1,2,...,K.
@@ -7894,19 +7894,19 @@ do 9 IND = 1,KM1
 !
 INDX = 5*KM1 - 1
 IADJ(INDX) = 0
-do 10 IND = 1,KM1
+DO IND = 1,KM1
   INDX = INDX-1
   IADJ(INDX) = IEND(IND)
-10 CONTINUE
+  END DO
 !
 ! REPLACE IEND ELEMENTS WITH POINTERS TO IADJ
 !
 INDX = 0
-do 11 IND = 1,KM1
+DO IND = 1,KM1
   INDX = INDX + 4
   IF (IND .EQ. NL  .OR.  IND .EQ. NR) INDX = INDX-1
   IEND(IND) = INDX
-11 CONTINUE
+  END DO
 INDX = INDX + K
 IEND(K) = INDX
 !
@@ -7914,9 +7914,9 @@ IEND(K) = INDX
 !
 IF (K .EQ. NN) RETURN
 KMIN = K+1
-do 12 K = KMIN,NN
+DO K = KMIN,NN
   CALL ADNODE(K,X,Y, IADJ,IEND, IERR)
-12 CONTINUE
+  END DO
 RETURN
 !
 ! ALL NODES ARE COLLINEAR
@@ -8328,9 +8328,9 @@ IF (NF .LE. NL) CALL SHIFTD(NF,NL,3, IADJ )
 IADJ(NF+2) = K
 IMIN = N(IP1)
 IMAX = KM1
-do 6 I = IMIN,IMAX
+DO I = IMIN,IMAX
   IEND(I) = IEND(I) + 3
-6 CONTINUE
+  END DO
 !
 NL = NF - 1
 NF = NFT(IP2)
@@ -8338,9 +8338,9 @@ CALL SHIFTD(NF,NL,2, IADJ )
 IADJ(NF+1) = K
 IMAX = IMIN - 1
 IMIN = N(IP2)
-do 7 I = IMIN,IMAX
+DO I = IMIN,IMAX
   IEND(I) = IEND(I) + 2
-7 CONTINUE
+  END DO
 !
 NL = NF - 1
 NF = NFT(IP3)
@@ -8348,18 +8348,18 @@ CALL SHIFTD(NF,NL,1, IADJ )
 IADJ(NF) = K
 IMAX = IMIN - 1
 IMIN = N(IP3)
-do 8 I = IMIN,IMAX
+DO I = IMIN,IMAX
   IEND(I) = IEND(I) + 1
-8 CONTINUE
+  END DO
 !
 ! ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
 !
 INDX = IEND(KM1)
 IEND(K) = INDX + 3
-do 9 I = 1,3
+DO I = 1,3
   INDX = INDX + 1
   IADJ(INDX) = N(I)
-9 CONTINUE
+  END DO
 RETURN
 END SUBROUTINE INTADD
 
@@ -9122,10 +9122,10 @@ IF (N .LT. 3) GO TO 20
 !
 EPS = 0.0
 MITER = 5
-do 10 J = 1,N
+DO J = 1,N
    ZXZY(1,J) = 0.0
    ZXZY(2,J) = 0.0
-10 CONTINUE
+END DO
 CALL GRADG1 (N, X, Y, Z, IADJ, IEND, EPS, MITER, ZXZY, IERR)
 IERR = 0
 RETURN
@@ -9364,11 +9364,11 @@ INTEGER IADJ(*), IEND(N)
 !
 IF (N .LT. 3) GO TO 20
 !
-do 10 J = 1,N
+DO J = 1,N
    CALL GRADL1 (N, J, X, Y, Z, IADJ, IEND, ZXZY(1,J), &
 &ZXZY(2,J), IERR)
    IF (IERR .LT. 0) GO TO 30
-10 CONTINUE
+END DO
 IERR = 0
 RETURN
 !
@@ -9890,10 +9890,10 @@ DS = DNP
 !
 ! UNMARK THE ELEMENTS OF NPTS
 !
-do 3 I = 1,LM1
+DO I = 1,LM1
   NI = NPTS(I)
   IEND(NI) = -IEND(NI)
-3 CONTINUE
+  END DO
 RETURN
 !
 ! L IS OUT OF RANGE
@@ -9913,11 +9913,11 @@ INTEGER IADJ(*), IEND(N)
 IF (N .LT. 3 .OR. M .LT. 1) GO TO 20
 !
 IST = 1
-do 10 J = 1,M
+DO J = 1,M
    CALL INTRC1 (N, XI(J), YI(J), X, Y, Z, IADJ, IEND, &
 &1, ZXZY, IST, ZI(J), IERR)
    IF (IERR .LT. 0) GO TO 30
-10 CONTINUE
+END DO
 IERR = 0
 RETURN
 !
@@ -9942,13 +9942,13 @@ IF (N .LT. 3 .OR. L .LT. 1 .OR. M .LT. 1 .OR. NROWS .LT. L) &
 &GO TO 30
 !
 IST = 1
-do 20 J = 1,M
-   do 10 I = 1,L
+DO J = 1,M
+   DO I = 1,L
       CALL INTRC1 (N, XI(I), YI(J), X, Y, Z, IADJ, IEND, &
 &1, ZXZY, IST, ZI(I,J), IERR)
       IF (IERR .LT. 0) GO TO 40
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 IERR = 0
 RETURN
 !
@@ -10419,10 +10419,10 @@ G(1) = (R(2)-R(3))*PHI(1) + F(1)*RO(1) - RO(2) + RO(3)
 G(2) = (R(3)-R(1))*PHI(2) + F(2)*RO(2) - RO(3) + RO(1)
 G(3) = (R(1)-R(2))*PHI(3) + F(3)*RO(3) - RO(1) + RO(2)
 !
-do 6 I = 1,3
+DO I = 1,3
   P(I) = G(I) + PHI(I)
   Q(I) = G(I) - PHI(I)
-6 CONTINUE
+  END DO
 !
 A(1) = R(1) + G(3) - G(2)
 A(2) = R(2) + G(1) - G(3)
@@ -10444,10 +10444,10 @@ IF (IFLAG .NE. 1) RETURN
 !
 ! COMPUTE WX AND WY
 !
-do 7 I = 1,3
+DO I = 1,3
   RX(I) = -V(I)/AREA
   RY(I) = U(I)/AREA
-7 CONTINUE
+  END DO
 PHIX(1) = R(2)*RX(3) + RX(2)*R(3)
 PHIY(1) = R(2)*RY(3) + RY(2)*R(3)
 PHIX(2) = R(3)*RX(1) + RX(3)*R(1)
@@ -10477,12 +10477,12 @@ GX(3) = (RX(1) - RX(2))*PHI(3) + (R(1) - R(2))*PHIX(3) &
 GY(3) = (RY(1) - RY(2))*PHI(3) + (R(1) - R(2))*PHIY(3) &
 &+ F(3)*ROY(3) - ROY(1) + ROY(2)
 !
-do 8 I = 1,3
+DO I = 1,3
   PX(I) = GX(I) + PHIX(I)
   PY(I) = GY(I) + PHIY(I)
   QX(I) = GX(I) - PHIX(I)
   QY(I) = GY(I) - PHIY(I)
-8 CONTINUE
+  END DO
 !
 AX(1) = RX(1) + GX(3) - GX(2)
 AY(1) = RY(1) + GY(3) - GY(2)

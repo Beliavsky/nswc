@@ -73,12 +73,20 @@ The recommended source is now `nswc.f90`. The readable fixed-form alternative
 procedures. `nswc_orig.f` preserves the supplied source unchanged. The conversion
 tools and regeneration instructions are described in [README.md](README.md).
 
+A subsequent pass replaced 2,548 straightforward labelled DO/CONTINUE loops
+with DO/END DO. Another 1,699 labelled loops were left unchanged because of
+shared labels, executable terminators, possible references, or uncertain control
+flow. The [conversion record](docs/loop-modernization.csv) reports all candidates
+and skipped reasons. Tests reproduce the maintained source from `nswc_orig.f`
+by applying the named-ending and loop converters, and verify that a second loop
+conversion makes no changes.
+
 Checks compare every fixed-form and free-form statement while preserving quoted
 and Hollerith text, verify all 2,214 documentation source links, and confirm that
 the free-form partitions reconstruct the complete file. All three versions
 compile with GNU Fortran using the documented legacy options, with the same
 28 warnings in the local compiler check. Representative numerical checks of
-vector operations, the gamma function, Chebyshev evaluation, and adaptive
+vector operations, a dense linear solve, the gamma function, Chebyshev evaluation, and adaptive
 quadrature produce identical results across all three versions. These checks
 do not constitute a full numerical validation of the library.
 

@@ -113,5 +113,31 @@ and subroutines, not modules or programs. Run the Python checks with
 Run `python tools/validate_sources.py` to compile all three versions with GNU
 Fortran and compare representative numerical results. Use `--compiler PATH`
 when the compiler is not on your command search path. These checks cover vector
-operations, the gamma function, Chebyshev evaluation, and adaptive quadrature;
+operations, a dense linear solve, the gamma function, Chebyshev evaluation, and adaptive quadrature;
 they are not a full numerical validation of the library.
+
+## Labelled DO loops
+
+`tools/modernize_do.py` replaces straightforward labelled DO/CONTINUE loops
+with DO/END DO in fixed-form source. It starts from the approach in
+`C:/python/fortran/xloop.py`, with labels scoped to each external procedure.
+The applied pass converted 2,548 loops and left 1,699 unchanged. The
+[conversion record](docs/loop-modernization.csv) lists every original labelled
+loop, its line numbers in `nswc.f`, and the reason for each skipped case.
+The conversion preserves physical line counts.
+
+```sh
+python tools/modernize_do.py nswc.f
+python tools/modernize_do.py nswc.f --output new_source.f --report loop_report.csv
+```
+
+The default previews changes. Output and report paths must be new files.
+`--diff` shows changes; `--in-place` creates a non-overwriting `.loops.bak`
+backup. After changing `nswc.f`, run the source generator and validation commands
+above. `nswc_orig.f` remains unchanged.
+
+The converter skips shared termination labels, executable terminators,
+continued headers, indirect branches, and ambiguous control flow. It retains
+labels mentioned elsewhere in the procedure, conservatively treating numeric
+mentions as possible references. This can leave safe conversions for later
+review. It also skips loops with possible branches into their bodies.

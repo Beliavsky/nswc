@@ -172,9 +172,9 @@ do 160 L = 1, LU
 !           PLACE THE TRANSFORMATION IN U FOR SUBSEQUENT BACK
 !           MULTIPLICATION.
 !
-      do 60 I = L, N
+      DO I = L, N
          U(I,L) = X(I,L)
-60 CONTINUE
+      END DO
 70 CONTINUE
    IF (L .GT. NRT) GO TO 150
 !
@@ -192,25 +192,25 @@ do 160 L = 1, LU
 !
 !              APPLY THE TRANSFORMATION.
 !
-         do 90 I = LP1, N
+         DO I = LP1, N
             WORK(I) = (0.0E0,0.0E0)
-90 CONTINUE
+         END DO
          do 100 J = LP1, P
             CALL CAXPY(N-L,E(J),X(LP1,J),1,WORK(LP1),1)
 100 CONTINUE
-         do 110 J = LP1, P
+         DO J = LP1, P
             CALL CAXPY(N-L,CONJG(-E(J)/E(LP1)),WORK(LP1),1, &
 &X(LP1,J),1)
-110 CONTINUE
+         END DO
 120 CONTINUE
       IF (.NOT.WANTV) GO TO 140
 !
 !              PLACE THE TRANSFORMATION IN V FOR SUBSEQUENT
 !              BACK MULTIPLICATION.
 !
-         do 130 I = LP1, P
+         DO I = LP1, P
             V(I,L) = E(I)
-130 CONTINUE
+         END DO
 140 CONTINUE
 150 CONTINUE
 160 CONTINUE
@@ -230,66 +230,66 @@ E(M) = (0.0E0,0.0E0)
 !
 IF (.NOT.WANTU) GO TO 300
    IF (NCU .LT. NCTP1) GO TO 200
-   do 190 J = NCTP1, NCU
-      do 180 I = 1, N
+   DO J = NCTP1, NCU
+      DO I = 1, N
          U(I,J) = (0.0E0,0.0E0)
-180 CONTINUE
+      END DO
       U(J,J) = (1.0E0,0.0E0)
-190 CONTINUE
+   END DO
 200 CONTINUE
    IF (NCT .LT. 1) GO TO 290
-   do 280 LL = 1, NCT
+   DO LL = 1, NCT
       L = NCT - LL + 1
       IF (CABS1(S(L)) .EQ. 0.0E0) GO TO 250
          LP1 = L + 1
          IF (NCU .LT. LP1) GO TO 220
-         do 210 J = LP1, NCU
+         DO J = LP1, NCU
             T = -CDOTC(N-L+1,U(L,L),1,U(L,J),1)/U(L,L)
             CALL CAXPY(N-L+1,T,U(L,L),1,U(L,J),1)
-210 CONTINUE
+         END DO
 220 CONTINUE
          CALL CSCAL(N-L+1,(-1.0E0,0.0E0),U(L,L),1)
          U(L,L) = (1.0E0,0.0E0) + U(L,L)
          LM1 = L - 1
          IF (LM1 .LT. 1) GO TO 240
-         do 230 I = 1, LM1
+         DO I = 1, LM1
             U(I,L) = (0.0E0,0.0E0)
-230 CONTINUE
+         END DO
 240 CONTINUE
       GO TO 270
 250 CONTINUE
-         do 260 I = 1, N
+         DO I = 1, N
             U(I,L) = (0.0E0,0.0E0)
-260 CONTINUE
+         END DO
          U(L,L) = (1.0E0,0.0E0)
 270 CONTINUE
-280 CONTINUE
+   END DO
 290 CONTINUE
 300 CONTINUE
 !
 !     IF IT IS REQUIRED, GENERATE V.
 !
 IF (.NOT.WANTV) GO TO 350
-   do 340 LL = 1, P
+   DO LL = 1, P
       L = P - LL + 1
       LP1 = L + 1
       IF (L .GT. NRT) GO TO 320
       IF (CABS1(E(L)) .EQ. 0.0E0) GO TO 320
-         do 310 J = LP1, P
+         DO J = LP1, P
             T = -CDOTC(P-L,V(LP1,L),1,V(LP1,J),1)/V(LP1,L)
             CALL CAXPY(P-L,T,V(LP1,L),1,V(LP1,J),1)
-310 CONTINUE
+         END DO
 320 CONTINUE
-      do 330 I = 1, P
+      DO I = 1, P
          V(I,L) = (0.0E0,0.0E0)
-330 CONTINUE
+      END DO
       V(L,L) = (1.0E0,0.0E0)
-340 CONTINUE
+   END DO
 350 CONTINUE
 !
 !     TRANSFORM S AND E SO THAT THEY ARE REAL.
 !
-do 380 I = 1, M
+DO I = 1, M
    IF (CABS1(S(I)) .EQ. 0.0E0) GO TO 360
       T = CMPLX(CABS(S(I)),0.0E0)
       R = S(I)/T
@@ -306,7 +306,7 @@ do 380 I = 1, M
       S(I+1) = S(I+1)*R
       IF (WANTV) CALL CSCAL(P,R,V(1,I+1),1)
 370 CONTINUE
-380 CONTINUE
+END DO
 390 CONTINUE
 !
 !     MAIN ITERATION LOOP FOR THE SINGULAR VALUES.
@@ -339,7 +339,7 @@ ITER = 0
 !                        S(L), ..., S(M) ARE NOT NEGLIGIBLE (QR STEP).
 !           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
 !
-   do 430 LL = 1, M
+   DO LL = 1, M
       L = M - LL
 !        ...EXIT
       IF (L .EQ. 0) GO TO 440
@@ -350,7 +350,7 @@ ITER = 0
 !        ......EXIT
          GO TO 440
 420 CONTINUE
-430 CONTINUE
+   END DO
 440 CONTINUE
    IF (L .NE. M - 1) GO TO 450
       KASE = 4
@@ -358,7 +358,7 @@ ITER = 0
 450 CONTINUE
       LP1 = L + 1
       MP1 = M + 1
-      do 470 LLS = LP1, MP1
+      DO LLS = LP1, MP1
          LS = M - LLS + LP1
 !           ...EXIT
          IF (LS .EQ. L) GO TO 480
@@ -371,7 +371,7 @@ ITER = 0
 !           ......EXIT
             GO TO 480
 460 CONTINUE
-470 CONTINUE
+      END DO
 480 CONTINUE
       IF (LS .NE. L) GO TO 490
          KASE = 3
@@ -397,7 +397,7 @@ ITER = 0
       MM1 = M - 1
       F = REAL(E(M-1))
       E(M-1) = (0.0E0,0.0E0)
-      do 550 KK = L, MM1
+      DO KK = L, MM1
          K = MM1 - KK + L
          T1 = REAL(S(K))
          CALL SROTG(T1,F,CS,SN)
@@ -407,7 +407,7 @@ ITER = 0
             E(K-1) = CS*E(K-1)
 540 CONTINUE
          IF (WANTV) CALL CSROT(P,V(1,K),1,V(1,M),1,CS,SN)
-550 CONTINUE
+      END DO
    GO TO 650
 !
 !        SPLIT AT NEGLIGIBLE S(L).
@@ -415,14 +415,14 @@ ITER = 0
 560 CONTINUE
       F = REAL(E(L-1))
       E(L-1) = (0.0E0,0.0E0)
-      do 570 K = L, M
+      DO K = L, M
          T1 = REAL(S(K))
          CALL SROTG(T1,F,CS,SN)
          S(K) = CMPLX(T1,0.0E0)
          F = -SN*REAL(E(K))
          E(K) = CS*E(K)
          IF (WANTU) CALL CSROT(N,U(1,K),1,U(1,L-1),1,CS,SN)
-570 CONTINUE
+      END DO
    GO TO 650
 !
 !        PERFORM ONE QR STEP.
@@ -452,7 +452,7 @@ ITER = 0
 !           CHASE ZEROS.
 !
       MM1 = M - 1
-      do 600 K = L, MM1
+      DO K = L, MM1
          CALL SROTG(F,G,CS,SN)
          IF (K .NE. L) E(K-1) = CMPLX(F,0.0E0)
          F = CS*REAL(S(K)) + SN*REAL(E(K))
@@ -468,7 +468,7 @@ ITER = 0
          E(K+1) = CS*E(K+1)
          IF (WANTU .AND. K .LT. N) &
 &CALL CSROT(N,U(1,K),1,U(1,K+1),1,CS,SN)
-600 CONTINUE
+      END DO
       E(M-1) = CMPLX(F,0.0E0)
       ITER = ITER + 1
    GO TO 650
@@ -530,7 +530,7 @@ do 11 K = 1,N
 !
 20 DET = 1.0
 NM1 = N-1
-do 52 K = 1,NM1
+DO K=1,NM1
 KP1 = K+1
 !
 !       SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -565,7 +565,7 @@ A(K,J) = A(L,J)
 C = A(I,K)/PIVOT
 do 51 J = KP1,N
 51 A(I,J) = A(I,J)-C*A(K,J)
-52 CONTINUE
+END DO
 !
 !         FINAL DETERMINANT CALCULATION
 !
@@ -597,7 +597,7 @@ do 11 K = 1,N
 !
 20 DPDET = 1.D0
 NM1 = N - 1
-do 52 K = 1,NM1
+DO K=1,NM1
 KP1 = K + 1
 !
 !       SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -632,7 +632,7 @@ A(K,J) = A(L,J)
 C = A(I,K)/PIVOT
 do 51 J = KP1,N
 51 A(I,J) = A(I,J) - C*A(K,J)
-52 CONTINUE
+END DO
 !
 !         FINAL DETERMINANT CALCULATION
 !
@@ -667,7 +667,7 @@ do 11 K = 1,N
 !
 20 CDET = (1.0,0.0)
 NM1 = N-1
-do 52 K = 1,NM1
+DO K=1,NM1
 KP1 = K+1
 !
 !       SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -702,7 +702,7 @@ A(K,J) = A(L,J)
 T = A(I,K)/PIVOT
 do 51 J = KP1,N
 51 A(I,J) = A(I,J)-T*A(K,J)
-52 CONTINUE
+END DO
 !
 !         FINAL DETERMINANT CALCULATION
 !
@@ -800,13 +800,13 @@ REAL U(NU,M), V(NV,N), TEMP, WK(*)
 !     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
 !
 IF (MO .NE. 0 .AND. MO .NE. 1) GO TO 35
-do 11 I = 1,M
-   do 10 J = I,M
+DO I = 1,M
+   DO J = I,M
       TEMP = A(I,J)
       A(I,J) = A(J,I)
       A(J,I) = TEMP
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 CALL ORTHES (NA,M,1,M,A,WK)
 CALL ORTRN1 (M,1,M,A,NA,U,NU,WK)
 !
@@ -814,13 +814,13 @@ IF (M .EQ. 1) GO TO 20
 CALL SCHUR (M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
 IF (IERR .NE. 0) GO TO 200
 !
-20 do 31 I = 1,M
-   do 30 J = I,M
+20 DO I = 1,M
+   DO J = I,M
       TEMP = A(I,J)
       A(I,J) = A(J,I)
       A(J,I) = TEMP
-30 CONTINUE
-31 CONTINUE
+   END DO
+END DO
 !
 !     IF REQUIRED, REDUCE B TO UPPER REAL SCHUR FORM
 !
@@ -834,29 +834,29 @@ IF (IERR .NE. 0) GO TO 210
 !
 !     TRANSFORM C
 !
-45 do 61 J = 1,N
-   do 51 I = 1,M
+45 DO J = 1,N
+   DO I = 1,M
       WK(I) = 0.0
-      do 50 K = 1,M
+      DO K = 1,M
          WK(I) = WK(I) + U(K,I)*C(K,J)
-50 CONTINUE
-51 CONTINUE
-   do 60 I = 1,M
+      END DO
+   END DO
+   DO I = 1,M
       C(I,J) = WK(I)
-60 CONTINUE
-61 CONTINUE
+   END DO
+END DO
 !
-do 81 I = 1,M
-   do 71 J = 1,N
+DO I = 1,M
+   DO J = 1,N
       WK(J) = 0.0
-      do 70 K = 1,N
+      DO K = 1,N
          WK(J) = WK(J) + C(I,K)*V(K,J)
-70 CONTINUE
-71 CONTINUE
-   do 80 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-80 CONTINUE
-81 CONTINUE
+   END DO
+END DO
 !
 !     SOLVE THE TRANSFORMED SYSTEM
 !
@@ -865,29 +865,29 @@ IF (IERR .NE. 0) GO TO 220
 !
 !     TRANSFORM C BACK TO THE SOLUTION
 !
-do 101 J = 1,N
-   do 91 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       WK(I) = 0.0
-      do 90 K = 1,M
+      DO K = 1,M
          WK(I) = WK(I) + U(I,K)*C(K,J)
-90 CONTINUE
-91 CONTINUE
-   do 100 I = 1,M
+      END DO
+   END DO
+   DO I = 1,M
       C(I,J) = WK(I)
-100 CONTINUE
-101 CONTINUE
+   END DO
+END DO
 !
-do 121 I = 1,M
-   do 111 J = 1,N
+DO I = 1,M
+   DO J = 1,N
       WK(J) = 0.0
-      do 110 K = 1,N
+      DO K = 1,N
          WK(J) = WK(J) + C(I,K)*V(J,K)
-110 CONTINUE
-111 CONTINUE
-   do 120 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-120 CONTINUE
-121 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -986,7 +986,7 @@ NA = EN - 1
 ENM2 = NA - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-40 do 50 LL = LOW,EN
+40 DO LL = LOW,EN
   L = EN + LOW - LL
   IF (L .EQ. LOW) GO TO 60
   S = ABS(H(L-1,L-1)) + ABS(H(L,L))
@@ -994,7 +994,7 @@ ENM2 = NA - 1
   S1 = S
   S2 = S1 + ABS(H(L,L-1))
   IF (S1 .EQ. S2) GO TO 60
-50 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 60 X = H(EN,EN)
 IF (L .EQ. EN) GO TO 220
@@ -1006,9 +1006,9 @@ IF (ITS .NE. 10 .AND. ITS .NE. 20) GO TO 80
 !     ********** FORM EXCEPTIONAL SHIFT **********
 T = T + X
 !
-do 70 I = LOW,EN
+DO I = LOW,EN
   H(I,I) = H(I,I) - X
-70 CONTINUE
+END DO
 !
 S = ABS(H(EN,NA)) + ABS(H(NA,ENM2))
 X = 0.75*S
@@ -1018,7 +1018,7 @@ W = -0.4375*S*S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 90 MM = L,ENM2
+DO MM = L,ENM2
   M = ENM2 + L - MM
   ZZ = H(M,M)
   R = X - ZZ
@@ -1034,7 +1034,7 @@ do 90 MM = L,ENM2
   S1 = ABS(P)*(ABS(H(M-1,M-1))+ABS(ZZ)+ABS(H(M+1,M+1)))
   S2 = S1 + ABS(H(M,M-1))*(ABS(Q) + ABS(R))
   IF (S1 .EQ. S2) GO TO 100
-90 CONTINUE
+END DO
 !
 100 MP2 = M + 2
 !
@@ -1070,34 +1070,34 @@ do 210 K = M,NA
   Q = Q/P
   R = R/P
 !     ********** ROW MODIFICATION **********
-  do 160 J = K,N
+  DO J = K,N
     P = H(K,J) + Q*H(K+1,J)
     IF (.NOT.NOTLAS) GO TO 150
     P = P + R*H(K+2,J)
     H(K+2,J) = H(K+2,J) - P*ZZ
 150 H(K+1,J) = H(K+1,J) - P*Y
     H(K,J) = H(K,J) - P*X
-160 CONTINUE
+  END DO
 !
   J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-  do 180 I = 1,J
+  DO I = 1,J
     P = X*H(I,K) + Y*H(I,K+1)
     IF (.NOT.NOTLAS) GO TO 170
     P = P + ZZ*H(I,K+2)
     H(I,K+2) = H(I,K+2) - P*R
 170 H(I,K+1) = H(I,K+1) - P*Q
     H(I,K) = H(I,K) - P
-180 CONTINUE
+  END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-  do 200 I = LOW,IGH
+  DO I = LOW,IGH
     P = X*Z(I,K) + Y*Z(I,K+1)
     IF (.NOT.NOTLAS) GO TO 190
     P = P + ZZ*Z(I,K+2)
     Z(I,K+2) = Z(I,K+2) - P*R
 190 Z(I,K+1) = Z(I,K+1) - P*Q
     Z(I,K) = Z(I,K) - P
-200 CONTINUE
+  END DO
 !
 210 CONTINUE
 !
@@ -1132,23 +1132,23 @@ R = SQRT(P*P + Q*Q)
 P = P/R
 Q = Q/R
 !     ********** ROW MODIFICATION **********
-do 240 J = NA,N
+DO J = NA,N
   ZZ = H(NA,J)
   H(NA,J) = Q*ZZ + P*H(EN,J)
   H(EN,J) = Q*H(EN,J) - P*ZZ
-240 CONTINUE
+END DO
 !     ********** COLUMN MODIFICATION **********
-do 250 I = 1,EN
+DO I = 1,EN
   ZZ = H(I,NA)
   H(I,NA) = Q*ZZ + P*H(I,EN)
   H(I,EN) = Q*H(I,EN) - P*ZZ
-250 CONTINUE
+END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-do 260 I = LOW,IGH
+DO I = LOW,IGH
   ZZ = Z(I,NA)
   Z(I,NA) = Q*ZZ + P*Z(I,EN)
   Z(I,EN) = Q*Z(I,EN) - P*ZZ
-260 CONTINUE
+END DO
 !
 GO TO 280
 !     ********** COMPLEX PAIR **********
@@ -1166,9 +1166,9 @@ RETURN
   IP1 = I + 1
   IF (ABS(WI(I)) .NE. 0.0) IP1 = IP1 + 1
   IF (IP1 .GT. N) GO TO 320
-  do 310 J = IP1,N
+  DO J = IP1,N
     H(J,I) = 0.0
-310 CONTINUE
+  END DO
 320 CONTINUE
 RETURN
 END SUBROUTINE SCHUR
@@ -1191,13 +1191,13 @@ L = 1
 15 LL = L + DL - 1
    IF (L .EQ. 1) GO TO 30
 !
-   do 22 J = L,LL
+   DO J = L,LL
       do 21 I = 1,M
       SUM = C(I,J)
          do 20 IB = 1,LM1
 20 SUM = SUM - C(I,IB)*B(IB,J)
 21 C(I,J) = SUM
-22 CONTINUE
+   END DO
 !
 30 K = 1
 40 KM1 = K - 1
@@ -1207,13 +1207,13 @@ L = 1
 45 KK = K + DK - 1
       IF (K .EQ. 1) GO TO 60
 !
-      do 52 I = K,KK
+      DO I = K,KK
          do 51 J = L,LL
          SUM = C(I,J)
             do 50 JA = 1,KM1
 50 SUM = SUM - A(I,JA)*C(JA,J)
 51 C(I,J) = SUM
-52 CONTINUE
+      END DO
 !
 60 IF (DL .EQ. 2) GO TO 80
       IF (DK .EQ. 2) GO TO 70
@@ -1377,13 +1377,13 @@ DOUBLE PRECISION U(NU,M), V(NV,N), TEMP, WK(*)
 !     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
 !
 IF (MO .NE. 0 .AND. MO .NE. 1) GO TO 35
-do 11 I = 1,M
-   do 10 J = I,M
+DO I = 1,M
+   DO J = I,M
       TEMP = A(I,J)
       A(I,J) = A(J,I)
       A(J,I) = TEMP
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 CALL DORTH (NA,M,1,M,A,WK)
 CALL DRTRN1 (M,1,M,A,NA,U,NU,WK)
 !
@@ -1391,13 +1391,13 @@ IF (M .EQ. 1) GO TO 20
 CALL DSCHUR (M,1,M,A,NA,U,NU,WK(1),WK(M+1),IERR)
 IF (IERR .NE. 0) GO TO 200
 !
-20 do 31 I = 1,M
-   do 30 J = I,M
+20 DO I = 1,M
+   DO J = I,M
       TEMP = A(I,J)
       A(I,J) = A(J,I)
       A(J,I) = TEMP
-30 CONTINUE
-31 CONTINUE
+   END DO
+END DO
 !
 !     IF REQUIRED, REDUCE B TO UPPER REAL SCHUR FORM
 !
@@ -1411,29 +1411,29 @@ IF (IERR .NE. 0) GO TO 210
 !
 !     TRANSFORM C
 !
-45 do 61 J = 1,N
-   do 51 I = 1,M
+45 DO J = 1,N
+   DO I = 1,M
       WK(I) = 0.D0
-      do 50 K = 1,M
+      DO K = 1,M
          WK(I) = WK(I) + U(K,I)*C(K,J)
-50 CONTINUE
-51 CONTINUE
-   do 60 I = 1,M
+      END DO
+   END DO
+   DO I = 1,M
       C(I,J) = WK(I)
-60 CONTINUE
-61 CONTINUE
+   END DO
+END DO
 !
-do 81 I = 1,M
-   do 71 J = 1,N
+DO I = 1,M
+   DO J = 1,N
       WK(J) = 0.D0
-      do 70 K = 1,N
+      DO K = 1,N
          WK(J) = WK(J) + C(I,K)*V(K,J)
-70 CONTINUE
-71 CONTINUE
-   do 80 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-80 CONTINUE
-81 CONTINUE
+   END DO
+END DO
 !
 !     SOLVE THE TRANSFORMED SYSTEM
 !
@@ -1442,29 +1442,29 @@ IF (IERR .NE. 0) GO TO 220
 !
 !     TRANSFORM C BACK TO THE SOLUTION
 !
-do 101 J = 1,N
-   do 91 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       WK(I) = 0.D0
-      do 90 K = 1,M
+      DO K = 1,M
          WK(I) = WK(I) + U(I,K)*C(K,J)
-90 CONTINUE
-91 CONTINUE
-   do 100 I = 1,M
+      END DO
+   END DO
+   DO I = 1,M
       C(I,J) = WK(I)
-100 CONTINUE
-101 CONTINUE
+   END DO
+END DO
 !
-do 121 I = 1,M
-   do 111 J = 1,N
+DO I = 1,M
+   DO J = 1,N
       WK(J) = 0.D0
-      do 110 K = 1,N
+      DO K = 1,N
          WK(J) = WK(J) + C(I,K)*V(J,K)
-110 CONTINUE
-111 CONTINUE
-   do 120 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-120 CONTINUE
-121 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -1583,9 +1583,9 @@ IF (ITS .NE. 10 .AND. ITS .NE. 20 .AND. ITS .NE. 30) GO TO 80
 !     ********** FORM EXCEPTIONAL SHIFT **********
 T = T + X
 !
-do 70 I = LOW,EN
+DO I = LOW,EN
   H(I,I) = H(I,I) - X
-70 CONTINUE
+END DO
 !
 S = DABS(H(EN,NA)) + DABS(H(NA,ENM2))
 X = 0.75D0*S
@@ -1595,7 +1595,7 @@ W = -0.4375D0*S*S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 90 MM = L,ENM2
+DO MM = L,ENM2
   M = ENM2 + L - MM
   ZZ = H(M,M)
   R = X - ZZ
@@ -1611,7 +1611,7 @@ do 90 MM = L,ENM2
   S1 = DABS(P)*(DABS(H(M-1,M-1))+DABS(ZZ)+DABS(H(M+1,M+1)))
   S2 = S1 + DABS(H(M,M-1))*(DABS(Q) + DABS(R))
   IF (S1 .EQ. S2) GO TO 100
-90 CONTINUE
+END DO
 !
 100 MP2 = M + 2
 !
@@ -1647,34 +1647,34 @@ do 210 K = M,NA
   Q = Q/P
   R = R/P
 !     ********** ROW MODIFICATION **********
-  do 160 J = K,N
+  DO J = K,N
     P = H(K,J) + Q*H(K+1,J)
     IF (.NOT.NOTLAS) GO TO 150
     P = P + R*H(K+2,J)
     H(K+2,J) = H(K+2,J) - P*ZZ
 150 H(K+1,J) = H(K+1,J) - P*Y
     H(K,J) = H(K,J) - P*X
-160 CONTINUE
+  END DO
 !
   J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-  do 180 I = 1,J
+  DO I = 1,J
     P = X*H(I,K) + Y*H(I,K+1)
     IF (.NOT.NOTLAS) GO TO 170
     P = P + ZZ*H(I,K+2)
     H(I,K+2) = H(I,K+2) - P*R
 170 H(I,K+1) = H(I,K+1) - P*Q
     H(I,K) = H(I,K) - P
-180 CONTINUE
+  END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-  do 200 I = LOW,IGH
+  DO I = LOW,IGH
     P = X*Z(I,K) + Y*Z(I,K+1)
     IF (.NOT.NOTLAS) GO TO 190
     P = P + ZZ*Z(I,K+2)
     Z(I,K+2) = Z(I,K+2) - P*R
 190 Z(I,K+1) = Z(I,K+1) - P*Q
     Z(I,K) = Z(I,K) - P
-200 CONTINUE
+  END DO
 !
 210 CONTINUE
 !
@@ -1709,23 +1709,23 @@ R = DSQRT(P*P + Q*Q)
 P = P/R
 Q = Q/R
 !     ********** ROW MODIFICATION **********
-do 240 J = NA,N
+DO J = NA,N
   ZZ = H(NA,J)
   H(NA,J) = Q*ZZ + P*H(EN,J)
   H(EN,J) = Q*H(EN,J) - P*ZZ
-240 CONTINUE
+END DO
 !     ********** COLUMN MODIFICATION **********
-do 250 I = 1,EN
+DO I = 1,EN
   ZZ = H(I,NA)
   H(I,NA) = Q*ZZ + P*H(I,EN)
   H(I,EN) = Q*H(I,EN) - P*ZZ
-250 CONTINUE
+END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-do 260 I = LOW,IGH
+DO I = LOW,IGH
   ZZ = Z(I,NA)
   Z(I,NA) = Q*ZZ + P*Z(I,EN)
   Z(I,EN) = Q*Z(I,EN) - P*ZZ
-260 CONTINUE
+END DO
 !
 GO TO 280
 !     ********** COMPLEX PAIR **********
@@ -1743,9 +1743,9 @@ RETURN
   IP1 = I + 1
   IF (DABS(WI(I)) .NE. 0.D0) IP1 = IP1 + 1
   IF (IP1 .GT. N) GO TO 320
-  do 310 J = IP1,N
+  DO J = IP1,N
     H(J,I) = 0.D0
-310 CONTINUE
+  END DO
 320 CONTINUE
 RETURN
 END SUBROUTINE DSCHUR
@@ -1768,13 +1768,13 @@ L = 1
 15 LL = L + DL - 1
    IF (L .EQ. 1) GO TO 30
 !
-   do 22 J = L,LL
+   DO J = L,LL
       do 21 I = 1,M
       SUM = C(I,J)
          do 20 IB = 1,LM1
 20 SUM = SUM - C(I,IB)*B(IB,J)
 21 C(I,J) = SUM
-22 CONTINUE
+   END DO
 !
 30 K = 1
 40 KM1 = K - 1
@@ -1784,13 +1784,13 @@ L = 1
 45 KK = K + DK - 1
       IF (K .EQ. 1) GO TO 60
 !
-      do 52 I = K,KK
+      DO I = K,KK
          do 51 J = L,LL
          SUM = C(I,J)
             do 50 JA = 1,KM1
 50 SUM = SUM - A(I,JA)*C(JA,J)
 51 C(I,J) = SUM
-52 CONTINUE
+      END DO
 !
 60 IF (DL .EQ. 2) GO TO 80
       IF (DK .EQ. 2) GO TO 70
@@ -1940,40 +1940,40 @@ IF (IERR .NE. 0) GO TO 200
 !
 !     TRANSFORM C
 !
-10 do 20 I = 1,N
+10 DO I = 1,N
    C(I,I) = C(I,I)/2.0
-20 CONTINUE
+END DO
 !
-do 41 I = 1,N
-   do 31 J = 1,N
+DO I = 1,N
+   DO J = 1,N
       WK(J) = 0.0
-      do 30 K = I,N
+      DO K = I,N
          WK(J) = WK(J) + C(I,K)*U(K,J)
-30 CONTINUE
-31 CONTINUE
-   do 40 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-40 CONTINUE
-41 CONTINUE
+   END DO
+END DO
 !
-do 61 J = 1,N
-   do 51 I = 1,N
+DO J = 1,N
+   DO I = 1,N
       WK(I) = 0.0
-      do 50 K = 1,N
+      DO K = 1,N
          WK(I) = WK(I) + U(K,I)*C(K,J)
-50 CONTINUE
-51 CONTINUE
-   do 60 I = 1,N
+      END DO
+   END DO
+   DO I = 1,N
       C(I,J) = WK(I)
-60 CONTINUE
-61 CONTINUE
+   END DO
+END DO
 !
-do 71 I = 1,N
-   do 70 J = I,N
+DO I = 1,N
+   DO J = I,N
       C(I,J) = C(I,J) + C(J,I)
       C(J,I) = C(I,J)
-70 CONTINUE
-71 CONTINUE
+   END DO
+END DO
 !
 !     SOLVE THE TRANSFORMED SYSTEM
 !
@@ -1982,40 +1982,40 @@ IF (IERR .NE. 0) GO TO 210
 !
 !     TRANSFORM C BACK TO THE SOLUTION
 !
-do 80 I = 1,N
+DO I = 1,N
    C(I,I) = C(I,I)/2.0
-80 CONTINUE
+END DO
 !
-do 101 I = 1,N
-   do 91 J = 1,N
+DO I = 1,N
+   DO J = 1,N
       WK(J) = 0.0
-      do 90 K = I,N
+      DO K = I,N
          WK(J) = WK(J) + C(I,K)*U(J,K)
-90 CONTINUE
-91 CONTINUE
-   do 100 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-100 CONTINUE
-101 CONTINUE
+   END DO
+END DO
 !
-do 121 J = 1,N
-   do 111 I = 1,N
+DO J = 1,N
+   DO I = 1,N
       WK(I) = 0.0
-      do 110 K = 1,N
+      DO K = 1,N
          WK(I) = WK(I) + U(I,K)*C(K,J)
-110 CONTINUE
-111 CONTINUE
-   do 120 I = 1,N
+      END DO
+   END DO
+   DO I = 1,N
       C(I,J) = WK(I)
-120 CONTINUE
-121 CONTINUE
+   END DO
+END DO
 !
-do 131 I = 1,N
-   do 130 J = I,N
+DO I = 1,N
+   DO J = I,N
       C(I,J) = C(I,J) + C(J,I)
       C(J,I) = C(I,J)
-130 CONTINUE
-131 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -2049,13 +2049,13 @@ L = 1
 35 KK = K + DK - 1
       IF (K .EQ. L) GO TO 45
 !
-      do 42 I = K,KK
+      DO I = K,KK
          do 41 J = L,LL
          SUM = C(I,J)
             do 40 IA = L,KM1
 40 SUM = SUM - A(IA,I)*C(IA,J)
 41 C(I,J) = SUM
-42 CONTINUE
+      END DO
 !
 45 IF (DL .EQ. 2) GO TO 60
       IF (DK .EQ. 2 ) GO TO 50
@@ -2143,15 +2143,15 @@ L = 1
 LDL = L + DL
 IF (LDL .GT. N) RETURN
 !
-do 121 J = LDL,N
-   do 100 I = L,LL
+DO J = LDL,N
+   DO I = L,LL
       C(I,J) = C(J,I)
-100 CONTINUE
+   END DO
    do 120 I = J,N
       do 110 K = L,LL
 110 C(I,J) = C(I,J) - C(I,K)*A(K,J) - A(K,I)*C(K,J)
 120 C(J,I) = C(I,J)
-121 CONTINUE
+END DO
 L = LDL
 GO TO 10
 !
@@ -2237,40 +2237,40 @@ IF (IERR .NE. 0) GO TO 200
 !
 !     TRANSFORM C
 !
-10 do 20 I = 1,N
+10 DO I = 1,N
    C(I,I) = C(I,I)/2.D0
-20 CONTINUE
+END DO
 !
-do 41 I = 1,N
-   do 31 J = 1,N
+DO I = 1,N
+   DO J = 1,N
       WK(J) = 0.D0
-      do 30 K = I,N
+      DO K = I,N
          WK(J) = WK(J) + C(I,K)*U(K,J)
-30 CONTINUE
-31 CONTINUE
-   do 40 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-40 CONTINUE
-41 CONTINUE
+   END DO
+END DO
 !
-do 61 J = 1,N
-   do 51 I = 1,N
+DO J = 1,N
+   DO I = 1,N
       WK(I) = 0.D0
-      do 50 K = 1,N
+      DO K = 1,N
          WK(I) = WK(I) + U(K,I)*C(K,J)
-50 CONTINUE
-51 CONTINUE
-   do 60 I = 1,N
+      END DO
+   END DO
+   DO I = 1,N
       C(I,J) = WK(I)
-60 CONTINUE
-61 CONTINUE
+   END DO
+END DO
 !
-do 71 I = 1,N
-   do 70 J = I,N
+DO I = 1,N
+   DO J = I,N
       C(I,J) = C(I,J) + C(J,I)
       C(J,I) = C(I,J)
-70 CONTINUE
-71 CONTINUE
+   END DO
+END DO
 !
 !     SOLVE THE TRANSFORMED SYSTEM
 !
@@ -2279,40 +2279,40 @@ IF (IERR .NE. 0) GO TO 210
 !
 !     TRANSFORM C BACK TO THE SOLUTION
 !
-do 80 I = 1,N
+DO I = 1,N
    C(I,I) = C(I,I)/2.D0
-80 CONTINUE
+END DO
 !
-do 101 I = 1,N
-   do 91 J = 1,N
+DO I = 1,N
+   DO J = 1,N
       WK(J) = 0.D0
-      do 90 K = I,N
+      DO K = I,N
          WK(J) = WK(J) + C(I,K)*U(J,K)
-90 CONTINUE
-91 CONTINUE
-   do 100 J = 1,N
+      END DO
+   END DO
+   DO J = 1,N
       C(I,J) = WK(J)
-100 CONTINUE
-101 CONTINUE
+   END DO
+END DO
 !
-do 121 J = 1,N
-   do 111 I = 1,N
+DO J = 1,N
+   DO I = 1,N
       WK(I) = 0.D0
-      do 110 K = 1,N
+      DO K = 1,N
          WK(I) = WK(I) + U(I,K)*C(K,J)
-110 CONTINUE
-111 CONTINUE
-   do 120 I = 1,N
+      END DO
+   END DO
+   DO I = 1,N
       C(I,J) = WK(I)
-120 CONTINUE
-121 CONTINUE
+   END DO
+END DO
 !
-do 131 I = 1,N
-   do 130 J = I,N
+DO I = 1,N
+   DO J = I,N
       C(I,J) = C(I,J) + C(J,I)
       C(J,I) = C(I,J)
-130 CONTINUE
-131 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -2346,13 +2346,13 @@ L = 1
 35 KK = K + DK - 1
       IF (K .EQ. L) GO TO 45
 !
-      do 42 I = K,KK
+      DO I = K,KK
          do 41 J = L,LL
          SUM = C(I,J)
             do 40 IA = L,KM1
 40 SUM = SUM - A(IA,I)*C(IA,J)
 41 C(I,J) = SUM
-42 CONTINUE
+      END DO
 !
 45 IF (DL .EQ. 2) GO TO 60
       IF (DK .EQ. 2 ) GO TO 50
@@ -2440,15 +2440,15 @@ L = 1
 LDL = L + DL
 IF (LDL .GT. N) RETURN
 !
-do 121 J = LDL,N
-   do 100 I = L,LL
+DO J = LDL,N
+   DO I = L,LL
       C(I,J) = C(J,I)
-100 CONTINUE
+   END DO
    do 120 I = J,N
       do 110 K = L,LL
 110 C(I,J) = C(I,J) - C(I,K)*A(K,J) - A(K,I)*C(K,J)
 120 C(J,I) = C(I,J)
-121 CONTINUE
+END DO
 L = LDL
 GO TO 10
 !
@@ -2660,61 +2660,61 @@ do 40 I = 1,N
 40 CONTINUE
 GNORM = (BNORM+SQRT(BNORM**2+4.0*ANORM*CNORM))/(2.0*ANORM)
 IF (IGUESS.EQ.0) GO TO 70
-do 60 I = 1,N
-  do 50 J = 1,N
+DO I=1,N
+  DO J=1,N
     XOLD(I,J) = S(I,J)
-50 CONTINUE
-60 CONTINUE
+  END DO
+END DO
 GO TO 100
 !
-70 do 90 I = 1,N
-  do 80 J = 1,N
+70 DO I=1,N
+  DO J=1,N
     XOLD(I,J) = CMPLX(0.0,0.0)
-80 CONTINUE
+  END DO
   XOLD(I,I) = CMPLX(GNORM,0.0)
-90 CONTINUE
+END DO
 !
-100 do 360 ITS = 1,MAXITS
+100 DO ITS=1,MAXITS
   IF (ITS.NE.31) GO TO 130
-  do 120 I = 1,N
-    do 110 J = 1,N
+  DO I=1,N
+    DO J=1,N
       XOLD(I,J) = CMPLX(0.0,0.0)
-110 CONTINUE
+    END DO
     XOLD(I,I) = CMPLX(0.0,GNORM)
-120 CONTINUE
+  END DO
 !
 130 IF (ITS.NE.61) GO TO 160
-  do 150 I = 1,N
-    do 140 J = 1,N
+  DO I=1,N
+    DO J=1,N
       XOLD(I,J) = C(I,J)
-140 CONTINUE
-150 CONTINUE
+    END DO
+  END DO
 !        ********** SET UP U AND RIGHT HAND SIDE **********
 160 CALL CMPROD(N, N, N, A, NM, XOLD, NM, U, NM, U)
-  do 180 I = 1,N
-    do 170 J = 1,N
+  DO I=1,N
+    DO J=1,N
       U(I,J) = U(I,J) + B(I,J)
-170 CONTINUE
-180 CONTINUE
+    END DO
+  END DO
   CALL CMPROD(N, N, N, U, NM, XOLD, NM, S, NM, S)
-  do 200 I = 1,N
-    do 190 J = 1,N
+  DO I=1,N
+    DO J=1,N
       S(I,J) = S(I,J) + C(I,J)
-190 CONTINUE
-200 CONTINUE
+    END DO
+  END DO
 !        ********** CHECK FOR CONVERGENCE **********
   XNORM = 0.0
   FXNORM = 0.0
-  do 220 I = 1,N
+  DO I=1,N
     XNI = 0.0
     FXNI = 0.0
-    do 210 J = 1,N
+    DO J=1,N
       XNI = XNI + CABS(XOLD(I,J))
       FXNI = FXNI + CABS(S(I,J))
-210 CONTINUE
+    END DO
     IF (XNI.GT.XNORM) XNORM = XNI
     IF (FXNI.GT.FXNORM) FXNORM = FXNI
-220 CONTINUE
+  END DO
   IF (TOL.LE.0.0) GO TO 230
   IF (FXNORM.LT.TOL) GO TO 370
 230 TNORM = 8.0*FLOAT(N)*ANORM*XNORM**2 + 5.0*FLOAT(N)*BNORM*XNORM &
@@ -2726,14 +2726,14 @@ GO TO 100
   IF (ITS.NE.1) GO TO 240
   MATS = 1
   CALL CQZHES(NM, N, U, A, MATS, Z, S, B, C)
-240 do 260 I = 1,N
-    do 250 J = 1,N
+240 DO I=1,N
+    DO J=1,N
       V(I,J) = A(I,J)
       L(I,J) = CONJG(XOLD(J,I))
       EYE(I,J) = CMPLX(0.0,0.0)
-250 CONTINUE
+    END DO
     EYE(I,I) = CMPLX(1.0,0.0)
-260 CONTINUE
+  END DO
   IF (ITS.EQ.1) GO TO 270
   MATS = 2
   CALL CQZHES(NM, N, U, V, MATS, Z, S, B, C)
@@ -2746,23 +2746,23 @@ GO TO 100
   IF (IERR.NE.0) GO TO 440
   CALL CTRANS(NM, N, L)
 !        ********** UPDATE S WITH R **********
-  do 310 I = 1,N
-    do 280 J = 1,N
+  DO I=1,N
+    DO J=1,N
       TEMP(J) = S(I,J)
       S(I,J) = CMPLX(0.0,0.0)
-280 CONTINUE
-    do 300 J = 1,N
-      do 290 K = 1,N
+    END DO
+    DO J=1,N
+      DO K=1,N
         S(I,J) = S(I,J) + TEMP(K)*R(K,J)
-290 CONTINUE
-300 CONTINUE
-310 CONTINUE
-  do 330 J = 1,N
-    do 320 I = 1,N
+      END DO
+    END DO
+  END DO
+  DO J=1,N
+    DO I=1,N
       L(I,J) = L(I,J)*EYE(J,J)
-320 CONTINUE
+    END DO
     EYE(J,J) = CMPLX(1.0,0.0)
-330 CONTINUE
+  END DO
 !        ********** BACKSOLVE THE TRANSFORMED SYSTEM **********
   CALL TRISLV(NM, N, U, V, L, S, TEMP, IERR)
   IF (IERR.NE.0) GO TO 450
@@ -2770,30 +2770,30 @@ GO TO 100
   CALL CMPROD(N, N, N, Z, NM, S, NM, L, NM, L)
   CALL CTRANS(NM, N, R)
   CALL CMPROD(N, N, N, L, NM, R, NM, S, NM, S)
-  do 350 I = 1,N
-    do 340 J = 1,N
+  DO I=1,N
+    DO J=1,N
       XOLD(I,J) = XOLD(I,J) - S(I,J)
-340 CONTINUE
-350 CONTINUE
-360 CONTINUE
+    END DO
+  END DO
+END DO
 !     ********** CONVERGENCE **********
 370 IGUESS = ITS - 1
 L(1,1) = CMPLX(FXNORM,0.0)
-do 390 I = 1,N
-  do 380 J = 1,N
+DO I=1,N
+  DO J=1,N
     S(I,J) = XOLD(I,J)
-380 CONTINUE
-390 CONTINUE
+  END DO
+END DO
 IERR = 0
 RETURN
 !     ********** ERROR RETURNS **********
 400 IERR = 1
 L(1,1) = CMPLX(FXNORM,0.0)
-do 420 I = 1,N
-  do 410 J = 1,N
+DO I=1,N
+  DO J=1,N
     S(I,J) = XOLD(I,J)
-410 CONTINUE
-420 CONTINUE
+  END DO
+END DO
 RETURN
 430 IERR = 2
 RETURN
@@ -2866,12 +2866,12 @@ INTEGER MATS
 !     REAL SQRT, CABS
 !     COMPLEX CMPLX, CONJG
 IF (MATS.EQ.0) GO TO 30
-do 20 I = 1,N
-  do 10 J = 1,N
+DO I=1,N
+  DO J=1,N
     Z(I,J) = CMPLX(0.0,0.0)
-10 CONTINUE
+  END DO
   Z(I,I) = CMPLX(1.0,0.0)
-20 CONTINUE
+END DO
 !     ********** REDUCE B TO UPPER TRIANGULAR FORM **********
 30 IF (N.LE.1) GO TO 260
 NM1 = N - 1
@@ -2879,32 +2879,32 @@ IF (MATS.EQ.2) GO TO 140
 do 130 L = 1,NM1
   L1 = L + 1
   S = 0.0
-  do 40 I = L1,N
+  DO I=L1,N
     S = S + CABS(B(I,L))
-40 CONTINUE
+  END DO
   IF (S.EQ.0.0) GO TO 130
   S = S + CABS(B(L,L))
   R = 0.0
-  do 50 I = L,N
+  DO I=L,N
     B(I,L) = B(I,L)/CMPLX(S,0.0)
     R = R + CABS(B(I,L))**2
-50 CONTINUE
+  END DO
   R = SQRT(R)
   RR = CMPLX(R,0.0)
   IF (CABS(B(L,L)).NE.0.0) RR = (B(L,L)/CABS(B(L,L)))*RR
   B(L,L) = B(L,L) + RR
   RHO = CONJG(RR)*B(L,L)
-  do 80 J = L1,N
+  DO J=L1,N
     T = CMPLX(0.0,0.0)
-    do 60 I = L,N
+    DO I=L,N
       T = T + CONJG(B(I,L))*B(I,J)
-60 CONTINUE
+    END DO
     T = -T/RHO
-    do 70 I = L,N
+    DO I=L,N
       B(I,J) = B(I,J) + T*B(I,L)
-70 CONTINUE
-80 CONTINUE
-  do 110 J = 1,N
+    END DO
+  END DO
+  DO J=1,N
     T = CMPLX(0.0,0.0)
     TF = CMPLX(0.0,0.0)
     TG = CMPLX(0.0,0.0)
@@ -2929,17 +2929,17 @@ do 130 L = 1,NM1
       G(I,J) = G(I,J) + TG*B(I,L)
       H(I,J) = H(I,J) + TH*B(I,L)
 100 CONTINUE
-110 CONTINUE
+  END DO
   B(L,L) = -CMPLX(S,0.0)*RR
-  do 120 I = L1,N
+  DO I=L1,N
     B(I,L) = CMPLX(0.0,0.0)
-120 CONTINUE
+  END DO
 130 CONTINUE
 !     ********** REDUCE A TO UPPER HESSENBERG FORM, WHILE
 !                KEEPING B TRIANGULAR **********
 140 IF (N.EQ.2) GO TO 260
 NM2 = N - 2
-do 250 K = 1,NM2
+DO K=1,NM2
   NK1 = NM1 - K
   do 240 LB = 1,NK1
     L = N - LB
@@ -2955,32 +2955,32 @@ do 250 K = 1,NM2
     V1 = -(U1+RR)/RR
     V2 = -U2/RR
     U2 = V2/V1
-    do 150 J = K,N
+    DO J=K,N
       T = A(L,J) + CONJG(U2)*A(L1,J)
       A(L,J) = A(L,J) + T*V1
       A(L1,J) = A(L1,J) + T*V2
-150 CONTINUE
+    END DO
     A(L1,K) = CMPLX(0.0,0.0)
-    do 160 J = L,N
+    DO J=L,N
       T = B(L,J) + CONJG(U2)*B(L1,J)
       B(L,J) = B(L,J) + T*V1
       B(L1,J) = B(L1,J) + T*V2
-160 CONTINUE
+    END DO
     IF (MATS.EQ.3) GO TO 180
-    do 170 J = 1,N
+    DO J=1,N
       TF = F(L,J) + CONJG(U2)*F(L1,J)
       F(L,J) = F(L,J) + TF*V1
       F(L1,J) = F(L1,J) + TF*V2
-170 CONTINUE
+    END DO
 180 IF (MATS.NE.1) GO TO 200
-    do 190 J = 1,N
+    DO J=1,N
       TG = G(L,J) + CONJG(U2) + G(L1,J)
       TH = H(L,J) + CONJG(U2) + H(L1,J)
       G(L,J) = G(L,J) + TG*V1
       H(L,J) = H(L,J) + TH*V1
       G(L1,J) = G(L1,J) + TG*V2
       H(L1,J) = H(L1,J) + TH*V2
-190 CONTINUE
+    END DO
 !     ********** ZERO B(L+1,L) **********
 200 S = CABS(B(L1,L1)) + CABS(B(L1,L))
     IF (S.EQ.0.0) GO TO 240
@@ -2992,25 +2992,25 @@ do 250 K = 1,NM2
     V1 = -(U1+RR)/RR
     V2 = -U2/RR
     U2 = V2/V1
-    do 210 I = 1,L1
+    DO I=1,L1
       T = B(I,L1) + CONJG(U2)*B(I,L)
       B(I,L1) = B(I,L1) + T*V1
       B(I,L) = B(I,L) + T*V2
-210 CONTINUE
+    END DO
     B(L1,L) = CMPLX(0.0,0.0)
-    do 220 I = 1,N
+    DO I=1,N
       T = A(I,L1) + CONJG(U2)*A(I,L)
       A(I,L1) = A(I,L1) + T*V1
       A(I,L) = A(I,L) + T*V2
-220 CONTINUE
+    END DO
     IF (MATS.EQ.0) GO TO 240
-    do 230 I = 1,N
+    DO I=1,N
       T = Z(I,L1) + CONJG(U2)*Z(I,L)
       Z(I,L1) = Z(I,L1) + T*V1
       Z(I,L) = Z(I,L) + T*V2
-230 CONTINUE
+    END DO
 240 CONTINUE
-250 CONTINUE
+END DO
 260 RETURN
 END SUBROUTINE CQZHES
 
@@ -3115,12 +3115,12 @@ NA = EN - 1
 ENM2 = NA - 1
 60 ISH = 1
 !     ********** CHECK FOR CONVERGENCE OR REDUCIBILITY **********
-do 70 LL = 1,EN
+DO LL=1,EN
   LM1 = EN - LL
   L = LM1 + 1
   IF (L.EQ.1) GO TO 90
   IF (CABS(A(L,LM1)).LE.EPSA) GO TO 80
-70 CONTINUE
+END DO
 80 A(L,LM1) = CMPLX(0.0,0.0)
 IF (L.LT.NA) GO TO 90
 !     ********** 1-BY-1 BLOCK ISOLATED **********
@@ -3149,11 +3149,11 @@ do 110 J = L,ENORN
   B(L,J) = B(L,J) + T*V1
   B(L1,J) = B(L1,J) + T*V2
   IF (MATS.EQ.3) GO TO 110
-  do 100 JJ = 1,N
+  DO JJ=1,N
     TF = F(L,JJ) + CONJG(U2)*F(L1,JJ)
     F(L,JJ) = F(L,JJ) + TF*V1
     F(L1,JJ) = F(L1,JJ) + TF*V2
-100 CONTINUE
+  END DO
 110 CONTINUE
 IF (L.NE.1) A(L,LM1) = -A(L,LM1)
 LM1 = L
@@ -3210,21 +3210,21 @@ do 200 K = L,NA
   V1 = -(U1+RR)/RR
   V2 = -U2/RR
   U2 = V2/V1
-  do 150 J = KM1,ENORN
+  DO J=KM1,ENORN
     T = A(K,J) + CONJG(U2)*A(K1,J)
     A(K,J) = A(K,J) + T*V1
     A(K1,J) = A(K1,J) + T*V2
     T = B(K,J) + CONJG(U2)*B(K1,J)
     B(K,J) = B(K,J) + T*V1
     B(K1,J) = B(K1,J) + T*V2
-150 CONTINUE
+  END DO
   IF (K.NE.L) A(K1,KM1) = CMPLX(0.0,0.0)
   IF (MATS.EQ.3) GO TO 170
-  do 160 J = 1,N
+  DO J=1,N
     TF = F(K,J) + CONJG(U2)*F(K1,J)
     F(K,J) = F(K,J) + TF*V1
     F(K1,J) = F(K1,J) + TF*V2
-160 CONTINUE
+  END DO
 !     ********** ZERO B(K+1,K) **********
 170 S = CABS(B(K1,K1)) + CABS(B(K1,K))
   IF (S.EQ.0.0) GO TO 200
@@ -3236,21 +3236,21 @@ do 200 K = L,NA
   V1 = -(U1+RR)/RR
   V2 = -U2/RR
   U2 = V2/V1
-  do 180 I = LOR1,LL
+  DO I=LOR1,LL
     T = A(I,K1) + CONJG(U2)*A(I,K)
     A(I,K1) = A(I,K1) + T*V1
     A(I,K) = A(I,K) + T*V2
     T = B(I,K1) + CONJG(U2)*B(I,K)
     B(I,K1) = B(I,K1) + T*V1
     B(I,K) = B(I,K) + T*V2
-180 CONTINUE
+  END DO
   B(K1,K) = CMPLX(0.0,0.0)
   IF (MATS.EQ.0) GO TO 200
-  do 190 I = 1,N
+  DO I=1,N
     T = Z(I,K1) + CONJG(U2)*Z(I,K)
     Z(I,K1) = Z(I,K1) + T*V1
     Z(I,K) = Z(I,K) + T*V2
-190 CONTINUE
+  END DO
 200 CONTINUE
 !     ********** END QZ STEP **********
 GO TO 60
@@ -3309,7 +3309,7 @@ REAL S, T
 !     COMPLEX CMPLX
 IERR = 0
 NM1 = N - 1
-do 120 KK = 1,N
+DO KK=1,N
 !        ********** BACKSUBSTITUTE FOR ROW K. **********
   K = N - KK + 1
   IF (CABS(F(K,N)).NE.0.0) GO TO 10
@@ -3327,9 +3327,9 @@ do 120 KK = 1,N
     J = N - I
     JP1 = J + 1
     SUM = CMPLX(0.0,0.0)
-    do 40 M = JP1,N
+    DO M=JP1,N
       SUM = SUM + F(K,M)*L(M,J)
-40 CONTINUE
+    END DO
     SUM = F(K,J) - V(K,K)*SUM
     IF (CABS(SUM).NE.0.0) GO TO 50
     F(K,J) = CMPLX(0.0,0.0)
@@ -3345,19 +3345,19 @@ do 120 KK = 1,N
 !        ********** FORM TEMP = YK-TRANS*L. **********
   IF (K.EQ.1) RETURN
   KM1 = K - 1
-  do 90 I = 1,N
+  DO I=1,N
     TEMP(I) = CMPLX(0.0,0.0)
-    do 80 J = 1,N
+    DO J=1,N
       TEMP(I) = TEMP(I) + F(K,J)*L(J,I)
-80 CONTINUE
-90 CONTINUE
+    END DO
+  END DO
 !        ********** PREPARE F' WHICH IS (K-1) BY N. **********
-  do 110 I = 1,KM1
-    do 100 J = 1,N
+  DO I=1,KM1
+    DO J=1,N
       F(I,J) = F(I,J) - U(I,K)*F(K,J) - V(I,K)*TEMP(J)
-100 CONTINUE
-110 CONTINUE
-120 CONTINUE
+    END DO
+  END DO
+END DO
 RETURN
 END SUBROUTINE TRISLV
 
@@ -3422,14 +3422,14 @@ IF (ANORM .GT. FACTOR) GO TO 20
 !
 !                NORMALIZE THE MATRIX A
 !
-do 31 J = 1,N
+DO J = 1,N
    do 30 I = 1,N
 30 A(I,J) = A(I,J)/FACTOR
-31 CONTINUE
+END DO
 !
 40 NP1 = N + 1
 NP6 = N + 6
-do 100 J = 1,N
+DO J = 1,N
 !
 !     COMPUTE THE J-TH COLUMN OF FIRST EIGHT POWERS OF A
 !
@@ -3439,14 +3439,14 @@ do 100 J = 1,N
 50 S = S + A(I,L)*A(L,J)
 51 WK(I,NP1) = S
 !
-   do 70 K = NP1,NP6
+   DO K = NP1,NP6
    KP1 = K + 1
       do 61 I = 1,N
       S = 0.0
          do 60 L = 1,N
 60 S = S + A(I,L)*WK(L,K)
 61 WK(I,KP1) = S
-70 CONTINUE
+   END DO
 !
 !     COMPUTE THE J-TH COLUMN OF THE NUMERATOR AND DENOMINATOR
 !                  OF THE PADE APPROXIMATION
@@ -3469,7 +3469,7 @@ do 100 J = 1,N
       Z(I,J) = Z(I,J) + 1.0
       WK(I,J) = WK(I,J) + 1.0
 90 CONTINUE
-100 CONTINUE
+END DO
 !
 !        CALCULATE EXP(A) BY SOLVING  WK * EXP(A) = Z
 !
@@ -3480,20 +3480,20 @@ IF (M .EQ. 0)  GO TO 150
 !          TAKE OUT THE EFFECT OF THE NORMALIZATION
 !                   OPERATION ON EXP(A)
 !
-do 140 K = 1,M
-   do 121 J = 1,N
+DO K = 1,M
+   DO J = 1,N
       do 120 I = 1,N
       S = 0.0
          do 110 L = 1,N
 110 S = S + Z(I,L)*Z(L,J)
 120 WK(I,J) = S
-121 CONTINUE
+   END DO
 !
-   do 131 J = 1,N
+   DO J = 1,N
       do 130 I = 1,N
 130 Z(I,J) = WK(I,J)
-131 CONTINUE
-140 CONTINUE
+   END DO
+END DO
 !
 !            TAKE OUT THE EFFECT OF THE BALANCING
 !                   OPERATION ON EXP(A)
@@ -3579,14 +3579,14 @@ IF (ANORM .GT. FACTOR) GO TO 20
 !
 !                NORMALIZE THE MATRIX A
 !
-do 31 J = 1,N
+DO J = 1,N
    do 30 I = 1,N
 30 A(I,J) = A(I,J)/FACTOR
-31 CONTINUE
+END DO
 !
 40 NP1 = N + 1
 NP10 = N + 10
-do 100 J = 1,N
+DO J = 1,N
 !
 !     COMPUTE THE J-TH COLUMN OF THE FIRST 12 POWERS OF A
 !
@@ -3596,14 +3596,14 @@ do 100 J = 1,N
 50 S = S + A(I,L)*A(L,J)
 51 WK(I,NP1) = S
 !
-   do 70 K = NP1,NP10
+   DO K = NP1,NP10
    KP1 = K + 1
       do 61 I = 1,N
       S = 0.D0
          do 60 L = 1,N
 60 S = S + A(I,L)*WK(L,K)
 61 WK(I,KP1) = S
-70 CONTINUE
+   END DO
 !
 !     COMPUTE THE J-TH COLUMN OF THE NUMERATOR AND DENOMINATOR
 !                  OF THE PADE APPROXIMATION
@@ -3626,7 +3626,7 @@ do 100 J = 1,N
       Z(I,J) = Z(I,J) + 1.D0
       WK(I,J) = WK(I,J) + 1.D0
 90 CONTINUE
-100 CONTINUE
+END DO
 !
 !        CALCULATE EXP(A) BY SOLVING  WK * EXP(A) = Z
 !
@@ -3637,20 +3637,20 @@ IF (M .EQ. 0)  GO TO 150
 !          TAKE OUT THE EFFECT OF THE NORMALIZATION
 !                   OPERATION ON EXP(A)
 !
-do 140 K = 1,M
-   do 121 J = 1,N
+DO K = 1,M
+   DO J = 1,N
       do 120 I = 1,N
       S = 0.D0
          do 110 L = 1,N
 110 S = S + Z(I,L)*Z(L,J)
 120 WK(I,J) = S
-121 CONTINUE
+   END DO
 !
-   do 131 J = 1,N
+   DO J = 1,N
       do 130 I = 1,N
 130 Z(I,J) = WK(I,J)
-131 CONTINUE
-140 CONTINUE
+   END DO
+END DO
 !
 !            TAKE OUT THE EFFECT OF THE BALANCING
 !                   OPERATION ON EXP(A)
@@ -3696,9 +3696,9 @@ RETURN
 !     FIND THE PIVOT FOR COLUMN 1
 !
 10 M = 1
-do 20 I = 2,N
+DO I = 2,N
 IF (ABS(C(M)) .LT. ABS(C(I))) M = I
-20 CONTINUE
+END DO
 !
 IP(1) = M
 C1 = C(M)
@@ -3714,7 +3714,7 @@ D(N) = BK/C(1)
 !
 !     K LOOP - EACH K FOR A NEW COLUMN OF THE TRANSPOSED SYSTEM
 !
-do 120 K = 2,N
+DO K = 2,N
 KP1 = K + 1
 KM1 = K - 1
 !
@@ -3763,9 +3763,9 @@ GO TO 90
 !
 !     FIND THE PIVOT
 !
-70 do 71 I = KP1,N
+70 DO I = KP1,N
 IF (ABS(C(M)) .LT. ABS(C(I))) M = I
-71 CONTINUE
+END DO
 !
 IP(K) = M
 CK = C(M)
@@ -3803,7 +3803,7 @@ IJOLD = IJOLD + 1
 IK = IK + 1
 D(IJ) = D(IJOLD) + D(IK)*DKJ
 110 CONTINUE
-120 CONTINUE
+END DO
 !
 LAST = MAX
 IF (IFLAG .LT. 0) LAST = MAX - 2
@@ -3860,9 +3860,9 @@ RETURN
 !     FIND THE PIVOT FOR COLUMN 1
 !
 10 M = 1
-do 20 I = 2,N
+DO I = 2,N
 IF (DABS(C(M)) .LT. DABS(C(I))) M = I
-20 CONTINUE
+END DO
 !
 IP(1) = M
 C1 = C(M)
@@ -3878,7 +3878,7 @@ D(N) = BK/C(1)
 !
 !     K LOOP - EACH K FOR A NEW COLUMN OF THE TRANSPOSED SYSTEM
 !
-do 120 K = 2,N
+DO K = 2,N
 KP1 = K + 1
 KM1 = K - 1
 !
@@ -3927,9 +3927,9 @@ GO TO 90
 !
 !     FIND THE PIVOT
 !
-70 do 71 I = KP1,N
+70 DO I = KP1,N
 IF (DABS(C(M)) .LT. DABS(C(I))) M = I
-71 CONTINUE
+END DO
 !
 IP(K) = M
 CK = C(M)
@@ -3967,7 +3967,7 @@ IJOLD = IJOLD + 1
 IK = IK + 1
 D(IJ) = D(IJOLD) + D(IK)*DKJ
 110 CONTINUE
-120 CONTINUE
+END DO
 !
 LAST = MAX
 IF (IFLAG .LT. 0) LAST = MAX - 2
@@ -4046,7 +4046,7 @@ D(N) = BK/C(1)
 !
 !     K LOOP - EACH K FOR A NEW COLUMN OF THE TRANSPOSED SYSTEM
 !
-do 120 K = 2,N
+DO K = 2,N
 KP1 = K + 1
 KM1 = K - 1
 !
@@ -4139,7 +4139,7 @@ IJOLD = IJOLD + 1
 IK = IK + 1
 D(IJ) = D(IJOLD) + D(IK)*DKJ
 110 CONTINUE
-120 CONTINUE
+END DO
 !
 LAST = MAX
 IF (IFLAG .LT. 0) LAST = MAX - 2
@@ -4175,20 +4175,20 @@ REAL A(KA,N), B(KB,*)
 !     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 !
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    K = ML + 1 - I
    do 10 J = 1,JMAX
       K = K + 1
 10 A(I,J) = B(I,K)
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
 L = 0
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
@@ -4197,37 +4197,37 @@ do 22 I = IMIN,IMAX
       A(I,J) = B(I,K)
 21 J = J - 1
    L = L + 1
-22 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER RIGHT CORNER
 !
 JMIN = MU + 2
 IF (JMIN .GT. N) GO TO 40
 IMAX0 = 1
-do 31 J = JMIN,N
+DO J = JMIN,N
    do 30 I = 1,IMAX0
 30 A(I,J) = 0.0
    IMAX0 = MIN0(IMAX,IMAX0 + 1)
-31 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER LEFT CORNER
 !
 40 IF (IMIN .EQ. IMAX) GO TO 50
 JMAX = IMAX - IMIN
-do 42 J = 1,JMAX
+DO J = 1,JMAX
    IMIN = IMIN + 1
    do 41 I = IMIN,IMAX
 41 A(I,J) = 0.0
-42 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,N
+DO J = 1,N
    do 51 I = IMIN,M
 51 A(I,J) = 0.0
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVBR
 
@@ -4242,7 +4242,7 @@ REAL A(KA,N), B(KB,*)
 !
 IF (ML .EQ. 0) GO TO 30
 L = ML
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
    do 10 JJ = 1,JMAX
@@ -4250,29 +4250,29 @@ do 11 I = 1,ML
       B(I,K) = A(I,J)
 10 J = J - 1
    L = L - 1
-11 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER LEFT CORNER
 !
 IMAX = ML
-do 21 J = 1,ML
+DO J = 1,ML
    do 20 I = 1,IMAX
 20 B(I,J) = 0.0
    IMAX = IMAX - 1
-21 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 30 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 32 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    K = 0
    do 31 J = JMIN,JMAX
       K = K + 1
 31 B(I,K) = A(I,J)
-32 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER RIGHT CORNER
 !
@@ -4280,20 +4280,20 @@ JMAX = ML + MU + 1
 IF (K .EQ. JMAX) GO TO 50
 JMIN = K + 1
 IMIN = IMAX
-do 41 J = JMIN,JMAX
+DO J = JMIN,JMAX
    do 40 I = IMIN,IMAX
 40 B(I,J) = 0.0
    IMIN = IMIN - 1
-41 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,JMAX
+DO J = 1,JMAX
    do 51 I = IMIN,M
 51 B(I,J) = 0.0
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVRB
 
@@ -4309,26 +4309,26 @@ REAL A(KA,N), B(KB,NB)
 NM1 = N - 1
 IMIN = M
 IF (M .EQ. 1) GO TO 20
-do 11 L = 2,M
+DO L = 2,M
    J = 1
    IMAX = MIN0(M,IMIN + NM1)
    do 10 I = IMIN,IMAX
       IF (A(I,J) .NE. 0.0) GO TO 20
 10 J = J + 1
    IMIN = IMIN - 1
-11 CONTINUE
+END DO
 !
 20 MM1 = M - 1
 JMIN = N
 IF (N .EQ. 1) GO TO 30
-do 22 L = 2,N
+DO L = 2,N
    I = 1
    JMAX = MIN0(N,JMIN + MM1)
    do 21 J = JMIN,JMAX
       IF (A(I,J) .NE. 0.0) GO TO 30
 21 I = I + 1
    JMIN = JMIN - 1
-22 CONTINUE
+END DO
 !
 30 ML = IMIN - 1
 MU = JMIN - 1
@@ -4357,20 +4357,20 @@ DOUBLE PRECISION A(KA,N), B(KB,*)
 !     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 !
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    K = ML + 1 - I
    do 10 J = 1,JMAX
       K = K + 1
 10 A(I,J) = B(I,K)
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
 L = 0
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
@@ -4379,37 +4379,37 @@ do 22 I = IMIN,IMAX
       A(I,J) = B(I,K)
 21 J = J - 1
    L = L + 1
-22 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER RIGHT CORNER
 !
 JMIN = MU + 2
 IF (JMIN .GT. N) GO TO 40
 IMAX0 = 1
-do 31 J = JMIN,N
+DO J = JMIN,N
    do 30 I = 1,IMAX0
 30 A(I,J) = 0.D0
    IMAX0 = MIN0(IMAX,IMAX0 + 1)
-31 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER LEFT CORNER
 !
 40 IF (IMIN .EQ. IMAX) GO TO 50
 JMAX = IMAX - IMIN
-do 42 J = 1,JMAX
+DO J = 1,JMAX
    IMIN = IMIN + 1
    do 41 I = IMIN,IMAX
 41 A(I,J) = 0.D0
-42 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,N
+DO J = 1,N
    do 51 I = IMIN,M
 51 A(I,J) = 0.D0
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVBD
 
@@ -4424,7 +4424,7 @@ DOUBLE PRECISION A(KA,N), B(KB,*)
 !
 IF (ML .EQ. 0) GO TO 30
 L = ML
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
    do 10 JJ = 1,JMAX
@@ -4432,29 +4432,29 @@ do 11 I = 1,ML
       B(I,K) = A(I,J)
 10 J = J - 1
    L = L - 1
-11 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER LEFT CORNER
 !
 IMAX = ML
-do 21 J = 1,ML
+DO J = 1,ML
    do 20 I = 1,IMAX
 20 B(I,J) = 0.D0
    IMAX = IMAX - 1
-21 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 30 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 32 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    K = 0
    do 31 J = JMIN,JMAX
       K = K + 1
 31 B(I,K) = A(I,J)
-32 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER RIGHT CORNER
 !
@@ -4462,20 +4462,20 @@ JMAX = ML + MU + 1
 IF (K .EQ. JMAX) GO TO 50
 JMIN = K + 1
 IMIN = IMAX
-do 41 J = JMIN,JMAX
+DO J = JMIN,JMAX
    do 40 I = IMIN,IMAX
 40 B(I,J) = 0.D0
    IMIN = IMIN - 1
-41 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,JMAX
+DO J = 1,JMAX
    do 51 I = IMIN,M
 51 B(I,J) = 0.D0
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVDB
 
@@ -4491,26 +4491,26 @@ DOUBLE PRECISION A(KA,N), B(KB,NB)
 NM1 = N - 1
 IMIN = M
 IF (M .EQ. 1) GO TO 20
-do 11 L = 2,M
+DO L = 2,M
    J = 1
    IMAX = MIN0(M,IMIN + NM1)
    do 10 I = IMIN,IMAX
       IF (A(I,J) .NE. 0.D0) GO TO 20
 10 J = J + 1
    IMIN = IMIN - 1
-11 CONTINUE
+END DO
 !
 20 MM1 = M - 1
 JMIN = N
 IF (N .EQ. 1) GO TO 30
-do 22 L = 2,N
+DO L = 2,N
    I = 1
    JMAX = MIN0(N,JMIN + MM1)
    do 21 J = JMIN,JMAX
       IF (A(I,J) .NE. 0.D0) GO TO 30
 21 I = I + 1
    JMIN = JMIN - 1
-22 CONTINUE
+END DO
 !
 30 ML = IMIN - 1
 MU = JMIN - 1
@@ -4539,20 +4539,20 @@ COMPLEX A(KA,N), B(KB,*)
 !     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 !
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    K = ML + 1 - I
    do 10 J = 1,JMAX
       K = K + 1
 10 A(I,J) = B(I,K)
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
 L = 0
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
@@ -4561,37 +4561,37 @@ do 22 I = IMIN,IMAX
       A(I,J) = B(I,K)
 21 J = J - 1
    L = L + 1
-22 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER RIGHT CORNER
 !
 JMIN = MU + 2
 IF (JMIN .GT. N) GO TO 40
 IMAX0 = 1
-do 31 J = JMIN,N
+DO J = JMIN,N
    do 30 I = 1,IMAX0
 30 A(I,J) = (0.0,0.0)
    IMAX0 = MIN0(IMAX,IMAX0 + 1)
-31 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER LEFT CORNER
 !
 40 IF (IMIN .EQ. IMAX) GO TO 50
 JMAX = IMAX - IMIN
-do 42 J = 1,JMAX
+DO J = 1,JMAX
    IMIN = IMIN + 1
    do 41 I = IMIN,IMAX
 41 A(I,J) = (0.0,0.0)
-42 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,N
+DO J = 1,N
    do 51 I = IMIN,M
 51 A(I,J) = (0.0,0.0)
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVBC
 
@@ -4606,7 +4606,7 @@ COMPLEX A(KA,N), B(KB,*)
 !
 IF (ML .EQ. 0) GO TO 30
 L = ML
-do 11 I = 1,ML
+DO I = 1,ML
    JMAX = MIN0(N,I + MU)
    J = JMAX
    do 10 JJ = 1,JMAX
@@ -4614,29 +4614,29 @@ do 11 I = 1,ML
       B(I,K) = A(I,J)
 10 J = J - 1
    L = L - 1
-11 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE UPPER LEFT CORNER
 !
 IMAX = ML
-do 21 J = 1,ML
+DO J = 1,ML
    do 20 I = 1,IMAX
 20 B(I,J) = (0.0,0.0)
    IMAX = IMAX - 1
-21 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 30 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 32 I = IMIN,IMAX
+DO I = IMIN,IMAX
    JMIN = I - ML
    JMAX = MIN0(N,I + MU)
    K = 0
    do 31 J = JMIN,JMAX
       K = K + 1
 31 B(I,K) = A(I,J)
-32 CONTINUE
+END DO
 !
 !     INSERT ZEROS IN THE LOWER RIGHT CORNER
 !
@@ -4644,20 +4644,20 @@ JMAX = ML + MU + 1
 IF (K .EQ. JMAX) GO TO 50
 JMIN = K + 1
 IMIN = IMAX
-do 41 J = JMIN,JMAX
+DO J = JMIN,JMAX
    do 40 I = IMIN,IMAX
 40 B(I,J) = (0.0,0.0)
    IMIN = IMIN - 1
-41 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX ROWS
 !
 50 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 52 J = 1,JMAX
+DO J = 1,JMAX
    do 51 I = IMIN,M
 51 B(I,J) = (0.0,0.0)
-52 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CVCB
 
@@ -4673,26 +4673,26 @@ COMPLEX A(KA,N), B(KB,NB)
 NM1 = N - 1
 IMIN = M
 IF (M .EQ. 1) GO TO 20
-do 11 L = 2,M
+DO L = 2,M
    J = 1
    IMAX = MIN0(M,IMIN + NM1)
    do 10 I = IMIN,IMAX
       IF (A(I,J) .NE. (0.0,0.0)) GO TO 20
 10 J = J + 1
    IMIN = IMIN - 1
-11 CONTINUE
+END DO
 !
 20 MM1 = M - 1
 JMIN = N
 IF (N .EQ. 1) GO TO 30
-do 22 L = 2,N
+DO L = 2,N
    I = 1
    JMAX = MIN0(N,JMIN + MM1)
    do 21 J = JMIN,JMAX
       IF (A(I,J) .NE. (0.0,0.0)) GO TO 30
 21 I = I + 1
    JMIN = JMIN - 1
-22 CONTINUE
+END DO
 !
 30 ML = IMIN - 1
 MU = JMIN - 1
@@ -4726,7 +4726,7 @@ KMAX = ML + MU + 1
 !
 J0 = ML
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    IB(I) = L
    KMIN = 1 + J0
    do 10 K = KMIN,KMAX
@@ -4737,13 +4737,13 @@ do 11 I = 1,ML
       L = L + 1
 10 CONTINUE
    J0 = J0 - 1
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    IB(I) = L
    do 21 K = 1,KMAX
       IF (A(I,K) .EQ. 0.0) GO TO 21
@@ -4753,16 +4753,16 @@ do 22 I = IMIN,IMAX
       L = L + 1
 21 CONTINUE
    J0 = J0 - 1
-22 CONTINUE
+END DO
 IERR = 0
 !
 !     SET UP THE REMAINING M-IMAX ROWS
 !
 IMIN = IMAX + 1
 MP1 = M + 1
-do 30 I = IMIN,MP1
+DO I = IMIN,MP1
    IB(I) = L
-30 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -4786,7 +4786,7 @@ KMAX = ML + MU + 1
 !
 J0 = ML
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    IB(I) = L
    KMIN = 1 + J0
    do 10 K = KMIN,KMAX
@@ -4797,13 +4797,13 @@ do 11 I = 1,ML
       L = L + 1
 10 CONTINUE
    J0 = J0 - 1
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    IB(I) = L
    do 21 K = 1,KMAX
       IF (A(I,K) .EQ. 0.D0) GO TO 21
@@ -4813,16 +4813,16 @@ do 22 I = IMIN,IMAX
       L = L + 1
 21 CONTINUE
    J0 = J0 - 1
-22 CONTINUE
+END DO
 IERR = 0
 !
 !     SET UP THE REMAINING M-IMAX ROWS
 !
 IMIN = IMAX + 1
 MP1 = M + 1
-do 30 I = IMIN,MP1
+DO I = IMIN,MP1
    IB(I) = L
-30 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -4846,7 +4846,7 @@ KMAX = ML + MU + 1
 !
 J0 = ML
 IF (ML .EQ. 0) GO TO 20
-do 11 I = 1,ML
+DO I = 1,ML
    IB(I) = L
    KMIN = 1 + J0
    do 10 K = KMIN,KMAX
@@ -4857,13 +4857,13 @@ do 11 I = 1,ML
       L = L + 1
 10 CONTINUE
    J0 = J0 - 1
-11 CONTINUE
+END DO
 !
 !     STORE THE REMAINING NONZERO DATA
 !
 20 IMIN = ML + 1
 IMAX = MIN0(M,ML + N)
-do 22 I = IMIN,IMAX
+DO I = IMIN,IMAX
    IB(I) = L
    do 21 K = 1,KMAX
       IF (A(I,K) .EQ. (0.0,0.0)) GO TO 21
@@ -4873,16 +4873,16 @@ do 22 I = IMIN,IMAX
       L = L + 1
 21 CONTINUE
    J0 = J0 - 1
-22 CONTINUE
+END DO
 IERR = 0
 !
 !     SET UP THE REMAINING M-IMAX ROWS
 !
 IMIN = IMAX + 1
 MP1 = M + 1
-do 30 I = IMIN,MP1
+DO I = IMIN,MP1
    IB(I) = L
-30 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -4921,10 +4921,10 @@ KMAX = ML + MU + 1
 IF (KMAX .GT. NB) GO TO 40
 !
 IERR = 0
-do 21 K = 1,KMAX
+DO K = 1,KMAX
    do 20 I = 1,M
 20 B(I,K) = 0.0
-21 CONTINUE
+END DO
 !
 !     STORE THE MATRIX IN B
 !
@@ -4978,10 +4978,10 @@ KMAX = ML + MU + 1
 IF (KMAX .GT. NB) GO TO 40
 !
 IERR = 0
-do 21 K = 1,KMAX
+DO K = 1,KMAX
    do 20 I = 1,M
 20 B(I,K) = 0.D0
-21 CONTINUE
+END DO
 !
 !     STORE THE MATRIX IN B
 !
@@ -5035,10 +5035,10 @@ KMAX = ML + MU + 1
 IF (KMAX .GT. NB) GO TO 40
 !
 IERR = 0
-do 21 K = 1,KMAX
+DO K = 1,KMAX
    do 20 I = 1,M
 20 B(I,K) = (0.0,0.0)
-21 CONTINUE
+END DO
 !
 !     STORE THE MATRIX IN B
 !
@@ -5071,11 +5071,11 @@ REAL A(KA,*)
 DOUBLE PRECISION B(KB,*)
 !
 NUM = ML + MU + 1
-do 20 J = 1,NUM
-   do 10 I = 1,M
+DO J = 1,NUM
+   DO I = 1,M
       B(I,J) = A(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE BCVRD
 
@@ -5088,11 +5088,11 @@ DOUBLE PRECISION A(KA,*)
 REAL B(KB,*)
 !
 NUM = ML + MU + 1
-do 20 J = 1,NUM
-   do 10 I = 1,M
+DO J = 1,NUM
+   DO I = 1,M
       B(I,J) = A(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE BCVDR
 
@@ -5108,24 +5108,24 @@ REAL B(KB,L)
 NL = ML
 IF (ML .EQ. 0) GO TO 30
 IMIN = ML + 1
-do 20 J = 1,ML
-   do 10 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF (REAL(A(I,J)) .NE. 0.0) GO TO 30
-10 CONTINUE
+   END DO
    NL = NL - 1
    IMIN = IMIN - 1
-20 CONTINUE
+END DO
 !
 30 NU = MU
 IF (MU .EQ. 0) GO TO 60
 J = ML + MU + 1
-do 50 K = 1,MU
-   do 40 I = 1,M
+DO K = 1,MU
+   DO I = 1,M
       IF (REAL(A(I,J)) .NE. 0.0) GO TO 60
-40 CONTINUE
+   END DO
    NU = NU - 1
    J = J - 1
-50 CONTINUE
+END DO
 !
 !     STORE THE REAL PART OF A IN B
 !
@@ -5133,12 +5133,12 @@ do 50 K = 1,MU
 IF (NUM .GT. L) GO TO 100
 IERR = 0
 K = ML - NL
-do 80 J = 1,NUM
+DO J = 1,NUM
    K = K + 1
-   do 70 I = 1,M
+   DO I = 1,M
       B(I,J) = REAL(A(I,K))
-70 CONTINUE
-80 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5159,24 +5159,24 @@ REAL B(KB,L)
 NL = ML
 IF (ML .EQ. 0) GO TO 30
 IMIN = ML + 1
-do 20 J = 1,ML
-   do 10 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF (AIMAG(A(I,J)) .NE. 0.0) GO TO 30
-10 CONTINUE
+   END DO
    NL = NL - 1
    IMIN = IMIN - 1
-20 CONTINUE
+END DO
 !
 30 NU = MU
 IF (MU .EQ. 0) GO TO 60
 J = ML + MU + 1
-do 50 K = 1,MU
-   do 40 I = 1,M
+DO K = 1,MU
+   DO I = 1,M
       IF (AIMAG(A(I,J)) .NE. 0.0) GO TO 60
-40 CONTINUE
+   END DO
    NU = NU - 1
    J = J - 1
-50 CONTINUE
+END DO
 !
 !     STORE THE IMAGINARY PART OF A IN B
 !
@@ -5184,12 +5184,12 @@ do 50 K = 1,MU
 IF (NUM .GT. L) GO TO 100
 IERR = 0
 K = ML - NL
-do 80 J = 1,NUM
+DO J = 1,NUM
    K = K + 1
-   do 70 I = 1,M
+   DO I = 1,M
       B(I,J) = AIMAG(A(I,K))
-70 CONTINUE
-80 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5220,11 +5220,11 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + K
-do 20 J = 1,JC
-   do 10 I = 1,M
+DO J = 1,JC
+   DO I = 1,M
       C(I,J) = CMPLX(A(I,J),0.0)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 GO TO 60
 !
 30 JA = 0
@@ -5232,45 +5232,45 @@ JB = NL - ML
 JC = JB
 JMAX = ML + K
 IF (JC .EQ. 0) GO TO 60
-do 50 J = 1,JC
-   do 40 I = 1,M
+DO J = 1,JC
+   DO I = 1,M
       C(I,J) = CMPLX(0.0,B(I,J))
-40 CONTINUE
-50 CONTINUE
+   END DO
+END DO
 !
 !     ADDITION OF THE COMMON DIAGONALS
 !
-60 do 80 J = 1,JMAX
+60 DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 70 I = 1,M
+   DO I = 1,M
       C(I,JC) = CMPLX(A(I,JA),B(I,JB))
-70 CONTINUE
-80 CONTINUE
+   END DO
+END DO
 !
 !     INSERTION OF THE REMAINING DIAGONALS
 !
 IF (NU .GE. MU) GO TO 120
 JMAX = MU - NU
-do 110 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
-   do 100 I = 1,M
+   DO I = 1,M
       C(I,JC) = CMPLX(A(I,JA),0.0)
-100 CONTINUE
-110 CONTINUE
+   END DO
+END DO
 RETURN
 !
 120 JMAX = NU - MU
 IF (JMAX .EQ. 0) RETURN
-do 140 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
-   do 130 I = 1,M
+   DO I = 1,M
       C(I,JC) = CMPLX(0.0,B(I,JB))
-130 CONTINUE
-140 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5293,22 +5293,22 @@ IF (MU .EQ. 0) GO TO 40
 !
 NDIAG = MU
 do 31 J = 1,MU
-   do 10 I = 1,NDIAG
+   DO I = 1,NDIAG
       B(I,J) = 0.0
-10 CONTINUE
+   END DO
 !
    LJ = LP1 - J
    IMAX = MIN0(M,N - NDIAG)
-   do 20 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(K,J) = A(I,LJ)
-20 CONTINUE
+   END DO
 !
    IF (K .EQ. N) GO TO 31
    IMIN = K + 1
-   do 30 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = 0.0
-30 CONTINUE
+   END DO
 31 NDIAG = NDIAG - 1
 !
 !     DEFINE THE REMAINING COLUMNS OF B
@@ -5318,16 +5318,16 @@ NDIAG = 0
 do 61 J = JMIN,L
    LJ = LP1 - J
    IMAX = MIN0(M - NDIAG,N)
-   do 50 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(I,J) = A(K,LJ)
-50 CONTINUE
+   END DO
 !
    IF (IMAX .EQ. N) GO TO 61
    IMIN = IMAX + 1
-   do 60 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = 0.0
-60 CONTINUE
+   END DO
 61 NDIAG = NDIAG + 1
 RETURN
 END SUBROUTINE BPOSE
@@ -5346,22 +5346,22 @@ IF (MU .EQ. 0) GO TO 40
 !
 NDIAG = MU
 do 31 J = 1,MU
-   do 10 I = 1,NDIAG
+   DO I = 1,NDIAG
       B(I,J) = 0.D0
-10 CONTINUE
+   END DO
 !
    LJ = LP1 - J
    IMAX = MIN0(M,N - NDIAG)
-   do 20 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(K,J) = A(I,LJ)
-20 CONTINUE
+   END DO
 !
    IF (K .EQ. N) GO TO 31
    IMIN = K + 1
-   do 30 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = 0.D0
-30 CONTINUE
+   END DO
 31 NDIAG = NDIAG - 1
 !
 !     DEFINE THE REMAINING COLUMNS OF B
@@ -5371,16 +5371,16 @@ NDIAG = 0
 do 61 J = JMIN,L
    LJ = LP1 - J
    IMAX = MIN0(M - NDIAG,N)
-   do 50 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(I,J) = A(K,LJ)
-50 CONTINUE
+   END DO
 !
    IF (IMAX .EQ. N) GO TO 61
    IMIN = IMAX + 1
-   do 60 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = 0.D0
-60 CONTINUE
+   END DO
 61 NDIAG = NDIAG + 1
 RETURN
 END SUBROUTINE DBPOSE
@@ -5399,22 +5399,22 @@ IF (MU .EQ. 0) GO TO 40
 !
 NDIAG = MU
 do 31 J = 1,MU
-   do 10 I = 1,NDIAG
+   DO I = 1,NDIAG
       B(I,J) = (0.0,0.0)
-10 CONTINUE
+   END DO
 !
    LJ = LP1 - J
    IMAX = MIN0(M,N - NDIAG)
-   do 20 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(K,J) = A(I,LJ)
-20 CONTINUE
+   END DO
 !
    IF (K .EQ. N) GO TO 31
    IMIN = K + 1
-   do 30 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = (0.0,0.0)
-30 CONTINUE
+   END DO
 31 NDIAG = NDIAG - 1
 !
 !     DEFINE THE REMAINING COLUMNS OF B
@@ -5424,16 +5424,16 @@ NDIAG = 0
 do 61 J = JMIN,L
    LJ = LP1 - J
    IMAX = MIN0(M - NDIAG,N)
-   do 50 I = 1,IMAX
+   DO I = 1,IMAX
       K = NDIAG + I
       B(I,J) = A(K,LJ)
-50 CONTINUE
+   END DO
 !
    IF (IMAX .EQ. N) GO TO 61
    IMIN = IMAX + 1
-   do 60 I = IMIN,N
+   DO I = IMIN,N
       B(I,J) = (0.0,0.0)
-60 CONTINUE
+   END DO
 61 NDIAG = NDIAG + 1
 RETURN
 END SUBROUTINE CBPOSE
@@ -5455,10 +5455,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -5467,10 +5467,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -5478,13 +5478,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) + B(I,J)) .NE. 0.0) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -5500,22 +5500,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -5523,22 +5523,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -5547,14 +5547,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) + B(I,LB)) .NE. 0.0) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -5562,14 +5562,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5595,10 +5595,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -5607,10 +5607,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -5618,13 +5618,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) + B(I,J)) .NE. 0.D0) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -5640,22 +5640,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -5663,22 +5663,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -5687,14 +5687,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) + B(I,LB)) .NE. 0.D0) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -5702,14 +5702,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5735,10 +5735,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -5747,10 +5747,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -5758,13 +5758,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) + B(I,J)) .NE. (0.0,0.0)) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -5780,22 +5780,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -5803,22 +5803,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -5827,14 +5827,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) + B(I,LB)) .NE. (0.0,0.0)) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -5842,14 +5842,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) + B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -5875,10 +5875,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -5887,10 +5887,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = -B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -5898,13 +5898,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) - B(I,J)) .NE. 0.0) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -5920,22 +5920,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -5943,22 +5943,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = -B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -5967,14 +5967,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) - B(I,LB)) .NE. 0.0) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -5982,14 +5982,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6015,10 +6015,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -6027,10 +6027,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = -B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -6038,13 +6038,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) - B(I,J)) .NE. 0.D0) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -6060,22 +6060,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -6083,22 +6083,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = -B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -6107,14 +6107,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) - B(I,LB)) .NE. 0.D0) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -6122,14 +6122,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6155,10 +6155,10 @@ JA = ML - NL
 JB = 0
 JC = JA
 JMAX = NL + 1
-do 12 J = 1,JC
+DO J = 1,JC
    do 11 I = 1,M
 11 C(I,J) = A(I,J)
-12 CONTINUE
+END DO
 GO TO 50
 !
 20 MCL = NL
@@ -6167,10 +6167,10 @@ JA = 0
 JB = NL - ML
 JC = JB
 JMAX = ML + 1
-do 22 J = 1,JC
+DO J = 1,JC
    do 21 I = 1,M
 21 C(I,J) = -B(I,J)
-22 CONTINUE
+END DO
 GO TO 50
 !
 !     COMPUTE MCL WHEN ML = NL
@@ -6178,13 +6178,13 @@ GO TO 50
 30 MCL = ML
 IF (ML .EQ. 0) GO TO 40
 IMIN = ML + 1
-do 32 J = 1,ML
-   do 31 I = IMIN,M
+DO J = 1,ML
+   DO I = IMIN,M
       IF ((A(I,J) - B(I,J)) .NE. (0.0,0.0)) GO TO 40
-31 CONTINUE
+   END DO
    MCL = MCL - 1
    IMIN = IMIN - 1
-32 CONTINUE
+END DO
 !
 40 JA = ML - MCL
 JB = JA
@@ -6200,22 +6200,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + NU
-do 111 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 110 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-110 CONTINUE
-111 CONTINUE
+   END DO
+END DO
 !
 JMAX = MU - NU
-do 121 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JC = JC + 1
    do 120 I = 1,M
 120 C(I,JC) = A(I,JA)
-121 CONTINUE
+END DO
 RETURN
 !
 130 MCU = NU
@@ -6223,22 +6223,22 @@ NUM = MCL + MCU + 1
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MU
-do 141 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 140 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-140 CONTINUE
-141 CONTINUE
+   END DO
+END DO
 !
 JMAX = NU - MU
-do 151 J = 1,JMAX
+DO J = 1,JMAX
    JB = JB + 1
    JC = JC + 1
    do 150 I = 1,M
 150 C(I,JC) = -B(I,JB)
-151 CONTINUE
+END DO
 RETURN
 !
 !     COMPUTE MCU WHEN MU = NU
@@ -6247,14 +6247,14 @@ RETURN
 IF (MU .EQ. 0) GO TO 170
 LA = ML + MU + 1
 LB = NL + NU + 1
-do 162 J = 1,MU
-   do 161 I = 1,M
+DO J = 1,MU
+   DO I = 1,M
       IF ((A(I,LA) - B(I,LB)) .NE. (0.0,0.0)) GO TO 170
-161 CONTINUE
+   END DO
    MCU = MCU - 1
    LA = LA - 1
    LB = LB - 1
-162 CONTINUE
+END DO
 !
 !     ADDITION OF THE REMAINING COLUMNS WHEN MU = NU
 !
@@ -6262,14 +6262,14 @@ do 162 J = 1,MU
 IF (NUM .GT. L) GO TO 200
 !
 JMAX = JMAX + MCU
-do 181 J = 1,JMAX
+DO J = 1,JMAX
    JA = JA + 1
    JB = JB + 1
    JC = JC + 1
-   do 180 I = 1,M
+   DO I = 1,M
       C(I,JC) = A(I,JA) - B(I,JB)
-180 CONTINUE
-181 CONTINUE
+   END DO
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6286,10 +6286,10 @@ SUBROUTINE BPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU, &
 REAL A(KA,*), B(KB,*), C(KC,NC)
 !
 IERR = 0
-do 11 J = 1,NC
+DO J = 1,NC
    do 10 I = 1,M
 10 C(I,J) = 0.0
-11 CONTINUE
+END DO
 !
 MLP1 = ML + 1
 NLP1 = NL + 1
@@ -6302,30 +6302,30 @@ IF (MCL .EQ. 0) GO TO 100
 !     FIND THE FIRST NONZERO LOWER DIAGONAL
 !
 MAXD = MCL
-do 31 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 21 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = 0.0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 20 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-20 CONTINUE
+      END DO
       C(I,1) = SUM
-21 CONTINUE
+   END DO
 !
-   do 30 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       IF (C(I,1) .NE. 0.0) GO TO 40
-30 CONTINUE
+   END DO
    MCL = MCL - 1
-31 CONTINUE
+END DO
 GO TO 100
 !
 40 IF (MCL .GE. NC) GO TO 100
@@ -6335,25 +6335,25 @@ IF (MCL .EQ. 1) GO TO 100
 !     COMPUTE THE REMAINING LOWER DIAGONALS
 !
 MIND = NDIAG + 1
-do 52 NDIAG = MIND,MAXD
+DO NDIAG = MIND,MAXD
    JC = JC + 1
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 51 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = 0.0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 50 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-50 CONTINUE
+      END DO
       C(I,JC) = SUM
-51 CONTINUE
-52 CONTINUE
+   END DO
+END DO
 !
 !     FIND THE LAST NONZERO UPPER DIAGONAL
 !
@@ -6362,60 +6362,60 @@ MCU = MIN0(L - 1,MU + NU)
 IF (MCU .EQ. 0) GO TO 130
 !
 MAXD = MCU
-do 121 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = MAXD + 1 - NDIAG
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 111 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = 0.0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 110 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-110 CONTINUE
+      END DO
       C(I,JC) = SUM
-111 CONTINUE
+   END DO
 !
-   do 120 I = 1,IMAX
+   DO I = 1,IMAX
       IF (C(I,JC) .NE. 0.0) GO TO 130
-120 CONTINUE
+   END DO
    MCU = MCU - 1
-121 CONTINUE
+END DO
 !
 130 LAST = MCL + MCU + 1
 IF (LAST .GT. NC) GO TO 200
 IF (MCU .EQ. 0) GO TO 140
-do 131 I = 1,IMAX
+DO I = 1,IMAX
    C(I,LAST) = C(I,JC)
    C(I,JC) = 0.0
-131 CONTINUE
+END DO
 !
 !     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
 !
 140 MAXD = MAX0(1,MCU)
-do 143 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = NDIAG - 1
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 142 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = 0.0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 141 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-141 CONTINUE
+      END DO
       C(I,JC) = SUM
-142 CONTINUE
+   END DO
    JC = JC + 1
-143 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6433,10 +6433,10 @@ DOUBLE PRECISION A(KA,*), B(KB,*), C(KC,NC)
 DOUBLE PRECISION SUM
 !
 IERR = 0
-do 11 J = 1,NC
+DO J = 1,NC
    do 10 I = 1,M
 10 C(I,J) = 0.D0
-11 CONTINUE
+END DO
 !
 MLP1 = ML + 1
 NLP1 = NL + 1
@@ -6449,30 +6449,30 @@ IF (MCL .EQ. 0) GO TO 100
 !     FIND THE FIRST NONZERO LOWER DIAGONAL
 !
 MAXD = MCL
-do 31 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 21 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = 0.D0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 20 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-20 CONTINUE
+      END DO
       C(I,1) = SUM
-21 CONTINUE
+   END DO
 !
-   do 30 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       IF (C(I,1) .NE. 0.D0) GO TO 40
-30 CONTINUE
+   END DO
    MCL = MCL - 1
-31 CONTINUE
+END DO
 GO TO 100
 !
 40 IF (MCL .GE. NC) GO TO 100
@@ -6482,25 +6482,25 @@ IF (MCL .EQ. 1) GO TO 100
 !     COMPUTE THE REMAINING LOWER DIAGONALS
 !
 MIND = NDIAG + 1
-do 52 NDIAG = MIND,MAXD
+DO NDIAG = MIND,MAXD
    JC = JC + 1
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 51 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = 0.D0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 50 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-50 CONTINUE
+      END DO
       C(I,JC) = SUM
-51 CONTINUE
-52 CONTINUE
+   END DO
+END DO
 !
 !     FIND THE LAST NONZERO UPPER DIAGONAL
 !
@@ -6509,60 +6509,60 @@ MCU = MIN0(L - 1,MU + NU)
 IF (MCU .EQ. 0) GO TO 130
 !
 MAXD = MCU
-do 121 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = MAXD + 1 - NDIAG
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 111 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = 0.D0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 110 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-110 CONTINUE
+      END DO
       C(I,JC) = SUM
-111 CONTINUE
+   END DO
 !
-   do 120 I = 1,IMAX
+   DO I = 1,IMAX
       IF (C(I,JC) .NE. 0.D0) GO TO 130
-120 CONTINUE
+   END DO
    MCU = MCU - 1
-121 CONTINUE
+END DO
 !
 130 LAST = MCL + MCU + 1
 IF (LAST .GT. NC) GO TO 200
 IF (MCU .EQ. 0) GO TO 140
-do 131 I = 1,IMAX
+DO I = 1,IMAX
    C(I,LAST) = C(I,JC)
    C(I,JC) = 0.D0
-131 CONTINUE
+END DO
 !
 !     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
 !
 140 MAXD = MAX0(1,MCU)
-do 143 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = NDIAG - 1
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 142 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = 0.D0
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 141 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-141 CONTINUE
+      END DO
       C(I,JC) = SUM
-142 CONTINUE
+   END DO
    JC = JC + 1
-143 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6580,10 +6580,10 @@ COMPLEX A(KA,*), B(KB,*), C(KC,NC)
 COMPLEX SUM
 !
 IERR = 0
-do 11 J = 1,NC
+DO J = 1,NC
    do 10 I = 1,M
 10 C(I,J) = (0.0,0.0)
-11 CONTINUE
+END DO
 !
 MLP1 = ML + 1
 NLP1 = NL + 1
@@ -6596,30 +6596,30 @@ IF (MCL .EQ. 0) GO TO 100
 !     FIND THE FIRST NONZERO LOWER DIAGONAL
 !
 MAXD = MCL
-do 31 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 21 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = (0.0,0.0)
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 20 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-20 CONTINUE
+      END DO
       C(I,1) = SUM
-21 CONTINUE
+   END DO
 !
-   do 30 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       IF (C(I,1) .NE. (0.0,0.0)) GO TO 40
-30 CONTINUE
+   END DO
    MCL = MCL - 1
-31 CONTINUE
+END DO
 GO TO 100
 !
 40 IF (MCL .GE. NC) GO TO 100
@@ -6629,25 +6629,25 @@ IF (MCL .EQ. 1) GO TO 100
 !     COMPUTE THE REMAINING LOWER DIAGONALS
 !
 MIND = NDIAG + 1
-do 52 NDIAG = MIND,MAXD
+DO NDIAG = MIND,MAXD
    JC = JC + 1
    IMJ = MAXD + 1 - NDIAG
    JMAX = MIN0(L,M - IMJ,NPML - IMJ,NPNU)
-   do 51 J = 1,JMAX
+   DO J = 1,JMAX
       I = J + IMJ
       SUM = (0.0,0.0)
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 50 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-50 CONTINUE
+      END DO
       C(I,JC) = SUM
-51 CONTINUE
-52 CONTINUE
+   END DO
+END DO
 !
 !     FIND THE LAST NONZERO UPPER DIAGONAL
 !
@@ -6656,60 +6656,60 @@ MCU = MIN0(L - 1,MU + NU)
 IF (MCU .EQ. 0) GO TO 130
 !
 MAXD = MCU
-do 121 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = MAXD + 1 - NDIAG
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 111 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = (0.0,0.0)
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 110 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-110 CONTINUE
+      END DO
       C(I,JC) = SUM
-111 CONTINUE
+   END DO
 !
-   do 120 I = 1,IMAX
+   DO I = 1,IMAX
       IF (C(I,JC) .NE. (0.0,0.0)) GO TO 130
-120 CONTINUE
+   END DO
    MCU = MCU - 1
-121 CONTINUE
+END DO
 !
 130 LAST = MCL + MCU + 1
 IF (LAST .GT. NC) GO TO 200
 IF (MCU .EQ. 0) GO TO 140
-do 131 I = 1,IMAX
+DO I = 1,IMAX
    C(I,LAST) = C(I,JC)
    C(I,JC) = (0.0,0.0)
-131 CONTINUE
+END DO
 !
 !     COMPUTE THE MAIN DIAGONAL AND THE REMAINING UPPER DIAGONALS
 !
 140 MAXD = MAX0(1,MCU)
-do 143 NDIAG = 1,MAXD
+DO NDIAG = 1,MAXD
    JMI = NDIAG - 1
    IMAX = MIN0(M,L - JMI,NPML,NPNU - JMI)
-   do 142 I = 1,IMAX
+   DO I = 1,IMAX
       J = I + JMI
       SUM = (0.0,0.0)
       KMIN = MAX0(1,I - ML,J - NU)
       KMAX = MIN0(N,I + MU,J + NL)
       KK = MLP1 - I + KMIN
       JJ = NLP1 + J - KMIN
-      do 141 K = KMIN,KMAX
+      DO K = KMIN,KMAX
          SUM = SUM + A(I,KK)*B(K,JJ)
          KK = KK + 1
          JJ = JJ - 1
-141 CONTINUE
+      END DO
       C(I,JC) = SUM
-142 CONTINUE
+   END DO
    JC = JC + 1
-143 CONTINUE
+END DO
 RETURN
 !
 !     ERROR RETURN
@@ -6729,40 +6729,40 @@ REAL A(KA,*), X(N), Y(M)
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = 0.0
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = 0.0
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
 !
 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 30 I = IMIN,M
+DO I = IMIN,M
    Y(I) = 0.0
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE BVPRD
 
@@ -6778,32 +6778,32 @@ REAL A(KA,*), X(N), Y(M)
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = Y(I)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = Y(I)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE BVPRD1
 
@@ -6820,40 +6820,40 @@ DOUBLE PRECISION SUM
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = 0.D0
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = 0.D0
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
 !
 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 30 I = IMIN,M
+DO I = IMIN,M
    Y(I) = 0.D0
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DBVPD
 
@@ -6870,32 +6870,32 @@ DOUBLE PRECISION SUM
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = Y(I)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = Y(I)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DBVPD1
 
@@ -6911,40 +6911,40 @@ COMPLEX SUM
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = (0.0,0.0)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = (0.0,0.0)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL M-IMAX COMPONENTS
 !
 IF (IMAX .EQ. M) RETURN
 IMIN = IMAX + 1
-do 30 I = IMIN,M
+DO I = IMIN,M
    Y(I) = (0.0,0.0)
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CBVPD
 
@@ -6961,32 +6961,32 @@ COMPLEX SUM
 MLP1 = ML + 1
 IF (ML .EQ. 0) GO TO 20
 JMIN = MLP1
-do 11 I = 1,ML
+DO I = 1,ML
    KMAX = MIN0(N,I + MU)
    KK = JMIN
    SUM = Y(I)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-10 CONTINUE
+   END DO
    Y(I) = SUM
    JMIN = JMIN - 1
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 IMAX = MIN0(M,N + ML)
-do 22 I = MLP1,IMAX
+DO I = MLP1,IMAX
    KMIN = I - ML
    KMAX = MIN0(N,I + MU)
    KK = 1
    SUM = Y(I)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(I,KK)*X(K)
       KK = KK + 1
-21 CONTINUE
+   END DO
    Y(I) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CBVPD1
 
@@ -6999,41 +6999,41 @@ REAL A(KA,*), X(M), Y(N)
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = 0.0
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = 0.0
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
 !
 IF (JMAX .EQ. N) RETURN
 JMIN = JMAX + 1
-do 30 J = JMIN,N
+DO J = JMIN,N
    Y(J) = 0.0
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE BTPRD
 
@@ -7047,33 +7047,33 @@ REAL A(KA,*), X(M), Y(N)
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = Y(J)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = Y(J)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE BTPRD1
 
@@ -7088,41 +7088,41 @@ DOUBLE PRECISION SUM
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = 0.D0
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = 0.D0
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
 !
 IF (JMAX .EQ. N) RETURN
 JMIN = JMAX + 1
-do 30 J = JMIN,N
+DO J = JMIN,N
    Y(J) = 0.D0
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DBTPD
 
@@ -7137,33 +7137,33 @@ DOUBLE PRECISION SUM
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = Y(J)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = Y(J)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DBTPD1
 
@@ -7177,41 +7177,41 @@ COMPLEX SUM
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = (0.0,0.0)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING NONZERO COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = (0.0,0.0)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 !
 !     STORE ZEROS IN THE FINAL N-JMAX COMPONENTS
 !
 IF (JMAX .EQ. N) RETURN
 JMIN = JMAX + 1
-do 30 J = JMIN,N
+DO J = JMIN,N
    Y(J) = (0.0,0.0)
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CBTPD
 
@@ -7226,33 +7226,33 @@ COMPLEX SUM
 !     COMPUTE THE FIRST MU COMPONENTS
 !
 IF (MU .EQ. 0) GO TO 20
-do 11 J = 1,MU
+DO J = 1,MU
    JJ = ML + J
    KMAX = MIN0(M,JJ)
    SUM = Y(J)
-   do 10 K = 1,KMAX
+   DO K = 1,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-10 CONTINUE
+   END DO
    Y(J) = SUM
-11 CONTINUE
+END DO
 !
 !     COMPUTE THE REMAINING COMPONENTS
 !
 20 NUM = ML + MU + 1
 JMIN = MU + 1
 JMAX = MIN0(N,M + MU)
-do 22 J = JMIN,JMAX
+DO J = JMIN,JMAX
    KMIN = J - MU
    KMAX = MIN0(M,J + ML)
    JJ = NUM
    SUM = Y(J)
-   do 21 K = KMIN,KMAX
+   DO K = KMIN,KMAX
       SUM = SUM + A(K,JJ)*X(K)
       JJ = JJ - 1
-21 CONTINUE
+   END DO
    Y(J) = SUM
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CBTPD1
 
@@ -7265,13 +7265,13 @@ REAL A(KA,*)
 !
 NUM = ML + MU + 1
 BNRM = 0.0
-do 20 I = 1,M
+DO I = 1,M
    SUM = 0.0
-   do 10 J = 1,NUM
+   DO J = 1,NUM
       SUM = SUM + ABS(A(I,J))
-10 CONTINUE
+   END DO
    BNRM = AMAX1(BNRM, SUM)
-20 CONTINUE
+END DO
 RETURN
 END FUNCTION BNRM
 
@@ -7288,9 +7288,9 @@ B1NRM = 0.0
 !
 IMIN = ML + 1
 IMAX = MIN0(M, IMIN + MU)
-do 10 I = IMIN,IMAX
+DO I = IMIN,IMAX
    B1NRM = AMAX1(B1NRM, SASUM(I,A(I),INCR))
-10 CONTINUE
+END DO
 I = IMAX
 J = I - ML
 NUM = I
@@ -7299,9 +7299,9 @@ IF (I .EQ. M) GO TO 30
 !
 IMIN = I + 1
 IMAX = MIN0(M, ML + N)
-do 20 I = IMIN,IMAX
+DO I = IMIN,IMAX
    B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
-20 CONTINUE
+END DO
 I = IMAX
 J = I - ML
 GO TO 50
@@ -7311,10 +7311,10 @@ GO TO 50
 30 JMAX = MU + 1
 IF (J .EQ. JMAX) GO TO 50
 JMIN = J + 1
-do 40 J = JMIN,JMAX
+DO J = JMIN,JMAX
    I = I + KA
    B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
-40 CONTINUE
+END DO
 J = JMAX
 !
 50 IF (J .EQ. N .OR. NUM .EQ. 1) RETURN
@@ -7335,13 +7335,13 @@ DOUBLE PRECISION SUM
 !
 NUM = ML + MU + 1
 DBNRM = 0.D0
-do 20 I = 1,M
+DO I = 1,M
    SUM = 0.D0
-   do 10 J = 1,NUM
+   DO J = 1,NUM
       SUM = SUM + DABS(A(I,J))
-10 CONTINUE
+   END DO
    DBNRM = DMAX1(DBNRM, SUM)
-20 CONTINUE
+END DO
 RETURN
 END FUNCTION DBNRM
 
@@ -7360,9 +7360,9 @@ DB1NRM = 0.D0
 !
 IMIN = ML + 1
 IMAX = MIN0(M, IMIN + MU)
-do 10 I = IMIN,IMAX
+DO I = IMIN,IMAX
    DB1NRM = DMAX1(DB1NRM, DASUM(I,A(I),INCR))
-10 CONTINUE
+END DO
 I = IMAX
 J = I - ML
 NUM = I
@@ -7371,9 +7371,9 @@ IF (I .EQ. M) GO TO 30
 !
 IMIN = I + 1
 IMAX = MIN0(M, ML + N)
-do 20 I = IMIN,IMAX
+DO I = IMIN,IMAX
    DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
-20 CONTINUE
+END DO
 I = IMAX
 J = I - ML
 GO TO 50
@@ -7383,10 +7383,10 @@ GO TO 50
 30 JMAX = MU + 1
 IF (J .EQ. JMAX) GO TO 50
 JMIN = J + 1
-do 40 J = JMIN,JMAX
+DO J = JMIN,JMAX
    I = I + KA
    DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
-40 CONTINUE
+END DO
 J = JMAX
 !
 50 IF (J .EQ. N .OR. NUM .EQ. 1) RETURN
@@ -7662,12 +7662,12 @@ M = ML + MU + 1
 !
 !     SET FILL-IN COLUMNS TO ZERO
 !
-do 11 J = 1,ML
+DO J = 1,ML
    JJ = M + J
-   do 10 I = 1,N
+   DO I = 1,N
       A(I,JJ) = 0.0
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
@@ -7705,11 +7705,11 @@ do 40 K = 1,N1
 !
 !     ROW ELIMINATION WITH COLUMN INDEXING
 !
-  do 30 J = 1,MP
+  DO J = 1,MP
      JJ = ML1 + J
      J1 = LM2 + J
      CALL SAXPY(LM, A(K,JJ), A(LMK,LM2), LDB, A(LMK,J1), LDB)
-30 CONTINUE
+  END DO
 40 CONTINUE
 !
 IPVT(N) = N
@@ -7718,10 +7718,10 @@ RETURN
 !
 !     CASE WHEN ML = 0
 !
-100 do 110 K = 1,N
+100 DO K = 1,N
   IPVT(K) = K
   IF (A(K,1) .EQ. 0.0) INFO = K
-110 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SNBFA
 
@@ -7799,7 +7799,7 @@ IF (JOB .NE. 0) GO TO 50
 !       FIRST SOLVE L*Y = B
 !
 IF (ML .EQ. 0) GO TO 30
-do 20 K = 1,NM1
+DO K = 1,NM1
    LM = MIN0(ML,N-K)
    L = IPVT(K)
    T = B(L)
@@ -7809,19 +7809,19 @@ do 20 K = 1,NM1
 10 KLM = K + LM
    MLM = ML1 - LM
    CALL SAXPY(LM, T, A(KLM,MLM), LDB, B(K+1), 1)
-20 CONTINUE
+END DO
 !
 !       NOW SOLVE  U*X = Y
 !
 30 K = N
-do 40 KB = 2,N
+DO KB = 2,N
    B(K) = B(K)/A(K,ML1)
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = -B(K)
    CALL SAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
    K = K - 1
-40 CONTINUE
+END DO
 B(1) = B(1)/A(1,ML1)
 RETURN
 !
@@ -7829,12 +7829,12 @@ RETURN
 !       FIRST SOLVE  TRANS(U)*Y = B
 !
 50 B(1) = B(1)/A(1,ML1)
-do 60 K = 2,N
+DO K = 2,N
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = SDOT(LM, A(K-1,ML2), LDB, B(LB), 1)
    B(K) = (B(K) - T)/A(K,ML1)
-60 CONTINUE
+END DO
 IF (ML .EQ. 0) RETURN
 !
 !       NOW SOLVE TRANS(L)*X = Y
@@ -8125,12 +8125,12 @@ M = ML + MU + 1
 !
 !     SET FILL-IN COLUMNS TO ZERO
 !
-do 11 J = 1,ML
+DO J = 1,ML
    JJ = M + J
-   do 10 I = 1,N
+   DO I = 1,N
       A(I,JJ) = 0.D0
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
@@ -8168,11 +8168,11 @@ do 40 K = 1,N1
 !
 !     ROW ELIMINATION WITH COLUMN INDEXING
 !
-  do 30 J = 1,MP
+  DO J = 1,MP
      JJ = ML1 + J
      J1 = LM2 + J
      CALL DAXPY(LM, A(K,JJ), A(LMK,LM2), LDB, A(LMK,J1), LDB)
-30 CONTINUE
+  END DO
 40 CONTINUE
 !
 IPVT(N) = N
@@ -8181,10 +8181,10 @@ RETURN
 !
 !     CASE WHEN ML = 0
 !
-100 do 110 K = 1,N
+100 DO K = 1,N
   IPVT(K) = K
   IF (A(K,1) .EQ. 0.D0) INFO = K
-110 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DBFA
 
@@ -8262,7 +8262,7 @@ IF (JOB .NE. 0) GO TO 50
 !       FIRST SOLVE L*Y = B
 !
 IF (ML .EQ. 0) GO TO 30
-do 20 K = 1,NM1
+DO K = 1,NM1
    LM = MIN0(ML,N-K)
    L = IPVT(K)
    T = B(L)
@@ -8272,19 +8272,19 @@ do 20 K = 1,NM1
 10 KLM = K + LM
    MLM = ML1 - LM
    CALL DAXPY(LM, T, A(KLM,MLM), LDB, B(K+1), 1)
-20 CONTINUE
+END DO
 !
 !       NOW SOLVE  U*X = Y
 !
 30 K = N
-do 40 KB = 2,N
+DO KB = 2,N
    B(K) = B(K)/A(K,ML1)
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = -B(K)
    CALL DAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
    K = K - 1
-40 CONTINUE
+END DO
 B(1) = B(1)/A(1,ML1)
 RETURN
 !
@@ -8292,12 +8292,12 @@ RETURN
 !       FIRST SOLVE  TRANS(U)*Y = B
 !
 50 B(1) = B(1)/A(1,ML1)
-do 60 K = 2,N
+DO K = 2,N
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = DDOT(LM, A(K-1,ML2), LDB, B(LB), 1)
    B(K) = (B(K) - T)/A(K,ML1)
-60 CONTINUE
+END DO
 IF (ML .EQ. 0) RETURN
 !
 !       NOW SOLVE TRANS(L)*X = Y
@@ -8722,12 +8722,12 @@ M = ML + MU + 1
 !
 !     SET FILL-IN COLUMNS TO ZERO
 !
-do 11 J = 1,ML
+DO J = 1,ML
    JJ = M + J
-   do 10 I = 1,N
+   DO I = 1,N
       A(I,JJ) = (0.0,0.0)
-10 CONTINUE
-11 CONTINUE
+   END DO
+END DO
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
@@ -8765,11 +8765,11 @@ do 40 K = 1,N1
 !
 !     ROW ELIMINATION WITH COLUMN INDEXING
 !
-  do 30 J = 1,MP
+  DO J = 1,MP
      JJ = ML1 + J
      J1 = LM2 + J
      CALL CAXPY(LM, A(K,JJ), A(LMK,LM2), LDB, A(LMK,J1), LDB)
-30 CONTINUE
+  END DO
 40 CONTINUE
 !
 IPVT(N) = N
@@ -8778,10 +8778,10 @@ RETURN
 !
 !     CASE WHEN ML = 0
 !
-100 do 110 K = 1,N
+100 DO K = 1,N
   IPVT(K) = K
   IF (A(K,1) .EQ. (0.0,0.0)) INFO = K
-110 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CBFA
 
@@ -8859,7 +8859,7 @@ IF (JOB .NE. 0) GO TO 50
 !       FIRST SOLVE L*Y = B
 !
 IF (ML .EQ. 0) GO TO 30
-do 20 K = 1,NM1
+DO K = 1,NM1
    LM = MIN0(ML,N-K)
    L = IPVT(K)
    T = B(L)
@@ -8869,19 +8869,19 @@ do 20 K = 1,NM1
 10 KLM = K + LM
    MLM = ML1 - LM
    CALL CAXPY(LM, T, A(KLM,MLM), LDB, B(K+1), 1)
-20 CONTINUE
+END DO
 !
 !       NOW SOLVE  U*X = Y
 !
 30 K = N
-do 40 KB = 2,N
+DO KB = 2,N
    B(K) = B(K)/A(K,ML1)
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = -B(K)
    CALL CAXPY(LM, T, A(K-1,ML2), LDB, B(LB), 1)
    K = K - 1
-40 CONTINUE
+END DO
 B(1) = B(1)/A(1,ML1)
 RETURN
 !
@@ -8889,12 +8889,12 @@ RETURN
 !       FIRST SOLVE  TRANS(U)*Y = B
 !
 50 B(1) = B(1)/A(1,ML1)
-do 60 K = 2,N
+DO K = 2,N
    LM = MIN0(K,M) - 1
    LB = K - LM
    T = CDOTU(LM, A(K-1,ML2), LDB, B(LB), 1)
    B(K) = (B(K) - T)/A(K,ML1)
-60 CONTINUE
+END DO
 IF (ML .EQ. 0) RETURN
 !
 !       NOW SOLVE TRANS(L)*X = Y
@@ -8927,7 +8927,7 @@ INTEGER IB(*), JB(*)
 !                 STORE THE I-TH ROW
 !
 IP = 1
-do 11 I = 1,M
+DO I = 1,M
    IB(I) = IP
    do 10 J = 1,N
       IF (A(I,J) .EQ. 0.0) GO TO 10
@@ -8936,7 +8936,7 @@ do 11 I = 1,M
       JB(IP) = J
       IP = IP + 1
 10 CONTINUE
-11 CONTINUE
+END DO
 !
 !                 COMPLETE THE SETUP
 !
@@ -8957,7 +8957,7 @@ INTEGER IB(*), JB(*)
 !                 STORE THE I-TH ROW
 !
 IP = 1
-do 11 I = 1,M
+DO I = 1,M
    IB(I) = IP
    do 10 J = 1,N
       IF (A(I,J) .EQ. 0.D0) GO TO 10
@@ -8966,7 +8966,7 @@ do 11 I = 1,M
       JB(IP) = J
       IP = IP + 1
 10 CONTINUE
-11 CONTINUE
+END DO
 !
 !                 COMPLETE THE SETUP
 !
@@ -8988,7 +8988,7 @@ DATA ZERO /(0.0,0.0)/
 !                 STORE THE I-TH ROW
 !
 IP = 1
-do 11 I = 1,M
+DO I = 1,M
    IB(I) = IP
    do 10 J = 1,N
       IF (A(I,J) .EQ. ZERO) GO TO 10
@@ -8997,7 +8997,7 @@ do 11 I = 1,M
       JB(IP) = J
       IP = IP + 1
 10 CONTINUE
-11 CONTINUE
+END DO
 !
 !                 COMPLETE THE SETUP
 !
@@ -9019,19 +9019,19 @@ do 30 I = 1,M
 !
 !                 CLEAR THE I-TH ROW
 !
-   do 10 J = 1,N
+   DO J = 1,N
       B(I,J) = 0.0
-10 CONTINUE
+   END DO
 !
 !                 STORE THE I-TH ROW
 !
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 30
-   do 20 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       B(I,J) = A(IP)
-20 CONTINUE
+   END DO
 !
 30 CONTINUE
 RETURN
@@ -9045,19 +9045,19 @@ do 30 I = 1,M
 !
 !                 CLEAR THE I-TH ROW
 !
-   do 10 J = 1,N
+   DO J = 1,N
       B(I,J) = 0.D0
-10 CONTINUE
+   END DO
 !
 !                 STORE THE I-TH ROW
 !
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 30
-   do 20 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       B(I,J) = A(IP)
-20 CONTINUE
+   END DO
 !
 30 CONTINUE
 RETURN
@@ -9071,19 +9071,19 @@ do 30 I = 1,M
 !
 !                 CLEAR THE I-TH ROW
 !
-   do 10 J = 1,N
+   DO J = 1,N
       B(I,J) = (0.0,0.0)
-10 CONTINUE
+   END DO
 !
 !                 STORE THE I-TH ROW
 !
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 30
-   do 20 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       B(I,J) = A(IP)
-20 CONTINUE
+   END DO
 !
 30 CONTINUE
 RETURN
@@ -9193,9 +9193,9 @@ REAL A(*), B(*), WK(N)
 COMPLEX C(*), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.0
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9205,10 +9205,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -9327,19 +9327,19 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 !
 MP1 = M + 1
 L = IA(1) - 1
-do 10 I = 1,MP1
+DO I = 1,MP1
    IB(I) = IA(I) - L
-10 CONTINUE
+END DO
 !
 IBEG = IA(1)
 IEND = IA(MP1) - 1
 IF (IBEG .GT. IEND) RETURN
 L = 1
-do 20 IP = IBEG,IEND
+DO IP = IBEG,IEND
    B(L) = CONJG(A(IP))
    JB(L) = JA(IP)
    L = L + 1
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SCONJ
 
@@ -9356,24 +9356,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9382,13 +9382,13 @@ do 31 I = 1,M
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9396,9 +9396,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE RPOSE
 
@@ -9417,24 +9417,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9444,13 +9444,13 @@ do 31 I = 1,M
    IPMIN = IA(II)
    IPMAX = IA(II+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9458,9 +9458,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE RPOSE1
 
@@ -9477,24 +9477,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9503,13 +9503,13 @@ do 31 I = 1,M
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9517,9 +9517,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DPOSE
 
@@ -9538,24 +9538,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9565,13 +9565,13 @@ do 31 I = 1,M
    IPMIN = IA(II)
    IPMAX = IA(II+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9579,9 +9579,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DPOSE1
 
@@ -9598,24 +9598,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9624,13 +9624,13 @@ do 31 I = 1,M
    IPMIN = IA(I)
    IPMAX = IA(I+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9638,9 +9638,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CPOSE
 
@@ -9659,24 +9659,24 @@ INTEGER IA(*), JA(*), IB(*), JB(*)
 IPMIN = IA(1)
 IPMAX = IA(M+1) - 1
 IF (IPMIN .GT. IPMAX) GO TO 40
-do 10 J = 1,N
+DO J = 1,N
    IB(J) = 0
-10 CONTINUE
-do 11 IP = IPMIN,IPMAX
+END DO
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    IB(J) = IB(J) + 1
-11 CONTINUE
+END DO
 !
 !          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
 !                AND STORE THEM IN IB(2),...,IB(N+1)
 !
 NUM = IA(M+1) - IA(1) + 1
 J = N
-do 20 JJ = 1,N
+DO JJ = 1,N
    NUM = NUM - IB(J)
    IB(J+1) = NUM
    J = J - 1
-20 CONTINUE
+END DO
 !
 !                STORE THE I-TH ROW OF A IN B AND JB
 !                  AND UPDATE THE POINTERS IN IB
@@ -9686,13 +9686,13 @@ do 31 I = 1,M
    IPMIN = IA(II)
    IPMAX = IA(II+1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 31
-   do 30 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       J = JA(IP)
       JP = IB(J+1)
       JB(JP) = I
       B(JP) = A(IP)
       IB(J+1) = JP + 1
-30 CONTINUE
+   END DO
 31 CONTINUE
 IB(1) = 1
 RETURN
@@ -9700,9 +9700,9 @@ RETURN
 !                    TRANSPOSE A ZERO MATRIX A
 !
 40 NP1 = N + 1
-do 41 J = 1,NP1
+DO J = 1,NP1
    IB(J) = 1
-41 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CPOSE1
 
@@ -9713,9 +9713,9 @@ SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 REAL A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.0
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9725,10 +9725,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -9772,9 +9772,9 @@ SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.D0
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9784,10 +9784,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -9831,9 +9831,9 @@ SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 COMPLEX A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = (0.0, 0.0)
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9843,10 +9843,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -9890,9 +9890,9 @@ SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 REAL A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.0
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9902,10 +9902,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -9949,9 +9949,9 @@ SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.D0
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -9961,10 +9961,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -10008,9 +10008,9 @@ SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 COMPLEX A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = (0.0, 0.0)
-10 CONTINUE
+END DO
 !
 !                  COMPUTE THE I-TH ROW OF C
 !
@@ -10020,10 +10020,10 @@ do 42 I = 1,M
    MINA = IA(I)
    MAXA = IA(I+1) - 1
    IF (MINA .GT. MAXA) GO TO 30
-   do 20 L = MINA,MAXA
+   DO L = MINA,MAXA
       J = JA(L)
       WK(J) = A(L)
-20 CONTINUE
+   END DO
 !
 30 MINB = IB(I)
    MAXB = IB(I+1) - 1
@@ -10067,9 +10067,9 @@ SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 REAL A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 K = 1,N
+DO K = 1,N
    WK(K) = 0.0
-10 CONTINUE
+END DO
 !
 !                     COMPUTE THE I-TH ROW OF C
 !
@@ -10087,10 +10087,10 @@ do 31 I = 1,L
       KPMIN = IB(J)
       KPMAX = IB(J+1) - 1
       IF (KPMIN .GT. KPMAX) GO TO 21
-      do 20 KP = KPMIN,KPMAX
+      DO KP = KPMIN,KPMAX
          K = JB(KP)
          WK(K) = WK(K) + T*B(KP)
-20 CONTINUE
+      END DO
 21 CONTINUE
 !
    do 30 K = 1,N
@@ -10119,9 +10119,9 @@ SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 K = 1,N
+DO K = 1,N
    WK(K) = 0.D0
-10 CONTINUE
+END DO
 !
 !                     COMPUTE THE I-TH ROW OF C
 !
@@ -10139,10 +10139,10 @@ do 31 I = 1,L
       KPMIN = IB(J)
       KPMAX = IB(J+1) - 1
       IF (KPMIN .GT. KPMAX) GO TO 21
-      do 20 KP = KPMIN,KPMAX
+      DO KP = KPMIN,KPMAX
          K = JB(KP)
          WK(K) = WK(K) + T*B(KP)
-20 CONTINUE
+      END DO
 21 CONTINUE
 !
    do 30 K = 1,N
@@ -10171,9 +10171,9 @@ SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 COMPLEX A(*), B(*), C(*), WK(N), T
 INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
 !-------------------------
-do 10 K = 1,N
+DO K = 1,N
    WK(K) = (0.0, 0.0)
-10 CONTINUE
+END DO
 !
 !                     COMPUTE THE I-TH ROW OF C
 !
@@ -10191,10 +10191,10 @@ do 31 I = 1,L
       KPMIN = IB(J)
       KPMAX = IB(J+1) - 1
       IF (KPMIN .GT. KPMAX) GO TO 21
-      do 20 KP = KPMIN,KPMAX
+      DO KP = KPMIN,KPMAX
          K = JB(KP)
          WK(K) = WK(K) + T*B(KP)
-20 CONTINUE
+      END DO
 21 CONTINUE
 !
    do 30 K = 1,N
@@ -10228,10 +10228,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE MVPRD
@@ -10248,10 +10248,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE MVPRD1
@@ -10263,19 +10263,19 @@ SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
 REAL A(*), X(M), Y(N), T
 INTEGER IA(*), JA(*)
 !
-do 10 J = 1,N
+DO J = 1,N
    Y(J) = 0.0
-10 CONTINUE
+END DO
 !
 do 21 I = 1,M
    T = X(I)
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 21
-   do 20 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-20 CONTINUE
+   END DO
 21 CONTINUE
 RETURN
 END SUBROUTINE MTPRD
@@ -10292,10 +10292,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-10 CONTINUE
+   END DO
 11 CONTINUE
 RETURN
 END SUBROUTINE MTPRD1
@@ -10312,10 +10312,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE DVPRD
@@ -10332,10 +10332,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE DVPRD1
@@ -10347,19 +10347,19 @@ SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
 DOUBLE PRECISION A(*), X(M), Y(N), T
 INTEGER IA(*), JA(*)
 !
-do 10 J = 1,N
+DO J = 1,N
    Y(J) = 0.D0
-10 CONTINUE
+END DO
 !
 do 21 I = 1,M
    T = X(I)
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 21
-   do 20 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-20 CONTINUE
+   END DO
 21 CONTINUE
 RETURN
 END SUBROUTINE DTPRD
@@ -10376,10 +10376,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-10 CONTINUE
+   END DO
 11 CONTINUE
 RETURN
 END SUBROUTINE DTPRD1
@@ -10396,10 +10396,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE CVPRD
@@ -10416,10 +10416,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       SUM = SUM + A(L)*X(J)
-10 CONTINUE
+   END DO
 11 Y(I) = SUM
 RETURN
 END SUBROUTINE CVPRD1
@@ -10431,19 +10431,19 @@ SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
 COMPLEX A(*), X(M), Y(N), T
 INTEGER IA(*), JA(*)
 !
-do 10 J = 1,N
+DO J = 1,N
    Y(J) = (0.0, 0.0)
-10 CONTINUE
+END DO
 !
 do 21 I = 1,M
    T = X(I)
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 21
-   do 20 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-20 CONTINUE
+   END DO
 21 CONTINUE
 RETURN
 END SUBROUTINE CTPRD
@@ -10460,10 +10460,10 @@ do 11 I = 1,M
    LMIN = IA(I)
    LMAX = IA(I+1) - 1
    IF (LMIN .GT. LMAX) GO TO 11
-   do 10 L = LMIN,LMAX
+   DO L = LMIN,LMAX
       J = JA(L)
       Y(J) = Y(J) + T*A(L)
-10 CONTINUE
+   END DO
 11 CONTINUE
 RETURN
 END SUBROUTINE CTPRD1
@@ -10482,9 +10482,9 @@ do 20 I = 1,M
    IPMAX = IA(I + 1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 20
    SUM = 0.0
-   do 10 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       SUM = SUM + ABS(A(IP))
-10 CONTINUE
+   END DO
    SNRM = AMAX1(SNRM, SUM)
 20 CONTINUE
 RETURN
@@ -10504,18 +10504,18 @@ IF (IPMIN .GT. IPMAX) RETURN
 !
 !     COMPUTE THE L1 NORM OF A
 !
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.0
-10 CONTINUE
+END DO
 !
-do 20 IP = IPMIN,IPMAX
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    WK(J) = WK(J) + ABS(A(IP))
-20 CONTINUE
+END DO
 !
-do 30 J = 1,N
+DO J = 1,N
    ANORM = AMAX1(ANORM,WK(J))
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE S1NRM
 

@@ -1,10 +1,12 @@
 ! Representative checks; this is not a full numerical validation of NSWC.
 program source_smoke
   implicit none
-  double precision, external :: ddot, dgamma, dcsevl
+  double precision, external :: ddot, dgamma, dcsevl, dnrm2
   integer, external :: idamax
   real, external :: square
   double precision :: x(3), y(3), coefficients(3), values(4)
+  double precision :: u(17), v(17), matrix(3,3), rhs(3), vector_results(4)
+  integer :: j, pivots(3), info
   real :: integral, error, work(400)
   integer :: evaluations, status, last, iwork(100)
 
@@ -24,9 +26,32 @@ program source_smoke
             evaluations, status, 100, 400, last, iwork, work)
   if (status /= 0 .or. abs(integral - 1./3.) > 1e-6) stop 6
   values(4) = dble(integral)
+
+  ! Exercise unrolled loops, non-unit/negative strides, and zero iterations.
+  u = [(dble(j), j=1,17)]
+  v = 2d0*u
+  vector_results = [ddot(17,u,1,v,1), ddot(17,u,-1,v,1), &
+                    ddot(8,u,2,v,2), ddot(0,u,1,v,1)]
+  if (any(abs(vector_results - [3570d0,1938d0,1360d0,0d0]) > 1d-10)) stop 7
+  call daxpy(17, 3d0, u, 1, v, 1)
+  if (any(abs(v - 5d0*u) > 1d-12)) stop 8
+  call daxpy(17, 1d0, u, -1, v, 1)
+  if (any(abs(v - (5d0*u + u(17:1:-1))) > 1d-12)) stop 9
+  if (abs(dnrm2(17,u,1) - sqrt(1785d0)) > 1d-12) stop 10
+
+  ! A small dense solve that requires pivoting and nested elimination loops.
+  matrix = reshape([0d0,2d0,1d0, 2d0,1d0,0d0, 1d0,0d0,3d0], [3,3])
+  rhs = [7d0,4d0,10d0]
+  call dgefa(matrix, 3, 3, pivots, info)
+  if (info /= 0) stop 11
+  call dgesl(matrix, 3, 3, pivots, rhs, 0)
+  if (any(abs(rhs - [1d0,2d0,3d0]) > 1d-12)) stop 12
+
   write (*, '(4ES25.16)') values
   write (*, '(3ES25.16)') y
   write (*, '(3I10)') evaluations, status, last
+  write (*, '(4ES25.16)') vector_results
+  write (*, '(3ES25.16)') rhs
 end program source_smoke
 
 real function square(x)

@@ -127,9 +127,9 @@ do 80 J = 1, NN
   KJ = J
 !                                       SEARCH FOR PIVOT IN THE J-TH
 !                                       COLUMN AND INTERCHANGE ROWS.
-  do 10 K = JP, M
+  DO K = JP, M
      IF (ABS(QR(K,J)) .GT. ABS(QR(KJ,J))) KJ = K
-10 CONTINUE
+  END DO
   IF (QR(KJ,J) .EQ. 0.0) GO TO 90
   IF (KJ .EQ. J) GO TO 30
   IP(J) = KJ
@@ -151,7 +151,7 @@ do 80 J = 1, NN
 !                                       PREMULTIPLY QR WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
   Y = 1.0 - S(J)
-  do 70 K = JP, N
+  DO K = JP, N
      SAV = QR(J,K)
      do 50 I = JP, M
 50 SAV = SAV + QR(I,J)*QR(I,K)
@@ -160,7 +160,7 @@ do 80 J = 1, NN
      SS = (SS - QR(J,K))/Y
      do 60 I = JP, M
 60 QR(I,K) = QR(I,K) - QR(I,J)*SS
-70 CONTINUE
+  END DO
 80 CONTINUE
 RETURN
 !
@@ -221,7 +221,7 @@ DIMENSION QR(MS,N), S(N), IP(N), X(M)
 !
 NN = N
 IF (N .EQ. M) NN = N - 1
-do 30 J = 1, NN
+DO J = 1, NN
   JP = J + 1
   IJ = IP(J)
   Y = 1.0 - S(J)
@@ -238,19 +238,19 @@ do 30 J = 1, NN
   SS = (SS - X(J))/Y
   do 20 K = JP, M
 20 X(K) = X(K) - QR(K,J)*SS
-30 CONTINUE
+END DO
 !                                       BACK SUBSTITUTE TO FIND THE
 !                                       LEAST SQUARES SOLUTION.
 X(N) = X(N)/QR(N,N)
 NM = N - 1
-do 50 I = 1, NM
+DO I = 1, NM
   NI = N - I
   NN = N
   do 40 J = 1, I
     X(NI) = X(NI) - QR(NI,NN)*X(NN)
 40 NN = NN - 1
   X(NI) = X(NI)/QR(NI,NI)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE ORSOL
 
@@ -456,9 +456,9 @@ do 80 J = 1, NN
   KJ = J
 !                                       SEARCH FOR PIVOT IN THE J-TH
 !                                       COLUMN AND INTERCHANGE ROWS.
-  do 10 K = JP, M
+  DO K = JP, M
      IF (DABS(QR(K,J)) .GT. DABS(QR(KJ,J))) KJ = K
-10 CONTINUE
+  END DO
   IF (QR(KJ,J) .EQ. 0.D0) GO TO 90
   IF (KJ .EQ. J) GO TO 30
   IP(J) = KJ
@@ -480,7 +480,7 @@ do 80 J = 1, NN
 !                                       PREMULTIPLY QR WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
   Y = 1.D0 - S(J)
-  do 70 K = JP, N
+  DO K = JP, N
      SAV = QR(J,K)
      do 50 I = JP, M
 50 SAV = SAV + QR(I,J)*QR(I,K)
@@ -489,7 +489,7 @@ do 80 J = 1, NN
      SS = (SS - QR(J,K))/Y
      do 60 I = JP, M
 60 QR(I,K) = QR(I,K) - QR(I,J)*SS
-70 CONTINUE
+  END DO
 80 CONTINUE
 RETURN
 !
@@ -552,7 +552,7 @@ DOUBLE PRECISION SAV, SS, Y
 !
 NN = N
 IF(N .EQ. M) NN = N - 1
-do 30 J = 1, NN
+DO J = 1, NN
   JP = J + 1
   IJ = IP(J)
   Y = 1.D0 - S(J)
@@ -569,19 +569,19 @@ do 30 J = 1, NN
   SS = (SS - X(J))/Y
   do 20 K = JP, M
 20 X(K) = X(K) - QR(K,J)*SS
-30 CONTINUE
+END DO
 !                                       BACK SUBSTITUTE TO FIND THE
 !                                       LEAST SQUARES SOLUTION.
 X(N) = X(N)/QR(N,N)
 NM = N - 1
-do 50 I = 1, NM
+DO I = 1, NM
   NI = N - I
   NN = N
   do 40 J = 1, I
     X(NI) = X(NI) - QR(NI,NN)*X(NN)
 40 NN = NN - 1
   X(NI) = X(NI)/QR(NI,NI)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DORSOL
 
@@ -747,13 +747,13 @@ EPS = 10.0*SPMPAR(1)
 RERR = AMAX1(EPS,RE)
 !
 IMAX = M5 - 1
-do 20 I = M4,IMAX
+DO I = M4,IMAX
    WORK(I) = RERR
-20 CONTINUE
+END DO
 IMAX = IMAX + M0
-do 30 I = M5,IMAX
+DO I = M5,IMAX
    WORK(I) = AE
-30 CONTINUE
+END DO
 !
 !     FACTOR THE MATRIX A
 !
@@ -853,30 +853,30 @@ INTEGER IC(N),IR(M)
 !
 J = 0
 KRANK = N
-do 10 I = 1,N
+DO I = 1,N
    IC(I) = I
-10 CONTINUE
-do 20 I = 1,M
+END DO
+DO I = 1,M
    IR(I) = I
-20 CONTINUE
+END DO
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE COL LENGTH
 !
-do 30 I = 1,N
+DO I = 1,N
    H(I) = SNRM2(M,A(1,I),1)
    W(I) = H(I)
-30 CONTINUE
+END DO
 !
 !         INITIALIZE ERROR BOUNDS
 !
-do 40 I = 1,N
+DO I = 1,N
    EB(I) = AMAX1(DB(I),UB(I)*H(I))
    UB(I) = EB(I)
    DB(I) = 0.0
-40 CONTINUE
+END DO
 !
 !          DISCARD SELF DEPENDENT COLUMNS
 !
@@ -939,24 +939,24 @@ IF (TT .GE. 1.0) GO TO 170
 !
 !     COMPUTE EXACT UB
 !
-do 125 I = 1,JM1
+DO I = 1,JM1
    W(I) = A(I,IMIN)
-125 CONTINUE
+END DO
 !
 L = JM1
 130 W(L) = W(L)/A(L,L)
 IF (L .EQ. 1) GO TO 150
 LM1 = L - 1
-do 140 I = L,JM1
+DO I = L,JM1
    W(LM1) = W(LM1) - A(LM1,I)*W(I)
-140 CONTINUE
+END DO
 L = LM1
 GO TO 130
 !
 150 TT = EB(IMIN)
-do 160 I = 1,JM1
+DO I = 1,JM1
    TT = TT + ABS(W(I))*EB(I)
-160 CONTINUE
+END DO
 UB(IMIN) = TT
 IF (UB(IMIN)/H(IMIN) .GE. 1.0) GO TO 170
 GO TO 200
@@ -1030,10 +1030,10 @@ A(J,J) = -TN
 UB(J) = UB(J)/ABS(A(J,J))
 DB(J) = (SIGN(EB(J),DB(J)) + DB(J))/A(J,J)
 IF (J .EQ. KRANK) GO TO 300
-do 260 I = JP1,KRANK
+DO I = JP1,KRANK
    UB(I) = UB(I) + ABS(A(J,I))*UB(J)
    DB(I) = DB(I) - A(J,I)*DB(J)
-260 CONTINUE
+END DO
 GO TO 100
 !
 !        E N D    M A I N    L O O P
@@ -1043,7 +1043,7 @@ GO TO 100
 !        COMPUTE KSURE
 !
 KM1 = KRANK - 1
-do 315 I = 1,KM1
+DO I = 1,KM1
    IS = 0
    KMI = KRANK - I
    do 310 II = 1,KMI
@@ -1054,16 +1054,16 @@ do 315 I = 1,KM1
       UB(II + 1) = TEMP
 310 CONTINUE
    IF (IS .EQ. 0) GO TO 320
-315 CONTINUE
+END DO
 !
 320 KSURE = 0
 SUM = 0.0
-do 325 I = 1,KRANK
+DO I = 1,KRANK
    R2 = UB(I)*UB(I)
    IF (R2 + SUM .GE. 1.0) GO TO 330
    SUM = SUM + R2
    KSURE = KSURE + 1
-325 CONTINUE
+END DO
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
@@ -1079,12 +1079,12 @@ I = KRANK
    A(I,I) = -TN
    IF (I .EQ. 1) GO TO 350
    IM1 = I - 1
-   do 345 II = 1,IM1
+   DO II = 1,IM1
       TT = -SDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
       TT = TT - A(II,I)
       CALL SAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
       A(II,I) = A(II,I) + TT*W(I)
-345 CONTINUE
+   END DO
    I = I - 1
    GO TO 340
 !
@@ -1117,14 +1117,14 @@ IF (K .GT. 0) GO TO 30
 !
 !        RANK=0
 !
-do 10 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = SNRM2(M,B(1,JB),1)
-10 CONTINUE
-do 21 JB = 1,NB
-   do 20 I = 1,N
+END DO
+DO JB = 1,NB
+   DO I = 1,N
       B(I,JB) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 RETURN
 !
 30 I = 0
@@ -1138,57 +1138,57 @@ RETURN
    IF (J .LT. 0) GO TO 40
 !
    IR(I) = -IR(I)
-   do 50 JB = 1,NB
+   DO JB = 1,NB
       RNORM(JB) = B(I,JB)
-50 CONTINUE
+   END DO
 !
    IJ = I
-60 do 70 JB = 1,NB
+60 DO JB = 1,NB
          B(IJ,JB) = B(J,JB)
-70 CONTINUE
+      END DO
       IJ = J
       J = IR(IJ)
       IR(IJ) = -IR(IJ)
    IF (J .NE. I) GO TO 60
 !
-   do 80 JB = 1,NB
+   DO JB = 1,NB
       B(IJ,JB) = RNORM(JB)
-80 CONTINUE
+   END DO
    GO TO 40
 !
-100 do 110 I = 1,M
+100 DO I = 1,M
    IR(I) = IABS(IR(I))
-110 CONTINUE
+END DO
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-do 130 J = 1,K
+DO J = 1,K
    TT = A(J,J)
    A(J,J) = H(J)
-   do 120 I = 1,NB
+   DO I = 1,NB
       BB = -SDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
       CALL SAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
-120 CONTINUE
+   END DO
    A(J,J) = TT
-130 CONTINUE
+END DO
 !
 !        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-do 140 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = SNRM2(M-K,B(KP1,JB),1)
-140 CONTINUE
+END DO
 !
 !     BACK SOLVE UPPER TRIANGULAR R
 !
 I = K
-150 do 160 JB = 1,NB
+150 DO JB = 1,NB
    B(I,JB) = B(I,JB)/A(I,I)
-160 CONTINUE
+END DO
 IF (I .EQ. 1) GO TO 200
 IM1 = I - 1
-do 170 JB = 1,NB
+DO JB = 1,NB
    CALL SAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
-170 CONTINUE
+END DO
 I = IM1
 GO TO 150
 !
@@ -1197,24 +1197,24 @@ GO TO 150
 !      TRUNCATED SOLUTION
 !
 200 IF (K .EQ. N) GO TO 230
-do 211 JB = 1,NB
-   do 210 I = KP1,N
+DO JB = 1,NB
+   DO I = KP1,N
       B(I,JB) = 0.0
-210 CONTINUE
-211 CONTINUE
+   END DO
+END DO
 IF (MODE .EQ. 1) GO TO 230
 !
 !      MINIMAL LENGTH SOLUTION
 !
 NMK = N - K
-do 221 JB = 1,NB
-   do 220 I = 1,K
+DO JB = 1,NB
+   DO I = 1,K
       TT = -SDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
       TT = TT - B(I,JB)
       CALL SAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
       B(I,JB) = B(I,JB) + TT*W(I)
-220 CONTINUE
-221 CONTINUE
+   END DO
+END DO
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
@@ -1234,9 +1234,9 @@ do 221 JB = 1,NB
    IF (J .NE. I) GO TO 250
    GO TO 240
 !
-260 do 270 I = 1,N
+260 DO I = 1,N
    IC(I) = IABS(IC(I))
-270 CONTINUE
+END DO
 RETURN
 END SUBROUTINE U12LS
 
@@ -1256,30 +1256,30 @@ INTEGER IC(N),IR(M)
 !
 J = 0
 KRANK = M
-do 10 I = 1,N
+DO I = 1,N
    IC(I) = I
-10 CONTINUE
-do 20 I = 1,M
+END DO
+DO I = 1,M
    IR(I) = I
-20 CONTINUE
+END DO
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE ROW LENGTH
 !
-do 30 I = 1,M
+DO I = 1,M
    H(I) = SNRM2(N,A(I,1),MDA)
    W(I) = H(I)
-30 CONTINUE
+END DO
 !
 !         INITIALIZE ERROR BOUNDS
 !
-do 40 I = 1,M
+DO I = 1,M
    EB(I) = AMAX1(DB(I),UB(I)*H(I))
    UB(I) = EB(I)
    DB(I) = 0.0
-40 CONTINUE
+END DO
 !
 !          DISCARD SELF DEPENDENT ROWS
 !
@@ -1342,24 +1342,24 @@ IF (TT .GE. 1.0) GO TO 170
 !
 !     COMPUTE EXACT UB
 !
-do 125 I = 1,JM1
+DO I = 1,JM1
    W(I) = A(IMIN,I)
-125 CONTINUE
+END DO
 !
 L = JM1
 130 W(L) = W(L)/A(L,L)
 IF (L .EQ. 1) GO TO 150
 LM1 = L - 1
-do 140 I = L,JM1
+DO I = L,JM1
    W(LM1) = W(LM1) - A(I,LM1)*W(I)
-140 CONTINUE
+END DO
 L = LM1
 GO TO 130
 !
 150 TT = EB(IMIN)
-do 160 I = 1,JM1
+DO I = 1,JM1
    TT = TT + ABS(W(I))*EB(I)
-160 CONTINUE
+END DO
 UB(IMIN) = TT
 IF (UB(IMIN)/H(IMIN) .GE. 1.0) GO TO 170
 GO TO 200
@@ -1433,10 +1433,10 @@ A(J,J) = -TN
 UB(J) = UB(J)/ABS(A(J,J))
 DB(J) = (SIGN(EB(J),DB(J))+DB(J))/A(J,J)
 IF (J .EQ. KRANK) GO TO 300
-do 260 I = JP1,KRANK
+DO I = JP1,KRANK
    UB(I) = UB(I) + ABS(A(I,J))*UB(J)
    DB(I) = DB(I) - A(I,J)*DB(J)
-260 CONTINUE
+END DO
 GO TO 100
 !
 !        E N D    M A I N    L O O P
@@ -1446,7 +1446,7 @@ GO TO 100
 !        COMPUTE KSURE
 !
 KM1 = KRANK - 1
-do 315 I = 1,KM1
+DO I = 1,KM1
    IS = 0
    KMI = KRANK - I
    do 310 II = 1,KMI
@@ -1457,16 +1457,16 @@ do 315 I = 1,KM1
       UB(II + 1) = TEMP
 310 CONTINUE
    IF (IS .EQ. 0) GO TO 320
-315 CONTINUE
+END DO
 !
 320 KSURE = 0
 SUM = 0.0
-do 325 I = 1,KRANK
+DO I = 1,KRANK
    R2 = UB(I)*UB(I)
    IF (R2 + SUM .GE. 1.0) GO TO 330
    SUM = SUM + R2
    KSURE = KSURE + 1
-325 CONTINUE
+END DO
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
@@ -1482,12 +1482,12 @@ I = KRANK
    A(I,I) = -TN
    IF (I .EQ. 1) GO TO 350
    IM1 = I - 1
-   do 345 II = 1,IM1
+   DO II = 1,IM1
       TT = -SDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
       TT = TT - A(I,II)
       CALL SAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
       A(I,II) = A(I,II) + TT*W(I)
-345 CONTINUE
+   END DO
    I = I - 1
    GO TO 340
 !
@@ -1520,14 +1520,14 @@ IF (K .GT. 0) GO TO 30
 !
 !        RANK=0
 !
-do 10 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = SNRM2(M,B(1,JB),1)
-10 CONTINUE
-do 21 JB = 1,NB
-   do 20 I = 1,N
+END DO
+DO JB = 1,NB
+   DO I = 1,N
       B(I,JB) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 RETURN
 !
 30 I = 0
@@ -1541,81 +1541,81 @@ RETURN
    IF (J .LT. 0) GO TO 40
 !
    IR(I) = -IR(I)
-   do 50 JB = 1,NB
+   DO JB = 1,NB
       RNORM(JB) = B(I,JB)
-50 CONTINUE
+   END DO
 !
    IJ = I
-60 do 70 JB = 1,NB
+60 DO JB = 1,NB
          B(IJ,JB) = B(J,JB)
-70 CONTINUE
+      END DO
       IJ = J
       J = IR(IJ)
       IR(IJ) = -IR(IJ)
    IF (J .NE. I) GO TO 60
 !
-   do 80 JB = 1,NB
+   DO JB = 1,NB
       B(IJ,JB) = RNORM(JB)
-80 CONTINUE
+   END DO
    GO TO 40
 !
-100 do 110 I = 1,M
+100 DO I = 1,M
    IR(I) = IABS(IR(I))
-110 CONTINUE
+END DO
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
 IF (MODE .LT. 2 .OR. K .EQ. M) GO TO 140
 MMK = M - K
-do 130 JB = 1,NB
-   do 120 J = 1,K
+DO JB = 1,NB
+   DO J = 1,K
       I = KP1 - J
       TT = -SDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
       TT = TT - B(I,JB)
       CALL SAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
       B(I,JB) = B(I,JB) + TT*W(I)
-120 CONTINUE
-130 CONTINUE
+   END DO
+END DO
 !
 !     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-140 do 150 JB = 1,NB
+140 DO JB = 1,NB
    RNORM(JB) = SNRM2(M-K,B(KP1,JB),1)
-150 CONTINUE
+END DO
 !
 !     BACK SOLVE LOWER TRIANGULAR L
 !
 do 170 JB = 1,NB
-   do 160 I = 1,K
+   DO I = 1,K
       B(I,JB) = B(I,JB)/A(I,I)
       IF (I .EQ. K) GO TO 170
       IP1 = I + 1
       CALL SAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
-160 CONTINUE
+   END DO
 170 CONTINUE
 !
 !      TRUNCATED SOLUTION
 !
 IF (K .EQ. N) GO TO 210
-do 201 JB = 1,NB
-   do 200 I = KP1,N
+DO JB = 1,NB
+   DO I = KP1,N
       B(I,JB) = 0.0
-200 CONTINUE
-201 CONTINUE
+   END DO
+END DO
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-210 do 230 I = 1,K
+210 DO I = 1,K
    J = KP1 - I
    TT = A(J,J)
    A(J,J) = H(J)
-   do 220 JB = 1,NB
+   DO JB = 1,NB
       BB = -SDOT(N-J+1,A(J,J),MDA,B(J,JB),1)/H(J)
       CALL SAXPY(N-J+1,BB,A(J,J),MDA,B(J,JB),1)
-220 CONTINUE
+   END DO
    A(J,J) = TT
-230 CONTINUE
+END DO
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
@@ -1635,9 +1635,9 @@ I = 0
    IF (J .NE. I) GO TO 250
    GO TO 240
 !
-260 do 270 I = 1,N
+260 DO I = 1,N
    IC(I) = IABS(IC(I))
-270 CONTINUE
+END DO
 RETURN
 END SUBROUTINE U12US
 
@@ -1805,13 +1805,13 @@ EPS = 10.D0*DPMPAR(1)
 RERR = DMAX1(EPS,RE)
 !
 IMAX = M5 - 1
-do 20 I = M4,IMAX
+DO I = M4,IMAX
    WORK(I) = RERR
-20 CONTINUE
+END DO
 IMAX = IMAX + M0
-do 30 I = M5,IMAX
+DO I = M5,IMAX
    WORK(I) = AE
-30 CONTINUE
+END DO
 !
 !     FACTOR THE MATRIX A
 !
@@ -1913,30 +1913,30 @@ DOUBLE PRECISION DDOT, DNRM2
 !
 J = 0
 KRANK = N
-do 10 I = 1,N
+DO I = 1,N
    IC(I) = I
-10 CONTINUE
-do 20 I = 1,M
+END DO
+DO I = 1,M
    IR(I) = I
-20 CONTINUE
+END DO
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE COL LENGTH
 !
-do 30 I = 1,N
+DO I = 1,N
    H(I) = DNRM2(M,A(1,I),1)
    W(I) = H(I)
-30 CONTINUE
+END DO
 !
 !         INITIALIZE ERROR BOUNDS
 !
-do 40 I = 1,N
+DO I = 1,N
    EB(I) = DMAX1(DB(I),UB(I)*H(I))
    UB(I) = EB(I)
    DB(I) = 0.D0
-40 CONTINUE
+END DO
 !
 !          DISCARD SELF DEPENDENT COLUMNS
 !
@@ -1999,24 +1999,24 @@ IF (TT .GE. 1.D0) GO TO 170
 !
 !     COMPUTE EXACT UB
 !
-do 125 I = 1,JM1
+DO I = 1,JM1
    W(I) = A(I,IMIN)
-125 CONTINUE
+END DO
 !
 L = JM1
 130 W(L) = W(L)/A(L,L)
 IF (L .EQ. 1) GO TO 150
 LM1 = L - 1
-do 140 I = L,JM1
+DO I = L,JM1
    W(LM1) = W(LM1) - A(LM1,I)*W(I)
-140 CONTINUE
+END DO
 L = LM1
 GO TO 130
 !
 150 TT = EB(IMIN)
-do 160 I = 1,JM1
+DO I = 1,JM1
    TT = TT + DABS(W(I))*EB(I)
-160 CONTINUE
+END DO
 UB(IMIN) = TT
 IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
 GO TO 200
@@ -2090,10 +2090,10 @@ A(J,J) = -TN
 UB(J) = UB(J)/DABS(A(J,J))
 DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
 IF (J .EQ. KRANK) GO TO 300
-do 260 I = JP1,KRANK
+DO I = JP1,KRANK
    UB(I) = UB(I) + DABS(A(J,I))*UB(J)
    DB(I) = DB(I) - A(J,I)*DB(J)
-260 CONTINUE
+END DO
 GO TO 100
 !
 !        E N D    M A I N    L O O P
@@ -2103,7 +2103,7 @@ GO TO 100
 !        COMPUTE KSURE
 !
 KM1 = KRANK - 1
-do 315 I = 1,KM1
+DO I = 1,KM1
    IS = 0
    KMI = KRANK - I
    do 310 II = 1,KMI
@@ -2114,16 +2114,16 @@ do 315 I = 1,KM1
       UB(II + 1) = TEMP
 310 CONTINUE
    IF (IS .EQ. 0) GO TO 320
-315 CONTINUE
+END DO
 !
 320 KSURE = 0
 SUM = 0.D0
-do 325 I = 1,KRANK
+DO I = 1,KRANK
    R2 = UB(I)*UB(I)
    IF (R2 + SUM .GE. 1.D0) GO TO 330
    SUM = SUM + R2
    KSURE = KSURE + 1
-325 CONTINUE
+END DO
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
@@ -2139,12 +2139,12 @@ I = KRANK
    A(I,I) = -TN
    IF (I .EQ. 1) GO TO 350
    IM1 = I - 1
-   do 345 II = 1,IM1
+   DO II = 1,IM1
       TT = -DDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
       TT = TT - A(II,I)
       CALL DAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
       A(II,I) = A(II,I) + TT*W(I)
-345 CONTINUE
+   END DO
    I = I - 1
    GO TO 340
 !
@@ -2179,14 +2179,14 @@ IF (K .GT. 0) GO TO 30
 !
 !        RANK=0
 !
-do 10 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = DNRM2(M,B(1,JB),1)
-10 CONTINUE
-do 21 JB = 1,NB
-   do 20 I = 1,N
+END DO
+DO JB = 1,NB
+   DO I = 1,N
       B(I,JB) = 0.D0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 RETURN
 !
 30 I = 0
@@ -2200,57 +2200,57 @@ RETURN
    IF (J .LT. 0) GO TO 40
 !
    IR(I) = -IR(I)
-   do 50 JB = 1,NB
+   DO JB = 1,NB
       RNORM(JB) = B(I,JB)
-50 CONTINUE
+   END DO
 !
    IJ = I
-60 do 70 JB = 1,NB
+60 DO JB = 1,NB
          B(IJ,JB) = B(J,JB)
-70 CONTINUE
+      END DO
       IJ = J
       J = IR(IJ)
       IR(IJ) = -IR(IJ)
    IF (J .NE. I) GO TO 60
 !
-   do 80 JB = 1,NB
+   DO JB = 1,NB
       B(IJ,JB) = RNORM(JB)
-80 CONTINUE
+   END DO
    GO TO 40
 !
-100 do 110 I = 1,M
+100 DO I = 1,M
    IR(I) = IABS(IR(I))
-110 CONTINUE
+END DO
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-do 130 J = 1,K
+DO J = 1,K
    TT = A(J,J)
    A(J,J) = H(J)
-   do 120 I = 1,NB
+   DO I = 1,NB
       BB = -DDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
       CALL DAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
-120 CONTINUE
+   END DO
    A(J,J) = TT
-130 CONTINUE
+END DO
 !
 !        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-do 140 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = DNRM2(M-K,B(KP1,JB),1)
-140 CONTINUE
+END DO
 !
 !     BACK SOLVE UPPER TRIANGULAR R
 !
 I = K
-150 do 160 JB = 1,NB
+150 DO JB = 1,NB
    B(I,JB) = B(I,JB)/A(I,I)
-160 CONTINUE
+END DO
 IF (I .EQ. 1) GO TO 200
 IM1 = I - 1
-do 170 JB = 1,NB
+DO JB = 1,NB
    CALL DAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
-170 CONTINUE
+END DO
 I = IM1
 GO TO 150
 !
@@ -2259,24 +2259,24 @@ GO TO 150
 !      TRUNCATED SOLUTION
 !
 200 IF (K .EQ. N) GO TO 230
-do 211 JB = 1,NB
-   do 210 I = KP1,N
+DO JB = 1,NB
+   DO I = KP1,N
       B(I,JB) = 0.D0
-210 CONTINUE
-211 CONTINUE
+   END DO
+END DO
 IF (MODE .EQ. 1) GO TO 230
 !
 !      MINIMAL LENGTH SOLUTION
 !
 NMK = N - K
-do 221 JB = 1,NB
-   do 220 I = 1,K
+DO JB = 1,NB
+   DO I = 1,K
       TT = -DDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
       TT = TT - B(I,JB)
       CALL DAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
       B(I,JB) = B(I,JB) + TT*W(I)
-220 CONTINUE
-221 CONTINUE
+   END DO
+END DO
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
@@ -2296,9 +2296,9 @@ do 221 JB = 1,NB
    IF (J .NE. I) GO TO 250
    GO TO 240
 !
-260 do 270 I = 1,N
+260 DO I = 1,N
    IC(I) = IABS(IC(I))
-270 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DU12LS
 
@@ -2320,30 +2320,30 @@ DOUBLE PRECISION DDOT, DNRM2
 !
 J = 0
 KRANK = M
-do 10 I = 1,N
+DO I = 1,N
    IC(I) = I
-10 CONTINUE
-do 20 I = 1,M
+END DO
+DO I = 1,M
    IR(I) = I
-20 CONTINUE
+END DO
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE ROW LENGTH
 !
-do 30 I = 1,M
+DO I = 1,M
    H(I) = DNRM2(N,A(I,1),MDA)
    W(I) = H(I)
-30 CONTINUE
+END DO
 !
 !         INITIALIZE ERROR BOUNDS
 !
-do 40 I = 1,M
+DO I = 1,M
    EB(I) = DMAX1(DB(I),UB(I)*H(I))
    UB(I) = EB(I)
    DB(I) = 0.D0
-40 CONTINUE
+END DO
 !
 !          DISCARD SELF DEPENDENT ROWS
 !
@@ -2406,24 +2406,24 @@ IF (TT .GE. 1.D0) GO TO 170
 !
 !     COMPUTE EXACT UB
 !
-do 125 I = 1,JM1
+DO I = 1,JM1
    W(I) = A(IMIN,I)
-125 CONTINUE
+END DO
 !
 L = JM1
 130 W(L) = W(L)/A(L,L)
 IF (L .EQ. 1) GO TO 150
 LM1 = L - 1
-do 140 I = L,JM1
+DO I = L,JM1
    W(LM1) = W(LM1) - A(I,LM1)*W(I)
-140 CONTINUE
+END DO
 L = LM1
 GO TO 130
 !
 150 TT = EB(IMIN)
-do 160 I = 1,JM1
+DO I = 1,JM1
    TT = TT + DABS(W(I))*EB(I)
-160 CONTINUE
+END DO
 UB(IMIN) = TT
 IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
 GO TO 200
@@ -2497,10 +2497,10 @@ A(J,J) = -TN
 UB(J) = UB(J)/DABS(A(J,J))
 DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
 IF (J .EQ. KRANK) GO TO 300
-do 260 I = JP1,KRANK
+DO I = JP1,KRANK
    UB(I) = UB(I) + DABS(A(I,J))*UB(J)
    DB(I) = DB(I) - A(I,J)*DB(J)
-260 CONTINUE
+END DO
 GO TO 100
 !
 !        E N D    M A I N    L O O P
@@ -2510,7 +2510,7 @@ GO TO 100
 !        COMPUTE KSURE
 !
 KM1 = KRANK - 1
-do 315 I = 1,KM1
+DO I = 1,KM1
    IS = 0
    KMI = KRANK - I
    do 310 II = 1,KMI
@@ -2521,16 +2521,16 @@ do 315 I = 1,KM1
       UB(II + 1) = TEMP
 310 CONTINUE
    IF (IS .EQ. 0) GO TO 320
-315 CONTINUE
+END DO
 !
 320 KSURE = 0
 SUM = 0.D0
-do 325 I = 1,KRANK
+DO I = 1,KRANK
    R2 = UB(I)*UB(I)
    IF (R2 + SUM .GE. 1.D0) GO TO 330
    SUM = SUM + R2
    KSURE = KSURE + 1
-325 CONTINUE
+END DO
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
@@ -2546,12 +2546,12 @@ I = KRANK
    A(I,I) = -TN
    IF (I .EQ. 1) GO TO 350
    IM1 = I - 1
-   do 345 II = 1,IM1
+   DO II = 1,IM1
       TT = -DDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
       TT = TT - A(I,II)
       CALL DAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
       A(I,II) = A(I,II) + TT*W(I)
-345 CONTINUE
+   END DO
    I = I - 1
    GO TO 340
 !
@@ -2586,14 +2586,14 @@ IF (K .GT. 0) GO TO 30
 !
 !        RANK=0
 !
-do 10 JB = 1,NB
+DO JB = 1,NB
    RNORM(JB) = DNRM2(M,B(1,JB),1)
-10 CONTINUE
-do 21 JB = 1,NB
-   do 20 I = 1,N
+END DO
+DO JB = 1,NB
+   DO I = 1,N
       B(I,JB) = 0.D0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 RETURN
 !
 30 I = 0
@@ -2607,81 +2607,81 @@ RETURN
    IF (J .LT. 0) GO TO 40
 !
    IR(I) = -IR(I)
-   do 50 JB = 1,NB
+   DO JB = 1,NB
       RNORM(JB) = B(I,JB)
-50 CONTINUE
+   END DO
 !
    IJ = I
-60 do 70 JB = 1,NB
+60 DO JB = 1,NB
          B(IJ,JB) = B(J,JB)
-70 CONTINUE
+      END DO
       IJ = J
       J = IR(IJ)
       IR(IJ) = -IR(IJ)
    IF (J .NE. I) GO TO 60
 !
-   do 80 JB = 1,NB
+   DO JB = 1,NB
       B(IJ,JB) = RNORM(JB)
-80 CONTINUE
+   END DO
    GO TO 40
 !
-100 do 110 I = 1,M
+100 DO I = 1,M
    IR(I) = IABS(IR(I))
-110 CONTINUE
+END DO
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
 IF (MODE .LT. 2 .OR. K .EQ. M) GO TO 140
 MMK = M - K
-do 130 JB = 1,NB
-   do 120 J = 1,K
+DO JB = 1,NB
+   DO J = 1,K
       I = KP1 - J
       TT = -DDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
       TT = TT - B(I,JB)
       CALL DAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
       B(I,JB) = B(I,JB) + TT*W(I)
-120 CONTINUE
-130 CONTINUE
+   END DO
+END DO
 !
 !     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-140 do 150 JB = 1,NB
+140 DO JB = 1,NB
    RNORM(JB) = DNRM2(M-K,B(KP1,JB),1)
-150 CONTINUE
+END DO
 !
 !     BACK SOLVE LOWER TRIANGULAR L
 !
 do 170 JB = 1,NB
-   do 160 I = 1,K
+   DO I = 1,K
       B(I,JB) = B(I,JB)/A(I,I)
       IF (I .EQ. K) GO TO 170
       IP1 = I + 1
       CALL DAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
-160 CONTINUE
+   END DO
 170 CONTINUE
 !
 !      TRUNCATED SOLUTION
 !
 IF (K .EQ. N) GO TO 210
-do 201 JB = 1,NB
-   do 200 I = KP1,N
+DO JB = 1,NB
+   DO I = KP1,N
       B(I,JB) = 0.D0
-200 CONTINUE
-201 CONTINUE
+   END DO
+END DO
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-210 do 230 I = 1,K
+210 DO I = 1,K
    J = KP1 - I
    TT = A(J,J)
    A(J,J) = H(J)
-   do 220 JB = 1,NB
+   DO JB = 1,NB
       BB = -DDOT(N-J+1,A(J,J),MDA,B(J,JB),1)/H(J)
       CALL DAXPY(N-J+1,BB,A(J,J),MDA,B(J,JB),1)
-220 CONTINUE
+   END DO
    A(J,J) = TT
-230 CONTINUE
+END DO
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
@@ -2701,9 +2701,9 @@ I = 0
    IF (J .NE. I) GO TO 250
    GO TO 240
 !
-260 do 270 I = 1,N
+260 DO I = 1,N
    IC(I) = IABS(IC(I))
-270 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DU12US
 
@@ -2833,22 +2833,22 @@ IF (LDIAG .LE. 0) GO TO 270
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
     LMAX = J
-        do 10 L = J,N
+        DO L = J,N
         H(L) = H(L) - A(J-1,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-10 CONTINUE
+        END DO
     Z = HMAX + FACTOR*H(LMAX)
     IF (Z .GT. HMAX) GO TO 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
 20 LMAX=J
-        do 40 L = J,N
+        DO L = J,N
         H(L) = 0.0
             do 30 I = J,M
 30 H(L) = H(L) + A(I,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-40 CONTINUE
+        END DO
     HMAX = H(LMAX)
 !    ..
 !     LMAX HAS BEEN DETERMINED
@@ -2870,9 +2870,9 @@ IF (LDIAG .LE. 0) GO TO 270
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !    ..
-    do 90 J = 1,LDIAG
+    DO J = 1,LDIAG
     IF (ABS(A(J,J)) .LE. TAU) GO TO 100
-90 CONTINUE
+    END DO
 K = LDIAG
 GO TO 110
 100 K = J - 1
@@ -2891,10 +2891,10 @@ IF (NB .LE. 0) GO TO 140
 !                                           SPECIAL FOR PSEUDORANK = 0
 IF (K .GT. 0) GO TO 160
 IF (NB .LE. 0) GO TO 270
-    do 151 JB = 1,NB
+    DO JB = 1,NB
         do 150 I = 1,N
 150 B(I,JB) = 0.0
-151 CONTINUE
+    END DO
 GO TO 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
@@ -2908,7 +2908,7 @@ GO TO 270
 !
 !
 IF (NB .LE. 0) GO TO 270
-    do 260 JB = 1,NB
+    DO JB = 1,NB
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
@@ -2941,7 +2941,7 @@ IF (NB .LE. 0) GO TO 270
         B(L,JB) = B(J,JB)
         B(J,JB) = TMP
 250 CONTINUE
-260 CONTINUE
+    END DO
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
@@ -3090,22 +3090,22 @@ IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
     LMAX = J
-        do 10 L = J,N
+        DO L = J,N
         H(L) = H(L) - A(J-1,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-10 CONTINUE
+        END DO
     Z = HMAX + FACTOR*H(LMAX)
     IF (Z .GT. HMAX) GO TO 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
 20 LMAX = J
-        do 40 L = J,N
+        DO L = J,N
         H(L) = 0.0
             do 30 I = J,M
 30 H(L) = H(L) + A(I,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-40 CONTINUE
+        END DO
     HMAX = H(LMAX)
 !    ..
 !     LMAX HAS BEEN DETERMINED
@@ -3153,10 +3153,10 @@ IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
 !                                           SPECIAL FOR PSEUDORANK = 0
 IF (K .GT. 0) GO TO 160
 IF (NB .LE. 0) GO TO 270
-    do 151 JB = 1,NB
+    DO JB = 1,NB
         do 150 I = 1,N
 150 B(I,JB) = 0.0
-151 CONTINUE
+    END DO
 GO TO 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
@@ -3170,7 +3170,7 @@ GO TO 270
 !
 !
 IF (NB .LE. 0) GO TO 270
-    do 260 JB = 1,NB
+    DO JB = 1,NB
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
@@ -3203,7 +3203,7 @@ IF (NB .LE. 0) GO TO 270
         B(L,JB) = B(J,JB)
         B(J,JB) = TMP
 250 CONTINUE
-260 CONTINUE
+    END DO
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
@@ -3431,22 +3431,22 @@ IF (LDIAG .LE. 0) GO TO 270
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
     LMAX = J
-        do 10 L = J,N
+        DO L = J,N
         H(L) = H(L) - A(J-1,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-10 CONTINUE
+        END DO
     Z = HMAX + FACTOR*H(LMAX)
     IF (Z .GT. HMAX) GO TO 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
 20 LMAX=J
-        do 40 L = J,N
+        DO L = J,N
         H(L) = 0.D0
             do 30 I = J,M
 30 H(L) = H(L) + A(I,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-40 CONTINUE
+        END DO
     HMAX = H(LMAX)
 !    ..
 !     LMAX HAS BEEN DETERMINED
@@ -3468,9 +3468,9 @@ IF (LDIAG .LE. 0) GO TO 270
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !    ..
-    do 90 J = 1,LDIAG
+    DO J = 1,LDIAG
     IF (DABS(A(J,J)) .LE. TAU) GO TO 100
-90 CONTINUE
+    END DO
 K = LDIAG
 GO TO 110
 100 K = J - 1
@@ -3489,10 +3489,10 @@ IF (NB .LE. 0) GO TO 140
 !                                           SPECIAL FOR PSEUDORANK = 0
 IF (K .GT. 0) GO TO 160
 IF (NB .LE. 0) GO TO 270
-    do 151 JB = 1,NB
+    DO JB = 1,NB
         do 150 I = 1,N
 150 B(I,JB) = 0.D0
-151 CONTINUE
+    END DO
 GO TO 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
@@ -3506,7 +3506,7 @@ GO TO 270
 !
 !
 IF (NB .LE. 0) GO TO 270
-    do 260 JB = 1,NB
+    DO JB = 1,NB
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
@@ -3539,7 +3539,7 @@ IF (NB .LE. 0) GO TO 270
         B(L,JB) = B(J,JB)
         B(J,JB) = TMP
 250 CONTINUE
-260 CONTINUE
+    END DO
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
@@ -3689,22 +3689,22 @@ IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
     LMAX = J
-        do 10 L = J,N
+        DO L = J,N
         H(L) = H(L) - A(J-1,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-10 CONTINUE
+        END DO
     Z = HMAX + FACTOR*H(LMAX)
     IF (Z .GT. HMAX) GO TO 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
 20 LMAX = J
-        do 40 L = J,N
+        DO L = J,N
         H(L) = 0.D0
             do 30 I = J,M
 30 H(L) = H(L) + A(I,L)**2
         IF (H(L) .GT. H(LMAX)) LMAX = L
-40 CONTINUE
+        END DO
     HMAX = H(LMAX)
 !    ..
 !     LMAX HAS BEEN DETERMINED
@@ -3752,10 +3752,10 @@ IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
 !                                           SPECIAL FOR PSEUDORANK = 0
 IF (K .GT. 0) GO TO 160
 IF (NB .LE. 0) GO TO 270
-    do 151 JB = 1,NB
+    DO JB = 1,NB
         do 150 I = 1,N
 150 B(I,JB) = 0.D0
-151 CONTINUE
+    END DO
 GO TO 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
@@ -3769,7 +3769,7 @@ GO TO 270
 !
 !
 IF (NB .LE. 0) GO TO 270
-    do 260 JB = 1,NB
+    DO JB = 1,NB
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
@@ -3802,7 +3802,7 @@ IF (NB .LE. 0) GO TO 270
         B(L,JB) = B(J,JB)
         B(J,JB) = TMP
 250 CONTINUE
-260 CONTINUE
+    END DO
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
@@ -4249,9 +4249,9 @@ RETURN
 !     COMPUTE NORM OF EQUALITY CONSTRAINT MATRIX AND RT SIDE.
 !
 ENORM = ZERO
-do 110 J = 1,N
+DO J = 1,N
   ENORM = AMAX1(ENORM,SASUM(ME,W(1,J),1))
-110 CONTINUE
+END DO
 FNORM = SASUM(ME,W(1,NP1),1)
 IF (.NOT.(L.GT.0)) GO TO 200
 SNMAX = ZERO
@@ -4293,7 +4293,7 @@ do 180 I = 1,L
 !     TRIANGULAR FORM.
 !
 IF (.NOT.(KRANKE.GT.0 .AND. KRANKE.LT.ME)) GO TO 220
-do 210 KK = 1,KRANKE
+DO KK = 1,KRANKE
   K = KRANKE + 1 - KK
 !
 !     APPLY TRANFORMATION TO MATRIX COLS. 1,...,K-1.
@@ -4301,14 +4301,14 @@ do 210 KK = 1,KRANKE
 !
 !     APPLY TO RT SIDE VECTOR.
   CALL H12(2, K, KRANKE+1, ME, W(1,K), 1, UP, W(1,NP1), 1, 1, 1)
-210 CONTINUE
+END DO
 220 IF (.NOT.(KRANKE.GT.0)) GO TO 240
 !
 !     SOLVE FOR VARIABLES 1,...,KRANKE IN NEW COORDINATES.
 CALL SCOPY(KRANKE, W(1,NP1), 1, X, 1)
-do 230 I = 1,KRANKE
+DO I=1,KRANKE
   X(I) = (X(I)-SDOT(I-1,W(I,1),MDW,X,1))/W(I,I)
-230 CONTINUE
+END DO
 !
 !     COMPUTE RESIDUALS FOR REDUCED PROBLEM.
 !
@@ -4330,9 +4330,9 @@ do 260 I = MEP1,M
 !     MOVE REDUCED PROBLEM DATA UPWARD IF KRANKE.LT.ME.
 !
 IF (.NOT.(KRANKE.LT.ME)) GO TO 290
-do 280 J = 1,NP1
+DO J=1,NP1
   CALL SCOPY(M-ME, W(ME+1,J), 1, W(KRANKE+1,J), 1)
-280 CONTINUE
+END DO
 !
 !     COMPUTE SOLN OF REDUCED PROBLEM.
 !
@@ -4368,10 +4368,10 @@ CALL SCOPY(KRANKE, WS(KRANKE+1), 1, W, MDW+1)
 !
 !     REAPPLY TRANS TO PUT SOLN IN ORIGINAL COORDINATES.
 !
-do 340 II = 1,KRANKE
+DO II = 1,KRANKE
   I = KRANKE + 1 - II
   CALL H12(2, I, I+1, N, W(I,1), MDW, WS(I), X, 1, 1, 1)
-340 CONTINUE
+END DO
 !
 !     COMPUTE COV MATRIX OF EQUAL. CONSTRAINED PROBLEM.
 !
@@ -4382,43 +4382,43 @@ do 400 JJ = 1,KRANKE
   RB = WS(J)*W(J,J)
   IF (RB.NE.ZERO) RB = ONE/RB
   JP1 = J + 1
-  do 350 I = JP1,N
+  DO I=JP1,N
     W(I,J) = SDOT(N-J,W(I,JP1),MDW,W(J,JP1),MDW)*RB
-350 CONTINUE
+  END DO
   GAM = SDOT(N-J,W(JP1,J),1,W(J,JP1),MDW)*RB
   GAM = HALF*GAM
   CALL SAXPY(N-J, GAM, W(J,JP1), MDW, W(JP1,J), 1)
-  do 370 I = JP1,N
-    do 360 K = I,N
+  DO I=JP1,N
+    DO K=I,N
       W(I,K) = W(I,K) + W(J,I)*W(K,J) + W(I,J)*W(J,K)
       W(K,I) = W(I,K)
-360 CONTINUE
-370 CONTINUE
+    END DO
+  END DO
   UJ = WS(J)
   VJ = GAM*UJ
   W(J,J) = UJ*VJ + UJ*VJ
-  do 380 I = JP1,N
+  DO I=JP1,N
     W(J,I) = UJ*W(I,J) + VJ*W(J,I)
-380 CONTINUE
+  END DO
   CALL SCOPY(N-J, W(J,JP1), MDW, W(JP1,J), 1)
 400 CONTINUE
 !
 !     APPLY THE SCALING TO THE COVARIANCE MATRIX.
 !
 420 IF (.NOT.(COV)) GO TO 450
-do 430 I = 1,N
+DO I = 1,N
   L = N1 + I
   CALL SSCAL(N, WS(L-1), W(I,1), MDW)
   CALL SSCAL(N, WS(L-1), W(1,I), 1)
-430 CONTINUE
+END DO
 !
 !     RESCALE SOLN. VECTOR.
 !
 450 IF (MODE .GT. 1) GO TO 470
-do 460 J = 1,N
+DO J = 1,N
   L = N1 + J
   X(J) = X(J)*WS(L-1)
-460 CONTINUE
+END DO
 470 IP(1) = KRANKE
 IP(3) = IP(3) + 2*KRANKE + N
 RETURN
@@ -4456,12 +4456,12 @@ RETURN
 500 KEY = PRGOPT(LAST+1)
 IF (KEY.EQ.1) COV = PRGOPT(LAST+2).NE.ZERO
 IF (.NOT.(KEY.EQ.2 .AND. PRGOPT(LAST+2).NE.ZERO)) GO TO 520
-do 510 J = 1,N
+DO J=1,N
   T = SNRM2(M,W(1,J),1)
   IF (T.NE.ZERO) T = ONE/T
   L = N1 + J
   WS(L-1) = T
-510 CONTINUE
+END DO
 520 IF (KEY.EQ.3) CALL SCOPY(N, PRGOPT(LAST+2), 1, WS(N1), 1)
 IF (KEY.EQ.4) TAU = AMAX1(SRELPR,PRGOPT(LAST+2))
 NEXT = PRGOPT(LINK)
@@ -4471,10 +4471,10 @@ RETURN
 530 LAST = LINK
 LINK = NEXT
 GO TO 490
-540 do 550 J = 1,N
+540 DO J=1,N
   L = N1 + J
   CALL SSCAL(M, WS(L-1), W(1,J), 1)
-550 CONTINUE
+END DO
 GO TO 90
 END SUBROUTINE LSEI
 
@@ -4559,9 +4559,9 @@ GO TO 500
 !     COMPUTE MATRIX NORM OF LEAST SQUARES EQUAS.
 !
 40 ANORM = ZERO
-do 50 J = 1,N
+DO J = 1,N
   ANORM = AMAX1(ANORM,SASUM(MA,W(1,J),1))
-50 CONTINUE
+END DO
 !
 !     SET TOL FOR HFTI( ) RANK TEST.
 TAU = TOL*ANORM
@@ -4597,33 +4597,33 @@ RETURN
 !
 IF (.NOT.(MA.LT.M)) GO TO 260
 IF (.NOT.(MINMAN.GT.0)) GO TO 160
-do 90 I = MAP1,M
+DO I = MAP1,M
   W(I,NP1) = W(I,NP1) - SDOT(N,W(I,1),MDW,WS,1)
-90 CONTINUE
-do 100 I = 1,MINMAN
+END DO
+DO I = 1,MINMAN
   J = IP(I)
 !
 !     APPLY PERMUTATIONS TO COLS OF INEQ. CONSTRAINT MATRIX.
   CALL SSWAP(MG, W(MAP1,I), 1, W(MAP1,J), 1)
-100 CONTINUE
+END DO
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO CONSTRAINT MATRIX.
 !
 IF (.NOT.(0.LT.KRANK .AND. KRANK.LT.N)) GO TO 120
-do 110 II = 1,KRANK
+DO II = 1,KRANK
   I = KRANK + 1 - II
   L = N1 + I
   CALL H12(2, I, KRANK+1, N, W(I,1), MDW, WS(L-1), W(MAP1,1), &
 &MDW, 1, MG)
-110 CONTINUE
+END DO
 !
 !     COMPUTE PERMUTED INEQ. CONSTR. MATRIX TIMES R-INVERSE.
 !
 120 do 150 I = MAP1,M
   IF (.NOT.(0.LT.KRANK)) GO TO 150
-  do 130 J = 1,KRANK
+  DO J=1,KRANK
     W(I,J) = (W(I,J)-SDOT(J-1,W(1,J),1,W(I,1),MDW))/W(J,J)
-130 CONTINUE
+  END DO
 150 CONTINUE
 !
 !     SOLVE THE REDUCED PROBLEM WITH LPDP ALGORITHM,
@@ -4636,32 +4636,32 @@ IF (.NOT.(KRANK.GT.0)) GO TO 180
 !
 !     COMPUTE SOLN IN ORIGINAL COORDINATES.
 !
-do 170 II = 1,KRANK
+DO II = 1,KRANK
   I = KRANK + 1 - II
   X(I) = (X(I)-SDOT(II-1,W(I,I+1),MDW,X(I+1),1))/W(I,I)
-170 CONTINUE
+END DO
 !
 !     APPLY HOUSEHOLDER TRANS. TO SOLN VECTOR.
 !
 180 IF (.NOT.(0.LT.KRANK .AND. KRANK.LT.N)) GO TO 200
-do 190 I = 1,KRANK
+DO I = 1,KRANK
   L = N1 + I
   CALL H12(2, I, KRANK+1, N, W(I,1), MDW, WS(L-1), X, 1, 1, 1)
-190 CONTINUE
+END DO
 200 IF (.NOT.(MINMAN.GT.0)) GO TO 270
 !
 !     REPERMUTE VARIABLES TO THEIR INPUT ORDER.
-do 210 II = 1,MINMAN
+DO II=1,MINMAN
   I = MINMAN + 1 - II
   J = IP(I)
   CALL SSWAP(1, X(I), 1, X(J), 1)
-210 CONTINUE
+END DO
 !
 !     VARIABLES ARE NOW IN ORIG. COORDINATES.
 !     ADD SOLN OF UNSCONSTRAINED PROB.
-do 220 I = 1,N
+DO I = 1,N
   X(I) = X(I) + WS(I)
-220 CONTINUE
+END DO
 !
 !     COMPUTE THE RESIDUAL VECTOR NORM.
 RNORM = SQRT(RNORM**2+XNORM**2)
@@ -4681,40 +4681,40 @@ KRP1 = KRANK + 1
 CALL SCOPY(KRANK, W, MDW+1, WS(N2), 1)
 !
 !     RECIPROCATE DIAG. TERMS.
-do 280 J = 1,KRANK
+DO J = 1,KRANK
   W(J,J) = ONE/W(J,J)
-280 CONTINUE
+END DO
 IF (.NOT.(KRANK.GT.1)) GO TO 310
 !
 !     INVERT THE UPPER TRIANGULAR QR FACTOR ON ITSELF.
-do 300 I = 1,KRM1
+DO I=1,KRM1
   IP1 = I + 1
-  do 290 J = IP1,KRANK
+  DO J=IP1,KRANK
     W(I,J) = -SDOT(J-I,W(I,I),MDW,W(I,J),1)*W(J,J)
-290 CONTINUE
-300 CONTINUE
+  END DO
+END DO
 !
 !     COMPUTE THE INVERTED FACTOR TIMES ITS TRANSPOSE.
-310 do 330 I = 1,KRANK
-  do 320 J = I,KRANK
+310 DO I=1,KRANK
+  DO J=I,KRANK
     W(I,J) = SDOT(KRANK+1-J,W(I,J),MDW,W(J,J),MDW)
-320 CONTINUE
-330 CONTINUE
+  END DO
+END DO
 IF (.NOT.(KRANK.LT.N)) GO TO 450
 !
 !     ZERO OUT LOWER TRAPEZOIDAL PART.
 !     COPY UPPER TRI. TO LOWER TRI. PART.
-do 340 J = 1,KRANK
+DO J=1,KRANK
   CALL SCOPY(J, W(1,J), 1, W(J,1), MDW)
-340 CONTINUE
-do 350 I = KRP1,N
+END DO
+DO I=KRP1,N
   W(I,1) = ZERO
   CALL SCOPY(I, W(I,1), 0, W(I,1), MDW)
-350 CONTINUE
+END DO
 !
 !     APPLY RIGHT SIDE TRANSFORMATIONS TO LOWER TRI.
 N3 = N2 + KRP1
-do 430 I = 1,KRANK
+DO I=1,KRANK
   L = N1 + I
   K = N2 + I
   RB = WS(L-1)*WS(K-1)
@@ -4729,42 +4729,42 @@ do 430 I = 1,KRANK
   L = N1 + I
   K = N3 + I
   WS(K-1) = WS(L-1)
-  do 360 J = KRP1,N
+  DO J=KRP1,N
     K = N3 + J
     WS(K-1) = W(I,J)
-360 CONTINUE
-  do 370 J = 1,N
+  END DO
+  DO J=1,N
     L = N3 + I
     K = N3 + J
     WS(J) = SDOT(J-I,W(J,I),MDW,WS(L-1),1) + SDOT(N-J+1,W(J,J),1, &
 &WS(K-1),1)
     WS(J) = WS(J)*RB
-370 CONTINUE
+  END DO
   L = N3 + I
   GAM = SDOT(N-I+1,WS(L-1),1,WS(I),1)*RB
   GAM = GAM*HALF
   CALL SAXPY(N-I+1, GAM, WS(L-1), 1, WS(I), 1)
-  do 410 J = I,N
+  DO J=I,N
     IF (.NOT.(I.GT.1)) GO TO 390
     IM1 = I - 1
     K = N3 + J
-    do 380 L = 1,IM1
+    DO L=1,IM1
       W(J,L) = W(J,L) + WS(K-1)*WS(L)
-380 CONTINUE
+    END DO
 390 K = N3 + J
-    do 400 L = I,J
+    DO L=I,J
       IL = N3 + L
       W(J,L) = W(J,L) + WS(J)*WS(IL-1) + WS(L)*WS(K-1)
-400 CONTINUE
-410 CONTINUE
+    END DO
+  END DO
 420 CONTINUE
-430 CONTINUE
+END DO
 !
 !     COPY LOWER TRI. TO UPPER TRI. TO SYMMETRIZE THE COVARIANCE MATRIX.
 !
-do 440 I = 1,N
+DO I = 1,N
   CALL SCOPY(I, W(I,1), MDW, W(1,I), 1)
-440 CONTINUE
+END DO
 !
 !     REPERMUTE ROWS AND COLS.
 !
@@ -4781,10 +4781,10 @@ do 440 I = 1,N
 !     PUT IN NORMALIZED RESIDUAL SUM OF SQUARES SCALE FACTOR
 !     AND SYMMETRIZE THE RESULTING COVARIANCE MARIX.
 !
-do 480 J = 1,N
+DO J = 1,N
   CALL SSCAL(J, FAC, W(1,J), 1)
   CALL SCOPY(J, W(1,J), 1, W(J,1), MDW)
-480 CONTINUE
+END DO
 GO TO 70
 !
 !     TO PROCESS-OPTION-VECTOR
@@ -4911,7 +4911,7 @@ GO TO 60
 !
 !     COPY TRANSPOSE OF (H G Y) TO WORK ARRAY WS(*).
 IW = 0
-do 80 I = 1,M
+DO I=1,M
 !
 !     MOVE COL OF TRANSPOSE OF H INTO WORK ARRAY.
    CALL SCOPY(N2, A(I,N1+1), MDA, WS(IW+1), 1)
@@ -4924,7 +4924,7 @@ do 80 I = 1,M
 !     MOVE COMPONENT OF VECTOR Y INTO WORK ARRAY.
    WS(IW+1) = A(I,NP1)
    IW = IW + 1
-80 CONTINUE
+END DO
 WS(IW+1) = ZERO
 CALL SCOPY(N, WS(IW+1), 0, WS(IW+1), 1)
 IW = IW + N
@@ -4943,14 +4943,14 @@ CALL WNNLS(WS, NP1, N2, NP1-N2, M, 0, PRGOPT, WS(IX), RNORM, &
 SC = ONE - SDOT(M,A(1,NP1),1,WS(IX),1)
 IF (.NOT.(ONE+FAC*ABS(SC).NE.ONE .AND. RNORM.GT.ZERO)) GO TO 110
 SC = ONE/SC
-do 90 J = 1,N1
+DO J=1,N1
    X(J) = SC*SDOT(M,A(1,J),1,WS(IX),1)
-90 CONTINUE
+END DO
 !
 !     COMPUTE THE VECTOR Q=Y-GW.  OVERWRITE Y WITH THIS VECTOR.
-do 100 I = 1,M
+DO I=1,M
    A(I,NP1) = A(I,NP1) - SDOT(N1,A(I,1),MDA,X,1)
-100 CONTINUE
+END DO
 GO TO 130
 110 MODE = 2
 RETURN
@@ -4958,12 +4958,12 @@ RETURN
 !
 !     COPY TRANSPOSE OF (H Q) TO WORK ARRAY WS(*).
 IW = 0
-do 140 I = 1,M
+DO I=1,M
    CALL SCOPY(N2, A(I,N1+1), MDA, WS(IW+1), 1)
    IW = IW + N2
    WS(IW+1) = A(I,NP1)
    IW = IW + 1
-140 CONTINUE
+END DO
 WS(IW+1) = ZERO
 CALL SCOPY(N2, WS(IW+1), 0, WS(IW+1), 1)
 IW = IW + N2
@@ -4984,10 +4984,10 @@ CALL WNNLS(WS, N2+1, 0, N2+1, M, 0, PRGOPT, WS(IX), RNORM, MODEW, &
 SC = ONE - SDOT(M,A(1,NP1),1,WS(IX),1)
 IF (.NOT.(ONE+FAC*ABS(SC).NE.ONE .AND. RNORM.GT.ZERO)) GO TO 160
 SC = ONE/SC
-do 150 J = 1,N2
+DO J=1,N2
    L = N1 + J
    X(L) = SC*SDOT(M,A(1,L),1,WS(IX),1)*X(L)
-150 CONTINUE
+END DO
 GO TO 180
 160 MODE = 2
 RETURN
@@ -6511,19 +6511,19 @@ K = K12 + M + N - 1
 ! STORE THE RESULT IN THE FIRST M ROWS OF ARRAY QR.  SET ARRAY C AND
 ! THE LAST N ROWS OF ARRAY QR EQUAL TO ZERO.
 !
-do 60 I = 1,K
+DO I=1,K
   C(I) = 0.0
-60 CONTINUE
+END DO
 MP1 = M + 1
 MPN = M + N
-do 90 J = 1,N
-  do 70 I = 1,M
+DO J=1,N
+  DO I=1,M
     QR(I,J) = A(I,J)*W(I)
-70 CONTINUE
-  do 80 I = MP1,MPN
+  END DO
+  DO I=MP1,MPN
     QR(I,J) = 0.0
-80 CONTINUE
-90 CONTINUE
+  END DO
+END DO
 !
 ! OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE MATRIX STORED IN THE FIRST
 ! M ROWS OF ARRAY QR AND COMPUTE ITS RANK.
@@ -6545,10 +6545,10 @@ RETURN
 do 200 K = 1,L
 ! K-TH RIGHT-HAND SIDE.
   K0 = K4 - 1
-  do 120 I = 1,M
+  DO I=1,M
     K0 = K0 + 1
     C(K0) = B(I,K)
-120 CONTINUE
+  END DO
 !
   CALL SOLVE2(M, N, M1, A, C(K4), W, N1, IPIVOT, QR, C(K3), &
 &ETA, FAIL, NUMIT, DIGITX, &
@@ -6556,21 +6556,21 @@ do 200 K = 1,L
 &MM, MMPNN)
 !
   K0 = K5 - 1
-  do 130 J = 1,N
+  DO J=1,N
     K0 = K0 + 1
     X(J,K) = C(K0)
-130 CONTINUE
+  END DO
   IF (M1.EQ.0) GO TO 150
-  do 140 I = 1,M1
+  DO I=1,M1
     RES(I,K) = 0.0
-140 CONTINUE
+  END DO
 150 M1P1 = M1 + 1
   IF (M1P1.GT.M) GO TO 170
   K0 = K6 + M1 - 1
-  do 160 I = M1P1,M
+  DO I=M1P1,M
     K0 = K0 + 1
     RES(I,K) = C(K0)
-160 CONTINUE
+  END DO
 170 CONTINUE
 !
 ! FOR RIGHT-HAND SIDES WHERE CONVERGENCE OF A SOLUTION IS REPORTED,
@@ -6600,32 +6600,32 @@ IF (KSUM.LT.L) GO TO 210
 IFAULT = 7
 RETURN
 210 IF (N1.LT.N) RETURN
-do 230 I = 1,N
+DO I=1,N
   MPI = M + I
-  do 220 J = 1,N
+  DO J=1,N
     QR(I,J) = QR(MPI,J)
-220 CONTINUE
+  END DO
   QR(I,I) = 0.0
-230 CONTINUE
+END DO
 !
 ! COMPUTE THE UNSCALED COVARIANCE MATRIX OF THE COEFFICIENTS.
 !
 CALL COVAR(N, M1, N1, IPIVOT, QR, C(K3), C(K9), MMPNN)
 IF (N.EQ.1) GO TO 260
-do 250 J = 2,N
+DO J=2,N
 JM1 = J - 1
   do 240 I = 1,JM1
 240 QR(I,J) = QR(J,I)
-250 CONTINUE
+END DO
 !
 ! IN CERTAIN PROBLEMS, SOME DIAGONAL TERMS OF THE UNSCALED COVARIANCE
 ! MATRIX ARE EQUAL TO ZERO OR TO SMALL POSITIVE NUMBERS.  BECAUSE OF
 ! ROUNDING ERRORS, COMPUTED VALUES FOR THESE TERMS MAY BE SMALL
 ! NEGATIVE NUMBERS.  IFAULT IS SET TO 11 IF THIS OCCURS.
 !
-260 do 270 J = 1,N
+260 DO J=1,N
   IF (QR(J,J).LT.0.0) GO TO 280
-270 CONTINUE
+END DO
 RETURN
 280 IF (IFAULT.NE.0) GO TO 290
 IFAULT = 11
@@ -6682,12 +6682,12 @@ MS = M
 MP1 = M + 1
 FINIS = .FALSE.
 IF (TOL.GT.0.0) TOL2 = TOL
-do 10 J = 1,N
+DO J=1,N
   D(J) = 0.0
   IPIVOT(J) = J
-10 CONTINUE
+END DO
 ! STEP NUMBER NS OF THE DECOMPOSITION.
-do 350 NS = 1,N
+DO NS=1,N
   K = M + NS
   IF (NS.EQ.M1+1) GO TO 20
   GO TO 30
@@ -6704,9 +6704,9 @@ do 350 NS = 1,N
     IF (FSUM) GO TO 50
     GO TO 70
 50 SUM = 0.0
-    do 60 L = MV,MH
+    DO L=MV,MH
       SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,J))
-60 CONTINUE
+    END DO
     D(J) = SUM
 70 IF (DS.LT.D(J)) GO TO 80
     GO TO 90
@@ -6727,11 +6727,11 @@ do 350 NS = 1,N
   IPIVOT(NS) = IK
   D(NP) = D(NS)
   KM1 = K - 1
-  do 130 L = 1,KM1
+  DO L=1,KM1
     C = QR(L,NP)
     QR(L,NP) = QR(L,NS)
     QR(L,NS) = C
-130 CONTINUE
+  END DO
 ! END COLUMN INTERCHANGE.
 ! END PIVOT SEARCH.
 ! RETURN HERE IF N1 = 0.  EITHER INPUT MATRIX QR EQUALS ZERO OR
@@ -6745,9 +6745,9 @@ do 350 NS = 1,N
   GO TO 180
 170 C = 1.0
 180 SUM = DBLE(C)
-  do 190 L = MV,MH
+  DO L=MV,MH
     SUM = SUM + DBLE(QR(L,NS))*DBLE(QR(L,NS))
-190 CONTINUE
+  END DO
   D(NS) = SUM
   DS = D(NS)
   IF (TOL.EQ.0.0) TOL2 = (FLOAT(N)*ETA)**2*D(M1+1)
@@ -6755,33 +6755,33 @@ do 350 NS = 1,N
   GO TO 290
 200 FINIS = .TRUE.
   MV = M + 1
-  do 280 NP = NS,N
+  DO NP=NS,N
     IF (1.GT.M1) GO TO 250
-    do 210 L = 1,M1
+    DO L=1,M1
       QR(L,NP) = 0.0
-210 CONTINUE
-    do 240 J = 1,M1
+    END DO
+    DO J=1,M1
       SUM = 0.0
-      do 220 L = 1,M
+      DO L=1,M
         SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,NP))
-220 CONTINUE
+      END DO
       C = SUM
       C = C/D(J)
-      do 230 L = 1,M1
+      DO L=1,M1
         QR(L,NP) = QR(L,NP) - C*QR(L,J)
-230 CONTINUE
-240 CONTINUE
+      END DO
+    END DO
 250 MPN1 = M + N1
-    do 270 JJ = MP1,MPN1
+    DO JJ=MP1,MPN1
       J = (M + 1) + (M + N1) - JJ
       SUM = 0.0
-      do 260 L = J,MPN1
+      DO L=J,MPN1
         LMM = L - M
         SUM = SUM + DBLE(QR(J,LMM))*DBLE(QR(L,NP))
-260 CONTINUE
+      END DO
       QR(J,NP) = -SUM
-270 CONTINUE
-280 CONTINUE
+    END DO
+  END DO
   GO TO 150
 ! RETURN HERE IF MATRIX OF CONSTRAINTS IS FOUND TO BE SINGULAR.
 290 IF (DS.EQ.0.0) RETURN
@@ -6791,22 +6791,22 @@ do 350 NS = 1,N
 ! BEGIN ORTHOGONALIZATION.
   do 330 J = NSP1,N
     SUM = 0.0
-    do 300 L = MV,MH
+    DO L=MV,MH
       SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,NS))
-300 CONTINUE
+    END DO
     RSJ = SUM
     RSJ = RSJ/DS
     QR(K,J) = RSJ
-    do 310 L = 1,MS
+    DO L=1,MS
       QR(L,J) = QR(L,J) - RSJ*QR(L,NS)
-310 CONTINUE
+    END DO
     IF (.NOT.FINIS) GO TO 320
     GO TO 330
 320 D(J) = D(J) - DS*RSJ*RSJ
 330 CONTINUE
 ! END ORTHOGONALIZATION.
 340 IF (.NOT.FINIS) N1 = N1 + 1
-350 CONTINUE
+END DO
 ! END STEP NUMBER NS.
 SING = .FALSE.
 ! NORMAL RETURN.
@@ -6879,13 +6879,13 @@ do 10 I = 1,M
   Y1(I) = 0.0
   IF (W(I).EQ.0.0) KZ = KZ + 1
 10 CONTINUE
-do 20 NS = 1,N
+DO NS=1,N
   J = M + NS
   F(J) = 0.0
   G(J) = 0.0
   X(NS) = 0.0
   Y2(NS) = 0.0
-20 CONTINUE
+END DO
 K = 0
 RDX2 = 0.0
 RDR2 = 0.0
@@ -6912,77 +6912,77 @@ do 100 NS = 1,N
   X(NP) = X(NP) + F(J)
   Y2(NP) = Y2(NP) + G(J)
   SUM = -DBLE(X(NP))
-  do 60 L = 1,M
+  DO L=1,M
     SUM = SUM + DBLE(A(L,NP))*DBLE(Y1(L))
-60 CONTINUE
+  END DO
   G(J) = -SUM
   IF (NS.GT.N1) GO TO 70
   GO TO 80
 70 F(J) = 0.0
   GO TO 100
 80 SUM = 0.0
-  do 90 L = 1,M
+  DO L=1,M
     SUM = SUM + DBLE(A(L,NP))*DBLE(WRES(L))
-90 CONTINUE
+  END DO
   F(J) = -SUM
 100 CONTINUE
-do 130 I = 1,M
+DO I=1,M
   SUM = 0.0
   IF (I.GT.M1) SUM = DBLE(RES(I))
-  do 110 L = 1,N
+  DO L=1,N
     SUM = SUM + DBLE(A(I,L))*DBLE(X(L))
-110 CONTINUE
+  END DO
   SUM = SUM - DBLE(B(I))
   F(I) = -SUM
   F(I) = F(I)*W(I)
   IF (W(I).EQ.0.0) RES(I) = DBLE(RES(I)) - SUM
   SUM = 0.0
   IF (I.GT.M1) SUM = DBLE(Y1(I))
-  do 120 L = 1,N
+  DO L=1,N
     SUM = SUM + DBLE(A(I,L))*DBLE(Y2(L))
-120 CONTINUE
+  END DO
   G(I) = -SUM
-130 CONTINUE
+END DO
 IF (N1P1.GT.N) GO TO 160
-do 150 I = N1P1,N
+DO I=N1P1,N
   NS = N + N1P1 - I
   J = M + NS
   SUM = 0.0
-  do 140 L = 1,J
+  DO L=1,J
     SUM = SUM + DBLE(QR(L,NS))*DBLE(G(L))
-140 CONTINUE
+  END DO
   G(J) = SUM
-150 CONTINUE
+END DO
 ! END NEW RESIDUALS.
 !
 160 CALL SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
 !
 IF (N1P1.GT.N) GO TO 200
-do 190 NS = N1P1,N
+DO NS=N1P1,N
   J = M + NS
   SUM = DBLE(G(J))
-  do 170 L = MP1,J
+  DO L=MP1,J
     SUM = SUM + DBLE(QR(L,NS))*DBLE(F(L))
-170 CONTINUE
+  END DO
   C = SUM
   C = C/D(NS)
-  do 180 I = 1,J
+  DO I=1,J
     F(I) = F(I) - C*QR(I,NS)
-180 CONTINUE
-190 CONTINUE
-200 do 210 J = MP1,MPN
+  END DO
+END DO
+200 DO J=MP1,MPN
   G(J) = 0.0
   IF (J.LE.M+N1) G(J) = G(J) + F(J)
-210 CONTINUE
+END DO
 !
 CALL SOLVE3(G, M1, M, N1, QR, D, Y, MMPNN)
 !
-do 220 I = 1,M
+DO I=1,M
   RDR2 = RDR2 + F(I)*F(I)
-220 CONTINUE
-do 230 I = MP1,MPN
+END DO
+DO I=MP1,MPN
   RDX2 = RDX2 + F(I)*F(I)
-230 CONTINUE
+END DO
 IF (K.NE.0) GO TO 240
 RNR = RDR2
 RNX = RDX2
@@ -7013,7 +7013,7 @@ REAL C, D(*), F(*), QR(MMPNN,N1), Y(*)
 DOUBLE PRECISION SUM
 MV = 1
 MH = M1
-do 100 NS = 1,N1
+DO NS=1,N1
   J = M + NS
   IF (NS.EQ.M1+1) GO TO 10
   GO TO 20
@@ -7022,10 +7022,10 @@ do 100 NS = 1,N1
 20 NSM1 = NS - 1
   SUM = -DBLE(F(J))
   IF (NS.EQ.1) GO TO 40
-  do 30 L = 1,NSM1
+  DO L=1,NSM1
     MPL = M + L
     SUM = SUM + DBLE(QR(MPL,NS))*DBLE(Y(L))
-30 CONTINUE
+  END DO
 40 Y(NS) = -SUM
   IF (NS.GT.M1) GO TO 50
   GO TO 60
@@ -7033,41 +7033,41 @@ do 100 NS = 1,N1
   GO TO 70
 60 C = 0.0
 70 SUM = DBLE(C)
-  do 80 L = MV,MH
+  DO L=MV,MH
     SUM = SUM + DBLE(QR(L,NS))*DBLE(F(L))
-80 CONTINUE
+  END DO
   C = SUM
   C = C/D(NS)
   F(J) = C
-  do 90 L = MV,M
+  DO L=MV,M
     F(L) = F(L) - C*QR(L,NS)
-90 CONTINUE
-100 CONTINUE
+  END DO
+END DO
 IF (1.GT.M1) GO TO 150
-do 110 L = 1,M1
+DO L=1,M1
   F(L) = 0.0
-110 CONTINUE
-do 140 NS = 1,M1
+END DO
+DO NS=1,M1
   SUM = -DBLE(Y(NS))
-  do 120 L = 1,M
+  DO L=1,M
     SUM = SUM + DBLE(QR(L,NS))*DBLE(F(L))
-120 CONTINUE
+  END DO
   C = SUM
   C = C/D(NS)
-  do 130 L = 1,M1
+  DO L=1,M1
     F(L) = F(L) - C*QR(L,NS)
-130 CONTINUE
-140 CONTINUE
-150 do 170 NS = 1,N1
+  END DO
+END DO
+150 DO NS=1,N1
   J = M + N1 + 1 - NS
   MPN1 = M + N1
   SUM = 0.0
-  do 160 L = J,MPN1
+  DO L=J,MPN1
     LMM = L - M
     SUM = SUM + DBLE(QR(J,LMM))*DBLE(F(L))
-160 CONTINUE
+  END DO
   F(J) = -SUM
-170 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SOLVE3
 
@@ -7096,50 +7096,50 @@ IF (L.GT.M1) C(L,L) = 1.0/D(L)
 IF (L.EQ.1) GO TO 60
 10 J = L - 1
 IF (J.GT.M1) C(J,J) = 1.0/D(J)
-do 20 K = L,N1
+DO K=L,N1
   Z(K) = C(J,K)
-20 CONTINUE
+END DO
 I = N1
-do 40 KA = J,N1
+DO KA=J,N1
   SUM = 0.0
   IF (I.EQ.J) SUM = DBLE(C(I,J))
-  do 30 K = L,N1
+  DO K=L,N1
     SUM = SUM - DBLE(Z(K))*DBLE(C(K,I))
-30 CONTINUE
+  END DO
   C(I,J) = SUM
   I = I - 1
-40 CONTINUE
-do 50 K = L,N1
+END DO
+DO K=L,N1
   C(J,K) = C(K,J)
-50 CONTINUE
+END DO
 L = L - 1
 IF (L.GT.1) GO TO 10
 60 IF (N1.EQ.N) GO TO 90
 N1P1 = N1 + 1
-do 80 I = 1,N
-  do 70 J = N1P1,N
+DO I=1,N
+  DO J=N1P1,N
     C(I,J) = 0.0
-70 CONTINUE
-80 CONTINUE
+  END DO
+END DO
 ! PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
-90 do 120 I = 1,N
-  do 100 J = 1,N
+90 DO I=1,N
+  DO J=1,N
     K = IPIVOT(J)
     Z(K) = C(I,J)
-100 CONTINUE
-  do 110 J = 1,N
+  END DO
+  DO J=1,N
     C(I,J) = Z(J)
-110 CONTINUE
-120 CONTINUE
-do 150 I = 1,N
-  do 130 J = 1,N
+  END DO
+END DO
+DO I=1,N
+  DO J=1,N
     K = IPIVOT(J)
     Z(K) = C(J,I)
-130 CONTINUE
-  do 140 J = I,N
+  END DO
+  DO J=I,N
     C(J,I) = Z(J)
-140 CONTINUE
-150 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE COVAR
 
@@ -7400,10 +7400,10 @@ ITN    = 0
 ISTOP  = 0
 NSTOP  = 0
 !
-do 10 I = 1, N
+DO I = 1, N
    W(I) = ZERO
    X(I) = ZERO
-10 CONTINUE
+END DO
 !
 !     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
@@ -7469,14 +7469,14 @@ T1 =    PHI/RHO
 T2 = -THETA/RHO
 T3 =    ONE/RHO
 !
-do 200 I = 1, N
+DO I = 1, N
    NPI   = N + I
    T     = W(NPI)
    X(I)  = T1*T + X(I)
    W(NPI)= T2*T + W(I)
    T     =(T3*T)**2
    DDNORM= T + DDNORM
-200 CONTINUE
+END DO
 !
 !
 !     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
@@ -7834,10 +7834,10 @@ ITN    = 0
 ISTOP  = 0
 NSTOP  = 0
 !
-do 10 I = 1, N
+DO I = 1, N
    W(I) = ZERO
    X(I) = ZERO
-10 CONTINUE
+END DO
 !
 !     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
@@ -7903,14 +7903,14 @@ T1 =    PHI/RHO
 T2 = -THETA/RHO
 T3 =    ONE/RHO
 !
-do 200 I = 1, N
+DO I = 1, N
    NPI   = N + I
    T     = W(NPI)
    X(I)  = T1*T + X(I)
    W(NPI)= T2*T + W(I)
    T     =(T3*T)**2
    DDNORM= T + DDNORM
-200 CONTINUE
+END DO
 !
 !
 !     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
@@ -8250,10 +8250,10 @@ ITN    = 0
 ISTOP  = 0
 NSTOP  = 0
 !
-do 10 I = 1, N
+DO I = 1, N
    W(I) = ZERO
    X(I) = ZERO
-10 CONTINUE
+END DO
 !
 !     SET UP THE FIRST VECTORS FOR THE BIDIAGONALIZATION.
 !     THESE SATISFY   BETA*U = B,   ALFA*W = A(TRANSPOSE)*U.
@@ -8319,14 +8319,14 @@ T1 =    PHI/RHO
 T2 = -THETA/RHO
 T3 =    ONE/RHO
 !
-do 200 I = 1, N
+DO I = 1, N
    NPI   = N + I
    T     = W(NPI)
    X(I)  = T1*T + X(I)
    W(NPI)= T2*T + W(I)
    T     =(T3*T)**2
    DDNORM= T + DDNORM
-200 CONTINUE
+END DO
 !
 !
 !     USE A PLANE ROTATION ON THE RIGHT TO ELIMINATE THE
@@ -8761,13 +8761,13 @@ IF (MO .NE. 0) GO TO 210
 !     SET A TO THE INITIAL HESSIAN.
 !
 10 NM1 = N - 1
-do 21 J = 1,NM1
+DO J = 1,NM1
    A(J,J) = 1.0/TYPSIZ(J)
    JP1 = J + 1
-   do 20 I = JP1,N
+   DO I = JP1,N
       A(I,J) = 0.0
-20 CONTINUE
-21 CONTINUE
+   END DO
+END DO
 A(N,N) = 1.0/TYPSIZ(N)
 GO TO 101
 !
@@ -8785,9 +8785,9 @@ IF (ITNCNT + 10 .GE. ITNLIM) GO TO 101
 !
 !     SOLVE  A*P = -G  FOR NEWTON STEP
 !
-105 do 110 I = 1,N
+105 DO I = 1,N
   WRK1(I) = -G(I)
-110 CONTINUE
+END DO
 CALL LLTSLV(NR,N,A,P,WRK1)
 !
 !     TAKE A STEP, ARRIVING AT THE POINT XPLS
@@ -8828,10 +8828,10 @@ CALL SECFAC(NR,N,X,G,A,XPLS,GPLS,ITNCNT,SQRNF, &
 !     UPDATE F, X, AND G
 !
 F = FPLS
-do 160 I = 1,N
+DO I = 1,N
   X(I) = XPLS(I)
   G(I) = GPLS(I)
-160 CONTINUE
+END DO
 GO TO 100
 !
 !     TERMINATION
@@ -8841,10 +8841,10 @@ GO TO 100
 200 IF (IERR .NE. 3) RETURN
 !
 210 FPLS = F
-do 220 I = 1,N
+DO I = 1,N
    XPLS(I) = X(I)
    GPLS(I) = G(I)
-220 CONTINUE
+END DO
 RETURN
 END SUBROUTINE OPTDRV
 
@@ -8888,18 +8888,18 @@ IF (N .EQ. 1) GO TO 810
 !
 !     COMPUTE SCALE MATRIX
 !
-do 10 I = 1,N
+DO I = 1,N
   TYPSIZ(I) = ABS(TYPSIZ(I))
   IF (TYPSIZ(I) .EQ. 0.0) TYPSIZ(I) = 1.0
-10 CONTINUE
+END DO
 !
 !     CHECK MAXIMUM STEP SIZE
 !
 IF (STEPMX .GT. 0.0) GO TO 20
 STPSIZ = 0.0
-do 15 I = 1, N
+DO I = 1, N
    STPSIZ = STPSIZ + (X(I)/TYPSIZ(I))**2
-15 CONTINUE
+END DO
 STPSIZ = SQRT(STPSIZ)
 STEPMX = AMAX1(1.0E3*STPSIZ, 1.0E3)
 20 CONTINUE
@@ -9008,10 +9008,10 @@ IF (RGX .GT. GRADTL*D) GO TO 30
 !     CHECK WHETHER WITHIN TOLERANCE.
 !
 RSX = 0.0
-do 40 I = 1,N
+DO I = 1,N
    RELSTP = ABS(XPLS(I) - X(I))/AMAX1(ABS(XPLS(I)),TYPSIZ(I))
    RSX = AMAX1(RSX,RELSTP)
-40 CONTINUE
+END DO
 JERR = 2
 IF (RSX .LE. STEPTL) GO TO 100
 !
@@ -9097,10 +9097,10 @@ do 20 I = 1,N
 IERR = 0
 RETURN
 !
-30 do 31 I = 1,N
+30 DO I = 1,N
    T = ABS(X(I))/C
    TYPSIZ(I) = AMAX1(T, XMIN)
-31 CONTINUE
+END DO
 IERR = -10
 RETURN
 END SUBROUTINE SCALEX
@@ -9132,29 +9132,29 @@ REAL A(NR,N), X(N), B(N)
 !
 X(1) = B(1)/A(1,1)
 IF (N .EQ. 1) GO TO 30
-do 20 I = 2,N
+DO I = 2,N
    SUM = 0.0
    IM1 = I - 1
-   do 10 J = 1,IM1
+   DO J = 1,IM1
       SUM = SUM + A(I,J)*X(J)
-10 CONTINUE
+   END DO
    X(I) = (B(I) - SUM)/A(I,I)
-20 CONTINUE
+END DO
 !
 !                   BACK SOLVE, RESULT IN X
 !
 30 X(N) = X(N)/A(N,N)
 IF (N .EQ. 1) RETURN
 I = N
-do 50 II = 2,N
+DO II = 2,N
    IP1 = I
    I = I - 1
    SUM = 0.0
-   do 40 J = IP1,N
+   DO J = IP1,N
       SUM = SUM + A(J,I)*X(J)
-40 CONTINUE
+   END DO
    X(I) = (X(I) - SUM)/A(I,I)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE LLTSLV
 
@@ -9181,14 +9181,14 @@ SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
 DIMENSION X(N), G(N), TYPSIZ(N)
 EXTERNAL FCN
 !
-do 10 J = 1,N
+DO J = 1,N
   STEPSZ = R * AMAX1(ABS(X(J)),TYPSIZ(J))
   XTMPJ = X(J)
   X(J) = XTMPJ + STEPSZ
   CALL FCN (N, X, FPLUS)
   X(J) = XTMPJ
   G(J) = (FPLUS - FX)/STEPSZ
-10 CONTINUE
+END DO
 RETURN
 END SUBROUTINE FSTOFD
 
@@ -9217,7 +9217,7 @@ EXTERNAL FCN
 !     FIND I-TH  STEPSIZE, EVALUATE TWO NEIGHBORS IN DIRECTION OF
 !     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
 !
-do 10 I = 1, N
+DO I = 1, N
    STEPI = R * AMAX1(ABS(X(I)),TYPSIZ(I))
    XTEMPI = X(I)
    X(I) = XTEMPI + STEPI
@@ -9226,7 +9226,7 @@ do 10 I = 1, N
    CALL FCN (N, X, FMINUS)
    X(I) = XTEMPI
    G(I) = (FPLUS - FMINUS)/(2.0*STEPI)
-10 CONTINUE
+END DO
 RETURN
 END SUBROUTINE FSTOCD
 
@@ -9280,24 +9280,24 @@ IF (SLN .LE. STEPMX) GO TO 30
 !     NEWTON STEP LONGER THAN MAXIMUM ALLOWED
 !
    SCL = STEPMX/SLN
-   do 20 I = 1,N
+   DO I = 1,N
       P(I) = SCL*P(I)
-20 CONTINUE
+   END DO
    SLN = STEPMX
 !
 30 SLP = SDOT(N,G,1,P,1)
 RLN = 0.0
-do 40 I = 1,N
+DO I = 1,N
    RLN = AMAX1(RLN,ABS(P(I))/AMAX1(ABS(X(I)),TYPSIZ(I)))
-40 CONTINUE
+END DO
 RMNLMB = STEPTL/RLN
 LAMBDA = 1.0
 !
 !     LOOP.  CHECK IF THE NEW ITERATE IS SATISFACTORY.
 !
-100 do 110 I = 1,N
+100 DO I = 1,N
   XPLS(I) = X(I) + LAMBDA*P(I)
-110 CONTINUE
+END DO
 CALL FCN(N,XPLS,FPLS)
 IF (FPLS .LE. F + SLP*1.E-4*LAMBDA) GO TO 200
 !
@@ -9403,10 +9403,10 @@ REAL S(N), Y(N), W(N)
 LOGICAL NOUPDT
 !
 IF (ITNCNT .EQ. 1) NOUPDT = .TRUE.
-do 10 I = 1,N
+DO I = 1,N
    S(I) = XPLS(I) - X(I)
    Y(I) = GPLS(I) - G(I)
-10 CONTINUE
+END DO
 DEN1 = SDOT(N,S,1,Y,1)
 SNORM2 = SNRM2(N,S,1)
 YNRM2 = SNRM2(N,Y,1)
@@ -9414,13 +9414,13 @@ IF (DEN1 .LT. TOL*SNORM2*YNRM2) RETURN
 !
 !     SET S = TRANSPOSE(L)*S
 !
-do 21 I = 1,N
+DO I = 1,N
    SUM = 0.0
-   do 20 J = I,N
+   DO J = I,N
       SUM = SUM + A(J,I)*S(J)
-20 CONTINUE
+   END DO
    S(I) = SUM
-21 CONTINUE
+END DO
 DEN2 = SDOT(N,S,1,S,1)
 !
 !     SET ALP = SQRT(DEN1/DEN2)
@@ -9432,56 +9432,56 @@ IF (.NOT.NOUPDT) GO TO 40
 !        RESET TO ALP*S. AFTER THIS IS DONE THEN DEN2 = DEN1
 !        AND ALP HAS THE VALUE 1.
 !
-   do 31 J = 1,N
+   DO J = 1,N
       S(J) = ALP*S(J)
-      do 30 I = J,N
+      DO I = J,N
          A(I,J) = ALP*A(I,J)
-30 CONTINUE
-31 CONTINUE
+      END DO
+   END DO
    NOUPDT = .FALSE.
    ALP = 1.0
 !
 !     SET W = L*S
 !
-40 do 51 I = 1,N
+40 DO I = 1,N
    SUM = 0.0
-   do 50 J = 1,I
+   DO J = 1,I
       SUM = SUM + A(I,J)*S(J)
-50 CONTINUE
+   END DO
    W(I) = SUM
-51 CONTINUE
+END DO
 !
 !     IF ABS(Y(I) - W(I)) IS LESS THAN THE ESTIMATED NOISE IN Y(I)
 !     FOR EACH I, THEN THE UPDATE IS SKIPPED.
 !
-do 60 I = 1,N
+DO I = 1,N
 IF (ABS(Y(I) - W(I)) .GE. TOL*AMAX1(ABS(G(I)),ABS(GPLS(I)))) &
 &GO TO 70
-60 CONTINUE
+END DO
 RETURN
 !
 !     W = Y - ALP*L*S
 !
-70 do 71 I = 1,N
+70 DO I = 1,N
    W(I) = Y(I) - ALP*W(I)
-71 CONTINUE
+END DO
 !
 !     S = S/SQRT(DEN1*DEN2)
 !
 ALP = ALP/DEN1
-do 80 I = 1,N
+DO I = 1,N
    S(I) = ALP*S(I)
-80 CONTINUE
+END DO
 !
 !     COPY L INTO UPPER TRIANGULAR PART.  ZERO L.
 !
-do 100 I = 2,N
+DO I = 2,N
    IM1 = I - 1
-   do 90 J = 1,IM1
+   DO J = 1,IM1
       A(J,I) = A(I,J)
       A(I,J) = 0.0
-90 CONTINUE
-100 CONTINUE
+   END DO
+END DO
 !
 !     FIND Q AND R SUCH THAT  Q*R = (L+) + S*(W+)
 !
@@ -9491,12 +9491,12 @@ CALL QRUPDT (NR, N, A, S, W)
 !     CHOLESKY DECOMPOSITION OF HESSIAN.  COPY BACK TO LOWER
 !     TRIANGULAR PART.
 !
-do 120 I = 2,N
+DO I = 2,N
    IM1 = I - 1
-   do 110 J = 1,IM1
+   DO J = 1,IM1
       A(I,J) = A(J,I)
-110 CONTINUE
-120 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE SECFAC
 
@@ -9531,25 +9531,25 @@ K = N
 !
 20 KM1 = K - 1
 IF (K .LE. 1) GO TO 40
-do 30 II = 1,KM1
+DO II = 1,KM1
    I = K - II
    CALL JROT (NR,N,A,I,U(I),-U(I+1),R)
    U(I) = R
-30 CONTINUE
+END DO
 !
 ! SET R = R + (U(1)*E1)(V+)
 !
-40 do 50 J = 1,N
+40 DO J = 1,N
    A(1,J) = A(1,J) + U(1)*V(J)
-50 CONTINUE
+END DO
 IF (K .LE. 1) RETURN
 !
 !       K-1 JACOBI ROTATIONS TRANSFORM UPPER HESSENBERG R
 !                   TO UPPER TRIANGULAR R*
 !
-do 60 I = 1,KM1
+DO I = 1,KM1
    CALL JROT (NR,N,A,I,A(I,I),-A(I+1,I),R)
-60 CONTINUE
+END DO
 RETURN
 END SUBROUTINE QRUPDT
 
@@ -9593,23 +9593,23 @@ R = Z*ABS(B)
 !
 !            APPLY THE ROTATION WHEN A IS NONZERO
 !
-20 do 30 J = I,N
+20 DO J = I,N
    T = H(I,J)
    Z = H(I+1,J)
    H(I,J) = C*T - S*Z
    H(I+1,J) = S*T + C*Z
-30 CONTINUE
+END DO
 RETURN
 !
 !                     CASE WHEN A = 0
 !
 40 S = SIGN(1.0, B)
 R = ABS(B)
-do 50 J = I,N
+DO J = I,N
    T = H(I,J)
    H(I,J) = - S*H(I+1,J)
    H(I+1,J) = S*T
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE JROT
 
@@ -9964,9 +9964,9 @@ IF (N .LE. 0 .OR. M .LT. N .OR. LDFJAC .LT. M &
 &.OR. FTOL .LT. 0.0 .OR. XTOL .LT. 0.0 .OR. GTOL .LT. 0.0 &
 &.OR. MAXFEV .LE. 0 .OR. FACTOR .LE. 0.0) GO TO 300
 IF (MODE .NE. 2) GO TO 20
-do 10 J = 1, N
+DO J = 1, N
    IF (DIAG(J) .LE. 0.0) GO TO 300
-10 CONTINUE
+   END DO
 20 CONTINUE
 !
 !     EVALUATE THE FUNCTION AT THE STARTING POINT
@@ -10011,18 +10011,18 @@ ITER = 1
 !
    IF (ITER .NE. 1) GO TO 80
    IF (MODE .EQ. 2) GO TO 60
-   do 50 J = 1, N
+   DO J = 1, N
       DIAG(J) = WA2(J)
       IF (WA2(J) .EQ. 0.0) DIAG(J) = 1.0
-50 CONTINUE
+      END DO
 60 CONTINUE
 !
 !        ON THE FIRST ITERATION, CALCULATE THE NORM OF THE SCALED X
 !        AND INITIALIZE THE STEP BOUND DELTA.
 !
-   do 70 J = 1, N
+   DO J = 1, N
       WA3(J) = DIAG(J)*X(J)
-70 CONTINUE
+      END DO
    XNORM = ENORM(N,WA3)
    DELTA = FACTOR*XNORM
    IF (DELTA .EQ. 0.0) DELTA = FACTOR
@@ -10031,38 +10031,38 @@ ITER = 1
 !        FORM (Q TRANSPOSE)*FVEC AND STORE THE FIRST N COMPONENTS IN
 !        QTF.
 !
-   do 90 I = 1, M
+   DO I = 1, M
       WA4(I) = FVEC(I)
-90 CONTINUE
-   do 130 J = 1, N
+      END DO
+   DO J = 1, N
       IF (FJAC(J,J) .EQ. 0.0) GO TO 120
       SUM = 0.0
-      do 100 I = J, M
+      DO I = J, M
          SUM = SUM + FJAC(I,J)*WA4(I)
-100 CONTINUE
+         END DO
       TEMP = -SUM/FJAC(J,J)
-      do 110 I = J, M
+      DO I = J, M
          WA4(I) = WA4(I) + FJAC(I,J)*TEMP
-110 CONTINUE
+         END DO
 120 CONTINUE
       FJAC(J,J) = WA1(J)
       QTF(J) = WA4(J)
-130 CONTINUE
+      END DO
 !
 !        COMPUTE THE NORM OF THE SCALED GRADIENT.
 !
    GNORM = 0.0
    IF (FNORM .EQ. 0.0) GO TO 170
-   do 160 J = 1, N
+   DO J = 1, N
       L = IPVT(J)
       IF (WA2(L) .EQ. 0.0) GO TO 150
       SUM = 0.0
-      do 140 I = 1, J
+      DO I = 1, J
          SUM = SUM + FJAC(I,J)*(QTF(I)/FNORM)
-140 CONTINUE
+         END DO
       GNORM = AMAX1(GNORM,ABS(SUM/WA2(L)))
 150 CONTINUE
-160 CONTINUE
+      END DO
 170 CONTINUE
 !
 !        TEST FOR CONVERGENCE OF THE GRADIENT NORM.
@@ -10073,9 +10073,9 @@ ITER = 1
 !        RESCALE IF NECESSARY.
 !
    IF (MODE .EQ. 2) GO TO 190
-   do 180 J = 1, N
+   DO J = 1, N
       DIAG(J) = AMAX1(DIAG(J),WA2(J))
-180 CONTINUE
+      END DO
 190 CONTINUE
 !
 !        BEGINNING OF THE INNER LOOP.
@@ -10089,11 +10089,11 @@ ITER = 1
 !
 !           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
 !
-      do 210 J = 1, N
+      DO J = 1, N
          WA1(J) = -WA1(J)
          WA2(J) = X(J) + WA1(J)
          WA3(J) = DIAG(J)*WA1(J)
-210 CONTINUE
+         END DO
       PNORM = ENORM(N,WA3)
 !
 !           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
@@ -10116,14 +10116,14 @@ ITER = 1
 !           COMPUTE THE SCALED PREDICTED REDUCTION AND
 !           THE SCALED DIRECTIONAL DERIVATIVE.
 !
-      do 230 J = 1, N
+      DO J = 1, N
          WA3(J) = 0.0
          L = IPVT(J)
          TEMP = WA1(L)
-         do 220 I = 1, J
+         DO I = 1, J
             WA3(I) = WA3(I) + FJAC(I,J)*TEMP
-220 CONTINUE
-230 CONTINUE
+            END DO
+         END DO
       TEMP1 = ENORM(N,WA3)/FNORM
       TEMP2 = (SQRT(PAR)*PNORM)/FNORM
       PRERED = TEMP1**2 + TEMP2**2/P5
@@ -10158,13 +10158,13 @@ ITER = 1
 !
 !           SUCCESSFUL ITERATION. UPDATE X, FVEC, AND THEIR NORMS.
 !
-      do 270 J = 1, N
+      DO J = 1, N
          X(J) = WA2(J)
          WA2(J) = DIAG(J)*X(J)
-270 CONTINUE
-      do 280 I = 1, M
+         END DO
+      DO I = 1, M
          FVEC(I) = WA4(I)
-280 CONTINUE
+         END DO
       XNORM = ENORM(N,WA2)
       FNORM = FNORM1
       ITER = ITER + 1
@@ -10383,37 +10383,37 @@ EPSMCH = SPMPAR(1)
 !     FIRST, CALCULATE THE GAUSS-NEWTON DIRECTION.
 !
 JJ = (N*(N + 1))/2 + 1
-do 50 K = 1, N
+DO K = 1, N
    J = N - K + 1
    JP1 = J + 1
    JJ = JJ - K
    L = JJ + 1
    SUM = 0.0
    IF (N .LT. JP1) GO TO 20
-   do 10 I = JP1, N
+   DO I = JP1, N
       SUM = SUM + R(L)*X(I)
       L = L + 1
-10 CONTINUE
+      END DO
 20 CONTINUE
    TEMP = R(JJ)
    IF (TEMP .NE. 0.0) GO TO 40
    L = J
-   do 30 I = 1, J
+   DO I = 1, J
       TEMP = AMAX1(TEMP,ABS(R(L)))
       L = L + N - I
-30 CONTINUE
+      END DO
    TEMP = EPSMCH*TEMP
    IF (TEMP .EQ. 0.0) TEMP = EPSMCH
 40 CONTINUE
    X(J) = (QTB(J) - SUM)/TEMP
-50 CONTINUE
+   END DO
 !
 !     TEST WHETHER THE GAUSS-NEWTON DIRECTION IS ACCEPTABLE.
 !
-do 60 J = 1, N
+DO J = 1, N
    WA1(J) = 0.0
    WA2(J) = DIAG(J)*X(J)
-60 CONTINUE
+   END DO
 QNORM = ENORM(N,WA2)
 IF (QNORM .LE. DELTA) GO TO 140
 !
@@ -10421,14 +10421,14 @@ IF (QNORM .LE. DELTA) GO TO 140
 !     NEXT, CALCULATE THE SCALED GRADIENT DIRECTION.
 !
 L = 1
-do 80 J = 1, N
+DO J = 1, N
    TEMP = QTB(J)
-   do 70 I = J, N
+   DO I = J, N
       WA1(I) = WA1(I) + R(L)*TEMP
       L = L + 1
-70 CONTINUE
+      END DO
    WA1(J) = WA1(J)/DIAG(J)
-80 CONTINUE
+   END DO
 !
 !     CALCULATE THE NORM OF THE SCALED GRADIENT AND TEST FOR
 !     THE SPECIAL CASE IN WHICH THE SCALED GRADIENT IS ZERO.
@@ -10441,18 +10441,18 @@ IF (GNORM .EQ. 0.0) GO TO 120
 !     CALCULATE THE POINT ALONG THE SCALED GRADIENT
 !     AT WHICH THE QUADRATIC IS MINIMIZED.
 !
-do 90 J = 1, N
+DO J = 1, N
    WA1(J) = (WA1(J)/GNORM)/DIAG(J)
-90 CONTINUE
+   END DO
 L = 1
-do 110 J = 1, N
+DO J = 1, N
    SUM = 0.0
-   do 100 I = J, N
+   DO I = J, N
       SUM = SUM + R(L)*WA1(I)
       L = L + 1
-100 CONTINUE
+      END DO
    WA2(J) = SUM
-110 CONTINUE
+   END DO
 TEMP = ENORM(N,WA2)
 SGNORM = (GNORM/TEMP)/TEMP
 !
@@ -10477,9 +10477,9 @@ ALPHA = ((DELTA/QNORM)*(1.0 - (SGNORM/DELTA)**2))/TEMP
 !     DIRECTION AND THE SCALED GRADIENT DIRECTION.
 !
 TEMP = (1.0 - ALPHA)*AMIN1(SGNORM,DELTA)
-do 130 J = 1, N
+DO J = 1, N
    X(J) = TEMP*WA1(J) + ALPHA*X(J)
-130 CONTINUE
+   END DO
 140 CONTINUE
 RETURN
 END SUBROUTINE DOGLEG
@@ -10590,7 +10590,7 @@ IF (MSUM .LT. N) GO TO 40
 !
 !        COMPUTATION OF DENSE APPROXIMATE JACOBIAN.
 !
-   do 20 J = 1, N
+   DO J = 1, N
       TEMP = X(J)
       H = EPS*ABS(TEMP)
       IF (H .EQ. ZERO) H = EPS
@@ -10598,36 +10598,36 @@ IF (MSUM .LT. N) GO TO 40
       CALL FCN(N,X,WA1,IFLAG)
       IF (IFLAG .LT. 0) GO TO 30
       X(J) = TEMP
-      do 10 I = 1, N
+      DO I = 1, N
          FJAC(I,J) = (WA1(I) - FVEC(I))/H
-10 CONTINUE
-20 CONTINUE
+         END DO
+      END DO
 30 CONTINUE
    GO TO 110
 40 CONTINUE
 !
 !        COMPUTATION OF BANDED APPROXIMATE JACOBIAN.
 !
-   do 90 K = 1, MSUM
-      do 60 J = K, N, MSUM
+   DO K = 1, MSUM
+      DO J = K, N, MSUM
          WA2(J) = X(J)
          H = EPS*ABS(WA2(J))
          IF (H .EQ. ZERO) H = EPS
          X(J) = WA2(J) + H
-60 CONTINUE
+         END DO
       CALL FCN(N,X,WA1,IFLAG)
       IF (IFLAG .LT. 0) GO TO 100
-      do 80 J = K, N, MSUM
+      DO J = K, N, MSUM
          X(J) = WA2(J)
          H = EPS*ABS(WA2(J))
          IF (H .EQ. ZERO) H = EPS
-         do 70 I = 1, N
+         DO I = 1, N
             FJAC(I,J) = ZERO
             IF (I .GE. J - MU .AND. I .LE. J + ML) &
 &FJAC(I,J) = (WA1(I) - FVEC(I))/H
-70 CONTINUE
-80 CONTINUE
-90 CONTINUE
+            END DO
+         END DO
+      END DO
 100 CONTINUE
 110 CONTINUE
 RETURN

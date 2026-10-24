@@ -929,14 +929,14 @@ IF (N .LE. 0) RETURN
 !     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
 !-----------------------------------------------------------------------
 WRITE (N,210) MAXEXP
-do 120 L = 1,500
+DO L = 1,500
    T = T*B
    XMAX = XMAX*B
    MAXEXP = MAXEXP + 1
    CALL STORE2 (T, T*P)
    IF (D1 .EQ.D2) GO TO 150
    WRITE (N,220) MAXEXP
-120 CONTINUE
+END DO
 WRITE (N,240)
 STOP
 !-----------------------------------------------------------------------
@@ -1175,14 +1175,14 @@ IF (N .LE. 0) RETURN
 !     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
 !-----------------------------------------------------------------------
 WRITE (N,210) MAXEXP
-do 120 L = 1,500
+DO L = 1,500
    T = T*B
    XMAX = XMAX*B
    MAXEXP = MAXEXP + 1
    CALL DSTOR2 (T, T*P)
    IF (D1 .EQ.D2) GO TO 150
    WRITE (N,220) MAXEXP
-120 CONTINUE
+END DO
 WRITE (N,240)
 STOP
 !-----------------------------------------------------------------------
@@ -1566,7 +1566,7 @@ do 40 II = 1,IMAX
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    JMAX = N - KI
-   do 32 J = 1,JMAX
+   DO J = 1,JMAX
       L = J
       LL = J + KI
       S = A(LL)
@@ -1579,7 +1579,7 @@ do 40 II = 1,IMAX
          IF (L .GT. 0) GO TO 30
 31 A(LL) = S
       B(LL) = T
-32 CONTINUE
+   END DO
 !
 40 I = I - 1
 RETURN
@@ -1664,7 +1664,7 @@ do 40 II = 1,IMAX
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    JMAX = N - KI
-   do 32 J = 1,JMAX
+   DO J = 1,JMAX
       L = J
       LL = J + KI
       S = A(LL)
@@ -1677,7 +1677,7 @@ do 40 II = 1,IMAX
          IF (L .GT. 0) GO TO 30
 31 A(LL) = S
       M(LL) = T
-32 CONTINUE
+   END DO
 !
 40 I = I - 1
 RETURN
@@ -1715,7 +1715,7 @@ do 40 II = 1,IMAX
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    JMAX = N - KI
-   do 32 J = 1,JMAX
+   DO J = 1,JMAX
       L = J
       LL = J + KI
       S = A(LL)
@@ -1728,7 +1728,7 @@ do 40 II = 1,IMAX
          IF (L .GT. 0) GO TO 30
 31 A(LL) = S
       B(LL) = T
-32 CONTINUE
+   END DO
 !
 40 I = I - 1
 RETURN
@@ -1813,7 +1813,7 @@ do 40 II = 1,IMAX
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    JMAX = N - KI
-   do 32 J = 1,JMAX
+   DO J = 1,JMAX
       L = J
       LL = J + KI
       S = A(LL)
@@ -1826,7 +1826,7 @@ do 40 II = 1,IMAX
          IF (L .GT. 0) GO TO 30
 31 A(LL) = S
       M(LL) = T
-32 CONTINUE
+   END DO
 !
 40 I = I - 1
 RETURN
@@ -1864,7 +1864,7 @@ do 40 II = 1,IMAX
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
    JMAX = N - KI
-   do 32 J = 1,JMAX
+   DO J = 1,JMAX
       L = J
       LL = J + KI
       S = A(LL)
@@ -1877,7 +1877,7 @@ do 40 II = 1,IMAX
          IF (L .GT. 0) GO TO 30
 31 A(LL) = S
       B(LL) = T
-32 CONTINUE
+   END DO
 !
 40 I = I - 1
 RETURN
@@ -3316,17 +3316,17 @@ RY = SNRM2(N, Y, 1)
 IF (RY .EQ. 0.0) GO TO 30
 !
 D = 0.0
-do 10 I = 1,N
+DO I = 1,N
    D = D + (X(I)/RX - Y(I)/RY)**2
-10 CONTINUE
+END DO
 IF (D .GT. 3.0) GO TO 20
 ANG = ACOS(0.5 + (0.5 - 0.5*D))
 RETURN
 !
 20 D = 0.0
-do 21 I = 1,N
+DO I = 1,N
    D = D + (X(I)/RX + Y(I)/RY)**2
-21 CONTINUE
+END DO
 ANG = ACOS((0.5*D - 0.5) - 0.5)
 RETURN
 !
@@ -4351,7 +4351,7 @@ THETA1 = ATAN2(V, U)
 !
 SUM = 0.0
 THETA = THETA1
-do 10 I = 2,N0
+DO I = 2,N0
    U = X(I) - X0
    V = Y(I) - Y0
    IF (U .EQ. 0.0 .AND. V .EQ. 0.0) GO TO 20
@@ -4363,7 +4363,7 @@ do 10 I = 2,N0
    IF (THETA .GT. THETAI) ANGLE = -ANGLE
    SUM = SUM + ANGLE
    THETA = THETAI
-10 CONTINUE
+END DO
 !
 ANGLE = ABS(THETA1 - THETA)
 IF (ABS(ANGLE - PI) .LT. TOL) GO TO 20
@@ -4599,10 +4599,10 @@ do 31 I = LMIN,M
 !                   GOING ALONG THE YMIN AXIS
 !
 K = L
-do 50 I = 1,L
+DO I = 1,L
    BX(I) = X(I)
    BY(I) = Y(I)
-50 CONTINUE
+END DO
 !
 N = 1
 VX(1) = X(1)
@@ -4728,18 +4728,18 @@ IF (H .GT. 0.0) GO TO 201
 !           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
 !
 IF (I .EQ. L .AND. K .EQ. KSAV) NN = NN + 1
-do 240 II = NN,MP1
+DO II = NN,MP1
    N = N + 1
    VX(N) = VX(II)
    VY(N) = VY(II)
-240 CONTINUE
+END DO
 !
 IF (I .EQ. L) J = J + 1
-do 245 II = J,MP1
+DO II = J,MP1
    K = K + 1
    BX(K) = BX(II)
    BY(K) = BY(II)
-245 CONTINUE
+END DO
 L = M
 !
 !                   GOING ALONG THE YMAX AXIS
@@ -4747,12 +4747,12 @@ L = M
 250 LBEG = LMAX + 1
 IF (LBEG .EQ. M) GO TO 260
 MM1 = M - 1
-do 251 I = LBEG,MM1
+DO I = LBEG,MM1
    L = L - 1
    K = K + 1
    BX(K) = X(L)
    BY(K) = Y(L)
-251 CONTINUE
+END DO
 N = N + 1
 VX(N) = BX(K)
 VY(N) = BY(K)
@@ -4886,19 +4886,19 @@ IF (H .GT. 0.0) GO TO 401
 !
 450 IF (NN .EQ. N) GO TO 470
 IF (I .EQ. L) NN = NN + 1
-do 451 II = NN,MP1
+DO II = NN,MP1
    N = N + 1
    VX(N) = VX(II)
    VY(N) = VY(II)
-451 CONTINUE
+END DO
 !
 IF (J .EQ. K) GO TO 471
 IF (I .EQ. L) J = J + 1
-do 460 II = J,MP1
+DO II = J,MP1
    K = K + 1
    BX(K) = BX(II)
    BY(K) = BY(II)
-460 CONTINUE
+END DO
 RETURN
 !
 470 N = MP1
@@ -4908,10 +4908,10 @@ RETURN
 !                     CASE WHEN YMIN = YMAX
 !
 500 CALL RRSORT (X, Y, M)
-do 510 I = 1,M
+DO I = 1,M
    BX(I) = X(I)
    BY(I) = Y(I)
-510 CONTINUE
+END DO
 K = MP1
 BX(K) = BX(1)
 BY(K) = BY(1)
@@ -5047,10 +5047,10 @@ CALL HC1 (IND, M, N, PR, AR, NB, IWK(S0), NP1, IWK(PC), &
 IF (IND .NE. 1) RETURN
 !
 II = S0
-do 10 I = 1,N
+DO I = 1,N
    S(I) = IWK(II)
    II = II + 1
-10 CONTINUE
+END DO
 RETURN
 !
 !                   ERROR RETURN
@@ -5112,39 +5112,39 @@ IF (IND .NE. 0) GO TO 500
 !
 ! S T E P   0   (INITIALIZE).
 !
-do 10 I = 1,N
+DO I=1,N
   VC(I) = 0
   SUBR(I) = 0
   RBUS(I) = 0
   P(I) = 1
-10 CONTINUE
-do 30 I = 1,N
+END DO
+DO I=1,N
   J1 = PR(I) + 1
   J2 = PR(I+1)
   VR(I) = J2 - J1 + 1
   IF (VR(I) .EQ. 0) GO TO 440
   IF (VR(I) .LT. 0) GO TO 620
-  do 20 J = J1,J2
+  DO J=J1,J2
     JA = AR(J)
     VC(JA) = VC(JA) + 1
-20 CONTINUE
-30 CONTINUE
+  END DO
+END DO
 PC(1) = 0
-do 40 I = 1,N
+DO I=1,N
   IF (VC(I) .EQ. 0) GO TO 440
   PC(I+1) = PC(I) + VC(I)
   VC(I) = 0
-40 CONTINUE
-do 60 I = 1,N
+END DO
+DO I=1,N
   J1 = PR(I) + 1
   J2 = PR(I+1)
-  do 50 J = J1,J2
+  DO J=J1,J2
     JJ = AR(J)
     VC(JJ) = VC(JJ) + 1
     JA = PC(JJ) + VC(JJ)
     AC(JA) = I
-50 CONTINUE
-60 CONTINUE
+  END DO
+END DO
 ! SELECT AS ROOT  JR  THE VERTEX  I  WITH MAXIMUM  VC(I)
 ! (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
 MAXE = VC(1)
@@ -5164,18 +5164,18 @@ S(1) = JR
 !
 ! S T E P   1   (SEARCH FOR IMPLIED ARCS).
 !
-110 do 120 J = 1,N
+110 DO J=1,N
   IF (VR(J).EQ.1) GO TO 130
   IF (VC(J).EQ.1) GO TO 170
-120 CONTINUE
+END DO
 ! NO FURTHER ARC CAN BE IMPLIED.
 GO TO 220
 ! ARC  (J,JL)  IS IMPLIED BECAUSE  VR(J) = 1 .
 130 L1 = PR(J) + 1
 L2 = PR(J+1)
-do 140 L = L1,L2
+DO L=L1,L2
   IF (AR(L).GT.0) GO TO 150
-140 CONTINUE
+END DO
 150 JL = AR(L)
 ! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
 ! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (J,JL) .
@@ -5195,9 +5195,9 @@ GO TO 210
 ! ARC  (JL,J)  IS IMPLIED BECAUSE  VC(J) = 1 .
 170 L1 = PC(J) + 1
 L2 = PC(J+1)
-do 180 L = L1,L2
+DO L=L1,L2
   IF (AC(L).GT.0) GO TO 190
-180 CONTINUE
+END DO
 190 JL = AC(L)
 ! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
 ! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (JL,J) .
@@ -5333,7 +5333,7 @@ AC(J2) = S(K)
 VC(JR) = VC(JR) + 1
 GO TO 420
 ! AT LEAST ONE ARC WAS IMPLIED AT LEVEL  K .
-370 do 410 J = 1,N
+370 DO J=1,N
   L1 = PR(J) + 1
   L2 = PR(J+1)
   do 400 L = L1,L2
@@ -5345,13 +5345,13 @@ GO TO 420
     VR(J) = VR(J) + 1
     LL1 = PC(JL) + 1
     LL2 = PC(JL+1)
-    do 380 LL = LL1,LL2
+    DO LL=LL1,LL2
       IF (K1-AC(LL).EQ.J) GO TO 390
-380 CONTINUE
+    END DO
 390 AC(LL) = J
     VC(JL) = VC(JL) + 1
 400 CONTINUE
-410 CONTINUE
+END DO
 420 K = K - 1
 GO TO 230
 !
@@ -5467,9 +5467,9 @@ do 30 J = J1,J2
   IA = A1(J)
   L1 = P2(IA) + 1
   L2 = P2(IA+1)
-  do 10 L = L1,L2
+  DO L=L1,L2
     IF (A2(L).EQ.I1) GO TO 20
-10 CONTINUE
+  END DO
 20 V2(IA) = V2(IA) - 1
   A2(L) = K1 - A2(L)
   A1(J) = K1 - IA
@@ -5494,9 +5494,9 @@ do 30 L = L1,L2
   V1(II) = V1(II) + 1
   LL1 = P2(IA) + 1
   LL2 = P2(IA+1)
-  do 10 LL = LL1,LL2
+  DO LL=LL1,LL2
     IF (K1-A2(LL).EQ.II) GO TO 20
-10 CONTINUE
+  END DO
 20 A2(LL) = II
   V2(IA) = V2(IA) + 1
 30 CONTINUE
@@ -5520,9 +5520,9 @@ do 40 MM = M1,M2
   GO TO 30
 10 J1 = P2(IARC) + 1
   J2 = P2(IARC+1)
-  do 20 JJ = J1,J2
+  DO JJ=J1,J2
     IF (A2(JJ).EQ.IB) GO TO 30
-20 CONTINUE
+  END DO
 30 A2(JJ) = K1 - A2(JJ)
   V2(IARC) = V2(IARC) - 1
   A1(MM) = K1 - IARC
@@ -5557,9 +5557,9 @@ do 20 JJ = J1,J2
   IF (AR(JJ).NE.IB) GO TO 20
   L1 = PC(IB) + 1
   L2 = PC(IB+1)
-  do 10 LL = L1,L2
+  DO LL=L1,L2
     IF (AC(LL).EQ.IA) GO TO 30
-10 CONTINUE
+  END DO
 20 CONTINUE
 ! ARC  (IA,IB)  IS NOT IN THE GRAPH.
 JJ = 0
@@ -5673,7 +5673,7 @@ TS(1) = QM*COS(-SZ(2))
 TS(2) = QM*SIN(-SZ(2))
 QF(1) = TS(1)*X - TS(2)*Y
 QF(2) = TS(1)*Y + TS(2)*X
-do 51 I = 1,18
+DO I = 1,18
    TS(1) = SZ(1) + CD(I)
    TS(2) = SZ(2)
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -5681,7 +5681,7 @@ do 51 I = 1,18
    TM(2) = -CE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-51 CONTINUE
+END DO
 EF(1) = QF(1)*SM(1) - QF(2)*SM(2)
 EF(2) = QF(1)*SM(2) + QF(2)*SM(1)
 GO TO 100
@@ -5826,7 +5826,7 @@ RETURN
 !
 50 SM(1) = 0.0
 SM(2) = 0.0
-do 51 I = 1,18
+DO I = 1,18
    TS(1) = SZ(1) + CD(I)
    TS(2) = SZ(2)
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -5834,7 +5834,7 @@ do 51 I = 1,18
    TM(2) = -CE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-51 CONTINUE
+END DO
 TS(1) = X*SM(1) - Y*SM(2)
 TS(2) = X*SM(2) + Y*SM(1)
 SM(1) = C*TS(1)
@@ -8393,7 +8393,7 @@ GO TO 110
 !
 50 SM(1) = 0.0
 SM(2) = 0.0
-do 51 I = 1,18
+DO I = 1,18
    TS(1) = X - CD(I)
    TS(2) = Y
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -8401,7 +8401,7 @@ do 51 I = 1,18
    TM(2) = -CE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-51 CONTINUE
+END DO
 TS(1) = ZR(1)*SM(1) - ZR(2)*SM(2)
 TS(2) = ZR(1)*SM(2) + ZR(2)*SM(1)
 SM(1) = 0.5*TS(1)
@@ -8773,13 +8773,13 @@ GO TO 110
 !
 50 SM(1) = 0.0
 SM(2) = 0.0
-do 51 I = 1,18
+DO I = 1,18
    TS(1) = X - CD(I)
    TS(2) = Y
    SS = TS(1)*TS(1) + TS(2)*TS(2)
    SM(1) = SM(1) + CE(I)*TS(1)/SS
    SM(2) = SM(2) - CE(I)*TS(2)/SS
-51 CONTINUE
+END DO
 GO TO 100
 !
 !         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
@@ -9079,10 +9079,10 @@ QX(1) = 0.0E0
 PX(2) = P1(1)
 QX(2) = Q1(1)
 !
-do 120 I = 2, 7
+DO I = 2, 7
    PX(I+1) = T * PX(I) - PX(I-1) + P1(I)
    QX(I+1) = T * QX(I) - QX(I-1) + Q1(I)
-120 CONTINUE
+END DO
 !
 SUMP = .5E0 * T * PX(8) - PX(7) + P1(8)
 SUMQ = .5E0 * T * QX(8) - QX(7) + Q1(8)
@@ -10131,7 +10131,7 @@ GO TO 130
 !-----------------------------------------------------------------------
 30 SM(1) = 0.0
 SM(2) = 0.0
-do 31 I = 1,18
+DO I = 1,18
    TS(1) = X - CD(I)
    TS(2) = Y
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -10139,7 +10139,7 @@ do 31 I = 1,18
    TM(2) =  CE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-31 CONTINUE
+END DO
 GO TO 130
 !-----------------------------------------------------------------------
 !                 EXPANSION INVOLVING EI AND DI
@@ -10151,7 +10151,7 @@ ZL(2) = ATAN2(-Y, -X)
 !
 SM(1) = 0.0
 SM(2) = 0.0
-do 50 I = 1,18
+DO I = 1,18
    TS(1) = -X - ED(I)
    TS(2) = -Y
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -10159,7 +10159,7 @@ do 50 I = 1,18
    TM(2) = -EE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-50 CONTINUE
+END DO
 SR(1) = ZL(1)*SM(1) - ZL(2)*SM(2)
 SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
 !
@@ -10167,7 +10167,7 @@ SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
 !
 SM(1) = 0.0
 SM(2) = 0.0
-do 60 I = 1,19
+DO I = 1,19
    TS(1) = -X - DD(I)
    TS(2) = -Y
    SS = TS(1)*TS(1) + TS(2)*TS(2)
@@ -10175,7 +10175,7 @@ do 60 I = 1,19
    TM(2) = -DE(I)*TS(2)/SS
    SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-60 CONTINUE
+END DO
 TS(1) = -(X*SM(1) + Y*SM(2))/R
 TS(2) = -(X*SM(2) - Y*SM(1))/R
 !
@@ -10346,7 +10346,7 @@ SM(1) = 0.0
 SM(2) = 0.0
 TM(1) = DL(1)
 TM(2) = DL(2)
-do 61 N = 1,25
+DO N = 1,25
    TS(1) = QB(N)*(TM(1)*QF(1) - TM(2)*QF(2))
    TS(2) = QB(N)*(TM(1)*QF(2) + TM(2)*QF(1))
    TM(1) = TS(1)
@@ -10355,7 +10355,7 @@ do 61 N = 1,25
    IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
 60 SM(1) = SM(1) + TM(1)
    SM(2) = SM(2) + TM(2)
-61 CONTINUE
+END DO
 !
 80 CLI = CMPLX(SR(1) + SM(1), SR(2) + SM(2))
 RETURN

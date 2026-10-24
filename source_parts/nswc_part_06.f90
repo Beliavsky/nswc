@@ -12,9 +12,9 @@ do 20 I = 1,M
    IPMAX = IA(I + 1) - 1
    IF (IPMIN .GT. IPMAX) GO TO 20
    SUM = 0.D0
-   do 10 IP = IPMIN,IPMAX
+   DO IP = IPMIN,IPMAX
       SUM = SUM + DABS(A(IP))
-10 CONTINUE
+   END DO
    DSNRM = DMAX1(DSNRM, SUM)
 20 CONTINUE
 RETURN
@@ -35,18 +35,18 @@ IF (IPMIN .GT. IPMAX) RETURN
 !
 !     COMPUTE THE L1 NORM OF A
 !
-do 10 J = 1,N
+DO J = 1,N
    WK(J) = 0.D0
-10 CONTINUE
+END DO
 !
-do 20 IP = IPMIN,IPMAX
+DO IP = IPMIN,IPMAX
    J = JA(IP)
    WK(J) = WK(J) + DABS(A(IP))
-20 CONTINUE
+END DO
 !
-do 30 J = 1,N
+DO J = 1,N
    ANORM = DMAX1(ANORM,WK(J))
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DS1NRM
 
@@ -60,22 +60,22 @@ SUBROUTINE SPORD (M, N, IA, R, IWK)
 INTEGER IA(*), R(M), IWK(*)
 !
 NP1 = N + 1
-do 10 I = 1,NP1
+DO I = 1,NP1
    IWK(I) = 0
-10 CONTINUE
+END DO
 !
 I = M
-do 20 II = 1,M
+DO II = 1,M
    NUM = IA(I+1) - IA(I) + 1
    L = NP1 + I
    IWK(L) = IWK(NUM)
    IWK(NUM) = I
    I = I - 1
-20 CONTINUE
+END DO
 !
 NUM = 1
 K = IWK(NUM)
-do 32 I = 1,M
+DO I = 1,M
 30 IF (K .NE. 0) GO TO 31
       NUM = NUM + 1
       K = IWK(NUM)
@@ -83,7 +83,7 @@ do 32 I = 1,M
 31 R(I) = K
    L = NP1 + K
    K = IWK(L)
-32 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SPORD
 
@@ -97,28 +97,28 @@ INTEGER IWK(*)
 !
 NP1 = N + 1
 LENGTH = IA(NP1) - IA(1)
-do 10 I = 1,N
+DO I = 1,N
    IWK(I) = IA(I+1) - IA(I)
-10 CONTINUE
+END DO
 CALL MC21A(N,JA,LENGTH,IA,IWK(1),R,NUM,IWK(NP1))
 IERR = N - NUM
 IF (IERR .NE. 0) RETURN
 !
-do 20 I = 1,N
+DO I = 1,N
    LI = R(I)
    IWK(I) = IA(LI)
    NPI = N + I
    IWK(NPI) = IA(LI+1) - IA(LI)
-20 CONTINUE
+END DO
 CALL MC13D(N,JA,LENGTH,IWK(1),IWK(NP1),C,IB,NUM,IWK(2*N+1))
 !
-do 30 I = 1,N
+DO I = 1,N
    LI = C(I)
    IWK(I) = R(LI)
-30 CONTINUE
-do 31 I = 1,N
+END DO
+DO I = 1,N
    R(I) = IWK(I)
-31 CONTINUE
+END DO
 RETURN
 END SUBROUTINE BLKORD
 
@@ -171,11 +171,11 @@ INTEGER IP(N), ICN(LICN), LENR(N), IPERM(N), PR(N), CV(N), &
 !
 !     INITIALIZATION OF ARRAYS
 !
-do 10 I = 1,N
+DO I = 1,N
    ARP(I) = LENR(I) - 1
    CV(I) = 0
    IPERM(I) = 0
-10 CONTINUE
+END DO
 NUMNZ = 0
 !
 !     MAIN LOOP.
@@ -193,10 +193,10 @@ IN1 = ARP(J)
 IF (IN1 .LT. 0) GO TO 60
 IN2 = IP(J) + LENR(J) - 1
 IN1 = IN2 - IN1
-do 50 II = IN1,IN2
+DO II = IN1,IN2
    I = ICN(II)
    IF (IPERM(I) .EQ. 0) GO TO 110
-50 CONTINUE
+END DO
 !
 !     NO CHEAP ASSIGNMENT IN ROW
 !
@@ -208,7 +208,7 @@ ARP(J) = -1
 !
 !     INNER LOOP.  EXTENDS CHAIN BY ONE OR BACKTRACKS.
 !
-do 90 KK = 1,JORD
+DO KK = 1,JORD
    IN1 = OUT(J)
    IF (IN1 .LT. 0) GO TO 80
    IN2 = IP(J) + LENR(J) - 1
@@ -234,7 +234,7 @@ do 90 KK = 1,JORD
 !
 80 J = PR(J)
    IF (J .EQ. -1) GO TO 130
-90 CONTINUE
+END DO
 !
 100 CONTINUE
 !
@@ -243,13 +243,13 @@ do 90 KK = 1,JORD
 110 IPERM(I) = J
 ARP(J) = IN2 - II - 1
 NUMNZ = NUMNZ + 1
-do 120 K = 1,JORD
+DO K = 1,JORD
    J = PR(J)
    IF (J .EQ. -1) GO TO 130
    II = IP(J) + LENR(J) - OUT(J) - 2
    I = ICN(II)
    IPERM(I) = J
-120 CONTINUE
+END DO
 !
 130 CONTINUE
 !
@@ -257,9 +257,9 @@ do 120 K = 1,JORD
 !     PERMUTATION IPERM.
 !
 IF (NUMNZ .EQ. N) GO TO 500
-do 140 I = 1,N
+DO I = 1,N
    ARP(I) = 0
-140 CONTINUE
+END DO
 K = 0
 do 160 I = 1,N
    IF (IPERM(I) .NE. 0) GO TO 150
@@ -343,10 +343,10 @@ NNM1 = N + N - 1
 !
 ! INITIALIZATION OF ARRAYS.
 !
-do 10 J = 1,N
+DO J=1,N
   NUMB(J) = 0
   ARP(J) = LENR(J) - 1
-10 CONTINUE
+END DO
 !
 !
 do 90 ISN = 1,N
@@ -372,13 +372,13 @@ do 90 ISN = 1,N
 ! LOOK AT EDGES LEAVING NODE IV UNTIL ONE ENTERS A NEW NODE OR
 !     ALL EDGES ARE EXHAUSTED.
 !
-    do 20 II = I1,I2
+    DO II=I1,I2
       IW = ICN(II)
 ! HAS NODE IW BEEN ON STACK ALREADY.
       IF (NUMB(IW).EQ.0) GO TO 70
 ! UPDATE VALUE OF LOWL(IV) IF NECESSARY.
       IF (LOWL(IW).LT.LOWL(IV)) LOWL(IV) = LOWL(IW)
-20 CONTINUE
+    END DO
 !
 ! THERE ARE NO MORE EDGES LEAVING NODE IV.
 !
@@ -395,13 +395,13 @@ do 90 ISN = 1,N
 ! PEEL BLOCK OFF THE TOP OF THE STACK STARTING AT THE TOP AND
 !     WORKING DOWN TO THE ROOT OF THE BLOCK.
 !
-    do 40 STP = IST1,N
+    DO STP=IST1,N
       IW = IB(STP)
       LOWL(IW) = N + 1
       ICNT = ICNT + 1
       NUMB(IW) = ICNT
       IF (IW.EQ.IV) GO TO 50
-40 CONTINUE
+    END DO
 50 IST = N - STP
     IB(NUM) = LCNT
 ! ARE THERE ANY NODES LEFT ON THE STACK.
@@ -434,10 +434,10 @@ do 90 ISN = 1,N
 !
 ! PUT PERMUTATION IN THE REQUIRED FORM.
 !
-100 do 110 I = 1,N
+100 DO I=1,N
   II = NUMB(I)
   ARP(II) = I
-110 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MC13E
 
@@ -543,10 +543,10 @@ JU = IU + N + 1
 !
 !  COMPUTE THE INVERSE PERMUTATION OF C
 !
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    ITEMP(L) = K
-10 CONTINUE
+END DO
 !
 !  CALL NSPIV1 TO PERFORM COMPUTATIONS
 !
@@ -618,9 +618,9 @@ INTEGER CK, PK, PPK, PV, V, VI, VJ, VK
 !
 !  INITIALIZE WORK STORAGE AND POINTERS TO JU
 !
-do 10 J = 1,N
+DO J = 1,N
   X(J) = 0.0
-10 CONTINUE
+END DO
 IU(1) = 1
 JUPTR = 0
 !
@@ -680,7 +680,7 @@ do 170 K = 1,N
   JMIN = IU(VI)
   JMAX = IU(VI+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 50
-  do 100 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     VJ = IC(JUJ)
 !
@@ -708,7 +708,7 @@ do 170 K = 1,N
 !  (U*(K,J) = U(K,J)*D(K,K))
 !
 90 X(VJ) = X(VJ) + LKI * U(J)
-100 CONTINUE
+  END DO
   GO TO 50
 !
 !  PIVOT--INTERCHANGE LARGEST ENTRY OF K-TH ROW OF U WITH
@@ -781,21 +781,21 @@ do 170 K = 1,N
 !  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 200 I = 1,N
+DO I = 1,N
   YK = Y(K)
   JMIN = IU(K)
   JMAX = IU(K+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 190
-  do 180 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     JUJ = IC(JUJ)
     YK = YK - U(J) * Y(JUJ)
-180 CONTINUE
+  END DO
 190 Y(K) = YK
   CK = C(K)
   X(CK) = YK
   K = K - 1
-200 CONTINUE
+END DO
 !
 !  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
 !
@@ -904,10 +904,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -936,32 +936,32 @@ do 11 K = 1,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 11
-   do 10 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-10 CONTINUE
+   END DO
 11 Y(K) = SUM/D(K)
 !
 !            SOLVE UX = B BY BACKWARD SUBSTITUTION
 !             AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 22 I = 1,N
+DO I = 1,N
    SUM = Y(K)
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-20 CONTINUE
+   END DO
 21 Y(K) = SUM
    LK = C(K)
    X(LK) = Y(K)
    K = K - 1
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE RSLV1
 
@@ -1044,10 +1044,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -1070,21 +1070,21 @@ REAL B(N), D(N), T(*), X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
-do 10 K = 1,N
+DO K = 1,N
    LK = C(K)
    Y(K) = B(LK)
-10 CONTINUE
+END DO
 !
 do 21 K = 1,N
    IF (Y(K) .EQ. 0.0) GO TO 21
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-20 CONTINUE
+   END DO
 21 CONTINUE
 !
 !            SOLVE XL = Y BY BACKWARD SUBSTITUTION
@@ -1094,23 +1094,23 @@ IF (N .EQ. 1) RETURN
 !
 K = N
 Y(N) = X(N)
-do 32 I = 2,N
+DO I = 2,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 31
-   do 30 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-30 CONTINUE
+   END DO
 31 K = K - 1
    Y(K) = Y(K)/D(K)
-32 CONTINUE
+END DO
 !
-do 40 K = 1,N
+DO K = 1,N
    LK = R(K)
    X(LK) = Y(K)
-40 CONTINUE
+END DO
 RETURN
 END SUBROUTINE TSLV1
 
@@ -1182,9 +1182,9 @@ REAL CONST, WI, WMAX
 !
 JPTR = 0
 IT(1) = 1
-do 10 J = 1,N
+DO J = 1,N
    W(J) = 0.0
-10 CONTINUE
+END DO
 !
 !     PERFORM THE LU FACTORIZATION OF THE R(K)-TH ROW OF A
 !
@@ -1433,10 +1433,10 @@ JU = IU + N + 1
 !
 !  COMPUTE THE INVERSE PERMUTATION OF C
 !
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    ITEMP(L) = K
-10 CONTINUE
+END DO
 !
 !  CALL DNSPIV TO PERFORM COMPUTATIONS
 !
@@ -1508,9 +1508,9 @@ INTEGER CK, PK, PPK, PV, V, VI, VJ, VK
 !
 !  INITIALIZE WORK STORAGE AND POINTERS TO JU
 !
-do 10 J = 1,N
+DO J = 1,N
   X(J) = 0.D0
-10 CONTINUE
+END DO
 IU(1) = 1
 JUPTR = 0
 !
@@ -1570,7 +1570,7 @@ do 170 K = 1,N
   JMIN = IU(VI)
   JMAX = IU(VI+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 50
-  do 100 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     VJ = IC(JUJ)
 !
@@ -1598,7 +1598,7 @@ do 170 K = 1,N
 !  (U*(K,J) = U(K,J)*D(K,K))
 !
 90 X(VJ) = X(VJ) + LKI * U(J)
-100 CONTINUE
+  END DO
   GO TO 50
 !
 !  PIVOT--INTERCHANGE LARGEST ENTRY OF K-TH ROW OF U WITH
@@ -1671,21 +1671,21 @@ do 170 K = 1,N
 !  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 200 I = 1,N
+DO I = 1,N
   YK = Y(K)
   JMIN = IU(K)
   JMAX = IU(K+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 190
-  do 180 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     JUJ = IC(JUJ)
     YK = YK - U(J) * Y(JUJ)
-180 CONTINUE
+  END DO
 190 Y(K) = YK
   CK = C(K)
   X(CK) = YK
   K = K - 1
-200 CONTINUE
+END DO
 !
 !  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
 !
@@ -1795,10 +1795,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -1827,32 +1827,32 @@ do 11 K = 1,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 11
-   do 10 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-10 CONTINUE
+   END DO
 11 Y(K) = SUM/D(K)
 !
 !            SOLVE UX = B BY BACKWARD SUBSTITUTION
 !             AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 22 I = 1,N
+DO I = 1,N
    SUM = Y(K)
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-20 CONTINUE
+   END DO
 21 Y(K) = SUM
    LK = C(K)
    X(LK) = Y(K)
    K = K - 1
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DSLV1
 
@@ -1936,10 +1936,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -1962,21 +1962,21 @@ DOUBLE PRECISION B(N), D(N), T(*), X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
-do 10 K = 1,N
+DO K = 1,N
    LK = C(K)
    Y(K) = B(LK)
-10 CONTINUE
+END DO
 !
 do 21 K = 1,N
    IF (Y(K) .EQ. 0.D0) GO TO 21
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-20 CONTINUE
+   END DO
 21 CONTINUE
 !
 !            SOLVE XL = Y BY BACKWARD SUBSTITUTION
@@ -1986,23 +1986,23 @@ IF (N .EQ. 1) RETURN
 !
 K = N
 Y(N) = X(N)
-do 32 I = 2,N
+DO I = 2,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 31
-   do 30 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-30 CONTINUE
+   END DO
 31 K = K - 1
    Y(K) = Y(K)/D(K)
-32 CONTINUE
+END DO
 !
-do 40 K = 1,N
+DO K = 1,N
    LK = R(K)
    X(LK) = Y(K)
-40 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DTSLV1
 
@@ -2075,9 +2075,9 @@ DOUBLE PRECISION CONST, WI, WMAX
 !
 JPTR = 0
 IT(1) = 1
-do 10 J = 1,N
+DO J = 1,N
    W(J) = 0.D0
-10 CONTINUE
+END DO
 !
 !     PERFORM THE LU FACTORIZATION OF THE R(K)-TH ROW OF A
 !
@@ -2397,9 +2397,9 @@ DATA ITMAX /5/
 !
 IF (KASE .NE. 0) GO TO 20
    T = 1.0/FLOAT(N)
-   do 10 I = 1,N
+   DO I = 1,N
       X(I) = T
-10 CONTINUE
+   END DO
    ITER = 0
    KASE = 1
    JUMP = 1
@@ -2416,11 +2416,11 @@ IF (N .GT. 1) GO TO 110
    GO TO 510
 !
 110 ANORM = SASUM(N,X,1)
-do 120 I = 1,N
+DO I = 1,N
    ISGN(I) = 1
    IF (X(I) .LT. 0.0) ISGN(I) = -1
    X(I) = ISGN(I)
-120 CONTINUE
+END DO
 KASE = 2
 JUMP = 2
 RETURN
@@ -2433,9 +2433,9 @@ J = ISAMAX(N,X,1)
 !
 !     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
 !
-210 do 220 I = 1,N
+210 DO I = 1,N
    X(I) = 0.0
-220 CONTINUE
+END DO
 X(J) = 1.0
 KASE = 1
 JUMP = 3
@@ -2447,11 +2447,11 @@ RETURN
 300 CALL SCOPY (N,X,1,V,1)
 ANRM = ANORM
 ANORM = SASUM(N,V,1)
-do 310 I = 1,N
+DO I = 1,N
    L = 1
    IF (X(I) .LT. 0.0) L = -1
    IF (L .NE. ISGN(I)) GO TO 320
-310 CONTINUE
+END DO
 !     REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED.
 GO TO 410
 !
@@ -2459,11 +2459,11 @@ GO TO 410
 !
 320 IF (ANORM .LE. ANRM) GO TO 410
 !
-do 330 I = 1,N
+DO I = 1,N
    ISGN(I) = 1
    IF (X(I) .LT. 0.0) ISGN(I) = -1
    X(I) = ISGN(I)
-330 CONTINUE
+END DO
 KASE = 2
 JUMP = 4
 RETURN
@@ -2481,10 +2481,10 @@ GO TO 210
 !     ITERATION COMPLETE.  FINAL STAGE.
 !
 410 ALTSGN = 1.0
-do 420 I = 1,N
+DO I = 1,N
    X(I) = ALTSGN * (1.0 + FLOAT(I-1)/FLOAT(N-1))
    ALTSGN = -ALTSGN
-420 CONTINUE
+END DO
 KASE = 1
 JUMP = 5
 RETURN
@@ -2558,9 +2558,9 @@ AN = N
 ANM1 = N - 1
 IF (KASE .NE. 0) GO TO 20
    T = 1.D0/AN
-   do 10 I = 1,N
+   DO I = 1,N
       X(I) = T
-10 CONTINUE
+   END DO
    ITER = 0
    KASE = 1
    JUMP = 1
@@ -2577,11 +2577,11 @@ IF (N .GT. 1) GO TO 110
    GO TO 510
 !
 110 ANORM = DASUM(N,X,1)
-do 120 I = 1,N
+DO I = 1,N
    ISGN(I) = 1
    IF (X(I) .LT. 0.D0) ISGN(I) = -1
    X(I) = ISGN(I)
-120 CONTINUE
+END DO
 KASE = 2
 JUMP = 2
 RETURN
@@ -2594,9 +2594,9 @@ J = IDAMAX(N,X,1)
 !
 !     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
 !
-210 do 220 I = 1,N
+210 DO I = 1,N
    X(I) = 0.D0
-220 CONTINUE
+END DO
 X(J) = 1.D0
 KASE = 1
 JUMP = 3
@@ -2608,11 +2608,11 @@ RETURN
 300 CALL DCOPY (N,X,1,V,1)
 ANRM = ANORM
 ANORM = DASUM(N,V,1)
-do 310 I = 1,N
+DO I = 1,N
    L = 1
    IF (X(I) .LT. 0.D0) L = -1
    IF (L .NE. ISGN(I)) GO TO 320
-310 CONTINUE
+END DO
 !     REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED.
 GO TO 410
 !
@@ -2620,11 +2620,11 @@ GO TO 410
 !
 320 IF (ANORM .LE. ANRM) GO TO 410
 !
-do 330 I = 1,N
+DO I = 1,N
    ISGN(I) = 1
    IF (X(I) .LT. 0.D0) ISGN(I) = -1
    X(I) = ISGN(I)
-330 CONTINUE
+END DO
 KASE = 2
 JUMP = 4
 RETURN
@@ -2642,11 +2642,11 @@ GO TO 210
 !     ITERATION COMPLETE.  FINAL STAGE.
 !
 410 ALTSGN = 1.D0
-do 420 I = 1,N
+DO I = 1,N
    T = I - 1
    X(I) = ALTSGN * (1.D0 + T/ANM1)
    ALTSGN = -ALTSGN
-420 CONTINUE
+END DO
 KASE = 1
 JUMP = 5
 RETURN
@@ -2764,10 +2764,10 @@ JU = IU + N + 1
 !
 !  COMPUTE THE INVERSE PERMUTATION OF C
 !
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    ITEMP(L) = K
-10 CONTINUE
+END DO
 !
 !  CALL CNSPIV TO PERFORM COMPUTATIONS
 !
@@ -2843,9 +2843,9 @@ ZERO = (0.0,0.0)
 !
 !  INITIALIZE WORK STORAGE AND POINTERS TO JU
 !
-do 10 J = 1,N
+DO J = 1,N
   X(J) = ZERO
-10 CONTINUE
+END DO
 IU(1) = 1
 JUPTR = 0
 !
@@ -2905,7 +2905,7 @@ do 170 K = 1,N
   JMIN = IU(VI)
   JMAX = IU(VI+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 50
-  do 100 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     VJ = IC(JUJ)
 !
@@ -2933,7 +2933,7 @@ do 170 K = 1,N
 !  (U*(K,J) = U(K,J)*D(K,K))
 !
 90 X(VJ) = X(VJ) + LKI * U(J)
-100 CONTINUE
+  END DO
   GO TO 50
 !
 !  PIVOT--INTERCHANGE LARGEST ENTRY OF K-TH ROW OF U WITH
@@ -3006,21 +3006,21 @@ do 170 K = 1,N
 !  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 200 I = 1,N
+DO I = 1,N
   YK = Y(K)
   JMIN = IU(K)
   JMAX = IU(K+1) - 1
   IF (JMIN .GT. JMAX)  GO TO 190
-  do 180 J = JMIN,JMAX
+  DO J = JMIN,JMAX
     JUJ = JU(J)
     JUJ = IC(JUJ)
     YK = YK - U(J) * Y(JUJ)
-180 CONTINUE
+  END DO
 190 Y(K) = YK
   CK = C(K)
   X(CK) = YK
   K = K - 1
-200 CONTINUE
+END DO
 !
 !  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
 !
@@ -3130,10 +3130,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -3162,32 +3162,32 @@ do 11 K = 1,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 11
-   do 10 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-10 CONTINUE
+   END DO
 11 Y(K) = SUM/D(K)
 !
 !            SOLVE UX = B BY BACKWARD SUBSTITUTION
 !             AND REORDER X TO CORRESPOND WITH A
 !
 K = N
-do 22 I = 1,N
+DO I = 1,N
    SUM = Y(K)
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       SUM = SUM - T(JJ)*Y(J)
-20 CONTINUE
+   END DO
 21 Y(K) = SUM
    LK = C(K)
    X(LK) = Y(K)
    K = K - 1
-22 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CSLV1
 
@@ -3271,10 +3271,10 @@ IF (M0 .NE. 0) GO TO 20
 !
 IERR = 0
 IF (N .LE. 0) RETURN
-do 10 K = 1,N
+DO K = 1,N
    L = C(K)
    IWK(L) = K
-10 CONTINUE
+END DO
 !
 !     OBTAIN THE LU DECOMPOSITION OF A
 !
@@ -3297,21 +3297,21 @@ COMPLEX B(N), D(N), T(*), X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
-do 10 K = 1,N
+DO K = 1,N
    LK = C(K)
    Y(K) = B(LK)
-10 CONTINUE
+END DO
 !
 do 21 K = 1,N
    IF (Y(K) .EQ. (0.0, 0.0)) GO TO 21
    JMIN = IU(K)
    JMAX = IT(K+1) - 1
    IF (JMIN .GT. JMAX) GO TO 21
-   do 20 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-20 CONTINUE
+   END DO
 21 CONTINUE
 !
 !            SOLVE XL = Y BY BACKWARD SUBSTITUTION
@@ -3321,23 +3321,23 @@ IF (N .EQ. 1) RETURN
 !
 K = N
 Y(N) = X(N)
-do 32 I = 2,N
+DO I = 2,N
    JMIN = IT(K)
    JMAX = IU(K) - 1
    IF (JMIN .GT. JMAX) GO TO 31
-   do 30 JJ = JMIN,JMAX
+   DO JJ = JMIN,JMAX
       LJ = JT(JJ)
       J = IC(LJ)
       Y(J) = Y(J) - T(JJ)*Y(K)
-30 CONTINUE
+   END DO
 31 K = K - 1
    Y(K) = Y(K)/D(K)
-32 CONTINUE
+END DO
 !
-do 40 K = 1,N
+DO K = 1,N
    LK = R(K)
    X(LK) = Y(K)
-40 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CTSLV1
 
@@ -3412,9 +3412,9 @@ DATA ZERO /(0.0, 0.0)/
 !--------------------
 JPTR = 0
 IT(1) = 1
-do 10 J = 1,N
+DO J = 1,N
    W(J) = ZERO
-10 CONTINUE
+END DO
 !
 !     PERFORM THE LU FACTORIZATION OF THE R(K)-TH ROW OF A
 !
@@ -3717,17 +3717,17 @@ GO TO 100
 20 SCALE(M) = J
 IF (J .EQ. M) GO TO 50
 !
-do 30 I = 1, L
+DO I = 1, L
    F = A(I,J)
    A(I,J) = A(I,M)
    A(I,M) = F
-30 CONTINUE
+END DO
 !
-do 40 I = K, N
+DO I = K, N
    F = A(J,I)
    A(J,I) = A(M,I)
    A(M,I) = F
-40 CONTINUE
+END DO
 !
 50 GO TO (80,130), IEXC
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
@@ -3851,17 +3851,17 @@ REAL S
 !
 IF (IGH .EQ. LOW) GO TO 30
 !
-do 11 I = LOW, IGH
+DO I = LOW, IGH
 S = SCALE(I)
    do 10 J = 1, N
 10 Z(I,J) = Z(I,J) * S
-11 CONTINUE
+END DO
 !
-do 21 J = LOW, IGH
+DO J = LOW, IGH
 S = 1.0/SCALE(J)
    do 20 I = 1, N
 20 Z(I,J) = Z(I,J) * S
-21 CONTINUE
+END DO
 !
 !     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
 !               IGH+1 STEP 1 UNTIL N DO -- **********
@@ -3948,17 +3948,17 @@ do 180 M = KP1, LA
    INT(M) = I
    IF (I .EQ. M) GO TO 130
 !    ********** INTERCHANGE ROWS AND COLUMNS OF A **********
-   do 110 J = MM1, N
+   DO J = MM1, N
       Y = A(I,J)
       A(I,J) = A(M,J)
       A(M,J) = Y
-110 CONTINUE
+   END DO
 !
-   do 120 J = 1, IGH
+   DO J = 1, IGH
       Y = A(J,I)
       A(J,I) = A(J,M)
       A(J,M) = Y
-120 CONTINUE
+   END DO
 !    ********** END INTERCHANGE **********
 130 IF (X .EQ. 0.0) GO TO 180
    MP1 = M + 1
@@ -4044,17 +4044,17 @@ do 180 M = KP1, LA
    INT(M) = I
    IF (I .EQ. M) GO TO 130
 !    ********** INTERCHANGE ROWS AND COLUMNS OF A **********
-   do 110 J = MM1, N
+   DO J = MM1, N
       Y = A(I,J)
       A(I,J) = A(M,J)
       A(M,J) = Y
-110 CONTINUE
+   END DO
 !
-   do 120 J = 1, IGH
+   DO J = 1, IGH
       Y = A(J,I)
       A(J,I) = A(J,M)
       A(J,M) = Y
-120 CONTINUE
+   END DO
 !    ********** END INTERCHANGE **********
 130 IF (X .EQ. 0.0) GO TO 180
    MP1 = M + 1
@@ -4136,46 +4136,46 @@ do 180 M = KP1, LA
    IF (SCALE .EQ. 0.0) GO TO 180
    MP = M + IGH
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   do 100 II = M, IGH
+   DO II = M, IGH
       I = MP - II
       ORT(I) = A(I,M-1) / SCALE
       H = H + ORT(I) * ORT(I)
-100 CONTINUE
+   END DO
 !
    G = SQRT(H)
    IF (ORT(M) .GE. 0.0) G = -G
    H = H - ORT(M) * G
    ORT(M) = ORT(M) - G
 !     ********** FORM (I-(U*UT)/H) * A **********
-   do 130 J = M, N
+   DO J = M, N
       F = 0.0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      do 110 II = M, IGH
+      DO II = M, IGH
          I = MP - II
          F = F + ORT(I) * A(I,J)
-110 CONTINUE
+      END DO
 !
       F = F / H
 !
       do 120 I = M, IGH
 120 A(I,J) = A(I,J) - F * ORT(I)
 !
-130 CONTINUE
+   END DO
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   do 160 I = 1, IGH
+   DO I = 1, IGH
       F = 0.0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      do 140 JJ = M, IGH
+      DO JJ = M, IGH
          J = MP - JJ
          F = F + ORT(J) * A(I,J)
-140 CONTINUE
+      END DO
 !
       F = F / H
 !
       do 150 J = M, IGH
 150 A(I,J) = A(I,J) - F * ORT(J)
 !
-160 CONTINUE
+   END DO
 !
    ORT(M) = SCALE * ORT(M)
    A(M,M-1) = SCALE * G
@@ -4272,13 +4272,13 @@ NA = EN - 1
 ENM2 = NA - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-70 do 80 LL = LOW, EN
+70 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 100
    S = ABS(H(L-1,L-1)) + ABS(H(L,L))
    IF (S .EQ. 0.0) S = NORM
    IF (ABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100
-80 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 100 X = H(EN,EN)
 IF (L .EQ. EN) GO TO 270
@@ -4301,7 +4301,7 @@ W = -0.4375 * S * S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 140 MM = L, ENM2
+DO MM = L, ENM2
    M = ENM2 + L - MM
    ZZ = H(M,M)
    R = X - ZZ
@@ -4316,7 +4316,7 @@ do 140 MM = L, ENM2
    IF (M .EQ. L) GO TO 150
    IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P) &
 &* (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
-140 CONTINUE
+END DO
 !
 150 MP2 = M + 2
 !
@@ -4352,25 +4352,25 @@ do 260 K = M, NA
    Q = Q / P
    R = R / P
 !     ********** ROW MODIFICATION **********
-   do 210 J = K, EN
+   DO J = K, EN
       P = H(K,J) + Q * H(K+1,J)
       IF (.NOT. NOTLAS) GO TO 200
       P = P + R * H(K+2,J)
       H(K+2,J) = H(K+2,J) - P * ZZ
 200 H(K+1,J) = H(K+1,J) - P * Y
       H(K,J) = H(K,J) - P * X
-210 CONTINUE
+   END DO
 !
    J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-   do 230 I = L, J
+   DO I = L, J
       P = X * H(I,K) + Y * H(I,K+1)
       IF (.NOT. NOTLAS) GO TO 220
       P = P + ZZ * H(I,K+2)
       H(I,K+2) = H(I,K+2) - P * R
 220 H(I,K+1) = H(I,K+1) - P * Q
       H(I,K) = H(I,K) - P
-230 CONTINUE
+   END DO
 !
 260 CONTINUE
 !
@@ -4451,7 +4451,7 @@ REAL S
 IF (M .EQ. 0) GO TO 200
 IF (IGH .EQ. LOW) GO TO 120
 !
-do 110 I = LOW, IGH
+DO I = LOW, IGH
    S = SCALE(I)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
@@ -4459,7 +4459,7 @@ do 110 I = LOW, IGH
    do 100 J = 1, M
 100 Z(I,J) = Z(I,J) * S
 !
-110 CONTINUE
+END DO
 !     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
 !               IGH+1 STEP 1 UNTIL N DO -- **********
 120 do 140 II = 1, N
@@ -4469,11 +4469,11 @@ do 110 I = LOW, IGH
    K = SCALE(I)
    IF (K .EQ. I) GO TO 140
 !
-   do 130 J = 1, M
+   DO J = 1, M
       S = Z(I,J)
       Z(I,J) = Z(K,J)
       Z(K,J) = S
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -4523,13 +4523,13 @@ INTEGER INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.0
 !
    Z(I,I) = 1.0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -4544,10 +4544,10 @@ do 140 MM = 1, KL
    I = INT(MP)
    IF (I .EQ. MP) GO TO 140
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       Z(MP,J) = Z(I,J)
       Z(I,J) = 0.0
-130 CONTINUE
+   END DO
 !
    Z(I,MP) = 1.0
 140 CONTINUE
@@ -4598,13 +4598,13 @@ REAL INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.0
 !
    Z(I,I) = 1.0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -4619,10 +4619,10 @@ do 140 MM = 1, KL
    I = INT(MP)
    IF (I .EQ. MP) GO TO 140
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       Z(MP,J) = Z(I,J)
       Z(I,J) = 0.0
-130 CONTINUE
+   END DO
 !
    Z(I,MP) = 1.0
 140 CONTINUE
@@ -4675,13 +4675,13 @@ REAL G
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.0
 !
    Z(I,I) = 1.0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -4694,7 +4694,7 @@ do 140 MM = 1, KL
    do 100 I = MP1, IGH
 100 ORT(I) = A(I,MP-1)
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       G = 0.0
 !
       do 110 I = MP, IGH
@@ -4706,7 +4706,7 @@ do 140 MM = 1, KL
       do 120 I = MP, IGH
 120 Z(I,J) = Z(I,J) + G * ORT(I)
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -4762,13 +4762,13 @@ REAL G
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.0
 !
    Z(I,I) = 1.0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -4781,7 +4781,7 @@ do 140 MM = 1, KL
    do 100 I = MP1, IGH
 100 ORT(I) = A(I,MP-1)
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       G = 0.0
 !
       do 110 I = MP, IGH
@@ -4793,7 +4793,7 @@ do 140 MM = 1, KL
       do 120 I = MP, IGH
 120 Z(I,J) = Z(I,J) + G * ORT(I)
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -4908,13 +4908,13 @@ NA = EN - 1
 ENM2 = NA - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-70 do 80 LL = LOW, EN
+70 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 100
    S = ABS(H(L-1,L-1)) + ABS(H(L,L))
    IF (S .EQ. 0.0) S = NORM
    IF (ABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100
-80 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 100 X = H(EN,EN)
 IF (L .EQ. EN) GO TO 270
@@ -4937,7 +4937,7 @@ W = -0.4375 * S * S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 140 MM = L, ENM2
+DO MM = L, ENM2
    M = ENM2 + L - MM
    ZZ = H(M,M)
    R = X - ZZ
@@ -4952,7 +4952,7 @@ do 140 MM = L, ENM2
    IF (M .EQ. L) GO TO 150
    IF (ABS(H(M,M-1)) * (ABS(Q) + ABS(R)) .LE. MACHEP * ABS(P) &
 &* (ABS(H(M-1,M-1)) + ABS(ZZ) + ABS(H(M+1,M+1)))) GO TO 150
-140 CONTINUE
+END DO
 !
 150 MP2 = M + 2
 !
@@ -4988,34 +4988,34 @@ do 260 K = M, NA
    Q = Q / P
    R = R / P
 !     ********** ROW MODIFICATION **********
-   do 210 J = K, N
+   DO J = K, N
       P = H(K,J) + Q * H(K+1,J)
       IF (.NOT. NOTLAS) GO TO 200
       P = P + R * H(K+2,J)
       H(K+2,J) = H(K+2,J) - P * ZZ
 200 H(K+1,J) = H(K+1,J) - P * Y
       H(K,J) = H(K,J) - P * X
-210 CONTINUE
+   END DO
 !
    J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-   do 230 I = 1, J
+   DO I = 1, J
       P = X * H(I,K) + Y * H(I,K+1)
       IF (.NOT. NOTLAS) GO TO 220
       P = P + ZZ * H(I,K+2)
       H(I,K+2) = H(I,K+2) - P * R
 220 H(I,K+1) = H(I,K+1) - P * Q
       H(I,K) = H(I,K) - P
-230 CONTINUE
+   END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-   do 250 I = LOW, IGH
+   DO I = LOW, IGH
       P = X * Z(I,K) + Y * Z(I,K+1)
       IF (.NOT. NOTLAS) GO TO 240
       P = P + ZZ * Z(I,K+2)
       Z(I,K+2) = Z(I,K+2) - P * R
 240 Z(I,K+1) = Z(I,K+1) - P * Q
       Z(I,K) = Z(I,K) - P
-250 CONTINUE
+   END DO
 !
 260 CONTINUE
 !
@@ -5050,23 +5050,23 @@ R = SQRT(P*P+Q*Q)
 P = P / R
 Q = Q / R
 !     ********** ROW MODIFICATION **********
-do 290 J = NA, N
+DO J = NA, N
    ZZ = H(NA,J)
    H(NA,J) = Q * ZZ + P * H(EN,J)
    H(EN,J) = Q * H(EN,J) - P * ZZ
-290 CONTINUE
+END DO
 !     ********** COLUMN MODIFICATION **********
-do 300 I = 1, EN
+DO I = 1, EN
    ZZ = H(I,NA)
    H(I,NA) = Q * ZZ + P * H(I,EN)
    H(I,EN) = Q * H(I,EN) - P * ZZ
-300 CONTINUE
+END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-do 310 I = LOW, IGH
+DO I = LOW, IGH
    ZZ = Z(I,NA)
    Z(I,NA) = Q * ZZ + P * Z(I,EN)
    Z(I,EN) = Q * Z(I,EN) - P * ZZ
-310 CONTINUE
+END DO
 !
 GO TO 330
 !     ********** COMPLEX PAIR **********
@@ -5145,10 +5145,10 @@ do 800 NN = 1, N
       RA = 0.0
       SA = H(I,EN)
 !
-      do 760 J = M, NA
+      DO J = M, NA
          RA = RA + H(I,J) * H(J,NA)
          SA = SA + H(I,J) * H(J,EN)
-760 CONTINUE
+      END DO
 !
       IF (WI(I) .GE. 0.0) GO TO 770
       ZZ = W
@@ -5329,17 +5329,17 @@ GO TO 100
 20 SCALE(M) = J
 IF (J .EQ. M) GO TO 50
 !
-do 30 I = 1, L
+DO I = 1, L
    F = A(I,J)
    A(I,J) = A(I,M)
    A(I,M) = F
-30 CONTINUE
+END DO
 !
-do 40 I = K, N
+DO I = K, N
    F = A(J,I)
    A(J,I) = A(M,I)
    A(M,I) = F
-40 CONTINUE
+END DO
 !
 50 GO TO (80,130), IEXC
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
@@ -5463,17 +5463,17 @@ DOUBLE PRECISION S
 !
 IF (IGH .EQ. LOW) GO TO 30
 !
-do 11 I = LOW, IGH
+DO I = LOW, IGH
 S = SCALE(I)
    do 10 J = 1, N
 10 Z(I,J) = Z(I,J) * S
-11 CONTINUE
+END DO
 !
-do 21 J = LOW, IGH
+DO J = LOW, IGH
 S = 1.D0/SCALE(J)
    do 20 I = 1, N
 20 Z(I,J) = Z(I,J) * S
-21 CONTINUE
+END DO
 !
 !     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
 !               IGH+1 STEP 1 UNTIL N DO -- **********
@@ -5556,46 +5556,46 @@ do 180 M = KP1, LA
    IF (SCALE .EQ. 0.D0) GO TO 180
    MP = M + IGH
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   do 100 II = M, IGH
+   DO II = M, IGH
       I = MP - II
       ORT(I) = A(I,M-1) / SCALE
       H = H + ORT(I) * ORT(I)
-100 CONTINUE
+   END DO
 !
    G = DSQRT(H)
    IF (ORT(M) .GE. 0.D0) G = -G
    H = H - ORT(M) * G
    ORT(M) = ORT(M) - G
 !     ********** FORM (I-(U*UT)/H) * A **********
-   do 130 J = M, N
+   DO J = M, N
       F = 0.D0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      do 110 II = M, IGH
+      DO II = M, IGH
          I = MP - II
          F = F + ORT(I) * A(I,J)
-110 CONTINUE
+      END DO
 !
       F = F / H
 !
       do 120 I = M, IGH
 120 A(I,J) = A(I,J) - F * ORT(I)
 !
-130 CONTINUE
+   END DO
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   do 160 I = 1, IGH
+   DO I = 1, IGH
       F = 0.D0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      do 140 JJ = M, IGH
+      DO JJ = M, IGH
          J = MP - JJ
          F = F + ORT(J) * A(I,J)
-140 CONTINUE
+      END DO
 !
       F = F / H
 !
       do 150 J = M, IGH
 150 A(I,J) = A(I,J) - F * ORT(J)
 !
-160 CONTINUE
+   END DO
 !
    ORT(M) = SCALE * ORT(M)
    A(M,M-1) = SCALE * G
@@ -5693,13 +5693,13 @@ NA = EN - 1
 ENM2 = NA - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-70 do 80 LL = LOW, EN
+70 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 100
    S = DABS(H(L-1,L-1)) + DABS(H(L,L))
    IF (S .EQ. 0.D0) S = NORM
    IF (DABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100
-80 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 100 X = H(EN,EN)
 IF (L .EQ. EN) GO TO 270
@@ -5722,7 +5722,7 @@ W = -.4375D0 * S * S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 140 MM = L, ENM2
+DO MM = L, ENM2
    M = ENM2 + L - MM
    ZZ = H(M,M)
    R = X - ZZ
@@ -5737,7 +5737,7 @@ do 140 MM = L, ENM2
    IF (M .EQ. L) GO TO 150
    IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P) &
 &* (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
-140 CONTINUE
+END DO
 !
 150 MP2 = M + 2
 !
@@ -5773,25 +5773,25 @@ do 260 K = M, NA
    Q = Q / P
    R = R / P
 !     ********** ROW MODIFICATION **********
-   do 210 J = K, EN
+   DO J = K, EN
       P = H(K,J) + Q * H(K+1,J)
       IF (.NOT. NOTLAS) GO TO 200
       P = P + R * H(K+2,J)
       H(K+2,J) = H(K+2,J) - P * ZZ
 200 H(K+1,J) = H(K+1,J) - P * Y
       H(K,J) = H(K,J) - P * X
-210 CONTINUE
+   END DO
 !
    J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-   do 230 I = L, J
+   DO I = L, J
       P = X * H(I,K) + Y * H(I,K+1)
       IF (.NOT. NOTLAS) GO TO 220
       P = P + ZZ * H(I,K+2)
       H(I,K+2) = H(I,K+2) - P * R
 220 H(I,K+1) = H(I,K+1) - P * Q
       H(I,K) = H(I,K) - P
-230 CONTINUE
+   END DO
 !
 260 CONTINUE
 !
@@ -5872,7 +5872,7 @@ DOUBLE PRECISION S
 IF (M .EQ. 0) GO TO 200
 IF (IGH .EQ. LOW) GO TO 120
 !
-do 110 I = LOW, IGH
+DO I = LOW, IGH
    S = SCALE(I)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
@@ -5880,7 +5880,7 @@ do 110 I = LOW, IGH
    do 100 J = 1, M
 100 Z(I,J) = Z(I,J) * S
 !
-110 CONTINUE
+END DO
 !     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
 !               IGH+1 STEP 1 UNTIL N DO -- **********
 120 do 140 II = 1, N
@@ -5890,11 +5890,11 @@ do 110 I = LOW, IGH
    K = SCALE(I)
    IF (K .EQ. I) GO TO 140
 !
-   do 130 J = 1, M
+   DO J = 1, M
       S = Z(I,J)
       Z(I,J) = Z(K,J)
       Z(K,J) = S
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -5946,13 +5946,13 @@ DOUBLE PRECISION G
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.D0
 !
    Z(I,I) = 1.D0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -5965,7 +5965,7 @@ do 140 MM = 1, KL
    do 100 I = MP1, IGH
 100 ORT(I) = A(I,MP-1)
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       G = 0.D0
 !
       do 110 I = MP, IGH
@@ -5977,7 +5977,7 @@ do 140 MM = 1, KL
       do 120 I = MP, IGH
 120 Z(I,J) = Z(I,J) + G * ORT(I)
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -6033,13 +6033,13 @@ DOUBLE PRECISION G
 !-----------------------------------------------------------------------
 !
 !     ********** INITIALIZE Z TO IDENTITY MATRIX **********
-do 80 I = 1, N
+DO I = 1, N
 !
    do 60 J = 1, N
 60 Z(I,J) = 0.D0
 !
    Z(I,I) = 1.D0
-80 CONTINUE
+END DO
 !
 KL = IGH - LOW - 1
 IF (KL .LT. 1) GO TO 200
@@ -6052,7 +6052,7 @@ do 140 MM = 1, KL
    do 100 I = MP1, IGH
 100 ORT(I) = A(I,MP-1)
 !
-   do 130 J = MP, IGH
+   DO J = MP, IGH
       G = 0.D0
 !
       do 110 I = MP, IGH
@@ -6064,7 +6064,7 @@ do 140 MM = 1, KL
       do 120 I = MP, IGH
 120 Z(I,J) = Z(I,J) + G * ORT(I)
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -6175,13 +6175,13 @@ NA = EN - 1
 ENM2 = NA - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-70 do 80 LL = LOW, EN
+70 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 100
    S = DABS(H(L-1,L-1)) + DABS(H(L,L))
    IF (S .EQ. 0.D0) S = NORM
    IF (DABS(H(L,L-1)) .LE. MACHEP * S) GO TO 100
-80 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 100 X = H(EN,EN)
 IF (L .EQ. EN) GO TO 270
@@ -6204,7 +6204,7 @@ W = -.4375D0 * S * S
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                SUB-DIAGONAL ELEMENTS.
 !                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
-do 140 MM = L, ENM2
+DO MM = L, ENM2
    M = ENM2 + L - MM
    ZZ = H(M,M)
    R = X - ZZ
@@ -6219,7 +6219,7 @@ do 140 MM = L, ENM2
    IF (M .EQ. L) GO TO 150
    IF (DABS(H(M,M-1)) * (DABS(Q) + DABS(R)) .LE. MACHEP * DABS(P) &
 &* (DABS(H(M-1,M-1)) + DABS(ZZ) + DABS(H(M+1,M+1)))) GO TO 150
-140 CONTINUE
+END DO
 !
 150 MP2 = M + 2
 !
@@ -6255,34 +6255,34 @@ do 260 K = M, NA
    Q = Q / P
    R = R / P
 !     ********** ROW MODIFICATION **********
-   do 210 J = K, N
+   DO J = K, N
       P = H(K,J) + Q * H(K+1,J)
       IF (.NOT. NOTLAS) GO TO 200
       P = P + R * H(K+2,J)
       H(K+2,J) = H(K+2,J) - P * ZZ
 200 H(K+1,J) = H(K+1,J) - P * Y
       H(K,J) = H(K,J) - P * X
-210 CONTINUE
+   END DO
 !
    J = MIN0(EN,K+3)
 !     ********** COLUMN MODIFICATION **********
-   do 230 I = 1, J
+   DO I = 1, J
       P = X * H(I,K) + Y * H(I,K+1)
       IF (.NOT. NOTLAS) GO TO 220
       P = P + ZZ * H(I,K+2)
       H(I,K+2) = H(I,K+2) - P * R
 220 H(I,K+1) = H(I,K+1) - P * Q
       H(I,K) = H(I,K) - P
-230 CONTINUE
+   END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-   do 250 I = LOW, IGH
+   DO I = LOW, IGH
       P = X * Z(I,K) + Y * Z(I,K+1)
       IF (.NOT. NOTLAS) GO TO 240
       P = P + ZZ * Z(I,K+2)
       Z(I,K+2) = Z(I,K+2) - P * R
 240 Z(I,K+1) = Z(I,K+1) - P * Q
       Z(I,K) = Z(I,K) - P
-250 CONTINUE
+   END DO
 !
 260 CONTINUE
 !
@@ -6317,23 +6317,23 @@ R = DSQRT(P*P+Q*Q)
 P = P / R
 Q = Q / R
 !     ********** ROW MODIFICATION **********
-do 290 J = NA, N
+DO J = NA, N
    ZZ = H(NA,J)
    H(NA,J) = Q * ZZ + P * H(EN,J)
    H(EN,J) = Q * H(EN,J) - P * ZZ
-290 CONTINUE
+END DO
 !     ********** COLUMN MODIFICATION **********
-do 300 I = 1, EN
+DO I = 1, EN
    ZZ = H(I,NA)
    H(I,NA) = Q * ZZ + P * H(I,EN)
    H(I,EN) = Q * H(I,EN) - P * ZZ
-300 CONTINUE
+END DO
 !     ********** ACCUMULATE TRANSFORMATIONS **********
-do 310 I = LOW, IGH
+DO I = LOW, IGH
    ZZ = Z(I,NA)
    Z(I,NA) = Q * ZZ + P * Z(I,EN)
    Z(I,EN) = Q * Z(I,EN) - P * ZZ
-310 CONTINUE
+END DO
 !
 GO TO 330
 !     ********** COMPLEX PAIR **********
@@ -6413,10 +6413,10 @@ do 800 NN = 1, N
       RA = 0.D0
       SA = H(I,EN)
 !
-      do 760 J = M, NA
+      DO J = M, NA
          RA = RA + H(I,J) * H(J,NA)
          SA = SA + H(I,J) * H(J,EN)
-760 CONTINUE
+      END DO
 !
       IF (WI(I) .GE. 0.D0) GO TO 770
       ZZ = W
@@ -6587,7 +6587,7 @@ REAL F,G,H,SCALE
 do 100 I = 1, N
 100 D(I) = A(I,I)
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-do 300 II = 1, N
+DO II = 1, N
    I = N + 1 - II
    L = I - 1
    H = 0.0
@@ -6602,10 +6602,10 @@ do 300 II = 1, N
    E2(I) = 0.0
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       A(I,K) = A(I,K) / SCALE
       H = H + A(I,K) * A(I,K)
-150 CONTINUE
+   END DO
 !
    E2(I) = SCALE * SCALE * H
    F = A(I,L)
@@ -6617,7 +6617,7 @@ do 300 II = 1, N
    IF (L .EQ. 1) GO TO 270
    F = 0.0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       G = 0.0
 !     ********** FORM ELEMENT OF A*U **********
       do 180 K = 1, J
@@ -6631,7 +6631,7 @@ do 300 II = 1, N
 !     ********** FORM ELEMENT OF P **********
 220 E(J) = G / H
       F = F + E(J) * A(I,J)
-240 CONTINUE
+   END DO
 !
    H = F / (H + H)
 !     ********** FORM REDUCED A **********
@@ -6650,7 +6650,7 @@ do 300 II = 1, N
 290 H = D(I)
    D(I) = A(I,I)
    A(I,I) = H
-300 CONTINUE
+END DO
 !
 RETURN
 !     ********** LAST CARD OF TRED1 **********
@@ -6699,7 +6699,7 @@ REAL F,G,H,HH,SCALE
 !-----------------------------------------------------------------------
 !
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-do 300 II = 1, N
+DO II = 1, N
    I = N + 1 - II
    L = I - 1
    IZ = (I * L) / 2
@@ -6707,21 +6707,21 @@ do 300 II = 1, N
    SCALE = 0.0
    IF (L .LT. 1) GO TO 130
 !     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
-   do 120 K = 1, L
+   DO K = 1, L
       IZ = IZ + 1
       D(K) = A(IZ)
       SCALE = SCALE + ABS(D(K))
-120 CONTINUE
+   END DO
 !
    IF (SCALE .NE. 0.0) GO TO 140
 130 E(I) = 0.0
    E2(I) = 0.0
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       D(K) = D(K) / SCALE
       H = H + D(K) * D(K)
-150 CONTINUE
+   END DO
 !
    E2(I) = SCALE * SCALE * H
    F = D(L)
@@ -6734,19 +6734,19 @@ do 300 II = 1, N
    IF (L .EQ. 1) GO TO 290
    F = 0.0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       G = 0.0
       JK = (J * (J-1)) / 2
 !     ********** FORM ELEMENT OF A*U **********
-      do 180 K = 1, L
+      DO K = 1, L
          JK = JK + 1
          IF (K .GT. J) JK = JK + K - 2
          G = G + A(JK) * D(K)
-180 CONTINUE
+      END DO
 !     ********** FORM ELEMENT OF P **********
       E(J) = G / H
       F = F + E(J) * D(J)
-240 CONTINUE
+   END DO
 !
    HH = F / (H + H)
    JK = 0
@@ -6763,7 +6763,7 @@ do 300 II = 1, N
 !
 290 D(I) = A(IZ+1)
    A(IZ+1) = SCALE * SQRT(H)
-300 CONTINUE
+END DO
 !
 RETURN
 !     ********** LAST CARD OF TRED3 **********
@@ -6826,18 +6826,18 @@ F = 0.0
 B = 0.0
 E2(N) = 0.0
 !
-do 290 L = 1, N
+DO L = 1, N
    J = 0
    H = MACHEP * (ABS(D(L)) + SQRT(E2(L)))
    IF (B .GT. H) GO TO 105
    B = H
    C = B * B
 !     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
-105 do 110 M = L, N
+105 DO M = L, N
       IF (E2(M) .LE. C) GO TO 120
 !     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-110 CONTINUE
+   END DO
 !
 120 IF (M .EQ. L) GO TO 210
 130 IF (J .EQ. 30) GO TO 1000
@@ -6863,7 +6863,7 @@ do 290 L = 1, N
    S = 0.0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       P = G * H
       R = P + E2(I)
@@ -6873,7 +6873,7 @@ do 290 L = 1, N
       G = D(I) - E2(I) / G
       IF (G .EQ. 0.0) G = B
       H = G * P / R
-200 CONTINUE
+   END DO
 !
    E2(L) = S * G
    D(L) = H
@@ -6886,15 +6886,15 @@ do 290 L = 1, N
 !     ********** ORDER EIGENVALUES **********
    IF (L .EQ. 1) GO TO 250
 !     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
-   do 230 II = 2, L
+   DO II = 2, L
       I = L + 2 - II
       IF (P .GE. D(I-1)) GO TO 270
       D(I) = D(I-1)
-230 CONTINUE
+   END DO
 !
 250 I = 1
 270 D(I) = P
-290 CONTINUE
+END DO
 !
 GO TO 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
@@ -6961,14 +6961,14 @@ do 100 I = 2, N
 !
 E(N) = 0.0
 !
-do 290 L = 1, N
+DO L = 1, N
    J = 0
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
-105 do 110 M = L, N
+105 DO M = L, N
       IF (M .EQ. N) GO TO 120
       IF (ABS(E(M)) .LE. MACHEP * (ABS(D(M)) + ABS(D(M+1)))) &
 &GO TO 120
-110 CONTINUE
+   END DO
 !
 120 P = D(L)
    IF (M .EQ. L) GO TO 215
@@ -6984,7 +6984,7 @@ do 290 L = 1, N
    P = 0.0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       F = S * E(I)
       B = C * E(I)
@@ -7005,7 +7005,7 @@ do 290 L = 1, N
       P = S * R
       D(I+1) = G + P
       G = C * R - B
-200 CONTINUE
+   END DO
 !
    D(L) = D(L) - P
    E(L) = G
@@ -7014,15 +7014,15 @@ do 290 L = 1, N
 !     ********** ORDER EIGENVALUES **********
 215 IF (L .EQ. 1) GO TO 250
 !     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
-   do 230 II = 2, L
+   DO II = 2, L
       I = L + 2 - II
       IF (P .GE. D(I-1)) GO TO 270
       D(I) = D(I-1)
-230 CONTINUE
+   END DO
 !
 250 I = 1
 270 D(I) = P
-290 CONTINUE
+END DO
 !
 GO TO 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
@@ -7081,7 +7081,7 @@ do 100 I = 1, N
 !
 IF (N .EQ. 1) GO TO 320
 !     ********** FOR I=N STEP -1 UNTIL 2 DO -- **********
-do 300 II = 2, N
+DO II = 2, N
    I = N + 2 - II
    L = I - 1
    H = 0.0
@@ -7095,10 +7095,10 @@ do 300 II = 2, N
 130 E(I) = Z(I,L)
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       Z(I,K) = Z(I,K) / SCALE
       H = H + Z(I,K) * Z(I,K)
-150 CONTINUE
+   END DO
 !
    F = Z(I,L)
    G = SQRT(H)
@@ -7108,7 +7108,7 @@ do 300 II = 2, N
    Z(I,L) = F - G
    F = 0.0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       Z(J,I) = Z(I,J) / H
       G = 0.0
 !     ********** FORM ELEMENT OF A*U **********
@@ -7123,7 +7123,7 @@ do 300 II = 2, N
 !     ********** FORM ELEMENT OF P **********
 220 E(J) = G / H
       F = F + E(J) * Z(I,J)
-240 CONTINUE
+   END DO
 !
    HH = F / (H + H)
 !     ********** FORM REDUCED A **********
@@ -7137,7 +7137,7 @@ do 300 II = 2, N
 260 CONTINUE
 !
 290 D(I) = H
-300 CONTINUE
+END DO
 !
 320 D(1) = 0.0
 E(1) = 0.0
@@ -7160,10 +7160,10 @@ do 500 I = 1, N
    Z(I,I) = 1.0
    IF (L .LT. 1) GO TO 500
 !
-   do 400 J = 1, L
+   DO J = 1, L
       Z(I,J) = 0.0
       Z(J,I) = 0.0
-400 CONTINUE
+   END DO
 !
 500 CONTINUE
 !
@@ -7246,16 +7246,16 @@ F = 0.0
 B = 0.0
 E(N) = 0.0
 !
-do 240 L = 1, N
+DO L = 1, N
    J = 0
    H = MACHEP * (ABS(D(L)) + ABS(E(L)))
    IF (B .LT. H) B = H
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
-   do 110 M = L, N
+   DO M = L, N
       IF (ABS(E(M)) .LE. B) GO TO 120
 !     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-110 CONTINUE
+   END DO
 !
 120 IF (M .EQ. L) GO TO 220
 130 IF (J .EQ. 30) GO TO 1000
@@ -7279,7 +7279,7 @@ do 240 L = 1, N
    S = 0.0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       G = C * E(I)
       H = C * P
@@ -7298,19 +7298,19 @@ do 240 L = 1, N
 160 P = C * D(I) - S * G
       D(I+1) = H + S * (C * G + S * D(I))
 !     ********** FORM VECTOR **********
-      do 180 K = 1, N
+      DO K = 1, N
          H = Z(K,I+1)
          Z(K,I+1) = S * Z(K,I) + C * H
          Z(K,I) = C * Z(K,I) - S * H
-180 CONTINUE
+      END DO
 !
-200 CONTINUE
+   END DO
 !
    E(L) = S * P
    D(L) = C * P
    IF (ABS(E(L)) .GT. B) GO TO 130
 220 D(L) = D(L) + F
-240 CONTINUE
+END DO
 !     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
 do 300 II = 2, N
    I = II - 1
@@ -7327,11 +7327,11 @@ do 300 II = 2, N
    D(K) = D(I)
    D(I) = P
 !
-   do 280 J = 1, N
+   DO J = 1, N
       P = Z(J,I)
       Z(J,I) = Z(J,K)
       Z(J,K) = P
-280 CONTINUE
+   END DO
 !
 300 CONTINUE
 !
@@ -7419,11 +7419,11 @@ E(N) = 0.0
 do 240 L = 1, N
    J = 0
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
-105 do 110 M = L, N
+105 DO M = L, N
       IF (M .EQ. N) GO TO 120
       IF (ABS(E(M)) .LE. MACHEP * (ABS(D(M)) + ABS(D(M+1)))) &
 &GO TO 120
-110 CONTINUE
+   END DO
 !
 120 P = D(L)
    IF (M .EQ. L) GO TO 240
@@ -7439,7 +7439,7 @@ do 240 L = 1, N
    P = 0.0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       F = S * E(I)
       B = C * E(I)
@@ -7461,13 +7461,13 @@ do 240 L = 1, N
       D(I+1) = G + P
       G = C * R - B
 !     ********** FORM VECTOR **********
-      do 180 K = 1, N
+      DO K = 1, N
          F = Z(K,I+1)
          Z(K,I+1) = S * Z(K,I) + C * F
          Z(K,I) = C * Z(K,I) - S * F
-180 CONTINUE
+      END DO
 !
-200 CONTINUE
+   END DO
 !
    D(L) = D(L) - P
    E(L) = G
@@ -7490,11 +7490,11 @@ do 300 II = 2, N
    D(K) = D(I)
    D(I) = P
 !
-   do 280 J = 1, N
+   DO J = 1, N
       P = Z(J,I)
       Z(J,I) = Z(J,K)
       Z(J,K) = P
-280 CONTINUE
+   END DO
 !
 300 CONTINUE
 !
@@ -7583,7 +7583,7 @@ DOUBLE PRECISION F,G,H,SCALE
 do 100 I = 1, N
 100 D(I) = A(I,I)
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-do 300 II = 1, N
+DO II = 1, N
    I = N + 1 - II
    L = I - 1
    H = 0.D0
@@ -7598,10 +7598,10 @@ do 300 II = 1, N
    E2(I) = 0.D0
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       A(I,K) = A(I,K) / SCALE
       H = H + A(I,K) * A(I,K)
-150 CONTINUE
+   END DO
 !
    E2(I) = SCALE * SCALE * H
    F = A(I,L)
@@ -7613,7 +7613,7 @@ do 300 II = 1, N
    IF (L .EQ. 1) GO TO 270
    F = 0.D0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       G = 0.D0
 !     ********** FORM ELEMENT OF A*U **********
       do 180 K = 1, J
@@ -7627,7 +7627,7 @@ do 300 II = 1, N
 !     ********** FORM ELEMENT OF P **********
 220 E(J) = G / H
       F = F + E(J) * A(I,J)
-240 CONTINUE
+   END DO
 !
    H = F / (H + H)
 !     ********** FORM REDUCED A **********
@@ -7646,7 +7646,7 @@ do 300 II = 1, N
 290 H = D(I)
    D(I) = A(I,I)
    A(I,I) = H
-300 CONTINUE
+END DO
 !
 RETURN
 !     ********** LAST CARD OF DTRED1 **********
@@ -7695,7 +7695,7 @@ DOUBLE PRECISION F,G,H,HH,SCALE
 !-----------------------------------------------------------------------
 !
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-do 300 II = 1, N
+DO II = 1, N
    I = N + 1 - II
    L = I - 1
    IZ = (I * L) / 2
@@ -7703,21 +7703,21 @@ do 300 II = 1, N
    SCALE = 0.D0
    IF (L .LT. 1) GO TO 130
 !     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
-   do 120 K = 1, L
+   DO K = 1, L
       IZ = IZ + 1
       D(K) = A(IZ)
       SCALE = SCALE + DABS(D(K))
-120 CONTINUE
+   END DO
 !
    IF (SCALE .NE. 0.D0) GO TO 140
 130 E(I) = 0.D0
    E2(I) = 0.D0
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       D(K) = D(K) / SCALE
       H = H + D(K) * D(K)
-150 CONTINUE
+   END DO
 !
    E2(I) = SCALE * SCALE * H
    F = D(L)
@@ -7730,19 +7730,19 @@ do 300 II = 1, N
    IF (L .EQ. 1) GO TO 290
    F = 0.D0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       G = 0.D0
       JK = (J * (J-1)) / 2
 !     ********** FORM ELEMENT OF A*U **********
-      do 180 K = 1, L
+      DO K = 1, L
          JK = JK + 1
          IF (K .GT. J) JK = JK + K - 2
          G = G + A(JK) * D(K)
-180 CONTINUE
+      END DO
 !     ********** FORM ELEMENT OF P **********
       E(J) = G / H
       F = F + E(J) * D(J)
-240 CONTINUE
+   END DO
 !
    HH = F / (H + H)
    JK = 0
@@ -7759,7 +7759,7 @@ do 300 II = 1, N
 !
 290 D(I) = A(IZ+1)
    A(IZ+1) = SCALE * DSQRT(H)
-300 CONTINUE
+END DO
 !
 RETURN
 !     ********** LAST CARD OF DTRED3 **********
@@ -7822,18 +7822,18 @@ F = 0.D0
 B = 0.D0
 E2(N) = 0.D0
 !
-do 290 L = 1, N
+DO L = 1, N
    J = 0
    H = MACHEP * (DABS(D(L)) + DSQRT(E2(L)))
    IF (B .GT. H) GO TO 105
    B = H
    C = B * B
 !     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
-105 do 110 M = L, N
+105 DO M = L, N
       IF (E2(M) .LE. C) GO TO 120
 !     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-110 CONTINUE
+   END DO
 !
 120 IF (M .EQ. L) GO TO 210
 130 IF (J .EQ. 50) GO TO 1000
@@ -7859,7 +7859,7 @@ do 290 L = 1, N
    S = 0.D0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       P = G * H
       R = P + E2(I)
@@ -7869,7 +7869,7 @@ do 290 L = 1, N
       G = D(I) - E2(I) / G
       IF (G .EQ. 0.D0) G = B
       H = G * P / R
-200 CONTINUE
+   END DO
 !
    E2(L) = S * G
    D(L) = H
@@ -7882,15 +7882,15 @@ do 290 L = 1, N
 !     ********** ORDER EIGENVALUES **********
    IF (L .EQ. 1) GO TO 250
 !     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
-   do 230 II = 2, L
+   DO II = 2, L
       I = L + 2 - II
       IF (P .GE. D(I-1)) GO TO 270
       D(I) = D(I-1)
-230 CONTINUE
+   END DO
 !
 250 I = 1
 270 D(I) = P
-290 CONTINUE
+END DO
 !
 GO TO 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
@@ -7949,7 +7949,7 @@ do 100 I = 1, N
 !
 IF (N .EQ. 1) GO TO 320
 !     ********** FOR I=N STEP -1 UNTIL 2 DO -- **********
-do 300 II = 2, N
+DO II = 2, N
    I = N + 2 - II
    L = I - 1
    H = 0.D0
@@ -7963,10 +7963,10 @@ do 300 II = 2, N
 130 E(I) = Z(I,L)
    GO TO 290
 !
-140 do 150 K = 1, L
+140 DO K = 1, L
       Z(I,K) = Z(I,K) / SCALE
       H = H + Z(I,K) * Z(I,K)
-150 CONTINUE
+   END DO
 !
    F = Z(I,L)
    G = DSQRT(H)
@@ -7976,7 +7976,7 @@ do 300 II = 2, N
    Z(I,L) = F - G
    F = 0.D0
 !
-   do 240 J = 1, L
+   DO J = 1, L
       Z(J,I) = Z(I,J) / H
       G = 0.D0
 !     ********** FORM ELEMENT OF A*U **********
@@ -7991,7 +7991,7 @@ do 300 II = 2, N
 !     ********** FORM ELEMENT OF P **********
 220 E(J) = G / H
       F = F + E(J) * Z(I,J)
-240 CONTINUE
+   END DO
 !
    HH = F / (H + H)
 !     ********** FORM REDUCED A **********
@@ -8005,7 +8005,7 @@ do 300 II = 2, N
 260 CONTINUE
 !
 290 D(I) = H
-300 CONTINUE
+END DO
 !
 320 D(1) = 0.D0
 E(1) = 0.D0
@@ -8028,10 +8028,10 @@ do 500 I = 1, N
    Z(I,I) = 1.D0
    IF (L .LT. 1) GO TO 500
 !
-   do 400 J = 1, L
+   DO J = 1, L
       Z(I,J) = 0.D0
       Z(J,I) = 0.D0
-400 CONTINUE
+   END DO
 !
 500 CONTINUE
 !
@@ -8114,16 +8114,16 @@ F = 0.D0
 B = 0.D0
 E(N) = 0.D0
 !
-do 240 L = 1, N
+DO L = 1, N
    J = 0
    H = MACHEP * (DABS(D(L)) + DABS(E(L)))
    IF (B .LT. H) B = H
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
-   do 110 M = L, N
+   DO M = L, N
       IF (DABS(E(M)) .LE. B) GO TO 120
 !     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-110 CONTINUE
+   END DO
 !
 120 IF (M .EQ. L) GO TO 220
 130 IF (J .EQ. 50) GO TO 1000
@@ -8147,7 +8147,7 @@ do 240 L = 1, N
    S = 0.D0
    MML = M - L
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   do 200 II = 1, MML
+   DO II = 1, MML
       I = M - II
       G = C * E(I)
       H = C * P
@@ -8166,19 +8166,19 @@ do 240 L = 1, N
 160 P = C * D(I) - S * G
       D(I+1) = H + S * (C * G + S * D(I))
 !     ********** FORM VECTOR **********
-      do 180 K = 1, N
+      DO K = 1, N
          H = Z(K,I+1)
          Z(K,I+1) = S * Z(K,I) + C * H
          Z(K,I) = C * Z(K,I) - S * H
-180 CONTINUE
+      END DO
 !
-200 CONTINUE
+   END DO
 !
    E(L) = S * P
    D(L) = C * P
    IF (DABS(E(L)) .GT. B) GO TO 130
 220 D(L) = D(L) + F
-240 CONTINUE
+END DO
 !     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
 do 300 II = 2, N
    I = II - 1
@@ -8195,11 +8195,11 @@ do 300 II = 2, N
    D(K) = D(I)
    D(I) = P
 !
-   do 280 J = 1, N
+   DO J = 1, N
       P = Z(J,I)
       Z(J,I) = Z(J,K)
       Z(J,K) = P
-280 CONTINUE
+   END DO
 !
 300 CONTINUE
 !
@@ -8323,23 +8323,23 @@ GO TO 100
 20 SCALE(M) = J
 IF (J .EQ. M) GO TO 50
 !
-do 30 I = 1, L
+DO I = 1, L
    F = AR(I,J)
    AR(I,J) = AR(I,M)
    AR(I,M) = F
    F = AI(I,J)
    AI(I,J) = AI(I,M)
    AI(I,M) = F
-30 CONTINUE
+END DO
 !
-do 40 I = K, N
+DO I = K, N
    F = AR(J,I)
    AR(J,I) = AR(M,I)
    AR(M,I) = F
    F = AI(J,I)
    AI(J,I) = AI(M,I)
    AI(M,I) = F
-40 CONTINUE
+END DO
 !
 50 GO TO (80,130), IEXC
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
@@ -8411,15 +8411,15 @@ do 270 I = K, L
    SCALE(I) = SCALE(I) * F
    NOCONV = .TRUE.
 !
-   do 250 J = K, N
+   DO J = K, N
       AR(I,J) = AR(I,J) * G
       AI(I,J) = AI(I,J) * G
-250 CONTINUE
+   END DO
 !
-   do 260 J = 1, L
+   DO J = 1, L
       AR(J,I) = AR(J,I) * F
       AI(J,I) = AI(J,I) * F
-260 CONTINUE
+   END DO
 !
 270 CONTINUE
 !
@@ -8493,12 +8493,12 @@ do 180 M = KP1, LA
    IF (SCALE .EQ. 0.0) GO TO 180
    MP = M + IGH
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   do 100 II = M, IGH
+   DO II = M, IGH
       I = MP - II
       ORTR(I) = AR(I,M-1) / SCALE
       ORTI(I) = AI(I,M-1) / SCALE
       H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
-100 CONTINUE
+   END DO
 !
    G = SQRT(H)
    F = CABS(CMPLX(ORTR(M),ORTI(M)))
@@ -8512,45 +8512,45 @@ do 180 M = KP1, LA
 103 ORTR(M) = G
    AR(M,M-1) = SCALE
 !     ********** FORM (I-(U*UT)/H) * A **********
-105 do 130 J = M, N
+105 DO J = M, N
       FR = 0.0
       FI = 0.0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      do 110 II = M, IGH
+      DO II = M, IGH
          I = MP - II
          FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
          FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
-110 CONTINUE
+      END DO
 !
       FR = FR / H
       FI = FI / H
 !
-      do 120 I = M, IGH
+      DO I = M, IGH
          AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
          AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
-120 CONTINUE
+      END DO
 !
-130 CONTINUE
+   END DO
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   do 160 I = 1, IGH
+   DO I = 1, IGH
       FR = 0.0
       FI = 0.0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      do 140 JJ = M, IGH
+      DO JJ = M, IGH
          J = MP - JJ
          FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
          FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
-140 CONTINUE
+      END DO
 !
       FR = FR / H
       FI = FI / H
 !
-      do 150 J = M, IGH
+      DO J = M, IGH
          AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
          AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
-150 CONTINUE
+      END DO
 !
-160 CONTINUE
+   END DO
 !
    ORTR(M) = SCALE * ORTR(M)
    ORTI(M) = SCALE * ORTI(M)
@@ -8646,17 +8646,17 @@ do 170 I = L, IGH
    HR(I,I-1) = NORM
    HI(I,I-1) = 0.0
 !
-   do 155 J = I, IGH
+   DO J = I, IGH
       SI = YR * HI(I,J) - YI * HR(I,J)
       HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
       HI(I,J) = SI
-155 CONTINUE
+   END DO
 !
-   do 160 J = LOW, LL
+   DO J = LOW, LL
       SI = YR * HI(J,I) + YI * HR(J,I)
       HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
       HI(J,I) = SI
-160 CONTINUE
+   END DO
 !
 170 CONTINUE
 !     ********** STORE ROOTS ISOLATED BY CBAL **********
@@ -8675,13 +8675,13 @@ ITS = 0
 ENM1 = EN - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW  -- **********
-240 do 260 LL = LOW, EN
+240 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 300
    IF (ABS(HR(L,L-1)) .LE. &
 &MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
 &+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
-260 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 300 IF (L .EQ. EN) GO TO 660
 IF (ITS .EQ. 30) GO TO 1000
@@ -8707,10 +8707,10 @@ GO TO 340
 320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
 SI = 0.0
 !
-340 do 360 I = LOW, EN
+340 DO I = LOW, EN
    HR(I,I) = HR(I,I) - SR
    HI(I,I) = HI(I,I) - SI
-360 CONTINUE
+END DO
 !
 TR = TR + SR
 TI = TI + SI
@@ -8718,7 +8718,7 @@ ITS = ITS + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
 LP1 = L + 1
 !
-do 500 I = LP1, EN
+DO I = LP1, EN
    SR = HR(I,I-1)
    HR(I,I-1) = 0.0
    NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
@@ -8731,7 +8731,7 @@ do 500 I = LP1, EN
    HI(I-1,I-1) = 0.0
    HI(I,I-1) = SR / NORM
 !
-   do 490 J = I, EN
+   DO J = I, EN
       YR = HR(I-1,J)
       YI = HI(I-1,J)
       ZZR = HR(I,J)
@@ -8740,9 +8740,9 @@ do 500 I = LP1, EN
       HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
       HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
       HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-490 CONTINUE
+   END DO
 !
-500 CONTINUE
+END DO
 !
 SI = HI(EN,EN)
 IF (SI .EQ. 0.0) GO TO 540
@@ -8752,11 +8752,11 @@ SI = SI / NORM
 HR(EN,EN) = NORM
 HI(EN,EN) = 0.0
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 do 600 J = LP1, EN
+540 DO J = LP1, EN
    XR = WR(J-1)
    XI = WI(J-1)
 !
-   do 580 I = L, J
+   DO I = L, J
       YR = HR(I,J-1)
       YI = 0.0
       ZZR = HR(I,J)
@@ -8767,18 +8767,18 @@ HI(EN,EN) = 0.0
 560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
       HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-580 CONTINUE
+   END DO
 !
-600 CONTINUE
+END DO
 !
 IF (SI .EQ. 0.0) GO TO 240
 !
-do 630 I = L, EN
+DO I = L, EN
    YR = HR(I,EN)
    YI = HI(I,EN)
    HR(I,EN) = SR * YR - SI * YI
    HI(I,EN) = SR * YI + SI * YR
-630 CONTINUE
+END DO
 !
 GO TO 240
 !     ********** A ROOT FOUND **********
@@ -8838,17 +8838,17 @@ REAL S
 IF (M .EQ. 0) GO TO 200
 IF (IGH .EQ. LOW) GO TO 120
 !
-do 110 I = LOW, IGH
+DO I = LOW, IGH
    S = SCALE(I)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
 !                S=1.0/SCALE(I). **********
-   do 100 J = 1, M
+   DO J = 1, M
       ZR(I,J) = ZR(I,J) * S
       ZI(I,J) = ZI(I,J) * S
-100 CONTINUE
+   END DO
 !
-110 CONTINUE
+END DO
 !     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
 !                IGH+1 STEP 1 UNTIL N DO -- **********
 120 do 140 II = 1, N
@@ -8858,14 +8858,14 @@ do 110 I = LOW, IGH
    K = SCALE(I)
    IF (K .EQ. I) GO TO 140
 !
-   do 130 J = 1, M
+   DO J = 1, M
       S = ZR(I,J)
       ZR(I,J) = ZR(K,J)
       ZR(K,J) = S
       S = ZI(I,J)
       ZI(I,J) = ZI(K,J)
       ZI(K,J) = S
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -8981,29 +8981,29 @@ IF (IEND) 180, 150, 105
    NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
    IP1 = I + 1
 !
-   do 110 K = IP1, IGH
+   DO K = IP1, IGH
       ORTR(K) = HR(K,I-1)
       ORTI(K) = HI(K,I-1)
-110 CONTINUE
+   END DO
 !
-   do 130 J = I, IGH
+   DO J = I, IGH
       SR = 0.0
       SI = 0.0
 !
-      do 115 K = I, IGH
+      DO K = I, IGH
          SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
          SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-115 CONTINUE
+      END DO
 !
       SR = SR / NORM
       SI = SI / NORM
 !
-      do 120 K = I, IGH
+      DO K = I, IGH
          ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
          ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-120 CONTINUE
+      END DO
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
@@ -9018,23 +9018,23 @@ do 170 I = L, IGH
    HR(I,I-1) = NORM
    HI(I,I-1) = 0.0
 !
-   do 155 J = I, N
+   DO J = I, N
       SI = YR * HI(I,J) - YI * HR(I,J)
       HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
       HI(I,J) = SI
-155 CONTINUE
+   END DO
 !
-   do 160 J = 1, LL
+   DO J = 1, LL
       SI = YR * HI(J,I) + YI * HR(J,I)
       HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
       HI(J,I) = SI
-160 CONTINUE
+   END DO
 !
-   do 165 J = LOW, IGH
+   DO J = LOW, IGH
       SI = YR * ZI(J,I) + YI * ZR(J,I)
       ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
       ZI(J,I) = SI
-165 CONTINUE
+   END DO
 !
 170 CONTINUE
 !     ********** STORE ROOTS ISOLATED BY CBAL **********
@@ -9053,13 +9053,13 @@ ITS = 0
 ENM1 = EN - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 do 260 LL = LOW, EN
+240 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 300
    IF (ABS(HR(L,L-1)) .LE. &
 &MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
 &+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
-260 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 300 IF (L .EQ. EN) GO TO 660
 IF (ITS .EQ. 30) GO TO 1000
@@ -9085,10 +9085,10 @@ GO TO 340
 320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
 SI = 0.0
 !
-340 do 360 I = LOW, EN
+340 DO I = LOW, EN
    HR(I,I) = HR(I,I) - SR
    HI(I,I) = HI(I,I) - SI
-360 CONTINUE
+END DO
 !
 TR = TR + SR
 TI = TI + SI
@@ -9096,7 +9096,7 @@ ITS = ITS + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
 LP1 = L + 1
 !
-do 500 I = LP1, EN
+DO I = LP1, EN
    SR = HR(I,I-1)
    HR(I,I-1) = 0.0
    NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
@@ -9109,7 +9109,7 @@ do 500 I = LP1, EN
    HI(I-1,I-1) = 0.0
    HI(I,I-1) = SR / NORM
 !
-   do 490 J = I, N
+   DO J = I, N
       YR = HR(I-1,J)
       YI = HI(I-1,J)
       ZZR = HR(I,J)
@@ -9118,9 +9118,9 @@ do 500 I = LP1, EN
       HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
       HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
       HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-490 CONTINUE
+   END DO
 !
-500 CONTINUE
+END DO
 !
 SI = HI(EN,EN)
 IF (SI .EQ. 0.0) GO TO 540
@@ -9132,18 +9132,18 @@ HI(EN,EN) = 0.0
 IF (EN .EQ. N) GO TO 540
 IP1 = EN + 1
 !
-do 520 J = IP1, N
+DO J = IP1, N
    YR = HR(EN,J)
    YI = HI(EN,J)
    HR(EN,J) = SR * YR + SI * YI
    HI(EN,J) = SR * YI - SI * YR
-520 CONTINUE
+END DO
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 do 600 J = LP1, EN
+540 DO J = LP1, EN
    XR = WR(J-1)
    XI = WI(J-1)
 !
-   do 580 I = 1, J
+   DO I = 1, J
       YR = HR(I,J-1)
       YI = 0.0
       ZZR = HR(I,J)
@@ -9154,9 +9154,9 @@ do 520 J = IP1, N
 560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
       HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-580 CONTINUE
+   END DO
 !
-   do 590 I = LOW, IGH
+   DO I = LOW, IGH
       YR = ZR(I,J-1)
       YI = ZI(I,J-1)
       ZZR = ZR(I,J)
@@ -9165,25 +9165,25 @@ do 520 J = IP1, N
       ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
       ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-590 CONTINUE
+   END DO
 !
-600 CONTINUE
+END DO
 !
 IF (SI .EQ. 0.0) GO TO 240
 !
-do 630 I = 1, EN
+DO I = 1, EN
    YR = HR(I,EN)
    YI = HI(I,EN)
    HR(I,EN) = SR * YR - SI * YI
    HI(I,EN) = SR * YI + SI * YR
-630 CONTINUE
+END DO
 !
-do 640 I = LOW, IGH
+DO I = LOW, IGH
    YR = ZR(I,EN)
    YI = ZI(I,EN)
    ZR(I,EN) = SR * YR - SI * YI
    ZI(I,EN) = SR * YI + SI * YR
-640 CONTINUE
+END DO
 !
 GO TO 240
 !     ********** A ROOT FOUND **********
@@ -9205,23 +9205,23 @@ do 720 I = 1, N
 !
 IF (N .EQ. 1 .OR. NORM .EQ. 0.0) GO TO 1001
 !     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-do 800 NN = 2, N
+DO NN = 2, N
    EN = N + 2 - NN
    XR = WR(EN)
    XI = WI(EN)
    ENM1 = EN - 1
 !     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   do 780 II = 1, ENM1
+   DO II = 1, ENM1
       I = EN - II
       ZZR = HR(I,EN)
       ZZI = HI(I,EN)
       IF (I .EQ. ENM1) GO TO 760
       IP1 = I + 1
 !
-      do 740 J = IP1, ENM1
+      DO J = IP1, ENM1
          ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
          ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-740 CONTINUE
+      END DO
 !
 760 YR = XR - WR(I)
       YI = XI - WI(I)
@@ -9229,9 +9229,9 @@ do 800 NN = 2, N
       Z3 = CMPLX(ZZR,ZZI) / CMPLX(YR,YI)
       HR(I,EN) = REAL(Z3)
       HI(I,EN) = AIMAG(Z3)
-780 CONTINUE
+   END DO
 !
-800 CONTINUE
+END DO
 !     ********** END BACKSUBSTITUTION **********
 ENM1 = N - 1
 !     ********** VECTORS OF ISOLATED ROOTS **********
@@ -9239,10 +9239,10 @@ do 840 I = 1, ENM1
    IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
    IP1 = I + 1
 !
-   do 820 J = IP1, N
+   DO J = IP1, N
       ZR(I,J) = HR(I,J)
       ZI(I,J) = HI(I,J)
-820 CONTINUE
+   END DO
 !
 840 CONTINUE
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
@@ -9256,10 +9256,10 @@ do 880 JJ = LOW, ENM1
       ZZR = ZR(I,J)
       ZZI = ZI(I,J)
 !
-      do 860 K = LOW, M
+      DO K = LOW, M
          ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
          ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-860 CONTINUE
+      END DO
 !
       ZR(I,J) = ZZR
       ZI(I,J) = ZZI
@@ -9387,23 +9387,23 @@ GO TO 100
 20 SCALE(M) = J
 IF (J .EQ. M) GO TO 50
 !
-do 30 I = 1, L
+DO I = 1, L
    F = AR(I,J)
    AR(I,J) = AR(I,M)
    AR(I,M) = F
    F = AI(I,J)
    AI(I,J) = AI(I,M)
    AI(I,M) = F
-30 CONTINUE
+END DO
 !
-do 40 I = K, N
+DO I = K, N
    F = AR(J,I)
    AR(J,I) = AR(M,I)
    AR(M,I) = F
    F = AI(J,I)
    AI(J,I) = AI(M,I)
    AI(M,I) = F
-40 CONTINUE
+END DO
 !
 50 GO TO (80,130), IEXC
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
@@ -9475,15 +9475,15 @@ do 270 I = K, L
    SCALE(I) = SCALE(I) * F
    NOCONV = .TRUE.
 !
-   do 250 J = K, N
+   DO J = K, N
       AR(I,J) = AR(I,J) * G
       AI(I,J) = AI(I,J) * G
-250 CONTINUE
+   END DO
 !
-   do 260 J = 1, L
+   DO J = 1, L
       AR(J,I) = AR(J,I) * F
       AI(J,I) = AI(J,I) * F
-260 CONTINUE
+   END DO
 !
 270 CONTINUE
 !
@@ -9556,12 +9556,12 @@ do 180 M = KP1, LA
    IF (SCALE .EQ. 0.D0) GO TO 180
    MP = M + IGH
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   do 100 II = M, IGH
+   DO II = M, IGH
       I = MP - II
       ORTR(I) = AR(I,M-1) / SCALE
       ORTI(I) = AI(I,M-1) / SCALE
       H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
-100 CONTINUE
+   END DO
 !
    G = DSQRT(H)
    F = DCPABS(ORTR(M),ORTI(M))
@@ -9575,45 +9575,45 @@ do 180 M = KP1, LA
 103 ORTR(M) = G
    AR(M,M-1) = SCALE
 !     ********** FORM (I-(U*UT)/H) * A **********
-105 do 130 J = M, N
+105 DO J = M, N
       FR = 0.D0
       FI = 0.D0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      do 110 II = M, IGH
+      DO II = M, IGH
          I = MP - II
          FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
          FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
-110 CONTINUE
+      END DO
 !
       FR = FR / H
       FI = FI / H
 !
-      do 120 I = M, IGH
+      DO I = M, IGH
          AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
          AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
-120 CONTINUE
+      END DO
 !
-130 CONTINUE
+   END DO
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   do 160 I = 1, IGH
+   DO I = 1, IGH
       FR = 0.D0
       FI = 0.D0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      do 140 JJ = M, IGH
+      DO JJ = M, IGH
          J = MP - JJ
          FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
          FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
-140 CONTINUE
+      END DO
 !
       FR = FR / H
       FI = FI / H
 !
-      do 150 J = M, IGH
+      DO J = M, IGH
          AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
          AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
-150 CONTINUE
+      END DO
 !
-160 CONTINUE
+   END DO
 !
    ORTR(M) = SCALE * ORTR(M)
    ORTI(M) = SCALE * ORTI(M)
@@ -9702,17 +9702,17 @@ do 170 I = L, IGH
    HR(I,I-1) = NORM
    HI(I,I-1) = 0.D0
 !
-   do 155 J = I, IGH
+   DO J = I, IGH
       SI = YR * HI(I,J) - YI * HR(I,J)
       HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
       HI(I,J) = SI
-155 CONTINUE
+   END DO
 !
-   do 160 J = LOW, LL
+   DO J = LOW, LL
       SI = YR * HI(J,I) + YI * HR(J,I)
       HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
       HI(J,I) = SI
-160 CONTINUE
+   END DO
 !
 170 CONTINUE
 !     ********** STORE ROOTS ISOLATED BY DCBAL **********
@@ -9731,13 +9731,13 @@ ITS = 0
 ENM1 = EN - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW  -- **********
-240 do 260 LL = LOW, EN
+240 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 300
    IF (DABS(HR(L,L-1)) .LE. &
 &MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
 &+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-260 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 300 IF (L .EQ. EN) GO TO 660
 IF (ITS .EQ. 50) GO TO 1000
@@ -9767,10 +9767,10 @@ GO TO 340
 320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
 SI = 0.D0
 !
-340 do 360 I = LOW, EN
+340 DO I = LOW, EN
    HR(I,I) = HR(I,I) - SR
    HI(I,I) = HI(I,I) - SI
-360 CONTINUE
+END DO
 !
 TR = TR + SR
 TI = TI + SI
@@ -9778,7 +9778,7 @@ ITS = ITS + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
 LP1 = L + 1
 !
-do 500 I = LP1, EN
+DO I = LP1, EN
    SR = HR(I,I-1)
    HR(I,I-1) = 0.D0
    NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
@@ -9791,7 +9791,7 @@ do 500 I = LP1, EN
    HI(I-1,I-1) = 0.D0
    HI(I,I-1) = SR / NORM
 !
-   do 490 J = I, EN
+   DO J = I, EN
       YR = HR(I-1,J)
       YI = HI(I-1,J)
       ZZR = HR(I,J)
@@ -9800,9 +9800,9 @@ do 500 I = LP1, EN
       HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
       HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
       HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-490 CONTINUE
+   END DO
 !
-500 CONTINUE
+END DO
 !
 SI = HI(EN,EN)
 IF (SI .EQ. 0.D0) GO TO 540
@@ -9812,11 +9812,11 @@ SI = SI / NORM
 HR(EN,EN) = NORM
 HI(EN,EN) = 0.D0
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 do 600 J = LP1, EN
+540 DO J = LP1, EN
    XR = WR(J-1)
    XI = WI(J-1)
 !
-   do 580 I = L, J
+   DO I = L, J
       YR = HR(I,J-1)
       YI = 0.D0
       ZZR = HR(I,J)
@@ -9827,18 +9827,18 @@ HI(EN,EN) = 0.D0
 560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
       HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-580 CONTINUE
+   END DO
 !
-600 CONTINUE
+END DO
 !
 IF (SI .EQ. 0.D0) GO TO 240
 !
-do 630 I = L, EN
+DO I = L, EN
    YR = HR(I,EN)
    YI = HI(I,EN)
    HR(I,EN) = SR * YR - SI * YI
    HI(I,EN) = SR * YI + SI * YR
-630 CONTINUE
+END DO
 !
 GO TO 240
 !     ********** A ROOT FOUND **********
@@ -9897,17 +9897,17 @@ DOUBLE PRECISION S
 IF (M .EQ. 0) GO TO 200
 IF (IGH .EQ. LOW) GO TO 120
 !
-do 110 I = LOW, IGH
+DO I = LOW, IGH
    S = SCALE(I)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
 !                S=1.0/SCALE(I). **********
-   do 100 J = 1, M
+   DO J = 1, M
       ZR(I,J) = ZR(I,J) * S
       ZI(I,J) = ZI(I,J) * S
-100 CONTINUE
+   END DO
 !
-110 CONTINUE
+END DO
 !
 !     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
 !                IGH+1 STEP 1 UNTIL N DO -- **********
@@ -9918,14 +9918,14 @@ do 110 I = LOW, IGH
    K = SCALE(I)
    IF (K .EQ. I) GO TO 140
 !
-   do 130 J = 1, M
+   DO J = 1, M
       S = ZR(I,J)
       ZR(I,J) = ZR(K,J)
       ZR(K,J) = S
       S = ZI(I,J)
       ZI(I,J) = ZI(K,J)
       ZI(K,J) = S
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !
@@ -10034,29 +10034,29 @@ IF (IEND) 180, 150, 105
    NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
    IP1 = I + 1
 !
-   do 110 K = IP1, IGH
+   DO K = IP1, IGH
       ORTR(K) = HR(K,I-1)
       ORTI(K) = HI(K,I-1)
-110 CONTINUE
+   END DO
 !
-   do 130 J = I, IGH
+   DO J = I, IGH
       SR = 0.D0
       SI = 0.D0
 !
-      do 115 K = I, IGH
+      DO K = I, IGH
          SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
          SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-115 CONTINUE
+      END DO
 !
       SR = SR / NORM
       SI = SI / NORM
 !
-      do 120 K = I, IGH
+      DO K = I, IGH
          ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
          ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-120 CONTINUE
+      END DO
 !
-130 CONTINUE
+   END DO
 !
 140 CONTINUE
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
@@ -10071,23 +10071,23 @@ do 170 I = L, IGH
    HR(I,I-1) = NORM
    HI(I,I-1) = 0.D0
 !
-   do 155 J = I, N
+   DO J = I, N
       SI = YR * HI(I,J) - YI * HR(I,J)
       HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
       HI(I,J) = SI
-155 CONTINUE
+   END DO
 !
-   do 160 J = 1, LL
+   DO J = 1, LL
       SI = YR * HI(J,I) + YI * HR(J,I)
       HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
       HI(J,I) = SI
-160 CONTINUE
+   END DO
 !
-   do 165 J = LOW, IGH
+   DO J = LOW, IGH
       SI = YR * ZI(J,I) + YI * ZR(J,I)
       ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
       ZI(J,I) = SI
-165 CONTINUE
+   END DO
 !
 170 CONTINUE
 !     ********** STORE ROOTS ISOLATED BY DCBAL **********
@@ -10106,13 +10106,13 @@ ITS = 0
 ENM1 = EN - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 do 260 LL = LOW, EN
+240 DO LL = LOW, EN
    L = EN + LOW - LL
    IF (L .EQ. LOW) GO TO 300
    IF (DABS(HR(L,L-1)) .LE. &
 &MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
 &+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-260 CONTINUE
+END DO
 !     ********** FORM SHIFT **********
 300 IF (L .EQ. EN) GO TO 660
 IF (ITS .EQ. 50) GO TO 1000
@@ -10142,10 +10142,10 @@ GO TO 340
 320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
 SI = 0.D0
 !
-340 do 360 I = LOW, EN
+340 DO I = LOW, EN
    HR(I,I) = HR(I,I) - SR
    HI(I,I) = HI(I,I) - SI
-360 CONTINUE
+END DO
 !
 TR = TR + SR
 TI = TI + SI
@@ -10153,7 +10153,7 @@ ITS = ITS + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
 LP1 = L + 1
 !
-do 500 I = LP1, EN
+DO I = LP1, EN
    SR = HR(I,I-1)
    HR(I,I-1) = 0.D0
    NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
@@ -10166,7 +10166,7 @@ do 500 I = LP1, EN
    HI(I-1,I-1) = 0.D0
    HI(I,I-1) = SR / NORM
 !
-   do 490 J = I, N
+   DO J = I, N
       YR = HR(I-1,J)
       YI = HI(I-1,J)
       ZZR = HR(I,J)
@@ -10175,9 +10175,9 @@ do 500 I = LP1, EN
       HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
       HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
       HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-490 CONTINUE
+   END DO
 !
-500 CONTINUE
+END DO
 !
 SI = HI(EN,EN)
 IF (SI .EQ. 0.D0) GO TO 540
@@ -10189,18 +10189,18 @@ HI(EN,EN) = 0.D0
 IF (EN .EQ. N) GO TO 540
 IP1 = EN + 1
 !
-do 520 J = IP1, N
+DO J = IP1, N
    YR = HR(EN,J)
    YI = HI(EN,J)
    HR(EN,J) = SR * YR + SI * YI
    HI(EN,J) = SR * YI - SI * YR
-520 CONTINUE
+END DO
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 do 600 J = LP1, EN
+540 DO J = LP1, EN
    XR = WR(J-1)
    XI = WI(J-1)
 !
-   do 580 I = 1, J
+   DO I = 1, J
       YR = HR(I,J-1)
       YI = 0.D0
       ZZR = HR(I,J)
@@ -10211,9 +10211,9 @@ do 520 J = IP1, N
 560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
       HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-580 CONTINUE
+   END DO
 !
-   do 590 I = LOW, IGH
+   DO I = LOW, IGH
       YR = ZR(I,J-1)
       YI = ZI(I,J-1)
       ZZR = ZR(I,J)
@@ -10222,25 +10222,25 @@ do 520 J = IP1, N
       ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
       ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
       ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-590 CONTINUE
+   END DO
 !
-600 CONTINUE
+END DO
 !
 IF (SI .EQ. 0.D0) GO TO 240
 !
-do 630 I = 1, EN
+DO I = 1, EN
    YR = HR(I,EN)
    YI = HI(I,EN)
    HR(I,EN) = SR * YR - SI * YI
    HI(I,EN) = SR * YI + SI * YR
-630 CONTINUE
+END DO
 !
-do 640 I = LOW, IGH
+DO I = LOW, IGH
    YR = ZR(I,EN)
    YI = ZI(I,EN)
    ZR(I,EN) = SR * YR - SI * YI
    ZI(I,EN) = SR * YI + SI * YR
-640 CONTINUE
+END DO
 !
 GO TO 240
 !     ********** A ROOT FOUND **********
@@ -10262,23 +10262,23 @@ do 720 I = 1, N
 !
 IF (N .EQ. 1 .OR. NORM .EQ. 0.D0) GO TO 1001
 !     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-do 800 NN = 2, N
+DO NN = 2, N
    EN = N + 2 - NN
    XR = WR(EN)
    XI = WI(EN)
    ENM1 = EN - 1
 !     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   do 780 II = 1, ENM1
+   DO II = 1, ENM1
       I = EN - II
       ZZR = HR(I,EN)
       ZZI = HI(I,EN)
       IF (I .EQ. ENM1) GO TO 760
       IP1 = I + 1
 !
-      do 740 J = IP1, ENM1
+      DO J = IP1, ENM1
          ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
          ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-740 CONTINUE
+      END DO
 !
 760 YR = XR - WR(I)
       YI = XI - WI(I)
@@ -10286,9 +10286,9 @@ do 800 NN = 2, N
       R2 = YR*YR + YI*YI
       HR(I,EN) = (ZZR*YR + ZZI*YI)/R2
       HI(I,EN) = (ZZI*YR - ZZR*YI)/R2
-780 CONTINUE
+   END DO
 !
-800 CONTINUE
+END DO
 !     ********** END BACKSUBSTITUTION **********
 ENM1 = N - 1
 !     ********** VECTORS OF ISOLATED ROOTS **********
@@ -10296,10 +10296,10 @@ do 840 I = 1, ENM1
    IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
    IP1 = I + 1
 !
-   do 820 J = IP1, N
+   DO J = IP1, N
       ZR(I,J) = HR(I,J)
       ZI(I,J) = HI(I,J)
-820 CONTINUE
+   END DO
 !
 840 CONTINUE
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
@@ -10313,10 +10313,10 @@ do 880 JJ = LOW, ENM1
       ZZR = ZR(I,J)
       ZZI = ZI(I,J)
 !
-      do 860 K = LOW, M
+      DO K = LOW, M
          ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
          ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-860 CONTINUE
+      END DO
 !
       ZR(I,J) = ZZR
       ZI(I,J) = ZZI
@@ -10478,39 +10478,39 @@ ITER = 0
 JS = 1
 IA = 0
 ! SET UP LABELS IN Q.
-do 10 J = 1,N
+DO J=1,N
    Q(KLM2,J) = J
-10 CONTINUE
+END DO
 do 30 I = 1,KLM
    Q(I,N2) = N + I
    IF (Q(I,N1).GE.0.) GO TO 30
-   do 20 J = 1,N2
+   DO J=1,N2
       Q(I,J) = -Q(I,J)
-20 CONTINUE
+   END DO
 30 CONTINUE
 ! SET UP PHASE 1 COSTS.
 IPHASE = 2
-do 40 J = 1,NKLM
+DO J=1,NKLM
    CU(1,J) = 0.
    CU(2,J) = 0.
    IU(1,J) = 0
    IU(2,J) = 0
-40 CONTINUE
+END DO
 IF (L.EQ.0) GO TO 60
-do 50 J = NK1,NKL
+DO J=NK1,NKL
    CU(1,J) = 1.
    CU(2,J) = 1.
    IU(1,J) = 1
    IU(2,J) = 1
-50 CONTINUE
+END DO
 IPHASE = 1
 60 IF (M.EQ.0) GO TO 80
-do 70 J = NKL1,NKLM
+DO J=NKL1,NKLM
    CU(2,J) = 1.
    IU(2,J) = 1
    JMN = J - N
    IF (Q(JMN,N2).LT.0.) IPHASE = 1
-70 CONTINUE
+END DO
 80 IF (KODE.EQ.0) GO TO 150
 do 110 J = 1,N
    IF (X(J)) 90, 110, 100
@@ -10533,9 +10533,9 @@ do 140 J = 1,K
 140 CONTINUE
 150 IF (IPHASE.EQ.2) GO TO 500
 ! COMPUTE THE MARGINAL COSTS.
-160 do 200 J = JS,N1
+160 DO J=JS,N1
    SUM = 0.D0
-   do 190 I = 1,KLM
+   DO I=1,KLM
       II = Q(I,N2)
       IF (II.LT.0) GO TO 170
       Z = CU(1,II)
@@ -10543,10 +10543,10 @@ do 140 J = 1,K
 170 IINEG = -II
       Z = CU(2,IINEG)
 180 SUM = SUM + DBLE(Q(I,J))*DBLE(Z)
-190 CONTINUE
+   END DO
    Q(KLM1,J) = SUM
-200 CONTINUE
-do 230 J = JS,N
+END DO
+DO J=JS,N
    II = Q(KLM2,J)
    IF (II.LT.0) GO TO 210
    Z = CU(1,II)
@@ -10554,7 +10554,7 @@ do 230 J = JS,N
 210 IINEG = -II
    Z = CU(2,IINEG)
 220 Q(KLM1,J) = Q(KLM1,J) - Z
-230 CONTINUE
+END DO
 ! DETERMINE THE VECTOR TO ENTER THE BASIS.
 240 XMAX = 0.
 IF (JS.GT.N) GO TO 490
@@ -10579,9 +10579,9 @@ do 280 J = JS,N
 280 CONTINUE
 IF (XMAX.LE.TOLER) GO TO 490
 IF (Q(KLM1,IN).EQ.XMAX) GO TO 300
-do 290 I = 1,KLM2
+DO I=1,KLM2
    Q(I,IN) = -Q(I,IN)
-290 CONTINUE
+END DO
 Q(KLM1,IN) = XMAX
 ! DETERMINE THE VECTOR TO LEAVE THE BASIS.
 300 IF (IPHASE.EQ.1 .OR. IA.EQ.0) GO TO 330
@@ -10593,11 +10593,11 @@ do 310 I = 1,IA
    IOUT = I
 310 CONTINUE
 IF (XMAX.LE.TOLER) GO TO 330
-do 320 J = 1,N2
+DO J=1,N2
    Z = Q(IA,J)
    Q(IA,J) = Q(IOUT,J)
    Q(IOUT,J) = Z
-320 CONTINUE
+END DO
 IOUT = IA
 IA = IA - 1
 PIVOT = Q(IOUT,IN)
@@ -10638,11 +10638,11 @@ IF (IU(1,IINEG).EQ.1) GO TO 420
 CUV = CU(1,II) + CU(2,II)
 IF (Q(KLM1,IN)-PIVOT*CUV.LE.TOLER) GO TO 420
 ! BYPASS INTERMEDIATE VERTICES.
-do 410 J = JS,N1
+DO J=JS,N1
    Z = Q(IOUT,J)
    Q(KLM1,J) = Q(KLM1,J) - Z*CUV
    Q(IOUT,J) = -Z
-410 CONTINUE
+END DO
 Q(IOUT,N2) = -Q(IOUT,N2)
 GO TO 350
 ! GAUSS-JORDAN ELIMINATION.
@@ -10650,9 +10650,9 @@ GO TO 350
 KODE = 3
 GO TO 590
 430 ITER = ITER + 1
-do 440 J = JS,N1
+DO J=JS,N1
    IF (J.NE.IN) Q(IOUT,J) = Q(IOUT,J)/PIVOT
-440 CONTINUE
+END DO
 ! IF PERMITTED, USE SUBROUTINE COL OF THE DESCRIPTION
 ! SECTION AND REPLACE THE FOLLOWING SEVEN STATEMENTS DOWN
 ! TO AND INCLUDING STATEMENT NUMBER 460 BY..
@@ -10664,25 +10664,25 @@ do 440 J = JS,N1
 do 460 J = JS,N1
    IF (J.EQ.IN) GO TO 460
    Z = -Q(IOUT,J)
-   do 450 I = 1,KLM1
+   DO I=1,KLM1
       IF (I.NE.IOUT) Q(I,J) = Q(I,J) + Z*Q(I,IN)
-450 CONTINUE
+   END DO
 460 CONTINUE
 TPIVOT = -PIVOT
-do 470 I = 1,KLM1
+DO I=1,KLM1
    IF (I.NE.IOUT) Q(I,IN) = Q(I,IN)/TPIVOT
-470 CONTINUE
+END DO
 Q(IOUT,IN) = 1./PIVOT
 Z = Q(IOUT,N2)
 Q(IOUT,N2) = Q(KLM2,IN)
 Q(KLM2,IN) = Z
 II = ABS(Z)
 IF (IU(1,II).EQ.0 .OR. IU(2,II).EQ.0) GO TO 240
-do 480 I = 1,KLM2
+DO I=1,KLM2
    Z = Q(I,IN)
    Q(I,IN) = Q(I,JS)
    Q(I,JS) = Z
-480 CONTINUE
+END DO
 JS = JS + 1
 GO TO 240
 ! TEST FOR OPTIMALITY.
@@ -10692,14 +10692,14 @@ KFORCE = 0
 GO TO 240
 ! SET UP PHASE 2 COSTS.
 500 IPHASE = 2
-do 510 J = 1,NKLM
+DO J=1,NKLM
    CU(1,J) = 0.
    CU(2,J) = 0.
-510 CONTINUE
-do 520 J = N1,NK
+END DO
+DO J=N1,NK
    CU(1,J) = 1.
    CU(2,J) = 1.
-520 CONTINUE
+END DO
 do 560 I = 1,KLM
    II = Q(I,N2)
    IF (II.GT.0) GO TO 530
@@ -10710,11 +10710,11 @@ do 560 I = 1,KLM
 530 IF (IU(1,II).EQ.0) GO TO 560
    CU(1,II) = 0.
 540 IA = IA + 1
-   do 550 J = 1,N2
+   DO J=1,N2
       Z = Q(IA,J)
       Q(IA,J) = Q(I,J)
       Q(I,J) = Z
-550 CONTINUE
+   END DO
 560 CONTINUE
 GO TO 160
 570 IF (Q(KLM1,N1).LE.TOLER) GO TO 500
@@ -10724,12 +10724,12 @@ GO TO 590
 ! PREPARE OUTPUT.
 KODE = 0
 590 SUM = 0.D0
-do 600 J = 1,N
+DO J=1,N
    X(J) = 0.
-600 CONTINUE
-do 610 I = 1,KLM
+END DO
+DO I=1,KLM
    RES(I) = 0.
-610 CONTINUE
+END DO
 do 640 I = 1,KLM
    II = Q(I,N2)
    SN = 1.

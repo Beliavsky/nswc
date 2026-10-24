@@ -31,34 +31,34 @@ IF(N .LE. 0 .OR.(DFLAG+TWO.EQ.ZERO)) GO TO 140
 10 CONTINUE
          DH21=DPARAM(3)
          DH12=DPARAM(4)
-              do 20 I = 1,NSTEPS,INCX
+              DO I=1,NSTEPS,INCX
               W=DX(I)
               Z=DY(I)
               DX(I)=W+Z*DH12
               DY(I)=W*DH21+Z
-20 CONTINUE
+              END DO
          GO TO 140
 30 CONTINUE
          DH11=DPARAM(2)
          DH22=DPARAM(5)
-              do 40 I = 1,NSTEPS,INCX
+              DO I=1,NSTEPS,INCX
               W=DX(I)
               Z=DY(I)
               DX(I)=W*DH11+Z
               DY(I)=-W+DH22*Z
-40 CONTINUE
+              END DO
          GO TO 140
 50 CONTINUE
          DH11=DPARAM(2)
          DH21=DPARAM(3)
          DH12=DPARAM(4)
          DH22=DPARAM(5)
-              do 60 I = 1,NSTEPS,INCX
+              DO I=1,NSTEPS,INCX
               W=DX(I)
               Z=DY(I)
               DX(I)=W*DH11+Z*DH12
               DY(I)=W*DH21+Z*DH22
-60 CONTINUE
+              END DO
          GO TO 140
 70 CONTINUE
     KX=1
@@ -70,40 +70,40 @@ IF(N .LE. 0 .OR.(DFLAG+TWO.EQ.ZERO)) GO TO 140
 80 CONTINUE
     DH21=DPARAM(3)
     DH12=DPARAM(4)
-         do 90 I = 1,N
+         DO I=1,N
          W=DX(KX)
          Z=DY(KY)
          DX(KX)=W+Z*DH12
          DY(KY)=W*DH21+Z
          KX=KX+INCX
          KY=KY+INCY
-90 CONTINUE
+         END DO
     GO TO 140
 100 CONTINUE
     DH11=DPARAM(2)
     DH22=DPARAM(5)
-         do 110 I = 1,N
+         DO I=1,N
          W=DX(KX)
          Z=DY(KY)
          DX(KX)=W*DH11+Z
          DY(KY)=-W+DH22*Z
          KX=KX+INCX
          KY=KY+INCY
-110 CONTINUE
+         END DO
     GO TO 140
 120 CONTINUE
     DH11=DPARAM(2)
     DH21=DPARAM(3)
     DH12=DPARAM(4)
     DH22=DPARAM(5)
-         do 130 I = 1,N
+         DO I=1,N
          W=DX(KX)
          Z=DY(KY)
          DX(KX)=W*DH11+Z*DH12
          DY(KY)=W*DH21+Z*DH22
          KX=KX+INCX
          KY=KY+INCY
-130 CONTINUE
+         END DO
 140 CONTINUE
     RETURN
     END SUBROUTINE DROTM
@@ -129,11 +129,11 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   STEMP = STEMP + SX(IX)*SY(IY)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 SDOT = STEMP
 RETURN
 !
@@ -144,15 +144,15 @@ RETURN
 !
 20 M = MOD(N,5)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   STEMP = STEMP + SX(I)*SY(I)
-30 CONTINUE
+END DO
 IF( N .LT. 5 ) GO TO 60
 40 MP1 = M + 1
-do 50 I = MP1,N,5
+DO I = MP1,N,5
   STEMP = STEMP + SX(I)*SY(I) + SX(I + 1)*SY(I + 1) + &
 &SX(I + 2)*SY(I + 2) + SX(I + 3)*SY(I + 3) + SX(I + 4)*SY(I + 4)
-50 CONTINUE
+END DO
 60 SDOT = STEMP
 RETURN
 END FUNCTION SDOT
@@ -178,11 +178,11 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   DTEMP = DTEMP + DX(IX)*DY(IY)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 DDOT = DTEMP
 RETURN
 !
@@ -193,15 +193,15 @@ RETURN
 !
 20 M = MOD(N,5)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   DTEMP = DTEMP + DX(I)*DY(I)
-30 CONTINUE
+END DO
 IF( N .LT. 5 ) GO TO 60
 40 MP1 = M + 1
-do 50 I = MP1,N,5
+DO I = MP1,N,5
   DTEMP = DTEMP + DX(I)*DY(I) + DX(I + 1)*DY(I + 1) + &
 &DX(I + 2)*DY(I + 2) + DX(I + 3)*DY(I + 3) + DX(I + 4)*DY(I + 4)
-50 CONTINUE
+END DO
 60 DDOT = DTEMP
 RETURN
 END FUNCTION DDOT
@@ -227,19 +227,19 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   CTEMP = CTEMP + CONJG(CX(IX))*CY(IY)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 CDOTC = CTEMP
 RETURN
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   CTEMP = CTEMP + CONJG(CX(I))*CY(I)
-30 CONTINUE
+END DO
 CDOTC = CTEMP
 RETURN
 END FUNCTION CDOTC
@@ -264,19 +264,19 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   CTEMP = CTEMP + CX(IX)*CY(IY)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 CDOTU = CTEMP
 RETURN
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   CTEMP = CTEMP + CX(I)*CY(I)
-30 CONTINUE
+END DO
 CDOTU = CTEMP
 RETURN
 END FUNCTION CDOTU
@@ -296,9 +296,9 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   SX(I) = SA*SX(I)
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
@@ -308,18 +308,18 @@ RETURN
 !
 20 M = MOD(N,5)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   SX(I) = SA*SX(I)
-30 CONTINUE
+END DO
 IF( N .LT. 5 ) RETURN
 40 MP1 = M + 1
-do 50 I = MP1,N,5
+DO I = MP1,N,5
   SX(I) = SA*SX(I)
   SX(I + 1) = SA*SX(I + 1)
   SX(I + 2) = SA*SX(I + 2)
   SX(I + 3) = SA*SX(I + 3)
   SX(I + 4) = SA*SX(I + 4)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SSCAL
 
@@ -338,9 +338,9 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   DX(I) = DA*DX(I)
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
@@ -350,18 +350,18 @@ RETURN
 !
 20 M = MOD(N,5)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   DX(I) = DA*DX(I)
-30 CONTINUE
+END DO
 IF( N .LT. 5 ) RETURN
 40 MP1 = M + 1
-do 50 I = MP1,N,5
+DO I = MP1,N,5
   DX(I) = DA*DX(I)
   DX(I + 1) = DA*DX(I + 1)
   DX(I + 2) = DA*DX(I + 2)
   DX(I + 3) = DA*DX(I + 3)
   DX(I + 4) = DA*DX(I + 4)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DSCAL
 
@@ -379,16 +379,16 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   CX(I) = CA*CX(I)
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   CX(I) = CA*CX(I)
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CSCAL
 
@@ -407,16 +407,16 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CSSCAL
 
@@ -440,11 +440,11 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   SY(IY) = SY(IY) + SA*SX(IX)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
@@ -454,17 +454,17 @@ RETURN
 !
 20 M = MOD(N,4)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   SY(I) = SY(I) + SA*SX(I)
-30 CONTINUE
+END DO
 IF( N .LT. 4 ) RETURN
 40 MP1 = M + 1
-do 50 I = MP1,N,4
+DO I = MP1,N,4
   SY(I) = SY(I) + SA*SX(I)
   SY(I + 1) = SY(I + 1) + SA*SX(I + 1)
   SY(I + 2) = SY(I + 2) + SA*SX(I + 2)
   SY(I + 3) = SY(I + 3) + SA*SX(I + 3)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SAXPY
 
@@ -488,11 +488,11 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   DY(IY) = DY(IY) + DA*DX(IX)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
@@ -502,17 +502,17 @@ RETURN
 !
 20 M = MOD(N,4)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   DY(I) = DY(I) + DA*DX(I)
-30 CONTINUE
+END DO
 IF( N .LT. 4 ) RETURN
 40 MP1 = M + 1
-do 50 I = MP1,N,4
+DO I = MP1,N,4
   DY(I) = DY(I) + DA*DX(I)
   DY(I + 1) = DY(I + 1) + DA*DX(I + 1)
   DY(I + 2) = DY(I + 2) + DA*DX(I + 2)
   DY(I + 3) = DY(I + 3) + DA*DX(I + 3)
-50 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DAXPY
 
@@ -535,18 +535,18 @@ IX = 1
 IY = 1
 IF(INCX.LT.0)IX = (-N+1)*INCX + 1
 IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-do 10 I = 1,N
+DO I = 1,N
   CY(IY) = CY(IY) + CA*CX(IX)
   IX = IX + INCX
   IY = IY + INCY
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   CY(I) = CY(I) + CA*CX(I)
-30 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CAXPY
 
@@ -567,9 +567,9 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   STEMP = STEMP + ABS(SX(I))
-10 CONTINUE
+END DO
 SASUM = STEMP
 RETURN
 !
@@ -580,15 +580,15 @@ RETURN
 !
 20 M = MOD(N,6)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   STEMP = STEMP + ABS(SX(I))
-30 CONTINUE
+END DO
 IF( N .LT. 6 ) GO TO 60
 40 MP1 = M + 1
-do 50 I = MP1,N,6
+DO I = MP1,N,6
   STEMP = STEMP + ABS(SX(I)) + ABS(SX(I + 1)) + ABS(SX(I + 2)) &
 &+ ABS(SX(I + 3)) + ABS(SX(I + 4)) + ABS(SX(I + 5))
-50 CONTINUE
+END DO
 60 SASUM = STEMP
 RETURN
 END FUNCTION SASUM
@@ -609,9 +609,9 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   DTEMP = DTEMP + DABS(DX(I))
-10 CONTINUE
+END DO
 DASUM = DTEMP
 RETURN
 !
@@ -622,15 +622,15 @@ RETURN
 !
 20 M = MOD(N,6)
 IF( M .EQ. 0 ) GO TO 40
-do 30 I = 1,M
+DO I = 1,M
   DTEMP = DTEMP + DABS(DX(I))
-30 CONTINUE
+END DO
 IF( N .LT. 6 ) GO TO 60
 40 MP1 = M + 1
-do 50 I = MP1,N,6
+DO I = MP1,N,6
   DTEMP = DTEMP + DABS(DX(I)) + DABS(DX(I + 1)) + DABS(DX(I + 2)) &
 &+ DABS(DX(I + 3)) + DABS(DX(I + 4)) + DABS(DX(I + 5))
-50 CONTINUE
+END DO
 60 DASUM = DTEMP
 RETURN
 END FUNCTION DASUM
@@ -653,17 +653,17 @@ IF(INCX.EQ.1)GO TO 20
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
 NINCX = N*INCX
-do 10 I = 1,NINCX,INCX
+DO I = 1,NINCX,INCX
   STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-10 CONTINUE
+END DO
 SCASUM = STEMP
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 do 30 I = 1,N
+20 DO I = 1,N
   STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-30 CONTINUE
+END DO
 SCASUM = STEMP
 RETURN
 END FUNCTION SCASUM
@@ -1065,12 +1065,12 @@ IF(INCX.EQ.1)GO TO 20
 IX = 1
 SMAX = ABS(SX(1))
 IX = IX + INCX
-do 10 I = 2,N
+DO I = 2,N
    IF(ABS(SX(IX)).LE.SMAX) GO TO 5
    ISAMAX = I
    SMAX = ABS(SX(IX))
 5 IX = IX + INCX
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
@@ -1103,12 +1103,12 @@ IF(INCX.EQ.1)GO TO 20
 IX = 1
 DMAX = DABS(DX(1))
 IX = IX + INCX
-do 10 I = 2,N
+DO I = 2,N
    IF(DABS(DX(IX)).LE.DMAX) GO TO 5
    IDAMAX = I
    DMAX = DABS(DX(IX))
 5 IX = IX + INCX
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
@@ -1145,12 +1145,12 @@ IF(INCX.EQ.1)GO TO 20
 IX = 1
 SMAX = CABS1(CX(1))
 IX = IX + INCX
-do 10 I = 2,N
+DO I = 2,N
    IF(CABS1(CX(IX)).LE.SMAX) GO TO 5
    ICAMAX = I
    SMAX = CABS1(CX(IX))
 5 IX = IX + INCX
-10 CONTINUE
+END DO
 RETURN
 !
 !        CODE FOR INCREMENT EQUAL TO 1
@@ -1168,11 +1168,11 @@ SUBROUTINE MCVFS(A,KA,N,B)
 REAL A(KA,N),B(*)
 !
 L = 0
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,J
    L = L + 1
 10 B(L) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCVFS
 
@@ -1180,11 +1180,11 @@ SUBROUTINE DMCVFS(A,KA,N,B)
 DOUBLE PRECISION A(KA,N),B(*)
 !
 L = 0
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,J
    L = L + 1
 10 B(L) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DMCVFS
 
@@ -1204,11 +1204,11 @@ I = J
 10 L = L - 1
 11 J = J - 1
 !
-do 21 I = 2,N
+DO I = 2,N
 IM1 = I - 1
    do 20 J = 1,IM1
 20 A(I,J) = A(J,I)
-21 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCVSF
 
@@ -1228,11 +1228,11 @@ I = J
 10 L = L - 1
 11 J = J - 1
 !
-do 21 I = 2,N
+DO I = 2,N
 IM1 = I - 1
    do 20 J = 1,IM1
 20 A(I,J) = A(J,I)
-21 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DMCVSF
 
@@ -1240,10 +1240,10 @@ SUBROUTINE MCVRD(M,N,A,KA,B,KB)
 REAL A(KA,N)
 DOUBLE PRECISION B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCVRD
 
@@ -1251,10 +1251,10 @@ SUBROUTINE MCVDR(M,N,A,KA,B,KB)
 DOUBLE PRECISION A(KA,N)
 REAL B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCVDR
 
@@ -1262,10 +1262,10 @@ SUBROUTINE MCVRC(M,N,A,KA,B,KB)
 REAL A(KA,N)
 COMPLEX B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = CMPLX(A(I,J),0.0)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCVRC
 
@@ -1273,10 +1273,10 @@ SUBROUTINE CMREAL(M,N,A,KA,B,KB)
 COMPLEX A(KA,N)
 REAL B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = REAL(A(I,J))
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMREAL
 
@@ -1284,20 +1284,20 @@ SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
 COMPLEX A(KA,N)
 REAL B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = AIMAG(A(I,J))
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMIMAG
 
 SUBROUTINE MCOPY(M,N,A,KA,B,KB)
 REAL A(KA,N),B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MCOPY
 
@@ -1313,60 +1313,60 @@ END SUBROUTINE SMCOPY
 SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
 DOUBLE PRECISION A(KA,N),B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DMCOPY
 
 SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
 COMPLEX A(KA,N),B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMCOPY
 
 SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
 COMPLEX A(KA,N),B(KB,N)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(I,J) = CONJG(A(I,J))
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMCONJ
 
 SUBROUTINE TPOSE(M,N,A,KA,B,KB)
 REAL A(KA,N),B(KB,M)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(J,I) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE TPOSE
 
 SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
 DOUBLE PRECISION A(KA,N),B(KB,M)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(J,I) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DTPOSE
 
 SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
 COMPLEX A(KA,N),B(KB,M)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(J,I) = A(I,J)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CTPOSE
 
@@ -1390,24 +1390,24 @@ M = N12 - 1
 IF (N1.NE.N2) GO TO 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
 I1MIN = 2
-do 20 I1MAX = N,M,N
+DO I1MAX=N,M,N
   I2 = I1MIN + N - 1
-  do 10 I1 = I1MIN,I1MAX
+  DO I1=I1MIN,I1MAX
     ATEMP = A(I1)
     A(I1) = A(I2)
     A(I2) = ATEMP
     I2 = I2 + N
-10 CONTINUE
+  END DO
   I1MIN = I1MIN + N + 1
-20 CONTINUE
+END DO
 RETURN
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 NDIM = 0
 CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-do 40 IP = 1,NPOWER
+DO IP=1,NPOWER
   IEXP(IP) = 0
-40 CONTINUE
+END DO
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
 IDIV = 1
 MHALF = M/2
@@ -1421,9 +1421,9 @@ do 60 IP = 1,NPOWER
   NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
 60 CONTINUE
 IF (NWORK.LE.0) GO TO 75
-do 70 I = 1,NWORK
+DO I=1,NWORK
   MOVED(I) = 0
-70 CONTINUE
+END DO
 75 ISTART = IDIV
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
@@ -1466,14 +1466,14 @@ GO TO 160
 A(MMIA1+1) = ATEMP
 160 ISTART = ISTART + IDIV
 IF (NCOUNT.GT.0) GO TO 80
-do 180 IP = 1,NPOWER
+DO IP=1,NPOWER
   IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
   IEXP(IP) = IEXP(IP) + 1
   IDIV = IDIV*IFACT(IP)
   GO TO 50
 170 IEXP(IP) = 0
   IDIV = IDIV/IPOWER(IP)
-180 CONTINUE
+END DO
 RETURN
 200 IF (N1.NE.N2) NDIM = 0
 RETURN
@@ -1499,24 +1499,24 @@ M = N12 - 1
 IF (N1.NE.N2) GO TO 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
 I1MIN = 2
-do 20 I1MAX = N,M,N
+DO I1MAX=N,M,N
   I2 = I1MIN + N - 1
-  do 10 I1 = I1MIN,I1MAX
+  DO I1=I1MIN,I1MAX
     ATEMP = A(I1)
     A(I1) = A(I2)
     A(I2) = ATEMP
     I2 = I2 + N
-10 CONTINUE
+  END DO
   I1MIN = I1MIN + N + 1
-20 CONTINUE
+END DO
 RETURN
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 NDIM = 0
 CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-do 40 IP = 1,NPOWER
+DO IP=1,NPOWER
   IEXP(IP) = 0
-40 CONTINUE
+END DO
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
 IDIV = 1
 MHALF = M/2
@@ -1530,9 +1530,9 @@ do 60 IP = 1,NPOWER
   NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
 60 CONTINUE
 IF (NWORK.LE.0) GO TO 75
-do 70 I = 1,NWORK
+DO I=1,NWORK
   MOVED(I) = 0
-70 CONTINUE
+END DO
 75 ISTART = IDIV
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
@@ -1575,14 +1575,14 @@ GO TO 160
 A(MMIA1+1) = ATEMP
 160 ISTART = ISTART + IDIV
 IF (NCOUNT.GT.0) GO TO 80
-do 180 IP = 1,NPOWER
+DO IP=1,NPOWER
   IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
   IEXP(IP) = IEXP(IP) + 1
   IDIV = IDIV*IFACT(IP)
   GO TO 50
 170 IEXP(IP) = 0
   IDIV = IDIV/IPOWER(IP)
-180 CONTINUE
+END DO
 RETURN
 200 IF (N1.NE.N2) NDIM = 0
 RETURN
@@ -1608,24 +1608,24 @@ M = N12 - 1
 IF (N1.NE.N2) GO TO 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
 I1MIN = 2
-do 20 I1MAX = N,M,N
+DO I1MAX=N,M,N
   I2 = I1MIN + N - 1
-  do 10 I1 = I1MIN,I1MAX
+  DO I1=I1MIN,I1MAX
     ATEMP = A(I1)
     A(I1) = A(I2)
     A(I2) = ATEMP
     I2 = I2 + N
-10 CONTINUE
+  END DO
   I1MIN = I1MIN + N + 1
-20 CONTINUE
+END DO
 RETURN
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
 30 NDIM = 0
 CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-do 40 IP = 1,NPOWER
+DO IP=1,NPOWER
   IEXP(IP) = 0
-40 CONTINUE
+END DO
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
 IDIV = 1
 MHALF = M/2
@@ -1639,9 +1639,9 @@ do 60 IP = 1,NPOWER
   NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
 60 CONTINUE
 IF (NWORK.LE.0) GO TO 75
-do 70 I = 1,NWORK
+DO I=1,NWORK
   MOVED(I) = 0
-70 CONTINUE
+END DO
 75 ISTART = IDIV
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
@@ -1684,14 +1684,14 @@ GO TO 160
 A(MMIA1+1) = ATEMP
 160 ISTART = ISTART + IDIV
 IF (NCOUNT.GT.0) GO TO 80
-do 180 IP = 1,NPOWER
+DO IP=1,NPOWER
   IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
   IEXP(IP) = IEXP(IP) + 1
   IDIV = IDIV*IFACT(IP)
   GO TO 50
 170 IEXP(IP) = 0
   IDIV = IDIV/IPOWER(IP)
-180 CONTINUE
+END DO
 RETURN
 200 IF (N1.NE.N2) NDIM = 0
 RETURN
@@ -1741,10 +1741,10 @@ END SUBROUTINE INFCTR
 SUBROUTINE CMADJ(M,N,A,KA,B,KB)
 COMPLEX A(KA,N),B(KB,M)
 !
-do 20 J = 1,N
+DO J = 1,N
    do 10 I = 1,M
 10 B(J,I) = CONJG(A(I,J))
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMADJ
 
@@ -1772,13 +1772,13 @@ SUBROUTINE CTRANS (NM, N, A)
 INTEGER I, J, N, NM
 COMPLEX A(NM,N), TEMP
 !
-do 20 I = 1,N
-  do 10 J = I,N
+DO I = 1,N
+  DO J = I,N
     TEMP = A(I,J)
     A(I,J) = CONJG(A(J,I))
     A(J,I) = CONJG(TEMP)
-10 CONTINUE
-20 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE CTRANS
 
@@ -1788,11 +1788,11 @@ SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 REAL A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) + B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE MADD
 
@@ -1802,11 +1802,11 @@ SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 DOUBLE PRECISION A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) + B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE DMADD
 
@@ -1816,11 +1816,11 @@ SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 COMPLEX A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) + B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CMADD
 
@@ -1838,11 +1838,11 @@ SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 REAL A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) - B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE MSUBT
 
@@ -1852,11 +1852,11 @@ SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 DOUBLE PRECISION A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) - B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE DMSUBT
 
@@ -1866,11 +1866,11 @@ SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 COMPLEX A(KA,N), B(KB,N), C(KC,N)
 !
-do 20 J = 1,N
-   do 10 I = 1,M
+DO J = 1,N
+   DO I = 1,M
       C(I,J) = A(I,J) - B(I,J)
-10 CONTINUE
-20 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CMSUBT
 
@@ -1889,15 +1889,15 @@ SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
 REAL A(KA,N), B(KB,L), C(KC,L)
 DOUBLE PRECISION W
 !
-do 30 J = 1,L
-   do 20 I = 1,M
+DO J = 1,L
+   DO I = 1,M
       W = 0.D0
-      do 10 K = 1,N
+      DO K = 1,N
          W = W + DBLE(A(I,K))*DBLE(B(K,J))
-10 CONTINUE
+      END DO
       C(I,J) = W
-20 CONTINUE
-30 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE MTMS
 
@@ -1907,15 +1907,15 @@ SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 DOUBLE PRECISION A(KA,N), B(KB,L), C(KC,L), W
 !
-do 30 J = 1,L
-   do 20 I = 1,M
+DO J = 1,L
+   DO I = 1,M
       W = 0.D0
-      do 10 K = 1,N
+      DO K = 1,N
          W = W + A(I,K)*B(K,J)
-10 CONTINUE
+      END DO
       C(I,J) = W
-20 CONTINUE
-30 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE DMTMS
 
@@ -1925,15 +1925,15 @@ SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
 !-----------------------------------------------------------------------
 COMPLEX A(KA,N), B(KB,L), C(KC,L), W
 !
-do 30 J = 1,L
-   do 20 I = 1,M
+DO J = 1,L
+   DO I = 1,M
       W = (0.0,0.0)
-      do 10 K = 1,N
+      DO K = 1,N
          W = W + A(I,K)*B(K,J)
-10 CONTINUE
+      END DO
       C(I,J) = W
-20 CONTINUE
-30 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CMTMS
 
@@ -1950,20 +1950,20 @@ C(1,1) = 1.0
 IF (RLOC(C,A)) GO TO 20
 IF (RLOC(C,B)) GO TO 30
 !
-do 12 J = 1,L
+DO J = 1,L
    do 11 I = 1,M
    W = 0.D0
       do 10 K = 1,N
 10 W = W + DBLE(A(I,K))*DBLE(B(K,J))
 11 C(I,J) = W
-12 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 A(1,1) = SAVE
-do 24 I = 1,M
+DO I = 1,M
    do 22 J = 1,L
    W = 0.D0
       do 21 K = 1,N
@@ -1971,14 +1971,14 @@ do 24 I = 1,M
 22 ROW(J) = W
    do 23 J = 1,L
 23 A(I,J) = ROW(J)
-24 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 B(1,1) = SAVE
-do 34 J = 1,L
+DO J = 1,L
    do 32 I = 1,M
    W = 0.D0
       do 31 K = 1,N
@@ -1986,7 +1986,7 @@ do 34 J = 1,L
 32 ROW(I) = W
    do 33 I = 1,M
 33 B(I,J) = ROW(I)
-34 CONTINUE
+END DO
 RETURN
 END SUBROUTINE MPROD
 
@@ -2041,20 +2041,20 @@ C(1,1) = 1.D0
 IF (DLOC(C,A)) GO TO 20
 IF (DLOC(C,B)) GO TO 30
 !
-do 12 J = 1,L
+DO J = 1,L
    do 11 I = 1,M
    W = 0.D0
       do 10 K = 1,N
 10 W = W + A(I,K)*B(K,J)
 11 C(I,J) = W
-12 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 A(1,1) = W
-do 24 I = 1,M
+DO I = 1,M
    do 22 J = 1,L
    W = 0.D0
       do 21 K = 1,N
@@ -2062,14 +2062,14 @@ do 24 I = 1,M
 22 ROW(J) = W
    do 23 J = 1,L
 23 A(I,J) = ROW(J)
-24 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 B(1,1) = W
-do 34 J = 1,L
+DO J = 1,L
    do 32 I = 1,M
    W = 0.D0
       do 31 K = 1,N
@@ -2077,7 +2077,7 @@ do 34 J = 1,L
 32 ROW(I) = W
    do 33 I = 1,M
 33 B(I,J) = ROW(I)
-34 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DMPROD
 
@@ -2132,20 +2132,20 @@ C(1,1) = (1.0,0.0)
 IF (CLOC(C,A)) GO TO 20
 IF (CLOC(C,B)) GO TO 30
 !
-do 12 J = 1,L
+DO J = 1,L
    do 11 I = 1,M
    W = (0.0,0.0)
       do 10 K = 1,N
 10 W = W + A(I,K)*B(K,J)
 11 C(I,J) = W
-12 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
 20 A(1,1) = W
-do 24 I = 1,M
+DO I = 1,M
    do 22 J = 1,L
    W = (0.0,0.0)
       do 21 K = 1,N
@@ -2153,14 +2153,14 @@ do 24 I = 1,M
 22 ROW(J) = W
    do 23 J = 1,L
 23 A(I,J) = ROW(J)
-24 CONTINUE
+END DO
 RETURN
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
 30 B(1,1) = W
-do 34 J = 1,L
+DO J = 1,L
    do 32 I = 1,M
    W = (0.0,0.0)
       do 31 K = 1,N
@@ -2168,7 +2168,7 @@ do 34 J = 1,L
 32 ROW(I) = W
    do 33 I = 1,M
 33 B(I,J) = ROW(I)
-34 CONTINUE
+END DO
 RETURN
 END SUBROUTINE CMPROD
 
@@ -2259,13 +2259,13 @@ END SUBROUTINE DSVPRD
 SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
 REAL A(KA,N),B(KB,L),C(KC,L)
 DOUBLE PRECISION S
-do 12 J = 1,L
+DO J=1,L
 do 11 I = 1,N
 S = 0.D0
 do 10 K = 1,M
 10 S = S + DBLE(A(K,I))*DBLE(B(K,J))
 11 C(I,J) = S
-12 CONTINUE
+END DO
 RETURN
 END SUBROUTINE TMPROD
 
@@ -2273,14 +2273,14 @@ SUBROUTINE SMPROD(M,N,A,KA,B)
 REAL A(KA,N),B(*)
 DOUBLE PRECISION S
 II=1
-do 12 I = 1,N
+DO I=1,N
 do 11 J = 1,I
 S = 0.D0
 do 10 K = 1,M
 10 S = S + DBLE(A(K,I))*DBLE(A(K,J))
 B(II) = S
 11 II = II + 1
-12 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SMPROD
 
@@ -2292,21 +2292,21 @@ REAL A(KA,N),B(KB,L),C(KC,*)
 INTEGER R,S
 !
 J = 0
-do 40 S = 1,N
-   do 30 JJ = 1,L
+DO S = 1,N
+   DO JJ = 1,L
    J = J + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
       I = 0
-      do 20 R = 1,M
+      DO R = 1,M
          do 10 II = 1,K
          I = I + 1
 10 C(I,J) = A(R,S)*B(II,JJ)
-20 CONTINUE
+      END DO
 !
-30 CONTINUE
-40 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE KPROD
 
@@ -2318,21 +2318,21 @@ DOUBLE PRECISION A(KA,N),B(KB,L),C(KC,*)
 INTEGER R,S
 !
 J = 0
-do 40 S = 1,N
-   do 30 JJ = 1,L
+DO S = 1,N
+   DO JJ = 1,L
    J = J + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
       I = 0
-      do 20 R = 1,M
+      DO R = 1,M
          do 10 II = 1,K
          I = I + 1
 10 C(I,J) = A(R,S)*B(II,JJ)
-20 CONTINUE
+      END DO
 !
-30 CONTINUE
-40 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE DKPROD
 
@@ -2344,21 +2344,21 @@ COMPLEX A(KA,N),B(KB,L),C(KC,*)
 INTEGER R,S
 !
 J = 0
-do 40 S = 1,N
-   do 30 JJ = 1,L
+DO S = 1,N
+   DO JJ = 1,L
    J = J + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
       I = 0
-      do 20 R = 1,M
+      DO R = 1,M
          do 10 II = 1,K
          I = I + 1
 10 C(I,J) = A(R,S)*B(II,JJ)
-20 CONTINUE
+      END DO
 !
-30 CONTINUE
-40 CONTINUE
+   END DO
+END DO
 RETURN
 END SUBROUTINE CKPROD
 
@@ -2388,13 +2388,13 @@ EPS = 10.0*SPMPAR(1)
 RERR = AMAX1(EPS,RE)
 !
 IMAX = M5 - 1
-do 20 I = M4,IMAX
+DO I = M4,IMAX
    WORK(I) = RERR
-20 CONTINUE
+END DO
 IMAX = IMAX + M0
-do 30 I = M5,IMAX
+DO I = M5,IMAX
    WORK(I) = AE
-30 CONTINUE
+END DO
 !
 !     FACTOR THE MATRIX A
 !
@@ -2438,13 +2438,13 @@ EPS = 10.D0*DPMPAR(1)
 RERR = DMAX1(EPS,RE)
 !
 IMAX = M5 - 1
-do 20 I = M4,IMAX
+DO I = M4,IMAX
    WORK(I) = RERR
-20 CONTINUE
+END DO
 IMAX = IMAX + M0
-do 30 I = M5,IMAX
+DO I = M5,IMAX
    WORK(I) = AE
-30 CONTINUE
+END DO
 !
 !     FACTOR THE MATRIX A
 !
@@ -2491,7 +2491,7 @@ DOUBLE PRECISION DSUM
 IF (N .LT. 2) GO TO 200
 D = 1.0
 NM1 = N - 1
-do 70 K = 1,NM1
+DO K = 1,NM1
    KP1 = K + 1
 !
 !               SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -2536,24 +2536,24 @@ do 70 K = 1,NM1
 41 A(K,J) = A(K,J)/P
       GO TO 60
 !
-50 do 52 J = KP1,N
+50 DO J = KP1,N
       DSUM = A(K,J)
       do 51 L = 1,KM1
 51 DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))
       A(K,J) = SNGL(DSUM)/P
-52 CONTINUE
+   END DO
 !
 !               COMPUTE THE (K+1)-ST COLUMN OF L
 !
-60 do 62 I = KP1,N
+60 DO I = KP1,N
       DSUM = A(I,KP1)
       do 61 L = 1,K
 61 DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))
       A(I,KP1) = DSUM
-62 CONTINUE
+   END DO
 !
    KM1 = K
-70 CONTINUE
+END DO
 !
 !                 CHECK THE N-TH PIVOT ELEMENT
 !
@@ -2564,7 +2564,7 @@ IF (D .EQ. 0.0) RETURN
 !
 IF (M .LE. 0) GO TO 120
 MAXB = KB*M
-do 102 ONEJ = 1,MAXB,KB
+DO ONEJ = 1,MAXB,KB
    KJ = ONEJ
    B(KJ) = B(KJ)/A(1,1)
    do 101 K = 2,N
@@ -2576,13 +2576,13 @@ do 102 ONEJ = 1,MAXB,KB
          DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
 100 LJ = LJ + 1
 101 B(KJ) = SNGL(DSUM)/A(K,K)
-102 CONTINUE
+END DO
 !
 !                 SOLVING THE EQUATION UX = Y
 !
-do 112 NJ = N,MAXB,KB
+DO NJ = N,MAXB,KB
    KJ = NJ
-   do 111 NMK = 1,NM1
+   DO NMK = 1,NM1
       K = N - NMK
       LJ = KJ
       KJ = KJ - 1
@@ -2592,13 +2592,13 @@ do 112 NJ = N,MAXB,KB
          DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
 110 LJ = LJ + 1
       B(KJ) = DSUM
-111 CONTINUE
-112 CONTINUE
+   END DO
+END DO
 !
 !               REPLACE L WITH THE INVERSE OF L
 !
 120 IF (MO .NE. 0) RETURN
-do 132 J = 1,NM1
+DO J = 1,NM1
    A(J,J) = 1.0/A(J,J)
    JP1 = J + 1
    do 131 I = JP1,N
@@ -2607,25 +2607,25 @@ do 132 J = 1,NM1
       do 130 L = J,IM1
 130 DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))
 131 A(I,J) = -SNGL(DSUM)/A(I,I)
-132 CONTINUE
+END DO
 A(N,N) = 1.0/A(N,N)
 !
 !           SOLVE UX = Y WHERE Y IS THE INVERSE OF L
 !
-do 152 NMK = 1,NM1
+DO NMK = 1,NM1
    K = N - NMK
    KP1 = K + 1
    do 140 J = KP1,N
       TEMP(J) = A(K,J)
 140 A(K,J) = 0.0
 !
-   do 151 J = 1,N
+   DO J = 1,N
       DSUM = A(K,J)
       do 150 L = KP1,N
 150 DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))
       A(K,J) = DSUM
-151 CONTINUE
-152 CONTINUE
+   END DO
+END DO
 !
 !                    COLUMN INTERCHANGES
 !
@@ -2692,7 +2692,7 @@ IF (KB .LT. N) GO TO 320
 5 IERR = 0
 IF (N .LT. 2) GO TO 200
 NM1 = N - 1
-do 70 K = 1,NM1
+DO K = 1,NM1
    KP1 = K + 1
 !
 !               SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -2735,24 +2735,24 @@ do 70 K = 1,NM1
 41 A(K,J) = A(K,J)/P
       GO TO 60
 !
-50 do 52 J = KP1,N
+50 DO J = KP1,N
       DSUM = A(K,J)
       do 51 L = 1,KM1
 51 DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))
       A(K,J) = SNGL(DSUM)/P
-52 CONTINUE
+   END DO
 !
 !               COMPUTE THE (K+1)-ST COLUMN OF L
 !
-60 do 62 I = KP1,N
+60 DO I = KP1,N
       DSUM = A(I,KP1)
       do 61 L = 1,K
 61 DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))
       A(I,KP1) = DSUM
-62 CONTINUE
+   END DO
 !
    KM1 = K
-70 CONTINUE
+END DO
 !
 !                 CHECK THE N-TH PIVOT ELEMENT
 !
@@ -2762,7 +2762,7 @@ IF (A(N,N) .EQ. 0.0) GO TO 310
 !
 IF (M .LE. 0) GO TO 120
 MAXB = KB*M
-do 102 ONEJ = 1,MAXB,KB
+DO ONEJ = 1,MAXB,KB
    KJ = ONEJ
    B(KJ) = B(KJ)/A(1,1)
    do 101 K = 2,N
@@ -2774,13 +2774,13 @@ do 102 ONEJ = 1,MAXB,KB
          DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
 100 LJ = LJ + 1
 101 B(KJ) = SNGL(DSUM)/A(K,K)
-102 CONTINUE
+END DO
 !
 !                 SOLVING THE EQUATION UX = Y
 !
-do 112 NJ = N,MAXB,KB
+DO NJ = N,MAXB,KB
    KJ = NJ
-   do 111 NMK = 1,NM1
+   DO NMK = 1,NM1
       K = N - NMK
       LJ = KJ
       KJ = KJ - 1
@@ -2790,13 +2790,13 @@ do 112 NJ = N,MAXB,KB
          DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
 110 LJ = LJ + 1
       B(KJ) = DSUM
-111 CONTINUE
-112 CONTINUE
+   END DO
+END DO
 !
 !               REPLACE L WITH THE INVERSE OF L
 !
 120 IF (MO .NE. 0) RETURN
-do 132 J = 1,NM1
+DO J = 1,NM1
    A(J,J) = 1.0/A(J,J)
    JP1 = J + 1
    do 131 I = JP1,N
@@ -2805,25 +2805,25 @@ do 132 J = 1,NM1
       do 130 L = J,IM1
 130 DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))
 131 A(I,J) = -SNGL(DSUM)/A(I,I)
-132 CONTINUE
+END DO
 A(N,N) = 1.0/A(N,N)
 !
 !           SOLVE UX = Y WHERE Y IS THE INVERSE OF L
 !
-do 152 NMK = 1,NM1
+DO NMK = 1,NM1
    K = N - NMK
    KP1 = K + 1
    do 140 J = KP1,N
       TEMP(J) = A(K,J)
 140 A(K,J) = 0.0
 !
-   do 151 J = 1,N
+   DO J = 1,N
       DSUM = A(K,J)
       do 150 L = KP1,N
 150 DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))
       A(K,J) = DSUM
-151 CONTINUE
-152 CONTINUE
+   END DO
+END DO
 !
 !                    COLUMN INTERCHANGES
 !
@@ -2896,7 +2896,7 @@ IER = 0
 IP(N) = 1
 IF (N .EQ. 1) GO TO 70
 NM1 = N - 1
-do 60 K = 1,NM1
+DO K = 1,NM1
   KP1 = K + 1
 !  FIND THE PIVOT IN COLUMN K.  SEARCH ROWS K TO N. --------------------
   M = K
@@ -2923,7 +2923,7 @@ do 60 K = 1,NM1
     do 40 I = KP1,N
 40 A(I,J) = A(I,J) + A(I,K)*T
 50 CONTINUE
-60 CONTINUE
+  END DO
 70 K = N
 IF (A(N,N) .EQ. 0.0) GO TO 80
 RETURN
@@ -2954,7 +2954,7 @@ DIMENSION A(NDIM, N), B(N), IP(N)
 IF (N .EQ. 1) GO TO 50
 NM1 = N - 1
 !  APPLY ROW PERMUTATIONS AND MULTIPLIERS TO B. ------------------------
-do 20 K = 1,NM1
+DO K = 1,NM1
   KP1 = K + 1
   M = IP(K)
   T = B(M)
@@ -2962,16 +2962,16 @@ do 20 K = 1,NM1
   B(K) = T
   do 10 I = KP1,N
 10 B(I) = B(I) + A(I,K)*T
-20 CONTINUE
+  END DO
 !  BACK SOLVE. ---------------------------------------------------------
-do 40 KB = 1,NM1
+DO KB = 1,NM1
   KM1 = N - KB
   K = KM1 + 1
   B(K) = B(K)/A(K,K)
   T = -B(K)
   do 30 I = 1,KM1
 30 B(I) = B(I) + A(I,K)*T
-40 CONTINUE
+  END DO
 50 B(1) = B(1)/A(1,1)
 RETURN
 END SUBROUTINE SOL
@@ -2984,7 +2984,7 @@ REAL A(KA,N), B(*)
 !
 IERR = 0
 MAXB = KB*M
-do 80 K = 1,N
+DO K = 1,N
 !
 !     EXAMINE THE PIVOT ELEMENT
 !
@@ -2997,14 +2997,14 @@ IF (PIVOT .NE. 0.0) GO TO 10
 !     DIVIDE THE PIVOT ROW BY THE PIVOT ELEMENT
 !
 10 A(K,K) = 1.0
-do 20 L = 1,N
+DO L = 1,N
    A(K,L) = A(K,L)/PIVOT
-20 CONTINUE
+END DO
 IF (M .LE. 0) GO TO 40
 !
-do 30 KL = K,MAXB,KB
+DO KL = K,MAXB,KB
    B(KL) = B(KL)/PIVOT
-30 CONTINUE
+END DO
 !
 !     REDUCE THE NON-PIVOT ROWS
 !
@@ -3012,19 +3012,19 @@ do 30 KL = K,MAXB,KB
    IF (J .EQ. K) GO TO 70
    T = A(J,K)
    A(J,K) = 0.0
-   do 50 L = 1,N
+   DO L = 1,N
       A(J,L) = A(J,L) - A(K,L)*T
-50 CONTINUE
+   END DO
    IF (M .LE. 0) GO TO 70
 !
    KL = K
-   do 60 JL = J,MAXB,KB
+   DO JL = J,MAXB,KB
       B(JL) = B(JL) - B(KL)*T
       KL = KL + KB
-60 CONTINUE
+   END DO
 70 CONTINUE
 !
-80 CONTINUE
+END DO
 RETURN
 END SUBROUTINE NPIVOT
 
@@ -3042,7 +3042,7 @@ REAL A(KA,N), B(KB,M)
 IERR = 0
 NM1 = N - 1
 IF (NM1 .EQ. 0) GO TO 140
-do 80 J = 1,NM1
+DO J = 1,NM1
 !
 !     SEARCH FOR THE J-TH PIVOT ELEMENT
 !
@@ -3058,29 +3058,29 @@ do 80 J = 1,NM1
 !
 !     INTERCHANGE ROWS J AND L
 !
-   do 20 K = J,N
+   DO K = J,N
       T = A(J,K)
       A(J,K) = A(L,K)
       A(L,K) = T
-20 CONTINUE
-   do 30 K = 1,M
+   END DO
+   DO K = 1,M
       T = B(J,K)
       B(J,K) = B(L,K)
       B(L,K) = T
-30 CONTINUE
+   END DO
 !
 !     ELIMINATE THE COEFFICIENTS OF X(J) IN ROWS I = J+1,...,N
 !
 40 P = A(J,J)
    JP1 = J + 1
-   do 70 I = JP1,N
+   DO I = JP1,N
       T = A(I,J)/P
       do 50 K = JP1,N
 50 A(I,K) = A(I,K) - T*A(J,K)
       do 60 K = 1,M
 60 B(I,K) = B(I,K) - T*B(J,K)
-70 CONTINUE
-80 CONTINUE
+   END DO
+END DO
 IF (A(N,N) .EQ. 0.0) GO TO 220
 !
 !     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
@@ -3088,7 +3088,7 @@ IF (A(N,N) .EQ. 0.0) GO TO 220
 do 100 J = 1,M
 100 B(N,J) = B(N,J)/A(N,N)
 !
-do 130 L = 1,NM1
+DO L = 1,NM1
 I = N - L
 IP1 = I + 1
    do 120 J = 1,M
@@ -3096,7 +3096,7 @@ IP1 = I + 1
       do 110 K = IP1,N
 110 SUM = SUM - A(I,K)*B(K,J)
 120 B(I,J) = SUM/A(I,I)
-130 CONTINUE
+END DO
 RETURN
 !
 !     CASE WHEN N = 1
@@ -3130,7 +3130,7 @@ DOUBLE PRECISION A(KA,N), B(KB,M), P, T
 IERR = 0
 NM1 = N - 1
 IF (NM1 .EQ. 0) GO TO 140
-do 80 K = 1,NM1
+DO K = 1,NM1
 !
 !     SEARCH FOR THE K-TH PIVOT ELEMENT
 !
@@ -3146,29 +3146,29 @@ do 80 K = 1,NM1
 !
 !     INTERCHANGE ROWS K AND L
 !
-   do 20 J = K,N
+   DO J = K,N
       T = A(K,J)
       A(K,J) = A(L,J)
       A(L,J) = T
-20 CONTINUE
-   do 30 J = 1,M
+   END DO
+   DO J = 1,M
       T = B(K,J)
       B(K,J) = B(L,J)
       B(L,J) = T
-30 CONTINUE
+   END DO
 !
 !     ELIMINATE THE COEFFICIENTS OF X(K) IN ROWS I = K+1,...,N
 !
 40 P = A(K,K)
    KP1 = K + 1
-   do 70 I = KP1,N
+   DO I = KP1,N
       T = A(I,K)/P
       do 50 J = KP1,N
 50 A(I,J) = A(I,J) - T*A(K,J)
       do 60 J = 1,M
 60 B(I,J) = B(I,J) - T*B(K,J)
-70 CONTINUE
-80 CONTINUE
+   END DO
+END DO
 IF (A(N,N) .EQ. 0.D0) GO TO 220
 !
 !     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
@@ -3264,10 +3264,10 @@ IF (IERR .NE. 0) RETURN
 !
 IF (M .LE. 0) GO TO 30
 ONEJ = 1
-do 20 J = 1,M
+DO J = 1,M
    CALL SGESL (A, KA, N, IPVT, B(ONEJ), 0)
    ONEJ = ONEJ + KB
-20 CONTINUE
+END DO
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
@@ -3465,9 +3465,9 @@ INTEGER INFO,J,K,KB,KP1,L
 !     COMPUTE 1-NORM OF A
 !
 ANORM = 0.0E0
-do 10 J = 1, N
+DO J = 1, N
    ANORM = AMAX1(ANORM,SASUM(N,A(1,J),1))
-10 CONTINUE
+END DO
 !
 !     FACTOR
 !
@@ -3483,10 +3483,10 @@ CALL SGEFA(A,LDA,N,IPVT,INFO)
 !     SOLVE TRANS(U)*W = E
 !
 EK = 1.0E0
-do 20 J = 1, N
+DO J = 1, N
    Z(J) = 0.0E0
-20 CONTINUE
-do 100 K = 1, N
+END DO
+DO K = 1, N
    IF (Z(K) .NE. 0.0E0) EK = SIGN(EK,-Z(K))
    IF (ABS(EK-Z(K)) .LE. ABS(A(K,K))) GO TO 30
       S = ABS(A(K,K))/ABS(EK-Z(K))
@@ -3507,27 +3507,27 @@ do 100 K = 1, N
 50 CONTINUE
    KP1 = K + 1
    IF (KP1 .GT. N) GO TO 90
-      do 60 J = KP1, N
+      DO J = KP1, N
          SM = SM + ABS(Z(J)+WKM*A(K,J))
          Z(J) = Z(J) + WK*A(K,J)
          S = S + ABS(Z(J))
-60 CONTINUE
+      END DO
       IF (S .GE. SM) GO TO 80
          T = WKM - WK
          WK = WKM
-         do 70 J = KP1, N
+         DO J = KP1, N
             Z(J) = Z(J) + T*A(K,J)
-70 CONTINUE
+         END DO
 80 CONTINUE
 90 CONTINUE
    Z(K) = WK
-100 CONTINUE
+END DO
 S = 1.0E0/SASUM(N,Z,1)
 CALL SSCAL(N,S,Z,1)
 !
 !     SOLVE TRANS(L)*Y = W
 !
-do 120 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (K .LT. N) Z(K) = Z(K) + SDOT(N-K,A(K+1,K),1,Z(K+1),1)
    IF (ABS(Z(K)) .LE. 1.0E0) GO TO 110
@@ -3538,7 +3538,7 @@ do 120 KB = 1, N
    T = Z(L)
    Z(L) = Z(K)
    Z(K) = T
-120 CONTINUE
+END DO
 S = 1.0E0/SASUM(N,Z,1)
 CALL SSCAL(N,S,Z,1)
 !
@@ -3546,7 +3546,7 @@ YNORM = 1.0E0
 !
 !     SOLVE L*V = Y
 !
-do 140 K = 1, N
+DO K = 1, N
    L = IPVT(K)
    T = Z(L)
    Z(L) = Z(K)
@@ -3557,14 +3557,14 @@ do 140 K = 1, N
       CALL SSCAL(N,S,Z,1)
       YNORM = S*YNORM
 130 CONTINUE
-140 CONTINUE
+END DO
 S = 1.0E0/SASUM(N,Z,1)
 CALL SSCAL(N,S,Z,1)
 YNORM = S*YNORM
 !
 !     SOLVE  U*Z = V
 !
-do 160 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (ABS(Z(K)) .LE. ABS(A(K,K))) GO TO 150
       S = ABS(A(K,K))/ABS(Z(K))
@@ -3575,7 +3575,7 @@ do 160 KB = 1, N
    IF (A(K,K) .EQ. 0.0E0) Z(K) = 1.0E0
    T = -Z(K)
    CALL SAXPY(K-1,T,A(1,K),1,Z(1),1)
-160 CONTINUE
+END DO
 !     MAKE ZNORM = 1.0
 S = 1.0E0/SASUM(N,Z,1)
 CALL SSCAL(N,S,Z,1)
@@ -3644,7 +3644,7 @@ INTEGER ISAMAX,J,K,KP1,L,NM1
 INFO = 0
 NM1 = N - 1
 IF (NM1 .LT. 1) GO TO 70
-do 60 K = 1, NM1
+DO K = 1, NM1
    KP1 = K + 1
 !
 !        FIND L = PIVOT INDEX
@@ -3671,19 +3671,19 @@ do 60 K = 1, NM1
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      do 30 J = KP1, N
+      DO J = KP1, N
          T = A(L,J)
          IF (L .EQ. K) GO TO 20
             A(L,J) = A(K,J)
             A(K,J) = T
 20 CONTINUE
          CALL SAXPY(N-K,T,A(K+1,K),1,A(K+1,J),1)
-30 CONTINUE
+      END DO
    GO TO 50
 40 CONTINUE
       INFO = K
 50 CONTINUE
-60 CONTINUE
+END DO
 70 CONTINUE
 IPVT(N) = N
 IF (A(N,N) .EQ. 0.0E0) INFO = N
@@ -3760,7 +3760,7 @@ IF (JOB .NE. 0) GO TO 50
 !        FIRST SOLVE  L*Y = B
 !
    IF (NM1 .LT. 1) GO TO 30
-   do 20 K = 1, NM1
+   DO K = 1, NM1
       L = IPVT(K)
       T = B(L)
       IF (L .EQ. K) GO TO 10
@@ -3768,32 +3768,32 @@ IF (JOB .NE. 0) GO TO 50
          B(K) = T
 10 CONTINUE
       CALL SAXPY(N-K,T,A(K+1,K),1,B(K+1),1)
-20 CONTINUE
+   END DO
 30 CONTINUE
 !
 !        NOW SOLVE  U*X = Y
 !
-   do 40 KB = 1, N
+   DO KB = 1, N
       K = N + 1 - KB
       B(K) = B(K)/A(K,K)
       T = -B(K)
       CALL SAXPY(K-1,T,A(1,K),1,B(1),1)
-40 CONTINUE
+   END DO
 GO TO 100
 50 CONTINUE
 !
 !        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 !        FIRST SOLVE  TRANS(U)*Y = B
 !
-   do 60 K = 1, N
+   DO K = 1, N
       T = SDOT(K-1,A(1,K),1,B(1),1)
       B(K) = (B(K) - T)/A(K,K)
-60 CONTINUE
+   END DO
 !
 !        NOW SOLVE TRANS(L)*X = Y
 !
    IF (NM1 .LT. 1) GO TO 90
-   do 80 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       B(K) = B(K) + SDOT(N-K,A(K+1,K),1,B(K+1),1)
       L = IPVT(K)
@@ -3802,7 +3802,7 @@ GO TO 100
          B(L) = B(K)
          B(K) = T
 70 CONTINUE
-80 CONTINUE
+   END DO
 90 CONTINUE
 100 CONTINUE
 RETURN
@@ -3900,38 +3900,38 @@ IF (JOB/10 .EQ. 0) GO TO 70
 !     COMPUTE INVERSE(U)
 !
 IF (MOD(JOB,10) .EQ. 0) GO TO 150
-   do 100 K = 1, N
+   DO K = 1, N
       A(K,K) = 1.0E0/A(K,K)
       T = -A(K,K)
       CALL SSCAL(K-1,T,A(1,K),1)
       KP1 = K + 1
       IF (N .LT. KP1) GO TO 90
-      do 80 J = KP1, N
+      DO J = KP1, N
          T = A(K,J)
          A(K,J) = 0.0E0
          CALL SAXPY(K,T,A(1,K),1,A(1,J),1)
-80 CONTINUE
+      END DO
 90 CONTINUE
-100 CONTINUE
+   END DO
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
    NM1 = N - 1
    IF (NM1 .LT. 1) GO TO 140
-   do 130 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       KP1 = K + 1
-      do 110 I = KP1, N
+      DO I = KP1, N
          WORK(I) = A(I,K)
          A(I,K) = 0.0E0
-110 CONTINUE
-      do 120 J = KP1, N
+      END DO
+      DO J = KP1, N
          T = WORK(J)
          CALL SAXPY(N,T,A(1,J),1,A(1,K),1)
-120 CONTINUE
+      END DO
       L = IPVT(K)
       IF (L .NE. K) CALL SSWAP(N,A(1,K),1,A(1,L),1)
-130 CONTINUE
+   END DO
 140 CONTINUE
 150 CONTINUE
 RETURN
@@ -3998,10 +3998,10 @@ IF (IERR .NE. 0) RETURN
 !
 IF (M .LE. 0) GO TO 30
 ONEJ = 1
-do 20 J = 1,M
+DO J = 1,M
    CALL DGESL (A, KA, N, IPVT, B(ONEJ), 0)
    ONEJ = ONEJ + KB
-20 CONTINUE
+END DO
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
@@ -4087,9 +4087,9 @@ INTEGER INFO,J,K,KB,KP1,L
 !     COMPUTE 1-NORM OF A
 !
 ANORM = 0.0D0
-do 10 J = 1, N
+DO J = 1, N
    ANORM = DMAX1(ANORM,DASUM(N,A(1,J),1))
-10 CONTINUE
+END DO
 !
 !     FACTOR
 !
@@ -4105,10 +4105,10 @@ CALL DGEFA(A,LDA,N,IPVT,INFO)
 !     SOLVE TRANS(U)*W = E
 !
 EK = 1.0D0
-do 20 J = 1, N
+DO J = 1, N
    Z(J) = 0.0D0
-20 CONTINUE
-do 100 K = 1, N
+END DO
+DO K = 1, N
    IF (Z(K) .NE. 0.0D0) EK = DSIGN(EK,-Z(K))
    IF (DABS(EK-Z(K)) .LE. DABS(A(K,K))) GO TO 30
       S = DABS(A(K,K))/DABS(EK-Z(K))
@@ -4129,27 +4129,27 @@ do 100 K = 1, N
 50 CONTINUE
    KP1 = K + 1
    IF (KP1 .GT. N) GO TO 90
-      do 60 J = KP1, N
+      DO J = KP1, N
          SM = SM + DABS(Z(J)+WKM*A(K,J))
          Z(J) = Z(J) + WK*A(K,J)
          S = S + DABS(Z(J))
-60 CONTINUE
+      END DO
       IF (S .GE. SM) GO TO 80
          T = WKM - WK
          WK = WKM
-         do 70 J = KP1, N
+         DO J = KP1, N
             Z(J) = Z(J) + T*A(K,J)
-70 CONTINUE
+         END DO
 80 CONTINUE
 90 CONTINUE
    Z(K) = WK
-100 CONTINUE
+END DO
 S = 1.0D0/DASUM(N,Z,1)
 CALL DSCAL(N,S,Z,1)
 !
 !     SOLVE TRANS(L)*Y = W
 !
-do 120 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (K .LT. N) Z(K) = Z(K) + DDOT(N-K,A(K+1,K),1,Z(K+1),1)
    IF (DABS(Z(K)) .LE. 1.0D0) GO TO 110
@@ -4160,7 +4160,7 @@ do 120 KB = 1, N
    T = Z(L)
    Z(L) = Z(K)
    Z(K) = T
-120 CONTINUE
+END DO
 S = 1.0D0/DASUM(N,Z,1)
 CALL DSCAL(N,S,Z,1)
 !
@@ -4168,7 +4168,7 @@ YNORM = 1.0D0
 !
 !     SOLVE L*V = Y
 !
-do 140 K = 1, N
+DO K = 1, N
    L = IPVT(K)
    T = Z(L)
    Z(L) = Z(K)
@@ -4179,14 +4179,14 @@ do 140 K = 1, N
       CALL DSCAL(N,S,Z,1)
       YNORM = S*YNORM
 130 CONTINUE
-140 CONTINUE
+END DO
 S = 1.0D0/DASUM(N,Z,1)
 CALL DSCAL(N,S,Z,1)
 YNORM = S*YNORM
 !
 !     SOLVE  U*Z = V
 !
-do 160 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (DABS(Z(K)) .LE. DABS(A(K,K))) GO TO 150
       S = DABS(A(K,K))/DABS(Z(K))
@@ -4197,7 +4197,7 @@ do 160 KB = 1, N
    IF (A(K,K) .EQ. 0.0D0) Z(K) = 1.0D0
    T = -Z(K)
    CALL DAXPY(K-1,T,A(1,K),1,Z(1),1)
-160 CONTINUE
+END DO
 !     MAKE ZNORM = 1.0
 S = 1.0D0/DASUM(N,Z,1)
 CALL DSCAL(N,S,Z,1)
@@ -4266,7 +4266,7 @@ INTEGER IDAMAX,J,K,KP1,L,NM1
 INFO = 0
 NM1 = N - 1
 IF (NM1 .LT. 1) GO TO 70
-do 60 K = 1, NM1
+DO K = 1, NM1
    KP1 = K + 1
 !
 !        FIND L = PIVOT INDEX
@@ -4293,19 +4293,19 @@ do 60 K = 1, NM1
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      do 30 J = KP1, N
+      DO J = KP1, N
          T = A(L,J)
          IF (L .EQ. K) GO TO 20
             A(L,J) = A(K,J)
             A(K,J) = T
 20 CONTINUE
          CALL DAXPY(N-K,T,A(K+1,K),1,A(K+1,J),1)
-30 CONTINUE
+      END DO
    GO TO 50
 40 CONTINUE
       INFO = K
 50 CONTINUE
-60 CONTINUE
+END DO
 70 CONTINUE
 IPVT(N) = N
 IF (A(N,N) .EQ. 0.0D0) INFO = N
@@ -4382,7 +4382,7 @@ IF (JOB .NE. 0) GO TO 50
 !        FIRST SOLVE  L*Y = B
 !
    IF (NM1 .LT. 1) GO TO 30
-   do 20 K = 1, NM1
+   DO K = 1, NM1
       L = IPVT(K)
       T = B(L)
       IF (L .EQ. K) GO TO 10
@@ -4390,32 +4390,32 @@ IF (JOB .NE. 0) GO TO 50
          B(K) = T
 10 CONTINUE
       CALL DAXPY(N-K,T,A(K+1,K),1,B(K+1),1)
-20 CONTINUE
+   END DO
 30 CONTINUE
 !
 !        NOW SOLVE  U*X = Y
 !
-   do 40 KB = 1, N
+   DO KB = 1, N
       K = N + 1 - KB
       B(K) = B(K)/A(K,K)
       T = -B(K)
       CALL DAXPY(K-1,T,A(1,K),1,B(1),1)
-40 CONTINUE
+   END DO
 GO TO 100
 50 CONTINUE
 !
 !        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 !        FIRST SOLVE  TRANS(U)*Y = B
 !
-   do 60 K = 1, N
+   DO K = 1, N
       T = DDOT(K-1,A(1,K),1,B(1),1)
       B(K) = (B(K) - T)/A(K,K)
-60 CONTINUE
+   END DO
 !
 !        NOW SOLVE TRANS(L)*X = Y
 !
    IF (NM1 .LT. 1) GO TO 90
-   do 80 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       B(K) = B(K) + DDOT(N-K,A(K+1,K),1,B(K+1),1)
       L = IPVT(K)
@@ -4424,7 +4424,7 @@ GO TO 100
          B(L) = B(K)
          B(K) = T
 70 CONTINUE
-80 CONTINUE
+   END DO
 90 CONTINUE
 100 CONTINUE
 RETURN
@@ -4522,38 +4522,38 @@ IF (JOB/10 .EQ. 0) GO TO 70
 !     COMPUTE INVERSE(U)
 !
 IF (MOD(JOB,10) .EQ. 0) GO TO 150
-   do 100 K = 1, N
+   DO K = 1, N
       A(K,K) = 1.0D0/A(K,K)
       T = -A(K,K)
       CALL DSCAL(K-1,T,A(1,K),1)
       KP1 = K + 1
       IF (N .LT. KP1) GO TO 90
-      do 80 J = KP1, N
+      DO J = KP1, N
          T = A(K,J)
          A(K,J) = 0.0D0
          CALL DAXPY(K,T,A(1,K),1,A(1,J),1)
-80 CONTINUE
+      END DO
 90 CONTINUE
-100 CONTINUE
+   END DO
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
    NM1 = N - 1
    IF (NM1 .LT. 1) GO TO 140
-   do 130 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       KP1 = K + 1
-      do 110 I = KP1, N
+      DO I = KP1, N
          WORK(I) = A(I,K)
          A(I,K) = 0.0D0
-110 CONTINUE
-      do 120 J = KP1, N
+      END DO
+      DO J = KP1, N
          T = WORK(J)
          CALL DAXPY(N,T,A(1,J),1,A(1,K),1)
-120 CONTINUE
+      END DO
       L = IPVT(K)
       IF (L .NE. K) CALL DSWAP(N,A(1,K),1,A(1,L),1)
-130 CONTINUE
+   END DO
 140 CONTINUE
 150 CONTINUE
 RETURN
@@ -4798,15 +4798,15 @@ DATA ZERO /0.0/
 !
 !
 MTRSTR(3,NMBLKS) = 0
-do 10 K = 2,NMBLKS
+DO K=2,NMBLKS
   IF (MTRSTR(3,K-1)+MTRSTR(3,K).GT.MTRSTR(2,K)) GO TO 30
-10 CONTINUE
+END DO
 ISUM1 = 0
 ISUM2 = 0
-do 20 K = 1,NMBLKS
+DO K=1,NMBLKS
   ISUM1 = ISUM1 + MTRSTR(1,K)
   ISUM2 = ISUM2 + MTRSTR(2,K) - MTRSTR(3,K)
-20 CONTINUE
+END DO
 IF (ISUM1.NE.ISUM2) GO TO 30
 IF (ISUM1.NE.N) GO TO 30
 !
@@ -4894,7 +4894,7 @@ IF (IFLAG.LT.0) RETURN
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-do 70 K = 2,NMBLKS
+DO K=2,NMBLKS
   INDPIV = INDPIV + NRWPIV
   INDEX2 = INDEX1 + NRWBLK*NRWPIV
   INDEX3 = INDEX2 + NRWBLK*NOVRLP
@@ -4943,7 +4943,7 @@ do 70 K = 2,NMBLKS
 !
   IF (IFLAG.LT.0) RETURN
 60 CONTINUE
-70 CONTINUE
+END DO
 RETURN
 END SUBROUTINE ARCEDC
 
@@ -4967,7 +4967,7 @@ DIMENSION BLOCK(NRWBLK,NCLBLK)
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-do 90 J = 1,NRWPIV
+DO J=1,NRWPIV
   JPLUS1 = J + 1
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -4979,13 +4979,13 @@ do 90 J = 1,NRWPIV
   MAX = J
   ROWMAX = ABS(BLOCK(J,J))
   IF (J.EQ.NRWBLK) GO TO 30
-  do 20 I1 = JPLUS1,NRWBLK
+  DO I1=JPLUS1,NRWBLK
     TEMPIV = ABS(BLOCK(I1,J))
     IF (TEMPIV.LE.ROWMAX) GO TO 10
     ROWMAX = TEMPIV
     MAX = I1
 10 CONTINUE
-20 CONTINUE
+  END DO
 30 CONTINUE
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -5008,11 +5008,11 @@ do 90 J = 1,NRWPIV
 !
   PIVOT(J) = MAX
   IF (J.EQ.MAX) GO TO 50
-  do 40 J1 = J,NCLBLK
+  DO J1=J,NCLBLK
     SWAP = BLOCK(MAX,J1)
     BLOCK(MAX,J1) = BLOCK(J,J1)
     BLOCK(J,J1) = SWAP
-40 CONTINUE
+  END DO
 50 CONTINUE
   IF (J.EQ.NRWBLK) RETURN
 !
@@ -5023,9 +5023,9 @@ do 90 J = 1,NRWPIV
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
   ROWPIV = BLOCK(J,J)
-  do 60 I1 = JPLUS1,NRWBLK
+  DO I1=JPLUS1,NRWBLK
     BLOCK(I1,J) = BLOCK(I1,J)/ROWPIV
-60 CONTINUE
+  END DO
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -5033,12 +5033,12 @@ do 90 J = 1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  do 80 J1 = JPLUS1,NCLBLK
-    do 70 L1 = JPLUS1,NRWBLK
+  DO J1=JPLUS1,NCLBLK
+    DO L1=JPLUS1,NRWBLK
       BLOCK(L1,J1) = BLOCK(L1,J1) - BLOCK(L1,J)*BLOCK(J,J1)
-70 CONTINUE
-80 CONTINUE
-90 CONTINUE
+    END DO
+  END DO
+END DO
 RETURN
 100 CONTINUE
 !
@@ -5073,7 +5073,7 @@ DIMENSION TOPBLK(NRWTOP,NOVRLP), BOTBLK(NRWBOT,NOVRLP)
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-do 110 J = 1,NCLPIV
+DO J=1,NCLPIV
   I = NRWTOP - NCLPIV + J
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -5086,13 +5086,13 @@ do 110 J = 1,NCLPIV
   COLMAX = ABS(TOPBLK(I,J))
   IF (J.EQ.NOVRLP) GO TO 30
   JPLUS1 = J + 1
-  do 20 J1 = JPLUS1,NOVRLP
+  DO J1=JPLUS1,NOVRLP
     TEMPIV = ABS(TOPBLK(I,J1))
     IF (TEMPIV.LE.COLMAX) GO TO 10
     COLMAX = TEMPIV
     MAX = J1
 10 CONTINUE
-20 CONTINUE
+  END DO
 30 CONTINUE
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -5115,16 +5115,16 @@ do 110 J = 1,NCLPIV
 !
   PIVOT(J) = MAX
   IF (J.EQ.MAX) GO TO 60
-  do 40 I1 = I,NRWTOP
+  DO I1=I,NRWTOP
     SWAP = TOPBLK(I1,J)
     TOPBLK(I1,J) = TOPBLK(I1,MAX)
     TOPBLK(I1,MAX) = SWAP
-40 CONTINUE
-  do 50 I2 = 1,NRWBOT
+  END DO
+  DO I2=1,NRWBOT
     SWAP = BOTBLK(I2,J)
     BOTBLK(I2,J) = BOTBLK(I2,MAX)
     BOTBLK(I2,MAX) = SWAP
-50 CONTINUE
+  END DO
 60 CONTINUE
   IF (J.EQ.NOVRLP) RETURN
 !
@@ -5135,20 +5135,20 @@ do 110 J = 1,NCLPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  do 100 J1 = JPLUS1,NOVRLP
+  DO J1=JPLUS1,NOVRLP
     COLMLT = TOPBLK(I,J1)/TOPBLK(I,J)
     TOPBLK(I,J1) = COLMLT
     IF (I.EQ.NRWTOP) GO TO 80
     IPLUS1 = I + 1
-    do 70 L1 = IPLUS1,NRWTOP
+    DO L1=IPLUS1,NRWTOP
       TOPBLK(L1,J1) = TOPBLK(L1,J1) - COLMLT*TOPBLK(L1,J)
-70 CONTINUE
+    END DO
 80 CONTINUE
-    do 90 L1 = 1,NRWBOT
+    DO L1=1,NRWBOT
       BOTBLK(L1,J1) = BOTBLK(L1,J1) - COLMLT*BOTBLK(L1,J)
-90 CONTINUE
-100 CONTINUE
-110 CONTINUE
+    END DO
+  END DO
+END DO
 RETURN
 120 CONTINUE
 !
@@ -5277,7 +5277,7 @@ IF (NRWPIV.GT.0) CALL ARCEFE(ARRAY(INDEXA), NRWBLK, NRWPIV, &
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-do 10 K = 2,NMBLKS
+DO K=2,NMBLKS
   INDEXA = INDEXA + NRWBLK*NRWPIV
   NCLPIV = NRWBLK - NRWPIV
   INDPIV = INDPIV + NRWPIV
@@ -5315,7 +5315,7 @@ do 10 K = 2,NMBLKS
 !
   IF (NRWPIV.GT.0) CALL ARCEFE(ARRAY(INDEXA), NRWBLK, NRWPIV, &
 &PIVOT(INDPIV), B(INDPIV))
-10 CONTINUE
+END DO
 !     INDEXB = INDPIV + NRWPIV - 1
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -5324,7 +5324,7 @@ do 10 K = 2,NMBLKS
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-do 30 LL = 2,NMBLKS
+DO LL=2,NMBLKS
   K = NMBLKS - LL + 1
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -5365,7 +5365,7 @@ do 30 LL = 2,NMBLKS
   INDEXA = INDEXA - NRWBLK*NRWPIV
   INDPIV = INDPIV - NRWPIV
   NCLPIV = MTRSTR(2,K) - NCLBLK
-30 CONTINUE
+END DO
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -5393,18 +5393,18 @@ SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
 !
 REAL BLOCK, B, X, XJ
 DIMENSION BLOCK(NRWBLK,NOVRLP), B(*), X(*)
-do 20 J = 1,NCLPIV
+DO J=1,NCLPIV
   I = NRWBLK - NCLPIV + J
   X(J) = B(J)/BLOCK(I,J)
   IF (I.EQ.NRWBLK) RETURN
   LONG = NRWBLK - I
   XJ = X(J)
-  do 10 L = 1,LONG
+  DO L=1,LONG
     IPLUSL = I + L
     JPLUSL = J + L
     B(JPLUSL) = B(JPLUSL) - BLOCK(IPLUSL,J)*XJ
-10 CONTINUE
-20 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE ARCEFS
 
@@ -5419,13 +5419,13 @@ SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
 !
 REAL BLOCK, B, X, XJ
 DIMENSION BLOCK(NRWBLK,NCLPIV), B(*), X(*)
-do 20 J = 1,NCLPIV
+DO J=1,NCLPIV
   XJ = X(J)
-  do 10 L = 1,NRWBLK
+  DO L=1,NRWBLK
     NCLPVL = NCLPIV + L
     B(NCLPVL) = B(NCLPVL) - BLOCK(L,J)*XJ
-10 CONTINUE
-20 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE ARCEFM
 
@@ -5441,7 +5441,7 @@ SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
 REAL BLOCK, B, BI, SWAP
 INTEGER PIVOT(NRWPIV), PIVOTI
 DIMENSION BLOCK(NRWBLK,NRWPIV), B(*)
-do 30 I = 1,NRWPIV
+DO I=1,NRWPIV
   PIVOTI = PIVOT(I)
   IF (PIVOTI.EQ.I) GO TO 10
   SWAP = B(I)
@@ -5451,10 +5451,10 @@ do 30 I = 1,NRWPIV
   IF (I.EQ.NRWBLK) RETURN
   BI = B(I)
   IPLUS1 = I + 1
-  do 20 L = IPLUS1,NRWBLK
+  DO L=IPLUS1,NRWBLK
     B(L) = B(L) - BLOCK(L,I)*BI
-20 CONTINUE
-30 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE ARCEFE
 
@@ -5469,16 +5469,16 @@ SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
 !
 REAL BLOCK, B, X, XJ
 DIMENSION BLOCK(NRWBLK,NCLBLK), B(*), X(*)
-do 20 NJ = 1,NRWPIV
+DO NJ=1,NRWPIV
   J = NRWPIV - NJ + 1
   X(J) = B(J)/BLOCK(J,J)
   IF (J.EQ.1) RETURN
   JMIN1 = J - 1
   XJ = X(J)
-  do 10 L = 1,JMIN1
+  DO L=1,JMIN1
     B(L) = B(L) - BLOCK(L,J)*XJ
-10 CONTINUE
-20 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE ARCEBS
 
@@ -5494,12 +5494,12 @@ SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
 REAL BLOCK, B, X, XJ
 DIMENSION BLOCK(NRWBLK,NCLBLK), B(*), X(*)
 NRWPV1 = NRWPIV + 1
-do 20 J = NRWPV1,NCLBLK
+DO J=NRWPV1,NCLBLK
   XJ = X(J)
-  do 10 L = 1,NRWPIV
+  DO L=1,NRWPIV
     B(L) = B(L) - BLOCK(L,J)*XJ
-10 CONTINUE
-20 CONTINUE
+  END DO
+END DO
 RETURN
 END SUBROUTINE ARCEBM
 
@@ -5604,52 +5604,52 @@ NM2 = N - 2
 CALL DEC (M, M, A, IP, IER)
 K = 1
 IF (IER .NE. 0) GO TO 200
-do 10 J = 1,M
+DO J = 1,M
   CALL SOL (M, M, A, B(1,J,1), IP)
   CALL SOL (M, M, A, C(1,J,1), IP)
-10 CONTINUE
+  END DO
 ! ADJUST B(*,*,2). -----------------------------------------------------
-do 40 J = 1,M
-  do 30 I = 1,M
+DO J = 1,M
+  DO I = 1,M
     DP = 0.
     do 20 L = 1,M
 20 DP = DP + C(I,L,2)*C(L,J,1)
     B(I,J,2) = B(I,J,2) - DP
-30 CONTINUE
-40 CONTINUE
+    END DO
+  END DO
 ! MAIN LOOP.  PROCESS BLOCK-ROWS 2 TO N-1. -----------------------------
-do 100 K = 2,NM1
+DO K = 2,NM1
   KM1 = K - 1
-  do 70 J = 1,M
-    do 60 I = 1,M
+  DO J = 1,M
+    DO I = 1,M
       DP = 0.
       do 50 L = 1,M
 50 DP = DP + C(I,L,K)*B(L,J,KM1)
       A(I,J,K) = A(I,J,K) - DP
-60 CONTINUE
-70 CONTINUE
+      END DO
+    END DO
   CALL DEC (M, M, A(1,1,K), IP(1,K), IER)
   IF (IER .NE. 0) GO TO 200
   do 80 J = 1,M
 80 CALL SOL (M, M, A(1,1,K), B(1,J,K), IP(1,K))
-100 CONTINUE
+  END DO
 ! PROCESS LAST BLOCK-ROW AND RETURN. -----------------------------------
-do 130 J = 1,M
-  do 120 I = 1,M
+DO J = 1,M
+  DO I = 1,M
     DP = 0.
     do 110 L = 1,M
 110 DP = DP + B(I,L,N)*B(L,J,NM2)
     C(I,J,N) = C(I,J,N) - DP
-120 CONTINUE
-130 CONTINUE
-do 160 J = 1,M
-  do 150 I = 1,M
+    END DO
+  END DO
+DO J = 1,M
+  DO I = 1,M
     DP = 0.
     do 140 L = 1,M
 140 DP = DP + C(I,L,N)*B(L,J,NM1)
     A(I,J,N) = A(I,J,N) - DP
-150 CONTINUE
-160 CONTINUE
+    END DO
+  END DO
 CALL DEC (M, M, A(1,1,N), IP(1,N), IER)
 K = N
 IF (IER .NE. 0) GO TO 200
@@ -5690,40 +5690,40 @@ NM1 = N - 1
 NM2 = N - 2
 ! FORWARD SOLUTION SWEEP. ----------------------------------------------
 CALL SOL (M, M, A, Y, IP)
-do 30 K = 2,NM1
+DO K = 2,NM1
   KM1 = K - 1
-  do 20 I = 1,M
+  DO I = 1,M
     DP = 0.
     do 10 J = 1,M
 10 DP = DP + C(I,J,K)*Y(J,KM1)
     Y(I,K) = Y(I,K) - DP
-20 CONTINUE
+    END DO
   CALL SOL (M, M, A(1,1,K), Y(1,K), IP(1,K))
-30 CONTINUE
-do 50 I = 1,M
+  END DO
+DO I = 1,M
   DP = 0.
   do 40 J = 1,M
 40 DP = DP + C(I,J,N)*Y(J,NM1) + B(I,J,N)*Y(J,NM2)
   Y(I,N) = Y(I,N) - DP
-50 CONTINUE
+  END DO
 CALL SOL (M, M, A(1,1,N), Y(1,N), IP(1,N))
 ! BACKWARD SOLUTION SWEEP. ---------------------------------------------
-do 80 KB = 1,NM1
+DO KB = 1,NM1
   K = N - KB
   KP1 = K + 1
-  do 70 I = 1,M
+  DO I = 1,M
     DP = 0.
     do 60 J = 1,M
 60 DP = DP + B(I,J,K)*Y(J,KP1)
     Y(I,K) = Y(I,K) - DP
-70 CONTINUE
-80 CONTINUE
-do 100 I = 1,M
+    END DO
+  END DO
+DO I = 1,M
   DP = 0.
   do 90 J = 1,M
 90 DP = DP + C(I,J,1)*Y(J,3)
   Y(I,1) = Y(I,1) - DP
-100 CONTINUE
+  END DO
 RETURN
 !-----------------------  END OF SUBROUTINE SOLBT  ---------------------
 END SUBROUTINE SOLBT
@@ -5854,22 +5854,22 @@ INTEGER K,KK,KM1K,KM1KM1,KP,KPS,KS
 !     FIND NORM OF A USING ONLY UPPER HALF
 !
 J1 = 1
-do 30 J = 1, N
+DO J = 1, N
    Z(J) = SASUM(J,AP(J1),1)
    IJ = J1
    J1 = J1 + J
    JM1 = J - 1
    IF (JM1 .LT. 1) GO TO 20
-   do 10 I = 1, JM1
+   DO I = 1, JM1
       Z(I) = Z(I) + ABS(AP(IJ))
       IJ = IJ + 1
-10 CONTINUE
+   END DO
 20 CONTINUE
-30 CONTINUE
+END DO
 ANORM = 0.0E0
-do 40 J = 1, N
+DO J = 1, N
    ANORM = AMAX1(ANORM,Z(J))
-40 CONTINUE
+END DO
 !
 !     FACTOR
 !
@@ -5884,9 +5884,9 @@ CALL SSPFA(AP,N,KPVT,INFO)
 !     SOLVE U*D*W = E
 !
 EK = 1.0E0
-do 50 J = 1, N
+DO J = 1, N
    Z(J) = 0.0E0
-50 CONTINUE
+END DO
 K = N
 IK = (N*(N - 1))/2
 60 IF (K .EQ. 0) GO TO 120
@@ -6176,10 +6176,10 @@ IK = (N*(N - 1))/2
       IMAXP1 = IMAX + 1
       IM = IMAX*(IMAX - 1)/2
       IMJ = IM + 2*IMAX
-      do 40 J = IMAXP1, K
+      DO J = IMAXP1, K
          ROWMAX = AMAX1(ROWMAX,ABS(AP(IMJ)))
          IMJ = IMJ + J
-40 CONTINUE
+      END DO
       IF (IMAX .EQ. 1) GO TO 50
          JMAX = ISAMAX(IMAX-1,AP(IM+1),1)
          JMIM = JMAX + IM
@@ -6218,20 +6218,20 @@ IK = (N*(N - 1))/2
 !
          CALL SSWAP(IMAX,AP(IM+1),1,AP(IK+1),1)
          IMJ = IK + IMAX
-         do 110 JJ = IMAX, K
+         DO JJ = IMAX, K
             J = K + IMAX - JJ
             JK = IK + J
             T = AP(JK)
             AP(JK) = AP(IMJ)
             AP(IMJ) = T
             IMJ = IMJ - (J - 1)
-110 CONTINUE
+         END DO
 120 CONTINUE
 !
 !           PERFORM THE ELIMINATION.
 !
       IJ = IK - (K - 1)
-      do 130 JJ = 1, KM1
+      DO JJ = 1, KM1
          J = K - JJ
          JK = IK + J
          MULK = -AP(JK)/AP(KK)
@@ -6240,7 +6240,7 @@ IK = (N*(N - 1))/2
          IJJ = IJ + J
          AP(JK) = MULK
          IJ = IJ - (J - 1)
-130 CONTINUE
+      END DO
 !
 !           SET THE PIVOT ARRAY.
 !
@@ -6259,14 +6259,14 @@ IK = (N*(N - 1))/2
 !
          CALL SSWAP(IMAX,AP(IM+1),1,AP(IKM1+1),1)
          IMJ = IKM1 + IMAX
-         do 150 JJ = IMAX, KM1
+         DO JJ = IMAX, KM1
             J = KM1 + IMAX - JJ
             JKM1 = IKM1 + J
             T = AP(JKM1)
             AP(JKM1) = AP(IMJ)
             AP(IMJ) = T
             IMJ = IMJ - (J - 1)
-150 CONTINUE
+         END DO
          T = AP(KM1K)
          AP(KM1K) = AP(IMK)
          AP(IMK) = T
@@ -6281,7 +6281,7 @@ IK = (N*(N - 1))/2
          AKM1 = AP(KM1KM1)/AP(KM1K)
          DENOM = 1.0E0 - AK*AKM1
          IJ = IK - (K - 1) - (K - 2)
-         do 170 JJ = 1, KM2
+         DO JJ = 1, KM2
             J = KM1 - JJ
             JK = IK + J
             BK = AP(JK)/AP(KM1K)
@@ -6297,7 +6297,7 @@ IK = (N*(N - 1))/2
             AP(JKM1) = MULKM1
             IJJ = IJ + J
             IJ = IJ - (J - 1)
-170 CONTINUE
+         END DO
 180 CONTINUE
 !
 !           SET THE PIVOT ARRAY.
@@ -6656,12 +6656,12 @@ IF (NOINV) GO TO 270
          IF (KM1 .LT. 1) GO TO 170
             CALL SCOPY(KM1,AP(IK+1),1,WORK,1)
             IJ = 0
-            do 160 J = 1, KM1
+            DO J = 1, KM1
                JK = IK + J
                AP(JK) = SDOT(J,AP(IJ+1),1,WORK,1)
                CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
                IJ = IJ + J
-160 CONTINUE
+            END DO
             AP(KK) = AP(KK) + SDOT(KM1,WORK,1,AP(IK+1),1)
 170 CONTINUE
          KSTEP = 1
@@ -6681,24 +6681,24 @@ IF (NOINV) GO TO 270
          IF (KM1 .LT. 1) GO TO 210
             CALL SCOPY(KM1,AP(IKP1+1),1,WORK,1)
             IJ = 0
-            do 190 J = 1, KM1
+            DO J = 1, KM1
                JKP1 = IKP1 + J
                AP(JKP1) = SDOT(J,AP(IJ+1),1,WORK,1)
                CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IKP1+1),1)
                IJ = IJ + J
-190 CONTINUE
+            END DO
             AP(KKP1+1) = AP(KKP1+1) &
 &+ SDOT(KM1,WORK,1,AP(IKP1+1),1)
             AP(KKP1) = AP(KKP1) &
 &+ SDOT(KM1,AP(IK+1),1,AP(IKP1+1),1)
             CALL SCOPY(KM1,AP(IK+1),1,WORK,1)
             IJ = 0
-            do 200 J = 1, KM1
+            DO J = 1, KM1
                JK = IK + J
                AP(JK) = SDOT(J,AP(IJ+1),1,WORK,1)
                CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
                IJ = IJ + J
-200 CONTINUE
+            END DO
             AP(KK) = AP(KK) + SDOT(KM1,WORK,1,AP(IK+1),1)
 210 CONTINUE
          KSTEP = 2
@@ -6711,14 +6711,14 @@ IF (NOINV) GO TO 270
          IKS = (KS*(KS - 1))/2
          CALL SSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
          KSJ = IK + KS
-         do 230 JB = KS, K
+         DO JB = KS, K
             J = K + KS - JB
             JK = IK + J
             TEMP = AP(JK)
             AP(JK) = AP(KSJ)
             AP(KSJ) = TEMP
             KSJ = KSJ - (J - 1)
-230 CONTINUE
+         END DO
          IF (KSTEP .EQ. 1) GO TO 240
             KSKP1 = IKP1 + KS
             TEMP = AP(KSKP1)
@@ -6861,22 +6861,22 @@ INTEGER K,KK,KM1K,KM1KM1,KP,KPS,KS
 !     FIND NORM OF A USING ONLY UPPER HALF
 !
 J1 = 1
-do 30 J = 1, N
+DO J = 1, N
    Z(J) = DASUM(J,AP(J1),1)
    IJ = J1
    J1 = J1 + J
    JM1 = J - 1
    IF (JM1 .LT. 1) GO TO 20
-   do 10 I = 1, JM1
+   DO I = 1, JM1
       Z(I) = Z(I) + DABS(AP(IJ))
       IJ = IJ + 1
-10 CONTINUE
+   END DO
 20 CONTINUE
-30 CONTINUE
+END DO
 ANORM = 0.0D0
-do 40 J = 1, N
+DO J = 1, N
    ANORM = DMAX1(ANORM,Z(J))
-40 CONTINUE
+END DO
 !
 !     FACTOR
 !
@@ -6891,9 +6891,9 @@ CALL DSPFA(AP,N,KPVT,INFO)
 !     SOLVE U*D*W = E
 !
 EK = 1.0D0
-do 50 J = 1, N
+DO J = 1, N
    Z(J) = 0.0D0
-50 CONTINUE
+END DO
 K = N
 IK = (N*(N - 1))/2
 60 IF (K .EQ. 0) GO TO 120
@@ -7183,10 +7183,10 @@ IK = (N*(N - 1))/2
       IMAXP1 = IMAX + 1
       IM = IMAX*(IMAX - 1)/2
       IMJ = IM + 2*IMAX
-      do 40 J = IMAXP1, K
+      DO J = IMAXP1, K
          ROWMAX = DMAX1(ROWMAX,DABS(AP(IMJ)))
          IMJ = IMJ + J
-40 CONTINUE
+      END DO
       IF (IMAX .EQ. 1) GO TO 50
          JMAX = IDAMAX(IMAX-1,AP(IM+1),1)
          JMIM = JMAX + IM
@@ -7225,20 +7225,20 @@ IK = (N*(N - 1))/2
 !
          CALL DSWAP(IMAX,AP(IM+1),1,AP(IK+1),1)
          IMJ = IK + IMAX
-         do 110 JJ = IMAX, K
+         DO JJ = IMAX, K
             J = K + IMAX - JJ
             JK = IK + J
             T = AP(JK)
             AP(JK) = AP(IMJ)
             AP(IMJ) = T
             IMJ = IMJ - (J - 1)
-110 CONTINUE
+         END DO
 120 CONTINUE
 !
 !           PERFORM THE ELIMINATION.
 !
       IJ = IK - (K - 1)
-      do 130 JJ = 1, KM1
+      DO JJ = 1, KM1
          J = K - JJ
          JK = IK + J
          MULK = -AP(JK)/AP(KK)
@@ -7247,7 +7247,7 @@ IK = (N*(N - 1))/2
          IJJ = IJ + J
          AP(JK) = MULK
          IJ = IJ - (J - 1)
-130 CONTINUE
+      END DO
 !
 !           SET THE PIVOT ARRAY.
 !
@@ -7266,14 +7266,14 @@ IK = (N*(N - 1))/2
 !
          CALL DSWAP(IMAX,AP(IM+1),1,AP(IKM1+1),1)
          IMJ = IKM1 + IMAX
-         do 150 JJ = IMAX, KM1
+         DO JJ = IMAX, KM1
             J = KM1 + IMAX - JJ
             JKM1 = IKM1 + J
             T = AP(JKM1)
             AP(JKM1) = AP(IMJ)
             AP(IMJ) = T
             IMJ = IMJ - (J - 1)
-150 CONTINUE
+         END DO
          T = AP(KM1K)
          AP(KM1K) = AP(IMK)
          AP(IMK) = T
@@ -7288,7 +7288,7 @@ IK = (N*(N - 1))/2
          AKM1 = AP(KM1KM1)/AP(KM1K)
          DENOM = 1.0D0 - AK*AKM1
          IJ = IK - (K - 1) - (K - 2)
-         do 170 JJ = 1, KM2
+         DO JJ = 1, KM2
             J = KM1 - JJ
             JK = IK + J
             BK = AP(JK)/AP(KM1K)
@@ -7304,7 +7304,7 @@ IK = (N*(N - 1))/2
             AP(JKM1) = MULKM1
             IJJ = IJ + J
             IJ = IJ - (J - 1)
-170 CONTINUE
+         END DO
 180 CONTINUE
 !
 !           SET THE PIVOT ARRAY.
@@ -7663,12 +7663,12 @@ IF (NOINV) GO TO 270
          IF (KM1 .LT. 1) GO TO 170
             CALL DCOPY(KM1,AP(IK+1),1,WORK,1)
             IJ = 0
-            do 160 J = 1, KM1
+            DO J = 1, KM1
                JK = IK + J
                AP(JK) = DDOT(J,AP(IJ+1),1,WORK,1)
                CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
                IJ = IJ + J
-160 CONTINUE
+            END DO
             AP(KK) = AP(KK) + DDOT(KM1,WORK,1,AP(IK+1),1)
 170 CONTINUE
          KSTEP = 1
@@ -7688,24 +7688,24 @@ IF (NOINV) GO TO 270
          IF (KM1 .LT. 1) GO TO 210
             CALL DCOPY(KM1,AP(IKP1+1),1,WORK,1)
             IJ = 0
-            do 190 J = 1, KM1
+            DO J = 1, KM1
                JKP1 = IKP1 + J
                AP(JKP1) = DDOT(J,AP(IJ+1),1,WORK,1)
                CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IKP1+1),1)
                IJ = IJ + J
-190 CONTINUE
+            END DO
             AP(KKP1+1) = AP(KKP1+1) &
 &+ DDOT(KM1,WORK,1,AP(IKP1+1),1)
             AP(KKP1) = AP(KKP1) &
 &+ DDOT(KM1,AP(IK+1),1,AP(IKP1+1),1)
             CALL DCOPY(KM1,AP(IK+1),1,WORK,1)
             IJ = 0
-            do 200 J = 1, KM1
+            DO J = 1, KM1
                JK = IK + J
                AP(JK) = DDOT(J,AP(IJ+1),1,WORK,1)
                CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
                IJ = IJ + J
-200 CONTINUE
+            END DO
             AP(KK) = AP(KK) + DDOT(KM1,WORK,1,AP(IK+1),1)
 210 CONTINUE
          KSTEP = 2
@@ -7718,14 +7718,14 @@ IF (NOINV) GO TO 270
          IKS = (KS*(KS - 1))/2
          CALL DSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
          KSJ = IK + KS
-         do 230 JB = KS, K
+         DO JB = KS, K
             J = K + KS - JB
             JK = IK + J
             TEMP = AP(JK)
             AP(JK) = AP(KSJ)
             AP(KSJ) = TEMP
             KSJ = KSJ - (J - 1)
-230 CONTINUE
+         END DO
          IF (KSTEP .EQ. 1) GO TO 240
             KSKP1 = IKP1 + KS
             TEMP = AP(KSKP1)
@@ -7830,28 +7830,28 @@ INTEGER J,JJ,JM1,K,KJ,KK
 !
 !
    JJ = 0
-   do 30 J = 1, N
+   DO J = 1, N
       INFO = J
       S = 0.0E0
       JM1 = J - 1
       KJ = JJ
       KK = 0
       IF (JM1 .LT. 1) GO TO 20
-      do 10 K = 1, JM1
+      DO K = 1, JM1
          KJ = KJ + 1
          T = AP(KJ) - SDOT(K-1,AP(KK+1),1,AP(JJ+1),1)
          KK = KK + K
          T = T/AP(KK)
          AP(KJ) = T
          S = S + T*T
-10 CONTINUE
+      END DO
 20 CONTINUE
       JJ = JJ + J
       S = AP(JJ) - S
 !     ......EXIT
       IF (S .LE. 0.0E0) GO TO 40
       AP(JJ) = SQRT(S)
-30 CONTINUE
+   END DO
    INFO = 0
 40 CONTINUE
 RETURN
@@ -7909,18 +7909,18 @@ REAL SDOT,T
 INTEGER K,KB,KK
 !
 KK = 0
-do 10 K = 1, N
+DO K = 1, N
    T = SDOT(K-1,AP(KK+1),1,B(1),1)
    KK = KK + K
    B(K) = (B(K) - T)/AP(KK)
-10 CONTINUE
-do 20 KB = 1, N
+END DO
+DO KB = 1, N
    K = N + 1 - KB
    B(K) = B(K)/AP(KK)
    KK = KK - K
    T = -B(K)
    CALL SAXPY(K-1,T,AP(KK+1),1,B(1),1)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE SPPSL
 
@@ -8008,7 +8008,7 @@ IF (JOB/10 .EQ. 0) GO TO 70
 !
 IF (MOD(JOB,10) .EQ. 0) GO TO 140
    KK = 0
-   do 100 K = 1, N
+   DO K = 1, N
       K1 = KK + 1
       KK = KK + K
       AP(KK) = 1.0E0/AP(KK)
@@ -8018,36 +8018,36 @@ IF (MOD(JOB,10) .EQ. 0) GO TO 140
       J1 = KK + 1
       KJ = KK + K
       IF (N .LT. KP1) GO TO 90
-      do 80 J = KP1, N
+      DO J = KP1, N
          T = AP(KJ)
          AP(KJ) = 0.0E0
          CALL SAXPY(K,T,AP(K1),1,AP(J1),1)
          J1 = J1 + J
          KJ = KJ + J
-80 CONTINUE
+      END DO
 90 CONTINUE
-100 CONTINUE
+   END DO
 !
 !        FORM  INVERSE(R) * TRANS(INVERSE(R))
 !
    JJ = 0
-   do 130 J = 1, N
+   DO J = 1, N
       J1 = JJ + 1
       JJ = JJ + J
       JM1 = J - 1
       K1 = 1
       KJ = J1
       IF (JM1 .LT. 1) GO TO 120
-      do 110 K = 1, JM1
+      DO K = 1, JM1
          T = AP(KJ)
          CALL SAXPY(K,T,AP(J1),1,AP(K1),1)
          K1 = K1 + K
          KJ = KJ + 1
-110 CONTINUE
+      END DO
 120 CONTINUE
       T = AP(JJ)
       CALL SSCAL(J,T,AP(J1),1)
-130 CONTINUE
+   END DO
 140 CONTINUE
 RETURN
 END SUBROUTINE SPPDI
@@ -8140,28 +8140,28 @@ INTEGER J,JJ,JM1,K,KJ,KK
 !
 !
    JJ = 0
-   do 30 J = 1, N
+   DO J = 1, N
       INFO = J
       S = 0.0D0
       JM1 = J - 1
       KJ = JJ
       KK = 0
       IF (JM1 .LT. 1) GO TO 20
-      do 10 K = 1, JM1
+      DO K = 1, JM1
          KJ = KJ + 1
          T = AP(KJ) - DDOT(K-1,AP(KK+1),1,AP(JJ+1),1)
          KK = KK + K
          T = T/AP(KK)
          AP(KJ) = T
          S = S + T*T
-10 CONTINUE
+      END DO
 20 CONTINUE
       JJ = JJ + J
       S = AP(JJ) - S
 !     ......EXIT
       IF (S .LE. 0.0D0) GO TO 40
       AP(JJ) = DSQRT(S)
-30 CONTINUE
+   END DO
    INFO = 0
 40 CONTINUE
 RETURN
@@ -8219,18 +8219,18 @@ DOUBLE PRECISION DDOT,T
 INTEGER K,KB,KK
 !
 KK = 0
-do 10 K = 1, N
+DO K = 1, N
    T = DDOT(K-1,AP(KK+1),1,B(1),1)
    KK = KK + K
    B(K) = (B(K) - T)/AP(KK)
-10 CONTINUE
-do 20 KB = 1, N
+END DO
+DO KB = 1, N
    K = N + 1 - KB
    B(K) = B(K)/AP(KK)
    KK = KK - K
    T = -B(K)
    CALL DAXPY(K-1,T,AP(KK+1),1,B(1),1)
-20 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DPPSL
 
@@ -8318,7 +8318,7 @@ IF (JOB/10 .EQ. 0) GO TO 70
 !
 IF (MOD(JOB,10) .EQ. 0) GO TO 140
    KK = 0
-   do 100 K = 1, N
+   DO K = 1, N
       K1 = KK + 1
       KK = KK + K
       AP(KK) = 1.0D0/AP(KK)
@@ -8328,36 +8328,36 @@ IF (MOD(JOB,10) .EQ. 0) GO TO 140
       J1 = KK + 1
       KJ = KK + K
       IF (N .LT. KP1) GO TO 90
-      do 80 J = KP1, N
+      DO J = KP1, N
          T = AP(KJ)
          AP(KJ) = 0.0D0
          CALL DAXPY(K,T,AP(K1),1,AP(J1),1)
          J1 = J1 + J
          KJ = KJ + J
-80 CONTINUE
+      END DO
 90 CONTINUE
-100 CONTINUE
+   END DO
 !
 !        FORM  INVERSE(R) * TRANS(INVERSE(R))
 !
    JJ = 0
-   do 130 J = 1, N
+   DO J = 1, N
       J1 = JJ + 1
       JJ = JJ + J
       JM1 = J - 1
       K1 = 1
       KJ = J1
       IF (JM1 .LT. 1) GO TO 120
-      do 110 K = 1, JM1
+      DO K = 1, JM1
          T = AP(KJ)
          CALL DAXPY(K,T,AP(J1),1,AP(K1),1)
          K1 = K1 + K
          KJ = KJ + 1
-110 CONTINUE
+      END DO
 120 CONTINUE
       T = AP(JJ)
       CALL DSCAL(J,T,AP(J1),1)
-130 CONTINUE
+   END DO
 140 CONTINUE
 RETURN
 END SUBROUTINE DPPDI
@@ -8592,10 +8592,10 @@ IF (IERR .NE. 0) RETURN
 !
 IF (M .LE. 0) GO TO 30
 ONEJ = 1
-do 20 J = 1,M
+DO J = 1,M
    CALL CGESL (A, KA, N, IPVT, B(ONEJ), 0)
    ONEJ = ONEJ + KB
-20 CONTINUE
+END DO
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
@@ -8797,9 +8797,9 @@ CSIGN1(ZDUM1,ZDUM2) = CABS1(ZDUM1)*(ZDUM2/CABS1(ZDUM2))
 !     COMPUTE 1-NORM OF A
 !
 ANORM = 0.0E0
-do 10 J = 1, N
+DO J = 1, N
    ANORM = AMAX1(ANORM,SCASUM(N,A(1,J),1))
-10 CONTINUE
+END DO
 !
 !     FACTOR
 !
@@ -8815,10 +8815,10 @@ CALL CGEFA(A,LDA,N,IPVT,INFO)
 !     SOLVE CTRANS(U)*W = E
 !
 EK = (1.0E0,0.0E0)
-do 20 J = 1, N
+DO J = 1, N
    Z(J) = (0.0E0,0.0E0)
-20 CONTINUE
-do 100 K = 1, N
+END DO
+DO K = 1, N
    IF (CABS1(Z(K)) .NE. 0.0E0) EK = CSIGN1(EK,-Z(K))
    IF (CABS1(EK-Z(K)) .LE. CABS1(A(K,K))) GO TO 30
       S = CABS1(A(K,K))/CABS1(EK-Z(K))
@@ -8839,27 +8839,27 @@ do 100 K = 1, N
 50 CONTINUE
    KP1 = K + 1
    IF (KP1 .GT. N) GO TO 90
-      do 60 J = KP1, N
+      DO J = KP1, N
          SM = SM + CABS1(Z(J)+WKM*CONJG(A(K,J)))
          Z(J) = Z(J) + WK*CONJG(A(K,J))
          S = S + CABS1(Z(J))
-60 CONTINUE
+      END DO
       IF (S .GE. SM) GO TO 80
          T = WKM - WK
          WK = WKM
-         do 70 J = KP1, N
+         DO J = KP1, N
             Z(J) = Z(J) + T*CONJG(A(K,J))
-70 CONTINUE
+         END DO
 80 CONTINUE
 90 CONTINUE
    Z(K) = WK
-100 CONTINUE
+END DO
 S = 1.0E0/SCASUM(N,Z,1)
 CALL CSSCAL(N,S,Z,1)
 !
 !     SOLVE CTRANS(L)*Y = W
 !
-do 120 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (K .LT. N) Z(K) = Z(K) + CDOTC(N-K,A(K+1,K),1,Z(K+1),1)
    IF (CABS1(Z(K)) .LE. 1.0E0) GO TO 110
@@ -8870,7 +8870,7 @@ do 120 KB = 1, N
    T = Z(L)
    Z(L) = Z(K)
    Z(K) = T
-120 CONTINUE
+END DO
 S = 1.0E0/SCASUM(N,Z,1)
 CALL CSSCAL(N,S,Z,1)
 !
@@ -8878,7 +8878,7 @@ YNORM = 1.0E0
 !
 !     SOLVE L*V = Y
 !
-do 140 K = 1, N
+DO K = 1, N
    L = IPVT(K)
    T = Z(L)
    Z(L) = Z(K)
@@ -8889,14 +8889,14 @@ do 140 K = 1, N
       CALL CSSCAL(N,S,Z,1)
       YNORM = S*YNORM
 130 CONTINUE
-140 CONTINUE
+END DO
 S = 1.0E0/SCASUM(N,Z,1)
 CALL CSSCAL(N,S,Z,1)
 YNORM = S*YNORM
 !
 !     SOLVE  U*Z = V
 !
-do 160 KB = 1, N
+DO KB = 1, N
    K = N + 1 - KB
    IF (CABS1(Z(K)) .LE. CABS1(A(K,K))) GO TO 150
       S = CABS1(A(K,K))/CABS1(Z(K))
@@ -8907,7 +8907,7 @@ do 160 KB = 1, N
    IF (CABS1(A(K,K)) .EQ. 0.0E0) Z(K) = (1.0E0,0.0E0)
    T = -Z(K)
    CALL CAXPY(K-1,T,A(1,K),1,Z(1),1)
-160 CONTINUE
+END DO
 !     MAKE ZNORM = 1.0
 S = 1.0E0/SCASUM(N,Z,1)
 CALL CSSCAL(N,S,Z,1)
@@ -8980,7 +8980,7 @@ CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
 INFO = 0
 NM1 = N - 1
 IF (NM1 .LT. 1) GO TO 70
-do 60 K = 1, NM1
+DO K = 1, NM1
    KP1 = K + 1
 !
 !        FIND L = PIVOT INDEX
@@ -9007,19 +9007,19 @@ do 60 K = 1, NM1
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      do 30 J = KP1, N
+      DO J = KP1, N
          T = A(L,J)
          IF (L .EQ. K) GO TO 20
             A(L,J) = A(K,J)
             A(K,J) = T
 20 CONTINUE
          CALL CAXPY(N-K,T,A(K+1,K),1,A(K+1,J),1)
-30 CONTINUE
+      END DO
    GO TO 50
 40 CONTINUE
       INFO = K
 50 CONTINUE
-60 CONTINUE
+END DO
 70 CONTINUE
 IPVT(N) = N
 IF (CABS1(A(N,N)) .EQ. 0.0E0) INFO = N
@@ -9097,7 +9097,7 @@ IF (JOB .NE. 0) GO TO 50
 !        FIRST SOLVE  L*Y = B
 !
    IF (NM1 .LT. 1) GO TO 30
-   do 20 K = 1, NM1
+   DO K = 1, NM1
       L = IPVT(K)
       T = B(L)
       IF (L .EQ. K) GO TO 10
@@ -9105,32 +9105,32 @@ IF (JOB .NE. 0) GO TO 50
          B(K) = T
 10 CONTINUE
       CALL CAXPY(N-K,T,A(K+1,K),1,B(K+1),1)
-20 CONTINUE
+   END DO
 30 CONTINUE
 !
 !        NOW SOLVE  U*X = Y
 !
-   do 40 KB = 1, N
+   DO KB = 1, N
       K = N + 1 - KB
       B(K) = B(K)/A(K,K)
       T = -B(K)
       CALL CAXPY(K-1,T,A(1,K),1,B(1),1)
-40 CONTINUE
+   END DO
 GO TO 100
 50 CONTINUE
 !
 !        JOB = NONZERO, SOLVE  CTRANS(A) * X = B
 !        FIRST SOLVE  CTRANS(U)*Y = B
 !
-   do 60 K = 1, N
+   DO K = 1, N
       T = CDOTC(K-1,A(1,K),1,B(1),1)
       B(K) = (B(K) - T)/CONJG(A(K,K))
-60 CONTINUE
+   END DO
 !
 !        NOW SOLVE CTRANS(L)*X = Y
 !
    IF (NM1 .LT. 1) GO TO 90
-   do 80 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       B(K) = B(K) + CDOTC(N-K,A(K+1,K),1,B(K+1),1)
       L = IPVT(K)
@@ -9139,7 +9139,7 @@ GO TO 100
          B(L) = B(K)
          B(K) = T
 70 CONTINUE
-80 CONTINUE
+   END DO
 90 CONTINUE
 100 CONTINUE
 RETURN
@@ -9240,38 +9240,38 @@ IF (JOB/10 .EQ. 0) GO TO 70
 !     COMPUTE INVERSE(U)
 !
 IF (MOD(JOB,10) .EQ. 0) GO TO 150
-   do 100 K = 1, N
+   DO K = 1, N
       A(K,K) = (1.0E0,0.0E0)/A(K,K)
       T = -A(K,K)
       CALL CSCAL(K-1,T,A(1,K),1)
       KP1 = K + 1
       IF (N .LT. KP1) GO TO 90
-      do 80 J = KP1, N
+      DO J = KP1, N
          T = A(K,J)
          A(K,J) = (0.0E0,0.0E0)
          CALL CAXPY(K,T,A(1,K),1,A(1,J),1)
-80 CONTINUE
+      END DO
 90 CONTINUE
-100 CONTINUE
+   END DO
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
    NM1 = N - 1
    IF (NM1 .LT. 1) GO TO 140
-   do 130 KB = 1, NM1
+   DO KB = 1, NM1
       K = N - KB
       KP1 = K + 1
-      do 110 I = KP1, N
+      DO I = KP1, N
          WORK(I) = A(I,K)
          A(I,K) = (0.0E0,0.0E0)
-110 CONTINUE
-      do 120 J = KP1, N
+      END DO
+      DO J = KP1, N
          T = WORK(J)
          CALL CAXPY(N,T,A(1,J),1,A(1,K),1)
-120 CONTINUE
+      END DO
       L = IPVT(K)
       IF (L .NE. K) CALL CSWAP(N,A(1,K),1,A(1,L),1)
-130 CONTINUE
+   END DO
 140 CONTINUE
 150 CONTINUE
 RETURN
@@ -9350,7 +9350,7 @@ IPVT(N) = 1
 IF (N .EQ. 1) GO TO 50
 NM1 = N - 1
 !
-do 40 K = 1,NM1
+DO K = 1,NM1
    KP1 = K + 1
 !
 !               SEARCH FOR THE K-TH PIVOT ELEMENT
@@ -9378,12 +9378,12 @@ do 40 K = 1,NM1
 !                    COMPUTE THE MULTIPLIERS
 !
 20 CALL CDIVID(1.D0, 0.D0, PR, PI, PR, PI)
-   do 21 I = KP1,N
+   DO I = KP1,N
       TR = AR(I,K)
       TI = AI(I,K)
       AR(I,K) = TR*PR - TI*PI
       AI(I,K) = TR*PI + TI*PR
-21 CONTINUE
+   END DO
 !
 !              INTERCHANGE AND ELIMINATE BY COLUMNS
 !
@@ -9395,12 +9395,12 @@ do 40 K = 1,NM1
       AI(L,J) = AI(K,J)
       AI(K,J) = TI
       IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 31
-      do 30 I = KP1,N
+      DO I = KP1,N
          AR(I,J) = AR(I,J) - AR(I,K)*TR + AI(I,K)*TI
          AI(I,J) = AI(I,J) - AR(I,K)*TI - AI(I,K)*TR
-30 CONTINUE
+      END DO
 31 CONTINUE
-40 CONTINUE
+END DO
 !
 !                  CHECK THE N-TH PIVOT ELEMENT
 !
@@ -9452,7 +9452,7 @@ DOUBLE PRECISION PR, PI, TR, TI
 !
 IF (N .EQ. 1) GO TO 50
 NM1 = N - 1
-do 20 K = 1, NM1
+DO K = 1, NM1
    KP1 = K + 1
    L = IPVT(K)
    do 11 J = 1,M
@@ -9463,41 +9463,41 @@ do 20 K = 1, NM1
       BI(L,J) = BI(K,J)
       BI(K,J) = TI
       IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 11
-      do 10 I = KP1, N
+      DO I = KP1, N
          BR(I,J) = BR(I,J) - AR(I,K)*TR + AI(I,K)*TI
          BI(I,J) = BI(I,J) - AR(I,K)*TI - AI(I,K)*TR
-10 CONTINUE
+      END DO
 11 CONTINUE
-20 CONTINUE
+END DO
 !
 !                   BACKWARD ELIMINATION
 !               FOR THE LAST N - 1 VARIABLES
 !
-do 40 L = 1,NM1
+DO L = 1,NM1
    KM1 = N - L
    K = KM1 + 1
    CALL CDIVID (1.D0, 0.D0, AR(K,K), AI(K,K), PR, PI)
-   do 31 J = 1,M
+   DO J = 1,M
       TR = BR(K,J)
       TI = BI(K,J)
       BR(K,J) = TR*PR - TI*PI
       BI(K,J) = TR*PI + TI*PR
       TR = BR(K,J)
       TI = BI(K,J)
-      do 30 I = 1, KM1
+      DO I = 1, KM1
          BR(I,J) = BR(I,J) - AR(I,K)*TR + AI(I,K)*TI
          BI(I,J) = BI(I,J) - AR(I,K)*TI - AI(I,K)*TR
-30 CONTINUE
-31 CONTINUE
-40 CONTINUE
+      END DO
+   END DO
+END DO
 !
 50 CALL CDIVID (1.D0, 0.D0, AR(1,1), AI(1,1), PR, PI)
-do 60 J = 1,M
+DO J = 1,M
    TR = BR(1,J)
    TI = BI(1,J)
    BR(1,J) = TR*PR - TI*PI
    BI(1,J) = TR*PI + TI*PR
-60 CONTINUE
+END DO
 RETURN
 END SUBROUTINE DCSOL
 
@@ -9537,45 +9537,45 @@ NM1 = N - 1
 !
 !                REPLACE U WITH THE INVERSE OF U
 !
-do 20 NMI = 1,NM1
+DO NMI = 1,NM1
    I = N - NMI
    IP1 = I + 1
    CALL CDIVID (1.D0, 0.D0, AR(I,I), AI(I,I), TR, TI)
-   do 11 JB = 1,NMI
+   DO JB = 1,NMI
       J = NP1 - JB
       SR = 0.D0
       SI = 0.D0
-      do 10 L = IP1,J
+      DO L = IP1,J
          SR = SR + AR(I,L)*AR(L,J) - AI(I,L)*AI(L,J)
          SI = SI + AR(I,L)*AI(L,J) + AI(I,L)*AR(L,J)
-10 CONTINUE
+      END DO
       AR(I,J) = -SR*TR + SI*TI
       AI(I,J) = -SR*TI - SI*TR
-11 CONTINUE
+   END DO
    AR(I,I) = TR
    AI(I,I) = TI
-20 CONTINUE
+END DO
 !
 !                COMPUTE  INVERSE(U)*INVERSE(L)
 !
 do 60 NMK = 1,NM1
    K = N - NMK
    KP1 = K + 1
-   do 30 I = KP1,N
+   DO I = KP1,N
       TEMP(1,I) = AR(I,K)
       TEMP(2,I) = AI(I,K)
       AR(I,K) = 0.D0
       AI(I,K) = 0.D0
-30 CONTINUE
+   END DO
 !
-   do 41 J = KP1,N
+   DO J = KP1,N
       TR = TEMP(1,J)
       TI = TEMP(2,J)
-      do 40 I = 1,N
+      DO I = 1,N
          AR(I,K) = AR(I,K) - AR(I,J)*TR + AI(I,J)*TI
          AI(I,K) = AI(I,K) - AR(I,J)*TI - AI(I,J)*TR
-40 CONTINUE
-41 CONTINUE
+      END DO
+   END DO
 !
    L = IPVT(K)
    IF (K .EQ. L) GO TO 60
@@ -9759,9 +9759,9 @@ do 160 L = 1, LU
 !           PLACE THE TRANSFORMATION IN U FOR SUBSEQUENT BACK
 !           MULTIPLICATION.
 !
-      do 60 I = L, N
+      DO I = L, N
          U(I,L) = X(I,L)
-60 CONTINUE
+      END DO
 70 CONTINUE
    IF (L .GT. NRT) GO TO 150
 !
@@ -9779,24 +9779,24 @@ do 160 L = 1, LU
 !
 !              APPLY THE TRANSFORMATION.
 !
-         do 90 I = LP1, N
+         DO I = LP1, N
             WORK(I) = 0.0E0
-90 CONTINUE
+         END DO
          do 100 J = LP1, P
             CALL SAXPY(N-L,E(J),X(LP1,J),1,WORK(LP1),1)
 100 CONTINUE
-         do 110 J = LP1, P
+         DO J = LP1, P
             CALL SAXPY(N-L,-E(J)/E(LP1),WORK(LP1),1,X(LP1,J),1)
-110 CONTINUE
+         END DO
 120 CONTINUE
       IF (.NOT.WANTV) GO TO 140
 !
 !              PLACE THE TRANSFORMATION IN V FOR SUBSEQUENT
 !              BACK MULTIPLICATION.
 !
-         do 130 I = LP1, P
+         DO I = LP1, P
             V(I,L) = E(I)
-130 CONTINUE
+         END DO
 140 CONTINUE
 150 CONTINUE
 160 CONTINUE
@@ -9816,61 +9816,61 @@ E(M) = 0.0E0
 !
 IF (.NOT.WANTU) GO TO 300
    IF (NCU .LT. NCTP1) GO TO 200
-   do 190 J = NCTP1, NCU
-      do 180 I = 1, N
+   DO J = NCTP1, NCU
+      DO I = 1, N
          U(I,J) = 0.0E0
-180 CONTINUE
+      END DO
       U(J,J) = 1.0E0
-190 CONTINUE
+   END DO
 200 CONTINUE
    IF (NCT .LT. 1) GO TO 290
-   do 280 LL = 1, NCT
+   DO LL = 1, NCT
       L = NCT - LL + 1
       IF (S(L) .EQ. 0.0E0) GO TO 250
          LP1 = L + 1
          IF (NCU .LT. LP1) GO TO 220
-         do 210 J = LP1, NCU
+         DO J = LP1, NCU
             T = -SDOT(N-L+1,U(L,L),1,U(L,J),1)/U(L,L)
             CALL SAXPY(N-L+1,T,U(L,L),1,U(L,J),1)
-210 CONTINUE
+         END DO
 220 CONTINUE
          CALL SSCAL(N-L+1,-1.0E0,U(L,L),1)
          U(L,L) = 1.0E0 + U(L,L)
          LM1 = L - 1
          IF (LM1 .LT. 1) GO TO 240
-         do 230 I = 1, LM1
+         DO I = 1, LM1
             U(I,L) = 0.0E0
-230 CONTINUE
+         END DO
 240 CONTINUE
       GO TO 270
 250 CONTINUE
-         do 260 I = 1, N
+         DO I = 1, N
             U(I,L) = 0.0E0
-260 CONTINUE
+         END DO
          U(L,L) = 1.0E0
 270 CONTINUE
-280 CONTINUE
+   END DO
 290 CONTINUE
 300 CONTINUE
 !
 !     IF IT IS REQUIRED, GENERATE V.
 !
 IF (.NOT.WANTV) GO TO 350
-   do 340 LL = 1, P
+   DO LL = 1, P
       L = P - LL + 1
       LP1 = L + 1
       IF (L .GT. NRT) GO TO 320
       IF (E(L) .EQ. 0.0E0) GO TO 320
-         do 310 J = LP1, P
+         DO J = LP1, P
             T = -SDOT(P-L,V(LP1,L),1,V(LP1,J),1)/V(LP1,L)
             CALL SAXPY(P-L,T,V(LP1,L),1,V(LP1,J),1)
-310 CONTINUE
+         END DO
 320 CONTINUE
-      do 330 I = 1, P
+      DO I = 1, P
          V(I,L) = 0.0E0
-330 CONTINUE
+      END DO
       V(L,L) = 1.0E0
-340 CONTINUE
+   END DO
 350 CONTINUE
 !
 !     MAIN ITERATION LOOP FOR THE SINGULAR VALUES.
@@ -9903,7 +9903,7 @@ ITER = 0
 !                        S(L), ..., S(M) ARE NOT NEGLIGIBLE (QR STEP).
 !           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
 !
-   do 390 LL = 1, M
+   DO LL = 1, M
       L = M - LL
 !        ...EXIT
       IF (L .EQ. 0) GO TO 400
@@ -9914,7 +9914,7 @@ ITER = 0
 !        ......EXIT
          GO TO 400
 380 CONTINUE
-390 CONTINUE
+   END DO
 400 CONTINUE
    IF (L .NE. M - 1) GO TO 410
       KASE = 4
@@ -9922,7 +9922,7 @@ ITER = 0
 410 CONTINUE
       LP1 = L + 1
       MP1 = M + 1
-      do 430 LLS = LP1, MP1
+      DO LLS = LP1, MP1
          LS = M - LLS + LP1
 !           ...EXIT
          IF (LS .EQ. L) GO TO 440
@@ -9935,7 +9935,7 @@ ITER = 0
 !           ......EXIT
             GO TO 440
 420 CONTINUE
-430 CONTINUE
+      END DO
 440 CONTINUE
       IF (LS .NE. L) GO TO 450
          KASE = 3
@@ -9961,7 +9961,7 @@ ITER = 0
       MM1 = M - 1
       F = E(M-1)
       E(M-1) = 0.0E0
-      do 510 KK = L, MM1
+      DO KK = L, MM1
          K = MM1 - KK + L
          T1 = S(K)
          CALL SROTG(T1,F,CS,SN)
@@ -9971,7 +9971,7 @@ ITER = 0
             E(K-1) = CS*E(K-1)
 500 CONTINUE
          IF (WANTV) CALL SROT(P,V(1,K),1,V(1,M),1,CS,SN)
-510 CONTINUE
+      END DO
    GO TO 610
 !
 !        SPLIT AT NEGLIGIBLE S(L).
@@ -9979,14 +9979,14 @@ ITER = 0
 520 CONTINUE
       F = E(L-1)
       E(L-1) = 0.0E0
-      do 530 K = L, M
+      DO K = L, M
          T1 = S(K)
          CALL SROTG(T1,F,CS,SN)
          S(K) = T1
          F = -SN*E(K)
          E(K) = CS*E(K)
          IF (WANTU) CALL SROT(N,U(1,K),1,U(1,L-1),1,CS,SN)
-530 CONTINUE
+      END DO
    GO TO 610
 !
 !        PERFORM ONE QR STEP.
@@ -10016,7 +10016,7 @@ ITER = 0
 !           CHASE ZEROS.
 !
       MM1 = M - 1
-      do 560 K = L, MM1
+      DO K = L, MM1
          CALL SROTG(F,G,CS,SN)
          IF (K .NE. L) E(K-1) = F
          F = CS*S(K) + SN*E(K)
@@ -10032,7 +10032,7 @@ ITER = 0
          E(K+1) = CS*E(K+1)
          IF (WANTU .AND. K .LT. N) &
 &CALL SROT(N,U(1,K),1,U(1,K+1),1,CS,SN)
-560 CONTINUE
+      END DO
       E(M-1) = F
       ITER = ITER + 1
    GO TO 610
@@ -10240,9 +10240,9 @@ do 160 L = 1, LU
 !           PLACE THE TRANSFORMATION IN U FOR SUBSEQUENT BACK
 !           MULTIPLICATION.
 !
-      do 60 I = L, N
+      DO I = L, N
          U(I,L) = X(I,L)
-60 CONTINUE
+      END DO
 70 CONTINUE
    IF (L .GT. NRT) GO TO 150
 !
@@ -10260,24 +10260,24 @@ do 160 L = 1, LU
 !
 !              APPLY THE TRANSFORMATION.
 !
-         do 90 I = LP1, N
+         DO I = LP1, N
             WORK(I) = 0.0D0
-90 CONTINUE
+         END DO
          do 100 J = LP1, P
             CALL DAXPY(N-L,E(J),X(LP1,J),1,WORK(LP1),1)
 100 CONTINUE
-         do 110 J = LP1, P
+         DO J = LP1, P
             CALL DAXPY(N-L,-E(J)/E(LP1),WORK(LP1),1,X(LP1,J),1)
-110 CONTINUE
+         END DO
 120 CONTINUE
       IF (.NOT.WANTV) GO TO 140
 !
 !              PLACE THE TRANSFORMATION IN V FOR SUBSEQUENT
 !              BACK MULTIPLICATION.
 !
-         do 130 I = LP1, P
+         DO I = LP1, P
             V(I,L) = E(I)
-130 CONTINUE
+         END DO
 140 CONTINUE
 150 CONTINUE
 160 CONTINUE
@@ -10297,61 +10297,61 @@ E(M) = 0.0D0
 !
 IF (.NOT.WANTU) GO TO 300
    IF (NCU .LT. NCTP1) GO TO 200
-   do 190 J = NCTP1, NCU
-      do 180 I = 1, N
+   DO J = NCTP1, NCU
+      DO I = 1, N
          U(I,J) = 0.0D0
-180 CONTINUE
+      END DO
       U(J,J) = 1.0D0
-190 CONTINUE
+   END DO
 200 CONTINUE
    IF (NCT .LT. 1) GO TO 290
-   do 280 LL = 1, NCT
+   DO LL = 1, NCT
       L = NCT - LL + 1
       IF (S(L) .EQ. 0.0D0) GO TO 250
          LP1 = L + 1
          IF (NCU .LT. LP1) GO TO 220
-         do 210 J = LP1, NCU
+         DO J = LP1, NCU
             T = -DDOT(N-L+1,U(L,L),1,U(L,J),1)/U(L,L)
             CALL DAXPY(N-L+1,T,U(L,L),1,U(L,J),1)
-210 CONTINUE
+         END DO
 220 CONTINUE
          CALL DSCAL(N-L+1,-1.0D0,U(L,L),1)
          U(L,L) = 1.0D0 + U(L,L)
          LM1 = L - 1
          IF (LM1 .LT. 1) GO TO 240
-         do 230 I = 1, LM1
+         DO I = 1, LM1
             U(I,L) = 0.0D0
-230 CONTINUE
+         END DO
 240 CONTINUE
       GO TO 270
 250 CONTINUE
-         do 260 I = 1, N
+         DO I = 1, N
             U(I,L) = 0.0D0
-260 CONTINUE
+         END DO
          U(L,L) = 1.0D0
 270 CONTINUE
-280 CONTINUE
+   END DO
 290 CONTINUE
 300 CONTINUE
 !
 !     IF IT IS REQUIRED, GENERATE V.
 !
 IF (.NOT.WANTV) GO TO 350
-   do 340 LL = 1, P
+   DO LL = 1, P
       L = P - LL + 1
       LP1 = L + 1
       IF (L .GT. NRT) GO TO 320
       IF (E(L) .EQ. 0.0D0) GO TO 320
-         do 310 J = LP1, P
+         DO J = LP1, P
             T = -DDOT(P-L,V(LP1,L),1,V(LP1,J),1)/V(LP1,L)
             CALL DAXPY(P-L,T,V(LP1,L),1,V(LP1,J),1)
-310 CONTINUE
+         END DO
 320 CONTINUE
-      do 330 I = 1, P
+      DO I = 1, P
          V(I,L) = 0.0D0
-330 CONTINUE
+      END DO
       V(L,L) = 1.0D0
-340 CONTINUE
+   END DO
 350 CONTINUE
 !
 !     MAIN ITERATION LOOP FOR THE SINGULAR VALUES.
@@ -10384,7 +10384,7 @@ ITER = 0
 !                        S(L), ..., S(M) ARE NOT NEGLIGIBLE (QR STEP).
 !           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
 !
-   do 390 LL = 1, M
+   DO LL = 1, M
       L = M - LL
 !        ...EXIT
       IF (L .EQ. 0) GO TO 400
@@ -10395,7 +10395,7 @@ ITER = 0
 !        ......EXIT
          GO TO 400
 380 CONTINUE
-390 CONTINUE
+   END DO
 400 CONTINUE
    IF (L .NE. M - 1) GO TO 410
       KASE = 4
@@ -10403,7 +10403,7 @@ ITER = 0
 410 CONTINUE
       LP1 = L + 1
       MP1 = M + 1
-      do 430 LLS = LP1, MP1
+      DO LLS = LP1, MP1
          LS = M - LLS + LP1
 !           ...EXIT
          IF (LS .EQ. L) GO TO 440
@@ -10416,7 +10416,7 @@ ITER = 0
 !           ......EXIT
             GO TO 440
 420 CONTINUE
-430 CONTINUE
+      END DO
 440 CONTINUE
       IF (LS .NE. L) GO TO 450
          KASE = 3
@@ -10442,7 +10442,7 @@ ITER = 0
       MM1 = M - 1
       F = E(M-1)
       E(M-1) = 0.0D0
-      do 510 KK = L, MM1
+      DO KK = L, MM1
          K = MM1 - KK + L
          T1 = S(K)
          CALL DROTG(T1,F,CS,SN)
@@ -10452,7 +10452,7 @@ ITER = 0
             E(K-1) = CS*E(K-1)
 500 CONTINUE
          IF (WANTV) CALL DROT(P,V(1,K),1,V(1,M),1,CS,SN)
-510 CONTINUE
+      END DO
    GO TO 610
 !
 !        SPLIT AT NEGLIGIBLE S(L).
@@ -10460,14 +10460,14 @@ ITER = 0
 520 CONTINUE
       F = E(L-1)
       E(L-1) = 0.0D0
-      do 530 K = L, M
+      DO K = L, M
          T1 = S(K)
          CALL DROTG(T1,F,CS,SN)
          S(K) = T1
          F = -SN*E(K)
          E(K) = CS*E(K)
          IF (WANTU) CALL DROT(N,U(1,K),1,U(1,L-1),1,CS,SN)
-530 CONTINUE
+      END DO
    GO TO 610
 !
 !        PERFORM ONE QR STEP.
@@ -10497,7 +10497,7 @@ ITER = 0
 !           CHASE ZEROS.
 !
       MM1 = M - 1
-      do 560 K = L, MM1
+      DO K = L, MM1
          CALL DROTG(F,G,CS,SN)
          IF (K .NE. L) E(K-1) = F
          F = CS*S(K) + SN*E(K)
@@ -10513,7 +10513,7 @@ ITER = 0
          E(K+1) = CS*E(K+1)
          IF (WANTU .AND. K .LT. N) &
 &CALL DROT(N,U(1,K),1,U(1,K+1),1,CS,SN)
-560 CONTINUE
+      END DO
       E(M-1) = F
       ITER = ITER + 1
    GO TO 610

@@ -126,14 +126,14 @@ S2 = N*U2
 IF (N .LT. 2) GO TO 70
 U = T/A
 NM1 = N - 1
-do 60 J = 1,NM1
+DO J = 1,NM1
    V1 = U1 + J*U
    V2 = (N - J)*U2
    C = S1*V1 - S2*V2
    D = S1*V2 + S2*V1
    S1 = C
    S2 = D
-60 CONTINUE
+END DO
 !
 !     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
 !
@@ -159,10 +159,10 @@ IF (A .GE. 289.0) M = 6
 IF (EPS .GT. 1.E-8) M = M/2
 SUM  = CMPLX(C0(M),0.0)
 L = M
-do 90 J = 2,M
+DO J = 2,M
    L = L - 1
    SUM = CMPLX(C0(L),0.0) + SUM*ETA2
-90 CONTINUE
+END DO
 SUM = SUM*ETA
 A1 = REAL(SUM)
 A2 = AIMAG(SUM)
@@ -788,14 +788,14 @@ S2 = N*U2
 IF (N .LT. 2) GO TO 70
 U = T/A
 NM1 = N - 1
-do 60 J = 1,NM1
+DO J = 1,NM1
    V1 = U1 + J*U
    V2 = (N - J)*U2
    C = S1*V1 - S2*V2
    D = S1*V2 + S2*V1
    S1 = C
    S2 = D
-60 CONTINUE
+END DO
 !
 !     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
 !
@@ -820,7 +820,7 @@ Q1 = U1*U1 - U2*U2
 Q2 = 2.D0*U1*U2
 A1 = 0.D0
 A2 = 0.D0
-do 91 J = 1,30
+DO J = 1,30
    T1 = A1
    T2 = A2
    A1 = A1 + C0(J)*U1
@@ -831,7 +831,7 @@ do 91 J = 1,30
    T2 = U1*Q2 + U2*Q1
    U1 = T1
    U2 = T2
-91 CONTINUE
+END DO
 !-----------------------------------------------------------------------
 !                 GATHERING TOGETHER THE RESULTS
 !-----------------------------------------------------------------------
@@ -1364,10 +1364,10 @@ ETA2 = ETA*ETA
 M = 12
 L = M
 SUM = CMPLX(C0(M),0.0)
-do 60 J = 2,M
+DO J = 2,M
    L = L - 1
    SUM = CMPLX(C0(L),0.0) + SUM*ETA2
-60 CONTINUE
+END DO
 SUM = CMPLX(0.5,0.0)*ETA + ETA2*SUM
 A1 = REAL(SUM)
 A2 = AIMAG(SUM)
@@ -1524,10 +1524,10 @@ GO TO 150
 DEN = X
 UPPER = P1(1) * X
 !
-do 210 I = 1, 5
+DO I = 1, 5
    DEN = (DEN + Q1(I)) * X
    UPPER = (UPPER + P1(I+1)) * X
-210 CONTINUE
+END DO
 !
 DEN = (UPPER + P1(7)) / (DEN + Q1(6))
 XMX0 = DBLE(X) - DX0
@@ -1544,10 +1544,10 @@ W = 1.0E0 / (X * X)
 DEN = W
 UPPER = P2(1) * W
 !
-do 310 I = 1, 3
+DO I = 1, 3
    DEN = (DEN + Q2(I)) * W
    UPPER = (UPPER + P2(I+1)) * W
-310 CONTINUE
+END DO
 !
 AUG = UPPER / (DEN + Q2(4)) - 0.5E0 / X + AUG
 350 PSI = AUG + ALOG(X)
@@ -1907,10 +1907,10 @@ X = 1.D0 - X
 !
 70 T = (10.D0/X)**2
 S = P(15)
-do 71 J = 1,14
+DO J = 1,14
    L = 15 - J
    S = P(L) + T*S
-71 CONTINUE
+END DO
 S = 0.5D0/X + T*S
 !
 !     FINAL ASSEMBLY
@@ -2160,13 +2160,13 @@ S = T*B(3)
 IF (ABS(S) .LT. TST) GO TO 80
 !
 TK = 2.0
-do 70 K = 4,22
+DO K = 4,22
    T = T*((TK+FN + 1.0)/(TK + 1.0))*((TK+FN)/(TK + 2.0))*RXSQ
    TRM(K) = T*B(K)
    IF (ABS(TRM(K)) .LT. TST) GO TO 80
    S = S + TRM(K)
    TK = TK + 2.0
-70 CONTINUE
+END DO
 !
 80 S = (S + T1)*TSS
 IF (XINC .EQ. 0.0) GO TO 100
@@ -2182,12 +2182,12 @@ FX = X + XM
 !-----------------------------------------------------------------------
 !     THIS LOOP SHOULD NOT BE CHANGED. FX IS ACCURATE WHEN X IS SMALL
 !-----------------------------------------------------------------------
-do 90 I = 1,NX
+DO I = 1,NX
    TRMR(I) = FX**(-NP)
    S = S + TRMR(I)
    XM = XM - 1.0
    FX = X + XM
-90 CONTINUE
+END DO
 !
 100 ANS(M) = S
 IF (FN .EQ. 0.0) GO TO 180
@@ -2195,7 +2195,7 @@ IF (FN .EQ. 0.0) GO TO 180
 !     GENERATE LOWER DERIVATIVES, J.LT.N+M-1
 !-----------------------------------------------------------------------
 IF (M .EQ. 1) RETURN
-do 150 J = 2,M
+DO J = 2,M
    FNP = FN
    FN = FN - 1.0
    TSS = TSS*XDMY
@@ -2206,36 +2206,36 @@ do 150 J = 2,M
    IF (ABS(S) .LT. TST) GO TO 120
 !
    TK = 3.0E0 + FNP
-   do 110 K = 4,22
+   DO K = 4,22
       TRM(K) = TRM(K)*FNP/TK
       IF (ABS(TRM(K)) .LT. TST) GO TO 120
       S = S + TRM(K)
       TK = TK + 2.0
-110 CONTINUE
+   END DO
 !
 120 S = (S + T1)*TSS
    IF (XINC .EQ. 0.0) GO TO 140
    IF (FN .EQ. 0.0) GO TO 160
    XM = XINC - 1.0
    FX = X + XM
-   do 130 I = 1,NX
+   DO I = 1,NX
       TRMR(I) = TRMR(I)*FX
       S = S + TRMR(I)
       XM = XM - 1.0
       FX = X + XM
-130 CONTINUE
+   END DO
 !
 140 MX = M - J + 1
    ANS(MX) = S
    IF (FN .EQ. 0.0) GO TO 180
-150 CONTINUE
+END DO
 RETURN
 !-----------------------------------------------------------------------
 !     RECURSION FOR N = 0
 !-----------------------------------------------------------------------
-160 do 170 I = 1,NX
+160 DO I = 1,NX
    S = S + 1.0/(X + FLOAT(NX-I))
-170 CONTINUE
+END DO
 !
 180 ANS(1) = S - XDMLN
 RETURN
@@ -2248,30 +2248,30 @@ T1 = (FNS + 1.0)*XLN
 T = EXP(-T1)
 S = T
 DEN = X
-do 210 I = 1,NN
+DO I = 1,NN
    DEN = DEN + 1.0
    TRM(I) = DEN**(-NP)
    S = S + TRM(I)
-210 CONTINUE
+END DO
 ANS(1) = S
 IF (M .EQ. 1) RETURN
 !-----------------------------------------------------------------------
 !     GENERATE HIGHER DERIVATIVES, J .GT. N
 !-----------------------------------------------------------------------
 TOL = WDTOL/5.0
-do 250 J = 2,M
+DO J = 2,M
    T = T/X
    S = T
    TOLS = T*TOL
    DEN = X
-   do 230 I = 1,NN
+   DO I = 1,NN
       DEN = DEN + 1.0
       TRM(I) = TRM(I)/DEN
       S = S + TRM(I)
       IF (TRM(I) .LT. TOLS) GO TO 240
-230 CONTINUE
+   END DO
 240 ANS(J) = S
-250 CONTINUE
+END DO
 RETURN
 !-----------------------------------------------------------------------
 !     SMALL X .LT. UNIT ROUND OFF
@@ -2279,10 +2279,10 @@ RETURN
 260 ANS(1) = X**(-N-1)
 IF (M .EQ. 1) RETURN
 K = 1
-do 270 I = 2,M
+DO I = 2,M
    ANS(K+1) = ANS(K)/X
    K = K + 1
-270 CONTINUE
+END DO
 RETURN
 !-----------------------------------------------------------------------
 !     ERROR RETURN
@@ -2338,11 +2338,11 @@ IF (B .LT. 8.0) GO TO 40
 30 IF (B .GT. 1000.0) GO TO 50
 N = A - 1.0
 W = 1.0
-do 31 I = 1,N
+DO I = 1,N
    A = A - 1.0
    H = A/B
    W = W * (H/(1.0 + H))
-31 CONTINUE
+END DO
 W = ALOG(W)
 IF (B .LT. 8.0) GO TO 40
 BETALN = W + GAMLN(A) + ALGDIV(A,B)
@@ -2352,10 +2352,10 @@ RETURN
 !
 40 N = B - 1.0
 Z = 1.0
-do 41 I = 1,N
+DO I = 1,N
    B = B - 1.0
    Z = Z * (B/(A + B))
-41 CONTINUE
+END DO
 BETALN = W + ALOG(Z) + (GAMLN(A) + (GAMLN(B) - GSUMLN(A,B)))
 RETURN
 !
@@ -2363,10 +2363,10 @@ RETURN
 !
 50 N = A - 1.0
 W = 1.0
-do 51 I = 1,N
+DO I = 1,N
    A = A - 1.0
    W = W * (A/(1.0 + A/B))
-51 CONTINUE
+END DO
 BETALN = (ALOG(W) - N*ALOG(B)) + (GAMLN(A) + ALGDIV(A,B))
 RETURN
 !-----------------------------------------------------------------------
@@ -2534,11 +2534,11 @@ IF (B .LT. 10.D0) GO TO 40
 30 IF (B .GT. 1.D3) GO TO 50
 N = A - 1.D0
 W = 1.D0
-do 31 I = 1,N
+DO I = 1,N
    A = A - 1.D0
    H = A/B
    W = W * (H/(1.D0 + H))
-31 CONTINUE
+END DO
 W = DLOG(W)
 IF (B .LT. 10.D0) GO TO 40
 DBETLN = W + DGAMLN(A) + DLGDIV(A,B)
@@ -2548,10 +2548,10 @@ RETURN
 !
 40 N = B - 1.D0
 Z = 1.D0
-do 41 I = 1,N
+DO I = 1,N
    B = B - 1.D0
    Z = Z * (B/(A + B))
-41 CONTINUE
+END DO
 DBETLN = W + DLOG(Z) + (DGAMLN(A) + (DGAMLN(B) - DGSMLN(A,B)))
 RETURN
 !
@@ -2559,10 +2559,10 @@ RETURN
 !
 50 N = A - 1.D0
 W = 1.D0
-do 51 I = 1,N
+DO I = 1,N
    A = A - 1.D0
    W = W*(A/(1.D0 + A/B))
-51 CONTINUE
+END DO
 SN = N
 DBETLN = (DLOG(W) - SN*DLOG(B)) + (DGAMLN(A) + DLGDIV(A,B))
 RETURN
@@ -2663,10 +2663,10 @@ W = W*(C/B)
 !
 T = (10.D0/A)**2
 Z = E(15)
-do 30 J = 1,14
+DO J = 1,14
    K = 15 - J
    Z = T*Z + E(K)
-30 CONTINUE
+END DO
 DBCORR = Z/A + W
 RETURN
 END FUNCTION DBCORR
@@ -2729,10 +2729,10 @@ do 21 J = 1,14
 !
 T = (10.D0/B)**2
 W = E(15)*S(15)
-do 30 J = 1,14
+DO J = 1,14
    K = 15 - J
    W = T*W + E(K)*S(K)
-30 CONTINUE
+END DO
 W = W*(C/B)
 !
 !                    COMBINE THE RESULTS
@@ -2922,12 +2922,12 @@ GO TO 80
 50 APN = A + 1.0
 T = X/APN
 WK(1) = T
-do 51 N = 2,20
+DO N = 2,20
    APN = APN + 1.0
    T = T*(X/APN)
    IF (T .LE. 1.E-3) GO TO 60
    WK(N) = T
-51 CONTINUE
+END DO
 N = 20
 !
 60 SUM = T
@@ -2951,12 +2951,12 @@ RETURN
 80 AMN = A - 1.0
 T = AMN/X
 WK(1) = T
-do 81 N = 2,20
+DO N = 2,20
    AMN = AMN - 1.0
    T = T*(AMN/X)
    IF (ABS(T) .LE. 1.E-3) GO TO 90
    WK(N) = T
-81 CONTINUE
+END DO
 N = 20
 !
 90 SUM = T
@@ -2967,10 +2967,10 @@ SUM = SUM + T
 GO TO 91
 !
 100 MAX = N - 1
-do 101 M = 1,MAX
+DO M = 1,MAX
    N = N - 1
    SUM = SUM + WK(N)
-101 CONTINUE
+END DO
 QANS = (R/X)*(1.0 + SUM)
 ANS = 0.5 + (0.5 - QANS)
 RETURN
@@ -3631,12 +3631,12 @@ GO TO 80
 50 APN = A + 1.D0
 T = X/APN
 WK(1) = T
-do 51 N = 2,20
+DO N = 2,20
    APN = APN + 1.D0
    T = T*(X/APN)
    IF (T .LT. 1.D-3) GO TO 60
    WK(N) = T
-51 CONTINUE
+END DO
 N = 20
 !
 60 SUM = T
@@ -3647,10 +3647,10 @@ TOL = 0.5D0*E
    IF (T .GT. TOL) GO TO 61
 !
 MAX = N - 1
-do 70 M = 1,MAX
+DO M = 1,MAX
    N = N - 1
    SUM = SUM + WK(N)
-70 CONTINUE
+END DO
 ANS = (R/A)*(1.D0 + SUM)
 QANS = 0.5D0 + (0.5D0 - ANS)
 RETURN
@@ -3660,12 +3660,12 @@ RETURN
 80 AMN = A - 1.D0
 T = AMN/X
 WK(1) = T
-do 81 N = 2,20
+DO N = 2,20
    AMN = AMN - 1.D0
    T = T*(AMN/X)
    IF (DABS(T) .LE. 1.D-3) GO TO 90
    WK(N) = T
-81 CONTINUE
+END DO
 N = 20
 !
 90 SUM = T
@@ -3676,10 +3676,10 @@ SUM = SUM + T
 GO TO 91
 !
 100 MAX = N - 1
-do 101 M = 1,MAX
+DO M = 1,MAX
    N = N - 1
    SUM = SUM + WK(N)
-101 CONTINUE
+END DO
 QANS = (R/X)*(1.D0 + SUM)
 ANS = 0.5D0 + (0.5D0 - QANS)
 RETURN
@@ -4944,22 +4944,22 @@ IF (R .LT. T) K = R
 !
 !          ADD THE INCREASING TERMS OF THE SERIES
 !
-30 do 31 I = 1,K
+30 DO I = 1,K
    L = I - 1
    D = ((APB + L)/(AP1 + L))*X*D
    W = W + D
-31 CONTINUE
+END DO
 IF (K .EQ. NM1) GO TO 50
 !
 !          ADD THE REMAINING TERMS OF THE SERIES
 !
 40 KP1 = K + 1
-do 41 I = KP1,NM1
+DO I = KP1,NM1
    L = I - 1
    D = ((APB + L)/(AP1 + L))*X*D
    W = W + D
    IF (D .LE. EPS*W) GO TO 50
-41 CONTINUE
+END DO
 !
 !               TERMINATE THE PROCEDURE
 !
@@ -5090,10 +5090,10 @@ RETURN
 N = B0 - 1.0
 IF (N .LT. 1) GO TO 70
 C = 1.0
-do 61 I = 1,N
+DO I = 1,N
    B0 = B0 - 1.0
    C = C*(B0/(A0 + B0))
-61 CONTINUE
+END DO
 U = ALOG(C) + U
 !
 70 Z = Z - U
@@ -5201,10 +5201,10 @@ RETURN
 N = B0 - 1.0
 IF (N .LT. 1) GO TO 70
 C = 1.0
-do 61 I = 1,N
+DO I = 1,N
    B0 = B0 - 1.0
    C = C*(B0/(A0 + B0))
-61 CONTINUE
+END DO
 U = ALOG(C) + U
 !
 70 Z = Z - U
@@ -5291,7 +5291,7 @@ SUM = J
 T = 1.0
 CN = 1.0
 N2 = 0.0
-do 22 N = 1,30
+DO N = 1,30
    BP2N = B + N2
    J = (BP2N*(BP2N + 1.0)*J + (Z + BP2N + 1.0)*T)*V
    N2 = N2 + 2.0
@@ -5310,7 +5310,7 @@ do 22 N = 1,30
    SUM = SUM + DJ
    IF (SUM .LE. 0.0) GO TO 100
    IF (ABS(DJ) .LE. EPS*(SUM + L)) GO TO 30
-22 CONTINUE
+END DO
 !
 !                    ADD THE RESULTS TO W
 !
@@ -5466,7 +5466,7 @@ HN = 1.0
 W = W0
 ZNM1 = Z
 ZN = Z2
-do 50 N = 2, NUM, 2
+DO N = 2, NUM, 2
    HN = H2*HN
    A0(N) = 2.0*R0*(1.0 + H*HN)/(N + 2.0)
    NP1 = N + 1
@@ -5502,7 +5502,7 @@ do 50 N = 2, NUM, 2
    T1 = D(NP1)*W*J1
    SUM = SUM + (T0 + T1)
    IF ((ABS(T0) + ABS(T1)) .LE. EPS*SUM) GO TO 60
-50 CONTINUE
+   END DO
 !
 60 U = EXP(-BCORR(A,B))
 BASYM = E0*T*U*SUM
@@ -6040,26 +6040,26 @@ IF (M .GT. 0) GO TO 160
 M = IABS(M)
 NU = NU + 1.0
 CALL CBJM (Z, NU, W)
-do 150 I = 2,M
+DO I = 2,M
    C = NU*(NU + 1.0)
    T = (C/W0)*(W - W1)
    W1 = W
    W = T
    NU = NU + 1.0
-150 CONTINUE
+END DO
 GO TO 180
 !
 !          BACKWARD RECURRENCE
 !
 160 NU = NU - 1.0
 CALL CBJM (Z, NU, W)
-do 170 I = 2,M
+DO I = 2,M
    C = NU*(NU + 1.0)
    T = (W0/C)*W1
    W1 = W
    W = W - T
    NU = NU - 1.0
-170 CONTINUE
+END DO
 !
 !          FINAL ASSEMBLY
 !
@@ -6123,12 +6123,12 @@ GO TO 70
 KM1 = K - 1
 W = (1.0, 0.0)
 T = W
-do 20 I = 1,KM1
+DO I = 1,KM1
    M = I
    T = T*(S/(M*(NU + M)))
    W = W + T
    IF (ANORM(T) .LE. EPS*ANORM(W)) GO TO 30
-20 CONTINUE
+END DO
 GO TO 70
 !
 !     CHECK IF THE (K-1)-ST AND K-TH TERMS CAN BE IGNORED.
@@ -6148,11 +6148,11 @@ A = AMAX1(A, A0)
 !
 T = (1.0, 0.0)
 KM2 = K - 2
-do 40 I = IMIN,KM2
+DO I = IMIN,KM2
    M = I
    T = T*(S/(M*(NU + M)))
    IF (A*ANORM(T) .LT. 0.5) RETURN
-40 CONTINUE
+END DO
 T = T*TI
 IMIN = KM2
 !
@@ -6161,12 +6161,12 @@ IMIN = KM2
 50 A = 1.0
 P = (1.0, 0.0)
 SN = P
-do 60 I = IMIN,KM1
+DO I = IMIN,KM1
    M = I
    A = A*M
    P = P*(NU + M)
    SN = S*SN
-60 CONTINUE
+END DO
 T = T*(CDIV(SN,P)/A)
 W = W + T
 !
@@ -6459,7 +6459,7 @@ A = A1
 T = A1
 M = 1.0
 TOL = EPS*ANORM(A1)
-do 20 I = 1,16
+DO I = 1,16
    A = A - 2.0*M
    M = M + 1.0
    T = T*A*ETA/M
@@ -6469,7 +6469,7 @@ do 20 I = 1,16
    T = T*A/M
    Q = Q + T
    IF (ANORM(T) .LE. TOL) GO TO 30
-20 CONTINUE
+END DO
 !
 30 P = P + 1.0
 Q = (Q + A1)*ZR
@@ -6926,9 +6926,9 @@ IF (N.EQ.1) RETURN
 I1 = 2
 GO TO 60
 50 I1 = 1
-60 do 70 I = I1,N
+60 DO I=I1,N
   Y(I) = 0.0E0
-70 CONTINUE
+END DO
 RETURN
 80 CONTINUE
 IF (ALPHA.LT.0.0E0) GO TO 710
@@ -7013,7 +7013,7 @@ AK = 3.0E0
 T2 = 1.0E0
 T = 1.0E0
 S1 = FN
-do 350 K = 1,17
+DO K=1,17
   S2 = T2 + S1
   T = -T*SXO2/S2
   S = S + T
@@ -7021,7 +7021,7 @@ do 350 K = 1,17
   T2 = T2 + AK
   AK = AK + 2.0E0
   S1 = S1 + FN
-350 CONTINUE
+END DO
 360 CONTINUE
 TEMP(IS) = S*EARG
 GO TO (370, 450, 610), IS
@@ -7073,12 +7073,12 @@ TRX = 2.0E0/X
 DTM = FNI
 TM = (DTM+FNF)*TRX
 K = NN + 1
-do 460 I = 3,NN
+DO I=3,NN
   K = K - 1
   Y(K-2) = TM*Y(K-1) - Y(K)
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
-460 CONTINUE
+END DO
 RETURN
 470 Y(1) = TEMP(2)
 RETURN
@@ -7119,7 +7119,7 @@ T1 = ETX
 S1 = 1.0E0
 FN = 1.0E0
 AK = 8.0E0
-do 530 K = 1,13
+DO K=1,13
   T1 = T1 + ETX
   FN = FN + AK
   TRX = DTM - FN
@@ -7135,7 +7135,7 @@ do 530 K = 1,13
   S2 = S2 + T2
   IF (ABS(T2).LE.RELB) GO TO 540
   AK = AK + 8.0E0
-530 CONTINUE
+END DO
 540 TEMP(IS) = COEF*(S1*SB-S2*SA)
 IF(IS.EQ.2) GO TO 560
 550 FIDAL = FIDAL + 1.0E0
@@ -7157,12 +7157,12 @@ IF (IN.EQ.0) GO TO 580
 !
 !     FORWARD RECUR TO INDEX ALPHA
 !
-do 570 I = 1,IN
+DO I=1,IN
   S = S2
   S2 = TM*S2 - S1
   TM = TM + TX
   S1 = S
-570 CONTINUE
+END DO
 IF (NN.EQ.1) GO TO 600
 S = S2
 S2 = TM*S2 - S1
@@ -7175,10 +7175,10 @@ S1 = S
 Y(1) = S1
 Y(2) = S2
 IF (NN.EQ.2) RETURN
-do 590 I = 3,NN
+DO I=3,NN
   Y(I) = TM*Y(I-1) - Y(I-2)
   TM = TM + TX
-590 CONTINUE
+END DO
 RETURN
 600 Y(1) = S2
 RETURN
@@ -7228,13 +7228,13 @@ KK = 1
 !
 !     BACKWARD RECUR UNINDEXED
 !
-do 680 I = 1,IN
+DO I=1,IN
   S = TB
   TB = TM*TB - TA
   TA = S
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
-680 CONTINUE
+END DO
 !     NORMALIZATION
 IF (KK.NE.1) GO TO 690
 TA = (TA/TB)*TEMP(3)
@@ -7254,12 +7254,12 @@ KM = K - 1
 !
 !     BACKWARD RECUR INDEXED
 !
-do 700 I = 1,KM
+DO I=1,KM
   Y(K-1) = TM*Y(K) - Y(K+1)
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
   K = K - 1
-700 CONTINUE
+END DO
 RETURN
 !
 !
@@ -7674,40 +7674,40 @@ do 170 JN = 1,IN
   KP1 = 2
   RZDEN = RCZ
   L = 2
-  do 140 LR = 2,8,2
+  DO LR=2,8,2
 !
 !     COMPUTE TWO U POLYNOMIALS FOR NEXT A(ZETA) AND B(ZETA)
 !
     LRP1 = LR + 1
-    do 120 K = LR,LRP1
+    DO K=LR,LRP1
       KS = KS + 1
       KP1 = KP1 + 1
       L = L + 1
       S1 = C(L)
-      do 110 J = 2,KP1
+      DO J=2,KP1
         L = L + 1
         S1 = S1*T2 + C(L)
-110 CONTINUE
+      END DO
       AP = AP*TFN
       UPOL(KP1) = AP*S1
       CR(KS) = BR(KS)*RZDEN
       RZDEN = RZDEN*RCZ
       DR(KS) = AR(KS)*RZDEN
-120 CONTINUE
+    END DO
     SUMA = UPOL(LRP1)
     SUMB = UPOL(LR+2) + UPOL(LRP1)*CRZ32
     JU = LRP1
-    do 130 JR = 1,LR
+    DO JR=1,LR
       JU = JU - 1
       SUMA = SUMA + CR(JR)*UPOL(JU)
       SUMB = SUMB + DR(JR)*UPOL(JU)
-130 CONTINUE
+    END DO
     TB = -TB
     IF (WK(1).GT.0.0E0) TB = ABS(TB)
     ASUM = ASUM + SUMA*TB
     BSUM = BSUM + SUMB*TB
     IF (ABS(SUMA).LE.TOL .AND. ABS(SUMB).LE.RELB) GO TO 150
-140 CONTINUE
+  END DO
 150 TB = WK(5)
   IF (WK(1).GT.0.0E0) TB = -TB
   BSUM = BSUM/TB
@@ -7907,23 +7907,23 @@ TT = T + T
 J=N1
 F1=AK1(J)
 F2=0.
-do 105 I = 1,M1
+DO I=1,M1
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+AK1(J)
 F2=TEMP1
-105 CONTINUE
+END DO
 AI=T*F1-F2+AK1(1)
 !
 J=N1D
 F1=DAK1(J)
 F2=0.
-do 106 I = 1,M1D
+DO I=1,M1D
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+DAK1(J)
 F2=TEMP1
-106 CONTINUE
+END DO
 DAI=-(T*F1-F2+DAK1(1))
 RETURN
 !
@@ -7933,24 +7933,24 @@ TT = T + T
 J=N2
 F1=AK2(J)
 F2=0.
-do 155 I = 1,M2
+DO I=1,M2
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+AK2(J)
 F2=TEMP1
-155 CONTINUE
+END DO
 RTRX=SQRT(RX)
 EC=EXP(-C)
 AI=EC*(T*F1-F2+AK2(1))/RTRX
 J=N2D
 F1=DAK2(J)
 F2=0.
-do 156 I = 1,M2D
+DO I=1,M2D
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+DAK2(J)
 F2=TEMP1
-156 CONTINUE
+END DO
 DAI=-EC*(T*F1-F2+DAK2(1))*RTRX
 RETURN
 !
@@ -7960,24 +7960,24 @@ TT=T+T
 J=N1
 F1=AK3(J)
 F2=0.
-do 205 I = 1,M1
+DO I=1,M1
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+AK3(J)
 F2=TEMP1
-205 CONTINUE
+END DO
 RTRX=SQRT(RX)
 EC=EXP(-C)
 AI=EC*(T*F1-F2+AK3(1))/RTRX
 J=N1D
 F1=DAK3(J)
 F2=0.
-do 206 I = 1,M1D
+DO I=1,M1D
 J=J-1
 TEMP1=F1
 F1=TT*F1-F2+DAK3(J)
 F2=TEMP1
-206 CONTINUE
+END DO
 DAI=-RTRX*EC*(T*F1-F2+DAK3(1))
 RETURN
 !
@@ -7990,7 +7990,7 @@ F1=AJP(J)
 E1=AJN(J)
 F2=0.
 E2=0.
-do 305 I = 1,M3
+DO I=1,M3
 J=J-1
 TEMP1=F1
 TEMP2=E1
@@ -7998,14 +7998,14 @@ F1=TT*F1-F2+AJP(J)
 E1=TT*E1-E2+AJN(J)
 F2=TEMP1
 E2=TEMP2
-305 CONTINUE
+END DO
 AI=(T*E1-E2+AJN(1))-X*(T*F1-F2+AJP(1))
 J=N3D
 F1=DAJP(J)
 E1=DAJN(J)
 F2=0.
 E2=0.
-do 306 I = 1,M3D
+DO I=1,M3D
 J=J-1
 TEMP1=F1
 TEMP2=E1
@@ -8013,7 +8013,7 @@ F1 = TT*F1-F2+DAJP(J)
 E1= TT*E1-E2+DAJN(J)
 F2=TEMP1
 E2=TEMP2
-306 CONTINUE
+END DO
 DAI=X*X*(T*F1-F2+DAJP(1))+(T*E1-E2+DAJN(1))
 RETURN
 !
@@ -8025,7 +8025,7 @@ F1=A(J)
 E1=B(J)
 F2=0.
 E2=0.
-do 310 I = 1,M4
+DO I=1,M4
 J=J-1
 TEMP1=F1
 TEMP2=E1
@@ -8033,7 +8033,7 @@ F1=TT*F1-F2+A(J)
 E1=TT*E1-E2+B(J)
 F2=TEMP1
 E2=TEMP2
-310 CONTINUE
+END DO
 TEMP1=T*F1-F2+A(1)
 TEMP2=T*E1-E2+B(1)
 RTRX=SQRT(RX)
@@ -8046,7 +8046,7 @@ F1=DA(J)
 E1=DB(J)
 F2=0.
 E2=0.
-do 311 I = 1,M4D
+DO I=1,M4D
 J=J-1
 TEMP1=F1
 TEMP2=E1
@@ -8054,7 +8054,7 @@ F1=TT*F1-F2+DA(J)
 E1=TT*E1-E2+DB(J)
 F2=TEMP1
 E2=TEMP2
-311 CONTINUE
+END DO
 TEMP1=T*F1-F2+DA(1)
 TEMP2=T*E1-E2+DB(1)
 E1=CCV*CON5+.5*SCV
@@ -8857,9 +8857,9 @@ IF (N.EQ.1) RETURN
 I1 = 2
 GO TO 60
 50 I1 = 1
-60 do 70 I = I1,N
+60 DO I=I1,N
   Y(I) = 0.0E0
-70 CONTINUE
+END DO
 RETURN
 80 CONTINUE
 IF (ALPHA.LT.0.0E0) GO TO 580
@@ -8977,7 +8977,7 @@ AK = 3.0E0
 T2 = 1.0E0
 T = 1.0E0
 S1 = FN
-do 250 K = 1,17
+DO K=1,17
   S2 = T2 + S1
   T = T*SXO2/S2
   S = S + T
@@ -8985,7 +8985,7 @@ do 250 K = 1,17
   T2 = T2 + AK
   AK = AK + 2.0E0
   S1 = S1 + FN
-250 CONTINUE
+END DO
 260 CONTINUE
 TEMP(IS) = S*EARG
 GO TO (270, 350, 500), IS
@@ -9037,13 +9037,13 @@ DTM = FNI
 TM = (DTM+FNF)*TRX
 IF (IN.EQ.0) GO TO 390
 !     BACKWARD RECUR TO INDEX ALPHA+NN-1
-do 380 I = 1,IN
+DO I=1,IN
   S = S2
   S2 = TM*S2 + S1
   S1 = S
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
-380 CONTINUE
+END DO
 Y(NN) = S1
 IF (NN.EQ.1) RETURN
 Y(NN-1) = S2
@@ -9055,12 +9055,12 @@ Y(NN) = S1
 Y(NN-1) = S2
 IF (NN.EQ.2) RETURN
 400 K = NN + 1
-do 410 I = 3,NN
+DO I=3,NN
   K = K - 1
   Y(K-2) = TM*Y(K-1) + Y(K)
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
-410 CONTINUE
+END DO
 RETURN
 420 Y(1) = TEMP(2)
 RETURN
@@ -9090,7 +9090,7 @@ S = 1.0E0 + DX
 ATOL = TOL*ABS(S)
 S2 = 1.0E0
 AK = 8.0E0
-do 470 K = 1,25
+DO K=1,25
   S1 = S1 + ETX
   S2 = S2 + AK
   DX = DTM - S2
@@ -9099,7 +9099,7 @@ do 470 K = 1,25
   S = S + T
   IF (ABS(T).LE.ATOL) GO TO 480
   AK = AK + 8.0E0
-470 CONTINUE
+END DO
 480 TEMP(IS) = S*EARG
 IF(IS.EQ.2) GO TO 360
 IS = 2
@@ -9140,13 +9140,13 @@ KK = 1
 !
 !     BACKWARD RECUR UNINDEXED
 !
-do 540 I = 1,IN
+DO I=1,IN
   S = TB
   TB = TM*TB + TA
   TA = S
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
-540 CONTINUE
+END DO
 !     NORMALIZATION
 IF (KK.NE.1) GO TO 550
 TA = (TA/TB)*TEMP(3)
@@ -9167,12 +9167,12 @@ KM = K - 1
 !
 !     BACKWARD RECUR INDEXED
 !
-do 560 I = 1,KM
+DO I=1,KM
   Y(K-1) = TM*Y(K) + Y(K+1)
   DTM = DTM - 1.0E0
   TM = (DTM+FNF)*TRX
   K = K - 1
-560 CONTINUE
+END DO
 RETURN
 !
 !
@@ -9485,13 +9485,13 @@ M = 1.0
 T = A*ZR
 P = T
 !
-do 10 I = 1, 16
+DO I = 1, 16
    A = A - 2.0*M
    M = M + 1.0
    T = T*A*ZR/M
    P = P + T
    IF (ANORM(T) .LE. EPS*ANORM(P)) GO TO 20
-10 CONTINUE
+END DO
 !
 20 P = P + 1.0
 T = CSQRT(ZR)
@@ -9582,12 +9582,12 @@ GO TO 90
 !                 RECURSION
 !
 70 N1 = N - 1
-do 80 I = 1, N1
+DO I = 1, N1
    AI = I
    U3 = (R1 + AI)*ZR*U2 + U1
    U1 = U2
    U2 = U3
-80 CONTINUE
+END DO
 W = U3
 !
 90 IF (IND .EQ. 0) RETURN
@@ -9714,7 +9714,7 @@ W2 = P
 !                 SUMMATION OF SERIES
 !
 T = 0.25*(Z*Z)
-do 70 K = 1, 50
+DO K = 1, 50
    AK = K
    F = (AK*F + P + Q)/((AK - NU)*(AK + NU))
    P = P/(AK - NU)
@@ -9725,7 +9725,7 @@ do 70 K = 1, 50
    T2 = C*(P - AK*F)
    W2 = W2 + T2
    IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80
-70 CONTINUE
+END DO
 !
 80 W2 = W2 * ZR
 RETURN
@@ -9928,12 +9928,12 @@ GO TO 90
 !                 RECURSION
 !
 70 N1 = N - 1
-do 80 I = 1, N1
+DO I = 1, N1
    AI = I
    U3 = (NU + AI)*ZR*U2 + U1
    U1 = U2
    U2 = U3
-80 CONTINUE
+END DO
 W = U3
 !
 90 IF (IND .EQ. 0) RETURN
@@ -9987,13 +9987,13 @@ M = 1.0
 T = A*ZR
 P = T
 !
-do 10 I = 1, 16
+DO I = 1, 16
    A = A - 2.0*M
    M = M + 1.0
    T = (A/M)*T*ZR
    P = P + T
    IF (ANORM(T) .LE. EPS*ANORM(P)) GO TO 20
-10 CONTINUE
+END DO
 !
 20 P = P + 1.0
 T = CSQRT(ZR)
@@ -10094,7 +10094,7 @@ W2 = P
 !                 SUMMATION OF SERIES
 !
 W = 0.25*(Z*Z)
-do 70 K = 1, 50
+DO K = 1, 50
    AK = K
    F = (AK*F + P + Q)/((AK - NU)*(AK + NU))
    P = P/(AK - NU)
@@ -10105,7 +10105,7 @@ do 70 K = 1, 50
    T2 = C*(P - AK*F)
    W2 = W2 + T2
    IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80
-70 CONTINUE
+END DO
 !
 80 W2 = W2 * ZR
 RETURN
