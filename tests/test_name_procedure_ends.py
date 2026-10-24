@@ -108,7 +108,7 @@ class ProcedureEndsTests(unittest.TestCase):
             self.assertFalse(output.exists())
 
     def test_complete_nswc_library(self):
-        source = (ROOT / "nswc.f").read_bytes()
+        source = (ROOT / "nswc_orig.f").read_bytes()
         result = transform(source)
         self.assertEqual(result.procedures, 1062)
         self.assertEqual(result.endings_changed, 1062)

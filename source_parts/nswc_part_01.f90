@@ -1,0 +1,10523 @@
+INTEGER function IPMPAR (I)
+!-----------------------------------------------------------------------
+!
+!     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
+!     THAT IS USED. IT IS ASSUMED THAT THE ARGUMENT I IS AN INTEGER
+!     HAVING ONE OF THE VALUES 1-10. IPMPAR(I) HAS THE VALUE ...
+!
+!  INTEGERS.
+!
+!     ASSUME INTEGERS ARE REPRESENTED IN THE N-DIGIT, BASE-A FORM
+!
+!               SIGN ( X(N-1)*A**(N-1) + ... + X(1)*A + X(0) )
+!
+!               WHERE 0 .LE. X(I) .LT. A FOR I=0,...,N-1.
+!
+!     IPMPAR(1) = A, THE BASE.
+!
+!     IPMPAR(2) = N, THE NUMBER OF BASE-A DIGITS.
+!
+!     IPMPAR(3) = A**N - 1, THE LARGEST MAGNITUDE.
+!
+!  FLOATING-POINT NUMBERS.
+!
+!     IT IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION FLOATING
+!     POINT ARITHMETICS HAVE THE SAME BASE, SAY B, AND THAT THE
+!     NONZERO NUMBERS ARE REPRESENTED IN THE FORM
+!
+!               SIGN (B**E) * (X(1)/B + ... + X(M)/B**M)
+!
+!               WHERE X(I) = 0,1,...,B-1 FOR I=1,...,M,
+!               X(1) .GE. 1, AND EMIN .LE. E .LE. EMAX.
+!
+!     IPMPAR(4) = B, THE BASE.
+!
+!  SINGLE-PRECISION
+!
+!     IPMPAR(5) = M, THE NUMBER OF BASE-B DIGITS.
+!
+!     IPMPAR(6) = EMIN, THE SMALLEST EXPONENT E.
+!
+!     IPMPAR(7) = EMAX, THE LARGEST EXPONENT E.
+!
+!  DOUBLE-PRECISION
+!
+!     IPMPAR(8) = M, THE NUMBER OF BASE-B DIGITS.
+!
+!     IPMPAR(9) = EMIN, THE SMALLEST EXPONENT E.
+!
+!     IPMPAR(10) = EMAX, THE LARGEST EXPONENT E.
+!
+!-----------------------------------------------------------------------
+!
+!     TO DEFINE THIS FUNCTION FOR THE COMPUTER BEING USED, ACTIVATE
+!     THE DATA STATMENTS FOR THE COMPUTER BY REMOVING THE C FROM
+!     COLUMN 1. (ALL THE OTHER DATA STATEMENTS SHOULD HAVE C IN
+!     COLUMN 1.)
+!
+!     IF DATA STATEMENTS ARE NOT GIVEN FOR THE COMPUTER BEING USED,
+!     THEN THE FORTRAN MANUAL FOR THE COMPUTER NORMALLY GIVES THE
+!     CONSTANTS IPMPAR(1), IPMPAR(2), AND IPMPAR(3) FOR THE INTEGER
+!     ARITHMETIC. HOWEVER, HELP MAY BE NEEDED TO OBTAIN THE CONSTANTS
+!     IPMPAR(4),...,IPMPAR(10) FOR THE SINGLE AND DOUBLE PRECISION
+!     ARITHMETICS. THE SUBROUTINES MACH AND RADIX ARE PROVIDED FOR
+!     THIS PURPOSE.
+!
+!-----------------------------------------------------------------------
+!
+!     IPMPAR IS AN ADAPTATION OF THE FUNCTION I1MACH, WRITTEN BY
+!     P.A. FOX, A.D. HALL, AND N.L. SCHRYER (BELL LABORATORIES).
+!     IPMPAR WAS FORMED BY A.H. MORRIS (NSWC). THE CONSTANTS ARE
+!     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
+!
+!-----------------------------------------------------------------------
+INTEGER IMACH(10)
+!
+!     MACHINE CONSTANTS FOR THE ALLIANT FX/8.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE AMDAHL MACHINES.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /   16 /
+!     DATA IMACH( 5) /    6 /
+!     DATA IMACH( 6) /  -64 /
+!     DATA IMACH( 7) /   63 /
+!     DATA IMACH( 8) /   14 /
+!     DATA IMACH( 9) /  -64 /
+!     DATA IMACH(10) /   63 /
+!
+!     MACHINE CONSTANTS FOR THE AT&T 3B SERIES, AT&T
+!     PC 7300, AND AT&T 6300.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE BURROUGHS 1700 SYSTEM.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   33 /
+!     DATA IMACH( 3) / 8589934591 /
+!     DATA IMACH( 4) /    2 /
+!     DATA IMACH( 5) /   24 /
+!     DATA IMACH( 6) / -256 /
+!     DATA IMACH( 7) /  255 /
+!     DATA IMACH( 8) /   60 /
+!     DATA IMACH( 9) / -256 /
+!     DATA IMACH(10) /  255 /
+!
+!     MACHINE CONSTANTS FOR THE BURROUGHS 5700 SYSTEM.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   39 /
+!     DATA IMACH( 3) / 549755813887 /
+!     DATA IMACH( 4) /    8 /
+!     DATA IMACH( 5) /   13 /
+!     DATA IMACH( 6) /  -50 /
+!     DATA IMACH( 7) /   76 /
+!     DATA IMACH( 8) /   26 /
+!     DATA IMACH( 9) /  -50 /
+!     DATA IMACH(10) /   76 /
+!
+!     MACHINE CONSTANTS FOR THE BURROUGHS 6700/7700 SYSTEMS.
+!
+!     DATA IMACH( 1) /      2 /
+!     DATA IMACH( 2) /     39 /
+!     DATA IMACH( 3) / 549755813887 /
+!     DATA IMACH( 4) /      8 /
+!     DATA IMACH( 5) /     13 /
+!     DATA IMACH( 6) /    -50 /
+!     DATA IMACH( 7) /     76 /
+!     DATA IMACH( 8) /     26 /
+!     DATA IMACH( 9) / -32754 /
+!     DATA IMACH(10) /  32780 /
+!
+!     MACHINE CONSTANTS FOR THE CDC 6000/7000 SERIES
+!     COMPUTERS, AND THE CDC CYBER 990 AND 995 (NOS
+!     OPERATING SYSTEM).
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   48 /
+!     DATA IMACH( 3) / 281474976710655 /
+!     DATA IMACH( 4) /    2 /
+!     DATA IMACH( 5) /   48 /
+!     DATA IMACH( 6) / -974 /
+!     DATA IMACH( 7) / 1070 /
+!     DATA IMACH( 8) /   95 /
+!     DATA IMACH( 9) / -926 /
+!     DATA IMACH(10) / 1070 /
+!
+!     MACHINE CONSTANTS FOR THE CDC CYBER 990 AND 995
+!     (NOS/VE OPERATING SYSTEM).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    63 /
+!     DATA IMACH( 3) / 9223372036854775807 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    48 /
+!     DATA IMACH( 6) / -4096 /
+!     DATA IMACH( 7) /  4095 /
+!     DATA IMACH( 8) /    96 /
+!     DATA IMACH( 9) / -4096 /
+!     DATA IMACH(10) /  4095 /
+!
+!     MACHINE CONSTANTS FOR THE CONVEX COMPUTERS
+!     (NATIVE MODE).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -127 /
+!     DATA IMACH( 7) /   127 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1023 /
+!     DATA IMACH(10) /  1023 /
+!
+!     MACHINE CONSTANTS FOR THE CONVEX COMPUTERS
+!     (IEEE MODE).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE CRAY 2, X-MP, AND Y-MP
+!     (CFT77 COMPILER USING THE 64 BIT INTEGER ARITHMETIC).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    63 /
+!     DATA IMACH( 3) / 9223372036854775807 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    48 /
+!     DATA IMACH( 6) / -8188 /
+!     DATA IMACH( 7) /  8189 /
+!     DATA IMACH( 8) /    96 /
+!     DATA IMACH( 9) / -8188 /
+!     DATA IMACH(10) /  8189 /
+!
+!     MACHINE CONSTANTS FOR THE CRAY 2, X-MP, AND Y-MP
+!     (CFT77 COMPILER USING THE 46 BIT INTEGER ARITHMETIC).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    46 /
+!     DATA IMACH( 3) / 70368744177663 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    48 /
+!     DATA IMACH( 6) / -8188 /
+!     DATA IMACH( 7) /  8189 /
+!     DATA IMACH( 8) /    96 /
+!     DATA IMACH( 9) / -8188 /
+!     DATA IMACH(10) /  8189 /
+!
+!     MACHINE CONSTANTS FOR THE DATA GENERAL ECLIPSE S/200.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   15 /
+!     DATA IMACH( 3) / 32767 /
+!     DATA IMACH( 4) /   16 /
+!     DATA IMACH( 5) /    6 /
+!     DATA IMACH( 6) /  -64 /
+!     DATA IMACH( 7) /   63 /
+!     DATA IMACH( 8) /   14 /
+!     DATA IMACH( 9) /  -64 /
+!     DATA IMACH(10) /   63 /
+!
+!     MACHINE CONSTANTS FOR THE HARRIS 220.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   23 /
+!     DATA IMACH( 3) / 8388607 /
+!     DATA IMACH( 4) /    2 /
+!     DATA IMACH( 5) /   23 /
+!     DATA IMACH( 6) / -127 /
+!     DATA IMACH( 7) /  127 /
+!     DATA IMACH( 8) /   38 /
+!     DATA IMACH( 9) / -127 /
+!     DATA IMACH(10) /  127 /
+!
+!     MACHINE CONSTANTS FOR THE HONEYWELL 600/6000
+!     AND DPS 8/70 SERIES.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   35 /
+!     DATA IMACH( 3) / 34359738367 /
+!     DATA IMACH( 4) /    2 /
+!     DATA IMACH( 5) /   27 /
+!     DATA IMACH( 6) / -127 /
+!     DATA IMACH( 7) /  127 /
+!     DATA IMACH( 8) /   63 /
+!     DATA IMACH( 9) / -127 /
+!     DATA IMACH(10) /  127 /
+!
+!     MACHINE CONSTANTS FOR THE HP 9000.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -126 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE IBM 360/370 SERIES,
+!     THE IBM 3033, THE ICL 2900, THE ITEL AS/6, THE
+!     XEROX SIGMA 5/7/9, AND THE SEL SYSTEMS 85/86.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /   16 /
+!     DATA IMACH( 5) /    6 /
+!     DATA IMACH( 6) /  -64 /
+!     DATA IMACH( 7) /   63 /
+!     DATA IMACH( 8) /   14 /
+!     DATA IMACH( 9) /  -64 /
+!     DATA IMACH(10) /   63 /
+!
+!     MACHINE CONSTANTS FOR THE IBM PC.
+!
+DATA IMACH( 1) /     2 /
+DATA IMACH( 2) /    31 /
+DATA IMACH( 3) / 2147483647 /
+DATA IMACH( 4) /     2 /
+DATA IMACH( 5) /    24 /
+DATA IMACH( 6) /  -125 /
+DATA IMACH( 7) /   128 /
+DATA IMACH( 8) /    53 /
+DATA IMACH( 9) / -1021 /
+DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE MACINTOSH II - ABSOFT
+!     MACFORTRAN II.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE PDP-11 FORTRAN SUPPORTING
+!     32-BIT INTEGER ARITHMETIC.
+!
+!     DATA IMACH( 1) /    2 /
+!     DATA IMACH( 2) /   31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /    2 /
+!     DATA IMACH( 5) /   24 /
+!     DATA IMACH( 6) / -127 /
+!     DATA IMACH( 7) /  127 /
+!     DATA IMACH( 8) /   56 /
+!     DATA IMACH( 9) / -127 /
+!     DATA IMACH(10) /  127 /
+!
+!     MACHINE CONSTANTS FOR THE SEQUENT BALANCE 8000.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE SILICON GRAPHICS IRIS-4D
+!     SERIES (MIPS R3000 PROCESSOR).
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE SUN 3.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -125 /
+!     DATA IMACH( 7) /   128 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1021 /
+!     DATA IMACH(10) /  1024 /
+!
+!     MACHINE CONSTANTS FOR THE UNIVAC 1100 SERIES.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    35 /
+!     DATA IMACH( 3) / 34359738367 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    27 /
+!     DATA IMACH( 6) /  -128 /
+!     DATA IMACH( 7) /   127 /
+!     DATA IMACH( 8) /    60 /
+!     DATA IMACH( 9) / -1024 /
+!     DATA IMACH(10) /  1023 /
+!
+!     MACHINE CONSTANTS FOR THE VAX AND MICROVAX
+!     COMPUTERS - F AND D FLOATING ARITHMETICS.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -127 /
+!     DATA IMACH( 7) /   127 /
+!     DATA IMACH( 8) /    56 /
+!     DATA IMACH( 9) /  -127 /
+!     DATA IMACH(10) /   127 /
+!
+!     MACHINE CONSTANTS FOR THE VAX AND MICROVAX
+!     COMPUTERS - F AND G FLOATING ARITHMETICS.
+!
+!     DATA IMACH( 1) /     2 /
+!     DATA IMACH( 2) /    31 /
+!     DATA IMACH( 3) / 2147483647 /
+!     DATA IMACH( 4) /     2 /
+!     DATA IMACH( 5) /    24 /
+!     DATA IMACH( 6) /  -127 /
+!     DATA IMACH( 7) /   127 /
+!     DATA IMACH( 8) /    53 /
+!     DATA IMACH( 9) / -1023 /
+!     DATA IMACH(10) /  1023 /
+!
+IPMPAR = IMACH(I)
+RETURN
+END FUNCTION IPMPAR
+
+!-----------------------------------------------------------------------
+SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+!-----------------------------------------------------------------------
+REAL RMACH(3)
+DOUBLE PRECISION DMACH(3)
+INTEGER IMACH(10)
+!-----------------------------------------------------------------------
+!
+!          COMPUTATION OF THE ENVIRONMENTAL CONSTANTS FOR THE
+!        SINGLE AND DOUBLE PRECISION FLOATING POINT ARITHMETICS
+!
+!                           -----------
+!
+!     IT IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION FLOATING
+!     POINT ARITHMETICS HAVE THE SAME BASE, SAY IBETA, AND THAT
+!     THE NONZERO NUMBERS ARE REPRESENTED IN THE FORM
+!
+!        SIGN (IBETA**K) * (X(1)/IBETA + ... + X(M)/IBETA ** M)
+!
+!     WHERE EACH X(I) IS AN INTEGER SUCH THAT
+!
+!        0 .LE. X(I) .LT. IBETA
+!
+!     AND  X(1) .GE. 1 . THE EXPONENT K IS AN INTEGER SUCH THAT
+!
+!        MINEXP .LE. K .LE. MAXEXP.
+!
+!     THE VALUES M, MINEXP, AND MAXEXP ARE NEEDED FOR BOTH THE
+!     SINGLE AND DOUBLE PRECISION ARITHMETICS IN ORDER TO DEFINE
+!     THE FUNCTION IPMPAR. THIS SUBROUTINE ATTEMPTS TO HELP THE
+!     USER IN OBTAINING THIS INFORMATION.
+!
+!-----------------------------------------------------------------------
+!                         INPUT AND OUTPUT
+!-----------------------------------------------------------------------
+!
+!     INPUT ...
+!
+!       MO    - MODE OF OPERATION OF THE ROUTINE.
+!
+!               MO = 0  OUTPUT UNIT N IS NOT USED. THE SINGLE
+!                       AND DOUBLE PRECISION ARITHMETICS ARE
+!                       EXAMINED.
+!               MO = 1  IT IS ASSUMED THAT UNIT N IS USED.
+!                       MACH SEARCHES FOR THE MAXIMUM EXPONENT
+!                       MAXEXP FOR THE SINGLE PRECISION ARITH-
+!                       METIC. THE DOUBLE PRECISION ARITHMETIC
+!                       IS NOT EXAMINED.
+!               MO = 2  IT IS ASSUMED THAT UNIT N IS USED.
+!                       MACH SEARCHES FOR THE MAXIMUM EXPONENT
+!                       MAXEXP FOR THE DOUBLE PRECISION ARITH-
+!                       METIC. THE SINGLE PRECISION ARITHMETIC
+!                       IS NOT EXAMINED.
+!
+!       N     - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
+!               OUTPUT UNIT, WHERE ANY INFORMATION WRITTEN ON
+!               THE UNIT WILL BE AVAILABLE TO THE USER IF MACH
+!               TERMINATES BECAUSE OF OVERFLOW. IF N .LE. 0
+!               THEN NO SUCH OUTPUT UNIT IS TO BE USED. (IF NO
+!               SUCH OUTPUT UNIT IS USED THEN SET MO = 0.)
+!
+!       IBETA - THE BASE OF THE FLOATING POINT ARITHMETICS. (IT
+!               IS ASSUMED THAT THE SINGLE AND DOUBLE PRECISION
+!               ARITHMETICS HAVE THE SAME BASE.) IF THIS VALUE
+!               IS NOT KNOWN THEN
+!
+!                           CALL RADIX (IBETA)
+!
+!               WILL (HOPEFULLY) PROVIDE THE CORRECT VALUE. AS
+!               FAR AS IS KNOWN, THE SUBROUTINE RADIX OPERATES
+!               PROPERLY ON ALL COMPUTERS. NEVERTHELESS, THE
+!               VALUE OBTAINED FOR IBETA SHOULD BE CHECKED.
+!
+!       IMAX  - IF IMAX IS POSITIVE THEN IMAX IS ASSUMED TO BE
+!               AN APPROXIMATION OF THE MAXIMUM EXPONENT MAXEXP
+!               FOR THE SINGLE PRECISION NUMBERS. OTHERWISE, IF
+!               IMAX .LE. 0, THEN THE ROUTINE DEFINES ITS OWN
+!               INITIAL APPROXIMATION FOR MAXEXP.
+!
+!       IDMAX - IF IDMAX IS POSITIVE THEN IDMAX IS ASSUMED TO BE
+!               AN APPROXIMATION OF THE MAXIMUM EXPONENT MAXEXP
+!               FOR THE DOUBLE PRECISION NUMBERS. OTHERWISE, IF
+!               IDMAX .LE. 0, THEN THE ROUTINE DEFINES ITS OWN
+!               INITIAL APPROXIMATION FOR MAXEXP.
+!
+!
+!     OUTPUT (WHEN MO = 0) ...
+!
+!       IMACH - INTEGER ARRAY OF DIMENSION 10 APPEARING IN THE
+!               DEFINITION OF THE FUNCTION IPMPAR.
+!               IPMPAR(I) = IMACH(I)  I = 4,...,10
+!
+!       RMACH - REAL ARRAY OF DIMENSION 3 GIVING THE FOLLOWING
+!               CONSTANTS FOR THE SINGLE PRECISION ARITHMETIC.
+!               RMACH(1) = B**(1-M), THE MACHINE PRECISION
+!               RMACH(2) = THE SMALLEST POSITIVE NUMBER
+!               RMACH(3) = THE LARGEST POSITIVE NUMBER
+!
+!       DMACH - DOUBLE PRECISION ARRAY OF DIMENSION 3 GIVING THE
+!               FOLLOWING CONSTANTS FOR THE DOUBLE PRECISION
+!               ARITHMETIC.
+!               DMACH(1) = B**(1-M), THE MACHINE PRECISION
+!               DMACH(2) = THE SMALLEST POSITIVE NUMBER
+!               DMACH(3) = THE LARGEST POSITIVE NUMBER
+!
+!-----------------------------------------------------------------------
+!                              USAGE
+!-----------------------------------------------------------------------
+!
+!     THE FOLLOWING PROCEDURE IS RECOMMENDED FOR OBTAINING THE
+!     DATA NEEDED FOR DEFINING IPMPAR.
+!
+!
+!     STEP (1). IN THIS STEP WE SEARCH FOR THE MAXIMUM EXPONENT
+!     MAXEXP FOR THE SINGLE PRECISION ARITHMETIC. THE DOUBLE
+!     PRECISION ARITHMETIC IS NOT CONSIDERED. IT IS ASSUMED THAT
+!     AN OUTPUT UNIT N IS BEING USED. GIVEN N AND IBETA. SET
+!     IMAX = 0 AND COMPUTE ...
+!
+!        CALL MACH (1, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+!
+!     WHEN THIS CODE IS RUN, INFORMATION IS GIVEN ON UNIT N FOR
+!     RESETTING IMAX. IF THE MAXIMUM EXPONENT HAS BEEN FOUND
+!     (IN THIS CASE, THE LAST INTEGER WRITTEN ON UNIT N WILL NOT
+!     BE FOLLOWED BY ANY STATEMENT EXCEPT POSSIBLY AN OVERFLOW
+!     STATEMENT), THEN SET IMAX TO THE LAST INTEGER WRITTEN ON
+!     UNIT N AND GO TO STEP (2). OTHERWISE, IF THE MAXIMUM
+!     EXPONENT HAS NOT BEEN FOUND, THEN RESET IMAX ACCORDING TO
+!     THE INSTRUCTIONS GIVEN ON UNIT N AND RERUN THE CODE. THE
+!     CODE MAY BE RERUN WITH DIFFERENT VALUES OF IMAX UNTIL THE
+!     THE MAXIMUM EXPONENT HAS BEEN FOUND OR A SATISFACTORY
+!     APPROXIMATION FOR THE MAXIMUM EXPONENT HAS BEEN OBTAINED.
+!     THEN SET IMAX TO THE MAXIMUM EXPONENT (OR THE APPROXIMATION)
+!     AND GO TO STEP (2).
+!
+!
+!     STEP (2). IN THIS STEP WE SEARCH FOR THE MAXIMUM EXPONENT
+!     MAXEXP FOR THE DOUBLE PRECISION ARITHMETIC. THE SINGLE
+!     PRECISION ARITHMETIC IS NOT CONSIDERED. IT IS ASSUMED THAT
+!     AN OUTPUT UNIT N IS BEING USED. GIVEN N AND IBETA. SET
+!     IDMAX = 0 AND COMPUTE ...
+!
+!        CALL MACH (2, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+!
+!     THE PROCEDURE USED IN THIS STEP FOR FINDING THE MAXIMUM
+!     EXPONENT OR OBTAINING A SUITABLE APPROXIMATION FOR THE
+!     MAXIMUM EXPONENT IS THE SAME AS IN STEP (1), THE ONLY
+!     DIFFERENCE BEING THAT NOW ONE WORKS WITH IDMAX INSTEAD
+!     OF IMAX. WHEN THE MAXIMUM EXPONENT IS FOUND OR A SUITABLE
+!     APPROXIMATION IS OBTAINED, THEN RESET IDMAX TO THE MAXIMUM
+!     EXPONENT (OR THE APPROXIMATION) AND GO TO STEP (3).
+!
+!
+!     STEP (3). GIVEN THE VALUES OBTAINED FOR IBETA, IMAX, AND
+!     IDMAX. THEN COMPUTE ...
+!
+!        CALL MACH (0, 0, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+!
+!     WHEN THIS CODE TERMINATES, ALL THE DATA NEEDED FOR DEFINING
+!     IPMPAR(4),...,IPMPAR(10) IS GIVEN IN THE ARRAY IMACH. THE
+!     DATA GIVEN IN THE ARRAYS RMACH AND DMACH ARE PROVIDED SO THAT
+!     THE USER CAN CHECK THE INFORMATION IN IMACH.
+!
+!             RMACH(1)  DEPENDS ON IMACH(4) AND IMACH(5)
+!             RMACH(2)  DEPENDS ON IMACH(4) AND IMACH(6)
+!             RMACH(3)  DEPENDS ON IMACH(4) AND IMACH(7)
+!             DMACH(1)  DEPENDS ON IMACH(4) AND IMACH(8)
+!             DMACH(2)  DEPENDS ON IMACH(4) AND IMACH(9)
+!             DMACH(3)  DEPENDS ON IMACH(4) AND IMACH(10)
+!
+!     THE VALUES IN RMACH AND DMACH SHOULD BE CHECKED TO SEE IF
+!     THEY MAKE SENSE. (FOR EXAMPLE, RMACH(2) AND DMACH(2) SHOULD
+!     NEVER BE 0.)
+!
+!-----------------------------------------------------------------------
+!                       GENERAL INFORMATION
+!-----------------------------------------------------------------------
+!
+!     THE VALUES IN IMACH(6) AND IMACH(9) ARE THE MINIMUM EXPONENTS
+!     FOR THE NUMBERS IN THE SINGLE AND DOUBLE PRECISION ARITHMETICS
+!     WHICH HAVE FULL ACCURACY. ON SOME COMPUTERS, ACCURACY IS LOST
+!     IN THE STORAGE OF SOME SMALL NUMBERS. THIS OCCURS IN THE DOUBLE
+!     PRECISION ARITHMETICS OF THE CDC 6000-7000 SERIES COMPUTES. ON
+!     THESE MACHINES, THE DOUBLE PRECISION NUMBERS LESS THAT 2**(-927)
+!     NORMALLY HAVE ONLY SINGLE PRECISION ACCURACY. CONSEQUENTLY,
+!     IMACH(9) WILL HAVE THE COMPUTED VALUE -926 INSTEAD OF -974
+!     (WHICH ONE WOULD NORMALLY EXPECT). IN THIS CASE, -926 IS THE
+!     VALUE THAT IS CONSIDERED TO BE CORRECT.
+!
+!     THIS PACKAGE OF SUBROUTINES INCLUDES MACH, RADIX, MACH1, STORE2,
+!     MACH2, DSTOR2. THE PACKAGE IS EXPERIMENTAL. IT IS PROVIDED AS
+!     AN AID IN DEFINING THE FUNCTION IPMPAR. THE SUBROUTINES IN THE
+!     PACKAGE ARE NOT USED BY ANY OF THE FUNCTIONS OR SUBROUTINES IN
+!     THE NSWC LIBRARY.
+!
+!     THE PURPOSE OF THE SUBROUTINES STORE2 AND DSTOR2 IS TO FORCE
+!     DATA TO BE STORED IN MEMORY. THESE ROUTINES ARE NEEDED WHEN
+!     DATA ARE STORED IN OVERSIZED REGISTERS.
+!
+!     THE ALGORITHM FOR THE SUBROUTINE RADIX WAS DEVELOPED BY M.A.
+!     MALCOLM (STANFORD UNIVERSITY). SEE REFERENCES (1) AND (2).
+!
+!-----------------
+!
+!     WRITTEN BY
+!        ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN VIRGINIA
+!
+!-----------------
+!
+!     REVISED ... MARCH 1992
+!
+!-----------------
+!
+!     REFERENCES ...
+!
+!     (1) MALCOLM, M.A., ALGORITHMS TO REVEAL PROPERTIES OF FLOATING
+!         POINT ARITHMETIC, COMM. ACM (15), 1972, PP. 949-951.
+!
+!     (2) GENTLEMEN, W.M. AND MAROVICH, S.B., MORE ON ALGORITHMS THAT
+!         REVEAL PROPERTIES OF FLOATING POINT ARITHMETIC UNITS,
+!         COMM. ACM (17), 1974, PP. 276-277.
+!
+!     (3) CODY, W.J. AND WAITE, W., SOFTWARE MANUAL FOR THE ELEMENTARY
+!         FUNCTIONS, PRENTICE-HALL, 1980, PP. 258-264.
+!
+!     (4) CODY, W.J., ALGORITHM 665. MACHAR, A SUBROUTINE TO DYNAMICALLY
+!         DETERMINE MACHINE PARAMETERS, ACM TRANS. MATH SOFTWARE (14),
+!         1988, PP. 303-311.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION DEPS, DINT, DMIN, DMAX
+!-----------------
+IMACH(1) = 0
+IMACH(2) = 0
+IMACH(3) = 0
+!
+N0 = N
+IF (MO .LE. 0) N0 = 0
+IF (MO .GE. 2) GO TO 10
+!-----------------------------------------------------------------------
+!     OBTAIN THE SINGLE PRECISION INFORMATION
+!-----------------------------------------------------------------------
+MAXEXP = IMAX
+CALL MACH1 (N0, IBETA, M, MINEXP, MAXEXP, EPS, XINT, XMIN, XMAX)
+IF (MO .EQ. 1) STOP
+RMACH(1) = EPS
+RMACH(2) = XMIN
+RMACH(3) = XMAX
+IMACH(4) = IBETA
+IMACH(5) = M
+IMACH(6) = MINEXP
+IMACH(7) = MAXEXP
+!-----------------------------------------------------------------------
+!     OBTAIN THE DOUBLE PRECISION INFORMATION
+!-----------------------------------------------------------------------
+10 MAXEXP = IDMAX
+CALL MACH2 (N0, IBETA, M, MINEXP, MAXEXP, DEPS, DINT, DMIN, DMAX)
+IF (MO .GE. 2) STOP
+DMACH(1) = DEPS
+DMACH(2) = DMIN
+DMACH(3) = DMAX
+IMACH(8) = M
+IMACH(9) = MINEXP
+IMACH(10)= MAXEXP
+RETURN
+END SUBROUTINE MACH
+
+SUBROUTINE RADIX (IBETA)
+!-----------------------------------------------------------------------
+!     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
+!-----------------------------------------------------------------------
+COMMON /SPDATA/ D1, D2
+!
+ONE  = FLOAT(1)
+!
+A = ONE
+10 A = A + A
+CALL STORE2 (A + ONE, A)
+Y = D1 - D2
+IF (Y .EQ. ONE) GO TO 10
+!
+B = ONE
+20 B = B + B
+CALL STORE2 (A + B, A)
+IF (D1 .EQ.D2) GO TO 20
+!
+IBETA = INT(D1 - D2)
+RETURN
+END SUBROUTINE RADIX
+
+SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
+&XMIN, XMAX)
+REAL EPS, XINT, XMIN, XMAX
+!-----------------------------------------------------------------------
+!
+!                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
+!             FOR THE SINGLE PRECISION FLOATING POINT ARITHMETIC
+!
+!                            -----------
+!
+!     INPUT ...
+!
+!       N       - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
+!                 OUTPUT UNIT. IN THIS CASE IT IS ASSUMED THAT
+!                 ANY INFORMATION THAT IS WRITTEN ON THE UNIT
+!                 WILL BE AVAILABLE TO THE USER IF THE ROUTINE
+!                 TERMINATES BECAUSE OF OVERFLOW. UNIT N IS
+!                 USED ONLY FOR COMPUTING THE EXACT MAXIMUM
+!                 BASE IBETA EXPONENT FOR THE FLOATING POINT
+!                 NUMBERS (THIS EXPONENT IS STORED IN MAXEXP).
+!                 IF THE EXACT MAXIMUM EXPONENT IS NOT NEEDED
+!                 (OR HAS ALREADY BEEN OBTAINED) THEN SET N
+!                 TO 0 OR A NEGATIVE VALUE.
+!
+!       IBETA   - THE BASE OF THE FLOATING POINT ARITHMETIC.
+!
+!       MAXEXP  - IF MAXEXP IS POSITIVE THEN MAXEXP IS ASSUMED TO
+!                 BE AN APPROXIMATION OF THE MAXIMUM (BASE IBETA)
+!                 EXPONENT FOR THE FLOATING POINT NUMBERS. OTHER-
+!                 WISE, IF MAXEXP .LE. 0, THEN AN APPROXIMATION
+!                 FOR THE MAXIMUM EXPONENT IS OBTAINED.
+!
+!     OUTPUT ...
+!
+!       M       - THE NUMBER OF BASE IBETA DIGITS IN THE FLOATING
+!                 POINT REPRESENTATION.
+!
+!       MINEXP  - THE LARGEST IN MAGNITUDE NEGATIVE INTEGER SUCH
+!                 THAT FLOAT(IBETA)**(MINEXP - 1) IS A POSITIVE
+!                 NUMBER.
+!
+!       MAXEXP  - IF MAXEXP IS POSITIVE ON INPUT AND N .LE. 0
+!                 THEN MAXEXP IS NOT MODIFIED.
+!
+!                 IF MAXEXP .LE. 0 ON INPUT AND N .LE. 0 THEN
+!                 ON OUTPUT MAXEXP = AN APPROXIMATION OF THE
+!                 MAXIMUM (BASE IBETA) EXPONENT FOR THE FLOATING
+!                 POINT NUMBERS.
+!
+!                 IF N IS POSITIVE THEN THE ROUTINE SEARCHES FOR
+!                 THE EXACT MAXIMUM EXPONENT FOR THE FLOATING
+!                 POINT NUMBERS. IF MAXEXP IS POSITIVE ON INPUT
+!                 THEN THE SEARCH BEGINS WITH MAXEXP. IF
+!                 MAXEXP .LE. 0 ON INPUT THEN THE ROUTINE BEGINS
+!                 THE SEARCH WITH ITS OWN INITIAL APPROXIMATION
+!                 FOR MAXEXP. THE FOLLOWING LOOP IS PERFORMED.
+!                     (1) CHECK THE CURRENT VALUE OF MAXEXP
+!                         FOR OVERFLOW. IF OVERFLOW OCCURS
+!                         THEN THE ROUTINE WILL (HOPEFULLY)
+!                         ABORT. OTHERWISE, IF OVERFLOW DOES
+!                         NOT OCCUR THEN GO TO (2).
+!                     (2) WRITE ON UNIT N THE CURRENT VALUE
+!                         OF MAXEXP AND GO TO (3).
+!                     (3) INCREASE THE VALUE OF MAXEXP BY 1
+!                         AND RETURN TO (1).
+!                 IF THE OVERFLOW TEST IN (1) FAILS THEN THE
+!                 ROUTINE ABORTS AFTER 500 PASSES THROUGH THE
+!                 LOOP. IF THE OVERFLOW TEST WORKS PROPERLY
+!                 THEN THE LAST INTEGER WRITTEN ON UNIT N IS
+!                 THE DESIRED MAXIMUM EXPONENT FOR THE FLOAT-
+!                 ING POINT NUMBERS. RESET MAXEXP TO THIS
+!                 INTEGER, SET N = 0, AND RERUN THE ROUTINE.
+!
+!       EPS     - THE RELATIVE PRECISION OF THE FLOATING ARITHMETIC.
+!                 EPS = FLOAT(IBETA)**(1 - M)
+!
+!       XINT    - THE LARGEST POSITIVE INTEGER THAT CAN
+!                 BE EXACTLY REPRESENTED AS A FLOATING
+!                 POINT NUMBER. XINT = B**M - 1  WHERE
+!                 B = FLOAT(IBETA).
+!
+!       XMIN    - THE SMALLEST NONZERO POWER OF THE BASE.
+!                 XMIN = FLOAT(IBETA)**(MINEXP - 1)
+!
+!       XMAX    - THE LARGEST FOATING POINT NUMBER THAT CAN
+!                 BE OBTAINED HAVING THE EXPONENT MAXEXP.
+!                 XMAX = (1 - B**(-M)) * B**MAXEXP  WHERE
+!                 B = FLOAT(IBETA). IF MAXEXP IS THE MAXIMUM
+!                 EXPONENT FOR THE FLOATING POINT NUMBERS
+!                 THEN XMAX IS THE LARGEST FLOATING POINT
+!                 NUMBER THAT EXISTS. THE VALUE OBTAINED
+!                 FOR XMAX MAY BE AFFECTED SLIGHTLY BY
+!                 ROUNDOFF ERROR.
+!
+!-----------------------------------------------------------------------
+REAL B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
+!----------------
+COMMON /SPDATA/ D1, D2
+!
+ZERO = FLOAT(0)
+ONE = FLOAT(1)
+B = FLOAT(IBETA)
+B2 = B*B
+BM1 = FLOAT(IBETA - 1)
+BINV = ONE/B
+!-----------------------------------------------------------------------
+!     COMPUTE M AND EPS
+!-----------------------------------------------------------------------
+M = 1
+T = B
+10 M = M + 1
+   Z = T
+   T = B*T
+   CALL STORE2 (T + ONE, T)
+   X = D1*BINV - Z
+   IF (X .EQ. BINV) GO TO 10
+!
+XINT = (Z - ONE)*B + BM1
+XMAX = XINT/T
+IF (XMAX .LT. ONE) GO TO 20
+   M = M - 1
+   T = Z
+   Z = Z*BINV
+   XINT = (Z - ONE)*B + BM1
+   XMAX = XINT/T
+20 EPS = ONE/Z
+!-----------------------------------------------------------------------
+!     COMPUTE MINEXP AND XMIN
+!-----------------------------------------------------------------------
+P = ONE + EPS
+Q = ONE + EPS*B2
+!
+!     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
+!     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
+!
+K = 1
+Z = BINV
+30 X = Z
+   Z = (X*X)*ONE
+   CALL STORE2 (Z*XINT, Z*T)
+   IF (D1 .EQ.D2) GO TO 40
+   IF (Z + Z .EQ. ZERO .OR. ABS(Z) .GE. X) GO TO 40
+   CALL STORE2 (Z, P*Z)
+   IF (T*D2 .EQ. T*Z) GO TO 40
+   K = K + K
+   GO TO 30
+!
+40 KM = K + K
+J = 0
+!
+!     LOOP TO DETERMINE MINEXP AND XMIN.
+!
+50 XMIN = X
+   X = (X*BINV)*ONE
+   CALL STORE2 (X*XINT, X*T)
+   IF (D1 .EQ.D2) GO TO 90
+   IF (X + X .EQ. ZERO .OR. ABS(X) .GE. XMIN) GO TO 90
+   CALL STORE2 (X, P*X)
+   IF (T*D2 .EQ. T*X) GO TO 80
+   K = K + 1
+   GO TO 50
+!
+!     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
+!     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
+!     THIS LOSS OF ACCURACY.
+!
+80 CALL STORE2 (X, Q*X)
+IF (T*D2 .NE. T*X) GO TO 90
+81 Z = X
+   J = J + 1
+   X = (X*BINV)*ONE
+   CALL STORE2 (X*XINT, X*T)
+   IF (D1 .EQ.D2) GO TO 90
+   IF (X + X .NE. ZERO .AND. ABS(X) .LT. Z) GO TO 81
+!
+90 MINEXP = 1 - K
+!-----------------------------------------------------------------------
+!     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMAX
+!     WHEN MAXEXP .LE. 0 ON INPUT
+!-----------------------------------------------------------------------
+IF (MAXEXP .GT. 0) GO TO 101
+IF (IBETA .EQ. 2 .OR. IBETA .EQ. 8 .OR. &
+&IBETA .EQ. 16) GO TO 100
+!
+   MAXEXP = K - 3
+   IF (N .GT. 0) WRITE (N,200) MAXEXP
+   T = ONE/(B2*B2*XMIN)
+   XMAX = (XMAX*T)*B
+   GO TO 110
+!
+100 K = K + J
+IF (K + K .GT. KM + 2) KM = KM + KM
+MAXEXP = KM - K - 3
+101 IF (N .GT. 0) WRITE (N,200) MAXEXP
+T = B**(MAXEXP - 2)
+XMAX = ((XMAX*T)*B)*B
+!-----------------------------------------------------------------------
+!     CHECK THE APPROXIMATION FOR MAXEXP
+!-----------------------------------------------------------------------
+110 CALL STORE2 (T, T*P)
+IF (D1 .EQ.D2) GO TO 150
+IF (N .LE. 0) RETURN
+!-----------------------------------------------------------------------
+!     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
+!-----------------------------------------------------------------------
+WRITE (N,210) MAXEXP
+do 120 L = 1,500
+   T = T*B
+   XMAX = XMAX*B
+   MAXEXP = MAXEXP + 1
+   CALL STORE2 (T, T*P)
+   IF (D1 .EQ.D2) GO TO 150
+   WRITE (N,220) MAXEXP
+120 CONTINUE
+WRITE (N,240)
+STOP
+!-----------------------------------------------------------------------
+!     REPORTING OVERFLOW ON UNIT N
+!-----------------------------------------------------------------------
+150 IF (N .GT. 0) WRITE (N,230)
+STOP
+!-----------------------------------------------------------------------
+!     FORMAT STATEMENTS
+!-----------------------------------------------------------------------
+200 format (50H THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS//I25// &
+&47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/50H THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN/ &
+&39H THIS APPROXIMATION AND RERUN THE CODE.//)
+210 format (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/ &
+&48H BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER/14H THAT FOLLOWS.//I25)
+220 format (I25)
+230 format (/32H   ****** OVERFLOW OCCURS ******)
+240 format (/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./ &
+&43H        IF ONE WISHES, SET IMAX (OR MAXEXP)/45H        TO A LARGER VALUE AND RERUN THE CODE./)
+!-----------------------------------------------------------------------
+END SUBROUTINE MACH1
+
+SUBROUTINE STORE2 (A, B)
+!-----------------------------------------------------------------------
+!     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
+!-----------------------------------------------------------------------
+COMMON /SPDATA/ D1, D2
+D1 = A
+D2 = B
+RETURN
+END SUBROUTINE STORE2
+
+SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
+&XMIN, XMAX)
+DOUBLE PRECISION EPS, XINT, XMIN, XMAX
+!-----------------------------------------------------------------------
+!
+!                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
+!             FOR THE DOUBLE PRECISION FLOATING POINT ARITHMETIC
+!
+!                            -----------
+!
+!     INPUT ...
+!
+!       N       - IF N IS POSITIVE THEN N IS THE NUMBER OF AN
+!                 OUTPUT UNIT. IN THIS CASE IT IS ASSUMED THAT
+!                 ANY INFORMATION THAT IS WRITTEN ON THE UNIT
+!                 WILL BE AVAILABLE TO THE USER IF THE ROUTINE
+!                 TERMINATES BECAUSE OF OVERFLOW. UNIT N IS
+!                 USED ONLY FOR COMPUTING THE EXACT MAXIMUM
+!                 BASE IBETA EXPONENT FOR THE FLOATING POINT
+!                 NUMBERS (THIS EXPONENT IS STORED IN MAXEXP).
+!                 IF THE EXACT MAXIMUM EXPONENT IS NOT NEEDED
+!                 (OR HAS ALREADY BEEN OBTAINED) THEN SET N
+!                 TO 0 OR A NEGATIVE VALUE.
+!
+!       IBETA   - THE BASE OF THE FLOATING POINT ARITHMETIC.
+!
+!       MAXEXP  - IF MAXEXP IS POSITIVE THEN MAXEXP IS ASSUMED TO
+!                 BE AN APPROXIMATION OF THE MAXIMUM (BASE IBETA)
+!                 EXPONENT FOR THE FLOATING POINT NUMBERS. OTHER-
+!                 WISE, IF MAXEXP .LE. 0, THEN AN APPROXIMATION
+!                 FOR THE MAXIMUM EXPONENT IS OBTAINED.
+!
+!     OUTPUT ...
+!
+!       M       - THE NUMBER OF BASE IBETA DIGITS IN THE FLOATING
+!                 POINT REPRESENTATION.
+!
+!       MINEXP  - LET B = DBLE(FLOAT(IBETA)). THEN MINEXP IS THE
+!                 LARGEST IN MAGNITUDE NEGATIVE INTEGER SUCH THAT
+!                 B**(MINEXP - 1) IS A POSITIVE NUMBER.
+!
+!       MAXEXP  - IF MAXEXP IS POSITIVE ON INPUT AND N .LE. 0
+!                 THEN MAXEXP IS NOT MODIFIED.
+!
+!                 IF MAXEXP .LE. 0 ON INPUT AND N .LE. 0 THEN
+!                 ON OUTPUT MAXEXP = AN APPROXIMATION OF THE
+!                 MAXIMUM (BASE IBETA) EXPONENT FOR THE FLOATING
+!                 POINT NUMBERS.
+!
+!                 IF N IS POSITIVE THEN THE ROUTINE SEARCHES FOR
+!                 THE EXACT MAXIMUM EXPONENT FOR THE FLOATING
+!                 POINT NUMBERS. IF MAXEXP IS POSITIVE ON INPUT
+!                 THEN THE SEARCH BEGINS WITH MAXEXP. IF
+!                 MAXEXP .LE. 0 ON INPUT THEN THE ROUTINE BEGINS
+!                 THE SEARCH WITH ITS OWN INITIAL APPROXIMATION
+!                 FOR MAXEXP. THE FOLLOWING LOOP IS PERFORMED.
+!                     (1) CHECK THE CURRENT VALUE OF MAXEXP
+!                         FOR OVERFLOW. IF OVERFLOW OCCURS
+!                         THEN THE ROUTINE WILL (HOPEFULLY)
+!                         ABORT. OTHERWISE, IF OVERFLOW DOES
+!                         NOT OCCUR THEN GO TO (2).
+!                     (2) WRITE ON UNIT N THE CURRENT VALUE
+!                         OF MAXEXP AND GO TO (3).
+!                     (3) INCREASE THE VALUE OF MAXEXP BY 1
+!                         AND RETURN TO (1).
+!                 IF THE OVERFLOW TEST IN (1) FAILS THEN THE
+!                 ROUTINE ABORTS AFTER 500 PASSES THROUGH THE
+!                 LOOP. IF THE OVERFLOW TEST WORKS PROPERLY
+!                 THEN THE LAST INTEGER WRITTEN ON UNIT N IS
+!                 THE DESIRED MAXIMUM EXPONENT FOR THE FLOAT-
+!                 ING POINT NUMBERS. RESET MAXEXP TO THIS
+!                 INTEGER, SET N = 0, AND RERUN THE ROUTINE.
+!
+!       EPS     - THE RELATIVE PRECISION OF THE FLOATING ARITHMETIC.
+!                 EPS = B**(1 - M) WHERE B = DBLE(FLOAT(IBETA)).
+!
+!       XINT    - THE LARGEST POSITIVE INTEGER THAT CAN
+!                 BE EXACTLY REPRESENTED AS A FLOATING
+!                 POINT NUMBER. XINT = B**M - 1  WHERE
+!                 B = DBLE(FLOAT(IBETA)).
+!
+!       XMIN    - THE SMALLEST NONZERO POWER OF THE BASE.
+!                 XMIN = B**(MINEXP-1) WHERE B=DBLE(FLOAT(IBETA)).
+!
+!       XMAX    - THE LARGEST FOATING POINT NUMBER THAT CAN
+!                 BE OBTAINED HAVING THE EXPONENT MAXEXP.
+!                 XMAX = (1 - B**(-M)) * B**MAXEXP  WHERE
+!                 B = DBLE(FLOAT(IBETA)). IF MAXEXP IS THE
+!                 MAXIMUM EXPONENT FOR THE FLOATING POINT
+!                 NUMBERS THEN XMAX IS THE LARGEST FLOATING
+!                 POINT NUMBER THAT EXISTS. THE VALUE
+!                 OBTAINED FOR XMAX MAY BE AFFECTED SLIGHTLY
+!                 BY ROUNDOFF ERROR.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION B,B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
+!----------------
+COMMON /DPDATA/ D1, D2
+!
+ZERO = DBLE(FLOAT(0))
+ONE = DBLE(FLOAT(1))
+B = DBLE(FLOAT(IBETA))
+B2 = B*B
+BM1 = DBLE(FLOAT(IBETA - 1))
+BINV = ONE/B
+!-----------------------------------------------------------------------
+!     COMPUTE M AND EPS
+!-----------------------------------------------------------------------
+M = 1
+T = B
+10 M = M + 1
+   Z = T
+   T = B*T
+   CALL DSTOR2 (T + ONE, T)
+   X = D1*BINV - Z
+   IF (X .EQ. BINV) GO TO 10
+!
+XINT = (Z - ONE)*B + BM1
+XMAX = XINT/T
+IF (XMAX .LT. ONE) GO TO 20
+   M = M - 1
+   T = Z
+   Z = Z*BINV
+   XINT = (Z - ONE)*B + BM1
+   XMAX = XINT/T
+20 EPS = ONE/Z
+!-----------------------------------------------------------------------
+!     COMPUTE MINEXP AND XMIN
+!-----------------------------------------------------------------------
+P = ONE + EPS
+Q = ONE + EPS*B2
+!
+!     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
+!     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
+!
+K = 1
+Z = BINV
+30 X = Z
+   Z = (X*X)*ONE
+   CALL DSTOR2 (Z*XINT, Z*T)
+   IF (D1 .EQ.D2) GO TO 40
+   IF (Z + Z .EQ. ZERO .OR. DABS(Z) .GE. X) GO TO 40
+   CALL DSTOR2 (Z, P*Z)
+   IF (T*D2 .EQ. T*Z) GO TO 40
+   K = K + K
+   GO TO 30
+!
+40 KM = K + K
+J = 0
+!
+!     LOOP TO DETERMINE MINEXP AND XMIN
+!
+50 XMIN = X
+   X = (X*BINV)*ONE
+   CALL DSTOR2 (X*XINT, X*T)
+   IF (D1 .EQ.D2) GO TO 90
+   IF (X + X .EQ. ZERO .OR. DABS(X) .GE. XMIN) GO TO 90
+   CALL DSTOR2 (X, P*X)
+   IF (T*D2 .EQ. T*X) GO TO 80
+   K = K + 1
+   GO TO 50
+!
+!     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
+!     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
+!     THIS LOSS OF ACCURACY.
+!
+80 CALL DSTOR2 (X, Q*X)
+IF (T*D2 .NE. T*X) GO TO 90
+81 Z = X
+   J = J + 1
+   X = (X*BINV)*ONE
+   CALL DSTOR2 (X*XINT, X*T)
+   IF (D1 .EQ.D2) GO TO 90
+   IF (X + X .NE. ZERO .AND. DABS(X) .LT. Z) GO TO 81
+!
+90 MINEXP = 1 - K
+!-----------------------------------------------------------------------
+!     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMIN
+!     WHEN MAXEXP .LE. 0 ON INPUT
+!-----------------------------------------------------------------------
+IF (MAXEXP .GT. 0) GO TO 101
+IF (IBETA .EQ. 2 .OR. IBETA .EQ. 8 .OR. &
+&IBETA .EQ. 16) GO TO 100
+!
+   MAXEXP = K - 3
+   IF (N .GT. 0) WRITE (N,200) MAXEXP
+   T = ONE/(B2*B2*XMIN)
+   XMAX = (XMAX*T)*B
+   GO TO 110
+!
+100 K = K + J
+IF (K + K .GT. KM + 2) KM = KM + KM
+MAXEXP = KM - K - 3
+101 IF (N .GT. 0) WRITE (N,200) MAXEXP
+T = B**(MAXEXP - 2)
+XMAX = ((XMAX*T)*B)*B
+!-----------------------------------------------------------------------
+!     CHECK THE APPROXIMATION FOR MAXEXP
+!-----------------------------------------------------------------------
+110 CALL DSTOR2 (T, T*P)
+IF (D1 .EQ.D2) GO TO 150
+IF (N .LE. 0) RETURN
+!-----------------------------------------------------------------------
+!     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
+!-----------------------------------------------------------------------
+WRITE (N,210) MAXEXP
+do 120 L = 1,500
+   T = T*B
+   XMAX = XMAX*B
+   MAXEXP = MAXEXP + 1
+   CALL DSTOR2 (T, T*P)
+   IF (D1 .EQ.D2) GO TO 150
+   WRITE (N,220) MAXEXP
+120 CONTINUE
+WRITE (N,240)
+STOP
+!-----------------------------------------------------------------------
+!     REPORTING OVERFLOW ON UNIT N
+!-----------------------------------------------------------------------
+150 IF (N .GT. 0) WRITE (N,230)
+STOP
+!-----------------------------------------------------------------------
+!     FORMAT STATEMENTS
+!-----------------------------------------------------------------------
+200 format (51H THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS//I25// &
+&47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/51H THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN/ &
+&39H THIS APPROXIMATION AND RERUN THE CODE.//)
+210 format (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/ &
+&49H BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER/14H THAT FOLLOWS.//I25)
+220 format (I25)
+230 format (32H0  ****** OVERFLOW OCCURS ******)
+240 format (/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./ &
+&44H        IF ONE WISHES, SET IDMAX (OR MAXEXP)/45H        TO A LARGER VALUE AND RERUN THE CODE./)
+!-----------------------------------------------------------------------
+END SUBROUTINE MACH2
+
+SUBROUTINE DSTOR2 (A, B)
+!-----------------------------------------------------------------------
+!     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A, B, D1, D2
+COMMON /DPDATA/ D1, D2
+D1 = A
+D2 = B
+RETURN
+END SUBROUTINE DSTOR2
+
+REAL function SPMPAR (I)
+!-----------------------------------------------------------------------
+!
+!     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
+!     THE COMPUTER BEING USED. IT IS ASSUMED THAT THE ARGUMENT
+!     I IS AN INTEGER HAVING ONE OF THE VALUES 1, 2, OR 3. IF THE
+!     SINGLE PRECISION ARITHMETIC BEING USED HAS M BASE B DIGITS AND
+!     ITS SMALLEST AND LARGEST EXPONENTS ARE EMIN AND EMAX, THEN
+!
+!        SPMPAR(1) = B**(1 - M), THE MACHINE PRECISION,
+!
+!        SPMPAR(2) = B**(EMIN - 1), THE SMALLEST MAGNITUDE,
+!
+!        SPMPAR(3) = B**EMAX*(1 - B**(-M)), THE LARGEST MAGNITUDE.
+!
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN VIRGINIA
+!-----------------------------------------------------------------------
+INTEGER EMIN, EMAX
+!
+IF (I .GT. 1) GO TO 10
+   B = IPMPAR(4)
+   M = IPMPAR(5)
+   SPMPAR = B**(1 - M)
+   RETURN
+!
+10 IF (I .GT. 2) GO TO 20
+   B = IPMPAR(4)
+   EMIN = IPMPAR(6)
+   ONE = FLOAT(1)
+   BINV = ONE/B
+   W = B**(EMIN + 2)
+   SPMPAR = ((W * BINV) * BINV) * BINV
+   RETURN
+!
+20 IBETA = IPMPAR(4)
+M = IPMPAR(5)
+EMAX = IPMPAR(7)
+!
+B = IBETA
+BM1 = IBETA - 1
+ONE = FLOAT(1)
+Z = B**(M - 1)
+W = ((Z - ONE)*B + BM1)/(B*Z)
+!
+Z = B**(EMAX - 2)
+SPMPAR = ((W * Z) * B) * B
+RETURN
+END FUNCTION SPMPAR
+
+double precision function DPMPAR (I)
+!-----------------------------------------------------------------------
+!
+!     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
+!     THE COMPUTER BEING USED. IT IS ASSUMED THAT THE ARGUMENT
+!     I IS AN INTEGER HAVING ONE OF THE VALUES 1, 2, OR 3. IF THE
+!     DOUBLE PRECISION ARITHMETIC BEING USED HAS M BASE B DIGITS AND
+!     ITS SMALLEST AND LARGEST EXPONENTS ARE EMIN AND EMAX, THEN
+!
+!        DPMPAR(1) = B**(1 - M), THE MACHINE PRECISION,
+!
+!        DPMPAR(2) = B**(EMIN - 1), THE SMALLEST MAGNITUDE,
+!
+!        DPMPAR(3) = B**EMAX*(1 - B**(-M)), THE LARGEST MAGNITUDE.
+!
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN VIRGINIA
+!-----------------------------------------------------------------------
+INTEGER EMIN, EMAX
+DOUBLE PRECISION B, BINV, BM1, ONE, W, Z
+!
+IF (I .GT. 1) GO TO 10
+   B = IPMPAR(4)
+   M = IPMPAR(8)
+   DPMPAR = B**(1 - M)
+   RETURN
+!
+10 IF (I .GT. 2) GO TO 20
+   B = IPMPAR(4)
+   EMIN = IPMPAR(9)
+   ONE = FLOAT(1)
+   BINV = ONE/B
+   W = B**(EMIN + 2)
+   DPMPAR = ((W * BINV) * BINV) * BINV
+   RETURN
+!
+20 IBETA = IPMPAR(4)
+M = IPMPAR(8)
+EMAX = IPMPAR(10)
+!
+B = IBETA
+BM1 = IBETA - 1
+ONE = FLOAT(1)
+Z = B**(M - 1)
+W = ((Z - ONE)*B + BM1)/(B*Z)
+!
+Z = B**(EMAX - 2)
+DPMPAR = ((W * Z) * B) * B
+RETURN
+END FUNCTION DPMPAR
+
+REAL function EPSLN (L)
+!--------------------------------------------------------------------
+!     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
+!     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
+!--------------------------------------------------------------------
+INTEGER B
+REAL LNB
+!
+B = IPMPAR(4)
+IF (B .NE. 2) GO TO 10
+   LNB = .69314718055995
+   GO TO 50
+10 IF (B .NE. 8) GO TO 20
+   LNB = 2.0794415416798
+   GO TO 50
+20 IF (B .NE. 16) GO TO 30
+   LNB = 2.7725887222398
+   GO TO 50
+30 LNB = ALOG(FLOAT(B))
+!
+50 M = 1 - IPMPAR(5)
+EPSLN = M * LNB
+RETURN
+END FUNCTION EPSLN
+
+double precision function DEPSLN (L)
+!--------------------------------------------------------------------
+!     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
+!     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
+!--------------------------------------------------------------------
+INTEGER B
+DOUBLE PRECISION DB, LNB, M
+!
+B = IPMPAR(4)
+IF (B .NE. 2) GO TO 10
+   LNB = .693147180559945309417232121458D+00
+   GO TO 50
+10 IF (B .NE. 8) GO TO 20
+   LNB = 2.07944154167983592825169636437D+00
+   GO TO 50
+20 IF (B .NE. 16) GO TO 30
+   LNB = 2.77258872223978123766892848583D+00
+   GO TO 50
+30 DB = B
+LNB = DLOG(DB)
+!
+50 M = 1 - IPMPAR(8)
+DEPSLN = M * LNB
+RETURN
+END FUNCTION DEPSLN
+
+REAL function EXPARG (L)
+!--------------------------------------------------------------------
+!     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
+!     EXP(W) CAN BE COMPUTED.
+!
+!     IF L IS NONZERO THEN  EXPARG(L) = THE LARGEST NEGATIVE W FOR
+!     WHICH THE COMPUTED VALUE OF EXP(W) IS NONZERO.
+!
+!     NOTE... ONLY AN APPROXIMATE VALUE FOR EXPARG(L) IS NEEDED.
+!--------------------------------------------------------------------
+INTEGER B
+REAL LNB
+!
+B = IPMPAR(4)
+IF (B .NE. 2) GO TO 10
+   LNB = .69314718055995
+   GO TO 50
+10 IF (B .NE. 8) GO TO 20
+   LNB = 2.0794415416798
+   GO TO 50
+20 IF (B .NE. 16) GO TO 30
+   LNB = 2.7725887222398
+   GO TO 50
+30 LNB = ALOG(FLOAT(B))
+!
+50 IF (L .EQ. 0) GO TO 60
+   M = IPMPAR(6) - 1
+   EXPARG = 0.99999 * (M * LNB)
+   RETURN
+60 M = IPMPAR(7)
+EXPARG = 0.99999 * (M * LNB)
+RETURN
+END FUNCTION EXPARG
+
+double precision function DXPARG (L)
+!--------------------------------------------------------------------
+!     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
+!     DEXP(W) CAN BE COMPUTED.
+!
+!     IF L IS NONZERO THEN  DXPARG(L) = THE LARGEST NEGATIVE W FOR
+!     WHICH THE COMPUTED VALUE OF DEXP(W) IS NONZERO.
+!
+!     NOTE... ONLY AN APPROXIMATE VALUE FOR DXPARG(L) IS NEEDED.
+!--------------------------------------------------------------------
+INTEGER B
+DOUBLE PRECISION DB, LNB
+!
+B = IPMPAR(4)
+IF (B .NE. 2) GO TO 10
+   LNB = .693147180559945309417232121458D+00
+   GO TO 50
+10 IF (B .NE. 8) GO TO 20
+   LNB = 2.07944154167983592825169636437D+00
+   GO TO 50
+20 IF (B .NE. 16) GO TO 30
+   LNB = 2.77258872223978123766892848583D+00
+   GO TO 50
+30 DB = B
+LNB = DLOG(DB)
+!
+50 IF (L .EQ. 0) GO TO 60
+   M = IPMPAR(9) - 1
+   DXPARG = 0.999999999999D+00 * (M * LNB)
+   RETURN
+60 M = IPMPAR(10)
+DXPARG = 0.999999999999D+00 * (M * LNB)
+RETURN
+END FUNCTION DXPARG
+
+SUBROUTINE ISHELL (A, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+INTEGER A(N), K(10), S
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE ISHELL
+
+SUBROUTINE SHELL (A, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+REAL A(N)
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE SHELL
+
+SUBROUTINE SHELL2 (A, B, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
+!     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+REAL A(N), B(N)
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 32 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+      T = B(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         B(LL) = B(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+      B(LL) = T
+32 CONTINUE
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE SHELL2
+
+SUBROUTINE RSORT (A, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+REAL A(N)
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE RSORT
+
+SUBROUTINE RISORT (A, M, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
+!     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+REAL A(N)
+INTEGER M(N), T
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 32 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+      T = M(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         M(LL) = M(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+      M(LL) = T
+32 CONTINUE
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE RISORT
+
+SUBROUTINE RRSORT (A, B, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
+!     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+REAL A(N), B(N)
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 32 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+      T = B(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         B(LL) = B(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+      B(LL) = T
+32 CONTINUE
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE RRSORT
+
+SUBROUTINE DSORT (A, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N), S
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE DSORT
+
+SUBROUTINE DISORT (A, M, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
+!     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N), S
+INTEGER M(N), T
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 32 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+      T = M(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         M(LL) = M(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+      M(LL) = T
+32 CONTINUE
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE DISORT
+
+SUBROUTINE DDSORT (A, B, N)
+!-----------------------------------------------------------------------
+!     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
+!     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
+!     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N), B(N), S, T
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
+!
+   JMAX = N - KI
+   do 32 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+      T = B(LL)
+30 IF (S .GE. A(L)) GO TO 31
+         A(LL) = A(L)
+         B(LL) = B(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+      B(LL) = T
+32 CONTINUE
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE DDSORT
+
+SUBROUTINE AORD (A, N)
+!-----------------------------------------------------------------------
+!     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
+!     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
+!     ASSUMED THAT N .GE. 1.
+!-----------------------------------------------------------------------
+REAL A(N)
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!                 SO THAT ABS(A(J)) .LE. ABS(A(J+KI))
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (ABS(S) .GE. ABS(A(L))) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE AORD
+
+SUBROUTINE DAORD (A, N)
+!-----------------------------------------------------------------------
+!     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
+!     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
+!     IT IS ASSUMED THAT N .GE. 1.
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N), S
+INTEGER K(10)
+!------------------------
+DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
+&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+!------------------------
+!
+!             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
+!
+IF (N .LT. 2) RETURN
+IMAX = 1
+do 10 I = 3,10
+   IF (N .LE. K(I)) GO TO 20
+   IMAX = IMAX + 1
+10 CONTINUE
+!
+!            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
+!
+20 I = IMAX
+do 40 II = 1,IMAX
+   KI = K(I)
+!
+!             SORTING ELEMENTS THAT ARE KI POSITIONS APART
+!               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
+!
+   JMAX = N - KI
+   do 31 J = 1,JMAX
+      L = J
+      LL = J + KI
+      S = A(LL)
+30 IF (DABS(S) .GE. DABS(A(L))) GO TO 31
+         A(LL) = A(L)
+         LL = L
+         L = L - KI
+         IF (L .GT. 0) GO TO 30
+31 A(LL) = S
+!
+40 I = I - 1
+RETURN
+END SUBROUTINE DAORD
+
+SUBROUTINE QSORTI (X, IND, N)
+INTEGER N, X(N), IND(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
+! SORT AN INTEGER ARRAY X INTO INCREASING ORDER.  THE ALGOR-
+! ITHM IS AS FOLLOWS.  IND IS INITIALIZED TO THE ORDERED
+! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
+! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
+! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
+! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
+! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
+! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
+! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
+! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
+! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
+! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
+! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
+! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
+! UNSORTED PORTION.
+!
+! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
+!
+!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!
+!                    IND - VECTOR OF LENGTH .GE. N.
+!
+! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
+!                          PERMUTED IN THE SAME FASHION AS X
+!                          WOULD BE.  THUS, THE ORDERING ON
+!                          X IS DEFINED BY Y(I) = X(IND(I)).
+!
+! INTRINSIC FUNCTIONS CALLED BY QSORTI - IFIX, FLOAT
+!
+!***********************************************************
+!
+! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
+!         LOG HAS BASE 2.
+!
+!***********************************************************
+!
+INTEGER IU(21), IL(21)
+INTEGER M, I, J, K, L, IJ, IT, ITT, INDX, T
+REAL R
+!
+! LOCAL PARAMETERS -
+!
+! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
+!            INDICES OF PORTIONS OF THE ARRAY X
+! M =      INDEX FOR IU AND IL
+! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
+! K,L =    INDICES IN THE RANGE I,...,J
+! IJ =     RANDOMLY CHOSEN INDEX BETWEEN I AND J
+! IT,ITT = TEMPORARY STORAGE FOR INTERCHANGES IN IND
+! INDX =   TEMPORARY INDEX FOR X
+! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
+! T =      CENTRAL ELEMENT OF X
+!
+IF (N .LE. 0) RETURN
+!
+! INITIALIZE IND, M, I, J, AND R
+!
+do 1 I = 1,N
+1 IND(I) = I
+M = 1
+I = 1
+J = N
+R = .375
+!
+! TOP OF LOOP
+!
+2 IF (I .GE. J) GO TO 10
+IF (R .GT. .5898437) GO TO 3
+R = R + .0390625
+GO TO 4
+3 R = R - .21875
+!
+! INITIALIZE K
+!
+4 K = I
+!
+! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+!
+IJ = I + IFIX(R*FLOAT(J-I))
+IT = IND(IJ)
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 5
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+!
+! INITIALIZE L
+!
+5 L = J
+!
+! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(J)
+IF (X(INDX) .GE. T) GO TO 7
+IND(IJ) = INDX
+IND(J) = IT
+IT = INDX
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 7
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+GO TO 7
+!
+! INTERCHANGE ELEMENTS K AND L
+!
+6 ITT = IND(L)
+IND(L) = IND(K)
+IND(K) = ITT
+!
+! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
+!   NOT LARGER THAN T
+!
+7 L = L - 1
+INDX = IND(L)
+IF (X(INDX) .GT. T) GO TO 7
+!
+! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
+!   NOT SMALLER THAN T
+!
+8 K = K + 1
+INDX = IND(K)
+IF (X(INDX) .LT. T) GO TO 8
+!
+! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
+!
+IF (K .LE. L) GO TO 6
+!
+! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
+!   ARRAY YET TO BE SORTED
+!
+IF (L-I .LE. J-K) GO TO 9
+IL(M) = I
+IU(M) = L
+I = K
+M = M + 1
+GO TO 11
+!
+9 IL(M) = K
+IU(M) = J
+J = L
+M = M + 1
+GO TO 11
+!
+! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+!
+10 M = M - 1
+IF (M .EQ. 0) RETURN
+I = IL(M)
+J = IU(M)
+!
+11 IF (J-I .GE. 11) GO TO 4
+IF (I .EQ. 1) GO TO 2
+I = I - 1
+!
+! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
+!   J-I .LT. 11.
+!
+12 I = I + 1
+IF (I .EQ. J) GO TO 10
+INDX = IND(I+1)
+T = X(INDX)
+IT = INDX
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 12
+K = I
+!
+13 IND(K+1) = IND(K)
+K = K - 1
+INDX = IND(K)
+IF (T .LT. X(INDX)) GO TO 13
+IND(K+1) = IT
+GO TO 12
+END SUBROUTINE QSORTI
+
+SUBROUTINE QSORTR (X, IND, N)
+INTEGER N, IND(N)
+REAL X(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
+! SORT THE REAL ARRAY X INTO INCREASING ORDER.  THE ALGOR-
+! ITHM IS AS FOLLOWS.  IND IS INITIALIZED TO THE ORDERED
+! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
+! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
+! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
+! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
+! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
+! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
+! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
+! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
+! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
+! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
+! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
+! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
+! UNSORTED PORTION.
+!
+! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
+!
+!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!
+!                    IND - VECTOR OF LENGTH .GE. N.
+!
+! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
+!                          PERMUTED IN THE SAME FASHION AS X
+!                          WOULD BE.  THUS, THE ORDERING ON
+!                          X IS DEFINED BY Y(I) = X(IND(I)).
+!
+! INTRINSIC FUNCTIONS CALLED BY QSORTR - IFIX, FLOAT
+!
+!***********************************************************
+!
+! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
+!         LOG HAS BASE 2.
+!
+!***********************************************************
+!
+INTEGER IU(21), IL(21)
+INTEGER M, I, J, K, L, IJ, IT, ITT, INDX
+REAL R, T
+!
+! LOCAL PARAMETERS -
+!
+! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
+!            INDICES OF PORTIONS OF THE ARRAY X
+! M =      INDEX FOR IU AND IL
+! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
+! K,L =    INDICES IN THE RANGE I,...,J
+! IJ =     RANDOMLY CHOSEN INDEX BETWEEN I AND J
+! IT,ITT = TEMPORARY STORAGE FOR INTERCHANGES IN IND
+! INDX =   TEMPORARY INDEX FOR X
+! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
+! T =      CENTRAL ELEMENT OF X
+!
+IF (N .LE. 0) RETURN
+!
+! INITIALIZE IND, M, I, J, AND R
+!
+do 1 I = 1,N
+1 IND(I) = I
+M = 1
+I = 1
+J = N
+R = .375
+!
+! TOP OF LOOP
+!
+2 IF (I .GE. J) GO TO 10
+IF (R .GT. .5898437) GO TO 3
+R = R + .0390625
+GO TO 4
+3 R = R - .21875
+!
+! INITIALIZE K
+!
+4 K = I
+!
+! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+!
+IJ = I + IFIX(R*FLOAT(J-I))
+IT = IND(IJ)
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 5
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+!
+! INITIALIZE L
+!
+5 L = J
+!
+! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(J)
+IF (X(INDX) .GE. T) GO TO 7
+IND(IJ) = INDX
+IND(J) = IT
+IT = INDX
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 7
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+GO TO 7
+!
+! INTERCHANGE ELEMENTS K AND L
+!
+6 ITT = IND(L)
+IND(L) = IND(K)
+IND(K) = ITT
+!
+! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
+!   NOT LARGER THAN T
+!
+7 L = L - 1
+INDX = IND(L)
+IF (X(INDX) .GT. T) GO TO 7
+!
+! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
+!   NOT SMALLER THAN T
+!
+8 K = K + 1
+INDX = IND(K)
+IF (X(INDX) .LT. T) GO TO 8
+!
+! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
+!
+IF (K .LE. L) GO TO 6
+!
+! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
+!   ARRAY YET TO BE SORTED
+!
+IF (L-I .LE. J-K) GO TO 9
+IL(M) = I
+IU(M) = L
+I = K
+M = M + 1
+GO TO 11
+!
+9 IL(M) = K
+IU(M) = J
+J = L
+M = M + 1
+GO TO 11
+!
+! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+!
+10 M = M - 1
+IF (M .EQ. 0) RETURN
+I = IL(M)
+J = IU(M)
+!
+11 IF (J-I .GE. 11) GO TO 4
+IF (I .EQ. 1) GO TO 2
+I = I - 1
+!
+! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
+!   J-I .LT. 11.
+!
+12 I = I + 1
+IF (I .EQ. J) GO TO 10
+INDX = IND(I+1)
+T = X(INDX)
+IT = INDX
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 12
+K = I
+!
+13 IND(K+1) = IND(K)
+K = K - 1
+INDX = IND(K)
+IF (T .LT. X(INDX)) GO TO 13
+IND(K+1) = IT
+GO TO 12
+END SUBROUTINE QSORTR
+
+SUBROUTINE QSORTD (X, IND, N)
+INTEGER N, IND(N)
+DOUBLE PRECISION X(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS SUBROUTINE USES AN ORDER N*LOG(N) QUICK SORT TO
+! SORT A DOUBLE PRECISION ARRAY X INTO INCREASING ORDER. THE
+! ALGORITHM IS AS FOLLOWS. IND IS INITIALIZED TO THE ORDERED
+! SEQUENCE OF INDICES 1,...,N, AND ALL INTERCHANGES ARE
+! APPLIED TO IND.  X IS DIVIDED INTO TWO PORTIONS BY PICKING
+! A CENTRAL ELEMENT T.  THE FIRST AND LAST ELEMENTS ARE COM-
+! PARED WITH T, AND INTERCHANGES ARE APPLIED AS NECESSARY SO
+! THAT THE THREE VALUES ARE IN ASCENDING ORDER.  INTER-
+! CHANGES ARE THEN APPLIED SO THAT ALL ELEMENTS GREATER THAN
+! T ARE IN THE UPPER PORTION OF THE ARRAY AND ALL ELEMENTS
+! LESS THAN T ARE IN THE LOWER PORTION.  THE UPPER AND LOWER
+! INDICES OF ONE OF THE PORTIONS ARE SAVED IN LOCAL ARRAYS,
+! AND THE PROCESS IS REPEATED ITERATIVELY ON THE OTHER
+! PORTION.  WHEN A PORTION IS COMPLETELY SORTED, THE PROCESS
+! BEGINS AGAIN BY RETRIEVING THE INDICES BOUNDING ANOTHER
+! UNSORTED PORTION.
+!
+! INPUT PARAMETERS -   N - LENGTH OF THE ARRAY X.
+!
+!                      X - VECTOR OF LENGTH N TO BE SORTED.
+!
+!                    IND - VECTOR OF LENGTH .GE. N.
+!
+! N AND X ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER - IND - SEQUENCE OF INDICES 1,...,N
+!                          PERMUTED IN THE SAME FASHION AS X
+!                          WOULD BE.  THUS, THE ORDERING ON
+!                          X IS DEFINED BY Y(I) = X(IND(I)).
+!
+! INTRINSIC FUNCTIONS CALLED BY QSORTD - IFIX, FLOAT
+!
+!***********************************************************
+!
+! NOTE -- IU AND IL MUST BE DIMENSIONED .GE. LOG(N) WHERE
+!         LOG HAS BASE 2.
+!
+!***********************************************************
+!
+INTEGER IU(21), IL(21)
+INTEGER M, I, J, K, L, IJ, IT, ITT, INDX
+REAL R
+DOUBLE PRECISION T
+!
+! LOCAL PARAMETERS -
+!
+! IU,IL =  TEMPORARY STORAGE FOR THE UPPER AND LOWER
+!            INDICES OF PORTIONS OF THE ARRAY X
+! M =      INDEX FOR IU AND IL
+! I,J =    LOWER AND UPPER INDICES OF A PORTION OF X
+! K,L =    INDICES IN THE RANGE I,...,J
+! IJ =     RANDOMLY CHOSEN INDEX BETWEEN I AND J
+! IT,ITT = TEMPORARY STORAGE FOR INTERCHANGES IN IND
+! INDX =   TEMPORARY INDEX FOR X
+! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
+! T =      CENTRAL ELEMENT OF X
+!
+IF (N .LE. 0) RETURN
+!
+! INITIALIZE IND, M, I, J, AND R
+!
+do 1 I = 1,N
+1 IND(I) = I
+M = 1
+I = 1
+J = N
+R = .375
+!
+! TOP OF LOOP
+!
+2 IF (I .GE. J) GO TO 10
+IF (R .GT. .5898437) GO TO 3
+R = R + .0390625
+GO TO 4
+3 R = R - .21875
+!
+! INITIALIZE K
+!
+4 K = I
+!
+! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
+!
+IJ = I + IFIX(R*FLOAT(J-I))
+IT = IND(IJ)
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 5
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+!
+! INITIALIZE L
+!
+5 L = J
+!
+! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(J)
+IF (X(INDX) .GE. T) GO TO 7
+IND(IJ) = INDX
+IND(J) = IT
+IT = INDX
+T = X(IT)
+!
+! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
+!   INTERCHANGE IT WITH T
+!
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 7
+IND(IJ) = INDX
+IND(I) = IT
+IT = INDX
+T = X(IT)
+GO TO 7
+!
+! INTERCHANGE ELEMENTS K AND L
+!
+6 ITT = IND(L)
+IND(L) = IND(K)
+IND(K) = ITT
+!
+! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
+!   NOT LARGER THAN T
+!
+7 L = L - 1
+INDX = IND(L)
+IF (X(INDX) .GT. T) GO TO 7
+!
+! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
+!   NOT SMALLER THAN T
+!
+8 K = K + 1
+INDX = IND(K)
+IF (X(INDX) .LT. T) GO TO 8
+!
+! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
+!
+IF (K .LE. L) GO TO 6
+!
+! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
+!   ARRAY YET TO BE SORTED
+!
+IF (L-I .LE. J-K) GO TO 9
+IL(M) = I
+IU(M) = L
+I = K
+M = M + 1
+GO TO 11
+!
+9 IL(M) = K
+IU(M) = J
+J = L
+M = M + 1
+GO TO 11
+!
+! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
+!
+10 M = M - 1
+IF (M .EQ. 0) RETURN
+I = IL(M)
+J = IU(M)
+!
+11 IF (J-I .GE. 11) GO TO 4
+IF (I .EQ. 1) GO TO 2
+I = I - 1
+!
+! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
+!   J-I .LT. 11.
+!
+12 I = I + 1
+IF (I .EQ. J) GO TO 10
+INDX = IND(I+1)
+T = X(INDX)
+IT = INDX
+INDX = IND(I)
+IF (X(INDX) .LE. T) GO TO 12
+K = I
+!
+13 IND(K+1) = IND(K)
+K = K - 1
+INDX = IND(K)
+IF (T .LT. X(INDX)) GO TO 13
+IND(K+1) = IT
+GO TO 12
+END SUBROUTINE QSORTD
+
+SUBROUTINE IORDER (A, IP, N)
+INTEGER N, A(N), IP(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!
+! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+!
+!                    IP - VECTOR CONTAINING THE SEQUENCE OF
+!                         INTEGERS 1,...,N PERMUTED IN THE
+!                         SAME FASHION THAT A IS TO BE PER-
+!                         MUTED.
+!
+!                     A - VECTOR TO BE PERMUTED.
+!
+! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
+!                         PERMUTATIONS DEFINED BY IP.
+!
+!***********************************************************
+!
+INTEGER NN, K, J, IPJ, TEMP
+!
+! LOCAL PARAMETERS -
+!
+! NN =   LOCAL COPY OF N
+! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
+!          PERMUTATION
+! J =    INDEX FOR IP AND A, J .GE. K
+! IPJ =  IP(J)
+! TEMP = TEMPORARY STORAGE FOR A(K)
+!
+NN = N
+IF (NN .LT. 2) RETURN
+K = 1
+!
+! LOOP ON PERMUTATIONS
+!
+1 J = K
+TEMP = A(K)
+!
+! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
+!   AS BEING INCLUDED IN THE PERMUTATION.
+!
+2 IPJ = IP(J)
+IP(J) = -IPJ
+IF (IPJ .EQ. K) GO TO 3
+A(J) = A(IPJ)
+J = IPJ
+GO TO 2
+3 A(J) = TEMP
+!
+! SEARCH FOR AN UNMARKED ELEMENT OF IP
+!
+4 K = K + 1
+IF (K .GT. NN) GO TO 5
+IF (IP(K) .GT. 0) GO TO 1
+GO TO 4
+!
+! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+!
+5 do 6 K = 1,NN
+6 IP(K) = -IP(K)
+RETURN
+END SUBROUTINE IORDER
+
+SUBROUTINE RORDER (A, IP, N)
+INTEGER N, IP(N)
+REAL A(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!
+! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+!
+!                    IP - VECTOR CONTAINING THE SEQUENCE OF
+!                         INTEGERS 1,...,N PERMUTED IN THE
+!                         SAME FASHION THAT A IS TO BE PER-
+!                         MUTED.
+!
+!                     A - VECTOR TO BE PERMUTED.
+!
+! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
+!                         PERMUTATIONS DEFINED BY IP.
+!
+!***********************************************************
+!
+INTEGER NN, K, J, IPJ
+REAL TEMP
+!
+! LOCAL PARAMETERS -
+!
+! NN =   LOCAL COPY OF N
+! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
+!          PERMUTATION
+! J =    INDEX FOR IP AND A, J .GE. K
+! IPJ =  IP(J)
+! TEMP = TEMPORARY STORAGE FOR A(K)
+!
+NN = N
+IF (NN .LT. 2) RETURN
+K = 1
+!
+! LOOP ON PERMUTATIONS
+!
+1 J = K
+TEMP = A(K)
+!
+! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
+!   AS BEING INCLUDED IN THE PERMUTATION.
+!
+2 IPJ = IP(J)
+IP(J) = -IPJ
+IF (IPJ .EQ. K) GO TO 3
+A(J) = A(IPJ)
+J = IPJ
+GO TO 2
+3 A(J) = TEMP
+!
+! SEARCH FOR AN UNMARKED ELEMENT OF IP
+!
+4 K = K + 1
+IF (K .GT. NN) GO TO 5
+IF (IP(K) .GT. 0) GO TO 1
+GO TO 4
+!
+! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+!
+5 do 6 K = 1,NN
+6 IP(K) = -IP(K)
+RETURN
+END SUBROUTINE RORDER
+
+SUBROUTINE DORDER (A, IP, N)
+INTEGER N, IP(N)
+DOUBLE PRECISION A(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS ROUTINE APPLIES A SET OF PERMUTATIONS TO A VECTOR.
+!
+! INPUT PARAMETERS -  N - LENGTH OF A AND IP.
+!
+!                    IP - VECTOR CONTAINING THE SEQUENCE OF
+!                         INTEGERS 1,...,N PERMUTED IN THE
+!                         SAME FASHION THAT A IS TO BE PER-
+!                         MUTED.
+!
+!                     A - VECTOR TO BE PERMUTED.
+!
+! N AND IP ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER -  A - REORDERED VECTOR REFLECTING THE
+!                         PERMUTATIONS DEFINED BY IP.
+!
+!***********************************************************
+!
+INTEGER NN, K, J, IPJ
+DOUBLE PRECISION TEMP
+!
+! LOCAL PARAMETERS -
+!
+! NN =   LOCAL COPY OF N
+! K =    INDEX FOR IP AND FOR THE FIRST ELEMENT OF A IN A
+!          PERMUTATION
+! J =    INDEX FOR IP AND A, J .GE. K
+! IPJ =  IP(J)
+! TEMP = TEMPORARY STORAGE FOR A(K)
+!
+NN = N
+IF (NN .LT. 2) RETURN
+K = 1
+!
+! LOOP ON PERMUTATIONS
+!
+1 J = K
+TEMP = A(K)
+!
+! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
+!   AS BEING INCLUDED IN THE PERMUTATION.
+!
+2 IPJ = IP(J)
+IP(J) = -IPJ
+IF (IPJ .EQ. K) GO TO 3
+A(J) = A(IPJ)
+J = IPJ
+GO TO 2
+3 A(J) = TEMP
+!
+! SEARCH FOR AN UNMARKED ELEMENT OF IP
+!
+4 K = K + 1
+IF (K .GT. NN) GO TO 5
+IF (IP(K) .GT. 0) GO TO 1
+GO TO 4
+!
+! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
+!
+5 do 6 K = 1,NN
+6 IP(K) = -IP(K)
+RETURN
+END SUBROUTINE DORDER
+
+REAL function CBRT (X)
+!-----------------------------------------------------------------------
+!                   CUBE ROOT OF A REAL NUMBER
+!-----------------------------------------------------------------------
+IF (X) 30, 10, 20
+10 CBRT = 0.0
+RETURN
+20 R = ALOG(X)/3.0
+CBRT = EXP(R)
+RETURN
+30 R = ALOG(-X)/3.0
+CBRT = -EXP(R)
+RETURN
+END FUNCTION CBRT
+
+double precision function DCBRT (X)
+!-----------------------------------------------------------------------
+!                   CUBE ROOT OF A REAL NUMBER
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, R
+!
+IF (X) 30, 10, 20
+10 DCBRT = 0.D0
+RETURN
+20 R = DLOG(X)/3.D0
+DCBRT = DEXP(R)
+RETURN
+30 R = DLOG(-X)/3.D0
+DCBRT = -DEXP(R)
+RETURN
+END FUNCTION DCBRT
+
+FUNCTION ARTNQ(Y,X)
+IF (X) 1,2,5
+1 ARTNQ=ATAN(Y/X)+3.1415926535898
+RETURN
+2 IF (Y) 3,8,4
+3 ARTNQ=4.7123889803847
+RETURN
+4 ARTNQ=1.5707963267949
+RETURN
+5 IF (Y) 6,8,7
+6 ARTNQ=ATAN(Y/X)+6.2831853071795
+RETURN
+7 ARTNQ=ATAN(Y/X)
+RETURN
+8 ARTNQ=0.
+RETURN
+END FUNCTION ARTNQ
+
+double precision function DARTNQ(Y,X)
+DOUBLE PRECISION X,Y
+IF (X) 1,2,5
+1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
+RETURN
+2 IF (Y) 3,8,4
+3 DARTNQ=4.71238898038468985769396507492D0
+RETURN
+4 DARTNQ=1.57079632679489661923132169164D0
+RETURN
+5 IF (Y) 6,8,7
+6 DARTNQ=DATAN(Y/X)+6.28318530717958647692528676656D0
+RETURN
+7 DARTNQ=DATAN(Y/X)
+RETURN
+8 DARTNQ=0.D0
+RETURN
+END FUNCTION DARTNQ
+
+REAL function CPABS(X, Y)
+!     --------------------------------------
+!     EVALUATION OF SQRT(X*X + Y*Y)
+!     --------------------------------------
+IF (ABS(X) .LE. ABS(Y)) GO TO 10
+   A = Y/X
+   CPABS = ABS(X)*SQRT(1.0 + A*A)
+   RETURN
+10 IF (Y .EQ. 0.0) GO TO 20
+   A = X/Y
+   CPABS = ABS(Y)*SQRT(1.0 + A*A)
+   RETURN
+20 CPABS = 0.0
+RETURN
+END FUNCTION CPABS
+
+double precision function DCPABS(X, Y)
+DOUBLE PRECISION X, Y
+!     --------------------------------------
+!     EVALUATION OF SQRT(X*X + Y*Y)
+!     --------------------------------------
+DOUBLE PRECISION A
+!
+IF (DABS(X) .LE. DABS(Y)) GO TO 10
+   A = Y/X
+   DCPABS = DABS(X)*DSQRT(1.D0 + A*A)
+   RETURN
+10 IF (Y .EQ. 0.D0) GO TO 20
+   A = X/Y
+   DCPABS = DABS(Y)*DSQRT(1.D0 + A*A)
+   RETURN
+20 DCPABS = 0.D0
+RETURN
+END FUNCTION DCPABS
+
+SUBROUTINE CREC (X, Y, U, V)
+!-----------------------------------------------------------------------
+!             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
+!-----------------------------------------------------------------------
+IF (ABS(X) .GT. ABS(Y)) GO TO 10
+   T = X/Y
+   D = Y + T*X
+   U = T/D
+   V = -1.0/D
+   RETURN
+10 T = Y/X
+D = X + T*Y
+U = 1.0/D
+V = -T/D
+RETURN
+END SUBROUTINE CREC
+
+SUBROUTINE DCREC (X, Y, U, V)
+!-----------------------------------------------------------------------
+!             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, Y, U, V
+DOUBLE PRECISION D, T
+!
+IF (DABS(X) .GT. DABS(Y)) GO TO 10
+   T = X/Y
+   D = Y + T*X
+   U = T/D
+   V = -1.D0/D
+   RETURN
+10 T = Y/X
+D = X + T*Y
+U = 1.D0/D
+V = -T/D
+RETURN
+END SUBROUTINE DCREC
+
+COMPLEX function CDIV (A, B)
+!-----------------------------------------------------------------------
+!              COMPLEX DIVISION A/B WHERE B IS NONZERO
+!-----------------------------------------------------------------------
+COMPLEX A, B
+!
+AR = REAL(A)
+AI = AIMAG(A)
+BR = REAL(B)
+BI = AIMAG(B)
+!
+IF (ABS(BR) .LT. ABS(BI)) GO TO 10
+   T = BI/BR
+   D = BR + T*BI
+   U = (AR + AI*T)/D
+   V = (AI - AR*T)/D
+   CDIV = CMPLX(U,V)
+   RETURN
+10 T = BR/BI
+D = BI + T*BR
+U = (AR*T + AI)/D
+V = (AI*T - AR)/D
+CDIV = CMPLX(U,V)
+RETURN
+END FUNCTION CDIV
+
+SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
+!-----------------------------------------------------------------------
+!     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR, AI, BR, BI, CR, CI
+DOUBLE PRECISION D, T, U, V
+DOUBLE PRECISION DPMPAR
+!
+IF (DABS(BR) .LE. DABS(BI)) GO TO 10
+T = BI/BR
+D = BR + T*BI
+U = (AR + AI*T)/D
+V = (AI - AR*T)/D
+CR = U
+CI = V
+RETURN
+!
+10 IF (BI .EQ. 0.D0) GO TO 20
+T = BR/BI
+D = BI + T*BR
+U = (AR*T + AI)/D
+V = (AI*T - AR)/D
+CR = U
+CI = V
+RETURN
+!
+!     DIVISION BY ZERO. C = INFINITY
+!
+20 CR = DPMPAR(3)
+CI = CR
+RETURN
+END SUBROUTINE CDIVID
+
+SUBROUTINE DCSQRT (Z, W)
+DOUBLE PRECISION Z(2), W(2)
+! ----------------------------------------------------------------------
+!        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
+!
+!                         -----------
+!
+!     Z AND W ARE INTERPRETED AS DOUBLE PRECISION COMPLEX NUMBERS.
+!     IT IS ASSUMED THAT Z(1) AND Z(2) ARE THE REAL AND IMAGINARY
+!     PARTS OF THE COMPLEX NUMBER Z, AND THAT W(1) AND W(2) ARE
+!     THE REAL AND IMAGINARY PARTS OF W.
+! ----------------------------------------------------------------------
+DOUBLE PRECISION X, Y, R
+DOUBLE PRECISION DCPABS
+!
+X = Z(1)
+Y = Z(2)
+IF (X) 30,10,20
+!
+10 IF (Y .NE. 0.D0) GO TO 11
+   W(1) = 0.D0
+   W(2) = 0.D0
+   RETURN
+11 W(1) = DSQRT(0.5D0*DABS(Y))
+W(2) = DSIGN(W(1),Y)
+RETURN
+!
+20 IF (Y .NE. 0.D0) GO TO 21
+   W(1) = DSQRT(X)
+   W(2) = 0.D0
+   RETURN
+21 R = DCPABS(X,Y)
+W(1) = DSQRT(0.5D0*(R + X))
+W(2) = 0.5D0*Y/W(1)
+RETURN
+!
+30 IF (Y .NE. 0.D0) GO TO 31
+   W(1) = 0.D0
+   W(2) = DSQRT(DABS(X))
+   RETURN
+31 R = DCPABS(X,Y)
+W(2) = DSQRT(0.5D0*(R - X))
+W(2) = DSIGN(W(2),Y)
+W(1) = 0.5D0*Y/W(2)
+RETURN
+END SUBROUTINE DCSQRT
+
+SUBROUTINE POCA(R,A,X,Y)
+X=R*COS(A)
+Y=R*SIN(A)
+RETURN
+END SUBROUTINE POCA
+
+SUBROUTINE CAPO(X,Y,R,THETA)
+IF (ABS(X).LE.ABS(Y)) GO TO 10
+A=Y/X
+R=ABS(X)*SQRT(1.0+A*A)
+THETA=ATAN2(Y,X)
+RETURN
+10 IF (Y.EQ.0.) GO TO 20
+A=X/Y
+R=ABS(Y)*SQRT(1.0+A*A)
+THETA=ATAN2(Y,X)
+RETURN
+20 R=0.0
+THETA=0.0
+RETURN
+END SUBROUTINE CAPO
+
+SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
+SINA=SIN(A)
+COSA=COS(A)
+X2= X1*COSA+Y1*SINA
+Y2=-X1*SINA+Y1*COSA
+RETURN
+END SUBROUTINE ROTA
+
+SUBROUTINE SROTG(SA,SB,SC,SS)
+!
+!     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
+!
+!
+!     CONSTRUCT THE GIVENS TRANSFORMATION
+!
+!         ( SC  SS )
+!     G = (        ) ,    SC**2 + SS**2 = 1 ,
+!         (-SS  SC )
+!
+!     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (SA,SB)**T .
+!
+!     THE QUANTITY R = (+/-)SQRT(SA**2 + SB**2) OVERWRITES SA IN
+!     STORAGE.  THE VALUE OF SB IS OVERWRITTEN BY A VALUE Z WHICH
+!     ALLOWS SC AND SS TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!           IF Z=1  SET  SC=0.  AND  SS=1.
+!           IF ABS(Z) .LT. 1  SET  SC=SQRT(1-Z**2)  AND  SS=Z
+!           IF ABS(Z) .GT. 1  SET  SC=1/Z  AND  SS=SQRT(1-SC**2)
+!
+!     NORMALLY, THE SUBPROGRAM SROT(N,SX,INCX,SY,INCY,SC,SS) WILL
+!     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
+!
+! ------------------------------------------------------------------
+!
+IF (ABS(SA) .LE. ABS(SB)) GO TO 10
+!
+! *** HERE ABS(SA) .GT. ABS(SB) ***
+!
+U = SA + SA
+V = SB / U
+!
+!     NOTE THAT U AND R HAVE THE SIGN OF SA
+!
+R = SQRT(.25 + V**2) * U
+!
+!     NOTE THAT SC IS POSITIVE
+!
+SC = SA / R
+SS = V * (SC + SC)
+SB = SS
+SA = R
+RETURN
+!
+! *** HERE ABS(SA) .LE. ABS(SB) ***
+!
+10 IF (SB .EQ. 0.) GO TO 20
+U = SB + SB
+V = SA / U
+!
+!     NOTE THAT U AND R HAVE THE SIGN OF SB
+!     (R IS IMMEDIATELY STORED IN SA)
+!
+SA = SQRT(.25 + V**2) * U
+!
+!     NOTE THAT SS IS POSITIVE
+!
+SS = SB / SA
+SC = V * (SS + SS)
+IF (SC .EQ. 0.) GO TO 15
+SB = 1. / SC
+RETURN
+15 SB = 1.
+RETURN
+!
+! *** HERE SA = SB = 0. ***
+!
+20 SC = 1.
+SS = 0.
+RETURN
+!
+END SUBROUTINE SROTG
+
+SUBROUTINE DROTG(DA,DB,DC,DS)
+!
+!     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
+!
+!
+!     CONSTRUCT THE GIVENS TRANSFORMATION
+!
+!         ( DC  DS )
+!     G = (        ) ,    DC**2 + DS**2 = 1 ,
+!         (-DS  DC )
+!
+!     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (DA,DB)**T .
+!
+!     THE QUANTITY R = (+/-)DSQRT(DA**2 + DB**2) OVERWRITES DA IN
+!     STORAGE.  THE VALUE OF DB IS OVERWRITTEN BY A VALUE Z WHICH
+!     ALLOWS DC AND DS TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!           IF Z=1  SET  DC=0.D0  AND  DS=1.D0
+!           IF DABS(Z) .LT. 1  SET  DC=DSQRT(1-Z**2)  AND  DS=Z
+!           IF DABS(Z) .GT. 1  SET  DC=1/Z  AND  DS=DSQRT(1-DC**2)
+!
+!     NORMALLY, THE SUBPROGRAM DROT(N,DX,INCX,DY,INCY,DC,DS) WILL
+!     NEXT BE CALLED TO APPLY THE TRANSFORMATION TO A 2 BY N MATRIX.
+!
+! ------------------------------------------------------------------
+!
+DOUBLE PRECISION DA, DB, DC, DS, U, V, R
+IF (DABS(DA) .LE. DABS(DB)) GO TO 10
+!
+! *** HERE DABS(DA) .GT. DABS(DB) ***
+!
+U = DA + DA
+V = DB / U
+!
+!     NOTE THAT U AND R HAVE THE SIGN OF DA
+!
+R = DSQRT(.25D0 + V**2) * U
+!
+!     NOTE THAT DC IS POSITIVE
+!
+DC = DA / R
+DS = V * (DC + DC)
+DB = DS
+DA = R
+RETURN
+!
+! *** HERE DABS(DA) .LE. DABS(DB) ***
+!
+10 IF (DB .EQ. 0.D0) GO TO 20
+U = DB + DB
+V = DA / U
+!
+!     NOTE THAT U AND R HAVE THE SIGN OF DB
+!     (R IS IMMEDIATELY STORED IN DA)
+!
+DA = DSQRT(.25D0 + V**2) * U
+!
+!     NOTE THAT DS IS POSITIVE
+!
+DS = DB / DA
+DC = V * (DS + DS)
+IF (DC .EQ. 0.D0) GO TO 15
+DB = 1.D0 / DC
+RETURN
+15 DB = 1.D0
+RETURN
+!
+! *** HERE DA = DB = 0.D0 ***
+!
+20 DC = 1.D0
+DS = 0.D0
+RETURN
+!
+END SUBROUTINE DROTG
+
+SUBROUTINE ROT3 (A, THETA)
+DIMENSION A(3,3), THETA(3)
+DATA PIHALF/1.5707963267949/
+!     --------------------
+IF (ABS(A(1,1)) .GT. ABS(A(2,1))) GO TO 10
+IF (A(2,1) .NE. 0.0) GO TO 11
+!
+!     CASE WHEN A(1,1) = A(2,1) = 0
+!
+THETA(3) = 0.0
+THETA(2) = SIGN(PIHALF,A(3,1))
+U = A(2,2)
+V = A(1,2)
+IF (A(3,1) .GT. 0.0) V = -V
+THETA(1) = ATAN2(V,U)
+RETURN
+!
+!     COMPUTATION OF R = SQRT(A(1,1)**2 + A(2,1)**2)
+!
+10 T = A(2,1)/A(1,1)
+R = ABS(A(1,1))*SQRT(1.0 + T*T)
+GO TO 20
+11 T = A(1,1)/A(2,1)
+R = ABS(A(2,1))*SQRT(1.0 + T*T)
+!
+!     EVALUATION OF THE ANGLES
+!
+20 THETA(3) = ATAN2(A(2,1),A(1,1))
+THETA(2) = ATAN2(A(3,1),R)
+U = DBLE(A(1,1))*DBLE(A(2,2)) - DBLE(A(1,2))*DBLE(A(2,1))
+IF (ABS(THETA(2)) .GT. 0.8) GO TO 21
+U = U/R
+V = A(3,2)/COS(THETA(2))
+GO TO 22
+21 V = DBLE(A(1,1))*DBLE(A(1,2)) + DBLE(A(2,1))*DBLE(A(2,2))
+V = -V/SIN(THETA(2))
+22 THETA(1) = ATAN2(V,U)
+RETURN
+END SUBROUTINE ROT3
+
+SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
+REAL XK, YK, ZK, CX, SX, CY, SY
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!
+!   THIS SUBROUTINE CONSTRUCTS THE ELEMENTS OF A 3 BY 3
+! ORTHOGONAL MATRIX R WHICH ROTATES A POINT (XK,YK,ZK) ON
+! THE UNIT SPHERE TO THE NORTH POLE, I.E.
+!
+!      (XK)     (CY  0 -SY)   (1   0   0)   (XK)     (0)
+!  R * (YK)  =  ( 0  1   0) * (0  CX -SX) * (YK)  =  (0)
+!      (ZK)     (SY  0  CY)   (0  SX  CX)   (ZK)     (1)
+!
+! INPUT PARAMETERS - XK,YK,ZK - COMPONENTS OF A UNIT VECTOR
+!                               TO BE ROTATED TO (0,0,1).
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - CX,SX,CY,SY - ELEMENTS OF R -- CX,SX
+!                                   DEFINE A ROTATION ABOUT
+!                                   THE X-AXIS AND CY,SY DE-
+!                                   FINE A ROTATION ABOUT
+!                                   THE Y-AXIS.
+!
+! INTRINSIC FUNCTION CALLED BY CONSTR - SQRT
+!
+!***********************************************************
+!
+CY = SQRT(YK*YK + ZK*ZK)
+SY = XK
+IF (CY .EQ. 0.) GO TO 1
+CX = ZK/CY
+SX = YK/CY
+RETURN
+!
+! (XK,YK,ZK) LIES ON THE X-AXIS
+!
+1 CX = 1.
+SX = 0.
+RETURN
+END SUBROUTINE CONSTR
+
+REAL function ANG (N, X, Y)
+!-----------------------------------------------------------------------
+!           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
+!-----------------------------------------------------------------------
+REAL X(N), Y(N)
+!
+IF (N .LT. 2) GO TO 30
+RX = SNRM2(N, X, 1)
+IF (RX .EQ. 0.0) GO TO 30
+RY = SNRM2(N, Y, 1)
+IF (RY .EQ. 0.0) GO TO 30
+!
+D = 0.0
+do 10 I = 1,N
+   D = D + (X(I)/RX - Y(I)/RY)**2
+10 CONTINUE
+IF (D .GT. 3.0) GO TO 20
+ANG = ACOS(0.5 + (0.5 - 0.5*D))
+RETURN
+!
+20 D = 0.0
+do 21 I = 1,N
+   D = D + (X(I)/RX + Y(I)/RY)**2
+21 CONTINUE
+ANG = ACOS((0.5*D - 0.5) - 0.5)
+RETURN
+!
+!                           ERROR RETURN
+!
+30 ANG = -1.0
+RETURN
+END FUNCTION ANG
+
+REAL function SIN0 (X)
+!-----------------------------------------------------------------------
+!          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
+!-----------------------------------------------------------------------
+DATA A0 /.157079632679490E+01/, A1 /-.645964097506244E+00/, &
+&A2 /.796926262460396E-01/, A3 /-.468175413228242E-02/, &
+&A4 /.160441150291651E-03/, A5 /-.359864175444606E-05/, &
+&A6 /.563372101191893E-07/
+!------------------------
+T = X*X
+SIN0 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
+&+ A1)*T + A0)*X
+RETURN
+END FUNCTION SIN0
+
+REAL function COS0 (X)
+!-----------------------------------------------------------------------
+!          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
+!-----------------------------------------------------------------------
+DATA A1 /-.123370055013615E+01/, A2 /.253669507899753E+00/, &
+&A3 /-.208634807330586E-01/, A4 /.919259935580283E-03/, &
+&A5 /-.252000841382533E-04/, A6 /.465461768260405E-06/
+!------------------------
+T = X*X
+COS0 = (((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T + A1)*T + 1.0
+RETURN
+END FUNCTION COS0
+
+REAL function SIN1 (X)
+!-----------------------------------------------------------------------
+!                   EVALUATION  OF SIN(X*PI)
+!-----------------------------------------------------------------------
+DATA A0 /.314159265358979E+01/, A1 /-.516771278004995E+01/, &
+&A2 /.255016403987327E+01/, A3 /-.599264528932149E+00/, &
+&A4 /.821458689493251E-01/, A5 /-.737001831310553E-02/, &
+&A6 /.461514425296398E-03/
+DATA B1 /-.493480220054460E+01/, B2 /.405871212639605E+01/, &
+&B3 /-.133526276691575E+01/, B4 /.235330543508553E+00/, &
+&B5 /-.258048861575714E-01/, B6 /.190653140279462E-02/
+!------------------------
+!
+!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!
+                 MAX = IPMPAR(3)
+!
+!------------------------
+A = ABS(X)
+IF (A .LT. FLOAT(MAX)) GO TO 10
+   SIN1 = 0.0
+   RETURN
+!
+10 N = A
+A = A - FLOAT(N)
+IF (A .GT. 0.75) GO TO 20
+IF (A .LT. 0.25) GO TO 21
+!
+!                    0.25 .LE. A .LE. 0.75
+!
+A = 0.25 + (0.25 - A)
+T = A*A
+SIN1 = ((((((B6*T + B5)*T + B4)*T + B3)*T + B2)*T &
+&+ B1)*T + 0.5) + 0.5
+GO TO 30
+!
+!                 A .LT. 0.25  OR  A .GT. 0.75
+!
+20 A = 0.25 + (0.75 - A)
+21 T = A*A
+SIN1 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
+&+ A1)*T + A0)*A
+!
+!                        TERMINATION
+!
+30 IF (X .LT. 0.0) SIN1 = - SIN1
+IF (MOD(N,2) .NE. 0) SIN1 = - SIN1
+RETURN
+END FUNCTION SIN1
+
+REAL function COS1 (X)
+!-----------------------------------------------------------------------
+!                   EVALUATION  OF COS(X*PI)
+!-----------------------------------------------------------------------
+DATA A0 /.314159265358979E+01/, A1 /-.516771278004995E+01/, &
+&A2 /.255016403987327E+01/, A3 /-.599264528932149E+00/, &
+&A4 /.821458689493251E-01/, A5 /-.737001831310553E-02/, &
+&A6 /.461514425296398E-03/
+DATA B1 /-.493480220054460E+01/, B2 /.405871212639605E+01/, &
+&B3 /-.133526276691575E+01/, B4 /.235330543508553E+00/, &
+&B5 /-.258048861575714E-01/, B6 /.190653140279462E-02/
+!------------------------
+!
+!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!
+                 MAX = IPMPAR(3)
+!
+!------------------------
+A = ABS(X)
+IF (A .LT. FLOAT(MAX)) GO TO 10
+   COS1 = 1.0
+   RETURN
+!
+10 N = A
+A = A - FLOAT(N)
+IF (A .GT. 0.75) GO TO 20
+IF (A .LT. 0.25) GO TO 21
+!
+!                    0.25 .LE. A .LE. 0.75
+!
+A = 0.25 + (0.25 - A)
+T = A*A
+COS1 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
+&+ A1)*T + A0)*A
+GO TO 30
+!
+!                 A .LT. 0.25  OR  A .GT. 0.75
+!
+20 A = 0.25 + (0.75 - A)
+N = N - 1
+21 T = A*A
+COS1 = ((((((B6*T + B5)*T + B4)*T + B3)*T + B2)*T &
+&+ B1)*T + 0.5) + 0.5
+!
+!                        TERMINATION
+!
+30 IF (MOD(N,2) .NE. 0) COS1 = - COS1
+RETURN
+END FUNCTION COS1
+
+double precision function DSIN1 (X)
+!-----------------------------------------------------------------------
+!
+!                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
+!
+!                             --------------
+!
+!     THE EXPANSION FOR SIN(PI*A) (ABS(A) .LE. PI/4) USING A1,...,A13
+!     IS ACCURATE TO WITHIN 2 UNITS OF THE 40-TH SIGNIFICANT DIGIT, AND
+!     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
+!     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION A, PI, T, W
+DOUBLE PRECISION A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
+&A11, A12, A13
+DOUBLE PRECISION B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, &
+&B11, B12, B13
+!------------------------
+DATA PI /3.141592653589793238462643383279502884197D+00/
+!------------------------
+DATA A1  /-.1028083791780141522795259479153765743002D+00/, &
+&A2  / .3170868848763100170457042079710451905600D-02/, &
+&A3  /-.4657026956105571623449026167864697920000D-04/, &
+&A4  / .3989844942879455643410226655783424000000D-06/, &
+&A5  /-.2237397227721999776371894030796800000000D-08/, &
+&A6  / .8847045483056962709715066675200000000000D-11/, &
+&A7  /-.2598715447506450292885585920000000000000D-13/, &
+&A8  / .5893449774331011070033920000000000000000D-16/, &
+&A9  /-.1062975472045522550784000000000000000000D-18/, &
+&A10 / .1561182648301780992000000000000000000000D-21/, &
+&A11 /-.1903193516670976000000000000000000000000D-24/, &
+&A12 / .1956617650176000000000000000000000000000D-27/, &
+&A13 /-.1711276032000000000000000000000000000000D-30/
+!------------------------
+DATA B1  /-.3084251375340424568385778437461297229882D+00/, &
+&B2  / .1585434424381550085228521039855226435920D-01/, &
+&B3  /-.3259918869273900136414318317506279360000D-03/, &
+&B4  / .3590860448591510079069203991239232000000D-05/, &
+&B5  /-.2461136950494199754009084061808640000000D-07/, &
+&B6  / .1150115912797405152263195572224000000000D-09/, &
+&B7  /-.3898073171259675439899172864000000000000D-12/, &
+&B8  / .1001886461636271969091584000000000000000D-14/, &
+&B9  /-.2019653396886572027084800000000000000000D-17/, &
+&B10 / .3278483561466560512000000000000000000000D-20/, &
+&B11 /-.4377345082051788800000000000000000000000D-23/, &
+&B12 / .4891532381388800000000000000000000000000D-26/, &
+&B13 /-.4617089843200000000000000000000000000000D-29/
+!------------------------
+!
+!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!
+                 MAX = IPMPAR(3)
+!
+!------------------------
+A = DABS(X)
+T = MAX
+IF (A .LT. T) GO TO 10
+   DSIN1 = 0.D0
+   RETURN
+!
+10 N = A
+T = N
+A = A - T
+IF (A .GT. 0.75D0) GO TO 20
+IF (A .LT. 0.25D0) GO TO 21
+!
+!                    0.25 .LE. A .LE. 0.75
+!
+A = 0.25D0 + (0.25D0 - A)
+T = 16.D0*A*A
+DSIN1 = (((((((((((((B13*T + B12)*T + B11)*T + B10)*T + B9)*T + &
+&B8)*T + B7)*T + B6)*T + B5)*T + B4)*T + B3)*T + &
+&B2)*T + B1)*T + 0.5D0) + 0.5D0
+GO TO 30
+!
+!                 A .LT. 0.25  OR  A .GT. 0.75
+!
+20 A = 0.25D0 + (0.75D0 - A)
+21 T = 16.D0*A*A
+W = (((((((((((((A13*T + A12)*T + A11)*T + A10)*T + A9)*T + &
+&A8)*T + A7)*T + A6)*T + A5)*T + A4)*T + A3)*T + &
+&A2)*T + A1)*T + 0.5D0) + 0.5D0
+DSIN1 = PI*A*W
+!
+!                        TERMINATION
+!
+30 IF (X .LT. 0.0) DSIN1 = - DSIN1
+IF (MOD(N,2) .NE. 0) DSIN1 = - DSIN1
+RETURN
+END FUNCTION DSIN1
+
+double precision function DCOS1 (X)
+!-----------------------------------------------------------------------
+!
+!                DOUBLE PRECISION EVALUATION OF COS(PI*X)
+!
+!                             --------------
+!
+!     THE EXPANSION FOR SIN(PI*A) (ABS(A) .LE. PI/4) USING A1,...,A13
+!     IS ACCURATE TO WITHIN 2 UNITS OF THE 40-TH SIGNIFICANT DIGIT, AND
+!     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
+!     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION A, PI, T, W
+DOUBLE PRECISION A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
+&A11, A12, A13
+DOUBLE PRECISION B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, &
+&B11, B12, B13
+!------------------------
+DATA PI /3.141592653589793238462643383279502884197D+00/
+!------------------------
+DATA A1  /-.1028083791780141522795259479153765743002D+00/, &
+&A2  / .3170868848763100170457042079710451905600D-02/, &
+&A3  /-.4657026956105571623449026167864697920000D-04/, &
+&A4  / .3989844942879455643410226655783424000000D-06/, &
+&A5  /-.2237397227721999776371894030796800000000D-08/, &
+&A6  / .8847045483056962709715066675200000000000D-11/, &
+&A7  /-.2598715447506450292885585920000000000000D-13/, &
+&A8  / .5893449774331011070033920000000000000000D-16/, &
+&A9  /-.1062975472045522550784000000000000000000D-18/, &
+&A10 / .1561182648301780992000000000000000000000D-21/, &
+&A11 /-.1903193516670976000000000000000000000000D-24/, &
+&A12 / .1956617650176000000000000000000000000000D-27/, &
+&A13 /-.1711276032000000000000000000000000000000D-30/
+!------------------------
+DATA B1  /-.3084251375340424568385778437461297229882D+00/, &
+&B2  / .1585434424381550085228521039855226435920D-01/, &
+&B3  /-.3259918869273900136414318317506279360000D-03/, &
+&B4  / .3590860448591510079069203991239232000000D-05/, &
+&B5  /-.2461136950494199754009084061808640000000D-07/, &
+&B6  / .1150115912797405152263195572224000000000D-09/, &
+&B7  /-.3898073171259675439899172864000000000000D-12/, &
+&B8  / .1001886461636271969091584000000000000000D-14/, &
+&B9  /-.2019653396886572027084800000000000000000D-17/, &
+&B10 / .3278483561466560512000000000000000000000D-20/, &
+&B11 /-.4377345082051788800000000000000000000000D-23/, &
+&B12 / .4891532381388800000000000000000000000000D-26/, &
+&B13 /-.4617089843200000000000000000000000000000D-29/
+!------------------------
+!
+!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!
+                 MAX = IPMPAR(3)
+!
+!------------------------
+A = DABS(X)
+T = MAX
+IF (A .LT. T) GO TO 10
+   DCOS1 = 1.D0
+   RETURN
+!
+10 N = A
+T = N
+A = A - T
+IF (A .GT. 0.75D0) GO TO 20
+IF (A .LT. 0.25D0) GO TO 21
+!
+!                    0.25 .LE. A .LE. 0.75
+!
+A = 0.25D0 + (0.25D0 - A)
+T = 16.D0*A*A
+W = (((((((((((((A13*T + A12)*T + A11)*T + A10)*T + A9)*T + &
+&A8)*T + A7)*T + A6)*T + A5)*T + A4)*T + A3)*T + &
+&A2)*T + A1)*T + 0.5D0) + 0.5D0
+DCOS1 = PI*A*W
+GO TO 30
+!
+!                 A .LT. 0.25  OR  A .GT. 0.75
+!
+20 A = 0.25D0 + (0.75D0 - A)
+N = N - 1
+21 T = 16.D0*A*A
+DCOS1 = (((((((((((((B13*T + B12)*T + B11)*T + B10)*T + B9)*T + &
+&B8)*T + B7)*T + B6)*T + B5)*T + B4)*T + B3)*T + &
+&B2)*T + B1)*T + 0.5D0) + 0.5D0
+!
+!                        TERMINATION
+!
+30 IF (MOD(N,2) .NE. 0) DCOS1 = - DCOS1
+RETURN
+END FUNCTION DCOS1
+
+SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
+!
+INTEGER ISW
+REAL SINHM,COSHM,X,CUT(5)
+!
+!                      FROM THE SPLINE UNDER TENSION PACKAGE
+!                       CODED BY A. K. CLINE AND R. J. RENKA
+!                            DEPARTMENT OF COMPUTER SCIENCES
+!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                          MODIFIED BY A.H. MORRIS (NSWC/DL)
+!
+! THIS SUBROUTINE RETURNS APPROXIMATIONS TO
+!       SINHM(X) = SINH(X)-X
+!       COSHM(X) = COSH(X)-1
+! AND
+!       COSHMM(X) = COSH(X)-1-X*X/2
+!
+! ON INPUT--
+!
+!   X CONTAINS THE VALUE OF THE INDEPENDENT VARIABLE.
+!
+!   ISW INDICATES THE FUNCTION DESIRED
+!           = -1 IF ONLY SINHM IS DESIRED,
+!           =  0 IF BOTH SINHM AND COSHM ARE DESIRED,
+!           =  1 IF ONLY COSHM IS DESIRED,
+!           =  2 IF ONLY COSHMM IS DESIRED,
+!           =  3 IF BOTH SINHM AND COSHMM ARE DESIRED.
+!
+! ON OUTPUT--
+!
+!   SINHM CONTAINS THE VALUE OF SINHM(X) IF ISW .LE. 0 OR
+!   ISW .EQ. 3 (SINHM IS UNALTERED IF ISW .EQ.1 OR ISW .EQ.
+!   2).
+!
+!   COSHM CONTAINS THE VALUE OF COSHM(X) IF ISW .EQ. 0 OR
+!   ISW .EQ. 1 AND CONTAINS THE VALUE OF COSHMM(X) IF ISW
+!   .GE. 2 (COSHM IS UNALTERED IF ISW .EQ. -1).
+!
+! AND
+!
+!   X AND ISW ARE UNALTERED.
+!
+!-----------------------------------------------------------
+!
+DATA SP5/.255251817302048E-09/, &
+&SP4/.723809046696880E-07/, &
+&SP3/.109233297700241E-04/, &
+&SP2/.954811583154274E-03/, &
+&SP1/.452867078563929E-01/, &
+&SQ1/-.471329214363072E-02/
+DATA CP5/.116744361560051E-08/, &
+&CP4/.280407224259429E-06/, &
+&CP3/.344417983443219E-04/, &
+&CP2/.232293648552398E-02/, &
+&CP1/.778752378267155E-01/, &
+&CQ1/-.545809550662099E-02/
+DATA ZP3/5.59297116264720E-07/, &
+&ZP2/1.77943488030894E-04/, &
+&ZP1/1.69800461894792E-02/, &
+&ZQ4/1.33412535492375E-09/, &
+&ZQ3/-5.80858944138663E-07/, &
+&ZQ2/1.27814964403863E-04/, &
+&ZQ1/-1.63532871439181E-02/
+DATA CUT(1)/1.65/, CUT(2)/1.2/, CUT(3)/1.2/, CUT(4)/2.7/, &
+&CUT(5)/1.65/
+!
+XX = X
+AX = ABS(XX)
+XS = XX*XX
+IF (AX .GE. CUT(ISW+2)) EXPX = EXP(AX)
+!
+! SINHM APPROXIMATION
+!
+IF (ISW .EQ. 1 .OR. ISW .EQ. 2) GO TO 2
+IF (AX .GE. 1.65) GO TO 1
+SINHM = ((((((SP5*XS+SP4)*XS+SP3)*XS+SP2)*XS+SP1)*XS+1.) &
+&*XS*XX)/((SQ1*XS+1.)*6.)
+GO TO 2
+1 SINHM = -(((AX+AX)+1./EXPX)-EXPX)/2.
+IF (XX .LT. 0.) SINHM = -SINHM
+!
+! COSHM APPROXIMATION
+!
+2 IF (ISW .NE. 0 .AND. ISW .NE. 1) GO TO 4
+IF (AX .GE. 1.2) GO TO 3
+COSHM = ((((((CP5*XS+CP4)*XS+CP3)*XS+CP2)*XS+CP1)*XS+1.) &
+&*XS)/((CQ1*XS+1.)*2.)
+GO TO 4
+3 COSHM = ((1./EXPX-2.)+EXPX)/2.
+!
+! COSHMM APPROXIMATION
+!
+4 IF (ISW .LE. 1) RETURN
+IF (AX .GE. 2.70) GO TO 5
+COSHM = ((((ZP3*XS+ZP2)*XS+ZP1)*XS+1.)*XS*XS)/(((((ZQ4 &
+&*XS+ZQ3)*XS+ZQ2)*XS+ZQ1)*XS+1.)*24.)
+RETURN
+5 COSHM = (((1./EXPX-2.)-XS)+EXPX)/2.
+RETURN
+END SUBROUTINE SNHCSH
+
+REAL function ESUM (MU, X)
+!-----------------------------------------------------------------------
+!                    EVALUATION OF EXP(MU + X)
+!-----------------------------------------------------------------------
+IF (X .GT. 0.0) GO TO 10
+!
+IF (MU .LT. 0) GO TO 20
+   W = MU + X
+   IF (W .GT. 0.0) GO TO 20
+   ESUM = EXP(W)
+   RETURN
+!
+10 IF (MU .GT. 0) GO TO 20
+   W = MU + X
+   IF (W .LT. 0.0) GO TO 20
+   ESUM = EXP(W)
+   RETURN
+!
+20 W = MU
+ESUM = EXP(W)*EXP(X)
+RETURN
+END FUNCTION ESUM
+
+double precision function DESUM (MU, X)
+!-----------------------------------------------------------------------
+!                    EVALUATION OF EXP(MU + X)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, W
+!
+IF (X .GT. 0.D0) GO TO 10
+!
+IF (MU .LT. 0) GO TO 20
+   W = MU + X
+   IF (W .GT. 0.D0) GO TO 20
+   DESUM = DEXP(W)
+   RETURN
+!
+10 IF (MU .GT. 0) GO TO 20
+   W = MU + X
+   IF (W .LT. 0.D0) GO TO 20
+   DESUM = DEXP(W)
+   RETURN
+!
+20 W = MU
+DESUM = DEXP(W)*DEXP(X)
+RETURN
+END FUNCTION DESUM
+
+REAL function REXP (X)
+!-----------------------------------------------------------------------
+!            EVALUATION OF THE FUNCTION EXP(X) - 1
+!-----------------------------------------------------------------------
+DATA P1/ .914041914819518E-09/, P2/ .238082361044469E-01/, &
+&Q1/-.499999999085958E+00/, Q2/ .107141568980644E+00/, &
+&Q3/-.119041179760821E-01/, Q4/ .595130811860248E-03/
+!-----------------------
+IF (ABS(X) .GT. 0.15) GO TO 10
+REXP = X*(((P2*X + P1)*X + 1.0)/((((Q4*X + Q3)*X + Q2)*X &
+&+ Q1)*X + 1.0))
+RETURN
+!
+10 IF (X .LT. 0.0) GO TO 20
+   E = EXP(X)
+   REXP = E*(0.5 + (0.5 - 1.0/E))
+   RETURN
+20 IF (X .LT. -37.0) GO TO 30
+   REXP = (EXP(X) - 0.5) - 0.5
+   RETURN
+30 REXP = -1.0
+RETURN
+END FUNCTION REXP
+
+double precision function DREXP (X)
+!-----------------------------------------------------------------------
+!            EVALUATION OF THE FUNCTION EXP(X) - 1
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, E, W, Z
+DOUBLE PRECISION A0, A1, A2, A3, A4, B1, B2, B3, B4
+DOUBLE PRECISION C1, C2, C3, C4, C5
+!---------------------------
+DATA A0/ .248015873015873015873016D-04/, &
+&A1/-.344452080605731005808147D-05/, &
+&A2/ .206664230430046597475413D-06/, &
+&A3/-.447300111094328162971036D-08/, &
+&A4/ .114734027080634968083920D-11/
+DATA B1/-.249994190011341852652396D+00/, &
+&B2/ .249987228833107957725728D-01/, &
+&B3/-.119037506846942249362528D-02/, &
+&B4/ .228908693387350391768682D-04/
+!---------------------------
+!     CI = 1/FACTORIAL(I + 2)
+!---------------------------
+DATA C1 / .1666666666666666666666666666666667D+00/, &
+&C2 / .4166666666666666666666666666666667D-01/, &
+&C3 / .8333333333333333333333333333333333D-02/, &
+&C4 / .1388888888888888888888888888888889D-02/, &
+&C5 / .1984126984126984126984126984126984D-03/
+!---------------------------
+IF (DABS(X) .GT. 0.15D0) GO TO 10
+!
+!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!
+!                C6 + C7*X + C8*X**2 + ....
+!
+!        THIS APPROXIMATION IS ACCURATE TO WITHIN
+!        1 UNIT OF THE 23-RD SIGNIFICANT DIGIT.
+!        THE RESULTING VALUE FOR W IS ACCURATE TO
+!        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
+!        DIGIT.
+!
+Z = ((((A4*X + A3)*X + A2)*X + A1)*X + A0) / &
+&((((B4*X + B3)*X + B2)*X + B1)*X + 1.D0)
+W = ((((((Z*X + C5)*X + C4)*X + C3)*X + C2)*X + &
+&C1)*X + 0.5D0)*X + 1.D0
+DREXP = X*W
+RETURN
+!
+10 IF (X .LT. 0.D0) GO TO 20
+   E = DEXP(X)
+   DREXP = E*(0.5D0 + (0.5D0 - 1.D0/E))
+   RETURN
+20 IF (X .LT. -77.D0) GO TO 30
+   DREXP = (DEXP(X) - 0.5D0) - 0.5D0
+   RETURN
+30 DREXP = -1.D0
+RETURN
+END FUNCTION DREXP
+
+SUBROUTINE REXP1 (X, E, W)
+!-----------------------------------------------------------------------
+!
+!                  EVALUATION OF W = (EXP(X) - 1)/X
+!
+!     E IS AN INPUT/OUTPUT VARIABLE. IF E .GE. 0 THEN IT IS ASSUMED
+!     THAT E = EXP(X). IN THIS CASE E IS NOT MODIFIED. IF E .LT. 0
+!     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
+!
+!-----------------------------------------------------------------------
+DATA P1/ .914041914819518E-09/, P2/ .238082361044469E-01/, &
+&Q1/-.499999999085958E+00/, Q2/ .107141568980644E+00/, &
+&Q3/-.119041179760821E-01/, Q4/ .595130811860248E-03/
+!-----------------------
+IF (ABS(X) .GT. 0.15) GO TO 10
+W = ((P2*X + P1)*X + 1.0)/((((Q4*X + Q3)*X + Q2)*X &
+&+ Q1)*X + 1.0)
+RETURN
+!
+10 IF (X .LT. 0.0) GO TO 20
+   IF (E .LT. 0.0) E = EXP(X)
+   W = (E*(0.5 + (0.5 - 1.0/E)))/X
+   RETURN
+20 IF (X .LT. -37.0) GO TO 30
+   IF (E .LT. 0.0) E = EXP(X)
+   W = ((E - 0.5) - 0.5)/X
+   RETURN
+30 W = -1.0/X
+RETURN
+END SUBROUTINE REXP1
+
+SUBROUTINE DREXP1 (X, E, W)
+!-----------------------------------------------------------------------
+!
+!                  EVALUATION OF W = (EXP(X) - 1)/X
+!
+!     E IS AN INPUT/OUTPUT VARIABLE. IF E .GE. 0 THEN IT IS ASSUMED
+!     THAT E = EXP(X). IN THIS CASE E IS NOT MODIFIED. IF E .LT. 0
+!     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, E, W, Z
+DOUBLE PRECISION A0, A1, A2, A3, A4, B1, B2, B3, B4
+DOUBLE PRECISION C1, C2, C3, C4, C5
+!---------------------------
+DATA A0/ .248015873015873015873016D-04/, &
+&A1/-.344452080605731005808147D-05/, &
+&A2/ .206664230430046597475413D-06/, &
+&A3/-.447300111094328162971036D-08/, &
+&A4/ .114734027080634968083920D-11/
+DATA B1/-.249994190011341852652396D+00/, &
+&B2/ .249987228833107957725728D-01/, &
+&B3/-.119037506846942249362528D-02/, &
+&B4/ .228908693387350391768682D-04/
+!---------------------------
+!     CI = 1/FACTORIAL(I + 2)
+!---------------------------
+DATA C1 / .1666666666666666666666666666666667D+00/, &
+&C2 / .4166666666666666666666666666666667D-01/, &
+&C3 / .8333333333333333333333333333333333D-02/, &
+&C4 / .1388888888888888888888888888888889D-02/, &
+&C5 / .1984126984126984126984126984126984D-03/
+!---------------------------
+W = 1.D0
+IF (DABS(X) .LT. 1.D-33) RETURN
+IF (DABS(X) .GT. 0.15D0) GO TO 10
+!
+!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!
+!                C6 + C7*X + C8*X**2 + ....
+!
+!        THIS APPROXIMATION IS ACCURATE TO WITHIN
+!        1 UNIT OF THE 23-RD SIGNIFICANT DIGIT.
+!        THE RESULTING VALUE FOR W IS ACCURATE TO
+!        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
+!        DIGIT.
+!
+Z = ((((A4*X + A3)*X + A2)*X + A1)*X + A0) / &
+&((((B4*X + B3)*X + B2)*X + B1)*X + 1.D0)
+W = ((((((Z*X + C5)*X + C4)*X + C3)*X + C2)*X + &
+&C1)*X + 0.5D0)*X + 1.D0
+RETURN
+!
+10 IF (X .LT. 0.D0) GO TO 20
+   IF (E .LT. 0.D0) E = DEXP(X)
+   W = (E*(0.5D0 + (0.5D0 - 1.D0/E)))/X
+   RETURN
+20 IF (X .LT. -77.D0) GO TO 30
+   IF (E .LT. 0.D0) E = DEXP(X)
+   W = ((E - 0.5D0) - 0.5D0)/X
+   RETURN
+30 W = -1.D0/X
+RETURN
+END SUBROUTINE DREXP1
+
+REAL function ALNREL(A)
+!-----------------------------------------------------------------------
+!            EVALUATION OF THE FUNCTION LN(1 + A)
+!-----------------------------------------------------------------------
+DATA P1/-.129418923021993E+01/, P2/.405303492862024E+00/, &
+&P3/-.178874546012214E-01/
+DATA Q1/-.162752256355323E+01/, Q2/.747811014037616E+00/, &
+&Q3/-.845104217945565E-01/
+!--------------------------
+IF (ABS(A) .GT. 0.375) GO TO 10
+T = A/(A + 2.0)
+T2 = T*T
+W = (((P3*T2 + P2)*T2 + P1)*T2 + 1.0)/ &
+&(((Q3*T2 + Q2)*T2 + Q1)*T2 + 1.0)
+ALNREL = 2.0*T*W
+RETURN
+!
+10 X = 1.0 + A
+IF (A .LT. 0.0) X = (A + 0.5) + 0.5
+ALNREL = ALOG(X)
+RETURN
+END FUNCTION ALNREL
+
+double precision function DLNREL (A)
+!-----------------------------------------------------------------------
+!            EVALUATION OF THE FUNCTION LN(1 + A)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A, T, T2, W, Z
+DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION C1, C2, C3, C4, C5
+!-------------------------
+DATA P0 / .7692307692307692307680D-01/, &
+&P1 /-.1505958055914600184836D+00/, &
+&P2 / .9302355725278521726994D-01/, &
+&P3 /-.1787900022182327735804D-01/
+DATA Q1 /-.2824412139355646910683D+01/, &
+&Q2 / .2892424216041495392509D+01/, &
+&Q3 /-.1263560605948009364422D+01/, &
+&Q4 / .1966769435894561313526D+00/
+!-------------------------
+!     CI = 1/(2I + 1)
+!-------------------------
+DATA C1 /.3333333333333333333333333333333D+00/, &
+&C2 /.2000000000000000000000000000000D+00/, &
+&C3 /.1428571428571428571428571428571D+00/, &
+&C4 /.1111111111111111111111111111111D+00/, &
+&C5 /.9090909090909090909090909090909D-01/
+!-------------------------
+IF (DABS(A) .LT. 0.375D0) GO TO 10
+T = 1.D0 + A
+IF (A .LT. 0.D0) T = 0.5D0 + (0.5D0 + A)
+DLNREL = DLOG(T)
+RETURN
+!
+!        W IS A MINIMAX APPROXIMATION OF THE SERIES
+!
+!               C6 + C7*T**2 + C8*T**4 + ...
+!
+!        THIS APPROXIMATION IS ACCURATE TO WITHIN
+!        1.6 UNITS OF THE 21-ST SIGNIFICANT DIGIT.
+!        THE RESULTING VALUE FOR 1.D0 + T2*Z IS
+!        ACCURATE TO WITHIN 1 UNIT OF THE 30-TH
+!        SIGNIFICANT DIGIT.
+!
+10 T = A/(A + 2.D0)
+T2 = T*T
+W = (((P3*T2 + P2)*T2 + P1)*T2 + P0)/ &
+&((((Q4*T2 + Q3)*T2 + Q2)*T2 + Q1)*T2 + 1.D0)
+!
+Z = ((((W*T2 + C5)*T2 + C4)*T2 + C3)*T2 + C2)*T2 + C1
+DLNREL = 2.D0*T*(1.D0 + T2*Z)
+RETURN
+END FUNCTION DLNREL
+
+REAL function RLOG(X)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE FUNCTION X - 1 - LN(X)
+!-----------------------------------------------------------------------
+!     A = RLOG (0.7)
+!     B = RLOG (4/3)
+!------------------------
+DATA A/.566749439387324E-01/
+DATA B/.456512608815524E-01/
+!------------------------
+DATA P0/ .333333333333333E+00/, P1/-.224696413112536E+00/, &
+&P2/ .620886815375787E-02/
+DATA Q1/-.127408923933623E+01/, Q2/ .354508718369557E+00/
+!------------------------
+IF (X .LT. 0.61 .OR. X .GT. 1.57) GO TO 100
+IF (X .LT. 0.82) GO TO 10
+IF (X .GT. 1.18) GO TO 20
+!
+!                 ARGUMENT REDUCTION
+!
+U = (X - 0.5) - 0.5
+UP2 = U + 2.0
+W1 = 0.0
+GO TO 30
+!
+10 U = (X - 0.7)/0.7
+UP2 = U + 2.0
+W1 = A - U*0.3
+GO TO 30
+!
+20 T = 0.75*(X - 1.0)
+U = T - 0.25
+UP2 = T + 1.75
+W1 = B + U/3.0
+!
+!                  SERIES EXPANSION
+!
+30 R = U/UP2
+T = R*R
+W = ((P2*T + P1)*T + P0)/((Q2*T + Q1)*T + 1.0)
+RLOG = R*(U - 2.0*T*W) + W1
+RETURN
+!
+!
+100 R = (X - 0.5) - 0.5
+RLOG = R - ALOG(X)
+RETURN
+END FUNCTION RLOG
+
+REAL function RLOG1(X)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE FUNCTION X - LN(1 + X)
+!-----------------------------------------------------------------------
+!     A = RLOG (0.7)
+!     B = RLOG (4/3)
+!------------------------
+DATA A/.566749439387324E-01/
+DATA B/.456512608815524E-01/
+!------------------------
+DATA P0/ .333333333333333E+00/, P1/-.224696413112536E+00/, &
+&P2/ .620886815375787E-02/
+DATA Q1/-.127408923933623E+01/, Q2/ .354508718369557E+00/
+!------------------------
+IF (X .LT. -0.39 .OR. X .GT. 0.57) GO TO 100
+IF (X .LT. -0.18) GO TO 10
+IF (X .GT.  0.18) GO TO 20
+!
+!                 ARGUMENT REDUCTION
+!
+U = X
+UP2 = U + 2.0
+W1 = 0.0
+GO TO 30
+!
+10 U = (X + 0.3)/0.7
+UP2 = U + 2.0
+W1 = A - U*0.3
+GO TO 30
+!
+20 T = 0.75*X
+U = T - 0.25
+UP2 = T + 1.75
+W1 = B + U/3.0
+!
+!                  SERIES EXPANSION
+!
+30 R = U/UP2
+T = R*R
+W = ((P2*T + P1)*T + P0)/((Q2*T + Q1)*T + 1.0)
+RLOG1 = R*(U - 2.0*T*W) + W1
+RETURN
+!
+!
+100 W = (X + 0.5) + 0.5
+RLOG1 = X - ALOG(W)
+RETURN
+END FUNCTION RLOG1
+
+double precision function DRLOG (X)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE FUNCTION X - 1 - LN(X)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION A, B, R, T, U, UP2, W, W1, Z
+DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION C1, C2, C3, C4, C5
+!-------------------------
+!     A = DRLOG (0.7)
+!     B = DRLOG (4/3)
+!-------------------------
+DATA A /.566749439387323789126387112411845D-01/
+DATA B /.456512608815524058941143273395059D-01/
+!-------------------------
+DATA P0 / .7692307692307692307680D-01/, &
+&P1 /-.1505958055914600184836D+00/, &
+&P2 / .9302355725278521726994D-01/, &
+&P3 /-.1787900022182327735804D-01/
+DATA Q1 /-.2824412139355646910683D+01/, &
+&Q2 / .2892424216041495392509D+01/, &
+&Q3 /-.1263560605948009364422D+01/, &
+&Q4 / .1966769435894561313526D+00/
+!-------------------------
+!     CI = 1/(2I + 1)
+!-------------------------
+DATA C1 /.333333333333333333333333333333333D+00/, &
+&C2 /.200000000000000000000000000000000D+00/, &
+&C3 /.142857142857142857142857142857143D+00/, &
+&C4 /.111111111111111111111111111111111D+00/, &
+&C5 /.909090909090909090909090909090909D-01/
+!-------------------------
+IF (X .LT. 0.61D0 .OR. X .GT. 1.57D0) GO TO 100
+IF (X .LT. 0.82D0) GO TO 10
+IF (X .GT. 1.18D0) GO TO 20
+!
+!                 ARGUMENT REDUCTION
+!
+U = (X - 0.5D0) - 0.5D0
+UP2 = U + 2.D0
+W1 = 0.D0
+GO TO 30
+!
+10 U = (X - 0.7D0)/0.7D0
+UP2 = U + 2.D0
+W1 = A - U*0.3D0
+GO TO 30
+!
+20 T = 0.75D0*(X - 1.D0)
+U = T - 0.25D0
+UP2 = T + 1.75D0
+W1 = B + U/3.D0
+!
+!                  SERIES EXPANSION
+!
+30 R = U/UP2
+T = R*R
+!
+!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!
+!               C6 + C7*R**2 + C8*R**4 + ...
+!
+!        FOR THE INTERVAL (0.0, 0.375). THE APPROX-
+!        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
+!        THE 21-ST SIGNIFICANT DIGIT.
+!
+Z = (((P3*T + P2)*T + P1)*T + P0)/ &
+&((((Q4*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
+!
+W = ((((Z*T + C5)*T + C4)*T + C3)*T + C2)*T + C1
+DRLOG = R*(U - 2.D0*T*W) + W1
+RETURN
+!
+!
+100 R = (X - 0.5D0) - 0.5D0
+DRLOG = R - DLOG(X)
+RETURN
+END FUNCTION DRLOG
+
+double precision function DRLOG1 (X)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE FUNCTION X - LN(1 + X)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION A, B, R, T, U, UP2, W, W1, Z
+DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION C1, C2, C3, C4, C5
+!-------------------------
+!     A = DRLOG (0.7)
+!     B = DRLOG (4/3)
+!-------------------------
+DATA A /.566749439387323789126387112411845D-01/
+DATA B /.456512608815524058941143273395059D-01/
+!-------------------------
+DATA P0 / .7692307692307692307680D-01/, &
+&P1 /-.1505958055914600184836D+00/, &
+&P2 / .9302355725278521726994D-01/, &
+&P3 /-.1787900022182327735804D-01/
+DATA Q1 /-.2824412139355646910683D+01/, &
+&Q2 / .2892424216041495392509D+01/, &
+&Q3 /-.1263560605948009364422D+01/, &
+&Q4 / .1966769435894561313526D+00/
+!-------------------------
+!     CI = 1/(2I + 1)
+!-------------------------
+DATA C1 /.333333333333333333333333333333333D+00/, &
+&C2 /.200000000000000000000000000000000D+00/, &
+&C3 /.142857142857142857142857142857143D+00/, &
+&C4 /.111111111111111111111111111111111D+00/, &
+&C5 /.909090909090909090909090909090909D-01/
+!-------------------------
+IF (X .LT. -0.39D0 .OR. X .GT. 0.57D0) GO TO 100
+IF (X .LT. -0.18D0) GO TO 10
+IF (X .GT.  0.18D0) GO TO 20
+!
+!                 ARGUMENT REDUCTION
+!
+U = X
+UP2 = U + 2.D0
+W1 = 0.D0
+GO TO 30
+!
+10 U = (X + 0.3D0)/0.7D0
+UP2 = U + 2.D0
+W1 = A - U*0.3D0
+GO TO 30
+!
+20 T = 0.75D0*X
+U = T - 0.25D0
+UP2 = T + 1.75D0
+W1 = B + U/3.D0
+!
+!                  SERIES EXPANSION
+!
+30 R = U/UP2
+T = R*R
+!
+!        Z IS A MINIMAX APPROXIMATION OF THE SERIES
+!
+!               C6 + C7*R**2 + C8*R**4 + ...
+!
+!        FOR THE INTERVAL (0.0, 0.375). THE APPROX-
+!        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
+!        THE 21-ST SIGNIFICANT DIGIT.
+!
+Z = (((P3*T + P2)*T + P1)*T + P0)/ &
+&((((Q4*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
+!
+W = ((((Z*T + C5)*T + C4)*T + C3)*T + C2)*T + C1
+DRLOG1 = R*(U - 2.D0*T*W) + W1
+RETURN
+!
+!
+100 W = (X + 0.5D0) + 0.5D0
+DRLOG1 = X - DLOG(W)
+RETURN
+END FUNCTION DRLOG1
+
+SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
+REAL X(N), Y(N)
+!-----------------------------------------------------------------------
+!     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
+!     (I = 1,...,N) TAKEN IN THIS ORDER. IT IS ASSUMED THAT THE
+!     POLYGONAL PATH IS A LOOP, WHERE (X(N),Y(N)) = (X(1),Y(1))
+!     OR THERE IS AN ARC FROM (X(N),Y(N)) TO (X(1),Y(1)).
+!
+!     (X0,Y0) IS AN ARBITRARY POINT AND L AND M ARE VARIABLES.
+!     L AND M ARE ASSIGNED THE FOLLOWING VALUES ...
+!
+!        L = -1   IF (X0,Y0) IS OUTSIDE THE POLYGONAL PATH
+!        L =  0   IF (X0,Y0) LIES ON THE POLYGONAL PATH
+!        L =  1   IF (X0,Y0) IS INSIDE THE POLYGONAL PATH
+!
+!     M = 0 IF (X0,Y0) IS ON OR OUTSIDE THE PATH. IF (X0,Y0)
+!     IS INSIDE THE PATH THEN M IS THE WINDING NUMBER OF THE
+!     PATH AROUND THE POINT (X0,Y0).
+!
+!-----------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0
+!
+               EPS = SPMPAR(1)
+!
+!-----------------------------------------------------------------------
+N0 = N
+IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N0 = N - 1
+PI = ATAN2(0.0, -1.0)
+PI2 = 2.0*PI
+TOL = 4.0*EPS*PI
+L = -1
+M = 0
+!
+U = X(1) - X0
+V = Y(1) - Y0
+IF (U .EQ. 0.0 .AND. V .EQ. 0.0) GO TO 20
+IF (N0 .LT. 2) RETURN
+THETA1 = ATAN2(V, U)
+!
+SUM = 0.0
+THETA = THETA1
+do 10 I = 2,N0
+   U = X(I) - X0
+   V = Y(I) - Y0
+   IF (U .EQ. 0.0 .AND. V .EQ. 0.0) GO TO 20
+   THETAI = ATAN2(V, U)
+!
+   ANGLE = ABS(THETAI - THETA)
+   IF (ABS(ANGLE - PI) .LT. TOL) GO TO 20
+   IF (ANGLE .GT. PI) ANGLE = ANGLE - PI2
+   IF (THETA .GT. THETAI) ANGLE = -ANGLE
+   SUM = SUM + ANGLE
+   THETA = THETAI
+10 CONTINUE
+!
+ANGLE = ABS(THETA1 - THETA)
+IF (ABS(ANGLE - PI) .LT. TOL) GO TO 20
+IF (ANGLE .GT. PI) ANGLE = ANGLE - PI2
+IF (THETA .GT. THETA1) ANGLE = -ANGLE
+SUM = SUM + ANGLE
+!
+!     SUM = 2*PI*M WHERE M IS THE WINDING NUMBER
+!
+M = ABS(SUM)/PI2 + 0.2
+IF (M .EQ. 0) RETURN
+L = 1
+IF (SUM .LT. 0.0) M = -M
+RETURN
+!
+!     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
+!
+20 L = 0
+RETURN
+END SUBROUTINE LOCPT
+
+SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
+!-----------------------------------------------------------------------
+!
+!                 INTERSECTION OF A STRIGHT LINE
+!                       AND POLYGONAL PATH
+!
+!-----------------------------------------------------------------------
+REAL A(2), B(2), X(N), Y(N), U(M), V(M)
+REAL K, KI
+!----------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+!
+                EPS = SPMPAR(1)
+!
+!----------------------
+NUM = 0
+IF (N .LT. 2) GO TO 200
+H = B(1) - A(1)
+K = B(2) - A(2)
+IF (H .EQ. 0.0 .AND. K .EQ. 0.0) GO TO 200
+!
+IERR = 0
+NM1 = N - 1
+TOL = 4.0*EPS
+TOL0 = 2.0*EPS
+ONEP = 1.0 + TOL
+ONEM = 0.5 + (0.5 - TOL0)
+!
+IND = 0
+do 100 I = 1, NM1
+   HI = X(I + 1) - X(I)
+   KI = Y(I + 1) - Y(I)
+   IF (HI .EQ. 0.0 .AND. KI .EQ. 0.0) GO TO 100
+   IND = 1
+!
+!           CHECK IF THE LINE FROM A TO B AND THE I-TH
+!                 LINE IN THE PATH ARE PARALLEL
+!
+   S = HI*K
+   T = H*KI
+   D = S - T
+   IF (ABS(D) .LE. TOL*AMAX1(ABS(S),ABS(T))) GO TO 40
+!-----------------------------------------------------------------------
+!                   THE LINES ARE NOT PARALLEL
+!-----------------------------------------------------------------------
+   P = X(I) - A(1)
+   Q = Y(I) - A(2)
+   S = HI*Q
+   T = KI*P
+   DIFF = S - T
+   IF (ABS(DIFF) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF = 0.0
+   S = H*Q
+   T = K*P
+   DIFF1 = S - T
+   IF (ABS(DIFF1) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF1 = 0.0
+!
+   S = DIFF/D
+   T = DIFF1/D
+   IF (S .LT. 0.0 .OR. S .GT. ONEP) GO TO 100
+   IF (T .LT. 0.0 .OR. T .GT. ONEP) GO TO 100
+   IF (NUM .GT. 0 .AND. T .EQ. 0.0) GO TO 100
+   IF (S .GT. 0.0) GO TO 20
+!
+!                   POINT A IS ON THE I-TH LINE
+!
+10 NUM = NUM + 1
+   IF (NUM .GT. M) GO TO 210
+   U(NUM) = A(1)
+   V(NUM) = A(2)
+   GO TO 100
+!
+!                   POINT B IS ON THE I-TH LINE
+!
+20 IF (S .LT. ONEM) GO TO 30
+21 NUM = NUM + 1
+   IF (NUM .GT. M) GO TO 210
+   U(NUM) = B(1)
+   V(NUM) = B(2)
+   GO TO 100
+!
+!              THE INTERIOR OF THE LINE FROM A TO B
+!                 INTERSECTS WITH THE I-TH LINE
+!
+30 NUM = NUM + 1
+   IF (NUM .GT. M) GO TO 210
+   U(NUM) = A(1) + S*H
+   V(NUM) = A(2) + S*K
+   GO TO 100
+!-----------------------------------------------------------------------
+!                     THE LINES ARE PARALLEL
+!-----------------------------------------------------------------------
+40 IF (ABS(HI) .GT. ABS(KI)) GO TO 50
+!
+      D = A(2) - Y(I)
+      IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(2)),ABS(Y(I)))) D = 0.0
+      S = D/KI
+!
+      P = X(I) + S*HI
+      IF (ABS(A(1) - P) .GT. TOL*AMAX1(ABS(A(1)),ABS(P))) &
+&GO TO 100
+!
+      D = B(2) - Y(I)
+      IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(2)),ABS(Y(I)))) D = 0.0
+      T = D/KI
+      GO TO 60
+!
+50 D = A(1) - X(I)
+   IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(1)),ABS(X(I)))) D = 0.0
+   S = D/HI
+!
+   P = Y(I) + S*KI
+   IF (ABS(P - A(2)) .GT. TOL*AMAX1(ABS(P),ABS(A(2)))) &
+&GO TO 100
+!
+   D = B(1) - X(I)
+   IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(1)),ABS(X(I)))) D = 0.0
+   T = D/HI
+!
+!              THE 2 LINES ARE PORTIONS OF THE SAME
+!                     STRAIGHT INFINITE LINE
+!
+60 IF (S .GT. 0.0 .AND. S .LT. ONEM) GO TO 220
+   IF (T .GT. 0.0 .AND. T .LT. ONEM) GO TO 220
+   TMIN = AMIN1(S,T)
+   TMAX = AMAX1(S,T)
+   IF (TMAX .LE. 0.0) GO TO 70
+   IF (TMIN .GE. ONEM) GO TO 80
+   GO TO 220
+!
+70 IF (TMAX .LT. 0.0) GO TO 100
+   IF (NUM .GT. 0) GO TO 100
+   IF (TMAX .EQ. S) GO TO 10
+   GO TO 21
+!
+80 IF (TMIN .GT. 1.0) GO TO 100
+   IF (TMIN .EQ. S) GO TO 10
+   GO TO 21
+!
+100 CONTINUE
+IF (IND .EQ. 0) GO TO 200
+!
+IF (NUM .LT. 2) RETURN
+IF (U(NUM) .EQ. X(1) .AND. V(NUM) .EQ. Y(1)) &
+&NUM = NUM - 1
+RETURN
+!
+!                          ERROR RETURN
+!
+200 IERR = 1
+RETURN
+210 IERR = 2
+NUM = NUM - 1
+RETURN
+220 IERR = -I
+RETURN
+END SUBROUTINE PFIND
+
+SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
+!-----------------------------------------------------------------------
+!           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
+!-----------------------------------------------------------------------
+REAL X(M), Y(M)
+REAL BX(*), BY(*), VX(*), VY(*)
+LOGICAL IBEG
+!---------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0.
+!
+                  EPS = SPMPAR(1)
+!
+!---------------------
+MP1 = M + 1
+ONEP = 1.0 + 4.0*EPS
+!
+!                       REORDER X AND Y
+!
+CALL RRSORT (Y, X, M)
+YMIN = Y(1)
+YMAX = Y(M)
+IF (YMIN .EQ. YMAX) GO TO 500
+!
+L = 1
+10 L = L + 1
+   IF (Y(L) .EQ. YMIN) GO TO 10
+LMIN = L
+L = L - 1
+CALL RRSORT (X, Y, L)
+X1 = X(1)
+!
+I = M
+20 I = I - 1
+   IF (Y(I) .EQ. YMAX) GO TO 20
+LMAX = I
+I = I + 1
+CALL RRSORT (X(I), Y(I), M - LMAX)
+XM = X(M)
+!
+!                      FIND XMIN AND XMAX
+!
+XMIN = X1
+XMAX = X(L)
+do 31 I = LMIN,M
+   IF (X(I) .GT. XMIN) GO TO 30
+      XMIN = X(I)
+      GO TO 31
+30 IF (X(I) .GT. XMAX) XMAX = X(I)
+31 CONTINUE
+!
+!                   GOING ALONG THE YMIN AXIS
+!
+K = L
+do 50 I = 1,L
+   BX(I) = X(I)
+   BY(I) = Y(I)
+50 CONTINUE
+!
+N = 1
+VX(1) = X(1)
+VY(1) = Y(1)
+IF (L .EQ. 1) GO TO 100
+N = 2
+VX(2) = X(L)
+VY(2) = Y(L)
+!
+!           GOING FROM THE YMIN AXIS TO THE XMAX AXIS
+!
+100 H = XMAX - BX(K)
+IF (H .EQ. 0.0) GO TO 150
+K0 = K
+IBEG = .TRUE.
+!
+110 CONTINUE
+   L = L + 1
+   IF (L .GT. LMAX) L = M
+   H = X(L) - BX(K)
+   IF (H .LE. 0.0) GO TO 110
+   DX = X(L) - BX(K0)
+   DY = Y(L) - BY(K0)
+   IF (IBEG) GO TO 120
+   R = (DX0/DX)*DY
+   IF (R .GT. ONEP*DY0) GO TO 130
+   IF (DY0 .GT. ONEP*R) GO TO 120
+   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 140
+      K = K + 1
+      GO TO 121
+120 IBEG = .FALSE.
+   DX0 = DX
+   DY0 = DY
+   K = K0 + 1
+121 BX(K) = X(L)
+   BY(K) = Y(L)
+   LSAV = L
+130 H = XMAX - X(L)
+IF (H .GT. 0.0) GO TO 110
+!
+140 L = LSAV
+N = N + 1
+VX(N) = BX(K)
+VY(N) = BY(K)
+GO TO 100
+!
+!                   GOING ALONG THE XMAX AXIS
+!
+150 IF (L .EQ. M) GO TO 250
+KSAV = K
+I = L
+151 IF (I .EQ. LMAX) GO TO 160
+   I = I + 1
+   IF (X(I) .NE. XMAX) GO TO 151
+   L = I
+   K = K + 1
+   BX(K) = X(I)
+   BY(K) = Y(I)
+   GO TO 151
+!
+160 XMAX = X(L)
+H = XMAX - XM
+IF (H .LE. 0.0) GO TO 170
+IF (L .NE. LMAX) GO TO 200
+   IF (K .EQ. KSAV) GO TO 170
+   N = N + 1
+   VX(N) = BX(K)
+   VY(N) = BY(K)
+!
+170 L = M
+K = K + 1
+BX(K) = XM
+BY(K) = Y(M)
+N = N + 1
+VX(N) = XM
+VY(N) = Y(M)
+GO TO 250
+!
+!           GOING FROM THE YMAX AXIS TO THE XMAX AXIS
+!        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
+!
+200 J = MP1
+NN = MP1
+BX(MP1) = XM
+VX(MP1) = XM
+BY(MP1) = Y(M)
+VY(MP1) = Y(M)
+I = LMAX + 1
+201 J0 = J
+IBEG = .TRUE.
+!
+210 CONTINUE
+   I = I - 1
+   H = X(I) - BX(J)
+   IF (H .LE. 0.0) GO TO 210
+   DX = X(I) - BX(J0)
+   DY = ABS(Y(I) - BY(J0))
+   IF (IBEG) GO TO 220
+   R = (DX0/DX)*DY
+   IF (R .GT. ONEP*DY0) GO TO 230
+   IF (DY0 .GT. ONEP*R) GO TO 220
+   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 235
+      J = J - 1
+      GO TO 221
+220 IBEG = .FALSE.
+   DX0 = DX
+   DY0 = DY
+   J = J0 - 1
+221 BX(J) = X(I)
+   BY(J) = Y(I)
+   ISAV = I
+230 H = XMAX - X(I)
+IF (H .GT. 0.0) GO TO 210
+!
+235 I = ISAV
+NN = NN - 1
+VX(NN) = BX(J)
+VY(NN) = BY(J)
+H = XMAX - BX(J)
+IF (H .GT. 0.0) GO TO 201
+!
+!          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
+!           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
+!
+IF (I .EQ. L .AND. K .EQ. KSAV) NN = NN + 1
+do 240 II = NN,MP1
+   N = N + 1
+   VX(N) = VX(II)
+   VY(N) = VY(II)
+240 CONTINUE
+!
+IF (I .EQ. L) J = J + 1
+do 245 II = J,MP1
+   K = K + 1
+   BX(K) = BX(II)
+   BY(K) = BY(II)
+245 CONTINUE
+L = M
+!
+!                   GOING ALONG THE YMAX AXIS
+!
+250 LBEG = LMAX + 1
+IF (LBEG .EQ. M) GO TO 260
+MM1 = M - 1
+do 251 I = LBEG,MM1
+   L = L - 1
+   K = K + 1
+   BX(K) = X(L)
+   BY(K) = Y(L)
+251 CONTINUE
+N = N + 1
+VX(N) = BX(K)
+VY(N) = BY(K)
+!
+260 IF (K .EQ. M) GO TO 370
+H = XMAX - BX(K)
+IF (H .GT. 0.0) GO TO 300
+H = BX(K) - XMIN
+IF (H .GT. 0.0) GO TO 301
+GO TO 370
+!
+!           GOING FROM THE YMAX AXIS TO THE XMIN AXIS
+!
+300 H = BX(K) - XMIN
+IF (H .EQ. 0.0) GO TO 350
+301 K0 = K
+IBEG = .TRUE.
+!
+310 CONTINUE
+   L = L - 1
+   IF (L .LT. LMIN) L = 1
+   H = X(L) - BX(K)
+   IF (H .GE. 0.0) GO TO 310
+   DX = ABS(X(L) - BX(K0))
+   DY = ABS(Y(L) - BY(K0))
+   IF (IBEG) GO TO 320
+   R = (DX0/DX)*DY
+   IF (R .GT. ONEP*DY0) GO TO 330
+   IF (DY0 .GT. ONEP*R) GO TO 320
+   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 340
+      IF (K .EQ. MP1) GO TO 330
+      K = K + 1
+      GO TO 321
+320 IBEG = .FALSE.
+   DX0 = DX
+   DY0 = DY
+   K = K0 + 1
+321 BX(K) = X(L)
+   BY(K) = Y(L)
+   LSAV = L
+330 H = X(L) - XMIN
+IF (H .GT. 0.0) GO TO 310
+!
+340 L = LSAV
+N = N + 1
+VX(N) = BX(K)
+VY(N) = BY(K)
+IF (L .EQ. 1) RETURN
+IF (K .EQ. M) GO TO 370
+GO TO 300
+!
+!                   GOING ALONG THE XMIN AXIS
+!
+350 KSAV = K
+I = L
+351 IF (I .EQ. LMIN) GO TO 360
+   I = I - 1
+   IF (X(I) .NE. XMIN) GO TO 351
+   L = I
+   K = K + 1
+   BX(K) = X(I)
+   BY(K) = Y(I)
+   GO TO 351
+!
+360 XMIN = X(L)
+H = X1 - XMIN
+IF (H .LE. 0.0) GO TO 370
+IF (K .EQ. KSAV) GO TO 365
+   N = N + 1
+   VX(N) = BX(K)
+   VY(N) = BY(K)
+365 IF (L .NE. LMIN) GO TO 400
+!
+370 K = K + 1
+BX(K) = X1
+BY(K) = Y(1)
+N = N + 1
+VX(N) = X1
+VY(N) = Y(1)
+RETURN
+!
+!           GOING FROM THE YMIN AXIS TO THE XMIN AXIS
+!        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
+!
+400 IF (K .EQ. M) GO TO 370
+KP1 = K + 1
+J = MP1
+NN = MP1
+BX(MP1) = X1
+VX(MP1) = X1
+BY(MP1) = Y(1)
+VY(MP1) = Y(1)
+I = LMIN - 1
+401 J0 = J
+IBEG = .TRUE.
+!
+410 CONTINUE
+   I = I + 1
+   H = X(I) - BX(J)
+   IF (H .GE. 0.0) GO TO 410
+   DX = ABS(X(I) - BX(J0))
+   DY = Y(I) - BY(J0)
+   IF (IBEG) GO TO 420
+   R = (DX0/DX)*DY
+   IF (R .GT. ONEP*DY0) GO TO 430
+   IF (DY0 .GT. ONEP*R) GO TO 420
+   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 440
+      IF (J .EQ. KP1) GO TO 430
+      J = J - 1
+      GO TO 421
+420 IBEG = .FALSE.
+   DX0 = DX
+   DY0 = DY
+   J = J0 - 1
+421 BX(J) = X(I)
+   BY(J) = Y(I)
+   ISAV = I
+430 H = X(I) - XMIN
+IF (H .GT. 0.0) GO TO 410
+!
+440 I = ISAV
+NN = NN - 1
+VX(NN) = BX(J)
+VY(NN) = BY(J)
+IF (J .EQ. KP1) GO TO 450
+H = BX(J) - XMIN
+IF (H .GT. 0.0) GO TO 401
+!
+!          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
+!           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
+!
+450 IF (NN .EQ. N) GO TO 470
+IF (I .EQ. L) NN = NN + 1
+do 451 II = NN,MP1
+   N = N + 1
+   VX(N) = VX(II)
+   VY(N) = VY(II)
+451 CONTINUE
+!
+IF (J .EQ. K) GO TO 471
+IF (I .EQ. L) J = J + 1
+do 460 II = J,MP1
+   K = K + 1
+   BX(K) = BX(II)
+   BY(K) = BY(II)
+460 CONTINUE
+RETURN
+!
+470 N = MP1
+471 K = MP1
+RETURN
+!
+!                     CASE WHEN YMIN = YMAX
+!
+500 CALL RRSORT (X, Y, M)
+do 510 I = 1,M
+   BX(I) = X(I)
+   BY(I) = Y(I)
+510 CONTINUE
+K = MP1
+BX(K) = BX(1)
+BY(K) = BY(1)
+!
+N = 3
+VX(1) = X(1)
+VX(2) = X(M)
+VX(3) = X(1)
+VY(1) = Y(1)
+VY(2) = Y(M)
+VY(3) = Y(1)
+RETURN
+END SUBROUTINE HULL
+
+REAL function PAREA(X, Y, NB)
+INTEGER NB
+REAL X(NB), Y(NB)
+!
+!*****************************************************************
+!
+!   GIVEN A SEQUENCE OF NB POINTS (X(I),Y(I)). PAREA COMPUTES
+! THE AREA BOUNDED BY THE CLOSED POLYGONAL CURVE WHICH PASSES
+! THROUGH THE POINTS IN THE ORDER THAT THEY ARE INDEXED. THE
+! FINAL POINT OF THE CURVE IS ASSUMED TO BE THE FIRST POINT
+! GIVEN. THEREFORE, IT NEED NOT BE LISTED AT THE END OF X AND
+! Y. THE CURVE IS NOT REQUIRED TO BE SIMPLE.
+!
+!*****************************************************************
+!
+N = NB
+IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N = N - 1
+IF (N - 3) 10, 20, 30
+!
+10 PAREA = 0.0
+RETURN
+!
+20 PAREA= 0.5*((X(2) - X(1))*(Y(3) - Y(1)) &
+&- (X(3) - X(1))*(Y(2) - Y(1)))
+RETURN
+!
+30 NM1 = N - 1
+A = X(1)*(Y(2) - Y(N)) + X(N)*(Y(1) - Y(NM1))
+do 31 I = 2, NM1
+31 A = A + X(I)*(Y(I+1) - Y(I-1))
+PAREA = 0.5*A
+RETURN
+END FUNCTION PAREA
+
+SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
+!
+! SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
+! DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
+! BY THE INTEGERS  1, 2, ..., N  AND  M  ARCS.
+!
+! INPUT ...
+!
+! IND   = 0  ON AN INITIAL CALL TO HC.
+!       = 1  OBTAIN ANOTHER HAMILTONIAN CIRCUIT.
+!       = 2  MORE BACK TRACKS ARE BEING PERMITTED.
+!       = 3  RESTORE THE ORGINAL ARRAY AR.
+! M     = NUMBER OF ARCS.
+! N     = NUMBER OF VERTICES.
+! PR(I) = SUM OF THE OUT-DEGREES OF VERTICES  1, ..., I-1
+!         (PR(1) = 0 ,  PR(N+1) = M).
+! AR    = ADJACENCY LIST. THE ELEMENTS FROM  AR(PR(I)+1) TO
+!         AR(PR(I+1))  ARE A RECORD CONTAINING,IN ANY ORDER,
+!         ALL THE VERTICES  J  SUCH THAT ARC  (I,J)  EXISTS.
+!         THE GRAPH SHOULD NOT CONTAIN ARCS STARTING AND
+!         ENDING AT THE SAME VERTEX.
+! NB    = UPPER BOUND ON THE NUMBER OF BACK TRACKS TO BE
+!         PERFORMED. (NB = -1 IF NO LIMIT IS TO BE PLACED
+!         ON THE NUMBER OF BACK TRACKS TAKEN.)
+! NUM   = DIMENSION OF THE WORK SPACE IWK. IT IS ASSUMED THAT
+!         NUM .GE. M + 8*N + 20.
+!
+! OUTPUT ...
+!
+! IND   = 1   A HAMILTONIAN CIRCUIT WAS FOUND. TO FIND ANOTHER
+!             CIRCUIT, RESET NB AND RECALL THE ROUTINE.
+!             THE ARRAY AR HAS BEEN MODIFIED. IF ONE DOES NOT
+!             WISH TO OBTAIN ANOTHER CIRCUIT, SET IND = 3 AND
+!             RECALL THE ROUTINE. THIS WILL RESTORE AR.
+!       = 2   THE MAXIMUM NUMBER OF BACK TRACKS WERE PERFORMED.
+!             TO CONTINUE, RESET NB AND RECALL THE ROUTINE.
+!             THE ARRAY AR HAS BEEN MODIFIED. IF ONE DOES NOT
+!             WISH TO CONTINUE, SET IND = 3 AND RECALL THE
+!             ROUTINE. THIS WILL RESTORE AR.
+!       = 4   NO CIRCUITS WERE FOUND. THE ARRAY  AR  HAS BEEN
+!             RESTORED (SEE THE REMARK BELOW) AND THE PROCEDURE
+!             IS FINISHED.
+!       = -1  (INPUT ERROR) IND .LT. 0  OR IND .GT. 3 ON INPUT.
+!       = -2  (INPUT ERROR) IND WAS MODIFIED. RESET IND TO ITS
+!              PREVIOUS OUTPUT VALUE AND RERUN THE CODE.
+!       = -3  (INPUT ERROR) THE INPUT SETTING IND = 3 CAN BE
+!              USED ONLY WHEN THE PREVIOUS OUTPUT VALUE FOR
+!              IND WAS 1 OR 2. IF THE PREVIOUS OUTPUT VALUE
+!              FOR IND WAS 4, THEN THE ARRAY AR HAS ALREADY
+!              BEEN RESTORED AND THERE IS NOTHING TO BE DONE.
+!       = -4  (INPUT ERROR) NUM .LT. M + 8*N + 20.
+!       = -5  (INPUT ERROR) PR(1) .NE. 0  OR  PR(N+1) .NE. M.
+!       = -6  (INPUT ERROR) PR(I) .GT. PR(I+1) FOR SOME I.
+! NB    = NUMBER OF BACK TRACKS PERFORMED.
+! S(I)  = I-TH  VERTEX IN THE HAMILTONIAN CIRCUIT FOUND.
+!
+! WORK SPACE ... IWK
+!
+! REMARK. IN AR, THE ORDER OF THE ARCS IN EACH RECORD MAY BE
+! ALTERED BY THE ROUTINE.
+!
+!     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
+!
+INTEGER PR(*), AR(M), S(N), IWK(NUM)
+INTEGER S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
+!
+NP1 = N + 1
+IF (IND .LT. 0 .OR. IND .GT. 3) GO TO 20
+IF (NUM .LT. M + 8*N + 20) GO TO 30
+IF (PR(1) .NE. 0 .OR. PR(NP1) .NE. M) GO TO 40
+!
+S0 = 20
+PC = S0 + N
+AC = PC + NP1
+VR = AC + M
+VC = VR + N
+P  = VC + N
+SUBR = P + N
+RBUS = SUBR + N
+TOR  = RBUS + N
+!
+CALL HC1 (IND, M, N, PR, AR, NB, IWK(S0), NP1, IWK(PC), &
+&IWK(AC), IWK(VR), IWK(VC), IWK(P), IWK(SUBR), &
+&IWK(RBUS), IWK(TOR), IWK(1), IWK(2), IWK(3))
+IF (IND .NE. 1) RETURN
+!
+II = S0
+do 10 I = 1,N
+   S(I) = IWK(II)
+   II = II + 1
+10 CONTINUE
+RETURN
+!
+!                   ERROR RETURN
+!
+20 IND = -1
+RETURN
+30 IND = -4
+RETURN
+40 IND = -5
+RETURN
+END SUBROUTINE HC
+
+SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR, &
+&VC, P, SUBR, RBUS, TOR, JR, K, IND0)
+!
+! MEANING OF THE WORK ARRAYS ...
+!
+! PC(I)   = SUM OF THE IN-DEGREES OF VERTICES  1, ..., I-1
+!           ( PC(1) = 0 ).
+! AC      = ADJACENCY LIST (BACKWARD). THE ELEMENTS FROM
+!           AC(PC(I)+1)  TO  AC(PC(I+1))  CONTAIN, IN ANY
+!           ORDER, ALL THE VERTICES  J  SUCH THAT ARC  (J,I)
+!           EXISTS.
+! WHEN AN ARC IS REMOVED FROM THE GRAPH AT THE  K-TH  LEVEL
+! OF THE BRANCH-DECISION TREE, THE CORRESPONDING ELEMENTS
+! AR(Q)  AND  AC(T)  ARE SET TO  - (K*(N+1) + AR(Q))  AND
+! TO  - (K*(N+1) + AC(T)) , RESPECTIVELY.
+! VR(I)   = CURRENT OUT-DEGREE OF VERTEX I .
+! VC(I)   = CURRENT IN-DEGREE OF VERTEX I .
+! SUBR(I) = - (K*(N+1) + J)  IF ARC  (I,J)  WAS IMPLIED AT
+!           THE  K-TH  LEVEL OF THE BRANCH-DECISION TREE.
+!         = 0  OTHERWISE.
+! RBUS(I) = - J  IF ARC  (J,I)  IS CURRENTLY IMPLIED.
+!         = 0  OTHERWISE.
+! TOR(K)  = Q*(M+1) + T  IF THE ARC GOING FROM  S(K)  TO THE
+!           ROOT, CORRESPONDING TO  AR(Q)  AND TO  AC(T),
+!           WAS REMOVED FROM THE GRAPH AT THE  K-TH  LEVEL
+!           OF THE BRANCH-DECISION TREE.
+!         = 0  OTHERWISE.
+! P(I)    = POINTER FOR THE FORWARD STEP. THE NEXT ARC
+!           STARTING FROM  I  TO BE CONSIDERED IN THE
+!           BRANCH-DECISION TREE IS  (I,AR(PR(I)+P(I)).
+!
+! MEANING OF THE MAIN SIMPLE VARIABLES ...
+!
+! JR   = ROOT. THE HAMILTONIAN CIRCUITS ARE DETERMINED AS
+!        PATHS STARTING AND ENDING AT  JR .
+! K    = CURRENT LEVEL OF THE BRANCH-DECISION TREE.
+! IND0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
+!        THERE WERE NO INPUT ERRORS.
+!
+INTEGER PR(NP1), PC(NP1), AR(M), AC(M), S(N), VR(N), VC(N), &
+&P(N), SUBR(N), RBUS(N), TOR(N)
+!
+NBO = NB
+NB = 0
+MP1 = M + 1
+IF (IND .NE. 0) GO TO 500
+!
+! S T E P   0   (INITIALIZE).
+!
+do 10 I = 1,N
+  VC(I) = 0
+  SUBR(I) = 0
+  RBUS(I) = 0
+  P(I) = 1
+10 CONTINUE
+do 30 I = 1,N
+  J1 = PR(I) + 1
+  J2 = PR(I+1)
+  VR(I) = J2 - J1 + 1
+  IF (VR(I) .EQ. 0) GO TO 440
+  IF (VR(I) .LT. 0) GO TO 620
+  do 20 J = J1,J2
+    JA = AR(J)
+    VC(JA) = VC(JA) + 1
+20 CONTINUE
+30 CONTINUE
+PC(1) = 0
+do 40 I = 1,N
+  IF (VC(I) .EQ. 0) GO TO 440
+  PC(I+1) = PC(I) + VC(I)
+  VC(I) = 0
+40 CONTINUE
+do 60 I = 1,N
+  J1 = PR(I) + 1
+  J2 = PR(I+1)
+  do 50 J = J1,J2
+    JJ = AR(J)
+    VC(JJ) = VC(JJ) + 1
+    JA = PC(JJ) + VC(JJ)
+    AC(JA) = I
+50 CONTINUE
+60 CONTINUE
+! SELECT AS ROOT  JR  THE VERTEX  I  WITH MAXIMUM  VC(I)
+! (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
+MAXE = VC(1)
+MINU = VR(1)
+JR = 1
+do 100 I = 2,N
+  IF (VC(I)-MAXE) 100, 70, 80
+70 IF (VR(I).GE.MINU) GO TO 100
+  GO TO 90
+80 MAXE = VC(I)
+90 MINU = VR(I)
+  JR = I
+100 CONTINUE
+K1 = -NP1
+K = 1
+S(1) = JR
+!
+! S T E P   1   (SEARCH FOR IMPLIED ARCS).
+!
+110 do 120 J = 1,N
+  IF (VR(J).EQ.1) GO TO 130
+  IF (VC(J).EQ.1) GO TO 170
+120 CONTINUE
+! NO FURTHER ARC CAN BE IMPLIED.
+GO TO 220
+! ARC  (J,JL)  IS IMPLIED BECAUSE  VR(J) = 1 .
+130 L1 = PR(J) + 1
+L2 = PR(J+1)
+do 140 L = L1,L2
+  IF (AR(L).GT.0) GO TO 150
+140 CONTINUE
+150 JL = AR(L)
+! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
+! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (J,JL) .
+CALL IPATH(J, JL, SUBR, RBUS, AR, PR, S, N, NP, IT1, IT2, K, JR, &
+&M, NP1)
+IF (NP.EQ.0) GO TO 160
+IF (NP.EQ.(-1)) GO TO 340
+! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
+K = K + 1
+GO TO 320
+160 SUBR(J) = K1 - JL
+RBUS(JL) = J
+! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT  JL .
+CALL IUPD(J, JL, L, AC, AR, PC, PR, VC, VR, K1, N, M, NP1)
+IF (J.EQ.0) GO TO 340
+GO TO 210
+! ARC  (JL,J)  IS IMPLIED BECAUSE  VC(J) = 1 .
+170 L1 = PC(J) + 1
+L2 = PC(J+1)
+do 180 L = L1,L2
+  IF (AC(L).GT.0) GO TO 190
+180 CONTINUE
+190 JL = AC(L)
+! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
+! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (JL,J) .
+CALL IPATH(JL, J, SUBR, RBUS, AR, PR, S, N, NP, IT1, IT2, K, JR, &
+&M, NP1)
+IF (NP.EQ.0) GO TO 200
+IF (NP.EQ.(-1)) GO TO 340
+! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
+I = S(K)
+K = K + 1
+GO TO 320
+200 SUBR(JL) = K1 - J
+RBUS(J) = JL
+! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  JL .
+CALL IUPD(J, JL, L, AR, AC, PR, PC, VR, VC, K1, N, M, NP1)
+IF (J.EQ.0) GO TO 340
+! IF ARC  (IT2,IT1)  IS IN THE GRAPH, REMOVE IT.
+210 CALL RARC(IT2, IT1, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, NP1)
+IF (JJ.EQ.(-1)) GO TO 340
+GO TO 110
+!
+! S T E P   2   (ADD IMPLIED ARCS TO S).
+!
+220 I = S(K)
+IF (SUBR(I).EQ.0) GO TO 230
+JSUBR = -SUBR(I) + (SUBR(I)/NP1)*NP1
+IF (JSUBR.EQ.JR) GO TO 340
+K = K + 1
+S(K) = JSUBR
+IF (K.NE.N) GO TO 220
+IF (SUBR(JSUBR).LT.0) GO TO 320
+GO TO 340
+!
+! S T E P   3   (BRANCH).
+!
+230 L1 = PR(I) + P(I)
+L2 = PR(I+1)
+IF (L1.GT.L2) GO TO 340
+! FIND THE NEXT ARC  (I,JL)  TO BE ADDED TO  S .
+DENS = N**3
+J1 = 0
+J2 = 0
+do 310 J = L1,L2
+  JL = AR(J)
+  IF (JL.LT.0) GO TO 310
+  IF (VR(JL).GT.0) GO TO 260
+  IF (SUBR(JL).EQ.0) GO TO 310
+  IF (JL.EQ.JR) GO TO 310
+  IEND = JL
+240 IEND = -SUBR(IEND) + (SUBR(IEND)/NP1)*NP1
+  IF (SUBR(IEND).NE.0) GO TO 240
+  IF (VC(JL).LT.VR(IEND)) GO TO 250
+  SCORE = VR(IEND)*N + VC(JL)
+  GO TO 280
+250 SCORE = VC(JL)*N + VR(IEND)
+  GO TO 280
+260 IF (VC(JL).LT.VR(JL)) GO TO 270
+  SCORE = VR(JL)*N + VC(JL)
+  GO TO 280
+270 SCORE = VC(JL)*N + VR(JL)
+280 IF (DENS.LE.SCORE) GO TO 290
+  DENS = SCORE
+  IPI = J
+290 IF (J1.EQ.0) GO TO 300
+  IF (J2.EQ.0) J2 = J
+  GO TO 310
+300 J1 = J
+310 CONTINUE
+IF (J1.EQ.0) GO TO 340
+JL = AR(IPI)
+AR(IPI) = AR(J1)
+AR(J1) = JL
+IF (J2.EQ.0) J2 = PR(I+1) + 1
+P(I) = J2 - PR(I)
+K = K + 1
+S(K) = JL
+K1 = -K*NP1
+! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  I .
+CALL FUPD(AR, AC, PR, PC, VR, VC, I, K1, N, M, NP1)
+! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT JL .
+CALL FUPD(AC, AR, PC, PR, VC, VR, JL, K1, N, M, NP1)
+TOR(K) = 0
+! IF ARC  (JL,JR)  IS IN THE GRAPH, REMOVE IT.
+CALL RARC(JL, JR, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, NP1)
+IF (JJ.EQ.0) GO TO 110
+IF (JJ.EQ.(-1)) GO TO 340
+TOR(K) = JJ*MP1 + LL
+GO TO 110
+!
+! S T E P   4   (HAMILTONIAN CIRCUIT FOUND).
+!
+320 IND = 1
+IND0 = 1
+K = K - 1
+RETURN
+!
+! S T E P   5   (BACKTRACK).
+!
+340 IF (K .LE. 1) GO TO 430
+JA = S(K)
+P(JA) = 1
+JA = S(K-1)
+IF (SUBR(JA) .EQ. 0) GO TO 350
+! BACKTRACKING FOR AN IMPLIED ARC.
+K = K - 1
+GO TO 340
+350 IF (NB .EQ. NBO) GO TO 450
+NB = NB + 1
+K1 = -K*NP1
+K2 = -(K+1)*NP1
+I = S(K-1)
+! BACKTRACKING FOR THE ARCS IMPLIED AT LEVEL  K .
+IFF = 0
+do 360 J = 1,N
+  IF (SUBR(J).GT.K1) GO TO 360
+  IF (SUBR(J).LT.K2) GO TO 360
+  JA = K1 - SUBR(J)
+  RBUS(JA) = 0
+  SUBR(J) = 0
+  IFF = 1
+360 CONTINUE
+IF (IFF.EQ.1) GO TO 370
+! NO ARC WAS IMPLIED AT LEVEL  K .
+CALL BUPD(AR, AC, PR, PC, VR, VC, I, K1, K2, N, M, NP1)
+CALL BUPD(AC, AR, PC, PR, VC, VR, S(K), K1, K2, N, M, NP1)
+IF (TOR(K).EQ.0) GO TO 420
+J1 = TOR(K)/MP1
+J2 = TOR(K) - J1*MP1
+AR(J1) = JR
+JA = S(K)
+VR(JA) = VR(JA) + 1
+AC(J2) = S(K)
+VC(JR) = VC(JR) + 1
+GO TO 420
+! AT LEAST ONE ARC WAS IMPLIED AT LEVEL  K .
+370 do 410 J = 1,N
+  L1 = PR(J) + 1
+  L2 = PR(J+1)
+  do 400 L = L1,L2
+    JL = AR(L)
+    IF (JL.GT.K1) GO TO 400
+    IF (JL.LT.K2) GO TO 400
+    JL = K1 - JL
+    AR(L) = JL
+    VR(J) = VR(J) + 1
+    LL1 = PC(JL) + 1
+    LL2 = PC(JL+1)
+    do 380 LL = LL1,LL2
+      IF (K1-AC(LL).EQ.J) GO TO 390
+380 CONTINUE
+390 AC(LL) = J
+    VC(JL) = VC(JL) + 1
+400 CONTINUE
+410 CONTINUE
+420 K = K - 1
+GO TO 230
+!
+! RESTORE THE ORIGINAL VECTOR  AR
+!
+430 do 431 J = 1,M
+  IF (AR(J) .GT. 0) GO TO 431
+  AR(J) = -AR(J) + (AR(J)/NP1)*NP1
+431 CONTINUE
+!
+! THE ALGORITHM IS FINISHED
+!
+440 IND = 4
+IND0 = 4
+RETURN
+!
+! THE MAXIMUM NUMBER OF BACK TRACKS WERE PERFORMED
+!
+450 IND = 2
+IND0 = 2
+RETURN
+!
+! CHECK IND WHEN IND = 1, 2, OR 3
+!
+500 IF (IND .NE. 3) GO TO 510
+   IF (IND0 .EQ. 1 .OR. IND0 .EQ. 2) GO TO 430
+   GO TO 610
+510 IF (IND .NE. IND0) GO TO 600
+IF (IND .EQ. 1) GO TO 340
+GO TO 350
+!
+! ERROR RETURN
+!
+600 IND = -2
+RETURN
+610 IND = -3
+RETURN
+620 IND = -6
+RETURN
+END SUBROUTINE HC1
+
+SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K, &
+&JR, M, NP1)
+!
+! SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
+! VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
+! ARC  (I,J) .
+!
+! MEANING OF THE OUTPUT PARAMETER  NP ...
+!
+! NP =  0  IF THE PATH CONTAINS  L .LT. N  VERTICES.
+!    =  1  IF THE PATH CONTAINS  N  VERTICES AND ARC (I2,I1)
+!          EXISTS (THE HAMILTONIAN CIRCUIT IS STORED IN  S )
+!    = -1  IF THE PATH CONTAINS  N  VERTICES BUT ARC (I2,I1)
+!          DOES NOT EXIST.
+!
+INTEGER SUBR(N), RBUS(N), AR(M), PR(NP1), S(N)
+!
+NP = 0
+L = 1
+I1 = I
+10 IF (RBUS(I1).EQ.0) GO TO 20
+I1 = RBUS(I1)
+L = L + 1
+GO TO 10
+20 I2 = J
+L = L + 1
+30 IF (SUBR(I2).EQ.0) GO TO 40
+I2 = -SUBR(I2) + (SUBR(I2)/NP1)*NP1
+L = L + 1
+GO TO 30
+40 CONTINUE
+IF (L.LT.N) RETURN
+! THE PATH CONTAINS  N  VERTICES.
+K1 = -K*NP1
+L1 = PR(I2) + 1
+L2 = PR(I2+1)
+do 60 L = L1,L2
+  IF (AR(L).LT.0) GO TO 50
+  IF (AR(L).EQ.I1) GO TO 70
+  GO TO 60
+50 IF (K1-AR(L).EQ.I1) GO TO 70
+60 CONTINUE
+! NO HAMILTONIAN CIRCUIT CAN BE DETERMINED.
+NP = -1
+RETURN
+! A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
+70 NP = 1
+RBUS(J) = I
+RBUS(I1) = I2
+S(N) = RBUS(JR)
+L = N - 1
+80 IF (L.EQ.K) GO TO 90
+JA = S(L+1)
+S(L) = RBUS(JA)
+L = L - 1
+GO TO 80
+90 RBUS(I1) = 0
+RBUS(J) = 0
+RETURN
+END SUBROUTINE IPATH
+
+SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
+!
+! FORWARD STEP UPDATING
+!
+INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+!
+J1 = P1(I1) + 1
+J2 = P1(I1+1)
+do 30 J = J1,J2
+  IF (A1(J).LT.0) GO TO 30
+  IA = A1(J)
+  L1 = P2(IA) + 1
+  L2 = P2(IA+1)
+  do 10 L = L1,L2
+    IF (A2(L).EQ.I1) GO TO 20
+10 CONTINUE
+20 V2(IA) = V2(IA) - 1
+  A2(L) = K1 - A2(L)
+  A1(J) = K1 - IA
+30 CONTINUE
+V1(I1) = 0
+RETURN
+END SUBROUTINE FUPD
+
+SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
+!
+! BACKTRACKING STEP UPDATING
+!
+INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+!
+L1 = P1(II) + 1
+L2 = P1(II+1)
+do 30 L = L1,L2
+  IF (A1(L).GT.K1) GO TO 30
+  IF (A1(L).LT.K2) GO TO 30
+  IA = K1 - A1(L)
+  A1(L) = IA
+  V1(II) = V1(II) + 1
+  LL1 = P2(IA) + 1
+  LL2 = P2(IA+1)
+  do 10 LL = LL1,LL2
+    IF (K1-A2(LL).EQ.II) GO TO 20
+10 CONTINUE
+20 A2(LL) = II
+  V2(IA) = V2(IA) + 1
+30 CONTINUE
+RETURN
+END SUBROUTINE BUPD
+
+SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
+!
+! UPDATING FOR IMPLIED ARC
+!
+INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+!
+M1 = P1(IB) + 1
+M2 = P1(IB+1)
+do 40 MM = M1,M2
+  IARC = A1(MM)
+  IF (IARC.LT.0) GO TO 40
+  IF (V2(IARC).NE.1) GO TO 10
+  IF (IARC.NE.IA) GO TO 50
+  JJ = L
+  GO TO 30
+10 J1 = P2(IARC) + 1
+  J2 = P2(IARC+1)
+  do 20 JJ = J1,J2
+    IF (A2(JJ).EQ.IB) GO TO 30
+20 CONTINUE
+30 A2(JJ) = K1 - A2(JJ)
+  V2(IARC) = V2(IARC) - 1
+  A1(MM) = K1 - IARC
+  V1(IB) = V1(IB) - 1
+40 CONTINUE
+RETURN
+50 IA = 0
+RETURN
+END SUBROUTINE IUPD
+
+SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, &
+&NP1)
+!
+! SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
+!
+! MEANING OF THE OUTPUT PARAMETERS  JJ  AND  LL ...
+!
+! JJ =  LOCATION OF THE ELEMENT OF  AR  CORRESPONDING TO THE
+!       REMOVED ARC.
+!    =  0  IF ARC  (IA,IB)  IS NOT IN THE GRAPH.
+!    = -1  IF, AFTER THE REMOVAL OF ARC  (IA,IB) , THE GRAPH
+!          WOULD ADMIT NO HAMILTONIAN CIRCUIT.
+! LL =  LOCATION OF THE ELEMENT OF  AC  CORRESPONDING TO THE
+!       REMOVED ARC (DEFINED ONLY IF  JJ .GT. 0 ).
+!
+INTEGER AR(M), AC(M), PR(NP1), PC(NP1), VR(N), VC(N)
+!
+J1 = PR(IA) + 1
+J2 = PR(IA+1)
+do 20 JJ = J1,J2
+  IF (AR(JJ).LT.0) GO TO 20
+  IF (AR(JJ).NE.IB) GO TO 20
+  L1 = PC(IB) + 1
+  L2 = PC(IB+1)
+  do 10 LL = L1,L2
+    IF (AC(LL).EQ.IA) GO TO 30
+10 CONTINUE
+20 CONTINUE
+! ARC  (IA,IB)  IS NOT IN THE GRAPH.
+JJ = 0
+RETURN
+30 IF (VR(IA).EQ.1) GO TO 40
+IF (VC(IB).EQ.1) GO TO 40
+AR(JJ) = K1 - IB
+VR(IA) = VR(IA) - 1
+AC(LL) = K1 - IA
+VC(IB) = VC(IB) - 1
+RETURN
+! ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
+40 JJ = -1
+RETURN
+END SUBROUTINE RARC
+
+SUBROUTINE CERF (MO, Z, W)
+!-----------------------------------------------------------------------
+!
+!               COMPUTATION OF THE COMPLEX ERROR FUNCTION
+!
+!                           ----------------
+!
+!                        W = ERF(Z)   IF MO = 0
+!                        W = ERFC(Z)  OTHERWISE
+!
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
+!------------------------
+!     C = 1/SQRT(PI)
+!------------------------
+DATA C /.564189583547756/
+!------------------------
+DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
+&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
+&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
+&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
+&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
+&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
+&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
+&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
+&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
+DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
+&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
+&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
+&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
+&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
+&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
+&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
+&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
+&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+!------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+SN = 1.0
+IF (X .GE. 0.0) GO TO 10
+   X = -X
+   Y = -Y
+   SN = -1.0
+!
+10 R = X*X + Y*Y
+SZ(1) = X*X - Y*Y
+SZ(2) = 2.0*X*Y
+!
+IF (R .LE. 1.0) GO TO 20
+IF (R .GE. 38.0) GO TO 60
+IF (SZ(1) + 0.064*SZ(2)*SZ(2) .GT. 0.0) GO TO 50
+!
+!                       TAYLOR SERIES
+!
+20 C2 = C + C
+TM(1) = C2*X
+TM(2) = C2*Y
+SM(1) = TM(1)
+SM(2) = TM(2)
+PM = 0.0
+30 PM = PM + 1.0
+   DM = 2.0*PM + 1.0
+   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
+   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
+   TM(1) = -TS(1)/PM
+   TM(2) = -TS(2)/PM
+   TS(1) = TM(1)/DM
+   TS(2) = TM(2)/DM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
+31 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 30
+!
+!                       TERMINATION
+!
+40 IF (MO .NE. 0) GO TO 41
+   W = CMPLX(SN*SM(1), SN*SM(2))
+   RETURN
+41 IF (SN .LT. 0.0) GO TO 42
+   SM(1) = 0.5 + (0.5 - SM(1))
+   SM(2) = -SM(2)
+   W = CMPLX(SM(1), SM(2))
+   RETURN
+42 W = CMPLX(1.0 + SM(1), SM(2))
+RETURN
+!
+!              RATIONAL FUNCTION APPROXIMATION
+!
+50 SM(1) = 0.0
+SM(2) = 0.0
+QM = C*EXP(-SZ(1))
+TS(1) = QM*COS(-SZ(2))
+TS(2) = QM*SIN(-SZ(2))
+QF(1) = TS(1)*X - TS(2)*Y
+QF(2) = TS(1)*Y + TS(2)*X
+do 51 I = 1,18
+   TS(1) = SZ(1) + CD(I)
+   TS(2) = SZ(2)
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  CE(I)*TS(1)/SS
+   TM(2) = -CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+51 CONTINUE
+EF(1) = QF(1)*SM(1) - QF(2)*SM(2)
+EF(2) = QF(1)*SM(2) + QF(2)*SM(1)
+GO TO 100
+!
+!                   ASYMPTOTIC EXPANSION
+!
+60 QF(1) =  SZ(1)/(R*R)
+QF(2) = -SZ(2)/(R*R)
+QM = C*EXP(-SZ(1))
+TS(1) = QM*COS(-SZ(2))
+TS(2) = QM*SIN(-SZ(2))
+TM(1) =  (TS(1)*X + TS(2)*Y)/R
+TM(2) = -(TS(1)*Y - TS(2)*X)/R
+SM(1) = TM(1)
+SM(2) = TM(2)
+PM = -0.5
+70 PM = PM + 1.0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = -PM*TS(1)
+   TM(2) = -PM*TS(2)
+   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+   IF (PM .LT. 25.5) GO TO 70
+!
+80 IF (X .GE. 0.01) GO TO 81
+   SN = -SN
+   GO TO 40
+81 EF(1) = SM(1)
+EF(2) = SM(2)
+!
+!                       TERMINATION
+!
+100 IF (MO .EQ. 0) GO TO 101
+   W = CMPLX(EF(1), EF(2))
+   IF (SN .EQ. 1.0) RETURN
+   W = CMPLX(2.0 - EF(1), -EF(2))
+   RETURN
+101 EF(1) = SN*(1.0 - EF(1))
+EF(2) = -SN*EF(2)
+W = CMPLX(EF(1),EF(2))
+RETURN
+END SUBROUTINE CERF
+
+SUBROUTINE CERFC (MO, Z, W)
+!-----------------------------------------------------------------------
+!
+!              COMPUTATION OF THE COMPLEX COERROR FUNCTION
+!
+!                           ----------------
+!
+!           W = ERFC(Z)           IF MO = 0 OR REAL(Z) .LT. 0
+!           W = EXP(X*X)*ERFC(Z)  OTHERWISE
+!
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
+!------------------------
+!     C = 1/SQRT(PI)
+!------------------------
+DATA C /.564189583547756/
+!------------------------
+DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
+&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
+&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
+&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
+&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
+&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
+&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
+&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
+&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
+DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
+&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
+&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
+&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
+&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
+&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
+&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
+&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
+&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+!------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+SN = 1.0
+IF (X .GE. 0.0) GO TO 10
+   X = -X
+   Y = -Y
+   SN = -1.0
+!
+10 IF (MO .NE. 0  .AND.  SN .EQ. 1.0  .AND. &
+&AMAX1(X, ABS(Y)) .GE. 100.0) GO TO 60
+R = X*X + Y*Y
+SZ(1) = X*X - Y*Y
+SZ(2) = 2.0*X*Y
+!
+IF (R .LE. 1.0) GO TO 20
+IF (R .GE. 38.0) GO TO 60
+IF (SZ(1) + 0.064*SZ(2)*SZ(2) .GT. 0.0) GO TO 50
+!
+!                       TAYLOR SERIES
+!
+20 C2 = C + C
+TM(1) = C2*X
+TM(2) = C2*Y
+SM(1) = TM(1)
+SM(2) = TM(2)
+PM = 0.0
+30 PM = PM + 1.0
+   DM = 2.0*PM + 1.0
+   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
+   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
+   TM(1) = -TS(1)/PM
+   TM(2) = -TS(2)/PM
+   TS(1) = TM(1)/DM
+   TS(2) = TM(2)/DM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
+31 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 30
+!
+!                       TERMINATION
+!
+40 IF (SN .EQ. 1.0) GO TO 41
+   W = CMPLX(1.0 + SM(1), SM(2))
+   RETURN
+41 SM(1) = 0.5 + (0.5 - SM(1))
+SM(2) = -SM(2)
+IF (MO .EQ. 0) GO TO 110
+!
+QM = EXP(SZ(1))
+QF(1) = QM*COS(SZ(2))
+QF(2) = QM*SIN(SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+W = CMPLX(TS(1),TS(2))
+RETURN
+!
+!              RATIONAL FUNCTION APPROXIMATION
+!
+50 SM(1) = 0.0
+SM(2) = 0.0
+do 51 I = 1,18
+   TS(1) = SZ(1) + CD(I)
+   TS(2) = SZ(2)
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  CE(I)*TS(1)/SS
+   TM(2) = -CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+51 CONTINUE
+TS(1) = X*SM(1) - Y*SM(2)
+TS(2) = X*SM(2) + Y*SM(1)
+SM(1) = C*TS(1)
+SM(2) = C*TS(2)
+GO TO 100
+!
+!                   ASYMPTOTIC EXPANSION
+!
+60 CALL CREC (X, Y, TM(1), TM(2))
+SM(1) = TM(1)
+SM(2) = TM(2)
+QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
+QF(2) = 2.0*TM(1)*TM(2)
+PM = -0.5
+70 PM = PM + 1.0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = -PM*TS(1)
+   TM(2) = -PM*TS(2)
+   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+   IF (PM .LT. 25.5) GO TO 70
+80 SM(1) = C*SM(1)
+SM(2) = C*SM(2)
+IF (X .LT. 0.01) GO TO 200
+!
+!                       TERMINATION
+!
+100 IF (MO .NE. 0 .AND. SN .EQ. 1.0) GO TO 110
+QM = EXP(-SZ(1))
+QF(1) = QM*COS(-SZ(2))
+QF(2) = QM*SIN(-SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+!
+IF (SN .EQ. 1.0) GO TO 110
+   W = CMPLX(2.0 - SM(1), -SM(2))
+   RETURN
+110 W = CMPLX(SM(1), SM(2))
+RETURN
+!
+!               MODIFIED ASYMPTOTIC EXPANSION
+!
+200 IF (MO .NE. 0 .AND. SN .EQ. 1.0) GO TO 210
+QM = EXP(-SZ(1))
+QF(1) = QM*COS(-SZ(2))
+QF(2) = QM*SIN(-SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = 1.0 + SN*TS(1)
+SM(2) = SN*TS(2)
+W = CMPLX(SM(1),SM(2))
+RETURN
+!
+210 IF (ABS(Y) .GE. 100.0) GO TO 110
+IF (SZ(1) .LE. EXPARG(1)) GO TO 110
+QM = EXP(SZ(1))
+SM(1) = QM*COS(SZ(2)) + SM(1)
+SM(2) = QM*SIN(SZ(2)) + SM(2)
+W = CMPLX(SM(1),SM(2))
+RETURN
+END SUBROUTINE CERFC
+
+REAL function ERF (X)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE REAL ERROR FUNCTION
+!-----------------------------------------------------------------------
+REAL A(5),B(3),P(8),Q(8),R(5),S(4)
+!-------------------------
+DATA C /.564189583547756/
+!-------------------------
+DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
+&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
+&A(5) /.128379167095513E+00/
+DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
+&B(3) /.375795757275549E+00/
+!-------------------------
+DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
+&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
+&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
+&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
+DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
+&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
+&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
+&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+!-------------------------
+DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
+&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
+&R(5) /2.82094791773523E-01/
+DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
+&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+!-------------------------
+AX = ABS(X)
+IF (AX .GT. 0.5) GO TO 10
+T = X*X
+TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
+BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
+ERF = X*(TOP/BOT)
+RETURN
+!
+10 IF (AX .GT. 4.0) GO TO 20
+TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
+&+ P(6))*AX + P(7))*AX + P(8)
+BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
+&+ Q(6))*AX + Q(7))*AX + Q(8)
+ERF = 0.5 + (0.5 - EXP(-X*X)*TOP/BOT)
+IF (X .LT. 0.0) ERF = -ERF
+RETURN
+!
+20 IF (AX .GE. 5.8) GO TO 30
+X2 = X*X
+T = 1.0/X2
+TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
+BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
+ERF = (C - TOP/(X2*BOT)) / AX
+ERF = 0.5 + (0.5 - EXP(-X2)*ERF)
+IF (X .LT. 0.0) ERF = -ERF
+RETURN
+!
+30 ERF = SIGN(1.0,X)
+RETURN
+END FUNCTION ERF
+
+REAL function ERFC (X)
+!-----------------------------------------------------------------------
+!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!-----------------------------------------------------------------------
+REAL A(5),B(3),P(8),Q(8),R(5),S(4)
+DOUBLE PRECISION W
+!-------------------------
+DATA C /.564189583547756/
+!-------------------------
+DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
+&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
+&A(5) /.128379167095513E+00/
+DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
+&B(3) /.375795757275549E+00/
+!-------------------------
+DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
+&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
+&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
+&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
+DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
+&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
+&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
+&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+!-------------------------
+DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
+&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
+&R(5) /2.82094791773523E-01/
+DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
+&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+!-------------------------
+!
+!                     ABS(X) .LE. 0.5
+!
+AX = ABS(X)
+IF (AX .GT. 0.5) GO TO 10
+T = X*X
+TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
+BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
+ERFC = 0.5 + (0.5 - X*(TOP/BOT))
+RETURN
+!
+!                  0.5 .LT. ABS(X) .LE. 4
+!
+10 IF (AX .GT. 4.0) GO TO 20
+TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
+&+ P(6))*AX + P(7))*AX + P(8)
+BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
+&+ Q(6))*AX + Q(7))*AX + Q(8)
+ERFC = TOP/BOT
+GO TO 30
+!
+!                       ABS(X) .GT. 4
+!
+20 IF (X .LE. -5.6) GO TO 40
+IF (X .GT. 100.0) GO TO 50
+T = X*X
+IF (T .GT. -EXPARG(1)) GO TO 50
+!
+T = 1.0/T
+TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
+BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
+ERFC = (C - T*TOP/BOT)/AX
+!
+!                      FINAL ASSEMBLY
+!
+30 W = DBLE(X)*DBLE(X)
+T = W
+E = W - DBLE(T)
+ERFC = ((0.5 + (0.5 - E)) * EXP(-T)) * ERFC
+IF (X .LT. 0.0) ERFC = 2.0 - ERFC
+RETURN
+!
+!             LIMIT VALUE FOR LARGE NEGATIVE X
+!
+40 ERFC = 2.0
+RETURN
+!
+!             LIMIT VALUE FOR LARGE POSITIVE X
+!
+50 ERFC = 0.0
+RETURN
+END FUNCTION ERFC
+
+REAL function ERFC1 (IND, X)
+!-----------------------------------------------------------------------
+!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!
+!          ERFC1(IND,X) = ERFC(X)            IF IND = 0
+!          ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
+!-----------------------------------------------------------------------
+REAL A(5),B(3),P(8),Q(8),R(5),S(4)
+DOUBLE PRECISION W
+!-------------------------
+DATA C /.564189583547756/
+!-------------------------
+DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
+&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
+&A(5) /.128379167095513E+00/
+DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
+&B(3) /.375795757275549E+00/
+!-------------------------
+DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
+&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
+&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
+&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
+DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
+&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
+&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
+&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+!-------------------------
+DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
+&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
+&R(5) /2.82094791773523E-01/
+DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
+&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+!-------------------------
+!
+!                     ABS(X) .LE. 0.5
+!
+AX = ABS(X)
+IF (AX .GT. 0.5) GO TO 10
+T = X*X
+TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
+BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
+ERFC1 = 0.5 + (0.5 - X*(TOP/BOT))
+IF (IND .NE. 0) ERFC1 = EXP(T) * ERFC1
+RETURN
+!
+!                  0.5 .LT. ABS(X) .LE. 4
+!
+10 IF (AX .GT. 4.0) GO TO 20
+TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
+&+ P(6))*AX + P(7))*AX + P(8)
+BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
+&+ Q(6))*AX + Q(7))*AX + Q(8)
+ERFC1 = TOP/BOT
+GO TO 40
+!
+!                      ABS(X) .GT. 4
+!
+20 IF (X .LE. -5.6) GO TO 50
+IF (IND .NE. 0) GO TO 30
+IF (X .GT. 100.0) GO TO 60
+IF (X*X .GT. -EXPARG(1)) GO TO 60
+!
+30 T = (1.0/X)**2
+TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
+BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
+ERFC1 = (C - T*TOP/BOT)/AX
+!
+!                      FINAL ASSEMBLY
+!
+40 IF (IND .EQ. 0) GO TO 41
+   IF (X .LT. 0.0) ERFC1 = 2.0*EXP(X*X) - ERFC1
+   RETURN
+41 W = DBLE(X)*DBLE(X)
+T = W
+E = W - DBLE(T)
+ERFC1 = ((0.5 + (0.5 - E)) * EXP(-T)) * ERFC1
+IF (X .LT. 0.0) ERFC1 = 2.0 - ERFC1
+RETURN
+!
+!             LIMIT VALUE FOR LARGE NEGATIVE X
+!
+50 ERFC1 = 2.0
+IF (IND .NE. 0) ERFC1 = 2.0*EXP(X*X)
+RETURN
+!
+!             LIMIT VALUE FOR LARGE POSITIVE X
+!                       WHEN IND = 0
+!
+60 ERFC1 = 0.0
+RETURN
+END FUNCTION ERFC1
+
+SUBROUTINE DCERF (MO, Z, W)
+!-----------------------------------------------------------------------
+!
+!               COMPUTATION OF THE COMPLEX ERROR FUNCTION
+!
+!                          -----------------
+!
+!                       W = ERF(Z)    IF MO = 0
+!                       W = ERFC(Z)   OTHERWISE
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION Z(2), W(2)
+DOUBLE PRECISION M, N, N2, N4, NP1
+DOUBLE PRECISION C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+DOUBLE PRECISION A0(2), AN(2), B0(2), BN(2)
+DOUBLE PRECISION G0(2), GN(2), H0(2), HN(2)
+DOUBLE PRECISION QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), WN(2)
+DOUBLE PRECISION ANORM, DPMPAR
+!------------------------
+ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+!------------------------
+!     C = 1/SQRT(PI)
+!------------------------
+DATA C /.56418958354775628694807945156077D0/
+!------------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!
+                EPS = DPMPAR(1)
+!
+!------------------------
+X = Z(1)
+Y = Z(2)
+SN = 1.D0
+IF (X .GE. 0.D0) GO TO 10
+   X = -X
+   Y = -Y
+   SN = -1.D0
+!
+10 R = X*X + Y*Y
+SZ(1) = X*X - Y*Y
+SZ(2) = 2.D0*X*Y
+!
+IF (R .LE. 1.D0) GO TO 20
+IF (R .GE. 144.D0) GO TO 100
+IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
+IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
+IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
+IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
+IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
+IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
+IF (R .GE. 6.25D0) GO TO 80
+IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
+IF (R .GE. 4.0D0) GO TO 40
+!
+D = X - 2.D0
+IF (D*D + Y*Y .LT. 1.D0) GO TO 40
+GO TO 50
+!
+!                          TAYLOR SERIES
+!
+20 C2 = C + C
+TM(1) = C2*X
+TM(2) = C2*Y
+SM(1) = TM(1)
+SM(2) = TM(2)
+TOL = 2.D0*EPS
+M = 0.D0
+21 M = M + 1.D0
+   D = M + M + 1.D0
+   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
+   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
+   TM(1) = -TS(1)/M
+   TM(2) = -TS(2)/M
+   TS(1) = TM(1)/D
+   TS(2) = TM(2)/D
+   SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (ANORM(TS(1),TS(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 21
+!
+IF (MO .NE. 0) GO TO 30
+   W(1) = SN*SM(1)
+   W(2) = SN*SM(2)
+   RETURN
+30 IF (SN .EQ. 1.D0) GO TO 31
+   W(1) = 1.D0 + SM(1)
+   W(2) = SM(2)
+   RETURN
+31 W(1) = 0.5D0 + (0.5D0 - SM(1))
+W(2) = -SM(2)
+RETURN
+!
+!                  TAYLOR SERIES AROUND Z0 = 2
+!
+40 TM(1) = X
+TM(2) = Y
+CALL ERFCM2 (0, TM, W)
+IF (MO .NE. 0) GO TO 41
+   W(1) = SN*(0.5D0 + (0.5D0 - W(1)))
+   W(2) = - SN*W(2)
+   RETURN
+41 IF (SN .GT. 0.D0) RETURN
+W(1) = 2.D0 - W(1)
+W(2) = - W(2)
+RETURN
+!
+!            PADE APPROXIMATION FOR THE TAYLOR SERIES
+!                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
+!
+50 D = 4.D0
+IF (R .GT. 16.D0) D = 16.D0
+IF (R .GT. 64.D0) D = 64.D0
+D2 = D*D
+CALL DCREC (SZ(1), SZ(2), W(1), W(2))
+A0(1) = 1.D0
+A0(2) = 0.D0
+AN(1) = (W(1) + 4.D0/15.D0)*D
+AN(2) = W(2)*D
+B0(1) = 1.D0
+B0(2) = 0.D0
+BN(1) = (W(1) - 0.4D0)*D
+BN(2) = W(2)*D
+CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+TOL = 10.D0*EPS
+N4 = 0.D0
+!
+60 N4 = N4 + 4.D0
+   E = (N4 + 1.D0)*(N4 + 5.D0)
+   TM(1) = D*(W(1) - 2.D0/E)
+   TM(2) = D*W(2)
+   E = D2*(N4*(N4 + 2.0))/((N4 - 1.0)*(N4 + 3.0)*(N4 + 1.0)**2)
+!
+   QF(1) = (TM(1)*AN(1) - TM(2)*AN(2)) + E*A0(1)
+   QF(2) = (TM(1)*AN(2) + TM(2)*AN(1)) + E*A0(2)
+   A0(1) = AN(1)
+   A0(2) = AN(2)
+   AN(1) = QF(1)
+   AN(2) = QF(2)
+   QF(1) = (TM(1)*BN(1) - TM(2)*BN(2)) + E*B0(1)
+   QF(2) = (TM(1)*BN(2) + TM(2)*BN(1)) + E*B0(2)
+   B0(1) = BN(1)
+   B0(2) = BN(2)
+   BN(1) = QF(1)
+   BN(2) = QF(2)
+!
+   W0(1) = WN(1)
+   W0(2) = WN(2)
+   CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
+&TOL*ANORM(WN(1), WN(2))) GO TO 60
+!
+C2 = C + C
+SM(1) = C2*(X*WN(1) - Y*WN(2))
+SM(2) = C2*(X*WN(2) + Y*WN(1))
+E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
+!
+W(1) = SN*TM(1)
+W(2) = SN*TM(2)
+IF (MO .EQ. 0) RETURN
+W(1) = 1.D0 - W(1)
+W(2) = - W(2)
+RETURN
+!
+!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
+!                    FOR  Z*EXP(Z*Z)*ERFC(Z)
+!
+80 D = 4.D0*R
+IF (R .LT. 16.D0) D = 16.D0*R
+D2 = D*D
+TM(1) = SZ(1) + SZ(1)
+TM(2) = SZ(2) + SZ(2)
+G0(1) = 1.D0
+G0(2) = 0.D0
+GN(1) = (2.D0 + TM(1))/D
+GN(2) = TM(2)/D
+H0(1) = 1.D0
+H0(2) = 0.D0
+TM(1) = 3.D0 + TM(1)
+HN(1) = TM(1)/D
+HN(2) = TM(2)/D
+CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+NP1 = 1.D0
+TOL = 10.D0*EPS
+!
+90 N = NP1
+   NP1 = N + 1.D0
+   N2 = N + N
+   E = (N2*(N2 + 1.D0))/D2
+   TM(1) = TM(1) + 4.D0
+   QF(1) = (TM(1)*GN(1) - TM(2)*GN(2))/D - E*G0(1)
+   QF(2) = (TM(1)*GN(2) + TM(2)*GN(1))/D - E*G0(2)
+   G0(1) = GN(1)
+   G0(2) = GN(2)
+   GN(1) = QF(1)
+   GN(2) = QF(2)
+   QF(1) = (TM(1)*HN(1) - TM(2)*HN(2))/D - E*H0(1)
+   QF(2) = (TM(1)*HN(2) + TM(2)*HN(1))/D - E*H0(2)
+   H0(1) = HN(1)
+   H0(2) = HN(2)
+   HN(1) = QF(1)
+   HN(2) = QF(2)
+!
+   W0(1) = WN(1)
+   W0(2) = WN(2)
+   CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
+&TOL*ANORM(WN(1), WN(2))) GO TO 90
+!
+TM(1) = X*HN(1) - Y*HN(2)
+TM(2) = X*HN(2) + Y*HN(1)
+CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
+GO TO 130
+!
+!                      ASYMPTOTIC EXPANSION
+!
+100 CALL DCREC (X, Y, TM(1), TM(2))
+SM(1) = TM(1)
+SM(2) = TM(2)
+QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
+QF(2) = 2.D0*TM(1)*TM(2)
+TOL = 2.D0*EPS
+D = -0.5D0
+110 D = D + 1.D0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = -D*TS(1)
+   TM(2) = -D*TS(2)
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+   IF (ANORM(TM(1),TM(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 110
+SM(1) = C*SM(1)
+SM(2) = C*SM(2)
+IF (X .LT. 1.D-2) GO TO 200
+!
+!                       TERMINATION
+!
+130 E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+!
+IF (MO .NE. 0) GO TO 140
+   W(1) = SN*(0.5D0 + (0.5D0 - SM(1)))
+   W(2) = - SN*SM(2)
+   RETURN
+140 IF (SN .EQ. 1.D0) GO TO 141
+   W(1) = 2.D0 - SM(1)
+   W(2) = -SM(2)
+   RETURN
+141 W(1) = SM(1)
+W(2) = SM(2)
+RETURN
+!
+!               MODIFIED ASYMPTOTIC EXPANSION
+!
+200 E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+W(1) = QF(1)*SM(1) - QF(2)*SM(2)
+W(2) = QF(1)*SM(2) + QF(2)*SM(1)
+IF (MO .EQ. 0) GO TO 210
+   W(1) = 1.D0 + SN*W(1)
+   W(2) = SN*W(2)
+   RETURN
+210 IF (SN .LT. 0.0) RETURN
+W(1) = - W(1)
+W(2) = - W(2)
+RETURN
+END SUBROUTINE DCERF
+
+SUBROUTINE DCERFC (MO, Z, W)
+!-----------------------------------------------------------------------
+!
+!              COMPUTATION OF THE COMPLEX COERROR FUNCTION
+!
+!                           ----------------
+!
+!           W = ERFC(Z)           IF MO = 0 OR REAL(Z) .LT. 0
+!           W = DEXP(X*X)*ERFC(Z)  OTHERWISE
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION Z(2), W(2)
+DOUBLE PRECISION M, N, N2, N4, NP1
+DOUBLE PRECISION C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+DOUBLE PRECISION A0(2), AN(2), B0(2), BN(2)
+DOUBLE PRECISION G0(2), GN(2), H0(2), HN(2)
+DOUBLE PRECISION QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), WN(2)
+DOUBLE PRECISION ANORM, DPMPAR, DXPARG
+!------------------------
+ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+!------------------------
+!     C = 1/SQRT(PI)
+!------------------------
+DATA C /.56418958354775628694807945156077D0/
+!------------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!
+                EPS = DPMPAR(1)
+!
+!------------------------
+X = Z(1)
+Y = Z(2)
+SN = 1.D0
+IF (X .GE. 0.D0) GO TO 10
+   X = -X
+   Y = -Y
+   SN = -1.D0
+!
+10 IF (MO .NE. 0  .AND.  SN .EQ. 1.D0  .AND. &
+&DMAX1(X, DABS(Y)) .GE. 144.D0) GO TO 100
+R = X*X + Y*Y
+SZ(1) = X*X - Y*Y
+SZ(2) = 2.D0*X*Y
+!
+IF (R .LE. 1.D0) GO TO 20
+IF (R .GE. 144.D0) GO TO 100
+IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
+IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
+IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
+IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
+IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
+IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
+IF (R .GE. 6.25D0) GO TO 80
+IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
+IF (R .GE. 4.0D0) GO TO 40
+!
+D = X - 2.D0
+IF (D*D + Y*Y .LT. 1.D0) GO TO 40
+GO TO 50
+!
+!                          TAYLOR SERIES
+!
+20 C2 = C + C
+TM(1) = C2*X
+TM(2) = C2*Y
+SM(1) = TM(1)
+SM(2) = TM(2)
+TOL = 2.D0*EPS
+M = 0.D0
+21 M = M + 1.D0
+   D = M + M + 1.D0
+   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
+   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
+   TM(1) = -TS(1)/M
+   TM(2) = -TS(2)/M
+   TS(1) = TM(1)/D
+   TS(2) = TM(2)/D
+   SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (ANORM(TS(1),TS(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 21
+!
+IF (SN .EQ. 1.D0) GO TO 30
+   W(1) = 1.D0 + SM(1)
+   W(2) = SM(2)
+   RETURN
+30 SM(1) = 0.5D0 + (0.5D0 - SM(1))
+SM(2) = -SM(2)
+IF (MO .EQ. 0) GO TO 140
+!
+E = DEXP(SZ(1))
+QF(1) = E*DCOS(SZ(2))
+QF(2) = E*DSIN(SZ(2))
+W(1) = QF(1)*SM(1) - QF(2)*SM(2)
+W(2) = QF(1)*SM(2) + QF(2)*SM(1)
+RETURN
+!
+!                  TAYLOR SERIES AROUND Z0 = 2
+!
+40 IF (SN .LT. 0.D0) GO TO 41
+   CALL ERFCM2 (MO, Z, W)
+   RETURN
+41 TM(1) = X
+TM(2) = Y
+CALL ERFCM2 (0, TM, W)
+W(1) = 2.D0 - W(1)
+W(2) = - W(2)
+RETURN
+!
+!            PADE APPROXIMATION FOR THE TAYLOR SERIES
+!                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
+!
+50 D = 4.D0
+IF (R .GT. 16.D0) D = 16.D0
+IF (R .GT. 64.D0) D = 64.D0
+D2 = D*D
+CALL DCREC (SZ(1), SZ(2), W(1), W(2))
+A0(1) = 1.D0
+A0(2) = 0.D0
+AN(1) = (W(1) + 4.D0/15.D0)*D
+AN(2) = W(2)*D
+B0(1) = 1.D0
+B0(2) = 0.D0
+BN(1) = (W(1) - 0.4D0)*D
+BN(2) = W(2)*D
+CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+TOL = 10.D0*EPS
+N4 = 0.D0
+!
+60 N4 = N4 + 4.D0
+   E = (N4 + 1.D0)*(N4 + 5.D0)
+   TM(1) = D*(W(1) - 2.D0/E)
+   TM(2) = D*W(2)
+   E = D2*(N4*(N4 + 2.0))/((N4 - 1.0)*(N4 + 3.0)*(N4 + 1.0)**2)
+!
+   QF(1) = (TM(1)*AN(1) - TM(2)*AN(2)) + E*A0(1)
+   QF(2) = (TM(1)*AN(2) + TM(2)*AN(1)) + E*A0(2)
+   A0(1) = AN(1)
+   A0(2) = AN(2)
+   AN(1) = QF(1)
+   AN(2) = QF(2)
+   QF(1) = (TM(1)*BN(1) - TM(2)*BN(2)) + E*B0(1)
+   QF(2) = (TM(1)*BN(2) + TM(2)*BN(1)) + E*B0(2)
+   B0(1) = BN(1)
+   B0(2) = BN(2)
+   BN(1) = QF(1)
+   BN(2) = QF(2)
+!
+   W0(1) = WN(1)
+   W0(2) = WN(2)
+   CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
+   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
+&TOL*ANORM(WN(1), WN(2))) GO TO 60
+!
+C2 = C + C
+SM(1) = C2*(X*WN(1) - Y*WN(2))
+SM(2) = C2*(X*WN(2) + Y*WN(1))
+!
+IF (MO .EQ. 0 .OR. SN .NE. 1.D0) GO TO 70
+   E = DEXP(SZ(1))
+   W(1) = E*DCOS(SZ(2)) - SM(1)
+   W(2) = E*DSIN(SZ(2)) - SM(2)
+   RETURN
+70 E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
+W(1) = 1.D0 - SN*TM(1)
+W(2) = - SN*TM(2)
+RETURN
+!
+!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
+!                    FOR  Z*EXP(Z*Z)*ERFC(Z)
+!
+80 D = 4.D0*R
+IF (R .LT. 16.D0) D = 16.D0*R
+D2 = D*D
+TM(1) = SZ(1) + SZ(1)
+TM(2) = SZ(2) + SZ(2)
+G0(1) = 1.D0
+G0(2) = 0.D0
+GN(1) = (2.D0 + TM(1))/D
+GN(2) = TM(2)/D
+H0(1) = 1.D0
+H0(2) = 0.D0
+TM(1) = 3.D0 + TM(1)
+HN(1) = TM(1)/D
+HN(2) = TM(2)/D
+CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+NP1 = 1.D0
+TOL = 10.D0*EPS
+!
+90 N = NP1
+   NP1 = N + 1.D0
+   N2 = N + N
+   E = (N2*(N2 + 1.D0))/D2
+   TM(1) = TM(1) + 4.D0
+   QF(1) = (TM(1)*GN(1) - TM(2)*GN(2))/D - E*G0(1)
+   QF(2) = (TM(1)*GN(2) + TM(2)*GN(1))/D - E*G0(2)
+   G0(1) = GN(1)
+   G0(2) = GN(2)
+   GN(1) = QF(1)
+   GN(2) = QF(2)
+   QF(1) = (TM(1)*HN(1) - TM(2)*HN(2))/D - E*H0(1)
+   QF(2) = (TM(1)*HN(2) + TM(2)*HN(1))/D - E*H0(2)
+   H0(1) = HN(1)
+   H0(2) = HN(2)
+   HN(1) = QF(1)
+   HN(2) = QF(2)
+!
+   W0(1) = WN(1)
+   W0(2) = WN(2)
+   CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
+   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
+&TOL*ANORM(WN(1), WN(2))) GO TO 90
+!
+TM(1) = X*HN(1) - Y*HN(2)
+TM(2) = X*HN(2) + Y*HN(1)
+CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
+GO TO 130
+!
+!                      ASYMPTOTIC EXPANSION
+!
+100 CALL DCREC (X, Y, TM(1), TM(2))
+SM(1) = TM(1)
+SM(2) = TM(2)
+QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
+QF(2) = 2.D0*TM(1)*TM(2)
+TOL = 2.D0*EPS
+D = -0.5D0
+110 D = D + 1.D0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = -D*TS(1)
+   TM(2) = -D*TS(2)
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+   IF (ANORM(TM(1),TM(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 110
+SM(1) = C*SM(1)
+SM(2) = C*SM(2)
+IF (X .LT. 1.D-2) GO TO 200
+!
+!                       TERMINATION
+!
+130 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 140
+E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+!
+IF (SN .EQ. 1.D0) GO TO 140
+   W(1) = 2.D0 - SM(1)
+   W(2) = -SM(2)
+   RETURN
+140 W(1) = SM(1)
+W(2) = SM(2)
+RETURN
+!
+!               MODIFIED ASYMPTOTIC EXPANSION
+!
+200 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 210
+E = DEXP(-SZ(1))
+QF(1) = E*DCOS(-SZ(2))
+QF(2) = E*DSIN(-SZ(2))
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+W(1) = 1.D0 + SN*TS(1)
+W(2) = SN*TS(2)
+RETURN
+!
+210 IF (DABS(Y) .GE. 100.D0) GO TO 140
+IF (SZ(1) .LE. DXPARG(1)) GO TO 140
+E = DEXP(SZ(1))
+W(1) = E*DCOS(SZ(2)) + SM(1)
+W(2) = E*DSIN(SZ(2)) + SM(2)
+RETURN
+END SUBROUTINE DCERFC
+
+SUBROUTINE ERFCM2 (MO, Z, W)
+!-----------------------------------------------------------------------
+!           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
+!                          AROUND Z0 = 2
+!-----------------------------------------------------------------------
+DOUBLE PRECISION Z(2), W(2)
+DOUBLE PRECISION A(63), C, E, EPS, H(2), T(2), TOL, X, Y
+DOUBLE PRECISION ANORM, DPMPAR
+!------------------------------
+ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+!------------------------------
+!     C = (2/SQRT(PI))*EXP(-4)
+!     E = ERFC(2)
+!------------------------------
+DATA C /.20666985354092053857068941306585476D-01/
+DATA E /.46777349810472658379307436327470714D-02/
+!------------------------------
+DATA A(1)  / .20000000000000000000000000000000000D+01/, &
+&A(2)  / .23333333333333333333333333333333333D+01/, &
+&A(3)  / .16666666666666666666666666666666667D+01/, &
+&A(4)  / .63333333333333333333333333333333333D+00/, &
+&A(5)  /-.22222222222222222222222222222222222D-01/, &
+&A(6)  /-.16349206349206349206349206349206349D+00/, &
+&A(7)  /-.76984126984126984126984126984126984D-01/, &
+&A(8)  /-.24250440917107583774250440917107584D-02/, &
+&A(9)  / .12716049382716049382716049382716049D-01/, &
+&A(10) / .50208433541766875100208433541766875D-02/
+DATA A(11) /-.25305969750414194858639303083747528D-03/, &
+&A(12) /-.78593217482106370995259884148773038D-03/, &
+&A(13) /-.19118154038788959423880058800693721D-03/, &
+&A(14) / .46324144207742091339974937858535742D-04/, &
+&A(15) / .33885549097189308829520469732109944D-04/, &
+&A(16) / .28637897646612243562134629672756034D-05/, &
+&A(17) /-.29071891082127275370004560446169188D-05/, &
+&A(18) /-.89674405786490646425523560263096103D-06/, &
+&A(19) / .96069103941908684338469767911200105D-07/, &
+&A(20) / .99432863129093191401848891268744113D-07/
+DATA A(21) / .97610310501460621303387795457283579D-08/, &
+&A(22) /-.65557500375673133822289344530892436D-08/, &
+&A(23) /-.18706782059105426900361744016236561D-08/, &
+&A(24) / .20329898993447386223176373714372370D-09/, &
+&A(25) / .16941915827254374668448114614201210D-09/, &
+&A(26) / .10619149520827430973786114446699534D-10/, &
+&A(27) /-.10136148256511788733365237088810952D-10/, &
+&A(28) /-.21042890133669970575386166675721692D-11/, &
+&A(29) / .37186985840699828780916522245407087D-12/, &
+&A(30) / .17921843632701679986488128324051002D-12/
+DATA A(31) /-.89823991804248069863542565948598397D-16/, &
+&A(32) /-.10533182313660970970232171410372199D-13/, &
+&A(33) /-.12340742690978398320850088252659714D-14/, &
+&A(34) / .44315624546581333350568244777175883D-15/, &
+&A(35) / .11584041639989442481950487524296214D-15/, &
+&A(36) /-.10765703619385988116658460442219647D-16/, &
+&A(37) /-.70653158723054941879586082239984222D-17/, &
+&A(38) /-.18708903154917138727191793341667090D-18/, &
+&A(39) / .32549879318817103966053527398133297D-18/, &
+&A(40) / .40654116689599228385911733319215613D-19/
+DATA A(41) /-.11250074516817311101947327325293424D-19/, &
+&A(42) /-.28923865378584966737386008432031980D-20/, &
+&A(43) / .23653053641701517160704870522922706D-21/, &
+&A(44) / .14665384680061888088099002254334292D-21/, &
+&A(45) / .26971039707314316218154193225264469D-23/, &
+&A(46) /-.58753834789274356433279671015522650D-23/, &
+&A(47) /-.59960357240498652932299485494869633D-24/, &
+&A(48) / .18586826578121663981412155416486531D-24/, &
+&A(49) / .38364131854692721721867481914852428D-25/, &
+&A(50) /-.41342210492630142578080062451711039D-26/
+DATA A(51) /-.17646283105274988992381528904600860D-26/, &
+&A(52) / .19828685934364181151988692232131608D-28/, &
+&A(53) / .65592252170840353572672782446212733D-28/, &
+&A(54) / .40626551379996340638338449938639730D-29/, &
+&A(55) /-.20097984104191034713653294173834095D-29/, &
+&A(56) /-.28104226475997460044096389060743131D-30/, &
+&A(57) / .48705319298749358709127987806547949D-31/, &
+&A(58) / .12664655832830787747161769929972617D-31/, &
+&A(59) /-.75168312488894341862391776330113688D-33/, &
+&A(60) /-.45760473722605993842481669806804415D-33/
+DATA A(61) /-.56725491529575395930156379514718000D-35/, &
+&A(62) / .13932664042920082608489441616061541D-34/, &
+&A(63) / .10452448992516358449586503951463322D-35/
+!------------------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0
+!
+       EPS = DPMPAR(1)
+!
+!------------------------------
+TOL = EPS*1.D+12
+H(1) = 1.D0 + (1.D0 - Z(1))
+H(2) = - Z(2)
+!
+X = 1.D0
+Y = 0.D0
+W(1) = A(30)
+W(2) = 0.D0
+do 10 N = 31,63
+   T(1) = X*H(1) - Y*H(2)
+   T(2) = X*H(2) + Y*H(1)
+   X = T(1)
+   Y = T(2)
+   T(1) = A(N)*X
+   T(2) = A(N)*Y
+   W(1) = W(1) + T(1)
+   W(2) = W(2) + T(2)
+   IF (ANORM(T(1),T(2)) .LE. TOL*ANORM(W(1),W(2))) GO TO 20
+10 CONTINUE
+!
+20 do 21 J = 1,29
+   N = 30 - J
+   X = H(1)*W(1) - H(2)*W(2)
+   W(2) = H(1)*W(2) + H(2)*W(1)
+   W(1) = A(N) + X
+21 CONTINUE
+X = H(1)*W(1) - H(2)*W(2)
+W(2) = H(1)*W(2) + H(2)*W(1)
+W(1) = 1.D0 + X
+!
+X = C*(H(1)*W(1) - H(2)*W(2))
+W(2) = C*(H(1)*W(2) + H(2)*W(1))
+W(1) = E + X
+IF (MO .EQ. 0) RETURN
+!
+!                     COMPUTE EXP(Z*Z)*ERFC(Z)
+!
+X = Z(1)*Z(1) - Z(2)*Z(2)
+Y = 2.D0*Z(1)*Z(2)
+X = DEXP(X)
+T(1) = X*DCOS(Y)
+T(2) = X*DSIN(Y)
+X = T(1)*W(1) - T(2)*W(2)
+Y = T(1)*W(2) + T(2)*W(1)
+W(1) = X
+W(2) = Y
+RETURN
+END SUBROUTINE ERFCM2
+
+double precision function DERF (X)
+!-----------------------------------------------------------------------
+!        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AX, T, X, W
+DOUBLE PRECISION A(21)
+DOUBLE PRECISION DERFC0
+!-------------------------------
+DATA A(1)  / .1283791670955125738961589031215D+00/, &
+&A(2)  /-.3761263890318375246320529677070D+00/, &
+&A(3)  / .1128379167095512573896158902931D+00/, &
+&A(4)  /-.2686617064513125175943235372542D-01/, &
+&A(5)  / .5223977625442187842111812447877D-02/, &
+&A(6)  /-.8548327023450852832540164081187D-03/, &
+&A(7)  / .1205533298178966425020717182498D-03/, &
+&A(8)  /-.1492565035840625090430728526820D-04/, &
+&A(9)  / .1646211436588924261080723578109D-05/, &
+&A(10) /-.1636584469123468757408968429674D-06/
+DATA A(11) / .1480719281587021715400818627811D-07/, &
+&A(12) /-.1229055530145120140800510155331D-08/, &
+&A(13) / .9422759058437197017313055084212D-10/, &
+&A(14) /-.6711366740969385085896257227159D-11/, &
+&A(15) / .4463222608295664017461758843550D-12/, &
+&A(16) /-.2783497395542995487275065856998D-13/, &
+&A(17) / .1634095572365337143933023780777D-14/, &
+&A(18) /-.9052845786901123985710019387938D-16/, &
+&A(19) / .4708274559689744439341671426731D-17/, &
+&A(20) /-.2187159356685015949749948252160D-18/, &
+&A(21) / .7043407712019701609635599701333D-20/
+!-------------------------------
+!
+!                     DABS(X) .LE. 1
+!
+AX = DABS(X)
+IF (AX .GT. 1.D0) GO TO 20
+T = X*X
+W = A(21)
+do 10 I = 1,20
+   K = 21 - I
+   W = T*W + A(K)
+10 CONTINUE
+DERF = X*(1.D0 + W)
+RETURN
+!
+!                     DABS(X) .GT. 1
+!
+20 IF (AX .GE. 8.5D0) GO TO 30
+DERF = 0.5D0 + (0.5D0 - DEXP(-X*X)*DERFC0(AX))
+IF (X .LT. 0.D0) DERF = -DERF
+RETURN
+!
+!                 LIMIT VALUE FOR LARGE X
+!
+30 DERF = DSIGN(1.D0,X)
+RETURN
+END FUNCTION DERF
+
+double precision function DERFC (X)
+!-----------------------------------------------------------------------
+!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, AX, T, W
+DOUBLE PRECISION A(21)
+DOUBLE PRECISION DERFC0, DXPARG
+!-------------------------------
+DATA A(1)  / .1283791670955125738961589031215D+00/, &
+&A(2)  /-.3761263890318375246320529677070D+00/, &
+&A(3)  / .1128379167095512573896158902931D+00/, &
+&A(4)  /-.2686617064513125175943235372542D-01/, &
+&A(5)  / .5223977625442187842111812447877D-02/, &
+&A(6)  /-.8548327023450852832540164081187D-03/, &
+&A(7)  / .1205533298178966425020717182498D-03/, &
+&A(8)  /-.1492565035840625090430728526820D-04/, &
+&A(9)  / .1646211436588924261080723578109D-05/, &
+&A(10) /-.1636584469123468757408968429674D-06/
+DATA A(11) / .1480719281587021715400818627811D-07/, &
+&A(12) /-.1229055530145120140800510155331D-08/, &
+&A(13) / .9422759058437197017313055084212D-10/, &
+&A(14) /-.6711366740969385085896257227159D-11/, &
+&A(15) / .4463222608295664017461758843550D-12/, &
+&A(16) /-.2783497395542995487275065856998D-13/, &
+&A(17) / .1634095572365337143933023780777D-14/, &
+&A(18) /-.9052845786901123985710019387938D-16/, &
+&A(19) / .4708274559689744439341671426731D-17/, &
+&A(20) /-.2187159356685015949749948252160D-18/, &
+&A(21) / .7043407712019701609635599701333D-20/
+!-------------------------------
+!
+!                     DABS(X) .LE. 1
+!
+AX = DABS(X)
+IF (AX .GT. 1.D0) GO TO 20
+T = X*X
+W = A(21)
+do 10 I = 1,20
+   K = 21 - I
+   W = T*W + A(K)
+10 CONTINUE
+DERFC = 0.5D0 + (0.5D0 - X*(1.D0 + W))
+RETURN
+!
+!                       X .LT. -1
+!
+20 IF (X .GT. 0.D0) GO TO 30
+DERFC = 2.D0
+IF (X .LT. -8.3D0) RETURN
+T = X*X
+DERFC = 2.D0 - DEXP(-T) * DERFC0(AX)
+RETURN
+!
+!                       X .GT. 1
+!
+30 DERFC = 0.D0
+IF (X .GT. 100.D0) RETURN
+T = X*X
+IF (T .GT. -DXPARG(1)) RETURN
+DERFC = DEXP(-T) * DERFC0(X)
+RETURN
+END FUNCTION DERFC
+
+double precision function DERFC1 (IND, X)
+!-----------------------------------------------------------------------
+!
+!         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+!
+!          DERFC1(IND,X) = ERFC(X)           IF IND = 0
+!          DERFC1(IND,X) = EXP(X*X)*ERFC(X)  OTHERWISE
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, AX, T, W
+DOUBLE PRECISION A(21)
+DOUBLE PRECISION DERFC0, DXPARG
+!-------------------------------
+DATA A(1)  / .1283791670955125738961589031215D+00/, &
+&A(2)  /-.3761263890318375246320529677070D+00/, &
+&A(3)  / .1128379167095512573896158902931D+00/, &
+&A(4)  /-.2686617064513125175943235372542D-01/, &
+&A(5)  / .5223977625442187842111812447877D-02/, &
+&A(6)  /-.8548327023450852832540164081187D-03/, &
+&A(7)  / .1205533298178966425020717182498D-03/, &
+&A(8)  /-.1492565035840625090430728526820D-04/, &
+&A(9)  / .1646211436588924261080723578109D-05/, &
+&A(10) /-.1636584469123468757408968429674D-06/
+DATA A(11) / .1480719281587021715400818627811D-07/, &
+&A(12) /-.1229055530145120140800510155331D-08/, &
+&A(13) / .9422759058437197017313055084212D-10/, &
+&A(14) /-.6711366740969385085896257227159D-11/, &
+&A(15) / .4463222608295664017461758843550D-12/, &
+&A(16) /-.2783497395542995487275065856998D-13/, &
+&A(17) / .1634095572365337143933023780777D-14/, &
+&A(18) /-.9052845786901123985710019387938D-16/, &
+&A(19) / .4708274559689744439341671426731D-17/, &
+&A(20) /-.2187159356685015949749948252160D-18/, &
+&A(21) / .7043407712019701609635599701333D-20/
+!-------------------------------
+!
+!                     DABS(X) .LE. 1
+!
+AX = DABS(X)
+IF (AX .GT. 1.D0) GO TO 20
+T = X*X
+W = A(21)
+do 10 I = 1,20
+   K = 21 - I
+   W = T*W + A(K)
+10 CONTINUE
+DERFC1 = 0.5D0 + (0.5D0 - X*(1.D0 + W))
+IF (IND .NE. 0) DERFC1 = DEXP(T) * DERFC1
+RETURN
+!
+!                       X .LT. -1
+!
+20 IF (X .GT. 0.D0) GO TO 50
+IF (X .LT. -8.3D0) GO TO 80
+IF (IND .EQ. 0) GO TO 30
+   DERFC1 = 2.D0*DEXP(X*X) - DERFC0(AX)
+   RETURN
+30 DERFC1 = 2.D0 - DEXP(-X*X)*DERFC0(AX)
+RETURN
+!
+!                       X .GT. 1
+!
+50 IF (IND .EQ. 0) GO TO 60
+   DERFC1 = DERFC0(X)
+   RETURN
+60 DERFC1 = 0.D0
+IF (X .GT. 100.D0) RETURN
+T = X*X
+IF (T .GT. -DXPARG(1)) RETURN
+DERFC1 = DEXP(-T) * DERFC0(X)
+RETURN
+!
+!             LIMIT VALUE FOR LARGE NEGATIVE X
+!
+80 DERFC1 = 2.D0
+IF (IND .NE. 0) DERFC1 = 2.D0*DEXP(X*X)
+RETURN
+END FUNCTION DERFC1
+
+double precision function DERFC0 (X)
+!-----------------------------------------------------------------------
+!
+!           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
+!
+!-----------------------------------------------------------------------
+!     WRITTEN BY ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN, VIRGINIA
+!        APRIL 1992
+!-------------------------------
+DOUBLE PRECISION X, T, U, V, Z, RPINV
+DOUBLE PRECISION P0, P1, P2, P3, P4, P5, P6, P7, &
+&Q1, Q2, Q3, Q4, Q5, Q6, Q7
+DOUBLE PRECISION R0, R1, R2, R3, R4, R5, R6, R7, R8
+DOUBLE PRECISION A0, A1, A2, A3, A4, A5, A6, A7, A8, &
+&B1, B2, B3, B4, B5, B6, B7, B8, B9, &
+&B10, B11
+DOUBLE PRECISION C0, C1, C2, C3, C4, C5, C6, C7, C8, &
+&D1, D2, D3, D4, D5, D6, D7, D8, D9
+DOUBLE PRECISION E0, E1, E2, E3
+DOUBLE PRECISION S1, S2, S3, S4, S5, S6, S7, S8, S9, &
+&S10, S11
+!-------------------------------
+!     RPINV = 1/SQRT(PI)
+!-------------------------------
+DATA RPINV /.56418958354775628694807945156077259D0/
+!-------------------------------
+DATA P0 / .16506148041280876191828601D-03/, &
+&P1 / .15471455377139313353998665D-03/, &
+&P2 / .44852548090298868465196794D-04/, &
+&P3 /-.49177280017226285450486205D-05/, &
+&P4 /-.69353602078656412367801676D-05/, &
+&P5 /-.20508667787746282746857743D-05/, &
+&P6 /-.28982842617824971177267380D-06/, &
+&P7 /-.17272433544836633301127174D-07/
+DATA Q1  /.16272656776533322859856317D+01/, &
+&Q2  /.12040996037066026106794322D+01/, &
+&Q3  /.52400246352158386907601472D+00/, &
+&Q4  /.14497345252798672362384241D+00/, &
+&Q5  /.25592517111042546492590736D-01/, &
+&Q6  /.26869088293991371028123158D-02/, &
+&Q7  /.13133767840925681614496481D-03/
+!-------------------------------
+DATA R0  / .145589721275038539045668824025D+00/, &
+&R1  /-.273421931495426482902320421863D+00/, &
+&R2  / .226008066916621506788789064272D+00/, &
+&R3  /-.163571895523923805648814425592D+00/, &
+&R4  / .102604312032193978662297299832D+00/, &
+&R5  /-.548023266949835519254211506880D-01/, &
+&R6  / .241432239725390106956523668160D-01/, &
+&R7  /-.822062115403915116036874169600D-02/, &
+&R8  / .180296241564687154310619200000D-02/
+!-------------------------------
+DATA A0 /-.45894433406309678202825375D-03/, &
+&A1 /-.12281298722544724287816236D-01/, &
+&A2 /-.91144359512342900801764781D-01/, &
+&A3 /-.28412489223839285652511367D-01/, &
+&A4 / .14083827189977123530129812D+01/, &
+&A5 / .11532175281537044570477189D+01/, &
+&A6 /-.72170903389442152112483632D+01/, &
+&A7 /-.19685597805218214001309225D+01/, &
+&A8 / .93846891504541841150916038D+01/
+DATA B1 / .25136329960926527692263725D+02/, &
+&B2 / .15349442087145759184067981D+03/, &
+&B3 /-.29971215958498680905476402D+03/, &
+&B4 /-.33876477506888115226730368D+04/, &
+&B5 / .28301829314924804988873701D+04/, &
+&B6 / .22979620942196507068034887D+05/, &
+&B7 /-.24280681522998071562462041D+05/, &
+&B8 /-.36680620673264731899504580D+05/, &
+&B9 / .42278731622295627627042436D+05/, &
+&B10/ .28834257644413614344549790D+03/, &
+&B11/ .70226293775648358646587341D+03/
+!-------------------------------
+DATA C0 /-.7040906288250128001000086D-04/, &
+&C1 /-.3858822461760510359506941D-02/, &
+&C2 /-.7708202127512212359395078D-01/, &
+&C3 /-.6713655014557429480440263D+00/, &
+&C4 /-.2081992124162995545731882D+01/, &
+&C5 / .2898831421475282558867888D+01/, &
+&C6 / .2199509380600429331650192D+02/, &
+&C7 / .2907064664404115316722996D+01/, &
+&C8 /-.4766208741588182425380950D+02/
+DATA D1 / .5238852785508439144747174D+02/, &
+&D2 / .9646843357714742409535148D+03/, &
+&D3 / .7007152775135939601804416D+04/, &
+&D4 / .8515386792259821780601162D+04/, &
+&D5 /-.1002360095177164564992134D+06/, &
+&D6 /-.2065250031331232815791912D+06/, &
+&D7 / .5695324805290370358175984D+06/, &
+&D8 / .6589752493461331195697873D+06/, &
+&D9 /-.1192930193156561957631462D+07/
+!-------------------------------
+DATA E0 / .540464821348814822409610122136D+00/, &
+&E1 /-.261515522487415653487049835220D-01/, &
+&E2 /-.288573438386338758794591212600D-02/, &
+&E3 /-.529353396945788057720258856000D-03/
+!-------------------------------
+!     COEFFICIENTS FOR THE ASYMPTOTIC EXPANSION
+!-------------------------------
+DATA S1  / .75000000000000000000D+00/, &
+&S2  /-.18750000000000000000D+01/, &
+&S3  / .65625000000000000000D+01/, &
+&S4  /-.29531250000000000000D+02/, &
+&S5  / .16242187500000000000D+03/, &
+&S6  /-.10557421875000000000D+04/, &
+&S7  / .79180664062500000000D+04/, &
+&S8  /-.67303564453125000000D+05/, &
+&S9  / .63938386230468750000D+06/, &
+&S10 /-.67135305541992187500D+07/, &
+&S11 / .77205601373291015625D+08/
+!-------------------------------
+!
+!                     1 .LE. X .LE. 2
+!
+IF (X .GT. 2.D0) GO TO 10
+U = ((((((P7*X + P6)*X + P5)*X + P4)*X + P3)*X + &
+&P2)*X + P1)*X + P0
+V = ((((((Q7*X + Q6)*X + Q5)*X + Q4)*X + Q3)*X + &
+&Q2)*X + Q1)*X + 1.D0
+!
+T = (X - 3.75D0)/(X + 3.75D0)
+DERFC0 = (((((((((U/V)*T + R8)*T + R7)*T + R6)*T + R5)*T + &
+&R4)*T + R3)*T + R2)*T + R1)*T + R0
+RETURN
+!
+!                     2 .LT. X .LE. 4
+!
+10 IF (X .GT. 4.D0) GO TO 20
+Z = 1.D0/(2.5D0 + X*X)
+U = (((((((A8*Z + A7)*Z + A6)*Z + A5)*Z + A4)*Z + A3)*Z + &
+&A2)*Z + A1)*Z + A0
+V = ((((((((((B11*Z + B10)*Z + B9)*Z + B8)*Z + B7)*Z + B6)*Z + &
+&B5)*Z + B4)*Z + B3)*Z + B2)*Z + B1)*Z + 1.D0
+!
+T = 13.D0*Z - 1.D0
+DERFC0 = ((((U/V)*T + E2)*T + E1)*T + E0)/X
+RETURN
+!
+!                     4 .LT. X .LT. 50
+!
+20 IF (X .GE. 50.D0) GO TO 30
+Z = 1.D0/(2.5D0 + X*X)
+U = (((((((C8*Z + C7)*Z + C6)*Z + C5)*Z + C4)*Z + C3)*Z + &
+&C2)*Z + C1)*Z + C0
+V = ((((((((D9*Z + D8)*Z + D7)*Z + D6)*Z + D5)*Z + D4)*Z + &
+&D3)*Z + D2)*Z + D1)*Z + 1.D0
+!
+T = 13.D0*Z - 1.D0
+DERFC0 = (((((U/V)*T + E3)*T + E2)*T + E1)*T + E0)/X
+RETURN
+!
+!                        X .GE. 50
+!
+30 T = (1.D0/X)**2
+Z = (((((((((((S11*T + S10)*T + S9)*T + S8)*T + S7)*T + &
+&S6)*T + S5)*T + S4)*T + S3)*T + S2)*T + S1)*T - &
+&0.5D0)*T + 1.D0
+DERFC0 = RPINV*(Z/X)
+RETURN
+END FUNCTION DERFC0
+
+REAL function ERFI (P, Q)
+!-----------------------------------------------------------------------
+!
+!              EVALUATION OF THE INVERSE ERROR FUNCTION
+!
+!                        ---------------
+!
+!     FOR 0 .LE. P .LT. 1,  W = ERFI(P,Q) WHERE ERF(W) = P. IT IS
+!     ASSUMED THAT Q = 1 - P.  IF P .LT. 0, Q .LE. 0, OR P + Q IS
+!     NOT 1, THEN ERFI(P,Q) IS SET TO A NEGATIVE VALUE.
+!
+!-----------------------------------------------------------------------
+!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
+!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!-----------------------------------------------------------------------
+REAL A(6),B(6),A1(7),B1(7),A2(9),B2(8),A3(9),B3(6)
+!-----------------------------------------------------------------------
+!     C2 = LN(1.E-100)
+!-----------------------------------------------------------------------
+DATA C /.5625/, C1 /.87890625/
+DATA C2 /-.2302585092994046E+03/
+!-----------------------------------------------------------------------
+!                            TABLE NO.16
+!-----------------------------------------------------------------------
+DATA A(1)/.1400216916161353E+03/,  A(2)/-.7204275515686407E+03/, &
+&A(3)/.1296708621660511E+04/,  A(4)/-.9697932901514031E+03/, &
+&A(5)/.2762427049269425E+03/,  A(6)/-.2012940180552054E+02/
+DATA B(1)/.1291046303114685E+03/,  B(2)/-.7312308064260973E+03/, &
+&B(3)/.1494970492915789E+04/,  B(4)/-.1337793793683419E+04/, &
+&B(5)/.5033747142783567E+03/,  B(6)/-.6220205554529216E+02/
+!-----------------------------------------------------------------------
+!                            TABLE NO.36
+!-----------------------------------------------------------------------
+DATA A1(1)/-.1690478046781745E+00/, A1(2)/.3524374318100228E+01/, &
+&A1(3)/-.2698143370550352E+02/, A1(4)/.9340783041018743E+02/, &
+&A1(5)/-.1455364428646732E+03/, A1(6)/.8805852004723659E+02/, &
+&A1(7)/-.1349018591231947E+02/
+DATA B1(1)/-.1203221171313429E+00/, B1(2)/.2684812231556632E+01/, &
+&B1(3)/-.2242485268704865E+02/, B1(4)/.8723495028643494E+02/, &
+&B1(5)/-.1604352408444319E+03/, B1(6)/.1259117982101525E+03/, &
+&B1(7)/-.3184861786248824E+02/
+!-----------------------------------------------------------------------
+!                            TABLE NO.56
+!-----------------------------------------------------------------------
+DATA A2(1)/.3100808562552958E-04/, A2(2)/.4097487603011940E-02/, &
+&A2(3)/.1214902662897276E+00/, A2(4)/.1109167694639028E+01/, &
+&A2(5)/.3228379855663924E+01/, A2(6)/.2881691815651599E+01/, &
+&A2(7)/.2047972087262996E+01/, A2(8)/.8545922081972148E+00/, &
+&A2(9)/.3551095884622383E-02/
+DATA B2(1)/.3100809298564522E-04/, B2(2)/.4097528678663915E-02/, &
+&B2(3)/.1215907800748757E+00/, B2(4)/.1118627167631696E+01/, &
+&B2(5)/.3432363984305290E+01/, B2(6)/.4140284677116202E+01/, &
+&B2(7)/.4119797271272204E+01/, B2(8)/.2162961962641435E+01/
+!-----------------------------------------------------------------------
+!                            TABLE NO.79
+!-----------------------------------------------------------------------
+DATA A3(1)/.3205405422062050E-08/, A3(2)/.1899479322632128E-05/, &
+&A3(3)/.2814223189858532E-03/, A3(4)/.1370504879067817E-01/, &
+&A3(5)/.2268143542005976E+00/, A3(6)/.1098421959892340E+01/, &
+&A3(7)/.6791143397056208E+00/, A3(8)/-.834334189167721E+00/, &
+&A3(9)/.3421951267240343E+00/
+DATA B3(1)/.3205405053282398E-08/, B3(2)/.1899480592260143E-05/, &
+&B3(3)/.2814349691098940E-03/, B3(4)/.1371092249602266E-01/, &
+&B3(5)/.2275172815174473E+00/, B3(6)/.1125348514036959E+01/
+!-----------------------------------------------------------------------
+IF (P .LT. 0.0 .OR. Q .LE. 0.0) GO TO 100
+EPS = AMAX1(SPMPAR(1),1.E-15)
+T = 0.5 + (0.5 - (P + Q))
+IF (ABS(T) .GT. 3.0*EPS) GO TO 110
+!
+!                      0 .LE. P .LE. 0.75
+!
+IF (P .GT. 0.75) GO TO 10
+V = P*P - C
+T = P *  (((((A(6)*V + A(5))*V + A(4))*V + A(3))*V &
+&+ A(2))*V + A(1))
+S = (((((V + B(6))*V + B(5))*V + B(4))*V + B(3))*V &
+&+ B(2))*V + B(1)
+GO TO 40
+!
+!                    0.75 .LT. P .LE. 0.9375
+!
+10 IF (P .GT. 0.9375) GO TO 20
+V = P*P - C1
+T = P *  ((((((A1(7)*V + A1(6))*V + A1(5))*V + A1(4))*V &
+&+ A1(3))*V + A1(2))*V + A1(1))
+S = ((((((V + B1(7))*V + B1(6))*V + B1(5))*V + B1(4))*V &
+&+ B1(3))*V + B1(2))*V + B1(1)
+GO TO 40
+!
+!                  1.E-100 .LE. Q .LT. 0.0625
+!
+20 V1 = ALOG(Q)
+V = 1.0/SQRT(-V1)
+IF (V1 .LT. C2) GO TO 30
+T = (((((((A2(9)*V + A2(8))*V + A2(7))*V + A2(6))*V + A2(5))*V &
+&+ A2(4))*V + A2(3))*V + A2(2))*V + A2(1)
+S = V *  ((((((((V + B2(8))*V + B2(7))*V + B2(6))*V + B2(5))*V &
+&+ B2(4))*V + B2(3))*V + B2(2))*V + B2(1))
+GO TO 40
+!
+!                 1.E-10000 .LE. Q .LT. 1.E-100
+!
+30 T = (((((((A3(9)*V + A3(8))*V + A3(7))*V + A3(6))*V + A3(5))*V &
+&+ A3(4))*V + A3(3))*V + A3(2))*V + A3(1)
+S = V * ((((((V + B3(6))*V + B3(5))*V + B3(4))*V + B3(3))*V &
+&+ B3(2))*V + B3(1))
+40 ERFI = T/S
+RETURN
+!
+!                         ERROR RETURN
+!
+100 ERFI = -1.0
+RETURN
+110 ERFI = -2.0
+RETURN
+END FUNCTION ERFI
+
+double precision function DERFI (P, Q)
+!-----------------------------------------------------------------------
+!
+!                  DOUBLE PRECISION COMPUTATION OF
+!                    THE INVERSE ERROR FUNCTION
+!
+!                         ----------------
+!
+!     FOR 0 .LE. P .LE. 1,  W = DERFI(P,Q) WHERE ERF(W) = P. IT
+!     IS ASSUMED THAT Q = 1 - P. IF P .LT. 0, Q .LE. 0, OR P + Q
+!     IS NOT 1, THEN DERFI(P,Q) IS SET TO A NEGATIVE VALUE.
+!
+!-----------------------------------------------------------------------
+!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
+!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!-----------------------------------------------------------------------
+DOUBLE PRECISION P, Q
+DOUBLE PRECISION C, C1, C2, R, EPS, F, LNQ, S, T, X
+DOUBLE PRECISION A(7), A1(7), A2(7), A3(11), A4(9), &
+&B(7), B1(6), B2(6), B3(10), B4(9)
+DOUBLE PRECISION DPMPAR, DERF, DERFC1
+!-----------------------------------------------------------------------
+!     C2 = LN(1.E-100)
+!     R  = SQRT(PI)/2
+!-----------------------------------------------------------------------
+DATA C /.5625D0/, C1 /.87890625D0/
+DATA C2 /-.2302585092994045684017991454684364D+03/
+DATA R   /.8862269254527580136490837416705726D+00/
+!-----------------------
+DATA A(1)/.841467547194693616D-01/, A(2)/.160499904248262200D+01/, &
+&A(3)/.809451641478547505D+01/, A(4)/.164273396973002581D+02/, &
+&A(5)/.154297507839223692D+02/, A(6)/.669584134660994039D+01/, &
+&A(7)/.108455979679682472D+01/
+DATA B(1)/.352281538790042405D-02/, B(2)/.293409069065309557D+00/, &
+&B(3)/.326709873508963100D+01/, B(4)/.123611641257633210D+02/, &
+&B(5)/.207984023857547070D+02/, B(6)/.170791197367677668D+02/, &
+&B(7)/.669253523595376683D+01/
+!-----------------------
+DATA A1(1)/.552755110179178015D+2/, A1(2)/.657347545992519152D+3/, &
+&A1(3)/.124276851197202733D+4/, A1(4)/.818859792456464820D+3/, &
+&A1(5)/.234425632359410093D+3/, A1(6)/.299942187305427917D+2/, &
+&A1(7)/.140496035731853946D+1/
+DATA B1(1)/.179209835890172156D+3/, B1(2)/.991315839349539886D+3/, &
+&B1(3)/.138271033653003487D+4/, B1(4)/.764020340925985926D+3/, &
+&B1(5)/.194354053300991923D+3/, B1(6)/.228139510050586581D+2/
+!-----------------------
+DATA A2(1)/.500926197430588206D+1/, A2(2)/.111349802614499199D+3/, &
+&A2(3)/.353872732756132161D+3/, A2(4)/.356000407341490731D+3/, &
+&A2(5)/.143264457509959760D+3/, A2(6)/.240823237485307567D+2/, &
+&A2(7)/.140496035273226366D+1/
+DATA B2(1)/.209004294324106981D+2/, B2(2)/.198607335199741185D+3/, &
+&B2(3)/.439311287748524270D+3/, B2(4)/.355415991280861051D+3/, &
+&B2(5)/.123303672628828521D+3/, B2(6)/.186060775181898848D+2/
+!-----------------------------------------------------------------------
+!                       MODIFIED TABLE NO.59
+!-----------------------------------------------------------------------
+DATA A3(1) /.237121026548776092D4/, A3(2) /.732899958728969905D6/, &
+&A3(3) /.182063754893444775D7/, A3(4) /.269191299062422172D7/, &
+&A3(5) /.304817224671614253D7/, A3(6) /.130643103351072345D7/, &
+&A3(7) /.296799076241952125D6/, A3(8) /.457006532030955554D5/, &
+&A3(9) /.373449801680687213D4/, A3(10)/.118062255483596543D3/, &
+&A3(11)/.100000329157954960D1/
+DATA B3(1) /.851911109952055378D6/, B3(2) /.194746720192729966D7/, &
+&B3(3) /.373640079258593694D7/, B3(4) /.397271370110424145D7/, &
+&B3(5) /.339457682064283712D7/, B3(6) /.136888294898155938D7/, &
+&B3(7) /.303357770911491406D6/, B3(8) /.459721480357533823D5/, &
+&B3(9) /.373762573565814355D4/, B3(10)/.118064334590001264D3/
+!-----------------------------------------------------------------------
+!                       MODIFIED TABLE NO.82
+!-----------------------------------------------------------------------
+DATA A4(1)/.154269429680540807D12/, A4(2)/.430207405012067454D12/, &
+&A4(3)/.182623446525965017D12/, A4(4)/.248740194409838713D11/, &
+&A4(5)/.133506080294978121D10/, A4(6)/.302446226073105850D08/, &
+&A4(7)/.285909602878724425D06/, A4(8)/.101789226017835707D04/, &
+&A4(9)/.100000004821118676D01/
+DATA B4(1)/.220533001293836387D12/, B4(2)/.347822938010402687D12/, &
+&B4(3)/.468373326975152250D12/, B4(4)/.185251723580351631D12/, &
+&B4(5)/.249464490520921771D11/, B4(6)/.133587491840784926D10/, &
+&B4(7)/.302480682561295591D08/, B4(8)/.285913799407861384D06/, &
+&B4(9)/.101789250893050230D04/
+!-----------------------------------------------------------------------
+IF (P .LT. 0.D0 .OR. Q .LE. 0.D0) GO TO 100
+EPS = DPMPAR(1)
+T = 0.5D0 + (0.5D0 - (P + Q))
+IF (DABS(T) .GT. 3.D0*EPS) GO TO 110
+!
+!                      0 .LE. P .LE. 0.75
+!
+IF (P .GT. 0.75D0) GO TO 10
+X = C - P*P
+S = (((((A(1)*X + A(2))*X + A(3))*X + A(4))*X + A(5))*X &
+&+ A(6))*X + A(7)
+T = ((((((B(1)*X + B(2))*X + B(3))*X + B(4))*X + B(5))*X &
+&+ B(6))*X + B(7))*X + 1.D0
+DERFI = P*(S/T)
+IF (EPS .GT. 1.D-19) RETURN
+!
+X = DERFI
+F = DERF(X) - P
+DERFI = X - R * DEXP(X*X) * F
+RETURN
+!
+!                    0.75 .LT. P .LE. 0.9375
+!
+10 IF (P .GT. 0.9375D0) GO TO 40
+X = C1 - P*P
+IF (X .GT. 0.1D0) GO TO 20
+S = ((((((A1(1)*X + A1(2))*X + A1(3))*X + A1(4))*X &
+&+ A1(5))*X + A1(6))*X + A1(7))
+T = ((((((B1(1)*X + B1(2))*X + B1(3))*X + B1(4))*X &
+&+ B1(5))*X + B1(6))*X + 1.D0)
+GO TO 30
+!
+20 S = ((((((A2(1)*X + A2(2))*X + A2(3))*X + A2(4))*X &
+&+ A2(5))*X + A2(6))*X + A2(7))
+T = ((((((B2(1)*X + B2(2))*X + B2(3))*X + B2(4))*X &
+&+ B2(5))*X + B2(6))*X + 1.D0)
+!
+30 DERFI = P*(S/T)
+IF (EPS .GT. 1.D-19) RETURN
+!
+X = DERFI
+T = DERFC1(1,X) - DEXP(X*X)*Q
+DERFI = X + R * T
+RETURN
+!
+!                  1.E-100 .LE. Q .LT. 0.0625
+!
+40 LNQ = DLOG(Q)
+X = 1.D0/DSQRT(- LNQ)
+IF (LNQ .LT. C2) GO TO 50
+S = (((((((((A3(1)*X + A3(2))*X + A3(3))*X + A3(4))*X + A3(5))*X &
+&+ A3(6))*X + A3(7))*X + A3(8))*X + A3(9))*X &
+&+ A3(10))*X + A3(11)
+T = (((((((((B3(1)*X + B3(2))*X + B3(3))*X + B3(4))*X + B3(5))*X &
+&+ B3(6))*X + B3(7))*X + B3(8))*X + B3(9))*X &
+&+ B3(10))*X + 1.D0
+GO TO 60
+!
+!                 1.E-10000 .LE. Q .LT. 1.E-100
+!
+50 S = (((((((A4(1)*X + A4(2))*X + A4(3))*X + A4(4))*X + A4(5))*X &
+&+ A4(6))*X + A4(7))*X + A4(8))*X + A4(9)
+T = ((((((((B4(1)*X + B4(2))*X + B4(3))*X + B4(4))*X + B4(5))*X &
+&+ B4(6))*X + B4(7))*X + B4(8))*X + B4(9))*X + 1.D0
+!
+60 DERFI = S/(X*T)
+IF (EPS .GT. 5.D-20) RETURN
+!
+X = DERFI
+T = DERFC1(1,X)
+F = (DLOG(T) - LNQ) - X*X
+DERFI = X + R*T*F
+RETURN
+!
+!                         ERROR RETURN
+!
+100 DERFI = -1.D0
+RETURN
+110 DERFI = -2.D0
+RETURN
+END FUNCTION DERFI
+
+REAL function AERF (X, H)
+!-----------------------------------------------------------------------
+!             COMPUTATION OF ERF(X + H) - ERF(X - H)
+!-----------------------------------------------------------------------
+!     C = 2/SQRT(PI)
+!     P = LN(9*SQRT(PI))
+!---------------------
+DATA C /1.12837916709551257/, P /2.76959/
+!---------------------
+!
+!     **** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!          SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+!
+                 EPS = SPMPAR(1)
+!
+!---------------------
+AERF = 0.0
+IF (H .EQ. 0.0) RETURN
+!
+AH = ABS(H)
+AX = ABS(X)
+XPH = AX + AH
+XMH = AX - AH
+!
+T = AMAX1(AH,AX)
+T = T*T
+IF (1.6*T*T .LT. EPS) GO TO 140
+IF ((AX*AH)**2 .LT. 0.5*EPS) GO TO 150
+IF (AX .LE. AH) GO TO 100
+!
+IF (XMH .LT. 9.0) GO TO 5
+   IF (XMH*XMH + P .GT. -EXPARG(1)) RETURN
+5 IF (4.0*AH*AX .GT. -EPSLN(0)) GO TO 120
+!
+IF (AX .GT. 3.0*AH) GO TO 10
+IF (XPH .LT. 1.0) GO TO 110
+GO TO 130
+!-------------------------------------------------
+!        FOR (AX LESS THAN OR EQUAL TO .40)
+!-------------------------------------------------
+10 E = AMAX1(1.E-15,EPS)
+IF (AX .GT. 0.40) GO TO 30
+H2 = XPH*XPH
+A2 = XMH*XMH
+X2 = AX + AX
+ST = 1.
+HF = XMH
+N = 0
+N1 = 1
+DN2 = 1.
+S = 0.
+20 N = N + 1
+  N1 = N1 + 2
+  DN2 = -DN2/N
+  ST = H2*ST + X2*HF
+  HF = A2*HF
+  T = ST*DN2/N1
+  S = S + T
+  IF (ABS(T) .GT. E*ABS(S)) GO TO 20
+S = 0.5 + (S + 0.5)
+AERF = 2.0*C*AH*S
+GO TO 45
+!-------------------------------------------------
+!        FOR (AX GREATER THAN .40)
+!-------------------------------------------------
+30 N = 1
+J = 0
+H2 = 0.
+Z = EXP(-0.5*AX*AX)
+U = 2.0*AH*C*Z
+H3 = Z
+V = 2.0*H*H
+HF = 2.0*AX*AH
+S = 0.
+35 H2 = (HF*H3 - V*H2)/N
+  N = N + 1
+  H3 = (HF*H2 - V*H3)/N
+  N = N + 1
+  HG = H3/N
+  S = S + HG
+  IF (ABS(HG) .GT. E*ABS(S)) GO TO 35
+  IF (J .NE. 0) GO TO 40
+  J = 1
+  GO TO 35
+40 AERF = U*(S + Z)
+45 IF (H .LT. 0.0) AERF = -AERF
+RETURN
+!-------------------------------------------------
+!        SPECIAL CASES
+!-------------------------------------------------
+100 IF (XPH .LT. 5.8) GO TO 110
+IF (XMH .GT. -5.6) GO TO 120
+AERF = SIGN(2.0,H)
+RETURN
+!
+110 AERF = ERF(XPH) - ERF(XMH)
+IF (H .LT. 0.0) AERF = -AERF
+RETURN
+!
+120 AERF = ERFC(XMH)
+IF (H .LT. 0.0) AERF = -AERF
+RETURN
+!
+130 AERF = ERFC(XMH) - ERFC(XPH)
+IF (H .LT. 0.0) AERF = -AERF
+RETURN
+!
+140 AERF = 2.0*C*H*(0.5 + (0.5 - (X*X + H*H/3.0)))
+RETURN
+!
+!     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
+!
+150 T = 2.0
+X2 = X*X
+IF (X2 .GE. EPS) T = 2.0*EXP(-X2)
+IF (H*H .GE. 3.0*EPS) GO TO 160
+   AERF = C*H*T
+   RETURN
+160 AERF = T*ERF(H)
+RETURN
+END FUNCTION AERF
+
+double precision function DAERF (X, H)
+!-----------------------------------------------------------------------
+!             COMPUTATION OF ERF(X + H) - ERF(X - H)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, H
+DOUBLE PRECISION AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, &
+&N, N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
+DOUBLE PRECISION DERF, DERFC, DPMPAR, DEPSLN, DXPARG
+!---------------------
+!     C = 2/SQRT(PI)
+!     P = LN(9*SQRT(PI))
+!---------------------
+DATA C /1.12837916709551257389615890312155D0/
+DATA P /2.76959D0/
+!---------------------
+!
+!     **** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!          SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0 .
+!
+                 EPS = DPMPAR(1)
+!
+!---------------------
+DAERF = 0.D0
+IF (H .EQ. 0.D0) RETURN
+!
+AH = DABS(H)
+AX = DABS(X)
+XPH = AX + AH
+XMH = AX - AH
+!
+T = DMAX1(AH,AX)
+T = T*T
+IF (1.6D0*T*T .LT. EPS) GO TO 140
+IF ((AX*AH)**2 .LT. 0.5D0*EPS) GO TO 150
+IF (AX .LE. AH) GO TO 100
+!
+IF (XMH .LT. 9.D0) GO TO 5
+   IF (XMH*XMH + P .GT. -DXPARG(1)) RETURN
+5 IF (4.D0*AH*AX .GT. -DEPSLN(0)) GO TO 120
+!
+IF (AX .GT. 3.D0*AH) GO TO 10
+IF (XPH .LT. 1.D0) GO TO 110
+GO TO 130
+!-------------------------------------------------
+!        FOR (AX LESS THAN OR EQUAL TO .40)
+!-------------------------------------------------
+10 E = DMAX1(1.D-30,EPS)
+IF (AX .GT. 0.4D0) GO TO 30
+H2 = XPH*XPH
+A2 = XMH*XMH
+X2 = AX + AX
+ST = 1.D0
+HF = XMH
+N = 0.D0
+N1 = 1.D0
+DN2 = 1.D0
+S = 0.D0
+20 N = N + 1.D0
+  N1 = N1 + 2.D0
+  DN2 = -DN2/N
+  ST = H2*ST + X2*HF
+  HF = A2*HF
+  T = ST*DN2/N1
+  S = S + T
+  IF (DABS(T) .GT. E*DABS(S)) GO TO 20
+S = 0.5D0 + (0.5D0 + S)
+DAERF = 2.D0*C*AH*S
+GO TO 45
+!-------------------------------------------------
+!        FOR (AX GREATER THAN .40)
+!-------------------------------------------------
+30 N = 1.D0
+J = 0
+H2 = 0.D0
+Z = DEXP(-0.5D0*AX*AX)
+U = 2.D0*AH*C*Z
+H3 = Z
+V = 2.D0*H*H
+HF = 2.D0*AX*AH
+S = 0.D0
+35 H2 = (HF*H3 - V*H2)/N
+  N = N + 1.D0
+  H3 = (HF*H2 - V*H3)/N
+  N = N + 1.D0
+  HG = H3/N
+  S = S + HG
+  IF (DABS(HG) .GT. E*DABS(S)) GO TO 35
+  IF (J .NE. 0) GO TO 40
+  J = 1
+  GO TO 35
+40 DAERF = U*(S + Z)
+45 IF (H .LT. 0.D0) DAERF = -DAERF
+RETURN
+!-------------------------------------------------
+!        SPECIAL CASES
+!-------------------------------------------------
+100 IF (XPH .LT. 8.5D0) GO TO 110
+IF (XMH .GT. -8.3D0) GO TO 120
+DAERF = DSIGN(2.D0,H)
+RETURN
+!
+110 DAERF = DERF(XPH) - DERF(XMH)
+IF (H .LT. 0.D0) DAERF = -DAERF
+RETURN
+!
+120 DAERF = DERFC(XMH)
+IF (H .LT. 0.D0) DAERF = -DAERF
+RETURN
+!
+130 DAERF = DERFC(XMH) - DERFC(XPH)
+IF (H .LT. 0.D0) DAERF = -DAERF
+RETURN
+!
+140 DAERF = 2.D0*C*H*(0.5D0 + (0.5D0 - (X*X + H*H/3.D0)))
+RETURN
+!
+!     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
+!
+150 T = 2.D0
+X2 = X*X
+IF (X2 .GE. EPS) T = 2.D0*DEXP(-X2)
+IF (H*H .GE. 3.D0*EPS) GO TO 160
+   DAERF = C*H*T
+   RETURN
+160 DAERF = T*DERF(H)
+RETURN
+END FUNCTION DAERF
+
+FUNCTION PNDF(X,IND)
+!     ---------------
+!     A = 1/SQRT(2)
+!     C = SQRT(2/PI)
+!     ---------------
+DATA A/.707106781186548/
+DATA C/.797884560802865/
+!     ---------------
+T = A*X
+IF (IND .NE. 0) GO TO 20
+IF (X .LT. -8.0) GO TO 10
+PNDF = 0.5*ERFC1(0,-T)
+RETURN
+10 PNDF = C/ERFC1(1,-T)
+RETURN
+20 IF (X .GT. 8.0) GO TO 30
+PNDF = 0.5*ERFC1(0,T)
+RETURN
+30 PNDF = C/ERFC1(1,T)
+RETURN
+END FUNCTION PNDF
+
+SUBROUTINE PNI (P, Q, D, W, IERR)
+!-----------------------------------------------------------------------
+!
+!         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
+!
+!                           ------------
+!
+!     LET F(T) = 1/(SQRT(2*PI)*EXP(-T*T/2)). THEN THE FUNCTION
+!
+!        PROB(X) = INTEGRAL FROM MINUS INFINITY TO X OF F(T)
+!
+!     IS THE NORMAL DISTRIBUTION FUNCTION OF ZERO MEAN AND UNIT
+!     VARIANCE. IT IS ASSUMED THAT P .GT. 0, Q .GT. 0, P + Q = 1,
+!     AND D = P - 0.5. THE VALUE W IS COMPUTED WHERE PROB(W) = P.
+!
+!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!
+!       IERR = 0  NO INPUT ERRORS WERE DETECTED. W WAS COMPUTED.
+!       IERR = 1  EITHER P OR Q IS INCORRECT.
+!       IERR = 2  D IS INCORRECT.
+!
+!-----------------------------------------------------------------------
+!     RT2 = SQRT(2)
+!------------------------
+DATA RT2 /1.414213562373095/
+!------------------------
+T = AMIN1(P,Q)
+IF (T .LE. 0.0) GO TO 10
+EPS = AMAX1(SPMPAR(1),1.E-15)
+W = 0.5 + (0.5 - (P + Q))
+IF (ABS(W) .GT. 2.0*EPS) GO TO 10
+!
+U = ABS(D + D)
+V = T + T
+W = ERFI(U, V)
+IF (W .LT. 0.0) GO TO 20
+!
+IERR = 0
+W = RT2*W
+IF (D .LT. 0.0) W = - W
+RETURN
+!
+!                         ERROR RETURN
+!
+10 IERR = 1
+RETURN
+20 IERR = 2
+RETURN
+END SUBROUTINE PNI
+
+SUBROUTINE DPNI (P, Q, D, W, IERR)
+!-----------------------------------------------------------------------
+!
+!         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
+!
+!                           ------------
+!
+!     LET F(T) = 1/(SQRT(2*PI)*EXP(-T*T/2)). THEN THE FUNCTION
+!
+!        PROB(X) = INTEGRAL FROM MINUS INFINITY TO X OF F(T)
+!
+!     IS THE NORMAL DISTRIBUTION FUNCTION OF ZERO MEAN AND UNIT
+!     VARIANCE. IT IS ASSUMED THAT P .GT. 0, Q .GT. 0, P + Q = 1,
+!     AND D = P - 0.5. THE VALUE W IS COMPUTED WHERE PROB(W) = P.
+!
+!     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!
+!       IERR = 0  NO INPUT ERRORS WERE DETECTED. W WAS COMPUTED.
+!       IERR = 1  EITHER P OR Q IS INCORRECT.
+!       IERR = 2  D IS INCORRECT.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION P, Q, D, W
+DOUBLE PRECISION EPS, RT2, U, V, T
+DOUBLE PRECISION DPMPAR, DERFI
+!------------------------
+!     RT2 = SQRT(2)
+!------------------------
+DATA RT2 /1.4142135623730950488016887242097D0/
+!------------------------
+T = DMIN1(P,Q)
+IF (T .LE. 0.D0) GO TO 10
+EPS = DPMPAR(1)
+W = 0.5D0 + (0.5D0 - (P + Q))
+IF (DABS(W) .GT. 2.D0*EPS) GO TO 10
+!
+U = DABS(D + D)
+V = T + T
+W = DERFI(U, V)
+IF (W .LT. 0.D0) GO TO 20
+!
+IERR = 0
+W = RT2*W
+IF (D .LT. 0.D0) W = - W
+RETURN
+!
+!                         ERROR RETURN
+!
+10 IERR = 1
+RETURN
+20 IERR = 2
+RETURN
+END SUBROUTINE DPNI
+
+REAL function DAW(X)
+!-----------------------------------------------------------------------
+!
+!     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
+!     INTEGRAL,
+!
+!        EXP(-X*X) * INTEGRAL (FROM 0 TO X) EXP(T*T) DT,
+!
+!     DEFINED FOR ALL REAL ARGUMENTS.
+!
+!     THE MAIN COMPUTATION INVOLVES EVALUATION OF RATIONAL CHEBYSHEV
+!     APPROXIMATIONS PUBLISHED IN MATH. COMP. 24, 171-178(1970) BY
+!     CODY, PACIOREK AND THACHER.
+!
+!-----------------------------------------------------------------------
+REAL P1(9),Q1(9),P2(8),Q2(7),P3(8),Q3(7),P4(7),Q4(6), &
+&FRAC,SUMP,SUMQ,W2,X,Y,XLARGE,XSMALL
+!---------------
+DATA XLARGE/16777216.0/, XSMALL/.59604644775391E-07/
+!---------------
+!
+!           COEFFICIENTS FOR R(8,8) APPROXIMATION,
+!           USED FOR ABS(X)  .LT.  2.5
+!
+!---------------
+DATA P1(1)/.100000000000000E+01/, P1(2)/-.135599049815353E+00/, &
+&P1(3)/.456738974064825E-01/, P1(4)/-.258323495918050E-02/, &
+&P1(5)/.360079463580992E-03/, P1(6)/-.944375029163387E-05/, &
+&P1(7)/.634674256878843E-06/, P1(8)/-.711645839183817E-08/, &
+&P1(9)/.977985913592343E-10/
+DATA Q1(1)/.100000000000000E+01/, Q1(2)/.531067616851310E+00/, &
+&Q1(3)/.133052308640737E+00/, Q1(4)/.206907491644210E-01/, &
+&Q1(5)/.220437428972266E-02/, Q1(6)/.166706801664365E-03/, &
+&Q1(7)/.887964712053131E-05/, Q1(8)/.311750854173480E-06/, &
+&Q1(9)/.574807177698046E-08/
+!---------------
+!
+!           COEFFICIENTS FOR R(7,7) APPROXIMATION,
+!           IN J-FRACTION FORM, USED FOR
+!           2.5 .LE. ABS(X) .LT. 3.5
+!
+!---------------
+DATA P2(1)/-.150695651187161E+01/, P2(2)/ .293365747395449E+02/, &
+&P2(3)/-.400000893643550E+02/, P2(4)/-.757931918089369E-01/, &
+&P2(5)/-.889106479747812E+01/, P2(6)/ .152644099623699E+02/, &
+&P2(7)/-.597678086823489E+01/, P2(8)/ .500236896088668E+00/
+DATA Q2(1)/-.673106069744813E+00/, Q2(2)/ .124486788262252E+04/, &
+&Q2(3)/ .721193217600229E+01/, Q2(4)/ .112461662024575E+03/, &
+&Q2(5)/ .729177556415532E+02/, Q2(6)/ .115840292551888E+03/, &
+&Q2(7)/ .226064666074309E+00/
+!---------------
+!
+!           COEFFICIENTS FOR R(7,7) APPROXIMATION,
+!           IN J-FRACTION FORM, USED FOR
+!           3.5 .LE. ABS(X) .LE. 5.0
+!
+!---------------
+DATA P3(1)/ .476405645273229E+01/, P3(2)/-.266167674896399E+02/, &
+&P3(3)/-.916804879813552E+01/, P3(4)/-.150507703496692E+02/, &
+&P3(5)/ .506460153742231E+01/, P3(6)/-.498544802986608E+01/, &
+&P3(7)/-.149838042036691E+01/, P3(8)/ .499999902705054E+00/
+DATA Q3(1)/ .287776122973187E+03/, Q3(2)/ .256105722342226E+02/, &
+&Q3(3)/ .751701277744067E+02/, Q3(4)/ .146515167783109E+03/, &
+&Q3(5)/ .330707724676114E+02/, Q3(6)/-.148715811787195E+01/, &
+&Q3(7)/ .250011459611839E+00/
+!---------------
+!
+!           COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!           IN J-FRACTION FORM, USED FOR ABS(X) .GT. 5.0
+!
+!---------------
+DATA P4(1)/-.315576735766984E+02/, P4(2)/-.100791496592972E+02/, &
+&P4(3)/-.710713709224200E+01/, P4(4)/-.596879853243925E+01/, &
+&P4(5)/-.449773645376092E+01/, P4(6)/-.249999965398199E+01/, &
+&P4(7)/ .499999999999330E+00/
+DATA Q4(1)/ .168874162155616E+03/, Q4(2)/ .698280748271071E+01/, &
+&Q4(3)/-.213029621139181E+02/, Q4(4)/-.712157348463305E+01/, &
+&Q4(5)/-.250005973192356E+01/, Q4(6)/ .750000000715687E+00/
+!-----------------------------------------------------------------------
+!
+IF (ABS(X) .GT. XLARGE) GO TO 500
+IF (ABS(X) .LT. XSMALL) GO TO 600
+Y = X * X
+IF (Y .GE. 6.25E0) GO TO 200
+!
+!     ---------- ABS(X) .LT. 2.5 ----------
+!
+SUMP = (((((((P1(9) * Y + P1(8)) * Y + P1(7)) * Y + P1(6)) &
+&* Y + P1(5)) * Y + P1(4)) * Y + P1(3)) * Y + P1(2)) &
+&* Y + P1(1)
+SUMQ = (((((((Q1(9) * Y + Q1(8)) * Y + Q1(7)) * Y + Q1(6)) &
+&* Y + Q1(5)) * Y + Q1(4)) * Y + Q1(3)) * Y + Q1(2)) &
+&* Y + Q1(1)
+DAW = X * SUMP / SUMQ
+GO TO 1000
+!
+!     ---------- 2.5 .LE. ABS(X) .LT. 3.5 ----------
+!
+200 IF (Y .GE. 12.25E0) GO TO 300
+FRAC = 0.0E0
+!
+do 220 I = 1, 7
+220 FRAC = Q2(I) / (P2(I) + Y + FRAC)
+!
+DAW = (P2(8) + FRAC) / X
+GO TO 1000
+!
+!     ---------- 3.5 .LE. ABS(X) .LT. 5.0 ----------
+!
+300 IF (Y .GE. 25.0E0) GO TO 400
+FRAC = 0.0E0
+!
+do 320 I = 1, 7
+320 FRAC = Q3(I) / (P3(I) + Y + FRAC)
+!
+DAW = (P3(8) + FRAC) / X
+GO TO 1000
+!
+!     ---------- 5.0 .LE. ABS(X) .LE. XLARGE ----------
+!
+400 W2 = 1.0E0 / X / X
+FRAC = 0.0E0
+!
+do 420 I = 1, 6
+420 FRAC = Q4(I) / (P4(I) + Y + FRAC)
+!
+FRAC = P4(7) + FRAC
+DAW = (0.5E0 + 0.5E0 * W2 * FRAC) / X
+GO TO 1000
+!
+!     ---------- XLARGE .LT. ABS(X) ----------
+!
+500 DAW = 0.5E0 / X
+GO TO 1000
+!
+!     ---------- RETURN FOR SMALL X ----------
+!
+600 DAW = X
+!
+1000 RETURN
+END FUNCTION DAW
+
+double precision function DPDAW (X)
+!-----------------------------------------------------------------------
+!            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, A(20), B(45), AX, EPS, T, W
+DOUBLE PRECISION DCSEVL, DPDAW0
+!----------------------------
+DATA EPS /1.D-31/
+!----------------------------
+DATA A(1)  /-.6666666666666666666666666666657D+00/, &
+&A(2)  / .2666666666666666666666666665302D+00/, &
+&A(3)  /-.7619047619047619047619046823290D-01/, &
+&A(4)  / .1693121693121693121693097101950D-01/, &
+&A(5)  /-.3078403078403078403073750370528D-02/, &
+&A(6)  / .4736004736004736004148385001356D-03/, &
+&A(7)  /-.6314672981339647953899064401849D-04/, &
+&A(8)  / .7429027036870170692270376716931D-05/, &
+&A(9)  /-.7820028459863171536925638117632D-06/, &
+&A(10) / .7447646152244351276445219666744D-07/
+DATA A(11) /-.6476214045244314289022051868963D-08/, &
+&A(12) / .5180971231894821888421654461823D-09/, &
+&A(13) /-.3837756389504541092817011259727D-10/, &
+&A(14) / .2646727414301012080897585412600D-11/, &
+&A(15) /-.1707553348198261876085879075486D-12/, &
+&A(16) / .1034770025122653524451023758330D-13/, &
+&A(17) /-.5905667147861158816695814259561D-15/, &
+&A(18) / .3157018166820009192834256496230D-16/, &
+&A(19) /-.1501742103181747984387915732309D-17/, &
+&A(20) / .4921379778280206677674574916266D-19/
+!----------------------------
+DATA B(1)  /-.56886544105215527114160533733674D-01/, &
+&B(2)  /-.31811346996168131279322878048822D+00/, &
+&B(3)  / .20873845413642236789741580198858D+00/, &
+&B(4)  /-.12475409913779131214073498314784D+00/, &
+&B(5)  / .67869305186676777092847516423676D-01/, &
+&B(6)  /-.33659144895270939503068230966587D-01/, &
+&B(7)  / .15260781271987971743682460381640D-01/, &
+&B(8)  /-.63483709625962148230586094788535D-02/, &
+&B(9)  / .24326740920748520596865966109343D-02/, &
+&B(10) /-.86219541491065032038526983549637D-03/
+DATA B(11) / .28376573336321625302857636538295D-03/, &
+&B(12) /-.87057549874170423699396581464335D-04/, &
+&B(13) / .24986849985481658331800044137276D-04/, &
+&B(14) /-.67319286764160294344603050339520D-05/, &
+&B(15) / .17078578785573543710504524047844D-05/, &
+&B(16) /-.40917551226475381271896592490038D-06/, &
+&B(17) / .92828292216755773260751785312273D-07/, &
+&B(18) /-.19991403610147617829845096332198D-07/, &
+&B(19) / .40963490644082195241210487868917D-08/, &
+&B(20) /-.80032409540993168075706781753561D-09/
+DATA B(21) / .14938503128761465059143225550110D-09/, &
+&B(22) /-.26687999885622329284924651063339D-10/, &
+&B(23) / .45712216985159458151405617724103D-11/, &
+&B(24) /-.75187305222043565872243727326771D-12/, &
+&B(25) / .11893100052629681879029828987302D-12/, &
+&B(26) /-.18116907933852346973490318263084D-13/, &
+&B(27) / .26611733684358969193001612199626D-14/, &
+&B(28) /-.37738863052129419795444109905930D-15/, &
+&B(29) / .51727953789087172679680082229329D-16/, &
+&B(30) /-.68603684084077500979419564670102D-17/
+DATA B(31) / .88123751354161071806469337321745D-18/, &
+&B(32) /-.10974248249996606292106299624652D-18/, &
+&B(33) / .13261199326367178513595545891635D-19/, &
+&B(34) /-.15562732768137380785488776571562D-20/, &
+&B(35) / .17751425583655720607833415570773D-21/, &
+&B(36) /-.19695006967006578384953608765439D-22/, &
+&B(37) / .21270074896998699661924010120533D-23/, &
+&B(38) /-.22375398124627973794182113962666D-24/, &
+&B(39) / .22942768578582348946971383125333D-25/, &
+&B(40) /-.22943788846552928693329592319999D-26/
+DATA B(41) / .22391702100592453618342297600000D-27/, &
+&B(42) /-.21338230616608897703678225066666D-28/, &
+&B(43) / .19866196585123531518028458666666D-29/, &
+&B(44) /-.18079295866694391771955199999999D-30/, &
+&B(45) / .16090686015283030305450666666666D-31/
+!----------------------------
+AX = DABS(X)
+IF (AX .GE. 4.D0) GO TO 30
+T = X*X
+IF (AX .GT. 1.D0) GO TO 20
+!
+!                       ABS(X) .LE. 1
+!
+DPDAW = X
+IF (T .LT. EPS) RETURN
+!
+W = A(20)
+do 10 I = 1,19
+   K = 20 - I
+   W = T*W + A(K)
+10 CONTINUE
+DPDAW = X * (0.75D0 + (0.25D0 + T*W))
+RETURN
+!
+!                    1 .LT. ABS(X) .LT. 4
+!
+20 DPDAW = X * (.25D0 + DCSEVL(.125D0*T - 1.D0, B, 45))
+RETURN
+!
+!                       ABS(X) .GE. 4
+!
+30 DPDAW = DPDAW0(AX)/X
+RETURN
+END FUNCTION DPDAW
+
+double precision function DPDAW0 (X)
+!-----------------------------------------------------------------------
+!
+!                EVALUATION OF X*DAW(X) FOR X .GE. 4
+!                WHERE DAW(X) IS THE DAWSON INTEGRAL
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, T, U, V, W
+DOUBLE PRECISION A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
+&A11, A12, A13, A14, A15, A16, A17, A18, &
+&B1, B2, B3, B4
+DOUBLE PRECISION C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, &
+&C11, C12, C13, C14, &
+&D1, D2, D3, D4, D5, D6, D7, D8
+DOUBLE PRECISION E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, &
+&F1, F2, F3, F4, F5, F6, F7, F8, F9, F10
+DOUBLE PRECISION G0, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, &
+&G11, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10
+DOUBLE PRECISION S0, S1, S2, S3, S4, S5
+DOUBLE PRECISION P0, P1, P2, P3, P4, P5, Q1, Q2, Q3, Q4, Q5
+!----------------------------
+DATA A0  / .59682223611279114961181337D-06/, &
+&A1  / .17685355947137064277328544D-05/, &
+&A2  / .46539151619719879425847199D-05/, &
+&A3  / .60206549750426063518629015D-05/, &
+&A4  / .71968323029042065431569341D-05/, &
+&A5  / .30632314265730271259576310D-05/, &
+&A6  / .58023977792358623878717970D-06/, &
+&A7  /-.79009104459686847104040749D-06/, &
+&A8  /-.48136647436848802449955585D-06/, &
+&A9  / .15516701696125663593787151D-05/
+DATA A10 / .41907470564012404920368069D-05/, &
+&A11 / .58027971313506864533128271D-05/, &
+&A12 / .55370618938769991926278955D-05/, &
+&A13 / .38921890500515083447099834D-05/, &
+&A14 / .20373391058442140223632125D-05/, &
+&A15 / .77894504402267231707108862D-06/, &
+&A16 / .20671717275442647450228015D-06/, &
+&A17 / .34163346266402336952767687D-07/, &
+&A18 / .26550833614486808486653527D-08/
+!----------------------------
+DATA B1  / .24655153970246619491575782D+01/, &
+&B2  / .62943144539382480033771054D+01/, &
+&B3  / .62122304537339562619049238D+01/, &
+&B4  / .72256247680648550388609993D+01/
+!----------------------------
+DATA C0  / .59682220964671964619429990D-06/, &
+&C1  / .15714896176335781761895194D-05/, &
+&C2  / .38969553030269966874001463D-05/, &
+&C3  / .52383725295173020317044495D-05/, &
+&C4  / .68105053752194312932660379D-05/, &
+&C5  / .54424292166005622934118953D-05/, &
+&C6  / .42426204827598626398351706D-05/, &
+&C7  / .16034175582037599078896885D-05/, &
+&C8  / .40869743822567069272296881D-06/, &
+&C9  /-.28877279517645392833652391D-06/
+DATA C10 /-.23330912423546272053845073D-06/, &
+&C11 /-.52391219684126122047201575D-07/, &
+&C12 / .21002079856304960793765863D-07/, &
+&C13 / .15999459808634652894884878D-07/, &
+&C14 / .30942877932880022278704223D-08/
+!----------------------------
+DATA D1  / .21353586303464124681525146D+01/, &
+&D2  / .51903635881846225790635588D+01/, &
+&D3  / .55426108503039000945912263D+01/, &
+&D4  / .72404445472735688881512590D+01/, &
+&D5  / .42043425514299588216548098D+01/, &
+&D6  / .39555198251457455938284071D+01/, &
+&D7  / .96558431899415447517392039D+00/, &
+&D8  / .85802563214754700974536646D+00/
+!----------------------------
+DATA E0  / .59682220964671964619429989D-06/, &
+&E1  / .84093250039847132132545694D-06/, &
+&E2  / .21215362314612857942015465D-05/, &
+&E3  / .17544801458346344458699925D-05/, &
+&E4  / .23300467572238537581015267D-05/, &
+&E5  / .10789302963153438789721000D-05/, &
+&E6  / .84593690165753140097573765D-06/, &
+&E7  / .58921927492401852305814815D-07/, &
+&E8  / .88699252882391671775568852D-08/, &
+&E9  /-.45367333700483839577191791D-07/
+DATA E10 /-.57476692572774473717756092D-08/
+!----------------------------
+DATA F1  / .91128032791938035312580060D+00/, &
+&F2  / .28248447610354665352098820D+01/, &
+&F3  / .12208226691968579661669930D+01/, &
+&F4  / .26127044898109340807106578D+01/, &
+&F5  / .34850941500747816686718301D+00/, &
+&F6  / .11058424028893031129155960D+01/, &
+&F7  /-.58583432304677947215235382D-01/, &
+&F8  / .22235753204903993496120223D+00/, &
+&F9  /-.22116625272550591073419658D-01/, &
+&F10 / .14938281115881437851795141D-01/
+!----------------------------
+DATA G0  / .59682220962853689178993039D-06/, &
+&G1  / .10399202637216492921747166D-05/, &
+&G2  / .20011159669496258291170369D-05/, &
+&G3  / .19689301951834731308289277D-05/, &
+&G4  / .18861506874082130108404839D-05/, &
+&G5  / .10403672611266773427898830D-05/, &
+&G6  / .42700287233074049241986613D-06/, &
+&G7  /-.16199303908856237550380048D-07/, &
+&G8  /-.73900110466591484816182863D-07/, &
+&G9  /-.21369058482679700785965255D-07/
+DATA G10 / .42853587024761116737793072D-08/, &
+&G11 /-.27226352610679391576406666D-09/
+!----------------------------
+DATA H1  / .12446924554654251972427023D+01/, &
+&H2  / .24571243397858142676189669D+01/, &
+&H3  / .16710488988253927773151334D+01/, &
+&H4  / .17260859791081983044753913D+01/, &
+&H5  / .67406536368694046314885196D+00/, &
+&H6  / .47403526893401885333000527D+00/, &
+&H7  / .96251479080923959509108658D-01/, &
+&H8  / .53334517885765587426678624D-01/, &
+&H9  / .39450307003297031975491216D-02/, &
+&H10 / .20209221166462656808887976D-02/
+!----------------------------
+DATA S0  / .8210986449041747719684610504710D-02/, &
+&S1  / .8646073144815053170065230898334D-02/, &
+&S2  / .4768322737615973285410030924398D-03/, &
+&S3  / .4792593707378225992657970685396D-04/, &
+&S4  / .7507677744363576693833551190204D-05/, &
+&S5  / .1737929446861228512373840727547D-05/
+!----------------------------
+DATA P0 / .29531250000000000000002D+02/, &
+&P1 /-.14571781607273299440392D+04/, &
+&P2 / .24285318385898860175073D+05/, &
+&P3 /-.15843555052114168113822D+06/, &
+&P4 / .32969397422638395586636D+06/, &
+&P5 /-.55331506994311967089636D+04/
+DATA Q1 /-.54843599093412230906873D+02/, &
+&Q2 / .10882497826844164906477D+04/, &
+&Q3 /-.96578534881552358457185D+04/, &
+&Q4 / .37803382357862589384458D+05/, &
+&Q5 /-.51283783372259864777146D+05/
+!----------------------------
+IF (X .GE. 12.D0) GO TO 50
+T = (32.D0/(X*X) - 0.5D0) - 0.5D0
+IF (T .GE. 0.D0) GO TO 20
+!
+!                    -7/9 .LE. T .LE. -0.4
+!
+IF (T .GT. -0.4D0) GO TO 10
+U = ((((((((A18*T + A17)*T + A16)*T + A15)*T + A14)*T + &
+&A13)*T + A12)*T + A11)*T + A10)*T + A9
+U = ((((((((U*T + A8)*T + A7)*T + A6)*T + A5)*T + &
+&A4)*T + A3)*T + A2)*T + A1)*T + A0
+V = (((B4*T + B3)*T + B2)*T + B1)*T + 1.D0
+GO TO 40
+!
+!                     -0.4 .LT. T .LT. 0
+!
+10 U = ((((((((C14*T + C13)*T + C12)*T + C11)*T + C10)*T + &
+&C9)*T + C8)*T + C7)*T + C6)*T + C5
+U = ((((U*T + C4)*T + C3)*T + C2)*T + C1)*T + C0
+V = (((((((D8*T + D7)*T + D6)*T + D5)*T + D4)*T + &
+&D3)*T + D2)*T + D1)*T + 1.D0
+GO TO 40
+!
+!                      0 .LE. T .LE. 0.4
+!
+20 IF (T .GT. 0.4D0) GO TO 30
+U = (((((((((E10*T + E9)*T + E8)*T + E7)*T + E6)*T + &
+&E5)*T + E4)*T + E3)*T + E2)*T + E1)*T + E0
+V = (((((((((F10*T + F9)*T + F8)*T + F7)*T + F6)*T + &
+&F5)*T + F4)*T + F3)*T + F2)*T + F1)*T + 1.D0
+GO TO 40
+!
+!                      0.4 .LT. T .LE. 1
+!
+30 U = ((((((((G11*T + G10)*T + G9)*T + G8)*T + G7)*T + &
+&G6)*T + G5)*T + G4)*T + G3)*T + G2
+U = (U*T + G1)*T + G0
+V = (((((((((H10*T + H9)*T + H8)*T + H7)*T + H6)*T + &
+&H5)*T + H4)*T + H3)*T + H2)*T + H1)*T + 1.D0
+!
+!          THE ABOVE FOUR MINIMAX APPROXIMATIONS U/V
+!          ARE ACCURATE TO WITHIN 1 UNIT OF THE 25-TH
+!          SIGNIFICANT DIGIT. THUS, THE APPROXIMATION
+!          FOR W IS ACCURATE TO WITHIN 1 UNIT OF THE
+!          29-TH SIGNIFICANT DIGIT.
+!
+40 W = ((((((U/V)*T + S5)*T + S4)*T + S3)*T + S2)*T + &
+&S1)*T + S0
+DPDAW0 = 0.5D0 + W
+RETURN
+!
+!                          X .GE. 12
+!
+50 T = (1.D0/X)**2
+W = (((((P5*T + P4)*T + P3)*T + P2)*T + P1)*T + P0)/ &
+&(((((Q5*T + Q4)*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
+W = ((((W*T + 6.5625D0)*T + 1.875D0)*T + 0.75D0)*T + &
+&0.5D0)*T + 1.D0
+DPDAW0 = 0.5D0*W
+RETURN
+END FUNCTION DPDAW0
+
+SUBROUTINE CFRNLI (MO, Z, W)
+!-----------------------------------------------------------------------
+!
+!            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
+!
+!                           ----------------
+!
+!                      W = E(Z)          IF MO = 0
+!                      W = EXP(-Z)*E(Z)  OTHERWISE
+!
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
+!------------------------
+!     C = 1/SQRT(PI)
+!     C0 = -1/SQRT(2)
+!------------------------
+DATA C  / .564189583547756/
+DATA C0 /-.707106781186548/
+!------------------------
+DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
+&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
+&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
+&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
+&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
+&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
+&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
+&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
+&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
+DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
+&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
+&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
+&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
+&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
+&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
+&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
+&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
+&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+!------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+R = CPABS(X, Y)
+IF (R .EQ. 0.0) GO TO 200
+!
+!              EVALUATION OF ZR = SQRT(2*Z/PI)
+!
+IF (X .GE. 0.0) GO TO 10
+   ZR(2) = SQRT(R - X)
+   ZR(1) = Y/ZR(2)
+   GO TO 11
+10 ZR(1) = SQRT(R + X)
+IF (Y .LT. 0.0) ZR(1) = -ZR(1)
+ZR(2) = Y/ZR(1)
+11 ZR(1) = C*ZR(1)
+ZR(2) = C*ZR(2)
+!
+IF (R .LE. 1.0) GO TO 20
+IF (R .GE. 38.0) GO TO 60
+IF (X .LT. 0.016*Y*Y) GO TO 50
+!
+!                       TAYLOR SERIES
+!
+20 SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = ZR(1)
+TM(2) = ZR(2)
+PM = 0.0
+30 PM = PM + 1.0
+   DM = 2.0*PM + 1.0
+   TS(1) = TM(1)*X - TM(2)*Y
+   TS(2) = TM(1)*Y + TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   TS(1) = TM(1)/DM
+   TS(2) = TM(2)/DM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
+31 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 30
+40 SM(1) = ZR(1) + SM(1)
+SM(2) = (C0 + ZR(2)) + SM(2)
+!
+IF (MO .EQ. 0) GO TO 120
+QM = EXP(-X)
+QF(1) = QM*COS(-Y)
+QF(2) = QM*SIN(-Y)
+GO TO 110
+!
+!              RATIONAL FUNCTION APPROXIMATION
+!
+50 SM(1) = 0.0
+SM(2) = 0.0
+do 51 I = 1,18
+   TS(1) = X - CD(I)
+   TS(2) = Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  CE(I)*TS(1)/SS
+   TM(2) = -CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+51 CONTINUE
+TS(1) = ZR(1)*SM(1) - ZR(2)*SM(2)
+TS(2) = ZR(1)*SM(2) + ZR(2)*SM(1)
+SM(1) = 0.5*TS(1)
+SM(2) = 0.5*TS(2)
+GO TO 100
+!
+!                   ASYMPTOTIC EXPANSION
+!
+60 QF(1) = (X/R)/R
+QF(2) = -(Y/R)/R
+TM(1) = QF(1)
+TM(2) = QF(2)
+SM(1) = TM(1)
+SM(2) = TM(2)
+PM = -0.5
+70 PM = PM + 1.0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = PM*TS(1)
+   TM(2) = PM*TS(2)
+   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+   IF (PM .LT. 25.5) GO TO 70
+80 TS(1) = ZR(1)*SM(1) - ZR(2)*SM(2)
+TS(2) = ZR(1)*SM(2) + ZR(2)*SM(1)
+SM(1) = 0.5*TS(1)
+SM(2) = 0.5*TS(2)
+IF (ZR(2) .LT. 8.E-3) GO TO 210
+!
+!                       TERMINATION
+!
+100 IF (MO .NE. 0) GO TO 120
+QM = EXP(X)
+QF(1) = QM*COS(Y)
+QF(2) = QM*SIN(Y)
+!
+110 TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+!
+120 W = CMPLX(SM(1),SM(2))
+RETURN
+!
+!                      CASE WHEN Z = 0
+!
+200 W = CMPLX(0.0,C0)
+RETURN
+!
+!               MODIFIED ASYMPTOTIC EXPANSION
+!
+210 IF (MO .NE. 0) GO TO 220
+QM = EXP(X)
+QF(1) = QM*COS(Y)
+QF(2) = QM*SIN(Y)
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+W = CMPLX(TS(1), C0 + TS(2))
+RETURN
+!
+220 IF (-X .LE. EXPARG(1)) GO TO 120
+QM = C0*EXP(-X)
+SM(1) = SM(1) + QM*SIN(Y)
+SM(2) = SM(2) + QM*COS(Y)
+W = CMPLX(SM(1),SM(2))
+RETURN
+END SUBROUTINE CFRNLI
+
+SUBROUTINE FRNL (T, C, S)
+!-----------------------------------------------------------------------
+!             EVALUATION OF THE REAL FRESNEL INTEGRALS
+!-----------------------------------------------------------------------
+REAL N
+REAL A(6),B(6),CP(13),SP(13)
+REAL PN(6),PD(6),QN(6),QD(6)
+REAL AN(6),AD(6),BN(6),BD(6)
+REAL CN(5),CD(5),DN(5),DD(5)
+REAL FP(7),GP(7),P(6),Q(6)
+!--------------------------
+DATA PI/3.1415926535898/
+!--------------------------
+DATA A(1)/-.119278241233760E-05/,  A(2)/.540730666359417E-04/, &
+&A(3)/-.160488306381990E-02/,  A(4)/.281855008757077E-01/, &
+&A(5)/-.246740110027210E+00/,  A(6)/.100000000000000E+01/
+DATA B(1)/-.155653074871090E-06/,  B(2)/.844415353045065E-05/, &
+&B(3)/-.312116934326082E-03/,  B(4)/.724478420395276E-02/, &
+&B(5)/-.922805853580325E-01/,  B(6)/.523598775598300E+00/
+!--------------------------
+DATA CP(1) /.114739945188034E-20/,  CP(2) /-.384444827287950E-18/, &
+&CP(3) /.832125729394275E-16/,  CP(4) /-.142979507360076E-13/, &
+&CP(5) /.198954961821465E-11/,  CP(6) /-.220226545457144E-09/, &
+&CP(7) /.188434924092257E-07/,  CP(8) /-.120009722914157E-05/, &
+&CP(9) /.540741337442140E-04/,  CP(10)/-.160488313553028E-02/, &
+&CP(11)/.281855008777956E-01/,  CP(12)/-.246740110027196E+00/, &
+&CP(13)/.999999999999996E+00/
+DATA SP(1) /.705700784853927E-22/,  SP(2) /-.252757991492418E-19/, &
+&SP(3) /.594117488940008E-17/,  SP(4) /-.112161631555448E-14/, &
+&SP(5) /.173332189994074E-12/,  SP(6) /-.215742302078015E-10/, &
+&SP(7) /.210821173208116E-08/,  SP(8) /-.156471443116560E-06/, &
+&SP(9) /.844427287845253E-05/,  SP(10)/-.312116942346186E-03/, &
+&SP(11)/.724478420418951E-02/,  SP(12)/-.922805853580323E-01/, &
+&SP(13)/.523598775598300E+00/
+!--------------------------
+DATA PN(1)/.318309816100920E+00/,  PN(2)/.134919391391516E+02/, &
+&PN(3)/.158258097490377E+03/,  PN(4)/.598796451682535E+03/, &
+&PN(5)/.632369782194966E+03/,  PN(6)/.967985390141920E+02/
+DATA PD(1)/.100000000000000E+01/,  PD(2)/.426900960480796E+02/, &
+&PD(3)/.509085485682426E+03/,  PD(4)/.200034664144742E+04/, &
+&PD(5)/.231910140792937E+04/,  PD(6)/.486678558201084E+03/
+DATA QN(1)/.101320876178478E+00/,  QN(2)/.490534697099052E+01/, &
+&QN(3)/.652095157811808E+02/,  QN(4)/.274183825747887E+03/, &
+&QN(5)/.305040725009211E+03/,  QN(6)/.364566615872326E+02/
+DATA QD(1)/.100000000000000E+01/,  QD(2)/.499330024470621E+02/, &
+&QD(3)/.709854097670206E+03/,  QD(4)/.343470762861172E+04/, &
+&QD(5)/.522213879312684E+04/,  QD(6)/.168801831831851E+04/
+!--------------------------
+DATA AN(1)/.318309885869756E+00/,  AN(2)/.254179177393500E+02/, &
+&AN(3)/.575003792540838E+03/,  AN(4)/.426673405867140E+04/, &
+&AN(5)/.891831887923938E+04/,  AN(6)/.267955736537967E+04/
+DATA AD(1)/.100000000000000E+01/,  AD(2)/.801567066285184E+02/, &
+&AD(3)/.182971463354850E+04/,  AD(4)/.138848884373420E+05/, &
+&AD(5)/.309228411873207E+05/,  AD(6)/.120421274105856E+05/
+DATA BN(1)/.101321181932417E+00/,  BN(2)/.925021984290547E+01/, &
+&BN(3)/.240932023056602E+03/,  BN(4)/.206079616836437E+04/, &
+&BN(5)/.484901973010149E+04/,  BN(6)/.130680669688315E+04/
+DATA BD(1)/.100000000000000E+01/,  BD(2)/.928158182389149E+02/, &
+&BD(3)/.250926840439955E+04/,  BD(4)/.233924458152954E+05/, &
+&BD(5)/.685638896406835E+05/,  BD(6)/.418593101455019E+05/
+!--------------------------
+DATA CN(1)/.318309886182000E+00/,  CN(2)/.299191968327887E+02/, &
+&CN(3)/.691428839605668E+03/,  CN(4)/.394539800974744E+04/, &
+&CN(5)/.290314254767015E+04/
+DATA CD(1)/.100000000000000E+01/,  CD(2)/.942978925136851E+02/, &
+&CD(3)/.219977296283666E+04/,  CD(4)/.129726479671006E+05/, &
+&CD(5)/.114991427758165E+05/
+DATA DN(1)/.101321183630876E+00/,  DN(2)/.110988033615242E+02/, &
+&DN(3)/.306282306497228E+03/,  DN(4)/.213130259794164E+04/, &
+&DN(5)/.171270676541694E+04/
+DATA DD(1)/.100000000000000E+01/,  DD(2)/.111060616085627E+03/, &
+&DD(3)/.318197586347414E+04/,  DD(4)/.249342095714049E+05/, &
+&DD(5)/.359241903823488E+05/
+!--------------------------
+DATA FP(1)/.449763389301234E+05/,  FP(2)/-.188763642051836E+04/, &
+&FP(3)/.669261097103246E+02/,  FP(4)/-.343966606879114E+01/, &
+&FP(5)/.343112896133346E+00/,  FP(6)/-.967546019461500E-01/, &
+&FP(7)/.318309886183465E+00/
+DATA GP(1)/.316642183365360E+06/,  GP(2)/-.120618995106638E+05/, &
+&GP(3)/.359164749179351E+03/,  GP(4)/-.142252603258172E+02/, &
+&GP(5)/.982934118445454E+00/,  GP(6)/-.153989722912325E+00/, &
+&GP(7)/.101321183639714E+00/
+!--------------------------
+DATA P(1)/-654729075.0/,  P(2)/2027025.0/,  P(3)/-10395.0/, &
+&P(4)/105.0/,  P(5)/-3.0/,  P(6)/1.0/
+DATA Q(1)/-13749310575.0/,  Q(2)/34459425.0/,  Q(3)/-135135.0/, &
+&Q(4)/945.0/,  Q(5)/-15.0/,  Q(6)/1.0/
+!--------------------------
+!
+!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!            LARGEST POSITIVE INTEGER THAT MAY BE USED.
+!
+               MAX = IPMPAR(3)
+!
+!-----------------------------------------------------------------------
+X = ABS(T)
+IF (X .GT. 4.0) GO TO 50
+XX = X*X
+Y = XX*XX
+!-----------------------------------------------------------------------
+!             EVALUATION OF C(X) AND S(X) FOR X .LT. 1.65
+!                          WHERE X = ABS(T)
+!-----------------------------------------------------------------------
+IF (X .GT. 0.6) GO TO 10
+C = ((((A(1)*Y + A(2))*Y + A(3))*Y + A(4))*Y + A(5))*Y + A(6)
+S = ((((B(1)*Y + B(2))*Y + B(3))*Y + B(4))*Y + B(5))*Y + B(6)
+C = T*C
+S = T*XX*S
+RETURN
+!
+10 IF (X .GE. 1.65) GO TO 20
+C = CP(1)
+S = SP(1)
+do 11 I = 2,13
+   C = CP(I) + C*Y
+11 S = SP(I) + S*Y
+C = T*C
+S = T*XX*S
+RETURN
+!-----------------------------------------------------------------------
+!          EVALUATION OF THE AUXILIARY FUNCTIONS F(X) AND G(X)
+!                        FOR X .GE. 1.65
+!-----------------------------------------------------------------------
+20 IF (X .GE. 2.0) GO TO 30
+FN = ((((PN(1)*Y + PN(2))*Y + PN(3))*Y + PN(4))*Y + PN(5))*Y &
+&+ PN(6)
+FD = ((((PD(1)*Y + PD(2))*Y + PD(3))*Y + PD(4))*Y + PD(5))*Y &
+&+ PD(6)
+GN = ((((QN(1)*Y + QN(2))*Y + QN(3))*Y + QN(4))*Y + QN(5))*Y &
+&+ QN(6)
+GD = ((((QD(1)*Y + QD(2))*Y + QD(3))*Y + QD(4))*Y + QD(5))*Y &
+&+ QD(6)
+F = FN/(X*FD)
+G = GN/(X*XX*GD)
+Y = 0.5*XX
+GO TO 80
+!
+30 IF (X .GE. 3.0) GO TO 40
+FN = ((((AN(1)*Y + AN(2))*Y + AN(3))*Y + AN(4))*Y + AN(5))*Y &
+&+ AN(6)
+FD = ((((AD(1)*Y + AD(2))*Y + AD(3))*Y + AD(4))*Y + AD(5))*Y &
+&+ AD(6)
+GN = ((((BN(1)*Y + BN(2))*Y + BN(3))*Y + BN(4))*Y + BN(5))*Y &
+&+ BN(6)
+GD = ((((BD(1)*Y + BD(2))*Y + BD(3))*Y + BD(4))*Y + BD(5))*Y &
+&+ BD(6)
+F = FN/(X*FD)
+G = GN/(X*XX*GD)
+GO TO 70
+!
+40 FN = (((CN(1)*Y + CN(2))*Y + CN(3))*Y + CN(4))*Y + CN(5)
+FD = (((CD(1)*Y + CD(2))*Y + CD(3))*Y + CD(4))*Y + CD(5)
+GN = (((DN(1)*Y + DN(2))*Y + DN(3))*Y + DN(4))*Y + DN(5)
+GD = (((DD(1)*Y + DD(2))*Y + DD(3))*Y + DD(4))*Y + DD(5)
+F = FN/(X*FD)
+G = GN/(X*XX*GD)
+GO TO 70
+!
+50 IF (X .GE. 6.0) GO TO 60
+XX = X*X
+Y = 1.0/(XX*XX)
+F = (((((FP(1)*Y + FP(2))*Y + FP(3))*Y + FP(4))*Y + FP(5))*Y &
+&+ FP(6))*Y + FP(7)
+G = (((((GP(1)*Y + GP(2))*Y + GP(3))*Y + GP(4))*Y + GP(5))*Y &
+&+ GP(6))*Y + GP(7)
+F = F/X
+G = G/(X*XX)
+GO TO 70
+!
+60 IF (X .GE. FLOAT(MAX)) GO TO 100
+PIX = PI*X
+PIXX = PIX*X
+Y = 1.0/PIXX
+Y = Y*Y
+F = ((((P(1)*Y + P(2))*Y + P(3))*Y + P(4))*Y + P(5))*Y + P(6)
+G = ((((Q(1)*Y + Q(2))*Y + Q(3))*Y + Q(4))*Y + Q(5))*Y + Q(6)
+F = F/PIX
+G = G/(PIX*PIXX)
+!-----------------------------------------------------------------------
+!           EVALUATION OF SIN(0.5*PI*X*X) AND COS(0.5*PI*X*X)
+!                 THE RESULTS ARE STORED IN SY AND CY
+!-----------------------------------------------------------------------
+70 M = X
+L = MOD(M,2)
+N = M - L
+Y = X - M
+R = X - N
+!
+Y = Y*N
+M = Y
+Y = Y - M
+IF (MOD(M,2) .NE. 0) Y = (Y - 0.5) - 0.5
+Y = Y + 0.5*R*R
+!
+80 SY = SIN1(Y)
+CY = COS1(Y)
+!-----------------------------------------------------------------------
+!                             TERMINATION
+!-----------------------------------------------------------------------
+90 C = 0.5 + (F*SY - G*CY)
+S = 0.5 - (F*CY + G*SY)
+IF (T .GE. 0.0) RETURN
+   C = - C
+   S = - S
+   RETURN
+!
+100 IF (T .LT. 0.0) GO TO 110
+   C = 0.5
+   S = 0.5
+   RETURN
+110 C = -0.5
+S = -0.5
+RETURN
+END SUBROUTINE FRNL
+
+SUBROUTINE CEXPLI (MO, Z, W)
+!-----------------------------------------------------------------------
+!           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL N, NP1
+REAL CD(18), CE(18)
+REAL QF(2), SM(2), TM(2), TS(2)
+REAL G0(2), GN(2), H0(2), HN(2), WN(2)
+LOGICAL IND
+!-------------------------
+ANORM(X,Y) = AMAX1(ABS(X),ABS(Y))
+!-------------------------
+DATA PI /3.14159265358979/
+DATA EULER /.577215664901533/
+!-------------------------
+DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.311105957086528E-01/, &
+&CD(3)  /.103661260539112E+00/, CD(4)  /.216532335244554E+00/, &
+&CD(5)  /.369931427960192E+00/, CD(6)  /.566766259990589E+00/, &
+&CD(7)  /.814042066324748E+00/, CD(8)  /.112384247540813E+01/, &
+&CD(9)  /.151400478148512E+01/, CD(10) /.200886795032284E+01/, &
+&CD(11) /.264052411823592E+01/, CD(12) /.345098449933392E+01/, &
+&CD(13) /.449583360763202E+01/, CD(14) /.585058263409822E+01/, &
+&CD(15) /.762273501463380E+01/, CD(16) /.997814501584578E+01/, &
+&CD(17) /.132122064896408E+02/, CD(18) /.180322948376021E+02/
+DATA CE(1)  /.850156516121093E-02/, CE(2)  /.505037465849058E-01/, &
+&CE(3)  /.836817368956407E-01/, CE(4)  /.107047582417607E+00/, &
+&CE(5)  /.120424719029462E+00/, CE(6)  /.125096631582229E+00/, &
+&CE(7)  /.122314435224685E+00/, CE(8)  /.112621417553907E+00/, &
+&CE(9)  /.963419407392582E-01/, CE(10) /.747398422757511E-01/, &
+&CE(11) /.508596135953441E-01/, CE(12) /.290822706773628E-01/, &
+&CE(13) /.132201640530101E-01/, CE(14) /.443802939829067E-02/, &
+&CE(15) /.992612478987576E-03/, CE(16) /.126579795112011E-03/, &
+&CE(17) /.702150908253350E-05/, CE(18) /.910281532564632E-07/
+!-------------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!
+                EPS = SPMPAR(1)
+!
+!-------------------------
+!
+X = REAL(Z)
+Y = AIMAG(Z)
+R = CPABS(X,Y)
+EPS = AMAX1(EPS,1.E-15)
+!
+IF (R .LE. 1.0) GO TO 20
+IF (R .GE. 40.0) GO TO 60
+IF (R .LT. 4.0) GO TO 10
+   IF (X .LE. 0.0 .OR. ABS(Y) .GT. 8.0) GO TO 60
+   IF (R .LT. 10.0 .AND. ABS(Y) .GT. 1.8*X) GO TO 60
+   GO TO 20
+10 IF (X .LT. 0.09*Y*Y) GO TO 50
+IF (R .GT. 3.6 .AND. ABS(Y) .GT. 1.8*X) GO TO 60
+!
+!                        TAYLOR SERIES
+!
+20 SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = X
+TM(2) = Y
+N = 1.0
+30 N = N + 1.0
+   TS(1) = TM(1)*X - TM(2)*Y
+   TS(2) = TM(1)*Y + TM(2)*X
+   TM(1) = TS(1)/N
+   TM(2) = TS(2)/N
+   TS(1) = TM(1)/N
+   TS(2) = TM(2)/N
+   SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (ANORM(TS(1),TS(2)) .GT. EPS*ANORM(SM(1),SM(2))) &
+&GO TO 30
+SM(1) = X + SM(1)
+SM(2) = Y + SM(2)
+!
+SM(1) = (EULER + ALOG(R)) + SM(1)
+SM(2) = ATAN2(-Y, -X) + SM(2)
+GO TO 110
+!
+!                      RATIONAL EXPANSION
+!
+50 SM(1) = 0.0
+SM(2) = 0.0
+do 51 I = 1,18
+   TS(1) = X - CD(I)
+   TS(2) = Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   SM(1) = SM(1) + CE(I)*TS(1)/SS
+   SM(2) = SM(2) - CE(I)*TS(2)/SS
+51 CONTINUE
+GO TO 100
+!
+!         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
+!                       FOR EXP(-Z)*EI(Z)
+!
+60 X = - X
+Y = - Y
+D = 4.0*R
+IF (R .LT. 10.0) D = 32.0
+G0(1) = 1.0
+G0(2) = 0.0
+GN(1) = (1.0 + X)/D
+GN(2) = Y/D
+H0(1) = 1.0
+H0(2) = 0.0
+U = X + 2.0
+HN(1) = U/D
+HN(2) = GN(2)
+W = CMPLX(1.0 + X, Y)/CMPLX(U,Y)
+WN(1) = REAL(W)
+WN(2) = AIMAG(W)
+NP1 = 1.0
+TOL = 4.0*EPS
+!
+70 N = NP1
+   NP1 = N + 1.0
+   E = (N*NP1)/D
+   U = U + 2.0
+   TM(1) = ((U*GN(1) - Y*GN(2)) - E*G0(1))/D
+   TM(2) = ((U*GN(2) + Y*GN(1)) - E*G0(2))/D
+   G0(1) = GN(1)
+   G0(2) = GN(2)
+   GN(1) = TM(1)
+   GN(2) = TM(2)
+   TM(1) = ((U*HN(1) - Y*HN(2)) - E*H0(1))/D
+   TM(2) = ((U*HN(2) + Y*HN(1)) - E*H0(2))/D
+   H0(1) = HN(1)
+   H0(2) = HN(2)
+   HN(1) = TM(1)
+   HN(2) = TM(2)
+!
+   TM(1) = WN(1)
+   TM(2) = WN(2)
+   W = CMPLX(GN(1),GN(2))/CMPLX(HN(1),HN(2))
+   WN(1) = REAL(W)
+   WN(2) = AIMAG(W)
+   IF (ANORM(TM(1) - WN(1), TM(2) - WN(2)) .GT. &
+&TOL*ANORM(WN(1), WN(2))) GO TO 70
+!
+X = REAL(Z)
+Y = AIMAG(Z)
+W = W/Z
+SM(1) = REAL(W)
+SM(2) = AIMAG(W)
+!
+!                         TERMINATION
+!
+100 IND = X .LE. 0.0 .OR. ABS(Y) .GT. 1.E-2
+IF (IND .AND. MO .NE. 0) GO TO 130
+C = PI
+IF (Y .GT. 0.0) C = -PI
+QM = EXP(X)
+CY = COS(Y)
+SY = SIN(Y)
+QF(1) = QM*CY
+QF(2) = QM*SY
+IF (MO .EQ. 0) GO TO 120
+!
+R = C/QM
+SM(1) = SM(1) + R*SY
+SM(2) = SM(2) + R*CY
+GO TO 130
+!
+110 IF (MO .EQ. 0) GO TO 130
+IND = .TRUE.
+QM = EXP(-X)
+QF(1) = QM*COS(-Y)
+QF(2) = QM*SIN(-Y)
+!
+120 TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+IF (.NOT. IND) SM(2) = SM(2) + C
+!
+130 W = CMPLX(SM(1),SM(2))
+RETURN
+END SUBROUTINE CEXPLI
+
+SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
+!
+REAL A(6),B(5),C(7),D(7),E(7),F(7),P1(8),Q1(8),P2(8),Q2(7), &
+&P3(8),Q3(7),P4(8),Q4(7),R(20),PX(9),QX(9), &
+&FRAC,SUMP,SUMQ,T,W,X,X0,XX0,XMX0,Y,DEXP40,XMAX, &
+&XMIN,EI,ARG,RESULT,EXPARG
+INTEGER I,INT,IERR
+DOUBLE PRECISION DX0
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE COMPUTES THE EXPONENTIAL INTEGRALS
+!
+!            EI(X),  E-SUB-1(X) = -EI(-X),  AND  EXP(-X)*EI(X)
+!
+!     WHERE
+!
+!             INTEGRAL (FROM T=-INFINITY TO T=X) (EXP(T)/T),  X .GT. 0,
+!     EI(X) =
+!             -INTEGRAL (FROM T=-X TO T=INFINITY) (EXP(-T)/T),
+!                                                         X .LT. 0,
+!
+!     AND WHERE THE FIRST INTEGRAL IS A PRINCIPAL VALUE INTEGRAL. THE
+!     ARGUMENTS INT, ARG, AND RESULT HAVE THE FOLLOWING USAGE ...
+!
+!            INT              ARG             RESULT
+!             1            X .NE. 0          EI(X)
+!             2            X .GT. 0          E-SUB-1(X)
+!             3            X .NE. 0          EXP(-X)*EI(X)
+!
+!     THE EXPANSION FOR 4 .LE. X .LE. 8 IS DUE TO WAYNE FULLERTON (LOS
+!     ALAMOS). THE REMAINING EXPANSIONS ARE FROM MATH. COMP. 22, 641-649
+!     (1968), AND MATH. COMP. 23, 289-303(1969) BY CODY AND THACHER.
+!
+!        ------------
+!
+!     ERROR MONITORING
+!
+!        THE PARAMETER IERR IS A VARIABLE THAT IS SET BY THE ROUTINE.
+!     IF NO ERRORS ARE DETECTED THEN IERR IS SET TO 0. THE FOLLOWING
+!     TABLE INDICATES THE TYPES OF ERRORS THAT MAY BE ENCOUNTERED IN
+!     THE ROUTINE AND THE FUNCTION VALUES SUPPLIED IN EACH CASE.
+!
+!     IERR    ERROR     ARGUMENT          FUNCTION VALUES FOR
+!                        RANGE        EI(X)  EXP(-X)*EI(X)  E-SUB-1(X)
+!      1    UNDERFLOW   X .LT. XMIN     0          -          0
+!      2    OVERFLOW    X .GT. XMAX     T          -          -
+!      3    ILLEGAL X     X = 0         T          T          T
+!      4    ILLEGAL X    X .LT. 0       -          -          T
+!
+!     T INDICATES THAT THE ROUTINE TERMINATES WITHOUT ASSIGNING A VALUE
+!     TO THE FUNCTION.
+!
+!        ----------
+!
+!     THIS SUBROUTINE WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR
+!     THE FUNPACK PACKAGE OF SPECIAL FUNCTION SUBROUTINES. THE ROUTINE
+!     WAS MODIFIED BY BY A.H. MORRIS (NSWC).
+!
+!-----------------------------------------------------------------------
+!
+!     XMAX AND XMIN ARE MACHINE DEPENDENT CONSTANTS FOR DETECTING
+!     UNDERFLOW AND OVERFLOW. XMAX AND XMIN ARE GIVEN APPROXIMATE
+!     VALUES IN STATEMENTS 240 AND 340.
+!
+!-----------------------------------------------------------------------
+!
+!     VALUE OF EXP(40.0)
+!
+!     ----------
+DATA DEXP40/.235385266837020E+18/
+!     ----------
+!
+!     ZERO OF EI(X)
+!
+!     ----------
+DATA X0/.372507410781366/,DX0/.37250741078136663446199186658D0/
+!     ----------
+!
+!     COEFFICIENTS FOR R(5,4) APPROXIMATION,
+!     USED FOR -1.0 .LE. X .LT. 0.0
+!
+!     ----------
+DATA A(1)/-.577215664901531E+00/, A(2) /.758833087029943E+00/, &
+&A(3) /.125660818982053E+00/, A(4) /.204158408934305E-01/, &
+&A(5) /.825035122466538E-03/, A(6) /.962949813453924E-05/
+DATA B(1) /.100000000000000E+01/, B(2) /.417810755380398E+00/, &
+&B(3) /.730228560396799E-01/, B(4) /.642720224671078E-02/, &
+&B(5) /.245134203588369E-03/
+!     ----------
+!
+!     COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!     USED FOR -4.0 .LE. X .LT. -1.0
+!
+!     ----------
+DATA C(1) /.465627107975096E-06/, C(2) /.999979577051595E+00/, &
+&C(3) /.904161556946328E+01/, C(4) /.243784088791317E+02/, &
+&C(5) /.230192559391334E+02/, C(6) /.690522522784443E+01/, &
+&C(7) /.430967839469389E+00/
+DATA D(1) /.100000000000000E+01/, D(2) /.100411643829054E+02/, &
+&D(3) /.324264210695138E+02/, D(4) /.412807841891424E+02/, &
+&D(5) /.204494785013794E+02/, D(6) /.331909213593302E+01/, &
+&D(7) /.103400130404874E+00/
+!     ----------
+!
+!     COEFFICIENTS FOR R(6,6) APPROXIMATION,
+!     USED FOR X .LT. -4.0
+!
+!     ----------
+DATA E(1)/-.999999999998447E+00/, E(2)/-.266271060431811E+02/, &
+&E(3)/-.241055827097015E+03/, E(4)/-.895927957772937E+03/, &
+&E(5)/-.129885688746484E+04/, E(6)/-.545374158883133E+03/, &
+&E(7)/-.566575206533869E+01/
+DATA F(1) /.100000000000000E+01/, F(2) /.286271060422192E+02/, &
+&F(3) /.292310039388533E+03/, F(4) /.133278537748257E+04/, &
+&F(5) /.277761949509163E+04/, F(6) /.240401713225909E+04/, &
+&F(7) /.631657483280800E+03/
+!     ----------
+!
+!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
+!     IN CHEBYSHEV POLYNOMIAL FORM, USED FOR
+!     0.0 .LT. X .LT. 4.0
+!
+!     ----------
+DATA P1(1)/-.866937339951070E+01/, P1(2)/-.549142265521085E+03/, &
+&P1(3)/-.421001615357070E+04/, P1(4)/-.249301393458648E+06/, &
+&P1(5)/-.119623669349247E+06/, P1(6)/-.221744627758845E+08/, &
+&P1(7) /.389280421311201E+07/, P1(8)/-.195773036904548E+09/
+DATA Q1(1) /.341718750000000E+02/, Q1(2)/-.160708926587221E+04/, &
+&Q1(3) /.357300298058508E+05/, Q1(4)/-.483547436162164E+06/, &
+&Q1(5) /.428559624611749E+07/, Q1(6)/-.249033375740540E+08/, &
+&Q1(7) /.891925767575612E+08/, Q1(8)/-.826271498626055E+08/
+!     ----------
+!
+!     COEFFICIENTS FOR CHEBYSHEV EXPANSION FOR
+!     4.0 .LE. X .LE. 8.0
+!
+!     ----------
+DATA R(1) / .636295897967470E+00/, R(2) /-.130811686750676E+00/, &
+&R(3) /-.843674102130539E-02/, R(4) / .265684915310067E-02/, &
+&R(5) / .328227217816581E-03/, R(6) /-.237834477714302E-04/, &
+&R(7) /-.114398043081001E-04/, R(8) /-.144059434332383E-05/, &
+&R(9) / .524159566511488E-08/, R(10)/ .384073064078443E-07/, &
+&R(11)/ .858802448602672E-08/, R(12)/ .102192266258550E-08/, &
+&R(13)/ .217491323232897E-10/, R(14)/-.220902381426231E-10/, &
+&R(15)/-.634575335449288E-11/, R(16)/-.108377465668577E-11/, &
+&R(17)/-.119098228722226E-12/, R(18)/-.284386823892656E-14/, &
+&R(19)/ .250803270266868E-14/, R(20)/ .787296415285598E-15/
+!
+!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
+!     IN J-FRACTION FORM, USED FOR
+!     8.0 .LT. X .LT. 12.0
+!
+!     ----------
+DATA P2(1)/-.218086381520723E+01/, P2(2)/-.219010233854881E+02/, &
+&P2(3)/ .930816385662165E+01/, P2(4) /.250762811293560E+02/, &
+&P2(5)/-.331842531997221E+02/, P2(6) /.601217990830080E+02/, &
+&P2(7)/-.432531132878135E+02/, P2(8) /.100443109228078E+01/
+DATA Q2(1)/ .393707701852715E+01/, Q2(2) /.300892648372915E+03/, &
+&Q2(3)/-.625041161671876E+01/, Q2(4) /.100367439516726E+04/, &
+&Q2(5)/ .143256738121938E+02/, Q2(6) /.273624119889328E+04/, &
+&Q2(7)/ .527468851962908E+00/
+!     ----------
+!
+!     COEFFICIENTS FOR R(7,7) APPROXIMATION,
+!     IN J-FRACTION FORM, USED FOR
+!     12.0 .LE. X .LT. 24.0
+!
+!     ----------
+DATA P3(1)/-.348334653602852E+01/, P3(2)/-.186545454883399E+02/, &
+&P3(3)/-.828561994140641E+01/, P3(4)/-.323467330305403E+02/, &
+&P3(5)/ .179601688769252E+02/, P3(6) /.175656315469614E+01/, &
+&P3(7)/-.195022321289660E+01/, P3(8) /.999994296074708E+00/
+DATA Q3(1) /.695000655887434E+02/, Q3(2) /.572837193837324E+02/, &
+&Q3(3) /.257776384238440E+02/, Q3(4) /.760761148007735E+03/, &
+&Q3(5) /.289516727925135E+02/, Q3(6)/-.343942266899870E+01/, &
+&Q3(7) /.100083867402639E+01/
+!     ----------
+!
+!     COEFFICIENTS FOR R(7.7) APPROXIMATION,
+!     IN J-FRACTION FORM, USED FOR X .GE. 24.0
+!
+!     ----------
+DATA P4(1)/-.531686623494482E+02/, P4(2)/ .891263822573708E+01/, &
+&P4(3)/-.139381360364405E+01/, P4(4)/-.308336269051763E+02/, &
+&P4(5)/-.749289167792884E+01/, P4(6)/-.500140345515924E+01/, &
+&P4(7)/-.300000016782086E+01/, P4(8)/ .100000000000058E+01/
+DATA Q4(1)/ .104745362652468E+04/, Q4(2)/-.674704580465832E+01/, &
+&Q4(3)/ .295999399486831E+03/, Q4(4)/-.431325836146628E+01/, &
+&Q4(5)/-.790404992298926E+01/, Q4(6)/-.299996432944446E+01/, &
+&Q4(7)/ .199999999924131E+01/
+!-----------------------------------------------------------------------
+!
+X = ARG
+IERR = 0
+IF (INT .EQ. 2) GO TO 450
+IF (X) 280, 640, 110
+110 IF (X .GE. 12.E0) GO TO 200
+IF (X .GT. 8.E0) GO TO 160
+IF (X .GE. 4.E0) GO TO 150
+!     ---------- 0.0 .LT. X .LT. 4.0.
+!                RATIONAL APPROXIMATION USED IS EXPRESSED
+!                IN TERMS OF CHEBYSHEV POLYNOMIALS TO
+!                IMPROVE CONDITIONING  ----------
+T = X + X
+T = T / 3.0E0 - 2.0E0
+PX(1) = 0.0E0
+QX(1) = 0.0E0
+PX(2) = P1(1)
+QX(2) = Q1(1)
+!
+do 120 I = 2, 7
+   PX(I+1) = T * PX(I) - PX(I-1) + P1(I)
+   QX(I+1) = T * QX(I) - QX(I-1) + Q1(I)
+120 CONTINUE
+!
+SUMP = .5E0 * T * PX(8) - PX(7) + P1(8)
+SUMQ = .5E0 * T * QX(8) - QX(7) + Q1(8)
+FRAC = SUMP / SUMQ
+XMX0 = DBLE(X) - DX0
+IF (ABS(XMX0) .LT. 0.07E0) GO TO 140
+XX0 = X / X0
+EI = ALOG(XX0) + XMX0 * FRAC
+IF (INT .EQ. 3) EI = EXP(-X) * EI
+GO TO 410
+!     ---------- EVALUATE APPROXIMATION FOR LN(X/X0)
+!                FOR X CLOSE TO X0 ----------
+140 Y = XMX0 / X0
+EI = ALNREL(Y) + XMX0 * FRAC
+IF (INT .EQ. 3) EI = EXP(-X) * EI
+GO TO 410
+!     ---------- 4.0 .LE. X .LE. 8.0 ----------
+150 M = 20
+EI = (1.0 + CSEVL (3.0 - 16.0/X, R, M)) / X
+IF (INT .EQ. 3) GO TO 410
+EI = EI * EXP(X)
+GO TO 410
+!     ---------- 8.0 .LT. X .LT. 12.0 ----------
+160 FRAC = 0.0E0
+!
+do 180 I = 1, 7
+180 FRAC = Q2(I) / (P2(I) + X + FRAC)
+!
+EI = (P2(8) + FRAC) / X
+IF (INT .EQ. 3) GO TO 410
+EI = EI * EXP(X)
+GO TO 410
+!     ---------- 12.0 .LE. X .LT. 24.0 ----------
+200 IF (X .GE. 24.E0) GO TO 240
+FRAC = 0.0E0
+!
+do 220 I = 1, 7
+220 FRAC = Q3(I) / (P3(I) + X + FRAC)
+!
+EI = (P3(8) + FRAC) / X
+IF (INT .EQ. 3) GO TO 410
+EI = EI * EXP(X)
+GO TO 410
+!     ---------- 24.0 .LE. X ----------
+240 XMAX = EXPARG(0)
+IF ((X .GT. XMAX) .AND. (INT .LT. 3)) GO TO 620
+Y = 1.0E0 / X
+FRAC = 0.0E0
+!
+do 260 I = 1, 7
+260 FRAC = Q4(I) / (P4(I) + X + FRAC)
+!
+FRAC = P4(8) + FRAC
+EI = Y + Y * Y * FRAC
+IF (INT .EQ. 3) GO TO 410
+IF (X .GT. 150.0E0) GO TO 270
+EI = EI * EXP(X)
+GO TO 410
+!     ---------- CALCULATION REFORMULATED TO AVOID
+!                PREMATURE OVERFLOW ----------
+270 EI = (EI * EXP(X-40.0E0)) * DEXP40
+GO TO 410
+!     ---------- ORIGINAL X WAS NEGATIVE.  CALCULATION OF
+!                E-SUB-1 JOINS AT LABEL 300 ----------
+280 Y = -X
+300 W = 1.0E0 / Y
+IF (Y .GT. 4.0E0) GO TO 340
+IF (Y .GT. 1.0E0) GO TO 320
+!     ---------- 0.0 .LT. -X .LE. 1.0 ----------
+EI = ALOG(Y) - (((((A(6) * Y + A(5)) * Y + A(4)) &
+&* Y + A(3)) * Y + A(2)) * Y + A(1)) / &
+&((((B(5) * Y + B(4)) * Y + B(3)) &
+&* Y + B(2)) * Y + B(1))
+IF (INT .EQ. 3) EI = EI * EXP(Y)
+GO TO 400
+!     ---------- 1.0 .LT. -X .LE. 4.0 ----------
+320 EI = -((((((C(7) * W + C(6)) * W + C(5)) * W + C(4)) &
+&* W + C(3)) * W + C(2)) * W + C(1))  / &
+&((((((D(7) * W + D(6)) * W + D(5)) * W + D(4)) &
+&* W + D(3)) * W + D(2)) * W + D(1))
+IF  (INT .EQ. 3) GO TO 410
+EI = EI * EXP(-Y)
+GO TO 400
+!     ---------- 4.0 .LT. -X ----------
+340 XMIN = EXPARG(1)
+IF ((-ABS(X) .LT. XMIN) .AND. (INT .LT. 3)) GO TO 600
+EI = -W * (1.0E0 + W * ((((((E(7) &
+&* W + E(6)) * W + E(5)) * W + E(4)) &
+&* W + E(3)) * W + E(2)) * W + E(1)) / &
+&((((((F(7) * W + F(6)) * W + F(5)) &
+&* W + F(4)) * W + F(3)) * W + F(2)) * W + F(1)))
+IF (INT .EQ. 3) GO TO 410
+EI = EI * EXP(-Y)
+T = 0.5E0 * EI
+IF (T .EQ. 0.0E0) GO TO 600
+400 IF (INT .EQ. 2) EI = -EI
+410 RESULT = EI
+RETURN
+450 Y = X
+IF (Y) 660, 640, 300
+!     ---------- ERROR RETURN FOR X .LT. XMIN,
+!                CAUSING UNDERFLOW ----------
+600 EI = 0.0E0
+IERR = 1
+GO TO 410
+!     ---------- ERROR RETURN FOR X .GT. XMAX,
+!                CAUSING OVERFLOW ----------
+620 IERR = 2
+RETURN
+!     ---------- ERROR RETURN FOR ILLEGAL
+!                ARGUMENT, X = 0 ----------
+640 IERR = 3
+RETURN
+!     ---------- ERROR RETURN FOR NEGATIVE
+!                ARGUMENT IN E-SUB-1 ----------
+660 IERR = 4
+RETURN
+END SUBROUTINE EXPLI
+
+double precision function DEI (X)
+!-----------------------------------------------------------------------
+!        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION DE1E
+!
+DEI = -DE1E(-X)
+IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
+RETURN
+END FUNCTION DEI
+
+double precision function DEI1 (X)
+!-----------------------------------------------------------------------
+!          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X
+DOUBLE PRECISION DE1E
+!
+DEI1  = -DE1E(-X)
+IF (X .GT. 4.D0 .OR. X .LT. -1.D0) RETURN
+DEI1 = DEXP(-X) * DEI1
+RETURN
+END FUNCTION DEI1
+
+double precision function DE1E(X)
+!-----------------------------------------------------------------------
+!
+!     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
+!     THE CAUCHY PRINCIPAL VALUE FOR NEGATIVE X. IF X IS NONZERO
+!     THEN DE1E HAS THE VALUE ...
+!
+!          DE1E(X) = E1(X)          IF -4 .LE. X .LE. 1
+!          DE1E(X) = EXP(X)*E1(X)   OTHERWISE
+!
+!-----------------------------------------------------------------------
+!     WRITTEN BY ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN, VIRGINIA
+!-----------------------------------------------------------------------
+!
+!     THE FOLLOWING SERIES FOR E1 WERE DEVELOPED BY WAYNE FULLERTON
+!     (LOS ALAMOS NATIONAL LABORATORY).
+!
+!     SERIES A             ON THE INTERVAL -3.12500E-02 TO  0.
+!                                        WITH WEIGHTED ERROR   4.62E-32
+!                                         LOG WEIGHTED ERROR  31.34
+!                               SIGNIFICANT FIGURES REQUIRED  29.70
+!                                    DECIMAL PLACES REQUIRED  32.18
+!
+!
+!     SERIES B             ON THE INTERVAL -1.25000E-01 TO -3.12500E-02
+!                                        WITH WEIGHTED ERROR   2.22E-32
+!                                         LOG WEIGHTED ERROR  31.65
+!                               SIGNIFICANT FIGURES REQUIRED  30.75
+!                                    DECIMAL PLACES REQUIRED  32.54
+!
+!
+!     SERIES D             ON THE INTERVAL -2.50000E-01 TO -1.25000E-01
+!                                        WITH WEIGHTED ERROR   5.19E-32
+!                                         LOG WEIGHTED ERROR  31.28
+!                               SIGNIFICANT FIGURES REQUIRED  30.82
+!                                    DECIMAL PLACES REQUIRED  32.09
+!
+!
+!     SERIES E             ON THE INTERVAL -4.00000E+00 TO -1.00000E+00
+!                                        WITH WEIGHTED ERROR   8.49E-34
+!                                         LOG WEIGHTED ERROR  33.07
+!                               SIGNIFICANT FIGURES REQUIRED  34.13
+!                                    DECIMAL PLACES REQUIRED  33.80
+!
+!
+!     SERIES R             ON THE INTERVAL -1.00000E+00 TO  1.00000E+00
+!                                        WITH WEIGHTED ERROR   8.08E-33
+!                                         LOG WEIGHTED ERROR  32.09
+!                        APPROX SIGNIFICANT FIGURES REQUIRED  30.4
+!                                    DECIMAL PLACES REQUIRED  32.79
+!
+!
+!     SERIES P             ON THE INTERVAL  2.50000E-01 TO  1.00000E+00
+!                                        WITH WEIGHTED ERROR   6.65E-32
+!                                         LOG WEIGHTED ERROR  31.18
+!                               SIGNIFICANT FIGURES REQUIRED  30.69
+!                                    DECIMAL PLACES REQUIRED  32.03
+!
+!
+!     SERIES Q             ON THE INTERVAL  0.          TO  2.50000E-01
+!                                        WITH WEIGHTED ERROR   5.07E-32
+!                                         LOG WEIGHTED ERROR  31.30
+!                               SIGNIFICANT FIGURES REQUIRED  30.40
+!                                    DECIMAL PLACES REQUIRED  32.20
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X, C, EPS, T, W
+DOUBLE PRECISION A(50), B(60), D(41), E(29), R(25), P(50), Q(64)
+DOUBLE PRECISION DEI0, DCSEVL, DPMPAR
+!------------------------------
+DATA A(1)  / .3284394579616699087873844201881D-01/, &
+&A(2)  /-.1669920452031362851476184343387D-01/, &
+&A(3)  / .2845284724361346807424899853252D-03/, &
+&A(4)  /-.7563944358516206489487866938533D-05/, &
+&A(5)  / .2798971289450859157504843180879D-06/, &
+&A(6)  /-.1357901828534531069525563926255D-07/, &
+&A(7)  / .8343596202040469255856102904906D-09/, &
+&A(8)  /-.6370971727640248438275242988532D-10/, &
+&A(9)  / .6007247608811861235760831561584D-11/, &
+&A(10) /-.7022876174679773590750626150088D-12/
+DATA A(11) / .1018302673703687693096652346883D-12/, &
+&A(12) /-.1761812903430880040406309966422D-13/, &
+&A(13) / .3250828614235360694244030353877D-14/, &
+&A(14) /-.5071770025505818678824872259044D-15/, &
+&A(15) / .1665177387043294298172486084156D-16/, &
+&A(16) / .3166753890797514400677003536555D-16/, &
+&A(17) /-.1588403763664141515133118343538D-16/, &
+&A(18) / .4175513256138018833003034618484D-17/, &
+&A(19) /-.2892347749707141906710714478852D-18/, &
+&A(20) /-.2800625903396608103506340589669D-18/
+DATA A(21) / .1322938639539270903707580023781D-18/, &
+&A(22) /-.1804447444177301627283887833557D-19/, &
+&A(23) /-.7905384086522616076291644817604D-20/, &
+&A(24) / .4435711366369570103946235838027D-20/, &
+&A(25) /-.4264103994978120868865309206555D-21/, &
+&A(26) /-.3920101766937117541553713162048D-21/, &
+&A(27) / .1527378051343994266343752326971D-21/, &
+&A(28) / .1024849527049372339310308783117D-22/, &
+&A(29) /-.2134907874771433576262711405882D-22/, &
+&A(30) / .3239139475160028267061694700366D-23/
+DATA A(31) / .2142183762299889954762643168296D-23/, &
+&A(32) /-.8234609419601018414700348082312D-24/, &
+&A(33) /-.1524652829645809479613694401140D-24/, &
+&A(34) / .1378208282460639134668480364325D-24/, &
+&A(35) / .2131311202833947879523224999253D-26/, &
+&A(36) /-.2012649651526484121817466763127D-25/, &
+&A(37) / .1995535662263358016106311782673D-26/, &
+&A(38) / .2798995808984003464948686520319D-26/, &
+&A(39) /-.5534511845389626637640819277823D-27/, &
+&A(40) /-.3884995396159968861682544026146D-27/
+DATA A(41) / .1121304434507359382850680354679D-27/, &
+&A(42) / .5566568152423740948256563833514D-28/, &
+&A(43) /-.2045482929810499700448533938176D-28/, &
+&A(44) /-.8453813992712336233411457493674D-29/, &
+&A(45) / .3565758433431291562816111116287D-29/, &
+&A(46) / .1383653872125634705539949098871D-29/, &
+&A(47) /-.6062167864451372436584533764778D-30/, &
+&A(48) /-.2447198043989313267437655119189D-30/, &
+&A(49) / .1006850640933998348011548180480D-30/, &
+&A(50) / .4623685555014869015664341461674D-31/
+!------------------------------
+DATA B(1)  / .20263150647078889499401236517381D+00/, &
+&B(2)  /-.73655140991203130439536898728034D-01/, &
+&B(3)  / .63909349118361915862753283840020D-02/, &
+&B(4)  /-.60797252705247911780653153363999D-03/, &
+&B(5)  /-.73706498620176629330681411493484D-04/, &
+&B(6)  / .48732857449450183453464992488076D-04/, &
+&B(7)  /-.23837064840448290766588489460235D-05/, &
+&B(8)  /-.30518612628561521027027332246121D-05/, &
+&B(9)  / .17050331572564559009688032992907D-06/, &
+&B(10) / .23834204527487747258601598136403D-06/
+DATA B(11) / .10781772556163166562596872364020D-07/, &
+&B(12) /-.17955692847399102653642691446599D-07/, &
+&B(13) /-.41284072341950457727912394640436D-08/, &
+&B(14) / .68622148588631968618346844526664D-09/, &
+&B(15) / .53130183120506356147602009675961D-09/, &
+&B(16) / .78796880261490694831305022893515D-10/, &
+&B(17) /-.26261762329356522290341675271232D-10/, &
+&B(18) /-.15483687636308261963125756294100D-10/, &
+&B(19) /-.25818962377261390492802405122591D-11/, &
+&B(20) / .59542879191591072658903529959352D-12/
+DATA B(21) / .46451400387681525833784919321405D-12/, &
+&B(22) / .11557855023255861496288006203731D-12/, &
+&B(23) /-.10475236870835799012317547189670D-14/, &
+&B(24) /-.11896653502709004368104489260929D-13/, &
+&B(25) /-.47749077490261778752643019349950D-14/, &
+&B(26) /-.81077649615772777976249734754135D-15/, &
+&B(27) / .13435569250031554199376987998178D-15/, &
+&B(28) / .14134530022913106260248873881287D-15/, &
+&B(29) / .49451592573953173115520663232883D-16/, &
+&B(30) / .79884048480080665648858587399367D-17/
+DATA B(31) /-.14008632188089809829248711935393D-17/, &
+&B(32) /-.14814246958417372107722804001680D-17/, &
+&B(33) /-.55826173646025601904010693937113D-18/, &
+&B(34) /-.11442074542191647264783072544598D-18/, &
+&B(35) / .25371823879566853500524018479923D-20/, &
+&B(36) / .13205328154805359813278863389097D-19/, &
+&B(37) / .62930261081586809166287426789485D-20/, &
+&B(38) / .17688270424882713734999261332548D-20/, &
+&B(39) / .23266187985146045209674296887432D-21/, &
+&B(40) /-.67803060811125233043773831844113D-22/
+DATA B(41) /-.59440876959676373802874150531891D-22/, &
+&B(42) /-.23618214531184415968532592503466D-22/, &
+&B(43) /-.60214499724601478214168478744576D-23/, &
+&B(44) /-.65517906474348299071370444144639D-24/, &
+&B(45) / .29388755297497724587042038699349D-24/, &
+&B(46) / .22601606200642115173215728758510D-24/, &
+&B(47) / .89534369245958628745091206873087D-25/, &
+&B(48) / .24015923471098457555772067457706D-25/, &
+&B(49) / .34118376888907172955666423043413D-26/, &
+&B(50) /-.71617071694630342052355013345279D-27/
+DATA B(51) /-.75620390659281725157928651980799D-27/, &
+&B(52) /-.33774612157467324637952920780800D-27/, &
+&B(53) /-.10479325703300941711526430332245D-27/, &
+&B(54) /-.21654550252170342240854880201386D-28/, &
+&B(55) /-.75297125745288269994689298432000D-30/, &
+&B(56) / .19103179392798935768638084000426D-29/, &
+&B(57) / .11492104966530338547790728833706D-29/, &
+&B(58) / .43896970582661751514410359193600D-30/, &
+&B(59) / .12320883239205686471647157725866D-30/, &
+&B(60) / .22220174457553175317538581162666D-31/
+!------------------------------
+DATA D(1)  / .63629589796747038767129887806803D+00/, &
+&D(2)  /-.13081168675067634385812671121135D+00/, &
+&D(3)  /-.84367410213053930014487662129752D-02/, &
+&D(4)  / .26568491531006685413029428068906D-02/, &
+&D(5)  / .32822721781658133778792170142517D-03/, &
+&D(6)  /-.23783447771430248269579807851050D-04/, &
+&D(7)  /-.11439804308100055514447076797047D-04/, &
+&D(8)  /-.14405943433238338455239717699323D-05/, &
+&D(9)  / .52415956651148829963772818061664D-08/, &
+&D(10) / .38407306407844323480979203059716D-07/
+DATA D(11) / .85880244860267195879660515759344D-08/, &
+&D(12) / .10219226625855003286339969553911D-08/, &
+&D(13) / .21749132323289724542821339805992D-10/, &
+&D(14) /-.22090238142623144809523503811741D-10/, &
+&D(15) /-.63457533544928753294383622208801D-11/, &
+&D(16) /-.10837746566857661115340539732919D-11/, &
+&D(17) /-.11909822872222586730262200440277D-12/, &
+&D(18) /-.28438682389265590299508766008661D-14/, &
+&D(19) / .25080327026686769668587195487546D-14/, &
+&D(20) / .78729641528559842431597726421265D-15/
+DATA D(21) / .15475066347785217148484334637329D-15/, &
+&D(22) / .22575322831665075055272608197290D-16/, &
+&D(23) / .22233352867266608760281380836693D-17/, &
+&D(24) / .16967819563544153513464194662399D-19/, &
+&D(25) /-.57608316255947682105310087304533D-19/, &
+&D(26) /-.17591235774646878055625369408853D-19/, &
+&D(27) /-.36286056375103174394755328682666D-20/, &
+&D(28) /-.59235569797328991652558143488000D-21/, &
+&D(29) /-.76030380926310191114429136895999D-22/, &
+&D(30) /-.62547843521711763842641428479999D-23/
+DATA D(31) / .25483360759307648606037606400000D-24/, &
+&D(32) / .25598615731739857020168874666666D-24/, &
+&D(33) / .71376239357899318800207052800000D-25/, &
+&D(34) / .14703759939567568181578956800000D-25/, &
+&D(35) / .25105524765386733555198634666666D-26/, &
+&D(36) / .35886666387790890886583637333333D-27/, &
+&D(37) / .39886035156771301763317759999999D-28/, &
+&D(38) / .21763676947356220478805333333333D-29/, &
+&D(39) /-.46146998487618942367607466666666D-30/, &
+&D(40) /-.20713517877481987707153066666666D-30/
+DATA D(41) /-.51890378563534371596970666666666D-31/
+!------------------------------
+DATA E(1)  /-.16113461655571494025720663927566180D+02/, &
+&E(2)  / .77940727787426802769272245891741497D+01/, &
+&E(3)  /-.19554058188631419507127283812814491D+01/, &
+&E(4)  / .37337293866277945611517190865690209D+00/, &
+&E(5)  /-.56925031910929019385263892220051166D-01/, &
+&E(6)  / .72110777696600918537847724812635813D-02/, &
+&E(7)  /-.78104901449841593997715184089064148D-03/, &
+&E(8)  / .73880933562621681878974881366177858D-04/, &
+&E(9)  /-.62028618758082045134358133607909712D-05/, &
+&E(10) / .46816002303176735524405823868362657D-06/
+DATA E(11) /-.32092888533298649524072553027228719D-07/, &
+&E(12) / .20151997487404533394826262213019548D-08/, &
+&E(13) /-.11673686816697793105356271695015419D-09/, &
+&E(14) / .62762706672039943397788748379615573D-11/, &
+&E(15) /-.31481541672275441045246781802393600D-12/, &
+&E(16) / .14799041744493474210894472251733333D-13/, &
+&E(17) /-.65457091583979673774263401588053333D-15/, &
+&E(18) / .27336872223137291142508012748799999D-16/, &
+&E(19) /-.10813524349754406876721727624533333D-17/, &
+&E(20) / .40628328040434303295300348586666666D-19/
+DATA E(21) /-.14535539358960455858914372266666666D-20/, &
+&E(22) / .49632746181648636830198442666666666D-22/, &
+&E(23) /-.16208612696636044604866560000000000D-23/, &
+&E(24) / .50721448038607422226431999999999999D-25/, &
+&E(25) /-.15235811133372207813973333333333333D-26/, &
+&E(26) / .44001511256103618696533333333333333D-28/, &
+&E(27) /-.12236141945416231594666666666666666D-29/, &
+&E(28) / .32809216661066001066666666666666666D-31/, &
+&E(29) /-.84933452268306432000000000000000000D-33/
+!------------------------------
+DATA R(1)  /-.3739021479220279511668698204827D-01/, &
+&R(2)  / .4272398606220957726049179176528D-01/, &
+&R(3)  /-.130318207984970054415392055219726D+00/, &
+&R(4)  / .144191240246988907341095893982137D-01/, &
+&R(5)  /-.134617078051068022116121527983553D-02/, &
+&R(6)  / .107310292530637799976115850970073D-03/, &
+&R(7)  /-.742999951611943649610283062223163D-05/, &
+&R(8)  / .453773256907537139386383211511827D-06/, &
+&R(9)  /-.247641721139060131846547423802912D-07/, &
+&R(10) / .122076581374590953700228167846102D-08/
+DATA R(11) /-.548514148064092393821357398028261D-10/, &
+&R(12) / .226362142130078799293688162377002D-11/, &
+&R(13) /-.863589727169800979404172916282240D-13/, &
+&R(14) / .306291553669332997581032894881279D-14/, &
+&R(15) /-.101485718855944147557128906734933D-15/, &
+&R(16) / .315482174034069877546855328426666D-17/, &
+&R(17) /-.923604240769240954484015923200000D-19/, &
+&R(18) / .255504267970814002440435029333333D-20/, &
+&R(19) /-.669912805684566847217882453333333D-22/, &
+&R(20) / .166925405435387319431987199999999D-23/
+DATA R(21) /-.396254925184379641856000000000000D-25/, &
+&R(22) / .898135896598511332010666666666666D-27/, &
+&R(23) /-.194763366993016433322666666666666D-28/, &
+&R(24) / .404836019024630033066666666666666D-30/, &
+&R(25) /-.807981567699845120000000000000000D-32/
+!------------------------------
+DATA P(1)  /-.60577324664060345999319382737747D+00/, &
+&P(2)  /-.11253524348366090030649768852718D+00/, &
+&P(3)  / .13432266247902779492487859329414D-01/, &
+&P(4)  /-.19268451873811457249246838991303D-02/, &
+&P(5)  / .30911833772060318335586737475368D-03/, &
+&P(6)  /-.53564132129618418776393559795147D-04/, &
+&P(7)  / .98278128802474923952491882717237D-05/, &
+&P(8)  /-.18853689849165182826902891938910D-05/, &
+&P(9)  / .37494319356894735406964042190531D-06/, &
+&P(10) /-.76823455870552639273733465680556D-07/
+DATA P(11) / .16143270567198777552956300060868D-07/, &
+&P(12) /-.34668022114907354566309060226027D-08/, &
+&P(13) / .75875420919036277572889747054114D-09/, &
+&P(14) /-.16886433329881412573514526636703D-09/, &
+&P(15) / .38145706749552265682804250927272D-10/, &
+&P(16) /-.87330266324446292706851718272334D-11/, &
+&P(17) / .20236728645867960961794311064330D-11/, &
+&P(18) /-.47413283039555834655210340820160D-12/, &
+&P(19) / .11221172048389864324731799928920D-12/, &
+&P(20) /-.26804225434840309912826809093395D-13/
+DATA P(21) / .64578514417716530343580369067212D-14/, &
+&P(22) /-.15682760501666478830305702849194D-14/, &
+&P(23) / .38367865399315404861821516441408D-15/, &
+&P(24) /-.94517173027579130478871048932556D-16/, &
+&P(25) / .23434812288949573293896666439133D-16/, &
+&P(26) /-.58458661580214714576123194419882D-17/, &
+&P(27) / .14666229867947778605873617419195D-17/, &
+&P(28) /-.36993923476444472706592538274474D-18/, &
+&P(29) / .93790159936721242136014291817813D-19/, &
+&P(30) /-.23893673221937873136308224087381D-19/
+DATA P(31) / .61150624629497608051934223837866D-20/, &
+&P(32) /-.15718585327554025507719853288106D-20/, &
+&P(33) / .40572387285585397769519294491306D-21/, &
+&P(34) /-.10514026554738034990566367122773D-21/, &
+&P(35) / .27349664930638667785806003131733D-22/, &
+&P(36) /-.71401604080205796099355574271999D-23/, &
+&P(37) / .18705552432235079986756924211199D-23/, &
+&P(38) /-.49167468166870480520478020949333D-24/, &
+&P(39) / .12964988119684031730916087125333D-24/, &
+&P(40) /-.34292515688362864461623940437333D-25/
+DATA P(41) / .90972241643887034329104820906666D-26/, &
+&P(42) /-.24202112314316856489934847999999D-26/, &
+&P(43) / .64563612934639510757670475093333D-27/, &
+&P(44) /-.17269132735340541122315987626666D-27/, &
+&P(45) / .46308611659151500715194231466666D-28/, &
+&P(46) /-.12448703637214131241755170133333D-28/, &
+&P(47) / .33544574090520678532907007999999D-29/, &
+&P(48) /-.90598868521070774437543935999999D-30/, &
+&P(49) / .24524147051474238587273216000000D-30/, &
+&P(50) /-.66528178733552062817107967999999D-31/
+!------------------------------
+DATA Q(1)  /-.1892918000753016825495679942820D+00/, &
+&Q(2)  /-.8648117855259871489968817056824D-01/, &
+&Q(3)  / .7224101543746594747021514839184D-02/, &
+&Q(4)  /-.8097559457557386197159655610181D-03/, &
+&Q(5)  / .1099913443266138867179251157002D-03/, &
+&Q(6)  /-.1717332998937767371495358814487D-04/, &
+&Q(7)  / .2985627514479283322825342495003D-05/, &
+&Q(8)  /-.5659649145771930056560167267155D-06/, &
+&Q(9)  / .1152680839714140019226583501663D-06/, &
+&Q(10) /-.2495030440269338228842128765065D-07/
+DATA Q(11) / .5692324201833754367039370368140D-08/, &
+&Q(12) /-.1359957664805600338490030939176D-08/, &
+&Q(13) / .3384662888760884590184512925859D-09/, &
+&Q(14) /-.8737853904474681952350849316580D-10/, &
+&Q(15) / .2331588663222659718612613400470D-10/, &
+&Q(16) /-.6411481049213785969753165196326D-11/, &
+&Q(17) / .1812246980204816433384359484682D-11/, &
+&Q(18) /-.5253831761558460688819403840466D-12/, &
+&Q(19) / .1559218272591925698855028609825D-12/, &
+&Q(20) /-.4729168297080398718476429369466D-13/
+DATA Q(21) / .1463761864393243502076199493808D-13/, &
+&Q(22) /-.4617388988712924102232173623604D-14/, &
+&Q(23) / .1482710348289369323789239660371D-14/, &
+&Q(24) /-.4841672496239229146973165734417D-15/, &
+&Q(25) / .1606215575700290408116571966188D-15/, &
+&Q(26) /-.5408917538957170947895023784252D-16/, &
+&Q(27) / .1847470159346897881370231402310D-16/, &
+&Q(28) /-.6395830792759094470500610425050D-17/, &
+&Q(29) / .2242780721699759457250233276170D-17/, &
+&Q(30) /-.7961369173983947552744555308646D-18/
+DATA Q(31) / .2859308111540197459808619929272D-18/, &
+&Q(32) /-.1038450244701137145900697137446D-18/, &
+&Q(33) / .3812040607097975780866841008319D-19/, &
+&Q(34) /-.1413795417717200768717562723696D-19/, &
+&Q(35) / .5295367865182740958305442594815D-20/, &
+&Q(36) /-.2002264245026825902137211131439D-20/, &
+&Q(37) / .7640262751275196014736848610918D-21/, &
+&Q(38) /-.2941119006868787883311263523362D-21/, &
+&Q(39) / .1141823539078927193037691483586D-21/, &
+&Q(40) /-.4469308475955298425247020718489D-22/
+DATA Q(41) / .1763262410571750770630491408520D-22/, &
+&Q(42) /-.7009968187925902356351518262340D-23/, &
+&Q(43) / .2807573556558378922287757507515D-23/, &
+&Q(44) /-.1132560944981086432141888891562D-23/, &
+&Q(45) / .4600574684375017946156764233727D-24/, &
+&Q(46) /-.1881448598976133459864609148108D-24/, &
+&Q(47) / .7744916111507730845444328478037D-25/, &
+&Q(48) /-.3208512760585368926702703826261D-25/, &
+&Q(49) / .1337445542910839760619930421384D-25/, &
+&Q(50) /-.5608671881802217048894771735210D-26/
+DATA Q(51) / .2365839716528537483710069473279D-26/, &
+&Q(52) /-.1003656195025305334065834526856D-26/, &
+&Q(53) / .4281490878094161131286642556927D-27/, &
+&Q(54) /-.1836345261815318199691326958250D-27/, &
+&Q(55) / .7917798231349540000097468678144D-28/, &
+&Q(56) /-.3431542358742220361025015775231D-28/, &
+&Q(57) / .1494705493897103237475066008917D-28/, &
+&Q(58) /-.6542620279865705439739042420053D-29/, &
+&Q(59) / .2877581395199171114340487353685D-29/, &
+&Q(60) /-.1271557211796024711027981200042D-29/
+DATA Q(61) / .5644615555648722522388044622506D-30/, &
+&Q(62) /-.2516994994284095106080616830293D-30/, &
+&Q(63) / .1127259818927510206370368804181D-30/, &
+&Q(64) /-.5069814875800460855562584719360D-31/
+!------------------------------
+!
+!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!
+                 EPS = DPMPAR(1)
+!
+!------------------------------
+IF (DABS(X) .GE. 90.D0) GO TO 80
+IF (X .GT. -1.D0) GO TO 40
+!
+!                    -90 .LT. X .LT. -4
+!
+IF (X .GT. -32.D0) GO TO 10
+M = 50
+IF (EPS .GE. 1.D-20) M = 25
+DE1E = (1.D0 + DCSEVL (64.D0/X+1.D0, A, M))/X
+RETURN
+!
+10 IF (X .GT. -8.D0) GO TO 20
+M = 60
+IF (EPS .GE. 1.D-20) M = 37
+DE1E = (1.D0 + DCSEVL ((64.D0/X+5.D0)/3.D0, B, M))/X
+RETURN
+!
+20 IF (X .GE. -4.D0) GO TO 30
+M = 41
+IF (EPS .GE. 1.D-20) M = 27
+DE1E = (1.D0 + DCSEVL (16.D0/X+3.D0, D, M))/X
+RETURN
+!
+!                     -4 .LE. X .LE. 1
+!
+30 M = 29
+IF (EPS .GE. 1.D-20) M = 20
+DE1E = -DLOG(-X) + DCSEVL ((2.D0*X+5.D0)/3.D0, E, M)
+RETURN
+!
+40 IF (X .GT. 1.0D0) GO TO 60
+IF (X .LT. -0.4D0 .OR. X .GT. -0.35D0) GO TO 50
+   DE1E = - DEI0(-X, EPS)
+   RETURN
+50 M = 25
+IF (EPS .GE. 1.D-20) M = 18
+DE1E = (-DLOG(DABS(X)) - 0.6875D0 + X)  + DCSEVL (X, R, M)
+RETURN
+!
+!                     1 .LT. X .LT. 90
+!
+60 IF (X .GT. 4.0D0) GO TO 70
+M = 50
+IF (EPS .GE. 1.D-20) M = 31
+DE1E = (1.D0 + DCSEVL ((8.D0/X-5.D0)/3.D0, P, M))/X
+RETURN
+!
+70 M = 64
+IF (EPS .GE. 1.D-20) M = 35
+DE1E = (1.D0 + DCSEVL (8.D0/X-1.D0, Q, M))/X
+RETURN
+!
+!                   ASYMPTOTIC EXPANSION
+!
+80 T = -1.D0/X
+C = T
+W = C
+M = 1
+81 M = M + 1
+   C = (M*T)*C
+   W = C + W
+   IF (DABS(C) .GT. EPS) GO TO 81
+DE1E = (1.D0 + W)/X
+RETURN
+END FUNCTION DE1E
+
+double precision function DEI0 (X, EPS)
+!-----------------------------------------------------------------------
+!
+!            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
+!                  WHERE X0 IS THE ZERO OF EI(X).
+!                    EPS IS THE TOLERANCE USED.
+!
+!-------------------------
+!     WRITTEN BY A.H. MORRIS
+!        NAVAL SURFACE WARFARE CENTER
+!        DAHLGREN, VIRGINIA
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(40), C, EPS, H, T, X, W
+DOUBLE PRECISION DK1, DK2, DK3, DB, DB2, DX
+!-------------------------
+DATA DK1 /25598514349.D0/, DK2 /12212826724.D0/, &
+&DK3 /52346020729.D0/
+DATA DB  /68719476736.D0/
+DATA DX  /.64725688445954142292644880487403537155379408215561D-33/
+!-------------------------
+DATA A(1)  / .3896215733907167310156502703593482682018D+01/, &
+&A(2)  /-.3281607866398561670879044070702055058438D+01/, &
+&A(3)  / .6522376145438925697728352767902339522245D+01/, &
+&A(4)  /-.1296969738353651703636356975116693457132D+02/, &
+&A(5)  / .2788629796294204997855360701398702087604D+02/, &
+&A(6)  /-.6237880152891541873078526672920295283143D+02/, &
+&A(7)  / .1435349488096750987841265647073135861344D+03/, &
+&A(8)  /-.3371558271787468916821364466977375583658D+03/, &
+&A(9)  / .8045318399821382506595322457265602778098D+03/, &
+&A(10) /-.1943796645723498840655451915157946462648D+04/
+DATA A(11) / .4743765650402430835228269085129777320454D+04/, &
+&A(12) /-.1167346399116716364394668734600584330571D+05/, &
+&A(13) / .2892695530543545087445160311373446386859D+05/, &
+&A(14) /-.7210794586837158996878001987822898188198D+05/, &
+&A(15) / .1806695585893919626172098163733836311447D+06/, &
+&A(16) /-.4546962188544665746524572520110515778526D+06/, &
+&A(17) / .1148834546817744310374556891236080193473D+07/, &
+&A(18) /-.2912721663850837498392234670693435881386D+07/, &
+&A(19) / .7407692958000587759747953639495510375408D+07/, &
+&A(20) /-.1889172700038153127288849726417780854730D+08/
+DATA A(21) / .4830003493086024720868271496253148288055D+08/, &
+&A(22) /-.1237682190024917092137405370407916520821D+09/, &
+&A(23) / .3178111056663621852260468265468336116367D+09/, &
+&A(24) /-.8176185693184928170769596413793786736279D+09/, &
+&A(25) / .2107109291864363741291032089276432438927D+10/, &
+&A(26) /-.5438996831077284596300440196418865401363D+10/, &
+&A(27) / .1406026390995585037838894210474681627693D+11/, &
+&A(28) /-.3639689100149205333626392754168250384373D+11/, &
+&A(29) / .9433859509219164512733865811047107199412D+11/, &
+&A(30) /-.2448111705066430130314746602027041462835D+12/
+DATA A(31) / .6359981818273706257655285041587660739835D+12/, &
+&A(32) /-.1653989211524391716301960841541179924503D+13/, &
+&A(33) / .4305601123377464671923711939926758523701D+13/, &
+&A(34) /-.1121847693567642152208443795868288937687D+14/, &
+&A(35) / .2925565695557339262045727352754930716608D+14/, &
+&A(36) /-.7635552741959392076619218035480359307499D+14/, &
+&A(37) / .1994372792759425025753893705017248674884D+15/, &
+&A(38) /-.5213021921201092276891722450906568692592D+15/, &
+&A(39) / .1363558024737805584657706536660107687818D+16/, &
+&A(40) /-.3568973490569445692988895507297245137908D+16/
+!-------------------------
+!
+!     SET  H = X - X0  WHERE X0 IS THE ZERO OF EI(X). X0 HAS THE
+!     APPROXIMATE 60 DIGIT VALUE ...
+!
+!      .37250741078136663446 19918665801191335356 89497771654051555657
+!
+!     A MORE ACCURATE VALUE IS GIVEN BY ...
+!
+!            X0 = DK1/8**12 + DK2/8**24 + DK3/8**36 + DX
+!
+!     THE FOLLOWING CODE SHOULD YIELD THE CORRECT VALUE FOR H IF A
+!     BINARY, OCTAL, OR HEXADECIMAL DOUBLE PRECISION ARITHMETIC IS
+!     BEING USED.
+!
+DB2 = DB*DB
+H = (((X - DK1/DB) - DK2/DB2) - DK3/(DB*DB2)) - DX
+!
+!-------------------------
+T = H
+W = 0.D0
+do 10 N = 2,40
+   C = A(N)*T
+   W = W + C
+   IF (DABS(C) .LT. EPS) GO TO 20
+   T = H*T
+10 CONTINUE
+!
+20 DEI0 = H * (A(1) + W)
+RETURN
+END FUNCTION DEI0
+
+FUNCTION SI(X)
+!
+!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
+!     MODIFIED BY A.H. MORRIS
+!
+!     REFERENCES
+!         SAND76-006C
+!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
+!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!
+!     ABSTRACT
+!         SI COMPUTES THE INTEGRAL OF SIN(T)/T ON (0,X) BY MEANS
+!         OF CHEBYSHEV EXPANSIONS ON (0,5) AND (5,INFINITY).
+!
+!     DESCRIPTION OF ARGUMENTS
+!
+!         INPUT
+!           X      - LIMIT OF INTEGRATION, UNRESTRICTED
+!
+!         OUTPUT
+!           SI     - VALUE OF THE INTEGRAL
+!
+!
+DIMENSION BB(16),CC(46)
+!     -------------------
+DATA N1,N2,M1,M2/16,46,14,21/
+DATA PIO2/1.5707963267949/
+!     -------------------
+DATA BB(1) / 6.84101190850653E-01/, BB(2) /-3.74538448460062E-01/, &
+&BB(3) /-2.82656062651542E-02/, BB(4) / 3.06078454012071E-02/, &
+&BB(5) /-8.99242948380352E-04/, BB(6) /-1.09884251456048E-03/, &
+&BB(7) / 5.81151604367358E-05/, BB(8) / 2.28802638122969E-05/, &
+&BB(9) /-1.35078982929539E-06/, BB(10)/-3.13213946132892E-07/, &
+&BB(11)/ 1.86619586786257E-08/, BB(12)/ 3.03991719607226E-09/, &
+&BB(13)/-1.76437788946489E-10/, BB(14)/-2.20236421792690E-11/, &
+&BB(15)/ 1.22710107703240E-12/, BB(16)/ 1.23680681116783E-13/
+!     -------------------
+DATA CC(1) / 9.76155271128712E-01/, CC(2) / 8.96845854916423E-02/, &
+&CC(3) /-3.04656658030696E-02/, CC(4) / 8.50892472922945E-02/, &
+&CC(5) /-5.78073683148386E-03/, CC(6) /-5.07182677775691E-03/, &
+&CC(7) / 8.38643256650893E-04/, CC(8) /-3.34223415981738E-04/, &
+&CC(9) /-2.15746207281216E-05/, CC(10)/ 1.28560650086065E-04/, &
+&CC(11)/-1.56456413510232E-05/, CC(12)/-1.52025513597262E-05/, &
+&CC(13)/ 4.04001013843204E-06/, CC(14)/-5.95896122752160E-07/, &
+&CC(15)/-4.34985305974340E-07/, CC(16)/ 7.13472533530840E-07/, &
+&CC(17)/-5.34302186061100E-08/, CC(18)/-1.76003581156610E-07/, &
+&CC(19)/ 3.85028855125900E-08/, CC(20)/ 1.92576544441700E-08/, &
+&CC(21)/-1.00735358217200E-08/, CC(22)/ 3.36359194377000E-09/, &
+&CC(23)/ 1.28049619406000E-09/, CC(24)/-2.42546870827000E-09/, &
+&CC(25)/ 1.86917288950000E-10/, CC(26)/ 7.13431298340000E-10/, &
+&CC(27)/-1.70673483710000E-10/, CC(28)/-1.14604070350000E-10/, &
+&CC(29)/ 5.88004411500000E-11/, CC(30)/-6.78417843000000E-12/, &
+&CC(31)/-1.21572380900000E-11/, CC(32)/ 1.26561248700000E-11/, &
+&CC(33)/ 4.74814180000000E-13/, CC(34)/-5.32309477000000E-12/, &
+&CC(35)/ 9.05903810000000E-13/, CC(36)/ 1.40046450000000E-12/, &
+&CC(37)/-5.00968320000000E-13/, CC(38)/-1.80458040000000E-13/
+DATA CC(39)/ 1.66162910000000E-13/, CC(40)/-5.02616400000000E-14/, &
+&CC(41)/-3.48453600000000E-14/, CC(42)/ 4.60056600000000E-14/, &
+&CC(43)/ 5.74000000000000E-16/, CC(44)/-1.95310700000000E-14/, &
+&CC(45)/ 3.68837000000000E-15/, CC(46)/ 5.62862000000000E-15/
+!     -------------------
+!     ****** AMAX IS A MACHINE DEPENDENT CONSTANT. IT IS ASSUMED THAT
+!            SIN(X) AND COS(X) ARE DEFINED FOR  ABS(X) .LE. AMAX, AND
+!            THAT PIO2 - (1 + 1/X)/X = PIO2 FOR X .GT. AMAX.
+!
+AMAX = 1.0/SPMPAR(1)
+!
+!
+AX=ABS(X)
+IF (AX.GT.5.0) GO TO 20
+J=N1
+BX=0.40*AX-1.0
+TX=BX+BX
+B1=BB(J)
+B2=0.
+do 10 I = 1,M1
+J=J-1
+TEMP=B1
+B1=TX*B1-B2+BB(J)
+10 B2=TEMP
+SI=(BX*B1-B2+BB(1))*X
+RETURN
+!
+20 IF (AX.GT.AMAX) GO TO 50
+BX=10./AX-1.
+TX=BX+BX
+J=N2
+B1=CC(J)
+B2=0.0
+do 30 I = 1,M2
+J=J-2
+TEMP=B1
+B1=TX*B1-B2+CC(J)
+30 B2=TEMP
+AIC=BX*B1-B2+CC(2)
+!
+J=N2-1
+B1=CC(J)
+B2=0.0
+do 40 I = 1,M2
+J=J-2
+TEMP=B1
+B1=TX*B1-B2+CC(J)
+40 B2=TEMP
+RC=BX*B1-B2+CC(1)
+!
+SI=(RC*COS(AX)+AIC*SIN(AX))/AX
+SI=PIO2-SI
+IF (X.LT.0.0) SI=-SI
+RETURN
+!
+50 SI=SIGN(PIO2,X)
+RETURN
+END FUNCTION SI
+
+FUNCTION CIN(X)
+!
+!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
+!     MODIFIED BY A.H. MORRIS
+!
+!     REFERENCES
+!         SAND76-0062
+!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
+!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!
+!     ABSTRACT
+!         CIN COMPUTES THE INTEGRAL OF (1-COS(T))/T ON (0,X) BY MEANS
+!         OF CHEBYSHEV EXPANSIONS ON (0,5) AND (5,INFINITY).
+!
+!     DESCRIPTION OF ARGUMENTS
+!
+!         INPUT
+!           X      - LIMIT OF INTEGRATION, UNRESTRICTED
+!
+!         OUTPUT
+!           CIN    - VALUE OF THE INTEGRAL
+!
+!
+DIMENSION BB(16),CC(46)
+!     -------------------
+DATA N1,N2,M1,M2     / 16, 46, 14, 21 /
+DATA ECON            / 5.77215664901533E-01/
+!     -------------------
+DATA BB(1) / 1.82820351064538E-01/, BB(2) /-8.23768704567135E-02/, &
+&BB(3) /-1.03468764544958E-02/, BB(4) / 5.05085201960312E-03/, &
+&BB(5) / 5.73772812356328E-05/, BB(6) /-1.42717916181096E-04/, &
+&BB(7) / 2.89263664732599E-06/, BB(8) / 2.43068098304909E-06/, &
+&BB(9) /-7.90337487433443E-08/, BB(10)/-2.80205535437371E-08/, &
+&BB(11)/ 1.05488738052065E-09/, BB(12)/ 2.34186901801115E-10/, &
+&BB(13)/-9.27762554764014E-12/, BB(14)/-1.48682586858284E-12/, &
+&BB(15)/ 5.95210263082868E-14/, BB(16)/ 7.42057835287916E-15/
+!     -------------------
+DATA CC(1) / 9.76155271128712E-01/, CC(2) / 8.96845854916423E-02/, &
+&CC(3) /-3.04656658030696E-02/, CC(4) / 8.50892472922945E-02/, &
+&CC(5) /-5.78073683148386E-03/, CC(6) /-5.07182677775691E-03/, &
+&CC(7) / 8.38643256650893E-04/, CC(8) /-3.34223415981738E-04/, &
+&CC(9) /-2.15746207281216E-05/, CC(10)/ 1.28560650086065E-04/, &
+&CC(11)/-1.56456413510232E-05/, CC(12)/-1.52025513597262E-05/, &
+&CC(13)/ 4.04001013843204E-06/, CC(14)/-5.95896122752160E-07/, &
+&CC(15)/-4.34985305974340E-07/, CC(16)/ 7.13472533530840E-07/, &
+&CC(17)/-5.34302186061100E-08/, CC(18)/-1.76003581156610E-07/, &
+&CC(19)/ 3.85028855125900E-08/, CC(20)/ 1.92576544441700E-08/, &
+&CC(21)/-1.00735358217200E-08/, CC(22)/ 3.36359194377000E-09/, &
+&CC(23)/ 1.28049619406000E-09/, CC(24)/-2.42546870827000E-09/, &
+&CC(25)/ 1.86917288950000E-10/, CC(26)/ 7.13431298340000E-10/, &
+&CC(27)/-1.70673483710000E-10/, CC(28)/-1.14604070350000E-10/, &
+&CC(29)/ 5.88004411500000E-11/, CC(30)/-6.78417843000000E-12/, &
+&CC(31)/-1.21572380900000E-11/, CC(32)/ 1.26561248700000E-11/, &
+&CC(33)/ 4.74814180000000E-13/, CC(34)/-5.32309477000000E-12/, &
+&CC(35)/ 9.05903810000000E-13/, CC(36)/ 1.40046450000000E-12/, &
+&CC(37)/-5.00968320000000E-13/, CC(38)/-1.80458040000000E-13/
+DATA CC(39)/ 1.66162910000000E-13/, CC(40)/-5.02616400000000E-14/, &
+&CC(41)/-3.48453600000000E-14/, CC(42)/ 4.60056600000000E-14/, &
+&CC(43)/ 5.74000000000000E-16/, CC(44)/-1.95310700000000E-14/, &
+&CC(45)/ 3.68837000000000E-15/, CC(46)/ 5.62862000000000E-15/
+!     -------------------
+!     ****** AMAX IS A MACHINE DEPENDENT CONSTANT. IT IS ASSUMED THAT
+!            SIN(X) AND COS(X) ARE DEFINED FOR  ABS(X) .LE. AMAX, AND
+!            THAT ECON + LN(X) - (1 + 1/X)/X = ECON + LN(X)
+!            FOR X .GT. AMAX.
+!
+AMAX = 0.1/SPMPAR(1)
+!
+!
+AX = ABS(X)
+IF (AX.GT.5.0) GO TO 20
+J=N1
+BX=0.40*AX-1.0
+TX=BX+BX
+B1=BB(J)
+B2=0.
+do 10 I = 1,M1
+J=J-1
+TEMP=B1
+B1=TX*B1-B2+BB(J)
+10 B2=TEMP
+CIN=X*X*(BX*B1-B2+BB(1))
+RETURN
+!
+20 IF (AX.GT.AMAX) GO TO 50
+BX=10./AX-1.0
+TX=BX+BX
+J=N2
+B1=CC(J)
+B2=0.0
+do 30 I = 1,M2
+J=J-2
+TEMP=B1
+B1=TX*B1-B2+CC(J)
+30 B2=TEMP
+AIC=BX*B1-B2+CC(2)
+!
+J=N2-1
+B1=CC(J)
+B2=0.0
+do 40 I = 1,M2
+J=J-2
+TEMP=B1
+B1=TX*B1-B2+CC(J)
+40 B2=TEMP
+RC=BX*B1-B2+CC(1)
+!
+CIN=(RC*SIN(AX)-AIC*COS(AX))/AX
+CIN=(ECON-CIN)+ALOG(AX)
+RETURN
+!
+50 CIN=ECON+ALOG(AX)
+RETURN
+END FUNCTION CIN
+
+SUBROUTINE CEXEXI (Z, W)
+!-----------------------------------------------------------------------
+!        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
+REAL ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
+!-------------------------
+!     EULER = EULER CONSTANT
+!     CONST = (PI*PI)/4
+!     ZETA2 = THE RIEMANN ZETA FUNCTION EVALUATED AT 2
+!-------------------------
+DATA CONST /2.46740110027234/
+DATA EULER /.577215664901533/
+DATA ZETA2 /1.64493406684823/
+!-------------------------
+DATA ED(1)  /0.00000000000000E+00/, ED(2)  /.311105957086528E-01/, &
+&ED(3)  /.103661260539112E+00/, ED(4)  /.216532335244554E+00/, &
+&ED(5)  /.369931427960192E+00/, ED(6)  /.566766259990589E+00/, &
+&ED(7)  /.814042066324748E+00/, ED(8)  /.112384247540813E+01/, &
+&ED(9)  /.151400478148512E+01/, ED(10) /.200886795032284E+01/, &
+&ED(11) /.264052411823592E+01/, ED(12) /.345098449933392E+01/, &
+&ED(13) /.449583360763202E+01/, ED(14) /.585058263409822E+01/, &
+&ED(15) /.762273501463380E+01/, ED(16) /.997814501584578E+01/, &
+&ED(17) /.132122064896408E+02/, ED(18) /.180322948376021E+02/
+DATA EE(1)  /.850156516121093E-02/, EE(2)  /.505037465849058E-01/, &
+&EE(3)  /.836817368956407E-01/, EE(4)  /.107047582417607E+00/, &
+&EE(5)  /.120424719029462E+00/, EE(6)  /.125096631582229E+00/, &
+&EE(7)  /.122314435224685E+00/, EE(8)  /.112621417553907E+00/, &
+&EE(9)  /.963419407392582E-01/, EE(10) /.747398422757511E-01/, &
+&EE(11) /.508596135953441E-01/, EE(12) /.290822706773628E-01/, &
+&EE(13) /.132201640530101E-01/, EE(14) /.443802939829067E-02/, &
+&EE(15) /.992612478987576E-03/, EE(16) /.126579795112011E-03/, &
+&EE(17) /.702150908253350E-05/, EE(18) /.910281532564632E-07/
+!-------------------------
+DATA DD(1)  /0.00000000000000E+00/, DD(2)  /.419556678374293E-01/, &
+&DD(3)  /.117533661648665E+00/, DD(4)  /.228560237455987E+00/, &
+&DD(5)  /.375667350161240E+00/, DD(6)  /.791594846276672E+00/, &
+&DD(7)  /.107546889623058E+01/, DD(8)  /.142659208030841E+01/, &
+&DD(9)  /.186290554952377E+01/, DD(10) /.240730009509856E+01/, &
+&DD(11) /.308854035607524E+01/, DD(12) /.394277605155259E+01/, &
+&DD(13) /.501593196543981E+01/, DD(14) /.636759180748651E+01/, &
+&DD(15) /.807776193096055E+01/, DD(16) /.102598961138887E+02/, &
+&DD(17) /.130896768422610E+02/, DD(18) /.168832169085916E+02/, &
+&DD(19) /.224083240941713E+02/
+DATA DE(1) /-.346911733535892E-03/, DE(2) /-.603787732461745E-02/, &
+&DE(3) /-.152461305949249E-01/, DE(4) /-.210582169827291E-01/, &
+&DE(5) /-.171894208720754E-01/, DE(6)  /.314323467033032E-01/, &
+&DE(7)  /.750898531566972E-01/, DE(8)  /.124689787807260E+00/, &
+&DE(9)  /.168579075090035E+00/, DE(10) /.191715080699511E+00/, &
+&DE(11) /.182600794550836E+00/, DE(12) /.142345674307147E+00/, &
+&DE(13) /.874862222419327E-01/, DE(14) /.402175083288425E-01/, &
+&DE(15) /.128575005680180E-01/, DE(16) /.257673782598441E-02/, &
+&DE(17) /.275955003784349E-03/, DE(18) /.119139315517122E-04/, &
+&DE(19) /.107292980199386E-06/
+!-------------------------
+DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.237286128313683E-01/, &
+&CD(3)  /.854113210668760E-01/, CD(4)  /.185276627282059E+00/, &
+&CD(5)  /.323741526616688E+00/, CD(6)  /.503045460381267E+00/, &
+&CD(7)  /.728806607587188E+00/, CD(8)  /.101122770102872E+01/, &
+&CD(9)  /.136598448171249E+01/, CD(10) /.181510139038929E+01/, &
+&CD(11) /.238824701955419E+01/, CD(12) /.312490532008812E+01/, &
+&CD(13) /.407802489894445E+01/, CD(14) /.532033545554865E+01/, &
+&CD(15) /.695624307290579E+01/, CD(16) /.914759902547031E+01/, &
+&CD(17) /.121829074388544E+02/, CD(18) /.167511311969873E+02/
+DATA CE(1)  /.349517258926827E-01/, CE(2)  /.135849105925897E+00/, &
+&CE(3)  /.158850581552296E+00/, CE(4)  /.153001434535435E+00/, &
+&CE(5)  /.134520752856461E+00/, CE(6)  /.111913051619671E+00/, &
+&CE(7)  /.892008386656190E-01/, CE(8)  /.679227205472067E-01/, &
+&CE(9)  /.486723197887211E-01/, CE(10) /.320170976532266E-01/, &
+&CE(11) /.187008965021111E-01/, CE(12) /.929708414427865E-02/, &
+&CE(13) /.372604763161087E-02/, CE(14) /.111989537559823E-02/, &
+&CE(15) /.228057496872353E-03/, CE(16) /.269596227781453E-04/, &
+&CE(17) /.141255430224301E-05/, CE(18) /.176352326808806E-07/
+!-------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+R = X*X + Y*Y
+!
+IF (R .LE. 1.0) GO TO 100
+IF (R .GE. 1296.0) GO TO 10
+IF (X .LT. 0.07*Y*Y) GO TO 30
+GO TO 40
+!-----------------------------------------------------------------------
+!                     ASYMPTOTIC EXPANSION
+!-----------------------------------------------------------------------
+10 QF(1) =  X/R
+QF(2) = -Y/R
+SM(1) = -QF(1)
+SM(2) = -QF(2)
+TM(1) =  SM(1)
+TM(2) =  SM(2)
+PM = 1.0
+20 TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = PM*TS(1)
+   TM(2) = PM*TS(2)
+   PM = PM + 1.0
+   TS(1) = TM(1)/PM
+   TS(2) = TM(2)/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 21
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 130
+21 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (PM .LT. 36.0) GO TO 20
+GO TO 130
+!-----------------------------------------------------------------------
+!                      RATIONAL EXPANSION
+!-----------------------------------------------------------------------
+30 SM(1) = 0.0
+SM(2) = 0.0
+do 31 I = 1,18
+   TS(1) = X - CD(I)
+   TS(2) = Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) = -CE(I)*TS(1)/SS
+   TM(2) =  CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+31 CONTINUE
+GO TO 130
+!-----------------------------------------------------------------------
+!                 EXPANSION INVOLVING EI AND DI
+!-----------------------------------------------------------------------
+40 ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+!
+!                    SET SM = EXP(Z)*EI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+do 50 I = 1,18
+   TS(1) = -X - ED(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  EE(I)*TS(1)/SS
+   TM(2) = -EE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+50 CONTINUE
+SR(1) = ZL(1)*SM(1) - ZL(2)*SM(2)
+SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
+!
+!                    SET SM = EXP(Z)*DI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+do 60 I = 1,19
+   TS(1) = -X - DD(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  DE(I)*TS(1)/SS
+   TM(2) = -DE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+60 CONTINUE
+TS(1) = -(X*SM(1) + Y*SM(2))/R
+TS(2) = -(X*SM(2) - Y*SM(1))/R
+!
+!                    COMPUTE THE EXPANSION
+!
+SR(1) = SR(1) - TS(1) - ZETA2
+SR(2) = SR(2) - TS(2)
+SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = ZETA2
+70 PM = PM + 1.0
+   QM = QM - 1.0/(PM*PM)
+   TS(1) = TM(1)*X - TM(2)*Y
+   TS(2) = TM(1)*Y + TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   TS(1) = QM*TM(1)
+   TS(2) = QM*TM(2)
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) - TS(1)
+   SM(2) = SM(2) - TS(2)
+   GO TO 70
+80 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!
+!                      COMPUTE EXP(-Z)*SM
+!
+QM = EXP(-X)
+QF(1) = QM*COS(-Y)
+QF(2) = QM*SIN(-Y)
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+GO TO 130
+!-----------------------------------------------------------------------
+!                  SERIES FOR X*X + Y*Y .LE. 1
+!-----------------------------------------------------------------------
+100 SM(1) = 0.0
+SM(2) = 0.0
+ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+SR(1) = CONST + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
+SR(2) = ZL(1)*ZL(2)
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = 0.0
+110 PM = PM + 1.0
+   QM = QM + 1.0/PM
+   TS(1) = -TM(1)*X + TM(2)*Y
+   TS(2) = -TM(1)*Y - TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   R = (ZL(1) - 1.0/PM) - QM
+   TS(1) = (R*TM(1) - ZL(2)*TM(2))/PM
+   TS(2) = (R*TM(2) + ZL(2)*TM(1))/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 111
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 120
+111 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 110
+120 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!-----------------------------------------------------------------------
+!                         TERMINATION
+!-----------------------------------------------------------------------
+130 W = CMPLX(SM(1), SM(2))
+RETURN
+END SUBROUTINE CEXEXI
+
+COMPLEX function CLI(Z)
+!     ******************************************************************
+!     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
+!     ******************************************************************
+COMPLEX Z
+REAL QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
+REAL AZ(2), C, PM, R, SM(2), TM(2), TS(2), SR(2)
+!     ---------------------
+!     C = PI**2/6
+!     ---------------------
+DATA C /1.64493406684823/
+!     ---------------------
+DATA QB(1) / 2.77777777777778E-2/,  QB(2) /-1.00000000000000E-2/, &
+&QB(3) /-1.70068027210884E-2/,  QB(4) /-1.94444444444444E-2/, &
+&QB(5) /-2.06611570247934E-2/,  QB(6) /-2.14173006480699E-2/, &
+&QB(7) /-2.19488663772311E-2/,  QB(8) /-2.23492338111715E-2/, &
+&QB(9) /-2.26636891351914E-2/,  QB(10)/-2.29178211549926E-2/, &
+&QB(11)/-2.31276449354844E-2/,  QB(12)/-2.33038680700203E-2/, &
+&QB(13)/-2.34539766464373E-2/,  QB(14)/-2.35833786876607E-2/, &
+&QB(15)/-2.36960832049849E-2/,  QB(16)/-2.37951264448373E-2/, &
+&QB(17)/-2.38828504258091E-2/,  QB(18)/-2.39610907251825E-2/, &
+&QB(19)/-2.40313063764460E-2/,  QB(20)/-2.40946717197585E-2/, &
+&QB(21)/-2.41521426124012E-2/,  QB(22)/-2.42045049812210E-2/, &
+&QB(23)/-2.42524109782181E-2/,  QB(24)/-2.42964062815807E-2/, &
+&QB(25)/-2.43369509729144E-2/
+!     ---------------------
+AZ(1) = REAL(Z)
+AZ(2) = AIMAG(Z)
+R = CPABS(AZ(1),AZ(2))
+IF (R .GT. 0.5) GO TO 10
+SR(1) = 0.0
+SR(2) = 0.0
+QF(1) = -AZ(1)
+QF(2) = -AZ(2)
+TM(1) =  AZ(1)
+TM(2) =  AZ(2)
+GO TO 30
+!
+10 IF (R .LT. 3.0) GO TO 20
+ZL(1) = ALOG(R)
+ZL(2) = ATAN2(AZ(2),AZ(1))
+SR(1) = C + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
+SR(2) = ZL(1)*ZL(2)
+QF(1) = (-AZ(1)/R)/R
+QF(2) = (AZ(2)/R)/R
+TM(1) = QF(1)
+TM(2) = QF(2)
+GO TO 30
+!
+20 ZD(1) = 1.0 + AZ(1)
+ZD(2) = AZ(2)
+DS = ZD(1)*ZD(1) + ZD(2)*ZD(2)
+IF (DS .EQ. 0.0) GO TO 100
+DL(1) = 0.5*ALOG(DS)
+DL(2) = ATAN2(ZD(2),ZD(1))
+IF (DS .GT. 0.25) GO TO 50
+   ZL(1) = ALOG(R)
+   ZL(2) = ATAN2(-AZ(2),-AZ(1))
+   SR(1) = -C + (DL(1)*ZL(1) - DL(2)*ZL(2))
+   SR(2) = DL(1)*ZL(2) + DL(2)*ZL(1)
+   QF(1) = ZD(1)
+   QF(2) = ZD(2)
+   TM(1) = QF(1)
+   TM(2) = QF(2)
+!
+!             EVALUATION OF THE TAYLOR SERIES
+!
+30 SR(1) = SR(1) + TM(1)
+SR(2) = SR(2) + TM(2)
+SM(1) = 0.0
+SM(2) = 0.0
+PM = 1.0
+40 PM = PM + 1.0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = TS(1)
+   TM(2) = TS(2)
+   TS(1) = TM(1)/(PM*PM)
+   TS(2) = TM(2)/(PM*PM)
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 41
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
+41 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 40
+!
+!        EVALUATION OF THE SERIES IN  U = -LN(1 + Z)
+!
+50 QF(1) = DL(1)*DL(1) - DL(2)*DL(2)
+QF(2) = 2.0*DL(1)*DL(2)
+SR(1) = DL(1) + 0.25*QF(1)
+SR(2) = DL(2) + 0.25*QF(2)
+SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = DL(1)
+TM(2) = DL(2)
+do 61 N = 1,25
+   TS(1) = QB(N)*(TM(1)*QF(1) - TM(2)*QF(2))
+   TS(2) = QB(N)*(TM(1)*QF(2) + TM(2)*QF(1))
+   TM(1) = TS(1)
+   TM(2) = TS(2)
+   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 60
+   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
+60 SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+61 CONTINUE
+!
+80 CLI = CMPLX(SR(1) + SM(1), SR(2) + SM(2))
+RETURN
+!
+!                  EVALUATION AT Z = -1
+!
+100 CLI = CMPLX(-C, 0.0)
+RETURN
+END FUNCTION CLI
+
+REAL function ALI(X)
+!-----------------------------------------------------------------------
+!            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WEAPONS CENTER
+!        DAHLGREN VIRGINIA
+!-----------------------------------------------------------------------
+REAL A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
+DOUBLE PRECISION X0
+!--------------------------
+!     CONST = PI**2/6
+!     X0 = ZERO OF THE REAL DILOGARITHM FUNCTION
+!--------------------------
+DATA CONST /1.64493406684823/
+DATA X0 /-12.5951703698450161286398965D0/
+!--------------------------
+DATA A(1)/.217590467528373E+01/, A(2)/.165569610692639E+01/, &
+&A(3)/.522944061702389E+00/, A(4)/.626073688152965E-01/, &
+&A(5)/.187280204672313E-02/
+DATA B(1)/.242590467528371E+01/, B(2)/.215106116463796E+01/, &
+&B(3)/.853664388896516E+00/, B(4)/.148635712775060E+00/, &
+&B(5)/.936304016023909E-02/, B(6)/.115362459229893E-03/
+!--------------------------
+DATA C(1)/-.139792925233661E+01/, C(2) /.368504569727477E+00/, &
+&C(3) /.467406917183686E-01/, C(4) /.113795257294490E-01/, &
+&C(5) /.369638462505741E-02/, C(6) /.140888669464352E-02/, &
+&C(7) /.580505641503297E-03/, C(8) /.279065584075104E-03/, &
+&C(9) /.727678355839120E-04/, C(10)/.941452067850052E-04/
+DATA D(1)/-.164792925233634E+01/, D(2) /.669375771675355E+00/
+!--------------------------
+DATA E(1)/-.194565741631859E+00/, E(2)/-.430017756528812E-02/, &
+&E(3)/-.129188263110634E-03/, E(4)/-.344864872694838E-05/, &
+&E(5) /.566899694553089E-09/, E(6) /.126641834906132E-07/, &
+&E(7) /.163966793864421E-08/, E(8) /.164221074630109E-09/, &
+&E(9) /.149644905021032E-10/, E(10)/.130214292886747E-11/, &
+&E(11)/.110415518123737E-12/, E(12)/.921674760163207E-14/, &
+&E(13)/.761646464974859E-15/, E(14)/.625216733700975E-16/, &
+&E(15)/.510910937990370E-17/, E(16)/.416215390793180E-18/, &
+&E(17)/.338357379188308E-19/, E(18)/.274674744366340E-20/
+!--------------------------
+DATA P(1)/-.124827318209942E+01/, P(2)/-.593706951284264E-01/, &
+&P(3)/ .368603360394688E-01/, P(4)/ .243497524184253E-02/
+DATA Q(1)/ .100000000000000E+01/, Q(2)/ .252618047164349E+00/, &
+&Q(3)/ .171618729068655E-01/, Q(4)/ .234444792844727E-03/, &
+&Q(5)/-.174928841869743E-05/, Q(6)/ .347369010951250E-07/, &
+&Q(7)/-.713275908929482E-09/, Q(8)/ .958397514026421E-11/
+!--------------------------
+DATA R(1)/.265189940015693E+00/, R(2)/.230201018075415E+00/, &
+&R(3)/.315999623504943E-01/, R(4)/.154066621939470E-02/, &
+&R(5)/.286697611038892E-04/, R(6)/.163031291368652E-06/, &
+&R(7)/.838957807732251E-10/
+DATA S(1)/.100000000000000E+01/, S(2)/.177195068872258E+00/, &
+&S(3)/.110559275223905E-01/, S(4)/.291916852717175E-03/, &
+&S(5)/.304793254397420E-05/, S(6)/.882114921507386E-08/
+!--------------------------
+!
+IF (X .GT. 1.0) GO TO 50
+IF (X .GE. 0.0) GO TO 40
+IF (X .GE.-0.5) GO TO 30
+IF (X .GE.-1.0) GO TO 20
+IF (X .GE.-2.0) GO TO 10
+!
+!                            X .LT. -2
+!
+IF (X .GE. -26.63 .AND. X .LE. -6.97) GO TO 100
+T = -1.0/X
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = 0.5*ALOG(-X)**2 - (2.0*CONST + W/X)
+RETURN
+!
+!                        -2 .LE. X .LT. -1
+!
+10 T = -(1.0 + X)
+W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
+&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
+&B(1))*T + 1.0)
+ALI = -(CONST + T*W) + ALOG(-X)*ALOG(T)
+RETURN
+!
+!                       -1 .LE. X .LT. -1/2
+!
+20 T = 0.5 + (0.5 + X)
+ALI = -CONST
+IF (T .EQ. 0.0) RETURN
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = (-CONST + T*W) + ALOG(-X)*ALOG(T)
+RETURN
+!
+!                       -1/2 .LE. X .LT. 0
+!
+30 T = -X
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = X*W
+RETURN
+!
+!                         0 .LE. X .LE. 1
+!
+40 W = (((((A(5)*X + A(4))*X + A(3))*X + A(2))*X + A(1))*X + 1.0)/ &
+&((((((B(6)*X + B(5))*X + B(4))*X + B(3))*X + B(2))*X + &
+&B(1))*X + 1.0)
+ALI = X*W
+RETURN
+!
+!                            X .GT. 1
+!
+50 T = 1.0/X
+W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
+&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
+&B(1))*T + 1.0)
+ALI = (CONST - W/X) + 0.5*ALOG(X)**2
+RETURN
+!
+!-----------------------------------------------------------------------
+!              EVALUATION FOR  -26.63 .LE. X .LE. -6.97
+!-----------------------------------------------------------------------
+!
+100 IF (X .LE. -14.0) GO TO 120
+IF (X .LE. -11.1) GO TO 110
+!
+!                    -11.1 .LT. X .LE. -6.97
+!
+T = -(X + 7.0)
+ALI = (((P(4)*T + P(3))*T + P(2))*T + P(1)) / (((((((Q(8)*T + &
+&Q(7))*T + Q(6))*T + Q(5))*T + Q(4))*T + Q(3))*T + &
+&Q(2))*T + Q(1))
+RETURN
+
+!
+!                     -14 .LT. X .LE. -11.1
+!
+110 T = DBLE(X) - X0
+W = E(14)
+do 111 L = 1,13
+   I = 14 - L
+111 W = W*T + E(I)
+ALI = T*W
+RETURN
+!
+!                     -26.63 .LE. X .LE. -14
+!
+120 T = -(X + 14.0)
+ALI = ((((((R(7)*T + R(6))*T + R(5))*T + R(4))*T + R(3))*T + &
+&R(2))*T + R(1)) / (((((S(6)*T + S(5))*T + &
+&S(4))*T + S(3))*T + S(2))*T + S(1))
+RETURN
+END FUNCTION ALI
+

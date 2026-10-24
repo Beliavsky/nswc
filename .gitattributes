@@ -1,0 +1,8 @@
+# Keep generated source byte comparisons reproducible on every platform.
+*.f text eol=lf
+*.f90 text eol=lf
+*.py text eol=lf
+
+# Preserve original whitespace and procedure separators at partition boundaries.
+nswc_orig.f whitespace=-blank-at-eol
+source_parts/*.f90 whitespace=-blank-at-eof

@@ -5,7 +5,7 @@ Report **NSWCDD/TR-92/425** (January 1993)
 Approved for public release; distribution unlimited.
 
 This is a GitHub-browseable edition of the 1993 manual, checked against the
-supplied fixed-form Fortran source (`nswc.f`). The routine index covers **576**
+original fixed-form Fortran source (`nswc_orig.f`). The routine index covers **576**
 documented procedures; the source contains **1,062** declarations including
 implementation helpers.
 
@@ -22,7 +22,9 @@ viewable code partitions.
 - [Review and limitations](NSWC_Source_Audit.md)
 - [Spelling and OCR checks](docs/spelling-checks.md)
 - [Original report cover](scans/page_0001.png)
-- [Original Fortran source](nswc.f)
+- [Recommended free-form Fortran source](nswc.f90)
+- [Readable fixed-form alternative](nswc.f)
+- [Unchanged original Fortran source](nswc_orig.f)
 
 ## Contents
 
@@ -57,24 +59,59 @@ viewable code partitions.
 
 *The chapter files are kept below GitHub's large-file limits to make in-browser navigation and rendering easier.*
 
-## Source readability script
+## Using the source
 
-`tools/name_procedure_ends.py` adds the matching name to procedure endings and
-ensures a blank line after each procedure except the last. It handles fixed-form
-typed function headers, continuations, labels, comments, and sequence fields.
-It uses only the Python standard library and defaults to a preview:
+Use `nswc.f90`, the recommended free-form version. It has named procedure
+endings and blank lines between procedures. `nswc.f` provides the same library
+in readable fixed form; `nswc_orig.f` preserves the supplied source unchanged.
+Compile only one version of the library to avoid duplicate procedure definitions.
+Documentation source links point into free-form files in `source_parts/`;
+displayed line numbers refer to the complete `nswc.f90`.
+
+The library retains legacy Fortran features. For GNU Fortran, for example:
 
 ```sh
-python tools/name_procedure_ends.py nswc.f
-python tools/name_procedure_ends.py nswc.f --output nswc_readable.f
+gfortran -c -std=legacy -fallow-argument-mismatch nswc.f90
 ```
 
-The output must be a new file. `--diff` shows proposed changes; `--in-place`
-updates the source after creating a non-overwriting `.bak` backup. Unsupported
-source forms or mismatched procedure boundaries cause an error before writing.
-The script targets external functions and subroutines, not modules or programs.
-Named endings require a Fortran 90 or newer compiler, even with fixed-form source.
+These options accommodate existing legacy constructs and argument mismatches;
+they do not establish correctness for every routine. Machine constants retain
+the original configuration; see the installation appendix before numerical use.
+Named procedure endings require Fortran 90 or newer, including in `nswc.f`.
 
-Applying the script changes source line numbers. Regenerate `source_parts` and
-the Markdown source links together before publishing a converted `nswc.f`.
-Run the script's tests with `python -m unittest discover -s tests -v`.
+## Regenerating the source
+
+Maintain `nswc.f` and generate `nswc.f90`, its browsable partitions, and the
+Markdown source links together:
+
+```sh
+python tools/regenerate_sources.py
+python tools/regenerate_sources.py --check
+```
+
+The generator overwrites generated source files and updates source-link line
+numbers. Do not edit `nswc.f90` or `source_parts/` independently. It uses the
+repository copy of `tools/fixed_to_free.py`, adapted from
+`C:/python/fortran/xfree.py`, so regeneration needs only Python's standard library.
+The local copy additionally handles compact DATA array declarations and wraps
+long FORMAT statements without splitting their Hollerith text.
+
+`tools/name_procedure_ends.py` created the readable fixed-form source from
+`nswc_orig.f`. It supports a preview, a separate output, and an in-place update
+with a non-overwriting backup:
+
+```sh
+python tools/name_procedure_ends.py nswc_orig.f --diff
+python tools/name_procedure_ends.py nswc_orig.f --output nswc_readable.f
+```
+
+The output must be a new file. Unsupported source forms or mismatched procedure
+boundaries cause an error before writing. The script targets external functions
+and subroutines, not modules or programs. Run the Python checks with
+`python -m unittest discover -s tests -v`.
+
+Run `python tools/validate_sources.py` to compile all three versions with GNU
+Fortran and compare representative numerical results. Use `--compiler PATH`
+when the compiler is not on your command search path. These checks cover vector
+operations, the gamma function, Chebyshev evaluation, and adaptive quadrature;
+they are not a full numerical validation of the library.

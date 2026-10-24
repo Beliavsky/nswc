@@ -429,7 +429,8 @@ C     DATA IMACH(10) /  1023 /
 C
       IPMPAR = IMACH(I)
       RETURN
-      END
+      END FUNCTION IPMPAR
+
 C-----------------------------------------------------------------------
       SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 C-----------------------------------------------------------------------
@@ -697,7 +698,8 @@ C-----------------------------------------------------------------------
       IMACH(9) = MINEXP
       IMACH(10)= MAXEXP
       RETURN
-      END
+      END SUBROUTINE MACH
+
       SUBROUTINE RADIX (IBETA)
 C-----------------------------------------------------------------------
 C     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
@@ -719,7 +721,8 @@ C
 C
       IBETA = INT(D1 - D2)
       RETURN
-      END
+      END SUBROUTINE RADIX
+
       SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       REAL EPS, XINT, XMIN, XMAX
@@ -959,7 +962,8 @@ C-----------------------------------------------------------------------
      *        43H        IF ONE WISHES, SET IMAX (OR MAXEXP)/
      *        45H        TO A LARGER VALUE AND RERUN THE CODE./)
 C-----------------------------------------------------------------------
-      END
+      END SUBROUTINE MACH1
+
       SUBROUTINE STORE2 (A, B)
 C-----------------------------------------------------------------------
 C     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
@@ -968,7 +972,8 @@ C-----------------------------------------------------------------------
       D1 = A
       D2 = B
       RETURN
-      END
+      END SUBROUTINE STORE2
+
       SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
       DOUBLE PRECISION EPS, XINT, XMIN, XMAX
@@ -1208,7 +1213,8 @@ C-----------------------------------------------------------------------
      *        44H        IF ONE WISHES, SET IDMAX (OR MAXEXP)/
      *        45H        TO A LARGER VALUE AND RERUN THE CODE./)
 C-----------------------------------------------------------------------
-      END
+      END SUBROUTINE MACH2
+
       SUBROUTINE DSTOR2 (A, B)
 C-----------------------------------------------------------------------
 C     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
@@ -1218,7 +1224,8 @@ C-----------------------------------------------------------------------
       D1 = A
       D2 = B
       RETURN
-      END
+      END SUBROUTINE DSTOR2
+
       REAL FUNCTION SPMPAR (I)
 C-----------------------------------------------------------------------
 C
@@ -1270,7 +1277,8 @@ C
       Z = B**(EMAX - 2)
       SPMPAR = ((W * Z) * B) * B
       RETURN
-      END
+      END FUNCTION SPMPAR
+
       DOUBLE PRECISION FUNCTION DPMPAR (I)
 C-----------------------------------------------------------------------
 C
@@ -1323,7 +1331,8 @@ C
       Z = B**(EMAX - 2)
       DPMPAR = ((W * Z) * B) * B
       RETURN
-      END
+      END FUNCTION DPMPAR
+
       REAL FUNCTION EPSLN (L)
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
@@ -1347,7 +1356,8 @@ C
    50 M = 1 - IPMPAR(5)
       EPSLN = M * LNB
       RETURN
-      END
+      END FUNCTION EPSLN
+
       DOUBLE PRECISION FUNCTION DEPSLN (L)
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
@@ -1372,7 +1382,8 @@ C
    50 M = 1 - IPMPAR(8)
       DEPSLN = M * LNB
       RETURN
-      END
+      END FUNCTION DEPSLN
+
       REAL FUNCTION EXPARG (L)
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
@@ -1405,7 +1416,8 @@ C
    60 M = IPMPAR(7)
       EXPARG = 0.99999 * (M * LNB)
       RETURN
-      END
+      END FUNCTION EXPARG
+
       DOUBLE PRECISION FUNCTION DXPARG (L)
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
@@ -1439,7 +1451,8 @@ C
    60 M = IPMPAR(10)
       DXPARG = 0.999999999999D+00 * (M * LNB)
       RETURN
-      END
+      END FUNCTION DXPARG
+
       SUBROUTINE ISHELL (A, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1483,7 +1496,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE ISHELL
+
       SUBROUTINE SHELL (A, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1528,7 +1542,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE SHELL
+
       SUBROUTINE SHELL2 (A, B, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1578,7 +1593,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE SHELL2
+
       SUBROUTINE RSORT (A, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1623,7 +1639,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE RSORT
+
       SUBROUTINE RISORT (A, M, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1674,7 +1691,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE RISORT
+
       SUBROUTINE RRSORT (A, B, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1724,7 +1742,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE RRSORT
+
       SUBROUTINE DSORT (A, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1769,7 +1788,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE DSORT
+
       SUBROUTINE DISORT (A, M, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1820,7 +1840,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE DISORT
+
       SUBROUTINE DDSORT (A, B, N)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
@@ -1870,7 +1891,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE DDSORT
+
       SUBROUTINE AORD (A, N)
 C-----------------------------------------------------------------------
 C     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
@@ -1916,7 +1938,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE AORD
+
       SUBROUTINE DAORD (A, N)
 C-----------------------------------------------------------------------
 C     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
@@ -1962,7 +1985,8 @@ C
 C
    40 I = I - 1
       RETURN
-      END
+      END SUBROUTINE DAORD
+
       SUBROUTINE QSORTI (X, IND, N)
       INTEGER N, X(N), IND(N)
 C
@@ -2160,7 +2184,8 @@ C
       IF (T .LT. X(INDX)) GO TO 13
       IND(K+1) = IT
       GO TO 12
-      END
+      END SUBROUTINE QSORTI
+
       SUBROUTINE QSORTR (X, IND, N)
       INTEGER N, IND(N)
       REAL    X(N)
@@ -2359,7 +2384,8 @@ C
       IF (T .LT. X(INDX)) GO TO 13
       IND(K+1) = IT
       GO TO 12
-      END
+      END SUBROUTINE QSORTR
+
       SUBROUTINE QSORTD (X, IND, N)
       INTEGER N, IND(N)
       DOUBLE PRECISION X(N)
@@ -2559,7 +2585,8 @@ C
       IF (T .LT. X(INDX)) GO TO 13
       IND(K+1) = IT
       GO TO 12
-      END
+      END SUBROUTINE QSORTD
+
       SUBROUTINE IORDER (A, IP, N)
       INTEGER N, A(N), IP(N)
 C
@@ -2629,7 +2656,8 @@ C
     5 DO 6 K = 1,NN
     6   IP(K) = -IP(K)
       RETURN
-      END
+      END SUBROUTINE IORDER
+
       SUBROUTINE RORDER (A, IP, N)
       INTEGER N, IP(N)
       REAL    A(N)
@@ -2701,7 +2729,8 @@ C
     5 DO 6 K = 1,NN
     6   IP(K) = -IP(K)
       RETURN
-      END
+      END SUBROUTINE RORDER
+
       SUBROUTINE DORDER (A, IP, N)
       INTEGER N, IP(N)
       DOUBLE PRECISION A(N)
@@ -2773,7 +2802,8 @@ C
     5 DO 6 K = 1,NN
     6   IP(K) = -IP(K)
       RETURN
-      END
+      END SUBROUTINE DORDER
+
       REAL FUNCTION CBRT (X)
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
@@ -2787,7 +2817,8 @@ C-----------------------------------------------------------------------
    30 R = ALOG(-X)/3.0
       CBRT = -EXP(R)
       RETURN
-      END
+      END FUNCTION CBRT
+
       DOUBLE PRECISION FUNCTION DCBRT (X)
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
@@ -2803,7 +2834,8 @@ C
    30 R = DLOG(-X)/3.D0
       DCBRT = -DEXP(R)
       RETURN
-      END
+      END FUNCTION DCBRT
+
       FUNCTION ARTNQ(Y,X)
       IF (X) 1,2,5
     1 ARTNQ=ATAN(Y/X)+3.1415926535898
@@ -2820,7 +2852,8 @@ C
       RETURN
     8 ARTNQ=0.
       RETURN
-      END
+      END FUNCTION ARTNQ
+
       DOUBLE PRECISION FUNCTION DARTNQ(Y,X)
       DOUBLE PRECISION X,Y
       IF (X) 1,2,5
@@ -2838,7 +2871,8 @@ C
       RETURN
     8 DARTNQ=0.D0
       RETURN
-      END
+      END FUNCTION DARTNQ
+
       REAL FUNCTION CPABS(X, Y)
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
@@ -2853,7 +2887,8 @@ C     --------------------------------------
          RETURN
    20 CPABS = 0.0
       RETURN
-      END
+      END FUNCTION CPABS
+
       DOUBLE PRECISION FUNCTION DCPABS(X, Y)
       DOUBLE PRECISION X, Y
 C     --------------------------------------
@@ -2871,7 +2906,8 @@ C
          RETURN
    20 DCPABS = 0.D0
       RETURN
-      END
+      END FUNCTION DCPABS
+
       SUBROUTINE CREC (X, Y, U, V)
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
@@ -2887,7 +2923,8 @@ C-----------------------------------------------------------------------
       U = 1.0/D
       V = -T/D
       RETURN
-      END
+      END SUBROUTINE CREC
+
       SUBROUTINE DCREC (X, Y, U, V)
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
@@ -2906,7 +2943,8 @@ C
       U = 1.D0/D
       V = -T/D
       RETURN
-      END
+      END SUBROUTINE DCREC
+
       COMPLEX FUNCTION CDIV (A, B)
 C-----------------------------------------------------------------------
 C              COMPLEX DIVISION A/B WHERE B IS NONZERO
@@ -2931,7 +2969,8 @@ C
       V = (AI*T - AR)/D
       CDIV = CMPLX(U,V)
       RETURN
-      END
+      END FUNCTION CDIV
+
       SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
@@ -2963,7 +3002,8 @@ C
    20 CR = DPMPAR(3)
       CI = CR
       RETURN
-      END
+      END SUBROUTINE CDIVID
+
       SUBROUTINE DCSQRT (Z, W)
       DOUBLE PRECISION Z(2), W(2)
 C ----------------------------------------------------------------------
@@ -3009,12 +3049,14 @@ C
       W(2) = DSIGN(W(2),Y)
       W(1) = 0.5D0*Y/W(2)
       RETURN
-      END
+      END SUBROUTINE DCSQRT
+
       SUBROUTINE POCA(R,A,X,Y)
       X=R*COS(A)
       Y=R*SIN(A)
       RETURN
-      END
+      END SUBROUTINE POCA
+
       SUBROUTINE CAPO(X,Y,R,THETA)
       IF (ABS(X).LE.ABS(Y)) GO TO 10
       A=Y/X
@@ -3029,14 +3071,16 @@ C
    20 R=0.0
       THETA=0.0
       RETURN
-      END
+      END SUBROUTINE CAPO
+
       SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
       SINA=SIN(A)
       COSA=COS(A)
       X2= X1*COSA+Y1*SINA
       Y2=-X1*SINA+Y1*COSA
       RETURN
-      END
+      END SUBROUTINE ROTA
+
       SUBROUTINE SROTG(SA,SB,SC,SS)
 C
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
@@ -3108,7 +3152,8 @@ C
       SS = 0.
       RETURN
 C
-      END
+      END SUBROUTINE SROTG
+
       SUBROUTINE DROTG(DA,DB,DC,DS)
 C
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
@@ -3181,7 +3226,8 @@ C
       DS = 0.D0
       RETURN
 C
-      END
+      END SUBROUTINE DROTG
+
       SUBROUTINE ROT3 (A, THETA)
       DIMENSION A(3,3), THETA(3)
       DATA PIHALF/1.5707963267949/
@@ -3220,7 +3266,8 @@ C
       V = -V/SIN(THETA(2))
    22 THETA(1) = ATAN2(V,U)
       RETURN
-      END
+      END SUBROUTINE ROT3
+
       SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
       REAL XK, YK, ZK, CX, SX, CY, SY
 C
@@ -3264,7 +3311,8 @@ C
     1 CX = 1.
       SX = 0.
       RETURN
-      END
+      END SUBROUTINE CONSTR
+
       REAL FUNCTION ANG (N, X, Y)
 C-----------------------------------------------------------------------
 C           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
@@ -3296,7 +3344,8 @@ C                           ERROR RETURN
 C
    30 ANG = -1.0
       RETURN
-      END
+      END FUNCTION ANG
+
       REAL FUNCTION SIN0 (X)
 C-----------------------------------------------------------------------
 C          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
@@ -3310,7 +3359,8 @@ C------------------------
       SIN0 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T
      *                  + A1)*T + A0)*X
       RETURN
-      END
+      END FUNCTION SIN0
+
       REAL FUNCTION COS0 (X)
 C-----------------------------------------------------------------------
 C          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
@@ -3322,7 +3372,8 @@ C------------------------
       T = X*X
       COS0 = (((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T + A1)*T + 1.0
       RETURN
-      END
+      END FUNCTION COS0
+
       REAL FUNCTION SIN1 (X)
 C-----------------------------------------------------------------------
 C                   EVALUATION  OF SIN(X*PI)
@@ -3372,7 +3423,8 @@ C
    30 IF (X .LT. 0.0) SIN1 = - SIN1
       IF (MOD(N,2) .NE. 0) SIN1 = - SIN1
       RETURN
-      END
+      END FUNCTION SIN1
+
       REAL FUNCTION COS1 (X)
 C-----------------------------------------------------------------------
 C                   EVALUATION  OF COS(X*PI)
@@ -3422,7 +3474,8 @@ C                        TERMINATION
 C
    30 IF (MOD(N,2) .NE. 0) COS1 = - COS1
       RETURN
-      END
+      END FUNCTION COS1
+
       DOUBLE PRECISION FUNCTION DSIN1 (X)
 C-----------------------------------------------------------------------
 C
@@ -3515,7 +3568,8 @@ C
    30 IF (X .LT. 0.0) DSIN1 = - DSIN1
       IF (MOD(N,2) .NE. 0) DSIN1 = - DSIN1
       RETURN
-      END
+      END FUNCTION DSIN1
+
       DOUBLE PRECISION FUNCTION DCOS1 (X)
 C-----------------------------------------------------------------------
 C
@@ -3608,7 +3662,8 @@ C                        TERMINATION
 C
    30 IF (MOD(N,2) .NE. 0) DCOS1 = - DCOS1
       RETURN
-      END
+      END FUNCTION DCOS1
+
       SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
 C
       INTEGER ISW
@@ -3708,7 +3763,8 @@ C
       RETURN
     5 COSHM = (((1./EXPX-2.)-XS)+EXPX)/2.
       RETURN
-      END
+      END SUBROUTINE SNHCSH
+
       REAL FUNCTION ESUM (MU, X)
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
@@ -3730,7 +3786,8 @@ C
    20 W = MU
       ESUM = EXP(W)*EXP(X)
       RETURN
-      END
+      END FUNCTION ESUM
+
       DOUBLE PRECISION FUNCTION DESUM (MU, X)
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
@@ -3754,7 +3811,8 @@ C
    20 W = MU
       DESUM = DEXP(W)*DEXP(X)
       RETURN
-      END
+      END FUNCTION DESUM
+
       REAL FUNCTION REXP (X)
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
@@ -3777,7 +3835,8 @@ C
          RETURN
    30 REXP = -1.0
       RETURN
-      END
+      END FUNCTION REXP
+
       DOUBLE PRECISION FUNCTION DREXP (X)
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
@@ -3832,7 +3891,8 @@ C
          RETURN
    30 DREXP = -1.D0
       RETURN
-      END
+      END FUNCTION DREXP
+
       SUBROUTINE REXP1 (X, E, W)
 C-----------------------------------------------------------------------
 C
@@ -3862,7 +3922,8 @@ C
          RETURN
    30 W = -1.0/X
       RETURN
-      END
+      END SUBROUTINE REXP1
+
       SUBROUTINE DREXP1 (X, E, W)
 C-----------------------------------------------------------------------
 C
@@ -3925,7 +3986,8 @@ C
          RETURN
    30 W = -1.D0/X
       RETURN
-      END
+      END SUBROUTINE DREXP1
+
       REAL FUNCTION ALNREL(A)
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
@@ -3947,7 +4009,8 @@ C
       IF (A .LT. 0.0) X = (A + 0.5) + 0.5
       ALNREL = ALOG(X)
       RETURN
-      END
+      END FUNCTION ALNREL
+
       DOUBLE PRECISION FUNCTION DLNREL (A)
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
@@ -3997,7 +4060,8 @@ C
       Z = ((((W*T2 + C5)*T2 + C4)*T2 + C3)*T2 + C2)*T2 + C1
       DLNREL = 2.D0*T*(1.D0 + T2*Z)
       RETURN
-      END
+      END FUNCTION DLNREL
+
       REAL FUNCTION RLOG(X)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
@@ -4045,7 +4109,8 @@ C
   100 R = (X - 0.5) - 0.5
       RLOG = R - ALOG(X)
       RETURN
-      END
+      END FUNCTION RLOG
+
       REAL FUNCTION RLOG1(X)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
@@ -4093,7 +4158,8 @@ C
   100 W = (X + 0.5) + 0.5
       RLOG1 = X - ALOG(W)
       RETURN
-      END
+      END FUNCTION RLOG1
+
       DOUBLE PRECISION FUNCTION DRLOG (X)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
@@ -4171,7 +4237,8 @@ C
   100 R = (X - 0.5D0) - 0.5D0
       DRLOG = R - DLOG(X)
       RETURN
-      END
+      END FUNCTION DRLOG
+
       DOUBLE PRECISION FUNCTION DRLOG1 (X)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
@@ -4249,7 +4316,8 @@ C
   100 W = (X + 0.5D0) + 0.5D0
       DRLOG1 = X - DLOG(W)
       RETURN
-      END
+      END FUNCTION DRLOG1
+
       SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
       REAL X(N), Y(N)
 C-----------------------------------------------------------------------
@@ -4325,7 +4393,8 @@ C     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
 C
    20 L = 0
       RETURN
-      END
+      END SUBROUTINE LOCPT
+
       SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
 C-----------------------------------------------------------------------
 C
@@ -4483,7 +4552,8 @@ C
       RETURN
   220 IERR = -I
       RETURN
-      END
+      END SUBROUTINE PFIND
+
       SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
 C-----------------------------------------------------------------------
 C           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
@@ -4864,7 +4934,8 @@ C
       VY(2) = Y(M)
       VY(3) = Y(1)
       RETURN
-      END
+      END SUBROUTINE HULL
+
       REAL FUNCTION PAREA(X, Y, NB)
       INTEGER NB
       REAL X(NB), Y(NB)
@@ -4897,7 +4968,8 @@ C
    31    A = A + X(I)*(Y(I+1) - Y(I-1))
       PAREA = 0.5*A
       RETURN
-      END
+      END FUNCTION PAREA
+
       SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
 C
 C SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
@@ -4999,7 +5071,8 @@ C
       RETURN
    40 IND = -5
       RETURN
-      END
+      END SUBROUTINE HC
+
       SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR,
      *                VC, P, SUBR, RBUS, TOR, JR, K, IND0)
 C
@@ -5328,7 +5401,8 @@ C
       RETURN
   620 IND = -6
       RETURN
-      END
+      END SUBROUTINE HC1
+
       SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K,
      * JR, M, NP1)
 C
@@ -5388,7 +5462,8 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
    90 RBUS(I1) = 0
       RBUS(J) = 0
       RETURN
-      END
+      END SUBROUTINE IPATH
+
       SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
 C
 C FORWARD STEP UPDATING
@@ -5411,7 +5486,8 @@ C
    30 CONTINUE
       V1(I1) = 0
       RETURN
-      END
+      END SUBROUTINE FUPD
+
       SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
 C
 C BACKTRACKING STEP UPDATING
@@ -5435,7 +5511,8 @@ C
         V2(IA) = V2(IA) + 1
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BUPD
+
       SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
 C
 C UPDATING FOR IMPLIED ARC
@@ -5464,7 +5541,8 @@ C
       RETURN
    50 IA = 0
       RETURN
-      END
+      END SUBROUTINE IUPD
+
       SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M,
      * NP1)
 C
@@ -5506,7 +5584,8 @@ C ARC  (IA,IB)  IS NOT IN THE GRAPH.
 C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
    40 JJ = -1
       RETURN
-      END
+      END SUBROUTINE RARC
+
       SUBROUTINE CERF (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -5657,7 +5736,8 @@ C
       EF(2) = -SN*EF(2)
       W = CMPLX(EF(1),EF(2))
       RETURN
-      END
+      END SUBROUTINE CERF
+
       SUBROUTINE CERFC (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -5830,7 +5910,8 @@ C
       SM(2) = QM*SIN(SZ(2)) + SM(2)
       W = CMPLX(SM(1),SM(2))
       RETURN
-      END
+      END SUBROUTINE CERFC
+
       REAL FUNCTION ERF (X)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE REAL ERROR FUNCTION
@@ -5889,7 +5970,8 @@ C
 C
    30 ERF = SIGN(1.0,X)
       RETURN
-      END
+      END FUNCTION ERF
+
       REAL FUNCTION ERFC (X)
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -5971,7 +6053,8 @@ C             LIMIT VALUE FOR LARGE POSITIVE X
 C
    50 ERFC = 0.0
       RETURN
-      END
+      END FUNCTION ERFC
+
       REAL FUNCTION ERFC1 (IND, X)
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -6062,7 +6145,8 @@ C                       WHEN IND = 0
 C
    60 ERFC1 = 0.0
       RETURN
-      END
+      END FUNCTION ERFC1
+
       SUBROUTINE DCERF (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -6339,7 +6423,8 @@ C
       W(1) = - W(1)
       W(2) = - W(2)
       RETURN
-      END
+      END SUBROUTINE DCERF
+
       SUBROUTINE DCERFC (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -6621,7 +6706,8 @@ C
       W(1) = E*DCOS(SZ(2)) + SM(1)
       W(2) = E*DSIN(SZ(2)) + SM(2)
       RETURN
-      END
+      END SUBROUTINE DCERFC
+
       SUBROUTINE ERFCM2 (MO, Z, W)
 C-----------------------------------------------------------------------
 C           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
@@ -6757,7 +6843,8 @@ C
       W(1) = X
       W(2) = Y
       RETURN
-      END
+      END SUBROUTINE ERFCM2
+
       DOUBLE PRECISION FUNCTION DERF (X)
 C-----------------------------------------------------------------------
 C        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
@@ -6813,7 +6900,8 @@ C                 LIMIT VALUE FOR LARGE X
 C
    30 DERF = DSIGN(1.D0,X)
       RETURN
-      END
+      END FUNCTION DERF
+
       DOUBLE PRECISION FUNCTION DERFC (X)
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -6875,7 +6963,8 @@ C
       IF (T .GT. -DXPARG(1)) RETURN
       DERFC = DEXP(-T) * DERFC0(X)
       RETURN
-      END
+      END FUNCTION DERFC
+
       DOUBLE PRECISION FUNCTION DERFC1 (IND, X)
 C-----------------------------------------------------------------------
 C
@@ -6953,7 +7042,8 @@ C
    80 DERFC1 = 2.D0
       IF (IND .NE. 0) DERFC1 = 2.D0*DEXP(X*X)
       RETURN
-      END
+      END FUNCTION DERFC1
+
       DOUBLE PRECISION FUNCTION DERFC0 (X)
 C-----------------------------------------------------------------------
 C
@@ -7115,7 +7205,8 @@ C
      *        0.5D0)*T + 1.D0
       DERFC0 = RPINV*(Z/X)
       RETURN
-      END
+      END FUNCTION DERFC0
+
       REAL FUNCTION ERFI (P, Q)
 C-----------------------------------------------------------------------
 C
@@ -7232,7 +7323,8 @@ C
       RETURN
   110 ERFI = -2.0
       RETURN
-      END
+      END FUNCTION ERFI
+
       DOUBLE PRECISION FUNCTION DERFI (P, Q)
 C-----------------------------------------------------------------------
 C
@@ -7394,7 +7486,8 @@ C
       RETURN
   110 DERFI = -2.D0
       RETURN
-      END
+      END FUNCTION DERFI
+
       REAL FUNCTION AERF (X, H)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF ERF(X + H) - ERF(X - H)
@@ -7515,7 +7608,8 @@ C
          RETURN
   160 AERF = T*ERF(H)
       RETURN
-      END
+      END FUNCTION AERF
+
       DOUBLE PRECISION FUNCTION DAERF (X, H)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF ERF(X + H) - ERF(X - H)
@@ -7642,7 +7736,8 @@ C
          RETURN
   160 DAERF = T*DERF(H)
       RETURN
-      END
+      END FUNCTION DAERF
+
       FUNCTION PNDF(X,IND)
 C     ---------------
 C     A = 1/SQRT(2)
@@ -7663,7 +7758,8 @@ C     ---------------
       RETURN
    30 PNDF = C/ERFC1(1,T)
       RETURN
-      END
+      END FUNCTION PNDF
+
       SUBROUTINE PNI (P, Q, D, W, IERR)
 C-----------------------------------------------------------------------
 C
@@ -7712,7 +7808,8 @@ C
       RETURN
    20 IERR = 2
       RETURN
-      END
+      END SUBROUTINE PNI
+
       SUBROUTINE DPNI (P, Q, D, W, IERR)
 C-----------------------------------------------------------------------
 C
@@ -7765,7 +7862,8 @@ C
       RETURN
    20 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DPNI
+
       REAL FUNCTION DAW(X)
 C-----------------------------------------------------------------------
 C
@@ -7906,7 +8004,8 @@ C
   600 DAW = X
 C
  1000 RETURN
-      END
+      END FUNCTION DAW
+
       DOUBLE PRECISION FUNCTION DPDAW (X)
 C-----------------------------------------------------------------------
 C            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
@@ -8010,7 +8109,8 @@ C                       ABS(X) .GE. 4
 C
    30 DPDAW = DPDAW0(AX)/X
       RETURN
-      END
+      END FUNCTION DPDAW
+
       DOUBLE PRECISION FUNCTION DPDAW0 (X)
 C-----------------------------------------------------------------------
 C
@@ -8208,7 +8308,8 @@ C
      *        0.5D0)*T + 1.D0
       DPDAW0 = 0.5D0*W
       RETURN
-      END
+      END FUNCTION DPDAW0
+
       SUBROUTINE CFRNLI (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -8379,7 +8480,8 @@ C
       SM(2) = SM(2) + QM*COS(Y)
       W = CMPLX(SM(1),SM(2))
       RETURN
-      END
+      END SUBROUTINE CFRNLI
+
       SUBROUTINE FRNL (T, C, S)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE REAL FRESNEL INTEGRALS
@@ -8593,7 +8695,8 @@ C
   110 C = -0.5
       S = -0.5
       RETURN
-      END
+      END SUBROUTINE FRNL
+
       SUBROUTINE CEXPLI (MO, Z, W)
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
@@ -8774,7 +8877,8 @@ C
 C
   130 W = CMPLX(SM(1),SM(2))
       RETURN
-      END
+      END SUBROUTINE CEXPLI
+
       SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
 C
       REAL A(6),B(5),C(7),D(7),E(7),F(7),P1(8),Q1(8),P2(8),Q2(7),
@@ -9106,7 +9210,8 @@ C     ---------- ERROR RETURN FOR NEGATIVE
 C                ARGUMENT IN E-SUB-1 ----------
   660 IERR = 4
       RETURN
-      END
+      END SUBROUTINE EXPLI
+
       DOUBLE PRECISION FUNCTION DEI (X)
 C-----------------------------------------------------------------------
 C        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
@@ -9117,7 +9222,8 @@ C
       DEI = -DE1E(-X)
       IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
       RETURN
-      END
+      END FUNCTION DEI
+
       DOUBLE PRECISION FUNCTION DEI1 (X)
 C-----------------------------------------------------------------------
 C          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
@@ -9129,7 +9235,8 @@ C
       IF (X .GT. 4.D0 .OR. X .LT. -1.D0) RETURN
       DEI1 = DEXP(-X) * DEI1
       RETURN
-      END
+      END FUNCTION DEI1
+
       DOUBLE PRECISION FUNCTION DE1E(X)
 C-----------------------------------------------------------------------
 C
@@ -9599,7 +9706,8 @@ C
          IF (DABS(C) .GT. EPS) GO TO 81
       DE1E = (1.D0 + W)/X
       RETURN
-      END
+      END FUNCTION DE1E
+
       DOUBLE PRECISION FUNCTION DEI0 (X, EPS)
 C-----------------------------------------------------------------------
 C
@@ -9690,7 +9798,8 @@ C-------------------------
 C
    20 DEI0 = H * (A(1) + W)
       RETURN
-      END
+      END FUNCTION DEI0
+
       FUNCTION SI(X)
 C
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
@@ -9804,7 +9913,8 @@ C
 C
    50 SI=SIGN(PIO2,X)
       RETURN
-      END
+      END FUNCTION SI
+
       FUNCTION CIN(X)
 C
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
@@ -9918,7 +10028,8 @@ C
 C
    50 CIN=ECON+ALOG(AX)
       RETURN
-      END
+      END FUNCTION CIN
+
       SUBROUTINE CEXEXI (Z, W)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
@@ -10148,7 +10259,8 @@ C                         TERMINATION
 C-----------------------------------------------------------------------
   130 W = CMPLX(SM(1), SM(2))
       RETURN
-      END
+      END SUBROUTINE CEXEXI
+
       COMPLEX FUNCTION CLI(Z)
 C     ******************************************************************
 C     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
@@ -10262,7 +10374,8 @@ C                  EVALUATION AT Z = -1
 C
   100 CLI = CMPLX(-C, 0.0)
       RETURN
-      END
+      END FUNCTION CLI
+
       REAL FUNCTION ALI(X)
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
@@ -10416,7 +10529,8 @@ C
      *            R(2))*T + R(1)) / (((((S(6)*T + S(5))*T +
      *            S(4))*T + S(3))*T + S(2))*T + S(1))
       RETURN
-      END
+      END FUNCTION ALI
+
       SUBROUTINE CGAMMA (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -10646,7 +10760,8 @@ C             THE REQUESTED VALUE CANNOT BE COMPUTED
 C-----------------------------------------------------------------------
   200 W = (0.0, 0.0)
       RETURN
-      END
+      END SUBROUTINE CGAMMA
+
       COMPLEX FUNCTION CGAM0 (Z)
 C-----------------------------------------------------------------------
 C          EVALUATION OF 1/GAMMA(1 + Z)  FOR ABS(Z) .LT. 1.0
@@ -10681,7 +10796,8 @@ C
    10 CONTINUE
       CGAM0 = 1.0 + Z*W
       RETURN
-      END
+      END FUNCTION CGAM0
+
       REAL FUNCTION GAMMA(A)
 C-----------------------------------------------------------------------
 C
@@ -10808,7 +10924,8 @@ C
       GAMMA = EXP(W)*(1.0 + T)
       IF (A .LT. 0.0) GAMMA = (1.0/(GAMMA*S))/X
       RETURN
-      END
+      END FUNCTION GAMMA
+
       DOUBLE PRECISION FUNCTION GLOG(X)
 C     -------------------
 C     EVALUATION OF LN(X) FOR X .GE. 15
@@ -10919,7 +11036,8 @@ C
 C
    10 GLOG = ALOG(X)
       RETURN
-      END
+      END FUNCTION GLOG
+
       REAL FUNCTION GAM1(A)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
@@ -10970,7 +11088,8 @@ C
          RETURN
    31 GAM1 = T*W/A
       RETURN
-      END
+      END FUNCTION GAM1
+
       REAL FUNCTION GAMLN (A)
 C-----------------------------------------------------------------------
 C            EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
@@ -11008,7 +11127,8 @@ C
    30 T = (1.0/A)**2
       W = (((((C5*T + C4)*T + C3)*T + C2)*T + C1)*T + C0)/A
       GAMLN = (D + W) + (A - 0.5)*(ALOG(A) - 1.0)
-      END
+      END FUNCTION GAMLN
+
       REAL FUNCTION GAMLN1 (A)
 C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
@@ -11039,7 +11159,8 @@ C
      *    (((((S5*X + S4)*X + S3)*X + S2)*X + S1)*X + 1.0)
       GAMLN1 = X*W
       RETURN
-      END
+      END FUNCTION GAMLN1
+
       SUBROUTINE DCGAMA (MO, Z, W)
 C-----------------------------------------------------------------------
 C
@@ -11308,7 +11429,8 @@ C-----------------------------------------------------------------------
   200 W(1) = 0.D0
       W(2) = 0.D0
       RETURN
-      END
+      END SUBROUTINE DCGAMA
+
       DOUBLE PRECISION FUNCTION DGAMMA(A)
 C-----------------------------------------------------------------------
 C
@@ -11406,7 +11528,8 @@ C
       DGAMMA = DEXP(W)
       IF (A .LT. 0.D0) DGAMMA = (1.D0/(DGAMMA*S))/X
       RETURN
-      END
+      END FUNCTION DGAMMA
+
       DOUBLE PRECISION FUNCTION DPDEL(X)
 C-----------------------------------------------------------------------
 C
@@ -11446,7 +11569,8 @@ C-----------------------------------------------------------------------
    10 CONTINUE
       DPDEL = W/X
       RETURN
-      END
+      END FUNCTION DPDEL
+
       DOUBLE PRECISION FUNCTION DGAM1 (X)
 C-----------------------------------------------------------------------
 C     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
@@ -11611,7 +11735,8 @@ C
          RETURN
    50 DGAM1 = T*Z/X
       RETURN
-      END
+      END FUNCTION DGAM1
+
       DOUBLE PRECISION FUNCTION DGAMLN (A)
 C-----------------------------------------------------------------------
 C
@@ -11650,7 +11775,8 @@ C
 C
    30 W = DPDEL(A)
       DGAMLN = (D + W) + (A - 0.5D0)*(DLOG(A) - 1.D0)
-      END
+      END FUNCTION DGAMLN
+
       DOUBLE PRECISION FUNCTION DGMLN1 (X)
 C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
@@ -11661,7 +11787,8 @@ C-----------------------
       W = DGAM1(X)
       DGMLN1 = - DLNREL(W)
       RETURN
-      END
+      END FUNCTION DGMLN1
+
       SUBROUTINE CPSI (Z, W)
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
@@ -11791,7 +11918,8 @@ C             THE REQUESTED VALUE CANNOT BE COMPUTED
 C-----------------------------------------------------------------------
   100 W = (0.0, 0.0)
       RETURN
-      END
+      END SUBROUTINE CPSI
+
       REAL FUNCTION PSI(XX)
 C---------------------------------------------------------------------
 C
@@ -11962,7 +12090,8 @@ C     ERROR RETURN
 C---------------------------------------------------------------------
   400 PSI = 0.0E0
       RETURN
-      END
+      END FUNCTION PSI
+
       SUBROUTINE DCPSI (Z, W)
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
@@ -12132,7 +12261,8 @@ C-----------------------------------------------------------------------
   100 W(1) = 0.D0
       W(2) = 0.D0
       RETURN
-      END
+      END SUBROUTINE DCPSI
+
       DOUBLE PRECISION FUNCTION DPSI(A)
 C-----------------------------------------------------------------------
 C
@@ -12321,7 +12451,8 @@ C
       DPSI = DLOG(X) - S
       IF (A .LT. 0.D0) DPSI = DPSI - W
       RETURN
-      END
+      END FUNCTION DPSI
+
       DOUBLE PRECISION FUNCTION DPSI0 (X)
 C-----------------------------------------------------------------------
 C
@@ -12390,7 +12521,8 @@ C
    10 CONTINUE
       DPSI0 = H*W
       RETURN
-      END
+      END FUNCTION DPSI0
+
       SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
 C-----------------------------------------------------------------------
 C
@@ -12700,7 +12832,8 @@ C
 C                            INCREASE THE DIMENSION OF TRMR(NMAX)
   330 IFLAG = 4
       RETURN
-      END
+      END SUBROUTINE PSIDF
+
       REAL FUNCTION BETALN (A0, B0)
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
@@ -12782,7 +12915,8 @@ C-----------------------------------------------------------------------
          RETURN
    61 BETALN = (((-0.5*ALOG(B) + E) + W) - U) - V
       RETURN
-      END
+      END FUNCTION BETALN
+
       REAL FUNCTION GSUMLN (A, B)
 C-----------------------------------------------------------------------
 C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
@@ -12797,7 +12931,8 @@ C-----------------------------------------------------------------------
          RETURN
    20 GSUMLN = GAMLN1(X - 1.0) + ALOG(X*(1.0 + X))
       RETURN
-      END
+      END FUNCTION GSUMLN
+
       REAL FUNCTION BCORR (A0, B0)
 C-----------------------------------------------------------------------
 C
@@ -12837,7 +12972,8 @@ C
       T = (1.0/A)**2
       BCORR = (((((C5*T + C4)*T + C3)*T + C2)*T + C1)*T + C0)/A + W
       RETURN
-      END
+      END FUNCTION BCORR
+
       REAL FUNCTION ALGDIV (A, B)
 C-----------------------------------------------------------------------
 C
@@ -12888,7 +13024,8 @@ C
          RETURN
    30 ALGDIV = (W - U) - V
       RETURN
-      END
+      END FUNCTION ALGDIV
+
       DOUBLE PRECISION FUNCTION DBETLN (A0, B0)
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
@@ -12975,7 +13112,8 @@ C-----------------------------------------------------------------------
          RETURN
    61 DBETLN = (((-0.5D0*DLOG(B) + E) + W) - U) - V
       RETURN
-      END
+      END FUNCTION DBETLN
+
       DOUBLE PRECISION FUNCTION DGSMLN (A, B)
 C-----------------------------------------------------------------------
 C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
@@ -12993,7 +13131,8 @@ C
          RETURN
    20 DGSMLN = DGMLN1(X - 1.D0) + DLOG(X*(1.D0 + X))
       RETURN
-      END
+      END FUNCTION DGSMLN
+
       DOUBLE PRECISION FUNCTION DBCORR (A0, B0)
 C-----------------------------------------------------------------------
 C
@@ -13063,7 +13202,8 @@ C
    30 CONTINUE
       DBCORR = Z/A + W
       RETURN
-      END
+      END FUNCTION DBCORR
+
       DOUBLE PRECISION FUNCTION DLGDIV (A, B)
 C-----------------------------------------------------------------------
 C
@@ -13137,7 +13277,8 @@ C
          RETURN
    40 DLGDIV = (W - U) - V
       RETURN
-      END
+      END FUNCTION DLGDIV
+
       SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
 C-----------------------------------------------------------------------
 C
@@ -13555,7 +13696,8 @@ C                     ERROR RETURN
 C
   400 ANS = 2.0
       RETURN
-      END
+      END SUBROUTINE GRATIO
+
       REAL FUNCTION RCOMP (A, X)
 C-----------------------------------------------------------------------
 C                EVALUATION OF EXP(-X)*X**A/GAMMA(A)
@@ -13583,7 +13725,8 @@ C
       T1 = T1 - A*RLOG(U)
       IF (T1 .GE. EXPARG(1)) RCOMP = RT2PIN*SQRT(A)*EXP(T1)
       RETURN
-      END
+      END FUNCTION RCOMP
+
       DOUBLE PRECISION FUNCTION DRCOMP (A, X)
 C-----------------------------------------------------------------------
 C              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
@@ -13612,7 +13755,8 @@ C
       W = -(DPDEL(A) + A*DRLOG(T))
       IF (W .GE. DXPARG(1)) DRCOMP = C * DSQRT(A) * DEXP(W)
       RETURN
-      END
+      END FUNCTION DRCOMP
+
       SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
 C-----------------------------------------------------------------------
 C
@@ -13935,7 +14079,8 @@ C
   560 X = SPMPAR(3)
       IERR = -8
       RETURN
-      END
+      END SUBROUTINE GAMINV
+
       SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
 C-----------------------------------------------------------------------
 C
@@ -14193,7 +14338,8 @@ C
   420 IERR = 3
       ANS = 2.D0
       RETURN
-      END
+      END SUBROUTINE DGRAT
+
       SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
 C-----------------------------------------------------------------------
 C
@@ -14501,7 +14647,8 @@ C
    10 ANS = E*(W - RT2PIN*T/RTA)
       QANS = 0.5D0 + (0.5D0 - ANS)
       RETURN
-      END
+      END SUBROUTINE DGR29
+
       SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
 C-----------------------------------------------------------------------
 C
@@ -14627,7 +14774,8 @@ C
    10 ANS = E*(W - RT2PIN*T/RTA)
       QANS = 0.5D0 + (0.5D0 - ANS)
       RETURN
-      END
+      END SUBROUTINE DGR17
+
       SUBROUTINE DGINV (A, X, P, Q, IERR)
 C-----------------------------------------------------------------------
 C
@@ -14948,7 +15096,8 @@ C
   560 X = DPMPAR(3)
       IERR = -8
       RETURN
-      END
+      END SUBROUTINE DGINV
+
       SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
 C-----------------------------------------------------------------------
 C
@@ -15157,7 +15306,8 @@ C
       RETURN
   360 IERR = 7
       RETURN
-      END
+      END SUBROUTINE BRATIO
+
       REAL FUNCTION FPSER (A, B, X, EPS)
 C-----------------------------------------------------------------------
 C
@@ -15192,7 +15342,8 @@ C
 C
       FPSER = FPSER*(1.0 + A*S)
       RETURN
-      END
+      END FUNCTION FPSER
+
       REAL FUNCTION APSER (A, B, X, EPS)
 C-----------------------------------------------------------------------
 C     APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
@@ -15221,7 +15372,8 @@ C
 C
       APSER = -A*(C + S)
       RETURN
-      END
+      END FUNCTION APSER
+
       REAL FUNCTION BPSER(A, B, X, EPS)
 C-----------------------------------------------------------------------
 C     POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
@@ -15301,7 +15453,8 @@ C-----------------------------------------------------------------------
          IF (ABS(W) .GT. TOL) GO TO 100
       BPSER = BPSER*(1.0 + A*SUM)
       RETURN
-      END
+      END FUNCTION BPSER
+
       REAL FUNCTION BUP(A, B, X, Y, N, EPS)
 C-----------------------------------------------------------------------
 C     EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
@@ -15365,7 +15518,8 @@ C               TERMINATE THE PROCEDURE
 C
    50 BUP = BUP*W
       RETURN
-      END
+      END FUNCTION BUP
+
       REAL FUNCTION BFRAC(A, B, X, Y, LAMBDA, EPS)
 C-----------------------------------------------------------------------
 C     CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
@@ -15427,7 +15581,8 @@ C                 TERMINATION
 C
    20 BFRAC = BFRAC*R
       RETURN
-      END
+      END FUNCTION BFRAC
+
       REAL FUNCTION BRCOMP (A, B, X, Y)
 C-----------------------------------------------------------------------
 C               EVALUATION OF X**A*Y**B/BETA(A,B)
@@ -15539,7 +15694,8 @@ C
   130 Z = EXP(-(A*U + B*V))
       BRCOMP = CONST*SQRT(B*X0)*Z*EXP(-BCORR(A,B))
       RETURN
-      END
+      END FUNCTION BRCOMP
+
       REAL FUNCTION BRCMP1 (MU, A, B, X, Y)
 C-----------------------------------------------------------------------
 C          EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
@@ -15649,7 +15805,8 @@ C
   130 Z = ESUM(MU,-(A*U + B*V))
       BRCMP1 = CONST*SQRT(B*X0)*Z*EXP(-BCORR(A,B))
       RETURN
-      END
+      END FUNCTION BRCMP1
+
       SUBROUTINE BGRAT(A, B, X, Y, W, EPS, IERR)
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
@@ -15718,7 +15875,8 @@ C               THE EXPANSION CANNOT BE COMPUTED
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE BGRAT
+
       SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
       REAL J, L
 C-----------------------------------------------------------------------
@@ -15806,7 +15964,8 @@ C
 C
   130 IF (X .LE. A) GO TO 100
       GO TO 110
-      END
+      END SUBROUTINE GRAT1
+
       REAL FUNCTION BASYM(A, B, LAMBDA, EPS)
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
@@ -15901,7 +16060,8 @@ C
    60 U = EXP(-BCORR(A,B))
       BASYM = E0*T*U*SUM
       RETURN
-      END
+      END FUNCTION BASYM
+
       SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
       REAL I, J, K, LAMBDA, M, N, W(10), Z(10)
 C     -------------------
@@ -16142,7 +16302,8 @@ C
 C
   420 IERR = 4
       RETURN
-      END
+      END SUBROUTINE ISUBX
+
       REAL FUNCTION BLND(A,B)
       REAL LOGAM
 C
@@ -16151,7 +16312,8 @@ C
          RETURN
    10 BLND = ALGDIV(B,A) + LOGAM(B + 1.0)
       RETURN
-      END
+      END FUNCTION BLND
+
       REAL FUNCTION LOGAM (X)
       REAL W(200)
 C     ------------------------------------------------------------------
@@ -16270,7 +16432,8 @@ C     ------------------------------------------------------------------
       Z = (((-0.75*T + 1.0)*T - 3.5)*T + 105.0)/(X*1260.0)
       LOGAM = (D + Z) + (X - 0.5)*(ALOG(X) - 1.0)
       RETURN
-      END
+      END FUNCTION LOGAM
+
       SUBROUTINE CBSSLJ (Z, CNU, W)
 C-----------------------------------------------------------------------
 C
@@ -16468,7 +16631,8 @@ C
   200 CALL CGAMMA(0, CNU, T)
       W = CDIV(W, CNU*T)
       RETURN
-      END
+      END SUBROUTINE CBSSLJ
+
       SUBROUTINE CBJM (Z, CNU, W)
 C-----------------------------------------------------------------------
 C
@@ -16567,7 +16731,8 @@ C
       IF (ANORM(T) .GT. EPS*ANORM(W)) GO TO 70
 C
       RETURN
-      END
+      END SUBROUTINE CBJM
+
       SUBROUTINE CBDB (CZ, CNU, FN, W)
 C-----------------------------------------------------------------------
 C
@@ -16795,7 +16960,8 @@ C
 C
   200 IF (INU .LT. 0.0) W = CONJG(W)
       RETURN
-      END
+      END SUBROUTINE CBDB
+
       SUBROUTINE CBJA (CZ, CNU, W)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF J(NU,Z) BY THE ASYMPTOTIC EXPANSION
@@ -16886,7 +17052,8 @@ C
 C
    60 IF (IND .NE. 0) W = CONJG(W)
       RETURN
-      END
+      END SUBROUTINE CBJA
+
       SUBROUTINE BSSLJ (A, IN, W)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
@@ -17190,7 +17357,8 @@ C     -------------------
       FJ(2)=QF(1)*SM(2)+QF(2)*SM(1)
       W=CMPLX(FJ(1),FJ(2))
       RETURN
-      END
+      END SUBROUTINE BSSLJ
+
       SUBROUTINE BESJ(X, ALPHA, N, Y, NZ)
 C
 C     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
@@ -17658,7 +17826,8 @@ C
   730 CONTINUE
       NZ = -1
       RETURN
-      END
+      END SUBROUTINE BESJ
+
       SUBROUTINE ASJY(FUNJY,X,FNU,FLGJY,IN,TOL,ELIM,Y,WK,IFLW)
 C
 C               ASJY COMPUTES BESSEL FUNCTIONS J AND Y
@@ -18102,7 +18271,8 @@ C
         FN = FN - FLGJY
   170 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ASJY
+
       SUBROUTINE JAIRY(X,RX,C,AI,DAI)
 C
 C                  JAIRY COMPUTES THE AIRY FUNCTION AI(X)
@@ -18444,7 +18614,8 @@ C
       E2=SCV*CON5-.5*CCV
       DAI=(TEMP1*E1-TEMP2*E2)*RTRX
       RETURN
-      END
+      END SUBROUTINE JAIRY
+
       SUBROUTINE BSSLY (A, IN, W)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
@@ -18754,7 +18925,8 @@ C     -------------------
       SM(1)=SR(1)+SM(1)
       SM(2)=SR(2)+SM(2)
       GO TO LY,(022,024,025)
-      END
+      END SUBROUTINE BSSLY
+
       SUBROUTINE CBSSLI (Z, CNU, W)
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -18784,7 +18956,8 @@ C
       T = 0.5*REAL(NU)
       W = W*CMPLX(COS1(T),SIN1(T))
       RETURN
-      END
+      END SUBROUTINE CBSSLI
+
       SUBROUTINE BSSLI (MO, A, IN, W)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
@@ -19108,7 +19281,8 @@ C     -------------------
       FI(2)=QF(1)*SM(2)+QF(2)*SM(1)
       W=CMPLX(FI(1),FI(2))
       RETURN
-      END
+      END SUBROUTINE BSSLI
+
       SUBROUTINE BESI(X, ALPHA, KODE, N, Y, NZ)
 C
 C     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
@@ -19571,7 +19745,8 @@ C
   610 CONTINUE
       NZ = -5
       RETURN
-      END
+      END SUBROUTINE BESI
+
       SUBROUTINE ASIK(X,FNU,KODE,FLGIK,RA,ARG,IN,TOL,Y)
 C
 C                  ASIK COMPUTES BESSEL FUNCTIONS I AND K
@@ -19697,7 +19872,8 @@ C     ---------------------
       Y(JN) = S2*COEF*SQRT(T)*CON(KK)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ASIK
+
       SUBROUTINE CBESK (Z, CNU, W)
 C-----------------------------------------------------------------------
 C
@@ -19809,7 +19985,8 @@ C     POWER SERIES AND MILLER ALGORITHM
 C
   200 CALL CBKM (Z, RZ, NU, W)
       RETURN
-      END
+      END SUBROUTINE CBESK
+
       SUBROUTINE CBKI (Z, CNU, W)
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -19830,7 +20007,8 @@ C
       U2 = COS1(A)*SINH(B)
       W = PIHALF*CDIV(W1 - W2, CMPLX(U1,U2))
       RETURN
-      END
+      END SUBROUTINE CBKI
+
       SUBROUTINE CBKA (Z, CNU, W)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR COMPLEX ORDER
@@ -19873,7 +20051,8 @@ C
       IF (AIMAG(Z) .EQ. 0.0) T = CONJG(T)
       W = C*T*P*CEXP(-Z)
       RETURN
-      END
+      END SUBROUTINE CBKA
+
       SUBROUTINE CBKM (Z, RZ, CNU, W)
 C-------------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE SECOND
@@ -19985,7 +20164,8 @@ C
       W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
       W = EX*(EX*W + W2)
       RETURN
-      END
+      END SUBROUTINE CBKM
+
       SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
 C-----------------------------------------------------------------------
 C
@@ -20102,7 +20282,8 @@ C
 C
    80 W2 = W2 * ZR
       RETURN
-      END
+      END SUBROUTINE CKPS
+
       SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
 C-----------------------------------------------------------------------
 C
@@ -20210,7 +20391,8 @@ C
       W = C1*(U1/S)
       W0 = 1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR
       RETURN
-      END
+      END SUBROUTINE CBKML
+
       SUBROUTINE CBSSLK (Z, R, W)
 C-----------------------------------------------------------------------
 C
@@ -20327,7 +20509,8 @@ C
       W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
       W = EX*(EX*W + W2)
       RETURN
-      END
+      END SUBROUTINE CBSSLK
+
       SUBROUTINE CKA (Z, NU, W)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
@@ -20370,7 +20553,8 @@ C
       IF (AIMAG(Z) .EQ. 0.0) T = CONJG(T)
       W = C*T*P*CEXP(-Z)
       RETURN
-      END
+      END SUBROUTINE CKA
+
       SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
 C-----------------------------------------------------------------------
 C
@@ -20478,7 +20662,8 @@ C
 C
    80 W2 = W2 * ZR
       RETURN
-      END
+      END SUBROUTINE CKM
+
       SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
 C-----------------------------------------------------------------------
 C
@@ -20568,7 +20753,8 @@ C
       K1 = C1*(U1/S)
       K2 = K1*(1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR)
       RETURN
-      END
+      END SUBROUTINE CKML
+
       COMPLEX FUNCTION CXP (N, NU)
 C-----------------------------------------------------------------------
 C                 COMPUTATION OF EXP(-R*(PI/2)*I)
@@ -20595,7 +20781,8 @@ C
 C
    40 CXP = CMPLX (S, C)
       RETURN
-      END
+      END FUNCTION CXP
+
       SUBROUTINE BSSLK (MO, A, IN, W)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
@@ -20836,7 +21023,8 @@ C     -------------------
       SM(1)=SR(1)+SM(1)
       SM(2)=SR(2)+SM(2)
       GO TO LK,(022,024,025)
-      END
+      END SUBROUTINE BSSLK
+
       SUBROUTINE CAI(IND,Z,AI,AIP,IERR)
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
@@ -20864,7 +21052,8 @@ C     ASYMPTOTIC EXPANSION
 C
    20 CALL AIA(IND,Z,AI,AIP,IERR)
       RETURN
-      END
+      END SUBROUTINE CAI
+
       SUBROUTINE AIRM (IND,Z,AI,AIP,BI,BIP)
 C--------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTIONS AI AND BI AND THEIR
@@ -20947,7 +21136,8 @@ C
    30    BI = BI*E
          BIP = BIP*E
       RETURN
-      END
+      END SUBROUTINE AIRM
+
       SUBROUTINE AII(IND, Z, AI, AIP, IERR)
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
@@ -20992,7 +21182,8 @@ C
    30 IF (R .LT. 7.4) GO TO 20
    40 CALL AIA (IND,Z,AI,AIP,IERR)
       RETURN
-      END
+      END SUBROUTINE AII
+
       SUBROUTINE AIA (IND, Z, AI, AIP, IERR)
 C-----------------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP FOR
@@ -21164,7 +21355,8 @@ C
       AIP = (0.0, 0.0)
       IERR = 1
       RETURN
-      END
+      END SUBROUTINE AIA
+
       SUBROUTINE CBI(IND,Z,BI,BIP,IERR)
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
@@ -21192,7 +21384,8 @@ C     ASYMPTOTIC EXPANSION
 C
    20 CALL BIA(IND,Z,BI,BIP,IERR)
       RETURN
-      END
+      END SUBROUTINE CBI
+
       SUBROUTINE BII(IND, Z, BI, BIP, IERR)
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
@@ -21248,7 +21441,8 @@ C
          RETURN
    40 CALL BIA(IND, Z, BI, BIP, IERR)
       RETURN
-      END
+      END SUBROUTINE BII
+
       SUBROUTINE BIA(IND,Z,BI,BIP,IERR)
 C---------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP FOR
@@ -21490,7 +21684,8 @@ C
       BIP = (0.0, 0.0)
       IERR = 1
       RETURN
-      END
+      END SUBROUTINE BIA
+
       SUBROUTINE IA(Z, I1, I2, I1M, I2M)
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
@@ -21533,7 +21728,8 @@ C
          RETURN
    20    CALL IMC(Z, I1, I2, I1M, I2M)
          RETURN
-         END
+         END SUBROUTINE IA
+
       SUBROUTINE IMC(Z, I1, I2, I1M, I2M)
 C----------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
@@ -21596,7 +21792,8 @@ C
       I1M = CF3*IB1
       I2M = CF4*IA1
       RETURN
-      END
+      END SUBROUTINE IMC
+
       SUBROUTINE BIM(Z,CN,W)
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND
@@ -21633,7 +21830,8 @@ C
 C
       W = W + 1.0
       RETURN
-      END
+      END SUBROUTINE BIM
+
       SUBROUTINE JA(Z, I1, I2, I1M, I2M)
 C------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND FOR
@@ -21676,7 +21874,8 @@ C
          RETURN
    20    CALL JMC(Z, I1, I2, I1M, I2M)
          RETURN
-         END
+         END SUBROUTINE JA
+
       SUBROUTINE JMC(Z, I1, I2, I1M, I2M)
 C----------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST
@@ -21739,7 +21938,8 @@ C
       I1M = CF3*IB1
       I2M = CF4*IA1
       RETURN
-      END
+      END SUBROUTINE JMC
+
       SUBROUTINE BJM(Z,CN,W)
 C-------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND
@@ -21776,7 +21976,8 @@ C
 C
       W = W + 1.0
       RETURN
-      END
+      END SUBROUTINE BJM
+
       SUBROUTINE KA(IND, Z, K1, K2)
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
@@ -21820,7 +22021,8 @@ C
             K1 = CONJG(K1)
             K2 = CONJG(K2)
             RETURN
-      END
+      END SUBROUTINE KA
+
       SUBROUTINE KML(IND, Z, K1, K2)
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
@@ -21873,7 +22075,8 @@ C
          K1 = K1*E
          K2 = K2*E
          RETURN
-      END
+      END SUBROUTINE KML
+
       REAL FUNCTION AI(X)
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE AIRY FUNCTION AI(X)
@@ -21965,7 +22168,8 @@ C
 C
    60 AI = 0.0
       RETURN
-      END
+      END FUNCTION AI
+
       REAL FUNCTION AIE(X)
 C-----------------------------------------------------------------------
 C
@@ -22061,7 +22265,8 @@ C
 C
    60 AIE = RN0/SQRT(RTX)
       RETURN
-      END
+      END FUNCTION AIE
+
       REAL FUNCTION BI(X)
 C-----------------------------------------------------------------------
 C
@@ -22194,7 +22399,8 @@ C
 C
    70 BI = 0.0
       RETURN
-      END
+      END FUNCTION BI
+
       REAL FUNCTION BIE(X)
 C-----------------------------------------------------------------------
 C
@@ -22325,7 +22531,8 @@ C
 C
    70 BIE = SN0/SQRT(RTX)
       RETURN
-      END
+      END FUNCTION BIE
+
       SUBROUTINE AIMP (X, R, PHI)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE AIRY MODULUS AND PHASE FOR X .GE. 1
@@ -22415,7 +22622,8 @@ C
       R = SQRT(R/RTX)
       PHI = PI4 + X*RTX*PHI
       RETURN
-      END
+      END SUBROUTINE AIMP
+
       COMPLEX FUNCTION CK(K,L)
 C     ------------------------------------------------------------------
 C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRAL F(K)
@@ -22636,7 +22844,8 @@ C     ERROR RETURN
 C
   200 CK = (0.0, 0.0)
       RETURN
-      END
+      END FUNCTION CK
+
       COMPLEX FUNCTION CFLECT(Z)
 C---------------------------------------------------------
 C     REFLECTS Z WITH RESPECT TO THE ORIGIN IF REAL(Z)
@@ -22651,7 +22860,8 @@ C     ----------
       RETURN
    30 CFLECT = Z
       RETURN
-      END
+      END FUNCTION CFLECT
+
       COMPLEX FUNCTION KM(K2)
       COMPLEX K2
 C---------------------------------------------------------------------
@@ -22682,7 +22892,8 @@ C
 C
    20 KM = HPI*S1
       RETURN
-      END
+      END FUNCTION KM
+
       SUBROUTINE KL (L, FK, FL)
       COMPLEX L, FK, FL
 C ----------------------------------------------------------------------
@@ -22748,7 +22959,8 @@ C
    50 FK = W*S1 - S2
       FL = HPI*S1
       RETURN
-      END
+      END SUBROUTINE KL
+
       SUBROUTINE CKE(K,L,CK,CE,IERR)
 C     ------------------------------------------------------------------
 C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRALS F(K)
@@ -23014,7 +23226,8 @@ C
       RETURN
   210 IERR = 2
       RETURN
-      END
+      END SUBROUTINE CKE
+
       COMPLEX FUNCTION ATN(Z)
 C---------------------------------------------------
 C     CALCULATES COMPLEX FUNCTION ATN(Z) = Z*ATAN(Z)
@@ -23034,7 +23247,8 @@ C---------------------------------------------------
       ATN2 = DA*Y + DB*X
       ATN = CMPLX(ATN1, ATN2)
       RETURN
-      END
+      END FUNCTION ATN
+
       SUBROUTINE EKM (K2, FK, EK)
       COMPLEX K2,FK,EK
 C ----------------------------------------------------------------------
@@ -23069,7 +23283,8 @@ C
    20 FK = HPI*S1
       EK = HPI*S2
       RETURN
-      END
+      END SUBROUTINE EKM
+
       SUBROUTINE EKL (L,FK,FL,EK,EL,GK,GL)
       COMPLEX L,L2,FK,FL,EK,EL,GK,GL
 C ----------------------------------------------------------------------
@@ -23159,7 +23374,8 @@ C
       GK = -W*S7*L2 -S4 + S5 + S2*L2
       GL = HPI*S7*L2
       RETURN
-      END
+      END SUBROUTINE EKL
+
       SUBROUTINE ELLPI (PHI, CPHI, K, L, F, E, IERR)
 C-----------------------------------------------------------------------
 C
@@ -23292,7 +23508,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE ELLPI
+
       SUBROUTINE DELLPI (PHI, CPHI, K, L, F, E, IERR)
 C-----------------------------------------------------------------------
 C
@@ -23431,7 +23648,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE DELLPI
+
       SUBROUTINE EPI (PHI, CPHI, K2, L2, N, M, P, IERR)
 C-----------------------------------------------------------------------
 C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
@@ -23490,7 +23708,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE EPI
+
       SUBROUTINE DEPI (PHI, CPHI, K2, L2, N, M, P, IERR)
 C-----------------------------------------------------------------------
 C               DOUBLE PRECISION COMPUTATION OF THE
@@ -23550,7 +23769,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE DEPI
+
       SUBROUTINE RFVAL (X, Y, Z, RF, IERR)
 C-----------------------------------------------------------------------
 C
@@ -23660,7 +23880,8 @@ C
   120 RF = 0.0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE RFVAL
+
       SUBROUTINE DRFVAL (X, Y, Z, RF, IERR)
 C-----------------------------------------------------------------------
 C
@@ -23770,7 +23991,8 @@ C
   120 RF = 0.D0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRFVAL
+
       SUBROUTINE RDVAL (X, Y, Z, RD, IERR)
 C-----------------------------------------------------------------------
 C
@@ -23891,7 +24113,8 @@ C
   120 RD = 0.0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE RDVAL
+
       SUBROUTINE DRDVAL (X, Y, Z, RD, IERR)
 C-----------------------------------------------------------------------
 C
@@ -24012,7 +24235,8 @@ C
   120 RD = 0.D0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRDVAL
+
       SUBROUTINE RJVAL (X, Y, Z, P, RJ, IERR)
 C-----------------------------------------------------------------------
 C
@@ -24149,7 +24373,8 @@ C
   120 RJ = 0.0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE RJVAL
+
       SUBROUTINE DRJVAL (X, Y, Z, P, RJ, IERR)
 C-----------------------------------------------------------------------
 C
@@ -24286,7 +24511,8 @@ C
   120 RJ = 0.D0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRJVAL
+
       SUBROUTINE RCVAL1 (X, Y, ERRTOL, RC, IERR)
 C-----------------------------------------------------------------------
 C
@@ -24386,7 +24612,8 @@ C
   120 RC = 0.0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE RCVAL1
+
       SUBROUTINE DRCVL1 (X, Y, ERRTOL, RC, IERR)
 C-----------------------------------------------------------------------
 C
@@ -24478,7 +24705,8 @@ C
   120 RC = 0.D0
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRCVL1
+
       SUBROUTINE ELLPF(U,K,L,S,C,D,IERR)
 C     -------------------------------------------------------------
 C     ELLPF CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K), AND
@@ -24561,7 +24789,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE ELLPF
+
       SUBROUTINE SCD(U,K,L,F,S,C,D)
 C     --------------------------------------------------------
 C     SCD COMPUTES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
@@ -24609,7 +24838,8 @@ C
       C = COS(U)
       D = 1.0
       RETURN
-      END
+      END SUBROUTINE SCD
+
       SUBROUTINE SCDM(U,K,S,C,D)
 C     -------------------------------------------------
 C     CALCULATES SN(U,K), CN(U,K), AND DN(U,K) FOR
@@ -24629,7 +24859,8 @@ C
       C = SQRT(1.0 - S*S)
       D = SQRT(1.0 - (K*S)**2)
       RETURN
-      END
+      END SUBROUTINE SCDM
+
       SUBROUTINE SCDF(U,K,L,F,F1,S,C,D)
 C     -------------------------------------------------------------
 C     SCDF COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
@@ -24686,7 +24917,8 @@ C
       C = L*TEMP/D
       D = L/D
       RETURN
-      END
+      END SUBROUTINE SCDF
+
       SUBROUTINE SCDJ(U,K,L,F,F1,S,C,D)
 C     ----------------------------------------------------------------
 C     SCDJ COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
@@ -24760,7 +24992,8 @@ C
       C = L*TEMP/D
       D = L/D
       RETURN
-      END
+      END SUBROUTINE SCDJ
+
       SUBROUTINE ELPFC1 (U,K,L,S,C,D,IERR)
 C     -------------------------------------------------------------
 C     ELPFC1 CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
@@ -24843,7 +25076,8 @@ C     ERROR RETURN
 C
    50 IERR = 3
       RETURN
-      END
+      END SUBROUTINE ELPFC1
+
       SUBROUTINE PEQ(Z, W, IERR)
 C
 C     WEIERSTRASS P-FUNCTION IN THE EQUIANHARMONIC CASE
@@ -24884,7 +25118,8 @@ C
      * Z6-2.619832920421E-5)*Z6-5.6444801847646E-4)*
      * Z6+4.565553484820106E-2)*Z6+1E0)
       RETURN
-      END
+      END SUBROUTINE PEQ
+
       SUBROUTINE PEQ1(Z, W, IERR)
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
@@ -24927,7 +25162,8 @@ C
      * Z6-1.0393701076352E-4)*Z6+9.5553182532237E-4)*
      * Z6+9.131106969640212E-2)*Z6+1E0)
       RETURN
-      END
+      END SUBROUTINE PEQ1
+
       SUBROUTINE PLEM(Z, W, IERR)
 C
 C     WEIERSTRASS P-FUNCTION IN THE LEMNISCATIC CASE
@@ -24970,7 +25206,8 @@ C
      * Z4-4.22629935217101E-3)*Z4+2.577496871700433E-2)*
      * Z4+4.2359940482277074E-1)*Z4+1E0)
       RETURN
-      END
+      END SUBROUTINE PLEM
+
       SUBROUTINE PLEM1(Z, W, IERR)
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
@@ -25016,7 +25253,8 @@ C
      * Z4-2.90730903142055E-3)*Z4+1.338392411135511E-2)*
      * Z4+2.3098639320021426E-1)*Z4+8.4719880964554148E-1)*Z4+1E0)
       RETURN
-      END
+      END SUBROUTINE PLEM1
+
       SUBROUTINE VALR2(X,Y,N0,P,IOP,A,IND,KO)
 C     -------------------
       DIMENSION X(*),Y(*),G(2),H(2)
@@ -25291,7 +25529,8 @@ C
       RETURN
  4021 IND=3
       RETURN
-      END
+      END SUBROUTINE VALR2
+
       SUBROUTINE CIRCV (R, D, J, P, IERR)
 C-----------------------------------------------------------------------
 C       IF J .NE. 0, OUTPUT IS P = CIRCULAR COVERAGE FUNCTION. P GIVES
@@ -25529,7 +25768,8 @@ C
   120   IERR = 2
         P = -1.0
         RETURN
-        END
+        END SUBROUTINE CIRCV
+
       SUBROUTINE ERFC0 (IND, X, E, Y)
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -25626,7 +25866,8 @@ C                       WHEN IND = 0
 C
    50 Y = 0.0
       RETURN
-      END
+      END SUBROUTINE ERFC0
+
       REAL FUNCTION ERFCR (X)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF  1/SQRT(PI) - X*EXP(X*X)*ERFC(X)  FOR X .GE. 4
@@ -25644,7 +25885,8 @@ C------------------------
       BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
       ERFCR = T*TOP/BOT
       RETURN
-      END
+      END FUNCTION ERFCR
+
       SUBROUTINE PKILL (R0, SX, SY, H, K, P)
 C-----------------------------------------------------------------------
 C
@@ -26077,7 +26319,8 @@ C
       IF (P .GT. (1.0 - AMIN1(1.E6*EPS,1.E-5))) P = 1.0
       IF (P .LT. 0.0) P = 0.0
       RETURN
-      END
+      END SUBROUTINE PKILL
+
       SUBROUTINE PLCOPY (A,KA,M,B,KB,N)
 C     ------------------------------------------------------------------
 C     COPYING REAL POLYNOMIALS
@@ -26100,7 +26343,8 @@ C
          LB = LB + KB
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE PLCOPY
+
       SUBROUTINE DPCOPY (A,KA,M,B,KB,N)
 C     ------------------------------------------------------------------
 C     COPYING DOUBLE PRECISION POLYNOMIALS
@@ -26123,7 +26367,8 @@ C
          LB = LB + KB
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPCOPY
+
       SUBROUTINE PADD (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     ADDITION OF REAL POLYNOMIALS
@@ -26142,7 +26387,8 @@ C
          LC = LC + KC
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE PADD
+
       SUBROUTINE DPADD (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     ADDITION OF DOUBLE PRECISION POLYNOMIALS
@@ -26161,7 +26407,8 @@ C
          LC = LC + KC
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPADD
+
       SUBROUTINE PSUBT (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF REAL POLYNOMIALS
@@ -26180,7 +26427,8 @@ C
          LC = LC + KC
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE PSUBT
+
       SUBROUTINE DPSUBT (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF DOUBLE PRECISION POLYNOMIALS
@@ -26199,7 +26447,8 @@ C
          LC = LC + KC
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPSUBT
+
       SUBROUTINE PMULT (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF REAL POLYNOMIALS
@@ -26235,7 +26484,8 @@ C
          C(LC) = 0.0
    60 LC = LC + KC
       RETURN
-      END
+      END SUBROUTINE PMULT
+
       SUBROUTINE DPMULT (A,KA,L,B,KB,M,C,KC,N)
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF DOUBLE PRECISION POLYNOMIALS
@@ -26271,7 +26521,8 @@ C
          C(LC) = 0.D0
    60 LC = LC + KC
       RETURN
-      END
+      END SUBROUTINE DPMULT
+
       SUBROUTINE PDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
 C     ------------------------------------------------------------------
 C     DIVISION OF REAL POLYNOMIALS
@@ -26323,7 +26574,8 @@ C                ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE PDIV
+
       SUBROUTINE DPDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
 C     ------------------------------------------------------------------
 C     DIVISION OF DOUBLE PRECISION POLYNOMIALS
@@ -26375,7 +26627,8 @@ C                ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DPDIV
+
       SUBROUTINE PLPWR(R,A,KA,M,B,KB,N,IERR)
 C     ------------------------------------------------------------------
 C     SET B = A**R WHERE A IS A REAL POLYNOMIAL
@@ -26426,7 +26679,8 @@ C                ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE PLPWR
+
       SUBROUTINE DPLPWR(R,A,KA,M,B,KB,N,IERR)
 C     ------------------------------------------------------------------
 C     SET B = A**R WHERE A IS A DOUBLE PRECISION POLYNOMIAL
@@ -26476,7 +26730,8 @@ C                ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DPLPWR
+
       SUBROUTINE PINV (A, D, N, Q)
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
@@ -26531,7 +26786,8 @@ C
          D(J) = SUM
    31 CONTINUE
       RETURN
-      END
+      END SUBROUTINE PINV
+
       SUBROUTINE DPINV (A, D, N, Q)
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
@@ -26587,7 +26843,8 @@ C
          D(J) = SUM
    31 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPINV
+
       SUBROUTINE MPLNMV (MO, AU, NC, AC, FV)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MULTIPLEX POLYNOMIAL EVALUATION
@@ -26639,7 +26896,8 @@ C
       L=L-1
   009 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MPLNMV
+
       REAL FUNCTION CSEVL (X, A, N)
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
@@ -26662,7 +26920,8 @@ C
    20 CONTINUE
       CSEVL = 0.5 * (S0 - S2)
       RETURN
-      END
+      END FUNCTION CSEVL
+
       DOUBLE PRECISION FUNCTION DCSEVL (X, A, N)
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
@@ -26685,7 +26944,8 @@ C
    20 CONTINUE
       DCSEVL = 0.5D0 * (S0 - S2)
       RETURN
-      END
+      END FUNCTION DCSEVL
+
       SUBROUTINE LGRNGN (AU, NA, AN)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN NORMALIZATION FACTORS
@@ -26705,7 +26965,8 @@ C
       AN(K)=TM
   003 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LGRNGN
+
       SUBROUTINE LGRNGV (MO, NA, QU, AU, AN, FF, DF, SF)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN FUNCTION EVALUATION
@@ -26811,7 +27072,8 @@ C
       FF(K)=1.0
   052 CONTINUE
   053 RETURN
-      END
+      END SUBROUTINE LGRNGV
+
       SUBROUTINE LGRNGX (AU, NA, AC)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN POLYNOMIAL EXPANSION
@@ -26858,7 +27120,8 @@ C
   007 CONTINUE
   008 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LGRNGX
+
       SUBROUTINE ORTHOS (AU, MA, AA, NA, AR)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL SYNTHESIS
@@ -26935,7 +27198,8 @@ C
       AR(2*M-3)=SM
   013 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ORTHOS
+
       SUBROUTINE ORTHOV (MO, NA, AU, AR, NF, FF, DF, SF)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EVALUATION
@@ -26986,7 +27250,8 @@ C
       SF(K)=(2.0*DF(K-1)+(AU-AR(L))*SF(K-1)-AR(L-3)*SF(K-2))/AR(L-1)
   006 CONTINUE
   007 RETURN
-      END
+      END SUBROUTINE ORTHOV
+
       SUBROUTINE ORTHOX (NA, AR, NC, AC)
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EXPANSION
@@ -27024,7 +27289,8 @@ C
   006 CONTINUE
   007 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ORTHOX
+
       REAL FUNCTION ZEROIN (F, AX, BX, AERR, RERR)
 C-----------------------------------------------------------------------
 C
@@ -27146,7 +27412,8 @@ C DONE
 C
    90 ZEROIN = B
       RETURN
-      END
+      END FUNCTION ZEROIN
+
       DOUBLE PRECISION FUNCTION DZERO (F, AX, BX, AERR, RERR)
 C-----------------------------------------------------------------------
 C
@@ -27268,7 +27535,8 @@ C DONE
 C
    90 DZERO = B
       RETURN
-      END
+      END FUNCTION DZERO
+
       SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
       INTEGER N,INFO,LWA
       REAL EPSFCN,TOL
@@ -27398,7 +27666,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE HBRD.
 C
-      END
+      END SUBROUTINE HBRD
+
       SUBROUTINE HYBRD(FCN,N,X,FVEC,XTOL,MAXFEV,ML,MU,EPSFCN,DIAG,
      *                 MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,R,LR,
      *                 QTF,WA1,WA2,WA3,WA4)
@@ -27856,7 +28125,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE HYBRD.
 C
-      END
+      END SUBROUTINE HYBRD
+
       SUBROUTINE QDCRT (A, Z)
 C-----------------------------------------------------------------------
 C
@@ -27913,7 +28183,8 @@ C
    40 Z(1) = (0.0, 0.0)
       Z(2) = CMPLX(-A(2)/A(3), 0.0)
       RETURN
-      END
+      END SUBROUTINE QDCRT
+
       SUBROUTINE DQDCRT (A, ZR, ZI)
 C-----------------------------------------------------------------------
 C
@@ -27976,7 +28247,8 @@ C
       ZI(1) = 0.D0
       ZI(2) = 0.D0
       RETURN
-      END
+      END SUBROUTINE DQDCRT
+
       SUBROUTINE CBCRT (A, Z)
 C-----------------------------------------------------------------------
 C
@@ -28170,7 +28442,8 @@ C
   131 Z(2) = Z(1)
       Z(1) = CMPLX(T, 0.0)
       RETURN
-      END
+      END SUBROUTINE CBCRT
+
       SUBROUTINE DCBCRT (A, ZR, ZI)
 C-----------------------------------------------------------------------
 C
@@ -28389,7 +28662,8 @@ C
   131 ZR(2) = ZR(1)
       ZR(1) = T
       RETURN
-      END
+      END SUBROUTINE DCBCRT
+
       SUBROUTINE QTCRT (A, Z)
 C-----------------------------------------------------------------------
 C
@@ -28536,7 +28810,8 @@ C
   100 Z(1) = (0.0, 0.0)
       CALL CBCRT(A(2), Z(2))
       RETURN
-      END
+      END SUBROUTINE QTCRT
+
       SUBROUTINE DQTCRT (A, ZR, ZI)
 C-----------------------------------------------------------------------
 C
@@ -28695,7 +28970,8 @@ C
       ZI(1) = 0.D0
       CALL DCBCRT(A(2), ZR(2), ZI(2))
       RETURN
-      END
+      END SUBROUTINE DQTCRT
+
       SUBROUTINE DRPOLY (OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK)
 C
 C     THIS SUBROUTINE FINDS THE ZEROS OF A REAL POLYNOMIAL.
@@ -28755,7 +29031,8 @@ C     ERROR RETURN
 C
    10 NUM = -1
       RETURN
-      END
+      END SUBROUTINE DRPOLY
+
       SUBROUTINE DRPLY1 (OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,
      *                   TEMP,PT,NUM)
 C-------------------------
@@ -29021,7 +29298,8 @@ C
       ZEROR(NUM) = LZR
       ZEROI(NUM) = LZI
       GO TO 40
-      END
+      END SUBROUTINE DRPLY1
+
       SUBROUTINE FXSHFR(L2, NZ, NN, P, QP, K, QK, SVK)
 C
 C     COMPUTES UP TO  L2  FIXED SHIFT K-POLYNOMIALS,
@@ -29168,7 +29446,8 @@ C
          OTS = TS
    80 CONTINUE
       RETURN
-      END
+      END SUBROUTINE FXSHFR
+
       SUBROUTINE QUADIT(UU, VV, NZ, NN, P, QP, K, QK)
 C
 C     VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A
@@ -29269,7 +29548,8 @@ C
       U = UI
       V = VI
       GO TO 10
-      END
+      END SUBROUTINE QUADIT
+
       SUBROUTINE REALIT(SSS, NZ, IFLAG, NN, P, QP, K, QK)
 C
 C     VARIABLE-SHIFT H POLYNOMIAL ITERATION FOR A REAL ZERO.
@@ -29377,7 +29657,8 @@ C
       IF (DABS(KV) .GT. DABS(K(N))*10.*ETA) T = -PV/KV
       S = S + T
       GO TO 10
-      END
+      END SUBROUTINE REALIT
+
       SUBROUTINE CALCSC(TYPE, N, K, QK)
 C
 C     THIS ROUTINE CALCULATES SCALAR QUANTITIES USED TO
@@ -29433,7 +29714,8 @@ C
       A1 = B - A*(D/C)
       A7 = A + G*D + H*F
       RETURN
-      END
+      END SUBROUTINE CALCSC
+
       SUBROUTINE NEXTK(TYPE, N, QP, K, QK)
 C
 C     COMPUTES THE NEXT K POLYNOMIALS USING THE SCALARS
@@ -29482,7 +29764,8 @@ C
          K(I) = QK(I - 2)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE NEXTK
+
       SUBROUTINE NEWEST (TYPE, UU, VV, NN, P, K)
 C
 C     COMPUTE NEW ESTIMATES OF THE QUADRATIC COEFFICIENTS
@@ -29528,7 +29811,8 @@ C
    30 UU = 0.D0
       VV = 0.D0
       RETURN
-      END
+      END SUBROUTINE NEWEST
+
       SUBROUTINE QUADSD (NN, U, V, P, Q, A, B)
 C
 C     DIVIDES P BY THE QUADRATIC  1,U,V  PLACING THE
@@ -29547,7 +29831,8 @@ C
          A = C
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE QUADSD
+
       SUBROUTINE QUADPL(A, B1, C, SR, SI, LR, LI)
 C
 C     CALCULATE THE ZEROS OF THE QUADRATIC A*Z**2+B1*Z+C.
@@ -29600,7 +29885,8 @@ C
       SI = DABS(D/A)
       LI = -SI
       RETURN
-      END
+      END SUBROUTINE QUADPL
+
       SUBROUTINE DCPOLY (OPR,OPI,IDEG,ZEROR,ZEROI,NUM,WK)
 C
 C     THIS SUBROUTINE FINDS THE ZEROS OF A COMPLEX POLYNOMIAL.
@@ -29663,7 +29949,8 @@ C     ERROR RETURN
 C
    10 NUM = -1
       RETURN
-      END
+      END SUBROUTINE DCPOLY
+
       SUBROUTINE DCPLY1 (OPR,OPI,IDEG,IDP1,ZEROR,ZEROI,PR,PI,QPR,QPI,
      *                   HR,HI,QHR,QHI,SHR,SHI,NUM)
 C-------------------------
@@ -29805,7 +30092,8 @@ C
             PI(I) = QPI(I)
   110    CONTINUE
          GO TO 40
-         END
+         END SUBROUTINE DCPLY1
+
       DOUBLE PRECISION FUNCTION SCALCP(NN,PT,ETA,INFIN,SMALNO,BASE)
 C
 C     RETURNS A SCALE FACTOR TO MULTIPLY THE COEFFICIENTS OF THE
@@ -29844,7 +30132,8 @@ C
    30 L = DLOG(SC)/DLOG(BASE) + 0.5D0
       SCALCP = BASE**L
       RETURN
-      END
+      END FUNCTION SCALCP
+
       SUBROUTINE CAUCHY(NN,BND,PT,Q)
 C
 C     CAUCHY COMPUTES A LOWER BOUND BND ON THE MODULI OF THE ZEROS
@@ -29895,7 +30184,8 @@ C
 C
    70 BND = X
       RETURN
-      END
+      END SUBROUTINE CAUCHY
+
       SUBROUTINE NOSHFT(L1,NN,TR,TI,ETA,PR,PI,HR,HI)
 C
 C     COMPUTES THE DERIVATIVE POLYNOMIAL AS THE INITIAL H
@@ -29939,7 +30229,8 @@ C
          HI(1) = 0.D0
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE NOSHFT
+
       SUBROUTINE FXSHFT(L2,ZR,ZI,CONV,NN,PR,PI,HR,HI,QPR,QPI,
      *                  QHR,QHI,SHR,SHI,SR,SI,TR,TI,PVR,PVI,
      *                  ARE,MRE,ETA,INFIN)
@@ -30031,7 +30322,8 @@ C
       CALL VRSHFT(10,ZR,ZI,CONV,NN,PR,PI,HR,HI,QPR,QPI,QHR,QHI,
      *                  SR,SI,TR,TI,PVR,PVI,ARE,MRE,ETA,INFIN)
       RETURN
-      END
+      END SUBROUTINE FXSHFT
+
       SUBROUTINE VRSHFT(L3,ZR,ZI,CONV,NN,PR,PI,HR,HI,QPR,QPI,QHR,QHI,
      *                  SR,SI,TR,TI,PVR,PVI,ARE,MRE,ETA,INFIN)
 C
@@ -30114,7 +30406,8 @@ C
          SI = SI + TI
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE VRSHFT
+
       SUBROUTINE CALCT(BOOL,N,SR,SI,TR,TI,PVR,PVI,ARE,HR,HI,QHR,QHI)
 C
 C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
@@ -30137,7 +30430,8 @@ C
    10 TR = 0.D0
       TI = 0.D0
       RETURN
-      END
+      END SUBROUTINE CALCT
+
       SUBROUTINE NEXTH(BOOL,N,TR,TI,HR,HI,QPR,QPI,QHR,QHI)
 C
 C     CALCULATES THE NEXT SHIFTED H POLYNOMIAL.
@@ -30168,7 +30462,8 @@ C
       HR(1) = 0.D0
       HI(1) = 0.D0
       RETURN
-      END
+      END SUBROUTINE NEXTH
+
       SUBROUTINE POLYEV(N,SR,SI,PR,PI,QR,QI,PVR,PVI)
 C
 C     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
@@ -30188,7 +30483,8 @@ C
          QI(I) = PVI
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE POLYEV
+
       DOUBLE PRECISION FUNCTION ERREV(NN,QR,QI,MS,MP,ARE,MRE)
 C
 C     BOUNDS THE ERROR IN EVALUATING THE POLYNOMIAL BY THE HORNER
@@ -30207,7 +30503,8 @@ C
    10 CONTINUE
       ERREV = E*(ARE + MRE) - MP*MRE
       RETURN
-      END
+      END FUNCTION ERREV
+
       SUBROUTINE RBND (N, C, W, ABSERR, RELERR, KLUST, KER)
 C-----------------------------------------------------------------------
 C
@@ -30354,7 +30651,8 @@ C
       RETURN
   210 KER = 2
       RETURN
-      END
+      END SUBROUTINE RBND
+
       SUBROUTINE CBND (N, C, W, ABSERR, RELERR, KLUST, KER)
 C-----------------------------------------------------------------------
 C
@@ -30501,7 +30799,8 @@ C
       RETURN
   210 KER = 2
       RETURN
-      END
+      END SUBROUTINE CBND
+
       SUBROUTINE  SCOPY(N,SX,INCX,SY,INCY)
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
@@ -30550,7 +30849,8 @@ C
         SY(I + 6) = SX(I + 6)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SCOPY
+
       SUBROUTINE  DCOPY(N,DX,INCX,DY,INCY)
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
@@ -30599,7 +30899,8 @@ C
         DY(I + 6) = DX(I + 6)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DCOPY
+
       SUBROUTINE  CCOPY(N,CX,INCX,CY,INCY)
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
@@ -30631,7 +30932,8 @@ C
         CY(I) = CX(I)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CCOPY
+
       SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
 C
 C                EXTENDED B L A S  SUBPROGRAM
@@ -30715,7 +31017,8 @@ C
          IY(I) = ITEMP1
    70 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ISWAP
+
       SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
 C
 C     INTERCHANGES TWO VECTORS.
@@ -30770,7 +31073,8 @@ C
         SY(I + 2) = STEMP
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSWAP
+
       SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
 C
 C     INTERCHANGES TWO VECTORS.
@@ -30825,7 +31129,8 @@ C
         DY(I + 2) = DTEMP
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSWAP
+
       SUBROUTINE  CSWAP (N,CX,INCX,CY,INCY)
 C
 C     INTERCHANGES TWO VECTORS.
@@ -30860,7 +31165,8 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
         CY(I) = CTEMP
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSWAP
+
       SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
 C
 C     APPLIES A PLANE ROTATION.
@@ -30896,7 +31202,8 @@ C
         SX(I) = STEMP
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SROT
+
       SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
 C
 C     APPLIES A PLANE ROTATION.
@@ -30932,7 +31239,8 @@ C
         DX(I) = DTEMP
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DROT
+
       SUBROUTINE  CSROT (N,CX,INCX,CY,INCY,C,S)
 C
 C     APPLIES A PLANE ROTATION, WHERE THE COS AND SIN (C AND S) ARE REAL
@@ -30970,7 +31278,8 @@ C
         CX(I) = CTEMP
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSROT
+
       SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
@@ -31116,7 +31425,8 @@ C
   260 CONTINUE
           SPARAM(1)=SFLAG
           RETURN
-      END
+      END SUBROUTINE SROTMG
+
       SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
@@ -31223,7 +31533,8 @@ C
   130          CONTINUE
   140     CONTINUE
           RETURN
-          END
+          END SUBROUTINE SROTM
+
       SUBROUTINE DROTMG (DD1,DD2,DX1,DY1,DPARAM)
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
@@ -31372,7 +31683,8 @@ C
   260 CONTINUE
           DPARAM(1)=DFLAG
           RETURN
-      END
+      END SUBROUTINE DROTMG
+
       SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
@@ -31481,7 +31793,8 @@ C
   130          CONTINUE
   140     CONTINUE
           RETURN
-          END
+          END SUBROUTINE DROTM
+
       REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
@@ -31529,7 +31842,8 @@ C
    50 CONTINUE
    60 SDOT = STEMP
       RETURN
-      END
+      END FUNCTION SDOT
+
       DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
@@ -31577,7 +31891,8 @@ C
    50 CONTINUE
    60 DDOT = DTEMP
       RETURN
-      END
+      END FUNCTION DDOT
+
       COMPLEX FUNCTION CDOTC(N,CX,INCX,CY,INCY)
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS, CONJUGATING THE FIRST
@@ -31614,7 +31929,8 @@ C
    30 CONTINUE
       CDOTC = CTEMP
       RETURN
-      END
+      END FUNCTION CDOTC
+
       COMPLEX FUNCTION CDOTU(N,CX,INCX,CY,INCY)
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
@@ -31650,7 +31966,8 @@ C
    30 CONTINUE
       CDOTU = CTEMP
       RETURN
-      END
+      END FUNCTION CDOTU
+
       SUBROUTINE  SSCAL(N,SA,SX,INCX)
 C
 C     SCALES A VECTOR BY A CONSTANT.
@@ -31691,7 +32008,8 @@ C
         SX(I + 4) = SA*SX(I + 4)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSCAL
+
       SUBROUTINE  DSCAL(N,DA,DX,INCX)
 C
 C     SCALES A VECTOR BY A CONSTANT.
@@ -31732,7 +32050,8 @@ C
         DX(I + 4) = DA*DX(I + 4)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSCAL
+
       SUBROUTINE  CSCAL(N,CA,CX,INCX)
 C
 C     SCALES A VECTOR BY A CONSTANT.
@@ -31758,7 +32077,8 @@ C
         CX(I) = CA*CX(I)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSCAL
+
       SUBROUTINE  CSSCAL(N,SA,CX,INCX)
 C
 C     SCALES A COMPLEX VECTOR BY A REAL CONSTANT.
@@ -31785,7 +32105,8 @@ C
         CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSSCAL
+
       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
@@ -31832,7 +32153,8 @@ C
         SY(I + 3) = SY(I + 3) + SA*SX(I + 3)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SAXPY
+
       SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
@@ -31879,7 +32201,8 @@ C
         DY(I + 3) = DY(I + 3) + DA*DX(I + 3)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DAXPY
+
       SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
@@ -31912,7 +32235,8 @@ C
         CY(I) = CY(I) + CA*CX(I)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CAXPY
+
       REAL FUNCTION SASUM(N,SX,INCX)
 C
 C     TAKES THE SUM OF THE ABSOLUTE VALUES.
@@ -31954,7 +32278,8 @@ C
    50 CONTINUE
    60 SASUM = STEMP
       RETURN
-      END
+      END FUNCTION SASUM
+
       DOUBLE PRECISION FUNCTION DASUM(N,DX,INCX)
 C
 C     TAKES THE SUM OF THE ABSOLUTE VALUES.
@@ -31995,7 +32320,8 @@ C
    50 CONTINUE
    60 DASUM = DTEMP
       RETURN
-      END
+      END FUNCTION DASUM
+
       REAL FUNCTION SCASUM(N,CX,INCX)
 C
 C     TAKES THE SUM OF THE ABSOLUTE VALUES OF A COMPLEX VECTOR AND
@@ -32027,7 +32353,8 @@ C
    30 CONTINUE
       SCASUM = STEMP
       RETURN
-      END
+      END FUNCTION SCASUM
+
       REAL FUNCTION SNRM2 ( N, SX, INCX)
       INTEGER          NEXT
       REAL   SX(*),  CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
@@ -32149,7 +32476,8 @@ C
       SNRM2 = XMAX * SQRT(SUM)
   300 CONTINUE
       RETURN
-      END
+      END FUNCTION SNRM2
+
       DOUBLE PRECISION FUNCTION DNRM2 ( N, DX, INCX)
       INTEGER          NEXT
       DOUBLE PRECISION   DX(*), CUTLO, CUTHI, HITEST, SUM, XMAX,ZERO,ONE
@@ -32271,7 +32599,8 @@ C
       DNRM2 = XMAX * DSQRT(SUM)
   300 CONTINUE
       RETURN
-      END
+      END FUNCTION DNRM2
+
       REAL FUNCTION SCNRM2( N, CX, INCX)
       LOGICAL IMAG, SCALE
       INTEGER          NEXT
@@ -32402,7 +32731,8 @@ C
       IF(SCALE) SCNRM2 = SCNRM2 * XMAX
   300 CONTINUE
       RETURN
-      END
+      END FUNCTION SCNRM2
+
       INTEGER FUNCTION ISAMAX(N,SX,INCX)
 C
 C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
@@ -32439,7 +32769,8 @@ C
          SMAX = ABS(SX(I))
    30 CONTINUE
       RETURN
-      END
+      END FUNCTION ISAMAX
+
       INTEGER FUNCTION IDAMAX(N,DX,INCX)
 C
 C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
@@ -32476,7 +32807,8 @@ C
          DMAX = DABS(DX(I))
    30 CONTINUE
       RETURN
-      END
+      END FUNCTION IDAMAX
+
       INTEGER FUNCTION ICAMAX(N,CX,INCX)
 C
 C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
@@ -32517,7 +32849,8 @@ C
          SMAX = CABS1(CX(I))
    30 CONTINUE
       RETURN
-      END
+      END FUNCTION ICAMAX
+
       SUBROUTINE MCVFS(A,KA,N,B)
       REAL A(KA,N),B(*)
 C
@@ -32528,7 +32861,8 @@ C
    10    B(L) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCVFS
+
       SUBROUTINE DMCVFS(A,KA,N,B)
       DOUBLE PRECISION A(KA,N),B(*)
 C
@@ -32539,7 +32873,8 @@ C
    10    B(L) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMCVFS
+
       SUBROUTINE MCVSF(A,KA,N,B)
       REAL A(KA,N),B(*)
 C
@@ -32562,7 +32897,8 @@ C
    20    A(I,J) = A(J,I)
    21 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCVSF
+
       SUBROUTINE DMCVSF(A,KA,N,B)
       DOUBLE PRECISION A(KA,N),B(*)
 C
@@ -32585,7 +32921,8 @@ C
    20    A(I,J) = A(J,I)
    21 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMCVSF
+
       SUBROUTINE MCVRD(M,N,A,KA,B,KB)
       REAL A(KA,N)
       DOUBLE PRECISION B(KB,N)
@@ -32595,7 +32932,8 @@ C
    10    B(I,J) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCVRD
+
       SUBROUTINE MCVDR(M,N,A,KA,B,KB)
       DOUBLE PRECISION A(KA,N)
       REAL B(KB,N)
@@ -32605,7 +32943,8 @@ C
    10    B(I,J) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCVDR
+
       SUBROUTINE MCVRC(M,N,A,KA,B,KB)
       REAL A(KA,N)
       COMPLEX B(KB,N)
@@ -32615,7 +32954,8 @@ C
    10    B(I,J) = CMPLX(A(I,J),0.0)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCVRC
+
       SUBROUTINE CMREAL(M,N,A,KA,B,KB)
       COMPLEX A(KA,N)
       REAL B(KB,N)
@@ -32625,7 +32965,8 @@ C
    10    B(I,J) = REAL(A(I,J))
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMREAL
+
       SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
       COMPLEX A(KA,N)
       REAL B(KB,N)
@@ -32635,7 +32976,8 @@ C
    10    B(I,J) = AIMAG(A(I,J))
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMIMAG
+
       SUBROUTINE MCOPY(M,N,A,KA,B,KB)
       REAL A(KA,N),B(KB,N)
 C
@@ -32644,7 +32986,8 @@ C
    10    B(I,J) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MCOPY
+
       SUBROUTINE SMCOPY(N,A,B)
       REAL A(*),B(*)
 C
@@ -32652,7 +32995,8 @@ C
       DO 10 K = 1,L
    10 B(K) = A(K)
       RETURN
-      END
+      END SUBROUTINE SMCOPY
+
       SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
       DOUBLE PRECISION A(KA,N),B(KB,N)
 C
@@ -32661,7 +33005,8 @@ C
    10    B(I,J) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMCOPY
+
       SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
       COMPLEX A(KA,N),B(KB,N)
 C
@@ -32670,7 +33015,8 @@ C
    10    B(I,J) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMCOPY
+
       SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
       COMPLEX A(KA,N),B(KB,N)
 C
@@ -32679,7 +33025,8 @@ C
    10    B(I,J) = CONJG(A(I,J))
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMCONJ
+
       SUBROUTINE TPOSE(M,N,A,KA,B,KB)
       REAL A(KA,N),B(KB,M)
 C
@@ -32688,7 +33035,8 @@ C
    10    B(J,I) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE TPOSE
+
       SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
       DOUBLE PRECISION A(KA,N),B(KB,M)
 C
@@ -32697,7 +33045,8 @@ C
    10    B(J,I) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DTPOSE
+
       SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
       COMPLEX A(KA,N),B(KB,M)
 C
@@ -32706,7 +33055,8 @@ C
    10    B(J,I) = A(I,J)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CTPOSE
+
       SUBROUTINE TIP (A, N1, N2, MOVED, NWORK, NDIM)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
@@ -32814,7 +33164,8 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       RETURN
   200 IF (N1.NE.N2) NDIM = 0
       RETURN
-      END
+      END SUBROUTINE TIP
+
       SUBROUTINE DTIP (A, N1, N2, MOVED, NWORK, NDIM)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
@@ -32922,7 +33273,8 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       RETURN
   200 IF (N1.NE.N2) NDIM = 0
       RETURN
-      END
+      END SUBROUTINE DTIP
+
       SUBROUTINE CTIP (A, N1, N2, MOVED, NWORK, NDIM)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
@@ -33030,7 +33382,8 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       RETURN
   200 IF (N1.NE.N2) NDIM = 0
       RETURN
-      END
+      END SUBROUTINE CTIP
+
       SUBROUTINE INFCTR(N, IFACT, IPOWER, NEXP, NPOWER)
 C FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
 C E.G., FOR N=1960=2**3 *5 *7**2, NPOWER=3, IFACT=2,5,7,
@@ -33070,7 +33423,8 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       NEXP(IP) = NEXP(IP) + 1
   140 NPOWER = IP
       RETURN
-      END
+      END SUBROUTINE INFCTR
+
       SUBROUTINE CMADJ(M,N,A,KA,B,KB)
       COMPLEX A(KA,N),B(KB,M)
 C
@@ -33079,7 +33433,8 @@ C
    10    B(J,I) = CONJG(A(I,J))
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMADJ
+
       SUBROUTINE CTRANS (NM, N, A)
 C
 C
@@ -33112,7 +33467,8 @@ C
    10   CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CTRANS
+
       SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                      ADDITION OF REAL MATRICES
@@ -33125,7 +33481,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MADD
+
       SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                ADDITION OF DOUBLE PRECISION MATRICES
@@ -33138,7 +33495,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMADD
+
       SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                   ADDITION OF COMPLEX MATRICES
@@ -33151,14 +33509,16 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMADD
+
       SUBROUTINE SMADD(N,A,B,C)
       REAL A(*),B(*),C(*)
       M=(N*(N+1))/2
       DO 10 K=1,M
    10 C(K)=A(K)+B(K)
       RETURN
-      END
+      END SUBROUTINE SMADD
+
       SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                     SUBTRACTION OF REAL MATRICES
@@ -33171,7 +33531,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MSUBT
+
       SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C              SUBTRACTION OF DOUBLE PRECISION MATRICES
@@ -33184,7 +33545,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMSUBT
+
       SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                  SUBTRACTION OF COMPLEX MATRICES
@@ -33197,14 +33559,16 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMSUBT
+
       SUBROUTINE SMSUBT(N,A,B,C)
       REAL A(*),B(*),C(*)
       M=(N*(N+1))/2
       DO 10 K=1,M
    10 C(K)=A(K)-B(K)
       RETURN
-      END
+      END SUBROUTINE SMSUBT
+
       SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
@@ -33222,7 +33586,8 @@ C
    20    CONTINUE
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MTMS
+
       SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
@@ -33239,7 +33604,8 @@ C
    20    CONTINUE
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMTMS
+
       SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
@@ -33256,7 +33622,8 @@ C
    20    CONTINUE
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMTMS
+
       SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
@@ -33308,7 +33675,8 @@ C
    33    B(I,J) = ROW(I)
    34 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MPROD
+
       LOGICAL FUNCTION RLOC (X, Y)
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -33338,14 +33706,16 @@ C
    10 Y(1) = YOLD
       RLOC = .FALSE.
       RETURN
-      END
+      END FUNCTION RLOC
+
       SUBROUTINE YCHG (X, Y, YOLD)
       REAL X(*), Y(*)
 C
       Y(1) = 0.0
       IF (YOLD .EQ. 0.0) Y(1) = 1.0
       RETURN
-      END
+      END SUBROUTINE YCHG
+
       SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
@@ -33396,7 +33766,8 @@ C
    33    B(I,J) = ROW(I)
    34 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMPROD
+
       LOGICAL FUNCTION DLOC (X, Y)
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -33426,14 +33797,16 @@ C
    10 Y(1) = YOLD
       DLOC = .FALSE.
       RETURN
-      END
+      END FUNCTION DLOC
+
       SUBROUTINE DYCHG (X, Y, YOLD)
       DOUBLE PRECISION X(*), Y(*), YOLD
 C
       Y(1) = 0.D0
       IF (YOLD .EQ. 0.D0) Y(1) = 1.D0
       RETURN
-      END
+      END SUBROUTINE DYCHG
+
       SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
@@ -33484,7 +33857,8 @@ C
    33    B(I,J) = ROW(I)
    34 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CMPROD
+
       LOGICAL FUNCTION CLOC (X, Y)
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -33514,7 +33888,8 @@ C
    10 Y(1) = YOLD
       CLOC = .FALSE.
       RETURN
-      END
+      END FUNCTION CLOC
+
       SUBROUTINE CYCHG (X, Y, YOLD)
       COMPLEX X(*), Y(*), YOLD
       COMPLEX ZERO, ONE
@@ -33523,7 +33898,8 @@ C
       Y(1) = ZERO
       IF (YOLD .EQ. ZERO) Y(1) = ONE
       RETURN
-      END
+      END SUBROUTINE CYCHG
+
       SUBROUTINE SVPRD(A,N,X,Y)
       REAL A(*),X(N),Y(N)
       Y(1) = A(1)*X(1)
@@ -33543,7 +33919,8 @@ C
       L = L + 1
    20 Y(K) = YK + A(L)*XK
       RETURN
-      END
+      END SUBROUTINE SVPRD
+
       SUBROUTINE DSVPRD(A,N,X,Y)
       DOUBLE PRECISION A(*),X(N),Y(N)
       DOUBLE PRECISION XK,YK
@@ -33564,7 +33941,8 @@ C
       L = L + 1
    20 Y(K) = YK + A(L)*XK
       RETURN
-      END
+      END SUBROUTINE DSVPRD
+
       SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
       REAL A(KA,N),B(KB,L),C(KC,L)
       DOUBLE PRECISION S
@@ -33576,7 +33954,8 @@ C
    11 C(I,J) = S
    12 CONTINUE
       RETURN
-      END
+      END SUBROUTINE TMPROD
+
       SUBROUTINE SMPROD(M,N,A,KA,B)
       REAL A(KA,N),B(*)
       DOUBLE PRECISION S
@@ -33590,7 +33969,8 @@ C
    11 II = II + 1
    12 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SMPROD
+
       SUBROUTINE KPROD(A,KA,M,N,B,KB,K,L,C,KC)
 C     ******************************************************************
 C     KRONECKER PRODUCT OF REAL MATRICES A AND B
@@ -33615,7 +33995,8 @@ C
    30    CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE KPROD
+
       SUBROUTINE DKPROD(A,KA,M,N,B,KB,K,L,C,KC)
 C     ******************************************************************
 C     KRONECKER PRODUCT OF DOUBLE PRECISION MATRICES A AND B
@@ -33640,7 +34021,8 @@ C
    30    CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DKPROD
+
       SUBROUTINE CKPROD(A,KA,M,N,B,KB,K,L,C,KC)
 C     ******************************************************************
 C     KRONECKER PRODUCT OF COMPLEX MATRICES A AND B
@@ -33665,7 +34047,8 @@ C
    30    CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CKPROD
+
       SUBROUTINE RNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
 C-----------------------------------------------------------------------
 C
@@ -33711,7 +34094,8 @@ C
    40 CALL U11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *            WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
       RETURN
-      END
+      END SUBROUTINE RNK
+
       SUBROUTINE DRNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
 C-----------------------------------------------------------------------
 C
@@ -33760,7 +34144,8 @@ C
    40 CALL DU11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE,
      *             WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
       RETURN
-      END
+      END SUBROUTINE DRNK
+
       SUBROUTINE CROUT(MO,N,M,A,KA,B,KB,D,INDEX,TEMP)
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
@@ -33953,7 +34338,8 @@ C
       DO 210 KJ = 1,MAXB,KB
   210    B(KJ) = B(KJ)/D
       RETURN
-      END
+      END SUBROUTINE CROUT
+
       SUBROUTINE KROUT(MO,N,M,A,KA,B,KB,IERR,INDEX,TEMP)
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
@@ -34162,7 +34548,8 @@ C                        INPUT ERROR
 C
   320 IERR = -1
       RETURN
-      END
+      END SUBROUTINE KROUT
+
       SUBROUTINE DEC (N, NDIM, A, IP, IER)
 C-----------------------------------------------------------------------
 C MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
@@ -34230,7 +34617,8 @@ C  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
  80   IER = K
       IP(N) = 0
       RETURN
-      END
+      END SUBROUTINE DEC
+
       SUBROUTINE SOL (N, NDIM, A, B, IP)
 C-----------------------------------------------------------------------
 C SOLUTION OF LINEAR SYSTEM, A*X = B .
@@ -34273,7 +34661,8 @@ C  BACK SOLVE. ---------------------------------------------------------
  40     CONTINUE
  50   B(1) = B(1)/A(1,1)
       RETURN
-      END
+      END SUBROUTINE SOL
+
       SUBROUTINE NPIVOT (N, M, A, KA, B, KB, D, IERR)
 C-----------------------------------------------------------------------
 C     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
@@ -34324,7 +34713,8 @@ C
 C
    80 CONTINUE
       RETURN
-      END
+      END SUBROUTINE NPIVOT
+
       SUBROUTINE SLV (N, M, A, KA, B, KB, IERR)
       REAL A(KA,N), B(KB,M)
 C     ------------------------------------------------------------------
@@ -34411,7 +34801,8 @@ C
       RETURN
  220  IERR = N
       RETURN
-      END
+      END SUBROUTINE SLV
+
       SUBROUTINE DPSLV (N, M, A, KA, B, KB, IERR)
       DOUBLE PRECISION A(KA,N), B(KB,M), P, T
 C     ------------------------------------------------------------------
@@ -34497,7 +34888,8 @@ C
       RETURN
  220  IERR = N
       RETURN
-      END
+      END SUBROUTINE DPSLV
+
       SUBROUTINE MSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
@@ -34534,7 +34926,8 @@ C                  THE PROBLEM CANNOT BE SOLVED
 C
    30 IERR = 1
       RETURN
-      END
+      END SUBROUTINE MSLV
+
       SUBROUTINE MSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
@@ -34572,7 +34965,8 @@ C                          ERROR RETURN
 C
    40 IERR = -1
       RETURN
-      END
+      END SUBROUTINE MSLV1
+
       SUBROUTINE SLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
 C     ******************************************************************
 C     SOLUTION OF REAL LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
@@ -34600,7 +34994,8 @@ C
       CALL SGESL(WK, N, N, IWK, X, 0)
       CALL LUIMP(A, KA, N, WK(1), N, IWK, B, X, WK(IR), IERR)
       RETURN
-      END
+      END SUBROUTINE SLVMP
+
       SUBROUTINE LUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
 C ----------------------------------------------------------------------
 C     PURPOSE
@@ -34682,7 +35077,8 @@ C
 C
       IF (RATIO .GT. AMIN1(RAT,4.0*EPS2)) IND = 1
       RETURN
-      END
+      END SUBROUTINE LUIMP
+
       SUBROUTINE SGECO(A,LDA,N,IPVT,RCOND,Z)
       INTEGER LDA,N,IPVT(*)
       REAL A(LDA,*),Z(*)
@@ -34875,7 +35271,8 @@ C
       IF (ANORM .NE. 0.0E0) RCOND = YNORM/ANORM
       IF (ANORM .EQ. 0.0E0) RCOND = 0.0E0
       RETURN
-      END
+      END SUBROUTINE SGECO
+
       SUBROUTINE SGEFA(A,LDA,N,IPVT,INFO)
       INTEGER LDA,N,IPVT(*),INFO
       REAL A(LDA,*)
@@ -34978,7 +35375,8 @@ C
       IPVT(N) = N
       IF (A(N,N) .EQ. 0.0E0) INFO = N
       RETURN
-      END
+      END SUBROUTINE SGEFA
+
       SUBROUTINE SGESL(A,LDA,N,IPVT,B,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       REAL A(LDA,*),B(*)
@@ -35095,7 +35493,8 @@ C
    90    CONTINUE
   100 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SGESL
+
       SUBROUTINE SGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       REAL A(LDA,*),DET(2),WORK(*)
@@ -35223,7 +35622,8 @@ C
   140    CONTINUE
   150 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SGEDI
+
       SUBROUTINE DMSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
@@ -35260,7 +35660,8 @@ C                  THE PROBLEM CANNOT BE SOLVED
 C
    30 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DMSLV
+
       SUBROUTINE DMSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
@@ -35298,7 +35699,8 @@ C                          ERROR RETURN
 C
    40 IERR = -1
       RETURN
-      END
+      END SUBROUTINE DMSLV1
+
       SUBROUTINE DGECO(A,LDA,N,IPVT,RCOND,Z)
       INTEGER LDA,N,IPVT(*)
       DOUBLE PRECISION A(LDA,*),Z(*)
@@ -35491,7 +35893,8 @@ C
       IF (ANORM .NE. 0.0D0) RCOND = YNORM/ANORM
       IF (ANORM .EQ. 0.0D0) RCOND = 0.0D0
       RETURN
-      END
+      END SUBROUTINE DGECO
+
       SUBROUTINE DGEFA(A,LDA,N,IPVT,INFO)
       INTEGER LDA,N,IPVT(*),INFO
       DOUBLE PRECISION A(LDA,*)
@@ -35594,7 +35997,8 @@ C
       IPVT(N) = N
       IF (A(N,N) .EQ. 0.0D0) INFO = N
       RETURN
-      END
+      END SUBROUTINE DGEFA
+
       SUBROUTINE DGESL(A,LDA,N,IPVT,B,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),B(*)
@@ -35711,7 +36115,8 @@ C
    90    CONTINUE
   100 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DGESL
+
       SUBROUTINE DGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),DET(2),WORK(*)
@@ -35839,7 +36244,8 @@ C
   140    CONTINUE
   150 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DGEDI
+
       SUBROUTINE ARCECO(N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG)
 C
 C***************************************************************
@@ -35976,7 +36382,8 @@ C**********************************************************************
       IF (IFLAG.NE.0) RETURN
       CALL ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
       RETURN
-      END
+      END SUBROUTINE ARCECO
+
       SUBROUTINE ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
 C
 C***************************************************************
@@ -36225,7 +36632,8 @@ C
    60   CONTINUE
    70 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEDC
+
       SUBROUTINE ARCEPR(BLOCK, NRWBLK, NCLBLK, NRWPIV, PIVOT, PIVMAX,
      * IFLAG)
 C
@@ -36330,7 +36738,8 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C
       IFLAG = -1
       RETURN
-      END
+      END SUBROUTINE ARCEPR
+
       SUBROUTINE ARCEPC(TOPBLK, NRWTOP, NOVRLP, BOTBLK, NRWBOT, NCLPIV,
      * PIVOT, PIVMAX, IFLAG)
 C
@@ -36439,7 +36848,8 @@ C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C
       IFLAG = -1
       RETURN
-      END
+      END SUBROUTINE ARCEPC
+
       SUBROUTINE ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
 C
 C***************************************************************
@@ -36657,7 +37067,8 @@ C
       CALL ARCEBS(ARRAY(INDEXA), NRWBLK, NCLBLK, NRWPIV, B(INDPIV),
      * X(INDPIV))
       RETURN
-      END
+      END SUBROUTINE ARCESL
+
       SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
 C
 C***************************************************************
@@ -36682,7 +37093,8 @@ C
    10   CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEFS
+
       SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
 C
 C***************************************************************
@@ -36702,7 +37114,8 @@ C
    10   CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEFM
+
       SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
 C
 C***************************************************************
@@ -36730,7 +37143,8 @@ C
    20   CONTINUE
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEFE
+
       SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
 C
 C***************************************************************
@@ -36753,7 +37167,8 @@ C
    10   CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEBS
+
       SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
 C
 C***************************************************************
@@ -36773,7 +37188,8 @@ C
    10   CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEBM
+
       SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
 C
 C***************************************************************
@@ -36805,7 +37221,8 @@ C
    30   CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ARCEBE
+
       SUBROUTINE BTSLV(MO, M, N, A, B, C, X, IP, IERR)
       INTEGER MO, M , N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), X(*)
@@ -36820,7 +37237,8 @@ C     SOLVE THE SYSTEM OF EQUATIONS
 C
    10 CALL SOLBT(M, N, A, B, C, X, IP)
       RETURN
-      END
+      END SUBROUTINE BTSLV
+
       SUBROUTINE DECBT (M, N, A, B, C, IP, IER)
       INTEGER M, N, IP(M,N), IER
       REAL A(M,M,N), B(M,M,N), C(M,M,N)
@@ -36929,7 +37347,8 @@ C ERROR RETURNS. -------------------------------------------------------
  210  IER = -1
       RETURN
 C-----------------------  END OF SUBROUTINE DECBT  ---------------------
-      END
+      END SUBROUTINE DECBT
+
       SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
       INTEGER M, N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), Y(M,N)
@@ -36994,7 +37413,8 @@ C BACKWARD SOLUTION SWEEP. ---------------------------------------------
  100    CONTINUE
       RETURN
 C-----------------------  END OF SUBROUTINE SOLBT  ---------------------
-      END
+      END SUBROUTINE SOLBT
+
       SUBROUTINE SMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
 C     ------------------
       REAL A(*),B(*)
@@ -37028,7 +37448,8 @@ C                  THE PROBLEM CANNOT BE SOLVED
 C
    30 IERR = 1
       RETURN
-      END
+      END SUBROUTINE SMSLV
+
       SUBROUTINE SSPCO(AP,N,KPVT,RCOND,Z)
       INTEGER N,KPVT(*)
       REAL AP(*),Z(*)
@@ -37313,7 +37734,8 @@ C
       IF (ANORM .NE. 0.0E0) RCOND = YNORM/ANORM
       IF (ANORM .EQ. 0.0E0) RCOND = 0.0E0
       RETURN
-      END
+      END SUBROUTINE SSPCO
+
       SUBROUTINE SSPFA(AP,N,KPVT,INFO)
       INTEGER N,KPVT(*),INFO
       REAL AP(*)
@@ -37577,7 +37999,8 @@ C
       GO TO 10
   200 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSPFA
+
       SUBROUTINE SSPSL(AP,N,KPVT,B)
       INTEGER N,KPVT(*)
       REAL AP(*),B(*)
@@ -37757,7 +38180,8 @@ C
       GO TO 90
   160 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSPSL
+
       SUBROUTINE SSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
       INTEGER N,JOB
       REAL AP(*),WORK(*)
@@ -37996,7 +38420,8 @@ C
   260    CONTINUE
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSPDI
+
       SUBROUTINE DSMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
 C     ------------------
       DOUBLE PRECISION A(*),B(*)
@@ -38030,7 +38455,8 @@ C                  THE PROBLEM CANNOT BE SOLVED
 C
    30 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DSMSLV
+
       SUBROUTINE DSPCO(AP,N,KPVT,RCOND,Z)
       INTEGER N,KPVT(*)
       DOUBLE PRECISION AP(*),Z(*)
@@ -38315,7 +38741,8 @@ C
       IF (ANORM .NE. 0.0D0) RCOND = YNORM/ANORM
       IF (ANORM .EQ. 0.0D0) RCOND = 0.0D0
       RETURN
-      END
+      END SUBROUTINE DSPCO
+
       SUBROUTINE DSPFA(AP,N,KPVT,INFO)
       INTEGER N,KPVT(*),INFO
       DOUBLE PRECISION AP(*)
@@ -38579,7 +39006,8 @@ C
       GO TO 10
   200 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSPFA
+
       SUBROUTINE DSPSL(AP,N,KPVT,B)
       INTEGER N,KPVT(*)
       DOUBLE PRECISION AP(*),B(*)
@@ -38759,7 +39187,8 @@ C
       GO TO 90
   160 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSPSL
+
       SUBROUTINE DSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
       INTEGER N,JOB
       DOUBLE PRECISION AP(*),WORK(*)
@@ -38998,7 +39427,8 @@ C
   260    CONTINUE
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSPDI
+
       SUBROUTINE PCHOL (MO,N,M,A,B,KB,IERR)
 C     -----------------
       REAL A(*), B(*), D(2)
@@ -39022,7 +39452,8 @@ C         COMPUTATION OF THE INVERSE OF A
 C
    20 IF (MO .EQ. 0) CALL SPPDI (A,N,D,1)
       RETURN
-      END
+      END SUBROUTINE PCHOL
+
       SUBROUTINE SPPFA(AP,N,INFO)
       INTEGER N,INFO
       REAL AP(*)
@@ -39111,7 +39542,8 @@ C     ......EXIT
          INFO = 0
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SPPFA
+
       SUBROUTINE SPPSL(AP,N,B)
       INTEGER N
       REAL AP(*),B(*)
@@ -39177,7 +39609,8 @@ C
          CALL SAXPY(K-1,T,AP(KK+1),1,B(1),1)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SPPSL
+
       SUBROUTINE SPPDI(AP,N,DET,JOB)
       INTEGER N,JOB
       REAL AP(*)
@@ -39304,7 +39737,8 @@ C
   130    CONTINUE
   140 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SPPDI
+
       SUBROUTINE DPCHOL (MO,N,M,A,B,KB,IERR)
 C     -----------------
       DOUBLE PRECISION A(*), B(*), D(2)
@@ -39328,7 +39762,8 @@ C         COMPUTATION OF THE INVERSE OF A
 C
    20 IF (MO .EQ. 0) CALL DPPDI (A,N,D,1)
       RETURN
-      END
+      END SUBROUTINE DPCHOL
+
       SUBROUTINE DPPFA(AP,N,INFO)
       INTEGER N,INFO
       DOUBLE PRECISION AP(*)
@@ -39417,7 +39852,8 @@ C     ......EXIT
          INFO = 0
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPPFA
+
       SUBROUTINE DPPSL(AP,N,B)
       INTEGER N
       DOUBLE PRECISION AP(*),B(*)
@@ -39483,7 +39919,8 @@ C
          CALL DAXPY(K-1,T,AP(KK+1),1,B(1),1)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPPSL
+
       SUBROUTINE DPPDI(AP,N,DET,JOB)
       INTEGER N,JOB
       DOUBLE PRECISION AP(*)
@@ -39610,7 +40047,8 @@ C
   130    CONTINUE
   140 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPPDI
+
       SUBROUTINE TOPLX (A, B, X, N, G, H, IERR)
 C-----------------------------------------------------------------------
 C            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
@@ -39693,7 +40131,8 @@ C     ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE TOPLX
+
       SUBROUTINE DTOPLX (A, B, X, N, G, H, IERR)
 C-----------------------------------------------------------------------
 C            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
@@ -39777,7 +40216,8 @@ C     ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DTOPLX
+
       SUBROUTINE CMSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
@@ -39814,7 +40254,8 @@ C                  THE PROBLEM CANNOT BE SOLVED
 C
    30 IERR = 1
       RETURN
-      END
+      END SUBROUTINE CMSLV
+
       SUBROUTINE CMSLV1 (MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
@@ -39852,7 +40293,8 @@ C                          ERROR RETURN
 C
    40 IERR = -1
       RETURN
-      END
+      END SUBROUTINE CMSLV1
+
       SUBROUTINE CSLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
@@ -39881,7 +40323,8 @@ C
       CALL CGESL(WK, N, N, IWK, X, 0)
       CALL CLUIMP(A, KA, N, WK(1), N, IWK, B, X, WK(IR), IERR)
       RETURN
-      END
+      END SUBROUTINE CSLVMP
+
       SUBROUTINE CLUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
 C ----------------------------------------------------------------------
 C     PURPOSE
@@ -39962,7 +40405,8 @@ C
 C
       IF (RATIO .GT. AMIN1(RAT,4.0*EPS2)) IND = 1
       RETURN
-      END
+      END SUBROUTINE CLUIMP
+
       SUBROUTINE CGECO(A,LDA,N,IPVT,RCOND,Z)
       INTEGER LDA,N,IPVT(*)
       COMPLEX A(LDA,*),Z(*)
@@ -40159,7 +40603,8 @@ C
       IF (ANORM .NE. 0.0E0) RCOND = YNORM/ANORM
       IF (ANORM .EQ. 0.0E0) RCOND = 0.0E0
       RETURN
-      END
+      END SUBROUTINE CGECO
+
       SUBROUTINE CGEFA(A,LDA,N,IPVT,INFO)
       INTEGER LDA,N,IPVT(*),INFO
       COMPLEX A(LDA,*)
@@ -40266,7 +40711,8 @@ C
       IPVT(N) = N
       IF (CABS1(A(N,N)) .EQ. 0.0E0) INFO = N
       RETURN
-      END
+      END SUBROUTINE CGEFA
+
       SUBROUTINE CGESL(A,LDA,N,IPVT,B,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       COMPLEX A(LDA,*),B(*)
@@ -40384,7 +40830,8 @@ C
    90    CONTINUE
   100 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CGESL
+
       SUBROUTINE CGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       INTEGER LDA,N,IPVT(*),JOB
       COMPLEX A(LDA,*),DET(2),WORK(*)
@@ -40515,7 +40962,8 @@ C
   140    CONTINUE
   150 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CGEDI
+
       SUBROUTINE DCMSLV (MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
@@ -40547,7 +40995,8 @@ C                          ERROR RETURN
 C
    30 IERR = -1
       RETURN
-      END
+      END SUBROUTINE DCMSLV
+
       SUBROUTINE DCFACT (AR, AI, KA, N, IPVT, IERR)
 C-----------------------------------------------------------------------
 C     DECOMPOSES A COMPLEX MATRIX BY PARTIAL PIVOT GAUSS ELIMINATION
@@ -40649,7 +41098,8 @@ C                    K-TH PIVOT ELEMENT IS 0
 C
   100 IERR = K
       RETURN
-      END
+      END SUBROUTINE DCFACT
+
       SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
 C-----------------------------------------------------------------------
 C     SOLUTION OF THE SYSTEM OF M EQUATIONS A*X = B USING THE
@@ -40736,7 +41186,8 @@ C
          BI(1,J) = TR*PI + TI*PR
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DCSOL
+
       SUBROUTINE DCMINV (AR, AI, KA, N, IPVT, TEMP)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE INVERSE OF A MATRIX A USING THE LU
@@ -40824,7 +41275,8 @@ C
    50       AI(I,L) = TI
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DCMINV
+
       SUBROUTINE SSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       REAL X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
@@ -41304,7 +41756,8 @@ C           ...EXIT
       GO TO 360
   620 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SSVDC
+
       SUBROUTINE DSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       DOUBLE PRECISION X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
@@ -41784,7 +42237,8 @@ C           ...EXIT
       GO TO 360
   620 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSVDC
+
       SUBROUTINE CSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       COMPLEX X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
@@ -42292,7 +42746,8 @@ C           ...EXIT
       GO TO 400
   660 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSVDC
+
       FUNCTION DET(A,KA,N,X)
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
@@ -42357,7 +42812,8 @@ C         FINAL DETERMINANT CALCULATION
 C
       DET = DET*A(N,N)
       RETURN
-      END
+      END FUNCTION DET
+
       DOUBLE PRECISION FUNCTION DPDET(A,KA,N,X)
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
@@ -42423,7 +42879,8 @@ C         FINAL DETERMINANT CALCULATION
 C
       DPDET = DPDET*A(N,N)
       RETURN
-      END
+      END FUNCTION DPDET
+
       COMPLEX FUNCTION CDET(A,KA,N,X)
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
@@ -42492,7 +42949,8 @@ C         FINAL DETERMINANT CALCULATION
 C
       CDET = CDET*A(N,N)
       RETURN
-      END
+      END FUNCTION CDET
+
       SUBROUTINE ABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       REAL A(NA,M), B(NB,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
@@ -42569,7 +43027,8 @@ C ----------------------------------------------------------------------
       CALL ABSLV1 (MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
      *                C,NC,WK(IW),IERR)
       RETURN
-      END
+      END SUBROUTINE ABSLV
+
       SUBROUTINE ABSLV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
 C ----------------------------------------------------------------------
 C     ABSLV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -42680,7 +43139,8 @@ C
       RETURN
   220 IERR = 1
       RETURN
-      END
+      END SUBROUTINE ABSLV1
+
       SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. SCHUR
@@ -42952,7 +43412,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
   310   CONTINUE
   320 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SCHUR
+
       SUBROUTINE SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
 C     ------------------------------------------------------------------
 C     SHRSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
@@ -43065,7 +43526,8 @@ C     ERROR RETURN
 C
   200 IERR = 1
       RETURN
-      END
+      END SUBROUTINE SHRSLV
+
       SUBROUTINE DABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       DOUBLE PRECISION A(NA,M), B(NB,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
@@ -43142,7 +43604,8 @@ C ----------------------------------------------------------------------
       CALL DABSV1 (MO,M,N,A,NA,WK(IU),M,B,NB,WK(IV),N,
      *                C,NC,WK(IW),IERR)
       RETURN
-      END
+      END SUBROUTINE DABSLV
+
       SUBROUTINE DABSV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
 C ----------------------------------------------------------------------
 C     DABSV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -43253,7 +43716,8 @@ C
       RETURN
   220 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DABSV1
+
       SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. DSCHUR
@@ -43525,7 +43989,8 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
   310   CONTINUE
   320 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSCHUR
+
       SUBROUTINE DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
 C     ------------------------------------------------------------------
 C     DSHSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
@@ -43638,7 +44103,8 @@ C     ERROR RETURN
 C
   200 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DSHSLV
+
       SUBROUTINE TASLV (MO,N,A,NA,C,NC,WK,IERR)
       REAL A(NA,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
@@ -43695,7 +44161,8 @@ C ----------------------------------------------------------------------
       IW = N*N + 1
       CALL TASLV1 (MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
       RETURN
-      END
+      END SUBROUTINE TASLV
+
       SUBROUTINE TASLV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
 C ----------------------------------------------------------------------
 C     TASLV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -43798,7 +44265,8 @@ C
       RETURN
   210 IERR = 1
       RETURN
-      END
+      END SUBROUTINE TASLV1
+
       SUBROUTINE SYMSLV (A,C,N,NA,NC,IERR)
 C ----------------------------------------------------------------------
 C     SYMSLV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -43932,7 +44400,8 @@ C     ERROR RETURN
 C
   200 IERR = 1
       RETURN
-      END
+      END SUBROUTINE SYMSLV
+
       SUBROUTINE DTASLV (MO,N,A,NA,C,NC,WK,IERR)
       DOUBLE PRECISION A(NA,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
@@ -43989,7 +44458,8 @@ C ----------------------------------------------------------------------
       IW = N*N + 1
       CALL DTASV1 (MO,N,A,NA,WK(1),N,C,NC,WK(IW),IERR)
       RETURN
-      END
+      END SUBROUTINE DTASLV
+
       SUBROUTINE DTASV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
 C ----------------------------------------------------------------------
 C     DTASV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -44092,7 +44562,8 @@ C
       RETURN
   210 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DTASV1
+
       SUBROUTINE DSYMSV (A,C,N,NA,NC,IERR)
 C ----------------------------------------------------------------------
 C     DSYMSV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -44226,7 +44697,8 @@ C     ERROR RETURN
 C
   200 IERR = 1
       RETURN
-      END
+      END SUBROUTINE DSYMSV
+
       SUBROUTINE SQUINT(NM, N, A, B, C, IGUESS, S, WORK, NW, TOL,
      * MAXITS, IERR)
 C
@@ -44324,7 +44796,8 @@ C
      * WORK(I2), WORK(I3), WORK(I4), WORK(I5), WORK(I6), WORK(I7), NW,
      * TOL, MAXITS, IERR)
       RETURN
-      END
+      END SUBROUTINE SQUINT
+
       SUBROUTINE SQUIN2(NM, N, A, B, C, IGUESS, S, L, U, V, Z, R, XOLD,
      * EYE, TEMP, NW, TOL, MAXITS, IERR)
 C
@@ -44571,7 +45044,8 @@ C     ********** ERROR RETURNS **********
       RETURN
   460 IERR = 999
       RETURN
-      END
+      END SUBROUTINE SQUIN2
+
       SUBROUTINE CQZHES(NM, N, A, B, MATS, Z, F, G, H)
 C
 C
@@ -44779,7 +45253,8 @@ C     ********** ZERO B(L+1,L) **********
   240   CONTINUE
   250 CONTINUE
   260 RETURN
-      END
+      END SUBROUTINE CQZHES
+
       SUBROUTINE CQZIT(NM, N, A, B, EPS1, MATS, Z, F, IERR)
 C
 C
@@ -45026,7 +45501,8 @@ C                HAS BECOME NEGLIGIBLE AFTER 50 ITERATIONS **********
 C     ********** SAVE EPSB FOR USE BY CQZVEC **********
   220 IF (N.GT.1) B(N,1) = CMPLX(EPSB,0.0)
       RETURN
-      END
+      END SUBROUTINE CQZIT
+
       SUBROUTINE TRISLV(NM, N, U, V, L, F, TEMP, IERR)
 C
 C
@@ -45124,7 +45600,8 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
   110   CONTINUE
   120 CONTINUE
       RETURN
-      END
+      END SUBROUTINE TRISLV
+
       SUBROUTINE MEXP (A, KA, N, Z, KZ, WK, IERR)
       REAL A(KA,N),Z(KZ,N),WK(N,*),C(8)
 C ----------------------------------------------------------------------
@@ -45271,7 +45748,8 @@ C
       RETURN
   210 IERR = 2
       RETURN
-      END
+      END SUBROUTINE MEXP
+
       SUBROUTINE DMEXP (A, KA, N, Z, KZ, WK, IERR)
       DOUBLE PRECISION A(KA,N),Z(KZ,N),WK(N,*)
       DOUBLE PRECISION ANORM,ANORM1,C(12),FACTOR,P,Q,S,S1
@@ -45427,7 +45905,8 @@ C
       RETURN
   210 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DMEXP
+
       SUBROUTINE LE (ROWK,N,B,C,D,IP,IERR)
 C     ******************************************************************
 C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
@@ -45589,7 +46068,8 @@ C     THE SYSTEM IS SINGULAR
 C
   200 IERR = K
       RETURN
-      END
+      END SUBROUTINE LE
+
       SUBROUTINE DPLE (ROWK,N,B,C,D,IP,IERR)
 C     ******************************************************************
 C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
@@ -45752,7 +46232,8 @@ C     THE SYSTEM IS SINGULAR
 C
   200 IERR = K
       RETURN
-      END
+      END SUBROUTINE DPLE
+
       SUBROUTINE CLE (ROWK,N,B,C,D,IP,IERR)
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH REDUCED STORAGE
@@ -45923,7 +46404,8 @@ C     THE SYSTEM IS SINGULAR
 C
   200 IERR = K
       RETURN
-      END
+      END SUBROUTINE CLE
+
       SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM BANDED TO
@@ -45988,7 +46470,8 @@ C
    51       A(I,J) = 0.0
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVBR
+
       SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
 C-----------------------------------------------------------------------
 C        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
@@ -46053,7 +46536,8 @@ C
    51       B(I,J) = 0.0
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVRB
+
       SUBROUTINE CVRB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM STANDARD
@@ -46102,7 +46586,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE CVRB1
+
       SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
@@ -46167,7 +46652,8 @@ C
    51       A(I,J) = 0.D0
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVBD
+
       SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
@@ -46232,7 +46718,8 @@ C
    51       B(I,J) = 0.D0
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVDB
+
       SUBROUTINE CVDB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
@@ -46281,7 +46768,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE CVDB1
+
       SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
 C-----------------------------------------------------------------------
 C          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
@@ -46346,7 +46834,8 @@ C
    51       A(I,J) = (0.0,0.0)
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVBC
+
       SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
 C-----------------------------------------------------------------------
 C        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
@@ -46411,7 +46900,8 @@ C
    51       B(I,J) = (0.0,0.0)
    52 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVCB
+
       SUBROUTINE CVCB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
 C-----------------------------------------------------------------------
 C           CONVERSION OF COMPLEX MATRICES FROM STANDARD
@@ -46460,7 +46950,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE CVCB1
+
       SUBROUTINE MCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM BANDED
@@ -46519,7 +47010,8 @@ C     ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE MCVBS
+
       SUBROUTINE DMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
@@ -46578,7 +47070,8 @@ C     ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE DMCVBS
+
       SUBROUTINE CMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM BANDED
@@ -46637,7 +47130,8 @@ C     ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE CMCVBS
+
       SUBROUTINE MCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM SPARSE
@@ -46693,7 +47187,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE MCVSB
+
       SUBROUTINE DMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
@@ -46749,7 +47244,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE DMCVSB
+
       SUBROUTINE CMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM SPARSE
@@ -46805,7 +47301,8 @@ C     ERROR RETURN
 C
    40 IERR = KMAX
       RETURN
-      END
+      END SUBROUTINE CMCVSB
+
       SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
@@ -46821,7 +47318,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BCVRD
+
       SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
@@ -46837,7 +47335,8 @@ C
    10    CONTINUE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BCVDR
+
       SUBROUTINE BREAL (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
 C-----------------------------------------------------------------------
 C              REAL PART OF A BANDED COMPLEX MATRIX
@@ -46887,7 +47386,8 @@ C     ERROR RETURN
 C
   100 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE BREAL
+
       SUBROUTINE BIMAG (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A BANDED COMPLEX MATRIX
@@ -46937,7 +47437,8 @@ C     ERROR RETURN
 C
   100 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE BIMAG
+
       SUBROUTINE BCVRC (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
@@ -47017,7 +47518,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE BCVRC
+
       SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
 C-----------------------------------------------------------------------
 C                TRANSPOSITION OF REAL BANDED MATRICES
@@ -47069,7 +47571,8 @@ C
    60    CONTINUE
    61    NDIAG = NDIAG + 1
       RETURN
-      END
+      END SUBROUTINE BPOSE
+
       SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
 C-----------------------------------------------------------------------
 C          TRANSPOSITION OF DOUBLE PRECISION BANDED MATRICES
@@ -47121,7 +47624,8 @@ C
    60    CONTINUE
    61    NDIAG = NDIAG + 1
       RETURN
-      END
+      END SUBROUTINE DBPOSE
+
       SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
 C-----------------------------------------------------------------------
 C              TRANSPOSITION OF COMPLEX BANDED MATRICES
@@ -47173,7 +47677,8 @@ C
    60    CONTINUE
    61    NDIAG = NDIAG + 1
       RETURN
-      END
+      END SUBROUTINE CBPOSE
+
       SUBROUTINE BADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C                 ADDITION OF REAL BANDED MATRICES
@@ -47312,7 +47817,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE BADD
+
       SUBROUTINE DBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C           ADDITION OF DOUBLE PRECISION BANDED MATRICES
@@ -47451,7 +47957,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE DBADD
+
       SUBROUTINE CBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C                ADDITION OF COMPLEX BANDED MATRICES
@@ -47590,7 +48097,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE CBADD
+
       SUBROUTINE BSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C                SUBTRACTION OF REAL BANDED MATRICES
@@ -47729,7 +48237,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE BSUBT
+
       SUBROUTINE DBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
@@ -47868,7 +48377,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE DBSUBT
+
       SUBROUTINE CBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF COMPLEX BANDED MATRICES
@@ -48007,7 +48517,8 @@ C     ERROR RETURN
 C
   200 IERR = NUM
       RETURN
-      END
+      END SUBROUTINE CBSUBT
+
       SUBROUTINE BPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                  C, KC, NC, MCL, MCU, IERR)
 C-----------------------------------------------------------------------
@@ -48152,7 +48663,8 @@ C     ERROR RETURN
 C
   200 IERR = LAST
       RETURN
-      END
+      END SUBROUTINE BPROD
+
       SUBROUTINE DBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
 C-----------------------------------------------------------------------
@@ -48298,7 +48810,8 @@ C     ERROR RETURN
 C
   200 IERR = LAST
       RETURN
-      END
+      END SUBROUTINE DBPROD
+
       SUBROUTINE CBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
 C-----------------------------------------------------------------------
@@ -48444,7 +48957,8 @@ C     ERROR RETURN
 C
   200 IERR = LAST
       RETURN
-      END
+      END SUBROUTINE CBPROD
+
       SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL BANDED MATRIX AND A REAL VECTOR
@@ -48491,7 +49005,8 @@ C
          Y(I) = 0.0
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BVPRD
+
       SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A REAL BANDED MATRIX
@@ -48531,7 +49046,8 @@ C
          Y(I) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BVPRD1
+
       SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C           PRODUCT OF A DOUBLE PRECISION BANDED MATRIX
@@ -48580,7 +49096,8 @@ C
          Y(I) = 0.D0
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBVPD
+
       SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C         SETTING Y = A*X + Y WHERE A IS A DOUBLE PRECISION
@@ -48621,7 +49138,8 @@ C
          Y(I) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBVPD1
+
       SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX BANDED MATRIX AND A COMPLEX VECTOR
@@ -48669,7 +49187,8 @@ C
          Y(I) = (0.0,0.0)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CBVPD
+
       SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A COMPLEX BANDED MATRIX
@@ -48710,7 +49229,8 @@ C
          Y(I) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CBVPD1
+
       SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL VECTOR AND A REAL BANDED MATRIX
@@ -48756,7 +49276,8 @@ C
          Y(J) = 0.0
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BTPRD
+
       SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A REAL BANDED MATRIX
@@ -48795,7 +49316,8 @@ C
          Y(J) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BTPRD1
+
       SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A DOUBLE PRECISION VECTOR AND
@@ -48843,7 +49365,8 @@ C
          Y(J) = 0.D0
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBTPD
+
       SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C         SETTING Y = X*A + Y WHERE A IS A DOUBLE PRECISION
@@ -48883,7 +49406,8 @@ C
          Y(J) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBTPD1
+
       SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX VECTOR AND A COMPLEX BANDED MATRIX
@@ -48930,7 +49454,8 @@ C
          Y(J) = (0.0,0.0)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CBTPD
+
       SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A COMPLEX BANDED MATRIX
@@ -48970,7 +49495,8 @@ C
          Y(J) = SUM
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CBTPD1
+
       REAL FUNCTION BNRM (A, KA, M, N, ML, MU)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
@@ -48988,7 +49514,8 @@ C
          BNRM = AMAX1(BNRM, SUM)
    20 CONTINUE
       RETURN
-      END
+      END FUNCTION BNRM
+
       REAL FUNCTION B1NRM (A, KA, M, N, ML, MU)
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A BANDED MATRIX A
@@ -49037,7 +49564,8 @@ C
          NUM = NUM - 1
          B1NRM = AMAX1(B1NRM, SASUM(NUM,A(I),INCR))
          GO TO 50
-      END
+      END FUNCTION B1NRM
+
       DOUBLE PRECISION FUNCTION DBNRM (A, KA, M, N, ML, MU)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
@@ -49056,7 +49584,8 @@ C
          DBNRM = DMAX1(DBNRM, SUM)
    20 CONTINUE
       RETURN
-      END
+      END FUNCTION DBNRM
+
       DOUBLE PRECISION FUNCTION DB1NRM (A, KA, M, N, ML, MU)
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A DOUBLE PRECISION
@@ -49107,7 +49636,8 @@ C
          NUM = NUM - 1
          DB1NRM = DMAX1(DB1NRM, DASUM(NUM,A(I),INCR))
          GO TO 50
-      END
+      END FUNCTION DB1NRM
+
       SUBROUTINE BSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     BSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -49185,7 +49715,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE BSLV
+
       SUBROUTINE BSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     BSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -49263,7 +49794,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE BSLV1
+
       SUBROUTINE SNBFA (A, LDA, N, ML, MU, IPVT, INFO)
 C ----------------------------------------------------------------------
 C
@@ -49432,7 +49964,8 @@ C
         IF (A(K,1) .EQ. 0.0) INFO = K
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SNBFA
+
       SUBROUTINE SNBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
 C ----------------------------------------------------------------------
 C
@@ -49566,7 +50099,8 @@ C
   100 DO 110 K = 1,N
   110    B(K) = B(K)/A(K,1)
       RETURN
-      END
+      END SUBROUTINE SNBSL
+
       SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -49644,7 +50178,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE DBSLV
+
       SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -49722,7 +50257,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE DBSLV1
+
       SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
 C ----------------------------------------------------------------------
 C
@@ -49891,7 +50427,8 @@ C
         IF (A(K,1) .EQ. 0.D0) INFO = K
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBFA
+
       SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
 C ----------------------------------------------------------------------
 C
@@ -50025,7 +50562,8 @@ C
   100 DO 110 K = 1,N
   110    B(K) = B(K)/A(K,1)
       RETURN
-      END
+      END SUBROUTINE DBSL
+
       SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
@@ -50089,7 +50627,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE B1CND
+
       SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 CONDITION NUMBER OF
@@ -50155,7 +50694,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE DB1CND
+
       SUBROUTINE CBSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     CBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -50234,7 +50774,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE CBSLV
+
       SUBROUTINE CBSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
 C ----------------------------------------------------------------------
 C     CBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -50313,7 +50854,8 @@ C
       RETURN
   120 IERR = -3
       RETURN
-      END
+      END SUBROUTINE CBSLV1
+
       SUBROUTINE CBFA (A, LDA, N, ML, MU, IPVT, INFO)
 C ----------------------------------------------------------------------
 C
@@ -50482,7 +51024,8 @@ C
         IF (A(K,1) .EQ. (0.0,0.0)) INFO = K
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CBFA
+
       SUBROUTINE CBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
 C ----------------------------------------------------------------------
 C
@@ -50616,7 +51159,8 @@ C
   100 DO 110 K = 1,N
   110    B(K) = B(K)/A(K,1)
       RETURN
-      END
+      END SUBROUTINE CBSL
+
       SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
       REAL A(KA,N), B(*)
       INTEGER IB(*), JB(*)
@@ -50645,7 +51189,8 @@ C                   ERROR RETURN
 C
    20 IERR = I
       RETURN
-      END
+      END SUBROUTINE CVRS
+
       SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
       DOUBLE PRECISION A(KA,N), B(*)
       INTEGER IB(*), JB(*)
@@ -50674,7 +51219,8 @@ C                   ERROR RETURN
 C
    20 IERR = I
       RETURN
-      END
+      END SUBROUTINE CVDS
+
       SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
       COMPLEX A(KA,N), B(*), ZERO
       INTEGER IB(*), JB(*)
@@ -50704,7 +51250,8 @@ C                   ERROR RETURN
 C
    20 IERR = I
       RETURN
-      END
+      END SUBROUTINE CVCS
+
       SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
       REAL A(*), B(KB,N)
       INTEGER IA(*), JA(*)
@@ -50729,7 +51276,8 @@ C
 C
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVSR
+
       SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
       DOUBLE PRECISION A(*), B(KB,N)
       INTEGER IA(*), JA(*)
@@ -50754,7 +51302,8 @@ C
 C
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVSD
+
       SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
       COMPLEX A(*), B(KB,N)
       INTEGER IA(*), JA(*)
@@ -50779,7 +51328,8 @@ C
 C
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CVSC
+
       SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
       REAL A(*)
       DOUBLE PRECISION B(*)
@@ -50800,7 +51350,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE SCVRD
+
       SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
       DOUBLE PRECISION A(*)
       REAL B(*)
@@ -50821,7 +51372,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE SCVDR
+
       SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C              REAL PART OF A SPARSE COMPLEX MATRIX
@@ -50846,7 +51398,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE CSREAL
+
       SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
@@ -50871,7 +51424,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE CSIMAG
+
       SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
@@ -50930,7 +51484,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE SCVRC
+
       SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C                  COPYING A SPARSE REAL MATRIX
@@ -50953,7 +51508,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE RSCOPY
+
       SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C              COPYING A SPARSE DOUBLE PRECISION MATRIX
@@ -50976,7 +51532,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE DSCOPY
+
       SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C                 COPYING A SPARSE COMPLEX MATRIX
@@ -51000,7 +51557,8 @@ C
    20 CONTINUE
       IB(M + 1) = L
       RETURN
-      END
+      END SUBROUTINE CSCOPY
+
       SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
@@ -51024,7 +51582,8 @@ C
          L = L + 1
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SCONJ
+
       SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C                 TRANSPOSING A SPARSE REAL MATRIX
@@ -51082,7 +51641,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RPOSE
+
       SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C                 TRANSPOSING A SPARSE REAL MATRIX
@@ -51143,7 +51703,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RPOSE1
+
       SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
@@ -51201,7 +51762,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPOSE
+
       SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
@@ -51262,7 +51824,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DPOSE1
+
       SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C               TRANSPOSING A SPARSE COMPLEX MATRIX
@@ -51320,7 +51883,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CPOSE
+
       SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 C-----------------------------------------------------------------------
 C               TRANSPOSING A SPARSE COMPLEX MATRIX
@@ -51381,7 +51945,8 @@ C
          IB(J) = 1
    41 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CPOSE1
+
       SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C               ADDITION OF SPARSE REAL MATRICES
@@ -51439,7 +52004,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE SADD
+
       SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
@@ -51497,7 +52063,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE DSADD
+
       SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C              ADDITION OF SPARSE COMPLEX MATRICES
@@ -51555,7 +52122,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE CSADD
+
       SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF SPARSE REAL MATRICES
@@ -51613,7 +52181,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE SSUBT
+
       SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
@@ -51671,7 +52240,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE DSSUBT
+
       SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C            SUBTRACTION OF SPARSE COMPLEX MATRICES
@@ -51729,7 +52299,8 @@ C                        ERROR RETURN
 C
    50 IERR = I
       RETURN
-      END
+      END SUBROUTINE CSSUBT
+
       SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C               MULTIPLICATION OF SPARSE REAL MATRICES
@@ -51780,7 +52351,8 @@ C                           ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE SPROD
+
       SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
@@ -51831,7 +52403,8 @@ C                           ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE DSPROD
+
       SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 C-----------------------------------------------------------------------
 C             MULTIPLICATION OF SPARSE COMPLEX MATRICES
@@ -51882,7 +52455,8 @@ C                           ERROR RETURN
 C
    40 IERR = I
       RETURN
-      END
+      END SUBROUTINE CSPROD
+
       SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
@@ -51901,7 +52475,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE MVPRD
+
       SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -51920,7 +52495,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE MVPRD1
+
       SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
@@ -51943,7 +52519,8 @@ C
    20    CONTINUE
    21 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MTPRD
+
       SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -51962,7 +52539,8 @@ C
    10    CONTINUE
    11 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MTPRD1
+
       SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
@@ -51981,7 +52559,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE DVPRD
+
       SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -52000,7 +52579,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE DVPRD1
+
       SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
@@ -52023,7 +52603,8 @@ C
    20    CONTINUE
    21 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DTPRD
+
       SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -52042,7 +52623,8 @@ C
    10    CONTINUE
    11 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DTPRD1
+
       SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
@@ -52061,7 +52643,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE CVPRD
+
       SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -52080,7 +52663,8 @@ C
    10    CONTINUE
    11 Y(I) = SUM
       RETURN
-      END
+      END SUBROUTINE CVPRD1
+
       SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
@@ -52103,7 +52687,8 @@ C
    20    CONTINUE
    21 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CTPRD
+
       SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
@@ -52122,7 +52707,8 @@ C
    10    CONTINUE
    11 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CTPRD1
+
       REAL FUNCTION SNRM (A, IA, JA, M, N)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
@@ -52143,7 +52729,8 @@ C
          SNRM = AMAX1(SNRM, SUM)
    20 CONTINUE
       RETURN
-      END
+      END FUNCTION SNRM
+
       SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
@@ -52171,7 +52758,8 @@ C
          ANORM = AMAX1(ANORM,WK(J))
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE S1NRM
+
       DOUBLE PRECISION FUNCTION DSNRM (A, IA, JA, M, N)
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
@@ -52192,7 +52780,8 @@ C
          DSNRM = DMAX1(DSNRM, SUM)
    20 CONTINUE
       RETURN
-      END
+      END FUNCTION DSNRM
+
       SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
 C-----------------------------------------------------------------------
 C               COMPUTATION OF THE L1 NORM OF A SPARSE
@@ -52221,7 +52810,8 @@ C
          ANORM = DMAX1(ANORM,WK(J))
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DS1NRM
+
       SUBROUTINE SPORD (M, N, IA, R, IWK)
 C-----------------------------------------------------------------------
 C        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
@@ -52257,7 +52847,8 @@ C
          K = IWK(L)
    32 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SPORD
+
       SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
 C-----------------------------------------------------------------------
 C        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
@@ -52291,7 +52882,8 @@ C
          R(I) = IWK(I)
    31 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BLKORD
+
       SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
 C-----------------------------------------------------------------------
 C DESCRIPTION OF PARAMETERS.
@@ -52321,7 +52913,8 @@ C
       CALL MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW(1,1),IW(1,2),
      *            IW(1,3),IW(1,4))
       RETURN
-      END
+      END SUBROUTINE MC21A
+
       SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
 C-----------------------------------------------------------------------
 C     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
@@ -52446,7 +53039,8 @@ C
          IPERM(IOUTK) = I
   170 CONTINUE
   500 RETURN
-      END
+      END SUBROUTINE MC21B
+
       SUBROUTINE MC13D(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW)
 C
 C DESCRIPTION OF PARAMETERS.
@@ -52475,7 +53069,8 @@ C
       CALL MC13E(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW(1,1),
      *  IW(1,2), IW(1,3))
       RETURN
-      END
+      END SUBROUTINE MC13D
+
       SUBROUTINE MC13E(N, ICN, LICN, IP, LENR, ARP, IB, NUM, LOWL,
      *  NUMB, PREV)
       INTEGER STP, DUMMY
@@ -52606,7 +53201,8 @@ C
         ARP(II) = I
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MC13E
+
       SUBROUTINE SPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
@@ -52720,7 +53316,8 @@ C
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       RETURN
-      END
+      END SUBROUTINE SPSLV
+
       SUBROUTINE NSPIV1 (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 C
 C
@@ -52988,7 +53585,8 @@ C  STORAGE FOR U EXCEEDED ON ROW K
 C
  1005 IERR = -(3*N+K)
       RETURN
-      END
+      END SUBROUTINE NSPIV1
+
       SUBROUTINE RSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
@@ -53085,7 +53683,8 @@ C
    20 CALL RSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE RSLV
+
       SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -53126,7 +53725,8 @@ C
          K = K - 1
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RSLV1
+
       SUBROUTINE TSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
@@ -53223,7 +53823,8 @@ C
    20 CALL TSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE TSLV
+
       SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -53273,7 +53874,8 @@ C
          X(LK) = Y(K)
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE TSLV1
+
       SUBROUTINE SPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 C-----------------------------------------------------------------------
 C     SPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
@@ -53486,7 +54088,8 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
 C
   230 IERR = -(3*N + K)
       RETURN
-      END
+      END SUBROUTINE SPLU
+
       SUBROUTINE DSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
@@ -53603,7 +54206,8 @@ C
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       RETURN
-      END
+      END SUBROUTINE DSPSLV
+
       SUBROUTINE DNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 C
 C
@@ -53871,7 +54475,8 @@ C  STORAGE FOR U EXCEEDED ON ROW K
 C
  1005 IERR = -(3*N+K)
       RETURN
-      END
+      END SUBROUTINE DNSPIV
+
       SUBROUTINE DSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
@@ -53969,7 +54574,8 @@ C
    20 CALL DSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE DSLV
+
       SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -54010,7 +54616,8 @@ C
          K = K - 1
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DSLV1
+
       SUBROUTINE DTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
@@ -54108,7 +54715,8 @@ C
    20 CALL DTSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE DTSLV
+
       SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -54158,7 +54766,8 @@ C
          X(LK) = Y(K)
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DTSLV1
+
       SUBROUTINE DSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 C-----------------------------------------------------------------------
 C     DSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
@@ -54372,7 +54981,8 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
 C
   230 IERR = -(3*N + K)
       RETURN
-      END
+      END SUBROUTINE DSPLU
+
       SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
@@ -54432,7 +55042,8 @@ C     SINGULAR CASE
 C
    50 IERR = 0
       RETURN
-      END
+      END SUBROUTINE S1CND
+
       SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
@@ -54492,7 +55103,8 @@ C     SINGULAR CASE
 C
    50 IERR = 0
       RETURN
-      END
+      END SUBROUTINE DS1CND
+
       SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       REAL V(N), X(N)
       INTEGER ISGN(N)
@@ -54648,7 +55260,8 @@ C
          ANORM = ANRM
   510 KASE = 0
       RETURN
-      END
+      END SUBROUTINE SONEST
+
       SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       DOUBLE PRECISION ANORM, V(N), X(N)
       INTEGER ISGN(N)
@@ -54809,7 +55422,8 @@ C
          ANORM = ANRM
   510 KASE = 0
       RETURN
-      END
+      END SUBROUTINE DONEST
+
       SUBROUTINE CSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
@@ -54923,7 +55537,8 @@ C
      *             ITEMP(IU),ITEMP(JU),RTEMP(U),IERR)
       IF (IERR .EQ. 0) IERR = 1
       RETURN
-      END
+      END SUBROUTINE CSPSLV
+
       SUBROUTINE CNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 C
 C
@@ -55195,7 +55810,8 @@ C  STORAGE FOR U EXCEEDED ON ROW K
 C
  1005 IERR = -(3*N+K)
       RETURN
-      END
+      END SUBROUTINE CNSPIV
+
       SUBROUTINE CSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
@@ -55293,7 +55909,8 @@ C
    20 CALL CSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                  B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE CSLV
+
       SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -55334,7 +55951,8 @@ C
          K = K - 1
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSLV1
+
       SUBROUTINE CTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
@@ -55432,7 +56050,8 @@ C
    20 CALL CTSLV1 (N,R,C,IWK(1),WK(1),WK(T),IWK(IT),IWK(JT),IWK(IU),
      *                 B,X,WK(Y))
       RETURN
-      END
+      END SUBROUTINE CTSLV
+
       SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
@@ -55482,7 +56101,8 @@ C
          X(LK) = Y(K)
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CTSLV1
+
       SUBROUTINE CSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 C-----------------------------------------------------------------------
 C     CSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
@@ -55698,7 +56318,8 @@ C     STORAGE FOR L AND U EXCEEDED ON ROW R(K)
 C
   230 IERR = -(3*N + K)
       RETURN
-      END
+      END SUBROUTINE CSPLU
+
       SUBROUTINE EIG (IBAL,A,KA,N,WR,WI,IERR)
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
@@ -55711,7 +56332,8 @@ C
       CALL ELMHS0 (KA,N,LOW,IGH,A,WR)
       CALL HQR (KA,N,LOW,IGH,A,WR,WI,IERR)
       RETURN
-      END
+      END SUBROUTINE EIG
+
       SUBROUTINE EIG1 (IBAL,A,KA,N,WR,WI,IERR)
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
@@ -55724,7 +56346,8 @@ C
       CALL ORTHES (KA,N,LOW,IGH,A,WR)
       CALL HQR (KA,N,LOW,IGH,A,WR,WI,IERR)
       RETURN
-      END
+      END SUBROUTINE EIG1
+
       SUBROUTINE EIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
@@ -55752,7 +56375,8 @@ C
    21       ZI(J,KP1) = -ZI(J,K)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE EIGV
+
       SUBROUTINE EIGV1 (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
@@ -55780,7 +56404,8 @@ C
    21       ZI(J,KP1) = -ZI(J,K)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE EIGV1
+
       SUBROUTINE BALANC(NM,N,A,LOW,IGH,SCALE)
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -55949,7 +56574,8 @@ C
   280 LOW = K
       IGH = L
       RETURN
-      END
+      END SUBROUTINE BALANC
+
       SUBROUTINE BALINV (NZ,N,Z,LOW,IGH,SCALE)
       INTEGER I,J,K,N,II,NZ,IGH,LOW
       REAL Z(NZ,N),SCALE(N)
@@ -56020,7 +56646,8 @@ C
    50       Z(J,K) = S
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BALINV
+
       SUBROUTINE ELMHES(NM,N,LOW,IGH,A,INT)
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
@@ -56115,7 +56742,8 @@ C
   180 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ELMHES
+
       SUBROUTINE ELMHS0(NM,N,LOW,IGH,A,INT)
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
@@ -56210,7 +56838,8 @@ C
   180 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ELMHS0
+
       SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
@@ -56315,7 +56944,8 @@ C
   180 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ORTHES
+
       SUBROUTINE HQR(NM,N,LOW,IGH,H,WR,WI,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
@@ -56538,7 +57168,8 @@ C     ********** SET ERROR -- NO CONVERGENCE TO AN
 C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
-      END
+      END SUBROUTINE HQR
+
       SUBROUTINE BALBAK(NM,N,LOW,IGH,SCALE,M,Z)
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
@@ -56609,7 +57240,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE BALBAK
+
       SUBROUTINE ELTRAN(NM,N,LOW,IGH,A,INT,Z)
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
@@ -56683,7 +57315,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ELTRAN
+
       SUBROUTINE ELTRN0(NM,N,LOW,IGH,A,INT,Z)
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
@@ -56757,7 +57390,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ELTRN0
+
       SUBROUTINE ORTRAN(NM,N,LOW,IGH,A,ORT,Z)
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
@@ -56839,7 +57473,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ORTRAN
+
       SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
@@ -56925,7 +57560,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE ORTRN1
+
       SUBROUTINE HQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
@@ -57337,7 +57973,8 @@ C     ********** SET ERROR -- NO CONVERGENCE TO AN
 C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
-      END
+      END SUBROUTINE HQR2
+
       SUBROUTINE DEIG (IBAL,A,KA,N,WR,WI,IERR)
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF DOUBLE PRECISION MATRICES
@@ -57350,7 +57987,8 @@ C
       CALL DORTH (KA,N,LOW,IGH,A,WR)
       CALL DHQR (KA,N,LOW,IGH,A,WR,WI,IERR)
       RETURN
-      END
+      END SUBROUTINE DEIG
+
       SUBROUTINE DEIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 C-----------------------------------------------------------------------
 C     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
@@ -57378,7 +58016,8 @@ C
    21       ZI(J,KP1) = -ZI(J,K)
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DEIGV
+
       SUBROUTINE DBAL(NM,N,A,LOW,IGH,SCALE)
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -57547,7 +58186,8 @@ C
   280 LOW = K
       IGH = L
       RETURN
-      END
+      END SUBROUTINE DBAL
+
       SUBROUTINE DBALNV (NZ,N,Z,LOW,IGH,SCALE)
       INTEGER I,J,K,N,II,NZ,IGH,LOW
       DOUBLE PRECISION Z(NZ,N),SCALE(N)
@@ -57618,7 +58258,8 @@ C
    50       Z(J,K) = S
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DBALNV
+
       SUBROUTINE DORTH(NM,N,LOW,IGH,A,ORT)
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
@@ -57723,7 +58364,8 @@ C
   180 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE DORTH
+
       SUBROUTINE DHQR(NM,N,LOW,IGH,H,WR,WI,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
@@ -57947,7 +58589,8 @@ C     ********** SET ERROR -- NO CONVERGENCE TO AN
 C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
-      END
+      END SUBROUTINE DHQR
+
       SUBROUTINE DBABK(NM,N,LOW,IGH,SCALE,M,Z)
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
@@ -58018,7 +58661,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE DBABK
+
       SUBROUTINE DORTRN(NM,N,LOW,IGH,A,ORT,Z)
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
@@ -58100,7 +58744,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE DORTRN
+
       SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
@@ -58186,7 +58831,8 @@ C
   140 CONTINUE
 C
   200 RETURN
-      END
+      END SUBROUTINE DRTRN1
+
       SUBROUTINE DHQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
@@ -58599,7 +59245,8 @@ C     ********** SET ERROR -- NO CONVERGENCE TO AN
 C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
-      END
+      END SUBROUTINE DHQR2
+
       SUBROUTINE SEIG (A, KA, N, W, T, IERR)
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -58615,7 +59262,8 @@ C
       CALL TRED3 (N, L, A, W, T(N+1), T(1))
       CALL TQLRAT (N, W, T, IERR)
       RETURN
-      END
+      END SUBROUTINE SEIG
+
       SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -58631,7 +59279,8 @@ C
       CALL TRED3 (N, L, A, W, T, T)
       CALL IMTQL1 (N, W, T, IERR)
       RETURN
-      END
+      END SUBROUTINE SEIG1
+
       SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
@@ -58641,7 +59290,8 @@ C
       CALL TRED2 (KA, N, A, W, T, Z)
       CALL TQL2 (KA, N, W, T, Z, IERR)
       RETURN
-      END
+      END SUBROUTINE SEIGV
+
       SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
@@ -58651,7 +59301,8 @@ C
       CALL TRED2 (KA, N, A, W, T, Z)
       CALL IMTQL2 (KA, N, W, T, Z, IERR)
       RETURN
-      END
+      END SUBROUTINE SEIGV1
+
       SUBROUTINE TRED1(NM,N,A,D,E,E2)
 C
       INTEGER I,J,K,L,N,II,NM,JP1
@@ -58765,7 +59416,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF TRED1 **********
-      END
+      END SUBROUTINE TRED1
+
       SUBROUTINE TRED3(N,NV,A,D,E,E2)
 C
       INTEGER I,J,K,L,N,II,IZ,JK,NV
@@ -58877,7 +59529,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF TRED3 **********
-      END
+      END SUBROUTINE TRED3
+
       SUBROUTINE TQLRAT(N,D,E2,IERR)
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
@@ -59011,7 +59664,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF TQLRAT **********
-      END
+      END SUBROUTINE TQLRAT
+
       SUBROUTINE IMTQL1(N,D,E,IERR)
 C
       INTEGER I,J,L,M,N,II,MML,IERR
@@ -59138,7 +59792,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF IMTQL1 **********
-      END
+      END SUBROUTINE IMTQL1
+
       SUBROUTINE TRED2(NM,N,A,D,E,Z)
 C
       INTEGER I,J,K,L,N,II,NM,JP1
@@ -59276,7 +59931,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF TRED2 **********
-      END
+      END SUBROUTINE TRED2
+
       SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
@@ -59447,7 +60103,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF TQL2 **********
-      END
+      END SUBROUTINE TQL2
+
       SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
 C
       INTEGER I,J,K,L,M,N,II,NM,MML,IERR
@@ -59609,7 +60266,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF IMTQL2 **********
-      END
+      END SUBROUTINE IMTQL2
+
       SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
 C-----------------------------------------------------------------------
 C                DOUBLE PRECISION COMPUTATION OF THE
@@ -59626,7 +60284,8 @@ C
       CALL DTRED3 (N, L, A, W, T(N+1), T(1))
       CALL DTQL (N, W, T, IERR)
       RETURN
-      END
+      END SUBROUTINE DSEIG
+
       SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
 C-----------------------------------------------------------------------
 C                 DOUBLE PRECISION COMPUTATION OF
@@ -59638,7 +60297,8 @@ C
       CALL DTRED2 (KA, N, A, W, T, Z)
       CALL DTQL2 (KA, N, W, T, Z, IERR)
       RETURN
-      END
+      END SUBROUTINE DSEIGV
+
       SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
 C
       INTEGER I,J,K,L,N,II,NM,JP1
@@ -59752,7 +60412,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF DTRED1 **********
-      END
+      END SUBROUTINE DTRED1
+
       SUBROUTINE DTRED3 (N,NV,A,D,E,E2)
 C
       INTEGER I,J,K,L,N,II,IZ,JK,NV
@@ -59864,7 +60525,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF DTRED3 **********
-      END
+      END SUBROUTINE DTRED3
+
       SUBROUTINE DTQL (N,D,E2,IERR)
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
@@ -59998,7 +60660,8 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF DTQL **********
-      END
+      END SUBROUTINE DTQL
+
       SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
 C
       INTEGER I,J,K,L,N,II,NM,JP1
@@ -60136,7 +60799,8 @@ C
 C
       RETURN
 C     ********** LAST CARD OF DTRED2 **********
-      END
+      END SUBROUTINE DTRED2
+
       SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
@@ -60307,7 +60971,8 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = L
  1001 RETURN
 C     ********** LAST CARD OF DTQL2 **********
-      END
+      END SUBROUTINE DTQL2
+
       SUBROUTINE CEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF COMPLEX MATRICES
@@ -60320,7 +60985,8 @@ C
       CALL CORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
       CALL COMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
       RETURN
-      END
+      END SUBROUTINE CEIG
+
       SUBROUTINE CEIGV(IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
 C-----------------------------------------------------------------------
 C          EIGENVALUES AND EIGENVECTORS OF COMPLEX MATRICES
@@ -60342,7 +61008,8 @@ C----------------------
       IF (IERR .NE. 0) RETURN
       IF (IBAL .NE. 0) CALL CBABK2(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
       RETURN
-      END
+      END SUBROUTINE CEIGV
+
       SUBROUTINE CBAL(NM,N,AR,AI,LOW,IGH,SCALE)
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -60524,7 +61191,8 @@ C
       IGH = L
       RETURN
 C     ********** LAST CARD OF CBAL **********
-      END
+      END SUBROUTINE CBAL
+
       SUBROUTINE CORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
@@ -60654,7 +61322,8 @@ C
 C
   200 RETURN
 C     ********** LAST CARD OF CORTH **********
-      END
+      END SUBROUTINE CORTH
+
       SUBROUTINE COMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
 C
       INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
@@ -60884,7 +61553,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
 C     ********** LAST CARD OF COMQR **********
-      END
+      END SUBROUTINE COMQR
+
       SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
@@ -60963,7 +61633,8 @@ C
 C
   200 RETURN
 C     ********** LAST CARD OF CBABK2 **********
-      END
+      END SUBROUTINE CBABK2
+
       SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1,
@@ -61362,7 +62033,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
 C     ********** LAST CARD OF COMQR2 **********
-      END
+      END SUBROUTINE COMQR2
+
       SUBROUTINE DCEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
 C-----------------------------------------------------------------------
 C            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
@@ -61375,7 +62047,8 @@ C
       CALL DCORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
       CALL DCOMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
       RETURN
-      END
+      END SUBROUTINE DCEIG
+
       SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
 C-----------------------------------------------------------------------
 C                     EIGENVALUES AND EIGENVECTORS
@@ -61400,7 +62073,8 @@ C----------------------
       IF (IERR .NE. 0) RETURN
       IF (IBAL .NE. 0) CALL DCBABK(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
       RETURN
-      END
+      END SUBROUTINE DCEIGV
+
       SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -61581,7 +62255,8 @@ C
       IGH = L
       RETURN
 C     ********** LAST CARD OF DCBAL **********
-      END
+      END SUBROUTINE DCBAL
+
       SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
@@ -61710,7 +62385,8 @@ C
 C
   200 RETURN
 C     ********** LAST CARD OF DCORTH **********
-      END
+      END SUBROUTINE DCORTH
+
       SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
 C
       INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
@@ -61936,7 +62612,8 @@ C     ********** SET ERROR -- NO CONVERGENCE TO AN
 C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
-      END
+      END SUBROUTINE DCOMQR
+
       SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
@@ -62016,7 +62693,8 @@ C
 C
   200 RETURN
 C     ********** LAST CARD OF DCBABK **********
-      END
+      END SUBROUTINE DCBABK
+
       SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1,
@@ -62412,7 +63090,8 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
  1000 IERR = EN
  1001 RETURN
 C     ********** LAST CARD OF DCMQR2 **********
-      END
+      END SUBROUTINE DCMQR2
+
       SUBROUTINE CL1(K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES,
      *                  ERROR, WK, IWK)
       DIMENSION Q(KQ,*), X(*), RES(*), WK(*), IWK(*)
@@ -62421,7 +63100,8 @@ C     -------------------
       CALL XL1(K, L, M, N, KLM, KQ, KLM + N, N + 2, Q, KODE, TOLER,
      *         ITER, X, RES, ERROR, WK, IWK(KLM+1), IWK(1))
       RETURN
-      END
+      END SUBROUTINE CL1
+
       SUBROUTINE XL1(K, L, M, N, KLMD, KLM2D, NKLMD, N2D,
      * Q, KODE, TOLER, ITER, X, RES, ERROR, CU, IU, S)
 C
@@ -62828,7 +63508,8 @@ C PREPARE OUTPUT.
   640 CONTINUE
       ERROR = SUM
       RETURN
-      END
+      END SUBROUTINE XL1
+
       SUBROUTINE LLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       DIMENSION A(KA,N),B(KB,NB),WK(N),IWK(N)
       LOGICAL EXIT
@@ -62853,7 +63534,8 @@ C
       B(NP1,J) = SQRT(RNORM)
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LLSQ
+
       SUBROUTINE LLSQMP(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       DIMENSION A(KA,N),B(KB,NB),WK(*),IWK(N)
       LOGICAL EXIT
@@ -62893,7 +63575,8 @@ C
       B(NP1,J) = SQRT(RNORM)
    31 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LLSQMP
+
       SUBROUTINE ORTHO(M, N, QR, MS, S, IP, EXIT)
 C***********************************************************************
 C      IDENTIFICATION
@@ -62995,7 +63678,8 @@ C                                       ORTHOGONAL MATRIX.
 C
    90 EXIT = .FALSE.
       RETURN
-      END
+      END SUBROUTINE ORTHO
+
       SUBROUTINE ORSOL(M, N, QR, MS, S, IP, X)
 C***********************************************************************
 C      IDENTIFICATION
@@ -63080,7 +63764,8 @@ C                                       LEAST SQUARES SOLUTION.
         X(NI) = X(NI)/QR(NI,NI)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ORSOL
+
       SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
 C ----------------------------------------------------------------------
 C      PURPOSE
@@ -63189,7 +63874,8 @@ C
       IF (RATIO .LE. AMIN1(RAT,FOUR*EPS2)) RETURN
       EXIT = .FALSE.
       RETURN
-      END
+      END SUBROUTINE ORIMP
+
       SUBROUTINE DLLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       DOUBLE PRECISION A(KA,N),B(KB,NB),WK(N)
       INTEGER IWK(N)
@@ -63216,7 +63902,8 @@ C
       B(NP1,J) = DSQRT(RNORM)
    22 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DLLSQ
+
       SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
 C***********************************************************************
 C      IDENTIFICATION
@@ -63320,7 +64007,8 @@ C                                       ORTHOGONAL MATRIX.
 C
    90 EXIT = .FALSE.
       RETURN
-      END
+      END SUBROUTINE DORTHO
+
       SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
 C***********************************************************************
 C      IDENTIFICATION
@@ -63407,7 +64095,8 @@ C                                       LEAST SQUARES SOLUTION.
         X(NI) = X(NI)/QR(NI,NI)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DORSOL
+
       SUBROUTINE LSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                 KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
 C-----------------------------------------------------------------------
@@ -63658,7 +64347,8 @@ C                             RE OR AE IS NEGATIVE
 C                             0 .LT. KRANK .LT. NP
 C 280 IERR = 8
 C     RETURN
-      END
+      END SUBROUTINE LSQR
+
       SUBROUTINE U11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IC,IR)
 C
@@ -63919,7 +64609,8 @@ C
       RETURN
   410 KRANK = J - 1
       RETURN
-      END
+      END SUBROUTINE U11LS
+
       SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
 C
 C        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
@@ -64059,7 +64750,8 @@ C
          IC(I) = IABS(IC(I))
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE U12LS
+
       SUBROUTINE U11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IR,IC)
 C
@@ -64320,7 +65012,8 @@ C
       RETURN
   410 KRANK = J - 1
       RETURN
-      END
+      END SUBROUTINE U11US
+
       SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
 C
 C        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
@@ -64458,7 +65151,8 @@ C
          IC(I) = IABS(IC(I))
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE U12US
+
       SUBROUTINE DLSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                  KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
 C-----------------------------------------------------------------------
@@ -64711,7 +65405,8 @@ C                             RE OR AE IS NEGATIVE
 C                             0 .LT. KRANK .LT. NP
 C 280 IERR = 8
 C     RETURN
-      END
+      END SUBROUTINE DLSQR
+
       SUBROUTINE DU11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IC,IR)
 C
@@ -64974,7 +65669,8 @@ C
       RETURN
   410 KRANK = J - 1
       RETURN
-      END
+      END SUBROUTINE DU11LS
+
       SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
 C
 C        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
@@ -65116,7 +65812,8 @@ C
          IC(I) = IABS(IC(I))
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DU12LS
+
       SUBROUTINE DU11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IR,IC)
 C
@@ -65379,7 +66076,8 @@ C
       RETURN
   410 KRANK = J - 1
       RETURN
-      END
+      END SUBROUTINE DU11US
+
       SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
 C
 C        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
@@ -65519,7 +66217,8 @@ C
          IC(I) = IABS(IC(I))
   270 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DU12US
+
       SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M)),RNORM(NB),H(N),G(N),IP(N)
@@ -65760,7 +66459,8 @@ C     THE SOLUTION VECTORS, X, ARE NOW
 C     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 C
   270 RETURN
-      END
+      END SUBROUTINE HFTI
+
       SUBROUTINE HFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M))
@@ -66029,7 +66729,8 @@ C
       RETURN
   310 IERR = 2
       RETURN
-      END
+      END SUBROUTINE HFTI2
+
       SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
@@ -66112,7 +66813,8 @@ C
   110         I4 = I4 + ICE
   120     CONTINUE
   130 RETURN
-      END
+      END SUBROUTINE H12
+
       SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
@@ -66355,7 +67057,8 @@ C     THE SOLUTION VECTORS, X, ARE NOW
 C     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 C
   270 RETURN
-      END
+      END SUBROUTINE DHFTI
+
       SUBROUTINE DHFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
@@ -66625,7 +67328,8 @@ C
       RETURN
   310 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DHFTI2
+
       SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
@@ -66707,7 +67411,8 @@ C
   110         I4 = I4 + ICE
   120     CONTINUE
   130 RETURN
-      END
+      END SUBROUTINE DH12
+
       SUBROUTINE LSEI(W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML,
      * MODE, WS, IP)
 C
@@ -67283,7 +67988,8 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
         CALL SSCAL(M, WS(L-1), W(1,J), 1)
   550 CONTINUE
       GO TO 90
-      END
+      END SUBROUTINE LSEI
+
       SUBROUTINE LSI(W, MDW, MA, MG, N, PRGOPT, X, RNORM, MODE, WS, IP)
 C
 C     THIS IS A COMPANION SUBPROGRAM TO LSEI( ).
@@ -67633,7 +68339,8 @@ C
          J = J + 3
   560 OPT(J) = 1.0
       GO TO 40
-      END
+      END SUBROUTINE LSI
+
       SUBROUTINE LPDP(A, MDA, M, N1, N2, PRGOPT, X, WNORM, MODE, WS, IS)
 C
 C     DIMENSION A(MDA,N+1),PRGOPT(*),X(N),WS((M+2)*(N+7)),IS(M+N+1),
@@ -67801,7 +68508,8 @@ C     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
   180 CALL SSCAL(N, YNORM, X, 1)
       WNORM = SNRM2(N1,X,1)
       RETURN
-      END
+      END SUBROUTINE LPDP
+
       SUBROUTINE WNNLS(W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE,
      * IWORK, WORK)
 C
@@ -68060,7 +68768,8 @@ C
      * IWORK(L1), WORK(1), WORK(L1), WORK(L2), WORK(L3), WORK(L4),
      * WORK(L5))
       RETURN
-      END
+      END SUBROUTINE WNNLS
+
       SUBROUTINE WNLSM(W, MDW, MME, MA, N, L, PRGOPT, X, RNORM, MODE,
      * IPIVOT, ITYPE, WD, H, SCALE, Z, TEMP, D)
 C
@@ -68677,7 +69386,8 @@ C
  1270 GO TO IGO958, (310, 1010)
  1280 GO TO IGO897, (880, 900)
  1290 GO TO IGO938, (460, 480, 500, 520)
-      END
+      END SUBROUTINE WNLSM
+
       SUBROUTINE WNLIT(W, MDW, M, N, L, IPIVOT, ITYPE, H, SCALE, RNORM,
      * IDOPE, DOPE, DONE)
 C
@@ -69057,7 +69767,8 @@ C     INTERCHANGES.
   570 GO TO IGO993, (30, 200, 330, 120)
   590 GO TO IGO990, (40, 240)
   600 GO TO IGO996, (20, 190, 320)
-      END
+      END SUBROUTINE WNLIT
+
       SUBROUTINE L2SLV(M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT,
      *                 X, NN, RES, MR, QR, MMPNN, C, IFAULT)
 C ** PURPOSE **
@@ -69433,7 +70144,8 @@ C
       RETURN
   290 IFAULT = 12
       RETURN
-      END
+      END SUBROUTINE L2SLV
+
 C     SUBROUTINE DECOM2(...)
 C SUBROUTINE DECOM2 USES A MODIFIED GRAM-SCHMIDT ALGORITHM WITH
 C PIVOTING TO OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE INPUT MATRIX
@@ -69611,7 +70323,8 @@ C END STEP NUMBER NS.
       SING = .FALSE.
 C NORMAL RETURN.
       RETURN
-      END
+      END SUBROUTINE DECOM2
+
 C     SUBROUTINE SOLVE2(...)
 C SUBROUTINE SOLVE2 USES THE ORTHOGONAL DECOMPOSITION STORED IN QR, D
 C AND IPIVOT TO COMPUTE THE SOLUTION (COEFFICIENTS AND RESIDUALS)
@@ -69803,7 +70516,8 @@ C END K-TH ITERATION STEP.
       RETURN
   280 FAIL = .TRUE.
       RETURN
-      END
+      END SUBROUTINE SOLVE2
+
       SUBROUTINE SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
 C SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
 C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
@@ -69867,7 +70581,8 @@ C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
         F(J) = -SUM
   170 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SOLVE3
+
       SUBROUTINE COVAR(N, M1, N1, IPIVOT, C, D, Z, NN)
 C SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
 C STORED IN C, D AND IPIVOT TO COMPUTE THE UNSCALED COVARIANCE MATRIX
@@ -69938,7 +70653,8 @@ C PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
   140   CONTINUE
   150 CONTINUE
       RETURN
-      END
+      END SUBROUTINE COVAR
+
       SUBROUTINE SPLSQ(M,N,A,IA,JA,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
 C
@@ -70347,7 +71063,8 @@ C     END OF ITERATION LOOP.
 C     ------------------------------------------------------------------
 C
   800 RETURN
-      END
+      END SUBROUTINE SPLSQ
+
       SUBROUTINE NORMLZ(N,X,BETA)
       INTEGER N
       REAL X(N),BETA
@@ -70368,7 +71085,8 @@ C
       BETA = SNRM2(N,X,1)
       IF (BETA .GT. ZERO) CALL SSCAL(N,(ONE/BETA),X,1)
       RETURN
-      END
+      END SUBROUTINE NORMLZ
+
       SUBROUTINE STLSQ(M,N,TA,ITA,JTA,DAMP,U,X,ATOL,BTOL,CONLIM,
      *                 ITNLIM,ISTOP,ITN,ACOND,RNORM,XNORM,W)
 C
@@ -70779,7 +71497,8 @@ C     END OF ITERATION LOOP.
 C     ------------------------------------------------------------------
 C
   800 RETURN
-      END
+      END SUBROUTINE STLSQ
+
       SUBROUTINE BLSQ(M,N,A,KA,ML,MU,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
 C
@@ -71194,7 +71913,8 @@ C     END OF ITERATION LOOP.
 C     ------------------------------------------------------------------
 C
   800 RETURN
-      END
+      END SUBROUTINE BLSQ
+
       SUBROUTINE FMIN(F, A0, B0, X, W, AERR, RERR, ERROR, IND)
 C     ******************************************************************
 C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
@@ -71360,7 +72080,8 @@ C
       W = FV
       ERROR = C1*E
       RETURN
-      END
+      END SUBROUTINE FMIN
+
       SUBROUTINE OPTF (FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
 C-----------------------------------------------------------------------
 C                 INTERFACE TO MINIMIZATION PACKAGE
@@ -71434,7 +72155,8 @@ C
       IF (IERR .NE. -10) RETURN
       ITNLIM = ITNLIM - ITNCNT
       GO TO 20
-      END
+      END SUBROUTINE OPTF
+
       SUBROUTINE OPTDRV (MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR,
      *        ITNLIM,ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,GPLS,
      *        IERR,A,G,P,WRK0,WRK1,WRK2)
@@ -71636,7 +72358,8 @@ C
          GPLS(I) = G(I)
   220 CONTINUE
       RETURN
-      END
+      END SUBROUTINE OPTDRV
+
       SUBROUTINE OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,
      *                       STEPMX,IERR)
 C-----------------------------------------------------------------------
@@ -71723,7 +72446,8 @@ C
       GO TO 895
   825 IERR = -5
   895 RETURN
-      END
+      END SUBROUTINE OPCHK1
+
       SUBROUTINE OPSTP(N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR,
      *           GRADTL,STEPTL,TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,
      *           FSTACK,NS,SPTR)
@@ -71835,7 +72559,8 @@ C     TERMINATE
 C
   100 IERR = JERR
       RETURN
-      END
+      END SUBROUTINE OPSTP
+
       SUBROUTINE FXDEC (FCN, N, X, FX, R)
 C-----------------------------------------------------------------------
 C     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
@@ -71862,7 +72587,8 @@ C
             X(I) = XMINUS
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE FXDEC
+
       SUBROUTINE SCALEX (MO, X, TYPSIZ, N, IERR)
       REAL X(N), TYPSIZ(N)
 C-----------------------------------------------------------------------
@@ -71889,7 +72615,8 @@ C
    31 CONTINUE
       IERR = -10
       RETURN
-      END
+      END SUBROUTINE SCALEX
+
       SUBROUTINE LLTSLV (NR,N,A,X,B)
 C-----------------------------------------------------------------------
 C        SOLUTION OF AX = B WHERE A HAS THE FORM L(L-TRANSPOSE)
@@ -71941,7 +72668,8 @@ C
          X(I) = (X(I) - SUM)/A(I,I)
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LLTSLV
+
       SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
 C-----------------------------------------------------------------------
 C     FIND FORWARD DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
@@ -71974,7 +72702,8 @@ C
         G(J) = (FPLUS - FX)/STEPSZ
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE FSTOFD
+
       SUBROUTINE FSTOCD (N, X, FCN, TYPSIZ, R, G)
 C-----------------------------------------------------------------------
 C     FIND CENTRAL DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
@@ -72011,7 +72740,8 @@ C
          G(I) = (FPLUS - FMINUS)/(2.0*STEPI)
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE FSTOCD
+
       SUBROUTINE LNSRCH(N,X,F,G,P,XPLS,FPLS,FCN,MXTAKE,IRETCD,
      *                  STEPMX,STEPTL,TYPSIZ)
 C-----------------------------------------------------------------------
@@ -72149,7 +72879,8 @@ C     NO SATISFACTORY XPLS FOUND SUFFICIENTLY DISTINCT FROM X
 C
   210 IRETCD = 1
       RETURN
-      END
+      END SUBROUTINE LNSRCH
+
       SUBROUTINE SECFAC (NR,N,X,G,A,XPLS,GPLS,ITNCNT,TOL,
      *                      NOUPDT,S,Y,W)
 C-----------------------------------------------------------------------
@@ -72279,7 +73010,8 @@ C
   110    CONTINUE
   120 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SECFAC
+
       SUBROUTINE QRUPDT (NR,N,A,U,V)
 C-----------------------------------------------------------------------
 C     FIND AN ORTHOGONAL MATRIX (Q*) AND AN UPPER TRIANGULAR
@@ -72331,7 +73063,8 @@ C
          CALL JROT (NR,N,A,I,A(I,I),-A(I+1,I),R)
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE QRUPDT
+
       SUBROUTINE JROT (NR,N,H,I,A,B,R)
 C-----------------------------------------------------------------------
 C         PRE-MULTIPLICATION OF AN UPPER HESSENBERG MATRIX H
@@ -72390,7 +73123,8 @@ C
          H(I+1,J) = S*T
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE JROT
+
       SUBROUTINE LMDIFF (FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
       INTEGER M,N,INFO,LWA
       INTEGER IWA(N)
@@ -72529,7 +73263,8 @@ C
       IF (INFO .EQ. 8) INFO = 4
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LMDIFF
+
       SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN,
      *                 DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,
      *                 IPVT,QTF,WA1,WA2,WA3,WA4)
@@ -72980,7 +73715,8 @@ C
       IFLAG = 0
       IF (NPRINT .GT. 0) CALL FCN(M,N,X,FVEC,IFLAG)
       RETURN
-      END
+      END SUBROUTINE LMDIF
+
       REAL FUNCTION ENORM(N,X)
       INTEGER N
       REAL X(N)
@@ -73085,7 +73821,8 @@ C
   120    CONTINUE
   130 CONTINUE
       RETURN
-      END
+      END FUNCTION ENORM
+
       SUBROUTINE DOGLEG(N,R,LR,DIAG,QTB,DELTA,X,WA1,WA2)
       INTEGER N,LR
       REAL DELTA
@@ -73257,7 +73994,8 @@ C
   130    CONTINUE
   140 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DOGLEG
+
       SUBROUTINE FDJAC1(FCN,N,X,FVEC,FJAC,LDFJAC,IFLAG,ML,MU,EPSFCN,
      *                  WA1,WA2)
       INTEGER N,LDFJAC,IFLAG,ML,MU
@@ -73408,7 +74146,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE FDJAC1.
 C
-      END
+      END SUBROUTINE FDJAC1
+
       SUBROUTINE FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA)
       INTEGER M,N,LDFJAC,IFLAG
       REAL EPSFCN
@@ -73516,7 +74255,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE FDJAC2.
 C
-      END
+      END SUBROUTINE FDJAC2
+
       SUBROUTINE LMPAR(N,R,LDR,IPVT,DIAG,QTB,DELTA,PAR,X,SDIAG,WA1,
      *                 WA2)
       INTEGER N,LDR
@@ -73778,7 +74518,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE LMPAR.
 C
-      END
+      END SUBROUTINE LMPAR
+
       SUBROUTINE QFORM(M,N,Q,LDQ,WA)
       INTEGER M,N,LDQ
       REAL Q(LDQ,M),WA(M)
@@ -73873,7 +74614,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE QFORM.
 C
-      END
+      END SUBROUTINE QFORM
+
       SUBROUTINE QRFAC(M,N,A,LDA,PIVOT,IPVT,LIPVT,RDIAG,ACNORM,WA)
       INTEGER M,N,LDA,LIPVT
       INTEGER IPVT(LIPVT)
@@ -74037,7 +74779,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE QRFAC.
 C
-      END
+      END SUBROUTINE QRFAC
+
       SUBROUTINE QRSOLV(N,R,LDR,IPVT,DIAG,QTB,X,SDIAG,WA)
       INTEGER N,LDR
       INTEGER IPVT(N)
@@ -74230,7 +74973,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE QRSOLV.
 C
-      END
+      END SUBROUTINE QRSOLV
+
       SUBROUTINE R1MPYQ(M,N,A,LDA,V,W)
       INTEGER M,N,LDA
       REAL A(LDA,N),V(N),W(N)
@@ -74322,7 +75066,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE R1MPYQ.
 C
-      END
+      END SUBROUTINE R1MPYQ
+
       SUBROUTINE R1UPDT(M,N,S,LS,U,V,W,SING)
       INTEGER M,N,LS
       LOGICAL SING
@@ -74528,7 +75273,8 @@ C
 C
 C     LAST CARD OF SUBROUTINE R1UPDT.
 C
-      END
+      END SUBROUTINE R1UPDT
+
       SUBROUTINE SMPLX (A,B0,C,KA,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
 C-----------------------------------------------------------------------
@@ -74565,7 +75311,8 @@ C
      1            EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,BI,
      2            WK(1),WK(M+1),IWK(1),IWK(IP))
       RETURN
-      END
+      END SUBROUTINE SMPLX
+
       SUBROUTINE SMPLX1 (A,B0,C,KA,M,N0,IND,IBASIS,R,Z,ITER,MXITER,
      *     EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,BI,XB,Y,BASIS,INDEX)
 C----------------------
@@ -75348,7 +76095,8 @@ C
   881    XB(I) = Y(I)
       Z = DSUM
       GO TO 220
-      END
+      END SUBROUTINE SMPLX1
+
       SUBROUTINE SSPLX (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
 C-----------------------------------------------------------------------
@@ -75386,7 +76134,8 @@ C
      1            EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,BI,
      2            WK(1),WK(M+1),IWK(1),IWK(IP))
       RETURN
-      END
+      END SUBROUTINE SSPLX
+
       SUBROUTINE SSPLX1 (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,R,Z,
      1       ITER,MXITER,EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,
      2       BI,XB,Y,BASIS,INDEX)
@@ -76197,7 +76946,8 @@ C
   881    XB(I) = Y(I)
       Z = DSUM
       GO TO 220
-      END
+      END SUBROUTINE SSPLX1
+
       SUBROUTINE CROUT1(A,KA,N,IEND,INDEX,TEMP,JP,IERR)
 C     ******************************************************************
 C     CROUT PROCEDURE FOR INVERTING MATRICES
@@ -76418,7 +77168,8 @@ C                    ERROR RETURN
 C
   300 IERR = 1
       RETURN
-      END
+      END SUBROUTINE CROUT1
+
       SUBROUTINE ASSGN (N,A,C,T,IWK,IERR)
 C     -------------------
 C     SOLUTION OF THE ASSIGNMENT PROBLEM
@@ -76434,7 +77185,8 @@ C
       CALL ASSGN1(N,A,C,T,IWK(1),IWK(I1),IWK(I2),IWK(I3),IWK(1),
      *            IWK(I3),IWK(I4),IWK(I5),IWK(I6),IERR)
       RETURN
-      END
+      END SUBROUTINE ASSGN
+
       SUBROUTINE ASSGN1(N,A,C,T,CH,LC,LR,LZ,NZ,RH,SLC,SLR,
      *                  U,IERR)
       INTEGER A(N,*), C(N), CH(N), LC(N), LR(N), LZ(N),
@@ -76681,7 +77433,8 @@ C ASSIGNMENT OF A NEW ROW
 C ERROR RETURN - INTEGER OVERFLOW OCCURS
   400 IERR = 1
       RETURN
-      END
+      END SUBROUTINE ASSGN1
+
       SUBROUTINE MKP (N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
 C
 C SUBROUTINE TO SOLVE A 0-1 MULTIPLE KNAPSACK PROBLEM OF N
@@ -76875,7 +77628,8 @@ C
       RETURN
   160 VSTAR = -8
       RETURN
-      END
+      END SUBROUTINE MKP
+
       SUBROUTINE MKP1 (N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
      1                 BB, BL, X, XL, B, UBB, LX, LXI,
      2                 F, PBL, Q, V, BS, PS, WS, XS, IWK)
@@ -77064,7 +77818,8 @@ C
   270 CONTINUE
       BCK = 0
       RETURN
-      END
+      END SUBROUTINE MKP1
+
       SUBROUTINE SIGMA1 (N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
      *                   BS,PS,WS,XS,IWK)
 C
@@ -77107,7 +77862,8 @@ C
         LX(JJ) = XS(J)
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SIGMA1
+
       SUBROUTINE PI1 (N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
      *                NP1,N5,BS,PS,WS,XS,IWK)
 C
@@ -77199,7 +77955,8 @@ C
         WS(NS) =  W(JJ)
   110 CONTINUE
       GO TO 40
-      END
+      END SUBROUTINE PI1
+
       SUBROUTINE PARC (I,II,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
      *                 LX,LXI,LR,LRI,LUBI)
 C
@@ -77244,7 +78001,8 @@ C
       UB = LUBI - VB
       IFLAG = 1
       RETURN
-      END
+      END SUBROUTINE PARC
+
       SUBROUTINE SKNP (NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
@@ -77268,7 +78026,8 @@ C
       CALL SKNP1 (NS,QS,KUB,VS,N,NP1,PS,WS,XS,IWK(I1),IWK(I2),
      *            IWK(I3),IWK(I4),IWK(I5))
       RETURN
-      END
+      END SUBROUTINE SKNP
+
       SUBROUTINE SKNP1 (NS,QS,KUB,VS,N,NP1,PS,WS,XS,D,MIN,
      *                  PBAR,WBAR,ZBAR)
 C
@@ -77471,7 +78230,8 @@ C
   400 CONTINUE
       LOLD = NN
       GO TO 80
-      END
+      END SUBROUTINE SKNP1
+
       SUBROUTINE LAINV (MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
 C-----------------------------------------------------------------------
 C
@@ -77602,7 +78362,8 @@ C
       ERROR = 1.0
       IERR = 6
       RETURN
-      END
+      END SUBROUTINE LAINV
+
       SUBROUTINE ABCON (FUN, C, NUM, IERR)
 C-----------------------------------------------------------------------
 C
@@ -77668,7 +78429,8 @@ C     TERMINATION
 C
    20 IERR = MIN0(IERR,2)
       RETURN
-      END
+      END SUBROUTINE ABCON
+
       SUBROUTINE SRCH (FUN,COND,XL,ETA,X,NUM,IERR)
 C-----------------------------------------------------------------------
 C     SRCH COMPUTES AN UPPER BOUND FOR THE SMALLEST NUMBER X SUCH
@@ -77782,7 +78544,8 @@ C
   400 X = XL
       IERR = 3
       RETURN
-      END
+      END SUBROUTINE SRCH
+
       SUBROUTINE ABCON1 (FUN, C, NUM, IERR)
 C-----------------------------------------------------------------------
 C
@@ -77904,7 +78667,8 @@ C
   100 C = 0.0
       IERR = 2
       RETURN
-      END
+      END SUBROUTINE ABCON1
+
       SUBROUTINE ACOND (FUN, X, COND, NUM, IERR)
 C-----------------------------------------------------------------------
 C
@@ -77967,7 +78731,8 @@ C
       IERR = 0
       IF (IER .GT. 4) IERR = 1
       RETURN
-      END
+      END SUBROUTINE ACOND
+
       FUNCTION ACONDF (X, Y, C, FUN)
 C-----------------------------------------------------------------------
 C        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
@@ -77979,7 +78744,8 @@ C
       T = 1.0/((X - C) + 1.0)
       ACONDF = A*T*T
       RETURN
-      END
+      END FUNCTION ACONDF
+
       FUNCTION ACONDG (X, Y, C, FUN)
 C-----------------------------------------------------------------------
 C        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
@@ -77993,7 +78759,8 @@ C
       V = 2.0*S*T
       ACONDG = -(A*V + B*U)
       RETURN
-      END
+      END FUNCTION ACONDG
+
       SUBROUTINE XCOND (FUN, X, COND, NUM, IERR)
 C-----------------------------------------------------------------------
 C
@@ -78058,7 +78825,8 @@ C     ERROR RETURN
 C
   100 IERR = 1
       RETURN
-      END
+      END SUBROUTINE XCOND
+
       FUNCTION XCONDX (X,Y,C,FUN)
 C
 C     REAL PART OF THE INTEGRAND IN XCOND
@@ -78071,7 +78839,8 @@ C
       V = 2.0*S*T
       XCONDX = A*U - B*V
       RETURN
-      END
+      END FUNCTION XCONDX
+
       FUNCTION XCONDY (X,Y,C,FUN)
 C
 C     IMAGINARY PART OF INTEGRAND IN XCOND
@@ -78084,7 +78853,8 @@ C
       V = 2.0*S*T
       XCONDY = A*V + B*U
       RETURN
-      END
+      END FUNCTION XCONDY
+
        SUBROUTINE LAINV1(FUN,T,C,EPSRE,EPSAB,RESULT,ESTERR,NUM,
      *   IER)
 C
@@ -78289,7 +79059,8 @@ C   SUMMATION IS EQUAL TO MAX
 C
       IER = 1
 999   RETURN
-      END
+      END SUBROUTINE LAINV1
+
       SUBROUTINE CQEXT(N,EPSTAB,RESULT,ABSERR,RES3LA,NRES)
 C
 C 1.        CQEXT
@@ -78502,7 +79273,8 @@ C
       RES3LA(3) = RESULT
   100 ABSERR = AMAX1(ABSERR,5.0E+00*EPMACH*ABS(REAL(RESULT)))
       RETURN
-      END
+      END SUBROUTINE CQEXT
+
       SUBROUTINE QAGI1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,RESULT,ABSERR,
      *                 NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
 C-----------------------------------------------------------------------
@@ -78696,7 +79468,8 @@ C
       CALL QAGIE1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *          NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       RETURN
-      END
+      END SUBROUTINE QAGI1
+
       SUBROUTINE QAGIE1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,
      *              ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
 C-----------------------------------------------------------------------
@@ -79166,7 +79939,8 @@ C
       IF (INF .EQ. 2) NEVAL = 2*NEVAL
       IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE QAGIE1
+
       SUBROUTINE QK15I1 (F, PHI, Y, C, BOUN, INF, A, B, RESULT, ABSERR,
      *                   RESABS, RESASC, EPMACH, UFLOW)
 C-----------------------------------------------------------------------
@@ -79351,7 +80125,8 @@ C
       TOL = 50.0*EPMACH
       IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
       RETURN
-      END
+      END SUBROUTINE QK15I1
+
       SUBROUTINE FFT (C,N,ISN,IERR)
       REAL C(*)
 C-----------------------------------------------------------------------
@@ -79365,7 +80140,8 @@ C-----------------------------------------------------------------------
       RETURN
    10 IERR = 4
       RETURN
-      END
+      END SUBROUTINE FFT
+
       SUBROUTINE FFT1 (A,B,N,ISN,IERR)
       REAL A(N), B(N)
 C     ------------
@@ -79374,7 +80150,8 @@ C     ------------
       RETURN
    10 IERR = 4
       RETURN
-      END
+      END SUBROUTINE FFT1
+
       SUBROUTINE MFFT (C,N,NDIM,ISN,IERR)
       REAL C(*)
       INTEGER N(NDIM)
@@ -79408,7 +80185,8 @@ C
       RETURN
    50 IERR = 5
       RETURN
-      END
+      END SUBROUTINE MFFT
+
       SUBROUTINE MFFT1 (A,B,N,NDIM,ISN,IERR)
       REAL A(*), B(*)
       INTEGER N(NDIM)
@@ -79435,7 +80213,8 @@ C
       RETURN
    50 IERR = 5
       RETURN
-      END
+      END SUBROUTINE MFFT1
+
       SUBROUTINE SFFT(A,B,NTOT,N,NSPAN,ISN,IERR)
 C  MULTIVARIATE COMPLEX FOURIER TRANSFORM, COMPUTED IN PLACE
 C    USING MIXED-RADIX FAST FOURIER TRANSFORM ALGORITHM.
@@ -80025,7 +80804,8 @@ C  ERROR FINISH - THERE IS AN INPUT ERROR
       RETURN
  1002 IERR=3
       RETURN
-      END
+      END SUBROUTINE SFFT
+
 C     ******************************************************************
 C
 C     SUBROUTINE COSQI(N,WSAVE)
@@ -80061,7 +80841,8 @@ C
   101 CONTINUE
       CALL RFFTI (N,WSAVE(N+1))
       RETURN
-      END
+      END SUBROUTINE COSQI
+
 C     ******************************************************************
 C
 C     SUBROUTINE COSQF(N,X,WSAVE)
@@ -80122,7 +80903,8 @@ C
   102 RETURN
   103 CALL COSQF1 (N,X,WSAVE,WSAVE(N+1))
       RETURN
-      END
+      END SUBROUTINE COSQF
+
       SUBROUTINE COSQF1 (N,X,W,XH)
       DIMENSION       X(*)       ,W(*)       ,XH(*)
       NS2 = (N+1)/2
@@ -80147,7 +80929,8 @@ C
          X(I-1) = XIM1
   103 CONTINUE
       RETURN
-      END
+      END SUBROUTINE COSQF1
+
 C     ******************************************************************
 C
 C     SUBROUTINE COSQB(N,X,WSAVE)
@@ -80210,7 +80993,8 @@ C
       RETURN
   103 CALL COSQB1 (N,X,WSAVE,WSAVE(N+1))
       RETURN
-      END
+      END SUBROUTINE COSQB
+
       SUBROUTINE COSQB1 (N,X,W,XH)
       DIMENSION       X(*)       ,W(*)       ,XH(*)
       NS2 = (N+1)/2
@@ -80237,7 +81021,8 @@ C
   103 CONTINUE
       X(1) = X(1)+X(1)
       RETURN
-      END
+      END SUBROUTINE COSQB1
+
 C     ******************************************************************
 C
 C     SUBROUTINE SINQF(N,X,WSAVE)
@@ -80305,7 +81090,8 @@ C
          X(K) = -X(K)
   102 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SINQF
+
 C     ******************************************************************
 C
 C     SUBROUTINE SINQB(N,X,WSAVE)
@@ -80373,7 +81159,8 @@ C
          X(KC+1) = XHOLD
   103 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SINQB
+
 C     ******************************************************************
 C
 C     SUBROUTINE RFFTI(N,WSAVE)
@@ -80402,7 +81189,8 @@ C
       IF (N .EQ. 1) RETURN
       CALL RFFTI1 (N,WSAVE(N+1),WSAVE(2*N+1))
       RETURN
-      END
+      END SUBROUTINE RFFTI
+
       SUBROUTINE RFFTI1 (N,WA,IFAC)
       REAL WA(*), IFAC(*)
       INTEGER NTRYH(4)
@@ -80460,7 +81248,8 @@ C
          L1 = L2
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RFFTI1
+
 C     ******************************************************************
 C
 C     SUBROUTINE RFFTB(N,R,WSAVE)
@@ -80524,7 +81313,8 @@ C
       IF (N .EQ. 1) RETURN
       CALL RFFTB1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
       RETURN
-      END
+      END SUBROUTINE RFFTB
+
       SUBROUTINE RFFTB1 (N,C,CH,WA,IFAC)
       REAL C(*), CH(*), WA(*), IFAC(*)
       NF = IFAC(2)
@@ -80583,7 +81373,8 @@ C
          C(I) = CH(I)
   117 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RFFTB1
+
       SUBROUTINE RADB2 (IDO,L1,CC,CH,WA1)
       DIMENSION       CC(IDO,2,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)
@@ -80623,7 +81414,8 @@ C
          CH(IDO,K,2) = -(CC(1,2,K)+CC(1,2,K))
   106 CONTINUE
   107 RETURN
-      END
+      END SUBROUTINE RADB2
+
       SUBROUTINE RADB3 (IDO,L1,CC,CH,WA1,WA2)
       DIMENSION       CC(IDO,3,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)
@@ -80683,7 +81475,8 @@ C
   105    CONTINUE
   106 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RADB3
+
       SUBROUTINE RADB4 (IDO,L1,CC,CH,WA1,WA2,WA3)
       DIMENSION       CC(IDO,4,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)
@@ -80768,7 +81561,8 @@ C
          CH(IDO,K,4) = -SQRT2*(TR1+TI1)
   106 CONTINUE
   107 RETURN
-      END
+      END SUBROUTINE RADB4
+
       SUBROUTINE RADB5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       DIMENSION       CC(IDO,5,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)     ,WA4(*)
@@ -80872,7 +81666,8 @@ C
   105    CONTINUE
   106 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RADB5
+
       SUBROUTINE RADBG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       DIMENSION       CH(IDO,L1,IP)          ,CC(IDO,IP,L1)          ,
      1                C1(IDO,L1,IP)          ,C2(IDL1,IP),
@@ -81032,7 +81827,8 @@ C
   141    CONTINUE
   142 CONTINUE
   143 RETURN
-      END
+      END SUBROUTINE RADBG
+
 C     ******************************************************************
 C
 C     SUBROUTINE RFFTF(N,R,WSAVE)
@@ -81098,7 +81894,8 @@ C
       IF (N .EQ. 1) RETURN
       CALL RFFTF1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
       RETURN
-      END
+      END SUBROUTINE RFFTF
+
       SUBROUTINE RFFTF1 (N,C,CH,WA,IFAC)
       REAL C(*), CH(*), WA(*), IFAC(*)
       NF = IFAC(2)
@@ -81157,7 +81954,8 @@ C
          C(I) = CH(I)
   112 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RFFTF1
+
       SUBROUTINE RADF2 (IDO,L1,CC,CH,WA1)
       DIMENSION       CH(IDO,2,L1)           ,CC(IDO,L1,*)           ,
      1                WA1(*)
@@ -81197,7 +81995,8 @@ C
          CH(IDO,1,K) = CC(IDO,K,1)
   106 CONTINUE
   107 RETURN
-      END
+      END SUBROUTINE RADF2
+
       SUBROUTINE RADF3 (IDO,L1,CC,CH,WA1,WA2)
       DIMENSION       CH(IDO,3,L1)           ,CC(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)
@@ -81255,7 +82054,8 @@ C
   105    CONTINUE
   106 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RADF3
+
       SUBROUTINE RADF4 (IDO,L1,CC,CH,WA1,WA2,WA3)
       DIMENSION       CC(IDO,L1,*)           ,CH(IDO,4,L1)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)
@@ -81336,7 +82136,8 @@ C
          CH(1,4,K) = TI1+CC(IDO,K,3)
   106 CONTINUE
   107 RETURN
-      END
+      END SUBROUTINE RADF4
+
       SUBROUTINE RADF5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       DIMENSION       CC(IDO,L1,*)           ,CH(IDO,5,L1)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)     ,WA4(*)
@@ -81436,7 +82237,8 @@ C
   105    CONTINUE
   106 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RADF5
+
       SUBROUTINE RADFG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       DIMENSION       CH(IDO,L1,IP)          ,CC(IDO,IP,L1)          ,
      1                C1(IDO,L1,IP)          ,C2(IDL1,IP),
@@ -81602,7 +82404,8 @@ C
   143    CONTINUE
   144 CONTINUE
       RETURN
-      END
+      END SUBROUTINE RADFG
+
       SUBROUTINE CHEBY (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      X                    P, Q, ERROR, IERR, W)
 C     ******************************************************************
@@ -81633,7 +82436,8 @@ C     ERROR RETURN
 C     ------------------------------------------------------------------
    10 IERR = 1
       RETURN
-      END
+      END SUBROUTINE CHEBY
+
       SUBROUTINE CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      1                   P, Q, ERROR, IERR, LP1, MP1, LPM, N, NP1,
      2                   X, XVAL, C, D, ERR, H)
@@ -81913,7 +82717,8 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
 C
   250 IERR = 6
       RETURN
-      END
+      END SUBROUTINE CHEBY1
+
       SUBROUTINE CERR (T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
 C     ------------------------------------------------------------------
 C     COMPUTE THE APPROXIMATION ERROR AT POINT T
@@ -81952,7 +82757,8 @@ C     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
 C
   110 IERR = 6
       RETURN
-      END
+      END SUBROUTINE CERR
+
       SUBROUTINE ADAPT (F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS,
      * COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT,
      * KDIFF, VALLFT, VALRGT)
@@ -82035,7 +82841,8 @@ C
       NPIECE = KNOTS
       ERREST = ERROR
       RETURN
-      END
+      END SUBROUTINE ADAPT
+
       SUBROUTINE ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
 C
 C     THIS ALGORITHM COMPUTES A PIECEWISE POLYNOMIAL APPROXIMATION
@@ -82254,7 +83061,8 @@ C
       IF (KNOTS.LT.MAXKNT) GO TO 10
       IERR = 1
       RETURN
-      END
+      END SUBROUTINE ADAPT1
+
       SUBROUTINE ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
 C
 C        ===============================================================
@@ -82391,7 +83199,8 @@ C         BAD VALUE IN DERIVATIVE BREAKS
 C
   240 IERR = -5
       RETURN
-      END
+      END SUBROUTINE ADSET
+
       SUBROUTINE ADTAKE(IERR)
 C
 C        ===============================================================
@@ -82469,7 +83278,8 @@ C        TOO SMALL AN INTERVAL.
 C
    30 IERR = 2
       RETURN
-      END
+      END SUBROUTINE ADTAKE
+
       SUBROUTINE ADCOMP(F)
 C
 C        ===============================================================
@@ -82578,7 +83388,8 @@ C         ADD 50 PERCENT FUDGE FACTOR
       ERRORI = ERRINT(F,POLYDD,XLEFT(NSTACK),XRIGHT(NSTACK),ABSC,WGTS)
       ERRORI = R*ERRORI
       RETURN
-      END
+      END SUBROUTINE ADCOMP
+
       DOUBLE PRECISION FUNCTION ERRINT(F, FIT, AAA, BBB, POINTS, WEIGHT)
 C
 C        ===============================================================
@@ -82650,7 +83461,8 @@ C              LOOP THROUGH THE REMAINING POINTS
    30 CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END FUNCTION ERRINT
+
       SUBROUTINE NEWTON(NL, NR, NI)
 C
 C        ===============================================================
@@ -82787,7 +83599,8 @@ C         LOOP THROUGH THE DIFFERENCES (IDIF INDEX)
   140 CONTINUE
   150 CONTINUE
       RETURN
-      END
+      END SUBROUTINE NEWTON
+
       DOUBLE PRECISION FUNCTION POLYDD(X)
 C
 C        ===============================================================
@@ -82821,7 +83634,8 @@ C
         POLYDD = DDTEMP(J,1) + (X-XDD(J))*POLYDD
    10 CONTINUE
       RETURN
-      END
+      END FUNCTION POLYDD
+
       SUBROUTINE ADCHK
 C
 C        ===============================================================
@@ -82873,7 +83687,8 @@ C             CHECK FOR DISCARD OF INTERVAL
 C
    40 IF (ERRORI.LE.DTEST) DISCRD = .TRUE.
       RETURN
-      END
+      END SUBROUTINE ADCHK
+
       SUBROUTINE ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
 C
 C        ===============================================================
@@ -82952,7 +83767,8 @@ C            PUT THE NEW KNOTS IN XKNOTS
       XKNOTS(KNOTS) = XRIGHT(NSTACK)
       NSTACK = NSTACK - 1
       RETURN
-      END
+      END SUBROUTINE ADPUT
+
       SUBROUTINE ADTRAN(D, POWERS)
 C
 C        ===============================================================
@@ -83084,7 +83900,8 @@ C                   SYNTHETIC DIVISION LOOP
   140 CONTINUE
 C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       RETURN
-      END
+      END SUBROUTINE ADTRAN
+
       SUBROUTINE CPSC (F, Z, N, IC, TOL, R, RS, ERR)
 C
 C  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
@@ -83321,7 +84138,8 @@ C
         RS(I) = (0.,0.)
   270   ERR(I) = 1.E10
       RETURN
-      END
+      END SUBROUTINE CPSC
+
       SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
       DOUBLE PRECISION X, Y, TOL, R, RS1(N), RS2(N), ERR(N)
 C
@@ -83600,7 +84418,8 @@ C
          RS2(I) = 0.D0
   270    ERR(I) = 1.D10
       RETURN
-      END
+      END SUBROUTINE DCPSC
+
       FUNCTION TRP(A,N,X,Y)
       DIMENSION X(N),Y(N)
 C
@@ -83631,7 +84450,8 @@ C
    60 R = (A-X(I))/(X(I+1)-X(I))
       TRP = Y(I)+R*(Y(I+1)-Y(I))
       RETURN
-      END
+      END FUNCTION TRP
+
       SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
 C     ******************************************************************
 C     LAGRANGE INTERPOLATION
@@ -83775,7 +84595,8 @@ C
       RETURN
   132 IERR = 3
       RETURN
-      END
+      END SUBROUTINE LTRP
+
       SUBROUTINE HTRP (N,X,Y,A,T,IERR)
 C     ******************************************************************
 C     HERMITE INTERPOLATION
@@ -83819,7 +84640,8 @@ C
       T(1) = I
       T(2) = K
       RETURN
-      END
+      END SUBROUTINE HTRP
+
       SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
       REAL X(*),A(N),C(N)
       DOUBLE PRECISION XX,R,T(N)
@@ -83842,7 +84664,8 @@ C
       DO 30 I=1,N
    30 C(I) = T(I)
       RETURN
-      END
+      END SUBROUTINE PCOEFF
+
       SUBROUTINE PFIT(ND,NP,X,Y,A,RNORM,PHI,PHIX,IERR)
 C     ******************************************************************
 C     UNWEIGHTED LEAST SQUARES POLYNOMIAL FIT
@@ -83978,7 +84801,8 @@ C
   101 A(K)=A(K)+A(MP1)*PHI(1,K)
   102 A(MP1)=A(MP1)*PHI(1,MP1)
       RETURN
-      END
+      END SUBROUTINE PFIT
+
       SUBROUTINE WPFIT(ND,NP,X,Y,W,A,RNORM,PHI,PHIX,IERR)
 C     ******************************************************************
 C     WEIGHTED LEAST SQUARES POLYNOMIAL FIT
@@ -84130,7 +84954,8 @@ C
       RETURN
   202 IERR=3
       RETURN
-      END
+      END SUBROUTINE WPFIT
+
       SUBROUTINE CBSPL (X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR)
 C-----------------------------------------------------------------------
 C                   CUBIC SPLINE INTERPOLATION
@@ -84256,7 +85081,8 @@ C
       RETURN
   210 IERR = 2
       RETURN
-      END
+      END SUBROUTINE CBSPL
+
       SUBROUTINE SPLIFT (X,Y,YP,YPP,N,W,IERR,ISX,A1,B1,AN,BN)
 C
 C     WRITTEN BY RONDALL E. JONES
@@ -84411,7 +85237,8 @@ C
       RETURN
   300 IERR = 3
       RETURN
-      END
+      END SUBROUTINE SPLIFT
+
       SUBROUTINE SPFIT (X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
 C-----------------------------------------------------------------------
 C            WEIGHTED LEAST SQUARES CUBIC SPLINE FITTING
@@ -84471,7 +85298,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE SPFIT
+
       SUBROUTINE CSPFIT (X, Y, M, BREAK, L, XCON, CON, NDER, NC,
      *                   Z, A, B, C, WK, IWK, IERR)
 C-----------------------------------------------------------------------
@@ -84549,7 +85377,8 @@ C
   120 IERR = -6
       IWK(1) = K
       RETURN
-      END
+      END SUBROUTINE CSPFIT
+
       SUBROUTINE SCOMP (X,Y,A,B,C,N,XI,YI,NI,IERR)
 C
 C     ABSTRACT
@@ -84644,7 +85473,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
-      END
+      END SUBROUTINE SCOMP
+
       SUBROUTINE SCOMP1 (X,Y,YP,N,XI,YI,NI,IERR)
 C
 C     ABSTRACT
@@ -84741,7 +85571,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
-      END
+      END SUBROUTINE SCOMP1
+
       SUBROUTINE SCOMP2 (X,Y,YPP,N,XI,YI,NI,IERR)
 C
 C     ABSTRACT
@@ -84841,7 +85672,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
-      END
+      END SUBROUTINE SCOMP2
+
       SUBROUTINE SEVAL (X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
 C
 C     ABSTRACT
@@ -84943,7 +85775,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,N)
       GO TO 10
-      END
+      END SUBROUTINE SEVAL
+
       SUBROUTINE SEVAL1 (X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
 C
 C     ABSTRACT
@@ -85046,7 +85879,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
-      END
+      END SUBROUTINE SEVAL1
+
       SUBROUTINE SEVAL2 (X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
 C
 C     ABSTRACT
@@ -85151,7 +85985,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,NM1)
       GO TO 10
-      END
+      END SUBROUTINE SEVAL2
+
       REAL FUNCTION CSINT (X, Y, A, B, C, N, ALPHA, BETA)
 C-----------------------------------------------------------------------
 C
@@ -85245,7 +86080,8 @@ C
      *           + 0.25*C(K)*R*S
       CSINT = (BETA - ALPHA)*SUM
       RETURN
-      END
+      END FUNCTION CSINT
+
       REAL FUNCTION CSINT1 (X, Y, YP, N, A, B)
 C-----------------------------------------------------------------------
 C
@@ -85353,7 +86189,8 @@ C
      *           + 0.25*CI*R*S
       CSINT1 = (B - A)*SUM
       RETURN
-      END
+      END FUNCTION CSINT1
+
       REAL FUNCTION CSINT2 (X, Y, YPP, N, A, B)
 C-----------------------------------------------------------------------
 C
@@ -85441,7 +86278,8 @@ C
      *    YPP(KP1)*(DMA + DMB)*(DPA*(2.0 - DPA) + DPB*(2.0 - DPB))
       CSINT2 = (B - A)*(0.5*R - H*H*S/24.0)
       RETURN
-      END
+      END FUNCTION CSINT2
+
       SUBROUTINE PDSPL (X, Y, A, B, C, N, T, IERR)
 C-----------------------------------------------------------------------
 C                PERIODIC CUBIC SPLINE INTERPOLATION
@@ -85565,7 +86403,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE PDSPL
+
       SUBROUTINE PDFIT (X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
 C-----------------------------------------------------------------------
 C            LEAST SQUARES PERIODIC CUBIC SPLINE FITTING
@@ -85654,7 +86493,8 @@ C
       RETURN
   140 IERR = 6
       RETURN
-      END
+      END SUBROUTINE PDFIT
+
       SUBROUTINE PSCMP (X, Y, A, B, C, N, XI, YI, M, IERR)
 C-----------------------------------------------------------------------
 C              EVALUATION OF A PERIODIC CUBIC SPLINE
@@ -85727,7 +86567,8 @@ C
       XX = X1
       YI(K) = Y(1)
       GO TO 100
-      END
+      END SUBROUTINE PSCMP
+
       SUBROUTINE PSEVL (X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
 C-----------------------------------------------------------------------
 C     EVALUATION AND DIFFERENTIATION OF A PERIODIC CUBIC SPLINE
@@ -85807,7 +86648,8 @@ C
       YPI(K) = A(1)
       YPPI(K) = B(1) + B(1)
       GO TO 100
-      END
+      END SUBROUTINE PSEVL
+
       SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
@@ -85838,7 +86680,8 @@ C     ERROR RETURN
 C
    10 IERR = 1
       RETURN
-      END
+      END SUBROUTINE CSLOOP
+
       SUBROUTINE CSLOP1 (M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
@@ -85994,7 +86837,8 @@ C
       RETURN
   210 IERR = 3
       RETURN
-      END
+      END SUBROUTINE CSLOP1
+
       SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
 C-----------------------------------------------------------------------
 C            EVALUATION OF A CUBIC SPLINE CLOSED CURVE
@@ -86070,7 +86914,8 @@ C
   110 IL = 1
       IR = MIN0(I+1,M)
       GO TO 10
-      END
+      END SUBROUTINE LOPCMP
+
       SUBROUTINE LOPDF (M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
 C-----------------------------------------------------------------------
 C          EVALUATION AND DIFFERENTIATION OF A CUBIC SPLINE
@@ -86132,7 +86977,8 @@ C
          DDZ(J) = B + (C + C)*DT
    51 CONTINUE
       RETURN
-      END
+      END SUBROUTINE LOPDF
+
       SUBROUTINE CURV1 (N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP,
      *                  SIGMA,IERR)
 C
@@ -86282,7 +87128,8 @@ C X-VALUES NOT STRICTLY INCREASING
 C
     9 IERR = 2
       RETURN
-      END
+      END SUBROUTINE CURV1
+
       FUNCTION CURV2 (T,N,X,Y,YP,SIGMA)
 C
       INTEGER N
@@ -86364,7 +87211,8 @@ C
      *        COSHP2*DEL1)))/(SIGMAP*SIGMAP*DELS*(SINHMS+
      *        SIGMAP*DELS))
       RETURN
-      END
+      END FUNCTION CURV2
+
       FUNCTION CURVD (T,N,X,Y,YP,SIGMA)
 C
       INTEGER N
@@ -86439,7 +87287,8 @@ C
      *        YP(IM1)*(DELS*SIGMAP*COSHM2-SINHMS))/
      *        (SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS))
       RETURN
-      END
+      END FUNCTION CURVD
+
       FUNCTION CURVI (XL,XU,N,X,Y,YP,SIGMA)
 C
       INTEGER N
@@ -86606,7 +87455,8 @@ C CORRECT SIGN AND RETURN
 C
    10 CURVI = SSIGN*SUM
       RETURN
-      END
+      END FUNCTION CURVI
+
       SUBROUTINE KURV1 (N,X,Y,SLP1,SLPN,ISLPSW,XP,YP,TEMP,S,
      *                  SIGMA,IERR)
 C
@@ -86792,7 +87642,8 @@ C COINCIDENT ADJACENT POINTS
 C
    12 IERR = 2
       RETURN
-      END
+      END SUBROUTINE KURV1
+
       SUBROUTINE KURV2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
 C
       INTEGER N
@@ -86891,7 +87742,8 @@ C
       XS = SUMX+XP(I)*C1+XP(IM1)*C2
       YS = SUMY+YP(I)*C1+YP(IM1)*C2
       RETURN
-      END
+      END SUBROUTINE KURV2
+
       SUBROUTINE KURVP1 (N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
 C
       INTEGER N,IERR
@@ -87057,7 +87909,8 @@ C COINCIDENT ADJACENT POINTS
 C
     8 IERR = 2
       RETURN
-      END
+      END SUBROUTINE KURVP1
+
       SUBROUTINE KURVP2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
 C
       INTEGER N
@@ -87162,7 +88015,8 @@ C
       XS = SUMX+CI*XP(I)+CIM1*XP(IM1)
       YS = SUMY+CI*YP(I)+CIM1*YP(IM1)
       RETURN
-      END
+      END SUBROUTINE KURVP2
+
       SUBROUTINE QURV1 (N,X,Y,Z,SLP1X,SLP1Y,SLP1Z,SLPNX,
      *                  SLPNY,SLPNZ,ISLPSW,XP,YP,ZP,TEMP,
      *                  S,SIGMA,IERR)
@@ -87373,7 +88227,8 @@ C COINCIDENT ADJACENT POINTS
 C
    10 IERR = 2
       RETURN
-      END
+      END SUBROUTINE QURV1
+
       SUBROUTINE QURV2 (T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
 C
       INTEGER N
@@ -87476,7 +88331,8 @@ C
       YS = SUMY+YP(I)*C1+YP(IM1)*C2
       ZS = SUMZ+ZP(I)*C1+ZP(IM1)*C2
       RETURN
-      END
+      END SUBROUTINE QURV2
+
       SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
 C
       REAL DEL1,DEL2,SIGMA,C1,C2,C3
@@ -87551,7 +88407,8 @@ C
     2 C1 = -1./DEL1
       C2 = -C1
       RETURN
-      END
+      END SUBROUTINE CEEZ
+
       SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
 C
       REAL DIAG,SDIAG,SIGMA,DEL
@@ -87601,7 +88458,8 @@ C
       DIAG = DENOM*(SIGDEL*COSHM-SINHM)
       SDIAG = DENOM*SINHM
       RETURN
-      END
+      END SUBROUTINE TERMS
+
       INTEGER FUNCTION INTRVL (X, T, M)
       REAL X, T(M)
 C-----------------------------------------------------------------------
@@ -87664,7 +88522,8 @@ C     NORMAL EXIT
 C
   110 INTRVL = I
       RETURN
-      END
+      END FUNCTION INTRVL
+
       SUBROUTINE BVAL (T, BCOEF, N, K, X, JDERIV, W, WK)
 C-----------------------------------------------------------------------
 C
@@ -87830,7 +88689,8 @@ C
 C
   200 W = WK(1,1)
       RETURN
-      END
+      END SUBROUTINE BVAL
+
       SUBROUTINE BVALI (T, BCOEFF, N, K, X, W, WK)
 C-----------------------------------------------------------------------
 C           INTEGRAL OF A PIECEWISE POLYNOMIAL FROM T(1) TO X
@@ -87868,7 +88728,8 @@ C
       NP1 = N + 1
       CALL BVALI0 (T, TNEW, WK(1), N, KP1, XVAL, W, WK(NP1))
       RETURN
-      END
+      END SUBROUTINE BVALI
+
       SUBROUTINE BVALI0 (T, TNEW, BCOEF, N, K, X, W, WK)
 C-----------------------------------------------------------------------
 C
@@ -87961,7 +88822,8 @@ C
 C
       W = WK(1,1)
       RETURN
-      END
+      END SUBROUTINE BVALI0
+
       SUBROUTINE BSPP (T, A, N, K, BREAK, C, L, WK)
 C-----------------------------------------------------------------------
 C
@@ -88056,7 +88918,8 @@ C
          C(1,L) = A(LEFT)
   110 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BSPP
+
       SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
 C-----------------------------------------------------------------------
 C
@@ -88143,7 +89006,8 @@ C
   130 IL = 1
       IR = MIN0(I + 1, N)
       GO TO 10
-      END
+      END SUBROUTINE PPVAL
+
       SUBROUTINE BSPVB (T, K, JHIGH, J, X, LEFT, BLIST)
 C-----------------------------------------------------------------------
 C
@@ -88199,7 +89063,8 @@ C
       IF (J .LT. JHIGH) GO TO 10
 C
       RETURN
-      END
+      END SUBROUTINE BSPVB
+
       SUBROUTINE BSPVD (T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
 C-----------------------------------------------------------------------
 C
@@ -88331,7 +89196,8 @@ C
    40    CONTINUE
    50 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BSPVD
+
       SUBROUTINE BSTRP (TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
 C-----------------------------------------------------------------------
 C   THIS ROUTINE PRODUCES THE B-SPLINE COEFF.S BCOEF OF THE PIECEWISE
@@ -88464,7 +89330,8 @@ C     *** ERROR RETURN
 C
   100 IFLAG = 1
       RETURN
-      END
+      END SUBROUTINE BSTRP
+
       SUBROUTINE BANFAC ( W, NROWW, NROW, NBANDL, NBANDU, IFLAG )
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  RETURNS IN  W  THE LU-FACTORIZATION (WITHOUT PIVOTING) OF THE BANDED
@@ -88578,7 +89445,8 @@ C                                       CHECK THE LAST DIAGONAL ENTRY .
   900 IF (W(MIDDLE,NROW) .NE. 0.)       RETURN
   999 IFLAG = 2
                                         RETURN
-      END
+      END SUBROUTINE BANFAC
+
       SUBROUTINE BANSLV ( W, NROWW, NROW, NBANDL, NBANDU, B )
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  COMPANION ROUTINE TO  BANFAC . IT RETURNS THE SOLUTION  X  OF THE
@@ -88634,7 +89502,8 @@ C                                A  IS LOWER TRIANGULAR .
          IF (I .GT. 1)                  GO TO 41
    49 B(1) = B(1)/W(MIDDLE,1)
                                         RETURN
-      END
+      END SUBROUTINE BANSLV
+
       SUBROUTINE BSLSQ (TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
 C-----------------------------------------------------------------------
 C
@@ -88722,7 +89591,8 @@ C             ERROR RETURN
 C
   100 IERR = -1
       RETURN
-      END
+      END SUBROUTINE BSLSQ
+
       SUBROUTINE BCHFAC (W, NB, N, DIAG, IFLAG)
 C-----------------------------------------------------------------------
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
@@ -88834,7 +89704,8 @@ C
    50    CONTINUE
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BCHFAC
+
       SUBROUTINE BCHSLV (W, NB, N, B)
 C-----------------------------------------------------------------------
 C
@@ -88889,7 +89760,8 @@ C
    60    K = K - 1
          IF (K .GT. 0) GO TO 40
       RETURN
-      END
+      END SUBROUTINE BCHSLV
+
       SUBROUTINE BFIT (BKPT, N, NORD, XDATA, YDATA, NDATA,
      *                 XCONST, YCONST, NDERIV, NCONST,
      *                 MODE, COEFF, RNORM, W, IW)
@@ -89124,7 +89996,8 @@ C
      1         XCONST, YCONST, NDERIV, MODE, COEFF, RNORM, W(I2),
      2         W(I1), MDG, W(I3), MDW, W(I7), IW)
       RETURN
-      END
+      END SUBROUTINE BFIT
+
       SUBROUTINE BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT,
      1        NCONST, XCONST, YCONST, NDERIV, MODE, COEFF, RNORM,
      2        BF, G, MDG, W, MDW, WORK, IWORK)
@@ -89425,7 +90298,8 @@ C                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
   860 IWORK(2) = INTW1
       MODE = -7
       RETURN
-      END
+      END SUBROUTINE BFIT0
+
       SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)
 C
 C***AUTHOR  LAWSON, C. L., (JPL)
@@ -89638,7 +90512,8 @@ C                                             ALG. STEP 24
   100 CONTINUE
 C                                             ALG. STEP 25
       RETURN
-      END
+      END SUBROUTINE BNDACC
+
       SUBROUTINE BNDSL (MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
 C
 C***AUTHOR  LAWSON, C. L., (JPL)
@@ -89819,7 +90694,8 @@ C            A ZERO DIAGONAL TERM OCCURS
 C
   130 IERR = 1
       RETURN
-      END
+      END SUBROUTINE BNDSL
+
       SUBROUTINE SPFIT2 (X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX,
      *                   YBREAK, NY, F, S, T, WK, NUM, IERR)
 C-----------------------------------------------------------------------
@@ -89950,7 +90826,8 @@ C
   130 IERR = 5
       WK(1) = L
       RETURN
-      END
+      END SUBROUTINE SPFIT2
+
       SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
 C-----------------------------------------------------------------------
 C
@@ -90058,7 +90935,8 @@ C
          DZ(MU,L) = (3.0*C(4)*DEL + 2.0*C(3))*DEL + C(2)
    70 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSPP
+
       SUBROUTINE CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, F1, KF1, F2, KF2, F12, KF12)
 C-----------------------------------------------------------------------
@@ -90212,7 +91090,8 @@ C
   410    CONTINUE
   420 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSURF
+
       SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
 C-----------------------------------------------------------------------
 C
@@ -90226,7 +91105,8 @@ C
       CALL CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, M,
      *            F(1,1,3), M, F(1,1,2), M, F(1,1,4), M)
       RETURN
-      END
+      END SUBROUTINE CSURF1
+
       SUBROUTINE CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                 F, KF, F1, KF1, F2, KF2, F12, KF12)
 C-----------------------------------------------------------------------
@@ -90375,7 +91255,8 @@ C
   410    CONTINUE
   420 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CSRF
+
       SUBROUTINE CSRF2 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, DDF)
 C-----------------------------------------------------------------------
@@ -90390,7 +91271,8 @@ C
       CALL CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF,
      *           DDF(1,1,2), M, DDF, M, DDF(1,1,3), M)
       RETURN
-      END
+      END SUBROUTINE CSRF2
+
       SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
 C
       INTEGER M,N,IZ,IERR
@@ -90770,7 +91652,8 @@ C THE OPTION VECTOR HAS AN ERROR
 C
    48 IERR = 3
       RETURN
-      END
+      END SUBROUTINE SURF
+
       FUNCTION SURF2 (XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
 C
       INTEGER M,N,IZ
@@ -90910,7 +91793,8 @@ C
       CALL SNHCSH (DUMMY,COSHP2,SIGMAX*DELP2,1)
       SURF2 = HERMNZ(ZIM1,ZI,ZXXIM1,ZXXI,SIGMAX)
       RETURN
-      END
+      END FUNCTION SURF2
+
       SUBROUTINE NSURF2 (DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ,
      *                   IDZ,M,N,X,Y,Z,IZ,ZP,WORK,SIGMA)
 C
@@ -91087,7 +91971,8 @@ C
     8     DZ(II,JJ) = WORK(1,II)*ZIM1+WORK(2,II)*ZI
      *                +WORK(3,II)*ZXXIM1+WORK(4,II)*ZXXI
       RETURN
-      END
+      END SUBROUTINE NSURF2
+
       SUBROUTINE BSTRP2 (X, Y, Z, KZ, TX, NX, KX, TY, NY, KY,
      *                   A, KA, WK, L, IFLAG)
 C-----------------------------------------------------------------------
@@ -91133,7 +92018,8 @@ C
       RETURN
   120 IFLAG = 3
       RETURN
-      END
+      END SUBROUTINE BSTRP2
+
       SUBROUTINE BSTRP1 (X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
 C-------------------------------------------------------------------
 C     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
@@ -91167,7 +92053,8 @@ C
    20    CONTINUE
    30 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BSTRP1
+
       SUBROUTINE BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX,
      *                   TY, NY, KY, A, KA, WK, L, IFLAG)
 C-----------------------------------------------------------------------
@@ -91221,7 +92108,8 @@ C
   120 IFLAG = -3
       WK(1) = M
       RETURN
-      END
+      END SUBROUTINE BSLSQ2
+
       SUBROUTINE BSLSQ1 (TAU, WGT, NTAU, Z, KZ, M, T, N, K,
      *                   A, KA, WK, Q, IERR)
 C-----------------------------------------------------------------------
@@ -91327,7 +92215,8 @@ C             ERROR RETURN
 C
   100 IERR = -1
       RETURN
-      END
+      END SUBROUTINE BSLSQ1
+
       SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
 C-----------------------------------------------------------------------
 C
@@ -91402,7 +92291,8 @@ C
    80    K = K - 1
          IF (K .GT. 0) GO TO 50
       RETURN
-      END
+      END SUBROUTINE BCHSV1
+
       SUBROUTINE BVAL2 (A, KA, TX, NX, KX, TY, NY, KY, X0, Y0,
      *                  IDX, IDY, F, WK)
 C-----------------------------------------------------------------------
@@ -91449,7 +92339,8 @@ C
       L = J - KY + 1
       CALL BVAL (TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
       RETURN
-      END
+      END SUBROUTINE BVAL2
+
       SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
       INTEGER N, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N)
@@ -91700,7 +92591,8 @@ C ALL NODES ARE COLLINEAR
 C
    13 IER = 2
       RETURN
-      END
+      END SUBROUTINE TRMESH
+
       SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
       INTEGER KK, IADJ(*), IEND(KK), IER
       REAL    X(KK), Y(KK)
@@ -91844,7 +92736,8 @@ C ALL NODES ARE COLLINEAR
 C
     5 IER = 1
       RETURN
-      END
+      END SUBROUTINE ADNODE
+
       SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
       INTEGER KK, I1, I2, IADJ(*), IEND(KK)
 C
@@ -91979,7 +92872,8 @@ C
       IADJ(KEND) = 0
       IEND(K) = KEND
       RETURN
-      END
+      END SUBROUTINE BDYADD
+
       SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
       INTEGER KK, I1, I2, I3, IADJ(*), IEND(KK)
 C
@@ -92135,7 +93029,8 @@ C
         IADJ(INDX) = N(I)
     9   CONTINUE
       RETURN
-      END
+      END SUBROUTINE INTADD
+
       SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
       INTEGER NFRST, NLAST, KK, IARR(*)
 C
@@ -92246,7 +93141,8 @@ C
       IARR(INDX) = IARR(I)
       I = I + 1
       GO TO 7
-      END
+      END SUBROUTINE SHIFTD
+
       SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
       INTEGER NIN1, NIN2, NOUT1, NOUT2, IADJ(*), IEND(*)
       INTEGER TINDX
@@ -92431,7 +93327,8 @@ C
       DO 15 I = IMIN,IMAX
    15   IEND(I) = IEND(I) + 1
       RETURN
-      END
+      END SUBROUTINE SWAPD
+
       LOGICAL FUNCTION SWPTST (IN1,IN2,IO1,IO2,X,Y)
       INTEGER IN1, IN2, IO1, IO2
       REAL    X(*), Y(*)
@@ -92530,7 +93427,8 @@ C
       IF (SIN12 .GE. 0.) RETURN
     1 SWPTST = .TRUE.
       RETURN
-      END
+      END FUNCTION SWPTST
+
       INTEGER FUNCTION TINDX (NVERTX,NABOR,IADJ,IEND)
       INTEGER NVERTX, NABOR, IADJ(*), IEND(*)
 C
@@ -92583,7 +93481,8 @@ C
 C
       TINDX = INDX
       RETURN
-      END
+      END FUNCTION TINDX
+
       SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
       INTEGER NST, IADJ(*), IEND(*), I1, I2, I3
       REAL    PX, PY, X(*), Y(*)
@@ -92878,7 +93777,8 @@ C
       I2 = 0
       I3 = 0
       RETURN
-      END
+      END SUBROUTINE TRFIND
+
       SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
@@ -92902,7 +93802,8 @@ C     ERROR RETURN
 C
    20 IERR = 1
       RETURN
-      END
+      END SUBROUTINE GRADG
+
       SUBROUTINE GRADG1 (N,X,Y,Z,IADJ,IEND,EPS, NIT,
      .                   ZXZY, IER)
       INTEGER N, IADJ(*), IEND(N), NIT, IER
@@ -93120,7 +94021,8 @@ C
     5 NIT = 0
       IER = 2
       RETURN
-      END
+      END SUBROUTINE GRADG1
+
       SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
@@ -93145,7 +94047,8 @@ C
 C
    30 IERR = 2
       RETURN
-      END
+      END SUBROUTINE GRADL
+
       SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
       INTEGER N, K, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N), Z(N), DX, DY
@@ -93438,7 +94341,8 @@ C NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
 C
    17 IER = -2
       RETURN
-      END
+      END SUBROUTINE GRADL1
+
       SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
       REAL XK, YK, ZK, XI, YI, ZI, S1, S2, R, ROW(6)
 C
@@ -93520,7 +94424,8 @@ C
     1 DO 2 I = 1,6
     2   ROW(I) = 0.
       RETURN
-      END
+      END SUBROUTINE SETRM
+
       SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
       INTEGER IADJ(*), IEND(*), L, NPTS(L), IER
       REAL    X(*), Y(*), DS
@@ -93663,7 +94568,8 @@ C L IS OUT OF RANGE
 C
     4 IER = 1
       RETURN
-      END
+      END SUBROUTINE GETNP
+
       SUBROUTINE SFVAL (N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND,
      *                  ZXZY, IERR)
 C-----------------------------------------------------------------------
@@ -93689,7 +94595,8 @@ C
       RETURN
    30 IERR = 2
       RETURN
-      END
+      END SUBROUTINE SFVAL
+
       SUBROUTINE SFVAL2 (N, X, Y, Z, L, M, NROWS, XI, YI, ZI,
      *                   IADJ, IEND, ZXZY, IERR)
 C-----------------------------------------------------------------------
@@ -93719,7 +94626,8 @@ C
       RETURN
    40 IERR = 2
       RETURN
-      END
+      END SUBROUTINE SFVAL2
+
       SUBROUTINE INTRC1 (N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG,
      .                   ZXZY, IST, PZ,IER)
       INTEGER N, IADJ(*), IEND(N), IFLAG, IST, IER
@@ -93994,7 +94902,8 @@ C NODES ARE COLLINEAR
 C
    12 IER = -2
       RETURN
-      END
+      END SUBROUTINE INTRC1
+
       SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1,
      .                 ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY,
      .                 IER)
@@ -94283,7 +95192,8 @@ C
       WX = 0.
       WY = 0.
       RETURN
-      END
+      END SUBROUTINE TVAL
+
       SUBROUTINE MFIT(DIMEN,FITDEG,NFPOLS,NFPTS,
      +                FITCDS,NCROWS,FITVLS,WTS,
      +                RESIDS,ERROR,FITIWK,FITDWK,
@@ -94454,7 +95364,8 @@ C
         RESIDS(P) = RESIDS(P) * SCALE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MFIT
+
       SUBROUTINE ALLOT(DEGREE,NPOLYS,NPTS,DIMEN,IWORK,IWKLEN,
      +                 IREQD,DREQD,ERROR)
 C
@@ -94656,7 +95567,8 @@ C
  40   IWORK(3) = PSIWID
       DREQD = 2 * NPOLYS + DIMEN + 1 + NPTS * PSIWID + ALFL
       RETURN
-      END
+      END SUBROUTINE ALLOT
+
       SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
 C
       INTEGER TOP,BOT,DEGREE,NPTS,DIMEN,NPOLYS,ERROR,I,ROWLEN
@@ -94740,7 +95652,8 @@ C
           IF ( I .LT. NPOLYS )  GO TO 60
    70 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BASIZ
+
       SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
 C
       INTEGER J,KJ,CURDEG,JPRIME,NWITHK,I,CURM1,RALEN,DIMM1,DIMM2
@@ -94883,7 +95796,8 @@ C
          IF ( J .EQ. NPOLYS ) RETURN
  70      J = J + 1
       RETURN
-      END
+      END SUBROUTINE MTABLE
+
       SUBROUTINE GNRTP(DEGREE,ALPHA,PSI,INDEXS,
      +                 NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS,
      +                 DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
@@ -94957,7 +95871,8 @@ C
      +           COORD,NCROWS,NPOLYS,DIMEN,NPTS,F,Z,C,PSIWID,
      +           WEIGHT,ALFL,ONPLYS,STTDEG,ERROR)
       RETURN
-      END
+      END SUBROUTINE GNRTP
+
       SUBROUTINE INCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,
      +                 SUMSQS,COORD,NCROWS,NPOLYS,
      +                 DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
@@ -95154,7 +96069,8 @@ C
       DEGREE = STTDEG
       NPOLYS = JM1
       RETURN
-      END
+      END SUBROUTINE INCDG
+
       SUBROUTINE SCALPM(COORD,NPTS,MAXABS)
 C
       INTEGER NPTS,P
@@ -95189,7 +96105,8 @@ C
          A = ABS(COORD(P))
    10    IF ( A .GT. MAXABS ) MAXABS = A
       RETURN
-      END
+      END SUBROUTINE SCALPM
+
       SUBROUTINE SCALDN(COORD,NPTS,MAXABS)
 C
       INTEGER NPTS,P
@@ -95215,7 +96132,8 @@ C
          DO 10 P = 1,NPTS
    10       COORD(P) = COORD(P) / MAXABS
          RETURN
-      END
+      END SUBROUTINE SCALDN
+
       SUBROUTINE MEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS,
      +                 ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
 C
@@ -95364,7 +96282,8 @@ C
       RETURN
   110 ERROR = -2
       RETURN
-      END
+      END SUBROUTINE MEVAL
+
       SUBROUTINE MEVAL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
 C
@@ -95444,7 +96363,8 @@ C
       DO 60 P = 1,NEPTS
  60      F(P) = RUNTOT
       RETURN
-      END
+      END SUBROUTINE MEVAL1
+
       SUBROUTINE DMFIT(DIMEN,FITDEG,NFPOLS,NFPTS,
      +                 FITCDS,NCROWS,FITVLS,WTS,
      +                 RESIDS,ERROR,FITIWK,FITDWK,
@@ -95615,7 +96535,8 @@ C
         RESIDS(P) = RESIDS(P) * SCALE
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DMFIT
+
       SUBROUTINE DGNRTP(DEGREE,ALPHA,PSI,INDEXS,
      +                  NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS,
      +                  DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
@@ -95689,7 +96610,8 @@ C
      +            COORD,NCROWS,NPOLYS,DIMEN,NPTS,F,Z,C,PSIWID,
      +            WEIGHT,ALFL,ONPLYS,STTDEG,ERROR)
       RETURN
-      END
+      END SUBROUTINE DGNRTP
+
       SUBROUTINE DINCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,
      +                  SUMSQS,COORD,NCROWS,NPOLYS,
      +                  DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
@@ -95886,7 +96808,8 @@ C
       DEGREE = STTDEG
       NPOLYS = JM1
       RETURN
-      END
+      END SUBROUTINE DINCDG
+
       SUBROUTINE DSCALP(COORD,NPTS,MAXABS)
 C
       INTEGER NPTS,P
@@ -95921,7 +96844,8 @@ C
          A = DABS(COORD(P))
    10    IF ( A .GT. MAXABS ) MAXABS = A
       RETURN
-      END
+      END SUBROUTINE DSCALP
+
       SUBROUTINE DSCALD(COORD,NPTS,MAXABS)
 C
       INTEGER NPTS,P
@@ -95947,7 +96871,8 @@ C
          DO 10 P = 1,NPTS
    10       COORD(P) = COORD(P) / MAXABS
          RETURN
-      END
+      END SUBROUTINE DSCALD
+
       SUBROUTINE DMEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS,
      +                  ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
 C
@@ -96097,7 +97022,8 @@ C
       RETURN
   110 ERROR = -2
       RETURN
-      END
+      END SUBROUTINE DMEVAL
+
       SUBROUTINE DMEVL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
 C
@@ -96177,7 +97103,8 @@ C
       DO 60 P = 1,NEPTS
  60      F(P) = RUNTOT
       RETURN
-      END
+      END SUBROUTINE DMEVL1
+
       REAL FUNCTION QSUBA (F, A, B, EPSIL, MCOUNT, RELERR, IND)
 C-----------------------------------------------------------------------
 C
@@ -96319,7 +97246,8 @@ C
   120 IF (A .GT. B) QSUBA = -QSUBA
       IF (QSUBA .NE. 0.0) RELERR = RELERR/ABS(QSUBA)
       RETURN
-      END
+      END FUNCTION QSUBA
+
       SUBROUTINE QUAD(A, B, RESULT, K, EPSIL, NPTS, ICHECK, F)
 C     --------------------
 C THIS SUBROUTINE ATTEMPTS TO CALCULATE THE INTEGRAL OF F(X)
@@ -96666,7 +97594,8 @@ C TRIVIAL CASE
       RESULT(2) = 0.0
       NPTS = 0
       RETURN
-      END
+      END SUBROUTINE QUAD
+
       SUBROUTINE QAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 C-----------------------------------------------------------------------
@@ -96837,7 +97766,8 @@ C
       CALL QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
      *        IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       RETURN
-      END
+      END SUBROUTINE QAGS
+
       SUBROUTINE QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *              NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
 C-----------------------------------------------------------------------
@@ -97287,7 +98217,8 @@ C
       ABSERR = ERRSUM
   130 IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE QAGSE
+
       SUBROUTINE QK21F (F, A, B, RESULT, ABSERR, RESABS, RESASC,
      *                  EPMACH, UFLOW, ISIG)
 C-----------------------------------------------------------------------
@@ -97456,7 +98387,8 @@ C
       TOL = EPMACH*0.5E+02
       IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR,TOL*RESABS)
       RETURN
-      END
+      END SUBROUTINE QK21F
+
       SUBROUTINE QAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 C-----------------------------------------------------------------------
@@ -97634,7 +98566,8 @@ C
       CALL QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *  NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       RETURN
-      END
+      END SUBROUTINE QAGI
+
       SUBROUTINE QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                  NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
 C-----------------------------------------------------------------------
@@ -98097,7 +99030,8 @@ C
       IF (INF .EQ. 2) NEVAL = 2*NEVAL
       IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE QAGIE
+
       SUBROUTINE QK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                  RESASC, EPMACH, UFLOW)
 C-----------------------------------------------------------------------
@@ -98274,7 +99208,8 @@ C
       TOL = 50.0*EPMACH
       IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
       RETURN
-      END
+      END SUBROUTINE QK15I
+
       SUBROUTINE QPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
 C     ..................................................................
 C
@@ -98407,7 +99342,8 @@ C
    90 MAXERR = IORD(NRMAX)
       ERMAX = ELIST(MAXERR)
       RETURN
-      END
+      END SUBROUTINE QPSRT
+
       SUBROUTINE QELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
      *                 EPMACH, OFLOW)
 C-----------------------------------------------------------------------
@@ -98580,7 +99516,8 @@ C
       RES3LA(3) = RESULT
   100 ABSERR = AMAX1(ABSERR,5.0*EPMACH*ABS(RESULT))
       RETURN
-      END
+      END SUBROUTINE QELG
+
       SUBROUTINE QXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                 LIMIT,LENIW,LENW,LAST,IWORK,WORK)
 C
@@ -98748,7 +99685,8 @@ C
      *  WORK(L4),WORK(L5),IWORK(L1),IWORK(L2))
 C
       RETURN
-      END
+      END SUBROUTINE QXGS
+
       SUBROUTINE QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
 C
@@ -99170,7 +100108,8 @@ C
       ABSERR = ERRSUM
   130 IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE QXGSE
+
       SUBROUTINE QXCPY (A, B, L)
 C
 C  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
@@ -99182,7 +100121,8 @@ C
       DO 10 I = 1,L
    10    A(I) = B(I)
       RETURN
-      END
+      END SUBROUTINE QXCPY
+
       SUBROUTINE QXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                  KEY,EPMACH,UFLOW,OFLOW)
 C
@@ -99294,7 +100234,8 @@ C
    10 CONTINUE
  3000 CONTINUE
       RETURN
-      END
+      END SUBROUTINE QXLQM
+
       SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -99488,7 +100429,8 @@ C
    30 CONTINUE
       YM = YM*ABS(BB)
       RETURN
-      END
+      END SUBROUTINE QXRUL
+
       SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
@@ -99582,7 +100524,8 @@ C
       S(11) = Z(17)
       LS = 11
       RETURN
-      END
+      END SUBROUTINE QXRRD
+
       SUBROUTINE DQAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 C-----------------------------------------------------------------------
@@ -99755,7 +100698,8 @@ C
       CALL DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL,
      *         IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       RETURN
-      END
+      END SUBROUTINE DQAGS
+
       SUBROUTINE DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *               NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
 C-----------------------------------------------------------------------
@@ -100205,7 +101149,8 @@ C
       ABSERR = ERRSUM
   130 IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE DQAGSE
+
       SUBROUTINE DQK21 (F, A, B, RESULT, ABSERR, RESABS, RESASC,
      *                  EPMACH, UFLOW, ISIG)
 C-----------------------------------------------------------------------
@@ -100392,7 +101337,8 @@ C
       TOL = EPMACH*0.5D+02
       IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR,TOL*RESABS)
       RETURN
-      END
+      END SUBROUTINE DQK21
+
       SUBROUTINE DQAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 C-----------------------------------------------------------------------
@@ -100573,7 +101519,8 @@ C
       CALL DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
       RETURN
-      END
+      END SUBROUTINE DQAGI
+
       SUBROUTINE DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                   NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
 C-----------------------------------------------------------------------
@@ -101036,7 +101983,8 @@ C
       IF (INF .EQ. 2) NEVAL = 2*NEVAL
       IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE DQAGIE
+
       SUBROUTINE DQK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                   RESASC, EPMACH, UFLOW)
 C-----------------------------------------------------------------------
@@ -101224,7 +102172,8 @@ C
       TOL = 50.D0*EPMACH
       IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR, TOL*RESABS)
       RETURN
-      END
+      END SUBROUTINE DQK15I
+
       SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
 C     ..................................................................
 C
@@ -101357,7 +102306,8 @@ C
    90 MAXERR = IORD(NRMAX)
       ERMAX = ELIST(MAXERR)
       RETURN
-      END
+      END SUBROUTINE DQPSRT
+
       SUBROUTINE DQELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
      *                  EPMACH, OFLOW)
 C-----------------------------------------------------------------------
@@ -101534,7 +102484,8 @@ C
       RES3LA(3) = RESULT
   100 ABSERR = DMAX1(ABSERR,5.D0*EPMACH*DABS(RESULT))
       RETURN
-      END
+      END SUBROUTINE DQELG
+
       SUBROUTINE DQXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                  LIMIT,LENIW,LENW,LAST,IWORK,WORK)
 C
@@ -101702,7 +102653,8 @@ C
      *  WORK(L4),WORK(L5),IWORK(L1),IWORK(L2))
 C
       RETURN
-      END
+      END SUBROUTINE DQXGS
+
       SUBROUTINE DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
 C
@@ -102125,7 +103077,8 @@ C
       ABSERR = ERRSUM
   130 IF (IER .GT. 2) IER = IER - 1
   999 RETURN
-      END
+      END SUBROUTINE DQXGSE
+
       SUBROUTINE DQXCPY (A, B, L)
 C
 C  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
@@ -102137,7 +103090,8 @@ C
       DO 10 I = 1,L
    10    A(I) = B(I)
       RETURN
-      END
+      END SUBROUTINE DQXCPY
+
       SUBROUTINE DQXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                   KEY,EPMACH,UFLOW,OFLOW)
 C
@@ -102249,7 +103203,8 @@ C
    10 CONTINUE
  3000 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DQXLQM
+
       SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -102443,7 +103398,8 @@ C
    30 CONTINUE
       YM = YM*DABS(BB)
       RETURN
-      END
+      END SUBROUTINE DQXRUL
+
       SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
@@ -102537,7 +103493,8 @@ C
       S(11) = Z(17)
       LS = 11
       RETURN
-      END
+      END SUBROUTINE DQXRRD
+
       SUBROUTINE CUBTRI(F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW,
      * IDATA, RDATA, IER)
 C
@@ -102728,7 +103685,8 @@ C       EXITS FROM SUBROUTINE
       GO TO 120
   150 IER = 5
       GO TO 120
-      END
+      END SUBROUTINE CUBTRI
+
       FUNCTION RNDERR(X, A, Y, B)
 C       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
 C       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
@@ -102742,7 +103700,8 @@ C       FORTRAN COMPILERS.
       T = S - Y
       RNDERR = T - B
       RETURN
-      END
+      END FUNCTION RNDERR
+
       SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
 C
 C       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
@@ -102874,7 +103833,8 @@ C
       P(5) = SNGL(A2)*AREA
       P(6) = ABS(P(5)-P(4))
       RETURN
-      END
+      END SUBROUTINE CUBRUL
+
       SUBROUTINE IESLV (KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,
      *                     MUPPER,NF,MF,NORM,W,IER)
 C
@@ -103037,7 +103997,8 @@ C   WHICH W IS TO BE SPLIT.
       NF=NFINAL
       MF=MFINAL
       RETURN
-      END
+      END SUBROUTINE IESLV
+
       SUBROUTINE IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUP,IER,
      *   CUTOFF,ROOTRT,UNITRD,NHALF,LUFACT,KMM,KMN,KNM,RHS,R,RH,
      *   DELN,TM,TN,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3,
@@ -103325,7 +104286,8 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
       RATE=R1
       IF(R1 .LE. CUTOFF) GO TO 22
       GO TO 27
-      END
+      END SUBROUTINE IEGS
+
       SUBROUTINE NSTERP(TM,WM,XM,M,TN,WN,XN,N,KERNEL,RHFCN,RHS,KMN,
      *   NHALF,NUP)
 C
@@ -103359,7 +104321,8 @@ C   CALCULATE NYSTROM INTERPOLATING FORMULA.
       DO 5 J=1,N
 5     XM(I)=XM(I)+WN(J)*KERNEL(TM(I),TN(J))*XN(J)
       RETURN
-      END
+      END SUBROUTINE NSTERP
+
       FUNCTION RMIN(N,M,COND,UNITRD,AVERR)
 C
 C   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
@@ -103374,7 +104337,8 @@ C
       RMIN=AMAX1((FLOAT1**1.5)*COND*UNITRD,
      *   (FLOAT2**1.5)*AVERR)
       RETURN
-      END
+      END FUNCTION RMIN
+
       REAL FUNCTION RNRM(X,Y,N,IFLAG)
 C
 C   IFLAG=0    CALCULATE THE MAXIMUM NORM OF X.
@@ -103392,7 +104356,8 @@ C   FIND THE NORM OF X-Y.
       DO 3 I=1,N
 3     RNRM=AMAX1(RNRM,ABS(X(I)-Y(I)))
       RETURN
-      END
+      END FUNCTION RNRM
+
       FUNCTION CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
 C
 C   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
@@ -103407,7 +104372,8 @@ C
       RETURN
 1     CONEW=COND
       RETURN
-      END
+      END FUNCTION CONEW
+
       SUBROUTINE WANDT(WV,TV,N,A,B)
 C
 C   INTEGRATION WEIGHTS AND NODES ARE TO BE CALCULATED AND STORED IN
@@ -103676,7 +104642,8 @@ C
       WV(I1)=R
 1     WV(I2)=R
       RETURN
-      END
+      END SUBROUTINE WANDT
+
       SUBROUTINE LEAVE(IERSET,NF,MF,XV,TV,WV,ERROR,KERNEL,RHFCN,EP,
      *   IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM,
      *   RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
@@ -103778,7 +104745,8 @@ C
       IF((IER .EQ. 3) .AND. (EP .GT. EPS)) IER=6
       EP=SAVEP
       RETURN
-      END
+      END SUBROUTINE LEAVE
+
       SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,
      *   KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
 C
@@ -103862,7 +104830,8 @@ C   CALCULATE XM.
 21    SUM=SUM+WN(J)*KERNEL(TM(I),TN(J))*DELN(J)
 22    XM(I)=SUM+R(I)+XMZ(I)
       RETURN
-      END
+      END SUBROUTINE ITERT
+
       SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
 C
 C   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
@@ -104024,7 +104993,8 @@ C
       ERROR = 0.0
       IF (NORMX .NE. 0.0) ERROR = NORME/NORMX
   300 RETURN
-      END
+      END SUBROUTINE LNSYS
+
       SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
 C
 C     SANDIA MATHEMATICAL PROGRAM LIBRARY
@@ -104184,7 +105154,8 @@ C
       IWORK(2) = -1
       IF(NORND) IWORK(2) = 1
       RETURN
-      END
+      END SUBROUTINE ODE
+
       SUBROUTINE DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,
      1  YY,WT,P,YP,YPOUT,PHI,ALPHA,BETA,SIG,V,W,G,PHASE1,PSI,X,H,HOLD,
      2  START,TOLD,DELSGN,NS,NORND,K,KOLD,ISNOLD)
@@ -104337,7 +105308,8 @@ C
       TOLD = T
       ISNOLD = 1
       RETURN
-      END
+      END SUBROUTINE DE1
+
       SUBROUTINE STEP1(F,NEQN,Y,X,H,EPS,WT,START,
      1 HOLD,K,KOLD,CRASH,PHI,P,YP,PSI,
      2 ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
@@ -104835,7 +105807,8 @@ C
 C
 C       ***     END BLOCK 4     ***
 C
-      END
+      END SUBROUTINE STEP1
+
       SUBROUTINE INTRP(X,Y,XOUT,YOUT,YPOUT,NEQN,KOLD,PHI,PSI)
 C
 C   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
@@ -104913,7 +105886,8 @@ C
       DO 35 L = 1,NEQN
  35     YOUT(L) = Y(L) + HI*YOUT(L)
       RETURN
-      END
+      END SUBROUTINE INTRP
+
       SUBROUTINE BRKF45 (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                   WORK,IWORK)
 C
@@ -105193,7 +106167,8 @@ C
       IF (BLKOUT) IWORK(5) = -1
 C
       RETURN
-      END
+      END SUBROUTINE BRKF45
+
       SUBROUTINE RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                 W,WP,X,HINT,H,Y1,Y2,F1,F2,F3,F4,F7,SAVRE,SAVAE,
      *                 TOLD,NFE,JFLAG,KFLAG,ENDPNT,BLKOUT)
@@ -105775,7 +106750,8 @@ C
   550 IFLAG = 6
       KFLAG = 6
       GO TO 400
-      END
+      END SUBROUTINE RKFC
+
       SUBROUTINE EXTRA (NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
 C
 C     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
@@ -105816,7 +106792,8 @@ C
      *                 2.0*(A3 - A4)))*SIG + HF)/H
    10 CONTINUE
       RETURN
-      END
+      END SUBROUTINE EXTRA
+
       SUBROUTINE RKF45 (F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
@@ -106008,7 +106985,8 @@ C
      2          WORK(K6+1),IWORK(1),IWORK(2),IWORK(3),IWORK(4),IWORK(5))
 C
       RETURN
-      END
+      END SUBROUTINE RKF45
+
       SUBROUTINE RKFS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,YP,H,F1,F2,F3,
      1                F4,F5,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
 C
@@ -106348,7 +107326,8 @@ C
   300 T = TOUT
       IFLAG = 2
       RETURN
-      END
+      END SUBROUTINE RKFS
+
       SUBROUTINE FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,S)
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
@@ -106413,7 +107392,8 @@ C
      2        277020.0*F5(K)))
 C
       RETURN
-      END
+      END SUBROUTINE FEHL
+
       SUBROUTINE GERK(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR,
      1                WORK,IWORK)
 C
@@ -106624,7 +107604,8 @@ C
      3          IWORK(1),IWORK(2),IWORK(3),IWORK(4),IWORK(5))
 C
       RETURN
-      END
+      END SUBROUTINE GERK
+
       SUBROUTINE GERKS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR,
      1                YP,H,F1,F2,F3,F4,F5,YG,YGP,SAVRE,SAVAE,
      2                NFE,KOP,INIT,JFLAG,KFLAG)
@@ -107001,7 +107982,8 @@ C
   450   GERROR(K)=(YG(K)-Y(K))/31.
 C
       RETURN
-      END
+      END SUBROUTINE GERKS
+
       SUBROUTINE SFODE (F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,
      *                  RWORK,LRW,IWORK,LIW,RPAR,IPAR)
 C     --------------
@@ -107024,7 +108006,8 @@ C
       RERR = RTOL(1)
       AERR = ATOL(1)
       RETURN
-      END
+      END SUBROUTINE SFODE
+
       SUBROUTINE SFODE1 (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      *                   RWORK,LRW,IWORK,LIW,RPAR,IPAR)
 C     --------------
@@ -107043,7 +108026,8 @@ C
      *             RWORK,LRW,IWORK,LIW,RPAR,IPAR,ZZZJAC)
       INFO(1) = INFO1(1)
       RETURN
-      END
+      END SUBROUTINE SFODE1
+
       SUBROUTINE ZZZJAC(T,Y,PD,N,RPAR,IPAR)
 C     -------------
 C     DUMMY JACOBIAN SUBROUTINE
@@ -107053,7 +108037,8 @@ C     -------------
 C     -------------
       T = 0.0
       RETURN
-      END
+      END SUBROUTINE ZZZJAC
+
       SUBROUTINE STFODE (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      1                   RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
 C***********************************************************************
@@ -107843,7 +108828,8 @@ C     CALL SVCO(RWORK(ICOMR),IWORK(ICOMI))
       INFO(1) = IBEGIN
 C
       RETURN
-      END
+      END SUBROUTINE STFODE
+
       SUBROUTINE RSCO (RSAV, ISAV)
 C-----------------------------------------------------------------------
 C THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
@@ -107861,7 +108847,8 @@ C
  20     ILS(I) = ISAV(I)
       RETURN
 C----------------------- END OF SUBROUTINE RSCO -----------------------
-      END
+      END SUBROUTINE RSCO
+
       SUBROUTINE SVCO (RSAV, ISAV)
 C-----------------------------------------------------------------------
 C THIS ROUTINE STORES IN RSAV AND ISAV THE CONTENTS OF COMMON BLOCK
@@ -107882,7 +108869,8 @@ C
  20     ISAV(I) = ILS(I)
       RETURN
 C----------------------- END OF SUBROUTINE SVCO -----------------------
-      END
+      END SUBROUTINE SVCO
+
       SUBROUTINE LSOD1 (F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT,
      1                YH,YH1,EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,
      2                TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
@@ -108187,7 +109175,8 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
       TOLD = T
       INTOUT = .FALSE.
       RETURN
-      END
+      END SUBROUTINE LSOD1
+
       SUBROUTINE HSTART(F,NEQ,A,B,Y,YPRIME,ETOL,MORDER,SMALL,BIG,
      1                                    SPY,PV,YP,SF,RPAR,IPAR,H)
 C
@@ -108480,7 +109469,8 @@ C                       NOW SET DIRECTION OF INTEGRATION
       H=SIGN(H,DX)
 C
       RETURN
-      END
+      END SUBROUTINE HSTART
+
       SUBROUTINE INTYD (T, K, YH, NYH, DKY, IFLAG)
 C
 C   INTYD APPROXIMATES THE SOLUTION AND DERIVATIVES AT T BY POLYNOMIAL
@@ -108557,7 +109547,8 @@ C
  90   IFLAG = -2
       RETURN
 C----------------------- END OF SUBROUTINE INTYD -----------------------
-      END
+      END SUBROUTINE INTYD
+
       SUBROUTINE STOD  (NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR,
      1   WM, IWM, F, JAC, RPAR, IPAR)
 C-----------------------------------------------------------------------
@@ -109015,7 +110006,8 @@ C-----------------------------------------------------------------------
       JSTART = 1
       RETURN
 C----------------------- END OF SUBROUTINE STOD  -----------------------
-      END
+      END SUBROUTINE STOD
+
       SUBROUTINE CFOD  (METH, ELCO, TESCO)
 C
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
@@ -109127,7 +110119,8 @@ C STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
  230    CONTINUE
       RETURN
 C----------------------- END OF SUBROUTINE CFOD  -----------------------
-      END
+      END SUBROUTINE CFOD
+
       SUBROUTINE PJAC (NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM,
      1   F, JAC, RPAR, IPAR)
 C
@@ -109291,7 +110284,8 @@ C DO LU DECOMPOSITION OF P. --------------------------------------------
       CALL SGBFA (WM(3), MEBAND, N, ML, MU, IWM(21), IER)
       RETURN
 C----------------------- END OF SUBROUTINE PJAC -----------------------
-      END
+      END SUBROUTINE PJAC
+
       SUBROUTINE SLVS (WM, IWM, X, TEM)
 C
 C   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
@@ -109359,7 +110353,8 @@ C
       CALL SGBSL (WM(3), MEBAND, N, ML, MU, IWM(21), X, 0)
       RETURN
 C----------------------- END OF SUBROUTINE SLVS -----------------------
-      END
+      END SUBROUTINE SLVS
+
       SUBROUTINE SGBFA(ABD,LDA,N,ML,MU,IPVT,INFO)
       INTEGER LDA,N,ML,MU,IPVT(*),INFO
       REAL ABD(LDA,*)
@@ -109530,7 +110525,8 @@ C
       IPVT(N) = N
       IF (ABD(M,N) .EQ. 0.0E0) INFO = N
       RETURN
-      END
+      END SUBROUTINE SGBFA
+
       SUBROUTINE SGBSL(ABD,LDA,N,ML,MU,IPVT,B,JOB)
       INTEGER LDA,N,ML,MU,IPVT(*),JOB
       REAL ABD(LDA,*),B(*)
@@ -109663,7 +110659,8 @@ C
    90    CONTINUE
   100 CONTINUE
       RETURN
-      END
+      END SUBROUTINE SGBSL
+
       FUNCTION VNORM(V,NCOMP)
 C
 C     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
@@ -109675,7 +110672,8 @@ C
       DO 10 K=1,NCOMP
    10   VNORM=AMAX1(VNORM,ABS(V(K)))
       RETURN
-      END
+      END FUNCTION VNORM
+
       REAL FUNCTION VNWRMS (N, V, W)
 C-----------------------------------------------------------------------
 C THIS FUNCTION ROUTINE COMPUTES THE WEIGHTED ROOT-MEAN-SQUARE NORM
@@ -109693,7 +110691,8 @@ C
       VNWRMS = SQRT(SUM/FLOAT(N))
       RETURN
 C----------------------- END OF FUNCTION VNWRMS ------------------------
-      END
+      END FUNCTION VNWRMS
+
       SUBROUTINE RK(N,T,H,A,F)
 C     ******************************************************************
 C     FOURTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
@@ -109744,7 +110743,8 @@ C
    51 A(NK)=A(K)
       CALL F(T,A(NP1))
       RETURN
-      END
+      END SUBROUTINE RK
+
       SUBROUTINE RK8(N,T,H,Y,DY,W,F)
 C     ******************************************************************
 C     EIGHTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
@@ -109811,7 +110811,8 @@ C
    41 DY(K)=Y(K)
       CALL F(T,DY)
       RETURN
-      END
+      END SUBROUTINE RK8
+
       SUBROUTINE SEPDE (COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1,
      *                         C, D, NP1, U, KU, W, NW, IERR)
 C ----------------------------------------------------------------------
@@ -110012,7 +111013,8 @@ C
      *             U, KU, U, KU, DUM, P, IERR)
       NW = DUM(1) + MN
       RETURN
-      END
+      END SUBROUTINE SEPDE
+
       SUBROUTINE PDEDGE (EDGE, INDX, INDY, IERR)
       INTEGER EDGE(4)
 C
@@ -110061,7 +111063,8 @@ C
       RETURN
   220 IERR = 13
       RETURN
-      END
+      END SUBROUTINE PDEDGE
+
       SUBROUTINE SEPELL (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,
      2                   USOL,IDMN,W,PERTRB,IERROR)
@@ -110550,7 +111553,8 @@ C
      2             W(I4),W(I5),W(I6),W(I7),W(I8),W(I9),W(I10),W(I11),
      3             W(I12),GRHS,MN,USOL,IDMN,W(I13),PERTRB,IERROR)
       RETURN
-      END
+      END SUBROUTINE SEPELL
+
       SUBROUTINE SEPEL1 (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,AN,BN,
      2                   CN,DN,UN,ZN,AM,BM,CM,DM,UM,ZM,GRHS,MN,USOL,
@@ -110862,7 +111866,8 @@ C     COMPUTE NEW RIGHT HAND SIDE FOR FOURTH ORDER SOLUTION
 C
       CALL DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
       GO TO 360
-      END
+      END SUBROUTINE SEPEL1
+
       SUBROUTINE CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,
      1                   COFY,IDMN,MN,IERROR)
 C
@@ -110928,7 +111933,8 @@ C     NO ERROR FOUND
 C
       IERROR = 0
       RETURN
-      END
+      END SUBROUTINE CHKPRM
+
       SUBROUTINE CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,
      1                   SINGLR)
 C
@@ -110977,7 +111983,8 @@ C     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
 C
       SINGLR = .TRUE.
       RETURN
-      END
+      END SUBROUTINE CHKSNG
+
       SUBROUTINE ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
 C
 C     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
@@ -111020,7 +112027,8 @@ C
    30    CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE ORTHG
+
       SUBROUTINE MINSOL (USOL,IDMN,ZN,ZM,PERTB)
 C
 C     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
@@ -111067,7 +112075,8 @@ C
    30    CONTINUE
    40 CONTINUE
       RETURN
-      END
+      END SUBROUTINE MINSOL
+
       SUBROUTINE TRISP (N,A,B,C,D,U,Z)
 C
 C     THIS SUBROUTINE SOLVES FOR A NON-ZERO EIGENVECTOR CORRESPONDING
@@ -111107,7 +112116,8 @@ C
          Z(K) = -D(K)*Z(K+1)-U(K)*Z(N)
    20 CONTINUE
       RETURN
-      END
+      END SUBROUTINE TRISP
+
       SUBROUTINE DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
 C
 C     THIS SUBROUTINE FIRST APPROXIMATES THE TRUNCATION ERROR GIVEN
@@ -111167,7 +112177,8 @@ C
    50    CONTINUE
    60 CONTINUE
       RETURN
-      END
+      END SUBROUTINE DEFER
+
       SUBROUTINE DXFN (U,IDMN,I,J,UXXX,UXXXX)
 C
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
@@ -111248,7 +112259,8 @@ C
       UXXXX = (-2.0*U(K-5,J)+11.0*U(K-4,J)-24.0*U(K-3,J)+26.0*U(K-2,J)-
      1                                    14.0*U(K-1,J)+3.0*U(K,J))/DLX4
       RETURN
-      END
+      END SUBROUTINE DXFN
+
       SUBROUTINE DYFN (U,IDMN,I,J,UYYY,UYYYY)
 C
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
@@ -111330,7 +112342,8 @@ C
       UYYYY = (-2.0*U(I,L-5)+11.0*U(I,L-4)-24.0*U(I,L-3)+26.0*U(I,L-2)-
      1                                    14.0*U(I,L-1)+3.0*U(I,L))/DLY4
       RETURN
-      END
+      END SUBROUTINE DYFN
+
       SUBROUTINE BLKTRI (IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y,
      1                   IERROR,W)
 C
@@ -111537,7 +112550,8 @@ C
      1             W(IW3),W(IWD),W(IWW),W(IWU),PRODP,CPRODP)
   190 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BLKTRI
+
       SUBROUTINE BLKTR1 (N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD,
      1                   WW,WU,PRDCT,CPRDCT)
 C
@@ -111772,7 +112786,8 @@ C
   430    CONTINUE
   440 CONTINUE
       RETURN
-      END
+      END SUBROUTINE BLKTR1
+
       SUBROUTINE INDXA (I,IR,IDXA,NA)
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
@@ -111782,7 +112797,8 @@ C
       IF (I-NM)  20, 20, 10
    10 NA = 0
    20 RETURN
-      END
+      END SUBROUTINE INDXA
+
       SUBROUTINE INDXC (I,IR,IDXC,NC)
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
@@ -111792,7 +112808,8 @@ C
       IF (IDXC+NC-1-NM)  20, 20, 10
    10 NC = 0
    20 RETURN
-      END
+      END SUBROUTINE INDXC
+
       SUBROUTINE INDXB (I,IR,IDX,IDP)
 C
 C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
@@ -111817,7 +112834,8 @@ C
    50 IF (I+IPL-NM)  70, 70, 60
    60 IDP = NM+IPL-I+1
    70 RETURN
-      END
+      END SUBROUTINE INDXB
+
       SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
 C
 C PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -111903,7 +112921,8 @@ C
   240 CONTINUE
       GO TO  20
   250 RETURN
-      END
+      END SUBROUTINE PROD0
+
       SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
 C
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -112005,7 +113024,8 @@ C
   270 CONTINUE
       GO TO  20
   280 RETURN
-      END
+      END SUBROUTINE PRODP
+
       SUBROUTINE CPROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,W,Y)
 C
 C CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -112102,7 +113122,8 @@ C
          YY(J) = REAL(Y(J))
   260 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CPROD0
+
       SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
 C
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
@@ -112222,7 +113243,8 @@ C
          YY(J) = REAL(Y(J))
   280 CONTINUE
       RETURN
-      END
+      END SUBROUTINE CPRODP
+
       SUBROUTINE COMPB (N,IERROR,AN,BN,CN,B,AH,BH)
 C
 C     COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS USING TQLRT0,
@@ -112318,7 +113340,8 @@ C
       RETURN
   220 IERROR = 5
       RETURN
-      END
+      END SUBROUTINE COMPB
+
       SUBROUTINE TQLRT0 (N,D,E2,IERR)
 C
       INTEGER         I          ,J          ,L          ,M          ,
@@ -112478,7 +113501,8 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
 C
   140 IERR = L
   150 RETURN
-      END
+      END SUBROUTINE TQLRT0
+
       SUBROUTINE PPADD (N,IERROR,A,C,CBP,BP,BH)
 C
 C     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
@@ -112628,7 +113652,8 @@ C
   420 IERROR = 4
   430 CONTINUE
       RETURN
-      END
+      END SUBROUTINE PPADD
+
       FUNCTION PSGF (X,IZ,C,A,BH)
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       FSG = 1.
@@ -112643,7 +113668,8 @@ C
       RETURN
    30 PSGF = 1.+FSG+HSG
       RETURN
-      END
+      END FUNCTION PSGF
+
       FUNCTION BSRH (XLL,XRR,IZ,C,A,BH,F,SGN)
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
@@ -112660,7 +113686,8 @@ C
       IF (DX-CNV)  50, 50, 10
    50 BSRH = .5*(XL+XR)
       RETURN
-      END
+      END FUNCTION BSRH
+
       FUNCTION PPSGF (X,IZ,C,A,BH)
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       SUM = 0.
@@ -112669,7 +113696,8 @@ C
    10 CONTINUE
       PPSGF = SUM
       RETURN
-      END
+      END FUNCTION PPSGF
+
       FUNCTION PPSPF (X,IZ,C,A,BH)
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       SUM = 0.
@@ -112678,7 +113706,8 @@ C
    10 CONTINUE
       PPSPF = SUM
       RETURN
-      END
+      END FUNCTION PPSPF
+
       SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
 C-----------------------------------------------------------------------
 C
@@ -112776,7 +113805,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE URGET
+
       SUBROUTINE URNG (IX, X, N, IERR)
       REAL X(N)
 C-----------------------------------------------------------------------
@@ -112851,7 +113881,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE URNG
+
       SUBROUTINE DURNG (IX, X, N, IERR)
       DOUBLE PRECISION X(N)
 C-----------------------------------------------------------------------
@@ -112926,7 +113957,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DURNG
+
       SUBROUTINE URNG0 (IX, U, V)
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -112991,7 +114023,8 @@ C
       V = V/T
       U = 0.5 + (0.5 - V)
       RETURN
-      END
+      END SUBROUTINE URNG0
+
       SUBROUTINE DURNG0 (IX, U, V)
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -113057,7 +114090,8 @@ C
       V = V/T
       U = 0.5D0 + (0.5D0 - V)
       RETURN
-      END
+      END SUBROUTINE DURNG0
+
       SUBROUTINE URNG1 (IX, U, V, D)
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -113126,7 +114160,8 @@ C
       V = V/T
       U = 0.5 + (0.5 - V)
       RETURN
-      END
+      END SUBROUTINE URNG1
+
       SUBROUTINE DURNG1 (IX, U, V, D)
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -113196,7 +114231,8 @@ C
       V = V/T
       U = 0.5D0 + (0.5D0 - V)
       RETURN
-      END
+      END SUBROUTINE DURNG1
+
       SUBROUTINE URNG2 (IX, X, Y, N, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113257,7 +114293,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE URNG2
+
       SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113319,7 +114356,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DURNG2
+
       SUBROUTINE RCIR (N, IX, X, Y, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113331,7 +114369,8 @@ C-----------------------------------------------------------------------
 C------------------
       CALL RCIR1 (N, IX, X, 1, Y, 1, IERR)
       RETURN
-      END
+      END SUBROUTINE RCIR
+
       SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113413,7 +114452,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE RCIR1
+
       SUBROUTINE DRCIR (N, IX, X, Y, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113425,7 +114465,8 @@ C-----------------------------------------------------------------------
 C------------------
       CALL DRCIR1 (N, IX, X, 1, Y, 1, IERR)
       RETURN
-      END
+      END SUBROUTINE DRCIR
+
       SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113508,7 +114549,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DRCIR1
+
       SUBROUTINE RNOR (IX, A, N, IERR)
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
@@ -113552,7 +114594,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE RNOR
+
       SUBROUTINE DRNOR (IX, A, N, IERR)
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
@@ -113597,7 +114640,8 @@ C
       RETURN
   110 IERR = 2
       RETURN
-      END
+      END SUBROUTINE DRNOR
+
       SUBROUTINE NRNG (IX, A, N, IERR)
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
@@ -113622,7 +114666,8 @@ C
       R = SQRT(-2.0*ALOG(A(N)))
       A(N) = R*COS(PI2*TEMP(1))
       RETURN
-      END
+      END SUBROUTINE NRNG
+
       SUBROUTINE DNRNG (IX, A, N, IERR)
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
@@ -113649,7 +114694,8 @@ C
       R = DSQRT(-2.D0*DLOG(A(N)))
       A(N) = R*DCOS(PI2*TEMP(1))
       RETURN
-      END
+      END SUBROUTINE DNRNG
+
       SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113780,7 +114826,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE NRVG
+
       SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
 C-----------------------------------------------------------------------
 C
@@ -113883,7 +114930,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE NRVG1
+
       SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114014,7 +115062,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE DNRVG
+
       SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114117,7 +115166,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE DNRVG1
+
       SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -114198,7 +115248,8 @@ C
       RETURN
   120 IERROR = 3
       RETURN
-      END
+      END SUBROUTINE RANEXP
+
       SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -114279,7 +115330,8 @@ C
       RETURN
   120 IERROR = 3
       RETURN
-      END
+      END SUBROUTINE DRNEXP
+
       SUBROUTINE RGAM (IX, A, N, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114335,7 +115387,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE RGAM
+
       SUBROUTINE DRGAM (IX, A, N, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114392,7 +115445,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRGAM
+
       SUBROUTINE RBETA (N, A, B, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114480,7 +115534,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE RBETA
+
       SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114570,7 +115625,8 @@ C
       RETURN
   120 IERR = 3
       RETURN
-      END
+      END SUBROUTINE DRBETA
+
       SUBROUTINE FRAN (N, A, B, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114667,7 +115723,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE FRAN
+
       SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114768,7 +115825,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE DFRAN
+
       SUBROUTINE TRAN (N, A, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114849,7 +115907,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE TRAN
+
       SUBROUTINE DTRAN (N, A, IX, X, IERR)
 C-----------------------------------------------------------------------
 C
@@ -114932,7 +115991,8 @@ C
       RETURN
   130 IERR = 4
       RETURN
-      END
+      END SUBROUTINE DTRAN
+
       SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -115045,7 +116105,8 @@ C
       RETURN
   130 IERROR = 4
       RETURN
-      END
+      END SUBROUTINE RMK1
+
       SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -115159,4 +116220,4 @@ C
       RETURN
   130 IERROR = 4
       RETURN
-      END
+      END SUBROUTINE DRMK1

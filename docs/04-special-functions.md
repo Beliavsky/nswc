@@ -12,16 +12,16 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CERF` | `SUBROUTINE` | `MO, Z, W` | [`L5510`](../source_parts/nswc_part_01.f#L5510) |
-| `CERFC` | `SUBROUTINE` | `MO, Z, W` | [`L5661`](../source_parts/nswc_part_01.f#L5661) |
-| `ERF` | `REAL FUNCTION` | `X` | [`L5834`](../source_parts/nswc_part_01.f#L5834) |
-| `ERFC` | `REAL FUNCTION` | `X` | [`L5893`](../source_parts/nswc_part_01.f#L5893) |
-| `ERFC1` | `REAL FUNCTION` | `IND, X` | [`L5975`](../source_parts/nswc_part_01.f#L5975) |
-| `DCERF` | `SUBROUTINE` | `MO, Z, W` | [`L6066`](../source_parts/nswc_part_01.f#L6066) |
-| `DCERFC` | `SUBROUTINE` | `MO, Z, W` | [`L6343`](../source_parts/nswc_part_01.f#L6343) |
-| `DERF` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6761`](../source_parts/nswc_part_01.f#L6761) |
-| `DERFC` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6817`](../source_parts/nswc_part_01.f#L6817) |
-| `DERFC1` | `DOUBLE PRECISION FUNCTION` | `IND, X` | [`L6879`](../source_parts/nswc_part_01.f#L6879) |
+| `CERF` | `SUBROUTINE` | `MO, Z, W` | [`L5579`](../source_parts/nswc_part_01.f90#L5579) |
+| `CERFC` | `SUBROUTINE` | `MO, Z, W` | [`L5731`](../source_parts/nswc_part_01.f90#L5731) |
+| `ERF` | `REAL FUNCTION` | `X` | [`L5905`](../source_parts/nswc_part_01.f90#L5905) |
+| `ERFC` | `REAL FUNCTION` | `X` | [`L5965`](../source_parts/nswc_part_01.f90#L5965) |
+| `ERFC1` | `REAL FUNCTION` | `IND, X` | [`L6048`](../source_parts/nswc_part_01.f90#L6048) |
+| `DCERF` | `SUBROUTINE` | `MO, Z, W` | [`L6140`](../source_parts/nswc_part_01.f90#L6140) |
+| `DCERFC` | `SUBROUTINE` | `MO, Z, W` | [`L6418`](../source_parts/nswc_part_01.f90#L6418) |
+| `DERF` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6838`](../source_parts/nswc_part_01.f90#L6838) |
+| `DERFC` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6895`](../source_parts/nswc_part_01.f90#L6895) |
+| `DERFC1` | `DOUBLE PRECISION FUNCTION` | `IND, X` | [`L6958`](../source_parts/nswc_part_01.f90#L6958) |
 
 
 For any complex z the error function is defined by
@@ -216,8 +216,8 @@ IND is an integer and z a double precision number. DERFC1{IND,z) is the double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ERFI` | `REAL FUNCTION` | `P, Q` | [`L7119`](../source_parts/nswc_part_01.f#L7119) |
-| `DERFI` | `DOUBLE PRECISION FUNCTION` | `P, Q` | [`L7236`](../source_parts/nswc_part_01.f#L7236) |
+| `ERFI` | `REAL FUNCTION` | `P, Q` | [`L7200`](../source_parts/nswc_part_01.f90#L7200) |
+| `DERFI` | `DOUBLE PRECISION FUNCTION` | `P, Q` | [`L7318`](../source_parts/nswc_part_01.f90#L7318) |
 
 
 For any 0 < x < 1, the following functions are available for obtaining the value w > 0 for which erf(w) = 2.
@@ -270,8 +270,8 @@ F(w)} es 4 erfe(w) - y if 3/4 <2 < 15/16 Inferfe(w)} --In(y) if 2 > 15/16.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `AERF` | `REAL FUNCTION` | `X, H` | [`L7398`](../source_parts/nswc_part_01.f#L7398) |
-| `DAERF` | `DOUBLE PRECISION FUNCTION` | `X, H` | [`L7519`](../source_parts/nswc_part_01.f#L7519) |
+| `AERF` | `REAL FUNCTION` | `X, H` | [`L7481`](../source_parts/nswc_part_01.f90#L7481) |
+| `DAERF` | `DOUBLE PRECISION FUNCTION` | `X, H` | [`L7603`](../source_parts/nswc_part_01.f90#L7603) |
 
 
 For any real x and h, let aerf(2,h) = erf(x+h) —erf(x~--h). Then the functions AERF and DAERF are available for computing aerf(z, A).
@@ -306,7 +306,7 @@ The arguments xz and h are double precision numbers. DAERF(z,h) is the double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PNDF` | `FUNCTION` | `X, IND` | [`L7646`](../source_parts/nswc_part_01.f#L7646) |
+| `PNDF` | `FUNCTION` | `X, IND` | [`L7731`](../source_parts/nswc_part_01.f90#L7731) |
 
 
 Let $\Phi(x)$ be the standard normal cumulative distribution function,
@@ -336,8 +336,8 @@ The source implements these calculations with `ERFC1`.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7667`](../source_parts/nswc_part_01.f#L7667) |
-| `DPNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7716`](../source_parts/nswc_part_01.f#L7716) |
+| `PNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7753`](../source_parts/nswc_part_01.f90#L7753) |
+| `DPNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7803`](../source_parts/nswc_part_01.f90#L7803) |
 
 
 For any real w, the normal probability distribution function P(w) (of mean 0 and variance 1) is defined by
@@ -378,8 +378,8 @@ are applied.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DAW` | `REAL FUNCTION` | `X` | [`L7769`](../source_parts/nswc_part_01.f#L7769) |
-| `DPDAW` | `DOUBLE PRECISION FUNCTION` | `X` | [`L7910`](../source_parts/nswc_part_01.f#L7910) |
+| `DAW` | `REAL FUNCTION` | `X` | [`L7857`](../source_parts/nswc_part_01.f90#L7857) |
+| `DPDAW` | `DOUBLE PRECISION FUNCTION` | `X` | [`L7999`](../source_parts/nswc_part_01.f90#L7999) |
 
 
 Dawson's integral is
@@ -410,7 +410,7 @@ Original documentation: [page 55](../scans/page_0055.png).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8212`](../source_parts/nswc_part_01.f#L8212) |
+| `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8303`](../source_parts/nswc_part_01.f90#L8303) |
 
 
 For any complex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subroutine 3 is available for computing E(z).
@@ -451,7 +451,7 @@ Reference. Hershey, A. V., Approximation of Functions by Sets of Poles, Report T
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FRNL` | `SUBROUTINE` | `T, C, S` | [`L8383`](../source_parts/nswc_part_01.f#L8383) |
+| `FRNL` | `SUBROUTINE` | `T, C, S` | [`L8475`](../source_parts/nswc_part_01.f90#L8475) |
 
 
 For any complex z the Fresnel integrals C(z) and S(z) can be defined by Oz) =[ ccs (507) dt 0 2 / * x S(z) = [ sin (-t? | dt (z) I sin (F )
@@ -486,10 +486,10 @@ Here m= 5. If x < 0 then the relations C(--r) = —C(2) and S(—<) = --S(z) are
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEXPLI` | `SUBROUTINE` | `MO, Z, W` | [`L8597`](../source_parts/nswc_part_01.f#L8597) |
-| `EXPLI` | `SUBROUTINE` | `INT, ARG, RESULT, IERR` | [`L8778`](../source_parts/nswc_part_01.f#L8778) |
-| `DEI` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9110`](../source_parts/nswc_part_01.f#L9110) |
-| `DEI1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9121`](../source_parts/nswc_part_01.f#L9121) |
+| `CEXPLI` | `SUBROUTINE` | `MO, Z, W` | [`L8690`](../source_parts/nswc_part_01.f90#L8690) |
+| `EXPLI` | `SUBROUTINE` | `INT, ARG, RESULT, IERR` | [`L8872`](../source_parts/nswc_part_01.f90#L8872) |
+| `DEI` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9205`](../source_parts/nswc_part_01.f90#L9205) |
+| `DEI1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9217`](../source_parts/nswc_part_01.f90#L9217) |
 
 
 For any complex z # 0 not on the positive real axis the exponential integral function
@@ -592,8 +592,8 @@ DE!1(z) The argument 2 # 0 is a double precision number. DEIi(z) is the double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SI` | `FUNCTION` | `X` | [`L9694`](../source_parts/nswc_part_01.f#L9694) |
-| `CIN` | `FUNCTION` | `X` | [`L9808`](../source_parts/nswc_part_01.f#L9808) |
+| `SI` | `FUNCTION` | `X` | [`L9793`](../source_parts/nswc_part_01.f90#L9793) |
+| `CIN` | `FUNCTION` | `X` | [`L9908`](../source_parts/nswc_part_01.f90#L9908) |
 
 
 For any complex z the sine integral and cosine integral functions Si(z) and Cin(z) are
@@ -626,7 +626,7 @@ CIN(z) CIN(z) = Cin(z) for all real z.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEXEXI` | `SUBROUTINE` | `Z, W` | [`L9922`](../source_parts/nswc_part_01.f#L9922) |
+| `CEXEXI` | `SUBROUTINE` | `Z, W` | [`L10023`](../source_parts/nswc_part_01.f90#L10023) |
 
 
 For any complex z # O not on the positive real axis, the exponential exponential integral function #Et{z) can be defined by
@@ -657,8 +657,8 @@ The argument z is a nonzero complex number and w is a complex variable. *When CE
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CLI` | `COMPLEX FUNCTION` | `Z` | [`L10152`](../source_parts/nswc_part_01.f#L10152) |
-| `ALI` | `REAL FUNCTION` | `X` | [`L10266`](../source_parts/nswc_part_01.f#L10266) |
+| `CLI` | `COMPLEX FUNCTION` | `Z` | [`L10254`](../source_parts/nswc_part_01.f90#L10254) |
+| `ALI` | `REAL FUNCTION` | `X` | [`L10369`](../source_parts/nswc_part_01.f90#L10369) |
 
 
 For any complex z where larg(1-+ z)}/ < #, the dilogarithm function L(z) may be defined by to t L{z) is real-valued fer any real z > —1, and -1 is a branch point. L(z) can be extended to
@@ -718,12 +718,12 @@ Re! L(t)] = --2?/3 — L(1/x) + 1/21n?(-2)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CGAMMA` | `SUBROUTINE` | `MO, Z, W` | [`L10420`](../source_parts/nswc_part_01.f#L10420) |
-| `GAMMA` | `REAL FUNCTION` | `A` | [`L10685`](../source_parts/nswc_part_02.f#L36) |
-| `GAMLN` | `REAL FUNCTION` | `A` | [`L10974`](../source_parts/nswc_part_02.f#L325) |
-| `DCGAMA` | `SUBROUTINE` | `MO, Z, W` | [`L11043`](../source_parts/nswc_part_02.f#L394) |
-| `DGAMMA` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11312`](../source_parts/nswc_part_02.f#L663) |
-| `DGAMLN` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11615`](../source_parts/nswc_part_02.f#L966) |
+| `CGAMMA` | `SUBROUTINE` | `MO, Z, W` | [`L10524`](../source_parts/nswc_part_02.f90#L1) |
+| `GAMMA` | `REAL FUNCTION` | `A` | [`L10791`](../source_parts/nswc_part_02.f90#L268) |
+| `GAMLN` | `REAL FUNCTION` | `A` | [`L11083`](../source_parts/nswc_part_02.f90#L560) |
+| `DCGAMA` | `SUBROUTINE` | `MO, Z, W` | [`L11154`](../source_parts/nswc_part_02.f90#L631) |
+| `DGAMMA` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11424`](../source_parts/nswc_part_02.f90#L901) |
+| `DGAMLN` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11730`](../source_parts/nswc_part_02.f90#L1207) |
 
 
 For any complex z # 0,-—1,-2,... the gamma function can be defined by
@@ -843,10 +843,10 @@ The argument 2 is a double precision positive number. DGAMLN(z) is the double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPSI` | `SUBROUTINE` | `Z, W` | [`L11665`](../source_parts/nswc_part_02.f#L1016) |
-| `PSI` | `REAL FUNCTION` | `XX` | [`L11795`](../source_parts/nswc_part_02.f#L1146) |
-| `DCPSI` | `SUBROUTINE` | `Z, W` | [`L11966`](../source_parts/nswc_part_02.f#L1317) |
-| `DPSI` | `DOUBLE PRECISION FUNCTION` | `A` | [`L12136`](../source_parts/nswc_part_02.f#L1487) |
+| `CPSI` | `SUBROUTINE` | `Z, W` | [`L11782`](../source_parts/nswc_part_02.f90#L1259) |
+| `PSI` | `REAL FUNCTION` | `XX` | [`L11913`](../source_parts/nswc_part_02.f90#L1390) |
+| `DCPSI` | `SUBROUTINE` | `Z, W` | [`L12085`](../source_parts/nswc_part_02.f90#L1562) |
+| `DPSI` | `DOUBLE PRECISION FUNCTION` | `A` | [`L12256`](../source_parts/nswc_part_02.f90#L1733) |
 
 
 For any complex z # 0,—1,—2,... the digamma (or psi) function y(z) is defined by b(z) = I’(z)/T(z)
@@ -920,7 +920,7 @@ Remark DPSI must be declared in the calling program to be of type DOUBLE PRECISI
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSIDF` | `SUBROUTINE` | `X, N, M, ANS, IFLAG` | [`L12394`](../source_parts/nswc_part_02.f#L1745) |
+| `PSIDF` | `SUBROUTINE` | `X, N, M, ANS, IFLAG` | [`L12516`](../source_parts/nswc_part_02.f90#L1993) |
 
 
 The following subroutine is available for computing the digamma function (zx) and its derivatives for real « > 0.
@@ -970,10 +970,10 @@ Reference Amos, D. E ,“Algorithm 610. A Portable Fortran Subroutine for Deriva
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GRATIO` | `SUBROUTINE` | `A, X, ANS, QANS, IND` | [`L13141`](../source_parts/nswc_part_02.f#L2492) |
-| `RCOMP` | `REAL FUNCTION` | `A, X` | [`L13559`](../source_parts/nswc_part_02.f#L2910) |
-| `DRCOMP` | `DOUBLE PRECISION FUNCTION` | `A, X` | [`L13587`](../source_parts/nswc_part_02.f#L2938) |
-| `DGRAT` | `SUBROUTINE` | `A, X, ANS, QANS, IERR` | [`L13939`](../source_parts/nswc_part_02.f#L3290) |
+| `GRATIO` | `SUBROUTINE` | `A, X, ANS, QANS, IND` | [`L13272`](../source_parts/nswc_part_02.f90#L2749) |
+| `RCOMP` | `REAL FUNCTION` | `A, X` | [`L13691`](../source_parts/nswc_part_02.f90#L3168) |
+| `DRCOMP` | `DOUBLE PRECISION FUNCTION` | `A, X` | [`L13720`](../source_parts/nswc_part_02.f90#L3197) |
+| `DGRAT` | `SUBROUTINE` | `A, X, ANS, QANS, IERR` | [`L14074`](../source_parts/nswc_part_02.f90#L3551) |
 
 
 For a > 0 and x > 0 let P(a,z) and Q(a,z) denote the functions defined by
@@ -1037,8 +1037,8 @@ The arguments a and x are double precision numbers where a > O and xz > 0. DRCOM
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GAMINV` | `SUBROUTINE` | `A, X, X0, P, Q, IERR` | [`L13616`](../source_parts/nswc_part_02.f#L2967) |
-| `DGINV` | `SUBROUTINE` | `A, X, P, Q, IERR` | [`L14631`](../source_parts/nswc_part_02.f#L3982) |
+| `GAMINV` | `SUBROUTINE` | `A, X, X0, P, Q, IERR` | [`L13750`](../source_parts/nswc_part_02.f90#L3227) |
+| `DGINV` | `SUBROUTINE` | `A, X, P, Q, IERR` | [`L14749`](../source_parts/nswc_part_02.f90#L4226) |
 
 
 For a > 0 and z > 0 let P(a,z) and Q(a,z) denote the incomplete gamma ratio functions defined by
@@ -1135,8 +1135,8 @@ accuracy. Iteration cannot be performed in this case. This can occur only when p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BETALN` | `REAL FUNCTION` | `A0, B0` | [`L12704`](../source_parts/nswc_part_02.f#L2055) |
-| `DBETLN` | `DOUBLE PRECISION FUNCTION` | `A0, B0` | [`L12892`](../source_parts/nswc_part_02.f#L2243) |
+| `BETALN` | `REAL FUNCTION` | `A0, B0` | [`L12827`](../source_parts/nswc_part_02.f90#L2304) |
+| `DBETLN` | `DOUBLE PRECISION FUNCTION` | `A0, B0` | [`L13019`](../source_parts/nswc_part_02.f90#L2496) |
 
 
 For a,b > 0 the beta function B(a,b) can be defined by
@@ -1179,9 +1179,9 @@ tation of the Incomplete Het. Function Ratios,” ACM Trans. Math Software 18 P�
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BRATIO` | `SUBROUTINE` | `A, B, X, Y, W, W1, IERR` | [`L14952`](../source_parts/nswc_part_02.f#L4303) |
-| `BRCOMP` | `REAL FUNCTION` | `A, B, X, Y` | [`L15431`](../source_parts/nswc_part_02.f#L4782) |
-| `ISUBX` | `SUBROUTINE` | `A0, B0, X0, P, IERR, EPS` | [`L15905`](../source_parts/nswc_part_02.f#L5256) |
+| `BRATIO` | `SUBROUTINE` | `A, B, X, Y, W, W1, IERR` | [`L15071`](../source_parts/nswc_part_02.f90#L4548) |
+| `BRCOMP` | `REAL FUNCTION` | `A, B, X, Y` | [`L15556`](../source_parts/nswc_part_02.f90#L5033) |
+| `ISUBX` | `SUBROUTINE` | `A0, B0, X0, P, IERR, EPS` | [`L16035`](../source_parts/nswc_part_02.f90#L5512) |
 
 
 For a,b > 0 and O < x < 1 the incomplete beta function is defined by
@@ -1267,9 +1267,9 @@ tation of the Incomplete Beta Function Ratios.” ACM Trans. Math Software 18 (1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSSLJ` | `SUBROUTINE` | `Z, CNU, W` | [`L16274`](../source_parts/nswc_part_02.f#L5625) |
-| `BSSLJ` | `SUBROUTINE` | `A, IN, W` | [`L16890`](../source_parts/nswc_part_02.f#L6241) |
-| `BESJ` | `SUBROUTINE` | `X, ALPHA, N, Y, NZ` | [`L17194`](../source_parts/nswc_part_02.f#L6545) |
+| `CBSSLJ` | `SUBROUTINE` | `Z, CNU, W` | [`L16407`](../source_parts/nswc_part_02.f90#L5884) |
+| `BSSLJ` | `SUBROUTINE` | `A, IN, W` | [`L17027`](../source_parts/nswc_part_02.f90#L6504) |
+| `BESJ` | `SUBROUTINE` | `X, ALPHA, N, Y, NZ` | [`L17332`](../source_parts/nswc_part_02.f90#L6809) |
 
 
 If vy is complex then J,(z)} is defined by
@@ -1343,7 +1343,7 @@ k> 0 The last k components of W have been set to 0 because of underflow,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L18448`](../source_parts/nswc_part_02.f#L7799) |
+| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L18589`](../source_parts/nswc_part_02.f90#L8066) |
 
 
 If » is any complex number not an integer, then Y,(z) can be defined by
@@ -1380,9 +1380,9 @@ The argument z is a complex number, n is an integer, and w is a complex variable
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L18758`](../source_parts/nswc_part_02.f#L8109) |
-| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L18788`](../source_parts/nswc_part_02.f#L8139) |
-| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L19112`](../source_parts/nswc_part_02.f#L8463) |
+| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L18900`](../source_parts/nswc_part_02.f90#L8377) |
+| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L18931`](../source_parts/nswc_part_02.f90#L8408) |
+| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L19256`](../source_parts/nswc_part_02.f90#L8733) |
 
 
 If v is complex then [,,(z) is defined by (z/2) yytek H(z) = 3 <kID(y +k +1)
@@ -1456,9 +1456,9 @@ k k k k k k
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L19701`](../source_parts/nswc_part_02.f#L9052) |
-| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L20214`](../source_parts/nswc_part_02.f#L9565) |
-| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L20599`](../source_parts/nswc_part_02.f#L9950) |
+| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L19847`](../source_parts/nswc_part_02.f90#L9324) |
+| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L20366`](../source_parts/nswc_part_02.f90#L9843) |
+| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L20756`](../source_parts/nswc_part_02.f90#L10233) |
 
 
 If v is any complex number not an integer, then K,{z) is defined by
@@ -1544,12 +1544,12 @@ MO is an integer, z a complex number, n an integer, and w a complex variable. It
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L20840`](../source_parts/nswc_part_02.f#L10191) |
-| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L21168`](../source_parts/nswc_part_03.f#L1) |
-| `AI` | `REAL FUNCTION` | `X` | [`L21877`](../source_parts/nswc_part_03.f#L710) |
-| `AIE` | `REAL FUNCTION` | `X` | [`L21969`](../source_parts/nswc_part_03.f#L802) |
-| `BI` | `REAL FUNCTION` | `X` | [`L22065`](../source_parts/nswc_part_03.f#L898) |
-| `BIE` | `REAL FUNCTION` | `X` | [`L22198`](../source_parts/nswc_part_03.f#L1031) |
+| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L20998`](../source_parts/nswc_part_02.f90#L10475) |
+| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L21330`](../source_parts/nswc_part_03.f90#L304) |
+| `AI` | `REAL FUNCTION` | `X` | [`L22050`](../source_parts/nswc_part_03.f90#L1024) |
+| `AIE` | `REAL FUNCTION` | `X` | [`L22143`](../source_parts/nswc_part_03.f90#L1117) |
+| `BI` | `REAL FUNCTION` | `X` | [`L22240`](../source_parts/nswc_part_03.f90#L1214) |
+| `BIE` | `REAL FUNCTION` | `X` | [`L22374`](../source_parts/nswc_part_03.f90#L1348) |
 
 
 3
@@ -1669,8 +1669,8 @@ If zc > 0 then BIE(z) = e~$ Bi(z) where ¢ = 223/?. Otherwise, if x < 0 then BIE
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L22419`](../source_parts/nswc_part_03.f#L1252) |
-| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L22752`](../source_parts/nswc_part_03.f#L1585) |
+| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L22597`](../source_parts/nswc_part_03.f90#L1571) |
+| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L22934`](../source_parts/nswc_part_03.f90#L1908) |
 
 
 If k is complex then the complete elliptic integrals of the first and second kinds can be defined by
@@ -1754,12 +1754,12 @@ arg(k) < —7/2, then K(k) = K(~k) and #(k) = E(--k) are applied.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23163`](../source_parts/nswc_part_03.f#L1996) |
-| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23296`](../source_parts/nswc_part_03.f#L2129) |
-| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L23554`](../source_parts/nswc_part_03.f#L2387) |
-| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L23664`](../source_parts/nswc_part_03.f#L2497) |
-| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L23774`](../source_parts/nswc_part_03.f#L2607) |
-| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L23895`](../source_parts/nswc_part_03.f#L2728) |
+| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23349`](../source_parts/nswc_part_03.f90#L2323) |
+| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23483`](../source_parts/nswc_part_03.f90#L2457) |
+| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L23744`](../source_parts/nswc_part_03.f90#L2718) |
+| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L23855`](../source_parts/nswc_part_03.f90#L2829) |
+| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L23966`](../source_parts/nswc_part_03.f90#L2940) |
+| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L24088`](../source_parts/nswc_part_03.f90#L3062) |
 
 
 1°0 < $< w/2, then the elliptic integrals of the first and second kinds are defined by
@@ -1910,10 +1910,10 @@ IERR = 3 Either a, 6, or c is too large.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23435`](../source_parts/nswc_part_03.f#L2268) |
-| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23494`](../source_parts/nswc_part_03.f#L2327) |
-| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24016`](../source_parts/nswc_part_03.f#L2849) |
-| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24153`](../source_parts/nswc_part_03.f#L2986) |
+| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23623`](../source_parts/nswc_part_03.f90#L2597) |
+| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23683`](../source_parts/nswc_part_03.f90#L2657) |
+| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24210`](../source_parts/nswc_part_03.f90#L3184) |
+| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24348`](../source_parts/nswc_part_03.f90#L3322) |
 
 
 For any 0 < ¢ < 1/2 the elliptic integral I{¢,n, x) is defined by ¢ II(¢,n,k) = / (1 — nsin? 6)~1(1 — k? sin? 6)~ 3d0 0
@@ -2019,8 +2019,8 @@ _ and Notis, E. M., “Algorithm 577,Algorithms for Incomplete Elliptic Integral
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L24482`](../source_parts/nswc_part_03.f#L3315) |
-| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L24764`](../source_parts/nswc_part_03.f#L3597) |
+| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L24680`](../source_parts/nswc_part_03.f90#L3654) |
+| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L24967`](../source_parts/nswc_part_03.f90#L3941) |
 
 
 For any complex number k # 0,+1 the elliptic function sn(z,#) may be defined as the meromorphic function w(z) that satisfies
@@ -2135,10 +2135,10 @@ SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFC1 was writ
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L24847`](../source_parts/nswc_part_03.f#L3680) |
-| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L24888`](../source_parts/nswc_part_03.f#L3721) |
-| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L24931`](../source_parts/nswc_part_03.f#L3764) |
-| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L24974`](../source_parts/nswc_part_03.f#L3807) |
+| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L25051`](../source_parts/nswc_part_03.f90#L4025) |
+| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L25093`](../source_parts/nswc_part_03.f90#L4067) |
+| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L25137`](../source_parts/nswc_part_03.f90#L4111) |
+| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L25180`](../source_parts/nswc_part_03.f90#L4154) |
 
 
 Lei w and w’ be complex numbers where Im(w’/w) > 0, and Wm, = 2mw + 2nw’ for all integers m,n. Then for any complex z, the Weierstrass elliptic function P(z;w,w') can be
@@ -2262,7 +2262,7 @@ niscatic Case,” Computing (Arch. Elektron. Rechnen) 18 (1977), pp. 341-349.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L25020`](../source_parts/nswc_part_03.f#L3853) |
+| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L25227`](../source_parts/nswc_part_03.f90#L4201) |
 
 
 Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose boundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
@@ -2342,7 +2342,7 @@ Jf dds g tal p* A(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L25295`](../source_parts/nswc_part_03.f#L4128) |
+| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L25503`](../source_parts/nswc_part_03.f90#L4477) |
 
 
 The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian distribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
@@ -2420,7 +2420,7 @@ Weapons Laboratory, Dahlgren, Virginia, 62
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L25648`](../source_parts/nswc_part_03.f#L4481) |
+| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L25859`](../source_parts/nswc_part_03.f90#L4833) |
 
 
 The subroutine PKILL is available for evaluating the integral of an uncorrelated elliptical Gaussian distribution over the area A of a circle (x — h)* + (y—k)? = R?. The probability to be computed is given by

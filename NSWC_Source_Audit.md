@@ -2,18 +2,18 @@
 
 The original 1993 report (**NSWCDD/TR-92/425**, Alfred H. Morris, Jr.) was
 OCR-transcribed into Markdown. This revision cross-checks the *interface information*
-against the supplied `nswc.f` fixed-form Fortran source.
+against the supplied `nswc_orig.f` fixed-form Fortran source.
 
 ## What was checked
 
-- **1,062** procedure declarations extracted from `nswc.f` (including support routines).
+- **1,062** procedure declarations extracted from `nswc_orig.f` (including support routines).
 - **576** names assigned to documented manual topics, grouped into **255** topics.
 - **259** topical sections in the revised manual; four are explanatory chapters without source-level entry points.
 - **429** in-text Fortran interface examples normalized to source declarations.
 - **51** occurrences of clearly misrecognized procedure names corrected in their associated topics.
 - The previously merged **Exponentials** topic was restored as a separate headed section.
 - The original alphabetic procedure index was rebuilt from source-matched names, removing references to nonexistent procedures and unsupported OCR artifacts.
-- Source line references were generated for each checked interface. For reliable GitHub viewing, links target partitions of `nswc.f` (the original source file is preserved unmodified).
+- Source line references were generated for each checked interface. For reliable GitHub viewing, links now target free-form partitions of `nswc.f90`. Displayed line numbers refer to that file; the supplied source is preserved unmodified as `nswc_orig.f`.
 
 ## Examples of substantive OCR/interface corrections
 
@@ -64,7 +64,23 @@ tool flags. These corrections do not remove the limitations below.
    them to documented public interfaces.
 6. The scanned report is an independent authority for what was documented in 1993;
    a source declaration differing from its printed example may reflect legitimate
-   changes or alternate dummy names. No behavior changes were made to `nswc.f`.
+   changes or alternate dummy names. The readable versions change source layout and procedure endings; no numerical algorithm changes are intended. The supplied source is preserved in `nswc_orig.f`.
+
+## Source readability conversion
+
+The recommended source is now `nswc.f90`. The readable fixed-form alternative
+`nswc.f` has named endings for all 1,062 procedures and blank lines between
+procedures. `nswc_orig.f` preserves the supplied source unchanged. The conversion
+tools and regeneration instructions are described in [README.md](README.md).
+
+Checks compare every fixed-form and free-form statement while preserving quoted
+and Hollerith text, verify all 2,214 documentation source links, and confirm that
+the free-form partitions reconstruct the complete file. All three versions
+compile with GNU Fortran using the documented legacy options, with the same
+28 warnings in the local compiler check. Representative numerical checks of
+vector operations, the gamma function, Chebyshev evaluation, and adaptive
+quadrature produce identical results across all three versions. These checks
+do not constitute a full numerical validation of the library.
 
 ## GitHub structure
 
@@ -72,10 +88,12 @@ tool flags. These corrections do not remove the limitations below.
 README.md
 docs/*.md (28 topic chapters and the documented-routine index)
 NSWC_Library_of_Mathematics_Subroutines_complete.md
-nswc.f
+nswc.f90 (recommended free-form source)
+nswc.f (maintained readable fixed-form source)
+nswc_orig.f (unchanged supplied source)
 NSWC_Source_Audit.md
 NSWC_Source_Interfaces.md
-source_parts/nswc_part_01.f ... (browseable source partitions)
+source_parts/nswc_part_01.f90 ... (browseable source partitions)
 scans/page_0001.png ... scans/page_0463.png
 ```
 

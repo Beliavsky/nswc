@@ -4,7 +4,7 @@
 ## Routine index (source-verified)
 
 This index contains routine declarations documented in this Markdown edition and
-verified to be present in the supplied `nswc.f`. It excludes implementation-only
+verified to be present in the supplied source (preserved as `nswc_orig.f` and available in free form as `nswc.f90`). It excludes implementation-only
 support routines; see [the source inventory](../NSWC_Source_Interfaces.md) for all source
 declarations.
 
