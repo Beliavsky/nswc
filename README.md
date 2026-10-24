@@ -56,3 +56,25 @@ viewable code partitions.
 - [Appendix: Installation and Precision Conversion](docs/28-appendix-installation-and-precision-conversion.md)
 
 *The chapter files are kept below GitHub's large-file limits to make in-browser navigation and rendering easier.*
+
+## Source readability script
+
+`tools/name_procedure_ends.py` adds the matching name to procedure endings and
+ensures a blank line after each procedure except the last. It handles fixed-form
+typed function headers, continuations, labels, comments, and sequence fields.
+It uses only the Python standard library and defaults to a preview:
+
+```sh
+python tools/name_procedure_ends.py nswc.f
+python tools/name_procedure_ends.py nswc.f --output nswc_readable.f
+```
+
+The output must be a new file. `--diff` shows proposed changes; `--in-place`
+updates the source after creating a non-overwriting `.bak` backup. Unsupported
+source forms or mismatched procedure boundaries cause an error before writing.
+The script targets external functions and subroutines, not modules or programs.
+Named endings require a Fortran 90 or newer compiler, even with fixed-form source.
+
+Applying the script changes source line numbers. Regenerate `source_parts` and
+the Markdown source links together before publishing a converted `nswc.f`.
+Run the script's tests with `python -m unittest discover -s tests -v`.
