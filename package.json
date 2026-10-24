@@ -1,0 +1,11 @@
+{
+  "name": "nswc-documentation-checks",
+  "private": true,
+  "scripts": {
+    "spellcheck": "python tools/check_spelling.py",
+    "spellcheck:report": "python tools/check_spelling.py --report-only"
+  },
+  "devDependencies": {
+    "cspell": "10.4.0"
+  }
+}

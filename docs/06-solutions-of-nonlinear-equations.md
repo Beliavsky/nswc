@@ -44,7 +44,7 @@ The arguments og, 6, AE RK, and RERR are double precision numbers, and P(x)is a 
 
 } [4,0 }
 
-AERR and RERE are the absolute and relative tolerances to be satisied (AERK > Qand RERR » 0). One may set RERK 10 * if it is desired that 2 be accurate to & significant decimal digits. [IP RERR 0 then itis assumed that machine accuracy is desired
+AERR and RERE are the absolute and relative tolerances to be satisfied (AERK > Qand RERR » 0). One may set RERK 10 * if it is desired that 2 be accurate to & significant decimal digits. [IP RERR 0 then itis assumed that machine accuracy is desired
 
 **Remarks.** Pomust be declared in the calling program to be of type DOUBLE PRECESSION and EXTERNAL, and DAR RO must be declared to be of type DOUBLE PRECESION
 
@@ -94,7 +94,7 @@ EPS is an input argument which specifies the relative accuracy of F. If it is es
 
 TOL is an input argument which specifies the desired accuracy of the solution. The Euclidean norin ||z|| == \/2,22 is employed. If ¢ denotes an actual solution of the equations, then HBRD terminates when an iterate 2 is generated for which it is estimated that |[z - x|| < TOL: |[z]] is satisfied. It is required that ‘TOL > 0. In order for the convergence test to work properly, it is recommended that TOL always be smaller than 107°,
 
-WK is an array of dimension @ that is used for a work space. It is assurned that the argument @ is greater than or equal to n(3n | 13)/2.
+WK is an array of dimension @ that is used for a work space. It is assumed that the argument @ is greater than or equal to n(3n | 13)/2.
 
 INFO is an integer variable that reports the status of the results. When HBRD ternsnates, INFO has one of the following values: INFO <0) This cecurs when the user terminates the execution of HEBRID hy resetting the arguinent IFLAG in the subroutine F to a negative value. “Then INFO tho nepative value of IPLAC. INPO 0G (Inpet Error) no 1, EPS © 0, POL « O, or @« m(Sn ob £8)/2. INFO ob A solution having the desired accuracy was obtained.
 

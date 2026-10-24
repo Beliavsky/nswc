@@ -22,7 +22,7 @@ Given an m X n matrix A and an mx @ matrix B. The column vectors b;,..., 6, of B
 
 This set of problems can be written in the form AX = B where X is the n x @ matrix having the column vectors z1, ...,2¢. There always exists 4 unique minimum length least squares solution 2, for each Ar; = b;. If B is the m x m identity matrix, then the matrix whose columns are the minimum length solution vectors z; is called the pseudoinverse of A.
 
-For any B, the subroutines LLSQ, LSQR, HFTI, and HFTI2 are available for obtaining the matrix X whose colurnns are the minimum length solution vectors. LSQR, HFTi, and HFTI2 are more general than LLSQ, begin able to solve arbitrary systems AX = B. LLSQ assumes that m > n > 1 and that the rank of A is n. LSQR employs a more involved procedure than HFTI and HFTI2. LSQR computes the rank of A, whereas HFTI and HFTI2 leave the determination of the rank to the user.
+For any B, the subroutines LLSQ, LSQR, HFTI, and HFTI2 are available for obtaining the matrix X whose columns are the minimum length solution vectors. LSQR, HFTi, and HFTI2 are more general than LLSQ, begin able to solve arbitrary systems AX = B. LLSQ assumes that m > n > 1 and that the rank of A is n. LSQR employs a more involved procedure than HFTI and HFTI2. LSQR computes the rank of A, whereas HFTI and HFTI2 leave the determination of the rank to the user.
 
 ```fortran
 CALL LLSQ(M, N, A, KA, B, KB, NB, WK, IWK, IERR)
@@ -83,7 +83,7 @@ TERR © 5
 
 HeRE 6 RERR or AdeacR os negative. FIERRO 7 MO / Oand #- 0.
 
-fwoas too smal.
+fwoas too small.
 
 No coumpatation is performed when an error is detected
 
@@ -152,7 +152,7 @@ Since fey] > ++: > |cee| > > clearly k& is the rank of A. It is also true that t
 (4) EIR TP and HETI2 yield the same results.
 ```
 
-Ervor Return TER Ros a variable that a cet by the routiae. Teno put erors ce detected
+Ervor Return TER Ros a variable that a cet by the routiae. Teno put errors ce detected
 
 then PR RE as set to O) Otherwise, TERR as assipoes one of the following valine. Lhoig ht boifen o> kea LPR woah @ - band Ads max crn}
 
@@ -256,7 +256,7 @@ a Wik and PWR are arrays of dimension a or larger that are work spaces for the r
 
 Wks a double precision array.
 
-Ersor Return TRKR ¢ O when wi con - bas not satistied (EER Ej) er the rank of Ac less Chan on (HERE 2)
+Ersor Return TRKR ¢ O when wi con - bas not satisfied (EER Ej) er the rank of Ac less Chan on (HERE 2)
 
 Note Adis destroyed durnyp computation Programming ULDSQ is a detver for the subroutines DORVHO and DORSOE Phese sub
 
@@ -347,7 +347,7 @@ H,G, and IP are arrays of dimension n or larger that are work spaces for the rou
 
 The parameters r,k, and D.
 
-vy is a double precision tolerance that is set by the user, * an integer variable, and D a double precision array of dimension min{m,n} ox larger. It is assurned that r > 0. Normally 7 = 0 is the setting that is used. D and & are set by the routines.
+vy is a double precision tolerance that is set by the user, * an integer variable, and D a double precision array of dimension min{m,n} ox larger. It is assumed that r > 0. Normally 7 = 0 is the setting that is used. D and & are set by the routines.
 
 In order to understand the use of r,k, and D one must be briefly acquainted with the processing of A. The routines first reduce A to a triangular matrix C where A = QCP. Q is an orthogonal matrix and P a permutation matri::. P is defined so that the diagonal elements c,; of C satisfy |c.| > |ev41,:41| for each 1. The variable k is set to the largest integer such that |c,,| > 7, and if DHFTI2 is used then the diagonal elements ¢,;; are stored in D. C is now regarded as the partitioned matrix
 
@@ -576,7 +576,7 @@ ifm =m, +m, then W is the m x (n + 1) matrix:
 
 _(#f w= (J \)
 
-The input argument kw is assumed to have the value: kw = the number of rows in the dimension siatement for W in the calling progam Thus it is required that kw > m.
+The input argument kw is assumed to have the value: kw = the number of rows in the dimension siatement for W in the calling program Thus it is required that kw > m.
 
 RNOKM is a variable. When WNNLS is called, 2 is computed and RNORM is assigned
 
@@ -605,7 +605,7 @@ RNORM are not defined.
 (2) If m <0 orn <0 then MODE is set to 0 and the routine terminates.
 ```
 
-The option vector OPT. If no options are desired then OPT may be declared to be of dimension 1 and OPT(1) must have the value 1. Otherwise, OPT is a linked list consisting of groups of data link,, key;, data; (¢ = i, ...,8). Each link, and key, is an integer. The amount of storage required by data; depends on the value of key,. The gereral layout of OPT is as follows:
+The option vector OPT. If no options are desired then OPT may be declared to be of dimension 1 and OPT(1) must have the value 1. Otherwise, OPT is a linked list consisting of groups of data link,, key;, data; (¢ = i, ...,8). Each link, and key, is an integer. The amount of storage required by data; depends on the value of key,. The general layout of OPT is as follows:
 
 ```text
 OPT(1) = link; (index of the first entry of the next group)
@@ -712,7 +712,7 @@ Ris anim * @ matrix. Let 6, denote the jy"
 
 Py of Bfor yg 1,048
 
-column vector Then L25LV stores the residual vector r, Wb, WaAz, inthe 7" columm of Ro Phe input argument kris tee number of rows in the dimension statement for Hin the calling progam.
+column vector Then L25LV stores the residual vector r, Wb, WaAz, inthe 7" column of Ro Phe input argument kris tee number of rows in the dimension statement for Hin the calling program.
 
 It is assumed that kr o> yn.
 
@@ -739,7 +739,7 @@ IPIVO'T is an array of dimension nor larger that is used by L2SLV to record the 
 
 WA from which the matrix A, is generated,
 
-Tosa 2-dimensional array of dimension kt x n that is used for temporary storage. it is assumed that kl cm +n When L2SLV terrnnates, if NE nothen the unscaled m+ on covariance matrix is stored in the first a rows and columms of 7.) Herative improvement is
+Tosa 2-dimensional array of dimension kt x n that is used for temporary storage. it is assumed that kl cm +n When L2SLV terrnnates, if NE nothen the unscaled m+ on covariance matrix is stored in the first a rows and columns of 7.) Herative improvement is
 
 not performed on the covariance matrix
 
@@ -766,7 +766,7 @@ tional
 
 <small>Original source: [View scanned PDF page 301](../scans/page_0301.png)</small>
 
-p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 6700.) TERR = 10 The accuracy of some x; before iterative improvement was estimated to be less than half a decimal digit. TERR = IL One ox rnore of the computed diagonal elements of the covariance matrix is negative. This is due to roundoff error. Theoretically, all the diagonal elements shou] 1 be nonnegative. No evidence of severe ill-conditioning was detected. IERR = 12 One or more of the computed diagonal elements of the covariance matrix is negativ This is due to roundoff error. Theoretically, all the diagonal eiements should be nonnegative. The problem appears to be extrernely ill-conditioned. When an input error is detected (IERR = 1,2, ...,6} thea L2SLV immediately terminates. If evidence of severe ill-conditioning is detected, then FRR is sct to 8,5, or 10 aad computation of the solutions continues. If iterative improvement appears to converge for one or more of the solutions, then the covariance matrix is also computed (when N1 = n). However, if iterative improvement fails for all the solutions r,,...,2, then IERP is set to 7 and the covariance matrix is not computed.
+p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 6700.) TERR = 10 The accuracy of some x; before iterative improvement was estimated to be less than half a decimal digit. TERR = IL One ox rnore of the computed diagonal elements of the covariance matrix is negative. This is due to roundoff error. Theoretically, all the diagonal elements shou] 1 be nonnegative. No evidence of severe ill-conditioning was detected. IERR = 12 One or more of the computed diagonal elements of the covariance matrix is negative This is due to roundoff error. Theoretically, all the diagonal eiements should be nonnegative. The problem appears to be extrernely ill-conditioned. When an input error is detected (IERR = 1,2, ...,6} thea L2SLV immediately terminates. If evidence of severe ill-conditioning is detected, then FRR is sct to 8,5, or 10 aad computation of the solutions continues. If iterative improvement appears to converge for one or more of the solutions, then the covariance matrix is also computed (when N1 = n). However, if iterative improvement fails for all the solutions r,,...,2, then IERP is set to 7 and the covariance matrix is not computed.
 
 **Note.** WK(1), ...,WK(22) should be examined when severe ill-conditioning is detected.
 
@@ -923,7 +923,7 @@ Az =: 6. The vector b is modified by the routines.
 
 ATOL and BTOL are input arguments which specify the relative accuracy of A and b respectively. For example, if it is estimated that b is accurate to k decimal digits then one may set BTOL = 107*. It is required that ATOL > 0 and BTOL > 0. If ATOL = 0 or BTOL = 0, then it is assumed that A or } is accurate to machine precision.
 
-Let cond(A} denote the condition number of A relative to the Frobenius norm.! In each iteration of che algorithm being used, an estimate is made of the condition number cond(A). The estimates form a monotonically nondecr ing sequence. The input argument CONLIM is an upper limit on cond (A). If CONLIM > 0 then the routines terminate when an estimate of cond(A) exceeds CONLIM. This termination may be needed to prevent smal! or zero singular values of A from coming into effect and causing damage to the solution x.
+Let cond(A} denote the condition number of A relative to the Frobenius norm.! In each iteration of che algorithm being used, an estimate is made of the condition number cond(A). The estimates form a monotonically nondecr ing sequence. The input argument CONLIM is an upper limit on cond (A). If CONLIM > 0 then the routines terminate when an estimate of cond(A) exceeds CONLIM. This termination may be needed to prevent small! or zero singular values of A from coming into effect and causing damage to the solution x.
 
 CONLIM may be ignored by being set to 0. It is assumed that-CONLIM > 0.
 

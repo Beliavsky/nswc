@@ -1,1 +1,5 @@
 /NSWC_Library_GitHub_Repository_reviewed.zip
+/node_modules/
+/.venv/
+/reports/
+__pycache__/

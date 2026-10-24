@@ -81,7 +81,7 @@ opsach tos dy ...jmeand gy 0 1, ...yn.
 
 Sis an array o dimension née f 6, 7 oan array of dimension n ¢ 6. and WK an array ef omension NUM where NUM > max {(r | ")G0 ' 2) (m4 2) 7 Smaxfan | Bn 2y}. Sy and WE are work spaces for the routine
 
-Crror Return. HERE has one of the fullowine valies if an Input error is detected:
+Crror Return. HERE has one of the following values if an Input error is detected:
 
 IERR Loither wy see) ou, orm 2 as vielated.
 
@@ -230,11 +230,11 @@ IERR 3 Gf OPP contams an error
 
 When an errors detected, the routine anmecdiately termnat -«
 
-Remark After Diifos cbtamed. then Che function SURF! may be used to evaluate the bisphne F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary condittons are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array contaiing the anforsvathon keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan inthe walue Go Baa h wroup of data key,, data, (1 \ oa) oas called an optton. bach key, is an ointeper and data, ius a dst of partial derwatise values thar oh
+Remark After Diifos cbtamed. then Che function SURF! may be used to evaluate the bisphne F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary condittons are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array contaiing the anforsvathon keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan inthe value Go Baa h wroup of data key,, data, (1 \ oa) oas called an optton. bach key, is an ointeper and data, ius a dst of partial derwatise values thar oh
 
 surface A Gr, y) is required tosatisfy Phe followinp Gptions are avarlabue
 
-key PE The values 2b Cry.y.) G2 1, mpolust be satisteed key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 Phe valies JF bry ys) tt ! sit trtist bee satisted
+key PE The values 2b Cry.y.) G2 1, mpolust be satisteed key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 Phe values JF bry ys) tt ! sit trtist bee satisted
 
 
 <small>Original source: [View scanned PDF page 385](../scans/page_0385.png)</small>

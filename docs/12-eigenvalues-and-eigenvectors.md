@@ -58,7 +58,7 @@ ay we
 | `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L55756`](../source_parts/nswc_part_06.f#L2765) |
 
 
-The subroutines EIGV and EIGV1 are availubie for computing the eigenvalues ond eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGVI. In partinular, ETGV and EIGV1 can frequently yield high precision resutts for the eigenvalues if tiey are distinct. However, be aware that errors in the eigenvalues, no matter how seeimin sly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significunt digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of sucn an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
+The subroutines EIGV and EIGV1 are available for computing the eigenvalues ond eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGVI. In particular, ETGV and EIGV1 can frequently yield high precision resutts for the eigenvalues if tiey are distinct. However, be aware that errors in the eigenvalues, no matter how seeimin sly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significunt digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of sucn an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
 
 ```fortran
 CALL EIGV(IBAL, A, KA, N, WR, WI, ZR, ZI, IERR)
@@ -405,7 +405,7 @@ AR and AI are real matrices of order n > i and WR and WI are real arrays of dime
 
 (tis assumed that the input argument ka is the number of rows in the dimension statements for AR and Al in the calling program. ZR and Al are real arrays of dimension
 
-ka xn, For j= 1,...,n the real parts of the coniponents of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" columm of ZI. ‘Phe eigenvectors 2, ...,¢, are not normalized.
+ka xn, For j= 1,...,n the real parts of the coniponents of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" column of ZI. ‘Phe eigenvectors 2, ...,¢, are not normalized.
 
 IBAL is an input argument that can be assigned any integer value. If ISAL / 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvecturs are computed. Otherwise, ff EBAL 0 then the complex materx is not
 
@@ -455,7 +455,7 @@ The subroutine DCEIG is available for the double precision computation of the ei
 CALL DCEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
 ```
 
-AR and AI are double precision matrices of order n > 1, and WR and WI are doubie precision arrays of dimension n or larger. AR and AI are the real and imaginary parts of the matrix whose eigenvalues are to be computed. When DCEIG is called the eigenvalues Ay, ---,)An, are computed. The real parts of the eigenvalues are stored in WR(!), ..., WR(n) and the imaginary parts are stored in WI(1),..., WI(n). The eigenvalues are unordered.
+AR and AI are double precision matrices of order n > 1, and WR and WI are double precision arrays of dimension n or larger. AR and AI are the real and imaginary parts of the matrix whose eigenvalues are to be computed. When DCEIG is called the eigenvalues Ay, ---,)An, are computed. The real parts of the eigenvalues are stored in WR(!), ..., WR(n) and the imaginary parts are stored in WI(1),..., WI(n). The eigenvalues are unordered.
 
 IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBAL may be any integer. If IBAL ¥ 0 then the complex inatrix {represented by AR and Al) is baianced before the eigenvalues are computed. Otherwise, if IBAL == 0 then the complex matrix is not balanced.
 

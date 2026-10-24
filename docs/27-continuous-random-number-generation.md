@@ -64,7 +64,7 @@ CALL URNG2(IX, X, Y, N, IERR)
 CALL DURNG2(IX, X, Y, N, IERR)
 ```
 
-and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arcays, and DURNG2 is used if X and Y are doubie precision arrays.
+and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arcays, and DURNG2 is used if X and Y are double precision arrays.
 
 The atzuinent n is the number of points to be generated, and tz and JERR are variables. On input, tt is an integer (called a seed) for initializing the sequence of points. It is assumed shat 1 < te < 49! —1. When URNGZ or DURNG2 is called, if no input errors are detected then [ERR is set to 0 and n points are generated. The abscissas 2,,...,2,, of the points are stored in X and tie ordinates y,,...,y, are stored in Y. On output, tz isa new seed for generating more poinis,
 
@@ -400,7 +400,7 @@ P(a,c) = =~ ra) Jo
 
 and for v > O consider the chi-square distribution having the distribution function
 
-cee en re = ~ vpe ‘ 6 > O). BG) = Tay [e wg (x >9) Then F,(r) = P(v/2,2/2), so that only the gamma distribution need be computed. The following subroutines are available for gererating variates from the gamma distribution when a > 107}.
+cee en re = ~ vpe ‘ 6 > O). BG) = Tay [e wg (x >9) Then F,(r) = P(v/2,2/2), so that only the gamma distribution need be computed. The following subroutines are available for generating variates from the gamma distribution when a > 107}.
 
 ```fortran
 CALL RGAM(IX, A, N, X, IERR)
@@ -597,12 +597,12 @@ CALL TRAN(N, A, IX, X, IERR)
 
 generate the sare 30 variates,
 
-**Warning.** The double precisicn subroutine DT RAN can be quite slow. It is recommended that its speed be shecked if thousands of variates are to be generated
+**Warning.** The double precisicn subroutine DT RAN can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated
 
 
 <small>Original source: [View scanned PDF page 455](../scans/page_0455.png)</small>
 
-**Remark.** It ig assumed that the imteger arithmetic being used handles all integers ¢ in the
+**Remark.** It is assumed that the integer arithmetic being used handles all integers ¢ in the
 
 interval |s! «¢ 23) — 1.
 

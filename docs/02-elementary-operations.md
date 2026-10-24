@@ -143,7 +143,7 @@ Tt is assumed that A is an integer array. When ISHELL is called, the elements of
 
 **Algorithm.** The Shell sorting algorithm with increments (3* — 1)/2 is employed. Programmer. A. H. Morris
 
-**Reference.** Knuth, D. E., The Art of Computer Programming. Vol.3, Sorting and Searchtng. Addison-Wesley, Reading, Mass., 1973, pp. 84-95.
+**Reference.** Knuth, D. E., The Art of Computer Programming. Vol.3, Sorting and Searching. Addison-Wesley, Reading, Mass., 1973, pp. 84-95.
 
 ```fortran
 CALL SHELL(A, N)
@@ -172,7 +172,7 @@ CALL DAORD(A, N)
 
 <small>Original source: [View scanned PDF page 22](../scans/page_0022.png)</small>
 
-It ig assumed that A is a double precision array. If DSORT is called, then the elements of A are reordered so that a; < aj4, fort = 1, ..,n — 1. Otherwise, if DAORD is called, then the elements of A are reordered so that |a,{ < jas41| for? =1,...,n~ 1.
+It is assumed that A is a double precision array. If DSORT is called, then the elements of A are reordered so that a; < aj4, fort = 1, ..,n — 1. Otherwise, if DAORD is called, then the elements of A are reordered so that |a,{ < jas41| for? =1,...,n~ 1.
 
 **Programmer.** A. H. Morris CALL DISORT(A, L, )
 
@@ -358,7 +358,7 @@ CALL DCSQRT(Z, W)
 
 <small>Original source: [View scanned PDF page 27](../scans/page_0027.png)</small>
 
-Z and W are double precision arrays of dimension 2. It ig assumed that Z(1) and Z(2) are the real and imaginary parts of a complex number z. When DCSQRT is called, if z = 0 then W(1) and W(2) are set to 0. Otherwise, if z 4 O then the square root w = \/z where -~x/2< arg(w) < 1/2 is computed and stored in W. W(1) and W(2) contain the real and imaginary parts of w, respectively.
+Z and W are double precision arrays of dimension 2. It is assumed that Z(1) and Z(2) are the real and imaginary parts of a complex number z. When DCSQRT is called, if z = 0 then W(1) and W(2) are set to 0. Otherwise, if z 4 O then the square root w = \/z where -~x/2< arg(w) < 1/2 is computed and stored in W. W(1) and W(2) contain the real and imaginary parts of w, respectively.
 
 **Note.** Z and W may reference the same storage area.
 
@@ -457,7 +457,7 @@ _ { sgn(a) if {a| > |6|
 
 then for r # O we note that |c| > |s| implies ¢ > 0, and that |c| < |s| implies s > 0. For convenience, when r — 0 we set c= 1 ands =0.
 
-The value o is not needed for the constuction of a Givens rotation matrix, but its use permits the representation of c and s by a single value z. For each c and ge, z is defined as
+The value o is not needed for the construction of a Givens rotation matrix, but its use permits the representation of c and s by a single value z. For each c and ge, z is defined as
 
 follows: ={3 if |s] <core=0
 
@@ -616,7 +616,7 @@ The argument z is a double precision number. DSIN1(z) is the double precision va
 
 **Programming.** DSIN1i was written by A.H. Morris. The function IPMPAR is used. DCOS1(z)
 
-The argument x is a double precision npumber. DCOS1(z) is the doubie precision value
+The argument x is a double precision npumber. DCOS1(z) is the double precision value
 
 for cos mx.
 

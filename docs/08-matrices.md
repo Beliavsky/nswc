@@ -80,7 +80,7 @@ A is a double precision m x n matrix and B a real 2-dimensional array. MCVDR sto
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimension statement for B in the calling p1ogram It is assurned that ka > m and kb > m, and that B contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling p1ogram It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -175,7 +175,7 @@ CALL MCOPY(M, N, A, KA, B, KB)
 
 A is a real m x n matrix and B a real 2-dimensional array. MCOPY makes a copy of the matrix A und stores itin B, The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program
 
-It is assurned that ka > m and kt > m, and that B contains at least n columns.
+It is assumed that ka > m and kt > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -205,7 +205,7 @@ CALL CMCOPY(M, N, A, KA, B, KB)
 
 Ais acomplex mxn matrix and B a complex 2-dimensional array, CMCOPY makes a copy of the matrix A and stores it in 8. The input arguments ke and kb have the following values:
 
-ka <= the number of rows in the dimension statement for A in the callhog prograrn
+ka <= the number of rows in the dimension statement for A in the callhog program
 
 kb = the number of rows in the dimension statement for B in the catiing program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
@@ -260,11 +260,11 @@ CALL CTPOSE(M, N, A, KA, B, KB)
 
 TPOSE is called if A is a real matrix and 8 a real array, DTPOSE is called if A isa double precision matrix and B a double precision array, and CTPOSE is called if 4 is a complex matrix and B a complex array.
 
-A is a matrix having m rows and n columns, and B a 2-dimensional arrary. The routine transposes A and stores the results in B. The input arguments ka and kb have the following values:
+A is a matrix having m rows and n columns, and B a 2-dimensional array. The routine transposes A and stores the results in B. The input arguments ka and kb have the following values:
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows ir the dimension statement for B in the calling program It is assumed that ka > m and kb > n, and that 2 contains at least n colurnns.
+kb = the number of rows ir the dimension statement for B in the calling program It is assumed that ka > m and kb > n, and that 2 contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -280,11 +280,11 @@ A is an array of dimension mn which contains an m X n matrix to be transposed. T
 
 MOVE, k, MDIM are ignored.
 
-If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assurned to be an array of dimension k. MOVE is a storage area for saving information that inay belp speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the rovtine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
+If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assumed to be an array of dimension k. MOVE is a storage area for saving information that inay belp speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the rovtine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
 
 **Programming.** The routines TIP, DPTEP, and CVEP employ the subroutine INECTR, ‘The routines were written by Norman Brenner (Dept. of Marth and Planetary Serences,
 
-Massachusetts Institute of Technology), and modifed by A. H. Morris.
+Massachusetts Institute of Technology), and modified by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 149](../scans/page_0149.png)</small>
@@ -321,7 +321,7 @@ It is assumed that A and B are diiferent storage areas.
 
 **Programmer.** A. H. Morris. CALL CTRANS(ka, n, A)
 
-A is a complex array of diraension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the niatrix and stores the results in A. It is assumed that ka > n.
+A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the niatrix and stores the results in A. It is assumed that ka > n.
 
 **Programmer.** George J. Davis (Georgia State University)
 
@@ -402,9 +402,9 @@ Prograt.. wer. A. H. Morris.
 
 The matrix difference C = A - B can be somputed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
 
-Aand B are real m.:n matrices and U a real 2-imensional i.reay. MSUBT comocutes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following vaiues: ka = the number :f rows in the dimensio:. statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
+Aand B are real m.:n matrices and U a real 2-imensional i.reay. MSUBT comocutes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following values: ka = the number :f rows in the dimensio:. statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
 
-The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the resuit C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assurned what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the etorage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
+The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the resuit C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the etorage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
 
 **Programmer.** A. H. Morris. CALL SMSUBT(n, A, B,C)
 
@@ -808,7 +808,7 @@ CALL DMSLV(MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK)
 
 A is a matrix of order n where n > 1. If MO == 0 then the inverse of A is computed and stored in A. If MO # 0 then the inverse is not computed.
 
-The argument rm is an integer. If m > 1 then B is a metrix having n rows and m colurnns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is iguored.
+The argument rm is an integer. If m > 1 then B is a metrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is iguored.
 
 The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for 8 in the calling program. If m < 0 then the argument ké is ignored.
 
@@ -863,7 +863,7 @@ IWK is an array of dimension m or larger that is used by the routines for keepin
 
 Fiemarks.
 
-(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A ani B are double precision matrices and WK a doubie precision array.
+(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A ani B are double precision matrices and WK a double precision array.
 
 (2) The matrix A is destroyed.
 
@@ -950,7 +950,7 @@ have 6; >> 9 columns in common for ¢ < m, Thus SO rp n and block A, begins in c
 
 pany
 
-», (cx ~ Oe) -+ L fer ¢ > 2. It is also assurned that three successive blacks Ay-1, Aj, Assi
+», (cx ~ Oe) -+ L fer ¢ > 2. It is also assumed that three successive blacks Ay-1, Aj, Assi
 
 k=
 
@@ -1192,7 +1192,7 @@ The argument kb is the number of rows in the dimension statement for B in the ca
 
 **Remarks.**
 
-(1) If PCHOL is called then it is assumed that A and 8 are real arrays, and if DPCHOL is called then it ig assumed that A and B are double precision arrays.
+(1) If PCHOL is called then it is assumed that A and 8 are real arrays, and if DPCHOL is called then it is assumed that A and B are double precision arrays.
 
 (2) Te data in A is destroyed.
 
@@ -1468,7 +1468,7 @@ J. 0 Do not compute the right singular vectors,
 
 J > Q Compute the right sineular vectors.
 
-U is a 2-dimensional array which containg the deft singular vectors that are requested, and kus the number of rows in the dimension stacement for (an the calling programa. It ig assumed that Au Som. Pf ne left sinpular vectors are requested (he, if JOB < £0) then U isignered by the rouvtmes. Ovherwise, ( must be of dimensun Aux na ifallea deft siagriar weetors are requested, and must be of dinieosion ku raindanya} af che first manidea, af
+U is a 2-dimensional array which containg the deft singular vectors that are requested, and kus the number of rows in the dimension stacement for (an the calling programa. It is assumed that Au Som. Pf ne left sinpular vectors are requested (he, if JOB < £0) then U isignered by the rouvtmes. Ovherwise, ( must be of dimensun Aux na ifallea deft siagriar weetors are requested, and must be of dinieosion ku raindanya} af che first manidea, af
 
 left atneudar vectors are requested. ia) i
 
@@ -1487,7 +1487,7 @@ F is an array of dimension n or larger, and WORK is an array of dimension m or l
 
 (2) The contents of A are destroyed by the routines. If left singular vectors are requested and there is sufficient storage in A to hold the vectors (there will be sufficient storage if m <n or JOB > 20), then one may set U = A. Similarly, if right singular vectors are requested and m > n then one may set V = A. However, only one of the two arrays U and V may be identified with A.
 
-**Error Return.** INFO is an iteger variable. If all the singular values are found then INFO will be set to O and the array E will contain zeros. However, if the 7'” singular value cannot be found then INFO is set to 7. In this case, if 7 < k where k = min{m,n} then the singular values d;41, ...,d, will have been computed and stored in D. A will have been reduced to an upper bidiagonal matrix B with D as its diagonal and EF its super diagonal. If U and V have been requested then B = U* AV will be satisfied.
+**Error Return.** INFO is an integer variable. If all the singular values are found then INFO will be set to O and the array E will contain zeros. However, if the 7'” singular value cannot be found then INFO is set to 7. In this case, if 7 < k where k = min{m,n} then the singular values d;41, ...,d, will have been computed and stored in D. A will have been reduced to an upper bidiagonal matrix B with D as its diagonal and EF its super diagonal. If U and V have been requested then B = U* AV will be satisfied.
 
 **Programming.** SSVDC, DSVDC, and CSVDC are part of the LINPACK package of matrix subroutines released by Argonne National Laboratory. The routines were coded by G. W. Svewart. (University of Maryland). The routines employ the vector subroutines SSWAP, SROT, SDOT, SSCAL, SAXPY, SNRM2, DSWAP, DROT, PDOT, DSCAL, DAXPY, DNRM2, and CSWAP, CSROT, CDOTC, CSCAL, CAXPY, SCNRM2, Also the subroutines SROTG and DRO'G are called.
 
@@ -1547,7 +1547,7 @@ CALL ABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 CALL DABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 ```
 
-If ABSLV is called then it is assuned that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assum :d that A, B,C, and Wh are doubie precision arrays.
+If ABSLV is called then it is assumed that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assum :d that A, B,C, and Wh are double precision arrays.
 
 It is assumed that m > iandn 1. The input argume.its ka, kb, ke have the following values:
 

@@ -20,6 +20,7 @@ viewable code partitions.
 - [Alphabetical documented routine index](docs/routine-index.md)
 - [Complete source interface inventory](NSWC_Source_Interfaces.md)
 - [Review and limitations](NSWC_Source_Audit.md)
+- [Spelling and OCR checks](docs/spelling-checks.md)
 - [Original report cover](scans/page_0001.png)
 - [Original Fortran source](nswc.f)
 

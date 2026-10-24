@@ -105,7 +105,7 @@ CVRB1 is used if A and B are real arrays, CVDB1 is used if A and B are double pr
 
 **Remark.** B may begin in the same location as A. If B begins in the same location then it is assumed thal kb = ka. In this case, the result B will overwrite the input data A. Otherwise, if B does not begin in the same location as A, then it is assumed that the storage areas A and B do not overlap.
 
-**Programming.** CVRB1 calls the subroutine CVRB, CVDBI calls the subroutine CVDB, and CVCBI calls the subroutine CVCB. These routines were writen by A. H. Morris.
+**Programming.** CVRB1 calls the subroutine CVRB, CVDBI calls the subroutine CVDB, and CVCBI calls the subroutine CVCB. These routines were written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 198](../scans/page_0198.png)</small>
@@ -133,7 +133,7 @@ CALL DMCVBS(A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR)
 CALL CMCVBS(A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR)
 ```
 
-A is an m X n matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statment for A in the calling program. It is assumed that 0 < mz, < m,0O < mu <n, and ka > m.
+A is an m X n matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m,0O < mu <n, and ka > m.
 
 It is assumed that A is to be stored in sparse form in the arrays B,JB,/B. NUM is the estimated maximum number of elements that will appear in B and J&B. It is assumed that B and JB are of dimension max{1, NUM} and that /B is of dimension m + 1.
 
@@ -216,7 +216,7 @@ Ais an m xn complex matrix stored in band form, m, the number of diagonals below
 
 B is a 2-dimensional real array of dimension kb x € where kb > m. The input argument é is an estimate of the maximum number of diagonals of Re(A) which will have to be stored (2 < me+ mu +1). TERR, ng, and ny are integer variables. When BREAL is called, if £ specifies sufficient storage for B then Re(A) is stored in band form in B. Also, IERR is assigned the value 0, ng = the number of diagonals of Re(A) below the main diagonal containing nonzero elements, and ny, = the number of diagonals of Re(A) above the main diagonal containing nonzero elements.
 
-**Error Return.** If @ does not specify sufficient storage for B, then IERR is assigned the value v where v is the number of colurnns needed for B. Reset £> v.
+**Error Return.** If @ does not specify sufficient storage for B, then IERR is assigned the value v where v is the number of columns needed for B. Reset £> v.
 
 **Programmer.** A. H. Morris. CALL BIMAG(A, ka, m,n, mz, mu, B, kb, €, ne, ny TERR)
 
@@ -224,7 +224,7 @@ Ais an m Xn complex imatrix stored in band form, mg the number of diagonals belo
 
 B is a 2-dimensional real array of dimension kb x € where kb > m. The input argument éis an estimate of the maximum number of diagonais of Im(A) which will have to be stored (2< me+mu +1). TERR, ne, and ny are integer variables. When BIMAG is called, if é specifies sufficient storage for J3 then Im(A) is stored in band form in B. Also, TERR is assigned the value 0, ng == the number of diagonals of Im(A) below the main diagonal conlLaining nonzero elements, and ny = the number of diagonals of fm(A) above the main diagona! containing nonzero elements.
 
-**Error Return.** If @ does not specify sufficient storage for 8B, then IERE is assigned the value v where v is the number of colurnns needed for B. Reset @ > v.
+**Error Return.** If @ does not specify sufficient storage for 8B, then IERE is assigned the value v where v is the number of columns needed for B. Reset @ > v.
 
 **Programmer.** A. H. Morris.
 
@@ -311,7 +311,7 @@ CALL CBADD(M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR)
 
 A and B are mm xX m matrices stored in band form, my, the number of diagonals of A below the main diagonal containing nonzero elements, m, the number of diagonals of A above the main diagonal containing nonzero elements, ng the number of diagonals of B below the main diagonal containing nonzero elements, and n, the number of diagonals of 2 above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for B in the calling program.
 
-It is assurned that A-+ B is to be stored in band fortn in C. C ts a 2-dimensional array of dimension ke x € where kc > m. The input argument @ is an estimate of the maximum number of diagonals of A + B which will have to be stored (@€ < max{rny, ne} | max{my,nu} $1). BADD is used if A and B are real arrays, DBADD is used if A and [2 are double precision arrays, and CBADD is used if A and B are complex arrays. TERR, vy, and ™, are integer variables. When the routine is called, if @ specifies sufficient storage for C then A { Bois computed and stored in band forin in C. Also TERR is assigned the value O, vg the number of diagonals of A} B below the main diagonal containing nonzero elements, and vy, the number of diagonals of A + B above the main diagonal containiny
+It is assumed that A-+ B is to be stored in band fortn in C. C ts a 2-dimensional array of dimension ke x € where kc > m. The input argument @ is an estimate of the maximum number of diagonals of A + B which will have to be stored (@€ < max{rny, ne} | max{my,nu} $1). BADD is used if A and B are real arrays, DBADD is used if A and [2 are double precision arrays, and CBADD is used if A and B are complex arrays. TERR, vy, and ™, are integer variables. When the routine is called, if @ specifies sufficient storage for C then A { Bois computed and stored in band forin in C. Also TERR is assigned the value O, vg the number of diagonals of A} B below the main diagonal containing nonzero elements, and vy, the number of diagonals of A + B above the main diagonal containiny
 
 noazero vlements,
 
@@ -583,7 +583,7 @@ CALL CBTPE’ ‘m,n, A, ka, me, ru, 72, y)
 
 A is an m Xn matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program. It is assumed that O < mg < m,0O « my, <n, and ka > m.
 
-The argument x is a row vector of d.mension m and y an array of diraension n. A,x,y are complex arrays. When CBTPD is called, 2A is computed ind stored in y.
+The argument x is a row vector of d.mension m and y an array of dimension n. A,x,y are complex arrays. When CBTPD is called, 2A is computed ind stored in y.
 
 **Remark.** It is assumed that the arrays A, 2, y do not overlap.
 
@@ -629,7 +629,7 @@ BANRM(A, ka, m,n, m,,m,) DBINRM(A, ka, m,n, me, mu)
 
 BiINRM is used if A is a real array and DBINRM is used if A is a double precision array. BINRM is a real function and DBINRM a double precision function.
 
-The function has the value ||A||; for any m x n matrix A stored in band form. The argument mg, is the number of diagonals below the main diagonal containing nonzero elements, mm, the number of diagonals avove the main diagonal containing nonzero elements, and ka the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m, 0 < my, <n, and ka > m,
+The function has the value ||A||; for any m x n matrix A stored in band form. The argument mg, is the number of diagonals below the main diagonal containing nonzero elements, mm, the number of diagonals above the main diagonal containing nonzero elements, and ka the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m, 0 < my, <n, and ka > m,
 
 **Remark.** DB1INRM must be declared to be of type DOUBLE. PRECISION in the calling program.
 

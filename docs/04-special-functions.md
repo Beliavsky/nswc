@@ -366,7 +366,7 @@ are applied.
 
 **Precision.** {f PNI is called then w is accurate to within 3 units of the 14" significant digit. Otherwise, if DPN] is called then w is accurate to within L unit of the 27" significant digit.
 
-**Programming.** PNI employs the functions FREI, SPMPAR, and IPMPAR, and DPNE employs the functions DERFI, DER, DERECI, DERECO, DXPARG, DPMPAR, and IPM- PAR. PNI was written by Armido R. DiDonato and modified by A. H. Morris. DPNI was adapted fromm PNE by A. EL. Morris,
+**Programming.** PNI employs the functions FREI, SPMPAR, and IPMPAR, and DPNE employs the functions DERFI, DER, DERECI, DERECO, DXPARG, DPMPAR, and IPM- PAR. PNI was written by Armido R. DiDonato and modified by A. H. Morris. DPNI was adapted from PNE by A. EL. Morris,
 
 
 <small>Original source: [View scanned PDF page 55](../scans/page_0055.png)</small>
@@ -413,7 +413,7 @@ Original documentation: [page 55](../scans/page_0055.png).
 | `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8212`](../source_parts/nswc_part_01.f#L8212) |
 
 
-For any omplex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assurned that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subrousine 3 is available for computing E(z).
+For any omplex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subrousine 3 is available for computing E(z).
 
 ```fortran
 CALL CFRNLI(MO, Z, W)
@@ -810,7 +810,7 @@ The argument z is a double precision number. DGAMMA(z) is the double precision v
 
 **Remark.** DGAMMA must be declared in calling program to be of type DOUBLE PRECI- SION.
 
-**Algorithm.** Li |x| < 20 then z is reduced to the inte:val (1,2) by [(a+ 1) = aT (a), and minimax approximations are used. If z < —20 then (1) is applied, and if z > 20 then (2) is used. A(z) is computed by the power series correxponding to the Chebyshev expansion ii the SLATEC library given by Wayne Fullerton ‘Los Alamos). The power series and minimax approximations were obtained ly A. H. Morris.
+**Algorithm.** Li |x| < 20 then z is reduced to the inte:val (1,2) by [(a+ 1) = aT (a), and minimax approximations are used. If z < —20 then (1) is applied, and if z > 20 then (2) is used. A(z) is computed by the power series corresponding to the Chebyshev expansion ii the SLATEC library given by Wayne Fullerton ‘Los Alamos). The power series and minimax approximations were obtained ly A. H. Morris.
 
 **Precision.** If 0 < x < 2 then DGAMMA(r) is accu; ate to within 1 unit of the 28'" signifiant digit. Otherwise, if z > 2 then DGA'MM 1(z* is accurate to within 1 unit of the 25°" significant digit.
 
@@ -1151,7 +1151,7 @@ BETALN(a, 5) BETALN(a, 6) = In B(a, d) for a,b > 0.
 
 **Programming.** BETALN employs the functions ALNREL, ALGDIV, BCORR, GAMLN, GAMLNI1, and GSUMLN. These functions were written by A. H. Morris.
 
-**Reference.** DiDonato, A. R. and Morris, A. H., “Algorithim 708 Significant Digit Computation of the Incomplete Beta Function Ratios,” ACM Trans. Math Software 18 (1992), pp. 360-373.
+**Reference.** DiDonato, A. R. and Morris, A. H., “Algorithm 708 Significant Digit Computation of the Incomplete Beta Function Ratios,” ACM Trans. Math Software 18 (1992), pp. 360-373.
 
 ```fortran
 DBETLN(A0, B0)
@@ -1624,7 +1624,7 @@ AIE(X)
 
 Ifx > Othen AlM(2} > e At(z) where ¢ = 39/7. Otherwise, if 2 < 0 then AIF (2)
 
-Algorithn.. tabhonal minimax approximations are used. Ifa « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
+Algorithm.. tabhonal minimax approximations are used. Ifa « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
 
 **Precision.** Fora > t, Allez) is accurate to within 2 units of the ¢4°? sipifteant cigit
 
@@ -1824,7 +1824,7 @@ The arguments a and 6 are nonnegative real numbers where a + 6 > 0, anJ «is a p
 
 IERR = | Either a,6, or ¢ is negative. JERR 2 Either a-+ 6 or ¢ is too small. [ERR - 3 Either a,b, or ¢ is too large.
 
-Precison. RDVAL is accurate to within 4 units of the 14" significant digit
+Precision. RDVAL is accurate to within 4 units of the 14" significant digit
 
 **Programming.** RDVAL was written by B.C. Carlson and Klaine M. Notis (Iowa State University), and modified by A. H. Morris. The function SPMPAR is used.
 
@@ -2041,7 +2041,7 @@ The elliptic functions en(z,k) and dn(z,k) may be defined by
 
 dn(z,k) = \/1 — k?sn(z, ky?
 
-where the roots take the value 1 for z = 0. In perticular, if & =: 0 then en(z,0) == cosz and dn(z,0) = 1, and if k = +1 then en(z,k) = dn(z,k) = 1/cosh~. The subroutines ELLPF and ELPFC1 are available for computing sn(z, k&),cn(z,b), and da(z,k) when & is a real value such that [ki < 1. ELLPF may be used when z is real and ELPFC1 when z is complex.
+where the roots take the value 1 for z = 0. In particular, if & =: 0 then en(z,0) == cosz and dn(z,0) = 1, and if k = +1 then en(z,k) = dn(z,k) = 1/cosh~. The subroutines ELLPF and ELPFC1 are available for computing sn(z, k&),cn(z,b), and da(z,k) when & is a real value such that [ki < 1. ELLPF may be used when z is real and ELPFC1 when z is complex.
 
 ```fortran
 CALL ELLPF(U, K, L, S, C, D, IERR)
@@ -2369,9 +2369,9 @@ The argument ¢ may be any integer. If O then the arguinents a and a are assumed
 
 IER and tw are variables. When CERCY as called, fino input errors are detected then IP RR is assigned the value 0. Also, w = W{A,ye) if) Oandw PCR, d)ifia 7 0.
 
-Error Retorn. Hoan inpat error is detected then TERR is set as follows: TERR Por Ois not satished, IE RK 20-0 e. bord + Ois not satished
+Error Retorn. Hoan input error is detected then TERR is set as follows: TERR Por Ois not satished, IE RK 20-0 e. bord + Ois not satished
 
-When either of Chese errors is detected, was assigned the walue I
+When either of Chese errors is detected, was assigned the value I
 
 Precision [ft Qthen owas accurate te within Lounit of the PS'P sqemificant digst when VON eo) os not near OQ) Otherwise, fa ¢ O them tis accurate to within fourm of the ppb
 

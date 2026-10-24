@@ -17,7 +17,7 @@ If the equations are nonstiff, then ODE and BRKF45 should first be considered fo
 
 When the user specifies error tolerances to be satisfied, normally he is interested only in the global error (the error of y(b)). However, the adaptive subroutines employ the tolerances for controlling local error (the error generated at each step in the interval from a to 6). No attempt is made to controi the prc ressive erosicn of accuracy that can occur when the steps accumulate. GERK is the only su. routine that estimates the global error. his subroutine employs the same Runge-Kutta-Fehlberg formulae used by RKF45. GERKE js 2-3 times slower than RKF45, but it is more accurate. RK E45 and BRKF45 take roughly the same amount of time, and have approximately the same accuracy.
 
-Output Considerations. Generally, when the equations y’(t) - f(t,u(t)) are to be solved and y(ay) is known, then solutions will be needed at a sequence of points dy, -..,@ya. Tf ODE, BRKF45, SFODE, or SFODEL is used, then the closeness of the output points a, should be of no concern. ‘The subroutines partially ignore a, 4, in the selection of the step size when going fromm a, to a,j. Instead, they step along the interval using the largest steps that are appropriate (accuracy aud efficiency are the prime concerns). Normally ayy 4
+Output Considerations. Generally, when the equations y’(t) - f(t,u(t)) are to be solved and y(ay) is known, then solutions will be needed at a sequence of points dy, -..,@ya. Tf ODE, BRKF45, SFODE, or SFODEL is used, then the closeness of the output points a, should be of no concern. ‘The subroutines partially ignore a, 4, in the selection of the step size when going from a, to a,j. Instead, they step along the interval using the largest steps that are appropriate (accuracy aud efficiency are the prime concerns). Normally ayy 4
 
 will be passed in the process Hf a,,j is passed then a quick interpolation yields the desired
 
@@ -49,7 +49,7 @@ Let y'(t) = f(t, y(t)) denote a system of n ordinary first order differential eq
 CALL ODE(F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK)
 ```
 
-The argument F is the name of a user defined subroutine that has the format: CALL F(t, ¥,DY) Y and DY are arrays of diraension n. On input Y contains the values y;(t),...,y,(t) for the argument t. F computes the derivatives yj(t), ...,y/,(¢) using y'(t) = f(t, y(t)) and stores the results in DY. F must be declared inthe calling program to be of type EXTERNAL.
+The argument F is the name of a user defined subroutine that has the format: CALL F(t, ¥,DY) Y and DY are arrays of dimension n. On input Y contains the values y;(t),...,y,(t) for the argument t. F computes the derivatives yj(t), ...,y/,(¢) using y'(t) = f(t, y(t)) and stores the results in DY. F must be declared inthe calling program to be of type EXTERNAL.
 
 WK is an array of dimension 100 -++ 21n or larger, and [WK is an array of dimension 5 or iarger. WK and IWK contain information needed for subsequent calls to ODE.
 
@@ -92,7 +92,7 @@ IND = +6 ODE did not reach TOUT because AERR = 0. T is set to the point closest 
 
 IND = 7 Nocomputation was performed. An input error was detected. The user must correct the error and call ODE again.
 
-WIND = +3,+4,+5 then to continue the integration just call ODE again. Similarly, if IND = +6 then reset AERR to be positive and call ODE again. In these cases do not modify T,Y,IND. The output values for these parameters are the appropriate input values for the next call to ODE. However, AERR and RERR may always be modifed when continuing an integration.
+WIND = +3,+4,+5 then to continue the integration just call ODE again. Similarly, if IND = +6 then reset AERR to be positive and call ODE again. In these cases do not modify T,Y,IND. The output values for these parameters are the appropriate input values for the next call to ODE. However, AERR and RERR may always be modified when continuing an integration.
 
 If the equations appear to be stiff (i.e., if IND = +5) then ODE may not be suitable for solving the equations. In this case it is recommended that a routine designed specifically for stiff equations be used.
 
@@ -396,7 +396,7 @@ IND 3 9000 derivative evaluations were performed Ntore derivative eval ations ar
 
 INI) A GERB did not reach POUR because AR RR O00 ARERR nous be
 
-Ihade postive
+Ihade positive
 
 Aig
 

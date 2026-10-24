@@ -35,7 +35,7 @@ WK is an array of dimension [n?/4] +n +3 or larger,’ and iWK is an integer arr
 
 **Remarks.**
 
-(i) When LE is called then it is assumed that 6, X, WK and the array Rin ROWK are real arrays. When DPLE is called then it is assumed that these arrays are doubie precision arrays, and when CLE is cailed then it is assumed that the arrays are complex.
+(i) When LE is called then it is assumed that 6, X, WK and the array Rin ROWK are real arrays. When DPLE is called then it is assumed that these arrays are double precision arrays, and when CLE is cailed then it is assumed that the arrays are complex.
 
 (2) When the equations are solved, ROWK is called to attach the first row of A, then the secend row, etc. Each row of A is attached only once.
 

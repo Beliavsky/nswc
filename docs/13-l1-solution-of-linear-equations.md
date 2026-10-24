@@ -42,7 +42,7 @@ is stored in X. Also RNORM is assigned the value ||Az — 4||},6 — Az is store
 
 When CLI is called, a modified form of the simplex algorithm is used to minimize ||Az ~ b||,. The arguments TOL and ITER control the use of this algorithm. The input argument TOL is a positive tolerance. CLi will not pivot on any quantity whose magnitude is less than TOL. Normally the setting TOL = 10~?”/* suffices where v is the number of decimal digits of accuracy available.
 
-Frequently the routine requires less than 5(k+é+m) iterations of the simplex alogrithm to solve the problem. ITER is a variable used for input/output purposes. On input the user must set ITER to the maximum number of iterations that will be permitted. When the routine terminates, ITER has for its value the number of iterations that were performed.
+Frequently the routine requires less than 5(k+é+m) iterations of the simplex algorithm to solve the problem. ITER is a variable used for input/output purposes. On input the user must set ITER to the maximum number of iterations that will be permitted. When the routine terminates, ITER has for its value the number of iterations that were performed.
 
 On output KODE reports the status of the results. The routine assigns KODE one of the following values:
 

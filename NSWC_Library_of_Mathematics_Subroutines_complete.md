@@ -516,7 +516,7 @@ Tt is assumed that A is an integer array. When ISHELL is called, the elements of
 
 **Algorithm.** The Shell sorting algorithm with increments (3* — 1)/2 is employed. Programmer. A. H. Morris
 
-**Reference.** Knuth, D. E., The Art of Computer Programming. Vol.3, Sorting and Searchtng. Addison-Wesley, Reading, Mass., 1973, pp. 84-95.
+**Reference.** Knuth, D. E., The Art of Computer Programming. Vol.3, Sorting and Searching. Addison-Wesley, Reading, Mass., 1973, pp. 84-95.
 
 ```fortran
 CALL SHELL(A, N)
@@ -545,7 +545,7 @@ CALL DAORD(A, N)
 
 <small>Original source: [View scanned PDF page 22](scans/page_0022.png)</small>
 
-It ig assumed that A is a double precision array. If DSORT is called, then the elements of A are reordered so that a; < aj4, fort = 1, ..,n — 1. Otherwise, if DAORD is called, then the elements of A are reordered so that |a,{ < jas41| for? =1,...,n~ 1.
+It is assumed that A is a double precision array. If DSORT is called, then the elements of A are reordered so that a; < aj4, fort = 1, ..,n — 1. Otherwise, if DAORD is called, then the elements of A are reordered so that |a,{ < jas41| for? =1,...,n~ 1.
 
 **Programmer.** A. H. Morris CALL DISORT(A, L, )
 
@@ -731,7 +731,7 @@ CALL DCSQRT(Z, W)
 
 <small>Original source: [View scanned PDF page 27](scans/page_0027.png)</small>
 
-Z and W are double precision arrays of dimension 2. It ig assumed that Z(1) and Z(2) are the real and imaginary parts of a complex number z. When DCSQRT is called, if z = 0 then W(1) and W(2) are set to 0. Otherwise, if z 4 O then the square root w = \/z where -~x/2< arg(w) < 1/2 is computed and stored in W. W(1) and W(2) contain the real and imaginary parts of w, respectively.
+Z and W are double precision arrays of dimension 2. It is assumed that Z(1) and Z(2) are the real and imaginary parts of a complex number z. When DCSQRT is called, if z = 0 then W(1) and W(2) are set to 0. Otherwise, if z 4 O then the square root w = \/z where -~x/2< arg(w) < 1/2 is computed and stored in W. W(1) and W(2) contain the real and imaginary parts of w, respectively.
 
 **Note.** Z and W may reference the same storage area.
 
@@ -830,7 +830,7 @@ _ { sgn(a) if {a| > |6|
 
 then for r # O we note that |c| > |s| implies ¢ > 0, and that |c| < |s| implies s > 0. For convenience, when r — 0 we set c= 1 ands =0.
 
-The value o is not needed for the constuction of a Givens rotation matrix, but its use permits the representation of c and s by a single value z. For each c and ge, z is defined as
+The value o is not needed for the construction of a Givens rotation matrix, but its use permits the representation of c and s by a single value z. For each c and ge, z is defined as
 
 follows: ={3 if |s] <core=0
 
@@ -989,7 +989,7 @@ The argument z is a double precision number. DSIN1(z) is the double precision va
 
 **Programming.** DSIN1i was written by A.H. Morris. The function IPMPAR is used. DCOS1(z)
 
-The argument x is a double precision npumber. DCOS1(z) is the doubie precision value
+The argument x is a double precision npumber. DCOS1(z) is the double precision value
 
 for cos mx.
 
@@ -1175,7 +1175,7 @@ Given an arbitrary point vo = (Zo, yo), the following subroutine is available fo
 CALL LOCPT(X0, Y0, X, Y, N, L, M)
 ```
 
-It ig assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn- The arguments @ and m are variables. When LOCPT terminates @ has one of the following values:
+It is assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn- The arguments @ and m are variables. When LOCPT terminates @ has one of the following values:
 
 €== ~1 if (zo, yo) is outside the path
 
@@ -1214,7 +1214,7 @@ The argument m is the estimated maximum number of points at which the line @ and
 
 **Error Return.** If an input error is detected than IERR has one of the following values:
 
-TieRR =: 1 Either a:- 6 or the path contains a single point. 8 HWeRR > 2 U and V require more storage. The argument m must be increased. IERR of The ¢! line segment of the path contains a segmen of the line @. & When an error is detected, & the number of points (u,,v,} found where the line @ and ] I Jj? a)
+TieRR =: 1 Either a:- 6 or the path contains a single point. 8 HWeRR > 2 U and V require more storage. The argument m must be increased. IERR of The ¢! line segment of the path contains a segment of the line @. & When an error is detected, & the number of points (u,,v,} found where the line @ and ] I Jj? a)
 
 path 7ointerseet, and U and V contain the abscissas and ordinates of these points.
 
@@ -1247,7 +1247,7 @@ VX% and VY are arrays of dimension m~-'- 1 or larger, and n is a variable. When 
 
 counterclockwise manner. Also (2!, yl!) == (ci, yy’).
 
-**Example.** Assime that we are given the points (-—1,-3), (1,1) (0,3), (2,2), (-2,4), (-1,~1). When HULi 13 called X and Y are reordered and we obtain: X contains —1,--1,1,2,0, --2 Y contains —3,-1,1,2,2 BX contains —1,2,0,—2,-1 BY contains —3,2,3,4,--3 V¥ contains -1,2,-2,~-1 VY contains --3,2,4,--3
+**Example.** Assume that we are given the points (-—1,-3), (1,1) (0,3), (2,2), (-2,4), (-1,~1). When HULi 13 called X and Y are reordered and we obtain: X contains —1,--1,1,2,0, --2 Y contains —3,-1,1,2,2 BX contains —1,2,0,—2,-1 BY contains —3,2,3,4,--3 V¥ contains -1,2,-2,~-1 VY contains --3,2,4,--3
 
 **Programming.** HULL calls the subroutine RRSORT and function SPMPAR. HULL was written by A. Ho Mornis.
 
@@ -1272,7 +1272,7 @@ PAREA(X, Y, NB)
 
 X and Y are arrays containing the abscissas r,,. ry and ordinates y1,...,yN, respectively. The argument N may have the value n or n+ 1. Since ta4, = v1, %,41 and Yn+14 are not required to appear in X and Y. PAREA(X,Y, N) is assigned the value A(r).
 
-**Programmer.** A. H. Morris Reference. DiDonato, A. R. and Hageman, R. K., Computation of the Integral ofthe Bi-
+**Programmer.** A. H. Morris Reference. DiDonato, A. R. and Hageman, R. K., Computation of the Integral of the Bi-
 
 vartate Normal Distribution over Arbitrary Poiygons, ieport TR 80-166, Naval Surface Weapons Center, Dahlgren, Virginia, 1980.
 
@@ -1359,7 +1359,7 @@ Pemarks.
 
 on
 
-(1) It ic assurned that € contains no loops.
+(1) It ic assumed that € contains no loops.
 
 (2) Normaily, few backtracks are needed when the number of vertices in each R; is small, say LM or less. Consequently, the setting NB =: —1 is generally appropriate in such canes,
 
@@ -1739,7 +1739,7 @@ are applied.
 
 **Precision.** {f PNI is called then w is accurate to within 3 units of the 14" significant digit. Otherwise, if DPN] is called then w is accurate to within L unit of the 27" significant digit.
 
-**Programming.** PNI employs the functions FREI, SPMPAR, and IPMPAR, and DPNE employs the functions DERFI, DER, DERECI, DERECO, DXPARG, DPMPAR, and IPM- PAR. PNI was written by Armido R. DiDonato and modified by A. H. Morris. DPNI was adapted fromm PNE by A. EL. Morris,
+**Programming.** PNI employs the functions FREI, SPMPAR, and IPMPAR, and DPNE employs the functions DERFI, DER, DERECI, DERECO, DXPARG, DPMPAR, and IPM- PAR. PNI was written by Armido R. DiDonato and modified by A. H. Morris. DPNI was adapted from PNE by A. EL. Morris,
 
 
 <small>Original source: [View scanned PDF page 55](scans/page_0055.png)</small>
@@ -1786,7 +1786,7 @@ Original documentation: [page 55](scans/page_0055.png).
 | `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8212`](source_parts/nswc_part_01.f#L8212) |
 
 
-For any omplex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assurned that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subrousine 3 is available for computing E(z).
+For any omplex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subrousine 3 is available for computing E(z).
 
 ```fortran
 CALL CFRNLI(MO, Z, W)
@@ -2183,7 +2183,7 @@ The argument z is a double precision number. DGAMMA(z) is the double precision v
 
 **Remark.** DGAMMA must be declared in calling program to be of type DOUBLE PRECI- SION.
 
-**Algorithm.** Li |x| < 20 then z is reduced to the inte:val (1,2) by [(a+ 1) = aT (a), and minimax approximations are used. If z < —20 then (1) is applied, and if z > 20 then (2) is used. A(z) is computed by the power series correxponding to the Chebyshev expansion ii the SLATEC library given by Wayne Fullerton ‘Los Alamos). The power series and minimax approximations were obtained ly A. H. Morris.
+**Algorithm.** Li |x| < 20 then z is reduced to the inte:val (1,2) by [(a+ 1) = aT (a), and minimax approximations are used. If z < —20 then (1) is applied, and if z > 20 then (2) is used. A(z) is computed by the power series corresponding to the Chebyshev expansion ii the SLATEC library given by Wayne Fullerton ‘Los Alamos). The power series and minimax approximations were obtained ly A. H. Morris.
 
 **Precision.** If 0 < x < 2 then DGAMMA(r) is accu; ate to within 1 unit of the 28'" signifiant digit. Otherwise, if z > 2 then DGA'MM 1(z* is accurate to within 1 unit of the 25°" significant digit.
 
@@ -2524,7 +2524,7 @@ BETALN(a, 5) BETALN(a, 6) = In B(a, d) for a,b > 0.
 
 **Programming.** BETALN employs the functions ALNREL, ALGDIV, BCORR, GAMLN, GAMLNI1, and GSUMLN. These functions were written by A. H. Morris.
 
-**Reference.** DiDonato, A. R. and Morris, A. H., “Algorithim 708 Significant Digit Computation of the Incomplete Beta Function Ratios,” ACM Trans. Math Software 18 (1992), pp. 360-373.
+**Reference.** DiDonato, A. R. and Morris, A. H., “Algorithm 708 Significant Digit Computation of the Incomplete Beta Function Ratios,” ACM Trans. Math Software 18 (1992), pp. 360-373.
 
 ```fortran
 DBETLN(A0, B0)
@@ -2997,7 +2997,7 @@ AIE(X)
 
 Ifx > Othen AlM(2} > e At(z) where ¢ = 39/7. Otherwise, if 2 < 0 then AIF (2)
 
-Algorithn.. tabhonal minimax approximations are used. Ifa « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
+Algorithm.. tabhonal minimax approximations are used. Ifa « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
 
 **Precision.** Fora > t, Allez) is accurate to within 2 units of the ¢4°? sipifteant cigit
 
@@ -3197,7 +3197,7 @@ The arguments a and 6 are nonnegative real numbers where a + 6 > 0, anJ «is a p
 
 IERR = | Either a,6, or ¢ is negative. JERR 2 Either a-+ 6 or ¢ is too small. [ERR - 3 Either a,b, or ¢ is too large.
 
-Precison. RDVAL is accurate to within 4 units of the 14" significant digit
+Precision. RDVAL is accurate to within 4 units of the 14" significant digit
 
 **Programming.** RDVAL was written by B.C. Carlson and Klaine M. Notis (Iowa State University), and modified by A. H. Morris. The function SPMPAR is used.
 
@@ -3414,7 +3414,7 @@ The elliptic functions en(z,k) and dn(z,k) may be defined by
 
 dn(z,k) = \/1 — k?sn(z, ky?
 
-where the roots take the value 1 for z = 0. In perticular, if & =: 0 then en(z,0) == cosz and dn(z,0) = 1, and if k = +1 then en(z,k) = dn(z,k) = 1/cosh~. The subroutines ELLPF and ELPFC1 are available for computing sn(z, k&),cn(z,b), and da(z,k) when & is a real value such that [ki < 1. ELLPF may be used when z is real and ELPFC1 when z is complex.
+where the roots take the value 1 for z = 0. In particular, if & =: 0 then en(z,0) == cosz and dn(z,0) = 1, and if k = +1 then en(z,k) = dn(z,k) = 1/cosh~. The subroutines ELLPF and ELPFC1 are available for computing sn(z, k&),cn(z,b), and da(z,k) when & is a real value such that [ki < 1. ELLPF may be used when z is real and ELPFC1 when z is complex.
 
 ```fortran
 CALL ELLPF(U, K, L, S, C, D, IERR)
@@ -3742,9 +3742,9 @@ The argument ¢ may be any integer. If O then the arguinents a and a are assumed
 
 IER and tw are variables. When CERCY as called, fino input errors are detected then IP RR is assigned the value 0. Also, w = W{A,ye) if) Oandw PCR, d)ifia 7 0.
 
-Error Retorn. Hoan inpat error is detected then TERR is set as follows: TERR Por Ois not satished, IE RK 20-0 e. bord + Ois not satished
+Error Retorn. Hoan input error is detected then TERR is set as follows: TERR Por Ois not satished, IE RK 20-0 e. bord + Ois not satished
 
-When either of Chese errors is detected, was assigned the walue I
+When either of Chese errors is detected, was assigned the value I
 
 Precision [ft Qthen owas accurate te within Lounit of the PS'P sqemificant digst when VON eo) os not near OQ) Otherwise, fa ¢ O them tis accurate to within fourm of the ppb
 
@@ -3909,7 +3909,7 @@ The routine stores the si 1 coefficients c, of p(x) — q(z) in C where C(1 + y-
 j=0,1,...,n-1.
 ```
 
-**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C wiil overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same Jocation as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
+**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same Jocation as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
 
 **Programmer.** A. H. More's.
 
@@ -3940,7 +3940,7 @@ A, B and C are arrays. PMULT is used if A, B and C are real arrays and DPMULT is
 
 The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and b, are assumed to be stored in A and B where A(l+j-ka} =a; (f= 0,1,...,€-1) BIL + j+kb) = 6; (7 =0,1,...,m— 1). The routine stores the first n coefficients cy of p(z)q(x) in C where C(1 + j-ke) = cy for g=0,1,...,2-1.
 
-**Remarks.** It is assurned that the array C does not overlap with the arrays A and B.
+**Remarks.** It is assumed that the array C does not overlap with the arrays A and B.
 
 **Programmer.** A. H. Morris.
 
@@ -4113,7 +4113,7 @@ f(z) = ao/2+ >> a;T,(x) where a, is real, then the following functions are avail
 
 It is assumed that n > } and that A is an array containing ao, 1, ...,@,—1 where A(t) == ay-1(¢ = 1,...,n). Then CSEVL(2, A,n) == f(z) for any real z.
 
-**Programmer.** A. H. Morris. DCSEVL(z, A,n) It is assumed that n > 1 and A is a double precision array containin @9,41, ...,@n—1 where A(i) = a;3(f = 1, ...,n). Then for any double precision value x, DCSEVL(z, A,n)
+**Programmer.** A. H. Morris. DCSEVL(z, A,n) It is assumed that n > 1 and A is a double precision array containing @9,41, ...,@n—1 where A(i) = a;3(f = 1, ...,n). Then for any double precision value x, DCSEVL(z, A,n)
 
 is the double precision value of f(z).
 
@@ -4298,7 +4298,7 @@ The arguments og, 6, AE RK, and RERR are double precision numbers, and P(x)is a 
 
 } [4,0 }
 
-AERR and RERE are the absolute and relative tolerances to be satisied (AERK > Qand RERR » 0). One may set RERK 10 * if it is desired that 2 be accurate to & significant decimal digits. [IP RERR 0 then itis assumed that machine accuracy is desired
+AERR and RERE are the absolute and relative tolerances to be satisfied (AERK > Qand RERR » 0). One may set RERK 10 * if it is desired that 2 be accurate to & significant decimal digits. [IP RERR 0 then itis assumed that machine accuracy is desired
 
 **Remarks.** Pomust be declared in the calling program to be of type DOUBLE PRECESSION and EXTERNAL, and DAR RO must be declared to be of type DOUBLE PRECESION
 
@@ -4348,7 +4348,7 @@ EPS is an input argument which specifies the relative accuracy of F. If it is es
 
 TOL is an input argument which specifies the desired accuracy of the solution. The Euclidean norin ||z|| == \/2,22 is employed. If ¢ denotes an actual solution of the equations, then HBRD terminates when an iterate 2 is generated for which it is estimated that |[z - x|| < TOL: |[z]] is satisfied. It is required that ‘TOL > 0. In order for the convergence test to work properly, it is recommended that TOL always be smaller than 107°,
 
-WK is an array of dimension @ that is used for a work space. It is assurned that the argument @ is greater than or equal to n(3n | 13)/2.
+WK is an array of dimension @ that is used for a work space. It is assumed that the argument @ is greater than or equal to n(3n | 13)/2.
 
 INFO is an integer variable that reports the status of the results. When HBRD ternsnates, INFO has one of the following values: INFO <0) This cecurs when the user terminates the execution of HEBRID hy resetting the arguinent IFLAG in the subroutine F to a negative value. “Then INFO tho nepative value of IPLAC. INPO 0G (Inpet Error) no 1, EPS © 0, POL « O, or @« m(Sn ob £8)/2. INFO ob A solution having the desired accuracy was obtained.
 
@@ -4560,7 +4560,7 @@ CALL DSWAP(N, DX, INCX, DY, INCY)
 CALL CSWAP(N, CX, INCX, CY, INCY)
 ```
 
-The argument kz is an integer which specifies the interval between successive components x, of the vector X. If kx > 0 then it is assumed that z, is stored in X(1+ (1—1)kz) for t=1,...,n. Otherwise, if kz < C then it is assurned that 2, is stored in X(1+(n--1)|kz|). Similarly, the argument ky specifies the spacing of the components of Y.
+The argument kz is an integer which specifies the interval between successive components x, of the vector X. If kx > 0 then it is assumed that z, is stored in X(1+ (1—1)kz) for t=1,...,n. Otherwise, if kz < C then it is assumed that 2, is stored in X(1+(n--1)|kz|). Similarly, the argument ky specifies the spacing of the components of Y.
 
 SSWAP is used if X and Y are real arrays, DSWAP is used if X and Y are double precision arrays, and CSWAP is used if X and Y are complex arrays. When any of these routines is called, if n < O then the routine immediately terminates. Otherwise, if n > 1 then the components z, and y, are interchanged for 1 = 1, ...,n. Thus, when the routine terminates X = (y1,..., Yn) and Y = (zy, ...,2y).
 
@@ -4693,7 +4693,7 @@ CALL DROTM(N, DX, INCX, DY, INCY, DPARAM)
 
 Let X = (21, ...,2,) and Y = (y1, ..., yn) be vectors, and Q be the array obtained by SRO'TMG or DROTMG. If A is the modified Givens rotation matrix stored in Q, then SROTM and DROTM are available for computing (3) = H (=) (@=1,...,n).
 
-The arguinent kz is an integer which specifies the interval between succesive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
+The arguinent kz is an integer which specifies the interval between successive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
 
 SROTM is used if X,Y, and @ are real arrays, and DROTM is used if X,Y, and Q are double precision arrays. When SROTM or DROTM is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then the components zx, and y, are replaced with Z, and g, fori =1,...,n.
 
@@ -4800,7 +4800,7 @@ CALL DAXPY(N, DA, DX, INCX, DY, INCY)
 CALL CAXPY(N, CA, CX, INCX, CY, INCY)
 ```
 
-The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifes the sp cing of the components of the vector Y.
+The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifies the sp cing of the components of the vector Y.
 
 SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if a ig a double precision number and X, Y are double precision arrays, and CAXPY is used if a is a complex number and X, Y are complex arrays. When any of these routines is called, if n < 0 or a = O then the routine immediately terminates. Otherwise, if n > 1 then y,; is replaced with az, + y; for + = 1,...,n. Thus when the routine terminates Y = (azy + yi, -..,@%n + Un).
 
@@ -4823,7 +4823,7 @@ SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if 
 | `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L31999`](source_parts/nswc_part_04.f#L305) |
 
 
-The follewing functions are available for computing the 2; norm of a ceal vector or a modified LZ, norm of a complex vector.
+The following functions are available for computing the 2; norm of a ceal vector or a modified LZ, norm of a complex vector.
 
 SASUIM(n, X, kz) DASUM(n, X, kz; SCASUM(n, X, kz)
 
@@ -4996,7 +4996,7 @@ A is a double precision m x n matrix and B a real 2-dimensional array. MCVDR sto
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimension statement for B in the calling p1ogram It is assurned that ka > m and kb > m, and that B contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling p1ogram It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -5091,7 +5091,7 @@ CALL MCOPY(M, N, A, KA, B, KB)
 
 A is a real m x n matrix and B a real 2-dimensional array. MCOPY makes a copy of the matrix A und stores itin B, The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program
 
-It is assurned that ka > m and kt > m, and that B contains at least n columns.
+It is assumed that ka > m and kt > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -5121,7 +5121,7 @@ CALL CMCOPY(M, N, A, KA, B, KB)
 
 Ais acomplex mxn matrix and B a complex 2-dimensional array, CMCOPY makes a copy of the matrix A and stores it in 8. The input arguments ke and kb have the following values:
 
-ka <= the number of rows in the dimension statement for A in the callhog prograrn
+ka <= the number of rows in the dimension statement for A in the callhog program
 
 kb = the number of rows in the dimension statement for B in the catiing program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
@@ -5176,11 +5176,11 @@ CALL CTPOSE(M, N, A, KA, B, KB)
 
 TPOSE is called if A is a real matrix and 8 a real array, DTPOSE is called if A isa double precision matrix and B a double precision array, and CTPOSE is called if 4 is a complex matrix and B a complex array.
 
-A is a matrix having m rows and n columns, and B a 2-dimensional arrary. The routine transposes A and stores the results in B. The input arguments ka and kb have the following values:
+A is a matrix having m rows and n columns, and B a 2-dimensional array. The routine transposes A and stores the results in B. The input arguments ka and kb have the following values:
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows ir the dimension statement for B in the calling program It is assumed that ka > m and kb > n, and that 2 contains at least n colurnns.
+kb = the number of rows ir the dimension statement for B in the calling program It is assumed that ka > m and kb > n, and that 2 contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -5196,11 +5196,11 @@ A is an array of dimension mn which contains an m X n matrix to be transposed. T
 
 MOVE, k, MDIM are ignored.
 
-If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assurned to be an array of dimension k. MOVE is a storage area for saving information that inay belp speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the rovtine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
+If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assumed to be an array of dimension k. MOVE is a storage area for saving information that inay belp speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the rovtine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
 
 **Programming.** The routines TIP, DPTEP, and CVEP employ the subroutine INECTR, ‘The routines were written by Norman Brenner (Dept. of Marth and Planetary Serences,
 
-Massachusetts Institute of Technology), and modifed by A. H. Morris.
+Massachusetts Institute of Technology), and modified by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 149](scans/page_0149.png)</small>
@@ -5237,7 +5237,7 @@ It is assumed that A and B are diiferent storage areas.
 
 **Programmer.** A. H. Morris. CALL CTRANS(ka, n, A)
 
-A is a complex array of diraension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the niatrix and stores the results in A. It is assumed that ka > n.
+A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the niatrix and stores the results in A. It is assumed that ka > n.
 
 **Programmer.** George J. Davis (Georgia State University)
 
@@ -5318,9 +5318,9 @@ Prograt.. wer. A. H. Morris.
 
 The matrix difference C = A - B can be somputed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
 
-Aand B are real m.:n matrices and U a real 2-imensional i.reay. MSUBT comocutes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following vaiues: ka = the number :f rows in the dimensio:. statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
+Aand B are real m.:n matrices and U a real 2-imensional i.reay. MSUBT comocutes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following values: ka = the number :f rows in the dimensio:. statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
 
-The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the resuit C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assurned what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the etorage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
+The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the resuit C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the etorage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
 
 **Programmer.** A. H. Morris. CALL SMSUBT(n, A, B,C)
 
@@ -5724,7 +5724,7 @@ CALL DMSLV(MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK)
 
 A is a matrix of order n where n > 1. If MO == 0 then the inverse of A is computed and stored in A. If MO # 0 then the inverse is not computed.
 
-The argument rm is an integer. If m > 1 then B is a metrix having n rows and m colurnns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is iguored.
+The argument rm is an integer. If m > 1 then B is a metrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is iguored.
 
 The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for 8 in the calling program. If m < 0 then the argument ké is ignored.
 
@@ -5779,7 +5779,7 @@ IWK is an array of dimension m or larger that is used by the routines for keepin
 
 Fiemarks.
 
-(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A ani B are double precision matrices and WK a doubie precision array.
+(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A ani B are double precision matrices and WK a double precision array.
 
 (2) The matrix A is destroyed.
 
@@ -5866,7 +5866,7 @@ have 6; >> 9 columns in common for ¢ < m, Thus SO rp n and block A, begins in c
 
 pany
 
-», (cx ~ Oe) -+ L fer ¢ > 2. It is also assurned that three successive blacks Ay-1, Aj, Assi
+», (cx ~ Oe) -+ L fer ¢ > 2. It is also assumed that three successive blacks Ay-1, Aj, Assi
 
 k=
 
@@ -6108,7 +6108,7 @@ The argument kb is the number of rows in the dimension statement for B in the ca
 
 **Remarks.**
 
-(1) If PCHOL is called then it is assumed that A and 8 are real arrays, and if DPCHOL is called then it ig assumed that A and B are double precision arrays.
+(1) If PCHOL is called then it is assumed that A and 8 are real arrays, and if DPCHOL is called then it is assumed that A and B are double precision arrays.
 
 (2) Te data in A is destroyed.
 
@@ -6384,7 +6384,7 @@ J. 0 Do not compute the right singular vectors,
 
 J > Q Compute the right sineular vectors.
 
-U is a 2-dimensional array which containg the deft singular vectors that are requested, and kus the number of rows in the dimension stacement for (an the calling programa. It ig assumed that Au Som. Pf ne left sinpular vectors are requested (he, if JOB < £0) then U isignered by the rouvtmes. Ovherwise, ( must be of dimensun Aux na ifallea deft siagriar weetors are requested, and must be of dinieosion ku raindanya} af che first manidea, af
+U is a 2-dimensional array which containg the deft singular vectors that are requested, and kus the number of rows in the dimension stacement for (an the calling programa. It is assumed that Au Som. Pf ne left sinpular vectors are requested (he, if JOB < £0) then U isignered by the rouvtmes. Ovherwise, ( must be of dimensun Aux na ifallea deft siagriar weetors are requested, and must be of dinieosion ku raindanya} af che first manidea, af
 
 left atneudar vectors are requested. ia) i
 
@@ -6403,7 +6403,7 @@ F is an array of dimension n or larger, and WORK is an array of dimension m or l
 
 (2) The contents of A are destroyed by the routines. If left singular vectors are requested and there is sufficient storage in A to hold the vectors (there will be sufficient storage if m <n or JOB > 20), then one may set U = A. Similarly, if right singular vectors are requested and m > n then one may set V = A. However, only one of the two arrays U and V may be identified with A.
 
-**Error Return.** INFO is an iteger variable. If all the singular values are found then INFO will be set to O and the array E will contain zeros. However, if the 7'” singular value cannot be found then INFO is set to 7. In this case, if 7 < k where k = min{m,n} then the singular values d;41, ...,d, will have been computed and stored in D. A will have been reduced to an upper bidiagonal matrix B with D as its diagonal and EF its super diagonal. If U and V have been requested then B = U* AV will be satisfied.
+**Error Return.** INFO is an integer variable. If all the singular values are found then INFO will be set to O and the array E will contain zeros. However, if the 7'” singular value cannot be found then INFO is set to 7. In this case, if 7 < k where k = min{m,n} then the singular values d;41, ...,d, will have been computed and stored in D. A will have been reduced to an upper bidiagonal matrix B with D as its diagonal and EF its super diagonal. If U and V have been requested then B = U* AV will be satisfied.
 
 **Programming.** SSVDC, DSVDC, and CSVDC are part of the LINPACK package of matrix subroutines released by Argonne National Laboratory. The routines were coded by G. W. Svewart. (University of Maryland). The routines employ the vector subroutines SSWAP, SROT, SDOT, SSCAL, SAXPY, SNRM2, DSWAP, DROT, PDOT, DSCAL, DAXPY, DNRM2, and CSWAP, CSROT, CDOTC, CSCAL, CAXPY, SCNRM2, Also the subroutines SROTG and DRO'G are called.
 
@@ -6463,7 +6463,7 @@ CALL ABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 CALL DABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 ```
 
-If ABSLV is called then it is assuned that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assum :d that A, B,C, and Wh are doubie precision arrays.
+If ABSLV is called then it is assumed that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assum :d that A, B,C, and Wh are double precision arrays.
 
 It is assumed that m > iandn 1. The input argume.its ka, kb, ke have the following values:
 
@@ -6714,7 +6714,7 @@ WK is an array of dimension [n?/4] +n +3 or larger,’ and iWK is an integer arr
 
 **Remarks.**
 
-(i) When LE is called then it is assumed that 6, X, WK and the array Rin ROWK are real arrays. When DPLE is called then it is assumed that these arrays are doubie precision arrays, and when CLE is cailed then it is assumed that the arrays are complex.
+(i) When LE is called then it is assumed that 6, X, WK and the array Rin ROWK are real arrays. When DPLE is called then it is assumed that these arrays are double precision arrays, and when CLE is cailed then it is assumed that the arrays are complex.
 
 (2) When the equations are solved, ROWK is called to attach the first row of A, then the secend row, etc. Each row of A is attached only once.
 
@@ -6855,7 +6855,7 @@ CVRB1 is used if A and B are real arrays, CVDB1 is used if A and B are double pr
 
 **Remark.** B may begin in the same location as A. If B begins in the same location then it is assumed thal kb = ka. In this case, the result B will overwrite the input data A. Otherwise, if B does not begin in the same location as A, then it is assumed that the storage areas A and B do not overlap.
 
-**Programming.** CVRB1 calls the subroutine CVRB, CVDBI calls the subroutine CVDB, and CVCBI calls the subroutine CVCB. These routines were writen by A. H. Morris.
+**Programming.** CVRB1 calls the subroutine CVRB, CVDBI calls the subroutine CVDB, and CVCBI calls the subroutine CVCB. These routines were written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 198](scans/page_0198.png)</small>
@@ -6883,7 +6883,7 @@ CALL DMCVBS(A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR)
 CALL CMCVBS(A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR)
 ```
 
-A is an m X n matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statment for A in the calling program. It is assumed that 0 < mz, < m,0O < mu <n, and ka > m.
+A is an m X n matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m,0O < mu <n, and ka > m.
 
 It is assumed that A is to be stored in sparse form in the arrays B,JB,/B. NUM is the estimated maximum number of elements that will appear in B and J&B. It is assumed that B and JB are of dimension max{1, NUM} and that /B is of dimension m + 1.
 
@@ -6966,7 +6966,7 @@ Ais an m xn complex matrix stored in band form, m, the number of diagonals below
 
 B is a 2-dimensional real array of dimension kb x € where kb > m. The input argument é is an estimate of the maximum number of diagonals of Re(A) which will have to be stored (2 < me+ mu +1). TERR, ng, and ny are integer variables. When BREAL is called, if £ specifies sufficient storage for B then Re(A) is stored in band form in B. Also, IERR is assigned the value 0, ng = the number of diagonals of Re(A) below the main diagonal containing nonzero elements, and ny, = the number of diagonals of Re(A) above the main diagonal containing nonzero elements.
 
-**Error Return.** If @ does not specify sufficient storage for B, then IERR is assigned the value v where v is the number of colurnns needed for B. Reset £> v.
+**Error Return.** If @ does not specify sufficient storage for B, then IERR is assigned the value v where v is the number of columns needed for B. Reset £> v.
 
 **Programmer.** A. H. Morris. CALL BIMAG(A, ka, m,n, mz, mu, B, kb, €, ne, ny TERR)
 
@@ -6974,7 +6974,7 @@ Ais an m Xn complex imatrix stored in band form, mg the number of diagonals belo
 
 B is a 2-dimensional real array of dimension kb x € where kb > m. The input argument éis an estimate of the maximum number of diagonais of Im(A) which will have to be stored (2< me+mu +1). TERR, ne, and ny are integer variables. When BIMAG is called, if é specifies sufficient storage for J3 then Im(A) is stored in band form in B. Also, TERR is assigned the value 0, ng == the number of diagonals of Im(A) below the main diagonal conlLaining nonzero elements, and ny = the number of diagonals of fm(A) above the main diagona! containing nonzero elements.
 
-**Error Return.** If @ does not specify sufficient storage for 8B, then IERE is assigned the value v where v is the number of colurnns needed for B. Reset @ > v.
+**Error Return.** If @ does not specify sufficient storage for 8B, then IERE is assigned the value v where v is the number of columns needed for B. Reset @ > v.
 
 **Programmer.** A. H. Morris.
 
@@ -7061,7 +7061,7 @@ CALL CBADD(M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR)
 
 A and B are mm xX m matrices stored in band form, my, the number of diagonals of A below the main diagonal containing nonzero elements, m, the number of diagonals of A above the main diagonal containing nonzero elements, ng the number of diagonals of B below the main diagonal containing nonzero elements, and n, the number of diagonals of 2 above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for B in the calling program.
 
-It is assurned that A-+ B is to be stored in band fortn in C. C ts a 2-dimensional array of dimension ke x € where kc > m. The input argument @ is an estimate of the maximum number of diagonals of A + B which will have to be stored (@€ < max{rny, ne} | max{my,nu} $1). BADD is used if A and B are real arrays, DBADD is used if A and [2 are double precision arrays, and CBADD is used if A and B are complex arrays. TERR, vy, and ™, are integer variables. When the routine is called, if @ specifies sufficient storage for C then A { Bois computed and stored in band forin in C. Also TERR is assigned the value O, vg the number of diagonals of A} B below the main diagonal containing nonzero elements, and vy, the number of diagonals of A + B above the main diagonal containiny
+It is assumed that A-+ B is to be stored in band fortn in C. C ts a 2-dimensional array of dimension ke x € where kc > m. The input argument @ is an estimate of the maximum number of diagonals of A + B which will have to be stored (@€ < max{rny, ne} | max{my,nu} $1). BADD is used if A and B are real arrays, DBADD is used if A and [2 are double precision arrays, and CBADD is used if A and B are complex arrays. TERR, vy, and ™, are integer variables. When the routine is called, if @ specifies sufficient storage for C then A { Bois computed and stored in band forin in C. Also TERR is assigned the value O, vg the number of diagonals of A} B below the main diagonal containing nonzero elements, and vy, the number of diagonals of A + B above the main diagonal containiny
 
 noazero vlements,
 
@@ -7333,7 +7333,7 @@ CALL CBTPE’ ‘m,n, A, ka, me, ru, 72, y)
 
 A is an m Xn matrix stored in band form, m, the number of diagonals below the main diagonal containing nonzero elements, and m, the number of diagonals above the main diagonal containing nonzero elements. The argument ka is the number of rows in the dimension statement for A in the calling program. It is assumed that O < mg < m,0O « my, <n, and ka > m.
 
-The argument x is a row vector of d.mension m and y an array of diraension n. A,x,y are complex arrays. When CBTPD is called, 2A is computed ind stored in y.
+The argument x is a row vector of d.mension m and y an array of dimension n. A,x,y are complex arrays. When CBTPD is called, 2A is computed ind stored in y.
 
 **Remark.** It is assumed that the arrays A, 2, y do not overlap.
 
@@ -7379,7 +7379,7 @@ BANRM(A, ka, m,n, m,,m,) DBINRM(A, ka, m,n, me, mu)
 
 BiINRM is used if A is a real array and DBINRM is used if A is a double precision array. BINRM is a real function and DBINRM a double precision function.
 
-The function has the value ||A||; for any m x n matrix A stored in band form. The argument mg, is the number of diagonals below the main diagonal containing nonzero elements, mm, the number of diagonals avove the main diagonal containing nonzero elements, and ka the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m, 0 < my, <n, and ka > m,
+The function has the value ||A||; for any m x n matrix A stored in band form. The argument mg, is the number of diagonals below the main diagonal containing nonzero elements, mm, the number of diagonals above the main diagonal containing nonzero elements, and ka the number of rows in the dimension statement for A in the calling program. It is assumed that 0 < mz, < m, 0 < my, <n, and ka > m,
 
 **Remark.** DB1INRM must be declared to be of type DOUBLE. PRECISION in the calling program.
 
@@ -7717,7 +7717,7 @@ can be stored as follows:
 
 A: [aii [aie [aia [ 437 | ase | 243 |
 
-The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissable. The clements of a row of the matrix may be given in any order desired.
+The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissible. The clements of a row of the matrix may be given in any order desired.
 
 **Remark.** it is not required that each a,, in A be nonzero.
 
@@ -8048,7 +8048,7 @@ Restriction. Ji is assumed that the storage areas B, 1B, JB do not overlap with 
 CALL DFOSE1{x, A, fA, JA, B,1B,J3,m,n)
 ```
 
-It is assumed that m ig an integer array of dimension m containing the data {11, ...,4m}, and that the sparse matrix A is stored in the arrays A, /A, JA. Aand B are double precision arrays. If A and JA contain k elements, then it is also assurned that B and JB are arrays of dimension k and that /B is an array of dimension n +-1. When DPGSE1 is called, (PA)* is computed and the results are stored in B, 7B, JB.
+It is assumed that m ig an integer array of dimension m containing the data {11, ...,4m}, and that the sparse matrix A is stored in the arrays A, /A, JA. Aand B are double precision arrays. If A and JA contain k elements, then it is also assumed that B and JB are arrays of dimension k and that /B is an array of dimension n +-1. When DPGSE1 is called, (PA)* is computed and the results are stored in B, 7B, JB.
 
 Remarks, DPOSEI orders the elements of each row of (7?A)! so that the column indices of the elements of the row are in ascending order. However, it does no checking for zero elements in A. if zero elements appear in the array A, then the zero elements will also
 
@@ -8327,7 +8327,7 @@ CALL DTPRD(M, N, A, IA, JA, X, Y)
 
 The argumei:t z is a row vector of dimension m and y an array of dimension n. A, z, y are double precision arrays. When DTPRD is called, 2A is computed and stored in y.
 
-**Remark.** It is assurned that the arrays A,2,y do not overlap. Programmer. A. H. Morris.
+**Remark.** It is assumed that the arrays A,2,y do not overlap. Programmer. A. H. Morris.
 
 ```fortran
 CALL DTPRD1(M, N, A, IA, JA, X, Y)
@@ -8590,7 +8590,7 @@ then the subroutine BLKORD should first be tried. This subroutine will specify a
 
 **Programming.** SPSLV is a modification by A. H. Morris of the subroutine NSPIV. SPSLV employs the subroutine NSPIV1. NSPIV and NSPIVI were written by Andrew H. Sherman (University of Texas at Austin).
 
-**Reference.** Sherman, Andrew H.,“Algorithims for Sparse Gaussian Elimination with Partial Pivoting,” “M Trans. Math Software 4 (1978), pp.330-~338.
+**Reference.** Sherman, Andrew H.,“Algorithms for Sparse Gaussian Elimination with Partial Pivoting,” “M Trans. Math Software 4 (1978), pp.330-~338.
 
 ```fortran
 CALL RSLV(M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR)
@@ -8612,7 +8612,7 @@ C is an integer array of « entries which plays a role similar to #. On input, C
 
 iV¥K and WK are arrays for interna! use by the routines, and MAX is an input argument. On an initial call to RSLV or TSLV, an LU decomposition of A is first obtained where J. is 4 lower triangular matrix and U a unit upper triangular matrix. The off-diagonal portions of 1 and 'J are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elements of £ and U that might be nonzero and have to be stored (MAX < n(n — 1)}. [WK is an integer array of dimension 4n + MAX + 2 or larger, and ‘VK is a real array of dirnension 2n + MAX or larger.
 
-On an imtial call to RSLV or TSLV, JERR is an integer variable that reports the status of the results. Wnen the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. IERR=miax{1,m} where m is the total number of off-diagonal nonzero elernents of L and U.
+On an imtial call to RSLV or TSLV, JERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. IERR=miax{1,m} where m is the total number of off-diagonal nonzero elernents of L and U.
 
 [ERR =0 The argument n is nonpositive.
 
@@ -8767,7 +8767,7 @@ A, b, and X are double precision arrays. {t ia assumed that n > 1 and that X is 
 
 R is an integer array of n entries specifying the order in which the » rows of A are to be examined and processed. For example, if R contains the entries 11, ...,%, then the algorithm first performs operations on row s1, next on row ¢g, etc. It is well known that the order in which the rows of a sparse matrix are processed can have a significant impact on the overall performance of subroutines such as DSLV and DTSLV. Thus & must be chosen judiciously. # is not modified by the routine.
 
-C is an integer array of n entries which plays a role similar to #. On input, C specifies a suggested order in which the m columns of A should be ordered for selection of the pivot elements. For example, if C contains the entries j1,...,7, then it is suggested that the first pivot element may be from column j;, the second pivot element from column je, etc. However, since partial pivoting with column interchange is performed, on output C may have been modified. On output, C wiil contain the actual order of the n columns from which the pivot elements were selected. This order will depend on A and R, and not on 6.
+C is an integer array of n entries which plays a role similar to #. On input, C specifies a suggested order in which the m columns of A should be ordered for selection of the pivot elements. For example, if C contains the entries j1,...,7, then it is suggested that the first pivot element may be from column j;, the second pivot element from column je, etc. However, since partial pivoting with column interchange is performed, on output C may have been modified. On output, C will contain the actual order of the n columns from which the pivot elements were selected. This order will depend on A and R, and not on 6.
 
 IWK and WK are arrays for internal use by the routines, and MAX is an input argument. On an initial call to DSLV or DTSLV, an LU decomposition of A is first obtained where L is a lower triangular matrix and U a unit upper triangular matrix. The off-diagonal portions of Z and U are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elerients of L and U that might be nonzero and have to be stored (MAX < n(n — 1)). [WK is an integer array of dimension 4n + MAX + 2 or larger, and WK is a double precision array of dimension 2n + MAX or larger.
 
@@ -8934,7 +8934,7 @@ C is an integer array of n entries which plays a role similar to R. On input, C'
 
 IWK and WK are arrays for internal use by the routines, and MAX is an input argument. On an initial call to CSLV or CTSLV, an LU decomposition of A is first obtained where LF is a lower triangular matrix and U a umt upper triangular matrix. The off-diagonal portions of L and U are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elements of L and U that might be nonzcro and have to be stored (MAX < n(n -- 1)). TWK is an integer array of dimension 4n + MAX + 2 or larger, and WK is a complex array of dimension 2n -+- MAX or larger.
 
-On an intial call to CSLV or CTSLV, IERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. INRR=max{1,m} where m is the total number of off-diagonal nonzero
+On an initial call to CSLV or CTSLV, IERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. INRR=max{1,m} where m is the total number of off-diagonal nonzero
 
 elements of L and U.
 
@@ -9020,7 +9020,7 @@ ay we
 | `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L55756`](source_parts/nswc_part_06.f#L2765) |
 
 
-The subroutines EIGV and EIGV1 are availubie for computing the eigenvalues ond eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGVI. In partinular, ETGV and EIGV1 can frequently yield high precision resutts for the eigenvalues if tiey are distinct. However, be aware that errors in the eigenvalues, no matter how seeimin sly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significunt digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of sucn an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
+The subroutines EIGV and EIGV1 are available for computing the eigenvalues ond eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGVI. In particular, ETGV and EIGV1 can frequently yield high precision resutts for the eigenvalues if tiey are distinct. However, be aware that errors in the eigenvalues, no matter how seeimin sly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significunt digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of sucn an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
 
 ```fortran
 CALL EIGV(IBAL, A, KA, N, WR, WI, ZR, ZI, IERR)
@@ -9367,7 +9367,7 @@ AR and AI are real matrices of order n > i and WR and WI are real arrays of dime
 
 (tis assumed that the input argument ka is the number of rows in the dimension statements for AR and Al in the calling program. ZR and Al are real arrays of dimension
 
-ka xn, For j= 1,...,n the real parts of the coniponents of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" columm of ZI. ‘Phe eigenvectors 2, ...,¢, are not normalized.
+ka xn, For j= 1,...,n the real parts of the coniponents of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" column of ZI. ‘Phe eigenvectors 2, ...,¢, are not normalized.
 
 IBAL is an input argument that can be assigned any integer value. If ISAL / 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvecturs are computed. Otherwise, ff EBAL 0 then the complex materx is not
 
@@ -9417,7 +9417,7 @@ The subroutine DCEIG is available for the double precision computation of the ei
 CALL DCEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
 ```
 
-AR and AI are double precision matrices of order n > 1, and WR and WI are doubie precision arrays of dimension n or larger. AR and AI are the real and imaginary parts of the matrix whose eigenvalues are to be computed. When DCEIG is called the eigenvalues Ay, ---,)An, are computed. The real parts of the eigenvalues are stored in WR(!), ..., WR(n) and the imaginary parts are stored in WI(1),..., WI(n). The eigenvalues are unordered.
+AR and AI are double precision matrices of order n > 1, and WR and WI are double precision arrays of dimension n or larger. AR and AI are the real and imaginary parts of the matrix whose eigenvalues are to be computed. When DCEIG is called the eigenvalues Ay, ---,)An, are computed. The real parts of the eigenvalues are stored in WR(!), ..., WR(n) and the imaginary parts are stored in WI(1),..., WI(n). The eigenvalues are unordered.
 
 IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBAL may be any integer. If IBAL ¥ 0 then the complex inatrix {represented by AR and Al) is baianced before the eigenvalues are computed. Otherwise, if IBAL == 0 then the complex matrix is not balanced.
 
@@ -9521,7 +9521,7 @@ is stored in X. Also RNORM is assigned the value ||Az — 4||},6 — Az is store
 
 When CLI is called, a modified form of the simplex algorithm is used to minimize ||Az ~ b||,. The arguments TOL and ITER control the use of this algorithm. The input argument TOL is a positive tolerance. CLi will not pivot on any quantity whose magnitude is less than TOL. Normally the setting TOL = 10~?”/* suffices where v is the number of decimal digits of accuracy available.
 
-Frequently the routine requires less than 5(k+é+m) iterations of the simplex alogrithm to solve the problem. ITER is a variable used for input/output purposes. On input the user must set ITER to the maximum number of iterations that will be permitted. When the routine terminates, ITER has for its value the number of iterations that were performed.
+Frequently the routine requires less than 5(k+é+m) iterations of the simplex algorithm to solve the problem. ITER is a variable used for input/output purposes. On input the user must set ITER to the maximum number of iterations that will be permitted. When the routine terminates, ITER has for its value the number of iterations that were performed.
 
 On output KODE reports the status of the results. The routine assigns KODE one of the following values:
 
@@ -9574,7 +9574,7 @@ Given an m X n matrix A and an mx @ matrix B. The column vectors b;,..., 6, of B
 
 This set of problems can be written in the form AX = B where X is the n x @ matrix having the column vectors z1, ...,2¢. There always exists 4 unique minimum length least squares solution 2, for each Ar; = b;. If B is the m x m identity matrix, then the matrix whose columns are the minimum length solution vectors z; is called the pseudoinverse of A.
 
-For any B, the subroutines LLSQ, LSQR, HFTI, and HFTI2 are available for obtaining the matrix X whose colurnns are the minimum length solution vectors. LSQR, HFTi, and HFTI2 are more general than LLSQ, begin able to solve arbitrary systems AX = B. LLSQ assumes that m > n > 1 and that the rank of A is n. LSQR employs a more involved procedure than HFTI and HFTI2. LSQR computes the rank of A, whereas HFTI and HFTI2 leave the determination of the rank to the user.
+For any B, the subroutines LLSQ, LSQR, HFTI, and HFTI2 are available for obtaining the matrix X whose columns are the minimum length solution vectors. LSQR, HFTi, and HFTI2 are more general than LLSQ, begin able to solve arbitrary systems AX = B. LLSQ assumes that m > n > 1 and that the rank of A is n. LSQR employs a more involved procedure than HFTI and HFTI2. LSQR computes the rank of A, whereas HFTI and HFTI2 leave the determination of the rank to the user.
 
 ```fortran
 CALL LLSQ(M, N, A, KA, B, KB, NB, WK, IWK, IERR)
@@ -9635,7 +9635,7 @@ TERR © 5
 
 HeRE 6 RERR or AdeacR os negative. FIERRO 7 MO / Oand #- 0.
 
-fwoas too smal.
+fwoas too small.
 
 No coumpatation is performed when an error is detected
 
@@ -9704,7 +9704,7 @@ Since fey] > ++: > |cee| > > clearly k& is the rank of A. It is also true that t
 (4) EIR TP and HETI2 yield the same results.
 ```
 
-Ervor Return TER Ros a variable that a cet by the routiae. Teno put erors ce detected
+Ervor Return TER Ros a variable that a cet by the routiae. Teno put errors ce detected
 
 then PR RE as set to O) Otherwise, TERR as assipoes one of the following valine. Lhoig ht boifen o> kea LPR woah @ - band Ads max crn}
 
@@ -9808,7 +9808,7 @@ a Wik and PWR are arrays of dimension a or larger that are work spaces for the r
 
 Wks a double precision array.
 
-Ersor Return TRKR ¢ O when wi con - bas not satistied (EER Ej) er the rank of Ac less Chan on (HERE 2)
+Ersor Return TRKR ¢ O when wi con - bas not satisfied (EER Ej) er the rank of Ac less Chan on (HERE 2)
 
 Note Adis destroyed durnyp computation Programming ULDSQ is a detver for the subroutines DORVHO and DORSOE Phese sub
 
@@ -9899,7 +9899,7 @@ H,G, and IP are arrays of dimension n or larger that are work spaces for the rou
 
 The parameters r,k, and D.
 
-vy is a double precision tolerance that is set by the user, * an integer variable, and D a double precision array of dimension min{m,n} ox larger. It is assurned that r > 0. Normally 7 = 0 is the setting that is used. D and & are set by the routines.
+vy is a double precision tolerance that is set by the user, * an integer variable, and D a double precision array of dimension min{m,n} ox larger. It is assumed that r > 0. Normally 7 = 0 is the setting that is used. D and & are set by the routines.
 
 In order to understand the use of r,k, and D one must be briefly acquainted with the processing of A. The routines first reduce A to a triangular matrix C where A = QCP. Q is an orthogonal matrix and P a permutation matri::. P is defined so that the diagonal elements c,; of C satisfy |c.| > |ev41,:41| for each 1. The variable k is set to the largest integer such that |c,,| > 7, and if DHFTI2 is used then the diagonal elements ¢,;; are stored in D. C is now regarded as the partitioned matrix
 
@@ -10128,7 +10128,7 @@ ifm =m, +m, then W is the m x (n + 1) matrix:
 
 _(#f w= (J \)
 
-The input argument kw is assumed to have the value: kw = the number of rows in the dimension siatement for W in the calling progam Thus it is required that kw > m.
+The input argument kw is assumed to have the value: kw = the number of rows in the dimension siatement for W in the calling program Thus it is required that kw > m.
 
 RNOKM is a variable. When WNNLS is called, 2 is computed and RNORM is assigned
 
@@ -10157,7 +10157,7 @@ RNORM are not defined.
 (2) If m <0 orn <0 then MODE is set to 0 and the routine terminates.
 ```
 
-The option vector OPT. If no options are desired then OPT may be declared to be of dimension 1 and OPT(1) must have the value 1. Otherwise, OPT is a linked list consisting of groups of data link,, key;, data; (¢ = i, ...,8). Each link, and key, is an integer. The amount of storage required by data; depends on the value of key,. The gereral layout of OPT is as follows:
+The option vector OPT. If no options are desired then OPT may be declared to be of dimension 1 and OPT(1) must have the value 1. Otherwise, OPT is a linked list consisting of groups of data link,, key;, data; (¢ = i, ...,8). Each link, and key, is an integer. The amount of storage required by data; depends on the value of key,. The general layout of OPT is as follows:
 
 ```text
 OPT(1) = link; (index of the first entry of the next group)
@@ -10264,7 +10264,7 @@ Ris anim * @ matrix. Let 6, denote the jy"
 
 Py of Bfor yg 1,048
 
-column vector Then L25LV stores the residual vector r, Wb, WaAz, inthe 7" columm of Ro Phe input argument kris tee number of rows in the dimension statement for Hin the calling progam.
+column vector Then L25LV stores the residual vector r, Wb, WaAz, inthe 7" column of Ro Phe input argument kris tee number of rows in the dimension statement for Hin the calling program.
 
 It is assumed that kr o> yn.
 
@@ -10291,7 +10291,7 @@ IPIVO'T is an array of dimension nor larger that is used by L2SLV to record the 
 
 WA from which the matrix A, is generated,
 
-Tosa 2-dimensional array of dimension kt x n that is used for temporary storage. it is assumed that kl cm +n When L2SLV terrnnates, if NE nothen the unscaled m+ on covariance matrix is stored in the first a rows and columms of 7.) Herative improvement is
+Tosa 2-dimensional array of dimension kt x n that is used for temporary storage. it is assumed that kl cm +n When L2SLV terrnnates, if NE nothen the unscaled m+ on covariance matrix is stored in the first a rows and columns of 7.) Herative improvement is
 
 not performed on the covariance matrix
 
@@ -10318,7 +10318,7 @@ tional
 
 <small>Original source: [View scanned PDF page 301](scans/page_0301.png)</small>
 
-p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 6700.) TERR = 10 The accuracy of some x; before iterative improvement was estimated to be less than half a decimal digit. TERR = IL One ox rnore of the computed diagonal elements of the covariance matrix is negative. This is due to roundoff error. Theoretically, all the diagonal elements shou] 1 be nonnegative. No evidence of severe ill-conditioning was detected. IERR = 12 One or more of the computed diagonal elements of the covariance matrix is negativ This is due to roundoff error. Theoretically, all the diagonal eiements should be nonnegative. The problem appears to be extrernely ill-conditioned. When an input error is detected (IERR = 1,2, ...,6} thea L2SLV immediately terminates. If evidence of severe ill-conditioning is detected, then FRR is sct to 8,5, or 10 aad computation of the solutions continues. If iterative improvement appears to converge for one or more of the solutions, then the covariance matrix is also computed (when N1 = n). However, if iterative improvement fails for all the solutions r,,...,2, then IERP is set to 7 and the covariance matrix is not computed.
+p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 6700.) TERR = 10 The accuracy of some x; before iterative improvement was estimated to be less than half a decimal digit. TERR = IL One ox rnore of the computed diagonal elements of the covariance matrix is negative. This is due to roundoff error. Theoretically, all the diagonal elements shou] 1 be nonnegative. No evidence of severe ill-conditioning was detected. IERR = 12 One or more of the computed diagonal elements of the covariance matrix is negative This is due to roundoff error. Theoretically, all the diagonal eiements should be nonnegative. The problem appears to be extrernely ill-conditioned. When an input error is detected (IERR = 1,2, ...,6} thea L2SLV immediately terminates. If evidence of severe ill-conditioning is detected, then FRR is sct to 8,5, or 10 aad computation of the solutions continues. If iterative improvement appears to converge for one or more of the solutions, then the covariance matrix is also computed (when N1 = n). However, if iterative improvement fails for all the solutions r,,...,2, then IERP is set to 7 and the covariance matrix is not computed.
 
 **Note.** WK(1), ...,WK(22) should be examined when severe ill-conditioning is detected.
 
@@ -10475,7 +10475,7 @@ Az =: 6. The vector b is modified by the routines.
 
 ATOL and BTOL are input arguments which specify the relative accuracy of A and b respectively. For example, if it is estimated that b is accurate to k decimal digits then one may set BTOL = 107*. It is required that ATOL > 0 and BTOL > 0. If ATOL = 0 or BTOL = 0, then it is assumed that A or } is accurate to machine precision.
 
-Let cond(A} denote the condition number of A relative to the Frobenius norm.! In each iteration of che algorithm being used, an estimate is made of the condition number cond(A). The estimates form a monotonically nondecr ing sequence. The input argument CONLIM is an upper limit on cond (A). If CONLIM > 0 then the routines terminate when an estimate of cond(A) exceeds CONLIM. This termination may be needed to prevent smal! or zero singular values of A from coming into effect and causing damage to the solution x.
+Let cond(A} denote the condition number of A relative to the Frobenius norm.! In each iteration of che algorithm being used, an estimate is made of the condition number cond(A). The estimates form a monotonically nondecr ing sequence. The input argument CONLIM is an upper limit on cond (A). If CONLIM > 0 then the routines terminate when an estimate of cond(A) exceeds CONLIM. This termination may be needed to prevent small! or zero singular values of A from coming into effect and causing damage to the solution x.
 
 CONLIM may be ignored by being set to 0. It is assumed that-CONLIM > 0.
 
@@ -10756,7 +10756,7 @@ NUMGE =: the number of > constraints.
 
 It is assumed that NUMLI > 0, NUMGE > 0, and NUMLE + NUMGE «< mu.
 
-When SMPLX or SSPLX is called, the routine attempts to maxunize S,¢,1, subject to the constaints. A modified form of the primal simplex algorithra is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXTTER has the value:
+When SMPLX or SSPLX is called, the routine attempts to maximize S,¢,1, subject to the constraints. A modified form of the primal simplex algorithm is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXTTER has the value:
 
 MXITER + the maximum number of iterations that may be performed. This argument is provided by the user. The related argument VPER is a variable that is set. by the routine. When the routine termmmates, PPER has for its value the number of iterations that were performed. IND is a variable and fRASIS an array of dimeusion ma. ERASIS contams Che ridices tof the current basic variables zy, and END) is used for mputfoutput purposes. On it put IND is normally set by the user to 0. if END Q then the routine selects its own
 
@@ -11231,7 +11231,7 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 
 **Programming.** MFFT and MFFT1 are interface routines for the subrcutine SFFT, which was written by Richard C. Singleton (Stanford Research Institute).
 
-**Reference.** Singleton, R. C., “An Algorithra for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacousties, vol. AU-17 (1969), pp 93-103.
+**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacousties, vol. AU-17 (1969), pp 93-103.
 
 
 <small>Original source: [View scanned PDF page 324](scans/page_0324.png)</small>
@@ -11281,7 +11281,7 @@ Colorado). CALL COSQB(n, X, WK)
 
 Nos an array of dimension sm oor larger. On raput it is assumed that X contains the data f(9o), f(@1), .. f{(8n aj}. When COSQB is called, 4na, is computed and stored in X(7) f)fory¢ O,b,.. oye oF.
 
-Wits an array of diraension $n ¢ 15 or larger thats a work space for the reuthic. WR onast be setup by Gis routine COSQHE before COSQB can be used.
+Wits an array of dimension $n ¢ 15 or larger thats a work space for the reuthic. WR onast be setup by Gis routine COSQHE before COSQB can be used.
 
 ALO
 
@@ -11306,7 +11306,7 @@ WK is an array of dimension 3n + 15 or larger that is a work space for the routi
 CALL SINQB(N, X, WSAVE)
 ```
 
-X is an array of dimension n or larger. On input it is assurned that X contains the data f(90), ...,f(@n—1). When SINQB is called, 4nb, is computed and stored in X(j) for geel,...,n.
+X is an array of dimension n or larger. On input it is assumed that X contains the data f(90), ...,f(@n—1). When SINQB is called, 4nb, is computed and stored in X(j) for geel,...,n.
 
 WK is an array of dimension 3n-| 15 or larger that is a work space for the routine. WK must be set up by the routine COSQI before SINQB can be used.
 
@@ -11442,7 +11442,7 @@ fors=1,...,k—1. The points 2,,. .,2, are called the knots (or nodes) of ¢.
 
 The argument yz is the maximum number of polynomials that may be used :n forming @. ERROR and & are variables, XKNOTS an array of dimension p+ 1 or larger, and C a 2-dimensional array of dimension pz x (n +1). ADAPT sets & to the number of knots that are generated. The knots 21, ...,2, are stored in the XKNOTS avray, and the coefficients Cic, ---yCin are stored 3: C(t,1),...,C(i,n +1) fort = 1,...,k — 1. FRROR is a vough estimate of the error ||f — ¢]|p.
 
-The argument @ specifies the degree of smoothness that the approx:mation ¢ must satisfy. it is assumed that 0 < @< 10 and n > 2é. If @ == O then it is only required that @ Ye continuous on the interval [a,6]. Otherwise, if @ > 1 then it ig assumed that f is of class C'f on [a,}] except at possibly a finite number of points (called break points), and it is required that ¢ be of class C* on [a,b] except possibly at the break points.
+The argument @ specifies the degree of smoothness that the approx:mation ¢ must satisfy. it is assumed that 0 < @< 10 and n > 2é. If @ == O then it is only required that @ Ye continuous on the interval [a,6]. Otherwise, if @ > 1 then it is assumed that f is of class C'f on [a,}] except at possibly a finite number of points (called break points), and it is required that ¢ be of class C* on [a,b] except possibly at the break points.
 
 The argument mi specifies the number of break points of f. It 1s assumed that m < 20. If mn = O then the arguments XBREAK,KDIFF,DLEFT, and DRIGH'S can be ignored. Otherwise, ifm > 1 then it is assumed that XBREAK,KOIFF DLEFT, and DRIGHT are arrays of dimension m or larger, and that
 
@@ -11453,7 +11453,7 @@ K DIFF (+) the smallest integer v, for which the vu" derivative of f does hot ex
 
 <small>Original source: [View scanned PDF page 330](scans/page_0330.png)</small>
 
-F is the name of a user defined function that has the value F(z, D) = f(z) fora < x < 6. If 2 = 0 then 1 can be ignored. (However, D must still be given as an argument of /’.) Otherwise, if 2 > 1 then D is an array of dimnension greater than or equal to @. For any x not a break point in XBREAK, the user must seb D(j) = the j** derivative of f at x for j < €. However, if x = XBREAK(s) then the user need only set. D(7) = the j** derivative of f at z for J < KDIFF(#). The function F must be declared in the calling prograi to be of type EXTERNAL.
+F is the name of a user defined function that has the value F(z, D) = f(z) fora < x < 6. If 2 = 0 then 1 can be ignored. (However, D must still be given as an argument of /’.) Otherwise, if 2 > 1 then D is an array of dimension greater than or equal to @. For any x not a break point in XBREAK, the user must seb D(j) = the j** derivative of f at x for j < €. However, if x = XBREAK(s) then the user need only set. D(7) = the j** derivative of f at z for J < KDIFF(#). The function F must be declared in the calling prograi to be of type EXTERNAL.
 
 The argument DX specifies the maximum distance to be permitted between the knots a;, and the argument ASIORM specifies the norm to be used. Set ANORM = +£1.0 for Ly approximation. ANORM = +2. for Lz (least. squares) approximation. ANORM = 3.0 for £.. (minimax) approximation. ANORM = ~-pfor L, 0 < p< oc) approximation.
 
@@ -11514,13 +11514,13 @@ IND = 3 A subinterval must be partitioned because its length is greater than DX.
 
 IND = 4 A subinterval must be partitioned so that the accuracy criterion
 
-can be satisfied. owever, this cannot be done either because the stack is full, or partitioning will produce too smal! an interval.
+can be satisfied. owever, this cannot be done either because the stack is full, or partitioning will produce too small! an interval.
 
 If an input error is detected (i.e., if IND < 0) then no cornputation is performed. Otherwise, if IND > O then when ADAPT terminates k := the number of knots generated, XKNO'US contains the knots, C contains the coefficients of the polynomials generated, and EathOR contains the error estimate for f ~- ¢ over the interval covered.
 
 **Remarks.**
 
-(1) if the Z,, norm is used then ¢ controls absolute accuracy, not relative acuracy. This should be kept in mind when ¢€ is to be set for any Lp norm.
+(1) if the Z,, norm is used then ¢ controls absolute accuracy, not relative accuracy. This should be kept in mind when ¢€ is to be set for any Lp norm.
 
 (2) ADAPT requires more time when £ > 2 than when € ~~ O or 1. However, the choice of the norm normally has hitle effect on the efficiency of the routine.
 
@@ -11624,9 +11624,9 @@ F is the name of a user defined subroutine that has the format: CALL F(z, y, u,v
 
 The arguments x9 and yo, which have double precision values, are the real and imaginary parts of z9. The argument n is an integer where 1 < n < 51, and AR and AI are double
 
-real and irmaginary parts of a, are stored in AR(j +1) and AI(j+ 1) for 7 =0,1, ...,n—- 1. Otherwise, if IND # 0 then the real and imaginary parts of f(zo) and the derivatives f'(zo), - wy f(z) are stored in AR and AI respectively.
+real and imaginary parts of a, are stored in AR(j +1) and AI(j+ 1) for 7 =0,1, ...,n—- 1. Otherwise, if IND # 0 then the real and imaginary parts of f(zo) and the derivatives f'(zo), - wy f(z) are stored in AR and AI respectively.
 
-The argument ¢, which has double precision values, specifies the relative accuracy of the subroutine F. If it is estimated that # produces results accurate to k decimal digits then one may set ¢ ~ JO°*. It ig assumed that « > O. Ife © O then the results of F are assumed to be correct to machine precision.
+The argument ¢, which has double precision values, specifies the relative accuracy of the subroutine F. If it is estimated that # produces results accurate to k decimal digits then one may set ¢ ~ JO°*. It is assumed that « > O. Ife © O then the results of F are assumed to be correct to machine precision.
 
 When DCPSC is called, f(z) is evaluated on circles of various radii around the point zo. fis a double precision variable. On input, A is the radius of the first circle on which
 
@@ -11976,7 +11976,7 @@ fori, Sor < tya1 (7 = 1,...,€-1). if the nodes are selected so that £ < m —
 CALL SPFIT(X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
 ```
 
-X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array roataiming wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no imput errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
+X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array roataiming wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no input errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
 
 WK is an array of dimension 7@+ 18 or larger that is a work space for the routine.
 
@@ -12027,7 +12027,7 @@ X is an array containing 2), ...,2m, Y an array containing y,, ...,y¥m, and 7�
 
 if& > 1 then XCON contains the points #,, ...,&, at which the constraints are placed.
 
-The pomts may be given in any order and need not be distinct. It is assurned that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
+The pomts may be given in any order and need not be distinct. It is assumed that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
 
 itupe = 0 f)(%,) <r,
 
@@ -12604,7 +12604,7 @@ Assume now that f(z;) = y; for ¢ = 1,...,n. Then for a fixed o, f(z) is uniquel
 
 CURV2(t,n, X,Y, DDY,o}
 
-\* and Y are arrays containing the abscissas 11, ...,2, and crdinates ys, .o +3 Yn, and DDY is an array containing the secord derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
+\* and Y are arrays containing the abscissas 11, ...,2, and crdinates ys, .o +3 Yn, and DDY is an array containing the second derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
 
 **Remark.** After DDY has been obtained, CURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor o remains fixed. However, if ¢ is modified then the derivative information in DDY will have to be recomputed before CURV2 can be used with the new tension factor.
 
@@ -12662,7 +12662,7 @@ AT9
 | `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L86796`](source_parts/nswc_part_09.f#L2052) |
 
 
-Given a sequence of points (21,41), ...,(@n, Yn). One progecnre for fi fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satioly a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining vhe second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is avaiable for computing the curve.
+Given a sequence of points (21,41), ...,(@n, Yn). One progecnre for fi fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satioly a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining vhe second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
 
 ```fortran
 CALL KURV1(N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR)
@@ -13311,7 +13311,7 @@ opsach tos dy ...jmeand gy 0 1, ...yn.
 
 Sis an array o dimension née f 6, 7 oan array of dimension n ¢ 6. and WK an array ef omension NUM where NUM > max {(r | ")G0 ' 2) (m4 2) 7 Smaxfan | Bn 2y}. Sy and WE are work spaces for the routine
 
-Crror Return. HERE has one of the fullowine valies if an Input error is detected:
+Crror Return. HERE has one of the following values if an Input error is detected:
 
 IERR Loither wy see) ou, orm 2 as vielated.
 
@@ -13460,11 +13460,11 @@ IERR 3 Gf OPP contams an error
 
 When an errors detected, the routine anmecdiately termnat -«
 
-Remark After Diifos cbtamed. then Che function SURF! may be used to evaluate the bisphne F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary condittons are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array contaiing the anforsvathon keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan inthe walue Go Baa h wroup of data key,, data, (1 \ oa) oas called an optton. bach key, is an ointeper and data, ius a dst of partial derwatise values thar oh
+Remark After Diifos cbtamed. then Che function SURF! may be used to evaluate the bisphne F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary condittons are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array contaiing the anforsvathon keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan inthe value Go Baa h wroup of data key,, data, (1 \ oa) oas called an optton. bach key, is an ointeper and data, ius a dst of partial derwatise values thar oh
 
 surface A Gr, y) is required tosatisfy Phe followinp Gptions are avarlabue
 
-key PE The values 2b Cry.y.) G2 1, mpolust be satisteed key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 Phe valies JF bry ys) tt ! sit trtist bee satisted
+key PE The values 2b Cry.y.) G2 1, mpolust be satisteed key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 Phe values JF bry ys) tt ! sit trtist bee satisted
 
 
 <small>Original source: [View scanned PDF page 385](scans/page_0385.png)</small>
@@ -13983,7 +13983,7 @@ CALL QAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST
 
 F(a) is a user defined function whose arguments and values are assumed to be real numbers. The purpose of QAGS is to compute the integral i F(x) dz. F need not be defined at a and 6, and it is not required that a < 6b. F must be declared in the calling program to be of type EXTERNAL.
 
-AERR and RERR. are the absolute and relative error tolerances to be used, and z isa variable. When QAGS is called, z is assigned the value obiained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assimed that machine accuracy is desired.
+AERR and RERR. are the absolute and relative error tolerances to be used, and z isa variable. When QAGS is called, z is assigned the value obiained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assumed that machine accuracy is desired.
 
 ERROR and NUM are variables. When QAGS terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
@@ -14037,7 +14037,7 @@ IWK is an array of dimension j and WK an array of dimension m. [WK and WK are wo
 
 in which the interval of integration may be partitioned. It is assumed that £ > 1, ys > 32, and m > 462. The argument n is a variable. When QXGS terminates, n = the number of subintervals that appeared in the partition. Normally n < 100.
 
-TERR is a variable that rerorts the status of the results. When the routine terminates, TERR he: one of the followin es;
+TERR is a variable that rerorts the status of the results. When the routine terminates, TERR he: one of the following es;
 
 TERR = 0 The routine; ied that the integral has been computed to the desired accu: «.
 
@@ -14049,7 +14049,7 @@ TERR = 2 The integral hus en computed, but because of roundoff error QXGS is not
 
 IERR = 3 Extremely bad in grand behavior occurs in the interval of inte-
 
-gration. The + 2 is not certain of the accuracy obtained. TERR = 4 The algorithn: aot converge. It is assumed that the requested accuracy can! achieved and that the result is the best wich
+gration. The + 2 is not certain of the accuracy obtained. TERR = 4 The algorithm: aot converge. It is assumed that the requested accuracy can! achieved and that the result is the best which
 
 can be obtain
 
@@ -14128,7 +14128,7 @@ IERR = 6 (Input Error) Either 2< 1, m < 4@, AERR < 0, or RERR < 0. In this case,
 
 **Remark.** NUM < 42(@-- 1) 4 21.
 
-**Algorithm.** The 2! point Kronrod rule and e-algorithim of P. Wynn are used. Programming. DQAGS employs the routines DQAGSE, DQK21, DQPSR, and DQELG. These subroutines are double precision versions by A. H. Morris of the routines QAGSE,
+**Algorithm.** The 2! point Kronrod rule and e-algorithm of P. Wynn are used. Programming. DQAGS employs the routines DQAGSE, DQK21, DQPSR, and DQELG. These subroutines are double precision versions by A. H. Morris of the routines QAGSE,
 
 QKR2UF, QPSRT, and QHLG. Phe function DPMPAR is also used.
 
@@ -14209,7 +14209,7 @@ AERR and RERR are the absolute and relative error tolerances to be used. The sub
 
 ERROR and NUM are variables. When QAGI terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
-IWK is an array of dimension £ and WK is an array of dimension m. IWK and WK are work spaces for the routine. The input argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assurned that @> 1 and m > 4@. The argument n is a variable. When QAGI terminates, n == the number of subintervals that appeared in the partition. Normally n < 100.
+IWK is an array of dimension £ and WK is an array of dimension m. IWK and WK are work spaces for the routine. The input argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assumed that @> 1 and m > 4@. The argument n is a variable. When QAGI terminates, n == the number of subintervals that appeared in the partition. Normally n < 100.
 
 IERK is a variable that reports the status of the results. When the routine terminates, TERR has one of the following values:
 
@@ -14445,7 +14445,7 @@ JERR = 5 The solution z{s) was not obtained to the desired accuracy at the Gauss
 
 Difficulties can arise, causing IERR > 1, when the integral equation is ill-conditioned or the kernel &(¢,t) is not appropriate for standard Gaussian quadrature. Iil-conditioning can occur whe the operator J - K is near singular or the norm ||K'|| is exceedingly large. Inappropriate kernels k(s,t) include those which are highly oscillatory or not continucusly differentiable for s and t in the open interval (a, b).
 
-**Programming.** IESLV employs the subroutines LEGS, NSTERP, WANDT,LEAVE, ITERT, LNSYS and functions RMIN,RNRM,CONEW. The routines save and exchange information in labled common blocks. The block names are XXINFO and XXLIN. The routines were written by Kendall E. Atkinson (University of Iowa), and modified by A. H. Morris. The function SPMPAR is also used.
+**Programming.** IESLV employs the subroutines LEGS, NSTERP, WANDT,LEAVE, ITERT, LNSYS and functions RMIN,RNRM,CONEW. The routines save and exchange information in labeled common blocks. The block names are XXINFO and XXLIN. The routines were written by Kendall E. Atkinson (University of Iowa), and modified by A. H. Morris. The function SPMPAR is also used.
 
 **Reference.** Atkinson, K. E.,“Ar Automatic Program for Linear Fredholm Integral Equations of the Second Kind,” ACM Trans. Math Software 2 (1976), pp. 154-171.
 
@@ -14469,7 +14469,7 @@ If the equations are nonstiff, then ODE and BRKF45 should first be considered fo
 
 When the user specifies error tolerances to be satisfied, normally he is interested only in the global error (the error of y(b)). However, the adaptive subroutines employ the tolerances for controlling local error (the error generated at each step in the interval from a to 6). No attempt is made to controi the prc ressive erosicn of accuracy that can occur when the steps accumulate. GERK is the only su. routine that estimates the global error. his subroutine employs the same Runge-Kutta-Fehlberg formulae used by RKF45. GERKE js 2-3 times slower than RKF45, but it is more accurate. RK E45 and BRKF45 take roughly the same amount of time, and have approximately the same accuracy.
 
-Output Considerations. Generally, when the equations y’(t) - f(t,u(t)) are to be solved and y(ay) is known, then solutions will be needed at a sequence of points dy, -..,@ya. Tf ODE, BRKF45, SFODE, or SFODEL is used, then the closeness of the output points a, should be of no concern. ‘The subroutines partially ignore a, 4, in the selection of the step size when going fromm a, to a,j. Instead, they step along the interval using the largest steps that are appropriate (accuracy aud efficiency are the prime concerns). Normally ayy 4
+Output Considerations. Generally, when the equations y’(t) - f(t,u(t)) are to be solved and y(ay) is known, then solutions will be needed at a sequence of points dy, -..,@ya. Tf ODE, BRKF45, SFODE, or SFODEL is used, then the closeness of the output points a, should be of no concern. ‘The subroutines partially ignore a, 4, in the selection of the step size when going from a, to a,j. Instead, they step along the interval using the largest steps that are appropriate (accuracy aud efficiency are the prime concerns). Normally ayy 4
 
 will be passed in the process Hf a,,j is passed then a quick interpolation yields the desired
 
@@ -14501,7 +14501,7 @@ Let y'(t) = f(t, y(t)) denote a system of n ordinary first order differential eq
 CALL ODE(F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK)
 ```
 
-The argument F is the name of a user defined subroutine that has the format: CALL F(t, ¥,DY) Y and DY are arrays of diraension n. On input Y contains the values y;(t),...,y,(t) for the argument t. F computes the derivatives yj(t), ...,y/,(¢) using y'(t) = f(t, y(t)) and stores the results in DY. F must be declared inthe calling program to be of type EXTERNAL.
+The argument F is the name of a user defined subroutine that has the format: CALL F(t, ¥,DY) Y and DY are arrays of dimension n. On input Y contains the values y;(t),...,y,(t) for the argument t. F computes the derivatives yj(t), ...,y/,(¢) using y'(t) = f(t, y(t)) and stores the results in DY. F must be declared inthe calling program to be of type EXTERNAL.
 
 WK is an array of dimension 100 -++ 21n or larger, and [WK is an array of dimension 5 or iarger. WK and IWK contain information needed for subsequent calls to ODE.
 
@@ -14544,7 +14544,7 @@ IND = +6 ODE did not reach TOUT because AERR = 0. T is set to the point closest 
 
 IND = 7 Nocomputation was performed. An input error was detected. The user must correct the error and call ODE again.
 
-WIND = +3,+4,+5 then to continue the integration just call ODE again. Similarly, if IND = +6 then reset AERR to be positive and call ODE again. In these cases do not modify T,Y,IND. The output values for these parameters are the appropriate input values for the next call to ODE. However, AERR and RERR may always be modifed when continuing an integration.
+WIND = +3,+4,+5 then to continue the integration just call ODE again. Similarly, if IND = +6 then reset AERR to be positive and call ODE again. In these cases do not modify T,Y,IND. The output values for these parameters are the appropriate input values for the next call to ODE. However, AERR and RERR may always be modified when continuing an integration.
 
 If the equations appear to be stiff (i.e., if IND = +5) then ODE may not be suitable for solving the equations. In this case it is recommended that a routine designed specifically for stiff equations be used.
 
@@ -14848,7 +14848,7 @@ IND 3 9000 derivative evaluations were performed Ntore derivative eval ations ar
 
 INI) A GERB did not reach POUR because AR RR O00 ARERR nous be
 
-Ihade postive
+Ihade positive
 
 Aig
 
@@ -15458,7 +15458,7 @@ CALL URNG2(IX, X, Y, N, IERR)
 CALL DURNG2(IX, X, Y, N, IERR)
 ```
 
-and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arcays, and DURNG2 is used if X and Y are doubie precision arrays.
+and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arcays, and DURNG2 is used if X and Y are double precision arrays.
 
 The atzuinent n is the number of points to be generated, and tz and JERR are variables. On input, tt is an integer (called a seed) for initializing the sequence of points. It is assumed shat 1 < te < 49! —1. When URNGZ or DURNG2 is called, if no input errors are detected then [ERR is set to 0 and n points are generated. The abscissas 2,,...,2,, of the points are stored in X and tie ordinates y,,...,y, are stored in Y. On output, tz isa new seed for generating more poinis,
 
@@ -15794,7 +15794,7 @@ P(a,c) = =~ ra) Jo
 
 and for v > O consider the chi-square distribution having the distribution function
 
-cee en re = ~ vpe ‘ 6 > O). BG) = Tay [e wg (x >9) Then F,(r) = P(v/2,2/2), so that only the gamma distribution need be computed. The following subroutines are available for gererating variates from the gamma distribution when a > 107}.
+cee en re = ~ vpe ‘ 6 > O). BG) = Tay [e wg (x >9) Then F,(r) = P(v/2,2/2), so that only the gamma distribution need be computed. The following subroutines are available for generating variates from the gamma distribution when a > 107}.
 
 ```fortran
 CALL RGAM(IX, A, N, X, IERR)
@@ -15991,12 +15991,12 @@ CALL TRAN(N, A, IX, X, IERR)
 
 generate the sare 30 variates,
 
-**Warning.** The double precisicn subroutine DT RAN can be quite slow. It is recommended that its speed be shecked if thousands of variates are to be generated
+**Warning.** The double precisicn subroutine DT RAN can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated
 
 
 <small>Original source: [View scanned PDF page 455](scans/page_0455.png)</small>
 
-**Remark.** It ig assumed that the imteger arithmetic being used handles all integers ¢ in the
+**Remark.** It is assumed that the integer arithmetic being used handles all integers ¢ in the
 
 interval |s! «¢ 23) — 1.
 

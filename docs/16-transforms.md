@@ -273,7 +273,7 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 
 **Programming.** MFFT and MFFT1 are interface routines for the subrcutine SFFT, which was written by Richard C. Singleton (Stanford Research Institute).
 
-**Reference.** Singleton, R. C., “An Algorithra for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacousties, vol. AU-17 (1969), pp 93-103.
+**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacousties, vol. AU-17 (1969), pp 93-103.
 
 
 <small>Original source: [View scanned PDF page 324](../scans/page_0324.png)</small>
@@ -323,7 +323,7 @@ Colorado). CALL COSQB(n, X, WK)
 
 Nos an array of dimension sm oor larger. On raput it is assumed that X contains the data f(9o), f(@1), .. f{(8n aj}. When COSQB is called, 4na, is computed and stored in X(7) f)fory¢ O,b,.. oye oF.
 
-Wits an array of diraension $n ¢ 15 or larger thats a work space for the reuthic. WR onast be setup by Gis routine COSQHE before COSQB can be used.
+Wits an array of dimension $n ¢ 15 or larger thats a work space for the reuthic. WR onast be setup by Gis routine COSQHE before COSQB can be used.
 
 ALO
 
@@ -348,7 +348,7 @@ WK is an array of dimension 3n + 15 or larger that is a work space for the routi
 CALL SINQB(N, X, WSAVE)
 ```
 
-X is an array of dimension n or larger. On input it is assurned that X contains the data f(90), ...,f(@n—1). When SINQB is called, 4nb, is computed and stored in X(j) for geel,...,n.
+X is an array of dimension n or larger. On input it is assumed that X contains the data f(90), ...,f(@n—1). When SINQB is called, 4nb, is computed and stored in X(j) for geel,...,n.
 
 WK is an array of dimension 3n-| 15 or larger that is a work space for the routine. WK must be set up by the routine COSQI before SINQB can be used.
 

@@ -21,7 +21,7 @@ can be stored as follows:
 
 A: [aii [aie [aia [ 437 | ase | 243 |
 
-The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissable. The clements of a row of the matrix may be given in any order desired.
+The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissible. The clements of a row of the matrix may be given in any order desired.
 
 **Remark.** it is not required that each a,, in A be nonzero.
 
@@ -352,7 +352,7 @@ Restriction. Ji is assumed that the storage areas B, 1B, JB do not overlap with 
 CALL DFOSE1{x, A, fA, JA, B,1B,J3,m,n)
 ```
 
-It is assumed that m ig an integer array of dimension m containing the data {11, ...,4m}, and that the sparse matrix A is stored in the arrays A, /A, JA. Aand B are double precision arrays. If A and JA contain k elements, then it is also assurned that B and JB are arrays of dimension k and that /B is an array of dimension n +-1. When DPGSE1 is called, (PA)* is computed and the results are stored in B, 7B, JB.
+It is assumed that m ig an integer array of dimension m containing the data {11, ...,4m}, and that the sparse matrix A is stored in the arrays A, /A, JA. Aand B are double precision arrays. If A and JA contain k elements, then it is also assumed that B and JB are arrays of dimension k and that /B is an array of dimension n +-1. When DPGSE1 is called, (PA)* is computed and the results are stored in B, 7B, JB.
 
 Remarks, DPOSEI orders the elements of each row of (7?A)! so that the column indices of the elements of the row are in ascending order. However, it does no checking for zero elements in A. if zero elements appear in the array A, then the zero elements will also
 
@@ -631,7 +631,7 @@ CALL DTPRD(M, N, A, IA, JA, X, Y)
 
 The argumei:t z is a row vector of dimension m and y an array of dimension n. A, z, y are double precision arrays. When DTPRD is called, 2A is computed and stored in y.
 
-**Remark.** It is assurned that the arrays A,2,y do not overlap. Programmer. A. H. Morris.
+**Remark.** It is assumed that the arrays A,2,y do not overlap. Programmer. A. H. Morris.
 
 ```fortran
 CALL DTPRD1(M, N, A, IA, JA, X, Y)
@@ -894,7 +894,7 @@ then the subroutine BLKORD should first be tried. This subroutine will specify a
 
 **Programming.** SPSLV is a modification by A. H. Morris of the subroutine NSPIV. SPSLV employs the subroutine NSPIV1. NSPIV and NSPIVI were written by Andrew H. Sherman (University of Texas at Austin).
 
-**Reference.** Sherman, Andrew H.,“Algorithims for Sparse Gaussian Elimination with Partial Pivoting,” “M Trans. Math Software 4 (1978), pp.330-~338.
+**Reference.** Sherman, Andrew H.,“Algorithms for Sparse Gaussian Elimination with Partial Pivoting,” “M Trans. Math Software 4 (1978), pp.330-~338.
 
 ```fortran
 CALL RSLV(M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR)
@@ -916,7 +916,7 @@ C is an integer array of « entries which plays a role similar to #. On input, C
 
 iV¥K and WK are arrays for interna! use by the routines, and MAX is an input argument. On an initial call to RSLV or TSLV, an LU decomposition of A is first obtained where J. is 4 lower triangular matrix and U a unit upper triangular matrix. The off-diagonal portions of 1 and 'J are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elements of £ and U that might be nonzero and have to be stored (MAX < n(n — 1)}. [WK is an integer array of dimension 4n + MAX + 2 or larger, and ‘VK is a real array of dirnension 2n + MAX or larger.
 
-On an imtial call to RSLV or TSLV, JERR is an integer variable that reports the status of the results. Wnen the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. IERR=miax{1,m} where m is the total number of off-diagonal nonzero elernents of L and U.
+On an imtial call to RSLV or TSLV, JERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. IERR=miax{1,m} where m is the total number of off-diagonal nonzero elernents of L and U.
 
 [ERR =0 The argument n is nonpositive.
 
@@ -1071,7 +1071,7 @@ A, b, and X are double precision arrays. {t ia assumed that n > 1 and that X is 
 
 R is an integer array of n entries specifying the order in which the » rows of A are to be examined and processed. For example, if R contains the entries 11, ...,%, then the algorithm first performs operations on row s1, next on row ¢g, etc. It is well known that the order in which the rows of a sparse matrix are processed can have a significant impact on the overall performance of subroutines such as DSLV and DTSLV. Thus & must be chosen judiciously. # is not modified by the routine.
 
-C is an integer array of n entries which plays a role similar to #. On input, C specifies a suggested order in which the m columns of A should be ordered for selection of the pivot elements. For example, if C contains the entries j1,...,7, then it is suggested that the first pivot element may be from column j;, the second pivot element from column je, etc. However, since partial pivoting with column interchange is performed, on output C may have been modified. On output, C wiil contain the actual order of the n columns from which the pivot elements were selected. This order will depend on A and R, and not on 6.
+C is an integer array of n entries which plays a role similar to #. On input, C specifies a suggested order in which the m columns of A should be ordered for selection of the pivot elements. For example, if C contains the entries j1,...,7, then it is suggested that the first pivot element may be from column j;, the second pivot element from column je, etc. However, since partial pivoting with column interchange is performed, on output C may have been modified. On output, C will contain the actual order of the n columns from which the pivot elements were selected. This order will depend on A and R, and not on 6.
 
 IWK and WK are arrays for internal use by the routines, and MAX is an input argument. On an initial call to DSLV or DTSLV, an LU decomposition of A is first obtained where L is a lower triangular matrix and U a unit upper triangular matrix. The off-diagonal portions of Z and U are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elerients of L and U that might be nonzero and have to be stored (MAX < n(n — 1)). [WK is an integer array of dimension 4n + MAX + 2 or larger, and WK is a double precision array of dimension 2n + MAX or larger.
 
@@ -1238,7 +1238,7 @@ C is an integer array of n entries which plays a role similar to R. On input, C'
 
 IWK and WK are arrays for internal use by the routines, and MAX is an input argument. On an initial call to CSLV or CTSLV, an LU decomposition of A is first obtained where LF is a lower triangular matrix and U a umt upper triangular matrix. The off-diagonal portions of L and U are stored in sparse form in IWK and WK. MAX is an estimate of the maximum number of off-diagonal elements of L and U that might be nonzcro and have to be stored (MAX < n(n -- 1)). TWK is an integer array of dimension 4n + MAX + 2 or larger, and WK is a complex array of dimension 2n -+- MAX or larger.
 
-On an intial call to CSLV or CTSLV, IERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. INRR=max{1,m} where m is the total number of off-diagonal nonzero
+On an initial call to CSLV or CTSLV, IERR is an integer variable that reports the status of the results. When the routine terminates, IERR has one of the following values: IERR > 0 The system of equations was solved. INRR=max{1,m} where m is the total number of off-diagonal nonzero
 
 elements of L and U.
 

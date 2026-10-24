@@ -95,7 +95,7 @@ JERR = 5 The solution z{s) was not obtained to the desired accuracy at the Gauss
 
 Difficulties can arise, causing IERR > 1, when the integral equation is ill-conditioned or the kernel &(¢,t) is not appropriate for standard Gaussian quadrature. Iil-conditioning can occur whe the operator J - K is near singular or the norm ||K'|| is exceedingly large. Inappropriate kernels k(s,t) include those which are highly oscillatory or not continucusly differentiable for s and t in the open interval (a, b).
 
-**Programming.** IESLV employs the subroutines LEGS, NSTERP, WANDT,LEAVE, ITERT, LNSYS and functions RMIN,RNRM,CONEW. The routines save and exchange information in labled common blocks. The block names are XXINFO and XXLIN. The routines were written by Kendall E. Atkinson (University of Iowa), and modified by A. H. Morris. The function SPMPAR is also used.
+**Programming.** IESLV employs the subroutines LEGS, NSTERP, WANDT,LEAVE, ITERT, LNSYS and functions RMIN,RNRM,CONEW. The routines save and exchange information in labeled common blocks. The block names are XXINFO and XXLIN. The routines were written by Kendall E. Atkinson (University of Iowa), and modified by A. H. Morris. The function SPMPAR is also used.
 
 **Reference.** Atkinson, K. E.,“Ar Automatic Program for Linear Fredholm Integral Equations of the Second Kind,” ACM Trans. Math Software 2 (1976), pp. 154-171.
 

@@ -86,7 +86,7 @@ The routine stores the si 1 coefficients c, of p(x) — q(z) in C where C(1 + y-
 j=0,1,...,n-1.
 ```
 
-**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C wiil overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same Jocation as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
+**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same Jocation as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
 
 **Programmer.** A. H. More's.
 
@@ -117,7 +117,7 @@ A, B and C are arrays. PMULT is used if A, B and C are real arrays and DPMULT is
 
 The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and b, are assumed to be stored in A and B where A(l+j-ka} =a; (f= 0,1,...,€-1) BIL + j+kb) = 6; (7 =0,1,...,m— 1). The routine stores the first n coefficients cy of p(z)q(x) in C where C(1 + j-ke) = cy for g=0,1,...,2-1.
 
-**Remarks.** It is assurned that the array C does not overlap with the arrays A and B.
+**Remarks.** It is assumed that the array C does not overlap with the arrays A and B.
 
 **Programmer.** A. H. Morris.
 
@@ -290,7 +290,7 @@ f(z) = ao/2+ >> a;T,(x) where a, is real, then the following functions are avail
 
 It is assumed that n > } and that A is an array containing ao, 1, ...,@,—1 where A(t) == ay-1(¢ = 1,...,n). Then CSEVL(2, A,n) == f(z) for any real z.
 
-**Programmer.** A. H. Morris. DCSEVL(z, A,n) It is assumed that n > 1 and A is a double precision array containin @9,41, ...,@n—1 where A(i) = a;3(f = 1, ...,n). Then for any double precision value x, DCSEVL(z, A,n)
+**Programmer.** A. H. Morris. DCSEVL(z, A,n) It is assumed that n > 1 and A is a double precision array containing @9,41, ...,@n—1 where A(i) = a;3(f = 1, ...,n). Then for any double precision value x, DCSEVL(z, A,n)
 
 is the double precision value of f(z).
 

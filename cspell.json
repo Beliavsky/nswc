@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "useGitignore": false,
+  "minWordLength": 3,
+  "allowCompoundWords": false,
+  "maxNumberOfProblems": 100000,
+  "maxDuplicateProblems": 100000,
+  "words": [
+    "NSWC", "NSWCDD", "Fortran", "Codespell", "subprogram", "subprograms",
+    "subinterval", "subintervals", "eigenvector", "eigenvectors",
+    "eigenvalue", "eigenvalues", "bidiagonal", "tridiagonal",
+    "orthonormal", "nonsingular", "nonnegative", "nonzero",
+    "Renka", "Sandia", "Chebyshev", "DiDonato", "Kincaid", "Krogh",
+    "Dahlgren", "Moler", "Runge", "Piessens", "Kutta", "Verlag",
+    "EISPACK", "LINPACK", "Shampine", "Dongarra", "roundoff",
+    "nonstiff", "bispline", "bisplines", "Ake", "Numer",
+    "BLAS", "SLATEC", "Higham", "Eckhardt", "redecompose", "redecomposition"
+  ]
+}

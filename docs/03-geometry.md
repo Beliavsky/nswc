@@ -25,7 +25,7 @@ Given an arbitrary point vo = (Zo, yo), the following subroutine is available fo
 CALL LOCPT(X0, Y0, X, Y, N, L, M)
 ```
 
-It ig assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn- The arguments @ and m are variables. When LOCPT terminates @ has one of the following values:
+It is assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn- The arguments @ and m are variables. When LOCPT terminates @ has one of the following values:
 
 €== ~1 if (zo, yo) is outside the path
 
@@ -64,7 +64,7 @@ The argument m is the estimated maximum number of points at which the line @ and
 
 **Error Return.** If an input error is detected than IERR has one of the following values:
 
-TieRR =: 1 Either a:- 6 or the path contains a single point. 8 HWeRR > 2 U and V require more storage. The argument m must be increased. IERR of The ¢! line segment of the path contains a segmen of the line @. & When an error is detected, & the number of points (u,,v,} found where the line @ and ] I Jj? a)
+TieRR =: 1 Either a:- 6 or the path contains a single point. 8 HWeRR > 2 U and V require more storage. The argument m must be increased. IERR of The ¢! line segment of the path contains a segment of the line @. & When an error is detected, & the number of points (u,,v,} found where the line @ and ] I Jj? a)
 
 path 7ointerseet, and U and V contain the abscissas and ordinates of these points.
 
@@ -97,7 +97,7 @@ VX% and VY are arrays of dimension m~-'- 1 or larger, and n is a variable. When 
 
 counterclockwise manner. Also (2!, yl!) == (ci, yy’).
 
-**Example.** Assime that we are given the points (-—1,-3), (1,1) (0,3), (2,2), (-2,4), (-1,~1). When HULi 13 called X and Y are reordered and we obtain: X contains —1,--1,1,2,0, --2 Y contains —3,-1,1,2,2 BX contains —1,2,0,—2,-1 BY contains —3,2,3,4,--3 V¥ contains -1,2,-2,~-1 VY contains --3,2,4,--3
+**Example.** Assume that we are given the points (-—1,-3), (1,1) (0,3), (2,2), (-2,4), (-1,~1). When HULi 13 called X and Y are reordered and we obtain: X contains —1,--1,1,2,0, --2 Y contains —3,-1,1,2,2 BX contains —1,2,0,—2,-1 BY contains —3,2,3,4,--3 V¥ contains -1,2,-2,~-1 VY contains --3,2,4,--3
 
 **Programming.** HULL calls the subroutine RRSORT and function SPMPAR. HULL was written by A. Ho Mornis.
 
@@ -122,7 +122,7 @@ PAREA(X, Y, NB)
 
 X and Y are arrays containing the abscissas r,,. ry and ordinates y1,...,yN, respectively. The argument N may have the value n or n+ 1. Since ta4, = v1, %,41 and Yn+14 are not required to appear in X and Y. PAREA(X,Y, N) is assigned the value A(r).
 
-**Programmer.** A. H. Morris Reference. DiDonato, A. R. and Hageman, R. K., Computation of the Integral ofthe Bi-
+**Programmer.** A. H. Morris Reference. DiDonato, A. R. and Hageman, R. K., Computation of the Integral of the Bi-
 
 vartate Normal Distribution over Arbitrary Poiygons, ieport TR 80-166, Naval Surface Weapons Center, Dahlgren, Virginia, 1980.
 
@@ -209,7 +209,7 @@ Pemarks.
 
 on
 
-(1) It ic assurned that € contains no loops.
+(1) It ic assumed that € contains no loops.
 
 (2) Normaily, few backtracks are needed when the number of vertices in each R; is small, say LM or less. Consequently, the setting NB =: —1 is generally appropriate in such canes,
 

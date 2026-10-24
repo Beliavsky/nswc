@@ -58,7 +58,7 @@ CALL DSWAP(N, DX, INCX, DY, INCY)
 CALL CSWAP(N, CX, INCX, CY, INCY)
 ```
 
-The argument kz is an integer which specifies the interval between successive components x, of the vector X. If kx > 0 then it is assumed that z, is stored in X(1+ (1—1)kz) for t=1,...,n. Otherwise, if kz < C then it is assurned that 2, is stored in X(1+(n--1)|kz|). Similarly, the argument ky specifies the spacing of the components of Y.
+The argument kz is an integer which specifies the interval between successive components x, of the vector X. If kx > 0 then it is assumed that z, is stored in X(1+ (1—1)kz) for t=1,...,n. Otherwise, if kz < C then it is assumed that 2, is stored in X(1+(n--1)|kz|). Similarly, the argument ky specifies the spacing of the components of Y.
 
 SSWAP is used if X and Y are real arrays, DSWAP is used if X and Y are double precision arrays, and CSWAP is used if X and Y are complex arrays. When any of these routines is called, if n < O then the routine immediately terminates. Otherwise, if n > 1 then the components z, and y, are interchanged for 1 = 1, ...,n. Thus, when the routine terminates X = (y1,..., Yn) and Y = (zy, ...,2y).
 
@@ -191,7 +191,7 @@ CALL DROTM(N, DX, INCX, DY, INCY, DPARAM)
 
 Let X = (21, ...,2,) and Y = (y1, ..., yn) be vectors, and Q be the array obtained by SRO'TMG or DROTMG. If A is the modified Givens rotation matrix stored in Q, then SROTM and DROTM are available for computing (3) = H (=) (@=1,...,n).
 
-The arguinent kz is an integer which specifies the interval between succesive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
+The arguinent kz is an integer which specifies the interval between successive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
 
 SROTM is used if X,Y, and @ are real arrays, and DROTM is used if X,Y, and Q are double precision arrays. When SROTM or DROTM is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then the components zx, and y, are replaced with Z, and g, fori =1,...,n.
 
@@ -298,7 +298,7 @@ CALL DAXPY(N, DA, DX, INCX, DY, INCY)
 CALL CAXPY(N, CA, CX, INCX, CY, INCY)
 ```
 
-The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifes the sp cing of the components of the vector Y.
+The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifies the sp cing of the components of the vector Y.
 
 SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if a ig a double precision number and X, Y are double precision arrays, and CAXPY is used if a is a complex number and X, Y are complex arrays. When any of these routines is called, if n < 0 or a = O then the routine immediately terminates. Otherwise, if n > 1 then y,; is replaced with az, + y; for + = 1,...,n. Thus when the routine terminates Y = (azy + yi, -..,@%n + Un).
 
@@ -321,7 +321,7 @@ SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if 
 | `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L31999`](../source_parts/nswc_part_04.f#L305) |
 
 
-The follewing functions are available for computing the 2; norm of a ceal vector or a modified LZ, norm of a complex vector.
+The following functions are available for computing the 2; norm of a ceal vector or a modified LZ, norm of a complex vector.
 
 SASUIM(n, X, kz) DASUM(n, X, kz; SCASUM(n, X, kz)
 

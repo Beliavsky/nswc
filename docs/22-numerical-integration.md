@@ -29,7 +29,7 @@ CALL QAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST
 
 F(a) is a user defined function whose arguments and values are assumed to be real numbers. The purpose of QAGS is to compute the integral i F(x) dz. F need not be defined at a and 6, and it is not required that a < 6b. F must be declared in the calling program to be of type EXTERNAL.
 
-AERR and RERR. are the absolute and relative error tolerances to be used, and z isa variable. When QAGS is called, z is assigned the value obiained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assimed that machine accuracy is desired.
+AERR and RERR. are the absolute and relative error tolerances to be used, and z isa variable. When QAGS is called, z is assigned the value obiained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assumed that machine accuracy is desired.
 
 ERROR and NUM are variables. When QAGS terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
@@ -83,7 +83,7 @@ IWK is an array of dimension j and WK an array of dimension m. [WK and WK are wo
 
 in which the interval of integration may be partitioned. It is assumed that £ > 1, ys > 32, and m > 462. The argument n is a variable. When QXGS terminates, n = the number of subintervals that appeared in the partition. Normally n < 100.
 
-TERR is a variable that rerorts the status of the results. When the routine terminates, TERR he: one of the followin es;
+TERR is a variable that rerorts the status of the results. When the routine terminates, TERR he: one of the following es;
 
 TERR = 0 The routine; ied that the integral has been computed to the desired accu: «.
 
@@ -95,7 +95,7 @@ TERR = 2 The integral hus en computed, but because of roundoff error QXGS is not
 
 IERR = 3 Extremely bad in grand behavior occurs in the interval of inte-
 
-gration. The + 2 is not certain of the accuracy obtained. TERR = 4 The algorithn: aot converge. It is assumed that the requested accuracy can! achieved and that the result is the best wich
+gration. The + 2 is not certain of the accuracy obtained. TERR = 4 The algorithm: aot converge. It is assumed that the requested accuracy can! achieved and that the result is the best which
 
 can be obtain
 
@@ -174,7 +174,7 @@ IERR = 6 (Input Error) Either 2< 1, m < 4@, AERR < 0, or RERR < 0. In this case,
 
 **Remark.** NUM < 42(@-- 1) 4 21.
 
-**Algorithm.** The 2! point Kronrod rule and e-algorithim of P. Wynn are used. Programming. DQAGS employs the routines DQAGSE, DQK21, DQPSR, and DQELG. These subroutines are double precision versions by A. H. Morris of the routines QAGSE,
+**Algorithm.** The 2! point Kronrod rule and e-algorithm of P. Wynn are used. Programming. DQAGS employs the routines DQAGSE, DQK21, DQPSR, and DQELG. These subroutines are double precision versions by A. H. Morris of the routines QAGSE,
 
 QKR2UF, QPSRT, and QHLG. Phe function DPMPAR is also used.
 
@@ -255,7 +255,7 @@ AERR and RERR are the absolute and relative error tolerances to be used. The sub
 
 ERROR and NUM are variables. When QAGI terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
-IWK is an array of dimension £ and WK is an array of dimension m. IWK and WK are work spaces for the routine. The input argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assurned that @> 1 and m > 4@. The argument n is a variable. When QAGI terminates, n == the number of subintervals that appeared in the partition. Normally n < 100.
+IWK is an array of dimension £ and WK is an array of dimension m. IWK and WK are work spaces for the routine. The input argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assumed that @> 1 and m > 4@. The argument n is a variable. When QAGI terminates, n == the number of subintervals that appeared in the partition. Normally n < 100.
 
 IERK is a variable that reports the status of the results. When the routine terminates, TERR has one of the following values:
 

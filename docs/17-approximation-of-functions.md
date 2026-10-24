@@ -105,7 +105,7 @@ fors=1,...,k—1. The points 2,,. .,2, are called the knots (or nodes) of ¢.
 
 The argument yz is the maximum number of polynomials that may be used :n forming @. ERROR and & are variables, XKNOTS an array of dimension p+ 1 or larger, and C a 2-dimensional array of dimension pz x (n +1). ADAPT sets & to the number of knots that are generated. The knots 21, ...,2, are stored in the XKNOTS avray, and the coefficients Cic, ---yCin are stored 3: C(t,1),...,C(i,n +1) fort = 1,...,k — 1. FRROR is a vough estimate of the error ||f — ¢]|p.
 
-The argument @ specifies the degree of smoothness that the approx:mation ¢ must satisfy. it is assumed that 0 < @< 10 and n > 2é. If @ == O then it is only required that @ Ye continuous on the interval [a,6]. Otherwise, if @ > 1 then it ig assumed that f is of class C'f on [a,}] except at possibly a finite number of points (called break points), and it is required that ¢ be of class C* on [a,b] except possibly at the break points.
+The argument @ specifies the degree of smoothness that the approx:mation ¢ must satisfy. it is assumed that 0 < @< 10 and n > 2é. If @ == O then it is only required that @ Ye continuous on the interval [a,6]. Otherwise, if @ > 1 then it is assumed that f is of class C'f on [a,}] except at possibly a finite number of points (called break points), and it is required that ¢ be of class C* on [a,b] except possibly at the break points.
 
 The argument mi specifies the number of break points of f. It 1s assumed that m < 20. If mn = O then the arguments XBREAK,KDIFF,DLEFT, and DRIGH'S can be ignored. Otherwise, ifm > 1 then it is assumed that XBREAK,KOIFF DLEFT, and DRIGHT are arrays of dimension m or larger, and that
 
@@ -116,7 +116,7 @@ K DIFF (+) the smallest integer v, for which the vu" derivative of f does hot ex
 
 <small>Original source: [View scanned PDF page 330](../scans/page_0330.png)</small>
 
-F is the name of a user defined function that has the value F(z, D) = f(z) fora < x < 6. If 2 = 0 then 1 can be ignored. (However, D must still be given as an argument of /’.) Otherwise, if 2 > 1 then D is an array of dimnension greater than or equal to @. For any x not a break point in XBREAK, the user must seb D(j) = the j** derivative of f at x for j < €. However, if x = XBREAK(s) then the user need only set. D(7) = the j** derivative of f at z for J < KDIFF(#). The function F must be declared in the calling prograi to be of type EXTERNAL.
+F is the name of a user defined function that has the value F(z, D) = f(z) fora < x < 6. If 2 = 0 then 1 can be ignored. (However, D must still be given as an argument of /’.) Otherwise, if 2 > 1 then D is an array of dimension greater than or equal to @. For any x not a break point in XBREAK, the user must seb D(j) = the j** derivative of f at x for j < €. However, if x = XBREAK(s) then the user need only set. D(7) = the j** derivative of f at z for J < KDIFF(#). The function F must be declared in the calling prograi to be of type EXTERNAL.
 
 The argument DX specifies the maximum distance to be permitted between the knots a;, and the argument ASIORM specifies the norm to be used. Set ANORM = +£1.0 for Ly approximation. ANORM = +2. for Lz (least. squares) approximation. ANORM = 3.0 for £.. (minimax) approximation. ANORM = ~-pfor L, 0 < p< oc) approximation.
 
@@ -177,13 +177,13 @@ IND = 3 A subinterval must be partitioned because its length is greater than DX.
 
 IND = 4 A subinterval must be partitioned so that the accuracy criterion
 
-can be satisfied. owever, this cannot be done either because the stack is full, or partitioning will produce too smal! an interval.
+can be satisfied. owever, this cannot be done either because the stack is full, or partitioning will produce too small! an interval.
 
 If an input error is detected (i.e., if IND < 0) then no cornputation is performed. Otherwise, if IND > O then when ADAPT terminates k := the number of knots generated, XKNO'US contains the knots, C contains the coefficients of the polynomials generated, and EathOR contains the error estimate for f ~- ¢ over the interval covered.
 
 **Remarks.**
 
-(1) if the Z,, norm is used then ¢ controls absolute accuracy, not relative acuracy. This should be kept in mind when ¢€ is to be set for any Lp norm.
+(1) if the Z,, norm is used then ¢ controls absolute accuracy, not relative accuracy. This should be kept in mind when ¢€ is to be set for any Lp norm.
 
 (2) ADAPT requires more time when £ > 2 than when € ~~ O or 1. However, the choice of the norm normally has hitle effect on the efficiency of the routine.
 
@@ -287,9 +287,9 @@ F is the name of a user defined subroutine that has the format: CALL F(z, y, u,v
 
 The arguments x9 and yo, which have double precision values, are the real and imaginary parts of z9. The argument n is an integer where 1 < n < 51, and AR and AI are double
 
-real and irmaginary parts of a, are stored in AR(j +1) and AI(j+ 1) for 7 =0,1, ...,n—- 1. Otherwise, if IND # 0 then the real and imaginary parts of f(zo) and the derivatives f'(zo), - wy f(z) are stored in AR and AI respectively.
+real and imaginary parts of a, are stored in AR(j +1) and AI(j+ 1) for 7 =0,1, ...,n—- 1. Otherwise, if IND # 0 then the real and imaginary parts of f(zo) and the derivatives f'(zo), - wy f(z) are stored in AR and AI respectively.
 
-The argument ¢, which has double precision values, specifies the relative accuracy of the subroutine F. If it is estimated that # produces results accurate to k decimal digits then one may set ¢ ~ JO°*. It ig assumed that « > O. Ife © O then the results of F are assumed to be correct to machine precision.
+The argument ¢, which has double precision values, specifies the relative accuracy of the subroutine F. If it is estimated that # produces results accurate to k decimal digits then one may set ¢ ~ JO°*. It is assumed that « > O. Ife © O then the results of F are assumed to be correct to machine precision.
 
 When DCPSC is called, f(z) is evaluated on circles of various radii around the point zo. fis a double precision variable. On input, A is the radius of the first circle on which
 

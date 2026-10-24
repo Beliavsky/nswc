@@ -223,7 +223,7 @@ NUMGE =: the number of > constraints.
 
 It is assumed that NUMLI > 0, NUMGE > 0, and NUMLE + NUMGE «< mu.
 
-When SMPLX or SSPLX is called, the routine attempts to maxunize S,¢,1, subject to the constaints. A modified form of the primal simplex algorithra is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXTTER has the value:
+When SMPLX or SSPLX is called, the routine attempts to maximize S,¢,1, subject to the constraints. A modified form of the primal simplex algorithm is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXTTER has the value:
 
 MXITER + the maximum number of iterations that may be performed. This argument is provided by the user. The related argument VPER is a variable that is set. by the routine. When the routine termmmates, PPER has for its value the number of iterations that were performed. IND is a variable and fRASIS an array of dimeusion ma. ERASIS contams Che ridices tof the current basic variables zy, and END) is used for mputfoutput purposes. On it put IND is normally set by the user to 0. if END Q then the routine selects its own
 

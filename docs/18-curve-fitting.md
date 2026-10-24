@@ -326,7 +326,7 @@ fori, Sor < tya1 (7 = 1,...,€-1). if the nodes are selected so that £ < m —
 CALL SPFIT(X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
 ```
 
-X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array roataiming wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no imput errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
+X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array roataiming wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no input errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
 
 WK is an array of dimension 7@+ 18 or larger that is a work space for the routine.
 
@@ -377,7 +377,7 @@ X is an array containing 2), ...,2m, Y an array containing y,, ...,y¥m, and 7�
 
 if& > 1 then XCON contains the points #,, ...,&, at which the constraints are placed.
 
-The pomts may be given in any order and need not be distinct. It is assurned that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
+The pomts may be given in any order and need not be distinct. It is assumed that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
 
 itupe = 0 f)(%,) <r,
 
@@ -954,7 +954,7 @@ Assume now that f(z;) = y; for ¢ = 1,...,n. Then for a fixed o, f(z) is uniquel
 
 CURV2(t,n, X,Y, DDY,o}
 
-\* and Y are arrays containing the abscissas 11, ...,2, and crdinates ys, .o +3 Yn, and DDY is an array containing the secord derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
+\* and Y are arrays containing the abscissas 11, ...,2, and crdinates ys, .o +3 Yn, and DDY is an array containing the second derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
 
 **Remark.** After DDY has been obtained, CURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor o remains fixed. However, if ¢ is modified then the derivative information in DDY will have to be recomputed before CURV2 can be used with the new tension factor.
 
@@ -1012,7 +1012,7 @@ AT9
 | `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L86796`](../source_parts/nswc_part_09.f#L2052) |
 
 
-Given a sequence of points (21,41), ...,(@n, Yn). One progecnre for fi fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satioly a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining vhe second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is avaiable for computing the curve.
+Given a sequence of points (21,41), ...,(@n, Yn). One progecnre for fi fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satioly a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining vhe second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
 
 ```fortran
 CALL KURV1(N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR)
