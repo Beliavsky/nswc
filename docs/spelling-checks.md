@@ -41,7 +41,8 @@ CSpell flags unknown words. Codespell's `clear` dictionary proposes known typo
 corrections. Both recognize procedure names and dummy arguments extracted from declarations in
 `nswc.f`. Reviewed technical vocabulary belongs in `cspell.json`; do not add OCR
 errors there merely to silence warnings. A small contextual OCR rule also flags
-the phrase formed by `It`, `ig`, and `assumed`, which word checks can miss.
+`It ig assumed` and `Tt is assumed` (including lowercase variants), which word
+checks can miss.
 
 Unmarked mathematical expressions, proper names, and damaged text can still
 produce false positives. Code samples and formulas excluded from this check can

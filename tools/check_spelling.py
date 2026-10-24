@@ -115,10 +115,10 @@ def check():
         # OCR can produce short valid fragments that dictionary tools miss.
         for name in files:
             for row, line in enumerate((temp / name).read_text(encoding="utf-8").splitlines(), 1):
-                for match in re.finditer(r"\b[Ii]t ig assumed\b", line):
+                for match in re.finditer(r"\b(?:[Ii]t ig|[Tt]t is) assumed\b", line):
                     issues.append(dict(tool="ocr", file=name, line=row,
                                        column=match.start() + 1, word=match.group(),
-                                       suggestion="It is assumed"))
+                                       suggestion="It is assumed" if match.group()[0].isupper() else "it is assumed"))
     for issue in issues:
         issue["context"] = originals[issue["file"]][issue["line"] - 1].strip()
     return files, issues

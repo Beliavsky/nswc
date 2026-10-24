@@ -837,7 +837,7 @@ T is an array containing the knots t;, ...,tm, X an mxn matrix whose 1*%
 
 row contains the point z;, and DX an m x n matrix whose #*” row contains the derivative '(t;). The arguments kz and kdz have the following values: kz = the number of rows in the dimension statement for X in the calling program kdz = the number of rows in the dimension statersent for DX in the calling program
 
-Tt is assumed that m > 2,n > 2, kx > m, and kdzr > m.
+It is assumed that m > 2,n > 2, kx > m, and kdzr > m.
 
 Let t,,...,¢, be the points at which the curve y is to be evaluated. TI is an array containing ¢;, ...,¢, and Z a 2-dimensional array containing at least & rows and n columns. The argument kz is the row dimension for Z in the calling program. It is assumed that
 

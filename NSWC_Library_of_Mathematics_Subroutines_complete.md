@@ -512,7 +512,7 @@ Let A be an array containing n > 1 elements aj, ...,a¢,. Then the following sub
 CALL ISHELL(A, N)
 ```
 
-Tt is assumed that A is an integer array. When ISHELL is called, the elements of A are reordered so that a, < aj41 fort =1,...,n—1.
+It is assumed that A is an integer array. When ISHELL is called, the elements of A are reordered so that a, < aj41 fort =1,...,n—1.
 
 **Algorithm.** The Shell sorting algorithm with increments (3* — 1)/2 is employed. Programmer. A. H. Morris
 
@@ -8952,7 +8952,7 @@ creased.
 
 When an error is detected, the routine immediately lermunates,
 
-After aa initial call to CSLY of CPSELV, of HeR RO} Coon cutput thee eather routine ray be called with MO / 0. When MO / 0 tt is assumed that only 6 may bave been imodified, CSLV is called for solving che new set of equations Arb, and CTSLV is called for solving the new set of equations Ale 6. Phe routine employs the LU decomposition obtamed on the imitial call te CSLY or CVSLYV to solve the pew system: of equations. The solution is atored in XY. As before, X and 6 may share the same storage area. IMO / 0 then only ny AOC, TWH, and WK are used A, PA, A, MAX, and PRR are not referenced by the routine,
+After aa initial call to CSLY of CPSELV, of HeR RO} Coon cutput thee eather routine ray be called with MO / 0. When MO / 0 it is assumed that only 6 may bave been imodified, CSLV is called for solving che new set of equations Arb, and CTSLV is called for solving the new set of equations Ale 6. Phe routine employs the LU decomposition obtamed on the imitial call te CSLY or CVSLYV to solve the pew system: of equations. The solution is atored in XY. As before, X and 6 may share the same storage area. IMO / 0 then only ny AOC, TWH, and WK are used A, PA, A, MAX, and PRR are not referenced by the routine,
 
 
 <small>Original source: [View scanned PDF page 261](scans/page_0261.png)</small>
@@ -12487,7 +12487,7 @@ T is an array containing the knots t;, ...,tm, X an mxn matrix whose 1*%
 
 row contains the point z;, and DX an m x n matrix whose #*” row contains the derivative '(t;). The arguments kz and kdz have the following values: kz = the number of rows in the dimension statement for X in the calling program kdz = the number of rows in the dimension statersent for DX in the calling program
 
-Tt is assumed that m > 2,n > 2, kx > m, and kdzr > m.
+It is assumed that m > 2,n > 2, kx > m, and kdzr > m.
 
 Let t,,...,¢, be the points at which the curve y is to be evaluated. TI is an array containing ¢;, ...,¢, and Z a 2-dimensional array containing at least & rows and n columns. The argument kz is the row dimension for Z in the calling program. It is assumed that
 

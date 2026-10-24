@@ -1256,7 +1256,7 @@ creased.
 
 When an error is detected, the routine immediately lermunates,
 
-After aa initial call to CSLY of CPSELV, of HeR RO} Coon cutput thee eather routine ray be called with MO / 0. When MO / 0 tt is assumed that only 6 may bave been imodified, CSLV is called for solving che new set of equations Arb, and CTSLV is called for solving the new set of equations Ale 6. Phe routine employs the LU decomposition obtamed on the imitial call te CSLY or CVSLYV to solve the pew system: of equations. The solution is atored in XY. As before, X and 6 may share the same storage area. IMO / 0 then only ny AOC, TWH, and WK are used A, PA, A, MAX, and PRR are not referenced by the routine,
+After aa initial call to CSLY of CPSELV, of HeR RO} Coon cutput thee eather routine ray be called with MO / 0. When MO / 0 it is assumed that only 6 may bave been imodified, CSLV is called for solving che new set of equations Arb, and CTSLV is called for solving the new set of equations Ale 6. Phe routine employs the LU decomposition obtamed on the imitial call te CSLY or CVSLYV to solve the pew system: of equations. The solution is atored in XY. As before, X and 6 may share the same storage area. IMO / 0 then only ny AOC, TWH, and WK are used A, PA, A, MAX, and PRR are not referenced by the routine,
 
 
 <small>Original source: [View scanned PDF page 261](../scans/page_0261.png)</small>

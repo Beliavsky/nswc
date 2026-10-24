@@ -139,7 +139,7 @@ Let A be an array containing n > 1 elements aj, ...,a¢,. Then the following sub
 CALL ISHELL(A, N)
 ```
 
-Tt is assumed that A is an integer array. When ISHELL is called, the elements of A are reordered so that a, < aj41 fort =1,...,n—1.
+It is assumed that A is an integer array. When ISHELL is called, the elements of A are reordered so that a, < aj41 fort =1,...,n—1.
 
 **Algorithm.** The Shell sorting algorithm with increments (3* — 1)/2 is employed. Programmer. A. H. Morris
 
