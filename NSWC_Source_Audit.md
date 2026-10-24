@@ -38,6 +38,14 @@ against the supplied `nswc.f` fixed-form Fortran source.
 
 ## Scope and unresolved limitations
 
+A subsequent manual prose pass reviewed the spelling-tool findings one Markdown
+file at a time and kept the complete manual consistent with the chapter edits.
+The singular-value-decomposition description of U was checked against scan 183;
+the uniform integer-selection description, error returns, and usage examples
+were checked against scan 438 and the URGET source. The
+[per-file review record](docs/proofreading-review.csv) identifies the remaining
+tool flags. These corrections do not remove the limitations below.
+
 1. **Names, arity, order of dummy arguments, and function/subroutine classification**
    are verified directly against the code. The presentation uses the identifiers from
    the source, which sometimes differ from those printed in the manual. Dummy

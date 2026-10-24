@@ -32,17 +32,17 @@ P(2,y) = >> ST aa dsl2)¥,(y)
 
 rl 7-1
 
-is called a bispline with the tension factor o (also, bicubie spline when o = 0). A bispline
+is called a bispline with the tension factor o (also, bicubic spline when o = 0). A bispline
 
 FCr,y) has the following properties:
 
 (1) (x,y) sa C? mapping on [21,25.] * [yt, val-
 
-(2) For each fixed y the mapping x +> F(x,y) is a spline in S,(X), and for cach fixed x the mappirs y+ > F(z, y) is a spline in S,(Y).
+(2) For each fixed y the mapping x +> F(x,y) is a spline in S,(X), and for each fixed x the mapping y+ > F(z, y) is a spline in S,(Y).
 
-(3) F is uniqu ly characterized by the values F(2,,9,), Dil (te. y;,), Dal (ay, ye), and D,D2F (re, Je) wheret ot, ...,m, 70 1, ym, ko By, and @ = tn!
+(3) F is uniquely characterized by the values F(2,,9,), Dil (te. y;,), Dal (ay, ye), and D,D2F (re, Je) wheret ot, ...,m, 70 1, ym, ko By, and @ = tn!
 
-Ifo Gthen a lecubie spline Pyro y) hes he value
+Ifo Gthen a bicubic spline Pyro y) hes he value
 
 3.08 “No k t \ Rey) DoD Lele My) KR Of 4) for sy we agp andi, ys tyyy where cg are consbe os be or oon Eo on)
 
@@ -61,15 +61,15 @@ Pye, Boat bak dhetiabe the partial derivatives of F
 | `SPFIT2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR` | [`L89823`](../source_parts/nswc_part_09.f#L5079) |
 
 
-GHVER ty <osee << ty and vy < +++ < vq, where mn > 2. Let { (tr, Ye,2re) 1 = 1,...,¢;9 2 1,...,} be a set of points where p,v > 4,u, < ay << Ly < Um, and SM st Sw S U_. Also let wy,...,w, and ti,,...,W, be positive weights. Then the following subrcutine is available for finding a bicubic spline f(z,y) having the knots ui0; (= 1,...,.m,7 = 1, ...,n) which minimizes » s wrt [f (Zr, Ye) — Wal’. =ITe=1
+GHVER ty <osee << ty and vy < +++ < vq, where mn > 2. Let { (tr, Ye,2re) 1 = 1,...,¢;9 2 1,...,} be a set of points where p,v > 4,u, < ay << Ly < Um, and SM st Sw S U_. Also let wy,...,w, and ti,,...,W, be positive weights. Then the following subroutine is available for finding a bicubic spline f(z,y) having the knots ui0; (= 1,...,.m,7 = 1, ...,n) which minimizes » s wrt [f (Zr, Ye) — Wal’. =ITe=1
 
 ```fortran
 CALL SPFIT2(X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR)
 ```
 
-X is an stray containing ay, ...,2,, WX an array containing wy, .++yWy, % an array ontainns ui, ..,¥., WY an array containing W,,...,@,, Z the p x v matrix (Zr), U anarray contaming “1, ...,Um, and V an array containing v1, ...,v,. It is essumed that kz ~ pw, where kz is the number of rows in the dimension statement for 2 in the calling program.
+X is an stray containing ay, ...,2,, WX an array containing wy, .++yWy, % an array containing ui, ..,¥., WY an array containing W,,...,@,, Z the p x v matrix (Zr), U an array containing “1, ...,Um, and V an array containing v1, ...,v,. It is assumed that kz ~ pw, where kz is the number of rows in the dimension statement for 2 in the calling program.
 
-& js a 3-dimensional array of diaension mxnx 4, and IERR a variable. When SPFI'L2 is called, if no Input errors are devocted then IERR is set to Q and the values /(u,,v,),
+& js a 3-dimensional array of dimension mxnx 4, and IERR a variable. When SPFI'L2 is called, if no Input errors are detected then IERR is set to Q and the values /(u,,v,),
 
 Dy f(t, v5), De f(t, vs), Di De f (uj, v;) of a weighted least squares bispline approximation yr}
 
@@ -79,21 +79,21 @@ f(x,y) are computed and stared in.) Specifically,
 
 opsach tos dy ...jmeand gy 0 1, ...yn.
 
-Sis an array o dimension née f 6, 7 oan array of dimension n ¢ 6. and WK an array ef omension NUM where NUM > max {(r | ")G0 ' 2) (m4 2) 7 Smaxfan | Bn 2y}. Sy and WE are work spaces for the routine
+Sis an array o dimension née f 6, 7 oan array of dimension n ¢ 6. and WK an array ef dimension NUM where NUM > max {(r | ")G0 ' 2) (m4 2) 7 Smaxfan | Bn 2y}. Sy and WE are work spaces for the routine
 
-Crror Return. HERE has one of the following values if an Input error is detected:
+Error Return. HERE has one of the following values if an Input error is detected:
 
-IERR Loither wy see) ou, orm 2 as vielated.
+IERR Loither wy see) ou, orm 2 as violated.
 
-1 n URE “ lies ty Bp 8 et dy or ge > ds violated. HR ther vy oe copy orm oe Bie virdated.,
+1 n URE “ lies ty Bp 8 et dy or ge > ds violated. HR ther vy oe copy orm oe Bie violated.,
 
-PURE 4 Vither pp yy ee ye oe ote 4 is violated Her S NUM is tee small (“Phe miecnten permissible value for NUM has Pera stored WEE} Reso NOM © WIL).
+PURE 4 Either pp yy ee ye oe ote 4 is violated Her S NUM is tee small (“The minimum permissible value for NUM has Pera stored WEE} Reso NOM © WIL).
 
-Wourwk After the array # ois obtareed, thea the suorcutme ColUEERE can be used ra
+Wourwk After the array # ois obtained, thea the subroutine ColUEERE can be used ra
 
-afer fferentiate che bispene flr y)
+afer differentiate che bispline flr y)
 
-PP yf dene te the partis! do creatives cf f
+PP yf dene te the partial derivatives cf f
 
 
 <small>Original source: [View scanned PDF page 380](../scans/page_0380.png)</small>
@@ -132,7 +132,7 @@ kw, = the number of rows in the dimension statement for W, in the calling progra
 
 kwz = the number of rows in the dimension statement for W., in the calling program kwyq = the number of rows in the dimension statement for Wy; in the calling program it is assumed that kw > m, kw, > m, kw2 > m, and kwy2 > m.
 
-The arguments k and @ are nonnegative integers. Let (r,,y.) (r = 1,.-.,H, $ 1, ...,v) be the points where D'S f is vo be compuced. X is an array containing 71, ..., z,, Y an array containing y,...,y., and 4 a 2-dimenstonal array of dimension kz x v
+The arguments k and @ are nonnegative integers. Let (r,,y.) (r = 1,.-.,H, $ 1, ...,v) be the points where D'S f is vo be computed. X is an array containing 71, ..., z,, Y an array containing y,...,y., and 4 a 2-dimensional array of dimension kz x v
 
 where kz > wp. When CSURF is called, the values DEDS f(r, Yo) are computed and stored in Zforr--1,...,fands— l,...,v.
 
@@ -142,18 +142,18 @@ where kz > wp. When CSURF is called, the values DEDS f(r, Yo) are computed and s
 CALL CSURF1(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
 ```
 
-U is an array containing u;, ...,uU,,, oan array contaming vy, ..,0,, and Woa 3- dimensional array of dimension mx n x 4. tis assumed that
+U is an array containing u;, ...,uU,,, oan array containing vy, ..,0,, and Woa 3- dimensional array of dimension mx n x 4. tis assumed that
 
 Wr g,t) . flue) a 1) Ds flu.) Wr, 7,3) Di f(u,e,) Wn 4) DD flac) fors: 9,...,mand7> 1, 0...n. Ty fand Daf denote the partial derivatives of f, and Pek py eee me Ra Gly fk bad, HH
 
-oré . 3then DRDO F(r,y) denates the right liniit DD f(s tive).
+oré . 3then DRDO F(r,y) denotes the right limit DD f(s tive).
 
 
 <small>Original source: [View scanned PDF page 382](../scans/page_0382.png)</small>
 
 The arguments k and f are nonnegative integers. Let (z,,y,) (r = 1,...,4, ¢ = 1,...,v) be the points where DF D{f is to be computed. X is an array containing zy, ..+) Zp, Y an array containing yz, ...,yv, and Z a 2-dimensional array of dimension kz x v where kz > wp. When CSURF'1 is called, the values D? Df} f(x,, ys) are computed and stored in Z forr=1,...,pands=1,...,v.
 
-**Programming.** CSURF1 is a driver for the subroutine CSURF,. The tunction INTRVL is used. CSURF 1 was written by A. H. Merris.
+**Programming.** CSURF1 is a driver for the subroutine CSURF,. The function INTRVL is used. CSURF 1 was written by A. H. Morris.
 
 CALL CSRF(k, £,X,u,Y,v,Z,k2,U,m,V,n,W, kw, Wi, kw,,Wo, kwe,Wiz,kwi2)
 
@@ -161,13 +161,13 @@ U is an array containing w),...,t%m, V an array containing v1,...,t,, and W, Wy,
 
 kw = the number of rows in the dimension statement for W in the calling program
 
-kw, = the number of rows in the dimensicn statement for W, in the calling prograin
+kw, = the number of rows in the dimension statement for W, in the calling program
 
 kwz = the number of rows in the dimension statement for W2 in the calling program kw y2 = the number of rows in the dimension statement for Wy2 in the calling program It is assumed that kw > m, kw, > m, kw. > m, and kwy2 > m.
 
-The arguments k and @ are nonnegative integers. Let (z,,y.) (r = 1,...,H, 8 . 4 * we . . i, ...,v) be the points where DED‘ f is to be computed. X is an array containing 2), ..., xy, Y an array containing yi, ..-, vv, and Z a 2-dimensional arriy of Cimension kz xX v
+The arguments k and @ are nonnegative integers. Let (z,,y.) (r = 1,...,H, 8 . 4 * we . . i, ...,v) be the points where DED‘ f is to be computed. X is an array containing 2), ..., xy, Y an array containing yi, ..-, vv, and Z a 2-dimensional array of dimension kz xX v
 
-where kz > p. When CSRF is called, the values DED{f(2,, ys) sre computed and stored in Z forr=1,...,u and a= t,...,v.
+where kz > p. When CSRF is called, the values DED{f(2,, ys) are computed and stored in Z forr=1,...,u and a= t,...,v.
 
 **Programming.** CSRF calls the function INTRVL. CSRE was written by A. H. Morris.
 
@@ -175,15 +175,15 @@ where kz > p. When CSRF is called, the values DED{f(2,, ys) sre computed and sto
 CALL CSRF2(IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, DDF)
 ```
 
-U is an array containing uy, ...,tm, oan array contaming vy, ...,u,, Wo othe mov n mainix (f(u,,v,)), and DDW a 3-dumensional array of dimension mx rns 3 where W1.9,38)) DID S(u,e,)
+U is an array containing uy, ...,tm, oan array containing vy, ...,u,, Wo othe mov n matrix (f(u,,v,)), and DDW a 3-dimensional array of dimension mx rns 3 where W1.9,38)) DID S(u,e,)
 
-ids forse 1,...,meand zy o4,.. nm. Phe argument Aw has the following valoe:
+ids forse 1,...,meand zy o4,.. nm. The argument Aw has the following value:
 
-Aw | the number of rows in the dhinension statement for Worn the callag proyeram
+Aw | the number of rows in the dimension statement for Worn the calling program
 
 It is assumed that Aue + ora,
 
-The arguments A and @ are nonnegative anterers Let fa, uy) (rv lL. opis x ¥ t \ Ua) } . t . 1, .,v) be the points where Of a fois to be compated Yo ois an array Contaming £4, (Ty, ) at array contaiming yy, (Y, and 4a 2 itnensonal array of diriensaon Aa ee where kz 0 ou. When CSR? as called, the values 2* 290, yl) are computed and stored in forr o1,. .,yeands |, ae
+The arguments A and @ are nonnegative integers Let fa, uy) (rv lL. opis x ¥ t \ Ua) } . t . 1, .,v) be the points where Of a fois to be computed Yo ois an array Containing £4, (Ty, ) at array containing yy, (Y, and 4a 2 dimensional array of dimension Aa ee where kz 0 ou. When CSR? as called, the values 2* 290, yl) are computed and stored in forr o1,. .,yeands |, ae
 
 oli
 
@@ -215,11 +215,11 @@ CALL SURF(M, N, X, Y, Z, IZ, OPT, ZP, TEMP, SIGMA, IERR)
 
 X is an array containing 21,...,2m, Y an array containing y1,...,y,,and Zthemxn matrix (z,;). The argument kz is the number of rows in the dimension statement for Z in the calling program. It is assumed that m > 2,n > 2, and kz > m.
 
-OPT is an array, called the optton vector, which permits the user to specify any boundary conditions that are to be imposed on the surface. If no boundary conditions are to be specified then OPT may be declared to be of dimension 1 and OPT(1) must be assiguvd the value 0. The details concerning the specification of boundary conditions in OPT are given below.
+OPT is an array, called the option vector, which permits the user to specify any boundary conditions that are to be imposed on the surface. If no boundary conditions are to be specified then OPT may be declared to be of dimension 1 and OPT(1) must be assigned the value 0. The details concerning the specification of boundary conditions in OPT are given below.
 
 DDZ is a 3-dimensional array of dimension m x n x 3 and JERR is a variable. When SURF is called, if no input errors are detected then IERR is assigned the value % and the partial derivatives D?F(z,,y;), DZ F(z.,y,),D? D2 F(z,,y,) (f= 1,...,mj7 = 1,...,n) are computed and stored in DDZ. DDZ(1, 7,1) DZ F(a,,y,), DDZ(, 7,2) — D?F(2,,y5), and DDZ(¥,7,3) — D? D2 F(2,,y,) for each 4, 9.
 
-WK ts an array of dimension rm + 2n or largec that is used for a work space.
+WK ts an array of dimension rm + 2n or larger that is used for a work space.
 
 ```text
 Error Return, TERR reports the following input errors:
@@ -228,13 +228,13 @@ IERR 2 af Eye ores Ty, OF Yr ort Un i onet satistied
 IERR 3 Gf OPP contams an error
 ```
 
-When an errors detected, the routine anmecdiately termnat -«
+When an errors detected, the routine immediately terminates -«
 
-Remark After Diifos cbtamed. then Che function SURF! may be used to evaluate the bisphne F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary condittons are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array contaiing the anforsvathon keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan inthe value Go Baa h wroup of data key,, data, (1 \ oa) oas called an optton. bach key, is an ointeper and data, ius a dst of partial derwatise values thar oh
+Remark After Diifos obtained. then Che function SURF! may be used to evaluate the bispline F(r,y). Also, ofa O then the subroutine CSRE2 may be used to evaluate or differentiate Flr y) The option vector OPT Tf no boundary conditions are ta be imposed then OPT mas be declared to be of dimension i and Cai) cust have the value O Otherwise, GHP as an array containing the information keyg. dats, keve. Gatag, hey ubstag th Vha bast eriryan in the value Go Baa h group of data key,, data, (1 \ oa) oas called an option. bach key, is an integer and data, ius a dst of partial derivative values thar oh
 
-surface A Gr, y) is required tosatisfy Phe followinp Gptions are avarlabue
+surface A Gr, y) is required to satisfy The following options are available
 
-key PE The values 2b Cry.y.) G2 1, mpolust be satisteed key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 Phe values JF bry ys) tt ! sit trtist bee satisted
+key PE The values 2b Cry.y.) G2 1, mpolust be satisfied key 2 OVhe values 2), Fle,.. vi) a ore} trrtist lie satusties! hey 4 The values JF bry ys) tt ! sit trtist bee satisfied
 
 
 <small>Original source: [View scanned PDF page 385](../scans/page_0385.png)</small>
@@ -260,9 +260,9 @@ OPT (M+3)= ~-1.3
 OPT (M + 4) = 0.0 (Terminates the option vector)
 ```
 
-Background. The evaiuation of D? F(z,,y;), D3 F(2:,y;), and D? Di F(z,, y,) reduce to the evaluation of second derivatives of splines. Specifically, for each ¢ < m D2F(2,, 91), ..., D2 F(z, yn) are the second derivatives that characterize the spline y > F(a:,y), and for each y <n D?F(21,y;),..., D?F (tm, y,) are the second derivatives that characterize the spline z++ F(z,y;). Also D, D3 F(2,,y;) and D, D2F(2m,y;) (7 = 1, ...,n) are the second derivatives that characterize the splines y > D,F(21,y) and y++ D,F(zm,y). For each j < m, after one obtains the values D3 F(z,,y,;) through which the spline ++ DEi*(x,y;) will pass and the end slopes D, D3 F(x1,y;) and D, D3? F(zm, y,;) which this spline must have, then the second derivatives that characterize this spline can be computed. D? D2 F (2, y;), ...; Di DZ F(2m,y;) are the second derivatives that characterize x ++ D2 F(z, y,).
+Background. The evaluation of D? F(z,,y;), D3 F(2:,y;), and D? Di F(z,, y,) reduce to the evaluation of second derivatives of splines. Specifically, for each ¢ < m D2F(2,, 91), ..., D2 F(z, yn) are the second derivatives that characterize the spline y > F(a:,y), and for each y <n D?F(21,y;),..., D?F (tm, y,) are the second derivatives that characterize the spline z++ F(z,y;). Also D, D3 F(2,,y;) and D, D2F(2m,y;) (7 = 1, ...,n) are the second derivatives that characterize the splines y > D,F(21,y) and y++ D,F(zm,y). For each j < m, after one obtains the values D3 F(z,,y,;) through which the spline ++ DEi*(x,y;) will pass and the end slopes D, D3 F(x1,y;) and D, D3? F(zm, y,;) which this spline must have, then the second derivatives that characterize this spline can be computed. D? D2 F (2, y;), ...; Di DZ F(2m,y;) are the second derivatives that characterize x ++ D2 F(z, y,).
 
-**Programming.** SURF empioys the subroutines CEEZ, TERMS, and SNHCSH. SURF was written by A. K. Cline and R. u. Renka (University of Texas at Austin), and modified by A. H. Morris.
+**Programming.** SURF employs the subroutines CEEZ, TERMS, and SNHCSH. SURF was written by A. K. Cline and R. u. Renka (University of Texas at Austin), and modified by A. H. Morris.
 
 ala
 
@@ -298,13 +298,13 @@ DDZ(i, 3,3) = D? D2 F(z;, 95)
 
 for each 1,7. SURF2(9,t,m,n, X,Y, Z,kz,DDZ,o) = F(s,t) for any point (,t).
 
-**Remark.** After DDZ has been obtained, SURF2 may be repeatedly catled to evaluate the bispline at different points so long ag the tension tactor ¢ remains fixed. However, if o is inodified then the derivative information in DDZ will have to be recomputed before SURF2 can be used with the new tension factor.
+**Remark.** After DDZ has been obtained, SURF2 may be repeatedly called to evaluate the bispline at different points so long ag the tension factor ¢ remains fixed. However, if o is modified then the derivative information in DDZ will have to be recomputed before SURF2 can be used with the new tension factor.
 
 **Programming.** SURF2 employs the function INTRVE and subroutine SNHCSH. SURF? was written by A. K. Cline and R. J. Renka (University of Texas at Austin).
 
 CALL NSURF2(sinin, Snax) ha, fminy tmax: Me, W, kw, m,n, X,Y, Z,kz, DDZ,WORK, 0)
 
-The arguments 8i,in and Smax are the lower ard upper limits of the x-coordinates of che grid on which F(z, y) is to be evaluated, and the argumenty ty), and tmax are the lower and upper limits of the y-coordinates. The purpose of the routine 1s to evaluate the bispline at the points (s,,t,;) where
+The arguments 8i,in and Smax are the lower ard upper limits of the x-coordinates of che grid on which F(z, y) is to be evaluated, and the arguments ty), and tmax are the lower and upper limits of the y-coordinates. The purpose of the routine 1s to evaluate the bispline at the points (s,,t,;) where
 
 tee oo . a \ Inax min 8y == Smin + bo Ly) ee
 
@@ -322,9 +322,9 @@ O15
 
 <small>Original source: [View scanned PDF page 387](../scans/page_0387.png)</small>
 
-The arguments m,n, X,Y, 4, kz, DDZ,o are the same as in SURF2. WORK is an array of dimeuasion 4m, or larger that is used for a work space.
+The arguments m,n, X,Y, 4, kz, DDZ,o are the same as in SURF2. WORK is an array of dimension 4m, or larger that is used for a work space.
 
-**Programming.** NSURF2 empioys the subroutine SNHCSH. NSURF2 was written by A. K. Cline (University of Texas at Austin).
+**Programming.** NSURF2 employs the subroutine SNHCSH. NSURF2 was written by A. K. Cline (University of Texas at Austin).
 
 S16
 
@@ -343,7 +343,7 @@ S16
 
 Form>k>landn> &> 1 let 5) < +++ < 9n4, and ty < ... < tnyy be sequences where 5; < sj44 (= 1, .,m) andt, < tye (J = 1,...,n). Let Bix, ..., Bmx be the B-splines for the knots 91 < +++ < Sm4, and By,...,Bne the B-splines for the knots ty Se) S tage. Given op < 21 < ++ < tm < Sm4i, te < yr < +++ < Yn < tny1, and the values z,; (f= 1,...,m,j7 =1,...,n). Then we wish to find a piecewise polynomial of the form
 
-m nm f{(z,y) = > S44; Bie(2) Byely) s=17=1 which satisfies f(z;,y;) = %j for? = 1,...,m and j = 1,...,n.1\ This problem has a unique solution when s; < 2; < 8;44% and t,; <y; <tj4¢fort=1,...,mandj=1,...,n. The following subrcutine is available for obtaining the coefficients a,; of this piecewise polynomial.
+m nm f{(z,y) = > S44; Bie(2) Byely) s=17=1 which satisfies f(z;,y;) = %j for? = 1,...,m and j = 1,...,n.1\ This problem has a unique solution when s; < 2; < 8;44% and t,; <y; <tj4¢fort=1,...,mandj=1,...,n. The following subroutine is available for obtaining the coefficients a,; of this piecewise polynomial.
 
 ```fortran
 CALL BSTRP2(X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG)
@@ -420,13 +420,13 @@ IERR = 0 The coefficients were obtained. The least squares approximation is uniq
 
 IERR =: 1 The coefficients for a least squares approximation were obtained. The approximation is not, unique.
 
-IERR = - 1 (Input error) Fither s, <2, < ++) < p< Sm41 Or p> max{2,k} is violated.
+IERR = - 1 (Input error) Either s, <2, < ++) < p< Sm41 Or p> max{2,k} is violated.
 
-TERR s- 2 Gnput error) Wither tg < yp < +++ < yy < tag ore > max {2, @} is viclatecd
+TERR s- 2 Input error) Wither tg < yp < +++ < yy < tag ore > max {2, @} is violated
 
-[ERR =~ 3 Cnpat error) NUM is too small. ‘Phe minimum permissible value
+[ERR =~ 3 Input error) NUM is too small. ‘The minimum permissible value
 
-Wry Saya then by f(ry,y) we mean flty yy) and ifvy - taaa then by f(z,y,) we niean f(aue).
+Wry Saya then by f(ry,y) we mean flty yy) and ifvy - taaa then by f(z,y,) we mean f(aue).
 
 
 <small>Original source: [View scanned PDF page 390](../scans/page_0390.png)</small>
@@ -450,7 +450,7 @@ for NUM, namely rv + max{(k-+ 1)m,(@+ Ln}, has been stored in WK(i). Reset NUM >
 | `BVAL2` | `SUBROUTINE` | `A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, IDX, IDY, F, WK` | [`L91406`](../source_parts/nswc_part_09.f#L6662) |
 
 
-Form>k>landn>é> 1 let 3, <--- < mye and ty < +++ < tyy, be sequences where s; < sy44 (¢ = 1,...,m) and t; < tye (7 = 1,...,n). Let Biz, ..., Bmg be the B-splines for the knuts sy < +++ < smsy and By, ..., Bye the B-splines for the knots
+Form>k>landn>é> 1 let 3, <--- < mye and ty < +++ < tyy, be sequences where s; < sy44 (¢ = 1,...,m) and t; < tye (7 = 1,...,n). Let Biz, ..., Bmg be the B-splines for the knots sy < +++ < smsy and By, ..., Bye the B-splines for the knots
 
 ty Sees Stage. If ™ n
 

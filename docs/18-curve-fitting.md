@@ -109,7 +109,7 @@ jg=1
 
 for 7 =0,1,...,n-—1
 
-WK is an array of dirnension n or larger that is a work space for the routine.
+WK is an array of dimension n or larger that is a work space for the routine.
 
 **Error Return.** If an error is detected then IERR is assigned one of the following values:
 
@@ -117,7 +117,7 @@ TERR = 1 The argument n is not positive.
 
 TERR = 2 There exists integers 1 and @ for which X/s) = X(@) but X(t) # X(j) for some j where t < 7 < @. In this case, the values t and & are stored (in floating point form) in WK(i) and WK(2).
 
-When an error is detected, the roviine immediately terminates
+When an error is detected, the routine immediately terminates
 
 ```text
 Example. If ;(G) = 2, p(--1) = 1, and p'(~1) = 2 where x, = 0 and 22 = ~-1, then HTRP
@@ -244,7 +244,7 @@ PHI is an array of dimension 2(n + 1) or larger, and WK is an array of dimension
 | `SPLIFT` | `SUBROUTINE` | `X, Y, YP, YPP, N, W, IERR, ISX, A1, B1, AN, BN` | [`L84260`](../source_parts/nswc_part_08.f#L10027) |
 
 
-Given z; < +--+ < ay. A function f(z) is a cubse epline having the nodes(knots) Z1,...,;%y if f is a polynomial of degree < 3 on the interval [z,,2;41] fori =1,...,n—-1, and the first and second derivatives f’(2) and f(x) exist and are continuous for all z. If f{; denotes the polynomial for the interval [z;, 2,41] then f; has the form:
+Given z; < +--+ < ay. A function f(z) is a cubic spline having the nodes(knots) Z1,...,;%y if f is a polynomial of degree < 3 on the interval [z,,2;41] fori =1,...,n—-1, and the first and second derivatives f’(2) and f(x) exist and are continuous for all z. If f{; denotes the polynomial for the interval [z;, 2,41] then f; has the form:
 
 fi(z) = yt ac(x — 2;) + by(z ~— 2)? + oy (2 — 2,)%.
 
@@ -256,15 +256,15 @@ Assume now that the ordinates y;,...,Y, are given. Then there exist an infinitud
 
 when n > 4. Then the subroutine SPLIFT is available for obtaining the spline. CALL CBSPL(X,Y, A, B,C, n,t1,%2, wi, wz, TERR)
 
-X and Y are arrays containing the abscissas 21, ...,2,, and ordinates yy, -.., Yn. It is assumed that rp. 77) so 2, andr 3. A,B and C are arrays of dimension mn or larger, and TERR an integer variable. When CBSPL is called , iffno input errors are detected then IERR is set to OQ. Also, the coefficients ay,d,e. (8 1,0... 1) of the interpolating spline {(2) are stored in A,B,C, and A(n) is set to f'(r,,).
+X and Y are arrays containing the abscissas 21, ...,2,, and ordinates yy, -.., Yn. It is assumed that rp. 77) so 2, andr 3. A,B and C are arrays of dimension mn or larger, and TERR an integer variable. When CBSPL is called , if no input errors are detected then IERR is set to OQ. Also, the coefficients ay,d,e. (8 1,0... 1) of the interpolating spline {(2) are stored in A,B,C, and A(n) is set to f'(r,,).
 
-The arguments 1,,%2, tw), wy specify the conditions thay the spline f(z) must satisfy. tt
+The arguments 1,,%2, tw), wy specify the conditions that the spline f(z) must satisfy. tt
 
 is assumed that t) and rg have the values O,1,2 where:
 
-tO fis continuous at ry. t, O fos continuous at or, 7. 1) ! f'(r1) has the value wy), Ly ! f'(4,) has the waloe us). ty 2 of" (ry) has the value wy. ty 2 f(r) has the value w,,
+tO fis continuous at ry. t, O fos continuous at or, 7. 1) ! f'(r1) has the value wy), Ly ! f'(4,) has the value us). ty 2 of" (ry) has the value wy. ty 2 f(r) has the value w,,
 
-Ifa, Othen the argument wy as qyaored, and ifa, O then wy is tenored
+Ifa, Othen the argument wy as ignored, and ifa, O then wy is ignored
 
 **Error Return.** TERR bafas SambleRR 2afar, cory. for somes
 
@@ -283,11 +283,11 @@ also desired.
 
 **Programming.** CBSPL is an adaptation by A. H. Morris of the subroutine CUBSPL, written by Carl de Boor (University of Wisconsin).
 
-**Reference.** de Boor, Carl, A Practical Gutde to Splines, Springer-Virlag, 1978. CALL SPLIFT(X, Y, DY,DDY,n,W, IERR,MO, «, 8, &, 8)
+**Reference.** de Boor, Carl, A Practical Guide to Splines, Springer-Verlag, 1978. CALL SPLIFT(X, Y, DY,DDY,n,W, IERR,MO, «, 8, &, 8)
 
-X and Y are arrays containing the abscissas 71, ...,z,, and ordinates y1,..., Yn. It is assumed that 7; < +--+ <2, andn> 4. DY and DDY are arrays of dimensien n or larger, and IERR an integer variable. When SPLIFT is called, if there are no input errors then IERR is assigned the value 0, the first derivatives f’(7,),.... f'(a,) are computed and stored in DY(1),...,DY(n), and the second derivatics f"{11),...,f"(zn) are computed and stored in DDY(1), ..., DDY(n).
+X and Y are arrays containing the abscissas 71, ...,z,, and ordinates y1,..., Yn. It is assumed that 7; < +--+ <2, andn> 4. DY and DDY are arrays of dimension n or larger, and IERR an integer variable. When SPLIFT is called, if there are no input errors then IERR is assigned the value 0, the first derivatives f’(7,),.... f'(a,) are computed and stored in DY(1),...,DY(n), and the second derivatives f"{11),...,f"(zn) are computed and stored in DDY(1), ..., DDY(n).
 
-W is an array of dimension 3n or larger that is used for a storage area. On the first call to SPLIFT the argument MO must be set to 0. When SPLIFT is initially called, certain calculations which depend only on the values of a, @, and 21, ...,2%, are performed and the resulis stored in W. On subsequent calls to SPLIFT, if only values of @,8 or y1,...,Yn are modified, then the information in W need not be recomputed. Set MO = 1 and the information in W will be reused.
+W is an array of dimension 3n or larger that is used for a storage area. On the first call to SPLIFT the argument MO must be set to 0. When SPLIFT is initially called, certain calculations which depend only on the values of a, @, and 21, ...,2%, are performed and the results stored in W. On subsequent calls to SPLIFT, if only values of @,8 or y1,...,Yn are modified, then the information in W need not be recomputed. Set MO = 1 and the information in W will be reused.
 
 Error Return if there is an input error then {ERR is set as follows: IERR = 1 if {aj > Lor jal > 1. IERR = 2 ifn < 4. TERR = 3 if the restriction 2; < +++ < x, 1s not satisfied. Remarks.
 
@@ -314,19 +314,19 @@ fe
 | `SPFIT` | `SUBROUTINE` | `X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR` | [`L84415`](../source_parts/nswc_part_08.f#L10182) |
 
 
-Let ty < +++ < tg be a sequence where @ > 2, {(aj,y:):¢ =1,...,m} be aset of m > 4 points where ty <2) <-+- < 2, < te, and wy, ..., Wm be positive weights. Then the subroutine SPFIT is available for obtaining a cubic spline f(z) with the nodes ty, ...,te
+Let ty < +++ < tg be a sequence where @ > 2, {(aj,y:):¢ =1,...,m} be a set of m > 4 points where ty <2) <-+- < 2, < te, and wy, ..., Wm be positive weights. Then the subroutine SPFIT is available for obtaining a cubic spline f(z) with the nodes ty, ...,te
 
 mm which minimizes ) w; (f(z:) — y:)*. This spline is represented by tet
 
 j{z) = 25 +a; (x ~ ty) 4 b5(2-- t;)? + cs (2 _ t;)°
 
-fori, Sor < tya1 (7 = 1,...,€-1). if the nodes are selected so that £ < m — 2 and cack intervai (t;,;41) contains a data point z,,, then this least squares approximation is unique.
+fori, Sor < tya1 (7 = 1,...,€-1). if the nodes are selected so that £ < m — 2 and each interval (t;,;41) contains a data point z,,, then this least squares approximation is unique.
 
 ```fortran
 CALL SPFIT(X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
 ```
 
-X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array roataiming wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no input errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
+X is an array containing 21,...,2%m, Y an array containing y1,...;Ym, W an array containing wy,,...,Wm, and T an array containing tj,...,t2. Z,A,B,C are arrays of dimension &— 1 or larger, and IERR is an integer variable. When SPFIT is called, if no input errors are detected then IERR is set to 0. Also, the coefficients z;,a;,6,,c; of the least squares approximating spline f(x) are computed and stored in Z, A, B,C.
 
 WK is an array of dimension 7@+ 18 or larger that is a work space for the routine.
 
@@ -345,7 +345,7 @@ If an error is detected, the routine immediately terminates.
 
 (2) After A,B,C, and Z have been obtained, then SCOMP may be used to evaluate the spline at. any point z. SEVAL may be used if derivatives are also desired.
 
-**Programming.** SPFIT empiovs the subroutines BSPP, BSLSQ, BSPVB, BCHFAC, and BCHSLV. SPFIT was writsen by A. H. Morris.
+**Programming.** SPFIT employs the subroutines BSPP, BSLSQ, BSPVB, BCHFAC, and BCHSLV. SPFIT was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 345](../scans/page_0345.png)</small>
@@ -360,7 +360,7 @@ If an error is detected, the routine immediately terminates.
 | `CSPFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, XCON, CON, NDER, NC, Z, A, B, C, WK, IWK, IERR` | [`L84475`](../source_parts/nswc_part_08.f#L10242) |
 
 
-Let ty <++* < tg be a sequence where @ > 2, and {(t4,y:) : i = 1,...,m} be a set of pointe where t) < 2) < +++ < 2m, < tg. Then the subrouiine CSPFIT is available for obtaining a cubic spline f(x) with the nodes t; ...,t, which minimizes DS (2s) — ys)? subject to a set of constraints. This spline is represented by
+Let ty <++* < tg be a sequence where @ > 2, and {(t4,y:) : i = 1,...,m} be a set of pointe where t) < 2) < +++ < 2m, < tg. Then the subroutine CSPFIT is available for obtaining a cubic spline f(x) with the nodes t; ...,t, which minimizes DS (2s) — ys)? subject to a set of constraints. This spline is represented by
 
 fort; S@<toyy Gad... f- 1.
 
@@ -377,7 +377,7 @@ X is an array containing 2), ...,2m, Y an array containing y,, ...,y¥m, and 7�
 
 if& > 1 then XCON contains the points #,, ...,&, at which the constraints are placed.
 
-The pomts may be given in any order and need not be distinct. It is assumed that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
+The points may be given in any order and need not be distinct. It is assumed that ti< Eo <tyfert=,...,6. At & any of the following types of constraints
 
 itupe = 0 f)(%,) <r,
 
@@ -392,7 +392,7 @@ R(t} = rj and NDER(t) = itype + 47. Wf an itype 3 constraint is imposed then it 
 ausumed that ty <r, < ty.
 ```
 
-WK and IWK are arrays that are work spaces for the routine. On input, IWK(4) is the dimension of WK and IWK(2) the dimension of WK. If £ = 0 ther one may set IWK(L) =- Nts and }WK(2} = @ where NB «= 7(@+ 7}. Otherwise, let v = £ + 3, m, be the number o¢ equality (i.e., “type 2 and 3) constraints, and m, the aumber of inequality (atype QO and 1) constraints. Then one must set
+WK and IWK are arrays that are work spaces for the routine. On input, IWK(4) is the dimension of WK and IWK(2) the dimension of WK. If £ = 0 then one may set IWK(L) =- Nts and }WK(2} = @ where NB «= 7(@+ 7}. Otherwise, let v = £ + 3, m, be the number o¢ equality (i.e., “type 2 and 3) constraints, and m, the number of inequality (atype QO and 1) constraints. Then one must set
 
 \
 
@@ -400,9 +400,9 @@ IWK(L) 2 NB + (eo 4 k)u td 2(m, tv) + (me tv) + (my + Q)lv + 8) IWKE2) > my + de
 
 **Remarks.**
 
-(1) Wk > tthen one can let the routine determine the amount of shorage that is needed for Wh and 1 Wh. Set WAHL) > Not anc IWK{2) - 2, in which case errors will oocur
+(1) Wk > tthen one can let the routine determine the amount of storage that is needed for Wh and 1 Wh. Set WAHL) > Not anc IWK{2) - 2, in which case errors will occur
 
-(sce the IND. 6,--7 error values Lelow). (2) NDER(s} taay t+ assigned a negative value (¢ ~ 1, ..,k). 1 NDERQG) «hoa the i’ constraint (4 ipaared
+(sce the IND. 6,--7 error values below). (2) NDER(s} taay t+ assigned a negative value (¢ ~ 1, ..,k). 1 NDERQG) «hoa the i’ constraint (4 ignored
 
 
 <small>Original source: [View scanned PDF page 346](../scans/page_0346.png)</small>
@@ -416,9 +416,9 @@ IND is assigned one of the following values:
 
 IND = G The spline was obtained.
 
-IND = 1 The equality (ie., itype 2 and 3) constraints are contradictory. The spline was cbtained where the equality constraints were satisfied in a least squares sense.
+IND = 1 The equality (ie., itype 2 and 3) constraints are contradictory. The spline was obtained where the equality constraints were satisfied in a least squares sense.
 
-IND = 2 The spline couJd not be obtained. The constraints are contradictory.
+IND = 2 The spline could not be obtained. The constraints are contradictory.
 
 IND = -1 €< 2.
 
@@ -477,13 +477,13 @@ CALL SCOMP(X, Y, A, B, C, N, XI, YI, NI, IERR)
 
 Let N =n-—1. Then N is the number of polynomials * that form the spline, X and Y are arrays containing the abscissas 7,,...,24 and ordinates y,,...,yn, and A,B,C are arrays containing the coefficients a,,b;,c; (6 = 1,..., NM). It is assumed that N > i and that ay << oy,
 
-Let £1,...,2m be the points at whicn the spline J 1s to be evaluated. XI is an array containing %,,...,2,,, YJ an arcay of dimension m or larger, and IERR a variable. When SCOMP is called, ifm < I then [ERE is set to 1 and the routine terminates. Otherwise, if m > | then IERR is set to 0 and f(#,) is computed and stored in YI(y) for 7 = 1, ...,m.
+Let £1,...,2m be the points at which the spline J 1s to be evaluated. XI is an array containing %,,...,2,,, YJ an array of dimension m or larger, and IERR a variable. When SCOMP is called, ifm < I then [ERE is set to 1 and the routine terminates. Otherwise, if m > | then IERR is set to 0 and f(#,) is computed and stored in YI(y) for 7 = 1, ...,m.
 
-**Note.** SCOMP does not require f to be a spline. It is only required that f;(x) be a cubic polynoraial y: 4 ay(a -- xz) + B(x — xy)" + ey(a ~ 2)? and that
+**Note.** SCOMP does not require f to be a spline. It is only required that f;(x) be a cubic polynomial y: 4 ay(a -- xz) + B(x — xy)" + ey(a ~ 2)? and that
 
 f(a) = fylz) fora > ay.
 
-In this case, SCOMEP computes the valuc ffa,+) for j <1, ..,m.
+In this case, SCOMEP computes the value ffa,+) for j <1, ..,m.
 
 fol
 
@@ -527,7 +527,7 @@ Let %1,...,Z,, be the points at which the spline f is to be evaluated. XI is an 
 | `SEVAL2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L85050`](../source_parts/nswc_part_09.f#L306) |
 
 
-Given 21 < +++ < rq. A function f(x) is a cubte spline having the nodes (knots) 1,...,2, if f is a polynomial of degree < 3 on the interval [2.,%s41] forf == 1,...,n—1, and the first and second derivatives f’(r) and f(x) exist and are continuous for all z. If f; denotes the polynomial for the interval {2,;,2,;41] then f; has the form:
+Given 21 < +++ < rq. A function f(x) is a cubic spline having the nodes (knots) 1,...,2, if f is a polynomial of degree < 3 on the interval [2.,%s41] forf == 1,...,n—1, and the first and second derivatives f’(r) and f(x) exist and are continuous for all z. If f; denotes the polynomial for the interval {2,;,2,;41] then f; has the form:
 
 f(z) = Y, + a,(x _ z;) Sa by (x _ x;)? “t+ (x - x,)°
 
@@ -604,7 +604,7 @@ Let %1,...,Zm be the points at which the spline f and its first two derivatives 
 | `CSINT2` | `REAL FUNCTION` | `X, Y, YPP, N, A, B` | [`L85357`](../source_parts/nswc_part_09.f#L613) |
 
 
-Given x, <--> < 2,. A function f(x) is a cubte epline having the nodes (knots) Ty,...,%, 1f f is a polynomial of degree < 3 on the interval [z;, 241] fort =1,...,n — 1, and the first and second derivatives f’(2) and f(r) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 2,41] then f; has the form:
+Given x, <--> < 2,. A function f(x) is a cubic epline having the nodes (knots) Ty,...,%, 1f f is a polynomial of degree < 3 on the interval [z;, 241] fort =1,...,n — 1, and the first and second derivatives f’(2) and f(r) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 2,41] then f; has the form:
 
 ```text
 fiz) = ys + asf — 24) + b;(2 — 2)? + ¢;(2 — 2,)8
@@ -628,7 +628,7 @@ CSINT(X, Y, A, B, C, N, ALPHA, BETA)
 
 Let N =n -~ 1. Then N is the number of polynomials f; that form the spline, X and Y are arrays containing the abscissas 41, ...,zy and ordinates y;,...,yn, and A, B,C are arrays containing the coefficients a,,b,,c,(1 = 1, ..., N)}. It is assumed that N > 1 and that
 
-ry <+++< ay. Then CSINT has the value f? f(t) dé. Programming. CSINT czails the function INTRVL. CSINT was written by A. H. Morris.
+ry <+++< ay. Then CSINT has the value f? f(t) dé. Programming. CSINT calls the function INTRVL. CSINT was written by A. H. Morris.
 
 ```fortran
 CSINT1(X, Y, YP, N, A, B)
@@ -659,20 +659,20 @@ Then CSINT2(X,¥,DDY,n,a, A) f" f(t) dt.
 | `PDSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, T, IERR` | [`L85445`](../source_parts/nswc_part_09.f#L701) |
 
 
-Given w; < +++ < a,. A function f(x) is a cubie spline having the nodes (knots) %1,...,2, if f is a polynomial of degree < 3 on the interval [z,, 2,41] for ¢ = 1,...,n - 1, and the first and second derivatives /'(z) and f(x) exist and are continuous for all z. If f, denotes the polynomial for the interval [z,;,2;:,] then f; has the form:
+Given w; < +++ < a,. A function f(x) is a cubic spline having the nodes (knots) %1,...,2, if f is a polynomial of degree < 3 on the interval [z,, 2,41] for ¢ = 1,...,n - 1, and the first and second derivatives /'(z) and f(x) exist and are continuous for all z. If f, denotes the polynomial for the interval [z,;,2;:,] then f; has the form:
 
-filz) = ys + aj(x ~ x4) + b:(x — ay)? + cy(x - 2,)°. Consequently, the function f ir obtained by fitting tue polynomials f,, ..., fy—1 tegether at the points 22, ...,2%y--4.
+filz) = ys + aj(x ~ x4) + b:(x — ay)? + cy(x - 2,)°. Consequently, the function f ir obtained by fitting tue polynomials f,, ..., fy—1 together at the points 22, ...,2%y--4.
 
 ```text
 Normally, a cubic spline f is defined for x ¢ [z1,x,,) by letting f(x) = f(x) for 2 < 21
 and f(r) = fy-.1(z) for z > ay. However, if
 ```
 
-f'(zit) = f'(an-) f"(21+) _ f"(tn~) are satishec then f may be defined for x ¢ (x1, z,] by requiring thut f(z +p) = f(z) for
+f'(zit) = f'(an-) f"(21+) _ f"(tn~) are satisfied then f may be defined for x ¢ (x1, z,] by requiring that f(z +p) = f(z) for
 
 all c where p = 2,, — 21. The function f is called a periodic spline when this is done.
 
-Now if the values yi, ...,4n—1 ate given, then there eyists a unique deriodic cubic spline f having the nodes z;,...,2, and satisfying f(2s) = uy; for? = 1,..,n-1. The following subroutine is available for obtaining the coefficients a;,b,,¢; of this spline,
+Now if the values yi, ...,4n—1 ate given, then there exists a unique periodic cubic spline f having the nodes z;,...,2, and satisfying f(2s) = uy; for? = 1,..,n-1. The following subroutine is available for obtaining the coefficients a;,b,,¢; of this spline,
 
 ```fortran
 CALL PDSPL(X, Y, A, B, C, N, T, IERR)
@@ -680,7 +680,7 @@ CALL PDSPL(X, Y, A, B, C, N, T, IERR)
 
 X is an array containing 21, ...,%, and Y an array containing y1,...,Yn—1. It is
 
-assumed that 4; < +++ < 2, and m > 3. A,B,C are arrays of dimension n — 1 or larger, and IERR a variable. When PSP? is called, if ro input errors are detected then [ERR is set to 0 and the coefficients a,;,6,,c, of the interpolating periodic cubjc spline are stored in A,B,C.
+assumed that 4; < +++ < 2, and m > 3. A,B,C are arrays of dimension n — 1 or larger, and IERR a variable. When PSP? is called, if ro input errors are detected then [ERR is set to 0 and the coefficients a,;,6,,c, of the interpolating periodic cubic spline are stored in A,B,C.
 
 WK is an array of dimension n ~ 2 or larger that is 1 work space for the routine.
 
@@ -709,13 +709,13 @@ Let t) <+-+ < t, be a sequence where é > 2 and { (2;,4;) :¢ =1, ...,m} a set o
 
 fx) = 25 +a;(x—t;) +6; (2 - t;)? + ¢;(2 — t,)* fort; <2 <tj;4: G=1,...,@—1). CALL PDFIT(X,Y,m,T,@, Z, A, B,C,WKIWK,IERR)
 
-X is an array containing 21, ...,2m, Y an array containing y,, ...,Y%m, and T an array containing t1,...,te. Z,A, B,C are arrays of dimension £— 1 or larger. When PDFIT is called, if tne desired pericdic cubic spline is obtained then the coefficients z;,a;,b;,¢; of the spline are stored in Z, A, B,C.
+X is an array containing 21, ...,2m, Y an array containing y,, ...,Y%m, and T an array containing t1,...,te. Z,A, B,C are arrays of dimension £— 1 or larger. When PDFIT is called, if the desired periodic cubic spline is obtained then the coefficients z;,a;,b;,¢; of the spline are stored in Z, A, B,C.
 
 WK and [WK are arrays that are work spaces for the routine. On input TWK(1) is the dimension of WK and IWK(2) the dimension of IWK. It is required that IWK(1) > (é+-6)(€-+ 15) + 10 and IWK(2) > 2¢+- 6.
 
-TERR is a variable that reports the status cf the resuits. When PDFIT terminates, IERR has one cf the following values:
+TERR is a variable that reports the status cf the results. When PDFIT terminates, IERR has one cf the following values:
 
-IERR = 0 The desired spline was obiained.
+IERR = 0 The desired spline was obtained.
 
 IERK = 1 The spline could not be obtained.
 
@@ -731,11 +731,11 @@ TERR = 6 Insufficient storage was specified for the IWK array. TWK(2) has been r
 
 If an error is detected, then JERR > 2 and the routine terminates.
 
-**Remark.** After A, 8,C, and Z have been obtained, then PSCMP may be used to evaluate the pericdic spline at any point x. PSEVL may be used if derivatives are also desired.
+**Remark.** After A, 8,C, and Z have been obtained, then PSCMP may be used to evaluate the periodic spline at any point x. PSEVL may be used if derivatives are also desired.
 
 **Programming.** PDFIT employs the subroutines BSPP, BFIT, BFITO, ENDACC, BNDSL,
 
-BSPVB, BSPVD, LSEI, and the subroutines and functisns used by LSEL PDEIP was written by A. H. Morris.
+BSPVB, BSPVD, LSEI, and the subroutines and functions used by LSEL PDEIP was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 354](../scans/page_0354.png)</small>
@@ -759,7 +759,7 @@ fora, <2 < 24) ($= 1,...,n- 1). Then the subroutine PSCMP is available for evalu
 CALL PSCMP(X, Y, A, B, C, N, XI, YI, M, IERR)
 ```
 
-X is an array containing 71, ...,2%,, Y an array containing y,,...,Yn—1, and A,B,C arrays containing the coefficients a,,6;,¢; (( = 1, ...,n—1). Itis assumed that 21 <-++ <2, and n> 3.
+X is an array containing 71, ...,2%,, Y an array containing y,,...,Yn—1, and A,B,C arrays containing the coefficients a,,6;,¢; (( = 1, ...,n—1). It is assumed that 21 <-++ <2, and n> 3.
 
 Let Z), ...,%,, be the points at which the periodic spline is to be evaluated. XI is an array containing Z;, ...,2%m, YI an array of dimension m or larger, and JERR a variable. When PSCMP is called, if no input errors are detected then IERR is set to 0 and f(z,) is computed and stored in YI(7) for 7 = 1, ...,m.
 
@@ -773,7 +773,7 @@ arrays containing the coefficients a,b,c; (= 1, ...,n~1). It is assumed that 1; 
 
 Let £1, ...,2m be the points at which the periodic spline and its first two derivatives are to be evaluated. XJ is an array containing %1,...,%m, YI, DYI, DDYI are arrays of
 
-dimension m or larger, and IERR a variable. When PSEVL is called, if no input errors are detected then IERR is set to 0 and f(#,), f‘(2;), f(#,) are coraputed and stored in YI(j), DYI{j), DDYI(j) for 7 = 1, ...,m.
+dimension m or larger, and IERR a variable. When PSEVL is called, if no input errors are detected then IERR is set to 0 and f(#,), f‘(2;), f(#,) are computed and stored in YI(j), DYI{j), DDYI(j) for 7 = 1, ...,m.
 
 **Error Return.** ERR = 1ifn <3 orm <0.
 
@@ -796,7 +796,7 @@ A71}
 | `LOPDF` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ` | [`L86074`](../source_parts/nswc_part_09.f#L1330) |
 
 
-Given m > 2 points x = (x41, ..+)%in) Where n > 2. One procedure for fitting a closed curve to the points is to first let s; = 0,8; = 9;-,+ [25 —2y~1|| for ¢ = 2, ...,m, and 8m+1 = 9m + ||t1 — Zm||,1 next let t; = 8:/8m+1 fori =1,.. ,m-+1, and then to find for each j <n the periodic cubic spline +,(t) having the knots ty, ... rtmii where 7;(t,) = 2, for i < m. The mapping 7(t} = (y1(t), ...,7(t)) then defines on the interval (0, 1] a closed curve which traverses the points (¢1,21), ...,(tm,2m), (1,21) and satisfies ¥'(0) = ¥'(1) and ¥"(0) = 7"(1). For t < 0 and t > 1, ¥(t) is defined by periodicity (having period 1). The subroutine CSLOOP is available for obtaining the derivatives ¥;(ts) which characterize this curve, the subroutine LOPCMP is available for computing the curve, and the subroutine LOPDF is available for diff rentiating the curve.
+Given m > 2 points x = (x41, ..+)%in) Where n > 2. One procedure for fitting a closed curve to the points is to first let s; = 0,8; = 9;-,+ [25 —2y~1|| for ¢ = 2, ...,m, and 8m+1 = 9m + ||t1 — Zm||,1 next let t; = 8:/8m+1 fori =1,.. ,m-+1, and then to find for each j <n the periodic cubic spline +,(t) having the knots ty, ... rtmii where 7;(t,) = 2, for i < m. The mapping 7(t} = (y1(t), ...,7(t)) then defines on the interval (0, 1] a closed curve which traverses the points (¢1,21), ...,(tm,2m), (1,21) and satisfies ¥'(0) = ¥'(1) and ¥"(0) = 7"(1). For t < 0 and t > 1, ¥(t) is defined by periodicity (having period 1). The subroutine CSLOOP is available for obtaining the derivatives ¥;(ts) which characterize this curve, the subroutine LOPCMP is available for computing the curve, and the subroutine LOPDF is available for differentiating the curve.
 
 ```fortran
 CALL CSLOOP(M, N, X, KX, T, DX, KDX, WK, IERR)
@@ -806,13 +806,13 @@ X is an mxXn matrix whose i'" row contains the point 2; = (211, -.-;2sn), Where 
 
 and n > 2. It is assumed shat the points 21, ..., 2, are indexed in the order that they are to be traversed by the curve -/(t). It is also assumed that 2; 4 241 forts 1,...,m—-! and that 2, 4 2;.
 
-DX is a 2-dimensional a) ray containing at least m rows and n columns. The arguments kx and kdz have the followi.g values:
+DX is a 2-dimensional a) ray containing at least m rows and n columns. The arguments kx and kdz have the following values:
 
 kx = the number of rows in the dimension statement for X in the calling program
 
 kdz = the number of rows in the dimension statement for DX in the calling program It is required that kx © m and kdr > m.
 
-JERR 1s a variab}) and 7 an array of dimension m or larger. When CSLJOP is called, if no input errors are deiected then IERR is assigned the value 0 and ¢;, ... ,'m are computed and stored in 7. Also, the derivatives 1; (ts) are computed ind stored in DX, where the 1!" row of DX contains y'(t,) == (y{ (ti), -.., 74 (ts).
+JERR 1s a variable) and 7 an array of dimension m or larger. When CSLJOP is called, if no input errors are detected then IERR is assigned the value 0 and ¢;, ... ,'m are computed and stored in 7. Also, the derivatives 1; (ts) are computed ind stored in DX, where the 1!" row of DX contains y'(t,) == (y{ (ti), -.., 74 (ts).
 
 WK is ar array of dimension 4(m 1) or larger that is a work space for the routine. Error Return. ERR reports the following input errors: IERR lo ifm<2orn< 2
 
@@ -820,7 +820,7 @@ JERR =. 2 fa, 2,4, for some t.
 
 IERR- 3 ifay, ry.
 
-**Remark.** Afier 17 and DX are obtained, LOPCMP may be used to compute the curve aud LOPDF may be used to differentiate the curve.
+**Remark.** After 17 and DX are obtained, LOPCMP may be used to compute the curve aud LOPDF may be used to differentiate the curve.
 
 **Programming.** CSLOOP calls the subroutine CSLOPL and function SNRM2. CSLOOP and CSLOPI were written by A. HL Morris
 
@@ -835,7 +835,7 @@ CALL LOPCMP(M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
 
 T is an array containing the knots t;, ...,tm, X an mxn matrix whose 1*%
 
-row contains the point z;, and DX an m x n matrix whose #*” row contains the derivative '(t;). The arguments kz and kdz have the following values: kz = the number of rows in the dimension statement for X in the calling program kdz = the number of rows in the dimension statersent for DX in the calling program
+row contains the point z;, and DX an m x n matrix whose #*” row contains the derivative '(t;). The arguments kz and kdz have the following values: kz = the number of rows in the dimension statement for X in the calling program kdz = the number of rows in the dimension statement for DX in the calling program
 
 It is assumed that m > 2,n > 2, kx > m, and kdzr > m.
 
@@ -852,11 +852,11 @@ stored in the #'" row of Z for1=1,...,2.
 CALL LOPDF(M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
 ```
 
-T is an array containing the knots ¢;,...,t,,, X an ms X n matrix whose 1*4 row contains the point z;, DX an m x n martrix whose 1°” row contains the derivative 7'(t,). The arguments kz and kdr have the following values:
+T is an array containing the knots ¢;,...,t,,, X an ms X n matrix whose 1*4 row contains the point z;, DX an m x n matrix whose 1°” row contains the derivative 7'(t,). The arguments kz and kdr have the following values:
 
-kz = ithe number of rows in the dimension statement for X in the calling program
+kz = the number of rows in the dimension statement for X in the calling program
 
-kdz = tte number of rows in the dimension statement for DX in the calling program
+kdz = the number of rows in the dimension statement for DX in the calling program
 
 It is assumed that m > 2,n > 2, kr > m, and kdz > m.
 
@@ -879,20 +879,20 @@ Aid
 | `CURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR` | [`L86136`](../source_parts/nswc_part_09.f#L1392) |
 
 
-Given real og anda, <---<z,. A function f(z) isa spline having the tenaton factor o and the nodes (knots) x1, ...,2, if f(x) and its first two derivatives are continuous on [t1,2n], and f(x) — 6? f(z) = ayz + 6, on the interval [z,, 2541] for # = 1,...,n- 1, Here @ = jo|(n -- 1)/{a_ ~ v1) and a,, 6; are constants. For zy < 2 < 2,41 f(z) can be represented by
+Given real og anda, <---<z,. A function f(z) isa spline having the tension factor o and the nodes (knots) x1, ...,2, if f(x) and its first two derivatives are continuous on [t1,2n], and f(x) — 6? f(z) = ayz + 6, on the interval [z,, 2541] for # = 1,...,n- 1, Here @ = jo|(n -- 1)/{a_ ~ v1) and a,, 6; are constants. For zy < 2 < 2,41 f(z) can be represented by
 
 ```text
 J (x) = Aysinha(z — z;) + Bysinh @(2,41 - x) - (ajz + 6,)/e?
 when o #0, and by a cubic polynomial when o = 0.
 ```
 
-Assume now that n ordinates y;, ...,y, are given. Then there exist an infinitude of splines f(z) having tension o for which f(z,) = y (f = 1,...,). However, if values y{ and y/, are given then oily one of these splines will satisfy f/{z,) = yj and f’({r,) = y/,. For convenience, denote this spline by f,. If o = 0 then it is clear that f, ia the standard cubic spline. Also it can be verified that when a — oo, f, converges uniformly on [z1, zy] to the piecewise jinear function é(z) where €(x) = y; + m,(z — 2;) for xy < z < ay41 (¢=1,...,n-—1). Here mn, = (ysa1 ~ ys)/(2i41 — 24). The following subroutine is available for obtaining the spline f,.
+Assume now that n ordinates y;, ...,y, are given. Then there exist an infinitude of splines f(z) having tension o for which f(z,) = y (f = 1,...,). However, if values y{ and y/, are given then oily one of these splines will satisfy f/{z,) = yj and f’({r,) = y/,. For convenience, denote this spline by f,. If o = 0 then it is clear that f, ia the standard cubic spline. Also it can be verified that when a — oo, f, converges uniformly on [z1, zy] to the piecewise linear function é(z) where €(x) = y; + m,(z — 2;) for xy < z < ay41 (¢=1,...,n-—1). Here mn, = (ysa1 ~ ys)/(2i41 — 24). The following subroutine is available for obtaining the spline f,.
 
 ```fortran
 CALL CURV1(N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR)
 ```
 
-X and Y are arrays containing the abscissas x1, ...,2,, aud ordinates y1,...,Yn- [tis assuined that n > 2 and rz; <+-- < ay.
+X and Y are arrays containing the abscissas x1, ...,2,, aud ordinates y1,...,Yn- [tis assumed that n > 2 and rz; <+-- < ay.
 
 ```text
 SLP1 and SLPN are assigned the values y} and y). The user may omit values for
@@ -903,17 +903,17 @@ IND = 2 A value is supplied for SLPN but not for SLP1.
 IND = 3 Values are not supplied for SLPI and SUPN.
 ```
 
-If a vatue is not supphed by the user, then the routing provides a value. DDY is an array of dimension rv or larger, and [ERK is an integer variable. When
+If a value is not supplied by the user, then the routing provides a value. DDY is an array of dimension rv or larger, and [ERK is an integer variable. When
 
-CURV 1 is called, if no input errors are detected then HERR is assigned the value 0 and the second derivatives f7/(21), ..., f0/(2,) are computea and stored in DDY.
+CURV 1 is called, if no input errors are detected then HERR is assigned the value 0 and the second derivatives f7/(21), ..., f0/(2,) are computed and stored in DDY.
 
 TEMP ts an array of dimension mn or larger that 1s used fur a work space.
 
 **Error Return.** fle RK reports the following input errors: HERR - bafae 2.
 
-IPRR 2 of ey coe) \ ay is not satishee
+IPRR 2 of ey coe) \ ay is not satisfied
 
-When either of (oese errors as detected, the routuie immediately terminates,
+When either of (oese errors as detected, the routine immediately terminates,
 
 
 <small>Original source: [View scanned PDF page 358](../scans/page_0358.png)</small>
@@ -954,13 +954,13 @@ Assume now that f(z;) = y; for ¢ = 1,...,n. Then for a fixed o, f(z) is uniquel
 
 CURV2(t,n, X,Y, DDY,o}
 
-\* and Y are arrays containing the abscissas 11, ...,2, and crdinates ys, .o +3 Yn, and DDY is an array containing the second derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
+\* and Y are arrays containing the abscissas 11, ...,2, and ordinates ys, .o +3 Yn, and DDY is an array containing the second derivatives f"(z1),...,f(z,). It is assumed that n>2 and a <+++ < a,. CURV2(t,n, X,Y DDY, a) = f(t) for any real t.
 
 **Remark.** After DDY has been obtained, CURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor o remains fixed. However, if ¢ is modified then the derivative information in DDY will have to be recomputed before CURV2 can be used with the new tension factor.
 
 **Programming.** CURV2 employs the function INTRVL and subroutine SNHCSH. CURV2 was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTRVL was written by A. H. Morris.
 
-**Reference.** Cline, A. K., “Scalar and Pianar Valued Curve Fitting using Splines under Tension,” Comm. ACM 17 (1974), pp. 218-220.
+**Reference.** Cline, A. K., “Scalar and Planar Valued Curve Fitting using Splines under Tension,” Comm. ACM 17 (1974), pp. 218-220.
 
 
 <small>Original source: [View scanned PDF page 360](../scans/page_0360.png)</small>
@@ -976,15 +976,15 @@ CURV2(t,n, X,Y, DDY,o}
 | `CURVI` | `FUNCTION` | `XL, XU, N, X, Y, YP, SIGMA` | [`L86443`](../source_parts/nswc_part_09.f#L1699) |
 
 
-Let f(x) be a spline having the tensicn factor o and the ucdes 21, ...,%n. Assume that f(ts) = ye ford = 1,..., 2. If the serond derivatives f'(r;), ..., f" (zp) are known then the following functions may be used for differentiating and integrating the spline.
+Let f(x) be a spline having the tension factor o and the nodes 21, ...,%n. Assume that f(ts) = ye ford = 1,..., 2. If the second derivatives f'(r;), ..., f" (zp) are known then the following functions may be used for differentiating and integrating the spline.
 
 ```fortran
 CURVD(T, N, X, Y, YP, SIGMA)
 ```
 
-X and Y are arrays contaming the abscisgas 7), ...,2%, and ordinates y1,...,yn, and DDY is an array containing the second derivatives f"(i71),..., (ay). It is assumed thai n> 2and gj <++: < 2,. For any real ¢, the derivative f’(é} is computed and assigned to be the value of CURVD(t,n, X,Y, DDY,¢).
+X and Y are arrays containing the abscissas 7), ...,2%, and ordinates y1,...,yn, and DDY is an array containing the second derivatives f"(i71),..., (ay). It is assumed thai n> 2and gj <++: < 2,. For any real ¢, the derivative f’(é} is computed and assigned to be the value of CURVD(t,n, X,Y, DDY,¢).
 
-Pragramming. CURVD employs the function INTRVL and subroutine SNHCSH. CURVD was written hy A. K. Cline and R. J. Renka (University of Texas at Austin). INTRYL was written by A. H. Morris.
+Programming. CURVD employs the function INTRVL and subroutine SNHCSH. CURVD was written hy A. K. Cline and R. J. Renka (University of Texas at Austin). INTRYL was written by A. H. Morris.
 
 ```fortran
 CURVI(XL, XU, N, X, Y, YP, SIGMA)
@@ -992,7 +992,7 @@ CURVI(XL, XU, N, X, Y, YP, SIGMA)
 
 X and Y are arrays containing the abscissas z,, ...,%,_ and ordinates yi,.. ,y,, and DDY is an array containing the second derivatives f"(r,),...,f"(2,). It is assumed thai n> 2and rz <+++ <a,. CURVI(a,b,n,X,Y,DDY,o) = f° f(t)dt for any real 2 and 6.
 
-**Note.** It is not required that a < A. Prograrmming. CURVI employs the function INTRVL and subroutine SNHCSH. CURVI
+**Note.** It is not required that a < A. Programming. CURVI employs the function INTRVL and subroutine SNHCSH. CURVI
 
 was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTRVL was written by A. H. Morris.
 
@@ -1012,7 +1012,7 @@ AT9
 | `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L86796`](../source_parts/nswc_part_09.f#L2052) |
 
 
-Given a sequence of points (21,41), ...,(@n, Yn). One progecnre for fi fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satioly a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining vhe second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
+Given a sequence of points (21,41), ...,(@n, Yn). One procedure for fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satisfy a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining the second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
 
 ```fortran
 CALL KURV1(N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR)
@@ -1020,7 +1020,7 @@ CALL KURV1(N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR)
 
 \* and Y are arrays containing the abscissas 21, ...,2%, and ordinates y1, ...,Yn. It is assumed that n > 2 and that tne points (~;, y;) are indexed in the order that they are to be traversed by the curve. It is also assumed that (24, Ys) # (S41, 441) for P= 1,...,n-- 1.
 
-SLPi and SLPN are assigned the values 0; and @,,. These angles are measured counterclockwise (in radians} irom the positive x-axis. The user may oi‘ values for SLP! and/or SUPN. IND specifies the information that is provided.
+SLPi and SLPN are assigned the values 0; and @,,. These angles are measured counterclockwise (in radians} from the positive x-axis. The user may oi‘ values for SLP! and/or SUPN. IND specifies the information that is provided.
 
 IND == 0 Values are supplied for SLP1 and SLPN.
 
@@ -1036,7 +1036,7 @@ a is the tension factor to be employed. If |¢i is small, say jo! < 107%, then z
 
 HERR is an integer variable and S, WDX, DDY are arrays cf dimension n or larger. Whoa KOURV1 is called, if no input errors are detected then TERR is assigned the value O aud the values 51, ...,@, are computed and stored in S. Also, the second derivatives wis... 2(s,) and y(s1),...,y"(8_) are computed and stored in DDX and DDY.
 
-EMP is an array of dimension n or larger that is used for a work space. Evror Return. IERR reports the following input errors: [ERR = Liffn < 2. TERR = 2 if (ty, ys) © (tsa, ue4i) for some ft. When either of these errors is detected, the routine immediately terminates. Remark. After S, DDX, DDY are obtained, KURV2 may be used to compute the curve.
+EMP is an array of dimension n or larger that is used for a work space. Error Return. IERR reports the following input errors: [ERR = Liffn < 2. TERR = 2 if (ty, ys) © (tsa, ue4i) for some ft. When either of these errors is detected, the routine immediately terminates. Remark. After S, DDX, DDY are obtained, KURV2 may be used to compute the curve.
 
 **Programming.** KURVI employs the subroutines CEEZ, TERMS, and SNHCSH. KURVI,
 
@@ -1057,7 +1057,7 @@ g(t).
 
 **Remark.** After DDX and DDY have been obtained, KURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor ao remains fixed. However, if o is modified then the derivative information in DDX and DDY will have to be recomputed before KURV2 can be used with the new tension factor.
 
-Prograraming. KURV2 employs the function INTRVL and subroutine SNHCSH. KURV2
+Programming. KURV2 employs the function INTRVL and subroutine SNHCSH. KURV2
 
 was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTRVL was written by A. H. Morris.
 
@@ -1075,7 +1075,7 @@ was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTR
 | `KURVP2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L87061`](../source_parts/nswc_part_09.f#L2317) |
 
 
-Given n > 2 points (21,41), ..., (2a, Yn)- One procedure for fitting a closed curve to the points is to let ¢; = JV (21 ~ tn)? + (yi — yn)? and 3, = sg.4 + V(x ~ 2-1)? + (yi — yyy)? for t= 2,...,n,and then to find periodic splines x(¢) and y(s) with tension o that pase through the points (91,7.), ...,(91,2n),(81 + 8,21) and (81,y)), . -+5(8n; Yn), (81 + 8n, 41). The mapping 8 +-+ (2:(s), y(s)) then defines a closed curve that passes through the points (25, ys). The subroutine KURVP1 is available for obtaining the second derivatives x"(s,), y"(8,)(t = 1,...,n) whict: characterize this curve, and the subroutine KURVP2 is available for com-
+Given n > 2 points (21,41), ..., (2a, Yn)- One procedure for fitting a closed curve to the points is to let ¢; = JV (21 ~ tn)? + (yi — yn)? and 3, = sg.4 + V(x ~ 2-1)? + (yi — yyy)? for t= 2,...,n,and then to find periodic splines x(¢) and y(s) with tension o that pass through the points (91,7.), ...,(91,2n),(81 + 8,21) and (81,y)), . -+5(8n; Yn), (81 + 8n, 41). The mapping 8 +-+ (2:(s), y(s)) then defines a closed curve that passes through the points (25, ys). The subroutine KURVP1 is available for obtaining the second derivatives x"(s,), y"(8,)(t = 1,...,n) which characterize this curve, and the subroutine KURVP2 is available for com-
 
 puting the curve.
 
@@ -1083,11 +1083,11 @@ puting the curve.
 CALL KURVP1(N, X, Y, XP, YP, TEMP, S, SIGMA, IERR)
 ```
 
-X and ¥Y are arrays containing the abscissa 21, ...,2, and ordinates y,, te) Yn Lb is assumed that n > 2 and that the points (z,, y;) are indexed in the order that they are to be traversed by the curvo. It is also assumed that (2,, yi) # (2s41, yep1) for? =1,...,n - 1.
+X and ¥Y are arrays containing the abscissa 21, ...,2, and ordinates y,, te) Yn Lb is assumed that n > 2 and that the points (z,, y;) are indexed in the order that they are to be traversed by the curve. It is also assumed that (2,, yi) # (2s41, yep1) for? =1,...,n - 1.
 
 g is the tension factor to be employed. If |o| is small, say |o| < 107, then 2(s) aud y(s) approximate periodic cubic splines. Otherwise, if |o| is large, say |a| > 100, then the curve approximates the closed polygonal path that traverses the points (2, ys).
 
-TERK is an integer variable and S, DDX, DDY are arrays of dimension n or larger. When KURVPL is called, if no input errors are detected then IERR ie assigned the value O and the vaties 81, ...,8, are computed and stored in S. Also, the second derivatives z"(s1),. ,# (sn) and y"(s1), ...,y”(s,) are computed and stored in DDX and DDY.
+TERK is an integer variable and S, DDX, DDY are arrays of dimension n or larger. When KURVPL is called, if no input errors are detected then IERR ie assigned the value O and the values 81, ...,8, are computed and stored in S. Also, the second derivatives z"(s1),. ,# (sn) and y"(s1), ...,y”(s,) are computed and stored in DDX and DDY.
 
 TEMP is an array of dimension 2n or larger that is used for . work space.
 
@@ -1098,7 +1098,7 @@ IERR = 1 ifn < 2.
 TERR = 2 if (2, ys) = (441, 41) for some 4.
 ```
 
-When either of these errors is detected, the rou.ine immediately terminates. Remark. After S, DDX, DDY are obtained, KURVP2 may be used to cornpute the curve.
+When either of these errors is detected, the routine immediately terminates. Remark. After S, DDX, DDY are obtained, KURVP2 may be used to compute the curve.
 
 **Programming.** KURVP1 employs the subroutines TERMS and SNHCSH. KURVP1 and TERMS were written by A. K. Cline and R. J. Renka (University of Texas at Austin).
 
@@ -1149,7 +1149,7 @@ splines z(s), y{s), z(s) can be selected so that 2'(s,;) == 2!, y'(s;) = yf, and
 
 CALi QURV1(n, x, Y, 4, SLP1X,SUPLY SLP1Z,SLPNX,SLPNY, SLPNZ,IND,DDX,DDY,DDZ,TEMP, S, 7, IERR)
 
-X is an array containing 2,,...,. VY an array containing yy, ...,Y,, and Z an array containing z;,. ,z, It is assumed tat n > 2 and that the points (2;,y,,2;) are indexed in the orde: ihai they are to be traversed by the curve. It is also assumed that (x3, Yes Wa )F(Ti4 1, Yir1,2041) for 4 = 1, a Sie
+X is an array containing 2,,...,. VY an array containing yy, ...,Y,, and Z an array containing z;,. ,z, It is assumed tat n > 2 and that the points (2;,y,,2;) are indexed in the order that they are to be traversed by the curve. It is also assumed that (x3, Yes Wa )F(Ti4 1, Yir1,2041) for 4 = 1, a Sie
 
 SLP1X, SLP1Y, SLP1Z and SLPNX, SLPNY, SLPNZ are assigned the values L,Y, 24 and z},,y),z). The user may omit values for SLP1X, SLPLY, SLPIZ and/or SLPNX, SLPNY, SLPNZ. The argument IND specifies the information that is provided.
 
@@ -1157,7 +1157,7 @@ IND = © Values are supplied for SLP1X,SLP1Y,SLPIZ and SUPNX,SLPNY, SLPNZ.
 
 INE) = 1 Values are supplied for SLP1X,SLP1Y,SLP1Z but not for SLPNX, SLPNY, SLPNZ.
 
-IND = 2 Values are supplied for SLPNX,SLPNY,SLPNZ but uot for SLPLX, SLPLY, SLPiZ.
+IND = 2 Values are supplied for SLPNX,SLPNY,SLPNZ but not for SLPLX, SLPLY, SLPiZ.
 
 IND = 3 No values are supplied for SLUPIX, SUPLY, SLP1Z and SLPNX, SLPNY, SLPNZ.
 
@@ -1165,7 +1165,7 @@ If a value is not supplied by the user, then the routine provides a value.
 
 7 is the tension factor to be « mployed. If |a| is small, say jo] < 1073, then x(s),y(s), z(s) approximate cubic splines. Otherwise, if |o| is large, say |o| > 100, then the resulting curve approximates the polygonal line from (r:, 41, 2;) to (Zn, Yn; 2n)-
 
-TERR is an integer variable and S$, i) OX, DDY, DDZ are arrays of dimension n or larger When QURVI is called, if no input: rors are detected then HEK? ig assigned the value O an the values 8), ..., 3, are computed aud stored in S. Also, the second derivatives "(sj yl") 2s) (Ft, jn) are compute and stored in Di &, DDY, DD4Z.
+TERR is an integer variable and S$, i) OX, DDY, DDZ are arrays of dimension n or larger When QURVI is called, if no input errors are detected then HEK? ig assigned the value O an the values 8), ..., 3, are computed aud stored in S. Also, the second derivatives "(sj yl") 2s) (Ft, jn) are compute and stored in Di &, DDY, DD4Z.
 
 ThM? os an array of dimension mor la ger i! vt is used for a work space,
 
@@ -1178,7 +1178,7 @@ IERR = 1 ifn <2.
 IERR = 2 if (zy, y3, 26) = (2541, vit1, 241) for gome ft.
 ```
 
-When either of thes: errors is detected, the routine immediately terminates.
+When either of these errors is detected, the routine immediately terminates.
 
 **Remark.** After S, DDX, DDY, DDZ are obtained, QURV2 may be used to compute the curve.
 
@@ -1190,11 +1190,11 @@ CALL QURV2(T, XS, YS, ZS, N, X, Y, Z, XP, YP, ZP, S, SIGMA)
 
 X is an array containing 7), ...,Z,, Y an array containing yi, ...,Yn, and 4 an array containing 21, ...,2,. © is an array containing s;,...,8,, and DDX, DDY, DD2d are arrays containing the second derivatives z"(s,), y(s;),2"(s.} (¢ = 1, ...,n}.
 
-Now consider the change of variabies t = s/s, and let t + ((t),y(t),z(t)) denote the curve in terms of the new parameter t. XT, YT, ZT are real variables. For any 0 < ¢ < 1, QURV2 computes the point (Z(¢),y(t),Z(t)) on the curve and assigns XT, YT, ZT the values x(t), y(t) Z(t).
+Now consider the change of variables t = s/s, and let t + ((t),y(t),z(t)) denote the curve in terms of the new parameter t. XT, YT, ZT are real variables. For any 0 < ¢ < 1, QURV2 computes the point (Z(¢),y(t),Z(t)) on the curve and assigns XT, YT, ZT the values x(t), y(t) Z(t).
 
-**Remark.** Afier DDX, DDY, DDZ have been obtainec, QURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor o rernains fixed. However, if o is modified then the derivative information in DDX, DDY, DDZ will have to be recomputed before QURV2 can be used with the new tension factor.
+**Remark.** After DDX, DDY, DDZ have been obtained, QURV2 may be repeatedly called to evaluate the curve at different points so long as the tension factor o remains fixed. However, if o is modified then the derivative information in DDX, DDY, DDZ will have to be recomputed before QURV2 can be used with the new tension factor.
 
-**Programming.** QURV2 employs fhe function INTRVL and subroutine SNHCSH. QURV2 was vritten by A. K. Cline and R. J. Renka (University of Texas at Austin).
+**Programming.** QURV2 employs the function INTRVL and subroutine SNHCSH. QURV2 was written by A. K. Cline and R. J. Renka (University of Texas at Austin).
 
 
 <small>Original source: [View scanned PDF page 367](../scans/page_0367.png)</small>
@@ -1226,13 +1226,13 @@ Otherwise, if no point appears more than k -- 1 times in the sequence {t;, ...,t
 
 From these relations it follows that By,(z) > CG when t; <2 < tyy,.
 
-Now let €: < +++ < €¢41 be a sequence of points where @ > 1. If m, is an integer where l<m,;< k-1 for 7 = 2,...,8@, let Pelé, ...,€e41; m2, ..., me] denote the collection of piecewise polynomials p(z) where p(x) is a polynomial of order < k (degree < k —- 1) on each interval [€5,€)41) (9 = 1,...,8, and p(r) is of class Ck-!~™ at each point €; (g = 2,...,@). Then €,...,£e1 are called the knots or break points for these piecewise polynomials, €2, ...,€/ the interior knots, and m2, ...,m¢g the multiplictiies of the
+Now let €: < +++ < €¢41 be a sequence of points where @ > 1. If m, is an integer where l<m,;< k-1 for 7 = 2,...,8@, let Pelé, ...,€e41; m2, ..., me] denote the collection of piecewise polynomials p(z) where p(x) is a polynomial of order < k (degree < k —- 1) on each interval [€5,€)41) (9 = 1,...,8, and p(r) is of class Ck-!~™ at each point €; (g = 2,...,@). Then €,...,£e1 are called the knots or break points for these piecewise polynomials, €2, ...,€/ the interior knots, and m2, ...,m¢g the multiplicities of the
 
 interior knots.
 
 Ifn=k+mg, + +++ + mgs, consider any sequence ty <--+ < ty4, where (1) th SS te < &, (2) tey1,---,, are the interior knots, where each interior knot €; appears exactly m, times, and
 
-‘Then the B-splines Bix, ..., Bag ave piecewise polynomials in Py[E1,...,€e41;m2, -.., me], forming a basis for this vector space. Consequently, any piecewise polynomial p(x) in the space can be represented uniquely in the forra p= 90°. , a,8,,. This representation is called a B-spline repreaentation for p(x). Wp $3? , a, By, then we note that p(z) = Oif 2 < t
+‘Then the B-splines Bix, ..., Bag ave piecewise polynomials in Py[E1,...,€e41;m2, -.., me], forming a basis for this vector space. Consequently, any piecewise polynomial p(x) in the space can be represented uniquely in the form p= 90°. , a,8,,. This representation is called a B-spline representation for p(x). Wp $3? , a, By, then we note that p(z) = Oif 2 < t
 
 or ze > tyyk.
 
@@ -1327,7 +1327,7 @@ tmik If a < tm then F(z) = ny! 6; By e41(z) is used where b; = } yet a,(ty 4“ 
 fori =1,...,n and 6; = 6, forts =n+1,...,m-—1.
 ```
 
-**Programming.** BVALI einploys the subroutine BVALIO and the function INTRVL. BVALI was written by A. H. Morris.
+**Programming.** BVALI employs the subroutine BVALIO and the function INTRVL. BVALI was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 371](../scans/page_0371.png)</small>
@@ -1415,13 +1415,13 @@ or larger. When PPVAL is called, f(Z,) is computed and stored in YI(j) for 7 = 1
 | `BSTRP` | `SUBROUTINE` | `TAU, GTAU, T, N, K, BCOEF, Q, IFLAG` | [`L88335`](../source_parts/nswc_part_09.f#L3591) |
 
 
-Forn > k > 1 fet ty < +--+ < thy, be a sequence wnere t; < tyy, fort = 1,...,n. Consider a set of points {(z,,y;) :f = 1,...,n} where t, < zy < +++ < gy < tnya. Then we wish to find a piecewise polynomial f = )°>?., a;B,~ which satisfies f(z,) = y for t= 1,...,n.! This problem has a unique :..lution when t; < z,; < ti44% for 1 <1 <n. The following subroutine is availabie for obtaining the coefficients a;, ...,a, of the interpolating piecewise polynomial,
+Forn > k > 1 fet ty < +--+ < thy, be a sequence wnere t; < tyy, fort = 1,...,n. Consider a set of points {(z,,y;) :f = 1,...,n} where t, < zy < +++ < gy < tnya. Then we wish to find a piecewise polynomial f = )°>?., a;B,~ which satisfies f(z,) = y for t= 1,...,n.! This problem has a unique :..lution when t; < z,; < ti44% for 1 <1 <n. The following subroutine is available for obtaining the coefficients a;, ...,a, of the interpolating piecewise polynomial,
 
 ```fortran
 CALL BSTRP(TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
 ```
 
-X ig an array containing z,,...,7,, Y an array containing yi, ...,¥,, and T an array containing t1,..-,tn4%- A is an array of dimension # or larger, and IFLAG an integer variable. On an initial call to the routine the user may assign IFLAG any noazero value. In this case, if no errors are detected then IFLAG is reset by the routine to O and the B-spline coefficients aj, ...,a@, are computed and stored in A. The routine may be recalled with IFLAG = 0 on input when only Y is modified. In this case, no error checking is performed and IFLAG= 0 on output. Also the B-spline coefficients a, ...,a, of the new interpolating piecewise polynomial are computed and stored in A.
+X ig an array containing z,,...,7,, Y an array containing yi, ...,¥,, and T an array containing t1,..-,tn4%- A is an array of dimension # or larger, and IFLAG an integer variable. On an initial call to the routine the user may assign IFLAG any nonzero value. In this case, if no errors are detected then IFLAG is reset by the routine to O and the B-spline coefficients aj, ...,a@, are computed and stored in A. The routine may be recalled with IFLAG = 0 on input when only Y is modified. In this case, no error checking is performed and IFLAG= 0 on output. Also the B-spline coefficients a, ...,a, of the new interpolating piecewise polynomial are computed and stored in A.
 
 WK is an array of dimension (2k — 1)n or larger that is used for temporary storage by the routine. When BSTRP terminates, WK contains information needed for subsequent calls to the routine.
 
@@ -1431,7 +1431,7 @@ Tp<c< zy
 
 < ty S21 < tag tioayn<ty, fori<it<cn
 
-ty < In < fad igs violated. When an error is decected, the routine immediately terminates.
+ty < In < fad igs violated. When an error is detected, the routine immediately terminates.
 
 **Remarks.**
 
@@ -1439,9 +1439,9 @@ ty < In < fad igs violated. When an error is decected, the routine immediately t
 
 (2) After the B-spline representation », a, By, is obtained, then the subroutine BVAL can be used to evaluate or differentiate the piecewise polynomial.
 
-Example Given n> 4 data points (7,,y,), then for & done may set dy, +.) te ory, thas Z,,2 fore l,...,n ky and x, bingy cot tnin. Phen ry,....2, 9 are the antenor knots for the interpolating piecewise polynomial fo Here we have cubie spine
+Example Given n> 4 data points (7,,y,), then for & done may set dy, +.) te ory, thas Z,,2 fore l,...,n ky and x, bingy cot tnin. Then ry,....2, 9 are the interior knots for the interpolating piecewise polynomial fo Here we have cubic spine
 
-interpolauon Where the data points ag and 7, 1. are not knots for f.
+interpolation Where the data points ag and 7, 1. are not knots for f.
 
 Moa tay then by fra} we died ‘fra )
 
@@ -1524,15 +1524,15 @@ CALL BFIT(BKPT, N, NORD, XDATA, YDATA, NDATA, XCONST, YCONST, NDERIV, NCONST, MO
 
 T is an array containing t,...,tn44%, X an array containing 7), ...,2%m, and Y an array containing y,,...,Ym- The argument @ is the number of constraints to be satisfied (£ > 0) and XCON, C, NDER are arrays of dimension max{1, £} or larger.
 
-If 2 > 1 then XCON contains the points 2), ...,£¢ at which the constraints are placed. The points Z; may be given in any order and need not be distinct. It is assumed that th <2; <thy1 fort =1,...,@ At @; any of the foilowing types of constraints itype = 0 f(z) < itype= 1 f)(B) > ey itype = 2 fO)(z,) = itype = 3 f)(%,) = fO (c,) can be imposed where 7 is a nonnegative integer. For the selected constraint, it is assumed that C(#) = c, and NDER(‘) = itype + 47. If an itype 3 constraint is iraposed then it is further assumed that ty < cy < ty41.
+If 2 > 1 then XCON contains the points 2), ...,£¢ at which the constraints are placed. The points Z; may be given in any order and need not be distinct. It is assumed that th <2; <thy1 fort =1,...,@ At @; any of the foilowing types of constraints itype = 0 f(z) < itype= 1 f)(B) > ey itype = 2 fO)(z,) = itype = 3 f)(%,) = fO (c,) can be imposed where 7 is a nonnegative integer. For the selected constraint, it is assumed that C(#) = c, and NDER(‘) = itype + 47. If an itype 3 constraint is imposed then it is further assumed that ty < cy < ty41.
 
-WK and IWK are arrays that are work spaces for the routine. On input, IWK(1) is the dimension of WK and IWK(?2) the dimension of IWK. If @ = O then one ray set JWK(1) ~ NB and [WK(2) = 2 where NB = (n+ 3)(k #1) | k®. Ctherwise, let ves n + 1, m, be the number of equality (i.e., itype 2 and 3) constraints, and m, the number of inequality (itype O and [} constraints. Then one must set
+WK and IWK are arrays that are work spaces for the routine. On input, IWK(1) is the dimension of WK and IWK(?2) the dimension of IWK. If @ = O then one ray set JWK(1) ~ NB and [WK(2) = 2 where NB = (n+ 3)(k #1) | k®. Otherwise, let ves n + 1, m, be the number of equality (i.e., itype 2 and 3) constraints, and m, the number of inequality (itype O and [} constraints. Then one must set
 
 IWK(1) > NB + (v4 ey t 2fm,. tv) t+ (rm, tv) tf (ry | 2)fe + 6) IWK(2} > m, 4 2v.
 
 **Remarks.**
 
-(t) If € > t then one can let the routine determine the amount of storage that is necded for WK and IWK. Set WHI) NB and IWK(2)) . 2, 1m which case errors will occur (see the IND «6, > 7 error values below),
+(t) If € > t then one can let the routine determine the amount of storage that is needed for WK and IWK. Set WHI) NB and IWK(2)) . 2, 1m which case errors will occur (see the IND «6, > 7 error values below),
 
 (2) NDER(1) may be assigned a negative value (1 hoo. jf) EE NDER(G) © 0 chen she
 
@@ -1545,9 +1545,9 @@ IND is a variable used for input/output purposes, A an array of dimension n or l
 
 / 5 stored in A, and r is assigned the value V du (f (zs) ~ yi).
 
-After an initial call to BFIT, if only the constraints are modified, then the informatic.: in WK concerning X and Y can be reused. In this case, one may set IND to a nonzero value and recall BFIT to solve the new problem. The input setting IND # 0 can be used only when T,n,k,X,Y,m, and WK have not been modified since the last call to BFIT
+After an initial call to BFIT, if only the constraints are modified, then the information in WK concerning X and Y can be reused. In this case, one may set IND to a nonzero value and recall BFIT to solve the new problem. The input setting IND # 0 can be used only when T,n,k,X,Y,m, and WK have not been modified since the last call to BFIT
 
-When BFIT terminates, IND reports the status of the results. IND is assigned one of the following values: IND = 0 The piecewise polynomial f was obtained. IND = 1 The equality (i.e., itype 2 and 3) constraints are contradictorv. The solution f was obtained where the equality constraints were satisfied in a least squares sense.
+When BFIT terminates, IND reports the status of the results. IND is assigned one of the following values: IND = 0 The piecewise polynomial f was obtained. IND = 1 The equality (i.e., itype 2 and 3) constraints are contradictory. The solution f was obtained where the equality constraints were satisfied in a least squares sense.
 
 IND = 2 The problem could not be solved. The constraints are contradictory.
 
@@ -1561,21 +1561,21 @@ IND = —4 The assumption t, < 21 < +++ < 2m < lnyy is not satisfied.
 
 IN]} = —5 The ¢'® constraint is incorrect for the value of 1 stored in IWK(2).
 
-IND = --6 Insufficient storage was specified for the WK array. }WK(1) has been reset to the arnount of storage needed by WK.
+IND = --6 Insufficient storage was specified for the WK array. }WK(1) has been reset to the amount of storage needed by WK.
 
 IND = --7 Insufficient storage was specified fer the IWK array. IWK(2) has
 
 been reset to the amount of storage needed by TWK. IWK(1) and IWK(2) are not modified when IND ¥ -—-5, ~6, --7.
 
-**Example.** If one wants f to be convex on an interval {t;,¢:41), then this is equivalent to requiring that f"(2) > 0 on the interval. Thus, if k - 4 then it suffices to require that f"(t.+) > O and f"(tyya-) > 0. For these two consuraints, 9 is the appropriate value for the NDER array.
+**Example.** If one wants f to be convex on an interval {t;,¢:41), then this is equivalent to requiring that f"(2) > 0 on the interval. Thus, if k - 4 then it suffices to require that f"(t.+) > O and f"(tyya-) > 0. For these two constraints, 9 is the appropriate value for the NDER array.
 
-**Programming.** BEIT employs the routines BFITO, BNDACC,BNDSL, BSPVB, BSP\ D, LSE], and the subroutines and functions used by LSEL BEET is a modification by AH. Morris of the subroutine PC, written by Richard Jo Hanson (Sandia Laboratories). ‘Phe subroutines BNDACC and BNDSL were written by Rickard Jo Hanson aud Charles 1, Lawson (Jet Propulsion Laboratory), and are described in reference (2).
+**Programming.** BEIT employs the routines BFITO, BNDACC,BNDSL, BSPVB, BSP\ D, LSE], and the subroutines and functions used by LSEL BEET is a modification by AH. Morris of the subroutine PC, written by Richard Jo Hanson (Sandia Laboratories). ‘The subroutines BNDACC and BNDSL were written by Richard Jo Hanson aud Charles 1, Lawson (Jet Propulsion Laboratory), and are described in reference (2).
 
-Reterences
+References
 
-(1) Hanson, HJ), Constratrned Least Squares Curve Mtting to Discrete Data ustny Le Splines A User’a Guide, Report SAND 78 129), Sandia Laboratories, Albuquerque, New Mexico, 1979.
+(1) Hanson, HJ), Constrained Least Squares Curve Fitting to Discrete Data using Le Splines A User’a Guide, Report SAND 78 129), Sandia Laboratories, Albuquerque, New Mexico, 1979.
 
-(2) Lawson, Coto, and Wansen. HO, Selerng Least Squares Problems, VPreutice t all,
+(2) Lawson, Coto, and Wansen. HO, Solving Least Squares Problems, VPreutice t all,
 
-fenglewood Cliffs, New Jersey. BUT:
+Englewood Cliffs, New Jersey. BUT:
 

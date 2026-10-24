@@ -17,9 +17,9 @@ MACH and RADIX, and their subroutines MACH1, STORE2, MACH2, DSTOR2 are the next 
 
 After IPMPAR has been defined, the remainder of the library can be installed. None of the remaining code needs any modification. Codes for the functions and subroutines appear approximately in the order that they appear in the manual.
 
-Single /Double Precision Conversion. The foliowing modifications must be made when a subroutine is converted from single to double precision form.
+Single /Double Precision Conversion. The following modifications must be made when a subroutine is converted from single to double precision form.
 
 (2) Replace the functions SPMPAR, EPSLN, and EXPARG with DPMPAR, DEPSLN, and DXPARG. Do not modify the arguments of these functions. DPMPAR, DEPSLN, and DXPARG must be declared to be of type DOUBLE PRECISION when they are employed.
 
-(2) If the function IPMPAR appears in the subroutine then replace [TPMPAR(5) with IPMPAR(8), IPMPAR(6) with IPMPAR(9), and IPMPAR(7) with IPMPAR(10).
+(2) If the function IPMPAR appears in the subroutine then replace [IPMPAR(5) with IPMPAR(8), IPMPAR(6) with IPMPAR(9), and IPMPAR(7) with IPMPAR(10).
 

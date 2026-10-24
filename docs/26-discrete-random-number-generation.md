@@ -15,37 +15,34 @@
 | `URGET` | `SUBROUTINE` | `N, IBEG, IEND, IX, L, IERR` | [`L112682`](../source_parts/nswc_part_11.f#L6671) |
 
 
-Given the integers tg and 3, wh2ret, < 1,. Then the following subroutine is available for selecting integers t where 1, <1 <1,. The selection is performed so that any integer 1 is equally likely to occur w’ ‘i probability 1/m where m = 1, —1, + i. Any integer ¢ mav be selected more than onc When the number of selected values become large, then th. mean and variance of the values approximate the mean and variance of the discrete uniform distribution where
+Given the integers $i_a$ and $i_b$ where $i_a < i_b$. Then the following subroutine is available for selecting integers $i$ where $i_a \leq i \leq i_b$. The selection is performed so that any integer $i$ is equally likely to occur with probability $1/m$ where $m = i_b - i_a + 1$. Any integer $i$ may be selected more than once. When the number of selected values becomes large, the mean and variance of the values approximate the mean and variance of the discrete uniform distribution where
 
-mean = tg + (ts - 14)/2
+mean = $i_a + (i_b - i_a)/2$
 
-variance = (m? ~ 1)/12.
+variance = $(m^2 - 1)/12$.
 
 ```fortran
 CALL URGET(N, IBEG, IEND, IX, L, IERR)
 ```
 
-The argument n is the number of values to be selected, J is an array of dimension n or larger, and tz and [ERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of values. It is assumed that 1 < iz < 23} - 1, When URGET is called, if no input errors are detected then IERR is set to 0 and n values are stored in L. On output, tz is a new seed for selecting more values.
+The argument n is the number of values to be selected, L is an array of dimension n or larger, and ix and IERR are variables. On input, ix is an integer (called a seed) for initializing the sequence of values. It is assumed that $1 \leq ix < 2^{31} - 1$. When URGET is called, if no input errors are detected then IERR is set to 0 and n values are stored in L. On output, ix is a new seed for selecting more values.
 
-**Error Return.** IERR = Lifn <0, JERR = 2 iff, > 5 or m > 234 — 1, and IERR = 8 if tz is not a proper seed.
+**Error Return.** IERR = 1 if $n \leq 0$, IERR = 2 if $i_a \geq i_b$ or $m \geq 2^{31} - 1$, and IERR = 3 if ix is not a proper seed.
 
 Usage. A given seed always initiates the same sequence of values. Thus, the following two sets of instructions
 
-(1) 1X27 CALL URGET(30,0,1,1X,L, ERR)
+(1) `IX = 7` followed by `CALL URGET(30,0,1,IX,L,IERR)`.
 
-(2) IX 7 CALL URGET(20,0 1,1X,L,fe RR) CALL URGE T(10,0,1,EX,E(21) HERR)
+(2) `IX = 7` followed by `CALL URGET(20,0,1,IX,L,IERR)` and `CALL URGET(10,0,1,IX,L(21),IERR)`.
 
-,
 
-generale the same 380 values (OQ and t).
+
+generate the same 30 values (0 and 1).
 
 **Remarks.**
 
-(1) ‘The n values selected need be distinct only when mo 2°! 2 und nom.
+(1) The n values selected need be distinct only when $m = 2^{31} - 2$ and $n = m$.
 
-(2) [tis assumed that the integer arithmetic being used handles all integers rin the intervat [a[ + nn i
+(2) It is assumed that the integer arithmetic being used handles all integers i in the interval $|i| \leq 2^{31} - 1$.
 
-**Programming.** Originally formulated by Joho Ro Criplers Wretten by A TE Meorcts
-
-NWAY)
-
+**Programming.** Originally formulated by John R. Crigler. Written by A. H. Morris.

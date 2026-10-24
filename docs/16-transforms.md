@@ -15,7 +15,7 @@
 | `LAINV` | `SUBROUTINE` | `MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR` | [`L77475`](../source_parts/nswc_part_08.f#L3242) |
 
 
-Let f(t) be a complex-valued function that is continuous for t > 0 except possibly at a countable set of values t, having no finite limit points. Then for complex z the Laplacc transform F(z) of f(t) is defined by
+Let f(t) be a complex-valued function that is continuous for t > 0 except possibly at a countable set of values t, having no finite limit points. Then for complex z the Laplace transform F(z) of f(t) is defined by
 
 F(z) = i e** f(t) dt
 
@@ -35,15 +35,15 @@ CALL LAINV(MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR)
 
 Ty is assumed that F(z) = F(z). The argument FUN is the name of a user defined subroutine for computing F(z). FUN has the format: CALL FUN(z, y, A, B) A and B are variables. For real arguments z and y, A and B are assigned the values A = Re[F(x + iy)] and B = Im[F (zc + ty)]. FUN must be declared in the calling program to be of type EXTERNAL.
 
-IERR is a variable that is used both for input and output purposes. If TERR > 0 on input then it is assumed that the abscissa of convergence is k:iown and that ¢ = the abscissa of convergence. Otherwise, if IERR< © then the abscissa of convergence must be computed. In this case, c is a variable. LAINV sets c to the value that is obtained for the abscissa of convergence.
+IERR is a variable that is used both for input and output purposes. If TERR > 0 on input then it is assumed that the abscissa of convergence is known and that ¢ = the abscissa of convergence. Otherwise, if IERR< © then the abscissa of convergence must be computed. In this case, c is a variable. LAINV sets c to the value that is obtained for the abscissa of convergence.
 
-MO is an integer which specifies the search procedure to be used for finding the abscissa of convergence c when TERR < 0 on input. A one-pass procedure is employed when MO # 0, and a two-pass procedure when MO =: 0. Norrnaily, the one-pass procedure should be used. However, if all the singularities of F(z) are known to be real, then the two-pass procedure (MQ == 0) will be more efficient.
+MO is an integer which specifies the search procedure to be used for finding the abscissa of convergence c when TERR < 0 on input. A one-pass procedure is employed when MO # 0, and a two-pass procedure when MO =: 0. Normally, the one-pass procedure should be used. However, if all the singularities of F(z) are known to be real, then the two-pass procedure (MQ == 0) will be more efficient.
 
 It is assumed that t > O and that Y is a variable. When LAINV is called ¥ is set to the value obtained for f(£).
 
 AERR and RERR are the absolute and relative error tolerances to be used in computing
 
-M(t) (AERR > 0 and RERR > 0). If one wants arcuracy to k significant digits then set RERR -- i0°*. WRERR | 0 then it is assumed that f(t) is to be computed te machine
+M(t) (AERR > 0 and RERR > 0). If one wants accuracy to k significant digits then set RERR -- i0°*. WRERR | 0 then it is assumed that f(t) is to be computed to machine
 
 
 <small>Original source: [View scanned PDF page 318](../scans/page_0318.png)</small>
@@ -62,7 +62,7 @@ JERR = 1 Y was obtained, but it may not be accurate because of inaccuracy in the
 
 TERR = 2 Y could not be obtained, possibly because too much accuracy was requested. Increase AERR and RERR, and rerun the problem.
 
-IERR = 3 Y could not be obtained, possibly because of inaccuracy in the computation of c or too much accuracy was requested. Increase AERR and KERR, and rerun the problem. This setting cccurs only when IERR < 0 on input.
+IERR = 3 Y could not be obtained, possibly because of inaccuracy in the computation of c or too much accuracy was requested. Increase AERR and KERR, and rerun the problem. This setting occurs only when IERR < 0 on input.
 
 IERR = 4 (Input error) The argument ¢ is not positive. Y and ERROR are assigned the values 0 and 1.
 
@@ -81,7 +81,7 @@ JERR = 6 The argument ¢ 1s too large for f(t) to be computed. Y and ERROR are a
 (2) The calculation may lose accuracy or fail when F(t) is oscillatory.
 ```
 
-**Algorithm.** Given c, f(#) is computed by a modification of the subroutine DLAINV deveioped by R. Piessens and R. Huysimans, where the real Wynn ¢-algorithm has been replaced with the complex Wynn ¢-algorithm.
+**Algorithm.** Given c, f(#) is computed by a modification of the subroutine DLAINV developed by R. Piessens and R. Huysmans, where the real Wynn ¢-algorithm has been replaced with the complex Wynn ¢-algorithm.
 
 When JERR < 0, ¢ is calculated by the subroutine ABCGN or the subroutine AB- CONT. In ABCON, which is a two-pass search procedure, the abscissa z, of the rightmost.
 
@@ -89,14 +89,14 @@ singularity in the strip ~104 < x < 10%, |y| < .O1 is first determined. Then the
 
 In ABCON and ABCONI], the function F(z)/(z~ 21-4 1)? is integrated along paths Cy and Cy defined as follows: C) is the straight line segment from (2,,0) te (zy, 01), followed by the straight line segment from (xy, 01) to (co,.01), and C’y is the straight line segment from (21,00) to (x;,0), followed by the straight line segment from (71,6) to (00,0). ‘The integral along Cy vanishes if no singularity lies to the right of ry in the strip fy} OF, and the integral along (2 vanishes if no singularity tes im Re(e) = ay. Otherwise, these
 
-integrals are nouzero in most applications. Siipson’s rule suffices for integrating along the
+integrals are nonzero in most applications. Siipson’s rule suffices for integrating along the
 
 
 <small>Original source: [View scanned PDF page 319](../scans/page_0319.png)</small>
 
-finite line seginent from (21,0) to (zy, 01).
+finite line segment from (21,0) to (zy, 01).
 
-**Example.** Let F(z) = 1/(1+ 27), in which case f(t) = sint. The following code may be uced for computing f(t) at ¢ = 1,1.1,1.2,...,1.9 and storing the results in the array W.
+**Example.** Let F(z) = 1/(1+ 27), in which case f(t) = sint. The following code may be used for computing f(t) at ¢ = 1,1.1,1.2,...,1.9 and storing the results in the array W.
 
 REAL W(10) EXTERNAL FT
 
@@ -129,9 +129,9 @@ B:= AIMAG(W) RETURN
 
 DND
 
-**Programming.** LAINV employs the subroutines ABCON, ABCONI, SRCH, ACOND, XCOND, LAINV1, CQEXT, QAG/1, QAGIEI, QELG, QK15/1, @PSRYT, CDIVID, CREC and functions ACONDF, ACONDG, XCONDX, XCONDY, SPMPAR, EXPARG. LAINV and ARCON were written by Andrew H. van Tuy! (NSWC) and modified by A.H. Morris. ABCONI was written by A.H. Morris. LAINV1I was written by Robert Piessens and Rudi Huysmans (University of Leuven, Herverlee, Belgium) and modified by Andrew van Tuyl. QAGIL is a modification of QAGI by Andrew van Tuyl and A.H. Merris.
+**Programming.** LAINV employs the subroutines ABCON, ABCONI, SRCH, ACOND, XCOND, LAINV1, CQEXT, QAG/1, QAGIEI, QELG, QK15/1, @PSRYT, CDIVID, CREC and functions ACONDF, ACONDG, XCONDX, XCONDY, SPMPAR, EXPARG. LAINV and ARCON were written by Andrew H. van Tuy! (NSWC) and modified by A.H. Morris. ABCONI was written by A.H. Morris. LAINV1I was written by Robert Piessens and Rudi Huysmans (University of Leuven, Herverlee, Belgium) and modified by Andrew van Tuyl. QAGIL is a modification of QAGI by Andrew van Tuyl and A.H. Morris.
 
-Preference. Piessens, R. and Huysmans, R., “Algorithm 619. Automatic Numerical Inversion of the Laplace Trausform,” ACM Trans. Math Sojtware 10 (1084), pp. 348-353.
+Preference. Piessens, R. and Huysmans, R., “Algorithm 619. Automatic Numerical Inversion of the Laplace Transform,” ACM Trans. Math Software 10 (1084), pp. 348-353.
 
 
 <small>Original source: [View scanned PDF page 320](../scans/page_0320.png)</small>
@@ -157,9 +157,9 @@ n-l - > f(O,)e7 27IR/" k=0
 
 cj; >=
 
-is called the discrete Fourter transform and its inverse
+is called the discrete Fourier transform and its inverse
 
-n—-I . f(8;) _- > cpet™ takin k=0 the snverse discrete Fourier transform. The following subroutines are available for computing these transforms.
+n—-I . f(8;) _- > cpet™ takin k=0 the inverse discrete Fourier transform. The following subroutines are available for computing these transforms.
 
 ```fortran
 CALL FFT(C, N, ISN, IERR)
@@ -199,7 +199,7 @@ The setting IERR = 2 can occur only when n > 4251528.
 
 **Programming.** FFT and FFT! are interface routines for the subroutine SFFT, which was written by Richard C. Singleton (Stanford Research Institute).
 
-**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Slectroacoustics, vol. AU-17T (1969), pp. 93-103.
+**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacoustics, vol. AU-17T (1969), pp. 93-103.
 
 
 <small>Original source: [View scanned PDF page 322](../scans/page_0322.png)</small>
@@ -242,7 +242,7 @@ Let cy = ay + 1b, be the data to be transformed where J = (g:, ---)Jm) for gp = 
 
 **Note.** If MFFT is used and m = 2 or 3, then instead of having to store the m-dimensional data cy into a 1-dimensional array C, the data may be stored in C where C is defined to be an m-dimensional array. If m= 2 then C may be declared to be of dimension ny X na, in which case C(j: + 1,972 + 1) = cy for all J ~ (51,32). Similarly, if m = 3 then C may be declared to be of dimension n, x ng x ns, in which case Cait byge + 1,93 + 1) = cy for all J > (91, 92,3). Similar comments hold for A and B if MFETL is employed.
 
-N is an array containing the integers nj, ...,n,,. The argumeut @ may have the values 1 and -1, and IERR is a variable. When MFFT or MFFT' is called, if there are no input errors then TERR is set to 0 and the transform
+N is an array containing the integers nj, ...,n,,. The argument @ may have the values 1 and -1, and IERR is a variable. When MFFT or MFFT' is called, if there are no input errors then TERR is set to 0 and the transform
 
 6, > Don crexp(2a lrg ky/ny) -- exp(27bt jn ky /tm )
 
@@ -271,9 +271,9 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 
 **Remark.** The complex array C of dimension ny--+n,, is interpreted by MFFT as a real array of dimension 2n,--+n,,. If this association is not permitted by the FORTRAN being employed then use MFFTi.
 
-**Programming.** MFFT and MFFT1 are interface routines for the subrcutine SFFT, which was written by Richard C. Singleton (Stanford Research Institute).
+**Programming.** MFFT and MFFT1 are interface routines for the subroutine SFFT, which was written by Richard C. Singleton (Stanford Research Institute).
 
-**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacousties, vol. AU-17 (1969), pp 93-103.
+**Reference.** Singleton, R. C., “An Algorithm for Computing the Mixed Radix Fast Fourier Transform,” IEEE Trans. Audio and Electroacoustics, vol. AU-17 (1969), pp 93-103.
 
 
 <small>Original source: [View scanned PDF page 324](../scans/page_0324.png)</small>
@@ -301,7 +301,7 @@ norm 2 when j = 0 and norm \/n/2 when j > 1. Thus, if f is a function that is
 
 n-1 approximated by f(9) = ao + 25> a;cos 7@ then each a; = +(f(6),cos 70). The mapmal
 
-3 ping f(0,) ++ a; is called the discrete cosine transform and its inverse a; ‘+ f{(6,} the snverse discrete cosine transform.
+3 ping f(0,) ++ a; is called the discrete cosine transform and its inverse a; ‘+ f{(6,} the inverse discrete cosine transform.
 
 Alternatively, the functions sin 7@ for 7 = 1, ...,n also form an orthogonal set where sin 7? has norm /n/2 when Z < rand norm Ja when jzn. Thus, if f is » function that
 
@@ -315,15 +315,15 @@ The subroutines COSQB and COSQF are available for computing the discrete cosine 
 CALL COSQI(N, WSAVE)
 ```
 
-WK is an array of dimension 3n 4+ 15 or larger that is a work space for the routines COSQB, COSQF, SINQB, and SINQF. COSQI stores in WK informaticn needed for the fast Fourier computation of the discrete cosine and sine transforins and their inverses. A preliminary call must be made to COSQI before COSQB, COSQF, SINGB, and SINQF can be used. After this preliminary call, COSQ!] need only be recalled when n is modified.
+WK is an array of dimension 3n 4+ 15 or larger that is a work space for the routines COSQB, COSQF, SINQB, and SINQF. COSQI stores in WK information needed for the fast Fourier computation of the discrete cosine and sine transforms and their inverses. A preliminary call must be made to COSQI before COSQB, COSQF, SINQB, and SINQF can be used. After this preliminary call, COSQ!] need only be recalled when n is modified.
 
 **Programming.** COSQ! employs the subroutines REF TL and REETHL. These routines were written by Pau) N. Swarztrauber (National Center for Atmospheric Research, Boulder,
 
 Colorado). CALL COSQB(n, X, WK)
 
-Nos an array of dimension sm oor larger. On raput it is assumed that X contains the data f(9o), f(@1), .. f{(8n aj}. When COSQB is called, 4na, is computed and stored in X(7) f)fory¢ O,b,.. oye oF.
+Nos an array of dimension sm oor larger. On input it is assumed that X contains the data f(9o), f(@1), .. f{(8n aj}. When COSQB is called, 4na, is computed and stored in X(7) f)fory¢ O,b,.. oye oF.
 
-Wits an array of dimension $n ¢ 15 or larger thats a work space for the reuthic. WR onast be setup by Gis routine COSQHE before COSQB can be used.
+Wits an array of dimension $n ¢ 15 or larger that is a work space for the routine. WR must be set up by Gis routine COSQI before COSQB can be used.
 
 ALO
 
@@ -352,7 +352,7 @@ X is an array of dimension n or larger. On input it is assumed that X contains t
 
 WK is an array of dimension 3n-| 15 or larger that is a work space for the routine. WK must be set up by the routine COSQI before SINQB can be used.
 
-**Programming.** SiNQB calls the subroutine COSQB. SINQB was written by Paul N. Swaratrauber (National Center for Atmospheric Research, Boulder, Colorado).
+**Programming.** SiNQB calls the subroutine COSQB. SINQB was written by Paul N. Swarztrauber (National Center for Atmospheric Research, Boulder, Colorado).
 
 ```fortran
 CALL SINQF(N, X, WSAVE)
@@ -362,9 +362,9 @@ X is an array of dimension mn or larger. On input it is assumed that XY contains
 
 yo O,f, ee. ym oT.
 
-WK is an array of dimension Gn + 15 or larger that is a work space for the routine, WK must be set up by the routine COSQH before SINQF can be used.
+WK is an array of dimension Gn + 15 or larger that is a work space for the routine, WK must be set up by the routine COSQI before SINQF can be used.
 
-**Example.** Assume that X contains the data 6,,... 26,0 When the statements CALL COSQI(n, WK) CALL SINQE(n, 8 WK) CALL SINQH(n, Y¥ WH)
+**Example.** Assume that X contains the data 6,,... 26,0 When the statements CALL COSQI(n, WK) CALL SINQF(n, 8 WK) CALL SINQB(n, Y¥ WH)
 
 
 <small>Original source: [View scanned PDF page 326](../scans/page_0326.png)</small>

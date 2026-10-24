@@ -48,7 +48,7 @@ is used. If 1 < |z| < 38 and 2? — y? + .064z7y? > 0 then
 
 (2) erf(2) = 1 - “T- vats
 
-is employed. A, and ry, are the poles and residues of the rational function approximation for the complex Fresnel integral Et) given in the relerence. The error function is related to E(z) by erf(z) = 1 ~¢/2E(—z?) for jarg(z)| < /2. If |z| > 38 and x > .O1 then erf(z) is computed by the asymptotic expansion erf(z) = 1 — W(z) where
+is employed. A, and ry, are the poles and residues of the rational function approximation for the complex Fresnel integral Et) given in the reference. The error function is related to E(z) by erf(z) = 1 ~¢/2E(—z?) for jarg(z)| < /2. If |z| > 38 and x > .O1 then erf(z) is computed by the asymptotic expansion erf(z) = 1 — W(z) where
 
 ye _ 1+3++-(2n~ 1) (3) YO) = Fels t LCD ae |
 
@@ -59,7 +59,7 @@ then the relation erf(--z) == —erf(z) is applied.
 
 **Programming.** Written by Allen V. Hershey and A. H. Morris.
 
-**Reference.** Hershey, A. ., Approximation of Functiona by Sets of Poles, Report TR- 2564, Naval Weapons Labora Dahlgren, Virginia, 1971.
+**Reference.** Hershey, A. ., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 
 <small>Original source: [View scanned PDF page 47](../scans/page_0047.png)</small>
@@ -74,13 +74,13 @@ MO is an integer, z a complex number, and w a complex variable. When CERFC is ca
 
 **Programming.** CERFC employs the subroutine CREC and functions EXPARG and IPM- PAR. CERFC was written by Allen V. Hershey and A. H. Morris.
 
-**Reference.** Hershey, A. V, Approzimation of Functions by Sets of Polea, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
+**Reference.** Hershey, A. V, Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 ERF(z) ERF(2) = erf(x) for any real z. Precision. ERF(z) is accurate to within 2 units of the 14" significant digit for x # 0. Programmer. A. H. Morris
 
 **Reference.** Cody, W. J., “Rational Chebyshev Approximations tor the Error Function,” Math Comp. 23 (1969), pp. 631-637.
 
-ERFC(z) ERFC(z) = erfc(z) for any rea! z.
+ERFC(z) ERFC(z) = erfc(z) for any real z.
 
 **Precision.** If « < 3 then ERFC(z) is accurate to within 2 units of the 14*” significant digit. Otherwise, if z > 3 then ERFC(z) is accurate to within 4 units of the 14'” significant digit when ERFC(2) # 0.
 
@@ -92,9 +92,9 @@ ERFC(z) ERFC(z) = erfc(z) for any rea! z.
 ERFC1(IND, X)
 ```
 
-IND is an integer and z a real number. ERFCI{IND,z) = erfc(z) when [ND = 0, and ERFCL(IND,z) = e”erfc(z) when IND # 0. Precision. If z < 3 then ERFC1(0,z) is accurate to within 2 units of the 14" significant digit. Otherwise, if x > 3 then ERFC1(0,z) is accurate to within 4 units of the 14¢*
+IND is an integer and z a real number. ERFC1{IND,z) = erfc(z) when [ND = 0, and ERFC1(IND,z) = e”erfc(z) when IND # 0. Precision. If z < 3 then ERFC1(0,z) is accurate to within 2 units of the 14" significant digit. Otherwise, if x > 3 then ERFC1(0,z) is accurate to within 4 units of the 14¢*
 
-significant digit when ERFCI(G,z) 4 0. If IND # O then ERFCI(IND,z) is accurate to
+significant digit when ERFC1(G,z) 4 0. If IND # O then ERFC1(IND,z) is accurate to
 
 
 <small>Original source: [View scanned PDF page 48](../scans/page_0048.png)</small>
@@ -151,7 +151,7 @@ and G,, and H,, satisfy
 
 **Programming.** DCER#F calls the subroutines ERFCM2, CDIVID, and DCREC. DCERF and ERFCM2 were written by A. H. Morris. The function DPMPAR is also used.
 
-**Reference.** Luke, Yudell L., The Special Functions and Their Approrimaitoas, Vol 2, Academic Press, New York, 1969.
+**Reference.** Luke, Yudell L., The Special Functions and Their Approximations, Vol 2, Academic Press, New York, 1969.
 
 ```fortran
 CALL DCERFC(MO, Z, W)
@@ -161,7 +161,7 @@ MO is an integer, and Z and W are double precision arrays of dimension 2. It is 
 
 **Precision.** For MO # 0 and Re(z) > 0, W(1) and W(2) are accurate to within 3 units of the 26'” significant digit when W(2) 4 0.
 
-**Programming.** DCERFC employs the subroutines ERFCM2, DCIVID, and DCREG, and functions DXPARG, DPMPAR,and IPMPAR. DCERFC and ERFCM2 were written by A. H. Morris.
+**Programming.** DCERFC employs the subroutines ERFCM2, CDIVID, and DCREC, and functions DXPARG, DPMPAR,and IPMPAR. DCERFC and ERFCM2 were written by A. H. Morris.
 
 ```fortran
 DERF(X)
@@ -175,7 +175,7 @@ The argument z is a double precision number. DERF(z) is the double precision val
 
 **Precision.** DERF(z) is accurate to within 2 units of the 28"" significant digit for x 4 0.
 
-**Programming.** DERF employs the function DERFCO. DERF was written by A. H. Morris. DERFC(z}
+**Programming.** DERF employs the function DERFC0. DERF was written by A. H. Morris. DERFC(z}
 
 The argument x is a double precision number. DERFC(z) is the double precision value
 
@@ -190,7 +190,7 @@ Algorithm, If |z| < 1 then the power series corresponding to the Chebyshev expan
 
 then minimax approximations are used, and if |z| > 50 then the asymptotic expansion (3) is employed. ‘Che power series and minimax approximations were obtained by A. H. Morris.
 
-Frecision. DERFC(z) is accurate to within 2 units of the 28" significant digit for 2 < 2.
+Precision. DERFC(z) is accurate to within 2 units of the 28" significant digit for 2 < 2.
 
 **Programming.** DERFC employs the functions DERF'CO, DXPARG, and IPMPAR. DERFC was written by A. H. Morris,
 
@@ -198,13 +198,13 @@ Frecision. DERFC(z) is accurate to within 2 units of the 28" significant digit f
 DERFC1(IND, X)
 ```
 
-IND is an integer and z a double precision number. DERFCI{IND,z) is the double precision value for erfc(z) when IND = 0, and DERFCI(IND,z) is the double precision value for e7 erfe(z) when IND £0.
+IND is an integer and z a double precision number. DERFC1{IND,z) is the double precision value for erfc(z) when IND = 0, and DERFC1(IND,z) is the double precision value for e7 erfe(z) when IND £0.
 
 **Remark.** DERFC1 must be declared in the calling program to be of type DOUBLE PRECISION.
 
 **Precision.** DERFCi(IND,z) is accurate to within 2 units of the 28°" significant digit when IND = O and 2 < 2, and when IND #4 O and 2z> -1
 
-**Programming.** DERFC1 employs the functions DERFCO, DXPARG, and IPMPAR. DERFCi was written by A. H. Morris.
+**Programming.** DERFC1 employs the functions DERFC0, DXPARG, and IPMPAR. DERFCi was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 51](../scans/page_0051.png)</small>
@@ -248,7 +248,7 @@ DERFI(z, y) is the double precision value for w where w > 0 and erf(w) = z.
 
 **Error Return.** DERFI(z,y) = —-1lif x < Oory <0, and DERFI(z,y) = -2ifz+y 1.
 
-**Algorithm.** If « < 15/16 then an initial value for w is given Ly minimax approximations due to A. H. Morris. Otherwise, if z > 15/16 then an initial value for w is given by minimax approximations from the reference. These approximations are accurate to 17-18 digits. If inore accuracy is needed, then a single iterate of the Newton procedure for solving F(w) =: 0 is taken to obtain w to machine precision. Here
+**Algorithm.** If « < 15/16 then an initial value for w is given Ly minimax approximations due to A. H. Morris. Otherwise, if z > 15/16 then an initial value for w is given by minimax approximations from the reference. These approximations are accurate to 17-18 digits. If more accuracy is needed, then a single iterate of the Newton procedure for solving F(w) =: 0 is taken to obtain w to machine precision. Here
 
 erflw) 2 if2< 3/4
 
@@ -256,7 +256,7 @@ F(w)} es 4 erfe(w) - y if 3/4 <2 < 15/16 Inferfe(w)} --In(y) if 2 > 15/16.
 
 **Precision.** DERFI (2,7) is accurate to within | unit of the 27" significant digit.
 
-**Programming.** DERFI employs the functions DERF, DERFC1, DERFCO, DXPARG, DPMPAR, and IPMPAR. DERFI was written by A. H. Morris.
+**Programming.** DERFI employs the functions DERF, DERFC1, DERFC0, DXPARG, DPMPAR, and IPMPAR. DERFI was written by A. H. Morris.
 
 **Reference.** Blair, J. M., Edwards, C. A., and Johnson, J. H.,“Rational Chebyshev Approximations for the Inverse of the Error Function,” Meth. Comp. 30 (1976), pp. 827 830.
 
@@ -280,9 +280,9 @@ AERF(z, h) AERF(z,h) = aerf(z,h) for any z and A.
 
 **Precision.** AERF(z,h) is accurate to within 6 units of the 12'" significant digit when AERF (sz, h) # 0.
 
-**Programming.** AERF employs the functions ERF, ERFC, EPSLN, EXPARG, SPMPAR, and IPMPAR. AERF was written by Armide R. DiDonato and modified by A.H. Morris.
+**Programming.** AERF employs the functions ERF, ERFC, EPSLN, EXPARG, SPMPAR, and IPMPAR. AERF was written by Armido R. DiDonato and modified by A.H. Morris.
 
-**Reference.** DiDonato, A.R., Signiffeant Digit Computation of the Elliptical Coverage Function, Report NSWC TR 90-513, Naval Surface Warfare Center, Dahlgren, Virginia, 1990.
+**Reference.** DiDonato, A.R., Significant Digit Computation of the Elliptical Coverage Function, Report NSWC TR 90-513, Naval Surface Warfare Center, Dahlgren, Virginia, 1990.
 
 ```fortran
 DAERF(X, H)
@@ -292,7 +292,7 @@ The arguments xz and h are double precision numbers. DAERF(z,h) is the double pr
 
 **Remark.** DAERF must be declared to be of type DOUBLE PRECISION in the calling program.
 
-**Programming.** DAERF employs the functions DERF, DERFC, DERFCO, DEPSLN, DX- PARG, DPMPAR, and IPMPAR. DAERF was written by Armido R. DiDonato and modified by A. H. Morris.
+**Programming.** DAERF employs the functions DERF, DERFC, DERFC0, DEPSLN, DX- PARG, DPMPAR, and IPMPAR. DAERF was written by Armido R. DiDonato and modified by A. H. Morris.
 
 **Reference.** DiDonato, A.R., Significant Digit Computation of the Elliptical Coverage Function, Report NSWC TR 90-513, Naval Surface Warfare Center, Dahlgren, Virginia, 1990.
 
@@ -413,7 +413,7 @@ Original documentation: [page 55](../scans/page_0055.png).
 | `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8212`](../source_parts/nswc_part_01.f#L8212) |
 
 
-For any omplex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subrousine 3 is available for computing E(z).
+For any complex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subroutine 3 is available for computing E(z).
 
 ```fortran
 CALL CFRNLI(MO, Z, W)
@@ -439,7 +439,7 @@ e 1-3---(2n —1) z) = pee fit S° v( ) /2nz at x (2z)"
 
 **Programming.** CF RNLI employs the functions CPABS, EXPARG, and IPMPAR. CFRNLI was written by Allen V. Hershey and A. H. Morris.
 
-Reierence. Hershey, A. V., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virgmia, 1971.
+Reference. Hershey, A. V., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 
 <small>Original source: [View scanned PDF page 57](../scans/page_0057.png)</small>
@@ -454,7 +454,7 @@ Reierence. Hershey, A. V., Approximation of Functions by Sets of Poles, Report T
 | `FRNL` | `SUBROUTINE` | `T, C, S` | [`L8383`](../source_parts/nswc_part_01.f#L8383) |
 
 
-For any compicx z the Fresnel integrals C(z) and S(z) can be defined by Oz) =[ ccs (507) dt 0 2 / * x S(z) = [ sin (-t? | dt (z) I sin (F )
+For any complex z the Fresnel integrals C(z) and S(z) can be defined by Oz) =[ ccs (507) dt 0 2 / * x S(z) = [ sin (-t? | dt (z) I sin (F )
 
 The following subroutine is available fer computing Cye} and 3 (z) when .: is real. CALL FRNL(z,C, S)
 
@@ -464,7 +464,7 @@ The argument x may be any real number. C and S are variables. When FRNL is calle
 
 lt S{a) =z - F(z) coss-2? — g(x) sins x?
 
-are invoked. For 1.65 < 2 < 6,2f(z) and x°g(z) are computed by rational minimax approximaticns. Otherwise, for z >: 6 the auxiliary functions f(z) and g(z) are cornputea by the asymptotic expansions:
+are invoked. For 1.65 < 2 < 6,2f(z) and x°g(z) are computed by rational minimax approximaticns. Otherwise, for z >: 6 the auxiliary functions f(z) and g(z) are computed by the asymptotic expansions:
 
 f(z) — 14 2| 1) (x2)? LOR, yh 8 (48 +1 g(t) =~ dal 4) Saar
 
@@ -474,7 +474,7 @@ Here m= 5. If x < 0 then the relations C(--r) = —C(2) and S(—<) = --S(z) are
 
 **Precision.** if |zj < 2 then FRNI is accurate to within 3 units of the 14 significant digit. Otherwise, if |z| > 2 then FRNL is accurate to within U unit of the 14" significant digit.
 
-**Programming.** FRNL calls the functiowe SIN], COSI, and IPMPAR. FRNL was written by A. H. Morris.
+**Programming.** FRNL calls the functions SIN], COS1, and IPMPAR. FRNL was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 58](../scans/page_0058.png)</small>
@@ -492,11 +492,11 @@ Here m= 5. If x < 0 then the relations C(--r) = —C(2) and S(—<) = --S(z) are
 | `DEI1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9121`](../source_parts/nswc_part_01.f#L9121) |
 
 
-For any couwnplex z # 0 not on the positive real axis the exponential integral function
+For any complex z # 0 not on the positive real axis the exponential integral function
 
 Ei(z) is defined by
 
-Bifz) = | ~~ dt, deco t Ki(z) is an analytic function. I€ z is ropiaced by -z and t by ~t we obtain the related
+Bifz) = | ~~ dt, deco t Ki(z) is an analytic function. I€ z is replaced by -z and t by ~t we obtain the related
 
 function PO ot
 
@@ -510,21 +510,21 @@ ar Ad ei(z) = vy + Ina + > --
 
 n-n! n=i
 
-for 2 > 0. The function ei(z), also known as the exponential integral function, has a zero i he point 29 = .37250 74107 81367 Ei(z) may be computed by the subroutine CEXPL whex z is complex, and Ei(z) and ei(z) may be computed by the subroutine EXPL£ and functions DET and DET] when z is real. DET and DEI! are double precision functions.
+for 2 > 0. The function ei(z), also known as the exponential integral function, has a zero i he point 29 = .37250 74107 81367 Ei(z) may be computed by the subroutine CEXPL when z is complex, and Ei(z) and ei(z) may be computed by the subroutine EXPL£ and functions DET and DET] when z is real. DET and DEI! are double precision functions.
 
 ```fortran
 CALL CEXPLI(MO, Z, W)
 ```
 
-MO is an integer, z 4 0 a complex number, and w a complex variable. When CEXPL1 is called, w is assigned the valu2 Ei(z) if MO = © and the value e~? Ei(z) if MO #0.
+MO is an integer, z 4 0 a complex number, and w a complex variable. When CEXPL1 is called, w is assigned the value Ei(z) if MO = © and the value e~? Ei(z) if MO #0.
 
 **Remark.** If z is a positive real number and MO = 0 then w =» ei(z) +-9¢.
 
-**Precision.** If MO = 0 then Re(w) and Im(w) are accurate to within 2 unts of the 12t significant digit when z is nov near a zero of Re(Ki{z)) or Im(Fi(z)).
+**Precision.** If MO = 0 then Re(w) and Im(w) are accurate to within 2 units of the 12t significant digit when z is nov near a zero of Re(Ki{z)) or Im(Fi(z)).
 
 **Programming.** CEXPLI employs the functions CPABS and SPMPAR. CEXPLI was initially written by Allen V. Hershey, and later rewritten by A. HL. Morris.
 
-**Reference.** ilershey, A. V., Approzimations of Functions by Sets of Poles, veo. o TR 2564, Naval Weanons Laboratory, Dahler-on, Virginia, 1971.
+**Reference.** Hershey, A. V., Approximations of Functions by Sets of Poles, veo. o TR 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 
 <small>Original source: [View scanned PDF page 59](../scans/page_0059.png)</small>
@@ -533,19 +533,19 @@ MO is an integer, z 4 0 a complex number, and w a complex variable. When CEXPL1 
 CALL EXPLI(INT, ARG, RESULT, IERR)
 ```
 
-MO may have the values 1,2, or 3. The argument x is a nonzero real nurnber and w areal variable. When EXPi is called, if MO = 1 then w is assigned the value Ei(x) for a < O and the value eifx) tor > 0. If MU = 2 then it is assured that z > 0. In this case w is assigned the value £,(z}. Otherwise, if MO = 3 then w is assigned the value e~*Ei(z) for a < GO and the value e~” vi{z) for x > 0.
+MO may have the values 1,2, or 3. The argument x is a nonzero real number and w areal variable. When EXPi is called, if MO = 1 then w is assigned the value Ei(x) for a < O and the value eifx) tor > 0. If MU = 2 then it is assured that z > 0. In this case w is assigned the value £,(z}. Otherwise, if MO = 3 then w is assigned the value e~*Ei(z) for a < GO and the value e~” vi{z) for x > 0.
 
 **Error return.** TERR is a variable that reports the status of the results. If the requested value w is obtained then [ERR is set to 0. Otherwise, TERR is assigned one of the following values:
 
 JERR = 1 Underflow occurs. In this case w = 0.
 
-TERR = 2 Overflow cccurs.
+TERR = 2 Overflow occurs.
 
 IERR = 3 (Input error) 2 = 0.
 
 IGRR = 4 (Input error) MO = 2 and x < 0. The variable w is not defined when IERR > 2.
 
-**Algorithm.** If MO 4 2 and 4 < 2x < 8, then the Chebyshev expansion in the SLATHC library obtained by Wayne Fullerton (Los Alamos) is used. The remaining approximations employed are from the references.
+**Algorithm.** If MO 4 2 and 4 < 2x < 8, then the Chebyshev expansion in the SLATEC library obtained by Wayne Fullerton (Los Alamos) is used. The remaining approximations employed are from the references.
 
 **Precision.** If MO # 2 and x > 0, then w is accurate to within 4 units of the 14° significant digit when w 7 0. Otherwise, w is accurate to within 3 units of the 14" significant digit when wv #0.
 
@@ -561,16 +561,16 @@ DEI(Cr) The argument x -f 0 is a double precision number. DEI(+) is the double p
 
 **Remark.** DET must be declared in the calling program to be of type DOUBLE PRECISION.
 
-Aigorithm. If 35 < 2 < 4 then the Taylor series expansion of elif; around zy is used. This expansion was obtained by A. Hf. Morris. Hf jx expansion for fi and ei is applied. Otherwise, the Chebyshev expansions in the SLATEK:
+Algorithm. If 35 < 2 < 4 then the Taylor series expansion of elif; around zy is used. This expansion was obtained by A. Hf. Morris. Hf jx expansion for fi and ei is applied. Otherwise, the Chebyshev expansions in the SLATEC:
 
 » 9O then the standard asymptotic
 
-Hbrary obtained by Wayne Fullerton (los Alaries) are used,
+library obtained by Wayne Fullerton (Los Alamos) are used,
 
 
 <small>Original source: [View scanned PDF page 60](../scans/page_0060.png)</small>
 
-**Programming.** DEI employs the functions DE1E and DEIO. These functions were written by A. H. Morris. The functions DCOSEVL and DPMPAR are also used.
+**Programming.** DEI employs the functions DE1E and DEI0. These functions were written by A. H. Morris. The functions DCSEVL and DPMPAR are also used.
 
 DE!1(z) The argument 2 # 0 is a double precision number. DEIi(z) is the double precision value for e~* Ei(z) when z < 0, and the double precision value for e~* ei{z) when z > 0.
 
@@ -580,7 +580,7 @@ DE!1(z) The argument 2 # 0 is a double precision number. DEIi(z) is the double p
 
 **Precision.** DEIi(z) ia accurate to within 4 units of the 28° significant digit when DEI1(z) £0.
 
-**Programming.** DEI1 employs the functions DEIE and DEIO. These functions were written by A. H. Morris. The functions DCSEVL and DPMPAR are also used.
+**Programming.** DEI1 employs the functions DE1E and DEI0. These functions were written by A. H. Morris. The functions DCSEVL and DPMPAR are also used.
 
 
 <small>Original source: [View scanned PDF page 61](../scans/page_0061.png)</small>
@@ -639,13 +639,13 @@ where E(u) is the exponential integral function. The following subroutine is ava
 CALL CEXEXI(Z, W)
 ```
 
-The argument z is a nonzero complex number and w is a complex variable. *Vhen CEXEXI is called, w is assigned the value EE1(z).
+The argument z is a nonzero complex number and w is a complex variable. *When CEXEXI is called, w is assigned the value EE1(z).
 
 **Precision.** Re(w) and Im(w) are accurate to within 1 unit of the 12" significant digit when Re(EEi(w)) and Im(ZE1(w)) are not near 0.
 
 **Programming.** CEXEXI was written by Allen V. Hershey and modified by A. H. Morris.
 
-**Reference.** Hershey, A. V., Approzimation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
+**Reference.** Hershey, A. V., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 
 <small>Original source: [View scanned PDF page 63](../scans/page_0063.png)</small>
@@ -692,7 +692,7 @@ is used where w = —Inj{l + z) and 32, are the Bernoulli numbers By, = 1/6, Bg 
 
 <small>Original source: [View scanned PDF page 64](../scans/page_0064.png)</small>
 
-**Reference.** Hershcy, A. V., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahigren, Virginia, 1971.
+**Reference.** Hershey, A. V., Approximation of Functions by Sets of Poles, Report TR- 2564, Naval Weapons Laboratory, Dahlgren, Virginia, 1971.
 
 ALI(z) ALI{z) = Re[L(x)j} for all real x.
 
@@ -706,7 +706,7 @@ Re! L(t)] = --2?/3 — L(1/x) + 1/21n?(-2)
 
 **Programmer.** A. E. Morris
 
-**Reference.** Morris, Robert, “The Dilogarithin Function of a Real Argument,” Math. Comp. 33 (1979), pp. 778-787.
+**Reference.** Morris, Robert, “The Dilogarithm Function of a Real Argument,” Math. Comp. 33 (1979), pp. 778-787.
 
 
 <small>Original source: [View scanned PDF page 65](../scans/page_0065.png)</small>
@@ -736,13 +736,13 @@ Then F(z) is a meromorphic function having simple poles at 0,—-1, ~2,... ,and
 
 r(z)= | t7~e* dt 0
 
-for Re(z) > 0. Also ['(z) # 0 for all z. The subroutines CGAMMA and DCGAMA are available for computing ['(z) and InI'(z) when z is complex, and the functions GAMMA, GAMLN, DGAMMA, and DGAMLN are available for computing T(z) and InI'(z) when z is real. DCGAMA, DGUAMMA, and DGAMLN are double precision procedures.
+for Re(z) > 0. Also ['(z) # 0 for all z. The subroutines CGAMMA and DCGAMA are available for computing ['(z) and InI'(z) when z is complex, and the functions GAMMA, GAMLN, DGAMMA, and DGAMLN are available for computing T(z) and InI'(z) when z is real. DCGAMA, DGAMMA, and DGAMLN are double precision procedures.
 
 ```fortran
 CALL CGAMMA(MO, Z, W)
 ```
 
-MO is an integer, z a cornplex number satisfying z 4 0,-1,-2, .. ., and w a complex variable. When CGAMMA is cailed, w is assigned the value P'(z) if MO = 0 and the value InI'{z) if MO 40.
+MO is an integer, z a complex number satisfying z 4 0,-1,-2, .. ., and w a complex variable. When CGAMMA is called, w is assigned the value P'(z) if MO = 0 and the value InI'{z) if MO 40.
 
 **Error return.** If z = 0,—1, --2,..., or if Re(z) < 0 and Re(z) is too large for In I'(z) to be computed, then w is assigned the value 0.
 
@@ -752,7 +752,7 @@ MO is an integer, z a cornplex number satisfying z 4 0,-1,-2, .. ., and w a comp
 
 (1) Kuki, Hirondo, “Complex Gamma Function with Error Control,” Comm. ACM 15 (1972), pp. 262-267.
 
-(2) Spira, Robert, “Calculation of the Gamma Function by Sitirling’s Formula,” Math Comp. 25 (1971), pp 317-322.
+(2) Spira, Robert, “Calculation of the Gamma Function by Stirling’s Formula,” Math Comp. 25 (1971), pp 317-322.
 
 ```fortran
 GAMMA(A)
@@ -760,7 +760,7 @@ GAMMA(A)
 
 The argument z's a real number, If (x) can be computed then G .MMA (z) is assigned the value U(z). Otherwise, if M(2) cannot be computed, then GAMMA(z) is set te 0.
 
-**Algorithm.** If jz! < 15 then x is reduced to the interval (1,2) by Pia + 1) @P(a), and a rational mipimax approximation is employed. If 2 <- -15 then n
+**Algorithm.** If jz! < 15 then x is reduced to the interval (1,2) by Pia + 1) @P(a), and a rational minimax approximation is employed. If 2 <- -15 then n
 
 
 <small>Original source: [View scanned PDF page 66](../scans/page_0066.png)</small>
@@ -773,23 +773,23 @@ The logarithm In is evaluated as follows: Let n be the largest integer less than
 
 **Precision.** If 0 < z < 2 then GAMMA(z) is accurate to within 2 units of the 14 significant digit. If s > 2 then GAMMA(z) is accurate to within 3 units of the 14" significant digit. Otherwise, GAMMA(z) is accurate to within 5 units of the 14"? significant digit.
 
-**Programming.** GAMMA cails the functions GLOG and EXPARG. These functions were written by A. H. Morris. The functions SPMPAR and IPMPAR are also used.
+**Programming.** GAMMA calls the functions GLOG and EXPARG. These functions were written by A. H. Morris. The functions SPMPAR and IPMPAR are also used.
 
-GAMLN(z) GAMLN(z) = InI(z) for all positive real z. Algerithm. See p. 379 and appendix D of the reference.
+GAMLN(z) GAMLN(z) = InI(z) for all positive real z. Algorithm. See p. 379 and appendix D of the reference.
 
 **Precision.** GAMLN(z) is accurate to within 2 units of the 14°? significant digit when GAMLN(z) 4 0.
 
 **Reference.** DiDonato, A. R. and Morris, A. H., “Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Math Software 12 (1986), pp. 377-393.
 
-**Programming.** GAMLN calls the function GAMLNI. These functions were written by A. H. Morris.
+**Programming.** GAMLN calls the function GAMLN1. These functions were written by A. H. Morris.
 
 ```fortran
 CALL DCGAMA(MO, Z, W)
 ```
 
-MO is an integer, and 4 and W are double precision arrays of dimension 2. It is assumed that Z(1) and 4(2) are the real and nnaginary parts of a complex number z. If MO... 0 then the double precision value for w — P(z) is computed. Otherwise, if MO 7 0 then the double precision value for w In P(z) is computed. W(1) and W(2) ‘contain the real and imaginary parts of w, respectively,
+MO is an integer, and 4 and W are double precision arrays of dimension 2. It is assumed that Z(1) and 4(2) are the real and imaginary parts of a complex number z. If MO... 0 then the double precision value for w — P(z) is computed. Otherwise, if MO 7 0 then the double precision value for w In P(z) is computed. W(1) and W(2) ‘contain the real and imaginary parts of w, respectively,
 
-**Error Return.** [fz 0, ty) 2, orif Re(z) > O and Re(z} is too large for In P(2) to be computed, then W(1) and W (2) are assigned the value 0
+**Error Return.** [fz 0, ty) 2, or if Re(z) > O and Re(z} is too large for In P(2) to be computed, then W(1) and W (2) are assigned the value 0
 
 
 <small>Original source: [View scanned PDF page 67](../scans/page_0067.png)</small>
@@ -814,7 +814,7 @@ The argument z is a double precision number. DGAMMA(z) is the double precision v
 
 **Precision.** If 0 < x < 2 then DGAMMA(r) is accu; ate to within 1 unit of the 28'" signifiant digit. Otherwise, if z > 2 then DGA'MM 1(z* is accurate to within 1 unit of the 25°" significant digit.
 
-**Programming.** DGAMMA calls the functions DGAMI, DPDEL, DSIN1, and DX PARG. These functions were written by A. H. Morris. The functions DPMPAR and IPMIAR are also used.
+**Programming.** DGAMMA calls the functions DGAM1, DPDEL, DSIN1, and DX PARG. These functions were written by A. H. Morris. The functions DPMPAR and IPMPAR are also used.
 
 ```fortran
 DGAMLN(A)
@@ -824,14 +824,14 @@ The argument 2 is a double precision positive number. DGAMLN(z) is the double pr
 
 **Remark.** DGAMLN must be declared in the calling program to be of type DOUBLE PRECISION,
 
-**Algorithm.** If 5 <2 © 2.5 then mintinax approximations are used, and ifr + LO uhen (2) is applied. A(x) 1s computed by the power series corresponding to the Chebyshev expansion in the SLATEC hbrary given by Wayne Fullerton (Los Alamos), The power series and minimax approximations were obtained by A. HE. Morris.
+**Algorithm.** If 5 <2 © 2.5 then minimax approximations are used, and ifr + LO then (2) is applied. A(x) 1s computed by the power series corresponding to the Chebyshev expansion in the SLATEC library given by Wayne Fullerton (Los Alamos), The power series and minimax approximations were obtained by A. HE. Morris.
 
 
 <small>Original source: [View scanned PDF page 68](../scans/page_0068.png)</small>
 
 **Precision.** DGAMLN(z) is accurate to within 2 units of the 28° significant digit when DGAMLN(s) # 0.
 
-**Programming.** DGAMLN cails the functions DPDEL, DGMLN1, DGAMI, and DLNREL. These functions were written by A. H. Morris.
+**Programming.** DGAMLN calls the functions DPDEL, DGMLN1, DGAM1, and DLNREL. These functions were written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 69](../scans/page_0069.png)</small>
@@ -871,18 +871,18 @@ n--1 . dt y=0 is applied. When x < © then
 
 is also used.
 
-**Programming.** CPSI calls the functions REXP, SPMPAR, and IFMPAR. CPSI was written by ASH. Morris.
+**Programming.** CPSI calls the functions REXP, SPMPAR, and IPMPAR. CPSI was written by ASH. Morris.
 
 PSi(z)
 
-The argumeat ris areal number. Hf y¥(z) can be coruputed then PS! (x) is assigned the value (2). Otherwise, if (a) cannot be computed then PSI(z) is set to 0.
+The argument ris areal number. Hf y¥(z) can be computed then PS! (x) is assigned the value (2). Otherwise, if (a) cannot be computed then PSI(z) is set to 0.
 
-**Precision.** If r+ O thea PSHry iy accurate to within 2 units of the 14% signiheant digit when PSitr) 4 0.
+**Precision.** If r+ O thea PSHry iy accurate to within 2 units of the 14% significant digit when PSitr) 4 0.
 
 
 <small>Original source: [View scanned PDF page 70](../scans/page_0070.png)</small>
 
-**Programming.** PSI calls the functions SPMPAR and IPMPAR. PSI was written at Argonte National Laboratory for the FUNPACK package of special function subroutines. PSI was modified by A. H. Morris.
+**Programming.** PSI calls the functions SPMPAR and IPMPAR. PSI was written at Argonne National Laboratory for the FUNPACK package of special function subroutines. PSI was modified by A. H. Morris.
 
 **Reference.** Cody, W. J., Strecok, A. J., and Thacher, H. C., “Chebyshev Approximations for the Psi Function,” Math Comp. 27 (1973), pp. 123-127.
 
@@ -934,19 +934,19 @@ Let wa = —p(x) and w, = (-1)" ym anroye ) where p'")(z) is the n*® derivative
 (mn =1,2,...).
 ```
 
-The argument x is a positive real number, n and rm are integers where n > O and m > 1, and W is an array of dimension m or iarger. When PSIDF is called, wyy;_1 18 computed and stored in W(t) for t= 1, ...,m.
+The argument x is a positive real number, n and rm are integers where n > O and m > 1, and W is an array of dimension m or larger. When PSIDF is called, wyy;_1 18 computed and stored in W(t) for t= 1, ...,m.
 
 IERR is an integer variable that reports the status of the results. When PSIDF terminates, IERR. has one of the following values:
 
 TERR = 0 The values w,, ...,Wptm— were obtained and stored in W.
 
-TERR = 1 (Input errer) x <0,n <0,orm< 1.
+TERR = 1 (Input error) x <0,n <0,orm< 1.
 
 IERR = 2 (Overflow) Either x is too small or n + m— 1 too large.
 
 {ERR = 3 (Underflow) Either z is too large or n+ m— 1 too large.
 
-TERR = 4 This setting can occur only ifn +m —1 > 100. When it occurs, Wn+m-1 cannot be computed since mn + m— 1 is too large for x. (However, wnim—1 may be computable for larger values of 2.)
+TERR = 4 This setting can occur only if n +m —1 > 100. When it occurs, Wn+m-1 cannot be computed since mn + m— 1 is too large for x. (However, wnim—1 may be computable for larger values of 2.)
 
 **Remark.** Even though PSIDF may be used for computing wo = --¥(z), its primary purpose is for computing the sealed derivatives w,(n > 1) of w(x). For x > 3, wy is accurate to within 2 units of the 14° significant digit. However, far less accuracy is frequently obtained when x < 3. In the worst case, all relative accuracy is lost for w. when z is sufficiently near the zero Zo = 1.4616... of y(z). For x < 3, the function PSI should be used for computing
 
@@ -956,7 +956,7 @@ Wz).
 
 **Programming.** PSID® employs the functions IPMPAR, SPMPAR, EPSLN, and EXPARG. PSIDF 1s a modification by A. H. Morris of the subroutine PSIFN, written by Donald E.
 
-Amos (Sandia Laboratcries).
+Amos (Sandia Laboratories).
 
 Reference Amos, D. E ,“Algorithm 610. A Portable Fortran Subroutine for Derivatives of the Psi Function,” ACAY Trans. Mati Software 9 (1983), pp. 494-502.
 
@@ -980,19 +980,19 @@ For a > 0 and x > 0 let P(a,z) and Q(a,z) denote the functions defined by
 
 1 * . P(a,z =a / e 43>! at (2) =a) J, _ 1 et pak On2) =575 | 2" ge~* dt.
 
-Then 0 < P(a,z) < 1 and P(a,r) + Q(a,z) = 1. Also, P(a,z) > Land QO(a,z) — Ofer xz > 0 when a -+ 0. Hence, we may define P(0,xz) = 1 and Q(0,2) = C for zr > 0. The subroutines GRATIO and DGRAT are available for computing P(a,2) and Q(a,z2), aul the auriiiary functions RCOMP and DRCOMP are provided for computing e~7z*/T(a).
+Then 0 < P(a,z) < 1 and P(a,r) + Q(a,z) = 1. Also, P(a,z) > Land QO(a,z) — Ofer xz > 0 when a -+ 0. Hence, we may define P(0,xz) = 1 and Q(0,2) = C for zr > 0. The subroutines GRATIO and DGRAT are available for computing P(a,2) and Q(a,z2), and the auxiliary functions RCOMP and DRCOMP are provided for computing e~7z*/T(a).
 
 ```fortran
 CALL GRATIO(A, X, ANS, QANS, IND)
 ```
 
-It is assumcd that @ > 0 and x > O, where a and z are not both 0. P and Q are variables. GRATIO assigns P the value P(a,z) and Q the value Qfa,x). The argument ¢ may be any integer. This argument specifies the desired accuracy of the results. If1 = 0 then the user is requesting as much accuracy as possible (up to 14 significant digits). Otherwise, if i = 1 then accuracy is requested to within 1 unit of the 6" significant digit, «1d if: # 0,1 then the accuracy is requested to within 1 unit of the 3" significant digit.
+It is assumed that @ > 0 and x > O, where a and z are not both 0. P and Q are variables. GRATIO assigns P the value P(a,z) and Q the value Qfa,x). The argument ¢ may be any integer. This argument specifies the desired accuracy of the results. If1 = 0 then the user is requesting as much accuracy as possible (up to 14 significant digits). Otherwise, if i = 1 then accuracy is requested to within 1 unit of the 6" significant digit, «1d if: # 0,1 then the accuracy is requested to within 1 unit of the 3" significant digit.
 
-**Error Return.** P is assigned the value 2 when a or x is negative, when a = xz = 0, or when P(a,z) and Q(a,2) are indeterminant. P(a,2) and Q(a,z) are indeterminant when xz aan a is exceedingly large. On the CDC 6000-7000 series ccmputers this occurs when |z/a ~ 1| < 107" and a > 6.6E25.
+**Error Return.** P is assigned the value 2 when a or x is negative, when a = xz = 0, or when P(a,z) and Q(a,2) are indeterminant. P(a,2) and Q(a,z) are indeterminant when xz aan a is exceedingly large. On the CDC 6000-7000 series computers this occurs when |z/a ~ 1| < 107" and a > 6.6E25.
 
 **Programming.** GRATIO calls the junctions ERP, ERFC1, REXP, RLOG, RCOMP, GAM1, GAMMA, and SPMPAR. GAMMA employs the functions GLOG, iSXPARG, and IPMPAR, GRATIO was written by A. H. Morris,
 
-**Reference.** Dibonato, A. R. and Morris, A. H., “Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Mats Software 12 (1986), pp. 377-398.
+**Reference.** DiDonato, A. R. and Morris, A. H., “Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Mats Software 12 (1986), pp. 377-398.
 
 RCOMP (a, z) RCOMP(a,z) = e7*27/I'(a) for a > O and x > 0. Algorithm. See page 378 of the reference.
 
@@ -1001,27 +1001,27 @@ RCOMP (a, z) RCOMP(a,z) = e7*27/I'(a) for a > O and x > 0. Algorithm. See page 3
 
 <small>Original source: [View scanned PDF page 73](../scans/page_0073.png)</small>
 
-Reference, Dibouato, A. R. and Morris, A. W., “Computation of the Incomplete Gamma Function Ratios and their Inverse,” ACM Trans. Math Software 12 (1986), pp. 377-393.
+Reference, DiDonato, A. R. and Morris, A. W., “Computation of the Incomplete Gamma Function Ratios and their Inverse,” ACM Trans. Math Software 12 (1986), pp. 377-393.
 
 ```fortran
 CALL DGRAT(A, X, ANS, QANS, IERR)
 ```
 
-The argurnents a and x are nonnegative double precision numbers, where a and « are not both G. P and Q ave double precision variatles, and JERR an integer variable. When DGRAT is called, if P(a, x) and Q(a,x) can be computed then IERR is set tc 0 and P and Q are assigned the double precision values for P(a,«) and Q{a,z).
+The arguments a and x are nonnegative double precision numbers, where a and « are not both G. P and Q ave double precision variables, and JERR an integer variable. When DGRAT is called, if P(a, x) and Q(a,x) can be computed then IERR is set tc 0 and P and Q are assigned the double precision values for P(a,«) and Q{a,z).
 
 **Error Return.** If P(a,x) and Q(e¢,z} cannot be computed then /° is set to 2 aad IERR is assigned one of the following values: IERR = ¢ @ or # is negative. IERR=2ua=2=0. IERR = 3 Pla,z) and Q(a,x) are indeterminant. This setting occurs only when z a aad a is exceedingly large.
 
-**Algorithm.** A modification cf the algorithm given in the refereuce is used. The functions e,(z) appearing in the Tenure Expansion on page 381 are computed by minimax approximations designed by A. H. Morris.
+**Algorithm.** A modification cf the algorithm given in the reference is used. The functions e,(z) appearing in the Tenure Expansion on page 381 are computed by minimax approximations designed by A. H. Morris.
 
-**Programming.** DGRAT ernploys the subroutines DGR26 and DGR17, and the functions IPMPAR, DPMPAR, DXPARG, DREXP, DRLOG, DSIN1, DERF, DERFC1, DERFCO, DGAMMA, DGAM1, DRCOMP, and DPDEL. DGRAT was written by A. H. Morris.
+**Programming.** DGRAT employs the subroutines DGR26 and DGR17, and the functions IPMPAR, DPMPAR, DXPARG, DREXP, DRLOG, DSIN1, DERF, DERFC1, DERFC0, DGAMMA, DGAM1, DRCOMP, and DPDEL. DGRAT was written by A. H. Morris.
 
-**Reference.** DiDonato, A.R. and Morris, A.H.,“Computation of the Incomplete Gamma Function Ratiog and Their Inverse,” ACM Trans. Muth Software 12 (1986), pp. 577-393.
+**Reference.** DiDonato, A.R. and Morris, A.H.,“Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Math. Software 12 (1986), pp. 577-393.
 
 ```fortran
 ORCOMP(a.z)
 ```
 
-The arguiaents a and x are double precision numbers where a > O and xz > 0. DRCOMP(a,z) is the double precision value for e~7z°/T(a).
+The arguments a and x are double precision numbers where a > O and xz > 0. DRCOMP(a,z) is the double precision value for e~7z°/T(a).
 
 **Remark.** DKCOIMP must be declared to be of type DOUBLE PRECISIC. in the calling program.
 
@@ -1055,7 +1055,7 @@ for obtaining the value 2 > 0 for which P(a,z) = p and Q(a,z) =q.
 CALL GAMINV(A, X, X0, P, Q, IERR)
 ```
 
-X is a variable. If p = 0 then X is assigned the value O, and if g = 0 then X is set to the largest floating point number available. Otherwise, if p 4 0 and g # 0 then GAMINYV attempts to obtain a solution « for P(a,z) = p and G(a,z) = q that is correct to at least 10 significant digits.! If a solution is obtained then it is stored in X. The solution is normally computed by Schroder iteration. The argument zg is an optional initial approximation for x. If the user does not wish to supply an initial approximation then set ro < 0.
+X is a variable. If p = 0 then X is assigned the value O, and if g = 0 then X is set to the largest floating point number available. Otherwise, if p 4 0 and g # 0 then GAMINV attempts to obtain a solution « for P(a,z) = p and G(a,z) = q that is correct to at least 10 significant digits.! If a solution is obtained then it is stored in X. The solution is normally computed by Schroder iteration. The argument zg is an optional initial approximation for x. If the user does not wish to supply an initial approximation then set ro < 0.
 
 ```text
 IND is a variable that reports the status of the results. When GAMINV terminates,
@@ -1099,13 +1099,13 @@ RCOMP, EXPARG, IPMPAR, and SPMPAR. GAMINV was written by A. H. Morris.
 CALL DGINV(A, X, P, Q, IERR)
 ```
 
-The arguments a, p, g are double precision numbers and X a double precision variable. If p = 0 then X is assigned the value ©, and if g = 0 then X is set to the largest double precision number available. Otherwisc, i 9 AO and ¢ #40 then DGINV attempts to obtain a double precision solution z for P(a,z) = p and Q{a,z) = q that is correct to machine accuracy. If a solution is obtained then it is stored in X.
+The arguments a, p, g are double precision numbers and X a double precision variable. If p = 0 then X is assigned the value ©, and if g = 0 then X is set to the largest double precision number available. Otherwise, i 9 AO and ¢ #40 then DGINV attempts to obtain a double precision solution z for P(a,z) = p and Q{a,z) = q that is correct to machine accuracy. If a solution is obtained then it is stored in X.
 
 IND is a variable that reports the status of the results. When DGINV terminates, IND has one of the following values:
 
 IND = 0 The solution was obtained. Iteration was not used.
 
-IND > 1 The solution was obtained. IND iterations wei: >serformed.
+IND > 1 The solution was obtained. IND iterations wei: performed.
 
 IND = —2 (Input error) a < 0.
 
@@ -1113,17 +1113,17 @@ IND = —3 No solution was obtained. The ratio Q/a is too large.
 
 IND = —4 (Input error) p< 0,¢ <O,orp+q#l.
 
-IND = —6 10 iterations were performed. The most recent value obtained for x is stored in X. (This setting shouid never occur.)
+IND = —6 10 iterations were performed. The most recent value obtained for x is stored in X. (This setting should never occur.)
 
 IND = —7 Iteration failed. No value is given for 2. This may occur when zw.
 
 IND = —8 A value for z is stored in X, but the routine is not certain of its
 
-accuracy. Iteration cannot be performed in this case. This can eccur only when p Oorg 30
+accuracy. Iteration cannot be performed in this case. This can occur only when p Oorg 30
 
-**Remarks.** Schroder iteration is normally used. On the CDC 6000-7000 series computers 4 or fewer interations are required.
+**Remarks.** Schroder iteration is normally used. On the CDC 6000-7000 series computers 4 or fewer iterations are required.
 
-**Programming.** DGINV employs the subroutines GAMINV, GRATIO, PNI, DGR17, DPNI, DGR29, and DGRAT, and functions RCOMP, DRCOMP, SPMPAR, DPMPAR, EXPARG, DXPARG, REXP, DREXP, ALNREL, DLNREL, RLOG, DRLOG, DSINi, ERF, EFRC1, DERF, DERFC1, DEFRCO, ERFI, DERFI, GAMMA, GLOG, GAM!, GAMLN, DGAM1, GAMLNI, DGAMMA, DPDEL, DGAMLN, DGMLN1, and IPMPAR. DGINV was written by A. H. Morris.
+**Programming.** DGINV employs the subroutines GAMINV, GRATIO, PNI, DGR17, DPNI, DGR29, and DGRAT, and functions RCOMP, DRCOMP, SPMPAR, DPMPAR, EXPARG, DXPARG, REXP, DREXP, ALNREL, DLNREL, RLOG, DRLOG, DSINi, ERF, EFRC1, DERF, DERFC1, DEFRCO, ERFI, DERFI, GAMMA, GLOG, GAM!, GAMLN, DGAM1, GAMLN1, DGAMMA, DPDEL, DGAMLN, DGMLN1, and IPMPAR. DGINV was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 76](../scans/page_0076.png)</small>
@@ -1159,13 +1159,13 @@ DBETLN(A0, B0)
 
 The arguments a and b are positive double precision numbers. DBETLN(a, 8) is the double precision value for In B(a,}).
 
-**Remark.** DBETILN must be declared in the calling program to be of type DOUBLE PRECISION,
+**Remark.** DBETLN must be declared in the calling program to be of type DOUBLE PRECISION,
 
-**Algorithm.** Vhe algorithm for In B(a, 6) on pages 19-21 of the reference is used. A(z} is computed by the power series corresponding to the Chebyshev expansion in the SLATEC library given by Wayne Fullerton (Los Alamos). The power series was obtained by A. H. Morris
+**Algorithm.** The algorithm for In B(a, 6) on pages 19-21 of the reference is used. A(z} is computed by the power series corresponding to the Chebyshev expansion in the SLATEC library given by Wayne Fullerton (Los Alamos). The power series was obtained by A. H. Morris
 
-**Programming.** DBETLN employs the functions DUNREL, DLGDIV, DBCORR, DPDEL, DGAMLN, DGMLN1, DGAMI and DGSMLN. These functions were written by A. Tl. Morris. The function DPMPAR is also used.
+**Programming.** DBETLN employs the functions DLNREL, DLGDIV, DBCORR, DPDEL, DGAMLN, DGMLN1, DGAM1 and DGSMLN. These functions were written by A. Tl. Morris. The function DPMPAR is also used.
 
-**Reference.** Diljonato, A. KR. and Morris, A. f., “Algorithm 708 Significant: Digit Compo:
+**Reference.** DiDonato, A. KR. and Morris, A. f., “Algorithm 708 Significant: Digit Compo:
 
 tation of the Incomplete Het. Function Ratios,” ACM Trans. Math Software 18 P£OQ2), pp. 860-378.
 
@@ -1184,7 +1184,7 @@ tation of the Incomplete Het. Function Ratios,” ACM Trans. Math Software 18 P�
 | `ISUBX` | `SUBROUTINE` | `A0, B0, X0, P, IERR, EPS` | [`L15905`](../source_parts/nswc_part_02.f#L5256) |
 
 
-For a,b > 0 and O < x < 1 the incomplete beta fuzction is defined by
+For a,b > 0 and O < x < 1 the incomplete beta function is defined by
 
 1
 
@@ -1209,7 +1209,7 @@ It is assumed that a > 0,6 > 0,0 < x < 1, and y=1- 2. W, W1, and IERR are variab
 
 IERR = bifa<O0orb<0
 
-TERR = 2 ifa=b=0
+TERR = 2 if a=b=0
 
 IERR = 8 ifs<Oorx> 1
 
@@ -1219,9 +1219,9 @@ IERRs« 5 frty fl
 
 TERR = 6 fe sae 0
 
-IERR - 7 if yes 6 O Programming. BRATIO employs the subroutines BURAT and GRATI, and the funetions ALGDIV, ALNREL, APSER, BASYM, BCORR, BETAUN, BFRAC, BPSER, BR.- COMP, BROMPI, BUP, ERF, ERFCL, FPSER, GAMLN, GAM™UNI, GAMI, GSUMLIN. PST, bSUM, PXPARG, ReXP, and RLOGI. These subroutines an functions were written by A. HL. Morris. The functions SPMPAR and IPMEPAR are also ust
+IERR - 7 if yes 6 O Programming. BRATIO employs the subroutines BURAT and GRATI, and the functions ALGDIV, ALNREL, APSER, BASYM, BCORR, BETAUN, BFRAC, BPSER, BR.- COMP, BROMPI, BUP, ERF, ERFC1, FPSER, GAMLN, GAM™UNI, GAMI, GSUMLIN. PST, bSUM, PXPARG, ReXP, and RLOGI. These subroutines an functions were written by A. HL. Morris. The functions SPMPAR and IPMPAR are also ust
 
-**Reference.** DiDonato, A. Ro ai Morris, A. HL, “Algorithm 708 Signi: ant Digit Compa tatiog of the fucamiplete Geta Paunction Ratios,” ACM Trans, Mth S ‘tware t8 PEGgy, pp. 360.373
+**Reference.** DiDonato, A. Ro ai Morris, A. HL, “Algorithm 708 Signi: ant Digit Compa tatiog of the Incomplete Beta Function Ratios,” ACM Trans, Mth S ‘tware t8 PEGgy, pp. 360.373
 
 
 <small>Original source: [View scanned PDF page 78](../scans/page_0078.png)</small>
@@ -1251,11 +1251,11 @@ Also W is assigned the value 0. Remarks. ISUBX was designed for a maximum precis
 
 **Programming.** ISUBX employs the functions ALGDIV, ALNREL, BLND, IPMPAR, and LOGAM. ISUBX was written by A. H. Morris.
 
-**Reference.** DiDonatc, A. R. and Jarnagin, M. P., “The Ffficient Calculation of the Incomplete Beta-function Ratio for Half-Integer Values of the Parameter a,b,” Math Comp. ‘1 (1967), pp. 652-662.
+**Reference.** DiDonato, A. R. and Jarnagin, M. P., “The Efficient Calculation of the Incomplete Beta-function Ratio for Half-Integer Values of the Parameter a,b,” Math Comp. ‘1 (1967), pp. 652-662.
 
-BRCOMP (a, b, x, y) BRCOMP(a, 6, z, y) =: z7y’ ‘B(a,8) for a,b > O and z,y 2» O where r+y = 1. Algorithm. See pages 19-21 of the reference. Programming. BRCOMP emplcys the functions ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN, GAMLNI, GSUMLN, and RLOG1. ‘These functions were written by A. ti, Morris. Reference. DiDonato, A. Rt. and Morris, A. tt, “Algorithm 708 Significant Digit Compu-
+BRCOMP (a, b, x, y) BRCOMP(a, 6, z, y) =: z7y’ ‘B(a,8) for a,b > O and z,y 2» O where r+y = 1. Algorithm. See pages 19-21 of the reference. Programming. BRCOMP employs the functions ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN, GAMLN1, GSUMLN, and RLOG1. ‘These functions were written by A. ti, Morris. Reference. DiDonato, A. Rt. and Morris, A. tt, “Algorithm 708 Significant Digit Compu-
 
-tation of the Incomplete Beta Funciion Ratios.” ACM Trans. Math Software 18 (1992), pp. 360 373,
+tation of the Incomplete Beta Function Ratios.” ACM Trans. Math Software 18 (1992), pp. 360 373,
 
 
 <small>Original source: [View scanned PDF page 79](../scans/page_0079.png)</small>
@@ -1276,7 +1276,7 @@ If vy is complex then J,(z)} is defined by
 
 wt kIT (v +k + 1)
 
-for any z # 0 in the complex plane cut alorg the negative real axis. J,(z) is analytic in the region. jarg(z)| < 2, and J,(z) is an entire functior of v for any fixed z. J,(z) can be exiended to the negative real axis by letting ~m < arg(z) < x. If v is an integer then J,,(z) is also detined at O and is an entire function of 2. The following subroutines are available for computing J,{z).
+for any z # 0 in the complex plane cut along the negative real axis. J,(z) is analytic in the region. jarg(z)| < 2, and J,(z) is an entire function of v for any fixed z. J,(z) can be extended to the negative real axis by letting ~m < arg(z) < x. If v is an integer then J,,(z) is also defined at O and is an entire function of 2. The following subroutines are available for computing J,{z).
 
 ```fortran
 CALL CBSSLJ(Z, CNU, W)
@@ -1288,9 +1288,9 @@ The arguments z and v are complex numbers and w is a complex variable. It is ass
 
 **Algorithm.** A modification of the Hershey procedure for applying the Maclaurin, Debye, and asymptotic expansions is used.
 
-Programmimg. CBSSLT emopioys the subroutines CREC, CGAMMA, CBJM, CBDB, CBJA aid functions (PPMPAR, SPMPAR, CPABS, CDIV, EXPARG, REXP, SIN1, COS], CGAMO, GAMMA, GLOG, CBSSLJ was written. by Andrew H. Van Tuyl and A. H. Morris.
+Programming. CBSSLJ employs the subroutines CREC, CGAMMA, CBJM, CBDB, CBJA aid functions (PPMPAR, SPMPAR, CPABS, CDIV, EXPARG, REXP, SIN1, COS], CGAMO, GAMMA, GLOG, CBSSLJ was written. by Andrew H. Van Tuyl and A. H. Morris.
 
-**Reference.** Hershey, A. V., Computation of Special Functsons, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virginia, 1973, pp. 33-42.
+**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virginia, 1973, pp. 33-42.
 
 ```fortran
 CALL BSSLJ(A, IN, W)
@@ -1298,11 +1298,11 @@ CALL BSSLJ(A, IN, W)
 
 The argument 7 is a complex number, n is an integer, and w is a complex variable. When BSSL,i is called, w is assigned the value J,,(z).
 
-**Precision.** BSSLJ is accurate to within 5-10 !4 for realO <2 < 35 andn 0,1.
+**Precision.** BSSLJ is accurate to within 5-10 !4 for realO <2 < 35 and n 0,1.
 
 **Programmer.** A.V. Hershey
 
-**Reference.** Hershey, A. V., Computation of Special Functione, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virgima, 1978.
+**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virginia, 1978.
 
 
 <small>Original source: [View scanned PDF page 80](../scans/page_0080.png)</small>
@@ -1311,9 +1311,9 @@ The argument 7 is a complex number, n is an integer, and w is a complex variable
 CALL BESJ(X, ALPHA, N, Y, NZ)
 ```
 
-The arguments z and @ are nonnegative real numbers, n is a positive integer, and W is an array of dimension n or larger. When BESJ is called J.4,;-1(z) is computed and stored in W(t) forf=1,...,n.
+The arguments z and @ are nonnegative real numbers, n is a positive integer, and W is an array of dimension n or larger. When BESJ is called J.4,;-1(z) is computed and stored in W(t) for f=1,...,n.
 
-The argument k is an integer variable that is set by the routine. If all Ja4;—1(z) are computed then k is set to 0. Otherwise, k is assigned cne of the following values:
+The argument k is an integer variable that is set by the routine. If all Ja4;—1(z) are computed then k is set to 0. Otherwise, k is assigned one of the following values:
 
 k = ~—1 The argument z is negative.
 
@@ -1321,15 +1321,15 @@ k == ~2 The argument a is negative.
 
 k = -—3 The requirement n > 1 is violated.
 
-k> 0 The last k components of W have Leen set to 0 because of underflow,
+k> 0 The last k components of W have been set to 0 because of underflow,
 
 **Precision.** For 0 < z < 35 and 0 < a < 1, BESJ is accurate to within 8- 107?%.
 
-**Programming.** BESJ calls the subroutines ASJY and JAIRY, and the functions GAMLN, SPMPAR, and IPMPAR. The subroutines were written by Donald E. Amos, Sharon L. Daniei, and M. Katherine Weston (Sandia Laboratories).
+**Programming.** BESJ calls the subroutines ASJY and JAIRY, and the functions GAMLN, SPMPAR, and IPMPAR. The subroutines were written by Donald E. Amos, Sharon L. Daniel, and M. Katherine Weston (Sandia Laboratories).
 
 **References.**
 
-(1) Amos, D.E., Daniel, S. L., and Weston, M. K., CDC 6600 Subroutines for Bessel Functions J,(z),z > 0,v > Oand Atry Functions A,(z),Ai(x),—0o < < oo. Report SAND 75-0147, Sandia Laboratories, Albuquerque, New Mexico, 1975.
+(1) Amos, D.E., Daniel, S. L., and Weston, M. K., CDC 6600 Subroutines for Bessel Functions J,(z),z > 0,v > Oand Airy Functions A,(z),Ai(x),—0o < < oo. Report SAND 75-0147, Sandia Laboratories, Albuquerque, New Mexico, 1975.
 
 (2) ee , “CDC 6600 Subroutines IBESS and JBESS for Bessel Functions I, (x) and J,(z),z2 > 0,v > 0,” ACM Trans. Math Software 3 (1977), pp. 76-92.
 
@@ -1354,7 +1354,7 @@ YL(z) =
 
 sin vr
 
-for any z # O in the complex plane cut along the negative real axis. For any lateger n we can also define Y,,(z) = lim Y,(z). Then for any complex v, Y,(z) is analytic in the region von
+for any z # O in the complex plane cut along the negative real axis. For any integer n we can also define Y,,(z) = lim Y,(z). Then for any complex v, Y,(z) is analytic in the region von
 
 jarg(z)| < x. Also, Y,(z) is an entire function of v for any fixed z. The following subroutine is available for computing Y,(z) when rv is an integer.
 
@@ -1368,7 +1368,7 @@ The argument z is a complex number, n is an integer, and w is a complex variable
 
 **Programmer.** A. V. Hershey
 
-**Reference.** Hershey, A. V., Computation of Spectal Functions, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virginia, 1978.
+**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-3788, Naval Surface Weapons Center, Dahlgren, Virginia, 1978.
 
 
 <small>Original source: [View scanned PDF page 82](../scans/page_0082.png)</small>
@@ -1399,25 +1399,25 @@ The arguments z and v are complex numbers and w is a complex variable. It is ass
 
 I,(z) = evri/2 J, (ze™ **/?) ~B< arg(z) <m T(z) eo ¥™? JT (ze™/?) - aw < arg(z) < §.
 
-**Programming.** CBSSLI calls the subroutine CBSSLJ and functions EXPARG, COSI], and SINT. Also, the functions and subroutines needed for CBSSLJ are used. CBSSLI was written by Andrew H. Van ‘Puyl and A. H. Morris
+**Programming.** CBSSLI calls the subroutine CBSSLJ and functions EXPARG, COS1], and SINT. Also, the functions and subroutines needed for CBSSLJ are used. CBSSLI was written by Andrew H. Van ‘Puyl and A. H. Morris
 
-CALL BSSLI(MO, z,n, w) MO ts an integer, z a complex number, n an integer, and w acomplex variable. If MO f O then it is assured that jarg(z)}) «oo. When BSSLI is called, w is assigned the value
+CALL BSSLI(MO, z,n, w) MO ts an integer, z a complex number, n an integer, and w a complex variable. If MO f O then it is assured that jarg(z)}) «oo. When BSSLI is called, w is assigned the value
 
 Liz} afMO | O and the value e 7/,(z2) 1f MO 7/9
 
-Precision, BSSL!is accurate to withip 5 unite of the 18" significant dipit for realO <2 - and nm O,1,... AU.
+Precision, BSSL!is accurate to within 5 unite of the 18" significant digit for realO <2 - and nm O,1,... AU.
 
 **Programmer.** Allen V. Hershey
 
-**Reference.** Hershey, A. V., Computation of Spectal Furicttona, Report TR-38788, Naval Sorface Weapons Center, Dahleren, Virginia, (978,
+**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-38788, Naval Surface Weapons Center, Dahlgren, Virginia, (978,
 
 ```fortran
 CALL BESI(X, ALPHA, KODE, N, Y, NZ)
 ```
 
-MO ormay be bor 2.) The crguments rand @ are nonnegative ceal mumaibers, ris a
+MO or may be bor 2.) The arguments rand @ are nonnegative real numbers, ris a
 
-positive integer, and ous an array of dimension mn or farger. When BiSt is called, if MEO
+positive integer, and ous an array of dimension mn or larger. When BiSt is called, if MEO
 
 
 <small>Original source: [View scanned PDF page 83](../scans/page_0083.png)</small>
@@ -1438,7 +1438,7 @@ k k k k k k
 
 **Precision.** For 0 < 2 < 35 andO <a <l,or0 <2 < 35 and a= 1,2...,40, i,(z) is accurate to within 2 units of the 12‘ significant digit.
 
-**Programming.** BESI calls the subroutine ASIK and the functions GAMLN, SPMPAR, and IPMPAR. BESI and ASIK were writien by D. E. Amos and S. L. Daniel (Sandia Laboratories).
+**Programming.** BESI calls the subroutine ASIK and the functions GAMLN, SPMPAR, and IPMPAR. BESI and ASIK were written by D. E. Amos and S. L. Daniel (Sandia Laboratories).
 
 **References.**
 
@@ -1467,9 +1467,9 @@ If v is any complex number not an integer, then K,{z) is defined by
 
 2 sin vr
 
-for any z # 0 in the conplex plane cut along the negative real axis. For any integer n we can also define K,,(z) = lim K,(z). Then for any complex v, K,(z) is analytic in the von
+for any z # 0 in the complex plane cut along the negative real axis. For any integer n we can also define K,,(z) = lim K,(z). Then for any complex v, K,(z) is analytic in the von
 
-regien |arg(z)| < a. Also, AK,(z) is an entire function of v for any fixed 2. K,(z) can be extended to the negative real axis by letting —*x < arg(z) < . The following subroutines are available for computing K,(z).
+region |arg(z)| < a. Also, AK,(z) is an entire function of v for any fixed 2. K,(z) can be extended to the negative real axis by letting —*x < arg(z) < . The following subroutines are available for computing K,(z).
 
 ```fortran
 CALL CBESK(Z, CNU, W)
@@ -1495,7 +1495,7 @@ along with the Miller algorithm and the power series Ki(z) - 32 cafe and K,41(z)
 
 Ky{z) -e °K fe 2) -ami(e ™2z) (0 < arg(z) < 7)
 
-Ky{z) oe’ KK (e"'z) + andy (e™*z) ( a + argfz) < 0). Precision. Frequently, 11 18 digit accuracy is obtained. Fer 10 ? © Jz) < 50, CBESK maintains accuracy to within 3 units of the 8"? significant digit except when RelA, (2)! or Im|{K L(2)] is near O, or occasionally when 2 is on the negative real axis. Leta atarae For 50 < lz) < 100, Refw) and Jm(w) are normally accurate to within 3 uniis of the 8" significant digit when, ™ Land ro 1/2. However, for £/2. 7) Land v not real, aeecurarcy gracually decreases as jz] iicreases.
+Ky{z) oe’ KK (e"'z) + andy (e™*z) ( a + argfz) < 0). Precision. Frequently, 11 18 digit accuracy is obtained. Fer 10 ? © Jz) < 50, CBESK maintains accuracy to within 3 units of the 8"? significant digit except when RelA, (2)! or Im|{K L(2)] is near O, or occasionally when 2 is on the negative real axis. Leta atarae For 50 < lz) < 100, Refw) and Jm(w) are normally accurate to within 3 units of the 8" significant digit when, ™ Land ro 1/2. However, for £/2. 7) Land v not real, accuracy gradually decreases as jz] increases.
 
 ‘
 
@@ -1504,13 +1504,13 @@ Programming, CBESK employs the subroutines CBHKA, CBKI, CBRM, CBA ATE, CAPS,
 
 <small>Original source: [View scanned PDF page 85](../scans/page_0085.png)</small>
 
-CGAMMA, CBSSLI, CBSSLJ, CREC and functions CDIV, CG AMO, COSO, COSI, SINO, SINI, CPABS, CXP, EXPARG, SPMPAR, IPMPAR. Also, the functions and subroutines needed for CBSSLJ are used. CBESK was written by Andrew H. Van Tuyl and A. H. Moiris.
+CGAMMA, CBSSLI, CBSSLJ, CREC and functions CDIV, CG AMO, COS0, COS1, SIN0, SIN1, CPABS, CXP, EXPARG, SPMPAR, IPMPAR. Also, the functions and subroutines needed for CBSSLJ are used. CBESK was written by Andrew H. Van Tuyl and A. H. Morris.
 
 **References.**
 
 (1) Amos, D.E., Computation of Bessel Functions of Complex Argument, Report SAND 83-0086, Sandia Laboratories, Albuquerque, New Mexico, i983.
 
-(2) Temme, N.M., “On the Numerical Evaluation of tne Modified Bessel Function of the Third Kind,” J. Comp. Physics 19 (1975), pp. 324--337.
+(2) Temme, N.M., “On the Numerical Evaluation of the Modified Bessel Function of the Third Kind,” J. Comp. Physics 19 (1975), pp. 324--337.
 
 ```fortran
 CALL CBSSLK(Z, R, W)
@@ -1520,19 +1520,19 @@ The argument z ig a nonzero complex number, ¢ 2 real number, and w a complex va
 
 **Algorithm.** The algorithm employed by CBESi. is used. For real r, (+) is not needed.
 
-**Programming.** CBSSLK employs the subroutines CBSSLJ, CKA, CKM, CKML, CREC and functions CPABS, COSO, CXP, GAM1, SINO, SPMPAR, IPMPAR. Also, the functions and subroutines needed for CBSSLJ are used. CBSSLK was written by Andrew H. Van Tuyl and modified by A. H. Morris.
+**Programming.** CBSSLK employs the subroutines CBSSLJ, CKA, CKM, CKML, CREC and functions CPABS, COS0, CXP, GAM1, SIN0, SPMPAR, IPMPAR. Also, the functions and subroutines needed for CBSSLJ are used. CBSSLK was written by Andrew H. Van Tuyl and modified by A. H. Morris.
 
 ```fortran
 CALL BSSLK(MO, A, IN, W)
 ```
 
-MO is an integer, z a complex number, n an integer, and w a complex variable. It is assurnea that |arg(z)| < *. When BSSLK is called, w is assigned the value K,,(z) if MO = 0 and the value e*A{,(z) if MO # 0.
+MO is an integer, z a complex number, n an integer, and w a complex variable. It is assumed that |arg(z)| < *. When BSSLK is called, w is assigned the value K,,(z) if MO = 0 and the value e*A{,(z) if MO # 0.
 
 **Precision.** BSSLK is accurate to within 6 units of the 14'* significant digit for real z and n-=-0,1.
 
 **Programmer.** Allen V. Hershey.
 
-**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-37868, Naval Surface Weapons Center, Dahlgren, Virginina, 1978.
+**Reference.** Hershey, A. V., Computation of Special Functions, Report TR-37868, Naval Surface Weapons Center, Dahlgren, Virginia, 1978.
 
 
 <small>Original source: [View scanned PDF page 86](../scans/page_0086.png)</small>
@@ -1554,7 +1554,7 @@ MO is an integer, z a complex number, n an integer, and w a complex variable. It
 
 3
 
-For any series w = ‘°° a,z" satisfying the differential ecuation w” = zw, it follows y La a
+For any series w = ‘°° a,z" satisfying the differential equation w” = zw, it follows y La a
 
 ```text
 n=0
@@ -1573,7 +1573,7 @@ Bi(z) = v3 lei f(z) + c2g(z)]
 
 for cy = 377/3/[(2/3) and cg = 371/3/P(1/3). Ai(z) and Bi(z) are entire functions.
 
-The subroutines CAI and CBI are available for computing At(z) and Bi(z) when z is complex, aid the functions AI, ATE, BI, and BIE are available for computing A1(z) and Bi(z) when z is real. CAI and CBI also provide the dervatives Ai’(z) and Bi'(z) of Ar(z) and Bi(z).
+The subroutines CAI and CBI are available for computing At(z) and Bi(z) when z is complex, aid the functions AI, ATE, BI, and BIE are available for computing A1(z) and Bi(z) when z is real. CAI and CBI also provide the derivatives Ai’(z) and Bi'(z) of Ar(z) and Bi(z).
 
 ```fortran
 CALL CAI(IND, Z, AI, AIP, IERR)
@@ -1583,7 +1583,7 @@ IND is an integer, z a complex number, and w and w’ complex variables. When CA
 
 LERR is a variable that is set by the routine. When CAI terminates, IERR has one of the following values: tERR =: O The desired values were obtained. IERR = 1 z ts too large for the desired values to be computed. In this case w and wu’ are assigned the value 0. Precision. Fur IND 4 0 the real and imaginary parts of w and w’ are accurate to within 2 units of the '2'* significant digit except near points where they vanish.
 
-**Programming.** CAI employs the subroutines AIRM, AIl, ATA, JA, oMC, BIM, KA, KML, IMC, and BIM. These routines were written by Andrew HE Van Tuy) and modified hy A. Uy Merris. The subroutines CAPO and CREC, and functions CPABS, EXPARG, IPMPAR, and SPMPAR are also used.
+**Programming.** CAI employs the subroutines AIRM, AIl, ATA, JA, oMC, BIM, KA, KML, IMC, and BIM. These routines were written by Andrew HE Van Tuy) and modified hy A. Uy Morris. The subroutines CAPO and CREC, and functions CPABS, EXPARG, IPMPAR, and SPMPAR are also used.
 
 ```fortran
 CALL CBHIND 2,w, wu’ IRAN)
@@ -1622,11 +1622,11 @@ Al(z) #0.
 AIE(X)
 ```
 
-Ifx > Othen AlM(2} > e At(z) where ¢ = 39/7. Otherwise, if 2 < 0 then AIF (2)
+If x > Othen AlM(2} > e At(z) where ¢ = 39/7. Otherwise, if 2 < 0 then AIF (2)
 
-Algorithm.. tabhonal minimax approximations are used. Ifa « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
+Algorithm.. rational minimax approximations are used. If a « Lthen Wand @ are computed where Artix) HR sinfoe /4 i @).
 
-**Precision.** Fora > t, Allez) is accurate to within 2 units of the ¢4°? sipifteant cigit
+**Precision.** Fora > t, Allez) is accurate to within 2 units of the ¢4°? significant digit
 
 i0O
 
@@ -1675,7 +1675,7 @@ If zc > 0 then BIE(z) = e~$ Bi(z) where ¢ = 223/?. Otherwise, if x < 0 then BIE
 
 If k is complex then the complete elliptic integrals of the first and second kinds can be defined by
 
-x/2 K(k) = i (1 — k? sin?t)~1/? de ) x/2 E(k) = / (i — k® sin?t)!/? de o for jarg(1 — k?)| < m. K(k) and E(k) can be extended to - < arg(1—k?) < x. Foz |k| <1
+x/2 K(k) = i (1 — k? sin?t)~1/? de ) x/2 E(k) = / (i — k® sin?t)!/? de o for jarg(1 — k?)| < m. K(k) and E(k) can be extended to - < arg(1—k?) < x. For |k| <1
 
 K(k) = So enk™
 
@@ -1695,7 +1695,7 @@ The function CK js available for computing A (k), and the subroutine CK for comp
 
 CK (k, €)
 
-CK(k, @) = K(k) for any complex k aud @where k? | #?) Land £4 0. CK is acomples valued function which must be declared in the calling program to be of type COMPLEX,
+CK(k, @) = K(k) for any complex k aud @where k? | #?) Land £4 0. CK is a complex valued function which must be declared in the calling program to be of type COMPLEX,
 
 **Error Return.** CK(k. 0) Of For kh? OAD.
 
@@ -1718,9 +1718,9 @@ Remarks.
 CALL CKE(K, L, CK, CE, IERR)
 ```
 
-The arguments k and @ are complex number: where k? + €? = 1 and £7 0,K and E are complex variables, and [ERR an integer variavie. When CKE is called, if no errors are detected then TERR is set to 0, K is assigned the value K(k), and E is assigned the value
+The arguments k and @ are complex number: where k? + €? = 1 and £7 0,K and E are complex variables, and [ERR an integer variable. When CKE is called, if no errors are detected then TERR is set to 0, K is assigned the value K(k), and E is assigned the value
 
-**Error Return.** IERR = 1 if €= 0 and IERR = 2 if k? + @? #1. In these cases, K and EF are not detined.
+**Error Return.** IERR = 1 if €= 0 and IERR = 2 if k? + @? #1. In these cases, K and EF are not defined.
 
 **Algorithm.** For & = 0 or ~1/2 < arg(k) < «/2, formulae (2) are used if |é| < .55, (1) are used if |@| > .55 and |kj < .55, and approximations of the form N
 
@@ -1728,9 +1728,9 @@ Na, K(k) = £7 5 Para
 
 N . bak b,k ae | .
 
-are t ed af [@) > 65 and .55 > [k] ~ Lo (3) are obtained from integral representations for K(k) and i(k) by numerical quadrature. If }é| > .55,|k] > 1, and [k] « |@ thes (4) (kK) B(k Y/e, fy. ii? are apphed where the sign in Ay is selected so that) ow/2 © arg(k1) + mf2. Otherwise, if
+are t ed af [@) > 65 and .55 > [k] ~ Lo (3) are obtained from integral representations for K(k) and i(k) by numerical quadrature. If }é| > .55,|k] > 1, and [k] « |@ thes (4) (kK) B(k Y/e, fy. ii? are applied where the sign in Ay is selected so that) ow/2 © arg(k1) + mf2. Otherwise, if
 
-OL HS, TR) 1, and [AL + [A det xy I/k and @y pr€/k where the sipm is selected su that 2/2 < arg(#,) > 2/2. Then A(A) fyov(ky) ps A(e,)| (5) Athy) FP AAS) as (h(E) ADI (ELD)
+OL HS, TR) 1, and [AL + [A det xy I/k and @y pr€/k where the sign is selected su that 2/2 < arg(#,) > 2/2. Then A(A) fyov(ky) ps A(e,)| (5) Athy) FP AAS) as (h(E) ADI (ELD)
 
 
 <small>Original source: [View scanned PDF page 91](../scans/page_0091.png)</small>
@@ -1740,7 +1740,7 @@ are applied where ¢ = 1 if Im(k) > O and 9 = ~1 if Im(k) < 0. If arg(k) > 2/2 o
 arg(k) < —7/2, then K(k) = K(~k) and #(k) = E(--k) are applied.
 ```
 
-**Precision.** If & is real and {k| < 1, or & is purely imaginary, the he relative crror of /y is less than 107'8. #k) is real-valucd for only these values of k. Otherwise, let ¢, = 10°}? if of E are less than e, except whvu wadertlow occurs, [k| < 1 and jarg(+:&)| < 10°78, or [kj < 104® and | /2— arg(t+k)| ~ 107?®°. In the latter two cases the relative error of the real part of @ is teas than 2,, but all relative accuracy for the imaginary part may be lost.
+**Precision.** If & is real and {k| < 1, or & is purely imaginary, the he relative error of /y is less than 107'8. #k) is real-valued for only these values of k. Otherwise, let ¢, = 10°}? if of E are less than e, except when underflow occurs, [k| < 1 and jarg(+:&)| < 10°78, or [kj < 104® and | /2— arg(t+k)| ~ 107?®°. In the latter two cases the relative error of the real part of @ is teas than 2,, but all relative accuracy for the imaginary part may be lost.
 
 **Programming.** CKE calls the subroutines EKI, and EKM, and the functions ALNREL, ATN, CF’ ECT, and SF MPAR. CKE wa: written by Andrew H. Van Tuyl,
 
@@ -1766,13 +1766,13 @@ arg(k) < —7/2, then K(k) = K(~k) and #(k) = E(--k) are applied.
 
 $ F(¢,*) =| (1 — k? sin?t)~'/? at 0
 
-¢ E($¢,k) = | (1 ~ k* sin?t)!/? dé 0 for any real k wh ce k? < 1 and 1— k? sin?g #0. Alternatively, we may consider l oO Rp a,b,c) 5 / [( + @)(t-+ 8)(E + c)}~1/? de 0 where a,b,c wre nonnegative and at mos. one of them is 0, and 3 “ i « Rp(a, b,c) == 5 / (t+ a)~ 2 (t + by 2 (t 4 ec) 9/? at JO
+¢ E($¢,k) = | (1 ~ k* sin?t)!/? dé 0 for any real k wh ce k? < 1 and 1— k? sin?g #0. Alternatively, we may consider l oO Rp a,b,c) 5 / [( + @)(t-+ 8)(E + c)}~1/? de 0 where a,b,c are nonnegative and at mos. one of them is 0, and 3 “ i « Rp(a, b,c) == 5 / (t+ a)~ 2 (t + by 2 (t 4 ec) 9/? at JO
 
 where a and 6 are nonnegative such that a+ > 0, and ¢ 1s positive. [fa <b <canda<c then
 
 ect? Bc 8/4 [ apaoy
 
-where cos & = afe and k? = (¢ ~ b)/(e ~ a). If @ = 2/2 then the integrals F(¢,&) and E(¢,k} ary said to be complete. Otherwise, if ¢ < w/2 then the integrals are said to be tncompi-te. The subroutines ELLPI, REVAL, RDVAL, DELLPI, DREVAL, and DRDVAL are available for computing £'(¢,&), E(¢,k), Re(a,6,c) and Rp(a,d,c). DELLPIL, DREVAL, and DRDVAL are double precision routines.
+where cos & = afe and k? = (¢ ~ b)/(e ~ a). If @ = 2/2 then the integrals F(¢,&) and E(¢,k} are said to be complete. Otherwise, if ¢ < w/2 then the integrals are said to be incomplete. The subroutines ELLPI, REVAL, RDVAL, DELLPI, DRFVAL, and DRDVAL are available for computing £'(¢,&), E(¢,k), Re(a,6,c) and Rp(a,d,c). DELLPI, DRFVAL, and DRDVAL are double precision routines.
 
 ```fortran
 CALL ELLP.(¢, ok. ¢ F, 2, IERR)
@@ -1808,9 +1808,9 @@ IERR = 3 Either a,b, or c is too large.
 
 **Precision.** RFVAL is accurate to within 4 units of the 14" significant digit.
 
-**Programming.** REVAL was written by B. C. Carlson and Elaine M. Notis (Iowa State Universit: \, and modified by A. H. Morvis. The function SPMPAR is used.
+**Programming.** REVAL was written by B. C. Carlson and Elaine M. Notis (Iowa State Universit: \, and modified by A. H. Morris. The function SPMPAR is used.
 
-**References.** (1) Carlson, B. C., “Computing Elliptic Integrals by Duplicstion,” Numertsche Mathematik 33 (1979), pp. 1-16. and Notis, E. M., “Algorithm 577. Algorithms for Incomplete Eiliptic Integrals,” ACM Trans. Math Software 7 (1981), pp. 398-403.
+**References.** (1) Carlson, B. C., “Computing Elliptic Integrals by Duplication,” Numerische Mathematik 33 (1979), pp. 1-16. and Notis, E. M., “Algorithm 577. Algorithms for Incomplete Elliptic Integrals,” ACM Trans. Math Software 7 (1981), pp. 398-403.
 
 (2)
 
@@ -1818,7 +1818,7 @@ IERR = 3 Either a,b, or c is too large.
 CALL RDVAL(X, Y, Z, RD, IERR)
 ```
 
-The arguments a and 6 are nonnegative real numbers where a + 6 > 0, anJ «is a positive real number. JERR and w are variables. When RDVAL is called, if no inpus error. are detected then JERR is set to O and w is assigned the value Rp(a, b,c).
+The arguments a and 6 are nonnegative real numbers where a + 6 > 0, anJ «is a positive real number. JERR and w are variables. When RDVAL is called, if no input errors are detected then JERR is set to O and w is assigned the value Rp(a, b,c).
 
 **Error Return.** If an input error is detected then HERR has one of the following values:
 
@@ -1826,14 +1826,14 @@ IERR = | Either a,6, or ¢ is negative. JERR 2 Either a-+ 6 or ¢ is too small. 
 
 Precision. RDVAL is accurate to within 4 units of the 14" significant digit
 
-**Programming.** RDVAL was written by B.C. Carlson and Klaine M. Notis (Iowa State University), and modified by A. H. Morris. The function SPMPAR is used.
+**Programming.** RDVAL was written by B.C. Carlson and Elaine M. Notis (Iowa State University), and modified by A. H. Morris. The function SPMPAR is used.
 
 
 <small>Original source: [View scanned PDF page 94](../scans/page_0094.png)</small>
 
 **References.**
 
-(1) Carlson, B. C., “Computing Elliptic Integrals by Duplication,” Numertsche Mathematik 33 (1979), pp. 1-16.
+(1) Carlson, B. C., “Computing Elliptic Integrals by Duplication,” Numerische Mathematik 33 (1979), pp. 1-16.
 
 (2) and Notis, E. M., “Algorithm 577, Algorithms for Incomplete Elliptic Integrals,” ACM Trans. Math Software 7 (1981), pp. 398-403.
 
@@ -1852,7 +1852,7 @@ IERR = 3 py =Oand @=0
 
 **Precision.** DEI LPI is accurate to within 5 units of the 28'" significant digit.
 
-**Programming.** DELLPI employs the functions DCPABS, DLNREL, and DPMPAR. DELLPi was written by Allea V. Hershey and modified by A. H. Morris.
+**Programming.** DELLPI employs the functions DCPABS, DLNREL, and DPMPAR. DELLPi was written by Allen V. Hershey and modified by A. H. Morris.
 
 **Reference.** DiDonato, A. R. and Hershey, A. V.,“New Formulas for Computing Incomplete Elliptic Integrals of the First and Second Kind,” JACM 6 (1959), pp. 515-526.
 
@@ -1860,7 +1860,7 @@ IERR = 3 py =Oand @=0
 CALL DRFVAL(X, Y, Z, RF, IERR)
 ```
 
-The arguments a,6,c are nonnegative double precision nuinbers, only one of which can be 0. TERR is an integer variable and w a double precision variable. When DRFVAL is called, if no input errors are detected then IERR is set to 0 and w is assigned the double precision value for Rr(a, 6,c).
+The arguments a,6,c are nonnegative double precision numbers, only one of which can be 0. TERR is an integer variable and w a double precision variable. When DRFVAL is called, if no input errors are detected then IERR is set to 0 and w is assigned the double precision value for Rr(a, 6,c).
 
 **Error Return.** if an input error is detected then JERR has one of the following values:
 
@@ -1870,9 +1870,9 @@ TERR =: 2 Either a + 6,a-+ c, or 6 ¢ cis too small.
 IERR =: 3 Either a, 6, or ¢ is too large.
 ```
 
-**Programming.** DRFVAL was written by B.C. Carlsou and Blaine M. Notis (lowa State University), and modified by A. H. Morris. The function DPMPAR is used.
+**Programming.** DRFVAL was written by B.C. Carlson and Elaine M. Notis (Iowa State University), and modified by A. H. Morris. The function DPMPAR is used.
 
-**References.** ‘farlson, B. C., “Computing Elhptic Integrals by Dupheation,” Nurmerssche Mathei) Carl B.C., “Com; g belly Integrals by Dupl N he Math matik 33 (1979), pp. 1 16.
+**References.** ‘Carlson, B. C., “Computing Elliptic Integrals by Duplication,” Nurmerssche Mathei) Carl B.C., “Com; g belly Integrals by Dupl N he Math matik 33 (1979), pp. 1 16.
 
 
 <small>Original source: [View scanned PDF page 95](../scans/page_0095.png)</small>
@@ -1922,11 +1922,11 @@ where n is any real number such that 1 — nsin? ¢ 4 0, and & any real number s
 
 3 f° ; R,(a,b,c,r) = > (tr) ie + a)(t + b)(t-+6)]~ tae 0
 
-where a,b,c are nonnegative and at most one of them is 0. Ifa <6< c anda <_ec then
+where a,b,c are nonnegative and at most one of them is 0. If a <6< c anda <_ec then
 
 _3 Ry(a,b,c,r) = ey lili m) ~ F($,k)]
 
-nsin where F(¢, k) is the elliptic integral of the first kind, cos? ¢ = a/c,k? = (c — b)/(¢ -- a), and n== (c~r)/(c — a). lf 6 = /2 then the elliptic integral II(¢,n, k) is said to be complete. Otherwise, if ¢ < w/2 then the integral is said to Le iscomplete. The subroutines EPI, RJVAL, DEPI, and DRJVAL are available for computing II(¢,n,k) and Ry(a,b,c,r). DEPI and DRJVAL are double precision routines.
+nsin where F(¢, k) is the elliptic integral of the first kind, cos? ¢ = a/c,k? = (c — b)/(¢ -- a), and n== (c~r)/(c — a). lf 6 = /2 then the elliptic integral II(¢,n, k) is said to be complete. Otherwise, if ¢ < w/2 then the integral is said to be incomplete. The subroutines EPI, RJVAL, DEPI, and DRJVAL are available for computing II(¢,n,k) and Ry(a,b,c,r). DEPI and DRJVAL are double precision routines.
 
 ```fortran
 CALL EPI(PHI, CPHI, K2, L2, N, M, P, IERR)
@@ -1934,11 +1934,11 @@ CALL EPI(PHI, CPHI, K2, L2, N, M, P, IERR)
 
 The arguments ¢,y, k?,@?,n,m are real numbers where ¢ > 0, > Od + n/2, hk? p €7 2 9, |nf < 1, and n tom. 1. Also, if w -- 0 then it is assumed that €? 4 0 and m 7 (. TERR and w are variables.) When EPI is called, if no input errors are detected then IERR is set to O and w is assigned the value II(d,n, &).
 
-**Error Return.** if an input error is detected then TERR has one of the following values: IERR ot Either @ or yo is negative, or @ bof #2. HERR © 2 Hither inf > borm fom 4 4. IFRR | 3 Bither &? or €? is negative, or k? 4 6? / 1. IFRR 4 Bither Y and mi are too close to O, or y and €? are too close to 0 peth
+**Error Return.** if an input error is detected then TERR has one of the following values: IERR ot Either @ or yo is negative, or @ bof #2. HERR © 2 Hither inf > borm fom 4 4. IFRR | 3 Either &? or €? is negative, or k? 4 6? / 1. IFRR 4 Either Y and mi are too close to O, or y and €? are too close to 0 peth
 
 **Precision.** EF Piis accurate to within 4 units of the surmibesnt dipat
 
-Progrannaing Eb PLemploys the subroutines, REVAL, RIVAL, ROVALE and function SPM PAI. LPT was written by AH. Morris
+Programming Eb PLemploys the subroutines, REVAL, RIVAL, ROVALE and function SPM PAI. LPT was written by AH. Morris
 
 ```fortran
 CALL RJVAL(X, Y, Z, P, RJ, IERR)
@@ -1962,7 +1962,7 @@ JERR == 3 Either a,b,c, or r is too large.
 
 **Precision.** RJVAL is accurate to within 4 units of the 14‘ significant digit.
 
-**Programming.** RJVAL calls the subroutine RCVAL1. These subroutines were written by B.C, Carlson and Elaine M. Notis (lowa State University), and modified by A.B. Morris. The function SPMPAR is also used.
+**Programming.** RJVAL calls the subroutine RCVAL1. These subroutines were written by B.C, Carlson and Elaine M. Notis (Iowa State University), and modified by A.B. Morris. The function SPMPAR is also used.
 
 **References.**
 
@@ -1974,7 +1974,7 @@ JERR == 3 Either a,b,c, or r is too large.
 CALL DEPI(PHI, CPHI, K2, L2, N, M, P, IERR)
 ```
 
-The arguments ¢, w, k?, £?,n,m are double precision numbers where ¢ > 0, > 0,¢ + y= 0/2, k? + €? = 1, |n| < 1, andn+m= 1. Also, if y = 0 then it is assumed that @? 4 0 and m # 0. IERR is an integer variable and w a double precision variable. When DEPI is called, if no input errors are detected then IERR is set to 0 and w is assigned the double precision value for TI(@, n, k).
+The arguments ¢, w, k?, £?,n,m are double precision numbers where ¢ > 0, > 0,¢ + y= 0/2, k? + €? = 1, |n| < 1, and n+m= 1. Also, if y = 0 then it is assumed that @? 4 0 and m # 0. IERR is an integer variable and w a double precision variable. When DEPI is called, if no input errors are detected then IERR is set to 0 and w is assigned the double precision value for TI(@, n, k).
 
 ```text
 Error Return. If an input error is detected then 1ERR has one of the following values:
@@ -1984,7 +1984,7 @@ IERR = 3 Either k? or €? is negative, or k? -+ €? 4 1,
 TERR = 4 Either p and m are too close to 0, or w and €? are too close to 0.
 ```
 
-**Programming.** DEPI employs the subroutines DRE VAL, DRJIVAL, DRCVL1 and function DPMPAR. DEPI was written by A.H. Morris. CALL DRJVAL(o, b,c,r, w, JERR) The arguments a,b,c are nonnegative double precision numbers, only one of which can be 0, and r is a positive double precision number. HERR is an integer variable and w a double precision variable. When DRJVAL is called, if no input errors are detected then TERE is set to O and wis assigned the double precision vie for Ry{a,4,e,r).
+**Programming.** DEPI employs the subroutines DRE VAL, DRJVAL, DRCVL1 and function DPMPAR. DEPI was written by A.H. Morris. CALL DRJVAL(o, b,c,r, w, JERR) The arguments a,b,c are nonnegative double precision numbers, only one of which can be 0, and r is a positive double precision number. HERR is an integer variable and w a double precision variable. When DRJVAL is called, if no input errors are detected then TERE is set to O and wis assigned the double precision vie for Ry{a,4,e,r).
 
 **Error Returns.** If an input error is detected then TERR has one of the following values:
 
@@ -1992,20 +1992,20 @@ JERR = 1 Either a,6,c, or r is negative.
 
 pay
 
-IeRR = 2 Either a@ } b,a 4 oe,60 + ¢, or r is toe sinall,
+IeRR = 2 Either a@ } b,a 4 oe,60 + ¢, or r is toe small,
 
 
 <small>Original source: [View scanned PDF page 98](../scans/page_0098.png)</small>
 
 TERR == 3 hither a,6,c, or r is too large.
 
-**Programming.** DRJVAL calls the subroutine DRCVLI. These subroutines were written by
+**Programming.** DRJVAL calls the subroutine DRCVL1. These subroutines were written by
 
 B.C. Carlson and Elaine M. Notis (Iowa State University), and modified by A.H. Morris. The function DPMPAR is also used.
 
 **References.**
 
-(1) Carlson, B. C., “Computing Elliptic Integrals by Duplication.” Numertsche Mathematik 33 (1979), pp. 1-16. (2)
+(1) Carlson, B. C., “Computing Elliptic Integrals by Duplication.” Numerische Mathematik 33 (1979), pp. 1-16. (2)
 
 _ and Notis, E. M., “Algorithm 577,Algorithms for Incomplete Elliptic Integrals.” ACM Trans. Math Software 7 (1981), pp. 398-403.
 
@@ -2047,9 +2047,9 @@ where the roots take the value 1 for z = 0. In particular, if & =: 0 then en(z,0
 CALL ELLPF(U, K, L, S, C, D, IERR)
 ```
 
-It is assumed that u,k, and @ are real numbers where k*? } €? -- 1. S,C, and D are real variables. When BLLPE is called, S,C, and D are assigned the values S ~ sn(u,k), C = en(u,k), and D.. dn(n,k).
+It is assumed that u,k, and @ are real numbers where k*? } €? -- 1. S,C, and D are real variables. When ELLPF is called, S,C, and D are assigned the values S ~ sn(u,k), C = en(u,k), and D.. dn(n,k).
 
-JERR ts a variable that reports the status of the results. When the routine terminates, TERK has oue of the following values:
+JERR ts a variable that reports the status of the results. When the routine terminates, TERK has one of the following values:
 
 IERR = 0 ‘The elliptic functions were computed.
 
@@ -2059,7 +2059,7 @@ TERR. 2 «is too large for k
 
 When JERR & 1, no computation is performed.
 
-**Precision.** Let A(k) be the complete eliiptic integral of the first kind. Por [Ay < .99995 the relative errors of sn(u,k) and dn(u,k) are less than 10 1? when O © u < Ak), and the 12 when O~ us 9TH (kK).
+**Precision.** Let A(k) be the complete elliptic integral of the first kind. For [Ay < .99995 the relative errors of sn(u,k) and dn(u,k) are less than 10 1? when O © u < Ak), and the 12 when O~ us 9TH (kK).
 
 relative error of cn(u,k) is less than 10
 
@@ -2096,7 +2096,7 @@ dn(u,k) = |é|/dn(v, k)
 
 are applied. Here v = HW -- u.
 
-**Programming.** HLLPF employs the subroutines SCD, SCDF, SCDJ, SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELLPF was written by Andrew H. Van Tuyl and modified by A. H. Morris.
+**Programming.** ELLPF employs the subroutines SCD, SCDF, SCDJ, SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELLPF was written by Andrew H. Van Tuyl and modified by A. H. Morris.
 
 ```fortran
 CALL ELPFC1(U, K, L, S, C, D, IERR)
@@ -2104,7 +2104,7 @@ CALL ELPFC1(U, K, L, S, C, D, IERR)
 
 The argument z is complex, and k and @ are real numbers where k? + €? = 1. S,C, and D are complex variables. When ELPFC1 is called S,C, and D are assigned the values Ss» gn(z,k), C = enfz,k), and D> dn(z,k).
 
-JERR is a variable that reports the status of the results) When the routine (- -munates, IER has one of the following values:
+JERR is a variable that reports the status of the results) When the routine terminates, IER has one of the following values:
 
 IERR — O The elliptic functions were computed,
 
@@ -2123,7 +2123,7 @@ When JERR > 1, no computation is performed.
 
 **Algorithm.** For z = 2 + ty let s = en(z,k) 8, = sn(y, 2) ec = en(z,k) cy, = en(y, 2) d = dn(z,k) d, = dn(y, £) and D = c3 + k*s?s?. Then an(z,k) = (sd, + teds,c,)/D en(z,k) = (cc, — #sds,4,)/D dn(z,k) — (deyd, — tk? scs;)/D are applied when D # 0. Programming. ELPFC1 calls ELLPF, which employs the subroutines SCD, SCDF, SCDJ,
 
-SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFCI was written by Andrew H. Van Tuyi.
+SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFC1 was written by Andrew H. Van Tuyl.
 
 
 <small>Original source: [View scanned PDF page 102](../scans/page_0102.png)</small>
@@ -2151,7 +2151,7 @@ where &’ denotes the sum for all m,n = 0,+1,+2,... except m=n = 0. If w= re’
 
 P(z+2w;w,w') = P(z; wu, w'
 
-P(z+ 2w';w,w’) = P(z,w,w’) for all z. The reiations
+P(z+ 2w';w,w’) = P(z,w,w’) for all z. The relations
 
 P(-2;w,w') = P(z;w,w’)
 
@@ -2161,7 +2161,7 @@ g2(Aw, Aw’) = Av*go(w, w’)
 
 g3(Aw, Aw’) = 48 g3(w, w’) also hold. We now consider the following cases:
 
-(1) Equianharmonic (gz = 0 and gg is a positive real nurnber)
+(1) Equianharmonic (gz = 0 and gg is a positive real number)
 
 ```text
 (2)  Lemniscatic (gz is a positive real number and g3 = 0)
@@ -2182,7 +2182,7 @@ P(z;w,w’). Error Return. !f z 0 wy, for some m,n then INR is assigned the valu
 
 relative error ig less than 7. FO FS
 
-**Programming.** Written by Uinch WKekhardt (University of Hamburg, West Germany). Modified by A. H. Morris.
+**Programming.** Written by Ulrich Eckhardt (University of Hamburg, West Germany). Modified by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 103](../scans/page_0103.png)</small>
@@ -2199,7 +2199,7 @@ CALL PEQ1(Z, W, IERR)
 
 The argument z is a complex number, e is a complex variable, and IERR is an integer
 
-variable. It is assumed that the periods are 2w = ; - v3; and 2w’ = 5+ vB, When PEQI
+variable. It is assumed that the periods are 2w = ; - v3; and 2w’ = 5+ vB, When PEQ1
 
 is called, if z is not a pole then JERR is assigned the value 0 and e is assigned the value P'(z; w,w’).
 
@@ -2219,13 +2219,13 @@ CALL PLEM(z, e, IERR) The argument z is a complex number, ¢ is a complex variab
 
 **Error Return.** If z == wm, for some m,n then IERR is assigned the value ! and e =: 0.
 
-**Precision.** If |P(z;w,w’)| < 1 then the absclute error is less than 6- 10713. Otherwise, the relative error is less than 6-107 !9.
+**Precision.** If |P(z;w,w’)| < 1 then the absolute error is less than 6- 10713. Otherwise, the relative error is less than 6-107 !9.
 
 **Programming.** Written by Ulrich Eckhardt (University of Hamburg, West Germany). Modified by A. H. Morris.
 
 **References.**
 
-(1) Eckhardt, Ulrich,“Algorithm 549, Weierstrass’ ElHptic Functions,” ACM Trans. Math Software 4 (1980), pp. 1f2 120.
+(1) Eckhardt, Ulrich,“Algorithm 549, Weierstrass’ Elliptic Functions,” ACM Trans. Math Software 4 (1980), pp. 1f2 120.
 
 
 <small>Original source: [View scanned PDF page 104](../scans/page_0104.png)</small>
@@ -2236,7 +2236,7 @@ CALL PLEM(z, e, IERR) The argument z is a complex number, ¢ is a complex variab
 CALL PLEM1(Z, W, IERR)
 ```
 
-The argument z is a complex number, ¢ is a complex variable, and [ERR is an integer variable. It is assumed that the periods are 2w =: 1 and 2w’ = +. When PLEMI is called, if z is not a pole then IERR is assigned the value O and e is assigned the value P’(z; w, w’).
+The argument z is a complex number, ¢ is a complex variable, and [ERR is an integer variable. It is assumed that the periods are 2w =: 1 and 2w’ = +. When PLEM1 is called, if z is not a pole then IERR is assigned the value O and e is assigned the value P’(z; w, w’).
 
 **Error Return.** If z = Wamp, for same m,n then IERR is assigned the value 1 and e = 0.
 
@@ -2265,7 +2265,7 @@ niscatic Case,” Computing (Arch. Elektron. Rechnen) 18 (1977), pp. 341-349.
 | `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L25020`](../source_parts/nswc_part_03.f#L3853) |
 
 
-Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose beundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
+Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose boundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
 
 1 2 2 P(r) -: — — (2° +y")/2 g. (7) == 5 IE xdy
 
@@ -2277,13 +2277,13 @@ _ (negatively) oriented closed curve, then P(r) and A(r) are positive (negative)
 
 a) vy Wy to 441 ~ 4. VALR2 also computes the value k(r) ~ a y Aé,, which is an
 
-t=1 integer. If the boundary is a simple closed curve, then k(r) is the winding number of the curve around any terior point of the polygon r.
+t=1 integer. If the boundary is a simple closed curve, then k(r) is the winding number of the curve around any interior point of the polygon r.
 
 Alternatively, assume that we are given three points v, — (z.,y¥,)(¢ = 1,2,3) and let 4é denote the angle between the vectors vz - vy and v3 v;. In this case, assume that the angle A@ is measured in a counterclockwise direction from V2 - by to vg: vy, so that O< O¢ < 2m. Let € denote the straight line beginning at point 71 and passing through point, v2, and let @ denote the straight line beginning at v; and passing through v3. Then the subroutine VALR2 is also available for computing P(r) when 7 is the semi-infinite angular region bounded by @ and é, and having the angle A@, 0 P(r) ~ 1 for any angular region t, and P(r) > 1 when A@ >» 2m.
 
 is . !
 
-. -— Angutar region 1 . oN Ae
+. -— Angular region 1 . oN Ae
 
 a
 
@@ -2291,7 +2291,7 @@ a
 CALL VALR2(X, Y, N0, P, IOP, A, IND, KO)
 ```
 
-The argument. mis either Lor the number of points involved in defining a pulypou Ifn f then it is assumed that 7 is a semi-infinite angucar region defined by the points vy (ay) (f 1,23), and that NY and VY are arrays vonlaimiig. 2), fy,ta and yay ye, ye Otherwise, ifn / To then it is assumed that a is a polygou defined by the poms +
+The argument. m is either Lor the number of points involved in defining a polygon If n f then it is assumed that 7 is a semi-infinite angular region defined by the points vy (ay) (f 1,23), and that NY and VY are arrays containing. 2), fy,ta and yay ye, ye Otherwise, if n / To then it is assumed that a is a polygon defined by the poms +
 
 13 ae
 
@@ -2314,9 +2314,9 @@ v3 to compute P(r) for >e angular region r. In this case, P is set
 
 to 5.
 
-IND = 2 The desired values were obtained. If n = 1 then A@ x x. Otherwise, ifn > 3 then |AQ,| ~ m for some ¢.
+IND = 2 The desired values were obtained. If n = 1 then A@ x x. Otherwise, if n > 3 then |AQ,| ~ m for some ¢.
 
-IND = 3 (Input error) E Kither n < Lorn = 2.
+IND = 3 (Input error) E Either n < Lorn = 2.
 
 **Remarks.** VALR2 can be used for computing the integral of the general bivariate density function over an arbitrary polygon or semi-infinite angular region 7. Consider
 
@@ -2328,9 +2328,9 @@ or angular region 7 and we obtain P(7) P(r). Moreover, if 7 is a polygon ten A(7
 
 Jf dds g tal p* A(z).
 
-**Programming.** VALR2 employs the functions ERE, ERFCI, and SPMPAR. VALR2 was designed by Armido R. DiDoaato and Richard K. Hageman, and modified by A. H. Morris.
+**Programming.** VALR2 employs the functions ERE, ERFC1, and SPMPAR. VALR2 was designed by Armido R. DiDonato and Richard K. Hageman, and modified by A. H. Morris.
 
-**Reference.** Gilonate, A. Ro, and Hageman, Ro K , Computation of the Integral of the Dia variate Normal Dratribution over Arbitrary Polygons, Report TR 80.166, Naval Surface Weapons Center, Dahlgren, Virginia, £980.
+**Reference.** Gilonate, A. Ro, and Hageman, Ro K , Computation of the Integral of the Dia variate Normal Distribution over Arbitrary Polygons, Report TR 80.166, Naval Surface Weapons Center, Dahlgren, Virginia, £980.
 
 
 <small>Original source: [View scanned PDF page 107](../scans/page_0107.png)</small>
@@ -2345,11 +2345,11 @@ Jf dds g tal p* A(z).
 | `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L25295`](../source_parts/nswc_part_03.f#L4128) |
 
 
-The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian disiribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
+The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian distribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
 
 1 K 6 gg? v(K)= 2 fi [exp{ Ze [4 et + (1 ~ 2%) cove] | r doar
 
-where c = o,/oz. P is the integral of a circular Gaussian distribution with comimon standard deviation o over a circle of radius Ro whose center is offset a distance de from the mean of the distribution.
+where c = o,/oz. P is the integral of a circular Gaussian distribution with common standard deviation o over a circle of radius Ro whose center is offset a distance de from the mean of the distribution.
 
 1 of” f?* P(R,d) = an / [ exp {-3 [(d + rcos@)? + r? sin? 6] \ rd0dr )
 
@@ -2365,17 +2365,17 @@ R P(R,d) > Qn] e !?Iy(ed)r dr i) where A (1 ¢?)/(4e?), B= (1 + ¢?)/(4e7), and 
 CALL CIRCV(R, D, J, P, IERR)
 ```
 
-The argument ¢ may be any integer. If O then the arguinents a and a are assumed to have the values ¢ © A anda oocwhere A > O and 0%. ¢* 1. Otherwise, if / 0 then r Randa dwhere BR > Oand d > 0.
+The argument ¢ may be any integer. If O then the arguments a and a are assumed to have the values ¢ © A anda oocwhere A > O and 0%. ¢* 1. Otherwise, if / 0 then r Randa dwhere BR > Oand d > 0.
 
 IER and tw are variables. When CERCY as called, fino input errors are detected then IP RR is assigned the value 0. Also, w = W{A,ye) if) Oandw PCR, d)ifia 7 0.
 
-Error Retorn. Hoan input error is detected then TERR is set as follows: TERR Por Ois not satished, IE RK 20-0 e. bord + Ois not satished
+Error Return. Hoan input error is detected then TERR is set as follows: TERR For Ois not satisfied, IE RK 20-0 e. bord + Ois not satisfied
 
-When either of Chese errors is detected, was assigned the value I
+When either of these errors is detected, was assigned the value I
 
-Precision [ft Qthen owas accurate te within Lounit of the PS'P sqemificant digst when VON eo) os not near OQ) Otherwise, fa ¢ O them tis accurate to within fourm of the ppb
+Precision [ft Qthen owas accurate te within Lounit of the PS'P significant digit when VON eo) os not near OQ) Otherwise, fa ¢ O them tis accurate to within fourm of the ppb
 
-siymificant diyat when (Ald) is not near 4
+significant digit when (Ald) is not near 4
 
 
 <small>Original source: [View scanned PDF page 108](../scans/page_0108.png)</small>
@@ -2394,21 +2394,21 @@ Otherwise, if AK? > 14 then the asymptotic expansion V(K,c) = 1~ e7K’/? ono Mn
 
 If 2 < 1.7 or Rd < 16 then P(R,d) > S054 7, is employed where Th Oe i ety, 2 | 6 d?/2 0 y RP/2.
 
-Otherwise, if Rd > 16 and R >» 1.7 then the asymip otic expansion
+Otherwise, if Rd > 16 and R >» 1.7 then the asymptotic expansion
 
 re ik d t 1 3 1} te 7 (8; ¢ s2)] if Rod
 
 eT ee ee fy. Hyd y> oN wo is used where z [A di/V2, 1 aed Seo May 82 Siied yoy Tn, and ; 1 Pa 7 wei Af, e erfe(z) - zn loan ot iT oe » . Fav an aka 7 Mavi on aralta 7 My) (n° I).
 
-**Programming.** CIRCV employs the functions ERE, ERECE, ERROR, EXPARG, GAMMA, GAMI, GLOG, RCOMP, REXP, RLOG and subroutanes HRECO, GRATIO. Phe functions SPMPAR and IPMPAR are also used) CIROV was written by Armudo Ro Dibonato aid modified by A. H. Morris
+**Programming.** CIRCV employs the functions ERE, ERECE, ERROR, EXPARG, GAMMA, GAMI, GLOG, RCOMP, REXP, RLOG and subroutines HRECO, GRATIO. The functions SPMPAR and IPMPAR are also used) CIROV was written by Armido Ro DiDonato aid modified by A. H. Morris
 
 **References.**
 
-(1) DiDonato, ALR | Bee Statistical Programa in BASIC for Desktop Computers, Report NSW UP r 83.03) Naval Surface Weapons Center, Dahlgren, Virgniua, Pose
+(1) DiDonato, ALR | Bee Statistical Programs in BASIC for Desktop Computers, Report NSW UP r 83.03) Naval Surface Weapons Center, Dahlgren, Virginia, Pose
 
-(2) and Jarnagin, MP, A Method for Computing the Generalized Cireular Error Function and the ¢ areular Coverage Function, Report P78, Naval
+(2) and Jarnagin, MP, A Method for Computing the Generalized Circular Error Function and the ¢ areular Coverage Function, Report P78, Naval
 
-Weapous Laboratory, Dahtpren, Virginia, 62
+Weapons Laboratory, Dahlgren, Virginia, 62
 
 
 <small>Original source: [View scanned PDF page 109](../scans/page_0109.png)</small>

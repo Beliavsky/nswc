@@ -16,16 +16,16 @@
 | `EIG1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L55715`](../source_parts/nswc_part_06.f#L2724) |
 
 
-The subroutines EIG and EIG1 are available for computing the eigenvalues of real matrices. These routines frequently yield results accurate to 13~—14 significant digits. Indeed, for symmetric matrices they may give 2 or more digits better accuracy than the routines designed spectfically for symmetric matrices. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur when the matrix is not symmetric. In this case one should not expect more than 7-8 digit accuracy.
+The subroutines EIG and EIG1 are available for computing the eigenvalues of real matrices. These routines frequently yield results accurate to 13~—14 significant digits. Indeed, for symmetric matrices they may give 2 or more digits better accuracy than the routines designed specifically for symmetric matrices. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur when the matrix is not symmetric. In this case one should not expect more than 7-8 digit accuracy.
 
 ```fortran
 CALL EIG(IBAL, A, KA, N, WR, WI, IERR)
 CALL EIG1(IBAL, A, KA, N, WR, WI, IERR)
 ```
 
-A is a matrix of order n > 1 and WP,WI are real arrays of 2! ~ension n or larger. When £IG or EIG1 is called then the cigeuvalues Ay, ...,A, of A are computec. The real parts of the eigenvalues are stored in WR(1), ...,.WR(n) and the imaginary parts are stored in WI(1), ...,WJ(n). The eigenvalues are unordered except that complex conjugate pairs of eigenvalues appear consecutively with the eigenvalue having the positive imaginary part being first.
+A is a matrix of order n > 1 and WP,WI are real arrays of 2! ~ension n or larger. When £IG or EIG1 is called then the eigenvalues Ay, ...,A, of A are computed. The real parts of the eigenvalues are stored in WR(1), ...,.WR(n) and the imaginary parts are stored in WI(1), ...,WJ(n). The eigenvalues are unordered except that complex conjugate pairs of eigenvalues appear consecutively with the eigenvalue having the positive imaginary part being first.
 
-IBAL and ka are input arguments. The argument ke is the number of rows in the dimension statement for A in the calling proeram. JBAL may be any integer. If IBAL #0 then the routines balance A before they coi.pute the eigenvalues. Otherwise, if IBAL = 0 then A is not balanced.
+IBAL and ka are input arguments. The argument ke is the number of rows in the dimension statement for A in the calling program. JBAL may be any integer. If IBAL #0 then the routines balance A before they compute the eigenvalues. Otherwise, if IBAL = 0 then A is not balanced.
 
 **Error Return.** JERR is an integer variable. If all the eigenvalues are found then IERR is set to 0. Otherwise, if more than 30 iterations are required to compute the j** eigenvalue A,, then IERR is set to 7 and the routine terminates. In this case, if 7 < n then the eigenvalues Aj+1,-+-)An will have been computed and the results stored in the WR and WI arrays.
 
@@ -33,14 +33,14 @@ IBAL and ka are input arguments. The argument ke is the number of rows in the di
 
 (1) Even though the balancing operation does not increase the theoretical bounds on the errors, nevertheless at times it may result in a slight loss of accuracy. On the other hand, balancing requires little additional time and in certain cases can improve the accuracy by as much as 5-6 significant digits. Thus it is recommended that balancing be done.
 
-(2) a is destcoyed during computation. EIG and EIG1 reduce A to upper Hessenberg form and vhen apply the QR algorithm to obtain the eigenvalues. They differ only in the chuice of transformations used to reduce A to upper Hessenberg form. EIG employs elementary similarity teansformations and EIG1i employs orthogonal sim: larity transformations. in theory the use of orthogonal transformations assures one of a tighter bound on che errors. However, since in practice matrices infrequently arise for which the orthogonal transformations actually generate more accurate results, and since the orthogonal transformations normally require more time than the elementary inansformations, therefore EIG is the recommended routine.
+(2) a is destroyed during computation. EIG and EIG1 reduce A to upper Hessenberg form and then apply the QR algorithm to obtain the eigenvalues. They differ only in the choice of transformations used to reduce A to upper Hessenberg form. EIG employs elementary similarity transformations and EIG1i employs orthogonal similarity transformations. in theory the use of orthogonal transformations assures one of a tighter bound on che errors. However, since in practice matrices infrequently arise for which the orthogonal transformations actually generate more accurate results, and since the orthogonal transformations normally require more time than the elementary transformations, therefore EIG is the recommended routine.
 
 
 <small>Original source: [View scanned PDF page 263](../scans/page_0263.png)</small>
 
 **Programming.** EIG and EIG1 are driver routines for the EISPACK. subroutines BALANCG, ELMHSO, ORTHES, and HQR. These subroutines were developed at Argonne National Laboratory. The functions SPMFPAR and IPMPAR are also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., ct al., Mairiz Eigenaysiem Routines - EISPACK Gutde (Second Edition), Spriuger-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., ct al., Matrix Eigensystem Routines - EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 
 ay we
 
@@ -58,24 +58,24 @@ ay we
 | `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L55756`](../source_parts/nswc_part_06.f#L2765) |
 
 
-The subroutines EIGV and EIGV1 are available for computing the eigenvalues ond eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGVI. In particular, ETGV and EIGV1 can frequently yield high precision resutts for the eigenvalues if tiey are distinct. However, be aware that errors in the eigenvalues, no matter how seeimin sly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significunt digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of sucn an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
+The subroutines EIGV and EIGV1 are available for computing the eigenvalues and eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGV1. In particular, EIGV and EIGV1 can frequently yield high precision results for the eigenvalues if they are distinct. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significant digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
 
 ```fortran
 CALL EIGV(IBAL, A, KA, N, WR, WI, ZR, ZI, IERR)
 CALL EIGV1(IBAL, A, KA, N, WR, WI, ZR, ZI, IERR)
 ```
 
-A is a matrix of order n > 1 and WR, WI are real arrays of dimension n or larger. When EIGV or EIGY1 is called the eigenvalues Aj, ...,4,, and corresponding eigenveciors Z1,..-,2n are computed. The real parts of the eigenvalues are stored in WR(1), ...,WRin) and the imaginary parts are stored in WI(1),...,WI{n). The eigenvalues are unordered except that complex conjugate pairs of eigenvalues appear consecutively with uhe eigenv:lue
+A is a matrix of order n > 1 and WR, WI are real arrays of dimension n or larger. When EIGV or EIGV1 is called the eigenvalues Aj, ...,4,, and corresponding eigenvectors Z1,..-,2n are computed. The real parts of the eigenvalues are stored in WR(1), ...,WRin) and the imaginary parts are stored in WI(1),...,WI{n). The eigenvalues are unordered except that complex conjugate pairs of eigenvalues appear consecutively with the eigenvalue
 
 having the positive imaginary part being first.
 
-The input argument ka is the number of rows in the disnansion statement for A in the calling program. ZR and ZI are real arrays of dimension ka Xn. For 7 = 1,...,n the real parts of the components of the eigenvector z; are stored in the jt" column of ZR (in locations YRUL7), ...,2R(n,7)) and the (imaginary parts are stored in the j*® column of ZL.
+The input argument ka is the number of rows in the dimension statement for A in the calling program. ZR and ZI are real arrays of dimension ka Xn. For 7 = 1,...,n the real parts of the components of the eigenvector z; are stored in the jt" column of ZR (in locations YRUL7), ...,2R(n,7)) and the (imaginary parts are stored in the j*® column of ZL.
 
-The eigenvectors z,;, ...,2, are na. normalied. l> ] Lay
+The eigenvectors z,;, ...,2, are na. normalized. l> ] Lay
 
-IBAL is an input argument that can b2 assigned an- integer value. IY IBAL 3 9 chen the routines balance A before they compute the eigeavilues and eigeavectors. Otherwise, if IBAL - 0 then A is not balanced.
+IBAL is an input argument that can b2 assigned an- integer value. IY IBAL 3 9 chen the routines balance A before they compute the eigenvalues and eigenvectors. Otherwise, if IBAL - 0 then A is not balanced.
 
-Erroy Return. HERR is an ieteger *ariabie. If all the eigenvalues and eigenvectors are found then IEFRR is set te 0. Otherwise, if inore than 36 iterations are required to compute the j' eigenvalue A;, then POKER is ect to g and the rouvine terminates. [iy this case, if ¢ <n tien the eigenvalues A,41, ....A, will have been computed and the results stored in the WR and WI arrays. Hiowever, none of the eigenvectors will have been computed. The eigenvectors are computed only after all the eigeuvalues hiave been obtained,
+Error Return. HERR is an integer variable. If all the eigenvalues and eigenvectors are found then IEFRR is set te 0. Otherwise, if more than 36 iterations are required to compute the j' eigenvalue A;, then POKER is ect to g and the routine terminates. [iy this case, if ¢ <n then the eigenvalues A,41, ....A, will have been computed and the results stored in the WR and WI arrays. However, none of the eigenvectors will have been computed. The eigenvectors are computed only after all the eigenvalues have been obtained,
 
 , aaa)
 
@@ -86,15 +86,15 @@ Remarks,
 
 (1) ven though the balancing operation does not increase the theoretical bounds on the
 
-errors, nevertheless at times it may result in aslight loss of accuracy. On the other hand, balancing requires little additional time and is certaia cases can improve the accuracy of ‘he eigenvalues by as much as 5-6 significant digits. Whea this occurs balancing will normally be needed to obtain the eigenvectors. In general, 1 ig recommended that balancing be done.
+errors, nevertheless at times it may result in a slight loss of accuracy. On the other hand, balancing requires little additional time and in certain cases can improve the accuracy of ‘he eigenvalues by as much as 5-6 significant digits. When this occurs balancing will normally be needed to obtain the eigenvectors. In general, 1 ig recommended that balancing be done.
 
-A is destroyed during computation, FIGV and EIGVi both reduce A to upper Hessenberg form, apply the QR algorithm to the essenberg matmx to obtain the eiyenvalues, and then backsubstijute to geaerate the eigenvectors. They differ only in the choice of transformations usec to reduce A to ucper Hessenberg form. EIGV employs elementary similarity transformations and E1G VY! employs orchogenal similarity transformations. In theory the use of orthogonal transformations assures one of a tighter bound on the errors. However, since in practice matrices infrequently arise fer which the orthogonal transforinations actually generate more accurate results, and since the orthogonal transformations nermally require more time than the elementary trangfor. maticas, therefore HiGV is the recormmended routine.
+A is destroyed during computation, EIGV and EIGVi both reduce A to upper Hessenberg form, apply the QR algorithm to the Hessenberg matrix to obtain the eigenvalues, and then backsubstitute to generate the eigenvectors. They differ only in the choice of transformations used to reduce A to upper Hessenberg form. EIGV employs elementary similarity transformations and E1G VY! employs orthogonal similarity transformations. In theory the use of orthogonal transformations assures one of a tighter bound on the errors. However, since in practice matrices infrequently arise fer which the orthogonal transformations actually generate more accurate results, and since the orthogonal transformations normally require more time than the elementary transformations, therefore HiGV is the recommended routine.
 
-**Programming.** EIGV and EIGVI are driver routines for the EISPACK subroutines BAL- ANC, HLMHSO, ORTHES, ELF RNO, ORTRAN, HQR2, and BALBAK. These subroutines were develoved at Argonne National Laboratory. The functions SPiMPAR and TPMPAR are also weed,
+**Programming.** EIGV and EIGV1 are driver routines for the EISPACK subroutines BAL- ANC, HLMHSO, ORTHES, ELF RNO, ORTRAN, HQR2, and BALBAK. These subroutines were developed at Argonne National Laboratory. The functions SPiMPAR and TPMPAR are also weed,
 
-Nefeverece. Smith, BLT, Goyle, é. “., et al. Matrsa Figensystem Routines -- EISPACK
+Reference. Smith, BLT, Goyle, é. “., et al. Matrix Eigensystem Routines -- EISPACK
 
-ad Edition}, Springev- Verlag, 1975.
+ad Edition}, Springer- Verlag, 1975.
 
 
 <small>Original source: [View scanned PDF page 266](../scans/page_0266.png)</small>
@@ -109,13 +109,13 @@ ad Edition}, Springev- Verlag, 1975.
 | `DEIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L57341`](../source_parts/nswc_part_06.f#L4350) |
 
 
-The subroutine DEIG is available for the double precision computation of the eigenvaiues of real matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
+The subroutine DEIG is available for the double precision computation of the eigenvalues of real matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
 
 ```fortran
 CALL DEIG(IBAL, A, KA, N, WR, WI, IERR)
 ```
 
-A is a double precision matrix of order n > 1 and WR, WI are double precision arrays of dimension n or larger. When DEIG is called then the eigenvalues A,, ...,A, of A are computed. The real parts of the eigenvalues are stored in WR(1),...,WR(n) and the imaginary parts are stored in WI(1), ...,WI(n). The eigenvalues are unordered except that coraplex conjugate pairs of eigenvalues appear consecutively with the eigenvalue having the positive imaginary part being first.
+A is a double precision matrix of order n > 1 and WR, WI are double precision arrays of dimension n or larger. When DEIG is called then the eigenvalues A,, ...,A, of A are computed. The real parts of the eigenvalues are stored in WR(1),...,WR(n) and the imaginary parts are stored in WI(1), ...,WI(n). The eigenvalues are unordered except that complex conjugate pairs of eigenvalues appear consecutively with the eigenvalue having the positive imaginary part being first.
 
 IBAL and ka are input arguments. The argument ka is the number of rows in the dimension statement for A in the calling program. IBAL may be any integer. If IBAL # 0 then the routine balances A before it computes the eigenvalues. Otherwise, if IBAL = 0 then A is not balanced.
 
@@ -130,7 +130,7 @@ IBAL and ka are input arguments. The argument ka is the number of rows in the di
 
 **Programming.** DEIG is a driver routine for the subroutines DBAL, DORTH, and DHQR. These subroutines are double precision versions of the EISPACK subroutines BALANC, ORTHES, and HOR, developed at Argonne National Laboratory. The double precision versions were prepared by A. H. Morris. The functions DPMPAR and IPMPAR are also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., et al., Matriz Eigensysterns Routines — EISPACK Guide (Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., et al., Matrix Eigensystem Routines — EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 
 Se qn on
 
@@ -147,7 +147,7 @@ Se qn on
 | `DEIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L57354`](../source_parts/nswc_part_06.f#L4363) |
 
 
-The subroutine DEIGYV +> available for the double precision computation of the eigenvalues and sigenvectors of reui matrices. This routine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. i: the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
+The subroutine DEIGV +> available for the double precision computation of the eigenvalues and eigenvectors of real matrices. This routine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. i: the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
 
 ```fortran
 CALL DEIGV(IBAL, A, KA, N, WR, WI, ZR, ZI, IERR)
@@ -159,9 +159,9 @@ The input argument. ka is the number of rows in the dimension statement for A in
 
 j** column of ZI. The eigenvectors 21, ...,Z, are not normalized.
 
-IBAL is an input argument that can be assigned any integer value. If If AL # O then the routine balances A before it computes the eigenvalues and elgenvectcrs. Otherwise, if IBAL = 0 then A is not balanced.
+IBAL is an input argument that can be assigned any integer value. If If AL # O then the routine balances A before it computes the eigenvalues and eigenvectors. Otherwise, if IBAL = 0 then A is not balanced.
 
-**Error Return.** JERR is an integer variable. If all the eigenvali:es and eigenvectors are found then IERR is set to 0. Otherwise, if more than 50 iterations are required to compute the 7*? eigenvalue 4;, then IERR is set to 7 and the routine terminates. In this case, if 7 <n then the eigenvalues A,41, ...,A, will have been computed and the results stored in the WR and WI arrays. However, none of the eigenvectors will have been computed. The eigenvectors are computed only after all the eigenvalues have been obtained.
+**Error Return.** JERR is an integer variable. If all the eigenvalues and eigenvectors are found then IERR is set to 0. Otherwise, if more than 50 iterations are required to compute the 7*? eigenvalue 4;, then IERR is set to 7 and the routine terminates. In this case, if 7 <n then the eigenvalues A,41, ...,A, will have been computed and the results stored in the WR and WI arrays. However, none of the eigenvectors will have been computed. The eigenvectors are computed only after all the eigenvalues have been obtained.
 
 **Remarks.**
 
@@ -173,9 +173,9 @@ IBAL is an input argument that can be assigned any integer value. If If AL # O t
 
 <small>Original source: [View scanned PDF page 268](../scans/page_0268.png)</small>
 
-**Programming.** DEIGV is a driver routine for the subroutines DBAL, DORTH, DORTRN, DHQR2, and DBABK. These subroutines are double precision versions of the EISPACK routines BALANC, ORTHES, ORTRAN, HQR2, and BALBAK, developed at Argonne Nationa) Laboratory. The double precision versions were prepared by A. H. Morris. The functions DPMPAR and IPMPAR are also used.
+**Programming.** DEIGV is a driver routine for the subroutines DBAL, DORTH, DORTRN, DHQR2, and DBABK. These subroutines are double precision versions of the EISPACK routines BALANC, ORTHES, ORTRAN, HQR2, and BALBAK, developed at Argonne National Laboratory. The double precision versions were prepared by A. H. Morris. The functions DPMPAR and IPMPAR are also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., et al., Matréz Etgensystem Routines - EISPACK Gutde (Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., et al., Matréz Eigensystem Routines - EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 
 
 <small>Original source: [View scanned PDF page 269](../scans/page_0269.png)</small>
@@ -191,14 +191,14 @@ IBAL is an input argument that can be assigned any integer value. If If AL # O t
 | `SEIG1` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L58619`](../source_parts/nswc_part_06.f#L5628) |
 
 
-The subroutines SEIG and SEIGt are available for computing the eigenvalues of syimwetric real matrices. These routines frequently yield high precision cesults, SIG is faster than SEIG1, but at times SEIGL will produce better results when the syrometric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference ia the reliability of the routines.
+The subroutines SEIG and SEIGt are available for computing the eigenvalues of symmetric real matrices. These routines frequently yield high precision results, SIG is faster than SEIG1, but at times SEIG1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference ia the reliability of the routines.
 
 ```fortran
 CALL SEIG(A, KA, N, W, T, IERR)
 CALL SEIG1(A, KA, N, W, T, IERR)
 ```
 
-A is a symmetric matrix of order n > | and W an array of dimension n or larger. When SEIG or SEIG1 is called the eigenvalues A,,...,A, are computed and stored in W(1),...,W(n). The eigervalues are ordered so that Ay < +--+ < X,.
+A is a symmetric matrix of order n > | and W an array of dimension n or larger. When SEIG or SEIG1 is called the eigenvalues A,,...,A, are computed and stored in W(1),...,W(n). The eigenvalues are ordered so that Ay < +--+ < X,.
 
 A may be packed or in standard form.) The input argument ka is a nonnegative
 
@@ -206,17 +206,17 @@ integer. If ka =O then A is assumed to be packed. Otherwise, if ka 4 0 then A is
 
 ka = the number of rows in the dimension statement for A in the calling program It is assumed that ka > n. However, it is not r ju ved that A(#,7) be defined for i < J. Only the lower triangular ele: ts of A are used.
 
-T is an array used for temporary storage. If SETG is called then T must be of dimensicn 2n. However, if SEIG1 is called then 7 need only be of dimension n.
+T is an array used for temporary storage. If SEIG is called then T must be of dimension 2n. However, if SEIG1 is called then 7 need only be of dimension n.
 
-Ervor Return. [ERR is an integer variable. Ii all the eigenvalues are found then IERR is set to 0, Otherwise, if more than 30 iterations of the QL algorithm are required to compute the 7" eigenvalue A;, then TERR is set to 7. In this case, if 7 > 1 then the eigenvalues At, ..-,Ayz--1 will have been computed and stored ia W. The eigenvalues are ordered so that Ay < ++: < A;_1. However, they need not be the smallest eigenvalues of A.
+Error Return. [ERR is an integer variable. Ii all the eigenvalues are found then IERR is set to 0, Otherwise, if more than 30 iterations of the QL algorithm are required to compute the 7" eigenvalue A;, then TERR is set to 7. In this case, if 7 > 1 then the eigenvalues At, ..-,Ayz--1 will have been computed and stored ia W. The eigenvalues are ordered so that Ay < ++: < A;_1. However, they need not be the smallest eigenvalues of A.
 
-**Remark.** A is destroye ' during computation.
+**Remark.** A is destroyed during computation.
 
-**Programming.** SEIG and SEIG1 are driver routines for the EISPACK subroutines TRED1, TRED3, TQLRAT, aid IMTQLI. ‘These subroutines were developed at Argonne National Laboratory. The function SPMPAR is also used.
+**Programming.** SEIG and SEIG1 are driver routines for the EISPACK subroutines TRED1, TRED3, TQLRAT, aid IMTQL1. ‘These subroutines were developed at Argonne National Laboratory. The function SPMPAR is also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., et ., Matriz Kigensystem Routines - EISPACK Gutde (Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., et ., Matrix Kigensystem Routines - EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 
-TRor details othe parked format see the section on packiag acl umpe oo syuituetih ¢oatrices
+TRor details othe parked format see the section on packing acl umpe oo symmetric ¢oatrices
 
 3OG
 
@@ -234,7 +234,7 @@ TRor details othe parked format see the section on packiag acl umpe oo syuitueti
 | `SEIGV1` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L58645`](../source_parts/nswc_part_06.f#L5654) |
 
 
-The subroutines SEIGV and SEIC: Vi are available for computing the eigenvalues and eigenvectors of symmetric real matrices. These routines frequently yield high precision results for the eigenvalues. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectots. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate tc 9--10 significant digits. SEIGV is faster than SEICVI1, but at times SEIGV1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference in the reliability of the routines.
+The subroutines SEIGV and SEIC: Vi are available for computing the eigenvalues and eigenvectors of symmetric real matrices. These routines frequently yield high precision results for the eigenvalues. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate tc 9--10 significant digits. SEIGV is faster than SEICVI1, but at times SEIGV1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference in the reliability of the routines.
 
 ```fortran
 CALL SEIGV(A, KA, N, W, Z, T, IERR)
@@ -247,15 +247,15 @@ A must ve in the standard format, having the dimension ka x n. It is assumed tha
 
 4 is an array of dimension ka X n or larger. For 7 = 1, ...,n the components of the eigenvector z; are stored in the jt* column of Z (in locations Z(1,9), ...,Z(n,7)). To conserve memory one may let A and Z denote the same array.
 
-T is an array of dit..cnsion 1 used for temporary storage.
+T is an array of dimension 1 used for temporary storage.
 
 **Error Return.** [TERR is an integer variable. If all the eigenvalues and eigenvectors are found then IEFRR is set to 0. Otherwise, if more than 3U iterations of the QL algorithm are required to compute the j‘ eigenvalue A,, then TERR is set to 7. In this case, if 7 > 1 then the eigenvalues 4,,...,A,~1 and eigenvectors z,,...,2;.1 Will have been computed and stored in the W and Z arrays. However, the eigenvalues will be unordered.
 
-**Remark.** A is not modified except when A and 4 denote the same array. Programming. SEIGV and SEICVi are driver routines for the EISPACK subroutiaes TRED2, TQL2, and IMTQL2. These subros cies were developed at Argonne National
+**Remark.** A is not modified except when A and 4 denote the same array. Programming. SEIGV and SEICVi are driver routines for the EISPACK subroutines TRED2, TQL2, and IMTQL2. These subroutines were developed at Argonne National
 
 Laboratory. The function SPMPAR is also used.
 
-**Reference.** Smith, BoOP., Bovle, J. M., et al., Matrix Etgensyatern Roucines EISPACK Guide Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, BoOP., Boyle, J. M., et al., Matrix Eigensystem Routines EISPACK Guide Second Edition), Springer-Verlag, 1976.
 
 
 <small>Original source: [View scanned PDF page 271](../scans/page_0271.png)</small>
@@ -270,13 +270,13 @@ Laboratory. The function SPMPAR is also used.
 | `DSEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L59613`](../source_parts/nswc_part_06.f#L6622) |
 
 
-The subroutine DSEIG is availabie for the Jouble precision computation of the eigenvalues of syminetric ceal matrices. Vhe subroutine frequently yields results accurate to 27-28 significant digits.
+The subroutine DSEIG is available for the double precision computation of the eigenvalues of symmetric real matrices. The subroutine frequently yields results accurate to 27-28 significant digits.
 
 ```fortran
 CALL DSEIG(A, KA, N, W, T, IERR)
 ```
 
-A is a double precision symmetric matrix of order n > 1 and W a double precision array of dimension n or larger. When DSEIG is called the eigenvalues \1, ...,A,, are cornputed and stored in W(i),...,W(n). The eigenvalues are ordered so that \y < +++ < An.
+A is a double precision symmetric matrix of order n > 1 and W a double precision array of dimension n or larger. When DSEIG is called the eigenvalues \1, ...,A,, are computed and stored in W(i),...,W(n). The eigenvalues are ordered so that \y < +++ < An.
 
 A may be packed or in standard form.! The input argument ka is a nonnegative
 
@@ -284,17 +284,17 @@ integer. If ka =O then A is assumed to be packed. Otherwise, if ka 4 0 then A is
 
 It is assumed that ko > n. However, it is not required that A(t, 7) be defined for 1 < 7. Only the lower triangular elements of A are used.
 
-T is a double precision array of dimension 2n or iarger that is a work space for the routine,
+T is a double precision array of dimension 2n or larger that is a work space for the routine,
 
-**Error Return.** IERR is an inceger variable. If all the cigevalues are found then IERR is set to 0. Otherwise, if more than 50 iterations of the QL algorithm are required to compute the j*® eigenvale 4,;, then IERR is set to 7. In this case, if 7 > 1 then the eigenvalues Ay,..-,A;—1 Will have been computed and stored in W. The eigenvalues are ordered so that Ay < +++ < Ay_1. However, they ueed not be the smallest eigenvalues of A.
+**Error Return.** IERR is an integer variable. If all the eigenvalues are found then IERR is set to 0. Otherwise, if more than 50 iterations of the QL algorithm are required to compute the j*® eigenvalue 4,;, then IERR is set to 7. In this case, if 7 > 1 then the eigenvalues Ay,..-,A;—1 Will have been computed and stored in W. The eigenvalues are ordered so that Ay < +++ < Ay_1. However, they need not be the smallest eigenvalues of A.
 
 **Remarks.** (1) A is destroyed during computation.
 
-(2) DSEIC is a double precision version of the eigenvalue routine SKIG.
+(2) DSEIG is a double precision version of the eigenvalue routine SEIG.
 
 **Programming.** DSEIG is a driver routine fur the subroutines DT REDI, DIT REDS, and DTQC. These subroutines are double precision versions of the EISPACK routines TRED I, TRED3, and TQLRAT, developed at Argonne National Laboratory. The double precision versions were prepared by A. H. Morris. The function DPMPAR is also used.
 
-**Reference.** Smith, 8. 'P., Boyle, J. M., et at, Matrix Evgensystem Routines EISPACE Guide (Second Edition), Springer-Verlag, 1976. Mor tals um che packed crmat vee the section ou packing and tatpackiog syrituetric inatrices.
+**Reference.** Smith, 8. 'P., Boyle, J. M., et at, Matrix Eigensystem Routines EISPACK Guide (Second Edition), Springer-Verlag, 1976. Mor tals um che packed crmat vee the section ou packing and unpacking symmetric matrices.
 
 
 <small>Original source: [View scanned PDF page 272](../scans/page_0272.png)</small>
@@ -325,7 +325,7 @@ A must be in the standard format, having the dimension ka x n. It is assumed tha
 
 T is a double precision array of dimension mn or larger that is a work space for the routine.
 
-Error Rewurn. TERR is an integer variable. If a!l the eigenvalues and eigenvectors are found then IERR is set to 0. Otherwise, if more than 50 iterations of the QL algorithm are required to compute the 7'" eigenvalue A;, then IERR is set to 7. In this case, if 7 > 1 then the eigenvalues A,,...,A,., and eigenvectors z,,...,2;..1 will have been computed and stored in the W and Z arrays. However, the eigenvalues will be unordered.
+Error Return. TERR is an integer variable. If a!l the eigenvalues and eigenvectors are found then IERR is set to 0. Otherwise, if more than 50 iterations of the QL algorithm are required to compute the 7'" eigenvalue A;, then IERR is set to 7. In this case, if 7 > 1 then the eigenvalues A,,...,A,., and eigenvectors z,,...,2;..1 will have been computed and stored in the W and Z arrays. However, the eigenvalues will be unordered.
 
 ```text
 Remarks.
@@ -333,13 +333,13 @@ Remarks.
 (2) DSEIG V is a double precision version of the eigenvalue /eigenvector subroutine SHEIGV,
 ```
 
-Programniung. DSEIGV as a driver routine for the subroutines D'PRED2 and DTQLY.
+Programming. DSEIGV as a driver routine for the subroutines D'PRED2 and DTQLY.
 
 T: ese subroutines are double precision versions of the KISPACN subroutines PRED? and
 
-TPQL2 developed at Argonne National Laboratory. The double precision versions were repared by A. HL. Morris. Phe function DPMPAR is also used.
+TPQL2 developed at Argonne National Laboratory. The double precision versions were prepared by A. HL. Morris. The function DPMPAR is also used.
 
-**Reference.** Sruth, 8. T., Boyle, Jo Mo, et al, Matrix Ergensystern Routines EISPACK Gute (Second Bdition), Springer-Verlag, Love
+**Reference.** Sruth, 8. T., Boyle, Jo Mo, et al, Matrix Eigensystem Routines EISPACK Gute (Second Edition), Springer-Verlag, Love
 
 
 <small>Original source: [View scanned PDF page 273](../scans/page_0273.png)</small>
@@ -354,7 +354,7 @@ TPQL2 developed at Argonne National Laboratory. The double precision versions we
 | `CEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L60311`](../source_parts/nswc_part_06.f#L7320) |
 
 
-The subroutine CEIG is available for computing the eigenvalues of complex matrices. This routine frequentiy yields results accurate to 13-14 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more thaa 7-8 digit accuracy.
+The subroutine CEIG is available for computing the eigenvalues of complex matrices. This routine frequently yields results accurate to 13-14 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 7-8 digit accuracy.
 
 ```fortran
 CALL CEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
@@ -362,25 +362,25 @@ CALL CEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
 
 AR and AI are real matrices of order n > 1, and WR and WI are real arrays of dimension n or larger. AR and Al are the real and imaginary portions of the complex matrix whose eigenvalues are to be computed. When CEIG is called the eigenvalues 41, ...,An are computed. The real parts of the eigenvalues are stored in WR(i),...,WR(n) and the imaginary parts ace stored in WI{1), ...,WI(n). The eigenvalues are unordered.
 
-IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBALL may be any integer. If IBAL 4 0 then the complex matrix (represented by AR and AJ) is baianced before the eigenvalues are computed. Otherwise, if IBAL = 0 then the complex matrix is not balanced.
+IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBALL may be any integer. If IBAL 4 0 then the complex matrix (represented by AR and AJ) is balanced before the eigenvalues are computed. Otherwise, if IBAL = 0 then the complex matrix is not balanced.
 
-**Error Return.** JERR is an integer variable. if all the eigenvalues are found then IERR is set tc 0. Otherwise, if more than 30 iterations are required to compute the j*" eigenvalue 4,, then IERR is set to 7 and the routine t2rminates. In this case, if 7 < n then the eigenvalues
+**Error Return.** JERR is an integer variable. if all the eigenvalues are found then IERR is set tc 0. Otherwise, if more than 30 iterations are required to compute the j*" eigenvalue 4,, then IERR is set to 7 and the routine terminates. In this case, if 7 < n then the eigenvalues
 
 Aj41)+++)An will have been computed and the results stored in the WR and WI arrays.
 
 **Remarks.**
 
-(1) Even though the balancing operation does not increase the theoretical bounds on the errors, revertheless at. times it may result in a slight loss of accuracy. On the other hand, balancing requires little additional time and in certain cases can improve the accuracy by as touch as 5-6 significant digits. Thus it is recommended that balancing be done.
+(1) Even though the balancing operation does not increase the theoretical bounds on the errors, nevertheless at. times it may result in a slight loss of accuracy. On the other hand, balancing requires little additional time and in certain cases can improve the accuracy by as touch as 5-6 significant digits. Thus it is recommended that balancing be done.
 
 (2) AR and Al are destroyed during computation. CEIG reduces the complex matrix (represented by AR and Al) to upper Hessenberg form with unitary similarity transformations. Then the QR algorithm is used to obtain the eigenvalues.
 
 Usage. If one has a complex matrix A, then AR sad lean be obtained using the matrix subroutines CMREAL and CMIMAG,
 
-**Programming.** ClEIG is a driver routine for the EISPACK subroutines CBAL, CORTE and COMQR. These subroutines were developed at Argoune Nattonal Laboratory. ‘The funetr es SPMPAR and IPMPAR are also used,
+**Programming.** ClEIG is a driver routine for the EISPACK subroutines CBAL, CORTE and COMQR. These subroutines were developed at Argonne National Laboratory. ‘The functions SPMPAR and IPMPAR are also used,
 
-**Reference.** Suuth, BoP, Boyle, do Moyet al. Matrtz Ergenaystern Routines EISPACK
+**Reference.** Suuth, BoP, Boyle, do Moyet al. Matrix Eigensystem Routines EISPACK
 
-trurde (Second Rdition), Springer Verkay, £6
+trurde (Second Edition), Springer Verlag, £6
 
 
 <small>Original source: [View scanned PDF page 274](../scans/page_0274.png)</small>
@@ -395,7 +395,7 @@ trurde (Second Rdition), Springer Verkay, £6
 | `CEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L60324`](../source_parts/nswc_part_06.f#L7333) |
 
 
-The subroutine CEIGV is available for computing the eigenvalues and eigenvectors of complex matrices. This routine frequently yields values for the eigenvalues that are accurate to 13-14 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14** significant digit, but the components of the corresponding eigenvector are only a-curate to 9-10 significant digits. If the eigenvalues of a matrix are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more tuan 7-8 digit accuracy, and the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector may be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
+The subroutine CEIGV is available for computing the eigenvalues and eigenvectors of complex matrices. This routine frequently yields values for the eigenvalues that are accurate to 13-14 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14** significant digit, but the components of the corresponding eigenvector are only a-curate to 9-10 significant digits. If the eigenvalues of a matrix are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 7-8 digit accuracy, and the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector may be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
 
 ```fortran
 CALL CEIGV(IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP)
@@ -405,9 +405,9 @@ AR and AI are real matrices of order n > i and WR and WI are real arrays of dime
 
 (tis assumed that the input argument ka is the number of rows in the dimension statements for AR and Al in the calling program. ZR and Al are real arrays of dimension
 
-ka xn, For j= 1,...,n the real parts of the coniponents of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" column of ZI. ‘Phe eigenvectors 2, ...,¢, are not normalized.
+ka xn, For j= 1,...,n the real parts of the components of the eigenvector z, are stored in the jt? column of ZR (in locations ZR(1,7), ...,ZR(n,7)) and the imaginary parts arc stored in the gj" column of ZI. ‘The eigenvectors 2, ...,¢, are not normalized.
 
-IBAL is an input argument that can be assigned any integer value. If ISAL / 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvecturs are computed. Otherwise, ff EBAL 0 then the complex materx is not
+IBAL is an input argument that can be assigned any integer value. If ISAL / 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvectors are computed. Otherwise, ff EBAL 0 then the complex matrix is not
 
 balanced.
 
@@ -415,9 +415,9 @@ EMP is a real array used for temporary storage by the routine. Pf no balancing i
 
 balancing is to be performed then TREMP must be of dimension On or larger.
 
-Errore Return. He Rois an integer variable. Uf ail the elpenvalaes and eienvectors are found then HERR is set to 0. Otherwise, if mice than 30 iterations are required Co compute they! eigenvalue A), then TERR is set tog and the routine terminates. In this case, uy > on then the eigenvalues Ay, 4,000.4, will have been computed and the results stored up the WER aid Wi arrays However, none of the eienvectoss will have been compited. The eigenvectors
+Error Return. He Rois an integer variable. Uf ail the eigenvalues and eigenvectors are found then HERR is set to 0. Otherwise, if mice than 30 iterations are required Co compute they! eigenvalue A), then TERR is set tog and the routine terminates. In this case, uy > on then the eigenvalues Ay, 4,000.4, will have been computed and the results stored up the WER aid Wi arrays However, none of the eigenvectors will have been computed. The eigenvectors
 
-are computed ouly after all (he eigenvalues thaws beed obtamed
+are computed only after all (he eigenvalues have been obtained
 
 Sana
 
@@ -426,7 +426,7 @@ Sana
 
 **Remarks.**
 
-(1) Even though the Lalanciag operation does not increase the theoretica! bounds on the errors, nevertheless at times it may result i: a slight loss of accuracy. On the other hand, calancing requires little additional time and in certain cases can improve the accuracy of the eigenvalues by as mucn as 5-6 significant digits. When this occurs balancing will no.inally be needed to obtain the eigenvectors. In general, it is recommended that balancing be done.
+(1) Even though the balancing operation does not increase the theoretical bounds on the errors, nevertheless at times it may result i: a slight loss of accuracy. On the other hand, balancing requires little additional time and in certain cases can improve the accuracy of the eigenvalues by as much as 5-6 significant digits. When this occurs balancing will normally be needed to obtain the eigenvectors. In general, it is recommended that balancing be done.
 
 (2) AR and AI are destroyed during computation. CEIGV reduces the complex matrix (represented by AR and AI) to upper Hessenberg form with unitary similarity transformations. Then the QR algorithm is employed to obtain the eigenvalues, and backsubstitution is performed to generate the eigenvectors.
 
@@ -434,7 +434,7 @@ Usage. lf one has a complex matrix A, then AR and AI can be obtained using the m
 
 **Programming.** CEIGV is a driver routine for the EISPACK subroutines CBAL, CORTH, COMQR2, and CBABK2. These subroutines were developed at Argonne National Laboratory. The functions SPMPAR and IPMPAR are also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., et al., Matriz Eigensystem Routines — EISPACK Gutde (Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., et al., Matrix Eigensystem Routines — EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 
 
 <small>Original source: [View scanned PDF page 276](../scans/page_0276.png)</small>
@@ -449,7 +449,7 @@ Usage. lf one has a complex matrix A, then AR and AI can be obtained using the m
 | `DCEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L61366`](../source_parts/nswc_part_06.f#L8375) |
 
 
-The subroutine DCEIG is available for the double precision computation of the eigenvalues of complex matrices. This routine frequently yields resulta accurate to 26-28 significant digits. However, if the eigenvalues are not distinct ur if they are exceedingly tightiy clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
+The subroutine DCEIG is available for the double precision computation of the eigenvalues of complex matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct ur if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
 
 ```fortran
 CALL DCEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
@@ -457,7 +457,7 @@ CALL DCEIG(IBAL, AR, AI, KA, N, WR, WI, IERR)
 
 AR and AI are double precision matrices of order n > 1, and WR and WI are double precision arrays of dimension n or larger. AR and AI are the real and imaginary parts of the matrix whose eigenvalues are to be computed. When DCEIG is called the eigenvalues Ay, ---,)An, are computed. The real parts of the eigenvalues are stored in WR(!), ..., WR(n) and the imaginary parts are stored in WI(1),..., WI(n). The eigenvalues are unordered.
 
-IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBAL may be any integer. If IBAL ¥ 0 then the complex inatrix {represented by AR and Al) is baianced before the eigenvalues are computed. Otherwise, if IBAL == 0 then the complex matrix is not balanced.
+IBAL and ka are input arguments. It is assumed that ka is the number of rows in the dimension statements for AR and AI in the calling program. IBAL may be any integer. If IBAL ¥ 0 then the complex matrix {represented by AR and Al) is balanced before the eigenvalues are computed. Otherwise, if IBAL == 0 then the complex matrix is not balanced.
 
 **Error Return.** IERR is an integer variable. If all the eigenvalues are found then IERR is set to 0. Othe wise, if more than 50 iterations are required to compute the jt eigenvalue A}; then IERR is set to 7 and the routine terminates. In this case, if 7 <n then the eigenvalues Ajy41)---,An will have been computed and the results stored in the WR and WI arrays.
 
@@ -468,9 +468,9 @@ IBAL and ka are input arguments. It is assumed that ka is the number of rows in 
 (2) DCEIG is a double precision version of the eigenvalue routine CEIG.
 ```
 
-**Programming.** DCEIG is a driver routine for the subroutines DCBAL, DCORTH, and DCOMAQR. These subroutines are double precision versions of the EISPACK subroutines CBAL, CORTH, and COMQR, developed at Argonne National Laboratory. The double precision versions were prepared by A Ho Morris. The functicns DCPABS, DPMPAR, IPMPAR and subroutine DCSQRT are also used.
+**Programming.** DCEIG is a driver routine for the subroutines DCBAL, DCORTH, and DCOMAQR. These subroutines are double precision versions of the EISPACK subroutines CBAL, CORTH, and COMQR, developed at Argonne National Laboratory. The double precision versions were prepared by A Ho Morris. The functions DCPABS, DPMPAR, IPMPAR and subroutine DCSQRT are also used.
 
-**Reference.** Sruth, Bo T., Boyle, Jo Mo. et al, Matriz Eigensystem Routines EISPACK Gutde (Second Edition), Springer Verlag, EQ76
+**Reference.** Sruth, Bo T., Boyle, Jo Mo. et al, Matrix Eigensystem Routines EISPACK Guide (Second Edition), Springer Verlag, EQ76
 
 
 <small>Original source: [View scanned PDF page 277](../scans/page_0277.png)</small>
@@ -493,26 +493,26 @@ CALL DCEIGV(IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP)
 
 AR and AI are double precision matrices of order n > 1 and WR and WI are double precision arrays of dimension n or larger. AR and AI are the real and imaginary portions of the complex matrix whose eigenvalues and eigenvectors are to be computed. When DCEIG V is called the eigenvalues A,, ....A, and corresponding eigenvectors z), ...,Z,, are computed. The real parts of the eigenvalues are stored in WR(1),..., WR(n) and the imaginary parts are stored in WI(!),...,WI(n). The eigenvalues are unordered.
 
-It is assumed that the input argument ka is the number of rows in the dimension stavements for AR and Alin the calling program. ZR and ZI are double precision arrays of dimension ka x n. For 7 ~ 1, ...,n the real parts of the components of the eigenvector z, are stored in the 7*" column of ZR (in locations ZR(1, 7), ...,2R(n,j)) and the imaginary ports are stored in the jt? column of ZI. The eigenvectors z;,...,2, are not normalized.
+It is assumed that the input argument ka is the number of rows in the dimension statements for AR and AI in the calling program. ZR and ZI are double precision arrays of dimension ka x n. For 7 ~ 1, ...,n the real parts of the components of the eigenvector z, are stored in the 7*" column of ZR (in locations ZR(1, 7), ...,2R(n,j)) and the imaginary ports are stored in the jt? column of ZI. The eigenvectors z;,...,2, are not normalized.
 
-IBAL is an input argument that can be assigned any integer value. If IBAL 7 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvectors are coraputed. Otherwise, if IBAL -= 0 then the complex matrix is not balanced.
+IBAL is an input argument that can be assigned any integer value. If IBAL 7 0 then the complex matrix (represented by AR and Al) is balanced before the eigenvalues and eigenvectors are computed. Otherwise, if IBAL -= 0 then the complex matrix is not balanced.
 
-TEMP is a double precision array used for temporary storage by the routine. If no balancing is to be done (ie., if IBAL 0) then TEMP must be of dimension 2n or larger. Otherwise, if balancing is to be performed then TEMP must be of dimensicn 3n or larger
+TEMP is a double precision array used for temporary storage by the routine. If no balancing is to be done (ie., if IBAL 0) then TEMP must be of dimension 2n or larger. Otherwise, if balancing is to be performed then TEMP must be of dimension 3n or larger
 
-**Error Return.** [EPR is an integer variable. If all the eigenvalues and eigenvectors are found then TERR 1s set to O. Otherwise, if more than 50 iterations are required to compute the j'? eigenvalue A,, then TERR is set to 7 and the routine ternungtes. In this case, if 7 <n then the eigenvalues A,41, -..,An will have been computed and the results stored in the WR and WI arrays. However, none of the etgenvectorg will have been computed. The eigenvectors
+**Error Return.** [EPR is an integer variable. If all the eigenvalues and eigenvectors are found then TERR 1s set to O. Otherwise, if more than 50 iterations are required to compute the j'? eigenvalue A,, then TERR is set to 7 and the routine terminates. In this case, if 7 <n then the eigenvalues A,41, -..,An will have been computed and the results stored in the WR and WI arrays. However, none of the eigenvectors will have been computed. The eigenvectors
 
-are computed only after all the ergenvalves have been obraimed
+are computed only after all the eigenvalues have been obtained
 
-Remarks (1) AK and Al are destroyed durtny cormputatior.
+Remarks (1) AK and Al are destroyed during computation.
 
-(2, DRCRIO Vos a double precision certon of the eqenvaiueetgenvertar routine ORIG V
+(2, DRCRIO Vos a double precision version of the eigenvalue/eigenvector routine ORIG V
 
 
 <small>Original source: [View scanned PDF page 278](../scans/page_0278.png)</small>
 
 gramming. DCEIGV is a driver for the subroutines DCBAL, DCORTH, DCMQR2,
 
-. DCBABK. These subroutines are double precision versions of the EISPACK routines CUAL, CORTH, COMQR2, and CBABK2, developed at Argonne Natioual Laboratory. ‘ne double precision versions were prepared by A. H. Morris. The functions DCPABS, DPMPAR, IPMFAR anc subroutine DCSQRT are also used.
+. DCBABK. These subroutines are double precision versions of the EISPACK routines CUAL, CORTH, COMQR2, and CBABK2, developed at Argonne National Laboratory. ‘ne double precision versions were prepared by A. H. Morris. The functions DCPABS, DPMPAR, IPMFAR anc subroutine DCSQRT are also used.
 
-**Reference.** Smith, B. T., Boyle, J. M., et al., Matriz Higenaystem Routines — EISPACK Gutde (Second Edition), Springer-Verlag, 1976.
+**Reference.** Smith, B. T., Boyle, J. M., et al., Matrix Eigensystem Routines — EISPACK Guide (Second Edition), Springer-Verlag, 1976.
 

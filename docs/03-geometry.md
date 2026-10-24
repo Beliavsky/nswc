@@ -17,7 +17,7 @@
 
 Given a sequence cf points »; = (v4, ys) (§ = 1,...,n). Let 7 denote the polygonal line which begins at point 1, traverses the points »; in the order that they are indexed, and is the straight line segment connecting 4, to u%41 for each ¢ = 1,...,n ~ 1. It is assumed that v, = v,, or that there is also a straight line segment from v, to vy when vy, F V4. Consequently, the polygonal path 7 is a loop beginning and ending at 11.
 
-For any point vo = (x0, yo) not on the path 1, let n(7r, vo) denote the winding number of the path 7 around the point vp. Then n(7,v0) = 0 if vo is outside the polygon whose boundary is r. If vo is inside the path then n(r, v9) = m where mis an integer. If m > 0 then the path r loops m times in a counterclockwise direction around the point vp. Otherwise, if m < 0 then ¢ loops |m| times in a clockwise direction around vp.
+For any point vo = (x0, yo) not on the path 1, let n(7r, vo) denote the winding number of the path 7 around the point vp. Then n(7,v0) = 0 if vo is outside the polygon whose boundary is r. If vo is inside the path then n(r, v9) = m where m is an integer. If m > 0 then the path r loops m times in a counterclockwise direction around the point vp. Otherwise, if m < 0 then ¢ loops |m| times in a clockwise direction around vp.
 
 Given an arbitrary point vo = (Zo, yo), the following subroutine is available for determining whether vo is on the path, outside the path, or inside the path. If the point vo is inside r then the winding number n(7,v0) = m is also computed.
 
@@ -35,7 +35,7 @@ It is assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn-
 
 **Remark.** There are no restrictions on the points (z,,y,). Consequently, the path may intersect itself.
 
-**Programming.** ‘The function SPMPAR is used. LOCP’T was written by A Ht. Morris.
+**Programming.** ‘The function SPMPAR is used. LOCPT was written by A Ht. Morris.
 
 
 <small>Original source: [View scanned PDF page 40](../scans/page_0040.png)</small>
@@ -56,7 +56,7 @@ Given a sequence of points vy; = (2,,y;) (¢ = 1, ...,n). Let r denote the polyg
 CALL PFIND(A, B, X, Y, N, U, V, M, NUM, IERR)
 ```
 
-The arguments a and 6 are arrays of dimension 2 containing the points (a,,a2) and (61,62). It is assumed that a 4 b and n > 2. X and Y are arrays containing 2), ...,2, aad Yl, +++) Yn Tespectively.
+The arguments a and 6 are arrays of dimension 2 containing the points (a,,a2) and (61,62). It is assumed that a 4 b and n > 2. X and Y are arrays containing 2), ...,2, and Yl, +++) Yn respectively.
 
 The argument m is the estimated maximum number of points at which the line @ and path + may intersect (m <n). U and V are arrays of dimension m or larger, and k and IERR are variables. When PFIND is called, if no input errors are detected then IERR 1< set to 0, k = the number of points (u,,v,;) where the line @ and path r intersect, and U and V contain the abscissas u;, ..., ug and ordinates vt), ...,v,% of these points. The points (u,,v;) are listed in the order that the path intersects € when proceeding from (21,41) to
 
@@ -66,7 +66,7 @@ The argument m is the estimated maximum number of points at which the line @ and
 
 TieRR =: 1 Either a:- 6 or the path contains a single point. 8 HWeRR > 2 U and V require more storage. The argument m must be increased. IERR of The ¢! line segment of the path contains a segment of the line @. & When an error is detected, & the number of points (u,,v,} found where the line @ and ] I Jj? a)
 
-path 7ointerseet, and U and V contain the abscissas and ordinates of these points.
+path 7 intersect, and U and V contain the abscissas and ordinates of these points.
 
 **Remark.** The intersecting points (u,,v,) need not be distinct. The path may intersect @ at the same point a number of times when proceeding from (11, yi) to (7, yn).
 
@@ -85,13 +85,13 @@ path 7ointerseet, and U and V contain the abscissas and ordinates of these point
 | `HULL` | `SUBROUTINE` | `X, Y, M, BX, BY, K, VX, VY, N` | [`L4487`](../source_parts/nswc_part_01.f#L4487) |
 
 
-If (z1, 41), ..., (2m, ym) are m distinct points in the plane, ther the following subroutine is available for finding the smallest convex polygon which with its interior contains the
+If (z1, 41), ..., (2m, ym) are m distinct points in the plane, then the following subroutine is available for finding the smallest convex polygon which with its interior contains the
 
 points. CALL HULL(X,Y,m, BX,BY,k, VX,VY,n)
 
-It is assumed that m > 2. X and ¥ are arrays containiig the abscissas 11, ...,2m and ordinates y1,...,Ym, respectively. When HULL is called the points are reordered so that Yi S++ Sym. Thus A and Y may be modified when the routine terminates.
+It is assumed that m > 2. X and ¥ are arrays containing the abscissas 11, ...,2m and ordinates y1,...,Ym, respectively. When HULL is called the points are reordered so that Yi S++ Sym. Thus A and Y may be modified when the routine terminates.
 
-RX and BY are arrays of dimension m+ 1 or larger, and k is @ variable. When HULL terminates, BX aad BY contain the abscissas and ordinates of the points (2,,y,) which lie on the boundary of the desired convex polygon, and k = the number of foinis stored in BX and BY. If BX and BY contain the abscissas x}, ..., 2), and ordinates yj,. , y,, then the points (2, y;' are indexed in the order they occur when traversing the boundary in a counterclockwise manner. Also (x1, y,) = (24, y4)-
+RX and BY are arrays of dimension m+ 1 or larger, and k is @ variable. When HULL terminates, BX and BY contain the abscissas and ordinates of the points (2,,y,) which lie on the boundary of the desired convex polygon, and k = the number of points stored in BX and BY. If BX and BY contain the abscissas x}, ..., 2), and ordinates yj,. , y,, then the points (2, y;' are indexed in the order they occur when traversing the boundary in a counterclockwise manner. Also (x1, y,) = (24, y4)-
 
 VX% and VY are arrays of dimension m~-'- 1 or larger, and n is a variable. When HULL terminates, VX and VY contain the abscissas and ordinates of the vertices of the desired convex polygon, and n = the number of points stored in VX and VY. If VX and VY contain the abscissas x, ...,¢/1 and ordinates y/, ...,y/’, then the vertices (2/’, yi’) are indexed in the order they occur when traversing the boundary of the convex polygon in a
 
@@ -99,7 +99,7 @@ counterclockwise manner. Also (2!, yl!) == (ci, yy’).
 
 **Example.** Assume that we are given the points (-—1,-3), (1,1) (0,3), (2,2), (-2,4), (-1,~1). When HULi 13 called X and Y are reordered and we obtain: X contains —1,--1,1,2,0, --2 Y contains —3,-1,1,2,2 BX contains —1,2,0,—2,-1 BY contains —3,2,3,4,--3 V¥ contains -1,2,-2,~-1 VY contains --3,2,4,--3
 
-**Programming.** HULL calls the subroutine RRSORT and function SPMPAR. HULL was written by A. Ho Mornis.
+**Programming.** HULL calls the subroutine RRSORT and function SPMPAR. HULL was written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 42](../scans/page_0042.png)</small>
@@ -124,7 +124,7 @@ X and Y are arrays containing the abscissas r,,. ry and ordinates y1,...,yN, res
 
 **Programmer.** A. H. Morris Reference. DiDonato, A. R. and Hageman, R. K., Computation of the Integral of the Bi-
 
-vartate Normal Distribution over Arbitrary Poiygons, ieport TR 80-166, Naval Surface Weapons Center, Dahlgren, Virginia, 1980.
+variate Normal Distribution over Arbitrary Polygons, report TR 80-166, Naval Surface Weapons Center, Dahlgren, Virginia, 1980.
 
 
 <small>Original source: [View scanned PDF page 43](../scans/page_0043.png)</small>
@@ -139,7 +139,7 @@ vartate Normal Distribution over Arbitrary Poiygons, ieport TR 80-166, Naval Sur
 | `HC` | `SUBROUTINE` | `IND, M, N, PR, AR, NB, S, IWK, NUM` | [`L4901`](../source_parts/nswc_part_01.f#L4901) |
 
 
-Given a directed graph G containing n vertices, denoted by the integers 1, ...,n. Then any circuit of n arcs which traverses the n vertices, say in the order 1), ...,%,, is called a Hamiltonian ctreutt. For convenience, it is assumed that for any two vertices ¢ and 7, no more than one arc exists which begins ai ¢ and ends at 7. Then the following subroutine is available for finding the Harniltonian circuits of G, if any exist.
+Given a directed graph G containing n vertices, denoted by the integers 1, ...,n. Then any circuit of n arcs which traverses the n vertices, say in the order 1), ...,%,, is called a Hamiltonian circuit. For convenience, it is assumed that for any two vertices ¢ and 7, no more than one arc exists which begins ai ¢ and ends at 7. Then the following subroutine is available for finding the Hamiltonian circuits of G, if any exist.
 
 ```fortran
 CALL H&(IND, m,n, P, A, NB, S, IWK,NUM)
@@ -158,20 +158,20 @@ P(t +1) = the total number of vertices in Ri, ..., Rj (f= 1,...,n).
 
 Hence, if P(s) < P(t¢+1) then the vertices in R,; are found in locations P(t)+1,..., P{t+1) of A. Otherwise, if P(t) = P(i+ 1) then R; = ¢ (the empty set); ie., there are no arcs in G which begin at ¢ (and no Hamiltonian circuits exist). Also, ?(n-+ 1) = m since there are m arcs in G.
 
-Exainple. Consider the graph where m=5,n=4 Ry = {2,4} hg = ¢ Ro. = 1,3} Ay = {3}. Then A contains 4,2,1,3,3 P contains 0,2,4,4,5.
+Example. Consider the graph where m=5,n=4 Ry = {2,4} hg = ¢ Ro. = 1,3} Ay = {3}. Then A contains 4,2,1,3,3 P contains 0,2,4,4,5.
 
 When HC is called, a depth-first tree search employing backtracking is used. NB is a variable for controlling the backtracking. If NB > 0 on input, then it is assumed that NB is the maximum number of backtracks that may be performed to find a Hamiltonian circuit. Otherwise, if NB < 0 then it is assumed that no restriction 1s placed on the backtracking. When HC terminates, NB =: the number of backtracks that were actually performed.
 
-Sis an integer array of dimension n. When HC is called, if a Hamiltonian circult is found which traverses the vertices, say in the order t,,...,4,,, then the ordered vertices ty,..-,%, are stored in S,
+Sis an integer array of dimension n. When HC is called, if a Hamiltonian circuit is found which traverses the vertices, say in the order t,,...,4,,, then the ordered vertices ty,..-,%, are stored in S,
 
 IWE is an array of dimension NUM that is w work space for the routine. Lbs assured that NUM > m+ 8n 4 20.
 
 
 <small>Original source: [View scanned PDF page 44](../scans/page_0044.png)</small>
 
-Only one Hamiltcaian circuit will be obtained on a call to HC. However, this routine can be repeatedly called to obtain all the Hamiltonian circuits. IND is a variable which controls the operation of the routine on input, and reports the status of the results on output. It is assumed that IND = 0 on the first cal! to HC. When the routine terminates, if no input errers are detected then IND has one of the following values:
+Only one Hamiltonian circuit will be obtained on a call to HC. However, this routine can be repeatedly called to obtain all the Hamiltonian circuits. IND is a variable which controls the operation of the routine on input, and reports the status of the results on output. It is assumed that IND = 0 on the first cal! to HC. When the routine terminates, if no input errors are detected then IND has one of the following values:
 
-IND = t A Hamiltonian circuit was found and the ordered vertices traversed by the circuit stored in S. To find another circuit, reset NB and recal] the routine.
+IND = t A Hamiltonian circuit was found and the ordered vertices traversed by the circuit stored in S. To find another circuit, reset NB and recall the routine.
 
 IND = 2 The maximum number of backtracks were performed. To continue, reset NB and recall the routine.
 
@@ -189,7 +189,7 @@ restored and IND = 4 when HC terminates.
 
 Storage of A. When A is restored, the order of the vertices of R, in .i may be modified for each ¢.
 
-**Error Return.** If an input error is detected then IND is set to one of the tcllowing values:
+**Error Return.** If an input error is detected then IND is set to one of the following values:
 
 IND = -1 IND <0 or IND > 3 on input.
 
@@ -203,7 +203,7 @@ IND = -5 P(1) #0 or P(n+1) Am.
 
 IND = --6 P(t) > P(t + 1) for some ¢.
 
-Pemarks.
+Remarks.
 
 {
 
@@ -211,7 +211,7 @@ on
 
 (1) It ic assumed that € contains no loops.
 
-(2) Normaily, few backtracks are needed when the number of vertices in each R; is small, say LM or less. Consequently, the setting NB =: —1 is generally appropriate in such canes,
+(2) Normally, few backtracks are needed when the number of vertices in each R; is small, say LM or less. Consequently, the setting NB =: —1 is generally appropriate in such canes,
 
 
 <small>Original source: [View scanned PDF page 45](../scans/page_0045.png)</small>
@@ -220,5 +220,5 @@ on
 
 Morris.
 
-**Reference.** Martello, 8., “Algorithm 595. An Enumerative Algorithm for Finding Hamilvcnian Circuits in a Directed Graph,” ACM Tyvans. Math Software 9 (1983), pp. 131-138.
+**Reference.** Martello, 8., “Algorithm 595. An Enumerative Algorithm for Finding Hamiltonian Circuits in a Directed Graph,” ACM Trans.. Math Software 9 (1983), pp. 131-138.
 

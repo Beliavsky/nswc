@@ -152,15 +152,15 @@ CALL AORD(A, N)
 
 It is assumed that A is a real array. If SHELL is called, then the elements of A are reordered so that a; < a;4, for! = 1,...,n —1. Otherwise, if AORD is called, then the
 
-elements of A are reordered so that |a,j < Jaj41| forf=1, ...,n-- 1.
+elements of A are reordered so that |a,j < Jaj41| for f=1, ...,n-- 1.
 
 **Programmer.** A. H. Morris CALL RISORT(A, L,n)
 
-It is assumed that A is a real array and [ an integer array containing n elements. When RISORT is called, the elements of A are reordered so that a, < ay4; fort = 1,...,n — 1. The same permutations are perforrned on I as on A, thereby reordering the ele.nents of L so as to correspond with the new ordering of A.
+It is assumed that A is a real array and [ an integer array containing n elements. When RISORT is called, the elements of A are reordered so that a, < ay4; fort = 1,...,n — 1. The same permutations are performed on I as on A, thereby reordering the elements of L so as to correspond with the new ordering of A.
 
 **Programmer.** A. H. Morris CALL SHELL2(A, B,n)
 
-It is assumed that A and B are real arrays containing n elements. Waen SHELL? is called, the elements of A are reordered so that a; < a,;,4, for # = 1,...,n ~— 1. The same permutations are performed on B as on A, thereby reordering the elements of B so as to correspond with the new ordering of A.
+It is assumed that A and B are real arrays containing n elements. When SHELL? is called, the elements of A are reordered so that a; < a,;,4, for # = 1,...,n ~— 1. The same permutations are performed on B as on A, thereby reordering the elements of B so as to correspond with the new ordering of A.
 
 **Programmer.** A. H. Morris
 
@@ -176,11 +176,11 @@ It is assumed that A is a double precision array. If DSORT is called, then the e
 
 **Programmer.** A. H. Morris CALL DISORT(A, L, )
 
-It is assumed that A is a double precision array and ZL an integer array containing n elements. When DISCRT is called, the elements of A are reordered go that a; < a4, for t= 1,...,2—1. The same permutations are performed on L as on A, thereby reordering the elements of LE so as to correspond with the new ordering of A.
+It is assumed that A is a double precision array and ZL an integer array containing n elements. When DISORT is called, the elements of A are reordered go that a; < a4, for t= 1,...,2—1. The same permutations are performed on L as on A, thereby reordering the elements of LE so as to correspond with the new ordering of A.
 
 **Programmer.** A. H. Morris CALL DDSORT(A, B,n)
 
-It is assumed that A and B are double precision arrays containing n elements. When DDSORT is called, the elements of A are reordered so that a; < a,4, forf =1,...,n—1. The same permutations are performed on B as on A, thereby reordering the elements of B so as to correspond with the new ordering of A.
+It is assumed that A and B are double precision arrays containing n elements. When DDSORT is called, the elements of A are reordered so that a; < a,4, for f =1,...,n—1. The same permutations are performed on B as on A, thereby reordering the elements of B so as to correspond with the new ordering of A.
 
 **Programmer.** A. H. Morris
 
@@ -190,15 +190,15 @@ CALL QSORTR(X, IND, N)
 CALL QSORTD(X, IND, N)
 ```
 
-QSORTI is used if A is an integer array, QOORTR is used if A is a real array, and QSORTD is used if A is a double precision array. It is assumed that n < 2097152 and that Lis an integer array of dimension n or larger. When the subroutine is called, the indices t1,...,% are stored in L where a, < ++: < a;,. A is not modified by the routine.
+QSORTI is used if A is an integer array, QSORTR is used if A is a real array, and QSORTD is used if A is a double precision array. It is assumed that n < 2097152 and that Lis an integer array of dimension n or larger. When the subroutine is called, the indices t1,...,% are stored in L where a, < ++: < a;,. A is not modified by the routine.
 
 **Remarks.**
 
-(1) After L has been obtained, A may be reordered so that a; < a;4, ford =i, ..,n-1 by IOKDER, RORDER, or DORDER (see below).
+(1) After L has been obtained, A may be reordered so that a; < a;4, ford =i, ..,n-1 by IORDER, RORDER, or DORDER (see below).
 
 (2) QSORTI, QSORTR, and QSORTD employ a quick sort procedure. These routines frequently take less than half the time required by the corresponding subroutines ISHELL, SHELL, and DSORT, which use a SHELL sort procedure.
 
-**Programmer.** Robert Renka (Oak Ridge Nationa) Laboratory).
+**Programmer.** Robert Renka (Oak Ridge National Laboratory).
 
 ```fortran
 CALL IORDER(A, IP, N)
@@ -276,7 +276,7 @@ if (z,y) is a point in the plane other than the origin (0,0), let L denote the s
 | `DCPABS` | `DOUBLE PRECISION FUNCTION` | `X, Y` | [`L2857`](../source_parts/nswc_part_01.f#L2857) |
 
 
-The following funetions are available for computing the length of a real vector (2, y).
+The following functions are available for computing the length of a real vector (2, y).
 
 CPABS(r, y) DCPABS (zs, y)
 
@@ -310,7 +310,7 @@ CALL CREC(X, Y, U, V)
 CALL DCREC(X, Y, U, V)
 ```
 
-CREC is used if x and + are single precision real nurnbers and u and v real variables, and DCREC is used if x and y are double precision numbers and u and v double precision variables. It is assumed that x and y are the real and imaginary parts of a nonzero complex number z. When CR&C or DCREC is called, u and v are set to the real and imaginary parts of 1/z, respectively.
+CREC is used if x and + are single precision real numbers and u and v real variables, and DCREC is used if x and y are double precision numbers and u and v double precision variables. It is assumed that x and y are the real and imaginary parts of a nonzero complex number z. When CR&C or DCREC is called, u and v are set to the real and imaginary parts of 1/z, respectively.
 
 **Programmer.** A. H. Morris
 
@@ -333,7 +333,7 @@ CDIV(a, b) CDIV(a, 6) =: a/b for any complex numbers a and b where 6 7 6.
 
 **Programmer.** A. H. Morris. CALL CDIVID(a,, az, 6), 52, u,v)
 
-The arguments 2,,@2,6,,0) are double precision numbers, and u and v are double precision variables, It is assumed that a, and ag are the real and imagiuiary parts of a complex number a, and that 6; and 6) are the real and iimaginery parts of a nonzero complex number 6 When CDIVID is called, u and v are set to the real and imaginary parts of a/b respectively.
+The arguments 2,,@2,6,,0) are double precision numbers, and u and v are double precision variables, It is assumed that a, and ag are the real and imaginary parts of a complex number a, and that 6; and 6) are the real and imaginary parts of a nonzero complex number 6 When CDIVID is called, u and v are set to the real and imaginary parts of a/b respectively.
 
 **Programmer.** A. HI. Morris.
 
@@ -347,7 +347,7 @@ The arguments 2,,@2,6,,0) are double precision numbers, and u and v are double p
 | `DCSQRT` | `SUBROUTINE` | `Z, W` | [`L2967`](../source_parts/nswc_part_01.f#L2967) |
 
 
-The following subroutine ts avaihible for voniputing the square root of a double precision
+The following subroutine ts available for computing the square root of a double precision
 
 complex number.
 
@@ -449,7 +449,7 @@ If a and 6 are real numbers where a? + b? # 0, then there is an orthogonal matri
 
 (_§ 8) such that ($$) (2) = (J). tm this case #? = a2 + 08,¢ = a/r, and 9 = b/r
 
-The matrix ( ° °) represents what is called a Gévens rotation. Given a and b, the matrix is uniquely defined up to the sign of r, For any real a, let sgn(a) = 1 if a > 0 and sgn(a) = ~1 ifa< 0. If we define r = oVa? + b? where
+The matrix ( ° °) represents what is called a Givens rotation. Given a and b, the matrix is uniquely defined up to the sign of r, For any real a, let sgn(a) = 1 if a > 0 and sgn(a) = ~1 if a< 0. If we define r = oVa? + b? where
 
 _ { sgn(a) if {a| > |6|
 
@@ -471,7 +471,7 @@ If |z| < 1 then set c= V1 — 2? and s = z.
 If |z| > 1 then set, ¢ = 1/z and s = V1 — c?.
 ```
 
-The subroutines SROTG and DROTG are available for computing c,s,r, and z. CROTG is used when a and 0 are single precision real numbers, and DROTG is used when a and b are double precision numbers.
+The subroutines SROTG and DROTG are available for computing c,s,r, and z. SROTG is used when a and 0 are single precision real numbers, and DROTG is used when a and b are double precision numbers.
 
 ```fortran
 CALL SROTG(SA, SB, SC, SS)
@@ -480,7 +480,7 @@ CALL DROTG(DA, DB, DC, DS)
 
 When SROTG is used then AR, BZ, C, and S are real variables. Otherwise, when DROTG is used then AR, BZ, C, and S are double precision variables. On input, AR = a and BZ = 6. When the routine terminates AR -: r, BZ = z,C = c,and S = s.
 
-**Programming.** These rovtines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F.'T. Krogh. SROTG and DROVG were written by Charles Lawson (Jet Propulsion Laboratory).
+**Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F.'T. Krogh. SROTG and DROTG were written by Charles Lawson (Jet Propulsion Laboratory).
 
 
 <small>Original source: [View scanned PDF page 30](../scans/page_0030.png)</small>
@@ -551,7 +551,7 @@ Cy, Sy. CALL CONSTR(z, y, z,CX,SX,CY,SY) CX,SX,CY,SY are variables. When CONSTR 
 
 the values cz, 81,Cy, Sy.
 
-**Programmer.** Robert J. Renka (Oak Ridge Nationai Laboratory)
+**Programmer.** Robert J. Renka (Oak Ridge National Laboratory)
 
 
 <small>Original source: [View scanned PDF page 32](../scans/page_0032.png)</small>
@@ -594,11 +594,11 @@ X and ¥ are arrays of dimension n containing 21, ...,%, and yi, ..., yn. ANG(n,
 | `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3519`](../source_parts/nswc_part_01.f#L3519) |
 
 
-The following functions are available for computing sin xz and cos wz for real ‘x. SINi(z) SINI{z) = sin wa for all real z. Algorithm. Minimax approximations are used for sinaz and cos mz when |a2| < 1/4. Precision. SIN1(z) is accurate to within 1 unit of the 14" significant digit when 0 < z < 1. Programming. SIN1 was written by A.H. Morris. The function IPMPAR is used. COS1(z) COSI(z) = cos wz for all real z. Algorithm. Minimax approximations are used for sinaz and cosmz when |x| < 1/4.
+The following functions are available for computing sin xz and cos wz for real ‘x. SIN1(z) SIN1{z) = sin wa for all real z. Algorithm. Minimax approximations are used for sinaz and cos mz when |a2| < 1/4. Precision. SIN1(z) is accurate to within 1 unit of the 14" significant digit when 0 < z < 1. Programming. SIN1 was written by A.H. Morris. The function IPMPAR is used. COS1(z) COS1(z) = cos wz for all real z. Algorithm. Minimax approximations are used for sinaz and cosmz when |x| < 1/4.
 
 **Precision.** COS1(x) is accurate to within L unit of the 14° significant digit when 0 < x < 1 and x # 1/2.
 
-**Programming.** COSI was written by A. H. Morris. The function IPMPAR is used.
+**Programming.** COS1 was written by A. H. Morris. The function IPMPAR is used.
 
 ```fortran
 DSIN1(X)
@@ -616,7 +616,7 @@ The argument z is a double precision number. DSIN1(z) is the double precision va
 
 **Programming.** DSIN1i was written by A.H. Morris. The function IPMPAR is used. DCOS1(z)
 
-The argument x is a double precision npumber. DCOS1(z) is the double precision value
+The argument x is a double precision number. DCOS1(z) is the double precision value
 
 for cos mx.
 
@@ -627,7 +627,7 @@ the 1
 
 **Remark.** DCOS1 must be declared to be of type DOUBLE PRECISION in the calling program.
 
-Aigorithm. For |z| < 7/4, sin wz and cos wz are computed by the power series corresponding to the Chebyshev expansions developed by J. L. Schonfelder (University of Birmingham, England). The power series were obtained by A. H. Morris.
+Algorithm. For |z| < 7/4, sin wz and cos wz are computed by the power series corresponding to the Chebyshev expansions developed by J. L. Schonfelder (University of Birmingham, England). The power series were obtained by A. H. Morris.
 
 **Precision.** DCOS1(z) is accurate to within 1 unit of the 28°” significant digit when 0 < z<landz#1/2.
 
@@ -719,7 +719,7 @@ Software* **12** (1986), 377-393.
 | `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4175`](../source_parts/nswc_part_01.f#L4175) |
 
 
-The functions ALNREL, RLOG, RLOGI, DLNREL, DRLOG, and DRLOG1 are available for computing In(1 + a), z — 1 — In(z), and a — In(1+ a). DLNREL, DRLOG, and DRLOGI are double precision functions.
+The functions ALNREL, RLOG, RLOG1, DLNREL, DRLOG, and DRLOG1 are available for computing In(1 + a), z — 1 — In(z), and a — In(1+ a). DLNREL, DRLOG, and DRLOG1 are double precision functions.
 
 ALNREL(a) ALNREL(a) = In(1 + a) for a > -1. Algorithm. See page 378 and appendix A of the reference.
 
@@ -727,19 +727,19 @@ ALNREL(a) ALNREL(a) = In(1 + a) for a > -1. Algorithm. See page 378 and appendix
 
 **Reference.** DiDonato, A. R., and Morris, A. H., “Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Math Software 12 (1986), pp. 377-393.
 
-**Programmer.** A. H. Morris. CLOG (zx) RLOG(x) == 2 -- 1 -- In(z) for x > 0. Aigorithm. See page 379 and appendix E of the reference.
+**Programmer.** A. H. Morris. CLOG (zx) RLOG(x) == 2 -- 1 -- In(z) for x > 0. Algorithm. See page 379 and appendix E of the reference.
 
 **Precision.** RLOG(s) is accurate to within 2 units of the 14'* significant digit when RLOG(z) 54 0.
 
 **Reference.** DiDonato, A. R., and Morris, A. H., “Computation of the Incomplete Gamma Function Ratios and Their Inverse,” ACM Trans. Math Software 12 (1986), pp. 877-383.
 
-**Programmer.** A. H. Morris. RLOG1(a) RLOGI(a) = a In(t ¢ a) fora> © 1. Algorithm. See page 379 and appendix bof the reference.
+**Programmer.** A. H. Morris. RLOG1(a) RLOG1(a) = a In(t ¢ a) fora> © 1. Algorithm. See page 379 and appendix B of the reference.
 
-Precision, RLOGI(a) is accurate to within 2 units of the 14" significant digit: when RLOGI{a) #4 0
+Precision, RLOG1(a) is accurate to within 2 units of the 14" significant digit: when RLOG1{a) #4 0
 
-**Reference.** DiDonato, A. BR, and Morris, A. H., “Computation of the incomplete Gata Function Ratios and Their Inverse,” ACM Trans, Math Software 12 (1986), pp. 377 U3.
+**Reference.** DiDonato, A. BR, and Morris, A. H., “Computation of the incomplete Gamma Function Ratios and Their Inverse,” ACM Trans, Math Software 12 (1986), pp. 377 U3.
 
-Pregrammer. A. H. Morris.
+Programmer. A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 38](../scans/page_0038.png)</small>
@@ -766,13 +766,13 @@ The argument z is a positive double precision number. DRLOG(z) is the double pre
 
 **Precision.** DRLOG(z) is accurate to within 1 unit of the 28" significant digit when DRLOG(z) #0.
 
-**Programmer.** A. H. Morris. DORLOGI(a)
+**Programmer.** A. H. Morris. DRLOG1(a)
 
-The argument a is a double precision number a > —i. DRLOGI(a) is the double precision value for a ~ In(1-+ a).
+The argument a is a double precision number a > —i. DRLOG1(a) is the double precision value for a ~ In(1-+ a).
 
-**Remark.** DRLOGI must be declared in the calling program to be of type DOUBLE PRECISION.
+**Remark.** DRLOG1 must be declared in the calling program to be of type DOUBLE PRECISION.
 
-**Precision.** DRLOGI(a) is accurate to within i unit of the 28 significant digit when DRLOGI(a) 7 0.
+**Precision.** DRLOG1(a) is accurate to within i unit of the 28 significant digit when DRLOG1(a) 7 0.
 
 **Programmer.** A. H. Morris.
 

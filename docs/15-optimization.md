@@ -25,13 +25,13 @@ It is assumed that a < 6. FMIN finds a value z in the interval [a,b] which is a 
 
 The input arguments AERR and RERR are the absolute and relative error tolerances to be satisfied. For example, if k significant digit accuracy is desired then one may set RERR -= 107*. It is assumed that AERR > 0 and RERR > 0. The setting AERR = 0 is equivalent to the setting AERR = 10779, and the setting RERK = 0 is a request for machine precision.
 
-IND is a variable that reports the status of the results. IND = 0 if z is found to the desired accuracy. Otherwise, IND = 1 when z cannot be obiained to the desired accuracy. In this case, w satisfies the tolerances AERR and RERR.
+IND is a variable that reports the status of the results. IND = 0 if z is found to the desired accuracy. Otherwise, IND = 1 when z cannot be obtained to the desired accuracy. In this case, w satisfies the tolerances AERR and RERR.
 
 **Note.** F must be declared in the calling program to be of type EXTERNAL.
 
 **Algorithm.** The golden section search procedure is used.
 
-**Programming.** The function SVMPAR is called. FMIN was written by A. H. Morris.
+**Programming.** The function SPMPAR is called. FMIN was written by A. H. Morris.
 
 AQT
 
@@ -77,7 +77,7 @@ IND — —4 (Input error) ITER < 0.
 
 IND = -5 (Input error) Either RERR < 0 or RERR > 1074.
 
-IND = 1 A local minimura x was found. The gradient of f at x was considered to be sufficiently small.
+IND = 1 A local minimum x was found. The gradient of f at x was considered to be sufficiently small.
 
 IND = 2 The steps taken became so small that OP'TF had to terminate. X is probably a local minimum, but it need not be a local minimum. The algorithm frequently requires exceedingly small steps to be taken, no matter whether X is close to or far from a local
 
@@ -98,7 +98,7 @@ When an input error is detected, the routine immediately terminates.
 
 Accuracy and Efficiency. OPTF is frequently extremely efficient in finding a value FVAL which roughly approximates a local minimum value f(z), but at times it can be quite slow in obtaining FVAL to greater precision. A rough approximation is often obtained in 20--30 iterations. If f(z) # 0 then FVAL may be accurate to 4-6 significant digits after 20-30 additional iterations, or FVAL may not be accurate to 1 significant digit after several hundred iterations. 4-6 digit accuracy is the greatest precision that can be expected. In general, it is recommended that ITER < 200. Each iteration can take considerable time, even if the subroutine F is cheap to evaluate.
 
-**Remark.** OPTF can be quite sensitive to the scaling of the variables (z,,...,2,). The routine tends to operate more efficiently when the components of a local minimum z = (z1,...,%n) are all roughly of the same magnitude. If the components are of considerably different magnitudes (say |x| * 107° and |x2| » 105) then convergence may be extremely slow. In such acase, OP TF attempts to rescale the variables, but the rescaling is not always helpful.
+**Remark.** OPTF can be quite sensitive to the scaling of the variables (z,,...,2,). The routine tends to operate more efficiently when the components of a local minimum z = (z1,...,%n) are all roughly of the same magnitude. If the components are of considerably different magnitudes (say |x| * 107° and |x2| » 105) then convergence may be extremely slow. In such a case, OP TF attempts to rescale the variables, but the rescaling is not always helpful.
 
 **Algorithm.** The line search algorithm given in pp. 325-327 of the reference is employed. Also, BFGS secant updates for the hessian are used.
 
@@ -132,21 +132,21 @@ guess a = (a), 1.5 Qn) to a minimum of ¢(z) is given. Then the following subrou
 CALL LMDIFF(FCN, M, N, X, FVEC, EPSFCN, TOL, INFO, IWA, WA, LWA)
 ```
 
-X is an array of dimension n and FVEC an array of dimension m. On input X contains the starting point a = (a;,...,a,). When LMDIFF teiminates, X contains the final estimate 7 = (21, ...,%n) of a minimum of ¢ and FVEC contains the values of the functions fy, ...,f/m at the output point in X,
+X is an array of dimension n and FVEC an array of dimension m. On input X contains the starting point a = (a;,...,a,). When LMDIFF terminates, X contains the final estimate 7 = (21, ...,%n) of a minimum of ¢ and FVEC contains the values of the functions fy, ...,f/m at the output point in X,
 
 The argument F is the name of a user defined subroutine that has the format: CALL F(m,n, X, VEC, IFLAG)
 
 Here X is an array of dimension n, FVEC an array of dimension m, and IFLAG an integer variable. The array X contains a point x = (z1,...,%n). Normally F evaluates the functions f,,..., fm at this point and stores the results in FVEC. However, if < does not lie in the domain of f1,..., fm then this cannot be done. In this case, the argument IFLAG (which will have been assigned a nonnegative value by LMDIFF) should be reset by F to a negative value. This will signal LMDIFF to terminate. F must be declared in the calling program to be of type EXTERNAL.
 
-EPS is an irput argument which specifies the relative accuracy of F. If it is estimated that the subroutine F produces results accurate to k significant decimal digits then one may set, EPS = 10-*. It is required that EPS > 0. If EPS = 0 then it is assumed that F produces results accurate to machine precision.
+EPS is an input argument which specifies the relative accuracy of F. If it is estimated that the subroutine F produces results accurate to k significant decimal digits then one may set, EPS = 10-*. It is required that EPS > 0. If EPS = 0 then it is assumed that F produces results accurate to machine precision.
 
 TOL is an input argument which specifies the desired accuracy to be attained. The Euclidean norm ||z|| = \/2,2? is employed. If ¢ denotes an actual minimum of ¢, then LMDIiFF terminates when an iterate x is generated for which it is estimated that
 
 (1) O(z) < (1 + TOL)?$(z) or
 
-(2) || D(z ~ #)|| < TOL - || Dz|| is satisfied. In (2) z and & are regarded as column vectors, and D is a diagonal matrix generated by LMDIFF whose entries are scaling factors. For convenience, criterion (1) is called the F-convergence (or ¢-convergence) test and criterion (2) is called the z-convergence test. It is required that TOL > 0. In order for the convergence tests to work properly, it is reconunended that TOL always be smaller than 10° ®,
+(2) || D(z ~ #)|| < TOL - || Dz|| is satisfied. In (2) z and & are regarded as column vectors, and D is a diagonal matrix generated by LMDIFF whose entries are scaling factors. For convenience, criterion (1) is called the F-convergence (or ¢-convergence) test and criterion (2) is called the z-convergence test. It is required that TOL > 0. In order for the convergence tests to work properly, it is recommended that TOL always be smaller than 10° ®,
 
-IWK is an array of dimension n and WK is an array of dirnension @. IWK and WK y
+IWK is an array of dimension n and WK is an array of dimension @. IWK and WK y
 
 are work spaces. It is assumed that @ > mn + 52 tom.
 
@@ -173,9 +173,9 @@ INFO =6 TOL is too small. No further reduction in the value of ¢(z) is possible
 
 INFO = 7 TOL is too small. No further improvement in the accuracy of X is possible.
 
-When LMDIFF terminates, if INFO + 0 then X contains the final iterate that was generated. Also, if INFO > 1 then FVEC contains the values of the functions f;,..., fm at this iterate. If INFO = 4 then X should be examined very closely. The gradient of ¢ can be 0 when X is a local minimum or maximum, or when X is a saddle point. If INFO = 5 then it may (or may not) be helpful to continue the procedure by recalling LMDIFF with the current point in X as the new starting point. Since TOL is a relative tolerance, this setting can Gecut when $(0) = 0.
+When LMDIFF terminates, if INFO + 0 then X contains the final iterate that was generated. Also, if INFO > 1 then FVEC contains the values of the functions f;,..., fm at this iterate. If INFO = 4 then X should be examined very closely. The gradient of ¢ can be 0 when X is a local minimum or maximum, or when X is a saddle point. If INFO = 5 then it may (or may not) be helpful to continue the procedure by recalling LMDIFF with the current point in X as the new starting point. Since TOL is a relative tolerance, this setting can occur when $(0) = 0.
 
-**Algorithm.** A modified form of the Levenberg-Marquardt algor'thm is employed.
+**Algorithm.** A modified form of the Levenberg-Marquardt algorithm is employed.
 
 **Programming.** LMDIFF is a slightly modified version of the MINPACK-1 subroutine LMDIF1. The MINPACK-1 subroutines LMDIF, SPMPAR, ENORM, FDJAC2, LMPAR, QRFAC, and QRSOLV are employed. The subroutines were written by Jorge J. More, Burton S. Garbow, and Kenneth E. Hillstrom (Argonne National Laboratory).
 
@@ -183,7 +183,7 @@ References,
 
 (1) More, J. J., Garbow, 8. S., and Hillstrom, K. §., User Guide for MINPACK-1, Argonne National Laboratory Report ANL- 80-74, Argonne, Illinois, 1980.
 
-(2) More, J. J., “The Levenberg-Marquardt Algorithm: Implementation and Theory,” Numertcal Analysis, G. A. Watson {ed.), Springer-Verlag, 1977.
+(2) More, J. J., “The Levenberg-Marquardt Algorithm: Implementation and Theory,” Numerical Analysis, G. A. Watson {ed.), Springer-Verlag, 1977.
 
 
 <small>Original source: [View scanned PDF page 311](../scans/page_0311.png)</small>
@@ -215,22 +215,22 @@ CALL SSPLX(TA,ITA,JTA, B,C, m,n, IND,IBASIS, X, z, ITER,MXITER, NUMLE,NUMGE,BI,W
 
 Jt is assumed that m > 2,n > 2, and that each b; > 0. If SMPLX is called then ka is the number of rows in the dimension statement for A in the calling program. Otherwise, if SSPLX is called then TA, ITA, JTA are arrays containing the transpose matrix A‘ in sparse form.
 
-The constraints a,;z7, +--+: - + GinIn{<, =, ~}b; are assumed to be ordered so that the < constraints are followed by the > constraints, and the = constraints come last. NUMLKE and NUMGE have the values:
+The constraints a,;z7, +--+: - + GinIn{<, =, ~}b; are assumed to be ordered so that the < constraints are followed by the > constraints, and the = constraints come last. NUMLE and NUMGE have the values:
 
 NUMLE =: the number of < constraints.
 
 NUMGE =: the number of > constraints.
 
-It is assumed that NUMLI > 0, NUMGE > 0, and NUMLE + NUMGE «< mu.
+It is assumed that NUMLE > 0, NUMGE > 0, and NUMLE + NUMGE «< mu.
 
-When SMPLX or SSPLX is called, the routine attempts to maximize S,¢,1, subject to the constraints. A modified form of the primal simplex algorithm is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXTTER has the value:
+When SMPLX or SSPLX is called, the routine attempts to maximize S,¢,1, subject to the constraints. A modified form of the primal simplex algorithm is employed. Frequently the procedure requires less than 5 iterations to perform the task. The argument MXITER has the value:
 
-MXITER + the maximum number of iterations that may be performed. This argument is provided by the user. The related argument VPER is a variable that is set. by the routine. When the routine termmmates, PPER has for its value the number of iterations that were performed. IND is a variable and fRASIS an array of dimeusion ma. ERASIS contams Che ridices tof the current basic variables zy, and END) is used for mputfoutput purposes. On it put IND is normally set by the user to 0. if END Q then the routine selects its own
+MXITER + the maximum number of iterations that may be performed. This argument is provided by the user. The related argument VPER is a variable that is set. by the routine. When the routine terminates, PPER has for its value the number of iterations that were performed. IND is a variable and fRASIS an array of dimension ma. ERASIS contains Che indices of the current basic variables zy, and END) is used for input/output purposes. On it put IND is normally set by the user to 0. if END Q then the routine selects its own
 
 
 <small>Original source: [View scanned PDF page 312](../scans/page_0312.png)</small>
 
-beginning basis and stores the appropriate indices in IBASIS. [The remainder of this paragraph may be skipped by anyone not acquainted with the simplex algorithm.| If the user wishes to use his owu beginning basis, then IND must be set to 1 and the indices of the initial basic variables stored in IBASIS. It ts not required that the initial basts be selected so that the baste variables are nonnegative. The initial basic variables may be original, slack, surplus, or artificial variables. Slack and surplus variables are automatically provided for the < and > constraints, and artificial variables for the = constraints. The routine defines z,,,,; to be the slack, surplus, or artificial variable for the ¢** constraint 4512, +++: + Qintn{<,=, >}b;. lf IND = 0 then the slack, surplus, and artificial variables are the initial basic variables that are employed.
+beginning basis and stores the appropriate indices in IBASIS. [The remainder of this paragraph may be skipped by anyone not acquainted with the simplex algorithm.| If the user wishes to use his own beginning basis, then IND must be set to 1 and the indices of the initial basic variables stored in IBASIS. It ts not required that the initial basts be selected so that the baste variables are nonnegative. The initial basic variables may be original, slack, surplus, or artificial variables. Slack and surplus variables are automatically provided for the < and > constraints, and artificial variables for the = constraints. The routine defines z,,,,; to be the slack, surplus, or artificial variable for the ¢** constraint 4512, +++: + Qintn{<,=, >}b;. lf IND = 0 then the slack, surplus, and artificial variables are the initial basic variables that are employed.
 
 On output [ND reports the status of the results. The routine assigns IND one of the following values:
 
@@ -254,7 +254,7 @@ BI is an array of dimension m? that is used for storing the inverse of the basis
 
 WK is an array of dimension 2m: or larger, and [WK is an array of dimension 2m +n or larger. WK and IWK are work spaces,
 
-**Input Errors.** IND 5 occurs on output when one of the followinyp conditions is violated:
+**Input Errors.** IND 5 occurs on output when one of the following conditions is violated:
 
 (1) n > 2 and ka om > 2.
 
@@ -262,13 +262,13 @@ WK is an array of dimension 2m: or larger, and [WK is an array of dimension 2m +
 
 3) Bach 6, > 0.
 
-4) ‘Phe basis matrix specified by the user in EBASIS (when IND 1 on input) is nensingular and suflictently well conditioned so that its inverse can be computed.
+4) ‘The basis matrix specified by the user in EBASIS (when IND 1 on input) is nonsingular and sufficiently well conditioned so that its inverse can be computed.
 
 ( ( (
 
-**Remarks.** (EH) ASA CPA WPA PPA are not modified by the routines (2) ‘Phe routines traximige Soeja,0 Phos function can be miuimized by maximizing (0 e,)0,
+**Remarks.** (EH) ASA CPA WPA PPA are not modified by the routines (2) ‘The routines maximize Soeja,0 Phos function can be minimized by maximizing (0 e,)0,
 
-and then clhingoie the sin of the result
+and then change the sign of the result
 
 alt
 
@@ -279,7 +279,7 @@ alt
 
 when A is sparse.
 
-Aigorithm. A three step procedure is used. The first step eliminates the negative variables. Then phases (1) and (2) of the primal simplex algorithm are invoked. Negative variables are eliminated as follows: Let 751, ...,2Bm be the basic variables and y,,; the components of the simplex tableau.
+Algorithm. A three step procedure is used. The first step eliminates the negative variables. Then phases (1) and (2) of the primal simplex algorithm are invoked. Negative variables are eliminated as follows: Let 751, ...,2Bm be the basic variables and y,,; the components of the simplex tableau.
 
 (1)
 
@@ -340,7 +340,7 @@ the routine. a(1),..., a(n) stored in JC Also Tis assigned the minimized value L
 
 IWK is an array of dimension 7n + 2 or larger that is a work space for the routine.
 
-IRR ows a vaniable that is set by the routine. If JC and 7 are obtained then IERR is assigned the value OQ) Otherwise, if the problem cannot be solved because of integer overflow,
+IRR ows a variable that is set by the routine. If JC and 7 are obtained then IERR is assigned the value OQ) Otherwise, if the problem cannot be solved because of integer overflow,
 
 then IERR I.
 
@@ -350,9 +350,9 @@ Remarks.
 (2) ASSGN tmuintimizes 7 Pag) Phis function can be maximized by minimizing
 ```
 
-MC eye, ,) and then changing the sign of the result Programming ASSGN calls the subroutine ASSGNE ASSGNI was written by Giorgia Carpaneto and Paolo Toth (Uouversity of Bologna, Ttaly), and modified by AH. Morris The function EPMPAR as alse used Reference ( Carpanero. (0 and Toth. be, “Alpotithin S48.) Solution of the Asstaainent
+MC eye, ,) and then changing the sign of the result Programming ASSGN calls the subroutine ASSGNE ASSGNI was written by Giorgia Carpaneto and Paolo Toth (University of Bologna, Italy), and modified by AH. Morris The function EPMPAR is also used Reference ( Carpanero. (0 and Toth. be, “Algorithm S48.) Solution of the Assignment
 
-Probie.” ACA Trans Aath Softwere ti (U8) pp lod TLE
+Probie.” ACA Trans Aath Software ti (U8) pp lod TLE
 
 tle
 
@@ -369,7 +369,7 @@ tle
 | `MKP` | `SUBROUTINE` | `N, M, P, W, K, BCK, XSTAR, VSTAR, WK, IWK, NUM` | [`L76685`](../source_parts/nswc_part_08.f#L2452) |
 
 
-Given n > 2 iterns, each having a profit p; > 0 and weight w; > 0, and m > 1 containers (knapsacks), each having a capacity k, > 0. Let z,; = 1 if item 7 is assigned to knapsack 1. Otherwise, let z;; == 0. Then the problem is to find an assignment z,; of the
+Given n > 2 items, each having a profit p; > 0 and weight w; > 0, and m > 1 containers (knapsacks), each having a capacity k, > 0. Let z,; = 1 if item 7 is assigned to knapsack 1. Otherwise, let z;; == 0. Then the problem is to find an assignment z,; of the
 
 m on items to the knapsacks which maximizes 0 = )> 5) p,2,; subject to s=ls=1
 
@@ -397,9 +397,9 @@ P and W are integer arrays containing pi,...,Pn and w,,...,w,, and K an integer 
 
 A depth-first tree search employing backtracking is used. if no bound is placed on the number of back tracks that may be performed, then the exact maximum a 3s assured. However, if the number of back tracks must be restricted, then only an approximation to the maximum may be obtained. The argument NBCK is available for limiting the backtracking. NBCK is a variable. On input, if NBCK = -1 then no restrictions are placed on the backtracking. Otherwise, if NBCK # ~—1, then it is assumed that NBCK is the maximum number of back tracks that are permitted. When the routine terminates, NBCK <= the number of back tracks that were actually performed.
 
-TEMP 1s a real array of dimension n or larger, and I'TEMP an integer array of dimension NUM. It is assumed that NUM > 5m 4 14n-+4mn-+ 3. TEMP and ITEMP are work spaces for the routine. It should be noted thav TEMP is the only argument of MKP that is not of integer type.
+TEMP 1s a real array of dimension n or larger, and I'TEMP an integer array of dimension NUM. It is assumed that NUM > 5m 4 14n-+4mn-+ 3. TEMP and ITEMP are work spaces for the routine. It should be noted that TEMP is the only argument of MKP that is not of integer type.
 
-**Error return.** If an input error is detected then @ 148 set to one of the followimy values:
+**Error return.** If an input error is detected then @ 148 set to one of the following values:
 
 od -Lifrn es Lorn < 2.
 
@@ -412,15 +412,15 @@ o = —8 if min{wy,...,wa} > ki; ie. if a knapsack cannot contain any item.
 
 go —4 if max{wi, ..., Wp} > km; Le., if an item cannot fit in any knapsack.
 
-o=—5 if Djw,; < kn; ie., if knapsack m can contain all the iterns.
+o=—5 if Djw,; < kn; ie., if knapsack m can contain all the items.
 
 o = ~7 if the knapsacks are not ordered so that ky <--- < ky.
 
 o0 = -8 if NUM < 5m+ l4n+ 4mn4 3.
 
-Backtracking. For NBCK = —1, the time required for finding the exact maximum depends primarily on the value of m, and can increase quite drametically for very small increases in the value of m. It is recommended that this setting never be used when m > 10. Instead, if m > 10 then a setting cof NBCK < 50 frequently suffices.
+Backtracking. For NBCK = —1, the time required for finding the exact maximum depends primarily on the value of m, and can increase quite dramatically for very small increases in the value of m. It is recommended that this setting never be used when m > 10. Instead, if m > 10 then a setting of NBCK < 50 frequently suffices.
 
 **Programming.** MKP employs the subroutines MKP1, S(GMA1, PI1, PARC, SKNP, and SKNP1. The interface subroutine MKP was written by A.H. Morris. The remaining subroutines were written by Silvano Martello (University of Bologna) and Paolo Toth (University of Florence) and modified by A.H. Morris. The subroutine RISORT is also used.
 
-**Reference.** Martello, S. and Toth, P.,“Algorithm 632. A Program for the 0-1 Multiple Knapsack Problein,” ACM Trans. Math Software 11 (1985), pp. 135-140.
+**Reference.** Martello, S. and Toth, P.,“Algorithm 632. A Program for the 0-1 Multiple Knapsack Problem,” ACM Trans. Math Software 11 (1985), pp. 135-140.
 

@@ -23,9 +23,9 @@ CALL URNG(IX, X, N, IERR)
 CALL DURNG(IX, X, N, IERR)
 ```
 
-A is an array of dimensiion n or larger where n > 1. URNG is used if A is a real array and DURNG is used if A is a double precision array.
+A is an array of dimension n or larger where n > 1. URNG is used if A is a real array and DURNG is used if A is a double precision array.
 
-The argument n is the number of variates to be generated, and tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of variates. It is assumed that 1 < ix < 234-1. When URNG or DURNG is called, if no input errors are detected then JERR is set to 0 and n uniform variates are stcred in A. On output, tz is a new seed for generating mere variates.
+The argument n is the number of variates to be generated, and tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of variates. It is assumed that 1 < ix < 234-1. When URNG or DURNG is called, if no input errors are detected then JERR is set to 0 and n uniform variates are stored in A. On output, tz is a new seed for generating mere variates.
 
 **Error Return.** IERR = 1 if n < 0 and IERR = 2 if tz is not a proper seed.
 
@@ -39,7 +39,7 @@ generate the same 30 variates.
 
 **Remark.** {t is assumed that the integer arithmetic being used handles ali integers ¢ in the interval |s| < 2°) — 4,
 
-**Programming.** Written by Linus Schrage (University of Chicage). Adapted by A.H. Morris.
+**Programming.** Written by Linus Schrage (University of Chicago). Adapted by A.H. Morris.
 
 **Reference.** Schrage, Linus,“A More Portable Fortran Random Number Generator,” ACM Trans. Math Software 5 (1979), pp. 132-138.
 
@@ -57,16 +57,16 @@ generate the same 30 variates.
 | `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L113261`](../source_parts/nswc_part_11.f#L7250) |
 
 
-Tne following subroutines are available for generating points (71,91), ..-,{2n, Yn) uniformly where 0 -< 2, < l and 0 < y, < 1 for each ¢.
+The following subroutines are available for generating points (71,91), ..-,{2n, Yn) uniformly where 0 -< 2, < l and 0 < y, < 1 for each ¢.
 
 ```fortran
 CALL URNG2(IX, X, Y, N, IERR)
 CALL DURNG2(IX, X, Y, N, IERR)
 ```
 
-and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arcays, and DURNG2 is used if X and Y are double precision arrays.
+and Y are arrays of dimension n or larger where n > 1. URNG2 is used if X and Y are real arrays, and DURNG2 is used if X and Y are double precision arrays.
 
-The atzuinent n is the number of points to be generated, and tz and JERR are variables. On input, tt is an integer (called a seed) for initializing the sequence of points. It is assumed shat 1 < te < 49! —1. When URNGZ or DURNG2 is called, if no input errors are detected then [ERR is set to 0 and n points are generated. The abscissas 2,,...,2,, of the points are stored in X and tie ordinates y,,...,y, are stored in Y. On output, tz isa new seed for generating more poinis,
+The argument n is the number of points to be generated, and tz and JERR are variables. On input, tt is an integer (called a seed) for initializing the sequence of points. It is assumed shat 1 < te < 49! —1. When URNGZ or DURNG2 is called, if no input errors are detected then [ERR is set to 0 and n points are generated. The abscissas 2,,...,2,, of the points are stored in X and tie ordinates y,,...,y, are stored in Y. On output, tz is a new seed for generating more points,
 
 **Error Return.** JERR = 1 ifn < G and IERR = 2 if ¢2 is not a proper seed.
 
@@ -87,7 +87,7 @@ generate the same 30 points.
 
 **Programming.** Written by Linus Schrage (University of Chicago). Adapted by A.H. Morris.
 
-**Reference.** Schrage, Linus,“A More Portable Fortran Random Number Generator,” ACM Trang. Math Software 5 (1979), pp. 132-138.
+**Reference.** Schrage, Linus,“A More Portable Fortran Random Number Generator,” ACM Trans. Math Software 5 (1979), pp. 132-138.
 
 
 <small>Original source: [View scanned PDF page 441](../scans/page_0441.png)</small>
@@ -110,13 +110,13 @@ CALL RCIR(N, IX, X, Y, IERR)
 CALL DRCIR(N, IX, X, Y, IERR)
 ```
 
-X and ¥ are arrays of dimension n oy iarger Where i > i. RCOUR (3 used if X and Y are real arrays, and DRCIR is used \f X and Y are double pzvcision arrays.
+X and ¥ are arrays of dimension n oy larger Where i > i. RCOUR (3 used if X and Y are real arrays, and DRCIR is used \f X and Y are double precision arrays.
 
-The argument n is the number of points to be senerated, ad tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of points. It is assumed that 1 < tz < 2%! -- 1. When RCIR or DRCIR is called, if no input errors are detected then IERR is set to 0 and n points are generated. The abscissaz 21, ...,2, of the points are stored in X and the ordinates y,, ...,¥, are stored in Y. On output, ix is a new seed for generating more poinis.
+The argument n is the number of points to be generated, ad tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of points. It is assumed that 1 < tz < 2%! -- 1. When RCIR or DRCIR is called, if no input errors are detected then IERR is set to 0 and n points are generated. The abscissas 21, ...,2, of the points are stored in X and the ordinates y,, ...,¥, are stored in Y. On output, ix is a new seed for generating more points.
 
-Errow Return. [ERR = 1 ifm < 0 and IERR = 2 if fz is not a proper seed.
+Error Return. [ERR = 1 ifm < 0 and IERR = 2 if fz is not a proper seed.
 
-Usaye. A given seed always initiates the same set of points. Thus, the following two sets of instructions
+Usage. A given seed always initiates the same set of points. Thus, the following two sets of instructions
 
 (1) IX=7 CALL RCIR(30,IX,X,Y,IERR)
 
@@ -132,9 +132,9 @@ Remarks.
 
 li] < 2381,
 
-Algorithm Points are gonerated uniformly in the square {(r,y) : Ja! < Land yf <b}. The procedure terminates woen n points have been obtained which he in tne unit circle
+Algorithm Points are generated uniformly in the square {(r,y) : Ja! < Land yf <b}. The procedure terminates when n points have been obtained which he in the unit circle
 
-**Programming.** RCL? calls the subroutine RCIRG, and DRCIR cells the subroutine DI CIR. These routiaes were weitton by A. TE Morris,
+**Programming.** RCL? calls the subroutine RCIRG, and DRCIR cells the subroutine DI CIR. These routines were written by A. TE Morris,
 
 
 <small>Original source: [View scanned PDF page 442](../scans/page_0442.png)</small>
@@ -156,7 +156,7 @@ Consider the normal distribution having the distribution function
 
 Fc) = Ss [ ent 2 at ( } J2n J ~00
 
-for all real x. This distribution has mean 0 and standard deviation 1. The following subroutities are available for cenerating normal variates from this distribution.
+for all real x. This distribution has mean 0 and standard deviation 1. The following subroutines are available for generating normal variates from this distribution.
 
 ```fortran
 CALL RNOR(IX, A, N, IERR)
@@ -189,11 +189,11 @@ thea we note that (1) and (2) generate the same 30 normal variates. Also (3) gen
 
 (1) If ay,...,@, ere variates from RNOR and v,; = ro + oa; fort = 1,...,n ando > 0, then vj, ...,0, are variates from a normal distribution with mean x9 and standard deviation «.
 
-(2) It is essumed that the integer arithmetic being used handles all integers in the interval ye oy3t
+(2) It is assumed that the integer arithmetic being used handles all integers in the interval ye oy3t
 
-**Programming.** RNOR calls the subroutine RCIR1, and DRNOR calls the subroutine DRCIR1. These routines are written by A. H. Marris.
+**Programming.** RNOR calls the subroutine RCIR1, and DRNOR calls the subroutine DRCIR1. These routines are written by A. H. Morris.
 
-**Reference.** Marsaglia, G. and Bray, T.A.,“A Convenient Method for Generating Normal Variables,” STAM Review 6 (1964), pp. 260-264.
+**Reference.** Marsaglia, G. and Bray, T.A.,“A Convenient Method for Generating Normal Variables,” SIAM Review 6 (1964), pp. 260-264.
 
 ```fortran
 CALL NRNG(IX, A, N, IERR)
@@ -202,11 +202,11 @@ CALL DNRNG(IX, A, N, IERR)
 
 A is an array of dimension n or larger where n > 1. A is a real array if NRNG is used and .4 is a double precision array if DNRKNG is used.
 
-The argument n is the number of variates to be generated, and tz and TERR are variables. On input, tz is an integer (called a ceed) for initializing the sequence of variates. It is assumed that 1 < tz < 23! —1. When NPNG or DNRNG is called, if no input errois are detected then IERR is set to 0 and n variates are stared in A. On output, tz is a new seed for generating more variates.
+The argument n is the number of variates to be generated, and tz and TERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of variates. It is assumed that 1 < tz < 23! —1. When NPNG or DNRNG is called, if no input errors are detected then IERR is set to 0 and n variates are stared in A. On output, tz is a new seed for generating more variates.
 
-Error Return, TERR = 1 ifn < C and IERR = 2 if tz is nct a proper seed. Algorithns. The Box-Mul'er algorithni is used.
+Error Return, TERR = 1 ifn < C and IERR = 2 if tz is nct a proper seed. Algorithm. The Box-Muller algorithm is used.
 
-Usage. Norma] variaves are generated in pairs. The usage of NRNG and DNRNG is identical to the usage of RNOR and DRNOR.
+Usage. Normal variates are generated in pairs. The usage of NRNG and DNRNG is identical to the usage of RNOR and DRNOR.
 
 **Remarks.**
 
@@ -251,20 +251,20 @@ It is assumed that m > 2. A is an array of dimension m(m +- 1)/2 or larger conta
 
 The argument. n is the number of vectors to be generated, and X is a 2-dimensional array of dimension kr x n. It is assumed that kr > m.
 
-N&VG is used if A, 4, and X are real arrays, and DNRVG is used if A, zp, and X are dcuble precision arrays.
+N&VG is used if A, 4, and X are real arrays, and DNRVG is used if A, zp, and X are double precision arrays.
 
-MO is an argument which specifies if NRVG or DNRVG is heing called for the first time, On an initial call, MO = 0 and we have the following setup:
+MO is an argument which specifies if NRVG or DNRVG is being called for the first time, On an initial call, MO = 0 and we have the following setup:
 
-The arguments tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of vectors. It is assumed that 1 < tz < 294 - 1. When NRVG or DNRVG is called, if no input errors are detected then TERR is set to 0 and n vectors x are stored in X. The j'” vector is stored in the 7** column of X. On output, tz is a new sced for generating more vectors.
+The arguments tz and IERR are variables. On input, tz is an integer (called a seed) for initializing the sequence of vectors. It is assumed that 1 < tz < 294 - 1. When NRVG or DNRVG is called, if no input errors are detected then TERR is set to 0 and n vectors x are stored in X. The j'” vector is stored in the 7** column of X. On output, tz is a new seed for generating more vectors.
 
 ```text
 Error Return. IERR = Lifn <0, IERR = 2ifm < lorm> kz, LERR = 3 if Ais not a
 positive definite matrix, and IFRR = 4 if tz is not a proper seed.
 ```
 
-On an initial call to NRVG or DNRVG, the lower triangular matrix in the Cliolesky decomposition of A replaces the original data in A. If IMRR -= 0 then the routine may be recalled with MO + 0 to generate more vectors. If MO / O then it is assumed that A and on have not been modified by the user. However, n, uw, X, and ka may be different.
+On an initial call to NRVG or DNRVG, the lower triangular matrix in the Cholesky decomposition of A replaces the original data in A. If IMRR -= 0 then the routine may be recalled with MO + 0 to generate more vectors. If MO / O then it is assumed that A and on have not been modified by the user. However, n, uw, X, and ka may be different.
 
-‘See the sectiun on packed syinmetric matrices and the subroutines MICVES, MOVSF, DMCVEBS, and DMCOVSF.
+‘See the section on packed symmetric matrices and the subroutines MICVES, MOVSF, DMCVEBS, and DMCOVSF.
 
 
 <small>Original source: [View scanned PDF page 445](../scans/page_0445.png)</small>
@@ -283,7 +283,7 @@ generate the same 30 vectors.
 
 **Algorithm.** The lower triangular matrix D in the Cholesky decomposition of A is computed, and n vectors z = (21, ...,2m) are generated where the values z; are independent variates from the normal distribution with mean O and variance 1. The n variates x = Lz+ yp of the multivariate normal distribution are then computed.
 
-Pregramming. NRVG employs the subroutines RNOR, RCIR1, SPPFA, and function SDOT, aad DNRVG employs the subroutines DRNOR, DRCIR1, DPPEFA, and function DDOT. NRVG and DNRVG were written by A. H. Morris.
+Programming. NRVG employs the subroutines RNOR, RCIR1, SPPFA, and function SDOT, aad DNRVG employs the subroutines DRNOR, DRCIR1, DPPEFA, and function DDOT. NRVG and DNRVG were written by A. H. Morris.
 
 **Reference.** Anderson, T.W., An Introduction to Multivariate Statistical Analysts, John Wiley and Sons, New York, 1958, pp. 5-27.
 
@@ -298,7 +298,7 @@ The argument n is the number of vectors to be generated, and X is a 2-dimensiona
 
 NRVGI 1s used if A, wy and X are real arrays, and DNRVG1 is used if A, yz, and X are double precision arrays.
 
-MO is an argument which specifies if NRVGI or DNRVGLI is being called for the firet
+MO is an argument which specifies if NRVGI or DNRVGLI is being called for the first
 
 
 <small>Original source: [View scanned PDF page 446](../scans/page_0446.png)</small>
@@ -314,7 +314,7 @@ some 1, and IERR = 4 if fz is not a proper seed.
 
 On an initial call to NRVGI or DNRVGI1, the square roots of the diagonal elements of the matrix are stored in A. If IERR = 0 then the routine may be recalled with MO # 0 to generate more vectors. If MO # 0 then it is assumed that A and m have not been modified by the user. However, n, », X, and kx may be different. The routine employs the roots obtained on the initial call to NRVG1 or DNRVGI to generate n new vectors. As before, if no input errors are detected then IERR is set to 0 and the new vectors are stored in X.
 
-Usage. The usage of NRVGi and DNRVG1 iis identical to the usage of NRVG and DNRVG.
+Usage. The usage of NRVGi and DNRVG1 is identical to the usage of NRVG and DNRVG.
 
 **Remarks.**
 
@@ -353,7 +353,7 @@ CALL RANEXP(N, A, ISEED, X, IERROR)
 CALL DRNEXP(N, A, ISEED, X, IERROR)
 ```
 
-X is an array of dimension n or larger where n > 1. The argument a is a real number and X a real array if RANEXP is used. Otherwise, a is a double precision nurmber and X a double precision array if DRNEXP is used.
+X is an array of dimension n or larger where n > 1. The argument a is a real number and X a real array if RANEXP is used. Otherwise, a is a double precision number and X a double precision array if DRNEXP is used.
 
 The argument n is the number of variates to be generated, and tz and IERR are variables. On input, iz is an integer (called a seed) for initializing the sequence of variates. It is assumed that 1 < tz < 23} —1. When RANEXP or DRNEXP is called, if no input errors are detected then IERR is set to 0 and n exponential variates are stored in X. On output, iz is a new seed for generating more variates.
 
@@ -367,11 +367,11 @@ Usage. A given seed always initiates the same set of variates. Thus, the followi
 
 generate the same 30 variates.
 
-**Remark.** If is assumed that the integer arithmetic being used hiindles all integers + in the
+**Remark.** If is assumed that the integer arithmetic being used handles all integers + in the
 
 interval |¢| < 2°) - 1.
 
-**Programming.** RANEXP calls the subroutine URNu, and DRNEXP calls the subroutine DURNG. RANEXP and DRNEXP were written by John R. Criggler. RANEXP has been obtained from the STATLIB library.
+**Programming.** RANEXP calls the subroutine URNu, and DRNEXP calls the subroutine DURNG. RANEXP and DRNEXP were written by John R. Crigler. RANEXP has been obtained from the STATLIB library.
 
 
 <small>Original source: [View scanned PDF page 448](../scans/page_0448.png)</small>
@@ -407,13 +407,13 @@ CALL RGAM(IX, A, N, X, IERR)
 CALL DRGAM(IX, A, N, X, IERR)
 ```
 
-X is an array of d'mension nv or jarger where n > 1. The argument a is a real number and .X a real array if RGAM is used. Otherwise, a is a double precision number and X a double precision array if DRGAM is used.
+X is an array of dimension nv or larger where n > 1. The argument a is a real number and .X a real array if RGAM is used. Otherwise, a is a double precision number and X a double precision array if DRGAM is used.
 
-It is assumed that a > 0.1 and that n is the number of variates to be generated. IERR and tz are variables. On input, tz is an integer (cailed a sced) for initializing the sequence of variates. it is assumed that 1 <i tz < 23! —~ 1. When RGAM or DRGAM is called, if no input errors are detected then JERR is set. to 0 and n gamma variates are stored in X. On output, iz 1s a new seed for generating more variates.
+It is assumed that a > 0.1 and that n is the number of variates to be generated. IERR and tz are variables. On input, tz is an integer (called a seed) for initializing the sequence of variates. it is assumed that 1 <i tz < 23! —~ 1. When RGAM or DRGAM is called, if no input errors are detected then JERR is set. to 0 and n gamma variates are stored in X. On output, iz 1s a new seed for generating more variates.
 
 **Error Return.** ORR = Lifn <0, TERR == 2ifa < 0.1, and IERR = 3 if tz is not a proper seed.
 
-Usage. A given seed always initiates the sarne set. of variates. Thus, the following two sets
+Usage. A given seed always initiates the same set. of variates. Thus, the following two sets
 
 of instructions
 
@@ -441,7 +441,7 @@ generate the same 30 variates.
 
 (2) It is assumed that the integer arithmetic being used handles all integers ¢ in the interval jij < 234-1.
 
-**Programming.** RGAM calls the subroutines URNGO and GAMINV, and DRGAM ecails the subroutines DURNGO and DGINV. RGAM and DRGAM were written by A. H. Morris.
+**Programming.** RGAM calls the subroutines URNGO and GAMINV, and DRGAM calls the subroutines DURNGO and DGINV. RGAM and DRGAM were written by A. H. Morris.
 
 SOG
 
@@ -470,13 +470,13 @@ CALL RBETA(N, A, B, IX, X, IERR)
 CALL DRBETA(N, A, B, IX, X, IERR)
 ```
 
-X is an array of dimension n or larger where n > 1. The arguments a and 8 are real uumbers and X a real array if RBETA is «sed. Otherwise, a and 6 are double precision numbers and X a double precision array if ORBETA is used.
+X is an array of dimension n or larger where n > 1. The arguments a and 8 are real numbers and X a real array if RBETA is «sed. Otherwise, a and 6 are double precision numbers and X a double precision array if ORBETA is used.
 
-It is assumed that a,b > 1/4 and that n is the number of variates to be generated. TERR and tz are variables. On input, 1z is an integer (called a seed) for initializing the sequence of variates. It is assumed that } < ix < 23! — 1. When RBETA or DRBETA is called, if no input, errors are detected then IEF.R is set to O and n beta variates are stored in X. On output, tz is a new seed for generaiing more variates.
+It is assumed that a,b > 1/4 and that n is the number of variates to be generated. TERR and tz are variables. On input, 1z is an integer (called a seed) for initializing the sequence of variates. It is assumed that } < ix < 23! — 1. When RBETA or DRBETA is called, if no input, errors are detected then IEF.R is set to O and n beta variates are stored in X. On output, tz is a new seed for generating more variates.
 
 **Error Return.** IERR = 1 ifn < 0, IERK = 2 if a < 1/4 or 6 < 1/4, and IERR = 3 if tz is not a4 proper seed.
 
-Usage. A given seed always initia‘es the gaine set of variates. Thus, the following two sets of instructions
+Usage. A given seed always initia‘es the same set of variates. Thus, the following two sets of instructions
 
 (1) IX=7 CALL RBETA (30, A, B, EX, X, IERR)
 
@@ -484,9 +484,9 @@ Usage. A given seed always initia‘es the gaine set of variates. Thus, the foll
 
 generate the same 30 variates.
 
-Warning, ‘The double precis on subroutine ORBITA can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated,
+Warning, ‘The double precision subroutine ORBITA can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated,
 
-**Remark.** [It is assumed that the integer arithmetic belug used handles all integers ¢ in the
+**Remark.** [It is assumed that the integer arithmetic being used handles all integers ¢ in the
 
 interval |e} = 294g. Programming. RBE’PA calls the subroutines OR NGO and GAMINY, and DRBR’PA calls
 
@@ -542,9 +542,9 @@ CALL FRAN(N, A, B, IX, X, IERR)
 CALL FRAN(N, A, B, IX, X, IERR)
 ```
 
-renerate the same SO vartates
+generate the same SO variates
 
-Warning The double precision subroutine OPRAN can be quite stow. PO ds recomunended
+Warning The double precision subroutine OPRAN can be quite stow. PO ds recommended
 
 that its speed he cheeSed df thousands of variates are to be generated
 
@@ -553,7 +553,7 @@ that its speed he cheeSed df thousands of variates are to be generated
 
 **Remark.** It is assumed that the integer arithmetic being used handles all integers 7 in the interval |#| < 2°! -- 1.
 
-**Programming.** FRAN cails the subroutines URNGO and GAMINV, and DF RAN calls the subroutines DURNGO and GINYV. FRAN ang DFRAN were w- iter by A. H. Morris.
+**Programming.** FRAN calls the subroutines URNGO and GAMINV, and DF RAN calls the subroutines DURNGO and GINYV. FRAN ang DFRAN were w- iter by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 454](../scans/page_0454.png)</small>
@@ -595,9 +595,9 @@ CALL TRAN(N, A, IX, X, IERR)
 CALL TRAN(N, A, IX, X, IERR)
 ```
 
-generate the sare 30 variates,
+generate the same 30 variates,
 
-**Warning.** The double precisicn subroutine DT RAN can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated
+**Warning.** The double precision subroutine DT RAN can be quite slow. It is recommended that its speed be checked if thousands of variates are to be generated
 
 
 <small>Original source: [View scanned PDF page 455](../scans/page_0455.png)</small>
@@ -606,7 +606,7 @@ generate the sare 30 variates,
 
 interval |s! «¢ 23) — 1.
 
-**Programming.** TRAN calis the subroutines URNGO, URNG1, PNI, and GAMINV, and DTRAN calls the routines DURNGO, DURNGI, DPNI, and DGINV. TRAN and DTRAN
+**Programming.** TRAN calls the subroutines URNGO, URNG1, PNI, and GAMINV, and DTRAN calls the routines DURNGO, DURNGI, DPNI, and DGINV. TRAN and DTRAN
 
 were written by A. H. Morris.
 
@@ -630,7 +630,7 @@ Given a sequence of independent variates z1,...,2n (mn > 2) from a norma! distri
 
 ay == Ko -f @(ay-.1 — 20) + 2; (j = 2, ...,n).
 
-Then aj,...,@, are variates from a normal distribution with mean rg and variances 9? /{ 1 — as. Since zi, ...,2, are independent variates, a; (j > 2) is considered to depen only on a;—1 for information from the past. Hence, a), ...,¢, forms a first order Markov ‘Le, first order autoregressive) process. Since the process is covariance stationary, the correlation
+Then aj,...,@, are variates from a normal distribution with mean rg and variances 9? /{ 1 — as. Since zi, ...,2, are independent variates, a; (j > 2) is considered to depend only on a;—1 for information from the past. Hence, a), ...,¢, forms a first order Markov ‘Le, first order autoregressive) process. Since the process is covariance stationary, the correlation
 
 between terms a; and a, of the sequence becomes progressively weaker when |k— | increases.
 
@@ -641,7 +641,7 @@ CALL RMKi(n, 20,0, a,12,.4, TERR)
 CALL DRMK1(N, FMU, SIG, ALPHA, ISEED, X, IERROR)
 ```
 
-The arguments 29,0, and @ are real numbers anc A a real arr » if RMK1 ic used. Otherwise, 29,0, and @ are double precision numbers and A a double precision array when DRMK1 is used.
+The arguments 29,0, and @ are real numbers and A a real arr » if RMK1 ic used. Otherwise, 29,0, and @ are double precision numbers and A a double precision array when DRMK1 is used.
 
 A is an array of dimension n or larger when n > 2, and t7 and TERR are variables. It is assumed that o > 0 and |a| < 1. On input, ¢¢ is an integer (called a seed) for initializing the sequence of variates z1,...,Z,. It is assumed that fk < fz < 23) — 4. When RMK1 or DRMK1 is called, if no input errors are detected then IERR is set to 0 and a sequence ay, ..-,@, is obtained and stored in A. On output, tz is a new seed for generating other sequences dy, ...,4n.-
 
@@ -653,12 +653,12 @@ IERR = 2 if ja] > 1
 JERR = 4 if ¢z is not a proper see.
 ```
 
-**Remark.** It is asgurned that the integer arithmetic being used havdies ali integers yin the interval |i] < 23t — y.
+**Remark.** It is assumed that the integer arithmetic being used handles all integers yin the interval |i] < 23t — y.
 
-**Programming.** RMK1 employs the subroutines RNOR and ROERT, and DRME: employs the subroutines DRNOR and DRCIRL. RMK1 was written by John R. Crigle: and madified by A. H. Morns. RMK1 is a modification of the subroutine RANMET, which resides in the STATLIB library. DRMK) was adapted from KMK1 by A. HH. Murris
+**Programming.** RMK1 employs the subroutines RNOR and ROERT, and DRME: employs the subroutines DRNOR and DRCIRL. RMK1 was written by John R. Crigler and modified by A. H. Morns. RMK1 is a modification of the subroutine RANMET, which resides in the STATLIB library. DRMK) was adapted from KMK1 by A. HH. Morris
 
 
 <small>Original source: [View scanned PDF page 457](../scans/page_0457.png)</small>
 
-**Reference.** Thomas, M.A., Gemmill, G.W., and Crigler, J.R., STATLIB: NSWC Libvary of Statistical Progvama and Suvroutines, Report NSWC TR 89-37, Naval Surface Warfare Center, Dahlcren, Virginia, °989.
+**Reference.** Thomas, M.A., Gemmill, G.W., and Crigler, J.R., STATLIB: NSWC Library of Statistical Programs and Subroutines, Report NSWC TR 89-37, Naval Surface Warfare Center, Dahlgren, Virginia, °989.
 

@@ -29,7 +29,7 @@ The argument kz is an integer which specifies the interval between successive co
 
 SCOPY is used if X and Y are real arrays, DCOPY is used if X and Y are double precision arrays, and CCOPY is used if X and Y are complex arrays. When any of these routines is called, if n < O then the routine immediately terminates. Otherwise, ifn > 1 then the components 2, of X are stored in Y according to the spacing specified by the ky parameter.
 
-**Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The routines were written by Jack Dongarra (Argonne Nationa! Laboratory).
+**Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The routines were written by Jack Dongarra (Argonne National Laboratory).
 
 **Reference.** Lawson, C. L., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic Lin-
 
@@ -93,7 +93,7 @@ CALL CSROT(N, CX, INCX, CY, INCY, C, S)
 
 The argument kz is an integer which specifies the interval between successive components z, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for t= 1,...,n. Otherwise, if kz < 0 then it is assumed that z, is stored in X(1+ (n — s)|kz|). Similarly, the argument ky specifies the spacing of the components of Y.
 
-SROT is used if X and Y are real arrays, DROT is used if X and Y are double precision arrays, and CSROT is used if X and Y are complex arruys. The arguments c and s are real numbers when SROT and CSROT are used, and are double precision numbers when DROT is used. When any of these routines is called, if n < 0 then the routine immediately terminates. Otherwise, if n > 1 then the components x; and y; are replaced with cx, + sy, and —sz,;+cy,; forf=1,...,n.
+SROT is used if X and Y are real arrays, DROT is used if X and Y are double precision arrays, and CSROT is used if X and Y are complex arrays. The arguments c and s are real numbers when SROT and CSROT are used, and are double precision numbers when DROT is used. When any of these routines is called, if n < 0 then the routine immediately terminates. Otherwise, if n > 1 then the components x; and y; are replaced with cx, + sy, and —sz,;+cy,; for f=1,...,n.
 
 **Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. fT. Krogh. The routines were written by Jack Dongarra (Argonne National Laboratory)
 
@@ -123,7 +123,7 @@ If a; and ag are real numbers where r* = a? + a? #% 0, then there is an orthogon
 
 ; matrix G = ( c *) such that G (2) = (5). In this case c = a)/r and s = ag/r. —s c¢ a2 0 The matrix G represents what is called a Givens rotation. Given A = a , the matrix 2)
 
-G is uniquely defined up te the sign of r.
+G is uniquely defined up to the sign of r.
 
 Alternatively, assume that instead of having A we are given D = (4 i ) and B= 2
 
@@ -152,11 +152,11 @@ in7
 
 <small>Original source: [View scanned PDF page 134](../scans/page_0134.png)</small>
 
-Any H which satisfies (1) is called a modified Givens rotation matriz. H is frequently preferred to G since its use may require fewer multiplications, and square roots are avoided. For convenience, if b2 = G or d; = 0 then H is defined to be the identity matrix and D=D. Otherwise, if b; = 0 or dy = O then formulas (3) are applied.
+Any H which satisfies (1) is called a modified Givens rotation matrix. H is frequently preferred to G since its use may require fewer multiplications, and square roots are avoided. For convenience, if b2 = G or d; = 0 then H is defined to be the identity matrix and D=D. Otherwise, if b; = 0 or dy = O then formulas (3) are applied.
 
 It is normally assumed that dy > 0. However, there are applications where it is
 
-convenient to let dp < 0. If dy > 0 and dy <0 then D and H can be defined by (2) or (3) depending on whether |d,b?| > |d,63| or {d.b?| < |d2b2|. If (8) are used and u # 0, then dy < 0, which is not compatible with the requirement d; > 0. Consequently, dz < 0 is permitted only when |d,b}| > |d2b3|, und we note that 0 < u < 1. Since u can be near 0, D and H may have to be rescaled to avoid overflow and underflow. Rescaling may also be needed when dz > 0 (in this case 1 <u < 2).
+convenient to let dp < 0. If dy > 0 and dy <0 then D and H can be defined by (2) or (3) depending on whether |d,b?| > |d,63| or {d.b?| < |d2b2|. If (8) are used and u # 0, then dy < 0, which is not compatible with the requirement d; > 0. Consequently, dz < 0 is permitted only when |d,b}| > |d2b3|, and we note that 0 < u < 1. Since u can be near 0, D and H may have to be rescaled to avoid overflow and underflow. Rescaling may also be needed when dz > 0 (in this case 1 <u < 2).
 
 The subroutines SROTMG and DROTMG are available for obtaining D and A, and [ the subroutines SROTM and DROTM are available for computing H (=) for any (<).
 
@@ -167,7 +167,7 @@ CALL DROTMG(DD1, DD2, DX1, DY1, DPARAM)
 
 D,, De, By, Be are real variables and @ areal array if SROTMG 3s used, and Dy, De, Ry, Bz are double precision variables and Q a double precision array if DROTMG is used. Q is an array of dimension 5.
 
-It is assumed that D, = dy and By = 6; (¢ = 1,2) on input and that d; > 0. The argument dz may be negative or nonnegative. If hh 7 0 then it is assumed that [d,b?| > |d263 |. When SRO'TMG or DROTMG is called, Dy and Dz are reset. to dy aud do, and 23, is reset to by. Be is not modified, and H is stored in Q as follows.
+It is assumed that D, = dy and By = 6; (¢ = 1,2) on input and that d; > 0. The argument dz may be negative or nonnegative. If hh 7 0 then it is assumed that [d,b?| > |d263 |. When SROTMG or DROTMG is called, Dy and Dz are reset. to dy aud do, and 23, is reset to by. Be is not modified, and H is stored in Q as follows.
 
 Q(1) is an indicator which specifies the elements of H that are stored in Q. IfQ(1) 1 then all the elements are stored and
 
@@ -175,9 +175,9 @@ QZ) -- hay Q(4) - Aas QB) ha QO(5) hay. Otherwise, Q(1) has one of the following
 
 Q(1) 2 ?fis the identity matrix, Q(2),...,Q(5) are not defined.
 
-**Error Return.** Hfdy © Oe fdp Oy} jdgb2] when dy © 0, then Doand Hoare set to the zero mnatrix and 6, Q. In this case, Q(t} Tand Q(t) O fora: 2.
+**Error Return.** Hfdy © Oe fdp Oy} jdgb2] when dy © 0, then Doand Hoare set to the zero matrix and 6, Q. In this case, Q(t} Tand Q(t) O fora: 2.
 
-Programming ‘Vhese subroutines are part of the BLAS packiase of basic dimear alpebrs subroutines designed by Co UL. Lawson, Ro Jo Hanson, DO Ro Kineaid, and Bo TO Kroph SROTUEM OG: and DROUOPNICO were tioedifed oo Al EE Morris,
+Programming ‘These subroutines are part of the BLAS package of basic linear algebra subroutines designed by Co UL. Lawson, Ro Jo Hanson, DO Ro Kincaid, and Bo TO Krogh SROTUEM OG: and DROUOPNICO were modified oo Al EE Morris,
 
 
 <small>Original source: [View scanned PDF page 135](../scans/page_0135.png)</small>
@@ -189,11 +189,11 @@ CALL SROTM/n, X, kz, Y,ky,Q)
 CALL DROTM(N, DX, INCX, DY, INCY, DPARAM)
 ```
 
-Let X = (21, ...,2,) and Y = (y1, ..., yn) be vectors, and Q be the array obtained by SRO'TMG or DROTMG. If A is the modified Givens rotation matrix stored in Q, then SROTM and DROTM are available for computing (3) = H (=) (@=1,...,n).
+Let X = (21, ...,2,) and Y = (y1, ..., yn) be vectors, and Q be the array obtained by SROTMG or DROTMG. If A is the modified Givens rotation matrix stored in Q, then SROTM and DROTM are available for computing (3) = H (=) (@=1,...,n).
 
-The arguinent kz is an integer which specifies the interval between successive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
+The argument kz is an integer which specifies the interval between successive components z, of the vector X. If kx > O then it is assumed that z, is stored in X(1+(#~1)kz) for t= 1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(4 + (n— 1)[kz}). Similarly, the argument ky specifies the spacing of the components of Y.
 
-SROTM is used if X,Y, and @ are real arrays, and DROTM is used if X,Y, and Q are double precision arrays. When SROTM or DROTM is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then the components zx, and y, are replaced with Z, and g, fori =1,...,n.
+SROTM is used if X,Y, and @ are real arrays, and DROTM is used if X,Y, and Q are double precision arrays. When SROTM or DROTM is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then the components zx, and y, are replaced with Z, and g, for i =1,...,n.
 
 **Programming.** These subroutines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh.
 
@@ -223,19 +223,19 @@ The following functions are available for computing the sums >>, 2,y; and 30. Z.
 
 SDOT(n, X, kz, Y,ky) DDOT(n, X, kz, Y, ky) CDOTC(n, X, kz, Y, ky) CDOTU(n, X, kz, Y, ky)
 
-The argument kz is an integer which specities the interval between successive components x, of the vector X. If kz > 0 then it is assumed that z, is stored in X(1+(#—1)kz) for i=1,...,n. Otherwise, if kx < 0 ther it is assumed that z, is stored in X(1+(n—1)|kzj). Similarly, the argument ky specifies the spacing of the components of Y’.
+The argument kz is an integer which specifies the interval between successive components x, of the vector X. If kz > 0 then it is assumed that z, is stored in X(1+(#—1)kz) for i=1,...,n. Otherwise, if kx < 0 then it is assumed that z, is stored in X(1+(n—1)|kzj). Similarly, the argument ky specifies the spacing of the components of Y’.
 
 SDOT is used if X and Y are real arrays, and DDOT is used if X and Y are double precision arrays. SDOT is 2 real function and DDOT is a double precision function. When either of these two functions is called, if n < 0 then the function is assigned the value 0. Otherwise, ifn > 1 then the function is assigned the value >> 7,4.
 
 scl
 
-CDOTC and CDOTU are used if X and Y are complex arrays. COOTC and CDOTU are complex functions. When either of these two functions is called, if n < 0 then the function is assigned the value 0. Otherwise, if n > t then CDOTC(n, X,kz,Y, ky) is assigned
+CDOTC and CDOTU are used if X and Y are complex arrays. CDOTC and CDOTU are complex functions. When either of these two functions is called, if n < 0 then the function is assigned the value 0. Otherwise, if n > t then CDOTC(n, X,kz,Y, ky) is assigned
 
 nm
 
-nm the value 5” z,y, and CDOTU (n, X,kz,Y, ky) is assigned the value >7 2,y.. Remark. DDOT must be declared in the calling program to be of type DOUBLE PRECI- SION, and CDOTC and CDOTYV must be declared to be of type COMPLEX.
+nm the value 5” z,y, and CDOTU (n, X,kz,Y, ky) is assigned the value >7 2,y.. Remark. DDOT must be declared in the calling program to be of type DOUBLE PRECISION, and CDOTC and CDOTU must be declared to be of type COMPLEX.
 
-**Programming.** These functions are part of the BLAS package of basic hnear algebra subroutines designea by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. ‘The functions were written by Jack Dongarra (Argonne National Laboratory).
+**Programming.** These functions are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. ‘The functions were written by Jack Dongarra (Argonne National Laboratory).
 
 **Reference.** Lawson, ©. L., Hanson, R. J., Kincaid, 9. R., and Krogh, F.T., “Basic Linear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979), pp. 308 323
 
@@ -264,13 +264,13 @@ CALL CSCAL(N, CA, CX, INCX)
 CALL CSSCAL(N, SA, CX, INCX)
 ```
 
-The argument kz is a positive integer. It is assumed that the component sz, is stored in X(1 + (¢ — 1)kx) fori = 1,...,n.
+The argument kz is a positive integer. It is assumed that the component sz, is stored in X(1 + (¢ — 1)kx) for i = 1,...,n.
 
-SSCAL is used if @ is a real number znd X a real array, DSCAL is used if « is a double precision number and X a double precision array, CSCAL is used if a is a cormplex number and X a complex array, and CSSCAL is used if a is a real number and X a complex array. When any of these routines is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then each z, is replaced with az,;. Thus when the routine tertaiinates X = (az,,...,a2,).
+SSCAL is used if @ is a real number and X a real array, DSCAL is used if « is a double precision number and X a double precision array, CSCAL is used if a is a complex number and X a complex array, and CSSCAL is used if a is a real number and X a complex array. When any of these routines is called, if n < 0 then the routine immediately terminates. Otherwise, ifn > 1 then each z, is replaced with az,;. Thus when the routine terminates X = (az,,...,a2,).
 
-**Programming.** These routines are part of the BLAS package of basic lincar algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Kroch. The routines were written by Jack Dongarra (Argonne National ¥.aboratory).
+**Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The routines were written by Jack Dongarra (Argonne National ¥.aboratory).
 
-**Reference.** Lawson, C. L., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic [inear Algebra Subprograms for FORTRAN Usage,” A(TM 1'vans. Mata Sojtware § (1979), pp. 308-323.
+**Reference.** Lawson, C. L., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic Linear Algebra Subprograms for FORTRAN Usage,” A(TM 1'vans. Mata Software § (1979), pp. 308-323.
 
 
 <small>Original source: [View scanned PDF page 138](../scans/page_0138.png)</small>
@@ -298,13 +298,13 @@ CALL DAXPY(N, DA, DX, INCX, DY, INCY)
 CALL CAXPY(N, CA, CX, INCX, CY, INCY)
 ```
 
-The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifies the sp cing of the components of the vector Y.
+The argument kz is an integer which specifies the interval between successive components 2, of the vector X. If kx > 0 then it is assumed that 2, is stored in X(1+(#—1)kz) for #=1,...,n. Otherwise, if kx < 0 then it i: assumed that 2, is stored in X(1+ (n —1)|kz]). Similarly, the argument ky specifies the spacing of the components of the vector Y.
 
-SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if a ig a double precision number and X, Y are double precision arrays, and CAXPY is used if a is a complex number and X, Y are complex arrays. When any of these routines is called, if n < 0 or a = O then the routine immediately terminates. Otherwise, if n > 1 then y,; is replaced with az, + y; for + = 1,...,n. Thus when the routine terminates Y = (azy + yi, -..,@%n + Un).
+SAXPY ‘s used if 418 a real number aid X, Y are real arrays, DAXPY is used if a ig a double precision number and X, Y are double precision arrays, and CAXPY is used if a is a complex number and X, Y are complex arrays. When any of these routines is called, if n < 0 or a = O then the routine immediately terminates. Otherwise, if n > 1 then y,; is replaced with az, + y; for + = 1,...,n. Thus when the routine terminates Y = (azy + yi, -..,@%n + Un).
 
 **Programming.** These routines are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The routines were written by Jack Dongarra (Argonne National Laboratory).
 
-**Reference.** Lawsen, C. 1., Hanson, R. J., Kit caid, D. R., and Kragh, F. T., “Basic Linear Algebra Subprograms for FORTRAN Usage,” ACM rans. Mata Software 5 (1979), pp. 308-323.
+**Reference.** Lawson, C. 1., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic Linear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math. Software 5 (1979), pp. 308-323.
 
 
 <small>Original source: [View scanned PDF page 139](../scans/page_0139.png)</small>
@@ -321,9 +321,9 @@ SAXPY ‘s vsed if 418 a real number aid X, Y are real arrays, DAXPY is used if 
 | `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L31999`](../source_parts/nswc_part_04.f#L305) |
 
 
-The following functions are available for computing the 2; norm of a ceal vector or a modified LZ, norm of a complex vector.
+The following functions are available for computing the 2; norm of a real vector or a modified LZ, norm of a complex vector.
 
-SASUIM(n, X, kz) DASUM(n, X, kz; SCASUM(n, X, kz)
+SASUM(n, X, kz) DASUM(n, X, kz; SCASUM(n, X, kz)
 
 ```text
 X := (x1, ....2,) is a vector and kz a positive integer. It is assumed that 2, is stored
@@ -336,9 +336,9 @@ nm % > 1 then the function is assigned the value >> |x|. sol
 
 SCASUM is used if X is a complex array. SCASUM is a real function. When SCASUM is called, if n < 0 then the function is assigned the value 0. Otherwise, if m > 1 then SCASUM(n, X, ka) is assigned the value > {|Re(z,)| + |Im(z,)|].
 
-t=1 Remarks. (1) DASUM must be declared in the calling pregram to be of type DOUBLE PRECISION. (2} SCASUM(n, X, kx) is the norm of the complex vector X == (21,.. ,2n) when X is regarded as a real vector of dimension 2n. This norm is frequently preferred over the n standard Ly norm )> |z,| since it takes less time to compute. t=1 Programming. These functions are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The functions were written by Jack Dongarra (Argonne National Laboratory).
+t=1 Remarks. (1) DASUM must be declared in the calling program to be of type DOUBLE PRECISION. (2} SCASUM(n, X, kx) is the norm of the complex vector X == (21,.. ,2n) when X is regarded as a real vector of dimension 2n. This norm is frequently preferred over the n standard Ly norm )> |z,| since it takes less time to compute. t=1 Programming. These functions are part of the BLAS package of basic linear algebra subroutines designed by C. L. Lawson, R. J. Hanson, D. R. Kincaid, and F. T. Krogh. The functions were written by Jack Dongarra (Argonne National Laboratory).
 
-**Reference.** Gawson, C. L., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic Lineat Algebra Subprcograms for FORTRAN Usage,” ACM Trans. Maih Software 5 (1979),
+**Reference.** Lawson, C. L., Hanson, R. J., Kincaid, D. R., and Krogh, F. T., “Basic Linear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math. Software 5 (1979),
 
 
 <small>Original source: [View scanned PDF page 140](../scans/page_0140.png)</small>
@@ -364,7 +364,7 @@ X = (21, ...,2n) is a vector and kz a positive integer. It is assumed that 2, is
 in X(14 (¢~- i)kr) ford = 1, ...,n.
 ```
 
-SNRM2 is used if X is a real array, DNRM2 is used if X is a double precision array, and SCNRM2 is used if X is a complex array. SNRM2 and SCNRM2 are rea! fur ctions and DNRM? a double precision function. When any of these functions is called, if n < 0 then the function is assigned the value 0. Otherwise, if n > 1 then the function is assigned
+SNRM2 is used if X is a real array, DNRM2 is used if X is a double precision array, and SCNRM2 is used if X is a complex array. SNRM2 and SCNRM2 are real functions and DNRM? a double precision function. When any of these functions is called, if n < 0 then the function is assigned the value 0. Otherwise, if n > 1 then the function is assigned
 
 n 2 the value p |z,| t=]
 

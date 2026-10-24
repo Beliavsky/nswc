@@ -29,7 +29,7 @@ CALL DMCVFS(A, KA, N, B)
 
 Ais ann Xn symmetric matrix and B an array whose dimension is equal to or greater than n(n + 1)/2. The routines store the packed form of A in B. MCVFS is used if A and B are real arrays and DMCVFS is used if A and B are double precision arrays. The input argument ka has the following value:
 
-ka = the numbezx of rows in the dimension statement for A in the calling program It is assuzned that ka > n.
+ka = the number of rows in the dimension statement for A in the calling program It is assumed that ka > n.
 
 **Note.** A and B may begin in the same location. Programmer. A. H. Morris.
 
@@ -68,7 +68,7 @@ Ais areal mxn matrix and B a double precision 2-dimensional array. MCVRD stores 
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimension statement for B in thx czlling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -80,7 +80,7 @@ A is a double precision m x n matrix and B a real 2-dimensional array. MCVDR sto
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimension statement for B in the calling p1ogram It is assumed that ka > m and kb > m, and that B contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -107,7 +107,7 @@ A is a real m x n matrix and B a complex 2-dimensional array. MCVRC stores the m
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb == the number of rows in the dimension statement for B in the calling prograni it is assumed that ka > m and kb > m, and that B contains at least n columns.
+kb == the number of rows in the dimension statement for B in the calling program it is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -125,7 +125,7 @@ kb == the number of rows in the dimension statement for B in the calling progran
 | `CMIMAG` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L32629`](../source_parts/nswc_part_04.f#L935) |
 
 
-if A = (a,j) is a complex matrix then let Re(A) = (Re(a,,)) and Im(A) = (In(a,,)) denote the real and imaginary parts of A. The foilowing subroutines are available for obtaining Re(A) and Im(A).
+if A = (a,j) is a complex matrix then let Re(A) = (Re(a,,)) and Im(A) = (In(a,,)) denote the real and imaginary parts of A. The following subroutines are available for obtaining Re(A) and Im(A).
 
 ```fortran
 CALL CMREAL(M, N, A, KA, B, KB)
@@ -173,7 +173,7 @@ kb = the number of rows in the dimension statement for B in the calling program 
 CALL MCOPY(M, N, A, KA, B, KB)
 ```
 
-A is a real m x n matrix and B a real 2-dimensional array. MCOPY makes a copy of the matrix A und stores itin B, The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program
+A is a real m x n matrix and B a real 2-dimensional array. MCOPY makes a copy of the matrix A and stores it in B, The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program
 
 It is assumed that ka > m and kt > m, and that B contains at least n columns.
 
@@ -195,7 +195,7 @@ A is a double precision m x n matrix and B a double precision 2-dimensional arra
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimensicn statement for B in the calling prograin It is assumed that ka > m and kd > m, and that 8 contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kd > m, and that 8 contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -203,11 +203,11 @@ kb = the number of rows in the dimensicn statement for B in the calling prograin
 CALL CMCOPY(M, N, A, KA, B, KB)
 ```
 
-Ais acomplex mxn matrix and B a complex 2-dimensional array, CMCOPY makes a copy of the matrix A and stores it in 8. The input arguments ke and kb have the following values:
+Ais a complex mxn matrix and B a complex 2-dimensional array, CMCOPY makes a copy of the matrix A and stores it in 8. The input arguments ke and kb have the following values:
 
-ka <= the number of rows in the dimension statement for A in the callhog program
+ka <= the number of rows in the dimension statement for A in the calling program
 
-kb = the number of rows in the dimension statement for B in the catiing program It is assumed that ka > m and kb > m, and that B contains at least n columns.
+kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Programmer.** A. H. Morris.
 
@@ -226,7 +226,7 @@ kb = the number of rows in the dimension statement for B in the catiing program 
 
 If A = (a,;) ig a complex matrix then let A = (a,;) denote the conjugate of A. The following subroutine is available for computing the conjugate matrix A: CALL CMCONJ(m,n, A, ka, B, kb}
 
-Ais acomplex mxn matrix and B a complex 2-dimensional array. CMCONJ computes A and stores the results in B. The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
+Ais a complex mxn matrix and B a complex 2-dimensional array. CMCONJ computes A and stores the results in B. The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb > m, and that B contains at least n columns.
 
 **Remark.** A and B may reference the same storage area when ka = kb.
 
@@ -250,7 +250,7 @@ Ais acomplex mxn matrix and B a complex 2-dimensional array. CMCONJ computes A a
 | `CTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L32926`](../source_parts/nswc_part_04.f#L1232) |
 
 
-The subroutines TPOSE, DTPOSH, C £POSE and TIP, DTIP, CTIP are available for transposing a matrix A. TPOSE, DTPOSE, and CTPOSE are used if the results are to be stored in a separate storage area B. TIP, DTIP, and CTIP are used if the results are to be stored in A (i.e., if the transposition is to be done in place).
+The subroutines TPOSE, DTPOSE, C £POSE and TIP, DTIP, CTIP are available for transposing a matrix A. TPOSE, DTPOSE, and CTPOSE are used if the results are to be stored in a separate storage area B. TIP, DTIP, and CTIP are used if the results are to be stored in A (i.e., if the transposition is to be done in place).
 
 ```fortran
 CALL TPOSE(M, N, A, KA, B, KB)
@@ -258,7 +258,7 @@ CALL DTPOSE(M, N, A, KA, B, KB)
 CALL CTPOSE(M, N, A, KA, B, KB)
 ```
 
-TPOSE is called if A is a real matrix and 8 a real array, DTPOSE is called if A isa double precision matrix and B a double precision array, and CTPOSE is called if 4 is a complex matrix and B a complex array.
+TPOSE is called if A is a real matrix and 8 a real array, DTPOSE is called if A is a double precision matrix and B a double precision array, and CTPOSE is called if 4 is a complex matrix and B a complex array.
 
 A is a matrix having m rows and n columns, and B a 2-dimensional array. The routine transposes A and stores the results in B. The input arguments ka and kb have the following values:
 
@@ -276,13 +276,13 @@ CALL CTIP(A, N1, N2, MOVED, NWORK, NDIM)
 
 TIP is called if A is a real array, DTIP is called if A is a double precision array, and CTIP is called if A is a complex array.
 
-A is an array of dimension mn which contains an m X n matrix to be transposed. The routine transposes the matrix and stcres the results in A. Hf mi =: n then the arguments
+A is an array of dimension mn which contains an m X n matrix to be transposed. The routine transposes the matrix and stores the results in A. Hf mi =: n then the arguments
 
 MOVE, k, MDIM are ignored.
 
-If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assumed to be an array of dimension k. MOVE is a storage area for saving information that inay belp speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the rovtine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
+If m ¥# n then & may be any integer. If k < 0 then MOVE is ignored. Otherwise, if k > 1 then MOVE is assumed to be an array of dimension k. MOVE is a storage area for saving information that may help speed up the transposition process. If no information is saved then TIP, DTIP, and CTIP may run 2 10 times slower than TPOSE, DTPOSE, and CTPOSE, However, the use of a storage area may or may not actually speed up the transposition process. This depends entirely on the values of mi and mn. MDIM ts a variable that is set by the routine. After the routine terminates, MDIM will be the estimated optimum setting for & for the current values of me and n.
 
-**Programming.** The routines TIP, DPTEP, and CVEP employ the subroutine INECTR, ‘The routines were written by Norman Brenner (Dept. of Marth and Planetary Serences,
+**Programming.** The routines TIP, DPTEP, and CVEP employ the subroutine INECTR, ‘The routines were written by Norman Brenner (Dept. of Marth and Planetary Sciences,
 
 Massachusetts Institute of Technology), and modified by A. H. Morris.
 
@@ -307,21 +307,21 @@ LOG
 | `CTRANS` | `SUBROUTINE` | `NM, N, A` | [`L33083`](../source_parts/nswc_part_04.f#L1389) |
 
 
-If A = (a,;) then let A* = (a,;) denote the adjcint of A. The following subroutines are available for computing A”*.
+If A = (a,;) then let A* = (a,;) denote the adjoint of A. The following subroutines are available for computing A”*.
 
 ```fortran
 CALL CMADJ(M, N, A, KA, B, KB)
 ```
 
-A is acomplex m xn matrix and B a complex 2-dimensional array. CMADJ computes A* and stores the results in B. The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program ko = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb » n, and that B contains at least n columns.
+A is a complex m xn matrix and B a complex 2-dimensional array. CMADJ computes A* and stores the results in B. The input arguments ka and kb have the following values: ka = the number of rows in the dimension statement for A in the calling program ko = the number of rows in the dimension statement for B in the calling program It is assumed that ka > m and kb » n, and that B contains at least n columns.
 
 **Remark.** CMADJ combines the following operations: CALL CTPOSE(m,n, A, ka, B, kh) CALL CMCONJ(n, m, B, &b, B, kb)
 
-It is assumed that A and B are diiferent storage areas.
+It is assumed that A and B are different storage areas.
 
 **Programmer.** A. H. Morris. CALL CTRANS(ka, n, A)
 
-A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the niatrix and stores the results in A. It is assumed that ka > n.
+A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS computes the adjoint of the matrix and stores the results in A. It is assumed that ka > n.
 
 **Programmer.** George J. Davis (Georgia State University)
 
@@ -343,15 +343,15 @@ A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS 
 
 The matrix sum C = A+ B can be computed by the following subroutines: CALL MADD(ta,n, A, ka, B, kb, C, kc)
 
-A and B are real m x n matrices and C a real 2-dimensional array. MADD computes A+ B and stores the resulis in C. The input arguinents ka, kb, kc have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program ke = the numb2r of rows in the dimension statement for C in the calling prograin It is assumed that ka > m, kb > m, ke > m, and that C contains at least n columns.
+A and B are real m x n matrices and C a real 2-dimensional array. MADD computes A+ B and stores the results in C. The input arguments ka, kb, kc have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program ke = the numb2r of rows in the dimension statement for C in the calling program It is assumed that ka > m, kb > m, ke > m, and that C contains at least n columns.
 
-The array C' may begin in the same location as A or B. li C begins in the saine lecation as A them it is assumed that ke = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed thet ke == kb. Otherwise, if C dees not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage areas for A and 8B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
+The array C' may begin in the same location as A or B. li C begins in the same location as A them it is assumed that ke = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that ke == kb. Otherwise, if C dees not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage areas for A and 8B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
 
 **Programmer.** A. H. Morris. CALL SMADD(n, A, B,C)
 
 A and B are real packed nx" symmetric matrices and C is a real array whose dimension is equal to or greater than n(n +-1)/2. SMADD computes A+- B, which is also a symmetric matrix, and stores the results in packed form in C.
 
-The array C may begin in the same location as Aor B. If C begins in the same location as A then the result C’ will overwrite the input data A. Similarly, B will be overwritten if C begins in the same location as B. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage
+The array C may begin in the same location as A or B. If C begins in the same location as A then the result C’ will overwrite the input data A. Similarly, B will be overwritten if C begins in the same location as B. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage
 
 areas for Aa! B.
 
@@ -359,16 +359,16 @@ areas for Aa! B.
 
 A and B are double precision m x n matrices and C a double precision 2-dimensional array. DMADD computes -t + B and stores the results in C. The arguments &a, kb, ke have the following values:
 
-ka > the nember of rows in the dimension statement for Ain the callmg program
+ka > the number of rows in the dimension statement for Ain the calling program
 
-kb the number of rows in the dunension statement for ff in the calling program
+kb the number of rows in the dimension statement for ff in the calling program
 
 Ac the number of rows tn the dimension statement for C ip the calling program [tis assumed that ka oom, Abo om, ke oor, and that © contains at least mn columns
 
 
 <small>Original source: [View scanned PDF page 152](../scans/page_0152.png)</small>
 
-The array C may begin in the same location as A or B. If C begins in the same location as A then it is assumed that ke = ka. In this case, the result C will overwy'te the input data A. Similarly, if C begins in the same location as B then it is assumed that ke = kt. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage «rea for C does not overlap with the storage areas fur A and B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
+The array C may begin in the same location as A or B. If C begins in the same location as A then it is assumed that ke = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that ke = kt. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage «rea for C does not overlap with the storage areas fur A and B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
 
 **Programmer.** A. H. Morris. CALL CMADD (m,n, A, ka, B, kb, C, ke)
 
@@ -376,13 +376,13 @@ A aid B are complex m xn matrices and C a complex 2-dimensional array. CMADD com
 
 “a = the number of rows in the dimension statement for A in the calling program
 
-ke -= the number of rows in the dimension staternent for B in the calling program
+ke -= the number of rows in the dimension statement for B in the calling program
 
 ke = the number of rows in the dimension statement for C in the calling program it is assumed that ka > m, kb > m, ke > m, and that C contains at least n columns.
 
-The array C may begin in the sarne location as Aor B. If C begins in the same location as A chen it is assumed that kc = ka. In this case, the result C’ will overwrite the input data 4. Sunilarly, if C begins in the same location as B then it is assumed that ke = kb. Otherwise, if C’ does not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage areas for A and @. In this case there is no restriction on ke (other than the customary restriction that ke > rm).
+The array C may begin in the same location as A or B. If C begins in the same location as A chen it is assumed that kc = ka. In this case, the result C’ will overwrite the input data 4. Similarly, if C begins in the same location as B then it is assumed that ke = kb. Otherwise, if C’ does not begin in the same location as A or B, then it is assumed that the storage area for C does not overlap with the storage areas for A and @. In this case there is no restriction on ke (other than the customary restriction that ke > rm).
 
-Prograt.. wer. A. H. Morris.
+Programmer. A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 153](../scans/page_0153.png)</small>
@@ -400,34 +400,34 @@ Prograt.. wer. A. H. Morris.
 | `SMSUBT` | `SUBROUTINE` | `N, A, B, C` | [`L33201`](../source_parts/nswc_part_04.f#L1507) |
 
 
-The matrix difference C = A - B can be somputed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
+The matrix difference C = A - B can be computed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
 
-Aand B are real m.:n matrices and U a real 2-imensional i.reay. MSUBT comocutes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following values: ka = the number :f rows in the dimensio:. statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
+A and B are real m.:n matrices and U a real 2-dimensional array. MSUBT computes A-- B and stores the results in C. ‘Che avout arguments Ke, kb, ke have the following values: ka = the number :f rows in the dimension statement :or A in the calling program kb == the number of rows in the dimension statement tur B in the calling program ke = the number o7 rows in the dimension statement for C in the calling program It is assumed that ka > mm, kb > m, ke > m, and that C’ contains at least n columns.
 
-The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the resuit C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the etorage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
+The array C may begin ii the same location as A or 3B. [fC begins in the same location as A then it is assumed that kc = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed what ke == kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the storage area for C' does not overlap with the storage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > mi}.
 
 **Programmer.** A. H. Morris. CALL SMSUBT(n, A, B,C)
 
-Aand # are real packed nx n syrnmetric matrices and C is a real array whase aimension is equal to or greater than n(n+1)/2. SMSUBT computes A— &, which is aso a symmetric matrix, and stores the results in packed form in C.
+A and # are real packed nx n symmetric matrices and C is a real array whose dimension is equal to or greater than n(n+1)/2. SMSUBT computes A— &, which is also a symmetric matrix, and stores the results in packed form in C.
 
-The array C may tegin in the 2ame location as Aor B. Uf begins in che same location as A then the result C’ wil! overwrite the input data A. Similarly, B will be overwritten if C begins in the same location as B. Otherwise, if C does nos bogin in the same location as Aor B, then it is assumed that the storage area for © does not overlap with the storage areas for A and B.
+The array C may begin in the same location as A or B. Uf begins in che same location as A then the result C’ will overwrite the input data A. Similarly, B will be overwritten if C begins in the same location as B. Otherwise, if C does nos begin in the same location as A or B, then it is assumed that the storage area for © does not overlap with the storage areas for A and B.
 
 **Programmer.** A. 1. Morris. CALL OMSUBT(m,n, A, ka, B, kb, C, kc)
 
-A and B are couble precision m xX n matrices and C' a deuule precision 2-dimersionil array. DMSUBT computes A -- B and stores the results is C. The arguinents ka, &b, kc have the following values:
+A and B are double precision m xX n matrices and C' a double precision 2-dimensional array. DMSUBT computes A -- B and stores the results is C. The arguments ka, &b, kc have the following values:
 
-ka = the number af news in the dimension ciatement for A in the calling program
+ka = the number af news in the dimension statement for A in the calling program
 
-kb = the number of rows in the dunension statzoient for Gin the calimg program
+kb = the number of rows in the dimension statement for Gin the calling program
 
-ke = the number of rows tu the diiaensiog stalemene for Cin the calling program It is assumed that ca So, ke Soa, Ac hom, and that C con.ains af least m columns,
+ke = the number of rows tu the dimension statement for Cin the calling program It is assumed that ca So, ke Soa, Ac hom, and that C contains af least m columns,
 
 vaus|
 
 
 <small>Original source: [View scanned PDF page 154](../scans/page_0154.png)</small>
 
-‘The array C may begin in the same location as Aor B. fC begics in the game location ag A then it is assumed that ke = ka. In this case, the result C will overwrite the input daia A. Similarly, if C begins in the same location as 8 then it is assumed that ke =: kb. Otherwise, if C does not, begin in the same location as A or #, then it is assumed that the storage area for C devs not overlap with the storage areas for A and B. In this case there
+‘The array C may begin in the same location as A or B. fC begins in the game location ag A then it is assumed that ke = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as 8 then it is assumed that ke =: kb. Otherwise, if C does not, begin in the same location as A or #, then it is assumed that the storage area for C devs not overlap with the storage areas for A and B. In this case there
 
 ~.
 
@@ -435,17 +435,17 @@ is no restriction on kc (other than the customary restriction that ke > m).
 
 **Programmer.** A. H. Morris. CALL CMSUBT(m,n, A, ka, B, kb, C, ke)
 
-A and & are complex rm x mn matrices and C a compiex 2-dimensional array. CMSUBT compuies A -- 8B and stores the results in C. The input arguments ka, kb, ke have the following values:
+A and & are complex rm x mn matrices and C a complex 2-dimensional array. CMSUBT computes A -- 8B and stores the results in C. The input arguments ka, kb, ke have the following values:
 
 ka = the number of rows in the dimension statement for A in the calling program
 
-ké = the number of rews in the dimension statement for B in the calling program
+ké = the number of rows in the dimension statement for B in the calling program
 
 ke == the number of rows in the dimension statement for C' in the calling program It is assumed that ka > m, kb > m, ke > m, and that C has at least n columns.
 
-The array C may begin in the garne location as A or 8. If C begins in the same iocation as A thea 1 is assumed that ke = ka. In this case, the result C will overwrite the input data A. Siroilarly, if C’ begins in the same location as B then it is assumed that ke = kb. Otherwise, if C’ does net begin in the same location as A or B, then it is assumed that the storage area for C’ does not overlap with the storage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
+The array C may begin in the same location as A or 8. If C begins in the same location as A thea 1 is assumed that ke = ka. In this case, the result C will overwrite the input data A. Similarly, if C’ begins in the same location as B then it is assumed that ke = kb. Otherwise, if C’ does net begin in the same location as A or B, then it is assumed that the storage area for C’ does not overlap with the storage areas for A and B. In this case there is no restriction on ke (other than the customary restriction that ke > m).
 
-Progranener. A. H. Morris.
+Programmer. A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 155](../scans/page_0155.png)</small>
@@ -465,7 +465,7 @@ Progranener. A. H. Morris.
 | `CMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L33437`](../source_parts/nswc_part_04.f#L1743) |
 
 
-The matrix product C -= AB may be computed by the subroutines MIMS, DMTMS, CMTMS cor MPROD, DMPROD, CMPROD. MTMS, DMTMS, and CMTMS can be used if the storage area for C does not overlap with the storage areas for A and 8. Otherwise, if the components of C are to be stored in the storage area for A or B, then MPROD, DMPROD, or CMPROD must be used.
+The matrix product C -= AB may be computed by the subroutines MTMS, DMTMS, CMTMS cor MPROD, DMPROD, CMPROD. MTMS, DMTMS, and CMTMS can be used if the storage area for C does not overlap with the storage areas for A and 8. Otherwise, if the components of C are to be stored in the storage area for A or B, then MPROD, DMPROD, or CMPROD must be used.
 
 ```fortran
 CALL MTMS(M, N, L, A, KA, B, KB, C, KC)
@@ -473,19 +473,19 @@ CALL DMTMS(M, N, L, A, KA, B, KB, C, KC)
 CALL CMTMS(M, N, L, A, KA, B, KB, C, KC)
 ```
 
-MTMS is used if A and B are real matrices and C a real array, DMTMS is used if A and B are double precision raatrices and C’ a double precision array, and CMTMS is used if 4 and B are complex matrices and C’ a complex array.
+MTMS is used if A and B are real matrices and C a real array, DMTMS is used if A and B are double precision matrices and C’ a double precision array, and CMTMS is used if 4 and B are complex matrices and C’ a complex array.
 
 A is a matrix having m rows and n columns, £ a matrix having n rows and £ columns, and C a 2-dimensional array. The routine computes the product AB and stores the results in C. The input arguments ka, kb, ke have the following values:
 
-ka = the number of rows in the dimension staternent for A in the calling program
+ka = the number of rows in the dimension statement for A in the calling program
 
 kb = the number of rows in the dimension statement for B in the calling program
 
-ke = the number of rows in the dimension statement for C in the calling program It is assumea that ka > m, kb > n, ke > m, and that C contains at least @ columns.
+ke = the number of rows in the dimension statement for C in the calling program It is assumed that ka > m, kb > n, ke > m, and that C contains at least @ columns.
 
-**Remark.** It is assumed that the siorage area for C is separate from the storage areas for A
+**Remark.** It is assumed that the storage area for C is separate from the storage areas for A
 
-and B. Programmey. A. H. Morris.
+and B. Programmer. A. H. Morris.
 
 ```fortran
 CALL MPROD(M, N, L, A, KA, B, KB, C, KC, ROW)
@@ -512,7 +512,7 @@ WK is an array that serves as a temporary storage area. The matrix C may begin i
 
 **Programming.** MPROD employs the subroutines RLOC and YCHG, DMPROD employs
 
-the subroutines DLOC and DYCHG, and CMPROCD employs the subroutines CLOC and CYCHG. The routines were written by A. H. Morris.
+the subroutines DLOC and DYCHG, and CMPROD employs the subroutines CLOC and CYCHG. The routines were written by A. H. Morris.
 
 
 <small>Original source: [View scanned PDF page 157](../scans/page_0157.png)</small>
@@ -593,7 +593,7 @@ CALL SMPROD(M, N, A, KA, B)
 
 A is a real m x n matrix and B a real array whose dimension is equal to or greater than n(n + 1)/2. SMPROD computes A‘A and stores its packed form in B. The input argument a has the following value:
 
-ka = the number of rows in the dimension statement for A in the cailing program It is assumed that ka > m.
+ka = the number of rows in the dimension statement for A in the calling program It is assumed that ka > m.
 
 **Note.** All inner products 5 4,:4,; are computed in double precision and the results stored k
 
@@ -622,7 +622,7 @@ defined by
 
 A@B= Dod, aQm1B +: a)
 
-From this definition we obvain:
+From this definition we obtain:
 
 (1) (Transpose Equality) (A @ B)' = At @ Bt.
 
@@ -630,19 +630,19 @@ From this definition we obvain:
 
 (3) (A@ BY(C@ DL) = (AC) @(BD) iC is a matrix having n rows and D a matrix having £ rows.
 
-If A and B are complex square matrices of urders mand k respectively, then from the sordan
+If A and B are complex square matrices of orders m and k respectively, then from the Jordan
 
 canonical forms of A and B the determinant equality det (A@ B) = (det A)* (det B)™ can
 
 be verified. Moreover, if A and B are nonsingular then (A 2 B)~' =. A~* @ B™! from. (2).
 
-The following subroutines are availabie for computing C = A B.
+The following subroutines are available for computing C = A B.
 
 CALi KPRC D(A, ka, m,n, B, kb, k, ?,C, ke) CALL DKPROD(A, ka, m,n, B, kb, k, £,C, ke) CALL CKPROD(A, ka, m,n, B, kb, k:, €,C, ke)
 
-It is assumed that A is an m X n matrix, B a k x @ matrix, and C' a 2-dimensional array. KPROD is used if A, B,C are real arrays, DKPROD its used if A, B,C are double precision arrays, and CKPROD is used if A, B,C’ are comp!ex arrays. When the routine is called, A ® B is computed and stcred in C.
+It is assumed that A is an m X n matrix, B a k x @ matrix, and C' a 2-dimensional array. KPROD is used if A, B,C are real arrays, DKPROD its used if A, B,C are double precision arrays, and CKPROD is used if A, B,C’ are comp!ex arrays. When the routine is called, A ® B is computed and stored in C.
 
-The arguments ka, kb, and ke have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimensiou. statement for B in the calling program ke = the number of rows in the dimension statement for C in the calling program It is assumed that ka > m, kb > k, ke > mk, and that C contains at least né columns.
+The arguments ka, kb, and ke have the following values: ka = the number of rows in the dimension statement for A in the calling program kb = the number of rows in the dimension statement for B in the calling program ke = the number of rows in the dimension statement for C in the calling program It is assumed that ka > m, kb > k, ke > mk, and that C contains at least né columns.
 
 **Remark.** It is assumed that the array C does not overlap with «4 or B.
 
@@ -671,9 +671,9 @@ CALL DRNK(A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
 
 A and WK are real arrays and RERR and AERR real values if RNK is used. A and WK are double precision arrays and RERR and AERR double precision values if DRNK is used.
 
-Ais anm Xn matrix where m,n > 1, and ka is the number of rows in the dimension statement for A in the calling progearn. It is required that ke > m. A is destroyed by the routine.
+Ais anm Xn matrix where m,n > 1, and ka is the number of rows in the dimension statement for A in the calling program. It is required that ke > m. A is destroyed by the routine.
 
-RERR is an argument which specifies that relative accuracy of the data in A. If it is estimaid that the elements in A are accurate to u significant digits then one may set RERR == 1074. It is required that RERR > 0. If RERR = 0 then it is assumed that, the elements in A are accurate to machine precision.
+RERR is an argument which specifies that relative accuracy of the data in A. If it is estimated that the elements in A are accurate to u significant digits then one may set RERR == 1074. It is required that RERR > 0. If RERR = 0 then it is assumed that, the elements in A are accurate to machine precision.
 
 AERR is an argument which specifies the maximum absolute uncertainty of the data in A. For example, if it is estimated that the elements a,,; of A have the relative accuracy RERR except when |a,;;| < 107%°, then one may set AERR = 107°°. It is required that AERR > 0.
 
@@ -681,16 +681,16 @@ The arguments k and ko are variables. When RNK or DRNK is called, the rank of A 
 
 WK is an array of dimension 5- min{m,n} or larger, and 1WK an array of dimension m-+n or larger. WK and IWK are work spaces for the routines.
 
-Remarke. Normally kp =: «, ia which case k is the rank of A. However, if ko 5“ « then it is recommended that the least syuares routine HF TI2 or DHF T2 be used for obtaining the most appropriate value for che rank. When HFTI2 or DHF 12 is used, B may be seiected to b. the m x m identity matrix, aud the size of the elements of the solution matrix X shouid be considered (in additicn tu the values of the residual norms). Frequently, the iower bound ko will be found to be the most appropriate value for the rank.
+Remarks. Normally kp =: «, ia which case k is the rank of A. However, if ko 5“ « then it is recommended that the least squares routine HF TI2 or DHF T2 be used for obtaining the most appropriate value for che rank. When HFTI2 or DHF 12 is used, B may be selected to b. the m x m identity matrix, aud the size of the elements of the solution matrix X should be considered (in addition tu the values of the residual norms). Frequently, the lower bound ko will be found to be the most appropriate value for the rank.
 
-**Programming.** RNK employs the subrcutines ULILS, ULIUS, ISWAP, SSWAP, SAXPY, SSCAL aad functions SDOT, SNRM®, [SMMAZX, SPMPAR, IPMPAR. DRNK employs the subroutines DULILS, DULIIUS, ISWAF, DSEWAP, DAXPY, DSCAL and functions DOOT, DNRM2, IDAMAX, DPMPAR, IPMPAR. KNK and DRNK were written by A. H. Morris, and O'ELS, UILUS, DULILS, PULINS, were written by T. Manteuffe! (Los Alamos).
+**Programming.** RNK employs the subroutines ULILS, ULIUS, ISWAP, SSWAP, SAXPY, SSCAL and functions SDOT, SNRM®, [SMMAZX, SPMPAR, IPMPAR. DRNK employs the subroutines DULILS, DULIIUS, ISWAF, DSEWAP, DAXPY, DSCAL and functions DOOT, DNRM2, IDAMAX, DPMPAR, IPMPAR. KNK and DRNK were written by A. H. Morris, and O'ELS, UILUS, DULILS, PULINS, were written by T. Manteuffel (Los Alamos).
 
-**Reference.** Manteuffel, U., An Interval Analysts Approach to Rank Determinatson
+**Reference.** Manteuffel, U., An Interval Analysts Approach to Rank Determination
 
 
 <small>Original source: [View scanned PDF page 162](../scans/page_0162.png)</small>
 
-in Linear Least Squares Problems, Keport SAND 80-0655, Sandia Laboratories, Albuquerque, New Mexico, 1980.
+in Linear Least Squares Problems, Report SAND 80-0655, Sandia Laboratories, Albuquerque, New Mexico, 1980.
 
 
 <small>Original source: [View scanned PDF page 163](../scans/page_0163.png)</small>
@@ -711,9 +711,9 @@ in Linear Least Squares Problems, Keport SAND 80-0655, Sandia Laboratories, Albu
 | `DMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L35264`](../source_parts/nswc_part_04.f#L3570) |
 
 
-The subroutines CROUT, KROUT, MSLV, MSLV1, NPIVOT, DMSLV, and DMSLVI1 are available for inverting real matrices A and solving systerns of real linear equations AX = B. CROUT, KROUT, MSLV, MSLV1, and NPIVOT solve single precision problems, and DMSLV and DMSLV1 solve double precision problems.
+The subroutines CROUT, KROUT, MSLV, MSLV1, NPIVOT, DMSLV, and DMSLV1 are available for inverting real matrices A and solving systems of real linear equations AX = B. CROUT, KROUT, MSLV, MSLV1, and NPIVOT solve single precision problems, and DMSLV and DMSLV1 solve double precision problems.
 
-All the routines except NPIVOT are general-purpose, employing partial pivot Gauss elimination. NP{VOT can only occasionally be used since it uses Gauss-Jordan elimination with no pivot search. Normally CRO'/T and KROUT produce the same results, and M5LV and MSLV1 produce the same resu:.s. Since many of the calculations are performed in double precision in CROUT and KR DUT, these subroutines will be slower than MSLV and MSLV1, but they may be more accirate.
+All the routines except NPIVOT are general-purpose, employing partial pivot Gauss elimination. NP{VOT can only occasionally be used since it uses Gauss-Jordan elimination with no pivot search. Normally CRO'/T and KROUT produce the same results, and M5LV and MSLV1 produce the same results. Since many of the calculations are performed in double precision in CROUT and KR DUT, these subroutines will be slower than MSLV and MSLV1, but they may be more accurate.
 
 ```fortran
 CALL CROUT(MO, N, M, A, KA, B, KB, D, INDEX, TEMP)
@@ -721,9 +721,9 @@ CALL CROUT(MO, N, M, A, KA, B, KB, D, INDEX, TEMP)
 
 A is areal matrix of order n where n > 1. If MO = 0 then the inverse of A is computed and stored in A. If MO #0 then the ‘verse is not computed.
 
-The argument rm is a: integer. If m > 1 then B is a real matrix having n rows and m columns. In this case the inatrix eqi sation AX = B is solved and the solution X is stored in B. If m < 0 then there wre no equations to be solved. In this case the argument B is ignored.
+The argument rm is a: integer. If m > 1 then B is a real matrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in B. If m < 0 then there are no equations to be solved. In this case the argument B is ignored.
 
-The argument ka is ihe v-uriber of rows in the dimension statement for A un the calling program, and kb th: nu aber of rows in the dimension statement for B in the calling program. lf m<. 0 then the argument k6 is ignored.
+The argument ka is the number of rows in the dimension statement for A un the calling program, and kb the number of rows in the dimension statement for B in the calling program. lf m<. 0 then the argument k6 is ignored.
 
 D is a real variable. When CROUT is called, D is assigned the value det(A) where det(A) is the determinant of A. If D is found to have the value 0 then the routine immediately terminates.
 
@@ -733,16 +733,16 @@ TEMP is a real array of dimension n or larger that is a work space for the routi
 
 **Remarks.**
 
-(1} KROUT should be used instead of CROU'P when the determinant 22 is not needed. Underflow or overflow in the calculation of 2) may cause CROU'T to terminate prem: turely.
+(1} KROUT should be used instead of CROU'P when the determinant 22 is not needed. Underflow or overflow in the calculation of 2) may cause CROU'T to terminate prematurely.
 
-(2) ‘The mateix Ais destroyed.
+(2) ‘The matrix Ais destroyed.
 
 21S
 
 
 <small>Original source: [View scanned PDF page 164](../scans/page_0164.png)</small>
 
-**Algorithm.** The Crout procedure is used. All inner products are computed in double precision and the results returued in singie precision. Partial pivoting is performed.
+**Algorithm.** The Crout procedure is used. All inner products are computed in double precision and the results returned in single precision. Partial pivoting is performed.
 
 **Programming.** CROUT calls the subroutine CROUTO. These routines were written by A. H. Morris.
 
@@ -754,7 +754,7 @@ A is a real matrix of order n where n > 1. If MO = 0 then the inverse of A is co
 
 The argument m is an integer. If m > 1 then B is a real matrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in B. If m < O then there are no equations to be solved. In this case the argument B is ignored.
 
-The argument ka is the nurnber of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored.
+The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored.
 
 [INDEX is an array of dimension n -- 1 or larger that is used by the routine for keeping track of the row interchanges that are made. If MO # 0 then INDEX is ignored.
 
@@ -780,7 +780,7 @@ When an error is detected, the routine immediately terminates. Remark. The matri
 CALL NPIVOT(N, M, A, KA, B, KB, D, IERR)
 ```
 
-Aisa real matrix of order n where n+ b When NPEVO’V is called the riverse of Ats
+A is a real matrix of order n where n+ b When NPEVO’V is called the inverse of Ats
 
 computed and stored my A,
 
@@ -795,9 +795,9 @@ D is a real variable. On input D must be assigned a value by the user. If the in
 
 Error Return JERR is an integer variable. If inversion is successful then IERR is assigned the value 0. Otherwise, JERR = 1 if NPIVOT cannot invert the matrix.
 
-**Algorithm.** The Gauss-Jordau procedure is used. However, no pivot searching is done. NPIVOT terminates (with IERR set to 1) whenever a zero pivot element is encountered.
+**Algorithm.** The Gauss-Jordan procedure is used. However, no pivot searching is done. NPIVOT terminates (with IERR set to 1) whenever a zero pivot element is encountered.
 
-**Remarks.** Since pivot search is frequently needed to invert a matrix, and since pivct search is normally required to obtain accurate results, NPIVOT should not be used except on those oecasions when pivot search is known to be superfluous.
+**Remarks.** Since pivot search is frequently needed to invert a matrix, and since pivot search is normally required to obtain accurate results, NPIVOT should not be used except on those occasions when pivot search is known to be superfluous.
 
 **Programmer.** A. H. Morris.
 
@@ -808,13 +808,13 @@ CALL DMSLV(MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK)
 
 A is a matrix of order n where n > 1. If MO == 0 then the inverse of A is computed and stored in A. If MO # 0 then the inverse is not computed.
 
-The argument rm is an integer. If m > 1 then B is a metrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is iguored.
+The argument rm is an integer. If m > 1 then B is a matrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in 8. If m < 0 then there are no equations to be solved. In this case the argument B is ignored.
 
 The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for 8 in the calling program. If m < 0 then the argument ké is ignored.
 
 D is an array of dimension 2. When either routine 1s called the determinant det(A) of the matrix A is computed. If det{A) ~ d- 10* where 1 < |d| < 10 and k an integer, then d ig stored in (1) and the exponent & is stored in floating point form in D(2).
 
-RCOND os a variable. When either routine is called, the roucime makes an ectirnate c of the condition number of the matrix A Cretative to the Ly norm), RCOOND ts assigned
+RCOND os a variable. When either routine is called, the routine makes an estimate c of the condition number of the matrix A (relative to the Ly norm), RCOOND ts assigned
 
 the value L/e. IWK is an array of dimension nor larger that is used by the routines for ke. ping track
 
@@ -825,15 +825,15 @@ af the row interchanges that are made. WK is an array of dimension n or larger t
 
 **Remarks.**
 
-(1) If MSLV is called then it is assumed that A and B are real matrices, D and WK real arzays, and RCOND a real variable. Otherwise, if DMSLYV is called then it is assumed that A and B are double precision matrices, D and WK double precision arrays, and RCOND a double precision variable.
+(1) If MSLV is called then it is assumed that A and B are real matrices, D and WK real arrays, and RCOND a real variable. Otherwise, if DMSLV is called then it is assumed that A and B are double precision matrices, D and WK double precision arrays, and RCOND a double precision variable.
 
-(2} RCOND satisfies 0 < RCOND < 1. If RCOND w 10~* then one can expect the results to have approximately k& fewer significant digits of accuracy than the elements of A. For example, if MSLV is used to invert a matrix in the 14 digit CDC sing!e precision arithmetic and RCOND = .4E~-3, then the computed coefficients of the inverse matrix should normally be accurate to about 11 digits. In general, RCOND characterizes how well or poorly conditioned the problem is. If RCOND #& 1 then one should expect the results to be almost as accurate as the original data A. How-ver, if RCOND s 0 then one should expeci the results to be nonsense.
+(2} RCOND satisfies 0 < RCOND < 1. If RCOND w 10~* then one can expect the results to have approximately k& fewer significant digits of accuracy than the elements of A. For example, if MSLV is used to invert a matrix in the 14 digit CDC sing!e precision arithmetic and RCOND = .4E~-3, then the computed coefficients of the inverse matrix should normally be accurate to about 11 digits. In general, RCOND characterizes how well or poorly conditioned the problem is. If RCOND #& 1 then one should expect the results to be almost as accurate as the original data A. However, if RCOND s 0 then one should expect the results to be nonsense.
 
 (3) The matrix A is destroyed.
 
-**Error Return.** JERR is an integer variable. If RCOND is sufficiently large so that 1+ RCOND > 1, then IERR is set to 0 and the problem is solved. Otherwise, if 14+-RCOND = 1 then {ERR is set to 1 and the routine terminates. In this case, A will have heen destroyed but B will not have been modified. Also the deterininant will not have been computed.
+**Error Return.** JERR is an integer variable. If RCOND is sufficiently large so that 1+ RCOND > 1, then IERR is set to 0 and the problem is solved. Otherwise, if 14+-RCOND = 1 then {ERR is set to 1 and the routine terminates. In this case, A will have been destroyed but B will not have been modified. Also the determinant will not have been computed.
 
-**Algorithm.** The partial pivot Gauss elirinatiecn procedure is used.
+**Algorithm.** The partial pivot Gauss elimination procedure is used.
 
 **Programming.** MSLV and DMSLV are driver routines for the LINPACK subroutines SGECO, SGEFA, SGESL, SGEDI and DGECO, DGEFA, DGESL, DGEDI. The subroutines were coded by Cleve Moler (University of New Mexico). The subroutines employ the vector routines SSWAP, SDOT, SSCAL, SAXPY, SASUM, iSAMAX and DSWAP, DDOT, DSCAL, DAXPY, DASUM, IDAMAX.
 
@@ -841,33 +841,33 @@ af the row interchanges that are made. WK is an array of dimension n or larger t
 
 (1) Dongarra, J. J., Bunch, J. R., Moler, C. B., and Stewart. G. W., LINPACK Users’ Guide, Society for Industrial and Applied Mathematics, Philadelphia, 1979.
 
-(2) Cline, A. K., Moler, C. B., Stewari, G. W., and Wilkinson, J. H., “An Estimate for the Condition Number of « Matrix,” SYAM Journal of Numerical Analysts 16 (1979), pp. 858-375.
+(2) Cline, A. K., Moler, C. B., Stewart, G. W., and Wilkinson, J. H., “An Estimate for the Condition Number of « Matrix,” SIAM Journal of Numerical Analysis 16 (1979), pp. 858-375.
 
 ```fortran
 CALL MSLV1(MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
 CALL DMSLV1(MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
 ```
 
-Ais amatnrix of order n where n > 1. If MO = 0 then the inverse of A 1s computed and stored in A. If MO 7 O then the inverse is not computed,
+Ais a matrix of order n where n > 1. If MO = 0 then the inverse of A 1s computed and stored in A. If MO 7 O then the inverse is not computed,
 
-The argument mis an integer. [fw > i then 8 is a matrix having n rows and m columns. In this case the matrix equation AN Bois solved and the solution is stored in B. If m < U then there are no equations to be solved. In this case the
+The argument m is an integer. [fw > i then 8 is a matrix having n rows and m columns. In this case the matrix equation AN Bois solved and the solution is stored in B. If m < U then there are no equations to be solved. In this case the
 
 
 <small>Original source: [View scanned PDF page 167](../scans/page_0167.png)</small>
 
 argument B is ignored.
 
-The argument ka is the number of rows in the dimension statement for A in the calling prograra, and kb the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored,
+The argument ka is the number of rows in the dimension statement for A in the calling program, and kb the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored,
 
 IWK is an array of dimension m or larger that is used by the routines for keeping track of the row interchanges that are made. WK is an array of dimension n o¢ larger that is used for a work space. If MO 3 0 then WK is ignored.
 
-Fiemarks.
+Remarks.
 
-(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A ani B are double precision matrices and WK a double precision array.
+(1) If MSLV1 is called then it is assumed that A and B are real matrices and WK i. real array. Otherwise, if DMSLV1 is called then it is assumed that A and B are double precision matrices and WK a double precision array.
 
 (2) The matrix A is destroyed.
 
-**Error Return.** TERR is a variable that reports the status of the results. When the routine terrainates JERR has one of the following values:
+**Error Return.** TERR is a variable that reports the status of the results. When the routine terminates JERR has one of the following values:
 
 TERR = 0 The requested results were obtained.
 
@@ -898,21 +898,21 @@ IERR = &k The k*® column of A has been reduced to a column containing only zero
 | `SLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L34576`](../source_parts/nswc_part_04.f#L2882) |
 
 
-Given a real n <1 matrix A and column vector 6. The followiny, subroutine is available for selving the equation Ax = 4. {terative inaprovement 's performed to corpute the solution x to machine accuracy,
+Given a real n <1 matrix A and column vector 6. The following, subroutine is available for solving the equation Ax = 4. Iterative improvement 's performed to compute the solution x to machine accuracy,
 
 ```fortran
 CALL SLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
 ```
 
-MO is an input argument. which specifies if SLVMP is being called for ihe tirst time. On an initial call, MO = 0 and we have the following setup:
+MO is an input argument. which specifies if SLVMP is being called for ihe first time. On an initial call, MO = 0 and we have the following setup:
 
-A is a 2-dimensional real array of dimension «a X n containing the riatrix A, 6 « real vector of dimension », and X a real array of dimension n. When SLVMF is called, Ar = & is solved and the solution stored in X. A and $ are not modified by the routine.
+A is a 2-dimensional real array of dimension «a X n containing the matrix A, 6 « real vector of dimension », and X a real array of dimension n. When SLVMF is called, Ar = & is solved and the solution stored in X. A and $ are not modified by the routine.
 
-WK is a real array of dimension n*+n or larger, and [WK an integer arruy of dimension n or larger. These arrays are for internal use by the routine. On un initial call to SLV MP, «1 LU decomposition is obtained for A and stored in WK and IWK. Then the equation Ax = 6 1s solved.
+WK is a real array of dimension n*+n or larger, and [WK an integer array of dimension n or larger. These arrays are for internal use by the routine. On un initial call to SLV MP, «1 LU decomposition is obtained for A and stored in WK and IWK. Then the equation Ax = 6 1s solved.
 
 IND is an integer variable that reports the status of the results. On an initial call to SLVMP, when the routine terminates IND has one of the following values:
 
-IND = 0 The solution X was obtained to machine accu: .cy.
+IND = 0 The solution X was obtained to machine accuracy.
 
 IND = 1 X was obtained, but not to machine accuracy.
 
@@ -920,13 +920,13 @@ IND = —k The k** column of A was reduced to a column containing only zeros.
 
 When IND = —k&, no solution is obtained.
 
-After an initial call to SLVMP, if IND == 0 or 1 on output, then the routine may be called to solve a new set of equations Az == 6 without having to redecompose the matrix A. In this case, the input argument MO may be set to any nonzero value. When MO #0 it is assumed that only 6 has been modified. The routine etnploys the LU decomposition obtained on the initial call to SLYMP to solve the new set of equations Ar = 6. On output X will contain the solution to the new set uf equations. As before, A and b are not modified by the routine.
+After an initial call to SLVMP, if IND == 0 or 1 on output, then the routine may be called to solve a new set of equations Az == 6 without having to redecompose the matrix A. In this case, the input argument MO may be set to any nonzero value. When MO #0 it is assumed that only 6 has been modified. The routine employs the LU decomposition obtained on the initial call to SLYMP to solve the new set of equations Ar = 6. On output X will contain the solution to the new set uf equations. As before, A and b are not modified by the routine.
 
-{f SLVMP is recalled with MO 4 0, tien when the routine terminates IND has one of the following values:
+{f SLVMP is recalled with MO 4 0, then when the routine terminates IND has one of the following values:
 
-IND = 0 The solution X was obtained to machine #ccuracy,
+IND = 0 The solution X was obtained to machine accuracy,
 
-IND = 1 X was obtained, but not to machine accuracy. Programming. SLY MP calls the subroutine LUIMP. These routines were written by A. H Morris. The subroutines MCOPY, SGEPA, SGESL, SSCAL, SAXPY and functions SUM. PAR, SDOT, ISAMAX are also empicyed.
+IND = 1 X was obtained, but not to machine accuracy. Programming. SLY MP calls the subroutine LUIMP. These routines were written by A. H Morris. The subroutines MCOPY, SGEPA, SGESL, SSCAL, SAXPY and functions SUM. PAR, SDOT, ISAMAX are also employed.
 
 
 <small>Original source: [View scanned PDF page 169](../scans/page_0169.png)</small>
@@ -944,7 +944,7 @@ IND = 1 X was obtained, but not to machine accuracy. Programming. SLY MP calls t
 
 Consider a system Az == 6 of linear equations where A is ann x n matrix having the block structure
 
-Hiere it is assumed that A, is an r; x c¢; matrix ford = 1,...,m, and that A; and Ajai rnay m
+Here it is assumed that A, is an r; x c¢; matrix ford = 1,...,m, and that A; and Ajai may m
 
 have 6; >> 9 columns in common for ¢ < m, Thus SO rp n and block A, begins in column al
 
@@ -954,7 +954,7 @@ pany
 
 k=
 
-do not have columns in comrion, Thus 65.1 + & < ec; ford = 2, ...53 ~ 1. Ifm > 2 then
+do not have columns in common, Thus 65.1 + & < ec; ford = 2, ...53 ~ 1. Ifm > 2 then
 
 the following subroutines are available for solving Az = 6.
 
@@ -982,11 +982,11 @@ ya, 822, 0)3,423, 232,442, 433, %43, 134,444, Ass.
 
 » mm 9 8, by = 2, and 62 = QO. Also, S is an array containing the data 11,421,
 
-M'TR is an integer matrix of dimension 3 x m containing the bleck information of the tmatrix A:
+M'TR is an integer matrix of dimension 3 x m containing the block information of the matrix A:
 
 MPRA1, 8) ss ry (f— 1, ...,m) MTR(Z,1) (t= 7, ...,m) MTR, £} & (g=-1,...,- 2)
 
-Por convenience, the routine sets MTR(3, m) . 0.
+For convenience, the routine sets MTR(3, m) . 0.
 
 y
 
@@ -997,7 +997,7 @@ Perens
 
 <small>Original source: [View scanned PDF page 170](../scans/page_0170.png)</small>
 
-X isan array of dimension n or larger. When ARCECO is called, A is decomposed and then the equations Az = 6 are solved. The decomposit:on of A is stored in S, overwriting the initial input data A, and the solution 2 is stored in X. The vector 6 is destroyed by the routine.
+X is an array of dimension n or larger. When ARCECO is called, A is decomposed and then the equations Az = 6 are solved. The decomposition of A is stored in S, overwriting the initial input data A, and the solution 2 is stored in X. The vector 6 is destroyed by the routine.
 
 IWK is an array of dimension n or larger for internal use by the routine. ‘The pivot indices involved in the decomposition of A are stored in IWK.
 
@@ -1008,7 +1008,7 @@ IND has one of the following values:
 
 IND = 0 The system of equations was solved.
 
-IND = 1 (Input Error) fither n,m, or MTR is incorrect, or three successive blocks A,_1, Ay, Ay41 of A have columns in common.
+IND = 1 (Input Error) Either n,m, or MTR is incorrect, or three successive blocks A,_1, Ay, Ay41 of A have columns in common.
 
 IND =~—1 A is a singular matrix. The equations cannot be solved.
 
@@ -1026,7 +1026,7 @@ CALL ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
 
 The argument m is the number of blocks A,,...,Am in the matrix A. ARCESL may be used only when IND = 0 on output from ARCECO. In this case, S contains the decomposition of A obtained by ARCECO and I5VK contains the pivot indices of the decomposition. The argument 6 is a vector of dimension n, and X an array of dimension nor larger. When ARCESL is called, the equations Az = 6 are solved and the solution stored in X. The vector 6 is destroyed by the routine.
 
-**Programming.** ARCESL calls the subroutines ARCEFS, ARCEFM, ARCEFE, ARCEBS, ARCEBM, and ARCEBE. These routines were developed by J. ©. Diaz (Mobil Research and Devclopment Corp.,Farmers Branch, Texas), G. Fairweather (University of Kentucky), and P. Keast (University of Tc onto).
+**Programming.** ARCESL calls the subroutines ARCEFS, ARCEFM, ARCEFE, ARCEBS, ARCEBM, and ARCEBE. These routines were developed by J. ©. Diaz (Mobil Research and Development Corp.,Farmers Branch, Texas), G. Fairweather (University of Kentucky), and P. Keast (University of Tc onto).
 
 
 <small>Original source: [View scanned PDF page 171](../scans/page_0171.png)</small>
@@ -1057,7 +1057,7 @@ MO is an input argument which specifies if BT'SLV is being called for the first 
 
 A, B, C are 3- dimensional arrays of dimension m x mx n where the (t,7)-th elements of the matrices Aj, 3x,Cx are stored in A(t,j,k), B(t, j,k), C(i,9,k) for k = 1,...,n. A, B,C are modified by the routine.
 
-X is an array of \unension mn or larger. On input, the vector 6 is stored in X. When BTSLV is called, 1! a solution x is obtained for T’z = 6 then the solution is stored in X.
+X is an array of dimension mn or larger. On input, the vector 6 is stored in X. When BTSLV is called, 1! a solution x is obtained for T’z = 6 then the solution is stored in X.
 
 IP is an array of dimension mn or larger that is used by the routine fv listing the row interchanges that are made.
 
@@ -1071,16 +1071,16 @@ IND = k The decomposition process failed in the &'* diagonal block. The
 
 routine cannot solve the equations in their present form.
 
-After an initial call to BTSLV, if IND -: 0 then the routine may be recalled with MO # 0 and a new 6. When MO ¥ 0, then it is assumed that A,B,C, and IP have not. beer tnodified and that X contains the new 6. The routine retrieves from A,B,C, and IP thi block decomposition that was obtained on the initial cali io BTSLV, and solves the nev
+After an initial call to BTSLV, if IND -: 0 then the routine may be recalled with MO # 0 and a new 6. When MO ¥ 0, then it is assumed that A,B,C, and IP have not. beer modified and that X contains the new 6. The routine retrieves from A,B,C, and IP the block decomposition that was obtained on the initial cali io BTSLV, and solves the nev
 
 
 <small>Original source: [View scanned PDF page 172](../scans/page_0172.png)</small>
 
 system of equations Tx =: 6. The solution is stored in X. In this case, IND 1s not referenced by the routine.
 
-Prograraming. BTSLV employs the subroutines DECBT, SOLBT, DEC, and SOL. These subroutines were written by Alan C. Hindmarsh (Lawrence Livermore Laboratory).
+Programming. BTSLV employs the subroutines DECBT, SOLBT, DEC, and SOL. These subroutines were written by Alan C. Hindmarsh (Lawrence Livermore Laboratory).
 
-**Reference.** Hindmarsh, A. C., Solutton of Block-Tridiagonal Systems of Lineur Al4yebrate Equations, Report UCID-30150, Lawrence Livermore Laboratory, 1977.
+**Reference.** Hindmarsh, A. C., Solution of Block-Tridiagonal Systems of Linear Algebraic Equations, Report UCID-30150, Lawrence Livermore Laboratory, 1977.
 
 
 <small>Original source: [View scanned PDF page 173](../scans/page_0173.png)</small>
@@ -1096,72 +1096,72 @@ Prograraming. BTSLV employs the subroutines DECBT, SOLBT, DEC, and SOL. These su
 | `DSMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L38000`](../source_parts/nswc_part_04.f#L6306) |
 
 
-‘The subroutines SMSLV and DSMSLYV are available for inverting symmetric real matrices A and solving systems of real linear equations AX = B. SMSLV handles single precision problems and DSMSLV handles double precision problems. it is assumed that the matrix A is in packed form. [f the inverse of A is computed, then the verse is a symmetric matrix which will be stored in packed form.
+‘The subroutines SMSLV and DSMSLV are available for inverting symmetric real matrices A and solving systems of real linear equations AX = B. SMSLV handles single precision problems and DSMSLV handles double precision problems. it is assumed that the matrix A is in packed form. [f the inverse of A is computed, then the verse is a symmetric matrix which will be stored in packed form.
 
-**Note.** All eigenvalues of a real symmetric matrix A are real. The tnertsa of A is the ordered triple (x,v,¢) where w ia the number of positive eigenvalues of A, v the number of negative eigenvalues of A, and ¢ the number of wero cigenvalues of A. Thus, if n is the order of A then w-+u+¢ =n. Also A is positive definite (positive semi-definite, negative definite, negative semi-definite) ifm =n (v=0,v=n,x =O).
+**Note.** All eigenvalues of a real symmetric matrix A are real. The inertia of A is the ordered triple (x,v,¢) where w ia the number of positive eigenvalues of A, v the number of negative eigenvalues of A, and ¢ the number of zero eigenvalues of A. Thus, if n is the order of A then w-+u+¢ =n. Also A is positive definite (positive semi-definite, negative definite, negative semi-definite) if m =n (v=0,v=n,x =O).
 
 ```fortran
 CALL SMSLV(MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK)
 CALL DSMSLV(MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK)
 ```
 
-A is an array of dimension n(n + 1)/2 containing the elements of a packed n x n symumietric matrix where n > 1. If MO = 0 then the inverse of A is computed and stored in A in packed form. If MO # 0 then the inverse of A is not computed.
+A is an array of dimension n(n + 1)/2 containing the elements of a packed n x n symmetric matrix where n > 1. If MO = 0 then the inverse of A is computed and stored in A in packed form. If MO # 0 then the inverse of A is not computed.
 
 The argument m is an integer. If m > 1 then B is a matrix having n rows and m columns. In this case AX = B is solved and the solution X is stored in HB. If rn < © then there are no equations to be solved. In this case B is ignored.
 
 The argument kb is the number cf rows in the dimension statement, for B in the calling program. If m < 0 i ‘en ké is ignored.
 
-1 is an array of dimension 2. When either routine is called the determinant det(A) of the matrix A is co: ipuied. If det(A) = d- 10* where 1 < |d| < 10 and & an integer, then d is stored in D(1) and the exponent & is stored in floating point form in (2),
+1 is an array of dimension 2. When either routine is called the determinant det(A) of the matrix A is computed. If det(A) = d- 10* where 1 < |d| < 10 and & an integer, then d is stored in D(1) and the exponent & is stored in floating point form in (2),
 
-RCOND is a variable. When eithe routine is called, the routine makes an estimate ¢ of the condition number ef the matrix A (relative to the Ly norm). RCOND is assigned the value I/c.
+RCOND is a variable. When either routine is called, the routine makes an estimate ¢ of the condition number ef the matrix A (relative to the Ly norm). RCOND is assigned the value I/c.
 
-INER'E is an quteger array of dimension $. When elther routine is called she inertia of the matrix Ais computed. INERT(L) is set to ti number of positive eigenvaltes of A, INERT (2) is set to the number of negative eigenvaluc: and INFET(3) is set to the number
+INER'E is an integer array of dimension $. When either routine is called she inertia of the matrix Ais computed. INERT(L) is set to ti number of positive eigenvalues of A, INERT (2) is set to the number of negative eigenvalues and INFET(3) is set to the number
 
 af vere: etgenvalse
 
-IPV Po os as oiteper array of dimension reoor urge: tats used by the routines fir
+IPV Po os as integer array of dimension reoor urge: tats used by the routines fir
 
-keopimg teock of she row and eclumn interchanges t) at are vde WK te array of dinienstes
+keeping track of she row and column interchanges t) at are vde WK te array of dimension
 
-root baw: thatas used as a work space.
+root baw: that is used as a work space.
 
 
 <small>Original source: [View scanned PDF page 174](../scans/page_0174.png)</small>
 
 **Remarks.**
 
-(1) If SMSLV is called then it is assumed that A and B are real matrices, D and WK are real arrays, and RCOND i» a real variable. Otherwise, if DSMSLYV is called then it is assumed that A and 8 are double precision matrices, D and WK are double precision arrays, and RCOND is a double precision variable.
+(1) If SMSLV is called then it is assumed that A and B are real matrices, D and WK are real arrays, and RCOND i» a real variable. Otherwise, if DSMSLV is called then it is assumed that A and 8 are double precision matrices, D and WK are double precision arrays, and RCOND is a double precision variable.
 
-(2) RCOND satisfies 0 < RCOND < 1. If RCOND ® 10~* then one can expect the results to have approximately k fewer significant digits of accuracy than the elements of A. For example, if SMSLV is used to invert a matrix in the 14 digit CDC single precision arithinetic and RCOND -- .4E—3, then the computed coefficients of the inverse matrix should normally be accurate to about 11 digits. In general, RCOND characterizes how well or poorly conditioned the problem is. If RCOND #& 1 then one should expect the results to be almost as accurate as the criginal data A. However, if RCOND ~ 0 then ne should expect the results to be nonsense.
+(2) RCOND satisfies 0 < RCOND < 1. If RCOND ® 10~* then one can expect the results to have approximately k fewer significant digits of accuracy than the elements of A. For example, if SMSLV is used to invert a matrix in the 14 digit CDC single precision arithmetic and RCOND -- .4E—3, then the computed coefficients of the inverse matrix should normally be accurate to about 11 digits. In general, RCOND characterizes how well or poorly conditioned the problem is. If RCOND #& 1 then one should expect the results to be almost as accurate as the original data A. However, if RCOND ~ 0 then ne should expect the results to be nonsense.
 
-(3) ‘Whe data in A is destroyed.
+(3) ‘The data in A is destroyed.
 
-Error Return, [IERR is an integer variable. If RCOND is sufficiently 'arge so that 1 + RCOND > 1, then [ERR is set to 0 and the problem is solved. Otherwise, if 1 +- RCOND == 1 then JERR is set, to 1 and the routine terminates. In this case, A will have been descroyed but B will not have been modified. Also the determinant and inertia will not have been computed.
+Error Return, [IERR is an integer variable. If RCOND is sufficiently large so that 1 + RCOND > 1, then [ERR is set to 0 and the problem is solved. Otherwise, if 1 +- RCOND == 1 then JERR is set, to 1 and the routine terminates. In this case, A will have been destroyed but B will not have been modified. Also the determinant and inertia will not have been computed.
 
 **Algorithm.** Toe diagonal pivoting factorization procedure is used. Partial pivoting is employed.
 
 **Precision.** SMSLV and the more general routine MSLV have approximately the same accuracy, and DSMSLV and DMSLV have approximately the same accuracy.
 
-Efficiency. iive: though SMSLV performs approximately half the number of multiplications and divisions as MSLV, normally one can expect SMSLV to take avout 70-80% of the time required by MSLV. However, for sparse matrices SMSLV may be 20-30% slower than MSLYV. Similar comments hold for DSMSLV and DMSLV.
+Efficiency. iive: though SMSLV performs approximately half the number of multiplications and divisions as MSLV, normally one can expect SMSLV to take about 70-80% of the time required by MSLV. However, for sparse matrices SMSLV may be 20-30% slower than MSLYV. Similar comments hold for DSMSLV and DMSLV.
 
-**Programming.** OMSLV and DSMSLV are driver routines for the LINPACK subroutines SSPCO,SSPFA,SSPSL, SsPDL and DSPCO, DSPFA, DSPSL, DSPDI. SSPCO and DS2CO were written by Cieve Moler (University of New Mexico). The remaining LINPACK 3ubroutines were written by James Kuanch (University of California, San Diego}. The subroutsacs employ the vector routines SCOPY, SSWAP, SDOT, SSCAL, SAXPY, SASUM, ISAMAX and DSWAP, DDO'T, DSC AL, DAXPY, DASUM, IDAMAX.
+**Programming.** OMSLV and DSMSLV are driver routines for the LINPACK subroutines SSPCO,SSPFA,SSPSL, SsPDL and DSPCO, DSPFA, DSPSL, DSPDI. SSPCO and DS2CO were written by Cleve Moler (University of New Mexico). The remaining LINPACK subroutines were written by James Kuanch (University of California, San Diego}. The subroutines employ the vector routines SCOPY, SSWAP, SDOT, SSCAL, SAXPY, SASUM, ISAMAX and DSWAP, DDO'T, DSC AL, DAXPY, DASUM, IDAMAX.
 
 **References.**
 
-(1) Bureh, Jo Ro and Parlett, BON “Direct Methods for Sclving Symmetric Indefinite Systems of Liner Equations,” STAM J. Numerseal Analysis 8 (1971), pp. @80 655,
+(1) Bureh, Jo Ro and Parlett, BON “Direct Methods for Solving Symmetric Indefinite Systems of Liner Equations,” SIAM J. Numerical Analysis 8 (1971), pp. @80 655,
 
-f2) Bunch, JO Ro, CAnatysis of the Diagonal Pivefttie Methoa,” STAAT J. Numerical Anolwage B CIS UE) pp. 656 GkO.
+f2) Bunch, JO Ro, CAnatysis of the Diagonal Pivefttie Method,” STAAT J. Numerical Analysis B CIS UE) pp. 656 GkO.
 
 
 <small>Original source: [View scanned PDF page 175](../scans/page_0175.png)</small>
 
-(3) Bunch, J. R., Kaufinan, L., and Parlett, B.N., “Decomposition of a Symmetric Matrix,” Numerische Mathematik 27 (1975), pp. 95-109.
+(3) Bunch, J. R., Kaufman, L., and Parlett, B.N., “Decomposition of a Symmetric Matrix,” Numerische Mathematik 27 (1975), pp. 95-109.
 
 (4) Bunch, J., and Kaufman, L., “Some Stable Methods for Calculating Inertia and Solving Symmetric Linear Systems,” Math. Comp. 31 (1977), pp. 163-179.
 
-(5) Cline, A. K., Moler, C. B., Stewart, G. W , and Wilkinson, J. H., “An Estimate for the Condition Number of a Matrix,” SIAM Numerical Analysts 16 (1979), pp. 368-375.
+(5) Cline, A. K., Moler, C. B., Stewart, G. W , and Wilkinson, J. H., “An Estimate for the Condition Number of a Matrix,” SIAM Numerical Analysis 16 (1979), pp. 368-375.
 
-(6) Dongarra, J. J., Bunch, J. R., Moler, ©. B., and Stewart, G. W., LINPACK Vaers’ Guide, Society for Inductrial and /.pplied Mathematics, Philadelphia, 1979.
+(6) Dongarra, J. J., Bunch, J. R., Moler, ©. B., and Stewart, G. W., LINPACK Vaers’ Guide, Society for Industrial and Applied Mathematics, Philadelphia, 1979.
 
 
 <small>Original source: [View scanned PDF page 176](../scans/page_0176.png)</small>
@@ -1198,21 +1198,21 @@ The argument kb is the number of rows in the dimension statement for B in the ca
 
 **Error Return.** [ERR is an integer variable. If A is positive definite then IERR is set to 0 and the problem is solved. Otherwise, IERE = & if the leading k x k submatrix of A is not positive definite.
 
-**Algorithm.** The Cholesky proce-ture is used.
+**Algorithm.** The Cholesky procedure is used.
 
-**Precision.** The results obtained by PCUOL and DPCHOL are occasionally less accurate (upto Ts gnificant digit) than the results obtained by SMSLV and DSMSLV.
+**Precision.** The results obtained by PCUOL and DPCHOL are occasionally less accurate (up to a significant digit) than the results obtained by SMSLV and DSMSLV.
 
-Prograrsaing, PCHOL and DPCHOL are driver routines for the LINPACK subroutiaes SPPFA,SPPSE, SPPD} and DPPPA, DPPSL, DPPDI. These subroutines were written by Cleve Moler (University of New Mexico). ‘The functions SDO'T, DDOT and subroutines SAXPY, SSCAL, DAXPY
+Programming, PCHOL and DPCHOL are driver routines for the LINPACK subroutines SPPFA,SPPSE, SPPD} and DPPPA, DPPSL, DPPDI. These subroutines were written by Cleve Moler (University of New Mexico). ‘The functions SDO'T, DDOT and subroutines SAXPY, SSCAL, DAXPY
 
 DSCAL are also used.
 
 Y
 
-Reierence. Dotgarra, J. J. Buneh, 3. Ro, Moler, (Bo, and Stewart, G. Wo, LIN PACK
+Reference. Dongarra, J. J. Bunch, 3. Ro, Moler, (Bo, and Stewart, G. Wo, LIN PACK
 
 Y
 
-Us re’ Gourde, Socety for fndustral and Appiied Mathematics, Phitadelohia, 1979
+Us re’ Gourde, Society for Industrial and Applied Mathematics, Philadelphia, 1979
 
 
 <small>Original source: [View scanned PDF page 177](../scans/page_0177.png)</small>
@@ -1236,7 +1236,7 @@ ay ag a_y see Ain42
 
 ag ay ao cee Gents Qn-1 Gn-2 An-g ... agp /
 
-For convenience, we denote this matrix by A, forn > 1. If A, is a real matrix where ap 4 0 and 6 is a real column vector, then the subroutines TOPLX and DTOPLX are available for solving the syetem of equations A,z = 6. TOPLX is a single precision routine and DTOPLX a double precision routine.
+For convenience, we denote this matrix by A, forn > 1. If A, is a real matrix where ap 4 0 and 6 is a real column vector, then the subroutines TOPLX and DTOPLX are available for solving the system of equations A,z = 6. TOPLX is a single precision routine and DTOPLX a double precision routine.
 
 ```fortran
 CALL TOPLX(A, B, X, N, G, H, IERR)
@@ -1247,11 +1247,11 @@ TOPLX is used if A,b,z,G, H are real arrays, and DTOPLX is used if 4,b,2,G, H ar
 
 A is an array of dimension 2n-1 or larger containing the coefficients A(j) =a,;_p (j= 1, ...,2n — 1) of the matrix A,. The argument 2 is an array of dimension n or larger, and TERR is an integer variable. When the routine is called, if A,z = 6 is solved then IERR is set to 0 and the solution is stored in x. A and 6b are not modified by the routine.
 
-G and H sre arrays of dimension n or larger that are work spaces for the routine. Error Return. TERR = i if the equations cannoi be solved by the routine.
+G and H are arrays of dimension n or larger that are work spaces for the routine. Error Return. TERR = i if the equations cannot be solved by the routine.
 
-**Remarks.** The Levinson bor ering procedure is used. This procedure is inductive, beginning with the solution 2, = 6;/ay of the equation agz, = by. Given a solution for a ee = b (# = 1,...,N) where N <n, then a solution for NM Ata, jtp = bh (r-
+**Remarks.** The Levinson bordering procedure is used. This procedure is inductive, beginning with the solution 2, = 6;/ay of the equation agz, = by. Given a solution for a ee = b (# = 1,...,N) where N <n, then a solution for NM Ata, jtp = bh (r-
 
-1, ...,N 41) is obtained where £1, ...,2y 4. is computed from z,,...,2y. This procedure fails when some submatrix Ay is singular (e.g, when eo -: 0). Also, the procedure may yleld poor results when some Aw is exceedingly ill-conditioned. In such situations one must use a more general equation solver. In TOPELX and D'TOPLX 4(n 1)? Hoating additions and 4n(n 1) integer/floating multiplications an! divisions are used when n> 2. Consequently, these routines are considerably more effic at than general equation solvers such as
+1, ...,N 41) is obtained where £1, ...,2y 4. is computed from z,,...,2y. This procedure fails when some submatrix Ay is singular (e.g, when eo -: 0). Also, the procedure may yield poor results when some Aw is exceedingly ill-conditioned. In such situations one must use a more general equation solver. In TOPELX and D'TOPLX 4(n 1)? floating additions and 4n(n 1) integer/floating multiplications an! divisions are used when n> 2. Consequently, these routines are considerably more efficient than general equation solvers such as
 
 KROUT and ISMSLYV, but more restrictive and frequently less accurate.
 
@@ -1286,13 +1286,13 @@ CALL CMSLV(MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK)
 
 A is a complex matrix of order n where n > 1. If MO = 0 then the inverse of A is computed and stored in A. If MO #0 then the inverse is not computed.
 
-The argument m is an integer. If m > 1 then B is a complex matrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in EB. If m < 0 then there are no equaticns to be solved. In this case the argument B is ignored.
+The argument m is an integer. If m > 1 then B is a complex matrix having n rows and m columns. In this case the matrix equation AX = B is solved and the solution X is stored in EB. If m < 0 then there are no equations to be solved. In this case the argument B is ignored.
 
 The argument ka is the number of rows in the dimension statement for A in the calling program, and the argument kb is the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored.
 
-D is a complex array of dimension 2. When CMSLV is called the determinant det(A) of the matrix A is computed. If det(A) = d-10* where 1 < |Re(d)| + |!m(d)] < 10 and k an integer, then d is stored in D(1) and the exponent k is stored ax a complex qaumber in D2).
+D is a complex array of dimension 2. When CMSLV is called the determinant det(A) of the matrix A is computed. If det(A) = d-10* where 1 < |Re(d)| + |!m(d)] < 10 and k an integer, then d is stored in D(1) and the exponent k is stored ax a complex number in D2).
 
-RCOND is a real variable’ When CMSLYV is called, the routine makes an estimate eof the condition number of the matrix A (relative to the modified L, norm where each absolute value |z| is replaced with |Re(z)] } [Im(z)]). RCOND is assigned the value L/c.
+RCOND is a real variable’ When CMSLV is called, the routine makes an estimate eof the condition number of the matrix A (relative to the modified L, norm where each absolute value |z| is replaced with |Re(z)] } [Im(z)]). RCOND is assigned the value L/c.
 
 IPV'T is an integer array of dimension n or larger that is used by the routine for keeping track of the row interchanges that are made. WK is a complex array of dimension mn or
 
@@ -1300,26 +1300,26 @@ larger that is used as a work space.
 
 **Remarks.**
 
-(1) RCOND satisfies 0+ ROOND = 1 IF RCOND s& LO * then one can expeet the results to have approximately & fewer significant digits of accuracy than the elements of 4 Por example, if CMSLV is used to invert a matrix in the bf digit CDC single precision arithmetic and ROCONDD 48 3) then the computed coefficients of the inverse miatris should normally be accurate to about EL digits. In general, ROOND characterizes tow well or poorly conditioned the problem is, I RCONDP ss b then one shouted expect the results to be almost as accurate as the original data cA However, af ROONE) oO then one should expect Che results to be nonsense
+(1) RCOND satisfies 0+ ROOND = 1 IF RCOND s& LO * then one can expect the results to have approximately & fewer significant digits of accuracy than the elements of 4 Por example, if CMSLV is used to invert a matrix in the bf digit CDC single precision arithmetic and ROCONDD 48 3) then the computed coefficients of the inverse matrix should normally be accurate to about EL digits. In general, ROOND characterizes tow well or poorly conditioned the problem is, I RCONDP ss b then one shouted expect the results to be almost as accurate as the original data cA However, af ROONE) oO then one should expect Che results to be nonsense
 
-(2) ‘Phe matrix Ais always desteoyed
+(2) ‘The matrix Ais always destroyed
 
-**Error Return.** UEKR is an integer variable If RCOND) is aafiicientiy Large se that |
+**Error Return.** UEKR is an integer variable If RCOND) is sufficiently Large se that |
 
 
 <small>Original source: [View scanned PDF page 179](../scans/page_0179.png)</small>
 
 RCOND > 1, then IERR is set to 0 and the problem is solved. Otherwise, if 1-+RCOND = 1 then IERR is set to 1 and the routine terminates. In this case, A will have been destroyed but B will not have been modified. Also the determinant will not have been computed.
 
-Algorithrn. The partial pivot Gauss elimination procedure is used. The pivots ax; are selected so that |Re(a,,)! + |{m(a,,)| = max {jRe(a,,)| + |Im(a,,)| if = 9, ...,n}.
+Algorithm. The partial pivot Gauss elimination procedure is used. The pivots ax; are selected so that |Re(a,,)! + |{m(a,,)| = max {jRe(a,,)| + |Im(a,,)| if = 9, ...,n}.
 
-**Programming.** CMSLV cails the LINPACK subroutines CGECO, CGEFA, CGESL, and CGEDI. These subroutines were written by Cleve Moler (University of New Mexico). The subroutines CSWAP, CSCAL, CSSCAL, CAXPY and functions CDOTC, SCASUM, ICA- MAX are also used.
+**Programming.** CMSLV calls the LINPACK subroutines CGECO, CGEFA, CGESL, and CGEDI. These subroutines were written by Cleve Moler (University of New Mexico). The subroutines CSWAP, CSCAL, CSSCAL, CAXPY and functions CDOTC, SCASUM, ICA- MAX are also used.
 
 **References.**
 
 (1) Dongarra, J. J., Bunch, J. R., Moler, C. B., and Stewart, G. W., LINPACK Users’ Guide, Society for Industrial and Applied Mathematics, Philadelphia, 1979.
 
-(2) Cline, A. K., Moler, C. B., Stewart, G. W., and Wilkinscn, J. H., “An Estimate for the Condition Number of a Matrix,” SIAM Journal of Numertcal Analysis 16 (1979), pp. 368-375.
+(2) Cline, A. K., Moler, C. B., Stewart, G. W., and Wilkinson, J. H., “An Estimate for the Condition Number of a Matrix,” SIAM Journal of Numerical Analysis 16 (1979), pp. 368-375.
 
 ```fortran
 CALL CMSLV1(MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
@@ -1327,9 +1327,9 @@ CALL CMSLV1(MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
 
 A is a complex matrix of order n where n > 1. If MO = 0 then the inverse of A 1s computed and stored in A. If MO + 0 then the inverse is not computed.
 
-The argument m is an integer. If m > 1 then B is a complex matrix having n rows aud m columns. In this case the matrix equation AX = B is solved and the soiution X is stored in B. If n < 0 then there are no equations to be soived. In this case the argument B is ignored.
+The argument m is an integer. If m > 1 then B is a complex matrix having n rows aud m columns. In this case the matrix equation AX = B is solved and the solution X is stored in B. If n < 0 then there are no equations to be solved. In this case the argument B is ignored.
 
-The argument ka is the number of rows in the dimension statement for A in the calling program, and the argument kb is the number of rows in the dimension staternent for B in the calling program. If m < 0 then the argument kb is ignored.
+The argument ka is the number of rows in the dimension statement for A in the calling program, and the argument kb is the number of rows in the dimension statement for B in the calling program. If m < 0 then the argument kb is ignored.
 
 IPVT is an integer array of dimension n or larger that is used by the routines for keeping track of the row interchanges that are made.
 
@@ -1337,9 +1337,9 @@ WK is a complex array of dimension n or larger that ts a work space for the rout
 
 If MO 4 O then WK is ignored.
 
-**Error Return.** JERR ts @ variable that reports the status of the results. When CMSLV1 terininates HERR has one of the following values: TERR O The requested results were obtained. Tok lo Mither n,ka, or Ab is incorrect. tn this case, A and #3 have not been modified, IERR ok The AM column of A has been reduced to a colunin containing
+**Error Return.** JERR ts @ variable that reports the status of the results. When CMSLV1 terminates HERR has one of the following values: TERR O The requested results were obtained. Tok lo Mither n,ka, or Ab is incorrect. tn this case, A and #3 have not been modified, IERR ok The AM column of A has been reduced to a column containing
 
-zeros. ‘The requested results cannot be obvamed,
+zeros. ‘The requested results cannot be obtained,
 
 
 <small>Original source: [View scanned PDF page 180](../scans/page_0180.png)</small>
@@ -1361,19 +1361,19 @@ zeros. ‘The requested results cannot be obvamed,
 CALL DCMSLV(MO, N, M, AR, AI, KA, BR, BI, KB, IERR, IPVT, WK)
 ```
 
-AR and AI are double precision matrices of order n > 1. AR and Al are the real and imaginary parts of the complex matrix A whose inverse is to be computed or for which AX = B is to be solved. If MO = 0 then the inverse of the cornplex matrix is computed and the results stored in AR and AI. If MO #0 then the inverse is not computed.
+AR and AI are double precision matrices of order n > 1. AR and Al are the real and imaginary parts of the complex matrix A whose inverse is to be computed or for which AX = B is to be solved. If MO = 0 then the inverse of the complex matrix is computed and the results stored in AR and AI. If MO #0 then the inverse is not computed.
 
 The argument m is an integer. If m > 1 then BR and BI are double precision matrices having m rows and m columns. In this case, BR and BI are the real and imaginary parts of the complex matrix B for which AX = B is to be solved. When DCMSLV is called, the real and imaginary parts of the solution X are computed and stored in BR and BI. If m < 0 then there are no equations to be solved. In this case BR and BI are ignored.
 
-The argument ka is the number of rows in the dimension statements for AR and AI in the calling program, and the argument kb is the wumber of rows in the dimension statements for BR and BI in the calling program. If m <0 then the argument kb is ignored.
+The argument ka is the number of rows in the dimension statements for AR and AI in the calling program, and the argument kb is the number of rows in the dimension statements for BR and BI in the calling program. If m <0 then the argument kb is ignored.
 
 IPVT is an integer array of dimension n or larger that is used by the routine for keeping track of the row interchanges that are made.
 
 WK is a double precision array of dimension 2n or larger that is a work space for the routine. If MO / 0 then WE is ignored,
 
-**Error Return.** TERR is a variable that reports the status of the results. Wien, DCMSLV terminates TERR has one of the following values: IERR O The requested results were obtained. IERR { Kither n, ka, or kbis incorrect. In this case, AR, Al, BR, BE have not been modified [ERR k The kf columns of AR and Al have been reduced to columns
+**Error Return.** TERR is a variable that reports the status of the results. Wien, DCMSLV terminates TERR has one of the following values: IERR O The requested results were obtained. IERR { Either n, ka, or kb is incorrect. In this case, AR, Al, BR, BE have not been modified [ERR k The kf columns of AR and Al have been reduced to columns
 
-containing zeros, Phe requested results were not obtamed
+containing zeros, The requested results were not obtained
 
 **Remark.** The matrices AR and Al are destroyed.
 
@@ -1382,7 +1382,7 @@ containing zeros, Phe requested results were not obtamed
 
 **Algorithm.** The partial pivot, Gauss elimination procedure is used. The pivots A,, are selected so that |Re(a,,)| + {Im(a,;)| — max {/Re(a,;)| -+ [Im(asy)| if = 9, ...,7)-
 
-**Programming.** DCMSLYV cails the subroutines DCFACT, DCSOL, and DCMINV. These routines were written by A. H. Morris. The functions CDIVity and DPMPAR are also used.
+**Programming.** DCMSLV calls the subroutines DCFACT, DCSOL, and DCMINV. These routines were written by A. H. Morris. The functions CDIVity and DPMPAR are also used.
 
 
 <small>Original source: [View scanned PDF page 182](../scans/page_0182.png)</small>
@@ -1403,13 +1403,13 @@ Given a complex n x n matrix A and a complex column vector 5. The following rout
 CALL CSLVMP/MO,,, A, ka, 6, X,WK,IWK,IND)
 ```
 
-MO is an input argument which specifies if CSLVMP is being called for the first time. On an initial call, MO = O and we have tiie following setup:
+MO is an input argument which specifies if CSLVMP is being called for the first time. On an initial call, MO = O and we have the following setup:
 
 A is a 2-dimensional complex array of dimension ka x n containing the matrix A, ba complex vector of dimension n, and X a complex array of dimension n. When CSLVMP is called, Ax = 6 is solved and the solution stored in X. A and 6 are not modified by the routine.
 
 WK is a complex array of dimension n? + n or larger, and [WK an integer array of dimension n or larger. These arrays are for internal use by the routine. On an initial call to CSLVMP, an LU decomposition is obtained for A and stored in WK and IWK. Then the equation Az = b is solved.
 
-IND is an integer variable that reports the status of the results. On an initial call to CSLVMP, when the rontine terminates ND has one of the following values:
+IND is an integer variable that reports the status of the results. On an initial call to CSLVMP, when the routine terminates ND has one of the following values:
 
 ```text
 IND = 0 The solution X was obtained to machine accuracy.
@@ -1419,15 +1419,15 @@ IND =~k The k‘* columi of A was reduced to a column containing only
 
 zeros. In this case no solution can be obtained.
 
-After an initial call to CSLVMP, if IND = O or | on ouvput, then the routine may be called to solve a new set of equations Az 6 without having to redecompose the matrix A. In this case, the input argument MO may be set to any nonzero value. When MO / 0 tis assumed that only 6 has been modified. The routine employs the LU decomposition obtained on the initial call to CSLVMP to solve the new set of equations At = 6 On output X will contain the solution to the new set ef equations. As before, A and 6 are iot modified by the routine.
+After an initial call to CSLVMP, if IND = O or | on output, then the routine may be called to solve a new set of equations Az 6 without having to redecompose the matrix A. In this case, the input argument MO may be set to any nonzero value. When MO / 0 tis assumed that only 6 has been modified. The routine employs the LU decomposition obtained on the initial call to CSLVMP to solve the new set of equations At = 6 On output X will contain the solution to the new set ef equations. As before, A and 6 are iot modified by the routine.
 
-If CSLYVMP is recalled with MO / 0, then when the routine terminates IND has one of the following values:
+If CSLVMP is recalled with MO / 0, then when the routine terminates IND has one of the following values:
 
-IND O ‘The sulution No was obtained to machine accuracy,
+IND O ‘The solution No was obtained to machine accuracy,
 
-IND 1 Xo was oblained, bat not to machine accuracy,
+IND 1 Xo was obtained, bat not to machine accuracy,
 
-Progranmming CSLV MIP calls the subroutine CLUIME. ('Phese routines were watten hy AOH. Morna The sibroctines CMCOPY, CGOEPA CORSE, CsCAL, CAXPY aad fur trong SUMPAR, COOVYPO) TOAMAN are alse craployed
+Programming CSLV MIP calls the subroutine CLUIME. ('These routines were written hy AOH. Morna The subroutines CMCOPY, CGOEPA CORSE, CsCAL, CAXPY aad fur trong SUMPAR, COOVYPO) TOAMAN are also employed
 
 
 <small>Original source: [View scanned PDF page 183](../scans/page_0183.png)</small>
@@ -1444,7 +1444,7 @@ Progranmming CSLV MIP calls the subroutine CLUIME. ('Phese routines were watten 
 | `CSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L41788`](../source_parts/nswc_part_04.f#L10094) |
 
 
-If 4 is a complex m x n matrix then there exists an m x m unitary matrix U and an n Xn unitary matrix V such that D = U* AV is a diagonal matrix?. Let di,...,d, be the diagonal elements of D where & = min{m,n}. Then U and V can be selected so that the diagonal elements are real numbers and d,; > dz > ++: > dy > 0. The nonnegative diagonal elements d@,; are unique, and if A is a real matrix then U and V can be chosen to be real orthogonal matrices. The decomposition D = U* AV is called the singular value decomposition of A. The elements dy, ...,d, are the stngular values of A, the columns of U are left singular vectors, and the columns of V are right stnguédar vectors.
+If 4 is a complex m x n matrix then there exists an m x m unitary matrix U and an n Xn unitary matrix V such that D = U* AV is a diagonal matrix?. Let di,...,d, be the diagonal elements of D where & = min{m,n}. Then U and V can be selected so that the diagonal elements are real numbers and d,; > dz > ++: > dy > 0. The nonnegative diagonal elements d@,; are unique, and if A is a real matrix then U and V can be chosen to be real orthogonal matrices. The decomposition D = U* AV is called the singular value decomposition of A. The elements dy, ...,d, are the singular values of A, the columns of U are left singular vectors, and the columns of V are right stnguédar vectors.
 
 **Remark.** For m > n, D = (2) where Dy = diag(di,...,dn). Consequently, if U is
 
@@ -1454,7 +1454,7 @@ The following subroutines are available for finding the singular value decomposi
 
 CALI. SSVDC(A, ka, m,n, D, EU, ku, V, kv, WORK ,JOB,INFO) CALL DSVDC(A, ka, m,n, D, E,U, ku, V, ku, WORK,JOB,INFO) CALL CSVDC(A,ka,m,n, D, E,U, ku, V, kv, WORK,JOB,INFO)
 
-A is a 2-dimensional array of dimension ka « n containing the m x n matrix whose singular value decomposition is to be computed. D is an array of dimension min{m + 1, n}. When any of the routines is called, the singular values of A are computed and stered in descending order of magnitude in (1), ..., D(k) where k ~= min{m, n}.
+A is a 2-dimensional array of dimension ka « n containing the m x n matrix whose singular value decomposition is to be computed. D is an array of dimension min{m + 1, n}. When any of the routines is called, the singular values of A are computed and stored in descending order of magnitude in (1), ..., D(k) where k ~= min{m, n}.
 
 JOB is an integer that controls the computation of the singular vectors. It is assumed that JOB — 1-10-+ J when J,J = 0,1, ...,9. J and J have the following meaning.
 
@@ -1466,13 +1466,13 @@ i=: 1 Compute all m left singular vectors
 
 J. 0 Do not compute the right singular vectors,
 
-J > Q Compute the right sineular vectors.
+J > Q Compute the right singular vectors.
 
-U is a 2-dimensional array which containg the deft singular vectors that are requested, and kus the number of rows in the dimension stacement for (an the calling programa. It is assumed that Au Som. Pf ne left sinpular vectors are requested (he, if JOB < £0) then U isignered by the rouvtmes. Ovherwise, ( must be of dimensun Aux na ifallea deft siagriar weetors are requested, and must be of dinieosion ku raindanya} af che first manidea, af
+U is a 2-dimensional array which contains the left singular vectors that are requested, and $k_u$ is the number of rows in the dimension statement for U in the calling program. It is assumed that $k_u \geq m$. If no left singular vectors are requested (i.e., if JOB < 10) then U is ignored by the routines. Otherwise, U must be of dimension $k_u \times m$ if all m left singular vectors are requested, and U must be of dimension $k_u \times \min\{m,n\}$ if the first min{m,n} left singular vectors are requested.
 
-left atneudar vectors are requested. ia) i
 
-Phot emotes the adiaiat mace off,
+
+$U^*$ denotes the adjoint matrix of $U$.
 
 
 <small>Original source: [View scanned PDF page 184](../scans/page_0184.png)</small>
@@ -1483,13 +1483,13 @@ F is an array of dimension n or larger, and WORK is an array of dimension m or l
 
 **Remarks.**
 
-(1) If SSVDC is called then it is assumed that the arrays A, D,E,U,V,WORK are real arrays, if DSVDC is calied then it is assumed that the arrays are double precision arrays, and if CSVDC is called then it is assumed that the arrays are complex arrays.
+(1) If SSVDC is called then it is assumed that the arrays A, D,E,U,V,WORK are real arrays, if DSVDC is called then it is assumed that the arrays are double precision arrays, and if CSVDC is called then it is assumed that the arrays are complex arrays.
 
 (2) The contents of A are destroyed by the routines. If left singular vectors are requested and there is sufficient storage in A to hold the vectors (there will be sufficient storage if m <n or JOB > 20), then one may set U = A. Similarly, if right singular vectors are requested and m > n then one may set V = A. However, only one of the two arrays U and V may be identified with A.
 
 **Error Return.** INFO is an integer variable. If all the singular values are found then INFO will be set to O and the array E will contain zeros. However, if the 7'” singular value cannot be found then INFO is set to 7. In this case, if 7 < k where k = min{m,n} then the singular values d;41, ...,d, will have been computed and stored in D. A will have been reduced to an upper bidiagonal matrix B with D as its diagonal and EF its super diagonal. If U and V have been requested then B = U* AV will be satisfied.
 
-**Programming.** SSVDC, DSVDC, and CSVDC are part of the LINPACK package of matrix subroutines released by Argonne National Laboratory. The routines were coded by G. W. Svewart. (University of Maryland). The routines employ the vector subroutines SSWAP, SROT, SDOT, SSCAL, SAXPY, SNRM2, DSWAP, DROT, PDOT, DSCAL, DAXPY, DNRM2, and CSWAP, CSROT, CDOTC, CSCAL, CAXPY, SCNRM2, Also the subroutines SROTG and DRO'G are called.
+**Programming.** SSVDC, DSVDC, and CSVDC are part of the LINPACK package of matrix subroutines released by Argonne National Laboratory. The routines were coded by G. W. Stewart. (University of Maryland). The routines employ the vector subroutines SSWAP, SROT, SDOT, SSCAL, SAXPY, SNRM2, DSWAP, DROT, DDOT, DSCAL, DAXPY, DNRM2, and CSWAP, CSROT, CDOTC, CSCAL, CAXPY, SCNRM2, Also the subroutines SROTG and DRO'G are called.
 
 **Reference.** Dongarra, J. J., Bunch, J. R., Moler, C. B., and Stewart, G. W., LINPACK Users’ Guide, Society for Industrial and Applied Mathematic., Philadelphia, 1979.
 
@@ -1510,17 +1510,17 @@ LAR
 | `CDET` | `COMPLEX FUNCTION` | `A, KA, N, X` | [`L42427`](../source_parts/nswc_part_05.f#L132) |
 
 
-The following functions are available for computing the determinant of A -- x] where Ais an n X n mairix, « a number, and J the n x n identity matrix.
+The following functions are available for computing the determinant of A -- x] where Ais an n X n matrix, « a number, and J the n x n identity matrix.
 
 DET(A,ka,n, x) DPDET(A, ka, n,z) CDET(A, ka, n, z)
 
-DET is a real function that is used when A is a real matrix and 2 a real nurober, DPDET is a double precision function that is used when A is a double precision matrix and z a double precision number, and CDET is a complex function that is used when A is a cornplex matrix and x a complex number.
+DET is a real function that is used when A is a real matrix and 2 a real number, DPDET is a double precision function that is used when A is a double precision matrix and z a double precision number, and CDET is a complex function that is used when A is a complex matrix and x a complex number.
 
 The value of the appropriate function is the determinant of the matrix A — 2/. The
 
 argument ka has the value: ka = the number of rows in the dimension statement for A in the calling program It is assumed that ka > n > 1.
 
-**Note.** A is destroyed during computation. Algorithm. Gauss jartial pivoting is performed to reduce A -— zJ to upper triangular form. In CDET the pivots a,; are selected so that |Re(a,,)| + |Im(a,;)| = Max{|Re(a,,)| +
+**Note.** A is destroyed during computation. Algorithm. Gauss partial pivoting is performed to reduce A -— zJ to upper triangular form. In CDET the pivots a,; are selected so that |Re(a,,)| + |Im(a,;)| = Max{|Re(a,,)| +
 
 \Im(a,;;)| :# = 7, ...,n} rather than |a,,;| = max{|a,;|:1 = 7, ...,n}.
 
@@ -1547,11 +1547,11 @@ CALL ABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 CALL DABSLV(MO, M, N, A, NA, B, NB, C, NC, WK, IERR)
 ```
 
-If ABSLV is called then it is assumed that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assum :d that A, B,C, and Wh are double precision arrays.
+If ABSLV is called then it is assumed that A, B,C, and W % are real arrays. Otherwise, if DABSLV is called then it is assumed that A, B,C, and Wh are double precision arrays.
 
-It is assumed that m > iandn 1. The input argume.its ka, kb, ke have the following values:
+It is assumed that m > iandn 1. The input arguments ka, kb, ke have the following values:
 
-ka =: the number of rows in the limension staternent for A in the calling program
+ka =: the number of rows in the dimension statement for A in the calling program
 
 kb - the number of rows in the dimension statement for B in the calling program
 
@@ -1559,7 +1559,7 @@ ke == the number of rows in the dimension statement for C in the calling program
 
 WK is an array of dimension rm? 4-n? + 2k or larger where k = max{m,n}. WE is a general storage area for the routine.
 
-MO is an input argument which specifies if the routine is being called for the first time. On an initial call MO <= 0. In this case, A is reduced to lower real Schur form, B is reduced oO Uoper veal Schur form, and then the transformed system of equations is solved.
+MO is an input argument which specifies if the routine is being called for the first time. On an initial call MO <= 0. In this case, A is reduced to lower real Schur form, B is reduced oO upper real Schur form, and then the transformed system of equations is solved.
 
 ND is # variable that reports the status of the results. When the routine terminates, INF) cat cue of the following values: a?
 
@@ -1570,26 +1570,26 @@ IND ‘i could mot be reduced tu lower Schur form.
 IND - 2 8 could met be reduced to upper Schur form.
 ```
 
-I IND 4 O then no solutio © is obtained.
+I IND 4 O then no solution © is obtained.
 
-When INE QO, A ce itains the lowcr Cehur forma of the matrix A, B contains the upper Schur form of the mourix fo and WK contains the orthogonal matrices mivolved an the decompositions of A and Bo Vhin .formation can be reused to solve a new set ool
+When INE QO, A ce itains the lower Schur forma of the matrix A, B contains the upper Schur form of the matrix fo and WK contains the orthogonal matrices involved an the decompositions of A and Bo This information can be reused to solve a new set ool
 
-equations. Phe following options are available: i BO}
+equations. The following options are available: i BO}
 
 MO i New matrices A and C' are given. The data foc ff ts reused in solving the new set of equations
 
-MO) s Sew iatrices &@ and ¢*" are piven. “Phe data fer ber otpaedd ant solving the new set of equations
+MO) s Sew matrices &@ and ¢*" are given. “The data fer ber otpaedd ant solving the new set of equations
 
-Mabe 09,2 Aonew inatrixn (os given. ‘Phe data for A and fo tensed an Se yti Che tra w set oof equattons,
+Mabe 09,2 Aonew matrix (os given. ‘The data for A and fo tensed an Se yti Che tra w set oof equations,
 
 
 <small>Original source: [View scanned PDF page 187](../scans/page_0187.png)</small>
 
-When the routine ix recailed, it is assumed that m,n, and Wik have not been modiiied.
+When the routine ix recalled, it is assumed that m,n, and Wik have not been modified.
 
-**Programming.** ABSLV employs the subrouti- 3 ABSLVI, ORTHES, ORTRN1, SCHUR, SHRSLV, SLV, and DABSLV ernpioys che rout. s DABSV1, DORTH, DRTRN1, DSCHUR, DSHSLV, DPSI-VY. ABSLV and DABSLY are adaptations by A. H. Morris of the subroutine AXPXB written by R. H. Bairtels and G. W. Stewart (University of Texas at Austin).
+**Programming.** ABSLV employs the subrouti- 3 ABSLVI, ORTHES, ORTRN1, SCHUR, SHRSLV, SLV, and DABSLV employs che rout. s DABSV1, DORTH, DRTRN1, DSCHUR, DSHSLV, DPSI-VY. ABSLV and DABSLY are adaptations by A. H. Morris of the subroutine AXPXB written by R. H. Bartels and G. W. Stewart (University of Texas at Austin).
 
-**Reference.** Bactels. R. H. and Stewart, G. W., “Algorithm 432, Solution of the Matrix Bqui tion AX | X Bo 0.” Comm. ACPL 15 (1972), pp. 820-826.
+**Reference.** Bartels. R. H. and Stewart, G. W., “Algorithm 432, Solution of the Matrix Equation AX | X Bo 0.” Comm. ACM 15 (1972), pp. 820-826.
 
 
 <small>Original source: [View scanned PDF page 188](../scans/page_0188.png)</small>
@@ -1605,20 +1605,20 @@ When the routine ix recailed, it is assumed that m,n, and Wik have not been modi
 | `DTASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L43936`](../source_parts/nswc_part_05.f#L1641) |
 
 
-Given matrices A and C of order 2 where C is symmetric. Then she subroutines TASLV and DTASLY are available for obtaining the symmetric matrix X which solves the equation A‘X + X 4=:C. TASLV yields single precision results and DTASLV yields double precision resuits.
+Given matrices A and C of order 2 where C is symmetric. Then she subroutines TASLV and DTASLV are available for obtaining the symmetric matrix X which solves the equation A‘X + X 4=:C. TASLV yields single precision results and DTASLV yields double precision results.
 
 ```fortran
 CALL TASLV(MO, N, A, NA, C, NC, WK, IERR)
 CALL DTASLV(MO, N, A, NA, C, NC, WK, IERR)
 ```
 
-If TASLYV is called then it is assumed that A, C and WK are real arrays. Otherwise, if TASLV is called then it is assuined that A, C, and WK are double precision arrays.
+If TASLV is called then it is assumed that A, C and WK are real arrays. Otherwise, if TASLV is called then it is assumed that A, C, and WK are double precision arrays.
 
-It is a sumed .1at n >... The input erguments ka and ke have the following values: ka = the numbe: of rows in the dimension statement for A in the calling program ke = the number >f rows in the dimension statement for C in the calling program
+It is a sumed .1at n >... The input arguments ka and ke have the following values: ka = the numbe: of rows in the dimension statement for A in the calling program ke = the number >f rows in the dimension statement for C in the calling program
 
-{t is requircd that ka > n and ke > n.
+{t is required that ka > n and ke > n.
 
-WK is an array of dimensior. n* + 2: or larger that is a general storage area for the routine.
+WK is an array of dimension n* + 2: or larger that is a general storage area for the routine.
 
 MO is an input argument, which specifies if the routine is being called for the first time. On an initial call MO = 0. In this case, A is reduced to upper real Schur form and then the transformed system of equations is solved.
 
@@ -1635,9 +1635,9 @@ IND. -1 A could not be reduced to upper Schur form,
 
 WIND ¥ 0 then no solution is obtained.
 
-When IND . 0, A contains the upper Schur form of the matrix 4 and WH contains the orthogonal matrix involved in the decomposition of A. ‘This data can be reused to solve a rew set of equations A'X + XA C. In this case, MO can be vet to any nonzero Value. Woen MO # Oit is assumed that only C has been modified. When the o-t) + terminates, toe solution for the new set of equations is stoset in © Proyramming. TASLV employs the subroutines VASEVE, OR THES, ORPRNE, SCHUR, SYR SEV, SUV and DTASLYV employs the routine DPASVI,ORTHDRERE EL DSCTEER, DSY VSV, LIPSEY. VASLV and DTASIV are adaptations by AJ HE Morus of toe subroutine ATAPSA written by Rofl Bartels and ce Woot wart (Univercty of Pexas at Austin).
+When IND . 0, A contains the upper Schur form of the matrix 4 and WH contains the orthogonal matrix involved in the decomposition of A. ‘This data can be reused to solve a rew set of equations A'X + XA C. In this case, MO can be vet to any nonzero Value. When MO # Oit is assumed that only C has been modified. When the o-t) + terminates, toe solution for the new set of equations is stored in © Programming. TASLV employs the subroutines VASEVE, OR THES, ORPRNE, SCHUR, SYR SEV, SUV and DTASLV employs the routine DPASVI,ORTHDRERE EL DSCTEER, DSY VSV, LIPSEY. VASLV and DTASIV are adaptations by AJ HE Morus of toe subroutine ATAPSA written by Rofl Bartels and ce Woot wart (University of Texas at Austin).
 
-**Reference.** Bartels, Ro No and Stewart, G. W Alpocthin ¢32 Hear of the Matrix equation AX) NE CS Comm. ACM ES (6), pp, X20
+**Reference.** Bartels, Ro No and Stewart, G. W Algorithm ¢32 Hear of the Matrix equation AX) NE CS Comm. ACM ES (6), pp, X20
 
 
 <small>Original source: [View scanned PDF page 189](../scans/page_0189.png)</small>
@@ -1652,7 +1652,7 @@ When IND . 0, A contains the upper Schur form of the matrix 4 and WH contains th
 | `SQUINT` | `SUBROUTINE` | `NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR` | [`L44230`](../source_parts/nswc_part_05.f#L1935) |
 
 
-Given complex n x n matrices A,B, and C. The following subroutine is available for obtaining a complex n X n matrix X which <olves the equation AX* + BX +C = 0.
+Given complex n x n matrices A,B, and C. The following subroutine is available for obtaining a complex n X n matrix X which solves the equation AX* + BX +C = 0.
 
 ```fortran
 CALL SQUINT(NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR)
@@ -1660,7 +1660,7 @@ CALL SQUINT(NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR)
 
 It is assumed that A, B,C, and X are 2-dimensional complex arrays of dimension mx n where sm > n. When SQUINT is called, the n x n complex matrix solution obtained for AX? + BX +C =:0 is stored in X. A,B, and C are modified by the routine.
 
-IND is an integer variable. On input, if IND + 0 then it is assumed that an initial approximation for the desired solution is provided in X by the user. Otherwise, if IND = 0 then the routine provides its own initial approximation. Then Newton iteration is performed. On output, IND = the number of iterati.13 that were performed to compute X.
+IND is an integer variable. On input, if IND + 0 then it is assumed that an initial approximation for the desired solution is provided in X by the user. Otherwise, if IND = 0 then the routine provides its own initial approximation. Then Newton iteration is performed. On output, IND = the number of iterations that were performed to compute X.
 
 WK is a complex array of dimension @ that is a work space for tue routine. It is assumed that > Tn? +n. When SQUINT terminates, WK(1) is a complex number whose real part is the norm ||AX? + BX +Clloo.
 
@@ -1670,15 +1670,15 @@ MAX is a variable. If MAX > 0 then MAX is the maximum number of iterations that 
 
 **Error Return.** [ERR is a variable that is set by the routine. If a solution X is obtained, then IF RR is assigned the value 0. Otherwise, JERR has one of the following values:
 
-IERR = J MAX iterations were performed. More iterations are needed. [ERR ~> 2,3 Factorization of the equations could not be cony Jeted.
+IERR = J MAX iterations were performed. More iterations are needed. [ERR ~> 2,3 Factorization of the equations could not be completed.
 
-X cannot be computed. IERR 10 4 nm Newton iteration failed on iteration mn. Pussibiy fo sancti accuracy was requested. X cannot be computed. IERR — 999 (Input Error) Either n= Les nor &< TnF don. When IERR |. 1 occurs, X contains the most recent value obtained for the solution and
+X cannot be computed. IERR 10 4 nm Newton iteration failed on iteration mn. Possibly fo sancti accuracy was requested. X cannot be computed. IERR — 999 (Input Error) Either n= Les nor &< TnF don. When IERR |. 1 occurs, X contains the most recent value obtained for the solution and
 
-WK(1) is a complex number whose real part is the latest value obtamed for the nor
+WK(1) is a complex number whose real part is the latest value obtained for the nor
 
 |AN?7 | BN 4 Clee.
 
-Programming, SQUEN’T employs the subroutines SQUIN?, CQZHES, CQZIP TRISLY, and CPRANS. These routines were designed by (reorge Jo Davis (Georgia State Cniversity, Atlanta, Georgia), CQOZHES and CQSET are modifications of the EESPACK subroutine QAHES and QZ17T, developed at Argonne National Laboratory. “Phe function SPMEPAR &
+Programming, SQUEN’T employs the subroutines SQUIN?, CQZHES, CQZIP TRISLY, and CPRANS. These routines were designed by (reorge Jo Davis (Georgia State University, Atlanta, Georgia), CQOZHES and CQSET are modifications of the EISPACK subroutine QAHES and QZ17T, developed at Argonne National Laboratory. “The function SPMEPAR &
 
 also used,
 
@@ -1689,9 +1689,9 @@ O40
 
 **References.**
 
-(i) Davis, G. J., “Aigorithin 598. Ai: Algorithm to Compute Solvents of the Matrix Equation AX? + BX + =U,” ACM Trans. Math Software 9 (1983), pp. 246-254.
+(i) Davis, G. J., “Algorithm 598. Ai: Algorithm to Compute Solvents of the Matrix Equation AX? + BX + =U,” ACM Trans. Math Software 9 (1983), pp. 246-254.
 
-(2) Garbow, B.S., et al., Matriz Eigersustems Routines - EISPACK Guide Extension, Springer-Verlag, 1977.
+(2) Garbow, B.S., et al., Matrix Eigensystems Routines - EISPACK Guide Extension, Springer-Verlag, 1977.
 
 
 <small>Original source: [View scanned PDF page 191](../scans/page_0191.png)</small>
@@ -1707,7 +1707,7 @@ O40
 | `DMEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L45275`](../source_parts/nswc_part_05.f#L2980) |
 
 
-Let A be a real matrix of order n > 1. Then the subroutines MEXP and DMEXP oo . are available for cormputing the exponential matrix e4 = )7> A'/t!, MEXP yields single t= 0 precision results and DMEXP yields double precision results.
+Let A be a real matrix of order n > 1. Then the subroutines MEXP and DMEXP oo . are available for computing the exponential matrix e4 = )7> A'/t!, MEXP yields single t= 0 precision results and DMEXP yields double precision results.
 
 ```fortran
 CALL MEXP(A, KA, N, Z, KZ, WK, IERR)
@@ -1715,38 +1715,38 @@ CALL MEXP(A, KA, N, Z, KZ, WK, IERR)
 
 A is a real matrix of order n > 1 and Z a real 2-dimensional array. MEXP computes e4 and stores the results in Z. The arguments ka and kz have the following values:
 
-ka = the number of rows in the dimension statement for A in the cailing program
+ka = the number of rows in the dimension statement for A in the calling program
 
 kz = the number of rows in the dimension statement for Z in the calling program It is assumed that ka > n, kz > n, and that A and Z are different storage areas. If n > 1 then A is destroyed.
 
-WK is a real array of dimension n(n +8) or iarger that is a work space for the routine.
+WK is a real array of dimension n(n +8) or larger that is a work space for the routine.
 
-IERR is a variable that reports the status of the results. When MEXP terminates, JERR is assigned one of the following values: IERR = 0 The exponential was computed. HERR -— 1 Phe norm {[All, = max, >°; ja] is too large. e puted. IFRR | 2 The Pade denominator matrix is singular. (This should never
+IERR is a variable that reports the status of the results. When MEXP terminates, JERR is assigned one of the following values: IERR = 0 The exponential was computed. HERR -— 1 The norm {[All, = max, >°; ja] is too large. e puted. IFRR | 2 The Pade denominator matrix is singular. (This should never
 
 4 cannot be com-
 
 occur.)
 
-**Algorithm.** Ais balanced, vielding a matrix BD ' P!' APD where Disa diagonal matrix, Pa permutation matrix, and || B][y < {|All;. Next m is set to the smallest nonnegative integer such that min {/]2)[q, [i Billo} < 2™, and the 8 diagonal Pade approximation for eis used to compute exp($/2™). Then ¢? > fexp(2/2™)?" is obtained by ra squarings, and e4 PDe® DPD EPlas apphed.
+**Algorithm.** Ais balanced, yielding a matrix BD ' P!' APD where D is a diagonal matrix, Pa permutation matrix, and || B][y < {|All;. Next m is set to the smallest nonnegative integer such that min {/]2)[q, [i Billo} < 2™, and the 8 diagonal Pade approximation for eis used to compute exp($/2™). Then ¢? > fexp(2/2™)?" is obtained by ra squarings, and e4 PDe® DPD EPlas applied.
 
 **Programming.** MXP calls the subroutines BALANC, BALINV, and SLV ‘The function IPMPAR as also used. MEXP was written by A. HL. Morris
 
-**Reference.** Ward, Robert, Co, “Numerteal Computathon of the Matrix Exponential with Accuracy Estimate,” SEAM J. Numerical Analysts 14 (1977), pp 600 GEO
+**Reference.** Ward, Robert, Co, “Numerical Computation of the Matrix Exponential with Accuracy Estimate,” SEAM J. Numerical Analysis 14 (1977), pp 600 GEO
 
 ```fortran
 CALL DMEXP(A, KA, N, Z, KZ, WK, IERR)
 ```
 
-Aas a double precision toatcix of order noo band 4 a double precision 2 ditietsrorel array. DMEXP computes e* and stores the results am 2 The argasients ka and be lave the following values:
+Aas a double precision matrix of order noo band 4 a double precision 2 dimensional array. DMEXP computes e* and stores the results am 2 The arguments ka and be lave the following values:
 
 Aa the number of rows in the dimension statement fo cl in the callin prostate
 
-ke the number of rows ie the dimension staterment fe. 4 i the calling prorat
+ke the number of rows ie the dimension statement fe. 4 i the calling prorat
 
 
 <small>Original source: [View scanned PDF page 192](../scans/page_0192.png)</small>
 
-It is assumed that ka > n, kz > n, and that A and Z ave different storage areas. Ifn > 1 then A is destroyed.
+It is assumed that ka > n, kz > n, and that A and Z ave different storage areas. If n > 1 then A is destroyed.
 
 WK is a double precision array of dimension n(n + 12) or larger that is a work space for the routine.
 
@@ -1760,5 +1760,5 @@ IERR = 2 The Pade denominator matrix is singular. (This should never occur.)
 
 **Programming.** DMEXP calls the subroutines DBAL, DBALNV, and DPSLV. The function IPMPAR is also used. DMEXP was written by A. H. Morris.
 
-**Reference.** Ward, Robert C., “Numerical Computation of the Matrix Exponential with Accuracy Estimate,” SIAM J. Numerical Analysts 14 (1977), pp. 600-610.
+**Reference.** Ward, Robert C., “Numerical Computation of the Matrix Exponential with Accuracy Estimate,” SIAM J. Numerical Analysis 14 (1977), pp. 600-610.
 

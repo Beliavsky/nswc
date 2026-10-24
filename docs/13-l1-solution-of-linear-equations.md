@@ -15,11 +15,11 @@
 | `CL1` | `SUBROUTINE` | `K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES, ERROR, WK, IWK` | [`L62416`](../source_parts/nswc_part_06.f#L9425) |
 
 
-Let Abeakxn matrix, C an éxn matrix, and “an mxn matrix. Also let b,d, and f be olumn vectors of dimensions hk, @, and mm respectively. The following subroutine is available for obtaining a column vector of dimension n which minimizes || Ax -- b||) = > |A,x — 6! ead subject to the constraints
+Let Abeakxn matrix, C an éxn matrix, and “an mxn matrix. Also let b,d, and f be column vectors of dimensions hk, @, and mm respectively. The following subroutine is available for obtaining a column vector of dimension n which minimizes || Ax -- b||) = > |A,x — 6! ead subject to the constraints
 
 Here A; denotes the i*" row of A, and Hx < f means that every component of Ez is less than or equal to the corresponding component of f. CALL CL1(k, 6, m,n, Q,kq, KODE,TOL,ITER, X, RES,RNORM,WK,IWK)
 
-It is assumed that k > 1,8 > 0,m ~~ 0, and n> 1. Q is a 2-dimensional array with kg rows and at least n -+- 2 colurons where kg > k+ &+m4+2. The matrices A,C, © and vectors 6,d, f are stored in the first k + @+ m rows and n+ 1 columns of Q as follows:
+It is assumed that k > 1,8 > 0,m ~~ 0, and n> 1. Q is a 2-dimensional array with kg rows and at least n -+- 2 columns where kg > k+ &+m4+2. The matrices A,C, © and vectors 6,d, f are stored in the first k + @+ m rows and n+ 1 columns of Q as follows:
 
 Ab" Q=;1C a hf
 
@@ -29,11 +29,11 @@ KODE is a variable used for input/output purposes, X an array of dimension n+ 2 
 
 b, - Aya > G, then the user may set KODE to a nonzero value. if KODE 4 O on input, then the user must also set X(j}) and RES(t) to the values
 
-{-10 2, <0 X(j) > 0.0 2; is unrestricted 1.0 2;>0 { 10 b> Aya <0 RESG) 0.0 6 Aya is unreatricted
+{-10 2, <0 X(j) > 0.0 2; is unrestricted 1.0 2;>0 { 10 b> Aya <0 RESG) 0.0 6 Aya is unrestricted
 
 iO b&b Ayr > 0 for gy ook, ym anda co J,...,k to indicate the additional constraints which are desired,
 
-INCOM is a variable When Ch} os called. if a vectoe gis found that parmeunaizes HAs bl subject to the desired constrauits, then ROOR © Quon output and the solutn 4
+INCOM is a variable When Ch} os called. if a vector gis found that minimizes HAs bl subject to the desired constraints, then ROOR © Quon output and the solution 4
 
 
 <small>Original source: [View scanned PDF page 280](../scans/page_0280.png)</small>
@@ -52,7 +52,7 @@ KODE = 1 The problem has no solution.
 
 KODE = 2 Sufficient accuracy cannot be maintained to solve the problem using the current value of TOL.
 
-KODE = 3 The maximum number of iteraticns were performed. More iterations are needed.
+KODE = 3 The maximum number of iterations were performed. More iterations are needed.
 
 When KODE > 1 on output, X contains the last vector = which was obtained, RNORM = ||Az — b||,, and RES contains the vectors b — A#,d— Cz, and f ~ Fi.
 
@@ -70,5 +70,5 @@ Constraints, » SIAM J. Numer. Analysts 15 (1978), pp. 603 611,
 (3)  , “Algorithm 552, Solution of the Constrained @,; Linear Approximation
 ```
 
-Problem,” ACM Trans. Math So;tware 6 (1980), pp. 231-235.
+Problem,” ACM Trans. Math Software 6 (1980), pp. 231-235.
 

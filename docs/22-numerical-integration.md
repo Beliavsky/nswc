@@ -19,9 +19,9 @@
 | `DQXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L101538`](../source_parts/nswc_part_10.f#L6171) |
 
 
-QAGS, QXGS, QSUBA, DQAGS, and DQXGS are available for computing integrals L F(x) dz over finite intervals. The subroutines QAGS and QXGS and the function QOQUBA yield single precision results. These procedures are adaptive. In such procedures, the selection of the points at which the integrand is evaluated depends on the nature of the integrand. DQAGS and DQXGS are double precision versicns of the subroutines QAGS and QXGS.
+QAGS, QXGS, QSUBA, DQAGS, and DQXGS are available for computing integrals L F(x) dz over finite intervals. The subroutines QAGS and QXGS and the function QOQUBA yield single precision results. These procedures are adaptive. In such procedures, the selection of the points at which the integrand is evaluated depends on the nature of the integrand. DQAGS and DQXGS are double precision versions of the subroutines QAGS and QXGS.
 
-QSUBA is applicable only when F and its derivatives have no singularities in the closed interval [a,b]. Otherwise, QAGS or QXGS should be used. These subroutines are appropriate when F(z) is continuous except possibly for a finite number of singularities. QAGS and QXGS generally yield accurate results when any singularities which exist are ‘ocated at the endpoints of the interval [a, b|. However, if F has an exceedingly narrow spike which contributes significantly to the value of the integrai, then the subroutines may overlack the spike and produce incorrect results. QAGS and QXGS normally have approximately the same accuracy. QAGS uses less storage than QXGS, but it frequently requires considerably more function evaluations than QXGS. Consequently, QXGS is recommended when the integrand F(z) is expensive to cornpute.
+QSUBA is applicable only when F and its derivatives have no singularities in the closed interval [a,b]. Otherwise, QAGS or QXGS should be used. These subroutines are appropriate when F(z) is continuous except possibly for a finite number of singularities. QAGS and QXGS generally yield accurate results when any singularities which exist are ‘ocated at the endpoints of the interval [a, b|. However, if F has an exceedingly narrow spike which contributes significantly to the value of the integral, then the subroutines may overlook the spike and produce incorrect results. QAGS and QXGS normally have approximately the same accuracy. QAGS uses less storage than QXGS, but it frequently requires considerably more function evaluations than QXGS. Consequently, QXGS is recommended when the integrand F(z) is expensive to compute.
 
 ```fortran
 CALL QAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
@@ -29,11 +29,11 @@ CALL QAGS(F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST
 
 F(a) is a user defined function whose arguments and values are assumed to be real numbers. The purpose of QAGS is to compute the integral i F(x) dz. F need not be defined at a and 6, and it is not required that a < 6b. F must be declared in the calling program to be of type EXTERNAL.
 
-AERR and RERR. are the absolute and relative error tolerances to be used, and z isa variable. When QAGS is called, z is assigned the value obiained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assumed that machine accuracy is desired.
+AERR and RERR. are the absolute and relative error tolerances to be used, and z is a variable. When QAGS is called, z is assigned the value obtained for J = fp F(z)dz. The subroutine attempts to obtain a value z which satisfies [J — z| < max{AERR, RERR.- [/]}. it is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set NERR = 107%. If RERR = 0 then it is assumed that machine accuracy is desired.
 
 ERROR and NUM are variables. When QAGS terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
-IWK is an array of dimension #@ and WK an array of dimension m. IWK and WK are work spaces for the routine. The input argument # is the maximum number of subintervals in which the interval of integration may be partition:d. It is assumed that @ > land m > 4€. The argument nis a variable. When QACS terminated, n =: the number of subintervals that appeared in the partition. Norn ally n < 100.
+IWK is an array of dimension #@ and WK an array of dimension m. IWK and WK are work spaces for the routine. The input argument # is the maximum number of subintervals in which the interval of integration may be partition:d. It is assumed that @ > land m > 4€. The argument nis a variable. When QACS terminated, n =: the number of subintervals that appeared in the partition. Normally n < 100.
 
 HERR is a variable that reports the status of the results. When the routine terminates, HERR has one of the following values:
 
@@ -83,7 +83,7 @@ IWK is an array of dimension j and WK an array of dimension m. [WK and WK are wo
 
 in which the interval of integration may be partitioned. It is assumed that £ > 1, ys > 32, and m > 462. The argument n is a variable. When QXGS terminates, n = the number of subintervals that appeared in the partition. Normally n < 100.
 
-TERR is a variable that rerorts the status of the results. When the routine terminates, TERR he: one of the following es;
+TERR is a variable that reports the status of the results. When the routine terminates, TERR he: one of the following es;
 
 TERR = 0 The routine; ied that the integral has been computed to the desired accu: «.
 
@@ -113,7 +113,7 @@ values are stored in the remaining 422 locations of WK.
 
 **Algorithm.** The recursive monotone quadrature formulas of P. Favati, G. Lotti, and F. Romani, and the e-algorithm of P. Wynn are used.
 
-**Programming.** QXGS emplovs the subroutines QXGSE, QXCPY, QKLQM, QXRUL, QXRRD, QPSRT, and QELG. QXGS js an adaptation of QAGS where the Gauss~Kronrod formulae have been replaced with the recursive monotone formulze. QXGS wag designed by Paola Favati (Instituio di Elaborazione dell’ Informazione, CNR, Pisa), Grazia Lotti, and Francesco Romani (Universita di Pisa, Italy), and modified by A. U. Morris. The function SPMPAR is also used.
+**Programming.** QXGS employs the subroutines QXGSE, QXCPY, QKLQM, QXRUL, QXRRD, QPSRT, and QELG. QXGS js an adaptation of QAGS where the Gauss~Kronrod formulae have been replaced with the recursive monotone formulae. QXGS wag designed by Paola Favati (Instituio di Elaborazione dell’ Informazione, CNR, Pisa), Grazia Lotti, and Francesco Romani (Universita di Pisa, Italy), and modified by A. U. Morris. The function SPMPAR is also used.
 
 **Reference.** Favati, P., Lotti, G., and Romani, F., “Algorithm 691. Improving QUADPACK Automatic Integration Routines,” ACM Trans. Math Software 17 (1991), pp. 218-282 QSUBA(F, a,b, RERR,MCOUNT, ERROR, IERR) F(z) is a user defined function whose arguments and values are assumed to be real
 
@@ -122,7 +122,7 @@ values are stored in the remaining 422 locations of WK.
 
 numbers. The purpose of QSUBA is to compute the integral i F(x) dz. F need not be defined at the points a and 6. However, it is assumed that a < 6. F must be declared in the calling program to be of type EXTERNAL.
 
-RER is the relative error tolerance to be satiefied. lt is assumed that RERR > O. If ~e wants accuracy to k significant digits then set RLRR = 107*.
+RER is the relative error tolerance to be satisfied. lt is assumed that RERR > O. If ~e wants accuracy to k significant digits then set RLRR = 107*.
 
 The input argument MCOUNT is the maximum: number of points at which # may be evaluated. It is recommended that MCOUNT > 1000.
 
@@ -136,9 +136,9 @@ the value of the integral that it can make.
 
 **Algorithm.** Gaussian quadrature is employed.
 
-**Programming.** QSUBA calis the subroutine QUAD. QSUBA and QUAD were written by T. N. L. Patterson (Queen’s University, Belfast, Northern Ireland}, and QSUBA was modified by A. dl. Morris. The function SPMPAR is used.
+**Programming.** QSUBA calls the subroutine QUAD. QSUBA and QUAD were written by T. N. L. Patterson (Queen’s University, Belfast, Northern Ireland}, and QSUBA was modified by A. dl. Morris. The function SPMPAR is used.
 
-**Reference.** Patterson, T. N. L.,“Algorithm: for Automatic Numerical lutegration Over a Finite Interval,” Comm. ACM 16 (1973), pp. 694-€99, CALL DQAGS(?, a,b, APRR,RERR,z, ERROR,NUM,IERR, 8, 1, nIWK,WK)
+**Reference.** Patterson, T. N. L.,“Algorithm: for Automatic Numerical Integration Over a Finite Interval,” Comm. ACM 16 (1973), pp. 694-€99, CALL DQAGS(?, a,b, APRR,RERR,z, ERROR,NUM,IERR, 8, 1, nIWK,WK)
 
 F(z) is a user defined function whose arguments and values are assumed to be double precision numbers. The purpose of DQAGS is to compute the integral f, F(r)dr. The arguments @ and 6 are double precision numbers. # need not be defined at a and 6, and
 
@@ -151,7 +151,7 @@ AERR and RERR are double precision numbers and z a double precision variable. AE
 
 ERROR is a double precision variable and NUM an integer variable. When DQAGS terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
-IWK is an integer array of dimension @ and WK a double precision array of dimension m. IWK and WK are work spaces for the routine. The argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assumed that €> land m > 4é@. the argument n is a variable. Wher DQAGS terminates, n = the number of subintervals that appeared in the partition. Normally n < 100.
+IWK is an integer array of dimension @ and WK a double precision array of dimension m. IWK and WK are work spaces for the routine. The argument @ is the maximum number of subintervals in which the interval of integration may be partitioned. It is assumed that €> land m > 4é@. the argument n is a variable. When DQAGS terminates, n = the number of subintervals that appeared in the partition. Normally n < 100.
 
 ```text
 IERR is a variable that reports the status of the results. When the routine terminates,
@@ -176,7 +176,7 @@ IERR = 6 (Input Error) Either 2< 1, m < 4@, AERR < 0, or RERR < 0. In this case,
 
 **Algorithm.** The 2! point Kronrod rule and e-algorithm of P. Wynn are used. Programming. DQAGS employs the routines DQAGSE, DQK21, DQPSR, and DQELG. These subroutines are double precision versions by A. H. Morris of the routines QAGSE,
 
-QKR2UF, QPSRT, and QHLG. Phe function DPMPAR is also used.
+QKR2UF, QPSRT, and QHLG. The function DPMPAR is also used.
 
 
 <small>Original source: [View scanned PDF page 403](../scans/page_0403.png)</small>
@@ -249,9 +249,9 @@ The subroutines QAGI and DQAGI are available for computing integrals over infini
 CALL QAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 ```
 
-F(x) is a user defined function whose arguments and values are assumed to be real numbers. The argument a is a real number, z is a variabie, and MO may be 1, —1, or 2. When QAGI is called, z is assigned the value f° F(x) dz if MO = 1 and the value f°. F(z) dz if MO = -1. Otherwise, if MO = 2 vhen z is assigned the value [| F(x) dz. If MO = +1 then F need not be defined at a. Otherwise, if MO = 2 then a is not used. F must be declared in the calling program to be of type EXTERNAL.
+F(x) is a user defined function whose arguments and values are assumed to be real numbers. The argument a is a real number, z is a variable, and MO may be 1, —1, or 2. When QAGI is called, z is assigned the value f° F(x) dz if MO = 1 and the value f°. F(z) dz if MO = -1. Otherwise, if MO = 2 then z is assigned the value [| F(x) dz. If MO = +1 then F need not be defined at a. Otherwise, if MO = 2 then a is not used. F must be declared in the calling program to be of type EXTERNAL.
 
-AERR and RERR are the absolute and relative error tolerances to be used. The subroutine attempts to obta:n a value z which satisfies | [ F(z) dz—z| < max{AERR,RERR: | f F(z)dz|}. It is assumed that AERR > 0 and RERR > 0. If cne wants accuracy to k significant digits then set RERR = 10~*. If RERR = 0 then it is assumed that machine accuracy is desired.
+AERR and RERR are the absolute and relative error tolerances to be used. The subroutine attempts to obtain a value z which satisfies | [ F(z) dz—z| < max{AERR,RERR: | f F(z)dz|}. It is assumed that AERR > 0 and RERR > 0. If one wants accuracy to k significant digits then set RERR = 10~*. If RERR = 0 then it is assumed that machine accuracy is desired.
 
 ERROR and NUM are variables. When QAGI terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
@@ -292,7 +292,7 @@ f P(2)dz = fire +1/t) +P -1/))S
 
 The transformed integrals are computed by the 15 point Kronrod rule and the e-algorithm of P. Wynn.
 
-**Programming.** QAGI employs the subroutines QAGIE, QK15I, QPSRT, and QELG. These routines were developed by Robert Piessens and Fiise de Doncker-Kapenga (Katholieke Universiteit Leuven, lieverlee, Belgium), and modified by A. H. Morris and Los Alamos National Laboratory. The function SPMPAR is also used.
+**Programming.** QAGI employs the subroutines QAGIE, QK15I, QPSRT, and QELG. These routines were developed by Robert Piessens and Elise de Doncker-Kapenga (Katholieke Universiteit Leuven, lieverlee, Belgium), and modified by A. H. Morris and Los Alamos National Laboratory. The function SPMPAR is also used.
 
 **Reference.** Piessens, R., de Doncker-Kapenga, E., Uberhuber, C. W., and Kahaner, D. K.., QUADPACK: A Subroutine Package for Automatic Integration, Springer-Verlag, 1983.
 
@@ -300,13 +300,13 @@ The transformed integrals are computed by the 15 point Kronrod rule and the e-al
 CALL DQAGI(F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
 ```
 
-F(x) is a user defined function whose arguments and values are assumed to be double precision numbers. The argument @ is a double precision number, z is a double precision variable, and MO may be 1, --1, or 2. When DQAGI is called, z is assigned the value f<° F(z) dz if MO = 1 and the value f°. #(z)dz if MO = —1. Otherwise, if MO = 2 then z is assigned the value ine F(x) dx. If MO = +1 then F need not be defined at a. Otherwise, if MO = 2 then a is not usec. F must be declared in the calling program to be of types DOUBLE PRECISION and EXTERNAL.
+F(x) is a user defined function whose arguments and values are assumed to be double precision numbers. The argument @ is a double precision number, z is a double precision variable, and MO may be 1, --1, or 2. When DQAGI is called, z is assigned the value f<° F(z) dz if MO = 1 and the value f°. #(z)dz if MO = —1. Otherwise, if MO = 2 then z is assigned the value ine F(x) dx. If MO = +1 then F need not be defined at a. Otherwise, if MO = 2 then a is not used. F must be declared in the calling program to be of types DOUBLE PRECISION and EXTERNAL.
 
 AERR and RERR are the absolute and relative error tolerances to be used. The subroutine attempts to obtain a value z which satisfies | [ F(z) dz - z| < mar{AERR,RERR- | f F(z) dz|}. %t is assumed that AFRR and RERR are nonnegative double precision numbers. If one wants accuracy to k significant digits then set RERR = 10°*. If RERR - 0 then it is assumed that machine accuracy is desired.
 
 ERROR is a double precision variable and NUM an integer variable. When DQAGI] terminates, ERROR is the estimated absolute error of z and NUM the number of points at which F was evaluated.
 
-IWK is an integer array of dimension @ and WK a double precision array of dimension m. IWK and WK are work spaces for the routine. The argument @ 1s the maximurn surmber
+IWK is an integer array of dimension @ and WK a double precision array of dimension m. IWK and WK are work spaces for the routine. The argument @ 1s the maximum number
 
 
 <small>Original source: [View scanned PDF page 407](../scans/page_0407.png)</small>
@@ -362,21 +362,21 @@ The input argument € is the error tolerance to be satisfied, and A is a variab
 
 The input argument MAX is the maximum number of points (2, y) at which F may be evaluated, and n is a variable. On an initial call to CUBTRI, the user must set n> 0. When the routine terminates, n will have for its value the number of points at which F was evaluated. (For subsequent calls concerning the same integral, see below.)
 
-W is an array of dimension @ for internal use by the routine. The input argument é specifies the maximum number of subtriangles in which the triangle of integration 7 may be partitioned. The subtriangles are stored in W, each subtriangle requiring © starage locations. “Phus @/6 is an estimate of the maximum number of subtriangles that mught have to be stored (@ 0 mar{1,3m 4 1} where m= (MAX/19 — I)/4).
+W is an array of dimension @ for internal use by the routine. The input argument é specifies the maximum number of subtriangles in which the triangle of integration 7 may be partitioned. The subtriangles are stored in W, each subtriangle requiring © storage locations. “Thus @/6 is an estimate of the maximum number of subtriangles that might have to be stored (@ 0 mar{1,3m 4 1} where m= (MAX/19 — I)/4).
 
 TERR is an integer variable that reports the status of the results. When the routine terminates, HERR has one of the following values:
 
-TERR 0 "Phe intepral was computed to the desired accuracy.
+TERR 0 "The integral was computed to the desired accuracy.
 
 IFRR ot MAN Gs too small A must be evaluated at more points.
 
-IERR 2 Phe storage space Woois full) [ts dimension #imust be mereased,
+IERR 2 The storage space Woois full) [ts dimension #imust be increased,
 
-IERR 3 Further subdivesion of the subtriangles impossible. Phis normally occurs when f(r, y) has a singulonty in (he region. “Phe situation can frequently be eliminated by placing the singularity at a vertex of the trianple of rmteyration 7.
+IERR 3 Further subdivision of the subtriangles impossible. This normally occurs when f(r, y) has a singularity in (he region. “The situation can frequently be eliminated by placing the singularity at a vertex of the triangle of integration 7.
 
-TERR 4 No durther tiiprovement in aecuracy as possible because of roundoff
+TERR 4 No further improvement in accuracy as possible because of roundoff
 
-errorin the computation of Foor the irrepsular behavier of Fe
+error in the computation of F or the irregular behavior of Fe
 
 HAS
 

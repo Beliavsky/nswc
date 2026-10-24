@@ -4,6 +4,13 @@ The Markdown transcription still contains OCR errors. Automated checks narrow
 the review to suspect words; they do not verify equations or recover missing text.
 Compare uncertain passages with the linked page scans.
 
+The [file-by-file review record](proofreading-review.csv) lists the manual prose
+pass completed on 2026-10-24, its direct edit counts, and the remaining tool flags.
+Chapter corrections are also mirrored in the complete manual. Selected damaged
+passages were checked against scans 183 and 438. The remaining flags include
+unresolved OCR, notation, identifiers, and names; this is not a full verification
+of the mathematics or code examples.
+
 ## Setup and use
 
 Install Node.js 22.18 or newer and Python 3.11 or newer, then run from the repository

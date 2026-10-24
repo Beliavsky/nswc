@@ -17,7 +17,7 @@
 | `CLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L45756`](../source_parts/nswc_part_05.f#L3461) |
 
 
-For n > 1, let A denote ann x n matrix and 6 a column vector of dimension n. Then the subroutines LE, DPLE, and CLE are availabte for solving the equations Az = 6 where A is not stored in-core. For large n, these routines require a work space of dimension x n?7/4. This permits the solution of systems of equations of double the order permitted by the standard solution procedures.
+For n > 1, let A denote ann x n matrix and 6 a column vector of dimension n. Then the subroutines LE, DPLE, and CLE are available for solving the equations Az = 6 where A is not stored in-core. For large n, these routines require a work space of dimension x n?7/4. This permits the solution of systems of equations of double the order permitted by the standard solution procedures.
 
 ```fortran
 CALL LE(ROWK, N, B, C, D, IP, IERR)
@@ -35,15 +35,15 @@ WK is an array of dimension [n?/4] +n +3 or larger,’ and iWK is an integer arr
 
 **Remarks.**
 
-(i) When LE is called then it is assumed that 6, X, WK and the array Rin ROWK are real arrays. When DPLE is called then it is assumed that these arrays are double precision arrays, and when CLE is cailed then it is assumed that the arrays are complex.
+(i) When LE is called then it is assumed that 6, X, WK and the array R in ROWK are real arrays. When DPLE is called then it is assumed that these arrays are double precision arrays, and when CLE is called then it is assumed that the arrays are complex.
 
-(2) When the equations are solved, ROWK is called to attach the first row of A, then the secend row, etc. Each row of A is attached only once.
+(2) When the equations are solved, ROWK is called to attach the first row of A, then the second row, etc. Each row of A is attached only once.
 
 (3) The array 6 is not modified by the routines.
 
 **Algorithm.** The partial pivot Henderson-Wassyng procedure is used.
 
-**Programming.** LE, DPLE, and CLE are modified versions by A. Hl. Morris of the subroutine TE, written by A. Wassyng (University of the Wiwwatersrand, Johannesburg, South: Africa).
+**Programming.** LE, DPLE, and CLE are modified versions by A. Hl. Morris of the subroutine TE, written by A. Wassyng (University of the Witwatersrand, Johannesburg, South: Africa).
 
 **Example.** Consider a system of n = 300 real linear equations b where the rows of A are stored, one row per logical record, in sequence in an unformatted file (say file 4). Then the following code can be used to solve the equations:
 

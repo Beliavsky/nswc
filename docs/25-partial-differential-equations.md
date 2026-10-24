@@ -23,7 +23,7 @@ on the rectangle a; < 2 < az,b1 < y < bg, where u is periodic in z or y, or u or
 
 CALL SEPDE(COFX,COFY,g,ITYPE,BVAL,IORD, ay, a2, m,b1,b2,n, U,ku,W, &,IND)
 
-It is assumed that m > 7 andn > 6. U isan mxn matrix. The argument ku is the number of rows in the dimension statement for U in the calling program. When SEPDE is called, if the elliptic equation is solved then U(i,7) = u(ai,y;) for? = 1,...,m and J=l1,...,n
+It is assumed that m > 7 and n > 6. U is an mxn matrix. The argument ku is the number of rows in the dimension statement for U in the calling program. When SEPDE is called, if the elliptic equation is solved then U(i,7) = u(ai,y;) for? = 1,...,m and J=l1,...,n
 
 The input argument IOKD is the order of the approximation procedure to be used. IORD may have the values 2 or 4.
 
@@ -33,7 +33,7 @@ The argument COFY is the name of a user defined subroutine that has the format: 
 
 The argument g is the name of a user defined function, where g(z,y) gives the right hand side of the elliptic equation for all ay < x < az,b; <y < by. The argument g must be declared in the calling program to be of type EXTERNAL.
 
-Buundary Conditions. The edges of the rectangular domain are labeled in a clockwise manner as follows:
+Boundary Conditions. The edges of the rectangular domain are labeled in a clockwise manner as follows:
 
 a edge I = { (x, 61) |ay <a <ayg } f ; edge 3~ { (z,b2)|a; <2 < az} te-] edge t= { (a2, y) |b) < y < by }
 
@@ -102,13 +102,13 @@ INI = 6 (Input error) m < 7.
 
 IND = 7 (Input error) n < 6.
 
-IND = 8 (Irput error) IORD ¥ 2,4.
+IND = 8 (Input error) IORD ¥ 2,4.
 
 IND = 10 (Input error) a(x)d(y) < O for some interior point (z, y) of the rectangle. This violates the assumption that the equation in elliptic.
 
-IND = 11 (Input error) @ was toa small. @ has been reset to the minitauin
+IND = 11 (Input error) @ was too small. @ has been reset to the minimum
 
-amount of storage n-eded for W.
+amount of storage needed for W.
 
 
 <small>Original source: [View scanned PDF page 436](../scans/page_0436.png)</small>
@@ -170,5 +170,5 @@ END
 
 COFX, COFY, GVAL, and BVAL must be declared in the calling program to be of type EXTERNAL.
 
-**Reference.** Adams, J., Swarztrauber, P., and Sweet, R., FISHPAK: Efficient FORTRAN Subprograms for the Solution of Separable Elliptic Partial Differential Equations, Verston 3. National Center for Atmospheric Research, Boulder, Colorado, 1978.
+**Reference.** Adams, J., Swarztrauber, P., and Sweet, R., FISHPAK: Efficient FORTRAN Subprograms for the Solution of Separable Elliptic Partial Differential Equations, Version 3. National Center for Atmospheric Research, Boulder, Colorado, 1978.
 

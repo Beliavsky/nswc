@@ -27,7 +27,7 @@ A and & are arrays. PLCOPY is used if A and B are real arrays, and DPCOPY is use
 
 The arguments m,n, ka, kb are positive integers. The coefficients a; are ¢ sumed to be stored in A where A(1+7-ku) = a; for 7 = 0,1,...,m-- 1. The routine stores the first n coefficients a; in B where B(1 + 7-kb) = a, for 7 =0,1,...,n—-1.
 
-Note Ifn>m then B(1+7-kb) = 0 for 7 > m.
+Note If n>m then B(1+7-kb) = 0 for 7 > m.
 
 **Programmer.** A. H. Morris.
 
@@ -59,7 +59,7 @@ CALL DPADD(A, KA, L, B, KB, M, C, KC, N)
 
 A, B and C are arrays. PADD is used if A, B and C are real arrays and DPADD is used if A, B and C are double precision arrays.
 
-The argumenis ¢,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; are assumed to be stored in A and B where A(l+j-ka} =a; (7 =0,1,...,@~1) B(L+j-kb) = 6; (7 =0,1,...,m~1). The routine stores the first n coefficients c; of p(x) + q(x) in C where C(1 +-j-ke) = cy for jJ=O0,1,...,n-1.
+The arguments ¢,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; are assumed to be stored in A and B where A(l+j-ka} =a; (7 =0,1,...,@~1) B(L+j-kb) = 6; (7 =0,1,...,m~1). The routine stores the first n coefficients c; of p(x) + q(x) in C where C(1 +-j-ke) = cy for jJ=O0,1,...,n-1.
 
 **Remarks.** The array C' nay begin in the same location as A or B. If C begins in the same location as A then it is assumed that ke =: ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that ke = kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
 
@@ -79,14 +79,14 @@ The argumenis ¢,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; 
 | `DPSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26184`](../source_parts/nswc_part_03.f#L5017) |
 
 
-£-1 m-- 1 : If p(z) = 33 a;: q{z) == 33 6,2? then the following subroutines are available for j=0 pd computing the first, ; ients of the polynomial p(x) ~ q(x) = 30, ¢;27. CALL PSU'S) ka, ¢, B, kb, m,C, ke, n) CALL DPSWUE I A, ka, é, Bj kb,m,C, ke, n) A, B and C are ari: PSUBT is used if A, B and C are real arrays and DPSUBT is used if A, B and C are! ble precision arrays. The arguments f, ka,kb,ke are positive integers. The coefficients a; and 6; are assumed to be storec nd B where A(l + 7+ka} (7 =0,1,...,8- 1) B(1 + 7-kb) (7 =0,1,...,m—1).
+£-1 m-- 1 : If p(z) = 33 a;: q{z) == 33 6,2? then the following subroutines are available for j=0 pd computing the first, ; ients of the polynomial p(x) ~ q(x) = 30, ¢;27. CALL PSU'S) ka, ¢, B, kb, m,C, ke, n) CALL DPSWUE I A, ka, é, Bj kb,m,C, ke, n) A, B and C are ari: PSUBT is used if A, B and C are real arrays and DPSUBT is used if A, B and C are! ble precision arrays. The arguments f, ka,kb,ke are positive integers. The coefficients a; and 6; are assumed to be stored nd B where A(l + 7+ka} (7 =0,1,...,8- 1) B(1 + 7-kb) (7 =0,1,...,m—1).
 
 ```text
 The routine stores the si 1 coefficients c, of p(x) — q(z) in C where C(1 + y-ke) == ¢; for
 j=0,1,...,n-1.
 ```
 
-**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same Jocation as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
+**Remarks.** The array C may begin in the same location as A cr B. If C begins in the same location as A then it is assumed that kc = ka. In this case, the result C will overwrite the input data A. Similarly, if C begins in the same location as B then it is assumed that kc = kb. Otherwise, if C does not begin in the same location as A or B, then it is assumed that the array C does not overlap with the arrays A and B.
 
 **Programmer.** A. H. More's.
 
@@ -149,7 +149,7 @@ CALL DPDIV(A, KA, L, B, KB, M, C, KC, N, IERR)
 
 A, B and C are arrays. PDIV is used if A, B and C are real arrays and DPDIV is used if A, 8 and C are double precision arrays.
 
-The arguments £,m,n,ka,kb,ke are positive integers. The coetficients a; and 5; are assumed to be: stored in A and B where A(l+jka)=a; (7 =0,1,...,0-1) B(1 + 7-kb) = b, (7 =0,1,...,m— 1). TERR is a variable. When the routine is called, if b) 4 0 then IERR is assigned the value O and the first n coefficients c; of p(x)/q(x) are stored in C where C(1 + j-ke) = c,; for 7 =O0,l,...,n-1.
+The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; are assumed to be: stored in A and B where A(l+jka)=a; (7 =0,1,...,0-1) B(1 + 7-kb) = b, (7 =0,1,...,m— 1). TERR is a variable. When the routine is called, if b) 4 0 then IERR is assigned the value O and the first n coefficients c; of p(x)/q(x) are stored in C where C(1 + j-ke) = c,; for 7 =O0,l,...,n-1.
 
 **Error Return.** JERR = 1 if bp = 0. In this case, ac computation is performed. Remarks. It is assumed that the array C does not overlap with the arrays A and B.
 
@@ -324,7 +324,7 @@ for 7 #1, and p(x) = >> p(a,)¢,(zr) for any polynomial of degree n ~— 1. For 
 t=1
 ```
 
-dy = (a; — a1) (a; ~ a2) +++ (ay — ag-—1) (ay — spi) +++ (ay — an) is called the nermalization divisor of ¢,(r). The following subroutines are available for
+dy = (a; — a1) (a; ~ a2) +++ (ay — ag-—1) (ay — spi) +++ (ay — an) is called the normalization divisor of ¢,(r). The following subroutines are available for
 
 computing the Lagrange polynomials and their normalization divisors.
 
@@ -352,9 +352,9 @@ The argument MO may take the values 0,1,2. If MO = 0 then the polynomials ¢,(z)
 CALL LGRNGX(AU, NA, AC)
 ```
 
-Ais an array of dimension n and © an array of dimension n»® (n } 1}. Phe arguments
+Ais an array of dimension n and © an array of dimension n»® (n } 1}. The arguments
 
-y | & @y,...,@, are given in A. The purpose of the routine is to compute the coellicients ¢,, of the Lagrange polynomials
+y | & @y,...,@, are given in A. The purpose of the routine is to compute the coefficients ¢,, of the Lagrange polynomials
 
 mood ™ : i & Bt) do eerie”. k oO
 
@@ -406,7 +406,7 @@ do(u) = 1/\/n. The following subroutines are available for computing these polyn
 CALL ORTHOS(AU, MA, AA, NA, AR)
 ```
 
-U is an array containing the values u,,...,u, and mis an integer such that 1 < m <n. P is an array of dimension n x m and R an array of dimension 2m — 2. When OQRTHOS is called, ¢;~1(u,;) is computed and stored in P(t,7) fort <nandj < m. Also the coefficients ao, bg, 41,6), ...,dm—2,6m-—2 are stored in R.
+U is an array containing the values u,,...,u, and m is an integer such that 1 < m <n. P is an array of dimension n x m and R an array of dimension 2m — 2. When OQRTHOS is called, ¢;~1(u,;) is computed and stored in P(t,7) fort <n and j < m. Also the coefficients ao, bg, 41,6), ...,dm—2,6m-—2 are stored in R.
 
 **Programmer.** Allen V. Hershey. CALL ORTHOV(MO,n, u, Ry m, F,DF,DDF) The argument u is a real number and m an integer such that 1 <m <n. BR is an
 
@@ -414,7 +414,7 @@ array containing the coefficients ag,6y, 4), 6), ...,@m-2,bm. 2 and PDE DDF are 
 
 dimension ma.
 
-MO imay take the values 0,1,2. If MO O then @o,¢@1,-.-.¢m . are evaluated at uand the values ¢, 1(u) stored in F. If MO I then ¢, 1 and its derivative @, are computed atu. In this case, 6, y(t) is stored in P(g) and ob (4) Is stored in DE() for y 1, ...,m. Similarly, if MO 2 then d, , and its first and second derivatives are evaluated atu. The values @, (1) are stored in F', the first derivatives are stored an DF,
+MO may take the values 0,1,2. If MO O then @o,¢@1,-.-.¢m . are evaluated at u and the values ¢, 1(u) stored in F. If MO I then ¢, 1 and its derivative @, are computed at u. In this case, 6, y(t) is stored in P(g) and ob (4) Is stored in DE() for y 1, ...,m. Similarly, if MO 2 then d, , and its first and second derivatives are evaluated at u. The values @, (1) are stored in F', the first derivatives are stored an DF,
 
 and the second derivatives are stored in DDE.
 
@@ -426,7 +426,7 @@ and the second derivatives are stored in DDE.
 CALL ORTHOX(NA, AR, NC, AC)
 ```
 
-The arpuinent sais an ointeyer such that bosom: on Alois an array Conbarning, Clie
+The argument sais an integer such that bosom: on Alois an array containing, Clie
 
-coclficients du,bo,ay, by, yn 2.4), pg and Coan array of dimension vs ra The purpose
+coefficients du,bo,ay, by, yn 2.4), pg and Coan array of dimension vs ra The purpose
 
