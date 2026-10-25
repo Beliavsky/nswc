@@ -1,0 +1,105 @@
+! Adapted from C:/fortran/amiller-nswc/test/test_svd_legacy.f90
+! Standalone legacy-interface driver: link one NSWC source version at a time.
+program test_svd
+   use, intrinsic :: iso_fortran_env, only : dp => real64
+   implicit none
+   integer, parameter :: n=3,p=2
+   real(dp) :: xd(n,p), xd0(n,p), sd(2), ed(2), ud(n,n), vd(p,p), workd(n), dd(2,2), rd(n,p)
+   real :: xs(n,p), ss(2), es(2), us(n,n), vs(p,p), works(n), ds(2,2), rs(n,p)
+   complex :: xc(n,p), xc0(n,p), sc(2), ec(2), uc(n,n), vc(p,p), workc(n), dc(2,2), rc(n,p)
+   integer :: info
+
+   interface
+      subroutine dsvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+         use, intrinsic :: iso_fortran_env, only : dp => real64
+         integer, intent(in) :: ldx
+         integer, intent(in) :: n
+         integer, intent(in) :: p
+         real(dp), intent(inout) :: x(ldx,*)
+         real(dp), intent(out) :: s(*)
+         real(dp), intent(out) :: e(*)
+         integer, intent(in) :: ldu
+         real(dp), intent(out) :: u(ldu,*)
+         integer, intent(in) :: ldv
+         real(dp), intent(out) :: v(ldv,*)
+         real(dp), intent(out) :: work(*)
+         integer, intent(in) :: job
+         integer, intent(out) :: info
+      end subroutine dsvdc
+      subroutine ssvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+         integer, intent(in) :: ldx
+         integer, intent(in) :: n
+         integer, intent(in) :: p
+         real, intent(inout) :: x(ldx,*)
+         real, intent(out) :: s(*)
+         real, intent(out) :: e(*)
+         integer, intent(in) :: ldu
+         real, intent(out) :: u(ldu,*)
+         integer, intent(in) :: ldv
+         real, intent(out) :: v(ldv,*)
+         real, intent(out) :: work(*)
+         integer, intent(in) :: job
+         integer, intent(out) :: info
+      end subroutine ssvdc
+      subroutine csvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
+         integer, intent(in) :: ldx
+         integer, intent(in) :: n
+         integer, intent(in) :: p
+         complex, intent(inout) :: x(ldx,*)
+         complex, intent(out) :: s(*)
+         complex, intent(out) :: e(*)
+         integer, intent(in) :: ldu
+         complex, intent(out) :: u(ldu,*)
+         integer, intent(in) :: ldv
+         complex, intent(out) :: v(ldv,*)
+         complex, intent(out) :: work(*)
+         integer, intent(in) :: job
+         integer, intent(out) :: info
+      end subroutine csvdc
+   end interface
+
+   xd=reshape([3.0_dp,0.0_dp,0.0_dp, 0.0_dp,2.0_dp,0.0_dp],[n,p])
+   xd0=xd
+   call dsvdc(xd,n,n,p,sd,ed,ud,n,vd,p,workd,11,info)
+   call require(info==0,'legacy external dsvdc status')
+   dd=0.0_dp
+   dd(1,1)=sd(1)
+   dd(2,2)=sd(2)
+   rd=matmul(ud(:,1:2),matmul(dd,transpose(vd)))
+   call require(maxval(abs(rd-xd0))<5.0e-13_dp,'legacy external dsvdc reconstruction')
+
+   xs=real(xd0)
+   call ssvdc(xs,n,n,p,ss,es,us,n,vs,p,works,11,info)
+   call require(info==0,'legacy external ssvdc status')
+   ds=0.0
+   ds(1,1)=ss(1)
+   ds(2,2)=ss(2)
+   rs=matmul(us(:,1:2),matmul(ds,transpose(vs)))
+   call require(maxval(abs(rs-real(xd0)))<3.0e-5,'legacy external ssvdc reconstruction')
+
+   xc=cmplx(real(xd0),0.0)
+   xc(1,1)=cmplx(0.0,3.0)
+   xc(2,2)=cmplx(0.0,-2.0)
+   xc0=xc
+   call csvdc(xc,n,n,p,sc,ec,uc,n,vc,p,workc,11,info)
+   call require(info==0,'legacy external csvdc status')
+   dc=cmplx(0.0,0.0)
+   dc(1,1)=sc(1)
+   dc(2,2)=sc(2)
+   rc=matmul(uc(:,1:2),matmul(dc,conjg(transpose(vc))))
+   call require(maxval(abs(rc-xc0))<5.0e-5,'legacy external csvdc reconstruction')
+
+   print '(a,2es25.16)', 'Double singular values: ',sd
+   print '(a,2es25.16)', 'Single singular values: ',ss
+   print '(a,4es25.16)', 'Complex singular values: ',sc
+   print '(a)', 'test_svd: PASS'
+contains
+   subroutine require(ok,label)
+      logical, intent(in) :: ok
+      character(len=*), intent(in) :: label
+      if (.not.ok) then
+         write(*,'(a,1x,a)') 'FAIL:',trim(label)
+         error stop 1
+      end if
+   end subroutine require
+end program test_svd

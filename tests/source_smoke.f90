@@ -52,6 +52,7 @@ program source_smoke
   write (*, '(3I10)') evaluations, status, last
   write (*, '(4ES25.16)') vector_results
   write (*, '(3ES25.16)') rhs
+  write (*, '(a)') 'source_smoke: PASS'
 end program source_smoke
 
 real function square(x)

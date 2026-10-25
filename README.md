@@ -21,6 +21,7 @@ viewable code partitions.
 - [Complete source interface inventory](NSWC_Source_Interfaces.md)
 - [Review and limitations](NSWC_Source_Audit.md)
 - [Spelling and OCR checks](docs/spelling-checks.md)
+- [Numerical test programs](docs/numerical-tests.md)
 - [Original report cover](scans/page_0001.png)
 - [Recommended free-form Fortran source](nswc.f90)
 - [Readable fixed-form alternative](nswc.f)
@@ -110,11 +111,14 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to compile all three versions with GNU
-Fortran and compare representative numerical results. Use `--compiler PATH`
-when the compiler is not on your command search path. These checks cover vector
-operations, a dense linear solve, the gamma function, Chebyshev evaluation, and adaptive quadrature;
-they are not a full numerical validation of the library.
+Run `python tools/validate_sources.py` to build and run 15 numerical test programs
+against all three versions with GNU Fortran (45 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 14 main
+programs adapted from `C:/fortran/amiller-nswc`, covering linear algebra, special
+functions, polynomial roots, interpolation, splines, integration, differential
+equations, Fourier transforms, and random sequences. See the
+[test guide](docs/numerical-tests.md) for individual programs, selection options,
+adaptations, and coverage limits.
 
 ## Labelled DO loops
 

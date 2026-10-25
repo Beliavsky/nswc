@@ -1,0 +1,86 @@
+! Adapted from C:/fortran/amiller-nswc/test/test_incomplete_beta_compat_legacy.f90
+! Standalone legacy-interface driver: link one NSWC source version at a time.
+program test_incomplete_beta_compat
+   use, intrinsic :: iso_fortran_env, only : dp => real64
+   implicit none
+   real(dp), parameter :: euler_gamma=0.577215664901532860606512090082402_dp
+   real :: w,w1
+   integer :: ierr
+
+   interface
+      real function alnrel(a)
+         real, intent(in) :: a
+      end function alnrel
+      real function rexp(x)
+         real, intent(in) :: x
+      end function rexp
+      real function rlog1(x)
+         real, intent(in) :: x
+      end function rlog1
+      real function gamln(a)
+         real, intent(in) :: a
+      end function gamln
+      real function gamln1(a)
+         real, intent(in) :: a
+      end function gamln1
+      real function gam1(a)
+         real, intent(in) :: a
+      end function gam1
+      real function algdiv(a,b)
+         real, intent(in) :: a,b
+      end function algdiv
+      real function erfc1(ind,x)
+         integer, intent(in) :: ind
+         real, intent(in) :: x
+      end function erfc1
+      real function psi(xx)
+         real, intent(in) :: xx
+      end function psi
+      real function esum(mu,x)
+         integer, intent(in) :: mu
+         real, intent(in) :: x
+      end function esum
+      subroutine bratio(a,b,x,y,w,w1,ierr)
+         real, intent(in) :: a,b,x,y
+         real, intent(out) :: w,w1
+         integer, intent(out) :: ierr
+      end subroutine bratio
+   end interface
+
+   call require(abs(real(alnrel(1.0e-5),dp)-log(1.0_dp+1.0e-5_dp))<2.0e-8_dp, 'legacy alnrel')
+   call require(abs(real(rexp(1.0e-5),dp)-(exp(1.0e-5_dp)-1.0_dp))<2.0e-8_dp, 'legacy rexp')
+   call require(abs(real(rlog1(1.0e-3),dp)-(1.0e-3_dp-log(1.0_dp+1.0e-3_dp)))<2.0e-8_dp, 'legacy rlog1')
+   call require(abs(real(gamln(5.0),dp)-log(24.0_dp))<2.0e-6_dp, 'legacy gamln')
+   call require(abs(real(gamln1(0.5),dp)-log_gamma(1.5_dp))<2.0e-6_dp, 'legacy gamln1')
+   call require(abs(real(gam1(0.25),dp)-(1.0_dp/gamma(1.25_dp)-1.0_dp))<2.0e-6_dp, 'legacy gam1')
+   call require(abs(real(algdiv(2.0,5.0),dp)-(log_gamma(5.0_dp)-log_gamma(7.0_dp)))<2.0e-6_dp, 'legacy algdiv')
+   call require(abs(real(erfc1(1,2.0),dp)-exp(4.0_dp)*erfc(2.0_dp))<2.0e-6_dp, 'legacy erfc1')
+   call require(abs(real(psi(1.0),dp)+euler_gamma)<2.0e-6_dp, 'legacy psi')
+   call require(abs(real(esum(2,-1.25),dp)-exp(0.75_dp))<2.0e-6_dp, 'legacy esum')
+
+   call bratio(2.5,3.5,0.4,0.6,w,w1,ierr)
+   call require(ierr==0, 'legacy bratio status')
+   call require(abs(real(w,dp)-0.4869041915261173978018393139424595_dp)<2.0e-6_dp, 'legacy bratio value')
+   call require(abs(real(w+w1-1.0,dp))<2.0e-6_dp, 'legacy bratio complement')
+   call bratio(0.0,0.0,0.5,0.5,w,w1,ierr)
+   call require(ierr==2, 'legacy bratio ierr 2')
+   call bratio(1.0,1.0,0.1,0.8,w,w1,ierr)
+   call require(ierr==5, 'legacy bratio ierr 5')
+   call bratio(0.0,1.0,0.0,1.0,w,w1,ierr)
+   call require(ierr==6, 'legacy bratio ierr 6')
+   call bratio(1.0,0.0,1.0,0.0,w,w1,ierr)
+   call require(ierr==7, 'legacy bratio ierr 7')
+
+   call bratio(2.5,3.5,0.4,0.6,w,w1,ierr)
+   print '(a,2es25.16)', 'Beta probability and complement: ',w,w1
+   print '(a)', 'test_incomplete_beta_compat: PASS'
+contains
+   subroutine require(ok,label)
+      logical, intent(in) :: ok
+      character(len=*), intent(in) :: label
+      if (.not. ok) then
+         write(*,'(a,1x,a)') 'FAIL:', trim(label)
+         error stop 1
+      end if
+   end subroutine require
+end program test_incomplete_beta_compat

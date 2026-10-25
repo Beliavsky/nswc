@@ -90,6 +90,12 @@ vector operations, a dense linear solve, the gamma function, Chebyshev evaluatio
 quadrature produce identical results across all three versions. These checks
 do not constitute a full numerical validation of the library.
 
+The numerical suite now also includes 14 standalone main programs adapted from
+the legacy drivers in `C:/fortran/amiller-nswc`, in addition to the smoke test.
+The [test guide](docs/numerical-tests.md) records their coverage and adaptations.
+The runner builds each program against each library version separately and
+checks expected results, completion, and agreement of the emitted diagnostics.
+
 ## GitHub structure
 
 ```
