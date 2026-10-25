@@ -1,0 +1,335 @@
+{
+  "input_sha256": "39013b45d6942422f86a17a71d46c08a011856bc144d8d29eb033a0db15cb6d0",
+  "output_sha256": "6f740e38efbeddc10c3f8192b3999c6d4b7060054fddd1925b4d0f9c9fe90c4c",
+  "procedures": 1062,
+  "type_statements_changed": 4799,
+  "intents_combined": 7259,
+  "dimensions_combined": 963,
+  "reviews": [
+    {
+      "procedure": "DEC",
+      "line": 36535,
+      "reason": "Dimension retained to preserve specification order: IP"
+    },
+    {
+      "procedure": "SOL",
+      "line": 36597,
+      "reason": "Dimension retained to preserve specification order: IP"
+    },
+    {
+      "procedure": "SLVMP",
+      "line": 36970,
+      "reason": "Dimension retained to preserve specification order: IWK"
+    },
+    {
+      "procedure": "LUIMP",
+      "line": 37037,
+      "reason": "Dimension retained to preserve specification order: IPVT"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: Q"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: X"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: CU"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: RES"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: S"
+    },
+    {
+      "procedure": "XL1",
+      "line": 66573,
+      "reason": "Dimension retained to preserve specification order: IU"
+    },
+    {
+      "procedure": "LLSQ",
+      "line": 66873,
+      "reason": "Dimension retained to preserve specification order: IWK"
+    },
+    {
+      "procedure": "LLSQMP",
+      "line": 66907,
+      "reason": "Dimension retained to preserve specification order: IWK"
+    },
+    {
+      "procedure": "ORTHO",
+      "line": 67005,
+      "reason": "Dimension retained to preserve specification order: IP"
+    },
+    {
+      "procedure": "ORSOL",
+      "line": 67114,
+      "reason": "Dimension retained to preserve specification order: IP"
+    },
+    {
+      "procedure": "ORIMP",
+      "line": 67212,
+      "reason": "Dimension retained to preserve specification order: IP"
+    },
+    {
+      "procedure": "SMPLX",
+      "line": 79091,
+      "reason": "Dimension retained to preserve specification order: IBASIS"
+    },
+    {
+      "procedure": "SSPLX",
+      "line": 79936,
+      "reason": "Dimension retained to preserve specification order: IBASIS"
+    },
+    {
+      "procedure": "QAGIE1",
+      "line": 83646,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 102887,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 102887,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 102887,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 102887,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "QAGSE",
+      "line": 102887,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 103718,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 103718,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 103718,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 103718,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "QAGIE",
+      "line": 103718,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "QPSRT",
+      "line": 104271,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "QPSRT",
+      "line": 104271,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "QXGS",
+      "line": 104674,
+      "reason": "Dimension retained to preserve specification order: WORK"
+    },
+    {
+      "procedure": "QXGS",
+      "line": 104674,
+      "reason": "Dimension retained to preserve specification order: IWORK"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: VALP"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: VALN"
+    },
+    {
+      "procedure": "QXGSE",
+      "line": 104853,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "DQAGS",
+      "line": 105716,
+      "reason": "Dimension retained to preserve specification order: WORK"
+    },
+    {
+      "procedure": "DQAGS",
+      "line": 105716,
+      "reason": "Dimension retained to preserve specification order: IWORK"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 105894,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 105894,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 105894,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 105894,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "DQAGSE",
+      "line": 105894,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "DQAGI",
+      "line": 106549,
+      "reason": "Dimension retained to preserve specification order: WORK"
+    },
+    {
+      "procedure": "DQAGI",
+      "line": 106549,
+      "reason": "Dimension retained to preserve specification order: IWORK"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 106737,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 106737,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 106737,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 106737,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "DQAGIE",
+      "line": 106737,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "DQPSRT",
+      "line": 107297,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "DQPSRT",
+      "line": 107297,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "DQXGS",
+      "line": 107699,
+      "reason": "Dimension retained to preserve specification order: WORK"
+    },
+    {
+      "procedure": "DQXGS",
+      "line": 107699,
+      "reason": "Dimension retained to preserve specification order: IWORK"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: ALIST"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: BLIST"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: ELIST"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: RLIST"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: VALP"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: VALN"
+    },
+    {
+      "procedure": "DQXGSE",
+      "line": 107879,
+      "reason": "Dimension retained to preserve specification order: IORD"
+    },
+    {
+      "procedure": "STFODE",
+      "line": 114034,
+      "reason": "Dimension retained to preserve specification order: IWORK"
+    }
+  ]
+}

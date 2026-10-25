@@ -1,351 +1,6 @@
-SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
-IMPLICIT NONE
-INTENT(IN) KA, M0, ML, MU, N
-INTENT(INOUT) A, B, IERR, IWK
-INTEGER IERR, KA, M0, ML, MU, N
-! ----------------------------------------------------------------------
-!     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
-!     THE NXN BANDED LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
-!     IF DBSLV IS BEING CALLED FOR THE FIRST TIME, OR IF IT IS BEING
-!     RECALLED WHERE A IS THE SAME MATRIX BUT B HAS BEEN MODIFIED.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) AN LU DECOMPO-
-!     SITION OF A IS OBTAINED AND THEN THE EQUATIONS ARE SOLVED.
-!     ON SUBSEQUENT CALLS (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED
-!     USING THE DECOMPOSITION OBTAINED ON THE INITIAL CALL TO DBSLV.
-!
-!
-!     INPUT ARGUMENTS WHEN M0=0 ---
-!
-!     A,KA      2-DIMENSIONAL ARRAY OF DIMENSION (KA,M) WHERE
-!               KA.GE.N AND M.GE.2*ML+MU+1. THE FIRST ML+MU+1
-!               COLUMNS CONTAIN THE MATRIX A IN BANDED FORM.
-!
-!     N         NUMBER OF EQUATIONS AND UNKNOWNS.
-!
-!     ML        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
-!
-!     MU        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
-!
-!     B         ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND
-!               SIDE DATA.
-!
-!
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
-!
-!     A         AN UPPER TIANGULAR MATRIX IN BAND STORAGE AND
-!               THE MULTIPLIERS WHICH WERE USED TO OBTAIN IT.
-!
-!     B         THE SOLUTION OF THE EQUATIONS.
-!
-!     IWK       ARRAY OF LENGTH N CONTAINING THE PIVOT INDICES.
-!
-!     IERR      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
-!               IERR=0 IF THE SOLUTION OF AX = B IS OBTAINED.
-!               OTHERWISE IERR.NE.0.
-!
-!
-!     AFTER AN INITIAL CALL TO DBSLV, THE ROUTINE MAY BE RECALLED
-!     WITH M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT
-!     A,KA,N,ML,MU,IWK HAVE NOT BEEN MODIFIED. DBSLV RETRIEVES THE
-!     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
-!     DBSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
-!     IS NOT REFERENCED.
-! ----------------------------------------------------------------------
-DOUBLE PRECISION A(KA,*), B(N)
-INTEGER IWK(N)
-IF (M0 .NE. 0) GO TO 10
-!
-!     ERROR CHECKING
-!
-IF (N .LE. 0 .OR. N .GT. KA) GO TO 100
-IF (ML .LT. 0 .OR. ML .GE. N) GO TO 110
-IF (MU .LT. 0 .OR. MU .GE. N) GO TO 120
-!
-!     OBTAIN AN LU DECOMPOSITION OF A
-!
-CALL DBFA(A,KA,N,ML,MU,IWK,IERR)
-IF (IERR .NE. 0) RETURN
-!
-!     SOLVE THE SYSTEM OF EQUATIONS
-!
-10 CALL DBSL(A,KA,N,ML,MU,IWK,B,0)
-RETURN
-!
-!     ERROR RETURN
-!
-100 IERR = -1
-RETURN
-110 IERR = -2
-RETURN
-120 IERR = -3
-RETURN
-END SUBROUTINE DBSLV
-
-SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
-IMPLICIT NONE
-INTENT(IN) KA, M0, ML, MU, N
-INTENT(INOUT) A, B, IERR, IWK
-INTEGER IERR, KA, M0, ML, MU, N
-! ----------------------------------------------------------------------
-!     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
-!     THE NXN BANDED LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
-!     IF DBSLV1 IS BEING CALLED FOR THE FIRST TIME, OR IF IT IS BEING
-!     RECALLED WHERE A IS THE SAME MATRIX BUT B HAS BEEN MODIFIED.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) AN LU DECOMPO-
-!     SITION OF A IS OBTAINED AND THEN THE EQUATIONS ARE SOLVED.
-!     ON SUBSEQUENT CALLS (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED
-!     USING THE DECOMPOSITION OBTAINED ON THE INITIAL CALL TO DBSLV1.
-!
-!
-!     INPUT ARGUMENTS WHEN M0=0 ---
-!
-!     A,KA      2-DIMENSIONAL ARRAY OF DIMENSION (KA,M) WHERE
-!               KA.GE.N AND M.GE.2*ML+MU+1. THE FIRST ML+MU+1
-!               COLUMNS CONTAIN THE MATRIX A IN BANDED FORM.
-!
-!     N         NUMBER OF EQUATIONS AND UNKNOWNS.
-!
-!     ML        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
-!
-!     MU        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
-!
-!     B         ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND
-!               SIDE DATA.
-!
-!
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
-!
-!     A         AN UPPER TIANGULAR MATRIX IN BAND STORAGE AND
-!               THE MULTIPLIERS WHICH WERE USED TO OBTAIN IT.
-!
-!     B         THE SOLUTION OF THE EQUATIONS.
-!
-!     IWK       ARRAY OF LENGTH N CONTAINING THE PIVOT INDICES.
-!
-!     IERR      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
-!               IERR=0 IF THE SOLUTION OF XA = B IS OBTAINED.
-!               OTHERWISE IERR.NE.0.
-!
-!
-!     AFTER AN INITIAL CALL TO DBSLV1, THE ROUTINE MAY BE RECALLED
-!     WITH M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT
-!     A,KA,N,ML,MU,IWK HAVE NOT BEEN MODIFIED. DBSLV RETRIEVES THE
-!     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
-!     DBSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
-!     IS NOT REFERENCED.
-! ----------------------------------------------------------------------
-DOUBLE PRECISION A(KA,*), B(N)
-INTEGER IWK(N)
-IF (M0 .NE. 0) GO TO 10
-!
-!     ERROR CHECKING
-!
-IF (N .LE. 0 .OR. N .GT. KA) GO TO 100
-IF (ML .LT. 0 .OR. ML .GE. N) GO TO 110
-IF (MU .LT. 0 .OR. MU .GE. N) GO TO 120
-!
-!     OBTAIN AN LU DECOMPOSITION OF A
-!
-CALL DBFA(A,KA,N,ML,MU,IWK,IERR)
-IF (IERR .NE. 0) RETURN
-!
-!     SOLVE THE SYSTEM OF EQUATIONS
-!
-10 CALL DBSL(A,KA,N,ML,MU,IWK,B,1)
-RETURN
-!
-!     ERROR RETURN
-!
-100 IERR = -1
-RETURN
-110 IERR = -2
-RETURN
-120 IERR = -3
-RETURN
-END SUBROUTINE DBSLV1
-
-SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
-IMPLICIT NONE
-INTENT(IN) LDA, ML, MU, N
-INTENT(OUT) INFO
-INTENT(INOUT) A, IPVT
-INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1 &
-&, MP, N1
-INTEGER IDAMAX
-! ----------------------------------------------------------------------
-!
-!               DBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
-!
-!                               --------
-!     ON ENTRY
-!
-!        A       DOUBLE PRECISION(LDA, NC)
-!                CONTAINS THE MATRIX IN BAND STORAGE. THE ROWS
-!                OF THE ORIGINAL MATRIX ARE STORED IN THE ROWS
-!                OF A AND THE DIAGONALS OF THE ORIGINAL MATRIX
-!                ARE STORED IN COLUMNS 1 THROUGH ML+MU+1 OF A.
-!                NC MUST BE .GE. 2*ML+MU+1 .
-!                SEE THE COMMENTS BELOW FOR DETAILS.
-!
-!        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY A. IT IS
-!                ASSUMED THAT LDA .GE. N.
-!
-!        N       INTEGER
-!                THE ORDER OF THE ORIGINAL MATRIX.
-!
-!        ML      INTEGER
-!                NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
-!                0 .LE. ML .LT. N .
-!
-!        MU      INTEGER
-!                NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
-!                0 .LE. MU .LT. N .
-!                MORE EFFICIENT IF ML .LE. MU .
-!
-!     ON RETURN
-!
-!        A       AN UPPER TRIANGULAR MATRIX IN BAND STORAGE
-!                AND THE MULTIPLIERS WHICH WERE USED TO OBTAIN IT.
-!                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L IS A PRODUCT OF PERMUTATION AND UNIT LOWER
-!                TRIANGULAR MATRICES AND U IS UPPER TRIANGULAR.
-!
-!        IPVT    INTEGER(N)
-!                AN INTEGER VECTOR OF PIVOT INDICES.
-!
-!        INFO    INTEGER
-!                =0  NORMAL VALUE
-!                =K  IF  U(K,K) .EQ. 0. THIS IS NOT AN ERROR
-!                CONDITION FOR THIS SUBROUTINE, BUT IT DOES
-!                INDICATE THAT DBSL WILL DIVIDE BY ZERO IF
-!                IT IS CALLED.
-!
-!     BAND STORAGE
-!
-!           IF A0 IS THE MATRIX THEN THE FOLLOWING CODE WILL STORE
-!           A0 IN BAND FORM.
-!
-!                   ML = (BAND WIDTH BELOW THE DIAGONAL)
-!                   MU = (BAND WIDTH ABOVE THE DIAGONAL)
-!                   DO 20 I = 1, N
-!                      J1 = MAX0(1, I-ML)
-!                      J2 = MIN0(N, I+MU)
-!                      DO 10 J = J1, J2
-!                         K = J - I + ML + 1
-!                         A(I,K) = A0(I,J)
-!                10    CONTINUE
-!                20 CONTINUE
-!
-!           THIS USES COLUMNS 1 THROUGH  ML + MU + 1  OF A.
-!           FURTHERMORE, ML ADDITIONAL COLUMNS ARE NEEDED IN
-!           A (STARTING WITH COLUMN  ML+MU+2) FOR ELEMENTS
-!           GENERATED DURING THE TRIANGULARIZATION. THE TOTAL
-!           NUMBER OF COLUMNS NEEDED IN A IS  2*ML+MU+1 .
-!
-!     EXAMPLE..  IF THE ORIGINAL MATRIX IS
-!
-!           11 12 13  0  0  0
-!           21 22 23 24  0  0
-!            0 32 33 34 35  0
-!            0  0 43 44 45 46
-!            0  0  0 54 55 56
-!            0  0  0  0 65 66
-!
-!      THEN  N = 6, ML = 1, MU = 2, LDA .GE. 6  AND A SHOULD CONTAIN
-!
-!              11 12 13  +     , + = USED FOR PIVOTING
-!           21 22 23 24  +
-!           32 33 34 35  +
-!           43 44 45 46  +
-!           54 55 56  +  +
-!           65 66  +  +  +
-!
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
-!
-!     SUBROUTINES AND FUNCTIONS
-!        MIN0,IDAMAX,DAXPY,DSCAL,DSWAP
-! ----------------------------------------------------------------------
-INTEGER LDA,N,ML,MU,INFO
-DOUBLE PRECISION A(LDA,*)
-INTEGER IPVT(N)
-DOUBLE PRECISION T
-!
-INFO = 0
-IF (ML .EQ. 0) GO TO 100
-M = ML + MU + 1
-!
-!     SET FILL-IN COLUMNS TO ZERO
-!
-DO J = 1,ML
-   JJ = M + J
-   DO I = 1,N
-      A(I,JJ) = 0.D0
-   END DO
-END DO
-!
-!     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
-!
-ML1 = ML + 1
-MB = ML + MU
-N1 = N - 1
-LDB = LDA - 1
-do 40 K = 1,N1
-  LM = MIN0(N-K,ML)
-  LMK = LM + K
-  LM1 = LM + 1
-  LM2 = ML1 - LM
-!
-!     SEARCH FOR PIVOT INDEX
-!
-  L = -IDAMAX(LM1, A(LMK,LM2), LDB) + LM1 + K
-  IPVT(K) = L
-  MP = MIN0(MB,N-K)
-!
-!     SWAP ROWS IF NECESSARY
-!
-  LL = ML1 + K - L
-  IF (L .NE. K) CALL DSWAP(MP + 1, A(K,ML1), LDA, A(L,LL), LDA)
-!
-!     SKIP COLUMN REDUCTION IF PIVOT IS ZERO
-!
-  IF (A(K,ML1) .NE. 0.D0) GO TO 20
-     INFO = K
-     GO TO 40
-!
-!     COMPUTE MULTIPLIERS
-!
-20 T = -1.D0/A(K,ML1)
-  CALL DSCAL(LM, T, A(LMK,LM2), LDB)
-!
-!     ROW ELIMINATION WITH COLUMN INDEXING
-!
-  DO J = 1,MP
-     JJ = ML1 + J
-     J1 = LM2 + J
-     CALL DAXPY(LM, A(K,JJ), A(LMK,LM2), LDB, A(LMK,J1), LDB)
-  END DO
-40 CONTINUE
-!
-IPVT(N) = N
-IF (A(N,ML1) .EQ. 0.D0) INFO = N
-RETURN
-!
-!     CASE WHEN ML = 0
-!
-100 DO K = 1,N
-  IPVT(K) = K
-  IF (A(K,1) .EQ. 0.D0) INFO = K
-END DO
-RETURN
-END SUBROUTINE DBFA
-
 SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
 IMPLICIT NONE
-INTENT(IN) A, IPVT, JOB, LDA, ML, MU, N
-INTENT(INOUT) B
-INTEGER ML1, ML2
+INTEGER :: ML1, ML2
 ! ----------------------------------------------------------------------
 !
 !     DBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -401,11 +56,12 @@ INTEGER ML1, ML2
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
-INTEGER LDA,N,ML,MU,JOB
-DOUBLE PRECISION A(LDA,*),B(N)
-INTEGER IPVT(N)
-DOUBLE PRECISION DDOT,T
-INTEGER K,KB,KLM,L,LB,LDB,LM,M,MLM,NM1
+INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
+DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(N)
+INTEGER, INTENT(IN) :: IPVT(N)
+DOUBLE PRECISION :: DDOT, T
+INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 !
 M = MU + ML + 1
 IF (M .EQ. 1) GO TO 100
@@ -482,20 +138,18 @@ END SUBROUTINE DBSL
 
 SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
 IMPLICIT NONE
-INTENT(IN) KA, ML, MU, N
-INTENT(OUT) COND
-INTENT(INOUT) A, IERR, IWK, WK
-INTEGER IERR, KA, ML, MU, N
-REAL COND
-INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
-REAL AINORM, ANORM
-REAL B1NRM
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, ML, MU, N
+REAL, INTENT(OUT) :: COND
+INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
+REAL :: AINORM, ANORM
+REAL :: B1NRM
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A BANDED MATRIX A
 !-----------------------------------------------------------------------
-REAL A(KA,*), WK(*)
-INTEGER IWK(*)
+REAL, INTENT(INOUT) :: A(KA,*), WK(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
 !-----------------------
 !     REAL WK(2*N)
 !     INTEGER IWK(2*N)
@@ -556,19 +210,19 @@ END SUBROUTINE B1CND
 
 SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
 IMPLICIT NONE
-INTENT(IN) KA, ML, MU, N
-INTENT(OUT) COND
-INTENT(INOUT) A, IERR, IWK, WK
-INTEGER IERR, KA, ML, MU, N
-INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, ML, MU, N
+INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
 !-----------------------------------------------------------------------
 !            COMPUTATION OF THE L1 CONDITION NUMBER OF
 !               A DOUBLE PRECISION BANDED MATRIX A
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(KA,*), COND, WK(*)
-INTEGER IWK(*)
-DOUBLE PRECISION ANORM, AINORM
-DOUBLE PRECISION DB1NRM
+DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*)
+DOUBLE PRECISION, INTENT(OUT) :: COND
+DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+DOUBLE PRECISION :: ANORM, AINORM
+DOUBLE PRECISION :: DB1NRM
 !-----------------------
 !     DOUBLE PRECISION WK(2*N)
 !     INTEGER IWK(2*N)
@@ -629,9 +283,8 @@ END SUBROUTINE DB1CND
 
 SUBROUTINE CBSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
 IMPLICIT NONE
-INTENT(IN) KA, M0, ML, MU, N
-INTENT(INOUT) A, B, IERR, IWK
-INTEGER IERR, KA, M0, ML, MU, N
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
 ! ----------------------------------------------------------------------
 !     CBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 !     THE NXN COMPLEX BANDED SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -681,8 +334,8 @@ INTEGER IERR, KA, M0, ML, MU, N
 !     CBSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
 !     IS NOT REFERENCED.
 ! ----------------------------------------------------------------------
-COMPLEX A(KA,*),B(N)
-INTEGER IWK(N)
+COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
+INTEGER, INTENT(INOUT) :: IWK(N)
 IF (M0 .NE. 0) GO TO 10
 !
 !     ERROR CHECKING
@@ -713,9 +366,8 @@ END SUBROUTINE CBSLV
 
 SUBROUTINE CBSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
 IMPLICIT NONE
-INTENT(IN) KA, M0, ML, MU, N
-INTENT(INOUT) A, B, IERR, IWK
-INTEGER IERR, KA, M0, ML, MU, N
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
 ! ----------------------------------------------------------------------
 !     CBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 !     THE NXN COMPLEX BANDED SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -765,8 +417,8 @@ INTEGER IERR, KA, M0, ML, MU, N
 !     CBSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
 !     IS NOT REFERENCED.
 ! ----------------------------------------------------------------------
-COMPLEX A(KA,*),B(N)
-INTEGER IWK(N)
+COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
+INTEGER, INTENT(INOUT) :: IWK(N)
 IF (M0 .NE. 0) GO TO 10
 !
 !     ERROR CHECKING
@@ -797,12 +449,9 @@ END SUBROUTINE CBSLV1
 
 SUBROUTINE CBFA (A, LDA, N, ML, MU, IPVT, INFO)
 IMPLICIT NONE
-INTENT(IN) LDA, ML, MU, N
-INTENT(OUT) INFO
-INTENT(INOUT) A, IPVT
-INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1 &
-&, MP, N1
-INTEGER ICAMAX
+INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, &
+&ML1, MP, N1
+INTEGER :: ICAMAX
 ! ----------------------------------------------------------------------
 !
 !               CBFA FACTORS A COMPLEX BAND MATRIX BY ELIMINATION.
@@ -898,10 +547,11 @@ INTEGER ICAMAX
 !     SUBROUTINES AND FUNCTIONS
 !        MIN0,ICAMAX,CAXPY,CSCAL,CSWAP
 ! ----------------------------------------------------------------------
-INTEGER LDA,N,ML,MU,INFO
-COMPLEX A(LDA,*)
-INTEGER IPVT(N)
-COMPLEX T
+INTEGER, INTENT(IN) :: LDA, N, ML, MU
+INTEGER, INTENT(OUT) :: INFO
+COMPLEX, INTENT(INOUT) :: A(LDA,*)
+INTEGER, INTENT(INOUT) :: IPVT(N)
+COMPLEX :: T
 !
 INFO = 0
 IF (ML .EQ. 0) GO TO 100
@@ -974,9 +624,7 @@ END SUBROUTINE CBFA
 
 SUBROUTINE CBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
 IMPLICIT NONE
-INTENT(IN) A, IPVT, JOB, LDA, ML, MU, N
-INTENT(INOUT) B
-INTEGER ML1, ML2
+INTEGER :: ML1, ML2
 ! ----------------------------------------------------------------------
 !
 !     CBSL SOLVES THE COMPLEX BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -1032,11 +680,12 @@ INTEGER ML1, ML2
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
-INTEGER LDA,N,ML,MU,JOB
-COMPLEX A(LDA,*),B(N)
-INTEGER IPVT(N)
-COMPLEX CDOTU,T
-INTEGER K,KB,KLM,L,LB,LDB,LM,M,MLM,NM1
+INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
+COMPLEX, INTENT(IN) :: A(LDA,*)
+COMPLEX, INTENT(INOUT) :: B(N)
+INTEGER, INTENT(IN) :: IPVT(N)
+COMPLEX :: CDOTU, T
+INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 !
 M = MU + ML + 1
 IF (M .EQ. 1) GO TO 100
@@ -1113,12 +762,12 @@ END SUBROUTINE CBSL
 
 SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
 IMPLICIT NONE
-INTENT(IN) A, KA, M, N, NUM
-INTENT(INOUT) B, IB, IERR, JB
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-REAL A(KA,N), B(*)
-INTEGER IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, M, N, NUM
+INTEGER :: I, IP, J
+REAL, INTENT(IN) :: A(KA,N)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !                 STORE THE I-TH ROW
 !
@@ -1148,12 +797,12 @@ END SUBROUTINE CVRS
 
 SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
 IMPLICIT NONE
-INTENT(IN) A, KA, M, N, NUM
-INTENT(INOUT) B, IB, IERR, JB
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-DOUBLE PRECISION A(KA,N), B(*)
-INTEGER IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, M, N, NUM
+INTEGER :: I, IP, J
+DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
+DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !                 STORE THE I-TH ROW
 !
@@ -1183,12 +832,13 @@ END SUBROUTINE CVDS
 
 SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
 IMPLICIT NONE
-INTENT(IN) A, KA, M, N, NUM
-INTENT(INOUT) B, IB, IERR, JB
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-COMPLEX A(KA,N), B(*), ZERO
-INTEGER IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, M, N, NUM
+INTEGER :: I, IP, J
+COMPLEX, INTENT(IN) :: A(KA,N)
+COMPLEX, INTENT(INOUT) :: B(*)
+COMPLEX :: ZERO
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 DATA ZERO /(0.0,0.0)/
 !
 !                 STORE THE I-TH ROW
@@ -1219,12 +869,11 @@ END SUBROUTINE CVCS
 
 SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, KB, M, N
-INTENT(INOUT) B
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-REAL A(*), B(KB,N)
-INTEGER IA(*), JA(*)
+INTEGER, INTENT(IN) :: KB, M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(KB,N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 30 I = 1,M
 !
@@ -1250,12 +899,11 @@ END SUBROUTINE CVSR
 
 SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, KB, M, N
-INTENT(INOUT) B
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-DOUBLE PRECISION A(*), B(KB,N)
-INTEGER IA(*), JA(*)
+INTEGER, INTENT(IN) :: KB, M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 30 I = 1,M
 !
@@ -1281,12 +929,11 @@ END SUBROUTINE CVSD
 
 SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, KB, M, N
-INTENT(INOUT) B
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-COMPLEX A(*), B(KB,N)
-INTEGER IA(*), JA(*)
+INTEGER, INTENT(IN) :: KB, M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: B(KB,N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 30 I = 1,M
 !
@@ -1312,13 +959,12 @@ END SUBROUTINE CVSC
 
 SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL A(*)
-DOUBLE PRECISION B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
+REAL, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1339,13 +985,12 @@ END SUBROUTINE SCVRD
 
 SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-DOUBLE PRECISION A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1366,17 +1011,16 @@ END SUBROUTINE SCVDR
 
 SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL T
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
+REAL :: T
 !-----------------------------------------------------------------------
 !              REAL PART OF A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+COMPLEX, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1398,17 +1042,16 @@ END SUBROUTINE CSREAL
 
 SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL T
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
+REAL :: T
 !-----------------------------------------------------------------------
 !            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+COMPLEX, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1430,16 +1073,18 @@ END SUBROUTINE CSIMAG
 
 SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
 !-----------------------------------------------------------------------
-REAL A(*), B(*), WK(N)
-COMPLEX C(*), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+REAL, INTENT(IN) :: A(*), B(*)
+REAL, INTENT(INOUT) :: WK(N)
+COMPLEX, INTENT(INOUT) :: C(*)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = 0.0
@@ -1495,15 +1140,15 @@ END SUBROUTINE SCVRC
 
 SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
 !-----------------------------------------------------------------------
 !                  COPYING A SPARSE REAL MATRIX
 !-----------------------------------------------------------------------
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1524,15 +1169,15 @@ END SUBROUTINE RSCOPY
 
 SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
 !-----------------------------------------------------------------------
 !              COPYING A SPARSE DOUBLE PRECISION MATRIX
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 L = 1
 do 20 I = 1,M
@@ -1553,15 +1198,16 @@ END SUBROUTINE DSCOPY
 
 SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L
 !-----------------------------------------------------------------------
 !                 COPYING A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*), ZERO
-INTEGER IA(*), JA(*), IB(*), JB(*)
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: B(*)
+COMPLEX :: ZERO
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 DATA ZERO /(0.0,0.0)/
 !
 L = 1
@@ -1583,15 +1229,15 @@ END SUBROUTINE CSCOPY
 
 SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M
-INTENT(INOUT) B, IB, JB
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L, MP1
+INTEGER, INTENT(IN) :: M
+INTEGER :: I, IBEG, IEND, IP, L, MP1
 !-----------------------------------------------------------------------
 !     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 MP1 = M + 1
 L = IA(1) - 1
@@ -1613,15 +1259,15 @@ END SUBROUTINE SCONJ
 
 SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !                 TRANSPOSING A SPARSE REAL MATRIX
 !-----------------------------------------------------------------------
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -1677,17 +1323,17 @@ END SUBROUTINE RPOSE
 
 SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, P
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !                 TRANSPOSING A SPARSE REAL MATRIX
 !                 WHERE THE ROWS ARE INTERCHANGED
 !-----------------------------------------------------------------------
-INTEGER P(M)
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(IN) :: P(M)
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -1744,15 +1390,15 @@ END SUBROUTINE RPOSE1
 
 SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -1808,17 +1454,17 @@ END SUBROUTINE DPOSE
 
 SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, P
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
 !                 WHERE THE ROWS ARE INTERCHANGED
 !-----------------------------------------------------------------------
-INTEGER P(M)
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(IN) :: P(M)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -1875,15 +1521,15 @@ END SUBROUTINE DPOSE1
 
 SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !               TRANSPOSING A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -1939,17 +1585,17 @@ END SUBROUTINE CPOSE
 
 SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, P
-INTENT(INOUT) B, IB, JB
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !               TRANSPOSING A SPARSE COMPLEX MATRIX
 !                 WHERE THE ROWS ARE INTERCHANGED
 !-----------------------------------------------------------------------
-INTEGER P(M)
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(IN) :: P(M)
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: B(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 !                 OF A AND STORE THE RESULTS IN IB
@@ -2006,15 +1652,17 @@ END SUBROUTINE CPOSE1
 
 SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !               ADDITION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+REAL, INTENT(IN) :: A(*), B(*)
+REAL, INTENT(INOUT) :: C(*), WK(N)
+REAL :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = 0.0
@@ -2070,15 +1718,17 @@ END SUBROUTINE SADD
 
 SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+DOUBLE PRECISION :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = 0.D0
@@ -2134,15 +1784,17 @@ END SUBROUTINE DSADD
 
 SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !              ADDITION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+COMPLEX, INTENT(IN) :: A(*), B(*)
+COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = (0.0, 0.0)
@@ -2198,15 +1850,17 @@ END SUBROUTINE CSADD
 
 SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !             SUBTRACTION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+REAL, INTENT(IN) :: A(*), B(*)
+REAL, INTENT(INOUT) :: C(*), WK(N)
+REAL :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = 0.0
@@ -2262,15 +1916,17 @@ END SUBROUTINE SSUBT
 
 SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+DOUBLE PRECISION :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = 0.D0
@@ -2326,15 +1982,17 @@ END SUBROUTINE DSSUBT
 
 SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N, NUM
+INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !            SUBTRACTION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+COMPLEX, INTENT(IN) :: A(*), B(*)
+COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO J = 1,N
    WK(J) = (0.0, 0.0)
@@ -2390,15 +2048,17 @@ END SUBROUTINE CSSUBT
 
 SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: L, M, N, NUM
+INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !               MULTIPLICATION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+REAL, INTENT(IN) :: A(*), B(*)
+REAL, INTENT(INOUT) :: C(*), WK(N)
+REAL :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO K = 1,N
    WK(K) = 0.0
@@ -2447,15 +2107,17 @@ END SUBROUTINE SPROD
 
 SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: L, M, N, NUM
+INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+DOUBLE PRECISION :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO K = 1,N
    WK(K) = 0.D0
@@ -2504,15 +2166,17 @@ END SUBROUTINE DSPROD
 
 SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
-INTENT(INOUT) C, IC, IERR, JC, WK
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: L, M, N, NUM
+INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !             MULTIPLICATION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+COMPLEX, INTENT(IN) :: A(*), B(*)
+COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 !-------------------------
 DO K = 1,N
    WK(K) = (0.0, 0.0)
@@ -2561,15 +2225,15 @@ END SUBROUTINE CSPROD
 
 SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
-REAL A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*), X(N)
+REAL, INTENT(INOUT) :: Y(M)
+REAL :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = 0.0
@@ -2586,15 +2250,15 @@ END SUBROUTINE MVPRD
 
 SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-REAL A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*), X(N)
+REAL, INTENT(INOUT) :: Y(M)
+REAL :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = Y(I)
@@ -2611,15 +2275,15 @@ END SUBROUTINE MVPRD1
 
 SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
-REAL A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*), X(M)
+REAL, INTENT(INOUT) :: Y(N)
+REAL :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 DO J = 1,N
    Y(J) = 0.0
@@ -2640,15 +2304,15 @@ END SUBROUTINE MTPRD
 
 SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-REAL A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*), X(M)
+REAL, INTENT(INOUT) :: Y(N)
+REAL :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    T = X(I)
@@ -2665,15 +2329,15 @@ END SUBROUTINE MTPRD1
 
 SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
+DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+DOUBLE PRECISION :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = 0.D0
@@ -2690,15 +2354,15 @@ END SUBROUTINE DVPRD
 
 SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
+DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+DOUBLE PRECISION :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = Y(I)
@@ -2715,15 +2379,15 @@ END SUBROUTINE DVPRD1
 
 SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
+DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+DOUBLE PRECISION :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 DO J = 1,N
    Y(J) = 0.D0
@@ -2744,15 +2408,15 @@ END SUBROUTINE DTPRD
 
 SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
+DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+DOUBLE PRECISION :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    T = X(I)
@@ -2769,15 +2433,15 @@ END SUBROUTINE DTPRD1
 
 SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
-COMPLEX A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+COMPLEX, INTENT(IN) :: A(*), X(N)
+COMPLEX, INTENT(INOUT) :: Y(M)
+COMPLEX :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = (0.0, 0.0)
@@ -2794,15 +2458,15 @@ END SUBROUTINE CVPRD
 
 SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-COMPLEX A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
+COMPLEX, INTENT(IN) :: A(*), X(N)
+COMPLEX, INTENT(INOUT) :: Y(M)
+COMPLEX :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    SUM = Y(I)
@@ -2819,15 +2483,15 @@ END SUBROUTINE CVPRD1
 
 SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
-COMPLEX A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+COMPLEX, INTENT(IN) :: A(*), X(M)
+COMPLEX, INTENT(INOUT) :: Y(N)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 DO J = 1,N
    Y(J) = (0.0, 0.0)
@@ -2848,15 +2512,15 @@ END SUBROUTINE CTPRD
 
 SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N, X
-INTENT(INOUT) Y
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
-COMPLEX A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
+COMPLEX, INTENT(IN) :: A(*), X(M)
+COMPLEX, INTENT(INOUT) :: Y(N)
+COMPLEX :: T
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 do 11 I = 1,M
    T = X(I)
@@ -2873,16 +2537,15 @@ END SUBROUTINE CTPRD1
 
 REAL function SNRM (A, IA, JA, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN
-REAL SUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, IP, IPMAX, IPMIN
+REAL :: SUM
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                      REAL SPARSE MATRIX A
 !-----------------------------------------------------------------------
-REAL A(*)
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 SNRM = 0.0
 do 20 I = 1,M
@@ -2900,17 +2563,15 @@ END FUNCTION SNRM
 
 SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTENT(OUT) ANORM
-INTENT(INOUT) WK
-INTEGER M, N
-REAL ANORM
-INTEGER IP, IPMAX, IPMIN, J
+INTEGER, INTENT(IN) :: M, N
+REAL, INTENT(OUT) :: ANORM
+INTEGER :: IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
 !-----------------------------------------------------------------------
-REAL A(*), WK(N)
-INTEGER IA(*), JA(*)
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: WK(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 ANORM = 0.0
 IPMIN = IA(1)
@@ -2936,15 +2597,15 @@ END SUBROUTINE S1NRM
 
 double precision function DSNRM (A, IA, JA, M, N)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, IP, IPMAX, IPMIN
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                DOUBLE PRECISION SPARSE MATRIX A
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), SUM
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION :: SUM
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 DSNRM = 0.D0
 do 20 I = 1,M
@@ -2962,17 +2623,16 @@ END FUNCTION DSNRM
 
 SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, M, N
-INTENT(OUT) ANORM
-INTENT(INOUT) WK
-INTEGER M, N
-INTEGER IP, IPMAX, IPMIN, J
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !               COMPUTATION OF THE L1 NORM OF A SPARSE
 !                     DOUBLE PRECISION MATRIX A
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), ANORM, WK(N)
-INTEGER IA(*), JA(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(OUT) :: ANORM
+DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
 !
 ANORM = 0.D0
 IPMIN = IA(1)
@@ -2998,17 +2658,16 @@ END SUBROUTINE DS1NRM
 
 SUBROUTINE SPORD (M, N, IA, R, IWK)
 IMPLICIT NONE
-INTENT(IN) IA, M, N
-INTENT(INOUT) IWK, R
-INTEGER M, N
-INTEGER I, II, K, L, NP1, NUM
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: I, II, K, L, NP1, NUM
 !-----------------------------------------------------------------------
 !        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
 !        BY INCREASING LENGTH. THE ROW ORDERING IS GIVEN IN R.
 !-----------------------------------------------------------------------
 !     IWK IS A WORK SPACE OF DIMENSION M + N + 1.
 !----------------------
-INTEGER IA(*), R(M), IWK(*)
+INTEGER, INTENT(IN) :: IA(*)
+INTEGER, INTENT(INOUT) :: R(M), IWK(*)
 !
 NP1 = N + 1
 DO I = 1,NP1
@@ -3040,16 +2699,17 @@ END SUBROUTINE SPORD
 
 SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
 IMPLICIT NONE
-INTENT(IN) IA, JA
-INTENT(INOUT) C, IB, IERR, IWK, NUM, R
-INTEGER IERR, N, NUM
-INTEGER I, LENGTH, LI, NP1, NPI
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER :: N
+INTEGER, INTENT(INOUT) :: NUM
+INTEGER :: I, LENGTH, LI, NP1, NPI
 !-----------------------------------------------------------------------
 !        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
 !-----------------------------------------------------------------------
-INTEGER IA(*), JA(*), R(N), C(N), IB(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: R(N), C(N), IB(N)
 !     INTEGER IWK(5*N)
-INTEGER IWK(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
 !
 NP1 = N + 1
 LENGTH = IA(NP1) - IA(1)
@@ -3080,9 +2740,8 @@ END SUBROUTINE BLKORD
 
 SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
 IMPLICIT NONE
-INTENT(IN) ICN, IP, LENR, LICN, N
-INTENT(INOUT) IPERM, IW, NUMNZ
-INTEGER LICN, N, NUMNZ
+INTEGER, INTENT(IN) :: LICN, N
+INTEGER, INTENT(INOUT) :: NUMNZ
 !-----------------------------------------------------------------------
 ! DESCRIPTION OF PARAMETERS.
 ! INPUT VARIABLES   N,ICN,LICN,IP,LENR
@@ -3105,8 +2764,9 @@ INTEGER LICN, N, NUMNZ
 ! NUMNZ NUMBER OF NON-ZEROS ON DIAGONAL OF PERMUTED MATRIX.
 ! IW  WORK ARRAY  ..  SEE LATER COMMENTS.
 !-----------------------------------------------------------------------
-INTEGER IP(N)
-INTEGER ICN(LICN), LENR(N), IPERM(N), IW(N,4)
+INTEGER, INTENT(IN) :: IP(N)
+INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+INTEGER, INTENT(INOUT) :: IPERM(N), IW(N,4)
 !
 CALL MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW(1,1),IW(1,2), &
 &IW(1,3),IW(1,4))
@@ -3115,10 +2775,9 @@ END SUBROUTINE MC21A
 
 SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
 IMPLICIT NONE
-INTENT(IN) ICN, IP, LENR, LICN, N
-INTENT(INOUT) ARP, CV, IPERM, NUMNZ, OUT, PR
-INTEGER LICN, N, NUMNZ
-INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
+INTEGER, INTENT(IN) :: LICN, N
+INTEGER, INTENT(INOUT) :: NUMNZ
+INTEGER :: I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 !-----------------------------------------------------------------------
 !     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
 !
@@ -3131,8 +2790,8 @@ INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 !     WHICH HAVE NOT BEEN SCANNED DURING ONE PASS THROUGH THE
 !     MAIN LOOP.
 !-----------------------------------------------------------------------
-INTEGER IP(N), ICN(LICN), LENR(N), IPERM(N), PR(N), CV(N), &
-&ARP(N), OUT(N)
+INTEGER, INTENT(IN) :: IP(N), ICN(LICN), LENR(N)
+INTEGER, INTENT(INOUT) :: IPERM(N), PR(N), CV(N), ARP(N), OUT(N)
 !
 !     INITIALIZATION OF ARRAYS
 !
@@ -3246,9 +2905,8 @@ END SUBROUTINE MC21B
 
 SUBROUTINE MC13D(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW)
 IMPLICIT NONE
-INTENT(IN) ICN, IP, LENR, LICN, N
-INTENT(INOUT) IB, IOR, IW, NUM
-INTEGER LICN, N, NUM
+INTEGER, INTENT(IN) :: LICN, N
+INTEGER, INTENT(INOUT) :: NUM
 !
 ! DESCRIPTION OF PARAMETERS.
 ! INPUT VARIABLES  .... N,ICN,LICN,IP,LENR.
@@ -3270,8 +2928,9 @@ INTEGER LICN, N, NUM
 ! NUM NUMBER OF BLOCKS FOUND.
 ! IW  WORK ARRAY OF LENGTH 3*N.
 !
-INTEGER IP(N)
-INTEGER ICN(LICN), LENR(N), IOR(N), IB(N), IW(N,3)
+INTEGER, INTENT(IN) :: IP(N)
+INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+INTEGER, INTENT(INOUT) :: IOR(N), IB(N), IW(N,3)
 !
 CALL MC13E(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW(1,1), &
 &IW(1,2), IW(1,3))
@@ -3281,14 +2940,12 @@ END SUBROUTINE MC13D
 SUBROUTINE MC13E(N, ICN, LICN, IP, LENR, ARP, IB, NUM, LOWL, &
 &NUMB, PREV)
 IMPLICIT NONE
-INTENT(IN) ICN, IP, LENR, LICN, N
-INTENT(OUT) NUM
-INTENT(INOUT) ARP, IB, LOWL, NUMB, PREV
-INTEGER LICN, N, NUM
-INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT &
-&, NNM1
-INTEGER STP, DUMMY
-INTEGER IP(N)
+INTEGER, INTENT(IN) :: LICN, N
+INTEGER, INTENT(OUT) :: NUM
+INTEGER :: I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, &
+&LCNT, NNM1
+INTEGER :: STP, DUMMY
+INTEGER, INTENT(IN) :: IP(N)
 !
 ! ARP(I) IS ONE LESS THAN THE NUMBER OF UNSEARCHED EDGES LEAVING
 !     NODE I.  AT THE END OF THE ALGORITHM IT IS SET TO A
@@ -3306,8 +2963,8 @@ INTEGER IP(N)
 ! PREV(I) IS THE NODE AT THE END OF THE PATH WHEN NODE I WAS
 !     PLACED ON THE STACK.
 !
-INTEGER ICN(LICN), LENR(N), ARP(N), IB(N), LOWL(N), NUMB(N), &
-&PREV(N)
+INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+INTEGER, INTENT(INOUT) :: ARP(N), IB(N), LOWL(N), NUMB(N), PREV(N)
 !
 !   ICNT IS THE NUMBER OF NODES WHOSE POSITIONS IN FINAL ORDERING HAVE
 !     BEEN FOUND.
@@ -3419,11 +3076,9 @@ END SUBROUTINE MC13E
 
 SUBROUTINE SPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(OUT) IERR
-INTENT(INOUT) C, ITEMP, RTEMP, X
-INTEGER IERR, MAX, N
-INTEGER K, L
+INTEGER, INTENT(OUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF REAL SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -3508,9 +3163,11 @@ INTEGER K, L
 !  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 !  ELEMENTS IN A.
 !------------------------
-REAL A(*), B(N), X(N), RTEMP(*)
-INTEGER IA(*), JA(*), R(N), C(N), ITEMP(*)
-INTEGER IU, JU, U, Y, P
+REAL, INTENT(IN) :: A(*), B(N)
+REAL, INTENT(INOUT) :: X(N), RTEMP(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+INTEGER :: IU, JU, U, Y, P
 !
 IERR = 0
 IF (N .LE. 0) RETURN
@@ -3540,10 +3197,10 @@ END SUBROUTINE SPSLV
 
 SUBROUTINE NSPIV1 (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
-INTEGER IERR, MAX, N
-INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, &
+&NZCNT
 !
 !
 !  NSPIV1 USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -3598,10 +3255,16 @@ INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 !  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 !
 !
-REAL A(*), B(N), U(MAX), X(N), Y(N)
-REAL DK, LKI, XPV, XPVMAX, YK
-INTEGER C(N), IA(*), IC(N), IU(*), JA(*), JU(MAX), P(*), R(N)
-INTEGER CK, PK, PPK, PV, V, VI, VJ, VK
+REAL, INTENT(IN) :: A(*), B(N)
+REAL, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+REAL :: DK, LKI, XPV, XPVMAX, YK
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER, INTENT(IN) :: IA(*)
+INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+INTEGER, INTENT(IN) :: JA(*)
+INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 !
 !  INITIALIZE WORK STORAGE AND POINTERS TO JU
 !
@@ -3814,10 +3477,9 @@ END SUBROUTINE NSPIV1
 
 SUBROUTINE RSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF REAL SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -3878,9 +3540,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-REAL A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+REAL, INTENT(IN) :: A(*), B(N)
+REAL, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -3917,13 +3583,13 @@ END SUBROUTINE RSLV
 
 SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-REAL B(N), D(N), T(*), X(N), Y(N), SUM
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+REAL, INTENT(IN) :: B(N), D(N), T(*)
+REAL, INTENT(INOUT) :: X(N), Y(N)
+REAL :: SUM
 !
 !            SOLVE LY = B BY FORWARD SUBSTITUTION
 !
@@ -3964,10 +3630,9 @@ END SUBROUTINE RSLV1
 
 SUBROUTINE TSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF REAL SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -4028,9 +3693,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-REAL A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+REAL, INTENT(IN) :: A(*), B(N)
+REAL, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -4067,13 +3736,12 @@ END SUBROUTINE TSLV
 
 SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-REAL B(N), D(N), T(*), X(N), Y(N)
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+REAL, INTENT(IN) :: B(N), D(N), T(*)
+REAL, INTENT(INOUT) :: X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
@@ -4123,10 +3791,10 @@ END SUBROUTINE TSLV1
 
 SUBROUTINE SPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, MAX, N, R
-INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
-INTEGER IERR, MAX, N
-INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, &
+&MAXIL
 !-----------------------------------------------------------------------
 !     SPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 !     TO PERFORM THE LU DECOMPOSITION OF A REAL SPARSE MATRIX.
@@ -4185,12 +3853,15 @@ INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 !
 !     P        INTEGER ARRAY OF DIMENSION N+1.
 !-----------------------------------------------------------------------
-REAL A(*), D(N), T(MAX), W(N)
-INTEGER IA(*), JA(*)
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(MAX), IU(N)
-INTEGER P(*), PM
-REAL CONST, WI, WMAX
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: D(N), T(MAX), W(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N), IC(N)
+INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+INTEGER, INTENT(INOUT) :: P(*)
+INTEGER :: PM
+REAL :: CONST, WI, WMAX
 !
 JPTR = 0
 IT(1) = 1
@@ -4342,11 +4013,9 @@ END SUBROUTINE SPLU
 
 SUBROUTINE DSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(OUT) IERR
-INTENT(INOUT) C, ITEMP, RTEMP, X
-INTEGER IERR, MAX, N
-INTEGER K, L
+INTEGER, INTENT(OUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: K, L
 !-----------------------------------------------------------------------
 !          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -4434,9 +4103,11 @@ INTEGER K, L
 !  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 !  ELEMENTS IN A.
 !------------------------
-DOUBLE PRECISION A(*), B(N), X(N), RTEMP(*)
-INTEGER IA(*), JA(*), R(N), C(N), ITEMP(*)
-INTEGER IU, JU, U, Y, P
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+DOUBLE PRECISION, INTENT(INOUT) :: X(N), RTEMP(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+INTEGER :: IU, JU, U, Y, P
 !
 IERR = 0
 IF (N .LE. 0) RETURN
@@ -4466,10 +4137,10 @@ END SUBROUTINE DSPSLV
 
 SUBROUTINE DNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
-INTEGER IERR, MAX, N
-INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, &
+&NZCNT
 !
 !
 !  DNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -4524,10 +4195,16 @@ INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 !  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 !
 !
-DOUBLE PRECISION A(*), B(N), U(MAX), X(N), Y(N)
-DOUBLE PRECISION DK, LKI, XPV, XPVMAX, YK
-INTEGER C(N), IA(*), IC(N), IU(*), JA(*), JU(MAX), P(*), R(N)
-INTEGER CK, PK, PPK, PV, V, VI, VJ, VK
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+DOUBLE PRECISION, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+DOUBLE PRECISION :: DK, LKI, XPV, XPVMAX, YK
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER, INTENT(IN) :: IA(*)
+INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+INTEGER, INTENT(IN) :: JA(*)
+INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 !
 !  INITIALIZE WORK STORAGE AND POINTERS TO JU
 !
@@ -4740,10 +4417,9 @@ END SUBROUTINE DNSPIV
 
 SUBROUTINE DSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -4805,9 +4481,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -4844,13 +4524,13 @@ END SUBROUTINE DSLV
 
 SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-DOUBLE PRECISION B(N), D(N), T(*), X(N), Y(N), SUM
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
+DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+DOUBLE PRECISION :: SUM
 !
 !            SOLVE LY = B BY FORWARD SUBSTITUTION
 !
@@ -4891,10 +4571,9 @@ END SUBROUTINE DSLV1
 
 SUBROUTINE DTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 !-----------------------------------------------------------------------
@@ -4956,9 +4635,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -4995,13 +4678,12 @@ END SUBROUTINE DTSLV
 
 SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-DOUBLE PRECISION B(N), D(N), T(*), X(N), Y(N)
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
+DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
@@ -5051,10 +4733,10 @@ END SUBROUTINE DTSLV1
 
 SUBROUTINE DSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, MAX, N, R
-INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
-INTEGER IERR, MAX, N
-INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, &
+&MAXIL
 !-----------------------------------------------------------------------
 !     DSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 !     TO PERFORM THE LU DECOMPOSITION OF A DOUBLE PRECISION SPARSE
@@ -5114,12 +4796,15 @@ INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 !
 !     P        INTEGER ARRAY OF DIMENSION N+1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), D(N), T(MAX), W(N)
-INTEGER IA(*), JA(*)
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(MAX), IU(N)
-INTEGER P(*), PM
-DOUBLE PRECISION CONST, WI, WMAX
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(INOUT) :: D(N), T(MAX), W(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N), IC(N)
+INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+INTEGER, INTENT(INOUT) :: P(*)
+INTEGER :: PM
+DOUBLE PRECISION :: CONST, WI, WMAX
 !
 JPTR = 0
 IT(1) = 1
@@ -5271,19 +4956,19 @@ END SUBROUTINE DSPLU
 
 SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, MAX, N, R
-INTENT(OUT) COND
-INTENT(INOUT) C, IERR, IWK, WK
-INTEGER IERR, MAX, N
-REAL COND
-INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
-REAL AINORM, ANORM
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+REAL, INTENT(OUT) :: COND
+INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
+REAL :: AINORM, ANORM
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A SPARSE MATRIX A
 !-----------------------------------------------------------------------
-REAL A(*), WK(*)
-INTEGER IA(*), JA(*), R(N), C(N), IWK(*)
+REAL, INTENT(IN) :: A(*)
+REAL, INTENT(INOUT) :: WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+INTEGER, INTENT(INOUT) :: C(N), IWK(*)
 !-----------------------
 !     REAL WK(4*N + MAX)
 !     INTEGER IWK(5*N + MAX + 2)
@@ -5340,17 +5025,19 @@ END SUBROUTINE S1CND
 
 SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, MAX, N, R
-INTENT(OUT) COND
-INTENT(INOUT) C, IERR, IWK, WK
-INTEGER IERR, MAX, N
-INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A SPARSE MATRIX A
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), COND, WK(*), ANORM, AINORM
-INTEGER IA(*), JA(*), R(N), C(N), IWK(*)
+DOUBLE PRECISION, INTENT(IN) :: A(*)
+DOUBLE PRECISION, INTENT(OUT) :: COND
+DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
+DOUBLE PRECISION :: ANORM, AINORM
+INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+INTEGER, INTENT(INOUT) :: C(N), IWK(*)
 !-----------------------
 !     DOUBLE PRECISION WK(4*N + MAX)
 !     INTEGER IWK(5*N + MAX + 2)
@@ -5407,16 +5094,15 @@ END SUBROUTINE DS1CND
 
 SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) ANORM, ISGN, ITER, J, JUMP, KASE, V, X
-INTEGER ITER, J, JUMP, KASE, N
-REAL ANORM
-INTEGER I, ITMAX, JLAST, L
-REAL ALTSGN, ANRM, T
-INTEGER ISAMAX
-REAL SASUM
-REAL V(N), X(N)
-INTEGER ISGN(N)
+INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
+INTEGER, INTENT(IN) :: N
+REAL, INTENT(INOUT) :: ANORM
+INTEGER :: I, ITMAX, JLAST, L
+REAL :: ALTSGN, ANRM, T
+INTEGER :: ISAMAX
+REAL :: SASUM
+REAL, INTENT(INOUT) :: V(N), X(N)
+INTEGER, INTENT(INOUT) :: ISGN(N)
 !-----------------------------------------------------------------------
 !
 !     SONEST ESTIMATES THE 1-NORM OF A SQUARE, REAL MATRIX  A.
@@ -5573,15 +5259,14 @@ END SUBROUTINE SONEST
 
 SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) ANORM, ISGN, ITER, J, JUMP, KASE, V, X
-INTEGER ITER, J, JUMP, KASE, N
-INTEGER I, ITMAX, JLAST, L
-INTEGER IDAMAX
-DOUBLE PRECISION ANORM, V(N), X(N)
-INTEGER ISGN(N)
-DOUBLE PRECISION ALTSGN, AN, ANM1, ANRM, T
-DOUBLE PRECISION DASUM
+INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, ITMAX, JLAST, L
+INTEGER :: IDAMAX
+DOUBLE PRECISION, INTENT(INOUT) :: ANORM, V(N), X(N)
+INTEGER, INTENT(INOUT) :: ISGN(N)
+DOUBLE PRECISION :: ALTSGN, AN, ANM1, ANRM, T
+DOUBLE PRECISION :: DASUM
 !-----------------------------------------------------------------------
 !
 !     DONEST ESTIMATES THE 1-NORM OF A SQUARE, REAL MATRIX  A.
@@ -5741,11 +5426,9 @@ END SUBROUTINE DONEST
 
 SUBROUTINE CSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(OUT) IERR
-INTENT(INOUT) C, ITEMP, RTEMP, X
-INTEGER IERR, MAX, N
-INTEGER K, L
+INTEGER, INTENT(OUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF COMPLEX SPARSE MATRICES
 !-----------------------------------------------------------------------
@@ -5830,9 +5513,11 @@ INTEGER K, L
 !  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 !  ELEMENTS IN A.
 !------------------------
-COMPLEX A(*), B(N), X(N), RTEMP(*)
-INTEGER IA(*), JA(*), R(N), C(N), ITEMP(*)
-INTEGER IU, JU, U, Y, P
+COMPLEX, INTENT(IN) :: A(*), B(N)
+COMPLEX, INTENT(INOUT) :: X(N), RTEMP(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
+INTEGER :: IU, JU, U, Y, P
 !
 IERR = 0
 IF (N .LE. 0) RETURN
@@ -5862,10 +5547,10 @@ END SUBROUTINE CSPSLV
 
 SUBROUTINE CNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, MAX, N, R
-INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
-INTEGER IERR, MAX, N
-INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, &
+&NZCNT
 !
 !
 !  CNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -5920,11 +5605,17 @@ INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 !  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 !
 !
-COMPLEX A(*), B(N), U(MAX), X(N), Y(N)
-COMPLEX DK, LKI, ONE, YK, ZERO
-REAL XPV, XPVMAX
-INTEGER C(N), IA(*), IC(N), IU(*), JA(*), JU(MAX), P(*), R(N)
-INTEGER CK, PK, PPK, PV, V, VI, VJ, VK
+COMPLEX, INTENT(IN) :: A(*), B(N)
+COMPLEX, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+COMPLEX :: DK, LKI, ONE, YK, ZERO
+REAL :: XPV, XPVMAX
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER, INTENT(IN) :: IA(*)
+INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+INTEGER, INTENT(IN) :: JA(*)
+INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 !
 ONE = (1.0,0.0)
 ZERO = (0.0,0.0)
@@ -6140,10 +5831,9 @@ END SUBROUTINE CNSPIV
 
 SUBROUTINE CSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF COMPLEX SPARSE MATRICES
 !-----------------------------------------------------------------------
@@ -6205,9 +5895,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+COMPLEX, INTENT(IN) :: A(*), B(N)
+COMPLEX, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -6244,13 +5938,13 @@ END SUBROUTINE CSLV
 
 SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-COMPLEX B(N), D(N), T(*), X(N), Y(N), SUM
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
+COMPLEX, INTENT(INOUT) :: X(N), Y(N)
+COMPLEX :: SUM
 !
 !            SOLVE LY = B BY FORWARD SUBSTITUTION
 !
@@ -6291,10 +5985,9 @@ END SUBROUTINE CSLV1
 
 SUBROUTINE CTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, IA, JA, M0, MAX, N, R
-INTENT(INOUT) C, IERR, IWK, WK, X
-INTEGER IERR, M0, MAX, N
-INTEGER IT, IU, JT, K, L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M0, MAX, N
+INTEGER :: IT, IU, JT, K, L
 !-----------------------------------------------------------------------
 !                 SOLUTION OF COMPLEX SPARSE MATRICES
 !-----------------------------------------------------------------------
@@ -6356,9 +6049,13 @@ INTEGER IT, IU, JT, K, L
 !     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 !     AND IERR ARE NOT REFERENCED.
 !-----------------------------------------------------------------------
-COMPLEX A(*), B(N), X(N), WK(*)
-INTEGER IA(*), JA(*), IWK(*)
-INTEGER R(N), C(N), Y, T, P
+COMPLEX, INTENT(IN) :: A(*), B(N)
+COMPLEX, INTENT(INOUT) :: X(N), WK(*)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(INOUT) :: IWK(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N)
+INTEGER :: Y, T, P
 !
 !     SET INDICES TO DIVIDE TEMPORARY STORAGE
 !
@@ -6395,13 +6092,12 @@ END SUBROUTINE CTSLV
 
 SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
 IMPLICIT NONE
-INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
-INTENT(INOUT) X, Y
-INTEGER N
-INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(*), IU(N)
-COMPLEX B(N), D(N), T(*), X(N), Y(N)
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
+INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
+INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
+COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
+COMPLEX, INTENT(INOUT) :: X(N), Y(N)
 !
 !            SOLVE YU = B BY FORWARD SUBSTITUTION
 !
@@ -6451,10 +6147,10 @@ END SUBROUTINE CTSLV1
 
 SUBROUTINE CSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
 IMPLICIT NONE
-INTENT(IN) A, IA, JA, MAX, N, R
-INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
-INTEGER IERR, MAX, N
-INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: MAX, N
+INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, &
+&MAXIL
 !-----------------------------------------------------------------------
 !     CSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 !     TO PERFORM THE LU DECOMPOSITION OF A COMPLEX SPARSE MATRIX.
@@ -6513,13 +6209,16 @@ INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 !
 !     P        INTEGER ARRAY OF DIMENSION N+1.
 !-----------------------------------------------------------------------
-COMPLEX A(*), D(N), T(MAX), W(N)
-INTEGER IA(*), JA(*)
-INTEGER R(N), C(N), IC(N)
-INTEGER IT(*), JT(MAX), IU(N)
-INTEGER P(*), PM
-COMPLEX CONST, ZERO
-REAL WI, WMAX
+COMPLEX, INTENT(IN) :: A(*)
+COMPLEX, INTENT(INOUT) :: D(N), T(MAX), W(N)
+INTEGER, INTENT(IN) :: IA(*), JA(*)
+INTEGER, INTENT(IN) :: R(N)
+INTEGER, INTENT(INOUT) :: C(N), IC(N)
+INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+INTEGER, INTENT(INOUT) :: P(*)
+INTEGER :: PM
+COMPLEX :: CONST, ZERO
+REAL :: WI, WMAX
 !--------------------
 DATA ZERO /(0.0, 0.0)/
 !--------------------
@@ -6673,14 +6372,14 @@ END SUBROUTINE CSPLU
 
 SUBROUTINE EIG (IBAL,A,KA,N,WR,WI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, LOW
 !-----------------------------------------------------------------------
 !                    EIGENVALUES OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), WR(N), WI(N)
+REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 !
 LOW = 1
 IGH = N
@@ -6692,14 +6391,14 @@ END SUBROUTINE EIG
 
 SUBROUTINE EIG1 (IBAL,A,KA,N,WR,WI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, LOW
 !-----------------------------------------------------------------------
 !                    EIGENVALUES OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), WR(N), WI(N)
+REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 !
 LOW = 1
 IGH = N
@@ -6711,14 +6410,14 @@ END SUBROUTINE EIG1
 
 SUBROUTINE EIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, J, K, KP1, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, J, K, KP1, LOW
 !-----------------------------------------------------------------------
 !           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
+REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
 !
 LOW = 1
 IGH = N
@@ -6745,14 +6444,14 @@ END SUBROUTINE EIGV
 
 SUBROUTINE EIGV1 (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, J, K, KP1, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, J, K, KP1, LOW
 !-----------------------------------------------------------------------
 !           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
+REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
 !
 LOW = 1
 IGH = N
@@ -6779,15 +6478,18 @@ END SUBROUTINE EIGV1
 
 SUBROUTINE BALANC(NM,N,A,LOW,IGH,SCALE)
 IMPLICIT NONE
-INTENT(IN) N, NM
-INTENT(INOUT) A, IGH, LOW, SCALE
 !
-INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
-REAL A(NM,N),SCALE(N)
-REAL C,F,G,R,S,B2,RADIX
-INTEGER IPMPAR
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: JJ
+INTEGER, INTENT(IN) :: NM
+INTEGER, INTENT(INOUT) :: IGH, LOW
+INTEGER :: IEXC
+REAL, INTENT(INOUT) :: A(NM,N), SCALE(N)
+REAL :: C, F, G, R, S, B2, RADIX
+INTEGER :: IPMPAR
 !     REAL ABS
-LOGICAL NOCONV
+LOGICAL :: NOCONV
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALANCE,
@@ -6952,11 +6654,13 @@ END SUBROUTINE BALANC
 
 SUBROUTINE BALINV (NZ,N,Z,LOW,IGH,SCALE)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NZ, SCALE
-INTENT(INOUT) Z
-INTEGER I,J,K,N,II,NZ,IGH,LOW
-REAL Z(NZ,N),SCALE(N)
-REAL S
+INTEGER :: I, J, K
+INTEGER, INTENT(IN) :: N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NZ, IGH, LOW
+REAL, INTENT(INOUT) :: Z(NZ,N)
+REAL, INTENT(IN) :: SCALE(N)
+REAL :: S
 !-----------------------------------------------------------------------
 !        GIVEN A MATRIX A OF ORDER N. BALANC TRANSFORMS A INTO
 !     THE MATRIX B BY THE SIMILARITY TRANSFORMATION
@@ -7027,14 +6731,18 @@ END SUBROUTINE BALINV
 
 SUBROUTINE ELMHES(NM,N,LOW,IGH,A,INT)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(INOUT) A, INT
 !
-INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
-REAL A(NM,N)
-REAL X,Y
+INTEGER :: I, J, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: LA
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: KP1
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MM1, MP1
+REAL, INTENT(INOUT) :: A(NM,N)
+REAL :: X, Y
 !     REAL ABS
-INTEGER INT(IGH)
+INTEGER, INTENT(INOUT) :: INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMHES,
@@ -7126,14 +6834,18 @@ END SUBROUTINE ELMHES
 
 SUBROUTINE ELMHS0(NM,N,LOW,IGH,A,INT)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(INOUT) A, INT
 !
-INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
-REAL A(NM,N)
-REAL X,Y
+INTEGER :: I, J, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: LA
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: KP1
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MM1, MP1
+REAL, INTENT(INOUT) :: A(NM,N)
+REAL :: X, Y
 !     REAL ABS
-REAL INT(IGH)
+REAL, INTENT(INOUT) :: INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMHES,
@@ -7225,12 +6937,15 @@ END SUBROUTINE ELMHS0
 
 SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(INOUT) A, ORT
 !
-INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
-REAL A(NM,N),ORT(IGH)
-REAL F,G,H,SCALE
+INTEGER :: I, J, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, JJ, LA, MP
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: KP1
+INTEGER, INTENT(IN) :: LOW
+REAL, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+REAL :: F, G, H, SCALE
 !     REAL SQRT,ABS
 !-----------------------------------------------------------------------
 !
@@ -7334,16 +7049,20 @@ END SUBROUTINE ORTHES
 
 SUBROUTINE HQR(NM,N,LOW,IGH,H,WR,WI,IERR)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(OUT) IERR
-INTENT(INOUT) H, WI, WR
 !
-INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
-REAL H(NM,N),WR(N),WI(N)
-REAL P,Q,R,S,T,W,X,Y,ZZ,NORM,MACHEP,SPMPAR
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: EN, LL, MM, NA
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: ITS
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MP2, ENM2
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+REAL :: P, Q, R, S, T, W, X, Y, ZZ, NORM, MACHEP, SPMPAR
 !     REAL SQRT,ABS
 !     INTEGER MIN0
-LOGICAL NOTLAS
+LOGICAL :: NOTLAS
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR,
@@ -7562,12 +7281,14 @@ END SUBROUTINE HQR
 
 SUBROUTINE BALBAK(NM,N,LOW,IGH,SCALE,M,Z)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, M, N, NM, SCALE
-INTENT(INOUT) Z
 !
-INTEGER I,J,K,M,N,II,NM,IGH,LOW
-REAL SCALE(N),Z(NM,M)
-REAL S
+INTEGER :: I, J, K
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+REAL, INTENT(IN) :: SCALE(N)
+REAL, INTENT(INOUT) :: Z(NM,M)
+REAL :: S
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALBAK,
@@ -7637,12 +7358,15 @@ END SUBROUTINE BALBAK
 
 SUBROUTINE ELTRAN(NM,N,LOW,IGH,A,INT,Z)
 IMPLICIT NONE
-INTENT(IN) A, IGH, INT, LOW, N, NM
-INTENT(INOUT) Z
 !
-INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
-REAL A(NM,IGH),Z(NM,N)
-INTEGER INT(IGH)
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+INTEGER :: MP1
+REAL, INTENT(IN) :: A(NM,IGH)
+REAL, INTENT(INOUT) :: Z(NM,N)
+INTEGER, INTENT(IN) :: INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMTRANS,
@@ -7715,12 +7439,15 @@ END SUBROUTINE ELTRAN
 
 SUBROUTINE ELTRN0(NM,N,LOW,IGH,A,INT,Z)
 IMPLICIT NONE
-INTENT(IN) A, IGH, INT, LOW, N, NM
-INTENT(INOUT) Z
 !
-INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
-REAL A(NM,IGH),Z(NM,N)
-REAL INT(IGH)
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+INTEGER :: MP1
+REAL, INTENT(IN) :: A(NM,IGH)
+REAL, INTENT(INOUT) :: Z(NM,N)
+REAL, INTENT(IN) :: INT(IGH)
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMTRANS,
@@ -7793,12 +7520,15 @@ END SUBROUTINE ELTRN0
 
 SUBROUTINE ORTRAN(NM,N,LOW,IGH,A,ORT,Z)
 IMPLICIT NONE
-INTENT(IN) A, IGH, LOW, N, NM
-INTENT(INOUT) ORT, Z
 !
-INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
-REAL A(NM,IGH),ORT(IGH),Z(NM,N)
-REAL G
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+INTEGER :: MP1
+REAL, INTENT(IN) :: A(NM,IGH)
+REAL, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+REAL :: G
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ORTRANS,
@@ -7879,12 +7609,16 @@ END SUBROUTINE ORTRAN
 
 SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
 IMPLICIT NONE
-INTENT(IN) A, IGH, LOW, N, NA, NZ
-INTENT(INOUT) ORT, Z
 !
-INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
-REAL A(NA,IGH),ORT(IGH),Z(NZ,N)
-REAL G
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NA, IGH, LOW
+INTEGER :: MP1
+INTEGER, INTENT(IN) :: NZ
+REAL, INTENT(IN) :: A(NA,IGH)
+REAL, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+REAL :: G
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ORTRANS,
@@ -7969,18 +7703,24 @@ END SUBROUTINE ORTRN1
 
 SUBROUTINE HQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(OUT) IERR
-INTENT(INOUT) H, WI, WR, Z
 !
-INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN, &
-&IGH,ITS,LOW,MP2,ENM2,IERR
-REAL H(NM,N),WR(N),WI(N),Z(NM,N)
-REAL P,Q,R,S,T,W,X,Y,RA,SA,VI,VR,ZZ,NORM,MACHEP,SPMPAR
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: EN, II, JJ, LL, MM, NA
+INTEGER, INTENT(IN) :: NM
+INTEGER :: NN
+INTEGER, INTENT(IN) :: IGH
+INTEGER :: ITS
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MP2, ENM2
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+REAL :: P, Q, R, S, T, W, X, Y, RA, SA, VI, VR, ZZ, NORM, MACHEP, &
+&SPMPAR
 !     REAL SQRT,ABS
 !     INTEGER MIN0
-LOGICAL NOTLAS
-COMPLEX Z3
+LOGICAL :: NOTLAS
+COMPLEX :: Z3
 !     COMPLEX CMPLX
 !     REAL REAL,AIMAG
 !-----------------------------------------------------------------------
@@ -8386,14 +8126,14 @@ END SUBROUTINE HQR2
 
 SUBROUTINE DEIG (IBAL,A,KA,N,WR,WI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, LOW
 !-----------------------------------------------------------------------
 !                EIGENVALUES OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(KA,N), WR(N), WI(N)
+DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 !
 LOW = 1
 IGH = N
@@ -8405,14 +8145,15 @@ END SUBROUTINE DEIG
 
 SUBROUTINE DEIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
 IMPLICIT NONE
-INTENT(IN) IBAL, KA, N
-INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, J, K, KP1, LOW
+INTEGER, INTENT(IN) :: IBAL
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: IGH, J, K, KP1, LOW
 !-----------------------------------------------------------------------
 !     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(KA,N),WR(N),WI(N),ZR(KA,N),ZI(KA,N)
+DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), &
+&ZR(KA,N), ZI(KA,N)
 !
 LOW = 1
 IGH = N
@@ -8439,15 +8180,18 @@ END SUBROUTINE DEIGV
 
 SUBROUTINE DBAL(NM,N,A,LOW,IGH,SCALE)
 IMPLICIT NONE
-INTENT(IN) N, NM
-INTENT(INOUT) A, IGH, LOW, SCALE
 !
-INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
-DOUBLE PRECISION A(NM,N),SCALE(N)
-DOUBLE PRECISION C,F,G,R,S,B2,RADIX
-INTEGER IPMPAR
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: JJ
+INTEGER, INTENT(IN) :: NM
+INTEGER, INTENT(INOUT) :: IGH, LOW
+INTEGER :: IEXC
+DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), SCALE(N)
+DOUBLE PRECISION :: C, F, G, R, S, B2, RADIX
+INTEGER :: IPMPAR
 !     DOUBLE PRECISION DABS
-LOGICAL NOCONV
+LOGICAL :: NOCONV
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALANCE,
@@ -8612,11 +8356,13 @@ END SUBROUTINE DBAL
 
 SUBROUTINE DBALNV (NZ,N,Z,LOW,IGH,SCALE)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NZ, SCALE
-INTENT(INOUT) Z
-INTEGER I,J,K,N,II,NZ,IGH,LOW
-DOUBLE PRECISION Z(NZ,N),SCALE(N)
-DOUBLE PRECISION S
+INTEGER :: I, J, K
+INTEGER, INTENT(IN) :: N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NZ, IGH, LOW
+DOUBLE PRECISION, INTENT(INOUT) :: Z(NZ,N)
+DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
+DOUBLE PRECISION :: S
 !-----------------------------------------------------------------------
 !        GIVEN A MATRIX A OF ORDER N. DBAL TRANSFORMS A INTO
 !     THE MATRIX B BY THE SIMILARITY TRANSFORMATION
@@ -8687,12 +8433,15 @@ END SUBROUTINE DBALNV
 
 SUBROUTINE DORTH(NM,N,LOW,IGH,A,ORT)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(INOUT) A, ORT
 !
-INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
-DOUBLE PRECISION A(NM,N),ORT(IGH)
-DOUBLE PRECISION F,G,H,SCALE
+INTEGER :: I, J, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, JJ, LA, MP
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: KP1
+INTEGER, INTENT(IN) :: LOW
+DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+DOUBLE PRECISION :: F, G, H, SCALE
 !     DOUBLE PRECISION DSQRT,DABS
 !-----------------------------------------------------------------------
 !
@@ -8796,16 +8545,21 @@ END SUBROUTINE DORTH
 
 SUBROUTINE DHQR(NM,N,LOW,IGH,H,WR,WI,IERR)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(OUT) IERR
-INTENT(INOUT) H, WI, WR
 !
-INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
-DOUBLE PRECISION H(NM,N),WR(N),WI(N)
-DOUBLE PRECISION P,Q,R,S,T,W,X,Y,ZZ,NORM,MACHEP,DPMPAR
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: EN, LL, MM, NA
+INTEGER, INTENT(IN) :: NM, IGH
+INTEGER :: ITS
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MP2, ENM2
+INTEGER, INTENT(OUT) :: IERR
+DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+DOUBLE PRECISION :: P, Q, R, S, T, W, X, Y, ZZ, NORM, MACHEP, &
+&DPMPAR
 !     DOUBLE PRECISION DSQRT,DABS
 !     INTEGER MIN0
-LOGICAL NOTLAS
+LOGICAL :: NOTLAS
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR,
@@ -9025,12 +8779,14 @@ END SUBROUTINE DHQR
 
 SUBROUTINE DBABK(NM,N,LOW,IGH,SCALE,M,Z)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, M, N, NM, SCALE
-INTENT(INOUT) Z
 !
-INTEGER I,J,K,M,N,II,NM,IGH,LOW
-DOUBLE PRECISION SCALE(N),Z(NM,M)
-DOUBLE PRECISION S
+INTEGER :: I, J, K
+INTEGER, INTENT(IN) :: M, N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
+DOUBLE PRECISION, INTENT(INOUT) :: Z(NM,M)
+DOUBLE PRECISION :: S
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALBAK,
@@ -9100,12 +8856,15 @@ END SUBROUTINE DBABK
 
 SUBROUTINE DORTRN(NM,N,LOW,IGH,A,ORT,Z)
 IMPLICIT NONE
-INTENT(IN) A, IGH, LOW, N, NM
-INTENT(INOUT) ORT, Z
 !
-INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
-DOUBLE PRECISION A(NM,IGH),ORT(IGH),Z(NM,N)
-DOUBLE PRECISION G
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NM, IGH, LOW
+INTEGER :: MP1
+DOUBLE PRECISION, INTENT(IN) :: A(NM,IGH)
+DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+DOUBLE PRECISION :: G
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ORTRANS,
@@ -9186,12 +8945,16 @@ END SUBROUTINE DORTRN
 
 SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
 IMPLICIT NONE
-INTENT(IN) A, IGH, LOW, N, NA, NZ
-INTENT(INOUT) ORT, Z
 !
-INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
-DOUBLE PRECISION A(NA,IGH),ORT(IGH),Z(NZ,N)
-DOUBLE PRECISION G
+INTEGER :: I, J
+INTEGER, INTENT(IN) :: N
+INTEGER :: KL, MM, MP
+INTEGER, INTENT(IN) :: NA, IGH, LOW
+INTEGER :: MP1
+INTEGER, INTENT(IN) :: NZ
+DOUBLE PRECISION, INTENT(IN) :: A(NA,IGH)
+DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+DOUBLE PRECISION :: G
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ORTRANS,
@@ -9276,19 +9039,24 @@ END SUBROUTINE DRTRN1
 
 SUBROUTINE DHQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
 IMPLICIT NONE
-INTENT(IN) IGH, LOW, N, NM
-INTENT(OUT) IERR
-INTENT(INOUT) H, WI, WR, Z
 !
-INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN, &
-&IGH,ITS,LOW,MP2,ENM2,IERR
-DOUBLE PRECISION H(NM,N),WR(N),WI(N),Z(NM,N)
-DOUBLE PRECISION A,B,D,P,Q,R,S,T,U,W,X,Y
-DOUBLE PRECISION RA,SA,VI,VR,ZZ,NORM,MACHEP
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: EN, II, JJ, LL, MM, NA
+INTEGER, INTENT(IN) :: NM
+INTEGER :: NN
+INTEGER, INTENT(IN) :: IGH
+INTEGER :: ITS
+INTEGER, INTENT(IN) :: LOW
+INTEGER :: MP2, ENM2
+INTEGER, INTENT(OUT) :: IERR
+DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+DOUBLE PRECISION :: A, B, D, P, Q, R, S, T, U, W, X, Y
+DOUBLE PRECISION :: RA, SA, VI, VR, ZZ, NORM, MACHEP
 !     INTEGER MIN0
 !     DOUBLE PRECISION DSQRT,DABS
-DOUBLE PRECISION DPMPAR
-LOGICAL NOTLAS
+DOUBLE PRECISION :: DPMPAR
+LOGICAL :: NOTLAS
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR2,
@@ -9694,14 +9462,14 @@ END SUBROUTINE DHQR2
 
 SUBROUTINE SEIG (A, KA, N, W, T, IERR)
 IMPLICIT NONE
-INTENT(IN) KA
-INTENT(INOUT) A, IERR, T, W
-INTEGER IERR, KA, N
-INTEGER L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA
+INTEGER :: N
+INTEGER :: L
 !-----------------------------------------------------------------------
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(*), W(N), T(*)
+REAL, INTENT(INOUT) :: A(*), W(N), T(*)
 !
 IF (KA .EQ. 0) GO TO 10
    CALL TRED1 (KA, N, A, W, T(N+1), T(1))
@@ -9716,14 +9484,13 @@ END SUBROUTINE SEIG
 
 SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
 IMPLICIT NONE
-INTENT(IN) KA, N
-INTENT(INOUT) A, IERR, T, W
-INTEGER IERR, KA, N
-INTEGER L
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
+INTEGER :: L
 !-----------------------------------------------------------------------
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(*), W(N), T(N)
+REAL, INTENT(INOUT) :: A(*), W(N), T(N)
 !
 IF (KA .EQ. 0) GO TO 10
    CALL TRED1 (KA, N, A, W, T, T)
@@ -9738,13 +9505,13 @@ END SUBROUTINE SEIG1
 
 SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
 IMPLICIT NONE
-INTENT(IN) A, KA, N
-INTENT(INOUT) IERR, T, W, Z
-INTEGER IERR, KA, N
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
 !-----------------------------------------------------------------------
 !        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), W(N), Z(KA,N), T(N)
+REAL, INTENT(IN) :: A(KA,N)
+REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 !
 CALL TRED2 (KA, N, A, W, T, Z)
 CALL TQL2 (KA, N, W, T, Z, IERR)
@@ -9753,13 +9520,13 @@ END SUBROUTINE SEIGV
 
 SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
 IMPLICIT NONE
-INTENT(IN) A, KA, N
-INTENT(INOUT) IERR, T, W, Z
-INTEGER IERR, KA, N
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: KA, N
 !-----------------------------------------------------------------------
 !        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-REAL A(KA,N), W(N), Z(KA,N), T(N)
+REAL, INTENT(IN) :: A(KA,N)
+REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 !
 CALL TRED2 (KA, N, A, W, T, Z)
 CALL IMTQL2 (KA, N, W, T, Z, IERR)
@@ -9768,12 +9535,14 @@ END SUBROUTINE SEIGV1
 
 SUBROUTINE TRED1(NM,N,A,D,E,E2)
 IMPLICIT NONE
-INTENT(IN) N, NM
-INTENT(INOUT) A, D, E, E2
 !
-INTEGER I,J,K,L,N,II,NM,JP1
-REAL A(NM,N),D(N),E(N),E2(N)
-REAL F,G,H,SCALE
+INTEGER :: I, J, K, L
+INTEGER, INTENT(IN) :: N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NM
+INTEGER :: JP1
+REAL, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
+REAL :: F, G, H, SCALE
 !     REAL SQRT,ABS
 !-----------------------------------------------------------------------
 !
@@ -9886,12 +9655,13 @@ END SUBROUTINE TRED1
 
 SUBROUTINE TRED3(N,NV,A,D,E,E2)
 IMPLICIT NONE
-INTENT(IN) N, NV
-INTENT(INOUT) A, D, E, E2
 !
-INTEGER I,J,K,L,N,II,IZ,JK,NV
-REAL A(NV),D(N),E(N),E2(N)
-REAL F,G,H,HH,SCALE
+INTEGER :: I, J, K, L
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, IZ, JK
+INTEGER, INTENT(IN) :: NV
+REAL, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
+REAL :: F, G, H, HH, SCALE
 !     REAL SQRT,ABS
 !-----------------------------------------------------------------------
 !
@@ -10002,14 +9772,14 @@ END SUBROUTINE TRED3
 
 SUBROUTINE TQLRAT(N,D,E2,IERR)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(OUT) IERR
-INTENT(INOUT) D, E2
-REAL SPMPAR
+REAL :: SPMPAR
 !
-INTEGER I,J,L,M,N,II,L1,MML,IERR
-REAL D(N),E2(N)
-REAL B,C,F,G,H,P,R,S,MACHEP
+INTEGER :: I, J, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, L1, MML
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: D(N), E2(N)
+REAL :: B, C, F, G, H, P, R, S, MACHEP
 !     REAL SQRT,ABS,SPMPAR
 !-----------------------------------------------------------------------
 !
@@ -10142,14 +9912,14 @@ END SUBROUTINE TQLRAT
 
 SUBROUTINE IMTQL1(N,D,E,IERR)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(OUT) IERR
-INTENT(INOUT) D, E
-REAL SPMPAR
+REAL :: SPMPAR
 !
-INTEGER I,J,L,M,N,II,MML,IERR
-REAL D(N),E(N)
-REAL B,C,F,G,P,R,S,MACHEP
+INTEGER :: I, J, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, MML
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: D(N), E(N)
+REAL :: B, C, F, G, P, R, S, MACHEP
 !     REAL SQRT,ABS,SPMPAR
 !-----------------------------------------------------------------------
 !
@@ -10275,12 +10045,15 @@ END SUBROUTINE IMTQL1
 
 SUBROUTINE TRED2(NM,N,A,D,E,Z)
 IMPLICIT NONE
-INTENT(IN) A, N, NM
-INTENT(INOUT) D, E, Z
 !
-INTEGER I,J,K,L,N,II,NM,JP1
-REAL A(NM,N),D(N),E(N),Z(NM,N)
-REAL F,G,H,HH,SCALE
+INTEGER :: I, J, K, L
+INTEGER, INTENT(IN) :: N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NM
+INTEGER :: JP1
+REAL, INTENT(IN) :: A(NM,N)
+REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+REAL :: F, G, H, HH, SCALE
 !     REAL SQRT,ABS
 !-----------------------------------------------------------------------
 !
@@ -10417,14 +10190,16 @@ END SUBROUTINE TRED2
 
 SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
 IMPLICIT NONE
-INTENT(IN) N, NM
-INTENT(OUT) IERR
-INTENT(INOUT) D, E, Z
-REAL SPMPAR
+REAL :: SPMPAR
 !
-INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
-REAL D(N),E(N),Z(NM,N)
-REAL B,C,F,G,H,P,R,S,MACHEP
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II, L1
+INTEGER, INTENT(IN) :: NM
+INTEGER :: MML
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+REAL :: B, C, F, G, H, P, R, S, MACHEP
 !     REAL SQRT,ABS,SPMPAR
 !-----------------------------------------------------------------------
 !
@@ -10591,4 +10366,174 @@ GO TO 1001
 1001 RETURN
 !     ********** LAST CARD OF TQL2 **********
 END SUBROUTINE TQL2
+
+SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
+IMPLICIT NONE
+REAL :: SPMPAR
+!
+INTEGER :: I, J, K, L, M
+INTEGER, INTENT(IN) :: N
+INTEGER :: II
+INTEGER, INTENT(IN) :: NM
+INTEGER :: MML
+INTEGER, INTENT(OUT) :: IERR
+REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+REAL :: B, C, F, G, P, R, S, MACHEP
+!     REAL SQRT,ABS,SPMPAR
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE IMTQL2,
+!     NUM. MATH. 12, 377-383(1968) BY MARTIN AND WILKINSON,
+!     AS MODIFIED IN NUM. MATH. 15, 450(1970) BY DUBRULLE.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 241-248(1971).
+!
+!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
+!     OF A SYMMETRIC TRIDIAGONAL MATRIX BY THE IMPLICIT QL METHOD.
+!     THE EIGENVECTORS OF A FULL SYMMETRIC MATRIX CAN ALSO
+!     BE FOUND IF  TRED2  HAS BEEN USED TO REDUCE THIS
+!     FULL MATRIX TO TRIDIAGONAL FORM.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX,
+!
+!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE INPUT MATRIX
+!          IN ITS LAST N-1 POSITIONS.  E(1) IS ARBITRARY,
+!
+!        Z CONTAINS THE TRANSFORMATION MATRIX PRODUCED IN THE
+!          REDUCTION BY  TRED2, IF PERFORMED.  IF THE EIGENVECTORS
+!          OF THE TRIDIAGONAL MATRIX ARE DESIRED, Z MUST CONTAIN
+!          THE IDENTITY MATRIX.
+!
+!      ON OUTPUT-
+!
+!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
+!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT BUT
+!          UNORDERED FOR INDICES 1,2,...,IERR-1,
+!
+!        E HAS BEEN DESTROYED,
+!
+!        Z CONTAINS ORTHONORMAL EIGENVECTORS OF THE SYMMETRIC
+!          TRIDIAGONAL (OR FULL) MATRIX.  IF AN ERROR EXIT IS MADE,
+!          Z CONTAINS THE EIGENVECTORS ASSOCIATED WITH THE STORED
+!          EIGENVALUES,
+!
+!        IERR IS SET TO
+!          ZERO       FOR NORMAL RETURN,
+!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!                     DETERMINED AFTER 30 ITERATIONS.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                MACHEP THE VALUE U WHERE U IS THE SMALLEST POSITIVE
+!                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
+!
+           MACHEP = SPMPAR(1)
+!
+!                **********
+!
+IERR = 0
+IF (N .EQ. 1) GO TO 1001
+!
+do 100 I = 2, N
+100 E(I-1) = E(I)
+!
+E(N) = 0.0
+!
+do 240 L = 1, N
+   J = 0
+!     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
+105 DO M = L, N
+      IF (M .EQ. N) GO TO 120
+      IF (ABS(E(M)) .LE. MACHEP * (ABS(D(M)) + ABS(D(M+1)))) &
+&GO TO 120
+   END DO
+!
+120 P = D(L)
+   IF (M .EQ. L) GO TO 240
+   IF (J .EQ. 30) GO TO 1000
+   J = J + 1
+!     ********** FORM SHIFT **********
+   G = (D(L+1) - P) / (2.0 * E(L))
+   R = SQRT(G*G+1.0)
+   IF (G .LT. 0.0) R = -R
+   G = D(M) - P + E(L) / (G + R)
+   S = 1.0
+   C = 1.0
+   P = 0.0
+   MML = M - L
+!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+   DO II = 1, MML
+      I = M - II
+      F = S * E(I)
+      B = C * E(I)
+      IF (ABS(F) .LT. ABS(G)) GO TO 150
+      C = G / F
+      R = SQRT(C*C+1.0)
+      E(I+1) = F * R
+      S = 1.0 / R
+      C = C * S
+      GO TO 160
+150 S = F / G
+      R = SQRT(S*S+1.0)
+      E(I+1) = G * R
+      C = 1.0 / R
+      S = S * C
+160 G = D(I+1) - P
+      R = (D(I) - G) * S + 2.0 * C * B
+      P = S * R
+      D(I+1) = G + P
+      G = C * R - B
+!     ********** FORM VECTOR **********
+      DO K = 1, N
+         F = Z(K,I+1)
+         Z(K,I+1) = S * Z(K,I) + C * F
+         Z(K,I) = C * Z(K,I) - S * F
+      END DO
+!
+   END DO
+!
+   D(L) = D(L) - P
+   E(L) = G
+   E(M) = 0.0
+   GO TO 105
+240 CONTINUE
+!     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
+do 300 II = 2, N
+   I = II - 1
+   K = I
+   P = D(I)
+!
+   do 260 J = II, N
+      IF (D(J) .GE. P) GO TO 260
+      K = J
+      P = D(J)
+260 CONTINUE
+!
+   IF (K .EQ. I) GO TO 300
+   D(K) = D(I)
+   D(I) = P
+!
+   DO J = 1, N
+      P = Z(J,I)
+      Z(J,I) = Z(J,K)
+      Z(J,K) = P
+   END DO
+!
+300 CONTINUE
+!
+GO TO 1001
+!     ********** SET ERROR -- NO CONVERGENCE TO AN
+!                EIGENVALUE AFTER 30 ITERATIONS **********
+1000 IERR = L
+1001 RETURN
+!     ********** LAST CARD OF IMTQL2 **********
+END SUBROUTINE IMTQL2
 

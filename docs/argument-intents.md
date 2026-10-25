@@ -97,10 +97,12 @@ python tools/argument_intents.py apply typed-baseline.f --manifest reviewed-inte
 ```
 
 Output files must be new. Applying the same manifest twice makes no further
-changes. To recover the declaration-only baseline from the current source:
+changes. The maintained source now combines types and intents. First recover
+the verified intermediate layout, then remove its reviewed intents:
 
 ```sh
-python tools/argument_intents.py baseline nswc.f --output typed-baseline.f
+python tools/validate_explicit_typing.py --unformatted-output reviewed-unformatted.f
+python tools/argument_intents.py baseline reviewed-unformatted.f --output typed-baseline.f
 ```
 
 Generate a fresh draft with a compatible Fortran-Tools installation:
@@ -112,7 +114,7 @@ python tools/argument_intents.py analyze typed-baseline.f --tool-dir PATH_TO_FOR
 Extend an existing reviewed manifest with writable suggestions:
 
 ```sh
-python tools/writable_intents.py nswc.f --manifest reviewed-intents.json --output draft-writable-intents.json
+python tools/writable_intents.py reviewed-unformatted.f --manifest reviewed-intents.json --output draft-writable-intents.json
 ```
 
 The writable analyzer first removes the existing annotations using that
@@ -121,12 +123,15 @@ from commit `837e804` with its matching source. The current cumulative manifest
 already contains that batch, so analyzing it again adds no further annotations.
 
 The draft is a review artifact. It does not change the library. After applying
-reviewed changes to `nswc.f`, run `python tools/regenerate_sources.py`.
+reviewed changes to the intermediate source, run
+`tools/combine_declarations.py` as described in the
+[typing guide](explicit-typing.md#combined-declarations), replace `nswc.f` with
+the formatted result, and run `python tools/regenerate_sources.py`.
 
 ## Validation
 
 `python tools/validate_explicit_typing.py` reconstructs the original readability
-and declaration changes, applies the intent manifest, and compares the result
+and declaration changes, applies the intent manifest and declaration formatting, and compares the result
 with `nswc.f`. GNU Fortran's compiler dump must confirm every reviewed `IN`,
 `OUT`, and `INOUT` attribute. Only those attributes are removed for the comparison
 of 25,873 symbol records; types, shapes, storage attributes, and argument lists

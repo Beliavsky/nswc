@@ -12,8 +12,32 @@ from explicit_typing import apply_manifest, DEFAULT_MANIFEST
 from modernize_do import transform as modernize_loops
 from name_procedure_ends import transform as name_ends
 from reviewed_source_fixes import apply_fixes, normalize_reviewed_symbols, check_warning_inventory
+from combine_declarations import transform as combine_declarations
+from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def non_declaration_content(data):
+    """Independently compare all remaining statements and the comment stream."""
+    lines = data.decode('latin-1').splitlines(True)
+    comments = {i: line.rstrip('\r\n') if line[0] in 'Cc*' else line.lstrip().rstrip('\r\n')
+                for i, line in enumerate(lines) if line.strip() and line[0] in 'Cc*!'}
+    content = []
+    for statement in statements(lines):
+        if not re.match(r'^\s*(?:INTEGER|REAL|COMPLEX|LOGICAL|CHARACTER|DOUBLE\s+(?:PRECISION|COMPLEX)|INTENT|DIMENSION)\b',
+                        statement.code, re.I):
+            content.append(statement.code)
+        quote = ''
+        for i in statement.lines:
+            _, comment, quote = code_comment(lines[i].rstrip('\r\n')[6:72], quote)
+            if comment:
+                comments[i] = comment
+    # The statement reader skips indented comment-only lines.
+    for i, line in enumerate(lines):
+        if line[6:72].lstrip().startswith('!') and i not in comments:
+            comments[i] = line[6:72].lstrip().rstrip('\r\n')
+    return content, [comments[i] for i in sorted(comments)]
 
 
 def symbols(dump, include_intrinsics=False):
@@ -98,7 +122,11 @@ def main():
     from argument_intents import apply_intents, normalize_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compiler", default="gfortran")
+    parser.add_argument("--unformatted-output", type=Path,
+                        help="Write a new copy of the verified intermediate source for historical manifest tools")
     args = parser.parse_args()
+    if args.unformatted_output and args.unformatted_output.exists():
+        parser.error("--unformatted-output must name a new file")
     compiler = str(Path(args.compiler).resolve()) if Path(args.compiler).is_file() else args.compiler
     manifest = json.loads(DEFAULT_MANIFEST.read_text())
     before = modernize_loops(name_ends((ROOT / "nswc_orig.f").read_bytes()).data).data
@@ -106,11 +134,16 @@ def main():
     intents = json.loads(INTENT_MANIFEST.read_text()) if INTENT_MANIFEST.exists() else None
     if intents:
         after = apply_intents(after, intents)
+    unformatted_source = after
+    formatting = combine_declarations(unformatted_source)
+    after = formatting.data
+    if non_declaration_content(unformatted_source) != non_declaration_content(after):
+        raise RuntimeError("Declaration formatting changed other statements or comments")
     if after != (ROOT / "nswc.f").read_bytes():
-        raise RuntimeError("Maintained source does not reproduce the reviewed typing batches")
+        raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
     inventories = []
     with tempfile.TemporaryDirectory(prefix="nswc-typing-") as folder:
-        for label, data in (("before", before), ("after", after)):
+        for label, data in (("before", before), ("reviewed", unformatted_source), ("after", after)):
             source = Path(folder) / (label + ".f")
             source.write_bytes(data)
             result = subprocess.run([compiler, "-fsyntax-only", "-std=legacy",
@@ -119,6 +152,12 @@ def main():
                                     env={**os.environ, "LC_ALL": "C"})
             if result.returncode:
                 raise RuntimeError(result.stderr)
+            complete = symbols(result.stdout, include_intrinsics=True)
+            if label == "reviewed":
+                reviewed_inventory = complete
+                continue
+            if label == "after" and complete != reviewed_inventory:
+                raise RuntimeError("Declaration formatting changed compiler symbol records")
             inventory = symbols(result.stdout)
             if label == "after" and intents:
                 inventory = normalize_intents(inventory, intents)
@@ -154,6 +193,9 @@ def main():
     print(f"Checked {count} compiler symbol records across {len(manifest['procedures'])} procedures; "
           "preserved all except three separately confirmed warning corrections.")
     print(f"Confirmed {warning_count} remaining compiler warnings against the reviewed inventory.")
+    print(f"Declaration formatting preserves all {sum(map(len, reviewed_inventory.values()))} compiler records, "
+          f"including intrinsics; combined {formatting.intents_combined} intents and {formatting.dimensions_combined} dimensions.")
+    print("Confirmed unchanged non-declaration statements and comment text/order.")
     if intents:
         counts = {mode: sum(v == mode for e in intents["procedures"].values() for v in e["arguments"].values())
                   for mode in ("IN", "OUT", "INOUT")}
@@ -164,6 +206,10 @@ def main():
     functions = manifest.get("forwarded_function_reviews", {})
     if functions:
         print(f"Checked {sum(map(len, functions.values()))} forwarded function types against original definitions or workers.")
+    if args.unformatted_output:
+        with args.unformatted_output.open('xb') as output:
+            output.write(unformatted_source)
+        print(f"Wrote verified unformatted intermediate: {args.unformatted_output}")
     return 0
 
 

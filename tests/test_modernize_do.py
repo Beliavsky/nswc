@@ -135,7 +135,8 @@ class ModernizeDoTests(unittest.TestCase):
         from argument_intents import apply_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
         if INTENT_MANIFEST.exists():
             reviewed = apply_intents(reviewed, json.loads(INTENT_MANIFEST.read_text()))
-        self.assertEqual(reviewed, (ROOT / "nswc.f").read_bytes())
+        from combine_declarations import transform as combine_declarations
+        self.assertEqual(combine_declarations(reviewed).data, (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 
 

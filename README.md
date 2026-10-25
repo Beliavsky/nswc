@@ -188,6 +188,23 @@ also records reviewed classifications for forwarded procedures, checked against
 their original calling conventions and return types. The archived `nswc_orig.f`
 retains its original typing.
 
+## Combined declarations
+
+Type and intent now appear together, for example `INTEGER, INTENT(IN) :: I`.
+The maintained source uses `::` in its type declarations. The formatting pass
+also combines separate array dimensions when declaration dependencies allow it.
+
+```sh
+python tools/combine_declarations.py nswc.f
+python tools/combine_declarations.py input.f --output formatted.f --report formatting.json
+```
+
+The default previews changes. `--in-place` creates a non-overwriting
+`.declarations.bak` backup; `--diff` displays the proposed edits. The
+[typing guide](docs/explicit-typing.md#combined-declarations) explains the retained
+dimensions, review report, and compiler checks. After changing `nswc.f`,
+regenerate the derived sources and verify the interfaces as described above.
+
 ## Argument intents
 
 The maintained sources have 4,176 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821

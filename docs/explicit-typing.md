@@ -488,7 +488,8 @@ python tools/validate_explicit_typing.py
 Use `--compiler PATH` if necessary. This reconstructs the source before explicit typing
 from the archived original and earlier readability transformations, applies the
 reviewed warning fixes, typing, and [argument intent manifests](argument-intents.md),
-and verifies that it reproduces `nswc.f`. GNU Fortran's symbol dumps confirm the added intent
+then combines declarations and verifies that it reproduces `nswc.f`.
+GNU Fortran's symbol dumps confirm the added intent
 attributes before those attributes are removed for comparison with the original
 symbol records. The local check compares
 25,873 variable and external procedure records across all 1,062 procedures, including
@@ -502,6 +503,60 @@ unused callback classification and the two quadratic output extents.
 
 The maintained source compiles with 12 reviewed warnings, compared with 28 in
 the original source. The compiler check rejects added or missing warnings.
+
+## Combined declarations
+
+`tools/combine_declarations.py` formats the reviewed fixed-form source without
+adding declarations or changing intents. For example:
+
+```fortran
+      INTEGER, INTENT(IN) :: I
+```
+
+The applied pass rewrites 4,799 type statements across all 1,062 procedures,
+combines all 7,259 separate argument intents, and merges 963 separate array
+dimensions into their entities. It keeps 65 dimensions separate to preserve
+specification order. These are conservative exclusions, rather than unresolved
+types or intents. The [review report](../tools/declaration-formatting.json)
+records the input and output hashes and each retained dimension. Its line
+numbers refer to `nswc.f` at commit `ee1bcf8`, before this formatting pass.
+
+```sh
+python tools/combine_declarations.py input.f
+python tools/combine_declarations.py input.f --diff
+python tools/combine_declarations.py input.f --output formatted.f --report formatting.json
+python tools/combine_declarations.py input.f --in-place
+```
+
+Preview is the default. Output and report paths must be distinct new files.
+In-place updates first create a non-overwriting `.declarations.bak` backup.
+Running the transformation again makes no further source changes.
+
+The tool splits declarations where intents differ, retains entity order, and
+wraps generated lines within fixed-form column 72. It preserves other type
+attributes, array bounds, character lengths, comments, and executable statements.
+Inline comments on rewritten declarations become standalone comments with their
+text and relative comment order preserved. Labels, sequence fields, initialized
+entities, unsupported syntax, and dimensions requiring later specification
+declarations are retained and reported for review. It supports external
+procedures, using the existing conservative fixed-form scanner.
+
+The original typing and intent manifests retain their historical hashes.
+Declaration formatting is a final reproducible step after those reviewed
+transformations. For tools that need the historical declaration layout, obtain
+a verified intermediate copy with:
+
+```sh
+python tools/validate_explicit_typing.py --unformatted-output reviewed-unformatted.f
+```
+
+That output must be a new file. The compiler validator compares the intermediate
+and formatted sources directly, including every intent and intrinsic symbol.
+Locally, all 27,756 compiler records match exactly. It then performs the existing
+comparison with the original source and checks the warning inventory. The
+archived `nswc_orig.f` is unchanged. Regeneration updates `nswc.f90`, the source
+partitions, and documentation links; Intel regeneration refreshes interface
+provenance, while compiler checks verify the interface characteristics.
 All 48 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so future source changes need

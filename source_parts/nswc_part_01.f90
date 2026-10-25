@@ -1,7 +1,6 @@
 INTEGER function IPMPAR (I)
 IMPLICIT NONE
-INTENT(IN) I
-INTEGER I
+INTEGER, INTENT(IN) :: I
 !-----------------------------------------------------------------------
 !
 !     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -74,7 +73,7 @@ INTEGER I
 !     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
 !
 !-----------------------------------------------------------------------
-INTEGER IMACH(10)
+INTEGER :: IMACH(10)
 !
 !     MACHINE CONSTANTS FOR THE ALLIANT FX/8.
 !
@@ -437,15 +436,14 @@ END FUNCTION IPMPAR
 !-----------------------------------------------------------------------
 SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 IMPLICIT NONE
-INTENT(IN) IDMAX, IMAX, MO, N
-INTENT(INOUT) DMACH, IMACH, RMACH
-INTEGER IBETA, IDMAX, IMAX, MO, N
-INTEGER M, MAXEXP, MINEXP, N0
-REAL EPS, XINT, XMAX, XMIN
+INTEGER :: IBETA
+INTEGER, INTENT(IN) :: IDMAX, IMAX, MO, N
+INTEGER :: M, MAXEXP, MINEXP, N0
+REAL :: EPS, XINT, XMAX, XMIN
 !-----------------------------------------------------------------------
-REAL RMACH(3)
-DOUBLE PRECISION DMACH(3)
-INTEGER IMACH(10)
+REAL, INTENT(INOUT) :: RMACH(3)
+DOUBLE PRECISION, INTENT(INOUT) :: DMACH(3)
+INTEGER, INTENT(INOUT) :: IMACH(10)
 !-----------------------------------------------------------------------
 !
 !          COMPUTATION OF THE ENVIRONMENTAL CONSTANTS FOR THE
@@ -672,7 +670,7 @@ INTEGER IMACH(10)
 !         1988, PP. 303-311.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION DEPS, DINT, DMIN, DMAX
+DOUBLE PRECISION :: DEPS, DINT, DMIN, DMAX
 !-----------------
 IMACH(1) = 0
 IMACH(2) = 0
@@ -711,9 +709,9 @@ END SUBROUTINE MACH
 
 SUBROUTINE RADIX (IBETA)
 IMPLICIT NONE
-INTEGER IBETA
-REAL A, B, ONE, Y
-REAL D1, D2
+INTEGER :: IBETA
+REAL :: A, B, ONE, Y
+REAL :: D1, D2
 !-----------------------------------------------------------------------
 !     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
 !-----------------------------------------------------------------------
@@ -739,9 +737,9 @@ END SUBROUTINE RADIX
 SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
 &XMIN, XMAX)
 IMPLICIT NONE
-INTEGER IBETA, M, MAXEXP, MINEXP, N
-INTEGER J, K, KM, L
-REAL EPS, XINT, XMIN, XMAX
+INTEGER :: IBETA, M, MAXEXP, MINEXP, N
+INTEGER :: J, K, KM, L
+REAL :: EPS, XINT, XMIN, XMAX
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -834,7 +832,7 @@ REAL EPS, XINT, XMIN, XMAX
 !                 ROUNDOFF ERROR.
 !
 !-----------------------------------------------------------------------
-REAL B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
+REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
 !----------------
 COMMON /SPDATA/ D1, D2
 !
@@ -982,8 +980,8 @@ END SUBROUTINE MACH1
 
 SUBROUTINE STORE2 (A, B)
 IMPLICIT NONE
-REAL A, B
-REAL D1, D2
+REAL :: A, B
+REAL :: D1, D2
 !-----------------------------------------------------------------------
 !     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
@@ -996,9 +994,9 @@ END SUBROUTINE STORE2
 SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
 &XMIN, XMAX)
 IMPLICIT NONE
-INTEGER IBETA, M, MAXEXP, MINEXP, N
-INTEGER J, K, KM, L
-DOUBLE PRECISION EPS, XINT, XMIN, XMAX
+INTEGER :: IBETA, M, MAXEXP, MINEXP, N
+INTEGER :: J, K, KM, L
+DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -1091,7 +1089,8 @@ DOUBLE PRECISION EPS, XINT, XMIN, XMAX
 !                 BY ROUNDOFF ERROR.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION B,B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
+DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, &
+&ZERO
 !----------------
 COMMON /DPDATA/ D1, D2
 !
@@ -1242,7 +1241,7 @@ IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A, B, D1, D2
+DOUBLE PRECISION :: A, B, D1, D2
 COMMON /DPDATA/ D1, D2
 D1 = A
 D2 = B
@@ -1251,11 +1250,10 @@ END SUBROUTINE DSTOR2
 
 REAL function SPMPAR (I)
 IMPLICIT NONE
-INTENT(IN) I
-INTEGER I
-INTEGER IBETA, M
-REAL B, BINV, BM1, ONE, W, Z
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: I
+INTEGER :: IBETA, M
+REAL :: B, BINV, BM1, ONE, W, Z
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !
 !     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
@@ -1276,7 +1274,7 @@ INTEGER IPMPAR
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN VIRGINIA
 !-----------------------------------------------------------------------
-INTEGER EMIN, EMAX
+INTEGER :: EMIN, EMAX
 !
 IF (I .GT. 1) GO TO 10
    B = IPMPAR(4)
@@ -1310,10 +1308,9 @@ END FUNCTION SPMPAR
 
 double precision function DPMPAR (I)
 IMPLICIT NONE
-INTENT(IN) I
-INTEGER I
-INTEGER IBETA, M
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: I
+INTEGER :: IBETA, M
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !
 !     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
@@ -1334,8 +1331,8 @@ INTEGER IPMPAR
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN VIRGINIA
 !-----------------------------------------------------------------------
-INTEGER EMIN, EMAX
-DOUBLE PRECISION B, BINV, BM1, ONE, W, Z
+INTEGER :: EMIN, EMAX
+DOUBLE PRECISION :: B, BINV, BM1, ONE, W, Z
 !
 IF (I .GT. 1) GO TO 10
    B = IPMPAR(4)
@@ -1369,16 +1366,15 @@ END FUNCTION DPMPAR
 
 REAL function EPSLN (L)
 IMPLICIT NONE
-INTENT(IN) L
-INTEGER L
-INTEGER M
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: L
+INTEGER :: M
+INTEGER :: IPMPAR
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
-INTEGER B
-REAL LNB
+INTEGER :: B
+REAL :: LNB
 !
 B = IPMPAR(4)
 IF (B .NE. 2) GO TO 10
@@ -1399,15 +1395,14 @@ END FUNCTION EPSLN
 
 double precision function DEPSLN (L)
 IMPLICIT NONE
-INTENT(IN) L
-INTEGER L
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: L
+INTEGER :: IPMPAR
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
-INTEGER B
-DOUBLE PRECISION DB, LNB, M
+INTEGER :: B
+DOUBLE PRECISION :: DB, LNB, M
 !
 B = IPMPAR(4)
 IF (B .NE. 2) GO TO 10
@@ -1429,10 +1424,9 @@ END FUNCTION DEPSLN
 
 REAL function EXPARG (L)
 IMPLICIT NONE
-INTENT(IN) L
-INTEGER L
-INTEGER M
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: L
+INTEGER :: M
+INTEGER :: IPMPAR
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 !     EXP(W) CAN BE COMPUTED.
@@ -1442,8 +1436,8 @@ INTEGER IPMPAR
 !
 !     NOTE... ONLY AN APPROXIMATE VALUE FOR EXPARG(L) IS NEEDED.
 !--------------------------------------------------------------------
-INTEGER B
-REAL LNB
+INTEGER :: B
+REAL :: LNB
 !
 B = IPMPAR(4)
 IF (B .NE. 2) GO TO 10
@@ -1468,10 +1462,9 @@ END FUNCTION EXPARG
 
 double precision function DXPARG (L)
 IMPLICIT NONE
-INTENT(IN) L
-INTEGER L
-INTEGER M
-INTEGER IPMPAR
+INTEGER, INTENT(IN) :: L
+INTEGER :: M
+INTEGER :: IPMPAR
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 !     DEXP(W) CAN BE COMPUTED.
@@ -1481,8 +1474,8 @@ INTEGER IPMPAR
 !
 !     NOTE... ONLY AN APPROXIMATE VALUE FOR DXPARG(L) IS NEEDED.
 !--------------------------------------------------------------------
-INTEGER B
-DOUBLE PRECISION DB, LNB
+INTEGER :: B
+DOUBLE PRECISION :: DB, LNB
 !
 B = IPMPAR(4)
 IF (B .NE. 2) GO TO 10
@@ -1508,15 +1501,14 @@ END FUNCTION DXPARG
 
 SUBROUTINE ISHELL (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-INTEGER A(N), K(10), S
+INTEGER, INTENT(INOUT) :: A(N)
+INTEGER :: K(10), S
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1558,17 +1550,15 @@ END SUBROUTINE ISHELL
 
 SUBROUTINE SHELL (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL A(N)
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N)
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1610,18 +1600,16 @@ END SUBROUTINE SHELL
 
 SUBROUTINE SHELL2 (A, B, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, B
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S, T
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S, T
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL A(N), B(N)
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N), B(N)
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1667,17 +1655,15 @@ END SUBROUTINE SHELL2
 
 SUBROUTINE RSORT (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL A(N)
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N)
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1719,19 +1705,18 @@ END SUBROUTINE RSORT
 
 SUBROUTINE RISORT (A, M, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, M
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL A(N)
-INTEGER M(N), T
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N)
+INTEGER, INTENT(INOUT) :: M(N)
+INTEGER :: T
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1777,18 +1762,16 @@ END SUBROUTINE RISORT
 
 SUBROUTINE RRSORT (A, B, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, B
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S, T
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S, T
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL A(N), B(N)
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N), B(N)
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1834,16 +1817,15 @@ END SUBROUTINE RRSORT
 
 SUBROUTINE DSORT (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(N), S
-INTEGER K(10)
+DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+DOUBLE PRECISION :: S
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1885,18 +1867,18 @@ END SUBROUTINE DSORT
 
 SUBROUTINE DISORT (A, M, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, M
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(N), S
-INTEGER M(N), T
-INTEGER K(10)
+DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+DOUBLE PRECISION :: S
+INTEGER, INTENT(INOUT) :: M(N)
+INTEGER :: T
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1942,17 +1924,16 @@ END SUBROUTINE DISORT
 
 SUBROUTINE DDSORT (A, B, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, B
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(N), B(N), S, T
-INTEGER K(10)
+DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
+DOUBLE PRECISION :: S, T
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1998,18 +1979,16 @@ END SUBROUTINE DDSORT
 
 SUBROUTINE AORD (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
-REAL S
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+REAL :: S
 !-----------------------------------------------------------------------
 !     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
 !     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
 !     ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
-REAL A(N)
-INTEGER K(10)
+REAL, INTENT(INOUT) :: A(N)
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -2051,17 +2030,16 @@ END SUBROUTINE AORD
 
 SUBROUTINE DAORD (A, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A
-INTEGER N
-INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+INTEGER, INTENT(IN) :: N
+INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
 !     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
 !     IT IS ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(N), S
-INTEGER K(10)
+DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+DOUBLE PRECISION :: S
+INTEGER :: K(10)
 !------------------------
 DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
 &K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -2103,9 +2081,8 @@ END SUBROUTINE DAORD
 
 SUBROUTINE QSORTI (X, IND, N)
 IMPLICIT NONE
-INTENT(IN) N, X
-INTENT(INOUT) IND
-INTEGER N, X(N), IND(N)
+INTEGER, INTENT(IN) :: N, X(N)
+INTEGER, INTENT(INOUT) :: IND(N)
 !
 !***********************************************************
 !
@@ -2151,9 +2128,9 @@ INTEGER N, X(N), IND(N)
 !
 !***********************************************************
 !
-INTEGER IU(21), IL(21)
-INTEGER M, I, J, K, L, IJ, IT, ITT, INDX, T
-REAL R
+INTEGER :: IU(21), IL(21)
+INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX, T
+REAL :: R
 !
 ! LOCAL PARAMETERS -
 !
@@ -2305,10 +2282,9 @@ END SUBROUTINE QSORTI
 
 SUBROUTINE QSORTR (X, IND, N)
 IMPLICIT NONE
-INTENT(IN) N, X
-INTENT(INOUT) IND
-INTEGER N, IND(N)
-REAL X(N)
+INTEGER, INTENT(IN) :: N
+INTEGER, INTENT(INOUT) :: IND(N)
+REAL, INTENT(IN) :: X(N)
 !
 !***********************************************************
 !
@@ -2354,9 +2330,9 @@ REAL X(N)
 !
 !***********************************************************
 !
-INTEGER IU(21), IL(21)
-INTEGER M, I, J, K, L, IJ, IT, ITT, INDX
-REAL R, T
+INTEGER :: IU(21), IL(21)
+INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
+REAL :: R, T
 !
 ! LOCAL PARAMETERS -
 !
@@ -2508,10 +2484,9 @@ END SUBROUTINE QSORTR
 
 SUBROUTINE QSORTD (X, IND, N)
 IMPLICIT NONE
-INTENT(IN) N, X
-INTENT(INOUT) IND
-INTEGER N, IND(N)
-DOUBLE PRECISION X(N)
+INTEGER, INTENT(IN) :: N
+INTEGER, INTENT(INOUT) :: IND(N)
+DOUBLE PRECISION, INTENT(IN) :: X(N)
 !
 !***********************************************************
 !
@@ -2557,10 +2532,10 @@ DOUBLE PRECISION X(N)
 !
 !***********************************************************
 !
-INTEGER IU(21), IL(21)
-INTEGER M, I, J, K, L, IJ, IT, ITT, INDX
-REAL R
-DOUBLE PRECISION T
+INTEGER :: IU(21), IL(21)
+INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
+REAL :: R
+DOUBLE PRECISION :: T
 !
 ! LOCAL PARAMETERS -
 !
@@ -2712,9 +2687,8 @@ END SUBROUTINE QSORTD
 
 SUBROUTINE IORDER (A, IP, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, IP
-INTEGER N, A(N), IP(N)
+INTEGER, INTENT(IN) :: N
+INTEGER, INTENT(INOUT) :: A(N), IP(N)
 !
 !***********************************************************
 !
@@ -2739,7 +2713,7 @@ INTEGER N, A(N), IP(N)
 !
 !***********************************************************
 !
-INTEGER NN, K, J, IPJ, TEMP
+INTEGER :: NN, K, J, IPJ, TEMP
 !
 ! LOCAL PARAMETERS -
 !
@@ -2786,10 +2760,9 @@ END SUBROUTINE IORDER
 
 SUBROUTINE RORDER (A, IP, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, IP
-INTEGER N, IP(N)
-REAL A(N)
+INTEGER, INTENT(IN) :: N
+INTEGER, INTENT(INOUT) :: IP(N)
+REAL, INTENT(INOUT) :: A(N)
 !
 !***********************************************************
 !
@@ -2814,8 +2787,8 @@ REAL A(N)
 !
 !***********************************************************
 !
-INTEGER NN, K, J, IPJ
-REAL TEMP
+INTEGER :: NN, K, J, IPJ
+REAL :: TEMP
 !
 ! LOCAL PARAMETERS -
 !
@@ -2862,10 +2835,9 @@ END SUBROUTINE RORDER
 
 SUBROUTINE DORDER (A, IP, N)
 IMPLICIT NONE
-INTENT(IN) N
-INTENT(INOUT) A, IP
-INTEGER N, IP(N)
-DOUBLE PRECISION A(N)
+INTEGER, INTENT(IN) :: N
+INTEGER, INTENT(INOUT) :: IP(N)
+DOUBLE PRECISION, INTENT(INOUT) :: A(N)
 !
 !***********************************************************
 !
@@ -2890,8 +2862,8 @@ DOUBLE PRECISION A(N)
 !
 !***********************************************************
 !
-INTEGER NN, K, J, IPJ
-DOUBLE PRECISION TEMP
+INTEGER :: NN, K, J, IPJ
+DOUBLE PRECISION :: TEMP
 !
 ! LOCAL PARAMETERS -
 !
@@ -2938,9 +2910,8 @@ END SUBROUTINE DORDER
 
 REAL function CBRT (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL R
+REAL, INTENT(IN) :: X
+REAL :: R
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
@@ -2957,11 +2928,11 @@ END FUNCTION CBRT
 
 double precision function DCBRT (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, R
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: R
 !
 IF (X) 30, 10, 20
 10 DCBRT = 0.D0
@@ -2976,9 +2947,8 @@ END FUNCTION DCBRT
 
 FUNCTION ARTNQ(Y,X)
 IMPLICIT NONE
-INTENT(IN) X, Y
-REAL X, Y
-REAL ARTNQ
+REAL, INTENT(IN) :: X, Y
+REAL :: ARTNQ
 IF (X) 1,2,5
 1 ARTNQ=ATAN(Y/X)+3.1415926535898
 RETURN
@@ -2998,8 +2968,7 @@ END FUNCTION ARTNQ
 
 double precision function DARTNQ(Y,X)
 IMPLICIT NONE
-INTENT(IN) X, Y
-DOUBLE PRECISION X,Y
+DOUBLE PRECISION, INTENT(IN) :: X, Y
 IF (X) 1,2,5
 1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
 RETURN
@@ -3019,9 +2988,8 @@ END FUNCTION DARTNQ
 
 REAL function CPABS(X, Y)
 IMPLICIT NONE
-INTENT(IN) X, Y
-REAL X, Y
-REAL A
+REAL, INTENT(IN) :: X, Y
+REAL :: A
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
 !     --------------------------------------
@@ -3039,12 +3007,11 @@ END FUNCTION CPABS
 
 double precision function DCPABS(X, Y)
 IMPLICIT NONE
-INTENT(IN) X, Y
-DOUBLE PRECISION X, Y
+DOUBLE PRECISION, INTENT(IN) :: X, Y
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
 !     --------------------------------------
-DOUBLE PRECISION A
+DOUBLE PRECISION :: A
 !
 IF (DABS(X) .LE. DABS(Y)) GO TO 10
    A = Y/X
@@ -3060,10 +3027,9 @@ END FUNCTION DCPABS
 
 SUBROUTINE CREC (X, Y, U, V)
 IMPLICIT NONE
-INTENT(IN) X, Y
-INTENT(INOUT) U, V
-REAL U, V, X, Y
-REAL D, T
+REAL, INTENT(INOUT) :: U, V
+REAL, INTENT(IN) :: X, Y
+REAL :: D, T
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
@@ -3082,13 +3048,12 @@ END SUBROUTINE CREC
 
 SUBROUTINE DCREC (X, Y, U, V)
 IMPLICIT NONE
-INTENT(IN) X, Y
-INTENT(INOUT) U, V
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, Y, U, V
-DOUBLE PRECISION D, T
+DOUBLE PRECISION, INTENT(IN) :: X, Y
+DOUBLE PRECISION, INTENT(INOUT) :: U, V
+DOUBLE PRECISION :: D, T
 !
 IF (DABS(X) .GT. DABS(Y)) GO TO 10
    T = X/Y
@@ -3105,12 +3070,11 @@ END SUBROUTINE DCREC
 
 COMPLEX function CDIV (A, B)
 IMPLICIT NONE
-INTENT(IN) A, B
-REAL AI, AR, BI, BR, D, T, U, V
+REAL :: AI, AR, BI, BR, D, T, U, V
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION A/B WHERE B IS NONZERO
 !-----------------------------------------------------------------------
-COMPLEX A, B
+COMPLEX, INTENT(IN) :: A, B
 !
 AR = REAL(A)
 AI = AIMAG(A)
@@ -3134,14 +3098,13 @@ END FUNCTION CDIV
 
 SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
 IMPLICIT NONE
-INTENT(IN) AI, AR, BI, BR
-INTENT(INOUT) CI, CR
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 !-----------------------------------------------------------------------
-DOUBLE PRECISION AR, AI, BR, BI, CR, CI
-DOUBLE PRECISION D, T, U, V
-DOUBLE PRECISION DPMPAR
+DOUBLE PRECISION, INTENT(IN) :: AR, AI, BR, BI
+DOUBLE PRECISION, INTENT(INOUT) :: CR, CI
+DOUBLE PRECISION :: D, T, U, V
+DOUBLE PRECISION :: DPMPAR
 !
 IF (DABS(BR) .LE. DABS(BI)) GO TO 10
 T = BI/BR
@@ -3170,9 +3133,8 @@ END SUBROUTINE CDIVID
 
 SUBROUTINE DCSQRT (Z, W)
 IMPLICIT NONE
-INTENT(IN) Z
-INTENT(INOUT) W
-DOUBLE PRECISION Z(2), W(2)
+DOUBLE PRECISION, INTENT(IN) :: Z(2)
+DOUBLE PRECISION, INTENT(INOUT) :: W(2)
 ! ----------------------------------------------------------------------
 !        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
 !
@@ -3183,8 +3145,8 @@ DOUBLE PRECISION Z(2), W(2)
 !     PARTS OF THE COMPLEX NUMBER Z, AND THAT W(1) AND W(2) ARE
 !     THE REAL AND IMAGINARY PARTS OF W.
 ! ----------------------------------------------------------------------
-DOUBLE PRECISION X, Y, R
-DOUBLE PRECISION DCPABS
+DOUBLE PRECISION :: X, Y, R
+DOUBLE PRECISION :: DCPABS
 !
 X = Z(1)
 Y = Z(2)
@@ -3220,9 +3182,8 @@ END SUBROUTINE DCSQRT
 
 SUBROUTINE POCA(R,A,X,Y)
 IMPLICIT NONE
-INTENT(IN) A, R
-INTENT(OUT) X, Y
-REAL A, R, X, Y
+REAL, INTENT(IN) :: A, R
+REAL, INTENT(OUT) :: X, Y
 X=R*COS(A)
 Y=R*SIN(A)
 RETURN
@@ -3230,10 +3191,9 @@ END SUBROUTINE POCA
 
 SUBROUTINE CAPO(X,Y,R,THETA)
 IMPLICIT NONE
-INTENT(IN) X, Y
-INTENT(INOUT) R, THETA
-REAL R, THETA, X, Y
-REAL A
+REAL, INTENT(INOUT) :: R, THETA
+REAL, INTENT(IN) :: X, Y
+REAL :: A
 IF (ABS(X).LE.ABS(Y)) GO TO 10
 A=Y/X
 R=ABS(X)*SQRT(1.0+A*A)
@@ -3251,10 +3211,11 @@ END SUBROUTINE CAPO
 
 SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
 IMPLICIT NONE
-INTENT(IN) A, X1, Y1
-INTENT(OUT) X2, Y2
-REAL A, X1, X2, Y1, Y2
-REAL COSA, SINA
+REAL, INTENT(IN) :: A, X1
+REAL, INTENT(OUT) :: X2
+REAL, INTENT(IN) :: Y1
+REAL, INTENT(OUT) :: Y2
+REAL :: COSA, SINA
 SINA=SIN(A)
 COSA=COS(A)
 X2= X1*COSA+Y1*SINA
@@ -3264,9 +3225,8 @@ END SUBROUTINE ROTA
 
 SUBROUTINE SROTG(SA,SB,SC,SS)
 IMPLICIT NONE
-INTENT(INOUT) SA, SB, SC, SS
-REAL SA, SB, SC, SS
-REAL R, U, V
+REAL, INTENT(INOUT) :: SA, SB, SC, SS
+REAL :: R, U, V
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3341,7 +3301,6 @@ END SUBROUTINE SROTG
 
 SUBROUTINE DROTG(DA,DB,DC,DS)
 IMPLICIT NONE
-INTENT(INOUT) DA, DB, DC, DS
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3366,7 +3325,8 @@ INTENT(INOUT) DA, DB, DC, DS
 !
 ! ------------------------------------------------------------------
 !
-DOUBLE PRECISION DA, DB, DC, DS, U, V, R
+DOUBLE PRECISION, INTENT(INOUT) :: DA, DB, DC, DS
+DOUBLE PRECISION :: U, V, R
 IF (DABS(DA) .LE. DABS(DB)) GO TO 10
 !
 ! *** HERE DABS(DA) .GT. DABS(DB) ***
@@ -3417,10 +3377,9 @@ END SUBROUTINE DROTG
 
 SUBROUTINE ROT3 (A, THETA)
 IMPLICIT NONE
-INTENT(INOUT) THETA
-REAL A, THETA
-REAL PIHALF, R, T, U, V
-DIMENSION A(3,3), THETA(3)
+REAL :: A(3,3)
+REAL, INTENT(INOUT) :: THETA(3)
+REAL :: PIHALF, R, T, U, V
 DATA PIHALF/1.5707963267949/
 !     --------------------
 IF (ABS(A(1,1)) .GT. ABS(A(2,1))) GO TO 10
@@ -3461,10 +3420,9 @@ END SUBROUTINE ROT3
 
 SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
 IMPLICIT NONE
-INTENT(IN) XK, YK, ZK
-INTENT(OUT) CY, SY
-INTENT(INOUT) CX, SX
-REAL XK, YK, ZK, CX, SX, CY, SY
+REAL, INTENT(IN) :: XK, YK, ZK
+REAL, INTENT(INOUT) :: CX, SX
+REAL, INTENT(OUT) :: CY, SY
 !
 !***********************************************************
 !
@@ -3510,15 +3468,14 @@ END SUBROUTINE CONSTR
 
 REAL function ANG (N, X, Y)
 IMPLICIT NONE
-INTENT(IN) N, X, Y
-INTEGER N
-INTEGER I
-REAL D, RX, RY
-REAL SNRM2
+INTEGER, INTENT(IN) :: N
+INTEGER :: I
+REAL :: D, RX, RY
+REAL :: SNRM2
 !-----------------------------------------------------------------------
 !           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
 !-----------------------------------------------------------------------
-REAL X(N), Y(N)
+REAL, INTENT(IN) :: X(N), Y(N)
 !
 IF (N .LT. 2) GO TO 30
 RX = SNRM2(N, X, 1)
@@ -3549,9 +3506,8 @@ END FUNCTION ANG
 
 REAL function SIN0 (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL A0, A1, A2, A3, A4, A5, A6, T
+REAL, INTENT(IN) :: X
+REAL :: A0, A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
 !          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -3568,9 +3524,8 @@ END FUNCTION SIN0
 
 REAL function COS0 (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL A1, A2, A3, A4, A5, A6, T
+REAL, INTENT(IN) :: X
+REAL :: A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
 !          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -3585,11 +3540,10 @@ END FUNCTION COS0
 
 REAL function SIN1 (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-INTEGER MAX, N
-REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
-INTEGER IPMPAR
+REAL, INTENT(IN) :: X
+INTEGER :: MAX, N
+REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF SIN(X*PI)
 !-----------------------------------------------------------------------
@@ -3642,11 +3596,10 @@ END FUNCTION SIN1
 
 REAL function COS1 (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-INTEGER MAX, N
-REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
-INTEGER IPMPAR
+REAL, INTENT(IN) :: X
+INTEGER :: MAX, N
+REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF COS(X*PI)
 !-----------------------------------------------------------------------
@@ -3699,9 +3652,8 @@ END FUNCTION COS1
 
 double precision function DSIN1 (X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER MAX, N
-INTEGER IPMPAR
+INTEGER :: MAX, N
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
@@ -3714,12 +3666,12 @@ INTEGER IPMPAR
 !     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION A, PI, T, W
-DOUBLE PRECISION A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
-&A11, A12, A13
-DOUBLE PRECISION B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, &
-&B11, B12, B13
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: A, PI, T, W
+DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, &
+&A12, A13
+DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, &
+&B12, B13
 !------------------------
 DATA PI /3.141592653589793238462643383279502884197D+00/
 !------------------------
@@ -3797,9 +3749,8 @@ END FUNCTION DSIN1
 
 double precision function DCOS1 (X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER MAX, N
-INTEGER IPMPAR
+INTEGER :: MAX, N
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF COS(PI*X)
@@ -3812,12 +3763,12 @@ INTEGER IPMPAR
 !     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION A, PI, T, W
-DOUBLE PRECISION A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
-&A11, A12, A13
-DOUBLE PRECISION B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, &
-&B11, B12, B13
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: A, PI, T, W
+DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, &
+&A12, A13
+DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, &
+&B12, B13
 !------------------------
 DATA PI /3.141592653589793238462643383279502884197D+00/
 !------------------------
@@ -3895,13 +3846,13 @@ END FUNCTION DCOS1
 
 SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
 IMPLICIT NONE
-INTENT(IN) ISW, X
-INTENT(INOUT) COSHM, SINHM
-REAL AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, SP4 &
-&, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
+REAL :: AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, &
+&SP4, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
 !
-INTEGER ISW
-REAL SINHM,COSHM,X,CUT(5)
+INTEGER, INTENT(IN) :: ISW
+REAL, INTENT(INOUT) :: SINHM, COSHM
+REAL, INTENT(IN) :: X
+REAL :: CUT(5)
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -4001,10 +3952,9 @@ END SUBROUTINE SNHCSH
 
 REAL function ESUM (MU, X)
 IMPLICIT NONE
-INTENT(IN) MU, X
-INTEGER MU
-REAL X
-REAL W
+INTEGER, INTENT(IN) :: MU
+REAL, INTENT(IN) :: X
+REAL :: W
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
@@ -4029,12 +3979,12 @@ END FUNCTION ESUM
 
 double precision function DESUM (MU, X)
 IMPLICIT NONE
-INTENT(IN) MU, X
-INTEGER MU
+INTEGER, INTENT(IN) :: MU
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, W
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: W
 !
 IF (X .GT. 0.D0) GO TO 10
 !
@@ -4057,9 +4007,8 @@ END FUNCTION DESUM
 
 REAL function REXP (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL E, P1, P2, Q1, Q2, Q3, Q4
+REAL, INTENT(IN) :: X
+REAL :: E, P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -4085,13 +4034,13 @@ END FUNCTION REXP
 
 double precision function DREXP (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, E, W, Z
-DOUBLE PRECISION A0, A1, A2, A3, A4, B1, B2, B3, B4
-DOUBLE PRECISION C1, C2, C3, C4, C5
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: E, W, Z
+DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
+DOUBLE PRECISION :: C1, C2, C3, C4, C5
 !---------------------------
 DATA A0/ .248015873015873015873016D-04/, &
 &A1/-.344452080605731005808147D-05/, &
@@ -4143,10 +4092,9 @@ END FUNCTION DREXP
 
 SUBROUTINE REXP1 (X, E, W)
 IMPLICIT NONE
-INTENT(IN) X
-INTENT(INOUT) E, W
-REAL E, W, X
-REAL P1, P2, Q1, Q2, Q3, Q4
+REAL, INTENT(INOUT) :: E, W
+REAL, INTENT(IN) :: X
+REAL :: P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4179,9 +4127,6 @@ END SUBROUTINE REXP1
 
 SUBROUTINE DREXP1 (X, E, W)
 IMPLICIT NONE
-INTENT(IN) X
-INTENT(OUT) W
-INTENT(INOUT) E
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4191,9 +4136,12 @@ INTENT(INOUT) E
 !     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, E, W, Z
-DOUBLE PRECISION A0, A1, A2, A3, A4, B1, B2, B3, B4
-DOUBLE PRECISION C1, C2, C3, C4, C5
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION, INTENT(INOUT) :: E
+DOUBLE PRECISION, INTENT(OUT) :: W
+DOUBLE PRECISION :: Z
+DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
+DOUBLE PRECISION :: C1, C2, C3, C4, C5
 !---------------------------
 DATA A0/ .248015873015873015873016D-04/, &
 &A1/-.344452080605731005808147D-05/, &
@@ -4247,9 +4195,8 @@ END SUBROUTINE DREXP1
 
 REAL function ALNREL(A)
 IMPLICIT NONE
-INTENT(IN) A
-REAL A
-REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
+REAL, INTENT(IN) :: A
+REAL :: P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4274,13 +4221,13 @@ END FUNCTION ALNREL
 
 double precision function DLNREL (A)
 IMPLICIT NONE
-INTENT(IN) A
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A, T, T2, W, Z
-DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION C1, C2, C3, C4, C5
+DOUBLE PRECISION, INTENT(IN) :: A
+DOUBLE PRECISION :: T, T2, W, Z
+DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION :: C1, C2, C3, C4, C5
 !-------------------------
 DATA P0 / .7692307692307692307680D-01/, &
 &P1 /-.1505958055914600184836D+00/, &
@@ -4327,9 +4274,8 @@ END FUNCTION DLNREL
 
 REAL function RLOG(X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
+REAL, INTENT(IN) :: X
+REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
@@ -4380,9 +4326,8 @@ END FUNCTION RLOG
 
 REAL function RLOG1(X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
+REAL, INTENT(IN) :: X
+REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -4433,14 +4378,13 @@ END FUNCTION RLOG1
 
 double precision function DRLOG (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION A, B, R, T, U, UP2, W, W1, Z
-DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION C1, C2, C3, C4, C5
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
+DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION :: C1, C2, C3, C4, C5
 !-------------------------
 !     A = DRLOG (0.7)
 !     B = DRLOG (4/3)
@@ -4514,14 +4458,13 @@ END FUNCTION DRLOG
 
 double precision function DRLOG1 (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION A, B, R, T, U, UP2, W, W1, Z
-DOUBLE PRECISION P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION C1, C2, C3, C4, C5
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
+DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
+DOUBLE PRECISION :: C1, C2, C3, C4, C5
 !-------------------------
 !     A = DRLOG (0.7)
 !     B = DRLOG (4/3)
@@ -4595,14 +4538,13 @@ END FUNCTION DRLOG1
 
 SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
 IMPLICIT NONE
-INTENT(IN) N, X, X0, Y, Y0
-INTENT(INOUT) L, M
-INTEGER L, M, N
-REAL X0, Y0
-INTEGER I, N0
-REAL ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
-REAL SPMPAR
-REAL X(N), Y(N)
+INTEGER, INTENT(INOUT) :: L, M
+INTEGER, INTENT(IN) :: N
+REAL, INTENT(IN) :: X0, Y0
+INTEGER :: I, N0
+REAL :: ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
+REAL :: SPMPAR
+REAL, INTENT(IN) :: X(N), Y(N)
 !-----------------------------------------------------------------------
 !     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
 !     (I = 1,...,N) TAKEN IN THIS ORDER. IT IS ASSUMED THAT THE
@@ -4680,22 +4622,22 @@ END SUBROUTINE LOCPT
 
 SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
 IMPLICIT NONE
-INTENT(IN) A, B, M, N, X, Y
-INTENT(OUT) NUM
-INTENT(INOUT) IERR, U, V
-INTEGER IERR, M, N, NUM
-INTEGER I, IND, NM1
-REAL D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX &
-&, TMIN, TOL, TOL0
-REAL SPMPAR
+INTEGER, INTENT(INOUT) :: IERR
+INTEGER, INTENT(IN) :: M, N
+INTEGER, INTENT(OUT) :: NUM
+INTEGER :: I, IND, NM1
+REAL :: D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX, &
+&TMIN, TOL, TOL0
+REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !
 !                 INTERSECTION OF A STRIGHT LINE
 !                       AND POLYGONAL PATH
 !
 !-----------------------------------------------------------------------
-REAL A(2), B(2), X(N), Y(N), U(M), V(M)
-REAL K, KI
+REAL, INTENT(IN) :: A(2), B(2), X(N), Y(N)
+REAL, INTENT(INOUT) :: U(M), V(M)
+REAL :: K, KI
 !----------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -4848,20 +4790,20 @@ END SUBROUTINE PFIND
 
 SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
 IMPLICIT NONE
-INTENT(IN) M
-INTENT(INOUT) BX, BY, K, N, VX, VY, X, Y
-INTEGER K, M, N
-INTEGER I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN &
-&, LSAV, MM1, MP1, NN
-REAL DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN, YMAX &
-&, YMIN
-REAL SPMPAR
+INTEGER, INTENT(INOUT) :: K
+INTEGER, INTENT(IN) :: M
+INTEGER, INTENT(INOUT) :: N
+INTEGER :: I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN, &
+&LSAV, MM1, MP1, NN
+REAL :: DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN, &
+&YMAX, YMIN
+REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
 !-----------------------------------------------------------------------
-REAL X(M), Y(M)
-REAL BX(*), BY(*), VX(*), VY(*)
-LOGICAL IBEG
+REAL, INTENT(INOUT) :: X(M), Y(M)
+REAL, INTENT(INOUT) :: BX(*), BY(*), VX(*), VY(*)
+LOGICAL :: IBEG
 !---------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -5239,11 +5181,10 @@ END SUBROUTINE HULL
 
 REAL function PAREA(X, Y, NB)
 IMPLICIT NONE
-INTENT(IN) NB, X, Y
-INTEGER I, N, NM1
-REAL A
-INTEGER NB
-REAL X(NB), Y(NB)
+INTEGER :: I, N, NM1
+REAL :: A
+INTEGER, INTENT(IN) :: NB
+REAL, INTENT(IN) :: X(NB), Y(NB)
 !
 !*****************************************************************
 !
@@ -5277,10 +5218,11 @@ END FUNCTION PAREA
 
 SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
 IMPLICIT NONE
-INTENT(IN) M, N, NUM, PR
-INTENT(INOUT) AR, IND, IWK, NB, S
-INTEGER IND, M, N, NB, NUM
-INTEGER I, II, NP1
+INTEGER, INTENT(INOUT) :: IND
+INTEGER, INTENT(IN) :: M, N
+INTEGER, INTENT(INOUT) :: NB
+INTEGER, INTENT(IN) :: NUM
+INTEGER :: I, II, NP1
 !
 ! SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
 ! DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
@@ -5343,8 +5285,9 @@ INTEGER I, II, NP1
 !
 !     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
 !
-INTEGER PR(*), AR(M), S(N), IWK(NUM)
-INTEGER S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
+INTEGER, INTENT(IN) :: PR(*)
+INTEGER, INTENT(INOUT) :: AR(M), S(N), IWK(NUM)
+INTEGER :: S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
 !
 NP1 = N + 1
 IF (IND .LT. 0 .OR. IND .GT. 3) GO TO 20
@@ -5386,13 +5329,13 @@ END SUBROUTINE HC
 SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR, &
 &VC, P, SUBR, RBUS, TOR, JR, K, IND0)
 IMPLICIT NONE
-INTENT(IN) M, N, NP1, PR
-INTENT(INOUT) AC, AR, IND, IND0, JR, K, NB, P, PC, RBUS, S, SUBR
-INTENT(INOUT) TOR, VC, VR
-INTEGER IND, IND0, JR, K, M, N, NB, NP1
-INTEGER I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, JSUBR &
-&, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
-REAL DENS, SCORE
+INTEGER, INTENT(INOUT) :: IND, IND0, JR, K
+INTEGER, INTENT(IN) :: M, N
+INTEGER, INTENT(INOUT) :: NB
+INTEGER, INTENT(IN) :: NP1
+INTEGER :: I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, &
+&JSUBR, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
+REAL :: DENS, SCORE
 !
 ! MEANING OF THE WORK ARRAYS ...
 !
@@ -5430,8 +5373,9 @@ REAL DENS, SCORE
 ! IND0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
 !        THERE WERE NO INPUT ERRORS.
 !
-INTEGER PR(NP1), PC(NP1), AR(M), AC(M), S(N), VR(N), VC(N), &
-&P(N), SUBR(N), RBUS(N), TOR(N)
+INTEGER, INTENT(IN) :: PR(NP1)
+INTEGER, INTENT(INOUT) :: PC(NP1), AR(M), AC(M), S(N), VR(N), &
+&VC(N), P(N), SUBR(N), RBUS(N), TOR(N)
 !
 NBO = NB
 NB = 0
@@ -5724,11 +5668,13 @@ END SUBROUTINE HC1
 SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K, &
 &JR, M, NP1)
 IMPLICIT NONE
-INTENT(IN) AR, I, J, JR, K, M, N, NP1, PR, SUBR
-INTENT(OUT) I1, NP
-INTENT(INOUT) I2, RBUS, S
-INTEGER I, I1, I2, J, JR, K, M, N, NP, NP1
-INTEGER JA, K1, L, L1, L2
+INTEGER, INTENT(IN) :: I
+INTEGER, INTENT(OUT) :: I1
+INTEGER, INTENT(INOUT) :: I2
+INTEGER, INTENT(IN) :: J, JR, K, M, N
+INTEGER, INTENT(OUT) :: NP
+INTEGER, INTENT(IN) :: NP1
+INTEGER :: JA, K1, L, L1, L2
 !
 ! SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
 ! VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
@@ -5742,7 +5688,10 @@ INTEGER JA, K1, L, L1, L2
 !    = -1  IF THE PATH CONTAINS  N  VERTICES BUT ARC (I2,I1)
 !          DOES NOT EXIST.
 !
-INTEGER SUBR(N), RBUS(N), AR(M), PR(NP1), S(N)
+INTEGER, INTENT(IN) :: SUBR(N)
+INTEGER, INTENT(INOUT) :: RBUS(N)
+INTEGER, INTENT(IN) :: AR(M), PR(NP1)
+INTEGER, INTENT(INOUT) :: S(N)
 !
 NP = 0
 L = 1
@@ -5790,14 +5739,14 @@ END SUBROUTINE IPATH
 
 SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
 IMPLICIT NONE
-INTENT(IN) I1, K1, M, N, NP1, P1, P2
-INTENT(INOUT) A1, A2, V1, V2
-INTEGER I1, K1, M, N, NP1
-INTEGER IA, J, J1, J2, L, L1, L2
+INTEGER, INTENT(IN) :: I1, K1, M, N, NP1
+INTEGER :: IA, J, J1, J2, L, L1, L2
 !
 ! FORWARD STEP UPDATING
 !
-INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 !
 J1 = P1(I1) + 1
 J2 = P1(I1+1)
@@ -5819,14 +5768,14 @@ END SUBROUTINE FUPD
 
 SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
 IMPLICIT NONE
-INTENT(IN) II, K1, K2, M, N, NP1, P1, P2
-INTENT(INOUT) A1, A2, V1, V2
-INTEGER II, K1, K2, M, N, NP1
-INTEGER IA, L, L1, L2, LL, LL1, LL2
+INTEGER, INTENT(IN) :: II, K1, K2, M, N, NP1
+INTEGER :: IA, L, L1, L2, LL, LL1, LL2
 !
 ! BACKTRACKING STEP UPDATING
 !
-INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 !
 L1 = P1(II) + 1
 L2 = P1(II+1)
@@ -5849,14 +5798,15 @@ END SUBROUTINE BUPD
 
 SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
 IMPLICIT NONE
-INTENT(IN) IB, K1, L, M, N, NP1, P1, P2
-INTENT(INOUT) A1, A2, IA, V1, V2
-INTEGER IA, IB, K1, L, M, N, NP1
-INTEGER IARC, J1, J2, JJ, M1, M2, MM
+INTEGER, INTENT(INOUT) :: IA
+INTEGER, INTENT(IN) :: IB, K1, L, M, N, NP1
+INTEGER :: IARC, J1, J2, JJ, M1, M2, MM
 !
 ! UPDATING FOR IMPLIED ARC
 !
-INTEGER A1(M), A2(M), P1(NP1), P2(NP1), V1(N), V2(N)
+INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 !
 M1 = P1(IB) + 1
 M2 = P1(IB+1)
@@ -5885,10 +5835,12 @@ END SUBROUTINE IUPD
 SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, &
 &NP1)
 IMPLICIT NONE
-INTENT(IN) IA, IB, K1, M, N, NP1, PC, PR
-INTENT(INOUT) AC, AR, JJ, LL, VC, VR
-INTEGER IA, IB, JJ, K1, LL, M, N, NP1
-INTEGER J1, J2, L1, L2
+INTEGER, INTENT(IN) :: IA, IB
+INTEGER, INTENT(INOUT) :: JJ
+INTEGER, INTENT(IN) :: K1
+INTEGER, INTENT(INOUT) :: LL
+INTEGER, INTENT(IN) :: M, N, NP1
+INTEGER :: J1, J2, L1, L2
 !
 ! SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
 !
@@ -5902,7 +5854,9 @@ INTEGER J1, J2, L1, L2
 ! LL =  LOCATION OF THE ELEMENT OF  AC  CORRESPONDING TO THE
 !       REMOVED ARC (DEFINED ONLY IF  JJ .GT. 0 ).
 !
-INTEGER AR(M), AC(M), PR(NP1), PC(NP1), VR(N), VC(N)
+INTEGER, INTENT(INOUT) :: AR(M), AC(M)
+INTEGER, INTENT(IN) :: PR(NP1), PC(NP1)
+INTEGER, INTENT(INOUT) :: VR(N), VC(N)
 !
 J1 = PR(IA) + 1
 J2 = PR(IA+1)
@@ -5932,11 +5886,9 @@ END SUBROUTINE RARC
 
 SUBROUTINE CERF (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
-INTEGER I
-REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
+INTEGER, INTENT(IN) :: MO
+INTEGER :: I
+REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -5947,8 +5899,9 @@ REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
 !                        W = ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX Z, W
-REAL CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
+COMPLEX, INTENT(IN) :: Z
+COMPLEX, INTENT(INOUT) :: W
+REAL :: CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
@@ -6090,12 +6043,10 @@ END SUBROUTINE CERF
 
 SUBROUTINE CERFC (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
-INTEGER I
-REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
-REAL EXPARG
+INTEGER, INTENT(IN) :: MO
+INTEGER :: I
+REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
+REAL :: EXPARG
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6106,8 +6057,9 @@ REAL EXPARG
 !           W = EXP(X*X)*ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX Z, W
-REAL CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
+COMPLEX, INTENT(IN) :: Z
+COMPLEX, INTENT(INOUT) :: W
+REAL :: CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
@@ -6271,13 +6223,12 @@ END SUBROUTINE CERFC
 
 REAL function ERF (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL AX, BOT, C, T, TOP, X2
+REAL, INTENT(IN) :: X
+REAL :: AX, BOT, C, T, TOP, X2
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL ERROR FUNCTION
 !-----------------------------------------------------------------------
-REAL A(5),B(3),P(8),Q(8),R(5),S(4)
+REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
 !-------------------------
 DATA C /.564189583547756/
 !-------------------------
@@ -6335,15 +6286,14 @@ END FUNCTION ERF
 
 REAL function ERFC (X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-REAL AX, BOT, C, E, T, TOP
-REAL EXPARG
+REAL, INTENT(IN) :: X
+REAL :: AX, BOT, C, E, T, TOP
+REAL :: EXPARG
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
-REAL A(5),B(3),P(8),Q(8),R(5),S(4)
-DOUBLE PRECISION W
+REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
+DOUBLE PRECISION :: W
 !-------------------------
 DATA C /.564189583547756/
 !-------------------------
@@ -6423,19 +6373,18 @@ END FUNCTION ERFC
 
 REAL function ERFC1 (IND, X)
 IMPLICIT NONE
-INTENT(IN) IND, X
-REAL EXPARG
-INTEGER IND
-REAL X
-REAL AX, BOT, C, E, T, TOP
+REAL :: EXPARG
+INTEGER, INTENT(IN) :: IND
+REAL, INTENT(IN) :: X
+REAL :: AX, BOT, C, E, T, TOP
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !
 !          ERFC1(IND,X) = ERFC(X)            IF IND = 0
 !          ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
 !-----------------------------------------------------------------------
-REAL A(5),B(3),P(8),Q(8),R(5),S(4)
-DOUBLE PRECISION W
+REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
+DOUBLE PRECISION :: W
 !-------------------------
 DATA C /.564189583547756/
 !-------------------------
@@ -6521,9 +6470,7 @@ END FUNCTION ERFC1
 
 SUBROUTINE DCERF (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
+INTEGER, INTENT(IN) :: MO
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -6534,13 +6481,15 @@ INTEGER MO
 !                       W = ERFC(Z)   OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION Z(2), W(2)
-DOUBLE PRECISION M, N, N2, N4, NP1
-DOUBLE PRECISION C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-DOUBLE PRECISION A0(2), AN(2), B0(2), BN(2)
-DOUBLE PRECISION G0(2), GN(2), H0(2), HN(2)
-DOUBLE PRECISION QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), WN(2)
-DOUBLE PRECISION ANORM, DPMPAR
+DOUBLE PRECISION, INTENT(IN) :: Z(2)
+DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+DOUBLE PRECISION :: M, N, N2, N4, NP1
+DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
+DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
+DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), &
+&WN(2)
+DOUBLE PRECISION :: ANORM, DPMPAR
 !------------------------
 ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 !------------------------
@@ -6803,9 +6752,7 @@ END SUBROUTINE DCERF
 
 SUBROUTINE DCERFC (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
+INTEGER, INTENT(IN) :: MO
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6816,13 +6763,15 @@ INTEGER MO
 !           W = DEXP(X*X)*ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION Z(2), W(2)
-DOUBLE PRECISION M, N, N2, N4, NP1
-DOUBLE PRECISION C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-DOUBLE PRECISION A0(2), AN(2), B0(2), BN(2)
-DOUBLE PRECISION G0(2), GN(2), H0(2), HN(2)
-DOUBLE PRECISION QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), WN(2)
-DOUBLE PRECISION ANORM, DPMPAR, DXPARG
+DOUBLE PRECISION, INTENT(IN) :: Z(2)
+DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+DOUBLE PRECISION :: M, N, N2, N4, NP1
+DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
+DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
+DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), &
+&WN(2)
+DOUBLE PRECISION :: ANORM, DPMPAR, DXPARG
 !------------------------
 ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 !------------------------
@@ -7090,17 +7039,16 @@ END SUBROUTINE DCERFC
 
 SUBROUTINE ERFCM2 (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
-INTEGER J, N
+INTEGER, INTENT(IN) :: MO
+INTEGER :: J, N
 !-----------------------------------------------------------------------
 !           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
-DOUBLE PRECISION Z(2), W(2)
-DOUBLE PRECISION A(63), C, E, EPS, H(2), T(2), TOL, X, Y
-DOUBLE PRECISION ANORM, DPMPAR
+DOUBLE PRECISION, INTENT(IN) :: Z(2)
+DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+DOUBLE PRECISION :: A(63), C, E, EPS, H(2), T(2), TOL, X, Y
+DOUBLE PRECISION :: ANORM, DPMPAR
 !------------------------------
 ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 !------------------------------
@@ -7232,14 +7180,15 @@ END SUBROUTINE ERFCM2
 
 double precision function DERF (X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER I, K
+INTEGER :: I, K
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
 !-----------------------------------------------------------------------
-DOUBLE PRECISION AX, T, X, W
-DOUBLE PRECISION A(21)
-DOUBLE PRECISION DERFC0
+DOUBLE PRECISION :: AX, T
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: W
+DOUBLE PRECISION :: A(21)
+DOUBLE PRECISION :: DERFC0
 !-------------------------------
 DATA A(1)  / .1283791670955125738961589031215D+00/, &
 &A(2)  /-.3761263890318375246320529677070D+00/, &
@@ -7292,14 +7241,14 @@ END FUNCTION DERF
 
 double precision function DERFC (X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER I, K
+INTEGER :: I, K
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, AX, T, W
-DOUBLE PRECISION A(21)
-DOUBLE PRECISION DERFC0, DXPARG
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: AX, T, W
+DOUBLE PRECISION :: A(21)
+DOUBLE PRECISION :: DERFC0, DXPARG
 !-------------------------------
 DATA A(1)  / .1283791670955125738961589031215D+00/, &
 &A(2)  /-.3761263890318375246320529677070D+00/, &
@@ -7358,9 +7307,8 @@ END FUNCTION DERFC
 
 double precision function DERFC1 (IND, X)
 IMPLICIT NONE
-INTENT(IN) IND, X
-INTEGER IND
-INTEGER I, K
+INTEGER, INTENT(IN) :: IND
+INTEGER :: I, K
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -7369,9 +7317,10 @@ INTEGER I, K
 !          DERFC1(IND,X) = EXP(X*X)*ERFC(X)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, AX, T, W
-DOUBLE PRECISION A(21)
-DOUBLE PRECISION DERFC0, DXPARG
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: AX, T, W
+DOUBLE PRECISION :: A(21)
+DOUBLE PRECISION :: DERFC0, DXPARG
 !-------------------------------
 DATA A(1)  / .1283791670955125738961589031215D+00/, &
 &A(2)  /-.3761263890318375246320529677070D+00/, &
@@ -7441,7 +7390,6 @@ END FUNCTION DERFC1
 
 double precision function DERFC0 (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -7452,18 +7400,17 @@ INTENT(IN) X
 !        DAHLGREN, VIRGINIA
 !        APRIL 1992
 !-------------------------------
-DOUBLE PRECISION X, T, U, V, Z, RPINV
-DOUBLE PRECISION P0, P1, P2, P3, P4, P5, P6, P7, &
-&Q1, Q2, Q3, Q4, Q5, Q6, Q7
-DOUBLE PRECISION R0, R1, R2, R3, R4, R5, R6, R7, R8
-DOUBLE PRECISION A0, A1, A2, A3, A4, A5, A6, A7, A8, &
-&B1, B2, B3, B4, B5, B6, B7, B8, B9, &
-&B10, B11
-DOUBLE PRECISION C0, C1, C2, C3, C4, C5, C6, C7, C8, &
-&D1, D2, D3, D4, D5, D6, D7, D8, D9
-DOUBLE PRECISION E0, E1, E2, E3
-DOUBLE PRECISION S1, S2, S3, S4, S5, S6, S7, S8, S9, &
-&S10, S11
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: T, U, V, Z, RPINV
+DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, P6, P7, Q1, Q2, Q3, &
+&Q4, Q5, Q6, Q7
+DOUBLE PRECISION :: R0, R1, R2, R3, R4, R5, R6, R7, R8
+DOUBLE PRECISION :: A0, A1, A2, A3, A4, A5, A6, A7, A8, B1, B2, &
+&B3, B4, B5, B6, B7, B8, B9, B10, B11
+DOUBLE PRECISION :: C0, C1, C2, C3, C4, C5, C6, C7, C8, D1, D2, &
+&D3, D4, D5, D6, D7, D8, D9
+DOUBLE PRECISION :: E0, E1, E2, E3
+DOUBLE PRECISION :: S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11
 !-------------------------------
 !     RPINV = 1/SQRT(PI)
 !-------------------------------
@@ -7606,10 +7553,9 @@ END FUNCTION DERFC0
 
 REAL function ERFI (P, Q)
 IMPLICIT NONE
-INTENT(IN) P, Q
-REAL P, Q
-REAL C, C1, C2, EPS, S, T, V, V1
-REAL SPMPAR
+REAL, INTENT(IN) :: P, Q
+REAL :: C, C1, C2, EPS, S, T, V, V1
+REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !
 !              EVALUATION OF THE INVERSE ERROR FUNCTION
@@ -7624,7 +7570,7 @@ REAL SPMPAR
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 !                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 !-----------------------------------------------------------------------
-REAL A(6),B(6),A1(7),B1(7),A2(9),B2(8),A3(9),B3(6)
+REAL :: A(6), B(6), A1(7), B1(7), A2(9), B2(8), A3(9), B3(6)
 !-----------------------------------------------------------------------
 !     C2 = LN(1.E-100)
 !-----------------------------------------------------------------------
@@ -7729,7 +7675,6 @@ END FUNCTION ERFI
 
 double precision function DERFI (P, Q)
 IMPLICIT NONE
-INTENT(IN) P, Q
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION COMPUTATION OF
@@ -7745,11 +7690,11 @@ INTENT(IN) P, Q
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 !                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 !-----------------------------------------------------------------------
-DOUBLE PRECISION P, Q
-DOUBLE PRECISION C, C1, C2, R, EPS, F, LNQ, S, T, X
-DOUBLE PRECISION A(7), A1(7), A2(7), A3(11), A4(9), &
-&B(7), B1(6), B2(6), B3(10), B4(9)
-DOUBLE PRECISION DPMPAR, DERF, DERFC1
+DOUBLE PRECISION, INTENT(IN) :: P, Q
+DOUBLE PRECISION :: C, C1, C2, R, EPS, F, LNQ, S, T, X
+DOUBLE PRECISION :: A(7), A1(7), A2(7), A3(11), A4(9), B(7), &
+&B1(6), B2(6), B3(10), B4(9)
+DOUBLE PRECISION :: DPMPAR, DERF, DERFC1
 !-----------------------------------------------------------------------
 !     C2 = LN(1.E-100)
 !     R  = SQRT(PI)/2
@@ -7894,14 +7839,13 @@ END FUNCTION DERFI
 
 REAL function AERF (X, H)
 IMPLICIT NONE
-INTENT(IN) H, X
-REAL H, X
-INTEGER J, N, N1
-REAL A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, U, V &
-&, X2, XMH, XPH, Z
-REAL EPSLN
-REAL EXPARG
-REAL SPMPAR
+REAL, INTENT(IN) :: H, X
+INTEGER :: J, N, N1
+REAL :: A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, &
+&U, V, X2, XMH, XPH, Z
+REAL :: EPSLN
+REAL :: EXPARG
+REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
@@ -8025,15 +7969,14 @@ END FUNCTION AERF
 
 double precision function DAERF (X, H)
 IMPLICIT NONE
-INTENT(IN) H, X
-INTEGER J
+INTEGER :: J
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, H
-DOUBLE PRECISION AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, &
-&N, N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
-DOUBLE PRECISION DERF, DERFC, DPMPAR, DEPSLN, DXPARG
+DOUBLE PRECISION, INTENT(IN) :: X, H
+DOUBLE PRECISION :: AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, N, &
+&N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
+DOUBLE PRECISION :: DERF, DERFC, DPMPAR, DEPSLN, DXPARG
 !---------------------
 !     C = 2/SQRT(PI)
 !     P = LN(9*SQRT(PI))
@@ -8156,12 +8099,11 @@ END FUNCTION DAERF
 
 FUNCTION PNDF(X,IND)
 IMPLICIT NONE
-INTENT(IN) IND, X
-INTEGER IND
-REAL X
-REAL A, C, T
-REAL PNDF
-REAL ERFC1
+INTEGER, INTENT(IN) :: IND
+REAL, INTENT(IN) :: X
+REAL :: A, C, T
+REAL :: PNDF
+REAL :: ERFC1
 !     ---------------
 !     A = 1/SQRT(2)
 !     C = SQRT(2/PI)
@@ -8185,13 +8127,12 @@ END FUNCTION PNDF
 
 SUBROUTINE PNI (P, Q, D, W, IERR)
 IMPLICIT NONE
-INTENT(IN) D, P, Q
-INTENT(INOUT) IERR, W
-INTEGER IERR
-REAL D, P, Q, W
-REAL EPS, RT2, T, U, V
-REAL ERFI
-REAL SPMPAR
+INTEGER, INTENT(INOUT) :: IERR
+REAL, INTENT(IN) :: D, P, Q
+REAL, INTENT(INOUT) :: W
+REAL :: EPS, RT2, T, U, V
+REAL :: ERFI
+REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -8243,9 +8184,7 @@ END SUBROUTINE PNI
 
 SUBROUTINE DPNI (P, Q, D, W, IERR)
 IMPLICIT NONE
-INTENT(IN) D, P, Q
-INTENT(INOUT) IERR, W
-INTEGER IERR
+INTEGER, INTENT(INOUT) :: IERR
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -8267,9 +8206,10 @@ INTEGER IERR
 !       IERR = 2  D IS INCORRECT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION P, Q, D, W
-DOUBLE PRECISION EPS, RT2, U, V, T
-DOUBLE PRECISION DPMPAR, DERFI
+DOUBLE PRECISION, INTENT(IN) :: P, Q, D
+DOUBLE PRECISION, INTENT(INOUT) :: W
+DOUBLE PRECISION :: EPS, RT2, U, V, T
+DOUBLE PRECISION :: DPMPAR, DERFI
 !------------------------
 !     RT2 = SQRT(2)
 !------------------------
@@ -8301,8 +8241,7 @@ END SUBROUTINE DPNI
 
 REAL function DAW(X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER I
+INTEGER :: I
 !-----------------------------------------------------------------------
 !
 !     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
@@ -8317,8 +8256,10 @@ INTEGER I
 !     CODY, PACIOREK AND THACHER.
 !
 !-----------------------------------------------------------------------
-REAL P1(9),Q1(9),P2(8),Q2(7),P3(8),Q3(7),P4(7),Q4(6), &
-&FRAC,SUMP,SUMQ,W2,X,Y,XLARGE,XSMALL
+REAL :: P1(9), Q1(9), P2(8), Q2(7), P3(8), Q3(7), P4(7), Q4(6), &
+&FRAC, SUMP, SUMQ, W2
+REAL, INTENT(IN) :: X
+REAL :: Y, XLARGE, XSMALL
 !---------------
 DATA XLARGE/16777216.0/, XSMALL/.59604644775391E-07/
 !---------------
@@ -8446,13 +8387,13 @@ END FUNCTION DAW
 
 double precision function DPDAW (X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER I, K
+INTEGER :: I, K
 !-----------------------------------------------------------------------
 !            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, A(20), B(45), AX, EPS, T, W
-DOUBLE PRECISION DCSEVL, DPDAW0
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: A(20), B(45), AX, EPS, T, W
+DOUBLE PRECISION :: DCSEVL, DPDAW0
 !----------------------------
 DATA EPS /1.D-31/
 !----------------------------
@@ -8554,26 +8495,24 @@ END FUNCTION DPDAW
 
 double precision function DPDAW0 (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF X*DAW(X) FOR X .GE. 4
 !                WHERE DAW(X) IS THE DAWSON INTEGRAL
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, T, U, V, W
-DOUBLE PRECISION A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
-&A11, A12, A13, A14, A15, A16, A17, A18, &
-&B1, B2, B3, B4
-DOUBLE PRECISION C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, &
-&C11, C12, C13, C14, &
-&D1, D2, D3, D4, D5, D6, D7, D8
-DOUBLE PRECISION E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, &
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: T, U, V, W
+DOUBLE PRECISION :: A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
+&A11, A12, A13, A14, A15, A16, A17, A18, B1, B2, B3, B4
+DOUBLE PRECISION :: C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, &
+&C11, C12, C13, C14, D1, D2, D3, D4, D5, D6, D7, D8
+DOUBLE PRECISION :: E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, &
 &F1, F2, F3, F4, F5, F6, F7, F8, F9, F10
-DOUBLE PRECISION G0, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, &
+DOUBLE PRECISION :: G0, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, &
 &G11, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10
-DOUBLE PRECISION S0, S1, S2, S3, S4, S5
-DOUBLE PRECISION P0, P1, P2, P3, P4, P5, Q1, Q2, Q3, Q4, Q5
+DOUBLE PRECISION :: S0, S1, S2, S3, S4, S5
+DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, Q1, Q2, Q3, Q4, Q5
 !----------------------------
 DATA A0  / .59682223611279114961181337D-06/, &
 &A1  / .17685355947137064277328544D-05/, &
@@ -8755,13 +8694,11 @@ END FUNCTION DPDAW0
 
 SUBROUTINE CFRNLI (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
-INTEGER I
-REAL C, C0, DM, PM, QM, R, SS, X, Y
-REAL EXPARG
-REAL CPABS
+INTEGER, INTENT(IN) :: MO
+INTEGER :: I
+REAL :: C, C0, DM, PM, QM, R, SS, X, Y
+REAL :: EXPARG
+REAL :: CPABS
 !-----------------------------------------------------------------------
 !
 !            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
@@ -8772,8 +8709,9 @@ REAL CPABS
 !                      W = EXP(-Z)*E(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX Z, W
-REAL CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
+COMPLEX, INTENT(IN) :: Z
+COMPLEX, INTENT(INOUT) :: W
+REAL :: CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !     C0 = -1/SQRT(2)
@@ -8935,23 +8873,22 @@ END SUBROUTINE CFRNLI
 
 SUBROUTINE FRNL (T, C, S)
 IMPLICIT NONE
-INTENT(IN) T
-INTENT(INOUT) C, S
-REAL C, S, T
-INTEGER I, L, M, MAX
-REAL CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
-REAL SIN1
-REAL COS1
-INTEGER IPMPAR
+REAL, INTENT(INOUT) :: C, S
+REAL, INTENT(IN) :: T
+INTEGER :: I, L, M, MAX
+REAL :: CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
+REAL :: SIN1
+REAL :: COS1
+INTEGER :: IPMPAR
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL FRESNEL INTEGRALS
 !-----------------------------------------------------------------------
-REAL N
-REAL A(6),B(6),CP(13),SP(13)
-REAL PN(6),PD(6),QN(6),QD(6)
-REAL AN(6),AD(6),BN(6),BD(6)
-REAL CN(5),CD(5),DN(5),DD(5)
-REAL FP(7),GP(7),P(6),Q(6)
+REAL :: N
+REAL :: A(6), B(6), CP(13), SP(13)
+REAL :: PN(6), PD(6), QN(6), QD(6)
+REAL :: AN(6), AD(6), BN(6), BD(6)
+REAL :: CN(5), CD(5), DN(5), DD(5)
+REAL :: FP(7), GP(7), P(6), Q(6)
 !--------------------------
 DATA PI/3.1415926535898/
 !--------------------------
@@ -9159,23 +9096,22 @@ END SUBROUTINE FRNL
 
 SUBROUTINE CEXPLI (MO, Z, W)
 IMPLICIT NONE
-INTENT(IN) MO, Z
-INTENT(INOUT) W
-INTEGER MO
-INTEGER I
-REAL C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
-REAL ANORM
-REAL SPMPAR
-REAL CPABS
+INTEGER, INTENT(IN) :: MO
+INTEGER :: I
+REAL :: C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
+REAL :: ANORM
+REAL :: SPMPAR
+REAL :: CPABS
 !-----------------------------------------------------------------------
 !           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
-COMPLEX Z, W
-REAL N, NP1
-REAL CD(18), CE(18)
-REAL QF(2), SM(2), TM(2), TS(2)
-REAL G0(2), GN(2), H0(2), HN(2), WN(2)
-LOGICAL IND
+COMPLEX, INTENT(IN) :: Z
+COMPLEX, INTENT(INOUT) :: W
+REAL :: N, NP1
+REAL :: CD(18), CE(18)
+REAL :: QF(2), SM(2), TM(2), TS(2)
+REAL :: G0(2), GN(2), H0(2), HN(2), WN(2)
+LOGICAL :: IND
 !-------------------------
 ANORM(X,Y) = AMAX1(ABS(X),ABS(Y))
 !-------------------------
@@ -9350,19 +9286,20 @@ END SUBROUTINE CEXPLI
 
 SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
 IMPLICIT NONE
-INTENT(IN) ARG, INT
-INTENT(OUT) IERR
-INTENT(INOUT) RESULT
-INTEGER M
-REAL CSEVL
-REAL ALNREL
+INTEGER :: M
+REAL :: CSEVL
+REAL :: ALNREL
 !
-REAL A(6),B(5),C(7),D(7),E(7),F(7),P1(8),Q1(8),P2(8),Q2(7), &
-&P3(8),Q3(7),P4(8),Q4(7),R(20),PX(9),QX(9), &
-&FRAC,SUMP,SUMQ,T,W,X,X0,XX0,XMX0,Y,DEXP40,XMAX, &
-&XMIN,EI,ARG,RESULT,EXPARG
-INTEGER I,INT,IERR
-DOUBLE PRECISION DX0
+REAL :: A(6), B(5), C(7), D(7), E(7), F(7), P1(8), Q1(8), P2(8), &
+&Q2(7), P3(8), Q3(7), P4(8), Q4(7), R(20), PX(9), QX(9), FRAC, &
+&SUMP, SUMQ, T, W, X, X0, XX0, XMX0, Y, DEXP40, XMAX, XMIN, EI
+REAL, INTENT(IN) :: ARG
+REAL, INTENT(INOUT) :: RESULT
+REAL :: EXPARG
+INTEGER :: I
+INTEGER, INTENT(IN) :: INT
+INTEGER, INTENT(OUT) :: IERR
+DOUBLE PRECISION :: DX0
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE COMPUTES THE EXPONENTIAL INTEGRALS
@@ -9690,12 +9627,11 @@ END SUBROUTINE EXPLI
 
 double precision function DEI (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION DE1E
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: DE1E
 !
 DEI = -DE1E(-X)
 IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
@@ -9704,12 +9640,11 @@ END FUNCTION DEI
 
 double precision function DEI1 (X)
 IMPLICIT NONE
-INTENT(IN) X
 !-----------------------------------------------------------------------
 !          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X
-DOUBLE PRECISION DE1E
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: DE1E
 !
 DEI1  = -DE1E(-X)
 IF (X .GT. 4.D0 .OR. X .LT. -1.D0) RETURN
@@ -9719,8 +9654,7 @@ END FUNCTION DEI1
 
 double precision function DE1E(X)
 IMPLICIT NONE
-INTENT(IN) X
-INTEGER M
+INTEGER :: M
 !-----------------------------------------------------------------------
 !
 !     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
@@ -9788,9 +9722,11 @@ INTEGER M
 !                                    DECIMAL PLACES REQUIRED  32.20
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION X, C, EPS, T, W
-DOUBLE PRECISION A(50), B(60), D(41), E(29), R(25), P(50), Q(64)
-DOUBLE PRECISION DEI0, DCSEVL, DPMPAR
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: C, EPS, T, W
+DOUBLE PRECISION :: A(50), B(60), D(41), E(29), R(25), P(50), &
+&Q(64)
+DOUBLE PRECISION :: DEI0, DCSEVL, DPMPAR
 !------------------------------
 DATA A(1)  / .3284394579616699087873844201881D-01/, &
 &A(2)  /-.1669920452031362851476184343387D-01/, &
@@ -10193,8 +10129,7 @@ END FUNCTION DE1E
 
 double precision function DEI0 (X, EPS)
 IMPLICIT NONE
-INTENT(IN) EPS, X
-INTEGER N
+INTEGER :: N
 !-----------------------------------------------------------------------
 !
 !            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
@@ -10206,8 +10141,12 @@ INTEGER N
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN, VIRGINIA
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(40), C, EPS, H, T, X, W
-DOUBLE PRECISION DK1, DK2, DK3, DB, DB2, DX
+DOUBLE PRECISION :: A(40), C
+DOUBLE PRECISION, INTENT(IN) :: EPS
+DOUBLE PRECISION :: H, T
+DOUBLE PRECISION, INTENT(IN) :: X
+DOUBLE PRECISION :: W
+DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
 !-------------------------
 DATA DK1 /25598514349.D0/, DK2 /12212826724.D0/, &
 &DK3 /52346020729.D0/
@@ -10288,12 +10227,12 @@ END FUNCTION DEI0
 
 FUNCTION SI(X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-INTEGER I, J, M1, M2, N1, N2
-REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, PIO2, RC, TEMP, TX
-REAL SI
-REAL SPMPAR
+REAL, INTENT(IN) :: X
+INTEGER :: I, J, M1, M2, N1, N2
+REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), PIO2, RC, TEMP, &
+&TX
+REAL :: SI
+REAL :: SPMPAR
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
 !     MODIFIED BY A.H. MORRIS
@@ -10316,7 +10255,6 @@ REAL SPMPAR
 !           SI     - VALUE OF THE INTEGRAL
 !
 !
-DIMENSION BB(16),CC(46)
 !     -------------------
 DATA N1,N2,M1,M2/16,46,14,21/
 DATA PIO2/1.5707963267949/
@@ -10410,12 +10348,12 @@ END FUNCTION SI
 
 FUNCTION CIN(X)
 IMPLICIT NONE
-INTENT(IN) X
-REAL X
-INTEGER I, J, M1, M2, N1, N2
-REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, ECON, RC, TEMP, TX
-REAL CIN
-REAL SPMPAR
+REAL, INTENT(IN) :: X
+INTEGER :: I, J, M1, M2, N1, N2
+REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), ECON, RC, TEMP, &
+&TX
+REAL :: CIN
+REAL :: SPMPAR
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
 !     MODIFIED BY A.H. MORRIS
@@ -10438,7 +10376,6 @@ REAL SPMPAR
 !           CIN    - VALUE OF THE INTEGRAL
 !
 !
-DIMENSION BB(16),CC(46)
 !     -------------------
 DATA N1,N2,M1,M2     / 16, 46, 14, 21 /
 DATA ECON            / 5.77215664901533E-01/
@@ -10529,4 +10466,239 @@ RETURN
 50 CIN=ECON+ALOG(AX)
 RETURN
 END FUNCTION CIN
+
+SUBROUTINE CEXEXI (Z, W)
+IMPLICIT NONE
+INTEGER :: I
+REAL :: CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
+!-----------------------------------------------------------------------
+!        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
+!-----------------------------------------------------------------------
+COMPLEX, INTENT(IN) :: Z
+COMPLEX, INTENT(INOUT) :: W
+REAL :: TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
+REAL :: ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
+!-------------------------
+!     EULER = EULER CONSTANT
+!     CONST = (PI*PI)/4
+!     ZETA2 = THE RIEMANN ZETA FUNCTION EVALUATED AT 2
+!-------------------------
+DATA CONST /2.46740110027234/
+DATA EULER /.577215664901533/
+DATA ZETA2 /1.64493406684823/
+!-------------------------
+DATA ED(1)  /0.00000000000000E+00/, ED(2)  /.311105957086528E-01/, &
+&ED(3)  /.103661260539112E+00/, ED(4)  /.216532335244554E+00/, &
+&ED(5)  /.369931427960192E+00/, ED(6)  /.566766259990589E+00/, &
+&ED(7)  /.814042066324748E+00/, ED(8)  /.112384247540813E+01/, &
+&ED(9)  /.151400478148512E+01/, ED(10) /.200886795032284E+01/, &
+&ED(11) /.264052411823592E+01/, ED(12) /.345098449933392E+01/, &
+&ED(13) /.449583360763202E+01/, ED(14) /.585058263409822E+01/, &
+&ED(15) /.762273501463380E+01/, ED(16) /.997814501584578E+01/, &
+&ED(17) /.132122064896408E+02/, ED(18) /.180322948376021E+02/
+DATA EE(1)  /.850156516121093E-02/, EE(2)  /.505037465849058E-01/, &
+&EE(3)  /.836817368956407E-01/, EE(4)  /.107047582417607E+00/, &
+&EE(5)  /.120424719029462E+00/, EE(6)  /.125096631582229E+00/, &
+&EE(7)  /.122314435224685E+00/, EE(8)  /.112621417553907E+00/, &
+&EE(9)  /.963419407392582E-01/, EE(10) /.747398422757511E-01/, &
+&EE(11) /.508596135953441E-01/, EE(12) /.290822706773628E-01/, &
+&EE(13) /.132201640530101E-01/, EE(14) /.443802939829067E-02/, &
+&EE(15) /.992612478987576E-03/, EE(16) /.126579795112011E-03/, &
+&EE(17) /.702150908253350E-05/, EE(18) /.910281532564632E-07/
+!-------------------------
+DATA DD(1)  /0.00000000000000E+00/, DD(2)  /.419556678374293E-01/, &
+&DD(3)  /.117533661648665E+00/, DD(4)  /.228560237455987E+00/, &
+&DD(5)  /.375667350161240E+00/, DD(6)  /.791594846276672E+00/, &
+&DD(7)  /.107546889623058E+01/, DD(8)  /.142659208030841E+01/, &
+&DD(9)  /.186290554952377E+01/, DD(10) /.240730009509856E+01/, &
+&DD(11) /.308854035607524E+01/, DD(12) /.394277605155259E+01/, &
+&DD(13) /.501593196543981E+01/, DD(14) /.636759180748651E+01/, &
+&DD(15) /.807776193096055E+01/, DD(16) /.102598961138887E+02/, &
+&DD(17) /.130896768422610E+02/, DD(18) /.168832169085916E+02/, &
+&DD(19) /.224083240941713E+02/
+DATA DE(1) /-.346911733535892E-03/, DE(2) /-.603787732461745E-02/, &
+&DE(3) /-.152461305949249E-01/, DE(4) /-.210582169827291E-01/, &
+&DE(5) /-.171894208720754E-01/, DE(6)  /.314323467033032E-01/, &
+&DE(7)  /.750898531566972E-01/, DE(8)  /.124689787807260E+00/, &
+&DE(9)  /.168579075090035E+00/, DE(10) /.191715080699511E+00/, &
+&DE(11) /.182600794550836E+00/, DE(12) /.142345674307147E+00/, &
+&DE(13) /.874862222419327E-01/, DE(14) /.402175083288425E-01/, &
+&DE(15) /.128575005680180E-01/, DE(16) /.257673782598441E-02/, &
+&DE(17) /.275955003784349E-03/, DE(18) /.119139315517122E-04/, &
+&DE(19) /.107292980199386E-06/
+!-------------------------
+DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.237286128313683E-01/, &
+&CD(3)  /.854113210668760E-01/, CD(4)  /.185276627282059E+00/, &
+&CD(5)  /.323741526616688E+00/, CD(6)  /.503045460381267E+00/, &
+&CD(7)  /.728806607587188E+00/, CD(8)  /.101122770102872E+01/, &
+&CD(9)  /.136598448171249E+01/, CD(10) /.181510139038929E+01/, &
+&CD(11) /.238824701955419E+01/, CD(12) /.312490532008812E+01/, &
+&CD(13) /.407802489894445E+01/, CD(14) /.532033545554865E+01/, &
+&CD(15) /.695624307290579E+01/, CD(16) /.914759902547031E+01/, &
+&CD(17) /.121829074388544E+02/, CD(18) /.167511311969873E+02/
+DATA CE(1)  /.349517258926827E-01/, CE(2)  /.135849105925897E+00/, &
+&CE(3)  /.158850581552296E+00/, CE(4)  /.153001434535435E+00/, &
+&CE(5)  /.134520752856461E+00/, CE(6)  /.111913051619671E+00/, &
+&CE(7)  /.892008386656190E-01/, CE(8)  /.679227205472067E-01/, &
+&CE(9)  /.486723197887211E-01/, CE(10) /.320170976532266E-01/, &
+&CE(11) /.187008965021111E-01/, CE(12) /.929708414427865E-02/, &
+&CE(13) /.372604763161087E-02/, CE(14) /.111989537559823E-02/, &
+&CE(15) /.228057496872353E-03/, CE(16) /.269596227781453E-04/, &
+&CE(17) /.141255430224301E-05/, CE(18) /.176352326808806E-07/
+!-------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+R = X*X + Y*Y
+!
+IF (R .LE. 1.0) GO TO 100
+IF (R .GE. 1296.0) GO TO 10
+IF (X .LT. 0.07*Y*Y) GO TO 30
+GO TO 40
+!-----------------------------------------------------------------------
+!                     ASYMPTOTIC EXPANSION
+!-----------------------------------------------------------------------
+10 QF(1) =  X/R
+QF(2) = -Y/R
+SM(1) = -QF(1)
+SM(2) = -QF(2)
+TM(1) =  SM(1)
+TM(2) =  SM(2)
+PM = 1.0
+20 TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = PM*TS(1)
+   TM(2) = PM*TS(2)
+   PM = PM + 1.0
+   TS(1) = TM(1)/PM
+   TS(2) = TM(2)/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 21
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 130
+21 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (PM .LT. 36.0) GO TO 20
+GO TO 130
+!-----------------------------------------------------------------------
+!                      RATIONAL EXPANSION
+!-----------------------------------------------------------------------
+30 SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,18
+   TS(1) = X - CD(I)
+   TS(2) = Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) = -CE(I)*TS(1)/SS
+   TM(2) =  CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+GO TO 130
+!-----------------------------------------------------------------------
+!                 EXPANSION INVOLVING EI AND DI
+!-----------------------------------------------------------------------
+40 ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+!
+!                    SET SM = EXP(Z)*EI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,18
+   TS(1) = -X - ED(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  EE(I)*TS(1)/SS
+   TM(2) = -EE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+SR(1) = ZL(1)*SM(1) - ZL(2)*SM(2)
+SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
+!
+!                    SET SM = EXP(Z)*DI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,19
+   TS(1) = -X - DD(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  DE(I)*TS(1)/SS
+   TM(2) = -DE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+TS(1) = -(X*SM(1) + Y*SM(2))/R
+TS(2) = -(X*SM(2) - Y*SM(1))/R
+!
+!                    COMPUTE THE EXPANSION
+!
+SR(1) = SR(1) - TS(1) - ZETA2
+SR(2) = SR(2) - TS(2)
+SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = ZETA2
+70 PM = PM + 1.0
+   QM = QM - 1.0/(PM*PM)
+   TS(1) = TM(1)*X - TM(2)*Y
+   TS(2) = TM(1)*Y + TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   TS(1) = QM*TM(1)
+   TS(2) = QM*TM(2)
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) - TS(1)
+   SM(2) = SM(2) - TS(2)
+   GO TO 70
+80 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!
+!                      COMPUTE EXP(-Z)*SM
+!
+QM = EXP(-X)
+QF(1) = QM*COS(-Y)
+QF(2) = QM*SIN(-Y)
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+GO TO 130
+!-----------------------------------------------------------------------
+!                  SERIES FOR X*X + Y*Y .LE. 1
+!-----------------------------------------------------------------------
+100 SM(1) = 0.0
+SM(2) = 0.0
+ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+SR(1) = CONST + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
+SR(2) = ZL(1)*ZL(2)
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = 0.0
+110 PM = PM + 1.0
+   QM = QM + 1.0/PM
+   TS(1) = -TM(1)*X + TM(2)*Y
+   TS(2) = -TM(1)*Y - TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   R = (ZL(1) - 1.0/PM) - QM
+   TS(1) = (R*TM(1) - ZL(2)*TM(2))/PM
+   TS(2) = (R*TM(2) + ZL(2)*TM(1))/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 111
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 120
+111 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 110
+120 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!-----------------------------------------------------------------------
+!                         TERMINATION
+!-----------------------------------------------------------------------
+130 W = CMPLX(SM(1), SM(2))
+RETURN
+END SUBROUTINE CEXEXI
 
