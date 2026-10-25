@@ -27,7 +27,8 @@
     "IMTQL1": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
     "TQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
     "IMTQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
-    "GERKS": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records."
+    "GERKS": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "DCPLY1": "Added INTEGER IPMPAR after checking original calls, the INTEGER function definition, full declaration report, and compiler symbol records."
   },
   "procedures": {
     "IPMPAR": {
@@ -843,6 +844,192 @@
         "      INTEGER I, M",
         "      REAL PHI, PI2, R"
       ]
+    },
+    "DRPOLY": {
+      "sha256": "d4439209402239cd71adf2c2c5d5202de833df21e33efc24dcc4623b8635c496",
+      "declarations": [
+        "      INTEGER IDP1"
+      ]
+    },
+    "FXSHFR": {
+      "sha256": "cd0400758a7948dc5af608a1a64ba291064005ddbe4e82a69b7e2bd7c0b6b931",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER N"
+      ]
+    },
+    "QUADIT": {
+      "sha256": "15662fabef6349a17d185b4fa83a232343f5b72ad89b3fc5890132c9910d8132",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER N"
+      ]
+    },
+    "REALIT": {
+      "sha256": "319f1dca12085cd173ca26144caedf5029006d3b9b453e2faf9759eb9fb6bc8e",
+      "declarations": [
+        "      INTEGER IFLAG, NN, NZ",
+        "      INTEGER I, J, N"
+      ]
+    },
+    "CALCSC": {
+      "sha256": "3f0fc0ad9ada4613496fbf8404a92ae78e97c2e0113248a786a548713c59629f",
+      "declarations": [
+        "      INTEGER N"
+      ]
+    },
+    "NEXTK": {
+      "sha256": "f10c270acc309c3064c7411d772a53d7c15853b0279377804b92adaf272c85fd",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I"
+      ]
+    },
+    "NEWEST": {
+      "sha256": "ec24a33139e20c063ef5dadfddf738d5b985c6fef322570cd51ea5484c2d03b2",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER N"
+      ]
+    },
+    "QUADSD": {
+      "sha256": "4517c8f06c469052c585fbc8c3ab0d1a1b4863d25e3f115cc2867613982b8f17",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER I"
+      ]
+    },
+    "QUADPL": {
+      "sha256": "7da3f61d6c0896fd3621fcfbb5655c932a1e98e65f73c9f9b3c18aeef599cd06",
+      "declarations": []
+    },
+    "DCPOLY": {
+      "sha256": "077a23da9570c0f0b3d34c08d91954bc7c57f1233367ac81739bb315e9480122",
+      "declarations": [
+        "      INTEGER NUM",
+        "      INTEGER IDP1"
+      ]
+    },
+    "DCPLY1": {
+      "sha256": "77ce33ade2a9c41599ba876d8d33f79312fae13f3f9107eb94016af291a8dc7b",
+      "declarations": [
+        "      INTEGER IDEG, IDP1, NUM",
+        "      INTEGER I, NN",
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "SCALCP": {
+      "sha256": "45ef6bcc2faeba0ea87079c9a926939547a0eac615e8e20166b02383c81ffe0a",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER I, L"
+      ]
+    },
+    "CAUCHY": {
+      "sha256": "a4dde351be1c5401a966717dae8289b04eadfb28ddd6fca28c799541831657be",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER I, N"
+      ]
+    },
+    "NOSHFT": {
+      "sha256": "f350411a44017b6df905a140ef2e3ea845319d3275f17ff48d67035d088c16b9",
+      "declarations": [
+        "      INTEGER L1, NN",
+        "      INTEGER I, J, JJ, N, NM1"
+      ]
+    },
+    "FXSHFT": {
+      "sha256": "8aadd2cd344104bfd77de6795b9bedc60934c7ff034d2552ecdc717b24e6e575",
+      "declarations": [
+        "      INTEGER L2, NN",
+        "      INTEGER I, J, N"
+      ]
+    },
+    "VRSHFT": {
+      "sha256": "0b9145de563e9e904cb46757662702d24923073710c46e552a72eb5112f47b12",
+      "declarations": [
+        "      INTEGER L3, NN",
+        "      INTEGER I, J, N"
+      ]
+    },
+    "CALCT": {
+      "sha256": "d1c429390c51dafb3941a0f1d9ca28e329c603e1431ec22980d5ae75d337edd5",
+      "declarations": [
+        "      INTEGER N"
+      ]
+    },
+    "NEXTH": {
+      "sha256": "10d5e7c9b8859d91e08613c8e6f8419e2b9777d3536ba93cb0680b578f77c09a",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER J"
+      ]
+    },
+    "POLYEV": {
+      "sha256": "977452f35661ade91f31e39f89c8fefa0cf709d3430c9f1cc1b6163121ebb9f8",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I"
+      ]
+    },
+    "ERREV": {
+      "sha256": "162490932c106168cc787aedf0887319bf2344e051fcb5fa9a3c461d986f3a54",
+      "declarations": [
+        "      INTEGER NN",
+        "      INTEGER I"
+      ]
+    },
+    "CCOPY": {
+      "sha256": "d2d840d66b1c6f23e1b37614ab046c3da3e258c7f84ca28ca3ffc33e13602376",
+      "declarations": []
+    },
+    "CSWAP": {
+      "sha256": "e94e0bbbf45829ec3dd1be3c7b1496a4ba1eb00db10e1724f77a1cc163df7069",
+      "declarations": []
+    },
+    "CSROT": {
+      "sha256": "a9c189e39f14a0b0ac02aa797d20d4d1d7509636c7887a294caa1917939fbc11",
+      "declarations": []
+    },
+    "CDOTC": {
+      "sha256": "abdfa912e7368629a7f07fc4f57d08570c64f60a66bc393ad5c375cf6303889d",
+      "declarations": []
+    },
+    "CSCAL": {
+      "sha256": "68670ca2e5cef9cd9a2b564e5b65b39b444e0b41efcff3fb8cf0c3eb98ce399b",
+      "declarations": []
+    },
+    "CSSCAL": {
+      "sha256": "4e1c531e942d804a120dea9ab6c835ca2acf05d245e3f5a81788f17ec1921145",
+      "declarations": []
+    },
+    "CAXPY": {
+      "sha256": "95b88ce5528af042a82a658d1144fa953074b6a5afbf86021bf46575bf5a1ef6",
+      "declarations": []
+    },
+    "SCASUM": {
+      "sha256": "b67eabe8eead5cdf99101dda339c0b4abfc323905e7daeec51d991ccd78cf5c9",
+      "declarations": []
+    },
+    "SCNRM2": {
+      "sha256": "967f24a4e298e27658d43052c3490c9e5aadd63599d172193ec0bc62cc6261c2",
+      "declarations": [
+        "      INTEGER INCX, N",
+        "      INTEGER I, NN"
+      ]
+    },
+    "ICAMAX": {
+      "sha256": "4d703582c602f240e0382cc4fe328f8bc0520254c01d611cc2bea7f73af225b7",
+      "declarations": []
+    },
+    "SGEDI": {
+      "sha256": "ca9c90220e31efe096b3d7834df5e4e219cd24afb4e46ae46a026e547dd507cd",
+      "declarations": []
+    },
+    "CGEDI": {
+      "sha256": "fa27af900264110ae4b60b2a70029b554708c00980fa8bda93129101032d0f7e",
+      "declarations": []
     }
   },
   "batches": [
@@ -992,6 +1179,45 @@
         "RK8",
         "URNG",
         "NRNG"
+      ]
+    },
+    {
+      "id": "batch-05",
+      "source_commit": "480019d",
+      "input_sha256": "fefcdb5825bc53720bbb475a7a604324ed346ad64d8bd528ed2ba3f0f03857bd",
+      "procedures": [
+        "DRPOLY",
+        "FXSHFR",
+        "QUADIT",
+        "REALIT",
+        "CALCSC",
+        "NEXTK",
+        "NEWEST",
+        "QUADSD",
+        "QUADPL",
+        "DCPOLY",
+        "DCPLY1",
+        "SCALCP",
+        "CAUCHY",
+        "NOSHFT",
+        "FXSHFT",
+        "VRSHFT",
+        "CALCT",
+        "NEXTH",
+        "POLYEV",
+        "ERREV",
+        "CCOPY",
+        "CSWAP",
+        "CSROT",
+        "CDOTC",
+        "CSCAL",
+        "CSSCAL",
+        "CAXPY",
+        "SCASUM",
+        "SCNRM2",
+        "ICAMAX",
+        "SGEDI",
+        "CGEDI"
       ]
     }
   ]

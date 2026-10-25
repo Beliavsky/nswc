@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 120 of the library's 1,062 procedures: the initial
-17 procedure pilot and subsequent batches of 40, 29, and 34. The remaining 942 procedures
+The reviewed conversions cover 152 of the library's 1,062 procedures: the initial
+17 procedure pilot and subsequent batches of 40, 29, 34, and 32. The remaining 910 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -88,6 +88,29 @@ The compiler comparison preserved all 714 non-intrinsic symbol records in this
 batch. No argument intents, precision choices, dimensions, storage statements,
 or executable code were changed.
 
+## Batch 5: polynomial roots and complex vector operations
+
+The fifth batch adds 32 procedures used by the polynomial-root, dense-solver,
+and singular-value regression tests:
+
+- Real polynomial roots: `DRPOLY`, `FXSHFR`, `QUADIT`, `REALIT`, `CALCSC`,
+  `NEXTK`, `NEWEST`, `QUADSD`, and `QUADPL`. The worker `DRPLY1` was converted
+  in the pilot.
+- Complex polynomial roots: `DCPOLY`, `DCPLY1`, `SCALCP`, `CAUCHY`, `NOSHFT`,
+  `FXSHFT`, `VRSHFT`, `CALCT`, `NEXTH`, `POLYEV`, and `ERREV`.
+- Complex vector operations: `CCOPY`, `CSWAP`, `CSROT`, `CDOTC`, `CSCAL`,
+  `CSSCAL`, `CAXPY`, `SCASUM`, `SCNRM2`, and `ICAMAX`.
+- Determinant and inverse workers: `SGEDI` and `CGEDI`.
+
+The missing-only report omitted `INTEGER IPMPAR` in `DCPLY1`. Its type was
+confirmed against the original call, integer function definition, full declaration
+report, and compiler symbol records. Procedures that already had all required
+declarations only needed `IMPLICIT NONE`.
+
+The compiler comparison preserved all 698 non-intrinsic symbol records in this
+batch, including the root solvers' shared storage. No argument intents, precision
+choices, dimensions, storage statements, or executable code were changed.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -155,7 +178,7 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-2,521 variable and external procedure records across the 120 procedures, including
+3,219 variable and external procedure records across the 152 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
