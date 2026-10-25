@@ -40,7 +40,7 @@ pot)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ODE` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L105515`](../source_parts/nswc_part_10.f90#L9824) |
+| `ODE` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L105598`](../source_parts/nswc_part_10.f90#L9824) |
 
 
 Let y'(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where f(t,y) = (filt,y), .--.fa(t,y)) and y(t) = (yi(t), ...,yn(t}). Assume that y(a) is known. Then for 6 + @ the subroutine ODE is available for computing y(b). ODE is recommended for nonstiff equations. The algorithm used is a variable order, variable step Adams predictor-correcter procedure.
@@ -147,7 +147,7 @@ eal qt biel
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BRKF45` | `SUBROUTINE` | `FCN, NEQN, Y, T, TOUT, TEND, YP, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L106408`](../source_parts/nswc_part_11.f90#L80) |
+| `BRKF45` | `SUBROUTINE` | `FCN, NEQN, Y, T, TOUT, TEND, YP, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L106491`](../source_parts/nswc_part_11.f90#L80) |
 
 
 Let y/(t) = f(t,y(2)) denote a system of n ordinary first order differential equations where f(t,y) = (fi(t,y),--.,fn(t,y)) and y(t) = (v(t), ...,y,(¢)). Assume that y(a) is known, and that f is defined and continuous on the interval from a to TIEND. Then for any 6 in this interval the subroutine BRKF45 1s available for computing y(6) and its derivative y'(6). BRKE45 was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (8 or fewer significant digits). The subroutine employs the Cash block Runge-Kutta-Fehlberg procedure.
@@ -244,7 +244,7 @@ pp. 424-426.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RKF45` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L107314`](../source_parts/nswc_part_11.f90#L986) |
+| `RKF45` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L107397`](../source_parts/nswc_part_11.f90#L986) |
 
 
 Let y/(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where f{t,y) = (fi (t,y), ..-, fa (t, y)) and y(t) = (y1 (¢), ..-, yn (t)). Assume that y(a) is known. Then for 6 # a the subroutine RKF46 is available for computing y(b). RKF45 was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (less than 8 significant digits). The routine employs the fourth-fifth order Runge-Kutta-Fehlberg formulae.
@@ -357,7 +357,7 @@ is also used.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GERK` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, GERROR, WORK, IWORK` | [`L107917`](../source_parts/nswc_part_11.f90#L1589) |
+| `GERK` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, GERROR, WORK, IWORK` | [`L108000`](../source_parts/nswc_part_11.f90#L1589) |
 
 
 Lei y'(t) == f(t,y(t)) denote a system of n ordinary first order differential equations where f(t,y) = (fi (t,y), ---, fn (t,y)) and y(t) = (yi (t), ..., yn (t)}. Assume that y(a) is known. Then for b 4 a the subroutine GERK is available for computing y(b). GERK was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (less than 8 significant digits). The routine employs the fourth-fifth order Runge-Kutta-Fehlberg formulae. GERK estimates the accuracy of the solution y(b).
@@ -468,8 +468,8 @@ Ny a3)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SFODE` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RERR, AERR, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L108519`](../source_parts/nswc_part_11.f90#L2191) |
-| `SFODE1` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RTOL, ATOL, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L108543`](../source_parts/nswc_part_11.f90#L2215) |
+| `SFODE` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RERR, AERR, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L108602`](../source_parts/nswc_part_11.f90#L2191) |
+| `SFODE1` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RTOL, ATOL, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L108626`](../source_parts/nswc_part_11.f90#L2215) |
 
 
 Let y’(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where flt,y) = Cit, y). ..-, fn (t, y)) and y(t) = (yi (t), --.,yn(t)). Assume that y(a) is known. Then for 6 # a the following subroutines are available for computing y(b). These routines are designed for stiff differential equations. The algorithm used is a variable order, variable step backward differentiation procedure.
@@ -635,7 +635,7 @@ RERR and AERR may Le modified on any continuation call to SFODEL1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L111228`](../source_parts/nswc_part_11.f90#L4900) |
+| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L111311`](../source_parts/nswc_part_11.f90#L4900) |
 
 
 Let y’(¢) = f(t,y(t)) denote a system of n ordinary first order nonstiff differential equations where f(t,y) = (fi(t,y),...,fn(t,y)) and y(t) = (yi(t), ...,yn(t)). Assume that y(to) is known. Then for a small real number A, the subroutine RK is available for computing y(to +h). RK employs the standard fourth-order Runge-Kutta procedure.
@@ -697,7 +697,7 @@ Note that the statements A(3) = 1.0 and A(4) = 0.0, which store the derivatives 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L111285`](../source_parts/nswc_part_11.f90#L4957) |
+| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L111368`](../source_parts/nswc_part_11.f90#L4957) |
 
 
 Let y(t) = f(t,y(t)) denote a system of n ordinary first. order nonstiff differential

@@ -33190,6 +33190,9 @@ C
       END SUBROUTINE DMCVSF
 
       SUBROUTINE MCVRD(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       REAL A(KA,N)
       DOUBLE PRECISION B(KB,N)
 C
@@ -33201,6 +33204,9 @@ C
       END SUBROUTINE MCVRD
 
       SUBROUTINE MCVDR(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       DOUBLE PRECISION A(KA,N)
       REAL B(KB,N)
 C
@@ -33212,6 +33218,9 @@ C
       END SUBROUTINE MCVDR
 
       SUBROUTINE MCVRC(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       REAL A(KA,N)
       COMPLEX B(KB,N)
 C
@@ -33223,6 +33232,9 @@ C
       END SUBROUTINE MCVRC
 
       SUBROUTINE CMREAL(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N)
       REAL B(KB,N)
 C
@@ -33234,6 +33246,9 @@ C
       END SUBROUTINE CMREAL
 
       SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N)
       REAL B(KB,N)
 C
@@ -33294,6 +33309,9 @@ C
       END SUBROUTINE CMCONJ
 
       SUBROUTINE TPOSE(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       REAL A(KA,N),B(KB,M)
 C
       DO J = 1,N
@@ -33304,6 +33322,9 @@ C
       END SUBROUTINE TPOSE
 
       SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       DOUBLE PRECISION A(KA,N),B(KB,M)
 C
       DO J = 1,N
@@ -33314,6 +33335,9 @@ C
       END SUBROUTINE DTPOSE
 
       SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N),B(KB,M)
 C
       DO J = 1,N
@@ -33324,6 +33348,10 @@ C
       END SUBROUTINE CTPOSE
 
       SUBROUTINE TIP (A, N1, N2, MOVED, NWORK, NDIM)
+      IMPLICIT NONE
+      INTEGER N1, N2, NDIM, NWORK
+      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
+     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -33433,6 +33461,10 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       END SUBROUTINE TIP
 
       SUBROUTINE DTIP (A, N1, N2, MOVED, NWORK, NDIM)
+      IMPLICIT NONE
+      INTEGER N1, N2, NDIM, NWORK
+      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
+     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -33542,6 +33574,10 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       END SUBROUTINE DTIP
 
       SUBROUTINE CTIP (A, N1, N2, MOVED, NWORK, NDIM)
+      IMPLICIT NONE
+      INTEGER N1, N2, NDIM, NWORK
+      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
+     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -33651,6 +33687,9 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       END SUBROUTINE CTIP
 
       SUBROUTINE INFCTR(N, IFACT, IPOWER, NEXP, NPOWER)
+      IMPLICIT NONE
+      INTEGER IFACT, IPOWER, N, NEXP, NPOWER
+      INTEGER IDIV, IFCUR, IP, IQUOT, NPART
 C FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
 C E.G., FOR N=1960=2**3 *5 *7**2, NPOWER=3, IFACT=2,5,7,
 C IPOWER=8,5,49, AND NEXP=3,1,2.
@@ -33692,6 +33731,9 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       END SUBROUTINE INFCTR
 
       SUBROUTINE CMADJ(M,N,A,KA,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J
       COMPLEX A(KA,N),B(KB,M)
 C
       DO J = 1,N
@@ -33702,6 +33744,7 @@ C
       END SUBROUTINE CMADJ
 
       SUBROUTINE CTRANS (NM, N, A)
+      IMPLICIT NONE
 C
 C
 C     SUBROUTINE CTRANS FINDS THE COMPLEX CONJUGATE OF AN INPUT
@@ -33736,6 +33779,9 @@ C
       END SUBROUTINE CTRANS
 
       SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, M, N
+      INTEGER I, J
 C-----------------------------------------------------------------------
 C                      ADDITION OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -33891,6 +33937,10 @@ C
       END SUBROUTINE CMTMS
 
       SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
+      REAL SAVE
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
 C-----------------------------------------------------------------------
@@ -33944,6 +33994,8 @@ C
       END SUBROUTINE MPROD
 
       LOGICAL FUNCTION RLOC (X, Y)
+      IMPLICIT NONE
+      REAL XOLD, YOLD
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 C
@@ -33975,6 +34027,8 @@ C
       END FUNCTION RLOC
 
       SUBROUTINE YCHG (X, Y, YOLD)
+      IMPLICIT NONE
+      REAL YOLD
       REAL X(*), Y(*)
 C
       Y(1) = 0.0
@@ -33983,6 +34037,9 @@ C
       END SUBROUTINE YCHG
 
       SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
@@ -34035,6 +34092,7 @@ C
       END SUBROUTINE DMPROD
 
       LOGICAL FUNCTION DLOC (X, Y)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 C
@@ -34066,6 +34124,7 @@ C
       END FUNCTION DLOC
 
       SUBROUTINE DYCHG (X, Y, YOLD)
+      IMPLICIT NONE
       DOUBLE PRECISION X(*), Y(*), YOLD
 C
       Y(1) = 0.D0
@@ -34074,6 +34133,9 @@ C
       END SUBROUTINE DYCHG
 
       SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
@@ -34126,6 +34188,7 @@ C
       END SUBROUTINE CMPROD
 
       LOGICAL FUNCTION CLOC (X, Y)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 C
@@ -34157,6 +34220,7 @@ C
       END FUNCTION CLOC
 
       SUBROUTINE CYCHG (X, Y, YOLD)
+      IMPLICIT NONE
       COMPLEX X(*), Y(*), YOLD
       COMPLEX ZERO, ONE
       DATA ZERO/(0.0,0.0)/, ONE/(1.0,0.0)/
@@ -34167,6 +34231,10 @@ C
       END SUBROUTINE CYCHG
 
       SUBROUTINE SVPRD(A,N,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, K, KM1, L
+      REAL XK, YK
       REAL A(*),X(N),Y(N)
       Y(1) = A(1)*X(1)
       IF (N .EQ. 1) RETURN
@@ -34188,6 +34256,9 @@ C
       END SUBROUTINE SVPRD
 
       SUBROUTINE DSVPRD(A,N,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, K, KM1, L
       DOUBLE PRECISION A(*),X(N),Y(N)
       DOUBLE PRECISION XK,YK
       Y(1) = A(1)*X(1)
@@ -34210,6 +34281,9 @@ C
       END SUBROUTINE DSVPRD
 
       SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, J, K
       REAL A(KA,N),B(KB,L),C(KC,L)
       DOUBLE PRECISION S
       DO J=1,L
@@ -34223,6 +34297,9 @@ C
       END SUBROUTINE TMPROD
 
       SUBROUTINE SMPROD(M,N,A,KA,B)
+      IMPLICIT NONE
+      INTEGER KA, M, N
+      INTEGER I, II, J, K
       REAL A(KA,N),B(*)
       DOUBLE PRECISION S
       II=1
@@ -41570,6 +41647,7 @@ C
       END SUBROUTINE DCMINV
 
       SUBROUTINE SSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
+      IMPLICIT NONE
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       REAL X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -88851,6 +88929,9 @@ C
       END SUBROUTINE QURV2
 
       SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
+      IMPLICIT NONE
+      INTEGER N
+      REAL COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM, SINHMP
 C
       REAL DEL1,DEL2,SIGMA,C1,C2,C3
 C
@@ -88927,6 +89008,8 @@ C
       END SUBROUTINE CEEZ
 
       SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
+      IMPLICIT NONE
+      REAL COSHM, DENOM, SIGDEL, SINHM
 C
       REAL DIAG,SDIAG,SIGMA,DEL
 C

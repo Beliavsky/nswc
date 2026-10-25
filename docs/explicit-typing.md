@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 184 of the library's 1,062 procedures in six
-batches of 17, 40, 29, 34, 32, and 32. The remaining 878 procedures
+The reviewed conversions cover 215 of the library's 1,062 procedures in seven
+batches of 17, 40, 29, 34, 32, 32, and 31. The remaining 847 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -137,6 +137,33 @@ tests remain part of the full suite; they do not cover every helper branch.
 No argument intents, precision choices, dimensions, storage statements, or
 executable library code were changed.
 
+## Batch 7: matrix utilities and remaining tested helpers
+
+The seventh batch adds 31 procedures:
+
+- Matrix conversions and transposes: `MCVRD`, `MCVDR`, `MCVRC`, `CMREAL`,
+  `CMIMAG`, `TPOSE`, `DTPOSE`, `CTPOSE`, `TIP`, `DTIP`, `CTIP`, `INFCTR`,
+  `CMADJ`, and `CTRANS`.
+- Matrix and vector arithmetic: `MADD`, `MPROD`, `DMPROD`, `CMPROD`, `SVPRD`,
+  `DSVPRD`, `TMPROD`, and `SMPROD`.
+- Storage-location helpers: `RLOC`, `YCHG`, `DLOC`, `DYCHG`, `CLOC`, and `CYCHG`.
+- Other tested workers: `SSVDC`, `CEEZ`, and `TERMS`.
+
+The draft needed no supplemental function return types. Compiler comparisons
+preserved all 435 non-intrinsic symbol records in this batch, including the
+logical location functions and their storage-probing helpers.
+
+Two more main programs were adapted from the Miller legacy tests:
+`test_dense_matrix_utils` and `test_matrix_utility_continuation`. They check
+real, double precision, and complex products, conversions, transposes, packed
+symmetric products, and in-place rectangular transposes. Module imports were
+replaced with `ISO_FORTRAN_ENV` precision definitions; product output arrays are
+initialized because the original routines probe their existing storage values.
+Both drivers emit numerical diagnostics for comparison across library versions.
+The suite now runs 17 programs against each of the three versions, for 51 runs.
+No argument intents, precision choices, dimensions, storage statements, or
+executable library code were changed.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -204,13 +231,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-3,851 variable and external procedure records across the 184 procedures, including
+4,286 variable and external procedure records across the 215 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 15 numerical test programs must still pass against each source version,
+All 17 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.

@@ -1325,6 +1325,207 @@
         "      INTEGER I, IL, IR",
         "      REAL TM"
       ]
+    },
+    "MCVRD": {
+      "sha256": "f0b7750844375b2b65475e9db836a3728cb81a167ce6023da9ed2b56cf67559a",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "MCVDR": {
+      "sha256": "743f03e807378055718f35b34e2f2fa27cd60e8751e708d0d1c0c28ea4699dc1",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "MCVRC": {
+      "sha256": "3e2f3b250ee77191405cb09d4e90554b1ede9dc7cec25425dbe42cffea3e9099",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "CMREAL": {
+      "sha256": "43e41508fa0d2983fdde221d5ec57961bf0dae3ef1b96189843bfac9358be41f",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "CMIMAG": {
+      "sha256": "3809e96b351e69211d5d68ec7e87218dc90d3a2530f6831b4adcc9779e8cc853",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "TPOSE": {
+      "sha256": "d352a16cbd54e76e1b48ef398c4d8922da18c4e37e796890248d1182d62e149e",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "DTPOSE": {
+      "sha256": "78b070e76dd0cfd7c0ebfca610bc265b94e697428164fb5e545fccdde2eb4446",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "CTPOSE": {
+      "sha256": "904dec53f940fa5b679939fc09888dba8dcf0519701a8ec98a2ecfe902b48cb1",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "TIP": {
+      "sha256": "6abdc9b09702edc67fdda670b92219919d5e7d1bbb67650e6af41b87ca98d2c7",
+      "declarations": [
+        "      INTEGER N1, N2, NDIM, NWORK",
+        "      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART",
+        "     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER"
+      ]
+    },
+    "DTIP": {
+      "sha256": "52ae14790225028775d09ab9b2693741bc7af0f560a98e59f16974d42207f05f",
+      "declarations": [
+        "      INTEGER N1, N2, NDIM, NWORK",
+        "      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART",
+        "     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER"
+      ]
+    },
+    "CTIP": {
+      "sha256": "86e65412f4ebc0b4877d40925e33adfd8a5a73fc614b900499997d228765ee83",
+      "declarations": [
+        "      INTEGER N1, N2, NDIM, NWORK",
+        "      INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART",
+        "     x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER"
+      ]
+    },
+    "INFCTR": {
+      "sha256": "6eb0732712a24d7b8f5084b6aaab98db699ec088b402a88877e946947943cf72",
+      "declarations": [
+        "      INTEGER IFACT, IPOWER, N, NEXP, NPOWER",
+        "      INTEGER IDIV, IFCUR, IP, IQUOT, NPART"
+      ]
+    },
+    "CMADJ": {
+      "sha256": "15496b24ea34ac92f4611be968dd60ad8328d83e330030faeade3f104780bd21",
+      "declarations": [
+        "      INTEGER KA, KB, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "CTRANS": {
+      "sha256": "2573951f205c7a1ee81b5cc62602ae985ea7f7ed8697e14ff70681dad2dabd79",
+      "declarations": []
+    },
+    "MADD": {
+      "sha256": "fdeba6bdfd8ca63822cd88b32c51769ab0e4c5f5f08b3a9058198c8b09273164",
+      "declarations": [
+        "      INTEGER KA, KB, KC, M, N",
+        "      INTEGER I, J"
+      ]
+    },
+    "MPROD": {
+      "sha256": "80b0b5d8f018ec24dcffd28e8b0794a5a2c4aa0aaf943be8a7baabbd9e348800",
+      "declarations": [
+        "      INTEGER KA, KB, KC, L, M, N",
+        "      INTEGER I, J, K",
+        "      REAL SAVE"
+      ]
+    },
+    "RLOC": {
+      "sha256": "a433dceefceb4fb59c6611197b9ff41c23f9bce422d779e07193feeaacf979b7",
+      "declarations": [
+        "      REAL XOLD, YOLD"
+      ]
+    },
+    "YCHG": {
+      "sha256": "b17ad072ef2449866d1434a8ca49219bb52ff3a232650b3f1eaba86ade9542f9",
+      "declarations": [
+        "      REAL YOLD"
+      ]
+    },
+    "DMPROD": {
+      "sha256": "2d50713fc5a45380992905a3a91b45eda2342bf2cd76597bbe98a267d993abd5",
+      "declarations": [
+        "      INTEGER KA, KB, KC, L, M, N",
+        "      INTEGER I, J, K"
+      ]
+    },
+    "DLOC": {
+      "sha256": "3a8f0beb522bea89baa2072a2d61a4701057e2bd6d64bfe1ccee3cf82dd3a176",
+      "declarations": []
+    },
+    "DYCHG": {
+      "sha256": "2a42574d7f1c2dd1587e5f3845687ecf01521633fe9d299f80cb9dacba7b0a53",
+      "declarations": []
+    },
+    "CMPROD": {
+      "sha256": "74f5e16adbf95b5366b4626367b97233f04a35cb6a2e2a08bf30bc6be866a8e6",
+      "declarations": [
+        "      INTEGER KA, KB, KC, L, M, N",
+        "      INTEGER I, J, K"
+      ]
+    },
+    "CLOC": {
+      "sha256": "412bf4de0e8bab04c94d36fccc82e7f0dca7599b3c0f774b6387a9adca2b47c8",
+      "declarations": []
+    },
+    "CYCHG": {
+      "sha256": "c7b9b98b91b0041e99a0e62c390d2b75007a427ac5447411440251c46947d2b3",
+      "declarations": []
+    },
+    "SVPRD": {
+      "sha256": "852da32ee502821b4b4ee5f393fd1fb387f2c95230e47c562b4fde3c255e3edc",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, K, KM1, L",
+        "      REAL XK, YK"
+      ]
+    },
+    "DSVPRD": {
+      "sha256": "272404bd32ae402791ab270e8d78a75abfc411521d3492d03488abacff29ff91",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, K, KM1, L"
+      ]
+    },
+    "TMPROD": {
+      "sha256": "4583e97a26417b48c4ac55fde9e6c8f494bc09bfdab45697ef96bf5f73cee9ba",
+      "declarations": [
+        "      INTEGER KA, KB, KC, L, M, N",
+        "      INTEGER I, J, K"
+      ]
+    },
+    "SMPROD": {
+      "sha256": "2dacc1891790e1506f96ad92c2ea37ab4bab65d2ce7ed6bd14d292ec00c253a5",
+      "declarations": [
+        "      INTEGER KA, M, N",
+        "      INTEGER I, II, J, K"
+      ]
+    },
+    "SSVDC": {
+      "sha256": "416e1be83fe07e1d33662ff5e26bb8c36e8c926390e1dec520130f834826b0b4",
+      "declarations": []
+    },
+    "CEEZ": {
+      "sha256": "aa1ef0f924423798d2b43afab1e2860b549bd9bc5e51c3517b2f30db67a8db87",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM, SINHMP"
+      ]
+    },
+    "TERMS": {
+      "sha256": "2aee28462b03431a5c9bb1e489db5231f64b55c3736321b98b7070331a2e6b53",
+      "declarations": [
+        "      REAL COSHM, DENOM, SIGDEL, SINHM"
+      ]
     }
   },
   "batches": [
@@ -1552,6 +1753,44 @@
         "RADF4",
         "RADF5",
         "INTRVL"
+      ]
+    },
+    {
+      "id": "batch-07",
+      "source_commit": "5dcbc64",
+      "input_sha256": "d9efd8633e24b48a22d606ddf85ff838c5221fb69804434d5377ef07ce79a647",
+      "procedures": [
+        "MCVRD",
+        "MCVDR",
+        "MCVRC",
+        "CMREAL",
+        "CMIMAG",
+        "TPOSE",
+        "DTPOSE",
+        "CTPOSE",
+        "TIP",
+        "DTIP",
+        "CTIP",
+        "INFCTR",
+        "CMADJ",
+        "CTRANS",
+        "MADD",
+        "MPROD",
+        "RLOC",
+        "YCHG",
+        "DMPROD",
+        "DLOC",
+        "DYCHG",
+        "CMPROD",
+        "CLOC",
+        "CYCHG",
+        "SVPRD",
+        "DSVPRD",
+        "TMPROD",
+        "SMPROD",
+        "SSVDC",
+        "CEEZ",
+        "TERMS"
       ]
     }
   ]
