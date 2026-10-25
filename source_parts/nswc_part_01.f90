@@ -1,6 +1,6 @@
-INTEGER function IPMPAR (I)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: I
+integer function ipmpar (i)
+implicit none
+integer, intent(in) :: i
 !-----------------------------------------------------------------------
 !
 !     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -73,7 +73,7 @@ INTEGER, INTENT(IN) :: I
 !     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
 !
 !-----------------------------------------------------------------------
-INTEGER :: IMACH(10)
+integer :: imach(10)
 !
 !     MACHINE CONSTANTS FOR THE ALLIANT FX/8.
 !
@@ -309,16 +309,16 @@ INTEGER :: IMACH(10)
 !
 !     MACHINE CONSTANTS FOR THE IBM PC.
 !
-DATA IMACH( 1) /     2 /
-DATA IMACH( 2) /    31 /
-DATA IMACH( 3) / 2147483647 /
-DATA IMACH( 4) /     2 /
-DATA IMACH( 5) /    24 /
-DATA IMACH( 6) /  -125 /
-DATA IMACH( 7) /   128 /
-DATA IMACH( 8) /    53 /
-DATA IMACH( 9) / -1021 /
-DATA IMACH(10) /  1024 /
+data imach( 1) /     2 /
+data imach( 2) /    31 /
+data imach( 3) / 2147483647 /
+data imach( 4) /     2 /
+data imach( 5) /    24 /
+data imach( 6) /  -125 /
+data imach( 7) /   128 /
+data imach( 8) /    53 /
+data imach( 9) / -1021 /
+data imach(10) /  1024 /
 !
 !     MACHINE CONSTANTS FOR THE MACINTOSH II - ABSOFT
 !     MACFORTRAN II.
@@ -429,21 +429,21 @@ DATA IMACH(10) /  1024 /
 !     DATA IMACH( 9) / -1023 /
 !     DATA IMACH(10) /  1023 /
 !
-IPMPAR = IMACH(I)
-RETURN
-END FUNCTION IPMPAR
+ipmpar = imach(i)
+return
+end function ipmpar
 
 !-----------------------------------------------------------------------
-SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
-IMPLICIT NONE
-INTEGER :: IBETA
-INTEGER, INTENT(IN) :: IDMAX, IMAX, MO, N
-INTEGER :: M, MAXEXP, MINEXP, N0
-REAL :: EPS, XINT, XMAX, XMIN
+subroutine mach (mo, n, ibeta, imax, idmax, imach, rmach, dmach)
+implicit none
+integer :: ibeta
+integer, intent(in) :: idmax, imax, mo, n
+integer :: m, maxexp, minexp, n0
+real :: eps, xint, xmax, xmin
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: RMACH(3)
-DOUBLE PRECISION, INTENT(INOUT) :: DMACH(3)
-INTEGER, INTENT(INOUT) :: IMACH(10)
+real, intent(inout) :: rmach(3)
+double precision, intent(inout) :: dmach(3)
+integer, intent(inout) :: imach(10)
 !-----------------------------------------------------------------------
 !
 !          COMPUTATION OF THE ENVIRONMENTAL CONSTANTS FOR THE
@@ -670,76 +670,76 @@ INTEGER, INTENT(INOUT) :: IMACH(10)
 !         1988, PP. 303-311.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: DEPS, DINT, DMIN, DMAX
+double precision :: deps, dint, dmin, dmax
 !-----------------
-IMACH(1) = 0
-IMACH(2) = 0
-IMACH(3) = 0
+imach(1) = 0
+imach(2) = 0
+imach(3) = 0
 !
-N0 = N
-IF (MO .LE. 0) N0 = 0
-IF (MO .GE. 2) GO TO 10
+n0 = n
+if (mo .le. 0) n0 = 0
+if (mo .ge. 2) go to 10
 !-----------------------------------------------------------------------
 !     OBTAIN THE SINGLE PRECISION INFORMATION
 !-----------------------------------------------------------------------
-MAXEXP = IMAX
-CALL MACH1 (N0, IBETA, M, MINEXP, MAXEXP, EPS, XINT, XMIN, XMAX)
-IF (MO .EQ. 1) STOP
-RMACH(1) = EPS
-RMACH(2) = XMIN
-RMACH(3) = XMAX
-IMACH(4) = IBETA
-IMACH(5) = M
-IMACH(6) = MINEXP
-IMACH(7) = MAXEXP
+maxexp = imax
+call mach1 (n0, ibeta, m, minexp, maxexp, eps, xint, xmin, xmax)
+if (mo .eq. 1) stop
+rmach(1) = eps
+rmach(2) = xmin
+rmach(3) = xmax
+imach(4) = ibeta
+imach(5) = m
+imach(6) = minexp
+imach(7) = maxexp
 !-----------------------------------------------------------------------
 !     OBTAIN THE DOUBLE PRECISION INFORMATION
 !-----------------------------------------------------------------------
-10 MAXEXP = IDMAX
-CALL MACH2 (N0, IBETA, M, MINEXP, MAXEXP, DEPS, DINT, DMIN, DMAX)
-IF (MO .GE. 2) STOP
-DMACH(1) = DEPS
-DMACH(2) = DMIN
-DMACH(3) = DMAX
-IMACH(8) = M
-IMACH(9) = MINEXP
-IMACH(10)= MAXEXP
-RETURN
-END SUBROUTINE MACH
+10 maxexp = idmax
+call mach2 (n0, ibeta, m, minexp, maxexp, deps, dint, dmin, dmax)
+if (mo .ge. 2) stop
+dmach(1) = deps
+dmach(2) = dmin
+dmach(3) = dmax
+imach(8) = m
+imach(9) = minexp
+imach(10)= maxexp
+return
+end subroutine mach
 
-SUBROUTINE RADIX (IBETA)
-IMPLICIT NONE
-INTEGER :: IBETA
-REAL :: A, B, ONE, Y
-REAL :: D1, D2
+subroutine radix (ibeta)
+implicit none
+integer :: ibeta
+real :: a, b, one, y
+real :: d1, d2
 !-----------------------------------------------------------------------
 !     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
 !-----------------------------------------------------------------------
-COMMON /SPDATA/ D1, D2
+common /spdata/ d1, d2
 !
-ONE  = FLOAT(1)
+one  = float(1)
 !
-A = ONE
-10 A = A + A
-CALL STORE2 (A + ONE, A)
-Y = D1 - D2
-IF (Y .EQ. ONE) GO TO 10
+a = one
+10 a = a + a
+call store2 (a + one, a)
+y = d1 - d2
+if (y .eq. one) go to 10
 !
-B = ONE
-20 B = B + B
-CALL STORE2 (A + B, A)
-IF (D1 .EQ.D2) GO TO 20
+b = one
+20 b = b + b
+call store2 (a + b, a)
+if (d1 .eq.d2) go to 20
 !
-IBETA = INT(D1 - D2)
-RETURN
-END SUBROUTINE RADIX
+ibeta = int(d1 - d2)
+return
+end subroutine radix
 
-SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
-&XMIN, XMAX)
-IMPLICIT NONE
-INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-INTEGER :: J, K, KM, L
-REAL :: EPS, XINT, XMIN, XMAX
+subroutine mach1 (n, ibeta, m, minexp, maxexp, eps, xint, &
+&xmin, xmax)
+implicit none
+integer :: ibeta, m, maxexp, minexp, n
+integer :: j, k, km, l
+real :: eps, xint, xmin, xmax
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -832,171 +832,171 @@ REAL :: EPS, XINT, XMIN, XMAX
 !                 ROUNDOFF ERROR.
 !
 !-----------------------------------------------------------------------
-REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
+real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
 !----------------
-COMMON /SPDATA/ D1, D2
+common /spdata/ d1, d2
 !
-ZERO = FLOAT(0)
-ONE = FLOAT(1)
-B = FLOAT(IBETA)
-B2 = B*B
-BM1 = FLOAT(IBETA - 1)
-BINV = ONE/B
+zero = float(0)
+one = float(1)
+b = float(ibeta)
+b2 = b*b
+bm1 = float(ibeta - 1)
+binv = one/b
 !-----------------------------------------------------------------------
 !     COMPUTE M AND EPS
 !-----------------------------------------------------------------------
-M = 1
-T = B
-10 M = M + 1
-   Z = T
-   T = B*T
-   CALL STORE2 (T + ONE, T)
-   X = D1*BINV - Z
-   IF (X .EQ. BINV) GO TO 10
+m = 1
+t = b
+10 m = m + 1
+   z = t
+   t = b*t
+   call store2 (t + one, t)
+   x = d1*binv - z
+   if (x .eq. binv) go to 10
 !
-XINT = (Z - ONE)*B + BM1
-XMAX = XINT/T
-IF (XMAX .LT. ONE) GO TO 20
-   M = M - 1
-   T = Z
-   Z = Z*BINV
-   XINT = (Z - ONE)*B + BM1
-   XMAX = XINT/T
-20 EPS = ONE/Z
+xint = (z - one)*b + bm1
+xmax = xint/t
+if (xmax .lt. one) go to 20
+   m = m - 1
+   t = z
+   z = z*binv
+   xint = (z - one)*b + bm1
+   xmax = xint/t
+20 eps = one/z
 !-----------------------------------------------------------------------
 !     COMPUTE MINEXP AND XMIN
 !-----------------------------------------------------------------------
-P = ONE + EPS
-Q = ONE + EPS*B2
+p = one + eps
+q = one + eps*b2
 !
 !     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
 !     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 !
-K = 1
-Z = BINV
-30 X = Z
-   Z = (X*X)*ONE
-   CALL STORE2 (Z*XINT, Z*T)
-   IF (D1 .EQ.D2) GO TO 40
-   IF (Z + Z .EQ. ZERO .OR. ABS(Z) .GE. X) GO TO 40
-   CALL STORE2 (Z, P*Z)
-   IF (T*D2 .EQ. T*Z) GO TO 40
-   K = K + K
-   GO TO 30
+k = 1
+z = binv
+30 x = z
+   z = (x*x)*one
+   call store2 (z*xint, z*t)
+   if (d1 .eq.d2) go to 40
+   if (z + z .eq. zero .or. abs(z) .ge. x) go to 40
+   call store2 (z, p*z)
+   if (t*d2 .eq. t*z) go to 40
+   k = k + k
+   go to 30
 !
-40 KM = K + K
-J = 0
+40 km = k + k
+j = 0
 !
 !     LOOP TO DETERMINE MINEXP AND XMIN.
 !
-50 XMIN = X
-   X = (X*BINV)*ONE
-   CALL STORE2 (X*XINT, X*T)
-   IF (D1 .EQ.D2) GO TO 90
-   IF (X + X .EQ. ZERO .OR. ABS(X) .GE. XMIN) GO TO 90
-   CALL STORE2 (X, P*X)
-   IF (T*D2 .EQ. T*X) GO TO 80
-   K = K + 1
-   GO TO 50
+50 xmin = x
+   x = (x*binv)*one
+   call store2 (x*xint, x*t)
+   if (d1 .eq.d2) go to 90
+   if (x + x .eq. zero .or. abs(x) .ge. xmin) go to 90
+   call store2 (x, p*x)
+   if (t*d2 .eq. t*x) go to 80
+   k = k + 1
+   go to 50
 !
 !     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
 !     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
 !     THIS LOSS OF ACCURACY.
 !
-80 CALL STORE2 (X, Q*X)
-IF (T*D2 .NE. T*X) GO TO 90
-81 Z = X
-   J = J + 1
-   X = (X*BINV)*ONE
-   CALL STORE2 (X*XINT, X*T)
-   IF (D1 .EQ.D2) GO TO 90
-   IF (X + X .NE. ZERO .AND. ABS(X) .LT. Z) GO TO 81
+80 call store2 (x, q*x)
+if (t*d2 .ne. t*x) go to 90
+81 z = x
+   j = j + 1
+   x = (x*binv)*one
+   call store2 (x*xint, x*t)
+   if (d1 .eq.d2) go to 90
+   if (x + x .ne. zero .and. abs(x) .lt. z) go to 81
 !
-90 MINEXP = 1 - K
+90 minexp = 1 - k
 !-----------------------------------------------------------------------
 !     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMAX
 !     WHEN MAXEXP .LE. 0 ON INPUT
 !-----------------------------------------------------------------------
-IF (MAXEXP .GT. 0) GO TO 101
-IF (IBETA .EQ. 2 .OR. IBETA .EQ. 8 .OR. &
-&IBETA .EQ. 16) GO TO 100
+if (maxexp .gt. 0) go to 101
+if (ibeta .eq. 2 .or. ibeta .eq. 8 .or. &
+&ibeta .eq. 16) go to 100
 !
-   MAXEXP = K - 3
-   IF (N .GT. 0) WRITE (N,200) MAXEXP
-   T = ONE/(B2*B2*XMIN)
-   XMAX = (XMAX*T)*B
-   GO TO 110
+   maxexp = k - 3
+   if (n .gt. 0) write (n,200) maxexp
+   t = one/(b2*b2*xmin)
+   xmax = (xmax*t)*b
+   go to 110
 !
-100 K = K + J
-IF (K + K .GT. KM + 2) KM = KM + KM
-MAXEXP = KM - K - 3
-101 IF (N .GT. 0) WRITE (N,200) MAXEXP
-T = B**(MAXEXP - 2)
-XMAX = ((XMAX*T)*B)*B
+100 k = k + j
+if (k + k .gt. km + 2) km = km + km
+maxexp = km - k - 3
+101 if (n .gt. 0) write (n,200) maxexp
+t = b**(maxexp - 2)
+xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     CHECK THE APPROXIMATION FOR MAXEXP
 !-----------------------------------------------------------------------
-110 CALL STORE2 (T, T*P)
-IF (D1 .EQ.D2) GO TO 150
-IF (N .LE. 0) RETURN
+110 call store2 (t, t*p)
+if (d1 .eq.d2) go to 150
+if (n .le. 0) return
 !-----------------------------------------------------------------------
 !     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
 !-----------------------------------------------------------------------
-WRITE (N,210) MAXEXP
-DO L = 1,500
-   T = T*B
-   XMAX = XMAX*B
-   MAXEXP = MAXEXP + 1
-   CALL STORE2 (T, T*P)
-   IF (D1 .EQ.D2) GO TO 150
-   WRITE (N,220) MAXEXP
-END DO
-WRITE (N,240)
-STOP
+write (n,210) maxexp
+do l = 1,500
+   t = t*b
+   xmax = xmax*b
+   maxexp = maxexp + 1
+   call store2 (t, t*p)
+   if (d1 .eq.d2) go to 150
+   write (n,220) maxexp
+end do
+write (n,240)
+stop
 !-----------------------------------------------------------------------
 !     REPORTING OVERFLOW ON UNIT N
 !-----------------------------------------------------------------------
-150 IF (N .GT. 0) WRITE (N,230)
-STOP
+150 if (n .gt. 0) write (n,230)
+stop
 !-----------------------------------------------------------------------
 !     FORMAT STATEMENTS
 !-----------------------------------------------------------------------
 200 format (' THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS'// &
-&I25// &
+&i25// &
 &' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/ &
 &' THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/ &
 &' THIS APPROXIMATION AND RERUN THE CODE.'//)
 210 format (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/ &
 &' BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER'/ &
-&' THAT FOLLOWS.'//I25)
-220 format (I25)
+&' THAT FOLLOWS.'//i25)
+220 format (i25)
 230 format (/'   ****** OVERFLOW OCCURS ******')
 240 format (/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/ &
 &'        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/ &
 &'        IF ONE WISHES, SET IMAX (OR MAXEXP)'/ &
 &'        TO A LARGER VALUE AND RERUN THE CODE.'/)
 !-----------------------------------------------------------------------
-END SUBROUTINE MACH1
+end subroutine mach1
 
-SUBROUTINE STORE2 (A, B)
-IMPLICIT NONE
-REAL :: A, B
-REAL :: D1, D2
+subroutine store2 (a, b)
+implicit none
+real :: a, b
+real :: d1, d2
 !-----------------------------------------------------------------------
 !     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
-COMMON /SPDATA/ D1, D2
-D1 = A
-D2 = B
-RETURN
-END SUBROUTINE STORE2
+common /spdata/ d1, d2
+d1 = a
+d2 = b
+return
+end subroutine store2
 
-SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
-&XMIN, XMAX)
-IMPLICIT NONE
-INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-INTEGER :: J, K, KM, L
-DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
+subroutine mach2 (n, ibeta, m, minexp, maxexp, eps, xint, &
+&xmin, xmax)
+implicit none
+integer :: ibeta, m, maxexp, minexp, n
+integer :: j, k, km, l
+double precision :: eps, xint, xmin, xmax
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -1089,171 +1089,171 @@ DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
 !                 BY ROUNDOFF ERROR.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, &
-&ZERO
+double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
+&zero
 !----------------
-COMMON /DPDATA/ D1, D2
+common /dpdata/ d1, d2
 !
-ZERO = DBLE(FLOAT(0))
-ONE = DBLE(FLOAT(1))
-B = DBLE(FLOAT(IBETA))
-B2 = B*B
-BM1 = DBLE(FLOAT(IBETA - 1))
-BINV = ONE/B
+zero = dble(float(0))
+one = dble(float(1))
+b = dble(float(ibeta))
+b2 = b*b
+bm1 = dble(float(ibeta - 1))
+binv = one/b
 !-----------------------------------------------------------------------
 !     COMPUTE M AND EPS
 !-----------------------------------------------------------------------
-M = 1
-T = B
-10 M = M + 1
-   Z = T
-   T = B*T
-   CALL DSTOR2 (T + ONE, T)
-   X = D1*BINV - Z
-   IF (X .EQ. BINV) GO TO 10
+m = 1
+t = b
+10 m = m + 1
+   z = t
+   t = b*t
+   call dstor2 (t + one, t)
+   x = d1*binv - z
+   if (x .eq. binv) go to 10
 !
-XINT = (Z - ONE)*B + BM1
-XMAX = XINT/T
-IF (XMAX .LT. ONE) GO TO 20
-   M = M - 1
-   T = Z
-   Z = Z*BINV
-   XINT = (Z - ONE)*B + BM1
-   XMAX = XINT/T
-20 EPS = ONE/Z
+xint = (z - one)*b + bm1
+xmax = xint/t
+if (xmax .lt. one) go to 20
+   m = m - 1
+   t = z
+   z = z*binv
+   xint = (z - one)*b + bm1
+   xmax = xint/t
+20 eps = one/z
 !-----------------------------------------------------------------------
 !     COMPUTE MINEXP AND XMIN
 !-----------------------------------------------------------------------
-P = ONE + EPS
-Q = ONE + EPS*B2
+p = one + eps
+q = one + eps*b2
 !
 !     MINEXP MUST BE FOUND. THIS LOOP OBTAINS THE LARGEST
 !     K = 2**I SUCH THAT B**(-K) DOES NOT UNDERFLOW.
 !
-K = 1
-Z = BINV
-30 X = Z
-   Z = (X*X)*ONE
-   CALL DSTOR2 (Z*XINT, Z*T)
-   IF (D1 .EQ.D2) GO TO 40
-   IF (Z + Z .EQ. ZERO .OR. DABS(Z) .GE. X) GO TO 40
-   CALL DSTOR2 (Z, P*Z)
-   IF (T*D2 .EQ. T*Z) GO TO 40
-   K = K + K
-   GO TO 30
+k = 1
+z = binv
+30 x = z
+   z = (x*x)*one
+   call dstor2 (z*xint, z*t)
+   if (d1 .eq.d2) go to 40
+   if (z + z .eq. zero .or. dabs(z) .ge. x) go to 40
+   call dstor2 (z, p*z)
+   if (t*d2 .eq. t*z) go to 40
+   k = k + k
+   go to 30
 !
-40 KM = K + K
-J = 0
+40 km = k + k
+j = 0
 !
 !     LOOP TO DETERMINE MINEXP AND XMIN
 !
-50 XMIN = X
-   X = (X*BINV)*ONE
-   CALL DSTOR2 (X*XINT, X*T)
-   IF (D1 .EQ.D2) GO TO 90
-   IF (X + X .EQ. ZERO .OR. DABS(X) .GE. XMIN) GO TO 90
-   CALL DSTOR2 (X, P*X)
-   IF (T*D2 .EQ. T*X) GO TO 80
-   K = K + 1
-   GO TO 50
+50 xmin = x
+   x = (x*binv)*one
+   call dstor2 (x*xint, x*t)
+   if (d1 .eq.d2) go to 90
+   if (x + x .eq. zero .or. dabs(x) .ge. xmin) go to 90
+   call dstor2 (x, p*x)
+   if (t*d2 .eq. t*x) go to 80
+   k = k + 1
+   go to 50
 !
 !     IF THERE IS LOSS OF ACCURACY NOT DUE TO UNDERFLOW
 !     THEN SET J = NUMBER OF DIGITS POSSIBLY LOST DUE TO
 !     THIS LOSS OF ACCURACY.
 !
-80 CALL DSTOR2 (X, Q*X)
-IF (T*D2 .NE. T*X) GO TO 90
-81 Z = X
-   J = J + 1
-   X = (X*BINV)*ONE
-   CALL DSTOR2 (X*XINT, X*T)
-   IF (D1 .EQ.D2) GO TO 90
-   IF (X + X .NE. ZERO .AND. DABS(X) .LT. Z) GO TO 81
+80 call dstor2 (x, q*x)
+if (t*d2 .ne. t*x) go to 90
+81 z = x
+   j = j + 1
+   x = (x*binv)*one
+   call dstor2 (x*xint, x*t)
+   if (d1 .eq.d2) go to 90
+   if (x + x .ne. zero .and. dabs(x) .lt. z) go to 81
 !
-90 MINEXP = 1 - K
+90 minexp = 1 - k
 !-----------------------------------------------------------------------
 !     DEFINE AN INITIAL APPROXIMATION FOR MAXEXP AND XMIN
 !     WHEN MAXEXP .LE. 0 ON INPUT
 !-----------------------------------------------------------------------
-IF (MAXEXP .GT. 0) GO TO 101
-IF (IBETA .EQ. 2 .OR. IBETA .EQ. 8 .OR. &
-&IBETA .EQ. 16) GO TO 100
+if (maxexp .gt. 0) go to 101
+if (ibeta .eq. 2 .or. ibeta .eq. 8 .or. &
+&ibeta .eq. 16) go to 100
 !
-   MAXEXP = K - 3
-   IF (N .GT. 0) WRITE (N,200) MAXEXP
-   T = ONE/(B2*B2*XMIN)
-   XMAX = (XMAX*T)*B
-   GO TO 110
+   maxexp = k - 3
+   if (n .gt. 0) write (n,200) maxexp
+   t = one/(b2*b2*xmin)
+   xmax = (xmax*t)*b
+   go to 110
 !
-100 K = K + J
-IF (K + K .GT. KM + 2) KM = KM + KM
-MAXEXP = KM - K - 3
-101 IF (N .GT. 0) WRITE (N,200) MAXEXP
-T = B**(MAXEXP - 2)
-XMAX = ((XMAX*T)*B)*B
+100 k = k + j
+if (k + k .gt. km + 2) km = km + km
+maxexp = km - k - 3
+101 if (n .gt. 0) write (n,200) maxexp
+t = b**(maxexp - 2)
+xmax = ((xmax*t)*b)*b
 !-----------------------------------------------------------------------
 !     CHECK THE APPROXIMATION FOR MAXEXP
 !-----------------------------------------------------------------------
-110 CALL DSTOR2 (T, T*P)
-IF (D1 .EQ.D2) GO TO 150
-IF (N .LE. 0) RETURN
+110 call dstor2 (t, t*p)
+if (d1 .eq.d2) go to 150
+if (n .le. 0) return
 !-----------------------------------------------------------------------
 !     LOOP TO FIND THE EXACT LARGEST VALUE FOR MAXEXP
 !-----------------------------------------------------------------------
-WRITE (N,210) MAXEXP
-DO L = 1,500
-   T = T*B
-   XMAX = XMAX*B
-   MAXEXP = MAXEXP + 1
-   CALL DSTOR2 (T, T*P)
-   IF (D1 .EQ.D2) GO TO 150
-   WRITE (N,220) MAXEXP
-END DO
-WRITE (N,240)
-STOP
+write (n,210) maxexp
+do l = 1,500
+   t = t*b
+   xmax = xmax*b
+   maxexp = maxexp + 1
+   call dstor2 (t, t*p)
+   if (d1 .eq.d2) go to 150
+   write (n,220) maxexp
+end do
+write (n,240)
+stop
 !-----------------------------------------------------------------------
 !     REPORTING OVERFLOW ON UNIT N
 !-----------------------------------------------------------------------
-150 IF (N .GT. 0) WRITE (N,230)
-STOP
+150 if (n .gt. 0) write (n,230)
+stop
 !-----------------------------------------------------------------------
 !     FORMAT STATEMENTS
 !-----------------------------------------------------------------------
 200 format (' THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS'// &
-&I25// &
+&i25// &
 &' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/ &
 &' THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/ &
 &' THIS APPROXIMATION AND RERUN THE CODE.'//)
 210 format (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/ &
 &' BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER'/ &
-&' THAT FOLLOWS.'//I25)
-220 format (I25)
+&' THAT FOLLOWS.'//i25)
+220 format (i25)
 230 format ('0  ****** OVERFLOW OCCURS ******')
 240 format (/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/ &
 &'        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/ &
 &'        IF ONE WISHES, SET IDMAX (OR MAXEXP)'/ &
 &'        TO A LARGER VALUE AND RERUN THE CODE.'/)
 !-----------------------------------------------------------------------
-END SUBROUTINE MACH2
+end subroutine mach2
 
-SUBROUTINE DSTOR2 (A, B)
-IMPLICIT NONE
+subroutine dstor2 (a, b)
+implicit none
 !-----------------------------------------------------------------------
 !     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: A, B, D1, D2
-COMMON /DPDATA/ D1, D2
-D1 = A
-D2 = B
-RETURN
-END SUBROUTINE DSTOR2
+double precision :: a, b, d1, d2
+common /dpdata/ d1, d2
+d1 = a
+d2 = b
+return
+end subroutine dstor2
 
-REAL function SPMPAR (I)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: I
-INTEGER :: IBETA, M
-REAL :: B, BINV, BM1, ONE, W, Z
-INTEGER :: IPMPAR
+real function spmpar (i)
+implicit none
+integer, intent(in) :: i
+integer :: ibeta, m
+real :: b, binv, bm1, one, w, z
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !
 !     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
@@ -1274,43 +1274,43 @@ INTEGER :: IPMPAR
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN VIRGINIA
 !-----------------------------------------------------------------------
-INTEGER :: EMIN, EMAX
+integer :: emin, emax
 !
-IF (I .GT. 1) GO TO 10
-   B = IPMPAR(4)
-   M = IPMPAR(5)
-   SPMPAR = B**(1 - M)
-   RETURN
+if (i .gt. 1) go to 10
+   b = ipmpar(4)
+   m = ipmpar(5)
+   spmpar = b**(1 - m)
+   return
 !
-10 IF (I .GT. 2) GO TO 20
-   B = IPMPAR(4)
-   EMIN = IPMPAR(6)
-   ONE = FLOAT(1)
-   BINV = ONE/B
-   W = B**(EMIN + 2)
-   SPMPAR = ((W * BINV) * BINV) * BINV
-   RETURN
+10 if (i .gt. 2) go to 20
+   b = ipmpar(4)
+   emin = ipmpar(6)
+   one = float(1)
+   binv = one/b
+   w = b**(emin + 2)
+   spmpar = ((w * binv) * binv) * binv
+   return
 !
-20 IBETA = IPMPAR(4)
-M = IPMPAR(5)
-EMAX = IPMPAR(7)
+20 ibeta = ipmpar(4)
+m = ipmpar(5)
+emax = ipmpar(7)
 !
-B = IBETA
-BM1 = IBETA - 1
-ONE = FLOAT(1)
-Z = B**(M - 1)
-W = ((Z - ONE)*B + BM1)/(B*Z)
+b = ibeta
+bm1 = ibeta - 1
+one = float(1)
+z = b**(m - 1)
+w = ((z - one)*b + bm1)/(b*z)
 !
-Z = B**(EMAX - 2)
-SPMPAR = ((W * Z) * B) * B
-RETURN
-END FUNCTION SPMPAR
+z = b**(emax - 2)
+spmpar = ((w * z) * b) * b
+return
+end function spmpar
 
-double precision function DPMPAR (I)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: I
-INTEGER :: IBETA, M
-INTEGER :: IPMPAR
+double precision function dpmpar (i)
+implicit none
+integer, intent(in) :: i
+integer :: ibeta, m
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !
 !     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
@@ -1331,102 +1331,102 @@ INTEGER :: IPMPAR
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN VIRGINIA
 !-----------------------------------------------------------------------
-INTEGER :: EMIN, EMAX
-DOUBLE PRECISION :: B, BINV, BM1, ONE, W, Z
+integer :: emin, emax
+double precision :: b, binv, bm1, one, w, z
 !
-IF (I .GT. 1) GO TO 10
-   B = IPMPAR(4)
-   M = IPMPAR(8)
-   DPMPAR = B**(1 - M)
-   RETURN
+if (i .gt. 1) go to 10
+   b = ipmpar(4)
+   m = ipmpar(8)
+   dpmpar = b**(1 - m)
+   return
 !
-10 IF (I .GT. 2) GO TO 20
-   B = IPMPAR(4)
-   EMIN = IPMPAR(9)
-   ONE = FLOAT(1)
-   BINV = ONE/B
-   W = B**(EMIN + 2)
-   DPMPAR = ((W * BINV) * BINV) * BINV
-   RETURN
+10 if (i .gt. 2) go to 20
+   b = ipmpar(4)
+   emin = ipmpar(9)
+   one = float(1)
+   binv = one/b
+   w = b**(emin + 2)
+   dpmpar = ((w * binv) * binv) * binv
+   return
 !
-20 IBETA = IPMPAR(4)
-M = IPMPAR(8)
-EMAX = IPMPAR(10)
+20 ibeta = ipmpar(4)
+m = ipmpar(8)
+emax = ipmpar(10)
 !
-B = IBETA
-BM1 = IBETA - 1
-ONE = FLOAT(1)
-Z = B**(M - 1)
-W = ((Z - ONE)*B + BM1)/(B*Z)
+b = ibeta
+bm1 = ibeta - 1
+one = float(1)
+z = b**(m - 1)
+w = ((z - one)*b + bm1)/(b*z)
 !
-Z = B**(EMAX - 2)
-DPMPAR = ((W * Z) * B) * B
-RETURN
-END FUNCTION DPMPAR
+z = b**(emax - 2)
+dpmpar = ((w * z) * b) * b
+return
+end function dpmpar
 
-REAL function EPSLN (L)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L
-INTEGER :: M
-INTEGER :: IPMPAR
+real function epsln (l)
+implicit none
+integer, intent(in) :: l
+integer :: m
+integer :: ipmpar
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
-INTEGER :: B
-REAL :: LNB
+integer :: b
+real :: lnb
 !
-B = IPMPAR(4)
-IF (B .NE. 2) GO TO 10
-   LNB = .69314718055995
-   GO TO 50
-10 IF (B .NE. 8) GO TO 20
-   LNB = 2.0794415416798
-   GO TO 50
-20 IF (B .NE. 16) GO TO 30
-   LNB = 2.7725887222398
-   GO TO 50
-30 LNB = ALOG(FLOAT(B))
+b = ipmpar(4)
+if (b .ne. 2) go to 10
+   lnb = .69314718055995
+   go to 50
+10 if (b .ne. 8) go to 20
+   lnb = 2.0794415416798
+   go to 50
+20 if (b .ne. 16) go to 30
+   lnb = 2.7725887222398
+   go to 50
+30 lnb = alog(float(b))
 !
-50 M = 1 - IPMPAR(5)
-EPSLN = M * LNB
-RETURN
-END FUNCTION EPSLN
+50 m = 1 - ipmpar(5)
+epsln = m * lnb
+return
+end function epsln
 
-double precision function DEPSLN (L)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L
-INTEGER :: IPMPAR
+double precision function depsln (l)
+implicit none
+integer, intent(in) :: l
+integer :: ipmpar
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
 !--------------------------------------------------------------------
-INTEGER :: B
-DOUBLE PRECISION :: DB, LNB, M
+integer :: b
+double precision :: db, lnb, m
 !
-B = IPMPAR(4)
-IF (B .NE. 2) GO TO 10
-   LNB = .693147180559945309417232121458D+00
-   GO TO 50
-10 IF (B .NE. 8) GO TO 20
-   LNB = 2.07944154167983592825169636437D+00
-   GO TO 50
-20 IF (B .NE. 16) GO TO 30
-   LNB = 2.77258872223978123766892848583D+00
-   GO TO 50
-30 DB = B
-LNB = DLOG(DB)
+b = ipmpar(4)
+if (b .ne. 2) go to 10
+   lnb = .693147180559945309417232121458d+00
+   go to 50
+10 if (b .ne. 8) go to 20
+   lnb = 2.07944154167983592825169636437d+00
+   go to 50
+20 if (b .ne. 16) go to 30
+   lnb = 2.77258872223978123766892848583d+00
+   go to 50
+30 db = b
+lnb = dlog(db)
 !
-50 M = 1 - IPMPAR(8)
-DEPSLN = M * LNB
-RETURN
-END FUNCTION DEPSLN
+50 m = 1 - ipmpar(8)
+depsln = m * lnb
+return
+end function depsln
 
-REAL function EXPARG (L)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L
-INTEGER :: M
-INTEGER :: IPMPAR
+real function exparg (l)
+implicit none
+integer, intent(in) :: l
+integer :: m
+integer :: ipmpar
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 !     EXP(W) CAN BE COMPUTED.
@@ -1436,35 +1436,35 @@ INTEGER :: IPMPAR
 !
 !     NOTE... ONLY AN APPROXIMATE VALUE FOR EXPARG(L) IS NEEDED.
 !--------------------------------------------------------------------
-INTEGER :: B
-REAL :: LNB
+integer :: b
+real :: lnb
 !
-B = IPMPAR(4)
-IF (B .NE. 2) GO TO 10
-   LNB = .69314718055995
-   GO TO 50
-10 IF (B .NE. 8) GO TO 20
-   LNB = 2.0794415416798
-   GO TO 50
-20 IF (B .NE. 16) GO TO 30
-   LNB = 2.7725887222398
-   GO TO 50
-30 LNB = ALOG(FLOAT(B))
+b = ipmpar(4)
+if (b .ne. 2) go to 10
+   lnb = .69314718055995
+   go to 50
+10 if (b .ne. 8) go to 20
+   lnb = 2.0794415416798
+   go to 50
+20 if (b .ne. 16) go to 30
+   lnb = 2.7725887222398
+   go to 50
+30 lnb = alog(float(b))
 !
-50 IF (L .EQ. 0) GO TO 60
-   M = IPMPAR(6) - 1
-   EXPARG = 0.99999 * (M * LNB)
-   RETURN
-60 M = IPMPAR(7)
-EXPARG = 0.99999 * (M * LNB)
-RETURN
-END FUNCTION EXPARG
+50 if (l .eq. 0) go to 60
+   m = ipmpar(6) - 1
+   exparg = 0.99999 * (m * lnb)
+   return
+60 m = ipmpar(7)
+exparg = 0.99999 * (m * lnb)
+return
+end function exparg
 
-double precision function DXPARG (L)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L
-INTEGER :: M
-INTEGER :: IPMPAR
+double precision function dxparg (l)
+implicit none
+integer, intent(in) :: l
+integer :: m
+integer :: ipmpar
 !--------------------------------------------------------------------
 !     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 !     DEXP(W) CAN BE COMPUTED.
@@ -1474,615 +1474,615 @@ INTEGER :: IPMPAR
 !
 !     NOTE... ONLY AN APPROXIMATE VALUE FOR DXPARG(L) IS NEEDED.
 !--------------------------------------------------------------------
-INTEGER :: B
-DOUBLE PRECISION :: DB, LNB
+integer :: b
+double precision :: db, lnb
 !
-B = IPMPAR(4)
-IF (B .NE. 2) GO TO 10
-   LNB = .693147180559945309417232121458D+00
-   GO TO 50
-10 IF (B .NE. 8) GO TO 20
-   LNB = 2.07944154167983592825169636437D+00
-   GO TO 50
-20 IF (B .NE. 16) GO TO 30
-   LNB = 2.77258872223978123766892848583D+00
-   GO TO 50
-30 DB = B
-LNB = DLOG(DB)
+b = ipmpar(4)
+if (b .ne. 2) go to 10
+   lnb = .693147180559945309417232121458d+00
+   go to 50
+10 if (b .ne. 8) go to 20
+   lnb = 2.07944154167983592825169636437d+00
+   go to 50
+20 if (b .ne. 16) go to 30
+   lnb = 2.77258872223978123766892848583d+00
+   go to 50
+30 db = b
+lnb = dlog(db)
 !
-50 IF (L .EQ. 0) GO TO 60
-   M = IPMPAR(9) - 1
-   DXPARG = 0.999999999999D+00 * (M * LNB)
-   RETURN
-60 M = IPMPAR(10)
-DXPARG = 0.999999999999D+00 * (M * LNB)
-RETURN
-END FUNCTION DXPARG
+50 if (l .eq. 0) go to 60
+   m = ipmpar(9) - 1
+   dxparg = 0.999999999999d+00 * (m * lnb)
+   return
+60 m = ipmpar(10)
+dxparg = 0.999999999999d+00 * (m * lnb)
+return
+end function dxparg
 
-SUBROUTINE ISHELL (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+subroutine ishell (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-INTEGER, INTENT(INOUT) :: A(N)
-INTEGER :: K(10), S
+integer, intent(inout) :: a(n)
+integer :: k(10), s
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE ISHELL
+40 i = i - 1
+return
+end subroutine ishell
 
-SUBROUTINE SHELL (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S
+subroutine shell (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-INTEGER :: K(10)
+real, intent(inout) :: a(n)
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE SHELL
+40 i = i - 1
+return
+end subroutine shell
 
-SUBROUTINE SHELL2 (A, B, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S, T
+subroutine shell2 (a, b, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s, t
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N), B(N)
-INTEGER :: K(10)
+real, intent(inout) :: a(n), b(n)
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   DO J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-      T = B(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         B(LL) = B(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
-      B(LL) = T
-   END DO
+   jmax = n - ki
+   do j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+      t = b(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         b(ll) = b(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
+      b(ll) = t
+   end do
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE SHELL2
+40 i = i - 1
+return
+end subroutine shell2
 
-SUBROUTINE RSORT (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S
+subroutine rsort (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-INTEGER :: K(10)
+real, intent(inout) :: a(n)
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE RSORT
+40 i = i - 1
+return
+end subroutine rsort
 
-SUBROUTINE RISORT (A, M, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S
+subroutine risort (a, m, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-INTEGER, INTENT(INOUT) :: M(N)
-INTEGER :: T
-INTEGER :: K(10)
+real, intent(inout) :: a(n)
+integer, intent(inout) :: m(n)
+integer :: t
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   DO J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-      T = M(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         M(LL) = M(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
-      M(LL) = T
-   END DO
+   jmax = n - ki
+   do j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+      t = m(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         m(ll) = m(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
+      m(ll) = t
+   end do
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE RISORT
+40 i = i - 1
+return
+end subroutine risort
 
-SUBROUTINE RRSORT (A, B, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S, T
+subroutine rrsort (a, b, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s, t
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N), B(N)
-INTEGER :: K(10)
+real, intent(inout) :: a(n), b(n)
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   DO J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-      T = B(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         B(LL) = B(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
-      B(LL) = T
-   END DO
+   jmax = n - ki
+   do j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+      t = b(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         b(ll) = b(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
+      b(ll) = t
+   end do
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE RRSORT
+40 i = i - 1
+return
+end subroutine rrsort
 
-SUBROUTINE DSORT (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+subroutine dsort (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-DOUBLE PRECISION :: S
-INTEGER :: K(10)
+double precision, intent(inout) :: a(n)
+double precision :: s
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE DSORT
+40 i = i - 1
+return
+end subroutine dsort
 
-SUBROUTINE DISORT (A, M, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+subroutine disort (a, m, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-DOUBLE PRECISION :: S
-INTEGER, INTENT(INOUT) :: M(N)
-INTEGER :: T
-INTEGER :: K(10)
+double precision, intent(inout) :: a(n)
+double precision :: s
+integer, intent(inout) :: m(n)
+integer :: t
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   DO J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-      T = M(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         M(LL) = M(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
-      M(LL) = T
-   END DO
+   jmax = n - ki
+   do j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+      t = m(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         m(ll) = m(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
+      m(ll) = t
+   end do
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE DISORT
+40 i = i - 1
+return
+end subroutine disort
 
-SUBROUTINE DDSORT (A, B, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+subroutine ddsort (a, b, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 !     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
-DOUBLE PRECISION :: S, T
-INTEGER :: K(10)
+double precision, intent(inout) :: a(n), b(n)
+double precision :: s, t
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT A(J).LE.A(J+KI) FOR J=1,...,N-KI
 !
-   JMAX = N - KI
-   DO J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-      T = B(LL)
-30 IF (S .GE. A(L)) GO TO 31
-         A(LL) = A(L)
-         B(LL) = B(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
-      B(LL) = T
-   END DO
+   jmax = n - ki
+   do j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+      t = b(ll)
+30 if (s .ge. a(l)) go to 31
+         a(ll) = a(l)
+         b(ll) = b(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
+      b(ll) = t
+   end do
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE DDSORT
+40 i = i - 1
+return
+end subroutine ddsort
 
-SUBROUTINE AORD (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
-REAL :: S
+subroutine aord (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
+real :: s
 !-----------------------------------------------------------------------
 !     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
 !     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
 !     ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-INTEGER :: K(10)
+real, intent(inout) :: a(n)
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !                 SO THAT ABS(A(J)) .LE. ABS(A(J+KI))
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (ABS(S) .GE. ABS(A(L))) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (abs(s) .ge. abs(a(l))) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE AORD
+40 i = i - 1
+return
+end subroutine aord
 
-SUBROUTINE DAORD (A, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+subroutine daord (a, n)
+implicit none
+integer, intent(in) :: n
+integer :: i, ii, imax, j, jmax, ki, l, ll
 !-----------------------------------------------------------------------
 !     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
 !     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
 !     IT IS ASSUMED THAT N .GE. 1.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-DOUBLE PRECISION :: S
-INTEGER :: K(10)
+double precision, intent(inout) :: a(n)
+double precision :: s
+integer :: k(10)
 !------------------------
-DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/, &
-&K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
+data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
+&k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
 !------------------------
 !
 !             SELECTION OF THE INCREMENTS K(I) = (3**I-1)/2
 !
-IF (N .LT. 2) RETURN
-IMAX = 1
-do 10 I = 3,10
-   IF (N .LE. K(I)) GO TO 20
-   IMAX = IMAX + 1
-10 CONTINUE
+if (n .lt. 2) return
+imax = 1
+do 10 i = 3,10
+   if (n .le. k(i)) go to 20
+   imax = imax + 1
+10 continue
 !
 !            STEPPING THROUGH THE INCREMENTS K(IMAX),...,K(1)
 !
-20 I = IMAX
-do 40 II = 1,IMAX
-   KI = K(I)
+20 i = imax
+do 40 ii = 1,imax
+   ki = k(i)
 !
 !             SORTING ELEMENTS THAT ARE KI POSITIONS APART
 !               SO THAT DABS(A(J)) .LE. DABS(A(J+KI))
 !
-   JMAX = N - KI
-   do 31 J = 1,JMAX
-      L = J
-      LL = J + KI
-      S = A(LL)
-30 IF (DABS(S) .GE. DABS(A(L))) GO TO 31
-         A(LL) = A(L)
-         LL = L
-         L = L - KI
-         IF (L .GT. 0) GO TO 30
-31 A(LL) = S
+   jmax = n - ki
+   do 31 j = 1,jmax
+      l = j
+      ll = j + ki
+      s = a(ll)
+30 if (dabs(s) .ge. dabs(a(l))) go to 31
+         a(ll) = a(l)
+         ll = l
+         l = l - ki
+         if (l .gt. 0) go to 30
+31 a(ll) = s
 !
-40 I = I - 1
-RETURN
-END SUBROUTINE DAORD
+40 i = i - 1
+return
+end subroutine daord
 
-SUBROUTINE QSORTI (X, IND, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, X(N)
-INTEGER, INTENT(INOUT) :: IND(N)
+subroutine qsorti (x, ind, n)
+implicit none
+integer, intent(in) :: n, x(n)
+integer, intent(inout) :: ind(n)
 !
 !***********************************************************
 !
@@ -2128,9 +2128,9 @@ INTEGER, INTENT(INOUT) :: IND(N)
 !
 !***********************************************************
 !
-INTEGER :: IU(21), IL(21)
-INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX, T
-REAL :: R
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx, t
+real :: r
 !
 ! LOCAL PARAMETERS -
 !
@@ -2145,146 +2145,146 @@ REAL :: R
 ! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
 ! T =      CENTRAL ELEMENT OF X
 !
-IF (N .LE. 0) RETURN
+if (n .le. 0) return
 !
 ! INITIALIZE IND, M, I, J, AND R
 !
-do 1 I = 1,N
-1 IND(I) = I
-M = 1
-I = 1
-J = N
-R = .375
+do 1 i = 1,n
+1 ind(i) = i
+m = 1
+i = 1
+j = n
+r = .375
 !
 ! TOP OF LOOP
 !
-2 IF (I .GE. J) GO TO 10
-IF (R .GT. .5898437) GO TO 3
-R = R + .0390625
-GO TO 4
-3 R = R - .21875
+2 if (i .ge. j) go to 10
+if (r .gt. .5898437) go to 3
+r = r + .0390625
+go to 4
+3 r = r - .21875
 !
 ! INITIALIZE K
 !
-4 K = I
+4 k = i
 !
 ! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
 !
-IJ = I + IFIX(R*FLOAT(J-I))
-IT = IND(IJ)
-T = X(IT)
+ij = i + ifix(r*float(j-i))
+it = ind(ij)
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 5
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
+indx = ind(i)
+if (x(indx) .le. t) go to 5
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
 !
 ! INITIALIZE L
 !
-5 L = J
+5 l = j
 !
 ! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(J)
-IF (X(INDX) .GE. T) GO TO 7
-IND(IJ) = INDX
-IND(J) = IT
-IT = INDX
-T = X(IT)
+indx = ind(j)
+if (x(indx) .ge. t) go to 7
+ind(ij) = indx
+ind(j) = it
+it = indx
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 7
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
-GO TO 7
+indx = ind(i)
+if (x(indx) .le. t) go to 7
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
+go to 7
 !
 ! INTERCHANGE ELEMENTS K AND L
 !
-6 ITT = IND(L)
-IND(L) = IND(K)
-IND(K) = ITT
+6 itt = ind(l)
+ind(l) = ind(k)
+ind(k) = itt
 !
 ! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
 !   NOT LARGER THAN T
 !
-7 L = L - 1
-INDX = IND(L)
-IF (X(INDX) .GT. T) GO TO 7
+7 l = l - 1
+indx = ind(l)
+if (x(indx) .gt. t) go to 7
 !
 ! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
 !   NOT SMALLER THAN T
 !
-8 K = K + 1
-INDX = IND(K)
-IF (X(INDX) .LT. T) GO TO 8
+8 k = k + 1
+indx = ind(k)
+if (x(indx) .lt. t) go to 8
 !
 ! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
 !
-IF (K .LE. L) GO TO 6
+if (k .le. l) go to 6
 !
 ! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
 !   ARRAY YET TO BE SORTED
 !
-IF (L-I .LE. J-K) GO TO 9
-IL(M) = I
-IU(M) = L
-I = K
-M = M + 1
-GO TO 11
+if (l-i .le. j-k) go to 9
+il(m) = i
+iu(m) = l
+i = k
+m = m + 1
+go to 11
 !
-9 IL(M) = K
-IU(M) = J
-J = L
-M = M + 1
-GO TO 11
+9 il(m) = k
+iu(m) = j
+j = l
+m = m + 1
+go to 11
 !
 ! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
 !
-10 M = M - 1
-IF (M .EQ. 0) RETURN
-I = IL(M)
-J = IU(M)
+10 m = m - 1
+if (m .eq. 0) return
+i = il(m)
+j = iu(m)
 !
-11 IF (J-I .GE. 11) GO TO 4
-IF (I .EQ. 1) GO TO 2
-I = I - 1
+11 if (j-i .ge. 11) go to 4
+if (i .eq. 1) go to 2
+i = i - 1
 !
 ! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
 !   J-I .LT. 11.
 !
-12 I = I + 1
-IF (I .EQ. J) GO TO 10
-INDX = IND(I+1)
-T = X(INDX)
-IT = INDX
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 12
-K = I
+12 i = i + 1
+if (i .eq. j) go to 10
+indx = ind(i+1)
+t = x(indx)
+it = indx
+indx = ind(i)
+if (x(indx) .le. t) go to 12
+k = i
 !
-13 IND(K+1) = IND(K)
-K = K - 1
-INDX = IND(K)
-IF (T .LT. X(INDX)) GO TO 13
-IND(K+1) = IT
-GO TO 12
-END SUBROUTINE QSORTI
+13 ind(k+1) = ind(k)
+k = k - 1
+indx = ind(k)
+if (t .lt. x(indx)) go to 13
+ind(k+1) = it
+go to 12
+end subroutine qsorti
 
-SUBROUTINE QSORTR (X, IND, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: IND(N)
-REAL, INTENT(IN) :: X(N)
+subroutine qsortr (x, ind, n)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: ind(n)
+real, intent(in) :: x(n)
 !
 !***********************************************************
 !
@@ -2330,9 +2330,9 @@ REAL, INTENT(IN) :: X(N)
 !
 !***********************************************************
 !
-INTEGER :: IU(21), IL(21)
-INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
-REAL :: R, T
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx
+real :: r, t
 !
 ! LOCAL PARAMETERS -
 !
@@ -2347,146 +2347,146 @@ REAL :: R, T
 ! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
 ! T =      CENTRAL ELEMENT OF X
 !
-IF (N .LE. 0) RETURN
+if (n .le. 0) return
 !
 ! INITIALIZE IND, M, I, J, AND R
 !
-do 1 I = 1,N
-1 IND(I) = I
-M = 1
-I = 1
-J = N
-R = .375
+do 1 i = 1,n
+1 ind(i) = i
+m = 1
+i = 1
+j = n
+r = .375
 !
 ! TOP OF LOOP
 !
-2 IF (I .GE. J) GO TO 10
-IF (R .GT. .5898437) GO TO 3
-R = R + .0390625
-GO TO 4
-3 R = R - .21875
+2 if (i .ge. j) go to 10
+if (r .gt. .5898437) go to 3
+r = r + .0390625
+go to 4
+3 r = r - .21875
 !
 ! INITIALIZE K
 !
-4 K = I
+4 k = i
 !
 ! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
 !
-IJ = I + IFIX(R*FLOAT(J-I))
-IT = IND(IJ)
-T = X(IT)
+ij = i + ifix(r*float(j-i))
+it = ind(ij)
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 5
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
+indx = ind(i)
+if (x(indx) .le. t) go to 5
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
 !
 ! INITIALIZE L
 !
-5 L = J
+5 l = j
 !
 ! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(J)
-IF (X(INDX) .GE. T) GO TO 7
-IND(IJ) = INDX
-IND(J) = IT
-IT = INDX
-T = X(IT)
+indx = ind(j)
+if (x(indx) .ge. t) go to 7
+ind(ij) = indx
+ind(j) = it
+it = indx
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 7
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
-GO TO 7
+indx = ind(i)
+if (x(indx) .le. t) go to 7
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
+go to 7
 !
 ! INTERCHANGE ELEMENTS K AND L
 !
-6 ITT = IND(L)
-IND(L) = IND(K)
-IND(K) = ITT
+6 itt = ind(l)
+ind(l) = ind(k)
+ind(k) = itt
 !
 ! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
 !   NOT LARGER THAN T
 !
-7 L = L - 1
-INDX = IND(L)
-IF (X(INDX) .GT. T) GO TO 7
+7 l = l - 1
+indx = ind(l)
+if (x(indx) .gt. t) go to 7
 !
 ! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
 !   NOT SMALLER THAN T
 !
-8 K = K + 1
-INDX = IND(K)
-IF (X(INDX) .LT. T) GO TO 8
+8 k = k + 1
+indx = ind(k)
+if (x(indx) .lt. t) go to 8
 !
 ! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
 !
-IF (K .LE. L) GO TO 6
+if (k .le. l) go to 6
 !
 ! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
 !   ARRAY YET TO BE SORTED
 !
-IF (L-I .LE. J-K) GO TO 9
-IL(M) = I
-IU(M) = L
-I = K
-M = M + 1
-GO TO 11
+if (l-i .le. j-k) go to 9
+il(m) = i
+iu(m) = l
+i = k
+m = m + 1
+go to 11
 !
-9 IL(M) = K
-IU(M) = J
-J = L
-M = M + 1
-GO TO 11
+9 il(m) = k
+iu(m) = j
+j = l
+m = m + 1
+go to 11
 !
 ! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
 !
-10 M = M - 1
-IF (M .EQ. 0) RETURN
-I = IL(M)
-J = IU(M)
+10 m = m - 1
+if (m .eq. 0) return
+i = il(m)
+j = iu(m)
 !
-11 IF (J-I .GE. 11) GO TO 4
-IF (I .EQ. 1) GO TO 2
-I = I - 1
+11 if (j-i .ge. 11) go to 4
+if (i .eq. 1) go to 2
+i = i - 1
 !
 ! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
 !   J-I .LT. 11.
 !
-12 I = I + 1
-IF (I .EQ. J) GO TO 10
-INDX = IND(I+1)
-T = X(INDX)
-IT = INDX
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 12
-K = I
+12 i = i + 1
+if (i .eq. j) go to 10
+indx = ind(i+1)
+t = x(indx)
+it = indx
+indx = ind(i)
+if (x(indx) .le. t) go to 12
+k = i
 !
-13 IND(K+1) = IND(K)
-K = K - 1
-INDX = IND(K)
-IF (T .LT. X(INDX)) GO TO 13
-IND(K+1) = IT
-GO TO 12
-END SUBROUTINE QSORTR
+13 ind(k+1) = ind(k)
+k = k - 1
+indx = ind(k)
+if (t .lt. x(indx)) go to 13
+ind(k+1) = it
+go to 12
+end subroutine qsortr
 
-SUBROUTINE QSORTD (X, IND, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: IND(N)
-DOUBLE PRECISION, INTENT(IN) :: X(N)
+subroutine qsortd (x, ind, n)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: ind(n)
+double precision, intent(in) :: x(n)
 !
 !***********************************************************
 !
@@ -2532,10 +2532,10 @@ DOUBLE PRECISION, INTENT(IN) :: X(N)
 !
 !***********************************************************
 !
-INTEGER :: IU(21), IL(21)
-INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
-REAL :: R
-DOUBLE PRECISION :: T
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx
+real :: r
+double precision :: t
 !
 ! LOCAL PARAMETERS -
 !
@@ -2550,145 +2550,145 @@ DOUBLE PRECISION :: T
 ! R =      PSEUDO RANDOM NUMBER FOR GENERATING IJ
 ! T =      CENTRAL ELEMENT OF X
 !
-IF (N .LE. 0) RETURN
+if (n .le. 0) return
 !
 ! INITIALIZE IND, M, I, J, AND R
 !
-do 1 I = 1,N
-1 IND(I) = I
-M = 1
-I = 1
-J = N
-R = .375
+do 1 i = 1,n
+1 ind(i) = i
+m = 1
+i = 1
+j = n
+r = .375
 !
 ! TOP OF LOOP
 !
-2 IF (I .GE. J) GO TO 10
-IF (R .GT. .5898437) GO TO 3
-R = R + .0390625
-GO TO 4
-3 R = R - .21875
+2 if (i .ge. j) go to 10
+if (r .gt. .5898437) go to 3
+r = r + .0390625
+go to 4
+3 r = r - .21875
 !
 ! INITIALIZE K
 !
-4 K = I
+4 k = i
 !
 ! SELECT A CENTRAL ELEMENT OF X AND SAVE IT IN T
 !
-IJ = I + IFIX(R*FLOAT(J-I))
-IT = IND(IJ)
-T = X(IT)
+ij = i + ifix(r*float(j-i))
+it = ind(ij)
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 5
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
+indx = ind(i)
+if (x(indx) .le. t) go to 5
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
 !
 ! INITIALIZE L
 !
-5 L = J
+5 l = j
 !
 ! IF THE LAST ELEMENT OF THE ARRAY IS LESS THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(J)
-IF (X(INDX) .GE. T) GO TO 7
-IND(IJ) = INDX
-IND(J) = IT
-IT = INDX
-T = X(IT)
+indx = ind(j)
+if (x(indx) .ge. t) go to 7
+ind(ij) = indx
+ind(j) = it
+it = indx
+t = x(it)
 !
 ! IF THE FIRST ELEMENT OF THE ARRAY IS GREATER THAN T,
 !   INTERCHANGE IT WITH T
 !
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 7
-IND(IJ) = INDX
-IND(I) = IT
-IT = INDX
-T = X(IT)
-GO TO 7
+indx = ind(i)
+if (x(indx) .le. t) go to 7
+ind(ij) = indx
+ind(i) = it
+it = indx
+t = x(it)
+go to 7
 !
 ! INTERCHANGE ELEMENTS K AND L
 !
-6 ITT = IND(L)
-IND(L) = IND(K)
-IND(K) = ITT
+6 itt = ind(l)
+ind(l) = ind(k)
+ind(k) = itt
 !
 ! FIND AN ELEMENT IN THE UPPER PART OF THE ARRAY WHICH IS
 !   NOT LARGER THAN T
 !
-7 L = L - 1
-INDX = IND(L)
-IF (X(INDX) .GT. T) GO TO 7
+7 l = l - 1
+indx = ind(l)
+if (x(indx) .gt. t) go to 7
 !
 ! FIND AN ELEMENT IN THE LOWER PART OF THE ARRAY WHCIH IS
 !   NOT SMALLER THAN T
 !
-8 K = K + 1
-INDX = IND(K)
-IF (X(INDX) .LT. T) GO TO 8
+8 k = k + 1
+indx = ind(k)
+if (x(indx) .lt. t) go to 8
 !
 ! IF K .LE. L, INTERCHANGE ELEMENTS K AND L
 !
-IF (K .LE. L) GO TO 6
+if (k .le. l) go to 6
 !
 ! SAVE THE UPPER AND LOWER SUBSCRIPTS OF THE PORTION OF THE
 !   ARRAY YET TO BE SORTED
 !
-IF (L-I .LE. J-K) GO TO 9
-IL(M) = I
-IU(M) = L
-I = K
-M = M + 1
-GO TO 11
+if (l-i .le. j-k) go to 9
+il(m) = i
+iu(m) = l
+i = k
+m = m + 1
+go to 11
 !
-9 IL(M) = K
-IU(M) = J
-J = L
-M = M + 1
-GO TO 11
+9 il(m) = k
+iu(m) = j
+j = l
+m = m + 1
+go to 11
 !
 ! BEGIN AGAIN ON ANOTHER UNSORTED PORTION OF THE ARRAY
 !
-10 M = M - 1
-IF (M .EQ. 0) RETURN
-I = IL(M)
-J = IU(M)
+10 m = m - 1
+if (m .eq. 0) return
+i = il(m)
+j = iu(m)
 !
-11 IF (J-I .GE. 11) GO TO 4
-IF (I .EQ. 1) GO TO 2
-I = I - 1
+11 if (j-i .ge. 11) go to 4
+if (i .eq. 1) go to 2
+i = i - 1
 !
 ! SORT ELEMENTS I+1,...,J.  NOTE THAT 1 .LE. I .LT. J AND
 !   J-I .LT. 11.
 !
-12 I = I + 1
-IF (I .EQ. J) GO TO 10
-INDX = IND(I+1)
-T = X(INDX)
-IT = INDX
-INDX = IND(I)
-IF (X(INDX) .LE. T) GO TO 12
-K = I
+12 i = i + 1
+if (i .eq. j) go to 10
+indx = ind(i+1)
+t = x(indx)
+it = indx
+indx = ind(i)
+if (x(indx) .le. t) go to 12
+k = i
 !
-13 IND(K+1) = IND(K)
-K = K - 1
-INDX = IND(K)
-IF (T .LT. X(INDX)) GO TO 13
-IND(K+1) = IT
-GO TO 12
-END SUBROUTINE QSORTD
+13 ind(k+1) = ind(k)
+k = k - 1
+indx = ind(k)
+if (t .lt. x(indx)) go to 13
+ind(k+1) = it
+go to 12
+end subroutine qsortd
 
-SUBROUTINE IORDER (A, IP, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: A(N), IP(N)
+subroutine iorder (a, ip, n)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: a(n), ip(n)
 !
 !***********************************************************
 !
@@ -2713,7 +2713,7 @@ INTEGER, INTENT(INOUT) :: A(N), IP(N)
 !
 !***********************************************************
 !
-INTEGER :: NN, K, J, IPJ, TEMP
+integer :: nn, k, j, ipj, temp
 !
 ! LOCAL PARAMETERS -
 !
@@ -2724,45 +2724,45 @@ INTEGER :: NN, K, J, IPJ, TEMP
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
 !
-NN = N
-IF (NN .LT. 2) RETURN
-K = 1
+nn = n
+if (nn .lt. 2) return
+k = 1
 !
 ! LOOP ON PERMUTATIONS
 !
-1 J = K
-TEMP = A(K)
+1 j = k
+temp = a(k)
 !
 ! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
 !   AS BEING INCLUDED IN THE PERMUTATION.
 !
-2 IPJ = IP(J)
-IP(J) = -IPJ
-IF (IPJ .EQ. K) GO TO 3
-A(J) = A(IPJ)
-J = IPJ
-GO TO 2
-3 A(J) = TEMP
+2 ipj = ip(j)
+ip(j) = -ipj
+if (ipj .eq. k) go to 3
+a(j) = a(ipj)
+j = ipj
+go to 2
+3 a(j) = temp
 !
 ! SEARCH FOR AN UNMARKED ELEMENT OF IP
 !
-4 K = K + 1
-IF (K .GT. NN) GO TO 5
-IF (IP(K) .GT. 0) GO TO 1
-GO TO 4
+4 k = k + 1
+if (k .gt. nn) go to 5
+if (ip(k) .gt. 0) go to 1
+go to 4
 !
 ! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
 !
-5 do 6 K = 1,NN
-6 IP(K) = -IP(K)
-RETURN
-END SUBROUTINE IORDER
+5 do 6 k = 1,nn
+6 ip(k) = -ip(k)
+return
+end subroutine iorder
 
-SUBROUTINE RORDER (A, IP, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: IP(N)
-REAL, INTENT(INOUT) :: A(N)
+subroutine rorder (a, ip, n)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: ip(n)
+real, intent(inout) :: a(n)
 !
 !***********************************************************
 !
@@ -2787,8 +2787,8 @@ REAL, INTENT(INOUT) :: A(N)
 !
 !***********************************************************
 !
-INTEGER :: NN, K, J, IPJ
-REAL :: TEMP
+integer :: nn, k, j, ipj
+real :: temp
 !
 ! LOCAL PARAMETERS -
 !
@@ -2799,45 +2799,45 @@ REAL :: TEMP
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
 !
-NN = N
-IF (NN .LT. 2) RETURN
-K = 1
+nn = n
+if (nn .lt. 2) return
+k = 1
 !
 ! LOOP ON PERMUTATIONS
 !
-1 J = K
-TEMP = A(K)
+1 j = k
+temp = a(k)
 !
 ! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
 !   AS BEING INCLUDED IN THE PERMUTATION.
 !
-2 IPJ = IP(J)
-IP(J) = -IPJ
-IF (IPJ .EQ. K) GO TO 3
-A(J) = A(IPJ)
-J = IPJ
-GO TO 2
-3 A(J) = TEMP
+2 ipj = ip(j)
+ip(j) = -ipj
+if (ipj .eq. k) go to 3
+a(j) = a(ipj)
+j = ipj
+go to 2
+3 a(j) = temp
 !
 ! SEARCH FOR AN UNMARKED ELEMENT OF IP
 !
-4 K = K + 1
-IF (K .GT. NN) GO TO 5
-IF (IP(K) .GT. 0) GO TO 1
-GO TO 4
+4 k = k + 1
+if (k .gt. nn) go to 5
+if (ip(k) .gt. 0) go to 1
+go to 4
 !
 ! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
 !
-5 do 6 K = 1,NN
-6 IP(K) = -IP(K)
-RETURN
-END SUBROUTINE RORDER
+5 do 6 k = 1,nn
+6 ip(k) = -ip(k)
+return
+end subroutine rorder
 
-SUBROUTINE DORDER (A, IP, N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+subroutine dorder (a, ip, n)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: ip(n)
+double precision, intent(inout) :: a(n)
 !
 !***********************************************************
 !
@@ -2862,8 +2862,8 @@ DOUBLE PRECISION, INTENT(INOUT) :: A(N)
 !
 !***********************************************************
 !
-INTEGER :: NN, K, J, IPJ
-DOUBLE PRECISION :: TEMP
+integer :: nn, k, j, ipj
+double precision :: temp
 !
 ! LOCAL PARAMETERS -
 !
@@ -2874,267 +2874,267 @@ DOUBLE PRECISION :: TEMP
 ! IPJ =  IP(J)
 ! TEMP = TEMPORARY STORAGE FOR A(K)
 !
-NN = N
-IF (NN .LT. 2) RETURN
-K = 1
+nn = n
+if (nn .lt. 2) return
+k = 1
 !
 ! LOOP ON PERMUTATIONS
 !
-1 J = K
-TEMP = A(K)
+1 j = k
+temp = a(k)
 !
 ! APPLY PERMUTATION TO A.  IP(J) IS MARKED (MADE NEGATIVE)
 !   AS BEING INCLUDED IN THE PERMUTATION.
 !
-2 IPJ = IP(J)
-IP(J) = -IPJ
-IF (IPJ .EQ. K) GO TO 3
-A(J) = A(IPJ)
-J = IPJ
-GO TO 2
-3 A(J) = TEMP
+2 ipj = ip(j)
+ip(j) = -ipj
+if (ipj .eq. k) go to 3
+a(j) = a(ipj)
+j = ipj
+go to 2
+3 a(j) = temp
 !
 ! SEARCH FOR AN UNMARKED ELEMENT OF IP
 !
-4 K = K + 1
-IF (K .GT. NN) GO TO 5
-IF (IP(K) .GT. 0) GO TO 1
-GO TO 4
+4 k = k + 1
+if (k .gt. nn) go to 5
+if (ip(k) .gt. 0) go to 1
+go to 4
 !
 ! ALL PERMUTATIONS HAVE BEEN APPLIED.  UNMARK IP.
 !
-5 do 6 K = 1,NN
-6 IP(K) = -IP(K)
-RETURN
-END SUBROUTINE DORDER
+5 do 6 k = 1,nn
+6 ip(k) = -ip(k)
+return
+end subroutine dorder
 
-REAL function CBRT (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: R
+real function cbrt (x)
+implicit none
+real, intent(in) :: x
+real :: r
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
-IF (X) 30, 10, 20
-10 CBRT = 0.0
-RETURN
-20 R = ALOG(X)/3.0
-CBRT = EXP(R)
-RETURN
-30 R = ALOG(-X)/3.0
-CBRT = -EXP(R)
-RETURN
-END FUNCTION CBRT
+if (x) 30, 10, 20
+10 cbrt = 0.0
+return
+20 r = alog(x)/3.0
+cbrt = exp(r)
+return
+30 r = alog(-x)/3.0
+cbrt = -exp(r)
+return
+end function cbrt
 
-double precision function DCBRT (X)
-IMPLICIT NONE
+double precision function dcbrt (x)
+implicit none
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: R
+double precision, intent(in) :: x
+double precision :: r
 !
-IF (X) 30, 10, 20
-10 DCBRT = 0.D0
-RETURN
-20 R = DLOG(X)/3.D0
-DCBRT = DEXP(R)
-RETURN
-30 R = DLOG(-X)/3.D0
-DCBRT = -DEXP(R)
-RETURN
-END FUNCTION DCBRT
+if (x) 30, 10, 20
+10 dcbrt = 0.d0
+return
+20 r = dlog(x)/3.d0
+dcbrt = dexp(r)
+return
+30 r = dlog(-x)/3.d0
+dcbrt = -dexp(r)
+return
+end function dcbrt
 
-FUNCTION ARTNQ(Y,X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X, Y
-REAL :: ARTNQ
-IF (X) 1,2,5
-1 ARTNQ=ATAN(Y/X)+3.1415926535898
-RETURN
-2 IF (Y) 3,8,4
-3 ARTNQ=4.7123889803847
-RETURN
-4 ARTNQ=1.5707963267949
-RETURN
-5 IF (Y) 6,8,7
-6 ARTNQ=ATAN(Y/X)+6.2831853071795
-RETURN
-7 ARTNQ=ATAN(Y/X)
-RETURN
-8 ARTNQ=0.
-RETURN
-END FUNCTION ARTNQ
+function artnq(y,x)
+implicit none
+real, intent(in) :: x, y
+real :: artnq
+if (x) 1,2,5
+1 artnq=atan(y/x)+3.1415926535898
+return
+2 if (y) 3,8,4
+3 artnq=4.7123889803847
+return
+4 artnq=1.5707963267949
+return
+5 if (y) 6,8,7
+6 artnq=atan(y/x)+6.2831853071795
+return
+7 artnq=atan(y/x)
+return
+8 artnq=0.
+return
+end function artnq
 
-double precision function DARTNQ(Y,X)
-IMPLICIT NONE
-DOUBLE PRECISION, INTENT(IN) :: X, Y
-IF (X) 1,2,5
-1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
-RETURN
-2 IF (Y) 3,8,4
-3 DARTNQ=4.71238898038468985769396507492D0
-RETURN
-4 DARTNQ=1.57079632679489661923132169164D0
-RETURN
-5 IF (Y) 6,8,7
-6 DARTNQ=DATAN(Y/X)+6.28318530717958647692528676656D0
-RETURN
-7 DARTNQ=DATAN(Y/X)
-RETURN
-8 DARTNQ=0.D0
-RETURN
-END FUNCTION DARTNQ
+double precision function dartnq(y,x)
+implicit none
+double precision, intent(in) :: x, y
+if (x) 1,2,5
+1 dartnq=datan(y/x)+3.14159265358979323846264338328d0
+return
+2 if (y) 3,8,4
+3 dartnq=4.71238898038468985769396507492d0
+return
+4 dartnq=1.57079632679489661923132169164d0
+return
+5 if (y) 6,8,7
+6 dartnq=datan(y/x)+6.28318530717958647692528676656d0
+return
+7 dartnq=datan(y/x)
+return
+8 dartnq=0.d0
+return
+end function dartnq
 
-REAL function CPABS(X, Y)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X, Y
-REAL :: A
+real function cpabs(x, y)
+implicit none
+real, intent(in) :: x, y
+real :: a
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
 !     --------------------------------------
-IF (ABS(X) .LE. ABS(Y)) GO TO 10
-   A = Y/X
-   CPABS = ABS(X)*SQRT(1.0 + A*A)
-   RETURN
-10 IF (Y .EQ. 0.0) GO TO 20
-   A = X/Y
-   CPABS = ABS(Y)*SQRT(1.0 + A*A)
-   RETURN
-20 CPABS = 0.0
-RETURN
-END FUNCTION CPABS
+if (abs(x) .le. abs(y)) go to 10
+   a = y/x
+   cpabs = abs(x)*sqrt(1.0 + a*a)
+   return
+10 if (y .eq. 0.0) go to 20
+   a = x/y
+   cpabs = abs(y)*sqrt(1.0 + a*a)
+   return
+20 cpabs = 0.0
+return
+end function cpabs
 
-double precision function DCPABS(X, Y)
-IMPLICIT NONE
-DOUBLE PRECISION, INTENT(IN) :: X, Y
+double precision function dcpabs(x, y)
+implicit none
+double precision, intent(in) :: x, y
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
 !     --------------------------------------
-DOUBLE PRECISION :: A
+double precision :: a
 !
-IF (DABS(X) .LE. DABS(Y)) GO TO 10
-   A = Y/X
-   DCPABS = DABS(X)*DSQRT(1.D0 + A*A)
-   RETURN
-10 IF (Y .EQ. 0.D0) GO TO 20
-   A = X/Y
-   DCPABS = DABS(Y)*DSQRT(1.D0 + A*A)
-   RETURN
-20 DCPABS = 0.D0
-RETURN
-END FUNCTION DCPABS
+if (dabs(x) .le. dabs(y)) go to 10
+   a = y/x
+   dcpabs = dabs(x)*dsqrt(1.d0 + a*a)
+   return
+10 if (y .eq. 0.d0) go to 20
+   a = x/y
+   dcpabs = dabs(y)*dsqrt(1.d0 + a*a)
+   return
+20 dcpabs = 0.d0
+return
+end function dcpabs
 
-SUBROUTINE CREC (X, Y, U, V)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: U, V
-REAL, INTENT(IN) :: X, Y
-REAL :: D, T
+subroutine crec (x, y, u, v)
+implicit none
+real, intent(inout) :: u, v
+real, intent(in) :: x, y
+real :: d, t
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
-IF (ABS(X) .GT. ABS(Y)) GO TO 10
-   T = X/Y
-   D = Y + T*X
-   U = T/D
-   V = -1.0/D
-   RETURN
-10 T = Y/X
-D = X + T*Y
-U = 1.0/D
-V = -T/D
-RETURN
-END SUBROUTINE CREC
+if (abs(x) .gt. abs(y)) go to 10
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.0/d
+   return
+10 t = y/x
+d = x + t*y
+u = 1.0/d
+v = -t/d
+return
+end subroutine crec
 
-SUBROUTINE DCREC (X, Y, U, V)
-IMPLICIT NONE
+subroutine dcrec (x, y, u, v)
+implicit none
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X, Y
-DOUBLE PRECISION, INTENT(INOUT) :: U, V
-DOUBLE PRECISION :: D, T
+double precision, intent(in) :: x, y
+double precision, intent(inout) :: u, v
+double precision :: d, t
 !
-IF (DABS(X) .GT. DABS(Y)) GO TO 10
-   T = X/Y
-   D = Y + T*X
-   U = T/D
-   V = -1.D0/D
-   RETURN
-10 T = Y/X
-D = X + T*Y
-U = 1.D0/D
-V = -T/D
-RETURN
-END SUBROUTINE DCREC
+if (dabs(x) .gt. dabs(y)) go to 10
+   t = x/y
+   d = y + t*x
+   u = t/d
+   v = -1.d0/d
+   return
+10 t = y/x
+d = x + t*y
+u = 1.d0/d
+v = -t/d
+return
+end subroutine dcrec
 
-COMPLEX function CDIV (A, B)
-IMPLICIT NONE
-REAL :: AI, AR, BI, BR, D, T, U, V
+complex function cdiv (a, b)
+implicit none
+real :: ai, ar, bi, br, d, t, u, v
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION A/B WHERE B IS NONZERO
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: A, B
+complex, intent(in) :: a, b
 !
-AR = REAL(A)
-AI = AIMAG(A)
-BR = REAL(B)
-BI = AIMAG(B)
+ar = real(a)
+ai = aimag(a)
+br = real(b)
+bi = aimag(b)
 !
-IF (ABS(BR) .LT. ABS(BI)) GO TO 10
-   T = BI/BR
-   D = BR + T*BI
-   U = (AR + AI*T)/D
-   V = (AI - AR*T)/D
-   CDIV = CMPLX(U,V)
-   RETURN
-10 T = BR/BI
-D = BI + T*BR
-U = (AR*T + AI)/D
-V = (AI*T - AR)/D
-CDIV = CMPLX(U,V)
-RETURN
-END FUNCTION CDIV
+if (abs(br) .lt. abs(bi)) go to 10
+   t = bi/br
+   d = br + t*bi
+   u = (ar + ai*t)/d
+   v = (ai - ar*t)/d
+   cdiv = cmplx(u,v)
+   return
+10 t = br/bi
+d = bi + t*br
+u = (ar*t + ai)/d
+v = (ai*t - ar)/d
+cdiv = cmplx(u,v)
+return
+end function cdiv
 
-SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
-IMPLICIT NONE
+subroutine cdivid (ar,ai,br,bi,cr,ci)
+implicit none
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: AR, AI, BR, BI
-DOUBLE PRECISION, INTENT(INOUT) :: CR, CI
-DOUBLE PRECISION :: D, T, U, V
-DOUBLE PRECISION :: DPMPAR
+double precision, intent(in) :: ar, ai, br, bi
+double precision, intent(inout) :: cr, ci
+double precision :: d, t, u, v
+double precision :: dpmpar
 !
-IF (DABS(BR) .LE. DABS(BI)) GO TO 10
-T = BI/BR
-D = BR + T*BI
-U = (AR + AI*T)/D
-V = (AI - AR*T)/D
-CR = U
-CI = V
-RETURN
+if (dabs(br) .le. dabs(bi)) go to 10
+t = bi/br
+d = br + t*bi
+u = (ar + ai*t)/d
+v = (ai - ar*t)/d
+cr = u
+ci = v
+return
 !
-10 IF (BI .EQ. 0.D0) GO TO 20
-T = BR/BI
-D = BI + T*BR
-U = (AR*T + AI)/D
-V = (AI*T - AR)/D
-CR = U
-CI = V
-RETURN
+10 if (bi .eq. 0.d0) go to 20
+t = br/bi
+d = bi + t*br
+u = (ar*t + ai)/d
+v = (ai*t - ar)/d
+cr = u
+ci = v
+return
 !
 !     DIVISION BY ZERO. C = INFINITY
 !
-20 CR = DPMPAR(3)
-CI = CR
-RETURN
-END SUBROUTINE CDIVID
+20 cr = dpmpar(3)
+ci = cr
+return
+end subroutine cdivid
 
-SUBROUTINE DCSQRT (Z, W)
-IMPLICIT NONE
-DOUBLE PRECISION, INTENT(IN) :: Z(2)
-DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+subroutine dcsqrt (z, w)
+implicit none
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
 ! ----------------------------------------------------------------------
 !        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
 !
@@ -3145,88 +3145,88 @@ DOUBLE PRECISION, INTENT(INOUT) :: W(2)
 !     PARTS OF THE COMPLEX NUMBER Z, AND THAT W(1) AND W(2) ARE
 !     THE REAL AND IMAGINARY PARTS OF W.
 ! ----------------------------------------------------------------------
-DOUBLE PRECISION :: X, Y, R
-DOUBLE PRECISION :: DCPABS
+double precision :: x, y, r
+double precision :: dcpabs
 !
-X = Z(1)
-Y = Z(2)
-IF (X) 30,10,20
+x = z(1)
+y = z(2)
+if (x) 30,10,20
 !
-10 IF (Y .NE. 0.D0) GO TO 11
-   W(1) = 0.D0
-   W(2) = 0.D0
-   RETURN
-11 W(1) = DSQRT(0.5D0*DABS(Y))
-W(2) = DSIGN(W(1),Y)
-RETURN
+10 if (y .ne. 0.d0) go to 11
+   w(1) = 0.d0
+   w(2) = 0.d0
+   return
+11 w(1) = dsqrt(0.5d0*dabs(y))
+w(2) = dsign(w(1),y)
+return
 !
-20 IF (Y .NE. 0.D0) GO TO 21
-   W(1) = DSQRT(X)
-   W(2) = 0.D0
-   RETURN
-21 R = DCPABS(X,Y)
-W(1) = DSQRT(0.5D0*(R + X))
-W(2) = 0.5D0*Y/W(1)
-RETURN
+20 if (y .ne. 0.d0) go to 21
+   w(1) = dsqrt(x)
+   w(2) = 0.d0
+   return
+21 r = dcpabs(x,y)
+w(1) = dsqrt(0.5d0*(r + x))
+w(2) = 0.5d0*y/w(1)
+return
 !
-30 IF (Y .NE. 0.D0) GO TO 31
-   W(1) = 0.D0
-   W(2) = DSQRT(DABS(X))
-   RETURN
-31 R = DCPABS(X,Y)
-W(2) = DSQRT(0.5D0*(R - X))
-W(2) = DSIGN(W(2),Y)
-W(1) = 0.5D0*Y/W(2)
-RETURN
-END SUBROUTINE DCSQRT
+30 if (y .ne. 0.d0) go to 31
+   w(1) = 0.d0
+   w(2) = dsqrt(dabs(x))
+   return
+31 r = dcpabs(x,y)
+w(2) = dsqrt(0.5d0*(r - x))
+w(2) = dsign(w(2),y)
+w(1) = 0.5d0*y/w(2)
+return
+end subroutine dcsqrt
 
-SUBROUTINE POCA(R,A,X,Y)
-IMPLICIT NONE
-REAL, INTENT(IN) :: A, R
-REAL, INTENT(OUT) :: X, Y
-X=R*COS(A)
-Y=R*SIN(A)
-RETURN
-END SUBROUTINE POCA
+subroutine poca(r,a,x,y)
+implicit none
+real, intent(in) :: a, r
+real, intent(out) :: x, y
+x=r*cos(a)
+y=r*sin(a)
+return
+end subroutine poca
 
-SUBROUTINE CAPO(X,Y,R,THETA)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: R, THETA
-REAL, INTENT(IN) :: X, Y
-REAL :: A
-IF (ABS(X).LE.ABS(Y)) GO TO 10
-A=Y/X
-R=ABS(X)*SQRT(1.0+A*A)
-THETA=ATAN2(Y,X)
-RETURN
-10 IF (Y.EQ.0.) GO TO 20
-A=X/Y
-R=ABS(Y)*SQRT(1.0+A*A)
-THETA=ATAN2(Y,X)
-RETURN
-20 R=0.0
-THETA=0.0
-RETURN
-END SUBROUTINE CAPO
+subroutine capo(x,y,r,theta)
+implicit none
+real, intent(inout) :: r, theta
+real, intent(in) :: x, y
+real :: a
+if (abs(x).le.abs(y)) go to 10
+a=y/x
+r=abs(x)*sqrt(1.0+a*a)
+theta=atan2(y,x)
+return
+10 if (y.eq.0.) go to 20
+a=x/y
+r=abs(y)*sqrt(1.0+a*a)
+theta=atan2(y,x)
+return
+20 r=0.0
+theta=0.0
+return
+end subroutine capo
 
-SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
-IMPLICIT NONE
-REAL, INTENT(IN) :: A, X1
-REAL, INTENT(OUT) :: X2
-REAL, INTENT(IN) :: Y1
-REAL, INTENT(OUT) :: Y2
-REAL :: COSA, SINA
-SINA=SIN(A)
-COSA=COS(A)
-X2= X1*COSA+Y1*SINA
-Y2=-X1*SINA+Y1*COSA
-RETURN
-END SUBROUTINE ROTA
+subroutine rota(x1,y1,a,x2,y2)
+implicit none
+real, intent(in) :: a, x1
+real, intent(out) :: x2
+real, intent(in) :: y1
+real, intent(out) :: y2
+real :: cosa, sina
+sina=sin(a)
+cosa=cos(a)
+x2= x1*cosa+y1*sina
+y2=-x1*sina+y1*cosa
+return
+end subroutine rota
 
-SUBROUTINE SROTG(SA,SB,SC,SS)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: SA, SB, SC, SS
-REAL :: R, U, V
+subroutine srotg(sa,sb,sc,ss)
+implicit none
+real, intent(inout) :: sa, sb, sc, ss
+real :: r, u, v
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3251,56 +3251,56 @@ REAL :: R, U, V
 !
 ! ------------------------------------------------------------------
 !
-IF (ABS(SA) .LE. ABS(SB)) GO TO 10
+if (abs(sa) .le. abs(sb)) go to 10
 !
 ! *** HERE ABS(SA) .GT. ABS(SB) ***
 !
-U = SA + SA
-V = SB / U
+u = sa + sa
+v = sb / u
 !
 !     NOTE THAT U AND R HAVE THE SIGN OF SA
 !
-R = SQRT(.25 + V**2) * U
+r = sqrt(.25 + v**2) * u
 !
 !     NOTE THAT SC IS POSITIVE
 !
-SC = SA / R
-SS = V * (SC + SC)
-SB = SS
-SA = R
-RETURN
+sc = sa / r
+ss = v * (sc + sc)
+sb = ss
+sa = r
+return
 !
 ! *** HERE ABS(SA) .LE. ABS(SB) ***
 !
-10 IF (SB .EQ. 0.) GO TO 20
-U = SB + SB
-V = SA / U
+10 if (sb .eq. 0.) go to 20
+u = sb + sb
+v = sa / u
 !
 !     NOTE THAT U AND R HAVE THE SIGN OF SB
 !     (R IS IMMEDIATELY STORED IN SA)
 !
-SA = SQRT(.25 + V**2) * U
+sa = sqrt(.25 + v**2) * u
 !
 !     NOTE THAT SS IS POSITIVE
 !
-SS = SB / SA
-SC = V * (SS + SS)
-IF (SC .EQ. 0.) GO TO 15
-SB = 1. / SC
-RETURN
-15 SB = 1.
-RETURN
+ss = sb / sa
+sc = v * (ss + ss)
+if (sc .eq. 0.) go to 15
+sb = 1. / sc
+return
+15 sb = 1.
+return
 !
 ! *** HERE SA = SB = 0. ***
 !
-20 SC = 1.
-SS = 0.
-RETURN
+20 sc = 1.
+ss = 0.
+return
 !
-END SUBROUTINE SROTG
+end subroutine srotg
 
-SUBROUTINE DROTG(DA,DB,DC,DS)
-IMPLICIT NONE
+subroutine drotg(da,db,dc,ds)
+implicit none
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3325,104 +3325,104 @@ IMPLICIT NONE
 !
 ! ------------------------------------------------------------------
 !
-DOUBLE PRECISION, INTENT(INOUT) :: DA, DB, DC, DS
-DOUBLE PRECISION :: U, V, R
-IF (DABS(DA) .LE. DABS(DB)) GO TO 10
+double precision, intent(inout) :: da, db, dc, ds
+double precision :: u, v, r
+if (dabs(da) .le. dabs(db)) go to 10
 !
 ! *** HERE DABS(DA) .GT. DABS(DB) ***
 !
-U = DA + DA
-V = DB / U
+u = da + da
+v = db / u
 !
 !     NOTE THAT U AND R HAVE THE SIGN OF DA
 !
-R = DSQRT(.25D0 + V**2) * U
+r = dsqrt(.25d0 + v**2) * u
 !
 !     NOTE THAT DC IS POSITIVE
 !
-DC = DA / R
-DS = V * (DC + DC)
-DB = DS
-DA = R
-RETURN
+dc = da / r
+ds = v * (dc + dc)
+db = ds
+da = r
+return
 !
 ! *** HERE DABS(DA) .LE. DABS(DB) ***
 !
-10 IF (DB .EQ. 0.D0) GO TO 20
-U = DB + DB
-V = DA / U
+10 if (db .eq. 0.d0) go to 20
+u = db + db
+v = da / u
 !
 !     NOTE THAT U AND R HAVE THE SIGN OF DB
 !     (R IS IMMEDIATELY STORED IN DA)
 !
-DA = DSQRT(.25D0 + V**2) * U
+da = dsqrt(.25d0 + v**2) * u
 !
 !     NOTE THAT DS IS POSITIVE
 !
-DS = DB / DA
-DC = V * (DS + DS)
-IF (DC .EQ. 0.D0) GO TO 15
-DB = 1.D0 / DC
-RETURN
-15 DB = 1.D0
-RETURN
+ds = db / da
+dc = v * (ds + ds)
+if (dc .eq. 0.d0) go to 15
+db = 1.d0 / dc
+return
+15 db = 1.d0
+return
 !
 ! *** HERE DA = DB = 0.D0 ***
 !
-20 DC = 1.D0
-DS = 0.D0
-RETURN
+20 dc = 1.d0
+ds = 0.d0
+return
 !
-END SUBROUTINE DROTG
+end subroutine drotg
 
-SUBROUTINE ROT3 (A, THETA)
-IMPLICIT NONE
-REAL :: A(3,3)
-REAL, INTENT(INOUT) :: THETA(3)
-REAL :: PIHALF, R, T, U, V
-DATA PIHALF/1.5707963267949/
+subroutine rot3 (a, theta)
+implicit none
+real :: a(3,3)
+real, intent(inout) :: theta(3)
+real :: pihalf, r, t, u, v
+data pihalf/1.5707963267949/
 !     --------------------
-IF (ABS(A(1,1)) .GT. ABS(A(2,1))) GO TO 10
-IF (A(2,1) .NE. 0.0) GO TO 11
+if (abs(a(1,1)) .gt. abs(a(2,1))) go to 10
+if (a(2,1) .ne. 0.0) go to 11
 !
 !     CASE WHEN A(1,1) = A(2,1) = 0
 !
-THETA(3) = 0.0
-THETA(2) = SIGN(PIHALF,A(3,1))
-U = A(2,2)
-V = A(1,2)
-IF (A(3,1) .GT. 0.0) V = -V
-THETA(1) = ATAN2(V,U)
-RETURN
+theta(3) = 0.0
+theta(2) = sign(pihalf,a(3,1))
+u = a(2,2)
+v = a(1,2)
+if (a(3,1) .gt. 0.0) v = -v
+theta(1) = atan2(v,u)
+return
 !
 !     COMPUTATION OF R = SQRT(A(1,1)**2 + A(2,1)**2)
 !
-10 T = A(2,1)/A(1,1)
-R = ABS(A(1,1))*SQRT(1.0 + T*T)
-GO TO 20
-11 T = A(1,1)/A(2,1)
-R = ABS(A(2,1))*SQRT(1.0 + T*T)
+10 t = a(2,1)/a(1,1)
+r = abs(a(1,1))*sqrt(1.0 + t*t)
+go to 20
+11 t = a(1,1)/a(2,1)
+r = abs(a(2,1))*sqrt(1.0 + t*t)
 !
 !     EVALUATION OF THE ANGLES
 !
-20 THETA(3) = ATAN2(A(2,1),A(1,1))
-THETA(2) = ATAN2(A(3,1),R)
-U = DBLE(A(1,1))*DBLE(A(2,2)) - DBLE(A(1,2))*DBLE(A(2,1))
-IF (ABS(THETA(2)) .GT. 0.8) GO TO 21
-U = U/R
-V = A(3,2)/COS(THETA(2))
-GO TO 22
-21 V = DBLE(A(1,1))*DBLE(A(1,2)) + DBLE(A(2,1))*DBLE(A(2,2))
-V = -V/SIN(THETA(2))
-22 THETA(1) = ATAN2(V,U)
-RETURN
-END SUBROUTINE ROT3
+20 theta(3) = atan2(a(2,1),a(1,1))
+theta(2) = atan2(a(3,1),r)
+u = dble(a(1,1))*dble(a(2,2)) - dble(a(1,2))*dble(a(2,1))
+if (abs(theta(2)) .gt. 0.8) go to 21
+u = u/r
+v = a(3,2)/cos(theta(2))
+go to 22
+21 v = dble(a(1,1))*dble(a(1,2)) + dble(a(2,1))*dble(a(2,2))
+v = -v/sin(theta(2))
+22 theta(1) = atan2(v,u)
+return
+end subroutine rot3
 
-SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
-IMPLICIT NONE
-REAL, INTENT(IN) :: XK, YK, ZK
-REAL, INTENT(INOUT) :: CX, SX
-REAL, INTENT(OUT) :: CY, SY
+subroutine constr (xk,yk,zk, cx,sx,cy,sy)
+implicit none
+real, intent(in) :: xk, yk, zk
+real, intent(inout) :: cx, sx
+real, intent(out) :: cy, sy
 !
 !***********************************************************
 !
@@ -3452,208 +3452,208 @@ REAL, INTENT(OUT) :: CY, SY
 !
 !***********************************************************
 !
-CY = SQRT(YK*YK + ZK*ZK)
-SY = XK
-IF (CY .EQ. 0.) GO TO 1
-CX = ZK/CY
-SX = YK/CY
-RETURN
+cy = sqrt(yk*yk + zk*zk)
+sy = xk
+if (cy .eq. 0.) go to 1
+cx = zk/cy
+sx = yk/cy
+return
 !
 ! (XK,YK,ZK) LIES ON THE X-AXIS
 !
-1 CX = 1.
-SX = 0.
-RETURN
-END SUBROUTINE CONSTR
+1 cx = 1.
+sx = 0.
+return
+end subroutine constr
 
-REAL function ANG (N, X, Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I
-REAL :: D, RX, RY
-REAL :: SNRM2
+real function ang (n, x, y)
+implicit none
+integer, intent(in) :: n
+integer :: i
+real :: d, rx, ry
+real :: snrm2
 !-----------------------------------------------------------------------
 !           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N)
+real, intent(in) :: x(n), y(n)
 !
-IF (N .LT. 2) GO TO 30
-RX = SNRM2(N, X, 1)
-IF (RX .EQ. 0.0) GO TO 30
-RY = SNRM2(N, Y, 1)
-IF (RY .EQ. 0.0) GO TO 30
+if (n .lt. 2) go to 30
+rx = snrm2(n, x, 1)
+if (rx .eq. 0.0) go to 30
+ry = snrm2(n, y, 1)
+if (ry .eq. 0.0) go to 30
 !
-D = 0.0
-DO I = 1,N
-   D = D + (X(I)/RX - Y(I)/RY)**2
-END DO
-IF (D .GT. 3.0) GO TO 20
-ANG = ACOS(0.5 + (0.5 - 0.5*D))
-RETURN
+d = 0.0
+do i = 1,n
+   d = d + (x(i)/rx - y(i)/ry)**2
+end do
+if (d .gt. 3.0) go to 20
+ang = acos(0.5 + (0.5 - 0.5*d))
+return
 !
-20 D = 0.0
-DO I = 1,N
-   D = D + (X(I)/RX + Y(I)/RY)**2
-END DO
-ANG = ACOS((0.5*D - 0.5) - 0.5)
-RETURN
+20 d = 0.0
+do i = 1,n
+   d = d + (x(i)/rx + y(i)/ry)**2
+end do
+ang = acos((0.5*d - 0.5) - 0.5)
+return
 !
 !                           ERROR RETURN
 !
-30 ANG = -1.0
-RETURN
-END FUNCTION ANG
+30 ang = -1.0
+return
+end function ang
 
-REAL function SIN0 (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: A0, A1, A2, A3, A4, A5, A6, T
+real function sin0 (x)
+implicit none
+real, intent(in) :: x
+real :: a0, a1, a2, a3, a4, a5, a6, t
 !-----------------------------------------------------------------------
 !          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
-DATA A0 /.157079632679490E+01/, A1 /-.645964097506244E+00/, &
-&A2 /.796926262460396E-01/, A3 /-.468175413228242E-02/, &
-&A4 /.160441150291651E-03/, A5 /-.359864175444606E-05/, &
-&A6 /.563372101191893E-07/
+data a0 /.157079632679490e+01/, a1 /-.645964097506244e+00/, &
+&a2 /.796926262460396e-01/, a3 /-.468175413228242e-02/, &
+&a4 /.160441150291651e-03/, a5 /-.359864175444606e-05/, &
+&a6 /.563372101191893e-07/
 !------------------------
-T = X*X
-SIN0 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
-&+ A1)*T + A0)*X
-RETURN
-END FUNCTION SIN0
+t = x*x
+sin0 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
+&+ a1)*t + a0)*x
+return
+end function sin0
 
-REAL function COS0 (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: A1, A2, A3, A4, A5, A6, T
+real function cos0 (x)
+implicit none
+real, intent(in) :: x
+real :: a1, a2, a3, a4, a5, a6, t
 !-----------------------------------------------------------------------
 !          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
-DATA A1 /-.123370055013615E+01/, A2 /.253669507899753E+00/, &
-&A3 /-.208634807330586E-01/, A4 /.919259935580283E-03/, &
-&A5 /-.252000841382533E-04/, A6 /.465461768260405E-06/
+data a1 /-.123370055013615e+01/, a2 /.253669507899753e+00/, &
+&a3 /-.208634807330586e-01/, a4 /.919259935580283e-03/, &
+&a5 /-.252000841382533e-04/, a6 /.465461768260405e-06/
 !------------------------
-T = X*X
-COS0 = (((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T + A1)*T + 1.0
-RETURN
-END FUNCTION COS0
+t = x*x
+cos0 = (((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t + a1)*t + 1.0
+return
+end function cos0
 
-REAL function SIN1 (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-INTEGER :: MAX, N
-REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
-INTEGER :: IPMPAR
+real function sin1 (x)
+implicit none
+real, intent(in) :: x
+integer :: max, n
+real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF SIN(X*PI)
 !-----------------------------------------------------------------------
-DATA A0 /.314159265358979E+01/, A1 /-.516771278004995E+01/, &
-&A2 /.255016403987327E+01/, A3 /-.599264528932149E+00/, &
-&A4 /.821458689493251E-01/, A5 /-.737001831310553E-02/, &
-&A6 /.461514425296398E-03/
-DATA B1 /-.493480220054460E+01/, B2 /.405871212639605E+01/, &
-&B3 /-.133526276691575E+01/, B4 /.235330543508553E+00/, &
-&B5 /-.258048861575714E-01/, B6 /.190653140279462E-02/
+data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
+&a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
+&a4 /.821458689493251e-01/, a5 /-.737001831310553e-02/, &
+&a6 /.461514425296398e-03/
+data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
+&b3 /-.133526276691575e+01/, b4 /.235330543508553e+00/, &
+&b5 /-.258048861575714e-01/, b6 /.190653140279462e-02/
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            LARGEST POSITIVE INTEGER THAT MAY BE USED.
 !
-                 MAX = IPMPAR(3)
+                 max = ipmpar(3)
 !
 !------------------------
-A = ABS(X)
-IF (A .LT. FLOAT(MAX)) GO TO 10
-   SIN1 = 0.0
-   RETURN
+a = abs(x)
+if (a .lt. float(max)) go to 10
+   sin1 = 0.0
+   return
 !
-10 N = A
-A = A - FLOAT(N)
-IF (A .GT. 0.75) GO TO 20
-IF (A .LT. 0.25) GO TO 21
+10 n = a
+a = a - float(n)
+if (a .gt. 0.75) go to 20
+if (a .lt. 0.25) go to 21
 !
 !                    0.25 .LE. A .LE. 0.75
 !
-A = 0.25 + (0.25 - A)
-T = A*A
-SIN1 = ((((((B6*T + B5)*T + B4)*T + B3)*T + B2)*T &
-&+ B1)*T + 0.5) + 0.5
-GO TO 30
+a = 0.25 + (0.25 - a)
+t = a*a
+sin1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
+&+ b1)*t + 0.5) + 0.5
+go to 30
 !
 !                 A .LT. 0.25  OR  A .GT. 0.75
 !
-20 A = 0.25 + (0.75 - A)
-21 T = A*A
-SIN1 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
-&+ A1)*T + A0)*A
+20 a = 0.25 + (0.75 - a)
+21 t = a*a
+sin1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
+&+ a1)*t + a0)*a
 !
 !                        TERMINATION
 !
-30 IF (X .LT. 0.0) SIN1 = - SIN1
-IF (MOD(N,2) .NE. 0) SIN1 = - SIN1
-RETURN
-END FUNCTION SIN1
+30 if (x .lt. 0.0) sin1 = - sin1
+if (mod(n,2) .ne. 0) sin1 = - sin1
+return
+end function sin1
 
-REAL function COS1 (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-INTEGER :: MAX, N
-REAL :: A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
-INTEGER :: IPMPAR
+real function cos1 (x)
+implicit none
+real, intent(in) :: x
+integer :: max, n
+real :: a, a0, a1, a2, a3, a4, a5, a6, b1, b2, b3, b4, b5, b6, t
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF COS(X*PI)
 !-----------------------------------------------------------------------
-DATA A0 /.314159265358979E+01/, A1 /-.516771278004995E+01/, &
-&A2 /.255016403987327E+01/, A3 /-.599264528932149E+00/, &
-&A4 /.821458689493251E-01/, A5 /-.737001831310553E-02/, &
-&A6 /.461514425296398E-03/
-DATA B1 /-.493480220054460E+01/, B2 /.405871212639605E+01/, &
-&B3 /-.133526276691575E+01/, B4 /.235330543508553E+00/, &
-&B5 /-.258048861575714E-01/, B6 /.190653140279462E-02/
+data a0 /.314159265358979e+01/, a1 /-.516771278004995e+01/, &
+&a2 /.255016403987327e+01/, a3 /-.599264528932149e+00/, &
+&a4 /.821458689493251e-01/, a5 /-.737001831310553e-02/, &
+&a6 /.461514425296398e-03/
+data b1 /-.493480220054460e+01/, b2 /.405871212639605e+01/, &
+&b3 /-.133526276691575e+01/, b4 /.235330543508553e+00/, &
+&b5 /-.258048861575714e-01/, b6 /.190653140279462e-02/
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            LARGEST POSITIVE INTEGER THAT MAY BE USED.
 !
-                 MAX = IPMPAR(3)
+                 max = ipmpar(3)
 !
 !------------------------
-A = ABS(X)
-IF (A .LT. FLOAT(MAX)) GO TO 10
-   COS1 = 1.0
-   RETURN
+a = abs(x)
+if (a .lt. float(max)) go to 10
+   cos1 = 1.0
+   return
 !
-10 N = A
-A = A - FLOAT(N)
-IF (A .GT. 0.75) GO TO 20
-IF (A .LT. 0.25) GO TO 21
+10 n = a
+a = a - float(n)
+if (a .gt. 0.75) go to 20
+if (a .lt. 0.25) go to 21
 !
 !                    0.25 .LE. A .LE. 0.75
 !
-A = 0.25 + (0.25 - A)
-T = A*A
-COS1 = ((((((A6*T + A5)*T + A4)*T + A3)*T + A2)*T &
-&+ A1)*T + A0)*A
-GO TO 30
+a = 0.25 + (0.25 - a)
+t = a*a
+cos1 = ((((((a6*t + a5)*t + a4)*t + a3)*t + a2)*t &
+&+ a1)*t + a0)*a
+go to 30
 !
 !                 A .LT. 0.25  OR  A .GT. 0.75
 !
-20 A = 0.25 + (0.75 - A)
-N = N - 1
-21 T = A*A
-COS1 = ((((((B6*T + B5)*T + B4)*T + B3)*T + B2)*T &
-&+ B1)*T + 0.5) + 0.5
+20 a = 0.25 + (0.75 - a)
+n = n - 1
+21 t = a*a
+cos1 = ((((((b6*t + b5)*t + b4)*t + b3)*t + b2)*t &
+&+ b1)*t + 0.5) + 0.5
 !
 !                        TERMINATION
 !
-30 IF (MOD(N,2) .NE. 0) COS1 = - COS1
-RETURN
-END FUNCTION COS1
+30 if (mod(n,2) .ne. 0) cos1 = - cos1
+return
+end function cos1
 
-double precision function DSIN1 (X)
-IMPLICIT NONE
-INTEGER :: MAX, N
-INTEGER :: IPMPAR
+double precision function dsin1 (x)
+implicit none
+integer :: max, n
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
@@ -3666,91 +3666,91 @@ INTEGER :: IPMPAR
 !     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: A, PI, T, W
-DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, &
-&A12, A13
-DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, &
-&B12, B13
+double precision, intent(in) :: x
+double precision :: a, pi, t, w
+double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
+&a12, a13
+double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
+&b12, b13
 !------------------------
-DATA PI /3.141592653589793238462643383279502884197D+00/
+data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
-DATA A1  /-.1028083791780141522795259479153765743002D+00/, &
-&A2  / .3170868848763100170457042079710451905600D-02/, &
-&A3  /-.4657026956105571623449026167864697920000D-04/, &
-&A4  / .3989844942879455643410226655783424000000D-06/, &
-&A5  /-.2237397227721999776371894030796800000000D-08/, &
-&A6  / .8847045483056962709715066675200000000000D-11/, &
-&A7  /-.2598715447506450292885585920000000000000D-13/, &
-&A8  / .5893449774331011070033920000000000000000D-16/, &
-&A9  /-.1062975472045522550784000000000000000000D-18/, &
-&A10 / .1561182648301780992000000000000000000000D-21/, &
-&A11 /-.1903193516670976000000000000000000000000D-24/, &
-&A12 / .1956617650176000000000000000000000000000D-27/, &
-&A13 /-.1711276032000000000000000000000000000000D-30/
+data a1  /-.1028083791780141522795259479153765743002d+00/, &
+&a2  / .3170868848763100170457042079710451905600d-02/, &
+&a3  /-.4657026956105571623449026167864697920000d-04/, &
+&a4  / .3989844942879455643410226655783424000000d-06/, &
+&a5  /-.2237397227721999776371894030796800000000d-08/, &
+&a6  / .8847045483056962709715066675200000000000d-11/, &
+&a7  /-.2598715447506450292885585920000000000000d-13/, &
+&a8  / .5893449774331011070033920000000000000000d-16/, &
+&a9  /-.1062975472045522550784000000000000000000d-18/, &
+&a10 / .1561182648301780992000000000000000000000d-21/, &
+&a11 /-.1903193516670976000000000000000000000000d-24/, &
+&a12 / .1956617650176000000000000000000000000000d-27/, &
+&a13 /-.1711276032000000000000000000000000000000d-30/
 !------------------------
-DATA B1  /-.3084251375340424568385778437461297229882D+00/, &
-&B2  / .1585434424381550085228521039855226435920D-01/, &
-&B3  /-.3259918869273900136414318317506279360000D-03/, &
-&B4  / .3590860448591510079069203991239232000000D-05/, &
-&B5  /-.2461136950494199754009084061808640000000D-07/, &
-&B6  / .1150115912797405152263195572224000000000D-09/, &
-&B7  /-.3898073171259675439899172864000000000000D-12/, &
-&B8  / .1001886461636271969091584000000000000000D-14/, &
-&B9  /-.2019653396886572027084800000000000000000D-17/, &
-&B10 / .3278483561466560512000000000000000000000D-20/, &
-&B11 /-.4377345082051788800000000000000000000000D-23/, &
-&B12 / .4891532381388800000000000000000000000000D-26/, &
-&B13 /-.4617089843200000000000000000000000000000D-29/
+data b1  /-.3084251375340424568385778437461297229882d+00/, &
+&b2  / .1585434424381550085228521039855226435920d-01/, &
+&b3  /-.3259918869273900136414318317506279360000d-03/, &
+&b4  / .3590860448591510079069203991239232000000d-05/, &
+&b5  /-.2461136950494199754009084061808640000000d-07/, &
+&b6  / .1150115912797405152263195572224000000000d-09/, &
+&b7  /-.3898073171259675439899172864000000000000d-12/, &
+&b8  / .1001886461636271969091584000000000000000d-14/, &
+&b9  /-.2019653396886572027084800000000000000000d-17/, &
+&b10 / .3278483561466560512000000000000000000000d-20/, &
+&b11 /-.4377345082051788800000000000000000000000d-23/, &
+&b12 / .4891532381388800000000000000000000000000d-26/, &
+&b13 /-.4617089843200000000000000000000000000000d-29/
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            LARGEST POSITIVE INTEGER THAT MAY BE USED.
 !
-                 MAX = IPMPAR(3)
+                 max = ipmpar(3)
 !
 !------------------------
-A = DABS(X)
-T = MAX
-IF (A .LT. T) GO TO 10
-   DSIN1 = 0.D0
-   RETURN
+a = dabs(x)
+t = max
+if (a .lt. t) go to 10
+   dsin1 = 0.d0
+   return
 !
-10 N = A
-T = N
-A = A - T
-IF (A .GT. 0.75D0) GO TO 20
-IF (A .LT. 0.25D0) GO TO 21
+10 n = a
+t = n
+a = a - t
+if (a .gt. 0.75d0) go to 20
+if (a .lt. 0.25d0) go to 21
 !
 !                    0.25 .LE. A .LE. 0.75
 !
-A = 0.25D0 + (0.25D0 - A)
-T = 16.D0*A*A
-DSIN1 = (((((((((((((B13*T + B12)*T + B11)*T + B10)*T + B9)*T + &
-&B8)*T + B7)*T + B6)*T + B5)*T + B4)*T + B3)*T + &
-&B2)*T + B1)*T + 0.5D0) + 0.5D0
-GO TO 30
+a = 0.25d0 + (0.25d0 - a)
+t = 16.d0*a*a
+dsin1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
+&b8)*t + b7)*t + b6)*t + b5)*t + b4)*t + b3)*t + &
+&b2)*t + b1)*t + 0.5d0) + 0.5d0
+go to 30
 !
 !                 A .LT. 0.25  OR  A .GT. 0.75
 !
-20 A = 0.25D0 + (0.75D0 - A)
-21 T = 16.D0*A*A
-W = (((((((((((((A13*T + A12)*T + A11)*T + A10)*T + A9)*T + &
-&A8)*T + A7)*T + A6)*T + A5)*T + A4)*T + A3)*T + &
-&A2)*T + A1)*T + 0.5D0) + 0.5D0
-DSIN1 = PI*A*W
+20 a = 0.25d0 + (0.75d0 - a)
+21 t = 16.d0*a*a
+w = (((((((((((((a13*t + a12)*t + a11)*t + a10)*t + a9)*t + &
+&a8)*t + a7)*t + a6)*t + a5)*t + a4)*t + a3)*t + &
+&a2)*t + a1)*t + 0.5d0) + 0.5d0
+dsin1 = pi*a*w
 !
 !                        TERMINATION
 !
-30 IF (X .LT. 0.0) DSIN1 = - DSIN1
-IF (MOD(N,2) .NE. 0) DSIN1 = - DSIN1
-RETURN
-END FUNCTION DSIN1
+30 if (x .lt. 0.0) dsin1 = - dsin1
+if (mod(n,2) .ne. 0) dsin1 = - dsin1
+return
+end function dsin1
 
-double precision function DCOS1 (X)
-IMPLICIT NONE
-INTEGER :: MAX, N
-INTEGER :: IPMPAR
+double precision function dcos1 (x)
+implicit none
+integer :: max, n
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF COS(PI*X)
@@ -3763,96 +3763,96 @@ INTEGER :: IPMPAR
 !     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: A, PI, T, W
-DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, &
-&A12, A13
-DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, &
-&B12, B13
+double precision, intent(in) :: x
+double precision :: a, pi, t, w
+double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
+&a12, a13
+double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
+&b12, b13
 !------------------------
-DATA PI /3.141592653589793238462643383279502884197D+00/
+data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
-DATA A1  /-.1028083791780141522795259479153765743002D+00/, &
-&A2  / .3170868848763100170457042079710451905600D-02/, &
-&A3  /-.4657026956105571623449026167864697920000D-04/, &
-&A4  / .3989844942879455643410226655783424000000D-06/, &
-&A5  /-.2237397227721999776371894030796800000000D-08/, &
-&A6  / .8847045483056962709715066675200000000000D-11/, &
-&A7  /-.2598715447506450292885585920000000000000D-13/, &
-&A8  / .5893449774331011070033920000000000000000D-16/, &
-&A9  /-.1062975472045522550784000000000000000000D-18/, &
-&A10 / .1561182648301780992000000000000000000000D-21/, &
-&A11 /-.1903193516670976000000000000000000000000D-24/, &
-&A12 / .1956617650176000000000000000000000000000D-27/, &
-&A13 /-.1711276032000000000000000000000000000000D-30/
+data a1  /-.1028083791780141522795259479153765743002d+00/, &
+&a2  / .3170868848763100170457042079710451905600d-02/, &
+&a3  /-.4657026956105571623449026167864697920000d-04/, &
+&a4  / .3989844942879455643410226655783424000000d-06/, &
+&a5  /-.2237397227721999776371894030796800000000d-08/, &
+&a6  / .8847045483056962709715066675200000000000d-11/, &
+&a7  /-.2598715447506450292885585920000000000000d-13/, &
+&a8  / .5893449774331011070033920000000000000000d-16/, &
+&a9  /-.1062975472045522550784000000000000000000d-18/, &
+&a10 / .1561182648301780992000000000000000000000d-21/, &
+&a11 /-.1903193516670976000000000000000000000000d-24/, &
+&a12 / .1956617650176000000000000000000000000000d-27/, &
+&a13 /-.1711276032000000000000000000000000000000d-30/
 !------------------------
-DATA B1  /-.3084251375340424568385778437461297229882D+00/, &
-&B2  / .1585434424381550085228521039855226435920D-01/, &
-&B3  /-.3259918869273900136414318317506279360000D-03/, &
-&B4  / .3590860448591510079069203991239232000000D-05/, &
-&B5  /-.2461136950494199754009084061808640000000D-07/, &
-&B6  / .1150115912797405152263195572224000000000D-09/, &
-&B7  /-.3898073171259675439899172864000000000000D-12/, &
-&B8  / .1001886461636271969091584000000000000000D-14/, &
-&B9  /-.2019653396886572027084800000000000000000D-17/, &
-&B10 / .3278483561466560512000000000000000000000D-20/, &
-&B11 /-.4377345082051788800000000000000000000000D-23/, &
-&B12 / .4891532381388800000000000000000000000000D-26/, &
-&B13 /-.4617089843200000000000000000000000000000D-29/
+data b1  /-.3084251375340424568385778437461297229882d+00/, &
+&b2  / .1585434424381550085228521039855226435920d-01/, &
+&b3  /-.3259918869273900136414318317506279360000d-03/, &
+&b4  / .3590860448591510079069203991239232000000d-05/, &
+&b5  /-.2461136950494199754009084061808640000000d-07/, &
+&b6  / .1150115912797405152263195572224000000000d-09/, &
+&b7  /-.3898073171259675439899172864000000000000d-12/, &
+&b8  / .1001886461636271969091584000000000000000d-14/, &
+&b9  /-.2019653396886572027084800000000000000000d-17/, &
+&b10 / .3278483561466560512000000000000000000000d-20/, &
+&b11 /-.4377345082051788800000000000000000000000d-23/, &
+&b12 / .4891532381388800000000000000000000000000d-26/, &
+&b13 /-.4617089843200000000000000000000000000000d-29/
 !------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            LARGEST POSITIVE INTEGER THAT MAY BE USED.
 !
-                 MAX = IPMPAR(3)
+                 max = ipmpar(3)
 !
 !------------------------
-A = DABS(X)
-T = MAX
-IF (A .LT. T) GO TO 10
-   DCOS1 = 1.D0
-   RETURN
+a = dabs(x)
+t = max
+if (a .lt. t) go to 10
+   dcos1 = 1.d0
+   return
 !
-10 N = A
-T = N
-A = A - T
-IF (A .GT. 0.75D0) GO TO 20
-IF (A .LT. 0.25D0) GO TO 21
+10 n = a
+t = n
+a = a - t
+if (a .gt. 0.75d0) go to 20
+if (a .lt. 0.25d0) go to 21
 !
 !                    0.25 .LE. A .LE. 0.75
 !
-A = 0.25D0 + (0.25D0 - A)
-T = 16.D0*A*A
-W = (((((((((((((A13*T + A12)*T + A11)*T + A10)*T + A9)*T + &
-&A8)*T + A7)*T + A6)*T + A5)*T + A4)*T + A3)*T + &
-&A2)*T + A1)*T + 0.5D0) + 0.5D0
-DCOS1 = PI*A*W
-GO TO 30
+a = 0.25d0 + (0.25d0 - a)
+t = 16.d0*a*a
+w = (((((((((((((a13*t + a12)*t + a11)*t + a10)*t + a9)*t + &
+&a8)*t + a7)*t + a6)*t + a5)*t + a4)*t + a3)*t + &
+&a2)*t + a1)*t + 0.5d0) + 0.5d0
+dcos1 = pi*a*w
+go to 30
 !
 !                 A .LT. 0.25  OR  A .GT. 0.75
 !
-20 A = 0.25D0 + (0.75D0 - A)
-N = N - 1
-21 T = 16.D0*A*A
-DCOS1 = (((((((((((((B13*T + B12)*T + B11)*T + B10)*T + B9)*T + &
-&B8)*T + B7)*T + B6)*T + B5)*T + B4)*T + B3)*T + &
-&B2)*T + B1)*T + 0.5D0) + 0.5D0
+20 a = 0.25d0 + (0.75d0 - a)
+n = n - 1
+21 t = 16.d0*a*a
+dcos1 = (((((((((((((b13*t + b12)*t + b11)*t + b10)*t + b9)*t + &
+&b8)*t + b7)*t + b6)*t + b5)*t + b4)*t + b3)*t + &
+&b2)*t + b1)*t + 0.5d0) + 0.5d0
 !
 !                        TERMINATION
 !
-30 IF (MOD(N,2) .NE. 0) DCOS1 = - DCOS1
-RETURN
-END FUNCTION DCOS1
+30 if (mod(n,2) .ne. 0) dcos1 = - dcos1
+return
+end function dcos1
 
-SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
-IMPLICIT NONE
-REAL :: AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, &
-&SP4, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
+subroutine snhcsh (sinhm,coshm,x,isw)
+implicit none
+real :: ax, cp1, cp2, cp3, cp4, cp5, cq1, expx, sp1, sp2, sp3, &
+&sp4, sp5, sq1, xs, xx, zp1, zp2, zp3, zq1, zq2, zq3, zq4
 !
-INTEGER, INTENT(IN) :: ISW
-REAL, INTENT(INOUT) :: SINHM, COSHM
-REAL, INTENT(IN) :: X
-REAL :: CUT(5)
+integer, intent(in) :: isw
+real, intent(inout) :: sinhm, coshm
+real, intent(in) :: x
+real :: cut(5)
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -3893,174 +3893,174 @@ REAL :: CUT(5)
 !
 !-----------------------------------------------------------
 !
-DATA SP5/.255251817302048E-09/, &
-&SP4/.723809046696880E-07/, &
-&SP3/.109233297700241E-04/, &
-&SP2/.954811583154274E-03/, &
-&SP1/.452867078563929E-01/, &
-&SQ1/-.471329214363072E-02/
-DATA CP5/.116744361560051E-08/, &
-&CP4/.280407224259429E-06/, &
-&CP3/.344417983443219E-04/, &
-&CP2/.232293648552398E-02/, &
-&CP1/.778752378267155E-01/, &
-&CQ1/-.545809550662099E-02/
-DATA ZP3/5.59297116264720E-07/, &
-&ZP2/1.77943488030894E-04/, &
-&ZP1/1.69800461894792E-02/, &
-&ZQ4/1.33412535492375E-09/, &
-&ZQ3/-5.80858944138663E-07/, &
-&ZQ2/1.27814964403863E-04/, &
-&ZQ1/-1.63532871439181E-02/
-DATA CUT(1)/1.65/, CUT(2)/1.2/, CUT(3)/1.2/, CUT(4)/2.7/, &
-&CUT(5)/1.65/
+data sp5/.255251817302048e-09/, &
+&sp4/.723809046696880e-07/, &
+&sp3/.109233297700241e-04/, &
+&sp2/.954811583154274e-03/, &
+&sp1/.452867078563929e-01/, &
+&sq1/-.471329214363072e-02/
+data cp5/.116744361560051e-08/, &
+&cp4/.280407224259429e-06/, &
+&cp3/.344417983443219e-04/, &
+&cp2/.232293648552398e-02/, &
+&cp1/.778752378267155e-01/, &
+&cq1/-.545809550662099e-02/
+data zp3/5.59297116264720e-07/, &
+&zp2/1.77943488030894e-04/, &
+&zp1/1.69800461894792e-02/, &
+&zq4/1.33412535492375e-09/, &
+&zq3/-5.80858944138663e-07/, &
+&zq2/1.27814964403863e-04/, &
+&zq1/-1.63532871439181e-02/
+data cut(1)/1.65/, cut(2)/1.2/, cut(3)/1.2/, cut(4)/2.7/, &
+&cut(5)/1.65/
 !
-XX = X
-AX = ABS(XX)
-XS = XX*XX
-IF (AX .GE. CUT(ISW+2)) EXPX = EXP(AX)
+xx = x
+ax = abs(xx)
+xs = xx*xx
+if (ax .ge. cut(isw+2)) expx = exp(ax)
 !
 ! SINHM APPROXIMATION
 !
-IF (ISW .EQ. 1 .OR. ISW .EQ. 2) GO TO 2
-IF (AX .GE. 1.65) GO TO 1
-SINHM = ((((((SP5*XS+SP4)*XS+SP3)*XS+SP2)*XS+SP1)*XS+1.) &
-&*XS*XX)/((SQ1*XS+1.)*6.)
-GO TO 2
-1 SINHM = -(((AX+AX)+1./EXPX)-EXPX)/2.
-IF (XX .LT. 0.) SINHM = -SINHM
+if (isw .eq. 1 .or. isw .eq. 2) go to 2
+if (ax .ge. 1.65) go to 1
+sinhm = ((((((sp5*xs+sp4)*xs+sp3)*xs+sp2)*xs+sp1)*xs+1.) &
+&*xs*xx)/((sq1*xs+1.)*6.)
+go to 2
+1 sinhm = -(((ax+ax)+1./expx)-expx)/2.
+if (xx .lt. 0.) sinhm = -sinhm
 !
 ! COSHM APPROXIMATION
 !
-2 IF (ISW .NE. 0 .AND. ISW .NE. 1) GO TO 4
-IF (AX .GE. 1.2) GO TO 3
-COSHM = ((((((CP5*XS+CP4)*XS+CP3)*XS+CP2)*XS+CP1)*XS+1.) &
-&*XS)/((CQ1*XS+1.)*2.)
-GO TO 4
-3 COSHM = ((1./EXPX-2.)+EXPX)/2.
+2 if (isw .ne. 0 .and. isw .ne. 1) go to 4
+if (ax .ge. 1.2) go to 3
+coshm = ((((((cp5*xs+cp4)*xs+cp3)*xs+cp2)*xs+cp1)*xs+1.) &
+&*xs)/((cq1*xs+1.)*2.)
+go to 4
+3 coshm = ((1./expx-2.)+expx)/2.
 !
 ! COSHMM APPROXIMATION
 !
-4 IF (ISW .LE. 1) RETURN
-IF (AX .GE. 2.70) GO TO 5
-COSHM = ((((ZP3*XS+ZP2)*XS+ZP1)*XS+1.)*XS*XS)/(((((ZQ4 &
-&*XS+ZQ3)*XS+ZQ2)*XS+ZQ1)*XS+1.)*24.)
-RETURN
-5 COSHM = (((1./EXPX-2.)-XS)+EXPX)/2.
-RETURN
-END SUBROUTINE SNHCSH
+4 if (isw .le. 1) return
+if (ax .ge. 2.70) go to 5
+coshm = ((((zp3*xs+zp2)*xs+zp1)*xs+1.)*xs*xs)/(((((zq4 &
+&*xs+zq3)*xs+zq2)*xs+zq1)*xs+1.)*24.)
+return
+5 coshm = (((1./expx-2.)-xs)+expx)/2.
+return
+end subroutine snhcsh
 
-REAL function ESUM (MU, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MU
-REAL, INTENT(IN) :: X
-REAL :: W
+real function esum (mu, x)
+implicit none
+integer, intent(in) :: mu
+real, intent(in) :: x
+real :: w
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
-IF (X .GT. 0.0) GO TO 10
+if (x .gt. 0.0) go to 10
 !
-IF (MU .LT. 0) GO TO 20
-   W = MU + X
-   IF (W .GT. 0.0) GO TO 20
-   ESUM = EXP(W)
-   RETURN
+if (mu .lt. 0) go to 20
+   w = mu + x
+   if (w .gt. 0.0) go to 20
+   esum = exp(w)
+   return
 !
-10 IF (MU .GT. 0) GO TO 20
-   W = MU + X
-   IF (W .LT. 0.0) GO TO 20
-   ESUM = EXP(W)
-   RETURN
+10 if (mu .gt. 0) go to 20
+   w = mu + x
+   if (w .lt. 0.0) go to 20
+   esum = exp(w)
+   return
 !
-20 W = MU
-ESUM = EXP(W)*EXP(X)
-RETURN
-END FUNCTION ESUM
+20 w = mu
+esum = exp(w)*exp(x)
+return
+end function esum
 
-double precision function DESUM (MU, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MU
+double precision function desum (mu, x)
+implicit none
+integer, intent(in) :: mu
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: W
+double precision, intent(in) :: x
+double precision :: w
 !
-IF (X .GT. 0.D0) GO TO 10
+if (x .gt. 0.d0) go to 10
 !
-IF (MU .LT. 0) GO TO 20
-   W = MU + X
-   IF (W .GT. 0.D0) GO TO 20
-   DESUM = DEXP(W)
-   RETURN
+if (mu .lt. 0) go to 20
+   w = mu + x
+   if (w .gt. 0.d0) go to 20
+   desum = dexp(w)
+   return
 !
-10 IF (MU .GT. 0) GO TO 20
-   W = MU + X
-   IF (W .LT. 0.D0) GO TO 20
-   DESUM = DEXP(W)
-   RETURN
+10 if (mu .gt. 0) go to 20
+   w = mu + x
+   if (w .lt. 0.d0) go to 20
+   desum = dexp(w)
+   return
 !
-20 W = MU
-DESUM = DEXP(W)*DEXP(X)
-RETURN
-END FUNCTION DESUM
+20 w = mu
+desum = dexp(w)*dexp(x)
+return
+end function desum
 
-REAL function REXP (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: E, P1, P2, Q1, Q2, Q3, Q4
+real function rexp (x)
+implicit none
+real, intent(in) :: x
+real :: e, p1, p2, q1, q2, q3, q4
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
-DATA P1/ .914041914819518E-09/, P2/ .238082361044469E-01/, &
-&Q1/-.499999999085958E+00/, Q2/ .107141568980644E+00/, &
-&Q3/-.119041179760821E-01/, Q4/ .595130811860248E-03/
+data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
+&q1/-.499999999085958e+00/, q2/ .107141568980644e+00/, &
+&q3/-.119041179760821e-01/, q4/ .595130811860248e-03/
 !-----------------------
-IF (ABS(X) .GT. 0.15) GO TO 10
-REXP = X*(((P2*X + P1)*X + 1.0)/((((Q4*X + Q3)*X + Q2)*X &
-&+ Q1)*X + 1.0))
-RETURN
+if (abs(x) .gt. 0.15) go to 10
+rexp = x*(((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
+&+ q1)*x + 1.0))
+return
 !
-10 IF (X .LT. 0.0) GO TO 20
-   E = EXP(X)
-   REXP = E*(0.5 + (0.5 - 1.0/E))
-   RETURN
-20 IF (X .LT. -37.0) GO TO 30
-   REXP = (EXP(X) - 0.5) - 0.5
-   RETURN
-30 REXP = -1.0
-RETURN
-END FUNCTION REXP
+10 if (x .lt. 0.0) go to 20
+   e = exp(x)
+   rexp = e*(0.5 + (0.5 - 1.0/e))
+   return
+20 if (x .lt. -37.0) go to 30
+   rexp = (exp(x) - 0.5) - 0.5
+   return
+30 rexp = -1.0
+return
+end function rexp
 
-double precision function DREXP (X)
-IMPLICIT NONE
+double precision function drexp (x)
+implicit none
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: E, W, Z
-DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
-DOUBLE PRECISION :: C1, C2, C3, C4, C5
+double precision, intent(in) :: x
+double precision :: e, w, z
+double precision :: a0, a1, a2, a3, a4, b1, b2, b3, b4
+double precision :: c1, c2, c3, c4, c5
 !---------------------------
-DATA A0/ .248015873015873015873016D-04/, &
-&A1/-.344452080605731005808147D-05/, &
-&A2/ .206664230430046597475413D-06/, &
-&A3/-.447300111094328162971036D-08/, &
-&A4/ .114734027080634968083920D-11/
-DATA B1/-.249994190011341852652396D+00/, &
-&B2/ .249987228833107957725728D-01/, &
-&B3/-.119037506846942249362528D-02/, &
-&B4/ .228908693387350391768682D-04/
+data a0/ .248015873015873015873016d-04/, &
+&a1/-.344452080605731005808147d-05/, &
+&a2/ .206664230430046597475413d-06/, &
+&a3/-.447300111094328162971036d-08/, &
+&a4/ .114734027080634968083920d-11/
+data b1/-.249994190011341852652396d+00/, &
+&b2/ .249987228833107957725728d-01/, &
+&b3/-.119037506846942249362528d-02/, &
+&b4/ .228908693387350391768682d-04/
 !---------------------------
 !     CI = 1/FACTORIAL(I + 2)
 !---------------------------
-DATA C1 / .1666666666666666666666666666666667D+00/, &
-&C2 / .4166666666666666666666666666666667D-01/, &
-&C3 / .8333333333333333333333333333333333D-02/, &
-&C4 / .1388888888888888888888888888888889D-02/, &
-&C5 / .1984126984126984126984126984126984D-03/
+data c1 / .1666666666666666666666666666666667d+00/, &
+&c2 / .4166666666666666666666666666666667d-01/, &
+&c3 / .8333333333333333333333333333333333d-02/, &
+&c4 / .1388888888888888888888888888888889d-02/, &
+&c5 / .1984126984126984126984126984126984d-03/
 !---------------------------
-IF (DABS(X) .GT. 0.15D0) GO TO 10
+if (dabs(x) .gt. 0.15d0) go to 10
 !
 !        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 !
@@ -4072,29 +4072,29 @@ IF (DABS(X) .GT. 0.15D0) GO TO 10
 !        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
 !        DIGIT.
 !
-Z = ((((A4*X + A3)*X + A2)*X + A1)*X + A0) / &
-&((((B4*X + B3)*X + B2)*X + B1)*X + 1.D0)
-W = ((((((Z*X + C5)*X + C4)*X + C3)*X + C2)*X + &
-&C1)*X + 0.5D0)*X + 1.D0
-DREXP = X*W
-RETURN
+z = ((((a4*x + a3)*x + a2)*x + a1)*x + a0) / &
+&((((b4*x + b3)*x + b2)*x + b1)*x + 1.d0)
+w = ((((((z*x + c5)*x + c4)*x + c3)*x + c2)*x + &
+&c1)*x + 0.5d0)*x + 1.d0
+drexp = x*w
+return
 !
-10 IF (X .LT. 0.D0) GO TO 20
-   E = DEXP(X)
-   DREXP = E*(0.5D0 + (0.5D0 - 1.D0/E))
-   RETURN
-20 IF (X .LT. -77.D0) GO TO 30
-   DREXP = (DEXP(X) - 0.5D0) - 0.5D0
-   RETURN
-30 DREXP = -1.D0
-RETURN
-END FUNCTION DREXP
+10 if (x .lt. 0.d0) go to 20
+   e = dexp(x)
+   drexp = e*(0.5d0 + (0.5d0 - 1.d0/e))
+   return
+20 if (x .lt. -77.d0) go to 30
+   drexp = (dexp(x) - 0.5d0) - 0.5d0
+   return
+30 drexp = -1.d0
+return
+end function drexp
 
-SUBROUTINE REXP1 (X, E, W)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: E, W
-REAL, INTENT(IN) :: X
-REAL :: P1, P2, Q1, Q2, Q3, Q4
+subroutine rexp1 (x, e, w)
+implicit none
+real, intent(inout) :: e, w
+real, intent(in) :: x
+real :: p1, p2, q1, q2, q3, q4
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4104,29 +4104,29 @@ REAL :: P1, P2, Q1, Q2, Q3, Q4
 !     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
 !
 !-----------------------------------------------------------------------
-DATA P1/ .914041914819518E-09/, P2/ .238082361044469E-01/, &
-&Q1/-.499999999085958E+00/, Q2/ .107141568980644E+00/, &
-&Q3/-.119041179760821E-01/, Q4/ .595130811860248E-03/
+data p1/ .914041914819518e-09/, p2/ .238082361044469e-01/, &
+&q1/-.499999999085958e+00/, q2/ .107141568980644e+00/, &
+&q3/-.119041179760821e-01/, q4/ .595130811860248e-03/
 !-----------------------
-IF (ABS(X) .GT. 0.15) GO TO 10
-W = ((P2*X + P1)*X + 1.0)/((((Q4*X + Q3)*X + Q2)*X &
-&+ Q1)*X + 1.0)
-RETURN
+if (abs(x) .gt. 0.15) go to 10
+w = ((p2*x + p1)*x + 1.0)/((((q4*x + q3)*x + q2)*x &
+&+ q1)*x + 1.0)
+return
 !
-10 IF (X .LT. 0.0) GO TO 20
-   IF (E .LT. 0.0) E = EXP(X)
-   W = (E*(0.5 + (0.5 - 1.0/E)))/X
-   RETURN
-20 IF (X .LT. -37.0) GO TO 30
-   IF (E .LT. 0.0) E = EXP(X)
-   W = ((E - 0.5) - 0.5)/X
-   RETURN
-30 W = -1.0/X
-RETURN
-END SUBROUTINE REXP1
+10 if (x .lt. 0.0) go to 20
+   if (e .lt. 0.0) e = exp(x)
+   w = (e*(0.5 + (0.5 - 1.0/e)))/x
+   return
+20 if (x .lt. -37.0) go to 30
+   if (e .lt. 0.0) e = exp(x)
+   w = ((e - 0.5) - 0.5)/x
+   return
+30 w = -1.0/x
+return
+end subroutine rexp1
 
-SUBROUTINE DREXP1 (X, E, W)
-IMPLICIT NONE
+subroutine drexp1 (x, e, w)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4136,34 +4136,34 @@ IMPLICIT NONE
 !     THEN E IS SET TO EXP(X) WHEN THIS VALUE IS NEEDED.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION, INTENT(INOUT) :: E
-DOUBLE PRECISION, INTENT(OUT) :: W
-DOUBLE PRECISION :: Z
-DOUBLE PRECISION :: A0, A1, A2, A3, A4, B1, B2, B3, B4
-DOUBLE PRECISION :: C1, C2, C3, C4, C5
+double precision, intent(in) :: x
+double precision, intent(inout) :: e
+double precision, intent(out) :: w
+double precision :: z
+double precision :: a0, a1, a2, a3, a4, b1, b2, b3, b4
+double precision :: c1, c2, c3, c4, c5
 !---------------------------
-DATA A0/ .248015873015873015873016D-04/, &
-&A1/-.344452080605731005808147D-05/, &
-&A2/ .206664230430046597475413D-06/, &
-&A3/-.447300111094328162971036D-08/, &
-&A4/ .114734027080634968083920D-11/
-DATA B1/-.249994190011341852652396D+00/, &
-&B2/ .249987228833107957725728D-01/, &
-&B3/-.119037506846942249362528D-02/, &
-&B4/ .228908693387350391768682D-04/
+data a0/ .248015873015873015873016d-04/, &
+&a1/-.344452080605731005808147d-05/, &
+&a2/ .206664230430046597475413d-06/, &
+&a3/-.447300111094328162971036d-08/, &
+&a4/ .114734027080634968083920d-11/
+data b1/-.249994190011341852652396d+00/, &
+&b2/ .249987228833107957725728d-01/, &
+&b3/-.119037506846942249362528d-02/, &
+&b4/ .228908693387350391768682d-04/
 !---------------------------
 !     CI = 1/FACTORIAL(I + 2)
 !---------------------------
-DATA C1 / .1666666666666666666666666666666667D+00/, &
-&C2 / .4166666666666666666666666666666667D-01/, &
-&C3 / .8333333333333333333333333333333333D-02/, &
-&C4 / .1388888888888888888888888888888889D-02/, &
-&C5 / .1984126984126984126984126984126984D-03/
+data c1 / .1666666666666666666666666666666667d+00/, &
+&c2 / .4166666666666666666666666666666667d-01/, &
+&c3 / .8333333333333333333333333333333333d-02/, &
+&c4 / .1388888888888888888888888888888889d-02/, &
+&c5 / .1984126984126984126984126984126984d-03/
 !---------------------------
-W = 1.D0
-IF (DABS(X) .LT. 1.D-33) RETURN
-IF (DABS(X) .GT. 0.15D0) GO TO 10
+w = 1.d0
+if (dabs(x) .lt. 1.d-33) return
+if (dabs(x) .gt. 0.15d0) go to 10
 !
 !        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 !
@@ -4175,82 +4175,82 @@ IF (DABS(X) .GT. 0.15D0) GO TO 10
 !        WITHIN 1 UNIT OF THE 33-RD SIGNIFICANT
 !        DIGIT.
 !
-Z = ((((A4*X + A3)*X + A2)*X + A1)*X + A0) / &
-&((((B4*X + B3)*X + B2)*X + B1)*X + 1.D0)
-W = ((((((Z*X + C5)*X + C4)*X + C3)*X + C2)*X + &
-&C1)*X + 0.5D0)*X + 1.D0
-RETURN
+z = ((((a4*x + a3)*x + a2)*x + a1)*x + a0) / &
+&((((b4*x + b3)*x + b2)*x + b1)*x + 1.d0)
+w = ((((((z*x + c5)*x + c4)*x + c3)*x + c2)*x + &
+&c1)*x + 0.5d0)*x + 1.d0
+return
 !
-10 IF (X .LT. 0.D0) GO TO 20
-   IF (E .LT. 0.D0) E = DEXP(X)
-   W = (E*(0.5D0 + (0.5D0 - 1.D0/E)))/X
-   RETURN
-20 IF (X .LT. -77.D0) GO TO 30
-   IF (E .LT. 0.D0) E = DEXP(X)
-   W = ((E - 0.5D0) - 0.5D0)/X
-   RETURN
-30 W = -1.D0/X
-RETURN
-END SUBROUTINE DREXP1
+10 if (x .lt. 0.d0) go to 20
+   if (e .lt. 0.d0) e = dexp(x)
+   w = (e*(0.5d0 + (0.5d0 - 1.d0/e)))/x
+   return
+20 if (x .lt. -77.d0) go to 30
+   if (e .lt. 0.d0) e = dexp(x)
+   w = ((e - 0.5d0) - 0.5d0)/x
+   return
+30 w = -1.d0/x
+return
+end subroutine drexp1
 
-REAL function ALNREL(A)
-IMPLICIT NONE
-REAL, INTENT(IN) :: A
-REAL :: P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
+real function alnrel(a)
+implicit none
+real, intent(in) :: a
+real :: p1, p2, p3, q1, q2, q3, t, t2, w, x
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
-DATA P1/-.129418923021993E+01/, P2/.405303492862024E+00/, &
-&P3/-.178874546012214E-01/
-DATA Q1/-.162752256355323E+01/, Q2/.747811014037616E+00/, &
-&Q3/-.845104217945565E-01/
+data p1/-.129418923021993e+01/, p2/.405303492862024e+00/, &
+&p3/-.178874546012214e-01/
+data q1/-.162752256355323e+01/, q2/.747811014037616e+00/, &
+&q3/-.845104217945565e-01/
 !--------------------------
-IF (ABS(A) .GT. 0.375) GO TO 10
-T = A/(A + 2.0)
-T2 = T*T
-W = (((P3*T2 + P2)*T2 + P1)*T2 + 1.0)/ &
-&(((Q3*T2 + Q2)*T2 + Q1)*T2 + 1.0)
-ALNREL = 2.0*T*W
-RETURN
+if (abs(a) .gt. 0.375) go to 10
+t = a/(a + 2.0)
+t2 = t*t
+w = (((p3*t2 + p2)*t2 + p1)*t2 + 1.0)/ &
+&(((q3*t2 + q2)*t2 + q1)*t2 + 1.0)
+alnrel = 2.0*t*w
+return
 !
-10 X = 1.0 + A
-IF (A .LT. 0.0) X = (A + 0.5) + 0.5
-ALNREL = ALOG(X)
-RETURN
-END FUNCTION ALNREL
+10 x = 1.0 + a
+if (a .lt. 0.0) x = (a + 0.5) + 0.5
+alnrel = alog(x)
+return
+end function alnrel
 
-double precision function DLNREL (A)
-IMPLICIT NONE
+double precision function dlnrel (a)
+implicit none
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION :: T, T2, W, Z
-DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION :: C1, C2, C3, C4, C5
+double precision, intent(in) :: a
+double precision :: t, t2, w, z
+double precision :: p0, p1, p2, p3, q1, q2, q3, q4
+double precision :: c1, c2, c3, c4, c5
 !-------------------------
-DATA P0 / .7692307692307692307680D-01/, &
-&P1 /-.1505958055914600184836D+00/, &
-&P2 / .9302355725278521726994D-01/, &
-&P3 /-.1787900022182327735804D-01/
-DATA Q1 /-.2824412139355646910683D+01/, &
-&Q2 / .2892424216041495392509D+01/, &
-&Q3 /-.1263560605948009364422D+01/, &
-&Q4 / .1966769435894561313526D+00/
+data p0 / .7692307692307692307680d-01/, &
+&p1 /-.1505958055914600184836d+00/, &
+&p2 / .9302355725278521726994d-01/, &
+&p3 /-.1787900022182327735804d-01/
+data q1 /-.2824412139355646910683d+01/, &
+&q2 / .2892424216041495392509d+01/, &
+&q3 /-.1263560605948009364422d+01/, &
+&q4 / .1966769435894561313526d+00/
 !-------------------------
 !     CI = 1/(2I + 1)
 !-------------------------
-DATA C1 /.3333333333333333333333333333333D+00/, &
-&C2 /.2000000000000000000000000000000D+00/, &
-&C3 /.1428571428571428571428571428571D+00/, &
-&C4 /.1111111111111111111111111111111D+00/, &
-&C5 /.9090909090909090909090909090909D-01/
+data c1 /.3333333333333333333333333333333d+00/, &
+&c2 /.2000000000000000000000000000000d+00/, &
+&c3 /.1428571428571428571428571428571d+00/, &
+&c4 /.1111111111111111111111111111111d+00/, &
+&c5 /.9090909090909090909090909090909d-01/
 !-------------------------
-IF (DABS(A) .LT. 0.375D0) GO TO 10
-T = 1.D0 + A
-IF (A .LT. 0.D0) T = 0.5D0 + (0.5D0 + A)
-DLNREL = DLOG(T)
-RETURN
+if (dabs(a) .lt. 0.375d0) go to 10
+t = 1.d0 + a
+if (a .lt. 0.d0) t = 0.5d0 + (0.5d0 + a)
+dlnrel = dlog(t)
+return
 !
 !        W IS A MINIMAX APPROXIMATION OF THE SERIES
 !
@@ -4262,178 +4262,178 @@ RETURN
 !        ACCURATE TO WITHIN 1 UNIT OF THE 30-TH
 !        SIGNIFICANT DIGIT.
 !
-10 T = A/(A + 2.D0)
-T2 = T*T
-W = (((P3*T2 + P2)*T2 + P1)*T2 + P0)/ &
-&((((Q4*T2 + Q3)*T2 + Q2)*T2 + Q1)*T2 + 1.D0)
+10 t = a/(a + 2.d0)
+t2 = t*t
+w = (((p3*t2 + p2)*t2 + p1)*t2 + p0)/ &
+&((((q4*t2 + q3)*t2 + q2)*t2 + q1)*t2 + 1.d0)
 !
-Z = ((((W*T2 + C5)*T2 + C4)*T2 + C3)*T2 + C2)*T2 + C1
-DLNREL = 2.D0*T*(1.D0 + T2*Z)
-RETURN
-END FUNCTION DLNREL
+z = ((((w*t2 + c5)*t2 + c4)*t2 + c3)*t2 + c2)*t2 + c1
+dlnrel = 2.d0*t*(1.d0 + t2*z)
+return
+end function dlnrel
 
-REAL function RLOG(X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
+real function rlog(x)
+implicit none
+real, intent(in) :: x
+real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
 !     A = RLOG (0.7)
 !     B = RLOG (4/3)
 !------------------------
-DATA A/.566749439387324E-01/
-DATA B/.456512608815524E-01/
+data a/.566749439387324e-01/
+data b/.456512608815524e-01/
 !------------------------
-DATA P0/ .333333333333333E+00/, P1/-.224696413112536E+00/, &
-&P2/ .620886815375787E-02/
-DATA Q1/-.127408923933623E+01/, Q2/ .354508718369557E+00/
+data p0/ .333333333333333e+00/, p1/-.224696413112536e+00/, &
+&p2/ .620886815375787e-02/
+data q1/-.127408923933623e+01/, q2/ .354508718369557e+00/
 !------------------------
-IF (X .LT. 0.61 .OR. X .GT. 1.57) GO TO 100
-IF (X .LT. 0.82) GO TO 10
-IF (X .GT. 1.18) GO TO 20
+if (x .lt. 0.61 .or. x .gt. 1.57) go to 100
+if (x .lt. 0.82) go to 10
+if (x .gt. 1.18) go to 20
 !
 !                 ARGUMENT REDUCTION
 !
-U = (X - 0.5) - 0.5
-UP2 = U + 2.0
-W1 = 0.0
-GO TO 30
+u = (x - 0.5) - 0.5
+up2 = u + 2.0
+w1 = 0.0
+go to 30
 !
-10 U = (X - 0.7)/0.7
-UP2 = U + 2.0
-W1 = A - U*0.3
-GO TO 30
+10 u = (x - 0.7)/0.7
+up2 = u + 2.0
+w1 = a - u*0.3
+go to 30
 !
-20 T = 0.75*(X - 1.0)
-U = T - 0.25
-UP2 = T + 1.75
-W1 = B + U/3.0
+20 t = 0.75*(x - 1.0)
+u = t - 0.25
+up2 = t + 1.75
+w1 = b + u/3.0
 !
 !                  SERIES EXPANSION
 !
-30 R = U/UP2
-T = R*R
-W = ((P2*T + P1)*T + P0)/((Q2*T + Q1)*T + 1.0)
-RLOG = R*(U - 2.0*T*W) + W1
-RETURN
+30 r = u/up2
+t = r*r
+w = ((p2*t + p1)*t + p0)/((q2*t + q1)*t + 1.0)
+rlog = r*(u - 2.0*t*w) + w1
+return
 !
 !
-100 R = (X - 0.5) - 0.5
-RLOG = R - ALOG(X)
-RETURN
-END FUNCTION RLOG
+100 r = (x - 0.5) - 0.5
+rlog = r - alog(x)
+return
+end function rlog
 
-REAL function RLOG1(X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
+real function rlog1(x)
+implicit none
+real, intent(in) :: x
+real :: a, b, p0, p1, p2, q1, q2, r, t, u, up2, w, w1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
 !     A = RLOG (0.7)
 !     B = RLOG (4/3)
 !------------------------
-DATA A/.566749439387324E-01/
-DATA B/.456512608815524E-01/
+data a/.566749439387324e-01/
+data b/.456512608815524e-01/
 !------------------------
-DATA P0/ .333333333333333E+00/, P1/-.224696413112536E+00/, &
-&P2/ .620886815375787E-02/
-DATA Q1/-.127408923933623E+01/, Q2/ .354508718369557E+00/
+data p0/ .333333333333333e+00/, p1/-.224696413112536e+00/, &
+&p2/ .620886815375787e-02/
+data q1/-.127408923933623e+01/, q2/ .354508718369557e+00/
 !------------------------
-IF (X .LT. -0.39 .OR. X .GT. 0.57) GO TO 100
-IF (X .LT. -0.18) GO TO 10
-IF (X .GT.  0.18) GO TO 20
+if (x .lt. -0.39 .or. x .gt. 0.57) go to 100
+if (x .lt. -0.18) go to 10
+if (x .gt.  0.18) go to 20
 !
 !                 ARGUMENT REDUCTION
 !
-U = X
-UP2 = U + 2.0
-W1 = 0.0
-GO TO 30
+u = x
+up2 = u + 2.0
+w1 = 0.0
+go to 30
 !
-10 U = (X + 0.3)/0.7
-UP2 = U + 2.0
-W1 = A - U*0.3
-GO TO 30
+10 u = (x + 0.3)/0.7
+up2 = u + 2.0
+w1 = a - u*0.3
+go to 30
 !
-20 T = 0.75*X
-U = T - 0.25
-UP2 = T + 1.75
-W1 = B + U/3.0
+20 t = 0.75*x
+u = t - 0.25
+up2 = t + 1.75
+w1 = b + u/3.0
 !
 !                  SERIES EXPANSION
 !
-30 R = U/UP2
-T = R*R
-W = ((P2*T + P1)*T + P0)/((Q2*T + Q1)*T + 1.0)
-RLOG1 = R*(U - 2.0*T*W) + W1
-RETURN
+30 r = u/up2
+t = r*r
+w = ((p2*t + p1)*t + p0)/((q2*t + q1)*t + 1.0)
+rlog1 = r*(u - 2.0*t*w) + w1
+return
 !
 !
-100 W = (X + 0.5) + 0.5
-RLOG1 = X - ALOG(W)
-RETURN
-END FUNCTION RLOG1
+100 w = (x + 0.5) + 0.5
+rlog1 = x - alog(w)
+return
+end function rlog1
 
-double precision function DRLOG (X)
-IMPLICIT NONE
+double precision function drlog (x)
+implicit none
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
-DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION :: C1, C2, C3, C4, C5
+double precision, intent(in) :: x
+double precision :: a, b, r, t, u, up2, w, w1, z
+double precision :: p0, p1, p2, p3, q1, q2, q3, q4
+double precision :: c1, c2, c3, c4, c5
 !-------------------------
 !     A = DRLOG (0.7)
 !     B = DRLOG (4/3)
 !-------------------------
-DATA A /.566749439387323789126387112411845D-01/
-DATA B /.456512608815524058941143273395059D-01/
+data a /.566749439387323789126387112411845d-01/
+data b /.456512608815524058941143273395059d-01/
 !-------------------------
-DATA P0 / .7692307692307692307680D-01/, &
-&P1 /-.1505958055914600184836D+00/, &
-&P2 / .9302355725278521726994D-01/, &
-&P3 /-.1787900022182327735804D-01/
-DATA Q1 /-.2824412139355646910683D+01/, &
-&Q2 / .2892424216041495392509D+01/, &
-&Q3 /-.1263560605948009364422D+01/, &
-&Q4 / .1966769435894561313526D+00/
+data p0 / .7692307692307692307680d-01/, &
+&p1 /-.1505958055914600184836d+00/, &
+&p2 / .9302355725278521726994d-01/, &
+&p3 /-.1787900022182327735804d-01/
+data q1 /-.2824412139355646910683d+01/, &
+&q2 / .2892424216041495392509d+01/, &
+&q3 /-.1263560605948009364422d+01/, &
+&q4 / .1966769435894561313526d+00/
 !-------------------------
 !     CI = 1/(2I + 1)
 !-------------------------
-DATA C1 /.333333333333333333333333333333333D+00/, &
-&C2 /.200000000000000000000000000000000D+00/, &
-&C3 /.142857142857142857142857142857143D+00/, &
-&C4 /.111111111111111111111111111111111D+00/, &
-&C5 /.909090909090909090909090909090909D-01/
+data c1 /.333333333333333333333333333333333d+00/, &
+&c2 /.200000000000000000000000000000000d+00/, &
+&c3 /.142857142857142857142857142857143d+00/, &
+&c4 /.111111111111111111111111111111111d+00/, &
+&c5 /.909090909090909090909090909090909d-01/
 !-------------------------
-IF (X .LT. 0.61D0 .OR. X .GT. 1.57D0) GO TO 100
-IF (X .LT. 0.82D0) GO TO 10
-IF (X .GT. 1.18D0) GO TO 20
+if (x .lt. 0.61d0 .or. x .gt. 1.57d0) go to 100
+if (x .lt. 0.82d0) go to 10
+if (x .gt. 1.18d0) go to 20
 !
 !                 ARGUMENT REDUCTION
 !
-U = (X - 0.5D0) - 0.5D0
-UP2 = U + 2.D0
-W1 = 0.D0
-GO TO 30
+u = (x - 0.5d0) - 0.5d0
+up2 = u + 2.d0
+w1 = 0.d0
+go to 30
 !
-10 U = (X - 0.7D0)/0.7D0
-UP2 = U + 2.D0
-W1 = A - U*0.3D0
-GO TO 30
+10 u = (x - 0.7d0)/0.7d0
+up2 = u + 2.d0
+w1 = a - u*0.3d0
+go to 30
 !
-20 T = 0.75D0*(X - 1.D0)
-U = T - 0.25D0
-UP2 = T + 1.75D0
-W1 = B + U/3.D0
+20 t = 0.75d0*(x - 1.d0)
+u = t - 0.25d0
+up2 = t + 1.75d0
+w1 = b + u/3.d0
 !
 !                  SERIES EXPANSION
 !
-30 R = U/UP2
-T = R*R
+30 r = u/up2
+t = r*r
 !
 !        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 !
@@ -4443,77 +4443,77 @@ T = R*R
 !        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
 !        THE 21-ST SIGNIFICANT DIGIT.
 !
-Z = (((P3*T + P2)*T + P1)*T + P0)/ &
-&((((Q4*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
+z = (((p3*t + p2)*t + p1)*t + p0)/ &
+&((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
 !
-W = ((((Z*T + C5)*T + C4)*T + C3)*T + C2)*T + C1
-DRLOG = R*(U - 2.D0*T*W) + W1
-RETURN
+w = ((((z*t + c5)*t + c4)*t + c3)*t + c2)*t + c1
+drlog = r*(u - 2.d0*t*w) + w1
+return
 !
 !
-100 R = (X - 0.5D0) - 0.5D0
-DRLOG = R - DLOG(X)
-RETURN
-END FUNCTION DRLOG
+100 r = (x - 0.5d0) - 0.5d0
+drlog = r - dlog(x)
+return
+end function drlog
 
-double precision function DRLOG1 (X)
-IMPLICIT NONE
+double precision function drlog1 (x)
+implicit none
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: A, B, R, T, U, UP2, W, W1, Z
-DOUBLE PRECISION :: P0, P1, P2, P3, Q1, Q2, Q3, Q4
-DOUBLE PRECISION :: C1, C2, C3, C4, C5
+double precision, intent(in) :: x
+double precision :: a, b, r, t, u, up2, w, w1, z
+double precision :: p0, p1, p2, p3, q1, q2, q3, q4
+double precision :: c1, c2, c3, c4, c5
 !-------------------------
 !     A = DRLOG (0.7)
 !     B = DRLOG (4/3)
 !-------------------------
-DATA A /.566749439387323789126387112411845D-01/
-DATA B /.456512608815524058941143273395059D-01/
+data a /.566749439387323789126387112411845d-01/
+data b /.456512608815524058941143273395059d-01/
 !-------------------------
-DATA P0 / .7692307692307692307680D-01/, &
-&P1 /-.1505958055914600184836D+00/, &
-&P2 / .9302355725278521726994D-01/, &
-&P3 /-.1787900022182327735804D-01/
-DATA Q1 /-.2824412139355646910683D+01/, &
-&Q2 / .2892424216041495392509D+01/, &
-&Q3 /-.1263560605948009364422D+01/, &
-&Q4 / .1966769435894561313526D+00/
+data p0 / .7692307692307692307680d-01/, &
+&p1 /-.1505958055914600184836d+00/, &
+&p2 / .9302355725278521726994d-01/, &
+&p3 /-.1787900022182327735804d-01/
+data q1 /-.2824412139355646910683d+01/, &
+&q2 / .2892424216041495392509d+01/, &
+&q3 /-.1263560605948009364422d+01/, &
+&q4 / .1966769435894561313526d+00/
 !-------------------------
 !     CI = 1/(2I + 1)
 !-------------------------
-DATA C1 /.333333333333333333333333333333333D+00/, &
-&C2 /.200000000000000000000000000000000D+00/, &
-&C3 /.142857142857142857142857142857143D+00/, &
-&C4 /.111111111111111111111111111111111D+00/, &
-&C5 /.909090909090909090909090909090909D-01/
+data c1 /.333333333333333333333333333333333d+00/, &
+&c2 /.200000000000000000000000000000000d+00/, &
+&c3 /.142857142857142857142857142857143d+00/, &
+&c4 /.111111111111111111111111111111111d+00/, &
+&c5 /.909090909090909090909090909090909d-01/
 !-------------------------
-IF (X .LT. -0.39D0 .OR. X .GT. 0.57D0) GO TO 100
-IF (X .LT. -0.18D0) GO TO 10
-IF (X .GT.  0.18D0) GO TO 20
+if (x .lt. -0.39d0 .or. x .gt. 0.57d0) go to 100
+if (x .lt. -0.18d0) go to 10
+if (x .gt.  0.18d0) go to 20
 !
 !                 ARGUMENT REDUCTION
 !
-U = X
-UP2 = U + 2.D0
-W1 = 0.D0
-GO TO 30
+u = x
+up2 = u + 2.d0
+w1 = 0.d0
+go to 30
 !
-10 U = (X + 0.3D0)/0.7D0
-UP2 = U + 2.D0
-W1 = A - U*0.3D0
-GO TO 30
+10 u = (x + 0.3d0)/0.7d0
+up2 = u + 2.d0
+w1 = a - u*0.3d0
+go to 30
 !
-20 T = 0.75D0*X
-U = T - 0.25D0
-UP2 = T + 1.75D0
-W1 = B + U/3.D0
+20 t = 0.75d0*x
+u = t - 0.25d0
+up2 = t + 1.75d0
+w1 = b + u/3.d0
 !
 !                  SERIES EXPANSION
 !
-30 R = U/UP2
-T = R*R
+30 r = u/up2
+t = r*r
 !
 !        Z IS A MINIMAX APPROXIMATION OF THE SERIES
 !
@@ -4523,28 +4523,28 @@ T = R*R
 !        IMATION IS ACCURATE TO WITHIN 1.6 UNITS OF
 !        THE 21-ST SIGNIFICANT DIGIT.
 !
-Z = (((P3*T + P2)*T + P1)*T + P0)/ &
-&((((Q4*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
+z = (((p3*t + p2)*t + p1)*t + p0)/ &
+&((((q4*t + q3)*t + q2)*t + q1)*t + 1.d0)
 !
-W = ((((Z*T + C5)*T + C4)*T + C3)*T + C2)*T + C1
-DRLOG1 = R*(U - 2.D0*T*W) + W1
-RETURN
+w = ((((z*t + c5)*t + c4)*t + c3)*t + c2)*t + c1
+drlog1 = r*(u - 2.d0*t*w) + w1
+return
 !
 !
-100 W = (X + 0.5D0) + 0.5D0
-DRLOG1 = X - DLOG(W)
-RETURN
-END FUNCTION DRLOG1
+100 w = (x + 0.5d0) + 0.5d0
+drlog1 = x - dlog(w)
+return
+end function drlog1
 
-SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: L, M
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: X0, Y0
-INTEGER :: I, N0
-REAL :: ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
-REAL :: SPMPAR
-REAL, INTENT(IN) :: X(N), Y(N)
+subroutine locpt (x0, y0, x, y, n, l, m)
+implicit none
+integer, intent(inout) :: l, m
+integer, intent(in) :: n
+real, intent(in) :: x0, y0
+integer :: i, n0
+real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
+real :: spmpar
+real, intent(in) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
 !     (I = 1,...,N) TAKEN IN THIS ORDER. IT IS ASSUMED THAT THE
@@ -4567,624 +4567,624 @@ REAL, INTENT(IN) :: X(N), Y(N)
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0
 !
-               EPS = SPMPAR(1)
+               eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
-N0 = N
-IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N0 = N - 1
-PI = ATAN2(0.0, -1.0)
-PI2 = 2.0*PI
-TOL = 4.0*EPS*PI
-L = -1
-M = 0
+n0 = n
+if (x(1) .eq. x(n) .and. y(1) .eq. y(n)) n0 = n - 1
+pi = atan2(0.0, -1.0)
+pi2 = 2.0*pi
+tol = 4.0*eps*pi
+l = -1
+m = 0
 !
-U = X(1) - X0
-V = Y(1) - Y0
-IF (U .EQ. 0.0 .AND. V .EQ. 0.0) GO TO 20
-IF (N0 .LT. 2) RETURN
-THETA1 = ATAN2(V, U)
+u = x(1) - x0
+v = y(1) - y0
+if (u .eq. 0.0 .and. v .eq. 0.0) go to 20
+if (n0 .lt. 2) return
+theta1 = atan2(v, u)
 !
-SUM = 0.0
-THETA = THETA1
-DO I = 2,N0
-   U = X(I) - X0
-   V = Y(I) - Y0
-   IF (U .EQ. 0.0 .AND. V .EQ. 0.0) GO TO 20
-   THETAI = ATAN2(V, U)
+sum = 0.0
+theta = theta1
+do i = 2,n0
+   u = x(i) - x0
+   v = y(i) - y0
+   if (u .eq. 0.0 .and. v .eq. 0.0) go to 20
+   thetai = atan2(v, u)
 !
-   ANGLE = ABS(THETAI - THETA)
-   IF (ABS(ANGLE - PI) .LT. TOL) GO TO 20
-   IF (ANGLE .GT. PI) ANGLE = ANGLE - PI2
-   IF (THETA .GT. THETAI) ANGLE = -ANGLE
-   SUM = SUM + ANGLE
-   THETA = THETAI
-END DO
+   angle = abs(thetai - theta)
+   if (abs(angle - pi) .lt. tol) go to 20
+   if (angle .gt. pi) angle = angle - pi2
+   if (theta .gt. thetai) angle = -angle
+   sum = sum + angle
+   theta = thetai
+end do
 !
-ANGLE = ABS(THETA1 - THETA)
-IF (ABS(ANGLE - PI) .LT. TOL) GO TO 20
-IF (ANGLE .GT. PI) ANGLE = ANGLE - PI2
-IF (THETA .GT. THETA1) ANGLE = -ANGLE
-SUM = SUM + ANGLE
+angle = abs(theta1 - theta)
+if (abs(angle - pi) .lt. tol) go to 20
+if (angle .gt. pi) angle = angle - pi2
+if (theta .gt. theta1) angle = -angle
+sum = sum + angle
 !
 !     SUM = 2*PI*M WHERE M IS THE WINDING NUMBER
 !
-M = ABS(SUM)/PI2 + 0.2
-IF (M .EQ. 0) RETURN
-L = 1
-IF (SUM .LT. 0.0) M = -M
-RETURN
+m = abs(sum)/pi2 + 0.2
+if (m .eq. 0) return
+l = 1
+if (sum .lt. 0.0) m = -m
+return
 !
 !     (X0, Y0) IS ON THE BOUNDARY OF THE PATH
 !
-20 L = 0
-RETURN
-END SUBROUTINE LOCPT
+20 l = 0
+return
+end subroutine locpt
 
-SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: M, N
-INTEGER, INTENT(OUT) :: NUM
-INTEGER :: I, IND, NM1
-REAL :: D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX, &
-&TMIN, TOL, TOL0
-REAL :: SPMPAR
+subroutine pfind (a, b, x, y, n, u, v, m, num, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n
+integer, intent(out) :: num
+integer :: i, ind, nm1
+real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, &
+&tmin, tol, tol0
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !                 INTERSECTION OF A STRIGHT LINE
 !                       AND POLYGONAL PATH
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: A(2), B(2), X(N), Y(N)
-REAL, INTENT(INOUT) :: U(M), V(M)
-REAL :: K, KI
+real, intent(in) :: a(2), b(2), x(n), y(n)
+real, intent(inout) :: u(m), v(m)
+real :: k, ki
 !----------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
 !
-                EPS = SPMPAR(1)
+                eps = spmpar(1)
 !
 !----------------------
-NUM = 0
-IF (N .LT. 2) GO TO 200
-H = B(1) - A(1)
-K = B(2) - A(2)
-IF (H .EQ. 0.0 .AND. K .EQ. 0.0) GO TO 200
+num = 0
+if (n .lt. 2) go to 200
+h = b(1) - a(1)
+k = b(2) - a(2)
+if (h .eq. 0.0 .and. k .eq. 0.0) go to 200
 !
-IERR = 0
-NM1 = N - 1
-TOL = 4.0*EPS
-TOL0 = 2.0*EPS
-ONEP = 1.0 + TOL
-ONEM = 0.5 + (0.5 - TOL0)
+ierr = 0
+nm1 = n - 1
+tol = 4.0*eps
+tol0 = 2.0*eps
+onep = 1.0 + tol
+onem = 0.5 + (0.5 - tol0)
 !
-IND = 0
-do 100 I = 1, NM1
-   HI = X(I + 1) - X(I)
-   KI = Y(I + 1) - Y(I)
-   IF (HI .EQ. 0.0 .AND. KI .EQ. 0.0) GO TO 100
-   IND = 1
+ind = 0
+do 100 i = 1, nm1
+   hi = x(i + 1) - x(i)
+   ki = y(i + 1) - y(i)
+   if (hi .eq. 0.0 .and. ki .eq. 0.0) go to 100
+   ind = 1
 !
 !           CHECK IF THE LINE FROM A TO B AND THE I-TH
 !                 LINE IN THE PATH ARE PARALLEL
 !
-   S = HI*K
-   T = H*KI
-   D = S - T
-   IF (ABS(D) .LE. TOL*AMAX1(ABS(S),ABS(T))) GO TO 40
+   s = hi*k
+   t = h*ki
+   d = s - t
+   if (abs(d) .le. tol*amax1(abs(s),abs(t))) go to 40
 !-----------------------------------------------------------------------
 !                   THE LINES ARE NOT PARALLEL
 !-----------------------------------------------------------------------
-   P = X(I) - A(1)
-   Q = Y(I) - A(2)
-   S = HI*Q
-   T = KI*P
-   DIFF = S - T
-   IF (ABS(DIFF) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF = 0.0
-   S = H*Q
-   T = K*P
-   DIFF1 = S - T
-   IF (ABS(DIFF1) .LE. TOL*AMAX1(ABS(S),ABS(T))) DIFF1 = 0.0
+   p = x(i) - a(1)
+   q = y(i) - a(2)
+   s = hi*q
+   t = ki*p
+   diff = s - t
+   if (abs(diff) .le. tol*amax1(abs(s),abs(t))) diff = 0.0
+   s = h*q
+   t = k*p
+   diff1 = s - t
+   if (abs(diff1) .le. tol*amax1(abs(s),abs(t))) diff1 = 0.0
 !
-   S = DIFF/D
-   T = DIFF1/D
-   IF (S .LT. 0.0 .OR. S .GT. ONEP) GO TO 100
-   IF (T .LT. 0.0 .OR. T .GT. ONEP) GO TO 100
-   IF (NUM .GT. 0 .AND. T .EQ. 0.0) GO TO 100
-   IF (S .GT. 0.0) GO TO 20
+   s = diff/d
+   t = diff1/d
+   if (s .lt. 0.0 .or. s .gt. onep) go to 100
+   if (t .lt. 0.0 .or. t .gt. onep) go to 100
+   if (num .gt. 0 .and. t .eq. 0.0) go to 100
+   if (s .gt. 0.0) go to 20
 !
 !                   POINT A IS ON THE I-TH LINE
 !
-10 NUM = NUM + 1
-   IF (NUM .GT. M) GO TO 210
-   U(NUM) = A(1)
-   V(NUM) = A(2)
-   GO TO 100
+10 num = num + 1
+   if (num .gt. m) go to 210
+   u(num) = a(1)
+   v(num) = a(2)
+   go to 100
 !
 !                   POINT B IS ON THE I-TH LINE
 !
-20 IF (S .LT. ONEM) GO TO 30
-21 NUM = NUM + 1
-   IF (NUM .GT. M) GO TO 210
-   U(NUM) = B(1)
-   V(NUM) = B(2)
-   GO TO 100
+20 if (s .lt. onem) go to 30
+21 num = num + 1
+   if (num .gt. m) go to 210
+   u(num) = b(1)
+   v(num) = b(2)
+   go to 100
 !
 !              THE INTERIOR OF THE LINE FROM A TO B
 !                 INTERSECTS WITH THE I-TH LINE
 !
-30 NUM = NUM + 1
-   IF (NUM .GT. M) GO TO 210
-   U(NUM) = A(1) + S*H
-   V(NUM) = A(2) + S*K
-   GO TO 100
+30 num = num + 1
+   if (num .gt. m) go to 210
+   u(num) = a(1) + s*h
+   v(num) = a(2) + s*k
+   go to 100
 !-----------------------------------------------------------------------
 !                     THE LINES ARE PARALLEL
 !-----------------------------------------------------------------------
-40 IF (ABS(HI) .GT. ABS(KI)) GO TO 50
+40 if (abs(hi) .gt. abs(ki)) go to 50
 !
-      D = A(2) - Y(I)
-      IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(2)),ABS(Y(I)))) D = 0.0
-      S = D/KI
+      d = a(2) - y(i)
+      if (abs(d) .le. tol0*amax1(abs(a(2)),abs(y(i)))) d = 0.0
+      s = d/ki
 !
-      P = X(I) + S*HI
-      IF (ABS(A(1) - P) .GT. TOL*AMAX1(ABS(A(1)),ABS(P))) &
-&GO TO 100
+      p = x(i) + s*hi
+      if (abs(a(1) - p) .gt. tol*amax1(abs(a(1)),abs(p))) &
+&go to 100
 !
-      D = B(2) - Y(I)
-      IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(2)),ABS(Y(I)))) D = 0.0
-      T = D/KI
-      GO TO 60
+      d = b(2) - y(i)
+      if (abs(d) .le. tol0*amax1(abs(b(2)),abs(y(i)))) d = 0.0
+      t = d/ki
+      go to 60
 !
-50 D = A(1) - X(I)
-   IF (ABS(D) .LE. TOL0*AMAX1(ABS(A(1)),ABS(X(I)))) D = 0.0
-   S = D/HI
+50 d = a(1) - x(i)
+   if (abs(d) .le. tol0*amax1(abs(a(1)),abs(x(i)))) d = 0.0
+   s = d/hi
 !
-   P = Y(I) + S*KI
-   IF (ABS(P - A(2)) .GT. TOL*AMAX1(ABS(P),ABS(A(2)))) &
-&GO TO 100
+   p = y(i) + s*ki
+   if (abs(p - a(2)) .gt. tol*amax1(abs(p),abs(a(2)))) &
+&go to 100
 !
-   D = B(1) - X(I)
-   IF (ABS(D) .LE. TOL0*AMAX1(ABS(B(1)),ABS(X(I)))) D = 0.0
-   T = D/HI
+   d = b(1) - x(i)
+   if (abs(d) .le. tol0*amax1(abs(b(1)),abs(x(i)))) d = 0.0
+   t = d/hi
 !
 !              THE 2 LINES ARE PORTIONS OF THE SAME
 !                     STRAIGHT INFINITE LINE
 !
-60 IF (S .GT. 0.0 .AND. S .LT. ONEM) GO TO 220
-   IF (T .GT. 0.0 .AND. T .LT. ONEM) GO TO 220
-   TMIN = AMIN1(S,T)
-   TMAX = AMAX1(S,T)
-   IF (TMAX .LE. 0.0) GO TO 70
-   IF (TMIN .GE. ONEM) GO TO 80
-   GO TO 220
+60 if (s .gt. 0.0 .and. s .lt. onem) go to 220
+   if (t .gt. 0.0 .and. t .lt. onem) go to 220
+   tmin = amin1(s,t)
+   tmax = amax1(s,t)
+   if (tmax .le. 0.0) go to 70
+   if (tmin .ge. onem) go to 80
+   go to 220
 !
-70 IF (TMAX .LT. 0.0) GO TO 100
-   IF (NUM .GT. 0) GO TO 100
-   IF (TMAX .EQ. S) GO TO 10
-   GO TO 21
+70 if (tmax .lt. 0.0) go to 100
+   if (num .gt. 0) go to 100
+   if (tmax .eq. s) go to 10
+   go to 21
 !
-80 IF (TMIN .GT. 1.0) GO TO 100
-   IF (TMIN .EQ. S) GO TO 10
-   GO TO 21
+80 if (tmin .gt. 1.0) go to 100
+   if (tmin .eq. s) go to 10
+   go to 21
 !
-100 CONTINUE
-IF (IND .EQ. 0) GO TO 200
+100 continue
+if (ind .eq. 0) go to 200
 !
-IF (NUM .LT. 2) RETURN
-IF (U(NUM) .EQ. X(1) .AND. V(NUM) .EQ. Y(1)) &
-&NUM = NUM - 1
-RETURN
+if (num .lt. 2) return
+if (u(num) .eq. x(1) .and. v(num) .eq. y(1)) &
+&num = num - 1
+return
 !
 !                          ERROR RETURN
 !
-200 IERR = 1
-RETURN
-210 IERR = 2
-NUM = NUM - 1
-RETURN
-220 IERR = -I
-RETURN
-END SUBROUTINE PFIND
+200 ierr = 1
+return
+210 ierr = 2
+num = num - 1
+return
+220 ierr = -i
+return
+end subroutine pfind
 
-SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: K
-INTEGER, INTENT(IN) :: M
-INTEGER, INTENT(INOUT) :: N
-INTEGER :: I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN, &
-&LSAV, MM1, MP1, NN
-REAL :: DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN, &
-&YMAX, YMIN
-REAL :: SPMPAR
+subroutine hull (x, y, m, bx, by, k, vx, vy, n)
+implicit none
+integer, intent(inout) :: k
+integer, intent(in) :: m
+integer, intent(inout) :: n
+integer :: i, ii, isav, j, j0, k0, kp1, ksav, l, lbeg, lmax, lmin, &
+&lsav, mm1, mp1, nn
+real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
+&ymax, ymin
+real :: spmpar
 !-----------------------------------------------------------------------
 !           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(M), Y(M)
-REAL, INTENT(INOUT) :: BX(*), BY(*), VX(*), VY(*)
-LOGICAL :: IBEG
+real, intent(inout) :: x(m), y(m)
+real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
+logical :: ibeg
 !---------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0.
 !
-                  EPS = SPMPAR(1)
+                  eps = spmpar(1)
 !
 !---------------------
-MP1 = M + 1
-ONEP = 1.0 + 4.0*EPS
+mp1 = m + 1
+onep = 1.0 + 4.0*eps
 !
 !                       REORDER X AND Y
 !
-CALL RRSORT (Y, X, M)
-YMIN = Y(1)
-YMAX = Y(M)
-IF (YMIN .EQ. YMAX) GO TO 500
+call rrsort (y, x, m)
+ymin = y(1)
+ymax = y(m)
+if (ymin .eq. ymax) go to 500
 !
-L = 1
-10 L = L + 1
-   IF (Y(L) .EQ. YMIN) GO TO 10
-LMIN = L
-L = L - 1
-CALL RRSORT (X, Y, L)
-X1 = X(1)
+l = 1
+10 l = l + 1
+   if (y(l) .eq. ymin) go to 10
+lmin = l
+l = l - 1
+call rrsort (x, y, l)
+x1 = x(1)
 !
-I = M
-20 I = I - 1
-   IF (Y(I) .EQ. YMAX) GO TO 20
-LMAX = I
-I = I + 1
-CALL RRSORT (X(I), Y(I), M - LMAX)
-XM = X(M)
+i = m
+20 i = i - 1
+   if (y(i) .eq. ymax) go to 20
+lmax = i
+i = i + 1
+call rrsort (x(i), y(i), m - lmax)
+xm = x(m)
 !
 !                      FIND XMIN AND XMAX
 !
-XMIN = X1
-XMAX = X(L)
-do 31 I = LMIN,M
-   IF (X(I) .GT. XMIN) GO TO 30
-      XMIN = X(I)
-      GO TO 31
-30 IF (X(I) .GT. XMAX) XMAX = X(I)
-31 CONTINUE
+xmin = x1
+xmax = x(l)
+do 31 i = lmin,m
+   if (x(i) .gt. xmin) go to 30
+      xmin = x(i)
+      go to 31
+30 if (x(i) .gt. xmax) xmax = x(i)
+31 continue
 !
 !                   GOING ALONG THE YMIN AXIS
 !
-K = L
-DO I = 1,L
-   BX(I) = X(I)
-   BY(I) = Y(I)
-END DO
+k = l
+do i = 1,l
+   bx(i) = x(i)
+   by(i) = y(i)
+end do
 !
-N = 1
-VX(1) = X(1)
-VY(1) = Y(1)
-IF (L .EQ. 1) GO TO 100
-N = 2
-VX(2) = X(L)
-VY(2) = Y(L)
+n = 1
+vx(1) = x(1)
+vy(1) = y(1)
+if (l .eq. 1) go to 100
+n = 2
+vx(2) = x(l)
+vy(2) = y(l)
 !
 !           GOING FROM THE YMIN AXIS TO THE XMAX AXIS
 !
-100 H = XMAX - BX(K)
-IF (H .EQ. 0.0) GO TO 150
-K0 = K
-IBEG = .TRUE.
+100 h = xmax - bx(k)
+if (h .eq. 0.0) go to 150
+k0 = k
+ibeg = .true.
 !
-110 CONTINUE
-   L = L + 1
-   IF (L .GT. LMAX) L = M
-   H = X(L) - BX(K)
-   IF (H .LE. 0.0) GO TO 110
-   DX = X(L) - BX(K0)
-   DY = Y(L) - BY(K0)
-   IF (IBEG) GO TO 120
-   R = (DX0/DX)*DY
-   IF (R .GT. ONEP*DY0) GO TO 130
-   IF (DY0 .GT. ONEP*R) GO TO 120
-   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 140
-      K = K + 1
-      GO TO 121
-120 IBEG = .FALSE.
-   DX0 = DX
-   DY0 = DY
-   K = K0 + 1
-121 BX(K) = X(L)
-   BY(K) = Y(L)
-   LSAV = L
-130 H = XMAX - X(L)
-IF (H .GT. 0.0) GO TO 110
+110 continue
+   l = l + 1
+   if (l .gt. lmax) l = m
+   h = x(l) - bx(k)
+   if (h .le. 0.0) go to 110
+   dx = x(l) - bx(k0)
+   dy = y(l) - by(k0)
+   if (ibeg) go to 120
+   r = (dx0/dx)*dy
+   if (r .gt. onep*dy0) go to 130
+   if (dy0 .gt. onep*r) go to 120
+   if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 140
+      k = k + 1
+      go to 121
+120 ibeg = .false.
+   dx0 = dx
+   dy0 = dy
+   k = k0 + 1
+121 bx(k) = x(l)
+   by(k) = y(l)
+   lsav = l
+130 h = xmax - x(l)
+if (h .gt. 0.0) go to 110
 !
-140 L = LSAV
-N = N + 1
-VX(N) = BX(K)
-VY(N) = BY(K)
-GO TO 100
+140 l = lsav
+n = n + 1
+vx(n) = bx(k)
+vy(n) = by(k)
+go to 100
 !
 !                   GOING ALONG THE XMAX AXIS
 !
-150 IF (L .EQ. M) GO TO 250
-KSAV = K
-I = L
-151 IF (I .EQ. LMAX) GO TO 160
-   I = I + 1
-   IF (X(I) .NE. XMAX) GO TO 151
-   L = I
-   K = K + 1
-   BX(K) = X(I)
-   BY(K) = Y(I)
-   GO TO 151
+150 if (l .eq. m) go to 250
+ksav = k
+i = l
+151 if (i .eq. lmax) go to 160
+   i = i + 1
+   if (x(i) .ne. xmax) go to 151
+   l = i
+   k = k + 1
+   bx(k) = x(i)
+   by(k) = y(i)
+   go to 151
 !
-160 XMAX = X(L)
-H = XMAX - XM
-IF (H .LE. 0.0) GO TO 170
-IF (L .NE. LMAX) GO TO 200
-   IF (K .EQ. KSAV) GO TO 170
-   N = N + 1
-   VX(N) = BX(K)
-   VY(N) = BY(K)
+160 xmax = x(l)
+h = xmax - xm
+if (h .le. 0.0) go to 170
+if (l .ne. lmax) go to 200
+   if (k .eq. ksav) go to 170
+   n = n + 1
+   vx(n) = bx(k)
+   vy(n) = by(k)
 !
-170 L = M
-K = K + 1
-BX(K) = XM
-BY(K) = Y(M)
-N = N + 1
-VX(N) = XM
-VY(N) = Y(M)
-GO TO 250
+170 l = m
+k = k + 1
+bx(k) = xm
+by(k) = y(m)
+n = n + 1
+vx(n) = xm
+vy(n) = y(m)
+go to 250
 !
 !           GOING FROM THE YMAX AXIS TO THE XMAX AXIS
 !        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
 !
-200 J = MP1
-NN = MP1
-BX(MP1) = XM
-VX(MP1) = XM
-BY(MP1) = Y(M)
-VY(MP1) = Y(M)
-I = LMAX + 1
-201 J0 = J
-IBEG = .TRUE.
+200 j = mp1
+nn = mp1
+bx(mp1) = xm
+vx(mp1) = xm
+by(mp1) = y(m)
+vy(mp1) = y(m)
+i = lmax + 1
+201 j0 = j
+ibeg = .true.
 !
-210 CONTINUE
-   I = I - 1
-   H = X(I) - BX(J)
-   IF (H .LE. 0.0) GO TO 210
-   DX = X(I) - BX(J0)
-   DY = ABS(Y(I) - BY(J0))
-   IF (IBEG) GO TO 220
-   R = (DX0/DX)*DY
-   IF (R .GT. ONEP*DY0) GO TO 230
-   IF (DY0 .GT. ONEP*R) GO TO 220
-   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 235
-      J = J - 1
-      GO TO 221
-220 IBEG = .FALSE.
-   DX0 = DX
-   DY0 = DY
-   J = J0 - 1
-221 BX(J) = X(I)
-   BY(J) = Y(I)
-   ISAV = I
-230 H = XMAX - X(I)
-IF (H .GT. 0.0) GO TO 210
+210 continue
+   i = i - 1
+   h = x(i) - bx(j)
+   if (h .le. 0.0) go to 210
+   dx = x(i) - bx(j0)
+   dy = abs(y(i) - by(j0))
+   if (ibeg) go to 220
+   r = (dx0/dx)*dy
+   if (r .gt. onep*dy0) go to 230
+   if (dy0 .gt. onep*r) go to 220
+   if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 235
+      j = j - 1
+      go to 221
+220 ibeg = .false.
+   dx0 = dx
+   dy0 = dy
+   j = j0 - 1
+221 bx(j) = x(i)
+   by(j) = y(i)
+   isav = i
+230 h = xmax - x(i)
+if (h .gt. 0.0) go to 210
 !
-235 I = ISAV
-NN = NN - 1
-VX(NN) = BX(J)
-VY(NN) = BY(J)
-H = XMAX - BX(J)
-IF (H .GT. 0.0) GO TO 201
+235 i = isav
+nn = nn - 1
+vx(nn) = bx(j)
+vy(nn) = by(j)
+h = xmax - bx(j)
+if (h .gt. 0.0) go to 201
 !
 !          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
 !           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
 !
-IF (I .EQ. L .AND. K .EQ. KSAV) NN = NN + 1
-DO II = NN,MP1
-   N = N + 1
-   VX(N) = VX(II)
-   VY(N) = VY(II)
-END DO
+if (i .eq. l .and. k .eq. ksav) nn = nn + 1
+do ii = nn,mp1
+   n = n + 1
+   vx(n) = vx(ii)
+   vy(n) = vy(ii)
+end do
 !
-IF (I .EQ. L) J = J + 1
-DO II = J,MP1
-   K = K + 1
-   BX(K) = BX(II)
-   BY(K) = BY(II)
-END DO
-L = M
+if (i .eq. l) j = j + 1
+do ii = j,mp1
+   k = k + 1
+   bx(k) = bx(ii)
+   by(k) = by(ii)
+end do
+l = m
 !
 !                   GOING ALONG THE YMAX AXIS
 !
-250 LBEG = LMAX + 1
-IF (LBEG .EQ. M) GO TO 260
-MM1 = M - 1
-DO I = LBEG,MM1
-   L = L - 1
-   K = K + 1
-   BX(K) = X(L)
-   BY(K) = Y(L)
-END DO
-N = N + 1
-VX(N) = BX(K)
-VY(N) = BY(K)
+250 lbeg = lmax + 1
+if (lbeg .eq. m) go to 260
+mm1 = m - 1
+do i = lbeg,mm1
+   l = l - 1
+   k = k + 1
+   bx(k) = x(l)
+   by(k) = y(l)
+end do
+n = n + 1
+vx(n) = bx(k)
+vy(n) = by(k)
 !
-260 IF (K .EQ. M) GO TO 370
-H = XMAX - BX(K)
-IF (H .GT. 0.0) GO TO 300
-H = BX(K) - XMIN
-IF (H .GT. 0.0) GO TO 301
-GO TO 370
+260 if (k .eq. m) go to 370
+h = xmax - bx(k)
+if (h .gt. 0.0) go to 300
+h = bx(k) - xmin
+if (h .gt. 0.0) go to 301
+go to 370
 !
 !           GOING FROM THE YMAX AXIS TO THE XMIN AXIS
 !
-300 H = BX(K) - XMIN
-IF (H .EQ. 0.0) GO TO 350
-301 K0 = K
-IBEG = .TRUE.
+300 h = bx(k) - xmin
+if (h .eq. 0.0) go to 350
+301 k0 = k
+ibeg = .true.
 !
-310 CONTINUE
-   L = L - 1
-   IF (L .LT. LMIN) L = 1
-   H = X(L) - BX(K)
-   IF (H .GE. 0.0) GO TO 310
-   DX = ABS(X(L) - BX(K0))
-   DY = ABS(Y(L) - BY(K0))
-   IF (IBEG) GO TO 320
-   R = (DX0/DX)*DY
-   IF (R .GT. ONEP*DY0) GO TO 330
-   IF (DY0 .GT. ONEP*R) GO TO 320
-   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 340
-      IF (K .EQ. MP1) GO TO 330
-      K = K + 1
-      GO TO 321
-320 IBEG = .FALSE.
-   DX0 = DX
-   DY0 = DY
-   K = K0 + 1
-321 BX(K) = X(L)
-   BY(K) = Y(L)
-   LSAV = L
-330 H = X(L) - XMIN
-IF (H .GT. 0.0) GO TO 310
+310 continue
+   l = l - 1
+   if (l .lt. lmin) l = 1
+   h = x(l) - bx(k)
+   if (h .ge. 0.0) go to 310
+   dx = abs(x(l) - bx(k0))
+   dy = abs(y(l) - by(k0))
+   if (ibeg) go to 320
+   r = (dx0/dx)*dy
+   if (r .gt. onep*dy0) go to 330
+   if (dy0 .gt. onep*r) go to 320
+   if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 340
+      if (k .eq. mp1) go to 330
+      k = k + 1
+      go to 321
+320 ibeg = .false.
+   dx0 = dx
+   dy0 = dy
+   k = k0 + 1
+321 bx(k) = x(l)
+   by(k) = y(l)
+   lsav = l
+330 h = x(l) - xmin
+if (h .gt. 0.0) go to 310
 !
-340 L = LSAV
-N = N + 1
-VX(N) = BX(K)
-VY(N) = BY(K)
-IF (L .EQ. 1) RETURN
-IF (K .EQ. M) GO TO 370
-GO TO 300
+340 l = lsav
+n = n + 1
+vx(n) = bx(k)
+vy(n) = by(k)
+if (l .eq. 1) return
+if (k .eq. m) go to 370
+go to 300
 !
 !                   GOING ALONG THE XMIN AXIS
 !
-350 KSAV = K
-I = L
-351 IF (I .EQ. LMIN) GO TO 360
-   I = I - 1
-   IF (X(I) .NE. XMIN) GO TO 351
-   L = I
-   K = K + 1
-   BX(K) = X(I)
-   BY(K) = Y(I)
-   GO TO 351
+350 ksav = k
+i = l
+351 if (i .eq. lmin) go to 360
+   i = i - 1
+   if (x(i) .ne. xmin) go to 351
+   l = i
+   k = k + 1
+   bx(k) = x(i)
+   by(k) = y(i)
+   go to 351
 !
-360 XMIN = X(L)
-H = X1 - XMIN
-IF (H .LE. 0.0) GO TO 370
-IF (K .EQ. KSAV) GO TO 365
-   N = N + 1
-   VX(N) = BX(K)
-   VY(N) = BY(K)
-365 IF (L .NE. LMIN) GO TO 400
+360 xmin = x(l)
+h = x1 - xmin
+if (h .le. 0.0) go to 370
+if (k .eq. ksav) go to 365
+   n = n + 1
+   vx(n) = bx(k)
+   vy(n) = by(k)
+365 if (l .ne. lmin) go to 400
 !
-370 K = K + 1
-BX(K) = X1
-BY(K) = Y(1)
-N = N + 1
-VX(N) = X1
-VY(N) = Y(1)
-RETURN
+370 k = k + 1
+bx(k) = x1
+by(k) = y(1)
+n = n + 1
+vx(n) = x1
+vy(n) = y(1)
+return
 !
 !           GOING FROM THE YMIN AXIS TO THE XMIN AXIS
 !        (HERE WE ARE TRAVERSING THE BOUNDARY CLOCKWISE)
 !
-400 IF (K .EQ. M) GO TO 370
-KP1 = K + 1
-J = MP1
-NN = MP1
-BX(MP1) = X1
-VX(MP1) = X1
-BY(MP1) = Y(1)
-VY(MP1) = Y(1)
-I = LMIN - 1
-401 J0 = J
-IBEG = .TRUE.
+400 if (k .eq. m) go to 370
+kp1 = k + 1
+j = mp1
+nn = mp1
+bx(mp1) = x1
+vx(mp1) = x1
+by(mp1) = y(1)
+vy(mp1) = y(1)
+i = lmin - 1
+401 j0 = j
+ibeg = .true.
 !
-410 CONTINUE
-   I = I + 1
-   H = X(I) - BX(J)
-   IF (H .GE. 0.0) GO TO 410
-   DX = ABS(X(I) - BX(J0))
-   DY = Y(I) - BY(J0)
-   IF (IBEG) GO TO 420
-   R = (DX0/DX)*DY
-   IF (R .GT. ONEP*DY0) GO TO 430
-   IF (DY0 .GT. ONEP*R) GO TO 420
-   IF (DY0 .EQ. 0.0 .AND. DY .GT. 0.0) GO TO 440
-      IF (J .EQ. KP1) GO TO 430
-      J = J - 1
-      GO TO 421
-420 IBEG = .FALSE.
-   DX0 = DX
-   DY0 = DY
-   J = J0 - 1
-421 BX(J) = X(I)
-   BY(J) = Y(I)
-   ISAV = I
-430 H = X(I) - XMIN
-IF (H .GT. 0.0) GO TO 410
+410 continue
+   i = i + 1
+   h = x(i) - bx(j)
+   if (h .ge. 0.0) go to 410
+   dx = abs(x(i) - bx(j0))
+   dy = y(i) - by(j0)
+   if (ibeg) go to 420
+   r = (dx0/dx)*dy
+   if (r .gt. onep*dy0) go to 430
+   if (dy0 .gt. onep*r) go to 420
+   if (dy0 .eq. 0.0 .and. dy .gt. 0.0) go to 440
+      if (j .eq. kp1) go to 430
+      j = j - 1
+      go to 421
+420 ibeg = .false.
+   dx0 = dx
+   dy0 = dy
+   j = j0 - 1
+421 bx(j) = x(i)
+   by(j) = y(i)
+   isav = i
+430 h = x(i) - xmin
+if (h .gt. 0.0) go to 410
 !
-440 I = ISAV
-NN = NN - 1
-VX(NN) = BX(J)
-VY(NN) = BY(J)
-IF (J .EQ. KP1) GO TO 450
-H = BX(J) - XMIN
-IF (H .GT. 0.0) GO TO 401
+440 i = isav
+nn = nn - 1
+vx(nn) = bx(j)
+vy(nn) = by(j)
+if (j .eq. kp1) go to 450
+h = bx(j) - xmin
+if (h .gt. 0.0) go to 401
 !
 !          UPDATE BX,BY AND VX,VY SO THAT THE BOUNDARY
 !           IS AGAIN BEING TRAVERSED COUNTERCLOCKWISE
 !
-450 IF (NN .EQ. N) GO TO 470
-IF (I .EQ. L) NN = NN + 1
-DO II = NN,MP1
-   N = N + 1
-   VX(N) = VX(II)
-   VY(N) = VY(II)
-END DO
+450 if (nn .eq. n) go to 470
+if (i .eq. l) nn = nn + 1
+do ii = nn,mp1
+   n = n + 1
+   vx(n) = vx(ii)
+   vy(n) = vy(ii)
+end do
 !
-IF (J .EQ. K) GO TO 471
-IF (I .EQ. L) J = J + 1
-DO II = J,MP1
-   K = K + 1
-   BX(K) = BX(II)
-   BY(K) = BY(II)
-END DO
-RETURN
+if (j .eq. k) go to 471
+if (i .eq. l) j = j + 1
+do ii = j,mp1
+   k = k + 1
+   bx(k) = bx(ii)
+   by(k) = by(ii)
+end do
+return
 !
-470 N = MP1
-471 K = MP1
-RETURN
+470 n = mp1
+471 k = mp1
+return
 !
 !                     CASE WHEN YMIN = YMAX
 !
-500 CALL RRSORT (X, Y, M)
-DO I = 1,M
-   BX(I) = X(I)
-   BY(I) = Y(I)
-END DO
-K = MP1
-BX(K) = BX(1)
-BY(K) = BY(1)
+500 call rrsort (x, y, m)
+do i = 1,m
+   bx(i) = x(i)
+   by(i) = y(i)
+end do
+k = mp1
+bx(k) = bx(1)
+by(k) = by(1)
 !
-N = 3
-VX(1) = X(1)
-VX(2) = X(M)
-VX(3) = X(1)
-VY(1) = Y(1)
-VY(2) = Y(M)
-VY(3) = Y(1)
-RETURN
-END SUBROUTINE HULL
+n = 3
+vx(1) = x(1)
+vx(2) = x(m)
+vx(3) = x(1)
+vy(1) = y(1)
+vy(2) = y(m)
+vy(3) = y(1)
+return
+end subroutine hull
 
-REAL function PAREA(X, Y, NB)
-IMPLICIT NONE
-INTEGER :: I, N, NM1
-REAL :: A
-INTEGER, INTENT(IN) :: NB
-REAL, INTENT(IN) :: X(NB), Y(NB)
+real function parea(x, y, nb)
+implicit none
+integer :: i, n, nm1
+real :: a
+integer, intent(in) :: nb
+real, intent(in) :: x(nb), y(nb)
 !
 !*****************************************************************
 !
@@ -5197,32 +5197,32 @@ REAL, INTENT(IN) :: X(NB), Y(NB)
 !
 !*****************************************************************
 !
-N = NB
-IF (X(1) .EQ. X(N) .AND. Y(1) .EQ. Y(N)) N = N - 1
-IF (N - 3) 10, 20, 30
+n = nb
+if (x(1) .eq. x(n) .and. y(1) .eq. y(n)) n = n - 1
+if (n - 3) 10, 20, 30
 !
-10 PAREA = 0.0
-RETURN
+10 parea = 0.0
+return
 !
-20 PAREA= 0.5*((X(2) - X(1))*(Y(3) - Y(1)) &
-&- (X(3) - X(1))*(Y(2) - Y(1)))
-RETURN
+20 parea= 0.5*((x(2) - x(1))*(y(3) - y(1)) &
+&- (x(3) - x(1))*(y(2) - y(1)))
+return
 !
-30 NM1 = N - 1
-A = X(1)*(Y(2) - Y(N)) + X(N)*(Y(1) - Y(NM1))
-do 31 I = 2, NM1
-31 A = A + X(I)*(Y(I+1) - Y(I-1))
-PAREA = 0.5*A
-RETURN
-END FUNCTION PAREA
+30 nm1 = n - 1
+a = x(1)*(y(2) - y(n)) + x(n)*(y(1) - y(nm1))
+do 31 i = 2, nm1
+31 a = a + x(i)*(y(i+1) - y(i-1))
+parea = 0.5*a
+return
+end function parea
 
-SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IND
-INTEGER, INTENT(IN) :: M, N
-INTEGER, INTENT(INOUT) :: NB
-INTEGER, INTENT(IN) :: NUM
-INTEGER :: I, II, NP1
+subroutine hc (ind, m, n, pr, ar, nb, s, iwk, num)
+implicit none
+integer, intent(inout) :: ind
+integer, intent(in) :: m, n
+integer, intent(inout) :: nb
+integer, intent(in) :: num
+integer :: i, ii, np1
 !
 ! SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
 ! DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
@@ -5285,57 +5285,57 @@ INTEGER :: I, II, NP1
 !
 !     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
 !
-INTEGER, INTENT(IN) :: PR(*)
-INTEGER, INTENT(INOUT) :: AR(M), S(N), IWK(NUM)
-INTEGER :: S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
+integer, intent(in) :: pr(*)
+integer, intent(inout) :: ar(m), s(n), iwk(num)
+integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
 !
-NP1 = N + 1
-IF (IND .LT. 0 .OR. IND .GT. 3) GO TO 20
-IF (NUM .LT. M + 8*N + 20) GO TO 30
-IF (PR(1) .NE. 0 .OR. PR(NP1) .NE. M) GO TO 40
+np1 = n + 1
+if (ind .lt. 0 .or. ind .gt. 3) go to 20
+if (num .lt. m + 8*n + 20) go to 30
+if (pr(1) .ne. 0 .or. pr(np1) .ne. m) go to 40
 !
-S0 = 20
-PC = S0 + N
-AC = PC + NP1
-VR = AC + M
-VC = VR + N
-P  = VC + N
-SUBR = P + N
-RBUS = SUBR + N
-TOR  = RBUS + N
+s0 = 20
+pc = s0 + n
+ac = pc + np1
+vr = ac + m
+vc = vr + n
+p  = vc + n
+subr = p + n
+rbus = subr + n
+tor  = rbus + n
 !
-CALL HC1 (IND, M, N, PR, AR, NB, IWK(S0), NP1, IWK(PC), &
-&IWK(AC), IWK(VR), IWK(VC), IWK(P), IWK(SUBR), &
-&IWK(RBUS), IWK(TOR), IWK(1), IWK(2), IWK(3))
-IF (IND .NE. 1) RETURN
+call hc1 (ind, m, n, pr, ar, nb, iwk(s0), np1, iwk(pc), &
+&iwk(ac), iwk(vr), iwk(vc), iwk(p), iwk(subr), &
+&iwk(rbus), iwk(tor), iwk(1), iwk(2), iwk(3))
+if (ind .ne. 1) return
 !
-II = S0
-DO I = 1,N
-   S(I) = IWK(II)
-   II = II + 1
-END DO
-RETURN
+ii = s0
+do i = 1,n
+   s(i) = iwk(ii)
+   ii = ii + 1
+end do
+return
 !
 !                   ERROR RETURN
 !
-20 IND = -1
-RETURN
-30 IND = -4
-RETURN
-40 IND = -5
-RETURN
-END SUBROUTINE HC
+20 ind = -1
+return
+30 ind = -4
+return
+40 ind = -5
+return
+end subroutine hc
 
-SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR, &
-&VC, P, SUBR, RBUS, TOR, JR, K, IND0)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IND, IND0, JR, K
-INTEGER, INTENT(IN) :: M, N
-INTEGER, INTENT(INOUT) :: NB
-INTEGER, INTENT(IN) :: NP1
-INTEGER :: I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, &
-&JSUBR, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
-REAL :: DENS, SCORE
+subroutine hc1 (ind, m, n, pr, ar, nb, s, np1, pc, ac, vr, &
+&vc, p, subr, rbus, tor, jr, k, ind0)
+implicit none
+integer, intent(inout) :: ind, ind0, jr, k
+integer, intent(in) :: m, n
+integer, intent(inout) :: nb
+integer, intent(in) :: np1
+integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
+&jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
+real :: dens, score
 !
 ! MEANING OF THE WORK ARRAYS ...
 !
@@ -5373,308 +5373,308 @@ REAL :: DENS, SCORE
 ! IND0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
 !        THERE WERE NO INPUT ERRORS.
 !
-INTEGER, INTENT(IN) :: PR(NP1)
-INTEGER, INTENT(INOUT) :: PC(NP1), AR(M), AC(M), S(N), VR(N), &
-&VC(N), P(N), SUBR(N), RBUS(N), TOR(N)
+integer, intent(in) :: pr(np1)
+integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
+&vc(n), p(n), subr(n), rbus(n), tor(n)
 !
-NBO = NB
-NB = 0
-MP1 = M + 1
-IF (IND .NE. 0) GO TO 500
+nbo = nb
+nb = 0
+mp1 = m + 1
+if (ind .ne. 0) go to 500
 !
 ! S T E P   0   (INITIALIZE).
 !
-DO I=1,N
-  VC(I) = 0
-  SUBR(I) = 0
-  RBUS(I) = 0
-  P(I) = 1
-END DO
-DO I=1,N
-  J1 = PR(I) + 1
-  J2 = PR(I+1)
-  VR(I) = J2 - J1 + 1
-  IF (VR(I) .EQ. 0) GO TO 440
-  IF (VR(I) .LT. 0) GO TO 620
-  DO J=J1,J2
-    JA = AR(J)
-    VC(JA) = VC(JA) + 1
-  END DO
-END DO
-PC(1) = 0
-DO I=1,N
-  IF (VC(I) .EQ. 0) GO TO 440
-  PC(I+1) = PC(I) + VC(I)
-  VC(I) = 0
-END DO
-DO I=1,N
-  J1 = PR(I) + 1
-  J2 = PR(I+1)
-  DO J=J1,J2
-    JJ = AR(J)
-    VC(JJ) = VC(JJ) + 1
-    JA = PC(JJ) + VC(JJ)
-    AC(JA) = I
-  END DO
-END DO
+do i=1,n
+  vc(i) = 0
+  subr(i) = 0
+  rbus(i) = 0
+  p(i) = 1
+end do
+do i=1,n
+  j1 = pr(i) + 1
+  j2 = pr(i+1)
+  vr(i) = j2 - j1 + 1
+  if (vr(i) .eq. 0) go to 440
+  if (vr(i) .lt. 0) go to 620
+  do j=j1,j2
+    ja = ar(j)
+    vc(ja) = vc(ja) + 1
+  end do
+end do
+pc(1) = 0
+do i=1,n
+  if (vc(i) .eq. 0) go to 440
+  pc(i+1) = pc(i) + vc(i)
+  vc(i) = 0
+end do
+do i=1,n
+  j1 = pr(i) + 1
+  j2 = pr(i+1)
+  do j=j1,j2
+    jj = ar(j)
+    vc(jj) = vc(jj) + 1
+    ja = pc(jj) + vc(jj)
+    ac(ja) = i
+  end do
+end do
 ! SELECT AS ROOT  JR  THE VERTEX  I  WITH MAXIMUM  VC(I)
 ! (BREAK TIES BY CHOOSING  I  WITH MINIMUM  VR(I) ).
-MAXE = VC(1)
-MINU = VR(1)
-JR = 1
-do 100 I = 2,N
-  IF (VC(I)-MAXE) 100, 70, 80
-70 IF (VR(I).GE.MINU) GO TO 100
-  GO TO 90
-80 MAXE = VC(I)
-90 MINU = VR(I)
-  JR = I
-100 CONTINUE
-K1 = -NP1
-K = 1
-S(1) = JR
+maxe = vc(1)
+minu = vr(1)
+jr = 1
+do 100 i = 2,n
+  if (vc(i)-maxe) 100, 70, 80
+70 if (vr(i).ge.minu) go to 100
+  go to 90
+80 maxe = vc(i)
+90 minu = vr(i)
+  jr = i
+100 continue
+k1 = -np1
+k = 1
+s(1) = jr
 !
 ! S T E P   1   (SEARCH FOR IMPLIED ARCS).
 !
-110 DO J=1,N
-  IF (VR(J).EQ.1) GO TO 130
-  IF (VC(J).EQ.1) GO TO 170
-END DO
+110 do j=1,n
+  if (vr(j).eq.1) go to 130
+  if (vc(j).eq.1) go to 170
+end do
 ! NO FURTHER ARC CAN BE IMPLIED.
-GO TO 220
+go to 220
 ! ARC  (J,JL)  IS IMPLIED BECAUSE  VR(J) = 1 .
-130 L1 = PR(J) + 1
-L2 = PR(J+1)
-DO L=L1,L2
-  IF (AR(L).GT.0) GO TO 150
-END DO
-150 JL = AR(L)
+130 l1 = pr(j) + 1
+l2 = pr(j+1)
+do l=l1,l2
+  if (ar(l).gt.0) go to 150
+end do
+150 jl = ar(l)
 ! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
 ! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (J,JL) .
-CALL IPATH(J, JL, SUBR, RBUS, AR, PR, S, N, NP, IT1, IT2, K, JR, &
-&M, NP1)
-IF (NP.EQ.0) GO TO 160
-IF (NP.EQ.(-1)) GO TO 340
+call ipath(j, jl, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
+&m, np1)
+if (np.eq.0) go to 160
+if (np.eq.(-1)) go to 340
 ! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
-K = K + 1
-GO TO 320
-160 SUBR(J) = K1 - JL
-RBUS(JL) = J
+k = k + 1
+go to 320
+160 subr(j) = k1 - jl
+rbus(jl) = j
 ! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT  JL .
-CALL IUPD(J, JL, L, AC, AR, PC, PR, VC, VR, K1, N, M, NP1)
-IF (J.EQ.0) GO TO 340
-GO TO 210
+call iupd(j, jl, l, ac, ar, pc, pr, vc, vr, k1, n, m, np1)
+if (j.eq.0) go to 340
+go to 210
 ! ARC  (JL,J)  IS IMPLIED BECAUSE  VC(J) = 1 .
-170 L1 = PC(J) + 1
-L2 = PC(J+1)
-DO L=L1,L2
-  IF (AC(L).GT.0) GO TO 190
-END DO
-190 JL = AC(L)
+170 l1 = pc(j) + 1
+l2 = pc(j+1)
+do l=l1,l2
+  if (ac(l).gt.0) go to 190
+end do
+190 jl = ac(l)
 ! FIND THE STARTING VERTEX  IT1  AND THE ENDING VERTEX  IT2
 ! OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING  (JL,J) .
-CALL IPATH(JL, J, SUBR, RBUS, AR, PR, S, N, NP, IT1, IT2, K, JR, &
-&M, NP1)
-IF (NP.EQ.0) GO TO 200
-IF (NP.EQ.(-1)) GO TO 340
+call ipath(jl, j, subr, rbus, ar, pr, s, n, np, it1, it2, k, jr, &
+&m, np1)
+if (np.eq.0) go to 200
+if (np.eq.(-1)) go to 340
 ! SUBROUTINE IPATH FOUND A HAMILTONIAN CIRCUIT.
-I = S(K)
-K = K + 1
-GO TO 320
-200 SUBR(JL) = K1 - J
-RBUS(J) = JL
+i = s(k)
+k = k + 1
+go to 320
+200 subr(jl) = k1 - j
+rbus(j) = jl
 ! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  JL .
-CALL IUPD(J, JL, L, AR, AC, PR, PC, VR, VC, K1, N, M, NP1)
-IF (J.EQ.0) GO TO 340
+call iupd(j, jl, l, ar, ac, pr, pc, vr, vc, k1, n, m, np1)
+if (j.eq.0) go to 340
 ! IF ARC  (IT2,IT1)  IS IN THE GRAPH, REMOVE IT.
-210 CALL RARC(IT2, IT1, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, NP1)
-IF (JJ.EQ.(-1)) GO TO 340
-GO TO 110
+210 call rarc(it2, it1, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
+if (jj.eq.(-1)) go to 340
+go to 110
 !
 ! S T E P   2   (ADD IMPLIED ARCS TO S).
 !
-220 I = S(K)
-IF (SUBR(I).EQ.0) GO TO 230
-JSUBR = -SUBR(I) + (SUBR(I)/NP1)*NP1
-IF (JSUBR.EQ.JR) GO TO 340
-K = K + 1
-S(K) = JSUBR
-IF (K.NE.N) GO TO 220
-IF (SUBR(JSUBR).LT.0) GO TO 320
-GO TO 340
+220 i = s(k)
+if (subr(i).eq.0) go to 230
+jsubr = -subr(i) + (subr(i)/np1)*np1
+if (jsubr.eq.jr) go to 340
+k = k + 1
+s(k) = jsubr
+if (k.ne.n) go to 220
+if (subr(jsubr).lt.0) go to 320
+go to 340
 !
 ! S T E P   3   (BRANCH).
 !
-230 L1 = PR(I) + P(I)
-L2 = PR(I+1)
-IF (L1.GT.L2) GO TO 340
+230 l1 = pr(i) + p(i)
+l2 = pr(i+1)
+if (l1.gt.l2) go to 340
 ! FIND THE NEXT ARC  (I,JL)  TO BE ADDED TO  S .
-DENS = N**3
-J1 = 0
-J2 = 0
-do 310 J = L1,L2
-  JL = AR(J)
-  IF (JL.LT.0) GO TO 310
-  IF (VR(JL).GT.0) GO TO 260
-  IF (SUBR(JL).EQ.0) GO TO 310
-  IF (JL.EQ.JR) GO TO 310
-  IEND = JL
-240 IEND = -SUBR(IEND) + (SUBR(IEND)/NP1)*NP1
-  IF (SUBR(IEND).NE.0) GO TO 240
-  IF (VC(JL).LT.VR(IEND)) GO TO 250
-  SCORE = VR(IEND)*N + VC(JL)
-  GO TO 280
-250 SCORE = VC(JL)*N + VR(IEND)
-  GO TO 280
-260 IF (VC(JL).LT.VR(JL)) GO TO 270
-  SCORE = VR(JL)*N + VC(JL)
-  GO TO 280
-270 SCORE = VC(JL)*N + VR(JL)
-280 IF (DENS.LE.SCORE) GO TO 290
-  DENS = SCORE
-  IPI = J
-290 IF (J1.EQ.0) GO TO 300
-  IF (J2.EQ.0) J2 = J
-  GO TO 310
-300 J1 = J
-310 CONTINUE
-IF (J1.EQ.0) GO TO 340
-JL = AR(IPI)
-AR(IPI) = AR(J1)
-AR(J1) = JL
-IF (J2.EQ.0) J2 = PR(I+1) + 1
-P(I) = J2 - PR(I)
-K = K + 1
-S(K) = JL
-K1 = -K*NP1
+dens = n**3
+j1 = 0
+j2 = 0
+do 310 j = l1,l2
+  jl = ar(j)
+  if (jl.lt.0) go to 310
+  if (vr(jl).gt.0) go to 260
+  if (subr(jl).eq.0) go to 310
+  if (jl.eq.jr) go to 310
+  iend = jl
+240 iend = -subr(iend) + (subr(iend)/np1)*np1
+  if (subr(iend).ne.0) go to 240
+  if (vc(jl).lt.vr(iend)) go to 250
+  score = vr(iend)*n + vc(jl)
+  go to 280
+250 score = vc(jl)*n + vr(iend)
+  go to 280
+260 if (vc(jl).lt.vr(jl)) go to 270
+  score = vr(jl)*n + vc(jl)
+  go to 280
+270 score = vc(jl)*n + vr(jl)
+280 if (dens.le.score) go to 290
+  dens = score
+  ipi = j
+290 if (j1.eq.0) go to 300
+  if (j2.eq.0) j2 = j
+  go to 310
+300 j1 = j
+310 continue
+if (j1.eq.0) go to 340
+jl = ar(ipi)
+ar(ipi) = ar(j1)
+ar(j1) = jl
+if (j2.eq.0) j2 = pr(i+1) + 1
+p(i) = j2 - pr(i)
+k = k + 1
+s(k) = jl
+k1 = -k*np1
 ! REMOVE FROM THE GRAPH ALL ARCS EMANATING FROM  I .
-CALL FUPD(AR, AC, PR, PC, VR, VC, I, K1, N, M, NP1)
+call fupd(ar, ac, pr, pc, vr, vc, i, k1, n, m, np1)
 ! REMOVE FROM THE GRAPH ALL ARCS TERMINATING AT JL .
-CALL FUPD(AC, AR, PC, PR, VC, VR, JL, K1, N, M, NP1)
-TOR(K) = 0
+call fupd(ac, ar, pc, pr, vc, vr, jl, k1, n, m, np1)
+tor(k) = 0
 ! IF ARC  (JL,JR)  IS IN THE GRAPH, REMOVE IT.
-CALL RARC(JL, JR, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, NP1)
-IF (JJ.EQ.0) GO TO 110
-IF (JJ.EQ.(-1)) GO TO 340
-TOR(K) = JJ*MP1 + LL
-GO TO 110
+call rarc(jl, jr, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, np1)
+if (jj.eq.0) go to 110
+if (jj.eq.(-1)) go to 340
+tor(k) = jj*mp1 + ll
+go to 110
 !
 ! S T E P   4   (HAMILTONIAN CIRCUIT FOUND).
 !
-320 IND = 1
-IND0 = 1
-K = K - 1
-RETURN
+320 ind = 1
+ind0 = 1
+k = k - 1
+return
 !
 ! S T E P   5   (BACKTRACK).
 !
-340 IF (K .LE. 1) GO TO 430
-JA = S(K)
-P(JA) = 1
-JA = S(K-1)
-IF (SUBR(JA) .EQ. 0) GO TO 350
+340 if (k .le. 1) go to 430
+ja = s(k)
+p(ja) = 1
+ja = s(k-1)
+if (subr(ja) .eq. 0) go to 350
 ! BACKTRACKING FOR AN IMPLIED ARC.
-K = K - 1
-GO TO 340
-350 IF (NB .EQ. NBO) GO TO 450
-NB = NB + 1
-K1 = -K*NP1
-K2 = -(K+1)*NP1
-I = S(K-1)
+k = k - 1
+go to 340
+350 if (nb .eq. nbo) go to 450
+nb = nb + 1
+k1 = -k*np1
+k2 = -(k+1)*np1
+i = s(k-1)
 ! BACKTRACKING FOR THE ARCS IMPLIED AT LEVEL  K .
-IFF = 0
-do 360 J = 1,N
-  IF (SUBR(J).GT.K1) GO TO 360
-  IF (SUBR(J).LT.K2) GO TO 360
-  JA = K1 - SUBR(J)
-  RBUS(JA) = 0
-  SUBR(J) = 0
-  IFF = 1
-360 CONTINUE
-IF (IFF.EQ.1) GO TO 370
+iff = 0
+do 360 j = 1,n
+  if (subr(j).gt.k1) go to 360
+  if (subr(j).lt.k2) go to 360
+  ja = k1 - subr(j)
+  rbus(ja) = 0
+  subr(j) = 0
+  iff = 1
+360 continue
+if (iff.eq.1) go to 370
 ! NO ARC WAS IMPLIED AT LEVEL  K .
-CALL BUPD(AR, AC, PR, PC, VR, VC, I, K1, K2, N, M, NP1)
-CALL BUPD(AC, AR, PC, PR, VC, VR, S(K), K1, K2, N, M, NP1)
-IF (TOR(K).EQ.0) GO TO 420
-J1 = TOR(K)/MP1
-J2 = TOR(K) - J1*MP1
-AR(J1) = JR
-JA = S(K)
-VR(JA) = VR(JA) + 1
-AC(J2) = S(K)
-VC(JR) = VC(JR) + 1
-GO TO 420
+call bupd(ar, ac, pr, pc, vr, vc, i, k1, k2, n, m, np1)
+call bupd(ac, ar, pc, pr, vc, vr, s(k), k1, k2, n, m, np1)
+if (tor(k).eq.0) go to 420
+j1 = tor(k)/mp1
+j2 = tor(k) - j1*mp1
+ar(j1) = jr
+ja = s(k)
+vr(ja) = vr(ja) + 1
+ac(j2) = s(k)
+vc(jr) = vc(jr) + 1
+go to 420
 ! AT LEAST ONE ARC WAS IMPLIED AT LEVEL  K .
-370 DO J=1,N
-  L1 = PR(J) + 1
-  L2 = PR(J+1)
-  do 400 L = L1,L2
-    JL = AR(L)
-    IF (JL.GT.K1) GO TO 400
-    IF (JL.LT.K2) GO TO 400
-    JL = K1 - JL
-    AR(L) = JL
-    VR(J) = VR(J) + 1
-    LL1 = PC(JL) + 1
-    LL2 = PC(JL+1)
-    DO LL=LL1,LL2
-      IF (K1-AC(LL).EQ.J) GO TO 390
-    END DO
-390 AC(LL) = J
-    VC(JL) = VC(JL) + 1
-400 CONTINUE
-END DO
-420 K = K - 1
-GO TO 230
+370 do j=1,n
+  l1 = pr(j) + 1
+  l2 = pr(j+1)
+  do 400 l = l1,l2
+    jl = ar(l)
+    if (jl.gt.k1) go to 400
+    if (jl.lt.k2) go to 400
+    jl = k1 - jl
+    ar(l) = jl
+    vr(j) = vr(j) + 1
+    ll1 = pc(jl) + 1
+    ll2 = pc(jl+1)
+    do ll=ll1,ll2
+      if (k1-ac(ll).eq.j) go to 390
+    end do
+390 ac(ll) = j
+    vc(jl) = vc(jl) + 1
+400 continue
+end do
+420 k = k - 1
+go to 230
 !
 ! RESTORE THE ORIGINAL VECTOR  AR
 !
-430 do 431 J = 1,M
-  IF (AR(J) .GT. 0) GO TO 431
-  AR(J) = -AR(J) + (AR(J)/NP1)*NP1
-431 CONTINUE
+430 do 431 j = 1,m
+  if (ar(j) .gt. 0) go to 431
+  ar(j) = -ar(j) + (ar(j)/np1)*np1
+431 continue
 !
 ! THE ALGORITHM IS FINISHED
 !
-440 IND = 4
-IND0 = 4
-RETURN
+440 ind = 4
+ind0 = 4
+return
 !
 ! THE MAXIMUM NUMBER OF BACK TRACKS WERE PERFORMED
 !
-450 IND = 2
-IND0 = 2
-RETURN
+450 ind = 2
+ind0 = 2
+return
 !
 ! CHECK IND WHEN IND = 1, 2, OR 3
 !
-500 IF (IND .NE. 3) GO TO 510
-   IF (IND0 .EQ. 1 .OR. IND0 .EQ. 2) GO TO 430
-   GO TO 610
-510 IF (IND .NE. IND0) GO TO 600
-IF (IND .EQ. 1) GO TO 340
-GO TO 350
+500 if (ind .ne. 3) go to 510
+   if (ind0 .eq. 1 .or. ind0 .eq. 2) go to 430
+   go to 610
+510 if (ind .ne. ind0) go to 600
+if (ind .eq. 1) go to 340
+go to 350
 !
 ! ERROR RETURN
 !
-600 IND = -2
-RETURN
-610 IND = -3
-RETURN
-620 IND = -6
-RETURN
-END SUBROUTINE HC1
+600 ind = -2
+return
+610 ind = -3
+return
+620 ind = -6
+return
+end subroutine hc1
 
-SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K, &
-&JR, M, NP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: I
-INTEGER, INTENT(OUT) :: I1
-INTEGER, INTENT(INOUT) :: I2
-INTEGER, INTENT(IN) :: J, JR, K, M, N
-INTEGER, INTENT(OUT) :: NP
-INTEGER, INTENT(IN) :: NP1
-INTEGER :: JA, K1, L, L1, L2
+subroutine ipath (i, j, subr, rbus, ar, pr, s, n, np, i1, i2, k, &
+&jr, m, np1)
+implicit none
+integer, intent(in) :: i
+integer, intent(out) :: i1
+integer, intent(inout) :: i2
+integer, intent(in) :: j, jr, k, m, n
+integer, intent(out) :: np
+integer, intent(in) :: np1
+integer :: ja, k1, l, l1, l2
 !
 ! SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
 ! VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
@@ -5688,159 +5688,159 @@ INTEGER :: JA, K1, L, L1, L2
 !    = -1  IF THE PATH CONTAINS  N  VERTICES BUT ARC (I2,I1)
 !          DOES NOT EXIST.
 !
-INTEGER, INTENT(IN) :: SUBR(N)
-INTEGER, INTENT(INOUT) :: RBUS(N)
-INTEGER, INTENT(IN) :: AR(M), PR(NP1)
-INTEGER, INTENT(INOUT) :: S(N)
+integer, intent(in) :: subr(n)
+integer, intent(inout) :: rbus(n)
+integer, intent(in) :: ar(m), pr(np1)
+integer, intent(inout) :: s(n)
 !
-NP = 0
-L = 1
-I1 = I
-10 IF (RBUS(I1).EQ.0) GO TO 20
-I1 = RBUS(I1)
-L = L + 1
-GO TO 10
-20 I2 = J
-L = L + 1
-30 IF (SUBR(I2).EQ.0) GO TO 40
-I2 = -SUBR(I2) + (SUBR(I2)/NP1)*NP1
-L = L + 1
-GO TO 30
-40 CONTINUE
-IF (L.LT.N) RETURN
+np = 0
+l = 1
+i1 = i
+10 if (rbus(i1).eq.0) go to 20
+i1 = rbus(i1)
+l = l + 1
+go to 10
+20 i2 = j
+l = l + 1
+30 if (subr(i2).eq.0) go to 40
+i2 = -subr(i2) + (subr(i2)/np1)*np1
+l = l + 1
+go to 30
+40 continue
+if (l.lt.n) return
 ! THE PATH CONTAINS  N  VERTICES.
-K1 = -K*NP1
-L1 = PR(I2) + 1
-L2 = PR(I2+1)
-do 60 L = L1,L2
-  IF (AR(L).LT.0) GO TO 50
-  IF (AR(L).EQ.I1) GO TO 70
-  GO TO 60
-50 IF (K1-AR(L).EQ.I1) GO TO 70
-60 CONTINUE
+k1 = -k*np1
+l1 = pr(i2) + 1
+l2 = pr(i2+1)
+do 60 l = l1,l2
+  if (ar(l).lt.0) go to 50
+  if (ar(l).eq.i1) go to 70
+  go to 60
+50 if (k1-ar(l).eq.i1) go to 70
+60 continue
 ! NO HAMILTONIAN CIRCUIT CAN BE DETERMINED.
-NP = -1
-RETURN
+np = -1
+return
 ! A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
-70 NP = 1
-RBUS(J) = I
-RBUS(I1) = I2
-S(N) = RBUS(JR)
-L = N - 1
-80 IF (L.EQ.K) GO TO 90
-JA = S(L+1)
-S(L) = RBUS(JA)
-L = L - 1
-GO TO 80
-90 RBUS(I1) = 0
-RBUS(J) = 0
-RETURN
-END SUBROUTINE IPATH
+70 np = 1
+rbus(j) = i
+rbus(i1) = i2
+s(n) = rbus(jr)
+l = n - 1
+80 if (l.eq.k) go to 90
+ja = s(l+1)
+s(l) = rbus(ja)
+l = l - 1
+go to 80
+90 rbus(i1) = 0
+rbus(j) = 0
+return
+end subroutine ipath
 
-SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: I1, K1, M, N, NP1
-INTEGER :: IA, J, J1, J2, L, L1, L2
+subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
+implicit none
+integer, intent(in) :: i1, k1, m, n, np1
+integer :: ia, j, j1, j2, l, l1, l2
 !
 ! FORWARD STEP UPDATING
 !
-INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 !
-J1 = P1(I1) + 1
-J2 = P1(I1+1)
-do 30 J = J1,J2
-  IF (A1(J).LT.0) GO TO 30
-  IA = A1(J)
-  L1 = P2(IA) + 1
-  L2 = P2(IA+1)
-  DO L=L1,L2
-    IF (A2(L).EQ.I1) GO TO 20
-  END DO
-20 V2(IA) = V2(IA) - 1
-  A2(L) = K1 - A2(L)
-  A1(J) = K1 - IA
-30 CONTINUE
-V1(I1) = 0
-RETURN
-END SUBROUTINE FUPD
+j1 = p1(i1) + 1
+j2 = p1(i1+1)
+do 30 j = j1,j2
+  if (a1(j).lt.0) go to 30
+  ia = a1(j)
+  l1 = p2(ia) + 1
+  l2 = p2(ia+1)
+  do l=l1,l2
+    if (a2(l).eq.i1) go to 20
+  end do
+20 v2(ia) = v2(ia) - 1
+  a2(l) = k1 - a2(l)
+  a1(j) = k1 - ia
+30 continue
+v1(i1) = 0
+return
+end subroutine fupd
 
-SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: II, K1, K2, M, N, NP1
-INTEGER :: IA, L, L1, L2, LL, LL1, LL2
+subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
+implicit none
+integer, intent(in) :: ii, k1, k2, m, n, np1
+integer :: ia, l, l1, l2, ll, ll1, ll2
 !
 ! BACKTRACKING STEP UPDATING
 !
-INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 !
-L1 = P1(II) + 1
-L2 = P1(II+1)
-do 30 L = L1,L2
-  IF (A1(L).GT.K1) GO TO 30
-  IF (A1(L).LT.K2) GO TO 30
-  IA = K1 - A1(L)
-  A1(L) = IA
-  V1(II) = V1(II) + 1
-  LL1 = P2(IA) + 1
-  LL2 = P2(IA+1)
-  DO LL=LL1,LL2
-    IF (K1-A2(LL).EQ.II) GO TO 20
-  END DO
-20 A2(LL) = II
-  V2(IA) = V2(IA) + 1
-30 CONTINUE
-RETURN
-END SUBROUTINE BUPD
+l1 = p1(ii) + 1
+l2 = p1(ii+1)
+do 30 l = l1,l2
+  if (a1(l).gt.k1) go to 30
+  if (a1(l).lt.k2) go to 30
+  ia = k1 - a1(l)
+  a1(l) = ia
+  v1(ii) = v1(ii) + 1
+  ll1 = p2(ia) + 1
+  ll2 = p2(ia+1)
+  do ll=ll1,ll2
+    if (k1-a2(ll).eq.ii) go to 20
+  end do
+20 a2(ll) = ii
+  v2(ia) = v2(ia) + 1
+30 continue
+return
+end subroutine bupd
 
-SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IA
-INTEGER, INTENT(IN) :: IB, K1, L, M, N, NP1
-INTEGER :: IARC, J1, J2, JJ, M1, M2, MM
+subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
+implicit none
+integer, intent(inout) :: ia
+integer, intent(in) :: ib, k1, l, m, n, np1
+integer :: iarc, j1, j2, jj, m1, m2, mm
 !
 ! UPDATING FOR IMPLIED ARC
 !
-INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-INTEGER, INTENT(INOUT) :: V1(N), V2(N)
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 !
-M1 = P1(IB) + 1
-M2 = P1(IB+1)
-do 40 MM = M1,M2
-  IARC = A1(MM)
-  IF (IARC.LT.0) GO TO 40
-  IF (V2(IARC).NE.1) GO TO 10
-  IF (IARC.NE.IA) GO TO 50
-  JJ = L
-  GO TO 30
-10 J1 = P2(IARC) + 1
-  J2 = P2(IARC+1)
-  DO JJ=J1,J2
-    IF (A2(JJ).EQ.IB) GO TO 30
-  END DO
-30 A2(JJ) = K1 - A2(JJ)
-  V2(IARC) = V2(IARC) - 1
-  A1(MM) = K1 - IARC
-  V1(IB) = V1(IB) - 1
-40 CONTINUE
-RETURN
-50 IA = 0
-RETURN
-END SUBROUTINE IUPD
+m1 = p1(ib) + 1
+m2 = p1(ib+1)
+do 40 mm = m1,m2
+  iarc = a1(mm)
+  if (iarc.lt.0) go to 40
+  if (v2(iarc).ne.1) go to 10
+  if (iarc.ne.ia) go to 50
+  jj = l
+  go to 30
+10 j1 = p2(iarc) + 1
+  j2 = p2(iarc+1)
+  do jj=j1,j2
+    if (a2(jj).eq.ib) go to 30
+  end do
+30 a2(jj) = k1 - a2(jj)
+  v2(iarc) = v2(iarc) - 1
+  a1(mm) = k1 - iarc
+  v1(ib) = v1(ib) - 1
+40 continue
+return
+50 ia = 0
+return
+end subroutine iupd
 
-SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, &
-&NP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IA, IB
-INTEGER, INTENT(INOUT) :: JJ
-INTEGER, INTENT(IN) :: K1
-INTEGER, INTENT(INOUT) :: LL
-INTEGER, INTENT(IN) :: M, N, NP1
-INTEGER :: J1, J2, L1, L2
+subroutine rarc(ia, ib, ar, ac, pr, pc, vr, vc, k1, jj, ll, n, m, &
+&np1)
+implicit none
+integer, intent(in) :: ia, ib
+integer, intent(inout) :: jj
+integer, intent(in) :: k1
+integer, intent(inout) :: ll
+integer, intent(in) :: m, n, np1
+integer :: j1, j2, l1, l2
 !
 ! SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
 !
@@ -5854,41 +5854,41 @@ INTEGER :: J1, J2, L1, L2
 ! LL =  LOCATION OF THE ELEMENT OF  AC  CORRESPONDING TO THE
 !       REMOVED ARC (DEFINED ONLY IF  JJ .GT. 0 ).
 !
-INTEGER, INTENT(INOUT) :: AR(M), AC(M)
-INTEGER, INTENT(IN) :: PR(NP1), PC(NP1)
-INTEGER, INTENT(INOUT) :: VR(N), VC(N)
+integer, intent(inout) :: ar(m), ac(m)
+integer, intent(in) :: pr(np1), pc(np1)
+integer, intent(inout) :: vr(n), vc(n)
 !
-J1 = PR(IA) + 1
-J2 = PR(IA+1)
-do 20 JJ = J1,J2
-  IF (AR(JJ).LT.0) GO TO 20
-  IF (AR(JJ).NE.IB) GO TO 20
-  L1 = PC(IB) + 1
-  L2 = PC(IB+1)
-  DO LL=L1,L2
-    IF (AC(LL).EQ.IA) GO TO 30
-  END DO
-20 CONTINUE
+j1 = pr(ia) + 1
+j2 = pr(ia+1)
+do 20 jj = j1,j2
+  if (ar(jj).lt.0) go to 20
+  if (ar(jj).ne.ib) go to 20
+  l1 = pc(ib) + 1
+  l2 = pc(ib+1)
+  do ll=l1,l2
+    if (ac(ll).eq.ia) go to 30
+  end do
+20 continue
 ! ARC  (IA,IB)  IS NOT IN THE GRAPH.
-JJ = 0
-RETURN
-30 IF (VR(IA).EQ.1) GO TO 40
-IF (VC(IB).EQ.1) GO TO 40
-AR(JJ) = K1 - IB
-VR(IA) = VR(IA) - 1
-AC(LL) = K1 - IA
-VC(IB) = VC(IB) - 1
-RETURN
+jj = 0
+return
+30 if (vr(ia).eq.1) go to 40
+if (vc(ib).eq.1) go to 40
+ar(jj) = k1 - ib
+vr(ia) = vr(ia) - 1
+ac(ll) = k1 - ia
+vc(ib) = vc(ib) - 1
+return
 ! ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
-40 JJ = -1
-RETURN
-END SUBROUTINE RARC
+40 jj = -1
+return
+end subroutine rarc
 
-SUBROUTINE CERF (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
-INTEGER :: I
-REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
+subroutine cerf (mo, z, w)
+implicit none
+integer, intent(in) :: mo
+integer :: i
+real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -5899,154 +5899,154 @@ REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
 !                        W = ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: Z
-COMPLEX, INTENT(INOUT) :: W
-REAL :: CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
+complex, intent(in) :: z
+complex, intent(inout) :: w
+real :: cd(18), ce(18), ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
-DATA C /.564189583547756/
+data c /.564189583547756/
 !------------------------
-DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
-&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
-&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
-&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
-&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
-&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
-&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
-&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
-&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
-DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
-&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
-&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
-&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
-&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
-&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
-&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
-&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
-&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
+&cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
+&cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
+&cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
+&cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
+&cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
+&cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
+&cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
+&cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
+data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
+&ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
+&ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
+&ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
+&ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
+&ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
+&ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
+&ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
+&ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
-X = REAL(Z)
-Y = AIMAG(Z)
-SN = 1.0
-IF (X .GE. 0.0) GO TO 10
-   X = -X
-   Y = -Y
-   SN = -1.0
+x = real(z)
+y = aimag(z)
+sn = 1.0
+if (x .ge. 0.0) go to 10
+   x = -x
+   y = -y
+   sn = -1.0
 !
-10 R = X*X + Y*Y
-SZ(1) = X*X - Y*Y
-SZ(2) = 2.0*X*Y
+10 r = x*x + y*y
+sz(1) = x*x - y*y
+sz(2) = 2.0*x*y
 !
-IF (R .LE. 1.0) GO TO 20
-IF (R .GE. 38.0) GO TO 60
-IF (SZ(1) + 0.064*SZ(2)*SZ(2) .GT. 0.0) GO TO 50
+if (r .le. 1.0) go to 20
+if (r .ge. 38.0) go to 60
+if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
 !
 !                       TAYLOR SERIES
 !
-20 C2 = C + C
-TM(1) = C2*X
-TM(2) = C2*Y
-SM(1) = TM(1)
-SM(2) = TM(2)
-PM = 0.0
-30 PM = PM + 1.0
-   DM = 2.0*PM + 1.0
-   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
-   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
-   TM(1) = -TS(1)/PM
-   TM(2) = -TS(2)/PM
-   TS(1) = TM(1)/DM
-   TS(2) = TM(2)/DM
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
-31 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   GO TO 30
+20 c2 = c + c
+tm(1) = c2*x
+tm(2) = c2*y
+sm(1) = tm(1)
+sm(2) = tm(2)
+pm = 0.0
+30 pm = pm + 1.0
+   dm = 2.0*pm + 1.0
+   ts(1) = tm(1)*sz(1) - tm(2)*sz(2)
+   ts(2) = tm(1)*sz(2) + tm(2)*sz(1)
+   tm(1) = -ts(1)/pm
+   tm(2) = -ts(2)/pm
+   ts(1) = tm(1)/dm
+   ts(2) = tm(2)/dm
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+31 sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   go to 30
 !
 !                       TERMINATION
 !
-40 IF (MO .NE. 0) GO TO 41
-   W = CMPLX(SN*SM(1), SN*SM(2))
-   RETURN
-41 IF (SN .LT. 0.0) GO TO 42
-   SM(1) = 0.5 + (0.5 - SM(1))
-   SM(2) = -SM(2)
-   W = CMPLX(SM(1), SM(2))
-   RETURN
-42 W = CMPLX(1.0 + SM(1), SM(2))
-RETURN
+40 if (mo .ne. 0) go to 41
+   w = cmplx(sn*sm(1), sn*sm(2))
+   return
+41 if (sn .lt. 0.0) go to 42
+   sm(1) = 0.5 + (0.5 - sm(1))
+   sm(2) = -sm(2)
+   w = cmplx(sm(1), sm(2))
+   return
+42 w = cmplx(1.0 + sm(1), sm(2))
+return
 !
 !              RATIONAL FUNCTION APPROXIMATION
 !
-50 SM(1) = 0.0
-SM(2) = 0.0
-QM = C*EXP(-SZ(1))
-TS(1) = QM*COS(-SZ(2))
-TS(2) = QM*SIN(-SZ(2))
-QF(1) = TS(1)*X - TS(2)*Y
-QF(2) = TS(1)*Y + TS(2)*X
-DO I = 1,18
-   TS(1) = SZ(1) + CD(I)
-   TS(2) = SZ(2)
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) =  CE(I)*TS(1)/SS
-   TM(2) = -CE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-EF(1) = QF(1)*SM(1) - QF(2)*SM(2)
-EF(2) = QF(1)*SM(2) + QF(2)*SM(1)
-GO TO 100
+50 sm(1) = 0.0
+sm(2) = 0.0
+qm = c*exp(-sz(1))
+ts(1) = qm*cos(-sz(2))
+ts(2) = qm*sin(-sz(2))
+qf(1) = ts(1)*x - ts(2)*y
+qf(2) = ts(1)*y + ts(2)*x
+do i = 1,18
+   ts(1) = sz(1) + cd(i)
+   ts(2) = sz(2)
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) =  ce(i)*ts(1)/ss
+   tm(2) = -ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ef(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ef(2) = qf(1)*sm(2) + qf(2)*sm(1)
+go to 100
 !
 !                   ASYMPTOTIC EXPANSION
 !
-60 QF(1) =  SZ(1)/(R*R)
-QF(2) = -SZ(2)/(R*R)
-QM = C*EXP(-SZ(1))
-TS(1) = QM*COS(-SZ(2))
-TS(2) = QM*SIN(-SZ(2))
-TM(1) =  (TS(1)*X + TS(2)*Y)/R
-TM(2) = -(TS(1)*Y - TS(2)*X)/R
-SM(1) = TM(1)
-SM(2) = TM(2)
-PM = -0.5
-70 PM = PM + 1.0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = -PM*TS(1)
-   TM(2) = -PM*TS(2)
-   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
-   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
-71 SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-   IF (PM .LT. 25.5) GO TO 70
+60 qf(1) =  sz(1)/(r*r)
+qf(2) = -sz(2)/(r*r)
+qm = c*exp(-sz(1))
+ts(1) = qm*cos(-sz(2))
+ts(2) = qm*sin(-sz(2))
+tm(1) =  (ts(1)*x + ts(2)*y)/r
+tm(2) = -(ts(1)*y - ts(2)*x)/r
+sm(1) = tm(1)
+sm(2) = tm(2)
+pm = -0.5
+70 pm = pm + 1.0
+   ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = -pm*ts(1)
+   tm(2) = -pm*ts(2)
+   if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
+   if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+   if (pm .lt. 25.5) go to 70
 !
-80 IF (X .GE. 0.01) GO TO 81
-   SN = -SN
-   GO TO 40
-81 EF(1) = SM(1)
-EF(2) = SM(2)
+80 if (x .ge. 0.01) go to 81
+   sn = -sn
+   go to 40
+81 ef(1) = sm(1)
+ef(2) = sm(2)
 !
 !                       TERMINATION
 !
-100 IF (MO .EQ. 0) GO TO 101
-   W = CMPLX(EF(1), EF(2))
-   IF (SN .EQ. 1.0) RETURN
-   W = CMPLX(2.0 - EF(1), -EF(2))
-   RETURN
-101 EF(1) = SN*(1.0 - EF(1))
-EF(2) = -SN*EF(2)
-W = CMPLX(EF(1),EF(2))
-RETURN
-END SUBROUTINE CERF
+100 if (mo .eq. 0) go to 101
+   w = cmplx(ef(1), ef(2))
+   if (sn .eq. 1.0) return
+   w = cmplx(2.0 - ef(1), -ef(2))
+   return
+101 ef(1) = sn*(1.0 - ef(1))
+ef(2) = -sn*ef(2)
+w = cmplx(ef(1),ef(2))
+return
+end subroutine cerf
 
-SUBROUTINE CERFC (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
-INTEGER :: I
-REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
-REAL :: EXPARG
+subroutine cerfc (mo, z, w)
+implicit none
+integer, intent(in) :: mo
+integer :: i
+real :: c, c2, dm, pm, qm, r, sn, ss, x, y
+real :: exparg
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6057,420 +6057,420 @@ REAL :: EXPARG
 !           W = EXP(X*X)*ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: Z
-COMPLEX, INTENT(INOUT) :: W
-REAL :: CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
+complex, intent(in) :: z
+complex, intent(inout) :: w
+real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
-DATA C /.564189583547756/
+data c /.564189583547756/
 !------------------------
-DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
-&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
-&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
-&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
-&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
-&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
-&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
-&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
-&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
-DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
-&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
-&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
-&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
-&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
-&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
-&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
-&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
-&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
+&cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
+&cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
+&cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
+&cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
+&cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
+&cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
+&cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
+&cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
+data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
+&ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
+&ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
+&ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
+&ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
+&ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
+&ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
+&ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
+&ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
-X = REAL(Z)
-Y = AIMAG(Z)
-SN = 1.0
-IF (X .GE. 0.0) GO TO 10
-   X = -X
-   Y = -Y
-   SN = -1.0
+x = real(z)
+y = aimag(z)
+sn = 1.0
+if (x .ge. 0.0) go to 10
+   x = -x
+   y = -y
+   sn = -1.0
 !
-10 IF (MO .NE. 0  .AND.  SN .EQ. 1.0  .AND. &
-&AMAX1(X, ABS(Y)) .GE. 100.0) GO TO 60
-R = X*X + Y*Y
-SZ(1) = X*X - Y*Y
-SZ(2) = 2.0*X*Y
+10 if (mo .ne. 0  .and.  sn .eq. 1.0  .and. &
+&amax1(x, abs(y)) .ge. 100.0) go to 60
+r = x*x + y*y
+sz(1) = x*x - y*y
+sz(2) = 2.0*x*y
 !
-IF (R .LE. 1.0) GO TO 20
-IF (R .GE. 38.0) GO TO 60
-IF (SZ(1) + 0.064*SZ(2)*SZ(2) .GT. 0.0) GO TO 50
+if (r .le. 1.0) go to 20
+if (r .ge. 38.0) go to 60
+if (sz(1) + 0.064*sz(2)*sz(2) .gt. 0.0) go to 50
 !
 !                       TAYLOR SERIES
 !
-20 C2 = C + C
-TM(1) = C2*X
-TM(2) = C2*Y
-SM(1) = TM(1)
-SM(2) = TM(2)
-PM = 0.0
-30 PM = PM + 1.0
-   DM = 2.0*PM + 1.0
-   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
-   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
-   TM(1) = -TS(1)/PM
-   TM(2) = -TS(2)/PM
-   TS(1) = TM(1)/DM
-   TS(2) = TM(2)/DM
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
-31 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   GO TO 30
+20 c2 = c + c
+tm(1) = c2*x
+tm(2) = c2*y
+sm(1) = tm(1)
+sm(2) = tm(2)
+pm = 0.0
+30 pm = pm + 1.0
+   dm = 2.0*pm + 1.0
+   ts(1) = tm(1)*sz(1) - tm(2)*sz(2)
+   ts(2) = tm(1)*sz(2) + tm(2)*sz(1)
+   tm(1) = -ts(1)/pm
+   tm(2) = -ts(2)/pm
+   ts(1) = tm(1)/dm
+   ts(2) = tm(2)/dm
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+31 sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   go to 30
 !
 !                       TERMINATION
 !
-40 IF (SN .EQ. 1.0) GO TO 41
-   W = CMPLX(1.0 + SM(1), SM(2))
-   RETURN
-41 SM(1) = 0.5 + (0.5 - SM(1))
-SM(2) = -SM(2)
-IF (MO .EQ. 0) GO TO 110
+40 if (sn .eq. 1.0) go to 41
+   w = cmplx(1.0 + sm(1), sm(2))
+   return
+41 sm(1) = 0.5 + (0.5 - sm(1))
+sm(2) = -sm(2)
+if (mo .eq. 0) go to 110
 !
-QM = EXP(SZ(1))
-QF(1) = QM*COS(SZ(2))
-QF(2) = QM*SIN(SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-W = CMPLX(TS(1),TS(2))
-RETURN
+qm = exp(sz(1))
+qf(1) = qm*cos(sz(2))
+qf(2) = qm*sin(sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+w = cmplx(ts(1),ts(2))
+return
 !
 !              RATIONAL FUNCTION APPROXIMATION
 !
-50 SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,18
-   TS(1) = SZ(1) + CD(I)
-   TS(2) = SZ(2)
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) =  CE(I)*TS(1)/SS
-   TM(2) = -CE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-TS(1) = X*SM(1) - Y*SM(2)
-TS(2) = X*SM(2) + Y*SM(1)
-SM(1) = C*TS(1)
-SM(2) = C*TS(2)
-GO TO 100
+50 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = sz(1) + cd(i)
+   ts(2) = sz(2)
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) =  ce(i)*ts(1)/ss
+   tm(2) = -ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ts(1) = x*sm(1) - y*sm(2)
+ts(2) = x*sm(2) + y*sm(1)
+sm(1) = c*ts(1)
+sm(2) = c*ts(2)
+go to 100
 !
 !                   ASYMPTOTIC EXPANSION
 !
-60 CALL CREC (X, Y, TM(1), TM(2))
-SM(1) = TM(1)
-SM(2) = TM(2)
-QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
-QF(2) = 2.0*TM(1)*TM(2)
-PM = -0.5
-70 PM = PM + 1.0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = -PM*TS(1)
-   TM(2) = -PM*TS(2)
-   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
-   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
-71 SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-   IF (PM .LT. 25.5) GO TO 70
-80 SM(1) = C*SM(1)
-SM(2) = C*SM(2)
-IF (X .LT. 0.01) GO TO 200
+60 call crec (x, y, tm(1), tm(2))
+sm(1) = tm(1)
+sm(2) = tm(2)
+qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
+qf(2) = 2.0*tm(1)*tm(2)
+pm = -0.5
+70 pm = pm + 1.0
+   ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = -pm*ts(1)
+   tm(2) = -pm*ts(2)
+   if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
+   if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+   if (pm .lt. 25.5) go to 70
+80 sm(1) = c*sm(1)
+sm(2) = c*sm(2)
+if (x .lt. 0.01) go to 200
 !
 !                       TERMINATION
 !
-100 IF (MO .NE. 0 .AND. SN .EQ. 1.0) GO TO 110
-QM = EXP(-SZ(1))
-QF(1) = QM*COS(-SZ(2))
-QF(2) = QM*SIN(-SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
+100 if (mo .ne. 0 .and. sn .eq. 1.0) go to 110
+qm = exp(-sz(1))
+qf(1) = qm*cos(-sz(2))
+qf(2) = qm*sin(-sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 !
-IF (SN .EQ. 1.0) GO TO 110
-   W = CMPLX(2.0 - SM(1), -SM(2))
-   RETURN
-110 W = CMPLX(SM(1), SM(2))
-RETURN
+if (sn .eq. 1.0) go to 110
+   w = cmplx(2.0 - sm(1), -sm(2))
+   return
+110 w = cmplx(sm(1), sm(2))
+return
 !
 !               MODIFIED ASYMPTOTIC EXPANSION
 !
-200 IF (MO .NE. 0 .AND. SN .EQ. 1.0) GO TO 210
-QM = EXP(-SZ(1))
-QF(1) = QM*COS(-SZ(2))
-QF(2) = QM*SIN(-SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = 1.0 + SN*TS(1)
-SM(2) = SN*TS(2)
-W = CMPLX(SM(1),SM(2))
-RETURN
+200 if (mo .ne. 0 .and. sn .eq. 1.0) go to 210
+qm = exp(-sz(1))
+qf(1) = qm*cos(-sz(2))
+qf(2) = qm*sin(-sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = 1.0 + sn*ts(1)
+sm(2) = sn*ts(2)
+w = cmplx(sm(1),sm(2))
+return
 !
-210 IF (ABS(Y) .GE. 100.0) GO TO 110
-IF (SZ(1) .LE. EXPARG(1)) GO TO 110
-QM = EXP(SZ(1))
-SM(1) = QM*COS(SZ(2)) + SM(1)
-SM(2) = QM*SIN(SZ(2)) + SM(2)
-W = CMPLX(SM(1),SM(2))
-RETURN
-END SUBROUTINE CERFC
+210 if (abs(y) .ge. 100.0) go to 110
+if (sz(1) .le. exparg(1)) go to 110
+qm = exp(sz(1))
+sm(1) = qm*cos(sz(2)) + sm(1)
+sm(2) = qm*sin(sz(2)) + sm(2)
+w = cmplx(sm(1),sm(2))
+return
+end subroutine cerfc
 
-REAL function ERF (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: AX, BOT, C, T, TOP, X2
+real function erf (x)
+implicit none
+real, intent(in) :: x
+real :: ax, bot, c, t, top, x2
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL ERROR FUNCTION
 !-----------------------------------------------------------------------
-REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
 !-------------------------
-DATA C /.564189583547756/
+data c /.564189583547756/
 !-------------------------
-DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
-&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
-&A(5) /.128379167095513E+00/
-DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
-&B(3) /.375795757275549E+00/
+data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
+&a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
+&a(5) /.128379167095513e+00/
+data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
+&b(3) /.375795757275549e+00/
 !-------------------------
-DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
-&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
-&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
-&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
-DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
-&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
-&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
-&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
+&p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
+&p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
+&p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
+data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
+&q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
+&q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
+&q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
-&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
-&R(5) /2.82094791773523E-01/
-DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
-&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
+&r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
+&r(5) /2.82094791773523e-01/
+data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
+&s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
-AX = ABS(X)
-IF (AX .GT. 0.5) GO TO 10
-T = X*X
-TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
-BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
-ERF = X*(TOP/BOT)
-RETURN
+ax = abs(x)
+if (ax .gt. 0.5) go to 10
+t = x*x
+top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
+bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
+erf = x*(top/bot)
+return
 !
-10 IF (AX .GT. 4.0) GO TO 20
-TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
-&+ P(6))*AX + P(7))*AX + P(8)
-BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
-&+ Q(6))*AX + Q(7))*AX + Q(8)
-ERF = 0.5 + (0.5 - EXP(-X*X)*TOP/BOT)
-IF (X .LT. 0.0) ERF = -ERF
-RETURN
+10 if (ax .gt. 4.0) go to 20
+top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
+&+ p(6))*ax + p(7))*ax + p(8)
+bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
+&+ q(6))*ax + q(7))*ax + q(8)
+erf = 0.5 + (0.5 - exp(-x*x)*top/bot)
+if (x .lt. 0.0) erf = -erf
+return
 !
-20 IF (AX .GE. 5.8) GO TO 30
-X2 = X*X
-T = 1.0/X2
-TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
-BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
-ERF = (C - TOP/(X2*BOT)) / AX
-ERF = 0.5 + (0.5 - EXP(-X2)*ERF)
-IF (X .LT. 0.0) ERF = -ERF
-RETURN
+20 if (ax .ge. 5.8) go to 30
+x2 = x*x
+t = 1.0/x2
+top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
+bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
+erf = (c - top/(x2*bot)) / ax
+erf = 0.5 + (0.5 - exp(-x2)*erf)
+if (x .lt. 0.0) erf = -erf
+return
 !
-30 ERF = SIGN(1.0,X)
-RETURN
-END FUNCTION ERF
+30 erf = sign(1.0,x)
+return
+end function erf
 
-REAL function ERFC (X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-REAL :: AX, BOT, C, E, T, TOP
-REAL :: EXPARG
+real function erfc (x)
+implicit none
+real, intent(in) :: x
+real :: ax, bot, c, e, t, top
+real :: exparg
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
-REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
-DOUBLE PRECISION :: W
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
+double precision :: w
 !-------------------------
-DATA C /.564189583547756/
+data c /.564189583547756/
 !-------------------------
-DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
-&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
-&A(5) /.128379167095513E+00/
-DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
-&B(3) /.375795757275549E+00/
+data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
+&a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
+&a(5) /.128379167095513e+00/
+data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
+&b(3) /.375795757275549e+00/
 !-------------------------
-DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
-&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
-&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
-&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
-DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
-&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
-&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
-&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
+&p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
+&p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
+&p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
+data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
+&q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
+&q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
+&q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
-&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
-&R(5) /2.82094791773523E-01/
-DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
-&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
+&r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
+&r(5) /2.82094791773523e-01/
+data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
+&s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
 !
 !                     ABS(X) .LE. 0.5
 !
-AX = ABS(X)
-IF (AX .GT. 0.5) GO TO 10
-T = X*X
-TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
-BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
-ERFC = 0.5 + (0.5 - X*(TOP/BOT))
-RETURN
+ax = abs(x)
+if (ax .gt. 0.5) go to 10
+t = x*x
+top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
+bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
+erfc = 0.5 + (0.5 - x*(top/bot))
+return
 !
 !                  0.5 .LT. ABS(X) .LE. 4
 !
-10 IF (AX .GT. 4.0) GO TO 20
-TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
-&+ P(6))*AX + P(7))*AX + P(8)
-BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
-&+ Q(6))*AX + Q(7))*AX + Q(8)
-ERFC = TOP/BOT
-GO TO 30
+10 if (ax .gt. 4.0) go to 20
+top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
+&+ p(6))*ax + p(7))*ax + p(8)
+bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
+&+ q(6))*ax + q(7))*ax + q(8)
+erfc = top/bot
+go to 30
 !
 !                       ABS(X) .GT. 4
 !
-20 IF (X .LE. -5.6) GO TO 40
-IF (X .GT. 100.0) GO TO 50
-T = X*X
-IF (T .GT. -EXPARG(1)) GO TO 50
+20 if (x .le. -5.6) go to 40
+if (x .gt. 100.0) go to 50
+t = x*x
+if (t .gt. -exparg(1)) go to 50
 !
-T = 1.0/T
-TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
-BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
-ERFC = (C - T*TOP/BOT)/AX
+t = 1.0/t
+top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
+bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
+erfc = (c - t*top/bot)/ax
 !
 !                      FINAL ASSEMBLY
 !
-30 W = DBLE(X)*DBLE(X)
-T = W
-E = W - DBLE(T)
-ERFC = ((0.5 + (0.5 - E)) * EXP(-T)) * ERFC
-IF (X .LT. 0.0) ERFC = 2.0 - ERFC
-RETURN
+30 w = dble(x)*dble(x)
+t = w
+e = w - dble(t)
+erfc = ((0.5 + (0.5 - e)) * exp(-t)) * erfc
+if (x .lt. 0.0) erfc = 2.0 - erfc
+return
 !
 !             LIMIT VALUE FOR LARGE NEGATIVE X
 !
-40 ERFC = 2.0
-RETURN
+40 erfc = 2.0
+return
 !
 !             LIMIT VALUE FOR LARGE POSITIVE X
 !
-50 ERFC = 0.0
-RETURN
-END FUNCTION ERFC
+50 erfc = 0.0
+return
+end function erfc
 
-REAL function ERFC1 (IND, X)
-IMPLICIT NONE
-REAL :: EXPARG
-INTEGER, INTENT(IN) :: IND
-REAL, INTENT(IN) :: X
-REAL :: AX, BOT, C, E, T, TOP
+real function erfc1 (ind, x)
+implicit none
+real :: exparg
+integer, intent(in) :: ind
+real, intent(in) :: x
+real :: ax, bot, c, e, t, top
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !
 !          ERFC1(IND,X) = ERFC(X)            IF IND = 0
 !          ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
 !-----------------------------------------------------------------------
-REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
-DOUBLE PRECISION :: W
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
+double precision :: w
 !-------------------------
-DATA C /.564189583547756/
+data c /.564189583547756/
 !-------------------------
-DATA A(1) /.771058495001320E-04/, A(2)/-.133733772997339E-02/, &
-&A(3) /.323076579225834E-01/, A(4) /.479137145607681E-01/, &
-&A(5) /.128379167095513E+00/
-DATA B(1) /.301048631703895E-02/, B(2) /.538971687740286E-01/, &
-&B(3) /.375795757275549E+00/
+data a(1) /.771058495001320e-04/, a(2)/-.133733772997339e-02/, &
+&a(3) /.323076579225834e-01/, a(4) /.479137145607681e-01/, &
+&a(5) /.128379167095513e+00/
+data b(1) /.301048631703895e-02/, b(2) /.538971687740286e-01/, &
+&b(3) /.375795757275549e+00/
 !-------------------------
-DATA P(1)/-1.36864857382717E-07/, P(2) /5.64195517478974E-01/, &
-&P(3) /7.21175825088309E+00/, P(4) /4.31622272220567E+01/, &
-&P(5) /1.52989285046940E+02/, P(6) /3.39320816734344E+02/, &
-&P(7) /4.51918953711873E+02/, P(8) /3.00459261020162E+02/
-DATA Q(1) /1.00000000000000E+00/, Q(2) /1.27827273196294E+01/, &
-&Q(3) /7.70001529352295E+01/, Q(4) /2.77585444743988E+02/, &
-&Q(5) /6.38980264465631E+02/, Q(6) /9.31354094850610E+02/, &
-&Q(7) /7.90950925327898E+02/, Q(8) /3.00459260956983E+02/
+data p(1)/-1.36864857382717e-07/, p(2) /5.64195517478974e-01/, &
+&p(3) /7.21175825088309e+00/, p(4) /4.31622272220567e+01/, &
+&p(5) /1.52989285046940e+02/, p(6) /3.39320816734344e+02/, &
+&p(7) /4.51918953711873e+02/, p(8) /3.00459261020162e+02/
+data q(1) /1.00000000000000e+00/, q(2) /1.27827273196294e+01/, &
+&q(3) /7.70001529352295e+01/, q(4) /2.77585444743988e+02/, &
+&q(5) /6.38980264465631e+02/, q(6) /9.31354094850610e+02/, &
+&q(7) /7.90950925327898e+02/, q(8) /3.00459260956983e+02/
 !-------------------------
-DATA R(1) /2.10144126479064E+00/, R(2) /2.62370141675169E+01/, &
-&R(3) /2.13688200555087E+01/, R(4) /4.65807828718470E+00/, &
-&R(5) /2.82094791773523E-01/
-DATA S(1) /9.41537750555460E+01/, S(2) /1.87114811799590E+02/, &
-&S(3) /9.90191814623914E+01/, S(4) /1.80124575948747E+01/
+data r(1) /2.10144126479064e+00/, r(2) /2.62370141675169e+01/, &
+&r(3) /2.13688200555087e+01/, r(4) /4.65807828718470e+00/, &
+&r(5) /2.82094791773523e-01/
+data s(1) /9.41537750555460e+01/, s(2) /1.87114811799590e+02/, &
+&s(3) /9.90191814623914e+01/, s(4) /1.80124575948747e+01/
 !-------------------------
 !
 !                     ABS(X) .LE. 0.5
 !
-AX = ABS(X)
-IF (AX .GT. 0.5) GO TO 10
-T = X*X
-TOP = ((((A(1)*T + A(2))*T + A(3))*T + A(4))*T + A(5)) + 1.0
-BOT = ((B(1)*T + B(2))*T + B(3))*T + 1.0
-ERFC1 = 0.5 + (0.5 - X*(TOP/BOT))
-IF (IND .NE. 0) ERFC1 = EXP(T) * ERFC1
-RETURN
+ax = abs(x)
+if (ax .gt. 0.5) go to 10
+t = x*x
+top = ((((a(1)*t + a(2))*t + a(3))*t + a(4))*t + a(5)) + 1.0
+bot = ((b(1)*t + b(2))*t + b(3))*t + 1.0
+erfc1 = 0.5 + (0.5 - x*(top/bot))
+if (ind .ne. 0) erfc1 = exp(t) * erfc1
+return
 !
 !                  0.5 .LT. ABS(X) .LE. 4
 !
-10 IF (AX .GT. 4.0) GO TO 20
-TOP = ((((((P(1)*AX + P(2))*AX + P(3))*AX + P(4))*AX + P(5))*AX &
-&+ P(6))*AX + P(7))*AX + P(8)
-BOT = ((((((Q(1)*AX + Q(2))*AX + Q(3))*AX + Q(4))*AX + Q(5))*AX &
-&+ Q(6))*AX + Q(7))*AX + Q(8)
-ERFC1 = TOP/BOT
-GO TO 40
+10 if (ax .gt. 4.0) go to 20
+top = ((((((p(1)*ax + p(2))*ax + p(3))*ax + p(4))*ax + p(5))*ax &
+&+ p(6))*ax + p(7))*ax + p(8)
+bot = ((((((q(1)*ax + q(2))*ax + q(3))*ax + q(4))*ax + q(5))*ax &
+&+ q(6))*ax + q(7))*ax + q(8)
+erfc1 = top/bot
+go to 40
 !
 !                      ABS(X) .GT. 4
 !
-20 IF (X .LE. -5.6) GO TO 50
-IF (IND .NE. 0) GO TO 30
-IF (X .GT. 100.0) GO TO 60
-IF (X*X .GT. -EXPARG(1)) GO TO 60
+20 if (x .le. -5.6) go to 50
+if (ind .ne. 0) go to 30
+if (x .gt. 100.0) go to 60
+if (x*x .gt. -exparg(1)) go to 60
 !
-30 T = (1.0/X)**2
-TOP = (((R(1)*T + R(2))*T + R(3))*T + R(4))*T + R(5)
-BOT = (((S(1)*T + S(2))*T + S(3))*T + S(4))*T + 1.0
-ERFC1 = (C - T*TOP/BOT)/AX
+30 t = (1.0/x)**2
+top = (((r(1)*t + r(2))*t + r(3))*t + r(4))*t + r(5)
+bot = (((s(1)*t + s(2))*t + s(3))*t + s(4))*t + 1.0
+erfc1 = (c - t*top/bot)/ax
 !
 !                      FINAL ASSEMBLY
 !
-40 IF (IND .EQ. 0) GO TO 41
-   IF (X .LT. 0.0) ERFC1 = 2.0*EXP(X*X) - ERFC1
-   RETURN
-41 W = DBLE(X)*DBLE(X)
-T = W
-E = W - DBLE(T)
-ERFC1 = ((0.5 + (0.5 - E)) * EXP(-T)) * ERFC1
-IF (X .LT. 0.0) ERFC1 = 2.0 - ERFC1
-RETURN
+40 if (ind .eq. 0) go to 41
+   if (x .lt. 0.0) erfc1 = 2.0*exp(x*x) - erfc1
+   return
+41 w = dble(x)*dble(x)
+t = w
+e = w - dble(t)
+erfc1 = ((0.5 + (0.5 - e)) * exp(-t)) * erfc1
+if (x .lt. 0.0) erfc1 = 2.0 - erfc1
+return
 !
 !             LIMIT VALUE FOR LARGE NEGATIVE X
 !
-50 ERFC1 = 2.0
-IF (IND .NE. 0) ERFC1 = 2.0*EXP(X*X)
-RETURN
+50 erfc1 = 2.0
+if (ind .ne. 0) erfc1 = 2.0*exp(x*x)
+return
 !
 !             LIMIT VALUE FOR LARGE POSITIVE X
 !                       WHEN IND = 0
 !
-60 ERFC1 = 0.0
-RETURN
-END FUNCTION ERFC1
+60 erfc1 = 0.0
+return
+end function erfc1
 
-SUBROUTINE DCERF (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
+subroutine dcerf (mo, z, w)
+implicit none
+integer, intent(in) :: mo
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -6481,278 +6481,278 @@ INTEGER, INTENT(IN) :: MO
 !                       W = ERFC(Z)   OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: Z(2)
-DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-DOUBLE PRECISION :: M, N, N2, N4, NP1
-DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
-DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
-DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), &
-&WN(2)
-DOUBLE PRECISION :: ANORM, DPMPAR
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
+double precision :: m, n, n2, n4, np1
+double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: a0(2), an(2), b0(2), bn(2)
+double precision :: g0(2), gn(2), h0(2), hn(2)
+double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
+&wn(2)
+double precision :: anorm, dpmpar
 !------------------------
-ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
-DATA C /.56418958354775628694807945156077D0/
+data c /.56418958354775628694807945156077d0/
 !------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
 !
-                EPS = DPMPAR(1)
+                eps = dpmpar(1)
 !
 !------------------------
-X = Z(1)
-Y = Z(2)
-SN = 1.D0
-IF (X .GE. 0.D0) GO TO 10
-   X = -X
-   Y = -Y
-   SN = -1.D0
+x = z(1)
+y = z(2)
+sn = 1.d0
+if (x .ge. 0.d0) go to 10
+   x = -x
+   y = -y
+   sn = -1.d0
 !
-10 R = X*X + Y*Y
-SZ(1) = X*X - Y*Y
-SZ(2) = 2.D0*X*Y
+10 r = x*x + y*y
+sz(1) = x*x - y*y
+sz(2) = 2.d0*x*y
 !
-IF (R .LE. 1.D0) GO TO 20
-IF (R .GE. 144.D0) GO TO 100
-IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
-IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
-IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
-IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
-IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
-IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
-IF (R .GE. 6.25D0) GO TO 80
-IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
-IF (R .GE. 4.0D0) GO TO 40
+if (r .le. 1.d0) go to 20
+if (r .ge. 144.d0) go to 100
+if (dabs(y) .gt. 31.8d0*x) go to 50
+if (dabs(y) .gt. 7.0d0*x .and. r .lt. 64.d0) go to 50
+if (dabs(y) .gt. 3.2d0*x .and. r .lt. 49.d0) go to 50
+if (dabs(y) .gt. 2.0d0*x .and. r .lt. 36.d0) go to 50
+if (dabs(y) .gt. 1.2d0*x .and. r .lt. 25.d0) go to 50
+if (dabs(y) .gt. 0.9d0*x .and. r .lt. 16.d0) go to 50
+if (r .ge. 6.25d0) go to 80
+if (dabs(y) .gt. 0.6d0*x) go to 50
+if (r .ge. 4.0d0) go to 40
 !
-D = X - 2.D0
-IF (D*D + Y*Y .LT. 1.D0) GO TO 40
-GO TO 50
+d = x - 2.d0
+if (d*d + y*y .lt. 1.d0) go to 40
+go to 50
 !
 !                          TAYLOR SERIES
 !
-20 C2 = C + C
-TM(1) = C2*X
-TM(2) = C2*Y
-SM(1) = TM(1)
-SM(2) = TM(2)
-TOL = 2.D0*EPS
-M = 0.D0
-21 M = M + 1.D0
-   D = M + M + 1.D0
-   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
-   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
-   TM(1) = -TS(1)/M
-   TM(2) = -TS(2)/M
-   TS(1) = TM(1)/D
-   TS(2) = TM(2)/D
-   SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   IF (ANORM(TS(1),TS(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 21
+20 c2 = c + c
+tm(1) = c2*x
+tm(2) = c2*y
+sm(1) = tm(1)
+sm(2) = tm(2)
+tol = 2.d0*eps
+m = 0.d0
+21 m = m + 1.d0
+   d = m + m + 1.d0
+   ts(1) = tm(1)*sz(1) - tm(2)*sz(2)
+   ts(2) = tm(1)*sz(2) + tm(2)*sz(1)
+   tm(1) = -ts(1)/m
+   tm(2) = -ts(2)/m
+   ts(1) = tm(1)/d
+   ts(2) = tm(2)/d
+   sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   if (anorm(ts(1),ts(2)) .gt. tol*anorm(sm(1),sm(2))) go to 21
 !
-IF (MO .NE. 0) GO TO 30
-   W(1) = SN*SM(1)
-   W(2) = SN*SM(2)
-   RETURN
-30 IF (SN .EQ. 1.D0) GO TO 31
-   W(1) = 1.D0 + SM(1)
-   W(2) = SM(2)
-   RETURN
-31 W(1) = 0.5D0 + (0.5D0 - SM(1))
-W(2) = -SM(2)
-RETURN
+if (mo .ne. 0) go to 30
+   w(1) = sn*sm(1)
+   w(2) = sn*sm(2)
+   return
+30 if (sn .eq. 1.d0) go to 31
+   w(1) = 1.d0 + sm(1)
+   w(2) = sm(2)
+   return
+31 w(1) = 0.5d0 + (0.5d0 - sm(1))
+w(2) = -sm(2)
+return
 !
 !                  TAYLOR SERIES AROUND Z0 = 2
 !
-40 TM(1) = X
-TM(2) = Y
-CALL ERFCM2 (0, TM, W)
-IF (MO .NE. 0) GO TO 41
-   W(1) = SN*(0.5D0 + (0.5D0 - W(1)))
-   W(2) = - SN*W(2)
-   RETURN
-41 IF (SN .GT. 0.D0) RETURN
-W(1) = 2.D0 - W(1)
-W(2) = - W(2)
-RETURN
+40 tm(1) = x
+tm(2) = y
+call erfcm2 (0, tm, w)
+if (mo .ne. 0) go to 41
+   w(1) = sn*(0.5d0 + (0.5d0 - w(1)))
+   w(2) = - sn*w(2)
+   return
+41 if (sn .gt. 0.d0) return
+w(1) = 2.d0 - w(1)
+w(2) = - w(2)
+return
 !
 !            PADE APPROXIMATION FOR THE TAYLOR SERIES
 !                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
 !
-50 D = 4.D0
-IF (R .GT. 16.D0) D = 16.D0
-IF (R .GT. 64.D0) D = 64.D0
-D2 = D*D
-CALL DCREC (SZ(1), SZ(2), W(1), W(2))
-A0(1) = 1.D0
-A0(2) = 0.D0
-AN(1) = (W(1) + 4.D0/15.D0)*D
-AN(2) = W(2)*D
-B0(1) = 1.D0
-B0(2) = 0.D0
-BN(1) = (W(1) - 0.4D0)*D
-BN(2) = W(2)*D
-CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
-TOL = 10.D0*EPS
-N4 = 0.D0
+50 d = 4.d0
+if (r .gt. 16.d0) d = 16.d0
+if (r .gt. 64.d0) d = 64.d0
+d2 = d*d
+call dcrec (sz(1), sz(2), w(1), w(2))
+a0(1) = 1.d0
+a0(2) = 0.d0
+an(1) = (w(1) + 4.d0/15.d0)*d
+an(2) = w(2)*d
+b0(1) = 1.d0
+b0(2) = 0.d0
+bn(1) = (w(1) - 0.4d0)*d
+bn(2) = w(2)*d
+call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+tol = 10.d0*eps
+n4 = 0.d0
 !
-60 N4 = N4 + 4.D0
-   E = (N4 + 1.D0)*(N4 + 5.D0)
-   TM(1) = D*(W(1) - 2.D0/E)
-   TM(2) = D*W(2)
-   E = D2*(N4*(N4 + 2.0))/((N4 - 1.0)*(N4 + 3.0)*(N4 + 1.0)**2)
+60 n4 = n4 + 4.d0
+   e = (n4 + 1.d0)*(n4 + 5.d0)
+   tm(1) = d*(w(1) - 2.d0/e)
+   tm(2) = d*w(2)
+   e = d2*(n4*(n4 + 2.0))/((n4 - 1.0)*(n4 + 3.0)*(n4 + 1.0)**2)
 !
-   QF(1) = (TM(1)*AN(1) - TM(2)*AN(2)) + E*A0(1)
-   QF(2) = (TM(1)*AN(2) + TM(2)*AN(1)) + E*A0(2)
-   A0(1) = AN(1)
-   A0(2) = AN(2)
-   AN(1) = QF(1)
-   AN(2) = QF(2)
-   QF(1) = (TM(1)*BN(1) - TM(2)*BN(2)) + E*B0(1)
-   QF(2) = (TM(1)*BN(2) + TM(2)*BN(1)) + E*B0(2)
-   B0(1) = BN(1)
-   B0(2) = BN(2)
-   BN(1) = QF(1)
-   BN(2) = QF(2)
+   qf(1) = (tm(1)*an(1) - tm(2)*an(2)) + e*a0(1)
+   qf(2) = (tm(1)*an(2) + tm(2)*an(1)) + e*a0(2)
+   a0(1) = an(1)
+   a0(2) = an(2)
+   an(1) = qf(1)
+   an(2) = qf(2)
+   qf(1) = (tm(1)*bn(1) - tm(2)*bn(2)) + e*b0(1)
+   qf(2) = (tm(1)*bn(2) + tm(2)*bn(1)) + e*b0(2)
+   b0(1) = bn(1)
+   b0(2) = bn(2)
+   bn(1) = qf(1)
+   bn(2) = qf(2)
 !
-   W0(1) = WN(1)
-   W0(2) = WN(2)
-   CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
-   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
-&TOL*ANORM(WN(1), WN(2))) GO TO 60
+   w0(1) = wn(1)
+   w0(2) = wn(2)
+   call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+   if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+&tol*anorm(wn(1), wn(2))) go to 60
 !
-C2 = C + C
-SM(1) = C2*(X*WN(1) - Y*WN(2))
-SM(2) = C2*(X*WN(2) + Y*WN(1))
-E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
+c2 = c + c
+sm(1) = c2*(x*wn(1) - y*wn(2))
+sm(2) = c2*(x*wn(2) + y*wn(1))
+e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+tm(1) = qf(1)*sm(1) - qf(2)*sm(2)
+tm(2) = qf(1)*sm(2) + qf(2)*sm(1)
 !
-W(1) = SN*TM(1)
-W(2) = SN*TM(2)
-IF (MO .EQ. 0) RETURN
-W(1) = 1.D0 - W(1)
-W(2) = - W(2)
-RETURN
+w(1) = sn*tm(1)
+w(2) = sn*tm(2)
+if (mo .eq. 0) return
+w(1) = 1.d0 - w(1)
+w(2) = - w(2)
+return
 !
 !         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
 !                    FOR  Z*EXP(Z*Z)*ERFC(Z)
 !
-80 D = 4.D0*R
-IF (R .LT. 16.D0) D = 16.D0*R
-D2 = D*D
-TM(1) = SZ(1) + SZ(1)
-TM(2) = SZ(2) + SZ(2)
-G0(1) = 1.D0
-G0(2) = 0.D0
-GN(1) = (2.D0 + TM(1))/D
-GN(2) = TM(2)/D
-H0(1) = 1.D0
-H0(2) = 0.D0
-TM(1) = 3.D0 + TM(1)
-HN(1) = TM(1)/D
-HN(2) = TM(2)/D
-CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
-NP1 = 1.D0
-TOL = 10.D0*EPS
+80 d = 4.d0*r
+if (r .lt. 16.d0) d = 16.d0*r
+d2 = d*d
+tm(1) = sz(1) + sz(1)
+tm(2) = sz(2) + sz(2)
+g0(1) = 1.d0
+g0(2) = 0.d0
+gn(1) = (2.d0 + tm(1))/d
+gn(2) = tm(2)/d
+h0(1) = 1.d0
+h0(2) = 0.d0
+tm(1) = 3.d0 + tm(1)
+hn(1) = tm(1)/d
+hn(2) = tm(2)/d
+call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+np1 = 1.d0
+tol = 10.d0*eps
 !
-90 N = NP1
-   NP1 = N + 1.D0
-   N2 = N + N
-   E = (N2*(N2 + 1.D0))/D2
-   TM(1) = TM(1) + 4.D0
-   QF(1) = (TM(1)*GN(1) - TM(2)*GN(2))/D - E*G0(1)
-   QF(2) = (TM(1)*GN(2) + TM(2)*GN(1))/D - E*G0(2)
-   G0(1) = GN(1)
-   G0(2) = GN(2)
-   GN(1) = QF(1)
-   GN(2) = QF(2)
-   QF(1) = (TM(1)*HN(1) - TM(2)*HN(2))/D - E*H0(1)
-   QF(2) = (TM(1)*HN(2) + TM(2)*HN(1))/D - E*H0(2)
-   H0(1) = HN(1)
-   H0(2) = HN(2)
-   HN(1) = QF(1)
-   HN(2) = QF(2)
+90 n = np1
+   np1 = n + 1.d0
+   n2 = n + n
+   e = (n2*(n2 + 1.d0))/d2
+   tm(1) = tm(1) + 4.d0
+   qf(1) = (tm(1)*gn(1) - tm(2)*gn(2))/d - e*g0(1)
+   qf(2) = (tm(1)*gn(2) + tm(2)*gn(1))/d - e*g0(2)
+   g0(1) = gn(1)
+   g0(2) = gn(2)
+   gn(1) = qf(1)
+   gn(2) = qf(2)
+   qf(1) = (tm(1)*hn(1) - tm(2)*hn(2))/d - e*h0(1)
+   qf(2) = (tm(1)*hn(2) + tm(2)*hn(1))/d - e*h0(2)
+   h0(1) = hn(1)
+   h0(2) = hn(2)
+   hn(1) = qf(1)
+   hn(2) = qf(2)
 !
-   W0(1) = WN(1)
-   W0(2) = WN(2)
-   CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
-   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
-&TOL*ANORM(WN(1), WN(2))) GO TO 90
+   w0(1) = wn(1)
+   w0(2) = wn(2)
+   call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+   if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+&tol*anorm(wn(1), wn(2))) go to 90
 !
-TM(1) = X*HN(1) - Y*HN(2)
-TM(2) = X*HN(2) + Y*HN(1)
-CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
-GO TO 130
+tm(1) = x*hn(1) - y*hn(2)
+tm(2) = x*hn(2) + y*hn(1)
+call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
+go to 130
 !
 !                      ASYMPTOTIC EXPANSION
 !
-100 CALL DCREC (X, Y, TM(1), TM(2))
-SM(1) = TM(1)
-SM(2) = TM(2)
-QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
-QF(2) = 2.D0*TM(1)*TM(2)
-TOL = 2.D0*EPS
-D = -0.5D0
-110 D = D + 1.D0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = -D*TS(1)
-   TM(2) = -D*TS(2)
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-   IF (ANORM(TM(1),TM(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 110
-SM(1) = C*SM(1)
-SM(2) = C*SM(2)
-IF (X .LT. 1.D-2) GO TO 200
+100 call dcrec (x, y, tm(1), tm(2))
+sm(1) = tm(1)
+sm(2) = tm(2)
+qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
+qf(2) = 2.d0*tm(1)*tm(2)
+tol = 2.d0*eps
+d = -0.5d0
+110 d = d + 1.d0
+   ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = -d*ts(1)
+   tm(2) = -d*ts(2)
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+   if (anorm(tm(1),tm(2)) .gt. tol*anorm(sm(1),sm(2))) go to 110
+sm(1) = c*sm(1)
+sm(2) = c*sm(2)
+if (x .lt. 1.d-2) go to 200
 !
 !                       TERMINATION
 !
-130 E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
+130 e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 !
-IF (MO .NE. 0) GO TO 140
-   W(1) = SN*(0.5D0 + (0.5D0 - SM(1)))
-   W(2) = - SN*SM(2)
-   RETURN
-140 IF (SN .EQ. 1.D0) GO TO 141
-   W(1) = 2.D0 - SM(1)
-   W(2) = -SM(2)
-   RETURN
-141 W(1) = SM(1)
-W(2) = SM(2)
-RETURN
+if (mo .ne. 0) go to 140
+   w(1) = sn*(0.5d0 + (0.5d0 - sm(1)))
+   w(2) = - sn*sm(2)
+   return
+140 if (sn .eq. 1.d0) go to 141
+   w(1) = 2.d0 - sm(1)
+   w(2) = -sm(2)
+   return
+141 w(1) = sm(1)
+w(2) = sm(2)
+return
 !
 !               MODIFIED ASYMPTOTIC EXPANSION
 !
-200 E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-W(1) = QF(1)*SM(1) - QF(2)*SM(2)
-W(2) = QF(1)*SM(2) + QF(2)*SM(1)
-IF (MO .EQ. 0) GO TO 210
-   W(1) = 1.D0 + SN*W(1)
-   W(2) = SN*W(2)
-   RETURN
-210 IF (SN .LT. 0.0) RETURN
-W(1) = - W(1)
-W(2) = - W(2)
-RETURN
-END SUBROUTINE DCERF
+200 e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+w(1) = qf(1)*sm(1) - qf(2)*sm(2)
+w(2) = qf(1)*sm(2) + qf(2)*sm(1)
+if (mo .eq. 0) go to 210
+   w(1) = 1.d0 + sn*w(1)
+   w(2) = sn*w(2)
+   return
+210 if (sn .lt. 0.0) return
+w(1) = - w(1)
+w(2) = - w(2)
+return
+end subroutine dcerf
 
-SUBROUTINE DCERFC (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
+subroutine dcerfc (mo, z, w)
+implicit none
+integer, intent(in) :: mo
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6763,552 +6763,552 @@ INTEGER, INTENT(IN) :: MO
 !           W = DEXP(X*X)*ERFC(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: Z(2)
-DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-DOUBLE PRECISION :: M, N, N2, N4, NP1
-DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
-DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
-DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2), &
-&WN(2)
-DOUBLE PRECISION :: ANORM, DPMPAR, DXPARG
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
+double precision :: m, n, n2, n4, np1
+double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: a0(2), an(2), b0(2), bn(2)
+double precision :: g0(2), gn(2), h0(2), hn(2)
+double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
+&wn(2)
+double precision :: anorm, dpmpar, dxparg
 !------------------------
-ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
 !     C = 1/SQRT(PI)
 !------------------------
-DATA C /.56418958354775628694807945156077D0/
+data c /.56418958354775628694807945156077d0/
 !------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
 !
-                EPS = DPMPAR(1)
+                eps = dpmpar(1)
 !
 !------------------------
-X = Z(1)
-Y = Z(2)
-SN = 1.D0
-IF (X .GE. 0.D0) GO TO 10
-   X = -X
-   Y = -Y
-   SN = -1.D0
+x = z(1)
+y = z(2)
+sn = 1.d0
+if (x .ge. 0.d0) go to 10
+   x = -x
+   y = -y
+   sn = -1.d0
 !
-10 IF (MO .NE. 0  .AND.  SN .EQ. 1.D0  .AND. &
-&DMAX1(X, DABS(Y)) .GE. 144.D0) GO TO 100
-R = X*X + Y*Y
-SZ(1) = X*X - Y*Y
-SZ(2) = 2.D0*X*Y
+10 if (mo .ne. 0  .and.  sn .eq. 1.d0  .and. &
+&dmax1(x, dabs(y)) .ge. 144.d0) go to 100
+r = x*x + y*y
+sz(1) = x*x - y*y
+sz(2) = 2.d0*x*y
 !
-IF (R .LE. 1.D0) GO TO 20
-IF (R .GE. 144.D0) GO TO 100
-IF (DABS(Y) .GT. 31.8D0*X) GO TO 50
-IF (DABS(Y) .GT. 7.0D0*X .AND. R .LT. 64.D0) GO TO 50
-IF (DABS(Y) .GT. 3.2D0*X .AND. R .LT. 49.D0) GO TO 50
-IF (DABS(Y) .GT. 2.0D0*X .AND. R .LT. 36.D0) GO TO 50
-IF (DABS(Y) .GT. 1.2D0*X .AND. R .LT. 25.D0) GO TO 50
-IF (DABS(Y) .GT. 0.9D0*X .AND. R .LT. 16.D0) GO TO 50
-IF (R .GE. 6.25D0) GO TO 80
-IF (DABS(Y) .GT. 0.6D0*X) GO TO 50
-IF (R .GE. 4.0D0) GO TO 40
+if (r .le. 1.d0) go to 20
+if (r .ge. 144.d0) go to 100
+if (dabs(y) .gt. 31.8d0*x) go to 50
+if (dabs(y) .gt. 7.0d0*x .and. r .lt. 64.d0) go to 50
+if (dabs(y) .gt. 3.2d0*x .and. r .lt. 49.d0) go to 50
+if (dabs(y) .gt. 2.0d0*x .and. r .lt. 36.d0) go to 50
+if (dabs(y) .gt. 1.2d0*x .and. r .lt. 25.d0) go to 50
+if (dabs(y) .gt. 0.9d0*x .and. r .lt. 16.d0) go to 50
+if (r .ge. 6.25d0) go to 80
+if (dabs(y) .gt. 0.6d0*x) go to 50
+if (r .ge. 4.0d0) go to 40
 !
-D = X - 2.D0
-IF (D*D + Y*Y .LT. 1.D0) GO TO 40
-GO TO 50
+d = x - 2.d0
+if (d*d + y*y .lt. 1.d0) go to 40
+go to 50
 !
 !                          TAYLOR SERIES
 !
-20 C2 = C + C
-TM(1) = C2*X
-TM(2) = C2*Y
-SM(1) = TM(1)
-SM(2) = TM(2)
-TOL = 2.D0*EPS
-M = 0.D0
-21 M = M + 1.D0
-   D = M + M + 1.D0
-   TS(1) = TM(1)*SZ(1) - TM(2)*SZ(2)
-   TS(2) = TM(1)*SZ(2) + TM(2)*SZ(1)
-   TM(1) = -TS(1)/M
-   TM(2) = -TS(2)/M
-   TS(1) = TM(1)/D
-   TS(2) = TM(2)/D
-   SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   IF (ANORM(TS(1),TS(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 21
+20 c2 = c + c
+tm(1) = c2*x
+tm(2) = c2*y
+sm(1) = tm(1)
+sm(2) = tm(2)
+tol = 2.d0*eps
+m = 0.d0
+21 m = m + 1.d0
+   d = m + m + 1.d0
+   ts(1) = tm(1)*sz(1) - tm(2)*sz(2)
+   ts(2) = tm(1)*sz(2) + tm(2)*sz(1)
+   tm(1) = -ts(1)/m
+   tm(2) = -ts(2)/m
+   ts(1) = tm(1)/d
+   ts(2) = tm(2)/d
+   sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   if (anorm(ts(1),ts(2)) .gt. tol*anorm(sm(1),sm(2))) go to 21
 !
-IF (SN .EQ. 1.D0) GO TO 30
-   W(1) = 1.D0 + SM(1)
-   W(2) = SM(2)
-   RETURN
-30 SM(1) = 0.5D0 + (0.5D0 - SM(1))
-SM(2) = -SM(2)
-IF (MO .EQ. 0) GO TO 140
+if (sn .eq. 1.d0) go to 30
+   w(1) = 1.d0 + sm(1)
+   w(2) = sm(2)
+   return
+30 sm(1) = 0.5d0 + (0.5d0 - sm(1))
+sm(2) = -sm(2)
+if (mo .eq. 0) go to 140
 !
-E = DEXP(SZ(1))
-QF(1) = E*DCOS(SZ(2))
-QF(2) = E*DSIN(SZ(2))
-W(1) = QF(1)*SM(1) - QF(2)*SM(2)
-W(2) = QF(1)*SM(2) + QF(2)*SM(1)
-RETURN
+e = dexp(sz(1))
+qf(1) = e*dcos(sz(2))
+qf(2) = e*dsin(sz(2))
+w(1) = qf(1)*sm(1) - qf(2)*sm(2)
+w(2) = qf(1)*sm(2) + qf(2)*sm(1)
+return
 !
 !                  TAYLOR SERIES AROUND Z0 = 2
 !
-40 IF (SN .LT. 0.D0) GO TO 41
-   CALL ERFCM2 (MO, Z, W)
-   RETURN
-41 TM(1) = X
-TM(2) = Y
-CALL ERFCM2 (0, TM, W)
-W(1) = 2.D0 - W(1)
-W(2) = - W(2)
-RETURN
+40 if (sn .lt. 0.d0) go to 41
+   call erfcm2 (mo, z, w)
+   return
+41 tm(1) = x
+tm(2) = y
+call erfcm2 (0, tm, w)
+w(1) = 2.d0 - w(1)
+w(2) = - w(2)
+return
 !
 !            PADE APPROXIMATION FOR THE TAYLOR SERIES
 !                    FOR  (EXP(Z*Z)/Z)*ERF(Z)
 !
-50 D = 4.D0
-IF (R .GT. 16.D0) D = 16.D0
-IF (R .GT. 64.D0) D = 64.D0
-D2 = D*D
-CALL DCREC (SZ(1), SZ(2), W(1), W(2))
-A0(1) = 1.D0
-A0(2) = 0.D0
-AN(1) = (W(1) + 4.D0/15.D0)*D
-AN(2) = W(2)*D
-B0(1) = 1.D0
-B0(2) = 0.D0
-BN(1) = (W(1) - 0.4D0)*D
-BN(2) = W(2)*D
-CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
-TOL = 10.D0*EPS
-N4 = 0.D0
+50 d = 4.d0
+if (r .gt. 16.d0) d = 16.d0
+if (r .gt. 64.d0) d = 64.d0
+d2 = d*d
+call dcrec (sz(1), sz(2), w(1), w(2))
+a0(1) = 1.d0
+a0(2) = 0.d0
+an(1) = (w(1) + 4.d0/15.d0)*d
+an(2) = w(2)*d
+b0(1) = 1.d0
+b0(2) = 0.d0
+bn(1) = (w(1) - 0.4d0)*d
+bn(2) = w(2)*d
+call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+tol = 10.d0*eps
+n4 = 0.d0
 !
-60 N4 = N4 + 4.D0
-   E = (N4 + 1.D0)*(N4 + 5.D0)
-   TM(1) = D*(W(1) - 2.D0/E)
-   TM(2) = D*W(2)
-   E = D2*(N4*(N4 + 2.0))/((N4 - 1.0)*(N4 + 3.0)*(N4 + 1.0)**2)
+60 n4 = n4 + 4.d0
+   e = (n4 + 1.d0)*(n4 + 5.d0)
+   tm(1) = d*(w(1) - 2.d0/e)
+   tm(2) = d*w(2)
+   e = d2*(n4*(n4 + 2.0))/((n4 - 1.0)*(n4 + 3.0)*(n4 + 1.0)**2)
 !
-   QF(1) = (TM(1)*AN(1) - TM(2)*AN(2)) + E*A0(1)
-   QF(2) = (TM(1)*AN(2) + TM(2)*AN(1)) + E*A0(2)
-   A0(1) = AN(1)
-   A0(2) = AN(2)
-   AN(1) = QF(1)
-   AN(2) = QF(2)
-   QF(1) = (TM(1)*BN(1) - TM(2)*BN(2)) + E*B0(1)
-   QF(2) = (TM(1)*BN(2) + TM(2)*BN(1)) + E*B0(2)
-   B0(1) = BN(1)
-   B0(2) = BN(2)
-   BN(1) = QF(1)
-   BN(2) = QF(2)
+   qf(1) = (tm(1)*an(1) - tm(2)*an(2)) + e*a0(1)
+   qf(2) = (tm(1)*an(2) + tm(2)*an(1)) + e*a0(2)
+   a0(1) = an(1)
+   a0(2) = an(2)
+   an(1) = qf(1)
+   an(2) = qf(2)
+   qf(1) = (tm(1)*bn(1) - tm(2)*bn(2)) + e*b0(1)
+   qf(2) = (tm(1)*bn(2) + tm(2)*bn(1)) + e*b0(2)
+   b0(1) = bn(1)
+   b0(2) = bn(2)
+   bn(1) = qf(1)
+   bn(2) = qf(2)
 !
-   W0(1) = WN(1)
-   W0(2) = WN(2)
-   CALL CDIVID (AN(1), AN(2), BN(1), BN(2), WN(1), WN(2))
-   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
-&TOL*ANORM(WN(1), WN(2))) GO TO 60
+   w0(1) = wn(1)
+   w0(2) = wn(2)
+   call cdivid (an(1), an(2), bn(1), bn(2), wn(1), wn(2))
+   if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+&tol*anorm(wn(1), wn(2))) go to 60
 !
-C2 = C + C
-SM(1) = C2*(X*WN(1) - Y*WN(2))
-SM(2) = C2*(X*WN(2) + Y*WN(1))
+c2 = c + c
+sm(1) = c2*(x*wn(1) - y*wn(2))
+sm(2) = c2*(x*wn(2) + y*wn(1))
 !
-IF (MO .EQ. 0 .OR. SN .NE. 1.D0) GO TO 70
-   E = DEXP(SZ(1))
-   W(1) = E*DCOS(SZ(2)) - SM(1)
-   W(2) = E*DSIN(SZ(2)) - SM(2)
-   RETURN
-70 E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-TM(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TM(2) = QF(1)*SM(2) + QF(2)*SM(1)
-W(1) = 1.D0 - SN*TM(1)
-W(2) = - SN*TM(2)
-RETURN
+if (mo .eq. 0 .or. sn .ne. 1.d0) go to 70
+   e = dexp(sz(1))
+   w(1) = e*dcos(sz(2)) - sm(1)
+   w(2) = e*dsin(sz(2)) - sm(2)
+   return
+70 e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+tm(1) = qf(1)*sm(1) - qf(2)*sm(2)
+tm(2) = qf(1)*sm(2) + qf(2)*sm(1)
+w(1) = 1.d0 - sn*tm(1)
+w(2) = - sn*tm(2)
+return
 !
 !         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
 !                    FOR  Z*EXP(Z*Z)*ERFC(Z)
 !
-80 D = 4.D0*R
-IF (R .LT. 16.D0) D = 16.D0*R
-D2 = D*D
-TM(1) = SZ(1) + SZ(1)
-TM(2) = SZ(2) + SZ(2)
-G0(1) = 1.D0
-G0(2) = 0.D0
-GN(1) = (2.D0 + TM(1))/D
-GN(2) = TM(2)/D
-H0(1) = 1.D0
-H0(2) = 0.D0
-TM(1) = 3.D0 + TM(1)
-HN(1) = TM(1)/D
-HN(2) = TM(2)/D
-CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
-NP1 = 1.D0
-TOL = 10.D0*EPS
+80 d = 4.d0*r
+if (r .lt. 16.d0) d = 16.d0*r
+d2 = d*d
+tm(1) = sz(1) + sz(1)
+tm(2) = sz(2) + sz(2)
+g0(1) = 1.d0
+g0(2) = 0.d0
+gn(1) = (2.d0 + tm(1))/d
+gn(2) = tm(2)/d
+h0(1) = 1.d0
+h0(2) = 0.d0
+tm(1) = 3.d0 + tm(1)
+hn(1) = tm(1)/d
+hn(2) = tm(2)/d
+call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+np1 = 1.d0
+tol = 10.d0*eps
 !
-90 N = NP1
-   NP1 = N + 1.D0
-   N2 = N + N
-   E = (N2*(N2 + 1.D0))/D2
-   TM(1) = TM(1) + 4.D0
-   QF(1) = (TM(1)*GN(1) - TM(2)*GN(2))/D - E*G0(1)
-   QF(2) = (TM(1)*GN(2) + TM(2)*GN(1))/D - E*G0(2)
-   G0(1) = GN(1)
-   G0(2) = GN(2)
-   GN(1) = QF(1)
-   GN(2) = QF(2)
-   QF(1) = (TM(1)*HN(1) - TM(2)*HN(2))/D - E*H0(1)
-   QF(2) = (TM(1)*HN(2) + TM(2)*HN(1))/D - E*H0(2)
-   H0(1) = HN(1)
-   H0(2) = HN(2)
-   HN(1) = QF(1)
-   HN(2) = QF(2)
+90 n = np1
+   np1 = n + 1.d0
+   n2 = n + n
+   e = (n2*(n2 + 1.d0))/d2
+   tm(1) = tm(1) + 4.d0
+   qf(1) = (tm(1)*gn(1) - tm(2)*gn(2))/d - e*g0(1)
+   qf(2) = (tm(1)*gn(2) + tm(2)*gn(1))/d - e*g0(2)
+   g0(1) = gn(1)
+   g0(2) = gn(2)
+   gn(1) = qf(1)
+   gn(2) = qf(2)
+   qf(1) = (tm(1)*hn(1) - tm(2)*hn(2))/d - e*h0(1)
+   qf(2) = (tm(1)*hn(2) + tm(2)*hn(1))/d - e*h0(2)
+   h0(1) = hn(1)
+   h0(2) = hn(2)
+   hn(1) = qf(1)
+   hn(2) = qf(2)
 !
-   W0(1) = WN(1)
-   W0(2) = WN(2)
-   CALL CDIVID (GN(1), GN(2), HN(1), HN(2), WN(1), WN(2))
-   IF (ANORM(WN(1) - W0(1), WN(2) - W0(2)) .GT. &
-&TOL*ANORM(WN(1), WN(2))) GO TO 90
+   w0(1) = wn(1)
+   w0(2) = wn(2)
+   call cdivid (gn(1), gn(2), hn(1), hn(2), wn(1), wn(2))
+   if (anorm(wn(1) - w0(1), wn(2) - w0(2)) .gt. &
+&tol*anorm(wn(1), wn(2))) go to 90
 !
-TM(1) = X*HN(1) - Y*HN(2)
-TM(2) = X*HN(2) + Y*HN(1)
-CALL CDIVID (C*GN(1), C*GN(2), TM(1), TM(2), SM(1), SM(2))
-GO TO 130
+tm(1) = x*hn(1) - y*hn(2)
+tm(2) = x*hn(2) + y*hn(1)
+call cdivid (c*gn(1), c*gn(2), tm(1), tm(2), sm(1), sm(2))
+go to 130
 !
 !                      ASYMPTOTIC EXPANSION
 !
-100 CALL DCREC (X, Y, TM(1), TM(2))
-SM(1) = TM(1)
-SM(2) = TM(2)
-QF(1) = TM(1)*TM(1) - TM(2)*TM(2)
-QF(2) = 2.D0*TM(1)*TM(2)
-TOL = 2.D0*EPS
-D = -0.5D0
-110 D = D + 1.D0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = -D*TS(1)
-   TM(2) = -D*TS(2)
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-   IF (ANORM(TM(1),TM(2)) .GT. TOL*ANORM(SM(1),SM(2))) GO TO 110
-SM(1) = C*SM(1)
-SM(2) = C*SM(2)
-IF (X .LT. 1.D-2) GO TO 200
+100 call dcrec (x, y, tm(1), tm(2))
+sm(1) = tm(1)
+sm(2) = tm(2)
+qf(1) = tm(1)*tm(1) - tm(2)*tm(2)
+qf(2) = 2.d0*tm(1)*tm(2)
+tol = 2.d0*eps
+d = -0.5d0
+110 d = d + 1.d0
+   ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = -d*ts(1)
+   tm(2) = -d*ts(2)
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+   if (anorm(tm(1),tm(2)) .gt. tol*anorm(sm(1),sm(2))) go to 110
+sm(1) = c*sm(1)
+sm(2) = c*sm(2)
+if (x .lt. 1.d-2) go to 200
 !
 !                       TERMINATION
 !
-130 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 140
-E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
+130 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 140
+e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 !
-IF (SN .EQ. 1.D0) GO TO 140
-   W(1) = 2.D0 - SM(1)
-   W(2) = -SM(2)
-   RETURN
-140 W(1) = SM(1)
-W(2) = SM(2)
-RETURN
+if (sn .eq. 1.d0) go to 140
+   w(1) = 2.d0 - sm(1)
+   w(2) = -sm(2)
+   return
+140 w(1) = sm(1)
+w(2) = sm(2)
+return
 !
 !               MODIFIED ASYMPTOTIC EXPANSION
 !
-200 IF (MO .NE. 0 .AND. SN .EQ. 1.D0) GO TO 210
-E = DEXP(-SZ(1))
-QF(1) = E*DCOS(-SZ(2))
-QF(2) = E*DSIN(-SZ(2))
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-W(1) = 1.D0 + SN*TS(1)
-W(2) = SN*TS(2)
-RETURN
+200 if (mo .ne. 0 .and. sn .eq. 1.d0) go to 210
+e = dexp(-sz(1))
+qf(1) = e*dcos(-sz(2))
+qf(2) = e*dsin(-sz(2))
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+w(1) = 1.d0 + sn*ts(1)
+w(2) = sn*ts(2)
+return
 !
-210 IF (DABS(Y) .GE. 100.D0) GO TO 140
-IF (SZ(1) .LE. DXPARG(1)) GO TO 140
-E = DEXP(SZ(1))
-W(1) = E*DCOS(SZ(2)) + SM(1)
-W(2) = E*DSIN(SZ(2)) + SM(2)
-RETURN
-END SUBROUTINE DCERFC
+210 if (dabs(y) .ge. 100.d0) go to 140
+if (sz(1) .le. dxparg(1)) go to 140
+e = dexp(sz(1))
+w(1) = e*dcos(sz(2)) + sm(1)
+w(2) = e*dsin(sz(2)) + sm(2)
+return
+end subroutine dcerfc
 
-SUBROUTINE ERFCM2 (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
-INTEGER :: J, N
+subroutine erfcm2 (mo, z, w)
+implicit none
+integer, intent(in) :: mo
+integer :: j, n
 !-----------------------------------------------------------------------
 !           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: Z(2)
-DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-DOUBLE PRECISION :: A(63), C, E, EPS, H(2), T(2), TOL, X, Y
-DOUBLE PRECISION :: ANORM, DPMPAR
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
+double precision :: a(63), c, e, eps, h(2), t(2), tol, x, y
+double precision :: anorm, dpmpar
 !------------------------------
-ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
+anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------------
 !     C = (2/SQRT(PI))*EXP(-4)
 !     E = ERFC(2)
 !------------------------------
-DATA C /.20666985354092053857068941306585476D-01/
-DATA E /.46777349810472658379307436327470714D-02/
+data c /.20666985354092053857068941306585476d-01/
+data e /.46777349810472658379307436327470714d-02/
 !------------------------------
-DATA A(1)  / .20000000000000000000000000000000000D+01/, &
-&A(2)  / .23333333333333333333333333333333333D+01/, &
-&A(3)  / .16666666666666666666666666666666667D+01/, &
-&A(4)  / .63333333333333333333333333333333333D+00/, &
-&A(5)  /-.22222222222222222222222222222222222D-01/, &
-&A(6)  /-.16349206349206349206349206349206349D+00/, &
-&A(7)  /-.76984126984126984126984126984126984D-01/, &
-&A(8)  /-.24250440917107583774250440917107584D-02/, &
-&A(9)  / .12716049382716049382716049382716049D-01/, &
-&A(10) / .50208433541766875100208433541766875D-02/
-DATA A(11) /-.25305969750414194858639303083747528D-03/, &
-&A(12) /-.78593217482106370995259884148773038D-03/, &
-&A(13) /-.19118154038788959423880058800693721D-03/, &
-&A(14) / .46324144207742091339974937858535742D-04/, &
-&A(15) / .33885549097189308829520469732109944D-04/, &
-&A(16) / .28637897646612243562134629672756034D-05/, &
-&A(17) /-.29071891082127275370004560446169188D-05/, &
-&A(18) /-.89674405786490646425523560263096103D-06/, &
-&A(19) / .96069103941908684338469767911200105D-07/, &
-&A(20) / .99432863129093191401848891268744113D-07/
-DATA A(21) / .97610310501460621303387795457283579D-08/, &
-&A(22) /-.65557500375673133822289344530892436D-08/, &
-&A(23) /-.18706782059105426900361744016236561D-08/, &
-&A(24) / .20329898993447386223176373714372370D-09/, &
-&A(25) / .16941915827254374668448114614201210D-09/, &
-&A(26) / .10619149520827430973786114446699534D-10/, &
-&A(27) /-.10136148256511788733365237088810952D-10/, &
-&A(28) /-.21042890133669970575386166675721692D-11/, &
-&A(29) / .37186985840699828780916522245407087D-12/, &
-&A(30) / .17921843632701679986488128324051002D-12/
-DATA A(31) /-.89823991804248069863542565948598397D-16/, &
-&A(32) /-.10533182313660970970232171410372199D-13/, &
-&A(33) /-.12340742690978398320850088252659714D-14/, &
-&A(34) / .44315624546581333350568244777175883D-15/, &
-&A(35) / .11584041639989442481950487524296214D-15/, &
-&A(36) /-.10765703619385988116658460442219647D-16/, &
-&A(37) /-.70653158723054941879586082239984222D-17/, &
-&A(38) /-.18708903154917138727191793341667090D-18/, &
-&A(39) / .32549879318817103966053527398133297D-18/, &
-&A(40) / .40654116689599228385911733319215613D-19/
-DATA A(41) /-.11250074516817311101947327325293424D-19/, &
-&A(42) /-.28923865378584966737386008432031980D-20/, &
-&A(43) / .23653053641701517160704870522922706D-21/, &
-&A(44) / .14665384680061888088099002254334292D-21/, &
-&A(45) / .26971039707314316218154193225264469D-23/, &
-&A(46) /-.58753834789274356433279671015522650D-23/, &
-&A(47) /-.59960357240498652932299485494869633D-24/, &
-&A(48) / .18586826578121663981412155416486531D-24/, &
-&A(49) / .38364131854692721721867481914852428D-25/, &
-&A(50) /-.41342210492630142578080062451711039D-26/
-DATA A(51) /-.17646283105274988992381528904600860D-26/, &
-&A(52) / .19828685934364181151988692232131608D-28/, &
-&A(53) / .65592252170840353572672782446212733D-28/, &
-&A(54) / .40626551379996340638338449938639730D-29/, &
-&A(55) /-.20097984104191034713653294173834095D-29/, &
-&A(56) /-.28104226475997460044096389060743131D-30/, &
-&A(57) / .48705319298749358709127987806547949D-31/, &
-&A(58) / .12664655832830787747161769929972617D-31/, &
-&A(59) /-.75168312488894341862391776330113688D-33/, &
-&A(60) /-.45760473722605993842481669806804415D-33/
-DATA A(61) /-.56725491529575395930156379514718000D-35/, &
-&A(62) / .13932664042920082608489441616061541D-34/, &
-&A(63) / .10452448992516358449586503951463322D-35/
+data a(1)  / .20000000000000000000000000000000000d+01/, &
+&a(2)  / .23333333333333333333333333333333333d+01/, &
+&a(3)  / .16666666666666666666666666666666667d+01/, &
+&a(4)  / .63333333333333333333333333333333333d+00/, &
+&a(5)  /-.22222222222222222222222222222222222d-01/, &
+&a(6)  /-.16349206349206349206349206349206349d+00/, &
+&a(7)  /-.76984126984126984126984126984126984d-01/, &
+&a(8)  /-.24250440917107583774250440917107584d-02/, &
+&a(9)  / .12716049382716049382716049382716049d-01/, &
+&a(10) / .50208433541766875100208433541766875d-02/
+data a(11) /-.25305969750414194858639303083747528d-03/, &
+&a(12) /-.78593217482106370995259884148773038d-03/, &
+&a(13) /-.19118154038788959423880058800693721d-03/, &
+&a(14) / .46324144207742091339974937858535742d-04/, &
+&a(15) / .33885549097189308829520469732109944d-04/, &
+&a(16) / .28637897646612243562134629672756034d-05/, &
+&a(17) /-.29071891082127275370004560446169188d-05/, &
+&a(18) /-.89674405786490646425523560263096103d-06/, &
+&a(19) / .96069103941908684338469767911200105d-07/, &
+&a(20) / .99432863129093191401848891268744113d-07/
+data a(21) / .97610310501460621303387795457283579d-08/, &
+&a(22) /-.65557500375673133822289344530892436d-08/, &
+&a(23) /-.18706782059105426900361744016236561d-08/, &
+&a(24) / .20329898993447386223176373714372370d-09/, &
+&a(25) / .16941915827254374668448114614201210d-09/, &
+&a(26) / .10619149520827430973786114446699534d-10/, &
+&a(27) /-.10136148256511788733365237088810952d-10/, &
+&a(28) /-.21042890133669970575386166675721692d-11/, &
+&a(29) / .37186985840699828780916522245407087d-12/, &
+&a(30) / .17921843632701679986488128324051002d-12/
+data a(31) /-.89823991804248069863542565948598397d-16/, &
+&a(32) /-.10533182313660970970232171410372199d-13/, &
+&a(33) /-.12340742690978398320850088252659714d-14/, &
+&a(34) / .44315624546581333350568244777175883d-15/, &
+&a(35) / .11584041639989442481950487524296214d-15/, &
+&a(36) /-.10765703619385988116658460442219647d-16/, &
+&a(37) /-.70653158723054941879586082239984222d-17/, &
+&a(38) /-.18708903154917138727191793341667090d-18/, &
+&a(39) / .32549879318817103966053527398133297d-18/, &
+&a(40) / .40654116689599228385911733319215613d-19/
+data a(41) /-.11250074516817311101947327325293424d-19/, &
+&a(42) /-.28923865378584966737386008432031980d-20/, &
+&a(43) / .23653053641701517160704870522922706d-21/, &
+&a(44) / .14665384680061888088099002254334292d-21/, &
+&a(45) / .26971039707314316218154193225264469d-23/, &
+&a(46) /-.58753834789274356433279671015522650d-23/, &
+&a(47) /-.59960357240498652932299485494869633d-24/, &
+&a(48) / .18586826578121663981412155416486531d-24/, &
+&a(49) / .38364131854692721721867481914852428d-25/, &
+&a(50) /-.41342210492630142578080062451711039d-26/
+data a(51) /-.17646283105274988992381528904600860d-26/, &
+&a(52) / .19828685934364181151988692232131608d-28/, &
+&a(53) / .65592252170840353572672782446212733d-28/, &
+&a(54) / .40626551379996340638338449938639730d-29/, &
+&a(55) /-.20097984104191034713653294173834095d-29/, &
+&a(56) /-.28104226475997460044096389060743131d-30/, &
+&a(57) / .48705319298749358709127987806547949d-31/, &
+&a(58) / .12664655832830787747161769929972617d-31/, &
+&a(59) /-.75168312488894341862391776330113688d-33/, &
+&a(60) /-.45760473722605993842481669806804415d-33/
+data a(61) /-.56725491529575395930156379514718000d-35/, &
+&a(62) / .13932664042920082608489441616061541d-34/, &
+&a(63) / .10452448992516358449586503951463322d-35/
 !------------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0
 !
-       EPS = DPMPAR(1)
+       eps = dpmpar(1)
 !
 !------------------------------
-TOL = EPS*1.D+12
-H(1) = 1.D0 + (1.D0 - Z(1))
-H(2) = - Z(2)
+tol = eps*1.d+12
+h(1) = 1.d0 + (1.d0 - z(1))
+h(2) = - z(2)
 !
-X = 1.D0
-Y = 0.D0
-W(1) = A(30)
-W(2) = 0.D0
-do 10 N = 31,63
-   T(1) = X*H(1) - Y*H(2)
-   T(2) = X*H(2) + Y*H(1)
-   X = T(1)
-   Y = T(2)
-   T(1) = A(N)*X
-   T(2) = A(N)*Y
-   W(1) = W(1) + T(1)
-   W(2) = W(2) + T(2)
-   IF (ANORM(T(1),T(2)) .LE. TOL*ANORM(W(1),W(2))) GO TO 20
-10 CONTINUE
+x = 1.d0
+y = 0.d0
+w(1) = a(30)
+w(2) = 0.d0
+do 10 n = 31,63
+   t(1) = x*h(1) - y*h(2)
+   t(2) = x*h(2) + y*h(1)
+   x = t(1)
+   y = t(2)
+   t(1) = a(n)*x
+   t(2) = a(n)*y
+   w(1) = w(1) + t(1)
+   w(2) = w(2) + t(2)
+   if (anorm(t(1),t(2)) .le. tol*anorm(w(1),w(2))) go to 20
+10 continue
 !
-20 do 21 J = 1,29
-   N = 30 - J
-   X = H(1)*W(1) - H(2)*W(2)
-   W(2) = H(1)*W(2) + H(2)*W(1)
-   W(1) = A(N) + X
-21 CONTINUE
-X = H(1)*W(1) - H(2)*W(2)
-W(2) = H(1)*W(2) + H(2)*W(1)
-W(1) = 1.D0 + X
+20 do 21 j = 1,29
+   n = 30 - j
+   x = h(1)*w(1) - h(2)*w(2)
+   w(2) = h(1)*w(2) + h(2)*w(1)
+   w(1) = a(n) + x
+21 continue
+x = h(1)*w(1) - h(2)*w(2)
+w(2) = h(1)*w(2) + h(2)*w(1)
+w(1) = 1.d0 + x
 !
-X = C*(H(1)*W(1) - H(2)*W(2))
-W(2) = C*(H(1)*W(2) + H(2)*W(1))
-W(1) = E + X
-IF (MO .EQ. 0) RETURN
+x = c*(h(1)*w(1) - h(2)*w(2))
+w(2) = c*(h(1)*w(2) + h(2)*w(1))
+w(1) = e + x
+if (mo .eq. 0) return
 !
 !                     COMPUTE EXP(Z*Z)*ERFC(Z)
 !
-X = Z(1)*Z(1) - Z(2)*Z(2)
-Y = 2.D0*Z(1)*Z(2)
-X = DEXP(X)
-T(1) = X*DCOS(Y)
-T(2) = X*DSIN(Y)
-X = T(1)*W(1) - T(2)*W(2)
-Y = T(1)*W(2) + T(2)*W(1)
-W(1) = X
-W(2) = Y
-RETURN
-END SUBROUTINE ERFCM2
+x = z(1)*z(1) - z(2)*z(2)
+y = 2.d0*z(1)*z(2)
+x = dexp(x)
+t(1) = x*dcos(y)
+t(2) = x*dsin(y)
+x = t(1)*w(1) - t(2)*w(2)
+y = t(1)*w(2) + t(2)*w(1)
+w(1) = x
+w(2) = y
+return
+end subroutine erfcm2
 
-double precision function DERF (X)
-IMPLICIT NONE
-INTEGER :: I, K
+double precision function derf (x)
+implicit none
+integer :: i, k
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: AX, T
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: W
-DOUBLE PRECISION :: A(21)
-DOUBLE PRECISION :: DERFC0
+double precision :: ax, t
+double precision, intent(in) :: x
+double precision :: w
+double precision :: a(21)
+double precision :: derfc0
 !-------------------------------
-DATA A(1)  / .1283791670955125738961589031215D+00/, &
-&A(2)  /-.3761263890318375246320529677070D+00/, &
-&A(3)  / .1128379167095512573896158902931D+00/, &
-&A(4)  /-.2686617064513125175943235372542D-01/, &
-&A(5)  / .5223977625442187842111812447877D-02/, &
-&A(6)  /-.8548327023450852832540164081187D-03/, &
-&A(7)  / .1205533298178966425020717182498D-03/, &
-&A(8)  /-.1492565035840625090430728526820D-04/, &
-&A(9)  / .1646211436588924261080723578109D-05/, &
-&A(10) /-.1636584469123468757408968429674D-06/
-DATA A(11) / .1480719281587021715400818627811D-07/, &
-&A(12) /-.1229055530145120140800510155331D-08/, &
-&A(13) / .9422759058437197017313055084212D-10/, &
-&A(14) /-.6711366740969385085896257227159D-11/, &
-&A(15) / .4463222608295664017461758843550D-12/, &
-&A(16) /-.2783497395542995487275065856998D-13/, &
-&A(17) / .1634095572365337143933023780777D-14/, &
-&A(18) /-.9052845786901123985710019387938D-16/, &
-&A(19) / .4708274559689744439341671426731D-17/, &
-&A(20) /-.2187159356685015949749948252160D-18/, &
-&A(21) / .7043407712019701609635599701333D-20/
+data a(1)  / .1283791670955125738961589031215d+00/, &
+&a(2)  /-.3761263890318375246320529677070d+00/, &
+&a(3)  / .1128379167095512573896158902931d+00/, &
+&a(4)  /-.2686617064513125175943235372542d-01/, &
+&a(5)  / .5223977625442187842111812447877d-02/, &
+&a(6)  /-.8548327023450852832540164081187d-03/, &
+&a(7)  / .1205533298178966425020717182498d-03/, &
+&a(8)  /-.1492565035840625090430728526820d-04/, &
+&a(9)  / .1646211436588924261080723578109d-05/, &
+&a(10) /-.1636584469123468757408968429674d-06/
+data a(11) / .1480719281587021715400818627811d-07/, &
+&a(12) /-.1229055530145120140800510155331d-08/, &
+&a(13) / .9422759058437197017313055084212d-10/, &
+&a(14) /-.6711366740969385085896257227159d-11/, &
+&a(15) / .4463222608295664017461758843550d-12/, &
+&a(16) /-.2783497395542995487275065856998d-13/, &
+&a(17) / .1634095572365337143933023780777d-14/, &
+&a(18) /-.9052845786901123985710019387938d-16/, &
+&a(19) / .4708274559689744439341671426731d-17/, &
+&a(20) /-.2187159356685015949749948252160d-18/, &
+&a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     DABS(X) .LE. 1
 !
-AX = DABS(X)
-IF (AX .GT. 1.D0) GO TO 20
-T = X*X
-W = A(21)
-do 10 I = 1,20
-   K = 21 - I
-   W = T*W + A(K)
-10 CONTINUE
-DERF = X*(1.D0 + W)
-RETURN
+ax = dabs(x)
+if (ax .gt. 1.d0) go to 20
+t = x*x
+w = a(21)
+do 10 i = 1,20
+   k = 21 - i
+   w = t*w + a(k)
+10 continue
+derf = x*(1.d0 + w)
+return
 !
 !                     DABS(X) .GT. 1
 !
-20 IF (AX .GE. 8.5D0) GO TO 30
-DERF = 0.5D0 + (0.5D0 - DEXP(-X*X)*DERFC0(AX))
-IF (X .LT. 0.D0) DERF = -DERF
-RETURN
+20 if (ax .ge. 8.5d0) go to 30
+derf = 0.5d0 + (0.5d0 - dexp(-x*x)*derfc0(ax))
+if (x .lt. 0.d0) derf = -derf
+return
 !
 !                 LIMIT VALUE FOR LARGE X
 !
-30 DERF = DSIGN(1.D0,X)
-RETURN
-END FUNCTION DERF
+30 derf = dsign(1.d0,x)
+return
+end function derf
 
-double precision function DERFC (X)
-IMPLICIT NONE
-INTEGER :: I, K
+double precision function derfc (x)
+implicit none
+integer :: i, k
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: AX, T, W
-DOUBLE PRECISION :: A(21)
-DOUBLE PRECISION :: DERFC0, DXPARG
+double precision, intent(in) :: x
+double precision :: ax, t, w
+double precision :: a(21)
+double precision :: derfc0, dxparg
 !-------------------------------
-DATA A(1)  / .1283791670955125738961589031215D+00/, &
-&A(2)  /-.3761263890318375246320529677070D+00/, &
-&A(3)  / .1128379167095512573896158902931D+00/, &
-&A(4)  /-.2686617064513125175943235372542D-01/, &
-&A(5)  / .5223977625442187842111812447877D-02/, &
-&A(6)  /-.8548327023450852832540164081187D-03/, &
-&A(7)  / .1205533298178966425020717182498D-03/, &
-&A(8)  /-.1492565035840625090430728526820D-04/, &
-&A(9)  / .1646211436588924261080723578109D-05/, &
-&A(10) /-.1636584469123468757408968429674D-06/
-DATA A(11) / .1480719281587021715400818627811D-07/, &
-&A(12) /-.1229055530145120140800510155331D-08/, &
-&A(13) / .9422759058437197017313055084212D-10/, &
-&A(14) /-.6711366740969385085896257227159D-11/, &
-&A(15) / .4463222608295664017461758843550D-12/, &
-&A(16) /-.2783497395542995487275065856998D-13/, &
-&A(17) / .1634095572365337143933023780777D-14/, &
-&A(18) /-.9052845786901123985710019387938D-16/, &
-&A(19) / .4708274559689744439341671426731D-17/, &
-&A(20) /-.2187159356685015949749948252160D-18/, &
-&A(21) / .7043407712019701609635599701333D-20/
+data a(1)  / .1283791670955125738961589031215d+00/, &
+&a(2)  /-.3761263890318375246320529677070d+00/, &
+&a(3)  / .1128379167095512573896158902931d+00/, &
+&a(4)  /-.2686617064513125175943235372542d-01/, &
+&a(5)  / .5223977625442187842111812447877d-02/, &
+&a(6)  /-.8548327023450852832540164081187d-03/, &
+&a(7)  / .1205533298178966425020717182498d-03/, &
+&a(8)  /-.1492565035840625090430728526820d-04/, &
+&a(9)  / .1646211436588924261080723578109d-05/, &
+&a(10) /-.1636584469123468757408968429674d-06/
+data a(11) / .1480719281587021715400818627811d-07/, &
+&a(12) /-.1229055530145120140800510155331d-08/, &
+&a(13) / .9422759058437197017313055084212d-10/, &
+&a(14) /-.6711366740969385085896257227159d-11/, &
+&a(15) / .4463222608295664017461758843550d-12/, &
+&a(16) /-.2783497395542995487275065856998d-13/, &
+&a(17) / .1634095572365337143933023780777d-14/, &
+&a(18) /-.9052845786901123985710019387938d-16/, &
+&a(19) / .4708274559689744439341671426731d-17/, &
+&a(20) /-.2187159356685015949749948252160d-18/, &
+&a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     DABS(X) .LE. 1
 !
-AX = DABS(X)
-IF (AX .GT. 1.D0) GO TO 20
-T = X*X
-W = A(21)
-do 10 I = 1,20
-   K = 21 - I
-   W = T*W + A(K)
-10 CONTINUE
-DERFC = 0.5D0 + (0.5D0 - X*(1.D0 + W))
-RETURN
+ax = dabs(x)
+if (ax .gt. 1.d0) go to 20
+t = x*x
+w = a(21)
+do 10 i = 1,20
+   k = 21 - i
+   w = t*w + a(k)
+10 continue
+derfc = 0.5d0 + (0.5d0 - x*(1.d0 + w))
+return
 !
 !                       X .LT. -1
 !
-20 IF (X .GT. 0.D0) GO TO 30
-DERFC = 2.D0
-IF (X .LT. -8.3D0) RETURN
-T = X*X
-DERFC = 2.D0 - DEXP(-T) * DERFC0(AX)
-RETURN
+20 if (x .gt. 0.d0) go to 30
+derfc = 2.d0
+if (x .lt. -8.3d0) return
+t = x*x
+derfc = 2.d0 - dexp(-t) * derfc0(ax)
+return
 !
 !                       X .GT. 1
 !
-30 DERFC = 0.D0
-IF (X .GT. 100.D0) RETURN
-T = X*X
-IF (T .GT. -DXPARG(1)) RETURN
-DERFC = DEXP(-T) * DERFC0(X)
-RETURN
-END FUNCTION DERFC
+30 derfc = 0.d0
+if (x .gt. 100.d0) return
+t = x*x
+if (t .gt. -dxparg(1)) return
+derfc = dexp(-t) * derfc0(x)
+return
+end function derfc
 
-double precision function DERFC1 (IND, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IND
-INTEGER :: I, K
+double precision function derfc1 (ind, x)
+implicit none
+integer, intent(in) :: ind
+integer :: i, k
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -7317,79 +7317,79 @@ INTEGER :: I, K
 !          DERFC1(IND,X) = EXP(X*X)*ERFC(X)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: AX, T, W
-DOUBLE PRECISION :: A(21)
-DOUBLE PRECISION :: DERFC0, DXPARG
+double precision, intent(in) :: x
+double precision :: ax, t, w
+double precision :: a(21)
+double precision :: derfc0, dxparg
 !-------------------------------
-DATA A(1)  / .1283791670955125738961589031215D+00/, &
-&A(2)  /-.3761263890318375246320529677070D+00/, &
-&A(3)  / .1128379167095512573896158902931D+00/, &
-&A(4)  /-.2686617064513125175943235372542D-01/, &
-&A(5)  / .5223977625442187842111812447877D-02/, &
-&A(6)  /-.8548327023450852832540164081187D-03/, &
-&A(7)  / .1205533298178966425020717182498D-03/, &
-&A(8)  /-.1492565035840625090430728526820D-04/, &
-&A(9)  / .1646211436588924261080723578109D-05/, &
-&A(10) /-.1636584469123468757408968429674D-06/
-DATA A(11) / .1480719281587021715400818627811D-07/, &
-&A(12) /-.1229055530145120140800510155331D-08/, &
-&A(13) / .9422759058437197017313055084212D-10/, &
-&A(14) /-.6711366740969385085896257227159D-11/, &
-&A(15) / .4463222608295664017461758843550D-12/, &
-&A(16) /-.2783497395542995487275065856998D-13/, &
-&A(17) / .1634095572365337143933023780777D-14/, &
-&A(18) /-.9052845786901123985710019387938D-16/, &
-&A(19) / .4708274559689744439341671426731D-17/, &
-&A(20) /-.2187159356685015949749948252160D-18/, &
-&A(21) / .7043407712019701609635599701333D-20/
+data a(1)  / .1283791670955125738961589031215d+00/, &
+&a(2)  /-.3761263890318375246320529677070d+00/, &
+&a(3)  / .1128379167095512573896158902931d+00/, &
+&a(4)  /-.2686617064513125175943235372542d-01/, &
+&a(5)  / .5223977625442187842111812447877d-02/, &
+&a(6)  /-.8548327023450852832540164081187d-03/, &
+&a(7)  / .1205533298178966425020717182498d-03/, &
+&a(8)  /-.1492565035840625090430728526820d-04/, &
+&a(9)  / .1646211436588924261080723578109d-05/, &
+&a(10) /-.1636584469123468757408968429674d-06/
+data a(11) / .1480719281587021715400818627811d-07/, &
+&a(12) /-.1229055530145120140800510155331d-08/, &
+&a(13) / .9422759058437197017313055084212d-10/, &
+&a(14) /-.6711366740969385085896257227159d-11/, &
+&a(15) / .4463222608295664017461758843550d-12/, &
+&a(16) /-.2783497395542995487275065856998d-13/, &
+&a(17) / .1634095572365337143933023780777d-14/, &
+&a(18) /-.9052845786901123985710019387938d-16/, &
+&a(19) / .4708274559689744439341671426731d-17/, &
+&a(20) /-.2187159356685015949749948252160d-18/, &
+&a(21) / .7043407712019701609635599701333d-20/
 !-------------------------------
 !
 !                     DABS(X) .LE. 1
 !
-AX = DABS(X)
-IF (AX .GT. 1.D0) GO TO 20
-T = X*X
-W = A(21)
-do 10 I = 1,20
-   K = 21 - I
-   W = T*W + A(K)
-10 CONTINUE
-DERFC1 = 0.5D0 + (0.5D0 - X*(1.D0 + W))
-IF (IND .NE. 0) DERFC1 = DEXP(T) * DERFC1
-RETURN
+ax = dabs(x)
+if (ax .gt. 1.d0) go to 20
+t = x*x
+w = a(21)
+do 10 i = 1,20
+   k = 21 - i
+   w = t*w + a(k)
+10 continue
+derfc1 = 0.5d0 + (0.5d0 - x*(1.d0 + w))
+if (ind .ne. 0) derfc1 = dexp(t) * derfc1
+return
 !
 !                       X .LT. -1
 !
-20 IF (X .GT. 0.D0) GO TO 50
-IF (X .LT. -8.3D0) GO TO 80
-IF (IND .EQ. 0) GO TO 30
-   DERFC1 = 2.D0*DEXP(X*X) - DERFC0(AX)
-   RETURN
-30 DERFC1 = 2.D0 - DEXP(-X*X)*DERFC0(AX)
-RETURN
+20 if (x .gt. 0.d0) go to 50
+if (x .lt. -8.3d0) go to 80
+if (ind .eq. 0) go to 30
+   derfc1 = 2.d0*dexp(x*x) - derfc0(ax)
+   return
+30 derfc1 = 2.d0 - dexp(-x*x)*derfc0(ax)
+return
 !
 !                       X .GT. 1
 !
-50 IF (IND .EQ. 0) GO TO 60
-   DERFC1 = DERFC0(X)
-   RETURN
-60 DERFC1 = 0.D0
-IF (X .GT. 100.D0) RETURN
-T = X*X
-IF (T .GT. -DXPARG(1)) RETURN
-DERFC1 = DEXP(-T) * DERFC0(X)
-RETURN
+50 if (ind .eq. 0) go to 60
+   derfc1 = derfc0(x)
+   return
+60 derfc1 = 0.d0
+if (x .gt. 100.d0) return
+t = x*x
+if (t .gt. -dxparg(1)) return
+derfc1 = dexp(-t) * derfc0(x)
+return
 !
 !             LIMIT VALUE FOR LARGE NEGATIVE X
 !
-80 DERFC1 = 2.D0
-IF (IND .NE. 0) DERFC1 = 2.D0*DEXP(X*X)
-RETURN
-END FUNCTION DERFC1
+80 derfc1 = 2.d0
+if (ind .ne. 0) derfc1 = 2.d0*dexp(x*x)
+return
+end function derfc1
 
-double precision function DERFC0 (X)
-IMPLICIT NONE
+double precision function derfc0 (x)
+implicit none
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -7400,162 +7400,162 @@ IMPLICIT NONE
 !        DAHLGREN, VIRGINIA
 !        APRIL 1992
 !-------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: T, U, V, Z, RPINV
-DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, P6, P7, Q1, Q2, Q3, &
-&Q4, Q5, Q6, Q7
-DOUBLE PRECISION :: R0, R1, R2, R3, R4, R5, R6, R7, R8
-DOUBLE PRECISION :: A0, A1, A2, A3, A4, A5, A6, A7, A8, B1, B2, &
-&B3, B4, B5, B6, B7, B8, B9, B10, B11
-DOUBLE PRECISION :: C0, C1, C2, C3, C4, C5, C6, C7, C8, D1, D2, &
-&D3, D4, D5, D6, D7, D8, D9
-DOUBLE PRECISION :: E0, E1, E2, E3
-DOUBLE PRECISION :: S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11
+double precision, intent(in) :: x
+double precision :: t, u, v, z, rpinv
+double precision :: p0, p1, p2, p3, p4, p5, p6, p7, q1, q2, q3, &
+&q4, q5, q6, q7
+double precision :: r0, r1, r2, r3, r4, r5, r6, r7, r8
+double precision :: a0, a1, a2, a3, a4, a5, a6, a7, a8, b1, b2, &
+&b3, b4, b5, b6, b7, b8, b9, b10, b11
+double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, d1, d2, &
+&d3, d4, d5, d6, d7, d8, d9
+double precision :: e0, e1, e2, e3
+double precision :: s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11
 !-------------------------------
 !     RPINV = 1/SQRT(PI)
 !-------------------------------
-DATA RPINV /.56418958354775628694807945156077259D0/
+data rpinv /.56418958354775628694807945156077259d0/
 !-------------------------------
-DATA P0 / .16506148041280876191828601D-03/, &
-&P1 / .15471455377139313353998665D-03/, &
-&P2 / .44852548090298868465196794D-04/, &
-&P3 /-.49177280017226285450486205D-05/, &
-&P4 /-.69353602078656412367801676D-05/, &
-&P5 /-.20508667787746282746857743D-05/, &
-&P6 /-.28982842617824971177267380D-06/, &
-&P7 /-.17272433544836633301127174D-07/
-DATA Q1  /.16272656776533322859856317D+01/, &
-&Q2  /.12040996037066026106794322D+01/, &
-&Q3  /.52400246352158386907601472D+00/, &
-&Q4  /.14497345252798672362384241D+00/, &
-&Q5  /.25592517111042546492590736D-01/, &
-&Q6  /.26869088293991371028123158D-02/, &
-&Q7  /.13133767840925681614496481D-03/
+data p0 / .16506148041280876191828601d-03/, &
+&p1 / .15471455377139313353998665d-03/, &
+&p2 / .44852548090298868465196794d-04/, &
+&p3 /-.49177280017226285450486205d-05/, &
+&p4 /-.69353602078656412367801676d-05/, &
+&p5 /-.20508667787746282746857743d-05/, &
+&p6 /-.28982842617824971177267380d-06/, &
+&p7 /-.17272433544836633301127174d-07/
+data q1  /.16272656776533322859856317d+01/, &
+&q2  /.12040996037066026106794322d+01/, &
+&q3  /.52400246352158386907601472d+00/, &
+&q4  /.14497345252798672362384241d+00/, &
+&q5  /.25592517111042546492590736d-01/, &
+&q6  /.26869088293991371028123158d-02/, &
+&q7  /.13133767840925681614496481d-03/
 !-------------------------------
-DATA R0  / .145589721275038539045668824025D+00/, &
-&R1  /-.273421931495426482902320421863D+00/, &
-&R2  / .226008066916621506788789064272D+00/, &
-&R3  /-.163571895523923805648814425592D+00/, &
-&R4  / .102604312032193978662297299832D+00/, &
-&R5  /-.548023266949835519254211506880D-01/, &
-&R6  / .241432239725390106956523668160D-01/, &
-&R7  /-.822062115403915116036874169600D-02/, &
-&R8  / .180296241564687154310619200000D-02/
+data r0  / .145589721275038539045668824025d+00/, &
+&r1  /-.273421931495426482902320421863d+00/, &
+&r2  / .226008066916621506788789064272d+00/, &
+&r3  /-.163571895523923805648814425592d+00/, &
+&r4  / .102604312032193978662297299832d+00/, &
+&r5  /-.548023266949835519254211506880d-01/, &
+&r6  / .241432239725390106956523668160d-01/, &
+&r7  /-.822062115403915116036874169600d-02/, &
+&r8  / .180296241564687154310619200000d-02/
 !-------------------------------
-DATA A0 /-.45894433406309678202825375D-03/, &
-&A1 /-.12281298722544724287816236D-01/, &
-&A2 /-.91144359512342900801764781D-01/, &
-&A3 /-.28412489223839285652511367D-01/, &
-&A4 / .14083827189977123530129812D+01/, &
-&A5 / .11532175281537044570477189D+01/, &
-&A6 /-.72170903389442152112483632D+01/, &
-&A7 /-.19685597805218214001309225D+01/, &
-&A8 / .93846891504541841150916038D+01/
-DATA B1 / .25136329960926527692263725D+02/, &
-&B2 / .15349442087145759184067981D+03/, &
-&B3 /-.29971215958498680905476402D+03/, &
-&B4 /-.33876477506888115226730368D+04/, &
-&B5 / .28301829314924804988873701D+04/, &
-&B6 / .22979620942196507068034887D+05/, &
-&B7 /-.24280681522998071562462041D+05/, &
-&B8 /-.36680620673264731899504580D+05/, &
-&B9 / .42278731622295627627042436D+05/, &
-&B10/ .28834257644413614344549790D+03/, &
-&B11/ .70226293775648358646587341D+03/
+data a0 /-.45894433406309678202825375d-03/, &
+&a1 /-.12281298722544724287816236d-01/, &
+&a2 /-.91144359512342900801764781d-01/, &
+&a3 /-.28412489223839285652511367d-01/, &
+&a4 / .14083827189977123530129812d+01/, &
+&a5 / .11532175281537044570477189d+01/, &
+&a6 /-.72170903389442152112483632d+01/, &
+&a7 /-.19685597805218214001309225d+01/, &
+&a8 / .93846891504541841150916038d+01/
+data b1 / .25136329960926527692263725d+02/, &
+&b2 / .15349442087145759184067981d+03/, &
+&b3 /-.29971215958498680905476402d+03/, &
+&b4 /-.33876477506888115226730368d+04/, &
+&b5 / .28301829314924804988873701d+04/, &
+&b6 / .22979620942196507068034887d+05/, &
+&b7 /-.24280681522998071562462041d+05/, &
+&b8 /-.36680620673264731899504580d+05/, &
+&b9 / .42278731622295627627042436d+05/, &
+&b10/ .28834257644413614344549790d+03/, &
+&b11/ .70226293775648358646587341d+03/
 !-------------------------------
-DATA C0 /-.7040906288250128001000086D-04/, &
-&C1 /-.3858822461760510359506941D-02/, &
-&C2 /-.7708202127512212359395078D-01/, &
-&C3 /-.6713655014557429480440263D+00/, &
-&C4 /-.2081992124162995545731882D+01/, &
-&C5 / .2898831421475282558867888D+01/, &
-&C6 / .2199509380600429331650192D+02/, &
-&C7 / .2907064664404115316722996D+01/, &
-&C8 /-.4766208741588182425380950D+02/
-DATA D1 / .5238852785508439144747174D+02/, &
-&D2 / .9646843357714742409535148D+03/, &
-&D3 / .7007152775135939601804416D+04/, &
-&D4 / .8515386792259821780601162D+04/, &
-&D5 /-.1002360095177164564992134D+06/, &
-&D6 /-.2065250031331232815791912D+06/, &
-&D7 / .5695324805290370358175984D+06/, &
-&D8 / .6589752493461331195697873D+06/, &
-&D9 /-.1192930193156561957631462D+07/
+data c0 /-.7040906288250128001000086d-04/, &
+&c1 /-.3858822461760510359506941d-02/, &
+&c2 /-.7708202127512212359395078d-01/, &
+&c3 /-.6713655014557429480440263d+00/, &
+&c4 /-.2081992124162995545731882d+01/, &
+&c5 / .2898831421475282558867888d+01/, &
+&c6 / .2199509380600429331650192d+02/, &
+&c7 / .2907064664404115316722996d+01/, &
+&c8 /-.4766208741588182425380950d+02/
+data d1 / .5238852785508439144747174d+02/, &
+&d2 / .9646843357714742409535148d+03/, &
+&d3 / .7007152775135939601804416d+04/, &
+&d4 / .8515386792259821780601162d+04/, &
+&d5 /-.1002360095177164564992134d+06/, &
+&d6 /-.2065250031331232815791912d+06/, &
+&d7 / .5695324805290370358175984d+06/, &
+&d8 / .6589752493461331195697873d+06/, &
+&d9 /-.1192930193156561957631462d+07/
 !-------------------------------
-DATA E0 / .540464821348814822409610122136D+00/, &
-&E1 /-.261515522487415653487049835220D-01/, &
-&E2 /-.288573438386338758794591212600D-02/, &
-&E3 /-.529353396945788057720258856000D-03/
+data e0 / .540464821348814822409610122136d+00/, &
+&e1 /-.261515522487415653487049835220d-01/, &
+&e2 /-.288573438386338758794591212600d-02/, &
+&e3 /-.529353396945788057720258856000d-03/
 !-------------------------------
 !     COEFFICIENTS FOR THE ASYMPTOTIC EXPANSION
 !-------------------------------
-DATA S1  / .75000000000000000000D+00/, &
-&S2  /-.18750000000000000000D+01/, &
-&S3  / .65625000000000000000D+01/, &
-&S4  /-.29531250000000000000D+02/, &
-&S5  / .16242187500000000000D+03/, &
-&S6  /-.10557421875000000000D+04/, &
-&S7  / .79180664062500000000D+04/, &
-&S8  /-.67303564453125000000D+05/, &
-&S9  / .63938386230468750000D+06/, &
-&S10 /-.67135305541992187500D+07/, &
-&S11 / .77205601373291015625D+08/
+data s1  / .75000000000000000000d+00/, &
+&s2  /-.18750000000000000000d+01/, &
+&s3  / .65625000000000000000d+01/, &
+&s4  /-.29531250000000000000d+02/, &
+&s5  / .16242187500000000000d+03/, &
+&s6  /-.10557421875000000000d+04/, &
+&s7  / .79180664062500000000d+04/, &
+&s8  /-.67303564453125000000d+05/, &
+&s9  / .63938386230468750000d+06/, &
+&s10 /-.67135305541992187500d+07/, &
+&s11 / .77205601373291015625d+08/
 !-------------------------------
 !
 !                     1 .LE. X .LE. 2
 !
-IF (X .GT. 2.D0) GO TO 10
-U = ((((((P7*X + P6)*X + P5)*X + P4)*X + P3)*X + &
-&P2)*X + P1)*X + P0
-V = ((((((Q7*X + Q6)*X + Q5)*X + Q4)*X + Q3)*X + &
-&Q2)*X + Q1)*X + 1.D0
+if (x .gt. 2.d0) go to 10
+u = ((((((p7*x + p6)*x + p5)*x + p4)*x + p3)*x + &
+&p2)*x + p1)*x + p0
+v = ((((((q7*x + q6)*x + q5)*x + q4)*x + q3)*x + &
+&q2)*x + q1)*x + 1.d0
 !
-T = (X - 3.75D0)/(X + 3.75D0)
-DERFC0 = (((((((((U/V)*T + R8)*T + R7)*T + R6)*T + R5)*T + &
-&R4)*T + R3)*T + R2)*T + R1)*T + R0
-RETURN
+t = (x - 3.75d0)/(x + 3.75d0)
+derfc0 = (((((((((u/v)*t + r8)*t + r7)*t + r6)*t + r5)*t + &
+&r4)*t + r3)*t + r2)*t + r1)*t + r0
+return
 !
 !                     2 .LT. X .LE. 4
 !
-10 IF (X .GT. 4.D0) GO TO 20
-Z = 1.D0/(2.5D0 + X*X)
-U = (((((((A8*Z + A7)*Z + A6)*Z + A5)*Z + A4)*Z + A3)*Z + &
-&A2)*Z + A1)*Z + A0
-V = ((((((((((B11*Z + B10)*Z + B9)*Z + B8)*Z + B7)*Z + B6)*Z + &
-&B5)*Z + B4)*Z + B3)*Z + B2)*Z + B1)*Z + 1.D0
+10 if (x .gt. 4.d0) go to 20
+z = 1.d0/(2.5d0 + x*x)
+u = (((((((a8*z + a7)*z + a6)*z + a5)*z + a4)*z + a3)*z + &
+&a2)*z + a1)*z + a0
+v = ((((((((((b11*z + b10)*z + b9)*z + b8)*z + b7)*z + b6)*z + &
+&b5)*z + b4)*z + b3)*z + b2)*z + b1)*z + 1.d0
 !
-T = 13.D0*Z - 1.D0
-DERFC0 = ((((U/V)*T + E2)*T + E1)*T + E0)/X
-RETURN
+t = 13.d0*z - 1.d0
+derfc0 = ((((u/v)*t + e2)*t + e1)*t + e0)/x
+return
 !
 !                     4 .LT. X .LT. 50
 !
-20 IF (X .GE. 50.D0) GO TO 30
-Z = 1.D0/(2.5D0 + X*X)
-U = (((((((C8*Z + C7)*Z + C6)*Z + C5)*Z + C4)*Z + C3)*Z + &
-&C2)*Z + C1)*Z + C0
-V = ((((((((D9*Z + D8)*Z + D7)*Z + D6)*Z + D5)*Z + D4)*Z + &
-&D3)*Z + D2)*Z + D1)*Z + 1.D0
+20 if (x .ge. 50.d0) go to 30
+z = 1.d0/(2.5d0 + x*x)
+u = (((((((c8*z + c7)*z + c6)*z + c5)*z + c4)*z + c3)*z + &
+&c2)*z + c1)*z + c0
+v = ((((((((d9*z + d8)*z + d7)*z + d6)*z + d5)*z + d4)*z + &
+&d3)*z + d2)*z + d1)*z + 1.d0
 !
-T = 13.D0*Z - 1.D0
-DERFC0 = (((((U/V)*T + E3)*T + E2)*T + E1)*T + E0)/X
-RETURN
+t = 13.d0*z - 1.d0
+derfc0 = (((((u/v)*t + e3)*t + e2)*t + e1)*t + e0)/x
+return
 !
 !                        X .GE. 50
 !
-30 T = (1.D0/X)**2
-Z = (((((((((((S11*T + S10)*T + S9)*T + S8)*T + S7)*T + &
-&S6)*T + S5)*T + S4)*T + S3)*T + S2)*T + S1)*T - &
-&0.5D0)*T + 1.D0
-DERFC0 = RPINV*(Z/X)
-RETURN
-END FUNCTION DERFC0
+30 t = (1.d0/x)**2
+z = (((((((((((s11*t + s10)*t + s9)*t + s8)*t + s7)*t + &
+&s6)*t + s5)*t + s4)*t + s3)*t + s2)*t + s1)*t - &
+&0.5d0)*t + 1.d0
+derfc0 = rpinv*(z/x)
+return
+end function derfc0
 
-REAL function ERFI (P, Q)
-IMPLICIT NONE
-REAL, INTENT(IN) :: P, Q
-REAL :: C, C1, C2, EPS, S, T, V, V1
-REAL :: SPMPAR
+real function erfi (p, q)
+implicit none
+real, intent(in) :: p, q
+real :: c, c1, c2, eps, s, t, v, v1
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !              EVALUATION OF THE INVERSE ERROR FUNCTION
@@ -7570,111 +7570,111 @@ REAL :: SPMPAR
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 !                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 !-----------------------------------------------------------------------
-REAL :: A(6), B(6), A1(7), B1(7), A2(9), B2(8), A3(9), B3(6)
+real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
 !     C2 = LN(1.E-100)
 !-----------------------------------------------------------------------
-DATA C /.5625/, C1 /.87890625/
-DATA C2 /-.2302585092994046E+03/
+data c /.5625/, c1 /.87890625/
+data c2 /-.2302585092994046e+03/
 !-----------------------------------------------------------------------
 !                            TABLE NO.16
 !-----------------------------------------------------------------------
-DATA A(1)/.1400216916161353E+03/,  A(2)/-.7204275515686407E+03/, &
-&A(3)/.1296708621660511E+04/,  A(4)/-.9697932901514031E+03/, &
-&A(5)/.2762427049269425E+03/,  A(6)/-.2012940180552054E+02/
-DATA B(1)/.1291046303114685E+03/,  B(2)/-.7312308064260973E+03/, &
-&B(3)/.1494970492915789E+04/,  B(4)/-.1337793793683419E+04/, &
-&B(5)/.5033747142783567E+03/,  B(6)/-.6220205554529216E+02/
+data a(1)/.1400216916161353e+03/,  a(2)/-.7204275515686407e+03/, &
+&a(3)/.1296708621660511e+04/,  a(4)/-.9697932901514031e+03/, &
+&a(5)/.2762427049269425e+03/,  a(6)/-.2012940180552054e+02/
+data b(1)/.1291046303114685e+03/,  b(2)/-.7312308064260973e+03/, &
+&b(3)/.1494970492915789e+04/,  b(4)/-.1337793793683419e+04/, &
+&b(5)/.5033747142783567e+03/,  b(6)/-.6220205554529216e+02/
 !-----------------------------------------------------------------------
 !                            TABLE NO.36
 !-----------------------------------------------------------------------
-DATA A1(1)/-.1690478046781745E+00/, A1(2)/.3524374318100228E+01/, &
-&A1(3)/-.2698143370550352E+02/, A1(4)/.9340783041018743E+02/, &
-&A1(5)/-.1455364428646732E+03/, A1(6)/.8805852004723659E+02/, &
-&A1(7)/-.1349018591231947E+02/
-DATA B1(1)/-.1203221171313429E+00/, B1(2)/.2684812231556632E+01/, &
-&B1(3)/-.2242485268704865E+02/, B1(4)/.8723495028643494E+02/, &
-&B1(5)/-.1604352408444319E+03/, B1(6)/.1259117982101525E+03/, &
-&B1(7)/-.3184861786248824E+02/
+data a1(1)/-.1690478046781745e+00/, a1(2)/.3524374318100228e+01/, &
+&a1(3)/-.2698143370550352e+02/, a1(4)/.9340783041018743e+02/, &
+&a1(5)/-.1455364428646732e+03/, a1(6)/.8805852004723659e+02/, &
+&a1(7)/-.1349018591231947e+02/
+data b1(1)/-.1203221171313429e+00/, b1(2)/.2684812231556632e+01/, &
+&b1(3)/-.2242485268704865e+02/, b1(4)/.8723495028643494e+02/, &
+&b1(5)/-.1604352408444319e+03/, b1(6)/.1259117982101525e+03/, &
+&b1(7)/-.3184861786248824e+02/
 !-----------------------------------------------------------------------
 !                            TABLE NO.56
 !-----------------------------------------------------------------------
-DATA A2(1)/.3100808562552958E-04/, A2(2)/.4097487603011940E-02/, &
-&A2(3)/.1214902662897276E+00/, A2(4)/.1109167694639028E+01/, &
-&A2(5)/.3228379855663924E+01/, A2(6)/.2881691815651599E+01/, &
-&A2(7)/.2047972087262996E+01/, A2(8)/.8545922081972148E+00/, &
-&A2(9)/.3551095884622383E-02/
-DATA B2(1)/.3100809298564522E-04/, B2(2)/.4097528678663915E-02/, &
-&B2(3)/.1215907800748757E+00/, B2(4)/.1118627167631696E+01/, &
-&B2(5)/.3432363984305290E+01/, B2(6)/.4140284677116202E+01/, &
-&B2(7)/.4119797271272204E+01/, B2(8)/.2162961962641435E+01/
+data a2(1)/.3100808562552958e-04/, a2(2)/.4097487603011940e-02/, &
+&a2(3)/.1214902662897276e+00/, a2(4)/.1109167694639028e+01/, &
+&a2(5)/.3228379855663924e+01/, a2(6)/.2881691815651599e+01/, &
+&a2(7)/.2047972087262996e+01/, a2(8)/.8545922081972148e+00/, &
+&a2(9)/.3551095884622383e-02/
+data b2(1)/.3100809298564522e-04/, b2(2)/.4097528678663915e-02/, &
+&b2(3)/.1215907800748757e+00/, b2(4)/.1118627167631696e+01/, &
+&b2(5)/.3432363984305290e+01/, b2(6)/.4140284677116202e+01/, &
+&b2(7)/.4119797271272204e+01/, b2(8)/.2162961962641435e+01/
 !-----------------------------------------------------------------------
 !                            TABLE NO.79
 !-----------------------------------------------------------------------
-DATA A3(1)/.3205405422062050E-08/, A3(2)/.1899479322632128E-05/, &
-&A3(3)/.2814223189858532E-03/, A3(4)/.1370504879067817E-01/, &
-&A3(5)/.2268143542005976E+00/, A3(6)/.1098421959892340E+01/, &
-&A3(7)/.6791143397056208E+00/, A3(8)/-.834334189167721E+00/, &
-&A3(9)/.3421951267240343E+00/
-DATA B3(1)/.3205405053282398E-08/, B3(2)/.1899480592260143E-05/, &
-&B3(3)/.2814349691098940E-03/, B3(4)/.1371092249602266E-01/, &
-&B3(5)/.2275172815174473E+00/, B3(6)/.1125348514036959E+01/
+data a3(1)/.3205405422062050e-08/, a3(2)/.1899479322632128e-05/, &
+&a3(3)/.2814223189858532e-03/, a3(4)/.1370504879067817e-01/, &
+&a3(5)/.2268143542005976e+00/, a3(6)/.1098421959892340e+01/, &
+&a3(7)/.6791143397056208e+00/, a3(8)/-.834334189167721e+00/, &
+&a3(9)/.3421951267240343e+00/
+data b3(1)/.3205405053282398e-08/, b3(2)/.1899480592260143e-05/, &
+&b3(3)/.2814349691098940e-03/, b3(4)/.1371092249602266e-01/, &
+&b3(5)/.2275172815174473e+00/, b3(6)/.1125348514036959e+01/
 !-----------------------------------------------------------------------
-IF (P .LT. 0.0 .OR. Q .LE. 0.0) GO TO 100
-EPS = AMAX1(SPMPAR(1),1.E-15)
-T = 0.5 + (0.5 - (P + Q))
-IF (ABS(T) .GT. 3.0*EPS) GO TO 110
+if (p .lt. 0.0 .or. q .le. 0.0) go to 100
+eps = amax1(spmpar(1),1.e-15)
+t = 0.5 + (0.5 - (p + q))
+if (abs(t) .gt. 3.0*eps) go to 110
 !
 !                      0 .LE. P .LE. 0.75
 !
-IF (P .GT. 0.75) GO TO 10
-V = P*P - C
-T = P *  (((((A(6)*V + A(5))*V + A(4))*V + A(3))*V &
-&+ A(2))*V + A(1))
-S = (((((V + B(6))*V + B(5))*V + B(4))*V + B(3))*V &
-&+ B(2))*V + B(1)
-GO TO 40
+if (p .gt. 0.75) go to 10
+v = p*p - c
+t = p *  (((((a(6)*v + a(5))*v + a(4))*v + a(3))*v &
+&+ a(2))*v + a(1))
+s = (((((v + b(6))*v + b(5))*v + b(4))*v + b(3))*v &
+&+ b(2))*v + b(1)
+go to 40
 !
 !                    0.75 .LT. P .LE. 0.9375
 !
-10 IF (P .GT. 0.9375) GO TO 20
-V = P*P - C1
-T = P *  ((((((A1(7)*V + A1(6))*V + A1(5))*V + A1(4))*V &
-&+ A1(3))*V + A1(2))*V + A1(1))
-S = ((((((V + B1(7))*V + B1(6))*V + B1(5))*V + B1(4))*V &
-&+ B1(3))*V + B1(2))*V + B1(1)
-GO TO 40
+10 if (p .gt. 0.9375) go to 20
+v = p*p - c1
+t = p *  ((((((a1(7)*v + a1(6))*v + a1(5))*v + a1(4))*v &
+&+ a1(3))*v + a1(2))*v + a1(1))
+s = ((((((v + b1(7))*v + b1(6))*v + b1(5))*v + b1(4))*v &
+&+ b1(3))*v + b1(2))*v + b1(1)
+go to 40
 !
 !                  1.E-100 .LE. Q .LT. 0.0625
 !
-20 V1 = ALOG(Q)
-V = 1.0/SQRT(-V1)
-IF (V1 .LT. C2) GO TO 30
-T = (((((((A2(9)*V + A2(8))*V + A2(7))*V + A2(6))*V + A2(5))*V &
-&+ A2(4))*V + A2(3))*V + A2(2))*V + A2(1)
-S = V *  ((((((((V + B2(8))*V + B2(7))*V + B2(6))*V + B2(5))*V &
-&+ B2(4))*V + B2(3))*V + B2(2))*V + B2(1))
-GO TO 40
+20 v1 = alog(q)
+v = 1.0/sqrt(-v1)
+if (v1 .lt. c2) go to 30
+t = (((((((a2(9)*v + a2(8))*v + a2(7))*v + a2(6))*v + a2(5))*v &
+&+ a2(4))*v + a2(3))*v + a2(2))*v + a2(1)
+s = v *  ((((((((v + b2(8))*v + b2(7))*v + b2(6))*v + b2(5))*v &
+&+ b2(4))*v + b2(3))*v + b2(2))*v + b2(1))
+go to 40
 !
 !                 1.E-10000 .LE. Q .LT. 1.E-100
 !
-30 T = (((((((A3(9)*V + A3(8))*V + A3(7))*V + A3(6))*V + A3(5))*V &
-&+ A3(4))*V + A3(3))*V + A3(2))*V + A3(1)
-S = V * ((((((V + B3(6))*V + B3(5))*V + B3(4))*V + B3(3))*V &
-&+ B3(2))*V + B3(1))
-40 ERFI = T/S
-RETURN
+30 t = (((((((a3(9)*v + a3(8))*v + a3(7))*v + a3(6))*v + a3(5))*v &
+&+ a3(4))*v + a3(3))*v + a3(2))*v + a3(1)
+s = v * ((((((v + b3(6))*v + b3(5))*v + b3(4))*v + b3(3))*v &
+&+ b3(2))*v + b3(1))
+40 erfi = t/s
+return
 !
 !                         ERROR RETURN
 !
-100 ERFI = -1.0
-RETURN
-110 ERFI = -2.0
-RETURN
-END FUNCTION ERFI
+100 erfi = -1.0
+return
+110 erfi = -2.0
+return
+end function erfi
 
-double precision function DERFI (P, Q)
-IMPLICIT NONE
+double precision function derfi (p, q)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION COMPUTATION OF
@@ -7690,449 +7690,449 @@ IMPLICIT NONE
 !     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 !                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: P, Q
-DOUBLE PRECISION :: C, C1, C2, R, EPS, F, LNQ, S, T, X
-DOUBLE PRECISION :: A(7), A1(7), A2(7), A3(11), A4(9), B(7), &
-&B1(6), B2(6), B3(10), B4(9)
-DOUBLE PRECISION :: DPMPAR, DERF, DERFC1
+double precision, intent(in) :: p, q
+double precision :: c, c1, c2, r, eps, f, lnq, s, t, x
+double precision :: a(7), a1(7), a2(7), a3(11), a4(9), b(7), &
+&b1(6), b2(6), b3(10), b4(9)
+double precision :: dpmpar, derf, derfc1
 !-----------------------------------------------------------------------
 !     C2 = LN(1.E-100)
 !     R  = SQRT(PI)/2
 !-----------------------------------------------------------------------
-DATA C /.5625D0/, C1 /.87890625D0/
-DATA C2 /-.2302585092994045684017991454684364D+03/
-DATA R   /.8862269254527580136490837416705726D+00/
+data c /.5625d0/, c1 /.87890625d0/
+data c2 /-.2302585092994045684017991454684364d+03/
+data r   /.8862269254527580136490837416705726d+00/
 !-----------------------
-DATA A(1)/.841467547194693616D-01/, A(2)/.160499904248262200D+01/, &
-&A(3)/.809451641478547505D+01/, A(4)/.164273396973002581D+02/, &
-&A(5)/.154297507839223692D+02/, A(6)/.669584134660994039D+01/, &
-&A(7)/.108455979679682472D+01/
-DATA B(1)/.352281538790042405D-02/, B(2)/.293409069065309557D+00/, &
-&B(3)/.326709873508963100D+01/, B(4)/.123611641257633210D+02/, &
-&B(5)/.207984023857547070D+02/, B(6)/.170791197367677668D+02/, &
-&B(7)/.669253523595376683D+01/
+data a(1)/.841467547194693616d-01/, a(2)/.160499904248262200d+01/, &
+&a(3)/.809451641478547505d+01/, a(4)/.164273396973002581d+02/, &
+&a(5)/.154297507839223692d+02/, a(6)/.669584134660994039d+01/, &
+&a(7)/.108455979679682472d+01/
+data b(1)/.352281538790042405d-02/, b(2)/.293409069065309557d+00/, &
+&b(3)/.326709873508963100d+01/, b(4)/.123611641257633210d+02/, &
+&b(5)/.207984023857547070d+02/, b(6)/.170791197367677668d+02/, &
+&b(7)/.669253523595376683d+01/
 !-----------------------
-DATA A1(1)/.552755110179178015D+2/, A1(2)/.657347545992519152D+3/, &
-&A1(3)/.124276851197202733D+4/, A1(4)/.818859792456464820D+3/, &
-&A1(5)/.234425632359410093D+3/, A1(6)/.299942187305427917D+2/, &
-&A1(7)/.140496035731853946D+1/
-DATA B1(1)/.179209835890172156D+3/, B1(2)/.991315839349539886D+3/, &
-&B1(3)/.138271033653003487D+4/, B1(4)/.764020340925985926D+3/, &
-&B1(5)/.194354053300991923D+3/, B1(6)/.228139510050586581D+2/
+data a1(1)/.552755110179178015d+2/, a1(2)/.657347545992519152d+3/, &
+&a1(3)/.124276851197202733d+4/, a1(4)/.818859792456464820d+3/, &
+&a1(5)/.234425632359410093d+3/, a1(6)/.299942187305427917d+2/, &
+&a1(7)/.140496035731853946d+1/
+data b1(1)/.179209835890172156d+3/, b1(2)/.991315839349539886d+3/, &
+&b1(3)/.138271033653003487d+4/, b1(4)/.764020340925985926d+3/, &
+&b1(5)/.194354053300991923d+3/, b1(6)/.228139510050586581d+2/
 !-----------------------
-DATA A2(1)/.500926197430588206D+1/, A2(2)/.111349802614499199D+3/, &
-&A2(3)/.353872732756132161D+3/, A2(4)/.356000407341490731D+3/, &
-&A2(5)/.143264457509959760D+3/, A2(6)/.240823237485307567D+2/, &
-&A2(7)/.140496035273226366D+1/
-DATA B2(1)/.209004294324106981D+2/, B2(2)/.198607335199741185D+3/, &
-&B2(3)/.439311287748524270D+3/, B2(4)/.355415991280861051D+3/, &
-&B2(5)/.123303672628828521D+3/, B2(6)/.186060775181898848D+2/
+data a2(1)/.500926197430588206d+1/, a2(2)/.111349802614499199d+3/, &
+&a2(3)/.353872732756132161d+3/, a2(4)/.356000407341490731d+3/, &
+&a2(5)/.143264457509959760d+3/, a2(6)/.240823237485307567d+2/, &
+&a2(7)/.140496035273226366d+1/
+data b2(1)/.209004294324106981d+2/, b2(2)/.198607335199741185d+3/, &
+&b2(3)/.439311287748524270d+3/, b2(4)/.355415991280861051d+3/, &
+&b2(5)/.123303672628828521d+3/, b2(6)/.186060775181898848d+2/
 !-----------------------------------------------------------------------
 !                       MODIFIED TABLE NO.59
 !-----------------------------------------------------------------------
-DATA A3(1) /.237121026548776092D4/, A3(2) /.732899958728969905D6/, &
-&A3(3) /.182063754893444775D7/, A3(4) /.269191299062422172D7/, &
-&A3(5) /.304817224671614253D7/, A3(6) /.130643103351072345D7/, &
-&A3(7) /.296799076241952125D6/, A3(8) /.457006532030955554D5/, &
-&A3(9) /.373449801680687213D4/, A3(10)/.118062255483596543D3/, &
-&A3(11)/.100000329157954960D1/
-DATA B3(1) /.851911109952055378D6/, B3(2) /.194746720192729966D7/, &
-&B3(3) /.373640079258593694D7/, B3(4) /.397271370110424145D7/, &
-&B3(5) /.339457682064283712D7/, B3(6) /.136888294898155938D7/, &
-&B3(7) /.303357770911491406D6/, B3(8) /.459721480357533823D5/, &
-&B3(9) /.373762573565814355D4/, B3(10)/.118064334590001264D3/
+data a3(1) /.237121026548776092d4/, a3(2) /.732899958728969905d6/, &
+&a3(3) /.182063754893444775d7/, a3(4) /.269191299062422172d7/, &
+&a3(5) /.304817224671614253d7/, a3(6) /.130643103351072345d7/, &
+&a3(7) /.296799076241952125d6/, a3(8) /.457006532030955554d5/, &
+&a3(9) /.373449801680687213d4/, a3(10)/.118062255483596543d3/, &
+&a3(11)/.100000329157954960d1/
+data b3(1) /.851911109952055378d6/, b3(2) /.194746720192729966d7/, &
+&b3(3) /.373640079258593694d7/, b3(4) /.397271370110424145d7/, &
+&b3(5) /.339457682064283712d7/, b3(6) /.136888294898155938d7/, &
+&b3(7) /.303357770911491406d6/, b3(8) /.459721480357533823d5/, &
+&b3(9) /.373762573565814355d4/, b3(10)/.118064334590001264d3/
 !-----------------------------------------------------------------------
 !                       MODIFIED TABLE NO.82
 !-----------------------------------------------------------------------
-DATA A4(1)/.154269429680540807D12/, A4(2)/.430207405012067454D12/, &
-&A4(3)/.182623446525965017D12/, A4(4)/.248740194409838713D11/, &
-&A4(5)/.133506080294978121D10/, A4(6)/.302446226073105850D08/, &
-&A4(7)/.285909602878724425D06/, A4(8)/.101789226017835707D04/, &
-&A4(9)/.100000004821118676D01/
-DATA B4(1)/.220533001293836387D12/, B4(2)/.347822938010402687D12/, &
-&B4(3)/.468373326975152250D12/, B4(4)/.185251723580351631D12/, &
-&B4(5)/.249464490520921771D11/, B4(6)/.133587491840784926D10/, &
-&B4(7)/.302480682561295591D08/, B4(8)/.285913799407861384D06/, &
-&B4(9)/.101789250893050230D04/
+data a4(1)/.154269429680540807d12/, a4(2)/.430207405012067454d12/, &
+&a4(3)/.182623446525965017d12/, a4(4)/.248740194409838713d11/, &
+&a4(5)/.133506080294978121d10/, a4(6)/.302446226073105850d08/, &
+&a4(7)/.285909602878724425d06/, a4(8)/.101789226017835707d04/, &
+&a4(9)/.100000004821118676d01/
+data b4(1)/.220533001293836387d12/, b4(2)/.347822938010402687d12/, &
+&b4(3)/.468373326975152250d12/, b4(4)/.185251723580351631d12/, &
+&b4(5)/.249464490520921771d11/, b4(6)/.133587491840784926d10/, &
+&b4(7)/.302480682561295591d08/, b4(8)/.285913799407861384d06/, &
+&b4(9)/.101789250893050230d04/
 !-----------------------------------------------------------------------
-IF (P .LT. 0.D0 .OR. Q .LE. 0.D0) GO TO 100
-EPS = DPMPAR(1)
-T = 0.5D0 + (0.5D0 - (P + Q))
-IF (DABS(T) .GT. 3.D0*EPS) GO TO 110
+if (p .lt. 0.d0 .or. q .le. 0.d0) go to 100
+eps = dpmpar(1)
+t = 0.5d0 + (0.5d0 - (p + q))
+if (dabs(t) .gt. 3.d0*eps) go to 110
 !
 !                      0 .LE. P .LE. 0.75
 !
-IF (P .GT. 0.75D0) GO TO 10
-X = C - P*P
-S = (((((A(1)*X + A(2))*X + A(3))*X + A(4))*X + A(5))*X &
-&+ A(6))*X + A(7)
-T = ((((((B(1)*X + B(2))*X + B(3))*X + B(4))*X + B(5))*X &
-&+ B(6))*X + B(7))*X + 1.D0
-DERFI = P*(S/T)
-IF (EPS .GT. 1.D-19) RETURN
+if (p .gt. 0.75d0) go to 10
+x = c - p*p
+s = (((((a(1)*x + a(2))*x + a(3))*x + a(4))*x + a(5))*x &
+&+ a(6))*x + a(7)
+t = ((((((b(1)*x + b(2))*x + b(3))*x + b(4))*x + b(5))*x &
+&+ b(6))*x + b(7))*x + 1.d0
+derfi = p*(s/t)
+if (eps .gt. 1.d-19) return
 !
-X = DERFI
-F = DERF(X) - P
-DERFI = X - R * DEXP(X*X) * F
-RETURN
+x = derfi
+f = derf(x) - p
+derfi = x - r * dexp(x*x) * f
+return
 !
 !                    0.75 .LT. P .LE. 0.9375
 !
-10 IF (P .GT. 0.9375D0) GO TO 40
-X = C1 - P*P
-IF (X .GT. 0.1D0) GO TO 20
-S = ((((((A1(1)*X + A1(2))*X + A1(3))*X + A1(4))*X &
-&+ A1(5))*X + A1(6))*X + A1(7))
-T = ((((((B1(1)*X + B1(2))*X + B1(3))*X + B1(4))*X &
-&+ B1(5))*X + B1(6))*X + 1.D0)
-GO TO 30
+10 if (p .gt. 0.9375d0) go to 40
+x = c1 - p*p
+if (x .gt. 0.1d0) go to 20
+s = ((((((a1(1)*x + a1(2))*x + a1(3))*x + a1(4))*x &
+&+ a1(5))*x + a1(6))*x + a1(7))
+t = ((((((b1(1)*x + b1(2))*x + b1(3))*x + b1(4))*x &
+&+ b1(5))*x + b1(6))*x + 1.d0)
+go to 30
 !
-20 S = ((((((A2(1)*X + A2(2))*X + A2(3))*X + A2(4))*X &
-&+ A2(5))*X + A2(6))*X + A2(7))
-T = ((((((B2(1)*X + B2(2))*X + B2(3))*X + B2(4))*X &
-&+ B2(5))*X + B2(6))*X + 1.D0)
+20 s = ((((((a2(1)*x + a2(2))*x + a2(3))*x + a2(4))*x &
+&+ a2(5))*x + a2(6))*x + a2(7))
+t = ((((((b2(1)*x + b2(2))*x + b2(3))*x + b2(4))*x &
+&+ b2(5))*x + b2(6))*x + 1.d0)
 !
-30 DERFI = P*(S/T)
-IF (EPS .GT. 1.D-19) RETURN
+30 derfi = p*(s/t)
+if (eps .gt. 1.d-19) return
 !
-X = DERFI
-T = DERFC1(1,X) - DEXP(X*X)*Q
-DERFI = X + R * T
-RETURN
+x = derfi
+t = derfc1(1,x) - dexp(x*x)*q
+derfi = x + r * t
+return
 !
 !                  1.E-100 .LE. Q .LT. 0.0625
 !
-40 LNQ = DLOG(Q)
-X = 1.D0/DSQRT(- LNQ)
-IF (LNQ .LT. C2) GO TO 50
-S = (((((((((A3(1)*X + A3(2))*X + A3(3))*X + A3(4))*X + A3(5))*X &
-&+ A3(6))*X + A3(7))*X + A3(8))*X + A3(9))*X &
-&+ A3(10))*X + A3(11)
-T = (((((((((B3(1)*X + B3(2))*X + B3(3))*X + B3(4))*X + B3(5))*X &
-&+ B3(6))*X + B3(7))*X + B3(8))*X + B3(9))*X &
-&+ B3(10))*X + 1.D0
-GO TO 60
+40 lnq = dlog(q)
+x = 1.d0/dsqrt(- lnq)
+if (lnq .lt. c2) go to 50
+s = (((((((((a3(1)*x + a3(2))*x + a3(3))*x + a3(4))*x + a3(5))*x &
+&+ a3(6))*x + a3(7))*x + a3(8))*x + a3(9))*x &
+&+ a3(10))*x + a3(11)
+t = (((((((((b3(1)*x + b3(2))*x + b3(3))*x + b3(4))*x + b3(5))*x &
+&+ b3(6))*x + b3(7))*x + b3(8))*x + b3(9))*x &
+&+ b3(10))*x + 1.d0
+go to 60
 !
 !                 1.E-10000 .LE. Q .LT. 1.E-100
 !
-50 S = (((((((A4(1)*X + A4(2))*X + A4(3))*X + A4(4))*X + A4(5))*X &
-&+ A4(6))*X + A4(7))*X + A4(8))*X + A4(9)
-T = ((((((((B4(1)*X + B4(2))*X + B4(3))*X + B4(4))*X + B4(5))*X &
-&+ B4(6))*X + B4(7))*X + B4(8))*X + B4(9))*X + 1.D0
+50 s = (((((((a4(1)*x + a4(2))*x + a4(3))*x + a4(4))*x + a4(5))*x &
+&+ a4(6))*x + a4(7))*x + a4(8))*x + a4(9)
+t = ((((((((b4(1)*x + b4(2))*x + b4(3))*x + b4(4))*x + b4(5))*x &
+&+ b4(6))*x + b4(7))*x + b4(8))*x + b4(9))*x + 1.d0
 !
-60 DERFI = S/(X*T)
-IF (EPS .GT. 5.D-20) RETURN
+60 derfi = s/(x*t)
+if (eps .gt. 5.d-20) return
 !
-X = DERFI
-T = DERFC1(1,X)
-F = (DLOG(T) - LNQ) - X*X
-DERFI = X + R*T*F
-RETURN
+x = derfi
+t = derfc1(1,x)
+f = (dlog(t) - lnq) - x*x
+derfi = x + r*t*f
+return
 !
 !                         ERROR RETURN
 !
-100 DERFI = -1.D0
-RETURN
-110 DERFI = -2.D0
-RETURN
-END FUNCTION DERFI
+100 derfi = -1.d0
+return
+110 derfi = -2.d0
+return
+end function derfi
 
-REAL function AERF (X, H)
-IMPLICIT NONE
-REAL, INTENT(IN) :: H, X
-INTEGER :: J, N, N1
-REAL :: A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, &
-&U, V, X2, XMH, XPH, Z
-REAL :: EPSLN
-REAL :: EXPARG
-REAL :: SPMPAR
+real function aerf (x, h)
+implicit none
+real, intent(in) :: h, x
+integer :: j, n, n1
+real :: a2, ah, ax, c, dn2, e, eps, h2, h3, hf, hg, p, s, st, t, &
+&u, v, x2, xmh, xph, z
+real :: epsln
+real :: exparg
+real :: spmpar
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
 !     C = 2/SQRT(PI)
 !     P = LN(9*SQRT(PI))
 !---------------------
-DATA C /1.12837916709551257/, P /2.76959/
+data c /1.12837916709551257/, p /2.76959/
 !---------------------
 !
 !     **** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !          SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
 !
-                 EPS = SPMPAR(1)
+                 eps = spmpar(1)
 !
 !---------------------
-AERF = 0.0
-IF (H .EQ. 0.0) RETURN
+aerf = 0.0
+if (h .eq. 0.0) return
 !
-AH = ABS(H)
-AX = ABS(X)
-XPH = AX + AH
-XMH = AX - AH
+ah = abs(h)
+ax = abs(x)
+xph = ax + ah
+xmh = ax - ah
 !
-T = AMAX1(AH,AX)
-T = T*T
-IF (1.6*T*T .LT. EPS) GO TO 140
-IF ((AX*AH)**2 .LT. 0.5*EPS) GO TO 150
-IF (AX .LE. AH) GO TO 100
+t = amax1(ah,ax)
+t = t*t
+if (1.6*t*t .lt. eps) go to 140
+if ((ax*ah)**2 .lt. 0.5*eps) go to 150
+if (ax .le. ah) go to 100
 !
-IF (XMH .LT. 9.0) GO TO 5
-   IF (XMH*XMH + P .GT. -EXPARG(1)) RETURN
-5 IF (4.0*AH*AX .GT. -EPSLN(0)) GO TO 120
+if (xmh .lt. 9.0) go to 5
+   if (xmh*xmh + p .gt. -exparg(1)) return
+5 if (4.0*ah*ax .gt. -epsln(0)) go to 120
 !
-IF (AX .GT. 3.0*AH) GO TO 10
-IF (XPH .LT. 1.0) GO TO 110
-GO TO 130
+if (ax .gt. 3.0*ah) go to 10
+if (xph .lt. 1.0) go to 110
+go to 130
 !-------------------------------------------------
 !        FOR (AX LESS THAN OR EQUAL TO .40)
 !-------------------------------------------------
-10 E = AMAX1(1.E-15,EPS)
-IF (AX .GT. 0.40) GO TO 30
-H2 = XPH*XPH
-A2 = XMH*XMH
-X2 = AX + AX
-ST = 1.
-HF = XMH
-N = 0
-N1 = 1
-DN2 = 1.
-S = 0.
-20 N = N + 1
-  N1 = N1 + 2
-  DN2 = -DN2/N
-  ST = H2*ST + X2*HF
-  HF = A2*HF
-  T = ST*DN2/N1
-  S = S + T
-  IF (ABS(T) .GT. E*ABS(S)) GO TO 20
-S = 0.5 + (S + 0.5)
-AERF = 2.0*C*AH*S
-GO TO 45
+10 e = amax1(1.e-15,eps)
+if (ax .gt. 0.40) go to 30
+h2 = xph*xph
+a2 = xmh*xmh
+x2 = ax + ax
+st = 1.
+hf = xmh
+n = 0
+n1 = 1
+dn2 = 1.
+s = 0.
+20 n = n + 1
+  n1 = n1 + 2
+  dn2 = -dn2/n
+  st = h2*st + x2*hf
+  hf = a2*hf
+  t = st*dn2/n1
+  s = s + t
+  if (abs(t) .gt. e*abs(s)) go to 20
+s = 0.5 + (s + 0.5)
+aerf = 2.0*c*ah*s
+go to 45
 !-------------------------------------------------
 !        FOR (AX GREATER THAN .40)
 !-------------------------------------------------
-30 N = 1
-J = 0
-H2 = 0.
-Z = EXP(-0.5*AX*AX)
-U = 2.0*AH*C*Z
-H3 = Z
-V = 2.0*H*H
-HF = 2.0*AX*AH
-S = 0.
-35 H2 = (HF*H3 - V*H2)/N
-  N = N + 1
-  H3 = (HF*H2 - V*H3)/N
-  N = N + 1
-  HG = H3/N
-  S = S + HG
-  IF (ABS(HG) .GT. E*ABS(S)) GO TO 35
-  IF (J .NE. 0) GO TO 40
-  J = 1
-  GO TO 35
-40 AERF = U*(S + Z)
-45 IF (H .LT. 0.0) AERF = -AERF
-RETURN
+30 n = 1
+j = 0
+h2 = 0.
+z = exp(-0.5*ax*ax)
+u = 2.0*ah*c*z
+h3 = z
+v = 2.0*h*h
+hf = 2.0*ax*ah
+s = 0.
+35 h2 = (hf*h3 - v*h2)/n
+  n = n + 1
+  h3 = (hf*h2 - v*h3)/n
+  n = n + 1
+  hg = h3/n
+  s = s + hg
+  if (abs(hg) .gt. e*abs(s)) go to 35
+  if (j .ne. 0) go to 40
+  j = 1
+  go to 35
+40 aerf = u*(s + z)
+45 if (h .lt. 0.0) aerf = -aerf
+return
 !-------------------------------------------------
 !        SPECIAL CASES
 !-------------------------------------------------
-100 IF (XPH .LT. 5.8) GO TO 110
-IF (XMH .GT. -5.6) GO TO 120
-AERF = SIGN(2.0,H)
-RETURN
+100 if (xph .lt. 5.8) go to 110
+if (xmh .gt. -5.6) go to 120
+aerf = sign(2.0,h)
+return
 !
-110 AERF = ERF(XPH) - ERF(XMH)
-IF (H .LT. 0.0) AERF = -AERF
-RETURN
+110 aerf = erf(xph) - erf(xmh)
+if (h .lt. 0.0) aerf = -aerf
+return
 !
-120 AERF = ERFC(XMH)
-IF (H .LT. 0.0) AERF = -AERF
-RETURN
+120 aerf = erfc(xmh)
+if (h .lt. 0.0) aerf = -aerf
+return
 !
-130 AERF = ERFC(XMH) - ERFC(XPH)
-IF (H .LT. 0.0) AERF = -AERF
-RETURN
+130 aerf = erfc(xmh) - erfc(xph)
+if (h .lt. 0.0) aerf = -aerf
+return
 !
-140 AERF = 2.0*C*H*(0.5 + (0.5 - (X*X + H*H/3.0)))
-RETURN
+140 aerf = 2.0*c*h*(0.5 + (0.5 - (x*x + h*h/3.0)))
+return
 !
 !     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
 !
-150 T = 2.0
-X2 = X*X
-IF (X2 .GE. EPS) T = 2.0*EXP(-X2)
-IF (H*H .GE. 3.0*EPS) GO TO 160
-   AERF = C*H*T
-   RETURN
-160 AERF = T*ERF(H)
-RETURN
-END FUNCTION AERF
+150 t = 2.0
+x2 = x*x
+if (x2 .ge. eps) t = 2.0*exp(-x2)
+if (h*h .ge. 3.0*eps) go to 160
+   aerf = c*h*t
+   return
+160 aerf = t*erf(h)
+return
+end function aerf
 
-double precision function DAERF (X, H)
-IMPLICIT NONE
-INTEGER :: J
+double precision function daerf (x, h)
+implicit none
+integer :: j
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X, H
-DOUBLE PRECISION :: AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, N, &
-&N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
-DOUBLE PRECISION :: DERF, DERFC, DPMPAR, DEPSLN, DXPARG
+double precision, intent(in) :: x, h
+double precision :: ah, ax, a2, c, dn2, e, eps, hf, hg, h2, h3, n, &
+&n1, p, s, st, t, u, v, xmh, xph, x2, z
+double precision :: derf, derfc, dpmpar, depsln, dxparg
 !---------------------
 !     C = 2/SQRT(PI)
 !     P = LN(9*SQRT(PI))
 !---------------------
-DATA C /1.12837916709551257389615890312155D0/
-DATA P /2.76959D0/
+data c /1.12837916709551257389615890312155d0/
+data p /2.76959d0/
 !---------------------
 !
 !     **** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !          SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0 .
 !
-                 EPS = DPMPAR(1)
+                 eps = dpmpar(1)
 !
 !---------------------
-DAERF = 0.D0
-IF (H .EQ. 0.D0) RETURN
+daerf = 0.d0
+if (h .eq. 0.d0) return
 !
-AH = DABS(H)
-AX = DABS(X)
-XPH = AX + AH
-XMH = AX - AH
+ah = dabs(h)
+ax = dabs(x)
+xph = ax + ah
+xmh = ax - ah
 !
-T = DMAX1(AH,AX)
-T = T*T
-IF (1.6D0*T*T .LT. EPS) GO TO 140
-IF ((AX*AH)**2 .LT. 0.5D0*EPS) GO TO 150
-IF (AX .LE. AH) GO TO 100
+t = dmax1(ah,ax)
+t = t*t
+if (1.6d0*t*t .lt. eps) go to 140
+if ((ax*ah)**2 .lt. 0.5d0*eps) go to 150
+if (ax .le. ah) go to 100
 !
-IF (XMH .LT. 9.D0) GO TO 5
-   IF (XMH*XMH + P .GT. -DXPARG(1)) RETURN
-5 IF (4.D0*AH*AX .GT. -DEPSLN(0)) GO TO 120
+if (xmh .lt. 9.d0) go to 5
+   if (xmh*xmh + p .gt. -dxparg(1)) return
+5 if (4.d0*ah*ax .gt. -depsln(0)) go to 120
 !
-IF (AX .GT. 3.D0*AH) GO TO 10
-IF (XPH .LT. 1.D0) GO TO 110
-GO TO 130
+if (ax .gt. 3.d0*ah) go to 10
+if (xph .lt. 1.d0) go to 110
+go to 130
 !-------------------------------------------------
 !        FOR (AX LESS THAN OR EQUAL TO .40)
 !-------------------------------------------------
-10 E = DMAX1(1.D-30,EPS)
-IF (AX .GT. 0.4D0) GO TO 30
-H2 = XPH*XPH
-A2 = XMH*XMH
-X2 = AX + AX
-ST = 1.D0
-HF = XMH
-N = 0.D0
-N1 = 1.D0
-DN2 = 1.D0
-S = 0.D0
-20 N = N + 1.D0
-  N1 = N1 + 2.D0
-  DN2 = -DN2/N
-  ST = H2*ST + X2*HF
-  HF = A2*HF
-  T = ST*DN2/N1
-  S = S + T
-  IF (DABS(T) .GT. E*DABS(S)) GO TO 20
-S = 0.5D0 + (0.5D0 + S)
-DAERF = 2.D0*C*AH*S
-GO TO 45
+10 e = dmax1(1.d-30,eps)
+if (ax .gt. 0.4d0) go to 30
+h2 = xph*xph
+a2 = xmh*xmh
+x2 = ax + ax
+st = 1.d0
+hf = xmh
+n = 0.d0
+n1 = 1.d0
+dn2 = 1.d0
+s = 0.d0
+20 n = n + 1.d0
+  n1 = n1 + 2.d0
+  dn2 = -dn2/n
+  st = h2*st + x2*hf
+  hf = a2*hf
+  t = st*dn2/n1
+  s = s + t
+  if (dabs(t) .gt. e*dabs(s)) go to 20
+s = 0.5d0 + (0.5d0 + s)
+daerf = 2.d0*c*ah*s
+go to 45
 !-------------------------------------------------
 !        FOR (AX GREATER THAN .40)
 !-------------------------------------------------
-30 N = 1.D0
-J = 0
-H2 = 0.D0
-Z = DEXP(-0.5D0*AX*AX)
-U = 2.D0*AH*C*Z
-H3 = Z
-V = 2.D0*H*H
-HF = 2.D0*AX*AH
-S = 0.D0
-35 H2 = (HF*H3 - V*H2)/N
-  N = N + 1.D0
-  H3 = (HF*H2 - V*H3)/N
-  N = N + 1.D0
-  HG = H3/N
-  S = S + HG
-  IF (DABS(HG) .GT. E*DABS(S)) GO TO 35
-  IF (J .NE. 0) GO TO 40
-  J = 1
-  GO TO 35
-40 DAERF = U*(S + Z)
-45 IF (H .LT. 0.D0) DAERF = -DAERF
-RETURN
+30 n = 1.d0
+j = 0
+h2 = 0.d0
+z = dexp(-0.5d0*ax*ax)
+u = 2.d0*ah*c*z
+h3 = z
+v = 2.d0*h*h
+hf = 2.d0*ax*ah
+s = 0.d0
+35 h2 = (hf*h3 - v*h2)/n
+  n = n + 1.d0
+  h3 = (hf*h2 - v*h3)/n
+  n = n + 1.d0
+  hg = h3/n
+  s = s + hg
+  if (dabs(hg) .gt. e*dabs(s)) go to 35
+  if (j .ne. 0) go to 40
+  j = 1
+  go to 35
+40 daerf = u*(s + z)
+45 if (h .lt. 0.d0) daerf = -daerf
+return
 !-------------------------------------------------
 !        SPECIAL CASES
 !-------------------------------------------------
-100 IF (XPH .LT. 8.5D0) GO TO 110
-IF (XMH .GT. -8.3D0) GO TO 120
-DAERF = DSIGN(2.D0,H)
-RETURN
+100 if (xph .lt. 8.5d0) go to 110
+if (xmh .gt. -8.3d0) go to 120
+daerf = dsign(2.d0,h)
+return
 !
-110 DAERF = DERF(XPH) - DERF(XMH)
-IF (H .LT. 0.D0) DAERF = -DAERF
-RETURN
+110 daerf = derf(xph) - derf(xmh)
+if (h .lt. 0.d0) daerf = -daerf
+return
 !
-120 DAERF = DERFC(XMH)
-IF (H .LT. 0.D0) DAERF = -DAERF
-RETURN
+120 daerf = derfc(xmh)
+if (h .lt. 0.d0) daerf = -daerf
+return
 !
-130 DAERF = DERFC(XMH) - DERFC(XPH)
-IF (H .LT. 0.D0) DAERF = -DAERF
-RETURN
+130 daerf = derfc(xmh) - derfc(xph)
+if (h .lt. 0.d0) daerf = -daerf
+return
 !
-140 DAERF = 2.D0*C*H*(0.5D0 + (0.5D0 - (X*X + H*H/3.D0)))
-RETURN
+140 daerf = 2.d0*c*h*(0.5d0 + (0.5d0 - (x*x + h*h/3.d0)))
+return
 !
 !     THE VALUE IS  2.0*EXP(-X*X)*ERF(H)
 !
-150 T = 2.D0
-X2 = X*X
-IF (X2 .GE. EPS) T = 2.D0*DEXP(-X2)
-IF (H*H .GE. 3.D0*EPS) GO TO 160
-   DAERF = C*H*T
-   RETURN
-160 DAERF = T*DERF(H)
-RETURN
-END FUNCTION DAERF
+150 t = 2.d0
+x2 = x*x
+if (x2 .ge. eps) t = 2.d0*dexp(-x2)
+if (h*h .ge. 3.d0*eps) go to 160
+   daerf = c*h*t
+   return
+160 daerf = t*derf(h)
+return
+end function daerf
 
-FUNCTION PNDF(X,IND)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IND
-REAL, INTENT(IN) :: X
-REAL :: A, C, T
-REAL :: PNDF
-REAL :: ERFC1
+function pndf(x,ind)
+implicit none
+integer, intent(in) :: ind
+real, intent(in) :: x
+real :: a, c, t
+real :: pndf
+real :: erfc1
 !     ---------------
 !     A = 1/SQRT(2)
 !     C = SQRT(2/PI)
 !     ---------------
-DATA A/.707106781186548/
-DATA C/.797884560802865/
+data a/.707106781186548/
+data c/.797884560802865/
 !     ---------------
-T = A*X
-IF (IND .NE. 0) GO TO 20
-IF (X .LT. -8.0) GO TO 10
-PNDF = 0.5*ERFC1(0,-T)
-RETURN
-10 PNDF = C/ERFC1(1,-T)
-RETURN
-20 IF (X .GT. 8.0) GO TO 30
-PNDF = 0.5*ERFC1(0,T)
-RETURN
-30 PNDF = C/ERFC1(1,T)
-RETURN
-END FUNCTION PNDF
+t = a*x
+if (ind .ne. 0) go to 20
+if (x .lt. -8.0) go to 10
+pndf = 0.5*erfc1(0,-t)
+return
+10 pndf = c/erfc1(1,-t)
+return
+20 if (x .gt. 8.0) go to 30
+pndf = 0.5*erfc1(0,t)
+return
+30 pndf = c/erfc1(1,t)
+return
+end function pndf
 
-SUBROUTINE PNI (P, Q, D, W, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-REAL, INTENT(IN) :: D, P, Q
-REAL, INTENT(INOUT) :: W
-REAL :: EPS, RT2, T, U, V
-REAL :: ERFI
-REAL :: SPMPAR
+subroutine pni (p, q, d, w, ierr)
+implicit none
+integer, intent(inout) :: ierr
+real, intent(in) :: d, p, q
+real, intent(inout) :: w
+real :: eps, rt2, t, u, v
+real :: erfi
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -8156,35 +8156,35 @@ REAL :: SPMPAR
 !-----------------------------------------------------------------------
 !     RT2 = SQRT(2)
 !------------------------
-DATA RT2 /1.414213562373095/
+data rt2 /1.414213562373095/
 !------------------------
-T = AMIN1(P,Q)
-IF (T .LE. 0.0) GO TO 10
-EPS = AMAX1(SPMPAR(1),1.E-15)
-W = 0.5 + (0.5 - (P + Q))
-IF (ABS(W) .GT. 2.0*EPS) GO TO 10
+t = amin1(p,q)
+if (t .le. 0.0) go to 10
+eps = amax1(spmpar(1),1.e-15)
+w = 0.5 + (0.5 - (p + q))
+if (abs(w) .gt. 2.0*eps) go to 10
 !
-U = ABS(D + D)
-V = T + T
-W = ERFI(U, V)
-IF (W .LT. 0.0) GO TO 20
+u = abs(d + d)
+v = t + t
+w = erfi(u, v)
+if (w .lt. 0.0) go to 20
 !
-IERR = 0
-W = RT2*W
-IF (D .LT. 0.0) W = - W
-RETURN
+ierr = 0
+w = rt2*w
+if (d .lt. 0.0) w = - w
+return
 !
 !                         ERROR RETURN
 !
-10 IERR = 1
-RETURN
-20 IERR = 2
-RETURN
-END SUBROUTINE PNI
+10 ierr = 1
+return
+20 ierr = 2
+return
+end subroutine pni
 
-SUBROUTINE DPNI (P, Q, D, W, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
+subroutine dpni (p, q, d, w, ierr)
+implicit none
+integer, intent(inout) :: ierr
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -8206,42 +8206,42 @@ INTEGER, INTENT(INOUT) :: IERR
 !       IERR = 2  D IS INCORRECT.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: P, Q, D
-DOUBLE PRECISION, INTENT(INOUT) :: W
-DOUBLE PRECISION :: EPS, RT2, U, V, T
-DOUBLE PRECISION :: DPMPAR, DERFI
+double precision, intent(in) :: p, q, d
+double precision, intent(inout) :: w
+double precision :: eps, rt2, u, v, t
+double precision :: dpmpar, derfi
 !------------------------
 !     RT2 = SQRT(2)
 !------------------------
-DATA RT2 /1.4142135623730950488016887242097D0/
+data rt2 /1.4142135623730950488016887242097d0/
 !------------------------
-T = DMIN1(P,Q)
-IF (T .LE. 0.D0) GO TO 10
-EPS = DPMPAR(1)
-W = 0.5D0 + (0.5D0 - (P + Q))
-IF (DABS(W) .GT. 2.D0*EPS) GO TO 10
+t = dmin1(p,q)
+if (t .le. 0.d0) go to 10
+eps = dpmpar(1)
+w = 0.5d0 + (0.5d0 - (p + q))
+if (dabs(w) .gt. 2.d0*eps) go to 10
 !
-U = DABS(D + D)
-V = T + T
-W = DERFI(U, V)
-IF (W .LT. 0.D0) GO TO 20
+u = dabs(d + d)
+v = t + t
+w = derfi(u, v)
+if (w .lt. 0.d0) go to 20
 !
-IERR = 0
-W = RT2*W
-IF (D .LT. 0.D0) W = - W
-RETURN
+ierr = 0
+w = rt2*w
+if (d .lt. 0.d0) w = - w
+return
 !
 !                         ERROR RETURN
 !
-10 IERR = 1
-RETURN
-20 IERR = 2
-RETURN
-END SUBROUTINE DPNI
+10 ierr = 1
+return
+20 ierr = 2
+return
+end subroutine dpni
 
-REAL function DAW(X)
-IMPLICIT NONE
-INTEGER :: I
+real function daw(x)
+implicit none
+integer :: i
 !-----------------------------------------------------------------------
 !
 !     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
@@ -8256,28 +8256,28 @@ INTEGER :: I
 !     CODY, PACIOREK AND THACHER.
 !
 !-----------------------------------------------------------------------
-REAL :: P1(9), Q1(9), P2(8), Q2(7), P3(8), Q3(7), P4(7), Q4(6), &
-&FRAC, SUMP, SUMQ, W2
-REAL, INTENT(IN) :: X
-REAL :: Y, XLARGE, XSMALL
+real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
+&frac, sump, sumq, w2
+real, intent(in) :: x
+real :: y, xlarge, xsmall
 !---------------
-DATA XLARGE/16777216.0/, XSMALL/.59604644775391E-07/
+data xlarge/16777216.0/, xsmall/.59604644775391e-07/
 !---------------
 !
 !           COEFFICIENTS FOR R(8,8) APPROXIMATION,
 !           USED FOR ABS(X)  .LT.  2.5
 !
 !---------------
-DATA P1(1)/.100000000000000E+01/, P1(2)/-.135599049815353E+00/, &
-&P1(3)/.456738974064825E-01/, P1(4)/-.258323495918050E-02/, &
-&P1(5)/.360079463580992E-03/, P1(6)/-.944375029163387E-05/, &
-&P1(7)/.634674256878843E-06/, P1(8)/-.711645839183817E-08/, &
-&P1(9)/.977985913592343E-10/
-DATA Q1(1)/.100000000000000E+01/, Q1(2)/.531067616851310E+00/, &
-&Q1(3)/.133052308640737E+00/, Q1(4)/.206907491644210E-01/, &
-&Q1(5)/.220437428972266E-02/, Q1(6)/.166706801664365E-03/, &
-&Q1(7)/.887964712053131E-05/, Q1(8)/.311750854173480E-06/, &
-&Q1(9)/.574807177698046E-08/
+data p1(1)/.100000000000000e+01/, p1(2)/-.135599049815353e+00/, &
+&p1(3)/.456738974064825e-01/, p1(4)/-.258323495918050e-02/, &
+&p1(5)/.360079463580992e-03/, p1(6)/-.944375029163387e-05/, &
+&p1(7)/.634674256878843e-06/, p1(8)/-.711645839183817e-08/, &
+&p1(9)/.977985913592343e-10/
+data q1(1)/.100000000000000e+01/, q1(2)/.531067616851310e+00/, &
+&q1(3)/.133052308640737e+00/, q1(4)/.206907491644210e-01/, &
+&q1(5)/.220437428972266e-02/, q1(6)/.166706801664365e-03/, &
+&q1(7)/.887964712053131e-05/, q1(8)/.311750854173480e-06/, &
+&q1(9)/.574807177698046e-08/
 !---------------
 !
 !           COEFFICIENTS FOR R(7,7) APPROXIMATION,
@@ -8285,14 +8285,14 @@ DATA Q1(1)/.100000000000000E+01/, Q1(2)/.531067616851310E+00/, &
 !           2.5 .LE. ABS(X) .LT. 3.5
 !
 !---------------
-DATA P2(1)/-.150695651187161E+01/, P2(2)/ .293365747395449E+02/, &
-&P2(3)/-.400000893643550E+02/, P2(4)/-.757931918089369E-01/, &
-&P2(5)/-.889106479747812E+01/, P2(6)/ .152644099623699E+02/, &
-&P2(7)/-.597678086823489E+01/, P2(8)/ .500236896088668E+00/
-DATA Q2(1)/-.673106069744813E+00/, Q2(2)/ .124486788262252E+04/, &
-&Q2(3)/ .721193217600229E+01/, Q2(4)/ .112461662024575E+03/, &
-&Q2(5)/ .729177556415532E+02/, Q2(6)/ .115840292551888E+03/, &
-&Q2(7)/ .226064666074309E+00/
+data p2(1)/-.150695651187161e+01/, p2(2)/ .293365747395449e+02/, &
+&p2(3)/-.400000893643550e+02/, p2(4)/-.757931918089369e-01/, &
+&p2(5)/-.889106479747812e+01/, p2(6)/ .152644099623699e+02/, &
+&p2(7)/-.597678086823489e+01/, p2(8)/ .500236896088668e+00/
+data q2(1)/-.673106069744813e+00/, q2(2)/ .124486788262252e+04/, &
+&q2(3)/ .721193217600229e+01/, q2(4)/ .112461662024575e+03/, &
+&q2(5)/ .729177556415532e+02/, q2(6)/ .115840292551888e+03/, &
+&q2(7)/ .226064666074309e+00/
 !---------------
 !
 !           COEFFICIENTS FOR R(7,7) APPROXIMATION,
@@ -8300,375 +8300,375 @@ DATA Q2(1)/-.673106069744813E+00/, Q2(2)/ .124486788262252E+04/, &
 !           3.5 .LE. ABS(X) .LE. 5.0
 !
 !---------------
-DATA P3(1)/ .476405645273229E+01/, P3(2)/-.266167674896399E+02/, &
-&P3(3)/-.916804879813552E+01/, P3(4)/-.150507703496692E+02/, &
-&P3(5)/ .506460153742231E+01/, P3(6)/-.498544802986608E+01/, &
-&P3(7)/-.149838042036691E+01/, P3(8)/ .499999902705054E+00/
-DATA Q3(1)/ .287776122973187E+03/, Q3(2)/ .256105722342226E+02/, &
-&Q3(3)/ .751701277744067E+02/, Q3(4)/ .146515167783109E+03/, &
-&Q3(5)/ .330707724676114E+02/, Q3(6)/-.148715811787195E+01/, &
-&Q3(7)/ .250011459611839E+00/
+data p3(1)/ .476405645273229e+01/, p3(2)/-.266167674896399e+02/, &
+&p3(3)/-.916804879813552e+01/, p3(4)/-.150507703496692e+02/, &
+&p3(5)/ .506460153742231e+01/, p3(6)/-.498544802986608e+01/, &
+&p3(7)/-.149838042036691e+01/, p3(8)/ .499999902705054e+00/
+data q3(1)/ .287776122973187e+03/, q3(2)/ .256105722342226e+02/, &
+&q3(3)/ .751701277744067e+02/, q3(4)/ .146515167783109e+03/, &
+&q3(5)/ .330707724676114e+02/, q3(6)/-.148715811787195e+01/, &
+&q3(7)/ .250011459611839e+00/
 !---------------
 !
 !           COEFFICIENTS FOR R(6,6) APPROXIMATION,
 !           IN J-FRACTION FORM, USED FOR ABS(X) .GT. 5.0
 !
 !---------------
-DATA P4(1)/-.315576735766984E+02/, P4(2)/-.100791496592972E+02/, &
-&P4(3)/-.710713709224200E+01/, P4(4)/-.596879853243925E+01/, &
-&P4(5)/-.449773645376092E+01/, P4(6)/-.249999965398199E+01/, &
-&P4(7)/ .499999999999330E+00/
-DATA Q4(1)/ .168874162155616E+03/, Q4(2)/ .698280748271071E+01/, &
-&Q4(3)/-.213029621139181E+02/, Q4(4)/-.712157348463305E+01/, &
-&Q4(5)/-.250005973192356E+01/, Q4(6)/ .750000000715687E+00/
+data p4(1)/-.315576735766984e+02/, p4(2)/-.100791496592972e+02/, &
+&p4(3)/-.710713709224200e+01/, p4(4)/-.596879853243925e+01/, &
+&p4(5)/-.449773645376092e+01/, p4(6)/-.249999965398199e+01/, &
+&p4(7)/ .499999999999330e+00/
+data q4(1)/ .168874162155616e+03/, q4(2)/ .698280748271071e+01/, &
+&q4(3)/-.213029621139181e+02/, q4(4)/-.712157348463305e+01/, &
+&q4(5)/-.250005973192356e+01/, q4(6)/ .750000000715687e+00/
 !-----------------------------------------------------------------------
 !
-IF (ABS(X) .GT. XLARGE) GO TO 500
-IF (ABS(X) .LT. XSMALL) GO TO 600
-Y = X * X
-IF (Y .GE. 6.25E0) GO TO 200
+if (abs(x) .gt. xlarge) go to 500
+if (abs(x) .lt. xsmall) go to 600
+y = x * x
+if (y .ge. 6.25e0) go to 200
 !
 !     ---------- ABS(X) .LT. 2.5 ----------
 !
-SUMP = (((((((P1(9) * Y + P1(8)) * Y + P1(7)) * Y + P1(6)) &
-&* Y + P1(5)) * Y + P1(4)) * Y + P1(3)) * Y + P1(2)) &
-&* Y + P1(1)
-SUMQ = (((((((Q1(9) * Y + Q1(8)) * Y + Q1(7)) * Y + Q1(6)) &
-&* Y + Q1(5)) * Y + Q1(4)) * Y + Q1(3)) * Y + Q1(2)) &
-&* Y + Q1(1)
-DAW = X * SUMP / SUMQ
-GO TO 1000
+sump = (((((((p1(9) * y + p1(8)) * y + p1(7)) * y + p1(6)) &
+&* y + p1(5)) * y + p1(4)) * y + p1(3)) * y + p1(2)) &
+&* y + p1(1)
+sumq = (((((((q1(9) * y + q1(8)) * y + q1(7)) * y + q1(6)) &
+&* y + q1(5)) * y + q1(4)) * y + q1(3)) * y + q1(2)) &
+&* y + q1(1)
+daw = x * sump / sumq
+go to 1000
 !
 !     ---------- 2.5 .LE. ABS(X) .LT. 3.5 ----------
 !
-200 IF (Y .GE. 12.25E0) GO TO 300
-FRAC = 0.0E0
+200 if (y .ge. 12.25e0) go to 300
+frac = 0.0e0
 !
-do 220 I = 1, 7
-220 FRAC = Q2(I) / (P2(I) + Y + FRAC)
+do 220 i = 1, 7
+220 frac = q2(i) / (p2(i) + y + frac)
 !
-DAW = (P2(8) + FRAC) / X
-GO TO 1000
+daw = (p2(8) + frac) / x
+go to 1000
 !
 !     ---------- 3.5 .LE. ABS(X) .LT. 5.0 ----------
 !
-300 IF (Y .GE. 25.0E0) GO TO 400
-FRAC = 0.0E0
+300 if (y .ge. 25.0e0) go to 400
+frac = 0.0e0
 !
-do 320 I = 1, 7
-320 FRAC = Q3(I) / (P3(I) + Y + FRAC)
+do 320 i = 1, 7
+320 frac = q3(i) / (p3(i) + y + frac)
 !
-DAW = (P3(8) + FRAC) / X
-GO TO 1000
+daw = (p3(8) + frac) / x
+go to 1000
 !
 !     ---------- 5.0 .LE. ABS(X) .LE. XLARGE ----------
 !
-400 W2 = 1.0E0 / X / X
-FRAC = 0.0E0
+400 w2 = 1.0e0 / x / x
+frac = 0.0e0
 !
-do 420 I = 1, 6
-420 FRAC = Q4(I) / (P4(I) + Y + FRAC)
+do 420 i = 1, 6
+420 frac = q4(i) / (p4(i) + y + frac)
 !
-FRAC = P4(7) + FRAC
-DAW = (0.5E0 + 0.5E0 * W2 * FRAC) / X
-GO TO 1000
+frac = p4(7) + frac
+daw = (0.5e0 + 0.5e0 * w2 * frac) / x
+go to 1000
 !
 !     ---------- XLARGE .LT. ABS(X) ----------
 !
-500 DAW = 0.5E0 / X
-GO TO 1000
+500 daw = 0.5e0 / x
+go to 1000
 !
 !     ---------- RETURN FOR SMALL X ----------
 !
-600 DAW = X
+600 daw = x
 !
-1000 RETURN
-END FUNCTION DAW
+1000 return
+end function daw
 
-double precision function DPDAW (X)
-IMPLICIT NONE
-INTEGER :: I, K
+double precision function dpdaw (x)
+implicit none
+integer :: i, k
 !-----------------------------------------------------------------------
 !            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: A(20), B(45), AX, EPS, T, W
-DOUBLE PRECISION :: DCSEVL, DPDAW0
+double precision, intent(in) :: x
+double precision :: a(20), b(45), ax, eps, t, w
+double precision :: dcsevl, dpdaw0
 !----------------------------
-DATA EPS /1.D-31/
+data eps /1.d-31/
 !----------------------------
-DATA A(1)  /-.6666666666666666666666666666657D+00/, &
-&A(2)  / .2666666666666666666666666665302D+00/, &
-&A(3)  /-.7619047619047619047619046823290D-01/, &
-&A(4)  / .1693121693121693121693097101950D-01/, &
-&A(5)  /-.3078403078403078403073750370528D-02/, &
-&A(6)  / .4736004736004736004148385001356D-03/, &
-&A(7)  /-.6314672981339647953899064401849D-04/, &
-&A(8)  / .7429027036870170692270376716931D-05/, &
-&A(9)  /-.7820028459863171536925638117632D-06/, &
-&A(10) / .7447646152244351276445219666744D-07/
-DATA A(11) /-.6476214045244314289022051868963D-08/, &
-&A(12) / .5180971231894821888421654461823D-09/, &
-&A(13) /-.3837756389504541092817011259727D-10/, &
-&A(14) / .2646727414301012080897585412600D-11/, &
-&A(15) /-.1707553348198261876085879075486D-12/, &
-&A(16) / .1034770025122653524451023758330D-13/, &
-&A(17) /-.5905667147861158816695814259561D-15/, &
-&A(18) / .3157018166820009192834256496230D-16/, &
-&A(19) /-.1501742103181747984387915732309D-17/, &
-&A(20) / .4921379778280206677674574916266D-19/
+data a(1)  /-.6666666666666666666666666666657d+00/, &
+&a(2)  / .2666666666666666666666666665302d+00/, &
+&a(3)  /-.7619047619047619047619046823290d-01/, &
+&a(4)  / .1693121693121693121693097101950d-01/, &
+&a(5)  /-.3078403078403078403073750370528d-02/, &
+&a(6)  / .4736004736004736004148385001356d-03/, &
+&a(7)  /-.6314672981339647953899064401849d-04/, &
+&a(8)  / .7429027036870170692270376716931d-05/, &
+&a(9)  /-.7820028459863171536925638117632d-06/, &
+&a(10) / .7447646152244351276445219666744d-07/
+data a(11) /-.6476214045244314289022051868963d-08/, &
+&a(12) / .5180971231894821888421654461823d-09/, &
+&a(13) /-.3837756389504541092817011259727d-10/, &
+&a(14) / .2646727414301012080897585412600d-11/, &
+&a(15) /-.1707553348198261876085879075486d-12/, &
+&a(16) / .1034770025122653524451023758330d-13/, &
+&a(17) /-.5905667147861158816695814259561d-15/, &
+&a(18) / .3157018166820009192834256496230d-16/, &
+&a(19) /-.1501742103181747984387915732309d-17/, &
+&a(20) / .4921379778280206677674574916266d-19/
 !----------------------------
-DATA B(1)  /-.56886544105215527114160533733674D-01/, &
-&B(2)  /-.31811346996168131279322878048822D+00/, &
-&B(3)  / .20873845413642236789741580198858D+00/, &
-&B(4)  /-.12475409913779131214073498314784D+00/, &
-&B(5)  / .67869305186676777092847516423676D-01/, &
-&B(6)  /-.33659144895270939503068230966587D-01/, &
-&B(7)  / .15260781271987971743682460381640D-01/, &
-&B(8)  /-.63483709625962148230586094788535D-02/, &
-&B(9)  / .24326740920748520596865966109343D-02/, &
-&B(10) /-.86219541491065032038526983549637D-03/
-DATA B(11) / .28376573336321625302857636538295D-03/, &
-&B(12) /-.87057549874170423699396581464335D-04/, &
-&B(13) / .24986849985481658331800044137276D-04/, &
-&B(14) /-.67319286764160294344603050339520D-05/, &
-&B(15) / .17078578785573543710504524047844D-05/, &
-&B(16) /-.40917551226475381271896592490038D-06/, &
-&B(17) / .92828292216755773260751785312273D-07/, &
-&B(18) /-.19991403610147617829845096332198D-07/, &
-&B(19) / .40963490644082195241210487868917D-08/, &
-&B(20) /-.80032409540993168075706781753561D-09/
-DATA B(21) / .14938503128761465059143225550110D-09/, &
-&B(22) /-.26687999885622329284924651063339D-10/, &
-&B(23) / .45712216985159458151405617724103D-11/, &
-&B(24) /-.75187305222043565872243727326771D-12/, &
-&B(25) / .11893100052629681879029828987302D-12/, &
-&B(26) /-.18116907933852346973490318263084D-13/, &
-&B(27) / .26611733684358969193001612199626D-14/, &
-&B(28) /-.37738863052129419795444109905930D-15/, &
-&B(29) / .51727953789087172679680082229329D-16/, &
-&B(30) /-.68603684084077500979419564670102D-17/
-DATA B(31) / .88123751354161071806469337321745D-18/, &
-&B(32) /-.10974248249996606292106299624652D-18/, &
-&B(33) / .13261199326367178513595545891635D-19/, &
-&B(34) /-.15562732768137380785488776571562D-20/, &
-&B(35) / .17751425583655720607833415570773D-21/, &
-&B(36) /-.19695006967006578384953608765439D-22/, &
-&B(37) / .21270074896998699661924010120533D-23/, &
-&B(38) /-.22375398124627973794182113962666D-24/, &
-&B(39) / .22942768578582348946971383125333D-25/, &
-&B(40) /-.22943788846552928693329592319999D-26/
-DATA B(41) / .22391702100592453618342297600000D-27/, &
-&B(42) /-.21338230616608897703678225066666D-28/, &
-&B(43) / .19866196585123531518028458666666D-29/, &
-&B(44) /-.18079295866694391771955199999999D-30/, &
-&B(45) / .16090686015283030305450666666666D-31/
+data b(1)  /-.56886544105215527114160533733674d-01/, &
+&b(2)  /-.31811346996168131279322878048822d+00/, &
+&b(3)  / .20873845413642236789741580198858d+00/, &
+&b(4)  /-.12475409913779131214073498314784d+00/, &
+&b(5)  / .67869305186676777092847516423676d-01/, &
+&b(6)  /-.33659144895270939503068230966587d-01/, &
+&b(7)  / .15260781271987971743682460381640d-01/, &
+&b(8)  /-.63483709625962148230586094788535d-02/, &
+&b(9)  / .24326740920748520596865966109343d-02/, &
+&b(10) /-.86219541491065032038526983549637d-03/
+data b(11) / .28376573336321625302857636538295d-03/, &
+&b(12) /-.87057549874170423699396581464335d-04/, &
+&b(13) / .24986849985481658331800044137276d-04/, &
+&b(14) /-.67319286764160294344603050339520d-05/, &
+&b(15) / .17078578785573543710504524047844d-05/, &
+&b(16) /-.40917551226475381271896592490038d-06/, &
+&b(17) / .92828292216755773260751785312273d-07/, &
+&b(18) /-.19991403610147617829845096332198d-07/, &
+&b(19) / .40963490644082195241210487868917d-08/, &
+&b(20) /-.80032409540993168075706781753561d-09/
+data b(21) / .14938503128761465059143225550110d-09/, &
+&b(22) /-.26687999885622329284924651063339d-10/, &
+&b(23) / .45712216985159458151405617724103d-11/, &
+&b(24) /-.75187305222043565872243727326771d-12/, &
+&b(25) / .11893100052629681879029828987302d-12/, &
+&b(26) /-.18116907933852346973490318263084d-13/, &
+&b(27) / .26611733684358969193001612199626d-14/, &
+&b(28) /-.37738863052129419795444109905930d-15/, &
+&b(29) / .51727953789087172679680082229329d-16/, &
+&b(30) /-.68603684084077500979419564670102d-17/
+data b(31) / .88123751354161071806469337321745d-18/, &
+&b(32) /-.10974248249996606292106299624652d-18/, &
+&b(33) / .13261199326367178513595545891635d-19/, &
+&b(34) /-.15562732768137380785488776571562d-20/, &
+&b(35) / .17751425583655720607833415570773d-21/, &
+&b(36) /-.19695006967006578384953608765439d-22/, &
+&b(37) / .21270074896998699661924010120533d-23/, &
+&b(38) /-.22375398124627973794182113962666d-24/, &
+&b(39) / .22942768578582348946971383125333d-25/, &
+&b(40) /-.22943788846552928693329592319999d-26/
+data b(41) / .22391702100592453618342297600000d-27/, &
+&b(42) /-.21338230616608897703678225066666d-28/, &
+&b(43) / .19866196585123531518028458666666d-29/, &
+&b(44) /-.18079295866694391771955199999999d-30/, &
+&b(45) / .16090686015283030305450666666666d-31/
 !----------------------------
-AX = DABS(X)
-IF (AX .GE. 4.D0) GO TO 30
-T = X*X
-IF (AX .GT. 1.D0) GO TO 20
+ax = dabs(x)
+if (ax .ge. 4.d0) go to 30
+t = x*x
+if (ax .gt. 1.d0) go to 20
 !
 !                       ABS(X) .LE. 1
 !
-DPDAW = X
-IF (T .LT. EPS) RETURN
+dpdaw = x
+if (t .lt. eps) return
 !
-W = A(20)
-do 10 I = 1,19
-   K = 20 - I
-   W = T*W + A(K)
-10 CONTINUE
-DPDAW = X * (0.75D0 + (0.25D0 + T*W))
-RETURN
+w = a(20)
+do 10 i = 1,19
+   k = 20 - i
+   w = t*w + a(k)
+10 continue
+dpdaw = x * (0.75d0 + (0.25d0 + t*w))
+return
 !
 !                    1 .LT. ABS(X) .LT. 4
 !
-20 DPDAW = X * (.25D0 + DCSEVL(.125D0*T - 1.D0, B, 45))
-RETURN
+20 dpdaw = x * (.25d0 + dcsevl(.125d0*t - 1.d0, b, 45))
+return
 !
 !                       ABS(X) .GE. 4
 !
-30 DPDAW = DPDAW0(AX)/X
-RETURN
-END FUNCTION DPDAW
+30 dpdaw = dpdaw0(ax)/x
+return
+end function dpdaw
 
-double precision function DPDAW0 (X)
-IMPLICIT NONE
+double precision function dpdaw0 (x)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF X*DAW(X) FOR X .GE. 4
 !                WHERE DAW(X) IS THE DAWSON INTEGRAL
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: T, U, V, W
-DOUBLE PRECISION :: A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, &
-&A11, A12, A13, A14, A15, A16, A17, A18, B1, B2, B3, B4
-DOUBLE PRECISION :: C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, &
-&C11, C12, C13, C14, D1, D2, D3, D4, D5, D6, D7, D8
-DOUBLE PRECISION :: E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, &
-&F1, F2, F3, F4, F5, F6, F7, F8, F9, F10
-DOUBLE PRECISION :: G0, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, &
-&G11, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10
-DOUBLE PRECISION :: S0, S1, S2, S3, S4, S5
-DOUBLE PRECISION :: P0, P1, P2, P3, P4, P5, Q1, Q2, Q3, Q4, Q5
+double precision, intent(in) :: x
+double precision :: t, u, v, w
+double precision :: a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, &
+&a11, a12, a13, a14, a15, a16, a17, a18, b1, b2, b3, b4
+double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, &
+&c11, c12, c13, c14, d1, d2, d3, d4, d5, d6, d7, d8
+double precision :: e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, &
+&f1, f2, f3, f4, f5, f6, f7, f8, f9, f10
+double precision :: g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, &
+&g11, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10
+double precision :: s0, s1, s2, s3, s4, s5
+double precision :: p0, p1, p2, p3, p4, p5, q1, q2, q3, q4, q5
 !----------------------------
-DATA A0  / .59682223611279114961181337D-06/, &
-&A1  / .17685355947137064277328544D-05/, &
-&A2  / .46539151619719879425847199D-05/, &
-&A3  / .60206549750426063518629015D-05/, &
-&A4  / .71968323029042065431569341D-05/, &
-&A5  / .30632314265730271259576310D-05/, &
-&A6  / .58023977792358623878717970D-06/, &
-&A7  /-.79009104459686847104040749D-06/, &
-&A8  /-.48136647436848802449955585D-06/, &
-&A9  / .15516701696125663593787151D-05/
-DATA A10 / .41907470564012404920368069D-05/, &
-&A11 / .58027971313506864533128271D-05/, &
-&A12 / .55370618938769991926278955D-05/, &
-&A13 / .38921890500515083447099834D-05/, &
-&A14 / .20373391058442140223632125D-05/, &
-&A15 / .77894504402267231707108862D-06/, &
-&A16 / .20671717275442647450228015D-06/, &
-&A17 / .34163346266402336952767687D-07/, &
-&A18 / .26550833614486808486653527D-08/
+data a0  / .59682223611279114961181337d-06/, &
+&a1  / .17685355947137064277328544d-05/, &
+&a2  / .46539151619719879425847199d-05/, &
+&a3  / .60206549750426063518629015d-05/, &
+&a4  / .71968323029042065431569341d-05/, &
+&a5  / .30632314265730271259576310d-05/, &
+&a6  / .58023977792358623878717970d-06/, &
+&a7  /-.79009104459686847104040749d-06/, &
+&a8  /-.48136647436848802449955585d-06/, &
+&a9  / .15516701696125663593787151d-05/
+data a10 / .41907470564012404920368069d-05/, &
+&a11 / .58027971313506864533128271d-05/, &
+&a12 / .55370618938769991926278955d-05/, &
+&a13 / .38921890500515083447099834d-05/, &
+&a14 / .20373391058442140223632125d-05/, &
+&a15 / .77894504402267231707108862d-06/, &
+&a16 / .20671717275442647450228015d-06/, &
+&a17 / .34163346266402336952767687d-07/, &
+&a18 / .26550833614486808486653527d-08/
 !----------------------------
-DATA B1  / .24655153970246619491575782D+01/, &
-&B2  / .62943144539382480033771054D+01/, &
-&B3  / .62122304537339562619049238D+01/, &
-&B4  / .72256247680648550388609993D+01/
+data b1  / .24655153970246619491575782d+01/, &
+&b2  / .62943144539382480033771054d+01/, &
+&b3  / .62122304537339562619049238d+01/, &
+&b4  / .72256247680648550388609993d+01/
 !----------------------------
-DATA C0  / .59682220964671964619429990D-06/, &
-&C1  / .15714896176335781761895194D-05/, &
-&C2  / .38969553030269966874001463D-05/, &
-&C3  / .52383725295173020317044495D-05/, &
-&C4  / .68105053752194312932660379D-05/, &
-&C5  / .54424292166005622934118953D-05/, &
-&C6  / .42426204827598626398351706D-05/, &
-&C7  / .16034175582037599078896885D-05/, &
-&C8  / .40869743822567069272296881D-06/, &
-&C9  /-.28877279517645392833652391D-06/
-DATA C10 /-.23330912423546272053845073D-06/, &
-&C11 /-.52391219684126122047201575D-07/, &
-&C12 / .21002079856304960793765863D-07/, &
-&C13 / .15999459808634652894884878D-07/, &
-&C14 / .30942877932880022278704223D-08/
+data c0  / .59682220964671964619429990d-06/, &
+&c1  / .15714896176335781761895194d-05/, &
+&c2  / .38969553030269966874001463d-05/, &
+&c3  / .52383725295173020317044495d-05/, &
+&c4  / .68105053752194312932660379d-05/, &
+&c5  / .54424292166005622934118953d-05/, &
+&c6  / .42426204827598626398351706d-05/, &
+&c7  / .16034175582037599078896885d-05/, &
+&c8  / .40869743822567069272296881d-06/, &
+&c9  /-.28877279517645392833652391d-06/
+data c10 /-.23330912423546272053845073d-06/, &
+&c11 /-.52391219684126122047201575d-07/, &
+&c12 / .21002079856304960793765863d-07/, &
+&c13 / .15999459808634652894884878d-07/, &
+&c14 / .30942877932880022278704223d-08/
 !----------------------------
-DATA D1  / .21353586303464124681525146D+01/, &
-&D2  / .51903635881846225790635588D+01/, &
-&D3  / .55426108503039000945912263D+01/, &
-&D4  / .72404445472735688881512590D+01/, &
-&D5  / .42043425514299588216548098D+01/, &
-&D6  / .39555198251457455938284071D+01/, &
-&D7  / .96558431899415447517392039D+00/, &
-&D8  / .85802563214754700974536646D+00/
+data d1  / .21353586303464124681525146d+01/, &
+&d2  / .51903635881846225790635588d+01/, &
+&d3  / .55426108503039000945912263d+01/, &
+&d4  / .72404445472735688881512590d+01/, &
+&d5  / .42043425514299588216548098d+01/, &
+&d6  / .39555198251457455938284071d+01/, &
+&d7  / .96558431899415447517392039d+00/, &
+&d8  / .85802563214754700974536646d+00/
 !----------------------------
-DATA E0  / .59682220964671964619429989D-06/, &
-&E1  / .84093250039847132132545694D-06/, &
-&E2  / .21215362314612857942015465D-05/, &
-&E3  / .17544801458346344458699925D-05/, &
-&E4  / .23300467572238537581015267D-05/, &
-&E5  / .10789302963153438789721000D-05/, &
-&E6  / .84593690165753140097573765D-06/, &
-&E7  / .58921927492401852305814815D-07/, &
-&E8  / .88699252882391671775568852D-08/, &
-&E9  /-.45367333700483839577191791D-07/
-DATA E10 /-.57476692572774473717756092D-08/
+data e0  / .59682220964671964619429989d-06/, &
+&e1  / .84093250039847132132545694d-06/, &
+&e2  / .21215362314612857942015465d-05/, &
+&e3  / .17544801458346344458699925d-05/, &
+&e4  / .23300467572238537581015267d-05/, &
+&e5  / .10789302963153438789721000d-05/, &
+&e6  / .84593690165753140097573765d-06/, &
+&e7  / .58921927492401852305814815d-07/, &
+&e8  / .88699252882391671775568852d-08/, &
+&e9  /-.45367333700483839577191791d-07/
+data e10 /-.57476692572774473717756092d-08/
 !----------------------------
-DATA F1  / .91128032791938035312580060D+00/, &
-&F2  / .28248447610354665352098820D+01/, &
-&F3  / .12208226691968579661669930D+01/, &
-&F4  / .26127044898109340807106578D+01/, &
-&F5  / .34850941500747816686718301D+00/, &
-&F6  / .11058424028893031129155960D+01/, &
-&F7  /-.58583432304677947215235382D-01/, &
-&F8  / .22235753204903993496120223D+00/, &
-&F9  /-.22116625272550591073419658D-01/, &
-&F10 / .14938281115881437851795141D-01/
+data f1  / .91128032791938035312580060d+00/, &
+&f2  / .28248447610354665352098820d+01/, &
+&f3  / .12208226691968579661669930d+01/, &
+&f4  / .26127044898109340807106578d+01/, &
+&f5  / .34850941500747816686718301d+00/, &
+&f6  / .11058424028893031129155960d+01/, &
+&f7  /-.58583432304677947215235382d-01/, &
+&f8  / .22235753204903993496120223d+00/, &
+&f9  /-.22116625272550591073419658d-01/, &
+&f10 / .14938281115881437851795141d-01/
 !----------------------------
-DATA G0  / .59682220962853689178993039D-06/, &
-&G1  / .10399202637216492921747166D-05/, &
-&G2  / .20011159669496258291170369D-05/, &
-&G3  / .19689301951834731308289277D-05/, &
-&G4  / .18861506874082130108404839D-05/, &
-&G5  / .10403672611266773427898830D-05/, &
-&G6  / .42700287233074049241986613D-06/, &
-&G7  /-.16199303908856237550380048D-07/, &
-&G8  /-.73900110466591484816182863D-07/, &
-&G9  /-.21369058482679700785965255D-07/
-DATA G10 / .42853587024761116737793072D-08/, &
-&G11 /-.27226352610679391576406666D-09/
+data g0  / .59682220962853689178993039d-06/, &
+&g1  / .10399202637216492921747166d-05/, &
+&g2  / .20011159669496258291170369d-05/, &
+&g3  / .19689301951834731308289277d-05/, &
+&g4  / .18861506874082130108404839d-05/, &
+&g5  / .10403672611266773427898830d-05/, &
+&g6  / .42700287233074049241986613d-06/, &
+&g7  /-.16199303908856237550380048d-07/, &
+&g8  /-.73900110466591484816182863d-07/, &
+&g9  /-.21369058482679700785965255d-07/
+data g10 / .42853587024761116737793072d-08/, &
+&g11 /-.27226352610679391576406666d-09/
 !----------------------------
-DATA H1  / .12446924554654251972427023D+01/, &
-&H2  / .24571243397858142676189669D+01/, &
-&H3  / .16710488988253927773151334D+01/, &
-&H4  / .17260859791081983044753913D+01/, &
-&H5  / .67406536368694046314885196D+00/, &
-&H6  / .47403526893401885333000527D+00/, &
-&H7  / .96251479080923959509108658D-01/, &
-&H8  / .53334517885765587426678624D-01/, &
-&H9  / .39450307003297031975491216D-02/, &
-&H10 / .20209221166462656808887976D-02/
+data h1  / .12446924554654251972427023d+01/, &
+&h2  / .24571243397858142676189669d+01/, &
+&h3  / .16710488988253927773151334d+01/, &
+&h4  / .17260859791081983044753913d+01/, &
+&h5  / .67406536368694046314885196d+00/, &
+&h6  / .47403526893401885333000527d+00/, &
+&h7  / .96251479080923959509108658d-01/, &
+&h8  / .53334517885765587426678624d-01/, &
+&h9  / .39450307003297031975491216d-02/, &
+&h10 / .20209221166462656808887976d-02/
 !----------------------------
-DATA S0  / .8210986449041747719684610504710D-02/, &
-&S1  / .8646073144815053170065230898334D-02/, &
-&S2  / .4768322737615973285410030924398D-03/, &
-&S3  / .4792593707378225992657970685396D-04/, &
-&S4  / .7507677744363576693833551190204D-05/, &
-&S5  / .1737929446861228512373840727547D-05/
+data s0  / .8210986449041747719684610504710d-02/, &
+&s1  / .8646073144815053170065230898334d-02/, &
+&s2  / .4768322737615973285410030924398d-03/, &
+&s3  / .4792593707378225992657970685396d-04/, &
+&s4  / .7507677744363576693833551190204d-05/, &
+&s5  / .1737929446861228512373840727547d-05/
 !----------------------------
-DATA P0 / .29531250000000000000002D+02/, &
-&P1 /-.14571781607273299440392D+04/, &
-&P2 / .24285318385898860175073D+05/, &
-&P3 /-.15843555052114168113822D+06/, &
-&P4 / .32969397422638395586636D+06/, &
-&P5 /-.55331506994311967089636D+04/
-DATA Q1 /-.54843599093412230906873D+02/, &
-&Q2 / .10882497826844164906477D+04/, &
-&Q3 /-.96578534881552358457185D+04/, &
-&Q4 / .37803382357862589384458D+05/, &
-&Q5 /-.51283783372259864777146D+05/
+data p0 / .29531250000000000000002d+02/, &
+&p1 /-.14571781607273299440392d+04/, &
+&p2 / .24285318385898860175073d+05/, &
+&p3 /-.15843555052114168113822d+06/, &
+&p4 / .32969397422638395586636d+06/, &
+&p5 /-.55331506994311967089636d+04/
+data q1 /-.54843599093412230906873d+02/, &
+&q2 / .10882497826844164906477d+04/, &
+&q3 /-.96578534881552358457185d+04/, &
+&q4 / .37803382357862589384458d+05/, &
+&q5 /-.51283783372259864777146d+05/
 !----------------------------
-IF (X .GE. 12.D0) GO TO 50
-T = (32.D0/(X*X) - 0.5D0) - 0.5D0
-IF (T .GE. 0.D0) GO TO 20
+if (x .ge. 12.d0) go to 50
+t = (32.d0/(x*x) - 0.5d0) - 0.5d0
+if (t .ge. 0.d0) go to 20
 !
 !                    -7/9 .LE. T .LE. -0.4
 !
-IF (T .GT. -0.4D0) GO TO 10
-U = ((((((((A18*T + A17)*T + A16)*T + A15)*T + A14)*T + &
-&A13)*T + A12)*T + A11)*T + A10)*T + A9
-U = ((((((((U*T + A8)*T + A7)*T + A6)*T + A5)*T + &
-&A4)*T + A3)*T + A2)*T + A1)*T + A0
-V = (((B4*T + B3)*T + B2)*T + B1)*T + 1.D0
-GO TO 40
+if (t .gt. -0.4d0) go to 10
+u = ((((((((a18*t + a17)*t + a16)*t + a15)*t + a14)*t + &
+&a13)*t + a12)*t + a11)*t + a10)*t + a9
+u = ((((((((u*t + a8)*t + a7)*t + a6)*t + a5)*t + &
+&a4)*t + a3)*t + a2)*t + a1)*t + a0
+v = (((b4*t + b3)*t + b2)*t + b1)*t + 1.d0
+go to 40
 !
 !                     -0.4 .LT. T .LT. 0
 !
-10 U = ((((((((C14*T + C13)*T + C12)*T + C11)*T + C10)*T + &
-&C9)*T + C8)*T + C7)*T + C6)*T + C5
-U = ((((U*T + C4)*T + C3)*T + C2)*T + C1)*T + C0
-V = (((((((D8*T + D7)*T + D6)*T + D5)*T + D4)*T + &
-&D3)*T + D2)*T + D1)*T + 1.D0
-GO TO 40
+10 u = ((((((((c14*t + c13)*t + c12)*t + c11)*t + c10)*t + &
+&c9)*t + c8)*t + c7)*t + c6)*t + c5
+u = ((((u*t + c4)*t + c3)*t + c2)*t + c1)*t + c0
+v = (((((((d8*t + d7)*t + d6)*t + d5)*t + d4)*t + &
+&d3)*t + d2)*t + d1)*t + 1.d0
+go to 40
 !
 !                      0 .LE. T .LE. 0.4
 !
-20 IF (T .GT. 0.4D0) GO TO 30
-U = (((((((((E10*T + E9)*T + E8)*T + E7)*T + E6)*T + &
-&E5)*T + E4)*T + E3)*T + E2)*T + E1)*T + E0
-V = (((((((((F10*T + F9)*T + F8)*T + F7)*T + F6)*T + &
-&F5)*T + F4)*T + F3)*T + F2)*T + F1)*T + 1.D0
-GO TO 40
+20 if (t .gt. 0.4d0) go to 30
+u = (((((((((e10*t + e9)*t + e8)*t + e7)*t + e6)*t + &
+&e5)*t + e4)*t + e3)*t + e2)*t + e1)*t + e0
+v = (((((((((f10*t + f9)*t + f8)*t + f7)*t + f6)*t + &
+&f5)*t + f4)*t + f3)*t + f2)*t + f1)*t + 1.d0
+go to 40
 !
 !                      0.4 .LT. T .LE. 1
 !
-30 U = ((((((((G11*T + G10)*T + G9)*T + G8)*T + G7)*T + &
-&G6)*T + G5)*T + G4)*T + G3)*T + G2
-U = (U*T + G1)*T + G0
-V = (((((((((H10*T + H9)*T + H8)*T + H7)*T + H6)*T + &
-&H5)*T + H4)*T + H3)*T + H2)*T + H1)*T + 1.D0
+30 u = ((((((((g11*t + g10)*t + g9)*t + g8)*t + g7)*t + &
+&g6)*t + g5)*t + g4)*t + g3)*t + g2
+u = (u*t + g1)*t + g0
+v = (((((((((h10*t + h9)*t + h8)*t + h7)*t + h6)*t + &
+&h5)*t + h4)*t + h3)*t + h2)*t + h1)*t + 1.d0
 !
 !          THE ABOVE FOUR MINIMAX APPROXIMATIONS U/V
 !          ARE ACCURATE TO WITHIN 1 UNIT OF THE 25-TH
@@ -8676,29 +8676,29 @@ V = (((((((((H10*T + H9)*T + H8)*T + H7)*T + H6)*T + &
 !          FOR W IS ACCURATE TO WITHIN 1 UNIT OF THE
 !          29-TH SIGNIFICANT DIGIT.
 !
-40 W = ((((((U/V)*T + S5)*T + S4)*T + S3)*T + S2)*T + &
-&S1)*T + S0
-DPDAW0 = 0.5D0 + W
-RETURN
+40 w = ((((((u/v)*t + s5)*t + s4)*t + s3)*t + s2)*t + &
+&s1)*t + s0
+dpdaw0 = 0.5d0 + w
+return
 !
 !                          X .GE. 12
 !
-50 T = (1.D0/X)**2
-W = (((((P5*T + P4)*T + P3)*T + P2)*T + P1)*T + P0)/ &
-&(((((Q5*T + Q4)*T + Q3)*T + Q2)*T + Q1)*T + 1.D0)
-W = ((((W*T + 6.5625D0)*T + 1.875D0)*T + 0.75D0)*T + &
-&0.5D0)*T + 1.D0
-DPDAW0 = 0.5D0*W
-RETURN
-END FUNCTION DPDAW0
+50 t = (1.d0/x)**2
+w = (((((p5*t + p4)*t + p3)*t + p2)*t + p1)*t + p0)/ &
+&(((((q5*t + q4)*t + q3)*t + q2)*t + q1)*t + 1.d0)
+w = ((((w*t + 6.5625d0)*t + 1.875d0)*t + 0.75d0)*t + &
+&0.5d0)*t + 1.d0
+dpdaw0 = 0.5d0*w
+return
+end function dpdaw0
 
-SUBROUTINE CFRNLI (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
-INTEGER :: I
-REAL :: C, C0, DM, PM, QM, R, SS, X, Y
-REAL :: EXPARG
-REAL :: CPABS
+subroutine cfrnli (mo, z, w)
+implicit none
+integer, intent(in) :: mo
+integer :: i
+real :: c, c0, dm, pm, qm, r, ss, x, y
+real :: exparg
+real :: cpabs
 !-----------------------------------------------------------------------
 !
 !            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
@@ -8709,597 +8709,597 @@ REAL :: CPABS
 !                      W = EXP(-Z)*E(Z)  OTHERWISE
 !
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: Z
-COMPLEX, INTENT(INOUT) :: W
-REAL :: CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
+complex, intent(in) :: z
+complex, intent(inout) :: w
+real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
 !------------------------
 !     C = 1/SQRT(PI)
 !     C0 = -1/SQRT(2)
 !------------------------
-DATA C  / .564189583547756/
-DATA C0 /-.707106781186548/
+data c  / .564189583547756/
+data c0 /-.707106781186548/
 !------------------------
-DATA CD(1) /0.00000000000000E00/,  CD(2) /2.08605856013476E-2/, &
-&CD(3) /8.29806940495687E-2/,  CD(4) /1.85421653326079E-1/, &
-&CD(5) /3.27963479382361E-1/,  CD(6) /5.12675279912828E-1/, &
-&CD(7) /7.45412958045105E-1/,  CD(8) /1.03695067418297E00/, &
-&CD(9) /1.40378061255437E00/,  CD(10)/1.86891662214001E00/, &
-&CD(11)/2.46314830523929E00/,  CD(12)/3.22719383737352E00/, &
-&CD(13)/4.21534348280013E00/,  CD(14)/5.50178873151549E00/, &
-&CD(15)/7.19258966683102E00/,  CD(16)/9.45170208076408E00/, &
-&CD(17)/1.25710718314784E+1/,  CD(18)/1.72483537216334E+1/
-DATA CE(1) /8.15723083324096E-2/,  CE(2) /1.59285285253437E-1/, &
-&CE(3) /1.48581625614499E-1/,  CE(4) /1.33219670836245E-1/, &
-&CE(5) /1.15690392878957E-1/,  CE(6) /9.78580959447535E-2/, &
-&CE(7) /8.05908834297624E-2/,  CE(8) /6.40204538609872E-2/, &
-&CE(9) /4.81445242767885E-2/,  CE(10)/3.33540658473295E-2/, &
-&CE(11)/2.05548099470193E-2/,  CE(12)/1.07847403887506E-2/, &
-&CE(13)/4.55634892214219E-3/,  CE(14)/1.43984458138925E-3/, &
-&CE(15)/3.07056139834171E-4/,  CE(16)/3.78156541168541E-5/, &
-&CE(17)/2.05173509616121E-6/,  CE(18)/2.63564823682747E-8/
+data cd(1) /0.00000000000000e00/,  cd(2) /2.08605856013476e-2/, &
+&cd(3) /8.29806940495687e-2/,  cd(4) /1.85421653326079e-1/, &
+&cd(5) /3.27963479382361e-1/,  cd(6) /5.12675279912828e-1/, &
+&cd(7) /7.45412958045105e-1/,  cd(8) /1.03695067418297e00/, &
+&cd(9) /1.40378061255437e00/,  cd(10)/1.86891662214001e00/, &
+&cd(11)/2.46314830523929e00/,  cd(12)/3.22719383737352e00/, &
+&cd(13)/4.21534348280013e00/,  cd(14)/5.50178873151549e00/, &
+&cd(15)/7.19258966683102e00/,  cd(16)/9.45170208076408e00/, &
+&cd(17)/1.25710718314784e+1/,  cd(18)/1.72483537216334e+1/
+data ce(1) /8.15723083324096e-2/,  ce(2) /1.59285285253437e-1/, &
+&ce(3) /1.48581625614499e-1/,  ce(4) /1.33219670836245e-1/, &
+&ce(5) /1.15690392878957e-1/,  ce(6) /9.78580959447535e-2/, &
+&ce(7) /8.05908834297624e-2/,  ce(8) /6.40204538609872e-2/, &
+&ce(9) /4.81445242767885e-2/,  ce(10)/3.33540658473295e-2/, &
+&ce(11)/2.05548099470193e-2/,  ce(12)/1.07847403887506e-2/, &
+&ce(13)/4.55634892214219e-3/,  ce(14)/1.43984458138925e-3/, &
+&ce(15)/3.07056139834171e-4/,  ce(16)/3.78156541168541e-5/, &
+&ce(17)/2.05173509616121e-6/,  ce(18)/2.63564823682747e-8/
 !------------------------
-X = REAL(Z)
-Y = AIMAG(Z)
-R = CPABS(X, Y)
-IF (R .EQ. 0.0) GO TO 200
+x = real(z)
+y = aimag(z)
+r = cpabs(x, y)
+if (r .eq. 0.0) go to 200
 !
 !              EVALUATION OF ZR = SQRT(2*Z/PI)
 !
-IF (X .GE. 0.0) GO TO 10
-   ZR(2) = SQRT(R - X)
-   ZR(1) = Y/ZR(2)
-   GO TO 11
-10 ZR(1) = SQRT(R + X)
-IF (Y .LT. 0.0) ZR(1) = -ZR(1)
-ZR(2) = Y/ZR(1)
-11 ZR(1) = C*ZR(1)
-ZR(2) = C*ZR(2)
+if (x .ge. 0.0) go to 10
+   zr(2) = sqrt(r - x)
+   zr(1) = y/zr(2)
+   go to 11
+10 zr(1) = sqrt(r + x)
+if (y .lt. 0.0) zr(1) = -zr(1)
+zr(2) = y/zr(1)
+11 zr(1) = c*zr(1)
+zr(2) = c*zr(2)
 !
-IF (R .LE. 1.0) GO TO 20
-IF (R .GE. 38.0) GO TO 60
-IF (X .LT. 0.016*Y*Y) GO TO 50
+if (r .le. 1.0) go to 20
+if (r .ge. 38.0) go to 60
+if (x .lt. 0.016*y*y) go to 50
 !
 !                       TAYLOR SERIES
 !
-20 SM(1) = 0.0
-SM(2) = 0.0
-TM(1) = ZR(1)
-TM(2) = ZR(2)
-PM = 0.0
-30 PM = PM + 1.0
-   DM = 2.0*PM + 1.0
-   TS(1) = TM(1)*X - TM(2)*Y
-   TS(2) = TM(1)*Y + TM(2)*X
-   TM(1) = TS(1)/PM
-   TM(2) = TS(2)/PM
-   TS(1) = TM(1)/DM
-   TS(2) = TM(2)/DM
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 31
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 40
-31 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   GO TO 30
-40 SM(1) = ZR(1) + SM(1)
-SM(2) = (C0 + ZR(2)) + SM(2)
+20 sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = zr(1)
+tm(2) = zr(2)
+pm = 0.0
+30 pm = pm + 1.0
+   dm = 2.0*pm + 1.0
+   ts(1) = tm(1)*x - tm(2)*y
+   ts(2) = tm(1)*y + tm(2)*x
+   tm(1) = ts(1)/pm
+   tm(2) = ts(2)/pm
+   ts(1) = tm(1)/dm
+   ts(2) = tm(2)/dm
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 31
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 40
+31 sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   go to 30
+40 sm(1) = zr(1) + sm(1)
+sm(2) = (c0 + zr(2)) + sm(2)
 !
-IF (MO .EQ. 0) GO TO 120
-QM = EXP(-X)
-QF(1) = QM*COS(-Y)
-QF(2) = QM*SIN(-Y)
-GO TO 110
+if (mo .eq. 0) go to 120
+qm = exp(-x)
+qf(1) = qm*cos(-y)
+qf(2) = qm*sin(-y)
+go to 110
 !
 !              RATIONAL FUNCTION APPROXIMATION
 !
-50 SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,18
-   TS(1) = X - CD(I)
-   TS(2) = Y
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) =  CE(I)*TS(1)/SS
-   TM(2) = -CE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-TS(1) = ZR(1)*SM(1) - ZR(2)*SM(2)
-TS(2) = ZR(1)*SM(2) + ZR(2)*SM(1)
-SM(1) = 0.5*TS(1)
-SM(2) = 0.5*TS(2)
-GO TO 100
+50 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = x - cd(i)
+   ts(2) = y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) =  ce(i)*ts(1)/ss
+   tm(2) = -ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ts(1) = zr(1)*sm(1) - zr(2)*sm(2)
+ts(2) = zr(1)*sm(2) + zr(2)*sm(1)
+sm(1) = 0.5*ts(1)
+sm(2) = 0.5*ts(2)
+go to 100
 !
 !                   ASYMPTOTIC EXPANSION
 !
-60 QF(1) = (X/R)/R
-QF(2) = -(Y/R)/R
-TM(1) = QF(1)
-TM(2) = QF(2)
-SM(1) = TM(1)
-SM(2) = TM(2)
-PM = -0.5
-70 PM = PM + 1.0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = PM*TS(1)
-   TM(2) = PM*TS(2)
-   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 71
-   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
-71 SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-   IF (PM .LT. 25.5) GO TO 70
-80 TS(1) = ZR(1)*SM(1) - ZR(2)*SM(2)
-TS(2) = ZR(1)*SM(2) + ZR(2)*SM(1)
-SM(1) = 0.5*TS(1)
-SM(2) = 0.5*TS(2)
-IF (ZR(2) .LT. 8.E-3) GO TO 210
+60 qf(1) = (x/r)/r
+qf(2) = -(y/r)/r
+tm(1) = qf(1)
+tm(2) = qf(2)
+sm(1) = tm(1)
+sm(2) = tm(2)
+pm = -0.5
+70 pm = pm + 1.0
+   ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = pm*ts(1)
+   tm(2) = pm*ts(2)
+   if (abs(sm(1)) + abs(tm(1)) .ne. abs(sm(1))) go to 71
+   if (abs(sm(2)) + abs(tm(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+   if (pm .lt. 25.5) go to 70
+80 ts(1) = zr(1)*sm(1) - zr(2)*sm(2)
+ts(2) = zr(1)*sm(2) + zr(2)*sm(1)
+sm(1) = 0.5*ts(1)
+sm(2) = 0.5*ts(2)
+if (zr(2) .lt. 8.e-3) go to 210
 !
 !                       TERMINATION
 !
-100 IF (MO .NE. 0) GO TO 120
-QM = EXP(X)
-QF(1) = QM*COS(Y)
-QF(2) = QM*SIN(Y)
+100 if (mo .ne. 0) go to 120
+qm = exp(x)
+qf(1) = qm*cos(y)
+qf(2) = qm*sin(y)
 !
-110 TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
+110 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
 !
-120 W = CMPLX(SM(1),SM(2))
-RETURN
+120 w = cmplx(sm(1),sm(2))
+return
 !
 !                      CASE WHEN Z = 0
 !
-200 W = CMPLX(0.0,C0)
-RETURN
+200 w = cmplx(0.0,c0)
+return
 !
 !               MODIFIED ASYMPTOTIC EXPANSION
 !
-210 IF (MO .NE. 0) GO TO 220
-QM = EXP(X)
-QF(1) = QM*COS(Y)
-QF(2) = QM*SIN(Y)
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-W = CMPLX(TS(1), C0 + TS(2))
-RETURN
+210 if (mo .ne. 0) go to 220
+qm = exp(x)
+qf(1) = qm*cos(y)
+qf(2) = qm*sin(y)
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+w = cmplx(ts(1), c0 + ts(2))
+return
 !
-220 IF (-X .LE. EXPARG(1)) GO TO 120
-QM = C0*EXP(-X)
-SM(1) = SM(1) + QM*SIN(Y)
-SM(2) = SM(2) + QM*COS(Y)
-W = CMPLX(SM(1),SM(2))
-RETURN
-END SUBROUTINE CFRNLI
+220 if (-x .le. exparg(1)) go to 120
+qm = c0*exp(-x)
+sm(1) = sm(1) + qm*sin(y)
+sm(2) = sm(2) + qm*cos(y)
+w = cmplx(sm(1),sm(2))
+return
+end subroutine cfrnli
 
-SUBROUTINE FRNL (T, C, S)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: C, S
-REAL, INTENT(IN) :: T
-INTEGER :: I, L, M, MAX
-REAL :: CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
-REAL :: SIN1
-REAL :: COS1
-INTEGER :: IPMPAR
+subroutine frnl (t, c, s)
+implicit none
+real, intent(inout) :: c, s
+real, intent(in) :: t
+integer :: i, l, m, max
+real :: cy, f, fd, fn, g, gd, gn, pi, pix, pixx, r, sy, x, xx, y
+real :: sin1
+real :: cos1
+integer :: ipmpar
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL FRESNEL INTEGRALS
 !-----------------------------------------------------------------------
-REAL :: N
-REAL :: A(6), B(6), CP(13), SP(13)
-REAL :: PN(6), PD(6), QN(6), QD(6)
-REAL :: AN(6), AD(6), BN(6), BD(6)
-REAL :: CN(5), CD(5), DN(5), DD(5)
-REAL :: FP(7), GP(7), P(6), Q(6)
+real :: n
+real :: a(6), b(6), cp(13), sp(13)
+real :: pn(6), pd(6), qn(6), qd(6)
+real :: an(6), ad(6), bn(6), bd(6)
+real :: cn(5), cd(5), dn(5), dd(5)
+real :: fp(7), gp(7), p(6), q(6)
 !--------------------------
-DATA PI/3.1415926535898/
+data pi/3.1415926535898/
 !--------------------------
-DATA A(1)/-.119278241233760E-05/,  A(2)/.540730666359417E-04/, &
-&A(3)/-.160488306381990E-02/,  A(4)/.281855008757077E-01/, &
-&A(5)/-.246740110027210E+00/,  A(6)/.100000000000000E+01/
-DATA B(1)/-.155653074871090E-06/,  B(2)/.844415353045065E-05/, &
-&B(3)/-.312116934326082E-03/,  B(4)/.724478420395276E-02/, &
-&B(5)/-.922805853580325E-01/,  B(6)/.523598775598300E+00/
+data a(1)/-.119278241233760e-05/,  a(2)/.540730666359417e-04/, &
+&a(3)/-.160488306381990e-02/,  a(4)/.281855008757077e-01/, &
+&a(5)/-.246740110027210e+00/,  a(6)/.100000000000000e+01/
+data b(1)/-.155653074871090e-06/,  b(2)/.844415353045065e-05/, &
+&b(3)/-.312116934326082e-03/,  b(4)/.724478420395276e-02/, &
+&b(5)/-.922805853580325e-01/,  b(6)/.523598775598300e+00/
 !--------------------------
-DATA CP(1) /.114739945188034E-20/,  CP(2) /-.384444827287950E-18/, &
-&CP(3) /.832125729394275E-16/,  CP(4) /-.142979507360076E-13/, &
-&CP(5) /.198954961821465E-11/,  CP(6) /-.220226545457144E-09/, &
-&CP(7) /.188434924092257E-07/,  CP(8) /-.120009722914157E-05/, &
-&CP(9) /.540741337442140E-04/,  CP(10)/-.160488313553028E-02/, &
-&CP(11)/.281855008777956E-01/,  CP(12)/-.246740110027196E+00/, &
-&CP(13)/.999999999999996E+00/
-DATA SP(1) /.705700784853927E-22/,  SP(2) /-.252757991492418E-19/, &
-&SP(3) /.594117488940008E-17/,  SP(4) /-.112161631555448E-14/, &
-&SP(5) /.173332189994074E-12/,  SP(6) /-.215742302078015E-10/, &
-&SP(7) /.210821173208116E-08/,  SP(8) /-.156471443116560E-06/, &
-&SP(9) /.844427287845253E-05/,  SP(10)/-.312116942346186E-03/, &
-&SP(11)/.724478420418951E-02/,  SP(12)/-.922805853580323E-01/, &
-&SP(13)/.523598775598300E+00/
+data cp(1) /.114739945188034e-20/,  cp(2) /-.384444827287950e-18/, &
+&cp(3) /.832125729394275e-16/,  cp(4) /-.142979507360076e-13/, &
+&cp(5) /.198954961821465e-11/,  cp(6) /-.220226545457144e-09/, &
+&cp(7) /.188434924092257e-07/,  cp(8) /-.120009722914157e-05/, &
+&cp(9) /.540741337442140e-04/,  cp(10)/-.160488313553028e-02/, &
+&cp(11)/.281855008777956e-01/,  cp(12)/-.246740110027196e+00/, &
+&cp(13)/.999999999999996e+00/
+data sp(1) /.705700784853927e-22/,  sp(2) /-.252757991492418e-19/, &
+&sp(3) /.594117488940008e-17/,  sp(4) /-.112161631555448e-14/, &
+&sp(5) /.173332189994074e-12/,  sp(6) /-.215742302078015e-10/, &
+&sp(7) /.210821173208116e-08/,  sp(8) /-.156471443116560e-06/, &
+&sp(9) /.844427287845253e-05/,  sp(10)/-.312116942346186e-03/, &
+&sp(11)/.724478420418951e-02/,  sp(12)/-.922805853580323e-01/, &
+&sp(13)/.523598775598300e+00/
 !--------------------------
-DATA PN(1)/.318309816100920E+00/,  PN(2)/.134919391391516E+02/, &
-&PN(3)/.158258097490377E+03/,  PN(4)/.598796451682535E+03/, &
-&PN(5)/.632369782194966E+03/,  PN(6)/.967985390141920E+02/
-DATA PD(1)/.100000000000000E+01/,  PD(2)/.426900960480796E+02/, &
-&PD(3)/.509085485682426E+03/,  PD(4)/.200034664144742E+04/, &
-&PD(5)/.231910140792937E+04/,  PD(6)/.486678558201084E+03/
-DATA QN(1)/.101320876178478E+00/,  QN(2)/.490534697099052E+01/, &
-&QN(3)/.652095157811808E+02/,  QN(4)/.274183825747887E+03/, &
-&QN(5)/.305040725009211E+03/,  QN(6)/.364566615872326E+02/
-DATA QD(1)/.100000000000000E+01/,  QD(2)/.499330024470621E+02/, &
-&QD(3)/.709854097670206E+03/,  QD(4)/.343470762861172E+04/, &
-&QD(5)/.522213879312684E+04/,  QD(6)/.168801831831851E+04/
+data pn(1)/.318309816100920e+00/,  pn(2)/.134919391391516e+02/, &
+&pn(3)/.158258097490377e+03/,  pn(4)/.598796451682535e+03/, &
+&pn(5)/.632369782194966e+03/,  pn(6)/.967985390141920e+02/
+data pd(1)/.100000000000000e+01/,  pd(2)/.426900960480796e+02/, &
+&pd(3)/.509085485682426e+03/,  pd(4)/.200034664144742e+04/, &
+&pd(5)/.231910140792937e+04/,  pd(6)/.486678558201084e+03/
+data qn(1)/.101320876178478e+00/,  qn(2)/.490534697099052e+01/, &
+&qn(3)/.652095157811808e+02/,  qn(4)/.274183825747887e+03/, &
+&qn(5)/.305040725009211e+03/,  qn(6)/.364566615872326e+02/
+data qd(1)/.100000000000000e+01/,  qd(2)/.499330024470621e+02/, &
+&qd(3)/.709854097670206e+03/,  qd(4)/.343470762861172e+04/, &
+&qd(5)/.522213879312684e+04/,  qd(6)/.168801831831851e+04/
 !--------------------------
-DATA AN(1)/.318309885869756E+00/,  AN(2)/.254179177393500E+02/, &
-&AN(3)/.575003792540838E+03/,  AN(4)/.426673405867140E+04/, &
-&AN(5)/.891831887923938E+04/,  AN(6)/.267955736537967E+04/
-DATA AD(1)/.100000000000000E+01/,  AD(2)/.801567066285184E+02/, &
-&AD(3)/.182971463354850E+04/,  AD(4)/.138848884373420E+05/, &
-&AD(5)/.309228411873207E+05/,  AD(6)/.120421274105856E+05/
-DATA BN(1)/.101321181932417E+00/,  BN(2)/.925021984290547E+01/, &
-&BN(3)/.240932023056602E+03/,  BN(4)/.206079616836437E+04/, &
-&BN(5)/.484901973010149E+04/,  BN(6)/.130680669688315E+04/
-DATA BD(1)/.100000000000000E+01/,  BD(2)/.928158182389149E+02/, &
-&BD(3)/.250926840439955E+04/,  BD(4)/.233924458152954E+05/, &
-&BD(5)/.685638896406835E+05/,  BD(6)/.418593101455019E+05/
+data an(1)/.318309885869756e+00/,  an(2)/.254179177393500e+02/, &
+&an(3)/.575003792540838e+03/,  an(4)/.426673405867140e+04/, &
+&an(5)/.891831887923938e+04/,  an(6)/.267955736537967e+04/
+data ad(1)/.100000000000000e+01/,  ad(2)/.801567066285184e+02/, &
+&ad(3)/.182971463354850e+04/,  ad(4)/.138848884373420e+05/, &
+&ad(5)/.309228411873207e+05/,  ad(6)/.120421274105856e+05/
+data bn(1)/.101321181932417e+00/,  bn(2)/.925021984290547e+01/, &
+&bn(3)/.240932023056602e+03/,  bn(4)/.206079616836437e+04/, &
+&bn(5)/.484901973010149e+04/,  bn(6)/.130680669688315e+04/
+data bd(1)/.100000000000000e+01/,  bd(2)/.928158182389149e+02/, &
+&bd(3)/.250926840439955e+04/,  bd(4)/.233924458152954e+05/, &
+&bd(5)/.685638896406835e+05/,  bd(6)/.418593101455019e+05/
 !--------------------------
-DATA CN(1)/.318309886182000E+00/,  CN(2)/.299191968327887E+02/, &
-&CN(3)/.691428839605668E+03/,  CN(4)/.394539800974744E+04/, &
-&CN(5)/.290314254767015E+04/
-DATA CD(1)/.100000000000000E+01/,  CD(2)/.942978925136851E+02/, &
-&CD(3)/.219977296283666E+04/,  CD(4)/.129726479671006E+05/, &
-&CD(5)/.114991427758165E+05/
-DATA DN(1)/.101321183630876E+00/,  DN(2)/.110988033615242E+02/, &
-&DN(3)/.306282306497228E+03/,  DN(4)/.213130259794164E+04/, &
-&DN(5)/.171270676541694E+04/
-DATA DD(1)/.100000000000000E+01/,  DD(2)/.111060616085627E+03/, &
-&DD(3)/.318197586347414E+04/,  DD(4)/.249342095714049E+05/, &
-&DD(5)/.359241903823488E+05/
+data cn(1)/.318309886182000e+00/,  cn(2)/.299191968327887e+02/, &
+&cn(3)/.691428839605668e+03/,  cn(4)/.394539800974744e+04/, &
+&cn(5)/.290314254767015e+04/
+data cd(1)/.100000000000000e+01/,  cd(2)/.942978925136851e+02/, &
+&cd(3)/.219977296283666e+04/,  cd(4)/.129726479671006e+05/, &
+&cd(5)/.114991427758165e+05/
+data dn(1)/.101321183630876e+00/,  dn(2)/.110988033615242e+02/, &
+&dn(3)/.306282306497228e+03/,  dn(4)/.213130259794164e+04/, &
+&dn(5)/.171270676541694e+04/
+data dd(1)/.100000000000000e+01/,  dd(2)/.111060616085627e+03/, &
+&dd(3)/.318197586347414e+04/,  dd(4)/.249342095714049e+05/, &
+&dd(5)/.359241903823488e+05/
 !--------------------------
-DATA FP(1)/.449763389301234E+05/,  FP(2)/-.188763642051836E+04/, &
-&FP(3)/.669261097103246E+02/,  FP(4)/-.343966606879114E+01/, &
-&FP(5)/.343112896133346E+00/,  FP(6)/-.967546019461500E-01/, &
-&FP(7)/.318309886183465E+00/
-DATA GP(1)/.316642183365360E+06/,  GP(2)/-.120618995106638E+05/, &
-&GP(3)/.359164749179351E+03/,  GP(4)/-.142252603258172E+02/, &
-&GP(5)/.982934118445454E+00/,  GP(6)/-.153989722912325E+00/, &
-&GP(7)/.101321183639714E+00/
+data fp(1)/.449763389301234e+05/,  fp(2)/-.188763642051836e+04/, &
+&fp(3)/.669261097103246e+02/,  fp(4)/-.343966606879114e+01/, &
+&fp(5)/.343112896133346e+00/,  fp(6)/-.967546019461500e-01/, &
+&fp(7)/.318309886183465e+00/
+data gp(1)/.316642183365360e+06/,  gp(2)/-.120618995106638e+05/, &
+&gp(3)/.359164749179351e+03/,  gp(4)/-.142252603258172e+02/, &
+&gp(5)/.982934118445454e+00/,  gp(6)/-.153989722912325e+00/, &
+&gp(7)/.101321183639714e+00/
 !--------------------------
-DATA P(1)/-654729075.0/,  P(2)/2027025.0/,  P(3)/-10395.0/, &
-&P(4)/105.0/,  P(5)/-3.0/,  P(6)/1.0/
-DATA Q(1)/-13749310575.0/,  Q(2)/34459425.0/,  Q(3)/-135135.0/, &
-&Q(4)/945.0/,  Q(5)/-15.0/,  Q(6)/1.0/
+data p(1)/-654729075.0/,  p(2)/2027025.0/,  p(3)/-10395.0/, &
+&p(4)/105.0/,  p(5)/-3.0/,  p(6)/1.0/
+data q(1)/-13749310575.0/,  q(2)/34459425.0/,  q(3)/-135135.0/, &
+&q(4)/945.0/,  q(5)/-15.0/,  q(6)/1.0/
 !--------------------------
 !
 !     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            LARGEST POSITIVE INTEGER THAT MAY BE USED.
 !
-               MAX = IPMPAR(3)
+               max = ipmpar(3)
 !
 !-----------------------------------------------------------------------
-X = ABS(T)
-IF (X .GT. 4.0) GO TO 50
-XX = X*X
-Y = XX*XX
+x = abs(t)
+if (x .gt. 4.0) go to 50
+xx = x*x
+y = xx*xx
 !-----------------------------------------------------------------------
 !             EVALUATION OF C(X) AND S(X) FOR X .LT. 1.65
 !                          WHERE X = ABS(T)
 !-----------------------------------------------------------------------
-IF (X .GT. 0.6) GO TO 10
-C = ((((A(1)*Y + A(2))*Y + A(3))*Y + A(4))*Y + A(5))*Y + A(6)
-S = ((((B(1)*Y + B(2))*Y + B(3))*Y + B(4))*Y + B(5))*Y + B(6)
-C = T*C
-S = T*XX*S
-RETURN
+if (x .gt. 0.6) go to 10
+c = ((((a(1)*y + a(2))*y + a(3))*y + a(4))*y + a(5))*y + a(6)
+s = ((((b(1)*y + b(2))*y + b(3))*y + b(4))*y + b(5))*y + b(6)
+c = t*c
+s = t*xx*s
+return
 !
-10 IF (X .GE. 1.65) GO TO 20
-C = CP(1)
-S = SP(1)
-do 11 I = 2,13
-   C = CP(I) + C*Y
-11 S = SP(I) + S*Y
-C = T*C
-S = T*XX*S
-RETURN
+10 if (x .ge. 1.65) go to 20
+c = cp(1)
+s = sp(1)
+do 11 i = 2,13
+   c = cp(i) + c*y
+11 s = sp(i) + s*y
+c = t*c
+s = t*xx*s
+return
 !-----------------------------------------------------------------------
 !          EVALUATION OF THE AUXILIARY FUNCTIONS F(X) AND G(X)
 !                        FOR X .GE. 1.65
 !-----------------------------------------------------------------------
-20 IF (X .GE. 2.0) GO TO 30
-FN = ((((PN(1)*Y + PN(2))*Y + PN(3))*Y + PN(4))*Y + PN(5))*Y &
-&+ PN(6)
-FD = ((((PD(1)*Y + PD(2))*Y + PD(3))*Y + PD(4))*Y + PD(5))*Y &
-&+ PD(6)
-GN = ((((QN(1)*Y + QN(2))*Y + QN(3))*Y + QN(4))*Y + QN(5))*Y &
-&+ QN(6)
-GD = ((((QD(1)*Y + QD(2))*Y + QD(3))*Y + QD(4))*Y + QD(5))*Y &
-&+ QD(6)
-F = FN/(X*FD)
-G = GN/(X*XX*GD)
-Y = 0.5*XX
-GO TO 80
+20 if (x .ge. 2.0) go to 30
+fn = ((((pn(1)*y + pn(2))*y + pn(3))*y + pn(4))*y + pn(5))*y &
+&+ pn(6)
+fd = ((((pd(1)*y + pd(2))*y + pd(3))*y + pd(4))*y + pd(5))*y &
+&+ pd(6)
+gn = ((((qn(1)*y + qn(2))*y + qn(3))*y + qn(4))*y + qn(5))*y &
+&+ qn(6)
+gd = ((((qd(1)*y + qd(2))*y + qd(3))*y + qd(4))*y + qd(5))*y &
+&+ qd(6)
+f = fn/(x*fd)
+g = gn/(x*xx*gd)
+y = 0.5*xx
+go to 80
 !
-30 IF (X .GE. 3.0) GO TO 40
-FN = ((((AN(1)*Y + AN(2))*Y + AN(3))*Y + AN(4))*Y + AN(5))*Y &
-&+ AN(6)
-FD = ((((AD(1)*Y + AD(2))*Y + AD(3))*Y + AD(4))*Y + AD(5))*Y &
-&+ AD(6)
-GN = ((((BN(1)*Y + BN(2))*Y + BN(3))*Y + BN(4))*Y + BN(5))*Y &
-&+ BN(6)
-GD = ((((BD(1)*Y + BD(2))*Y + BD(3))*Y + BD(4))*Y + BD(5))*Y &
-&+ BD(6)
-F = FN/(X*FD)
-G = GN/(X*XX*GD)
-GO TO 70
+30 if (x .ge. 3.0) go to 40
+fn = ((((an(1)*y + an(2))*y + an(3))*y + an(4))*y + an(5))*y &
+&+ an(6)
+fd = ((((ad(1)*y + ad(2))*y + ad(3))*y + ad(4))*y + ad(5))*y &
+&+ ad(6)
+gn = ((((bn(1)*y + bn(2))*y + bn(3))*y + bn(4))*y + bn(5))*y &
+&+ bn(6)
+gd = ((((bd(1)*y + bd(2))*y + bd(3))*y + bd(4))*y + bd(5))*y &
+&+ bd(6)
+f = fn/(x*fd)
+g = gn/(x*xx*gd)
+go to 70
 !
-40 FN = (((CN(1)*Y + CN(2))*Y + CN(3))*Y + CN(4))*Y + CN(5)
-FD = (((CD(1)*Y + CD(2))*Y + CD(3))*Y + CD(4))*Y + CD(5)
-GN = (((DN(1)*Y + DN(2))*Y + DN(3))*Y + DN(4))*Y + DN(5)
-GD = (((DD(1)*Y + DD(2))*Y + DD(3))*Y + DD(4))*Y + DD(5)
-F = FN/(X*FD)
-G = GN/(X*XX*GD)
-GO TO 70
+40 fn = (((cn(1)*y + cn(2))*y + cn(3))*y + cn(4))*y + cn(5)
+fd = (((cd(1)*y + cd(2))*y + cd(3))*y + cd(4))*y + cd(5)
+gn = (((dn(1)*y + dn(2))*y + dn(3))*y + dn(4))*y + dn(5)
+gd = (((dd(1)*y + dd(2))*y + dd(3))*y + dd(4))*y + dd(5)
+f = fn/(x*fd)
+g = gn/(x*xx*gd)
+go to 70
 !
-50 IF (X .GE. 6.0) GO TO 60
-XX = X*X
-Y = 1.0/(XX*XX)
-F = (((((FP(1)*Y + FP(2))*Y + FP(3))*Y + FP(4))*Y + FP(5))*Y &
-&+ FP(6))*Y + FP(7)
-G = (((((GP(1)*Y + GP(2))*Y + GP(3))*Y + GP(4))*Y + GP(5))*Y &
-&+ GP(6))*Y + GP(7)
-F = F/X
-G = G/(X*XX)
-GO TO 70
+50 if (x .ge. 6.0) go to 60
+xx = x*x
+y = 1.0/(xx*xx)
+f = (((((fp(1)*y + fp(2))*y + fp(3))*y + fp(4))*y + fp(5))*y &
+&+ fp(6))*y + fp(7)
+g = (((((gp(1)*y + gp(2))*y + gp(3))*y + gp(4))*y + gp(5))*y &
+&+ gp(6))*y + gp(7)
+f = f/x
+g = g/(x*xx)
+go to 70
 !
-60 IF (X .GE. FLOAT(MAX)) GO TO 100
-PIX = PI*X
-PIXX = PIX*X
-Y = 1.0/PIXX
-Y = Y*Y
-F = ((((P(1)*Y + P(2))*Y + P(3))*Y + P(4))*Y + P(5))*Y + P(6)
-G = ((((Q(1)*Y + Q(2))*Y + Q(3))*Y + Q(4))*Y + Q(5))*Y + Q(6)
-F = F/PIX
-G = G/(PIX*PIXX)
+60 if (x .ge. float(max)) go to 100
+pix = pi*x
+pixx = pix*x
+y = 1.0/pixx
+y = y*y
+f = ((((p(1)*y + p(2))*y + p(3))*y + p(4))*y + p(5))*y + p(6)
+g = ((((q(1)*y + q(2))*y + q(3))*y + q(4))*y + q(5))*y + q(6)
+f = f/pix
+g = g/(pix*pixx)
 !-----------------------------------------------------------------------
 !           EVALUATION OF SIN(0.5*PI*X*X) AND COS(0.5*PI*X*X)
 !                 THE RESULTS ARE STORED IN SY AND CY
 !-----------------------------------------------------------------------
-70 M = X
-L = MOD(M,2)
-N = M - L
-Y = X - M
-R = X - N
+70 m = x
+l = mod(m,2)
+n = m - l
+y = x - m
+r = x - n
 !
-Y = Y*N
-M = Y
-Y = Y - M
-IF (MOD(M,2) .NE. 0) Y = (Y - 0.5) - 0.5
-Y = Y + 0.5*R*R
+y = y*n
+m = y
+y = y - m
+if (mod(m,2) .ne. 0) y = (y - 0.5) - 0.5
+y = y + 0.5*r*r
 !
-80 SY = SIN1(Y)
-CY = COS1(Y)
+80 sy = sin1(y)
+cy = cos1(y)
 !-----------------------------------------------------------------------
 !                             TERMINATION
 !-----------------------------------------------------------------------
-90 C = 0.5 + (F*SY - G*CY)
-S = 0.5 - (F*CY + G*SY)
-IF (T .GE. 0.0) RETURN
-   C = - C
-   S = - S
-   RETURN
+90 c = 0.5 + (f*sy - g*cy)
+s = 0.5 - (f*cy + g*sy)
+if (t .ge. 0.0) return
+   c = - c
+   s = - s
+   return
 !
-100 IF (T .LT. 0.0) GO TO 110
-   C = 0.5
-   S = 0.5
-   RETURN
-110 C = -0.5
-S = -0.5
-RETURN
-END SUBROUTINE FRNL
+100 if (t .lt. 0.0) go to 110
+   c = 0.5
+   s = 0.5
+   return
+110 c = -0.5
+s = -0.5
+return
+end subroutine frnl
 
-SUBROUTINE CEXPLI (MO, Z, W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MO
-INTEGER :: I
-REAL :: C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
-REAL :: ANORM
-REAL :: SPMPAR
-REAL :: CPABS
+subroutine cexpli (mo, z, w)
+implicit none
+integer, intent(in) :: mo
+integer :: i
+real :: c, cy, d, e, eps, euler, pi, qm, r, ss, sy, tol, u, x, y
+real :: anorm
+real :: spmpar
+real :: cpabs
 !-----------------------------------------------------------------------
 !           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: Z
-COMPLEX, INTENT(INOUT) :: W
-REAL :: N, NP1
-REAL :: CD(18), CE(18)
-REAL :: QF(2), SM(2), TM(2), TS(2)
-REAL :: G0(2), GN(2), H0(2), HN(2), WN(2)
-LOGICAL :: IND
+complex, intent(in) :: z
+complex, intent(inout) :: w
+real :: n, np1
+real :: cd(18), ce(18)
+real :: qf(2), sm(2), tm(2), ts(2)
+real :: g0(2), gn(2), h0(2), hn(2), wn(2)
+logical :: ind
 !-------------------------
-ANORM(X,Y) = AMAX1(ABS(X),ABS(Y))
+anorm(x,y) = amax1(abs(x),abs(y))
 !-------------------------
-DATA PI /3.14159265358979/
-DATA EULER /.577215664901533/
+data pi /3.14159265358979/
+data euler /.577215664901533/
 !-------------------------
-DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.311105957086528E-01/, &
-&CD(3)  /.103661260539112E+00/, CD(4)  /.216532335244554E+00/, &
-&CD(5)  /.369931427960192E+00/, CD(6)  /.566766259990589E+00/, &
-&CD(7)  /.814042066324748E+00/, CD(8)  /.112384247540813E+01/, &
-&CD(9)  /.151400478148512E+01/, CD(10) /.200886795032284E+01/, &
-&CD(11) /.264052411823592E+01/, CD(12) /.345098449933392E+01/, &
-&CD(13) /.449583360763202E+01/, CD(14) /.585058263409822E+01/, &
-&CD(15) /.762273501463380E+01/, CD(16) /.997814501584578E+01/, &
-&CD(17) /.132122064896408E+02/, CD(18) /.180322948376021E+02/
-DATA CE(1)  /.850156516121093E-02/, CE(2)  /.505037465849058E-01/, &
-&CE(3)  /.836817368956407E-01/, CE(4)  /.107047582417607E+00/, &
-&CE(5)  /.120424719029462E+00/, CE(6)  /.125096631582229E+00/, &
-&CE(7)  /.122314435224685E+00/, CE(8)  /.112621417553907E+00/, &
-&CE(9)  /.963419407392582E-01/, CE(10) /.747398422757511E-01/, &
-&CE(11) /.508596135953441E-01/, CE(12) /.290822706773628E-01/, &
-&CE(13) /.132201640530101E-01/, CE(14) /.443802939829067E-02/, &
-&CE(15) /.992612478987576E-03/, CE(16) /.126579795112011E-03/, &
-&CE(17) /.702150908253350E-05/, CE(18) /.910281532564632E-07/
+data cd(1)  /0.00000000000000e+00/, cd(2)  /.311105957086528e-01/, &
+&cd(3)  /.103661260539112e+00/, cd(4)  /.216532335244554e+00/, &
+&cd(5)  /.369931427960192e+00/, cd(6)  /.566766259990589e+00/, &
+&cd(7)  /.814042066324748e+00/, cd(8)  /.112384247540813e+01/, &
+&cd(9)  /.151400478148512e+01/, cd(10) /.200886795032284e+01/, &
+&cd(11) /.264052411823592e+01/, cd(12) /.345098449933392e+01/, &
+&cd(13) /.449583360763202e+01/, cd(14) /.585058263409822e+01/, &
+&cd(15) /.762273501463380e+01/, cd(16) /.997814501584578e+01/, &
+&cd(17) /.132122064896408e+02/, cd(18) /.180322948376021e+02/
+data ce(1)  /.850156516121093e-02/, ce(2)  /.505037465849058e-01/, &
+&ce(3)  /.836817368956407e-01/, ce(4)  /.107047582417607e+00/, &
+&ce(5)  /.120424719029462e+00/, ce(6)  /.125096631582229e+00/, &
+&ce(7)  /.122314435224685e+00/, ce(8)  /.112621417553907e+00/, &
+&ce(9)  /.963419407392582e-01/, ce(10) /.747398422757511e-01/, &
+&ce(11) /.508596135953441e-01/, ce(12) /.290822706773628e-01/, &
+&ce(13) /.132201640530101e-01/, ce(14) /.443802939829067e-02/, &
+&ce(15) /.992612478987576e-03/, ce(16) /.126579795112011e-03/, &
+&ce(17) /.702150908253350e-05/, ce(18) /.910281532564632e-07/
 !-------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
 !
-                EPS = SPMPAR(1)
+                eps = spmpar(1)
 !
 !-------------------------
 !
-X = REAL(Z)
-Y = AIMAG(Z)
-R = CPABS(X,Y)
-EPS = AMAX1(EPS,1.E-15)
+x = real(z)
+y = aimag(z)
+r = cpabs(x,y)
+eps = amax1(eps,1.e-15)
 !
-IF (R .LE. 1.0) GO TO 20
-IF (R .GE. 40.0) GO TO 60
-IF (R .LT. 4.0) GO TO 10
-   IF (X .LE. 0.0 .OR. ABS(Y) .GT. 8.0) GO TO 60
-   IF (R .LT. 10.0 .AND. ABS(Y) .GT. 1.8*X) GO TO 60
-   GO TO 20
-10 IF (X .LT. 0.09*Y*Y) GO TO 50
-IF (R .GT. 3.6 .AND. ABS(Y) .GT. 1.8*X) GO TO 60
+if (r .le. 1.0) go to 20
+if (r .ge. 40.0) go to 60
+if (r .lt. 4.0) go to 10
+   if (x .le. 0.0 .or. abs(y) .gt. 8.0) go to 60
+   if (r .lt. 10.0 .and. abs(y) .gt. 1.8*x) go to 60
+   go to 20
+10 if (x .lt. 0.09*y*y) go to 50
+if (r .gt. 3.6 .and. abs(y) .gt. 1.8*x) go to 60
 !
 !                        TAYLOR SERIES
 !
-20 SM(1) = 0.0
-SM(2) = 0.0
-TM(1) = X
-TM(2) = Y
-N = 1.0
-30 N = N + 1.0
-   TS(1) = TM(1)*X - TM(2)*Y
-   TS(2) = TM(1)*Y + TM(2)*X
-   TM(1) = TS(1)/N
-   TM(2) = TS(2)/N
-   TS(1) = TM(1)/N
-   TS(2) = TM(2)/N
-   SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   IF (ANORM(TS(1),TS(2)) .GT. EPS*ANORM(SM(1),SM(2))) &
-&GO TO 30
-SM(1) = X + SM(1)
-SM(2) = Y + SM(2)
+20 sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = x
+tm(2) = y
+n = 1.0
+30 n = n + 1.0
+   ts(1) = tm(1)*x - tm(2)*y
+   ts(2) = tm(1)*y + tm(2)*x
+   tm(1) = ts(1)/n
+   tm(2) = ts(2)/n
+   ts(1) = tm(1)/n
+   ts(2) = tm(2)/n
+   sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   if (anorm(ts(1),ts(2)) .gt. eps*anorm(sm(1),sm(2))) &
+&go to 30
+sm(1) = x + sm(1)
+sm(2) = y + sm(2)
 !
-SM(1) = (EULER + ALOG(R)) + SM(1)
-SM(2) = ATAN2(-Y, -X) + SM(2)
-GO TO 110
+sm(1) = (euler + alog(r)) + sm(1)
+sm(2) = atan2(-y, -x) + sm(2)
+go to 110
 !
 !                      RATIONAL EXPANSION
 !
-50 SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,18
-   TS(1) = X - CD(I)
-   TS(2) = Y
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   SM(1) = SM(1) + CE(I)*TS(1)/SS
-   SM(2) = SM(2) - CE(I)*TS(2)/SS
-END DO
-GO TO 100
+50 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = x - cd(i)
+   ts(2) = y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   sm(1) = sm(1) + ce(i)*ts(1)/ss
+   sm(2) = sm(2) - ce(i)*ts(2)/ss
+end do
+go to 100
 !
 !         PADE APPROXIMATION FOR THE ASYMPTOTIC EXPANSION
 !                       FOR EXP(-Z)*EI(Z)
 !
-60 X = - X
-Y = - Y
-D = 4.0*R
-IF (R .LT. 10.0) D = 32.0
-G0(1) = 1.0
-G0(2) = 0.0
-GN(1) = (1.0 + X)/D
-GN(2) = Y/D
-H0(1) = 1.0
-H0(2) = 0.0
-U = X + 2.0
-HN(1) = U/D
-HN(2) = GN(2)
-W = CMPLX(1.0 + X, Y)/CMPLX(U,Y)
-WN(1) = REAL(W)
-WN(2) = AIMAG(W)
-NP1 = 1.0
-TOL = 4.0*EPS
+60 x = - x
+y = - y
+d = 4.0*r
+if (r .lt. 10.0) d = 32.0
+g0(1) = 1.0
+g0(2) = 0.0
+gn(1) = (1.0 + x)/d
+gn(2) = y/d
+h0(1) = 1.0
+h0(2) = 0.0
+u = x + 2.0
+hn(1) = u/d
+hn(2) = gn(2)
+w = cmplx(1.0 + x, y)/cmplx(u,y)
+wn(1) = real(w)
+wn(2) = aimag(w)
+np1 = 1.0
+tol = 4.0*eps
 !
-70 N = NP1
-   NP1 = N + 1.0
-   E = (N*NP1)/D
-   U = U + 2.0
-   TM(1) = ((U*GN(1) - Y*GN(2)) - E*G0(1))/D
-   TM(2) = ((U*GN(2) + Y*GN(1)) - E*G0(2))/D
-   G0(1) = GN(1)
-   G0(2) = GN(2)
-   GN(1) = TM(1)
-   GN(2) = TM(2)
-   TM(1) = ((U*HN(1) - Y*HN(2)) - E*H0(1))/D
-   TM(2) = ((U*HN(2) + Y*HN(1)) - E*H0(2))/D
-   H0(1) = HN(1)
-   H0(2) = HN(2)
-   HN(1) = TM(1)
-   HN(2) = TM(2)
+70 n = np1
+   np1 = n + 1.0
+   e = (n*np1)/d
+   u = u + 2.0
+   tm(1) = ((u*gn(1) - y*gn(2)) - e*g0(1))/d
+   tm(2) = ((u*gn(2) + y*gn(1)) - e*g0(2))/d
+   g0(1) = gn(1)
+   g0(2) = gn(2)
+   gn(1) = tm(1)
+   gn(2) = tm(2)
+   tm(1) = ((u*hn(1) - y*hn(2)) - e*h0(1))/d
+   tm(2) = ((u*hn(2) + y*hn(1)) - e*h0(2))/d
+   h0(1) = hn(1)
+   h0(2) = hn(2)
+   hn(1) = tm(1)
+   hn(2) = tm(2)
 !
-   TM(1) = WN(1)
-   TM(2) = WN(2)
-   W = CMPLX(GN(1),GN(2))/CMPLX(HN(1),HN(2))
-   WN(1) = REAL(W)
-   WN(2) = AIMAG(W)
-   IF (ANORM(TM(1) - WN(1), TM(2) - WN(2)) .GT. &
-&TOL*ANORM(WN(1), WN(2))) GO TO 70
+   tm(1) = wn(1)
+   tm(2) = wn(2)
+   w = cmplx(gn(1),gn(2))/cmplx(hn(1),hn(2))
+   wn(1) = real(w)
+   wn(2) = aimag(w)
+   if (anorm(tm(1) - wn(1), tm(2) - wn(2)) .gt. &
+&tol*anorm(wn(1), wn(2))) go to 70
 !
-X = REAL(Z)
-Y = AIMAG(Z)
-W = W/Z
-SM(1) = REAL(W)
-SM(2) = AIMAG(W)
+x = real(z)
+y = aimag(z)
+w = w/z
+sm(1) = real(w)
+sm(2) = aimag(w)
 !
 !                         TERMINATION
 !
-100 IND = X .LE. 0.0 .OR. ABS(Y) .GT. 1.E-2
-IF (IND .AND. MO .NE. 0) GO TO 130
-C = PI
-IF (Y .GT. 0.0) C = -PI
-QM = EXP(X)
-CY = COS(Y)
-SY = SIN(Y)
-QF(1) = QM*CY
-QF(2) = QM*SY
-IF (MO .EQ. 0) GO TO 120
+100 ind = x .le. 0.0 .or. abs(y) .gt. 1.e-2
+if (ind .and. mo .ne. 0) go to 130
+c = pi
+if (y .gt. 0.0) c = -pi
+qm = exp(x)
+cy = cos(y)
+sy = sin(y)
+qf(1) = qm*cy
+qf(2) = qm*sy
+if (mo .eq. 0) go to 120
 !
-R = C/QM
-SM(1) = SM(1) + R*SY
-SM(2) = SM(2) + R*CY
-GO TO 130
+r = c/qm
+sm(1) = sm(1) + r*sy
+sm(2) = sm(2) + r*cy
+go to 130
 !
-110 IF (MO .EQ. 0) GO TO 130
-IND = .TRUE.
-QM = EXP(-X)
-QF(1) = QM*COS(-Y)
-QF(2) = QM*SIN(-Y)
+110 if (mo .eq. 0) go to 130
+ind = .true.
+qm = exp(-x)
+qf(1) = qm*cos(-y)
+qf(2) = qm*sin(-y)
 !
-120 TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
-IF (.NOT. IND) SM(2) = SM(2) + C
+120 ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
+if (.not. ind) sm(2) = sm(2) + c
 !
-130 W = CMPLX(SM(1),SM(2))
-RETURN
-END SUBROUTINE CEXPLI
+130 w = cmplx(sm(1),sm(2))
+return
+end subroutine cexpli
 
-SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
-IMPLICIT NONE
-INTEGER :: M
-REAL :: CSEVL
-REAL :: ALNREL
+subroutine expli(int,arg,result,ierr)
+implicit none
+integer :: m
+real :: csevl
+real :: alnrel
 !
-REAL :: A(6), B(5), C(7), D(7), E(7), F(7), P1(8), Q1(8), P2(8), &
-&Q2(7), P3(8), Q3(7), P4(8), Q4(7), R(20), PX(9), QX(9), FRAC, &
-&SUMP, SUMQ, T, W, X, X0, XX0, XMX0, Y, DEXP40, XMAX, XMIN, EI
-REAL, INTENT(IN) :: ARG
-REAL, INTENT(INOUT) :: RESULT
-REAL :: EXPARG
-INTEGER :: I
-INTEGER, INTENT(IN) :: INT
-INTEGER, INTENT(OUT) :: IERR
-DOUBLE PRECISION :: DX0
+real :: a(6), b(5), c(7), d(7), e(7), f(7), p1(8), q1(8), p2(8), &
+&q2(7), p3(8), q3(7), p4(8), q4(7), r(20), px(9), qx(9), frac, &
+&sump, sumq, t, w, x, x0, xx0, xmx0, y, dexp40, xmax, xmin, ei
+real, intent(in) :: arg
+real, intent(inout) :: result
+real :: exparg
+integer :: i
+integer, intent(in) :: int
+integer, intent(out) :: ierr
+double precision :: dx0
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE COMPUTES THE EXPONENTIAL INTEGRALS
@@ -9361,53 +9361,53 @@ DOUBLE PRECISION :: DX0
 !     VALUE OF EXP(40.0)
 !
 !     ----------
-DATA DEXP40/.235385266837020E+18/
+data dexp40/.235385266837020e+18/
 !     ----------
 !
 !     ZERO OF EI(X)
 !
 !     ----------
-DATA X0/.372507410781366/,DX0/.37250741078136663446199186658D0/
+data x0/.372507410781366/,dx0/.37250741078136663446199186658d0/
 !     ----------
 !
 !     COEFFICIENTS FOR R(5,4) APPROXIMATION,
 !     USED FOR -1.0 .LE. X .LT. 0.0
 !
 !     ----------
-DATA A(1)/-.577215664901531E+00/, A(2) /.758833087029943E+00/, &
-&A(3) /.125660818982053E+00/, A(4) /.204158408934305E-01/, &
-&A(5) /.825035122466538E-03/, A(6) /.962949813453924E-05/
-DATA B(1) /.100000000000000E+01/, B(2) /.417810755380398E+00/, &
-&B(3) /.730228560396799E-01/, B(4) /.642720224671078E-02/, &
-&B(5) /.245134203588369E-03/
+data a(1)/-.577215664901531e+00/, a(2) /.758833087029943e+00/, &
+&a(3) /.125660818982053e+00/, a(4) /.204158408934305e-01/, &
+&a(5) /.825035122466538e-03/, a(6) /.962949813453924e-05/
+data b(1) /.100000000000000e+01/, b(2) /.417810755380398e+00/, &
+&b(3) /.730228560396799e-01/, b(4) /.642720224671078e-02/, &
+&b(5) /.245134203588369e-03/
 !     ----------
 !
 !     COEFFICIENTS FOR R(6,6) APPROXIMATION,
 !     USED FOR -4.0 .LE. X .LT. -1.0
 !
 !     ----------
-DATA C(1) /.465627107975096E-06/, C(2) /.999979577051595E+00/, &
-&C(3) /.904161556946328E+01/, C(4) /.243784088791317E+02/, &
-&C(5) /.230192559391334E+02/, C(6) /.690522522784443E+01/, &
-&C(7) /.430967839469389E+00/
-DATA D(1) /.100000000000000E+01/, D(2) /.100411643829054E+02/, &
-&D(3) /.324264210695138E+02/, D(4) /.412807841891424E+02/, &
-&D(5) /.204494785013794E+02/, D(6) /.331909213593302E+01/, &
-&D(7) /.103400130404874E+00/
+data c(1) /.465627107975096e-06/, c(2) /.999979577051595e+00/, &
+&c(3) /.904161556946328e+01/, c(4) /.243784088791317e+02/, &
+&c(5) /.230192559391334e+02/, c(6) /.690522522784443e+01/, &
+&c(7) /.430967839469389e+00/
+data d(1) /.100000000000000e+01/, d(2) /.100411643829054e+02/, &
+&d(3) /.324264210695138e+02/, d(4) /.412807841891424e+02/, &
+&d(5) /.204494785013794e+02/, d(6) /.331909213593302e+01/, &
+&d(7) /.103400130404874e+00/
 !     ----------
 !
 !     COEFFICIENTS FOR R(6,6) APPROXIMATION,
 !     USED FOR X .LT. -4.0
 !
 !     ----------
-DATA E(1)/-.999999999998447E+00/, E(2)/-.266271060431811E+02/, &
-&E(3)/-.241055827097015E+03/, E(4)/-.895927957772937E+03/, &
-&E(5)/-.129885688746484E+04/, E(6)/-.545374158883133E+03/, &
-&E(7)/-.566575206533869E+01/
-DATA F(1) /.100000000000000E+01/, F(2) /.286271060422192E+02/, &
-&F(3) /.292310039388533E+03/, F(4) /.133278537748257E+04/, &
-&F(5) /.277761949509163E+04/, F(6) /.240401713225909E+04/, &
-&F(7) /.631657483280800E+03/
+data e(1)/-.999999999998447e+00/, e(2)/-.266271060431811e+02/, &
+&e(3)/-.241055827097015e+03/, e(4)/-.895927957772937e+03/, &
+&e(5)/-.129885688746484e+04/, e(6)/-.545374158883133e+03/, &
+&e(7)/-.566575206533869e+01/
+data f(1) /.100000000000000e+01/, f(2) /.286271060422192e+02/, &
+&f(3) /.292310039388533e+03/, f(4) /.133278537748257e+04/, &
+&f(5) /.277761949509163e+04/, f(6) /.240401713225909e+04/, &
+&f(7) /.631657483280800e+03/
 !     ----------
 !
 !     COEFFICIENTS FOR R(7,7) APPROXIMATION,
@@ -9415,44 +9415,44 @@ DATA F(1) /.100000000000000E+01/, F(2) /.286271060422192E+02/, &
 !     0.0 .LT. X .LT. 4.0
 !
 !     ----------
-DATA P1(1)/-.866937339951070E+01/, P1(2)/-.549142265521085E+03/, &
-&P1(3)/-.421001615357070E+04/, P1(4)/-.249301393458648E+06/, &
-&P1(5)/-.119623669349247E+06/, P1(6)/-.221744627758845E+08/, &
-&P1(7) /.389280421311201E+07/, P1(8)/-.195773036904548E+09/
-DATA Q1(1) /.341718750000000E+02/, Q1(2)/-.160708926587221E+04/, &
-&Q1(3) /.357300298058508E+05/, Q1(4)/-.483547436162164E+06/, &
-&Q1(5) /.428559624611749E+07/, Q1(6)/-.249033375740540E+08/, &
-&Q1(7) /.891925767575612E+08/, Q1(8)/-.826271498626055E+08/
+data p1(1)/-.866937339951070e+01/, p1(2)/-.549142265521085e+03/, &
+&p1(3)/-.421001615357070e+04/, p1(4)/-.249301393458648e+06/, &
+&p1(5)/-.119623669349247e+06/, p1(6)/-.221744627758845e+08/, &
+&p1(7) /.389280421311201e+07/, p1(8)/-.195773036904548e+09/
+data q1(1) /.341718750000000e+02/, q1(2)/-.160708926587221e+04/, &
+&q1(3) /.357300298058508e+05/, q1(4)/-.483547436162164e+06/, &
+&q1(5) /.428559624611749e+07/, q1(6)/-.249033375740540e+08/, &
+&q1(7) /.891925767575612e+08/, q1(8)/-.826271498626055e+08/
 !     ----------
 !
 !     COEFFICIENTS FOR CHEBYSHEV EXPANSION FOR
 !     4.0 .LE. X .LE. 8.0
 !
 !     ----------
-DATA R(1) / .636295897967470E+00/, R(2) /-.130811686750676E+00/, &
-&R(3) /-.843674102130539E-02/, R(4) / .265684915310067E-02/, &
-&R(5) / .328227217816581E-03/, R(6) /-.237834477714302E-04/, &
-&R(7) /-.114398043081001E-04/, R(8) /-.144059434332383E-05/, &
-&R(9) / .524159566511488E-08/, R(10)/ .384073064078443E-07/, &
-&R(11)/ .858802448602672E-08/, R(12)/ .102192266258550E-08/, &
-&R(13)/ .217491323232897E-10/, R(14)/-.220902381426231E-10/, &
-&R(15)/-.634575335449288E-11/, R(16)/-.108377465668577E-11/, &
-&R(17)/-.119098228722226E-12/, R(18)/-.284386823892656E-14/, &
-&R(19)/ .250803270266868E-14/, R(20)/ .787296415285598E-15/
+data r(1) / .636295897967470e+00/, r(2) /-.130811686750676e+00/, &
+&r(3) /-.843674102130539e-02/, r(4) / .265684915310067e-02/, &
+&r(5) / .328227217816581e-03/, r(6) /-.237834477714302e-04/, &
+&r(7) /-.114398043081001e-04/, r(8) /-.144059434332383e-05/, &
+&r(9) / .524159566511488e-08/, r(10)/ .384073064078443e-07/, &
+&r(11)/ .858802448602672e-08/, r(12)/ .102192266258550e-08/, &
+&r(13)/ .217491323232897e-10/, r(14)/-.220902381426231e-10/, &
+&r(15)/-.634575335449288e-11/, r(16)/-.108377465668577e-11/, &
+&r(17)/-.119098228722226e-12/, r(18)/-.284386823892656e-14/, &
+&r(19)/ .250803270266868e-14/, r(20)/ .787296415285598e-15/
 !
 !     COEFFICIENTS FOR R(7,7) APPROXIMATION,
 !     IN J-FRACTION FORM, USED FOR
 !     8.0 .LT. X .LT. 12.0
 !
 !     ----------
-DATA P2(1)/-.218086381520723E+01/, P2(2)/-.219010233854881E+02/, &
-&P2(3)/ .930816385662165E+01/, P2(4) /.250762811293560E+02/, &
-&P2(5)/-.331842531997221E+02/, P2(6) /.601217990830080E+02/, &
-&P2(7)/-.432531132878135E+02/, P2(8) /.100443109228078E+01/
-DATA Q2(1)/ .393707701852715E+01/, Q2(2) /.300892648372915E+03/, &
-&Q2(3)/-.625041161671876E+01/, Q2(4) /.100367439516726E+04/, &
-&Q2(5)/ .143256738121938E+02/, Q2(6) /.273624119889328E+04/, &
-&Q2(7)/ .527468851962908E+00/
+data p2(1)/-.218086381520723e+01/, p2(2)/-.219010233854881e+02/, &
+&p2(3)/ .930816385662165e+01/, p2(4) /.250762811293560e+02/, &
+&p2(5)/-.331842531997221e+02/, p2(6) /.601217990830080e+02/, &
+&p2(7)/-.432531132878135e+02/, p2(8) /.100443109228078e+01/
+data q2(1)/ .393707701852715e+01/, q2(2) /.300892648372915e+03/, &
+&q2(3)/-.625041161671876e+01/, q2(4) /.100367439516726e+04/, &
+&q2(5)/ .143256738121938e+02/, q2(6) /.273624119889328e+04/, &
+&q2(7)/ .527468851962908e+00/
 !     ----------
 !
 !     COEFFICIENTS FOR R(7,7) APPROXIMATION,
@@ -9460,201 +9460,201 @@ DATA Q2(1)/ .393707701852715E+01/, Q2(2) /.300892648372915E+03/, &
 !     12.0 .LE. X .LT. 24.0
 !
 !     ----------
-DATA P3(1)/-.348334653602852E+01/, P3(2)/-.186545454883399E+02/, &
-&P3(3)/-.828561994140641E+01/, P3(4)/-.323467330305403E+02/, &
-&P3(5)/ .179601688769252E+02/, P3(6) /.175656315469614E+01/, &
-&P3(7)/-.195022321289660E+01/, P3(8) /.999994296074708E+00/
-DATA Q3(1) /.695000655887434E+02/, Q3(2) /.572837193837324E+02/, &
-&Q3(3) /.257776384238440E+02/, Q3(4) /.760761148007735E+03/, &
-&Q3(5) /.289516727925135E+02/, Q3(6)/-.343942266899870E+01/, &
-&Q3(7) /.100083867402639E+01/
+data p3(1)/-.348334653602852e+01/, p3(2)/-.186545454883399e+02/, &
+&p3(3)/-.828561994140641e+01/, p3(4)/-.323467330305403e+02/, &
+&p3(5)/ .179601688769252e+02/, p3(6) /.175656315469614e+01/, &
+&p3(7)/-.195022321289660e+01/, p3(8) /.999994296074708e+00/
+data q3(1) /.695000655887434e+02/, q3(2) /.572837193837324e+02/, &
+&q3(3) /.257776384238440e+02/, q3(4) /.760761148007735e+03/, &
+&q3(5) /.289516727925135e+02/, q3(6)/-.343942266899870e+01/, &
+&q3(7) /.100083867402639e+01/
 !     ----------
 !
 !     COEFFICIENTS FOR R(7.7) APPROXIMATION,
 !     IN J-FRACTION FORM, USED FOR X .GE. 24.0
 !
 !     ----------
-DATA P4(1)/-.531686623494482E+02/, P4(2)/ .891263822573708E+01/, &
-&P4(3)/-.139381360364405E+01/, P4(4)/-.308336269051763E+02/, &
-&P4(5)/-.749289167792884E+01/, P4(6)/-.500140345515924E+01/, &
-&P4(7)/-.300000016782086E+01/, P4(8)/ .100000000000058E+01/
-DATA Q4(1)/ .104745362652468E+04/, Q4(2)/-.674704580465832E+01/, &
-&Q4(3)/ .295999399486831E+03/, Q4(4)/-.431325836146628E+01/, &
-&Q4(5)/-.790404992298926E+01/, Q4(6)/-.299996432944446E+01/, &
-&Q4(7)/ .199999999924131E+01/
+data p4(1)/-.531686623494482e+02/, p4(2)/ .891263822573708e+01/, &
+&p4(3)/-.139381360364405e+01/, p4(4)/-.308336269051763e+02/, &
+&p4(5)/-.749289167792884e+01/, p4(6)/-.500140345515924e+01/, &
+&p4(7)/-.300000016782086e+01/, p4(8)/ .100000000000058e+01/
+data q4(1)/ .104745362652468e+04/, q4(2)/-.674704580465832e+01/, &
+&q4(3)/ .295999399486831e+03/, q4(4)/-.431325836146628e+01/, &
+&q4(5)/-.790404992298926e+01/, q4(6)/-.299996432944446e+01/, &
+&q4(7)/ .199999999924131e+01/
 !-----------------------------------------------------------------------
 !
-X = ARG
-IERR = 0
-IF (INT .EQ. 2) GO TO 450
-IF (X) 280, 640, 110
-110 IF (X .GE. 12.E0) GO TO 200
-IF (X .GT. 8.E0) GO TO 160
-IF (X .GE. 4.E0) GO TO 150
+x = arg
+ierr = 0
+if (int .eq. 2) go to 450
+if (x) 280, 640, 110
+110 if (x .ge. 12.e0) go to 200
+if (x .gt. 8.e0) go to 160
+if (x .ge. 4.e0) go to 150
 !     ---------- 0.0 .LT. X .LT. 4.0.
 !                RATIONAL APPROXIMATION USED IS EXPRESSED
 !                IN TERMS OF CHEBYSHEV POLYNOMIALS TO
 !                IMPROVE CONDITIONING  ----------
-T = X + X
-T = T / 3.0E0 - 2.0E0
-PX(1) = 0.0E0
-QX(1) = 0.0E0
-PX(2) = P1(1)
-QX(2) = Q1(1)
+t = x + x
+t = t / 3.0e0 - 2.0e0
+px(1) = 0.0e0
+qx(1) = 0.0e0
+px(2) = p1(1)
+qx(2) = q1(1)
 !
-DO I = 2, 7
-   PX(I+1) = T * PX(I) - PX(I-1) + P1(I)
-   QX(I+1) = T * QX(I) - QX(I-1) + Q1(I)
-END DO
+do i = 2, 7
+   px(i+1) = t * px(i) - px(i-1) + p1(i)
+   qx(i+1) = t * qx(i) - qx(i-1) + q1(i)
+end do
 !
-SUMP = .5E0 * T * PX(8) - PX(7) + P1(8)
-SUMQ = .5E0 * T * QX(8) - QX(7) + Q1(8)
-FRAC = SUMP / SUMQ
-XMX0 = DBLE(X) - DX0
-IF (ABS(XMX0) .LT. 0.07E0) GO TO 140
-XX0 = X / X0
-EI = ALOG(XX0) + XMX0 * FRAC
-IF (INT .EQ. 3) EI = EXP(-X) * EI
-GO TO 410
+sump = .5e0 * t * px(8) - px(7) + p1(8)
+sumq = .5e0 * t * qx(8) - qx(7) + q1(8)
+frac = sump / sumq
+xmx0 = dble(x) - dx0
+if (abs(xmx0) .lt. 0.07e0) go to 140
+xx0 = x / x0
+ei = alog(xx0) + xmx0 * frac
+if (int .eq. 3) ei = exp(-x) * ei
+go to 410
 !     ---------- EVALUATE APPROXIMATION FOR LN(X/X0)
 !                FOR X CLOSE TO X0 ----------
-140 Y = XMX0 / X0
-EI = ALNREL(Y) + XMX0 * FRAC
-IF (INT .EQ. 3) EI = EXP(-X) * EI
-GO TO 410
+140 y = xmx0 / x0
+ei = alnrel(y) + xmx0 * frac
+if (int .eq. 3) ei = exp(-x) * ei
+go to 410
 !     ---------- 4.0 .LE. X .LE. 8.0 ----------
-150 M = 20
-EI = (1.0 + CSEVL (3.0 - 16.0/X, R, M)) / X
-IF (INT .EQ. 3) GO TO 410
-EI = EI * EXP(X)
-GO TO 410
+150 m = 20
+ei = (1.0 + csevl (3.0 - 16.0/x, r, m)) / x
+if (int .eq. 3) go to 410
+ei = ei * exp(x)
+go to 410
 !     ---------- 8.0 .LT. X .LT. 12.0 ----------
-160 FRAC = 0.0E0
+160 frac = 0.0e0
 !
-do 180 I = 1, 7
-180 FRAC = Q2(I) / (P2(I) + X + FRAC)
+do 180 i = 1, 7
+180 frac = q2(i) / (p2(i) + x + frac)
 !
-EI = (P2(8) + FRAC) / X
-IF (INT .EQ. 3) GO TO 410
-EI = EI * EXP(X)
-GO TO 410
+ei = (p2(8) + frac) / x
+if (int .eq. 3) go to 410
+ei = ei * exp(x)
+go to 410
 !     ---------- 12.0 .LE. X .LT. 24.0 ----------
-200 IF (X .GE. 24.E0) GO TO 240
-FRAC = 0.0E0
+200 if (x .ge. 24.e0) go to 240
+frac = 0.0e0
 !
-do 220 I = 1, 7
-220 FRAC = Q3(I) / (P3(I) + X + FRAC)
+do 220 i = 1, 7
+220 frac = q3(i) / (p3(i) + x + frac)
 !
-EI = (P3(8) + FRAC) / X
-IF (INT .EQ. 3) GO TO 410
-EI = EI * EXP(X)
-GO TO 410
+ei = (p3(8) + frac) / x
+if (int .eq. 3) go to 410
+ei = ei * exp(x)
+go to 410
 !     ---------- 24.0 .LE. X ----------
-240 XMAX = EXPARG(0)
-IF ((X .GT. XMAX) .AND. (INT .LT. 3)) GO TO 620
-Y = 1.0E0 / X
-FRAC = 0.0E0
+240 xmax = exparg(0)
+if ((x .gt. xmax) .and. (int .lt. 3)) go to 620
+y = 1.0e0 / x
+frac = 0.0e0
 !
-do 260 I = 1, 7
-260 FRAC = Q4(I) / (P4(I) + X + FRAC)
+do 260 i = 1, 7
+260 frac = q4(i) / (p4(i) + x + frac)
 !
-FRAC = P4(8) + FRAC
-EI = Y + Y * Y * FRAC
-IF (INT .EQ. 3) GO TO 410
-IF (X .GT. 150.0E0) GO TO 270
-EI = EI * EXP(X)
-GO TO 410
+frac = p4(8) + frac
+ei = y + y * y * frac
+if (int .eq. 3) go to 410
+if (x .gt. 150.0e0) go to 270
+ei = ei * exp(x)
+go to 410
 !     ---------- CALCULATION REFORMULATED TO AVOID
 !                PREMATURE OVERFLOW ----------
-270 EI = (EI * EXP(X-40.0E0)) * DEXP40
-GO TO 410
+270 ei = (ei * exp(x-40.0e0)) * dexp40
+go to 410
 !     ---------- ORIGINAL X WAS NEGATIVE.  CALCULATION OF
 !                E-SUB-1 JOINS AT LABEL 300 ----------
-280 Y = -X
-300 W = 1.0E0 / Y
-IF (Y .GT. 4.0E0) GO TO 340
-IF (Y .GT. 1.0E0) GO TO 320
+280 y = -x
+300 w = 1.0e0 / y
+if (y .gt. 4.0e0) go to 340
+if (y .gt. 1.0e0) go to 320
 !     ---------- 0.0 .LT. -X .LE. 1.0 ----------
-EI = ALOG(Y) - (((((A(6) * Y + A(5)) * Y + A(4)) &
-&* Y + A(3)) * Y + A(2)) * Y + A(1)) / &
-&((((B(5) * Y + B(4)) * Y + B(3)) &
-&* Y + B(2)) * Y + B(1))
-IF (INT .EQ. 3) EI = EI * EXP(Y)
-GO TO 400
+ei = alog(y) - (((((a(6) * y + a(5)) * y + a(4)) &
+&* y + a(3)) * y + a(2)) * y + a(1)) / &
+&((((b(5) * y + b(4)) * y + b(3)) &
+&* y + b(2)) * y + b(1))
+if (int .eq. 3) ei = ei * exp(y)
+go to 400
 !     ---------- 1.0 .LT. -X .LE. 4.0 ----------
-320 EI = -((((((C(7) * W + C(6)) * W + C(5)) * W + C(4)) &
-&* W + C(3)) * W + C(2)) * W + C(1))  / &
-&((((((D(7) * W + D(6)) * W + D(5)) * W + D(4)) &
-&* W + D(3)) * W + D(2)) * W + D(1))
-IF  (INT .EQ. 3) GO TO 410
-EI = EI * EXP(-Y)
-GO TO 400
+320 ei = -((((((c(7) * w + c(6)) * w + c(5)) * w + c(4)) &
+&* w + c(3)) * w + c(2)) * w + c(1))  / &
+&((((((d(7) * w + d(6)) * w + d(5)) * w + d(4)) &
+&* w + d(3)) * w + d(2)) * w + d(1))
+if  (int .eq. 3) go to 410
+ei = ei * exp(-y)
+go to 400
 !     ---------- 4.0 .LT. -X ----------
-340 XMIN = EXPARG(1)
-IF ((-ABS(X) .LT. XMIN) .AND. (INT .LT. 3)) GO TO 600
-EI = -W * (1.0E0 + W * ((((((E(7) &
-&* W + E(6)) * W + E(5)) * W + E(4)) &
-&* W + E(3)) * W + E(2)) * W + E(1)) / &
-&((((((F(7) * W + F(6)) * W + F(5)) &
-&* W + F(4)) * W + F(3)) * W + F(2)) * W + F(1)))
-IF (INT .EQ. 3) GO TO 410
-EI = EI * EXP(-Y)
-T = 0.5E0 * EI
-IF (T .EQ. 0.0E0) GO TO 600
-400 IF (INT .EQ. 2) EI = -EI
-410 RESULT = EI
-RETURN
-450 Y = X
-IF (Y) 660, 640, 300
+340 xmin = exparg(1)
+if ((-abs(x) .lt. xmin) .and. (int .lt. 3)) go to 600
+ei = -w * (1.0e0 + w * ((((((e(7) &
+&* w + e(6)) * w + e(5)) * w + e(4)) &
+&* w + e(3)) * w + e(2)) * w + e(1)) / &
+&((((((f(7) * w + f(6)) * w + f(5)) &
+&* w + f(4)) * w + f(3)) * w + f(2)) * w + f(1)))
+if (int .eq. 3) go to 410
+ei = ei * exp(-y)
+t = 0.5e0 * ei
+if (t .eq. 0.0e0) go to 600
+400 if (int .eq. 2) ei = -ei
+410 result = ei
+return
+450 y = x
+if (y) 660, 640, 300
 !     ---------- ERROR RETURN FOR X .LT. XMIN,
 !                CAUSING UNDERFLOW ----------
-600 EI = 0.0E0
-IERR = 1
-GO TO 410
+600 ei = 0.0e0
+ierr = 1
+go to 410
 !     ---------- ERROR RETURN FOR X .GT. XMAX,
 !                CAUSING OVERFLOW ----------
-620 IERR = 2
-RETURN
+620 ierr = 2
+return
 !     ---------- ERROR RETURN FOR ILLEGAL
 !                ARGUMENT, X = 0 ----------
-640 IERR = 3
-RETURN
+640 ierr = 3
+return
 !     ---------- ERROR RETURN FOR NEGATIVE
 !                ARGUMENT IN E-SUB-1 ----------
-660 IERR = 4
-RETURN
-END SUBROUTINE EXPLI
+660 ierr = 4
+return
+end subroutine expli
 
-double precision function DEI (X)
-IMPLICIT NONE
+double precision function dei (x)
+implicit none
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: DE1E
+double precision, intent(in) :: x
+double precision :: de1e
 !
-DEI = -DE1E(-X)
-IF (X .GT. 4.D0 .OR. X .LT. -1.D0) DEI = DEXP(X) * DEI
-RETURN
-END FUNCTION DEI
+dei = -de1e(-x)
+if (x .gt. 4.d0 .or. x .lt. -1.d0) dei = dexp(x) * dei
+return
+end function dei
 
-double precision function DEI1 (X)
-IMPLICIT NONE
+double precision function dei1 (x)
+implicit none
 !-----------------------------------------------------------------------
 !          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: DE1E
+double precision, intent(in) :: x
+double precision :: de1e
 !
-DEI1  = -DE1E(-X)
-IF (X .GT. 4.D0 .OR. X .LT. -1.D0) RETURN
-DEI1 = DEXP(-X) * DEI1
-RETURN
-END FUNCTION DEI1
+dei1  = -de1e(-x)
+if (x .gt. 4.d0 .or. x .lt. -1.d0) return
+dei1 = dexp(-x) * dei1
+return
+end function dei1
 
-double precision function DE1E(X)
-IMPLICIT NONE
-INTEGER :: M
+double precision function de1e(x)
+implicit none
+integer :: m
 !-----------------------------------------------------------------------
 !
 !     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
@@ -9722,414 +9722,414 @@ INTEGER :: M
 !                                    DECIMAL PLACES REQUIRED  32.20
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: C, EPS, T, W
-DOUBLE PRECISION :: A(50), B(60), D(41), E(29), R(25), P(50), &
-&Q(64)
-DOUBLE PRECISION :: DEI0, DCSEVL, DPMPAR
+double precision, intent(in) :: x
+double precision :: c, eps, t, w
+double precision :: a(50), b(60), d(41), e(29), r(25), p(50), &
+&q(64)
+double precision :: dei0, dcsevl, dpmpar
 !------------------------------
-DATA A(1)  / .3284394579616699087873844201881D-01/, &
-&A(2)  /-.1669920452031362851476184343387D-01/, &
-&A(3)  / .2845284724361346807424899853252D-03/, &
-&A(4)  /-.7563944358516206489487866938533D-05/, &
-&A(5)  / .2798971289450859157504843180879D-06/, &
-&A(6)  /-.1357901828534531069525563926255D-07/, &
-&A(7)  / .8343596202040469255856102904906D-09/, &
-&A(8)  /-.6370971727640248438275242988532D-10/, &
-&A(9)  / .6007247608811861235760831561584D-11/, &
-&A(10) /-.7022876174679773590750626150088D-12/
-DATA A(11) / .1018302673703687693096652346883D-12/, &
-&A(12) /-.1761812903430880040406309966422D-13/, &
-&A(13) / .3250828614235360694244030353877D-14/, &
-&A(14) /-.5071770025505818678824872259044D-15/, &
-&A(15) / .1665177387043294298172486084156D-16/, &
-&A(16) / .3166753890797514400677003536555D-16/, &
-&A(17) /-.1588403763664141515133118343538D-16/, &
-&A(18) / .4175513256138018833003034618484D-17/, &
-&A(19) /-.2892347749707141906710714478852D-18/, &
-&A(20) /-.2800625903396608103506340589669D-18/
-DATA A(21) / .1322938639539270903707580023781D-18/, &
-&A(22) /-.1804447444177301627283887833557D-19/, &
-&A(23) /-.7905384086522616076291644817604D-20/, &
-&A(24) / .4435711366369570103946235838027D-20/, &
-&A(25) /-.4264103994978120868865309206555D-21/, &
-&A(26) /-.3920101766937117541553713162048D-21/, &
-&A(27) / .1527378051343994266343752326971D-21/, &
-&A(28) / .1024849527049372339310308783117D-22/, &
-&A(29) /-.2134907874771433576262711405882D-22/, &
-&A(30) / .3239139475160028267061694700366D-23/
-DATA A(31) / .2142183762299889954762643168296D-23/, &
-&A(32) /-.8234609419601018414700348082312D-24/, &
-&A(33) /-.1524652829645809479613694401140D-24/, &
-&A(34) / .1378208282460639134668480364325D-24/, &
-&A(35) / .2131311202833947879523224999253D-26/, &
-&A(36) /-.2012649651526484121817466763127D-25/, &
-&A(37) / .1995535662263358016106311782673D-26/, &
-&A(38) / .2798995808984003464948686520319D-26/, &
-&A(39) /-.5534511845389626637640819277823D-27/, &
-&A(40) /-.3884995396159968861682544026146D-27/
-DATA A(41) / .1121304434507359382850680354679D-27/, &
-&A(42) / .5566568152423740948256563833514D-28/, &
-&A(43) /-.2045482929810499700448533938176D-28/, &
-&A(44) /-.8453813992712336233411457493674D-29/, &
-&A(45) / .3565758433431291562816111116287D-29/, &
-&A(46) / .1383653872125634705539949098871D-29/, &
-&A(47) /-.6062167864451372436584533764778D-30/, &
-&A(48) /-.2447198043989313267437655119189D-30/, &
-&A(49) / .1006850640933998348011548180480D-30/, &
-&A(50) / .4623685555014869015664341461674D-31/
+data a(1)  / .3284394579616699087873844201881d-01/, &
+&a(2)  /-.1669920452031362851476184343387d-01/, &
+&a(3)  / .2845284724361346807424899853252d-03/, &
+&a(4)  /-.7563944358516206489487866938533d-05/, &
+&a(5)  / .2798971289450859157504843180879d-06/, &
+&a(6)  /-.1357901828534531069525563926255d-07/, &
+&a(7)  / .8343596202040469255856102904906d-09/, &
+&a(8)  /-.6370971727640248438275242988532d-10/, &
+&a(9)  / .6007247608811861235760831561584d-11/, &
+&a(10) /-.7022876174679773590750626150088d-12/
+data a(11) / .1018302673703687693096652346883d-12/, &
+&a(12) /-.1761812903430880040406309966422d-13/, &
+&a(13) / .3250828614235360694244030353877d-14/, &
+&a(14) /-.5071770025505818678824872259044d-15/, &
+&a(15) / .1665177387043294298172486084156d-16/, &
+&a(16) / .3166753890797514400677003536555d-16/, &
+&a(17) /-.1588403763664141515133118343538d-16/, &
+&a(18) / .4175513256138018833003034618484d-17/, &
+&a(19) /-.2892347749707141906710714478852d-18/, &
+&a(20) /-.2800625903396608103506340589669d-18/
+data a(21) / .1322938639539270903707580023781d-18/, &
+&a(22) /-.1804447444177301627283887833557d-19/, &
+&a(23) /-.7905384086522616076291644817604d-20/, &
+&a(24) / .4435711366369570103946235838027d-20/, &
+&a(25) /-.4264103994978120868865309206555d-21/, &
+&a(26) /-.3920101766937117541553713162048d-21/, &
+&a(27) / .1527378051343994266343752326971d-21/, &
+&a(28) / .1024849527049372339310308783117d-22/, &
+&a(29) /-.2134907874771433576262711405882d-22/, &
+&a(30) / .3239139475160028267061694700366d-23/
+data a(31) / .2142183762299889954762643168296d-23/, &
+&a(32) /-.8234609419601018414700348082312d-24/, &
+&a(33) /-.1524652829645809479613694401140d-24/, &
+&a(34) / .1378208282460639134668480364325d-24/, &
+&a(35) / .2131311202833947879523224999253d-26/, &
+&a(36) /-.2012649651526484121817466763127d-25/, &
+&a(37) / .1995535662263358016106311782673d-26/, &
+&a(38) / .2798995808984003464948686520319d-26/, &
+&a(39) /-.5534511845389626637640819277823d-27/, &
+&a(40) /-.3884995396159968861682544026146d-27/
+data a(41) / .1121304434507359382850680354679d-27/, &
+&a(42) / .5566568152423740948256563833514d-28/, &
+&a(43) /-.2045482929810499700448533938176d-28/, &
+&a(44) /-.8453813992712336233411457493674d-29/, &
+&a(45) / .3565758433431291562816111116287d-29/, &
+&a(46) / .1383653872125634705539949098871d-29/, &
+&a(47) /-.6062167864451372436584533764778d-30/, &
+&a(48) /-.2447198043989313267437655119189d-30/, &
+&a(49) / .1006850640933998348011548180480d-30/, &
+&a(50) / .4623685555014869015664341461674d-31/
 !------------------------------
-DATA B(1)  / .20263150647078889499401236517381D+00/, &
-&B(2)  /-.73655140991203130439536898728034D-01/, &
-&B(3)  / .63909349118361915862753283840020D-02/, &
-&B(4)  /-.60797252705247911780653153363999D-03/, &
-&B(5)  /-.73706498620176629330681411493484D-04/, &
-&B(6)  / .48732857449450183453464992488076D-04/, &
-&B(7)  /-.23837064840448290766588489460235D-05/, &
-&B(8)  /-.30518612628561521027027332246121D-05/, &
-&B(9)  / .17050331572564559009688032992907D-06/, &
-&B(10) / .23834204527487747258601598136403D-06/
-DATA B(11) / .10781772556163166562596872364020D-07/, &
-&B(12) /-.17955692847399102653642691446599D-07/, &
-&B(13) /-.41284072341950457727912394640436D-08/, &
-&B(14) / .68622148588631968618346844526664D-09/, &
-&B(15) / .53130183120506356147602009675961D-09/, &
-&B(16) / .78796880261490694831305022893515D-10/, &
-&B(17) /-.26261762329356522290341675271232D-10/, &
-&B(18) /-.15483687636308261963125756294100D-10/, &
-&B(19) /-.25818962377261390492802405122591D-11/, &
-&B(20) / .59542879191591072658903529959352D-12/
-DATA B(21) / .46451400387681525833784919321405D-12/, &
-&B(22) / .11557855023255861496288006203731D-12/, &
-&B(23) /-.10475236870835799012317547189670D-14/, &
-&B(24) /-.11896653502709004368104489260929D-13/, &
-&B(25) /-.47749077490261778752643019349950D-14/, &
-&B(26) /-.81077649615772777976249734754135D-15/, &
-&B(27) / .13435569250031554199376987998178D-15/, &
-&B(28) / .14134530022913106260248873881287D-15/, &
-&B(29) / .49451592573953173115520663232883D-16/, &
-&B(30) / .79884048480080665648858587399367D-17/
-DATA B(31) /-.14008632188089809829248711935393D-17/, &
-&B(32) /-.14814246958417372107722804001680D-17/, &
-&B(33) /-.55826173646025601904010693937113D-18/, &
-&B(34) /-.11442074542191647264783072544598D-18/, &
-&B(35) / .25371823879566853500524018479923D-20/, &
-&B(36) / .13205328154805359813278863389097D-19/, &
-&B(37) / .62930261081586809166287426789485D-20/, &
-&B(38) / .17688270424882713734999261332548D-20/, &
-&B(39) / .23266187985146045209674296887432D-21/, &
-&B(40) /-.67803060811125233043773831844113D-22/
-DATA B(41) /-.59440876959676373802874150531891D-22/, &
-&B(42) /-.23618214531184415968532592503466D-22/, &
-&B(43) /-.60214499724601478214168478744576D-23/, &
-&B(44) /-.65517906474348299071370444144639D-24/, &
-&B(45) / .29388755297497724587042038699349D-24/, &
-&B(46) / .22601606200642115173215728758510D-24/, &
-&B(47) / .89534369245958628745091206873087D-25/, &
-&B(48) / .24015923471098457555772067457706D-25/, &
-&B(49) / .34118376888907172955666423043413D-26/, &
-&B(50) /-.71617071694630342052355013345279D-27/
-DATA B(51) /-.75620390659281725157928651980799D-27/, &
-&B(52) /-.33774612157467324637952920780800D-27/, &
-&B(53) /-.10479325703300941711526430332245D-27/, &
-&B(54) /-.21654550252170342240854880201386D-28/, &
-&B(55) /-.75297125745288269994689298432000D-30/, &
-&B(56) / .19103179392798935768638084000426D-29/, &
-&B(57) / .11492104966530338547790728833706D-29/, &
-&B(58) / .43896970582661751514410359193600D-30/, &
-&B(59) / .12320883239205686471647157725866D-30/, &
-&B(60) / .22220174457553175317538581162666D-31/
+data b(1)  / .20263150647078889499401236517381d+00/, &
+&b(2)  /-.73655140991203130439536898728034d-01/, &
+&b(3)  / .63909349118361915862753283840020d-02/, &
+&b(4)  /-.60797252705247911780653153363999d-03/, &
+&b(5)  /-.73706498620176629330681411493484d-04/, &
+&b(6)  / .48732857449450183453464992488076d-04/, &
+&b(7)  /-.23837064840448290766588489460235d-05/, &
+&b(8)  /-.30518612628561521027027332246121d-05/, &
+&b(9)  / .17050331572564559009688032992907d-06/, &
+&b(10) / .23834204527487747258601598136403d-06/
+data b(11) / .10781772556163166562596872364020d-07/, &
+&b(12) /-.17955692847399102653642691446599d-07/, &
+&b(13) /-.41284072341950457727912394640436d-08/, &
+&b(14) / .68622148588631968618346844526664d-09/, &
+&b(15) / .53130183120506356147602009675961d-09/, &
+&b(16) / .78796880261490694831305022893515d-10/, &
+&b(17) /-.26261762329356522290341675271232d-10/, &
+&b(18) /-.15483687636308261963125756294100d-10/, &
+&b(19) /-.25818962377261390492802405122591d-11/, &
+&b(20) / .59542879191591072658903529959352d-12/
+data b(21) / .46451400387681525833784919321405d-12/, &
+&b(22) / .11557855023255861496288006203731d-12/, &
+&b(23) /-.10475236870835799012317547189670d-14/, &
+&b(24) /-.11896653502709004368104489260929d-13/, &
+&b(25) /-.47749077490261778752643019349950d-14/, &
+&b(26) /-.81077649615772777976249734754135d-15/, &
+&b(27) / .13435569250031554199376987998178d-15/, &
+&b(28) / .14134530022913106260248873881287d-15/, &
+&b(29) / .49451592573953173115520663232883d-16/, &
+&b(30) / .79884048480080665648858587399367d-17/
+data b(31) /-.14008632188089809829248711935393d-17/, &
+&b(32) /-.14814246958417372107722804001680d-17/, &
+&b(33) /-.55826173646025601904010693937113d-18/, &
+&b(34) /-.11442074542191647264783072544598d-18/, &
+&b(35) / .25371823879566853500524018479923d-20/, &
+&b(36) / .13205328154805359813278863389097d-19/, &
+&b(37) / .62930261081586809166287426789485d-20/, &
+&b(38) / .17688270424882713734999261332548d-20/, &
+&b(39) / .23266187985146045209674296887432d-21/, &
+&b(40) /-.67803060811125233043773831844113d-22/
+data b(41) /-.59440876959676373802874150531891d-22/, &
+&b(42) /-.23618214531184415968532592503466d-22/, &
+&b(43) /-.60214499724601478214168478744576d-23/, &
+&b(44) /-.65517906474348299071370444144639d-24/, &
+&b(45) / .29388755297497724587042038699349d-24/, &
+&b(46) / .22601606200642115173215728758510d-24/, &
+&b(47) / .89534369245958628745091206873087d-25/, &
+&b(48) / .24015923471098457555772067457706d-25/, &
+&b(49) / .34118376888907172955666423043413d-26/, &
+&b(50) /-.71617071694630342052355013345279d-27/
+data b(51) /-.75620390659281725157928651980799d-27/, &
+&b(52) /-.33774612157467324637952920780800d-27/, &
+&b(53) /-.10479325703300941711526430332245d-27/, &
+&b(54) /-.21654550252170342240854880201386d-28/, &
+&b(55) /-.75297125745288269994689298432000d-30/, &
+&b(56) / .19103179392798935768638084000426d-29/, &
+&b(57) / .11492104966530338547790728833706d-29/, &
+&b(58) / .43896970582661751514410359193600d-30/, &
+&b(59) / .12320883239205686471647157725866d-30/, &
+&b(60) / .22220174457553175317538581162666d-31/
 !------------------------------
-DATA D(1)  / .63629589796747038767129887806803D+00/, &
-&D(2)  /-.13081168675067634385812671121135D+00/, &
-&D(3)  /-.84367410213053930014487662129752D-02/, &
-&D(4)  / .26568491531006685413029428068906D-02/, &
-&D(5)  / .32822721781658133778792170142517D-03/, &
-&D(6)  /-.23783447771430248269579807851050D-04/, &
-&D(7)  /-.11439804308100055514447076797047D-04/, &
-&D(8)  /-.14405943433238338455239717699323D-05/, &
-&D(9)  / .52415956651148829963772818061664D-08/, &
-&D(10) / .38407306407844323480979203059716D-07/
-DATA D(11) / .85880244860267195879660515759344D-08/, &
-&D(12) / .10219226625855003286339969553911D-08/, &
-&D(13) / .21749132323289724542821339805992D-10/, &
-&D(14) /-.22090238142623144809523503811741D-10/, &
-&D(15) /-.63457533544928753294383622208801D-11/, &
-&D(16) /-.10837746566857661115340539732919D-11/, &
-&D(17) /-.11909822872222586730262200440277D-12/, &
-&D(18) /-.28438682389265590299508766008661D-14/, &
-&D(19) / .25080327026686769668587195487546D-14/, &
-&D(20) / .78729641528559842431597726421265D-15/
-DATA D(21) / .15475066347785217148484334637329D-15/, &
-&D(22) / .22575322831665075055272608197290D-16/, &
-&D(23) / .22233352867266608760281380836693D-17/, &
-&D(24) / .16967819563544153513464194662399D-19/, &
-&D(25) /-.57608316255947682105310087304533D-19/, &
-&D(26) /-.17591235774646878055625369408853D-19/, &
-&D(27) /-.36286056375103174394755328682666D-20/, &
-&D(28) /-.59235569797328991652558143488000D-21/, &
-&D(29) /-.76030380926310191114429136895999D-22/, &
-&D(30) /-.62547843521711763842641428479999D-23/
-DATA D(31) / .25483360759307648606037606400000D-24/, &
-&D(32) / .25598615731739857020168874666666D-24/, &
-&D(33) / .71376239357899318800207052800000D-25/, &
-&D(34) / .14703759939567568181578956800000D-25/, &
-&D(35) / .25105524765386733555198634666666D-26/, &
-&D(36) / .35886666387790890886583637333333D-27/, &
-&D(37) / .39886035156771301763317759999999D-28/, &
-&D(38) / .21763676947356220478805333333333D-29/, &
-&D(39) /-.46146998487618942367607466666666D-30/, &
-&D(40) /-.20713517877481987707153066666666D-30/
-DATA D(41) /-.51890378563534371596970666666666D-31/
+data d(1)  / .63629589796747038767129887806803d+00/, &
+&d(2)  /-.13081168675067634385812671121135d+00/, &
+&d(3)  /-.84367410213053930014487662129752d-02/, &
+&d(4)  / .26568491531006685413029428068906d-02/, &
+&d(5)  / .32822721781658133778792170142517d-03/, &
+&d(6)  /-.23783447771430248269579807851050d-04/, &
+&d(7)  /-.11439804308100055514447076797047d-04/, &
+&d(8)  /-.14405943433238338455239717699323d-05/, &
+&d(9)  / .52415956651148829963772818061664d-08/, &
+&d(10) / .38407306407844323480979203059716d-07/
+data d(11) / .85880244860267195879660515759344d-08/, &
+&d(12) / .10219226625855003286339969553911d-08/, &
+&d(13) / .21749132323289724542821339805992d-10/, &
+&d(14) /-.22090238142623144809523503811741d-10/, &
+&d(15) /-.63457533544928753294383622208801d-11/, &
+&d(16) /-.10837746566857661115340539732919d-11/, &
+&d(17) /-.11909822872222586730262200440277d-12/, &
+&d(18) /-.28438682389265590299508766008661d-14/, &
+&d(19) / .25080327026686769668587195487546d-14/, &
+&d(20) / .78729641528559842431597726421265d-15/
+data d(21) / .15475066347785217148484334637329d-15/, &
+&d(22) / .22575322831665075055272608197290d-16/, &
+&d(23) / .22233352867266608760281380836693d-17/, &
+&d(24) / .16967819563544153513464194662399d-19/, &
+&d(25) /-.57608316255947682105310087304533d-19/, &
+&d(26) /-.17591235774646878055625369408853d-19/, &
+&d(27) /-.36286056375103174394755328682666d-20/, &
+&d(28) /-.59235569797328991652558143488000d-21/, &
+&d(29) /-.76030380926310191114429136895999d-22/, &
+&d(30) /-.62547843521711763842641428479999d-23/
+data d(31) / .25483360759307648606037606400000d-24/, &
+&d(32) / .25598615731739857020168874666666d-24/, &
+&d(33) / .71376239357899318800207052800000d-25/, &
+&d(34) / .14703759939567568181578956800000d-25/, &
+&d(35) / .25105524765386733555198634666666d-26/, &
+&d(36) / .35886666387790890886583637333333d-27/, &
+&d(37) / .39886035156771301763317759999999d-28/, &
+&d(38) / .21763676947356220478805333333333d-29/, &
+&d(39) /-.46146998487618942367607466666666d-30/, &
+&d(40) /-.20713517877481987707153066666666d-30/
+data d(41) /-.51890378563534371596970666666666d-31/
 !------------------------------
-DATA E(1)  /-.16113461655571494025720663927566180D+02/, &
-&E(2)  / .77940727787426802769272245891741497D+01/, &
-&E(3)  /-.19554058188631419507127283812814491D+01/, &
-&E(4)  / .37337293866277945611517190865690209D+00/, &
-&E(5)  /-.56925031910929019385263892220051166D-01/, &
-&E(6)  / .72110777696600918537847724812635813D-02/, &
-&E(7)  /-.78104901449841593997715184089064148D-03/, &
-&E(8)  / .73880933562621681878974881366177858D-04/, &
-&E(9)  /-.62028618758082045134358133607909712D-05/, &
-&E(10) / .46816002303176735524405823868362657D-06/
-DATA E(11) /-.32092888533298649524072553027228719D-07/, &
-&E(12) / .20151997487404533394826262213019548D-08/, &
-&E(13) /-.11673686816697793105356271695015419D-09/, &
-&E(14) / .62762706672039943397788748379615573D-11/, &
-&E(15) /-.31481541672275441045246781802393600D-12/, &
-&E(16) / .14799041744493474210894472251733333D-13/, &
-&E(17) /-.65457091583979673774263401588053333D-15/, &
-&E(18) / .27336872223137291142508012748799999D-16/, &
-&E(19) /-.10813524349754406876721727624533333D-17/, &
-&E(20) / .40628328040434303295300348586666666D-19/
-DATA E(21) /-.14535539358960455858914372266666666D-20/, &
-&E(22) / .49632746181648636830198442666666666D-22/, &
-&E(23) /-.16208612696636044604866560000000000D-23/, &
-&E(24) / .50721448038607422226431999999999999D-25/, &
-&E(25) /-.15235811133372207813973333333333333D-26/, &
-&E(26) / .44001511256103618696533333333333333D-28/, &
-&E(27) /-.12236141945416231594666666666666666D-29/, &
-&E(28) / .32809216661066001066666666666666666D-31/, &
-&E(29) /-.84933452268306432000000000000000000D-33/
+data e(1)  /-.16113461655571494025720663927566180d+02/, &
+&e(2)  / .77940727787426802769272245891741497d+01/, &
+&e(3)  /-.19554058188631419507127283812814491d+01/, &
+&e(4)  / .37337293866277945611517190865690209d+00/, &
+&e(5)  /-.56925031910929019385263892220051166d-01/, &
+&e(6)  / .72110777696600918537847724812635813d-02/, &
+&e(7)  /-.78104901449841593997715184089064148d-03/, &
+&e(8)  / .73880933562621681878974881366177858d-04/, &
+&e(9)  /-.62028618758082045134358133607909712d-05/, &
+&e(10) / .46816002303176735524405823868362657d-06/
+data e(11) /-.32092888533298649524072553027228719d-07/, &
+&e(12) / .20151997487404533394826262213019548d-08/, &
+&e(13) /-.11673686816697793105356271695015419d-09/, &
+&e(14) / .62762706672039943397788748379615573d-11/, &
+&e(15) /-.31481541672275441045246781802393600d-12/, &
+&e(16) / .14799041744493474210894472251733333d-13/, &
+&e(17) /-.65457091583979673774263401588053333d-15/, &
+&e(18) / .27336872223137291142508012748799999d-16/, &
+&e(19) /-.10813524349754406876721727624533333d-17/, &
+&e(20) / .40628328040434303295300348586666666d-19/
+data e(21) /-.14535539358960455858914372266666666d-20/, &
+&e(22) / .49632746181648636830198442666666666d-22/, &
+&e(23) /-.16208612696636044604866560000000000d-23/, &
+&e(24) / .50721448038607422226431999999999999d-25/, &
+&e(25) /-.15235811133372207813973333333333333d-26/, &
+&e(26) / .44001511256103618696533333333333333d-28/, &
+&e(27) /-.12236141945416231594666666666666666d-29/, &
+&e(28) / .32809216661066001066666666666666666d-31/, &
+&e(29) /-.84933452268306432000000000000000000d-33/
 !------------------------------
-DATA R(1)  /-.3739021479220279511668698204827D-01/, &
-&R(2)  / .4272398606220957726049179176528D-01/, &
-&R(3)  /-.130318207984970054415392055219726D+00/, &
-&R(4)  / .144191240246988907341095893982137D-01/, &
-&R(5)  /-.134617078051068022116121527983553D-02/, &
-&R(6)  / .107310292530637799976115850970073D-03/, &
-&R(7)  /-.742999951611943649610283062223163D-05/, &
-&R(8)  / .453773256907537139386383211511827D-06/, &
-&R(9)  /-.247641721139060131846547423802912D-07/, &
-&R(10) / .122076581374590953700228167846102D-08/
-DATA R(11) /-.548514148064092393821357398028261D-10/, &
-&R(12) / .226362142130078799293688162377002D-11/, &
-&R(13) /-.863589727169800979404172916282240D-13/, &
-&R(14) / .306291553669332997581032894881279D-14/, &
-&R(15) /-.101485718855944147557128906734933D-15/, &
-&R(16) / .315482174034069877546855328426666D-17/, &
-&R(17) /-.923604240769240954484015923200000D-19/, &
-&R(18) / .255504267970814002440435029333333D-20/, &
-&R(19) /-.669912805684566847217882453333333D-22/, &
-&R(20) / .166925405435387319431987199999999D-23/
-DATA R(21) /-.396254925184379641856000000000000D-25/, &
-&R(22) / .898135896598511332010666666666666D-27/, &
-&R(23) /-.194763366993016433322666666666666D-28/, &
-&R(24) / .404836019024630033066666666666666D-30/, &
-&R(25) /-.807981567699845120000000000000000D-32/
+data r(1)  /-.3739021479220279511668698204827d-01/, &
+&r(2)  / .4272398606220957726049179176528d-01/, &
+&r(3)  /-.130318207984970054415392055219726d+00/, &
+&r(4)  / .144191240246988907341095893982137d-01/, &
+&r(5)  /-.134617078051068022116121527983553d-02/, &
+&r(6)  / .107310292530637799976115850970073d-03/, &
+&r(7)  /-.742999951611943649610283062223163d-05/, &
+&r(8)  / .453773256907537139386383211511827d-06/, &
+&r(9)  /-.247641721139060131846547423802912d-07/, &
+&r(10) / .122076581374590953700228167846102d-08/
+data r(11) /-.548514148064092393821357398028261d-10/, &
+&r(12) / .226362142130078799293688162377002d-11/, &
+&r(13) /-.863589727169800979404172916282240d-13/, &
+&r(14) / .306291553669332997581032894881279d-14/, &
+&r(15) /-.101485718855944147557128906734933d-15/, &
+&r(16) / .315482174034069877546855328426666d-17/, &
+&r(17) /-.923604240769240954484015923200000d-19/, &
+&r(18) / .255504267970814002440435029333333d-20/, &
+&r(19) /-.669912805684566847217882453333333d-22/, &
+&r(20) / .166925405435387319431987199999999d-23/
+data r(21) /-.396254925184379641856000000000000d-25/, &
+&r(22) / .898135896598511332010666666666666d-27/, &
+&r(23) /-.194763366993016433322666666666666d-28/, &
+&r(24) / .404836019024630033066666666666666d-30/, &
+&r(25) /-.807981567699845120000000000000000d-32/
 !------------------------------
-DATA P(1)  /-.60577324664060345999319382737747D+00/, &
-&P(2)  /-.11253524348366090030649768852718D+00/, &
-&P(3)  / .13432266247902779492487859329414D-01/, &
-&P(4)  /-.19268451873811457249246838991303D-02/, &
-&P(5)  / .30911833772060318335586737475368D-03/, &
-&P(6)  /-.53564132129618418776393559795147D-04/, &
-&P(7)  / .98278128802474923952491882717237D-05/, &
-&P(8)  /-.18853689849165182826902891938910D-05/, &
-&P(9)  / .37494319356894735406964042190531D-06/, &
-&P(10) /-.76823455870552639273733465680556D-07/
-DATA P(11) / .16143270567198777552956300060868D-07/, &
-&P(12) /-.34668022114907354566309060226027D-08/, &
-&P(13) / .75875420919036277572889747054114D-09/, &
-&P(14) /-.16886433329881412573514526636703D-09/, &
-&P(15) / .38145706749552265682804250927272D-10/, &
-&P(16) /-.87330266324446292706851718272334D-11/, &
-&P(17) / .20236728645867960961794311064330D-11/, &
-&P(18) /-.47413283039555834655210340820160D-12/, &
-&P(19) / .11221172048389864324731799928920D-12/, &
-&P(20) /-.26804225434840309912826809093395D-13/
-DATA P(21) / .64578514417716530343580369067212D-14/, &
-&P(22) /-.15682760501666478830305702849194D-14/, &
-&P(23) / .38367865399315404861821516441408D-15/, &
-&P(24) /-.94517173027579130478871048932556D-16/, &
-&P(25) / .23434812288949573293896666439133D-16/, &
-&P(26) /-.58458661580214714576123194419882D-17/, &
-&P(27) / .14666229867947778605873617419195D-17/, &
-&P(28) /-.36993923476444472706592538274474D-18/, &
-&P(29) / .93790159936721242136014291817813D-19/, &
-&P(30) /-.23893673221937873136308224087381D-19/
-DATA P(31) / .61150624629497608051934223837866D-20/, &
-&P(32) /-.15718585327554025507719853288106D-20/, &
-&P(33) / .40572387285585397769519294491306D-21/, &
-&P(34) /-.10514026554738034990566367122773D-21/, &
-&P(35) / .27349664930638667785806003131733D-22/, &
-&P(36) /-.71401604080205796099355574271999D-23/, &
-&P(37) / .18705552432235079986756924211199D-23/, &
-&P(38) /-.49167468166870480520478020949333D-24/, &
-&P(39) / .12964988119684031730916087125333D-24/, &
-&P(40) /-.34292515688362864461623940437333D-25/
-DATA P(41) / .90972241643887034329104820906666D-26/, &
-&P(42) /-.24202112314316856489934847999999D-26/, &
-&P(43) / .64563612934639510757670475093333D-27/, &
-&P(44) /-.17269132735340541122315987626666D-27/, &
-&P(45) / .46308611659151500715194231466666D-28/, &
-&P(46) /-.12448703637214131241755170133333D-28/, &
-&P(47) / .33544574090520678532907007999999D-29/, &
-&P(48) /-.90598868521070774437543935999999D-30/, &
-&P(49) / .24524147051474238587273216000000D-30/, &
-&P(50) /-.66528178733552062817107967999999D-31/
+data p(1)  /-.60577324664060345999319382737747d+00/, &
+&p(2)  /-.11253524348366090030649768852718d+00/, &
+&p(3)  / .13432266247902779492487859329414d-01/, &
+&p(4)  /-.19268451873811457249246838991303d-02/, &
+&p(5)  / .30911833772060318335586737475368d-03/, &
+&p(6)  /-.53564132129618418776393559795147d-04/, &
+&p(7)  / .98278128802474923952491882717237d-05/, &
+&p(8)  /-.18853689849165182826902891938910d-05/, &
+&p(9)  / .37494319356894735406964042190531d-06/, &
+&p(10) /-.76823455870552639273733465680556d-07/
+data p(11) / .16143270567198777552956300060868d-07/, &
+&p(12) /-.34668022114907354566309060226027d-08/, &
+&p(13) / .75875420919036277572889747054114d-09/, &
+&p(14) /-.16886433329881412573514526636703d-09/, &
+&p(15) / .38145706749552265682804250927272d-10/, &
+&p(16) /-.87330266324446292706851718272334d-11/, &
+&p(17) / .20236728645867960961794311064330d-11/, &
+&p(18) /-.47413283039555834655210340820160d-12/, &
+&p(19) / .11221172048389864324731799928920d-12/, &
+&p(20) /-.26804225434840309912826809093395d-13/
+data p(21) / .64578514417716530343580369067212d-14/, &
+&p(22) /-.15682760501666478830305702849194d-14/, &
+&p(23) / .38367865399315404861821516441408d-15/, &
+&p(24) /-.94517173027579130478871048932556d-16/, &
+&p(25) / .23434812288949573293896666439133d-16/, &
+&p(26) /-.58458661580214714576123194419882d-17/, &
+&p(27) / .14666229867947778605873617419195d-17/, &
+&p(28) /-.36993923476444472706592538274474d-18/, &
+&p(29) / .93790159936721242136014291817813d-19/, &
+&p(30) /-.23893673221937873136308224087381d-19/
+data p(31) / .61150624629497608051934223837866d-20/, &
+&p(32) /-.15718585327554025507719853288106d-20/, &
+&p(33) / .40572387285585397769519294491306d-21/, &
+&p(34) /-.10514026554738034990566367122773d-21/, &
+&p(35) / .27349664930638667785806003131733d-22/, &
+&p(36) /-.71401604080205796099355574271999d-23/, &
+&p(37) / .18705552432235079986756924211199d-23/, &
+&p(38) /-.49167468166870480520478020949333d-24/, &
+&p(39) / .12964988119684031730916087125333d-24/, &
+&p(40) /-.34292515688362864461623940437333d-25/
+data p(41) / .90972241643887034329104820906666d-26/, &
+&p(42) /-.24202112314316856489934847999999d-26/, &
+&p(43) / .64563612934639510757670475093333d-27/, &
+&p(44) /-.17269132735340541122315987626666d-27/, &
+&p(45) / .46308611659151500715194231466666d-28/, &
+&p(46) /-.12448703637214131241755170133333d-28/, &
+&p(47) / .33544574090520678532907007999999d-29/, &
+&p(48) /-.90598868521070774437543935999999d-30/, &
+&p(49) / .24524147051474238587273216000000d-30/, &
+&p(50) /-.66528178733552062817107967999999d-31/
 !------------------------------
-DATA Q(1)  /-.1892918000753016825495679942820D+00/, &
-&Q(2)  /-.8648117855259871489968817056824D-01/, &
-&Q(3)  / .7224101543746594747021514839184D-02/, &
-&Q(4)  /-.8097559457557386197159655610181D-03/, &
-&Q(5)  / .1099913443266138867179251157002D-03/, &
-&Q(6)  /-.1717332998937767371495358814487D-04/, &
-&Q(7)  / .2985627514479283322825342495003D-05/, &
-&Q(8)  /-.5659649145771930056560167267155D-06/, &
-&Q(9)  / .1152680839714140019226583501663D-06/, &
-&Q(10) /-.2495030440269338228842128765065D-07/
-DATA Q(11) / .5692324201833754367039370368140D-08/, &
-&Q(12) /-.1359957664805600338490030939176D-08/, &
-&Q(13) / .3384662888760884590184512925859D-09/, &
-&Q(14) /-.8737853904474681952350849316580D-10/, &
-&Q(15) / .2331588663222659718612613400470D-10/, &
-&Q(16) /-.6411481049213785969753165196326D-11/, &
-&Q(17) / .1812246980204816433384359484682D-11/, &
-&Q(18) /-.5253831761558460688819403840466D-12/, &
-&Q(19) / .1559218272591925698855028609825D-12/, &
-&Q(20) /-.4729168297080398718476429369466D-13/
-DATA Q(21) / .1463761864393243502076199493808D-13/, &
-&Q(22) /-.4617388988712924102232173623604D-14/, &
-&Q(23) / .1482710348289369323789239660371D-14/, &
-&Q(24) /-.4841672496239229146973165734417D-15/, &
-&Q(25) / .1606215575700290408116571966188D-15/, &
-&Q(26) /-.5408917538957170947895023784252D-16/, &
-&Q(27) / .1847470159346897881370231402310D-16/, &
-&Q(28) /-.6395830792759094470500610425050D-17/, &
-&Q(29) / .2242780721699759457250233276170D-17/, &
-&Q(30) /-.7961369173983947552744555308646D-18/
-DATA Q(31) / .2859308111540197459808619929272D-18/, &
-&Q(32) /-.1038450244701137145900697137446D-18/, &
-&Q(33) / .3812040607097975780866841008319D-19/, &
-&Q(34) /-.1413795417717200768717562723696D-19/, &
-&Q(35) / .5295367865182740958305442594815D-20/, &
-&Q(36) /-.2002264245026825902137211131439D-20/, &
-&Q(37) / .7640262751275196014736848610918D-21/, &
-&Q(38) /-.2941119006868787883311263523362D-21/, &
-&Q(39) / .1141823539078927193037691483586D-21/, &
-&Q(40) /-.4469308475955298425247020718489D-22/
-DATA Q(41) / .1763262410571750770630491408520D-22/, &
-&Q(42) /-.7009968187925902356351518262340D-23/, &
-&Q(43) / .2807573556558378922287757507515D-23/, &
-&Q(44) /-.1132560944981086432141888891562D-23/, &
-&Q(45) / .4600574684375017946156764233727D-24/, &
-&Q(46) /-.1881448598976133459864609148108D-24/, &
-&Q(47) / .7744916111507730845444328478037D-25/, &
-&Q(48) /-.3208512760585368926702703826261D-25/, &
-&Q(49) / .1337445542910839760619930421384D-25/, &
-&Q(50) /-.5608671881802217048894771735210D-26/
-DATA Q(51) / .2365839716528537483710069473279D-26/, &
-&Q(52) /-.1003656195025305334065834526856D-26/, &
-&Q(53) / .4281490878094161131286642556927D-27/, &
-&Q(54) /-.1836345261815318199691326958250D-27/, &
-&Q(55) / .7917798231349540000097468678144D-28/, &
-&Q(56) /-.3431542358742220361025015775231D-28/, &
-&Q(57) / .1494705493897103237475066008917D-28/, &
-&Q(58) /-.6542620279865705439739042420053D-29/, &
-&Q(59) / .2877581395199171114340487353685D-29/, &
-&Q(60) /-.1271557211796024711027981200042D-29/
-DATA Q(61) / .5644615555648722522388044622506D-30/, &
-&Q(62) /-.2516994994284095106080616830293D-30/, &
-&Q(63) / .1127259818927510206370368804181D-30/, &
-&Q(64) /-.5069814875800460855562584719360D-31/
+data q(1)  /-.1892918000753016825495679942820d+00/, &
+&q(2)  /-.8648117855259871489968817056824d-01/, &
+&q(3)  / .7224101543746594747021514839184d-02/, &
+&q(4)  /-.8097559457557386197159655610181d-03/, &
+&q(5)  / .1099913443266138867179251157002d-03/, &
+&q(6)  /-.1717332998937767371495358814487d-04/, &
+&q(7)  / .2985627514479283322825342495003d-05/, &
+&q(8)  /-.5659649145771930056560167267155d-06/, &
+&q(9)  / .1152680839714140019226583501663d-06/, &
+&q(10) /-.2495030440269338228842128765065d-07/
+data q(11) / .5692324201833754367039370368140d-08/, &
+&q(12) /-.1359957664805600338490030939176d-08/, &
+&q(13) / .3384662888760884590184512925859d-09/, &
+&q(14) /-.8737853904474681952350849316580d-10/, &
+&q(15) / .2331588663222659718612613400470d-10/, &
+&q(16) /-.6411481049213785969753165196326d-11/, &
+&q(17) / .1812246980204816433384359484682d-11/, &
+&q(18) /-.5253831761558460688819403840466d-12/, &
+&q(19) / .1559218272591925698855028609825d-12/, &
+&q(20) /-.4729168297080398718476429369466d-13/
+data q(21) / .1463761864393243502076199493808d-13/, &
+&q(22) /-.4617388988712924102232173623604d-14/, &
+&q(23) / .1482710348289369323789239660371d-14/, &
+&q(24) /-.4841672496239229146973165734417d-15/, &
+&q(25) / .1606215575700290408116571966188d-15/, &
+&q(26) /-.5408917538957170947895023784252d-16/, &
+&q(27) / .1847470159346897881370231402310d-16/, &
+&q(28) /-.6395830792759094470500610425050d-17/, &
+&q(29) / .2242780721699759457250233276170d-17/, &
+&q(30) /-.7961369173983947552744555308646d-18/
+data q(31) / .2859308111540197459808619929272d-18/, &
+&q(32) /-.1038450244701137145900697137446d-18/, &
+&q(33) / .3812040607097975780866841008319d-19/, &
+&q(34) /-.1413795417717200768717562723696d-19/, &
+&q(35) / .5295367865182740958305442594815d-20/, &
+&q(36) /-.2002264245026825902137211131439d-20/, &
+&q(37) / .7640262751275196014736848610918d-21/, &
+&q(38) /-.2941119006868787883311263523362d-21/, &
+&q(39) / .1141823539078927193037691483586d-21/, &
+&q(40) /-.4469308475955298425247020718489d-22/
+data q(41) / .1763262410571750770630491408520d-22/, &
+&q(42) /-.7009968187925902356351518262340d-23/, &
+&q(43) / .2807573556558378922287757507515d-23/, &
+&q(44) /-.1132560944981086432141888891562d-23/, &
+&q(45) / .4600574684375017946156764233727d-24/, &
+&q(46) /-.1881448598976133459864609148108d-24/, &
+&q(47) / .7744916111507730845444328478037d-25/, &
+&q(48) /-.3208512760585368926702703826261d-25/, &
+&q(49) / .1337445542910839760619930421384d-25/, &
+&q(50) /-.5608671881802217048894771735210d-26/
+data q(51) / .2365839716528537483710069473279d-26/, &
+&q(52) /-.1003656195025305334065834526856d-26/, &
+&q(53) / .4281490878094161131286642556927d-27/, &
+&q(54) /-.1836345261815318199691326958250d-27/, &
+&q(55) / .7917798231349540000097468678144d-28/, &
+&q(56) /-.3431542358742220361025015775231d-28/, &
+&q(57) / .1494705493897103237475066008917d-28/, &
+&q(58) /-.6542620279865705439739042420053d-29/, &
+&q(59) / .2877581395199171114340487353685d-29/, &
+&q(60) /-.1271557211796024711027981200042d-29/
+data q(61) / .5644615555648722522388044622506d-30/, &
+&q(62) /-.2516994994284095106080616830293d-30/, &
+&q(63) / .1127259818927510206370368804181d-30/, &
+&q(64) /-.5069814875800460855562584719360d-31/
 !------------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.D0 + EPS .GT. 1.D0.
 !
-                 EPS = DPMPAR(1)
+                 eps = dpmpar(1)
 !
 !------------------------------
-IF (DABS(X) .GE. 90.D0) GO TO 80
-IF (X .GT. -1.D0) GO TO 40
+if (dabs(x) .ge. 90.d0) go to 80
+if (x .gt. -1.d0) go to 40
 !
 !                    -90 .LT. X .LT. -4
 !
-IF (X .GT. -32.D0) GO TO 10
-M = 50
-IF (EPS .GE. 1.D-20) M = 25
-DE1E = (1.D0 + DCSEVL (64.D0/X+1.D0, A, M))/X
-RETURN
+if (x .gt. -32.d0) go to 10
+m = 50
+if (eps .ge. 1.d-20) m = 25
+de1e = (1.d0 + dcsevl (64.d0/x+1.d0, a, m))/x
+return
 !
-10 IF (X .GT. -8.D0) GO TO 20
-M = 60
-IF (EPS .GE. 1.D-20) M = 37
-DE1E = (1.D0 + DCSEVL ((64.D0/X+5.D0)/3.D0, B, M))/X
-RETURN
+10 if (x .gt. -8.d0) go to 20
+m = 60
+if (eps .ge. 1.d-20) m = 37
+de1e = (1.d0 + dcsevl ((64.d0/x+5.d0)/3.d0, b, m))/x
+return
 !
-20 IF (X .GE. -4.D0) GO TO 30
-M = 41
-IF (EPS .GE. 1.D-20) M = 27
-DE1E = (1.D0 + DCSEVL (16.D0/X+3.D0, D, M))/X
-RETURN
+20 if (x .ge. -4.d0) go to 30
+m = 41
+if (eps .ge. 1.d-20) m = 27
+de1e = (1.d0 + dcsevl (16.d0/x+3.d0, d, m))/x
+return
 !
 !                     -4 .LE. X .LE. 1
 !
-30 M = 29
-IF (EPS .GE. 1.D-20) M = 20
-DE1E = -DLOG(-X) + DCSEVL ((2.D0*X+5.D0)/3.D0, E, M)
-RETURN
+30 m = 29
+if (eps .ge. 1.d-20) m = 20
+de1e = -dlog(-x) + dcsevl ((2.d0*x+5.d0)/3.d0, e, m)
+return
 !
-40 IF (X .GT. 1.0D0) GO TO 60
-IF (X .LT. -0.4D0 .OR. X .GT. -0.35D0) GO TO 50
-   DE1E = - DEI0(-X, EPS)
-   RETURN
-50 M = 25
-IF (EPS .GE. 1.D-20) M = 18
-DE1E = (-DLOG(DABS(X)) - 0.6875D0 + X)  + DCSEVL (X, R, M)
-RETURN
+40 if (x .gt. 1.0d0) go to 60
+if (x .lt. -0.4d0 .or. x .gt. -0.35d0) go to 50
+   de1e = - dei0(-x, eps)
+   return
+50 m = 25
+if (eps .ge. 1.d-20) m = 18
+de1e = (-dlog(dabs(x)) - 0.6875d0 + x)  + dcsevl (x, r, m)
+return
 !
 !                     1 .LT. X .LT. 90
 !
-60 IF (X .GT. 4.0D0) GO TO 70
-M = 50
-IF (EPS .GE. 1.D-20) M = 31
-DE1E = (1.D0 + DCSEVL ((8.D0/X-5.D0)/3.D0, P, M))/X
-RETURN
+60 if (x .gt. 4.0d0) go to 70
+m = 50
+if (eps .ge. 1.d-20) m = 31
+de1e = (1.d0 + dcsevl ((8.d0/x-5.d0)/3.d0, p, m))/x
+return
 !
-70 M = 64
-IF (EPS .GE. 1.D-20) M = 35
-DE1E = (1.D0 + DCSEVL (8.D0/X-1.D0, Q, M))/X
-RETURN
+70 m = 64
+if (eps .ge. 1.d-20) m = 35
+de1e = (1.d0 + dcsevl (8.d0/x-1.d0, q, m))/x
+return
 !
 !                   ASYMPTOTIC EXPANSION
 !
-80 T = -1.D0/X
-C = T
-W = C
-M = 1
-81 M = M + 1
-   C = (M*T)*C
-   W = C + W
-   IF (DABS(C) .GT. EPS) GO TO 81
-DE1E = (1.D0 + W)/X
-RETURN
-END FUNCTION DE1E
+80 t = -1.d0/x
+c = t
+w = c
+m = 1
+81 m = m + 1
+   c = (m*t)*c
+   w = c + w
+   if (dabs(c) .gt. eps) go to 81
+de1e = (1.d0 + w)/x
+return
+end function de1e
 
-double precision function DEI0 (X, EPS)
-IMPLICIT NONE
-INTEGER :: N
+double precision function dei0 (x, eps)
+implicit none
+integer :: n
 !-----------------------------------------------------------------------
 !
 !            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
@@ -10141,58 +10141,58 @@ INTEGER :: N
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN, VIRGINIA
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: A(40), C
-DOUBLE PRECISION, INTENT(IN) :: EPS
-DOUBLE PRECISION :: H, T
-DOUBLE PRECISION, INTENT(IN) :: X
-DOUBLE PRECISION :: W
-DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
+double precision :: a(40), c
+double precision, intent(in) :: eps
+double precision :: h, t
+double precision, intent(in) :: x
+double precision :: w
+double precision :: dk1, dk2, dk3, db, db2, dx
 !-------------------------
-DATA DK1 /25598514349.D0/, DK2 /12212826724.D0/, &
-&DK3 /52346020729.D0/
-DATA DB  /68719476736.D0/
-DATA DX  /.64725688445954142292644880487403537155379408215561D-33/
+data dk1 /25598514349.d0/, dk2 /12212826724.d0/, &
+&dk3 /52346020729.d0/
+data db  /68719476736.d0/
+data dx  /.64725688445954142292644880487403537155379408215561d-33/
 !-------------------------
-DATA A(1)  / .3896215733907167310156502703593482682018D+01/, &
-&A(2)  /-.3281607866398561670879044070702055058438D+01/, &
-&A(3)  / .6522376145438925697728352767902339522245D+01/, &
-&A(4)  /-.1296969738353651703636356975116693457132D+02/, &
-&A(5)  / .2788629796294204997855360701398702087604D+02/, &
-&A(6)  /-.6237880152891541873078526672920295283143D+02/, &
-&A(7)  / .1435349488096750987841265647073135861344D+03/, &
-&A(8)  /-.3371558271787468916821364466977375583658D+03/, &
-&A(9)  / .8045318399821382506595322457265602778098D+03/, &
-&A(10) /-.1943796645723498840655451915157946462648D+04/
-DATA A(11) / .4743765650402430835228269085129777320454D+04/, &
-&A(12) /-.1167346399116716364394668734600584330571D+05/, &
-&A(13) / .2892695530543545087445160311373446386859D+05/, &
-&A(14) /-.7210794586837158996878001987822898188198D+05/, &
-&A(15) / .1806695585893919626172098163733836311447D+06/, &
-&A(16) /-.4546962188544665746524572520110515778526D+06/, &
-&A(17) / .1148834546817744310374556891236080193473D+07/, &
-&A(18) /-.2912721663850837498392234670693435881386D+07/, &
-&A(19) / .7407692958000587759747953639495510375408D+07/, &
-&A(20) /-.1889172700038153127288849726417780854730D+08/
-DATA A(21) / .4830003493086024720868271496253148288055D+08/, &
-&A(22) /-.1237682190024917092137405370407916520821D+09/, &
-&A(23) / .3178111056663621852260468265468336116367D+09/, &
-&A(24) /-.8176185693184928170769596413793786736279D+09/, &
-&A(25) / .2107109291864363741291032089276432438927D+10/, &
-&A(26) /-.5438996831077284596300440196418865401363D+10/, &
-&A(27) / .1406026390995585037838894210474681627693D+11/, &
-&A(28) /-.3639689100149205333626392754168250384373D+11/, &
-&A(29) / .9433859509219164512733865811047107199412D+11/, &
-&A(30) /-.2448111705066430130314746602027041462835D+12/
-DATA A(31) / .6359981818273706257655285041587660739835D+12/, &
-&A(32) /-.1653989211524391716301960841541179924503D+13/, &
-&A(33) / .4305601123377464671923711939926758523701D+13/, &
-&A(34) /-.1121847693567642152208443795868288937687D+14/, &
-&A(35) / .2925565695557339262045727352754930716608D+14/, &
-&A(36) /-.7635552741959392076619218035480359307499D+14/, &
-&A(37) / .1994372792759425025753893705017248674884D+15/, &
-&A(38) /-.5213021921201092276891722450906568692592D+15/, &
-&A(39) / .1363558024737805584657706536660107687818D+16/, &
-&A(40) /-.3568973490569445692988895507297245137908D+16/
+data a(1)  / .3896215733907167310156502703593482682018d+01/, &
+&a(2)  /-.3281607866398561670879044070702055058438d+01/, &
+&a(3)  / .6522376145438925697728352767902339522245d+01/, &
+&a(4)  /-.1296969738353651703636356975116693457132d+02/, &
+&a(5)  / .2788629796294204997855360701398702087604d+02/, &
+&a(6)  /-.6237880152891541873078526672920295283143d+02/, &
+&a(7)  / .1435349488096750987841265647073135861344d+03/, &
+&a(8)  /-.3371558271787468916821364466977375583658d+03/, &
+&a(9)  / .8045318399821382506595322457265602778098d+03/, &
+&a(10) /-.1943796645723498840655451915157946462648d+04/
+data a(11) / .4743765650402430835228269085129777320454d+04/, &
+&a(12) /-.1167346399116716364394668734600584330571d+05/, &
+&a(13) / .2892695530543545087445160311373446386859d+05/, &
+&a(14) /-.7210794586837158996878001987822898188198d+05/, &
+&a(15) / .1806695585893919626172098163733836311447d+06/, &
+&a(16) /-.4546962188544665746524572520110515778526d+06/, &
+&a(17) / .1148834546817744310374556891236080193473d+07/, &
+&a(18) /-.2912721663850837498392234670693435881386d+07/, &
+&a(19) / .7407692958000587759747953639495510375408d+07/, &
+&a(20) /-.1889172700038153127288849726417780854730d+08/
+data a(21) / .4830003493086024720868271496253148288055d+08/, &
+&a(22) /-.1237682190024917092137405370407916520821d+09/, &
+&a(23) / .3178111056663621852260468265468336116367d+09/, &
+&a(24) /-.8176185693184928170769596413793786736279d+09/, &
+&a(25) / .2107109291864363741291032089276432438927d+10/, &
+&a(26) /-.5438996831077284596300440196418865401363d+10/, &
+&a(27) / .1406026390995585037838894210474681627693d+11/, &
+&a(28) /-.3639689100149205333626392754168250384373d+11/, &
+&a(29) / .9433859509219164512733865811047107199412d+11/, &
+&a(30) /-.2448111705066430130314746602027041462835d+12/
+data a(31) / .6359981818273706257655285041587660739835d+12/, &
+&a(32) /-.1653989211524391716301960841541179924503d+13/, &
+&a(33) / .4305601123377464671923711939926758523701d+13/, &
+&a(34) /-.1121847693567642152208443795868288937687d+14/, &
+&a(35) / .2925565695557339262045727352754930716608d+14/, &
+&a(36) /-.7635552741959392076619218035480359307499d+14/, &
+&a(37) / .1994372792759425025753893705017248674884d+15/, &
+&a(38) /-.5213021921201092276891722450906568692592d+15/, &
+&a(39) / .1363558024737805584657706536660107687818d+16/, &
+&a(40) /-.3568973490569445692988895507297245137908d+16/
 !-------------------------
 !
 !     SET  H = X - X0  WHERE X0 IS THE ZERO OF EI(X). X0 HAS THE
@@ -10208,31 +10208,31 @@ DATA A(31) / .6359981818273706257655285041587660739835D+12/, &
 !     BINARY, OCTAL, OR HEXADECIMAL DOUBLE PRECISION ARITHMETIC IS
 !     BEING USED.
 !
-DB2 = DB*DB
-H = (((X - DK1/DB) - DK2/DB2) - DK3/(DB*DB2)) - DX
+db2 = db*db
+h = (((x - dk1/db) - dk2/db2) - dk3/(db*db2)) - dx
 !
 !-------------------------
-T = H
-W = 0.D0
-do 10 N = 2,40
-   C = A(N)*T
-   W = W + C
-   IF (DABS(C) .LT. EPS) GO TO 20
-   T = H*T
-10 CONTINUE
+t = h
+w = 0.d0
+do 10 n = 2,40
+   c = a(n)*t
+   w = w + c
+   if (dabs(c) .lt. eps) go to 20
+   t = h*t
+10 continue
 !
-20 DEI0 = H * (A(1) + W)
-RETURN
-END FUNCTION DEI0
+20 dei0 = h * (a(1) + w)
+return
+end function dei0
 
-FUNCTION SI(X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-INTEGER :: I, J, M1, M2, N1, N2
-REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), PIO2, RC, TEMP, &
-&TX
-REAL :: SI
-REAL :: SPMPAR
+function si(x)
+implicit none
+real, intent(in) :: x
+integer :: i, j, m1, m2, n1, n2
+real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), pio2, rc, temp, &
+&tx
+real :: si
+real :: spmpar
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
 !     MODIFIED BY A.H. MORRIS
@@ -10256,104 +10256,104 @@ REAL :: SPMPAR
 !
 !
 !     -------------------
-DATA N1,N2,M1,M2/16,46,14,21/
-DATA PIO2/1.5707963267949/
+data n1,n2,m1,m2/16,46,14,21/
+data pio2/1.5707963267949/
 !     -------------------
-DATA BB(1) / 6.84101190850653E-01/, BB(2) /-3.74538448460062E-01/, &
-&BB(3) /-2.82656062651542E-02/, BB(4) / 3.06078454012071E-02/, &
-&BB(5) /-8.99242948380352E-04/, BB(6) /-1.09884251456048E-03/, &
-&BB(7) / 5.81151604367358E-05/, BB(8) / 2.28802638122969E-05/, &
-&BB(9) /-1.35078982929539E-06/, BB(10)/-3.13213946132892E-07/, &
-&BB(11)/ 1.86619586786257E-08/, BB(12)/ 3.03991719607226E-09/, &
-&BB(13)/-1.76437788946489E-10/, BB(14)/-2.20236421792690E-11/, &
-&BB(15)/ 1.22710107703240E-12/, BB(16)/ 1.23680681116783E-13/
+data bb(1) / 6.84101190850653e-01/, bb(2) /-3.74538448460062e-01/, &
+&bb(3) /-2.82656062651542e-02/, bb(4) / 3.06078454012071e-02/, &
+&bb(5) /-8.99242948380352e-04/, bb(6) /-1.09884251456048e-03/, &
+&bb(7) / 5.81151604367358e-05/, bb(8) / 2.28802638122969e-05/, &
+&bb(9) /-1.35078982929539e-06/, bb(10)/-3.13213946132892e-07/, &
+&bb(11)/ 1.86619586786257e-08/, bb(12)/ 3.03991719607226e-09/, &
+&bb(13)/-1.76437788946489e-10/, bb(14)/-2.20236421792690e-11/, &
+&bb(15)/ 1.22710107703240e-12/, bb(16)/ 1.23680681116783e-13/
 !     -------------------
-DATA CC(1) / 9.76155271128712E-01/, CC(2) / 8.96845854916423E-02/, &
-&CC(3) /-3.04656658030696E-02/, CC(4) / 8.50892472922945E-02/, &
-&CC(5) /-5.78073683148386E-03/, CC(6) /-5.07182677775691E-03/, &
-&CC(7) / 8.38643256650893E-04/, CC(8) /-3.34223415981738E-04/, &
-&CC(9) /-2.15746207281216E-05/, CC(10)/ 1.28560650086065E-04/, &
-&CC(11)/-1.56456413510232E-05/, CC(12)/-1.52025513597262E-05/, &
-&CC(13)/ 4.04001013843204E-06/, CC(14)/-5.95896122752160E-07/, &
-&CC(15)/-4.34985305974340E-07/, CC(16)/ 7.13472533530840E-07/, &
-&CC(17)/-5.34302186061100E-08/, CC(18)/-1.76003581156610E-07/, &
-&CC(19)/ 3.85028855125900E-08/, CC(20)/ 1.92576544441700E-08/, &
-&CC(21)/-1.00735358217200E-08/, CC(22)/ 3.36359194377000E-09/, &
-&CC(23)/ 1.28049619406000E-09/, CC(24)/-2.42546870827000E-09/, &
-&CC(25)/ 1.86917288950000E-10/, CC(26)/ 7.13431298340000E-10/, &
-&CC(27)/-1.70673483710000E-10/, CC(28)/-1.14604070350000E-10/, &
-&CC(29)/ 5.88004411500000E-11/, CC(30)/-6.78417843000000E-12/, &
-&CC(31)/-1.21572380900000E-11/, CC(32)/ 1.26561248700000E-11/, &
-&CC(33)/ 4.74814180000000E-13/, CC(34)/-5.32309477000000E-12/, &
-&CC(35)/ 9.05903810000000E-13/, CC(36)/ 1.40046450000000E-12/, &
-&CC(37)/-5.00968320000000E-13/, CC(38)/-1.80458040000000E-13/
-DATA CC(39)/ 1.66162910000000E-13/, CC(40)/-5.02616400000000E-14/, &
-&CC(41)/-3.48453600000000E-14/, CC(42)/ 4.60056600000000E-14/, &
-&CC(43)/ 5.74000000000000E-16/, CC(44)/-1.95310700000000E-14/, &
-&CC(45)/ 3.68837000000000E-15/, CC(46)/ 5.62862000000000E-15/
+data cc(1) / 9.76155271128712e-01/, cc(2) / 8.96845854916423e-02/, &
+&cc(3) /-3.04656658030696e-02/, cc(4) / 8.50892472922945e-02/, &
+&cc(5) /-5.78073683148386e-03/, cc(6) /-5.07182677775691e-03/, &
+&cc(7) / 8.38643256650893e-04/, cc(8) /-3.34223415981738e-04/, &
+&cc(9) /-2.15746207281216e-05/, cc(10)/ 1.28560650086065e-04/, &
+&cc(11)/-1.56456413510232e-05/, cc(12)/-1.52025513597262e-05/, &
+&cc(13)/ 4.04001013843204e-06/, cc(14)/-5.95896122752160e-07/, &
+&cc(15)/-4.34985305974340e-07/, cc(16)/ 7.13472533530840e-07/, &
+&cc(17)/-5.34302186061100e-08/, cc(18)/-1.76003581156610e-07/, &
+&cc(19)/ 3.85028855125900e-08/, cc(20)/ 1.92576544441700e-08/, &
+&cc(21)/-1.00735358217200e-08/, cc(22)/ 3.36359194377000e-09/, &
+&cc(23)/ 1.28049619406000e-09/, cc(24)/-2.42546870827000e-09/, &
+&cc(25)/ 1.86917288950000e-10/, cc(26)/ 7.13431298340000e-10/, &
+&cc(27)/-1.70673483710000e-10/, cc(28)/-1.14604070350000e-10/, &
+&cc(29)/ 5.88004411500000e-11/, cc(30)/-6.78417843000000e-12/, &
+&cc(31)/-1.21572380900000e-11/, cc(32)/ 1.26561248700000e-11/, &
+&cc(33)/ 4.74814180000000e-13/, cc(34)/-5.32309477000000e-12/, &
+&cc(35)/ 9.05903810000000e-13/, cc(36)/ 1.40046450000000e-12/, &
+&cc(37)/-5.00968320000000e-13/, cc(38)/-1.80458040000000e-13/
+data cc(39)/ 1.66162910000000e-13/, cc(40)/-5.02616400000000e-14/, &
+&cc(41)/-3.48453600000000e-14/, cc(42)/ 4.60056600000000e-14/, &
+&cc(43)/ 5.74000000000000e-16/, cc(44)/-1.95310700000000e-14/, &
+&cc(45)/ 3.68837000000000e-15/, cc(46)/ 5.62862000000000e-15/
 !     -------------------
 !     ****** AMAX IS A MACHINE DEPENDENT CONSTANT. IT IS ASSUMED THAT
 !            SIN(X) AND COS(X) ARE DEFINED FOR  ABS(X) .LE. AMAX, AND
 !            THAT PIO2 - (1 + 1/X)/X = PIO2 FOR X .GT. AMAX.
 !
-AMAX = 1.0/SPMPAR(1)
+amax = 1.0/spmpar(1)
 !
 !
-AX=ABS(X)
-IF (AX.GT.5.0) GO TO 20
-J=N1
-BX=0.40*AX-1.0
-TX=BX+BX
-B1=BB(J)
-B2=0.
-do 10 I = 1,M1
-J=J-1
-TEMP=B1
-B1=TX*B1-B2+BB(J)
-10 B2=TEMP
-SI=(BX*B1-B2+BB(1))*X
-RETURN
+ax=abs(x)
+if (ax.gt.5.0) go to 20
+j=n1
+bx=0.40*ax-1.0
+tx=bx+bx
+b1=bb(j)
+b2=0.
+do 10 i = 1,m1
+j=j-1
+temp=b1
+b1=tx*b1-b2+bb(j)
+10 b2=temp
+si=(bx*b1-b2+bb(1))*x
+return
 !
-20 IF (AX.GT.AMAX) GO TO 50
-BX=10./AX-1.
-TX=BX+BX
-J=N2
-B1=CC(J)
-B2=0.0
-do 30 I = 1,M2
-J=J-2
-TEMP=B1
-B1=TX*B1-B2+CC(J)
-30 B2=TEMP
-AIC=BX*B1-B2+CC(2)
+20 if (ax.gt.amax) go to 50
+bx=10./ax-1.
+tx=bx+bx
+j=n2
+b1=cc(j)
+b2=0.0
+do 30 i = 1,m2
+j=j-2
+temp=b1
+b1=tx*b1-b2+cc(j)
+30 b2=temp
+aic=bx*b1-b2+cc(2)
 !
-J=N2-1
-B1=CC(J)
-B2=0.0
-do 40 I = 1,M2
-J=J-2
-TEMP=B1
-B1=TX*B1-B2+CC(J)
-40 B2=TEMP
-RC=BX*B1-B2+CC(1)
+j=n2-1
+b1=cc(j)
+b2=0.0
+do 40 i = 1,m2
+j=j-2
+temp=b1
+b1=tx*b1-b2+cc(j)
+40 b2=temp
+rc=bx*b1-b2+cc(1)
 !
-SI=(RC*COS(AX)+AIC*SIN(AX))/AX
-SI=PIO2-SI
-IF (X.LT.0.0) SI=-SI
-RETURN
+si=(rc*cos(ax)+aic*sin(ax))/ax
+si=pio2-si
+if (x.lt.0.0) si=-si
+return
 !
-50 SI=SIGN(PIO2,X)
-RETURN
-END FUNCTION SI
+50 si=sign(pio2,x)
+return
+end function si
 
-FUNCTION CIN(X)
-IMPLICIT NONE
-REAL, INTENT(IN) :: X
-INTEGER :: I, J, M1, M2, N1, N2
-REAL :: AIC, AMAX, AX, B1, B2, BB(16), BX, CC(46), ECON, RC, TEMP, &
-&TX
-REAL :: CIN
-REAL :: SPMPAR
+function cin(x)
+implicit none
+real, intent(in) :: x
+integer :: i, j, m1, m2, n1, n2
+real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), econ, rc, temp, &
+&tx
+real :: cin
+real :: spmpar
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
 !     MODIFIED BY A.H. MORRIS
@@ -10377,328 +10377,328 @@ REAL :: SPMPAR
 !
 !
 !     -------------------
-DATA N1,N2,M1,M2     / 16, 46, 14, 21 /
-DATA ECON            / 5.77215664901533E-01/
+data n1,n2,m1,m2     / 16, 46, 14, 21 /
+data econ            / 5.77215664901533e-01/
 !     -------------------
-DATA BB(1) / 1.82820351064538E-01/, BB(2) /-8.23768704567135E-02/, &
-&BB(3) /-1.03468764544958E-02/, BB(4) / 5.05085201960312E-03/, &
-&BB(5) / 5.73772812356328E-05/, BB(6) /-1.42717916181096E-04/, &
-&BB(7) / 2.89263664732599E-06/, BB(8) / 2.43068098304909E-06/, &
-&BB(9) /-7.90337487433443E-08/, BB(10)/-2.80205535437371E-08/, &
-&BB(11)/ 1.05488738052065E-09/, BB(12)/ 2.34186901801115E-10/, &
-&BB(13)/-9.27762554764014E-12/, BB(14)/-1.48682586858284E-12/, &
-&BB(15)/ 5.95210263082868E-14/, BB(16)/ 7.42057835287916E-15/
+data bb(1) / 1.82820351064538e-01/, bb(2) /-8.23768704567135e-02/, &
+&bb(3) /-1.03468764544958e-02/, bb(4) / 5.05085201960312e-03/, &
+&bb(5) / 5.73772812356328e-05/, bb(6) /-1.42717916181096e-04/, &
+&bb(7) / 2.89263664732599e-06/, bb(8) / 2.43068098304909e-06/, &
+&bb(9) /-7.90337487433443e-08/, bb(10)/-2.80205535437371e-08/, &
+&bb(11)/ 1.05488738052065e-09/, bb(12)/ 2.34186901801115e-10/, &
+&bb(13)/-9.27762554764014e-12/, bb(14)/-1.48682586858284e-12/, &
+&bb(15)/ 5.95210263082868e-14/, bb(16)/ 7.42057835287916e-15/
 !     -------------------
-DATA CC(1) / 9.76155271128712E-01/, CC(2) / 8.96845854916423E-02/, &
-&CC(3) /-3.04656658030696E-02/, CC(4) / 8.50892472922945E-02/, &
-&CC(5) /-5.78073683148386E-03/, CC(6) /-5.07182677775691E-03/, &
-&CC(7) / 8.38643256650893E-04/, CC(8) /-3.34223415981738E-04/, &
-&CC(9) /-2.15746207281216E-05/, CC(10)/ 1.28560650086065E-04/, &
-&CC(11)/-1.56456413510232E-05/, CC(12)/-1.52025513597262E-05/, &
-&CC(13)/ 4.04001013843204E-06/, CC(14)/-5.95896122752160E-07/, &
-&CC(15)/-4.34985305974340E-07/, CC(16)/ 7.13472533530840E-07/, &
-&CC(17)/-5.34302186061100E-08/, CC(18)/-1.76003581156610E-07/, &
-&CC(19)/ 3.85028855125900E-08/, CC(20)/ 1.92576544441700E-08/, &
-&CC(21)/-1.00735358217200E-08/, CC(22)/ 3.36359194377000E-09/, &
-&CC(23)/ 1.28049619406000E-09/, CC(24)/-2.42546870827000E-09/, &
-&CC(25)/ 1.86917288950000E-10/, CC(26)/ 7.13431298340000E-10/, &
-&CC(27)/-1.70673483710000E-10/, CC(28)/-1.14604070350000E-10/, &
-&CC(29)/ 5.88004411500000E-11/, CC(30)/-6.78417843000000E-12/, &
-&CC(31)/-1.21572380900000E-11/, CC(32)/ 1.26561248700000E-11/, &
-&CC(33)/ 4.74814180000000E-13/, CC(34)/-5.32309477000000E-12/, &
-&CC(35)/ 9.05903810000000E-13/, CC(36)/ 1.40046450000000E-12/, &
-&CC(37)/-5.00968320000000E-13/, CC(38)/-1.80458040000000E-13/
-DATA CC(39)/ 1.66162910000000E-13/, CC(40)/-5.02616400000000E-14/, &
-&CC(41)/-3.48453600000000E-14/, CC(42)/ 4.60056600000000E-14/, &
-&CC(43)/ 5.74000000000000E-16/, CC(44)/-1.95310700000000E-14/, &
-&CC(45)/ 3.68837000000000E-15/, CC(46)/ 5.62862000000000E-15/
+data cc(1) / 9.76155271128712e-01/, cc(2) / 8.96845854916423e-02/, &
+&cc(3) /-3.04656658030696e-02/, cc(4) / 8.50892472922945e-02/, &
+&cc(5) /-5.78073683148386e-03/, cc(6) /-5.07182677775691e-03/, &
+&cc(7) / 8.38643256650893e-04/, cc(8) /-3.34223415981738e-04/, &
+&cc(9) /-2.15746207281216e-05/, cc(10)/ 1.28560650086065e-04/, &
+&cc(11)/-1.56456413510232e-05/, cc(12)/-1.52025513597262e-05/, &
+&cc(13)/ 4.04001013843204e-06/, cc(14)/-5.95896122752160e-07/, &
+&cc(15)/-4.34985305974340e-07/, cc(16)/ 7.13472533530840e-07/, &
+&cc(17)/-5.34302186061100e-08/, cc(18)/-1.76003581156610e-07/, &
+&cc(19)/ 3.85028855125900e-08/, cc(20)/ 1.92576544441700e-08/, &
+&cc(21)/-1.00735358217200e-08/, cc(22)/ 3.36359194377000e-09/, &
+&cc(23)/ 1.28049619406000e-09/, cc(24)/-2.42546870827000e-09/, &
+&cc(25)/ 1.86917288950000e-10/, cc(26)/ 7.13431298340000e-10/, &
+&cc(27)/-1.70673483710000e-10/, cc(28)/-1.14604070350000e-10/, &
+&cc(29)/ 5.88004411500000e-11/, cc(30)/-6.78417843000000e-12/, &
+&cc(31)/-1.21572380900000e-11/, cc(32)/ 1.26561248700000e-11/, &
+&cc(33)/ 4.74814180000000e-13/, cc(34)/-5.32309477000000e-12/, &
+&cc(35)/ 9.05903810000000e-13/, cc(36)/ 1.40046450000000e-12/, &
+&cc(37)/-5.00968320000000e-13/, cc(38)/-1.80458040000000e-13/
+data cc(39)/ 1.66162910000000e-13/, cc(40)/-5.02616400000000e-14/, &
+&cc(41)/-3.48453600000000e-14/, cc(42)/ 4.60056600000000e-14/, &
+&cc(43)/ 5.74000000000000e-16/, cc(44)/-1.95310700000000e-14/, &
+&cc(45)/ 3.68837000000000e-15/, cc(46)/ 5.62862000000000e-15/
 !     -------------------
 !     ****** AMAX IS A MACHINE DEPENDENT CONSTANT. IT IS ASSUMED THAT
 !            SIN(X) AND COS(X) ARE DEFINED FOR  ABS(X) .LE. AMAX, AND
 !            THAT ECON + LN(X) - (1 + 1/X)/X = ECON + LN(X)
 !            FOR X .GT. AMAX.
 !
-AMAX = 0.1/SPMPAR(1)
+amax = 0.1/spmpar(1)
 !
 !
-AX = ABS(X)
-IF (AX.GT.5.0) GO TO 20
-J=N1
-BX=0.40*AX-1.0
-TX=BX+BX
-B1=BB(J)
-B2=0.
-do 10 I = 1,M1
-J=J-1
-TEMP=B1
-B1=TX*B1-B2+BB(J)
-10 B2=TEMP
-CIN=X*X*(BX*B1-B2+BB(1))
-RETURN
+ax = abs(x)
+if (ax.gt.5.0) go to 20
+j=n1
+bx=0.40*ax-1.0
+tx=bx+bx
+b1=bb(j)
+b2=0.
+do 10 i = 1,m1
+j=j-1
+temp=b1
+b1=tx*b1-b2+bb(j)
+10 b2=temp
+cin=x*x*(bx*b1-b2+bb(1))
+return
 !
-20 IF (AX.GT.AMAX) GO TO 50
-BX=10./AX-1.0
-TX=BX+BX
-J=N2
-B1=CC(J)
-B2=0.0
-do 30 I = 1,M2
-J=J-2
-TEMP=B1
-B1=TX*B1-B2+CC(J)
-30 B2=TEMP
-AIC=BX*B1-B2+CC(2)
+20 if (ax.gt.amax) go to 50
+bx=10./ax-1.0
+tx=bx+bx
+j=n2
+b1=cc(j)
+b2=0.0
+do 30 i = 1,m2
+j=j-2
+temp=b1
+b1=tx*b1-b2+cc(j)
+30 b2=temp
+aic=bx*b1-b2+cc(2)
 !
-J=N2-1
-B1=CC(J)
-B2=0.0
-do 40 I = 1,M2
-J=J-2
-TEMP=B1
-B1=TX*B1-B2+CC(J)
-40 B2=TEMP
-RC=BX*B1-B2+CC(1)
+j=n2-1
+b1=cc(j)
+b2=0.0
+do 40 i = 1,m2
+j=j-2
+temp=b1
+b1=tx*b1-b2+cc(j)
+40 b2=temp
+rc=bx*b1-b2+cc(1)
 !
-CIN=(RC*SIN(AX)-AIC*COS(AX))/AX
-CIN=(ECON-CIN)+ALOG(AX)
-RETURN
+cin=(rc*sin(ax)-aic*cos(ax))/ax
+cin=(econ-cin)+alog(ax)
+return
 !
-50 CIN=ECON+ALOG(AX)
-RETURN
-END FUNCTION CIN
+50 cin=econ+alog(ax)
+return
+end function cin
 
-SUBROUTINE CEXEXI (Z, W)
-IMPLICIT NONE
-INTEGER :: I
-REAL :: CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
+subroutine cexexi (z, w)
+implicit none
+integer :: i
+real :: const, euler, pm, qm, r, ss, x, y, zeta2
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: Z
-COMPLEX, INTENT(INOUT) :: W
-REAL :: TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
-REAL :: ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
+complex, intent(in) :: z
+complex, intent(inout) :: w
+real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real :: ed(18), ee(18), dd(19), de(19), cd(18), ce(18)
 !-------------------------
 !     EULER = EULER CONSTANT
 !     CONST = (PI*PI)/4
 !     ZETA2 = THE RIEMANN ZETA FUNCTION EVALUATED AT 2
 !-------------------------
-DATA CONST /2.46740110027234/
-DATA EULER /.577215664901533/
-DATA ZETA2 /1.64493406684823/
+data const /2.46740110027234/
+data euler /.577215664901533/
+data zeta2 /1.64493406684823/
 !-------------------------
-DATA ED(1)  /0.00000000000000E+00/, ED(2)  /.311105957086528E-01/, &
-&ED(3)  /.103661260539112E+00/, ED(4)  /.216532335244554E+00/, &
-&ED(5)  /.369931427960192E+00/, ED(6)  /.566766259990589E+00/, &
-&ED(7)  /.814042066324748E+00/, ED(8)  /.112384247540813E+01/, &
-&ED(9)  /.151400478148512E+01/, ED(10) /.200886795032284E+01/, &
-&ED(11) /.264052411823592E+01/, ED(12) /.345098449933392E+01/, &
-&ED(13) /.449583360763202E+01/, ED(14) /.585058263409822E+01/, &
-&ED(15) /.762273501463380E+01/, ED(16) /.997814501584578E+01/, &
-&ED(17) /.132122064896408E+02/, ED(18) /.180322948376021E+02/
-DATA EE(1)  /.850156516121093E-02/, EE(2)  /.505037465849058E-01/, &
-&EE(3)  /.836817368956407E-01/, EE(4)  /.107047582417607E+00/, &
-&EE(5)  /.120424719029462E+00/, EE(6)  /.125096631582229E+00/, &
-&EE(7)  /.122314435224685E+00/, EE(8)  /.112621417553907E+00/, &
-&EE(9)  /.963419407392582E-01/, EE(10) /.747398422757511E-01/, &
-&EE(11) /.508596135953441E-01/, EE(12) /.290822706773628E-01/, &
-&EE(13) /.132201640530101E-01/, EE(14) /.443802939829067E-02/, &
-&EE(15) /.992612478987576E-03/, EE(16) /.126579795112011E-03/, &
-&EE(17) /.702150908253350E-05/, EE(18) /.910281532564632E-07/
+data ed(1)  /0.00000000000000e+00/, ed(2)  /.311105957086528e-01/, &
+&ed(3)  /.103661260539112e+00/, ed(4)  /.216532335244554e+00/, &
+&ed(5)  /.369931427960192e+00/, ed(6)  /.566766259990589e+00/, &
+&ed(7)  /.814042066324748e+00/, ed(8)  /.112384247540813e+01/, &
+&ed(9)  /.151400478148512e+01/, ed(10) /.200886795032284e+01/, &
+&ed(11) /.264052411823592e+01/, ed(12) /.345098449933392e+01/, &
+&ed(13) /.449583360763202e+01/, ed(14) /.585058263409822e+01/, &
+&ed(15) /.762273501463380e+01/, ed(16) /.997814501584578e+01/, &
+&ed(17) /.132122064896408e+02/, ed(18) /.180322948376021e+02/
+data ee(1)  /.850156516121093e-02/, ee(2)  /.505037465849058e-01/, &
+&ee(3)  /.836817368956407e-01/, ee(4)  /.107047582417607e+00/, &
+&ee(5)  /.120424719029462e+00/, ee(6)  /.125096631582229e+00/, &
+&ee(7)  /.122314435224685e+00/, ee(8)  /.112621417553907e+00/, &
+&ee(9)  /.963419407392582e-01/, ee(10) /.747398422757511e-01/, &
+&ee(11) /.508596135953441e-01/, ee(12) /.290822706773628e-01/, &
+&ee(13) /.132201640530101e-01/, ee(14) /.443802939829067e-02/, &
+&ee(15) /.992612478987576e-03/, ee(16) /.126579795112011e-03/, &
+&ee(17) /.702150908253350e-05/, ee(18) /.910281532564632e-07/
 !-------------------------
-DATA DD(1)  /0.00000000000000E+00/, DD(2)  /.419556678374293E-01/, &
-&DD(3)  /.117533661648665E+00/, DD(4)  /.228560237455987E+00/, &
-&DD(5)  /.375667350161240E+00/, DD(6)  /.791594846276672E+00/, &
-&DD(7)  /.107546889623058E+01/, DD(8)  /.142659208030841E+01/, &
-&DD(9)  /.186290554952377E+01/, DD(10) /.240730009509856E+01/, &
-&DD(11) /.308854035607524E+01/, DD(12) /.394277605155259E+01/, &
-&DD(13) /.501593196543981E+01/, DD(14) /.636759180748651E+01/, &
-&DD(15) /.807776193096055E+01/, DD(16) /.102598961138887E+02/, &
-&DD(17) /.130896768422610E+02/, DD(18) /.168832169085916E+02/, &
-&DD(19) /.224083240941713E+02/
-DATA DE(1) /-.346911733535892E-03/, DE(2) /-.603787732461745E-02/, &
-&DE(3) /-.152461305949249E-01/, DE(4) /-.210582169827291E-01/, &
-&DE(5) /-.171894208720754E-01/, DE(6)  /.314323467033032E-01/, &
-&DE(7)  /.750898531566972E-01/, DE(8)  /.124689787807260E+00/, &
-&DE(9)  /.168579075090035E+00/, DE(10) /.191715080699511E+00/, &
-&DE(11) /.182600794550836E+00/, DE(12) /.142345674307147E+00/, &
-&DE(13) /.874862222419327E-01/, DE(14) /.402175083288425E-01/, &
-&DE(15) /.128575005680180E-01/, DE(16) /.257673782598441E-02/, &
-&DE(17) /.275955003784349E-03/, DE(18) /.119139315517122E-04/, &
-&DE(19) /.107292980199386E-06/
+data dd(1)  /0.00000000000000e+00/, dd(2)  /.419556678374293e-01/, &
+&dd(3)  /.117533661648665e+00/, dd(4)  /.228560237455987e+00/, &
+&dd(5)  /.375667350161240e+00/, dd(6)  /.791594846276672e+00/, &
+&dd(7)  /.107546889623058e+01/, dd(8)  /.142659208030841e+01/, &
+&dd(9)  /.186290554952377e+01/, dd(10) /.240730009509856e+01/, &
+&dd(11) /.308854035607524e+01/, dd(12) /.394277605155259e+01/, &
+&dd(13) /.501593196543981e+01/, dd(14) /.636759180748651e+01/, &
+&dd(15) /.807776193096055e+01/, dd(16) /.102598961138887e+02/, &
+&dd(17) /.130896768422610e+02/, dd(18) /.168832169085916e+02/, &
+&dd(19) /.224083240941713e+02/
+data de(1) /-.346911733535892e-03/, de(2) /-.603787732461745e-02/, &
+&de(3) /-.152461305949249e-01/, de(4) /-.210582169827291e-01/, &
+&de(5) /-.171894208720754e-01/, de(6)  /.314323467033032e-01/, &
+&de(7)  /.750898531566972e-01/, de(8)  /.124689787807260e+00/, &
+&de(9)  /.168579075090035e+00/, de(10) /.191715080699511e+00/, &
+&de(11) /.182600794550836e+00/, de(12) /.142345674307147e+00/, &
+&de(13) /.874862222419327e-01/, de(14) /.402175083288425e-01/, &
+&de(15) /.128575005680180e-01/, de(16) /.257673782598441e-02/, &
+&de(17) /.275955003784349e-03/, de(18) /.119139315517122e-04/, &
+&de(19) /.107292980199386e-06/
 !-------------------------
-DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.237286128313683E-01/, &
-&CD(3)  /.854113210668760E-01/, CD(4)  /.185276627282059E+00/, &
-&CD(5)  /.323741526616688E+00/, CD(6)  /.503045460381267E+00/, &
-&CD(7)  /.728806607587188E+00/, CD(8)  /.101122770102872E+01/, &
-&CD(9)  /.136598448171249E+01/, CD(10) /.181510139038929E+01/, &
-&CD(11) /.238824701955419E+01/, CD(12) /.312490532008812E+01/, &
-&CD(13) /.407802489894445E+01/, CD(14) /.532033545554865E+01/, &
-&CD(15) /.695624307290579E+01/, CD(16) /.914759902547031E+01/, &
-&CD(17) /.121829074388544E+02/, CD(18) /.167511311969873E+02/
-DATA CE(1)  /.349517258926827E-01/, CE(2)  /.135849105925897E+00/, &
-&CE(3)  /.158850581552296E+00/, CE(4)  /.153001434535435E+00/, &
-&CE(5)  /.134520752856461E+00/, CE(6)  /.111913051619671E+00/, &
-&CE(7)  /.892008386656190E-01/, CE(8)  /.679227205472067E-01/, &
-&CE(9)  /.486723197887211E-01/, CE(10) /.320170976532266E-01/, &
-&CE(11) /.187008965021111E-01/, CE(12) /.929708414427865E-02/, &
-&CE(13) /.372604763161087E-02/, CE(14) /.111989537559823E-02/, &
-&CE(15) /.228057496872353E-03/, CE(16) /.269596227781453E-04/, &
-&CE(17) /.141255430224301E-05/, CE(18) /.176352326808806E-07/
+data cd(1)  /0.00000000000000e+00/, cd(2)  /.237286128313683e-01/, &
+&cd(3)  /.854113210668760e-01/, cd(4)  /.185276627282059e+00/, &
+&cd(5)  /.323741526616688e+00/, cd(6)  /.503045460381267e+00/, &
+&cd(7)  /.728806607587188e+00/, cd(8)  /.101122770102872e+01/, &
+&cd(9)  /.136598448171249e+01/, cd(10) /.181510139038929e+01/, &
+&cd(11) /.238824701955419e+01/, cd(12) /.312490532008812e+01/, &
+&cd(13) /.407802489894445e+01/, cd(14) /.532033545554865e+01/, &
+&cd(15) /.695624307290579e+01/, cd(16) /.914759902547031e+01/, &
+&cd(17) /.121829074388544e+02/, cd(18) /.167511311969873e+02/
+data ce(1)  /.349517258926827e-01/, ce(2)  /.135849105925897e+00/, &
+&ce(3)  /.158850581552296e+00/, ce(4)  /.153001434535435e+00/, &
+&ce(5)  /.134520752856461e+00/, ce(6)  /.111913051619671e+00/, &
+&ce(7)  /.892008386656190e-01/, ce(8)  /.679227205472067e-01/, &
+&ce(9)  /.486723197887211e-01/, ce(10) /.320170976532266e-01/, &
+&ce(11) /.187008965021111e-01/, ce(12) /.929708414427865e-02/, &
+&ce(13) /.372604763161087e-02/, ce(14) /.111989537559823e-02/, &
+&ce(15) /.228057496872353e-03/, ce(16) /.269596227781453e-04/, &
+&ce(17) /.141255430224301e-05/, ce(18) /.176352326808806e-07/
 !-------------------------
-X = REAL(Z)
-Y = AIMAG(Z)
-R = X*X + Y*Y
+x = real(z)
+y = aimag(z)
+r = x*x + y*y
 !
-IF (R .LE. 1.0) GO TO 100
-IF (R .GE. 1296.0) GO TO 10
-IF (X .LT. 0.07*Y*Y) GO TO 30
-GO TO 40
+if (r .le. 1.0) go to 100
+if (r .ge. 1296.0) go to 10
+if (x .lt. 0.07*y*y) go to 30
+go to 40
 !-----------------------------------------------------------------------
 !                     ASYMPTOTIC EXPANSION
 !-----------------------------------------------------------------------
-10 QF(1) =  X/R
-QF(2) = -Y/R
-SM(1) = -QF(1)
-SM(2) = -QF(2)
-TM(1) =  SM(1)
-TM(2) =  SM(2)
-PM = 1.0
-20 TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = PM*TS(1)
-   TM(2) = PM*TS(2)
-   PM = PM + 1.0
-   TS(1) = TM(1)/PM
-   TS(2) = TM(2)/PM
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 21
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 130
-21 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   IF (PM .LT. 36.0) GO TO 20
-GO TO 130
+10 qf(1) =  x/r
+qf(2) = -y/r
+sm(1) = -qf(1)
+sm(2) = -qf(2)
+tm(1) =  sm(1)
+tm(2) =  sm(2)
+pm = 1.0
+20 ts(1) = tm(1)*qf(1) - tm(2)*qf(2)
+   ts(2) = tm(1)*qf(2) + tm(2)*qf(1)
+   tm(1) = pm*ts(1)
+   tm(2) = pm*ts(2)
+   pm = pm + 1.0
+   ts(1) = tm(1)/pm
+   ts(2) = tm(2)/pm
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 21
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 130
+21 sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   if (pm .lt. 36.0) go to 20
+go to 130
 !-----------------------------------------------------------------------
 !                      RATIONAL EXPANSION
 !-----------------------------------------------------------------------
-30 SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,18
-   TS(1) = X - CD(I)
-   TS(2) = Y
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) = -CE(I)*TS(1)/SS
-   TM(2) =  CE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-GO TO 130
+30 sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = x - cd(i)
+   ts(2) = y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) = -ce(i)*ts(1)/ss
+   tm(2) =  ce(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+go to 130
 !-----------------------------------------------------------------------
 !                 EXPANSION INVOLVING EI AND DI
 !-----------------------------------------------------------------------
-40 ZL(1) = EULER + 0.5*ALOG(R)
-ZL(2) = ATAN2(-Y, -X)
+40 zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
 !
 !                    SET SM = EXP(Z)*EI(-Z)
 !
-SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,18
-   TS(1) = -X - ED(I)
-   TS(2) = -Y
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) =  EE(I)*TS(1)/SS
-   TM(2) = -EE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-SR(1) = ZL(1)*SM(1) - ZL(2)*SM(2)
-SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,18
+   ts(1) = -x - ed(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) =  ee(i)*ts(1)/ss
+   tm(2) = -ee(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+sr(1) = zl(1)*sm(1) - zl(2)*sm(2)
+sr(2) = zl(1)*sm(2) + zl(2)*sm(1)
 !
 !                    SET SM = EXP(Z)*DI(-Z)
 !
-SM(1) = 0.0
-SM(2) = 0.0
-DO I = 1,19
-   TS(1) = -X - DD(I)
-   TS(2) = -Y
-   SS = TS(1)*TS(1) + TS(2)*TS(2)
-   TM(1) =  DE(I)*TS(1)/SS
-   TM(2) = -DE(I)*TS(2)/SS
-   SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-TS(1) = -(X*SM(1) + Y*SM(2))/R
-TS(2) = -(X*SM(2) - Y*SM(1))/R
+sm(1) = 0.0
+sm(2) = 0.0
+do i = 1,19
+   ts(1) = -x - dd(i)
+   ts(2) = -y
+   ss = ts(1)*ts(1) + ts(2)*ts(2)
+   tm(1) =  de(i)*ts(1)/ss
+   tm(2) = -de(i)*ts(2)/ss
+   sm(1) = sm(1) + tm(1)
+   sm(2) = sm(2) + tm(2)
+end do
+ts(1) = -(x*sm(1) + y*sm(2))/r
+ts(2) = -(x*sm(2) - y*sm(1))/r
 !
 !                    COMPUTE THE EXPANSION
 !
-SR(1) = SR(1) - TS(1) - ZETA2
-SR(2) = SR(2) - TS(2)
-SM(1) = 0.0
-SM(2) = 0.0
-TM(1) = 1.0
-TM(2) = 0.0
-PM = 0.0
-QM = ZETA2
-70 PM = PM + 1.0
-   QM = QM - 1.0/(PM*PM)
-   TS(1) = TM(1)*X - TM(2)*Y
-   TS(2) = TM(1)*Y + TM(2)*X
-   TM(1) = TS(1)/PM
-   TM(2) = TS(2)/PM
-   TS(1) = QM*TM(1)
-   TS(2) = QM*TM(2)
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 71
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
-71 SM(1) = SM(1) - TS(1)
-   SM(2) = SM(2) - TS(2)
-   GO TO 70
-80 SM(1) = SR(1) + SM(1)
-SM(2) = SR(2) + SM(2)
+sr(1) = sr(1) - ts(1) - zeta2
+sr(2) = sr(2) - ts(2)
+sm(1) = 0.0
+sm(2) = 0.0
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = zeta2
+70 pm = pm + 1.0
+   qm = qm - 1.0/(pm*pm)
+   ts(1) = tm(1)*x - tm(2)*y
+   ts(2) = tm(1)*y + tm(2)*x
+   tm(1) = ts(1)/pm
+   tm(2) = ts(2)/pm
+   ts(1) = qm*tm(1)
+   ts(2) = qm*tm(2)
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 71
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 80
+71 sm(1) = sm(1) - ts(1)
+   sm(2) = sm(2) - ts(2)
+   go to 70
+80 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
 !
 !                      COMPUTE EXP(-Z)*SM
 !
-QM = EXP(-X)
-QF(1) = QM*COS(-Y)
-QF(2) = QM*SIN(-Y)
-TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
-TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
-SM(1) = TS(1)
-SM(2) = TS(2)
-GO TO 130
+qm = exp(-x)
+qf(1) = qm*cos(-y)
+qf(2) = qm*sin(-y)
+ts(1) = qf(1)*sm(1) - qf(2)*sm(2)
+ts(2) = qf(1)*sm(2) + qf(2)*sm(1)
+sm(1) = ts(1)
+sm(2) = ts(2)
+go to 130
 !-----------------------------------------------------------------------
 !                  SERIES FOR X*X + Y*Y .LE. 1
 !-----------------------------------------------------------------------
-100 SM(1) = 0.0
-SM(2) = 0.0
-ZL(1) = EULER + 0.5*ALOG(R)
-ZL(2) = ATAN2(-Y, -X)
-SR(1) = CONST + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
-SR(2) = ZL(1)*ZL(2)
-TM(1) = 1.0
-TM(2) = 0.0
-PM = 0.0
-QM = 0.0
-110 PM = PM + 1.0
-   QM = QM + 1.0/PM
-   TS(1) = -TM(1)*X + TM(2)*Y
-   TS(2) = -TM(1)*Y - TM(2)*X
-   TM(1) = TS(1)/PM
-   TM(2) = TS(2)/PM
-   R = (ZL(1) - 1.0/PM) - QM
-   TS(1) = (R*TM(1) - ZL(2)*TM(2))/PM
-   TS(2) = (R*TM(2) + ZL(2)*TM(1))/PM
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 111
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 120
-111 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   GO TO 110
-120 SM(1) = SR(1) + SM(1)
-SM(2) = SR(2) + SM(2)
+100 sm(1) = 0.0
+sm(2) = 0.0
+zl(1) = euler + 0.5*alog(r)
+zl(2) = atan2(-y, -x)
+sr(1) = const + 0.5*(zl(1)*zl(1) - zl(2)*zl(2))
+sr(2) = zl(1)*zl(2)
+tm(1) = 1.0
+tm(2) = 0.0
+pm = 0.0
+qm = 0.0
+110 pm = pm + 1.0
+   qm = qm + 1.0/pm
+   ts(1) = -tm(1)*x + tm(2)*y
+   ts(2) = -tm(1)*y - tm(2)*x
+   tm(1) = ts(1)/pm
+   tm(2) = ts(2)/pm
+   r = (zl(1) - 1.0/pm) - qm
+   ts(1) = (r*tm(1) - zl(2)*tm(2))/pm
+   ts(2) = (r*tm(2) + zl(2)*tm(1))/pm
+   if (abs(sm(1)) + abs(ts(1)) .ne. abs(sm(1))) go to 111
+   if (abs(sm(2)) + abs(ts(2)) .eq. abs(sm(2))) go to 120
+111 sm(1) = sm(1) + ts(1)
+   sm(2) = sm(2) + ts(2)
+   go to 110
+120 sm(1) = sr(1) + sm(1)
+sm(2) = sr(2) + sm(2)
 !-----------------------------------------------------------------------
 !                         TERMINATION
 !-----------------------------------------------------------------------
-130 W = CMPLX(SM(1), SM(2))
-RETURN
-END SUBROUTINE CEXEXI
+130 w = cmplx(sm(1), sm(2))
+return
+end subroutine cexexi
 

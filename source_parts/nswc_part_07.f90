@@ -1,53 +1,53 @@
-SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA
-INTEGER :: N
-INTEGER :: L
+subroutine dseig (a, ka, n, w, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka
+integer :: n
+integer :: l
 !-----------------------------------------------------------------------
 !                DOUBLE PRECISION COMPUTATION OF THE
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(*), W(N), T(*)
+double precision, intent(inout) :: a(*), w(n), t(*)
 !
-IF (KA .EQ. 0) GO TO 10
-   CALL DTRED1 (KA, N, A, W, T(N+1), T(1))
-   CALL DTQL (N, W, T, IERR)
-   RETURN
-10 L = N*(N + 1)
-L = L/2
-CALL DTRED3 (N, L, A, W, T(N+1), T(1))
-CALL DTQL (N, W, T, IERR)
-RETURN
-END SUBROUTINE DSEIG
+if (ka .eq. 0) go to 10
+   call dtred1 (ka, n, a, w, t(n+1), t(1))
+   call dtql (n, w, t, ierr)
+   return
+10 l = n*(n + 1)
+l = l/2
+call dtred3 (n, l, a, w, t(n+1), t(1))
+call dtql (n, w, t, ierr)
+return
+end subroutine dseig
 
-SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, N
+subroutine dseigv (a, ka, n, w, z, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
 !-----------------------------------------------------------------------
 !                 DOUBLE PRECISION COMPUTATION OF
 !                 EIGENVALUES AND EIGENVECTORS OF
 !                     SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-DOUBLE PRECISION, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: w(n), z(ka,n), t(n)
 !
-CALL DTRED2 (KA, N, A, W, T, Z)
-CALL DTQL2 (KA, N, W, T, Z, IERR)
-RETURN
-END SUBROUTINE DSEIGV
+call dtred2 (ka, n, a, w, t, z)
+call dtql2 (ka, n, w, t, z, ierr)
+return
+end subroutine dseigv
 
-SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
-IMPLICIT NONE
+subroutine dtred1 (nm,n,a,d,e,e2)
+implicit none
 !
-INTEGER :: I, J, K, L
-INTEGER, INTENT(IN) :: N
-INTEGER :: II
-INTEGER, INTENT(IN) :: NM
-INTEGER :: JP1
-DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
-DOUBLE PRECISION :: F, G, H, SCALE
+integer :: i, j, k, l
+integer, intent(in) :: n
+integer :: ii
+integer, intent(in) :: nm
+integer :: jp1
+double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+double precision :: f, g, h, scale
 !     DOUBLE PRECISION DSQRT,DABS
 !-----------------------------------------------------------------------
 !
@@ -86,87 +86,87 @@ DOUBLE PRECISION :: F, G, H, SCALE
 !
 !-----------------------------------------------------------------------
 !
-do 100 I = 1, N
-100 D(I) = A(I,I)
+do 100 i = 1, n
+100 d(i) = a(i,i)
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-DO II = 1, N
-   I = N + 1 - II
-   L = I - 1
-   H = 0.D0
-   SCALE = 0.D0
-   IF (L .LT. 1) GO TO 130
+do ii = 1, n
+   i = n + 1 - ii
+   l = i - 1
+   h = 0.d0
+   scale = 0.d0
+   if (l .lt. 1) go to 130
 !     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
-   do 120 K = 1, L
-120 SCALE = SCALE + DABS(A(I,K))
+   do 120 k = 1, l
+120 scale = scale + dabs(a(i,k))
 !
-   IF (SCALE .NE. 0.D0) GO TO 140
-130 E(I) = 0.D0
-   E2(I) = 0.D0
-   GO TO 290
+   if (scale .ne. 0.d0) go to 140
+130 e(i) = 0.d0
+   e2(i) = 0.d0
+   go to 290
 !
-140 DO K = 1, L
-      A(I,K) = A(I,K) / SCALE
-      H = H + A(I,K) * A(I,K)
-   END DO
+140 do k = 1, l
+      a(i,k) = a(i,k) / scale
+      h = h + a(i,k) * a(i,k)
+   end do
 !
-   E2(I) = SCALE * SCALE * H
-   F = A(I,L)
-   G = DSQRT(H)
-   IF (F .GE. 0.D0) G = -G
-   E(I) = SCALE * G
-   H = H - F * G
-   A(I,L) = F - G
-   IF (L .EQ. 1) GO TO 270
-   F = 0.D0
+   e2(i) = scale * scale * h
+   f = a(i,l)
+   g = dsqrt(h)
+   if (f .ge. 0.d0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   a(i,l) = f - g
+   if (l .eq. 1) go to 270
+   f = 0.d0
 !
-   DO J = 1, L
-      G = 0.D0
+   do j = 1, l
+      g = 0.d0
 !     ********** FORM ELEMENT OF A*U **********
-      do 180 K = 1, J
-180 G = G + A(J,K) * A(I,K)
+      do 180 k = 1, j
+180 g = g + a(j,k) * a(i,k)
 !
-      JP1 = J + 1
-      IF (L .LT. JP1) GO TO 220
+      jp1 = j + 1
+      if (l .lt. jp1) go to 220
 !
-      do 200 K = JP1, L
-200 G = G + A(K,J) * A(I,K)
+      do 200 k = jp1, l
+200 g = g + a(k,j) * a(i,k)
 !     ********** FORM ELEMENT OF P **********
-220 E(J) = G / H
-      F = F + E(J) * A(I,J)
-   END DO
+220 e(j) = g / h
+      f = f + e(j) * a(i,j)
+   end do
 !
-   H = F / (H + H)
+   h = f / (h + h)
 !     ********** FORM REDUCED A **********
-   do 260 J = 1, L
-      F = A(I,J)
-      G = E(J) - H * F
-      E(J) = G
+   do 260 j = 1, l
+      f = a(i,j)
+      g = e(j) - h * f
+      e(j) = g
 !
-      do 260 K = 1, J
-         A(J,K) = A(J,K) - F * E(K) - G * A(I,K)
-260 CONTINUE
+      do 260 k = 1, j
+         a(j,k) = a(j,k) - f * e(k) - g * a(i,k)
+260 continue
 !
-270 do 280 K = 1, L
-280 A(I,K) = SCALE * A(I,K)
+270 do 280 k = 1, l
+280 a(i,k) = scale * a(i,k)
 !
-290 H = D(I)
-   D(I) = A(I,I)
-   A(I,I) = H
-END DO
+290 h = d(i)
+   d(i) = a(i,i)
+   a(i,i) = h
+end do
 !
-RETURN
+return
 !     ********** LAST CARD OF DTRED1 **********
-END SUBROUTINE DTRED1
+end subroutine dtred1
 
-SUBROUTINE DTRED3 (N,NV,A,D,E,E2)
-IMPLICIT NONE
+subroutine dtred3 (n,nv,a,d,e,e2)
+implicit none
 !
-INTEGER :: I, J, K, L
-INTEGER, INTENT(IN) :: N
-INTEGER :: II, IZ, JK
-INTEGER, INTENT(IN) :: NV
-DOUBLE PRECISION, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
-DOUBLE PRECISION :: F, G, H, HH, SCALE
+integer :: i, j, k, l
+integer, intent(in) :: n
+integer :: ii, iz, jk
+integer, intent(in) :: nv
+double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
+double precision :: f, g, h, hh, scale
 !     DOUBLE PRECISION DSQRT,DABS
 !-----------------------------------------------------------------------
 !
@@ -205,86 +205,86 @@ DOUBLE PRECISION :: F, G, H, HH, SCALE
 !-----------------------------------------------------------------------
 !
 !     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
-DO II = 1, N
-   I = N + 1 - II
-   L = I - 1
-   IZ = (I * L) / 2
-   H = 0.D0
-   SCALE = 0.D0
-   IF (L .LT. 1) GO TO 130
+do ii = 1, n
+   i = n + 1 - ii
+   l = i - 1
+   iz = (i * l) / 2
+   h = 0.d0
+   scale = 0.d0
+   if (l .lt. 1) go to 130
 !     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
-   DO K = 1, L
-      IZ = IZ + 1
-      D(K) = A(IZ)
-      SCALE = SCALE + DABS(D(K))
-   END DO
+   do k = 1, l
+      iz = iz + 1
+      d(k) = a(iz)
+      scale = scale + dabs(d(k))
+   end do
 !
-   IF (SCALE .NE. 0.D0) GO TO 140
-130 E(I) = 0.D0
-   E2(I) = 0.D0
-   GO TO 290
+   if (scale .ne. 0.d0) go to 140
+130 e(i) = 0.d0
+   e2(i) = 0.d0
+   go to 290
 !
-140 DO K = 1, L
-      D(K) = D(K) / SCALE
-      H = H + D(K) * D(K)
-   END DO
+140 do k = 1, l
+      d(k) = d(k) / scale
+      h = h + d(k) * d(k)
+   end do
 !
-   E2(I) = SCALE * SCALE * H
-   F = D(L)
-   G = DSQRT(H)
-   IF (F .GE. 0.D0) G = -G
-   E(I) = SCALE * G
-   H = H - F * G
-   D(L) = F - G
-   A(IZ) = SCALE * D(L)
-   IF (L .EQ. 1) GO TO 290
-   F = 0.D0
+   e2(i) = scale * scale * h
+   f = d(l)
+   g = dsqrt(h)
+   if (f .ge. 0.d0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   d(l) = f - g
+   a(iz) = scale * d(l)
+   if (l .eq. 1) go to 290
+   f = 0.d0
 !
-   DO J = 1, L
-      G = 0.D0
-      JK = (J * (J-1)) / 2
+   do j = 1, l
+      g = 0.d0
+      jk = (j * (j-1)) / 2
 !     ********** FORM ELEMENT OF A*U **********
-      DO K = 1, L
-         JK = JK + 1
-         IF (K .GT. J) JK = JK + K - 2
-         G = G + A(JK) * D(K)
-      END DO
+      do k = 1, l
+         jk = jk + 1
+         if (k .gt. j) jk = jk + k - 2
+         g = g + a(jk) * d(k)
+      end do
 !     ********** FORM ELEMENT OF P **********
-      E(J) = G / H
-      F = F + E(J) * D(J)
-   END DO
+      e(j) = g / h
+      f = f + e(j) * d(j)
+   end do
 !
-   HH = F / (H + H)
-   JK = 0
+   hh = f / (h + h)
+   jk = 0
 !     ********** FORM REDUCED A **********
-   do 260 J = 1, L
-      F = D(J)
-      G = E(J) - HH * F
-      E(J) = G
+   do 260 j = 1, l
+      f = d(j)
+      g = e(j) - hh * f
+      e(j) = g
 !
-      do 260 K = 1, J
-         JK = JK + 1
-         A(JK) = A(JK) - F * E(K) - G * D(K)
-260 CONTINUE
+      do 260 k = 1, j
+         jk = jk + 1
+         a(jk) = a(jk) - f * e(k) - g * d(k)
+260 continue
 !
-290 D(I) = A(IZ+1)
-   A(IZ+1) = SCALE * DSQRT(H)
-END DO
+290 d(i) = a(iz+1)
+   a(iz+1) = scale * dsqrt(h)
+end do
 !
-RETURN
+return
 !     ********** LAST CARD OF DTRED3 **********
-END SUBROUTINE DTRED3
+end subroutine dtred3
 
-SUBROUTINE DTQL (N,D,E2,IERR)
-IMPLICIT NONE
+subroutine dtql (n,d,e2,ierr)
+implicit none
 !
-INTEGER :: I, J, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: II, L1, MML
-INTEGER, INTENT(OUT) :: IERR
-DOUBLE PRECISION, INTENT(INOUT) :: D(N), E2(N)
-DOUBLE PRECISION :: B, C, F, G, H, P, R, S, MACHEP
-DOUBLE PRECISION :: DPMPAR
+integer :: i, j, l, m
+integer, intent(in) :: n
+integer :: ii, l1, mml
+integer, intent(out) :: ierr
+double precision, intent(inout) :: d(n), e2(n)
+double precision :: b, c, f, g, h, p, r, s, machep
+double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TQLRAT,
@@ -322,109 +322,109 @@ DOUBLE PRECISION :: DPMPAR
 !                MACHEP THE VALUE U WHERE U IS THE SMALLEST POSITIVE
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
-           MACHEP = DPMPAR(1)
+           machep = dpmpar(1)
 !
 !                **********
 !
-IERR = 0
-IF (N .EQ. 1) GO TO 1001
+ierr = 0
+if (n .eq. 1) go to 1001
 !
-do 100 I = 2, N
-100 E2(I-1) = E2(I)
+do 100 i = 2, n
+100 e2(i-1) = e2(i)
 !
-F = 0.D0
-B = 0.D0
-E2(N) = 0.D0
+f = 0.d0
+b = 0.d0
+e2(n) = 0.d0
 !
-DO L = 1, N
-   J = 0
-   H = MACHEP * (DABS(D(L)) + DSQRT(E2(L)))
-   IF (B .GT. H) GO TO 105
-   B = H
-   C = B * B
+do l = 1, n
+   j = 0
+   h = machep * (dabs(d(l)) + dsqrt(e2(l)))
+   if (b .gt. h) go to 105
+   b = h
+   c = b * b
 !     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
-105 DO M = L, N
-      IF (E2(M) .LE. C) GO TO 120
+105 do m = l, n
+      if (e2(m) .le. c) go to 120
 !     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-   END DO
+   end do
 !
-120 IF (M .EQ. L) GO TO 210
-130 IF (J .EQ. 50) GO TO 1000
-   J = J + 1
+120 if (m .eq. l) go to 210
+130 if (j .eq. 50) go to 1000
+   j = j + 1
 !     ********** FORM SHIFT **********
-   L1 = L + 1
-   S = DSQRT(E2(L))
-   G = D(L)
-   P = (D(L1) - G) / (2.D0 * S)
-   R = DSQRT(P*P + 1.D0)
-   IF (P .LT. 0.D0) R = -R
-   D(L) = S / (P + R)
-   H = G - D(L)
+   l1 = l + 1
+   s = dsqrt(e2(l))
+   g = d(l)
+   p = (d(l1) - g) / (2.d0 * s)
+   r = dsqrt(p*p + 1.d0)
+   if (p .lt. 0.d0) r = -r
+   d(l) = s / (p + r)
+   h = g - d(l)
 !
-   do 140 I = L1, N
-140 D(I) = D(I) - H
+   do 140 i = l1, n
+140 d(i) = d(i) - h
 !
-   F = F + H
+   f = f + h
 !     ********** RATIONAL QL TRANSFORMATION **********
-   G = D(M)
-   IF (G .EQ. 0.D0) G = B
-   H = G
-   S = 0.D0
-   MML = M - L
+   g = d(m)
+   if (g .eq. 0.d0) g = b
+   h = g
+   s = 0.d0
+   mml = m - l
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   DO II = 1, MML
-      I = M - II
-      P = G * H
-      R = P + E2(I)
-      E2(I+1) = S * R
-      S = E2(I) / R
-      D(I+1) = H + S * (H + D(I))
-      G = D(I) - E2(I) / G
-      IF (G .EQ. 0.D0) G = B
-      H = G * P / R
-   END DO
+   do ii = 1, mml
+      i = m - ii
+      p = g * h
+      r = p + e2(i)
+      e2(i+1) = s * r
+      s = e2(i) / r
+      d(i+1) = h + s * (h + d(i))
+      g = d(i) - e2(i) / g
+      if (g .eq. 0.d0) g = b
+      h = g * p / r
+   end do
 !
-   E2(L) = S * G
-   D(L) = H
+   e2(l) = s * g
+   d(l) = h
 !     ********** GUARD AGAINST UNDERFLOW IN CONVERGENCE TEST **********
-   IF (H .EQ. 0.D0) GO TO 210
-   IF (DABS(E2(L)) .LE. DABS(C/H)) GO TO 210
-   E2(L) = H * E2(L)
-   IF (E2(L) .NE. 0.D0) GO TO 130
-210 P = D(L) + F
+   if (h .eq. 0.d0) go to 210
+   if (dabs(e2(l)) .le. dabs(c/h)) go to 210
+   e2(l) = h * e2(l)
+   if (e2(l) .ne. 0.d0) go to 130
+210 p = d(l) + f
 !     ********** ORDER EIGENVALUES **********
-   IF (L .EQ. 1) GO TO 250
+   if (l .eq. 1) go to 250
 !     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
-   DO II = 2, L
-      I = L + 2 - II
-      IF (P .GE. D(I-1)) GO TO 270
-      D(I) = D(I-1)
-   END DO
+   do ii = 2, l
+      i = l + 2 - ii
+      if (p .ge. d(i-1)) go to 270
+      d(i) = d(i-1)
+   end do
 !
-250 I = 1
-270 D(I) = P
-END DO
+250 i = 1
+270 d(i) = p
+end do
 !
-GO TO 1001
+go to 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = L
-1001 RETURN
+1000 ierr = l
+1001 return
 !     ********** LAST CARD OF DTQL **********
-END SUBROUTINE DTQL
+end subroutine dtql
 
-SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
-IMPLICIT NONE
+subroutine dtred2 (nm,n,a,d,e,z)
+implicit none
 !
-INTEGER :: I, J, K, L
-INTEGER, INTENT(IN) :: N
-INTEGER :: II
-INTEGER, INTENT(IN) :: NM
-INTEGER :: JP1
-DOUBLE PRECISION, INTENT(IN) :: A(NM,N)
-DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
-DOUBLE PRECISION :: F, G, H, HH, SCALE
+integer :: i, j, k, l
+integer, intent(in) :: n
+integer :: ii
+integer, intent(in) :: nm
+integer :: jp1
+double precision, intent(in) :: a(nm,n)
+double precision, intent(inout) :: d(n), e(n), z(nm,n)
+double precision :: f, g, h, hh, scale
 !     DOUBLE PRECISION DSQRT,DABS
 !-----------------------------------------------------------------------
 !
@@ -461,116 +461,116 @@ DOUBLE PRECISION :: F, G, H, HH, SCALE
 !
 !-----------------------------------------------------------------------
 !
-do 100 I = 1, N
+do 100 i = 1, n
 !
-   do 100 J = 1, I
-      Z(I,J) = A(I,J)
-100 CONTINUE
+   do 100 j = 1, i
+      z(i,j) = a(i,j)
+100 continue
 !
-IF (N .EQ. 1) GO TO 320
+if (n .eq. 1) go to 320
 !     ********** FOR I=N STEP -1 UNTIL 2 DO -- **********
-DO II = 2, N
-   I = N + 2 - II
-   L = I - 1
-   H = 0.D0
-   SCALE = 0.D0
-   IF (L .LT. 2) GO TO 130
+do ii = 2, n
+   i = n + 2 - ii
+   l = i - 1
+   h = 0.d0
+   scale = 0.d0
+   if (l .lt. 2) go to 130
 !     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
-   do 120 K = 1, L
-120 SCALE = SCALE + DABS(Z(I,K))
+   do 120 k = 1, l
+120 scale = scale + dabs(z(i,k))
 !
-   IF (SCALE .NE. 0.D0) GO TO 140
-130 E(I) = Z(I,L)
-   GO TO 290
+   if (scale .ne. 0.d0) go to 140
+130 e(i) = z(i,l)
+   go to 290
 !
-140 DO K = 1, L
-      Z(I,K) = Z(I,K) / SCALE
-      H = H + Z(I,K) * Z(I,K)
-   END DO
+140 do k = 1, l
+      z(i,k) = z(i,k) / scale
+      h = h + z(i,k) * z(i,k)
+   end do
 !
-   F = Z(I,L)
-   G = DSQRT(H)
-   IF (F .GE. 0.D0) G = -G
-   E(I) = SCALE * G
-   H = H - F * G
-   Z(I,L) = F - G
-   F = 0.D0
+   f = z(i,l)
+   g = dsqrt(h)
+   if (f .ge. 0.d0) g = -g
+   e(i) = scale * g
+   h = h - f * g
+   z(i,l) = f - g
+   f = 0.d0
 !
-   DO J = 1, L
-      Z(J,I) = Z(I,J) / H
-      G = 0.D0
+   do j = 1, l
+      z(j,i) = z(i,j) / h
+      g = 0.d0
 !     ********** FORM ELEMENT OF A*U **********
-      do 180 K = 1, J
-180 G = G + Z(J,K) * Z(I,K)
+      do 180 k = 1, j
+180 g = g + z(j,k) * z(i,k)
 !
-      JP1 = J + 1
-      IF (L .LT. JP1) GO TO 220
+      jp1 = j + 1
+      if (l .lt. jp1) go to 220
 !
-      do 200 K = JP1, L
-200 G = G + Z(K,J) * Z(I,K)
+      do 200 k = jp1, l
+200 g = g + z(k,j) * z(i,k)
 !     ********** FORM ELEMENT OF P **********
-220 E(J) = G / H
-      F = F + E(J) * Z(I,J)
-   END DO
+220 e(j) = g / h
+      f = f + e(j) * z(i,j)
+   end do
 !
-   HH = F / (H + H)
+   hh = f / (h + h)
 !     ********** FORM REDUCED A **********
-   do 260 J = 1, L
-      F = Z(I,J)
-      G = E(J) - HH * F
-      E(J) = G
+   do 260 j = 1, l
+      f = z(i,j)
+      g = e(j) - hh * f
+      e(j) = g
 !
-      do 260 K = 1, J
-         Z(J,K) = Z(J,K) - F * E(K) - G * Z(I,K)
-260 CONTINUE
+      do 260 k = 1, j
+         z(j,k) = z(j,k) - f * e(k) - g * z(i,k)
+260 continue
 !
-290 D(I) = H
-END DO
+290 d(i) = h
+end do
 !
-320 D(1) = 0.D0
-E(1) = 0.D0
+320 d(1) = 0.d0
+e(1) = 0.d0
 !     ********** ACCUMULATION OF TRANSFORMATION MATRICES **********
-do 500 I = 1, N
-   L = I - 1
-   IF (D(I) .EQ. 0.D0) GO TO 380
+do 500 i = 1, n
+   l = i - 1
+   if (d(i) .eq. 0.d0) go to 380
 !
-   do 360 J = 1, L
-      G = 0.D0
+   do 360 j = 1, l
+      g = 0.d0
 !
-      do 340 K = 1, L
-340 G = G + Z(I,K) * Z(K,J)
+      do 340 k = 1, l
+340 g = g + z(i,k) * z(k,j)
 !
-      do 360 K = 1, L
-         Z(K,J) = Z(K,J) - G * Z(K,I)
-360 CONTINUE
+      do 360 k = 1, l
+         z(k,j) = z(k,j) - g * z(k,i)
+360 continue
 !
-380 D(I) = Z(I,I)
-   Z(I,I) = 1.D0
-   IF (L .LT. 1) GO TO 500
+380 d(i) = z(i,i)
+   z(i,i) = 1.d0
+   if (l .lt. 1) go to 500
 !
-   DO J = 1, L
-      Z(I,J) = 0.D0
-      Z(J,I) = 0.D0
-   END DO
+   do j = 1, l
+      z(i,j) = 0.d0
+      z(j,i) = 0.d0
+   end do
 !
-500 CONTINUE
+500 continue
 !
-RETURN
+return
 !     ********** LAST CARD OF DTRED2 **********
-END SUBROUTINE DTRED2
+end subroutine dtred2
 
-SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
-IMPLICIT NONE
+subroutine dtql2 (nm,n,d,e,z,ierr)
+implicit none
 !
-INTEGER :: I, J, K, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: II, L1
-INTEGER, INTENT(IN) :: NM
-INTEGER :: MML
-INTEGER, INTENT(OUT) :: IERR
-DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
-DOUBLE PRECISION :: B, C, F, G, H, P, R, S, MACHEP
-DOUBLE PRECISION :: DPMPAR
+integer :: i, j, k, l, m
+integer, intent(in) :: n
+integer :: ii, l1
+integer, intent(in) :: nm
+integer :: mml
+integer, intent(out) :: ierr
+double precision, intent(inout) :: d(n), e(n), z(nm,n)
+double precision :: b, c, f, g, h, p, r, s, machep
+double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE TQL2,
@@ -626,179 +626,179 @@ DOUBLE PRECISION :: DPMPAR
 !                MACHEP THE VALUE U WHERE U IS THE SMALLEST POSITIVE
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
-           MACHEP = DPMPAR(1)
+           machep = dpmpar(1)
 !
 !                **********
 !
-IERR = 0
-IF (N .EQ. 1) GO TO 1001
+ierr = 0
+if (n .eq. 1) go to 1001
 !
-do 100 I = 2, N
-100 E(I-1) = E(I)
+do 100 i = 2, n
+100 e(i-1) = e(i)
 !
-F = 0.D0
-B = 0.D0
-E(N) = 0.D0
+f = 0.d0
+b = 0.d0
+e(n) = 0.d0
 !
-DO L = 1, N
-   J = 0
-   H = MACHEP * (DABS(D(L)) + DABS(E(L)))
-   IF (B .LT. H) B = H
+do l = 1, n
+   j = 0
+   h = machep * (dabs(d(l)) + dabs(e(l)))
+   if (b .lt. h) b = h
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
-   DO M = L, N
-      IF (DABS(E(M)) .LE. B) GO TO 120
+   do m = l, n
+      if (dabs(e(m)) .le. b) go to 120
 !     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
-   END DO
+   end do
 !
-120 IF (M .EQ. L) GO TO 220
-130 IF (J .EQ. 50) GO TO 1000
-   J = J + 1
+120 if (m .eq. l) go to 220
+130 if (j .eq. 50) go to 1000
+   j = j + 1
 !     ********** FORM SHIFT **********
-   L1 = L + 1
-   G = D(L)
-   P = (D(L1) - G) / (2.D0 * E(L))
-   R = DSQRT(P*P + 1.D0)
-   IF (P .LT. 0.D0) R = -R
-   D(L) = E(L) / (P + R)
-   H = G - D(L)
+   l1 = l + 1
+   g = d(l)
+   p = (d(l1) - g) / (2.d0 * e(l))
+   r = dsqrt(p*p + 1.d0)
+   if (p .lt. 0.d0) r = -r
+   d(l) = e(l) / (p + r)
+   h = g - d(l)
 !
-   do 140 I = L1, N
-140 D(I) = D(I) - H
+   do 140 i = l1, n
+140 d(i) = d(i) - h
 !
-   F = F + H
+   f = f + h
 !     ********** QL TRANSFORMATION **********
-   P = D(M)
-   C = 1.D0
-   S = 0.D0
-   MML = M - L
+   p = d(m)
+   c = 1.d0
+   s = 0.d0
+   mml = m - l
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
-   DO II = 1, MML
-      I = M - II
-      G = C * E(I)
-      H = C * P
-      IF (DABS(P) .LT. DABS(E(I))) GO TO 150
-      C = E(I) / P
-      R = DSQRT(C*C + 1.D0)
-      E(I+1) = S * P * R
-      S = C / R
-      C = 1.D0 / R
-      GO TO 160
-150 C = P / E(I)
-      R = DSQRT(C*C + 1.D0)
-      E(I+1) = S * E(I) * R
-      S = 1.D0 / R
-      C = C * S
-160 P = C * D(I) - S * G
-      D(I+1) = H + S * (C * G + S * D(I))
+   do ii = 1, mml
+      i = m - ii
+      g = c * e(i)
+      h = c * p
+      if (dabs(p) .lt. dabs(e(i))) go to 150
+      c = e(i) / p
+      r = dsqrt(c*c + 1.d0)
+      e(i+1) = s * p * r
+      s = c / r
+      c = 1.d0 / r
+      go to 160
+150 c = p / e(i)
+      r = dsqrt(c*c + 1.d0)
+      e(i+1) = s * e(i) * r
+      s = 1.d0 / r
+      c = c * s
+160 p = c * d(i) - s * g
+      d(i+1) = h + s * (c * g + s * d(i))
 !     ********** FORM VECTOR **********
-      DO K = 1, N
-         H = Z(K,I+1)
-         Z(K,I+1) = S * Z(K,I) + C * H
-         Z(K,I) = C * Z(K,I) - S * H
-      END DO
+      do k = 1, n
+         h = z(k,i+1)
+         z(k,i+1) = s * z(k,i) + c * h
+         z(k,i) = c * z(k,i) - s * h
+      end do
 !
-   END DO
+   end do
 !
-   E(L) = S * P
-   D(L) = C * P
-   IF (DABS(E(L)) .GT. B) GO TO 130
-220 D(L) = D(L) + F
-END DO
+   e(l) = s * p
+   d(l) = c * p
+   if (dabs(e(l)) .gt. b) go to 130
+220 d(l) = d(l) + f
+end do
 !     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
-do 300 II = 2, N
-   I = II - 1
-   K = I
-   P = D(I)
+do 300 ii = 2, n
+   i = ii - 1
+   k = i
+   p = d(i)
 !
-   do 260 J = II, N
-      IF (D(J) .GE. P) GO TO 260
-      K = J
-      P = D(J)
-260 CONTINUE
+   do 260 j = ii, n
+      if (d(j) .ge. p) go to 260
+      k = j
+      p = d(j)
+260 continue
 !
-   IF (K .EQ. I) GO TO 300
-   D(K) = D(I)
-   D(I) = P
+   if (k .eq. i) go to 300
+   d(k) = d(i)
+   d(i) = p
 !
-   DO J = 1, N
-      P = Z(J,I)
-      Z(J,I) = Z(J,K)
-      Z(J,K) = P
-   END DO
+   do j = 1, n
+      p = z(j,i)
+      z(j,i) = z(j,k)
+      z(j,k) = p
+   end do
 !
-300 CONTINUE
+300 continue
 !
-GO TO 1001
+go to 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = L
-1001 RETURN
+1000 ierr = l
+1001 return
 !     ********** LAST CARD OF DTQL2 **********
-END SUBROUTINE DTQL2
+end subroutine dtql2
 
-SUBROUTINE CEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBAL
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: IGH, LOW
+subroutine ceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+integer :: igh, low
 !-----------------------------------------------------------------------
 !                EIGENVALUES OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N)
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
 !
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL CBAL(KA,N,AR,AI,LOW,IGH,WR)
-CALL CORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
-CALL COMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
-RETURN
-END SUBROUTINE CEIG
+low = 1
+igh = n
+if (ibal .ne. 0) call cbal(ka,n,ar,ai,low,igh,wr)
+call corth(ka,n,low,igh,ar,ai,wr,wi)
+call comqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
+return
+end subroutine ceig
 
-SUBROUTINE CEIGV(IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBAL
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I1, I2, I3, IGH, LOW
+subroutine ceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
 !          EIGENVALUES AND EIGENVECTORS OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N), ZR(KA,N), &
-&ZI(KA,N), TEMP(*)
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
+&zi(ka,n), temp(*)
 !----------------------
 !     TEMP IS A TEMPORARY STORAGE AREA
 !        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
 !        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
 !----------------------
-I2 = 1
-I3 = N + 1
-I1 = N + I3
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL CBAL(KA,N,AR,AI,LOW,IGH,TEMP(I1))
-CALL CORTH(KA,N,LOW,IGH,AR,AI,TEMP(I2),TEMP(I3))
-CALL COMQR2(KA,N,LOW,IGH,TEMP(I2),TEMP(I3),AR,AI,WR,WI,ZR,ZI,IERR)
-IF (IERR .NE. 0) RETURN
-IF (IBAL .NE. 0) CALL CBABK2(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
-RETURN
-END SUBROUTINE CEIGV
+i2 = 1
+i3 = n + 1
+i1 = n + i3
+low = 1
+igh = n
+if (ibal .ne. 0) call cbal(ka,n,ar,ai,low,igh,temp(i1))
+call corth(ka,n,low,igh,ar,ai,temp(i2),temp(i3))
+call comqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi,zr,zi,ierr)
+if (ierr .ne. 0) return
+if (ibal .ne. 0) call cbabk2(ka,n,low,igh,temp(i1),n,zr,zi)
+return
+end subroutine ceigv
 
-SUBROUTINE CBAL(NM,N,AR,AI,LOW,IGH,SCALE)
-IMPLICIT NONE
-INTEGER :: IPMPAR
+subroutine cbal(nm,n,ar,ai,low,igh,scale)
+implicit none
+integer :: ipmpar
 !
-INTEGER :: I, J, K, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: JJ
-INTEGER, INTENT(IN) :: NM
-INTEGER, INTENT(INOUT) :: IGH, LOW
-INTEGER :: IEXC
-REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
-REAL :: C, F, G, R, S, B2, RADIX
+integer :: i, j, k, l, m
+integer, intent(in) :: n
+integer :: jj
+integer, intent(in) :: nm
+integer, intent(inout) :: igh, low
+integer :: iexc
+real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+real :: c, f, g, r, s, b2, radix
 !     REAL ABS
-LOGICAL :: NOCONV
+logical :: noconv
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -854,138 +854,138 @@ LOGICAL :: NOCONV
 !     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
 !
-           RADIX = IPMPAR(4)
+           radix = ipmpar(4)
 !
 !                **********
 !
-B2 = RADIX * RADIX
-K = 1
-L = N
-GO TO 100
+b2 = radix * radix
+k = 1
+l = n
+go to 100
 !     ********** IN-LINE PROCEDURE FOR ROW AND
 !                COLUMN EXCHANGE **********
-20 SCALE(M) = J
-IF (J .EQ. M) GO TO 50
+20 scale(m) = j
+if (j .eq. m) go to 50
 !
-DO I = 1, L
-   F = AR(I,J)
-   AR(I,J) = AR(I,M)
-   AR(I,M) = F
-   F = AI(I,J)
-   AI(I,J) = AI(I,M)
-   AI(I,M) = F
-END DO
+do i = 1, l
+   f = ar(i,j)
+   ar(i,j) = ar(i,m)
+   ar(i,m) = f
+   f = ai(i,j)
+   ai(i,j) = ai(i,m)
+   ai(i,m) = f
+end do
 !
-DO I = K, N
-   F = AR(J,I)
-   AR(J,I) = AR(M,I)
-   AR(M,I) = F
-   F = AI(J,I)
-   AI(J,I) = AI(M,I)
-   AI(M,I) = F
-END DO
+do i = k, n
+   f = ar(j,i)
+   ar(j,i) = ar(m,i)
+   ar(m,i) = f
+   f = ai(j,i)
+   ai(j,i) = ai(m,i)
+   ai(m,i) = f
+end do
 !
-50 GO TO (80,130), IEXC
+50 go to (80,130), iexc
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
 !                AND PUSH THEM DOWN **********
-80 IF (L .EQ. 1) GO TO 280
-L = L - 1
+80 if (l .eq. 1) go to 280
+l = l - 1
 !     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
-100 do 120 JJ = 1, L
-   J = L + 1 - JJ
+100 do 120 jj = 1, l
+   j = l + 1 - jj
 !
-   do 110 I = 1, L
-      IF (I .EQ. J) GO TO 110
-      IF (AR(J,I) .NE. 0.0 .OR. AI(J,I) .NE. 0.0) GO TO 120
-110 CONTINUE
+   do 110 i = 1, l
+      if (i .eq. j) go to 110
+      if (ar(j,i) .ne. 0.0 .or. ai(j,i) .ne. 0.0) go to 120
+110 continue
 !
-   M = L
-   IEXC = 1
-   GO TO 20
-120 CONTINUE
+   m = l
+   iexc = 1
+   go to 20
+120 continue
 !
-GO TO 140
+go to 140
 !     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
 !                AND PUSH THEM LEFT **********
-130 K = K + 1
+130 k = k + 1
 !
-140 do 170 J = K, L
+140 do 170 j = k, l
 !
-   do 150 I = K, L
-      IF (I .EQ. J) GO TO 150
-      IF (AR(I,J) .NE. 0.0 .OR. AI(I,J) .NE. 0.0) GO TO 170
-150 CONTINUE
+   do 150 i = k, l
+      if (i .eq. j) go to 150
+      if (ar(i,j) .ne. 0.0 .or. ai(i,j) .ne. 0.0) go to 170
+150 continue
 !
-   M = K
-   IEXC = 2
-   GO TO 20
-170 CONTINUE
+   m = k
+   iexc = 2
+   go to 20
+170 continue
 !     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
-do 180 I = K, L
-180 SCALE(I) = 1.0
+do 180 i = k, l
+180 scale(i) = 1.0
 !     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
-190 NOCONV = .FALSE.
+190 noconv = .false.
 !
-do 270 I = K, L
-   C = 0.0
-   R = 0.0
+do 270 i = k, l
+   c = 0.0
+   r = 0.0
 !
-   do 200 J = K, L
-      IF (J .EQ. I) GO TO 200
-      C = C + ABS(AR(J,I)) + ABS(AI(J,I))
-      R = R + ABS(AR(I,J)) + ABS(AI(I,J))
-200 CONTINUE
+   do 200 j = k, l
+      if (j .eq. i) go to 200
+      c = c + abs(ar(j,i)) + abs(ai(j,i))
+      r = r + abs(ar(i,j)) + abs(ai(i,j))
+200 continue
 !     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
-   IF (C .EQ. 0.0 .OR. R .EQ. 0.0) GO TO 270
-   G = R / RADIX
-   F = 1.0
-   S = C + R
-210 IF (C .GE. G) GO TO 220
-   F = F * RADIX
-   C = C * B2
-   GO TO 210
-220 G = R * RADIX
-230 IF (C .LT. G) GO TO 240
-   F = F / RADIX
-   C = C / B2
-   GO TO 230
+   if (c .eq. 0.0 .or. r .eq. 0.0) go to 270
+   g = r / radix
+   f = 1.0
+   s = c + r
+210 if (c .ge. g) go to 220
+   f = f * radix
+   c = c * b2
+   go to 210
+220 g = r * radix
+230 if (c .lt. g) go to 240
+   f = f / radix
+   c = c / b2
+   go to 230
 !     ********** NOW BALANCE **********
-240 IF ((C + R) / F .GE. 0.95 * S) GO TO 270
-   G = 1.0 / F
-   SCALE(I) = SCALE(I) * F
-   NOCONV = .TRUE.
+240 if ((c + r) / f .ge. 0.95 * s) go to 270
+   g = 1.0 / f
+   scale(i) = scale(i) * f
+   noconv = .true.
 !
-   DO J = K, N
-      AR(I,J) = AR(I,J) * G
-      AI(I,J) = AI(I,J) * G
-   END DO
+   do j = k, n
+      ar(i,j) = ar(i,j) * g
+      ai(i,j) = ai(i,j) * g
+   end do
 !
-   DO J = 1, L
-      AR(J,I) = AR(J,I) * F
-      AI(J,I) = AI(J,I) * F
-   END DO
+   do j = 1, l
+      ar(j,i) = ar(j,i) * f
+      ai(j,i) = ai(j,i) * f
+   end do
 !
-270 CONTINUE
+270 continue
 !
-IF (NOCONV) GO TO 190
+if (noconv) go to 190
 !
-280 LOW = K
-IGH = L
-RETURN
+280 low = k
+igh = l
+return
 !     ********** LAST CARD OF CBAL **********
-END SUBROUTINE CBAL
+end subroutine cbal
 
-SUBROUTINE CORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
-IMPLICIT NONE
+subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
+implicit none
 !
-INTEGER :: I, J, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: II, JJ, LA, MP
-INTEGER, INTENT(IN) :: NM, IGH
-INTEGER :: KP1
-INTEGER, INTENT(IN) :: LOW
-REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH), ORTI(IGH)
-REAL :: F, G, H, FI, FR, SCALE
+integer :: i, j, m
+integer, intent(in) :: n
+integer :: ii, jj, la, mp
+integer, intent(in) :: nm, igh
+integer :: kp1
+integer, intent(in) :: low
+real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
+real :: f, g, h, fi, fr, scale
 !     REAL SQRT,CABS,ABS
 !     COMPLEX CMPLX
 !-----------------------------------------------------------------------
@@ -1027,106 +1027,106 @@ REAL :: F, G, H, FI, FR, SCALE
 !          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
 !
 !-----------------------------------------------------------------------
-LA = IGH - 1
-KP1 = LOW + 1
-IF (LA .LT. KP1) GO TO 200
+la = igh - 1
+kp1 = low + 1
+if (la .lt. kp1) go to 200
 !
-do 180 M = KP1, LA
-   H = 0.0
-   ORTR(M) = 0.0
-   ORTI(M) = 0.0
-   SCALE = 0.0
+do 180 m = kp1, la
+   h = 0.0
+   ortr(m) = 0.0
+   orti(m) = 0.0
+   scale = 0.0
 !     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
-   do 90 I = M, IGH
-90 SCALE = SCALE + ABS(AR(I,M-1)) + ABS(AI(I,M-1))
+   do 90 i = m, igh
+90 scale = scale + abs(ar(i,m-1)) + abs(ai(i,m-1))
 !
-   IF (SCALE .EQ. 0.0) GO TO 180
-   MP = M + IGH
+   if (scale .eq. 0.0) go to 180
+   mp = m + igh
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   DO II = M, IGH
-      I = MP - II
-      ORTR(I) = AR(I,M-1) / SCALE
-      ORTI(I) = AI(I,M-1) / SCALE
-      H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
-   END DO
+   do ii = m, igh
+      i = mp - ii
+      ortr(i) = ar(i,m-1) / scale
+      orti(i) = ai(i,m-1) / scale
+      h = h + ortr(i) * ortr(i) + orti(i) * orti(i)
+   end do
 !
-   G = SQRT(H)
-   F = CABS(CMPLX(ORTR(M),ORTI(M)))
-   IF (F .EQ. 0.0) GO TO 103
-   H = H + F * G
-   G = G / F
-   ORTR(M) = (1.0 + G) * ORTR(M)
-   ORTI(M) = (1.0 + G) * ORTI(M)
-   GO TO 105
+   g = sqrt(h)
+   f = cabs(cmplx(ortr(m),orti(m)))
+   if (f .eq. 0.0) go to 103
+   h = h + f * g
+   g = g / f
+   ortr(m) = (1.0 + g) * ortr(m)
+   orti(m) = (1.0 + g) * orti(m)
+   go to 105
 !
-103 ORTR(M) = G
-   AR(M,M-1) = SCALE
+103 ortr(m) = g
+   ar(m,m-1) = scale
 !     ********** FORM (I-(U*UT)/H) * A **********
-105 DO J = M, N
-      FR = 0.0
-      FI = 0.0
+105 do j = m, n
+      fr = 0.0
+      fi = 0.0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      DO II = M, IGH
-         I = MP - II
-         FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
-         FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
-      END DO
+      do ii = m, igh
+         i = mp - ii
+         fr = fr + ortr(i) * ar(i,j) + orti(i) * ai(i,j)
+         fi = fi + ortr(i) * ai(i,j) - orti(i) * ar(i,j)
+      end do
 !
-      FR = FR / H
-      FI = FI / H
+      fr = fr / h
+      fi = fi / h
 !
-      DO I = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
-         AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
-      END DO
+      do i = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(i) + fi * orti(i)
+         ai(i,j) = ai(i,j) - fr * orti(i) - fi * ortr(i)
+      end do
 !
-   END DO
+   end do
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   DO I = 1, IGH
-      FR = 0.0
-      FI = 0.0
+   do i = 1, igh
+      fr = 0.0
+      fi = 0.0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      DO JJ = M, IGH
-         J = MP - JJ
-         FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
-         FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
-      END DO
+      do jj = m, igh
+         j = mp - jj
+         fr = fr + ortr(j) * ar(i,j) - orti(j) * ai(i,j)
+         fi = fi + ortr(j) * ai(i,j) + orti(j) * ar(i,j)
+      end do
 !
-      FR = FR / H
-      FI = FI / H
+      fr = fr / h
+      fi = fi / h
 !
-      DO J = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
-         AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
-      END DO
+      do j = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(j) - fi * orti(j)
+         ai(i,j) = ai(i,j) + fr * orti(j) - fi * ortr(j)
+      end do
 !
-   END DO
+   end do
 !
-   ORTR(M) = SCALE * ORTR(M)
-   ORTI(M) = SCALE * ORTI(M)
-   AR(M,M-1) = -G * AR(M,M-1)
-   AI(M,M-1) = -G * AI(M,M-1)
-180 CONTINUE
+   ortr(m) = scale * ortr(m)
+   orti(m) = scale * orti(m)
+   ar(m,m-1) = -g * ar(m,m-1)
+   ai(m,m-1) = -g * ai(m,m-1)
+180 continue
 !
-200 RETURN
+200 return
 !     ********** LAST CARD OF CORTH **********
-END SUBROUTINE CORTH
+end subroutine corth
 
-SUBROUTINE COMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
-IMPLICIT NONE
+subroutine comqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+implicit none
 !
-INTEGER :: I, J, L
-INTEGER, INTENT(IN) :: N
-INTEGER :: EN, LL
-INTEGER, INTENT(IN) :: NM, IGH
-INTEGER :: ITS
-INTEGER, INTENT(IN) :: LOW
-INTEGER :: LP1, ENM1
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N)
-REAL :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, NORM, MACHEP
-COMPLEX :: Z3
-REAL :: SPMPAR
+integer :: i, j, l
+integer, intent(in) :: n
+integer :: en, ll
+integer, intent(in) :: nm, igh
+integer :: its
+integer, intent(in) :: low
+integer :: lp1, enm1
+integer, intent(out) :: ierr
+real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
+real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex :: z3
+real :: spmpar
 !     INTEGER MIN0
 !     REAL SQRT,CABS,ABS,REAL,AIMAG
 !     COMPLEX CSQRT,CMPLX
@@ -1186,181 +1186,181 @@ REAL :: SPMPAR
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
 !
-           MACHEP = SPMPAR(1)
+           machep = spmpar(1)
 !
 !                **********
 !
-IERR = 0
-IF (LOW .EQ. IGH) GO TO 180
+ierr = 0
+if (low .eq. igh) go to 180
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-L = LOW + 1
+l = low + 1
 !
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.0) GO TO 170
-   NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.0
+do 170 i = l, igh
+   ll = min0(i+1,igh)
+   if (hi(i,i-1) .eq. 0.0) go to 170
+   norm = cabs(cmplx(hr(i,i-1),hi(i,i-1)))
+   yr = hr(i,i-1) / norm
+   yi = hi(i,i-1) / norm
+   hr(i,i-1) = norm
+   hi(i,i-1) = 0.0
 !
-   DO J = I, IGH
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
+   do j = i, igh
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
 !
-   DO J = LOW, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
+   do j = low, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
 !
-170 CONTINUE
+170 continue
 !     ********** STORE ROOTS ISOLATED BY CBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
+180 do 200 i = 1, n
+   if (i .ge. low .and. i .le. igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 !
-EN = IGH
-TR = 0.0
-TI = 0.0
+en = igh
+tr = 0.0
+ti = 0.0
 !     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 1001
-ITS = 0
-ENM1 = EN - 1
+220 if (en .lt. low) go to 1001
+its = 0
+enm1 = en - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW  -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (ABS(HR(L,L-1)) .LE. &
-&MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
-&+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
-END DO
+240 do ll = low, en
+   l = en + low - ll
+   if (l .eq. low) go to 300
+   if (abs(hr(l,l-1)) .le. &
+&machep * (abs(hr(l-1,l-1)) + abs(hi(l-1,l-1)) &
+&+ abs(hr(l,l)) +abs(hi(l,l)))) go to 300
+end do
 !     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 30) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.0
-YI = (HI(ENM1,ENM1) - SI) / 2.0
-Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
-ZZR = REAL(Z3)
-ZZI = AIMAG(Z3)
-IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z3 = CMPLX(XR,XI) / CMPLX(YR+ZZR,YI+ZZI)
-SR = SR - REAL(Z3)
-SI = SI - AIMAG(Z3)
-GO TO 340
+300 if (l .eq. en) go to 660
+if (its .eq. 30) go to 1000
+if (its .eq. 10 .or. its .eq. 20) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr .eq. 0.0 .and. xi .eq. 0.0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.0
+yi = (hi(enm1,enm1) - si) / 2.0
+z3 = csqrt(cmplx(yr**2-yi**2+xr,2.0*yr*yi+xi))
+zzr = real(z3)
+zzi = aimag(z3)
+if (yr * zzr + yi * zzi .ge. 0.0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z3 = cmplx(xr,xi) / cmplx(yr+zzr,yi+zzi)
+sr = sr - real(z3)
+si = si - aimag(z3)
+go to 340
 !     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
-SI = 0.0
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en-2))
+si = 0.0
 !
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
 !
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
+tr = tr + sr
+ti = ti + si
+its = its + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
+lp1 = l + 1
 !
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.0
-   NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.0
-   HI(I,I-1) = SR / NORM
+do i = lp1, en
+   sr = hr(i,i-1)
+   hr(i,i-1) = 0.0
+   norm = sqrt(hr(i-1,i-1)*hr(i-1,i-1)+hi(i-1,i-1)*hi(i-1,i-1) &
+&+sr*sr)
+   xr = hr(i-1,i-1) / norm
+   wr(i-1) = xr
+   xi = hi(i-1,i-1) / norm
+   wi(i-1) = xi
+   hr(i-1,i-1) = norm
+   hi(i-1,i-1) = 0.0
+   hi(i,i-1) = sr / norm
 !
-   DO J = I, EN
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
+   do j = i, en
+      yr = hr(i-1,j)
+      yi = hi(i-1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i-1,j) = xr * yr + xi * yi + hi(i,i-1) * zzr
+      hi(i-1,j) = xr * yi - xi * yr + hi(i,i-1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i-1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i-1) * yi
+   end do
 !
-END DO
+end do
 !
-SI = HI(EN,EN)
-IF (SI .EQ. 0.0) GO TO 540
-NORM = CABS(CMPLX(HR(EN,EN),SI))
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.0
+si = hi(en,en)
+if (si .eq. 0.0) go to 540
+norm = cabs(cmplx(hr(en,en),si))
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.0
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
+540 do j = lp1, en
+   xr = wr(j-1)
+   xi = wi(j-1)
 !
-   DO I = L, J
-      YR = HR(I,J-1)
-      YI = 0.0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = l, j
+      yr = hr(i,j-1)
+      yi = 0.0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i .eq. j) go to 560
+      yi = hi(i,j-1)
+      hi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+560 hr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-END DO
+end do
 !
-IF (SI .EQ. 0.0) GO TO 240
+if (si .eq. 0.0) go to 240
 !
-DO I = L, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
+do i = l, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
 !
-GO TO 240
+go to 240
 !     ********** A ROOT FOUND **********
-660 WR(EN) = HR(EN,EN) + TR
-WI(EN) = HI(EN,EN) + TI
-EN = ENM1
-GO TO 220
+660 wr(en) = hr(en,en) + tr
+wi(en) = hi(en,en) + ti
+en = enm1
+go to 220
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 30 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
+1000 ierr = en
+1001 return
 !     ********** LAST CARD OF COMQR **********
-END SUBROUTINE COMQR
+end subroutine comqr
 
-SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
-IMPLICIT NONE
+subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
+implicit none
 !
-INTEGER :: I, J, K
-INTEGER, INTENT(IN) :: M, N
-INTEGER :: II
-INTEGER, INTENT(IN) :: NM, IGH, LOW
-REAL, INTENT(IN) :: SCALE(N)
-REAL, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
-REAL :: S
+integer :: i, j, k
+integer, intent(in) :: m, n
+integer :: ii
+integer, intent(in) :: nm, igh, low
+real, intent(in) :: scale(n)
+real, intent(inout) :: zr(nm,m), zi(nm,m)
+real :: s
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -1398,62 +1398,62 @@ REAL :: S
 !          IN THEIR FIRST M COLUMNS.
 !
 !-----------------------------------------------------------------------
-IF (M .EQ. 0) GO TO 200
-IF (IGH .EQ. LOW) GO TO 120
+if (m .eq. 0) go to 200
+if (igh .eq. low) go to 120
 !
-DO I = LOW, IGH
-   S = SCALE(I)
+do i = low, igh
+   s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
 !                S=1.0/SCALE(I). **********
-   DO J = 1, M
-      ZR(I,J) = ZR(I,J) * S
-      ZI(I,J) = ZI(I,J) * S
-   END DO
+   do j = 1, m
+      zr(i,j) = zr(i,j) * s
+      zi(i,j) = zi(i,j) * s
+   end do
 !
-END DO
+end do
 !     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
 !                IGH+1 STEP 1 UNTIL N DO -- **********
-120 do 140 II = 1, N
-   I = II
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
-   IF (I .LT. LOW) I = LOW - II
-   K = SCALE(I)
-   IF (K .EQ. I) GO TO 140
+120 do 140 ii = 1, n
+   i = ii
+   if (i .ge. low .and. i .le. igh) go to 140
+   if (i .lt. low) i = low - ii
+   k = scale(i)
+   if (k .eq. i) go to 140
 !
-   DO J = 1, M
-      S = ZR(I,J)
-      ZR(I,J) = ZR(K,J)
-      ZR(K,J) = S
-      S = ZI(I,J)
-      ZI(I,J) = ZI(K,J)
-      ZI(K,J) = S
-   END DO
+   do j = 1, m
+      s = zr(i,j)
+      zr(i,j) = zr(k,j)
+      zr(k,j) = s
+      s = zi(i,j)
+      zi(i,j) = zi(k,j)
+      zi(k,j) = s
+   end do
 !
-140 CONTINUE
+140 continue
 !
-200 RETURN
+200 return
 !     ********** LAST CARD OF CBABK2 **********
-END SUBROUTINE CBABK2
+end subroutine cbabk2
 
-SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
-IMPLICIT NONE
+subroutine comqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
+implicit none
 !
-INTEGER :: I, J, K, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: EN, II, JJ, LL
-INTEGER, INTENT(IN) :: NM
-INTEGER :: NN
-INTEGER, INTENT(IN) :: IGH
-INTEGER :: IP1, ITS
-INTEGER, INTENT(IN) :: LOW
-INTEGER :: LP1, ENM1, IEND
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N), ZR(NM,N), &
-&ZI(NM,N), ORTR(IGH), ORTI(IGH)
-REAL :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, NORM, MACHEP
-COMPLEX :: Z3
-REAL :: SPMPAR
+integer :: i, j, k, l, m
+integer, intent(in) :: n
+integer :: en, ii, jj, ll
+integer, intent(in) :: nm
+integer :: nn
+integer, intent(in) :: igh
+integer :: ip1, its
+integer, intent(in) :: low
+integer :: lp1, enm1, iend
+integer, intent(out) :: ierr
+real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
+&zi(nm,n), ortr(igh), orti(igh)
+real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
+complex :: z3
+real :: spmpar
 !     INTEGER MIN0
 !     REAL SQRT,CABS,ABS,REAL,AIMAG
 !     COMPLEX CSQRT,CMPLX
@@ -1527,388 +1527,388 @@ REAL :: SPMPAR
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
 !
-           MACHEP = SPMPAR(1)
+           machep = spmpar(1)
 !
 !                **********
 !
-IERR = 0
+ierr = 0
 !     ********** INITIALIZE EIGENVECTOR MATRIX **********
-do 100 I = 1, N
+do 100 i = 1, n
 !
-   do 100 J = 1, N
-      ZR(I,J) = 0.0
-      ZI(I,J) = 0.0
-      IF (I .EQ. J) ZR(I,J) = 1.0
-100 CONTINUE
+   do 100 j = 1, n
+      zr(i,j) = 0.0
+      zi(i,j) = 0.0
+      if (i .eq. j) zr(i,j) = 1.0
+100 continue
 !     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 !                FROM THE INFORMATION LEFT BY CORTH **********
-IEND = IGH - LOW - 1
-IF (IEND) 180, 150, 105
+iend = igh - low - 1
+if (iend) 180, 150, 105
 !     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
-105 do 140 II = 1, IEND
-   I = IGH - II
-   IF (ORTR(I) .EQ. 0.0 .AND. ORTI(I) .EQ. 0.0) GO TO 140
-   IF (HR(I,I-1) .EQ. 0.0 .AND. HI(I,I-1) .EQ. 0.0) GO TO 140
+105 do 140 ii = 1, iend
+   i = igh - ii
+   if (ortr(i) .eq. 0.0 .and. orti(i) .eq. 0.0) go to 140
+   if (hr(i,i-1) .eq. 0.0 .and. hi(i,i-1) .eq. 0.0) go to 140
 !     ********** NORM BELOW IS NEGATIVE OF H FORMED IN CORTH **********
-   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
-   IP1 = I + 1
+   norm = hr(i,i-1) * ortr(i) + hi(i,i-1) * orti(i)
+   ip1 = i + 1
 !
-   DO K = IP1, IGH
-      ORTR(K) = HR(K,I-1)
-      ORTI(K) = HI(K,I-1)
-   END DO
+   do k = ip1, igh
+      ortr(k) = hr(k,i-1)
+      orti(k) = hi(k,i-1)
+   end do
 !
-   DO J = I, IGH
-      SR = 0.0
-      SI = 0.0
+   do j = i, igh
+      sr = 0.0
+      si = 0.0
 !
-      DO K = I, IGH
-         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
-         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-      END DO
+      do k = i, igh
+         sr = sr + ortr(k) * zr(k,j) + orti(k) * zi(k,j)
+         si = si + ortr(k) * zi(k,j) - orti(k) * zr(k,j)
+      end do
 !
-      SR = SR / NORM
-      SI = SI / NORM
+      sr = sr / norm
+      si = si / norm
 !
-      DO K = I, IGH
-         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
-         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-      END DO
+      do k = i, igh
+         zr(k,j) = zr(k,j) + sr * ortr(k) - si * orti(k)
+         zi(k,j) = zi(k,j) + sr * orti(k) + si * ortr(k)
+      end do
 !
-   END DO
+   end do
 !
-140 CONTINUE
+140 continue
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-150 L = LOW + 1
+150 l = low + 1
 !
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.0) GO TO 170
-   NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.0
+do 170 i = l, igh
+   ll = min0(i+1,igh)
+   if (hi(i,i-1) .eq. 0.0) go to 170
+   norm = cabs(cmplx(hr(i,i-1),hi(i,i-1)))
+   yr = hr(i,i-1) / norm
+   yi = hi(i,i-1) / norm
+   hr(i,i-1) = norm
+   hi(i,i-1) = 0.0
 !
-   DO J = I, N
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
+   do j = i, n
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
 !
-   DO J = 1, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
+   do j = 1, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
 !
-   DO J = LOW, IGH
-      SI = YR * ZI(J,I) + YI * ZR(J,I)
-      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
-      ZI(J,I) = SI
-   END DO
+   do j = low, igh
+      si = yr * zi(j,i) + yi * zr(j,i)
+      zr(j,i) = yr * zr(j,i) - yi * zi(j,i)
+      zi(j,i) = si
+   end do
 !
-170 CONTINUE
+170 continue
 !     ********** STORE ROOTS ISOLATED BY CBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
+180 do 200 i = 1, n
+   if (i .ge. low .and. i .le. igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 !
-EN = IGH
-TR = 0.0
-TI = 0.0
+en = igh
+tr = 0.0
+ti = 0.0
 !     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 680
-ITS = 0
-ENM1 = EN - 1
+220 if (en .lt. low) go to 680
+its = 0
+enm1 = en - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (ABS(HR(L,L-1)) .LE. &
-&MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
-&+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
-END DO
+240 do ll = low, en
+   l = en + low - ll
+   if (l .eq. low) go to 300
+   if (abs(hr(l,l-1)) .le. &
+&machep * (abs(hr(l-1,l-1)) + abs(hi(l-1,l-1)) &
+&+ abs(hr(l,l)) +abs(hi(l,l)))) go to 300
+end do
 !     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 30) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.0
-YI = (HI(ENM1,ENM1) - SI) / 2.0
-Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
-ZZR = REAL(Z3)
-ZZI = AIMAG(Z3)
-IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z3 = CMPLX(XR,XI) / CMPLX(YR+ZZR,YI+ZZI)
-SR = SR - REAL(Z3)
-SI = SI - AIMAG(Z3)
-GO TO 340
+300 if (l .eq. en) go to 660
+if (its .eq. 30) go to 1000
+if (its .eq. 10 .or. its .eq. 20) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr .eq. 0.0 .and. xi .eq. 0.0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.0
+yi = (hi(enm1,enm1) - si) / 2.0
+z3 = csqrt(cmplx(yr**2-yi**2+xr,2.0*yr*yi+xi))
+zzr = real(z3)
+zzi = aimag(z3)
+if (yr * zzr + yi * zzi .ge. 0.0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z3 = cmplx(xr,xi) / cmplx(yr+zzr,yi+zzi)
+sr = sr - real(z3)
+si = si - aimag(z3)
+go to 340
 !     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
-SI = 0.0
+320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en-2))
+si = 0.0
 !
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
 !
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
+tr = tr + sr
+ti = ti + si
+its = its + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
+lp1 = l + 1
 !
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.0
-   NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.0
-   HI(I,I-1) = SR / NORM
+do i = lp1, en
+   sr = hr(i,i-1)
+   hr(i,i-1) = 0.0
+   norm = sqrt(hr(i-1,i-1)*hr(i-1,i-1)+hi(i-1,i-1)*hi(i-1,i-1) &
+&+sr*sr)
+   xr = hr(i-1,i-1) / norm
+   wr(i-1) = xr
+   xi = hi(i-1,i-1) / norm
+   wi(i-1) = xi
+   hr(i-1,i-1) = norm
+   hi(i-1,i-1) = 0.0
+   hi(i,i-1) = sr / norm
 !
-   DO J = I, N
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
+   do j = i, n
+      yr = hr(i-1,j)
+      yi = hi(i-1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i-1,j) = xr * yr + xi * yi + hi(i,i-1) * zzr
+      hi(i-1,j) = xr * yi - xi * yr + hi(i,i-1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i-1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i-1) * yi
+   end do
 !
-END DO
+end do
 !
-SI = HI(EN,EN)
-IF (SI .EQ. 0.0) GO TO 540
-NORM = CABS(CMPLX(HR(EN,EN),SI))
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.0
-IF (EN .EQ. N) GO TO 540
-IP1 = EN + 1
+si = hi(en,en)
+if (si .eq. 0.0) go to 540
+norm = cabs(cmplx(hr(en,en),si))
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.0
+if (en .eq. n) go to 540
+ip1 = en + 1
 !
-DO J = IP1, N
-   YR = HR(EN,J)
-   YI = HI(EN,J)
-   HR(EN,J) = SR * YR + SI * YI
-   HI(EN,J) = SR * YI - SI * YR
-END DO
+do j = ip1, n
+   yr = hr(en,j)
+   yi = hi(en,j)
+   hr(en,j) = sr * yr + si * yi
+   hi(en,j) = sr * yi - si * yr
+end do
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
+540 do j = lp1, en
+   xr = wr(j-1)
+   xi = wi(j-1)
 !
-   DO I = 1, J
-      YR = HR(I,J-1)
-      YI = 0.0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = 1, j
+      yr = hr(i,j-1)
+      yi = 0.0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i .eq. j) go to 560
+      yi = hi(i,j-1)
+      hi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+560 hr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-   DO I = LOW, IGH
-      YR = ZR(I,J-1)
-      YI = ZI(I,J-1)
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = low, igh
+      yr = zr(i,j-1)
+      yi = zi(i,j-1)
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      zr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      zi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+      zr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      zi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-END DO
+end do
 !
-IF (SI .EQ. 0.0) GO TO 240
+if (si .eq. 0.0) go to 240
 !
-DO I = 1, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
+do i = 1, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
 !
-DO I = LOW, IGH
-   YR = ZR(I,EN)
-   YI = ZI(I,EN)
-   ZR(I,EN) = SR * YR - SI * YI
-   ZI(I,EN) = SR * YI + SI * YR
-END DO
+do i = low, igh
+   yr = zr(i,en)
+   yi = zi(i,en)
+   zr(i,en) = sr * yr - si * yi
+   zi(i,en) = sr * yi + si * yr
+end do
 !
-GO TO 240
+go to 240
 !     ********** A ROOT FOUND **********
-660 HR(EN,EN) = HR(EN,EN) + TR
-WR(EN) = HR(EN,EN)
-HI(EN,EN) = HI(EN,EN) + TI
-WI(EN) = HI(EN,EN)
-EN = ENM1
-GO TO 220
+660 hr(en,en) = hr(en,en) + tr
+wr(en) = hr(en,en)
+hi(en,en) = hi(en,en) + ti
+wi(en) = hi(en,en)
+en = enm1
+go to 220
 !     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
 !                VECTORS OF UPPER TRIANGULAR FORM **********
-680 NORM = 0.0
+680 norm = 0.0
 !
-do 720 I = 1, N
+do 720 i = 1, n
 !
-   do 720 J = I, N
-      NORM = NORM + ABS(HR(I,J)) + ABS(HI(I,J))
-720 CONTINUE
+   do 720 j = i, n
+      norm = norm + abs(hr(i,j)) + abs(hi(i,j))
+720 continue
 !
-IF (N .EQ. 1 .OR. NORM .EQ. 0.0) GO TO 1001
+if (n .eq. 1 .or. norm .eq. 0.0) go to 1001
 !     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-DO NN = 2, N
-   EN = N + 2 - NN
-   XR = WR(EN)
-   XI = WI(EN)
-   ENM1 = EN - 1
+do nn = 2, n
+   en = n + 2 - nn
+   xr = wr(en)
+   xi = wi(en)
+   enm1 = en - 1
 !     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   DO II = 1, ENM1
-      I = EN - II
-      ZZR = HR(I,EN)
-      ZZI = HI(I,EN)
-      IF (I .EQ. ENM1) GO TO 760
-      IP1 = I + 1
+   do ii = 1, enm1
+      i = en - ii
+      zzr = hr(i,en)
+      zzi = hi(i,en)
+      if (i .eq. enm1) go to 760
+      ip1 = i + 1
 !
-      DO J = IP1, ENM1
-         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
-         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-      END DO
+      do j = ip1, enm1
+         zzr = zzr + hr(i,j) * hr(j,en) - hi(i,j) * hi(j,en)
+         zzi = zzi + hr(i,j) * hi(j,en) + hi(i,j) * hr(j,en)
+      end do
 !
-760 YR = XR - WR(I)
-      YI = XI - WI(I)
-      IF (YR .EQ. 0.0 .AND. YI .EQ. 0.0) YR = MACHEP * NORM
-      Z3 = CMPLX(ZZR,ZZI) / CMPLX(YR,YI)
-      HR(I,EN) = REAL(Z3)
-      HI(I,EN) = AIMAG(Z3)
-   END DO
+760 yr = xr - wr(i)
+      yi = xi - wi(i)
+      if (yr .eq. 0.0 .and. yi .eq. 0.0) yr = machep * norm
+      z3 = cmplx(zzr,zzi) / cmplx(yr,yi)
+      hr(i,en) = real(z3)
+      hi(i,en) = aimag(z3)
+   end do
 !
-END DO
+end do
 !     ********** END BACKSUBSTITUTION **********
-ENM1 = N - 1
+enm1 = n - 1
 !     ********** VECTORS OF ISOLATED ROOTS **********
-do 840 I = 1, ENM1
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
-   IP1 = I + 1
+do 840 i = 1, enm1
+   if (i .ge. low .and. i .le. igh) go to 840
+   ip1 = i + 1
 !
-   DO J = IP1, N
-      ZR(I,J) = HR(I,J)
-      ZI(I,J) = HI(I,J)
-   END DO
+   do j = ip1, n
+      zr(i,j) = hr(i,j)
+      zi(i,j) = hi(i,j)
+   end do
 !
-840 CONTINUE
+840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
 !                VECTORS OF ORIGINAL FULL MATRIX.
 !                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
-do 880 JJ = LOW, ENM1
-   J = N + LOW - JJ
-   M = MIN0(J-1,IGH)
+do 880 jj = low, enm1
+   j = n + low - jj
+   m = min0(j-1,igh)
 !
-   do 880 I = LOW, IGH
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
+   do 880 i = low, igh
+      zzr = zr(i,j)
+      zzi = zi(i,j)
 !
-      DO K = LOW, M
-         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
-         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-      END DO
+      do k = low, m
+         zzr = zzr + zr(i,k) * hr(k,j) - zi(i,k) * hi(k,j)
+         zzi = zzi + zr(i,k) * hi(k,j) + zi(i,k) * hr(k,j)
+      end do
 !
-      ZR(I,J) = ZZR
-      ZI(I,J) = ZZI
-880 CONTINUE
+      zr(i,j) = zzr
+      zi(i,j) = zzi
+880 continue
 !
-GO TO 1001
+go to 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 30 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
+1000 ierr = en
+1001 return
 !     ********** LAST CARD OF COMQR2 **********
-END SUBROUTINE COMQR2
+end subroutine comqr2
 
-SUBROUTINE DCEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBAL
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: IGH, LOW
+subroutine dceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+integer :: igh, low
 !-----------------------------------------------------------------------
 !            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), &
-&WI(N)
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+&wi(n)
 !
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,WR)
-CALL DCORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
-CALL DCOMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
-RETURN
-END SUBROUTINE DCEIG
+low = 1
+igh = n
+if (ibal .ne. 0) call dcbal(ka,n,ar,ai,low,igh,wr)
+call dcorth(ka,n,low,igh,ar,ai,wr,wi)
+call dcomqr(ka,n,low,igh,ar,ai,wr,wi,ierr)
+return
+end subroutine dceig
 
-SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBAL
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I1, I2, I3, IGH, LOW
+subroutine dceigv (ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+implicit none
+integer, intent(in) :: ibal
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, n
+integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
 !                     EIGENVALUES AND EIGENVECTORS
 !                 OF DOUBLE PRECISION COMPLEX MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), &
-&WI(N), ZR(KA,N), ZI(KA,N), TEMP(*)
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+&wi(n), zr(ka,n), zi(ka,n), temp(*)
 !----------------------
 !     TEMP IS A TEMPORARY STORAGE AREA
 !        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
 !        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
 !----------------------
-I2 = 1
-I3 = N + 1
-I1 = N + I3
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,TEMP(I1))
-CALL DCORTH(KA,N,LOW,IGH,AR,AI,TEMP(I2),TEMP(I3))
-CALL DCMQR2(KA,N,LOW,IGH,TEMP(I2),TEMP(I3),AR,AI,WR,WI, &
-&ZR,ZI,IERR)
-IF (IERR .NE. 0) RETURN
-IF (IBAL .NE. 0) CALL DCBABK(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
-RETURN
-END SUBROUTINE DCEIGV
+i2 = 1
+i3 = n + 1
+i1 = n + i3
+low = 1
+igh = n
+if (ibal .ne. 0) call dcbal(ka,n,ar,ai,low,igh,temp(i1))
+call dcorth(ka,n,low,igh,ar,ai,temp(i2),temp(i3))
+call dcmqr2(ka,n,low,igh,temp(i2),temp(i3),ar,ai,wr,wi, &
+&zr,zi,ierr)
+if (ierr .ne. 0) return
+if (ibal .ne. 0) call dcbabk(ka,n,low,igh,temp(i1),n,zr,zi)
+return
+end subroutine dceigv
 
-SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
-IMPLICIT NONE
-INTEGER :: IPMPAR
+subroutine dcbal(nm,n,ar,ai,low,igh,scale)
+implicit none
+integer :: ipmpar
 !
-INTEGER :: I, J, K, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: JJ
-INTEGER, INTENT(IN) :: NM
-INTEGER, INTENT(INOUT) :: IGH, LOW
-INTEGER :: IEXC
-DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
-DOUBLE PRECISION :: C, F, G, R, S, B2, RADIX
-LOGICAL :: NOCONV
+integer :: i, j, k, l, m
+integer, intent(in) :: n
+integer :: jj
+integer, intent(in) :: nm
+integer, intent(inout) :: igh, low
+integer :: iexc
+double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+double precision :: c, f, g, r, s, b2, radix
+logical :: noconv
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -1964,140 +1964,140 @@ LOGICAL :: NOCONV
 !     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
 !
-           RADIX = IPMPAR(4)
+           radix = ipmpar(4)
 !
 !                **********
 !
-B2 = RADIX * RADIX
-K = 1
-L = N
-GO TO 100
+b2 = radix * radix
+k = 1
+l = n
+go to 100
 !     ********** IN-LINE PROCEDURE FOR ROW AND
 !                COLUMN EXCHANGE **********
-20 SCALE(M) = J
-IF (J .EQ. M) GO TO 50
+20 scale(m) = j
+if (j .eq. m) go to 50
 !
-DO I = 1, L
-   F = AR(I,J)
-   AR(I,J) = AR(I,M)
-   AR(I,M) = F
-   F = AI(I,J)
-   AI(I,J) = AI(I,M)
-   AI(I,M) = F
-END DO
+do i = 1, l
+   f = ar(i,j)
+   ar(i,j) = ar(i,m)
+   ar(i,m) = f
+   f = ai(i,j)
+   ai(i,j) = ai(i,m)
+   ai(i,m) = f
+end do
 !
-DO I = K, N
-   F = AR(J,I)
-   AR(J,I) = AR(M,I)
-   AR(M,I) = F
-   F = AI(J,I)
-   AI(J,I) = AI(M,I)
-   AI(M,I) = F
-END DO
+do i = k, n
+   f = ar(j,i)
+   ar(j,i) = ar(m,i)
+   ar(m,i) = f
+   f = ai(j,i)
+   ai(j,i) = ai(m,i)
+   ai(m,i) = f
+end do
 !
-50 GO TO (80,130), IEXC
+50 go to (80,130), iexc
 !     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
 !                AND PUSH THEM DOWN **********
-80 IF (L .EQ. 1) GO TO 280
-L = L - 1
+80 if (l .eq. 1) go to 280
+l = l - 1
 !     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
-100 do 120 JJ = 1, L
-   J = L + 1 - JJ
+100 do 120 jj = 1, l
+   j = l + 1 - jj
 !
-   do 110 I = 1, L
-      IF (I .EQ. J) GO TO 110
-      IF (AR(J,I) .NE. 0.D0 .OR. AI(J,I) .NE. 0.D0) GO TO 120
-110 CONTINUE
+   do 110 i = 1, l
+      if (i .eq. j) go to 110
+      if (ar(j,i) .ne. 0.d0 .or. ai(j,i) .ne. 0.d0) go to 120
+110 continue
 !
-   M = L
-   IEXC = 1
-   GO TO 20
-120 CONTINUE
+   m = l
+   iexc = 1
+   go to 20
+120 continue
 !
-GO TO 140
+go to 140
 !     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
 !                AND PUSH THEM LEFT **********
-130 K = K + 1
+130 k = k + 1
 !
-140 do 170 J = K, L
+140 do 170 j = k, l
 !
-   do 150 I = K, L
-      IF (I .EQ. J) GO TO 150
-      IF (AR(I,J) .NE. 0.D0 .OR. AI(I,J) .NE. 0.D0) GO TO 170
-150 CONTINUE
+   do 150 i = k, l
+      if (i .eq. j) go to 150
+      if (ar(i,j) .ne. 0.d0 .or. ai(i,j) .ne. 0.d0) go to 170
+150 continue
 !
-   M = K
-   IEXC = 2
-   GO TO 20
-170 CONTINUE
+   m = k
+   iexc = 2
+   go to 20
+170 continue
 !     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
-do 180 I = K, L
-180 SCALE(I) = 1.D0
+do 180 i = k, l
+180 scale(i) = 1.d0
 !     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
-190 NOCONV = .FALSE.
+190 noconv = .false.
 !
-do 270 I = K, L
-   C = 0.D0
-   R = 0.D0
+do 270 i = k, l
+   c = 0.d0
+   r = 0.d0
 !
-   do 200 J = K, L
-      IF (J .EQ. I) GO TO 200
-      C = C + DABS(AR(J,I)) + DABS(AI(J,I))
-      R = R + DABS(AR(I,J)) + DABS(AI(I,J))
-200 CONTINUE
+   do 200 j = k, l
+      if (j .eq. i) go to 200
+      c = c + dabs(ar(j,i)) + dabs(ai(j,i))
+      r = r + dabs(ar(i,j)) + dabs(ai(i,j))
+200 continue
 !     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
-   IF (C .EQ. 0.D0 .OR. R .EQ. 0.D0) GO TO 270
-   G = R / RADIX
-   F = 1.D0
-   S = C + R
-210 IF (C .GE. G) GO TO 220
-   F = F * RADIX
-   C = C * B2
-   GO TO 210
-220 G = R * RADIX
-230 IF (C .LT. G) GO TO 240
-   F = F / RADIX
-   C = C / B2
-   GO TO 230
+   if (c .eq. 0.d0 .or. r .eq. 0.d0) go to 270
+   g = r / radix
+   f = 1.d0
+   s = c + r
+210 if (c .ge. g) go to 220
+   f = f * radix
+   c = c * b2
+   go to 210
+220 g = r * radix
+230 if (c .lt. g) go to 240
+   f = f / radix
+   c = c / b2
+   go to 230
 !     ********** NOW BALANCE **********
-240 IF ((C + R) / F .GE. 0.95D0 * S) GO TO 270
-   G = 1.D0 / F
-   SCALE(I) = SCALE(I) * F
-   NOCONV = .TRUE.
+240 if ((c + r) / f .ge. 0.95d0 * s) go to 270
+   g = 1.d0 / f
+   scale(i) = scale(i) * f
+   noconv = .true.
 !
-   DO J = K, N
-      AR(I,J) = AR(I,J) * G
-      AI(I,J) = AI(I,J) * G
-   END DO
+   do j = k, n
+      ar(i,j) = ar(i,j) * g
+      ai(i,j) = ai(i,j) * g
+   end do
 !
-   DO J = 1, L
-      AR(J,I) = AR(J,I) * F
-      AI(J,I) = AI(J,I) * F
-   END DO
+   do j = 1, l
+      ar(j,i) = ar(j,i) * f
+      ai(j,i) = ai(j,i) * f
+   end do
 !
-270 CONTINUE
+270 continue
 !
-IF (NOCONV) GO TO 190
+if (noconv) go to 190
 !
-280 LOW = K
-IGH = L
-RETURN
+280 low = k
+igh = l
+return
 !     ********** LAST CARD OF DCBAL **********
-END SUBROUTINE DCBAL
+end subroutine dcbal
 
-SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
-IMPLICIT NONE
+subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
+implicit none
 !
-INTEGER :: I, J, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: II, JJ, LA, MP
-INTEGER, INTENT(IN) :: NM, IGH
-INTEGER :: KP1
-INTEGER, INTENT(IN) :: LOW
-DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH), &
-&ORTI(IGH)
-DOUBLE PRECISION :: F, G, H, FI, FR, SCALE
-DOUBLE PRECISION :: DCPABS
+integer :: i, j, m
+integer, intent(in) :: n
+integer :: ii, jj, la, mp
+integer, intent(in) :: nm, igh
+integer :: kp1
+integer, intent(in) :: low
+double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
+&orti(igh)
+double precision :: f, g, h, fi, fr, scale
+double precision :: dcpabs
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
@@ -2137,108 +2137,108 @@ DOUBLE PRECISION :: DCPABS
 !          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
 !
 !-----------------------------------------------------------------------
-LA = IGH - 1
-KP1 = LOW + 1
-IF (LA .LT. KP1) GO TO 200
+la = igh - 1
+kp1 = low + 1
+if (la .lt. kp1) go to 200
 !
-do 180 M = KP1, LA
-   H = 0.D0
-   ORTR(M) = 0.D0
-   ORTI(M) = 0.D0
-   SCALE = 0.D0
+do 180 m = kp1, la
+   h = 0.d0
+   ortr(m) = 0.d0
+   orti(m) = 0.d0
+   scale = 0.d0
 !     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
-   do 90 I = M, IGH
-90 SCALE = SCALE + DABS(AR(I,M-1)) + DABS(AI(I,M-1))
+   do 90 i = m, igh
+90 scale = scale + dabs(ar(i,m-1)) + dabs(ai(i,m-1))
 !
-   IF (SCALE .EQ. 0.D0) GO TO 180
-   MP = M + IGH
+   if (scale .eq. 0.d0) go to 180
+   mp = m + igh
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   DO II = M, IGH
-      I = MP - II
-      ORTR(I) = AR(I,M-1) / SCALE
-      ORTI(I) = AI(I,M-1) / SCALE
-      H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
-   END DO
+   do ii = m, igh
+      i = mp - ii
+      ortr(i) = ar(i,m-1) / scale
+      orti(i) = ai(i,m-1) / scale
+      h = h + ortr(i) * ortr(i) + orti(i) * orti(i)
+   end do
 !
-   G = DSQRT(H)
-   F = DCPABS(ORTR(M),ORTI(M))
-   IF (F .EQ. 0.D0) GO TO 103
-   H = H + F * G
-   G = G / F
-   ORTR(M) = (1.D0 + G) * ORTR(M)
-   ORTI(M) = (1.D0 + G) * ORTI(M)
-   GO TO 105
+   g = dsqrt(h)
+   f = dcpabs(ortr(m),orti(m))
+   if (f .eq. 0.d0) go to 103
+   h = h + f * g
+   g = g / f
+   ortr(m) = (1.d0 + g) * ortr(m)
+   orti(m) = (1.d0 + g) * orti(m)
+   go to 105
 !
-103 ORTR(M) = G
-   AR(M,M-1) = SCALE
+103 ortr(m) = g
+   ar(m,m-1) = scale
 !     ********** FORM (I-(U*UT)/H) * A **********
-105 DO J = M, N
-      FR = 0.D0
-      FI = 0.D0
+105 do j = m, n
+      fr = 0.d0
+      fi = 0.d0
 !     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      DO II = M, IGH
-         I = MP - II
-         FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
-         FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
-      END DO
+      do ii = m, igh
+         i = mp - ii
+         fr = fr + ortr(i) * ar(i,j) + orti(i) * ai(i,j)
+         fi = fi + ortr(i) * ai(i,j) - orti(i) * ar(i,j)
+      end do
 !
-      FR = FR / H
-      FI = FI / H
+      fr = fr / h
+      fi = fi / h
 !
-      DO I = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
-         AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
-      END DO
+      do i = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(i) + fi * orti(i)
+         ai(i,j) = ai(i,j) - fr * orti(i) - fi * ortr(i)
+      end do
 !
-   END DO
+   end do
 !     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   DO I = 1, IGH
-      FR = 0.D0
-      FI = 0.D0
+   do i = 1, igh
+      fr = 0.d0
+      fi = 0.d0
 !     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      DO JJ = M, IGH
-         J = MP - JJ
-         FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
-         FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
-      END DO
+      do jj = m, igh
+         j = mp - jj
+         fr = fr + ortr(j) * ar(i,j) - orti(j) * ai(i,j)
+         fi = fi + ortr(j) * ai(i,j) + orti(j) * ar(i,j)
+      end do
 !
-      FR = FR / H
-      FI = FI / H
+      fr = fr / h
+      fi = fi / h
 !
-      DO J = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
-         AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
-      END DO
+      do j = m, igh
+         ar(i,j) = ar(i,j) - fr * ortr(j) - fi * orti(j)
+         ai(i,j) = ai(i,j) + fr * orti(j) - fi * ortr(j)
+      end do
 !
-   END DO
+   end do
 !
-   ORTR(M) = SCALE * ORTR(M)
-   ORTI(M) = SCALE * ORTI(M)
-   AR(M,M-1) = -G * AR(M,M-1)
-   AI(M,M-1) = -G * AI(M,M-1)
-180 CONTINUE
+   ortr(m) = scale * ortr(m)
+   orti(m) = scale * orti(m)
+   ar(m,m-1) = -g * ar(m,m-1)
+   ai(m,m-1) = -g * ai(m,m-1)
+180 continue
 !
-200 RETURN
+200 return
 !     ********** LAST CARD OF DCORTH **********
-END SUBROUTINE DCORTH
+end subroutine dcorth
 
-SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
-IMPLICIT NONE
+subroutine dcomqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
+implicit none
 !
-INTEGER :: I, J, L
-INTEGER, INTENT(IN) :: N
-INTEGER :: EN, LL
-INTEGER, INTENT(IN) :: NM, IGH
-INTEGER :: ITS
-INTEGER, INTENT(IN) :: LOW
-INTEGER :: LP1, ENM1
-INTEGER, INTENT(OUT) :: IERR
-DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), &
-&WI(N)
-DOUBLE PRECISION :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, &
-&NORM, MACHEP
-DOUBLE PRECISION :: R2, W(2), Z(2)
-DOUBLE PRECISION :: DPMPAR, DCPABS
+integer :: i, j, l
+integer, intent(in) :: n
+integer :: en, ll
+integer, intent(in) :: nm, igh
+integer :: its
+integer, intent(in) :: low
+integer :: lp1, enm1
+integer, intent(out) :: ierr
+double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+&wi(n)
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
+&norm, machep
+double precision :: r2, w(2), z(2)
+double precision :: dpmpar, dcpabs
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
@@ -2291,184 +2291,184 @@ DOUBLE PRECISION :: DPMPAR, DCPABS
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
 !
-           MACHEP = DPMPAR(1)
+           machep = dpmpar(1)
 !
 !                **********
 !
-IERR = 0
-IF (LOW .EQ. IGH) GO TO 180
+ierr = 0
+if (low .eq. igh) go to 180
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-L = LOW + 1
+l = low + 1
 !
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
-   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.D0
+do 170 i = l, igh
+   ll = min0(i+1,igh)
+   if (hi(i,i-1) .eq. 0.d0) go to 170
+   norm = dcpabs(hr(i,i-1),hi(i,i-1))
+   yr = hr(i,i-1) / norm
+   yi = hi(i,i-1) / norm
+   hr(i,i-1) = norm
+   hi(i,i-1) = 0.d0
 !
-   DO J = I, IGH
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
+   do j = i, igh
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
 !
-   DO J = LOW, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
+   do j = low, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
 !
-170 CONTINUE
+170 continue
 !     ********** STORE ROOTS ISOLATED BY DCBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
+180 do 200 i = 1, n
+   if (i .ge. low .and. i .le. igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 !
-EN = IGH
-TR = 0.D0
-TI = 0.D0
+en = igh
+tr = 0.d0
+ti = 0.d0
 !     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 1001
-ITS = 0
-ENM1 = EN - 1
+220 if (en .lt. low) go to 1001
+its = 0
+enm1 = en - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW  -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (DABS(HR(L,L-1)) .LE. &
-&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
-&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-END DO
+240 do ll = low, en
+   l = en + low - ll
+   if (l .eq. low) go to 300
+   if (dabs(hr(l,l-1)) .le. &
+&machep * (dabs(hr(l-1,l-1)) + dabs(hi(l-1,l-1)) &
+&+ dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
+end do
 !     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 50) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.D0
-YI = (HI(ENM1,ENM1) - SI) / 2.D0
-Z(1) = YR*YR - YI*YI + XR
-Z(2) = 2.D0*YR*YI + XI
-CALL DCSQRT(Z,W)
-ZZR = W(1)
-ZZI = W(2)
-IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z(1) = YR + ZZR
-Z(2) = YI + ZZI
-R2 = Z(1)**2 + Z(2)**2
-SR = SR - (XR*Z(1) + XI*Z(2))/R2
-SI = SI - (XI*Z(1) - XR*Z(2))/R2
-GO TO 340
+300 if (l .eq. en) go to 660
+if (its .eq. 50) go to 1000
+if (its .eq. 10 .or. its .eq. 20 .or. its .eq. 30) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr .eq. 0.d0 .and. xi .eq. 0.d0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.d0
+yi = (hi(enm1,enm1) - si) / 2.d0
+z(1) = yr*yr - yi*yi + xr
+z(2) = 2.d0*yr*yi + xi
+call dcsqrt(z,w)
+zzr = w(1)
+zzi = w(2)
+if (yr * zzr + yi * zzi .ge. 0.d0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z(1) = yr + zzr
+z(2) = yi + zzi
+r2 = z(1)**2 + z(2)**2
+sr = sr - (xr*z(1) + xi*z(2))/r2
+si = si - (xi*z(1) - xr*z(2))/r2
+go to 340
 !     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
-SI = 0.D0
+320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en-2))
+si = 0.d0
 !
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
 !
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
+tr = tr + sr
+ti = ti + si
+its = its + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
+lp1 = l + 1
 !
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.D0
-   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+ SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.D0
-   HI(I,I-1) = SR / NORM
+do i = lp1, en
+   sr = hr(i,i-1)
+   hr(i,i-1) = 0.d0
+   norm = dsqrt(hr(i-1,i-1)*hr(i-1,i-1)+hi(i-1,i-1)*hi(i-1,i-1) &
+&+ sr*sr)
+   xr = hr(i-1,i-1) / norm
+   wr(i-1) = xr
+   xi = hi(i-1,i-1) / norm
+   wi(i-1) = xi
+   hr(i-1,i-1) = norm
+   hi(i-1,i-1) = 0.d0
+   hi(i,i-1) = sr / norm
 !
-   DO J = I, EN
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
+   do j = i, en
+      yr = hr(i-1,j)
+      yi = hi(i-1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i-1,j) = xr * yr + xi * yi + hi(i,i-1) * zzr
+      hi(i-1,j) = xr * yi - xi * yr + hi(i,i-1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i-1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i-1) * yi
+   end do
 !
-END DO
+end do
 !
-SI = HI(EN,EN)
-IF (SI .EQ. 0.D0) GO TO 540
-NORM = DCPABS(HR(EN,EN),SI)
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.D0
+si = hi(en,en)
+if (si .eq. 0.d0) go to 540
+norm = dcpabs(hr(en,en),si)
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.d0
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
+540 do j = lp1, en
+   xr = wr(j-1)
+   xi = wi(j-1)
 !
-   DO I = L, J
-      YR = HR(I,J-1)
-      YI = 0.D0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = l, j
+      yr = hr(i,j-1)
+      yi = 0.d0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i .eq. j) go to 560
+      yi = hi(i,j-1)
+      hi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+560 hr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-END DO
+end do
 !
-IF (SI .EQ. 0.D0) GO TO 240
+if (si .eq. 0.d0) go to 240
 !
-DO I = L, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
+do i = l, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
 !
-GO TO 240
+go to 240
 !     ********** A ROOT FOUND **********
-660 WR(EN) = HR(EN,EN) + TR
-WI(EN) = HI(EN,EN) + TI
-EN = ENM1
-GO TO 220
+660 wr(en) = hr(en,en) + tr
+wi(en) = hi(en,en) + ti
+en = enm1
+go to 220
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
-END SUBROUTINE DCOMQR
+1000 ierr = en
+1001 return
+end subroutine dcomqr
 
-SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
-IMPLICIT NONE
+subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
+implicit none
 !
-INTEGER :: I, J, K
-INTEGER, INTENT(IN) :: M, N
-INTEGER :: II
-INTEGER, INTENT(IN) :: NM, IGH, LOW
-DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
-DOUBLE PRECISION, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
-DOUBLE PRECISION :: S
+integer :: i, j, k
+integer, intent(in) :: m, n
+integer :: ii
+integer, intent(in) :: nm, igh, low
+double precision, intent(in) :: scale(n)
+double precision, intent(inout) :: zr(nm,m), zi(nm,m)
+double precision :: s
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -2506,64 +2506,64 @@ DOUBLE PRECISION :: S
 !          IN THEIR FIRST M COLUMNS.
 !
 !-----------------------------------------------------------------------
-IF (M .EQ. 0) GO TO 200
-IF (IGH .EQ. LOW) GO TO 120
+if (m .eq. 0) go to 200
+if (igh .eq. low) go to 120
 !
-DO I = LOW, IGH
-   S = SCALE(I)
+do i = low, igh
+   s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                IF THE FOREGOING STATEMENT IS REPLACED BY
 !                S=1.0/SCALE(I). **********
-   DO J = 1, M
-      ZR(I,J) = ZR(I,J) * S
-      ZI(I,J) = ZI(I,J) * S
-   END DO
+   do j = 1, m
+      zr(i,j) = zr(i,j) * s
+      zi(i,j) = zi(i,j) * s
+   end do
 !
-END DO
+end do
 !
 !     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
 !                IGH+1 STEP 1 UNTIL N DO -- **********
-120 do 140 II = 1, N
-   I = II
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
-   IF (I .LT. LOW) I = LOW - II
-   K = SCALE(I)
-   IF (K .EQ. I) GO TO 140
+120 do 140 ii = 1, n
+   i = ii
+   if (i .ge. low .and. i .le. igh) go to 140
+   if (i .lt. low) i = low - ii
+   k = scale(i)
+   if (k .eq. i) go to 140
 !
-   DO J = 1, M
-      S = ZR(I,J)
-      ZR(I,J) = ZR(K,J)
-      ZR(K,J) = S
-      S = ZI(I,J)
-      ZI(I,J) = ZI(K,J)
-      ZI(K,J) = S
-   END DO
+   do j = 1, m
+      s = zr(i,j)
+      zr(i,j) = zr(k,j)
+      zr(k,j) = s
+      s = zi(i,j)
+      zi(i,j) = zi(k,j)
+      zi(k,j) = s
+   end do
 !
-140 CONTINUE
+140 continue
 !
-200 RETURN
+200 return
 !     ********** LAST CARD OF DCBABK **********
-END SUBROUTINE DCBABK
+end subroutine dcbabk
 
-SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
-IMPLICIT NONE
+subroutine dcmqr2 (nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
+implicit none
 !
-INTEGER :: I, J, K, L, M
-INTEGER, INTENT(IN) :: N
-INTEGER :: EN, II, JJ, LL
-INTEGER, INTENT(IN) :: NM
-INTEGER :: NN
-INTEGER, INTENT(IN) :: IGH
-INTEGER :: IP1, ITS
-INTEGER, INTENT(IN) :: LOW
-INTEGER :: LP1, ENM1, IEND
-INTEGER, INTENT(OUT) :: IERR
-DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), &
-&WI(N), ZR(NM,N), ZI(NM,N), ORTR(IGH), ORTI(IGH)
-DOUBLE PRECISION :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, &
-&NORM, MACHEP
-DOUBLE PRECISION :: R2, W(2), Z(2)
-DOUBLE PRECISION :: DPMPAR, DCPABS
+integer :: i, j, k, l, m
+integer, intent(in) :: n
+integer :: en, ii, jj, ll
+integer, intent(in) :: nm
+integer :: nn
+integer, intent(in) :: igh
+integer :: ip1, its
+integer, intent(in) :: low
+integer :: lp1, enm1, iend
+integer, intent(out) :: ierr
+double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
+&wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
+&norm, machep
+double precision :: r2, w(2), z(2)
+double precision :: dpmpar, dcpabs
 !-----------------------------------------------------------------------
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
@@ -2630,349 +2630,349 @@ DOUBLE PRECISION :: DPMPAR, DCPABS
 !     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
 !
-           MACHEP = DPMPAR(1)
+           machep = dpmpar(1)
 !
 !                **********
 !
-IERR = 0
+ierr = 0
 !     ********** INITIALIZE EIGENVECTOR MATRIX **********
-do 100 I = 1, N
+do 100 i = 1, n
 !
-   do 100 J = 1, N
-      ZR(I,J) = 0.D0
-      ZI(I,J) = 0.D0
-      IF (I .EQ. J) ZR(I,J) = 1.D0
-100 CONTINUE
+   do 100 j = 1, n
+      zr(i,j) = 0.d0
+      zi(i,j) = 0.d0
+      if (i .eq. j) zr(i,j) = 1.d0
+100 continue
 !     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
 !                FROM THE INFORMATION LEFT BY DCORTH **********
-IEND = IGH - LOW - 1
-IF (IEND) 180, 150, 105
+iend = igh - low - 1
+if (iend) 180, 150, 105
 !     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
-105 do 140 II = 1, IEND
-   I = IGH - II
-   IF (ORTR(I) .EQ. 0.D0 .AND. ORTI(I) .EQ. 0.D0) GO TO 140
-   IF (HR(I,I-1) .EQ. 0.D0 .AND. HI(I,I-1) .EQ. 0.D0) GO TO 140
+105 do 140 ii = 1, iend
+   i = igh - ii
+   if (ortr(i) .eq. 0.d0 .and. orti(i) .eq. 0.d0) go to 140
+   if (hr(i,i-1) .eq. 0.d0 .and. hi(i,i-1) .eq. 0.d0) go to 140
 !     ********** NORM BELOW IS NEGATIVE OF H FORMED IN DCORTH **********
-   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
-   IP1 = I + 1
+   norm = hr(i,i-1) * ortr(i) + hi(i,i-1) * orti(i)
+   ip1 = i + 1
 !
-   DO K = IP1, IGH
-      ORTR(K) = HR(K,I-1)
-      ORTI(K) = HI(K,I-1)
-   END DO
+   do k = ip1, igh
+      ortr(k) = hr(k,i-1)
+      orti(k) = hi(k,i-1)
+   end do
 !
-   DO J = I, IGH
-      SR = 0.D0
-      SI = 0.D0
+   do j = i, igh
+      sr = 0.d0
+      si = 0.d0
 !
-      DO K = I, IGH
-         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
-         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-      END DO
+      do k = i, igh
+         sr = sr + ortr(k) * zr(k,j) + orti(k) * zi(k,j)
+         si = si + ortr(k) * zi(k,j) - orti(k) * zr(k,j)
+      end do
 !
-      SR = SR / NORM
-      SI = SI / NORM
+      sr = sr / norm
+      si = si / norm
 !
-      DO K = I, IGH
-         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
-         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-      END DO
+      do k = i, igh
+         zr(k,j) = zr(k,j) + sr * ortr(k) - si * orti(k)
+         zi(k,j) = zi(k,j) + sr * orti(k) + si * ortr(k)
+      end do
 !
-   END DO
+   end do
 !
-140 CONTINUE
+140 continue
 !     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-150 L = LOW + 1
+150 l = low + 1
 !
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
-   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.D0
+do 170 i = l, igh
+   ll = min0(i+1,igh)
+   if (hi(i,i-1) .eq. 0.d0) go to 170
+   norm = dcpabs(hr(i,i-1),hi(i,i-1))
+   yr = hr(i,i-1) / norm
+   yi = hi(i,i-1) / norm
+   hr(i,i-1) = norm
+   hi(i,i-1) = 0.d0
 !
-   DO J = I, N
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
+   do j = i, n
+      si = yr * hi(i,j) - yi * hr(i,j)
+      hr(i,j) = yr * hr(i,j) + yi * hi(i,j)
+      hi(i,j) = si
+   end do
 !
-   DO J = 1, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
+   do j = 1, ll
+      si = yr * hi(j,i) + yi * hr(j,i)
+      hr(j,i) = yr * hr(j,i) - yi * hi(j,i)
+      hi(j,i) = si
+   end do
 !
-   DO J = LOW, IGH
-      SI = YR * ZI(J,I) + YI * ZR(J,I)
-      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
-      ZI(J,I) = SI
-   END DO
+   do j = low, igh
+      si = yr * zi(j,i) + yi * zr(j,i)
+      zr(j,i) = yr * zr(j,i) - yi * zi(j,i)
+      zi(j,i) = si
+   end do
 !
-170 CONTINUE
+170 continue
 !     ********** STORE ROOTS ISOLATED BY DCBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
+180 do 200 i = 1, n
+   if (i .ge. low .and. i .le. igh) go to 200
+   wr(i) = hr(i,i)
+   wi(i) = hi(i,i)
+200 continue
 !
-EN = IGH
-TR = 0.D0
-TI = 0.D0
+en = igh
+tr = 0.d0
+ti = 0.d0
 !     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 680
-ITS = 0
-ENM1 = EN - 1
+220 if (en .lt. low) go to 680
+its = 0
+enm1 = en - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 !                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (DABS(HR(L,L-1)) .LE. &
-&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
-&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-END DO
+240 do ll = low, en
+   l = en + low - ll
+   if (l .eq. low) go to 300
+   if (dabs(hr(l,l-1)) .le. &
+&machep * (dabs(hr(l-1,l-1)) + dabs(hi(l-1,l-1)) &
+&+ dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
+end do
 !     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 50) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.D0
-YI = (HI(ENM1,ENM1) - SI) / 2.D0
-Z(1) = YR*YR - YI*YI + XR
-Z(2) = 2.D0*YR*YI + XI
-CALL DCSQRT(Z,W)
-ZZR = W(1)
-ZZI = W(2)
-IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z(1) = YR + ZZR
-Z(2) = YI + ZZI
-R2 = Z(1)**2 + Z(2)**2
-SR = SR - (XR*Z(1) + XI*Z(2))/R2
-SI = SI - (XI*Z(1) - XR*Z(2))/R2
-GO TO 340
+300 if (l .eq. en) go to 660
+if (its .eq. 50) go to 1000
+if (its .eq. 10 .or. its .eq. 20 .or. its .eq. 30) go to 320
+sr = hr(en,en)
+si = hi(en,en)
+xr = hr(enm1,en) * hr(en,enm1)
+xi = hi(enm1,en) * hr(en,enm1)
+if (xr .eq. 0.d0 .and. xi .eq. 0.d0) go to 340
+yr = (hr(enm1,enm1) - sr) / 2.d0
+yi = (hi(enm1,enm1) - si) / 2.d0
+z(1) = yr*yr - yi*yi + xr
+z(2) = 2.d0*yr*yi + xi
+call dcsqrt(z,w)
+zzr = w(1)
+zzi = w(2)
+if (yr * zzr + yi * zzi .ge. 0.d0) go to 310
+zzr = -zzr
+zzi = -zzi
+310 z(1) = yr + zzr
+z(2) = yi + zzi
+r2 = z(1)**2 + z(2)**2
+sr = sr - (xr*z(1) + xi*z(2))/r2
+si = si - (xi*z(1) - xr*z(2))/r2
+go to 340
 !     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
-SI = 0.D0
+320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en-2))
+si = 0.d0
 !
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
+340 do i = low, en
+   hr(i,i) = hr(i,i) - sr
+   hi(i,i) = hi(i,i) - si
+end do
 !
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
+tr = tr + sr
+ti = ti + si
+its = its + 1
 !     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
+lp1 = l + 1
 !
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.D0
-   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+ SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.D0
-   HI(I,I-1) = SR / NORM
+do i = lp1, en
+   sr = hr(i,i-1)
+   hr(i,i-1) = 0.d0
+   norm = dsqrt(hr(i-1,i-1)*hr(i-1,i-1)+hi(i-1,i-1)*hi(i-1,i-1) &
+&+ sr*sr)
+   xr = hr(i-1,i-1) / norm
+   wr(i-1) = xr
+   xi = hi(i-1,i-1) / norm
+   wi(i-1) = xi
+   hr(i-1,i-1) = norm
+   hi(i-1,i-1) = 0.d0
+   hi(i,i-1) = sr / norm
 !
-   DO J = I, N
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
+   do j = i, n
+      yr = hr(i-1,j)
+      yi = hi(i-1,j)
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      hr(i-1,j) = xr * yr + xi * yi + hi(i,i-1) * zzr
+      hi(i-1,j) = xr * yi - xi * yr + hi(i,i-1) * zzi
+      hr(i,j) = xr * zzr - xi * zzi - hi(i,i-1) * yr
+      hi(i,j) = xr * zzi + xi * zzr - hi(i,i-1) * yi
+   end do
 !
-END DO
+end do
 !
-SI = HI(EN,EN)
-IF (SI .EQ. 0.D0) GO TO 540
-NORM = DCPABS(HR(EN,EN),SI)
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.D0
-IF (EN .EQ. N) GO TO 540
-IP1 = EN + 1
+si = hi(en,en)
+if (si .eq. 0.d0) go to 540
+norm = dcpabs(hr(en,en),si)
+sr = hr(en,en) / norm
+si = si / norm
+hr(en,en) = norm
+hi(en,en) = 0.d0
+if (en .eq. n) go to 540
+ip1 = en + 1
 !
-DO J = IP1, N
-   YR = HR(EN,J)
-   YI = HI(EN,J)
-   HR(EN,J) = SR * YR + SI * YI
-   HI(EN,J) = SR * YI - SI * YR
-END DO
+do j = ip1, n
+   yr = hr(en,j)
+   yi = hi(en,j)
+   hr(en,j) = sr * yr + si * yi
+   hi(en,j) = sr * yi - si * yr
+end do
 !     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
+540 do j = lp1, en
+   xr = wr(j-1)
+   xi = wi(j-1)
 !
-   DO I = 1, J
-      YR = HR(I,J-1)
-      YI = 0.D0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = 1, j
+      yr = hr(i,j-1)
+      yi = 0.d0
+      zzr = hr(i,j)
+      zzi = hi(i,j)
+      if (i .eq. j) go to 560
+      yi = hi(i,j-1)
+      hi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+560 hr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      hr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      hi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-   DO I = LOW, IGH
-      YR = ZR(I,J-1)
-      YI = ZI(I,J-1)
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
+   do i = low, igh
+      yr = zr(i,j-1)
+      yi = zi(i,j-1)
+      zzr = zr(i,j)
+      zzi = zi(i,j)
+      zr(i,j-1) = xr * yr - xi * yi + hi(j,j-1) * zzr
+      zi(i,j-1) = xr * yi + xi * yr + hi(j,j-1) * zzi
+      zr(i,j) = xr * zzr + xi * zzi - hi(j,j-1) * yr
+      zi(i,j) = xr * zzi - xi * zzr - hi(j,j-1) * yi
+   end do
 !
-END DO
+end do
 !
-IF (SI .EQ. 0.D0) GO TO 240
+if (si .eq. 0.d0) go to 240
 !
-DO I = 1, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
+do i = 1, en
+   yr = hr(i,en)
+   yi = hi(i,en)
+   hr(i,en) = sr * yr - si * yi
+   hi(i,en) = sr * yi + si * yr
+end do
 !
-DO I = LOW, IGH
-   YR = ZR(I,EN)
-   YI = ZI(I,EN)
-   ZR(I,EN) = SR * YR - SI * YI
-   ZI(I,EN) = SR * YI + SI * YR
-END DO
+do i = low, igh
+   yr = zr(i,en)
+   yi = zi(i,en)
+   zr(i,en) = sr * yr - si * yi
+   zi(i,en) = sr * yi + si * yr
+end do
 !
-GO TO 240
+go to 240
 !     ********** A ROOT FOUND **********
-660 HR(EN,EN) = HR(EN,EN) + TR
-WR(EN) = HR(EN,EN)
-HI(EN,EN) = HI(EN,EN) + TI
-WI(EN) = HI(EN,EN)
-EN = ENM1
-GO TO 220
+660 hr(en,en) = hr(en,en) + tr
+wr(en) = hr(en,en)
+hi(en,en) = hi(en,en) + ti
+wi(en) = hi(en,en)
+en = enm1
+go to 220
 !     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
 !                VECTORS OF UPPER TRIANGULAR FORM **********
-680 NORM = 0.D0
+680 norm = 0.d0
 !
-do 720 I = 1, N
+do 720 i = 1, n
 !
-   do 720 J = I, N
-      NORM = NORM + DABS(HR(I,J)) + DABS(HI(I,J))
-720 CONTINUE
+   do 720 j = i, n
+      norm = norm + dabs(hr(i,j)) + dabs(hi(i,j))
+720 continue
 !
-IF (N .EQ. 1 .OR. NORM .EQ. 0.D0) GO TO 1001
+if (n .eq. 1 .or. norm .eq. 0.d0) go to 1001
 !     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-DO NN = 2, N
-   EN = N + 2 - NN
-   XR = WR(EN)
-   XI = WI(EN)
-   ENM1 = EN - 1
+do nn = 2, n
+   en = n + 2 - nn
+   xr = wr(en)
+   xi = wi(en)
+   enm1 = en - 1
 !     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   DO II = 1, ENM1
-      I = EN - II
-      ZZR = HR(I,EN)
-      ZZI = HI(I,EN)
-      IF (I .EQ. ENM1) GO TO 760
-      IP1 = I + 1
+   do ii = 1, enm1
+      i = en - ii
+      zzr = hr(i,en)
+      zzi = hi(i,en)
+      if (i .eq. enm1) go to 760
+      ip1 = i + 1
 !
-      DO J = IP1, ENM1
-         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
-         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-      END DO
+      do j = ip1, enm1
+         zzr = zzr + hr(i,j) * hr(j,en) - hi(i,j) * hi(j,en)
+         zzi = zzi + hr(i,j) * hi(j,en) + hi(i,j) * hr(j,en)
+      end do
 !
-760 YR = XR - WR(I)
-      YI = XI - WI(I)
-      IF (YR .EQ. 0.D0 .AND. YI .EQ. 0.D0) YR = MACHEP * NORM
-      R2 = YR*YR + YI*YI
-      HR(I,EN) = (ZZR*YR + ZZI*YI)/R2
-      HI(I,EN) = (ZZI*YR - ZZR*YI)/R2
-   END DO
+760 yr = xr - wr(i)
+      yi = xi - wi(i)
+      if (yr .eq. 0.d0 .and. yi .eq. 0.d0) yr = machep * norm
+      r2 = yr*yr + yi*yi
+      hr(i,en) = (zzr*yr + zzi*yi)/r2
+      hi(i,en) = (zzi*yr - zzr*yi)/r2
+   end do
 !
-END DO
+end do
 !     ********** END BACKSUBSTITUTION **********
-ENM1 = N - 1
+enm1 = n - 1
 !     ********** VECTORS OF ISOLATED ROOTS **********
-do 840 I = 1, ENM1
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
-   IP1 = I + 1
+do 840 i = 1, enm1
+   if (i .ge. low .and. i .le. igh) go to 840
+   ip1 = i + 1
 !
-   DO J = IP1, N
-      ZR(I,J) = HR(I,J)
-      ZI(I,J) = HI(I,J)
-   END DO
+   do j = ip1, n
+      zr(i,j) = hr(i,j)
+      zi(i,j) = hi(i,j)
+   end do
 !
-840 CONTINUE
+840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
 !                VECTORS OF ORIGINAL FULL MATRIX.
 !                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
-do 880 JJ = LOW, ENM1
-   J = N + LOW - JJ
-   M = MIN0(J-1,IGH)
+do 880 jj = low, enm1
+   j = n + low - jj
+   m = min0(j-1,igh)
 !
-   do 880 I = LOW, IGH
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
+   do 880 i = low, igh
+      zzr = zr(i,j)
+      zzi = zi(i,j)
 !
-      DO K = LOW, M
-         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
-         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-      END DO
+      do k = low, m
+         zzr = zzr + zr(i,k) * hr(k,j) - zi(i,k) * hi(k,j)
+         zzi = zzi + zr(i,k) * hi(k,j) + zi(i,k) * hr(k,j)
+      end do
 !
-      ZR(I,J) = ZZR
-      ZI(I,J) = ZZI
-880 CONTINUE
+      zr(i,j) = zzr
+      zi(i,j) = zzi
+880 continue
 !
-GO TO 1001
+go to 1001
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
+1000 ierr = en
+1001 return
 !     ********** LAST CARD OF DCMQR2 **********
-END SUBROUTINE DCMQR2
+end subroutine dcmqr2
 
-SUBROUTINE CL1(K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES, &
-&ERROR, WK, IWK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: ITER, IWK(*)
-INTEGER, INTENT(IN) :: K
-INTEGER, INTENT(INOUT) :: KODE
-INTEGER, INTENT(IN) :: KQ, L, M, N
-REAL, INTENT(INOUT) :: ERROR, Q(KQ,*), RES(*)
-REAL, INTENT(IN) :: TOLER
-REAL, INTENT(INOUT) :: WK(*), X(*)
-INTEGER :: KLM
+subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
+&error, wk, iwk)
+implicit none
+integer, intent(inout) :: iter, iwk(*)
+integer, intent(in) :: k
+integer, intent(inout) :: kode
+integer, intent(in) :: kq, l, m, n
+real, intent(inout) :: error, q(kq,*), res(*)
+real, intent(in) :: toler
+real, intent(inout) :: wk(*), x(*)
+integer :: klm
 !     -------------------
-KLM = K + L + M
-CALL XL1(K, L, M, N, KLM, KQ, KLM + N, N + 2, Q, KODE, TOLER, &
-&ITER, X, RES, ERROR, WK, IWK(KLM+1), IWK(1))
-RETURN
-END SUBROUTINE CL1
+klm = k + l + m
+call xl1(k, l, m, n, klm, kq, klm + n, n + 2, q, kode, toler, &
+&iter, x, res, error, wk, iwk(klm+1), iwk(1))
+return
+end subroutine cl1
 
-SUBROUTINE XL1(K, L, M, N, KLMD, KLM2D, NKLMD, N2D, &
-&Q, KODE, TOLER, ITER, X, RES, ERROR, CU, IU, S)
-IMPLICIT NONE
+subroutine xl1(k, l, m, n, klmd, klm2d, nklmd, n2d, &
+&q, kode, toler, iter, x, res, error, cu, iu, s)
+implicit none
 !
 ! THIS SUBROUTINE USES A MODIFICATION OF THE SIMPLEX
 ! METHOD OF LINEAR PROGRAMMING TO CALCULATE AN L1 SOLUTION
@@ -3081,230 +3081,230 @@ IMPLICIT NONE
 ! SEE COMMENTS FOLLOWING STATEMENT LABELLED 440 FOR
 ! INSTRUCTIONS ON THE IMPLEMENTATION OF THIS MODIFICATION.
 !
-DOUBLE PRECISION :: SUM
-REAL, INTENT(INOUT) :: Q, X
-REAL :: Z
-REAL, INTENT(INOUT) :: CU
-REAL :: SN, ZU, ZV, CUV
-REAL, INTENT(INOUT) :: RES
-REAL :: XMAX, XMIN
-REAL, INTENT(INOUT) :: ERROR
-REAL :: PIVOT
-REAL, INTENT(IN) :: TOLER
-REAL :: TPIVOT
-INTEGER :: I, J
-INTEGER, INTENT(IN) :: K, L, M, N
-INTEGER, INTENT(INOUT) :: S
-INTEGER :: IA, II, IN
-INTEGER, INTENT(INOUT) :: IU
-INTEGER :: JS, KK, NK, N1, N2, JMN, JPN, KLM, NKL, NK1
-INTEGER, INTENT(IN) :: N2D
-INTEGER :: IIMN, IOUT
-INTEGER, INTENT(INOUT) :: ITER
-INTEGER, INTENT(IN) :: KLMD
-INTEGER :: KLM1, KLM2
-INTEGER, INTENT(INOUT) :: KODE
-INTEGER :: NKLM, NKL1
-INTEGER, INTENT(IN) :: KLM2D
-INTEGER :: MAXIT
-INTEGER, INTENT(IN) :: NKLMD
-INTEGER :: IPHASE, KFORCE, IINEG
-DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD), &
-&CU(2,NKLMD), IU(2,NKLMD), S(KLMD)
+double precision :: sum
+real, intent(inout) :: q, x
+real :: z
+real, intent(inout) :: cu
+real :: sn, zu, zv, cuv
+real, intent(inout) :: res
+real :: xmax, xmin
+real, intent(inout) :: error
+real :: pivot
+real, intent(in) :: toler
+real :: tpivot
+integer :: i, j
+integer, intent(in) :: k, l, m, n
+integer, intent(inout) :: s
+integer :: ia, ii, in
+integer, intent(inout) :: iu
+integer :: js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1
+integer, intent(in) :: n2d
+integer :: iimn, iout
+integer, intent(inout) :: iter
+integer, intent(in) :: klmd
+integer :: klm1, klm2
+integer, intent(inout) :: kode
+integer :: nklm, nkl1
+integer, intent(in) :: klm2d
+integer :: maxit
+integer, intent(in) :: nklmd
+integer :: iphase, kforce, iineg
+dimension q(klm2d,n2d), x(n2d), res(klmd), &
+&cu(2,nklmd), iu(2,nklmd), s(klmd)
 !
 ! INITIALIZATION.
 !
-MAXIT = ITER
-N1 = N + 1
-N2 = N + 2
-NK = N + K
-NK1 = NK + 1
-NKL = NK + L
-NKL1 = NKL + 1
-KLM = K + L + M
-KLM1 = KLM + 1
-KLM2 = KLM + 2
-NKLM = N + KLM
-KFORCE = 1
-ITER = 0
-JS = 1
-IA = 0
+maxit = iter
+n1 = n + 1
+n2 = n + 2
+nk = n + k
+nk1 = nk + 1
+nkl = nk + l
+nkl1 = nkl + 1
+klm = k + l + m
+klm1 = klm + 1
+klm2 = klm + 2
+nklm = n + klm
+kforce = 1
+iter = 0
+js = 1
+ia = 0
 ! SET UP LABELS IN Q.
-DO J=1,N
-   Q(KLM2,J) = J
-END DO
-do 30 I = 1,KLM
-   Q(I,N2) = N + I
-   IF (Q(I,N1).GE.0.) GO TO 30
-   DO J=1,N2
-      Q(I,J) = -Q(I,J)
-   END DO
-30 CONTINUE
+do j=1,n
+   q(klm2,j) = j
+end do
+do 30 i = 1,klm
+   q(i,n2) = n + i
+   if (q(i,n1).ge.0.) go to 30
+   do j=1,n2
+      q(i,j) = -q(i,j)
+   end do
+30 continue
 ! SET UP PHASE 1 COSTS.
-IPHASE = 2
-DO J=1,NKLM
-   CU(1,J) = 0.
-   CU(2,J) = 0.
-   IU(1,J) = 0
-   IU(2,J) = 0
-END DO
-IF (L.EQ.0) GO TO 60
-DO J=NK1,NKL
-   CU(1,J) = 1.
-   CU(2,J) = 1.
-   IU(1,J) = 1
-   IU(2,J) = 1
-END DO
-IPHASE = 1
-60 IF (M.EQ.0) GO TO 80
-DO J=NKL1,NKLM
-   CU(2,J) = 1.
-   IU(2,J) = 1
-   JMN = J - N
-   IF (Q(JMN,N2).LT.0.) IPHASE = 1
-END DO
-80 IF (KODE.EQ.0) GO TO 150
-do 110 J = 1,N
-   IF (X(J)) 90, 110, 100
-90 CU(1,J) = 1.
-   IU(1,J) = 1
-   GO TO 110
-100 CU(2,J) = 1.
-   IU(2,J) = 1
-110 CONTINUE
-do 140 J = 1,K
-   JPN = J + N
-   IF (RES(J)) 120, 140, 130
-120 CU(1,JPN) = 1.
-   IU(1,JPN) = 1
-   IF (Q(J,N2).GT.0.0) IPHASE = 1
-   GO TO 140
-130 CU(2,JPN) = 1.
-   IU(2,JPN) = 1
-   IF (Q(J,N2).LT.0.0) IPHASE = 1
-140 CONTINUE
-150 IF (IPHASE.EQ.2) GO TO 500
+iphase = 2
+do j=1,nklm
+   cu(1,j) = 0.
+   cu(2,j) = 0.
+   iu(1,j) = 0
+   iu(2,j) = 0
+end do
+if (l.eq.0) go to 60
+do j=nk1,nkl
+   cu(1,j) = 1.
+   cu(2,j) = 1.
+   iu(1,j) = 1
+   iu(2,j) = 1
+end do
+iphase = 1
+60 if (m.eq.0) go to 80
+do j=nkl1,nklm
+   cu(2,j) = 1.
+   iu(2,j) = 1
+   jmn = j - n
+   if (q(jmn,n2).lt.0.) iphase = 1
+end do
+80 if (kode.eq.0) go to 150
+do 110 j = 1,n
+   if (x(j)) 90, 110, 100
+90 cu(1,j) = 1.
+   iu(1,j) = 1
+   go to 110
+100 cu(2,j) = 1.
+   iu(2,j) = 1
+110 continue
+do 140 j = 1,k
+   jpn = j + n
+   if (res(j)) 120, 140, 130
+120 cu(1,jpn) = 1.
+   iu(1,jpn) = 1
+   if (q(j,n2).gt.0.0) iphase = 1
+   go to 140
+130 cu(2,jpn) = 1.
+   iu(2,jpn) = 1
+   if (q(j,n2).lt.0.0) iphase = 1
+140 continue
+150 if (iphase.eq.2) go to 500
 ! COMPUTE THE MARGINAL COSTS.
-160 DO J=JS,N1
-   SUM = 0.D0
-   DO I=1,KLM
-      II = Q(I,N2)
-      IF (II.LT.0) GO TO 170
-      Z = CU(1,II)
-      GO TO 180
-170 IINEG = -II
-      Z = CU(2,IINEG)
-180 SUM = SUM + DBLE(Q(I,J))*DBLE(Z)
-   END DO
-   Q(KLM1,J) = SUM
-END DO
-DO J=JS,N
-   II = Q(KLM2,J)
-   IF (II.LT.0) GO TO 210
-   Z = CU(1,II)
-   GO TO 220
-210 IINEG = -II
-   Z = CU(2,IINEG)
-220 Q(KLM1,J) = Q(KLM1,J) - Z
-END DO
+160 do j=js,n1
+   sum = 0.d0
+   do i=1,klm
+      ii = q(i,n2)
+      if (ii.lt.0) go to 170
+      z = cu(1,ii)
+      go to 180
+170 iineg = -ii
+      z = cu(2,iineg)
+180 sum = sum + dble(q(i,j))*dble(z)
+   end do
+   q(klm1,j) = sum
+end do
+do j=js,n
+   ii = q(klm2,j)
+   if (ii.lt.0) go to 210
+   z = cu(1,ii)
+   go to 220
+210 iineg = -ii
+   z = cu(2,iineg)
+220 q(klm1,j) = q(klm1,j) - z
+end do
 ! DETERMINE THE VECTOR TO ENTER THE BASIS.
-240 XMAX = 0.
-IF (JS.GT.N) GO TO 490
-do 280 J = JS,N
-   ZU = Q(KLM1,J)
-   II = Q(KLM2,J)
-   IF (II.GT.0) GO TO 250
-   II = -II
-   ZV = ZU
-   ZU = -ZU - CU(1,II) - CU(2,II)
-   GO TO 260
-250 ZV = -ZU - CU(1,II) - CU(2,II)
-260 IF (KFORCE.EQ.1 .AND. II.GT.N) GO TO 280
-   IF (IU(1,II).EQ.1) GO TO 270
-   IF (ZU.LE.XMAX) GO TO 270
-   XMAX = ZU
-   IN = J
-270 IF (IU(2,II).EQ.1) GO TO 280
-   IF (ZV.LE.XMAX) GO TO 280
-   XMAX = ZV
-   IN = J
-280 CONTINUE
-IF (XMAX.LE.TOLER) GO TO 490
-IF (Q(KLM1,IN).EQ.XMAX) GO TO 300
-DO I=1,KLM2
-   Q(I,IN) = -Q(I,IN)
-END DO
-Q(KLM1,IN) = XMAX
+240 xmax = 0.
+if (js.gt.n) go to 490
+do 280 j = js,n
+   zu = q(klm1,j)
+   ii = q(klm2,j)
+   if (ii.gt.0) go to 250
+   ii = -ii
+   zv = zu
+   zu = -zu - cu(1,ii) - cu(2,ii)
+   go to 260
+250 zv = -zu - cu(1,ii) - cu(2,ii)
+260 if (kforce.eq.1 .and. ii.gt.n) go to 280
+   if (iu(1,ii).eq.1) go to 270
+   if (zu.le.xmax) go to 270
+   xmax = zu
+   in = j
+270 if (iu(2,ii).eq.1) go to 280
+   if (zv.le.xmax) go to 280
+   xmax = zv
+   in = j
+280 continue
+if (xmax.le.toler) go to 490
+if (q(klm1,in).eq.xmax) go to 300
+do i=1,klm2
+   q(i,in) = -q(i,in)
+end do
+q(klm1,in) = xmax
 ! DETERMINE THE VECTOR TO LEAVE THE BASIS.
-300 IF (IPHASE.EQ.1 .OR. IA.EQ.0) GO TO 330
-XMAX = 0.
-do 310 I = 1,IA
-   Z = ABS(Q(I,IN))
-   IF (Z.LE.XMAX) GO TO 310
-   XMAX = Z
-   IOUT = I
-310 CONTINUE
-IF (XMAX.LE.TOLER) GO TO 330
-DO J=1,N2
-   Z = Q(IA,J)
-   Q(IA,J) = Q(IOUT,J)
-   Q(IOUT,J) = Z
-END DO
-IOUT = IA
-IA = IA - 1
-PIVOT = Q(IOUT,IN)
-GO TO 420
-330 KK = 0
-do 340 I = 1,KLM
-   Z = Q(I,IN)
-   IF (Z.LE.TOLER) GO TO 340
-   KK = KK + 1
-   RES(KK) = Q(I,N1)/Z
-   S(KK) = I
-340 CONTINUE
-350 IF (KK.GT.0) GO TO 360
-KODE = 2
-GO TO 590
-360 XMIN = RES(1)
-IOUT = S(1)
-J = 1
-IF (KK.EQ.1) GO TO 380
-do 370 I = 2,KK
-   IF (RES(I).GE.XMIN) GO TO 370
-   J = I
-   XMIN = RES(I)
-   IOUT = S(I)
-370 CONTINUE
-RES(J) = RES(KK)
-S(J) = S(KK)
-380 KK = KK - 1
-PIVOT = Q(IOUT,IN)
-II = Q(IOUT,N2)
-IF (IPHASE.EQ.1) GO TO 400
-IF (II.LT.0) GO TO 390
-IF (IU(2,II).EQ.1) GO TO 420
-GO TO 400
-390 IINEG = -II
-IF (IU(1,IINEG).EQ.1) GO TO 420
-400 II = IABS(II)
-CUV = CU(1,II) + CU(2,II)
-IF (Q(KLM1,IN)-PIVOT*CUV.LE.TOLER) GO TO 420
+300 if (iphase.eq.1 .or. ia.eq.0) go to 330
+xmax = 0.
+do 310 i = 1,ia
+   z = abs(q(i,in))
+   if (z.le.xmax) go to 310
+   xmax = z
+   iout = i
+310 continue
+if (xmax.le.toler) go to 330
+do j=1,n2
+   z = q(ia,j)
+   q(ia,j) = q(iout,j)
+   q(iout,j) = z
+end do
+iout = ia
+ia = ia - 1
+pivot = q(iout,in)
+go to 420
+330 kk = 0
+do 340 i = 1,klm
+   z = q(i,in)
+   if (z.le.toler) go to 340
+   kk = kk + 1
+   res(kk) = q(i,n1)/z
+   s(kk) = i
+340 continue
+350 if (kk.gt.0) go to 360
+kode = 2
+go to 590
+360 xmin = res(1)
+iout = s(1)
+j = 1
+if (kk.eq.1) go to 380
+do 370 i = 2,kk
+   if (res(i).ge.xmin) go to 370
+   j = i
+   xmin = res(i)
+   iout = s(i)
+370 continue
+res(j) = res(kk)
+s(j) = s(kk)
+380 kk = kk - 1
+pivot = q(iout,in)
+ii = q(iout,n2)
+if (iphase.eq.1) go to 400
+if (ii.lt.0) go to 390
+if (iu(2,ii).eq.1) go to 420
+go to 400
+390 iineg = -ii
+if (iu(1,iineg).eq.1) go to 420
+400 ii = iabs(ii)
+cuv = cu(1,ii) + cu(2,ii)
+if (q(klm1,in)-pivot*cuv.le.toler) go to 420
 ! BYPASS INTERMEDIATE VERTICES.
-DO J=JS,N1
-   Z = Q(IOUT,J)
-   Q(KLM1,J) = Q(KLM1,J) - Z*CUV
-   Q(IOUT,J) = -Z
-END DO
-Q(IOUT,N2) = -Q(IOUT,N2)
-GO TO 350
+do j=js,n1
+   z = q(iout,j)
+   q(klm1,j) = q(klm1,j) - z*cuv
+   q(iout,j) = -z
+end do
+q(iout,n2) = -q(iout,n2)
+go to 350
 ! GAUSS-JORDAN ELIMINATION.
-420 IF (ITER.LT.MAXIT) GO TO 430
-KODE = 3
-GO TO 590
-430 ITER = ITER + 1
-DO J=JS,N1
-   IF (J.NE.IN) Q(IOUT,J) = Q(IOUT,J)/PIVOT
-END DO
+420 if (iter.lt.maxit) go to 430
+kode = 3
+go to 590
+430 iter = iter + 1
+do j=js,n1
+   if (j.ne.in) q(iout,j) = q(iout,j)/pivot
+end do
 ! IF PERMITTED, USE SUBROUTINE COL OF THE DESCRIPTION
 ! SECTION AND REPLACE THE FOLLOWING SEVEN STATEMENTS DOWN
 ! TO AND INCLUDING STATEMENT NUMBER 460 BY..
@@ -3313,182 +3313,182 @@ END DO
 !        Z = -Q(IOUT,J)
 !        CALL COL(Q(1,J), Q(1,IN), Z, IOUT, KLM1)
 ! 460 CONTINUE
-do 460 J = JS,N1
-   IF (J.EQ.IN) GO TO 460
-   Z = -Q(IOUT,J)
-   DO I=1,KLM1
-      IF (I.NE.IOUT) Q(I,J) = Q(I,J) + Z*Q(I,IN)
-   END DO
-460 CONTINUE
-TPIVOT = -PIVOT
-DO I=1,KLM1
-   IF (I.NE.IOUT) Q(I,IN) = Q(I,IN)/TPIVOT
-END DO
-Q(IOUT,IN) = 1./PIVOT
-Z = Q(IOUT,N2)
-Q(IOUT,N2) = Q(KLM2,IN)
-Q(KLM2,IN) = Z
-II = ABS(Z)
-IF (IU(1,II).EQ.0 .OR. IU(2,II).EQ.0) GO TO 240
-DO I=1,KLM2
-   Z = Q(I,IN)
-   Q(I,IN) = Q(I,JS)
-   Q(I,JS) = Z
-END DO
-JS = JS + 1
-GO TO 240
+do 460 j = js,n1
+   if (j.eq.in) go to 460
+   z = -q(iout,j)
+   do i=1,klm1
+      if (i.ne.iout) q(i,j) = q(i,j) + z*q(i,in)
+   end do
+460 continue
+tpivot = -pivot
+do i=1,klm1
+   if (i.ne.iout) q(i,in) = q(i,in)/tpivot
+end do
+q(iout,in) = 1./pivot
+z = q(iout,n2)
+q(iout,n2) = q(klm2,in)
+q(klm2,in) = z
+ii = abs(z)
+if (iu(1,ii).eq.0 .or. iu(2,ii).eq.0) go to 240
+do i=1,klm2
+   z = q(i,in)
+   q(i,in) = q(i,js)
+   q(i,js) = z
+end do
+js = js + 1
+go to 240
 ! TEST FOR OPTIMALITY.
-490 IF (KFORCE.EQ.0) GO TO 580
-IF (IPHASE.EQ.1 .AND. Q(KLM1,N1).LE.TOLER) GO TO 500
-KFORCE = 0
-GO TO 240
+490 if (kforce.eq.0) go to 580
+if (iphase.eq.1 .and. q(klm1,n1).le.toler) go to 500
+kforce = 0
+go to 240
 ! SET UP PHASE 2 COSTS.
-500 IPHASE = 2
-DO J=1,NKLM
-   CU(1,J) = 0.
-   CU(2,J) = 0.
-END DO
-DO J=N1,NK
-   CU(1,J) = 1.
-   CU(2,J) = 1.
-END DO
-do 560 I = 1,KLM
-   II = Q(I,N2)
-   IF (II.GT.0) GO TO 530
-   II = -II
-   IF (IU(2,II).EQ.0) GO TO 560
-   CU(2,II) = 0.
-   GO TO 540
-530 IF (IU(1,II).EQ.0) GO TO 560
-   CU(1,II) = 0.
-540 IA = IA + 1
-   DO J=1,N2
-      Z = Q(IA,J)
-      Q(IA,J) = Q(I,J)
-      Q(I,J) = Z
-   END DO
-560 CONTINUE
-GO TO 160
-570 IF (Q(KLM1,N1).LE.TOLER) GO TO 500
-KODE = 1
-GO TO 590
-580 IF (IPHASE.EQ.1) GO TO 570
+500 iphase = 2
+do j=1,nklm
+   cu(1,j) = 0.
+   cu(2,j) = 0.
+end do
+do j=n1,nk
+   cu(1,j) = 1.
+   cu(2,j) = 1.
+end do
+do 560 i = 1,klm
+   ii = q(i,n2)
+   if (ii.gt.0) go to 530
+   ii = -ii
+   if (iu(2,ii).eq.0) go to 560
+   cu(2,ii) = 0.
+   go to 540
+530 if (iu(1,ii).eq.0) go to 560
+   cu(1,ii) = 0.
+540 ia = ia + 1
+   do j=1,n2
+      z = q(ia,j)
+      q(ia,j) = q(i,j)
+      q(i,j) = z
+   end do
+560 continue
+go to 160
+570 if (q(klm1,n1).le.toler) go to 500
+kode = 1
+go to 590
+580 if (iphase.eq.1) go to 570
 ! PREPARE OUTPUT.
-KODE = 0
-590 SUM = 0.D0
-DO J=1,N
-   X(J) = 0.
-END DO
-DO I=1,KLM
-   RES(I) = 0.
-END DO
-do 640 I = 1,KLM
-   II = Q(I,N2)
-   SN = 1.
-   IF (II.GT.0) GO TO 620
-   II = -II
-   SN = -1.
-620 IF (II.GT.N) GO TO 630
-   X(II) = SN*Q(I,N1)
-   GO TO 640
-630 IIMN = II - N
-   RES(IIMN) = SN*Q(I,N1)
-   IF (II.GE.N1 .AND. II.LE.NK) SUM = SUM + &
-&DBLE(Q(I,N1))
-640 CONTINUE
-ERROR = SUM
-RETURN
-END SUBROUTINE XL1
+kode = 0
+590 sum = 0.d0
+do j=1,n
+   x(j) = 0.
+end do
+do i=1,klm
+   res(i) = 0.
+end do
+do 640 i = 1,klm
+   ii = q(i,n2)
+   sn = 1.
+   if (ii.gt.0) go to 620
+   ii = -ii
+   sn = -1.
+620 if (ii.gt.n) go to 630
+   x(ii) = sn*q(i,n1)
+   go to 640
+630 iimn = ii - n
+   res(iimn) = sn*q(i,n1)
+   if (ii.ge.n1 .and. ii.le.nk) sum = sum + &
+&dble(q(i,n1))
+640 continue
+error = sum
+return
+end subroutine xl1
 
-SUBROUTINE LLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(INOUT) :: IWK
-INTEGER, INTENT(IN) :: KA, KB, M, N, NB
-REAL, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
-INTEGER :: I, J, NP1
-REAL :: RNORM
-DIMENSION IWK(N)
-LOGICAL :: EXIT
+subroutine llsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(inout) :: iwk
+integer, intent(in) :: ka, kb, m, n, nb
+real, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+integer :: i, j, np1
+real :: rnorm
+dimension iwk(n)
+logical :: exit
 !     --------------
-IERR = 0
-IF (1 .LT. N .AND. N .LE. M) GO TO 10
-IERR = 1
-RETURN
+ierr = 0
+if (1 .lt. n .and. n .le. m) go to 10
+ierr = 1
+return
 !
-10 NP1 = N + 1
-CALL ORTHO(M,N,A,KA,WK,IWK,EXIT)
-IF (EXIT) GO TO 20
-IERR = 2
-RETURN
+10 np1 = n + 1
+call ortho(m,n,a,ka,wk,iwk,exit)
+if (exit) go to 20
+ierr = 2
+return
 !
-20 do 22 J = 1,NB
-CALL ORSOL(M,N,A,KA,WK,IWK,B(1,J))
-IF (M .EQ. N) GO TO 22
-RNORM = 0.0
-do 21 I = NP1,M
-21 RNORM = RNORM + B(I,J)*B(I,J)
-B(NP1,J) = SQRT(RNORM)
-22 CONTINUE
-RETURN
-END SUBROUTINE LLSQ
+20 do 22 j = 1,nb
+call orsol(m,n,a,ka,wk,iwk,b(1,j))
+if (m .eq. n) go to 22
+rnorm = 0.0
+do 21 i = np1,m
+21 rnorm = rnorm + b(i,j)*b(i,j)
+b(np1,j) = sqrt(rnorm)
+22 continue
+return
+end subroutine llsq
 
-SUBROUTINE LLSQMP(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(INOUT) :: IWK
-INTEGER, INTENT(IN) :: KA, KB, M, N, NB
-REAL :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,NB), WK(*)
-INTEGER :: I, J, LQ, LR, LS, NP1
-REAL :: RNORM
-DIMENSION IWK(N)
-LOGICAL :: EXIT
+subroutine llsqmp(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(inout) :: iwk
+integer, intent(in) :: ka, kb, m, n, nb
+real :: a(ka,n)
+real, intent(inout) :: b(kb,nb), wk(*)
+integer :: i, j, lq, lr, ls, np1
+real :: rnorm
+dimension iwk(n)
+logical :: exit
 !     -------------------
 !     DIMENSION WK(MN + 2M + N)
 !     -------------------
-IERR = 0
-IF (1.LT.N .AND. N.LE.M) GO TO 10
-IERR = 2
-RETURN
+ierr = 0
+if (1.lt.n .and. n.le.m) go to 10
+ierr = 2
+return
 !
-10 NP1 = N + 1
-LR = M + 1
-LS = LR + M
-LQ = LS + N
+10 np1 = n + 1
+lr = m + 1
+ls = lr + m
+lq = ls + n
 !
-CALL MCOPY(M, N, A, KA, WK(LQ), M)
-CALL ORTHO(M, N, WK(LQ), M, WK(LS), IWK, EXIT)
-IF (EXIT) GO TO 20
-IERR = 3
-RETURN
+call mcopy(m, n, a, ka, wk(lq), m)
+call ortho(m, n, wk(lq), m, wk(ls), iwk, exit)
+if (exit) go to 20
+ierr = 3
+return
 !
-20 do 31 J = 1,NB
-do 21 I = 1,M
-21 WK(I) = B(I,J)
-CALL ORSOL(M, N, WK(LQ), M, WK(LS), IWK, WK(1))
-CALL ORIMP(M, N, A, KA, WK(LQ), M, WK(LS), IWK, B(1,J), &
-&WK(1), WK(LR), EXIT)
-do 22 I = 1,N
-22 B(I,J) = WK(I)
-IF (.NOT.EXIT) IERR = 1
-IF (M .EQ. N) GO TO 31
+20 do 31 j = 1,nb
+do 21 i = 1,m
+21 wk(i) = b(i,j)
+call orsol(m, n, wk(lq), m, wk(ls), iwk, wk(1))
+call orimp(m, n, a, ka, wk(lq), m, wk(ls), iwk, b(1,j), &
+&wk(1), wk(lr), exit)
+do 22 i = 1,n
+22 b(i,j) = wk(i)
+if (.not.exit) ierr = 1
+if (m .eq. n) go to 31
 !
-RNORM = 0.0
-do 30 I = NP1,M
-30 RNORM = RNORM + WK(I)*WK(I)
-B(NP1,J) = SQRT(RNORM)
-31 CONTINUE
-RETURN
-END SUBROUTINE LLSQMP
+rnorm = 0.0
+do 30 i = np1,m
+30 rnorm = rnorm + wk(i)*wk(i)
+b(np1,j) = sqrt(rnorm)
+31 continue
+return
+end subroutine llsqmp
 
-SUBROUTINE ORTHO(M, N, QR, MS, S, IP, EXIT)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IP
-INTEGER, INTENT(IN) :: M, MS, N
-REAL, INTENT(INOUT) :: QR(MS,N), S(N)
-INTEGER :: I, J, JP, K, KJ, NN
-REAL :: AJJ, SAV, SS, Y
+subroutine ortho(m, n, qr, ms, s, ip, exit)
+implicit none
+integer, intent(inout) :: ip
+integer, intent(in) :: m, ms, n
+real, intent(inout) :: qr(ms,n), s(n)
+integer :: i, j, jp, k, kj, nn
+real :: ajj, sav, ss, y
 !***********************************************************************
 !      IDENTIFICATION
 !        ORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -3538,67 +3538,67 @@ REAL :: AJJ, SAV, SS, Y
 !            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 !            TECHNICAL REPORT ARL TR 74-0124(1974).
 !***********************************************************************
-DIMENSION IP(N)
-LOGICAL, INTENT(OUT) :: EXIT
+dimension ip(n)
+logical, intent(out) :: exit
 !
-EXIT = .TRUE.
-NN = N
-IF (N .EQ. M) NN = N - 1
-do 80 J = 1, NN
-  IP(J) = J
-  JP = J + 1
-  KJ = J
+exit = .true.
+nn = n
+if (n .eq. m) nn = n - 1
+do 80 j = 1, nn
+  ip(j) = j
+  jp = j + 1
+  kj = j
 !                                       SEARCH FOR PIVOT IN THE J-TH
 !                                       COLUMN AND INTERCHANGE ROWS.
-  DO K = JP, M
-     IF (ABS(QR(K,J)) .GT. ABS(QR(KJ,J))) KJ = K
-  END DO
-  IF (QR(KJ,J) .EQ. 0.0) GO TO 90
-  IF (KJ .EQ. J) GO TO 30
-  IP(J) = KJ
-  do 20 I = J, N
-     SAV = QR(J,I)
-     QR(J,I) = QR(KJ,I)
-20 QR(KJ,I) = SAV
+  do k = jp, m
+     if (abs(qr(k,j)) .gt. abs(qr(kj,j))) kj = k
+  end do
+  if (qr(kj,j) .eq. 0.0) go to 90
+  if (kj .eq. j) go to 30
+  ip(j) = kj
+  do 20 i = j, n
+     sav = qr(j,i)
+     qr(j,i) = qr(kj,i)
+20 qr(kj,i) = sav
 !                                       NORMALIZE THE PIVOTING COLUMN
 !                                       AND FIND ITS NORM.
-30 AJJ = QR(J,J)
-  do 31 I = JP, M
-31 QR(I,J) = QR(I,J)/AJJ
-  SAV = 1.0
-  do 40 I = JP, M
-40 SAV = SAV + QR(I,J)*QR(I,J)
-  S(J) = -SQRT(SAV)
-  QR(J,J) = S(J)*AJJ
-  IF (JP .GT. N) GO TO 80
+30 ajj = qr(j,j)
+  do 31 i = jp, m
+31 qr(i,j) = qr(i,j)/ajj
+  sav = 1.0
+  do 40 i = jp, m
+40 sav = sav + qr(i,j)*qr(i,j)
+  s(j) = -sqrt(sav)
+  qr(j,j) = s(j)*ajj
+  if (jp .gt. n) go to 80
 !                                       PREMULTIPLY QR WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
-  Y = 1.0 - S(J)
-  DO K = JP, N
-     SAV = QR(J,K)
-     do 50 I = JP, M
-50 SAV = SAV + QR(I,J)*QR(I,K)
-     SS = QR(J,K)
-     QR(J,K) = SAV/S(J)
-     SS = (SS - QR(J,K))/Y
-     do 60 I = JP, M
-60 QR(I,K) = QR(I,K) - QR(I,J)*SS
-  END DO
-80 CONTINUE
-RETURN
+  y = 1.0 - s(j)
+  do k = jp, n
+     sav = qr(j,k)
+     do 50 i = jp, m
+50 sav = sav + qr(i,j)*qr(i,k)
+     ss = qr(j,k)
+     qr(j,k) = sav/s(j)
+     ss = (ss - qr(j,k))/y
+     do 60 i = jp, m
+60 qr(i,k) = qr(i,k) - qr(i,j)*ss
+  end do
+80 continue
+return
 !
-90 EXIT = .FALSE.
-RETURN
-END SUBROUTINE ORTHO
+90 exit = .false.
+return
+end subroutine ortho
 
-SUBROUTINE ORSOL(M, N, QR, MS, S, IP, X)
-IMPLICIT NONE
-INTEGER :: IP
-INTEGER, INTENT(IN) :: M, MS, N
-REAL :: QR(MS,N), S(N)
-REAL, INTENT(INOUT) :: X(M)
-INTEGER :: I, IJ, J, JP, K, NI, NM, NN
-REAL :: SAV, SS, Y
+subroutine orsol(m, n, qr, ms, s, ip, x)
+implicit none
+integer :: ip
+integer, intent(in) :: m, ms, n
+real :: qr(ms,n), s(n)
+real, intent(inout) :: x(m)
+integer :: i, ij, j, jp, k, ni, nm, nn
+real :: sav, ss, y
 !***********************************************************************
 !      IDENTIFICATION
 !        ORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -3647,55 +3647,55 @@ REAL :: SAV, SS, Y
 !            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 !            TECHNICAL REPORT ARL TR 74-0124(1974).
 !***********************************************************************
-DIMENSION IP(N)
+dimension ip(n)
 !
-NN = N
-IF (N .EQ. M) NN = N - 1
-DO J = 1, NN
-  JP = J + 1
-  IJ = IP(J)
-  Y = 1.0 - S(J)
-  SAV = X(J)
-  X(J) = X(IJ)
-  X(IJ) = SAV
+nn = n
+if (n .eq. m) nn = n - 1
+do j = 1, nn
+  jp = j + 1
+  ij = ip(j)
+  y = 1.0 - s(j)
+  sav = x(j)
+  x(j) = x(ij)
+  x(ij) = sav
 !                                       PREMULTIPLY X WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
-  SAV = X(J)
-  do 10 K = JP, M
-10 SAV = SAV + QR(K,J)*X(K)
-  SS = X(J)
-  X(J) = SAV/S(J)
-  SS = (SS - X(J))/Y
-  do 20 K = JP, M
-20 X(K) = X(K) - QR(K,J)*SS
-END DO
+  sav = x(j)
+  do 10 k = jp, m
+10 sav = sav + qr(k,j)*x(k)
+  ss = x(j)
+  x(j) = sav/s(j)
+  ss = (ss - x(j))/y
+  do 20 k = jp, m
+20 x(k) = x(k) - qr(k,j)*ss
+end do
 !                                       BACK SUBSTITUTE TO FIND THE
 !                                       LEAST SQUARES SOLUTION.
-X(N) = X(N)/QR(N,N)
-NM = N - 1
-DO I = 1, NM
-  NI = N - I
-  NN = N
-  do 40 J = 1, I
-    X(NI) = X(NI) - QR(NI,NN)*X(NN)
-40 NN = NN - 1
-  X(NI) = X(NI)/QR(NI,NI)
-END DO
-RETURN
-END SUBROUTINE ORSOL
+x(n) = x(n)/qr(n,n)
+nm = n - 1
+do i = 1, nm
+  ni = n - i
+  nn = n
+  do 40 j = 1, i
+    x(ni) = x(ni) - qr(ni,nn)*x(nn)
+40 nn = nn - 1
+  x(ni) = x(ni)/qr(ni,ni)
+end do
+return
+end subroutine orsol
 
-SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
-IMPLICIT NONE
-INTEGER :: IP
-INTEGER, INTENT(IN) :: KA, M, MS, N
-REAL :: A(KA,N), B(M), QR(MS,N)
-REAL, INTENT(INOUT) :: R(M)
-REAL :: S(N)
-REAL, INTENT(INOUT) :: X(M)
-INTEGER :: I, J, K, NP1
-REAL :: EPS, EPS2, FOUR, FOURTH, ONE, RAT, RATIO, RNRM2, XNRM2, &
-&ZERO
-REAL :: SPMPAR
+subroutine orimp(m, n, a, ka, qr, ms, s, ip, b, x, r, exit)
+implicit none
+integer :: ip
+integer, intent(in) :: ka, m, ms, n
+real :: a(ka,n), b(m), qr(ms,n)
+real, intent(inout) :: r(m)
+real :: s(n)
+real, intent(inout) :: x(m)
+integer :: i, j, k, np1
+real :: eps, eps2, four, fourth, one, rat, ratio, rnrm2, xnrm2, &
+&zero
+real :: spmpar
 ! ----------------------------------------------------------------------
 !      PURPOSE
 !        GIVEN AN APPROXIMATE LEAST SQUARES SOLUTION X OF A LINEAR
@@ -3747,100 +3747,100 @@ REAL :: SPMPAR
 !
 ! ----------------------------------------------------------------------
 !
-DIMENSION IP(N)
-LOGICAL, INTENT(OUT) :: EXIT
-DOUBLE PRECISION :: DSUM
-DATA ZERO/0.0/, ONE/1.0/, FOUR/4.0/, FOURTH/0.25/
+dimension ip(n)
+logical, intent(out) :: exit
+double precision :: dsum
+data zero/0.0/, one/1.0/, four/4.0/, fourth/0.25/
 !
 !     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 !                THE VALUE U WHERE U IS THE SMALLEST POSITIVE FLOATING
 !                POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
-EPS = SPMPAR(1)
+eps = spmpar(1)
 !
-EXIT = .TRUE.
-NP1 = N + 1
-EPS2 = EPS*EPS
+exit = .true.
+np1 = n + 1
+eps2 = eps*eps
 !
-XNRM2 = ZERO
-do 10 I = 1,N
-10 XNRM2 = XNRM2 + X(I)*X(I)
-IF (XNRM2 .EQ. ZERO) RETURN
-RATIO = ONE
+xnrm2 = zero
+do 10 i = 1,n
+10 xnrm2 = xnrm2 + x(i)*x(i)
+if (xnrm2 .eq. zero) return
+ratio = one
 !
 !                                       FIND THE RESIDUAL VECTOR.
 !
-20 do 22 K = 1,M
-DSUM = B(K)
-do 21 J = 1,N
-21 DSUM = DSUM - DBLE(A(K,J))*DBLE(X(J))
-22 R(K) = DSUM
+20 do 22 k = 1,m
+dsum = b(k)
+do 21 j = 1,n
+21 dsum = dsum - dble(a(k,j))*dble(x(j))
+22 r(k) = dsum
 !
 !                                       FIND THE CORRECTION VECTOR.
 !
-CALL ORSOL(M, N, QR, MS, S, IP, R)
-RNRM2 = ZERO
-do 30 K = 1,N
-30 RNRM2 = RNRM2 + R(K)*R(K)
-IF (RNRM2 .LE. EPS2*XNRM2) RETURN
+call orsol(m, n, qr, ms, s, ip, r)
+rnrm2 = zero
+do 30 k = 1,n
+30 rnrm2 = rnrm2 + r(k)*r(k)
+if (rnrm2 .le. eps2*xnrm2) return
 !
 !                                       FORM NEW APPROXIMATE SOLUTION.
 !
-do 40 K = 1,N
-40 X(K) = X(K) + R(K)
-XNRM2 = ZERO
-do 41 K = 1,N
-41 XNRM2 = XNRM2 + X(K)*X(K)
-IF (M .EQ. N) GO TO 50
-do 42 K = NP1,M
-42 X(K) = R(K)
+do 40 k = 1,n
+40 x(k) = x(k) + r(k)
+xnrm2 = zero
+do 41 k = 1,n
+41 xnrm2 = xnrm2 + x(k)*x(k)
+if (m .eq. n) go to 50
+do 42 k = np1,m
+42 x(k) = r(k)
 !
-50 IF (XNRM2 .EQ. ZERO) RETURN
-RAT = RATIO
-RATIO = RNRM2/XNRM2
-IF (RATIO .LE. FOURTH*RAT) GO TO 20
+50 if (xnrm2 .eq. zero) return
+rat = ratio
+ratio = rnrm2/xnrm2
+if (ratio .le. fourth*rat) go to 20
 !
-IF (RATIO .LE. AMIN1(RAT,FOUR*EPS2)) RETURN
-EXIT = .FALSE.
-RETURN
-END SUBROUTINE ORIMP
+if (ratio .le. amin1(rat,four*eps2)) return
+exit = .false.
+return
+end subroutine orimp
 
-SUBROUTINE DLLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, N, NB
-INTEGER :: I, J, NP1
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
-INTEGER, INTENT(INOUT) :: IWK(N)
-DOUBLE PRECISION :: RNORM
-LOGICAL :: EXIT
+subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, n, nb
+integer :: i, j, np1
+double precision, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
+integer, intent(inout) :: iwk(n)
+double precision :: rnorm
+logical :: exit
 !     --------------
-IERR = 0
-IF (1 .LT. N .AND. N .LE. M) GO TO 10
-IERR = 1
-RETURN
+ierr = 0
+if (1 .lt. n .and. n .le. m) go to 10
+ierr = 1
+return
 !
-10 NP1 = N + 1
-CALL DORTHO(M,N,A,KA,WK,IWK,EXIT)
-IF (EXIT) GO TO 20
-IERR = 2
-RETURN
+10 np1 = n + 1
+call dortho(m,n,a,ka,wk,iwk,exit)
+if (exit) go to 20
+ierr = 2
+return
 !
-20 do 22 J = 1,NB
-CALL DORSOL(M,N,A,KA,WK,IWK,B(1,J))
-IF (M .EQ. N) GO TO 22
-RNORM = 0.D0
-   do 21 I = NP1,M
-21 RNORM = RNORM + B(I,J)*B(I,J)
-B(NP1,J) = DSQRT(RNORM)
-22 CONTINUE
-RETURN
-END SUBROUTINE DLLSQ
+20 do 22 j = 1,nb
+call dorsol(m,n,a,ka,wk,iwk,b(1,j))
+if (m .eq. n) go to 22
+rnorm = 0.d0
+   do 21 i = np1,m
+21 rnorm = rnorm + b(i,j)*b(i,j)
+b(np1,j) = dsqrt(rnorm)
+22 continue
+return
+end subroutine dllsq
 
-SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, MS, N
-INTEGER :: I, J, JP, K, KJ, NN
+subroutine dortho(m, n, qr, ms, s, ip, exit)
+implicit none
+integer, intent(in) :: m, ms, n
+integer :: i, j, jp, k, kj, nn
 !***********************************************************************
 !      IDENTIFICATION
 !        DORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -3890,65 +3890,65 @@ INTEGER :: I, J, JP, K, KJ, NN
 !            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 !            TECHNICAL REPORT ARL TR 74-0124(1974).
 !***********************************************************************
-DOUBLE PRECISION, INTENT(INOUT) :: QR(MS,N), S(N)
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION :: AJJ, SAV, SS, Y
-LOGICAL, INTENT(OUT) :: EXIT
+double precision, intent(inout) :: qr(ms,n), s(n)
+integer, intent(inout) :: ip(n)
+double precision :: ajj, sav, ss, y
+logical, intent(out) :: exit
 !
-EXIT = .TRUE.
-NN = N
-IF (N .EQ. M) NN = N - 1
-do 80 J = 1, NN
-  IP(J) = J
-  JP = J + 1
-  KJ = J
+exit = .true.
+nn = n
+if (n .eq. m) nn = n - 1
+do 80 j = 1, nn
+  ip(j) = j
+  jp = j + 1
+  kj = j
 !                                       SEARCH FOR PIVOT IN THE J-TH
 !                                       COLUMN AND INTERCHANGE ROWS.
-  DO K = JP, M
-     IF (DABS(QR(K,J)) .GT. DABS(QR(KJ,J))) KJ = K
-  END DO
-  IF (QR(KJ,J) .EQ. 0.D0) GO TO 90
-  IF (KJ .EQ. J) GO TO 30
-  IP(J) = KJ
-  do 20 I = J, N
-     SAV = QR(J,I)
-     QR(J,I) = QR(KJ,I)
-20 QR(KJ,I) = SAV
+  do k = jp, m
+     if (dabs(qr(k,j)) .gt. dabs(qr(kj,j))) kj = k
+  end do
+  if (qr(kj,j) .eq. 0.d0) go to 90
+  if (kj .eq. j) go to 30
+  ip(j) = kj
+  do 20 i = j, n
+     sav = qr(j,i)
+     qr(j,i) = qr(kj,i)
+20 qr(kj,i) = sav
 !                                       NORMALIZE THE PIVOTING COLUMN
 !                                       AND FIND ITS NORM.
-30 AJJ = QR(J,J)
-  do 31 I = JP, M
-31 QR(I,J) = QR(I,J)/AJJ
-  SAV = 1.D0
-  do 40 I = JP, M
-40 SAV = SAV + QR(I,J)*QR(I,J)
-  S(J) = -DSQRT(SAV)
-  QR(J,J) = S(J)*AJJ
-  IF (JP .GT. N) GO TO 80
+30 ajj = qr(j,j)
+  do 31 i = jp, m
+31 qr(i,j) = qr(i,j)/ajj
+  sav = 1.d0
+  do 40 i = jp, m
+40 sav = sav + qr(i,j)*qr(i,j)
+  s(j) = -dsqrt(sav)
+  qr(j,j) = s(j)*ajj
+  if (jp .gt. n) go to 80
 !                                       PREMULTIPLY QR WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
-  Y = 1.D0 - S(J)
-  DO K = JP, N
-     SAV = QR(J,K)
-     do 50 I = JP, M
-50 SAV = SAV + QR(I,J)*QR(I,K)
-     SS = QR(J,K)
-     QR(J,K) = SAV/S(J)
-     SS = (SS - QR(J,K))/Y
-     do 60 I = JP, M
-60 QR(I,K) = QR(I,K) - QR(I,J)*SS
-  END DO
-80 CONTINUE
-RETURN
+  y = 1.d0 - s(j)
+  do k = jp, n
+     sav = qr(j,k)
+     do 50 i = jp, m
+50 sav = sav + qr(i,j)*qr(i,k)
+     ss = qr(j,k)
+     qr(j,k) = sav/s(j)
+     ss = (ss - qr(j,k))/y
+     do 60 i = jp, m
+60 qr(i,k) = qr(i,k) - qr(i,j)*ss
+  end do
+80 continue
+return
 !
-90 EXIT = .FALSE.
-RETURN
-END SUBROUTINE DORTHO
+90 exit = .false.
+return
+end subroutine dortho
 
-SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, MS, N
-INTEGER :: I, IJ, J, JP, K, NI, NM, NN
+subroutine dorsol(m, n, qr, ms, s, ip, x)
+implicit none
+integer, intent(in) :: m, ms, n
+integer :: i, ij, j, jp, k, ni, nm, nn
 !***********************************************************************
 !      IDENTIFICATION
 !        DORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -3997,57 +3997,57 @@ INTEGER :: I, IJ, J, JP, K, NI, NM, NN
 !            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 !            TECHNICAL REPORT ARL TR 74-0124(1974).
 !***********************************************************************
-DOUBLE PRECISION, INTENT(IN) :: QR(MS,N), S(N)
-DOUBLE PRECISION, INTENT(INOUT) :: X(M)
-INTEGER, INTENT(IN) :: IP(N)
-DOUBLE PRECISION :: SAV, SS, Y
+double precision, intent(in) :: qr(ms,n), s(n)
+double precision, intent(inout) :: x(m)
+integer, intent(in) :: ip(n)
+double precision :: sav, ss, y
 !
-NN = N
-IF(N .EQ. M) NN = N - 1
-DO J = 1, NN
-  JP = J + 1
-  IJ = IP(J)
-  Y = 1.D0 - S(J)
-  SAV = X(J)
-  X(J) = X(IJ)
-  X(IJ) = SAV
+nn = n
+if(n .eq. m) nn = n - 1
+do j = 1, nn
+  jp = j + 1
+  ij = ip(j)
+  y = 1.d0 - s(j)
+  sav = x(j)
+  x(j) = x(ij)
+  x(ij) = sav
 !                                       PREMULTIPLY X WITH THE J-TH
 !                                       ORTHOGONAL MATRIX.
-  SAV = X(J)
-  do 10 K = JP, M
-10 SAV = SAV + QR(K,J)*X(K)
-  SS = X(J)
-  X(J) = SAV/S(J)
-  SS = (SS - X(J))/Y
-  do 20 K = JP, M
-20 X(K) = X(K) - QR(K,J)*SS
-END DO
+  sav = x(j)
+  do 10 k = jp, m
+10 sav = sav + qr(k,j)*x(k)
+  ss = x(j)
+  x(j) = sav/s(j)
+  ss = (ss - x(j))/y
+  do 20 k = jp, m
+20 x(k) = x(k) - qr(k,j)*ss
+end do
 !                                       BACK SUBSTITUTE TO FIND THE
 !                                       LEAST SQUARES SOLUTION.
-X(N) = X(N)/QR(N,N)
-NM = N - 1
-DO I = 1, NM
-  NI = N - I
-  NN = N
-  do 40 J = 1, I
-    X(NI) = X(NI) - QR(NI,NN)*X(NN)
-40 NN = NN - 1
-  X(NI) = X(NI)/QR(NI,NI)
-END DO
-RETURN
-END SUBROUTINE DORSOL
+x(n) = x(n)/qr(n,n)
+nm = n - 1
+do i = 1, nm
+  ni = n - i
+  nn = n
+  do 40 j = 1, i
+    x(ni) = x(ni) - qr(ni,nn)*x(nn)
+40 nn = nn - 1
+  x(ni) = x(ni)/qr(ni,ni)
+end do
+return
+end subroutine dorsol
 
-SUBROUTINE LSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, &
-&KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: IND
-INTEGER, INTENT(INOUT) :: KRANK, KSURE
-INTEGER, INTENT(IN) :: LIW, LW, M, MDA, MDB, N, NB
-REAL, INTENT(IN) :: AE, RE
-INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
-REAL :: EPS, RERR
-REAL :: SPMPAR
+subroutine lsqr (ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+&ksure, rnorm, work, lw, iwork, liw, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ind
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
+real, intent(in) :: ae, re
+integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
+real :: eps, rerr
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -4157,8 +4157,8 @@ REAL :: SPMPAR
 !                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS,
 !                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), RNORM(*), WORK(LW)
-INTEGER, INTENT(INOUT) :: IWORK(LIW)
+real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
 !----------------
 !     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
 !                   ARE NEVER INTERCHANGED.
@@ -4175,142 +4175,142 @@ INTEGER, INTENT(INOUT) :: IWORK(LIW)
 !                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
 !                   FIRST N LOCATIONS OF WORK ARE USED.
 !----------------
-NP = 0
-MODE = 2
+np = 0
+mode = 2
 !
 !     CHECK THE INPUT
 !
-IF (NB .LE. 0 .AND. IND .NE. 0) GO TO 200
-IF (M .LT. 1 .OR. N .LT. 1) GO TO 210
-IF (MDA .LT. M) GO TO 220
-IF (LIW .LT. M + N) GO TO 240
+if (nb .le. 0 .and. ind .ne. 0) go to 200
+if (m .lt. 1 .or. n .lt. 1) go to 210
+if (mda .lt. m) go to 220
+if (liw .lt. m + n) go to 240
 !
-M0 = MIN0(M,N)
-N0 = MAX0(M,N)
+m0 = min0(m,n)
+n0 = max0(m,n)
 !     NUM = 0
 !
-IF (NB .LE. 0) GO TO 10
-IF (MDB .LT. N0) GO TO 230
-IF (IND .NE. 0) GO TO 100
+if (nb .le. 0) go to 10
+if (mdb .lt. n0) go to 230
+if (ind .ne. 0) go to 100
 !
-10 IF (LW .LT. 5*M0) GO TO 250
-IF (RE .LT. 0.0 .OR. AE .LT. 0.0) GO TO 260
+10 if (lw .lt. 5*m0) go to 250
+if (re .lt. 0.0 .or. ae .lt. 0.0) go to 260
 !
 !     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 !
-M1 = 1
-M2 = M1 + M0
-M3 = M2 + M0
-M4 = M3 + M0
-M5 = M4 + M0
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
 !
-EPS = 10.0*SPMPAR(1)
-RERR = AMAX1(EPS,RE)
+eps = 10.0*spmpar(1)
+rerr = amax1(eps,re)
 !
-IMAX = M5 - 1
-DO I = M4,IMAX
-   WORK(I) = RERR
-END DO
-IMAX = IMAX + M0
-DO I = M5,IMAX
-   WORK(I) = AE
-END DO
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
 !
 !     FACTOR THE MATRIX A
 !
 !     NUM = NP
-IF (M .LT. N) GO TO 40
+if (m .lt. n) go to 40
 !
-   CALL U11LS (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-   GO TO 100
+   call u11ls (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+   go to 100
 !
-40 CALL U11US (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
+40 call u11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
 !     SOLUTION PHASE
 !
-100 IERR = 0
-INFO = 0
-IF (KRANK .EQ. M0) GO TO 110
-IF (KRANK .EQ. 0) GO TO 110
+100 ierr = 0
+info = 0
+if (krank .eq. m0) go to 110
+if (krank .eq. 0) go to 110
 !     IF (KRANK .LT. NUM) GO TO 280
 !     IF (MODE .EQ. 0) RETURN
-INFO = MODE
+info = mode
 !
-110 IF (NB .LE. 0) RETURN
+110 if (nb .le. 0) return
 !
-M1 = 1
-M2 = 1 + M0
-IF (INFO .EQ. 2) GO TO 130
+m1 = 1
+m2 = 1 + m0
+if (info .eq. 2) go to 130
 !
 !     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
 !
-IF (LW .LT. M0) GO TO 250
-IF (M .LT. N) GO TO 120
+if (lw .lt. m0) go to 250
+if (m .lt. n) go to 120
 !
-   CALL U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
-   RETURN
+   call u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m1),iwork(m1),iwork(m2))
+   return
 !
-120 CALL U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
-RETURN
+120 call u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m1),iwork(m1),iwork(m2))
+return
 !
 !     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
 !
-130 IF (LW .LT. 2*M0) GO TO 250
-IF (M .LT. N) GO TO 140
+130 if (lw .lt. 2*m0) go to 250
+if (m .lt. n) go to 140
 !
-   CALL U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
-   RETURN
+   call u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m2),iwork(m1),iwork(m2))
+   return
 !
-140 CALL U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
-RETURN
+140 call u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m2),iwork(m1),iwork(m2))
+return
 !
 !     ERROR RETURN
 !
 !                             NB .LE. 0  ON A CONTINUATION CALL
-200 IERR = 7
-RETURN
+200 ierr = 7
+return
 !                             M .LT. 1 OR N .LT. 1
-210 IERR = 1
-RETURN
+210 ierr = 1
+return
 !                             MDA .LT. M
-220 IERR = 2
-RETURN
+220 ierr = 2
+return
 !                             MDB .LT. MAX(M,N)
-230 IERR = 3
-RETURN
+230 ierr = 3
+return
 !                             LIW .LT. M + N
-240 IERR = 4
-RETURN
+240 ierr = 4
+return
 !                             LW TOO SMALL
-250 IERR = 5
-RETURN
+250 ierr = 5
+return
 !                             RE OR AE IS NEGATIVE
-260 IERR = 6
-RETURN
+260 ierr = 6
+return
 !                             0 .LT. KRANK .LT. NP
 ! 280 IERR = 8
 !     RETURN
-END SUBROUTINE LSQR
+end subroutine lsqr
 
-SUBROUTINE U11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
-&IC,IR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: KRANK
-INTEGER, INTENT(INOUT) :: KSURE
-INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
-REAL, INTENT(INOUT) :: A(MDA,N), DB(N), EB(N), H(N), UB(N), W(N)
-INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, &
-&KP1, KZ, L, LM1, MM, NMK
-REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
-REAL :: SNRM2
-REAL :: SDOT
-INTEGER :: ISAMAX
+subroutine u11ls (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+&ic,ir)
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+real, intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+&kp1, kz, l, lm1, mm, nmk
+real :: bb, r2, rmin, sum, t, temp, tn, tt
+real :: snrm2
+real :: sdot
+integer :: isamax
 !
 !       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 !       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -4318,269 +4318,269 @@ INTEGER :: ISAMAX
 !       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 !       DEFICIENCY.
 !
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+integer, intent(inout) :: ic(n), ir(m)
 !
 !        INITIALIZATION
 !
-J = 0
-KRANK = N
-DO I = 1,N
-   IC(I) = I
-END DO
-DO I = 1,M
-   IR(I) = I
-END DO
+j = 0
+krank = n
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE COL LENGTH
 !
-DO I = 1,N
-   H(I) = SNRM2(M,A(1,I),1)
-   W(I) = H(I)
-END DO
+do i = 1,n
+   h(i) = snrm2(m,a(1,i),1)
+   w(i) = h(i)
+end do
 !
 !         INITIALIZE ERROR BOUNDS
 !
-DO I = 1,N
-   EB(I) = AMAX1(DB(I),UB(I)*H(I))
-   UB(I) = EB(I)
-   DB(I) = 0.0
-END DO
+do i = 1,n
+   eb(i) = amax1(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.0
+end do
 !
 !          DISCARD SELF DEPENDENT COLUMNS
 !
-I = 1
-50 IF (EB(I) .GE. H(I)) GO TO 60
-IF (I .EQ. KRANK) GO TO 70
-I = I + 1
-GO TO 50
+i = 1
+50 if (eb(i) .ge. h(i)) go to 60
+if (i .eq. krank) go to 70
+i = i + 1
+go to 50
 !
 !          MATRIX REDUCTION
 !
-60 KK = KRANK
-KRANK = KRANK - 1
-IF (MODE .EQ. 0) RETURN
-IF (I .LE. NP) GO TO 400
-IF (I .GT. KRANK) GO TO 70
-CALL SSWAP (1,EB(I),1,EB(KK),1)
-CALL SSWAP (1,UB(I),1,UB(KK),1)
-CALL SSWAP (1,W(I),1,W(KK),1)
-CALL SSWAP (1,H(I),1,H(KK),1)
-CALL ISWAP (1,IC(I),1,IC(KK),1)
-CALL SSWAP (M,A(1,I),1,A(1,KK),1)
-GO TO 50
+60 kk = krank
+krank = krank - 1
+if (mode .eq. 0) return
+if (i .le. np) go to 400
+if (i .gt. krank) go to 70
+call sswap (1,eb(i),1,eb(kk),1)
+call sswap (1,ub(i),1,ub(kk),1)
+call sswap (1,w(i),1,w(kk),1)
+call sswap (1,h(i),1,h(kk),1)
+call iswap (1,ic(i),1,ic(kk),1)
+call sswap (m,a(1,i),1,a(1,kk),1)
+go to 50
 !
 !           TEST FOR ZERO RANK
 !
-70 IF (KRANK .GT. 0) GO TO 100
-KRANK = 0
-KSURE = 0
-RETURN
+70 if (krank .gt. 0) go to 100
+krank = 0
+ksure = 0
+return
 !
 !        M A I N    L O O P
 !
-100 J = J + 1
-JP1 = J + 1
-JM1 = J - 1
-KZ = KRANK
-IF (J .LE. NP) KZ = J
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j .le. np) kz = j
 !
 !        EACH COL HAS MM=M-J+1 COMPONENTS
 !
-MM = M - J + 1
+mm = m - j + 1
 !
 !         UB DETERMINES COLUMN PIVOT
 !
-110 IMIN = J
-IF (H(J) .EQ. 0.0) GO TO 170
-RMIN = UB(J)/H(J)
-do 120 I = J,KZ
-   IF (UB(I) .GE. H(I)*RMIN) GO TO 120
-   RMIN = UB(I)/H(I)
-   IMIN = I
-120 CONTINUE
+110 imin = j
+if (h(j) .eq. 0.0) go to 170
+rmin = ub(j)/h(j)
+do 120 i = j,kz
+   if (ub(i) .ge. h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
 !
 !     TEST FOR RANK DEFICIENCY
 !
-IF (RMIN .LT. 1.0) GO TO 200
-TT = (EB(IMIN) + ABS(DB(IMIN)))/H(IMIN)
-IF (TT .GE. 1.0) GO TO 170
+if (rmin .lt. 1.0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt .ge. 1.0) go to 170
 !
 !     COMPUTE EXACT UB
 !
-DO I = 1,JM1
-   W(I) = A(I,IMIN)
-END DO
+do i = 1,jm1
+   w(i) = a(i,imin)
+end do
 !
-L = JM1
-130 W(L) = W(L)/A(L,L)
-IF (L .EQ. 1) GO TO 150
-LM1 = L - 1
-DO I = L,JM1
-   W(LM1) = W(LM1) - A(LM1,I)*W(I)
-END DO
-L = LM1
-GO TO 130
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l .eq. 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(lm1,i)*w(i)
+end do
+l = lm1
+go to 130
 !
-150 TT = EB(IMIN)
-DO I = 1,JM1
-   TT = TT + ABS(W(I))*EB(I)
-END DO
-UB(IMIN) = TT
-IF (UB(IMIN)/H(IMIN) .GE. 1.0) GO TO 170
-GO TO 200
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) .ge. 1.0) go to 170
+go to 200
 !
 !        MATRIX REDUCTION
 !
-170 KK = KRANK
-KRANK = KRANK - 1
-KZ = KRANK
-IF (MODE .EQ. 0) RETURN
-IF (J .LE. NP) GO TO 410
-IF (IMIN .GT. KRANK) GO TO 180
-   CALL ISWAP (1,IC(IMIN),1,IC(KK),1)
-   CALL SSWAP (M,A(1,IMIN),1,A(1,KK),1)
-   CALL SSWAP (1,EB(IMIN),1,EB(KK),1)
-   CALL SSWAP (1,UB(IMIN),1,UB(KK),1)
-   CALL SSWAP (1,DB(IMIN),1,DB(KK),1)
-   CALL SSWAP (1,W(IMIN),1,W(KK),1)
-   CALL SSWAP (1,H(IMIN),1,H(KK),1)
-180 IF (J .GT. KRANK) GO TO 300
-GO TO 110
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode .eq. 0) return
+if (j .le. np) go to 410
+if (imin .gt. krank) go to 180
+   call iswap (1,ic(imin),1,ic(kk),1)
+   call sswap (m,a(1,imin),1,a(1,kk),1)
+   call sswap (1,eb(imin),1,eb(kk),1)
+   call sswap (1,ub(imin),1,ub(kk),1)
+   call sswap (1,db(imin),1,db(kk),1)
+   call sswap (1,w(imin),1,w(kk),1)
+   call sswap (1,h(imin),1,h(kk),1)
+180 if (j .gt. krank) go to 300
+go to 110
 !
 !        COLUMN PIVOT
 !
-200 IF (IMIN .EQ. J) GO TO 210
-CALL SSWAP (1,H(J),1,H(IMIN),1)
-CALL SSWAP (M,A(1,J),1,A(1,IMIN),1)
-CALL SSWAP (1,EB(J),1,EB(IMIN),1)
-CALL SSWAP (1,UB(J),1,UB(IMIN),1)
-CALL SSWAP (1,DB(J),1,DB(IMIN),1)
-CALL SSWAP (1,W(J),1,W(IMIN),1)
-CALL ISWAP (1,IC(J),1,IC(IMIN),1)
+200 if (imin .eq. j) go to 210
+call sswap (1,h(j),1,h(imin),1)
+call sswap (m,a(1,j),1,a(1,imin),1)
+call sswap (1,eb(j),1,eb(imin),1)
+call sswap (1,ub(j),1,ub(imin),1)
+call sswap (1,db(j),1,db(imin),1)
+call sswap (1,w(j),1,w(imin),1)
+call iswap (1,ic(j),1,ic(imin),1)
 !
 !        ROW PIVOT
 !
-210 JMAX = ISAMAX(MM,A(J,J),1)
-JMAX = JMAX + J - 1
-IF (JMAX .EQ. J) GO TO 220
-CALL SSWAP (N,A(J,1),MDA,A(JMAX,1),MDA)
-CALL ISWAP (1,IR(J),1,IR(JMAX),1)
+210 jmax = isamax(mm,a(j,j),1)
+jmax = jmax + j - 1
+if (jmax .eq. j) go to 220
+call sswap (n,a(j,1),mda,a(jmax,1),mda)
+call iswap (1,ir(j),1,ir(jmax),1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATION
 !
-220 TN = SNRM2(MM,A(J,J),1)
-IF (TN .EQ. 0.0) GO TO 170
-IF (A(J,J) .NE. 0.0) TN = SIGN(TN,A(J,J))
-CALL SSCAL (MM,1.0/TN,A(J,J),1)
-A(J,J) = A(J,J) + 1.0
-IF (J .EQ. N) GO TO 250
-do 240 I = JP1,N
-   BB = -SDOT(MM,A(J,J),1,A(J,I),1)/A(J,J)
-   CALL SAXPY (MM,BB,A(J,J),1,A(J,I),1)
-   IF (I .LE. NP) GO TO 240
-   IF (H(I) .EQ. 0.0) GO TO 240
-   TT = 1.0 - (A(J,I)/H(I))**2
-   TT = AMAX1(TT,0.0)
-   T = TT
-   TT = 1.0 + 0.05*TT*(H(I)/W(I))**2
-   IF (TT .EQ. 1.0) GO TO 230
-      H(I) = H(I)*SQRT(T)
-      GO TO 240
-230 H(I) = SNRM2(M-J,A(J+1,I),1)
-   W(I) = H(I)
-240 CONTINUE
+220 tn = snrm2(mm,a(j,j),1)
+if (tn .eq. 0.0) go to 170
+if (a(j,j) .ne. 0.0) tn = sign(tn,a(j,j))
+call sscal (mm,1.0/tn,a(j,j),1)
+a(j,j) = a(j,j) + 1.0
+if (j .eq. n) go to 250
+do 240 i = jp1,n
+   bb = -sdot(mm,a(j,j),1,a(j,i),1)/a(j,j)
+   call saxpy (mm,bb,a(j,j),1,a(j,i),1)
+   if (i .le. np) go to 240
+   if (h(i) .eq. 0.0) go to 240
+   tt = 1.0 - (a(j,i)/h(i))**2
+   tt = amax1(tt,0.0)
+   t = tt
+   tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
+   if (tt .eq. 1.0) go to 230
+      h(i) = h(i)*sqrt(t)
+      go to 240
+230 h(i) = snrm2(m-j,a(j+1,i),1)
+   w(i) = h(i)
+240 continue
 !
-250 H(J) = A(J,J)
-A(J,J) = -TN
+250 h(j) = a(j,j)
+a(j,j) = -tn
 !
 !          UPDATE UB, DB
 !
-UB(J) = UB(J)/ABS(A(J,J))
-DB(J) = (SIGN(EB(J),DB(J)) + DB(J))/A(J,J)
-IF (J .EQ. KRANK) GO TO 300
-DO I = JP1,KRANK
-   UB(I) = UB(I) + ABS(A(J,I))*UB(J)
-   DB(I) = DB(I) - A(J,I)*DB(J)
-END DO
-GO TO 100
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j)) + db(j))/a(j,j)
+if (j .eq. krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(j,i))*ub(j)
+   db(i) = db(i) - a(j,i)*db(j)
+end do
+go to 100
 !
 !        E N D    M A I N    L O O P
 !
-300 CONTINUE
+300 continue
 !
 !        COMPUTE KSURE
 !
-KM1 = KRANK - 1
-DO I = 1,KM1
-   IS = 0
-   KMI = KRANK - I
-   do 310 II = 1,KMI
-      IF (UB(II) .LE. UB(II + 1)) GO TO 310
-      IS = 1
-      TEMP = UB(II)
-      UB(II) = UB(II + 1)
-      UB(II + 1) = TEMP
-310 CONTINUE
-   IF (IS .EQ. 0) GO TO 320
-END DO
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do 310 ii = 1,kmi
+      if (ub(ii) .le. ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310 continue
+   if (is .eq. 0) go to 320
+end do
 !
-320 KSURE = 0
-SUM = 0.0
-DO I = 1,KRANK
-   R2 = UB(I)*UB(I)
-   IF (R2 + SUM .GE. 1.0) GO TO 330
-   SUM = SUM + R2
-   KSURE = KSURE + 1
-END DO
+320 ksure = 0
+sum = 0.0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum .ge. 1.0) go to 330
+   sum = sum + r2
+   ksure = ksure + 1
+end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
 !
-330 IF (KRANK .EQ. N .OR. MODE .LT. 2) RETURN
-NMK = N - KRANK
-KP1 = KRANK + 1
-I = KRANK
-340 TN = SNRM2(NMK,A(I,KP1),MDA)/A(I,I)
-   TN = A(I,I)*SQRT(1.0 + TN*TN)
-   CALL SSCAL (NMK,1.0/TN,A(I,KP1),MDA)
-   W(I) = A(I,I)/TN + 1.0
-   A(I,I) = -TN
-   IF (I .EQ. 1) GO TO 350
-   IM1 = I - 1
-   DO II = 1,IM1
-      TT = -SDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
-      TT = TT - A(II,I)
-      CALL SAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
-      A(II,I) = A(II,I) + TT*W(I)
-   END DO
-   I = I - 1
-   GO TO 340
+330 if (krank .eq. n .or. mode .lt. 2) return
+nmk = n - krank
+kp1 = krank + 1
+i = krank
+340 tn = snrm2(nmk,a(i,kp1),mda)/a(i,i)
+   tn = a(i,i)*sqrt(1.0 + tn*tn)
+   call sscal (nmk,1.0/tn,a(i,kp1),mda)
+   w(i) = a(i,i)/tn + 1.0
+   a(i,i) = -tn
+   if (i .eq. 1) go to 350
+   im1 = i - 1
+   do ii = 1,im1
+      tt = -sdot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
+      tt = tt - a(ii,i)
+      call saxpy (nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+      a(ii,i) = a(ii,i) + tt*w(i)
+   end do
+   i = i - 1
+   go to 340
 !
-350 CONTINUE
-RETURN
+350 continue
+return
 !
 !     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
 !
-400 KRANK = I - 1
-RETURN
-410 KRANK = J - 1
-RETURN
-END SUBROUTINE U11LS
+400 krank = i - 1
+return
+410 krank = j - 1
+return
+end subroutine u11ls
 
-SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
-REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,NB)
-REAL :: H(N)
-REAL, INTENT(INOUT) :: RNORM(NB)
-REAL :: W(N)
-INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
-REAL :: BB, TT
-REAL :: SNRM2
-REAL :: SDOT
+subroutine u12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,nb)
+real :: h(n)
+real, intent(inout) :: rnorm(nb)
+real :: w(n)
+integer :: i, ij, im1, j, jb, k, kp1, nmk
+real :: bb, tt
+real :: snrm2
+real :: sdot
 !
 !        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -4589,150 +4589,150 @@ REAL :: SDOT
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+integer, intent(inout) :: ic(n), ir(m)
 !
-K = KRANK
-KP1 = K + 1
-IF (K .GT. 0) GO TO 30
+k = krank
+kp1 = k + 1
+if (k .gt. 0) go to 30
 !
 !        RANK=0
 !
-DO JB = 1,NB
-   RNORM(JB) = SNRM2(M,B(1,JB),1)
-END DO
-DO JB = 1,NB
-   DO I = 1,N
-      B(I,JB) = 0.0
-   END DO
-END DO
-RETURN
+do jb = 1,nb
+   rnorm(jb) = snrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+return
 !
-30 I = 0
+30 i = 0
 !
 !     REORDER B TO REFLECT ROW INTERCHANGES
 !
-40 I = I + 1
-   IF (I .EQ. M) GO TO 100
-   J = IR(I)
-   IF (J .EQ. I) GO TO 40
-   IF (J .LT. 0) GO TO 40
+40 i = i + 1
+   if (i .eq. m) go to 100
+   j = ir(i)
+   if (j .eq. i) go to 40
+   if (j .lt. 0) go to 40
 !
-   IR(I) = -IR(I)
-   DO JB = 1,NB
-      RNORM(JB) = B(I,JB)
-   END DO
+   ir(i) = -ir(i)
+   do jb = 1,nb
+      rnorm(jb) = b(i,jb)
+   end do
 !
-   IJ = I
-60 DO JB = 1,NB
-         B(IJ,JB) = B(J,JB)
-      END DO
-      IJ = J
-      J = IR(IJ)
-      IR(IJ) = -IR(IJ)
-   IF (J .NE. I) GO TO 60
+   ij = i
+60 do jb = 1,nb
+         b(ij,jb) = b(j,jb)
+      end do
+      ij = j
+      j = ir(ij)
+      ir(ij) = -ir(ij)
+   if (j .ne. i) go to 60
 !
-   DO JB = 1,NB
-      B(IJ,JB) = RNORM(JB)
-   END DO
-   GO TO 40
+   do jb = 1,nb
+      b(ij,jb) = rnorm(jb)
+   end do
+   go to 40
 !
-100 DO I = 1,M
-   IR(I) = IABS(IR(I))
-END DO
+100 do i = 1,m
+   ir(i) = iabs(ir(i))
+end do
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-DO J = 1,K
-   TT = A(J,J)
-   A(J,J) = H(J)
-   DO I = 1,NB
-      BB = -SDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
-      CALL SAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
-   END DO
-   A(J,J) = TT
-END DO
+do j = 1,k
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do i = 1,nb
+      bb = -sdot (m-j+1,a(j,j),1,b(j,i),1)/h(j)
+      call saxpy (m-j+1,bb,a(j,j),1,b(j,i),1)
+   end do
+   a(j,j) = tt
+end do
 !
 !        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-DO JB = 1,NB
-   RNORM(JB) = SNRM2(M-K,B(KP1,JB),1)
-END DO
+do jb = 1,nb
+   rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
+end do
 !
 !     BACK SOLVE UPPER TRIANGULAR R
 !
-I = K
-150 DO JB = 1,NB
-   B(I,JB) = B(I,JB)/A(I,I)
-END DO
-IF (I .EQ. 1) GO TO 200
-IM1 = I - 1
-DO JB = 1,NB
-   CALL SAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
-END DO
-I = IM1
-GO TO 150
+i = k
+150 do jb = 1,nb
+   b(i,jb) = b(i,jb)/a(i,i)
+end do
+if (i .eq. 1) go to 200
+im1 = i - 1
+do jb = 1,nb
+   call saxpy (im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+end do
+i = im1
+go to 150
 !
 !     RANK LT N
 !
 !      TRUNCATED SOLUTION
 !
-200 IF (K .EQ. N) GO TO 230
-DO JB = 1,NB
-   DO I = KP1,N
-      B(I,JB) = 0.0
-   END DO
-END DO
-IF (MODE .EQ. 1) GO TO 230
+200 if (k .eq. n) go to 230
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.0
+   end do
+end do
+if (mode .eq. 1) go to 230
 !
 !      MINIMAL LENGTH SOLUTION
 !
-NMK = N - K
-DO JB = 1,NB
-   DO I = 1,K
-      TT = -SDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
-      TT = TT - B(I,JB)
-      CALL SAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
-      B(I,JB) = B(I,JB) + TT*W(I)
-   END DO
-END DO
+nmk = n - k
+do jb = 1,nb
+   do i = 1,k
+      tt = -sdot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call saxpy (nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
-230 I = 0
+230 i = 0
 !
-240 I = I + 1
-   IF (I .EQ. N) GO TO 260
-   J = IC(I)
-   IF (J .EQ. I) GO TO 240
-   IF (J .LT. 0) GO TO 240
+240 i = i + 1
+   if (i .eq. n) go to 260
+   j = ic(i)
+   if (j .eq. i) go to 240
+   if (j .lt. 0) go to 240
 !
-   IC(I) = -IC(I)
-250 CALL SSWAP (NB,B(J,1),MDB,B(I,1),MDB)
-      IJ = IC(J)
-      IC(J) = -IC(J)
-      J = IJ
-   IF (J .NE. I) GO TO 250
-   GO TO 240
+   ic(i) = -ic(i)
+250 call sswap (nb,b(j,1),mdb,b(i,1),mdb)
+      ij = ic(j)
+      ic(j) = -ic(j)
+      j = ij
+   if (j .ne. i) go to 250
+   go to 240
 !
-260 DO I = 1,N
-   IC(I) = IABS(IC(I))
-END DO
-RETURN
-END SUBROUTINE U12LS
+260 do i = 1,n
+   ic(i) = iabs(ic(i))
+end do
+return
+end subroutine u12ls
 
-SUBROUTINE U11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
-&IR,IC)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: KRANK
-INTEGER, INTENT(INOUT) :: KSURE
-INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
-REAL, INTENT(INOUT) :: A(MDA,N), DB(M), EB(M), H(M), UB(M), W(M)
-INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, &
-&KP1, KZ, L, LM1, MMK, NN
-REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
-REAL :: SNRM2
-REAL :: SDOT
-INTEGER :: ISAMAX
+subroutine u11us (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+&ir,ic)
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+real, intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+&kp1, kz, l, lm1, mmk, nn
+real :: bb, r2, rmin, sum, t, temp, tn, tt
+real :: snrm2
+real :: sdot
+integer :: isamax
 !
 !       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 !       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -4740,269 +4740,269 @@ INTEGER :: ISAMAX
 !       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 !       DEFICIENCY.
 !
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+integer, intent(inout) :: ic(n), ir(m)
 !
 !        INITIALIZATION
 !
-J = 0
-KRANK = M
-DO I = 1,N
-   IC(I) = I
-END DO
-DO I = 1,M
-   IR(I) = I
-END DO
+j = 0
+krank = m
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE ROW LENGTH
 !
-DO I = 1,M
-   H(I) = SNRM2(N,A(I,1),MDA)
-   W(I) = H(I)
-END DO
+do i = 1,m
+   h(i) = snrm2(n,a(i,1),mda)
+   w(i) = h(i)
+end do
 !
 !         INITIALIZE ERROR BOUNDS
 !
-DO I = 1,M
-   EB(I) = AMAX1(DB(I),UB(I)*H(I))
-   UB(I) = EB(I)
-   DB(I) = 0.0
-END DO
+do i = 1,m
+   eb(i) = amax1(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.0
+end do
 !
 !          DISCARD SELF DEPENDENT ROWS
 !
-I = 1
-50 IF (EB(I) .GE. H(I)) GO TO 60
-IF (I .EQ. KRANK) GO TO 70
-I = I + 1
-GO TO 50
+i = 1
+50 if (eb(i) .ge. h(i)) go to 60
+if (i .eq. krank) go to 70
+i = i + 1
+go to 50
 !
 !          MATRIX REDUCTION
 !
-60 KK = KRANK
-KRANK = KRANK - 1
-IF (MODE .EQ. 0) RETURN
-IF (I .LE. NP) GO TO 400
-IF (I .GT. KRANK) GO TO 70
-CALL SSWAP (1,EB(I),1,EB(KK),1)
-CALL SSWAP (1,UB(I),1,UB(KK),1)
-CALL SSWAP (1,W(I),1,W(KK),1)
-CALL SSWAP (1,H(I),1,H(KK),1)
-CALL ISWAP (1,IR(I),1,IR(KK),1)
-CALL SSWAP (N,A(I,1),MDA,A(KK,1),MDA)
-GO TO 50
+60 kk = krank
+krank = krank - 1
+if (mode .eq. 0) return
+if (i .le. np) go to 400
+if (i .gt. krank) go to 70
+call sswap (1,eb(i),1,eb(kk),1)
+call sswap (1,ub(i),1,ub(kk),1)
+call sswap (1,w(i),1,w(kk),1)
+call sswap (1,h(i),1,h(kk),1)
+call iswap (1,ir(i),1,ir(kk),1)
+call sswap (n,a(i,1),mda,a(kk,1),mda)
+go to 50
 !
 !           TEST FOR ZERO RANK
 !
-70 IF (KRANK .GT. 0) GO TO 100
-KRANK = 0
-KSURE = 0
-RETURN
+70 if (krank .gt. 0) go to 100
+krank = 0
+ksure = 0
+return
 !
 !        M A I N    L O O P
 !
-100 J = J + 1
-JP1 = J + 1
-JM1 = J - 1
-KZ = KRANK
-IF (J .LE. NP) KZ = J
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j .le. np) kz = j
 !
 !        EACH ROW HAS NN=N-J+1 COMPONENTS
 !
-NN = N - J + 1
+nn = n - j + 1
 !
 !         UB DETERMINES ROW PIVOT
 !
-110 IMIN = J
-IF (H(J) .EQ. 0.0) GO TO 170
-RMIN = UB(J)/H(J)
-do 120 I = J,KZ
-   IF (UB(I) .GE. H(I)*RMIN) GO TO 120
-   RMIN = UB(I)/H(I)
-   IMIN = I
-120 CONTINUE
+110 imin = j
+if (h(j) .eq. 0.0) go to 170
+rmin = ub(j)/h(j)
+do 120 i = j,kz
+   if (ub(i) .ge. h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
 !
 !     TEST FOR RANK DEFICIENCY
 !
-IF (RMIN .LT. 1.0) GO TO 200
-TT = (EB(IMIN) + ABS(DB(IMIN)))/H(IMIN)
-IF (TT .GE. 1.0) GO TO 170
+if (rmin .lt. 1.0) go to 200
+tt = (eb(imin) + abs(db(imin)))/h(imin)
+if (tt .ge. 1.0) go to 170
 !
 !     COMPUTE EXACT UB
 !
-DO I = 1,JM1
-   W(I) = A(IMIN,I)
-END DO
+do i = 1,jm1
+   w(i) = a(imin,i)
+end do
 !
-L = JM1
-130 W(L) = W(L)/A(L,L)
-IF (L .EQ. 1) GO TO 150
-LM1 = L - 1
-DO I = L,JM1
-   W(LM1) = W(LM1) - A(I,LM1)*W(I)
-END DO
-L = LM1
-GO TO 130
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l .eq. 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(i,lm1)*w(i)
+end do
+l = lm1
+go to 130
 !
-150 TT = EB(IMIN)
-DO I = 1,JM1
-   TT = TT + ABS(W(I))*EB(I)
-END DO
-UB(IMIN) = TT
-IF (UB(IMIN)/H(IMIN) .GE. 1.0) GO TO 170
-GO TO 200
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + abs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) .ge. 1.0) go to 170
+go to 200
 !
 !        MATRIX REDUCTION
 !
-170 KK = KRANK
-KRANK = KRANK - 1
-KZ = KRANK
-IF (MODE .EQ. 0) RETURN
-IF (J .LE. NP) GO TO 410
-IF (IMIN .GT. KRANK) GO TO 180
-   CALL ISWAP (1,IR(IMIN),1,IR(KK),1)
-   CALL SSWAP (N,A(IMIN,1),MDA,A(KK,1),MDA)
-   CALL SSWAP (1,EB(IMIN),1,EB(KK),1)
-   CALL SSWAP (1,UB(IMIN),1,UB(KK),1)
-   CALL SSWAP (1,DB(IMIN),1,DB(KK),1)
-   CALL SSWAP (1,W(IMIN),1,W(KK),1)
-   CALL SSWAP (1,H(IMIN),1,H(KK),1)
-180 IF (J .GT. KRANK) GO TO 300
-GO TO 110
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode .eq. 0) return
+if (j .le. np) go to 410
+if (imin .gt. krank) go to 180
+   call iswap (1,ir(imin),1,ir(kk),1)
+   call sswap (n,a(imin,1),mda,a(kk,1),mda)
+   call sswap (1,eb(imin),1,eb(kk),1)
+   call sswap (1,ub(imin),1,ub(kk),1)
+   call sswap (1,db(imin),1,db(kk),1)
+   call sswap (1,w(imin),1,w(kk),1)
+   call sswap (1,h(imin),1,h(kk),1)
+180 if (j .gt. krank) go to 300
+go to 110
 !
 !        ROW PIVOT
 !
-200 IF (IMIN .EQ. J) GO TO 210
-CALL SSWAP (1,H(J),1,H(IMIN),1)
-CALL SSWAP (N,A(J,1),MDA,A(IMIN,1),MDA)
-CALL SSWAP (1,EB(J),1,EB(IMIN),1)
-CALL SSWAP (1,UB(J),1,UB(IMIN),1)
-CALL SSWAP (1,DB(J),1,DB(IMIN),1)
-CALL SSWAP (1,W(J),1,W(IMIN),1)
-CALL ISWAP (1,IR(J),1,IR(IMIN),1)
+200 if (imin .eq. j) go to 210
+call sswap (1,h(j),1,h(imin),1)
+call sswap (n,a(j,1),mda,a(imin,1),mda)
+call sswap (1,eb(j),1,eb(imin),1)
+call sswap (1,ub(j),1,ub(imin),1)
+call sswap (1,db(j),1,db(imin),1)
+call sswap (1,w(j),1,w(imin),1)
+call iswap (1,ir(j),1,ir(imin),1)
 !
 !        COLUMN PIVOT
 !
-210 JMAX = ISAMAX(NN,A(J,J),MDA)
-JMAX = JMAX + J - 1
-IF (JMAX .EQ. J) GO TO 220
-CALL SSWAP (M,A(1,J),1,A(1,JMAX),1)
-CALL ISWAP (1,IC(J),1,IC(JMAX),1)
+210 jmax = isamax(nn,a(j,j),mda)
+jmax = jmax + j - 1
+if (jmax .eq. j) go to 220
+call sswap (m,a(1,j),1,a(1,jmax),1)
+call iswap (1,ic(j),1,ic(jmax),1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATION
 !
-220 TN = SNRM2(NN,A(J,J),MDA)
-IF (TN .EQ. 0.0) GO TO 170
-IF (A(J,J) .NE. 0.0) TN = SIGN(TN,A(J,J))
-CALL SSCAL (NN,1.0/TN,A(J,J),MDA)
-A(J,J) = A(J,J) + 1.0
-IF (J .EQ. M) GO TO 250
-do 240 I = JP1,M
-   BB = -SDOT(NN,A(J,J),MDA,A(I,J),MDA)/A(J,J)
-   CALL SAXPY (NN,BB,A(J,J),MDA,A(I,J),MDA)
-   IF (I .LE. NP) GO TO 240
-   IF (H(I) .EQ. 0.0) GO TO 240
-   TT = 1.0 - (A(I,J)/H(I))**2
-   TT = AMAX1(TT,0.0)
-   T = TT
-   TT = 1.0 + 0.05*TT*(H(I)/W(I))**2
-   IF (TT .EQ. 1.0) GO TO 230
-      H(I) = H(I)*SQRT(T)
-      GO TO 240
-230 H(I) = SNRM2(N-J,A(I,J+1),MDA)
-   W(I) = H(I)
-240 CONTINUE
+220 tn = snrm2(nn,a(j,j),mda)
+if (tn .eq. 0.0) go to 170
+if (a(j,j) .ne. 0.0) tn = sign(tn,a(j,j))
+call sscal (nn,1.0/tn,a(j,j),mda)
+a(j,j) = a(j,j) + 1.0
+if (j .eq. m) go to 250
+do 240 i = jp1,m
+   bb = -sdot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
+   call saxpy (nn,bb,a(j,j),mda,a(i,j),mda)
+   if (i .le. np) go to 240
+   if (h(i) .eq. 0.0) go to 240
+   tt = 1.0 - (a(i,j)/h(i))**2
+   tt = amax1(tt,0.0)
+   t = tt
+   tt = 1.0 + 0.05*tt*(h(i)/w(i))**2
+   if (tt .eq. 1.0) go to 230
+      h(i) = h(i)*sqrt(t)
+      go to 240
+230 h(i) = snrm2(n-j,a(i,j+1),mda)
+   w(i) = h(i)
+240 continue
 !
-250 H(J) = A(J,J)
-A(J,J) = -TN
+250 h(j) = a(j,j)
+a(j,j) = -tn
 !
 !          UPDATE UB, DB
 !
-UB(J) = UB(J)/ABS(A(J,J))
-DB(J) = (SIGN(EB(J),DB(J))+DB(J))/A(J,J)
-IF (J .EQ. KRANK) GO TO 300
-DO I = JP1,KRANK
-   UB(I) = UB(I) + ABS(A(I,J))*UB(J)
-   DB(I) = DB(I) - A(I,J)*DB(J)
-END DO
-GO TO 100
+ub(j) = ub(j)/abs(a(j,j))
+db(j) = (sign(eb(j),db(j))+db(j))/a(j,j)
+if (j .eq. krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + abs(a(i,j))*ub(j)
+   db(i) = db(i) - a(i,j)*db(j)
+end do
+go to 100
 !
 !        E N D    M A I N    L O O P
 !
-300 CONTINUE
+300 continue
 !
 !        COMPUTE KSURE
 !
-KM1 = KRANK - 1
-DO I = 1,KM1
-   IS = 0
-   KMI = KRANK - I
-   do 310 II = 1,KMI
-      IF (UB(II) .LE. UB(II + 1)) GO TO 310
-      IS = 1
-      TEMP = UB(II)
-      UB(II) = UB(II + 1)
-      UB(II + 1) = TEMP
-310 CONTINUE
-   IF (IS .EQ. 0) GO TO 320
-END DO
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do 310 ii = 1,kmi
+      if (ub(ii) .le. ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310 continue
+   if (is .eq. 0) go to 320
+end do
 !
-320 KSURE = 0
-SUM = 0.0
-DO I = 1,KRANK
-   R2 = UB(I)*UB(I)
-   IF (R2 + SUM .GE. 1.0) GO TO 330
-   SUM = SUM + R2
-   KSURE = KSURE + 1
-END DO
+320 ksure = 0
+sum = 0.0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum .ge. 1.0) go to 330
+   sum = sum + r2
+   ksure = ksure + 1
+end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
 !
-330 IF (KRANK .EQ. M .OR. MODE .LT. 2) RETURN
-MMK = M - KRANK
-KP1 = KRANK + 1
-I = KRANK
-340 TN = SNRM2(MMK,A(KP1,I),1)/A(I,I)
-   TN = A(I,I)*SQRT(1.0 + TN*TN)
-   CALL SSCAL (MMK,1.0/TN,A(KP1,I),1)
-   W(I) = A(I,I)/TN + 1.0
-   A(I,I) = -TN
-   IF (I .EQ. 1) GO TO 350
-   IM1 = I - 1
-   DO II = 1,IM1
-      TT = -SDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
-      TT = TT - A(I,II)
-      CALL SAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
-      A(I,II) = A(I,II) + TT*W(I)
-   END DO
-   I = I - 1
-   GO TO 340
+330 if (krank .eq. m .or. mode .lt. 2) return
+mmk = m - krank
+kp1 = krank + 1
+i = krank
+340 tn = snrm2(mmk,a(kp1,i),1)/a(i,i)
+   tn = a(i,i)*sqrt(1.0 + tn*tn)
+   call sscal (mmk,1.0/tn,a(kp1,i),1)
+   w(i) = a(i,i)/tn + 1.0
+   a(i,i) = -tn
+   if (i .eq. 1) go to 350
+   im1 = i - 1
+   do ii = 1,im1
+      tt = -sdot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
+      tt = tt - a(i,ii)
+      call saxpy (mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+      a(i,ii) = a(i,ii) + tt*w(i)
+   end do
+   i = i - 1
+   go to 340
 !
-350 CONTINUE
-RETURN
+350 continue
+return
 !
 !     FIRST NP ROWS ARE LINEARLY DEPENDENT
 !
-400 KRANK = I - 1
-RETURN
-410 KRANK = J - 1
-RETURN
-END SUBROUTINE U11US
+400 krank = i - 1
+return
+410 krank = j - 1
+return
+end subroutine u11us
 
-SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
-REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,NB)
-REAL :: H(M)
-REAL, INTENT(INOUT) :: RNORM(NB)
-REAL :: W(M)
-INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
-REAL :: BB, TT
-REAL :: SNRM2
-REAL :: SDOT
+subroutine u12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,nb)
+real :: h(m)
+real, intent(inout) :: rnorm(nb)
+real :: w(m)
+integer :: i, ij, ip1, j, jb, k, kp1, mmk
+real :: bb, tt
+real :: snrm2
+real :: sdot
 !
 !        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -5011,143 +5011,143 @@ REAL :: SDOT
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
+integer, intent(inout) :: ic(n), ir(m)
 !
-K = KRANK
-KP1 = K + 1
-IF (K .GT. 0) GO TO 30
+k = krank
+kp1 = k + 1
+if (k .gt. 0) go to 30
 !
 !        RANK=0
 !
-DO JB = 1,NB
-   RNORM(JB) = SNRM2(M,B(1,JB),1)
-END DO
-DO JB = 1,NB
-   DO I = 1,N
-      B(I,JB) = 0.0
-   END DO
-END DO
-RETURN
+do jb = 1,nb
+   rnorm(jb) = snrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.0
+   end do
+end do
+return
 !
-30 I = 0
+30 i = 0
 !
 !     REORDER B TO REFLECT ROW INTERCHANGES
 !
-40 I = I + 1
-   IF (I .EQ. M) GO TO 100
-   J = IR(I)
-   IF (J .EQ. I) GO TO 40
-   IF (J .LT. 0) GO TO 40
+40 i = i + 1
+   if (i .eq. m) go to 100
+   j = ir(i)
+   if (j .eq. i) go to 40
+   if (j .lt. 0) go to 40
 !
-   IR(I) = -IR(I)
-   DO JB = 1,NB
-      RNORM(JB) = B(I,JB)
-   END DO
+   ir(i) = -ir(i)
+   do jb = 1,nb
+      rnorm(jb) = b(i,jb)
+   end do
 !
-   IJ = I
-60 DO JB = 1,NB
-         B(IJ,JB) = B(J,JB)
-      END DO
-      IJ = J
-      J = IR(IJ)
-      IR(IJ) = -IR(IJ)
-   IF (J .NE. I) GO TO 60
+   ij = i
+60 do jb = 1,nb
+         b(ij,jb) = b(j,jb)
+      end do
+      ij = j
+      j = ir(ij)
+      ir(ij) = -ir(ij)
+   if (j .ne. i) go to 60
 !
-   DO JB = 1,NB
-      B(IJ,JB) = RNORM(JB)
-   END DO
-   GO TO 40
+   do jb = 1,nb
+      b(ij,jb) = rnorm(jb)
+   end do
+   go to 40
 !
-100 DO I = 1,M
-   IR(I) = IABS(IR(I))
-END DO
+100 do i = 1,m
+   ir(i) = iabs(ir(i))
+end do
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-IF (MODE .LT. 2 .OR. K .EQ. M) GO TO 140
-MMK = M - K
-DO JB = 1,NB
-   DO J = 1,K
-      I = KP1 - J
-      TT = -SDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
-      TT = TT - B(I,JB)
-      CALL SAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
-      B(I,JB) = B(I,JB) + TT*W(I)
-   END DO
-END DO
+if (mode .lt. 2 .or. k .eq. m) go to 140
+mmk = m - k
+do jb = 1,nb
+   do j = 1,k
+      i = kp1 - j
+      tt = -sdot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call saxpy (mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
 !
 !     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-140 DO JB = 1,NB
-   RNORM(JB) = SNRM2(M-K,B(KP1,JB),1)
-END DO
+140 do jb = 1,nb
+   rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
+end do
 !
 !     BACK SOLVE LOWER TRIANGULAR L
 !
-do 170 JB = 1,NB
-   DO I = 1,K
-      B(I,JB) = B(I,JB)/A(I,I)
-      IF (I .EQ. K) GO TO 170
-      IP1 = I + 1
-      CALL SAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
-   END DO
-170 CONTINUE
+do 170 jb = 1,nb
+   do i = 1,k
+      b(i,jb) = b(i,jb)/a(i,i)
+      if (i .eq. k) go to 170
+      ip1 = i + 1
+      call saxpy(k-i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
+   end do
+170 continue
 !
 !      TRUNCATED SOLUTION
 !
-IF (K .EQ. N) GO TO 210
-DO JB = 1,NB
-   DO I = KP1,N
-      B(I,JB) = 0.0
-   END DO
-END DO
+if (k .eq. n) go to 210
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.0
+   end do
+end do
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-210 DO I = 1,K
-   J = KP1 - I
-   TT = A(J,J)
-   A(J,J) = H(J)
-   DO JB = 1,NB
-      BB = -SDOT(N-J+1,A(J,J),MDA,B(J,JB),1)/H(J)
-      CALL SAXPY(N-J+1,BB,A(J,J),MDA,B(J,JB),1)
-   END DO
-   A(J,J) = TT
-END DO
+210 do i = 1,k
+   j = kp1 - i
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do jb = 1,nb
+      bb = -sdot(n-j+1,a(j,j),mda,b(j,jb),1)/h(j)
+      call saxpy(n-j+1,bb,a(j,j),mda,b(j,jb),1)
+   end do
+   a(j,j) = tt
+end do
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
-I = 0
+i = 0
 !
-240 I = I + 1
-   IF (I .EQ. N) GO TO 260
-   J = IC(I)
-   IF (J .EQ. I) GO TO 240
-   IF (J .LT. 0) GO TO 240
+240 i = i + 1
+   if (i .eq. n) go to 260
+   j = ic(i)
+   if (j .eq. i) go to 240
+   if (j .lt. 0) go to 240
 !
-   IC(I) = -IC(I)
-250 CALL SSWAP (NB,B(J,1),MDB,B(I,1),MDB)
-      IJ = IC(J)
-      IC(J) = -IC(J)
-      J = IJ
-   IF (J .NE. I) GO TO 250
-   GO TO 240
+   ic(i) = -ic(i)
+250 call sswap (nb,b(j,1),mdb,b(i,1),mdb)
+      ij = ic(j)
+      ic(j) = -ic(j)
+      j = ij
+   if (j .ne. i) go to 250
+   go to 240
 !
-260 DO I = 1,N
-   IC(I) = IABS(IC(I))
-END DO
-RETURN
-END SUBROUTINE U12US
+260 do i = 1,n
+   ic(i) = iabs(ic(i))
+end do
+return
+end subroutine u12us
 
-SUBROUTINE DLSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, &
-&KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: IND
-INTEGER, INTENT(INOUT) :: KRANK, KSURE
-INTEGER, INTENT(IN) :: LIW, LW, M, MDA, MDB, N, NB
-INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
+subroutine dlsqr (ind, a, mda, m, n, b, mdb, nb, re, ae, krank, &
+&ksure, rnorm, work, lw, iwork, liw, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ind
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
+integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !-----------------------------------------------------------------------
 !
 !              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -5257,12 +5257,12 @@ INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
 !                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS*,
 !                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
-DOUBLE PRECISION, INTENT(IN) :: RE, AE
-DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), WORK(LW)
-INTEGER, INTENT(INOUT) :: IWORK(LIW)
-DOUBLE PRECISION :: EPS, RERR
-DOUBLE PRECISION :: DPMPAR
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: re, ae
+double precision, intent(inout) :: rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
+double precision :: eps, rerr
+double precision :: dpmpar
 !----------------
 !     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
 !                   ARE NEVER INTERCHANGED.
@@ -5279,138 +5279,138 @@ DOUBLE PRECISION :: DPMPAR
 !                   CALL TO THE ROUTINE. IF MODE LT. 2, ONLY THE
 !                   FIRST N LOCATIONS OF WORK ARE USED.
 !----------------
-NP = 0
-MODE = 2
+np = 0
+mode = 2
 !
 !     CHECK THE INPUT
 !
-IF (NB .LE. 0 .AND. IND .NE. 0) GO TO 200
-IF (M .LT. 1 .OR. N .LT. 1) GO TO 210
-IF (MDA .LT. M) GO TO 220
-IF (LIW .LT. M + N) GO TO 240
+if (nb .le. 0 .and. ind .ne. 0) go to 200
+if (m .lt. 1 .or. n .lt. 1) go to 210
+if (mda .lt. m) go to 220
+if (liw .lt. m + n) go to 240
 !
-M0 = MIN0(M,N)
-N0 = MAX0(M,N)
+m0 = min0(m,n)
+n0 = max0(m,n)
 !     NUM = 0
 !
-IF (NB .LE. 0) GO TO 10
-IF (MDB .LT. N0) GO TO 230
-IF (IND .NE. 0) GO TO 100
+if (nb .le. 0) go to 10
+if (mdb .lt. n0) go to 230
+if (ind .ne. 0) go to 100
 !
-10 IF (LW .LT. 5*M0) GO TO 250
-IF (RE .LT. 0.D0 .OR. AE .LT. 0.D0) GO TO 260
+10 if (lw .lt. 5*m0) go to 250
+if (re .lt. 0.d0 .or. ae .lt. 0.d0) go to 260
 !
 !     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 !
-M1 = 1
-M2 = M1 + M0
-M3 = M2 + M0
-M4 = M3 + M0
-M5 = M4 + M0
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
 !
-EPS = 10.D0*DPMPAR(1)
-RERR = DMAX1(EPS,RE)
+eps = 10.d0*dpmpar(1)
+rerr = dmax1(eps,re)
 !
-IMAX = M5 - 1
-DO I = M4,IMAX
-   WORK(I) = RERR
-END DO
-IMAX = IMAX + M0
-DO I = M5,IMAX
-   WORK(I) = AE
-END DO
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
 !
 !     FACTOR THE MATRIX A
 !
 !     NUM = NP
-IF (M .LT. N) GO TO 40
+if (m .lt. n) go to 40
 !
-   CALL DU11LS (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-   GO TO 100
+   call du11ls (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+   go to 100
 !
-40 CALL DU11US (A,MDA,M,N,WORK(M4),WORK(M5),MODE,NP,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
+40 call du11us (a,mda,m,n,work(m4),work(m5),mode,np,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
 !
 !     SOLUTION PHASE
 !
-100 IERR = 0
-INFO = 0
-IF (KRANK .EQ. M0) GO TO 110
-IF (KRANK .EQ. 0) GO TO 110
+100 ierr = 0
+info = 0
+if (krank .eq. m0) go to 110
+if (krank .eq. 0) go to 110
 !     IF (KRANK .LT. NUM) GO TO 280
 !     IF (MODE .EQ. 0) RETURN
-INFO = MODE
+info = mode
 !
-110 IF (NB .LE. 0) RETURN
+110 if (nb .le. 0) return
 !
-M1 = 1
-M2 = 1 + M0
-IF (INFO .EQ. 2) GO TO 130
+m1 = 1
+m2 = 1 + m0
+if (info .eq. 2) go to 130
 !
 !     ONLY MIN(M,N) ELEMENTS OF WORK ARE NEEDED
 !
-IF (LW .LT. M0) GO TO 250
-IF (M .LT. N) GO TO 120
+if (lw .lt. m0) go to 250
+if (m .lt. n) go to 120
 !
-   CALL DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
-   RETURN
+   call du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m1),iwork(m1),iwork(m2))
+   return
 !
-120 CALL DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M1),IWORK(M1),IWORK(M2))
-RETURN
+120 call du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m1),iwork(m1),iwork(m2))
+return
 !
 !     HERE 2*MIN(M,N) ELEMENTS OF WORK ARE NEEDED
 !
-130 IF (LW .LT. 2*M0) GO TO 250
-IF (M .LT. N) GO TO 140
+130 if (lw .lt. 2*m0) go to 250
+if (m .lt. n) go to 140
 !
-   CALL DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
-   RETURN
+   call du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m2),iwork(m1),iwork(m2))
+   return
 !
-140 CALL DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM, &
-&WORK(M1),WORK(M2),IWORK(M1),IWORK(M2))
-RETURN
+140 call du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm, &
+&work(m1),work(m2),iwork(m1),iwork(m2))
+return
 !
 !     ERROR RETURN
 !
 !                             NB .LE. 0  ON A CONTINUATION CALL
-200 IERR = 7
-RETURN
+200 ierr = 7
+return
 !                             M .LT. 1 OR N .LT. 1
-210 IERR = 1
-RETURN
+210 ierr = 1
+return
 !                             MDA .LT. M
-220 IERR = 2
-RETURN
+220 ierr = 2
+return
 !                             MDB .LT. MAX(M,N)
-230 IERR = 3
-RETURN
+230 ierr = 3
+return
 !                             LIW .LT. M + N
-240 IERR = 4
-RETURN
+240 ierr = 4
+return
 !                             LW TOO SMALL
-250 IERR = 5
-RETURN
+250 ierr = 5
+return
 !                             RE OR AE IS NEGATIVE
-260 IERR = 6
-RETURN
+260 ierr = 6
+return
 !                             0 .LT. KRANK .LT. NP
 ! 280 IERR = 8
 !     RETURN
-END SUBROUTINE DLSQR
+end subroutine dlsqr
 
-SUBROUTINE DU11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
-&IC,IR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: KRANK
-INTEGER, INTENT(INOUT) :: KSURE
-INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
-INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, &
-&KP1, KZ, L, LM1, MM, NMK
-INTEGER :: IDAMAX
+subroutine du11ls (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+&ic,ir)
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+&kp1, kz, l, lm1, mm, nmk
+integer :: idamax
 !
 !       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 !       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -5418,266 +5418,266 @@ INTEGER :: IDAMAX
 !       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 !       DEFICIENCY.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(N), DB(N), H(N), &
-&W(N), EB(N)
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
-DOUBLE PRECISION :: DDOT, DNRM2
+double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
+&w(n), eb(n)
+integer, intent(inout) :: ic(n), ir(m)
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+double precision :: ddot, dnrm2
 !
 !        INITIALIZATION
 !
-J = 0
-KRANK = N
-DO I = 1,N
-   IC(I) = I
-END DO
-DO I = 1,M
-   IR(I) = I
-END DO
+j = 0
+krank = n
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE COL LENGTH
 !
-DO I = 1,N
-   H(I) = DNRM2(M,A(1,I),1)
-   W(I) = H(I)
-END DO
+do i = 1,n
+   h(i) = dnrm2(m,a(1,i),1)
+   w(i) = h(i)
+end do
 !
 !         INITIALIZE ERROR BOUNDS
 !
-DO I = 1,N
-   EB(I) = DMAX1(DB(I),UB(I)*H(I))
-   UB(I) = EB(I)
-   DB(I) = 0.D0
-END DO
+do i = 1,n
+   eb(i) = dmax1(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.d0
+end do
 !
 !          DISCARD SELF DEPENDENT COLUMNS
 !
-I = 1
-50 IF (EB(I) .GE. H(I)) GO TO 60
-IF (I .EQ. KRANK) GO TO 70
-I = I + 1
-GO TO 50
+i = 1
+50 if (eb(i) .ge. h(i)) go to 60
+if (i .eq. krank) go to 70
+i = i + 1
+go to 50
 !
 !          MATRIX REDUCTION
 !
-60 KK = KRANK
-KRANK = KRANK - 1
-IF (MODE .EQ. 0) RETURN
-IF (I .LE. NP) GO TO 400
-IF (I .GT. KRANK) GO TO 70
-CALL DSWAP (1,EB(I),1,EB(KK),1)
-CALL DSWAP (1,UB(I),1,UB(KK),1)
-CALL DSWAP (1,W(I),1,W(KK),1)
-CALL DSWAP (1,H(I),1,H(KK),1)
-CALL ISWAP (1,IC(I),1,IC(KK),1)
-CALL DSWAP (M,A(1,I),1,A(1,KK),1)
-GO TO 50
+60 kk = krank
+krank = krank - 1
+if (mode .eq. 0) return
+if (i .le. np) go to 400
+if (i .gt. krank) go to 70
+call dswap (1,eb(i),1,eb(kk),1)
+call dswap (1,ub(i),1,ub(kk),1)
+call dswap (1,w(i),1,w(kk),1)
+call dswap (1,h(i),1,h(kk),1)
+call iswap (1,ic(i),1,ic(kk),1)
+call dswap (m,a(1,i),1,a(1,kk),1)
+go to 50
 !
 !           TEST FOR ZERO RANK
 !
-70 IF (KRANK .GT. 0) GO TO 100
-KRANK = 0
-KSURE = 0
-RETURN
+70 if (krank .gt. 0) go to 100
+krank = 0
+ksure = 0
+return
 !
 !        M A I N    L O O P
 !
-100 J = J + 1
-JP1 = J + 1
-JM1 = J - 1
-KZ = KRANK
-IF (J .LE. NP) KZ = J
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j .le. np) kz = j
 !
 !        EACH COL HAS MM=M-J+1 COMPONENTS
 !
-MM = M - J + 1
+mm = m - j + 1
 !
 !         UB DETERMINES COLUMN PIVOT
 !
-110 IMIN = J
-IF (H(J) .EQ. 0.D0) GO TO 170
-RMIN = UB(J)/H(J)
-do 120 I = J,KZ
-   IF (UB(I) .GE. H(I)*RMIN) GO TO 120
-   RMIN = UB(I)/H(I)
-   IMIN = I
-120 CONTINUE
+110 imin = j
+if (h(j) .eq. 0.d0) go to 170
+rmin = ub(j)/h(j)
+do 120 i = j,kz
+   if (ub(i) .ge. h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
 !
 !     TEST FOR RANK DEFICIENCY
 !
-IF (RMIN .LT. 1.D0) GO TO 200
-TT = (EB(IMIN) + DABS(DB(IMIN)))/H(IMIN)
-IF (TT .GE. 1.D0) GO TO 170
+if (rmin .lt. 1.d0) go to 200
+tt = (eb(imin) + dabs(db(imin)))/h(imin)
+if (tt .ge. 1.d0) go to 170
 !
 !     COMPUTE EXACT UB
 !
-DO I = 1,JM1
-   W(I) = A(I,IMIN)
-END DO
+do i = 1,jm1
+   w(i) = a(i,imin)
+end do
 !
-L = JM1
-130 W(L) = W(L)/A(L,L)
-IF (L .EQ. 1) GO TO 150
-LM1 = L - 1
-DO I = L,JM1
-   W(LM1) = W(LM1) - A(LM1,I)*W(I)
-END DO
-L = LM1
-GO TO 130
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l .eq. 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(lm1,i)*w(i)
+end do
+l = lm1
+go to 130
 !
-150 TT = EB(IMIN)
-DO I = 1,JM1
-   TT = TT + DABS(W(I))*EB(I)
-END DO
-UB(IMIN) = TT
-IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
-GO TO 200
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + dabs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) .ge. 1.d0) go to 170
+go to 200
 !
 !        MATRIX REDUCTION
 !
-170 KK = KRANK
-KRANK = KRANK - 1
-KZ = KRANK
-IF (MODE .EQ. 0) RETURN
-IF (J .LE. NP) GO TO 410
-IF (IMIN .GT. KRANK) GO TO 180
-   CALL ISWAP (1,IC(IMIN),1,IC(KK),1)
-   CALL DSWAP (M,A(1,IMIN),1,A(1,KK),1)
-   CALL DSWAP (1,EB(IMIN),1,EB(KK),1)
-   CALL DSWAP (1,UB(IMIN),1,UB(KK),1)
-   CALL DSWAP (1,DB(IMIN),1,DB(KK),1)
-   CALL DSWAP (1,W(IMIN),1,W(KK),1)
-   CALL DSWAP (1,H(IMIN),1,H(KK),1)
-180 IF (J .GT. KRANK) GO TO 300
-GO TO 110
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode .eq. 0) return
+if (j .le. np) go to 410
+if (imin .gt. krank) go to 180
+   call iswap (1,ic(imin),1,ic(kk),1)
+   call dswap (m,a(1,imin),1,a(1,kk),1)
+   call dswap (1,eb(imin),1,eb(kk),1)
+   call dswap (1,ub(imin),1,ub(kk),1)
+   call dswap (1,db(imin),1,db(kk),1)
+   call dswap (1,w(imin),1,w(kk),1)
+   call dswap (1,h(imin),1,h(kk),1)
+180 if (j .gt. krank) go to 300
+go to 110
 !
 !        COLUMN PIVOT
 !
-200 IF (IMIN .EQ. J) GO TO 210
-CALL DSWAP (1,H(J),1,H(IMIN),1)
-CALL DSWAP (M,A(1,J),1,A(1,IMIN),1)
-CALL DSWAP (1,EB(J),1,EB(IMIN),1)
-CALL DSWAP (1,UB(J),1,UB(IMIN),1)
-CALL DSWAP (1,DB(J),1,DB(IMIN),1)
-CALL DSWAP (1,W(J),1,W(IMIN),1)
-CALL ISWAP (1,IC(J),1,IC(IMIN),1)
+200 if (imin .eq. j) go to 210
+call dswap (1,h(j),1,h(imin),1)
+call dswap (m,a(1,j),1,a(1,imin),1)
+call dswap (1,eb(j),1,eb(imin),1)
+call dswap (1,ub(j),1,ub(imin),1)
+call dswap (1,db(j),1,db(imin),1)
+call dswap (1,w(j),1,w(imin),1)
+call iswap (1,ic(j),1,ic(imin),1)
 !
 !        ROW PIVOT
 !
-210 JMAX = IDAMAX(MM,A(J,J),1)
-JMAX = JMAX + J - 1
-IF (JMAX .EQ. J) GO TO 220
-CALL DSWAP (N,A(J,1),MDA,A(JMAX,1),MDA)
-CALL ISWAP (1,IR(J),1,IR(JMAX),1)
+210 jmax = idamax(mm,a(j,j),1)
+jmax = jmax + j - 1
+if (jmax .eq. j) go to 220
+call dswap (n,a(j,1),mda,a(jmax,1),mda)
+call iswap (1,ir(j),1,ir(jmax),1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATION
 !
-220 TN = DNRM2(MM,A(J,J),1)
-IF (TN .EQ. 0.D0) GO TO 170
-IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
-CALL DSCAL (MM,1.D0/TN,A(J,J),1)
-A(J,J) = A(J,J) + 1.D0
-IF (J .EQ. N) GO TO 250
-do 240 I = JP1,N
-   BB = -DDOT(MM,A(J,J),1,A(J,I),1)/A(J,J)
-   CALL DAXPY (MM,BB,A(J,J),1,A(J,I),1)
-   IF (I .LE. NP) GO TO 240
-   IF (H(I) .EQ. 0.D0) GO TO 240
-   TT = 1.D0 - (A(J,I)/H(I))**2
-   TT = DMAX1(TT,0.D0)
-   T = TT
-   TT = 1.D0 + 0.05D0*TT*(H(I)/W(I))**2
-   IF (TT .EQ. 1.D0) GO TO 230
-      H(I) = H(I)*DSQRT(T)
-      GO TO 240
-230 H(I) = DNRM2(M-J,A(J+1,I),1)
-   W(I) = H(I)
-240 CONTINUE
+220 tn = dnrm2(mm,a(j,j),1)
+if (tn .eq. 0.d0) go to 170
+if (a(j,j) .ne. 0.d0) tn = dsign(tn,a(j,j))
+call dscal (mm,1.d0/tn,a(j,j),1)
+a(j,j) = a(j,j) + 1.d0
+if (j .eq. n) go to 250
+do 240 i = jp1,n
+   bb = -ddot(mm,a(j,j),1,a(j,i),1)/a(j,j)
+   call daxpy (mm,bb,a(j,j),1,a(j,i),1)
+   if (i .le. np) go to 240
+   if (h(i) .eq. 0.d0) go to 240
+   tt = 1.d0 - (a(j,i)/h(i))**2
+   tt = dmax1(tt,0.d0)
+   t = tt
+   tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
+   if (tt .eq. 1.d0) go to 230
+      h(i) = h(i)*dsqrt(t)
+      go to 240
+230 h(i) = dnrm2(m-j,a(j+1,i),1)
+   w(i) = h(i)
+240 continue
 !
-250 H(J) = A(J,J)
-A(J,J) = -TN
+250 h(j) = a(j,j)
+a(j,j) = -tn
 !
 !          UPDATE UB, DB
 !
-UB(J) = UB(J)/DABS(A(J,J))
-DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
-IF (J .EQ. KRANK) GO TO 300
-DO I = JP1,KRANK
-   UB(I) = UB(I) + DABS(A(J,I))*UB(J)
-   DB(I) = DB(I) - A(J,I)*DB(J)
-END DO
-GO TO 100
+ub(j) = ub(j)/dabs(a(j,j))
+db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
+if (j .eq. krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + dabs(a(j,i))*ub(j)
+   db(i) = db(i) - a(j,i)*db(j)
+end do
+go to 100
 !
 !        E N D    M A I N    L O O P
 !
-300 CONTINUE
+300 continue
 !
 !        COMPUTE KSURE
 !
-KM1 = KRANK - 1
-DO I = 1,KM1
-   IS = 0
-   KMI = KRANK - I
-   do 310 II = 1,KMI
-      IF (UB(II) .LE. UB(II + 1)) GO TO 310
-      IS = 1
-      TEMP = UB(II)
-      UB(II) = UB(II + 1)
-      UB(II + 1) = TEMP
-310 CONTINUE
-   IF (IS .EQ. 0) GO TO 320
-END DO
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do 310 ii = 1,kmi
+      if (ub(ii) .le. ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310 continue
+   if (is .eq. 0) go to 320
+end do
 !
-320 KSURE = 0
-SUM = 0.D0
-DO I = 1,KRANK
-   R2 = UB(I)*UB(I)
-   IF (R2 + SUM .GE. 1.D0) GO TO 330
-   SUM = SUM + R2
-   KSURE = KSURE + 1
-END DO
+320 ksure = 0
+sum = 0.d0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum .ge. 1.d0) go to 330
+   sum = sum + r2
+   ksure = ksure + 1
+end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
 !
-330 IF (KRANK .EQ. N .OR. MODE .LT. 2) RETURN
-NMK = N - KRANK
-KP1 = KRANK + 1
-I = KRANK
-340 TN = DNRM2(NMK,A(I,KP1),MDA)/A(I,I)
-   TN = A(I,I)*DSQRT(1.D0 + TN*TN)
-   CALL DSCAL (NMK,1.D0/TN,A(I,KP1),MDA)
-   W(I) = A(I,I)/TN + 1.D0
-   A(I,I) = -TN
-   IF (I .EQ. 1) GO TO 350
-   IM1 = I - 1
-   DO II = 1,IM1
-      TT = -DDOT(NMK,A(II,KP1),MDA,A(I,KP1),MDA)/W(I)
-      TT = TT - A(II,I)
-      CALL DAXPY (NMK,TT,A(I,KP1),MDA,A(II,KP1),MDA)
-      A(II,I) = A(II,I) + TT*W(I)
-   END DO
-   I = I - 1
-   GO TO 340
+330 if (krank .eq. n .or. mode .lt. 2) return
+nmk = n - krank
+kp1 = krank + 1
+i = krank
+340 tn = dnrm2(nmk,a(i,kp1),mda)/a(i,i)
+   tn = a(i,i)*dsqrt(1.d0 + tn*tn)
+   call dscal (nmk,1.d0/tn,a(i,kp1),mda)
+   w(i) = a(i,i)/tn + 1.d0
+   a(i,i) = -tn
+   if (i .eq. 1) go to 350
+   im1 = i - 1
+   do ii = 1,im1
+      tt = -ddot(nmk,a(ii,kp1),mda,a(i,kp1),mda)/w(i)
+      tt = tt - a(ii,i)
+      call daxpy (nmk,tt,a(i,kp1),mda,a(ii,kp1),mda)
+      a(ii,i) = a(ii,i) + tt*w(i)
+   end do
+   i = i - 1
+   go to 340
 !
-350 CONTINUE
-RETURN
+350 continue
+return
 !
 !     FIRST NP COLUMNS ARE LINEARLY DEPENDENT
 !
-400 KRANK = I - 1
-RETURN
-410 KRANK = J - 1
-RETURN
-END SUBROUTINE DU11LS
+400 krank = i - 1
+return
+410 krank = j - 1
+return
+end subroutine du11ls
 
-SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
-INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
+subroutine du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+integer :: i, ij, im1, j, jb, k, kp1, nmk
 !
 !        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -5686,150 +5686,150 @@ INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
-DOUBLE PRECISION, INTENT(IN) :: H(N), W(N)
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-DOUBLE PRECISION :: BB, TT
-DOUBLE PRECISION :: DDOT, DNRM2
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
+double precision :: bb, tt
+double precision :: ddot, dnrm2
 !
-K = KRANK
-KP1 = K + 1
-IF (K .GT. 0) GO TO 30
+k = krank
+kp1 = k + 1
+if (k .gt. 0) go to 30
 !
 !        RANK=0
 !
-DO JB = 1,NB
-   RNORM(JB) = DNRM2(M,B(1,JB),1)
-END DO
-DO JB = 1,NB
-   DO I = 1,N
-      B(I,JB) = 0.D0
-   END DO
-END DO
-RETURN
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+return
 !
-30 I = 0
+30 i = 0
 !
 !     REORDER B TO REFLECT ROW INTERCHANGES
 !
-40 I = I + 1
-   IF (I .EQ. M) GO TO 100
-   J = IR(I)
-   IF (J .EQ. I) GO TO 40
-   IF (J .LT. 0) GO TO 40
+40 i = i + 1
+   if (i .eq. m) go to 100
+   j = ir(i)
+   if (j .eq. i) go to 40
+   if (j .lt. 0) go to 40
 !
-   IR(I) = -IR(I)
-   DO JB = 1,NB
-      RNORM(JB) = B(I,JB)
-   END DO
+   ir(i) = -ir(i)
+   do jb = 1,nb
+      rnorm(jb) = b(i,jb)
+   end do
 !
-   IJ = I
-60 DO JB = 1,NB
-         B(IJ,JB) = B(J,JB)
-      END DO
-      IJ = J
-      J = IR(IJ)
-      IR(IJ) = -IR(IJ)
-   IF (J .NE. I) GO TO 60
+   ij = i
+60 do jb = 1,nb
+         b(ij,jb) = b(j,jb)
+      end do
+      ij = j
+      j = ir(ij)
+      ir(ij) = -ir(ij)
+   if (j .ne. i) go to 60
 !
-   DO JB = 1,NB
-      B(IJ,JB) = RNORM(JB)
-   END DO
-   GO TO 40
+   do jb = 1,nb
+      b(ij,jb) = rnorm(jb)
+   end do
+   go to 40
 !
-100 DO I = 1,M
-   IR(I) = IABS(IR(I))
-END DO
+100 do i = 1,m
+   ir(i) = iabs(ir(i))
+end do
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-DO J = 1,K
-   TT = A(J,J)
-   A(J,J) = H(J)
-   DO I = 1,NB
-      BB = -DDOT (M-J+1,A(J,J),1,B(J,I),1)/H(J)
-      CALL DAXPY (M-J+1,BB,A(J,J),1,B(J,I),1)
-   END DO
-   A(J,J) = TT
-END DO
+do j = 1,k
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do i = 1,nb
+      bb = -ddot (m-j+1,a(j,j),1,b(j,i),1)/h(j)
+      call daxpy (m-j+1,bb,a(j,j),1,b(j,i),1)
+   end do
+   a(j,j) = tt
+end do
 !
 !        FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-DO JB = 1,NB
-   RNORM(JB) = DNRM2(M-K,B(KP1,JB),1)
-END DO
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
+end do
 !
 !     BACK SOLVE UPPER TRIANGULAR R
 !
-I = K
-150 DO JB = 1,NB
-   B(I,JB) = B(I,JB)/A(I,I)
-END DO
-IF (I .EQ. 1) GO TO 200
-IM1 = I - 1
-DO JB = 1,NB
-   CALL DAXPY (IM1,-B(I,JB),A(1,I),1,B(1,JB),1)
-END DO
-I = IM1
-GO TO 150
+i = k
+150 do jb = 1,nb
+   b(i,jb) = b(i,jb)/a(i,i)
+end do
+if (i .eq. 1) go to 200
+im1 = i - 1
+do jb = 1,nb
+   call daxpy (im1,-b(i,jb),a(1,i),1,b(1,jb),1)
+end do
+i = im1
+go to 150
 !
 !     RANK LT N
 !
 !      TRUNCATED SOLUTION
 !
-200 IF (K .EQ. N) GO TO 230
-DO JB = 1,NB
-   DO I = KP1,N
-      B(I,JB) = 0.D0
-   END DO
-END DO
-IF (MODE .EQ. 1) GO TO 230
+200 if (k .eq. n) go to 230
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+if (mode .eq. 1) go to 230
 !
 !      MINIMAL LENGTH SOLUTION
 !
-NMK = N - K
-DO JB = 1,NB
-   DO I = 1,K
-      TT = -DDOT(NMK,A(I,KP1),MDA,B(KP1,JB),1)/W(I)
-      TT = TT - B(I,JB)
-      CALL DAXPY (NMK,TT,A(I,KP1),MDA,B(KP1,JB),1)
-      B(I,JB) = B(I,JB) + TT*W(I)
-   END DO
-END DO
+nmk = n - k
+do jb = 1,nb
+   do i = 1,k
+      tt = -ddot(nmk,a(i,kp1),mda,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call daxpy (nmk,tt,a(i,kp1),mda,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
-230 I = 0
+230 i = 0
 !
-240 I = I + 1
-   IF (I .EQ. N) GO TO 260
-   J = IC(I)
-   IF (J .EQ. I) GO TO 240
-   IF (J .LT. 0) GO TO 240
+240 i = i + 1
+   if (i .eq. n) go to 260
+   j = ic(i)
+   if (j .eq. i) go to 240
+   if (j .lt. 0) go to 240
 !
-   IC(I) = -IC(I)
-250 CALL DSWAP (NB,B(J,1),MDB,B(I,1),MDB)
-      IJ = IC(J)
-      IC(J) = -IC(J)
-      J = IJ
-   IF (J .NE. I) GO TO 250
-   GO TO 240
+   ic(i) = -ic(i)
+250 call dswap (nb,b(j,1),mdb,b(i,1),mdb)
+      ij = ic(j)
+      ic(j) = -ic(j)
+      j = ij
+   if (j .ne. i) go to 250
+   go to 240
 !
-260 DO I = 1,N
-   IC(I) = IABS(IC(I))
-END DO
-RETURN
-END SUBROUTINE DU12LS
+260 do i = 1,n
+   ic(i) = iabs(ic(i))
+end do
+return
+end subroutine du12ls
 
-SUBROUTINE DU11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
-&IR,IC)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: KRANK
-INTEGER, INTENT(INOUT) :: KSURE
-INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
-INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, &
-&KP1, KZ, L, LM1, MMK, NN
-INTEGER :: IDAMAX
+subroutine du11us (a,mda,m,n,ub,db,mode,np,krank,ksure,h,w,eb, &
+&ir,ic)
+implicit none
+integer, intent(out) :: krank
+integer, intent(inout) :: ksure
+integer, intent(in) :: m, mda, mode, n, np
+integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
+&kp1, kz, l, lm1, mmk, nn
+integer :: idamax
 !
 !       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 !       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -5837,266 +5837,266 @@ INTEGER :: IDAMAX
 !       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 !       DEFICIENCY.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(M), DB(M), H(M), &
-&W(M), EB(M)
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
-DOUBLE PRECISION :: DDOT, DNRM2
+double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
+&w(m), eb(m)
+integer, intent(inout) :: ic(n), ir(m)
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+double precision :: ddot, dnrm2
 !
 !        INITIALIZATION
 !
-J = 0
-KRANK = M
-DO I = 1,N
-   IC(I) = I
-END DO
-DO I = 1,M
-   IR(I) = I
-END DO
+j = 0
+krank = m
+do i = 1,n
+   ic(i) = i
+end do
+do i = 1,m
+   ir(i) = i
+end do
 !
 !        DETERMINE REL AND ABS ERROR VECTORS
 !
 !
 !        CALCULATE ROW LENGTH
 !
-DO I = 1,M
-   H(I) = DNRM2(N,A(I,1),MDA)
-   W(I) = H(I)
-END DO
+do i = 1,m
+   h(i) = dnrm2(n,a(i,1),mda)
+   w(i) = h(i)
+end do
 !
 !         INITIALIZE ERROR BOUNDS
 !
-DO I = 1,M
-   EB(I) = DMAX1(DB(I),UB(I)*H(I))
-   UB(I) = EB(I)
-   DB(I) = 0.D0
-END DO
+do i = 1,m
+   eb(i) = dmax1(db(i),ub(i)*h(i))
+   ub(i) = eb(i)
+   db(i) = 0.d0
+end do
 !
 !          DISCARD SELF DEPENDENT ROWS
 !
-I = 1
-50 IF (EB(I) .GE. H(I)) GO TO 60
-IF (I .EQ. KRANK) GO TO 70
-I = I + 1
-GO TO 50
+i = 1
+50 if (eb(i) .ge. h(i)) go to 60
+if (i .eq. krank) go to 70
+i = i + 1
+go to 50
 !
 !          MATRIX REDUCTION
 !
-60 KK = KRANK
-KRANK = KRANK - 1
-IF (MODE .EQ. 0) RETURN
-IF (I .LE. NP) GO TO 400
-IF (I .GT. KRANK) GO TO 70
-CALL DSWAP (1,EB(I),1,EB(KK),1)
-CALL DSWAP (1,UB(I),1,UB(KK),1)
-CALL DSWAP (1,W(I),1,W(KK),1)
-CALL DSWAP (1,H(I),1,H(KK),1)
-CALL ISWAP (1,IR(I),1,IR(KK),1)
-CALL DSWAP (N,A(I,1),MDA,A(KK,1),MDA)
-GO TO 50
+60 kk = krank
+krank = krank - 1
+if (mode .eq. 0) return
+if (i .le. np) go to 400
+if (i .gt. krank) go to 70
+call dswap (1,eb(i),1,eb(kk),1)
+call dswap (1,ub(i),1,ub(kk),1)
+call dswap (1,w(i),1,w(kk),1)
+call dswap (1,h(i),1,h(kk),1)
+call iswap (1,ir(i),1,ir(kk),1)
+call dswap (n,a(i,1),mda,a(kk,1),mda)
+go to 50
 !
 !           TEST FOR ZERO RANK
 !
-70 IF (KRANK .GT. 0) GO TO 100
-KRANK = 0
-KSURE = 0
-RETURN
+70 if (krank .gt. 0) go to 100
+krank = 0
+ksure = 0
+return
 !
 !        M A I N    L O O P
 !
-100 J = J + 1
-JP1 = J + 1
-JM1 = J - 1
-KZ = KRANK
-IF (J .LE. NP) KZ = J
+100 j = j + 1
+jp1 = j + 1
+jm1 = j - 1
+kz = krank
+if (j .le. np) kz = j
 !
 !        EACH ROW HAS NN=N-J+1 COMPONENTS
 !
-NN = N - J + 1
+nn = n - j + 1
 !
 !         UB DETERMINES ROW PIVOT
 !
-110 IMIN = J
-IF (H(J) .EQ. 0.D0) GO TO 170
-RMIN = UB(J)/H(J)
-do 120 I = J,KZ
-   IF (UB(I) .GE. H(I)*RMIN) GO TO 120
-   RMIN = UB(I)/H(I)
-   IMIN = I
-120 CONTINUE
+110 imin = j
+if (h(j) .eq. 0.d0) go to 170
+rmin = ub(j)/h(j)
+do 120 i = j,kz
+   if (ub(i) .ge. h(i)*rmin) go to 120
+   rmin = ub(i)/h(i)
+   imin = i
+120 continue
 !
 !     TEST FOR RANK DEFICIENCY
 !
-IF (RMIN .LT. 1.D0) GO TO 200
-TT = (EB(IMIN) + DABS(DB(IMIN)))/H(IMIN)
-IF (TT .GE. 1.D0) GO TO 170
+if (rmin .lt. 1.d0) go to 200
+tt = (eb(imin) + dabs(db(imin)))/h(imin)
+if (tt .ge. 1.d0) go to 170
 !
 !     COMPUTE EXACT UB
 !
-DO I = 1,JM1
-   W(I) = A(IMIN,I)
-END DO
+do i = 1,jm1
+   w(i) = a(imin,i)
+end do
 !
-L = JM1
-130 W(L) = W(L)/A(L,L)
-IF (L .EQ. 1) GO TO 150
-LM1 = L - 1
-DO I = L,JM1
-   W(LM1) = W(LM1) - A(I,LM1)*W(I)
-END DO
-L = LM1
-GO TO 130
+l = jm1
+130 w(l) = w(l)/a(l,l)
+if (l .eq. 1) go to 150
+lm1 = l - 1
+do i = l,jm1
+   w(lm1) = w(lm1) - a(i,lm1)*w(i)
+end do
+l = lm1
+go to 130
 !
-150 TT = EB(IMIN)
-DO I = 1,JM1
-   TT = TT + DABS(W(I))*EB(I)
-END DO
-UB(IMIN) = TT
-IF (UB(IMIN)/H(IMIN) .GE. 1.D0) GO TO 170
-GO TO 200
+150 tt = eb(imin)
+do i = 1,jm1
+   tt = tt + dabs(w(i))*eb(i)
+end do
+ub(imin) = tt
+if (ub(imin)/h(imin) .ge. 1.d0) go to 170
+go to 200
 !
 !        MATRIX REDUCTION
 !
-170 KK = KRANK
-KRANK = KRANK - 1
-KZ = KRANK
-IF (MODE .EQ. 0) RETURN
-IF (J .LE. NP) GO TO 410
-IF (IMIN .GT. KRANK) GO TO 180
-   CALL ISWAP (1,IR(IMIN),1,IR(KK),1)
-   CALL DSWAP (N,A(IMIN,1),MDA,A(KK,1),MDA)
-   CALL DSWAP (1,EB(IMIN),1,EB(KK),1)
-   CALL DSWAP (1,UB(IMIN),1,UB(KK),1)
-   CALL DSWAP (1,DB(IMIN),1,DB(KK),1)
-   CALL DSWAP (1,W(IMIN),1,W(KK),1)
-   CALL DSWAP (1,H(IMIN),1,H(KK),1)
-180 IF (J .GT. KRANK) GO TO 300
-GO TO 110
+170 kk = krank
+krank = krank - 1
+kz = krank
+if (mode .eq. 0) return
+if (j .le. np) go to 410
+if (imin .gt. krank) go to 180
+   call iswap (1,ir(imin),1,ir(kk),1)
+   call dswap (n,a(imin,1),mda,a(kk,1),mda)
+   call dswap (1,eb(imin),1,eb(kk),1)
+   call dswap (1,ub(imin),1,ub(kk),1)
+   call dswap (1,db(imin),1,db(kk),1)
+   call dswap (1,w(imin),1,w(kk),1)
+   call dswap (1,h(imin),1,h(kk),1)
+180 if (j .gt. krank) go to 300
+go to 110
 !
 !        ROW PIVOT
 !
-200 IF (IMIN .EQ. J) GO TO 210
-CALL DSWAP (1,H(J),1,H(IMIN),1)
-CALL DSWAP (N,A(J,1),MDA,A(IMIN,1),MDA)
-CALL DSWAP (1,EB(J),1,EB(IMIN),1)
-CALL DSWAP (1,UB(J),1,UB(IMIN),1)
-CALL DSWAP (1,DB(J),1,DB(IMIN),1)
-CALL DSWAP (1,W(J),1,W(IMIN),1)
-CALL ISWAP (1,IR(J),1,IR(IMIN),1)
+200 if (imin .eq. j) go to 210
+call dswap (1,h(j),1,h(imin),1)
+call dswap (n,a(j,1),mda,a(imin,1),mda)
+call dswap (1,eb(j),1,eb(imin),1)
+call dswap (1,ub(j),1,ub(imin),1)
+call dswap (1,db(j),1,db(imin),1)
+call dswap (1,w(j),1,w(imin),1)
+call iswap (1,ir(j),1,ir(imin),1)
 !
 !        COLUMN PIVOT
 !
-210 JMAX = IDAMAX(NN,A(J,J),MDA)
-JMAX = JMAX + J - 1
-IF (JMAX .EQ. J) GO TO 220
-CALL DSWAP (M,A(1,J),1,A(1,JMAX),1)
-CALL ISWAP (1,IC(J),1,IC(JMAX),1)
+210 jmax = idamax(nn,a(j,j),mda)
+jmax = jmax + j - 1
+if (jmax .eq. j) go to 220
+call dswap (m,a(1,j),1,a(1,jmax),1)
+call iswap (1,ic(j),1,ic(jmax),1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATION
 !
-220 TN = DNRM2(NN,A(J,J),MDA)
-IF (TN .EQ. 0.D0) GO TO 170
-IF (A(J,J) .NE. 0.D0) TN = DSIGN(TN,A(J,J))
-CALL DSCAL (NN,1.D0/TN,A(J,J),MDA)
-A(J,J) = A(J,J) + 1.D0
-IF (J .EQ. M) GO TO 250
-do 240 I = JP1,M
-   BB = -DDOT(NN,A(J,J),MDA,A(I,J),MDA)/A(J,J)
-   CALL DAXPY (NN,BB,A(J,J),MDA,A(I,J),MDA)
-   IF (I .LE. NP) GO TO 240
-   IF (H(I) .EQ. 0.D0) GO TO 240
-   TT = 1.0 - (A(I,J)/H(I))**2
-   TT = DMAX1(TT,0.D0)
-   T = TT
-   TT = 1.D0 + 0.05D0*TT*(H(I)/W(I))**2
-   IF (TT .EQ. 1.D0) GO TO 230
-      H(I) = H(I)*DSQRT(T)
-      GO TO 240
-230 H(I) = DNRM2(N-J,A(I,J+1),MDA)
-   W(I) = H(I)
-240 CONTINUE
+220 tn = dnrm2(nn,a(j,j),mda)
+if (tn .eq. 0.d0) go to 170
+if (a(j,j) .ne. 0.d0) tn = dsign(tn,a(j,j))
+call dscal (nn,1.d0/tn,a(j,j),mda)
+a(j,j) = a(j,j) + 1.d0
+if (j .eq. m) go to 250
+do 240 i = jp1,m
+   bb = -ddot(nn,a(j,j),mda,a(i,j),mda)/a(j,j)
+   call daxpy (nn,bb,a(j,j),mda,a(i,j),mda)
+   if (i .le. np) go to 240
+   if (h(i) .eq. 0.d0) go to 240
+   tt = 1.0 - (a(i,j)/h(i))**2
+   tt = dmax1(tt,0.d0)
+   t = tt
+   tt = 1.d0 + 0.05d0*tt*(h(i)/w(i))**2
+   if (tt .eq. 1.d0) go to 230
+      h(i) = h(i)*dsqrt(t)
+      go to 240
+230 h(i) = dnrm2(n-j,a(i,j+1),mda)
+   w(i) = h(i)
+240 continue
 !
-250 H(J) = A(J,J)
-A(J,J) = -TN
+250 h(j) = a(j,j)
+a(j,j) = -tn
 !
 !          UPDATE UB, DB
 !
-UB(J) = UB(J)/DABS(A(J,J))
-DB(J) = (DSIGN(EB(J),DB(J)) + DB(J))/A(J,J)
-IF (J .EQ. KRANK) GO TO 300
-DO I = JP1,KRANK
-   UB(I) = UB(I) + DABS(A(I,J))*UB(J)
-   DB(I) = DB(I) - A(I,J)*DB(J)
-END DO
-GO TO 100
+ub(j) = ub(j)/dabs(a(j,j))
+db(j) = (dsign(eb(j),db(j)) + db(j))/a(j,j)
+if (j .eq. krank) go to 300
+do i = jp1,krank
+   ub(i) = ub(i) + dabs(a(i,j))*ub(j)
+   db(i) = db(i) - a(i,j)*db(j)
+end do
+go to 100
 !
 !        E N D    M A I N    L O O P
 !
-300 CONTINUE
+300 continue
 !
 !        COMPUTE KSURE
 !
-KM1 = KRANK - 1
-DO I = 1,KM1
-   IS = 0
-   KMI = KRANK - I
-   do 310 II = 1,KMI
-      IF (UB(II) .LE. UB(II + 1)) GO TO 310
-      IS = 1
-      TEMP = UB(II)
-      UB(II) = UB(II + 1)
-      UB(II + 1) = TEMP
-310 CONTINUE
-   IF (IS .EQ. 0) GO TO 320
-END DO
+km1 = krank - 1
+do i = 1,km1
+   is = 0
+   kmi = krank - i
+   do 310 ii = 1,kmi
+      if (ub(ii) .le. ub(ii + 1)) go to 310
+      is = 1
+      temp = ub(ii)
+      ub(ii) = ub(ii + 1)
+      ub(ii + 1) = temp
+310 continue
+   if (is .eq. 0) go to 320
+end do
 !
-320 KSURE = 0
-SUM = 0.D0
-DO I = 1,KRANK
-   R2 = UB(I)*UB(I)
-   IF (R2 + SUM .GE. 1.D0) GO TO 330
-   SUM = SUM + R2
-   KSURE = KSURE + 1
-END DO
+320 ksure = 0
+sum = 0.d0
+do i = 1,krank
+   r2 = ub(i)*ub(i)
+   if (r2 + sum .ge. 1.d0) go to 330
+   sum = sum + r2
+   ksure = ksure + 1
+end do
 !
 !     IF SYSTEM IS OF REDUCED RANK AND MODE = 2
 !     COMPLETE THE DECOMPOSITION FOR SHORTEST LEAST SQUARES SOLUTION
 !
-330 IF (KRANK .EQ. M .OR. MODE .LT. 2) RETURN
-MMK = M - KRANK
-KP1 = KRANK + 1
-I = KRANK
-340 TN = DNRM2(MMK,A(KP1,I),1)/A(I,I)
-   TN = A(I,I)*DSQRT(1.D0 + TN*TN)
-   CALL DSCAL (MMK,1.D0/TN,A(KP1,I),1)
-   W(I) = A(I,I)/TN + 1.D0
-   A(I,I) = -TN
-   IF (I .EQ. 1) GO TO 350
-   IM1 = I - 1
-   DO II = 1,IM1
-      TT = -DDOT(MMK,A(KP1,II),1,A(KP1,I),1)/W(I)
-      TT = TT - A(I,II)
-      CALL DAXPY (MMK,TT,A(KP1,I),1,A(KP1,II),1)
-      A(I,II) = A(I,II) + TT*W(I)
-   END DO
-   I = I - 1
-   GO TO 340
+330 if (krank .eq. m .or. mode .lt. 2) return
+mmk = m - krank
+kp1 = krank + 1
+i = krank
+340 tn = dnrm2(mmk,a(kp1,i),1)/a(i,i)
+   tn = a(i,i)*dsqrt(1.d0 + tn*tn)
+   call dscal (mmk,1.d0/tn,a(kp1,i),1)
+   w(i) = a(i,i)/tn + 1.d0
+   a(i,i) = -tn
+   if (i .eq. 1) go to 350
+   im1 = i - 1
+   do ii = 1,im1
+      tt = -ddot(mmk,a(kp1,ii),1,a(kp1,i),1)/w(i)
+      tt = tt - a(i,ii)
+      call daxpy (mmk,tt,a(kp1,i),1,a(kp1,ii),1)
+      a(i,ii) = a(i,ii) + tt*w(i)
+   end do
+   i = i - 1
+   go to 340
 !
-350 CONTINUE
-RETURN
+350 continue
+return
 !
 !     FIRST NP ROWS ARE LINEARLY DEPENDENT
 !
-400 KRANK = I - 1
-RETURN
-410 KRANK = J - 1
-RETURN
-END SUBROUTINE DU11US
+400 krank = i - 1
+return
+410 krank = j - 1
+return
+end subroutine du11us
 
-SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
-INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
+subroutine du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
+implicit none
+integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+integer :: i, ij, ip1, j, jb, k, kp1, mmk
 !
 !        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -6105,147 +6105,147 @@ INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
 !
 !       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
-DOUBLE PRECISION, INTENT(IN) :: H(M), W(M)
-INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-DOUBLE PRECISION :: BB, TT
-DOUBLE PRECISION :: DDOT, DNRM2
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(m), w(m)
+integer, intent(inout) :: ic(n), ir(m)
+double precision :: bb, tt
+double precision :: ddot, dnrm2
 !
-K = KRANK
-KP1 = K + 1
-IF (K .GT. 0) GO TO 30
+k = krank
+kp1 = k + 1
+if (k .gt. 0) go to 30
 !
 !        RANK=0
 !
-DO JB = 1,NB
-   RNORM(JB) = DNRM2(M,B(1,JB),1)
-END DO
-DO JB = 1,NB
-   DO I = 1,N
-      B(I,JB) = 0.D0
-   END DO
-END DO
-RETURN
+do jb = 1,nb
+   rnorm(jb) = dnrm2(m,b(1,jb),1)
+end do
+do jb = 1,nb
+   do i = 1,n
+      b(i,jb) = 0.d0
+   end do
+end do
+return
 !
-30 I = 0
+30 i = 0
 !
 !     REORDER B TO REFLECT ROW INTERCHANGES
 !
-40 I = I + 1
-   IF (I .EQ. M) GO TO 100
-   J = IR(I)
-   IF (J .EQ. I) GO TO 40
-   IF (J .LT. 0) GO TO 40
+40 i = i + 1
+   if (i .eq. m) go to 100
+   j = ir(i)
+   if (j .eq. i) go to 40
+   if (j .lt. 0) go to 40
 !
-   IR(I) = -IR(I)
-   DO JB = 1,NB
-      RNORM(JB) = B(I,JB)
-   END DO
+   ir(i) = -ir(i)
+   do jb = 1,nb
+      rnorm(jb) = b(i,jb)
+   end do
 !
-   IJ = I
-60 DO JB = 1,NB
-         B(IJ,JB) = B(J,JB)
-      END DO
-      IJ = J
-      J = IR(IJ)
-      IR(IJ) = -IR(IJ)
-   IF (J .NE. I) GO TO 60
+   ij = i
+60 do jb = 1,nb
+         b(ij,jb) = b(j,jb)
+      end do
+      ij = j
+      j = ir(ij)
+      ir(ij) = -ir(ij)
+   if (j .ne. i) go to 60
 !
-   DO JB = 1,NB
-      B(IJ,JB) = RNORM(JB)
-   END DO
-   GO TO 40
+   do jb = 1,nb
+      b(ij,jb) = rnorm(jb)
+   end do
+   go to 40
 !
-100 DO I = 1,M
-   IR(I) = IABS(IR(I))
-END DO
+100 do i = 1,m
+   ir(i) = iabs(ir(i))
+end do
 !
 !     IF A IS OF REDUCED RANK AND MODE=2,
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-IF (MODE .LT. 2 .OR. K .EQ. M) GO TO 140
-MMK = M - K
-DO JB = 1,NB
-   DO J = 1,K
-      I = KP1 - J
-      TT = -DDOT(MMK,A(KP1,I),1,B(KP1,JB),1)/W(I)
-      TT = TT - B(I,JB)
-      CALL DAXPY (MMK,TT,A(KP1,I),1,B(KP1,JB),1)
-      B(I,JB) = B(I,JB) + TT*W(I)
-   END DO
-END DO
+if (mode .lt. 2 .or. k .eq. m) go to 140
+mmk = m - k
+do jb = 1,nb
+   do j = 1,k
+      i = kp1 - j
+      tt = -ddot(mmk,a(kp1,i),1,b(kp1,jb),1)/w(i)
+      tt = tt - b(i,jb)
+      call daxpy (mmk,tt,a(kp1,i),1,b(kp1,jb),1)
+      b(i,jb) = b(i,jb) + tt*w(i)
+   end do
+end do
 !
 !     FIND NORMS OF RESIDUAL VECTOR(S)..(BEFORE OVERWRITE B)
 !
-140 DO JB = 1,NB
-   RNORM(JB) = DNRM2(M-K,B(KP1,JB),1)
-END DO
+140 do jb = 1,nb
+   rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
+end do
 !
 !     BACK SOLVE LOWER TRIANGULAR L
 !
-do 170 JB = 1,NB
-   DO I = 1,K
-      B(I,JB) = B(I,JB)/A(I,I)
-      IF (I .EQ. K) GO TO 170
-      IP1 = I + 1
-      CALL DAXPY(K-I,-B(I,JB),A(IP1,I),1,B(IP1,JB),1)
-   END DO
-170 CONTINUE
+do 170 jb = 1,nb
+   do i = 1,k
+      b(i,jb) = b(i,jb)/a(i,i)
+      if (i .eq. k) go to 170
+      ip1 = i + 1
+      call daxpy(k-i,-b(i,jb),a(ip1,i),1,b(ip1,jb),1)
+   end do
+170 continue
 !
 !      TRUNCATED SOLUTION
 !
-IF (K .EQ. N) GO TO 210
-DO JB = 1,NB
-   DO I = KP1,N
-      B(I,JB) = 0.D0
-   END DO
-END DO
+if (k .eq. n) go to 210
+do jb = 1,nb
+   do i = kp1,n
+      b(i,jb) = 0.d0
+   end do
+end do
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO B
 !
-210 DO I = 1,K
-   J = KP1 - I
-   TT = A(J,J)
-   A(J,J) = H(J)
-   DO JB = 1,NB
-      BB = -DDOT(N-J+1,A(J,J),MDA,B(J,JB),1)/H(J)
-      CALL DAXPY(N-J+1,BB,A(J,J),MDA,B(J,JB),1)
-   END DO
-   A(J,J) = TT
-END DO
+210 do i = 1,k
+   j = kp1 - i
+   tt = a(j,j)
+   a(j,j) = h(j)
+   do jb = 1,nb
+      bb = -ddot(n-j+1,a(j,j),mda,b(j,jb),1)/h(j)
+      call daxpy(n-j+1,bb,a(j,j),mda,b(j,jb),1)
+   end do
+   a(j,j) = tt
+end do
 !
 !     REORDER B TO REFLECT COLUMN INTERCHANGES
 !
-I = 0
+i = 0
 !
-240 I = I + 1
-   IF (I .EQ. N) GO TO 260
-   J = IC(I)
-   IF (J .EQ. I) GO TO 240
-   IF (J .LT. 0) GO TO 240
+240 i = i + 1
+   if (i .eq. n) go to 260
+   j = ic(i)
+   if (j .eq. i) go to 240
+   if (j .lt. 0) go to 240
 !
-   IC(I) = -IC(I)
-250 CALL DSWAP (NB,B(J,1),MDB,B(I,1),MDB)
-      IJ = IC(J)
-      IC(J) = -IC(J)
-      J = IJ
-   IF (J .NE. I) GO TO 250
-   GO TO 240
+   ic(i) = -ic(i)
+250 call dswap (nb,b(j,1),mdb,b(i,1),mdb)
+      ij = ic(j)
+      ic(j) = -ic(j)
+      j = ij
+   if (j .ne. i) go to 250
+   go to 240
 !
-260 DO I = 1,N
-   IC(I) = IABS(IC(I))
-END DO
-RETURN
-END SUBROUTINE DU12US
+260 do i = 1,n
+   ic(i) = iabs(ic(i))
+end do
+return
+end subroutine du12us
 
-SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: K
-INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
-REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), G(N), H(N), RNORM(*)
-REAL, INTENT(IN) :: TAU
-INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
-REAL :: FACTOR, HMAX, SM1, TMP, Z
+subroutine hfti (a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
+real, intent(in) :: tau
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+real :: factor, hmax, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M)),RNORM(NB),H(N),G(N),IP(N)
 !
@@ -6356,146 +6356,146 @@ REAL :: FACTOR, HMAX, SM1, TMP, Z
 !                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !-----------------------------------------------------------------------
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION :: SM
+integer, intent(inout) :: ip(n)
+double precision :: sm
 !---------------------
-DATA FACTOR /1.E-3/
+data factor /1.e-3/
 !
-K = 0
-LDIAG = MIN0(M,N)
-IF (LDIAG .LE. 0) GO TO 270
-    do 80 J = 1,LDIAG
-    IF (J .EQ. 1) GO TO 20
+k = 0
+ldiag = min0(m,n)
+if (ldiag .le. 0) go to 270
+    do 80 j = 1,ldiag
+    if (j .eq. 1) go to 20
 !
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-    LMAX = J
-        DO L = J,N
-        H(L) = H(L) - A(J-1,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    Z = HMAX + FACTOR*H(LMAX)
-    IF (Z .GT. HMAX) GO TO 50
+    lmax = j
+        do l = j,n
+        h(l) = h(l) - a(j-1,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    z = hmax + factor*h(lmax)
+    if (z .gt. hmax) go to 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-20 LMAX=J
-        DO L = J,N
-        H(L) = 0.0
-            do 30 I = J,M
-30 H(L) = H(L) + A(I,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    HMAX = H(LMAX)
+20 lmax=j
+        do l = j,n
+        h(l) = 0.0
+            do 30 i = j,m
+30 h(l) = h(l) + a(i,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    hmax = h(lmax)
 !    ..
 !     LMAX HAS BEEN DETERMINED
 !
 !     DO COLUMN INTERCHANGES IF NEEDED.
 !    ..
-50 IP(J) = LMAX
-    IF (IP(J) .EQ. J) GO TO 70
-        do 60 I = 1,M
-        TMP = A(I,J)
-        A(I,J) = A(I,LMAX)
-60 A(I,LMAX) = TMP
-    H(LMAX) = H(J)
+50 ip(j) = lmax
+    if (ip(j) .eq. j) go to 70
+        do 60 i = 1,m
+        tmp = a(i,j)
+        a(i,j) = a(i,lmax)
+60 a(i,lmax) = tmp
+    h(lmax) = h(j)
 !
 !     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 !    ..
-70 CALL H12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-80 CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+70 call h12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
+80 call h12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !    ..
-    DO J = 1,LDIAG
-    IF (ABS(A(J,J)) .LE. TAU) GO TO 100
-    END DO
-K = LDIAG
-GO TO 110
-100 K = J - 1
-110 KP1 = K + 1
+    do j = 1,ldiag
+    if (abs(a(j,j)) .le. tau) go to 100
+    end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
 !
 !     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
 !
-IF (NB .LE. 0) GO TO 140
-    do 130 JB = 1,NB
-    TMP = 0.0
-    IF (KP1 .GT. M) GO TO 130
-        do 120 I = KP1,M
-120 TMP = TMP + B(I,JB)**2
-130 RNORM(JB) = SQRT(TMP)
-140 CONTINUE
+if (nb .le. 0) go to 140
+    do 130 jb = 1,nb
+    tmp = 0.0
+    if (kp1 .gt. m) go to 130
+        do 120 i = kp1,m
+120 tmp = tmp + b(i,jb)**2
+130 rnorm(jb) = sqrt(tmp)
+140 continue
 !                                           SPECIAL FOR PSEUDORANK = 0
-IF (K .GT. 0) GO TO 160
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
-        do 150 I = 1,N
-150 B(I,JB) = 0.0
-    END DO
-GO TO 270
+if (k .gt. 0) go to 160
+if (nb .le. 0) go to 270
+    do jb = 1,nb
+        do 150 i = 1,n
+150 b(i,jb) = 0.0
+    end do
+go to 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
 !     DECOMPOSITION OF FIRST K ROWS.
 !    ..
-160 IF (K .EQ. N) GO TO 180
-    do 170 II = 1,K
-    I = KP1 - II
-170 CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
-180 CONTINUE
+160 if (k .eq. n) go to 180
+    do 170 ii = 1,k
+    i = kp1 - ii
+170 call h12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i-1)
+180 continue
 !
 !
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
+if (nb .le. 0) go to 270
+    do jb = 1,nb
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
-        do 210 L = 1,K
-        SM = 0.D0
-        I = KP1 - L
-        IF (I .EQ. K) GO TO 200
-        IP1 = I + 1
-            do 190 J = IP1,K
-190 SM = SM + DBLE(A(I,J))*DBLE(B(J,JB))
-200 SM1 = DBLE(B(I,JB)) - SM
-210 B(I,JB) = SM1/A(I,I)
+        do 210 l = 1,k
+        sm = 0.d0
+        i = kp1 - l
+        if (i .eq. k) go to 200
+        ip1 = i + 1
+            do 190 j = ip1,k
+190 sm = sm + dble(a(i,j))*dble(b(j,jb))
+200 sm1 = dble(b(i,jb)) - sm
+210 b(i,jb) = sm1/a(i,i)
 !
 !     COMPLETE COMPUTATION OF SOLUTION VECTOR.
 !    ..
-    IF (K .EQ. N) GO TO 240
-        do 220 J = KP1,N
-220 B(J,JB) = 0.0
-        do 230 I = 1,K
-230 CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+    if (k .eq. n) go to 240
+        do 220 j = kp1,n
+220 b(j,jb) = 0.0
+        do 230 i = 1,k
+230 call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 !      COLUMN INTERCHANGES.
 !    ..
-240 do 250 JJ = 1,LDIAG
-        J = LDIAG + 1 - JJ
-        IF (IP(J) .EQ. J) GO TO 250
-        L = IP(J)
-        TMP = B(L,JB)
-        B(L,JB) = B(J,JB)
-        B(J,JB) = TMP
-250 CONTINUE
-    END DO
+240 do 250 jj = 1,ldiag
+        j = ldiag + 1 - jj
+        if (ip(j) .eq. j) go to 250
+        l = ip(j)
+        tmp = b(l,jb)
+        b(l,jb) = b(j,jb)
+        b(j,jb) = tmp
+250 continue
+    end do
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 !
-270 RETURN
-END SUBROUTINE HFTI
+270 return
+end subroutine hfti
 
-SUBROUTINE HFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(OUT) :: K
-INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
-REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), D(*), G(N), H(N), &
-&RNORM(*)
-REAL, INTENT(IN) :: TAU
-INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
-REAL :: FACTOR, HMAX, SM1, TMP, Z
+subroutine hfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
+&rnorm(*)
+real, intent(in) :: tau
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+real :: factor, hmax, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DIMENSION D(L) WHERE L = MIN(M,N)
@@ -6618,158 +6618,158 @@ REAL :: FACTOR, HMAX, SM1, TMP, Z
 !                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
 !                       THESE ERRORS ARE FATAL.
 !-----------------------------------------------------------------------
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION :: SM
+integer, intent(inout) :: ip(n)
+double precision :: sm
 !---------------------
-DATA FACTOR /1.E-3/
+data factor /1.e-3/
 !
-K = 0
-LDIAG = MIN0(M,N)
-IF (LDIAG .LE. 0) GO TO 270
-IF (M .GT. MDA) GO TO 300
-IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
+k = 0
+ldiag = min0(m,n)
+if (ldiag .le. 0) go to 270
+if (m .gt. mda) go to 300
+if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 !
-    do 80 J = 1,LDIAG
-    IF (J .EQ. 1) GO TO 20
+    do 80 j = 1,ldiag
+    if (j .eq. 1) go to 20
 !
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-    LMAX = J
-        DO L = J,N
-        H(L) = H(L) - A(J-1,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    Z = HMAX + FACTOR*H(LMAX)
-    IF (Z .GT. HMAX) GO TO 50
+    lmax = j
+        do l = j,n
+        h(l) = h(l) - a(j-1,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    z = hmax + factor*h(lmax)
+    if (z .gt. hmax) go to 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-20 LMAX = J
-        DO L = J,N
-        H(L) = 0.0
-            do 30 I = J,M
-30 H(L) = H(L) + A(I,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    HMAX = H(LMAX)
+20 lmax = j
+        do l = j,n
+        h(l) = 0.0
+            do 30 i = j,m
+30 h(l) = h(l) + a(i,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    hmax = h(lmax)
 !    ..
 !     LMAX HAS BEEN DETERMINED
 !
 !     DO COLUMN INTERCHANGES IF NEEDED.
 !    ..
-50 IP(J) = LMAX
-    IF (IP(J) .EQ. J) GO TO 70
-        do 60 I = 1,M
-        TMP = A(I,J)
-        A(I,J) = A(I,LMAX)
-60 A(I,LMAX) = TMP
-    H(LMAX) = H(J)
+50 ip(j) = lmax
+    if (ip(j) .eq. j) go to 70
+        do 60 i = 1,m
+        tmp = a(i,j)
+        a(i,j) = a(i,lmax)
+60 a(i,lmax) = tmp
+    h(lmax) = h(j)
 !
 !     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 !    ..
-70 CALL H12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-80 CALL H12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+70 call h12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
+80 call h12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
 !    ..
-    do 90 J = 1,LDIAG
-    IF (ABS(A(J,J)) .LE. TAU) GO TO 100
-90 D(J) = A(J,J)
-    K = LDIAG
-    KP1 = K + 1
-    GO TO 110
+    do 90 j = 1,ldiag
+    if (abs(a(j,j)) .le. tau) go to 100
+90 d(j) = a(j,j)
+    k = ldiag
+    kp1 = k + 1
+    go to 110
 !
-100 K = J - 1
-    KP1 = J
-    do 105 J = KP1,LDIAG
-105 D(J) = A(J,J)
+100 k = j - 1
+    kp1 = j
+    do 105 j = kp1,ldiag
+105 d(j) = a(j,j)
 !
 !     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
 !
-110 IF (NB .LE. 0) GO TO 140
-    do 130 JB = 1,NB
-    TMP = 0.0
-    IF (KP1 .GT. M) GO TO 130
-        do 120 I = KP1,M
-120 TMP = TMP + B(I,JB)**2
-130 RNORM(JB) = SQRT(TMP)
-140 CONTINUE
+110 if (nb .le. 0) go to 140
+    do 130 jb = 1,nb
+    tmp = 0.0
+    if (kp1 .gt. m) go to 130
+        do 120 i = kp1,m
+120 tmp = tmp + b(i,jb)**2
+130 rnorm(jb) = sqrt(tmp)
+140 continue
 !                                           SPECIAL FOR PSEUDORANK = 0
-IF (K .GT. 0) GO TO 160
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
-        do 150 I = 1,N
-150 B(I,JB) = 0.0
-    END DO
-GO TO 270
+if (k .gt. 0) go to 160
+if (nb .le. 0) go to 270
+    do jb = 1,nb
+        do 150 i = 1,n
+150 b(i,jb) = 0.0
+    end do
+go to 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
 !     DECOMPOSITION OF FIRST K ROWS.
 !    ..
-160 IF (K .EQ. N) GO TO 180
-    do 170 II = 1,K
-    I = KP1 - II
-170 CALL H12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
-180 CONTINUE
+160 if (k .eq. n) go to 180
+    do 170 ii = 1,k
+    i = kp1 - ii
+170 call h12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i-1)
+180 continue
 !
 !
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
+if (nb .le. 0) go to 270
+    do jb = 1,nb
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
-        do 210 L = 1,K
-        SM = 0.D0
-        I = KP1 - L
-        IF (I .EQ. K) GO TO 200
-        IP1 = I + 1
-            do 190 J = IP1,K
-190 SM = SM + DBLE(A(I,J))*DBLE(B(J,JB))
-200 SM1 = DBLE(B(I,JB)) - SM
-210 B(I,JB)=SM1/A(I,I)
+        do 210 l = 1,k
+        sm = 0.d0
+        i = kp1 - l
+        if (i .eq. k) go to 200
+        ip1 = i + 1
+            do 190 j = ip1,k
+190 sm = sm + dble(a(i,j))*dble(b(j,jb))
+200 sm1 = dble(b(i,jb)) - sm
+210 b(i,jb)=sm1/a(i,i)
 !
 !     COMPLETE COMPUTATION OF SOLUTION VECTOR.
 !    ..
-    IF (K .EQ. N) GO TO 240
-        do 220 J = KP1,N
-220 B(J,JB) = 0.0
-        do 230 I = 1,K
-230 CALL H12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+    if (k .eq. n) go to 240
+        do 220 j = kp1,n
+220 b(j,jb) = 0.0
+        do 230 i = 1,k
+230 call h12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 !      COLUMN INTERCHANGES.
 !    ..
-240 do 250 JJ = 1,LDIAG
-        J = LDIAG + 1 - JJ
-        IF (IP(J) .EQ. J) GO TO 250
-        L = IP(J)
-        TMP = B(L,JB)
-        B(L,JB) = B(J,JB)
-        B(J,JB) = TMP
-250 CONTINUE
-    END DO
+240 do 250 jj = 1,ldiag
+        j = ldiag + 1 - jj
+        if (ip(j) .eq. j) go to 250
+        l = ip(j)
+        tmp = b(l,jb)
+        b(l,jb) = b(j,jb)
+        b(j,jb) = tmp
+250 continue
+    end do
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 !
-270 IERR = 0
-RETURN
+270 ierr = 0
+return
 !
 !     ERROR RETURN
 !
-300 IERR = 1
-RETURN
-310 IERR = 2
-RETURN
-END SUBROUTINE HFTI2
+300 ierr = 1
+return
+310 ierr = 2
+return
+end subroutine hfti2
 
-SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
-REAL, INTENT(INOUT) :: C(*), U(IUE,M), UP
-INTEGER :: I, I2, I3, I4, INCR, J
-REAL :: CL, D, SM1
+subroutine h12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+real, intent(inout) :: c(*), u(iue,m), up
+integer :: i, i2, i3, i4, incr, j
+real :: cl, d, sm1
 !-----------------------------------------------------------------------
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -6798,65 +6798,65 @@ REAL :: CL, D, SM1
 !     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0
 !            NO OPERATIONS WILL BE DONE ON C().
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: SM, B
+double precision :: sm, b
 !
-IF (0 .GE. LPIVOT .OR. LPIVOT .GE. L1 .OR. L1 .GT. M) RETURN
-CL = ABS(U(1,LPIVOT))
-IF (MODE .EQ. 2) GO TO 60
+if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
+cl = abs(u(1,lpivot))
+if (mode .eq. 2) go to 60
 !
 !                            ****** CONSTRUCT THE TRANSFORMATION. ******
 !
-    do 10 J = L1,M
-10 CL = AMAX1(ABS(U(1,J)),CL)
-IF (CL .LE. 0.0) GO TO 130
-D = U(1,LPIVOT)/CL
-SM = D*D
-    do 20 J = L1,M
-    D = U(1,J)/CL
-20 SM = SM + DBLE(D*D)
+    do 10 j = l1,m
+10 cl = amax1(abs(u(1,j)),cl)
+if (cl .le. 0.0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+    do 20 j = l1,m
+    d = u(1,j)/cl
+20 sm = sm + dble(d*d)
 !
-SM1 = SM
-CL = CL*SQRT(SM1)
-IF (U(1,LPIVOT) .GT. 0.0) CL = -CL
-UP = U(1,LPIVOT) - CL
-U(1,LPIVOT) = CL
-GO TO 70
+sm1 = sm
+cl = cl*sqrt(sm1)
+if (u(1,lpivot) .gt. 0.0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
 !
 !            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
 !
-60 IF (CL) 130,130,70
-70 IF (NCV .LE. 0) RETURN
-B = DBLE(UP)*DBLE(U(1,LPIVOT))
+60 if (cl) 130,130,70
+70 if (ncv .le. 0) return
+b = dble(up)*dble(u(1,lpivot))
 !
 !                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
 !
-IF (B .GE. 0.D0) GO TO 130
-B = 1.D0/B
-I2 = 1 - ICV + ICE*(LPIVOT - 1)
-INCR = ICE*(L1 - LPIVOT)
-    do 120 J = 1,NCV
-    I2 = I2 + ICV
-    I3 = I2 + INCR
-    I4 = I3
-    SM = DBLE(C(I2))*DBLE(UP)
-        do 90 I = L1,M
-        SM = SM + DBLE(C(I3))*DBLE(U(1,I))
-90 I3 = I3 + ICE
-    IF (SM .EQ. 0.D0) GO TO 120
-    SM = SM*B
-    C(I2) = C(I2) + SM*DBLE(UP)
-        do 110 I = L1,M
-        C(I4) = C(I4) + SM*DBLE(U(1,I))
-110 I4 = I4 + ICE
-120 CONTINUE
-130 RETURN
-END SUBROUTINE H12
+if (b .ge. 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+    do 120 j = 1,ncv
+    i2 = i2 + icv
+    i3 = i2 + incr
+    i4 = i3
+    sm = dble(c(i2))*dble(up)
+        do 90 i = l1,m
+        sm = sm + dble(c(i3))*dble(u(1,i))
+90 i3 = i3 + ice
+    if (sm .eq. 0.d0) go to 120
+    sm = sm*b
+    c(i2) = c(i2) + sm*dble(up)
+        do 110 i = l1,m
+        c(i4) = c(i4) + sm*dble(u(1,i))
+110 i4 = i4 + ice
+120 continue
+130 return
+end subroutine h12
 
-SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: K
-INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
-INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+subroutine dhfti (a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
+implicit none
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
@@ -6969,145 +6969,145 @@ INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 !                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
 !                       ARE NOT GENERALLY REQUIRED BY THE USER.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
-DOUBLE PRECISION, INTENT(IN) :: TAU
-DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
+double precision :: factor, hmax, sm, sm1, tmp, z
 !---------------------
-DATA FACTOR /1.D-3/
+data factor /1.d-3/
 !
-K = 0
-LDIAG = MIN0(M,N)
-IF (LDIAG .LE. 0) GO TO 270
-    do 80 J = 1,LDIAG
-    IF (J .EQ. 1) GO TO 20
+k = 0
+ldiag = min0(m,n)
+if (ldiag .le. 0) go to 270
+    do 80 j = 1,ldiag
+    if (j .eq. 1) go to 20
 !
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-    LMAX = J
-        DO L = J,N
-        H(L) = H(L) - A(J-1,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    Z = HMAX + FACTOR*H(LMAX)
-    IF (Z .GT. HMAX) GO TO 50
+    lmax = j
+        do l = j,n
+        h(l) = h(l) - a(j-1,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    z = hmax + factor*h(lmax)
+    if (z .gt. hmax) go to 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-20 LMAX=J
-        DO L = J,N
-        H(L) = 0.D0
-            do 30 I = J,M
-30 H(L) = H(L) + A(I,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    HMAX = H(LMAX)
+20 lmax=j
+        do l = j,n
+        h(l) = 0.d0
+            do 30 i = j,m
+30 h(l) = h(l) + a(i,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    hmax = h(lmax)
 !    ..
 !     LMAX HAS BEEN DETERMINED
 !
 !     DO COLUMN INTERCHANGES IF NEEDED.
 !    ..
-50 IP(J) = LMAX
-    IF (IP(J) .EQ. J) GO TO 70
-        do 60 I = 1,M
-        TMP = A(I,J)
-        A(I,J) = A(I,LMAX)
-60 A(I,LMAX) = TMP
-    H(LMAX) = H(J)
+50 ip(j) = lmax
+    if (ip(j) .eq. j) go to 70
+        do 60 i = 1,m
+        tmp = a(i,j)
+        a(i,j) = a(i,lmax)
+60 a(i,lmax) = tmp
+    h(lmax) = h(j)
 !
 !     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 !    ..
-70 CALL DH12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-80 CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+70 call dh12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
+80 call dh12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !    ..
-    DO J = 1,LDIAG
-    IF (DABS(A(J,J)) .LE. TAU) GO TO 100
-    END DO
-K = LDIAG
-GO TO 110
-100 K = J - 1
-110 KP1 = K + 1
+    do j = 1,ldiag
+    if (dabs(a(j,j)) .le. tau) go to 100
+    end do
+k = ldiag
+go to 110
+100 k = j - 1
+110 kp1 = k + 1
 !
 !     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
 !
-IF (NB .LE. 0) GO TO 140
-    do 130 JB = 1,NB
-    TMP = 0.D0
-    IF (KP1 .GT. M) GO TO 130
-        do 120 I = KP1,M
-120 TMP = TMP + B(I,JB)**2
-130 RNORM(JB) = DSQRT(TMP)
-140 CONTINUE
+if (nb .le. 0) go to 140
+    do 130 jb = 1,nb
+    tmp = 0.d0
+    if (kp1 .gt. m) go to 130
+        do 120 i = kp1,m
+120 tmp = tmp + b(i,jb)**2
+130 rnorm(jb) = dsqrt(tmp)
+140 continue
 !                                           SPECIAL FOR PSEUDORANK = 0
-IF (K .GT. 0) GO TO 160
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
-        do 150 I = 1,N
-150 B(I,JB) = 0.D0
-    END DO
-GO TO 270
+if (k .gt. 0) go to 160
+if (nb .le. 0) go to 270
+    do jb = 1,nb
+        do 150 i = 1,n
+150 b(i,jb) = 0.d0
+    end do
+go to 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
 !     DECOMPOSITION OF FIRST K ROWS.
 !    ..
-160 IF (K .EQ. N) GO TO 180
-    do 170 II = 1,K
-    I = KP1 - II
-170 CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
-180 CONTINUE
+160 if (k .eq. n) go to 180
+    do 170 ii = 1,k
+    i = kp1 - ii
+170 call dh12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i-1)
+180 continue
 !
 !
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
+if (nb .le. 0) go to 270
+    do jb = 1,nb
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
-        do 210 L = 1,K
-        SM = 0.D0
-        I = KP1 - L
-        IF (I .EQ. K) GO TO 200
-        IP1 = I + 1
-            do 190 J = IP1,K
-190 SM = SM + A(I,J)*B(J,JB)
-200 SM1 = B(I,JB) - SM
-210 B(I,JB) = SM1/A(I,I)
+        do 210 l = 1,k
+        sm = 0.d0
+        i = kp1 - l
+        if (i .eq. k) go to 200
+        ip1 = i + 1
+            do 190 j = ip1,k
+190 sm = sm + a(i,j)*b(j,jb)
+200 sm1 = b(i,jb) - sm
+210 b(i,jb) = sm1/a(i,i)
 !
 !     COMPLETE COMPUTATION OF SOLUTION VECTOR.
 !    ..
-    IF (K .EQ. N) GO TO 240
-        do 220 J = KP1,N
-220 B(J,JB) = 0.D0
-        do 230 I = 1,K
-230 CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+    if (k .eq. n) go to 240
+        do 220 j = kp1,n
+220 b(j,jb) = 0.d0
+        do 230 i = 1,k
+230 call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 !      COLUMN INTERCHANGES.
 !    ..
-240 do 250 JJ = 1,LDIAG
-        J = LDIAG + 1 - JJ
-        IF (IP(J) .EQ. J) GO TO 250
-        L = IP(J)
-        TMP = B(L,JB)
-        B(L,JB) = B(J,JB)
-        B(J,JB) = TMP
-250 CONTINUE
-    END DO
+240 do 250 jj = 1,ldiag
+        j = ldiag + 1 - jj
+        if (ip(j) .eq. j) go to 250
+        l = ip(j)
+        tmp = b(l,jb)
+        b(l,jb) = b(j,jb)
+        b(j,jb) = tmp
+250 continue
+    end do
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 !
-270 RETURN
-END SUBROUTINE DHFTI
+270 return
+end subroutine dhfti
 
-SUBROUTINE DHFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(OUT) :: K
-INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
-INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+subroutine dhfti2(a,mda,m,n,b,mdb,nb,d,tau,k,rnorm,h,g,ip,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(out) :: k
+integer, intent(in) :: m, mda, mdb, n, nb
+integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DOUBLE PRECISION D(L) WHERE L = MIN(M,N)
@@ -7231,159 +7231,159 @@ INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 !                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
 !                       THESE ERRORS ARE FATAL.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*), D(*)
-DOUBLE PRECISION, INTENT(IN) :: TAU
-DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
-INTEGER, INTENT(INOUT) :: IP(N)
-DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
+double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
+double precision :: factor, hmax, sm, sm1, tmp, z
 !---------------------
-DATA FACTOR /1.D-3/
+data factor /1.d-3/
 !
-K = 0
-LDIAG = MIN0(M,N)
-IF (LDIAG .LE. 0) GO TO 270
-IF (M .GT. MDA) GO TO 300
-IF (NB .GT. 1 .AND. MAX0(M,N) .GT. MDB) GO TO 310
+k = 0
+ldiag = min0(m,n)
+if (ldiag .le. 0) go to 270
+if (m .gt. mda) go to 300
+if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 !
-    do 80 J = 1,LDIAG
-    IF (J .EQ. 1) GO TO 20
+    do 80 j = 1,ldiag
+    if (j .eq. 1) go to 20
 !
 !     UPDATE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-    LMAX = J
-        DO L = J,N
-        H(L) = H(L) - A(J-1,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    Z = HMAX + FACTOR*H(LMAX)
-    IF (Z .GT. HMAX) GO TO 50
+    lmax = j
+        do l = j,n
+        h(l) = h(l) - a(j-1,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    z = hmax + factor*h(lmax)
+    if (z .gt. hmax) go to 50
 !
 !     COMPUTE SQUARED COLUMN LENGTHS AND FIND LMAX
 !    ..
-20 LMAX = J
-        DO L = J,N
-        H(L) = 0.D0
-            do 30 I = J,M
-30 H(L) = H(L) + A(I,L)**2
-        IF (H(L) .GT. H(LMAX)) LMAX = L
-        END DO
-    HMAX = H(LMAX)
+20 lmax = j
+        do l = j,n
+        h(l) = 0.d0
+            do 30 i = j,m
+30 h(l) = h(l) + a(i,l)**2
+        if (h(l) .gt. h(lmax)) lmax = l
+        end do
+    hmax = h(lmax)
 !    ..
 !     LMAX HAS BEEN DETERMINED
 !
 !     DO COLUMN INTERCHANGES IF NEEDED.
 !    ..
-50 IP(J) = LMAX
-    IF (IP(J) .EQ. J) GO TO 70
-        do 60 I = 1,M
-        TMP = A(I,J)
-        A(I,J) = A(I,LMAX)
-60 A(I,LMAX) = TMP
-    H(LMAX) = H(J)
+50 ip(j) = lmax
+    if (ip(j) .eq. j) go to 70
+        do 60 i = 1,m
+        tmp = a(i,j)
+        a(i,j) = a(i,lmax)
+60 a(i,lmax) = tmp
+    h(lmax) = h(j)
 !
 !     COMPUTE THE J-TH TRANSFORMATION AND APPLY IT TO A AND B.
 !    ..
-70 CALL DH12 (1,J,J+1,M,A(1,J),1,H(J),A(1,J+1),1,MDA,N-J)
-80 CALL DH12 (2,J,J+1,M,A(1,J),1,H(J),B,1,MDB,NB)
+70 call dh12 (1,j,j+1,m,a(1,j),1,h(j),a(1,j+1),1,mda,n-j)
+80 call dh12 (2,j,j+1,m,a(1,j),1,h(j),b,1,mdb,nb)
 !
 !     DETERMINE THE PSEUDORANK, K, USING THE TOLERANCE, TAU.
 !     ALSO STORE THE DIAGONAL ELEMENTS IN THE ARRAY D.
 !    ..
-    do 90 J = 1,LDIAG
-    IF (DABS(A(J,J)) .LE. TAU) GO TO 100
-90 D(J) = A(J,J)
-    K = LDIAG
-    KP1 = K + 1
-    GO TO 110
+    do 90 j = 1,ldiag
+    if (dabs(a(j,j)) .le. tau) go to 100
+90 d(j) = a(j,j)
+    k = ldiag
+    kp1 = k + 1
+    go to 110
 !
-100 K = J - 1
-    KP1 = J
-    do 105 J = KP1,LDIAG
-105 D(J) = A(J,J)
+100 k = j - 1
+    kp1 = j
+    do 105 j = kp1,ldiag
+105 d(j) = a(j,j)
 !
 !     COMPUTE THE NORMS OF THE RESIDUAL VECTORS.
 !
-110 IF (NB .LE. 0) GO TO 140
-    do 130 JB = 1,NB
-    TMP = 0.D0
-    IF (KP1 .GT. M) GO TO 130
-        do 120 I = KP1,M
-120 TMP = TMP + B(I,JB)**2
-130 RNORM(JB) = DSQRT(TMP)
-140 CONTINUE
+110 if (nb .le. 0) go to 140
+    do 130 jb = 1,nb
+    tmp = 0.d0
+    if (kp1 .gt. m) go to 130
+        do 120 i = kp1,m
+120 tmp = tmp + b(i,jb)**2
+130 rnorm(jb) = dsqrt(tmp)
+140 continue
 !                                           SPECIAL FOR PSEUDORANK = 0
-IF (K .GT. 0) GO TO 160
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
-        do 150 I = 1,N
-150 B(I,JB) = 0.D0
-    END DO
-GO TO 270
+if (k .gt. 0) go to 160
+if (nb .le. 0) go to 270
+    do jb = 1,nb
+        do 150 i = 1,n
+150 b(i,jb) = 0.d0
+    end do
+go to 270
 !
 !     IF THE PSEUDORANK IS LESS THAN N COMPUTE HOUSEHOLDER
 !     DECOMPOSITION OF FIRST K ROWS.
 !    ..
-160 IF (K .EQ. N) GO TO 180
-    do 170 II = 1,K
-    I = KP1 - II
-170 CALL DH12 (1,I,KP1,N,A(I,1),MDA,G(I),A,MDA,1,I-1)
-180 CONTINUE
+160 if (k .eq. n) go to 180
+    do 170 ii = 1,k
+    i = kp1 - ii
+170 call dh12 (1,i,kp1,n,a(i,1),mda,g(i),a,mda,1,i-1)
+180 continue
 !
 !
-IF (NB .LE. 0) GO TO 270
-    DO JB = 1,NB
+if (nb .le. 0) go to 270
+    do jb = 1,nb
 !
 !     SOLVE THE K BY K TRIANGULAR SYSTEM.
 !    ..
-        do 210 L = 1,K
-        SM = 0.D0
-        I = KP1 - L
-        IF (I .EQ. K) GO TO 200
-        IP1 = I + 1
-            do 190 J = IP1,K
-190 SM = SM + A(I,J)*B(J,JB)
-200 SM1 = B(I,JB) - SM
-210 B(I,JB)=SM1/A(I,I)
+        do 210 l = 1,k
+        sm = 0.d0
+        i = kp1 - l
+        if (i .eq. k) go to 200
+        ip1 = i + 1
+            do 190 j = ip1,k
+190 sm = sm + a(i,j)*b(j,jb)
+200 sm1 = b(i,jb) - sm
+210 b(i,jb)=sm1/a(i,i)
 !
 !     COMPLETE COMPUTATION OF SOLUTION VECTOR.
 !    ..
-    IF (K .EQ. N) GO TO 240
-        do 220 J = KP1,N
-220 B(J,JB) = 0.D0
-        do 230 I = 1,K
-230 CALL DH12 (2,I,KP1,N,A(I,1),MDA,G(I),B(1,JB),1,MDB,1)
+    if (k .eq. n) go to 240
+        do 220 j = kp1,n
+220 b(j,jb) = 0.d0
+        do 230 i = 1,k
+230 call dh12 (2,i,kp1,n,a(i,1),mda,g(i),b(1,jb),1,mdb,1)
 !
 !      RE-ORDER THE SOLUTION VECTOR TO COMPENSATE FOR THE
 !      COLUMN INTERCHANGES.
 !    ..
-240 do 250 JJ = 1,LDIAG
-        J = LDIAG + 1 - JJ
-        IF (IP(J) .EQ. J) GO TO 250
-        L = IP(J)
-        TMP = B(L,JB)
-        B(L,JB) = B(J,JB)
-        B(J,JB) = TMP
-250 CONTINUE
-    END DO
+240 do 250 jj = 1,ldiag
+        j = ldiag + 1 - jj
+        if (ip(j) .eq. j) go to 250
+        l = ip(j)
+        tmp = b(l,jb)
+        b(l,jb) = b(j,jb)
+        b(j,jb) = tmp
+250 continue
+    end do
 !    ..
 !     THE SOLUTION VECTORS, X, ARE NOW
 !     IN THE FIRST  N  ROWS OF THE ARRAY B(,).
 !
-270 IERR = 0
-RETURN
+270 ierr = 0
+return
 !
 !     ERROR RETURN
 !
-300 IERR = 1
-RETURN
-310 IERR = 2
-RETURN
-END SUBROUTINE DHFTI2
+300 ierr = 1
+return
+310 ierr = 2
+return
+end subroutine dhfti2
 
-SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
-INTEGER :: I, I2, I3, I4, INCR, J
+subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
+implicit none
+integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+integer :: i, i2, i3, i4, incr, j
 !-----------------------------------------------------------------------
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -7412,76 +7412,76 @@ INTEGER :: I, I2, I3, I4, INCR, J
 !     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0
 !            NO OPERATIONS WILL BE DONE ON C().
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: U(IUE,M), UP, C(*)
-DOUBLE PRECISION :: B, CL, D, SM
+double precision, intent(inout) :: u(iue,m), up, c(*)
+double precision :: b, cl, d, sm
 !
-IF (0 .GE. LPIVOT .OR. LPIVOT .GE. L1 .OR. L1 .GT. M) RETURN
-CL = DABS(U(1,LPIVOT))
-IF (MODE .EQ. 2) GO TO 60
+if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
+cl = dabs(u(1,lpivot))
+if (mode .eq. 2) go to 60
 !
 !                            ****** CONSTRUCT THE TRANSFORMATION. ******
 !
-    do 10 J = L1,M
-10 CL = DMAX1(DABS(U(1,J)),CL)
-IF (CL .LE. 0.D0) GO TO 130
-D = U(1,LPIVOT)/CL
-SM = D*D
-    do 20 J = L1,M
-    D = U(1,J)/CL
-20 SM = SM + D*D
+    do 10 j = l1,m
+10 cl = dmax1(dabs(u(1,j)),cl)
+if (cl .le. 0.d0) go to 130
+d = u(1,lpivot)/cl
+sm = d*d
+    do 20 j = l1,m
+    d = u(1,j)/cl
+20 sm = sm + d*d
 !
-CL = CL*DSQRT(SM)
-IF (U(1,LPIVOT) .GT. 0.D0) CL = -CL
-UP = U(1,LPIVOT) - CL
-U(1,LPIVOT) = CL
-GO TO 70
+cl = cl*dsqrt(sm)
+if (u(1,lpivot) .gt. 0.d0) cl = -cl
+up = u(1,lpivot) - cl
+u(1,lpivot) = cl
+go to 70
 !
 !            ****** APPLY THE TRANSFORMATION  I+U*(U**T)/B  TO C. ******
 !
-60 IF (CL) 130,130,70
-70 IF (NCV .LE. 0) RETURN
-B = UP*U(1,LPIVOT)
+60 if (cl) 130,130,70
+70 if (ncv .le. 0) return
+b = up*u(1,lpivot)
 !
 !                       B  MUST BE NONPOSITIVE HERE.  IF B = 0., RETURN.
 !
-IF (B .GE. 0.D0) GO TO 130
-B = 1.D0/B
-I2 = 1 - ICV + ICE*(LPIVOT - 1)
-INCR = ICE*(L1 - LPIVOT)
-    do 120 J = 1,NCV
-    I2 = I2 + ICV
-    I3 = I2 + INCR
-    I4 = I3
-    SM = C(I2)*UP
-        do 90 I = L1,M
-        SM = SM + C(I3)*U(1,I)
-90 I3 = I3 + ICE
-    IF (SM .EQ. 0.D0) GO TO 120
-    SM = SM*B
-    C(I2) = C(I2) + SM*UP
-        do 110 I = L1,M
-        C(I4) = C(I4) + SM*U(1,I)
-110 I4 = I4 + ICE
-120 CONTINUE
-130 RETURN
-END SUBROUTINE DH12
+if (b .ge. 0.d0) go to 130
+b = 1.d0/b
+i2 = 1 - icv + ice*(lpivot - 1)
+incr = ice*(l1 - lpivot)
+    do 120 j = 1,ncv
+    i2 = i2 + icv
+    i3 = i2 + incr
+    i4 = i3
+    sm = c(i2)*up
+        do 90 i = l1,m
+        sm = sm + c(i3)*u(1,i)
+90 i3 = i3 + ice
+    if (sm .eq. 0.d0) go to 120
+    sm = sm*b
+    c(i2) = c(i2) + sm*up
+        do 110 i = l1,m
+        c(i4) = c(i4) + sm*u(1,i)
+110 i4 = i4 + ice
+120 continue
+130 return
+end subroutine dh12
 
-SUBROUTINE LSEI(W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, &
-&MODE, WS, IP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MA, MDW, ME, MG
-INTEGER, INTENT(OUT) :: MODE
-INTEGER :: N
-REAL, INTENT(INOUT) :: RNORME, RNORML
-INTEGER :: I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST, &
-&LINK, M, MAPKE1, MDEQC, MEND, MEP1, N1, N2, NEXT, NLINK, NOPT, &
-&NP1, NTIMES
-REAL :: ENORM, FNORM, GAM, HALF, ONE, RB, RN, RNMAX, SIZE, SN, &
-&SNMAX, SRELPR, T, TAU, UJ, UP, VJ, XNORM, XNRME, ZERO
-REAL :: SNRM2
-REAL :: SASUM
-REAL :: SDOT
-REAL :: SPMPAR
+subroutine lsei(w, mdw, me, ma, mg, n, prgopt, x, rnorme, rnorml, &
+&mode, ws, ip)
+implicit none
+integer, intent(in) :: ma, mdw, me, mg
+integer, intent(out) :: mode
+integer :: n
+real, intent(inout) :: rnorme, rnorml
+integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
+&link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
+&np1, ntimes
+real :: enorm, fnorm, gam, half, one, rb, rn, rnmax, size, sn, &
+&snmax, srelpr, t, tau, uj, up, vj, xnorm, xnrme, zero
+real :: snrm2
+real :: sasum
+real :: sdot
+real :: spmpar
 !
 !     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),
 !     WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)
@@ -7794,285 +7794,285 @@ REAL :: SPMPAR
 !
 !     REVISED OCT. 1, 1989.
 !
-REAL, INTENT(INOUT) :: W(MDW,*)
-REAL, INTENT(IN) :: PRGOPT(*)
-REAL, INTENT(INOUT) :: X(*), WS(*)
-INTEGER, INTENT(INOUT) :: IP(*)
-LOGICAL :: COV
-DATA ZERO /0.E0/, ONE /1.E0/, HALF /0.5E0/
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
+logical :: cov
+data zero /0.e0/, one /1.e0/, half /0.5e0/
 !
 !     COMPUTE MACHINE PRECISION
 !
-SRELPR = SPMPAR(1)
+srelpr = spmpar(1)
 !
 !     COMPUTE NUMBER OF POSSIBLE RIGHT MULTIPLYING HOUSEHOLDER
 !     TRANSFORMATIONS.
 !
-M = ME + MA + MG
-MODE = 0
-IF (N .LE. 0 .OR. ME + MA .LE. 0) RETURN
-IF (.NOT.(MDW.LT.M)) GO TO 80
-MODE = 4
-RETURN
-80 NP1 = N + 1
-KRANKE = MIN0(ME,N)
-N1 = 2*KRANKE + 1
-N2 = N1 + N
+m = me + ma + mg
+mode = 0
+if (n .le. 0 .or. me + ma .le. 0) return
+if (.not.(mdw.lt.m)) go to 80
+mode = 4
+return
+80 np1 = n + 1
+kranke = min0(me,n)
+n1 = 2*kranke + 1
+n2 = n1 + n
 !
 !     PROCESS-OPTION-VECTOR
 !
-GO TO 480
-90 IF (.NOT.(COV .AND. MDW.LT.N)) GO TO 100
-MODE = 4
-RETURN
-100 L = KRANKE
+go to 480
+90 if (.not.(cov .and. mdw.lt.n)) go to 100
+mode = 4
+return
+100 l = kranke
 !
 !     COMPUTE NORM OF EQUALITY CONSTRAINT MATRIX AND RT SIDE.
 !
-ENORM = ZERO
-DO J = 1,N
-  ENORM = AMAX1(ENORM,SASUM(ME,W(1,J),1))
-END DO
-FNORM = SASUM(ME,W(1,NP1),1)
-IF (.NOT.(L.GT.0)) GO TO 200
-SNMAX = ZERO
-RNMAX = ZERO
-do 180 I = 1,L
+enorm = zero
+do j = 1,n
+  enorm = amax1(enorm,sasum(me,w(1,j),1))
+end do
+fnorm = sasum(me,w(1,np1),1)
+if (.not.(l.gt.0)) go to 200
+snmax = zero
+rnmax = zero
+do 180 i = 1,l
 !
 !     COMPUTE MAXIMUM RATIO OF VECTOR LENGTHS. PARTITION
 !     IS AT COL. I.
-  do 150 K = I,ME
-     SN = SDOT(N-I+1,W(K,I),MDW,W(K,I),MDW)
-     RN = SDOT(I-1,W(K,1),MDW,W(K,1),MDW)
-     IF (.NOT.(RN.EQ.ZERO .AND. SN.GT.SNMAX)) GO TO 120
-     SNMAX = SN
-     IMAX = K
-     GO TO 150
-120 IF (.NOT.(K.EQ.I .OR. (SN*RNMAX.GT.RN*SNMAX))) GO TO 150
-     SNMAX = SN
-     RNMAX = RN
-     IMAX = K
-150 CONTINUE
+  do 150 k = i,me
+     sn = sdot(n-i+1,w(k,i),mdw,w(k,i),mdw)
+     rn = sdot(i-1,w(k,1),mdw,w(k,1),mdw)
+     if (.not.(rn.eq.zero .and. sn.gt.snmax)) go to 120
+     snmax = sn
+     imax = k
+     go to 150
+120 if (.not.(k.eq.i .or. (sn*rnmax.gt.rn*snmax))) go to 150
+     snmax = sn
+     rnmax = rn
+     imax = k
+150 continue
 !
 !     INTERCHANGE ROWS IF NECESSARY.
-  IF (I.NE.IMAX) CALL SSWAP(NP1, W(I,1), MDW, W(IMAX,1), MDW)
-  IF (.NOT.(SNMAX.GT.TAU**2*RNMAX)) GO TO 160
+  if (i.ne.imax) call sswap(np1, w(i,1), mdw, w(imax,1), mdw)
+  if (.not.(snmax.gt.tau**2*rnmax)) go to 160
 !
 !     ELIMINATE ELEMS I+1,...,N IN ROW I.
-  CALL H12(1, I, I+1, N, W(I,1), MDW, WS(I), W(I+1,1), MDW, 1, &
-&M-I)
-  GO TO 180
-160 KRANKE = I - 1
-  GO TO 200
-180 CONTINUE
+  call h12(1, i, i+1, n, w(i,1), mdw, ws(i), w(i+1,1), mdw, 1, &
+&m-i)
+  go to 180
+160 kranke = i - 1
+  go to 200
+180 continue
 !
 !     SAVE DIAG. TERMS OF LOWER TRAP. MATRIX.
 !
-200 CALL SCOPY(KRANKE, W, MDW+1, WS(KRANKE+1), 1)
+200 call scopy(kranke, w, mdw+1, ws(kranke+1), 1)
 !
 !     USE HOUSEHOLDER TRANS FROM LEFT TO ACHIEVE KRANKE BY KRANKE UPPER
 !     TRIANGULAR FORM.
 !
-IF (.NOT.(KRANKE.GT.0 .AND. KRANKE.LT.ME)) GO TO 220
-DO KK = 1,KRANKE
-  K = KRANKE + 1 - KK
+if (.not.(kranke.gt.0 .and. kranke.lt.me)) go to 220
+do kk = 1,kranke
+  k = kranke + 1 - kk
 !
 !     APPLY TRANFORMATION TO MATRIX COLS. 1,...,K-1.
-  CALL H12(1, K, KRANKE+1, ME, W(1,K), 1, UP, W, 1, MDW, K-1)
+  call h12(1, k, kranke+1, me, w(1,k), 1, up, w, 1, mdw, k-1)
 !
 !     APPLY TO RT SIDE VECTOR.
-  CALL H12(2, K, KRANKE+1, ME, W(1,K), 1, UP, W(1,NP1), 1, 1, 1)
-END DO
-220 IF (.NOT.(KRANKE.GT.0)) GO TO 240
+  call h12(2, k, kranke+1, me, w(1,k), 1, up, w(1,np1), 1, 1, 1)
+end do
+220 if (.not.(kranke.gt.0)) go to 240
 !
 !     SOLVE FOR VARIABLES 1,...,KRANKE IN NEW COORDINATES.
-CALL SCOPY(KRANKE, W(1,NP1), 1, X, 1)
-DO I=1,KRANKE
-  X(I) = (X(I)-SDOT(I-1,W(I,1),MDW,X,1))/W(I,I)
-END DO
+call scopy(kranke, w(1,np1), 1, x, 1)
+do i=1,kranke
+  x(i) = (x(i)-sdot(i-1,w(i,1),mdw,x,1))/w(i,i)
+end do
 !
 !     COMPUTE RESIDUALS FOR REDUCED PROBLEM.
 !
-240 MEP1 = ME + 1
-RNORML = ZERO
-IF (.NOT.(ME.LT.M)) GO TO 270
-do 260 I = MEP1,M
-  W(I,NP1) = W(I,NP1) - SDOT(KRANKE,W(I,1),MDW,X,1)
-  SN = SDOT(KRANKE,W(I,1),MDW,W(I,1),MDW)
-  RN = SDOT(N-KRANKE,W(I,KRANKE+1),MDW,W(I,KRANKE+1),MDW)
-  IF (.NOT.(RN.LE.TAU**2*SN .AND. KRANKE.LT.N)) GO TO 260
-  W(I,KRANKE+1) = ZERO
-  CALL SCOPY(N-KRANKE, W(I,KRANKE+1), 0, W(I,KRANKE+1), MDW)
-260 CONTINUE
+240 mep1 = me + 1
+rnorml = zero
+if (.not.(me.lt.m)) go to 270
+do 260 i = mep1,m
+  w(i,np1) = w(i,np1) - sdot(kranke,w(i,1),mdw,x,1)
+  sn = sdot(kranke,w(i,1),mdw,w(i,1),mdw)
+  rn = sdot(n-kranke,w(i,kranke+1),mdw,w(i,kranke+1),mdw)
+  if (.not.(rn.le.tau**2*sn .and. kranke.lt.n)) go to 260
+  w(i,kranke+1) = zero
+  call scopy(n-kranke, w(i,kranke+1), 0, w(i,kranke+1), mdw)
+260 continue
 !
 !     COMPUTE EQUAL. CONSTRAINT EQUAS. RESIDUAL LENGTH.
-270 RNORME = SNRM2(ME-KRANKE,W(KRANKE+1,NP1),1)
+270 rnorme = snrm2(me-kranke,w(kranke+1,np1),1)
 !
 !     MOVE REDUCED PROBLEM DATA UPWARD IF KRANKE.LT.ME.
 !
-IF (.NOT.(KRANKE.LT.ME)) GO TO 290
-DO J=1,NP1
-  CALL SCOPY(M-ME, W(ME+1,J), 1, W(KRANKE+1,J), 1)
-END DO
+if (.not.(kranke.lt.me)) go to 290
+do j=1,np1
+  call scopy(m-me, w(me+1,j), 1, w(kranke+1,j), 1)
+end do
 !
 !     COMPUTE SOLN OF REDUCED PROBLEM.
 !
-290 CALL LSI(W(KRANKE+1,KRANKE+1), MDW, MA, MG, N-KRANKE, PRGOPT, &
-&X(KRANKE+1), RNORML, MODE, WS(N2), IP(2))
-IF (MODE .GT. 1) GO TO 470
-IF (.NOT.(ME.GT.0)) GO TO 330
+290 call lsi(w(kranke+1,kranke+1), mdw, ma, mg, n-kranke, prgopt, &
+&x(kranke+1), rnorml, mode, ws(n2), ip(2))
+if (mode .gt. 1) go to 470
+if (.not.(me.gt.0)) go to 330
 !
 !     TEST FOR CONSISTENCY OF EQUALITY CONSTRAINTS.
 !
-MDEQC = 0
-XNRME = SASUM(KRANKE,W(1,NP1),1)
-IF (RNORME.GT.TAU*(ENORM*XNRME+FNORM)) MDEQC = 1
-MODE = MODE + MDEQC
+mdeqc = 0
+xnrme = sasum(kranke,w(1,np1),1)
+if (rnorme.gt.tau*(enorm*xnrme+fnorm)) mdeqc = 1
+mode = mode + mdeqc
 !
 !     CHECK IF SOLN TO EQUAL. CONSTRAINTS SATISFIES INEQUAL.
 !     CONSTRAINTS WHEN THERE ARE NO DEGREES OF FREEDOM LEFT.
 !
-IF (.NOT.(KRANKE.EQ.N .AND. MG.GT.0)) GO TO 330
-XNORM = SASUM(N,X,1)
-MAPKE1 = MA + KRANKE + 1
-MEND = MA + KRANKE + MG
-do 310 I = MAPKE1,MEND
-  SIZE = SASUM(N,W(I,1),MDW)*XNORM + ABS(W(I,NP1))
-  IF (.NOT.(W(I,NP1).GT.TAU*SIZE)) GO TO 310
-  MODE = 2
-  GO TO 470
-310 CONTINUE
-330 IF (.NOT.(KRANKE.GT.0)) GO TO 420
+if (.not.(kranke.eq.n .and. mg.gt.0)) go to 330
+xnorm = sasum(n,x,1)
+mapke1 = ma + kranke + 1
+mend = ma + kranke + mg
+do 310 i = mapke1,mend
+  size = sasum(n,w(i,1),mdw)*xnorm + abs(w(i,np1))
+  if (.not.(w(i,np1).gt.tau*size)) go to 310
+  mode = 2
+  go to 470
+310 continue
+330 if (.not.(kranke.gt.0)) go to 420
 !
 !     REPLACE DIAG. TERMS OF LOWER TRAP. MATRIX.
-CALL SCOPY(KRANKE, WS(KRANKE+1), 1, W, MDW+1)
+call scopy(kranke, ws(kranke+1), 1, w, mdw+1)
 !
 !     REAPPLY TRANS TO PUT SOLN IN ORIGINAL COORDINATES.
 !
-DO II = 1,KRANKE
-  I = KRANKE + 1 - II
-  CALL H12(2, I, I+1, N, W(I,1), MDW, WS(I), X, 1, 1, 1)
-END DO
+do ii = 1,kranke
+  i = kranke + 1 - ii
+  call h12(2, i, i+1, n, w(i,1), mdw, ws(i), x, 1, 1, 1)
+end do
 !
 !     COMPUTE COV MATRIX OF EQUAL. CONSTRAINED PROBLEM.
 !
-IF (.NOT.(COV)) GO TO 450
-do 400 JJ = 1,KRANKE
-  J = KRANKE + 1 - JJ
-  IF (.NOT.(J.LT.N)) GO TO 400
-  RB = WS(J)*W(J,J)
-  IF (RB.NE.ZERO) RB = ONE/RB
-  JP1 = J + 1
-  DO I=JP1,N
-    W(I,J) = SDOT(N-J,W(I,JP1),MDW,W(J,JP1),MDW)*RB
-  END DO
-  GAM = SDOT(N-J,W(JP1,J),1,W(J,JP1),MDW)*RB
-  GAM = HALF*GAM
-  CALL SAXPY(N-J, GAM, W(J,JP1), MDW, W(JP1,J), 1)
-  DO I=JP1,N
-    DO K=I,N
-      W(I,K) = W(I,K) + W(J,I)*W(K,J) + W(I,J)*W(J,K)
-      W(K,I) = W(I,K)
-    END DO
-  END DO
-  UJ = WS(J)
-  VJ = GAM*UJ
-  W(J,J) = UJ*VJ + UJ*VJ
-  DO I=JP1,N
-    W(J,I) = UJ*W(I,J) + VJ*W(J,I)
-  END DO
-  CALL SCOPY(N-J, W(J,JP1), MDW, W(JP1,J), 1)
-400 CONTINUE
+if (.not.(cov)) go to 450
+do 400 jj = 1,kranke
+  j = kranke + 1 - jj
+  if (.not.(j.lt.n)) go to 400
+  rb = ws(j)*w(j,j)
+  if (rb.ne.zero) rb = one/rb
+  jp1 = j + 1
+  do i=jp1,n
+    w(i,j) = sdot(n-j,w(i,jp1),mdw,w(j,jp1),mdw)*rb
+  end do
+  gam = sdot(n-j,w(jp1,j),1,w(j,jp1),mdw)*rb
+  gam = half*gam
+  call saxpy(n-j, gam, w(j,jp1), mdw, w(jp1,j), 1)
+  do i=jp1,n
+    do k=i,n
+      w(i,k) = w(i,k) + w(j,i)*w(k,j) + w(i,j)*w(j,k)
+      w(k,i) = w(i,k)
+    end do
+  end do
+  uj = ws(j)
+  vj = gam*uj
+  w(j,j) = uj*vj + uj*vj
+  do i=jp1,n
+    w(j,i) = uj*w(i,j) + vj*w(j,i)
+  end do
+  call scopy(n-j, w(j,jp1), mdw, w(jp1,j), 1)
+400 continue
 !
 !     APPLY THE SCALING TO THE COVARIANCE MATRIX.
 !
-420 IF (.NOT.(COV)) GO TO 450
-DO I = 1,N
-  L = N1 + I
-  CALL SSCAL(N, WS(L-1), W(I,1), MDW)
-  CALL SSCAL(N, WS(L-1), W(1,I), 1)
-END DO
+420 if (.not.(cov)) go to 450
+do i = 1,n
+  l = n1 + i
+  call sscal(n, ws(l-1), w(i,1), mdw)
+  call sscal(n, ws(l-1), w(1,i), 1)
+end do
 !
 !     RESCALE SOLN. VECTOR.
 !
-450 IF (MODE .GT. 1) GO TO 470
-DO J = 1,N
-  L = N1 + J
-  X(J) = X(J)*WS(L-1)
-END DO
-470 IP(1) = KRANKE
-IP(3) = IP(3) + 2*KRANKE + N
-RETURN
-480 CONTINUE
+450 if (mode .gt. 1) go to 470
+do j = 1,n
+  l = n1 + j
+  x(j) = x(j)*ws(l-1)
+end do
+470 ip(1) = kranke
+ip(3) = ip(3) + 2*kranke + n
+return
+480 continue
 !     TO PROCESS-OPTION-VECTOR
 !
 !     THE NOMINAL TOLERANCE USED IN THE CODE
 !     FOR THE EQUALITY CONSTRAINT EQUATIONS.
-TAU = SQRT(SRELPR)
+tau = sqrt(srelpr)
 !
 !     THE NOMINAL COLUMN SCALING USED IN THE CODE IS
 !     THE IDENTITY SCALING.
-WS(N1) = ONE
-CALL SCOPY(N, WS(N1), 0, WS(N1), 1)
+ws(n1) = one
+call scopy(n, ws(n1), 0, ws(n1), 1)
 !
 !     NO COVARIANCE MATRIX IS NOMINALLY COMPUTED.
-COV = .FALSE.
+cov = .false.
 !
 !     DEFINE BOUND FOR NUMBER OF OPTIONS TO CHANGE.
-NOPT = 1000
-NTIMES = 0
+nopt = 1000
+ntimes = 0
 !
 !     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
-NLINK = 100000
-LAST = 1
-LINK = PRGOPT(1)
-IF (.NOT.(LINK.LE.0 .OR. LINK.GT.NLINK)) GO TO 490
-MODE = 4
-RETURN
-490 IF (.NOT.(LINK.GT.1)) GO TO 540
-NTIMES = NTIMES + 1
-IF (.NOT.(NTIMES.GT.NOPT)) GO TO 500
-MODE = 4
-RETURN
-500 KEY = PRGOPT(LAST+1)
-IF (KEY.EQ.1) COV = PRGOPT(LAST+2).NE.ZERO
-IF (.NOT.(KEY.EQ.2 .AND. PRGOPT(LAST+2).NE.ZERO)) GO TO 520
-DO J=1,N
-  T = SNRM2(M,W(1,J),1)
-  IF (T.NE.ZERO) T = ONE/T
-  L = N1 + J
-  WS(L-1) = T
-END DO
-520 IF (KEY.EQ.3) CALL SCOPY(N, PRGOPT(LAST+2), 1, WS(N1), 1)
-IF (KEY.EQ.4) TAU = AMAX1(SRELPR,PRGOPT(LAST+2))
-NEXT = PRGOPT(LINK)
-IF (.NOT.(NEXT.LE.0 .OR. NEXT.GT.NLINK)) GO TO 530
-MODE = 4
-RETURN
-530 LAST = LINK
-LINK = NEXT
-GO TO 490
-540 DO J=1,N
-  L = N1 + J
-  CALL SSCAL(M, WS(L-1), W(1,J), 1)
-END DO
-GO TO 90
-END SUBROUTINE LSEI
+nlink = 100000
+last = 1
+link = prgopt(1)
+if (.not.(link.le.0 .or. link.gt.nlink)) go to 490
+mode = 4
+return
+490 if (.not.(link.gt.1)) go to 540
+ntimes = ntimes + 1
+if (.not.(ntimes.gt.nopt)) go to 500
+mode = 4
+return
+500 key = prgopt(last+1)
+if (key.eq.1) cov = prgopt(last+2).ne.zero
+if (.not.(key.eq.2 .and. prgopt(last+2).ne.zero)) go to 520
+do j=1,n
+  t = snrm2(m,w(1,j),1)
+  if (t.ne.zero) t = one/t
+  l = n1 + j
+  ws(l-1) = t
+end do
+520 if (key.eq.3) call scopy(n, prgopt(last+2), 1, ws(n1), 1)
+if (key.eq.4) tau = amax1(srelpr,prgopt(last+2))
+next = prgopt(link)
+if (.not.(next.le.0 .or. next.gt.nlink)) go to 530
+mode = 4
+return
+530 last = link
+link = next
+go to 490
+540 do j=1,n
+  l = n1 + j
+  call sscal(m, ws(l-1), w(1,j), 1)
+end do
+go to 90
+end subroutine lsei
 
-SUBROUTINE LSI(W, MDW, MA, MG, N, PRGOPT, X, RNORM, MODE, WS, IP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MA, MDW, MG
-INTEGER, INTENT(OUT) :: MODE
-INTEGER :: N
-REAL, INTENT(OUT) :: RNORM
-INTEGER :: I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK, &
-&KRM1, KRP1, L, LAST, LINK, M, MAP1, MDLPDP, MINMAN, N1, N2, N3, &
-&NEXT, NP1
-REAL :: ANORM, BLOWUP, EPS, FAC, GAM, HALF, ONE, RB, SRELPR, TAU, &
-&TOL, XNORM, ZERO
-REAL :: SASUM
-REAL :: SDOT
-REAL :: SPMPAR
+subroutine lsi(w, mdw, ma, mg, n, prgopt, x, rnorm, mode, ws, ip)
+implicit none
+integer, intent(in) :: ma, mdw, mg
+integer, intent(out) :: mode
+integer :: n
+real, intent(out) :: rnorm
+integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
+&krm1, krp1, l, last, link, m, map1, mdlpdp, minman, n1, n2, n3, &
+&next, np1
+real :: anorm, blowup, eps, fac, gam, half, one, rb, srelpr, tau, &
+&tol, xnorm, zero
+real :: sasum
+real :: sdot
+real :: spmpar
 !
 !     THIS IS A COMPANION SUBPROGRAM TO LSEI( ).
 !     THE DOCUMENTATION FOR LSEI( ) HAS MORE COMPLETE
@@ -8132,313 +8132,313 @@ REAL :: SPMPAR
 !     SPMPAR        FUNCTION TO COMPUTE THE RELATIVE MACHINE
 !                   PRECISION.
 !
-REAL, INTENT(INOUT) :: W(MDW,*)
-REAL, INTENT(IN) :: PRGOPT(*)
-REAL, INTENT(INOUT) :: X(*), WS(*)
-REAL :: RNRM(1), OPT(7)
-INTEGER, INTENT(INOUT) :: IP(*)
-LOGICAL :: COV
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+real :: rnrm(1), opt(7)
+integer, intent(inout) :: ip(*)
+logical :: cov
 !
-DATA ZERO /0.E0/, ONE /1.E0/, HALF /0.5E0/
+data zero /0.e0/, one /1.e0/, half /0.5e0/
 !
-SRELPR = SPMPAR(1)
-MODE = 0
-RNORM = ZERO
-M = MA + MG
-NP1 = N + 1
-KRANK = 0
-IF (N.LE.0 .OR. M.LE.0) GO TO 70
+srelpr = spmpar(1)
+mode = 0
+rnorm = zero
+m = ma + mg
+np1 = n + 1
+krank = 0
+if (n.le.0 .or. m.le.0) go to 70
 !
 !     PROCESS-OPTION-VECTOR
 !
-GO TO 500
+go to 500
 !
 !     COMPUTE MATRIX NORM OF LEAST SQUARES EQUAS.
 !
-40 ANORM = ZERO
-DO J = 1,N
-  ANORM = AMAX1(ANORM,SASUM(MA,W(1,J),1))
-END DO
+40 anorm = zero
+do j = 1,n
+  anorm = amax1(anorm,sasum(ma,w(1,j),1))
+end do
 !
 !     SET TOL FOR HFTI( ) RANK TEST.
-TAU = TOL*ANORM
+tau = tol*anorm
 !
 !     COMPUTE HOUSEHOLDER ORTHOGONAL DECOMP OF MATRIX.
 !
-IF (N.GT.0) WS(1) = ZERO
-CALL SCOPY(N, WS, 0, WS, 1)
-CALL SCOPY(MA, W(1,NP1), 1, WS, 1)
-K = MAX0(M,N)
-MINMAN = MIN0(MA,N)
-N1 = K + 1
-N2 = N1 + N
-CALL HFTI(W, MDW, MA, N, WS, 1, 1, TAU, KRANK, RNRM, WS(N2), &
-&WS(N1), IP)
-RNORM = RNRM(1)
-FAC = ONE
-GAM = MA - KRANK
-IF (KRANK .LT. MA) FAC = RNORM**2/GAM
-GO TO 80
+if (n.gt.0) ws(1) = zero
+call scopy(n, ws, 0, ws, 1)
+call scopy(ma, w(1,np1), 1, ws, 1)
+k = max0(m,n)
+minman = min0(ma,n)
+n1 = k + 1
+n2 = n1 + n
+call hfti(w, mdw, ma, n, ws, 1, 1, tau, krank, rnrm, ws(n2), &
+&ws(n1), ip)
+rnorm = rnrm(1)
+fac = one
+gam = ma - krank
+if (krank .lt. ma) fac = rnorm**2/gam
+go to 80
 !
 !     REDUCE-TO-LPDP-AND-SOLVE
 !
-70 IP(1) = KRANK
-IP(2) = N + MAX0(M,N) + (MG+2)*(N+7)
-RETURN
+70 ip(1) = krank
+ip(2) = n + max0(m,n) + (mg+2)*(n+7)
+return
 !
 !     TO REDUCE-TO-LPDP-AND-SOLVE
 !
-80 MAP1 = MA + 1
+80 map1 = ma + 1
 !
 !     COMPUTE INEQ. RT-HAND SIDE FOR LPDP.
 !
-IF (.NOT.(MA.LT.M)) GO TO 260
-IF (.NOT.(MINMAN.GT.0)) GO TO 160
-DO I = MAP1,M
-  W(I,NP1) = W(I,NP1) - SDOT(N,W(I,1),MDW,WS,1)
-END DO
-DO I = 1,MINMAN
-  J = IP(I)
+if (.not.(ma.lt.m)) go to 260
+if (.not.(minman.gt.0)) go to 160
+do i = map1,m
+  w(i,np1) = w(i,np1) - sdot(n,w(i,1),mdw,ws,1)
+end do
+do i = 1,minman
+  j = ip(i)
 !
 !     APPLY PERMUTATIONS TO COLS OF INEQ. CONSTRAINT MATRIX.
-  CALL SSWAP(MG, W(MAP1,I), 1, W(MAP1,J), 1)
-END DO
+  call sswap(mg, w(map1,i), 1, w(map1,j), 1)
+end do
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO CONSTRAINT MATRIX.
 !
-IF (.NOT.(0.LT.KRANK .AND. KRANK.LT.N)) GO TO 120
-DO II = 1,KRANK
-  I = KRANK + 1 - II
-  L = N1 + I
-  CALL H12(2, I, KRANK+1, N, W(I,1), MDW, WS(L-1), W(MAP1,1), &
-&MDW, 1, MG)
-END DO
+if (.not.(0.lt.krank .and. krank.lt.n)) go to 120
+do ii = 1,krank
+  i = krank + 1 - ii
+  l = n1 + i
+  call h12(2, i, krank+1, n, w(i,1), mdw, ws(l-1), w(map1,1), &
+&mdw, 1, mg)
+end do
 !
 !     COMPUTE PERMUTED INEQ. CONSTR. MATRIX TIMES R-INVERSE.
 !
-120 do 150 I = MAP1,M
-  IF (.NOT.(0.LT.KRANK)) GO TO 150
-  DO J=1,KRANK
-    W(I,J) = (W(I,J)-SDOT(J-1,W(1,J),1,W(I,1),MDW))/W(J,J)
-  END DO
-150 CONTINUE
+120 do 150 i = map1,m
+  if (.not.(0.lt.krank)) go to 150
+  do j=1,krank
+    w(i,j) = (w(i,j)-sdot(j-1,w(1,j),1,w(i,1),mdw))/w(j,j)
+  end do
+150 continue
 !
 !     SOLVE THE REDUCED PROBLEM WITH LPDP ALGORITHM,
 !     THE LEAST PROJECTED DISTANCE PROBLEM.
 !
-160 CALL LPDP(W(MAP1,1), MDW, MG, KRANK, N-KRANK, OPT, X, XNORM, &
-&MDLPDP, WS(N2), IP(N+1))
-IF (MDLPDP .NE. 1) GO TO 240
-IF (.NOT.(KRANK.GT.0)) GO TO 180
+160 call lpdp(w(map1,1), mdw, mg, krank, n-krank, opt, x, xnorm, &
+&mdlpdp, ws(n2), ip(n+1))
+if (mdlpdp .ne. 1) go to 240
+if (.not.(krank.gt.0)) go to 180
 !
 !     COMPUTE SOLN IN ORIGINAL COORDINATES.
 !
-DO II = 1,KRANK
-  I = KRANK + 1 - II
-  X(I) = (X(I)-SDOT(II-1,W(I,I+1),MDW,X(I+1),1))/W(I,I)
-END DO
+do ii = 1,krank
+  i = krank + 1 - ii
+  x(i) = (x(i)-sdot(ii-1,w(i,i+1),mdw,x(i+1),1))/w(i,i)
+end do
 !
 !     APPLY HOUSEHOLDER TRANS. TO SOLN VECTOR.
 !
-180 IF (.NOT.(0.LT.KRANK .AND. KRANK.LT.N)) GO TO 200
-DO I = 1,KRANK
-  L = N1 + I
-  CALL H12(2, I, KRANK+1, N, W(I,1), MDW, WS(L-1), X, 1, 1, 1)
-END DO
-200 IF (.NOT.(MINMAN.GT.0)) GO TO 270
+180 if (.not.(0.lt.krank .and. krank.lt.n)) go to 200
+do i = 1,krank
+  l = n1 + i
+  call h12(2, i, krank+1, n, w(i,1), mdw, ws(l-1), x, 1, 1, 1)
+end do
+200 if (.not.(minman.gt.0)) go to 270
 !
 !     REPERMUTE VARIABLES TO THEIR INPUT ORDER.
-DO II=1,MINMAN
-  I = MINMAN + 1 - II
-  J = IP(I)
-  CALL SSWAP(1, X(I), 1, X(J), 1)
-END DO
+do ii=1,minman
+  i = minman + 1 - ii
+  j = ip(i)
+  call sswap(1, x(i), 1, x(j), 1)
+end do
 !
 !     VARIABLES ARE NOW IN ORIG. COORDINATES.
 !     ADD SOLN OF UNSCONSTRAINED PROB.
-DO I = 1,N
-  X(I) = X(I) + WS(I)
-END DO
+do i = 1,n
+  x(i) = x(i) + ws(i)
+end do
 !
 !     COMPUTE THE RESIDUAL VECTOR NORM.
-RNORM = SQRT(RNORM**2+XNORM**2)
-GO TO 270
-240 MODE = 2
-GO TO 270
-260 CALL SCOPY(N, WS, 1, X, 1)
-270 IF (.NOT.(COV .AND. KRANK.GT.0)) GO TO 70
+rnorm = sqrt(rnorm**2+xnorm**2)
+go to 270
+240 mode = 2
+go to 270
+260 call scopy(n, ws, 1, x, 1)
+270 if (.not.(cov .and. krank.gt.0)) go to 70
 !
 !     COMPUTE COVARIANCE MATRIX BASED ON THE ORTHOGONAL DECOMP.
 !     FROM HFTI( ).
 !
-KRM1 = KRANK - 1
-KRP1 = KRANK + 1
+krm1 = krank - 1
+krp1 = krank + 1
 !
 !     COPY DIAG. TERMS TO WORKING ARRAY.
-CALL SCOPY(KRANK, W, MDW+1, WS(N2), 1)
+call scopy(krank, w, mdw+1, ws(n2), 1)
 !
 !     RECIPROCATE DIAG. TERMS.
-DO J = 1,KRANK
-  W(J,J) = ONE/W(J,J)
-END DO
-IF (.NOT.(KRANK.GT.1)) GO TO 310
+do j = 1,krank
+  w(j,j) = one/w(j,j)
+end do
+if (.not.(krank.gt.1)) go to 310
 !
 !     INVERT THE UPPER TRIANGULAR QR FACTOR ON ITSELF.
-DO I=1,KRM1
-  IP1 = I + 1
-  DO J=IP1,KRANK
-    W(I,J) = -SDOT(J-I,W(I,I),MDW,W(I,J),1)*W(J,J)
-  END DO
-END DO
+do i=1,krm1
+  ip1 = i + 1
+  do j=ip1,krank
+    w(i,j) = -sdot(j-i,w(i,i),mdw,w(i,j),1)*w(j,j)
+  end do
+end do
 !
 !     COMPUTE THE INVERTED FACTOR TIMES ITS TRANSPOSE.
-310 DO I=1,KRANK
-  DO J=I,KRANK
-    W(I,J) = SDOT(KRANK+1-J,W(I,J),MDW,W(J,J),MDW)
-  END DO
-END DO
-IF (.NOT.(KRANK.LT.N)) GO TO 450
+310 do i=1,krank
+  do j=i,krank
+    w(i,j) = sdot(krank+1-j,w(i,j),mdw,w(j,j),mdw)
+  end do
+end do
+if (.not.(krank.lt.n)) go to 450
 !
 !     ZERO OUT LOWER TRAPEZOIDAL PART.
 !     COPY UPPER TRI. TO LOWER TRI. PART.
-DO J=1,KRANK
-  CALL SCOPY(J, W(1,J), 1, W(J,1), MDW)
-END DO
-DO I=KRP1,N
-  W(I,1) = ZERO
-  CALL SCOPY(I, W(I,1), 0, W(I,1), MDW)
-END DO
+do j=1,krank
+  call scopy(j, w(1,j), 1, w(j,1), mdw)
+end do
+do i=krp1,n
+  w(i,1) = zero
+  call scopy(i, w(i,1), 0, w(i,1), mdw)
+end do
 !
 !     APPLY RIGHT SIDE TRANSFORMATIONS TO LOWER TRI.
-N3 = N2 + KRP1
-DO I=1,KRANK
-  L = N1 + I
-  K = N2 + I
-  RB = WS(L-1)*WS(K-1)
-  IF (.NOT.(RB.LT.ZERO)) GO TO 420
+n3 = n2 + krp1
+do i=1,krank
+  l = n1 + i
+  k = n2 + i
+  rb = ws(l-1)*ws(k-1)
+  if (.not.(rb.lt.zero)) go to 420
 !
 !     IF RB.GE.ZERO, TRANSFORMATION CAN BE REGARDED AS ZERO.
-  RB = ONE/RB
+  rb = one/rb
 !
 !     STORE UNSCALED RANK-ONE HOUSEHOLDER UPDATE IN WORK ARRAY.
-  WS(N3) = ZERO
-  CALL SCOPY(N, WS(N3), 0, WS(N3), 1)
-  L = N1 + I
-  K = N3 + I
-  WS(K-1) = WS(L-1)
-  DO J=KRP1,N
-    K = N3 + J
-    WS(K-1) = W(I,J)
-  END DO
-  DO J=1,N
-    L = N3 + I
-    K = N3 + J
-    WS(J) = SDOT(J-I,W(J,I),MDW,WS(L-1),1) + SDOT(N-J+1,W(J,J),1, &
-&WS(K-1),1)
-    WS(J) = WS(J)*RB
-  END DO
-  L = N3 + I
-  GAM = SDOT(N-I+1,WS(L-1),1,WS(I),1)*RB
-  GAM = GAM*HALF
-  CALL SAXPY(N-I+1, GAM, WS(L-1), 1, WS(I), 1)
-  DO J=I,N
-    IF (.NOT.(I.GT.1)) GO TO 390
-    IM1 = I - 1
-    K = N3 + J
-    DO L=1,IM1
-      W(J,L) = W(J,L) + WS(K-1)*WS(L)
-    END DO
-390 K = N3 + J
-    DO L=I,J
-      IL = N3 + L
-      W(J,L) = W(J,L) + WS(J)*WS(IL-1) + WS(L)*WS(K-1)
-    END DO
-  END DO
-420 CONTINUE
-END DO
+  ws(n3) = zero
+  call scopy(n, ws(n3), 0, ws(n3), 1)
+  l = n1 + i
+  k = n3 + i
+  ws(k-1) = ws(l-1)
+  do j=krp1,n
+    k = n3 + j
+    ws(k-1) = w(i,j)
+  end do
+  do j=1,n
+    l = n3 + i
+    k = n3 + j
+    ws(j) = sdot(j-i,w(j,i),mdw,ws(l-1),1) + sdot(n-j+1,w(j,j),1, &
+&ws(k-1),1)
+    ws(j) = ws(j)*rb
+  end do
+  l = n3 + i
+  gam = sdot(n-i+1,ws(l-1),1,ws(i),1)*rb
+  gam = gam*half
+  call saxpy(n-i+1, gam, ws(l-1), 1, ws(i), 1)
+  do j=i,n
+    if (.not.(i.gt.1)) go to 390
+    im1 = i - 1
+    k = n3 + j
+    do l=1,im1
+      w(j,l) = w(j,l) + ws(k-1)*ws(l)
+    end do
+390 k = n3 + j
+    do l=i,j
+      il = n3 + l
+      w(j,l) = w(j,l) + ws(j)*ws(il-1) + ws(l)*ws(k-1)
+    end do
+  end do
+420 continue
+end do
 !
 !     COPY LOWER TRI. TO UPPER TRI. TO SYMMETRIZE THE COVARIANCE MATRIX.
 !
-DO I = 1,N
-  CALL SCOPY(I, W(I,1), MDW, W(1,I), 1)
-END DO
+do i = 1,n
+  call scopy(i, w(i,1), mdw, w(1,i), 1)
+end do
 !
 !     REPERMUTE ROWS AND COLS.
 !
-450 do 470 II = 1,MINMAN
-  I = MINMAN + 1 - II
-  K = IP(I)
-  IF (.NOT.(I.NE.K)) GO TO 470
-  CALL SSWAP(1, W(I,I), 1, W(K,K), 1)
-  CALL SSWAP(I-1, W(1,I), 1, W(1,K), 1)
-  CALL SSWAP(K-I-1, W(I,I+1), MDW, W(I+1,K), 1)
-  CALL SSWAP(N-K, W(I,K+1), MDW, W(K,K+1), MDW)
-470 CONTINUE
+450 do 470 ii = 1,minman
+  i = minman + 1 - ii
+  k = ip(i)
+  if (.not.(i.ne.k)) go to 470
+  call sswap(1, w(i,i), 1, w(k,k), 1)
+  call sswap(i-1, w(1,i), 1, w(1,k), 1)
+  call sswap(k-i-1, w(i,i+1), mdw, w(i+1,k), 1)
+  call sswap(n-k, w(i,k+1), mdw, w(k,k+1), mdw)
+470 continue
 !
 !     PUT IN NORMALIZED RESIDUAL SUM OF SQUARES SCALE FACTOR
 !     AND SYMMETRIZE THE RESULTING COVARIANCE MARIX.
 !
-DO J = 1,N
-  CALL SSCAL(J, FAC, W(1,J), 1)
-  CALL SCOPY(J, W(1,J), 1, W(J,1), MDW)
-END DO
-GO TO 70
+do j = 1,n
+  call sscal(j, fac, w(1,j), 1)
+  call scopy(j, w(1,j), 1, w(j,1), mdw)
+end do
+go to 70
 !
 !     TO PROCESS-OPTION-VECTOR
 !
 !     THE NOMINAL TOLERANCE USED IN THE CODE,
-500 TOL = SQRT(SRELPR)
-COV = .FALSE.
-LAST = 1
-LINK = PRGOPT(1)
-KEY8 = 0
-KEY9 = 0
-510 IF (.NOT.(LINK.GT.1)) GO TO 540
-   KEY = PRGOPT(LAST+1)
-   IF (KEY .EQ. 1) COV = PRGOPT(LAST+2).NE.ZERO
-   IF (KEY .EQ. 5) TOL = AMAX1(SRELPR,PRGOPT(LAST+2))
-   IF (KEY .NE. 8) GO TO 520
-      KEY8 = 1
-      EPS = PRGOPT(LAST+2)
-      GO TO 530
-520 IF (KEY .NE. 9) GO TO 530
-      KEY9 = 1
-      BLOWUP = PRGOPT(LAST+2)
-530 NEXT = PRGOPT(LINK)
-   LAST = LINK
-   LINK = NEXT
-   GO TO 510
+500 tol = sqrt(srelpr)
+cov = .false.
+last = 1
+link = prgopt(1)
+key8 = 0
+key9 = 0
+510 if (.not.(link.gt.1)) go to 540
+   key = prgopt(last+1)
+   if (key .eq. 1) cov = prgopt(last+2).ne.zero
+   if (key .eq. 5) tol = amax1(srelpr,prgopt(last+2))
+   if (key .ne. 8) go to 520
+      key8 = 1
+      eps = prgopt(last+2)
+      go to 530
+520 if (key .ne. 9) go to 530
+      key9 = 1
+      blowup = prgopt(last+2)
+530 next = prgopt(link)
+   last = link
+   link = next
+   go to 510
 !
 !     PREPARE THE OPTION VECTOR FOR WNNLS
 !
-540 J = 1
-IF (KEY8 .EQ. 0) GO TO 550
-   OPT(1) = 4.0
-   OPT(2) = 8.0
-   OPT(3) = EPS
-   J = 4
-550 IF (KEY9 .EQ. 0) GO TO 560
-   OPT(J) = J + 3
-   OPT(J+1) = 9.0
-   OPT(J+2) = BLOWUP
-   J = J + 3
-560 OPT(J) = 1.0
-GO TO 40
-END SUBROUTINE LSI
+540 j = 1
+if (key8 .eq. 0) go to 550
+   opt(1) = 4.0
+   opt(2) = 8.0
+   opt(3) = eps
+   j = 4
+550 if (key9 .eq. 0) go to 560
+   opt(j) = j + 3
+   opt(j+1) = 9.0
+   opt(j+2) = blowup
+   j = j + 3
+560 opt(j) = 1.0
+go to 40
+end subroutine lsi
 
-SUBROUTINE LPDP(A, MDA, M, N1, N2, PRGOPT, X, WNORM, MODE, WS, IS)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IS(*)
-INTEGER, INTENT(IN) :: M, MDA
-INTEGER, INTENT(OUT) :: MODE
-INTEGER, INTENT(IN) :: N1, N2
-REAL, INTENT(INOUT) :: A(MDA,*)
-REAL :: PRGOPT(*)
-REAL, INTENT(INOUT) :: WNORM, WS(*), X(*)
-INTEGER :: I, IW, IX, J, L, MODEW, N, NP1
-REAL :: FAC, ONE, RNORM, SC, YNORM, ZERO
-REAL :: SNRM2
-REAL :: SDOT
+subroutine lpdp(a, mda, m, n1, n2, prgopt, x, wnorm, mode, ws, is)
+implicit none
+integer, intent(inout) :: is(*)
+integer, intent(in) :: m, mda
+integer, intent(out) :: mode
+integer, intent(in) :: n1, n2
+real, intent(inout) :: a(mda,*)
+real :: prgopt(*)
+real, intent(inout) :: wnorm, ws(*), x(*)
+integer :: i, iw, ix, j, l, modew, n, np1
+real :: fac, one, rnorm, sc, ynorm, zero
+real :: snrm2
+real :: sdot
 !
 !     DIMENSION A(MDA,N+1),PRGOPT(*),X(N),WS((M+2)*(N+7)),IS(M+N+1),
 !     WHERE N=N1+N2.  THIS IS A SLIGHT OVERESTIMATE FOR WS(*).
@@ -8479,141 +8479,141 @@ REAL :: SDOT
 !     SDOT,SCOPY    SUBROUTINES FROM THE BLAS PACKAGE.
 !     SSCAL,SNRM2   SEE TRANS. MATH SOFTWARE (5), P. 308.
 !
-DATA ZERO, ONE /0.E0,1.E0/, FAC /0.1E0/
+data zero, one /0.e0,1.e0/, fac /0.1e0/
 !
-N = N1 + N2
-MODE = 1
-IF (.NOT.(M.LE.0)) GO TO 20
-IF (.NOT.(N.GT.0)) GO TO 10
-X(1) = ZERO
-CALL SCOPY(N, X, 0, X, 1)
-10 WNORM = ZERO
-RETURN
-20 NP1 = N + 1
+n = n1 + n2
+mode = 1
+if (.not.(m.le.0)) go to 20
+if (.not.(n.gt.0)) go to 10
+x(1) = zero
+call scopy(n, x, 0, x, 1)
+10 wnorm = zero
+return
+20 np1 = n + 1
 !
 !     SCALE NONZERO ROWS OF INEQUALITY MATRIX TO HAVE LENGTH ONE.
 !
-do 40 I = 1,M
-   SC = SNRM2(N,A(I,1),MDA)
-   IF (SC .EQ. ZERO) GO TO 40
-   SC = ONE/SC
-   CALL SSCAL(NP1, SC, A(I,1), MDA)
-40 CONTINUE
+do 40 i = 1,m
+   sc = snrm2(n,a(i,1),mda)
+   if (sc .eq. zero) go to 40
+   sc = one/sc
+   call sscal(np1, sc, a(i,1), mda)
+40 continue
 !
 !     SCALE RT.-SIDE VECTOR TO HAVE LENGTH ONE (OR ZERO).
-YNORM = SNRM2(M,A(1,NP1),1)
-IF (YNORM .EQ. ZERO) GO TO 50
-SC = ONE/YNORM
-CALL SSCAL(M, SC, A(1,NP1), 1)
+ynorm = snrm2(m,a(1,np1),1)
+if (ynorm .eq. zero) go to 50
+sc = one/ynorm
+call sscal(m, sc, a(1,np1), 1)
 !
 !     SCALE COLS OF MATRIX H.
-50 J = N1 + 1
-60 IF (J .GT. N) GO TO 70
-SC = SNRM2(M,A(1,J),1)
-IF (SC .NE. ZERO) SC = ONE/SC
-CALL SSCAL(M, SC, A(1,J), 1)
-X(J) = SC
-J = J + 1
-GO TO 60
-70 IF (.NOT.(N1.GT.0)) GO TO 130
+50 j = n1 + 1
+60 if (j .gt. n) go to 70
+sc = snrm2(m,a(1,j),1)
+if (sc .ne. zero) sc = one/sc
+call sscal(m, sc, a(1,j), 1)
+x(j) = sc
+j = j + 1
+go to 60
+70 if (.not.(n1.gt.0)) go to 130
 !
 !     COPY TRANSPOSE OF (H G Y) TO WORK ARRAY WS(*).
-IW = 0
-DO I=1,M
+iw = 0
+do i=1,m
 !
 !     MOVE COL OF TRANSPOSE OF H INTO WORK ARRAY.
-   CALL SCOPY(N2, A(I,N1+1), MDA, WS(IW+1), 1)
-   IW = IW + N2
+   call scopy(n2, a(i,n1+1), mda, ws(iw+1), 1)
+   iw = iw + n2
 !
 !     MOVE COL OF TRANSPOSE OF G INTO WORK ARRAY.
-   CALL SCOPY(N1, A(I,1), MDA, WS(IW+1), 1)
-   IW = IW + N1
+   call scopy(n1, a(i,1), mda, ws(iw+1), 1)
+   iw = iw + n1
 !
 !     MOVE COMPONENT OF VECTOR Y INTO WORK ARRAY.
-   WS(IW+1) = A(I,NP1)
-   IW = IW + 1
-END DO
-WS(IW+1) = ZERO
-CALL SCOPY(N, WS(IW+1), 0, WS(IW+1), 1)
-IW = IW + N
-WS(IW+1) = ONE
-IW = IW + 1
+   ws(iw+1) = a(i,np1)
+   iw = iw + 1
+end do
+ws(iw+1) = zero
+call scopy(n, ws(iw+1), 0, ws(iw+1), 1)
+iw = iw + n
+ws(iw+1) = one
+iw = iw + 1
 !
 !     SOLVE EU=F SUBJECT TO (TRANSPOSE OF H)U=0, U.GE.0.  THE
 !     MATRIX E = TRANSPOSE OF (G Y), AND THE (N+1)-VECTOR
 !     F = TRANSPOSE OF (0,...,0,1).
-IX = IW + 1
-IW = IW + M
-CALL WNNLS(WS, NP1, N2, NP1-N2, M, 0, PRGOPT, WS(IX), RNORM, &
-&MODEW, IS, WS(IW+1))
+ix = iw + 1
+iw = iw + m
+call wnnls(ws, np1, n2, np1-n2, m, 0, prgopt, ws(ix), rnorm, &
+&modew, is, ws(iw+1))
 !
 !     COMPUTE THE COMPONENTS OF THE SOLN DENOTED ABOVE BY W.
-SC = ONE - SDOT(M,A(1,NP1),1,WS(IX),1)
-IF (.NOT.(ONE+FAC*ABS(SC).NE.ONE .AND. RNORM.GT.ZERO)) GO TO 110
-SC = ONE/SC
-DO J=1,N1
-   X(J) = SC*SDOT(M,A(1,J),1,WS(IX),1)
-END DO
+sc = one - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(one+fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 110
+sc = one/sc
+do j=1,n1
+   x(j) = sc*sdot(m,a(1,j),1,ws(ix),1)
+end do
 !
 !     COMPUTE THE VECTOR Q=Y-GW.  OVERWRITE Y WITH THIS VECTOR.
-DO I=1,M
-   A(I,NP1) = A(I,NP1) - SDOT(N1,A(I,1),MDA,X,1)
-END DO
-GO TO 130
-110 MODE = 2
-RETURN
-130 IF (.NOT.(N2.GT.0)) GO TO 180
+do i=1,m
+   a(i,np1) = a(i,np1) - sdot(n1,a(i,1),mda,x,1)
+end do
+go to 130
+110 mode = 2
+return
+130 if (.not.(n2.gt.0)) go to 180
 !
 !     COPY TRANSPOSE OF (H Q) TO WORK ARRAY WS(*).
-IW = 0
-DO I=1,M
-   CALL SCOPY(N2, A(I,N1+1), MDA, WS(IW+1), 1)
-   IW = IW + N2
-   WS(IW+1) = A(I,NP1)
-   IW = IW + 1
-END DO
-WS(IW+1) = ZERO
-CALL SCOPY(N2, WS(IW+1), 0, WS(IW+1), 1)
-IW = IW + N2
-WS(IW+1) = ONE
-IW = IW + 1
-IX = IW + 1
-IW = IW + M
+iw = 0
+do i=1,m
+   call scopy(n2, a(i,n1+1), mda, ws(iw+1), 1)
+   iw = iw + n2
+   ws(iw+1) = a(i,np1)
+   iw = iw + 1
+end do
+ws(iw+1) = zero
+call scopy(n2, ws(iw+1), 0, ws(iw+1), 1)
+iw = iw + n2
+ws(iw+1) = one
+iw = iw + 1
+ix = iw + 1
+iw = iw + m
 !
 !     SOLVE RV=S SUBJECT TO V.GE.0.  THE MATRIX R =(TRANSPOSE
 !     OF (H Q)), WHERE Q=Y-GW.  THE (N2+1)-VECTOR S =(TRANSPOSE
 !     OF (0,...,0,1)).
 !
-CALL WNNLS(WS, N2+1, 0, N2+1, M, 0, PRGOPT, WS(IX), RNORM, MODEW, &
-&IS, WS(IW+1))
+call wnnls(ws, n2+1, 0, n2+1, m, 0, prgopt, ws(ix), rnorm, modew, &
+&is, ws(iw+1))
 !
 !     COMPUTE THE COMPONENTS OF THE SOLN DENOTED ABOVE BY Z.
 !
-SC = ONE - SDOT(M,A(1,NP1),1,WS(IX),1)
-IF (.NOT.(ONE+FAC*ABS(SC).NE.ONE .AND. RNORM.GT.ZERO)) GO TO 160
-SC = ONE/SC
-DO J=1,N2
-   L = N1 + J
-   X(L) = SC*SDOT(M,A(1,L),1,WS(IX),1)*X(L)
-END DO
-GO TO 180
-160 MODE = 2
-RETURN
+sc = one - sdot(m,a(1,np1),1,ws(ix),1)
+if (.not.(one+fac*abs(sc).ne.one .and. rnorm.gt.zero)) go to 160
+sc = one/sc
+do j=1,n2
+   l = n1 + j
+   x(l) = sc*sdot(m,a(1,l),1,ws(ix),1)*x(l)
+end do
+go to 180
+160 mode = 2
+return
 !
 !     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
-180 CALL SSCAL(N, YNORM, X, 1)
-WNORM = SNRM2(N1,X,1)
-RETURN
-END SUBROUTINE LPDP
+180 call sscal(n, ynorm, x, 1)
+wnorm = snrm2(n1,x,1)
+return
+end subroutine lpdp
 
-SUBROUTINE WNNLS(W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, &
-&IWORK, WORK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L, MA, MDW, ME
-INTEGER, INTENT(OUT) :: MODE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: L1, L2, L3, L4, L5
+subroutine wnnls(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, &
+&iwork, work)
+implicit none
+integer, intent(in) :: l, ma, mdw, me
+integer, intent(out) :: mode
+integer, intent(in) :: n
+real, intent(inout) :: rnorm
+integer :: l1, l2, l3, l4, l5
 !
 !     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
 !
@@ -8844,53 +8844,53 @@ INTEGER :: L1, L2, L3, L4, L5
 !        R.J. HANSON.  AVAILABLE AS SANDIA TECHNICAL REPORT NO.
 !        SAND77-0552, AND MATH. PROGRAMMING, VOL. 21, (1981), P. 98-118.
 !
-REAL, INTENT(INOUT) :: W(MDW,*)
-REAL, INTENT(IN) :: PRGOPT(*)
-REAL, INTENT(INOUT) :: X(N), WORK(*)
-INTEGER, INTENT(INOUT) :: IWORK(*)
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(n), work(*)
+integer, intent(inout) :: iwork(*)
 !
-MODE = 0
-IF (MA+ME .LE. 0 .OR. N .LE. 0) RETURN
-IF (.NOT.(MDW.LT.ME+MA)) GO TO 10
-MODE = 2
-RETURN
-10 IF (0.LE.L .AND. L.LE.N) GO TO 20
-MODE = 2
-RETURN
+mode = 0
+if (ma+me .le. 0 .or. n .le. 0) return
+if (.not.(mdw.lt.me+ma)) go to 10
+mode = 2
+return
+10 if (0.le.l .and. l.le.n) go to 20
+mode = 2
+return
 !
 !     THE PURPOSE OF THIS SUBROUTINE IS TO BREAK UP THE ARRAYS
 !     WORK(*) AND IWORK(*) INTO SEPARATE WORK ARRAYS
 !     REQUIRED BY THE MAIN SUBROUTINE WNLSM( ).
 !
-20 L1 = N + 1
-L2 = L1 + N
-L3 = L2 + ME + MA
-L4 = L3 + N
-L5 = L4 + N
+20 l1 = n + 1
+l2 = l1 + n
+l3 = l2 + me + ma
+l4 = l3 + n
+l5 = l4 + n
 !
-CALL WNLSM(W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, IWORK, &
-&IWORK(L1), WORK(1), WORK(L1), WORK(L2), WORK(L3), WORK(L4), &
-&WORK(L5))
-RETURN
-END SUBROUTINE WNNLS
+call wnlsm(w, mdw, me, ma, n, l, prgopt, x, rnorm, mode, iwork, &
+&iwork(l1), work(1), work(l1), work(l2), work(l3), work(l4), &
+&work(l5))
+return
+end subroutine wnnls
 
-SUBROUTINE WNLSM(W, MDW, MME, MA, N, L, PRGOPT, X, RNORM, MODE, &
-&IPIVOT, ITYPE, WD, H, SCALE, Z, TEMP, D)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L, MA, MDW, MME
-INTEGER, INTENT(INOUT) :: MODE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER, &
-&ITMAX, IWMAX, J, JCON, JJ, JM1, JP, KEY, KRANK, KRP1, L1, LAST, &
-&LINK, LP1, M, ME, MEP1, NEXT, NIV, NIV1, NLINK, NM1, NOPT, NP1, &
-&NSOLN, NSP1, NTIMES
-REAL :: ALAMDA, ALPHA, ALSQ, AMAX, BLOWUP, BNORM, EANORM, FAC, &
-&ONE, SM, SRELPR, T, TAU, TWO, WMAX, Z2, ZERO, ZZ
-REAL :: SNRM2
-REAL :: SASUM
-REAL :: SPMPAR
-INTEGER :: ISAMAX
+subroutine wnlsm(w, mdw, mme, ma, n, l, prgopt, x, rnorm, mode, &
+&ipivot, itype, wd, h, scale, z, temp, d)
+implicit none
+integer, intent(in) :: l, ma, mdw, mme
+integer, intent(inout) :: mode
+integer, intent(in) :: n
+real, intent(inout) :: rnorm
+integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, &
+&itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
+&link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, &
+&nsoln, nsp1, ntimes
+real :: alamda, alpha, alsq, amax, blowup, bnorm, eanorm, fac, &
+&one, sm, srelpr, t, tau, two, wmax, z2, zero, zz
+real :: snrm2
+real :: sasum
+real :: spmpar
+integer :: isamax
 !
 !     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 !     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -8940,26 +8940,26 @@ INTEGER :: ISAMAX
 !                                       (A)
 !
 !
-REAL, INTENT(INOUT) :: W(MDW,*), X(*), WD(*), H(*), SCALE(*)
-REAL :: DOPE(4)
-REAL, INTENT(INOUT) :: Z(*), TEMP(*)
-REAL, INTENT(IN) :: PRGOPT(*)
-REAL, INTENT(INOUT) :: D(*)
-REAL :: SPARAM(5)
-INTEGER, INTENT(INOUT) :: IPIVOT(*), ITYPE(*)
-INTEGER :: IDOPE(8)
-LOGICAL :: HITCON, FEASBL, DONE, POS
-DATA ZERO /0.E0/, ONE /1.E0/, TWO /2.E0/
+real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
+real :: dope(4)
+real, intent(inout) :: z(*), temp(*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: d(*)
+real :: sparam(5)
+integer, intent(inout) :: ipivot(*), itype(*)
+integer :: idope(8)
+logical :: hitcon, feasbl, done, pos
+data zero /0.e0/, one /1.e0/, two /2.e0/
 !
 !     INITIALIZE-VARIABLES
 !
-GO TO 180
+go to 180
 !
 !     PERFORM INITIAL TRIANGULARIZATION IN THE SUBMATRIX
 !     CORRESPONDING TO THE UNCONSTRAINED VARIABLES USING
 !     THE PROCEDURE INITIALLY-TRIANGULARIZE.
 !
-10 GO TO 280
+10 go to 280
 !
 !     PERFORM WNNLS ALGORITHM USING THE FOLLOWING STEPS.
 !
@@ -8975,172 +8975,172 @@ GO TO 180
 !
 !     COMPUTE-FINAL-SOLUTION
 !
-20 IF (DONE) GO TO 80
-GO TO 300
+20 if (done) go to 80
+go to 300
 !
 !     COMPUTE-SEARCH-DIRECTION-AND-FEASIBLE-POINT
 !
-30 IF (.NOT.(HITCON)) GO TO 50
-GO TO 370
+30 if (.not.(hitcon)) go to 50
+go to 370
 !
 !     WHEN (HITCON) ADD-CONSTRAINTS
 !
-50 GO TO 640
+50 go to 640
 !
 !     ELSE PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
 !
-80 GO TO 1000
+80 go to 1000
 !
 !     COMPUTE-FINAL-SOLUTION
 !
-100 CONTINUE
+100 continue
 !
 !     TO PROCESS-OPTION-VECTOR
-FAC = 1.E-4
+fac = 1.e-4
 !
 !     THE NOMINAL TOLERANCE USED IN THE CODE,
-TAU = SQRT(SRELPR)
+tau = sqrt(srelpr)
 !
 !     THE NOMINAL BLOW-UP FACTOR USED IN THE CODE.
-BLOWUP = TAU
+blowup = tau
 !
 !     THE NOMINAL COLUMN SCALING USED IN THE CODE IS
 !     THE IDENTITY SCALING.
-D(1) = ONE
-CALL SCOPY(N, D, 0, D, 1)
+d(1) = one
+call scopy(n, d, 0, d, 1)
 !
 !     DEFINE BOUND FOR NUMBER OF OPTIONS TO CHANGE.
-NOPT = 1000
+nopt = 1000
 !
 !     DEFINE BOUND FOR POSITIVE VALUE OF LINK.
-NLINK = 100000
-NTIMES = 0
-LAST = 1
-LINK = PRGOPT(1)
-IF (.NOT.(LINK.LE.0 .OR. LINK.GT.NLINK)) GO TO 110
-MODE = 2
-RETURN
-110 IF (.NOT.(LINK.GT.1)) GO TO 160
-NTIMES = NTIMES + 1
-IF (.NOT.(NTIMES.GT.NOPT)) GO TO 120
-MODE = 2
-RETURN
-120 KEY = PRGOPT(LAST+1)
-IF (.NOT.(KEY.EQ.6 .AND. PRGOPT(LAST+2).NE.ZERO)) GO TO 140
-do 130 J = 1,N
-  T = SNRM2(M,W(1,J),1)
-  IF (T.NE.ZERO) T = ONE/T
-  D(J) = T
-130 CONTINUE
-140 IF (KEY.EQ.7) CALL SCOPY(N, PRGOPT(LAST+2), 1, D, 1)
-IF (KEY.EQ.8) TAU = AMAX1(SRELPR,PRGOPT(LAST+2))
-IF (KEY.EQ.9) BLOWUP = AMAX1(SRELPR,PRGOPT(LAST+2))
-NEXT = PRGOPT(LINK)
-IF (.NOT.(NEXT.LE.0 .OR. NEXT.GT.NLINK)) GO TO 150
-MODE = 2
-RETURN
-150 LAST = LINK
-LINK = NEXT
-GO TO 110
-160 do 170 J = 1,N
-  CALL SSCAL(M, D(J), W(1,J), 1)
-170 CONTINUE
-GO TO 220
+nlink = 100000
+ntimes = 0
+last = 1
+link = prgopt(1)
+if (.not.(link.le.0 .or. link.gt.nlink)) go to 110
+mode = 2
+return
+110 if (.not.(link.gt.1)) go to 160
+ntimes = ntimes + 1
+if (.not.(ntimes.gt.nopt)) go to 120
+mode = 2
+return
+120 key = prgopt(last+1)
+if (.not.(key.eq.6 .and. prgopt(last+2).ne.zero)) go to 140
+do 130 j = 1,n
+  t = snrm2(m,w(1,j),1)
+  if (t.ne.zero) t = one/t
+  d(j) = t
+130 continue
+140 if (key.eq.7) call scopy(n, prgopt(last+2), 1, d, 1)
+if (key.eq.8) tau = amax1(srelpr,prgopt(last+2))
+if (key.eq.9) blowup = amax1(srelpr,prgopt(last+2))
+next = prgopt(link)
+if (.not.(next.le.0 .or. next.gt.nlink)) go to 150
+mode = 2
+return
+150 last = link
+link = next
+go to 110
+160 do 170 j = 1,n
+  call sscal(m, d(j), w(1,j), 1)
+170 continue
+go to 220
 !
 !     TO INITIALIZE-VARIABLES
 !
 !     SRELPR IS THE PRECISION FOR THE MACHINE BEING USED.
 !
-180 SRELPR = SPMPAR(1)
+180 srelpr = spmpar(1)
 !
-M = MA + MME
-ME = MME
-MEP1 = ME + 1
-GO TO 100
+m = ma + mme
+me = mme
+mep1 = me + 1
+go to 100
 !
 !     PROCESS-OPTION-VECTOR
-220 DONE = .FALSE.
-ITER = 0
-ITMAX = 3*(N-L)
-MODE = 0
-LP1 = L + 1
-NSOLN = L
-NSP1 = NSOLN + 1
-NP1 = N + 1
-NM1 = N - 1
-L1 = MIN0(M,L)
+220 done = .false.
+iter = 0
+itmax = 3*(n-l)
+mode = 0
+lp1 = l + 1
+nsoln = l
+nsp1 = nsoln + 1
+np1 = n + 1
+nm1 = n - 1
+l1 = min0(m,l)
 !
 !     COMPUTE SCALE FACTOR TO APPLY TO EQUAL. CONSTRAINT EQUAS.
-do 230 J = 1,N
-  WD(J) = SASUM(M,W(1,J),1)
-230 CONTINUE
-IMAX = ISAMAX(N,WD,1)
-EANORM = WD(IMAX)
-BNORM = SASUM(M,W(1,NP1),1)
-ALAMDA = EANORM/(SRELPR*FAC)
+do 230 j = 1,n
+  wd(j) = sasum(m,w(1,j),1)
+230 continue
+imax = isamax(n,wd,1)
+eanorm = wd(imax)
+bnorm = sasum(m,w(1,np1),1)
+alamda = eanorm/(srelpr*fac)
 !
 !     DEFINE SCALING DIAG MATRIX FOR MOD GIVENS USAGE AND
 !     CLASSIFY EQUATION TYPES.
-ALSQ = ALAMDA**2
-do 260 I = 1,M
+alsq = alamda**2
+do 260 i = 1,m
 !
 !     WHEN EQU I IS HEAVILY WEIGHTED ITYPE(I)=0, ELSE ITYPE(I)=1.
-  IF (.NOT.(I.LE.ME)) GO TO 240
-  T = ALSQ
-  ITEMP = 0
-  GO TO 250
-240 T = ONE
-  ITEMP = 1
-250 SCALE(I) = T
-  ITYPE(I) = ITEMP
-260 CONTINUE
+  if (.not.(i.le.me)) go to 240
+  t = alsq
+  itemp = 0
+  go to 250
+240 t = one
+  itemp = 1
+250 scale(i) = t
+  itype(i) = itemp
+260 continue
 !
 !     SET THE SOLN VECTOR X(*) TO ZERO AND THE COL INTERCHANGE
 !     MATRIX TO THE IDENTITY.
-X(1) = ZERO
-CALL SCOPY(N, X, 0, X, 1)
-do 270 I = 1,N
-  IPIVOT(I) = I
-270 CONTINUE
-GO TO 10
-280 CONTINUE
+x(1) = zero
+call scopy(n, x, 0, x, 1)
+do 270 i = 1,n
+  ipivot(i) = i
+270 continue
+go to 10
+280 continue
 !
 !     TO INITIALLY-TRIANGULARIZE
 !
 !     SET FIRST L COMPS. OF DUAL VECTOR TO ZERO BECAUSE
 !     THESE CORRESPOND TO THE UNCONSTRAINED VARIABLES.
-IF (.NOT.(L.GT.0)) GO TO 290
-WD(1) = ZERO
-CALL SCOPY(L, WD, 0, WD, 1)
+if (.not.(l.gt.0)) go to 290
+wd(1) = zero
+call scopy(l, wd, 0, wd, 1)
 !
 !     THE ARRAYS IDOPE(*) AND DOPE(*) ARE USED TO PASS
 !     INFORMATION TO WNLIT().  THIS WAS DONE TO AVOID
 !     A LONG CALLING SEQUENCE OR THE USE OF COMMON.
-290 IDOPE(1) = ME
-IDOPE(2) = MEP1
-IDOPE(3) = 0
-IDOPE(4) = 1
-IDOPE(5) = NSOLN
-IDOPE(6) = 0
-IDOPE(7) = 1
-IDOPE(8) = L1
+290 idope(1) = me
+idope(2) = mep1
+idope(3) = 0
+idope(4) = 1
+idope(5) = nsoln
+idope(6) = 0
+idope(7) = 1
+idope(8) = l1
 !
-DOPE(1) = ALSQ
-DOPE(2) = EANORM
-DOPE(3) = FAC
-DOPE(4) = TAU
-CALL WNLIT(W, MDW, M, N, L, IPIVOT, ITYPE, H, SCALE, RNORM, &
-&IDOPE, DOPE, DONE)
-ME = IDOPE(1)
-MEP1 = IDOPE(2)
-KRANK = IDOPE(3)
-KRP1 = IDOPE(4)
-NSOLN = IDOPE(5)
-NIV = IDOPE(6)
-NIV1 = IDOPE(7)
-L1 = IDOPE(8)
-GO TO 20
-300 CONTINUE
+dope(1) = alsq
+dope(2) = eanorm
+dope(3) = fac
+dope(4) = tau
+call wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
+&idope, dope, done)
+me = idope(1)
+mep1 = idope(2)
+krank = idope(3)
+krp1 = idope(4)
+nsoln = idope(5)
+niv = idope(6)
+niv1 = idope(7)
+l1 = idope(8)
+go to 20
+300 continue
 !
 !     TO COMPUTE-SEARCH-DIRECTION-AND-FEASIBLE-POINT
 !
@@ -9148,195 +9148,195 @@ GO TO 20
 !     VARIABLES AND STORE THE SOLUTION IN Z(*).
 !
 !     SOLVE-SYSTEM
-assign 310 to IGO958
-GO TO 1110
+assign 310 to igo958
+go to 1110
 !
 !     INCREMENT ITERATION COUNTER AND CHECK AGAINST MAX. NUMBER
 !     OF ITERATIONS.
-310 ITER = ITER + 1
-IF (.NOT.(ITER.GT.ITMAX)) GO TO 320
-MODE = 1
-DONE = .TRUE.
+310 iter = iter + 1
+if (.not.(iter.gt.itmax)) go to 320
+mode = 1
+done = .true.
 !
 !     CHECK TO SEE IF ANY CONSTRAINTS HAVE BECOME ACTIVE.
 !     IF SO, CALCULATE AN INTERPOLATION FACTOR SO THAT ALL
 !     ACTIVE CONSTRAINTS ARE REMOVED FROM THE BASIS.
-320 ALPHA = TWO
-HITCON = .FALSE.
-IF (.NOT.(L.LT.NSOLN)) GO TO 360
-do 350 J = LP1,NSOLN
-  ZZ = Z(J)
-  IF (.NOT.(ZZ.LE.ZERO)) GO TO 350
-  T = X(J)/(X(J)-ZZ)
-  IF (.NOT.(T.LT.ALPHA)) GO TO 330
-  ALPHA = T
-  JCON = J
-330 HITCON = .TRUE.
-350 CONTINUE
-360 GO TO 30
-370 CONTINUE
+320 alpha = two
+hitcon = .false.
+if (.not.(l.lt.nsoln)) go to 360
+do 350 j = lp1,nsoln
+  zz = z(j)
+  if (.not.(zz.le.zero)) go to 350
+  t = x(j)/(x(j)-zz)
+  if (.not.(t.lt.alpha)) go to 330
+  alpha = t
+  jcon = j
+330 hitcon = .true.
+350 continue
+360 go to 30
+370 continue
 !
 !     TO ADD-CONSTRAINTS
 !
 !     USE COMPUTED ALPHA TO INTERPOLATE BETWEEN LAST
 !     FEASIBLE SOLUTION X(*) AND CURRENT UNCONSTRAINED
 !     (AND INFEASIBLE) SOLUTION Z(*).
-IF (.NOT.(LP1.LE.NSOLN)) GO TO 390
-do 380 J = LP1,NSOLN
-  X(J) = X(J) + ALPHA*(Z(J)-X(J))
-380 CONTINUE
-390 FEASBL = .FALSE.
-GO TO 410
-400 IF (FEASBL) GO TO 20
+if (.not.(lp1.le.nsoln)) go to 390
+do 380 j = lp1,nsoln
+  x(j) = x(j) + alpha*(z(j)-x(j))
+380 continue
+390 feasbl = .false.
+go to 410
+400 if (feasbl) go to 20
 !
 !     REMOVE COL JCON AND SHIFT COLS JCON+1 THROUGH N TO THE
 !     LEFT. SWAP COL JCON INTO THE N-TH POSITION.  THIS ACHIEVES
 !     UPPER HESSENBERG FORM FOR THE NONACTIVE CONSTRAINTS AND
 !     LEAVES AN UPPER HESSENBERG MATRIX TO RETRIANGULARIZE.
-410 do 420 I = 1,M
-  T = W(I,JCON)
-  CALL SCOPY(N-JCON, W(I,JCON+1), MDW, W(I,JCON), MDW)
-  W(I,N) = T
-420 CONTINUE
+410 do 420 i = 1,m
+  t = w(i,jcon)
+  call scopy(n-jcon, w(i,jcon+1), mdw, w(i,jcon), mdw)
+  w(i,n) = t
+420 continue
 !
 !     UPDATE PERMUTED INDEX VECTOR TO REFLECT THIS SHIFT AND SWAP.
-ITEMP = IPIVOT(JCON)
-IF (.NOT.(JCON.LT.N)) GO TO 440
-do 430 I = JCON,NM1
-  IPIVOT(I) = IPIVOT(I+1)
-430 CONTINUE
-440 IPIVOT(N) = ITEMP
+itemp = ipivot(jcon)
+if (.not.(jcon.lt.n)) go to 440
+do 430 i = jcon,nm1
+  ipivot(i) = ipivot(i+1)
+430 continue
+440 ipivot(n) = itemp
 !
 !     SIMILARLY REPERMUTE X(*) VECTOR.
-CALL SCOPY(N-JCON, X(JCON+1), 1, X(JCON), 1)
-X(N) = ZERO
-NSP1 = NSOLN
-NSOLN = NSOLN - 1
-NIV1 = NIV
-NIV = NIV - 1
+call scopy(n-jcon, x(jcon+1), 1, x(jcon), 1)
+x(n) = zero
+nsp1 = nsoln
+nsoln = nsoln - 1
+niv1 = niv
+niv = niv - 1
 !
 !     RETRIANGULARIZE UPPER HESSENBERG MATRIX AFTER ADDING CONSTRAINTS.
-J = JCON
-I = KRANK + JCON - L
-450 IF (.NOT.(J.LE.NSOLN)) GO TO 570
-IF (.NOT.(ITYPE(I).EQ.0 .AND. ITYPE(I+1).EQ.0)) GO TO 470
-assign 460 to IGO938
-GO TO 620
+j = jcon
+i = krank + jcon - l
+450 if (.not.(j.le.nsoln)) go to 570
+if (.not.(itype(i).eq.0 .and. itype(i+1).eq.0)) go to 470
+assign 460 to igo938
+go to 620
 !
 !     (ITYPE(I).EQ.0 .AND. ITYPE(I+1).EQ.0) ZERO-IP1-TO-I-IN-COL-J
-460 GO TO 560
-470 IF (.NOT.(ITYPE(I).EQ.1 .AND. ITYPE(I+1).EQ.1)) GO TO 490
-assign 480 to IGO938
-GO TO 620
+460 go to 560
+470 if (.not.(itype(i).eq.1 .and. itype(i+1).eq.1)) go to 490
+assign 480 to igo938
+go to 620
 !
 !     (ITYPE(I).EQ.1 .AND. ITYPE(I+1).EQ.1) ZERO-IP1-TO-I-IN-COL-J
-480 GO TO 560
-490 IF (.NOT.(ITYPE(I).EQ.1 .AND. ITYPE(I+1).EQ.0)) GO TO 510
-CALL SSWAP(NP1, W(I,1), MDW, W(I+1,1), MDW)
-CALL SSWAP(1, SCALE(I), 1, SCALE(I+1), 1)
-ITEMP = ITYPE(I+1)
-ITYPE(I+1) = ITYPE(I)
-ITYPE(I) = ITEMP
+480 go to 560
+490 if (.not.(itype(i).eq.1 .and. itype(i+1).eq.0)) go to 510
+call sswap(np1, w(i,1), mdw, w(i+1,1), mdw)
+call sswap(1, scale(i), 1, scale(i+1), 1)
+itemp = itype(i+1)
+itype(i+1) = itype(i)
+itype(i) = itemp
 !
 !     SWAPPED ROW WAS FORMERLY A PIVOT ELT., SO IT WILL
 !     BE LARGE ENOUGH TO PERFORM ELIM.
-assign 500 to IGO938
-GO TO 620
+assign 500 to igo938
+go to 620
 !
 !     ZERO-IP1-TO-I-IN-COL-J
-500 GO TO 560
-510 IF (.NOT.(ITYPE(I).EQ.0 .AND. ITYPE(I+1).EQ.1)) GO TO 550
-T = SCALE(I)*W(I,J)**2/ALSQ
-IF (.NOT.(T.GT.TAU**2*EANORM**2)) GO TO 530
-assign 520 to IGO938
-GO TO 620
-520 GO TO 540
-530 CALL SSWAP(NP1, W(I,1), MDW, W(I+1,1), MDW)
-CALL SSWAP(1, SCALE(I), 1, SCALE(I+1), 1)
-ITEMP = ITYPE(I+1)
-ITYPE(I+1) = ITYPE(I)
-ITYPE(I) = ITEMP
-W(I+1,J) = ZERO
-540 CONTINUE
-550 CONTINUE
-560 I = I + 1
-J = J + 1
-GO TO 450
+500 go to 560
+510 if (.not.(itype(i).eq.0 .and. itype(i+1).eq.1)) go to 550
+t = scale(i)*w(i,j)**2/alsq
+if (.not.(t.gt.tau**2*eanorm**2)) go to 530
+assign 520 to igo938
+go to 620
+520 go to 540
+530 call sswap(np1, w(i,1), mdw, w(i+1,1), mdw)
+call sswap(1, scale(i), 1, scale(i+1), 1)
+itemp = itype(i+1)
+itype(i+1) = itype(i)
+itype(i) = itemp
+w(i+1,j) = zero
+540 continue
+550 continue
+560 i = i + 1
+j = j + 1
+go to 450
 !
 !     SEE IF THE REMAINING COEFFS IN THE SOLN SET ARE FEASIBLE.  THEY
 !     SHOULD BE BECAUSE OF THE WAY ALPHA WAS DETERMINED.  IF ANY ARE
 !     INFEASIBLE IT IS DUE TO ROUNDOFF ERROR.  ANY THAT ARE NON-
 !     POSITIVE WILL BE SET TO ZERO AND REMOVED FROM THE SOLN SET.
-570 IF (.NOT.(LP1.LE.NSOLN)) GO TO 590
-do 580 JCON = LP1,NSOLN
-  IF (X(JCON).LE.ZERO) GO TO 600
-580 CONTINUE
-590 FEASBL = .TRUE.
-600 CONTINUE
-GO TO 400
-620 CONTINUE
+570 if (.not.(lp1.le.nsoln)) go to 590
+do 580 jcon = lp1,nsoln
+  if (x(jcon).le.zero) go to 600
+580 continue
+590 feasbl = .true.
+600 continue
+go to 400
+620 continue
 !
 !     TO ZERO-IP1-TO-I-IN-COL-J
-IF (.NOT.(W(I+1,J).NE.ZERO)) GO TO 630
-CALL SROTMG(SCALE(I), SCALE(I+1), W(I,J), W(I+1,J), SPARAM)
-W(I+1,J) = ZERO
-CALL SROTM(NP1-J, W(I,J+1), MDW, W(I+1,J+1), MDW, SPARAM)
-630 GO TO 1290
+if (.not.(w(i+1,j).ne.zero)) go to 630
+call srotmg(scale(i), scale(i+1), w(i,j), w(i+1,j), sparam)
+w(i+1,j) = zero
+call srotm(np1-j, w(i,j+1), mdw, w(i+1,j+1), mdw, sparam)
+630 go to 1290
 !
 !     TO PERFORM-MULTIPLIER-TEST-AND-DROP-A-CONSTRAINT
 !
-640 CALL SCOPY(NSOLN, Z, 1, X, 1)
-IF (.NOT.(NSOLN.LT.N)) GO TO 650
-X(NSP1) = ZERO
-CALL SCOPY(N-NSOLN, X(NSP1), 0, X(NSP1), 1)
-650 I = NIV1
-660 IF (.NOT.(I.LE.ME)) GO TO 690
+640 call scopy(nsoln, z, 1, x, 1)
+if (.not.(nsoln.lt.n)) go to 650
+x(nsp1) = zero
+call scopy(n-nsoln, x(nsp1), 0, x(nsp1), 1)
+650 i = niv1
+660 if (.not.(i.le.me)) go to 690
 !
 !     RECLASSIFY LEAST SQUARES EQATIONS AS EQUALITIES AS
 !     NECESSARY.
-IF (.NOT.(ITYPE(I).EQ.0)) GO TO 670
-I = I + 1
-GO TO 680
-670 CALL SSWAP(NP1, W(I,1), MDW, W(ME,1), MDW)
-CALL SSWAP(1, SCALE(I), 1, SCALE(ME), 1)
-ITEMP = ITYPE(I)
-ITYPE(I) = ITYPE(ME)
-ITYPE(ME) = ITEMP
-MEP1 = ME
-ME = ME - 1
-680 GO TO 660
+if (.not.(itype(i).eq.0)) go to 670
+i = i + 1
+go to 680
+670 call sswap(np1, w(i,1), mdw, w(me,1), mdw)
+call sswap(1, scale(i), 1, scale(me), 1)
+itemp = itype(i)
+itype(i) = itype(me)
+itype(me) = itemp
+mep1 = me
+me = me - 1
+680 go to 660
 !
 !     FORM INNER PRODUCT VECTOR WD(*) OF DUAL COEFFS.
-690 IF (.NOT.(NSP1.LE.N)) GO TO 730
-do 720 J = NSP1,N
-  SM = ZERO
-  IF (.NOT.(NSOLN.LT.M)) GO TO 710
-  do 700 I = NSP1,M
-    SM = SM + SCALE(I)*W(I,J)*W(I,NP1)
-700 CONTINUE
-710 WD(J) = SM
-720 CONTINUE
-730 GO TO 750
-740 IF (POS .OR. DONE) GO TO 970
+690 if (.not.(nsp1.le.n)) go to 730
+do 720 j = nsp1,n
+  sm = zero
+  if (.not.(nsoln.lt.m)) go to 710
+  do 700 i = nsp1,m
+    sm = sm + scale(i)*w(i,j)*w(i,np1)
+700 continue
+710 wd(j) = sm
+720 continue
+730 go to 750
+740 if (pos .or. done) go to 970
 !
 !     FIND J SUCH THAT WD(J)=WMAX IS MAXIMUM.  THIS DETERMINES
 !     THAT THE INCOMING COL J WILL REDUCE THE RESIDUAL VECTOR
 !     AND BE POSITIVE.
-750 WMAX = ZERO
-IWMAX = NSP1
-IF (.NOT.(NSP1.LE.N)) GO TO 780
-do 770 J = NSP1,N
-  IF (.NOT.(WD(J).GT.WMAX)) GO TO 760
-  WMAX = WD(J)
-  IWMAX = J
-760 CONTINUE
-770 CONTINUE
-780 IF (.NOT.(WMAX.LE.ZERO)) GO TO 790
-DONE = .TRUE.
-GO TO 960
+750 wmax = zero
+iwmax = nsp1
+if (.not.(nsp1.le.n)) go to 780
+do 770 j = nsp1,n
+  if (.not.(wd(j).gt.wmax)) go to 760
+  wmax = wd(j)
+  iwmax = j
+760 continue
+770 continue
+780 if (.not.(wmax.le.zero)) go to 790
+done = .true.
+go to 960
 !
 !     SET DUAL COEFF TO ZERO FOR INCOMING COL.
-790 WD(IWMAX) = ZERO
+790 wd(iwmax) = zero
 !
 !     WMAX .GT. ZERO, SO OKAY TO MOVE COL IWMAX TO SOLN SET.
 !     PERFORM TRANSFORMATION TO RETRIANGULARIZE, AND TEST
@@ -9344,184 +9344,184 @@ GO TO 960
 !     SWAP COL IWMAX INTO NSOLN-TH POSITION TO MAINTAIN UPPER
 !     HESSENBERG FORM OF ADJACENT COLS, AND ADD NEW COL TO
 !     TRIANGULAR DECOMPOSITION.
-NSOLN = NSP1
-NSP1 = NSOLN + 1
-NIV = NIV1
-NIV1 = NIV + 1
-IF (.NOT.(NSOLN.NE.IWMAX)) GO TO 800
-CALL SSWAP(M, W(1,NSOLN), 1, W(1,IWMAX), 1)
-WD(IWMAX) = WD(NSOLN)
-WD(NSOLN) = ZERO
-ITEMP = IPIVOT(NSOLN)
-IPIVOT(NSOLN) = IPIVOT(IWMAX)
-IPIVOT(IWMAX) = ITEMP
+nsoln = nsp1
+nsp1 = nsoln + 1
+niv = niv1
+niv1 = niv + 1
+if (.not.(nsoln.ne.iwmax)) go to 800
+call sswap(m, w(1,nsoln), 1, w(1,iwmax), 1)
+wd(iwmax) = wd(nsoln)
+wd(nsoln) = zero
+itemp = ipivot(nsoln)
+ipivot(nsoln) = ipivot(iwmax)
+ipivot(iwmax) = itemp
 !
 !     REDUCE COL NSOLN SO THAT THE MATRIX OF NONACTIVE
 !     CONSTRAINTS VARIABLES IS TRIANGULAR.
-800 J = M
-810 IF (.NOT.(J.GT.NIV)) GO TO 870
-JM1 = J - 1
-JP = JM1
+800 j = m
+810 if (.not.(j.gt.niv)) go to 870
+jm1 = j - 1
+jp = jm1
 !
 !     WHEN OPERATING NEAR THE ME LINE, TEST TO SEE IF THE PIVOT ELT.
 !     IS NEAR ZERO.  IF SO, USE THE LARGEST ELT. ABOVE IT AS THE PIVOT.
 !     THIS IS TO MAINTAIN THE SHARP INTERFACE BETWEEN WEIGHTED AND
 !     NON-WEIGHTED ROWS IN ALL CASES.
-IF (.NOT.(J.EQ.MEP1)) GO TO 850
-IMAX = ME
-AMAX = SCALE(ME)*W(ME,NSOLN)**2
-820 IF (.NOT.(JP.GE.NIV)) GO TO 840
-T = SCALE(JP)*W(JP,NSOLN)**2
-IF (.NOT.(T.GT.AMAX)) GO TO 830
-IMAX = JP
-AMAX = T
-830 JP = JP - 1
-GO TO 820
-840 JP = IMAX
-850 IF (.NOT.(W(J,NSOLN).NE.ZERO)) GO TO 860
-CALL SROTMG(SCALE(JP), SCALE(J), W(JP,NSOLN), W(J,NSOLN), SPARAM)
-W(J,NSOLN) = ZERO
-CALL SROTM(NP1-NSOLN, W(JP,NSP1), MDW, W(J,NSP1), MDW, SPARAM)
-860 J = JM1
-GO TO 810
+if (.not.(j.eq.mep1)) go to 850
+imax = me
+amax = scale(me)*w(me,nsoln)**2
+820 if (.not.(jp.ge.niv)) go to 840
+t = scale(jp)*w(jp,nsoln)**2
+if (.not.(t.gt.amax)) go to 830
+imax = jp
+amax = t
+830 jp = jp - 1
+go to 820
+840 jp = imax
+850 if (.not.(w(j,nsoln).ne.zero)) go to 860
+call srotmg(scale(jp), scale(j), w(jp,nsoln), w(j,nsoln), sparam)
+w(j,nsoln) = zero
+call srotm(np1-nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
+860 j = jm1
+go to 810
 !
 !     SOLVE FOR Z(NSOLN)=PROPOSED NEW VALUE FOR X(NSOLN).
 !     TEST IF THIS IS NONPOSITIVE OR TOO LARGE.
 !     IF THIS WAS TRUE OR IF THE PIVOT TERM WAS ZERO REJECT
 !     THE COL AS DEPENDENT.
-870 IF (.NOT.(W(NIV,NSOLN).NE.ZERO)) GO TO 890
-ISOL = NIV
-assign 880 to IGO897
-GO TO 980
+870 if (.not.(w(niv,nsoln).ne.zero)) go to 890
+isol = niv
+assign 880 to igo897
+go to 980
 !
 !     TEST-PROPOSED-NEW-COMPONENT
-880 GO TO 940
-890 IF (.NOT.(NIV.LE.ME .AND. W(MEP1,NSOLN).NE.ZERO)) GO TO 920
+880 go to 940
+890 if (.not.(niv.le.me .and. w(mep1,nsoln).ne.zero)) go to 920
 !
 !     TRY TO ADD ROW MEP1 AS AN ADDITIONAL EQUALITY CONSTRAINT.
 !     CHECK SIZE OF PROPOSED NEW SOLN COMPONENT.
 !     REJECT IT IF IT IS TOO LARGE.
-ISOL = MEP1
-assign 900 to IGO897
-GO TO 980
+isol = mep1
+assign 900 to igo897
+go to 980
 !
 !     TEST-PROPOSED-NEW-COMPONENT
-900 IF (.NOT.(POS)) GO TO 910
+900 if (.not.(pos)) go to 910
 !
 !     SWAP ROWS MEP1 AND NIV, AND SCALE FACTORS FOR THESE ROWS.
-CALL SSWAP(NP1, W(MEP1,1), MDW, W(NIV,1), MDW)
-CALL SSWAP(1, SCALE(MEP1), 1, SCALE(NIV), 1)
-ITEMP = ITYPE(MEP1)
-ITYPE(MEP1) = ITYPE(NIV)
-ITYPE(NIV) = ITEMP
-ME = MEP1
-MEP1 = ME + 1
-910 GO TO 930
-920 POS = .FALSE.
-930 CONTINUE
-940 IF (POS) GO TO 950
-NSP1 = NSOLN
-NSOLN = NSOLN - 1
-NIV1 = NIV
-NIV = NIV - 1
-950 CONTINUE
-960 GO TO 740
-970 GO TO 20
-980 CONTINUE
+call sswap(np1, w(mep1,1), mdw, w(niv,1), mdw)
+call sswap(1, scale(mep1), 1, scale(niv), 1)
+itemp = itype(mep1)
+itype(mep1) = itype(niv)
+itype(niv) = itemp
+me = mep1
+mep1 = me + 1
+910 go to 930
+920 pos = .false.
+930 continue
+940 if (pos) go to 950
+nsp1 = nsoln
+nsoln = nsoln - 1
+niv1 = niv
+niv = niv - 1
+950 continue
+960 go to 740
+970 go to 20
+980 continue
 !
 !     TO TEST-PROPOSED-NEW-COMPONENT
-Z2 = W(ISOL,NP1)/W(ISOL,NSOLN)
-Z(NSOLN) = Z2
-POS = Z2.GT.ZERO
-IF (.NOT.(Z2*EANORM.GE.BNORM .AND. POS)) GO TO 990
-POS = .NOT.(BLOWUP*Z2*EANORM.GE.BNORM)
-990 GO TO 1280
-1000 CONTINUE
+z2 = w(isol,np1)/w(isol,nsoln)
+z(nsoln) = z2
+pos = z2.gt.zero
+if (.not.(z2*eanorm.ge.bnorm .and. pos)) go to 990
+pos = .not.(blowup*z2*eanorm.ge.bnorm)
+990 go to 1280
+1000 continue
 !     TO COMPUTE-FINAL-SOLUTION
 !
 !     SOLVE SYSTEM, STORE RESULTS IN X(*).
 !
-assign 1010 to IGO958
-GO TO 1110
+assign 1010 to igo958
+go to 1110
 !     SOLVE-SYSTEM
-1010 CALL SCOPY(NSOLN, Z, 1, X, 1)
+1010 call scopy(nsoln, z, 1, x, 1)
 !
 !     APPLY HOUSEHOLDER TRANSFORMATIONS TO X(*) IF KRANK.LT.L
-IF (.NOT.(0.LT.KRANK .AND. KRANK.LT.L)) GO TO 1030
-do 1020 I = 1,KRANK
-  CALL H12(2, I, KRP1, L, W(I,1), MDW, H(I), X, 1, 1, 1)
-1020 CONTINUE
+if (.not.(0.lt.krank .and. krank.lt.l)) go to 1030
+do 1020 i = 1,krank
+  call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
+1020 continue
 !
 !     FILL IN TRAILING ZEROES FOR CONSTRAINED VARIABLES NOT IN SOLN.
-1030 IF (.NOT.(NSOLN.LT.N)) GO TO 1040
-X(NSP1) = ZERO
-CALL SCOPY(N-NSOLN, X(NSP1), 0, X(NSP1), 1)
+1030 if (.not.(nsoln.lt.n)) go to 1040
+x(nsp1) = zero
+call scopy(n-nsoln, x(nsp1), 0, x(nsp1), 1)
 !
 !     REPERMUTE SOLN VECTOR TO NATURAL ORDER.
-1040 do 1070 I = 1,N
-  J = I
-1050 IF (IPIVOT(J).EQ.I) GO TO 1060
-  J = J + 1
-  GO TO 1050
-1060 IPIVOT(J) = IPIVOT(I)
-  IPIVOT(I) = J
-  CALL SSWAP(1, X(J), 1, X(I), 1)
-1070 CONTINUE
+1040 do 1070 i = 1,n
+  j = i
+1050 if (ipivot(j).eq.i) go to 1060
+  j = j + 1
+  go to 1050
+1060 ipivot(j) = ipivot(i)
+  ipivot(i) = j
+  call sswap(1, x(j), 1, x(i), 1)
+1070 continue
 !
 !     RESCALE THE SOLN USING THE COL SCALING.
-do 1080 J = 1,N
-  X(J) = X(J)*D(J)
-1080 CONTINUE
-IF (.NOT.(NIV.LT.M)) GO TO 1100
-do 1090 I = NIV1,M
-  T = W(I,NP1)
-  IF (I.LE.ME) T = T/ALAMDA
-  T = (SCALE(I)*T)*T
-  RNORM = RNORM + T
-1090 CONTINUE
-1100 RNORM = SQRT(RNORM)
-RETURN
+do 1080 j = 1,n
+  x(j) = x(j)*d(j)
+1080 continue
+if (.not.(niv.lt.m)) go to 1100
+do 1090 i = niv1,m
+  t = w(i,np1)
+  if (i.le.me) t = t/alamda
+  t = (scale(i)*t)*t
+  rnorm = rnorm + t
+1090 continue
+1100 rnorm = sqrt(rnorm)
+return
 !
 !     TO SOLVE-SYSTEM
 !
-1110 CONTINUE
-IF (.NOT.(DONE)) GO TO 1120
-ISOL = 1
-GO TO 1130
-1120 ISOL = LP1
-1130 IF (.NOT.(NSOLN.GE.ISOL)) GO TO 1270
+1110 continue
+if (.not.(done)) go to 1120
+isol = 1
+go to 1130
+1120 isol = lp1
+1130 if (.not.(nsoln.ge.isol)) go to 1270
 !
 !     COPY RT. HAND SIDE INTO TEMP VECTOR TO USE OVERWRITING METHOD.
-CALL SCOPY(NIV, W(1,NP1), 1, TEMP, 1)
-do 1180 JJ = ISOL,NSOLN
-  J = NSOLN - JJ + ISOL
-  IF (.NOT.(J.GT.KRANK)) GO TO 1140
-  I = NIV - JJ + ISOL
-  GO TO 1150
-1140 I = J
-1150 IF (.NOT.(J.GT.KRANK .AND. J.LE.L)) GO TO 1160
-  Z(J) = ZERO
-  GO TO 1170
-1160 Z(J) = TEMP(I)/W(I,J)
-  CALL SAXPY(I-1, -Z(J), W(1,J), 1, TEMP, 1)
-1170 CONTINUE
-1180 CONTINUE
+call scopy(niv, w(1,np1), 1, temp, 1)
+do 1180 jj = isol,nsoln
+  j = nsoln - jj + isol
+  if (.not.(j.gt.krank)) go to 1140
+  i = niv - jj + isol
+  go to 1150
+1140 i = j
+1150 if (.not.(j.gt.krank .and. j.le.l)) go to 1160
+  z(j) = zero
+  go to 1170
+1160 z(j) = temp(i)/w(i,j)
+  call saxpy(i-1, -z(j), w(1,j), 1, temp, 1)
+1170 continue
+1180 continue
 !
-1270 GO TO IGO958, (310, 1010)
-1280 GO TO IGO897, (880, 900)
-1290 GO TO IGO938, (460, 480, 500, 520)
-END SUBROUTINE WNLSM
+1270 go to igo958, (310, 1010)
+1280 go to igo897, (880, 900)
+1290 go to igo938, (460, 480, 500, 520)
+end subroutine wnlsm
 
-SUBROUTINE WNLIT(W, MDW, M, N, L, IPIVOT, ITYPE, H, SCALE, RNORM, &
-&IDOPE, DOPE, DONE)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L, M, MDW, N
-REAL, INTENT(OUT) :: RNORM
-INTEGER :: I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1, &
-&ITEMP, J, J1, JJ, JM1, JP, K, KK, KRANK, KRP1, L1, LB, LEND, LP1, &
-&MAX, ME, MEND, MEP1, NIV, NIV1, NP1, NSOLN
-REAL :: ALSQ, EANORM, FAC, FACTOR, HBAR, ONE, RN, SN, T, TAU, &
-&TENM3, ZERO
+subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
+&idope, dope, done)
+implicit none
+integer, intent(in) :: l, m, mdw, n
+real, intent(out) :: rnorm
+integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
+&itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
+&max, me, mend, mep1, niv, niv1, np1, nsoln
+real :: alsq, eanorm, fac, factor, hbar, one, rn, sn, t, tau, &
+&tenm3, zero
 !
 !     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 !     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -9535,324 +9535,324 @@ REAL :: ALSQ, EANORM, FAC, FACTOR, HBAR, ONE, RN, SN, T, TAU, &
 !     COL INTERCHANGES.
 !     REVISED OCT. 1, 1989
 !
-REAL, INTENT(INOUT) :: W(MDW,*), H(*), SCALE(*)
-REAL, INTENT(IN) :: DOPE(*)
-REAL :: SPARAM(5)
-INTEGER, INTENT(INOUT) :: ITYPE(*), IPIVOT(*), IDOPE(*)
-INTEGER :: ISAMAX
-LOGICAL :: INDEP
-LOGICAL, INTENT(INOUT) :: DONE
-LOGICAL :: RECALC
-DATA TENM3 /1.E-3/, ZERO /0.E0/, ONE /1.E0/
+real, intent(inout) :: w(mdw,*), h(*), scale(*)
+real, intent(in) :: dope(*)
+real :: sparam(5)
+integer, intent(inout) :: itype(*), ipivot(*), idope(*)
+integer :: isamax
+logical :: indep
+logical, intent(inout) :: done
+logical :: recalc
+data tenm3 /1.e-3/, zero /0.e0/, one /1.e0/
 !
-ME = IDOPE(1)
-MEP1 = IDOPE(2)
-KRANK = IDOPE(3)
-KRP1 = IDOPE(4)
-NSOLN = IDOPE(5)
-NIV = IDOPE(6)
-NIV1 = IDOPE(7)
-L1 = IDOPE(8)
+me = idope(1)
+mep1 = idope(2)
+krank = idope(3)
+krp1 = idope(4)
+nsoln = idope(5)
+niv = idope(6)
+niv1 = idope(7)
+l1 = idope(8)
 !
-ALSQ = DOPE(1)
-EANORM = DOPE(2)
-FAC = DOPE(3)
-TAU = DOPE(4)
-NP1 = N + 1
-LB = MIN0(M-1,L)
-RECALC = .TRUE.
-RNORM = ZERO
-KRANK = 0
+alsq = dope(1)
+eanorm = dope(2)
+fac = dope(3)
+tau = dope(4)
+np1 = n + 1
+lb = min0(m-1,l)
+recalc = .true.
+rnorm = zero
+krank = 0
 !     WE SET FACTOR=1.E0 SO THAT THE HEAVY WEIGHT ALAMDA WILL BE
 !     INCLUDED IN THE TEST FOR COL INDEPENDENCE.
-FACTOR = 1.E0
-I = 1
-IP1 = 2
-LEND = L
-10 IF (.NOT.(I.LE.LB)) GO TO 150
-IF (.NOT.(I.LE.ME)) GO TO 130
+factor = 1.e0
+i = 1
+ip1 = 2
+lend = l
+10 if (.not.(i.le.lb)) go to 150
+if (.not.(i.le.me)) go to 130
 !
 !     SET IR TO POINT TO THE I-TH ROW.
-IR = I
-MEND = M
-assign 20 to IGO996
-GO TO 460
+ir = i
+mend = m
+assign 20 to igo996
+go to 460
 !
 !     UPDATE-COL-SS-AND-FIND-PIVOT-COL
-20 assign 30 to IGO993
-GO TO 560
+20 assign 30 to igo993
+go to 560
 !
 !     PERFORM-COL-INTERCHANGE
 !
 !     SET IC TO POINT TO I-TH COL.
-30 IC = I
-assign 40 to IGO990
-GO TO 520
+30 ic = i
+assign 40 to igo990
+go to 520
 !
 !     TEST-INDEP-OF-INCOMING-COL
-40 IF (.NOT.(INDEP)) GO TO 110
+40 if (.not.(indep)) go to 110
 !
 !     ELIMINATE I-TH COL BELOW DIAG. USING MOD. GIVENS TRANSFORMATIONS
 !     APPLIED TO (A B).
-J = M
-do 100 JJ = IP1,M
-  JM1 = J - 1
-  JP = JM1
-  IF (.NOT.(JJ.EQ.M)) GO TO 70
-  IF (.NOT.(I.LT.MEP1)) GO TO 80
-  J = MEP1
-  JP = I
-  T = SCALE(JP)*W(JP,I)**2*TAU**2
-  IF (.NOT.(T.GT.SCALE(J)*W(J,I)**2)) GO TO 130
-  GO TO 80
-70 IF (.NOT.(J.EQ.MEP1)) GO TO 80
-  J = JM1
-  JM1 = J - 1
-  JP = JM1
-80 IF (.NOT.(W(J,I).NE.ZERO)) GO TO 90
-  CALL SROTMG(SCALE(JP), SCALE(J), W(JP,I), W(J,I), SPARAM)
-  W(J,I) = ZERO
-  CALL SROTM(NP1-I, W(JP,IP1), MDW, W(J,IP1), MDW, SPARAM)
-90 J = JM1
-100 CONTINUE
-GO TO 140
-110 CONTINUE
-IF (.NOT.(LEND.GT.I)) GO TO 130
+j = m
+do 100 jj = ip1,m
+  jm1 = j - 1
+  jp = jm1
+  if (.not.(jj.eq.m)) go to 70
+  if (.not.(i.lt.mep1)) go to 80
+  j = mep1
+  jp = i
+  t = scale(jp)*w(jp,i)**2*tau**2
+  if (.not.(t.gt.scale(j)*w(j,i)**2)) go to 130
+  go to 80
+70 if (.not.(j.eq.mep1)) go to 80
+  j = jm1
+  jm1 = j - 1
+  jp = jm1
+80 if (.not.(w(j,i).ne.zero)) go to 90
+  call srotmg(scale(jp), scale(j), w(jp,i), w(j,i), sparam)
+  w(j,i) = zero
+  call srotm(np1-i, w(jp,ip1), mdw, w(j,ip1), mdw, sparam)
+90 j = jm1
+100 continue
+go to 140
+110 continue
+if (.not.(lend.gt.i)) go to 130
 !
 !     COL I IS DEPENDENT. SWAP WITH COL LEND.
-MAX = LEND
+max = lend
 !
 !     PERFORM-COL-INTERCHANGE
-assign 120 to IGO993
-GO TO 560
-120 CONTINUE
-LEND = LEND - 1
+assign 120 to igo993
+go to 560
+120 continue
+lend = lend - 1
 !
 !     FIND COL IN REMAINING SET WITH LARGEST SS.
-MAX = ISAMAX(LEND-I+1,H(I),1) + I - 1
-HBAR = H(MAX)
-GO TO 30
-130 CONTINUE
-KRANK = I - 1
-GO TO 160
-140 I = IP1
-IP1 = IP1 + 1
-GO TO 10
-150 KRANK = L1
-160 CONTINUE
-KRP1 = KRANK + 1
-IF (.NOT.(KRANK.LT.ME)) GO TO 290
-FACTOR = ALSQ
-do 170 I = KRP1,ME
-  IF (L.GT.0) W(I,1) = ZERO
-  CALL SCOPY(L, W(I,1), 0, W(I,1), MDW)
-170 CONTINUE
+max = isamax(lend-i+1,h(i),1) + i - 1
+hbar = h(max)
+go to 30
+130 continue
+krank = i - 1
+go to 160
+140 i = ip1
+ip1 = ip1 + 1
+go to 10
+150 krank = l1
+160 continue
+krp1 = krank + 1
+if (.not.(krank.lt.me)) go to 290
+factor = alsq
+do 170 i = krp1,me
+  if (l.gt.0) w(i,1) = zero
+  call scopy(l, w(i,1), 0, w(i,1), mdw)
+170 continue
 !
 !     DETERMINE THE RANK OF THE REMAINING EQUALITY CONSTRAINT
 !     EQUATIONS BY ELIMINATING WITHIN THE BLOCK OF CONSTRAINED
 !     VARIABLES.  REMOVE ANY REDUNDANT CONSTRAINTS.
 !
-IR = KRP1
-IF (.NOT.(L.LT.N)) GO TO 245
-LP1 = L + 1
-RECALC = .TRUE.
-LB = MIN0(L+ME-KRANK,N)
-I = LP1
-IP1 = I + 1
-180 IF (.NOT.(I.LE.LB)) GO TO 280
-IR = KRANK + I - L
-LEND = N
-MEND = ME
-assign 190 to IGO996
-GO TO 460
+ir = krp1
+if (.not.(l.lt.n)) go to 245
+lp1 = l + 1
+recalc = .true.
+lb = min0(l+me-krank,n)
+i = lp1
+ip1 = i + 1
+180 if (.not.(i.le.lb)) go to 280
+ir = krank + i - l
+lend = n
+mend = me
+assign 190 to igo996
+go to 460
 !
 !     UPDATE-COL-SS-AND-FIND-PIVOT-COL
-190 assign 200 to IGO993
-GO TO 560
+190 assign 200 to igo993
+go to 560
 !
 !     PERFORM-COL-INTERCHANGE
 !
 !     ELIMINATE ELEMENTS IN THE I-TH COL.
-200 J = ME
-210 IF (.NOT.(J.GT.IR)) GO TO 230
-JM1 = J - 1
-IF (.NOT.(W(J,I).NE.ZERO)) GO TO 220
-CALL SROTMG(SCALE(JM1), SCALE(J), W(JM1,I), W(J,I), SPARAM)
-W(J,I) = ZERO
-CALL SROTM(NP1-I, W(JM1,IP1), MDW, W(J,IP1), MDW, SPARAM)
-220 J = JM1
-GO TO 210
+200 j = me
+210 if (.not.(j.gt.ir)) go to 230
+jm1 = j - 1
+if (.not.(w(j,i).ne.zero)) go to 220
+call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
+w(j,i) = zero
+call srotm(np1-i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
+220 j = jm1
+go to 210
 !
 !     SET IC=I=COL BEING ELIMINATED
-230 IC = I
-assign 240 to IGO990
-GO TO 520
+230 ic = i
+assign 240 to igo990
+go to 520
 !
 !     TEST-INDEP-OF-INCOMING-COL
-240 IF (INDEP) GO TO 270
+240 if (indep) go to 270
 !
 !     REMOVE ANY REDUNDANT OR DEPENDENT EQUALITY CONSTRAINTS.
-245 CONTINUE
-JJ = IR
-250 IF (.NOT.(IR.LE.ME)) GO TO 260
-W(IR,1) = ZERO
-CALL SCOPY(N, W(IR,1), 0, W(IR,1), MDW)
-RNORM = RNORM + (SCALE(IR)*W(IR,NP1)/ALSQ)*W(IR,NP1)
-W(IR,NP1) = ZERO
-SCALE(IR) = ONE
+245 continue
+jj = ir
+250 if (.not.(ir.le.me)) go to 260
+w(ir,1) = zero
+call scopy(n, w(ir,1), 0, w(ir,1), mdw)
+rnorm = rnorm + (scale(ir)*w(ir,np1)/alsq)*w(ir,np1)
+w(ir,np1) = zero
+scale(ir) = one
 !     RECLASSIFY THE ZEROED ROW AS A LEAST SQUARES EQUATION.
-ITYPE(IR) = 1
-IR = IR + 1
-GO TO 250
+itype(ir) = 1
+ir = ir + 1
+go to 250
 !
 !     REDUCE ME TO REFLECT ANY DISCOVERED DEPENDENT EQUALITY
 !     CONSTRAINTS.
-260 CONTINUE
-ME = JJ - 1
-MEP1 = ME + 1
-GO TO 300
-270 I = IP1
-IP1 = IP1 + 1
-GO TO 180
-280 CONTINUE
-290 CONTINUE
-300 CONTINUE
-IF (.NOT.(KRANK.LT.L1)) GO TO 420
+260 continue
+me = jj - 1
+mep1 = me + 1
+go to 300
+270 i = ip1
+ip1 = ip1 + 1
+go to 180
+280 continue
+290 continue
+300 continue
+if (.not.(krank.lt.l1)) go to 420
 !
 !     TRY TO DETERMINE THE VARIABLES KRANK+1 THROUGH L1 FROM THE
 !     LEAST SQUARES EQUATIONS.  CONTINUE THE TRIANGULARIZATION WITH
 !     PIVOT ELEMENT W(MEP1,I).
 !
-RECALC = .TRUE.
+recalc = .true.
 !
 !     SET FACTOR=ALSQ TO REMOVE EFFECT OF HEAVY WEIGHT FROM
 !     TEST FOR COL INDEPENDENCE.
-FACTOR = ALSQ
-KK = KRP1
-I = KK
-IP1 = I + 1
-310 IF (.NOT.(I.LE.L1)) GO TO 410
+factor = alsq
+kk = krp1
+i = kk
+ip1 = i + 1
+310 if (.not.(i.le.l1)) go to 410
 !
 !     SET IR TO POINT TO THE MEP1-ST ROW.
-IR = MEP1
-LEND = L
-MEND = M
-assign 320 to IGO996
-GO TO 460
+ir = mep1
+lend = l
+mend = m
+assign 320 to igo996
+go to 460
 !
 !     UPDATE-COL-SS-AND-FIND-PIVOT-COL
-320 assign 330 to IGO993
-GO TO 560
+320 assign 330 to igo993
+go to 560
 !
 !     PERFORM-COL-INTERCHANGE
 !
 !     ELIMINATE I-TH COL BELOW THE IR-TH ELEMENT.
-330 IRP1 = IR + 1
-IF (.NOT.(IRP1.LE.M)) GO TO 355
-J = M
-do 350 JJ = IRP1,M
-  JM1 = J - 1
-  IF (.NOT.(W(J,I).NE.ZERO)) GO TO 340
-  CALL SROTMG(SCALE(JM1), SCALE(J), W(JM1,I), W(J,I), SPARAM)
-  W(J,I) = ZERO
-  CALL SROTM(NP1-I, W(JM1,IP1), MDW, W(J,IP1), MDW, SPARAM)
-340 J = JM1
-350 CONTINUE
-355 CONTINUE
+330 irp1 = ir + 1
+if (.not.(irp1.le.m)) go to 355
+j = m
+do 350 jj = irp1,m
+  jm1 = j - 1
+  if (.not.(w(j,i).ne.zero)) go to 340
+  call srotmg(scale(jm1), scale(j), w(jm1,i), w(j,i), sparam)
+  w(j,i) = zero
+  call srotm(np1-i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
+340 j = jm1
+350 continue
+355 continue
 !
 !     TEST IF NEW PIVOT ELEMENT IS NEAR ZERO. IF SO, THE COL IS
 !     DEPENDENT.
-T = SCALE(IR)*W(IR,I)**2
-INDEP = T.GT.TAU**2*EANORM**2
-IF (.NOT.INDEP) GO TO 380
+t = scale(ir)*w(ir,i)**2
+indep = t.gt.tau**2*eanorm**2
+if (.not.indep) go to 380
 !
 !     COL TEST PASSED. NOW MUST PASS ROW NORM TEST TO BE CLASSIFIED
 !     AS INDEPENDENT.
-RN = ZERO
-do 370 I1 = IR,M
-  do 360 J1 = IP1,N
-    RN = AMAX1(RN,SCALE(I1)*W(I1,J1)**2)
-360 CONTINUE
-370 CONTINUE
-INDEP = T.GT.TAU**2*RN
+rn = zero
+do 370 i1 = ir,m
+  do 360 j1 = ip1,n
+    rn = amax1(rn,scale(i1)*w(i1,j1)**2)
+360 continue
+370 continue
+indep = t.gt.tau**2*rn
 !
 !     IF INDEPENDENT, SWAP THE IR-TH AND KRP1-ST ROWS TO MAINTAIN THE
 !     TRIANGULAR FORM.  UPDATE THE RANK INDICATOR KRANK AND THE
 !     EQUALITY CONSTRAINT POINTER ME.
-380 IF (.NOT.(INDEP)) GO TO 390
-CALL SSWAP(NP1, W(KRP1,1), MDW, W(IR,1), MDW)
-CALL SSWAP(1, SCALE(KRP1), 1, SCALE(IR), 1)
+380 if (.not.(indep)) go to 390
+call sswap(np1, w(krp1,1), mdw, w(ir,1), mdw)
+call sswap(1, scale(krp1), 1, scale(ir), 1)
 !     RECLASSIFY THE LEAST SQ. EQUATION AS AN EQUALITY CONSTRAINT AND
 !     RESCALE IT.
-ITYPE(IR) = 0
-T = SQRT(SCALE(KRP1))
-CALL SSCAL(NP1, T, W(KRP1,1), MDW)
-SCALE(KRP1) = ALSQ
-ME = MEP1
-MEP1 = ME + 1
-KRANK = KRP1
-KRP1 = KRANK + 1
-GO TO 400
-390 GO TO 430
-400 I = IP1
-IP1 = IP1 + 1
-GO TO 310
-410 CONTINUE
-420 CONTINUE
-430 CONTINUE
+itype(ir) = 0
+t = sqrt(scale(krp1))
+call sscal(np1, t, w(krp1,1), mdw)
+scale(krp1) = alsq
+me = mep1
+mep1 = me + 1
+krank = krp1
+krp1 = krank + 1
+go to 400
+390 go to 430
+400 i = ip1
+ip1 = ip1 + 1
+go to 310
+410 continue
+420 continue
+430 continue
 !
 !     IF PSEUDORANK IS LESS THAN L, APPLY HOUSEHOLDER TRANS.
 !     FROM RIGHT.
-IF (.NOT.(KRANK.LT.L)) GO TO 450
-do 440 I = 1,KRANK
-  J = KRP1 - I
-  CALL H12(1, J, KRP1, L, W(J,1), MDW, H(J), W, MDW, 1, J-1)
-440 CONTINUE
-450 NIV = KRANK + NSOLN - L
-NIV1 = NIV + 1
-IF (L.EQ.N) DONE = .TRUE.
+if (.not.(krank.lt.l)) go to 450
+do 440 i = 1,krank
+  j = krp1 - i
+  call h12(1, j, krp1, l, w(j,1), mdw, h(j), w, mdw, 1, j-1)
+440 continue
+450 niv = krank + nsoln - l
+niv1 = niv + 1
+if (l.eq.n) done = .true.
 !
 !  END OF INITIAL TRIANGULARIZATION.
-IDOPE(1) = ME
-IDOPE(2) = MEP1
-IDOPE(3) = KRANK
-IDOPE(4) = KRP1
-IDOPE(5) = NSOLN
-IDOPE(6) = NIV
-IDOPE(7) = NIV1
-IDOPE(8) = L1
-RETURN
-460 CONTINUE
+idope(1) = me
+idope(2) = mep1
+idope(3) = krank
+idope(4) = krp1
+idope(5) = nsoln
+idope(6) = niv
+idope(7) = niv1
+idope(8) = l1
+return
+460 continue
 !
 !     TO UPDATE-COL-SS-AND-FIND-PIVOT-COL
 !
 !     THE COL SS VECTOR WILL BE UPDATED AT EACH STEP. WHEN
 !     NUMERICALLY NECESSARY, THESE VALUES WILL BE RECOMPUTED.
 !
-IF (.NOT.(IR.NE.1 .AND. (.NOT.RECALC))) GO TO 480
+if (.not.(ir.ne.1 .and. (.not.recalc))) go to 480
 !     UPDATE COL SS =SUM OF SQUARES.
-do 470 J = I,LEND
-  H(J) = H(J) - SCALE(IR-1)*W(IR-1,J)**2
-470 CONTINUE
+do 470 j = i,lend
+  h(j) = h(j) - scale(ir-1)*w(ir-1,j)**2
+470 continue
 !
 !     TEST FOR NUMERICAL ACCURACY.
-MAX = ISAMAX(LEND-I+1,H(I),1) + I - 1
-RECALC = HBAR + TENM3*H(MAX).EQ.HBAR
+max = isamax(lend-i+1,h(i),1) + i - 1
+recalc = hbar + tenm3*h(max).eq.hbar
 !
 !     IF REQUIRED, RECALCULATE COL SS, USING ROWS IR THROUGH MEND.
-480 IF (.NOT.(RECALC)) GO TO 510
-do 500 J = I,LEND
-  H(J) = ZERO
-  do 490 K = IR,MEND
-    H(J) = H(J) + SCALE(K)*W(K,J)**2
-490 CONTINUE
-500 CONTINUE
+480 if (.not.(recalc)) go to 510
+do 500 j = i,lend
+  h(j) = zero
+  do 490 k = ir,mend
+    h(j) = h(j) + scale(k)*w(k,j)**2
+490 continue
+500 continue
 !
 !     FIND COL WITH LARGEST SS.
-MAX = ISAMAX(LEND-I+1,H(I),1) + I - 1
-HBAR = H(MAX)
-510 GO TO 600
-520 CONTINUE
+max = isamax(lend-i+1,h(i),1) + i - 1
+hbar = h(max)
+510 go to 600
+520 continue
 !
 !     TO TEST-INDEP-OF-INCOMING-COL
 !
@@ -9872,49 +9872,49 @@ HBAR = H(MAX)
 !     AND COMPUTE  SN = INVERSE WEIGHTED LENGTH OF A1
 !                  RN = INVERSE WEIGHTED LENGTH OF A2
 !     CALL THE COL INDEPENDENT WHEN RN .GT. TAU*SN
-SN = ZERO
-RN = ZERO
-do 550 J = 1,MEND
-  T = SCALE(J)
-  IF (J.LE.ME) T = T/FACTOR
-  T = T*W(J,IC)**2
-  IF (.NOT.(J.LT.IR)) GO TO 530
-  SN = SN + T
-  GO TO 540
-530 RN = RN + T
-540 CONTINUE
-550 CONTINUE
-INDEP = RN.GT.TAU**2*SN
-GO TO 590
-560 CONTINUE
+sn = zero
+rn = zero
+do 550 j = 1,mend
+  t = scale(j)
+  if (j.le.me) t = t/factor
+  t = t*w(j,ic)**2
+  if (.not.(j.lt.ir)) go to 530
+  sn = sn + t
+  go to 540
+530 rn = rn + t
+540 continue
+550 continue
+indep = rn.gt.tau**2*sn
+go to 590
+560 continue
 !
 !     TO PERFORM-COL-INTERCHANGE
 !
-IF (.NOT.(MAX.NE.I)) GO TO 570
+if (.not.(max.ne.i)) go to 570
 !     EXCHANGE ELEMENTS OF PERMUTED INDEX VECTOR AND PERFORM COL
 !     INTERCHANGES.
-ITEMP = IPIVOT(I)
-IPIVOT(I) = IPIVOT(MAX)
-IPIVOT(MAX) = ITEMP
-CALL SSWAP(M, W(1,MAX), 1, W(1,I), 1)
-T = H(MAX)
-H(MAX) = H(I)
-H(I) = T
-570 GO TO IGO993, (30, 200, 330, 120)
-590 GO TO IGO990, (40, 240)
-600 GO TO IGO996, (20, 190, 320)
-END SUBROUTINE WNLIT
+itemp = ipivot(i)
+ipivot(i) = ipivot(max)
+ipivot(max) = itemp
+call sswap(m, w(1,max), 1, w(1,i), 1)
+t = h(max)
+h(max) = h(i)
+h(i) = t
+570 go to igo993, (30, 200, 330, 120)
+590 go to igo990, (40, 240)
+600 go to igo996, (20, 190, 320)
+end subroutine wnlit
 
-SUBROUTINE L2SLV(M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, &
-&X, NN, RES, MR, QR, MMPNN, C, IFAULT)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFAULT
-INTEGER, INTENT(IN) :: L, M, M1, MB, MM, MMPNN, MR, N
-INTEGER, INTENT(INOUT) :: N1
-INTEGER, INTENT(IN) :: NN
-INTEGER :: I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4, &
-&K5, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
-REAL :: SPMPAR
+subroutine l2slv(m, n, m1, l, a, mm, b, mb, w, tol, n1, ipivot, &
+&x, nn, res, mr, qr, mmpnn, c, ifault)
+implicit none
+integer, intent(inout) :: ifault
+integer, intent(in) :: l, m, m1, mb, mm, mmpnn, mr, n
+integer, intent(inout) :: n1
+integer, intent(in) :: nn
+integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
+&k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
+real :: spmpar
 ! ** PURPOSE **
 ! SUBROUTINE L2SLV COMPUTES LEAST SQUARES SOLUTIONS TO OVERDETERMINED
 ! AND UNDERDETERMINED SYSTEMS OF LINEAR EQUATIONS.  THE METHOD USED IS
@@ -10093,47 +10093,47 @@ REAL :: SPMPAR
 ! *                                                                   *
 ! *********************************************************************
 !
-INTEGER, INTENT(INOUT) :: IPIVOT(N)
-REAL, INTENT(IN) :: A(MM,N), B(MB,L)
-REAL, INTENT(INOUT) :: C(*)
-REAL :: ETA
-REAL, INTENT(INOUT) :: QR(MMPNN,N), RES(MR,L), TOL, W(M), X(NN,L)
-REAL :: DIGITX
-LOGICAL :: FAIL
-LOGICAL :: SING
+integer, intent(inout) :: ipivot(n)
+real, intent(in) :: a(mm,n), b(mb,l)
+real, intent(inout) :: c(*)
+real :: eta
+real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
+real :: digitx
+logical :: fail
+logical :: sing
 !
 ! SET VALUE OF ETA, A MACHINE-DEPENDENT PARAMETER.
 ! ETA, THE RELATIVE MACHINE PRECISION, IS THE SMALLEST POSITIVE REAL
 ! NUMBER SUCH THAT 1.0 + ETA IS GREATER THAN 1.0 IN FLOATING-POINT
 ! ARITHMETIC.
 !
-ETA = SPMPAR(1)
+eta = spmpar(1)
 !
 ! DEFAULT VALUE FOR TOL IS ZERO.
 !
-IF (TOL.LT.0.0) TOL = 0.0
-IFAULT = 0
-KSUM = 0
+if (tol.lt.0.0) tol = 0.0
+ifault = 0
+ksum = 0
 !
 ! PERFORM INITIAL CHECKING OF INPUT PARAMETERS, DIMENSIONS AND
 ! WEIGHTS FOR POSSIBLE ERRORS.
 !
-IF (M.GT.0 .AND. N.GT.0 .AND. L.GT.0) GO TO 10
-IFAULT = 1
-RETURN
-10 IF (M1.LE.M .AND. M1.LE.N .AND. M1.GE.0) GO TO 20
-IFAULT = 2
-RETURN
-20 IF (M.LE.MM .AND. M.LE.MB .AND. M.LE.MR .AND. N.LE.NN &
-&.AND. M+N.LE.MMPNN) GO TO 30
-IFAULT = 3
-RETURN
-30 do 40 I = 1,M
-  IF (M1.GT.0 .AND. I.LE.M1) W(I) = 1.0
-  IF (W(I).GE.0.0) GO TO 40
-  IFAULT = 4
-  RETURN
-40 CONTINUE
+if (m.gt.0 .and. n.gt.0 .and. l.gt.0) go to 10
+ifault = 1
+return
+10 if (m1.le.m .and. m1.le.n .and. m1.ge.0) go to 20
+ifault = 2
+return
+20 if (m.le.mm .and. m.le.mb .and. m.le.mr .and. n.le.nn &
+&.and. m+n.le.mmpnn) go to 30
+ifault = 3
+return
+30 do 40 i = 1,m
+  if (m1.gt.0 .and. i.le.m1) w(i) = 1.0
+  if (w(i).ge.0.0) go to 40
+  ifault = 4
+  return
+40 continue
 !
 ! SET PARAMETERS WHICH ALLOCATE VECTOR C TO CONTAIN CERTAIN FINAL
 ! RESULTS AND ALSO TO BE USED AS WORK SPACE.
@@ -10151,85 +10151,85 @@ RETURN
 ! K11 IS STARTING POINT FOR WORK SPACE OF LENGTH M + N.
 ! K12 IS STARTING POINT FOR WORK SPACE OF LENGTH M + N.
 !
-K1 = 1
-K2 = K1 + L
-K3 = K2 + L
-K4 = K3 + N
-K5 = K4 + M
-K6 = K5 + N
-K7 = K6 + M
-K8 = K7 + M
-K9 = K8 + M
-K10 = K9 + N
-K11 = K10 + N
-K12 = K11 + M + N
-K = K12 + M + N - 1
+k1 = 1
+k2 = k1 + l
+k3 = k2 + l
+k4 = k3 + n
+k5 = k4 + m
+k6 = k5 + n
+k7 = k6 + m
+k8 = k7 + m
+k9 = k8 + m
+k10 = k9 + n
+k11 = k10 + n
+k12 = k11 + m + n
+k = k12 + m + n - 1
 !
 ! MULTIPLY EACH ROW OF MATRIX A (M BY N) BY ITS APPROPRIATE WEIGHT AND
 ! STORE THE RESULT IN THE FIRST M ROWS OF ARRAY QR.  SET ARRAY C AND
 ! THE LAST N ROWS OF ARRAY QR EQUAL TO ZERO.
 !
-DO I=1,K
-  C(I) = 0.0
-END DO
-MP1 = M + 1
-MPN = M + N
-DO J=1,N
-  DO I=1,M
-    QR(I,J) = A(I,J)*W(I)
-  END DO
-  DO I=MP1,MPN
-    QR(I,J) = 0.0
-  END DO
-END DO
+do i=1,k
+  c(i) = 0.0
+end do
+mp1 = m + 1
+mpn = m + n
+do j=1,n
+  do i=1,m
+    qr(i,j) = a(i,j)*w(i)
+  end do
+  do i=mp1,mpn
+    qr(i,j) = 0.0
+  end do
+end do
 !
 ! OBTAIN AN ORTHOGONAL DECOMPOSITION OF THE MATRIX STORED IN THE FIRST
 ! M ROWS OF ARRAY QR AND COMPUTE ITS RANK.
 !
-CALL DECOM2(M, N, M1, ETA, TOL, QR, C(K3), N1, IPIVOT, SING, &
-&MMPNN)
+call decom2(m, n, m1, eta, tol, qr, c(k3), n1, ipivot, sing, &
+&mmpnn)
 !
-IF (.NOT.SING) GO TO 110
-IF (N1.GT.0) GO TO 100
-IFAULT = 5
-RETURN
-100 IFAULT = 6
-RETURN
+if (.not.sing) go to 110
+if (n1.gt.0) go to 100
+ifault = 5
+return
+100 ifault = 6
+return
 !
 ! SEEK A SOLUTION (COEFFICIENTS AND RESIDUALS) FOR EACH OF THE L LEAST
 ! SQUARES PROBLEMS WHOSE RIGHT-HAND SIDES ARE GIVEN IN THE ARRAY B.
 !
-110 ITER = -ALOG10(ETA)
-do 200 K = 1,L
+110 iter = -alog10(eta)
+do 200 k = 1,l
 ! K-TH RIGHT-HAND SIDE.
-  K0 = K4 - 1
-  DO I=1,M
-    K0 = K0 + 1
-    C(K0) = B(I,K)
-  END DO
+  k0 = k4 - 1
+  do i=1,m
+    k0 = k0 + 1
+    c(k0) = b(i,k)
+  end do
 !
-  CALL SOLVE2(M, N, M1, A, C(K4), W, N1, IPIVOT, QR, C(K3), &
-&ETA, FAIL, NUMIT, DIGITX, &
-&C(K5), C(K6), C(K7), C(K8), C(K9), C(K10), C(K11), C(K12), &
-&MM, MMPNN)
+  call solve2(m, n, m1, a, c(k4), w, n1, ipivot, qr, c(k3), &
+&eta, fail, numit, digitx, &
+&c(k5), c(k6), c(k7), c(k8), c(k9), c(k10), c(k11), c(k12), &
+&mm, mmpnn)
 !
-  K0 = K5 - 1
-  DO J=1,N
-    K0 = K0 + 1
-    X(J,K) = C(K0)
-  END DO
-  IF (M1.EQ.0) GO TO 150
-  DO I=1,M1
-    RES(I,K) = 0.0
-  END DO
-150 M1P1 = M1 + 1
-  IF (M1P1.GT.M) GO TO 170
-  K0 = K6 + M1 - 1
-  DO I=M1P1,M
-    K0 = K0 + 1
-    RES(I,K) = C(K0)
-  END DO
-170 CONTINUE
+  k0 = k5 - 1
+  do j=1,n
+    k0 = k0 + 1
+    x(j,k) = c(k0)
+  end do
+  if (m1.eq.0) go to 150
+  do i=1,m1
+    res(i,k) = 0.0
+  end do
+150 m1p1 = m1 + 1
+  if (m1p1.gt.m) go to 170
+  k0 = k6 + m1 - 1
+  do i=m1p1,m
+    k0 = k0 + 1
+    res(i,k) = c(k0)
+  end do
+170 continue
 !
 ! FOR RIGHT-HAND SIDES WHERE CONVERGENCE OF A SOLUTION IS REPORTED,
 ! A CHECK IS MADE FOR EVIDENCE OF SEVERE ILL-CONDITIONING.  SUCH
@@ -10240,57 +10240,57 @@ do 200 K = 1,L
 ! IS SET TO 9.  IF DIGITX IS LESS THAN 0.5 (HALF A DECIMAL DIGIT)
 ! THEN IFAULT IS SET TO 10.
 !
-  C(K) = FLOAT(NUMIT)
-  IF (FAIL) C(K) = -C(K)
-  K0 = K2 + K - 1
-  C(K0) = DIGITX
-  IF (.NOT.FAIL) GO TO 180
+  c(k) = float(numit)
+  if (fail) c(k) = -c(k)
+  k0 = k2 + k - 1
+  c(k0) = digitx
+  if (.not.fail) go to 180
 ! KSUM IS A TALLY OF SOLUTIONS WHICH FAILED TO CONVERGE.
-  KSUM = KSUM + 1
-  IFAULT = 8
-  GO TO 200
-180 IF (NUMIT.LE.ITER) GO TO 190
-  IFAULT = 9
-190 IF (DIGITX.GE.0.5) GO TO 200
-  IFAULT = 10
-200 CONTINUE
-IF (KSUM.LT.L) GO TO 210
-IFAULT = 7
-RETURN
-210 IF (N1.LT.N) RETURN
-DO I=1,N
-  MPI = M + I
-  DO J=1,N
-    QR(I,J) = QR(MPI,J)
-  END DO
-  QR(I,I) = 0.0
-END DO
+  ksum = ksum + 1
+  ifault = 8
+  go to 200
+180 if (numit.le.iter) go to 190
+  ifault = 9
+190 if (digitx.ge.0.5) go to 200
+  ifault = 10
+200 continue
+if (ksum.lt.l) go to 210
+ifault = 7
+return
+210 if (n1.lt.n) return
+do i=1,n
+  mpi = m + i
+  do j=1,n
+    qr(i,j) = qr(mpi,j)
+  end do
+  qr(i,i) = 0.0
+end do
 !
 ! COMPUTE THE UNSCALED COVARIANCE MATRIX OF THE COEFFICIENTS.
 !
-CALL COVAR(N, M1, N1, IPIVOT, QR, C(K3), C(K9), MMPNN)
-IF (N.EQ.1) GO TO 260
-DO J=2,N
-JM1 = J - 1
-  do 240 I = 1,JM1
-240 QR(I,J) = QR(J,I)
-END DO
+call covar(n, m1, n1, ipivot, qr, c(k3), c(k9), mmpnn)
+if (n.eq.1) go to 260
+do j=2,n
+jm1 = j - 1
+  do 240 i = 1,jm1
+240 qr(i,j) = qr(j,i)
+end do
 !
 ! IN CERTAIN PROBLEMS, SOME DIAGONAL TERMS OF THE UNSCALED COVARIANCE
 ! MATRIX ARE EQUAL TO ZERO OR TO SMALL POSITIVE NUMBERS.  BECAUSE OF
 ! ROUNDING ERRORS, COMPUTED VALUES FOR THESE TERMS MAY BE SMALL
 ! NEGATIVE NUMBERS.  IFAULT IS SET TO 11 IF THIS OCCURS.
 !
-260 DO J=1,N
-  IF (QR(J,J).LT.0.0) GO TO 280
-END DO
-RETURN
-280 IF (IFAULT.NE.0) GO TO 290
-IFAULT = 11
-RETURN
-290 IFAULT = 12
-RETURN
-END SUBROUTINE L2SLV
+260 do j=1,n
+  if (qr(j,j).lt.0.0) go to 280
+end do
+return
+280 if (ifault.ne.0) go to 290
+ifault = 11
+return
+290 ifault = 12
+return
+end subroutine l2slv
 
 !     SUBROUTINE DECOM2(...)
 ! SUBROUTINE DECOM2 USES A MODIFIED GRAM-SCHMIDT ALGORITHM WITH
@@ -10325,164 +10325,164 @@ END SUBROUTINE L2SLV
 ! ON EXIT, THE VECTOR IPIVOT RECORDS THE ORDER IN WHICH THE COLUMNS
 ! OF QR WERE SELECTED BY THE PIVOTING SCHEME IN THE COURSE OF THE
 ! ORTHOGONAL DECOMPOSITION.
-SUBROUTINE DECOM2(M, N, M1, ETA, TOL, QR, D, N1, IPIVOT, SING, &
-&MMPNN)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, M1, MMPNN, N
-INTEGER, INTENT(OUT) :: N1
-INTEGER :: IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP, &
-&NS, NSP1
-INTEGER, INTENT(INOUT) :: IPIVOT(N)
-REAL :: C
-REAL, INTENT(INOUT) :: D(*)
-REAL :: DM, DS
-REAL, INTENT(IN) :: ETA
-REAL, INTENT(INOUT) :: QR(MMPNN,N)
-REAL :: RSJ
-REAL, INTENT(IN) :: TOL
-REAL :: TOL2
-DOUBLE PRECISION :: SUM
-LOGICAL :: FINIS, FSUM
-LOGICAL, INTENT(OUT) :: SING
-N1 = 0
-SING = .TRUE.
-FSUM = .TRUE.
-MV = 1
-MH = M1
-MS = M
-MP1 = M + 1
-FINIS = .FALSE.
-IF (TOL.GT.0.0) TOL2 = TOL
-DO J=1,N
-  D(J) = 0.0
-  IPIVOT(J) = J
-END DO
+subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
+&mmpnn)
+implicit none
+integer, intent(in) :: m, m1, mmpnn, n
+integer, intent(out) :: n1
+integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
+&ns, nsp1
+integer, intent(inout) :: ipivot(n)
+real :: c
+real, intent(inout) :: d(*)
+real :: dm, ds
+real, intent(in) :: eta
+real, intent(inout) :: qr(mmpnn,n)
+real :: rsj
+real, intent(in) :: tol
+real :: tol2
+double precision :: sum
+logical :: finis, fsum
+logical, intent(out) :: sing
+n1 = 0
+sing = .true.
+fsum = .true.
+mv = 1
+mh = m1
+ms = m
+mp1 = m + 1
+finis = .false.
+if (tol.gt.0.0) tol2 = tol
+do j=1,n
+  d(j) = 0.0
+  ipivot(j) = j
+end do
 ! STEP NUMBER NS OF THE DECOMPOSITION.
-DO NS=1,N
-  K = M + NS
-  IF (NS.EQ.M1+1) GO TO 20
-  GO TO 30
-20 IF (M1.EQ.M) GO TO 200
-  MV = M1 + 1
-  MH = M
-  FSUM = .TRUE.
-30 IF (.NOT.FINIS) GO TO 40
-  GO TO 150
+do ns=1,n
+  k = m + ns
+  if (ns.eq.m1+1) go to 20
+  go to 30
+20 if (m1.eq.m) go to 200
+  mv = m1 + 1
+  mh = m
+  fsum = .true.
+30 if (.not.finis) go to 40
+  go to 150
 ! PIVOT SEARCH.
-40 DS = 0.0
-  NP = NS
-  do 90 J = NS,N
-    IF (FSUM) GO TO 50
-    GO TO 70
-50 SUM = 0.0
-    DO L=MV,MH
-      SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,J))
-    END DO
-    D(J) = SUM
-70 IF (DS.LT.D(J)) GO TO 80
-    GO TO 90
-80 DS = D(J)
-    NP = J
-90 CONTINUE
-  IF (FSUM) DM = DS
-  IF (DS.LT.ETA*DM) GO TO 100
-  FSUM = .FALSE.
-  GO TO 110
-100 FSUM = .TRUE.
-110 IF (FSUM) GO TO 40
-  IF (NP.NE.NS) GO TO 120
-  GO TO 140
+40 ds = 0.0
+  np = ns
+  do 90 j = ns,n
+    if (fsum) go to 50
+    go to 70
+50 sum = 0.0
+    do l=mv,mh
+      sum = sum + dble(qr(l,j))*dble(qr(l,j))
+    end do
+    d(j) = sum
+70 if (ds.lt.d(j)) go to 80
+    go to 90
+80 ds = d(j)
+    np = j
+90 continue
+  if (fsum) dm = ds
+  if (ds.lt.eta*dm) go to 100
+  fsum = .false.
+  go to 110
+100 fsum = .true.
+110 if (fsum) go to 40
+  if (np.ne.ns) go to 120
+  go to 140
 ! COLUMN INTERCHANGE.
-120 IK = IPIVOT(NP)
-  IPIVOT(NP) = IPIVOT(NS)
-  IPIVOT(NS) = IK
-  D(NP) = D(NS)
-  KM1 = K - 1
-  DO L=1,KM1
-    C = QR(L,NP)
-    QR(L,NP) = QR(L,NS)
-    QR(L,NS) = C
-  END DO
+120 ik = ipivot(np)
+  ipivot(np) = ipivot(ns)
+  ipivot(ns) = ik
+  d(np) = d(ns)
+  km1 = k - 1
+  do l=1,km1
+    c = qr(l,np)
+    qr(l,np) = qr(l,ns)
+    qr(l,ns) = c
+  end do
 ! END COLUMN INTERCHANGE.
 ! END PIVOT SEARCH.
 ! RETURN HERE IF N1 = 0.  EITHER INPUT MATRIX QR EQUALS ZERO OR
 ! MATRIX OF CONSTRAINTS EQUALS ZERO.
-140 IF (NS.EQ.1 .AND. DS.EQ.0.0) RETURN
-  GO TO 160
-150 MS = K - 1
-  MH = K - 1
-160 IF (FINIS) GO TO 170
-  C = 0.0
-  GO TO 180
-170 C = 1.0
-180 SUM = DBLE(C)
-  DO L=MV,MH
-    SUM = SUM + DBLE(QR(L,NS))*DBLE(QR(L,NS))
-  END DO
-  D(NS) = SUM
-  DS = D(NS)
-  IF (TOL.EQ.0.0) TOL2 = (FLOAT(N)*ETA)**2*D(M1+1)
-  IF (.NOT.FINIS .AND. NS.GT.M1 .AND. DS.LE.TOL2) GO TO 200
-  GO TO 290
-200 FINIS = .TRUE.
-  MV = M + 1
-  DO NP=NS,N
-    IF (1.GT.M1) GO TO 250
-    DO L=1,M1
-      QR(L,NP) = 0.0
-    END DO
-    DO J=1,M1
-      SUM = 0.0
-      DO L=1,M
-        SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,NP))
-      END DO
-      C = SUM
-      C = C/D(J)
-      DO L=1,M1
-        QR(L,NP) = QR(L,NP) - C*QR(L,J)
-      END DO
-    END DO
-250 MPN1 = M + N1
-    DO JJ=MP1,MPN1
-      J = (M + 1) + (M + N1) - JJ
-      SUM = 0.0
-      DO L=J,MPN1
-        LMM = L - M
-        SUM = SUM + DBLE(QR(J,LMM))*DBLE(QR(L,NP))
-      END DO
-      QR(J,NP) = -SUM
-    END DO
-  END DO
-  GO TO 150
+140 if (ns.eq.1 .and. ds.eq.0.0) return
+  go to 160
+150 ms = k - 1
+  mh = k - 1
+160 if (finis) go to 170
+  c = 0.0
+  go to 180
+170 c = 1.0
+180 sum = dble(c)
+  do l=mv,mh
+    sum = sum + dble(qr(l,ns))*dble(qr(l,ns))
+  end do
+  d(ns) = sum
+  ds = d(ns)
+  if (tol.eq.0.0) tol2 = (float(n)*eta)**2*d(m1+1)
+  if (.not.finis .and. ns.gt.m1 .and. ds.le.tol2) go to 200
+  go to 290
+200 finis = .true.
+  mv = m + 1
+  do np=ns,n
+    if (1.gt.m1) go to 250
+    do l=1,m1
+      qr(l,np) = 0.0
+    end do
+    do j=1,m1
+      sum = 0.0
+      do l=1,m
+        sum = sum + dble(qr(l,j))*dble(qr(l,np))
+      end do
+      c = sum
+      c = c/d(j)
+      do l=1,m1
+        qr(l,np) = qr(l,np) - c*qr(l,j)
+      end do
+    end do
+250 mpn1 = m + n1
+    do jj=mp1,mpn1
+      j = (m + 1) + (m + n1) - jj
+      sum = 0.0
+      do l=j,mpn1
+        lmm = l - m
+        sum = sum + dble(qr(j,lmm))*dble(qr(l,np))
+      end do
+      qr(j,np) = -sum
+    end do
+  end do
+  go to 150
 ! RETURN HERE IF MATRIX OF CONSTRAINTS IS FOUND TO BE SINGULAR.
-290 IF (DS.EQ.0.0) RETURN
-  QR(K,NS) = -1.0
-  NSP1 = NS + 1
-  IF (NSP1.GT.N) GO TO 340
+290 if (ds.eq.0.0) return
+  qr(k,ns) = -1.0
+  nsp1 = ns + 1
+  if (nsp1.gt.n) go to 340
 ! BEGIN ORTHOGONALIZATION.
-  do 330 J = NSP1,N
-    SUM = 0.0
-    DO L=MV,MH
-      SUM = SUM + DBLE(QR(L,J))*DBLE(QR(L,NS))
-    END DO
-    RSJ = SUM
-    RSJ = RSJ/DS
-    QR(K,J) = RSJ
-    DO L=1,MS
-      QR(L,J) = QR(L,J) - RSJ*QR(L,NS)
-    END DO
-    IF (.NOT.FINIS) GO TO 320
-    GO TO 330
-320 D(J) = D(J) - DS*RSJ*RSJ
-330 CONTINUE
+  do 330 j = nsp1,n
+    sum = 0.0
+    do l=mv,mh
+      sum = sum + dble(qr(l,j))*dble(qr(l,ns))
+    end do
+    rsj = sum
+    rsj = rsj/ds
+    qr(k,j) = rsj
+    do l=1,ms
+      qr(l,j) = qr(l,j) - rsj*qr(l,ns)
+    end do
+    if (.not.finis) go to 320
+    go to 330
+320 d(j) = d(j) - ds*rsj*rsj
+330 continue
 ! END ORTHOGONALIZATION.
-340 IF (.NOT.FINIS) N1 = N1 + 1
-END DO
+340 if (.not.finis) n1 = n1 + 1
+end do
 ! END STEP NUMBER NS.
-SING = .FALSE.
+sing = .false.
 ! NORMAL RETURN.
-RETURN
-END SUBROUTINE DECOM2
+return
+end subroutine decom2
 
 !     SUBROUTINE SOLVE2(...)
 ! SUBROUTINE SOLVE2 USES THE ORTHOGONAL DECOMPOSITION STORED IN QR, D

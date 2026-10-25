@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 
 from fixed_to_free import convert_text
+from lowercase_fortran import lowercase
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,7 @@ LINK = re.compile(
 
 
 def generate(root=ROOT):
-    free = convert_text((root / "nswc.f").read_text(encoding="ascii"))
+    free = lowercase(convert_text((root / "nswc.f").read_text(encoding="ascii")))
     lines = free.splitlines(keepends=True)
     declarations = {}
     for number, line in enumerate(lines, 1):

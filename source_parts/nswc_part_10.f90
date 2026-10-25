@@ -1,8 +1,8 @@
-SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KDZ, KZ, M, N
-INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, K, KMJ, L, LEFT, MP1, MU
-REAL :: DEL, DIFF, R, S, TERM, X
+subroutine cspp (t, a, ka, m, n, z, kz, dz, kdz)
+implicit none
+integer, intent(in) :: ka, kdz, kz, m, n
+integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
+real :: del, diff, r, s, term, x
 !-----------------------------------------------------------------------
 !
 !            COMPUTATION OF N CUBIC SPLINES AND THEIR FIRST
@@ -34,457 +34,457 @@ REAL :: DEL, DIFF, R, S, TERM, X
 !             THE J-TH CUBIC SPLINE EVALUATED AT THE POINT T(I+3).
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*), A(KA,N)
-REAL, INTENT(INOUT) :: Z(KZ,*), DZ(KDZ,*)
-REAL :: C(4), WK(4,5)
+real, intent(in) :: t(*), a(ka,n)
+real, intent(inout) :: z(kz,*), dz(kdz,*)
+real :: c(4), wk(4,5)
 !
-K = 4
-MP1 = M + 1
-DO MU = 1,N
+k = 4
+mp1 = m + 1
+do mu = 1,n
 !
 !        OBTAING THE VALUES FOR THE MU-TH CUBIC SPLINE
 !
-   L = 0
-   DO LEFT = K,M
-      L = L + 1
+   l = 0
+   do left = k,m
+      l = l + 1
 !
 !           COMPUTE THE COEFFICIENTS FOR THE L-TH
 !           POLYNOMIAL FORMING THE CUBIC SPLINE. THE
 !           COEFFICIENTS ARE STORED IN C. THIS CODE
 !           IS FROM THE SUBROUTINE BSPP.
 !
-      DO J = 1,K
-         JJ = LEFT - K + J
-         WK(J,1) = A(JJ,MU)
-      END DO
+      do j = 1,k
+         jj = left - k + j
+         wk(j,1) = a(jj,mu)
+      end do
 !
-      DO J = 1,3
-         JP1 = J + 1
-         KMJ = K - J
-         DO I = 1,KMJ
-            IL = I + LEFT
-            ILKJ = IL - KMJ
-            DIFF = T(IL) - T(ILKJ)
-            WK(I,JP1) = (WK(I+1,J) - WK(I,J))/DIFF
-         END DO
-      END DO
+      do j = 1,3
+         jp1 = j + 1
+         kmj = k - j
+         do i = 1,kmj
+            il = i + left
+            ilkj = il - kmj
+            diff = t(il) - t(ilkj)
+            wk(i,jp1) = (wk(i+1,j) - wk(i,j))/diff
+         end do
+      end do
 !
-      WK(1,5) = 1.0
-      X = T(LEFT)
-      C(4) = WK(1,4)
-      R = 1.0
-      DO J = 1,3
-         JP1 = J + 1
-         S = 0.0
-         DO I = 1,J
-            IL = I + LEFT
-            ILJ = IL - J
-            TERM = WK(I,5)/(T(IL) - T(ILJ))
-            WK(I,5) = S + (T(IL) - X)*TERM
-            S = (X - T(ILJ))*TERM
-         END DO
-         WK(JP1,5) = S
+      wk(1,5) = 1.0
+      x = t(left)
+      c(4) = wk(1,4)
+      r = 1.0
+      do j = 1,3
+         jp1 = j + 1
+         s = 0.0
+         do i = 1,j
+            il = i + left
+            ilj = il - j
+            term = wk(i,5)/(t(il) - t(ilj))
+            wk(i,5) = s + (t(il) - x)*term
+            s = (x - t(ilj))*term
+         end do
+         wk(jp1,5) = s
 !
-         S = 0.0
-         KMJ = K - J
-         DO I = 1,JP1
-            S = S + WK(I,KMJ)*WK(I,5)
-         END DO
-         R = (R*FLOAT(KMJ))/FLOAT(J)
-         C(KMJ) = R*S
-      END DO
+         s = 0.0
+         kmj = k - j
+         do i = 1,jp1
+            s = s + wk(i,kmj)*wk(i,5)
+         end do
+         r = (r*float(kmj))/float(j)
+         c(kmj) = r*s
+      end do
 !
 !           STORE THE VALUE OF THE SPLINE AND ITS
 !           FIRST DERIVATIVE AT THE KNOT T(LEFT)
 !
-      Z(MU,L) = C(1)
-      DZ(MU,L) = C(2)
-   END DO
+      z(mu,l) = c(1)
+      dz(mu,l) = c(2)
+   end do
 !
 !        COMPUTE THE SPLINE AND ITS FIRST DERIVATIVE
 !                    AT THE KNOT T(M+1)
 !
-   L = L + 1
-   DEL = T(MP1) - T(M)
-   Z(MU,L) = ((C(4)*DEL + C(3))*DEL + C(2))*DEL + C(1)
-   DZ(MU,L) = (3.0*C(4)*DEL + 2.0*C(3))*DEL + C(2)
-END DO
-RETURN
-END SUBROUTINE CSPP
+   l = l + 1
+   del = t(mp1) - t(m)
+   z(mu,l) = ((c(4)*del + c(3))*del + c(2))*del + c(1)
+   dz(mu,l) = (3.0*c(4)*del + 2.0*c(3))*del + c(2)
+end do
+return
+end subroutine cspp
 
-SUBROUTINE CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, &
-&F, KF, F1, KF1, F2, KF2, F12, KF12)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, &
-&MY, N
-INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
-REAL :: A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1, &
-&DS, DT, DX, DY, FI, FIP1, XX, YY
-INTEGER :: INTRVL
+subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+&f, kf, f1, kf1, f2, kf2, f12, kf12)
+implicit none
+integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
+&my, n
+integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
+real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
+&ds, dt, dx, dy, fi, fip1, xx, yy
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 !                        SPLINE OVER A GRID
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(MX), Y(MY)
-REAL, INTENT(INOUT) :: Z(KZ,MY)
-REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N), &
-&F12(KF12,N)
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+&f12(kf12,n)
 !
-IF (IDER .GT. 3 .OR. JDER .GT. 3) GO TO 400
-MM1 = M - 1
-NM1 = N - 1
+if (ider .gt. 3 .or. jder .gt. 3) go to 400
+mm1 = m - 1
+nm1 = n - 1
 !
-IOLD = 0
-JOLD = 0
-DO L = 1,MY
-   YY = Y(L)
-   IF (YY .LT. T(2)) GO TO 10
-   IF (YY .GE. T(NM1)) GO TO 20
-   IF (L .EQ. 1) GO TO 30
-   IF (YY - Y(L-1)) 30,50,40
+iold = 0
+jold = 0
+do l = 1,my
+   yy = y(l)
+   if (yy .lt. t(2)) go to 10
+   if (yy .ge. t(nm1)) go to 20
+   if (l .eq. 1) go to 30
+   if (yy - y(l-1)) 30,50,40
 !
-10 J = 1
-   GO TO 50
-20 J = NM1
-   GO TO 50
-30 J = INTRVL (YY, T, N)
-   GO TO 50
+10 j = 1
+   go to 50
+20 j = nm1
+   go to 50
+30 j = intrvl (yy, t, n)
+   go to 50
 !
 !        LINEAR FORWARD SEARCH
 !
-40 IF (YY .LT. T(J + 1)) GO TO 50
-   J = J + 1
-   GO TO 40
+40 if (yy .lt. t(j + 1)) go to 50
+   j = j + 1
+   go to 40
 !
-50 JP1 = J + 1
-   DT = T(JP1) - T(J)
+50 jp1 = j + 1
+   dt = t(jp1) - t(j)
 !
-   do 350 K = 1,MX
-      XX = X(K)
-      IF (XX .LT. S(2)) GO TO 100
-      IF (XX .GE. S(MM1)) GO TO 110
-      IF (K .EQ. 1) GO TO 120
-      IF (XX - X(K-1)) 120,130,140
+   do 350 k = 1,mx
+      xx = x(k)
+      if (xx .lt. s(2)) go to 100
+      if (xx .ge. s(mm1)) go to 110
+      if (k .eq. 1) go to 120
+      if (xx - x(k-1)) 120,130,140
 !
-100 I = 1
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-110 I = MM1
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-120 I = INTRVL (XX, S, M)
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-130 Z(K,L) = Z(K-1,L)
-      GO TO 350
+100 i = 1
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+110 i = mm1
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+120 i = intrvl (xx, s, m)
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+130 z(k,l) = z(k-1,l)
+      go to 350
 !
 !           LINEAR FORWARD SEARCH
 !
-140 IF (XX .LT. S(I + 1)) GO TO 210
-150 I = I + 1
-         IF (XX .GE. S(I + 1)) GO TO 150
+140 if (xx .lt. s(i + 1)) go to 210
+150 i = i + 1
+         if (xx .ge. s(i + 1)) go to 150
 !
 !           COMPUTATION OF THE JDER-TH DERIVATIVE OF
 !           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND
 !           D1F(S(I+1),Y) AT THE POINT YY.
 !
-200 IOLD = I
-         IP1 = I + 1
-         DS = S(IP1) - S(I)
+200 iold = i
+         ip1 = i + 1
+         ds = s(ip1) - s(i)
 !
-         D = (F(I,JP1) - F(I,J))/DT
-         A = F2(I,J) + F2(I,JP1)
-         B = (-A - F2(I,J) + 3.0*D)/DT
-         C = (A - D - D)/(DT*DT)
+         d = (f(i,jp1) - f(i,j))/dt
+         a = f2(i,j) + f2(i,jp1)
+         b = (-a - f2(i,j) + 3.0*d)/dt
+         c = (a - d - d)/(dt*dt)
 !
-         D = (F(IP1,JP1) - F(IP1,J))/DT
-         A = F2(IP1,J) + F2(IP1,JP1)
-         B1 = (-A - F2(IP1,J) + 3.0*D)/DT
-         C1 = (A - D - D)/(DT*DT)
+         d = (f(ip1,jp1) - f(ip1,j))/dt
+         a = f2(ip1,j) + f2(ip1,jp1)
+         b1 = (-a - f2(ip1,j) + 3.0*d)/dt
+         c1 = (a - d - d)/(dt*dt)
 !
-         D = (F1(I,JP1) - F1(I,J))/DT
-         A = F12(I,J) + F12(I,JP1)
-         B2 = (-A - F12(I,J) + 3.0*D)/DT
-         C2 = (A - D - D)/(DT*DT)
+         d = (f1(i,jp1) - f1(i,j))/dt
+         a = f12(i,j) + f12(i,jp1)
+         b2 = (-a - f12(i,j) + 3.0*d)/dt
+         c2 = (a - d - d)/(dt*dt)
 !
-         D = (F1(IP1,JP1) - F1(IP1,J))/DT
-         A = F12(IP1,J) + F12(IP1,JP1)
-         B3 = (-A - F12(IP1,J) + 3.0*D)/DT
-         C3 = (A - D - D)/(DT*DT)
+         d = (f1(ip1,jp1) - f1(ip1,j))/dt
+         a = f12(ip1,j) + f12(ip1,jp1)
+         b3 = (-a - f12(ip1,j) + 3.0*d)/dt
+         c3 = (a - d - d)/(dt*dt)
 !
-210 DY = YY - T(J)
-      IF (JDER .EQ. 0) GO TO 220
-      IF (JDER - 2) 230,240,250
+210 dy = yy - t(j)
+      if (jder .eq. 0) go to 220
+      if (jder - 2) 230,240,250
 !
-220 FI = ((C*DY + B)*DY + F2(I,J))*DY + F(I,J)
-      FIP1 = ((C1*DY + B1)*DY + F2(IP1,J))*DY + F(IP1,J)
-      DFI = ((C2*DY + B2)*DY + F12(I,J))*DY + F1(I,J)
-      DFIP1 = ((C3*DY + B3)*DY + F12(IP1,J))*DY + F1(IP1,J)
-      GO TO 300
+220 fi = ((c*dy + b)*dy + f2(i,j))*dy + f(i,j)
+      fip1 = ((c1*dy + b1)*dy + f2(ip1,j))*dy + f(ip1,j)
+      dfi = ((c2*dy + b2)*dy + f12(i,j))*dy + f1(i,j)
+      dfip1 = ((c3*dy + b3)*dy + f12(ip1,j))*dy + f1(ip1,j)
+      go to 300
 !
-230 FI = (3.0*C*DY + 2.0*B)*DY + F2(I,J)
-      FIP1 = (3.0*C1*DY + 2.0*B1)*DY + F2(IP1,J)
-      DFI = (3.0*C2*DY + 2.0*B2)*DY + F12(I,J)
-      DFIP1 = (3.0*C3*DY + 2.0*B3)*DY + F12(IP1,J)
-      GO TO 300
+230 fi = (3.0*c*dy + 2.0*b)*dy + f2(i,j)
+      fip1 = (3.0*c1*dy + 2.0*b1)*dy + f2(ip1,j)
+      dfi = (3.0*c2*dy + 2.0*b2)*dy + f12(i,j)
+      dfip1 = (3.0*c3*dy + 2.0*b3)*dy + f12(ip1,j)
+      go to 300
 !
-240 FI = 6.0*C*DY + 2.0*B
-      FIP1 = 6.0*C1*DY + 2.0*B1
-      DFI = 6.0*C2*DY + 2.0*B2
-      DFIP1 = 6.0*C3*DY + 2.0*B3
-      GO TO 300
+240 fi = 6.0*c*dy + 2.0*b
+      fip1 = 6.0*c1*dy + 2.0*b1
+      dfi = 6.0*c2*dy + 2.0*b2
+      dfip1 = 6.0*c3*dy + 2.0*b3
+      go to 300
 !
-250 FI = 6.0*C
-      FIP1 = 6.0*C1
-      DFI = 6.0*C2
-      DFIP1 = 6.0*C3
+250 fi = 6.0*c
+      fip1 = 6.0*c1
+      dfi = 6.0*c2
+      dfip1 = 6.0*c3
 !
 !           COMPUTATION OF THE IDER-TH DERIVATIVE
 !           AT THE POINT XX.
 !
-300 D = (FIP1 - FI)/DS
-      A = DFI + DFIP1
-      BX = (-A - DFI + 3.0*D)/DS
-      CX = (A - D - D)/(DS*DS)
+300 d = (fip1 - fi)/ds
+      a = dfi + dfip1
+      bx = (-a - dfi + 3.0*d)/ds
+      cx = (a - d - d)/(ds*ds)
 !
-      DX = XX - S(I)
-      IF (IDER .EQ. 0) GO TO 310
-      IF (IDER - 2) 320,330,340
+      dx = xx - s(i)
+      if (ider .eq. 0) go to 310
+      if (ider - 2) 320,330,340
 !
-310 Z(K,L) = ((CX*DX + BX)*DX + DFI)*DX + FI
-      GO TO 350
-320 Z(K,L) = (3.0*CX*DX + 2.0*BX)*DX + DFI
-      GO TO 350
-330 Z(K,L) = 6.0*CX*DX + 2.0*BX
-      GO TO 350
-340 Z(K,L) = 6.0*CX
+310 z(k,l) = ((cx*dx + bx)*dx + dfi)*dx + fi
+      go to 350
+320 z(k,l) = (3.0*cx*dx + 2.0*bx)*dx + dfi
+      go to 350
+330 z(k,l) = 6.0*cx*dx + 2.0*bx
+      go to 350
+340 z(k,l) = 6.0*cx
 !
-350 CONTINUE
-   JOLD = J
-END DO
-RETURN
+350 continue
+   jold = j
+end do
+return
 !
 !     CASE WHEN THE RESULTS ARE ZERO.
 !
-400 DO L = 1,MY
-   DO K = 1,MX
-      Z(K,L) = 0.0
-   END DO
-END DO
-RETURN
-END SUBROUTINE CSURF
+400 do l = 1,my
+   do k = 1,mx
+      z(k,l) = 0.0
+   end do
+end do
+return
+end subroutine csurf
 
-SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDER, JDER, KZ, M, MX, MY, N
+subroutine csurf1 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
+implicit none
+integer, intent(in) :: ider, jder, kz, m, mx, my, n
 !-----------------------------------------------------------------------
 !
 !             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 !                        SPLINE OVER A GRID
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(MX), Y(MY)
-REAL, INTENT(INOUT) :: Z(KZ,MY)
-REAL, INTENT(IN) :: S(M), T(N), F(M,N,4)
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(m,n,4)
 !
-CALL CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, M, &
-&F(1,1,3), M, F(1,1,2), M, F(1,1,4), M)
-RETURN
-END SUBROUTINE CSURF1
+call csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
+&f(1,1,3), m, f(1,1,2), m, f(1,1,4), m)
+return
+end subroutine csurf1
 
-SUBROUTINE CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, &
-&F, KF, F1, KF1, F2, KF2, F12, KF12)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, &
-&MY, N
-INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
-REAL :: A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS, &
-&DT, DX, DY, FI, FIP1, XX, YY
-INTEGER :: INTRVL
+subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+&f, kf, f1, kf1, f2, kf2, f12, kf12)
+implicit none
+integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
+&my, n
+integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
+real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
+&dt, dx, dy, fi, fip1, xx, yy
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 !                        SPLINE OVER A GRID
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(MX), Y(MY)
-REAL, INTENT(INOUT) :: Z(KZ,MY)
-REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N), &
-&F12(KF12,N)
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+&f12(kf12,n)
 !
-IF (IDER .GT. 3 .OR. JDER .GT. 3) GO TO 400
-MM1 = M - 1
-NM1 = N - 1
+if (ider .gt. 3 .or. jder .gt. 3) go to 400
+mm1 = m - 1
+nm1 = n - 1
 !
-IOLD = 0
-JOLD = 0
-DO L = 1,MY
-   YY = Y(L)
-   IF (YY .LT. T(2)) GO TO 10
-   IF (YY .GE. T(NM1)) GO TO 20
-   IF (L .EQ. 1) GO TO 30
-   IF (YY - Y(L-1)) 30,50,40
+iold = 0
+jold = 0
+do l = 1,my
+   yy = y(l)
+   if (yy .lt. t(2)) go to 10
+   if (yy .ge. t(nm1)) go to 20
+   if (l .eq. 1) go to 30
+   if (yy - y(l-1)) 30,50,40
 !
-10 J = 1
-   GO TO 50
-20 J = NM1
-   GO TO 50
-30 J = INTRVL (YY, T, N)
-   GO TO 50
+10 j = 1
+   go to 50
+20 j = nm1
+   go to 50
+30 j = intrvl (yy, t, n)
+   go to 50
 !
 !        LINEAR FORWARD SEARCH
 !
-40 IF (YY .LT. T(J + 1)) GO TO 50
-   J = J + 1
-   GO TO 40
+40 if (yy .lt. t(j + 1)) go to 50
+   j = j + 1
+   go to 40
 !
-50 JP1 = J + 1
-   DT = T(JP1) - T(J)
+50 jp1 = j + 1
+   dt = t(jp1) - t(j)
 !
-   do 350 K = 1,MX
-      XX = X(K)
-      IF (XX .LT. S(2)) GO TO 100
-      IF (XX .GE. S(MM1)) GO TO 110
-      IF (K .EQ. 1) GO TO 120
-      IF (XX - X(K-1)) 120,130,140
+   do 350 k = 1,mx
+      xx = x(k)
+      if (xx .lt. s(2)) go to 100
+      if (xx .ge. s(mm1)) go to 110
+      if (k .eq. 1) go to 120
+      if (xx - x(k-1)) 120,130,140
 !
-100 I = 1
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-110 I = MM1
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-120 I = INTRVL (XX, S, M)
-      IF (I .EQ. IOLD .AND. J .EQ. JOLD) GO TO 210
-      GO TO 200
-130 Z(K,L) = Z(K-1,L)
-      GO TO 350
+100 i = 1
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+110 i = mm1
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+120 i = intrvl (xx, s, m)
+      if (i .eq. iold .and. j .eq. jold) go to 210
+      go to 200
+130 z(k,l) = z(k-1,l)
+      go to 350
 !
 !           LINEAR FORWARD SEARCH
 !
-140 IF (XX .LT. S(I + 1)) GO TO 210
-150 I = I + 1
-         IF (XX .GE. S(I + 1)) GO TO 150
+140 if (xx .lt. s(i + 1)) go to 210
+150 i = i + 1
+         if (xx .ge. s(i + 1)) go to 150
 !
 !           COMPUTATION OF THE JDER-TH DERIVATIVE OF
 !           F(S(I),Y), D1F(S(I),Y), F(S(I+1),Y), AND
 !           D1F(S(I+1),Y) AT THE POINT YY.
 !
-200 IOLD = I
-         IP1 = I + 1
-         DS = S(IP1) - S(I)
+200 iold = i
+         ip1 = i + 1
+         ds = s(ip1) - s(i)
 !
-         D = (F(I,JP1) - F(I,J))/DT
-         A = D - DT*(2.0*F2(I,J) + F2(I,JP1))/6.0
-         C = (F2(I,JP1) - F2(I,J))/(6.0*DT)
+         d = (f(i,jp1) - f(i,j))/dt
+         a = d - dt*(2.0*f2(i,j) + f2(i,jp1))/6.0
+         c = (f2(i,jp1) - f2(i,j))/(6.0*dt)
 !
-         D = (F(IP1,JP1) - F(IP1,J))/DT
-         A1 = D - DT*(2.0*F2(IP1,J) + F2(IP1,JP1))/6.0
-         C1 = (F2(IP1,JP1) - F2(IP1,J))/(6.0*DT)
+         d = (f(ip1,jp1) - f(ip1,j))/dt
+         a1 = d - dt*(2.0*f2(ip1,j) + f2(ip1,jp1))/6.0
+         c1 = (f2(ip1,jp1) - f2(ip1,j))/(6.0*dt)
 !
-         D = (F1(I,JP1) - F1(I,J))/DT
-         A2 = D - DT*(2.0*F12(I,J) + F12(I,JP1))/6.0
-         C2 = (F12(I,JP1) - F12(I,J))/(6.0*DT)
+         d = (f1(i,jp1) - f1(i,j))/dt
+         a2 = d - dt*(2.0*f12(i,j) + f12(i,jp1))/6.0
+         c2 = (f12(i,jp1) - f12(i,j))/(6.0*dt)
 !
-         D = (F1(IP1,JP1) - F1(IP1,J))/DT
-         A3 = D - DT*(2.0*F12(IP1,J) + F12(IP1,JP1))/6.0
-         C3 = (F12(IP1,JP1) - F12(IP1,J))/(6.0*DT)
+         d = (f1(ip1,jp1) - f1(ip1,j))/dt
+         a3 = d - dt*(2.0*f12(ip1,j) + f12(ip1,jp1))/6.0
+         c3 = (f12(ip1,jp1) - f12(ip1,j))/(6.0*dt)
 !
-210 DY = YY - T(J)
-      IF (JDER .EQ. 0) GO TO 220
-      IF (JDER - 2) 230,240,250
+210 dy = yy - t(j)
+      if (jder .eq. 0) go to 220
+      if (jder - 2) 230,240,250
 !
-220 FI = ((C*DY + 0.5*F2(I,J))*DY + A)*DY + F(I,J)
-      FIP1 = ((C1*DY + 0.5*F2(IP1,J))*DY + A1)*DY + F(IP1,J)
-      DFI = ((C2*DY + 0.5*F12(I,J))*DY + A2)*DY + F1(I,J)
-      DFIP1 = ((C3*DY + 0.5*F12(IP1,J))*DY + A3)*DY + F1(IP1,J)
-      GO TO 300
+220 fi = ((c*dy + 0.5*f2(i,j))*dy + a)*dy + f(i,j)
+      fip1 = ((c1*dy + 0.5*f2(ip1,j))*dy + a1)*dy + f(ip1,j)
+      dfi = ((c2*dy + 0.5*f12(i,j))*dy + a2)*dy + f1(i,j)
+      dfip1 = ((c3*dy + 0.5*f12(ip1,j))*dy + a3)*dy + f1(ip1,j)
+      go to 300
 !
-230 FI = (3.0*C*DY + F2(I,J))*DY + A
-      FIP1 = (3.0*C1*DY + F2(IP1,J))*DY + A1
-      DFI = (3.0*C2*DY + F12(I,J))*DY + A2
-      DFIP1 = (3.0*C3*DY + F12(IP1,J))*DY + A3
-      GO TO 300
+230 fi = (3.0*c*dy + f2(i,j))*dy + a
+      fip1 = (3.0*c1*dy + f2(ip1,j))*dy + a1
+      dfi = (3.0*c2*dy + f12(i,j))*dy + a2
+      dfip1 = (3.0*c3*dy + f12(ip1,j))*dy + a3
+      go to 300
 !
-240 FI = 6.0*C*DY + F2(I,J)
-      FIP1 = 6.0*C1*DY + F2(IP1,J)
-      DFI = 6.0*C2*DY + F12(I,J)
-      DFIP1 = 6.0*C3*DY + F12(IP1,J)
-      GO TO 300
+240 fi = 6.0*c*dy + f2(i,j)
+      fip1 = 6.0*c1*dy + f2(ip1,j)
+      dfi = 6.0*c2*dy + f12(i,j)
+      dfip1 = 6.0*c3*dy + f12(ip1,j)
+      go to 300
 !
-250 FI = 6.0*C
-      FIP1 = 6.0*C1
-      DFI = 6.0*C2
-      DFIP1 = 6.0*C3
+250 fi = 6.0*c
+      fip1 = 6.0*c1
+      dfi = 6.0*c2
+      dfip1 = 6.0*c3
 !
 !           COMPUTATION OF THE IDER-TH DERIVATIVE
 !           AT THE POINT XX.
 !
-300 D = (FIP1 - FI)/DS
-      AX = D - DS*(2.0*DFI + DFIP1)/6.0
-      CX = (DFIP1 - DFI)/(6.0*DS)
+300 d = (fip1 - fi)/ds
+      ax = d - ds*(2.0*dfi + dfip1)/6.0
+      cx = (dfip1 - dfi)/(6.0*ds)
 !
-      DX = XX - S(I)
-      IF (IDER .EQ. 0) GO TO 310
-      IF (IDER - 2) 320,330,340
+      dx = xx - s(i)
+      if (ider .eq. 0) go to 310
+      if (ider - 2) 320,330,340
 !
-310 Z(K,L) = ((CX*DX + 0.5*DFI)*DX + AX)*DX + FI
-      GO TO 350
-320 Z(K,L) = (3.0*CX*DX + DFI)*DX + AX
-      GO TO 350
-330 Z(K,L) = 6.0*CX*DX + DFI
-      GO TO 350
-340 Z(K,L) = 6.0*CX
+310 z(k,l) = ((cx*dx + 0.5*dfi)*dx + ax)*dx + fi
+      go to 350
+320 z(k,l) = (3.0*cx*dx + dfi)*dx + ax
+      go to 350
+330 z(k,l) = 6.0*cx*dx + dfi
+      go to 350
+340 z(k,l) = 6.0*cx
 !
-350 CONTINUE
-   JOLD = J
-END DO
-RETURN
+350 continue
+   jold = j
+end do
+return
 !
 !     CASE WHEN THE RESULTS ARE ZERO.
 !
-400 DO L = 1,MY
-   DO K = 1,MX
-      Z(K,L) = 0.0
-   END DO
-END DO
-RETURN
-END SUBROUTINE CSRF
+400 do l = 1,my
+   do k = 1,mx
+      z(k,l) = 0.0
+   end do
+end do
+return
+end subroutine csrf
 
-SUBROUTINE CSRF2 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, &
-&F, KF, DDF)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDER, JDER, KF, KZ, M, MX, MY, N
+subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
+&f, kf, ddf)
+implicit none
+integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
 !-----------------------------------------------------------------------
 !
 !             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 !                        SPLINE OVER A GRID
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(MX), Y(MY)
-REAL, INTENT(INOUT) :: Z(KZ,MY)
-REAL, INTENT(IN) :: S(M), T(N), F(KF,N), DDF(M,N,3)
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 !
-CALL CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, &
-&DDF(1,1,2), M, DDF, M, DDF(1,1,3), M)
-RETURN
-END SUBROUTINE CSRF2
+call csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, kf, &
+&ddf(1,1,2), m, ddf, m, ddf(1,1,3), m)
+return
+end subroutine csrf2
 
-SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
-IMPLICIT NONE
-INTEGER :: I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1, &
-&KEY, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
-REAL :: C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM, &
-&DELY1, DELY2, DELYN, DELYNM, DIAG1, DIAG2, DIAGI, DIAGIN, SDIAG1, &
-&SDIAG2, SIGMAX, SIGMAY, T, ZXY1NS, ZXYMNS
+subroutine surf (m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
+implicit none
+integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, &
+&key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
+real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
+&dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
+&sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
 !
-INTEGER, INTENT(IN) :: M, N, IZ
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), OPT(*)
-REAL, INTENT(INOUT) :: ZP(M,N,*), TEMP(*)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: m, n, iz
+integer, intent(out) :: ierr
+real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
+real, intent(inout) :: zp(m,n,*), temp(*)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -562,321 +562,321 @@ REAL, INTENT(IN) :: SIGMA
 !
 !-----------------------------------------------------------
 !
-INTEGER :: IND(8), LOC(8), NUM(8)
-DATA NUM(5)/1/, NUM(6)/1/, NUM(7)/1/, NUM(8)/1/
+integer :: ind(8), loc(8), num(8)
+data num(5)/1/, num(6)/1/, num(7)/1/, num(8)/1/
 !
-MM1 = M-1
-MP1 = M+1
-NM1 = N-1
-NP1 = N+1
-NPM = N+M
-IERR = 0
-IF (N .LE. 1 .OR. M .LE. 1) GO TO 46
-IF (Y(N) .LE. Y(1)) GO TO 47
+mm1 = m-1
+mp1 = m+1
+nm1 = n-1
+np1 = n+1
+npm = n+m
+ierr = 0
+if (n .le. 1 .or. m .le. 1) go to 46
+if (y(n) .le. y(1)) go to 47
 !
 ! PROCESS THE OPTION VECTOR
 !
-NUM(1) = N
-NUM(2) = N
-NUM(3) = M
-NUM(4) = M
-IND(1) = 0
-IND(2) = 0
-IND(3) = 0
-IND(4) = 0
-IND(5) = 0
-IND(6) = 0
-IND(7) = 0
-IND(8) = 0
+num(1) = n
+num(2) = n
+num(3) = m
+num(4) = m
+ind(1) = 0
+ind(2) = 0
+ind(3) = 0
+ind(4) = 0
+ind(5) = 0
+ind(6) = 0
+ind(7) = 0
+ind(8) = 0
 !
-L = 1
-100 KEY = OPT(L)
-IF (KEY) 48,110,101
-101 IF (KEY .GT. 8) GO TO 48
-IND(KEY) = 1
-L = L+1
-LOC(KEY) = L
-L = L + NUM(KEY)
-GO TO 100
+l = 1
+100 key = opt(l)
+if (key) 48,110,101
+101 if (key .gt. 8) go to 48
+ind(key) = 1
+l = l+1
+loc(key) = l
+l = l + num(key)
+go to 100
 !
 ! DENORMALIZE TENSION FACTOR IN Y-DIRECTION
 !
-110 SIGMAY = ABS(SIGMA)*FLOAT(N-1)/(Y(N)-Y(1))
+110 sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
 ! OBTAIN Y-PARTIAL DERIVATIVES ALONG Y = Y(1)
 !
-IF (IND(3) .EQ. 0) GO TO 2
-L = LOC(3)
-do 1 I = 1,M
-  ZP(I,1,1) = OPT(L)
-1 L = L+1
-GO TO 5
-2 DELY1 = Y(2)-Y(1)
-DELY2 = DELY1+DELY1
-IF (N .GT. 2) DELY2 = Y(3)-Y(1)
-IF (DELY1 .LE. 0. .OR. DELY2 .LE. DELY1) GO TO 47
-CALL CEEZ (DELY1,DELY2,SIGMAY,C1,C2,C3,N)
-do 3 I = 1,M
-3 ZP(I,1,1) = C1*Z(I,1)+C2*Z(I,2)
-IF (N .EQ. 2) GO TO 5
-do 4 I = 1,M
-4 ZP(I,1,1) = ZP(I,1,1)+C3*Z(I,3)
+if (ind(3) .eq. 0) go to 2
+l = loc(3)
+do 1 i = 1,m
+  zp(i,1,1) = opt(l)
+1 l = l+1
+go to 5
+2 dely1 = y(2)-y(1)
+dely2 = dely1+dely1
+if (n .gt. 2) dely2 = y(3)-y(1)
+if (dely1 .le. 0. .or. dely2 .le. dely1) go to 47
+call ceez (dely1,dely2,sigmay,c1,c2,c3,n)
+do 3 i = 1,m
+3 zp(i,1,1) = c1*z(i,1)+c2*z(i,2)
+if (n .eq. 2) go to 5
+do 4 i = 1,m
+4 zp(i,1,1) = zp(i,1,1)+c3*z(i,3)
 !
 ! OBTAIN Y-PARTIAL DERIVATIVES ALONG Y = Y(N)
 !
-5 IF (IND(4) .EQ. 0) GO TO 7
-L = LOC(4)
-do 6 I = 1,M
-  NPI = N+I
-  TEMP(NPI) = OPT(L)
-6 L = L+1
-GO TO 10
-7 DELYN = Y(N)-Y(NM1)
-DELYNM = DELYN+DELYN
-IF (N .GT. 2) DELYNM = Y(N)-Y(N-2)
-IF (DELYN .LE. 0. .OR. DELYNM .LE. DELYN) GO TO 47
-CALL CEEZ (-DELYN,-DELYNM,SIGMAY,C1,C2,C3,N)
-do 8 I = 1,M
-  NPI = N+I
-8 TEMP(NPI) = C1*Z(I,N)+C2*Z(I,NM1)
-IF (N .EQ. 2) GO TO 10
-do 9 I = 1,M
-  NPI = N+I
-9 TEMP(NPI) = TEMP(NPI)+C3*Z(I,N-2)
-10 IF (X(M) .LE. X(1)) GO TO 47
+5 if (ind(4) .eq. 0) go to 7
+l = loc(4)
+do 6 i = 1,m
+  npi = n+i
+  temp(npi) = opt(l)
+6 l = l+1
+go to 10
+7 delyn = y(n)-y(nm1)
+delynm = delyn+delyn
+if (n .gt. 2) delynm = y(n)-y(n-2)
+if (delyn .le. 0. .or. delynm .le. delyn) go to 47
+call ceez (-delyn,-delynm,sigmay,c1,c2,c3,n)
+do 8 i = 1,m
+  npi = n+i
+8 temp(npi) = c1*z(i,n)+c2*z(i,nm1)
+if (n .eq. 2) go to 10
+do 9 i = 1,m
+  npi = n+i
+9 temp(npi) = temp(npi)+c3*z(i,n-2)
+10 if (x(m) .le. x(1)) go to 47
 !
 ! DENORMALIZE TENSION FACTOR IN X-DIRECTION
 !
-SIGMAX = ABS(SIGMA)*FLOAT(M-1)/(X(M)-X(1))
+sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
 !
 ! OBTAIN X-PARTIAL DERIVATIVES ALONG X = X(1)
 !
-IF (IND(1) .EQ. 0) GO TO 12
-L = LOC(1)
-do 11 J = 1,N
-  ZP(1,J,2) = OPT(L)
-11 L = L+1
-IF (IND(5)+IND(7) .EQ. 2) GO TO 15
-12 DELX1 = X(2)-X(1)
-DELX2 = DELX1+DELX1
-IF (M .GT. 2) DELX2 = X(3)-X(1)
-IF (DELX1 .LE. 0. .OR. DELX2 .LE. DELX1) GO TO 47
-CALL CEEZ (DELX1,DELX2,SIGMAX,C1,C2,C3,M)
-IF (IND(1) .EQ. 1) GO TO 15
-do 13 J = 1,N
-13 ZP(1,J,2) = C1*Z(1,J)+C2*Z(2,J)
-IF (M .EQ. 2) GO TO 15
-do 14 J = 1,N
-14 ZP(1,J,2) = ZP(1,J,2)+C3*Z(3,J)
+if (ind(1) .eq. 0) go to 12
+l = loc(1)
+do 11 j = 1,n
+  zp(1,j,2) = opt(l)
+11 l = l+1
+if (ind(5)+ind(7) .eq. 2) go to 15
+12 delx1 = x(2)-x(1)
+delx2 = delx1+delx1
+if (m .gt. 2) delx2 = x(3)-x(1)
+if (delx1 .le. 0. .or. delx2 .le. delx1) go to 47
+call ceez (delx1,delx2,sigmax,c1,c2,c3,m)
+if (ind(1) .eq. 1) go to 15
+do 13 j = 1,n
+13 zp(1,j,2) = c1*z(1,j)+c2*z(2,j)
+if (m .eq. 2) go to 15
+do 14 j = 1,n
+14 zp(1,j,2) = zp(1,j,2)+c3*z(3,j)
 !
 ! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(1),Y(1))
 !
-15 IF (IND(5) .EQ. 0) GO TO 16
-L = LOC(5)
-ZP(1,1,3) = OPT(L)
-GO TO 17
-16 ZP(1,1,3) = C1*ZP(1,1,1)+C2*ZP(2,1,1)
-IF (M .GT. 2) ZP(1,1,3) = ZP(1,1,3)+C3*ZP(3,1,1)
+15 if (ind(5) .eq. 0) go to 16
+l = loc(5)
+zp(1,1,3) = opt(l)
+go to 17
+16 zp(1,1,3) = c1*zp(1,1,1)+c2*zp(2,1,1)
+if (m .gt. 2) zp(1,1,3) = zp(1,1,3)+c3*zp(3,1,1)
 !
 ! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(1),Y(N))
 !
-17 IF (IND(7) .EQ. 0) GO TO 18
-L = LOC(7)
-ZXY1NS = OPT(L)
-GO TO 19
-18 ZXY1NS = C1*TEMP(N+1)+C2*TEMP(N+2)
-IF (M .GT. 2) ZXY1NS = ZXY1NS+C3*TEMP(N+3)
+17 if (ind(7) .eq. 0) go to 18
+l = loc(7)
+zxy1ns = opt(l)
+go to 19
+18 zxy1ns = c1*temp(n+1)+c2*temp(n+2)
+if (m .gt. 2) zxy1ns = zxy1ns+c3*temp(n+3)
 !
 ! OBTAIN X-PARTIAL DERIVATIVE ALONG X = X(M)
 !
-19 IF (IND(2) .EQ. 0) GO TO 21
-L = LOC(2)
-do 20 J = 1,N
-  NPMPJ = NPM+J
-  TEMP(NPMPJ) = OPT(L)
-20 L = L+1
-21 IF (IND(6)+IND(8) .EQ. 2) GO TO 24
-DELXM = X(M)-X(MM1)
-DELXMM = DELXM+DELXM
-IF (M .GT. 2) DELXMM = X(M)-X(M-2)
-IF (DELXM .LE. 0. .OR. DELXMM .LE. DELXM) GO TO 47
-CALL CEEZ (-DELXM,-DELXMM,SIGMAX,C1,C2,C3,M)
-IF (IND(2) .EQ. 1) GO TO 24
-do 22 J = 1,N
-  NPMPJ = NPM+J
-22 TEMP(NPMPJ) = C1*Z(M,J)+C2*Z(MM1,J)
-IF (M .EQ. 2) GO TO 24
-do 23 J = 1,N
-  NPMPJ = NPM+J
-23 TEMP(NPMPJ) = TEMP(NPMPJ)+C3*Z(M-2,J)
+19 if (ind(2) .eq. 0) go to 21
+l = loc(2)
+do 20 j = 1,n
+  npmpj = npm+j
+  temp(npmpj) = opt(l)
+20 l = l+1
+21 if (ind(6)+ind(8) .eq. 2) go to 24
+delxm = x(m)-x(mm1)
+delxmm = delxm+delxm
+if (m .gt. 2) delxmm = x(m)-x(m-2)
+if (delxm .le. 0. .or. delxmm .le. delxm) go to 47
+call ceez (-delxm,-delxmm,sigmax,c1,c2,c3,m)
+if (ind(2) .eq. 1) go to 24
+do 22 j = 1,n
+  npmpj = npm+j
+22 temp(npmpj) = c1*z(m,j)+c2*z(mm1,j)
+if (m .eq. 2) go to 24
+do 23 j = 1,n
+  npmpj = npm+j
+23 temp(npmpj) = temp(npmpj)+c3*z(m-2,j)
 !
 ! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(M),Y(1))
 !
-24 IF (IND(6) .EQ. 0) GO TO 25
-L = LOC(6)
-ZP(M,1,3) = OPT(L)
-GO TO 26
-25 ZP(M,1,3) = C1*ZP(M,1,1)+C2*ZP(MM1,1,1)
-IF (M .GT. 2) ZP(M,1,3) = ZP(M,1,3)+C3*ZP(M-2,1,1)
+24 if (ind(6) .eq. 0) go to 25
+l = loc(6)
+zp(m,1,3) = opt(l)
+go to 26
+25 zp(m,1,3) = c1*zp(m,1,1)+c2*zp(mm1,1,1)
+if (m .gt. 2) zp(m,1,3) = zp(m,1,3)+c3*zp(m-2,1,1)
 !
 ! OBTAIN X-Y-PARTIAL DERIVATIVE AT (X(M),Y(N))
 !
-26 IF (IND(8) .EQ. 0) GO TO 27
-L = LOC(8)
-ZXYMNS = OPT(L)
-GO TO 28
-27 ZXYMNS = C1*TEMP(NPM)+C2*TEMP(NPM-1)
-IF (M .GT. 2) ZXYMNS = ZXYMNS+C3*TEMP(NPM-2)
+26 if (ind(8) .eq. 0) go to 27
+l = loc(8)
+zxymns = opt(l)
+go to 28
+27 zxymns = c1*temp(npm)+c2*temp(npm-1)
+if (m .gt. 2) zxymns = zxymns+c3*temp(npm-2)
 !
 ! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR Y-GRID
 ! PERFORM FORWARD ELIMINATION
 !
-28 DEL1 = Y(2)-Y(1)
-IF (DEL1 .LE. 0.) GO TO 47
-DELI = 1./DEL1
-do 29 I = 1,M
-29 ZP(I,2,1) = DELI*(Z(I,2)-Z(I,1))
-ZP(1,2,3) = DELI*(ZP(1,2,2)-ZP(1,1,2))
-ZP(M,2,3) = DELI*(TEMP(NPM+2)-TEMP(NPM+1))
-CALL TERMS (DIAG1,SDIAG1,SIGMAY,DEL1)
-DIAGI = 1./DIAG1
-do 30 I = 1,M
-30 ZP(I,1,1) = DIAGI*(ZP(I,2,1)-ZP(I,1,1))
-ZP(1,1,3) = DIAGI*(ZP(1,2,3)-ZP(1,1,3))
-ZP(M,1,3) = DIAGI*(ZP(M,2,3)-ZP(M,1,3))
-TEMP(1) = DIAGI*SDIAG1
-IF (N .EQ. 2) GO TO 34
-do 33 J = 2,NM1
-  JM1 = J-1
-  JP1 = J+1
-  NPMPJ = NPM+J
-  DEL2 = Y(JP1)-Y(J)
-  IF (DEL2 .LE. 0.) GO TO 47
-  DELI = 1./DEL2
-  do 31 I = 1,M
-31 ZP(I,JP1,1) = DELI*(Z(I,JP1)-Z(I,J))
-  ZP(1,JP1,3) = DELI*(ZP(1,JP1,2)-ZP(1,J,2))
-  ZP(M,JP1,3) = DELI*(TEMP(NPMPJ+1)-TEMP(NPMPJ))
-  CALL TERMS (DIAG2,SDIAG2,SIGMAY,DEL2)
-  DIAGIN = 1./(DIAG1+DIAG2-SDIAG1*TEMP(JM1))
-  do 32 I = 1,M
-32 ZP(I,J,1) = DIAGIN*(ZP(I,JP1,1)-ZP(I,J,1)- &
-&SDIAG1*ZP(I,JM1,1))
-  ZP(1,J,3) = DIAGIN*(ZP(1,JP1,3)-ZP(1,J,3)- &
-&SDIAG1*ZP(1,JM1,3))
-  ZP(M,J,3) = DIAGIN*(ZP(M,JP1,3)-ZP(M,J,3)- &
-&SDIAG1*ZP(M,JM1,3))
-  TEMP(J) = DIAGIN*SDIAG2
-  DIAG1 = DIAG2
-33 SDIAG1 = SDIAG2
-34 DIAGIN = 1./(DIAG1-SDIAG1*TEMP(NM1))
-do 35 I = 1,M
-  NPI = N+I
-35 ZP(I,N,1) = DIAGIN*(TEMP(NPI)-ZP(I,N,1)- &
-&SDIAG1*ZP(I,NM1,1))
-ZP(1,N,3) = DIAGIN*(ZXY1NS-ZP(1,N,3)- &
-&SDIAG1*ZP(1,NM1,3))
-TEMP(N) = DIAGIN*(ZXYMNS-ZP(M,N,3)- &
-&SDIAG1*ZP(M,NM1,3))
+28 del1 = y(2)-y(1)
+if (del1 .le. 0.) go to 47
+deli = 1./del1
+do 29 i = 1,m
+29 zp(i,2,1) = deli*(z(i,2)-z(i,1))
+zp(1,2,3) = deli*(zp(1,2,2)-zp(1,1,2))
+zp(m,2,3) = deli*(temp(npm+2)-temp(npm+1))
+call terms (diag1,sdiag1,sigmay,del1)
+diagi = 1./diag1
+do 30 i = 1,m
+30 zp(i,1,1) = diagi*(zp(i,2,1)-zp(i,1,1))
+zp(1,1,3) = diagi*(zp(1,2,3)-zp(1,1,3))
+zp(m,1,3) = diagi*(zp(m,2,3)-zp(m,1,3))
+temp(1) = diagi*sdiag1
+if (n .eq. 2) go to 34
+do 33 j = 2,nm1
+  jm1 = j-1
+  jp1 = j+1
+  npmpj = npm+j
+  del2 = y(jp1)-y(j)
+  if (del2 .le. 0.) go to 47
+  deli = 1./del2
+  do 31 i = 1,m
+31 zp(i,jp1,1) = deli*(z(i,jp1)-z(i,j))
+  zp(1,jp1,3) = deli*(zp(1,jp1,2)-zp(1,j,2))
+  zp(m,jp1,3) = deli*(temp(npmpj+1)-temp(npmpj))
+  call terms (diag2,sdiag2,sigmay,del2)
+  diagin = 1./(diag1+diag2-sdiag1*temp(jm1))
+  do 32 i = 1,m
+32 zp(i,j,1) = diagin*(zp(i,jp1,1)-zp(i,j,1)- &
+&sdiag1*zp(i,jm1,1))
+  zp(1,j,3) = diagin*(zp(1,jp1,3)-zp(1,j,3)- &
+&sdiag1*zp(1,jm1,3))
+  zp(m,j,3) = diagin*(zp(m,jp1,3)-zp(m,j,3)- &
+&sdiag1*zp(m,jm1,3))
+  temp(j) = diagin*sdiag2
+  diag1 = diag2
+33 sdiag1 = sdiag2
+34 diagin = 1./(diag1-sdiag1*temp(nm1))
+do 35 i = 1,m
+  npi = n+i
+35 zp(i,n,1) = diagin*(temp(npi)-zp(i,n,1)- &
+&sdiag1*zp(i,nm1,1))
+zp(1,n,3) = diagin*(zxy1ns-zp(1,n,3)- &
+&sdiag1*zp(1,nm1,3))
+temp(n) = diagin*(zxymns-zp(m,n,3)- &
+&sdiag1*zp(m,nm1,3))
 !
 ! PERFORM BACK SUBSTITUTION
 !
-do 37 J = 2,N
-  JBAK = NP1-J
-  JBAKP1 = JBAK+1
-  T = TEMP(JBAK)
-  do 36 I = 1,M
-36 ZP(I,JBAK,1) = ZP(I,JBAK,1)-T*ZP(I,JBAKP1,1)
-  ZP(1,JBAK,3) = ZP(1,JBAK,3)-T*ZP(1,JBAKP1,3)
-37 TEMP(JBAK) = ZP(M,JBAK,3)-T*TEMP(JBAKP1)
+do 37 j = 2,n
+  jbak = np1-j
+  jbakp1 = jbak+1
+  t = temp(jbak)
+  do 36 i = 1,m
+36 zp(i,jbak,1) = zp(i,jbak,1)-t*zp(i,jbakp1,1)
+  zp(1,jbak,3) = zp(1,jbak,3)-t*zp(1,jbakp1,3)
+37 temp(jbak) = zp(m,jbak,3)-t*temp(jbakp1)
 !
 ! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR X-GRID
 ! PERFORM FORWARD ELIMINATION
 !
-DEL1 = X(2)-X(1)
-IF (DEL1 .LE. 0.) GO TO 47
-DELI = 1./DEL1
-do 38 J = 1,N
-  ZP(2,J,2) = DELI*(Z(2,J)-Z(1,J))
-38 ZP(2,J,3) = DELI*(ZP(2,J,1)-ZP(1,J,1))
-CALL TERMS (DIAG1,SDIAG1,SIGMAX,DEL1)
-DIAGI = 1./DIAG1
-do 39 J = 1,N
-  ZP(1,J,2) = DIAGI*(ZP(2,J,2)-ZP(1,J,2))
-39 ZP(1,J,3) = DIAGI*(ZP(2,J,3)-ZP(1,J,3))
-TEMP(N+1) = DIAGI*SDIAG1
-IF (M  .EQ. 2) GO TO 43
-do 42 I = 2,MM1
-  IM1 = I-1
-  IP1 = I+1
-  NPI = N+I
-  DEL2 = X(IP1)-X(I)
-  IF (DEL2 .LE. 0.) GO TO 47
-  DELI = 1./DEL2
-  do 40 J = 1,N
-    ZP(IP1,J,2) = DELI*(Z(IP1,J)-Z(I,J))
-40 ZP(IP1,J,3) = DELI*(ZP(IP1,J,1)-ZP(I,J,1))
-  CALL TERMS (DIAG2,SDIAG2,SIGMAX,DEL2)
-  DIAGIN = 1./(DIAG1+DIAG2-SDIAG1*TEMP(NPI-1))
-  do 41 J = 1,N
-    ZP(I,J,2) = DIAGIN*(ZP(IP1,J,2)-ZP(I,J,2)- &
-&SDIAG1*ZP(IM1,J,2))
-41 ZP(I,J,3) = DIAGIN*(ZP(IP1,J,3)-ZP(I,J,3)- &
-&SDIAG1*ZP(IM1,J,3))
-  TEMP(NPI) = DIAGIN*SDIAG2
-  DIAG1 = DIAG2
-42 SDIAG1 = SDIAG2
-43 DIAGIN = 1./(DIAG1-SDIAG1*TEMP(NPM-1))
-do 44 J = 1,N
-  NPMPJ = NPM+J
-  ZP(M,J,2) = DIAGIN*(TEMP(NPMPJ)-ZP(M,J,2)- &
-&SDIAG1*ZP(MM1,J,2))
-44 ZP(M,J,3) = DIAGIN*(TEMP(J)-ZP(M,J,3)- &
-&SDIAG1*ZP(MM1,J,3))
+del1 = x(2)-x(1)
+if (del1 .le. 0.) go to 47
+deli = 1./del1
+do 38 j = 1,n
+  zp(2,j,2) = deli*(z(2,j)-z(1,j))
+38 zp(2,j,3) = deli*(zp(2,j,1)-zp(1,j,1))
+call terms (diag1,sdiag1,sigmax,del1)
+diagi = 1./diag1
+do 39 j = 1,n
+  zp(1,j,2) = diagi*(zp(2,j,2)-zp(1,j,2))
+39 zp(1,j,3) = diagi*(zp(2,j,3)-zp(1,j,3))
+temp(n+1) = diagi*sdiag1
+if (m  .eq. 2) go to 43
+do 42 i = 2,mm1
+  im1 = i-1
+  ip1 = i+1
+  npi = n+i
+  del2 = x(ip1)-x(i)
+  if (del2 .le. 0.) go to 47
+  deli = 1./del2
+  do 40 j = 1,n
+    zp(ip1,j,2) = deli*(z(ip1,j)-z(i,j))
+40 zp(ip1,j,3) = deli*(zp(ip1,j,1)-zp(i,j,1))
+  call terms (diag2,sdiag2,sigmax,del2)
+  diagin = 1./(diag1+diag2-sdiag1*temp(npi-1))
+  do 41 j = 1,n
+    zp(i,j,2) = diagin*(zp(ip1,j,2)-zp(i,j,2)- &
+&sdiag1*zp(im1,j,2))
+41 zp(i,j,3) = diagin*(zp(ip1,j,3)-zp(i,j,3)- &
+&sdiag1*zp(im1,j,3))
+  temp(npi) = diagin*sdiag2
+  diag1 = diag2
+42 sdiag1 = sdiag2
+43 diagin = 1./(diag1-sdiag1*temp(npm-1))
+do 44 j = 1,n
+  npmpj = npm+j
+  zp(m,j,2) = diagin*(temp(npmpj)-zp(m,j,2)- &
+&sdiag1*zp(mm1,j,2))
+44 zp(m,j,3) = diagin*(temp(j)-zp(m,j,3)- &
+&sdiag1*zp(mm1,j,3))
 !
 ! PERFORM BACK SUBSTITUTION
 !
-do 45 I = 2,M
-  IBAK = MP1-I
-  IBAKP1 = IBAK+1
-  NPIBAK = N+IBAK
-  T = TEMP(NPIBAK)
-  do 45 J = 1,N
-    ZP(IBAK,J,2) = ZP(IBAK,J,2)-T*ZP(IBAKP1,J,2)
-45 ZP(IBAK,J,3) = ZP(IBAK,J,3)-T*ZP(IBAKP1,J,3)
-RETURN
+do 45 i = 2,m
+  ibak = mp1-i
+  ibakp1 = ibak+1
+  npibak = n+ibak
+  t = temp(npibak)
+  do 45 j = 1,n
+    zp(ibak,j,2) = zp(ibak,j,2)-t*zp(ibakp1,j,2)
+45 zp(ibak,j,3) = zp(ibak,j,3)-t*zp(ibakp1,j,3)
+return
 !
 ! TOO FEW POINTS
 !
-46 IERR = 1
-RETURN
+46 ierr = 1
+return
 !
 ! POINTS NOT STRICTLY INCREASING
 !
-47 IERR = 2
-RETURN
+47 ierr = 2
+return
 !
 ! THE OPTION VECTOR HAS AN ERROR
 !
-48 IERR = 3
-RETURN
-END SUBROUTINE SURF
+48 ierr = 3
+return
+end subroutine surf
 
-FUNCTION SURF2 (XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1, J, JM1
-REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY, F1, &
-&F2, FP1, FP2, SIGMAP, SIGMAX, SIGMAY, SINHM1, SINHM2, SINHMS, &
-&SINHP1, SINHP2, ZI, ZIM1, ZXXI, ZXXIM1
-REAL :: HERMNZ
-REAL :: SURF2
-REAL :: HERMZ
-INTEGER :: INTRVL
+function surf2 (xx,yy,m,n,x,y,z,iz,zp,sigma)
+implicit none
+integer :: i, im1, j, jm1
+real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
+&f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
+&sinhp1, sinhp2, zi, zim1, zxxi, zxxim1
+real :: hermnz
+real :: surf2
+real :: hermz
+integer :: intrvl
 !
-INTEGER, INTENT(IN) :: M, N, IZ
-REAL, INTENT(IN) :: XX, YY, X(M), Y(N)
-REAL :: Z(IZ,N), ZP(M,N,*)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: m, n, iz
+real, intent(in) :: xx, yy, x(m), y(n)
+real :: z(iz,n), zp(m,n,*)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -932,102 +932,102 @@ REAL, INTENT(IN) :: SIGMA
 !
 ! INLINE ONE DIMENSIONAL CUBIC SPLINE INTERPOLATION
 !
-HERMZ (F1,F2,FP1,FP2) = (F2*DEL1+F1*DEL2)/DELS-DEL1* &
-&DEL2*(FP2*(DEL1+DELS)+ &
-&FP1*(DEL2+DELS))/ &
-&(6.*DELS)
+hermz (f1,f2,fp1,fp2) = (f2*del1+f1*del2)/dels-del1* &
+&del2*(fp2*(del1+dels)+ &
+&fp1*(del2+dels))/ &
+&(6.*dels)
 !
 ! INLINE ONE DIMENSIONAL SPLINE UNDER TENSION INTERPOLATION
 !
-HERMNZ (F1,F2,FP1,FP2,SIGMAP) = (F2*DEL1+F1*DEL2)/DELS &
-&+(FP2*(SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)* &
-&SINHP2+SIGMAP*COSHP1*DEL2)) &
-&+FP1*(SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)* &
-&SINHP1+SIGMAP*COSHP2*DEL1)) &
-&)/(SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS))
+hermnz (f1,f2,fp1,fp2,sigmap) = (f2*del1+f1*del2)/dels &
+&+(fp2*(sinhm1*del2-del1*(2.*(coshp1+1.)* &
+&sinhp2+sigmap*coshp1*del2)) &
+&+fp1*(sinhm2*del1-del2*(2.*(coshp2+1.)* &
+&sinhp1+sigmap*coshp2*del1)) &
+&)/(sigmap*sigmap*dels*(sinhms+sigmap*dels))
 !
 ! DENORMALIZE TENSION FACTOR IN X AND Y DIRECTION
 !
-SIGMAX = ABS(SIGMA)*FLOAT(M-1)/(X(M)-X(1))
-SIGMAY = ABS(SIGMA)*FLOAT(N-1)/(Y(N)-Y(1))
+sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
+sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
 ! DETERMINE Y INTERVAL
 !
-JM1 = INTRVL (YY,Y,N)
-J = JM1+1
+jm1 = intrvl (yy,y,n)
+j = jm1+1
 !
 ! DETERMINE X INTERVAL
 !
-IM1 = INTRVL (XX,X,M)
-I = IM1+1
-DEL1 = YY-Y(JM1)
-DEL2 = Y(J)-YY
-DELS = Y(J)-Y(JM1)
-IF (SIGMAY .NE. 0.) GO TO 1
+im1 = intrvl (xx,x,m)
+i = im1+1
+del1 = yy-y(jm1)
+del2 = y(j)-yy
+dels = y(j)-y(jm1)
+if (sigmay .ne. 0.) go to 1
 !
 ! PERFORM FOUR INTERPOLATIONS IN Y-DIRECTION
 !
-ZIM1 = HERMZ(Z(I-1,J-1),Z(I-1,J),ZP(I-1,J-1,1), &
-&ZP(I-1,J,1))
-ZI = HERMZ(Z(I,J-1),Z(I,J),ZP(I,J-1,1),ZP(I,J,1))
-ZXXIM1 = HERMZ(ZP(I-1,J-1,2),ZP(I-1,J,2), &
-&ZP(I-1,J-1,3),ZP(I-1,J,3))
-ZXXI = HERMZ(ZP(I,J-1,2),ZP(I,J,2), &
-&ZP(I,J-1,3),ZP(I,J,3))
-GO TO 2
-1 DELP1 = (DEL1+DELS)/2.
-DELP2 = (DEL2+DELS)/2.
-CALL SNHCSH (SINHM1,DUMMY,SIGMAY*DEL1,-1)
-CALL SNHCSH (SINHM2,DUMMY,SIGMAY*DEL2,-1)
-CALL SNHCSH (SINHMS,DUMMY,SIGMAY*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,SIGMAY*DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,SIGMAY*DELP2,1)
-ZIM1 = HERMNZ(Z(I-1,J-1),Z(I-1,J),ZP(I-1,J-1,1), &
-&ZP(I-1,J,1),SIGMAY)
-ZI = HERMNZ(Z(I,J-1),Z(I,J),ZP(I,J-1,1),ZP(I,J,1), &
-&SIGMAY)
-ZXXIM1 = HERMNZ(ZP(I-1,J-1,2),ZP(I-1,J,2), &
-&ZP(I-1,J-1,3),ZP(I-1,J,3),SIGMAY)
-ZXXI = HERMNZ(ZP(I,J-1,2),ZP(I,J,2), &
-&ZP(I,J-1,3),ZP(I,J,3),SIGMAY)
+zim1 = hermz(z(i-1,j-1),z(i-1,j),zp(i-1,j-1,1), &
+&zp(i-1,j,1))
+zi = hermz(z(i,j-1),z(i,j),zp(i,j-1,1),zp(i,j,1))
+zxxim1 = hermz(zp(i-1,j-1,2),zp(i-1,j,2), &
+&zp(i-1,j-1,3),zp(i-1,j,3))
+zxxi = hermz(zp(i,j-1,2),zp(i,j,2), &
+&zp(i,j-1,3),zp(i,j,3))
+go to 2
+1 delp1 = (del1+dels)/2.
+delp2 = (del2+dels)/2.
+call snhcsh (sinhm1,dummy,sigmay*del1,-1)
+call snhcsh (sinhm2,dummy,sigmay*del2,-1)
+call snhcsh (sinhms,dummy,sigmay*dels,-1)
+call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
+call snhcsh (dummy,coshp1,sigmay*delp1,1)
+call snhcsh (dummy,coshp2,sigmay*delp2,1)
+zim1 = hermnz(z(i-1,j-1),z(i-1,j),zp(i-1,j-1,1), &
+&zp(i-1,j,1),sigmay)
+zi = hermnz(z(i,j-1),z(i,j),zp(i,j-1,1),zp(i,j,1), &
+&sigmay)
+zxxim1 = hermnz(zp(i-1,j-1,2),zp(i-1,j,2), &
+&zp(i-1,j-1,3),zp(i-1,j,3),sigmay)
+zxxi = hermnz(zp(i,j-1,2),zp(i,j,2), &
+&zp(i,j-1,3),zp(i,j,3),sigmay)
 !
 ! PERFORM FINAL INTERPOLATION IN X-DIRECTION
 !
-2 DEL1 = XX-X(IM1)
-DEL2 = X(I)-XX
-DELS = X(I)-X(IM1)
-IF (SIGMAX .NE. 0.) GO TO 3
-SURF2 = HERMZ(ZIM1,ZI,ZXXIM1,ZXXI)
-RETURN
-3 DELP1 = (DEL1+DELS)/2.
-DELP2 = (DEL2+DELS)/2.
-CALL SNHCSH (SINHM1,DUMMY,SIGMAX*DEL1,-1)
-CALL SNHCSH (SINHM2,DUMMY,SIGMAX*DEL2,-1)
-CALL SNHCSH (SINHMS,DUMMY,SIGMAX*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,SIGMAX*DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,SIGMAX*DELP2,1)
-SURF2 = HERMNZ(ZIM1,ZI,ZXXIM1,ZXXI,SIGMAX)
-RETURN
-END FUNCTION SURF2
+2 del1 = xx-x(im1)
+del2 = x(i)-xx
+dels = x(i)-x(im1)
+if (sigmax .ne. 0.) go to 3
+surf2 = hermz(zim1,zi,zxxim1,zxxi)
+return
+3 delp1 = (del1+dels)/2.
+delp2 = (del2+dels)/2.
+call snhcsh (sinhm1,dummy,sigmax*del1,-1)
+call snhcsh (sinhm2,dummy,sigmax*del2,-1)
+call snhcsh (sinhms,dummy,sigmax*dels,-1)
+call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
+call snhcsh (dummy,coshp1,sigmax*delp1,1)
+call snhcsh (dummy,coshp2,sigmax*delp2,1)
+surf2 = hermnz(zim1,zi,zxxim1,zxxi,sigmax)
+return
+end function surf2
 
-SUBROUTINE NSURF2 (DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ, &
-&IDZ,M,N,X,Y,Z,IZ,ZP,WORK,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, II, IM1, J, JJ, JM1, LASTI, LASTJ
-REAL :: C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, &
-&DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2, &
-&SINHMS, SINHP1, SINHP2, TEMP, XII, YJJ, ZI, ZIM1, ZXXI, ZXXIM1
+subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
+&idz,m,n,x,y,z,iz,zp,work,sigma)
+implicit none
+integer :: i, ii, im1, j, jj, jm1, lasti, lastj
+real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
+&dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
+&sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
 !
-INTEGER, INTENT(IN) :: MD, ND, IDZ, M, N, IZ
-REAL, INTENT(IN) :: DXMIN, DXMAX, DYMIN, DYMAX
-REAL, INTENT(INOUT) :: DZ(IDZ,ND)
-REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), ZP(M,N,*)
-REAL, INTENT(INOUT) :: WORK(4,MD)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: md, nd, idz, m, n, iz
+real, intent(in) :: dxmin, dxmax, dymin, dymax
+real, intent(inout) :: dz(idz,nd)
+real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
+real, intent(inout) :: work(4,md)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                                 CODED BY ALAN KAYLOR CLINE
@@ -1099,113 +1099,113 @@ REAL, INTENT(IN) :: SIGMA
 !
 ! DENORMALIZE TENSION FACTOR IN X AND Y DIRECTION
 !
-SIGMAX = ABS(SIGMA)*FLOAT(M-1)/(X(M)-X(1))
-SIGMAY = ABS(SIGMA)*FLOAT(N-1)/(Y(N)-Y(1))
+sigmax = abs(sigma)*float(m-1)/(x(m)-x(1))
+sigmay = abs(sigma)*float(n-1)/(y(n)-y(1))
 !
 ! FIND INTERVALS OF SECOND X GRID WITH RESPECT TO ORIGINAL X
 ! GRID
 !
-DELTDX = 0.
-IF (MD .GE. 2) DELTDX = (DXMAX-DXMIN)/FLOAT(MD-1)
-LASTI = 1
-do 3 II = 1,MD
-  XII = DXMIN+FLOAT(II-1)*DELTDX
-  I = LASTI
-1 I = I+1
-  IF (XII .GT. X(I) .AND. I .LT. M) GO TO 1
-  IM1 = I-1
-  LASTI = IM1
-  DEL1 = XII-X(IM1)
-  DEL2 = X(I)-XII
-  DELS = X(I)-X(IM1)
-  WORK(1,II) = DEL2/DELS
-  WORK(2,II) = DEL1/DELS
-  IF (SIGMAX .NE. 0.) GO TO 2
-  TEMP = -DEL1*DEL2/(6.*DELS)
-  WORK(3,II) = TEMP*(DEL2+DELS)
-  WORK(4,II) = TEMP*(DEL1+DELS)
-  GO TO 3
-2 DELP1 = (DEL1+DELS)/2.
-  DELP2 = (DEL2+DELS)/2.
-  CALL SNHCSH (SINHM1,DUMMY,SIGMAX*DEL1,-1)
-  CALL SNHCSH (SINHM2,DUMMY,SIGMAX*DEL2,-1)
-  CALL SNHCSH (SINHMS,DUMMY,SIGMAX*DELS,-1)
-  CALL SNHCSH (SINHP1,DUMMY,SIGMAX*DEL1/2.,-1)
-  CALL SNHCSH (SINHP2,DUMMY,SIGMAX*DEL2/2.,-1)
-  CALL SNHCSH (DUMMY,COSHP1,SIGMAX*DELP1,1)
-  CALL SNHCSH (DUMMY,COSHP2,SIGMAX*DELP2,1)
-  TEMP = SIGMAX*SIGMAX*DELS*(SINHMS+SIGMAX*DELS)
-  WORK(3,II) = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)* &
-&SINHP1+SIGMAX*COSHP2*DEL1))/TEMP
-  WORK(4,II) = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)* &
-&SINHP2+SIGMAX*COSHP1*DEL2))/TEMP
-3 CONTINUE
+deltdx = 0.
+if (md .ge. 2) deltdx = (dxmax-dxmin)/float(md-1)
+lasti = 1
+do 3 ii = 1,md
+  xii = dxmin+float(ii-1)*deltdx
+  i = lasti
+1 i = i+1
+  if (xii .gt. x(i) .and. i .lt. m) go to 1
+  im1 = i-1
+  lasti = im1
+  del1 = xii-x(im1)
+  del2 = x(i)-xii
+  dels = x(i)-x(im1)
+  work(1,ii) = del2/dels
+  work(2,ii) = del1/dels
+  if (sigmax .ne. 0.) go to 2
+  temp = -del1*del2/(6.*dels)
+  work(3,ii) = temp*(del2+dels)
+  work(4,ii) = temp*(del1+dels)
+  go to 3
+2 delp1 = (del1+dels)/2.
+  delp2 = (del2+dels)/2.
+  call snhcsh (sinhm1,dummy,sigmax*del1,-1)
+  call snhcsh (sinhm2,dummy,sigmax*del2,-1)
+  call snhcsh (sinhms,dummy,sigmax*dels,-1)
+  call snhcsh (sinhp1,dummy,sigmax*del1/2.,-1)
+  call snhcsh (sinhp2,dummy,sigmax*del2/2.,-1)
+  call snhcsh (dummy,coshp1,sigmax*delp1,1)
+  call snhcsh (dummy,coshp2,sigmax*delp2,1)
+  temp = sigmax*sigmax*dels*(sinhms+sigmax*dels)
+  work(3,ii) = (sinhm2*del1-del2*(2.*(coshp2+1.)* &
+&sinhp1+sigmax*coshp2*del1))/temp
+  work(4,ii) = (sinhm1*del2-del1*(2.*(coshp1+1.)* &
+&sinhp2+sigmax*coshp1*del2))/temp
+3 continue
 !
 ! FIND INTERVALS OF SECOND Y GRID WITH RESPECT TO ORIGINAL Y
 ! GRID AND PERFORM INTRPOLATION
 !
-DELTDY = 0.
-IF (ND .GE. 2) DELTDY = (DYMAX-DYMIN)/FLOAT(ND-1)
-LASTJ = 1
-do 8 JJ = 1,ND
-  YJJ = DYMIN+FLOAT(JJ-1)*DELTDY
-  J = LASTJ
-4 J = J+1
-  IF (YJJ .GT. Y(J) .AND. J .LT. N) GO TO 4
-  JM1 = J-1
-  LASTJ = JM1
-  DEL1 = YJJ-Y(JM1)
-  DEL2 = Y(J)-YJJ
-  DELS = Y(J)-Y(JM1)
-  C1 = DEL2/DELS
-  C2 = DEL1/DELS
-  IF (SIGMAY .NE. 0.) GO TO 5
-  TEMP = -DEL1*DEL2/(6.*DELS)
-  C3 = TEMP*(DEL2+DELS)
-  C4 = TEMP*(DEL1+DELS)
-  GO TO 6
-5 DELP1 = (DEL1+DELS)/2.
-  DELP2 = (DEL2+DELS)/2.
-  CALL SNHCSH (SINHM1,DUMMY,SIGMAY*DEL1,-1)
-  CALL SNHCSH (SINHM2,DUMMY,SIGMAY*DEL2,-1)
-  CALL SNHCSH (SINHMS,DUMMY,SIGMAY*DELS,-1)
-  CALL SNHCSH (SINHP1,DUMMY,SIGMAY*DEL1/2.,-1)
-  CALL SNHCSH (SINHP2,DUMMY,SIGMAY*DEL2/2.,-1)
-  CALL SNHCSH (DUMMY,COSHP1,SIGMAY*DELP1,1)
-  CALL SNHCSH (DUMMY,COSHP2,SIGMAY*DELP2,1)
-  TEMP = SIGMAY*SIGMAY*DELS*(SINHMS+SIGMAY*DELS)
-  C3 = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)* &
-&SINHP1+SIGMAY*COSHP2*DEL1))/TEMP
-  C4 = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)* &
-&SINHP2+SIGMAY*COSHP1*DEL2))/TEMP
-6 LASTI = 0
-  do 8 II = 1,MD
-    XII = DXMIN+FLOAT(II-1)*DELTDX
-    I = MAX0 (1, LASTI)
-7 I = I+1
-    IF (XII .GT. X(I) .AND. I .LT. M) GO TO 7
-    IM1 = I-1
-    IF (IM1 .EQ. LASTI) GO TO 8
-    LASTI = IM1
-    ZIM1 = C1*Z(IM1,JM1)+C2*Z(IM1,J) &
-&+C3*ZP(IM1,JM1,1)+C4*ZP(IM1,J,1)
-    ZI = C1*Z(I,JM1)+C2*Z(I,J) &
-&+C3*ZP(I,JM1,1)+C4*ZP(I,J,1)
-    ZXXIM1 = C1*ZP(IM1,JM1,2)+C2*ZP(IM1,J,2) &
-&+C3*ZP(IM1,JM1,3)+C4*ZP(IM1,J,3)
-    ZXXI = C1*ZP(I,JM1,2)+C2*ZP(I,J,2) &
-&+C3*ZP(I,JM1,3)+C4*ZP(I,J,3)
-8 DZ(II,JJ) = WORK(1,II)*ZIM1+WORK(2,II)*ZI &
-&+WORK(3,II)*ZXXIM1+WORK(4,II)*ZXXI
-RETURN
-END SUBROUTINE NSURF2
+deltdy = 0.
+if (nd .ge. 2) deltdy = (dymax-dymin)/float(nd-1)
+lastj = 1
+do 8 jj = 1,nd
+  yjj = dymin+float(jj-1)*deltdy
+  j = lastj
+4 j = j+1
+  if (yjj .gt. y(j) .and. j .lt. n) go to 4
+  jm1 = j-1
+  lastj = jm1
+  del1 = yjj-y(jm1)
+  del2 = y(j)-yjj
+  dels = y(j)-y(jm1)
+  c1 = del2/dels
+  c2 = del1/dels
+  if (sigmay .ne. 0.) go to 5
+  temp = -del1*del2/(6.*dels)
+  c3 = temp*(del2+dels)
+  c4 = temp*(del1+dels)
+  go to 6
+5 delp1 = (del1+dels)/2.
+  delp2 = (del2+dels)/2.
+  call snhcsh (sinhm1,dummy,sigmay*del1,-1)
+  call snhcsh (sinhm2,dummy,sigmay*del2,-1)
+  call snhcsh (sinhms,dummy,sigmay*dels,-1)
+  call snhcsh (sinhp1,dummy,sigmay*del1/2.,-1)
+  call snhcsh (sinhp2,dummy,sigmay*del2/2.,-1)
+  call snhcsh (dummy,coshp1,sigmay*delp1,1)
+  call snhcsh (dummy,coshp2,sigmay*delp2,1)
+  temp = sigmay*sigmay*dels*(sinhms+sigmay*dels)
+  c3 = (sinhm2*del1-del2*(2.*(coshp2+1.)* &
+&sinhp1+sigmay*coshp2*del1))/temp
+  c4 = (sinhm1*del2-del1*(2.*(coshp1+1.)* &
+&sinhp2+sigmay*coshp1*del2))/temp
+6 lasti = 0
+  do 8 ii = 1,md
+    xii = dxmin+float(ii-1)*deltdx
+    i = max0 (1, lasti)
+7 i = i+1
+    if (xii .gt. x(i) .and. i .lt. m) go to 7
+    im1 = i-1
+    if (im1 .eq. lasti) go to 8
+    lasti = im1
+    zim1 = c1*z(im1,jm1)+c2*z(im1,j) &
+&+c3*zp(im1,jm1,1)+c4*zp(im1,j,1)
+    zi = c1*z(i,jm1)+c2*z(i,j) &
+&+c3*zp(i,jm1,1)+c4*zp(i,j,1)
+    zxxim1 = c1*zp(im1,jm1,2)+c2*zp(im1,j,2) &
+&+c3*zp(im1,jm1,3)+c4*zp(im1,j,3)
+    zxxi = c1*zp(i,jm1,2)+c2*zp(i,j,2) &
+&+c3*zp(i,jm1,3)+c4*zp(i,j,3)
+8 dz(ii,jj) = work(1,ii)*zim1+work(2,ii)*zi &
+&+work(3,ii)*zxxim1+work(4,ii)*zxxi
+return
+end subroutine nsurf2
 
-SUBROUTINE BSTRP2 (X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, &
-&A, KA, WK, L, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: KA, KX, KY, KZ, L, NX, NY
-INTEGER :: IW, M
+subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
+&a, ka, wk, l, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
+integer :: iw, m
 !-----------------------------------------------------------------------
 !
 !         PIECEWISE POLYNOMIAL INTERPOLATION IN TWO VARIABLES
@@ -1226,37 +1226,37 @@ INTEGER :: IW, M
 !     REAL TX(NX + KX), TY(NY + KY)
 !     REAL WK(L)  WHERE L = NX*NY + MAX(2*KX*NX, 2*KY*NY)
 !-------------------------
-REAL, INTENT(IN) :: X(NX), Y(NY), Z(KZ,NY)
-REAL, INTENT(IN) :: TX(*), TY(*)
-REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
+real, intent(in) :: x(nx), y(ny), z(kz,ny)
+real, intent(in) :: tx(*), ty(*)
+real, intent(inout) :: a(ka,ny), wk(l)
 !
-M = NX*NY + 2*MAX0(KX*NX, KY*NY)
-IF (L .LT. M) GO TO 120
+m = nx*ny + 2*max0(kx*nx, ky*ny)
+if (l .lt. m) go to 120
 !
 !     COMPUTE THE COEFFICIENTS
 !
-IW = NX*NY + 1
-CALL BSTRP1 (X, Z, KZ, NX, NY, TX, KX, WK, NY, WK(IW), IFLAG)
-IF (IFLAG .NE. 0) GO TO 100
-CALL BSTRP1 (Y, WK, NY, NY, NX, TY, KY, A, KA, WK(IW), IFLAG)
-IF (IFLAG .NE. 0) GO TO 110
-RETURN
+iw = nx*ny + 1
+call bstrp1 (x, z, kz, nx, ny, tx, kx, wk, ny, wk(iw), iflag)
+if (iflag .ne. 0) go to 100
+call bstrp1 (y, wk, ny, ny, nx, ty, ky, a, ka, wk(iw), iflag)
+if (iflag .ne. 0) go to 110
+return
 !
 !     ERROR RETURN
 !
-100 IFLAG = 1
-RETURN
-110 IFLAG = 2
-RETURN
-120 IFLAG = 3
-RETURN
-END SUBROUTINE BSTRP2
+100 iflag = 1
+return
+110 iflag = 2
+return
+120 iflag = 3
+return
+end subroutine bstrp2
 
-SUBROUTINE BSTRP1 (X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IFLAG
-INTEGER, INTENT(IN) :: K, KA, KZ, M, N
-INTEGER :: I, J, MP1
+subroutine bstrp1 (x, z, kz, m, n, t, k, a, ka, work, iflag)
+implicit none
+integer, intent(out) :: iflag
+integer, intent(in) :: k, ka, kz, m, n
+integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
 !     N SETS OF DATA STORED IN THE COLUMNS OF THE ARRAY Z. THE
@@ -1266,38 +1266,38 @@ INTEGER :: I, J, MP1
 !-------------------------------------------------------------------
 !     REAL T(M + K), WORK(2*K*M)
 !-----------------------
-REAL, INTENT(IN) :: X(M), Z(KZ,N), T(*)
-REAL, INTENT(INOUT) :: A(KA,M), WORK(*)
+real, intent(in) :: x(m), z(kz,n), t(*)
+real, intent(inout) :: a(ka,m), work(*)
 !
 !     FIRST DATA SET
 !
-IFLAG = 1
-MP1 = M + 1
-CALL BSTRP (X, Z, T, M, K, WORK(1), WORK(MP1), IFLAG)
-IF (IFLAG .NE. 0) RETURN
+iflag = 1
+mp1 = m + 1
+call bstrp (x, z, t, m, k, work(1), work(mp1), iflag)
+if (iflag .ne. 0) return
 !
-DO I = 1,M
-   A(1,I) = WORK(I)
-END DO
-IF (N .EQ. 1) RETURN
+do i = 1,m
+   a(1,i) = work(i)
+end do
+if (n .eq. 1) return
 !
 !     REMAINING DATA SETS
 !
-DO J = 2,N
-   CALL BSTRP (X, Z(1,J), T, M, K, WORK(1), WORK(MP1), IFLAG)
-   DO I = 1,M
-      A(J,I) = WORK(I)
-   END DO
-END DO
-RETURN
-END SUBROUTINE BSTRP1
+do j = 2,n
+   call bstrp (x, z(1,j), t, m, k, work(1), work(mp1), iflag)
+   do i = 1,m
+      a(j,i) = work(i)
+   end do
+end do
+return
+end subroutine bstrp1
 
-SUBROUTINE BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX, &
-&TY, NY, KY, A, KA, WK, L, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: KA, KX, KY, KZ, L, MX, MY, NX, NY
-INTEGER :: IERR, IQ, IW, M
+subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
+&ty, ny, ky, a, ka, wk, l, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
+integer :: ierr, iq, iw, m
 !-----------------------------------------------------------------------
 !
 !             WEIGHTED LEAST SQUARES FITTING OF PIECEWISE
@@ -1319,46 +1319,46 @@ INTEGER :: IERR, IQ, IW, M
 !     REAL TX(NX + KX), TY(NY + KY)
 !     REAL WK(L)  WHERE L = NX*MY + MAX((KX+1)*NX,(KY+1)*NY)
 !-------------------------
-REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ,MY)
-REAL, INTENT(IN) :: TX(*), TY(*)
-REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
+real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
+real, intent(in) :: tx(*), ty(*)
+real, intent(inout) :: a(ka,ny), wk(l)
 !
-M = NX*MY + MAX0((KX + 1)*NX,(KY + 1)*NY)
-IF (L .LT. M) GO TO 120
+m = nx*my + max0((kx + 1)*nx,(ky + 1)*ny)
+if (l .lt. m) go to 120
 !
 !     COMPUTE THE COEFFICIENTS
 !
-IW = NX*MY + 1
-IQ = IW + NX
-CALL BSLSQ1 (X, WX, MX, Z, KZ, MY, TX, NX, KX, &
-&WK, MY, WK(IW), WK(IQ), IERR)
-IF (IERR .LT. 0) GO TO 100
+iw = nx*my + 1
+iq = iw + nx
+call bslsq1 (x, wx, mx, z, kz, my, tx, nx, kx, &
+&wk, my, wk(iw), wk(iq), ierr)
+if (ierr .lt. 0) go to 100
 !
-IQ = IW + NY
-CALL BSLSQ1 (Y, WY, MY, WK, MY, NX, TY, NY, KY, &
-&A, KA, WK(IW), WK(IQ), IFLAG)
-IF (IFLAG .LT. 0) GO TO 110
-IFLAG = MAX0(IERR,IFLAG)
-RETURN
+iq = iw + ny
+call bslsq1 (y, wy, my, wk, my, nx, ty, ny, ky, &
+&a, ka, wk(iw), wk(iq), iflag)
+if (iflag .lt. 0) go to 110
+iflag = max0(ierr,iflag)
+return
 !
 !     ERROR RETURN
 !
-100 IFLAG = -1
-RETURN
-110 IFLAG = -2
-RETURN
-120 IFLAG = -3
-WK(1) = M
-RETURN
-END SUBROUTINE BSLSQ2
+100 iflag = -1
+return
+110 iflag = -2
+return
+120 iflag = -3
+wk(1) = m
+return
+end subroutine bslsq2
 
-SUBROUTINE BSLSQ1 (TAU, WGT, NTAU, Z, KZ, M, T, N, K, &
-&A, KA, WK, Q, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: K, KA, KZ, M, N, NTAU
-INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
-REAL :: DW
+subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
+&a, ka, wk, q, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: k, ka, kz, m, n, ntau
+integer :: i, j, jj, l, left, leftmk, mm
+real :: dw
 !-----------------------------------------------------------------------
 !
 !     BSLSQ1 PRODUCES THE B-SPLINE COEFFICIENTS A(J,1),...,A(J,N)
@@ -1401,75 +1401,75 @@ REAL :: DW
 !            -1  INPUT ERRORS WERE DETECTED.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: TAU(NTAU), WGT(NTAU), Z(KZ,M)
-REAL, INTENT(IN) :: T(*)
-REAL, INTENT(INOUT) :: A(KA,N), WK(N), Q(K,N)
+real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
+real, intent(in) :: t(*)
+real, intent(inout) :: a(ka,n), wk(n), q(k,n)
 !
-IF (NTAU .LT. MAX0(2,K)) GO TO 100
-IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
+if (ntau .lt. max0(2,k)) go to 100
+if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
 !
-DO I = 2,NTAU
-   IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
-END DO
+do i = 2,ntau
+   if (tau(i - 1) .gt. tau(i)) go to 100
+end do
 !
-DO J = 1,N
-   DO I = 1,M
-      A(I,J) = 0.0
-   END DO
-END DO
+do j = 1,n
+   do i = 1,m
+      a(i,j) = 0.0
+   end do
+end do
 !
-DO J = 1,N
-   DO I = 1,K
-      Q(I,J) = 0.0
-   END DO
-END DO
+do j = 1,n
+   do i = 1,k
+      q(i,j) = 0.0
+   end do
+end do
 !
-LEFT = K
-DO L = 1,NTAU
+left = k
+do l = 1,ntau
 !
 !        *** FIND THE INDEX LEFT SUCH THAT
 !            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
 !
-40 IF (LEFT .EQ. N) GO TO 50
-      IF (TAU(L) .LT. T(LEFT+1)) GO TO 50
-      LEFT = LEFT + 1
-      GO TO 40
+40 if (left .eq. n) go to 50
+      if (tau(l) .lt. t(left+1)) go to 50
+      left = left + 1
+      go to 40
 !
-50 JJ = 0
-   CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
+50 jj = 0
+   call bspvb (t, k, k, jj, tau(l), left, wk)
 !
-   LEFTMK = LEFT - K
-   DO MM = 1,K
-      DW = WK(MM)*WGT(L)
-      J = LEFTMK + MM
-      DO I = 1,M
-         A(I,J) = DW*Z(L,I) + A(I,J)
-      END DO
-      I = 1
-      DO JJ = MM,K
-         Q(I,J) = WK(JJ)*DW + Q(I,J)
-         I = I + 1
-      END DO
-   END DO
-END DO
+   leftmk = left - k
+   do mm = 1,k
+      dw = wk(mm)*wgt(l)
+      j = leftmk + mm
+      do i = 1,m
+         a(i,j) = dw*z(l,i) + a(i,j)
+      end do
+      i = 1
+      do jj = mm,k
+         q(i,j) = wk(jj)*dw + q(i,j)
+         i = i + 1
+      end do
+   end do
+end do
 !
 !        SOLVE THE NORMAL EQUATIONS
 !
-CALL BCHFAC (Q, K, N, WK, IERR)
-CALL BCHSV1 (Q, K, N, A, KA, M)
-RETURN
+call bchfac (q, k, n, wk, ierr)
+call bchsv1 (q, k, n, a, ka, m)
+return
 !
 !             ERROR RETURN
 !
-100 IERR = -1
-RETURN
-END SUBROUTINE BSLSQ1
+100 ierr = -1
+return
+end subroutine bslsq1
 
-SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KB, M, N, NB
-INTEGER :: I, J, JMAX, JPK, K, NBM1
-REAL :: T
+subroutine bchsv1 (w, nb, n, b, kb, m)
+implicit none
+integer, intent(in) :: kb, m, n, nb
+integer :: i, j, jmax, jpk, k, nbm1
+real :: t
 !-----------------------------------------------------------------------
 !
 !     BCHSV1 SOLVES M LINEAR SYSTEMS C*X = B  (I = 1,...,M), WHERE
@@ -1501,59 +1501,59 @@ REAL :: T
 !     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: W(NB,N)
-REAL, INTENT(INOUT) :: B(KB,N)
+real, intent(in) :: w(nb,n)
+real, intent(inout) :: b(kb,n)
 !
-IF (N .GT. 1) GO TO 20
-DO I = 1,M
-   B(I,1) = B(I,1)*W(1,1)
-END DO
-RETURN
+if (n .gt. 1) go to 20
+do i = 1,m
+   b(i,1) = b(i,1)*w(1,1)
+end do
+return
 !
 !     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
 !
-20 NBM1 = NB - 1
-do 40 K = 1,N
-   JMAX = MIN0(NBM1,N - K)
-   IF (JMAX .LT. 1) GO TO 40
-   DO J = 1,JMAX
-      JPK = J + K
-      T = W(J + 1,K)
-      DO I = 1,M
-         B(I,JPK) = B(I,JPK) - T*B(I,K)
-      END DO
-   END DO
-40 CONTINUE
+20 nbm1 = nb - 1
+do 40 k = 1,n
+   jmax = min0(nbm1,n - k)
+   if (jmax .lt. 1) go to 40
+   do j = 1,jmax
+      jpk = j + k
+      t = w(j + 1,k)
+      do i = 1,m
+         b(i,jpk) = b(i,jpk) - t*b(i,k)
+      end do
+   end do
+40 continue
 !                              T     -1
 !     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
 !
-K = N
-50 T = W(1,K)
-   DO I = 1,M
-      B(I,K) = T*B(I,K)
-   END DO
-   JMAX = MIN0(NBM1,N - K)
-   IF (JMAX .LT. 1) GO TO 80
-   DO J = 1,JMAX
-      JPK = J + K
-      T = W(J + 1,K)
-      DO I = 1,M
-         B(I,K) = B(I,K) - T*B(I,JPK)
-      END DO
-   END DO
-80 K = K - 1
-   IF (K .GT. 0) GO TO 50
-RETURN
-END SUBROUTINE BCHSV1
+k = n
+50 t = w(1,k)
+   do i = 1,m
+      b(i,k) = t*b(i,k)
+   end do
+   jmax = min0(nbm1,n - k)
+   if (jmax .lt. 1) go to 80
+   do j = 1,jmax
+      jpk = j + k
+      t = w(j + 1,k)
+      do i = 1,m
+         b(i,k) = b(i,k) - t*b(i,jpk)
+      end do
+   end do
+80 k = k - 1
+   if (k .gt. 0) go to 50
+return
+end subroutine bchsv1
 
-SUBROUTINE BVAL2 (A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, &
-&IDX, IDY, F, WK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDX, IDY, KA, KX, KY, NX, NY
-REAL, INTENT(OUT) :: F
-REAL, INTENT(IN) :: X0, Y0
-INTEGER :: I, IW, J, L, M
-INTEGER :: INTRVL
+subroutine bval2 (a, ka, tx, nx, kx, ty, ny, ky, x0, y0, &
+&idx, idy, f, wk)
+implicit none
+integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
+real, intent(out) :: f
+real, intent(in) :: x0, y0
+integer :: i, iw, j, l, m
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !                EVALUATION AND PARTIAL DIFFERENTIATION
@@ -1568,45 +1568,45 @@ INTEGER :: INTRVL
 !-----------------------------------------------------------------------
 !     REAL TX(NX + KX), TY(NY + KY), WK(KY + 3*MAX(KX,KY))
 !-----------------------------
-REAL, INTENT(IN) :: A(KA,NY), TX(*), TY(*)
-REAL, INTENT(INOUT) :: WK(*)
+real, intent(in) :: a(ka,ny), tx(*), ty(*)
+real, intent(inout) :: wk(*)
 !
-F = 0.0
-M = NX + KX
-IF (X0 .LT. TX(1) .OR. X0 .GT. TX(M)) RETURN
-M = NY + KY
-IF (Y0 .LT. TY(1) .OR. Y0 .GT. TY(M)) RETURN
+f = 0.0
+m = nx + kx
+if (x0 .lt. tx(1) .or. x0 .gt. tx(m)) return
+m = ny + ky
+if (y0 .lt. ty(1) .or. y0 .gt. ty(m)) return
 !
-IW = KY + 1
-J = INTRVL(Y0, TY, M)
-IF (J .GT. KY) GO TO 20
+iw = ky + 1
+j = intrvl(y0, ty, m)
+if (j .gt. ky) go to 20
 !
 !     CASE WHEN  J .LE. KY
 !
-DO L = 1,J
-   CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(L), WK(IW))
-END DO
-CALL BVAL (TY, WK(1), J, KY, Y0, IDY, F, WK(IW))
-RETURN
+do l = 1,j
+   call bval (tx, a(1,l), nx, kx, x0, idx, wk(l), wk(iw))
+end do
+call bval (ty, wk(1), j, ky, y0, idy, f, wk(iw))
+return
 !
 !     CASE WHEN  J .GT. KY
 !
-20 L = J - KY
-DO I = 1,KY
-   L = L + 1
-   CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(I), WK(IW))
-END DO
-L = J - KY + 1
-CALL BVAL (TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
-RETURN
-END SUBROUTINE BVAL2
+20 l = j - ky
+do i = 1,ky
+   l = l + 1
+   call bval (tx, a(1,l), nx, kx, x0, idx, wk(i), wk(iw))
+end do
+l = j - ky + 1
+call bval (ty(l), wk(1), ky, ky, y0, idy, f, wk(iw))
+return
+end subroutine bval2
 
-SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: IADJ(*), IEND(N)
-INTEGER, INTENT(OUT) :: IER
-REAL :: X(N), Y(N)
+subroutine trmesh (n,x,y, iadj,iend,ier)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: iadj(*), iend(n)
+integer, intent(out) :: ier
+real :: x(n), y(n)
 !
 !***********************************************************
 !
@@ -1680,9 +1680,9 @@ REAL :: X(N), Y(N)
 !
 !***********************************************************
 !
-INTEGER :: NN, K, KM1, NL, NR, IND, INDX, N0, ITEMP, IERR, KM1D2, &
-&KMI, I, KMIN
-REAL :: XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, CPROD, SPROD
+integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
+&kmi, i, kmin
+real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
 ! LOCAL PARAMETERS -
 !
@@ -1711,158 +1711,158 @@ REAL :: XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, CPROD, SPROD
 !                 REORDERING LOOP
 ! KMIN =        FIRST NODE INDEX SENT TO ADNODE
 !
-NN = N
-IER = 1
-IF (NN .LT. 3) RETURN
-IER = 0
+nn = n
+ier = 1
+if (nn .lt. 3) return
+ier = 0
 !
 ! INITIALIZE IEND, NL, NR, AND K
 !
-IEND(1) = 1
-IEND(2) = 2
-XL = X(1)
-YL = Y(1)
-XR = X(2)
-YR = Y(2)
-K = 2
+iend(1) = 1
+iend(2) = 2
+xl = x(1)
+yl = y(1)
+xr = x(2)
+yr = y(2)
+k = 2
 !
 ! BEGIN LOOP ON NODES 3,4,...
 !
-1 DXR = XR-XL
-DYR = YR-YL
+1 dxr = xr-xl
+dyr = yr-yl
 !
 ! NEXT LOOP BEGINS HERE IF NL AND NR ARE UNCHANGED
 !
-2 IF (K .EQ. NN) GO TO 13
-KM1 = K
-K = KM1 + 1
-XK = X(K)
-YK = Y(K)
-DXK = XK-XL
-DYK = YK-YL
-CPROD = DXR*DYK - DXK*DYR
-IF (CPROD .GT. 0.) GO TO 6
-IF (CPROD .LT. 0.) GO TO 8
+2 if (k .eq. nn) go to 13
+km1 = k
+k = km1 + 1
+xk = x(k)
+yk = y(k)
+dxk = xk-xl
+dyk = yk-yl
+cprod = dxr*dyk - dxk*dyr
+if (cprod .gt. 0.) go to 6
+if (cprod .lt. 0.) go to 8
 !
 ! NODE K LIES ON THE LINE CONTAINING NODES 1,2,...,K-1.
 !   SET SPROD TO (NL-NR,NL-K).
 !
-SPROD = DXR*DXK + DYR*DYK
-IF (SPROD .GT. 0.) GO TO 3
+sprod = dxr*dxk + dyr*dyk
+if (sprod .gt. 0.) go to 3
 !
 ! NODE K IS TO THE LEFT OF NL.  INSERT K AS THE FIRST
 !   (LEFTMOST) NODE IN IEND AND SET NL TO K.
 !
-CALL SHIFTD(1,KM1,1, IEND )
-IEND(1) = K
-XL = XK
-YL = YK
-GO TO 1
+call shiftd(1,km1,1, iend )
+iend(1) = k
+xl = xk
+yl = yk
+go to 1
 !
 ! NODE K IS TO THE RIGHT OF NL.  FIND THE LEFTMOST NODE
 !   N0 WHICH LIES TO THE RIGHT OF K.
 !   SET SPROD TO (N0-NL,N0-K).
 !
-3 do 4 IND = 2,KM1
-  N0 = IEND(IND)
-  SPROD = (XL-X(N0))*(XK-X(N0)) + &
-&(YL-Y(N0))*(YK-Y(N0))
-  IF (SPROD .GE. 0.) GO TO 5
-4 CONTINUE
+3 do 4 ind = 2,km1
+  n0 = iend(ind)
+  sprod = (xl-x(n0))*(xk-x(n0)) + &
+&(yl-y(n0))*(yk-y(n0))
+  if (sprod .ge. 0.) go to 5
+4 continue
 !
 ! NODE K IS TO THE RIGHT OF NR.  INSERT K AS THE LAST
 !   (RIGHTMOST) NODE IN IEND AND SET NR TO K.
 !
-IEND(K) = K
-XR = XK
-YR = YK
-GO TO 1
+iend(k) = k
+xr = xk
+yr = yk
+go to 1
 !
 ! NODE K LIES BETWEEN IEND(IND-1) AND IEND(IND).  INSERT K
 !   IN IEND.
 !
-5 CALL SHIFTD(IND,KM1,1, IEND )
-IEND(IND) = K
-GO TO 2
+5 call shiftd(ind,km1,1, iend )
+iend(ind) = k
+go to 2
 !
 ! NODE K IS TO THE LEFT OF NL-NR.  REORDER IEND SO THAT NL
 !   IS THE LEFTMOST NODE AS VIEWED FROM K.
 !
-6 KM1D2 = KM1/2
-DO I = 1,KM1D2
-  KMI = K-I
-  ITEMP = IEND(I)
-  IEND(I) = IEND(KMI)
-  IEND(KMI) = ITEMP
-  END DO
+6 km1d2 = km1/2
+do i = 1,km1d2
+  kmi = k-i
+  itemp = iend(i)
+  iend(i) = iend(kmi)
+  iend(kmi) = itemp
+  end do
 !
 ! NODE K IS TO THE RIGHT OF NL-NR.  CREATE A TRIANGULATION
 !   CONSISTING OF NODES 1,2,...,K.
 !
-8 NL = IEND(1)
-NR = IEND(KM1)
+8 nl = iend(1)
+nr = iend(km1)
 !
 ! CREATE THE ADJACENCY LISTS FOR THE FIRST K-1 NODES.
 !   INSERT NEIGHBORS IN REVERSE ORDER.  EACH NODE HAS FOUR
 !   NEIGHBORS EXCEPT NL AND NR WHICH HAVE THREE.
 !
-do 9 IND = 1,KM1
-  N0 = IEND(IND)
-  INDX = 4*N0
-  IF (N0 .GE. NL) INDX = INDX-1
-  IF (N0 .GE. NR) INDX = INDX-1
-  IADJ(INDX) = 0
-  INDX = INDX-1
-  IF (IND .LT. KM1) IADJ(INDX) = IEND(IND+1)
-  IF (IND .LT. KM1) INDX = INDX-1
-  IADJ(INDX) = K
-  IF (IND .EQ. 1) GO TO 9
-  IADJ(INDX-1) = IEND(IND-1)
-9 CONTINUE
+do 9 ind = 1,km1
+  n0 = iend(ind)
+  indx = 4*n0
+  if (n0 .ge. nl) indx = indx-1
+  if (n0 .ge. nr) indx = indx-1
+  iadj(indx) = 0
+  indx = indx-1
+  if (ind .lt. km1) iadj(indx) = iend(ind+1)
+  if (ind .lt. km1) indx = indx-1
+  iadj(indx) = k
+  if (ind .eq. 1) go to 9
+  iadj(indx-1) = iend(ind-1)
+9 continue
 !
 ! CREATE THE ADJACENCY LIST FOR NODE K
 !
-INDX = 5*KM1 - 1
-IADJ(INDX) = 0
-DO IND = 1,KM1
-  INDX = INDX-1
-  IADJ(INDX) = IEND(IND)
-  END DO
+indx = 5*km1 - 1
+iadj(indx) = 0
+do ind = 1,km1
+  indx = indx-1
+  iadj(indx) = iend(ind)
+  end do
 !
 ! REPLACE IEND ELEMENTS WITH POINTERS TO IADJ
 !
-INDX = 0
-DO IND = 1,KM1
-  INDX = INDX + 4
-  IF (IND .EQ. NL  .OR.  IND .EQ. NR) INDX = INDX-1
-  IEND(IND) = INDX
-  END DO
-INDX = INDX + K
-IEND(K) = INDX
+indx = 0
+do ind = 1,km1
+  indx = indx + 4
+  if (ind .eq. nl  .or.  ind .eq. nr) indx = indx-1
+  iend(ind) = indx
+  end do
+indx = indx + k
+iend(k) = indx
 !
 ! ADD THE REMAINING NODES TO THE TRIANGULATION
 !
-IF (K .EQ. NN) RETURN
-KMIN = K+1
-DO K = KMIN,NN
-  CALL ADNODE(K,X,Y, IADJ,IEND, IERR)
-  END DO
-RETURN
+if (k .eq. nn) return
+kmin = k+1
+do k = kmin,nn
+  call adnode(k,x,y, iadj,iend, ierr)
+  end do
+return
 !
 ! ALL NODES ARE COLLINEAR
 !
-13 IER = 2
-RETURN
-END SUBROUTINE TRMESH
+13 ier = 2
+return
+end subroutine trmesh
 
-SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KK
-INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
-INTEGER, INTENT(OUT) :: IER
-REAL :: X(KK), Y(KK)
-LOGICAL :: SWPTST
-INTEGER :: TINDX
+subroutine adnode (kk,x,y, iadj,iend, ier)
+implicit none
+integer, intent(in) :: kk
+integer, intent(inout) :: iadj(*), iend(kk)
+integer, intent(out) :: ier
+real :: x(kk), y(kk)
+logical :: swptst
+integer :: tindx
 !
 !***********************************************************
 !
@@ -1913,9 +1913,9 @@ INTEGER :: TINDX
 !
 !***********************************************************
 !
-INTEGER :: K, KM1, I1, I2, I3, INDKF, INDKL, NABOR1, IO1, IO2, &
-&IN1, INDK1, IND2F, IND21
-REAL :: XK, YK
+integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
+&in1, indk1, ind2f, ind21
+real :: xk, yk
 !
 ! LOCAL PARAMETERS -
 !
@@ -1935,78 +1935,78 @@ REAL :: XK, YK
 ! IND21 =    INDEX OF IO1 IN THE ADJACENCY LIST FOR IO2
 ! XK,YK =    X(K), Y(K)
 !
-IER = 0
-K = KK
+ier = 0
+k = kk
 !
 ! INITIALIZATION
 !
-KM1 = K - 1
-XK = X(K)
-YK = Y(K)
+km1 = k - 1
+xk = x(k)
+yk = y(k)
 !
 ! ADD NODE K TO THE MESH
 !
-CALL TRFIND(KM1,XK,YK,X,Y,IADJ,IEND, I1,I2,I3)
-IF (I1 .EQ. 0) GO TO 5
-IF (I3 .EQ. 0) CALL BDYADD(K,I1,I2, IADJ,IEND )
-IF (I3 .NE. 0) CALL INTADD(K,I1,I2,I3, IADJ,IEND )
+call trfind(km1,xk,yk,x,y,iadj,iend, i1,i2,i3)
+if (i1 .eq. 0) go to 5
+if (i3 .eq. 0) call bdyadd(k,i1,i2, iadj,iend )
+if (i3 .ne. 0) call intadd(k,i1,i2,i3, iadj,iend )
 !
 ! INITIALIZE VARIABLES FOR OPTIMIZATION OF THE MESH
 !
-INDKF = IEND(KM1) + 1
-INDKL = IEND(K)
-NABOR1 = IADJ(INDKF)
-IO2 = NABOR1
-INDK1 = INDKF + 1
-IO1 = IADJ(INDK1)
+indkf = iend(km1) + 1
+indkl = iend(k)
+nabor1 = iadj(indkf)
+io2 = nabor1
+indk1 = indkf + 1
+io1 = iadj(indk1)
 !
 ! BEGIN LOOP -- FIND THE VERTEX OPPOSITE K
 !
-1 IND2F = 1
-IF (IO2 .NE. 1) IND2F = IEND(IO2-1) + 1
-IND21 = TINDX(IO2,IO1,IADJ,IEND)
-IF (IND2F .EQ. IND21) GO TO 2
-IN1 = IADJ(IND21-1)
-GO TO 3
+1 ind2f = 1
+if (io2 .ne. 1) ind2f = iend(io2-1) + 1
+ind21 = tindx(io2,io1,iadj,iend)
+if (ind2f .eq. ind21) go to 2
+in1 = iadj(ind21-1)
+go to 3
 !
 ! IN1 IS THE LAST NEIGHBOR OF IO2
 !
-2 IND21 = IEND(IO2)
-IN1 = IADJ(IND21)
-IF (IN1 .EQ. 0) GO TO 4
+2 ind21 = iend(io2)
+in1 = iadj(ind21)
+if (in1 .eq. 0) go to 4
 !
 ! SWAP TEST -- IF A SWAP OCCURS, TWO NEW ARCS ARE OPPOSITE K
 !              AND MUST BE TESTED.  INDK1 AND INDKF MUST BE
 !              DECREMENTED.
 !
-3 IF ( .NOT. SWPTST(IN1,K,IO1,IO2,X,Y) ) GO TO 4
-CALL SWAPD (IN1,K,IO1,IO2, IADJ,IEND)
-IO1 = IN1
-INDK1 = INDK1 - 1
-INDKF = INDKF - 1
-GO TO 1
+3 if ( .not. swptst(in1,k,io1,io2,x,y) ) go to 4
+call swapd (in1,k,io1,io2, iadj,iend)
+io1 = in1
+indk1 = indk1 - 1
+indkf = indkf - 1
+go to 1
 !
 ! NO SWAP OCCURRED.  RESET IO2 AND IO1, AND TEST FOR
 !   TERMINATION.
 !
-4 IF (IO1 .EQ. NABOR1) RETURN
-IO2 = IO1
-INDK1 = INDK1 + 1
-IF (INDK1 .GT. INDKL) INDK1 = INDKF
-IO1 = IADJ(INDK1)
-IF (IO1 .NE. 0) GO TO 1
-RETURN
+4 if (io1 .eq. nabor1) return
+io2 = io1
+indk1 = indk1 + 1
+if (indk1 .gt. indkl) indk1 = indkf
+io1 = iadj(indk1)
+if (io1 .ne. 0) go to 1
+return
 !
 ! ALL NODES ARE COLLINEAR
 !
-5 IER = 1
-RETURN
-END SUBROUTINE ADNODE
+5 ier = 1
+return
+end subroutine adnode
 
-SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KK, I1, I2
-INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+subroutine bdyadd (kk,i1,i2, iadj,iend )
+implicit none
+integer, intent(in) :: kk, i1, i2
+integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
@@ -2057,8 +2057,8 @@ INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
 !
 !***********************************************************
 !
-INTEGER :: K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, IMIN, IMAX, &
-&KEND, NEXT, INDX
+integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
+&kend, next, indx
 !
 ! LOCAL PARAMETERS -
 !
@@ -2076,75 +2076,75 @@ INTEGER :: K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, IMIN, IMAX, &
 ! NEXT =         NEXT BOUNDARY NODE TO BE CONNECTED TO KK
 ! INDX =         INDEX FOR IADJ
 !
-K = KK
-KM1 = K - 1
-NRIGHT = I1
-NLEFT = I2
+k = kk
+km1 = k - 1
+nright = i1
+nleft = i2
 !
 ! INITIALIZE VARIABLES
 !
-NL = IEND(KM1)
-N1 = 1
-IF (NLEFT .NE. 1) N1 = IEND(NLEFT-1) + 1
-N2 = IEND(NRIGHT)
-NF = MAX0(N1,N2)
+nl = iend(km1)
+n1 = 1
+if (nleft .ne. 1) n1 = iend(nleft-1) + 1
+n2 = iend(nright)
+nf = max0(n1,n2)
 !
 ! INSERT K AS A NEIGHBOR OF MAX(NRIGHT,NLEFT)
 !
-CALL SHIFTD(NF,NL,2, IADJ )
-IADJ(NF+1) = K
-IMIN = MAX0(NRIGHT,NLEFT)
-do 1 I = IMIN,KM1
-  IEND(I) = IEND(I) + 2
-1 CONTINUE
+call shiftd(nf,nl,2, iadj )
+iadj(nf+1) = k
+imin = max0(nright,nleft)
+do 1 i = imin,km1
+  iend(i) = iend(i) + 2
+1 continue
 !
 ! INITIALIZE KEND AND INSERT K AS A NEIGHBOR OF
 !   MIN(NRIGHT,NLEFT)
 !
-KEND = NL + 3
-NL = NF - 1
-NF = MIN0(N1,N2)
-CALL SHIFTD(NF,NL,1, IADJ )
-IADJ(NF) = K
-IMAX = IMIN - 1
-IMIN = MIN0(NRIGHT,NLEFT)
-do 2 I = IMIN,IMAX
-  IEND(I) = IEND(I) + 1
-2 CONTINUE
+kend = nl + 3
+nl = nf - 1
+nf = min0(n1,n2)
+call shiftd(nf,nl,1, iadj )
+iadj(nf) = k
+imax = imin - 1
+imin = min0(nright,nleft)
+do 2 i = imin,imax
+  iend(i) = iend(i) + 1
+2 continue
 !
 ! INSERT NRIGHT AS THE FIRST NEIGHBOR OF K
 !
-IADJ(KEND) = NRIGHT
+iadj(kend) = nright
 !
 ! INITIALIZE INDX FOR LOOP ON BOUNDARY NODES BETWEEN NRIGHT
 !   AND NLEFT
 !
-INDX = IEND(NRIGHT) - 2
-3 NEXT = IADJ(INDX)
-IF (NEXT .EQ. NLEFT) GO TO 4
+indx = iend(nright) - 2
+3 next = iadj(indx)
+if (next .eq. nleft) go to 4
 !
 ! CONNECT NEXT AND K
 !
-KEND = KEND + 1
-IADJ(KEND) = NEXT
-INDX = IEND(NEXT)
-IADJ(INDX) = K
-INDX = INDX - 1
-GO TO 3
+kend = kend + 1
+iadj(kend) = next
+indx = iend(next)
+iadj(indx) = k
+indx = indx - 1
+go to 3
 !
 ! INSERT NLEFT AND 0 AS THE LAST NEIGHBORS OF K
 !
-4 IADJ(KEND+1) = NLEFT
-KEND = KEND + 2
-IADJ(KEND) = 0
-IEND(K) = KEND
-RETURN
-END SUBROUTINE BDYADD
+4 iadj(kend+1) = nleft
+kend = kend + 2
+iadj(kend) = 0
+iend(k) = kend
+return
+end subroutine bdyadd
 
-SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KK, I1, I2, I3
-INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+subroutine intadd (kk,i1,i2,i3, iadj,iend )
+implicit none
+integer, intent(in) :: kk, i1, i2, i3
+integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
@@ -2191,8 +2191,8 @@ INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
 !
 !***********************************************************
 !
-INTEGER :: K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, NL, N1, &
-&N2, IMIN, IMAX, I, ITEMP
+integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
+&n2, imin, imax, i, itemp
 !
 ! LOCAL PARAMETERS -
 !
@@ -2212,98 +2212,98 @@ INTEGER :: K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, NL, N1, &
 ! I =           DO-LOOP INDEX
 ! ITEMP =       TEMPORARY STORAGE LOCATION
 !
-K = KK
+k = kk
 !
 ! INITIALIZATION
 !
-N(1) = I1
-N(2) = I2
-N(3) = I3
+n(1) = i1
+n(2) = i2
+n(3) = i3
 !
 ! SET UP NFT
 !
-do 2 I = 1,3
-  N1 = N(I)
-  INDX = MOD(I,3) + 1
-  N2 = N(INDX)
-  INDX = IEND(N1) + 1
+do 2 i = 1,3
+  n1 = n(i)
+  indx = mod(i,3) + 1
+  n2 = n(indx)
+  indx = iend(n1) + 1
 !
 ! FIND THE INDEX OF N2 AS A NEIGHBOR OF N1
 !
-1 INDX = INDX - 1
-  IF (IADJ(INDX) .NE. N2) GO TO 1
-  NFT(I) = INDX + 1
-2 CONTINUE
+1 indx = indx - 1
+  if (iadj(indx) .ne. n2) go to 1
+  nft(i) = indx + 1
+2 continue
 !
 ! ORDER THE VERTICES BY DECREASING MAGNITUDE.
 !   N(IP(I+1)) PRECEDES N(IP(I)) IN IEND FOR
 !   I = 1,2.
 !
-IP1 = 1
-IP2 = 2
-IP3 = 3
-IF ( N(2) .LE. N(1) ) GO TO 3
-IP1 = 2
-IP2 = 1
-3 IF ( N(3) .LE. N(IP1) ) GO TO 4
-IP3 = IP1
-IP1 = 3
-4 IF ( N(IP3) .LE. N(IP2) )  GO TO 5
-ITEMP = IP2
-IP2 = IP3
-IP3 = ITEMP
+ip1 = 1
+ip2 = 2
+ip3 = 3
+if ( n(2) .le. n(1) ) go to 3
+ip1 = 2
+ip2 = 1
+3 if ( n(3) .le. n(ip1) ) go to 4
+ip3 = ip1
+ip1 = 3
+4 if ( n(ip3) .le. n(ip2) )  go to 5
+itemp = ip2
+ip2 = ip3
+ip3 = itemp
 !
 ! ADD NODE K TO THE ADJACENCY LISTS OF EACH VERTEX AND
 !   UPDATE IEND.  FOR EACH VERTEX, A SET OF IADJ ELEMENTS
 !   IS SHIFTED DOWNWARD AND K IS INSERTED.  SHIFTING STARTS
 !   AT THE END OF THE ARRAY.
 !
-5 KM1 = K - 1
-NL = IEND(KM1)
-NF = NFT(IP1)
-IF (NF .LE. NL) CALL SHIFTD(NF,NL,3, IADJ )
-IADJ(NF+2) = K
-IMIN = N(IP1)
-IMAX = KM1
-DO I = IMIN,IMAX
-  IEND(I) = IEND(I) + 3
-  END DO
+5 km1 = k - 1
+nl = iend(km1)
+nf = nft(ip1)
+if (nf .le. nl) call shiftd(nf,nl,3, iadj )
+iadj(nf+2) = k
+imin = n(ip1)
+imax = km1
+do i = imin,imax
+  iend(i) = iend(i) + 3
+  end do
 !
-NL = NF - 1
-NF = NFT(IP2)
-CALL SHIFTD(NF,NL,2, IADJ )
-IADJ(NF+1) = K
-IMAX = IMIN - 1
-IMIN = N(IP2)
-DO I = IMIN,IMAX
-  IEND(I) = IEND(I) + 2
-  END DO
+nl = nf - 1
+nf = nft(ip2)
+call shiftd(nf,nl,2, iadj )
+iadj(nf+1) = k
+imax = imin - 1
+imin = n(ip2)
+do i = imin,imax
+  iend(i) = iend(i) + 2
+  end do
 !
-NL = NF - 1
-NF = NFT(IP3)
-CALL SHIFTD(NF,NL,1, IADJ )
-IADJ(NF) = K
-IMAX = IMIN - 1
-IMIN = N(IP3)
-DO I = IMIN,IMAX
-  IEND(I) = IEND(I) + 1
-  END DO
+nl = nf - 1
+nf = nft(ip3)
+call shiftd(nf,nl,1, iadj )
+iadj(nf) = k
+imax = imin - 1
+imin = n(ip3)
+do i = imin,imax
+  iend(i) = iend(i) + 1
+  end do
 !
 ! ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
 !
-INDX = IEND(KM1)
-IEND(K) = INDX + 3
-DO I = 1,3
-  INDX = INDX + 1
-  IADJ(INDX) = N(I)
-  END DO
-RETURN
-END SUBROUTINE INTADD
+indx = iend(km1)
+iend(k) = indx + 3
+do i = 1,3
+  indx = indx + 1
+  iadj(indx) = n(i)
+  end do
+return
+end subroutine intadd
 
-SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NFRST, NLAST, KK
-INTEGER, INTENT(INOUT) :: IARR(*)
+subroutine shiftd (nfrst,nlast,kk, iarr )
+implicit none
+integer, intent(in) :: nfrst, nlast, kk
+integer, intent(inout) :: iarr(*)
 !
 !***********************************************************
 !
@@ -2339,8 +2339,8 @@ INTEGER, INTENT(INOUT) :: IARR(*)
 !
 !***********************************************************
 !
-INTEGER :: INC, K, NF, NL, NLP1, NS, NSL, I, IBAK, INDX, IMAX
-DATA    INC/5/
+integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
+data    inc/5/
 !
 ! LOCAL PARAMETERS -
 !
@@ -2359,65 +2359,65 @@ DATA    INC/5/
 ! INDX = INDEX FOR IARR
 ! IMAX = BOUND ON DO-LOOP INDEX
 !
-K = KK
-NF = NFRST
-NL = NLAST
-IF (NF .GT. NL  .OR.  K .EQ. 0) RETURN
-NLP1 = NL + 1
-NS = NLP1 - NF
-NSL = INC*(NS/INC)
-IF ( K .LT. 0) GO TO 4
+k = kk
+nf = nfrst
+nl = nlast
+if (nf .gt. nl  .or.  k .eq. 0) return
+nlp1 = nl + 1
+ns = nlp1 - nf
+nsl = inc*(ns/inc)
+if ( k .lt. 0) go to 4
 !
 ! SHIFT DOWNWARD STARTING FROM THE BOTTOM
 !
-IF (NSL .LE. 0) GO TO 2
-do 1 I = 1,NSL,INC
-  IBAK = NLP1 - I
-  INDX = IBAK + K
-  IARR(INDX) = IARR(IBAK)
-  IARR(INDX-1) = IARR(IBAK-1)
-  IARR(INDX-2) = IARR(IBAK-2)
-  IARR(INDX-3) = IARR(IBAK-3)
-  IARR(INDX-4) = IARR(IBAK-4)
-1 CONTINUE
+if (nsl .le. 0) go to 2
+do 1 i = 1,nsl,inc
+  ibak = nlp1 - i
+  indx = ibak + k
+  iarr(indx) = iarr(ibak)
+  iarr(indx-1) = iarr(ibak-1)
+  iarr(indx-2) = iarr(ibak-2)
+  iarr(indx-3) = iarr(ibak-3)
+  iarr(indx-4) = iarr(ibak-4)
+1 continue
 !
 ! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
 !
-2 IBAK = NLP1 - NSL
-3 IF (IBAK .LE. NF) RETURN
-IBAK = IBAK - 1
-INDX = IBAK + K
-IARR(INDX) = IARR(IBAK)
-GO TO 3
+2 ibak = nlp1 - nsl
+3 if (ibak .le. nf) return
+ibak = ibak - 1
+indx = ibak + k
+iarr(indx) = iarr(ibak)
+go to 3
 !
 ! SHIFT UPWARD STARTING FROM THE TOP
 !
-4 IF (NSL .LE. 0) GO TO 6
-IMAX = NLP1 - INC
-do 5 I = NF,IMAX,INC
-  INDX = I + K
-  IARR(INDX) = IARR(I)
-  IARR(INDX+1) = IARR(I+1)
-  IARR(INDX+2) = IARR(I+2)
-  IARR(INDX+3) = IARR(I+3)
-  IARR(INDX+4) = IARR(I+4)
-5 CONTINUE
+4 if (nsl .le. 0) go to 6
+imax = nlp1 - inc
+do 5 i = nf,imax,inc
+  indx = i + k
+  iarr(indx) = iarr(i)
+  iarr(indx+1) = iarr(i+1)
+  iarr(indx+2) = iarr(i+2)
+  iarr(indx+3) = iarr(i+3)
+  iarr(indx+4) = iarr(i+4)
+5 continue
 !
 ! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
 !
-6 I = NSL + NF
-7 IF (I .GT. NL) RETURN
-INDX = I + K
-IARR(INDX) = IARR(I)
-I = I + 1
-GO TO 7
-END SUBROUTINE SHIFTD
+6 i = nsl + nf
+7 if (i .gt. nl) return
+indx = i + k
+iarr(indx) = iarr(i)
+i = i + 1
+go to 7
+end subroutine shiftd
 
-SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NIN1, NIN2, NOUT1, NOUT2
-INTEGER, INTENT(INOUT) :: IADJ(*), IEND(*)
-INTEGER :: TINDX
+subroutine swapd (nin1,nin2,nout1,nout2, iadj,iend)
+implicit none
+integer, intent(in) :: nin1, nin2, nout1, nout2
+integer, intent(inout) :: iadj(*), iend(*)
+integer :: tindx
 !
 !***********************************************************
 !
@@ -2450,7 +2450,7 @@ INTEGER :: TINDX
 !
 !***********************************************************
 !
-INTEGER :: IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, IMIN, IMAX
+integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 !
 ! LOCAL PARAMETERS -
 !
@@ -2468,142 +2468,142 @@ INTEGER :: IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, IMIN, IMAX
 ! IMIN,IMAX = BOUNDS ON THE PORTION OF IEND TO BE INCRE-
 !               MENTED OR DECREMENTED
 !
-IN(1) = NIN1
-IN(2) = NIN2
-IO(1) = NOUT1
-IO(2) = NOUT2
-IP1 = 1
+in(1) = nin1
+in(2) = nin2
+io(1) = nout1
+io(2) = nout2
+ip1 = 1
 !
 ! ORDER THE INDICES SO THAT IN(1) .LT. IN(2) AND IO(1) .LT.
 !   IO(2), AND CHOOSE IP1 AND IP2 SUCH THAT (IN(1),IO(IP1),
 !   IO(IP2)) FORMS A TRIANGLE.
 !
-IF (IN(1) .LT. IN(2)) GO TO 1
-IN(1) = IN(2)
-IN(2) = NIN1
-IP1 = 2
-1 IF (IO(1) .LT. IO(2)) GO TO 2
-IO(1) = IO(2)
-IO(2) = NOUT1
-IP1 = 3 - IP1
-2 IP2 = 3 - IP1
-IF (IO(2) .LT. IN(1)) GO TO 8
-IF (IN(2) .LT. IO(1)) GO TO 12
+if (in(1) .lt. in(2)) go to 1
+in(1) = in(2)
+in(2) = nin1
+ip1 = 2
+1 if (io(1) .lt. io(2)) go to 2
+io(1) = io(2)
+io(2) = nout1
+ip1 = 3 - ip1
+2 ip2 = 3 - ip1
+if (io(2) .lt. in(1)) go to 8
+if (in(2) .lt. io(1)) go to 12
 !
 ! IN(1) AND IO(1) PRECEDE IN(2) AND IO(2).  FOR (J,K) =
 !   (1,2) AND (2,1), DELETE IO(K) AS A NEIGHBOR OF IO(J)
 !   BY SHIFTING A PORTION OF IADJ EITHER UP OR DOWN AND
 !   AND INSERT IN(K) AS A NEIGHBOR OF IN(J).
 !
-do 7 J = 1,2
-  K = 3 - J
-  IF (IN(J) .GT. IO(J)) GO TO 4
+do 7 j = 1,2
+  k = 3 - j
+  if (in(j) .gt. io(j)) go to 4
 !
 !   THE NEIGHBORS OF IN(J) PRECEDE THOSE OF IO(J) -- SHIFT
 !     DOWN BY 1
 !
-  NF = 1 + TINDX(IN(J),IO(IP1),IADJ,IEND)
-  NL = -1 + TINDX(IO(J),IO(K),IADJ,IEND)
-  IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
-  IADJ(NF) = IN(K)
-  IMIN = IN(J)
-  IMAX = IO(J)-1
-  do 3 I = IMIN,IMAX
-3 IEND(I) = IEND(I) + 1
-  GO TO 6
+  nf = 1 + tindx(in(j),io(ip1),iadj,iend)
+  nl = -1 + tindx(io(j),io(k),iadj,iend)
+  if (nf .le. nl) call shiftd(nf,nl,1, iadj )
+  iadj(nf) = in(k)
+  imin = in(j)
+  imax = io(j)-1
+  do 3 i = imin,imax
+3 iend(i) = iend(i) + 1
+  go to 6
 !
 !   THE NEIGHBORS OF IO(J) PRECEDE THOSE OF IN(J) -- SHIFT
 !     UP BY 1
 !
-4 NF = 1 + TINDX(IO(J),IO(K),IADJ,IEND)
-  NL = -1 + TINDX(IN(J),IO(IP2),IADJ,IEND)
-  IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
-  IADJ(NL) = IN(K)
-  IMIN = IO(J)
-  IMAX = IN(J) - 1
-  do 5 I = IMIN,IMAX
-5 IEND(I) = IEND(I) - 1
+4 nf = 1 + tindx(io(j),io(k),iadj,iend)
+  nl = -1 + tindx(in(j),io(ip2),iadj,iend)
+  if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
+  iadj(nl) = in(k)
+  imin = io(j)
+  imax = in(j) - 1
+  do 5 i = imin,imax
+5 iend(i) = iend(i) - 1
 !
 !   REVERSE (IP1,IP2) FOR (J,K) = (2,1)
 !
-6 IP1 = IP2
-  IP2 = 3 - IP1
-7 CONTINUE
-RETURN
+6 ip1 = ip2
+  ip2 = 3 - ip1
+7 continue
+return
 !
 ! THE VERTICES ARE ORDERED (IO(1),IO(2),IN(1),IN(2)).
 !   DELETE IO(2) BY SHIFTING UP BY 1
 !
-8 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
-NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
-IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
-IMIN = IO(1)
-IMAX = IO(2)-1
-do 9 I = IMIN,IMAX
-9 IEND(I) = IEND(I) - 1
+8 nf = 1 + tindx(io(1),io(2),iadj,iend)
+nl = -1 + tindx(io(2),io(1),iadj,iend)
+if (nf .le. nl) call shiftd(nf,nl,-1, iadj )
+imin = io(1)
+imax = io(2)-1
+do 9 i = imin,imax
+9 iend(i) = iend(i) - 1
 !
 !   DELETE IO(1) BY SHIFTING UP BY 2 AND INSERT IN(2)
 !
-NF = NL + 2
-NL = -1 + TINDX(IN(1),IO(IP2),IADJ,IEND)
-IF (NF .LE. NL) CALL SHIFTD(NF,NL,-2, IADJ )
-IADJ(NL-1) = IN(2)
-IMIN = IO(2)
-IMAX = IN(1)-1
-do 10 I = IMIN,IMAX
-10 IEND(I) = IEND(I) - 2
+nf = nl + 2
+nl = -1 + tindx(in(1),io(ip2),iadj,iend)
+if (nf .le. nl) call shiftd(nf,nl,-2, iadj )
+iadj(nl-1) = in(2)
+imin = io(2)
+imax = in(1)-1
+do 10 i = imin,imax
+10 iend(i) = iend(i) - 2
 !
 !   SHIFT UP BY 1 AND INSERT IN(1)
 !
-NF = NL + 1
-NL = -1 + TINDX(IN(2),IO(IP1),IADJ,IEND)
-CALL SHIFTD(NF,NL,-1, IADJ )
-IADJ(NL) = IN(1)
-IMIN = IN(1)
-IMAX = IN(2)-1
-do 11 I = IMIN,IMAX
-11 IEND(I) = IEND(I) - 1
-RETURN
+nf = nl + 1
+nl = -1 + tindx(in(2),io(ip1),iadj,iend)
+call shiftd(nf,nl,-1, iadj )
+iadj(nl) = in(1)
+imin = in(1)
+imax = in(2)-1
+do 11 i = imin,imax
+11 iend(i) = iend(i) - 1
+return
 !
 ! THE VERTICES ARE ORDERED (IN(1),IN(2),IO(1),IO(2)).
 !   DELETE IO(1) BY SHIFTING DOWN BY 1
 !
-12 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
-NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
-IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
-IMIN = IO(1)
-IMAX = IO(2) - 1
-do 13 I = IMIN,IMAX
-13 IEND(I) = IEND(I) + 1
+12 nf = 1 + tindx(io(1),io(2),iadj,iend)
+nl = -1 + tindx(io(2),io(1),iadj,iend)
+if (nf .le. nl) call shiftd(nf,nl,1, iadj )
+imin = io(1)
+imax = io(2) - 1
+do 13 i = imin,imax
+13 iend(i) = iend(i) + 1
 !
 !   DELETE IO(2) BY SHIFTING DOWN BY 2 AND INSERT IN(1)
 !
-NL = NF - 2
-NF = 1 + TINDX(IN(2),IO(IP2),IADJ,IEND)
-IF (NF .LE. NL) CALL SHIFTD(NF,NL,2, IADJ )
-IADJ(NF+1) = IN(1)
-IMIN = IN(2)
-IMAX = IO(1) - 1
-do 14 I = IMIN,IMAX
-14 IEND(I) = IEND(I) + 2
+nl = nf - 2
+nf = 1 + tindx(in(2),io(ip2),iadj,iend)
+if (nf .le. nl) call shiftd(nf,nl,2, iadj )
+iadj(nf+1) = in(1)
+imin = in(2)
+imax = io(1) - 1
+do 14 i = imin,imax
+14 iend(i) = iend(i) + 2
 !
 !   SHIFT DOWN BY 1 AND INSERT IN(2)
 !
-NL = NF - 1
-NF = 1 + TINDX(IN(1),IO(IP1),IADJ,IEND)
-CALL SHIFTD(NF,NL,1, IADJ )
-IADJ(NF) = IN(2)
-IMIN = IN(1)
-IMAX = IN(2) - 1
-do 15 I = IMIN,IMAX
-15 IEND(I) = IEND(I) + 1
-RETURN
-END SUBROUTINE SWAPD
+nl = nf - 1
+nf = 1 + tindx(in(1),io(ip1),iadj,iend)
+call shiftd(nf,nl,1, iadj )
+iadj(nf) = in(2)
+imin = in(1)
+imax = in(2) - 1
+do 15 i = imin,imax
+15 iend(i) = iend(i) + 1
+return
+end subroutine swapd
 
-LOGICAL function SWPTST (IN1,IN2,IO1,IO2,X,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IN1, IN2, IO1, IO2
-REAL, INTENT(IN) :: X(*), Y(*)
+logical function swptst (in1,in2,io1,io2,x,y)
+implicit none
+integer, intent(in) :: in1, in2, io1, io2
+real, intent(in) :: x(*), y(*)
 !
 !***********************************************************
 !
@@ -2643,8 +2643,8 @@ REAL, INTENT(IN) :: X(*), Y(*)
 !
 !***********************************************************
 !
-REAL :: DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, SIN1, &
-&SIN2, COS1, COS2, SIN12
+real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
+&sin2, cos1, cos2, sin12
 !
 ! LOCAL PARAMETERS -
 !
@@ -2665,45 +2665,45 @@ REAL :: DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, SIN1, &
 ! SIN12 =     SIN1*COS2 + COS1*SIN2 -- PROPORTIONAL TO
 !               SIN(T1+T2)
 !
-SWPTST = .FALSE.
+swptst = .false.
 !
 ! COMPUTE THE VECTORS CONTAINING THE ANGLES T1, T2
 !
-DX11 = X(IO1) - X(IN1)
-DX12 = X(IO2) - X(IN1)
-DX22 = X(IO2) - X(IN2)
-DX21 = X(IO1) - X(IN2)
+dx11 = x(io1) - x(in1)
+dx12 = x(io2) - x(in1)
+dx22 = x(io2) - x(in2)
+dx21 = x(io1) - x(in2)
 !
-DY11 = Y(IO1) - Y(IN1)
-DY12 = Y(IO2) - Y(IN1)
-DY22 = Y(IO2) - Y(IN2)
-DY21 = Y(IO1) - Y(IN2)
+dy11 = y(io1) - y(in1)
+dy12 = y(io2) - y(in1)
+dy22 = y(io2) - y(in2)
+dy21 = y(io1) - y(in2)
 !
 ! COMPUTE INNER PRODUCTS
 !
-COS1 = DX11*DX12 + DY11*DY12
-COS2 = DX22*DX21 + DY22*DY21
+cos1 = dx11*dx12 + dy11*dy12
+cos2 = dx22*dx21 + dy22*dy21
 !
 ! THE DIAGONALS SHOULD BE SWAPPED IFF (T1+T2) .GT. 180
 !   DEGREES.  THE FOLLOWING TWO TESTS INSURE NUMERICAL
 !   STABILITY.
 !
-IF (COS1 .GE. 0.  .AND.  COS2 .GE. 0.) RETURN
-IF (COS1 .LT. 0.  .AND.  COS2 .LT. 0.) GO TO 1
+if (cos1 .ge. 0.  .and.  cos2 .ge. 0.) return
+if (cos1 .lt. 0.  .and.  cos2 .lt. 0.) go to 1
 !
 ! COMPUTE VECTOR CROSS PRODUCTS
 !
-SIN1 = DX11*DY12 - DX12*DY11
-SIN2 = DX22*DY21 - DX21*DY22
-SIN12 = SIN1*COS2 + COS1*SIN2
-IF (SIN12 .GE. 0.) RETURN
-1 SWPTST = .TRUE.
-RETURN
-END FUNCTION SWPTST
+sin1 = dx11*dy12 - dx12*dy11
+sin2 = dx22*dy21 - dx21*dy22
+sin12 = sin1*cos2 + cos1*sin2
+if (sin12 .ge. 0.) return
+1 swptst = .true.
+return
+end function swptst
 
-INTEGER function TINDX (NVERTX,NABOR,IADJ,IEND)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NVERTX, NABOR, IADJ(*), IEND(*)
+integer function tindx (nvertx,nabor,iadj,iend)
+implicit none
+integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 !
 !***********************************************************
 !
@@ -2734,35 +2734,35 @@ INTEGER, INTENT(IN) :: NVERTX, NABOR, IADJ(*), IEND(*)
 !
 !***********************************************************
 !
-INTEGER :: NB, INDX
+integer :: nb, indx
 !
 ! LOCAL PARAMETERS -
 !
 ! NB =   LOCAL COPY OF NABOR
 ! INDX = INDEX FOR IADJ
 !
-NB = NABOR
+nb = nabor
 !
 ! INITIALIZATION
 !
-INDX = IEND(NVERTX) + 1
+indx = iend(nvertx) + 1
 !
 ! SEARCH THE LIST OF NVERTX NEIGHBORS FOR NB
 !
-1 INDX = INDX - 1
-IF (IADJ(INDX) .NE. NB) GO TO 1
+1 indx = indx - 1
+if (iadj(indx) .ne. nb) go to 1
 !
-TINDX = INDX
-RETURN
-END FUNCTION TINDX
+tindx = indx
+return
+end function tindx
 
-SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
-IMPLICIT NONE
-REAL :: X0, X1, X2, Y0, Y1, Y2
-INTEGER, INTENT(IN) :: NST, IADJ(*), IEND(*)
-INTEGER, INTENT(INOUT) :: I1, I2, I3
-REAL, INTENT(IN) :: PX, PY
-REAL :: X(*), Y(*)
+subroutine trfind (nst,px,py,x,y,iadj,iend, i1,i2,i3)
+implicit none
+real :: x0, x1, x2, y0, y1, y2
+integer, intent(in) :: nst, iadj(*), iend(*)
+integer, intent(inout) :: i1, i2, i3
+real, intent(in) :: px, py
+real :: x(*), y(*)
 !
 !***********************************************************
 !
@@ -2819,9 +2819,9 @@ REAL :: X(*), Y(*)
 !
 !***********************************************************
 !
-INTEGER :: N0, N1, N2, N3, N4, INDX, IND, NF, NL, NEXT
-REAL :: XP, YP
-LOGICAL :: LEFT
+integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
+real :: xp, yp
+logical :: left
 !
 ! LOCAL PARAMETERS -
 !
@@ -2841,61 +2841,61 @@ LOGICAL :: LEFT
 !               Y0) = .TRUE. IFF (X0,Y0) IS ON OR TO THE
 !               LEFT OF THE VECTOR FROM (X1,Y1) TO (X2,Y2).
 !
-LEFT(X1,Y1,X2,Y2,X0,Y0) = (X2-X1)*(Y0-Y1) .GE. &
-&(X0-X1)*(Y2-Y1)
-XP = PX
-YP = PY
+left(x1,y1,x2,y2,x0,y0) = (x2-x1)*(y0-y1) .ge. &
+&(x0-x1)*(y2-y1)
+xp = px
+yp = py
 !
 ! INITIALIZE VARIABLES AND FIND A CONE CONTAINING P
 !
-N0 = MAX0(NST,1)
-1 INDX = IEND(N0)
-NL = IADJ(INDX)
-INDX = 1
-IF (N0 .NE. 1) INDX = IEND(N0-1) + 1
-NF = IADJ(INDX)
-N1 = NF
-IF (NL .NE. 0) GO TO 3
+n0 = max0(nst,1)
+1 indx = iend(n0)
+nl = iadj(indx)
+indx = 1
+if (n0 .ne. 1) indx = iend(n0-1) + 1
+nf = iadj(indx)
+n1 = nf
+if (nl .ne. 0) go to 3
 !
 ! N0 IS A BOUNDARY NODE.  SET NL TO THE LAST NONZERO
 !   NEIGHBOR OF N0.
 !
-IND = IEND(N0) - 1
-NL = IADJ(IND)
-IF ( LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) ) GO TO 2
+ind = iend(n0) - 1
+nl = iadj(ind)
+if ( left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) go to 2
 !
 ! P IS OUTSIDE THE BOUNDARY
 !
-NL = N0
-GO TO 16
-2 IF ( LEFT(X(NL),Y(NL),X(N0),Y(N0),XP,YP) ) GO TO 4
+nl = n0
+go to 16
+2 if ( left(x(nl),y(nl),x(n0),y(n0),xp,yp) ) go to 4
 !
 ! P IS OUTSIDE THE BOUNDARY AND N0 IS THE RIGHTMOST
 !   VISIBLE BOUNDARY NODE
 !
-I1 = N0
-GO TO 18
+i1 = n0
+go to 18
 !
 ! N0 IS AN INTERIOR NODE.  FIND N1.
 !
-3 IF ( LEFT(X(N0),Y(N0),X(N1),Y(N1),XP,YP) ) GO TO 4
-INDX = INDX + 1
-N1 = IADJ(INDX)
-IF (N1 .EQ. NL) GO TO 7
-GO TO 3
+3 if ( left(x(n0),y(n0),x(n1),y(n1),xp,yp) ) go to 4
+indx = indx + 1
+n1 = iadj(indx)
+if (n1 .eq. nl) go to 7
+go to 3
 !
 ! P IS TO THE LEFT OF ARC N0-N1.  INITIALIZE N2 TO THE NEXT
 !   NEIGHBOR OF N0.
 !
-4 INDX = INDX + 1
-N2 = IADJ(INDX)
-IF ( .NOT. LEFT(X(N0),Y(N0),X(N2),Y(N2),XP,YP) ) &
-&GO TO 8
-N1 = N2
-IF (N1 .NE. NL) GO TO 4
-IF ( .NOT. LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) ) &
-&GO TO 7
-IF (XP .EQ. X(N0) .AND. YP .EQ. Y(N0)) GO TO 6
+4 indx = indx + 1
+n2 = iadj(indx)
+if ( .not. left(x(n0),y(n0),x(n2),y(n2),xp,yp) ) &
+&go to 8
+n1 = n2
+if (n1 .ne. nl) go to 4
+if ( .not. left(x(n0),y(n0),x(nf),y(nf),xp,yp) ) &
+&go to 7
+if (xp .eq. x(n0) .and. yp .eq. y(n0)) go to 6
 !
 ! P IS LEFT OF OR ON ARCS N0-NB FOR ALL NEIGHBORS NB
 !   OF N0.
@@ -2904,195 +2904,195 @@ IF (XP .EQ. X(N0) .AND. YP .EQ. Y(N0)) GO TO 6
 !   IN REVERSE ORDER.  NOTE -- N1 = NL AND INDX POINTS TO
 !   NL.
 !
-5 IF ( .NOT. LEFT(X(N1),Y(N1),X(N0),Y(N0),XP,YP) ) &
-&GO TO 6
-IF (N1 .EQ. NF) GO TO 20
-INDX = INDX - 1
-N1 = IADJ(INDX)
-GO TO 5
+5 if ( .not. left(x(n1),y(n1),x(n0),y(n0),xp,yp) ) &
+&go to 6
+if (n1 .eq. nf) go to 20
+indx = indx - 1
+n1 = iadj(indx)
+go to 5
 !
 ! P IS TO THE RIGHT OF N1-N0, OR P=N0.  SET N0 TO N1 AND
 !   START OVER.
 !
-6 N0 = N1
-GO TO 1
+6 n0 = n1
+go to 1
 !
 ! P IS BETWEEN ARCS N0-N1 AND N0-NF
 !
-7 N2 = NF
+7 n2 = nf
 !
 ! P IS CONTAINED IN A CONE DEFINED BY LINE SEGMENTS N0-N1
 !   AND N0-N2 WHERE N1 IS ADJACENT TO N2
 !
-8 N3 = N0
-9 IF ( LEFT(X(N1),Y(N1),X(N2),Y(N2),XP,YP) ) GO TO 13
+8 n3 = n0
+9 if ( left(x(n1),y(n1),x(n2),y(n2),xp,yp) ) go to 13
 !
 ! SET N4 TO THE FIRST NEIGHBOR OF N2 FOLLOWING N1
 !
-INDX = IEND(N2)
-IF (IADJ(INDX) .NE. N1) GO TO 10
+indx = iend(n2)
+if (iadj(indx) .ne. n1) go to 10
 !
 ! N1 IS THE LAST NEIGHBOR OF N2.
 ! SET N4 TO THE FIRST NEIGHBOR.
 !
-INDX = 1
-IF (N2 .NE. 1) INDX = IEND(N2-1) + 1
-N4 = IADJ(INDX)
-GO TO 11
+indx = 1
+if (n2 .ne. 1) indx = iend(n2-1) + 1
+n4 = iadj(indx)
+go to 11
 !
 ! N1 IS NOT THE LAST NEIGHBOR OF N2
 !
-10 INDX = INDX-1
-IF (IADJ(INDX) .NE. N1) GO TO 10
-N4 = IADJ(INDX+1)
-IF (N4 .NE. 0) GO TO 11
+10 indx = indx-1
+if (iadj(indx) .ne. n1) go to 10
+n4 = iadj(indx+1)
+if (n4 .ne. 0) go to 11
 !
 ! P IS OUTSIDE THE BOUNDARY
 !
-NF = N2
-NL = N1
-GO TO 16
+nf = n2
+nl = n1
+go to 16
 !
 ! DEFINE A NEW ARC N1-N2 WHICH INTERSECTS THE LINE
 !   SEGMENT N0-P
 !
-11 IF ( LEFT(X(N0),Y(N0),X(N4),Y(N4),XP,YP) ) GO TO 12
-N3 = N2
-N2 = N4
-GO TO 9
-12 N3 = N1
-N1 = N4
-GO TO 9
+11 if ( left(x(n0),y(n0),x(n4),y(n4),xp,yp) ) go to 12
+n3 = n2
+n2 = n4
+go to 9
+12 n3 = n1
+n1 = n4
+go to 9
 !
 ! P IS IN THE TRIANGLE (N1,N2,N3) AND NOT ON N2-N3.  IF
 !   N3-N1 OR N1-N2 IS A BOUNDARY ARC CONTAINING P, TREAT P
 !   AS EXTERIOR.
 !
-13 INDX = IEND(N1)
-IF (IADJ(INDX) .NE. 0) GO TO 15
+13 indx = iend(n1)
+if (iadj(indx) .ne. 0) go to 15
 !
 ! N1 IS A BOUNDARY NODE.  N3-N1 IS A BOUNDARY ARC IFF N3
 !   IS THE LAST NONZERO NEIGHBOR OF N1.
 !
-IF (N3 .NE. IADJ(INDX-1)) GO TO 14
+if (n3 .ne. iadj(indx-1)) go to 14
 !
 ! N3-N1 IS A BOUNDARY ARC
 !
-IF ( .NOT. LEFT(X(N1),Y(N1),X(N3),Y(N3),XP,YP) ) &
-&GO TO 14
+if ( .not. left(x(n1),y(n1),x(n3),y(n3),xp,yp) ) &
+&go to 14
 !
 ! P LIES ON N1-N3
 !
-I1 = N1
-I2 = N3
-I3 = 0
-RETURN
+i1 = n1
+i2 = n3
+i3 = 0
+return
 !
 ! N3-N1 IS NOT A BOUNDARY ARC CONTAINING P.  N1-N2 IS A
 !   BOUNDARY ARC IFF N2 IS THE FIRST NEIGHBOR OF N1.
 !
-14 INDX = 1
-IF (N1 .NE. 1) INDX = IEND(N1-1) + 1
-IF (N2 .NE. IADJ(INDX)) GO TO 15
+14 indx = 1
+if (n1 .ne. 1) indx = iend(n1-1) + 1
+if (n2 .ne. iadj(indx)) go to 15
 !
 ! N1-N2 IS A BOUNDARY ARC
 !
-IF ( .NOT. LEFT(X(N2),Y(N2),X(N1),Y(N1),XP,YP) ) &
-&GO TO 15
+if ( .not. left(x(n2),y(n2),x(n1),y(n1),xp,yp) ) &
+&go to 15
 !
 ! P LIES ON N1-N2
 !
-I1 = N2
-I2 = N1
-I3 = 0
-RETURN
+i1 = n2
+i2 = n1
+i3 = 0
+return
 !
 ! P DOES NOT LIE ON A BOUNDARY ARC.
 !
-15 I1 = N1
-I2 = N2
-I3 = N3
-RETURN
+15 i1 = n1
+i2 = n2
+i3 = n3
+return
 !
 ! NF AND NL ARE ADJACENT BOUNDARY NODES WHICH ARE VISIBLE
 !   FROM P.  FIND THE FIRST VISIBLE BOUNDARY NODE.
 ! SET NEXT TO THE FIRST NEIGHBOR OF NF.
 !
-16 INDX = 1
-IF (NF .NE. 1) INDX = IEND(NF-1) + 1
-NEXT = IADJ(INDX)
-IF ( LEFT(X(NF),Y(NF),X(NEXT),Y(NEXT),XP,YP) ) &
-&GO TO 17
-NF = NEXT
-GO TO 16
+16 indx = 1
+if (nf .ne. 1) indx = iend(nf-1) + 1
+next = iadj(indx)
+if ( left(x(nf),y(nf),x(next),y(next),xp,yp) ) &
+&go to 17
+nf = next
+go to 16
 !
 ! NF IS THE FIRST (RIGHTMOST) VISIBLE BOUNDARY NODE
 !
-17 I1 = NF
+17 i1 = nf
 !
 ! FIND THE LAST VISIBLE BOUNDARY NODE.  NL IS THE FIRST
 !   CANDIDATE FOR I2.
 ! SET NEXT TO THE LAST NEIGHBOR OF NL.
 !
-18 INDX = IEND(NL) - 1
-NEXT = IADJ(INDX)
-IF ( LEFT(X(NEXT),Y(NEXT),X(NL),Y(NL),XP,YP) ) &
-&GO TO 19
-NL = NEXT
-GO TO 18
+18 indx = iend(nl) - 1
+next = iadj(indx)
+if ( left(x(next),y(next),x(nl),y(nl),xp,yp) ) &
+&go to 19
+nl = next
+go to 18
 !
 ! NL IS THE LAST (LEFTMOST) VISIBLE BOUNDARY NODE
 !
-19 I2 = NL
-I3 = 0
-RETURN
+19 i2 = nl
+i3 = 0
+return
 !
 ! ALL POINTS ARE COLLINEAR
 !
-20 I1 = 0
-I2 = 0
-I3 = 0
-RETURN
-END SUBROUTINE TRFIND
+20 i1 = 0
+i2 = 0
+i3 = 0
+return
+end subroutine trfind
 
-SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-INTEGER :: J, MITER
-REAL :: EPS
+subroutine gradg (n, x, y, z, iadj, iend, zxzy, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer :: j, miter
+real :: eps
 !-----------------------------------------------------------------------
 !                      DERIVATIVE ESTIMATION
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N), Z(N)
-REAL, INTENT(INOUT) :: ZXZY(2,N)
-INTEGER, INTENT(IN) :: IADJ(*), IEND(N)
+real, intent(in) :: x(n), y(n), z(n)
+real, intent(inout) :: zxzy(2,n)
+integer, intent(in) :: iadj(*), iend(n)
 !
-IF (N .LT. 3) GO TO 20
+if (n .lt. 3) go to 20
 !
-EPS = 0.0
-MITER = 5
-DO J = 1,N
-   ZXZY(1,J) = 0.0
-   ZXZY(2,J) = 0.0
-END DO
-CALL GRADG1 (N, X, Y, Z, IADJ, IEND, EPS, MITER, ZXZY, IERR)
-IERR = 0
-RETURN
+eps = 0.0
+miter = 5
+do j = 1,n
+   zxzy(1,j) = 0.0
+   zxzy(2,j) = 0.0
+end do
+call gradg1 (n, x, y, z, iadj, iend, eps, miter, zxzy, ierr)
+ierr = 0
+return
 !
 !     ERROR RETURN
 !
-20 IERR = 1
-RETURN
-END SUBROUTINE GRADG
+20 ierr = 1
+return
+end subroutine gradg
 
-SUBROUTINE GRADG1 (N,X,Y,Z,IADJ,IEND,EPS, NIT, &
-&ZXZY, IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, IADJ(*), IEND(N)
-INTEGER, INTENT(INOUT) :: NIT, IER
-REAL, INTENT(IN) :: X(N), Y(N), Z(N), EPS
-REAL, INTENT(INOUT) :: ZXZY(2,N)
+subroutine gradg1 (n,x,y,z,iadj,iend,eps, nit, &
+&zxzy, ier)
+implicit none
+integer, intent(in) :: n, iadj(*), iend(n)
+integer, intent(inout) :: nit, ier
+real, intent(in) :: x(n), y(n), z(n), eps
+real, intent(inout) :: zxzy(2,n)
 !
 !***********************************************************
 !
@@ -3181,9 +3181,9 @@ REAL, INTENT(INOUT) :: ZXZY(2,N)
 !
 !***********************************************************
 !
-INTEGER :: NN, MAXIT, ITER, K, INDF, INDL, INDX, NB
-REAL :: TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, A22, R1, R2, &
-&DELX, DELY, DELXS, DELYS, DSQ, DCUB, T, DZX, DZY
+integer :: nn, maxit, iter, k, indf, indl, indx, nb
+real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
+&delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !
 ! LOCAL PARAMETERS -
 !
@@ -3215,136 +3215,136 @@ REAL :: TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, A22, R1, R2, &
 ! DZX,DZY =     SOLUTION OF THE 2 BY 2 SYSTEM -- CHANGE IN
 !                 DERIVATIVES AT K FROM THE PREVIOUS ITERATE
 !
-NN = N
-TOL = EPS
-MAXIT = NIT
+nn = n
+tol = eps
+maxit = nit
 !
 ! ERROR CHECKS AND INITIALIZATION
 !
-IF (NN .LT. 3  .OR.  TOL .LT. 0.  .OR.  MAXIT .LT. 0) &
-&GO TO 5
-ITER = 0
+if (nn .lt. 3  .or.  tol .lt. 0.  .or.  maxit .lt. 0) &
+&go to 5
+iter = 0
 !
 ! TOP OF ITERATION LOOP
 !
-1 IF (ITER .EQ. MAXIT) GO TO 4
-DGMAX = 0.
-INDL = 0
-do 3 K = 1,NN
-  XK = X(K)
-  YK = Y(K)
-  ZK = Z(K)
-  ZXK = ZXZY(1,K)
-  ZYK = ZXZY(2,K)
+1 if (iter .eq. maxit) go to 4
+dgmax = 0.
+indl = 0
+do 3 k = 1,nn
+  xk = x(k)
+  yk = y(k)
+  zk = z(k)
+  zxk = zxzy(1,k)
+  zyk = zxzy(2,k)
 !
 !   INITIALIZE COMPONENTS OF THE 2 BY 2 SYSTEM
 !
-  A11 = 0.
-  A12 = 0.
-  A22 = 0.
-  R1 = 0.
-  R2 = 0.
+  a11 = 0.
+  a12 = 0.
+  a22 = 0.
+  r1 = 0.
+  r2 = 0.
 !
 !   LOOP ON NEIGHBORS NB OF K
 !
-  INDF = INDL + 1
-  INDL = IEND(K)
-  do 2 INDX = INDF,INDL
-    NB = IADJ(INDX)
-    IF (NB .EQ. 0) GO TO 2
+  indf = indl + 1
+  indl = iend(k)
+  do 2 indx = indf,indl
+    nb = iadj(indx)
+    if (nb .eq. 0) go to 2
 !
 !   COMPUTE THE COMPONENTS OF ARC NB-K
 !
-    DELX = X(NB) - XK
-    DELY = Y(NB) - YK
-    DELXS = DELX*DELX
-    DELYS = DELY*DELY
-    DSQ = DELXS + DELYS
-    DCUB = DSQ*SQRT(DSQ)
+    delx = x(nb) - xk
+    dely = y(nb) - yk
+    delxs = delx*delx
+    delys = dely*dely
+    dsq = delxs + delys
+    dcub = dsq*sqrt(dsq)
 !
 !   UPDATE THE SYSTEM COMPONENTS FOR NODE NB
 !
-    A11 = A11 + DELXS/DCUB
-    A12 = A12 + DELX*DELY/DCUB
-    A22 = A22 + DELYS/DCUB
-    T = ( 1.5*(Z(NB)-ZK) - ((ZXZY(1,NB)/2.+ZXK)*DELX + &
-&(ZXZY(2,NB)/2.+ZYK)*DELY) )/DCUB
-    R1 = R1 + T*DELX
-    R2 = R2 + T*DELY
-2 CONTINUE
+    a11 = a11 + delxs/dcub
+    a12 = a12 + delx*dely/dcub
+    a22 = a22 + delys/dcub
+    t = ( 1.5*(z(nb)-zk) - ((zxzy(1,nb)/2.+zxk)*delx + &
+&(zxzy(2,nb)/2.+zyk)*dely) )/dcub
+    r1 = r1 + t*delx
+    r2 = r2 + t*dely
+2 continue
 !
 !   SOLVE THE 2 BY 2 SYSTEM AND UPDATE DGMAX
 !
-  DZY = (A11*R2 - A12*R1)/(A11*A22 - A12*A12)
-  DZX = (R1 - A12*DZY)/A11
-  DGMAX = AMAX1(DGMAX,ABS(DZX),ABS(DZY))
+  dzy = (a11*r2 - a12*r1)/(a11*a22 - a12*a12)
+  dzx = (r1 - a12*dzy)/a11
+  dgmax = amax1(dgmax,abs(dzx),abs(dzy))
 !
 !   UPDATE THE PARTIALS AT NODE K
 !
-  ZXZY(1,K) = ZXK + DZX
-3 ZXZY(2,K) = ZYK + DZY
+  zxzy(1,k) = zxk + dzx
+3 zxzy(2,k) = zyk + dzy
 !
 !   INCREMENT ITER AND TEST FOR CONVERGENCE
 !
-ITER = ITER + 1
-IF (DGMAX .GT. TOL) GO TO 1
+iter = iter + 1
+if (dgmax .gt. tol) go to 1
 !
 ! METHOD CONVERGED
 !
-NIT = ITER
-IER = 0
-RETURN
+nit = iter
+ier = 0
+return
 !
 ! METHOD FAILED TO CONVERGE WITHIN NIT ITERATIONS
 !
-4 IER = 1
-RETURN
+4 ier = 1
+return
 !
 ! PARAMETER OUT OF RANGE
 !
-5 NIT = 0
-IER = 2
-RETURN
-END SUBROUTINE GRADG1
+5 nit = 0
+ier = 2
+return
+end subroutine gradg1
 
-SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-INTEGER :: J
+subroutine gradl (n, x, y, z, iadj, iend, zxzy, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer :: j
 !-----------------------------------------------------------------------
 !                      DERIVATIVE ESTIMATION
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N), Z(N)
-REAL, INTENT(INOUT) :: ZXZY(2,N)
-INTEGER, INTENT(IN) :: IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(N)
+real, intent(in) :: x(n), y(n), z(n)
+real, intent(inout) :: zxzy(2,n)
+integer, intent(in) :: iadj(*)
+integer, intent(inout) :: iend(n)
 !
-IF (N .LT. 3) GO TO 20
+if (n .lt. 3) go to 20
 !
-DO J = 1,N
-   CALL GRADL1 (N, J, X, Y, Z, IADJ, IEND, ZXZY(1,J), &
-&ZXZY(2,J), IERR)
-   IF (IERR .LT. 0) GO TO 30
-END DO
-IERR = 0
-RETURN
+do j = 1,n
+   call gradl1 (n, j, x, y, z, iadj, iend, zxzy(1,j), &
+&zxzy(2,j), ierr)
+   if (ierr .lt. 0) go to 30
+end do
+ierr = 0
+return
 !
 !     ERROR RETURN
 !
-20 IERR = 1
-RETURN
+20 ierr = 1
+return
 !
-30 IERR = 2
-RETURN
-END SUBROUTINE GRADL
+30 ierr = 2
+return
+end subroutine gradl
 
-SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, K, IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(N), IER
-REAL, INTENT(IN) :: X(N), Y(N), Z(N)
-REAL, INTENT(INOUT) :: DX, DY
+subroutine gradl1 (n,k,x,y,z,iadj,iend, dx,dy,ier)
+implicit none
+integer, intent(in) :: n, k, iadj(*)
+integer, intent(inout) :: iend(n), ier
+real, intent(in) :: x(n), y(n), z(n)
+real, intent(inout) :: dx, dy
 !
 !***********************************************************
 !
@@ -3412,12 +3412,12 @@ REAL, INTENT(INOUT) :: DX, DY
 !
 !***********************************************************
 !
-INTEGER :: NN, KK, LMN, LMX, LMIN, LMAX, LM1, LNP, NPTS(30), IERR, &
-&NP, I, J, IM1, JP1, IP1, L
-REAL :: SUM, DS, R, RS, RTOL, AVSQ, AV, XK, YK, ZK, A(6,6), C, S, &
-&DMIN, DTOL, SF
-DATA    LMN/10/
-DATA    LMX/30/, RTOL/1.E-5/, DTOL/.01/, SF/1./
+integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
+&np, i, j, im1, jp1, ip1, l
+real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
+&dmin, dtol, sf
+data    lmn/10/
+data    lmx/30/, rtol/1.e-5/, dtol/.01/, sf/1./
 !
 ! LOCAL PARAMETERS -
 !
@@ -3477,169 +3477,169 @@ DATA    LMX/30/, RTOL/1.E-5/, DTOL/.01/, SF/1./
 !               IS ILL-CONDITIONED.  AS SF INCREASES, THE
 !               FITTING FUNCTION APPROACHES A LINEAR
 !
-NN = N
-KK = K
+nn = n
+kk = k
 !
 ! CHECK FOR ERRORS AND INITIALIZE LMIN, LMAX
 !
-IF (NN .LT. 3  .OR.  KK .LT. 1  .OR.  KK .GT. NN) &
-&GO TO 16
-LMIN = MIN0(LMN,NN)
-LMAX = MIN0(LMX,NN)
+if (nn .lt. 3  .or.  kk .lt. 1  .or.  kk .gt. nn) &
+&go to 16
+lmin = min0(lmn,nn)
+lmax = min0(lmx,nn)
 !
 ! COMPUTE NPTS, LNP, AVSQ, AV, AND R.
 !   SET NPTS TO THE CLOSEST LMIN-1 NODES TO K.
 !
-SUM = 0.
-NPTS(1) = KK
-LM1 = LMIN - 1
-do 1 LNP = 2,LM1
-  CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, DS,IERR)
-1 SUM = SUM + DS
+sum = 0.
+npts(1) = kk
+lm1 = lmin - 1
+do 1 lnp = 2,lm1
+  call getnp (x,y,iadj,iend,lnp, npts, ds,ierr)
+1 sum = sum + ds
 !
 ! ADD ADDITIONAL NODES TO NPTS UNTIL THE RELATIVE INCREASE
 !   IN DS IS AT LEAST RTOL.
 !
-do 2 LNP = LMIN,LMAX
-  CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, RS,IERR)
-  IF ((RS-DS)/DS .LE. RTOL) GO TO 2
-  IF (LNP .GT. 6) GO TO 3
-2 SUM = SUM + RS
+do 2 lnp = lmin,lmax
+  call getnp (x,y,iadj,iend,lnp, npts, rs,ierr)
+  if ((rs-ds)/ds .le. rtol) go to 2
+  if (lnp .gt. 6) go to 3
+2 sum = sum + rs
 !
 ! USE ALL LMAX NODES IN THE LEAST SQUARES FIT.  RS IS
 !   ARBITRARILY INCREASED BY 10 PER CENT.
 !
-RS = 1.1*RS
-LNP = LMAX + 1
+rs = 1.1*rs
+lnp = lmax + 1
 !
 ! THERE ARE LNP-2 EQUATIONS CORRESPONDING TO NODES NPTS(2),
 !   ...,NPTS(LNP-1).
 !
-3 AVSQ = SUM/FLOAT(LNP-2)
-AV = SQRT(AVSQ)
-R = SQRT(RS)
-XK = X(KK)
-YK = Y(KK)
-ZK = Z(KK)
-IF (LNP .LT. 7) GO TO 12
+3 avsq = sum/float(lnp-2)
+av = sqrt(avsq)
+r = sqrt(rs)
+xk = x(kk)
+yk = y(kk)
+zk = z(kk)
+if (lnp .lt. 7) go to 12
 !
 ! SET UP THE FIRST 5 EQUATIONS OF THE AUGMENTED REGRESSION
 !   MATRIX (TRANSPOSED) AS THE COLUMNS OF A, AND ZERO OUT
 !   THE LOWER TRIANGLE (UPPER TRIANGLE OF A) WITH GIVENS
 !   ROTATIONS
 !
-do 5 I = 1,5
-  NP = NPTS(I+1)
-  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
-&R, A(1,I))
-  IF (I .EQ. 1) GO TO 5
-  IM1 = I - 1
-  do 4 J = 1,IM1
-    JP1 = J + 1
-    L = 6 - J
-    CALL SROTG (A(J,J),A(J,I),C,S)
-4 CALL SROT (L,A(JP1,J),1,A(JP1,I),1,C,S)
-5 CONTINUE
+do 5 i = 1,5
+  np = npts(i+1)
+  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+&r, a(1,i))
+  if (i .eq. 1) go to 5
+  im1 = i - 1
+  do 4 j = 1,im1
+    jp1 = j + 1
+    l = 6 - j
+    call srotg (a(j,j),a(j,i),c,s)
+4 call srot (l,a(jp1,j),1,a(jp1,i),1,c,s)
+5 continue
 !
 ! ADD THE ADDITIONAL EQUATIONS TO THE SYSTEM USING
 !   THE LAST COLUMN OF A -- I .LE. LNP.
 !
-I = 7
-6 IF (I .EQ. LNP) GO TO 8
-  NP = NPTS(I)
-  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
-&R, A(1,6))
-  do 7 J = 1,5
-    JP1 = J + 1
-    L = 6 - J
-    CALL SROTG (A(J,J),A(J,6),C,S)
-7 CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
-  I = I + 1
-  GO TO 6
+i = 7
+6 if (i .eq. lnp) go to 8
+  np = npts(i)
+  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+&r, a(1,6))
+  do 7 j = 1,5
+    jp1 = j + 1
+    l = 6 - j
+    call srotg (a(j,j),a(j,6),c,s)
+7 call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+  i = i + 1
+  go to 6
 !
 ! TEST THE SYSTEM FOR ILL-CONDITIONING
 !
-8 DMIN = AMIN1( ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)), &
-&ABS(A(4,4)),ABS(A(5,5)) )
-IF (DMIN .GE. DTOL) GO TO 15
-IF (LNP .GT. LMAX) GO TO 9
+8 dmin = amin1( abs(a(1,1)),abs(a(2,2)),abs(a(3,3)), &
+&abs(a(4,4)),abs(a(5,5)) )
+if (dmin .ge. dtol) go to 15
+if (lnp .gt. lmax) go to 9
 !
 ! ADD ANOTHER NODE TO THE SYSTEM AND INCREASE R --
 !   I .EQ. LNP
 !
-LNP = LNP + 1
-IF (LNP .LE. LMAX) CALL GETNP (X,Y,IADJ,IEND,LNP, &
-&NPTS, RS,IERR)
-R = SQRT(1.1*RS)
-GO TO 6
+lnp = lnp + 1
+if (lnp .le. lmax) call getnp (x,y,iadj,iend,lnp, &
+&npts, rs,ierr)
+r = sqrt(1.1*rs)
+go to 6
 !
 ! STABILIZE THE SYSTEM BY DAMPING SECOND PARTIALS --ADD
 !   MULTIPLES OF THE FIRST THREE UNIT VECTORS TO THE FIRST
 !   THREE EQUATIONS.
 !
-9 do 11 I = 1,3
-  A(I,6) = SF
-  IP1 = I + 1
-  do 10 J = IP1,6
-10 A(J,6) = 0.
-  do 11 J = I,5
-    JP1 = J + 1
-    L = 6 - J
-    CALL SROTG (A(J,J),A(J,6),C,S)
-11 CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
-GO TO 14
+9 do 11 i = 1,3
+  a(i,6) = sf
+  ip1 = i + 1
+  do 10 j = ip1,6
+10 a(j,6) = 0.
+  do 11 j = i,5
+    jp1 = j + 1
+    l = 6 - j
+    call srotg (a(j,j),a(j,6),c,s)
+11 call srot (l,a(jp1,j),1,a(jp1,6),1,c,s)
+go to 14
 !
 ! 4 .LE. LNP .LE. 6 (2, 3, OR 4 EQUATIONS) -- FIT A PLANE TO
 !   THE DATA USING THE LAST 3 COLUMNS OF A.
 !
-12 NP = NPTS(2)
-CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
-&R, A(1,4))
-NP = NPTS(3)
-CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
-&R, A(1,5))
-CALL SROTG (A(4,4),A(4,5),C,S)
-CALL SROT (2,A(5,4),1,A(5,5),1,C,S)
-IF (LNP .EQ. 4) GO TO 14
+12 np = npts(2)
+call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+&r, a(1,4))
+np = npts(3)
+call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+&r, a(1,5))
+call srotg (a(4,4),a(4,5),c,s)
+call srot (2,a(5,4),1,a(5,5),1,c,s)
+if (lnp .eq. 4) go to 14
 !
-LM1 = LNP - 1
-do 13 I = 4,LM1
-  NP = NPTS(I)
-  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
-&R, A(1,6))
-  CALL SROTG (A(4,4),A(4,6),C,S)
-  CALL SROT (2,A(5,4),1,A(5,6),1,C,S)
-  CALL SROTG (A(5,5),A(5,6),C,S)
-13 CALL SROT (1,A(6,5),1,A(6,6),1,C,S)
+lm1 = lnp - 1
+do 13 i = 4,lm1
+  np = npts(i)
+  call setrm (xk,yk,zk,x(np),y(np),z(np),av,avsq, &
+&r, a(1,6))
+  call srotg (a(4,4),a(4,6),c,s)
+  call srot (2,a(5,4),1,a(5,6),1,c,s)
+  call srotg (a(5,5),a(5,6),c,s)
+13 call srot (1,a(6,5),1,a(6,6),1,c,s)
 !
 ! TEST THE LINEAR FIT FOR ILL-CONDITIONING
 !
-14 DMIN = AMIN1( ABS(A(4,4)),ABS(A(5,5)) )
-IF (DMIN .LT. DTOL) GO TO 17
+14 dmin = amin1( abs(a(4,4)),abs(a(5,5)) )
+if (dmin .lt. dtol) go to 17
 !
 ! SOLVE THE 2 BY 2 TRIANGULAR SYSTEM FOR THE DERIVATIVES
 !
-15 DY = A(6,5)/A(5,5)
-DX = (A(6,4) - A(5,4)*DY)/A(4,4)/AV
-DY = DY/AV
-IER = LNP - 1
-RETURN
+15 dy = a(6,5)/a(5,5)
+dx = (a(6,4) - a(5,4)*dy)/a(4,4)/av
+dy = dy/av
+ier = lnp - 1
+return
 !
 ! N OR K IS OUT OF RANGE
 !
-16 IER = -1
-RETURN
+16 ier = -1
+return
 !
 ! NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
 !
-17 IER = -2
-RETURN
-END SUBROUTINE GRADL1
+17 ier = -2
+return
+end subroutine gradl1
 
-SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
-IMPLICIT NONE
-REAL, INTENT(IN) :: XK, YK, ZK, XI, YI, ZI, S1, S2, R
-REAL, INTENT(INOUT) :: ROW(6)
+subroutine setrm (xk,yk,zk,xi,yi,zi,s1,s2,r, row)
+implicit none
+real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
+real, intent(inout) :: row(6)
 !
 !***********************************************************
 !
@@ -3681,8 +3681,8 @@ REAL, INTENT(INOUT) :: ROW(6)
 !
 !***********************************************************
 !
-INTEGER :: I
-REAL :: DX, DY, DXSQ, DYSQ, D, W, W1, W2
+integer :: i
+real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !
 ! LOCAL PARAMETERS -
 !
@@ -3696,39 +3696,39 @@ REAL :: DX, DY, DXSQ, DYSQ, D, W, W1, W2
 ! W1 =   W/S1
 ! W2 =   W/S2
 !
-DX = XI - XK
-DY = YI - YK
-DXSQ = DX*DX
-DYSQ = DY*DY
-D = SQRT(DXSQ + DYSQ)
-IF (D .LE. 0.  .OR.  D .GE. R) GO TO 1
-W = (R-D)/R/D
-W1 = W/S1
-W2 = W/S2
-ROW(1) = DXSQ*W2
-ROW(2) = DX*DY*W2
-ROW(3) = DYSQ*W2
-ROW(4) = DX*W1
-ROW(5) = DY*W1
-ROW(6) = (ZI - ZK)*W
-RETURN
+dx = xi - xk
+dy = yi - yk
+dxsq = dx*dx
+dysq = dy*dy
+d = sqrt(dxsq + dysq)
+if (d .le. 0.  .or.  d .ge. r) go to 1
+w = (r-d)/r/d
+w1 = w/s1
+w2 = w/s2
+row(1) = dxsq*w2
+row(2) = dx*dy*w2
+row(3) = dysq*w2
+row(4) = dx*w1
+row(5) = dy*w1
+row(6) = (zi - zk)*w
+return
 !
 ! NODES K AND I COINCIDE OR NODE I IS OUTSIDE OF THE RADIUS
 !   OF INFLUENCE.  SET ROW TO THE ZERO VECTOR.
 !
-1 do 2 I = 1,6
-2 ROW(I) = 0.
-RETURN
-END SUBROUTINE SETRM
+1 do 2 i = 1,6
+2 row(i) = 0.
+return
+end subroutine setrm
 
-SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(*)
-INTEGER, INTENT(IN) :: L
-INTEGER, INTENT(INOUT) :: NPTS(L), IER
-REAL, INTENT(IN) :: X(*), Y(*)
-REAL, INTENT(INOUT) :: DS
+subroutine getnp (x,y,iadj,iend,l, npts, ds,ier)
+implicit none
+integer, intent(in) :: iadj(*)
+integer, intent(inout) :: iend(*)
+integer, intent(in) :: l
+integer, intent(inout) :: npts(l), ier
+real, intent(in) :: x(*), y(*)
+real, intent(inout) :: ds
 !
 !***********************************************************
 !
@@ -3792,8 +3792,8 @@ REAL, INTENT(INOUT) :: DS
 !
 !***********************************************************
 !
-INTEGER :: LM1, N1, I, NI, NP, INDF, INDL, INDX, NB
-REAL :: X1, Y1, DNP, DNB
+integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
+real :: x1, y1, dnp, dnb
 !
 ! LOCAL PARAMETERS -
 !
@@ -3810,150 +3810,150 @@ REAL :: X1, Y1, DNP, DNB
 ! DNP,DNB = SQUARED DISTANCES FROM N1 TO NP AND NB,
 !             RESPECTIVELY
 !
-LM1 = L - 1
-IF (LM1 .LT. 1) GO TO 4
-IER = 0
-N1 = NPTS(1)
-X1 = X(N1)
-Y1 = Y(N1)
+lm1 = l - 1
+if (lm1 .lt. 1) go to 4
+ier = 0
+n1 = npts(1)
+x1 = x(n1)
+y1 = y(n1)
 !
 ! MARK THE ELEMENTS OF NPTS
 !
-do 1 I = 1,LM1
-  NI = NPTS(I)
-  IEND(NI) = -IEND(NI)
-1 CONTINUE
+do 1 i = 1,lm1
+  ni = npts(i)
+  iend(ni) = -iend(ni)
+1 continue
 !
 ! CANDIDATES FOR NP = NPTS(L) ARE THE UNMARKED NEIGHBORS
 !   OF NODES IN NPTS.  NP=0 IS A FLAG TO SET NP TO THE
 !   FIRST CANDIDATE ENCOUNTERED.
 !
-NP = 0
-DNP = 0.
+np = 0
+dnp = 0.
 !
 ! LOOP ON NODES NI IN NPTS
 !
-do 2 I = 1,LM1
-  NI = NPTS(I)
-  INDF = 1
-  IF (NI .GT. 1) INDF = IABS(IEND(NI-1)) + 1
-  INDL = -IEND(NI)
+do 2 i = 1,lm1
+  ni = npts(i)
+  indf = 1
+  if (ni .gt. 1) indf = iabs(iend(ni-1)) + 1
+  indl = -iend(ni)
 !
 ! LOOP ON NEIGHBORS NB OF NI
 !
-  do 2 INDX = INDF,INDL
-    NB = IADJ(INDX)
-    IF (NB .EQ. 0  .OR.  IEND(NB) .LT. 0) GO TO 2
+  do 2 indx = indf,indl
+    nb = iadj(indx)
+    if (nb .eq. 0  .or.  iend(nb) .lt. 0) go to 2
 !
 ! NB IS AN UNMARKED NEIGHBOR OF NI.  REPLACE NP IF NB IS
 !   CLOSER TO N1 OR IS THE FIRST CANDIDATE ENCOUNTERED.
 !
-    DNB = (X(NB)-X1)**2 + (Y(NB)-Y1)**2
-    IF (NP .NE. 0  .AND.  DNB .GE. DNP) GO TO 2
-    NP = NB
-    DNP = DNB
-2 CONTINUE
-NPTS(L) = NP
-DS = DNP
+    dnb = (x(nb)-x1)**2 + (y(nb)-y1)**2
+    if (np .ne. 0  .and.  dnb .ge. dnp) go to 2
+    np = nb
+    dnp = dnb
+2 continue
+npts(l) = np
+ds = dnp
 !
 ! UNMARK THE ELEMENTS OF NPTS
 !
-DO I = 1,LM1
-  NI = NPTS(I)
-  IEND(NI) = -IEND(NI)
-  END DO
-RETURN
+do i = 1,lm1
+  ni = npts(i)
+  iend(ni) = -iend(ni)
+  end do
+return
 !
 ! L IS OUT OF RANGE
 !
-4 IER = 1
-RETURN
-END SUBROUTINE GETNP
+4 ier = 1
+return
+end subroutine getnp
 
-SUBROUTINE SFVAL (N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, &
-&ZXZY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: M, N
-INTEGER :: IST, J
+subroutine sfval (n, x, y, z, m, xi, yi, zi, iadj, iend, &
+&zxzy, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n
+integer :: ist, j
 !-----------------------------------------------------------------------
 !                    EVALUATION OF THE SURFACE
 !-----------------------------------------------------------------------
-REAL :: X(N), Y(N)
-REAL, INTENT(IN) :: Z(N), XI(M), YI(M)
-REAL, INTENT(INOUT) :: ZI(M)
-REAL, INTENT(IN) :: ZXZY(2,N)
-INTEGER, INTENT(IN) :: IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(N)
+real :: x(n), y(n)
+real, intent(in) :: z(n), xi(m), yi(m)
+real, intent(inout) :: zi(m)
+real, intent(in) :: zxzy(2,n)
+integer, intent(in) :: iadj(*)
+integer, intent(inout) :: iend(n)
 !
-IF (N .LT. 3 .OR. M .LT. 1) GO TO 20
+if (n .lt. 3 .or. m .lt. 1) go to 20
 !
-IST = 1
-DO J = 1,M
-   CALL INTRC1 (N, XI(J), YI(J), X, Y, Z, IADJ, IEND, &
-&1, ZXZY, IST, ZI(J), IERR)
-   IF (IERR .LT. 0) GO TO 30
-END DO
-IERR = 0
-RETURN
+ist = 1
+do j = 1,m
+   call intrc1 (n, xi(j), yi(j), x, y, z, iadj, iend, &
+&1, zxzy, ist, zi(j), ierr)
+   if (ierr .lt. 0) go to 30
+end do
+ierr = 0
+return
 !
 !     ERROR RETURN
 !
-20 IERR = 1
-RETURN
-30 IERR = 2
-RETURN
-END SUBROUTINE SFVAL
+20 ierr = 1
+return
+30 ierr = 2
+return
+end subroutine sfval
 
-SUBROUTINE SFVAL2 (N, X, Y, Z, L, M, NROWS, XI, YI, ZI, &
-&IADJ, IEND, ZXZY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: L, M, N, NROWS
-INTEGER :: I, IST, J
+subroutine sfval2 (n, x, y, z, l, m, nrows, xi, yi, zi, &
+&iadj, iend, zxzy, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, m, n, nrows
+integer :: i, ist, j
 !-----------------------------------------------------------------------
 !                EVALUATION OF THE SURFACE OVER A GRID
 !-----------------------------------------------------------------------
-REAL :: X(N), Y(N)
-REAL, INTENT(IN) :: Z(N), ZXZY(2,N)
-REAL, INTENT(IN) :: XI(L), YI(M)
-REAL, INTENT(INOUT) :: ZI(NROWS,M)
-INTEGER, INTENT(IN) :: IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(N)
+real :: x(n), y(n)
+real, intent(in) :: z(n), zxzy(2,n)
+real, intent(in) :: xi(l), yi(m)
+real, intent(inout) :: zi(nrows,m)
+integer, intent(in) :: iadj(*)
+integer, intent(inout) :: iend(n)
 !
-IF (N .LT. 3 .OR. L .LT. 1 .OR. M .LT. 1 .OR. NROWS .LT. L) &
-&GO TO 30
+if (n .lt. 3 .or. l .lt. 1 .or. m .lt. 1 .or. nrows .lt. l) &
+&go to 30
 !
-IST = 1
-DO J = 1,M
-   DO I = 1,L
-      CALL INTRC1 (N, XI(I), YI(J), X, Y, Z, IADJ, IEND, &
-&1, ZXZY, IST, ZI(I,J), IERR)
-      IF (IERR .LT. 0) GO TO 40
-   END DO
-END DO
-IERR = 0
-RETURN
+ist = 1
+do j = 1,m
+   do i = 1,l
+      call intrc1 (n, xi(i), yi(j), x, y, z, iadj, iend, &
+&1, zxzy, ist, zi(i,j), ierr)
+      if (ierr .lt. 0) go to 40
+   end do
+end do
+ierr = 0
+return
 !
 !     ERROR RETURN
 !
-30 IERR = 1
-RETURN
-40 IERR = 2
-RETURN
-END SUBROUTINE SFVAL2
+30 ierr = 1
+return
+40 ierr = 2
+return
+end subroutine sfval2
 
-SUBROUTINE INTRC1 (N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG, &
-&ZXZY, IST, PZ,IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, IADJ(*)
-INTEGER, INTENT(INOUT) :: IEND(N)
-INTEGER, INTENT(IN) :: IFLAG
-INTEGER, INTENT(INOUT) :: IST, IER
-REAL, INTENT(IN) :: PX, PY
-REAL :: X(N), Y(N)
-REAL, INTENT(IN) :: Z(N), ZXZY(2,N)
-REAL, INTENT(OUT) :: PZ
+subroutine intrc1 (n,px,py,x,y,z,iadj,iend,iflag, &
+&zxzy, ist, pz,ier)
+implicit none
+integer, intent(in) :: n, iadj(*)
+integer, intent(inout) :: iend(n)
+integer, intent(in) :: iflag
+integer, intent(inout) :: ist, ier
+real, intent(in) :: px, py
+real :: x(n), y(n)
+real, intent(in) :: z(n), zxzy(2,n)
+real, intent(out) :: pz
 !
 !***********************************************************
 !
@@ -4043,10 +4043,10 @@ REAL, INTENT(OUT) :: PZ
 !
 !***********************************************************
 !
-INTEGER :: NN, I1, I2, I3, IERR, N1, N2, INDX
-REAL :: XP, YP, ZX1, ZY1, ZX2, ZY2, ZX3, ZY3, X1, Y1, X2, Y2, X3, &
-&Y3, Z1, Z2, Z3, DUM, DP, U, V, XQ, YQ, R1, R2, A1, A2, B1, B2, C1, &
-&C2, F1, F2
+integer :: nn, i1, i2, i3, ierr, n1, n2, indx
+real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
+&y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
+&c2, f1, f2
 !
 ! LOCAL PARAMETERS -
 !
@@ -4083,54 +4083,54 @@ REAL :: XP, YP, ZX1, ZY1, ZX2, ZY2, ZX3, ZY3, X1, Y1, X2, Y2, X3, &
 ! F1,F2 =                   CUBIC FACTORS USED TO COMPUTE
 !                             THE CARDINAL FUNCTIONS
 !
-NN = N
-PZ = 0.
-IF (NN .LT. 3  .OR.  IFLAG .LT. 0  .OR.  IFLAG .GT. 1 &
-&.OR.  IST .LT. 1  .OR.  IST .GT. NN) GO TO 11
-XP = PX
-YP = PY
+nn = n
+pz = 0.
+if (nn .lt. 3  .or.  iflag .lt. 0  .or.  iflag .gt. 1 &
+&.or.  ist .lt. 1  .or.  ist .gt. nn) go to 11
+xp = px
+yp = py
 !
 ! FIND A TRIANGLE CONTAINING P IF P IS WITHIN THE MESH
 !   BOUNDARY
 !
-CALL TRFIND(IST,XP,YP,X,Y,IADJ,IEND, I1,I2,I3)
-IF (I1 .EQ. 0) GO TO 12
-IST = I1
-IF (I3 .EQ. 0) GO TO 3
-IF (IFLAG .NE. 1) GO TO 1
+call trfind(ist,xp,yp,x,y,iadj,iend, i1,i2,i3)
+if (i1 .eq. 0) go to 12
+ist = i1
+if (i3 .eq. 0) go to 3
+if (iflag .ne. 1) go to 1
 !
 ! DERIVATIVES ARE USER PROVIDED
 !
-ZX1 = ZXZY(1,I1)
-ZX2 = ZXZY(1,I2)
-ZX3 = ZXZY(1,I3)
-ZY1 = ZXZY(2,I1)
-ZY2 = ZXZY(2,I2)
-ZY3 = ZXZY(2,I3)
-GO TO 2
+zx1 = zxzy(1,i1)
+zx2 = zxzy(1,i2)
+zx3 = zxzy(1,i3)
+zy1 = zxzy(2,i1)
+zy2 = zxzy(2,i2)
+zy3 = zxzy(2,i3)
+go to 2
 !
 ! COMPUTE DERIVATIVE ESTIMATES AT THE VERTICES
 !
-1 CALL GRADL1(NN,I1,X,Y,Z,IADJ,IEND, ZX1,ZY1,IERR)
-CALL GRADL1(NN,I2,X,Y,Z,IADJ,IEND, ZX2,ZY2,IERR)
-CALL GRADL1(NN,I3,X,Y,Z,IADJ,IEND, ZX3,ZY3,IERR)
+1 call gradl1(nn,i1,x,y,z,iadj,iend, zx1,zy1,ierr)
+call gradl1(nn,i2,x,y,z,iadj,iend, zx2,zy2,ierr)
+call gradl1(nn,i3,x,y,z,iadj,iend, zx3,zy3,ierr)
 !
 ! SET LOCAL PARAMETERS FOR CALL TO TVAL
 !
-2 X1 = X(I1)
-Y1 = Y(I1)
-X2 = X(I2)
-Y2 = Y(I2)
-X3 = X(I3)
-Y3 = Y(I3)
-Z1 = Z(I1)
-Z2 = Z(I2)
-Z3 = Z(I3)
-CALL TVAL(XP,YP,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1,ZX2, &
-&ZX3,ZY1,ZY2,ZY3,0, PZ,DUM,DUM,IERR)
-IF (IERR .NE. 0) GO TO 12
-IER = 0
-RETURN
+2 x1 = x(i1)
+y1 = y(i1)
+x2 = x(i2)
+y2 = y(i2)
+x3 = x(i3)
+y3 = y(i3)
+z1 = z(i1)
+z2 = z(i2)
+z3 = z(i3)
+call tval(xp,yp,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1,zx2, &
+&zx3,zy1,zy2,zy3,0, pz,dum,dum,ierr)
+if (ierr .ne. 0) go to 12
+ier = 0
+return
 !
 ! P IS OUTSIDE OF THE MESH BOUNDARY.  EXTRAPOLATE TO P BY
 !   PASSING A LINEAR FUNCTION OF ONE VARIABLE THROUGH THE
@@ -4141,100 +4141,100 @@ RETURN
 ! DETERMINE Q BY TRAVERSING THE BOUNDARY STARTING FROM
 !   THE RIGHTMOST VISIBLE NODE I1.
 !
-3 N2 = I1
+3 n2 = i1
 !
 ! SET N1 TO THE LAST NONZERO NEIGHBOR OF N2 AND COMPUTE DP
 !
-4 INDX = IEND(N2) - 1
-N1 = IADJ(INDX)
-X1 = X(N1)
-Y1 = Y(N1)
-X2 = X(N2)
-Y2 = Y(N2)
-DP = (X1-X2)*(XP-X2) + (Y1-Y2)*(YP-Y2)
-IF (DP .LE. 0.) GO TO 5
-IF ((XP-X1)*(X2-X1) + (YP-Y1)*(Y2-Y1) .GT. 0.) GO TO 8
-N2 = N1
-GO TO 4
+4 indx = iend(n2) - 1
+n1 = iadj(indx)
+x1 = x(n1)
+y1 = y(n1)
+x2 = x(n2)
+y2 = y(n2)
+dp = (x1-x2)*(xp-x2) + (y1-y2)*(yp-y2)
+if (dp .le. 0.) go to 5
+if ((xp-x1)*(x2-x1) + (yp-y1)*(y2-y1) .gt. 0.) go to 8
+n2 = n1
+go to 4
 !
 ! N2 IS THE CLOSEST BOUNDARY POINT TO P.  COMPUTE PARTIAL
 !   DERIVATIVES AT N2.
 !
-5 IF (IFLAG .NE. 1) GO TO 6
-ZX2 = ZXZY(1,N2)
-ZY2 = ZXZY(2,N2)
-GO TO 7
-6 CALL GRADL1(NN,N2,X,Y,Z,IADJ,IEND, ZX2,ZY2,IERR)
+5 if (iflag .ne. 1) go to 6
+zx2 = zxzy(1,n2)
+zy2 = zxzy(2,n2)
+go to 7
+6 call gradl1(nn,n2,x,y,z,iadj,iend, zx2,zy2,ierr)
 !
 ! COMPUTE EXTRAPOLATED VALUE AT P
 !
-7 PZ = Z(N2) + ZX2*(XP-X2) + ZY2*(YP-Y2)
-IER = 1
-RETURN
+7 pz = z(n2) + zx2*(xp-x2) + zy2*(yp-y2)
+ier = 1
+return
 !
 ! THE CLOSEST BOUNDARY POINT Q LIES ON N2-N1.  COMPUTE
 !   PARTIALS AT N1 AND N2.
 !
-8 IF (IFLAG .NE. 1) GO TO 9
-ZX1 = ZXZY(1,N1)
-ZY1 = ZXZY(2,N1)
-ZX2 = ZXZY(1,N2)
-ZY2 = ZXZY(2,N2)
-GO TO 10
-9 CALL GRADL1(NN,N1,X,Y,Z,IADJ,IEND, ZX1,ZY1,IERR)
-CALL GRADL1(NN,N2,X,Y,Z,IADJ,IEND, ZX2,ZY2,IERR)
+8 if (iflag .ne. 1) go to 9
+zx1 = zxzy(1,n1)
+zy1 = zxzy(2,n1)
+zx2 = zxzy(1,n2)
+zy2 = zxzy(2,n2)
+go to 10
+9 call gradl1(nn,n1,x,y,z,iadj,iend, zx1,zy1,ierr)
+call gradl1(nn,n2,x,y,z,iadj,iend, zx2,zy2,ierr)
 !
 ! COMPUTE Q, ITS BARYCENTRIC COORDINATES, AND THE CARDINAL
 !   FUNCTIONS FOR EXTRAPOLATION
 !
-10 U = X2-X1
-V = Y2-Y1
-R1 = DP/(U**2 + V**2)
-R2 = 1. - R1
-XQ = R1*X1 + R2*X2
-YQ = R1*Y1 + R2*Y2
-F1 = R1*R1*R2
-F2 = R1*R2*R2
-A1 = R1 + (F1-F2)
-A2 = R2 - (F1-F2)
-B1 = U*F1
-B2 = -U*F2
-C1 = V*F1
-C2 = -V*F2
+10 u = x2-x1
+v = y2-y1
+r1 = dp/(u**2 + v**2)
+r2 = 1. - r1
+xq = r1*x1 + r2*x2
+yq = r1*y1 + r2*y2
+f1 = r1*r1*r2
+f2 = r1*r2*r2
+a1 = r1 + (f1-f2)
+a2 = r2 - (f1-f2)
+b1 = u*f1
+b2 = -u*f2
+c1 = v*f1
+c2 = -v*f2
 !
 ! COMPUTE THE VALUE OF THE INTERPOLATORY SURFACE (TVAL)
 !   AT Q
 !
-PZ = A1*Z(N1) + A2*Z(N2) + B1*ZX1 + B2*ZX2 + &
-&C1*ZY1 + C2*ZY2
+pz = a1*z(n1) + a2*z(n2) + b1*zx1 + b2*zx2 + &
+&c1*zy1 + c2*zy2
 !
 ! COMPUTE THE EXTRAPOLATED VALUE AT P
 !
-PZ = PZ + (R1*ZX1 + R2*ZX2)*(XP-XQ) + &
-&(R1*ZY1 + R2*ZY2)*(YP-YQ)
-IER = 1
-RETURN
+pz = pz + (r1*zx1 + r2*zx2)*(xp-xq) + &
+&(r1*zy1 + r2*zy2)*(yp-yq)
+ier = 1
+return
 !
 ! N, IFLAG, OR IST OUT OF RANGE
 !
-11 IER = -1
-RETURN
+11 ier = -1
+return
 !
 ! NODES ARE COLLINEAR
 !
-12 IER = -2
-RETURN
-END SUBROUTINE INTRC1
+12 ier = -2
+return
+end subroutine intrc1
 
-SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1, &
-&ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY, &
-&IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IFLAG
-INTEGER, INTENT(INOUT) :: IER
-REAL, INTENT(IN) :: X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, ZX1, &
-&ZX2, ZX3, ZY1, ZY2, ZY3
-REAL, INTENT(INOUT) :: W, WX, WY
+subroutine tval (x,y,x1,x2,x3,y1,y2,y3,z1,z2,z3,zx1, &
+&zx2,zx3,zy1,zy2,zy3,iflag, w,wx,wy, &
+&ier)
+implicit none
+integer, intent(in) :: iflag
+integer, intent(inout) :: ier
+real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
+&zx2, zx3, zy1, zy2, zy3
+real, intent(inout) :: w, wx, wy
 !
 !***********************************************************
 !
@@ -4302,11 +4302,11 @@ REAL, INTENT(INOUT) :: W, WX, WY
 !
 !***********************************************************
 !
-INTEGER :: I, IP1, IP2, IP3
-REAL :: U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), RY(3), &
-&PHI(3), PHIX(3), PHIY(3), RMIN, C1, C2, RO(3), ROX(3), ROY(3), &
-&F(3), G(3), GX(3), GY(3), P(3), PX(3), PY(3), Q(3), QX(3), QY(3), &
-&A(3), AX(3), AY(3), B(3), BX(3), BY(3), C(3), CX(3), CY(3)
+integer :: i, ip1, ip2, ip3
+real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
+&phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
+&f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
+&a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
 !
 ! LOCAL PARAMETERS -
 !
@@ -4350,191 +4350,191 @@ REAL :: U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), RY(3), &
 !                     COEFFICIENT IS ZY(K)
 ! CX(K),CY(K) =     X,Y PARTIALS OF C(K)
 !
-U(1) = X3 - X2
-U(2) = X1 - X3
-U(3) = X2 - X1
+u(1) = x3 - x2
+u(2) = x1 - x3
+u(3) = x2 - x1
 !
-V(1) = Y3 - Y2
-V(2) = Y1 - Y3
-V(3) = Y2 - Y1
+v(1) = y3 - y2
+v(2) = y1 - y3
+v(3) = y2 - y1
 !
-do 1 I = 1,3
-  SL(I) = U(I)*U(I) + V(I)*V(I)
-1 CONTINUE
+do 1 i = 1,3
+  sl(i) = u(i)*u(i) + v(i)*v(i)
+1 continue
 !
 ! AREA = 3-1 X 3-2
 !
-AREA = U(1)*V(2) - U(2)*V(1)
-IF (AREA .EQ. 0.) GO TO 9
+area = u(1)*v(2) - u(2)*v(1)
+if (area .eq. 0.) go to 9
 !
 ! R(1) = (2-3 X 2-(X,Y))/AREA, R(2) = (1-(X,Y) X 1-3)/AREA,
 !   R(3) = (1-2 X 1-(X,Y))/AREA
 !
-R(1) = (U(1)*(Y-Y2) - V(1)*(X-X2))/AREA
-XP = X - X1
-YP = Y - Y1
-R(2) = (U(2)*YP - V(2)*XP)/AREA
-R(3) = (U(3)*YP - V(3)*XP)/AREA
-IER = 0
+r(1) = (u(1)*(y-y2) - v(1)*(x-x2))/area
+xp = x - x1
+yp = y - y1
+r(2) = (u(2)*yp - v(2)*xp)/area
+r(3) = (u(3)*yp - v(3)*xp)/area
+ier = 0
 !
-PHI(1) = R(2)*R(3)
-PHI(2) = R(3)*R(1)
-PHI(3) = R(1)*R(2)
+phi(1) = r(2)*r(3)
+phi(2) = r(3)*r(1)
+phi(3) = r(1)*r(2)
 !
-RMIN = AMIN1(R(1),R(2),R(3))
-IF (RMIN .NE. R(1)) GO TO 3
-IP1 = 1
-IP2 = 2
-IP3 = 3
-GO TO 5
-3 IF (RMIN .NE. R(2)) GO TO 4
-IP1 = 2
-IP2 = 3
-IP3 = 1
-GO TO 5
-4 IP1 = 3
-IP2 = 1
-IP3 = 2
+rmin = amin1(r(1),r(2),r(3))
+if (rmin .ne. r(1)) go to 3
+ip1 = 1
+ip2 = 2
+ip3 = 3
+go to 5
+3 if (rmin .ne. r(2)) go to 4
+ip1 = 2
+ip2 = 3
+ip3 = 1
+go to 5
+4 ip1 = 3
+ip2 = 1
+ip3 = 2
 !
-5 C1 = RMIN*RMIN/2.
-C2 = RMIN/3.
-RO(IP1) = (PHI(IP1) + 5.*C1/3.)*R(IP1) - C1
-RO(IP2) = C1*(R(IP3) - C2)
-RO(IP3) = C1*(R(IP2) - C2)
+5 c1 = rmin*rmin/2.
+c2 = rmin/3.
+ro(ip1) = (phi(ip1) + 5.*c1/3.)*r(ip1) - c1
+ro(ip2) = c1*(r(ip3) - c2)
+ro(ip3) = c1*(r(ip2) - c2)
 !
-F(1) = 3.*(SL(2)-SL(3))/SL(1)
-F(2) = 3.*(SL(3)-SL(1))/SL(2)
-F(3) = 3.*(SL(1)-SL(2))/SL(3)
+f(1) = 3.*(sl(2)-sl(3))/sl(1)
+f(2) = 3.*(sl(3)-sl(1))/sl(2)
+f(3) = 3.*(sl(1)-sl(2))/sl(3)
 !
-G(1) = (R(2)-R(3))*PHI(1) + F(1)*RO(1) - RO(2) + RO(3)
-G(2) = (R(3)-R(1))*PHI(2) + F(2)*RO(2) - RO(3) + RO(1)
-G(3) = (R(1)-R(2))*PHI(3) + F(3)*RO(3) - RO(1) + RO(2)
+g(1) = (r(2)-r(3))*phi(1) + f(1)*ro(1) - ro(2) + ro(3)
+g(2) = (r(3)-r(1))*phi(2) + f(2)*ro(2) - ro(3) + ro(1)
+g(3) = (r(1)-r(2))*phi(3) + f(3)*ro(3) - ro(1) + ro(2)
 !
-DO I = 1,3
-  P(I) = G(I) + PHI(I)
-  Q(I) = G(I) - PHI(I)
-  END DO
+do i = 1,3
+  p(i) = g(i) + phi(i)
+  q(i) = g(i) - phi(i)
+  end do
 !
-A(1) = R(1) + G(3) - G(2)
-A(2) = R(2) + G(1) - G(3)
-A(3) = R(3) + G(2) - G(1)
+a(1) = r(1) + g(3) - g(2)
+a(2) = r(2) + g(1) - g(3)
+a(3) = r(3) + g(2) - g(1)
 !
-B(1) = U(3)*P(3) + U(2)*Q(2)
-B(2) = U(1)*P(1) + U(3)*Q(3)
-B(3) = U(2)*P(2) + U(1)*Q(1)
+b(1) = u(3)*p(3) + u(2)*q(2)
+b(2) = u(1)*p(1) + u(3)*q(3)
+b(3) = u(2)*p(2) + u(1)*q(1)
 !
-C(1) = V(3)*P(3) + V(2)*Q(2)
-C(2) = V(1)*P(1) + V(3)*Q(3)
-C(3) = V(2)*P(2) + V(1)*Q(1)
+c(1) = v(3)*p(3) + v(2)*q(2)
+c(2) = v(1)*p(1) + v(3)*q(3)
+c(3) = v(2)*p(2) + v(1)*q(1)
 !
 ! W IS A LINEAR COMBINATION OF THE CARDINAL FUNCTIONS
 !
-W = A(1)*Z1 + A(2)*Z2 + A(3)*Z3 + (B(1)*ZX1 + B(2)*ZX2 &
-&+ B(3)*ZX3 + C(1)*ZY1 + C(2)*ZY2 + C(3)*ZY3)/2.
-IF (IFLAG .NE. 1) RETURN
+w = a(1)*z1 + a(2)*z2 + a(3)*z3 + (b(1)*zx1 + b(2)*zx2 &
+&+ b(3)*zx3 + c(1)*zy1 + c(2)*zy2 + c(3)*zy3)/2.
+if (iflag .ne. 1) return
 !
 ! COMPUTE WX AND WY
 !
-DO I = 1,3
-  RX(I) = -V(I)/AREA
-  RY(I) = U(I)/AREA
-  END DO
-PHIX(1) = R(2)*RX(3) + RX(2)*R(3)
-PHIY(1) = R(2)*RY(3) + RY(2)*R(3)
-PHIX(2) = R(3)*RX(1) + RX(3)*R(1)
-PHIY(2) = R(3)*RY(1) + RY(3)*R(1)
-PHIX(3) = R(1)*RX(2) + RX(1)*R(2)
-PHIY(3) = R(1)*RY(2) + RY(1)*R(2)
+do i = 1,3
+  rx(i) = -v(i)/area
+  ry(i) = u(i)/area
+  end do
+phix(1) = r(2)*rx(3) + rx(2)*r(3)
+phiy(1) = r(2)*ry(3) + ry(2)*r(3)
+phix(2) = r(3)*rx(1) + rx(3)*r(1)
+phiy(2) = r(3)*ry(1) + ry(3)*r(1)
+phix(3) = r(1)*rx(2) + rx(1)*r(2)
+phiy(3) = r(1)*ry(2) + ry(1)*r(2)
 !
-ROX(IP1) = RX(IP1)*(PHI(IP1) + 5.*C1) + &
-&R(IP1)*(PHIX(IP1) - RX(IP1))
-ROY(IP1) = RY(IP1)*(PHI(IP1) + 5.*C1) + &
-&R(IP1)*(PHIY(IP1) - RY(IP1))
-ROX(IP2) = RX(IP1)*(PHI(IP2) - C1) + C1*RX(IP3)
-ROY(IP2) = RY(IP1)*(PHI(IP2) - C1) + C1*RY(IP3)
-ROX(IP3) = RX(IP1)*(PHI(IP3) - C1) + C1*RX(IP2)
-ROY(IP3) = RY(IP1)*(PHI(IP3) - C1) + C1*RY(IP2)
+rox(ip1) = rx(ip1)*(phi(ip1) + 5.*c1) + &
+&r(ip1)*(phix(ip1) - rx(ip1))
+roy(ip1) = ry(ip1)*(phi(ip1) + 5.*c1) + &
+&r(ip1)*(phiy(ip1) - ry(ip1))
+rox(ip2) = rx(ip1)*(phi(ip2) - c1) + c1*rx(ip3)
+roy(ip2) = ry(ip1)*(phi(ip2) - c1) + c1*ry(ip3)
+rox(ip3) = rx(ip1)*(phi(ip3) - c1) + c1*rx(ip2)
+roy(ip3) = ry(ip1)*(phi(ip3) - c1) + c1*ry(ip2)
 !
-GX(1) = (RX(2) - RX(3))*PHI(1) + (R(2) - R(3))*PHIX(1) &
-&+ F(1)*ROX(1) - ROX(2) + ROX(3)
-GY(1) = (RY(2) - RY(3))*PHI(1) + (R(2) - R(3))*PHIY(1) &
-&+ F(1)*ROY(1) - ROY(2) + ROY(3)
-GX(2) = (RX(3) - RX(1))*PHI(2) + (R(3) - R(1))*PHIX(2) &
-&+ F(2)*ROX(2) - ROX(3) + ROX(1)
-GY(2) = (RY(3) - RY(1))*PHI(2) + (R(3) - R(1))*PHIY(2) &
-&+ F(2)*ROY(2) - ROY(3) + ROY(1)
-GX(3) = (RX(1) - RX(2))*PHI(3) + (R(1) - R(2))*PHIX(3) &
-&+ F(3)*ROX(3) - ROX(1) + ROX(2)
-GY(3) = (RY(1) - RY(2))*PHI(3) + (R(1) - R(2))*PHIY(3) &
-&+ F(3)*ROY(3) - ROY(1) + ROY(2)
+gx(1) = (rx(2) - rx(3))*phi(1) + (r(2) - r(3))*phix(1) &
+&+ f(1)*rox(1) - rox(2) + rox(3)
+gy(1) = (ry(2) - ry(3))*phi(1) + (r(2) - r(3))*phiy(1) &
+&+ f(1)*roy(1) - roy(2) + roy(3)
+gx(2) = (rx(3) - rx(1))*phi(2) + (r(3) - r(1))*phix(2) &
+&+ f(2)*rox(2) - rox(3) + rox(1)
+gy(2) = (ry(3) - ry(1))*phi(2) + (r(3) - r(1))*phiy(2) &
+&+ f(2)*roy(2) - roy(3) + roy(1)
+gx(3) = (rx(1) - rx(2))*phi(3) + (r(1) - r(2))*phix(3) &
+&+ f(3)*rox(3) - rox(1) + rox(2)
+gy(3) = (ry(1) - ry(2))*phi(3) + (r(1) - r(2))*phiy(3) &
+&+ f(3)*roy(3) - roy(1) + roy(2)
 !
-DO I = 1,3
-  PX(I) = GX(I) + PHIX(I)
-  PY(I) = GY(I) + PHIY(I)
-  QX(I) = GX(I) - PHIX(I)
-  QY(I) = GY(I) - PHIY(I)
-  END DO
+do i = 1,3
+  px(i) = gx(i) + phix(i)
+  py(i) = gy(i) + phiy(i)
+  qx(i) = gx(i) - phix(i)
+  qy(i) = gy(i) - phiy(i)
+  end do
 !
-AX(1) = RX(1) + GX(3) - GX(2)
-AY(1) = RY(1) + GY(3) - GY(2)
-AX(2) = RX(2) + GX(1) - GX(3)
-AY(2) = RY(2) + GY(1) - GY(3)
-AX(3) = RX(3) + GX(2) - GX(1)
-AY(3) = RY(3) + GY(2) - GY(1)
+ax(1) = rx(1) + gx(3) - gx(2)
+ay(1) = ry(1) + gy(3) - gy(2)
+ax(2) = rx(2) + gx(1) - gx(3)
+ay(2) = ry(2) + gy(1) - gy(3)
+ax(3) = rx(3) + gx(2) - gx(1)
+ay(3) = ry(3) + gy(2) - gy(1)
 !
-BX(1) = U(3)*PX(3) + U(2)*QX(2)
-BY(1) = U(3)*PY(3) + U(2)*QY(2)
-BX(2) = U(1)*PX(1) + U(3)*QX(3)
-BY(2) = U(1)*PY(1) + U(3)*QY(3)
-BX(3) = U(2)*PX(2) + U(1)*QX(1)
-BY(3) = U(2)*PY(2) + U(1)*QY(1)
+bx(1) = u(3)*px(3) + u(2)*qx(2)
+by(1) = u(3)*py(3) + u(2)*qy(2)
+bx(2) = u(1)*px(1) + u(3)*qx(3)
+by(2) = u(1)*py(1) + u(3)*qy(3)
+bx(3) = u(2)*px(2) + u(1)*qx(1)
+by(3) = u(2)*py(2) + u(1)*qy(1)
 !
-CX(1) = V(3)*PX(3) + V(2)*QX(2)
-CY(1) = V(3)*PY(3) + V(2)*QY(2)
-CX(2) = V(1)*PX(1) + V(3)*QX(3)
-CY(2) = V(1)*PY(1) + V(3)*QY(3)
-CX(3) = V(2)*PX(2) + V(1)*QX(1)
-CY(3) = V(2)*PY(2) + V(1)*QY(1)
+cx(1) = v(3)*px(3) + v(2)*qx(2)
+cy(1) = v(3)*py(3) + v(2)*qy(2)
+cx(2) = v(1)*px(1) + v(3)*qx(3)
+cy(2) = v(1)*py(1) + v(3)*qy(3)
+cx(3) = v(2)*px(2) + v(1)*qx(1)
+cy(3) = v(2)*py(2) + v(1)*qy(1)
 !
 ! WX AND WY ARE LINEAR COMBINATIONS OF THE CARDINAL
 !   FUNCTIONS
 !
-WX = AX(1)*Z1 + AX(2)*Z2 + AX(3)*Z3 + (BX(1)*ZX1 + &
-&BX(2)*ZX2 + BX(3)*ZX3 + CX(1)*ZY1 + CX(2)*ZY2 + &
-&CX(3)*ZY3)/2.
-WY = AY(1)*Z1 + AY(2)*Z2 + AY(3)*Z3 + (BY(1)*ZX1 + &
-&BY(2)*ZX2 + BY(3)*ZX3 + CY(1)*ZY1 + CY(2)*ZY2 + &
-&CY(3)*ZY3)/2.
-RETURN
+wx = ax(1)*z1 + ax(2)*z2 + ax(3)*z3 + (bx(1)*zx1 + &
+&bx(2)*zx2 + bx(3)*zx3 + cx(1)*zy1 + cx(2)*zy2 + &
+&cx(3)*zy3)/2.
+wy = ay(1)*z1 + ay(2)*z2 + ay(3)*z3 + (by(1)*zx1 + &
+&by(2)*zx2 + by(3)*zx3 + cy(1)*zy1 + cy(2)*zy2 + &
+&cy(3)*zy3)/2.
+return
 !
 ! VERTICES ARE COLLINEAR
 !
-9 IER = 1
-W = 0.
-IF (IFLAG .NE. 1) RETURN
-WX = 0.
-WY = 0.
-RETURN
-END SUBROUTINE TVAL
+9 ier = 1
+w = 0.
+if (iflag .ne. 1) return
+wx = 0.
+wy = 0.
+return
+end subroutine tval
 
-SUBROUTINE MFIT(DIMEN,FITDEG,NFPOLS,NFPTS, &
-&FITCDS,NCROWS,FITVLS,WTS, &
-&RESIDS,ERROR,FITIWK,FITDWK, &
-&FIWKLN,FDWKLN,IREQD,DREQD)
-IMPLICIT NONE
+subroutine mfit(dimen,fitdeg,nfpols,nfpts, &
+&fitcds,ncrows,fitvls,wts, &
+&resids,error,fitiwk,fitdwk, &
+&fiwkln,fdwkln,ireqd,dreqd)
+implicit none
 !
-INTEGER, INTENT(INOUT) :: NFPOLS, FITDEG
-INTEGER, INTENT(IN) :: NFPTS, DIMEN, FIWKLN, FDWKLN
-INTEGER, INTENT(INOUT) :: ERROR, IREQD, DREQD
-INTEGER :: INDSTT, P, DIMP1
-INTEGER, INTENT(IN) :: NCROWS
-INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID, &
-&ALFL
-INTEGER, INTENT(INOUT) :: FITIWK(FIWKLN)
-REAL, INTENT(INOUT) :: FITDWK(FDWKLN), FITCDS(NCROWS,DIMEN)
-REAL, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
-REAL, INTENT(IN) :: WTS(NFPTS)
-REAL :: SCALE
+integer, intent(inout) :: nfpols, fitdeg
+integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
+integer, intent(inout) :: error, ireqd, dreqd
+integer :: indstt, p, dimp1
+integer, intent(in) :: ncrows
+integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
+&alfl
+integer, intent(inout) :: fitiwk(fiwkln)
+real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
+real, intent(inout) :: fitvls(nfpts), resids(nfpts)
+real, intent(in) :: wts(nfpts)
+real :: scale
 !
 !     ***************
 !     PURPOSE
@@ -4644,68 +4644,68 @@ REAL :: SCALE
 !     MFIT  CALLS  ALLOT  AND  GNRTP.
 !     ****************
 !
-DIMP1 = DIMEN + 1
+dimp1 = dimen + 1
 !
 !     ***************
 !
-CALL ALLOT(FITDEG,NFPOLS,NFPTS,DIMEN,FITIWK,FIWKLN,IREQD,DREQD, &
-&ERROR)
-IF ( ERROR .GE. 2 ) RETURN
+call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
+&error)
+if ( error .ge. 2 ) return
 !
-IF ( FDWKLN .GE. DREQD ) GO TO 10
-   ERROR = 4
-   RETURN
-10 CONTINUE
+if ( fdwkln .ge. dreqd ) go to 10
+   error = 4
+   return
+10 continue
 !
-PSIWID = FITIWK(3)
-ALFL = FITIWK(4)
-INDSTT = 1
-NEWSTT = 4 * NFPOLS + INDSTT
-MAXSTT = 1
-ALFSTT = MAXSTT + DIMP1
-CSTT = ALFSTT + ALFL
-SSQSTT = CSTT + NFPOLS
-PSISTT = SSQSTT + NFPOLS
+psiwid = fitiwk(3)
+alfl = fitiwk(4)
+indstt = 1
+newstt = 4 * nfpols + indstt
+maxstt = 1
+alfstt = maxstt + dimp1
+cstt = alfstt + alfl
+ssqstt = cstt + nfpols
+psistt = ssqstt + nfpols
 !
 !     ***************
 !
-   CALL GNRTP(FITDEG,FITDWK(ALFSTT), &
-&FITDWK(PSISTT),FITIWK(INDSTT), &
-&FITIWK(NEWSTT),FITDWK(SSQSTT),FITCDS, &
-&NCROWS,NFPOLS,DIMEN,NFPTS,FITVLS,RESIDS, &
-&FITDWK(CSTT),PSIWID,WTS,ALFL,DIMP1, &
-&FITDWK(MAXSTT),ERROR)
+   call gnrtp(fitdeg,fitdwk(alfstt), &
+&fitdwk(psistt),fitiwk(indstt), &
+&fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+&ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+&fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+&fitdwk(maxstt),error)
 !
 !     ***************
 !     STORE THE NUMBER OF BASIS POLYNOMIALS ACTUALLY COMPUTED
 !     BY THE MODIFIED ROUTINE INCDG CALLED BY GNRTP.
 !     ***************
 !
-FITIWK(1) = NFPOLS
+fitiwk(1) = nfpols
 !
 !     ***************
 !     UNSCALE THE RESIDUALS FOR THE BENEFIT OF THE USER.
 !     ***************
 !
-SCALE = FITDWK(DIMEN + 1)
-DO P = 1,NFPTS
-  RESIDS(P) = RESIDS(P) * SCALE
-END DO
-RETURN
-END SUBROUTINE MFIT
+scale = fitdwk(dimen + 1)
+do p = 1,nfpts
+  resids(p) = resids(p) * scale
+end do
+return
+end subroutine mfit
 
-SUBROUTINE ALLOT(DEGREE,NPOLYS,NPTS,DIMEN,IWORK,IWKLEN, &
-&IREQD,DREQD,ERROR)
-IMPLICIT NONE
+subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
+&ireqd,dreqd,error)
+implicit none
 !
-INTEGER, INTENT(INOUT) :: IREQD, DREQD
-INTEGER :: ALFL
-INTEGER, INTENT(INOUT) :: ERROR, NPOLYS, DEGREE
-INTEGER, INTENT(IN) :: DIMEN, NPTS
-INTEGER :: NEWSTT, PSIWID, KMXBAS, STARTJ, KJP1D2, INDEX
-INTEGER, INTENT(IN) :: IWKLEN
-INTEGER :: NPLYT4
-INTEGER, INTENT(INOUT) :: IWORK(IWKLEN)
+integer, intent(inout) :: ireqd, dreqd
+integer :: alfl
+integer, intent(inout) :: error, npolys, degree
+integer, intent(in) :: dimen, npts
+integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
+integer, intent(in) :: iwklen
+integer :: nplyt4
+integer, intent(inout) :: iwork(iwklen)
 !
 !     ***************
 !     PURPOSE
@@ -4782,13 +4782,13 @@ INTEGER, INTENT(INOUT) :: IWORK(IWKLEN)
 !     AND THE DIMENSION.
 !     ***************
 !
-CALL BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
-IF ( ERROR .GE. 2 ) RETURN
-IREQD = 4 * NPOLYS + DEGREE * DIMEN
-IF ( IWKLEN .GE. IREQD ) GO TO 5
-   ERROR = 4
-   RETURN
-5 NEWSTT = 4 * NPOLYS + 1
+call basiz(degree,npts,dimen,npolys,error)
+if ( error .ge. 2 ) return
+ireqd = 4 * npolys + degree * dimen
+if ( iwklen .ge. ireqd ) go to 5
+   error = 4
+   return
+5 newstt = 4 * npolys + 1
 !
 !     ***************
 !     SET UP USEFUL INDEXING ARRAYS
@@ -4797,17 +4797,17 @@ IF ( IWKLEN .GE. IREQD ) GO TO 5
 !          IWORK(NEWSTT ,..., IWORK(NEWSTT+DIMEN*DEGREE)
 !     ***************
 !
-CALL MTABLE(DEGREE,DIMEN,NPOLYS,IWORK,IWORK(NEWSTT),ALFL)
-IWORK(1) = DEGREE
-IWORK(2) = NPOLYS
+call mtable(degree,dimen,npolys,iwork,iwork(newstt),alfl)
+iwork(1) = degree
+iwork(2) = npolys
 !
 !     ***************
 !     FORCE  ALFL  TO BE AT LEAST 1 SO THAT DIMENSION STATEMENTS
 !     USING  ALFL  DO NOT BOMB.
 !     ***************
 !
-IF ( ALFL .GT. 1 ) ALFL = ALFL - 1
-IWORK(4) = ALFL
+if ( alfl .gt. 1 ) alfl = alfl - 1
+iwork(4) = alfl
 !
 !     ***************
 !     THE FOLLOWING IS A SECTION OF CODE FOR SETTING UP THE
@@ -4844,73 +4844,73 @@ IWORK(4) = ALFL
 !                           INDEXS(3,NPOLYS)               (CASE 4)
 !                        )
 !
-IF ( DEGREE .GT. 2 ) GO TO 10
+if ( degree .gt. 2 ) go to 10
 !
 !     ***************
 !     CASE 1
 !     ***************
 !
-   PSIWID = NPOLYS
-GO TO 40
-10 NPLYT4 = 4 * NPOLYS
+   psiwid = npolys
+go to 40
+10 nplyt4 = 4 * npolys
 !
 !     ***************
 !     KMXBAS  IS K
 !                 NPOLYS
 !     ***************
 !
-   KMXBAS = IWORK(NPLYT4 - 2)
+   kmxbas = iwork(nplyt4 - 2)
 !
-   IF ( KMXBAS .NE. DIMEN ) GO TO 20
+   if ( kmxbas .ne. dimen ) go to 20
 !
 !     ***************
 !     CASE 2
 !     ***************
 !
-      PSIWID = NPOLYS - IWORK(4 * NPOLYS - 1)
-   GO TO 40
+      psiwid = npolys - iwork(4 * npolys - 1)
+   go to 40
 !
 !     ***************
 !     INDEX =  NEWKJ( K      + 1 , DEGREE(NPOLYS-2) )
 !                      NPOLYS
 !     ***************
 !
-20 INDEX = NPLYT4 + (DEGREE - 3) * DIMEN + KMXBAS + 1
-      KJP1D2 = IWORK(INDEX)
+20 index = nplyt4 + (degree - 3) * dimen + kmxbas + 1
+      kjp1d2 = iwork(index)
 !
 !     ***************
 !     STARTJ  =  INDEXS(3,NPOLYS)
 !     ***************
 !
-      STARTJ = IWORK(NPLYT4 - 1)
-      IF ( STARTJ .GT. KJP1D2 ) GO TO 30
+      startj = iwork(nplyt4 - 1)
+      if ( startj .gt. kjp1d2 ) go to 30
 !
 !     ***************
 !     CASE 4
 !     ***************
 !
-         PSIWID = NPOLYS - STARTJ + 1
-      GO TO 40
+         psiwid = npolys - startj + 1
+      go to 40
 !
 !     ***************
 !     CASE 3
 !     ***************
 !
-30 PSIWID = NPOLYS - KJP1D2 + 1
-40 IWORK(3) = PSIWID
-DREQD = 2 * NPOLYS + DIMEN + 1 + NPTS * PSIWID + ALFL
-RETURN
-END SUBROUTINE ALLOT
+30 psiwid = npolys - kjp1d2 + 1
+40 iwork(3) = psiwid
+dreqd = 2 * npolys + dimen + 1 + npts * psiwid + alfl
+return
+end subroutine allot
 
-SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
-IMPLICIT NONE
+subroutine basiz(degree,npts,dimen,npolys,error)
+implicit none
 !
-INTEGER :: TOP, BOT
-INTEGER, INTENT(INOUT) :: DEGREE
-INTEGER, INTENT(IN) :: NPTS, DIMEN
-INTEGER, INTENT(INOUT) :: NPOLYS
-INTEGER, INTENT(OUT) :: ERROR
-INTEGER :: I, ROWLEN
+integer :: top, bot
+integer, intent(inout) :: degree
+integer, intent(in) :: npts, dimen
+integer, intent(inout) :: npolys
+integer, intent(out) :: error
+integer :: i, rowlen
 !
 !     ***************
 !     PURPOSE
@@ -4947,61 +4947,61 @@ INTEGER :: I, ROWLEN
 !     OCTOBER 16, 1984
 !     ****************
 !
-ERROR = 0
-IF ( NPTS .GE. 1 .AND. DIMEN .GE. 1 ) GO TO 10
-   ERROR = 3
-   RETURN
+error = 0
+if ( npts .ge. 1 .and. dimen .ge. 1 ) go to 10
+   error = 3
+   return
 !
-10 CONTINUE
-IF ( DEGREE .LT. 0 ) GO TO 30
+10 continue
+if ( degree .lt. 0 ) go to 30
 !
-  ROWLEN = 1
-  NPOLYS = 1
-  TOP = DIMEN - 1
-  BOT = 0
-  IF ( DEGREE .LT. 1 )  GO TO 30
-    DO I=1,DEGREE
-      TOP = TOP + 1
-      BOT = BOT + 1
-      ROWLEN = (ROWLEN*TOP)/BOT
-      NPOLYS = NPOLYS + ROWLEN
-    END DO
+  rowlen = 1
+  npolys = 1
+  top = dimen - 1
+  bot = 0
+  if ( degree .lt. 1 )  go to 30
+    do i=1,degree
+      top = top + 1
+      bot = bot + 1
+      rowlen = (rowlen*top)/bot
+      npolys = npolys + rowlen
+    end do
 !
-30 CONTINUE
-IF ( NPOLYS .GE. 1 ) GO TO 40
-      ERROR = 2
-      RETURN
-40 CONTINUE
-IF ( NPOLYS .LT. NPTS ) GO TO 50
-      NPOLYS = NPTS
-      ERROR = 1
-50 CONTINUE
-ROWLEN = 1
-I = 1
-DEGREE = 0
-TOP = DIMEN - 1
-BOT = 0
-60 CONTINUE
-IF ( I .GE. NPOLYS )  GO TO 70
-    TOP = TOP + 1
-    BOT = BOT + 1
-    ROWLEN = (ROWLEN*TOP)/BOT
-    I = I + ROWLEN
-    DEGREE = DEGREE + 1
-    IF ( I .LT. NPOLYS )  GO TO 60
-70 CONTINUE
-RETURN
-END SUBROUTINE BASIZ
+30 continue
+if ( npolys .ge. 1 ) go to 40
+      error = 2
+      return
+40 continue
+if ( npolys .lt. npts ) go to 50
+      npolys = npts
+      error = 1
+50 continue
+rowlen = 1
+i = 1
+degree = 0
+top = dimen - 1
+bot = 0
+60 continue
+if ( i .ge. npolys )  go to 70
+    top = top + 1
+    bot = bot + 1
+    rowlen = (rowlen*top)/bot
+    i = i + rowlen
+    degree = degree + 1
+    if ( i .lt. npolys )  go to 60
+70 continue
+return
+end subroutine basiz
 
-SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
-IMPLICIT NONE
+subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
+implicit none
 !
-INTEGER :: J, KJ, CURDEG, JPRIME, NWITHK, I, CURM1, RALEN, DIMM1, &
-&DIMM2
-INTEGER, INTENT(IN) :: NPOLYS, DIMEN, DEGREE
-INTEGER, INTENT(OUT) :: ALFLP1
-INTEGER :: DIMP1
-INTEGER, INTENT(INOUT) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
+integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, &
+&dimm2
+integer, intent(in) :: npolys, dimen, degree
+integer, intent(out) :: alflp1
+integer :: dimp1
+integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !
 !     ***************
 !     PURPOSE
@@ -5075,7 +5075,7 @@ INTEGER, INTENT(INOUT) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
 !     OCTOBER 16, 1984
 !     ****************
 !
-ALFLP1 = 1
+alflp1 = 1
 !
 !     ***************
 !     SET  INDEXS (4,1) TO 1 SO THAT  ALFL - INDEXS (4,1)+1 IS THE
@@ -5084,85 +5084,85 @@ ALFLP1 = 1
 !     AND  ALFLP1  OTHERWISE.
 !     ***************
 !
-INDEXS(4,1) = 1
+indexs(4,1) = 1
 !
-IF ( NPOLYS .EQ. 1 ) RETURN
-J = 2
-do 10 KJ = 1,DIMEN
-   NEWKJ(KJ,1) = KJ + 1
-   INDEXS(1,J) = 1
-   INDEXS(2,J) = KJ
-   INDEXS(3,J) = 1
-   INDEXS(4,J) = ALFLP1
-   ALFLP1 = ALFLP1 + J - 1
-   IF ( J .EQ. NPOLYS ) RETURN
-10 J = J + 1
-IF ( DEGREE .EQ. 1 ) RETURN
-RALEN = 1
-DIMM1 = DIMEN - 1
-DIMM2 = DIMEN - 2
-DIMP1 = DIMEN + 1
-do 70 CURDEG = 2,DEGREE
-   CURM1 = CURDEG - 1
-   RALEN = (RALEN * (DIMM2 + CURDEG)) / CURM1
-   NWITHK = RALEN
-   KJ = 1
-20 JPRIME = NEWKJ(KJ,CURM1)
-   NEWKJ(KJ,CURDEG) = J
-   IF ( KJ .EQ. DIMEN ) GO TO 60
-      do 50 I = 1,NWITHK
-         INDEXS(1,J) = JPRIME
-         INDEXS(2,J) = KJ
+if ( npolys .eq. 1 ) return
+j = 2
+do 10 kj = 1,dimen
+   newkj(kj,1) = kj + 1
+   indexs(1,j) = 1
+   indexs(2,j) = kj
+   indexs(3,j) = 1
+   indexs(4,j) = alflp1
+   alflp1 = alflp1 + j - 1
+   if ( j .eq. npolys ) return
+10 j = j + 1
+if ( degree .eq. 1 ) return
+ralen = 1
+dimm1 = dimen - 1
+dimm2 = dimen - 2
+dimp1 = dimen + 1
+do 70 curdeg = 2,degree
+   curm1 = curdeg - 1
+   ralen = (ralen * (dimm2 + curdeg)) / curm1
+   nwithk = ralen
+   kj = 1
+20 jprime = newkj(kj,curm1)
+   newkj(kj,curdeg) = j
+   if ( kj .eq. dimen ) go to 60
+      do 50 i = 1,nwithk
+         indexs(1,j) = jprime
+         indexs(2,j) = kj
 !
 !     ***************
 !     CALCULATE  INDEXS (3, J ),  INDEXS (4, J )
 !     ***************
 !
-         IF ( KJ .LT. INDEXS(2,JPRIME) ) GO TO 30
-            INDEXS(3,J) = INDEXS(1,JPRIME)
-            GO TO 40
-30 INDEXS(3,J) = NEWKJ(1,CURDEG - 1)
-40 INDEXS(4,J) = ALFLP1
-         ALFLP1 = ALFLP1 + J - INDEXS(3,J)
-         IF ( J .EQ. NPOLYS ) RETURN
+         if ( kj .lt. indexs(2,jprime) ) go to 30
+            indexs(3,j) = indexs(1,jprime)
+            go to 40
+30 indexs(3,j) = newkj(1,curdeg - 1)
+40 indexs(4,j) = alflp1
+         alflp1 = alflp1 + j - indexs(3,j)
+         if ( j .eq. npolys ) return
 !
-         JPRIME = JPRIME + 1
-50 J = J + 1
-      KJ = KJ + 1
-      NWITHK = (NWITHK * (DIMP1 - KJ)) / (DIMEN + CURDEG - KJ)
-      GO TO 20
-60 INDEXS(1,J) = JPRIME
-   INDEXS(2,J) = DIMEN
-   INDEXS(3,J) = INDEXS(1,JPRIME)
-   INDEXS(4,J) = ALFLP1
-   ALFLP1 = ALFLP1 + J - INDEXS(3,J)
-   IF ( J .EQ. NPOLYS ) RETURN
-70 J = J + 1
-RETURN
-END SUBROUTINE MTABLE
+         jprime = jprime + 1
+50 j = j + 1
+      kj = kj + 1
+      nwithk = (nwithk * (dimp1 - kj)) / (dimen + curdeg - kj)
+      go to 20
+60 indexs(1,j) = jprime
+   indexs(2,j) = dimen
+   indexs(3,j) = indexs(1,jprime)
+   indexs(4,j) = alflp1
+   alflp1 = alflp1 + j - indexs(3,j)
+   if ( j .eq. npolys ) return
+70 j = j + 1
+return
+end subroutine mtable
 
-SUBROUTINE GNRTP(DEGREE,ALPHA,PSI,INDEXS, &
-&NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS, &
-&DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
-&ALFL,DIMP1,MAXABS,ERROR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine gnrtp(degree,alpha,psi,indexs, &
+&newkj,sumsqs,coord,ncrows,npolys, &
+&dimen,npts,f,z,c,psiwid,weight, &
+&alfl,dimp1,maxabs,error)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER, INTENT(INOUT) :: DEGREE
-INTEGER, INTENT(IN) :: DIMEN
-INTEGER, INTENT(INOUT) :: NPOLYS
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: K
-INTEGER, INTENT(IN) :: PSIWID, ALFL
-INTEGER :: P, STTDEG, ONPLYS
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: DIMP1
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
-REAL, INTENT(INOUT) :: PSI(NPTS,PSIWID), ALPHA(ALFL), F(NPTS)
-REAL, INTENT(INOUT) :: COORD(NCROWS,DIMEN), MAXABS(DIMP1)
-REAL, INTENT(IN) :: WEIGHT(NPTS)
-REAL, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS), C(NPOLYS)
-REAL :: RUNTOT, RNTOT1
+integer, intent(inout) :: degree
+integer, intent(in) :: dimen
+integer, intent(inout) :: npolys
+integer, intent(in) :: npts
+integer :: k
+integer, intent(in) :: psiwid, alfl
+integer :: p, sttdeg, onplys
+integer, intent(inout) :: error
+integer :: dimp1
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
+real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
+real, intent(in) :: weight(npts)
+real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+real :: runtot, rntot1
 !
 !     ***************
 !     PURPOSE
@@ -5187,11 +5187,11 @@ REAL :: RUNTOT, RNTOT1
 !     SET UP THE SCALING.
 !     ***************
 !
-do 10 K = 1,DIMEN
-   CALL SCALPM(COORD(1,K),NPTS,MAXABS(K))
-10 CALL SCALDN(COORD(1,K),NPTS,MAXABS(K))
-CALL SCALPM(F,NPTS,MAXABS(DIMP1))
-CALL SCALDN(F,NPTS,MAXABS(DIMP1))
+do 10 k = 1,dimen
+   call scalpm(coord(1,k),npts,maxabs(k))
+10 call scaldn(coord(1,k),npts,maxabs(k))
+call scalpm(f,npts,maxabs(dimp1))
+call scaldn(f,npts,maxabs(dimp1))
 !
 !     ***************
 !      SUMSQS (1) = (1,1)
@@ -5199,58 +5199,58 @@ CALL SCALDN(F,NPTS,MAXABS(DIMP1))
 !      1
 !     ***************
 !
-RUNTOT = 0.0
-RNTOT1 = 0.0
-do 20 P = 1,NPTS
-   PSI(P,1) = 1.0
-   RNTOT1 = RNTOT1 + WEIGHT(P)
-20 RUNTOT = RUNTOT + F(P) * WEIGHT(P)
-SUMSQS(1) = RNTOT1
-C(1) = RUNTOT / RNTOT1
+runtot = 0.0
+rntot1 = 0.0
+do 20 p = 1,npts
+   psi(p,1) = 1.0
+   rntot1 = rntot1 + weight(p)
+20 runtot = runtot + f(p) * weight(p)
+sumsqs(1) = rntot1
+c(1) = runtot / rntot1
 !
 !     ***************
 !     Z = F - C
 !              1
 !     ***************
 !
-do 30 P = 1,NPTS
-30 Z(P) = F(P) - C(1)
+do 30 p = 1,npts
+30 z(p) = f(p) - c(1)
 !
-IF ( NPOLYS .EQ. 1 ) RETURN
-STTDEG = 1
-ONPLYS = 1
+if ( npolys .eq. 1 ) return
+sttdeg = 1
+onplys = 1
 !
-CALL INCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,SUMSQS, &
-&COORD,NCROWS,NPOLYS,DIMEN,NPTS,F,Z,C,PSIWID, &
-&WEIGHT,ALFL,ONPLYS,STTDEG,ERROR)
-RETURN
-END SUBROUTINE GNRTP
+call incdg(degree,alpha,psi,indexs,newkj,sumsqs, &
+&coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+&weight,alfl,onplys,sttdeg,error)
+return
+end subroutine gnrtp
 
-SUBROUTINE INCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ, &
-&SUMSQS,COORD,NCROWS,NPOLYS, &
-&DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
-&ALFL,ONPLYS,STTDEG,ERROR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine incdg(degree,alpha,psi,indexs,newkj, &
+&sumsqs,coord,ncrows,npolys, &
+&dimen,npts,f,z,c,psiwid,weight, &
+&alfl,onplys,sttdeg,error)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
-INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: J0MJ1, J1M1, STARTA
-INTEGER, INTENT(IN) :: ONPLYS
-INTEGER :: ONPP1
-INTEGER, INTENT(INOUT) :: STTDEG
-INTEGER :: INDEX1, INDEX2
-INTEGER, INTENT(INOUT) :: DEGREE, NPOLYS
-INTEGER, INTENT(IN) :: NPTS, DIMEN, PSIWID, ALFL
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
-REAL, INTENT(INOUT) :: ALPHA(ALFL)
-REAL, INTENT(IN) :: COORD(NCROWS,DIMEN)
-REAL, INTENT(INOUT) :: PSI(NPTS,PSIWID)
-REAL, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
-REAL, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
-REAL, INTENT(INOUT) :: Z(NPTS)
-REAL :: ARC, RUNTOT, RNTOT1, RNTOT2
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
+integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
+integer, intent(inout) :: error
+integer :: j0mj1, j1m1, starta
+integer, intent(in) :: onplys
+integer :: onpp1
+integer, intent(inout) :: sttdeg
+integer :: index1, index2
+integer, intent(inout) :: degree, npolys
+integer, intent(in) :: npts, dimen, psiwid, alfl
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+real, intent(inout) :: alpha(alfl)
+real, intent(in) :: coord(ncrows,dimen)
+real, intent(inout) :: psi(npts,psiwid)
+real, intent(inout) :: sumsqs(npolys), c(npolys)
+real, intent(in) :: f(npts), weight(npts)
+real, intent(inout) :: z(npts)
+real :: arc, runtot, rntot1, rntot2
 !
 !     ***************
 !     PURPOSE
@@ -5267,58 +5267,58 @@ REAL :: ARC, RUNTOT, RNTOT1, RNTOT2
 !
 !     ****************
 !
-IF ( ONPLYS .GE. 1 .AND. STTDEG .GE. 1 ) GO TO 10
-   ERROR = 6
-RETURN
-10 IF ( INDEXS(2,ONPLYS) .EQ. DIMEN ) GO TO 20
-      CURDEG = STTDEG
-   GO TO 30
-20 CURDEG = STTDEG + 1
-30 ONPP1 = ONPLYS + 1
-do 170 J = ONPP1,NPOLYS
-   JPRIME = INDEXS(1,J)
-   JINDEX = J - ((J - 1) / PSIWID) * PSIWID
-   JPINDX = JPRIME - ((JPRIME - 1) / PSIWID) * PSIWID
-   KJ = INDEXS(2,J)
-   START = INDEXS(3,J)
-   M = START
-   STARTA = INDEXS(4,J) - START
-   IF ( CURDEG .EQ. 1 ) GO TO 100
-   KJP = INDEXS(2,JPRIME)
-   J1 = NEWKJ(KJ,CURDEG - 1)
+if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
+   error = 6
+return
+10 if ( indexs(2,onplys) .eq. dimen ) go to 20
+      curdeg = sttdeg
+   go to 30
+20 curdeg = sttdeg + 1
+30 onpp1 = onplys + 1
+do 170 j = onpp1,npolys
+   jprime = indexs(1,j)
+   jindex = j - ((j - 1) / psiwid) * psiwid
+   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
+   kj = indexs(2,j)
+   start = indexs(3,j)
+   m = start
+   starta = indexs(4,j) - start
+   if ( curdeg .eq. 1 ) go to 100
+   kjp = indexs(2,jprime)
+   j1 = newkj(kj,curdeg - 1)
 !
 !     ***************
 !     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
 !     PREVIOUSLY CALCULATED ALPHAS.
 !     ***************
 !
-   IF ( KJ .LT. KJP ) GO TO 50
+   if ( kj .lt. kjp ) go to 50
 !
 !     ***************
 !     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
 !     CALCULATE  ALPHA ( J , JPP )
 !     ***************
 !
-   INDEX1 = INDEXS(4,J)
-   ALPHA(INDEX1) = SUMSQS(JPRIME) / SUMSQS(START)
+   index1 = indexs(4,j)
+   alpha(index1) = sumsqs(jprime) / sumsqs(start)
 !
-   M = START + 1
-   J3 = NEWKJ(1,CURDEG - 1) - 1
-   IF ( M .GT. J3 ) GO TO 50
+   m = start + 1
+   j3 = newkj(1,curdeg - 1) - 1
+   if ( m .gt. j3 ) go to 50
 !
 !     ***************
 !     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
 !     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
 !     ***************
 !
-      J1MJ2 = J1 - NEWKJ(KJ,CURDEG - 2)
+      j1mj2 = j1 - newkj(kj,curdeg - 2)
 !
-      do 40 L = M,J3
-         Q = J1MJ2 + L
-         INDEX1 = STARTA + L
-         INDEX2 = INDEXS(4,Q) - INDEXS(3,Q) + JPRIME
-40 ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) / &
-&SUMSQS(L)
+      do 40 l = m,j3
+         q = j1mj2 + l
+         index1 = starta + l
+         index2 = indexs(4,q) - indexs(3,q) + jprime
+40 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+&sumsqs(l)
 !
 !     ***************
 !     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN THE 2
@@ -5329,18 +5329,18 @@ do 170 J = ONPP1,NPOLYS
 !                              J
 !     ***************
 !
-   M = J3 + 1
-50 IF ( JPRIME .EQ. J1 ) GO TO 100
-      IF ( KJ .EQ. 1 ) GO TO 80
-      J1M1 = J1 - 1
-      do 70 L = M,J1M1
-         RUNTOT = 0.0
-         do 60 P = 1,NPTS
-            INDEX1 = L - ((L - 1) / PSIWID) * PSIWID
-60 RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) * &
-&PSI(P,INDEX1) * WEIGHT(P)
-         INDEX1 = STARTA + L
-70 ALPHA(INDEX1) = RUNTOT / SUMSQS(L)
+   m = j3 + 1
+50 if ( jprime .eq. j1 ) go to 100
+      if ( kj .eq. 1 ) go to 80
+      j1m1 = j1 - 1
+      do 70 l = m,j1m1
+         runtot = 0.0
+         do 60 p = 1,npts
+            index1 = l - ((l - 1) / psiwid) * psiwid
+60 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+&psi(p,index1) * weight(p)
+         index1 = starta + l
+70 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN
@@ -5348,15 +5348,15 @@ do 170 J = ONPP1,NPOLYS
 !      JP  - 1.
 !     ***************
 !
-80 J0MJ1 = NEWKJ(KJ,CURDEG) - J1
-      JPM1 = JPRIME - 1
-      do 90 L = J1,JPM1
-         Q = J0MJ1 + L
-         INDEX1 = STARTA + L
-         INDEX2 = INDEXS(4,Q) - INDEXS(3,Q) + JPRIME
-90 ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) / &
-&SUMSQS(L)
-      M = JPRIME
+80 j0mj1 = newkj(kj,curdeg) - j1
+      jpm1 = jprime - 1
+      do 90 l = j1,jpm1
+         q = j0mj1 + l
+         index1 = starta + l
+         index2 = indexs(4,q) - indexs(3,q) + jprime
+90 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+&sumsqs(l)
+      m = jprime
 !
 !     ***************
 !     CALCULATE THE REMAINING  ALPHA ( J , M ) FROM
@@ -5366,15 +5366,15 @@ do 170 J = ONPP1,NPOLYS
 !                           J
 !     ***************
 !
-100 JM1 = J - 1
-   do 120 L = M,JM1
-      RUNTOT = 0.0
-      do 110 P = 1,NPTS
-         INDEX1 = L - ((L - 1) / PSIWID) * PSIWID
-110 RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) * &
-&PSI(P,INDEX1) * WEIGHT(P)
-      INDEX1 = STARTA + L
-120 ALPHA(INDEX1) = RUNTOT / SUMSQS(L)
+100 jm1 = j - 1
+   do 120 l = m,jm1
+      runtot = 0.0
+      do 110 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+110 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+&psi(p,index1) * weight(p)
+      index1 = starta + l
+120 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     NOW CALCULATE THE  PSI (P,J),  SUMSQS (J) AND  C (J) USING
@@ -5390,26 +5390,26 @@ do 170 J = ONPP1,NPOLYS
 !      J         J
 !     ***************
 !
-130 JM1 = J - 1
-    ARC = 0.0
-    RNTOT1 = 0.0
-    RNTOT2 = 0.0
-    do 150 P = 1,NPTS
-        RUNTOT = COORD(P,KJ) * PSI(P,JPINDX)
-        do 140 L = START,JM1
-           INDEX1 = STARTA + L
-           INDEX2 = L - ((L - 1) / PSIWID) * PSIWID
-140 RUNTOT = RUNTOT - ALPHA(INDEX1) * PSI(P,INDEX2)
-        PSI(P,JINDEX) = RUNTOT
-        ARC = ARC + PSI(P,INDEX2) * PSI(P,JINDEX) * &
-&WEIGHT(P)
-        RNTOT1 = RNTOT1 + PSI(P,JINDEX) * PSI(P,JINDEX) * &
-&WEIGHT(P)
-150 RNTOT2 = RNTOT2 + Z(P) * PSI(P,JINDEX) * WEIGHT(P)
-    IF (ARC * ARC .GE. SUMSQS(JM1) * RNTOT1 * 1.E-03) &
-&GO TO 200
-    SUMSQS(J) = RNTOT1
-    C(J) = RNTOT2 / RNTOT1
+130 jm1 = j - 1
+    arc = 0.0
+    rntot1 = 0.0
+    rntot2 = 0.0
+    do 150 p = 1,npts
+        runtot = coord(p,kj) * psi(p,jpindx)
+        do 140 l = start,jm1
+           index1 = starta + l
+           index2 = l - ((l - 1) / psiwid) * psiwid
+140 runtot = runtot - alpha(index1) * psi(p,index2)
+        psi(p,jindex) = runtot
+        arc = arc + psi(p,index2) * psi(p,jindex) * &
+&weight(p)
+        rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+&weight(p)
+150 rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+    if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.e-03) &
+&go to 200
+    sumsqs(j) = rntot1
+    c(j) = rntot2 / rntot1
 !
 !     ***************
 !     CALCULATE THE NEW  Z ( P ) AND THE NEW  SSRES  USING
@@ -5418,31 +5418,31 @@ do 170 J = ONPP1,NPOLYS
 !              J      J
 !     ***************
 !
-    do 160 P = 1,NPTS
-160 Z(P) = Z(P) - C(J) * PSI(P,JINDEX)
-    STTDEG = CURDEG
-170 IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1
-RETURN
+    do 160 p = 1,npts
+160 z(p) = z(p) - c(j) * psi(p,jindex)
+    sttdeg = curdeg
+170 if ( kj .eq. dimen ) curdeg = curdeg + 1
+return
 !
 !     ***************
 !     THE J-TH BASIS MULTINOMIAL CANNOT BE COMPUTED ACCURATELY.
 !     ONLY J - 1 BASIS MULTINOMIALS ARE GENERATED.
 !     ***************
 !
-200 ERROR = -1
-DEGREE = STTDEG
-NPOLYS = JM1
-RETURN
-END SUBROUTINE INCDG
+200 error = -1
+degree = sttdeg
+npolys = jm1
+return
+end subroutine incdg
 
-SUBROUTINE SCALPM(COORD,NPTS,MAXABS)
-IMPLICIT NONE
+subroutine scalpm(coord,npts,maxabs)
+implicit none
 !
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: P
-REAL, INTENT(OUT) :: MAXABS
-REAL :: A
-REAL, INTENT(IN) :: COORD(NPTS)
+integer, intent(in) :: npts
+integer :: p
+real, intent(out) :: maxabs
+real :: a
+real, intent(in) :: coord(npts)
 !
 !     ***************
 !     PURPOSE
@@ -5467,20 +5467,20 @@ REAL, INTENT(IN) :: COORD(NPTS)
 !
 !     ****************
 !
-MAXABS = 0.0
-do 10 P = 1,NPTS
-   A = ABS(COORD(P))
-10 IF ( A .GT. MAXABS ) MAXABS = A
-RETURN
-END SUBROUTINE SCALPM
+maxabs = 0.0
+do 10 p = 1,npts
+   a = abs(coord(p))
+10 if ( a .gt. maxabs ) maxabs = a
+return
+end subroutine scalpm
 
-SUBROUTINE SCALDN(COORD,NPTS,MAXABS)
-IMPLICIT NONE
+subroutine scaldn(coord,npts,maxabs)
+implicit none
 !
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: P
-REAL, INTENT(IN) :: MAXABS
-REAL, INTENT(INOUT) :: COORD(NPTS)
+integer, intent(in) :: npts
+integer :: p
+real, intent(in) :: maxabs
+real, intent(inout) :: coord(npts)
 !
 !     ***************
 !     PURPOSE
@@ -5497,29 +5497,29 @@ REAL, INTENT(INOUT) :: COORD(NPTS)
 !
 !     ****************
 !
-IF ( MAXABS .EQ. 0.0E+00 ) RETURN
-   do 10 P = 1,NPTS
-10 COORD(P) = COORD(P) / MAXABS
-   RETURN
-END SUBROUTINE SCALDN
+if ( maxabs .eq. 0.0e+00 ) return
+   do 10 p = 1,npts
+10 coord(p) = coord(p) / maxabs
+   return
+end subroutine scaldn
 
-SUBROUTINE MEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS, &
-&ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NEROWS
+subroutine meval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
+&error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
+implicit none
+integer, intent(in) :: nerows
 !
-INTEGER, INTENT(IN) :: FIWKLN, FDWKLN
-INTEGER, INTENT(INOUT) :: NEPOLS
-INTEGER, INTENT(IN) :: NEPTS, DIMEN
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: MAXSTT, ALFSTT, CSTT
-INTEGER :: GBASIZ, ALFL, DIMP1
-INTEGER, INTENT(IN) :: EVLDEG
-INTEGER :: TOP, BOT, CURDEG, PSISTT
-INTEGER, INTENT(IN) :: FITIWK(FIWKLN)
-REAL, INTENT(INOUT) :: FITDWK(FDWKLN)
-REAL, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
-REAL, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+integer, intent(in) :: fiwkln, fdwkln
+integer, intent(inout) :: nepols
+integer, intent(in) :: nepts, dimen
+integer, intent(inout) :: error
+integer :: maxstt, alfstt, cstt
+integer :: gbasiz, alfl, dimp1
+integer, intent(in) :: evldeg
+integer :: top, bot, curdeg, psistt
+integer, intent(in) :: fitiwk(fiwkln)
+real, intent(inout) :: fitdwk(fdwkln)
+real, intent(in) :: evlcds(nerows,dimen)
+real, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     ***************
 !     PURPOSE
@@ -5619,64 +5619,64 @@ REAL, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
 !     FULL MULTINOMIAL DEGREE.
 !     ***************
 !
-IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-IF (EVLDEG) 40,10,20
+if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
+if (evldeg) 40,10,20
 !
-10 NEPOLS = 1
-GO TO 50
+10 nepols = 1
+go to 50
 !
-20 TOP = 1
-BOT = 1
-do 30 CURDEG = 1,EVLDEG
-   TOP = TOP * (DIMEN + CURDEG)
-30 BOT = BOT * CURDEG
-NEPOLS = TOP / BOT
+20 top = 1
+bot = 1
+do 30 curdeg = 1,evldeg
+   top = top * (dimen + curdeg)
+30 bot = bot * curdeg
+nepols = top / bot
 !
-40 GBASIZ = FITIWK(1)
-IF (NEPOLS .GT. GBASIZ .OR. NEPOLS .LT. 1) GO TO 100
+40 gbasiz = fitiwk(1)
+if (nepols .gt. gbasiz .or. nepols .lt. 1) go to 100
 !
-50 ERROR = 0
-DIMP1 = DIMEN + 1
-ALFL = FITIWK(4)
-MAXSTT = 1
-ALFSTT = DIMP1 + MAXSTT
-CSTT = ALFSTT + ALFL
-PSISTT = CSTT + FITIWK(2)
+50 error = 0
+dimp1 = dimen + 1
+alfl = fitiwk(4)
+maxstt = 1
+alfstt = dimp1 + maxstt
+cstt = alfstt + alfl
+psistt = cstt + fitiwk(2)
 !
 !     ***************
 !     THE ACTUAL EVALUATION IS DONE INSIDE  MEVAL1.
 !     ***************
 !
-CALL MEVAL1 (EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS, &
-&FITDWK(ALFSTT),FITIWK,FITDWK(PSISTT), &
-&EVLVLS,ALFL,FITDWK(MAXSTT),TEMP,DIMP1)
-RETURN
+call meval1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
+&fitdwk(alfstt),fitiwk,fitdwk(psistt), &
+&evlvls,alfl,fitdwk(maxstt),temp,dimp1)
+return
 !
 !     ***************
 !     ERROR RETURN
 !     ***************
 !
-100 ERROR = -1
-RETURN
-110 ERROR = -2
-RETURN
-END SUBROUTINE MEVAL
+100 error = -1
+return
+110 error = -2
+return
+end subroutine meval
 
-SUBROUTINE MEVAL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA, &
-&INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+&indexs,psi,f,alfl,maxabs,x,dimp1)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER, INTENT(IN) :: DIMEN, NEPTS, NPOLYS, ALFL, DIMP1
-INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS)
-REAL, INTENT(IN) :: ALPHA(ALFL), COORD(NCROWS,DIMEN)
-REAL, INTENT(INOUT) :: PSI(NPOLYS)
-REAL, INTENT(IN) :: C(NPOLYS)
-REAL, INTENT(INOUT) :: F(NEPTS)
-REAL, INTENT(IN) :: MAXABS(DIMP1)
-REAL, INTENT(INOUT) :: X(DIMEN)
-REAL :: RUNTOT, RNTOT1
+integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
+integer :: jm1, jprime, m, p, k, i, j, index
+integer, intent(in) :: indexs(4,npolys)
+real, intent(in) :: alpha(alfl), coord(ncrows,dimen)
+real, intent(inout) :: psi(npolys)
+real, intent(in) :: c(npolys)
+real, intent(inout) :: f(nepts)
+real, intent(in) :: maxabs(dimp1)
+real, intent(inout) :: x(dimen)
+real :: runtot, rntot1
 !
 !     ***************
 !     PURPOSE
@@ -5704,19 +5704,19 @@ REAL :: RUNTOT, RNTOT1
 !
 !     ****************
 !
-IF (NPOLYS .EQ. 1) GO TO 50
+if (npolys .eq. 1) go to 50
 !
-PSI(1) = 1.0
-do 40 P = 1,NEPTS
+psi(1) = 1.0
+do 40 p = 1,nepts
 !
 !     ***************
 !     SCALE THE COORDINATES OF THE P-TH POINT
 !     ***************
 !
-   DO K = 1,DIMEN
-        X(K) = COORD(P,K)
-        IF (MAXABS(K) .NE. 0.0) X(K) = X(K) / MAXABS(K)
-   END DO
+   do k = 1,dimen
+        x(k) = coord(p,k)
+        if (maxabs(k) .ne. 0.0) x(k) = x(k) / maxabs(k)
+   end do
 !
 !     ***************
 !     USE THE  BASIS FUNCTION COEFFICIENTS  C  AND RECURRENCE
@@ -5724,50 +5724,50 @@ do 40 P = 1,NEPTS
 !     AT THE P-TH POINT.
 !     ***************
 !
-   RNTOT1 = C(1)
-   do 30 J = 2,NPOLYS
-        K = INDEXS(2,J)
-        JPRIME = INDEXS(1,J)
-        RUNTOT = X(K) * PSI(JPRIME)
-        I = INDEXS(3,J)
-        JM1 = J - 1
-        do 20 M = I,JM1
-           INDEX = INDEXS(4,J) + M - I
-20 RUNTOT = RUNTOT - PSI(M) * ALPHA(INDEX)
-        PSI(J) = RUNTOT
-30 RNTOT1 = RNTOT1 + C(J) * PSI(J)
-40 F(P) = RNTOT1 * MAXABS(DIMP1)
-RETURN
+   rntot1 = c(1)
+   do 30 j = 2,npolys
+        k = indexs(2,j)
+        jprime = indexs(1,j)
+        runtot = x(k) * psi(jprime)
+        i = indexs(3,j)
+        jm1 = j - 1
+        do 20 m = i,jm1
+           index = indexs(4,j) + m - i
+20 runtot = runtot - psi(m) * alpha(index)
+        psi(j) = runtot
+30 rntot1 = rntot1 + c(j) * psi(j)
+40 f(p) = rntot1 * maxabs(dimp1)
+return
 !
 !     ***************
 !     COMPUTE THE DEGREE 0 POLYNOMIAL
 !     ***************
 !
-50 RUNTOT = C(1) * MAXABS(DIMP1)
-do 60 P = 1,NEPTS
-60 F(P) = RUNTOT
-RETURN
-END SUBROUTINE MEVAL1
+50 runtot = c(1) * maxabs(dimp1)
+do 60 p = 1,nepts
+60 f(p) = runtot
+return
+end subroutine meval1
 
-SUBROUTINE DMFIT(DIMEN,FITDEG,NFPOLS,NFPTS, &
-&FITCDS,NCROWS,FITVLS,WTS, &
-&RESIDS,ERROR,FITIWK,FITDWK, &
-&FIWKLN,FDWKLN,IREQD,DREQD)
-IMPLICIT NONE
+subroutine dmfit(dimen,fitdeg,nfpols,nfpts, &
+&fitcds,ncrows,fitvls,wts, &
+&resids,error,fitiwk,fitdwk, &
+&fiwkln,fdwkln,ireqd,dreqd)
+implicit none
 !
-INTEGER, INTENT(INOUT) :: NFPOLS, FITDEG
-INTEGER, INTENT(IN) :: NFPTS, DIMEN, FIWKLN, FDWKLN
-INTEGER, INTENT(INOUT) :: ERROR, IREQD, DREQD
-INTEGER :: INDSTT, P, DIMP1
-INTEGER, INTENT(IN) :: NCROWS
-INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID, &
-&ALFL
-INTEGER, INTENT(INOUT) :: FITIWK(FIWKLN)
-DOUBLE PRECISION, INTENT(INOUT) :: FITDWK(FDWKLN), &
-&FITCDS(NCROWS,DIMEN)
-DOUBLE PRECISION, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
-DOUBLE PRECISION, INTENT(IN) :: WTS(NFPTS)
-DOUBLE PRECISION :: SCALE
+integer, intent(inout) :: nfpols, fitdeg
+integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
+integer, intent(inout) :: error, ireqd, dreqd
+integer :: indstt, p, dimp1
+integer, intent(in) :: ncrows
+integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
+&alfl
+integer, intent(inout) :: fitiwk(fiwkln)
+double precision, intent(inout) :: fitdwk(fdwkln), &
+&fitcds(ncrows,dimen)
+double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
+double precision, intent(in) :: wts(nfpts)
+double precision :: scale
 !
 !     ***************
 !     PURPOSE
@@ -5878,81 +5878,81 @@ DOUBLE PRECISION :: SCALE
 !     DMFIT  CALLS  ALLOT  AND  DGNRTP.
 !     ****************
 !
-DIMP1 = DIMEN + 1
+dimp1 = dimen + 1
 !
 !     ***************
 !
-CALL ALLOT(FITDEG,NFPOLS,NFPTS,DIMEN,FITIWK,FIWKLN,IREQD,DREQD, &
-&ERROR)
-IF ( ERROR .GE. 2 ) RETURN
+call allot(fitdeg,nfpols,nfpts,dimen,fitiwk,fiwkln,ireqd,dreqd, &
+&error)
+if ( error .ge. 2 ) return
 !
-IF ( FDWKLN .GE. DREQD ) GO TO 10
-   ERROR = 4
-   RETURN
-10 CONTINUE
+if ( fdwkln .ge. dreqd ) go to 10
+   error = 4
+   return
+10 continue
 !
-PSIWID = FITIWK(3)
-ALFL = FITIWK(4)
-INDSTT = 1
-NEWSTT = 4 * NFPOLS + INDSTT
-MAXSTT = 1
-ALFSTT = MAXSTT + DIMP1
-CSTT = ALFSTT + ALFL
-SSQSTT = CSTT + NFPOLS
-PSISTT = SSQSTT + NFPOLS
+psiwid = fitiwk(3)
+alfl = fitiwk(4)
+indstt = 1
+newstt = 4 * nfpols + indstt
+maxstt = 1
+alfstt = maxstt + dimp1
+cstt = alfstt + alfl
+ssqstt = cstt + nfpols
+psistt = ssqstt + nfpols
 !
 !     ***************
 !
-   CALL DGNRTP(FITDEG,FITDWK(ALFSTT), &
-&FITDWK(PSISTT),FITIWK(INDSTT), &
-&FITIWK(NEWSTT),FITDWK(SSQSTT),FITCDS, &
-&NCROWS,NFPOLS,DIMEN,NFPTS,FITVLS,RESIDS, &
-&FITDWK(CSTT),PSIWID,WTS,ALFL,DIMP1, &
-&FITDWK(MAXSTT),ERROR)
+   call dgnrtp(fitdeg,fitdwk(alfstt), &
+&fitdwk(psistt),fitiwk(indstt), &
+&fitiwk(newstt),fitdwk(ssqstt),fitcds, &
+&ncrows,nfpols,dimen,nfpts,fitvls,resids, &
+&fitdwk(cstt),psiwid,wts,alfl,dimp1, &
+&fitdwk(maxstt),error)
 !
 !     ***************
 !     STORE THE NUMBER OF BASIS POLYNOMIALS ACTUALLY COMPUTED
 !     BY THE MODIFIED ROUTINE DINCDG CALLED BY DGNRTP.
 !     ***************
 !
-FITIWK(1) = NFPOLS
+fitiwk(1) = nfpols
 !
 !     ***************
 !     UNSCALE THE RESIDUALS FOR THE BENEFIT OF THE USER.
 !     ***************
 !
-SCALE = FITDWK(DIMEN + 1)
-DO P = 1,NFPTS
-  RESIDS(P) = RESIDS(P) * SCALE
-END DO
-RETURN
-END SUBROUTINE DMFIT
+scale = fitdwk(dimen + 1)
+do p = 1,nfpts
+  resids(p) = resids(p) * scale
+end do
+return
+end subroutine dmfit
 
-SUBROUTINE DGNRTP(DEGREE,ALPHA,PSI,INDEXS, &
-&NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS, &
-&DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
-&ALFL,DIMP1,MAXABS,ERROR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine dgnrtp(degree,alpha,psi,indexs, &
+&newkj,sumsqs,coord,ncrows,npolys, &
+&dimen,npts,f,z,c,psiwid,weight, &
+&alfl,dimp1,maxabs,error)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER, INTENT(INOUT) :: DEGREE
-INTEGER, INTENT(IN) :: DIMEN
-INTEGER, INTENT(INOUT) :: NPOLYS
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: K
-INTEGER, INTENT(IN) :: PSIWID, ALFL
-INTEGER :: P, STTDEG, ONPLYS
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: DIMP1
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
-DOUBLE PRECISION, INTENT(INOUT) :: PSI(NPTS,PSIWID), ALPHA(ALFL), &
-&F(NPTS)
-DOUBLE PRECISION, INTENT(INOUT) :: COORD(NCROWS,DIMEN), &
-&MAXABS(DIMP1)
-DOUBLE PRECISION, INTENT(IN) :: WEIGHT(NPTS)
-DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS), &
-&C(NPOLYS)
-DOUBLE PRECISION :: RUNTOT, RNTOT1
+integer, intent(inout) :: degree
+integer, intent(in) :: dimen
+integer, intent(inout) :: npolys
+integer, intent(in) :: npts
+integer :: k
+integer, intent(in) :: psiwid, alfl
+integer :: p, sttdeg, onplys
+integer, intent(inout) :: error
+integer :: dimp1
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+double precision, intent(inout) :: psi(npts,psiwid), alpha(alfl), &
+&f(npts)
+double precision, intent(inout) :: coord(ncrows,dimen), &
+&maxabs(dimp1)
+double precision, intent(in) :: weight(npts)
+double precision, intent(inout) :: z(npts), sumsqs(npolys), &
+&c(npolys)
+double precision :: runtot, rntot1
 !
 !     ***************
 !     PURPOSE
@@ -5977,11 +5977,11 @@ DOUBLE PRECISION :: RUNTOT, RNTOT1
 !     SET UP THE SCALING.
 !     ***************
 !
-do 10 K = 1,DIMEN
-   CALL DSCALP(COORD(1,K),NPTS,MAXABS(K))
-10 CALL DSCALD(COORD(1,K),NPTS,MAXABS(K))
-CALL DSCALP(F,NPTS,MAXABS(DIMP1))
-CALL DSCALD(F,NPTS,MAXABS(DIMP1))
+do 10 k = 1,dimen
+   call dscalp(coord(1,k),npts,maxabs(k))
+10 call dscald(coord(1,k),npts,maxabs(k))
+call dscalp(f,npts,maxabs(dimp1))
+call dscald(f,npts,maxabs(dimp1))
 !
 !     ***************
 !      SUMSQS (1) = (1,1)
@@ -5989,58 +5989,58 @@ CALL DSCALD(F,NPTS,MAXABS(DIMP1))
 !      1
 !     ***************
 !
-RUNTOT = 0.D0
-RNTOT1 = 0.D0
-do 20 P = 1,NPTS
-   PSI(P,1) = 1.D0
-   RNTOT1 = RNTOT1 + WEIGHT(P)
-20 RUNTOT = RUNTOT + F(P) * WEIGHT(P)
-SUMSQS(1) = RNTOT1
-C(1) = RUNTOT / RNTOT1
+runtot = 0.d0
+rntot1 = 0.d0
+do 20 p = 1,npts
+   psi(p,1) = 1.d0
+   rntot1 = rntot1 + weight(p)
+20 runtot = runtot + f(p) * weight(p)
+sumsqs(1) = rntot1
+c(1) = runtot / rntot1
 !
 !     ***************
 !     Z = F - C
 !              1
 !     ***************
 !
-do 30 P = 1,NPTS
-30 Z(P) = F(P) - C(1)
+do 30 p = 1,npts
+30 z(p) = f(p) - c(1)
 !
-IF ( NPOLYS .EQ. 1 ) RETURN
-STTDEG = 1
-ONPLYS = 1
+if ( npolys .eq. 1 ) return
+sttdeg = 1
+onplys = 1
 !
-CALL DINCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ,SUMSQS, &
-&COORD,NCROWS,NPOLYS,DIMEN,NPTS,F,Z,C,PSIWID, &
-&WEIGHT,ALFL,ONPLYS,STTDEG,ERROR)
-RETURN
-END SUBROUTINE DGNRTP
+call dincdg(degree,alpha,psi,indexs,newkj,sumsqs, &
+&coord,ncrows,npolys,dimen,npts,f,z,c,psiwid, &
+&weight,alfl,onplys,sttdeg,error)
+return
+end subroutine dgnrtp
 
-SUBROUTINE DINCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ, &
-&SUMSQS,COORD,NCROWS,NPOLYS, &
-&DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
-&ALFL,ONPLYS,STTDEG,ERROR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine dincdg(degree,alpha,psi,indexs,newkj, &
+&sumsqs,coord,ncrows,npolys, &
+&dimen,npts,f,z,c,psiwid,weight, &
+&alfl,onplys,sttdeg,error)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
-INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: J0MJ1, J1M1, STARTA
-INTEGER, INTENT(IN) :: ONPLYS
-INTEGER :: ONPP1
-INTEGER, INTENT(INOUT) :: STTDEG
-INTEGER :: INDEX1, INDEX2
-INTEGER, INTENT(INOUT) :: DEGREE, NPOLYS
-INTEGER, INTENT(IN) :: NPTS, DIMEN, PSIWID, ALFL
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
-DOUBLE PRECISION, INTENT(INOUT) :: ALPHA(ALFL)
-DOUBLE PRECISION, INTENT(IN) :: COORD(NCROWS,DIMEN)
-DOUBLE PRECISION, INTENT(INOUT) :: PSI(NPTS,PSIWID)
-DOUBLE PRECISION, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
-DOUBLE PRECISION, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
-DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS)
-DOUBLE PRECISION :: ARC, RUNTOT, RNTOT1, RNTOT2
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
+integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
+integer, intent(inout) :: error
+integer :: j0mj1, j1m1, starta
+integer, intent(in) :: onplys
+integer :: onpp1
+integer, intent(inout) :: sttdeg
+integer :: index1, index2
+integer, intent(inout) :: degree, npolys
+integer, intent(in) :: npts, dimen, psiwid, alfl
+integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
+double precision, intent(inout) :: alpha(alfl)
+double precision, intent(in) :: coord(ncrows,dimen)
+double precision, intent(inout) :: psi(npts,psiwid)
+double precision, intent(inout) :: sumsqs(npolys), c(npolys)
+double precision, intent(in) :: f(npts), weight(npts)
+double precision, intent(inout) :: z(npts)
+double precision :: arc, runtot, rntot1, rntot2
 !
 !     ***************
 !     PURPOSE
@@ -6057,58 +6057,58 @@ DOUBLE PRECISION :: ARC, RUNTOT, RNTOT1, RNTOT2
 !
 !     ****************
 !
-IF ( ONPLYS .GE. 1 .AND. STTDEG .GE. 1 ) GO TO 10
-   ERROR = 6
-RETURN
-10 IF ( INDEXS(2,ONPLYS) .EQ. DIMEN ) GO TO 20
-      CURDEG = STTDEG
-   GO TO 30
-20 CURDEG = STTDEG + 1
-30 ONPP1 = ONPLYS + 1
-do 170 J = ONPP1,NPOLYS
-   JPRIME = INDEXS(1,J)
-   JINDEX = J - ((J - 1) / PSIWID) * PSIWID
-   JPINDX = JPRIME - ((JPRIME - 1) / PSIWID) * PSIWID
-   KJ = INDEXS(2,J)
-   START = INDEXS(3,J)
-   M = START
-   STARTA = INDEXS(4,J) - START
-   IF ( CURDEG .EQ. 1 ) GO TO 100
-   KJP = INDEXS(2,JPRIME)
-   J1 = NEWKJ(KJ,CURDEG - 1)
+if ( onplys .ge. 1 .and. sttdeg .ge. 1 ) go to 10
+   error = 6
+return
+10 if ( indexs(2,onplys) .eq. dimen ) go to 20
+      curdeg = sttdeg
+   go to 30
+20 curdeg = sttdeg + 1
+30 onpp1 = onplys + 1
+do 170 j = onpp1,npolys
+   jprime = indexs(1,j)
+   jindex = j - ((j - 1) / psiwid) * psiwid
+   jpindx = jprime - ((jprime - 1) / psiwid) * psiwid
+   kj = indexs(2,j)
+   start = indexs(3,j)
+   m = start
+   starta = indexs(4,j) - start
+   if ( curdeg .eq. 1 ) go to 100
+   kjp = indexs(2,jprime)
+   j1 = newkj(kj,curdeg - 1)
 !
 !     ***************
 !     CALCULATE THOSE  ALPHA ( J , M ) THAT CAN BE CALCULATED FROM
 !     PREVIOUSLY CALCULATED ALPHAS.
 !     ***************
 !
-   IF ( KJ .LT. KJP ) GO TO 50
+   if ( kj .lt. kjp ) go to 50
 !
 !     ***************
 !     FIRST CALCULATE THOSE BETWEEN  JPP  AND THE END OF 2 ROWS BACK.
 !     CALCULATE  ALPHA ( J , JPP )
 !     ***************
 !
-   INDEX1 = INDEXS(4,J)
-   ALPHA(INDEX1) = SUMSQS(JPRIME) / SUMSQS(START)
+   index1 = indexs(4,j)
+   alpha(index1) = sumsqs(jprime) / sumsqs(start)
 !
-   M = START + 1
-   J3 = NEWKJ(1,CURDEG - 1) - 1
-   IF ( M .GT. J3 ) GO TO 50
+   m = start + 1
+   j3 = newkj(1,curdeg - 1) - 1
+   if ( m .gt. j3 ) go to 50
 !
 !     ***************
 !     CURDEG .GT. 2 IF CONTROL HAS PASSED THE BRANCHES IN THE 3-RD
 !     PREVIOUS AND 8-TH PREVIOUS STATEMENTS.
 !     ***************
 !
-      J1MJ2 = J1 - NEWKJ(KJ,CURDEG - 2)
+      j1mj2 = j1 - newkj(kj,curdeg - 2)
 !
-      do 40 L = M,J3
-         Q = J1MJ2 + L
-         INDEX1 = STARTA + L
-         INDEX2 = INDEXS(4,Q) - INDEXS(3,Q) + JPRIME
-40 ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) / &
-&SUMSQS(L)
+      do 40 l = m,j3
+         q = j1mj2 + l
+         index1 = starta + l
+         index2 = indexs(4,q) - indexs(3,q) + jprime
+40 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+&sumsqs(l)
 !
 !     ***************
 !     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN THE 2
@@ -6119,18 +6119,18 @@ do 170 J = ONPP1,NPOLYS
 !                              J
 !     ***************
 !
-   M = J3 + 1
-50 IF ( JPRIME .EQ. J1 ) GO TO 100
-      IF ( KJ .EQ. 1 ) GO TO 80
-      J1M1 = J1 - 1
-      do 70 L = M,J1M1
-         RUNTOT = 0.D0
-         do 60 P = 1,NPTS
-            INDEX1 = L - ((L - 1) / PSIWID) * PSIWID
-60 RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) * &
-&PSI(P,INDEX1) * WEIGHT(P)
-         INDEX1 = STARTA + L
-70 ALPHA(INDEX1) = RUNTOT / SUMSQS(L)
+   m = j3 + 1
+50 if ( jprime .eq. j1 ) go to 100
+      if ( kj .eq. 1 ) go to 80
+      j1m1 = j1 - 1
+      do 70 l = m,j1m1
+         runtot = 0.d0
+         do 60 p = 1,npts
+            index1 = l - ((l - 1) / psiwid) * psiwid
+60 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+&psi(p,index1) * weight(p)
+         index1 = starta + l
+70 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     CALCULATE  ALPHA ( J , M ) FOR  M  BETWEEN
@@ -6138,15 +6138,15 @@ do 170 J = ONPP1,NPOLYS
 !      JP  - 1.
 !     ***************
 !
-80 J0MJ1 = NEWKJ(KJ,CURDEG) - J1
-      JPM1 = JPRIME - 1
-      do 90 L = J1,JPM1
-         Q = J0MJ1 + L
-         INDEX1 = STARTA + L
-         INDEX2 = INDEXS(4,Q) - INDEXS(3,Q) + JPRIME
-90 ALPHA(INDEX1) = ALPHA(INDEX2) * SUMSQS(JPRIME) / &
-&SUMSQS(L)
-      M = JPRIME
+80 j0mj1 = newkj(kj,curdeg) - j1
+      jpm1 = jprime - 1
+      do 90 l = j1,jpm1
+         q = j0mj1 + l
+         index1 = starta + l
+         index2 = indexs(4,q) - indexs(3,q) + jprime
+90 alpha(index1) = alpha(index2) * sumsqs(jprime) / &
+&sumsqs(l)
+      m = jprime
 !
 !     ***************
 !     CALCULATE THE REMAINING  ALPHA ( J , M ) FROM
@@ -6156,15 +6156,15 @@ do 170 J = ONPP1,NPOLYS
 !                           J
 !     ***************
 !
-100 JM1 = J - 1
-   do 120 L = M,JM1
-      RUNTOT = 0.D0
-      do 110 P = 1,NPTS
-         INDEX1 = L - ((L - 1) / PSIWID) * PSIWID
-110 RUNTOT = RUNTOT + COORD(P,KJ) * PSI(P,JPINDX) * &
-&PSI(P,INDEX1) * WEIGHT(P)
-      INDEX1 = STARTA + L
-120 ALPHA(INDEX1) = RUNTOT / SUMSQS(L)
+100 jm1 = j - 1
+   do 120 l = m,jm1
+      runtot = 0.d0
+      do 110 p = 1,npts
+         index1 = l - ((l - 1) / psiwid) * psiwid
+110 runtot = runtot + coord(p,kj) * psi(p,jpindx) * &
+&psi(p,index1) * weight(p)
+      index1 = starta + l
+120 alpha(index1) = runtot / sumsqs(l)
 !
 !     ***************
 !     NOW CALCULATE THE  PSI (P,J),  SUMSQS (J) AND  C (J) USING
@@ -6180,26 +6180,26 @@ do 170 J = ONPP1,NPOLYS
 !      J         J
 !     ***************
 !
-130 JM1 = J - 1
-    ARC = 0.D0
-    RNTOT1 = 0.D0
-    RNTOT2 = 0.D0
-    do 150 P = 1,NPTS
-        RUNTOT = COORD(P,KJ) * PSI(P,JPINDX)
-        do 140 L = START,JM1
-           INDEX1 = STARTA + L
-           INDEX2 = L - ((L - 1) / PSIWID) * PSIWID
-140 RUNTOT = RUNTOT - ALPHA(INDEX1) * PSI(P,INDEX2)
-        PSI(P,JINDEX) = RUNTOT
-        ARC = ARC + PSI(P,INDEX2) * PSI(P,JINDEX) * &
-&WEIGHT(P)
-        RNTOT1 = RNTOT1 + PSI(P,JINDEX) * PSI(P,JINDEX) * &
-&WEIGHT(P)
-150 RNTOT2 = RNTOT2 + Z(P) * PSI(P,JINDEX) * WEIGHT(P)
-    IF (ARC * ARC .GE. SUMSQS(JM1) * RNTOT1 * 1.D-06) &
-&GO TO 200
-    SUMSQS(J) = RNTOT1
-    C(J) = RNTOT2 / RNTOT1
+130 jm1 = j - 1
+    arc = 0.d0
+    rntot1 = 0.d0
+    rntot2 = 0.d0
+    do 150 p = 1,npts
+        runtot = coord(p,kj) * psi(p,jpindx)
+        do 140 l = start,jm1
+           index1 = starta + l
+           index2 = l - ((l - 1) / psiwid) * psiwid
+140 runtot = runtot - alpha(index1) * psi(p,index2)
+        psi(p,jindex) = runtot
+        arc = arc + psi(p,index2) * psi(p,jindex) * &
+&weight(p)
+        rntot1 = rntot1 + psi(p,jindex) * psi(p,jindex) * &
+&weight(p)
+150 rntot2 = rntot2 + z(p) * psi(p,jindex) * weight(p)
+    if (arc * arc .ge. sumsqs(jm1) * rntot1 * 1.d-06) &
+&go to 200
+    sumsqs(j) = rntot1
+    c(j) = rntot2 / rntot1
 !
 !     ***************
 !     CALCULATE THE NEW  Z ( P ) AND THE NEW  SSRES  USING
@@ -6208,31 +6208,31 @@ do 170 J = ONPP1,NPOLYS
 !              J      J
 !     ***************
 !
-    do 160 P = 1,NPTS
-160 Z(P) = Z(P) - C(J) * PSI(P,JINDEX)
-    STTDEG = CURDEG
-170 IF ( KJ .EQ. DIMEN ) CURDEG = CURDEG + 1
-RETURN
+    do 160 p = 1,npts
+160 z(p) = z(p) - c(j) * psi(p,jindex)
+    sttdeg = curdeg
+170 if ( kj .eq. dimen ) curdeg = curdeg + 1
+return
 !
 !     ***************
 !     THE J-TH BASIS MULTINOMIAL CANNOT BE COMPUTED ACCURATELY.
 !     ONLY J - 1 BASIS MULTINOMIALS ARE GENERATED.
 !     ***************
 !
-200 ERROR = -1
-DEGREE = STTDEG
-NPOLYS = JM1
-RETURN
-END SUBROUTINE DINCDG
+200 error = -1
+degree = sttdeg
+npolys = jm1
+return
+end subroutine dincdg
 
-SUBROUTINE DSCALP(COORD,NPTS,MAXABS)
-IMPLICIT NONE
+subroutine dscalp(coord,npts,maxabs)
+implicit none
 !
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: P
-DOUBLE PRECISION, INTENT(OUT) :: MAXABS
-DOUBLE PRECISION :: A
-DOUBLE PRECISION, INTENT(IN) :: COORD(NPTS)
+integer, intent(in) :: npts
+integer :: p
+double precision, intent(out) :: maxabs
+double precision :: a
+double precision, intent(in) :: coord(npts)
 !
 !     ***************
 !     PURPOSE
@@ -6257,20 +6257,20 @@ DOUBLE PRECISION, INTENT(IN) :: COORD(NPTS)
 !
 !     ****************
 !
-MAXABS = 0.D0
-do 10 P = 1,NPTS
-   A = DABS(COORD(P))
-10 IF ( A .GT. MAXABS ) MAXABS = A
-RETURN
-END SUBROUTINE DSCALP
+maxabs = 0.d0
+do 10 p = 1,npts
+   a = dabs(coord(p))
+10 if ( a .gt. maxabs ) maxabs = a
+return
+end subroutine dscalp
 
-SUBROUTINE DSCALD(COORD,NPTS,MAXABS)
-IMPLICIT NONE
+subroutine dscald(coord,npts,maxabs)
+implicit none
 !
-INTEGER, INTENT(IN) :: NPTS
-INTEGER :: P
-DOUBLE PRECISION, INTENT(IN) :: MAXABS
-DOUBLE PRECISION, INTENT(INOUT) :: COORD(NPTS)
+integer, intent(in) :: npts
+integer :: p
+double precision, intent(in) :: maxabs
+double precision, intent(inout) :: coord(npts)
 !
 !     ***************
 !     PURPOSE
@@ -6287,29 +6287,29 @@ DOUBLE PRECISION, INTENT(INOUT) :: COORD(NPTS)
 !
 !     ****************
 !
-IF ( MAXABS .EQ. 0.0D+00 ) RETURN
-   do 10 P = 1,NPTS
-10 COORD(P) = COORD(P) / MAXABS
-   RETURN
-END SUBROUTINE DSCALD
+if ( maxabs .eq. 0.0d+00 ) return
+   do 10 p = 1,npts
+10 coord(p) = coord(p) / maxabs
+   return
+end subroutine dscald
 
-SUBROUTINE DMEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS, &
-&ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NEROWS
+subroutine dmeval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
+&error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
+implicit none
+integer, intent(in) :: nerows
 !
-INTEGER, INTENT(IN) :: FIWKLN, FDWKLN
-INTEGER, INTENT(INOUT) :: NEPOLS
-INTEGER, INTENT(IN) :: NEPTS, DIMEN
-INTEGER, INTENT(INOUT) :: ERROR
-INTEGER :: MAXSTT, ALFSTT, CSTT
-INTEGER :: GBASIZ, ALFL, DIMP1
-INTEGER, INTENT(IN) :: EVLDEG
-INTEGER :: TOP, BOT, CURDEG, PSISTT
-INTEGER, INTENT(IN) :: FITIWK(FIWKLN)
-DOUBLE PRECISION, INTENT(INOUT) :: FITDWK(FDWKLN)
-DOUBLE PRECISION, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
-DOUBLE PRECISION, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+integer, intent(in) :: fiwkln, fdwkln
+integer, intent(inout) :: nepols
+integer, intent(in) :: nepts, dimen
+integer, intent(inout) :: error
+integer :: maxstt, alfstt, cstt
+integer :: gbasiz, alfl, dimp1
+integer, intent(in) :: evldeg
+integer :: top, bot, curdeg, psistt
+integer, intent(in) :: fitiwk(fiwkln)
+double precision, intent(inout) :: fitdwk(fdwkln)
+double precision, intent(in) :: evlcds(nerows,dimen)
+double precision, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     ***************
 !     PURPOSE
@@ -6410,64 +6410,64 @@ DOUBLE PRECISION, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
 !     FULL MULTINOMIAL DEGREE.
 !     ***************
 !
-IF (NEPTS .LT. 1 .OR. DIMEN .LT. 1) GO TO 110
-IF (EVLDEG) 40,10,20
+if (nepts .lt. 1 .or. dimen .lt. 1) go to 110
+if (evldeg) 40,10,20
 !
-10 NEPOLS = 1
-GO TO 50
+10 nepols = 1
+go to 50
 !
-20 TOP = 1
-BOT = 1
-do 30 CURDEG = 1,EVLDEG
-   TOP = TOP * (DIMEN + CURDEG)
-30 BOT = BOT * CURDEG
-NEPOLS = TOP / BOT
+20 top = 1
+bot = 1
+do 30 curdeg = 1,evldeg
+   top = top * (dimen + curdeg)
+30 bot = bot * curdeg
+nepols = top / bot
 !
-40 GBASIZ = FITIWK(1)
-IF (NEPOLS .GT. GBASIZ .OR. NEPOLS .LT. 1) GO TO 100
+40 gbasiz = fitiwk(1)
+if (nepols .gt. gbasiz .or. nepols .lt. 1) go to 100
 !
-50 ERROR = 0
-DIMP1 = DIMEN + 1
-ALFL = FITIWK(4)
-MAXSTT = 1
-ALFSTT = DIMP1 + MAXSTT
-CSTT = ALFSTT + ALFL
-PSISTT = CSTT + FITIWK(2)
+50 error = 0
+dimp1 = dimen + 1
+alfl = fitiwk(4)
+maxstt = 1
+alfstt = dimp1 + maxstt
+cstt = alfstt + alfl
+psistt = cstt + fitiwk(2)
 !
 !     ***************
 !     THE ACTUAL EVALUATION IS DONE INSIDE  DMEVL1.
 !     ***************
 !
-CALL DMEVL1 (EVLCDS,NEROWS,FITDWK(CSTT),NEPTS,DIMEN,NEPOLS, &
-&FITDWK(ALFSTT),FITIWK,FITDWK(PSISTT), &
-&EVLVLS,ALFL,FITDWK(MAXSTT),TEMP,DIMP1)
-RETURN
+call dmevl1 (evlcds,nerows,fitdwk(cstt),nepts,dimen,nepols, &
+&fitdwk(alfstt),fitiwk,fitdwk(psistt), &
+&evlvls,alfl,fitdwk(maxstt),temp,dimp1)
+return
 !
 !     ***************
 !     ERROR RETURN
 !     ***************
 !
-100 ERROR = -1
-RETURN
-110 ERROR = -2
-RETURN
-END SUBROUTINE DMEVAL
+100 error = -1
+return
+110 error = -2
+return
+end subroutine dmeval
 
-SUBROUTINE DMEVL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA, &
-&INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCROWS
+subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
+&indexs,psi,f,alfl,maxabs,x,dimp1)
+implicit none
+integer, intent(in) :: ncrows
 !
-INTEGER, INTENT(IN) :: DIMEN, NEPTS, NPOLYS, ALFL, DIMP1
-INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
-INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS)
-DOUBLE PRECISION, INTENT(IN) :: ALPHA(ALFL), COORD(NCROWS,DIMEN)
-DOUBLE PRECISION, INTENT(INOUT) :: PSI(NPOLYS)
-DOUBLE PRECISION, INTENT(IN) :: C(NPOLYS)
-DOUBLE PRECISION, INTENT(INOUT) :: F(NEPTS)
-DOUBLE PRECISION, INTENT(IN) :: MAXABS(DIMP1)
-DOUBLE PRECISION, INTENT(INOUT) :: X(DIMEN)
-DOUBLE PRECISION :: RUNTOT, RNTOT1
+integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
+integer :: jm1, jprime, m, p, k, i, j, index
+integer, intent(in) :: indexs(4,npolys)
+double precision, intent(in) :: alpha(alfl), coord(ncrows,dimen)
+double precision, intent(inout) :: psi(npolys)
+double precision, intent(in) :: c(npolys)
+double precision, intent(inout) :: f(nepts)
+double precision, intent(in) :: maxabs(dimp1)
+double precision, intent(inout) :: x(dimen)
+double precision :: runtot, rntot1
 !
 !     ***************
 !     PURPOSE
@@ -6495,19 +6495,19 @@ DOUBLE PRECISION :: RUNTOT, RNTOT1
 !
 !     ****************
 !
-IF (NPOLYS .EQ. 1) GO TO 50
+if (npolys .eq. 1) go to 50
 !
-PSI(1) = 1.D0
-do 40 P = 1,NEPTS
+psi(1) = 1.d0
+do 40 p = 1,nepts
 !
 !     ***************
 !     SCALE THE COORDINATES OF THE P-TH POINT
 !     ***************
 !
-   DO K = 1,DIMEN
-        X(K) = COORD(P,K)
-        IF (MAXABS(K) .NE. 0.D0) X(K) = X(K) / MAXABS(K)
-   END DO
+   do k = 1,dimen
+        x(k) = coord(p,k)
+        if (maxabs(k) .ne. 0.d0) x(k) = x(k) / maxabs(k)
+   end do
 !
 !     ***************
 !     USE THE  BASIS FUNCTION COEFFICIENTS  C  AND RECURRENCE
@@ -6515,41 +6515,41 @@ do 40 P = 1,NEPTS
 !     AT THE P-TH POINT.
 !     ***************
 !
-   RNTOT1 = C(1)
-   do 30 J = 2,NPOLYS
-        K = INDEXS(2,J)
-        JPRIME = INDEXS(1,J)
-        RUNTOT = X(K) * PSI(JPRIME)
-        I = INDEXS(3,J)
-        JM1 = J - 1
-        do 20 M = I,JM1
-           INDEX = INDEXS(4,J) + M - I
-20 RUNTOT = RUNTOT - PSI(M) * ALPHA(INDEX)
-        PSI(J) = RUNTOT
-30 RNTOT1 = RNTOT1 + C(J) * PSI(J)
-40 F(P) = RNTOT1 * MAXABS(DIMP1)
-RETURN
+   rntot1 = c(1)
+   do 30 j = 2,npolys
+        k = indexs(2,j)
+        jprime = indexs(1,j)
+        runtot = x(k) * psi(jprime)
+        i = indexs(3,j)
+        jm1 = j - 1
+        do 20 m = i,jm1
+           index = indexs(4,j) + m - i
+20 runtot = runtot - psi(m) * alpha(index)
+        psi(j) = runtot
+30 rntot1 = rntot1 + c(j) * psi(j)
+40 f(p) = rntot1 * maxabs(dimp1)
+return
 !
 !     ***************
 !     COMPUTE THE DEGREE 0 POLYNOMIAL
 !     ***************
 !
-50 RUNTOT = C(1) * MAXABS(DIMP1)
-do 60 P = 1,NEPTS
-60 F(P) = RUNTOT
-RETURN
-END SUBROUTINE DMEVL1
+50 runtot = c(1) * maxabs(dimp1)
+do 60 p = 1,nepts
+60 f(p) = runtot
+return
+end subroutine dmevl1
 
-REAL function QSUBA (F, A, B, EPSIL, MCOUNT, RELERR, IND)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IND
-INTEGER, INTENT(IN) :: MCOUNT
-REAL, INTENT(IN) :: A, B, EPSIL
-REAL, INTENT(INOUT) :: RELERR
-INTEGER :: ICHECK, IS, ISMAX, K, NF, NPTS
-REAL :: EPS, ERR, RESULT(8), STACK(100), SUB1, SUB2, SUB3, SUM, &
-&TOL, X
-REAL :: F, SPMPAR
+real function qsuba (f, a, b, epsil, mcount, relerr, ind)
+implicit none
+integer, intent(inout) :: ind
+integer, intent(in) :: mcount
+real, intent(in) :: a, b, epsil
+real, intent(inout) :: relerr
+integer :: icheck, is, ismax, k, nf, npts
+real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
+&tol, x
+real :: f, spmpar
 !-----------------------------------------------------------------------
 !
 !                INTEGRATION OVER A FINITE INTERVAL
@@ -6588,118 +6588,118 @@ REAL :: F, SPMPAR
 !     OF EPSIL. IT IS RECOMMENDED THAT EPSIL BE LESS THAN 0.001.
 !
 !-----------------------------------------------------------------------
-EXTERNAL F
-DATA ISMAX/100/
+external f
+data ismax/100/
 !-----------------------------------------------------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0.
 !
-                EPS = SPMPAR(1)
+                eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
-QSUBA = 0.0
-RELERR = 0.0
-IND = 0
-IF (A .EQ. B) RETURN
+qsuba = 0.0
+relerr = 0.0
+ind = 0
+if (a .eq. b) return
 !
 !     APPLY QUAD TO THE ENTIRE INTERVAL
 !
-SUB1 = AMIN1(A,B)
-SUB3 = AMAX1(A,B)
-TOL = AMAX1(EPSIL, 10.0*EPS)
-CALL QUAD (SUB1, SUB3, RESULT, K, TOL, NPTS, ICHECK, F)
-IF (ICHECK .EQ. 0) GO TO 100
-IS = 1
+sub1 = amin1(a,b)
+sub3 = amax1(a,b)
+tol = amax1(epsil, 10.0*eps)
+call quad (sub1, sub3, result, k, tol, npts, icheck, f)
+if (icheck .eq. 0) go to 100
+is = 1
 !
 !     SUBDIVIDE THE INTERVAL (SUB1,SUB3) INTO THE SUBINTERVALS
 !     (SUB1,SUB2) AND (SUB2,SUB3). CALL QUAD FOR (SUB1,SUB2).
 !
-10 IF (NPTS .GE. MCOUNT) GO TO 110
-SUB2 = 0.5*(SUB1 + SUB3)
-CALL QUAD (SUB1, SUB2, RESULT, K, TOL, NF, ICHECK, F)
-NPTS = NPTS + NF
-ERR = ABS(RESULT(K) - RESULT(K-1))
-SUM = QSUBA + RESULT(K)
-IF (ICHECK .EQ. 0 .OR. ERR .LE. ABS(TOL*SUM)) GO TO 30
+10 if (npts .ge. mcount) go to 110
+sub2 = 0.5*(sub1 + sub3)
+call quad (sub1, sub2, result, k, tol, nf, icheck, f)
+npts = npts + nf
+err = abs(result(k) - result(k-1))
+sum = qsuba + result(k)
+if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 30
 !
 !        STACK THE SUBINTERVAL (SUB1,SUB2) FOR FURTHER
 !        EXAMINATION IF THERE IS SUFFICIENT STORAGE.
 !
-   IF (IS .GE. ISMAX) GO TO 20
-      STACK(IS) = SUB1
-      IS = IS + 1
-      STACK(IS) = SUB2
-      IS = IS + 1
-      GO TO 40
-20 IND = 3
+   if (is .ge. ismax) go to 20
+      stack(is) = sub1
+      is = is + 1
+      stack(is) = sub2
+      is = is + 1
+      go to 40
+20 ind = 3
 !
 !     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
 !
-30 X = QSUBA
-QSUBA = SUM
-RELERR = RELERR + ERR
-IF (IND .NE. 0 .OR. X*RESULT(K) .GE. 0.0) GO TO 40
-X = 0.1*AMIN1(ABS(X),ABS(RESULT(K)))
-IF (ABS(QSUBA) .LE. X) IND = 1
+30 x = qsuba
+qsuba = sum
+relerr = relerr + err
+if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 40
+x = 0.1*amin1(abs(x),abs(result(k)))
+if (abs(qsuba) .le. x) ind = 1
 !
 !     CALL QUAD FOR THE INTERVAL (SUB2,SUB3)
 !
-40 IF (NPTS .GE. MCOUNT) GO TO 110
-CALL QUAD (SUB2, SUB3, RESULT, K, TOL, NF, ICHECK, F)
-NPTS = NPTS + NF
-ERR = ABS(RESULT(K) - RESULT(K-1))
-SUM = QSUBA + RESULT(K)
-IF (ICHECK .EQ. 0 .OR. ERR .LE. ABS(TOL*SUM)) GO TO 50
+40 if (npts .ge. mcount) go to 110
+call quad (sub2, sub3, result, k, tol, nf, icheck, f)
+npts = npts + nf
+err = abs(result(k) - result(k-1))
+sum = qsuba + result(k)
+if (icheck .eq. 0 .or. err .le. abs(tol*sum)) go to 50
 !
 !        SUBDIVIDE THE INTERVAL (SUB2,SUB3)
 !
-   SUB1 = SUB2
-   GO TO 10
+   sub1 = sub2
+   go to 10
 !
 !     UPDATE QSUBA AND CHECK IF ANY SIGNIFICANT DIGITS ARE LOST
 !
-50 X = QSUBA
-QSUBA = SUM
-RELERR = RELERR + ERR
-IF (IND .NE. 0 .OR. X*RESULT(K) .GE. 0.0) GO TO 60
-X = 0.1*AMIN1(ABS(X),ABS(RESULT(K)))
-IF (ABS(QSUBA) .LE. X) IND = 1
+50 x = qsuba
+qsuba = sum
+relerr = relerr + err
+if (ind .ne. 0 .or. x*result(k) .ge. 0.0) go to 60
+x = 0.1*amin1(abs(x),abs(result(k)))
+if (abs(qsuba) .le. x) ind = 1
 !
 !     SUBDIVIDE THE INTERVAL LAST STACKED
 !
-60 IF (IS .EQ. 1) GO TO 120
-IS = IS - 1
-SUB3 = STACK(IS)
-IS = IS - 1
-SUB1 = STACK(IS)
-GO TO 10
+60 if (is .eq. 1) go to 120
+is = is - 1
+sub3 = stack(is)
+is = is - 1
+sub1 = stack(is)
+go to 10
 !
 !     TERMINATION WHEN SUBDIVISION IS NOT NEEDED
 !
-100 QSUBA = RESULT(K)
-IF (A .GT. B) QSUBA = -QSUBA
-RELERR = ABS(RESULT(K) - RESULT(K-1))
-IF (QSUBA .NE. 0.0) RELERR = RELERR/ABS(QSUBA)
-RETURN
+100 qsuba = result(k)
+if (a .gt. b) qsuba = -qsuba
+relerr = abs(result(k) - result(k-1))
+if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
+return
 !
 !     SUBDIVISION RESULT
 !
-110 IND = 2
-120 IF (A .GT. B) QSUBA = -QSUBA
-IF (QSUBA .NE. 0.0) RELERR = RELERR/ABS(QSUBA)
-RETURN
-END FUNCTION QSUBA
+110 ind = 2
+120 if (a .gt. b) qsuba = -qsuba
+if (qsuba .ne. 0.0) relerr = relerr/abs(qsuba)
+return
+end function qsuba
 
-SUBROUTINE QUAD(A, B, RESULT, K, EPSIL, NPTS, ICHECK, F)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: ICHECK
-INTEGER, INTENT(INOUT) :: K, NPTS
-REAL, INTENT(IN) :: A, B, EPSIL
-REAL, INTENT(INOUT) :: RESULT(*)
-INTEGER :: I, INEW, IOLD, J
-REAL :: ACUM, DIFF, FUNCT(127), FZERO, P(381), SUM, X
-REAL :: F
+subroutine quad(a, b, result, k, epsil, npts, icheck, f)
+implicit none
+integer, intent(out) :: icheck
+integer, intent(inout) :: k, npts
+real, intent(in) :: a, b, epsil
+real, intent(inout) :: result(*)
+integer :: i, inew, iold, j
+real :: acum, diff, funct(127), fzero, p(381), sum, x
+real :: f
 !     --------------------
 ! THIS SUBROUTINE ATTEMPTS TO CALCULATE THE INTEGRAL OF F(X)
 ! OVER THE INTERVAL *A* TO *B* WITH RELATIVE ERROR NOT
@@ -6734,316 +6734,316 @@ REAL :: F
 ! ABSCISSAE AND WEIGHTS OF QUADRATURE RULES ARE STACKED IN
 ! ARRAY *P* IN THE ORDER IN WHICH THEY ARE NEEDED.
 !     --------------------
-EXTERNAL F
-data P( 1),P( 2),P( 3),P( 4),P( 5),P( 6),P( 7), &
-&P( 8),P( 9),P(10),P(11),P(12),P(13),P(14), &
-&P(15),P(16),P(17),P(18),P(19),P(20),P(21), &
-&P(22),P(23),P(24),P(25),P(26),P(27),P(28)/ &
-&0.77459666924148337704E00,0.55555555555555555556E00, &
-&0.88888888888888888889E00,0.26848808986833344073E00, &
-&0.96049126870802028342E00,0.10465622602646726519E00, &
-&0.43424374934680255800E00,0.40139741477596222291E00, &
-&0.45091653865847414235E00,0.13441525524378422036E00, &
-&0.51603282997079739697E-01,0.20062852937698902103E00, &
-&0.99383196321275502221E00,0.17001719629940260339E-01, &
-&0.88845923287225699889E00,0.92927195315124537686E-01, &
-&0.62110294673722640294E00,0.17151190913639138079E00, &
-&0.22338668642896688163E00,0.21915685840158749640E00, &
-&0.22551049979820668739E00,0.67207754295990703540E-01, &
-&0.25807598096176653565E-01,0.10031427861179557877E00, &
-&0.84345657393211062463E-02,0.46462893261757986541E-01, &
-&0.85755920049990351154E-01,0.10957842105592463824E00/
-data P(29),P(30),P(31),P(32),P(33),P(34),P(35), &
-&P(36),P(37),P(38),P(39),P(40),P(41),P(42), &
-&P(43),P(44),P(45),P(46),P(47),P(48),P(49), &
-&P(50),P(51),P(52),P(53),P(54),P(55),P(56)/ &
-&0.99909812496766759766E00,0.25447807915618744154E-02, &
-&0.98153114955374010687E00,0.16446049854387810934E-01, &
-&0.92965485742974005667E00,0.35957103307129322097E-01, &
-&0.83672593816886873550E00,0.56979509494123357412E-01, &
-&0.70249620649152707861E00,0.76879620499003531043E-01, &
-&0.53131974364437562397E00,0.93627109981264473617E-01, &
-&0.33113539325797683309E00,0.10566989358023480974E00, &
-&0.11248894313318662575E00,0.11195687302095345688E00, &
-&0.11275525672076869161E00,0.33603877148207730542E-01, &
-&0.12903800100351265626E-01,0.50157139305899537414E-01, &
-&0.42176304415588548391E-02,0.23231446639910269443E-01, &
-&0.42877960025007734493E-01,0.54789210527962865032E-01, &
-&0.12651565562300680114E-02,0.82230079572359296693E-02, &
-&0.17978551568128270333E-01,0.28489754745833548613E-01/
-data P(57),P(58),P(59),P(60),P(61),P(62),P(63), &
-&P(64),P(65),P(66),P(67),P(68),P(69),P(70), &
-&P(71),P(72),P(73),P(74),P(75),P(76),P(77), &
-&P(78),P(79),P(80),P(81),P(82),P(83),P(84)/ &
-&0.38439810249455532039E-01,0.46813554990628012403E-01, &
-&0.52834946790116519862E-01,0.55978436510476319408E-01, &
-&0.99987288812035761194E00,0.36322148184553065969E-03, &
-&0.99720625937222195908E00,0.25790497946856882724E-02, &
-&0.98868475754742947994E00,0.61155068221172463397E-02, &
-&0.97218287474858179658E00,0.10498246909621321898E-01, &
-&0.94634285837340290515E00,0.15406750466559497802E-01, &
-&0.91037115695700429250E00,0.20594233915912711149E-01, &
-&0.86390793819369047715E00,0.25869679327214746911E-01, &
-&0.80694053195021761186E00,0.31073551111687964880E-01, &
-&0.73975604435269475868E00,0.36064432780782572640E-01, &
-&0.66290966002478059546E00,0.40715510116944318934E-01, &
-&0.57719571005204581484E00,0.44914531653632197414E-01, &
-&0.48361802694584102756E00,0.48564330406673198716E-01/
-data P( 85),P( 86),P( 87),P( 88),P( 89),P( 90),P( 91), &
-&P( 92),P( 93),P( 94),P( 95),P( 96),P( 97),P( 98), &
-&P( 99),P(100),P(101),P(102),P(103),P(104),P(105), &
-&P(106),P(107),P(108),P(109),P(110),P(111),P(112)/ &
-&0.38335932419873034692E00,0.51583253952048458777E-01, &
-&0.27774982202182431507E00,0.53905499335266063927E-01, &
-&0.16823525155220746498E00,0.55481404356559363988E-01, &
-&0.56344313046592789972E-01,0.56277699831254301273E-01, &
-&0.56377628360384717388E-01,0.16801938574103865271E-01, &
-&0.64519000501757369228E-02,0.25078569652949768707E-01, &
-&0.21088152457266328793E-02,0.11615723319955134727E-01, &
-&0.21438980012503867246E-01,0.27394605263981432516E-01, &
-&0.63260731936263354422E-03,0.41115039786546930472E-02, &
-&0.89892757840641357233E-02,0.14244877372916774306E-01, &
-&0.19219905124727766019E-01,0.23406777495314006201E-01, &
-&0.26417473395058259931E-01,0.27989218255238159704E-01, &
-&0.18073956444538835782E-03,0.12895240826104173921E-02, &
-&0.30577534101755311361E-02,0.52491234548088591251E-02/
-data P(113),P(114),P(115),P(116),P(117),P(118),P(119), &
-&P(120),P(121),P(122),P(123),P(124),P(125),P(126), &
-&P(127),P(128),P(129),P(130),P(131),P(132),P(133), &
-&P(134),P(135),P(136),P(137),P(138),P(139),P(140)/ &
-&0.77033752332797418482E-02,0.10297116957956355524E-01, &
-&0.12934839663607373455E-01,0.15536775555843982440E-01, &
-&0.18032216390391286320E-01,0.20357755058472159467E-01, &
-&0.22457265826816098707E-01,0.24282165203336599358E-01, &
-&0.25791626976024229388E-01,0.26952749667633031963E-01, &
-&0.27740702178279681994E-01,0.28138849915627150636E-01, &
-&0.99998243035489159858E00,0.50536095207862517625E-04, &
-&0.99959879967191068325E00,0.37774664632698466027E-03, &
-&0.99831663531840739253E00,0.93836984854238150079E-03, &
-&0.99572410469840718851E00,0.16811428654214699063E-02, &
-&0.99149572117810613240E00,0.25687649437940203731E-02, &
-&0.98537149959852037111E00,0.35728927835172996494E-02, &
-&0.97714151463970571416E00,0.46710503721143217474E-02, &
-&0.96663785155841656709E00,0.58434498758356395076E-02/
-data P(141),P(142),P(143),P(144),P(145),P(146),P(147), &
-&P(148),P(149),P(150),P(151),P(152),P(153),P(154), &
-&P(155),P(156),P(157),P(158),P(159),P(160),P(161), &
-&P(162),P(163),P(164),P(165),P(166),P(167),P(168)/ &
-&0.95373000642576113641E00,0.70724899954335554680E-02, &
-&0.93832039777959288365E00,0.83428387539681577056E-02, &
-&0.92034002547001242073E00,0.96411777297025366953E-02, &
-&0.89974489977694003664E00,0.10955733387837901648E-01, &
-&0.87651341448470526974E00,0.12275830560082770087E-01, &
-&0.85064449476835027976E00,0.13591571009765546790E-01, &
-&0.82215625436498040737E00,0.14893641664815182035E-01, &
-&0.79108493379984836143E00,0.16173218729577719942E-01, &
-&0.75748396638051363793E00,0.17421930159464173747E-01, &
-&0.72142308537009891548E00,0.18631848256138790186E-01, &
-&0.68298743109107922809E00,0.19795495048097499488E-01, &
-&0.64227664250975951377E00,0.20905851445812023852E-01, &
-&0.59940393024224289297E00,0.21956366305317824939E-01, &
-&0.55449513263193254887E00,0.22940964229387748761E-01/
-data P(169),P(170),P(171),P(172),P(173),P(174),P(175), &
-&P(176),P(177),P(178),P(179),P(180),P(181),P(182), &
-&P(183),P(184),P(185),P(186),P(187),P(188),P(189), &
-&P(190),P(191),P(192),P(193),P(194),P(195),P(196)/ &
-&0.50768775753371660215E00,0.23854052106038540080E-01, &
-&0.45913001198983233287E00,0.24690524744487676909E-01, &
-&0.40897982122988867241E00,0.25445769965464765813E-01, &
-&0.35740383783153215238E00,0.26115673376706097680E-01, &
-&0.30457644155671404334E00,0.26696622927450359906E-01, &
-&0.25067873030348317661E00,0.27185513229624791819E-01, &
-&0.19589750271110015392E00,0.27579749566481873035E-01, &
-&0.14042423315256017459E00,0.27877251476613701609E-01, &
-&0.84454040083710883710E-01,0.28076455793817246607E-01, &
-&0.28184648949745694339E-01,0.28176319033016602131E-01, &
-&0.28188814180192358694E-01,0.84009692870519326354E-02, &
-&0.32259500250878684614E-02,0.12539284826474884353E-01, &
-&0.10544076228633167722E-02,0.58078616599775673635E-02, &
-&0.10719490006251933623E-01,0.13697302631990716258E-01/
-data P(197),P(198),P(199),P(200),P(201),P(202),P(203), &
-&P(204),P(205),P(206),P(207),P(208),P(209),P(210), &
-&P(211),P(212),P(213),P(214),P(215),P(216),P(217), &
-&P(218),P(219),P(220),P(221),P(222),P(223),P(224)/ &
-&0.31630366082226447689E-03,0.20557519893273465236E-02, &
-&0.44946378920320678616E-02,0.71224386864583871532E-02, &
-&0.96099525623638830097E-02,0.11703388747657003101E-01, &
-&0.13208736697529129966E-01,0.13994609127619079852E-01, &
-&0.90372734658751149261E-04,0.64476204130572477933E-03, &
-&0.15288767050877655684E-02,0.26245617274044295626E-02, &
-&0.38516876166398709241E-02,0.51485584789781777618E-02, &
-&0.64674198318036867274E-02,0.77683877779219912200E-02, &
-&0.90161081951956431600E-02,0.10178877529236079733E-01, &
-&0.11228632913408049354E-01,0.12141082601668299679E-01, &
-&0.12895813488012114694E-01,0.13476374833816515982E-01, &
-&0.13870351089139840997E-01,0.14069424957813575318E-01, &
-&0.25157870384280661489E-04,0.18887326450650491366E-03, &
-&0.46918492424785040975E-03,0.84057143271072246365E-03/
-data P(225),P(226),P(227),P(228),P(229),P(230),P(231), &
-&P(232),P(233),P(234),P(235),P(236),P(237),P(238), &
-&P(239),P(240),P(241),P(242),P(243),P(244),P(245), &
-&P(246),P(247),P(248),P(249),P(250),P(251),P(252)/ &
-&0.12843824718970101768E-02,0.17864463917586498247E-02, &
-&0.23355251860571608737E-02,0.29217249379178197538E-02, &
-&0.35362449977167777340E-02,0.41714193769840788528E-02, &
-&0.48205888648512683476E-02,0.54778666939189508240E-02, &
-&0.61379152800413850435E-02,0.67957855048827733948E-02, &
-&0.74468208324075910174E-02,0.80866093647888599710E-02, &
-&0.87109650797320868736E-02,0.93159241280693950932E-02, &
-&0.98977475240487497440E-02,0.10452925722906011926E-01, &
-&0.10978183152658912470E-01,0.11470482114693874380E-01, &
-&0.11927026053019270040E-01,0.12345262372243838455E-01, &
-&0.12722884982732382906E-01,0.13057836688353048840E-01, &
-&0.13348311463725179953E-01,0.13592756614812395910E-01, &
-&0.13789874783240936517E-01,0.13938625738306850804E-01, &
-&0.14038227896908623303E-01,0.14088159516508301065E-01/
-data P(253),P(254),P(255),P(256),P(257),P(258),P(259), &
-&P(260),P(261),P(262),P(263),P(264),P(265),P(266), &
-&P(267),P(268),P(269),P(270),P(271),P(272),P(273), &
-&P(274),P(275),P(276),P(277),P(278),P(279),P(280)/ &
-&0.99999759637974846462E00,0.69379364324108267170E-05, &
-&0.99994399620705437576E00,0.53275293669780613125E-04, &
-&0.99976049092443204733E00,0.13575491094922871973E-03, &
-&0.99938033802502358193E00,0.24921240048299729402E-03, &
-&0.99874561446809511470E00,0.38974528447328229322E-03, &
-&0.99780535449595727456E00,0.55429531493037471492E-03, &
-&0.99651414591489027385E00,0.74028280424450333046E-03, &
-&0.99483150280062100052E00,0.94536151685852538246E-03, &
-&0.99272134428278861533E00,0.11674841174299594077E-02, &
-&0.99015137040077015918E00,0.14049079956551446427E-02, &
-&0.98709252795403406719E00,0.16561127281544526052E-02, &
-&0.98351865757863272876E00,0.19197129710138724125E-02, &
-&0.97940628167086268381E00,0.21944069253638388388E-02, &
-&0.97473445975240266776E00,0.24789582266575679307E-02/
-data P(281),P(282),P(283),P(284),P(285),P(286),P(287), &
-&P(288),P(289),P(290),P(291),P(292),P(293),P(294), &
-&P(295),P(296),P(297),P(298),P(299),P(300),P(301), &
-&P(302),P(303),P(304),P(305),P(306),P(307),P(308)/ &
-&0.96948465950245923177E00,0.27721957645934509940E-02, &
-&0.96364062156981213252E00,0.30730184347025783234E-02, &
-&0.95718821610986096274E00,0.33803979910869203823E-02, &
-&0.95011529752129487656E00,0.36933779170256508183E-02, &
-&0.94241156519108305981E00,0.40110687240750233989E-02, &
-&0.93406843615772578800E00,0.43326409680929828545E-02, &
-&0.92507893290707565236E00,0.46573172997568547773E-02, &
-&0.91543758715576504064E00,0.49843645647655386012E-02, &
-&0.90514035881326159519E00,0.53130866051870565663E-02, &
-&0.89418456833555902286E00,0.56428181013844441585E-02, &
-&0.88256884024734190684E00,0.59729195655081658049E-02, &
-&0.87029305554811390585E00,0.63027734490857587172E-02, &
-&0.85735831088623215653E00,0.66317812429018878941E-02, &
-&0.84376688267270860104E00,0.69593614093904229394E-02/
-data P(309),P(310),P(311),P(312),P(313),P(314),P(315), &
-&P(316),P(317),P(318),P(319),P(320),P(321),P(322), &
-&P(323),P(324),P(325),P(326),P(327),P(328),P(329), &
-&P(330),P(331),P(332),P(333),P(334),P(335),P(336)/ &
-&0.82952219463740140018E00,0.72849479805538070639E-02, &
-&0.81462878765513741344E00,0.76079896657190565832E-02, &
-&0.79909229096084140180E00,0.79279493342948491103E-02, &
-&0.78291939411828301639E00,0.82443037630328680306E-02, &
-&0.76611781930376009072E00,0.85565435613076896192E-02, &
-&0.74869629361693660282E00,0.88641732094824942641E-02, &
-&0.73066452124218126133E00,0.91667111635607884067E-02, &
-&0.71203315536225203459E00,0.94636899938300652943E-02, &
-&0.69281376977911470289E00,0.97546565363174114611E-02, &
-&0.67301883023041847920E00,0.10039172044056840798E-01, &
-&0.65266166541001749610E00,0.10316812330947621682E-01, &
-&0.63175643771119423041E00,0.10587167904885197931E-01, &
-&0.61031811371518640016E00,0.10849844089337314099E-01, &
-&0.58836243444766254143E00,0.11104461134006926537E-01/
-data P(337),P(338),P(339),P(340),P(341),P(342),P(343), &
-&P(344),P(345),P(346),P(347),P(348),P(349),P(350), &
-&P(351),P(352),P(353),P(354),P(355),P(356),P(357), &
-&P(358),P(359),P(360),P(361),P(362),P(363),P(364)/ &
-&0.56590588542365442262E00,0.11350654315980596602E-01, &
-&0.54296566649831149049E00,0.11588074033043952568E-01, &
-&0.51955966153745702199E00,0.11816385890830235763E-01, &
-&0.49570640791876146017E00,0.12035270785279562630E-01, &
-&0.47142506587165887693E00,0.12244424981611985899E-01, &
-&0.44673538766202847374E00,0.12443560190714035263E-01, &
-&0.42165768662616330006E00,0.12632403643542078765E-01, &
-&0.39621280605761593918E00,0.12810698163877361967E-01, &
-&0.37042208795007823014E00,0.12978202239537399286E-01, &
-&0.34430734159943802278E00,0.13134690091960152836E-01, &
-&0.31789081206847668318E00,0.13279951743930530650E-01, &
-&0.29119514851824668196E00,0.13413793085110098513E-01, &
-&0.26424337241092676194E00,0.13536035934956213614E-01, &
-&0.23705884558982972721E00,0.13646518102571291428E-01/
-data P(365),P(366),P(367),P(368),P(369),P(370),P(371), &
-&P(372),P(373),P(374),P(375),P(376),P(377),P(378), &
-&P(379),P(380),P(381)/ &
-&0.20966523824318119477E00,0.13745093443001896632E-01, &
-&0.18208649675925219825E00,0.13831631909506428676E-01, &
-&0.15434681148137810869E00,0.13906019601325461264E-01, &
-&0.12647058437230196685E00,0.13968158806516938516E-01, &
-&0.98482396598119202090E-01,0.14017968039456608810E-01, &
-&0.70406976042855179063E-01,0.14055382072649964277E-01, &
-&0.42269164765363603212E-01,0.14080351962553661325E-01, &
-&0.14093886410782462614E-01,0.14092845069160408355E-01, &
-&0.14094407090096179347E-01/
-ICHECK = 0
+external f
+data p( 1),p( 2),p( 3),p( 4),p( 5),p( 6),p( 7), &
+&p( 8),p( 9),p(10),p(11),p(12),p(13),p(14), &
+&p(15),p(16),p(17),p(18),p(19),p(20),p(21), &
+&p(22),p(23),p(24),p(25),p(26),p(27),p(28)/ &
+&0.77459666924148337704e00,0.55555555555555555556e00, &
+&0.88888888888888888889e00,0.26848808986833344073e00, &
+&0.96049126870802028342e00,0.10465622602646726519e00, &
+&0.43424374934680255800e00,0.40139741477596222291e00, &
+&0.45091653865847414235e00,0.13441525524378422036e00, &
+&0.51603282997079739697e-01,0.20062852937698902103e00, &
+&0.99383196321275502221e00,0.17001719629940260339e-01, &
+&0.88845923287225699889e00,0.92927195315124537686e-01, &
+&0.62110294673722640294e00,0.17151190913639138079e00, &
+&0.22338668642896688163e00,0.21915685840158749640e00, &
+&0.22551049979820668739e00,0.67207754295990703540e-01, &
+&0.25807598096176653565e-01,0.10031427861179557877e00, &
+&0.84345657393211062463e-02,0.46462893261757986541e-01, &
+&0.85755920049990351154e-01,0.10957842105592463824e00/
+data p(29),p(30),p(31),p(32),p(33),p(34),p(35), &
+&p(36),p(37),p(38),p(39),p(40),p(41),p(42), &
+&p(43),p(44),p(45),p(46),p(47),p(48),p(49), &
+&p(50),p(51),p(52),p(53),p(54),p(55),p(56)/ &
+&0.99909812496766759766e00,0.25447807915618744154e-02, &
+&0.98153114955374010687e00,0.16446049854387810934e-01, &
+&0.92965485742974005667e00,0.35957103307129322097e-01, &
+&0.83672593816886873550e00,0.56979509494123357412e-01, &
+&0.70249620649152707861e00,0.76879620499003531043e-01, &
+&0.53131974364437562397e00,0.93627109981264473617e-01, &
+&0.33113539325797683309e00,0.10566989358023480974e00, &
+&0.11248894313318662575e00,0.11195687302095345688e00, &
+&0.11275525672076869161e00,0.33603877148207730542e-01, &
+&0.12903800100351265626e-01,0.50157139305899537414e-01, &
+&0.42176304415588548391e-02,0.23231446639910269443e-01, &
+&0.42877960025007734493e-01,0.54789210527962865032e-01, &
+&0.12651565562300680114e-02,0.82230079572359296693e-02, &
+&0.17978551568128270333e-01,0.28489754745833548613e-01/
+data p(57),p(58),p(59),p(60),p(61),p(62),p(63), &
+&p(64),p(65),p(66),p(67),p(68),p(69),p(70), &
+&p(71),p(72),p(73),p(74),p(75),p(76),p(77), &
+&p(78),p(79),p(80),p(81),p(82),p(83),p(84)/ &
+&0.38439810249455532039e-01,0.46813554990628012403e-01, &
+&0.52834946790116519862e-01,0.55978436510476319408e-01, &
+&0.99987288812035761194e00,0.36322148184553065969e-03, &
+&0.99720625937222195908e00,0.25790497946856882724e-02, &
+&0.98868475754742947994e00,0.61155068221172463397e-02, &
+&0.97218287474858179658e00,0.10498246909621321898e-01, &
+&0.94634285837340290515e00,0.15406750466559497802e-01, &
+&0.91037115695700429250e00,0.20594233915912711149e-01, &
+&0.86390793819369047715e00,0.25869679327214746911e-01, &
+&0.80694053195021761186e00,0.31073551111687964880e-01, &
+&0.73975604435269475868e00,0.36064432780782572640e-01, &
+&0.66290966002478059546e00,0.40715510116944318934e-01, &
+&0.57719571005204581484e00,0.44914531653632197414e-01, &
+&0.48361802694584102756e00,0.48564330406673198716e-01/
+data p( 85),p( 86),p( 87),p( 88),p( 89),p( 90),p( 91), &
+&p( 92),p( 93),p( 94),p( 95),p( 96),p( 97),p( 98), &
+&p( 99),p(100),p(101),p(102),p(103),p(104),p(105), &
+&p(106),p(107),p(108),p(109),p(110),p(111),p(112)/ &
+&0.38335932419873034692e00,0.51583253952048458777e-01, &
+&0.27774982202182431507e00,0.53905499335266063927e-01, &
+&0.16823525155220746498e00,0.55481404356559363988e-01, &
+&0.56344313046592789972e-01,0.56277699831254301273e-01, &
+&0.56377628360384717388e-01,0.16801938574103865271e-01, &
+&0.64519000501757369228e-02,0.25078569652949768707e-01, &
+&0.21088152457266328793e-02,0.11615723319955134727e-01, &
+&0.21438980012503867246e-01,0.27394605263981432516e-01, &
+&0.63260731936263354422e-03,0.41115039786546930472e-02, &
+&0.89892757840641357233e-02,0.14244877372916774306e-01, &
+&0.19219905124727766019e-01,0.23406777495314006201e-01, &
+&0.26417473395058259931e-01,0.27989218255238159704e-01, &
+&0.18073956444538835782e-03,0.12895240826104173921e-02, &
+&0.30577534101755311361e-02,0.52491234548088591251e-02/
+data p(113),p(114),p(115),p(116),p(117),p(118),p(119), &
+&p(120),p(121),p(122),p(123),p(124),p(125),p(126), &
+&p(127),p(128),p(129),p(130),p(131),p(132),p(133), &
+&p(134),p(135),p(136),p(137),p(138),p(139),p(140)/ &
+&0.77033752332797418482e-02,0.10297116957956355524e-01, &
+&0.12934839663607373455e-01,0.15536775555843982440e-01, &
+&0.18032216390391286320e-01,0.20357755058472159467e-01, &
+&0.22457265826816098707e-01,0.24282165203336599358e-01, &
+&0.25791626976024229388e-01,0.26952749667633031963e-01, &
+&0.27740702178279681994e-01,0.28138849915627150636e-01, &
+&0.99998243035489159858e00,0.50536095207862517625e-04, &
+&0.99959879967191068325e00,0.37774664632698466027e-03, &
+&0.99831663531840739253e00,0.93836984854238150079e-03, &
+&0.99572410469840718851e00,0.16811428654214699063e-02, &
+&0.99149572117810613240e00,0.25687649437940203731e-02, &
+&0.98537149959852037111e00,0.35728927835172996494e-02, &
+&0.97714151463970571416e00,0.46710503721143217474e-02, &
+&0.96663785155841656709e00,0.58434498758356395076e-02/
+data p(141),p(142),p(143),p(144),p(145),p(146),p(147), &
+&p(148),p(149),p(150),p(151),p(152),p(153),p(154), &
+&p(155),p(156),p(157),p(158),p(159),p(160),p(161), &
+&p(162),p(163),p(164),p(165),p(166),p(167),p(168)/ &
+&0.95373000642576113641e00,0.70724899954335554680e-02, &
+&0.93832039777959288365e00,0.83428387539681577056e-02, &
+&0.92034002547001242073e00,0.96411777297025366953e-02, &
+&0.89974489977694003664e00,0.10955733387837901648e-01, &
+&0.87651341448470526974e00,0.12275830560082770087e-01, &
+&0.85064449476835027976e00,0.13591571009765546790e-01, &
+&0.82215625436498040737e00,0.14893641664815182035e-01, &
+&0.79108493379984836143e00,0.16173218729577719942e-01, &
+&0.75748396638051363793e00,0.17421930159464173747e-01, &
+&0.72142308537009891548e00,0.18631848256138790186e-01, &
+&0.68298743109107922809e00,0.19795495048097499488e-01, &
+&0.64227664250975951377e00,0.20905851445812023852e-01, &
+&0.59940393024224289297e00,0.21956366305317824939e-01, &
+&0.55449513263193254887e00,0.22940964229387748761e-01/
+data p(169),p(170),p(171),p(172),p(173),p(174),p(175), &
+&p(176),p(177),p(178),p(179),p(180),p(181),p(182), &
+&p(183),p(184),p(185),p(186),p(187),p(188),p(189), &
+&p(190),p(191),p(192),p(193),p(194),p(195),p(196)/ &
+&0.50768775753371660215e00,0.23854052106038540080e-01, &
+&0.45913001198983233287e00,0.24690524744487676909e-01, &
+&0.40897982122988867241e00,0.25445769965464765813e-01, &
+&0.35740383783153215238e00,0.26115673376706097680e-01, &
+&0.30457644155671404334e00,0.26696622927450359906e-01, &
+&0.25067873030348317661e00,0.27185513229624791819e-01, &
+&0.19589750271110015392e00,0.27579749566481873035e-01, &
+&0.14042423315256017459e00,0.27877251476613701609e-01, &
+&0.84454040083710883710e-01,0.28076455793817246607e-01, &
+&0.28184648949745694339e-01,0.28176319033016602131e-01, &
+&0.28188814180192358694e-01,0.84009692870519326354e-02, &
+&0.32259500250878684614e-02,0.12539284826474884353e-01, &
+&0.10544076228633167722e-02,0.58078616599775673635e-02, &
+&0.10719490006251933623e-01,0.13697302631990716258e-01/
+data p(197),p(198),p(199),p(200),p(201),p(202),p(203), &
+&p(204),p(205),p(206),p(207),p(208),p(209),p(210), &
+&p(211),p(212),p(213),p(214),p(215),p(216),p(217), &
+&p(218),p(219),p(220),p(221),p(222),p(223),p(224)/ &
+&0.31630366082226447689e-03,0.20557519893273465236e-02, &
+&0.44946378920320678616e-02,0.71224386864583871532e-02, &
+&0.96099525623638830097e-02,0.11703388747657003101e-01, &
+&0.13208736697529129966e-01,0.13994609127619079852e-01, &
+&0.90372734658751149261e-04,0.64476204130572477933e-03, &
+&0.15288767050877655684e-02,0.26245617274044295626e-02, &
+&0.38516876166398709241e-02,0.51485584789781777618e-02, &
+&0.64674198318036867274e-02,0.77683877779219912200e-02, &
+&0.90161081951956431600e-02,0.10178877529236079733e-01, &
+&0.11228632913408049354e-01,0.12141082601668299679e-01, &
+&0.12895813488012114694e-01,0.13476374833816515982e-01, &
+&0.13870351089139840997e-01,0.14069424957813575318e-01, &
+&0.25157870384280661489e-04,0.18887326450650491366e-03, &
+&0.46918492424785040975e-03,0.84057143271072246365e-03/
+data p(225),p(226),p(227),p(228),p(229),p(230),p(231), &
+&p(232),p(233),p(234),p(235),p(236),p(237),p(238), &
+&p(239),p(240),p(241),p(242),p(243),p(244),p(245), &
+&p(246),p(247),p(248),p(249),p(250),p(251),p(252)/ &
+&0.12843824718970101768e-02,0.17864463917586498247e-02, &
+&0.23355251860571608737e-02,0.29217249379178197538e-02, &
+&0.35362449977167777340e-02,0.41714193769840788528e-02, &
+&0.48205888648512683476e-02,0.54778666939189508240e-02, &
+&0.61379152800413850435e-02,0.67957855048827733948e-02, &
+&0.74468208324075910174e-02,0.80866093647888599710e-02, &
+&0.87109650797320868736e-02,0.93159241280693950932e-02, &
+&0.98977475240487497440e-02,0.10452925722906011926e-01, &
+&0.10978183152658912470e-01,0.11470482114693874380e-01, &
+&0.11927026053019270040e-01,0.12345262372243838455e-01, &
+&0.12722884982732382906e-01,0.13057836688353048840e-01, &
+&0.13348311463725179953e-01,0.13592756614812395910e-01, &
+&0.13789874783240936517e-01,0.13938625738306850804e-01, &
+&0.14038227896908623303e-01,0.14088159516508301065e-01/
+data p(253),p(254),p(255),p(256),p(257),p(258),p(259), &
+&p(260),p(261),p(262),p(263),p(264),p(265),p(266), &
+&p(267),p(268),p(269),p(270),p(271),p(272),p(273), &
+&p(274),p(275),p(276),p(277),p(278),p(279),p(280)/ &
+&0.99999759637974846462e00,0.69379364324108267170e-05, &
+&0.99994399620705437576e00,0.53275293669780613125e-04, &
+&0.99976049092443204733e00,0.13575491094922871973e-03, &
+&0.99938033802502358193e00,0.24921240048299729402e-03, &
+&0.99874561446809511470e00,0.38974528447328229322e-03, &
+&0.99780535449595727456e00,0.55429531493037471492e-03, &
+&0.99651414591489027385e00,0.74028280424450333046e-03, &
+&0.99483150280062100052e00,0.94536151685852538246e-03, &
+&0.99272134428278861533e00,0.11674841174299594077e-02, &
+&0.99015137040077015918e00,0.14049079956551446427e-02, &
+&0.98709252795403406719e00,0.16561127281544526052e-02, &
+&0.98351865757863272876e00,0.19197129710138724125e-02, &
+&0.97940628167086268381e00,0.21944069253638388388e-02, &
+&0.97473445975240266776e00,0.24789582266575679307e-02/
+data p(281),p(282),p(283),p(284),p(285),p(286),p(287), &
+&p(288),p(289),p(290),p(291),p(292),p(293),p(294), &
+&p(295),p(296),p(297),p(298),p(299),p(300),p(301), &
+&p(302),p(303),p(304),p(305),p(306),p(307),p(308)/ &
+&0.96948465950245923177e00,0.27721957645934509940e-02, &
+&0.96364062156981213252e00,0.30730184347025783234e-02, &
+&0.95718821610986096274e00,0.33803979910869203823e-02, &
+&0.95011529752129487656e00,0.36933779170256508183e-02, &
+&0.94241156519108305981e00,0.40110687240750233989e-02, &
+&0.93406843615772578800e00,0.43326409680929828545e-02, &
+&0.92507893290707565236e00,0.46573172997568547773e-02, &
+&0.91543758715576504064e00,0.49843645647655386012e-02, &
+&0.90514035881326159519e00,0.53130866051870565663e-02, &
+&0.89418456833555902286e00,0.56428181013844441585e-02, &
+&0.88256884024734190684e00,0.59729195655081658049e-02, &
+&0.87029305554811390585e00,0.63027734490857587172e-02, &
+&0.85735831088623215653e00,0.66317812429018878941e-02, &
+&0.84376688267270860104e00,0.69593614093904229394e-02/
+data p(309),p(310),p(311),p(312),p(313),p(314),p(315), &
+&p(316),p(317),p(318),p(319),p(320),p(321),p(322), &
+&p(323),p(324),p(325),p(326),p(327),p(328),p(329), &
+&p(330),p(331),p(332),p(333),p(334),p(335),p(336)/ &
+&0.82952219463740140018e00,0.72849479805538070639e-02, &
+&0.81462878765513741344e00,0.76079896657190565832e-02, &
+&0.79909229096084140180e00,0.79279493342948491103e-02, &
+&0.78291939411828301639e00,0.82443037630328680306e-02, &
+&0.76611781930376009072e00,0.85565435613076896192e-02, &
+&0.74869629361693660282e00,0.88641732094824942641e-02, &
+&0.73066452124218126133e00,0.91667111635607884067e-02, &
+&0.71203315536225203459e00,0.94636899938300652943e-02, &
+&0.69281376977911470289e00,0.97546565363174114611e-02, &
+&0.67301883023041847920e00,0.10039172044056840798e-01, &
+&0.65266166541001749610e00,0.10316812330947621682e-01, &
+&0.63175643771119423041e00,0.10587167904885197931e-01, &
+&0.61031811371518640016e00,0.10849844089337314099e-01, &
+&0.58836243444766254143e00,0.11104461134006926537e-01/
+data p(337),p(338),p(339),p(340),p(341),p(342),p(343), &
+&p(344),p(345),p(346),p(347),p(348),p(349),p(350), &
+&p(351),p(352),p(353),p(354),p(355),p(356),p(357), &
+&p(358),p(359),p(360),p(361),p(362),p(363),p(364)/ &
+&0.56590588542365442262e00,0.11350654315980596602e-01, &
+&0.54296566649831149049e00,0.11588074033043952568e-01, &
+&0.51955966153745702199e00,0.11816385890830235763e-01, &
+&0.49570640791876146017e00,0.12035270785279562630e-01, &
+&0.47142506587165887693e00,0.12244424981611985899e-01, &
+&0.44673538766202847374e00,0.12443560190714035263e-01, &
+&0.42165768662616330006e00,0.12632403643542078765e-01, &
+&0.39621280605761593918e00,0.12810698163877361967e-01, &
+&0.37042208795007823014e00,0.12978202239537399286e-01, &
+&0.34430734159943802278e00,0.13134690091960152836e-01, &
+&0.31789081206847668318e00,0.13279951743930530650e-01, &
+&0.29119514851824668196e00,0.13413793085110098513e-01, &
+&0.26424337241092676194e00,0.13536035934956213614e-01, &
+&0.23705884558982972721e00,0.13646518102571291428e-01/
+data p(365),p(366),p(367),p(368),p(369),p(370),p(371), &
+&p(372),p(373),p(374),p(375),p(376),p(377),p(378), &
+&p(379),p(380),p(381)/ &
+&0.20966523824318119477e00,0.13745093443001896632e-01, &
+&0.18208649675925219825e00,0.13831631909506428676e-01, &
+&0.15434681148137810869e00,0.13906019601325461264e-01, &
+&0.12647058437230196685e00,0.13968158806516938516e-01, &
+&0.98482396598119202090e-01,0.14017968039456608810e-01, &
+&0.70406976042855179063e-01,0.14055382072649964277e-01, &
+&0.42269164765363603212e-01,0.14080351962553661325e-01, &
+&0.14093886410782462614e-01,0.14092845069160408355e-01, &
+&0.14094407090096179347e-01/
+icheck = 0
 ! CHECK FOR TRIVIAL CASE.
-IF (A.EQ.B) GO TO 70
+if (a.eq.b) go to 70
 ! SCALE FACTORS.
-SUM = (B+A)/2.0
-DIFF = (B-A)/2.0
+sum = (b+a)/2.0
+diff = (b-a)/2.0
 ! 1-POINT GAUSS
-FZERO = F(SUM)
-RESULT(1) = 2.0*FZERO*DIFF
-I = 0
-IOLD = 0
-INEW = 1
-K = 2
-ACUM = 0.0
-GO TO 30
-10 IF (K.EQ.8) GO TO 50
-K = K + 1
-ACUM = 0.0
+fzero = f(sum)
+result(1) = 2.0*fzero*diff
+i = 0
+iold = 0
+inew = 1
+k = 2
+acum = 0.0
+go to 30
+10 if (k.eq.8) go to 50
+k = k + 1
+acum = 0.0
 ! CONTRIBUTION FROM FUNCTION VALUES ALREADY COMPUTED.
-do 20 J = 1,IOLD
-  I = I + 1
-  ACUM = ACUM + P(I)*FUNCT(J)
-20 CONTINUE
+do 20 j = 1,iold
+  i = i + 1
+  acum = acum + p(i)*funct(j)
+20 continue
 ! CONTRIBUTION FROM NEW FUNCTION VALUES.
-30 IOLD = IOLD + INEW
-do 40 J = INEW,IOLD
-  I = I + 1
-  X = P(I)*DIFF
-  FUNCT(J) = F(SUM+X) + F(SUM-X)
-  I = I + 1
-  ACUM = ACUM + P(I)*FUNCT(J)
-40 CONTINUE
-INEW = IOLD + 1
-I = I + 1
-RESULT(K) = (ACUM+P(I)*FZERO)*DIFF
+30 iold = iold + inew
+do 40 j = inew,iold
+  i = i + 1
+  x = p(i)*diff
+  funct(j) = f(sum+x) + f(sum-x)
+  i = i + 1
+  acum = acum + p(i)*funct(j)
+40 continue
+inew = iold + 1
+i = i + 1
+result(k) = (acum+p(i)*fzero)*diff
 ! CHECK FOR CONVERGENCE.
-IF (ABS(RESULT(K)-RESULT(K-1))-EPSIL*ABS(RESULT(K))) 60, &
+if (abs(result(k)-result(k-1))-epsil*abs(result(k))) 60, &
 &60, 10
 ! CONVERGENCE NOT ACHIEVED.
-50 ICHECK = 1
+50 icheck = 1
 ! NORMAL TERMINATION.
-60 NPTS = INEW + IOLD
-RETURN
+60 npts = inew + iold
+return
 ! TRIVIAL CASE
-70 K = 2
-RESULT(1) = 0.0
-RESULT(2) = 0.0
-NPTS = 0
-RETURN
-END SUBROUTINE QUAD
+70 k = 2
+result(1) = 0.0
+result(2) = 0.0
+npts = 0
+return
+end subroutine quad
 
-SUBROUTINE QAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR, &
-&NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
-IMPLICIT NONE
-REAL :: F
-INTEGER, INTENT(OUT) :: IER, LAST
-INTEGER, INTENT(IN) :: LENW, LIMIT
-INTEGER, INTENT(OUT) :: NEVAL
-REAL, INTENT(IN) :: A
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(IN) :: B, EPSABS, EPSREL
-REAL, INTENT(OUT) :: RESULT
-INTEGER :: L1, L2, L3
+subroutine qags (f, a, b, epsabs, epsrel, result, abserr, &
+&neval, ier, limit, lenw, last, iwork, work)
+implicit none
+real :: f
+integer, intent(out) :: ier, last
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+real, intent(in) :: a
+real, intent(out) :: abserr
+real, intent(in) :: b, epsabs, epsrel
+real, intent(out) :: result
+integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF A DEFINITE INTEGRAL
@@ -7190,33 +7190,33 @@ INTEGER :: L1, L2, L3
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: WORK(LENW)
-INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
-EXTERNAL F
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
 !
 !         CHECK VALIDITY OF LIMIT AND LENW.
 !
-IER = 6
-NEVAL = 0
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-IF (LIMIT .LT. 1 .OR. LENW .LT. LIMIT*4) RETURN
+ier = 6
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
 !         PREPARE CALL FOR QAGSE.
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
 !
-CALL QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL, &
-&IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
-RETURN
-END SUBROUTINE QAGS
+call qagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
+&ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine qags
 
-SUBROUTINE QAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
-IMPLICIT NONE
+subroutine qagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,alist,blist,rlist,elist,iord,last)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                 COMPUTATION OF A DEFINITE INTEGRAL
@@ -7357,39 +7357,39 @@ IMPLICIT NONE
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: A
-REAL :: ABSEPS
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(INOUT) :: ALIST
-REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
-REAL, INTENT(IN) :: B
-REAL, INTENT(INOUT) :: BLIST
-REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
-REAL, INTENT(INOUT) :: ELIST
-REAL :: EPMACH
-REAL, INTENT(IN) :: EPSABS, EPSREL
-REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12, &
-&ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-REAL, INTENT(OUT) :: RESULT
-REAL :: RES3LA(3)
-REAL, INTENT(INOUT) :: RLIST
-REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR
-INTEGER, INTENT(OUT) :: NEVAL
-INTEGER :: NRES, NRMAX, NUMRL2
-LOGICAL :: EXTRAP, NOEXT
+real, intent(in) :: a
+real :: abseps
+real, intent(out) :: abserr
+real, intent(inout) :: alist
+real :: area, area1, area12, area2, a1, a2
+real, intent(in) :: b
+real, intent(inout) :: blist
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real, intent(inout) :: elist
+real :: epmach
+real, intent(in) :: epsabs, epsrel
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, f, oflow, rerr, resabs, reseps
+real, intent(out) :: result
+real :: res3la(3)
+real, intent(inout) :: rlist
+real :: rlist2(52), small, spmpar, t, uflow
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr
+integer, intent(out) :: neval
+integer :: nres, nrmax, numrl2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit)
 !
-EXTERNAL F
+external f
 !
 !            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 !            LIMEXP IN SUBROUTINE QELG (RLIST2 SHOULD BE OF DIMENSION
@@ -7444,261 +7444,261 @@ EXTERNAL F
 !           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = SPMPAR(1)
-UFLOW = SPMPAR(2)
-OFLOW = SPMPAR(3)
+epmach = spmpar(1)
+uflow = spmpar(2)
+oflow = spmpar(3)
 !
 !            CHECK EPSABS AND EPSREL
 !            -----------------------
 !
-NEVAL = 0
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-ALIST(1) = A
-BLIST(1) = B
-RLIST(1) = 0.0
-ELIST(1) = 0.0
-IER = 6
-IF (EPSABS .LT. 0.0 .OR. EPSREL .LT. 0.0) GO TO 999
-IER = 0
-RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.0
+elist(1) = 0.0
+ier = 6
+if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
+ier = 0
+rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
 !
-IERRO = 0
-CALL QK21F (F, A, B, RESULT, ABSERR, DEFABS, RESABS, &
-&EPMACH, UFLOW, ID)
-IF (ID .NE. 0) GO TO 999
-NEVAL = 21
+ierro = 0
+call qk21f (f, a, b, result, abserr, defabs, resabs, &
+&epmach, uflow, id)
+if (id .ne. 0) go to 999
+neval = 21
 !
 !           TEST ON ACCURACY.
 !
-DRES = ABS(RESULT)
-ERRBND = AMAX1(EPSABS,RERR*DRES)
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-IF (ABSERR .LE. 100.0*EPMACH*DEFABS .AND. ABSERR .GT. &
-&ERRBND) IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0) GO TO 999
+dres = abs(result)
+errbnd = amax1(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
+&errbnd) ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0) go to 999
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-CORREC = 0.0
-NRMAX = 1
-NRES = 0
-NUMRL2 = 2
-KTMIN = 0
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.0 - 50.0*EPMACH)*DEFABS) KSGN = 1
-T = 1.0 + 100.0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+correc = 0.0
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
+t = 1.0 + 100.0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST
 !           ERROR ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL QK21F (F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1, &
-&EPMACH, UFLOW, IER)
-  IF (IER .NE. 0) GO TO 100
-  CALL QK21F (F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2, &
-&EPMACH, UFLOW, IER)
-  NEVAL = NEVAL + 42
+  a1 = alist(maxerr)
+  b1 = 0.5*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call qk21f (f, a1, b1, area1, error1, resabs, defab1, &
+&epmach, uflow, ier)
+  if (ier .ne. 0) go to 100
+  call qk21f (f, a2, b2, area2, error2, resabs, defab2, &
+&epmach, uflow, ier)
+  neval = neval + 42
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1E-04*ABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+&.or. erro12 .lt. 0.99*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 !           SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
 !           SUBINTERVALS EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT A POINT OF THE INTEGRATION RANGE.
 !
-  IF (AMAX1(ABS(A1),ABS(B2)) .LE. &
-&T*(ABS(A2) + 0.1E+04*UFLOW)) IER = 4
+  if (amax1(abs(a1),abs(b2)) .le. &
+&t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  GO TO 30
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  go to 30
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 !           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 !           BISECTED NEXT).
 !
-30 CALL QPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
-  IF (ERRSUM .LE. ERRBND) GO TO 115
+  if (errsum .le. errbnd) go to 115
 ! ***JUMP OUT OF DO-LOOP
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
+  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
+40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
 !           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
 !           EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
 ! ***JUMP OUT OF DO-LOOP
-    IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+    if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL QELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES, &
-&EPMACH, OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+&epmach, oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = amax1(epsabs,rerr*abs(reseps))
 ! ***JUMP OUT OF DO-LOOP
-  IF (ABSERR .LE. ERTEST) GO TO 100
+  if (abserr .le. ertest) go to 100
 !
 !           PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = ABS(B - A)*0.375
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5
+  erlarg = errsum
+  go to 90
+80 small = abs(b - a)*0.375
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.0 .AND. AREA .NE. 0.0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.0) GO TO 130
-GO TO 110
-105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.0 .and. area .ne. 0.0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.0) go to 130
+go to 110
+105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
 !           TEST ON DIVERGENCE.
 !
-110 IF (KSGN .EQ. -1 .AND. AMAX1(ABS(RESULT),ABS(AREA)) .LE. &
-&DEFABS*0.1E-01) GO TO 130
-IF (0.1E-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1E+03 &
-&.OR. ERRSUM .GT. ABS(AREA)) IER = 6
-GO TO 130
+110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
+&defabs*0.1e-01) go to 130
+if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
+&.or. errsum .gt. abs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.0
-DO K = 1,LAST
-   RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE QAGSE
+115 result = 0.0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine qagse
 
-SUBROUTINE QK21F (F, A, B, RESULT, ABSERR, RESABS, RESASC, &
-&EPMACH, UFLOW, ISIG)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: ISIG
-REAL, INTENT(IN) :: A
-REAL, INTENT(INOUT) :: ABSERR
-REAL, INTENT(IN) :: B, EPMACH
-REAL, INTENT(INOUT) :: RESABS, RESASC, RESULT
-REAL, INTENT(IN) :: UFLOW
-INTEGER :: J, JTW, JTWM1
-REAL :: ABSC, CENTR, DHLGTH, FC, FSUM, FVAL1, FVAL2, HLGTH, RESG, &
-&RESK, RESKH, TOL
-REAL :: F
+subroutine qk21f (f, a, b, result, abserr, resabs, resasc, &
+&epmach, uflow, isig)
+implicit none
+integer, intent(out) :: isig
+real, intent(in) :: a
+real, intent(inout) :: abserr
+real, intent(in) :: b, epmach
+real, intent(inout) :: resabs, resasc, result
+real, intent(in) :: uflow
+integer :: j, jtw, jtwm1
+real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
+&resk, reskh, tol
+real :: f
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -7755,8 +7755,8 @@ REAL :: F
 !                 - F (USER-PROVIDED FUNCTION)
 !
 !-----------------------------------------------------------------------
-REAL :: FV1(10), FV2(10), WG(5), WGK(11), XGK(11)
-EXTERNAL F
+real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
+external f
 !
 !           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
 !           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
@@ -7772,28 +7772,28 @@ EXTERNAL F
 !
 !           WG     - WEIGHTS OF THE 10-POINT GAUSS RULE
 !
-DATA XGK(1),XGK(2),XGK(3),XGK(4),XGK(5),XGK(6),XGK(7), &
-&XGK(8),XGK(9),XGK(10),XGK(11)/ &
-&0.9956571630258081E+00,     0.9739065285171717E+00, &
-&0.9301574913557082E+00,     0.8650633666889845E+00, &
-&0.7808177265864169E+00,     0.6794095682990244E+00, &
-&0.5627571346686047E+00,     0.4333953941292472E+00, &
-&0.2943928627014602E+00,     0.1488743389816312E+00, &
-&0.0000000000000000E+00/
+data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
+&xgk(8),xgk(9),xgk(10),xgk(11)/ &
+&0.9956571630258081e+00,     0.9739065285171717e+00, &
+&0.9301574913557082e+00,     0.8650633666889845e+00, &
+&0.7808177265864169e+00,     0.6794095682990244e+00, &
+&0.5627571346686047e+00,     0.4333953941292472e+00, &
+&0.2943928627014602e+00,     0.1488743389816312e+00, &
+&0.0000000000000000e+00/
 !
-DATA WGK(1),WGK(2),WGK(3),WGK(4),WGK(5),WGK(6),WGK(7), &
-&WGK(8),WGK(9),WGK(10),WGK(11)/ &
-&0.1169463886737187E-01,     0.3255816230796473E-01, &
-&0.5475589657435200E-01,     0.7503967481091995E-01, &
-&0.9312545458369761E-01,     0.1093871588022976E+00, &
-&0.1234919762620659E+00,     0.1347092173114733E+00, &
-&0.1427759385770601E+00,     0.1477391049013385E+00, &
-&0.1494455540029169E+00/
+data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
+&wgk(8),wgk(9),wgk(10),wgk(11)/ &
+&0.1169463886737187e-01,     0.3255816230796473e-01, &
+&0.5475589657435200e-01,     0.7503967481091995e-01, &
+&0.9312545458369761e-01,     0.1093871588022976e+00, &
+&0.1234919762620659e+00,     0.1347092173114733e+00, &
+&0.1427759385770601e+00,     0.1477391049013385e+00, &
+&0.1494455540029169e+00/
 !
-DATA WG(1),WG(2),WG(3),WG(4),WG(5)/ &
-&0.6667134430868814E-01,     0.1494513491505806E+00, &
-&0.2190863625159820E+00,     0.2692667193099964E+00, &
-&0.2955242247147529E+00/
+data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
+&0.6667134430868814e-01,     0.1494513491505806e+00, &
+&0.2190863625159820e+00,     0.2692667193099964e+00, &
+&0.2955242247147529e+00/
 !
 !
 !           LIST OF MAJOR VARIABLES
@@ -7809,77 +7809,77 @@ DATA WG(1),WG(2),WG(3),WG(4),WG(5)/ &
 !                    I.E. TO I/(B-A)
 !
 !
-CENTR = 0.5*(A + B)
-HLGTH = 0.5*(B - A)
-DHLGTH = ABS(HLGTH)
+centr = 0.5*(a + b)
+hlgth = 0.5*(b - a)
+dhlgth = abs(hlgth)
 !
 !             CHECK IF THE INTERVAL (A,B) IS TOO SHORT
 !
-ISIG = 5
-ABSC = ABS(CENTR) + DHLGTH*0.14
-IF (ABSC .EQ. ABS(CENTR)) RETURN
+isig = 5
+absc = abs(centr) + dhlgth*0.14
+if (absc .eq. abs(centr)) return
 !
 !           COMPUTE THE 21-POINT KRONROD APPROXIMATION TO
 !           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
 !
-ISIG = 0
-RESG = 0.0
-FC = F(CENTR)
-RESK = WGK(11)*FC
-RESABS = ABS(RESK)
-do 10 J = 1,5
-  JTW = 2*J
-  ABSC = HLGTH*XGK(JTW)
-  FVAL1 = F(CENTR - ABSC)
-  FVAL2 = F(CENTR + ABSC)
-  FV1(JTW) = FVAL1
-  FV2(JTW) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESG = RESG + WG(J)*FSUM
-  RESK = RESK + WGK(JTW)*FSUM
-  RESABS = RESABS + WGK(JTW)*(ABS(FVAL1) + ABS(FVAL2))
-10 CONTINUE
-DO J = 1,5
-  JTWM1 = 2*J - 1
-  ABSC = HLGTH*XGK(JTWM1)
-  FVAL1 = F(CENTR - ABSC)
-  FVAL2 = F(CENTR + ABSC)
-  FV1(JTWM1) = FVAL1
-  FV2(JTWM1) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESK = RESK + WGK(JTWM1)*FSUM
-  RESABS = RESABS + WGK(JTWM1)*(ABS(FVAL1) + ABS(FVAL2))
-END DO
-RESKH = RESK*0.5
-RESASC = WGK(11)*ABS(FC - RESKH)
-DO J = 1,10
-  RESASC = RESASC + WGK(J)*(ABS(FV1(J)-RESKH) + ABS(FV2(J)-RESKH))
-END DO
-RESULT = RESK*HLGTH
-RESABS = RESABS*DHLGTH
-RESASC = RESASC*DHLGTH
-ABSERR = ABS((RESK - RESG)*HLGTH)
-IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0) &
-&ABSERR = RESASC*AMIN1(1.0, &
-&(0.2E+03*ABSERR/RESASC)**1.5)
-TOL = EPMACH*0.5E+02
-IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR,TOL*RESABS)
-RETURN
-END SUBROUTINE QK21F
+isig = 0
+resg = 0.0
+fc = f(centr)
+resk = wgk(11)*fc
+resabs = abs(resk)
+do 10 j = 1,5
+  jtw = 2*j
+  absc = hlgth*xgk(jtw)
+  fval1 = f(centr - absc)
+  fval2 = f(centr + absc)
+  fv1(jtw) = fval1
+  fv2(jtw) = fval2
+  fsum = fval1 + fval2
+  resg = resg + wg(j)*fsum
+  resk = resk + wgk(jtw)*fsum
+  resabs = resabs + wgk(jtw)*(abs(fval1) + abs(fval2))
+10 continue
+do j = 1,5
+  jtwm1 = 2*j - 1
+  absc = hlgth*xgk(jtwm1)
+  fval1 = f(centr - absc)
+  fval2 = f(centr + absc)
+  fv1(jtwm1) = fval1
+  fv2(jtwm1) = fval2
+  fsum = fval1 + fval2
+  resk = resk + wgk(jtwm1)*fsum
+  resabs = resabs + wgk(jtwm1)*(abs(fval1) + abs(fval2))
+end do
+reskh = resk*0.5
+resasc = wgk(11)*abs(fc - reskh)
+do j = 1,10
+  resasc = resasc + wgk(j)*(abs(fv1(j)-reskh) + abs(fv2(j)-reskh))
+end do
+result = resk*hlgth
+resabs = resabs*dhlgth
+resasc = resasc*dhlgth
+abserr = abs((resk - resg)*hlgth)
+if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
+&abserr = resasc*amin1(1.0, &
+&(0.2e+03*abserr/resasc)**1.5)
+tol = epmach*0.5e+02
+if (resabs .gt. uflow/tol) abserr = amax1(abserr,tol*resabs)
+return
+end subroutine qk21f
 
-SUBROUTINE QAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, &
-&NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(IN) :: INF
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LENW, LIMIT
-INTEGER, INTENT(OUT) :: NEVAL
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(IN) :: BOUND, EPSABS, EPSREL
-REAL, INTENT(OUT) :: RESULT
-INTEGER :: L1, L2, L3
-REAL :: F
+subroutine qagi (f, bound, inf, epsabs, epsrel, result, abserr, &
+&neval, ier, limit, lenw, last, iwork, work)
+implicit none
+integer, intent(out) :: ier
+integer, intent(in) :: inf
+integer, intent(out) :: last
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+real, intent(out) :: abserr
+real, intent(in) :: bound, epsabs, epsrel
+real, intent(out) :: result
+integer :: l1, l2, l3
+real :: f
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -8033,33 +8033,33 @@ REAL :: F
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: WORK(LENW)
-INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
-EXTERNAL F
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
 !
 !         CHECK VALIDITY OF LIMIT AND LENW.
 !
-IER = 6
-NEVAL = 0
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-IF (LIMIT .LT. 1 .OR. LENW .LT. LIMIT*4) RETURN
+ier = 6
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
 !         PREPARE CALL FOR QAGIE.
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
 !
-CALL QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
-RETURN
-END SUBROUTINE QAGI
+call qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine qagi
 
-SUBROUTINE QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
-IMPLICIT NONE
+subroutine qagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,alist,blist,rlist,elist,iord,last)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -8209,40 +8209,40 @@ IMPLICIT NONE
 !              - SPMPAR
 !
 !-----------------------------------------------------------------------
-REAL :: ABSEPS
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(INOUT) :: ALIST
-REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
-REAL, INTENT(INOUT) :: BLIST
-REAL :: BOUN
-REAL, INTENT(IN) :: BOUND
-REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
-REAL, INTENT(INOUT) :: ELIST
-REAL :: EPMACH
-REAL, INTENT(IN) :: EPSABS, EPSREL
-REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12, &
-&ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-REAL, INTENT(OUT) :: RESULT
-REAL :: RES3LA(3)
-REAL, INTENT(INOUT) :: RLIST
-REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(IN) :: INF
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR
-INTEGER, INTENT(OUT) :: NEVAL
-INTEGER :: NRES, NRMAX, NUMRL2
-LOGICAL :: EXTRAP, NOEXT
+real :: abseps
+real, intent(out) :: abserr
+real, intent(inout) :: alist
+real :: area, area1, area12, area2, a1, a2
+real, intent(inout) :: blist
+real :: boun
+real, intent(in) :: bound
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real, intent(inout) :: elist
+real :: epmach
+real, intent(in) :: epsabs, epsrel
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, f, oflow, rerr, resabs, reseps
+real, intent(out) :: result
+real :: res3la(3)
+real, intent(inout) :: rlist
+real :: rlist2(52), small, spmpar, t, uflow
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(in) :: inf
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr
+integer, intent(out) :: neval
+integer :: nres, nrmax, numrl2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit)
 !
-EXTERNAL F
+external f
 !
 !            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 !            LIMEXP IN SUBROUTINE QELG.
@@ -8297,26 +8297,26 @@ EXTERNAL F
 !           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = SPMPAR(1)
-UFLOW = SPMPAR(2)
-OFLOW = SPMPAR(3)
+epmach = spmpar(1)
+uflow = spmpar(2)
+oflow = spmpar(3)
 !
 !           CHECK EPSABS AND EPSREL
 !           -----------------------
 !
-NEVAL = 0
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-ALIST(1) = 0.0
-BLIST(1) = 1.0
-RLIST(1) = 0.0
-ELIST(1) = 0.0
-IORD(1) = 0
-IER = 6
-IF (EPSABS .LT. 0.0 .OR. EPSREL .LT. 0.0) GO TO 999
-IER = 0
-RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
+neval = 0
+last = 0
+result = 0.0
+abserr = 0.0
+alist(1) = 0.0
+blist(1) = 1.0
+rlist(1) = 0.0
+elist(1) = 0.0
+iord(1) = 0
+ier = 6
+if (epsabs .lt. 0.0 .or. epsrel .lt. 0.0) go to 999
+ier = 0
+rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
@@ -8326,236 +8326,236 @@ RERR = AMAX1(EPSREL, 50.0*EPMACH, 0.5E-14)
 !           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 !           I2 = INTEGRAL OF F OVER (0,+INFINITY).
 !
-BOUN = BOUND
-IF (INF .EQ. 2) BOUN = 0.0
-CALL QK15I (F, BOUN, INF, 0.0, 1.0, RESULT, ABSERR, &
-&DEFABS, RESABS, EPMACH, UFLOW)
+boun = bound
+if (inf .eq. 2) boun = 0.0
+call qk15i (f, boun, inf, 0.0, 1.0, result, abserr, &
+&defabs, resabs, epmach, uflow)
 !
 !           TEST ON ACCURACY
 !
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-DRES = ABS(RESULT)
-ERRBND = AMAX1(EPSABS,RERR*DRES)
-IF (ABSERR .LE. 100.0*EPMACH*DEFABS .AND. ABSERR .GT. ERRBND) &
-&IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0 .OR. (ABSERR .LE. ERRBND .AND. ABSERR .NE. RESABS) &
-&.OR. ABSERR .EQ. 0.0) GO TO 130
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+dres = abs(result)
+errbnd = amax1(epsabs,rerr*dres)
+if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. errbnd) &
+&ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
+&.or. abserr .eq. 0.0) go to 130
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-CORREC = 0.0
-NRMAX = 1
-NRES = 0
-KTMIN = 0
-NUMRL2 = 2
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IERRO = 0
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.0 - 50.0*EPMACH)*DEFABS) KSGN = 1
-T = 1.0 + 100.0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+correc = 0.0
+nrmax = 1
+nres = 0
+ktmin = 0
+numrl2 = 2
+extrap = .false.
+noext = .false.
+ierro = 0
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
+t = 1.0 + 100.0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH NRMAX-TH LARGEST
 !           ERROR ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL QK15I (F, BOUN, INF, A1, B1, AREA1, ERROR1, &
-&RESABS, DEFAB1, EPMACH, UFLOW)
-  CALL QK15I (F, BOUN, INF, A2, B2, AREA2, ERROR2, &
-&RESABS, DEFAB2, EPMACH, UFLOW)
+  a1 = alist(maxerr)
+  b1 = 0.5*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call qk15i (f, boun, inf, a1, b1, area1, error1, &
+&resabs, defab1, epmach, uflow)
+  call qk15i (f, boun, inf, a2, b2, area2, error2, &
+&resabs, defab2, epmach, uflow)
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1E-04*ABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+&.or. erro12 .lt. 0.99*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 !           SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
 !           SUBINTERVALS EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT SOME POINTS OF THE INTEGRATION RANGE.
 !
 
-  IF (AMAX1(ABS(A1),ABS(B2)) .LE. &
-&T*(ABS(A2) + 0.1E+04*UFLOW)) IER = 4
+  if (amax1(abs(a1),abs(b2)) .le. &
+&t*(abs(a2) + 0.1e+04*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  GO TO 30
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  go to 30
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 !           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 !           BISECTED NEXT).
 !
-30 CALL QPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
-  IF (ERRSUM .LE. ERRBND) GO TO 115
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+30 call qpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+  if (errsum .le. errbnd) go to 115
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
+  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
+40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
 !           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
 !           EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
-    IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
+    if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL QELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES, &
-&EPMACH, OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
-  IF (ABSERR .LE. ERTEST) GO TO 100
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call qelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+&epmach, oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = amax1(epsabs,rerr*abs(reseps))
+  if (abserr .le. ertest) go to 100
 !
 !            PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = 0.375
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5
+  erlarg = errsum
+  go to 90
+80 small = 0.375
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.0 .AND. AREA .NE. 0.0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.0) GO TO 130
-GO TO 110
-105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.0 .and. area .ne. 0.0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.0) go to 130
+go to 110
+105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
 !           TEST ON DIVERGENCE
 !
-110 IF (KSGN .EQ. -1 .AND. AMAX1(ABS(RESULT),ABS(AREA)) .LE. &
-&DEFABS*0.1E-01) GO TO 130
-IF (0.1E-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1E+03 &
-&.OR. ERRSUM .GT. ABS(AREA)) IER = 6
-GO TO 130
+110 if (ksgn .eq. -1 .and. amax1(abs(result),abs(area)) .le. &
+&defabs*0.1e-01) go to 130
+if (0.1e-01 .gt. (result/area) .or. (result/area) .gt. 0.1e+03 &
+&.or. errsum .gt. abs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.0
-DO K = 1,LAST
-  RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 NEVAL = 30*LAST - 15
-IF (INF .EQ. 2) NEVAL = 2*NEVAL
-IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE QAGIE
+115 result = 0.0
+do k = 1,last
+  result = result + rlist(k)
+end do
+abserr = errsum
+130 neval = 30*last - 15
+if (inf .eq. 2) neval = 2*neval
+if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine qagie
 
-SUBROUTINE QK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS, &
-&RESASC, EPMACH, UFLOW)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INF
-REAL, INTENT(IN) :: A
-REAL, INTENT(INOUT) :: ABSERR
-REAL, INTENT(IN) :: B, BOUN, EPMACH
-REAL, INTENT(INOUT) :: RESABS, RESASC, RESULT
-REAL, INTENT(IN) :: UFLOW
-INTEGER :: J
-REAL :: ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2, &
-&HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
-REAL :: F
+subroutine qk15i (f, boun, inf, a, b, result, abserr, resabs, &
+&resasc, epmach, uflow)
+implicit none
+integer, intent(in) :: inf
+real, intent(in) :: a
+real, intent(inout) :: abserr
+real, intent(in) :: b, boun, epmach
+real, intent(inout) :: resabs, resasc, result
+real, intent(in) :: uflow
+integer :: j
+real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
+&hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
+real :: f
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -8627,8 +8627,8 @@ REAL :: F
 !                 - F (USER-PROVIDED FUNCTION)
 !
 !-----------------------------------------------------------------------
-REAL :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
-EXTERNAL F
+real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
+external f
 !
 !           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
 !           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
@@ -8646,25 +8646,25 @@ EXTERNAL F
 !                    TO THE ABSCISSAE XGK(2), XGK(4), ...
 !                    WG(1), WG(3), ... ARE SET TO ZERO.
 !
-DATA XGK(1),XGK(2),XGK(3),XGK(4),XGK(5),XGK(6),XGK(7), &
-&XGK(8)/ &
-&0.9914553711208126E+00,     0.9491079123427585E+00, &
-&0.8648644233597691E+00,     0.7415311855993944E+00, &
-&0.5860872354676911E+00,     0.4058451513773972E+00, &
-&0.2077849550078985E+00,     0.0000000000000000E+00/
+data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
+&xgk(8)/ &
+&0.9914553711208126e+00,     0.9491079123427585e+00, &
+&0.8648644233597691e+00,     0.7415311855993944e+00, &
+&0.5860872354676911e+00,     0.4058451513773972e+00, &
+&0.2077849550078985e+00,     0.0000000000000000e+00/
 !
-DATA WGK(1),WGK(2),WGK(3),WGK(4),WGK(5),WGK(6),WGK(7), &
-&WGK(8)/ &
-&0.2293532201052922E-01,     0.6309209262997855E-01, &
-&0.1047900103222502E+00,     0.1406532597155259E+00, &
-&0.1690047266392679E+00,     0.1903505780647854E+00, &
-&0.2044329400752989E+00,     0.2094821410847278E+00/
+data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
+&wgk(8)/ &
+&0.2293532201052922e-01,     0.6309209262997855e-01, &
+&0.1047900103222502e+00,     0.1406532597155259e+00, &
+&0.1690047266392679e+00,     0.1903505780647854e+00, &
+&0.2044329400752989e+00,     0.2094821410847278e+00/
 !
-DATA WG(1),WG(2),WG(3),WG(4),WG(5),WG(6),WG(7),WG(8)/ &
-&0.0000000000000000E+00,     0.1294849661688697E+00, &
-&0.0000000000000000E+00,     0.2797053914892767E+00, &
-&0.0000000000000000E+00,     0.3818300505051189E+00, &
-&0.0000000000000000E+00,     0.4179591836734694E+00/
+data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
+&0.0000000000000000e+00,     0.1294849661688697e+00, &
+&0.0000000000000000e+00,     0.2797053914892767e+00, &
+&0.0000000000000000e+00,     0.3818300505051189e+00, &
+&0.0000000000000000e+00,     0.4179591836734694e+00/
 !
 !
 !           LIST OF MAJOR VARIABLES
@@ -8681,59 +8681,59 @@ DATA WG(1),WG(2),WG(3),WG(4),WG(5),WG(6),WG(7),WG(8)/ &
 !                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
 !
 !
-DINF = MIN0(1,INF)
+dinf = min0(1,inf)
 !
-CENTR = 0.5*(A + B)
-HLGTH = 0.5*(B - A)
-TABSC1 = BOUN + DINF*(1.0 - CENTR)/CENTR
-FVAL1 = F(TABSC1)
-IF (INF .EQ. 2) FVAL1 = FVAL1 + F(-TABSC1)
-FC = (FVAL1/CENTR)/CENTR
+centr = 0.5*(a + b)
+hlgth = 0.5*(b - a)
+tabsc1 = boun + dinf*(1.0 - centr)/centr
+fval1 = f(tabsc1)
+if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+fc = (fval1/centr)/centr
 !
 !           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
 !           THE INTEGRAL, AND ESTIMATE THE ERROR.
 !
-RESG = WG(8)*FC
-RESK = WGK(8)*FC
-RESABS = ABS(RESK)
-DO J = 1,7
-  ABSC = HLGTH*XGK(J)
-  ABSC1 = CENTR - ABSC
-  ABSC2 = CENTR + ABSC
-  TABSC1 = BOUN + DINF*(1.0 - ABSC1)/ABSC1
-  TABSC2 = BOUN + DINF*(1.0 - ABSC2)/ABSC2
-  FVAL1 = F(TABSC1)
-  FVAL2 = F(TABSC2)
-  IF (INF .EQ. 2) FVAL1 = FVAL1 + F(-TABSC1)
-  IF (INF .EQ. 2) FVAL2 = FVAL2 + F(-TABSC2)
-  FVAL1 = (FVAL1/ABSC1)/ABSC1
-  FVAL2 = (FVAL2/ABSC2)/ABSC2
-  FV1(J) = FVAL1
-  FV2(J) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESG = RESG + WG(J)*FSUM
-  RESK = RESK + WGK(J)*FSUM
-  RESABS = RESABS + WGK(J)*(ABS(FVAL1) + ABS(FVAL2))
-END DO
-RESKH = RESK*0.5
-RESASC = WGK(8)*ABS(FC - RESKH)
-DO J = 1,7
-  RESASC = RESASC + WGK(J)*(ABS(FV1(J)-RESKH) + &
-&ABS(FV2(J)-RESKH))
-END DO
-RESULT = RESK*HLGTH
-RESASC = RESASC*HLGTH
-RESABS = RESABS*HLGTH
-ABSERR = ABS((RESK - RESG)*HLGTH)
-IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0) ABSERR = RESASC* &
-&AMIN1(1.0, (0.2E+03*ABSERR/RESASC)**1.5)
-TOL = 50.0*EPMACH
-IF (RESABS .GT. UFLOW/TOL) ABSERR = AMAX1(ABSERR, TOL*RESABS)
-RETURN
-END SUBROUTINE QK15I
+resg = wg(8)*fc
+resk = wgk(8)*fc
+resabs = abs(resk)
+do j = 1,7
+  absc = hlgth*xgk(j)
+  absc1 = centr - absc
+  absc2 = centr + absc
+  tabsc1 = boun + dinf*(1.0 - absc1)/absc1
+  tabsc2 = boun + dinf*(1.0 - absc2)/absc2
+  fval1 = f(tabsc1)
+  fval2 = f(tabsc2)
+  if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+  if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
+  fval1 = (fval1/absc1)/absc1
+  fval2 = (fval2/absc2)/absc2
+  fv1(j) = fval1
+  fv2(j) = fval2
+  fsum = fval1 + fval2
+  resg = resg + wg(j)*fsum
+  resk = resk + wgk(j)*fsum
+  resabs = resabs + wgk(j)*(abs(fval1) + abs(fval2))
+end do
+reskh = resk*0.5
+resasc = wgk(8)*abs(fc - reskh)
+do j = 1,7
+  resasc = resasc + wgk(j)*(abs(fv1(j)-reskh) + &
+&abs(fv2(j)-reskh))
+end do
+result = resk*hlgth
+resasc = resasc*hlgth
+resabs = resabs*hlgth
+abserr = abs((resk - resg)*hlgth)
+if (resasc .ne. 0.0 .and. abserr .ne. 0.0) abserr = resasc* &
+&amin1(1.0, (0.2e+03*abserr/resasc)**1.5)
+tol = 50.0*epmach
+if (resabs .gt. uflow/tol) abserr = amax1(abserr, tol*resabs)
+return
+end subroutine qk15i
 
-SUBROUTINE QPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
-IMPLICIT NONE
+subroutine qpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
+implicit none
 !     ..................................................................
 !
 ! 1.        QPSRT
@@ -8789,24 +8789,24 @@ IMPLICIT NONE
 !
 !     ..................................................................
 !
-REAL :: ELIST
-REAL, INTENT(INOUT) :: ERMAX
-REAL :: ERRMAX, ERRMIN
-INTEGER :: I, IBEG, IDO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: ISUCC, J, JBND, JUPBN, K
-INTEGER, INTENT(IN) :: LAST, LIMIT
-INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
-DIMENSION ELIST(LAST),IORD(LAST)
+real :: elist
+real, intent(inout) :: ermax
+real :: errmax, errmin
+integer :: i, ibeg, ido
+integer, intent(inout) :: iord
+integer :: isucc, j, jbnd, jupbn, k
+integer, intent(in) :: last, limit
+integer, intent(inout) :: maxerr, nrmax
+dimension elist(last),iord(last)
 !
 !           CHECK WHETHER THE LIST CONTAINS MORE THAN
 !           TWO ERROR ESTIMATES.
 !
 !***FIRST EXECUTABLE STATEMENT  QPSRT
-IF(LAST.GT.2) GO TO 10
-IORD(1) = 1
-IORD(2) = 2
-GO TO 90
+if(last.gt.2) go to 10
+iord(1) = 1
+iord(2) = 2
+go to 90
 !
 !           THIS PART OF THE ROUTINE IS ONLY EXECUTED
 !           IF, DUE TO A DIFFICULT INTEGRAND, SUBDIVISION
@@ -8814,74 +8814,74 @@ GO TO 90
 !           THE INSERT PROCEDURE SHOULD START AFTER THE
 !           NRMAX-TH LARGEST ERROR ESTIMATE.
 !
-10 ERRMAX = ELIST(MAXERR)
-IF(NRMAX.EQ.1) GO TO 30
-IDO = NRMAX-1
-DO I = 1,IDO
-  ISUCC = IORD(NRMAX-1)
+10 errmax = elist(maxerr)
+if(nrmax.eq.1) go to 30
+ido = nrmax-1
+do i = 1,ido
+  isucc = iord(nrmax-1)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMAX.LE.ELIST(ISUCC)) GO TO 30
-  IORD(NRMAX) = ISUCC
-  NRMAX = NRMAX-1
-   END DO
+  if(errmax.le.elist(isucc)) go to 30
+  iord(nrmax) = isucc
+  nrmax = nrmax-1
+   end do
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN THE LIST TO
 !           BE MAINTAINED IN DESCENDING ORDER. THIS NUMBER
 !           DEPENDS ON THE NUMBER OF SUBDIVISIONS STILL
 !           ALLOWED.
 !
-30 JUPBN = LAST
-IF(LAST.GT.(LIMIT/2+2)) JUPBN = LIMIT+3-LAST
-ERRMIN = ELIST(LAST)
+30 jupbn = last
+if(last.gt.(limit/2+2)) jupbn = limit+3-last
+errmin = elist(last)
 !
 !           INSERT ERRMAX BY TRAVERSING THE LIST TOP-DOWN,
 !           STARTING COMPARISON FROM THE ELEMENT ELIST(IORD(NRMAX+1)).
 !
-JBND = JUPBN-1
-IBEG = NRMAX+1
-IF(IBEG.GT.JBND) GO TO 50
-DO I=IBEG,JBND
-  ISUCC = IORD(I)
+jbnd = jupbn-1
+ibeg = nrmax+1
+if(ibeg.gt.jbnd) go to 50
+do i=ibeg,jbnd
+  isucc = iord(i)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMAX.GE.ELIST(ISUCC)) GO TO 60
-  IORD(I-1) = ISUCC
-END DO
-50 IORD(JBND) = MAXERR
-IORD(JUPBN) = LAST
-GO TO 90
+  if(errmax.ge.elist(isucc)) go to 60
+  iord(i-1) = isucc
+end do
+50 iord(jbnd) = maxerr
+iord(jupbn) = last
+go to 90
 !
 !           INSERT ERRMIN BY TRAVERSING THE LIST BOTTOM-UP.
 !
-60 IORD(I-1) = MAXERR
-K = JBND
-DO J=I,JBND
-  ISUCC = IORD(K)
+60 iord(i-1) = maxerr
+k = jbnd
+do j=i,jbnd
+  isucc = iord(k)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMIN.LT.ELIST(ISUCC)) GO TO 80
-  IORD(K+1) = ISUCC
-  K = K-1
-END DO
-IORD(I) = LAST
-GO TO 90
-80 IORD(K+1) = LAST
+  if(errmin.lt.elist(isucc)) go to 80
+  iord(k+1) = isucc
+  k = k-1
+end do
+iord(i) = last
+go to 90
+80 iord(k+1) = last
 !
 !           SET MAXERR AND ERMAX.
 !
-90 MAXERR = IORD(NRMAX)
-ERMAX = ELIST(MAXERR)
-RETURN
-END SUBROUTINE QPSRT
+90 maxerr = iord(nrmax)
+ermax = elist(maxerr)
+return
+end subroutine qpsrt
 
-SUBROUTINE QELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES, &
-&EPMACH, OFLOW)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: N, NRES
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(IN) :: EPMACH, OFLOW
-REAL, INTENT(OUT) :: RESULT
-INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP, NEWELM, NUM
-REAL :: DELTA1, DELTA2, DELTA3, E0, E1, E1ABS, E2, E3, EPSINF, &
-&ERR1, ERR2, ERR3, ERROR, RES, SS, TOL1, TOL2, TOL3
+subroutine qelg (n, epstab, result, abserr, res3la, nres, &
+&epmach, oflow)
+implicit none
+integer, intent(inout) :: n, nres
+real, intent(out) :: abserr
+real, intent(in) :: epmach, oflow
+real, intent(out) :: result
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
+real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
+&err1, err2, err3, error, res, ss, tol1, tol2, tol3
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -8930,7 +8930,7 @@ REAL :: DELTA1, DELTA2, DELTA3, E0, E1, E1ABS, E2, E3, EPSINF, &
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: EPSTAB(52), RES3LA(3)
+real, intent(inout) :: epstab(52), res3la(3)
 !---------------------
 !
 !           LIST OF MAJOR VARIABLES
@@ -8952,111 +8952,111 @@ REAL, INTENT(INOUT) :: EPSTAB(52), RES3LA(3)
 !           TABLE CAN CONTAIN. IF THIS NUMBER IS REACHED, THE UPPER
 !           DIAGONAL OF THE EPSILON TABLE IS DELETED.
 !
-NRES = NRES + 1
-ABSERR = OFLOW
-RESULT = EPSTAB(N)
-IF (N .LT. 3) GO TO 100
-LIMEXP = 50
-EPSTAB(N + 2) = EPSTAB(N)
-NEWELM = (N - 1)/2
-EPSTAB(N) = OFLOW
-NUM = N
-K1 = N
-do 40 I = 1,NEWELM
-  K2 = K1 - 1
-  K3 = K1 - 2
-  RES = EPSTAB(K1 + 2)
-  E0 = EPSTAB(K3)
-  E1 = EPSTAB(K2)
-  E2 = RES
-  E1ABS = ABS(E1)
-  DELTA2 = E2 - E1
-  ERR2 = ABS(DELTA2)
-  TOL2 = AMAX1(ABS(E2),E1ABS)*EPMACH
-  DELTA3 = E1 - E0
-  ERR3 = ABS(DELTA3)
-  TOL3 = AMAX1(E1ABS,ABS(E0))*EPMACH
-  IF (ERR2 .GT. TOL2 .OR. ERR3 .GT. TOL3) GO TO 10
+nres = nres + 1
+abserr = oflow
+result = epstab(n)
+if (n .lt. 3) go to 100
+limexp = 50
+epstab(n + 2) = epstab(n)
+newelm = (n - 1)/2
+epstab(n) = oflow
+num = n
+k1 = n
+do 40 i = 1,newelm
+  k2 = k1 - 1
+  k3 = k1 - 2
+  res = epstab(k1 + 2)
+  e0 = epstab(k3)
+  e1 = epstab(k2)
+  e2 = res
+  e1abs = abs(e1)
+  delta2 = e2 - e1
+  err2 = abs(delta2)
+  tol2 = amax1(abs(e2),e1abs)*epmach
+  delta3 = e1 - e0
+  err3 = abs(delta3)
+  tol3 = amax1(e1abs,abs(e0))*epmach
+  if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
 !           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
 !           ACCURACY, CONVERGENCE IS ASSUMED.
 !           RESULT = E2
 !           ABSERR = ABS(E1-E0) + ABS(E2-E1)
 !
-  RESULT = RES
-  ABSERR = ERR2 + ERR3
+  result = res
+  abserr = err2 + err3
 ! ***JUMP OUT OF DO-LOOP
-  GO TO 100
-10 E3 = EPSTAB(K1)
-  EPSTAB(K1) = E1
-  DELTA1 = E1 - E3
-  ERR1 = ABS(DELTA1)
-  TOL1 = AMAX1(E1ABS,ABS(E3))*EPMACH
+  go to 100
+10 e3 = epstab(k1)
+  epstab(k1) = e1
+  delta1 = e1 - e3
+  err1 = abs(delta1)
+  tol1 = amax1(e1abs,abs(e3))*epmach
 !
 !           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
 !           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
 !
-  IF (ERR1.LE.TOL1 .OR. ERR2.LE.TOL2 .OR. ERR3.LE.TOL3) GO TO 20
-  SS = 1.0/DELTA1 + 1.0/DELTA2 - 1.0/DELTA3
-  EPSINF = ABS(SS*E1)
+  if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
+  ss = 1.0/delta1 + 1.0/delta2 - 1.0/delta3
+  epsinf = abs(ss*e1)
 !
 !           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
 !           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
 !           OF N.
 !
-  IF (EPSINF .GT. 0.1E-03) GO TO 30
-20 N = I + I - 1
+  if (epsinf .gt. 0.1e-03) go to 30
+20 n = i + i - 1
 ! ***JUMP OUT OF DO-LOOP
-  GO TO 50
+  go to 50
 !
 !           COMPUTE A NEW ELEMENT AND EVENTUALLY ADJUST
 !           THE VALUE OF RESULT.
 !
-30 RES = E1 + 1.0/SS
-  EPSTAB(K1) = RES
-  K1 = K1 - 2
-  ERROR = ERR2 + ABS(RES - E2) + ERR3
-  IF (ERROR .GT. ABSERR) GO TO 40
-  ABSERR = ERROR
-  RESULT = RES
-40 CONTINUE
+30 res = e1 + 1.0/ss
+  epstab(k1) = res
+  k1 = k1 - 2
+  error = err2 + abs(res - e2) + err3
+  if (error .gt. abserr) go to 40
+  abserr = error
+  result = res
+40 continue
 !
 !           SHIFT THE TABLE.
 !
-50 IF (N .EQ. LIMEXP) N = 2*(LIMEXP/2) - 1
-IB = 1
-IF ((NUM/2)*2 .EQ. NUM) IB = 2
-IE = NEWELM + 1
-DO I = 1,IE
-  IB2 = IB + 2
-  EPSTAB(IB) = EPSTAB(IB2)
-  IB = IB2
-END DO
-IF (NUM .EQ. N) GO TO 80
-INDX = NUM - N + 1
-DO I = 1,N
-  EPSTAB(I) = EPSTAB(INDX)
-  INDX = INDX + 1
-END DO
-80 IF (NRES .GE. 4) GO TO 90
-RES3LA(NRES) = RESULT
-ABSERR = OFLOW
-GO TO 100
+50 if (n .eq. limexp) n = 2*(limexp/2) - 1
+ib = 1
+if ((num/2)*2 .eq. num) ib = 2
+ie = newelm + 1
+do i = 1,ie
+  ib2 = ib + 2
+  epstab(ib) = epstab(ib2)
+  ib = ib2
+end do
+if (num .eq. n) go to 80
+indx = num - n + 1
+do i = 1,n
+  epstab(i) = epstab(indx)
+  indx = indx + 1
+end do
+80 if (nres .ge. 4) go to 90
+res3la(nres) = result
+abserr = oflow
+go to 100
 !
 !           COMPUTE ERROR ESTIMATE
 !
-90 ABSERR = ABS(RESULT - RES3LA(3)) + ABS(RESULT - RES3LA(2)) + &
-&ABS(RESULT - RES3LA(1))
-RES3LA(1) = RES3LA(2)
-RES3LA(2) = RES3LA(3)
-RES3LA(3) = RESULT
-100 ABSERR = AMAX1(ABSERR,5.0*EPMACH*ABS(RESULT))
-RETURN
-END SUBROUTINE QELG
+90 abserr = abs(result - res3la(3)) + abs(result - res3la(2)) + &
+&abs(result - res3la(1))
+res3la(1) = res3la(2)
+res3la(2) = res3la(3)
+res3la(3) = result
+100 abserr = amax1(abserr,5.0*epmach*abs(result))
+return
+end subroutine qelg
 
-SUBROUTINE QXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER, &
-&LIMIT,LENIW,LENW,LAST,IWORK,WORK)
-IMPLICIT NONE
+subroutine qxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
+&limit,leniw,lenw,last,iwork,work)
+implicit none
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -9193,50 +9193,50 @@ IMPLICIT NONE
 !                    WORK(LIMIT*4+1), ... IS THE AREA RESERVED TO STORE
 !                     FUNCTIONAL VALUES.
 !
-REAL :: A
-REAL, INTENT(OUT) :: ABSERR
-REAL :: B
-REAL, INTENT(IN) :: EPSABS, EPSREL
-REAL :: F
-REAL, INTENT(OUT) :: RESULT
-REAL, INTENT(INOUT) :: WORK
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(INOUT) :: IWORK
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
-INTEGER :: L1, L2, L3, L4, L5
+real :: a
+real, intent(out) :: abserr
+real :: b
+real, intent(in) :: epsabs, epsrel
+real :: f
+real, intent(out) :: result
+real, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(out) :: last
+integer, intent(in) :: leniw, lenw, limit
+integer :: l1, l2, l3, l4, l5
 !
-DIMENSION IWORK(LENIW),WORK(LENW)
+dimension iwork(leniw),work(lenw)
 !
-EXTERNAL F
+external f
 !
 !         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
 !
-IER = 6
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-IF (LIMIT.LT.1 .OR. LENIW.LT.LIMIT*3 .OR. LENW.LT.LIMIT*46) &
-&RETURN
+ier = 6
+last = 0
+result = 0.0
+abserr = 0.0
+if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
+&return
 !
 !         PREPARE CALL FOR QXGSE.
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
-L4 = LIMIT + L3
-L5 = 21*LIMIT + L4
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
+l4 = limit + l3
+l5 = 21*limit + l4
 !
-CALL QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST, &
-&WORK(L4),WORK(L5),IWORK(L1),IWORK(L2))
+call qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+&ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
+&work(l4),work(l5),iwork(l1),iwork(l2))
 !
-RETURN
-END SUBROUTINE QXGS
+return
+end subroutine qxgs
 
-SUBROUTINE QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
-IMPLICIT NONE
+subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+&ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
+implicit none
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 !            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -9371,39 +9371,39 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  F,SPMPAR,QELG,QXLQM,QPSRT,QXRRD,QXCPY
 !
-REAL :: A, ABSEPS
-REAL, INTENT(OUT) :: ABSERR
-REAL, INTENT(INOUT) :: ALIST
-REAL :: AREA, AREA1, AREA12, AREA2, A1, A2, B
-REAL, INTENT(INOUT) :: BLIST
-REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
-REAL, INTENT(INOUT) :: ELIST
-REAL :: EPMACH
-REAL, INTENT(IN) :: EPSABS, EPSREL
-REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12, &
-&ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-REAL, INTENT(OUT) :: RESULT
-REAL :: RES3LA(3)
-REAL, INTENT(INOUT) :: RLIST
-REAL :: RLIST2(52), SMALL, T, UFLOW
-REAL, INTENT(INOUT) :: VALP, VALN
-REAL :: VP1(21), VP2(21), VN1(21), VN2(21), SPMPAR
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
-INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
-INTEGER :: LP1, LP2, LN1, LN2
-LOGICAL :: EXTRAP, NOEXT
+real :: a, abseps
+real, intent(out) :: abserr
+real, intent(inout) :: alist
+real :: area, area1, area12, area2, a1, a2, b
+real, intent(inout) :: blist
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real, intent(inout) :: elist
+real :: epmach
+real, intent(in) :: epsabs, epsrel
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, f, oflow, rerr, resabs, reseps
+real, intent(out) :: result
+real :: res3la(3)
+real, intent(inout) :: rlist
+real :: rlist2(52), small, t, uflow
+real, intent(inout) :: valp, valn
+real :: vp1(21), vp2(21), vn1(21), vn2(21), spmpar
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr, nres, nrmax, numrl2
+integer, intent(inout) :: lp(limit), ln(limit)
+integer :: lp1, lp2, ln1, ln2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit), valp(21,limit), valn(21,limit)
 !
-EXTERNAL F
+external f
 !
 !            MACHINE DEPENDENT CONSTANTS
 !            ---------------------------
@@ -9412,287 +9412,287 @@ EXTERNAL F
 !          UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !          OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = SPMPAR(1)
-UFLOW = SPMPAR(2)
-OFLOW = SPMPAR(3)
+epmach = spmpar(1)
+uflow = spmpar(2)
+oflow = spmpar(3)
 !
 !            TEST ON VALIDITY OF PARAMETERS
 !            ------------------------------
-LAST = 0
-RESULT = 0.0
-ABSERR = 0.0
-ALIST(1) = A
-BLIST(1) = B
-RLIST(1) = 0.0
-ELIST(1) = 0.0
-IER = 6
-IF (EPSABS .LT. 0.0 .OR. EPSREL.LT. 0.0) GO TO 999
-IER = 0
-RERR = AMAX1(EPSREL, 50.0*EPMACH)
+last = 0
+result = 0.0
+abserr = 0.0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.0
+elist(1) = 0.0
+ier = 6
+if (epsabs .lt. 0.0 .or. epsrel.lt. 0.0) go to 999
+ier = 0
+rerr = amax1(epsrel, 50.0*epmach)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
 !
-IERRO = 0
-LP(1) = 1
-LN(1) = 1
-VALP(1,1) = F((A + B)*0.5)
-VALN(1,1) = VALP(1,1)
-CALL QXLQM (F,A,B,RESULT,ABSERR,DEFABS,RESABS, &
-&VALP(1,1),VALN(1,1),LP(1),LN(1),2, &
-&EPMACH,UFLOW,OFLOW)
+ierro = 0
+lp(1) = 1
+ln(1) = 1
+valp(1,1) = f((a + b)*0.5)
+valn(1,1) = valp(1,1)
+call qxlqm (f,a,b,result,abserr,defabs,resabs, &
+&valp(1,1),valn(1,1),lp(1),ln(1),2, &
+&epmach,uflow,oflow)
 !
 !           TEST ON ACCURACY.
 !
-DRES = ABS(RESULT)
-ERRBND = AMAX1(EPSABS,RERR*DRES)
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-IF (ABSERR .LE. 100.0*EPMACH*DEFABS .AND. ABSERR .GT. &
-&ERRBND) IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0 .OR. (ABSERR.LE.ERRBND.AND.ABSERR.NE.RESABS) .OR. &
-&ABSERR .EQ. 0.0) GO TO 999
+dres = abs(result)
+errbnd = amax1(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr .le. 100.0*epmach*defabs .and. abserr .gt. &
+&errbnd) ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
+&abserr .eq. 0.0) go to 999
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-NRMAX = 1
-NRES = 0
-NUMRL2 = 2
-KTMIN = 0
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.0 - 50.0*EPMACH)*DEFABS) KSGN = 1
-T = 1.0 + 100.0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.0 - 50.0*epmach)*defabs) ksgn = 1
+t = 1.0 + 100.0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST ERROR
 !           ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL QXRRD(F,VALN(1,MAXERR),LN(MAXERR),B1,A1,VN1,VP1,LN1,LP1)
-  CALL QXLQM(F,A1,B1,AREA1,ERROR1,RESABS,DEFAB1,VP1,VN1,LP1,LN1, &
-&2,EPMACH,UFLOW,OFLOW)
-  CALL QXRRD(F,VALP(1,MAXERR),LP(MAXERR),A2,B2,VP2,VN2,LP2,LN2)
-  CALL QXLQM(F,A2,B2,AREA2,ERROR2,RESABS,DEFAB2,VP2,VN2,LP2,LN2, &
-&2,EPMACH,UFLOW,OFLOW)
+  a1 = alist(maxerr)
+  b1 = 0.5*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call qxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
+  call qxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
+&2,epmach,uflow,oflow)
+  call qxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
+  call qxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
+&2,epmach,uflow,oflow)
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (ABS(RLIST(MAXERR) - AREA12) .GT. 0.1E-04*ABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST.GT.10 .AND. ERRO12.GT.ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = AMAX1(EPSABS,RERR*ABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (abs(rlist(maxerr) - area12) .gt. 0.1e-04*abs(area12) &
+&.or. erro12 .lt. 0.99*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last.gt.10 .and. erro12.gt.errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = amax1(epsabs,rerr*abs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF SUBINTERVALS
 !           EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT A POINT OF THE INTEGRATION RANGE.
 !
-  IF (AMAX1(ABS(A1),ABS(B2)) .LE. &
-&T*(ABS(A2) + 1.E+03*UFLOW)) IER = 4
+  if (amax1(abs(a1),abs(b2)) .le. &
+&t*(abs(a2) + 1.e+03*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  CALL QXCPY(VALP(1,MAXERR),VP1,LP1)
-  LP(MAXERR) = LP1
-  CALL QXCPY(VALN(1,MAXERR),VN1,LN1)
-  LN(MAXERR) = LN1
-  CALL QXCPY(VALP(1,LAST),VP2,LP2)
-  LP(LAST) = LP2
-  CALL QXCPY(VALN(1,LAST),VN2,LN2)
-  LN(LAST) = LN2
-  GO TO 30
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  call qxcpy(valp(1,maxerr),vp1,lp1)
+  lp(maxerr) = lp1
+  call qxcpy(valn(1,maxerr),vn1,ln1)
+  ln(maxerr) = ln1
+  call qxcpy(valp(1,last),vp2,lp2)
+  lp(last) = lp2
+  call qxcpy(valn(1,last),vn2,ln2)
+  ln(last) = ln2
+  go to 30
 !
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
-  CALL QXCPY(VALP(1,MAXERR),VP2,LP2)
-  LP(MAXERR) = LP2
-  CALL QXCPY(VALN(1,MAXERR),VN2,LN2)
-  LN(MAXERR) = LN2
-  CALL QXCPY(VALP(1,LAST),VP1,LP1)
-  LP(LAST) = LP1
-  CALL QXCPY(VALN(1,LAST),VN1,LN1)
-  LN(LAST) = LN1
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
+  call qxcpy(valp(1,maxerr),vp2,lp2)
+  lp(maxerr) = lp2
+  call qxcpy(valn(1,maxerr),vn2,ln2)
+  ln(maxerr) = ln2
+  call qxcpy(valp(1,last),vp1,lp1)
+  lp(last) = lp1
+  call qxcpy(valn(1,last),vn1,ln1)
+  ln(last) = ln1
 !
 !           CALL SUBROUTINE QPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE SUBINTERVAL
 !           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
 !
-30 CALL QPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+30 call qpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRSUM .LE. ERRBND) GO TO 115
+  if(errsum .le. errbnd) go to 115
 ! ***JUMP OUT OF DO-LOOP
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (ABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (abs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
+  if (abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
 !
 !           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
 !           MORE CAUTIOUS EXTRAPOLATION THAN IN THE ORIGINAL DQAGSE
 !           ROUTINE
 !
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. 0.3*ERTEST) GO TO 60
+40 if (ierro .eq. 3 .or. erlarg .le. 0.3*ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS OVER THE
 !           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
 ! ***JUMP OUT OF DO-LOOP
-    IF(ABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+    if(abs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL QELG (NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES, &
-&EPMACH,OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1E-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = AMAX1(EPSABS,RERR*ABS(RESEPS))
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call qelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+&epmach,oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1e-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = amax1(epsabs,rerr*abs(reseps))
 ! ***JUMP OUT OF DO-LOOP
-  IF (ABSERR .LE. ERTEST) GO TO 100
+  if (abserr .le. ertest) go to 100
 !
 !           PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = ABS(B - A)*0.375
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5
+  erlarg = errsum
+  go to 90
+80 small = abs(b - a)*0.375
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.0 .AND. AREA .NE. 0.0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.0) GO TO 130
-GO TO 110
-105 IF (ABSERR/ABS(RESULT) .GT. ERRSUM/ABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.0 .and. area .ne. 0.0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.0) go to 130
+go to 110
+105 if (abserr/abs(result) .gt. errsum/abs(area)) go to 115
 !
 !           TEST ON DIVERGENCE.
 !
-110 IF(KSGN.EQ.(-1).AND.AMAX1(ABS(RESULT),ABS(AREA)).LE. &
-&DEFABS*0.1E-01) GO TO 130
-IF(0.1E-01.GT.(RESULT/AREA).OR.(RESULT/AREA).GT.0.1E+03 &
-&.OR.ERRSUM.GT.ABS(AREA)) IER = 6
-GO TO 130
+110 if(ksgn.eq.(-1).and.amax1(abs(result),abs(area)).le. &
+&defabs*0.1e-01) go to 130
+if(0.1e-01.gt.(result/area).or.(result/area).gt.0.1e+03 &
+&.or.errsum.gt.abs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.0
-DO K = 1,LAST
-   RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE QXGSE
+115 result = 0.0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine qxgse
 
-SUBROUTINE QXCPY (A, B, L)
-IMPLICIT NONE
-INTEGER :: I
+subroutine qxcpy (a, b, l)
+implicit none
+integer :: i
 !
 !  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
 !          THE REAL VECTOR A OF LENGTH L
 !
-INTEGER, INTENT(IN) :: L
-REAL, INTENT(INOUT) :: A(L)
-REAL, INTENT(IN) :: B(L)
+integer, intent(in) :: l
+real, intent(inout) :: a(l)
+real, intent(in) :: b(l)
 !
-do 10 I = 1,L
-10 A(I) = B(I)
-RETURN
-END SUBROUTINE QXCPY
+do 10 i = 1,l
+10 a(i) = b(i)
+return
+end subroutine qxcpy
 
-SUBROUTINE QXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS, &
-&KEY,EPMACH,UFLOW,OFLOW)
-IMPLICIT NONE
+subroutine qxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
+&key,epmach,uflow,oflow)
+implicit none
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -9774,47 +9774,47 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  QXRUL
 !
-REAL :: F
-REAL, INTENT(IN) :: A, B
-REAL, INTENT(INOUT) :: RESULT, ABSERR, RESABS, RESASC
-REAL :: T
-REAL, INTENT(IN) :: EPMACH, OFLOW, UFLOW
-REAL :: RESG, RESK, ERROLD
-REAL, INTENT(INOUT) :: VR(21), VS(21)
-INTEGER :: K, K0, K1, K2
-INTEGER, INTENT(IN) :: KEY
-INTEGER :: KEY1
-INTEGER, INTENT(INOUT) :: LR, LS
-EXTERNAL F
+real :: f
+real, intent(in) :: a, b
+real, intent(inout) :: result, abserr, resabs, resasc
+real :: t
+real, intent(in) :: epmach, oflow, uflow
+real :: resg, resk, errold
+real, intent(inout) :: vr(21), vs(21)
+integer :: k, k0, k1, k2
+integer, intent(in) :: key
+integer :: key1
+integer, intent(inout) :: lr, ls
+external f
 !
-KEY1 = MAX0(KEY ,  0)
-KEY1 = MIN0(KEY1,  4)
-K0   = MAX0(KEY1-2,0)
-K1   = K0 + 1
-K2   = MIN0(KEY1+1,3)
+key1 = max0(key ,  0)
+key1 = min0(key1,  4)
+k0   = max0(key1-2,0)
+k1   = k0 + 1
+k2   = min0(key1+1,3)
 !
-CALL QXRUL (F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
-ERROLD = OFLOW
-T = 10.0*EPMACH
-do 10 K = K1,K2
-  CALL QXRUL (F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
-  RESULT = RESK
-  ABSERR = ABS(RESK - RESG)
-  IF (RESASC .NE. 0.0 .AND. ABSERR .NE. 0.0) &
-&ABSERR = RESASC*AMIN1(1.0,(200.0*ABSERR/RESASC)**1.5)
-  IF (RESABS .GT. UFLOW/T) ABSERR = AMAX1(T*RESABS,ABSERR)
-  RESG = RESK
-  IF (ABSERR .GT. ERROLD*0.16) GO TO 3000
-  IF (ABSERR .LT. 1000.0*EPMACH*RESABS) GO TO 3000
-  ERROLD = ABSERR
-10 CONTINUE
-3000 CONTINUE
-RETURN
-END SUBROUTINE QXLQM
+call qxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
+errold = oflow
+t = 10.0*epmach
+do 10 k = k1,k2
+  call qxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+  result = resk
+  abserr = abs(resk - resg)
+  if (resasc .ne. 0.0 .and. abserr .ne. 0.0) &
+&abserr = resasc*amin1(1.0,(200.0*abserr/resasc)**1.5)
+  if (resabs .gt. uflow/t) abserr = amax1(t*resabs,abserr)
+  resg = resk
+  if (abserr .gt. errold*0.16) go to 3000
+  if (abserr .lt. 1000.0*epmach*resabs) go to 3000
+  errold = abserr
+10 continue
+3000 continue
+return
+end subroutine qxlqm
 
-SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
-IMPLICIT NONE
-INTEGER :: I, IS, K, KS
+subroutine qxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
+implicit none
+integer :: i, is, k, ks
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -9884,141 +9884,141 @@ INTEGER :: I, IS, K, KS
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 !
 !------------------------
-REAL :: F
-REAL, INTENT(IN) :: XL, XU
-REAL :: LDL
-REAL, INTENT(OUT) :: Y
-REAL, INTENT(INOUT) :: YA, YM
-REAL :: Y2, XX(41), WW(52)
-REAL, INTENT(INOUT) :: FV1(21), FV2(21)
-REAL :: AA, BB, C
-INTEGER :: ISTART(4), LEN(4), J
-INTEGER, INTENT(IN) :: KE, K1
-INTEGER, INTENT(INOUT) :: L1, L2
-EXTERNAL F
+real :: f
+real, intent(in) :: xl, xu
+real :: ldl
+real, intent(out) :: y
+real, intent(inout) :: ya, ym
+real :: y2, xx(41), ww(52)
+real, intent(inout) :: fv1(21), fv2(21)
+real :: aa, bb, c
+integer :: istart(4), len(4), j
+integer, intent(in) :: ke, k1
+integer, intent(inout) :: l1, l2
+external f
 !------------------------
-DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
-DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
+data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
+data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
 !------------------------
-DATA XX( 1)/.0                       /
-DATA XX( 2)/.25000000000000000000E+00/
-DATA XX( 3)/.50000000000000000000E+00/
-DATA XX( 4)/.75000000000000000000E+00/
-DATA XX( 5)/.87500000000000000000E+00/
-DATA XX( 6)/.93750000000000000000E+00/
-DATA XX( 7)/.10000000000000000000E+01/
-DATA XX( 8)/.37500000000000000000E+00/
-DATA XX( 9)/.62500000000000000000E+00/
-DATA XX(10)/.96875000000000000000E+00/
-DATA XX(11)/.12500000000000000000E+00/
-DATA XX(12)/.68750000000000000000E+00/
-DATA XX(13)/.81250000000000000000E+00/
-DATA XX(14)/.98437500000000000000E+00/
-DATA XX(15)/.18750000000000000000E+00/
-DATA XX(16)/.31250000000000000000E+00/
-DATA XX(17)/.43750000000000000000E+00/
-DATA XX(18)/.56250000000000000000E+00/
-DATA XX(19)/.84375000000000000000E+00/
-DATA XX(20)/.90625000000000000000E+00/
-DATA XX(21)/.99218750000000000000E+00/
+data xx( 1)/.0                       /
+data xx( 2)/.25000000000000000000e+00/
+data xx( 3)/.50000000000000000000e+00/
+data xx( 4)/.75000000000000000000e+00/
+data xx( 5)/.87500000000000000000e+00/
+data xx( 6)/.93750000000000000000e+00/
+data xx( 7)/.10000000000000000000e+01/
+data xx( 8)/.37500000000000000000e+00/
+data xx( 9)/.62500000000000000000e+00/
+data xx(10)/.96875000000000000000e+00/
+data xx(11)/.12500000000000000000e+00/
+data xx(12)/.68750000000000000000e+00/
+data xx(13)/.81250000000000000000e+00/
+data xx(14)/.98437500000000000000e+00/
+data xx(15)/.18750000000000000000e+00/
+data xx(16)/.31250000000000000000e+00/
+data xx(17)/.43750000000000000000e+00/
+data xx(18)/.56250000000000000000e+00/
+data xx(19)/.84375000000000000000e+00/
+data xx(20)/.90625000000000000000e+00/
+data xx(21)/.99218750000000000000e+00/
 !   NUMBER OF NODES 13
-DATA WW(1)/1.303262173284849021810473057638590518409112513421E-1/
-DATA WW(2)/2.390632866847646220320329836544615917290026806242E-1/
-DATA WW(3)/2.630626354774670227333506083741355715758124943143E-1/
-DATA WW(4)/2.186819313830574175167853094864355208948886875898E-1/
-DATA WW(5)/2.757897646642836865859601197607471574336674206700E-2/
-DATA WW(6)/1.055750100538458443365034879086669791305550493830E-1/
-DATA WW(7)/1.571194260595182254168429283636656908546309467968E-2/
+data ww(1)/1.303262173284849021810473057638590518409112513421e-1/
+data ww(2)/2.390632866847646220320329836544615917290026806242e-1/
+data ww(3)/2.630626354774670227333506083741355715758124943143e-1/
+data ww(4)/2.186819313830574175167853094864355208948886875898e-1/
+data ww(5)/2.757897646642836865859601197607471574336674206700e-2/
+data ww(6)/1.055750100538458443365034879086669791305550493830e-1/
+data ww(7)/1.571194260595182254168429283636656908546309467968e-2/
 !   NUMBER OF NODES 19
-DATA WW(8)/1.298751627936015783241173611320651866834051160074E-1/
-DATA WW(9)/2.249996826462523640447834514709508786970828213187E-1/
-DATA WW(15)/5.542699233295875168406783695143646338274805359780E-2/
-DATA WW(10)/1.680415725925575286319046726692683040162290325505E-1/
-DATA WW(16)/9.986735247403367525720377847755415293097913496236E-2/
-DATA WW(11)/1.415567675701225879892811622832845252125600939627E-1/
-DATA WW(12)/1.006482260551160175038684459742336605269707889822E-1/
-DATA WW(13)/2.510604860724282479058338820428989444699235030871E-2/
-DATA WW(17)/4.507523056810492466415880450799432587809828791196E-2/
-DATA WW(14)/9.402964360009747110031098328922608224934320397592E-3/
+data ww(8)/1.298751627936015783241173611320651866834051160074e-1/
+data ww(9)/2.249996826462523640447834514709508786970828213187e-1/
+data ww(15)/5.542699233295875168406783695143646338274805359780e-2/
+data ww(10)/1.680415725925575286319046726692683040162290325505e-1/
+data ww(16)/9.986735247403367525720377847755415293097913496236e-2/
+data ww(11)/1.415567675701225879892811622832845252125600939627e-1/
+data ww(12)/1.006482260551160175038684459742336605269707889822e-1/
+data ww(13)/2.510604860724282479058338820428989444699235030871e-2/
+data ww(17)/4.507523056810492466415880450799432587809828791196e-2/
+data ww(14)/9.402964360009747110031098328922608224934320397592e-3/
 !   NUMBER OF NODES 27
-DATA WW(18)/6.300942249647773931746170540321811473310938661469E-2/
-DATA WW(28)/1.239572396231834242194189674243818619042280816640E-1/
-DATA WW(19)/1.261383225537664703012999637242003647020326905948E-1/
-DATA WW(25)/1.235837891364555000245004813294817451524633100256E-1/
-DATA WW(20)/1.273864433581028272878709981850307363453523117880E-1/
-DATA WW(26)/1.148933497158144016800199601785309838604146040215E-1/
-DATA WW(29)/2.501306413750310579525950767549691151739047969345E-2/
-DATA WW(21)/8.576500414311820514214087864326799153427368592787E-2/
-DATA WW(30)/4.915957918146130094258849161350510503556792927578E-2/
-DATA WW(22)/7.102884842310253397447305465997026228407227220665E-2/
-DATA WW(23)/5.026383572857942403759829860675892897279675661654E-2/
-DATA WW(27)/1.252575774226122633391477702593585307254527198070E-2/
-DATA WW(31)/2.259167374956474713302030584548274729936249753832E-2/
-DATA WW(24)/4.683670010609093810432609684738393586390722052124E-3/
+data ww(18)/6.300942249647773931746170540321811473310938661469e-2/
+data ww(28)/1.239572396231834242194189674243818619042280816640e-1/
+data ww(19)/1.261383225537664703012999637242003647020326905948e-1/
+data ww(25)/1.235837891364555000245004813294817451524633100256e-1/
+data ww(20)/1.273864433581028272878709981850307363453523117880e-1/
+data ww(26)/1.148933497158144016800199601785309838604146040215e-1/
+data ww(29)/2.501306413750310579525950767549691151739047969345e-2/
+data ww(21)/8.576500414311820514214087864326799153427368592787e-2/
+data ww(30)/4.915957918146130094258849161350510503556792927578e-2/
+data ww(22)/7.102884842310253397447305465997026228407227220665e-2/
+data ww(23)/5.026383572857942403759829860675892897279675661654e-2/
+data ww(27)/1.252575774226122633391477702593585307254527198070e-2/
+data ww(31)/2.259167374956474713302030584548274729936249753832e-2/
+data ww(24)/4.683670010609093810432609684738393586390722052124e-3/
 !   NUMBER OF NODES 41
-DATA WW(32)/6.362762978782724559269342300509058175967124446839E-2/
-DATA WW(42)/1.187141856692283347609436153545356484256869129472E-1/
-DATA WW(46)/1.533126874056586959338368742803997744815413565014E-2/
-DATA WW(33)/9.950065827346794643193261975720606296171462239514E-2/
-DATA WW(47)/3.527159369750123100455704702965541866345781113903E-2/
-DATA WW(39)/8.140326425945938045967829319725797511040878579808E-2/
-DATA WW(48)/5.000556431653955124212795201196389006184693561679E-2/
-DATA WW(34)/7.048220002718565366098742295389607994441704889441E-2/
-DATA WW(49)/5.744164831179720106340717579281831675999717767532E-2/
-DATA WW(40)/6.583213447600552906273539578430361199084485578379E-2/
-DATA WW(43)/5.999947605385971985589674757013565610751028128731E-2/
-DATA WW(35)/6.512297339398335645872697307762912795346716454337E-2/
-DATA WW(44)/5.500937980198041736910257988346101839062581489820E-2/
-DATA WW(50)/1.598823797283813438301248206397233634639162043386E-2/
-DATA WW(36)/3.998229150313659724790527138690215186863915308702E-2/
-DATA WW(51)/2.635660410220884993472478832884065450876913559421E-2/
-DATA WW(37)/3.456512257080287509832054272964315588028252136044E-2/
-DATA WW(41)/2.592913726450792546064232192976262988065252032902E-2/
-DATA WW(45)/5.264422421764655969760271538981443718440340270116E-3/
-DATA WW(52)/1.196003937945541091670106760660561117114584656319E-2/
-DATA WW(38)/2.212167975884114432760321569298651047876071264944E-3/
+data ww(32)/6.362762978782724559269342300509058175967124446839e-2/
+data ww(42)/1.187141856692283347609436153545356484256869129472e-1/
+data ww(46)/1.533126874056586959338368742803997744815413565014e-2/
+data ww(33)/9.950065827346794643193261975720606296171462239514e-2/
+data ww(47)/3.527159369750123100455704702965541866345781113903e-2/
+data ww(39)/8.140326425945938045967829319725797511040878579808e-2/
+data ww(48)/5.000556431653955124212795201196389006184693561679e-2/
+data ww(34)/7.048220002718565366098742295389607994441704889441e-2/
+data ww(49)/5.744164831179720106340717579281831675999717767532e-2/
+data ww(40)/6.583213447600552906273539578430361199084485578379e-2/
+data ww(43)/5.999947605385971985589674757013565610751028128731e-2/
+data ww(35)/6.512297339398335645872697307762912795346716454337e-2/
+data ww(44)/5.500937980198041736910257988346101839062581489820e-2/
+data ww(50)/1.598823797283813438301248206397233634639162043386e-2/
+data ww(36)/3.998229150313659724790527138690215186863915308702e-2/
+data ww(51)/2.635660410220884993472478832884065450876913559421e-2/
+data ww(37)/3.456512257080287509832054272964315588028252136044e-2/
+data ww(41)/2.592913726450792546064232192976262988065252032902e-2/
+data ww(45)/5.264422421764655969760271538981443718440340270116e-3/
+data ww(52)/1.196003937945541091670106760660561117114584656319e-2/
+data ww(38)/2.212167975884114432760321569298651047876071264944e-3/
 !------------------------
-K = KE + 1
-IS = ISTART(K)
-KS = LEN(K)
-LDL = XU - XL
-BB = LDL*0.5
-AA = XL + BB
+k = ke + 1
+is = istart(k)
+ks = len(k)
+ldl = xu - xl
+bb = ldl*0.5
+aa = xl + bb
 !
-Y = 0.0
-do 10 I = 1,KS
-   C = BB*XX(I)
-   IF (I .GT. L1) FV1(I) = F(AA + C)
-   IF (I .GT. L2) FV2(I) = F(AA - C)
-   J = IS + I
-   Y = Y + (FV1(I) + FV2(I))*WW(J)
-10 CONTINUE
+y = 0.0
+do 10 i = 1,ks
+   c = bb*xx(i)
+   if (i .gt. l1) fv1(i) = f(aa + c)
+   if (i .gt. l2) fv2(i) = f(aa - c)
+   j = is + i
+   y = y + (fv1(i) + fv2(i))*ww(j)
+10 continue
 !
-Y2 = Y
-Y = Y*BB
-IF (L1 .LT. KS) L1 = KS
-IF (L2 .LT. KS) L2 = KS
-IF (KE .NE. K1) RETURN
+y2 = y
+y = y*bb
+if (l1 .lt. ks) l1 = ks
+if (l2 .lt. ks) l2 = ks
+if (ke .ne. k1) return
 !
-YA = 0.0
-do 20 I = 1,KS
-   J = IS + I
-   YA = YA + (ABS(FV1(I)) + ABS(FV2(I)))*WW(J)
-20 CONTINUE
-YA = YA*ABS(BB)
+ya = 0.0
+do 20 i = 1,ks
+   j = is + i
+   ya = ya + (abs(fv1(i)) + abs(fv2(i)))*ww(j)
+20 continue
+ya = ya*abs(bb)
 !
-Y2 = Y2*0.5
-YM = 0.0
-do 30 I = 1,KS
-   J = IS + I
-   YM = YM + (ABS(FV1(I) - Y2) + ABS(FV2(I) - Y2))*WW(J)
-30 CONTINUE
-YM = YM*ABS(BB)
-RETURN
-END SUBROUTINE QXRUL
+y2 = y2*0.5
+ym = 0.0
+do 30 i = 1,ks
+   j = is + i
+   ym = ym + (abs(fv1(i) - y2) + abs(fv2(i) - y2))*ww(j)
+30 continue
+ym = ym*abs(bb)
+return
+end subroutine qxrul
 
-SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
-IMPLICIT NONE
+subroutine qxrrd (f,z,lz,xl,xu,r,s,lr,ls)
+implicit none
 !
 !            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 !            THE BISECTION OF AN INTERVAL
@@ -10053,74 +10053,74 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  F
 !
-REAL :: F
-REAL, INTENT(INOUT) :: R(21), S(21)
-REAL :: Z(21)
-REAL, INTENT(IN) :: XU, XL
-REAL :: DLEN, CENTR
-INTEGER, INTENT(INOUT) :: LR, LS
-INTEGER, INTENT(IN) :: LZ
+real :: f
+real, intent(inout) :: r(21), s(21)
+real :: z(21)
+real, intent(in) :: xu, xl
+real :: dlen, centr
+integer, intent(inout) :: lr, ls
+integer, intent(in) :: lz
 !
-DLEN = (XU - XL)*0.5
-CENTR = XL + DLEN
-R(1) =  Z(3)
-R(2) =  Z(9)
-R(3) =  Z(4)
-R(4) =  Z(5)
-R(5) =  Z(6)
-R(6) =  Z(10)
-R(7) =  Z(7)
-S(1) =  Z(3)
-S(2) =  Z(8)
-S(3) =  Z(2)
-S(7) =  Z(1)
-IF (LZ .GT. 11) GO TO 10
+dlen = (xu - xl)*0.5
+centr = xl + dlen
+r(1) =  z(3)
+r(2) =  z(9)
+r(3) =  z(4)
+r(4) =  z(5)
+r(5) =  z(6)
+r(6) =  z(10)
+r(7) =  z(7)
+s(1) =  z(3)
+s(2) =  z(8)
+s(3) =  z(2)
+s(7) =  z(1)
+if (lz .gt. 11) go to 10
 !
-R(8) =  F(CENTR + DLEN*0.375)
-R(9) =  F(CENTR + DLEN*0.625)
-R(10) = F(CENTR + DLEN*0.96875)
-LR = 10
-IF (LZ .NE. 11) S(4) = F(CENTR - DLEN*0.75)
-IF (LZ .EQ. 11) S(4) = Z(11)
-S(5) =  F(CENTR - DLEN*0.875)
-S(6) =  F(CENTR - DLEN*0.9375)
-S(8) =  F(CENTR - DLEN*0.375)
-S(9) =  F(CENTR - DLEN*0.625)
-S(10) = F(CENTR - DLEN*0.96875)
-LS = 10
-RETURN
+r(8) =  f(centr + dlen*0.375)
+r(9) =  f(centr + dlen*0.625)
+r(10) = f(centr + dlen*0.96875)
+lr = 10
+if (lz .ne. 11) s(4) = f(centr - dlen*0.75)
+if (lz .eq. 11) s(4) = z(11)
+s(5) =  f(centr - dlen*0.875)
+s(6) =  f(centr - dlen*0.9375)
+s(8) =  f(centr - dlen*0.375)
+s(9) =  f(centr - dlen*0.625)
+s(10) = f(centr - dlen*0.96875)
+ls = 10
+return
 !
-10 R(8) = Z(12)
-R(9) = Z(13)
-R(10) = Z(14)
-LR = 10
-S(4) = Z(11)
-S(5) = F(CENTR - DLEN*0.875)
-S(6) = F(CENTR - DLEN*0.9375)
-IF (LZ .GT. 14) GO TO 20
-S(8)  = F(CENTR - DLEN*0.375)
-S(9)  = F(CENTR - DLEN*0.625)
-S(10) = F(CENTR - DLEN*0.96875)
-LS = 10
-RETURN
+10 r(8) = z(12)
+r(9) = z(13)
+r(10) = z(14)
+lr = 10
+s(4) = z(11)
+s(5) = f(centr - dlen*0.875)
+s(6) = f(centr - dlen*0.9375)
+if (lz .gt. 14) go to 20
+s(8)  = f(centr - dlen*0.375)
+s(9)  = f(centr - dlen*0.625)
+s(10) = f(centr - dlen*0.96875)
+ls = 10
+return
 !
-20 R(11) = Z(18)
-R(12) = Z(19)
-R(13) = Z(20)
-R(14) = Z(21)
-LR = 14
-S(8) = Z(16)
-S(9) = Z(15)
-S(10) = F(CENTR - DLEN*0.96875)
-S(11) = Z(17)
-LS = 11
-RETURN
-END SUBROUTINE QXRRD
+20 r(11) = z(18)
+r(12) = z(19)
+r(13) = z(20)
+r(14) = z(21)
+lr = 14
+s(8) = z(16)
+s(9) = z(15)
+s(10) = f(centr - dlen*0.96875)
+s(11) = z(17)
+ls = 11
+return
+end subroutine qxrrd
 
-SUBROUTINE DQAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR, &
-&NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: LAST
+subroutine dqags (f, a, b, epsabs, epsrel, result, abserr, &
+&neval, ier, limit, lenw, last, iwork, work)
+implicit none
+integer, intent(out) :: last
 !-----------------------------------------------------------------------
 !
 !           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -10267,44 +10267,44 @@ INTEGER, INTENT(OUT) :: LAST
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION, INTENT(IN) :: B, EPSABS, EPSREL
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION, INTENT(INOUT) :: WORK
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(INOUT) :: IWORK
-INTEGER, INTENT(IN) :: LENW, LIMIT
-INTEGER :: L1, L2, L3
-INTEGER, INTENT(OUT) :: NEVAL
+double precision, intent(in) :: a
+double precision, intent(out) :: abserr
+double precision, intent(in) :: b, epsabs, epsrel
+double precision :: f
+double precision, intent(out) :: result
+double precision, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(in) :: lenw, limit
+integer :: l1, l2, l3
+integer, intent(out) :: neval
 !
-DIMENSION IWORK(LIMIT), WORK(LENW)
-EXTERNAL F
+dimension iwork(limit), work(lenw)
+external f
 !
 !         CHECK VALIDITY OF LIMIT AND LENW.
 !
-IER = 6
-NEVAL = 0
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-IF (LIMIT .LT. 1 .OR. LENW .LT. LIMIT*4) RETURN
+ier = 6
+neval = 0
+last = 0
+result = 0.d0
+abserr = 0.d0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
 !         PREPARE CALL FOR DQAGSE.
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
 !
-CALL DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,NEVAL, &
-&IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
-RETURN
-END SUBROUTINE DQAGS
+call dqagse (f,a,b,epsabs,epsrel,limit,result,abserr,neval, &
+&ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine dqags
 
-SUBROUTINE DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
-IMPLICIT NONE
+subroutine dqagse (f,a,b,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,alist,blist,rlist,elist,iord,last)
+implicit none
 !-----------------------------------------------------------------------
 !
 !           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -10445,40 +10445,40 @@ IMPLICIT NONE
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION :: ABSEPS
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
-DOUBLE PRECISION, INTENT(IN) :: B
-DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, &
-&DPMPAR, DRES
-DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-DOUBLE PRECISION :: EPMACH
-DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, &
-&ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION :: RES3LA(3)
-DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR
-INTEGER, INTENT(OUT) :: NEVAL
-INTEGER :: NRES, NRMAX, NUMRL2
-LOGICAL :: EXTRAP, NOEXT
+double precision, intent(in) :: a
+double precision :: abseps
+double precision, intent(out) :: abserr
+double precision, intent(inout) :: alist
+double precision :: area, area1, area12, area2, a1, a2
+double precision, intent(in) :: b
+double precision, intent(inout) :: blist
+double precision :: b1, b2, correc, defabs, defab1, defab2, &
+&dpmpar, dres
+double precision, intent(inout) :: elist
+double precision :: epmach
+double precision, intent(in) :: epsabs, epsrel
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision, intent(out) :: result
+double precision :: res3la(3)
+double precision, intent(inout) :: rlist
+double precision :: rlist2(52), small, t, uflow
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr
+integer, intent(out) :: neval
+integer :: nres, nrmax, numrl2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit)
 !
-EXTERNAL F
+external f
 !
 !            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 !            LIMEXP IN SUBROUTINE DQELG (RLIST2 SHOULD BE OF DIMENSION
@@ -10533,245 +10533,245 @@ EXTERNAL F
 !           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = DPMPAR(1)
-UFLOW = DPMPAR(2)
-OFLOW = DPMPAR(3)
+epmach = dpmpar(1)
+uflow = dpmpar(2)
+oflow = dpmpar(3)
 !
 !            CHECK EPSABS AND EPSREL
 !            -----------------------
 !
-NEVAL = 0
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-ALIST(1) = A
-BLIST(1) = B
-RLIST(1) = 0.D0
-ELIST(1) = 0.D0
-IER = 6
-IF (EPSABS .LT. 0.D0 .OR. EPSREL .LT. 0.D0) GO TO 999
-IER = 0
-RERR = DMAX1(EPSREL, 50.D0*EPMACH, 0.5D-28)
+neval = 0
+last = 0
+result = 0.d0
+abserr = 0.d0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.d0
+elist(1) = 0.d0
+ier = 6
+if (epsabs .lt. 0.d0 .or. epsrel .lt. 0.d0) go to 999
+ier = 0
+rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
 !
-IERRO = 0
-CALL DQK21 (F, A, B, RESULT, ABSERR, DEFABS, RESABS, &
-&EPMACH, UFLOW, ID)
-IF (ID .NE. 0) GO TO 999
-NEVAL = 21
+ierro = 0
+call dqk21 (f, a, b, result, abserr, defabs, resabs, &
+&epmach, uflow, id)
+if (id .ne. 0) go to 999
+neval = 21
 !
 !           TEST ON ACCURACY.
 !
-DRES = DABS(RESULT)
-ERRBND = DMAX1(EPSABS,RERR*DRES)
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-IF (ABSERR .LE. 100.D0*EPMACH*DEFABS .AND. ABSERR .GT. &
-&ERRBND) IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0) GO TO 999
+dres = dabs(result)
+errbnd = dmax1(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. &
+&errbnd) ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0) go to 999
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-CORREC = 0.D0
-NRMAX = 1
-NRES = 0
-NUMRL2 = 2
-KTMIN = 0
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.D0 - 50.D0*EPMACH)*DEFABS) KSGN = 1
-T = 1.D0 + 100.D0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+correc = 0.d0
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
+t = 1.d0 + 100.d0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST
 !           ERROR ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5D0*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL DQK21 (F, A1, B1, AREA1, ERROR1, RESABS, DEFAB1, &
-&EPMACH, UFLOW, IER)
-  IF (IER .NE. 0) GO TO 100
-  CALL DQK21 (F, A2, B2, AREA2, ERROR2, RESABS, DEFAB2, &
-&EPMACH, UFLOW, IER)
-  NEVAL = NEVAL + 42
+  a1 = alist(maxerr)
+  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call dqk21 (f, a1, b1, area1, error1, resabs, defab1, &
+&epmach, uflow, ier)
+  if (ier .ne. 0) go to 100
+  call dqk21 (f, a2, b2, area2, error2, resabs, defab2, &
+&epmach, uflow, ier)
+  neval = neval + 42
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+&.or. erro12 .lt. 0.99d0*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 !           SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
 !           SUBINTERVALS EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT A POINT OF THE INTEGRATION RANGE.
 !
-  IF (DMAX1(DABS(A1),DABS(B2)) .LE. &
-&T*(DABS(A2) + 0.1D+04*UFLOW)) IER = 4
+  if (dmax1(dabs(a1),dabs(b2)) .le. &
+&t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  GO TO 30
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  go to 30
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 !           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 !           BISECTED NEXT).
 !
-30 CALL DQPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
-  IF (ERRSUM .LE. ERRBND) GO TO 115
+  if (errsum .le. errbnd) go to 115
 ! ***JUMP OUT OF DO-LOOP
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
+  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
+40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
 !           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
 !           EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
 ! ***JUMP OUT OF DO-LOOP
-    IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+    if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL DQELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES, &
-&EPMACH, OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+&epmach, oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = dmax1(epsabs,rerr*dabs(reseps))
 ! ***JUMP OUT OF DO-LOOP
-  IF (ABSERR .LE. ERTEST) GO TO 100
+  if (abserr .le. ertest) go to 100
 !
 !           PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5D0
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = DABS(B - A)*0.375D0
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5d0
+  erlarg = errsum
+  go to 90
+80 small = dabs(b - a)*0.375d0
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.D0 .AND. AREA .NE. 0.D0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.D0) GO TO 130
-GO TO 110
-105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.d0 .and. area .ne. 0.d0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.d0) go to 130
+go to 110
+105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
 !           TEST ON DIVERGENCE.
 !
-110 IF (KSGN .EQ. -1 .AND. DMAX1(DABS(RESULT),DABS(AREA)) .LE. &
-&DEFABS*0.1D-01) GO TO 130
-IF (0.1D-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1D+03 &
-&.OR. ERRSUM .GT. DABS(AREA)) IER = 6
-GO TO 130
+110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
+&defabs*0.1d-01) go to 130
+if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
+&.or. errsum .gt. dabs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.0
-DO K = 1,LAST
-   RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE DQAGSE
+115 result = 0.0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine dqagse
 

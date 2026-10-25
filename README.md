@@ -125,6 +125,15 @@ repository copy of `tools/fixed_to_free.py`, so regeneration needs only Python's
 standard library. The converter handles compact DATA array declarations and wraps
 long FORMAT statements without splitting their Hollerith text.
 
+Generation also applies `tools/lowercase_fortran.py` to make free-form code
+lowercase while preserving quoted strings, comments, spacing, and line numbers.
+Comment capitalization can be reviewed separately in the maintained `nswc.f`.
+For another free-form file, use
+`python tools/lowercase_fortran.py input.f90 --output lowercase.f90`.
+The output must be a new file. The filter rejects preprocessor directives and
+unquoted Hollerith constants, which require separate review. Existing quoted
+FORMAT strings in the maintained library are preserved exactly.
+
 `tools/name_procedure_ends.py` created the readable fixed-form source from
 `nswc_orig.f`. It supports a preview, a separate output, and an in-place update
 with a non-overwriting backup:

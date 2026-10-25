@@ -1,19 +1,19 @@
-SUBROUTINE COSQI (N,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*)
-INTEGER :: K
-REAL :: DT, FK, PIH
-DATA PIH /1.57079632679491/
-DT = PIH/FLOAT(N)
-FK = 0.
-DO K=1,N
-   FK = FK+1.
-   WSAVE(K) = COS(FK*DT)
-END DO
-CALL RFFTI (N,WSAVE(N+1))
-RETURN
-END SUBROUTINE COSQI
+subroutine cosqi (n,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*)
+integer :: k
+real :: dt, fk, pih
+data pih /1.57079632679491/
+dt = pih/float(n)
+fk = 0.
+do k=1,n
+   fk = fk+1.
+   wsave(k) = cos(fk*dt)
+end do
+call rffti (n,wsave(n+1))
+return
+end subroutine cosqi
 
 !     ******************************************************************
 !
@@ -65,51 +65,51 @@ END SUBROUTINE COSQI
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
 !
-SUBROUTINE COSQF (N,X,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*), X(*)
-REAL :: SQRT2, TSQX
-DATA SQRT2 /1.4142135623731/
-IF (N-2) 102,101,103
-101 TSQX = SQRT2*X(2)
-X(2) = X(1)-TSQX
-X(1) = X(1)+TSQX
-102 RETURN
-103 CALL COSQF1 (N,X,WSAVE,WSAVE(N+1))
-RETURN
-END SUBROUTINE COSQF
+subroutine cosqf (n,x,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*), x(*)
+real :: sqrt2, tsqx
+data sqrt2 /1.4142135623731/
+if (n-2) 102,101,103
+101 tsqx = sqrt2*x(2)
+x(2) = x(1)-tsqx
+x(1) = x(1)+tsqx
+102 return
+103 call cosqf1 (n,x,wsave,wsave(n+1))
+return
+end subroutine cosqf
 
-SUBROUTINE COSQF1 (N,X,W,XH)
-IMPLICIT NONE
-INTEGER :: N
-REAL :: W(*)
-REAL, INTENT(INOUT) :: X(*), XH(*)
-INTEGER :: I, K, KC, MODN, NP2, NS2
-REAL :: XIM1
-NS2 = (N+1)/2
-NP2 = N+2
-DO K=2,NS2
-   KC = NP2-K
-   XH(K) = X(K)+X(KC)
-   XH(KC) = X(K)-X(KC)
-END DO
-MODN = MOD(N,2)
-IF (MODN .EQ. 0) XH(NS2+1) = X(NS2+1)+X(NS2+1)
-DO K=2,NS2
-   KC = NP2-K
-   X(K) = W(K-1)*XH(KC)+W(KC-1)*XH(K)
-   X(KC) = W(K-1)*XH(K)-W(KC-1)*XH(KC)
-END DO
-IF (MODN .EQ. 0) X(NS2+1) = W(NS2)*XH(NS2+1)
-CALL RFFTF (N,X,XH)
-DO I=3,N,2
-   XIM1 = X(I-1)-X(I)
-   X(I) = X(I-1)+X(I)
-   X(I-1) = XIM1
-END DO
-RETURN
-END SUBROUTINE COSQF1
+subroutine cosqf1 (n,x,w,xh)
+implicit none
+integer :: n
+real :: w(*)
+real, intent(inout) :: x(*), xh(*)
+integer :: i, k, kc, modn, np2, ns2
+real :: xim1
+ns2 = (n+1)/2
+np2 = n+2
+do k=2,ns2
+   kc = np2-k
+   xh(k) = x(k)+x(kc)
+   xh(kc) = x(k)-x(kc)
+end do
+modn = mod(n,2)
+if (modn .eq. 0) xh(ns2+1) = x(ns2+1)+x(ns2+1)
+do k=2,ns2
+   kc = np2-k
+   x(k) = w(k-1)*xh(kc)+w(kc-1)*xh(k)
+   x(kc) = w(k-1)*xh(k)-w(kc-1)*xh(kc)
+end do
+if (modn .eq. 0) x(ns2+1) = w(ns2)*xh(ns2+1)
+call rfftf (n,x,xh)
+do i=3,n,2
+   xim1 = x(i-1)-x(i)
+   x(i) = x(i-1)+x(i)
+   x(i-1) = xim1
+end do
+return
+end subroutine cosqf1
 
 !     ******************************************************************
 !
@@ -161,55 +161,55 @@ END SUBROUTINE COSQF1
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
 !
-SUBROUTINE COSQB (N,X,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*), X(*)
-REAL :: TSQRT2, X1
-DATA TSQRT2 /2.82842712474619/
-IF (N-2) 101,102,103
-101 X(1) = 4.*X(1)
-RETURN
-102 X1 = 4.*(X(1)+X(2))
-X(2) = TSQRT2*(X(1)-X(2))
-X(1) = X1
-RETURN
-103 CALL COSQB1 (N,X,WSAVE,WSAVE(N+1))
-RETURN
-END SUBROUTINE COSQB
+subroutine cosqb (n,x,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*), x(*)
+real :: tsqrt2, x1
+data tsqrt2 /2.82842712474619/
+if (n-2) 101,102,103
+101 x(1) = 4.*x(1)
+return
+102 x1 = 4.*(x(1)+x(2))
+x(2) = tsqrt2*(x(1)-x(2))
+x(1) = x1
+return
+103 call cosqb1 (n,x,wsave,wsave(n+1))
+return
+end subroutine cosqb
 
-SUBROUTINE COSQB1 (N,X,W,XH)
-IMPLICIT NONE
-INTEGER :: N
-REAL :: W(*)
-REAL, INTENT(INOUT) :: X(*), XH(*)
-INTEGER :: I, K, KC, MODN, NP2, NS2
-REAL :: XIM1
-NS2 = (N+1)/2
-NP2 = N+2
-DO I=3,N,2
-   XIM1 = X(I-1)+X(I)
-   X(I) = X(I)-X(I-1)
-   X(I-1) = XIM1
-END DO
-X(1) = X(1)+X(1)
-MODN = MOD(N,2)
-IF (MODN .EQ. 0) X(N) = X(N)+X(N)
-CALL RFFTB (N,X,XH)
-DO K=2,NS2
-   KC = NP2-K
-   XH(K) = W(K-1)*X(KC)+W(KC-1)*X(K)
-   XH(KC) = W(K-1)*X(K)-W(KC-1)*X(KC)
-END DO
-IF (MODN .EQ. 0) X(NS2+1) = W(NS2)*(X(NS2+1)+X(NS2+1))
-DO K=2,NS2
-   KC = NP2-K
-   X(K) = XH(K)+XH(KC)
-   X(KC) = XH(K)-XH(KC)
-END DO
-X(1) = X(1)+X(1)
-RETURN
-END SUBROUTINE COSQB1
+subroutine cosqb1 (n,x,w,xh)
+implicit none
+integer :: n
+real :: w(*)
+real, intent(inout) :: x(*), xh(*)
+integer :: i, k, kc, modn, np2, ns2
+real :: xim1
+ns2 = (n+1)/2
+np2 = n+2
+do i=3,n,2
+   xim1 = x(i-1)+x(i)
+   x(i) = x(i)-x(i-1)
+   x(i-1) = xim1
+end do
+x(1) = x(1)+x(1)
+modn = mod(n,2)
+if (modn .eq. 0) x(n) = x(n)+x(n)
+call rfftb (n,x,xh)
+do k=2,ns2
+   kc = np2-k
+   xh(k) = w(k-1)*x(kc)+w(kc-1)*x(k)
+   xh(kc) = w(k-1)*x(k)-w(kc-1)*x(kc)
+end do
+if (modn .eq. 0) x(ns2+1) = w(ns2)*(x(ns2+1)+x(ns2+1))
+do k=2,ns2
+   kc = np2-k
+   x(k) = xh(k)+xh(kc)
+   x(kc) = xh(k)-xh(kc)
+end do
+x(1) = x(1)+x(1)
+return
+end subroutine cosqb1
 
 !     ******************************************************************
 !
@@ -263,26 +263,26 @@ END SUBROUTINE COSQB1
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
 !
-SUBROUTINE SINQF (N,X,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*), X(*)
-INTEGER :: K, KC, NS2
-REAL :: XHOLD
-IF (N .EQ. 1) RETURN
-NS2 = N/2
-DO K=1,NS2
-   KC = N-K
-   XHOLD = X(K)
-   X(K) = X(KC+1)
-   X(KC+1) = XHOLD
-END DO
-CALL COSQF (N,X,WSAVE)
-DO K=2,N,2
-   X(K) = -X(K)
-END DO
-RETURN
-END SUBROUTINE SINQF
+subroutine sinqf (n,x,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*), x(*)
+integer :: k, kc, ns2
+real :: xhold
+if (n .eq. 1) return
+ns2 = n/2
+do k=1,ns2
+   kc = n-k
+   xhold = x(k)
+   x(k) = x(kc+1)
+   x(kc+1) = xhold
+end do
+call cosqf (n,x,wsave)
+do k=2,n,2
+   x(k) = -x(k)
+end do
+return
+end subroutine sinqf
 
 !     ******************************************************************
 !
@@ -334,28 +334,28 @@ END SUBROUTINE SINQF
 !     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 !             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
 !
-SUBROUTINE SINQB (N,X,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*), X(*)
-INTEGER :: K, KC, NS2
-REAL :: XHOLD
-IF (N .GT. 1) GO TO 101
-X(1) = 4.*X(1)
-RETURN
-101 NS2 = N/2
-DO K=2,N,2
-   X(K) = -X(K)
-END DO
-CALL COSQB (N,X,WSAVE)
-DO K=1,NS2
-   KC = N-K
-   XHOLD = X(K)
-   X(K) = X(KC+1)
-   X(KC+1) = XHOLD
-END DO
-RETURN
-END SUBROUTINE SINQB
+subroutine sinqb (n,x,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*), x(*)
+integer :: k, kc, ns2
+real :: xhold
+if (n .gt. 1) go to 101
+x(1) = 4.*x(1)
+return
+101 ns2 = n/2
+do k=2,n,2
+   x(k) = -x(k)
+end do
+call cosqb (n,x,wsave)
+do k=1,ns2
+   kc = n-k
+   xhold = x(k)
+   x(k) = x(kc+1)
+   x(kc+1) = xhold
+end do
+return
+end subroutine sinqb
 
 !     ******************************************************************
 !
@@ -380,78 +380,78 @@ END SUBROUTINE SINQB
 !             ARE REQUIRED FOR DIFFERENT VALUES OF N. THE CONTENTS OF
 !             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF RFFTF OR RFFTB.
 !
-SUBROUTINE RFFTI (N,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: WSAVE(*)
-IF (N .EQ. 1) RETURN
-CALL RFFTI1 (N,WSAVE(N+1),WSAVE(2*N+1))
-RETURN
-END SUBROUTINE RFFTI
+subroutine rffti (n,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: wsave(*)
+if (n .eq. 1) return
+call rffti1 (n,wsave(n+1),wsave(2*n+1))
+return
+end subroutine rffti
 
-SUBROUTINE RFFTI1 (N,WA,IFAC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF, &
-&NFM1, NL, NQ, NR, NTRY
-REAL :: ARG, ARGH, ARGLD, FI, TPI
-REAL, INTENT(INOUT) :: WA(*), IFAC(*)
-INTEGER :: NTRYH(4)
-DATA NTRYH(1),NTRYH(2),NTRYH(3),NTRYH(4)/4,2,3,5/
-NL = N
-NF = 0
-J = 0
-101 J = J+1
-IF (J-4) 102,102,103
-102 NTRY = NTRYH(J)
-GO TO 104
-103 NTRY = NTRY+2
-104 NQ = NL/NTRY
-NR = NL-NTRY*NQ
-IF (NR) 101,105,101
-105 NF = NF+1
-IFAC(NF+2) = NTRY
-NL = NQ
-IF (NTRY .NE. 2) GO TO 107
-IF (NF .EQ. 1) GO TO 107
-DO I=2,NF
-   IB = NF-I+2
-   IFAC(IB+2) = IFAC(IB+1)
-END DO
-IFAC(3) = 2
-107 IF (NL .NE. 1) GO TO 104
-IFAC(1) = N
-IFAC(2) = NF
-TPI = 6.28318530717959
-ARGH = TPI/FLOAT(N)
-IS = 0
-NFM1 = NF-1
-L1 = 1
-IF (NFM1 .EQ. 0) RETURN
-DO K1=1,NFM1
-   IP = IFAC(K1+2)
-   LD = 0
-   L2 = L1*IP
-   IDO = N/L2
-   IPM = IP-1
-   DO J=1,IPM
-      LD = LD+L1
-      I = IS
-      ARGLD = FLOAT(LD)*ARGH
-      FI = 0.
-      DO II=3,IDO,2
-         I = I+2
-         FI = FI+1.
-         ARG = FI*ARGLD
-         WA(I-1) = COS(ARG)
-         WA(I) = SIN(ARG)
-      END DO
-      IS = IS+IDO
-   END DO
-   L1 = L2
-END DO
-RETURN
-END SUBROUTINE RFFTI1
+subroutine rffti1 (n,wa,ifac)
+implicit none
+integer, intent(in) :: n
+integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
+&nfm1, nl, nq, nr, ntry
+real :: arg, argh, argld, fi, tpi
+real, intent(inout) :: wa(*), ifac(*)
+integer :: ntryh(4)
+data ntryh(1),ntryh(2),ntryh(3),ntryh(4)/4,2,3,5/
+nl = n
+nf = 0
+j = 0
+101 j = j+1
+if (j-4) 102,102,103
+102 ntry = ntryh(j)
+go to 104
+103 ntry = ntry+2
+104 nq = nl/ntry
+nr = nl-ntry*nq
+if (nr) 101,105,101
+105 nf = nf+1
+ifac(nf+2) = ntry
+nl = nq
+if (ntry .ne. 2) go to 107
+if (nf .eq. 1) go to 107
+do i=2,nf
+   ib = nf-i+2
+   ifac(ib+2) = ifac(ib+1)
+end do
+ifac(3) = 2
+107 if (nl .ne. 1) go to 104
+ifac(1) = n
+ifac(2) = nf
+tpi = 6.28318530717959
+argh = tpi/float(n)
+is = 0
+nfm1 = nf-1
+l1 = 1
+if (nfm1 .eq. 0) return
+do k1=1,nfm1
+   ip = ifac(k1+2)
+   ld = 0
+   l2 = l1*ip
+   ido = n/l2
+   ipm = ip-1
+   do j=1,ipm
+      ld = ld+l1
+      i = is
+      argld = float(ld)*argh
+      fi = 0.
+      do ii=3,ido,2
+         i = i+2
+         fi = fi+1.
+         arg = fi*argld
+         wa(i-1) = cos(arg)
+         wa(i) = sin(arg)
+      end do
+      is = is+ido
+   end do
+   l1 = l2
+end do
+return
+end subroutine rffti1
 
 !     ******************************************************************
 !
@@ -511,564 +511,564 @@ END SUBROUTINE RFFTI1
 !             CALLS OF RFFTB OR RFFTF.
 !
 !
-SUBROUTINE RFFTB (N,R,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: R(*), WSAVE(*)
-IF (N .EQ. 1) RETURN
-CALL RFFTB1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
-RETURN
-END SUBROUTINE RFFTB
+subroutine rfftb (n,r,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: r(*), wsave(*)
+if (n .eq. 1) return
+call rfftb1 (n,r,wsave,wsave(n+1),wsave(2*n+1))
+return
+end subroutine rfftb
 
-SUBROUTINE RFFTB1 (N,C,CH,WA,IFAC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, L1, L2, NA, NF
-REAL, INTENT(INOUT) :: C(*), CH(*)
-REAL :: WA(*)
-REAL, INTENT(IN) :: IFAC(*)
-NF = IFAC(2)
-NA = 0
-L1 = 1
-IW = 1
-DO K1=1,NF
-   IP = IFAC(K1+2)
-   L2 = IP*L1
-   IDO = N/L2
-   IDL1 = IDO*L1
-   IF (IP .NE. 4) GO TO 103
-   IX2 = IW+IDO
-   IX3 = IX2+IDO
-   IF (NA .NE. 0) GO TO 101
-   CALL RADB4 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
-   GO TO 102
-101 CALL RADB4 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
-102 NA = 1-NA
-   GO TO 115
-103 IF (IP .NE. 2) GO TO 106
-   IF (NA .NE. 0) GO TO 104
-   CALL RADB2 (IDO,L1,C,CH,WA(IW))
-   GO TO 105
-104 CALL RADB2 (IDO,L1,CH,C,WA(IW))
-105 NA = 1-NA
-   GO TO 115
-106 IF (IP .NE. 3) GO TO 109
-   IX2 = IW+IDO
-   IF (NA .NE. 0) GO TO 107
-   CALL RADB3 (IDO,L1,C,CH,WA(IW),WA(IX2))
-   GO TO 108
-107 CALL RADB3 (IDO,L1,CH,C,WA(IW),WA(IX2))
-108 NA = 1-NA
-   GO TO 115
-109 IF (IP .NE. 5) GO TO 112
-   IX2 = IW+IDO
-   IX3 = IX2+IDO
-   IX4 = IX3+IDO
-   IF (NA .NE. 0) GO TO 110
-   CALL RADB5 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
-   GO TO 111
-110 CALL RADB5 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
-111 NA = 1-NA
-   GO TO 115
-112 IF (NA .NE. 0) GO TO 113
-   CALL RADBG (IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
-   GO TO 114
-113 CALL RADBG (IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
-114 IF (IDO .EQ. 1) NA = 1-NA
-115 L1 = L2
-   IW = IW+(IP-1)*IDO
-END DO
-IF (NA .EQ. 0) RETURN
-DO I=1,N
-   C(I) = CH(I)
-END DO
-RETURN
-END SUBROUTINE RFFTB1
+subroutine rfftb1 (n,c,ch,wa,ifac)
+implicit none
+integer, intent(in) :: n
+integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
+real, intent(inout) :: c(*), ch(*)
+real :: wa(*)
+real, intent(in) :: ifac(*)
+nf = ifac(2)
+na = 0
+l1 = 1
+iw = 1
+do k1=1,nf
+   ip = ifac(k1+2)
+   l2 = ip*l1
+   ido = n/l2
+   idl1 = ido*l1
+   if (ip .ne. 4) go to 103
+   ix2 = iw+ido
+   ix3 = ix2+ido
+   if (na .ne. 0) go to 101
+   call radb4 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
+   go to 102
+101 call radb4 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
+102 na = 1-na
+   go to 115
+103 if (ip .ne. 2) go to 106
+   if (na .ne. 0) go to 104
+   call radb2 (ido,l1,c,ch,wa(iw))
+   go to 105
+104 call radb2 (ido,l1,ch,c,wa(iw))
+105 na = 1-na
+   go to 115
+106 if (ip .ne. 3) go to 109
+   ix2 = iw+ido
+   if (na .ne. 0) go to 107
+   call radb3 (ido,l1,c,ch,wa(iw),wa(ix2))
+   go to 108
+107 call radb3 (ido,l1,ch,c,wa(iw),wa(ix2))
+108 na = 1-na
+   go to 115
+109 if (ip .ne. 5) go to 112
+   ix2 = iw+ido
+   ix3 = ix2+ido
+   ix4 = ix3+ido
+   if (na .ne. 0) go to 110
+   call radb5 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+   go to 111
+110 call radb5 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+111 na = 1-na
+   go to 115
+112 if (na .ne. 0) go to 113
+   call radbg (ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
+   go to 114
+113 call radbg (ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
+114 if (ido .eq. 1) na = 1-na
+115 l1 = l2
+   iw = iw+(ip-1)*ido
+end do
+if (na .eq. 0) return
+do i=1,n
+   c(i) = ch(i)
+end do
+return
+end subroutine rfftb1
 
-SUBROUTINE RADB2 (IDO,L1,CC,CH,WA1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,2,L1)
-REAL, INTENT(INOUT) :: CH(IDO,L1,*)
-REAL :: WA1(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: TI2, TR2
-DO K=1,L1
-   CH(1,K,1) = CC(1,1,K)+CC(IDO,2,K)
-   CH(1,K,2) = CC(1,1,K)-CC(IDO,2,K)
-END DO
-IF (IDO-2) 107,105,102
-102 IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 108
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      CH(I-1,K,1) = CC(I-1,1,K)+CC(IC-1,2,K)
-      TR2 = CC(I-1,1,K)-CC(IC-1,2,K)
-      CH(I,K,1) = CC(I,1,K)-CC(IC,2,K)
-      TI2 = CC(I,1,K)+CC(IC,2,K)
-      CH(I-1,K,2) = WA1(I-2)*TR2-WA1(I-1)*TI2
-      CH(I,K,2) = WA1(I-2)*TI2+WA1(I-1)*TR2
-   END DO
-END DO
-GO TO 111
-108 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      CH(I-1,K,1) = CC(I-1,1,K)+CC(IC-1,2,K)
-      TR2 = CC(I-1,1,K)-CC(IC-1,2,K)
-      CH(I,K,1) = CC(I,1,K)-CC(IC,2,K)
-      TI2 = CC(I,1,K)+CC(IC,2,K)
-      CH(I-1,K,2) = WA1(I-2)*TR2-WA1(I-1)*TI2
-      CH(I,K,2) = WA1(I-2)*TI2+WA1(I-1)*TR2
-   END DO
-END DO
-111 IF (MOD(IDO,2) .EQ. 1) RETURN
-105 DO K=1,L1
-   CH(IDO,K,1) = CC(IDO,1,K)+CC(IDO,1,K)
-   CH(IDO,K,2) = -(CC(1,2,K)+CC(1,2,K))
-END DO
-107 RETURN
-END SUBROUTINE RADB2
+subroutine radb2 (ido,l1,cc,ch,wa1)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,2,l1)
+real, intent(inout) :: ch(ido,l1,*)
+real :: wa1(*)
+integer :: i, ic, idp2, k
+real :: ti2, tr2
+do k=1,l1
+   ch(1,k,1) = cc(1,1,k)+cc(ido,2,k)
+   ch(1,k,2) = cc(1,1,k)-cc(ido,2,k)
+end do
+if (ido-2) 107,105,102
+102 idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 108
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      ch(i-1,k,1) = cc(i-1,1,k)+cc(ic-1,2,k)
+      tr2 = cc(i-1,1,k)-cc(ic-1,2,k)
+      ch(i,k,1) = cc(i,1,k)-cc(ic,2,k)
+      ti2 = cc(i,1,k)+cc(ic,2,k)
+      ch(i-1,k,2) = wa1(i-2)*tr2-wa1(i-1)*ti2
+      ch(i,k,2) = wa1(i-2)*ti2+wa1(i-1)*tr2
+   end do
+end do
+go to 111
+108 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      ch(i-1,k,1) = cc(i-1,1,k)+cc(ic-1,2,k)
+      tr2 = cc(i-1,1,k)-cc(ic-1,2,k)
+      ch(i,k,1) = cc(i,1,k)-cc(ic,2,k)
+      ti2 = cc(i,1,k)+cc(ic,2,k)
+      ch(i-1,k,2) = wa1(i-2)*tr2-wa1(i-1)*ti2
+      ch(i,k,2) = wa1(i-2)*ti2+wa1(i-1)*tr2
+   end do
+end do
+111 if (mod(ido,2) .eq. 1) return
+105 do k=1,l1
+   ch(ido,k,1) = cc(ido,1,k)+cc(ido,1,k)
+   ch(ido,k,2) = -(cc(1,2,k)+cc(1,2,k))
+end do
+107 return
+end subroutine radb2
 
-SUBROUTINE RADB3 (IDO,L1,CC,CH,WA1,WA2)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,3,L1)
-REAL, INTENT(INOUT) :: CH(IDO,L1,*)
-REAL :: WA1(*), WA2(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CI3, CR2, CR3, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, &
-&TR2
-DATA TAUR,TAUI /-.5,.866025403784439/
-DO K=1,L1
-   TR2 = CC(IDO,2,K)+CC(IDO,2,K)
-   CR2 = CC(1,1,K)+TAUR*TR2
-   CH(1,K,1) = CC(1,1,K)+TR2
-   CI3 = TAUI*(CC(1,3,K)+CC(1,3,K))
-   CH(1,K,2) = CR2-CI3
-   CH(1,K,3) = CR2+CI3
-END DO
-IF (IDO .EQ. 1) RETURN
-IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 104
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      TR2 = CC(I-1,3,K)+CC(IC-1,2,K)
-      CR2 = CC(I-1,1,K)+TAUR*TR2
-      CH(I-1,K,1) = CC(I-1,1,K)+TR2
-      TI2 = CC(I,3,K)-CC(IC,2,K)
-      CI2 = CC(I,1,K)+TAUR*TI2
-      CH(I,K,1) = CC(I,1,K)+TI2
-      CR3 = TAUI*(CC(I-1,3,K)-CC(IC-1,2,K))
-      CI3 = TAUI*(CC(I,3,K)+CC(IC,2,K))
-      DR2 = CR2-CI3
-      DR3 = CR2+CI3
-      DI2 = CI2+CR3
-      DI3 = CI2-CR3
-      CH(I-1,K,2) = WA1(I-2)*DR2-WA1(I-1)*DI2
-      CH(I,K,2) = WA1(I-2)*DI2+WA1(I-1)*DR2
-      CH(I-1,K,3) = WA2(I-2)*DR3-WA2(I-1)*DI3
-      CH(I,K,3) = WA2(I-2)*DI3+WA2(I-1)*DR3
-   END DO
-END DO
-RETURN
-104 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      TR2 = CC(I-1,3,K)+CC(IC-1,2,K)
-      CR2 = CC(I-1,1,K)+TAUR*TR2
-      CH(I-1,K,1) = CC(I-1,1,K)+TR2
-      TI2 = CC(I,3,K)-CC(IC,2,K)
-      CI2 = CC(I,1,K)+TAUR*TI2
-      CH(I,K,1) = CC(I,1,K)+TI2
-      CR3 = TAUI*(CC(I-1,3,K)-CC(IC-1,2,K))
-      CI3 = TAUI*(CC(I,3,K)+CC(IC,2,K))
-      DR2 = CR2-CI3
-      DR3 = CR2+CI3
-      DI2 = CI2+CR3
-      DI3 = CI2-CR3
-      CH(I-1,K,2) = WA1(I-2)*DR2-WA1(I-1)*DI2
-      CH(I,K,2) = WA1(I-2)*DI2+WA1(I-1)*DR2
-      CH(I-1,K,3) = WA2(I-2)*DR3-WA2(I-1)*DI3
-      CH(I,K,3) = WA2(I-2)*DI3+WA2(I-1)*DR3
-   END DO
-END DO
-RETURN
-END SUBROUTINE RADB3
+subroutine radb3 (ido,l1,cc,ch,wa1,wa2)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,3,l1)
+real, intent(inout) :: ch(ido,l1,*)
+real :: wa1(*), wa2(*)
+integer :: i, ic, idp2, k
+real :: ci2, ci3, cr2, cr3, di2, di3, dr2, dr3, taui, taur, ti2, &
+&tr2
+data taur,taui /-.5,.866025403784439/
+do k=1,l1
+   tr2 = cc(ido,2,k)+cc(ido,2,k)
+   cr2 = cc(1,1,k)+taur*tr2
+   ch(1,k,1) = cc(1,1,k)+tr2
+   ci3 = taui*(cc(1,3,k)+cc(1,3,k))
+   ch(1,k,2) = cr2-ci3
+   ch(1,k,3) = cr2+ci3
+end do
+if (ido .eq. 1) return
+idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 104
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      tr2 = cc(i-1,3,k)+cc(ic-1,2,k)
+      cr2 = cc(i-1,1,k)+taur*tr2
+      ch(i-1,k,1) = cc(i-1,1,k)+tr2
+      ti2 = cc(i,3,k)-cc(ic,2,k)
+      ci2 = cc(i,1,k)+taur*ti2
+      ch(i,k,1) = cc(i,1,k)+ti2
+      cr3 = taui*(cc(i-1,3,k)-cc(ic-1,2,k))
+      ci3 = taui*(cc(i,3,k)+cc(ic,2,k))
+      dr2 = cr2-ci3
+      dr3 = cr2+ci3
+      di2 = ci2+cr3
+      di3 = ci2-cr3
+      ch(i-1,k,2) = wa1(i-2)*dr2-wa1(i-1)*di2
+      ch(i,k,2) = wa1(i-2)*di2+wa1(i-1)*dr2
+      ch(i-1,k,3) = wa2(i-2)*dr3-wa2(i-1)*di3
+      ch(i,k,3) = wa2(i-2)*di3+wa2(i-1)*dr3
+   end do
+end do
+return
+104 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      tr2 = cc(i-1,3,k)+cc(ic-1,2,k)
+      cr2 = cc(i-1,1,k)+taur*tr2
+      ch(i-1,k,1) = cc(i-1,1,k)+tr2
+      ti2 = cc(i,3,k)-cc(ic,2,k)
+      ci2 = cc(i,1,k)+taur*ti2
+      ch(i,k,1) = cc(i,1,k)+ti2
+      cr3 = taui*(cc(i-1,3,k)-cc(ic-1,2,k))
+      ci3 = taui*(cc(i,3,k)+cc(ic,2,k))
+      dr2 = cr2-ci3
+      dr3 = cr2+ci3
+      di2 = ci2+cr3
+      di3 = ci2-cr3
+      ch(i-1,k,2) = wa1(i-2)*dr2-wa1(i-1)*di2
+      ch(i,k,2) = wa1(i-2)*di2+wa1(i-1)*dr2
+      ch(i-1,k,3) = wa2(i-2)*dr3-wa2(i-1)*di3
+      ch(i,k,3) = wa2(i-2)*di3+wa2(i-1)*dr3
+   end do
+end do
+return
+end subroutine radb3
 
-SUBROUTINE RADB4 (IDO,L1,CC,CH,WA1,WA2,WA3)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,4,L1)
-REAL, INTENT(INOUT) :: CH(IDO,L1,*)
-REAL :: WA1(*), WA2(*), WA3(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CI3, CI4, CR2, CR3, CR4, SQRT2, TI1, TI2, TI3, TI4, &
-&TR1, TR2, TR3, TR4
-DATA SQRT2 /1.414213562373095/
-DO K=1,L1
-   TR1 = CC(1,1,K)-CC(IDO,4,K)
-   TR2 = CC(1,1,K)+CC(IDO,4,K)
-   TR3 = CC(IDO,2,K)+CC(IDO,2,K)
-   TR4 = CC(1,3,K)+CC(1,3,K)
-   CH(1,K,1) = TR2+TR3
-   CH(1,K,2) = TR1-TR4
-   CH(1,K,3) = TR2-TR3
-   CH(1,K,4) = TR1+TR4
-END DO
-IF (IDO-2) 107,105,102
-102 IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 108
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      TI1 = CC(I,1,K)+CC(IC,4,K)
-      TI2 = CC(I,1,K)-CC(IC,4,K)
-      TI3 = CC(I,3,K)-CC(IC,2,K)
-      TR4 = CC(I,3,K)+CC(IC,2,K)
-      TR1 = CC(I-1,1,K)-CC(IC-1,4,K)
-      TR2 = CC(I-1,1,K)+CC(IC-1,4,K)
-      TI4 = CC(I-1,3,K)-CC(IC-1,2,K)
-      TR3 = CC(I-1,3,K)+CC(IC-1,2,K)
-      CH(I-1,K,1) = TR2+TR3
-      CR3 = TR2-TR3
-      CH(I,K,1) = TI2+TI3
-      CI3 = TI2-TI3
-      CR2 = TR1-TR4
-      CR4 = TR1+TR4
-      CI2 = TI1+TI4
-      CI4 = TI1-TI4
-      CH(I-1,K,2) = WA1(I-2)*CR2-WA1(I-1)*CI2
-      CH(I,K,2) = WA1(I-2)*CI2+WA1(I-1)*CR2
-      CH(I-1,K,3) = WA2(I-2)*CR3-WA2(I-1)*CI3
-      CH(I,K,3) = WA2(I-2)*CI3+WA2(I-1)*CR3
-      CH(I-1,K,4) = WA3(I-2)*CR4-WA3(I-1)*CI4
-      CH(I,K,4) = WA3(I-2)*CI4+WA3(I-1)*CR4
-   END DO
-END DO
-GO TO 111
-108 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      TI1 = CC(I,1,K)+CC(IC,4,K)
-      TI2 = CC(I,1,K)-CC(IC,4,K)
-      TI3 = CC(I,3,K)-CC(IC,2,K)
-      TR4 = CC(I,3,K)+CC(IC,2,K)
-      TR1 = CC(I-1,1,K)-CC(IC-1,4,K)
-      TR2 = CC(I-1,1,K)+CC(IC-1,4,K)
-      TI4 = CC(I-1,3,K)-CC(IC-1,2,K)
-      TR3 = CC(I-1,3,K)+CC(IC-1,2,K)
-      CH(I-1,K,1) = TR2+TR3
-      CR3 = TR2-TR3
-      CH(I,K,1) = TI2+TI3
-      CI3 = TI2-TI3
-      CR2 = TR1-TR4
-      CR4 = TR1+TR4
-      CI2 = TI1+TI4
-      CI4 = TI1-TI4
-      CH(I-1,K,2) = WA1(I-2)*CR2-WA1(I-1)*CI2
-      CH(I,K,2) = WA1(I-2)*CI2+WA1(I-1)*CR2
-      CH(I-1,K,3) = WA2(I-2)*CR3-WA2(I-1)*CI3
-      CH(I,K,3) = WA2(I-2)*CI3+WA2(I-1)*CR3
-      CH(I-1,K,4) = WA3(I-2)*CR4-WA3(I-1)*CI4
-      CH(I,K,4) = WA3(I-2)*CI4+WA3(I-1)*CR4
-   END DO
-END DO
-111 IF (MOD(IDO,2) .EQ. 1) RETURN
-105 DO K=1,L1
-   TI1 = CC(1,2,K)+CC(1,4,K)
-   TI2 = CC(1,4,K)-CC(1,2,K)
-   TR1 = CC(IDO,1,K)-CC(IDO,3,K)
-   TR2 = CC(IDO,1,K)+CC(IDO,3,K)
-   CH(IDO,K,1) = TR2+TR2
-   CH(IDO,K,2) = SQRT2*(TR1-TI1)
-   CH(IDO,K,3) = TI2+TI2
-   CH(IDO,K,4) = -SQRT2*(TR1+TI1)
-END DO
-107 RETURN
-END SUBROUTINE RADB4
+subroutine radb4 (ido,l1,cc,ch,wa1,wa2,wa3)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,4,l1)
+real, intent(inout) :: ch(ido,l1,*)
+real :: wa1(*), wa2(*), wa3(*)
+integer :: i, ic, idp2, k
+real :: ci2, ci3, ci4, cr2, cr3, cr4, sqrt2, ti1, ti2, ti3, ti4, &
+&tr1, tr2, tr3, tr4
+data sqrt2 /1.414213562373095/
+do k=1,l1
+   tr1 = cc(1,1,k)-cc(ido,4,k)
+   tr2 = cc(1,1,k)+cc(ido,4,k)
+   tr3 = cc(ido,2,k)+cc(ido,2,k)
+   tr4 = cc(1,3,k)+cc(1,3,k)
+   ch(1,k,1) = tr2+tr3
+   ch(1,k,2) = tr1-tr4
+   ch(1,k,3) = tr2-tr3
+   ch(1,k,4) = tr1+tr4
+end do
+if (ido-2) 107,105,102
+102 idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 108
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      ti1 = cc(i,1,k)+cc(ic,4,k)
+      ti2 = cc(i,1,k)-cc(ic,4,k)
+      ti3 = cc(i,3,k)-cc(ic,2,k)
+      tr4 = cc(i,3,k)+cc(ic,2,k)
+      tr1 = cc(i-1,1,k)-cc(ic-1,4,k)
+      tr2 = cc(i-1,1,k)+cc(ic-1,4,k)
+      ti4 = cc(i-1,3,k)-cc(ic-1,2,k)
+      tr3 = cc(i-1,3,k)+cc(ic-1,2,k)
+      ch(i-1,k,1) = tr2+tr3
+      cr3 = tr2-tr3
+      ch(i,k,1) = ti2+ti3
+      ci3 = ti2-ti3
+      cr2 = tr1-tr4
+      cr4 = tr1+tr4
+      ci2 = ti1+ti4
+      ci4 = ti1-ti4
+      ch(i-1,k,2) = wa1(i-2)*cr2-wa1(i-1)*ci2
+      ch(i,k,2) = wa1(i-2)*ci2+wa1(i-1)*cr2
+      ch(i-1,k,3) = wa2(i-2)*cr3-wa2(i-1)*ci3
+      ch(i,k,3) = wa2(i-2)*ci3+wa2(i-1)*cr3
+      ch(i-1,k,4) = wa3(i-2)*cr4-wa3(i-1)*ci4
+      ch(i,k,4) = wa3(i-2)*ci4+wa3(i-1)*cr4
+   end do
+end do
+go to 111
+108 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      ti1 = cc(i,1,k)+cc(ic,4,k)
+      ti2 = cc(i,1,k)-cc(ic,4,k)
+      ti3 = cc(i,3,k)-cc(ic,2,k)
+      tr4 = cc(i,3,k)+cc(ic,2,k)
+      tr1 = cc(i-1,1,k)-cc(ic-1,4,k)
+      tr2 = cc(i-1,1,k)+cc(ic-1,4,k)
+      ti4 = cc(i-1,3,k)-cc(ic-1,2,k)
+      tr3 = cc(i-1,3,k)+cc(ic-1,2,k)
+      ch(i-1,k,1) = tr2+tr3
+      cr3 = tr2-tr3
+      ch(i,k,1) = ti2+ti3
+      ci3 = ti2-ti3
+      cr2 = tr1-tr4
+      cr4 = tr1+tr4
+      ci2 = ti1+ti4
+      ci4 = ti1-ti4
+      ch(i-1,k,2) = wa1(i-2)*cr2-wa1(i-1)*ci2
+      ch(i,k,2) = wa1(i-2)*ci2+wa1(i-1)*cr2
+      ch(i-1,k,3) = wa2(i-2)*cr3-wa2(i-1)*ci3
+      ch(i,k,3) = wa2(i-2)*ci3+wa2(i-1)*cr3
+      ch(i-1,k,4) = wa3(i-2)*cr4-wa3(i-1)*ci4
+      ch(i,k,4) = wa3(i-2)*ci4+wa3(i-1)*cr4
+   end do
+end do
+111 if (mod(ido,2) .eq. 1) return
+105 do k=1,l1
+   ti1 = cc(1,2,k)+cc(1,4,k)
+   ti2 = cc(1,4,k)-cc(1,2,k)
+   tr1 = cc(ido,1,k)-cc(ido,3,k)
+   tr2 = cc(ido,1,k)+cc(ido,3,k)
+   ch(ido,k,1) = tr2+tr2
+   ch(ido,k,2) = sqrt2*(tr1-ti1)
+   ch(ido,k,3) = ti2+ti2
+   ch(ido,k,4) = -sqrt2*(tr1+ti1)
+end do
+107 return
+end subroutine radb4
 
-SUBROUTINE RADB5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,5,L1)
-REAL, INTENT(INOUT) :: CH(IDO,L1,*)
-REAL :: WA1(*), WA2(*), WA3(*), WA4(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, &
-&DI5, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, &
-&TR12, TR2, TR3, TR4, TR5
-DATA TR11,TI11,TR12,TI12 /.309016994374947,.951056516295154, &
+subroutine radb5 (ido,l1,cc,ch,wa1,wa2,wa3,wa4)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,5,l1)
+real, intent(inout) :: ch(ido,l1,*)
+real :: wa1(*), wa2(*), wa3(*), wa4(*)
+integer :: i, ic, idp2, k
+real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, &
+&di5, dr2, dr3, dr4, dr5, ti11, ti12, ti2, ti3, ti4, ti5, tr11, &
+&tr12, tr2, tr3, tr4, tr5
+data tr11,ti11,tr12,ti12 /.309016994374947,.951056516295154, &
 &-.809016994374947,.587785252292473/
-DO K=1,L1
-   TI5 = CC(1,3,K)+CC(1,3,K)
-   TI4 = CC(1,5,K)+CC(1,5,K)
-   TR2 = CC(IDO,2,K)+CC(IDO,2,K)
-   TR3 = CC(IDO,4,K)+CC(IDO,4,K)
-   CH(1,K,1) = CC(1,1,K)+TR2+TR3
-   CR2 = CC(1,1,K)+TR11*TR2+TR12*TR3
-   CR3 = CC(1,1,K)+TR12*TR2+TR11*TR3
-   CI5 = TI11*TI5+TI12*TI4
-   CI4 = TI12*TI5-TI11*TI4
-   CH(1,K,2) = CR2-CI5
-   CH(1,K,3) = CR3-CI4
-   CH(1,K,4) = CR3+CI4
-   CH(1,K,5) = CR2+CI5
-END DO
-IF (IDO .EQ. 1) RETURN
-IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 104
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      TI5 = CC(I,3,K)+CC(IC,2,K)
-      TI2 = CC(I,3,K)-CC(IC,2,K)
-      TI4 = CC(I,5,K)+CC(IC,4,K)
-      TI3 = CC(I,5,K)-CC(IC,4,K)
-      TR5 = CC(I-1,3,K)-CC(IC-1,2,K)
-      TR2 = CC(I-1,3,K)+CC(IC-1,2,K)
-      TR4 = CC(I-1,5,K)-CC(IC-1,4,K)
-      TR3 = CC(I-1,5,K)+CC(IC-1,4,K)
-      CH(I-1,K,1) = CC(I-1,1,K)+TR2+TR3
-      CH(I,K,1) = CC(I,1,K)+TI2+TI3
-      CR2 = CC(I-1,1,K)+TR11*TR2+TR12*TR3
-      CI2 = CC(I,1,K)+TR11*TI2+TR12*TI3
-      CR3 = CC(I-1,1,K)+TR12*TR2+TR11*TR3
-      CI3 = CC(I,1,K)+TR12*TI2+TR11*TI3
-      CR5 = TI11*TR5+TI12*TR4
-      CI5 = TI11*TI5+TI12*TI4
-      CR4 = TI12*TR5-TI11*TR4
-      CI4 = TI12*TI5-TI11*TI4
-      DR3 = CR3-CI4
-      DR4 = CR3+CI4
-      DI3 = CI3+CR4
-      DI4 = CI3-CR4
-      DR5 = CR2+CI5
-      DR2 = CR2-CI5
-      DI5 = CI2-CR5
-      DI2 = CI2+CR5
-      CH(I-1,K,2) = WA1(I-2)*DR2-WA1(I-1)*DI2
-      CH(I,K,2) = WA1(I-2)*DI2+WA1(I-1)*DR2
-      CH(I-1,K,3) = WA2(I-2)*DR3-WA2(I-1)*DI3
-      CH(I,K,3) = WA2(I-2)*DI3+WA2(I-1)*DR3
-      CH(I-1,K,4) = WA3(I-2)*DR4-WA3(I-1)*DI4
-      CH(I,K,4) = WA3(I-2)*DI4+WA3(I-1)*DR4
-      CH(I-1,K,5) = WA4(I-2)*DR5-WA4(I-1)*DI5
-      CH(I,K,5) = WA4(I-2)*DI5+WA4(I-1)*DR5
-   END DO
-END DO
-RETURN
-104 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      TI5 = CC(I,3,K)+CC(IC,2,K)
-      TI2 = CC(I,3,K)-CC(IC,2,K)
-      TI4 = CC(I,5,K)+CC(IC,4,K)
-      TI3 = CC(I,5,K)-CC(IC,4,K)
-      TR5 = CC(I-1,3,K)-CC(IC-1,2,K)
-      TR2 = CC(I-1,3,K)+CC(IC-1,2,K)
-      TR4 = CC(I-1,5,K)-CC(IC-1,4,K)
-      TR3 = CC(I-1,5,K)+CC(IC-1,4,K)
-      CH(I-1,K,1) = CC(I-1,1,K)+TR2+TR3
-      CH(I,K,1) = CC(I,1,K)+TI2+TI3
-      CR2 = CC(I-1,1,K)+TR11*TR2+TR12*TR3
-      CI2 = CC(I,1,K)+TR11*TI2+TR12*TI3
-      CR3 = CC(I-1,1,K)+TR12*TR2+TR11*TR3
-      CI3 = CC(I,1,K)+TR12*TI2+TR11*TI3
-      CR5 = TI11*TR5+TI12*TR4
-      CI5 = TI11*TI5+TI12*TI4
-      CR4 = TI12*TR5-TI11*TR4
-      CI4 = TI12*TI5-TI11*TI4
-      DR3 = CR3-CI4
-      DR4 = CR3+CI4
-      DI3 = CI3+CR4
-      DI4 = CI3-CR4
-      DR5 = CR2+CI5
-      DR2 = CR2-CI5
-      DI5 = CI2-CR5
-      DI2 = CI2+CR5
-      CH(I-1,K,2) = WA1(I-2)*DR2-WA1(I-1)*DI2
-      CH(I,K,2) = WA1(I-2)*DI2+WA1(I-1)*DR2
-      CH(I-1,K,3) = WA2(I-2)*DR3-WA2(I-1)*DI3
-      CH(I,K,3) = WA2(I-2)*DI3+WA2(I-1)*DR3
-      CH(I-1,K,4) = WA3(I-2)*DR4-WA3(I-1)*DI4
-      CH(I,K,4) = WA3(I-2)*DI4+WA3(I-1)*DR4
-      CH(I-1,K,5) = WA4(I-2)*DR5-WA4(I-1)*DI5
-      CH(I,K,5) = WA4(I-2)*DI5+WA4(I-1)*DR5
-   END DO
-END DO
-RETURN
-END SUBROUTINE RADB5
+do k=1,l1
+   ti5 = cc(1,3,k)+cc(1,3,k)
+   ti4 = cc(1,5,k)+cc(1,5,k)
+   tr2 = cc(ido,2,k)+cc(ido,2,k)
+   tr3 = cc(ido,4,k)+cc(ido,4,k)
+   ch(1,k,1) = cc(1,1,k)+tr2+tr3
+   cr2 = cc(1,1,k)+tr11*tr2+tr12*tr3
+   cr3 = cc(1,1,k)+tr12*tr2+tr11*tr3
+   ci5 = ti11*ti5+ti12*ti4
+   ci4 = ti12*ti5-ti11*ti4
+   ch(1,k,2) = cr2-ci5
+   ch(1,k,3) = cr3-ci4
+   ch(1,k,4) = cr3+ci4
+   ch(1,k,5) = cr2+ci5
+end do
+if (ido .eq. 1) return
+idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 104
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      ti5 = cc(i,3,k)+cc(ic,2,k)
+      ti2 = cc(i,3,k)-cc(ic,2,k)
+      ti4 = cc(i,5,k)+cc(ic,4,k)
+      ti3 = cc(i,5,k)-cc(ic,4,k)
+      tr5 = cc(i-1,3,k)-cc(ic-1,2,k)
+      tr2 = cc(i-1,3,k)+cc(ic-1,2,k)
+      tr4 = cc(i-1,5,k)-cc(ic-1,4,k)
+      tr3 = cc(i-1,5,k)+cc(ic-1,4,k)
+      ch(i-1,k,1) = cc(i-1,1,k)+tr2+tr3
+      ch(i,k,1) = cc(i,1,k)+ti2+ti3
+      cr2 = cc(i-1,1,k)+tr11*tr2+tr12*tr3
+      ci2 = cc(i,1,k)+tr11*ti2+tr12*ti3
+      cr3 = cc(i-1,1,k)+tr12*tr2+tr11*tr3
+      ci3 = cc(i,1,k)+tr12*ti2+tr11*ti3
+      cr5 = ti11*tr5+ti12*tr4
+      ci5 = ti11*ti5+ti12*ti4
+      cr4 = ti12*tr5-ti11*tr4
+      ci4 = ti12*ti5-ti11*ti4
+      dr3 = cr3-ci4
+      dr4 = cr3+ci4
+      di3 = ci3+cr4
+      di4 = ci3-cr4
+      dr5 = cr2+ci5
+      dr2 = cr2-ci5
+      di5 = ci2-cr5
+      di2 = ci2+cr5
+      ch(i-1,k,2) = wa1(i-2)*dr2-wa1(i-1)*di2
+      ch(i,k,2) = wa1(i-2)*di2+wa1(i-1)*dr2
+      ch(i-1,k,3) = wa2(i-2)*dr3-wa2(i-1)*di3
+      ch(i,k,3) = wa2(i-2)*di3+wa2(i-1)*dr3
+      ch(i-1,k,4) = wa3(i-2)*dr4-wa3(i-1)*di4
+      ch(i,k,4) = wa3(i-2)*di4+wa3(i-1)*dr4
+      ch(i-1,k,5) = wa4(i-2)*dr5-wa4(i-1)*di5
+      ch(i,k,5) = wa4(i-2)*di5+wa4(i-1)*dr5
+   end do
+end do
+return
+104 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      ti5 = cc(i,3,k)+cc(ic,2,k)
+      ti2 = cc(i,3,k)-cc(ic,2,k)
+      ti4 = cc(i,5,k)+cc(ic,4,k)
+      ti3 = cc(i,5,k)-cc(ic,4,k)
+      tr5 = cc(i-1,3,k)-cc(ic-1,2,k)
+      tr2 = cc(i-1,3,k)+cc(ic-1,2,k)
+      tr4 = cc(i-1,5,k)-cc(ic-1,4,k)
+      tr3 = cc(i-1,5,k)+cc(ic-1,4,k)
+      ch(i-1,k,1) = cc(i-1,1,k)+tr2+tr3
+      ch(i,k,1) = cc(i,1,k)+ti2+ti3
+      cr2 = cc(i-1,1,k)+tr11*tr2+tr12*tr3
+      ci2 = cc(i,1,k)+tr11*ti2+tr12*ti3
+      cr3 = cc(i-1,1,k)+tr12*tr2+tr11*tr3
+      ci3 = cc(i,1,k)+tr12*ti2+tr11*ti3
+      cr5 = ti11*tr5+ti12*tr4
+      ci5 = ti11*ti5+ti12*ti4
+      cr4 = ti12*tr5-ti11*tr4
+      ci4 = ti12*ti5-ti11*ti4
+      dr3 = cr3-ci4
+      dr4 = cr3+ci4
+      di3 = ci3+cr4
+      di4 = ci3-cr4
+      dr5 = cr2+ci5
+      dr2 = cr2-ci5
+      di5 = ci2-cr5
+      di2 = ci2+cr5
+      ch(i-1,k,2) = wa1(i-2)*dr2-wa1(i-1)*di2
+      ch(i,k,2) = wa1(i-2)*di2+wa1(i-1)*dr2
+      ch(i-1,k,3) = wa2(i-2)*dr3-wa2(i-1)*di3
+      ch(i,k,3) = wa2(i-2)*di3+wa2(i-1)*dr3
+      ch(i-1,k,4) = wa3(i-2)*dr4-wa3(i-1)*di4
+      ch(i,k,4) = wa3(i-2)*di4+wa3(i-1)*dr4
+      ch(i-1,k,5) = wa4(i-2)*dr5-wa4(i-1)*di5
+      ch(i,k,5) = wa4(i-2)*di5+wa4(i-1)*dr5
+   end do
+end do
+return
+end subroutine radb5
 
-SUBROUTINE RADBG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDL1, IDO, IP, L1
-REAL, INTENT(INOUT) :: C1(IDO,L1,IP), C2(IDL1,IP)
-REAL :: CC(IDO,IP,L1)
-REAL, INTENT(INOUT) :: CH(IDO,L1,IP), CH2(IDL1,IP)
-REAL :: WA(*)
-INTEGER :: I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, &
-&LC, NBD
-REAL :: AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP, &
-&TPI
-DATA TPI/6.28318530717959/
-ARG = TPI/FLOAT(IP)
-DCP = COS(ARG)
-DSP = SIN(ARG)
-IDP2 = IDO+2
-NBD = (IDO-1)/2
-IPP2 = IP+2
-IPPH = (IP+1)/2
-IF (IDO .LT. L1) GO TO 103
-DO K=1,L1
-   DO I=1,IDO
-      CH(I,K,1) = CC(I,1,K)
-   END DO
-END DO
-GO TO 106
-103 DO I=1,IDO
-   DO K=1,L1
-      CH(I,K,1) = CC(I,1,K)
-   END DO
-END DO
-106 DO J=2,IPPH
-   JC = IPP2-J
-   J2 = J+J
-   DO K=1,L1
-      CH(1,K,J) = CC(IDO,J2-2,K)+CC(IDO,J2-2,K)
-      CH(1,K,JC) = CC(1,J2-1,K)+CC(1,J2-1,K)
-   END DO
-END DO
-IF (IDO .EQ. 1) GO TO 116
-IF (NBD .LT. L1) GO TO 112
-DO J=2,IPPH
-   JC = IPP2-J
-   DO K=1,L1
-      DO I=3,IDO,2
-         IC = IDP2-I
-         CH(I-1,K,J) = CC(I-1,2*J-1,K)+CC(IC-1,2*J-2,K)
-         CH(I-1,K,JC) = CC(I-1,2*J-1,K)-CC(IC-1,2*J-2,K)
-         CH(I,K,J) = CC(I,2*J-1,K)-CC(IC,2*J-2,K)
-         CH(I,K,JC) = CC(I,2*J-1,K)+CC(IC,2*J-2,K)
-      END DO
-   END DO
-END DO
-GO TO 116
-112 DO J=2,IPPH
-   JC = IPP2-J
-   DO I=3,IDO,2
-      IC = IDP2-I
-      DO K=1,L1
-         CH(I-1,K,J) = CC(I-1,2*J-1,K)+CC(IC-1,2*J-2,K)
-         CH(I-1,K,JC) = CC(I-1,2*J-1,K)-CC(IC-1,2*J-2,K)
-         CH(I,K,J) = CC(I,2*J-1,K)-CC(IC,2*J-2,K)
-         CH(I,K,JC) = CC(I,2*J-1,K)+CC(IC,2*J-2,K)
-      END DO
-   END DO
-END DO
-116 AR1 = 1.
-AI1 = 0.
-DO L=2,IPPH
-   LC = IPP2-L
-   AR1H = DCP*AR1-DSP*AI1
-   AI1 = DCP*AI1+DSP*AR1
-   AR1 = AR1H
-   DO IK=1,IDL1
-      C2(IK,L) = CH2(IK,1)+AR1*CH2(IK,2)
-      C2(IK,LC) = AI1*CH2(IK,IP)
-   END DO
-   DC2 = AR1
-   DS2 = AI1
-   AR2 = AR1
-   AI2 = AI1
-   DO J=3,IPPH
-      JC = IPP2-J
-      AR2H = DC2*AR2-DS2*AI2
-      AI2 = DC2*AI2+DS2*AR2
-      AR2 = AR2H
-      DO IK=1,IDL1
-         C2(IK,L) = C2(IK,L)+AR2*CH2(IK,J)
-         C2(IK,LC) = C2(IK,LC)+AI2*CH2(IK,JC)
-      END DO
-   END DO
-END DO
-DO J=2,IPPH
-   DO IK=1,IDL1
-      CH2(IK,1) = CH2(IK,1)+CH2(IK,J)
-   END DO
-END DO
-DO J=2,IPPH
-   JC = IPP2-J
-   DO K=1,L1
-      CH(1,K,J) = C1(1,K,J)-C1(1,K,JC)
-      CH(1,K,JC) = C1(1,K,J)+C1(1,K,JC)
-   END DO
-END DO
-IF (IDO .EQ. 1) GO TO 132
-IF (NBD .LT. L1) GO TO 128
-DO J=2,IPPH
-   JC = IPP2-J
-   DO K=1,L1
-      DO I=3,IDO,2
-         CH(I-1,K,J) = C1(I-1,K,J)-C1(I,K,JC)
-         CH(I-1,K,JC) = C1(I-1,K,J)+C1(I,K,JC)
-         CH(I,K,J) = C1(I,K,J)+C1(I-1,K,JC)
-         CH(I,K,JC) = C1(I,K,J)-C1(I-1,K,JC)
-      END DO
-   END DO
-END DO
-GO TO 132
-128 DO J=2,IPPH
-   JC = IPP2-J
-   DO I=3,IDO,2
-      DO K=1,L1
-         CH(I-1,K,J) = C1(I-1,K,J)-C1(I,K,JC)
-         CH(I-1,K,JC) = C1(I-1,K,J)+C1(I,K,JC)
-         CH(I,K,J) = C1(I,K,J)+C1(I-1,K,JC)
-         CH(I,K,JC) = C1(I,K,J)-C1(I-1,K,JC)
-      END DO
-   END DO
-END DO
-132 CONTINUE
-IF (IDO .EQ. 1) RETURN
-DO IK=1,IDL1
-   C2(IK,1) = CH2(IK,1)
-END DO
-DO J=2,IP
-   DO K=1,L1
-      C1(1,K,J) = CH(1,K,J)
-   END DO
-END DO
-IF (NBD .GT. L1) GO TO 139
-IS = -IDO
-DO J=2,IP
-   IS = IS+IDO
-   IDIJ = IS
-   DO I=3,IDO,2
-      IDIJ = IDIJ+2
-      DO K=1,L1
-         C1(I-1,K,J) = WA(IDIJ-1)*CH(I-1,K,J)-WA(IDIJ)*CH(I,K,J)
-         C1(I,K,J) = WA(IDIJ-1)*CH(I,K,J)+WA(IDIJ)*CH(I-1,K,J)
-      END DO
-   END DO
-END DO
-GO TO 143
-139 IS = -IDO
-DO J=2,IP
-   IS = IS+IDO
-   DO K=1,L1
-      IDIJ = IS
-      DO I=3,IDO,2
-         IDIJ = IDIJ+2
-         C1(I-1,K,J) = WA(IDIJ-1)*CH(I-1,K,J)-WA(IDIJ)*CH(I,K,J)
-         C1(I,K,J) = WA(IDIJ-1)*CH(I,K,J)+WA(IDIJ)*CH(I-1,K,J)
-      END DO
-   END DO
-END DO
-143 RETURN
-END SUBROUTINE RADBG
+subroutine radbg (ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
+implicit none
+integer, intent(in) :: idl1, ido, ip, l1
+real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip)
+real :: cc(ido,ip,l1)
+real, intent(inout) :: ch(ido,l1,ip), ch2(idl1,ip)
+real :: wa(*)
+integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
+&lc, nbd
+real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp, &
+&tpi
+data tpi/6.28318530717959/
+arg = tpi/float(ip)
+dcp = cos(arg)
+dsp = sin(arg)
+idp2 = ido+2
+nbd = (ido-1)/2
+ipp2 = ip+2
+ipph = (ip+1)/2
+if (ido .lt. l1) go to 103
+do k=1,l1
+   do i=1,ido
+      ch(i,k,1) = cc(i,1,k)
+   end do
+end do
+go to 106
+103 do i=1,ido
+   do k=1,l1
+      ch(i,k,1) = cc(i,1,k)
+   end do
+end do
+106 do j=2,ipph
+   jc = ipp2-j
+   j2 = j+j
+   do k=1,l1
+      ch(1,k,j) = cc(ido,j2-2,k)+cc(ido,j2-2,k)
+      ch(1,k,jc) = cc(1,j2-1,k)+cc(1,j2-1,k)
+   end do
+end do
+if (ido .eq. 1) go to 116
+if (nbd .lt. l1) go to 112
+do j=2,ipph
+   jc = ipp2-j
+   do k=1,l1
+      do i=3,ido,2
+         ic = idp2-i
+         ch(i-1,k,j) = cc(i-1,2*j-1,k)+cc(ic-1,2*j-2,k)
+         ch(i-1,k,jc) = cc(i-1,2*j-1,k)-cc(ic-1,2*j-2,k)
+         ch(i,k,j) = cc(i,2*j-1,k)-cc(ic,2*j-2,k)
+         ch(i,k,jc) = cc(i,2*j-1,k)+cc(ic,2*j-2,k)
+      end do
+   end do
+end do
+go to 116
+112 do j=2,ipph
+   jc = ipp2-j
+   do i=3,ido,2
+      ic = idp2-i
+      do k=1,l1
+         ch(i-1,k,j) = cc(i-1,2*j-1,k)+cc(ic-1,2*j-2,k)
+         ch(i-1,k,jc) = cc(i-1,2*j-1,k)-cc(ic-1,2*j-2,k)
+         ch(i,k,j) = cc(i,2*j-1,k)-cc(ic,2*j-2,k)
+         ch(i,k,jc) = cc(i,2*j-1,k)+cc(ic,2*j-2,k)
+      end do
+   end do
+end do
+116 ar1 = 1.
+ai1 = 0.
+do l=2,ipph
+   lc = ipp2-l
+   ar1h = dcp*ar1-dsp*ai1
+   ai1 = dcp*ai1+dsp*ar1
+   ar1 = ar1h
+   do ik=1,idl1
+      c2(ik,l) = ch2(ik,1)+ar1*ch2(ik,2)
+      c2(ik,lc) = ai1*ch2(ik,ip)
+   end do
+   dc2 = ar1
+   ds2 = ai1
+   ar2 = ar1
+   ai2 = ai1
+   do j=3,ipph
+      jc = ipp2-j
+      ar2h = dc2*ar2-ds2*ai2
+      ai2 = dc2*ai2+ds2*ar2
+      ar2 = ar2h
+      do ik=1,idl1
+         c2(ik,l) = c2(ik,l)+ar2*ch2(ik,j)
+         c2(ik,lc) = c2(ik,lc)+ai2*ch2(ik,jc)
+      end do
+   end do
+end do
+do j=2,ipph
+   do ik=1,idl1
+      ch2(ik,1) = ch2(ik,1)+ch2(ik,j)
+   end do
+end do
+do j=2,ipph
+   jc = ipp2-j
+   do k=1,l1
+      ch(1,k,j) = c1(1,k,j)-c1(1,k,jc)
+      ch(1,k,jc) = c1(1,k,j)+c1(1,k,jc)
+   end do
+end do
+if (ido .eq. 1) go to 132
+if (nbd .lt. l1) go to 128
+do j=2,ipph
+   jc = ipp2-j
+   do k=1,l1
+      do i=3,ido,2
+         ch(i-1,k,j) = c1(i-1,k,j)-c1(i,k,jc)
+         ch(i-1,k,jc) = c1(i-1,k,j)+c1(i,k,jc)
+         ch(i,k,j) = c1(i,k,j)+c1(i-1,k,jc)
+         ch(i,k,jc) = c1(i,k,j)-c1(i-1,k,jc)
+      end do
+   end do
+end do
+go to 132
+128 do j=2,ipph
+   jc = ipp2-j
+   do i=3,ido,2
+      do k=1,l1
+         ch(i-1,k,j) = c1(i-1,k,j)-c1(i,k,jc)
+         ch(i-1,k,jc) = c1(i-1,k,j)+c1(i,k,jc)
+         ch(i,k,j) = c1(i,k,j)+c1(i-1,k,jc)
+         ch(i,k,jc) = c1(i,k,j)-c1(i-1,k,jc)
+      end do
+   end do
+end do
+132 continue
+if (ido .eq. 1) return
+do ik=1,idl1
+   c2(ik,1) = ch2(ik,1)
+end do
+do j=2,ip
+   do k=1,l1
+      c1(1,k,j) = ch(1,k,j)
+   end do
+end do
+if (nbd .gt. l1) go to 139
+is = -ido
+do j=2,ip
+   is = is+ido
+   idij = is
+   do i=3,ido,2
+      idij = idij+2
+      do k=1,l1
+         c1(i-1,k,j) = wa(idij-1)*ch(i-1,k,j)-wa(idij)*ch(i,k,j)
+         c1(i,k,j) = wa(idij-1)*ch(i,k,j)+wa(idij)*ch(i-1,k,j)
+      end do
+   end do
+end do
+go to 143
+139 is = -ido
+do j=2,ip
+   is = is+ido
+   do k=1,l1
+      idij = is
+      do i=3,ido,2
+         idij = idij+2
+         c1(i-1,k,j) = wa(idij-1)*ch(i-1,k,j)-wa(idij)*ch(i,k,j)
+         c1(i,k,j) = wa(idij-1)*ch(i,k,j)+wa(idij)*ch(i-1,k,j)
+      end do
+   end do
+end do
+143 return
+end subroutine radbg
 
 !     ******************************************************************
 !
@@ -1130,946 +1130,946 @@ END SUBROUTINE RADBG
 !             CALLS OF RFFTF OR RFFTB.
 !
 !
-SUBROUTINE RFFTF (N,R,WSAVE)
-IMPLICIT NONE
-INTEGER :: N
-REAL, INTENT(INOUT) :: R(*), WSAVE(*)
-IF (N .EQ. 1) RETURN
-CALL RFFTF1 (N,R,WSAVE,WSAVE(N+1),WSAVE(2*N+1))
-RETURN
-END SUBROUTINE RFFTF
+subroutine rfftf (n,r,wsave)
+implicit none
+integer :: n
+real, intent(inout) :: r(*), wsave(*)
+if (n .eq. 1) return
+call rfftf1 (n,r,wsave,wsave(n+1),wsave(2*n+1))
+return
+end subroutine rfftf
 
-SUBROUTINE RFFTF1 (N,C,CH,WA,IFAC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, KH, L1, L2, &
-&NA, NF
-REAL, INTENT(INOUT) :: C(*), CH(*)
-REAL :: WA(*)
-REAL, INTENT(IN) :: IFAC(*)
-NF = IFAC(2)
-NA = 1
-L2 = N
-IW = N
-DO K1=1,NF
-   KH = NF-K1
-   IP = IFAC(KH+3)
-   L1 = L2/IP
-   IDO = N/L2
-   IDL1 = IDO*L1
-   IW = IW-(IP-1)*IDO
-   NA = 1-NA
-   IF (IP .NE. 4) GO TO 102
-   IX2 = IW+IDO
-   IX3 = IX2+IDO
-   IF (NA .NE. 0) GO TO 101
-   CALL RADF4 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3))
-   GO TO 110
-101 CALL RADF4 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3))
-   GO TO 110
-102 IF (IP .NE. 2) GO TO 104
-   IF (NA .NE. 0) GO TO 103
-   CALL RADF2 (IDO,L1,C,CH,WA(IW))
-   GO TO 110
-103 CALL RADF2 (IDO,L1,CH,C,WA(IW))
-   GO TO 110
-104 IF (IP .NE. 3) GO TO 106
-   IX2 = IW+IDO
-   IF (NA .NE. 0) GO TO 105
-   CALL RADF3 (IDO,L1,C,CH,WA(IW),WA(IX2))
-   GO TO 110
-105 CALL RADF3 (IDO,L1,CH,C,WA(IW),WA(IX2))
-   GO TO 110
-106 IF (IP .NE. 5) GO TO 108
-   IX2 = IW+IDO
-   IX3 = IX2+IDO
-   IX4 = IX3+IDO
-   IF (NA .NE. 0) GO TO 107
-   CALL RADF5 (IDO,L1,C,CH,WA(IW),WA(IX2),WA(IX3),WA(IX4))
-   GO TO 110
-107 CALL RADF5 (IDO,L1,CH,C,WA(IW),WA(IX2),WA(IX3),WA(IX4))
-   GO TO 110
-108 IF (IDO .EQ. 1) NA = 1-NA
-   IF (NA .NE. 0) GO TO 109
-   CALL RADFG (IDO,IP,L1,IDL1,C,C,C,CH,CH,WA(IW))
-   NA = 1
-   GO TO 110
-109 CALL RADFG (IDO,IP,L1,IDL1,CH,CH,CH,C,C,WA(IW))
-   NA = 0
-110 L2 = L1
-END DO
-IF (NA .EQ. 1) RETURN
-DO I=1,N
-   C(I) = CH(I)
-END DO
-RETURN
-END SUBROUTINE RFFTF1
+subroutine rfftf1 (n,c,ch,wa,ifac)
+implicit none
+integer, intent(in) :: n
+integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
+&na, nf
+real, intent(inout) :: c(*), ch(*)
+real :: wa(*)
+real, intent(in) :: ifac(*)
+nf = ifac(2)
+na = 1
+l2 = n
+iw = n
+do k1=1,nf
+   kh = nf-k1
+   ip = ifac(kh+3)
+   l1 = l2/ip
+   ido = n/l2
+   idl1 = ido*l1
+   iw = iw-(ip-1)*ido
+   na = 1-na
+   if (ip .ne. 4) go to 102
+   ix2 = iw+ido
+   ix3 = ix2+ido
+   if (na .ne. 0) go to 101
+   call radf4 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3))
+   go to 110
+101 call radf4 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3))
+   go to 110
+102 if (ip .ne. 2) go to 104
+   if (na .ne. 0) go to 103
+   call radf2 (ido,l1,c,ch,wa(iw))
+   go to 110
+103 call radf2 (ido,l1,ch,c,wa(iw))
+   go to 110
+104 if (ip .ne. 3) go to 106
+   ix2 = iw+ido
+   if (na .ne. 0) go to 105
+   call radf3 (ido,l1,c,ch,wa(iw),wa(ix2))
+   go to 110
+105 call radf3 (ido,l1,ch,c,wa(iw),wa(ix2))
+   go to 110
+106 if (ip .ne. 5) go to 108
+   ix2 = iw+ido
+   ix3 = ix2+ido
+   ix4 = ix3+ido
+   if (na .ne. 0) go to 107
+   call radf5 (ido,l1,c,ch,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+   go to 110
+107 call radf5 (ido,l1,ch,c,wa(iw),wa(ix2),wa(ix3),wa(ix4))
+   go to 110
+108 if (ido .eq. 1) na = 1-na
+   if (na .ne. 0) go to 109
+   call radfg (ido,ip,l1,idl1,c,c,c,ch,ch,wa(iw))
+   na = 1
+   go to 110
+109 call radfg (ido,ip,l1,idl1,ch,ch,ch,c,c,wa(iw))
+   na = 0
+110 l2 = l1
+end do
+if (na .eq. 1) return
+do i=1,n
+   c(i) = ch(i)
+end do
+return
+end subroutine rfftf1
 
-SUBROUTINE RADF2 (IDO,L1,CC,CH,WA1)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,L1,*)
-REAL, INTENT(INOUT) :: CH(IDO,2,L1)
-REAL :: WA1(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: TI2, TR2
-DO K=1,L1
-   CH(1,1,K) = CC(1,K,1)+CC(1,K,2)
-   CH(IDO,2,K) = CC(1,K,1)-CC(1,K,2)
-END DO
-IF (IDO-2) 107,105,102
-102 IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 108
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      TR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      TI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      CH(I,1,K) = CC(I,K,1)+TI2
-      CH(IC,2,K) = TI2-CC(I,K,1)
-      CH(I-1,1,K) = CC(I-1,K,1)+TR2
-      CH(IC-1,2,K) = CC(I-1,K,1)-TR2
-   END DO
-END DO
-GO TO 111
-108 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      TR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      TI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      CH(I,1,K) = CC(I,K,1)+TI2
-      CH(IC,2,K) = TI2-CC(I,K,1)
-      CH(I-1,1,K) = CC(I-1,K,1)+TR2
-      CH(IC-1,2,K) = CC(I-1,K,1)-TR2
-   END DO
-END DO
-111 IF (MOD(IDO,2) .EQ. 1) RETURN
-105 DO K=1,L1
-   CH(1,2,K) = -CC(IDO,K,2)
-   CH(IDO,1,K) = CC(IDO,K,1)
-END DO
-107 RETURN
-END SUBROUTINE RADF2
+subroutine radf2 (ido,l1,cc,ch,wa1)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,l1,*)
+real, intent(inout) :: ch(ido,2,l1)
+real :: wa1(*)
+integer :: i, ic, idp2, k
+real :: ti2, tr2
+do k=1,l1
+   ch(1,1,k) = cc(1,k,1)+cc(1,k,2)
+   ch(ido,2,k) = cc(1,k,1)-cc(1,k,2)
+end do
+if (ido-2) 107,105,102
+102 idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 108
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      tr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      ti2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      ch(i,1,k) = cc(i,k,1)+ti2
+      ch(ic,2,k) = ti2-cc(i,k,1)
+      ch(i-1,1,k) = cc(i-1,k,1)+tr2
+      ch(ic-1,2,k) = cc(i-1,k,1)-tr2
+   end do
+end do
+go to 111
+108 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      tr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      ti2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      ch(i,1,k) = cc(i,k,1)+ti2
+      ch(ic,2,k) = ti2-cc(i,k,1)
+      ch(i-1,1,k) = cc(i-1,k,1)+tr2
+      ch(ic-1,2,k) = cc(i-1,k,1)-tr2
+   end do
+end do
+111 if (mod(ido,2) .eq. 1) return
+105 do k=1,l1
+   ch(1,2,k) = -cc(ido,k,2)
+   ch(ido,1,k) = cc(ido,k,1)
+end do
+107 return
+end subroutine radf2
 
-SUBROUTINE RADF3 (IDO,L1,CC,CH,WA1,WA2)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,L1,*)
-REAL, INTENT(INOUT) :: CH(IDO,3,L1)
-REAL :: WA1(*), WA2(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CR2, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TI3, TR2, &
-&TR3
-DATA TAUR,TAUI /-.5,.866025403784439/
-DO K=1,L1
-   CR2 = CC(1,K,2)+CC(1,K,3)
-   CH(1,1,K) = CC(1,K,1)+CR2
-   CH(1,3,K) = TAUI*(CC(1,K,3)-CC(1,K,2))
-   CH(IDO,2,K) = CC(1,K,1)+TAUR*CR2
-END DO
-IF (IDO .EQ. 1) RETURN
-IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 104
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      DR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      DI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      DR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      DI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      CR2 = DR2+DR3
-      CI2 = DI2+DI3
-      CH(I-1,1,K) = CC(I-1,K,1)+CR2
-      CH(I,1,K) = CC(I,K,1)+CI2
-      TR2 = CC(I-1,K,1)+TAUR*CR2
-      TI2 = CC(I,K,1)+TAUR*CI2
-      TR3 = TAUI*(DI2-DI3)
-      TI3 = TAUI*(DR3-DR2)
-      CH(I-1,3,K) = TR2+TR3
-      CH(IC-1,2,K) = TR2-TR3
-      CH(I,3,K) = TI2+TI3
-      CH(IC,2,K) = TI3-TI2
-   END DO
-END DO
-RETURN
-104 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      DR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      DI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      DR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      DI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      CR2 = DR2+DR3
-      CI2 = DI2+DI3
-      CH(I-1,1,K) = CC(I-1,K,1)+CR2
-      CH(I,1,K) = CC(I,K,1)+CI2
-      TR2 = CC(I-1,K,1)+TAUR*CR2
-      TI2 = CC(I,K,1)+TAUR*CI2
-      TR3 = TAUI*(DI2-DI3)
-      TI3 = TAUI*(DR3-DR2)
-      CH(I-1,3,K) = TR2+TR3
-      CH(IC-1,2,K) = TR2-TR3
-      CH(I,3,K) = TI2+TI3
-      CH(IC,2,K) = TI3-TI2
-   END DO
-END DO
-RETURN
-END SUBROUTINE RADF3
+subroutine radf3 (ido,l1,cc,ch,wa1,wa2)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,l1,*)
+real, intent(inout) :: ch(ido,3,l1)
+real :: wa1(*), wa2(*)
+integer :: i, ic, idp2, k
+real :: ci2, cr2, di2, di3, dr2, dr3, taui, taur, ti2, ti3, tr2, &
+&tr3
+data taur,taui /-.5,.866025403784439/
+do k=1,l1
+   cr2 = cc(1,k,2)+cc(1,k,3)
+   ch(1,1,k) = cc(1,k,1)+cr2
+   ch(1,3,k) = taui*(cc(1,k,3)-cc(1,k,2))
+   ch(ido,2,k) = cc(1,k,1)+taur*cr2
+end do
+if (ido .eq. 1) return
+idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 104
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      dr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      di2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      dr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      di3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      cr2 = dr2+dr3
+      ci2 = di2+di3
+      ch(i-1,1,k) = cc(i-1,k,1)+cr2
+      ch(i,1,k) = cc(i,k,1)+ci2
+      tr2 = cc(i-1,k,1)+taur*cr2
+      ti2 = cc(i,k,1)+taur*ci2
+      tr3 = taui*(di2-di3)
+      ti3 = taui*(dr3-dr2)
+      ch(i-1,3,k) = tr2+tr3
+      ch(ic-1,2,k) = tr2-tr3
+      ch(i,3,k) = ti2+ti3
+      ch(ic,2,k) = ti3-ti2
+   end do
+end do
+return
+104 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      dr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      di2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      dr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      di3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      cr2 = dr2+dr3
+      ci2 = di2+di3
+      ch(i-1,1,k) = cc(i-1,k,1)+cr2
+      ch(i,1,k) = cc(i,k,1)+ci2
+      tr2 = cc(i-1,k,1)+taur*cr2
+      ti2 = cc(i,k,1)+taur*ci2
+      tr3 = taui*(di2-di3)
+      ti3 = taui*(dr3-dr2)
+      ch(i-1,3,k) = tr2+tr3
+      ch(ic-1,2,k) = tr2-tr3
+      ch(i,3,k) = ti2+ti3
+      ch(ic,2,k) = ti3-ti2
+   end do
+end do
+return
+end subroutine radf3
 
-SUBROUTINE RADF4 (IDO,L1,CC,CH,WA1,WA2,WA3)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,L1,*)
-REAL, INTENT(INOUT) :: CH(IDO,4,L1)
-REAL :: WA1(*), WA2(*), WA3(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CI3, CI4, CR2, CR3, CR4, HSQT2, TI1, TI2, TI3, TI4, &
-&TR1, TR2, TR3, TR4
-DATA HSQT2 /.7071067811865475/
-DO K=1,L1
-   TR1 = CC(1,K,2)+CC(1,K,4)
-   TR2 = CC(1,K,1)+CC(1,K,3)
-   CH(1,1,K) = TR1+TR2
-   CH(IDO,4,K) = TR2-TR1
-   CH(IDO,2,K) = CC(1,K,1)-CC(1,K,3)
-   CH(1,3,K) = CC(1,K,4)-CC(1,K,2)
-END DO
-IF (IDO-2) 107,105,102
-102 IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 111
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      CR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      CI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      CR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      CI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      CR4 = WA3(I-2)*CC(I-1,K,4)+WA3(I-1)*CC(I,K,4)
-      CI4 = WA3(I-2)*CC(I,K,4)-WA3(I-1)*CC(I-1,K,4)
-      TR1 = CR2+CR4
-      TR4 = CR4-CR2
-      TI1 = CI2+CI4
-      TI4 = CI2-CI4
-      TI2 = CC(I,K,1)+CI3
-      TI3 = CC(I,K,1)-CI3
-      TR2 = CC(I-1,K,1)+CR3
-      TR3 = CC(I-1,K,1)-CR3
-      CH(I-1,1,K) = TR1+TR2
-      CH(IC-1,4,K) = TR2-TR1
-      CH(I,1,K) = TI1+TI2
-      CH(IC,4,K) = TI1-TI2
-      CH(I-1,3,K) = TI4+TR3
-      CH(IC-1,2,K) = TR3-TI4
-      CH(I,3,K) = TR4+TI3
-      CH(IC,2,K) = TR4-TI3
-   END DO
-END DO
-GO TO 110
-111 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      CR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      CI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      CR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      CI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      CR4 = WA3(I-2)*CC(I-1,K,4)+WA3(I-1)*CC(I,K,4)
-      CI4 = WA3(I-2)*CC(I,K,4)-WA3(I-1)*CC(I-1,K,4)
-      TR1 = CR2+CR4
-      TR4 = CR4-CR2
-      TI1 = CI2+CI4
-      TI4 = CI2-CI4
-      TI2 = CC(I,K,1)+CI3
-      TI3 = CC(I,K,1)-CI3
-      TR2 = CC(I-1,K,1)+CR3
-      TR3 = CC(I-1,K,1)-CR3
-      CH(I-1,1,K) = TR1+TR2
-      CH(IC-1,4,K) = TR2-TR1
-      CH(I,1,K) = TI1+TI2
-      CH(IC,4,K) = TI1-TI2
-      CH(I-1,3,K) = TI4+TR3
-      CH(IC-1,2,K) = TR3-TI4
-      CH(I,3,K) = TR4+TI3
-      CH(IC,2,K) = TR4-TI3
-   END DO
-END DO
-110 IF (MOD(IDO,2) .EQ. 1) RETURN
-105 DO K=1,L1
-   TI1 = -HSQT2*(CC(IDO,K,2)+CC(IDO,K,4))
-   TR1 = HSQT2*(CC(IDO,K,2)-CC(IDO,K,4))
-   CH(IDO,1,K) = TR1+CC(IDO,K,1)
-   CH(IDO,3,K) = CC(IDO,K,1)-TR1
-   CH(1,2,K) = TI1-CC(IDO,K,3)
-   CH(1,4,K) = TI1+CC(IDO,K,3)
-END DO
-107 RETURN
-END SUBROUTINE RADF4
+subroutine radf4 (ido,l1,cc,ch,wa1,wa2,wa3)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,l1,*)
+real, intent(inout) :: ch(ido,4,l1)
+real :: wa1(*), wa2(*), wa3(*)
+integer :: i, ic, idp2, k
+real :: ci2, ci3, ci4, cr2, cr3, cr4, hsqt2, ti1, ti2, ti3, ti4, &
+&tr1, tr2, tr3, tr4
+data hsqt2 /.7071067811865475/
+do k=1,l1
+   tr1 = cc(1,k,2)+cc(1,k,4)
+   tr2 = cc(1,k,1)+cc(1,k,3)
+   ch(1,1,k) = tr1+tr2
+   ch(ido,4,k) = tr2-tr1
+   ch(ido,2,k) = cc(1,k,1)-cc(1,k,3)
+   ch(1,3,k) = cc(1,k,4)-cc(1,k,2)
+end do
+if (ido-2) 107,105,102
+102 idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 111
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      cr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      ci2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      cr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      ci3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      cr4 = wa3(i-2)*cc(i-1,k,4)+wa3(i-1)*cc(i,k,4)
+      ci4 = wa3(i-2)*cc(i,k,4)-wa3(i-1)*cc(i-1,k,4)
+      tr1 = cr2+cr4
+      tr4 = cr4-cr2
+      ti1 = ci2+ci4
+      ti4 = ci2-ci4
+      ti2 = cc(i,k,1)+ci3
+      ti3 = cc(i,k,1)-ci3
+      tr2 = cc(i-1,k,1)+cr3
+      tr3 = cc(i-1,k,1)-cr3
+      ch(i-1,1,k) = tr1+tr2
+      ch(ic-1,4,k) = tr2-tr1
+      ch(i,1,k) = ti1+ti2
+      ch(ic,4,k) = ti1-ti2
+      ch(i-1,3,k) = ti4+tr3
+      ch(ic-1,2,k) = tr3-ti4
+      ch(i,3,k) = tr4+ti3
+      ch(ic,2,k) = tr4-ti3
+   end do
+end do
+go to 110
+111 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      cr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      ci2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      cr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      ci3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      cr4 = wa3(i-2)*cc(i-1,k,4)+wa3(i-1)*cc(i,k,4)
+      ci4 = wa3(i-2)*cc(i,k,4)-wa3(i-1)*cc(i-1,k,4)
+      tr1 = cr2+cr4
+      tr4 = cr4-cr2
+      ti1 = ci2+ci4
+      ti4 = ci2-ci4
+      ti2 = cc(i,k,1)+ci3
+      ti3 = cc(i,k,1)-ci3
+      tr2 = cc(i-1,k,1)+cr3
+      tr3 = cc(i-1,k,1)-cr3
+      ch(i-1,1,k) = tr1+tr2
+      ch(ic-1,4,k) = tr2-tr1
+      ch(i,1,k) = ti1+ti2
+      ch(ic,4,k) = ti1-ti2
+      ch(i-1,3,k) = ti4+tr3
+      ch(ic-1,2,k) = tr3-ti4
+      ch(i,3,k) = tr4+ti3
+      ch(ic,2,k) = tr4-ti3
+   end do
+end do
+110 if (mod(ido,2) .eq. 1) return
+105 do k=1,l1
+   ti1 = -hsqt2*(cc(ido,k,2)+cc(ido,k,4))
+   tr1 = hsqt2*(cc(ido,k,2)-cc(ido,k,4))
+   ch(ido,1,k) = tr1+cc(ido,k,1)
+   ch(ido,3,k) = cc(ido,k,1)-tr1
+   ch(1,2,k) = ti1-cc(ido,k,3)
+   ch(1,4,k) = ti1+cc(ido,k,3)
+end do
+107 return
+end subroutine radf4
 
-SUBROUTINE RADF5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDO, L1
-REAL :: CC(IDO,L1,*)
-REAL, INTENT(INOUT) :: CH(IDO,5,L1)
-REAL :: WA1(*), WA2(*), WA3(*), WA4(*)
-INTEGER :: I, IC, IDP2, K
-REAL :: CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, &
-&DI5, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, &
-&TR12, TR2, TR3, TR4, TR5
-DATA TR11,TI11,TR12,TI12 /.309016994374947,.951056516295154, &
+subroutine radf5 (ido,l1,cc,ch,wa1,wa2,wa3,wa4)
+implicit none
+integer, intent(in) :: ido, l1
+real :: cc(ido,l1,*)
+real, intent(inout) :: ch(ido,5,l1)
+real :: wa1(*), wa2(*), wa3(*), wa4(*)
+integer :: i, ic, idp2, k
+real :: ci2, ci3, ci4, ci5, cr2, cr3, cr4, cr5, di2, di3, di4, &
+&di5, dr2, dr3, dr4, dr5, ti11, ti12, ti2, ti3, ti4, ti5, tr11, &
+&tr12, tr2, tr3, tr4, tr5
+data tr11,ti11,tr12,ti12 /.309016994374947,.951056516295154, &
 &-.809016994374947,.587785252292473/
-DO K=1,L1
-   CR2 = CC(1,K,5)+CC(1,K,2)
-   CI5 = CC(1,K,5)-CC(1,K,2)
-   CR3 = CC(1,K,4)+CC(1,K,3)
-   CI4 = CC(1,K,4)-CC(1,K,3)
-   CH(1,1,K) = CC(1,K,1)+CR2+CR3
-   CH(IDO,2,K) = CC(1,K,1)+TR11*CR2+TR12*CR3
-   CH(1,3,K) = TI11*CI5+TI12*CI4
-   CH(IDO,4,K) = CC(1,K,1)+TR12*CR2+TR11*CR3
-   CH(1,5,K) = TI12*CI5-TI11*CI4
-END DO
-IF (IDO .EQ. 1) RETURN
-IDP2 = IDO+2
-IF((IDO-1)/2.LT.L1) GO TO 104
-DO K=1,L1
-   DO I=3,IDO,2
-      IC = IDP2-I
-      DR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      DI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      DR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      DI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      DR4 = WA3(I-2)*CC(I-1,K,4)+WA3(I-1)*CC(I,K,4)
-      DI4 = WA3(I-2)*CC(I,K,4)-WA3(I-1)*CC(I-1,K,4)
-      DR5 = WA4(I-2)*CC(I-1,K,5)+WA4(I-1)*CC(I,K,5)
-      DI5 = WA4(I-2)*CC(I,K,5)-WA4(I-1)*CC(I-1,K,5)
-      CR2 = DR2+DR5
-      CI5 = DR5-DR2
-      CR5 = DI2-DI5
-      CI2 = DI2+DI5
-      CR3 = DR3+DR4
-      CI4 = DR4-DR3
-      CR4 = DI3-DI4
-      CI3 = DI3+DI4
-      CH(I-1,1,K) = CC(I-1,K,1)+CR2+CR3
-      CH(I,1,K) = CC(I,K,1)+CI2+CI3
-      TR2 = CC(I-1,K,1)+TR11*CR2+TR12*CR3
-      TI2 = CC(I,K,1)+TR11*CI2+TR12*CI3
-      TR3 = CC(I-1,K,1)+TR12*CR2+TR11*CR3
-      TI3 = CC(I,K,1)+TR12*CI2+TR11*CI3
-      TR5 = TI11*CR5+TI12*CR4
-      TI5 = TI11*CI5+TI12*CI4
-      TR4 = TI12*CR5-TI11*CR4
-      TI4 = TI12*CI5-TI11*CI4
-      CH(I-1,3,K) = TR2+TR5
-      CH(IC-1,2,K) = TR2-TR5
-      CH(I,3,K) = TI2+TI5
-      CH(IC,2,K) = TI5-TI2
-      CH(I-1,5,K) = TR3+TR4
-      CH(IC-1,4,K) = TR3-TR4
-      CH(I,5,K) = TI3+TI4
-      CH(IC,4,K) = TI4-TI3
-   END DO
-END DO
-RETURN
-104 DO I=3,IDO,2
-   IC = IDP2-I
-   DO K=1,L1
-      DR2 = WA1(I-2)*CC(I-1,K,2)+WA1(I-1)*CC(I,K,2)
-      DI2 = WA1(I-2)*CC(I,K,2)-WA1(I-1)*CC(I-1,K,2)
-      DR3 = WA2(I-2)*CC(I-1,K,3)+WA2(I-1)*CC(I,K,3)
-      DI3 = WA2(I-2)*CC(I,K,3)-WA2(I-1)*CC(I-1,K,3)
-      DR4 = WA3(I-2)*CC(I-1,K,4)+WA3(I-1)*CC(I,K,4)
-      DI4 = WA3(I-2)*CC(I,K,4)-WA3(I-1)*CC(I-1,K,4)
-      DR5 = WA4(I-2)*CC(I-1,K,5)+WA4(I-1)*CC(I,K,5)
-      DI5 = WA4(I-2)*CC(I,K,5)-WA4(I-1)*CC(I-1,K,5)
-      CR2 = DR2+DR5
-      CI5 = DR5-DR2
-      CR5 = DI2-DI5
-      CI2 = DI2+DI5
-      CR3 = DR3+DR4
-      CI4 = DR4-DR3
-      CR4 = DI3-DI4
-      CI3 = DI3+DI4
-      CH(I-1,1,K) = CC(I-1,K,1)+CR2+CR3
-      CH(I,1,K) = CC(I,K,1)+CI2+CI3
-      TR2 = CC(I-1,K,1)+TR11*CR2+TR12*CR3
-      TI2 = CC(I,K,1)+TR11*CI2+TR12*CI3
-      TR3 = CC(I-1,K,1)+TR12*CR2+TR11*CR3
-      TI3 = CC(I,K,1)+TR12*CI2+TR11*CI3
-      TR5 = TI11*CR5+TI12*CR4
-      TI5 = TI11*CI5+TI12*CI4
-      TR4 = TI12*CR5-TI11*CR4
-      TI4 = TI12*CI5-TI11*CI4
-      CH(I-1,3,K) = TR2+TR5
-      CH(IC-1,2,K) = TR2-TR5
-      CH(I,3,K) = TI2+TI5
-      CH(IC,2,K) = TI5-TI2
-      CH(I-1,5,K) = TR3+TR4
-      CH(IC-1,4,K) = TR3-TR4
-      CH(I,5,K) = TI3+TI4
-      CH(IC,4,K) = TI4-TI3
-   END DO
-END DO
-RETURN
-END SUBROUTINE RADF5
+do k=1,l1
+   cr2 = cc(1,k,5)+cc(1,k,2)
+   ci5 = cc(1,k,5)-cc(1,k,2)
+   cr3 = cc(1,k,4)+cc(1,k,3)
+   ci4 = cc(1,k,4)-cc(1,k,3)
+   ch(1,1,k) = cc(1,k,1)+cr2+cr3
+   ch(ido,2,k) = cc(1,k,1)+tr11*cr2+tr12*cr3
+   ch(1,3,k) = ti11*ci5+ti12*ci4
+   ch(ido,4,k) = cc(1,k,1)+tr12*cr2+tr11*cr3
+   ch(1,5,k) = ti12*ci5-ti11*ci4
+end do
+if (ido .eq. 1) return
+idp2 = ido+2
+if((ido-1)/2.lt.l1) go to 104
+do k=1,l1
+   do i=3,ido,2
+      ic = idp2-i
+      dr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      di2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      dr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      di3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      dr4 = wa3(i-2)*cc(i-1,k,4)+wa3(i-1)*cc(i,k,4)
+      di4 = wa3(i-2)*cc(i,k,4)-wa3(i-1)*cc(i-1,k,4)
+      dr5 = wa4(i-2)*cc(i-1,k,5)+wa4(i-1)*cc(i,k,5)
+      di5 = wa4(i-2)*cc(i,k,5)-wa4(i-1)*cc(i-1,k,5)
+      cr2 = dr2+dr5
+      ci5 = dr5-dr2
+      cr5 = di2-di5
+      ci2 = di2+di5
+      cr3 = dr3+dr4
+      ci4 = dr4-dr3
+      cr4 = di3-di4
+      ci3 = di3+di4
+      ch(i-1,1,k) = cc(i-1,k,1)+cr2+cr3
+      ch(i,1,k) = cc(i,k,1)+ci2+ci3
+      tr2 = cc(i-1,k,1)+tr11*cr2+tr12*cr3
+      ti2 = cc(i,k,1)+tr11*ci2+tr12*ci3
+      tr3 = cc(i-1,k,1)+tr12*cr2+tr11*cr3
+      ti3 = cc(i,k,1)+tr12*ci2+tr11*ci3
+      tr5 = ti11*cr5+ti12*cr4
+      ti5 = ti11*ci5+ti12*ci4
+      tr4 = ti12*cr5-ti11*cr4
+      ti4 = ti12*ci5-ti11*ci4
+      ch(i-1,3,k) = tr2+tr5
+      ch(ic-1,2,k) = tr2-tr5
+      ch(i,3,k) = ti2+ti5
+      ch(ic,2,k) = ti5-ti2
+      ch(i-1,5,k) = tr3+tr4
+      ch(ic-1,4,k) = tr3-tr4
+      ch(i,5,k) = ti3+ti4
+      ch(ic,4,k) = ti4-ti3
+   end do
+end do
+return
+104 do i=3,ido,2
+   ic = idp2-i
+   do k=1,l1
+      dr2 = wa1(i-2)*cc(i-1,k,2)+wa1(i-1)*cc(i,k,2)
+      di2 = wa1(i-2)*cc(i,k,2)-wa1(i-1)*cc(i-1,k,2)
+      dr3 = wa2(i-2)*cc(i-1,k,3)+wa2(i-1)*cc(i,k,3)
+      di3 = wa2(i-2)*cc(i,k,3)-wa2(i-1)*cc(i-1,k,3)
+      dr4 = wa3(i-2)*cc(i-1,k,4)+wa3(i-1)*cc(i,k,4)
+      di4 = wa3(i-2)*cc(i,k,4)-wa3(i-1)*cc(i-1,k,4)
+      dr5 = wa4(i-2)*cc(i-1,k,5)+wa4(i-1)*cc(i,k,5)
+      di5 = wa4(i-2)*cc(i,k,5)-wa4(i-1)*cc(i-1,k,5)
+      cr2 = dr2+dr5
+      ci5 = dr5-dr2
+      cr5 = di2-di5
+      ci2 = di2+di5
+      cr3 = dr3+dr4
+      ci4 = dr4-dr3
+      cr4 = di3-di4
+      ci3 = di3+di4
+      ch(i-1,1,k) = cc(i-1,k,1)+cr2+cr3
+      ch(i,1,k) = cc(i,k,1)+ci2+ci3
+      tr2 = cc(i-1,k,1)+tr11*cr2+tr12*cr3
+      ti2 = cc(i,k,1)+tr11*ci2+tr12*ci3
+      tr3 = cc(i-1,k,1)+tr12*cr2+tr11*cr3
+      ti3 = cc(i,k,1)+tr12*ci2+tr11*ci3
+      tr5 = ti11*cr5+ti12*cr4
+      ti5 = ti11*ci5+ti12*ci4
+      tr4 = ti12*cr5-ti11*cr4
+      ti4 = ti12*ci5-ti11*ci4
+      ch(i-1,3,k) = tr2+tr5
+      ch(ic-1,2,k) = tr2-tr5
+      ch(i,3,k) = ti2+ti5
+      ch(ic,2,k) = ti5-ti2
+      ch(i-1,5,k) = tr3+tr4
+      ch(ic-1,4,k) = tr3-tr4
+      ch(i,5,k) = ti3+ti4
+      ch(ic,4,k) = ti4-ti3
+   end do
+end do
+return
+end subroutine radf5
 
-SUBROUTINE RADFG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDL1, IDO, IP, L1
-REAL, INTENT(INOUT) :: C1(IDO,L1,IP), C2(IDL1,IP), CC(IDO,IP,L1), &
-&CH(IDO,L1,IP), CH2(IDL1,IP)
-REAL :: WA(*)
-INTEGER :: I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, &
-&LC, NBD
-REAL :: AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP, &
-&TPI
-DATA TPI/6.28318530717959/
-ARG = TPI/FLOAT(IP)
-DCP = COS(ARG)
-DSP = SIN(ARG)
-IPPH = (IP+1)/2
-IPP2 = IP+2
-IDP2 = IDO+2
-NBD = (IDO-1)/2
-IF (IDO .EQ. 1) GO TO 119
-DO IK=1,IDL1
-   CH2(IK,1) = C2(IK,1)
-END DO
-DO J=2,IP
-   DO K=1,L1
-      CH(1,K,J) = C1(1,K,J)
-   END DO
-END DO
-IF (NBD .GT. L1) GO TO 107
-IS = -IDO
-DO J=2,IP
-   IS = IS+IDO
-   IDIJ = IS
-   DO I=3,IDO,2
-      IDIJ = IDIJ+2
-      DO K=1,L1
-         CH(I-1,K,J) = WA(IDIJ-1)*C1(I-1,K,J)+WA(IDIJ)*C1(I,K,J)
-         CH(I,K,J) = WA(IDIJ-1)*C1(I,K,J)-WA(IDIJ)*C1(I-1,K,J)
-      END DO
-   END DO
-END DO
-GO TO 111
-107 IS = -IDO
-DO J=2,IP
-   IS = IS+IDO
-   DO K=1,L1
-      IDIJ = IS
-      DO I=3,IDO,2
-         IDIJ = IDIJ+2
-         CH(I-1,K,J) = WA(IDIJ-1)*C1(I-1,K,J)+WA(IDIJ)*C1(I,K,J)
-         CH(I,K,J) = WA(IDIJ-1)*C1(I,K,J)-WA(IDIJ)*C1(I-1,K,J)
-      END DO
-   END DO
-END DO
-111 IF (NBD .LT. L1) GO TO 115
-DO J=2,IPPH
-   JC = IPP2-J
-   DO K=1,L1
-      DO I=3,IDO,2
-         C1(I-1,K,J) = CH(I-1,K,J)+CH(I-1,K,JC)
-         C1(I-1,K,JC) = CH(I,K,J)-CH(I,K,JC)
-         C1(I,K,J) = CH(I,K,J)+CH(I,K,JC)
-         C1(I,K,JC) = CH(I-1,K,JC)-CH(I-1,K,J)
-      END DO
-   END DO
-END DO
-GO TO 121
-115 DO J=2,IPPH
-   JC = IPP2-J
-   DO I=3,IDO,2
-      DO K=1,L1
-         C1(I-1,K,J) = CH(I-1,K,J)+CH(I-1,K,JC)
-         C1(I-1,K,JC) = CH(I,K,J)-CH(I,K,JC)
-         C1(I,K,J) = CH(I,K,J)+CH(I,K,JC)
-         C1(I,K,JC) = CH(I-1,K,JC)-CH(I-1,K,J)
-      END DO
-   END DO
-END DO
-GO TO 121
-119 DO IK=1,IDL1
-   C2(IK,1) = CH2(IK,1)
-END DO
-121 DO J=2,IPPH
-   JC = IPP2-J
-   DO K=1,L1
-      C1(1,K,J) = CH(1,K,J)+CH(1,K,JC)
-      C1(1,K,JC) = CH(1,K,JC)-CH(1,K,J)
-   END DO
-END DO
+subroutine radfg (ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa)
+implicit none
+integer, intent(in) :: idl1, ido, ip, l1
+real, intent(inout) :: c1(ido,l1,ip), c2(idl1,ip), cc(ido,ip,l1), &
+&ch(ido,l1,ip), ch2(idl1,ip)
+real :: wa(*)
+integer :: i, ic, idij, idp2, ik, ipp2, ipph, is, j, j2, jc, k, l, &
+&lc, nbd
+real :: ai1, ai2, ar1, ar1h, ar2, ar2h, arg, dc2, dcp, ds2, dsp, &
+&tpi
+data tpi/6.28318530717959/
+arg = tpi/float(ip)
+dcp = cos(arg)
+dsp = sin(arg)
+ipph = (ip+1)/2
+ipp2 = ip+2
+idp2 = ido+2
+nbd = (ido-1)/2
+if (ido .eq. 1) go to 119
+do ik=1,idl1
+   ch2(ik,1) = c2(ik,1)
+end do
+do j=2,ip
+   do k=1,l1
+      ch(1,k,j) = c1(1,k,j)
+   end do
+end do
+if (nbd .gt. l1) go to 107
+is = -ido
+do j=2,ip
+   is = is+ido
+   idij = is
+   do i=3,ido,2
+      idij = idij+2
+      do k=1,l1
+         ch(i-1,k,j) = wa(idij-1)*c1(i-1,k,j)+wa(idij)*c1(i,k,j)
+         ch(i,k,j) = wa(idij-1)*c1(i,k,j)-wa(idij)*c1(i-1,k,j)
+      end do
+   end do
+end do
+go to 111
+107 is = -ido
+do j=2,ip
+   is = is+ido
+   do k=1,l1
+      idij = is
+      do i=3,ido,2
+         idij = idij+2
+         ch(i-1,k,j) = wa(idij-1)*c1(i-1,k,j)+wa(idij)*c1(i,k,j)
+         ch(i,k,j) = wa(idij-1)*c1(i,k,j)-wa(idij)*c1(i-1,k,j)
+      end do
+   end do
+end do
+111 if (nbd .lt. l1) go to 115
+do j=2,ipph
+   jc = ipp2-j
+   do k=1,l1
+      do i=3,ido,2
+         c1(i-1,k,j) = ch(i-1,k,j)+ch(i-1,k,jc)
+         c1(i-1,k,jc) = ch(i,k,j)-ch(i,k,jc)
+         c1(i,k,j) = ch(i,k,j)+ch(i,k,jc)
+         c1(i,k,jc) = ch(i-1,k,jc)-ch(i-1,k,j)
+      end do
+   end do
+end do
+go to 121
+115 do j=2,ipph
+   jc = ipp2-j
+   do i=3,ido,2
+      do k=1,l1
+         c1(i-1,k,j) = ch(i-1,k,j)+ch(i-1,k,jc)
+         c1(i-1,k,jc) = ch(i,k,j)-ch(i,k,jc)
+         c1(i,k,j) = ch(i,k,j)+ch(i,k,jc)
+         c1(i,k,jc) = ch(i-1,k,jc)-ch(i-1,k,j)
+      end do
+   end do
+end do
+go to 121
+119 do ik=1,idl1
+   c2(ik,1) = ch2(ik,1)
+end do
+121 do j=2,ipph
+   jc = ipp2-j
+   do k=1,l1
+      c1(1,k,j) = ch(1,k,j)+ch(1,k,jc)
+      c1(1,k,jc) = ch(1,k,jc)-ch(1,k,j)
+   end do
+end do
 !
-AR1 = 1.
-AI1 = 0.
-DO L=2,IPPH
-   LC = IPP2-L
-   AR1H = DCP*AR1-DSP*AI1
-   AI1 = DCP*AI1+DSP*AR1
-   AR1 = AR1H
-   DO IK=1,IDL1
-      CH2(IK,L) = C2(IK,1)+AR1*C2(IK,2)
-      CH2(IK,LC) = AI1*C2(IK,IP)
-   END DO
-   DC2 = AR1
-   DS2 = AI1
-   AR2 = AR1
-   AI2 = AI1
-   DO J=3,IPPH
-      JC = IPP2-J
-      AR2H = DC2*AR2-DS2*AI2
-      AI2 = DC2*AI2+DS2*AR2
-      AR2 = AR2H
-      DO IK=1,IDL1
-         CH2(IK,L) = CH2(IK,L)+AR2*C2(IK,J)
-         CH2(IK,LC) = CH2(IK,LC)+AI2*C2(IK,JC)
-      END DO
-   END DO
-END DO
-DO J=2,IPPH
-   DO IK=1,IDL1
-      CH2(IK,1) = CH2(IK,1)+C2(IK,J)
-   END DO
-END DO
+ar1 = 1.
+ai1 = 0.
+do l=2,ipph
+   lc = ipp2-l
+   ar1h = dcp*ar1-dsp*ai1
+   ai1 = dcp*ai1+dsp*ar1
+   ar1 = ar1h
+   do ik=1,idl1
+      ch2(ik,l) = c2(ik,1)+ar1*c2(ik,2)
+      ch2(ik,lc) = ai1*c2(ik,ip)
+   end do
+   dc2 = ar1
+   ds2 = ai1
+   ar2 = ar1
+   ai2 = ai1
+   do j=3,ipph
+      jc = ipp2-j
+      ar2h = dc2*ar2-ds2*ai2
+      ai2 = dc2*ai2+ds2*ar2
+      ar2 = ar2h
+      do ik=1,idl1
+         ch2(ik,l) = ch2(ik,l)+ar2*c2(ik,j)
+         ch2(ik,lc) = ch2(ik,lc)+ai2*c2(ik,jc)
+      end do
+   end do
+end do
+do j=2,ipph
+   do ik=1,idl1
+      ch2(ik,1) = ch2(ik,1)+c2(ik,j)
+   end do
+end do
 !
-IF (IDO .LT. L1) GO TO 132
-DO K=1,L1
-   DO I=1,IDO
-      CC(I,1,K) = CH(I,K,1)
-   END DO
-END DO
-GO TO 135
-132 DO I=1,IDO
-   DO K=1,L1
-      CC(I,1,K) = CH(I,K,1)
-   END DO
-END DO
-135 DO J=2,IPPH
-   JC = IPP2-J
-   J2 = J+J
-   DO K=1,L1
-      CC(IDO,J2-2,K) = CH(1,K,J)
-      CC(1,J2-1,K) = CH(1,K,JC)
-   END DO
-END DO
-IF (IDO .EQ. 1) RETURN
-IF (NBD .LT. L1) GO TO 141
-DO J=2,IPPH
-   JC = IPP2-J
-   J2 = J+J
-   DO K=1,L1
-      DO I=3,IDO,2
-         IC = IDP2-I
-         CC(I-1,J2-1,K) = CH(I-1,K,J)+CH(I-1,K,JC)
-         CC(IC-1,J2-2,K) = CH(I-1,K,J)-CH(I-1,K,JC)
-         CC(I,J2-1,K) = CH(I,K,J)+CH(I,K,JC)
-         CC(IC,J2-2,K) = CH(I,K,JC)-CH(I,K,J)
-      END DO
-   END DO
-END DO
-RETURN
-141 DO J=2,IPPH
-   JC = IPP2-J
-   J2 = J+J
-   DO I=3,IDO,2
-      IC = IDP2-I
-      DO K=1,L1
-         CC(I-1,J2-1,K) = CH(I-1,K,J)+CH(I-1,K,JC)
-         CC(IC-1,J2-2,K) = CH(I-1,K,J)-CH(I-1,K,JC)
-         CC(I,J2-1,K) = CH(I,K,J)+CH(I,K,JC)
-         CC(IC,J2-2,K) = CH(I,K,JC)-CH(I,K,J)
-      END DO
-   END DO
-END DO
-RETURN
-END SUBROUTINE RADFG
+if (ido .lt. l1) go to 132
+do k=1,l1
+   do i=1,ido
+      cc(i,1,k) = ch(i,k,1)
+   end do
+end do
+go to 135
+132 do i=1,ido
+   do k=1,l1
+      cc(i,1,k) = ch(i,k,1)
+   end do
+end do
+135 do j=2,ipph
+   jc = ipp2-j
+   j2 = j+j
+   do k=1,l1
+      cc(ido,j2-2,k) = ch(1,k,j)
+      cc(1,j2-1,k) = ch(1,k,jc)
+   end do
+end do
+if (ido .eq. 1) return
+if (nbd .lt. l1) go to 141
+do j=2,ipph
+   jc = ipp2-j
+   j2 = j+j
+   do k=1,l1
+      do i=3,ido,2
+         ic = idp2-i
+         cc(i-1,j2-1,k) = ch(i-1,k,j)+ch(i-1,k,jc)
+         cc(ic-1,j2-2,k) = ch(i-1,k,j)-ch(i-1,k,jc)
+         cc(i,j2-1,k) = ch(i,k,j)+ch(i,k,jc)
+         cc(ic,j2-2,k) = ch(i,k,jc)-ch(i,k,j)
+      end do
+   end do
+end do
+return
+141 do j=2,ipph
+   jc = ipp2-j
+   j2 = j+j
+   do i=3,ido,2
+      ic = idp2-i
+      do k=1,l1
+         cc(i-1,j2-1,k) = ch(i-1,k,j)+ch(i-1,k,jc)
+         cc(ic-1,j2-2,k) = ch(i-1,k,j)-ch(i-1,k,jc)
+         cc(i,j2-1,k) = ch(i,k,j)+ch(i,k,jc)
+         cc(ic,j2-2,k) = ch(i,k,jc)-ch(i,k,j)
+      end do
+   end do
+end do
+return
+end subroutine radfg
 
-SUBROUTINE CHEBY (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, &
-&P, Q, ERROR, IERR, W)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, ITNO
-INTEGER, INTENT(IN) :: L, M, MXITER
-INTEGER :: I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
+subroutine cheby (a, b, f, g, phi, eps, itno, mxiter, l, m, &
+&p, q, error, ierr, w)
+implicit none
+integer, intent(inout) :: ierr, itno
+integer, intent(in) :: l, m, mxiter
+integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
 !     ******************************************************************
 !     RATIONAL CHEBYCHEV APPROXIMATION OF CONTINUOUS FUNCTIONS
 !     ******************************************************************
-DOUBLE PRECISION, INTENT(IN) :: A, B
-DOUBLE PRECISION :: F, G, PHI
-DOUBLE PRECISION, INTENT(IN) :: EPS
-DOUBLE PRECISION, INTENT(INOUT) :: ERROR
-DOUBLE PRECISION, INTENT(INOUT) :: P(*), Q(*), W(*)
-EXTERNAL F, G, PHI
+double precision, intent(in) :: a, b
+double precision :: f, g, phi
+double precision, intent(in) :: eps
+double precision, intent(inout) :: error
+double precision, intent(inout) :: p(*), q(*), w(*)
+external f, g, phi
 !     -------------------
-IF (L .LT. 0 .OR. M .LT. 0) GO TO 10
-LP1 = L + 1
-MP1 = M + 1
-LPM = L + M
-N = LPM + 1
-NP1 = N + 1
+if (l .lt. 0 .or. m .lt. 0) go to 10
+lp1 = l + 1
+mp1 = m + 1
+lpm = l + m
+n = lpm + 1
+np1 = n + 1
 !     -------------------
-I1 = NP1 + 1
-I2 = I1 + NP1
-I3 = I2 + NP1*NP1
-I4 = I3 + NP1
-I5 = I4 + NP1
-CALL CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q, &
-&ERROR, IERR, LP1, MP1, LPM, N, NP1, W(1), &
-&W(I1), W(I2), W(I3), W(I4), W(I5))
-RETURN
+i1 = np1 + 1
+i2 = i1 + np1
+i3 = i2 + np1*np1
+i4 = i3 + np1
+i5 = i4 + np1
+call cheby1 (a, b, f, g, phi, eps, itno, mxiter, l, m, p, q, &
+&error, ierr, lp1, mp1, lpm, n, np1, w(1), &
+&w(i1), w(i2), w(i3), w(i4), w(i5))
+return
 !     ------------------------------------------------------------------
 !     ERROR RETURN
 !     ------------------------------------------------------------------
-10 IERR = 1
-RETURN
-END SUBROUTINE CHEBY
+10 ierr = 1
+return
+end subroutine cheby
 
-SUBROUTINE CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, &
-&P, Q, ERROR, IERR, LP1, MP1, LPM, N, NP1, &
-&X, XVAL, C, D, ERR, H)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, ITNO
-INTEGER, INTENT(IN) :: L, LP1, LPM, M, MP1, MXITER, N, NP1
-INTEGER :: I, II, J, K, KOUNT, LPI
+subroutine cheby1 (a, b, f, g, phi, eps, itno, mxiter, l, m, &
+&p, q, error, ierr, lp1, mp1, lpm, n, np1, &
+&x, xval, c, d, err, h)
+implicit none
+integer, intent(inout) :: ierr, itno
+integer, intent(in) :: l, lp1, lpm, m, mp1, mxiter, n, np1
+integer :: i, ii, j, k, kount, lpi
 !     ------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A, B
-DOUBLE PRECISION :: F, G, PHI
-DOUBLE PRECISION, INTENT(IN) :: EPS
-DOUBLE PRECISION, INTENT(OUT) :: ERROR
-DOUBLE PRECISION, INTENT(INOUT) :: P(LP1), Q(MP1), X(NP1), &
-&XVAL(NP1), C(NP1,NP1), D(NP1), ERR(NP1), H(NP1)
-DOUBLE PRECISION :: B1, C0, DEL, DN, DNP1, EPS0, HALF, H1, OLDERR, &
-&ONE, PI, SIGN, SUM, TAU, TEMPL, TEN, TEST, U, XI, XLB, XM1, Y, Y2, &
-&Y3, Z, ZERO, ZZ, Z1, Z2, Z3
-EXTERNAL F, G, PHI
+double precision, intent(in) :: a, b
+double precision :: f, g, phi
+double precision, intent(in) :: eps
+double precision, intent(out) :: error
+double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
+&xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
+double precision :: b1, c0, del, dn, dnp1, eps0, half, h1, olderr, &
+&one, pi, sign, sum, tau, templ, ten, test, u, xi, xlb, xm1, y, y2, &
+&y3, z, zero, zz, z1, z2, z3
+external f, g, phi
 !     -------------------
-DATA PI/3.14159265358979323846264338328D0/
-DATA ZERO/0.D0/, HALF/.5D0/, ONE/1.D0/, TEN/10.D0/
-DATA EPS0/1.D-2/, TAU/.015D0/, C0/.0625D0/
+data pi/3.14159265358979323846264338328d0/
+data zero/0.d0/, half/.5d0/, one/1.d0/, ten/10.d0/
+data eps0/1.d-2/, tau/.015d0/, c0/.0625d0/
 !     -------------------
-ERROR = ZERO
-IF (EPS .LE. ZERO .OR. EPS .GE. EPS0) GO TO 200
-IERR = 0
+error = zero
+if (eps .le. zero .or. eps .ge. eps0) go to 200
+ierr = 0
 !
-ITNO = 1
-XLB = ZERO
-DN = N
-DNP1 = NP1
+itno = 1
+xlb = zero
+dn = n
+dnp1 = np1
 !
-do 10 I = 1,LP1
-10 P(I) = ZERO
-do 11 I = 1,MP1
-11 Q(I) = ZERO
-Q(1) = ONE
+do 10 i = 1,lp1
+10 p(i) = zero
+do 11 i = 1,mp1
+11 q(i) = zero
+q(1) = one
 !
 !     COMPUTE INITIAL APPROXIMATIONS OF THE CRITICAL POINTS
 !
-X(1) = A
-X(NP1) = B
-K = N/2
-IF (K .LE. 0) GO TO 30
-B1 = HALF*(B - A)
-XM1 = HALF*(A + B)
-do 20 I = 1,K
-XI = I
-Z = -B1*DCOS(PI*(XI/DN))
-X(I+1) = Z + XM1
-II = NP1 - I
-20 X(II) = XM1 - Z
+x(1) = a
+x(np1) = b
+k = n/2
+if (k .le. 0) go to 30
+b1 = half*(b - a)
+xm1 = half*(a + b)
+do 20 i = 1,k
+xi = i
+z = -b1*dcos(pi*(xi/dn))
+x(i+1) = z + xm1
+ii = np1 - i
+20 x(ii) = xm1 - z
 !
 !     EVALUATE PHI AT THE CRITICAL POINTS
 !
-30 do 31 I = 1,NP1
-31 XVAL(I) = PHI(X(I))
-KOUNT = 1
+30 do 31 i = 1,np1
+31 xval(i) = phi(x(i))
+kount = 1
 !
 !     SET UP THE LINEAR EQUATIONS
 !
-40 K = L + 2
-SIGN = ONE
-DO I = 1,NP1
-SIGN = -SIGN
-C(I,1) = ONE
-IF (L .LE. 0) GO TO 42
-do 41 J = 2,LP1
-41 C(I,J) = C(I,J-1)*XVAL(I)
-42 D(I) = F(X(I))
-IF (M .LE. 0) GO TO 44
-TEMPL = SIGN*XLB*G(X(I)) - D(I)
-C(I,K) = XVAL(I)*TEMPL
-IF (K .GT. LPM) GO TO 44
-do 43 J = K,LPM
-43 C(I,J+1) = C(I,J)*XVAL(I)
-44 C(I,NP1) = SIGN*G(X(I))
-END DO
+40 k = l + 2
+sign = one
+do i = 1,np1
+sign = -sign
+c(i,1) = one
+if (l .le. 0) go to 42
+do 41 j = 2,lp1
+41 c(i,j) = c(i,j-1)*xval(i)
+42 d(i) = f(x(i))
+if (m .le. 0) go to 44
+templ = sign*xlb*g(x(i)) - d(i)
+c(i,k) = xval(i)*templ
+if (k .gt. lpm) go to 44
+do 43 j = k,lpm
+43 c(i,j+1) = c(i,j)*xval(i)
+44 c(i,np1) = sign*g(x(i))
+end do
 !
 !     SOLVE THE EQUATIONS CX = D AND STORE THE RESULTS IN D
 !
-CALL DPSLV (NP1, 1, C, NP1, D, NP1, IERR)
-IF (IERR .NE. 0) GO TO 220
-IF (KOUNT .GT. 1) GO TO 50
+call dpslv (np1, 1, c, np1, d, np1, ierr)
+if (ierr .ne. 0) go to 220
+if (kount .gt. 1) go to 50
 !
 !     REDEFINE THE EQUATIONS AND SOLVE
 !
-XLB = (D(NP1) + XLB*DN)/DNP1
-IF (M .LE. 0) GO TO 61
-KOUNT = 2
-GO TO 40
+xlb = (d(np1) + xlb*dn)/dnp1
+if (m .le. 0) go to 61
+kount = 2
+go to 40
 !
-50 TEST = DABS(XLB - D(NP1))
-XLB = (D(NP1) + XLB*DN)/DNP1
-KOUNT = KOUNT + 1
-IF (KOUNT .LE. 4 .AND. TEST .GT. EPS0*DABS(XLB)) GO TO 40
+50 test = dabs(xlb - d(np1))
+xlb = (d(np1) + xlb*dn)/dnp1
+kount = kount + 1
+if (kount .le. 4 .and. test .gt. eps0*dabs(xlb)) go to 40
 !
 !     STORE THE RESULTS IN P AND Q
 !
-do 60 I = 2,MP1
-LPI = L + I
-60 Q(I) = D(LPI)
-61 do 62 I = 1,LP1
-62 P(I) = D(I)
+do 60 i = 2,mp1
+lpi = l + i
+60 q(i) = d(lpi)
+61 do 62 i = 1,lp1
+62 p(i) = d(i)
 !
 !     SEARCH FOR NEW CRITICAL POINTS
 !
-OLDERR = ERROR
-ERROR = ZERO
-Z1 = ZERO
-U = ONE
-IF (XLB .LT. ZERO) U = -U
+olderr = error
+error = zero
+z1 = zero
+u = one
+if (xlb .lt. zero) u = -u
 !
-IF (N .GT. 1) GO TO 70
-H(1) = TAU*(X(2) - X(1))
-H(2) = -H(1)
-GO TO 72
-70 do 71 I = 2,N
-71 H(I) = TAU*(X(I+1) - X(I-1))
-H(1) = HALF*H(2)
-H(NP1) = -HALF*H(N)
-72 CONTINUE
+if (n .gt. 1) go to 70
+h(1) = tau*(x(2) - x(1))
+h(2) = -h(1)
+go to 72
+70 do 71 i = 2,n
+71 h(i) = tau*(x(i+1) - x(i-1))
+h(1) = half*h(2)
+h(np1) = -half*h(n)
+72 continue
 !
-DO I = 1,NP1
-Y2 = X(I)
-H1 = H(I)
-Y3 = Y2 + H1
-CALL CERR(Y2, F(Y2), G(Y2), PHI(Y2), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-Z2 = U*DEL
-CALL CERR(Y3, F(Y3), G(Y3), PHI(Y3), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-Z3 = U*DEL
-IF (Z2 .LT. Z3) GO TO 80
-H1 = -H1
-Z = Z3
-Z3 = Z2
-Z2 = Z
-Y = Y3
-Y3 = Y2
-Y2 = Y
+do i = 1,np1
+y2 = x(i)
+h1 = h(i)
+y3 = y2 + h1
+call cerr(y2, f(y2), g(y2), phi(y2), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+z2 = u*del
+call cerr(y3, f(y3), g(y3), phi(y3), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+z3 = u*del
+if (z2 .lt. z3) go to 80
+h1 = -h1
+z = z3
+z3 = z2
+z2 = z
+y = y3
+y3 = y2
+y2 = y
 !
-80 Y = Y3 + H1
-IF (Y .GE. A) GO TO 81
-Y = A
-GO TO 90
-81 IF (Y .LE. B) GO TO 82
-Y = B
-GO TO 90
-82 CALL CERR(Y, F(Y), G(Y), PHI(Y), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-Z = U*DEL
-IF (Z .LE. Z3) GO TO 83
-Y2 = Y3
-Y3 = Y
-Z2 = Z3
-Z3 = Z
-GO TO 80
-83 Y = (Z - Z3) + (Z2 - Z3)
-IF (Y .NE. ZERO) GO TO 84
-Y = Y3
-GO TO 90
-84 Y = HALF*(Y2 + Y3) + H1*(Z2 - Z3)/Y
+80 y = y3 + h1
+if (y .ge. a) go to 81
+y = a
+go to 90
+81 if (y .le. b) go to 82
+y = b
+go to 90
+82 call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+z = u*del
+if (z .le. z3) go to 83
+y2 = y3
+y3 = y
+z2 = z3
+z3 = z
+go to 80
+83 y = (z - z3) + (z2 - z3)
+if (y .ne. zero) go to 84
+y = y3
+go to 90
+84 y = half*(y2 + y3) + h1*(z2 - z3)/y
 !
-90 X(I) = Y
-CALL CERR(Y, F(Y), G(Y), PHI(Y), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-ERR(I) = DEL
-U = -U
-IF (I .EQ. 1) GO TO 91
-IF (X(I) .LE. X(I-1)) GO TO 230
-91 Z = DABS(ERR(I))
-ERROR = DMAX1(ERROR, Z)
-IF (Z .GE. TEN) GO TO 240
-Y = DABS(XLB)
-ZZ = ONE
-IF (Y .NE. ZERO) ZZ = DABS(Z - Y)/Y
-IF (Z1 .LT. ZZ) Z1 = ZZ
-END DO
+90 x(i) = y
+call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+err(i) = del
+u = -u
+if (i .eq. 1) go to 91
+if (x(i) .le. x(i-1)) go to 230
+91 z = dabs(err(i))
+error = dmax1(error, z)
+if (z .ge. ten) go to 240
+y = dabs(xlb)
+zz = one
+if (y .ne. zero) zz = dabs(z - y)/y
+if (z1 .lt. zz) z1 = zz
+end do
 !
 !     SEARCH FOR AN EXTRA EXTREMAL POINT BETWEEN THE ENDPOINTS
 !     OF THE INTERVAL AND THE CRITICAL POINTS
 !
-IF (X(1) .LE. A) GO TO 110
-H1 = C0*(X(1) - A)
-U = ONE
-IF (XLB .GE. ZERO) U = -U
-Z3 = ZERO
-Y = A
-do 100 I = 1,16
-CALL CERR(Y, F(Y), G(Y), PHI(Y), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-Z = U*DEL
-IF (Z .LE. Z3) GO TO 100
-Z3 = Z
-Z2 = Y
-100 Y = Y + H1
-ERROR = DMAX1(ERROR, Z3)
-Z = DABS(XLB)
-IF (Z3 .LE. Z) GO TO 110
-I = NP1
-do 101 II = 2,NP1
-ERR(I) = ERR(I-1)
-X(I) = X(I-1)
-101 I = I - 1
-X(1) = Z2
-ERR(1) = U*Z3
-GO TO 113
+if (x(1) .le. a) go to 110
+h1 = c0*(x(1) - a)
+u = one
+if (xlb .ge. zero) u = -u
+z3 = zero
+y = a
+do 100 i = 1,16
+call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+z = u*del
+if (z .le. z3) go to 100
+z3 = z
+z2 = y
+100 y = y + h1
+error = dmax1(error, z3)
+z = dabs(xlb)
+if (z3 .le. z) go to 110
+i = np1
+do 101 ii = 2,np1
+err(i) = err(i-1)
+x(i) = x(i-1)
+101 i = i - 1
+x(1) = z2
+err(1) = u*z3
+go to 113
 !
-110 IF (X(NP1) .GE. B) GO TO 120
-H1 = C0*(B - X(NP1))
-U = ONE
-IF (ERR(NP1) .GE. ZERO) U = -U
-Z3 = ZERO
-Y = B
-do 111 I = 1,16
-CALL CERR(Y, F(Y), G(Y), PHI(Y), DEL, IERR, L, LP1, M, NP1, D)
-IF (IERR .NE. 0) RETURN
-Z = U*DEL
-IF (Z .LE. Z3) GO TO 111
-Z3 = Z
-Z2 = Y
-111 Y = Y - H1
-ERROR = DMAX1(ERROR, Z3)
-Z = DABS(XLB)
-IF (Z3 .LE. Z) GO TO 120
-do 112 I = 1,N
-ERR(I) = ERR(I+1)
-112 X(I) = X(I+1)
-X(NP1) = Z2
-ERR(NP1) = U*Z3
-113 XLB = -XLB
-ZZ = ONE
-IF (Z .NE. ZERO) ZZ = DABS(Z3 - Z)/Z
-IF (Z1 .LT. ZZ) Z1 = ZZ
+110 if (x(np1) .ge. b) go to 120
+h1 = c0*(b - x(np1))
+u = one
+if (err(np1) .ge. zero) u = -u
+z3 = zero
+y = b
+do 111 i = 1,16
+call cerr(y, f(y), g(y), phi(y), del, ierr, l, lp1, m, np1, d)
+if (ierr .ne. 0) return
+z = u*del
+if (z .le. z3) go to 111
+z3 = z
+z2 = y
+111 y = y - h1
+error = dmax1(error, z3)
+z = dabs(xlb)
+if (z3 .le. z) go to 120
+do 112 i = 1,n
+err(i) = err(i+1)
+112 x(i) = x(i+1)
+x(np1) = z2
+err(np1) = u*z3
+113 xlb = -xlb
+zz = one
+if (z .ne. zero) zz = dabs(z3 - z)/z
+if (z1 .lt. zz) z1 = zz
 !
 !     CHECK FOR CONVERGENCE
 !
-120 IF (Z1 .LE. EPS) RETURN
+120 if (z1 .le. eps) return
 !
 !     SET UP FOR THE NEXT ITERATION
 !
-IF (ITNO .GE. MXITER) GO TO 210
-SUM = ZERO
-SIGN = ONE
-do 130 I = 1,NP1
-SUM = SUM + SIGN*ERR(I)
-130 SIGN = -SIGN
-XLB = SUM/DNP1
-ITNO = ITNO + 1
-GO TO 30
+if (itno .ge. mxiter) go to 210
+sum = zero
+sign = one
+do 130 i = 1,np1
+sum = sum + sign*err(i)
+130 sign = -sign
+xlb = sum/dnp1
+itno = itno + 1
+go to 30
 !     ------------------------------------------------------------------
 !     ERROR RETURN
 !     ------------------------------------------------------------------
 !     INPUT ERROR
 !
-200 IERR = 1
-RETURN
+200 ierr = 1
+return
 !
 !     MXITER ITERATIONS WERE PERFORMED - MORE ITERATIONS ARE NEEDED
 !
-210 IERR = 2
-RETURN
+210 ierr = 2
+return
 !
 !     THE LINEAR EQUATIONS CANNOT BE SOLVED
 !
-220 IF (ITNO .EQ. 1) GO TO 250
-IERR = 3
-RETURN
+220 if (itno .eq. 1) go to 250
+ierr = 3
+return
 !
 !     THE SEQUENCE OF CRITICAL POINTS IS NOT MONOTONICALLY INCREASING
 !
-230 IERR = 4
-IF (I .LE. N) ERROR = OLDERR
-RETURN
+230 ierr = 4
+if (i .le. n) error = olderr
+return
 !
 !     IT APPEARS THAT THE ALGORITHM HAS FAILED TO CONVERGE
 !     THERE MAY BE POLES IN THE RATIONAL APPROXIMATION
 !
-240 IERR = 5
-RETURN
+240 ierr = 5
+return
 !
 !     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
 !
-250 IERR = 6
-RETURN
-END SUBROUTINE CHEBY1
+250 ierr = 6
+return
+end subroutine cheby1
 
-SUBROUTINE CERR (T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: L, LP1, M, NP1
-INTEGER :: I, II
+subroutine cerr (t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, lp1, m, np1
+integer :: i, ii
 !     ------------------------------------------------------------------
 !     COMPUTE THE APPROXIMATION ERROR AT POINT T
 !     ------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: T, FT, GT, PHIT
-DOUBLE PRECISION, INTENT(INOUT) :: DEL
-DOUBLE PRECISION, INTENT(IN) :: D(NP1)
-DOUBLE PRECISION :: P, Q, R, ZERO, ONE
-DATA ZERO/0.D0/, ONE/1.D0/
+double precision, intent(in) :: t, ft, gt, phit
+double precision, intent(inout) :: del
+double precision, intent(in) :: d(np1)
+double precision :: p, q, r, zero, one
+data zero/0.d0/, one/1.d0/
 !     -------------------
-P = D(LP1)
-IF (L .LE. 0) GO TO 20
-do 10 I = 1,L
-II = LP1 - I
-10 P = P*PHIT + D(II)
+p = d(lp1)
+if (l .le. 0) go to 20
+do 10 i = 1,l
+ii = lp1 - i
+10 p = p*phit + d(ii)
 !
-20 Q = ZERO
-IF (M .LE. 0) GO TO 22
-do 21 I = 1,M
-II = NP1 - I
-21 Q = (Q + D(II))*PHIT
-22 Q = Q + ONE
+20 q = zero
+if (m .le. 0) go to 22
+do 21 i = 1,m
+ii = np1 - i
+21 q = (q + d(ii))*phit
+22 q = q + one
 !
-IF (Q .EQ. ZERO) GO TO 110
-IF (GT .EQ. ZERO) GO TO 100
-R = P/Q
-DEL = (R - FT)/GT
-RETURN
+if (q .eq. zero) go to 110
+if (gt .eq. zero) go to 100
+r = p/q
+del = (r - ft)/gt
+return
 !     ------------------------------------------------------------------
 !     ERROR RETURN
 !     ------------------------------------------------------------------
 !     THE FUNCTION G IS ZERO AT POINT T
 !
-100 IERR = 1
-RETURN
+100 ierr = 1
+return
 !
 !     THE ROUTINE HAS COMPLETELY FAILED - THE RESULTS SHOULD BE IGNORED
 !
-110 IERR = 6
-RETURN
-END SUBROUTINE CERR
+110 ierr = 6
+return
+end subroutine cerr
 
-SUBROUTINE ADAPT (F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS, &
-&COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT, &
-&KDIFF, VALLFT, VALRGT)
-IMPLICIT NONE
-INTEGER :: IERR, KBREAK, KDIFF(KBREAK), KMAX, MO, NDEG, NPIECE, &
-&NSMTH
-INTEGER :: K, KDIMEN, NDIMEN
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adapt (f, xlft, xrgt, epsln, npiece, errest, xknots, &
+&coefs, ierr, kmax, ndeg, nsmth, anorm, dx, mo, kbreak, brakpt, &
+&kdiff, vallft, valrgt)
+implicit none
+integer :: ierr, kbreak, kdiff(kbreak), kmax, mo, ndeg, npiece, &
+&nsmth
+integer :: k, kdimen, ndimen
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
@@ -2098,63 +2098,63 @@ INTEGER :: KNOTS
 !     BLEFT      VALLFT
 !     BRIGHT     VALRGT
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: XKNOTS(*), COEFS(KMAX,*)
-DOUBLE PRECISION :: ANORM, BRAKPT(KBREAK), DX, EPSLN, ERREST, &
-&VALLFT(KBREAK), VALRGT(KBREAK), XLFT, XRGT
-DOUBLE PRECISION :: F
-EXTERNAL F
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: xknots(*), coefs(kmax,*)
+double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
+&vallft(kbreak), valrgt(kbreak), xlft, xrgt
+double precision :: f
+external f
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
 !
-10 A = XLFT
-B = XRGT
-ACCUR = EPSLN
-DEGREE = NDEG
-SMOOTH = NSMTH
-NORM = ANORM
-CHARF = DX
-EDIST = MO
-NBREAK = KBREAK
-IF (NBREAK.LE.0 .OR. NBREAK.GE.21) GO TO 30
-do 20 K = 1,NBREAK
-  XBREAK(K) = BRAKPT(K)
-  DBREAK(K) = KDIFF(K)
-  BLEFT(K) = VALLFT(K)
-  BRIGHT(K) = VALRGT(K)
-20 CONTINUE
-30 CONTINUE
+10 a = xlft
+b = xrgt
+accur = epsln
+degree = ndeg
+smooth = nsmth
+norm = anorm
+charf = dx
+edist = mo
+nbreak = kbreak
+if (nbreak.le.0 .or. nbreak.ge.21) go to 30
+do 20 k = 1,nbreak
+  xbreak(k) = brakpt(k)
+  dbreak(k) = kdiff(k)
+  bleft(k) = vallft(k)
+  bright(k) = valrgt(k)
+20 continue
+30 continue
 !
-KDIMEN = KMAX+1
-NDIMEN = NDEG+1
-CALL ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-NPIECE = KNOTS
-ERREST = ERROR
-RETURN
-END SUBROUTINE ADAPT
+kdimen = kmax+1
+ndimen = ndeg+1
+call adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
+npiece = knots
+errest = error
+return
+end subroutine adapt
 
-SUBROUTINE ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-IMPLICIT NONE
-INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
+implicit none
+integer :: ierr, kdimen, kmax, ndimen
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !     THIS ALGORITHM COMPUTES A PIECEWISE POLYNOMIAL APPROXIMATION
 !  OF SPECIFIED SMOOTHNESS, ACCURACY AND DEGREE.  THE INPUT TO THE
@@ -2283,27 +2283,27 @@ INTEGER :: KNOTS
 !
 !     4. CHANGE DPMPAR TO SPMPAR IN ADSET.
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
-DOUBLE PRECISION :: F
-EXTERNAL F
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
+double precision :: f
+external f
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
 !                      KNTDIM - KDIMEN, NAME CHANGED TO PUT IN COMMON
 !                      NPARDM - NDIMEN, NAME CHANGED TO PUT IN COMMON
-COMMON /RESULZ/ ERROR, KNOTS
+common /resulz/ error, knots
 !                      KNOTS = FINAL NO. OF KNOTS, INCLUDES B AS ONE.
 !                      ERROR = ESTIMATE OF ERROR ACTUALLY ACHIEVED.
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
 !             KONTRL CONTAINS GENERALLY USEFUL VARIABLES
 !                      MAXSTK - SEE COMMENTS ABOVE
 !                      BUFFER - THE MACHINE DEPENDENT TOLERANCE USED
@@ -2323,8 +2323,8 @@ COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
 !                               LEFT  = BREAK AT XLEFT(NSTACK)
 !                               RIGHT = BREAK AT XRIGHT(NSTACK)
 !                               BOTH  = BREAK AT BOTH ENDS
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !             COMDIF CONTAINS VARIABLES USED ONLY BY ADCOMP AND FRIENDS.
 !                      NINTRP - NUMBER OF INTERIOR INTERPOLATION POINTS
 !                               FOR THE CURRENT INTERVAL
@@ -2343,187 +2343,187 @@ COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
 !
 !            CHECK THE INPUT AND INITIALIZE ALL THE PARAMETERS
 !
-CALL ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-IF (IERR.NE.0) RETURN
+call adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
+if (ierr.ne.0) return
 !
 !                  LOOP OVER PROCESSING OF INTERVALS
 !
-10 CALL ADTAKE(IERR)
-IF (IERR.NE.0) RETURN
-CALL ADCOMP(F)
+10 call adtake(ierr)
+if (ierr.ne.0) return
+call adcomp(f)
 !
 !                   CHECK FOR DISCARDING INTERVALS
 !
-CALL ADCHK
+call adchk
 !
 !            PUT NEW INTERVALS ON STACK OR DISCARD, UPDATE STATUS
 !
-CALL ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-IF (IERR.NE.0) RETURN
+call adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
+if (ierr.ne.0) return
 !
 !                    TEST FOR NORMAL TERMINATION
 !
-IF (NSTACK.EQ.0) RETURN
+if (nstack.eq.0) return
 !
 !                CHECK ON THE NUMBER OF KNOTS GENERATED
 !
-IF (KNOTS.LT.MAXKNT) GO TO 10
-IERR = 1
-RETURN
-END SUBROUTINE ADAPT1
+if (knots.lt.maxknt) go to 10
+ierr = 1
+return
+end subroutine adapt1
 
-SUBROUTINE ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-IMPLICIT NONE
-INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-INTEGER :: J, K, KBOTH, KLEFT, KRIGHT, LIMSM
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
+implicit none
+integer :: ierr, kdimen, kmax, ndimen
+integer :: j, k, kboth, kleft, kright, limsm
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
 ! **  THIS PROGRAM CHECKS THE INPUT DATA AND INITIALIZES THE COMPUTATION
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
-DOUBLE PRECISION :: AKMAX, EPS, EPS0, KM1, RATIO, ZERO, ONE, TWO, &
-&THREE, C100
-DOUBLE PRECISION :: DPMPAR
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
+double precision :: akmax, eps, eps0, km1, ratio, zero, one, two, &
+&three, c100
+double precision :: dpmpar
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-DATA EPS0/1.D-30/
-DATA ZERO,ONE,TWO,THREE,C100/0.D0,1.D0,2.D0,3.D0,100.D0/
-DATA KLEFT, KRIGHT, KBOTH /1, 2, 3/
+data eps0/1.d-30/
+data zero,one,two,three,c100/0.d0,1.d0,2.d0,3.d0,100.d0/
+data kleft, kright, kboth /1, 2, 3/
 !
-EPS = DPMPAR(1)
-BUFFER = C100*DMAX1(EPS,EPS0)
+eps = dpmpar(1)
+buffer = c100*dmax1(eps,eps0)
 !
 !         PUT DATA STATEMENT ITEMS INTO COMMON VARIABLES
 !
-LEFT = KLEFT
-RIGHT = KRIGHT
-BOTH = KBOTH
+left = kleft
+right = kright
+both = kboth
 !
 ! -------- SET CURRENT VALUES OF LIMITS ON DIMENSIONS ------------------
 !
-KNTDIM = KDIMEN
-NPARDM = NDIMEN
-MAXKNT = KNTDIM
-MAXSTK = 50
-MAXPAR = MIN0(20,NPARDM)
-MAXAUX = 20
+kntdim = kdimen
+npardm = ndimen
+maxknt = kntdim
+maxstk = 50
+maxpar = min0(20,npardm)
+maxaux = 20
 !
 ! -------- CHECK INPUT DATA --------------------------------------------
 !
-IERR = 0
-IF (A.GE.B .OR. ACCUR.LE.ZERO) GO TO 200
-IF (DEGREE.GE.MAXPAR .OR. 2*SMOOTH.GE.DEGREE) GO TO 200
-AKMAX = KMAX
-RATIO = (B-A)/(DABS(A)+DABS(B))
-IF (RATIO.LE.TWO*BUFFER*AKMAX) GO TO 210
-IF (CHARF.LT.(B-A)/AKMAX) GO TO 220
-IF (NORM.GE.ZERO .AND. (NORM-ONE)*(NORM-TWO)*(NORM-THREE).NE.ZERO) &
-&GO TO 200
-IF (EDIST*(EDIST-1)*(EDIST-2).NE.0) GO TO 200
-IF (NBREAK.LT.0 .OR. NBREAK.GT.MAXAUX) GO TO 200
-IF (NBREAK.EQ.0) GO TO 150
+ierr = 0
+if (a.ge.b .or. accur.le.zero) go to 200
+if (degree.ge.maxpar .or. 2*smooth.ge.degree) go to 200
+akmax = kmax
+ratio = (b-a)/(dabs(a)+dabs(b))
+if (ratio.le.two*buffer*akmax) go to 210
+if (charf.lt.(b-a)/akmax) go to 220
+if (norm.ge.zero .and. (norm-one)*(norm-two)*(norm-three).ne.zero) &
+&go to 200
+if (edist*(edist-1)*(edist-2).ne.0) go to 200
+if (nbreak.lt.0 .or. nbreak.gt.maxaux) go to 200
+if (nbreak.eq.0) go to 150
 !
 !         CHECK THE BREAK POINT DATA, MONOTONICITY AND DEGREE
 !
-J = 1
-IF (XBREAK(1).LT.A .OR. XBREAK(NBREAK).GT.B) GO TO 230
-IF (NBREAK.EQ.1) GO TO 110
-do 100 J = 2,NBREAK
-  IF (XBREAK(J-1).GE.XBREAK(J)) GO TO 230
-100 CONTINUE
-110 LIMSM = (DEGREE-1)/2
-DO J=1,NBREAK
-  IF (DBREAK(J).LT.0 .OR. DBREAK(J).GT.LIMSM) GO TO 240
-END DO
+j = 1
+if (xbreak(1).lt.a .or. xbreak(nbreak).gt.b) go to 230
+if (nbreak.eq.1) go to 110
+do 100 j = 2,nbreak
+  if (xbreak(j-1).ge.xbreak(j)) go to 230
+100 continue
+110 limsm = (degree-1)/2
+do j=1,nbreak
+  if (dbreak(j).lt.0 .or. dbreak(j).gt.limsm) go to 240
+end do
 !
 ! -------- INITIALIZATION OF VARIABLES ---------------------------------
 !
 !             ACTIVE INTERVAL STACK
 !
-150 NSTACK = 1
-XLEFT(1) = A
-XRIGHT(1) = B
+150 nstack = 1
+xleft(1) = a
+xright(1) = b
 !
 !             TERMINATION AND ERROR VALUES
 !
-ERROR = ZERO
-DSCTOL = ACCUR**DABS(NORM)
-IF (EDIST.EQ.0) DSCTOL = DSCTOL/(B-A)
-IF (NORM.EQ.THREE) DSCTOL = ACCUR
+error = zero
+dsctol = accur**dabs(norm)
+if (edist.eq.0) dsctol = dsctol/(b-a)
+if (norm.eq.three) dsctol = accur
 !
 !             MISCELLANEOUS VARIABLES AND POINTERS
 !
-IBREAK = 1
-KNOTS = 1
-INTERP = DEGREE + 2 - 2*SMOOTH
-XKNOTS(1) = A
-NPAR = DEGREE + 1
+ibreak = 1
+knots = 1
+interp = degree + 2 - 2*smooth
+xknots(1) = a
+npar = degree + 1
 !
 !             COMPUTE ARRAY OF NPAR FACTORIALS
 !
-FACTOR(1) = ONE
-FACTOR(2) = ONE
-DO K=3,NPAR
-  KM1 = K-1
-  FACTOR(K) = KM1*FACTOR(K-1)
-END DO
-RETURN
+factor(1) = one
+factor(2) = one
+do k=3,npar
+  km1 = k-1
+  factor(k) = km1*factor(k-1)
+end do
+return
 !
 ! -------- ERROR RETURN ------------------------------------------------
 !
-200 IERR = -1
-RETURN
+200 ierr = -1
+return
 !
 !         A AND B ARE TOO CLOSE
 !
-210 IERR = -2
-RETURN
+210 ierr = -2
+return
 !
 !         CHARF IS TOO SMALL
 !
-220 IERR = -3
-RETURN
+220 ierr = -3
+return
 !
 !         BREAK POINTS ARE NOT MONOTONIC
 !
-230 IERR = -4
-RETURN
+230 ierr = -4
+return
 !
 !         BAD VALUE IN DERIVATIVE BREAKS
 !
-240 IERR = -5
-RETURN
-END SUBROUTINE ADSET
+240 ierr = -5
+return
+end subroutine adset
 
-SUBROUTINE ADTAKE(IERR)
-IMPLICIT NONE
-INTEGER :: IERR
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adtake(ierr)
+implicit none
+integer :: ierr
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
@@ -2531,112 +2531,112 @@ INTEGER :: KNOTS
 !     IT ALSO DOES MOST OF THE WORK OF LOCATING AND HANDLING
 !     BREAK POINTS
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: DX, RATIO
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: dx, ratio
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
 !         CHECK FOR BREAK POINT
-BREAK = 0
-IF (NBREAK.EQ.0 .OR. IBREAK.GT.NBREAK) GO TO 20
-IF (XBREAK(IBREAK).GT.XRIGHT(NSTACK)) GO TO 20
+break = 0
+if (nbreak.eq.0 .or. ibreak.gt.nbreak) go to 20
+if (xbreak(ibreak).gt.xright(nstack)) go to 20
 !
 !               SET CONTROL VARIABLE BREAK, CHECK FOR LOCATION
-IF (XBREAK(IBREAK).GT.XLEFT(NSTACK)) GO TO 10
-BREAK = LEFT
-IF (IBREAK.EQ.NBREAK) GO TO 20
+if (xbreak(ibreak).gt.xleft(nstack)) go to 10
+break = left
+if (ibreak.eq.nbreak) go to 20
 !             CHECK FOR SECOND BREAK POINT IN THIS INTERVAL
-IF (XBREAK(IBREAK+1).GE.XRIGHT(NSTACK)) GO TO 20
+if (xbreak(ibreak+1).ge.xright(nstack)) go to 20
 !                 NEXT BREAK IS INSIDE INTERVAL, SPLIT TOP INTERVAL
-BREAK = BOTH
+break = both
 !                  CHECK EXCEEDING STACK LIMIT. IF SO, STOP
-IF (NSTACK.EQ.MAXSTK) GO TO 30
+if (nstack.eq.maxstk) go to 30
 !                     DONT SPLIT VERY SMALL INTERVALS, STOP INSTEAD
-DX = XBREAK(IBREAK+1) - XLEFT(NSTACK)
-RATIO = DX/(DABS(A)+DABS(B))
-IF (RATIO.LE.BUFFER) GO TO 30
-NSTACK = NSTACK + 1
-XLEFT(NSTACK) = XLEFT(NSTACK-1)
-XRIGHT(NSTACK) = XBREAK(IBREAK+1)
-XLEFT(NSTACK-1) = XRIGHT(NSTACK)
-GO TO 20
+dx = xbreak(ibreak+1) - xleft(nstack)
+ratio = dx/(dabs(a)+dabs(b))
+if (ratio.le.buffer) go to 30
+nstack = nstack + 1
+xleft(nstack) = xleft(nstack-1)
+xright(nstack) = xbreak(ibreak+1)
+xleft(nstack-1) = xright(nstack)
+go to 20
 !
-10 BREAK = RIGHT
+10 break = right
 !                 CHECK TO SEE IF BREAK IS ALREADY AT RIGHT END POINT
-IF (XBREAK(IBREAK).GE.XRIGHT(NSTACK)) GO TO 20
+if (xbreak(ibreak).ge.xright(nstack)) go to 20
 !                 THE BREAK IS INSIDE INTERVAL, SPLIT TOP INTERVAL
 !                  CHECK EXCEEDING STACK LIMIT. IF SO, STOP
-IF (NSTACK.EQ.MAXSTK) GO TO 30
+if (nstack.eq.maxstk) go to 30
 !                     DONT SPLIT VERY SMALL INTERVALS, STOP INSTEAD
-DX = XBREAK(IBREAK) - XLEFT(NSTACK)
-RATIO = DX/(DABS(A)+DABS(B))
-IF (RATIO.LE.BUFFER) GO TO 30
-NSTACK = NSTACK + 1
-XLEFT(NSTACK) = XLEFT(NSTACK-1)
-XRIGHT(NSTACK) = XBREAK(IBREAK)
-XLEFT(NSTACK-1) = XRIGHT(NSTACK)
-20 CONTINUE
-RETURN
+dx = xbreak(ibreak) - xleft(nstack)
+ratio = dx/(dabs(a)+dabs(b))
+if (ratio.le.buffer) go to 30
+nstack = nstack + 1
+xleft(nstack) = xleft(nstack-1)
+xright(nstack) = xbreak(ibreak)
+xleft(nstack-1) = xright(nstack)
+20 continue
+return
 !
 !        A BREAK POINT IS IN THE INTERIOR OF THE TOP SUBINTERVAL OF
 !        THE STACK.  THE SUBINTERVAL CANNOT BE PARTITIONED EITHER
 !        BECAUSE THE STACK IS FULL, OR BECAUSE PARTITIONING LEADS TO
 !        TOO SMALL AN INTERVAL.
 !
-30 IERR = 2
-RETURN
-END SUBROUTINE ADTAKE
+30 ierr = 2
+return
+end subroutine adtake
 
-SUBROUTINE ADCOMP(F)
-IMPLICIT NONE
-INTEGER :: J
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adcomp(f)
+implicit none
+integer :: j
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
 ! **  THIS PROGRAM COMPUTES THE PIECEWISE POLYNOMIAL APPROXIMATION ON
 !     THE CURRENT INTERVAL. IT ALSO ESTIMATES THE ERROR
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: ABSC(4), AJ, DX, FDERVL(9), FDERVR(9), &
-&FDUMB(9), R, WGTS(4)
-DOUBLE PRECISION :: ERRINT, F, POLYDD
-EXTERNAL F, POLYDD
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: absc(4), aj, dx, fdervl(9), fdervr(9), &
+&fdumb(9), r, wgts(4)
+double precision :: errint, f, polydd
+external f, polydd
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-EQUIVALENCE (FLEFT(2),FDERVL(1)), (FRIGHT(2),FDERVR(1))
-DATA R/1.5D0/
+equivalence (fleft(2),fdervl(1)), (fright(2),fdervr(1))
+data r/1.5d0/
 !
 !     THIRTY DIGIT VALUES FOR THE GAUSS INTEGRATION CONSTANTS
 !                    .861136311594052575223946488893D0
@@ -2649,80 +2649,80 @@ DATA R/1.5D0/
 !           THESE CONSTANTS. IF THE ACCURACY IS CHANGED TO K DECIMAL
 !           DIGITS THEN SET EPS0 = 10**(-K).
 !
-DATA ABSC(1) /-.861136311594052575223946488893D0 /
-DATA ABSC(2) /-.339981043584856264802665759103D0 /
-DATA ABSC(3) / .339981043584856264802665759103D0 /
-DATA ABSC(4) / .861136311594052575223946488893D0 /
-DATA WGTS(1) / .347854845137453857373063949222D0 /
-DATA WGTS(2) / .652145154862546142626936050778D0 /
-DATA WGTS(3) / .652145154862546142626936050778D0 /
-DATA WGTS(4) / .347854845137453857373063949222D0 /
+data absc(1) /-.861136311594052575223946488893d0 /
+data absc(2) /-.339981043584856264802665759103d0 /
+data absc(3) / .339981043584856264802665759103d0 /
+data absc(4) / .861136311594052575223946488893d0 /
+data wgts(1) / .347854845137453857373063949222d0 /
+data wgts(2) / .652145154862546142626936050778d0 /
+data wgts(3) / .652145154862546142626936050778d0 /
+data wgts(4) / .347854845137453857373063949222d0 /
 !
 !             COMPUTE INTERPOLATION INFORMATION
-NINTRP = DEGREE - 2*SMOOTH - 1
+nintrp = degree - 2*smooth - 1
 !
 !          INCREASE NUMBER OF INTERPOLATION POINTS IF BREAK POINTS ARE
 !          SPECIFIED WITH FEWER DERIVATIVES THAN SMOOTH
-IF (BREAK.EQ.LEFT .OR. BREAK.EQ.RIGHT) NINTRP = NINTRP + SMOOTH - &
-&DBREAK(IBREAK)
-IF (BREAK.EQ.BOTH) NINTRP = NINTRP + 2*SMOOTH - DBREAK(IBREAK) - &
-&DBREAK(IBREAK+1)
-IF (NINTRP.EQ.0) GO TO 20
+if (break.eq.left .or. break.eq.right) nintrp = nintrp + smooth - &
+&dbreak(ibreak)
+if (break.eq.both) nintrp = nintrp + 2*smooth - dbreak(ibreak) - &
+&dbreak(ibreak+1)
+if (nintrp.eq.0) go to 20
 !
 !             GENERATE EQUAL SPACED INTERPOLATION POINTS
-AJ = NINTRP+1
-DX = (XRIGHT(NSTACK)-XLEFT(NSTACK))/AJ
-do 10 J = 1,NINTRP
-  AJ = J
-  XINTRP(J) = XLEFT(NSTACK) + AJ*DX
-10 CONTINUE
+aj = nintrp+1
+dx = (xright(nstack)-xleft(nstack))/aj
+do 10 j = 1,nintrp
+  aj = j
+  xintrp(j) = xleft(nstack) + aj*dx
+10 continue
 !
 !             GET LEFT AND RIGHT F-VALUES, PUT F-VALUE IN FIRST ELEMENT
 !             OF ARRAYS FLEFT AND FRIGHT.  GET DERIVATIVES BACK AS
 !             OTHER ELEMENTS VIA THE SUBARRAYS FDERVL AND FDERVR.
-20 FLEFT(1) = F(XLEFT(NSTACK),FDERVL)
-FRIGHT(1) = F(XRIGHT(NSTACK),FDERVR)
-LEFTX = SMOOTH + 1
-RIGHTX = LEFTX
+20 fleft(1) = f(xleft(nstack),fdervl)
+fright(1) = f(xright(nstack),fdervr)
+leftx = smooth + 1
+rightx = leftx
 !            GET F-VALUES AT OTHER INTERPOLATION POINTS, IF ANY
-IF (NINTRP.EQ.0) GO TO 40
-DO J=1,NINTRP
-  FINTRP(J) = F(XINTRP(J),FDUMB)
-END DO
+if (nintrp.eq.0) go to 40
+do j=1,nintrp
+  fintrp(j) = f(xintrp(j),fdumb)
+end do
 !
 !          CHECK FOR BREAK POINTS, MODIFY VALUES IF NECESSARY
-40 CONTINUE
-IF (BREAK.NE.LEFT) GO TO 50
-LEFTX = DBREAK(IBREAK) + 1
-FLEFT(LEFTX) = BRIGHT(IBREAK)
-50 IF (BREAK.NE.RIGHT) GO TO 60
-RIGHTX = DBREAK(IBREAK) + 1
-FRIGHT(RIGHTX) = BLEFT(IBREAK)
-60 IF (BREAK.NE.BOTH) GO TO 70
-LEFTX = DBREAK(IBREAK) + 1
-RIGHTX = DBREAK(IBREAK+1) + 1
-FLEFT(LEFTX) = BRIGHT(IBREAK)
-FRIGHT(RIGHTX) = BLEFT(IBREAK+1)
-70 CONTINUE
+40 continue
+if (break.ne.left) go to 50
+leftx = dbreak(ibreak) + 1
+fleft(leftx) = bright(ibreak)
+50 if (break.ne.right) go to 60
+rightx = dbreak(ibreak) + 1
+fright(rightx) = bleft(ibreak)
+60 if (break.ne.both) go to 70
+leftx = dbreak(ibreak) + 1
+rightx = dbreak(ibreak+1) + 1
+fleft(leftx) = bright(ibreak)
+fright(rightx) = bleft(ibreak+1)
+70 continue
 !
 !           COMPUTE DIVIDED DIFFERENCES, NEWTON FORM OF POLYNOMIAL
-CALL NEWTON(LEFTX, RIGHTX, NINTRP)
+call newton(leftx, rightx, nintrp)
 !
 !         COMPUTE NORM OF ERROR OF THIS APPROMIMATION USING FOUR PTS
 !         ADD 50 PERCENT FUDGE FACTOR
-ERRORI = ERRINT(F,POLYDD,XLEFT(NSTACK),XRIGHT(NSTACK),ABSC,WGTS)
-ERRORI = R*ERRORI
-RETURN
-END SUBROUTINE ADCOMP
+errori = errint(f,polydd,xleft(nstack),xright(nstack),absc,wgts)
+errori = r*errori
+return
+end subroutine adcomp
 
-double precision function ERRINT(F, FIT, AAA, BBB, POINTS, WEIGHT)
-IMPLICIT NONE
-INTEGER :: J
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+double precision function errint(f, fit, aaa, bbb, points, weight)
+implicit none
+integer :: j
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
@@ -2732,76 +2732,76 @@ INTEGER :: KNOTS
 !     THE INTEGRATION USES THE POINTS AND WEIGHTS GIVEN AND SCALED
 !     FROM (-1,1) TO (AAA,BBB)
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: AAA, ABMID, BA, BBB, FDUMB(9), FIT, P, PJ, &
-&POINTS(*), WEIGHT(*), ER, F1, F2, TWO, THREE
-DOUBLE PRECISION :: F
-EXTERNAL F, FIT
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: aaa, abmid, ba, bbb, fdumb(9), fit, p, pj, &
+&points(*), weight(*), er, f1, f2, two, three
+double precision :: f
+external f, fit
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-DATA TWO,THREE/2.0D0,3.0D0/
+data two,three/2.0d0,3.0d0/
 !
 !         COMPUTE MIDPOINT = ABMID AND HALF LENGTH = BA OF INTERVAL
-ABMID = (AAA+BBB)/TWO
-BA = (BBB-AAA)/TWO
-PJ = ABMID + BA*POINTS(1)
+abmid = (aaa+bbb)/two
+ba = (bbb-aaa)/two
+pj = abmid + ba*points(1)
 !
 !         TEST FOR TCHEBYCHEFF (MINIMAX) NORM WHICH USES SPECIAL CODE
-IF (NORM.EQ.THREE) GO TO 20
+if (norm.eq.three) go to 20
 !
 !         HAVE GENERAL LP NORM OR LEAST SQUARES OR LEAST DEVIATIONS
-P = DABS(NORM)
+p = dabs(norm)
 !              INITIALIZE THE QUADRATURE RULE
-ERRINT = DABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(1)
+errint = dabs(f(pj,fdumb)-fit(pj))**p*weight(1)
 !              LOOP THROUGH REMAINING POINTS
-do 10 J = 2,4
-  PJ = ABMID + BA*POINTS(J)
-  F1 = F(PJ,FDUMB)
-  F2 = FIT(PJ)
-  ER = DABS(F1-F2)**P
-  ERRINT = ERRINT + DABS(F(PJ,FDUMB)-FIT(PJ))**P*WEIGHT(J)
-10 CONTINUE
-ERRINT = ERRINT*BA
-GO TO 40
+do 10 j = 2,4
+  pj = abmid + ba*points(j)
+  f1 = f(pj,fdumb)
+  f2 = fit(pj)
+  er = dabs(f1-f2)**p
+  errint = errint + dabs(f(pj,fdumb)-fit(pj))**p*weight(j)
+10 continue
+errint = errint*ba
+go to 40
 !
 !         TCHEBYCHEFF NORM
-20 CONTINUE
+20 continue
 !             FIND MAX ERROR ON POINTS
 !               INITIALIZE
-ERRINT = DABS(F(PJ,FDUMB)-FIT(PJ))
+errint = dabs(f(pj,fdumb)-fit(pj))
 !              LOOP THROUGH THE REMAINING POINTS
-DO J=2,4
-  PJ = ABMID + BA*POINTS(J)
-  ERRINT = DMAX1(ERRINT,DABS(F(PJ,FDUMB)-FIT(PJ)))
-END DO
-40 CONTINUE
-RETURN
-END FUNCTION ERRINT
+do j=2,4
+  pj = abmid + ba*points(j)
+  errint = dmax1(errint,dabs(f(pj,fdumb)-fit(pj)))
+end do
+40 continue
+return
+end function errint
 
-SUBROUTINE NEWTON(NL, NR, NI)
-IMPLICIT NONE
-INTEGER :: NI, NL, NR
-INTEGER :: IDIF, IPT, IPT2, J, K, NDDX, NL1, NL2, NR1, NR2, NRL, &
-&NRLJ, NRLJ1
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine newton(nl, nr, ni)
+implicit none
+integer :: ni, nl, nr
+integer :: idif, ipt, ipt2, j, k, nddx, nl1, nl2, nr1, nr2, nrl, &
+&nrlj, nrlj1
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
@@ -2830,219 +2830,219 @@ INTEGER :: KNOTS
 !             I
 !
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: DIFFF, DIFFX
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: difff, diffx
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
 !                 MAIN CALCULATION OF DIVIDED DIFFERENCES
 !         DEFINE A FEW SHORT CONSTANTS
-NL1 = NL - 1
-NL2 = NL + 1
-NR1 = NR - 1
-NR2 = NR + 1
-NRL = NR + NL
+nl1 = nl - 1
+nl2 = nl + 1
+nr1 = nr - 1
+nr2 = nr + 1
+nrl = nr + nl
 !
 !         PUT X-VALUES IN A SINGLE ARRAY WITH NDDX = NL+NR+NI POINTS
-do 10 NDDX = 1,NL
-  XDD(NDDX) = XLEFT(NSTACK)
-10 CONTINUE
-NDDX = NL
-do 20 K = 1,NR
-  NDDX = NDDX + 1
-  XDD(NDDX) = XRIGHT(NSTACK)
-20 CONTINUE
+do 10 nddx = 1,nl
+  xdd(nddx) = xleft(nstack)
+10 continue
+nddx = nl
+do 20 k = 1,nr
+  nddx = nddx + 1
+  xdd(nddx) = xright(nstack)
+20 continue
 !            CHECK IF THERE ARE ANY INTERPOLATION POINTS TO ADD TO XDD
-IF (NI.EQ.0) GO TO 40
-DO K=1,NI
-  NDDX = NDDX + 1
-  XDD(NDDX) = XINTRP(K)
-END DO
+if (ni.eq.0) go to 40
+do k=1,ni
+  nddx = nddx + 1
+  xdd(nddx) = xintrp(k)
+end do
 !
 !           FILL BORDER OF FIRST TRIANGLE - SIZE NL.
-40 CONTINUE
+40 continue
 !         TOP BORDER
-do 50 IDIF = 1,NL
-  DDTEMP(IDIF,1) = FLEFT(IDIF)/FACTOR(IDIF)
-50 CONTINUE
-IF (NL1.EQ.0) GO TO 70
+do 50 idif = 1,nl
+  ddtemp(idif,1) = fleft(idif)/factor(idif)
+50 continue
+if (nl1.eq.0) go to 70
 !                   BOTTOM BORDER
-DO IDIF=1,NL1
-  IPT = NL2 - IDIF
-  DDTEMP(IDIF,IPT) = DDTEMP(IDIF,1)
-END DO
+do idif=1,nl1
+  ipt = nl2 - idif
+  ddtemp(idif,ipt) = ddtemp(idif,1)
+end do
 !
 !          FILL BORDER OF SECOND TRIANGLE - SIZE NR
-70 CONTINUE
+70 continue
 !         TOP BORDER
-DO IDIF=1,NR
-  DDTEMP(IDIF,NL2) = FRIGHT(IDIF)/FACTOR(IDIF)
-END DO
-IF (NRL.EQ.NL2) GO TO 100
+do idif=1,nr
+  ddtemp(idif,nl2) = fright(idif)/factor(idif)
+end do
+if (nrl.eq.nl2) go to 100
 !                   BOTTOM BORDER
-DO IDIF=1,NR1
-  IPT = NRL + 1 - IDIF
-  DDTEMP(IDIF,IPT) = DDTEMP(IDIF,NL2)
-END DO
+do idif=1,nr1
+  ipt = nrl + 1 - idif
+  ddtemp(idif,ipt) = ddtemp(idif,nl2)
+end do
 !
 !           FILL PARALLOGRAM BETWEEN THE TWO TRIANGLES JUST FILLED
 !          FILL ENTRIES PARALLEL TO BOTTOM OF FIRST TRIANGLE
-100 CONTINUE
+100 continue
 !
 !         LOOP STEPPING ALONG TOP SIDE OF SECOND TRIANGLE
-DO J=2,NR2
-  IDIF = J
+do j=2,nr2
+  idif = j
 !             LOOP STEPPING PARALLEL TO BOTTOM SIDE OF FIRST TRIANGLE
-  DO K=2,NL2
-    IPT = NL + 2 - K
-    DIFFF = DDTEMP(IDIF-1,IPT+1) - DDTEMP(IDIF-1,IPT)
-    IPT2 = IPT - 1 + IDIF
-    DIFFX = XDD(IPT2) - XDD(IPT)
-    DDTEMP(IDIF,IPT) = DIFFF/DIFFX
-    IDIF = IDIF + 1
-  END DO
-END DO
+  do k=2,nl2
+    ipt = nl + 2 - k
+    difff = ddtemp(idif-1,ipt+1) - ddtemp(idif-1,ipt)
+    ipt2 = ipt - 1 + idif
+    diffx = xdd(ipt2) - xdd(ipt)
+    ddtemp(idif,ipt) = difff/diffx
+    idif = idif + 1
+  end do
+end do
 !
 !         FILL IN BOTTOM DIAGONALS FOR INTERPOLATION POINTS, IF ANY
-IF (NI.EQ.0) GO TO 150
+if (ni.eq.0) go to 150
 !         LOOP THROUGH THE INTERPOLATATION POINTS
-DO J=1,NI
-  IDIF = 2
-  NRLJ = NRL + J
-  DDTEMP(1,NRLJ) = FINTRP(J)
+do j=1,ni
+  idif = 2
+  nrlj = nrl + j
+  ddtemp(1,nrlj) = fintrp(j)
 !         LOOP THROUGH THE DIFFERENCES (IDIF INDEX)
-  NRLJ1 = NRLJ - 1
-  DO K=1,NRLJ1
-    IPT = NRLJ - K
-    DIFFF = DDTEMP(IDIF-1,IPT+1) - DDTEMP(IDIF-1,IPT)
-    DIFFX = XDD(NRLJ) - XDD(IPT)
-    DDTEMP(IDIF,IPT) = DIFFF/DIFFX
-    IDIF = IDIF + 1
-  END DO
-END DO
-150 CONTINUE
-RETURN
-END SUBROUTINE NEWTON
+  nrlj1 = nrlj - 1
+  do k=1,nrlj1
+    ipt = nrlj - k
+    difff = ddtemp(idif-1,ipt+1) - ddtemp(idif-1,ipt)
+    diffx = xdd(nrlj) - xdd(ipt)
+    ddtemp(idif,ipt) = difff/diffx
+    idif = idif + 1
+  end do
+end do
+150 continue
+return
+end subroutine newton
 
-double precision function POLYDD(X)
-IMPLICIT NONE
-INTEGER :: J, K
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+double precision function polydd(x)
+implicit none
+integer :: j, k
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
 ! **  THIS FUNCTION EVALUATES THE CURRENT POLYNOMIAL PIECE REPRESENTED
 !     BY THE DIVIDED DIFFERENCES DDTEMP ON THE POINT SET XDD.
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: X
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: x
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-POLYDD = DDTEMP(DEGREE+1,1)
-do 10 K = 1,DEGREE
-  J = DEGREE + 1 - K
-  POLYDD = DDTEMP(J,1) + (X-XDD(J))*POLYDD
-10 CONTINUE
-RETURN
-END FUNCTION POLYDD
+polydd = ddtemp(degree+1,1)
+do 10 k = 1,degree
+  j = degree + 1 - k
+  polydd = ddtemp(j,1) + (x-xdd(j))*polydd
+10 continue
+return
+end function polydd
 
-SUBROUTINE ADCHK
-IMPLICIT NONE
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adchk
+implicit none
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
 ! **  THIS PROGRAM CHECKS FOR DISCARDING INTERVAL, APPLIES VARIOUS
 !     TESTS ABOUT DISCARDING INVOLVING EDIST AND CHARF.
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: AKNOTS, DTEST, DX, THREE, FIVE
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: aknots, dtest, dx, three, five
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-DATA THREE,FIVE/3.0D0,5.0D0/
+data three,five/3.0d0,5.0d0/
 !
-DISCRD = .FALSE.
-DX = XRIGHT(NSTACK) - XLEFT(NSTACK)
-IF (DX.GT.CHARF) RETURN
+discrd = .false.
+dx = xright(nstack) - xleft(nstack)
+if (dx.gt.charf) return
 !
 !         COMPUTE DTEST FOR THE LOCAL ERROR CRITERION
 !
-IF (NORM.EQ.THREE) GO TO 30
-IF (EDIST-1) 10,20,30
-10 DTEST = DX*DSCTOL
-GO TO 40
+if (norm.eq.three) go to 30
+if (edist-1) 10,20,30
+10 dtest = dx*dsctol
+go to 40
 !         FOR THE APPROXIMATE FIXED ERROR DISTRIBUTION TYPE WE ESTIMATE
 !         THE FINAL NUMBER OF KNOTS BY( LIMITING IT A LITTLE )
 !             (NSTACK+KNOTS+2)((B-A)/(XRIGHT-A))
-20 AKNOTS = NSTACK+KNOTS+2
-DTEST = DSCTOL/(AKNOTS*DMIN1((B-A)/(XRIGHT(NSTACK)-A),FIVE))
-GO TO 40
-30 DTEST = DSCTOL
+20 aknots = nstack+knots+2
+dtest = dsctol/(aknots*dmin1((b-a)/(xright(nstack)-a),five))
+go to 40
+30 dtest = dsctol
 !
 !             CHECK FOR DISCARD OF INTERVAL
 !
-40 IF (ERRORI.LE.DTEST) DISCRD = .TRUE.
-RETURN
-END SUBROUTINE ADCHK
+40 if (errori.le.dtest) discrd = .true.
+return
+end subroutine adchk
 
-SUBROUTINE ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
-IMPLICIT NONE
-INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
-INTEGER :: K
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
+implicit none
+integer :: ierr, kdimen, kmax, ndimen
+integer :: k
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 ! **  THIS PROGRAM PUTS INTERVALS ON THE STACK OR DISCARDS THEM.
@@ -3051,83 +3051,83 @@ INTEGER :: KNOTS
 !     THE POLYNOMIAL TO THE POWER FORM AND PUT THE COEFFICIENTS INTO
 !     THE ARRAY COEFS.  IT ALSO CHECKS FOR PASSING BREAK POINTS
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
-DOUBLE PRECISION :: DX, HALF, ONE, POWERS(20), P, RATIO, THREE
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
+double precision :: dx, half, one, powers(20), p, ratio, three
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
-DATA HALF,ONE,THREE/.5D0,1.D0,3.D0/
+data half,one,three/.5d0,1.d0,3.d0/
 !
 !            CHECK FOR DISCARDING THE INTERVAL
-IF (DISCRD) GO TO 30
+if (discrd) go to 30
 !
 !         SUBDIVIDE INTERVAL AND PLACE ON STACK
-IF (NSTACK.LT.MAXSTK) GO TO 10
+if (nstack.lt.maxstk) go to 10
 !             FATAL ERROR, EXCEEDED ACTIVE STACK SIZE
-IERR = 4
-DX = XRIGHT(NSTACK)-XLEFT(NSTACK)
-IF (DX.GT.CHARF) IERR = 3
-RETURN
+ierr = 4
+dx = xright(nstack)-xleft(nstack)
+if (dx.gt.charf) ierr = 3
+return
 !
-10 DX = (XRIGHT(NSTACK)-XLEFT(NSTACK))*HALF
+10 dx = (xright(nstack)-xleft(nstack))*half
 !              CHECK FOR SMALL INTERVALS
-RATIO = DX/(DABS(A)+DABS(B))
-IF (RATIO.GT.BUFFER) GO TO 20
-IERR = 4
-RETURN
+ratio = dx/(dabs(a)+dabs(b))
+if (ratio.gt.buffer) go to 20
+ierr = 4
+return
 !
-20 NSTACK = NSTACK + 1
-XLEFT(NSTACK) = XLEFT(NSTACK-1)
-XLEFT(NSTACK-1) = XRIGHT(NSTACK-1) - DX
-XRIGHT(NSTACK) = XLEFT(NSTACK-1)
-RETURN
+20 nstack = nstack + 1
+xleft(nstack) = xleft(nstack-1)
+xleft(nstack-1) = xright(nstack-1) - dx
+xright(nstack) = xleft(nstack-1)
+return
 !
 !            DISCARD INTERVAL, UPDATE GLOBAL ERROR, XKNOTS AND COEFS
-30 P = DABS(NORM)
-IF (NORM.EQ.THREE) ERROR = DMAX1(ERROR,ERRORI)
-IF (NORM.NE.THREE) ERROR = (ERROR**P+ERRORI)**(ONE/P)
+30 p = dabs(norm)
+if (norm.eq.three) error = dmax1(error,errori)
+if (norm.ne.three) error = (error**p+errori)**(one/p)
 !
 !              CHECK FOR PASSING BREAK POINTS
-IF (BREAK.EQ.LEFT .OR. BREAK.EQ.BOTH) IBREAK = IBREAK + 1
+if (break.eq.left .or. break.eq.both) ibreak = ibreak + 1
 !
 !             TRANSFORM REPRESENTATION OF POLYNOMIAL FROM DIVIDED
 !             DIFFERENCES TO POWERS OF X WITH ORIGIN AT XKNOTS (KNOTS)
-CALL ADTRAN(DDTEMP, POWERS)
+call adtran(ddtemp, powers)
 !
 !             PUT COEFS INTO THE MAIN ARRAY
-DO K=1,NPAR
-  COEFS(KNOTS,K) = POWERS(K)
-END DO
+do k=1,npar
+  coefs(knots,k) = powers(k)
+end do
 !            PUT THE NEW KNOTS IN XKNOTS
-KNOTS = KNOTS + 1
-XKNOTS(KNOTS) = XRIGHT(NSTACK)
-NSTACK = NSTACK - 1
-RETURN
-END SUBROUTINE ADPUT
+knots = knots + 1
+xknots(knots) = xright(nstack)
+nstack = nstack - 1
+return
+end subroutine adput
 
-SUBROUTINE ADTRAN(D, POWERS)
-IMPLICIT NONE
-INTEGER :: I, II, J, K, KHI, KOEF, L, LTOP, NI, NI1, NL, NR, NRI, &
-&NRI1, NRL, NRLI, NRLK
-INTEGER :: LEFTX, NINTRP
-INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
-INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK
-INTEGER :: KNOTS
+subroutine adtran(d, powers)
+implicit none
+integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
+&nri1, nrl, nrli, nrlk
+integer :: leftx, nintrp
+integer :: kntdim, level, nbreak, npardm
+integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack
+integer :: knots
 !
 !        ===============================================================
 !
@@ -3138,35 +3138,35 @@ INTEGER :: KNOTS
 !     AND THERE ARE NINTRP OTHER PTS XINTRP(K)  INBETWEEN THEM.
 !     SEE SUBROUTINE NEWTON FOR MORE DETAILS
 !
-DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF, &
-&DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18), &
-&FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18), &
-&XLEFT(50), XRIGHT(50), BUFFER
-INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX, &
-&SMOOTH
-LOGICAL :: DISCRD
-DOUBLE PRECISION :: D(20,*), POWERS(*), SHIFT, XL, XR, XTEMP(20)
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: d(20,*), powers(*), shift, xl, xr, xtemp(20)
 !
-COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT, &
-&DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
-COMMON /RESULZ/ ERROR, KNOTS
-COMMON /KONTRL/ DSCTOL, ERRORI, XLEFT, XRIGHT, BREAK, BOTH, &
-&FACTOR, IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, &
-&NPAR, NSTACK, RIGHT, DISCRD, BUFFER
-COMMON /COMDIF/ DDTEMP, FINTRP, FLEFT, FRIGHT, XDD, XINTRP, &
-&LEFTX, NINTRP, RIGHTX
+common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
+&dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
+common /resulz/ error, knots
+common /kontrl/ dsctol, errori, xleft, xright, break, both, &
+&factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
+&npar, nstack, right, discrd, buffer
+common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
+&leftx, nintrp, rightx
 !
 !         SET SOME SHORT LOCAL VARIABLE NAMES
 !
-XL = XLEFT(NSTACK)
-XR = XRIGHT(NSTACK)
-NL = LEFTX
-NR = RIGHTX
-NI = NINTRP
-NRL = NR + NL
-NRI = NR + NI
-NRI1 = NRI - 1
-NRLI = NRL + NI
+xl = xleft(nstack)
+xr = xright(nstack)
+nl = leftx
+nr = rightx
+ni = nintrp
+nrl = nr + nl
+nri = nr + ni
+nri1 = nri - 1
+nrli = nrl + ni
 !
 !         STARTING REPRESENTATION IS (ASSUMING XL = 0 )
 !
@@ -3185,88 +3185,88 @@ NRLI = NRL + NI
 !
 !     THE RESULTING COEFFICIENTS ARE PUT IN THE ARRAY POWERS
 !
-IF (NI.EQ.0) GO TO 100
+if (ni.eq.0) go to 100
 !
 !             BUILD UP THE POLYNOMIAL FOR THE INTERPOLATION POINTS
 !
 !         USE SPECIAL FORMULAS FOR NI LESS THAN 3
-IF (NI.EQ.1) GO TO 10
-IF (NI.EQ.2) GO TO 20
-GO TO 30
-10 POWERS(1) = D(NRL+1,1)
-GO TO 80
-20 POWERS(1) = D(NRL+1,1) + (XR-XINTRP(1))*D(NRL+2,1)
-POWERS(2) = D(NRL+2,1)
-GO TO 80
+if (ni.eq.1) go to 10
+if (ni.eq.2) go to 20
+go to 30
+10 powers(1) = d(nrl+1,1)
+go to 80
+20 powers(1) = d(nrl+1,1) + (xr-xintrp(1))*d(nrl+2,1)
+powers(2) = d(nrl+2,1)
+go to 80
 !
 !         CONVERSION BY REPEATED SYNTHETIC DIVISION
-30 NI1 = NI - 1
+30 ni1 = ni - 1
 !         INITIALIZE THE POWERS AND XTEMP ARRAYS
-DO K=1,NI
-  XTEMP(K) = XINTRP(K)
-  NRLK = NRL + K
-  POWERS(K) = D(NRLK,1)
-END DO
+do k=1,ni
+  xtemp(k) = xintrp(k)
+  nrlk = nrl + k
+  powers(k) = d(nrlk,1)
+end do
 !
 !         DO THE REPEATED SYNTHETIC DIVISION TO REPLACE THE XTEMP
 !         = XINTRP POINTS OF THE NEWTON EXPANSION BY THE XR POINTS
-do 70 K = 1,NI1
+do 70 k = 1,ni1
 !              POWERS(NI) IS FIXED AND SET ABOVE
-  do 50 II = 1,NI1
-    I = NI - II
-    POWERS(I) = POWERS(I) + (XR-XTEMP(I))*POWERS(I+1)
-50 CONTINUE
+  do 50 ii = 1,ni1
+    i = ni - ii
+    powers(i) = powers(i) + (xr-xtemp(i))*powers(i+1)
+50 continue
 !              SHIFT THE NEWTON EXPANSION PTS. UP, PUT IN ONE MORE XR
-  DO II=1,NI1
-    I = NI - II
-    XTEMP(I+1) = XTEMP(I)
-  END DO
-  XTEMP(1) = XR
-70 CONTINUE
-80 CONTINUE
+  do ii=1,ni1
+    i = ni - ii
+    xtemp(i+1) = xtemp(i)
+  end do
+  xtemp(1) = xr
+70 continue
+80 continue
 !             SHIFT THE COEFFICIENTS TO THE TOP OF THE POWERS ARRAY
-DO K=1,NI
-  L = NI + 1 - K
-  LTOP = L + NRL
-  POWERS(LTOP) = POWERS(L)
-END DO
+do k=1,ni
+  l = ni + 1 - k
+  ltop = l + nrl
+  powers(ltop) = powers(l)
+end do
 !
 !             HAVE THE INTERPOLATION PT. COEFS. IN THE ARRAY POWERS
-100 CONTINUE
+100 continue
 !             PUT THE REMAINING DIVIDED DIFFS INTO THE POWERS ARRAY
-DO J=1,NRL
-  POWERS(J) = D(J,1)
-END DO
+do j=1,nrl
+  powers(j) = d(j,1)
+end do
 !
 !         TRANSFORM THE ORIGIN OF THE POLYNOMIAL FROM XR TO XL
 !         WE USE REPEATED SYNTHETIC DIVISION
-IF (NRI.EQ.1) GO TO 140
-SHIFT = XR - XL
-KHI = NRI1
+if (nri.eq.1) go to 140
+shift = xr - xl
+khi = nri1
 !             LOOP THROUGH THE COEFFICIENTS
-DO J=2,NRI
+do j=2,nri
 !                   SYNTHETIC DIVISION LOOP
-  DO K=1,KHI
-    KOEF = NRLI - K
-    POWERS(KOEF) = POWERS(KOEF) - SHIFT*POWERS(KOEF+1)
-  END DO
-  KHI = KHI - 1
-END DO
-140 CONTINUE
+  do k=1,khi
+    koef = nrli - k
+    powers(koef) = powers(koef) - shift*powers(koef+1)
+  end do
+  khi = khi - 1
+end do
+140 continue
 !     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
-RETURN
-END SUBROUTINE ADTRAN
+return
+end subroutine adtran
 
-SUBROUTINE CPSC (F, Z, N, IC, TOL, R, RS, ERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IC, N
-REAL, INTENT(INOUT) :: ERR(N), R
-REAL, INTENT(IN) :: TOL
-INTEGER :: I, IA, INR, IP(32), IQ, IS, IT, IW(7), IX, J, JN, KL, &
-&KM, KN, L, L1, L2, LF, LN, M, NP, NR
-REAL :: ANG, B, C(4), CM, CP, CT, CX, EP6, EPS, EPS0, FAC, FACT, &
-&FC(3), PI, R1, RA, RE, SC(4), SF, SP, SR
-REAL :: SPMPAR
+subroutine cpsc (f, z, n, ic, tol, r, rs, err)
+implicit none
+integer, intent(in) :: ic, n
+real, intent(inout) :: err(n), r
+real, intent(in) :: tol
+integer :: i, ia, inr, ip(32), iq, is, it, iw(7), ix, j, jn, kl, &
+&km, kn, l, l1, l2, lf, ln, m, np, nr
+real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
+&fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
+real :: spmpar
 !
 !  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
 !
@@ -3297,221 +3297,221 @@ REAL :: SPMPAR
 !    ERR REAL ARRAY ERR(N) CONTAINING ABSOLUTE ERROR ESTIMATES FOR THE
 !        NUMBERS IN RS.
 !
-COMPLEX :: F, A(64), V
-COMPLEX, INTENT(INOUT) :: RS(N)
-COMPLEX :: RT(51,3), FV(6), U, W, T, Z, RV(3), RQ, S, XK, MULT, CO
+complex :: f, a(64), v
+complex, intent(inout) :: rs(n)
+complex :: rt(51,3), fv(6), u, w, t, z, rv(3), rq, s, xk, mult, co
 !
 !  LIST OF THE VARIABLES INITIALIZED IN THE DATA STATEMENT BELOW.
 !   IW   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
 !   IP   PERMUTATION CONSTANTS FOR THE FFT.
 !   RV   CONSTANTS FOR THE LAURENT SERIES TEST.
 !
-DATA IW(1),IW(2),IW(3),IW(4),IW(5),IW(6),IW(7)/1,2,4,8,16,32,64/
-DATA IP( 1),IP( 2),IP( 3),IP( 4),IP( 5),IP( 6),IP( 7),IP( 8), &
-&IP( 9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16), &
-&IP(17),IP(18),IP(19),IP(20),IP(21),IP(22),IP(23),IP(24), &
-&IP(25),IP(26),IP(27),IP(28),IP(29),IP(30),IP(31),IP(32)/ &
+data iw(1),iw(2),iw(3),iw(4),iw(5),iw(6),iw(7)/1,2,4,8,16,32,64/
+data ip( 1),ip( 2),ip( 3),ip( 4),ip( 5),ip( 6),ip( 7),ip( 8), &
+&ip( 9),ip(10),ip(11),ip(12),ip(13),ip(14),ip(15),ip(16), &
+&ip(17),ip(18),ip(19),ip(20),ip(21),ip(22),ip(23),ip(24), &
+&ip(25),ip(26),ip(27),ip(28),ip(29),ip(30),ip(31),ip(32)/ &
 &64,32,48,16,56,24,40,8,60,28,44,12,52,20,36,4,62,30,46,14, &
 &54,22,38,6,58,26,42,10,50,18,34,2/
-DATA RV(1)/(-.4,.3)/, RV(2)/(.7,.2)/, RV(3)/(.02,-.06)/
+data rv(1)/(-.4,.3)/, rv(2)/(.7,.2)/, rv(3)/(.02,-.06)/
 !
 !  STATEMENT FUNCTION FOR MULTIPLICATION OF A COMPLEX NUMBER
 !  BY A REAL NUMBER.
 !
-MULT(RE,CO) = CMPLX(RE*REAL(CO),RE*AIMAG(CO))
+mult(re,co) = cmplx(re*real(co),re*aimag(co))
 !
 !  -------------------
 !
 !  ****** EPS0 IS A MACHINE DEPENDENT CONSTANT. EPS0 IS THE
 !         SMALLEST NUMBER SUCH THAT 1 + EPS0 .GT. 1.
 !
-              EPS0 = SPMPAR(1)
+              eps0 = spmpar(1)
 !
 !  -------------------
 !
 !  INITIALIZATION.
 !
-EPS = AMAX1(EPS0,TOL)
-SC(1) = .125
-C(1) = EPS**(1./28.)
-EP6 = C(1)**6
-PI = 4.0*ATAN(1.0)
-FV(1) = (-1.,0.)
-FV(2) = (0.,-1.)
-R1 = SQRT(0.5)
-RA = 1.0/R1
-FV(3) = CMPLX(R1,-R1)
-do 10 I = 2,4
-  SC(I) = .5*SC(I-1)
-  C(I) = SQRT(C(I-1))
-  ANG = PI*SC(I-1)
-10 FV(I+2) = CMPLX(COS(ANG),-SIN(ANG))
+eps = amax1(eps0,tol)
+sc(1) = .125
+c(1) = eps**(1./28.)
+ep6 = c(1)**6
+pi = 4.0*atan(1.0)
+fv(1) = (-1.,0.)
+fv(2) = (0.,-1.)
+r1 = sqrt(0.5)
+ra = 1.0/r1
+fv(3) = cmplx(r1,-r1)
+do 10 i = 2,4
+  sc(i) = .5*sc(i-1)
+  c(i) = sqrt(c(i-1))
+  ang = pi*sc(i-1)
+10 fv(i+2) = cmplx(cos(ang),-sin(ang))
 !
 !  START EXECUTION.
 !
-IF (N .GT. 51 .OR. N .LT. 1) GO TO 260
-L2 = 1
-LF = 0
-NP = 0
-M = 0
-NR = -1
+if (n .gt. 51 .or. n .lt. 1) go to 260
+l2 = 1
+lf = 0
+np = 0
+m = 0
+nr = -1
 !
 !  FIND IF A FFT OVER 8, 16, 32, OR 64 POINTS SHOULD BE USED.
 !
-KL = 1
-IF (N .GT. 6) KL = 2
-IF (N .GT. 12) KL = 3
-IF (N .GT. 25) KL = 4
-KM = KL + 2
-KN = 7 - KM
-IX = IW(KM + 1)
-IS = IW(KN)
-30 V = CMPLX(R,0.0)
+kl = 1
+if (n .gt. 6) kl = 2
+if (n .gt. 12) kl = 3
+if (n .gt. 25) kl = 4
+km = kl + 2
+kn = 7 - km
+ix = iw(km + 1)
+is = iw(kn)
+30 v = cmplx(r,0.0)
 !
 !  FUNCTION VALUES OF F ARE STORED READY PERMUTATED FOR THE FFT.
 !
-do 40 I = IS,32,IS
-  IQ = IP(I)
-  V = V*FV(KM)
-  A(IQ) = F(Z + V)
-40 A(IQ - 1) = F(Z - V)
-LN = 2
-JN = 1
+do 40 i = is,32,is
+  iq = ip(i)
+  v = v*fv(km)
+  a(iq) = f(z + v)
+40 a(iq - 1) = f(z - v)
+ln = 2
+jn = 1
 !
 !  THE LOOP  DO 70 ... CONSTITUTES THE FFT.
 !
-do 70 L = 1,KM
-  U = (1.,0.)
-  W = FV(L)
-  do 60 J = 1,JN
-    do 50 I = J,IX,LN
-      IT = I + JN
-      T = A(IT)*U
-      A(IT) = A(I) - T
-50 A(I) = A(I) + T
-60 U = U*W
-  LN = LN + LN
-70 JN = JN + JN
-CX = 0.0
-B = 1.0
+do 70 l = 1,km
+  u = (1.,0.)
+  w = fv(l)
+  do 60 j = 1,jn
+    do 50 i = j,ix,ln
+      it = i + jn
+      t = a(it)*u
+      a(it) = a(i) - t
+50 a(i) = a(i) + t
+60 u = u*w
+  ln = ln + ln
+70 jn = jn + jn
+cx = 0.0
+b = 1.0
 !
 !  TEST ON HOW FAST THE COEFFICIENTS OBTAINED DECREASE.
 !
-do 80 I = 1,IX
-  CT = CABS(A(I))/B
-  IF (CT .LT. CX) GO TO 80
-  CX = CT
-  INR = I
-80 B = B*C(KL)
-IF (M .LE. 1) GO TO 100
+do 80 i = 1,ix
+  ct = cabs(a(i))/b
+  if (ct .lt. cx) go to 80
+  cx = ct
+  inr = i
+80 b = b*c(kl)
+if (m .le. 1) go to 100
 !
 !  ESTIMATE OF THE ROUNDING ERROR LEVEL FOR THE LAST RADIUS.
 !
-ERR(1) = CX*EPS
-do 90 I = 2,N
-90 ERR(I) = ERR(I-1)/R
-100 SF = SC(KL)
-do 110 I = 1,IX
-  A(I) = MULT(SF,A(I))
-110 SF = SF/R
-L1 = L2
-L2 = 1
-IF (INR .GT. IW(KM)) GO TO 150
-IF (LF .EQ. 1) GO TO 140
+err(1) = cx*eps
+do 90 i = 2,n
+90 err(i) = err(i-1)/r
+100 sf = sc(kl)
+do 110 i = 1,ix
+  a(i) = mult(sf,a(i))
+110 sf = sf/r
+l1 = l2
+l2 = 1
+if (inr .gt. iw(km)) go to 150
+if (lf .eq. 1) go to 140
 !
 !  TEST IF THE SERIES IS A TAYLOR OR A LAURENT SERIES.
 !
-SR = 0.0
-SP = 0.0
-do 130 J = 1,3
-  RQ = MULT(R,RV(J))
-  S = A(IX)
-  do 120 I = 2,IX
-    IA = IX + 1 - I
-120 S = S*RQ + A(IA)
-  CP = CABS(S)
-  IF (CP .GT. SP) SP = CP
-  CM = CABS(S - F(Z + RQ))
-130 IF (CM .GT. SR) SR = CM
-IF (SR .GT. 1.E-3*SP) GO TO 150
-LF = 1
-140 L2 = -1
+sr = 0.0
+sp = 0.0
+do 130 j = 1,3
+  rq = mult(r,rv(j))
+  s = a(ix)
+  do 120 i = 2,ix
+    ia = ix + 1 - i
+120 s = s*rq + a(ia)
+  cp = cabs(s)
+  if (cp .gt. sp) sp = cp
+  cm = cabs(s - f(z + rq))
+130 if (cm .gt. sr) sr = cm
+if (sr .gt. 1.e-3*sp) go to 150
+lf = 1
+140 l2 = -1
 !
 !  DETERMINATION OF THE NEXT RADIUS TO BE USED.
 !
-150 IF (NR .GE. 0) GO TO 160
-  FACT = 2.0
-  IF (L2 .EQ. 1) FACT = 0.5
-  L1 = L2
-  NR = 0
-160 IF (L1 .NE. L2) GO TO 180
-  IF (NR .GT. 0) GO TO 170
-    NP = NP + 1
-    IF (NP-15) 190,190,260
-170 FACT = 1.0/FACT
-180 FACT = 1.0/SQRT(FACT)
-NR = NR + 1
-190 R = R*FACT
-M = NR - KL - 1
-IF (M .LE. 0) GO TO 30
+150 if (nr .ge. 0) go to 160
+  fact = 2.0
+  if (l2 .eq. 1) fact = 0.5
+  l1 = l2
+  nr = 0
+160 if (l1 .ne. l2) go to 180
+  if (nr .gt. 0) go to 170
+    np = np + 1
+    if (np-15) 190,190,260
+170 fact = 1.0/fact
+180 fact = 1.0/sqrt(fact)
+nr = nr + 1
+190 r = r*fact
+m = nr - kl - 1
+if (m .le. 0) go to 30
 !
 !  THE RESULTS FOR THE LAST THREE RADII ARE STORED.
 !
-do 200 I = 1,N
-200 RT(I,M) = A(I)
-IF (M .EQ. 1) GO TO 220
+do 200 i = 1,n
+200 rt(i,m) = a(i)
+if (m .eq. 1) go to 220
 !
 !  EXTRAPOLATION.
 !
-do 210 I = 1,N
-  XK = RT(I,M-1) - RT(I,M)
-210 RT(I,M-1) = RT(I,M) - MULT(FC(M-1),XK)
-IF (M .EQ. 3) GO TO 230
+do 210 i = 1,n
+  xk = rt(i,m-1) - rt(i,m)
+210 rt(i,m-1) = rt(i,m) - mult(fc(m-1),xk)
+if (m .eq. 3) go to 230
 !
 !  CALCULATION OF THE EXTRAPOLATION CONSTANTS.
 !
-220 FC(M) = 1.5 + SIGN(.5,FACT-1.)
-IF (M .EQ. 2) FC(M) = FC(M) + RA
-IF (FACT .GT. 1.0) FC(M) = -FC(M)
-GO TO 30
-230 FC(3) = FC(1)*FC(2)/(FC(1) + FC(2) + 1.0)
+220 fc(m) = 1.5 + sign(.5,fact-1.)
+if (m .eq. 2) fc(m) = fc(m) + ra
+if (fact .gt. 1.0) fc(m) = -fc(m)
+go to 30
+230 fc(3) = fc(1)*fc(2)/(fc(1) + fc(2) + 1.0)
 !
 !  FINAL EXTRAPOLATION AND ERROR ESTIMATE.
 !
-do 240 I = 1,N
-  XK = RT(I,1) - RT(I,2)
-  ERR(I) = ERR(I) + EP6*CABS(XK)
-240 RS(I) = RT(I,2) - MULT(FC(3),XK)
+do 240 i = 1,n
+  xk = rt(i,1) - rt(i,2)
+  err(i) = err(i) + ep6*cabs(xk)
+240 rs(i) = rt(i,2) - mult(fc(3),xk)
 !
 !  MULTIPLY POWER SERIES COEFFICIENTS AND ERROR ESTIMATE BY FACTORIALS
 !  IF DERIVATIVES WANTED.
 !
-IF (IC .EQ. 0) RETURN
-FAC = 0.0
-FACT = 1.0
-do 250 I = 1,N
-  RS(I) = MULT(FACT,RS(I))
-  ERR(I) = FACT*ERR(I)
-  FAC = FAC + 1.0
-250 FACT = FACT*FAC
-RETURN
+if (ic .eq. 0) return
+fac = 0.0
+fact = 1.0
+do 250 i = 1,n
+  rs(i) = mult(fact,rs(i))
+  err(i) = fact*err(i)
+  fac = fac + 1.0
+250 fact = fact*fac
+return
 !
 !  ERROR RETURN.
 !
-260 do 270 I = 1,N
-  RS(I) = (0.,0.)
-270 ERR(I) = 1.E10
-RETURN
-END SUBROUTINE CPSC
+260 do 270 i = 1,n
+  rs(i) = (0.,0.)
+270 err(i) = 1.e10
+return
+end subroutine cpsc
 
-SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IC, N
-INTEGER :: I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1, &
-&L2, LF, LN, M, MM1, NP, NR
-DOUBLE PRECISION :: X, Y
-DOUBLE PRECISION, INTENT(IN) :: TOL
-DOUBLE PRECISION, INTENT(INOUT) :: R, RS1(N), RS2(N), ERR(N)
+subroutine dcpsc (fun, x, y, n, ic, tol, r, rs1, rs2, err)
+implicit none
+integer, intent(in) :: ic, n
+integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
+&l2, lf, ln, m, mm1, np, nr
+double precision :: x, y
+double precision, intent(in) :: tol
+double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !
 !  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
 !
@@ -3553,13 +3553,13 @@ DOUBLE PRECISION, INTENT(INOUT) :: R, RS1(N), RS2(N), ERR(N)
 !    ERR REAL ARRAY ERR(N) CONTAINING ABSOLUTE ERROR ESTIMATES FOR THE
 !        COMPLEX NUMBERS WHOSE REAL AND IMAGINARY PARTS ARE IN RS1,RS2.
 !
-INTEGER :: IP(32), IW(7)
-DOUBLE PRECISION :: ANG, B, CM, CP, CT, CX, EPS, EPS0, EP6, FAC, &
-&FACT, PI, RA, R1, S, SF, SP, SR, T, U, V, W
-DOUBLE PRECISION :: C(4), FC(3), SC(4)
-DOUBLE PRECISION :: A1(64), A2(64), FV1(6), FV2(6), RT1(51,3), &
-&RT2(51,3), RV1(3), RV2(3)
-DOUBLE PRECISION :: DCPABS, DPMPAR
+integer :: ip(32), iw(7)
+double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
+&fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w
+double precision :: c(4), fc(3), sc(4)
+double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), &
+&rt2(51,3), rv1(3), rv2(3)
+double precision :: dcpabs, dpmpar
 !
 !  LIST OF THE VARIABLES INITIALIZED IN THE DATA STATEMENT BELOW.
 !   IW   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
@@ -3567,870 +3567,870 @@ DOUBLE PRECISION :: DCPABS, DPMPAR
 !   RV1  REAL PARTS OF THE CONSTANTS FOR THE LAURENT SERIES TEST.
 !   RV2  IMAGINARY PARTS OF THE CONSTANTS FOR THE LAURENT SERIES TEST.
 !
-DATA IW(1),IW(2),IW(3),IW(4),IW(5),IW(6),IW(7)/1,2,4,8,16,32,64/
-DATA IP( 1),IP( 2),IP( 3),IP( 4),IP( 5),IP( 6),IP( 7),IP( 8), &
-&IP( 9),IP(10),IP(11),IP(12),IP(13),IP(14),IP(15),IP(16), &
-&IP(17),IP(18),IP(19),IP(20),IP(21),IP(22),IP(23),IP(24), &
-&IP(25),IP(26),IP(27),IP(28),IP(29),IP(30),IP(31),IP(32)/ &
+data iw(1),iw(2),iw(3),iw(4),iw(5),iw(6),iw(7)/1,2,4,8,16,32,64/
+data ip( 1),ip( 2),ip( 3),ip( 4),ip( 5),ip( 6),ip( 7),ip( 8), &
+&ip( 9),ip(10),ip(11),ip(12),ip(13),ip(14),ip(15),ip(16), &
+&ip(17),ip(18),ip(19),ip(20),ip(21),ip(22),ip(23),ip(24), &
+&ip(25),ip(26),ip(27),ip(28),ip(29),ip(30),ip(31),ip(32)/ &
 &64,32,48,16,56,24,40,8,60,28,44,12,52,20,36,4,62,30,46,14, &
 &54,22,38,6,58,26,42,10,50,18,34,2/
-DATA RV1(1)/-.4D0/, RV2(1)/.3D0/, &
-&RV1(2)/ .7D0/, RV2(2)/.2D0/, &
-&RV1(3)/.02D0/, RV2(3)/-.06D0/
+data rv1(1)/-.4d0/, rv2(1)/.3d0/, &
+&rv1(2)/ .7d0/, rv2(2)/.2d0/, &
+&rv1(3)/.02d0/, rv2(3)/-.06d0/
 !
 !  -------------------
 !
 !  ****** EPS0 IS A MACHINE DEPENDENT CONSTANT. EPS0 IS THE
 !         SMALLEST NUMBER SUCH THAT 1 + EPS0 .GT. 1.
 !
-              EPS0 = DPMPAR(1)
+              eps0 = dpmpar(1)
 !
 !  -------------------
 !
 !  INITIALIZATION.
 !
-EPS = DMAX1(EPS0,TOL)
-SC(1) = .125D0
-C(1) = EPS**(1.D0/28.D0)
-EP6 = C(1)**6
-PI = 4.D0*DATAN(1.D0)
-FV1(1) = -1.D0
-FV2(1) =  0.D0
-FV1(2) =  0.D0
-FV2(2) = -1.D0
-R1 = DSQRT(0.5D0)
-RA = 1.D0/R1
-FV1(3) =  R1
-FV2(3) = -R1
-do 10 I = 2,4
-   SC(I) = 0.5D0*SC(I-1)
-   C(I) = DSQRT(C(I-1))
-   ANG = PI*SC(I-1)
-   FV1(I + 2) =  DCOS(ANG)
-10 FV2(I + 2) = -DSIN(ANG)
+eps = dmax1(eps0,tol)
+sc(1) = .125d0
+c(1) = eps**(1.d0/28.d0)
+ep6 = c(1)**6
+pi = 4.d0*datan(1.d0)
+fv1(1) = -1.d0
+fv2(1) =  0.d0
+fv1(2) =  0.d0
+fv2(2) = -1.d0
+r1 = dsqrt(0.5d0)
+ra = 1.d0/r1
+fv1(3) =  r1
+fv2(3) = -r1
+do 10 i = 2,4
+   sc(i) = 0.5d0*sc(i-1)
+   c(i) = dsqrt(c(i-1))
+   ang = pi*sc(i-1)
+   fv1(i + 2) =  dcos(ang)
+10 fv2(i + 2) = -dsin(ang)
 !
 !  START EXECUTION.
 !
-IF (N .GT. 51 .OR. N .LT. 1) GO TO 260
-L2 = 1
-LF = 0
-NP = 0
-M = 0
-NR = -1
+if (n .gt. 51 .or. n .lt. 1) go to 260
+l2 = 1
+lf = 0
+np = 0
+m = 0
+nr = -1
 !
 !  FIND IF A FFT OVER 8, 16, 32, OR 64 POINTS SHOULD BE USED.
 !
-KL = 1
-IF (N .GT. 6) KL = 2
-IF (N .GT. 12) KL = 3
-IF (N .GT. 25) KL = 4
-KM = KL + 2
-KN = 7 - KM
-IX = IW(KM + 1)
-IS = IW(KN)
-30 U = R
-V = 0.D0
+kl = 1
+if (n .gt. 6) kl = 2
+if (n .gt. 12) kl = 3
+if (n .gt. 25) kl = 4
+km = kl + 2
+kn = 7 - km
+ix = iw(km + 1)
+is = iw(kn)
+30 u = r
+v = 0.d0
 !
 !  FUNCTION VALUES OF F ARE STORED READY PERMUTATED FOR THE FFT.
 !
-do 40 I = IS,32,IS
-   IQ = IP(I)
-   T = U*FV1(KM) - V*FV2(KM)
-   V = U*FV2(KM) + V*FV1(KM)
-   U = T
-   CALL FUN(X + U, Y + V, A1(IQ), A2(IQ))
-   CALL FUN(X - U, Y - V, A1(IQ-1), A2(IQ-1))
-40 CONTINUE
-LN = 2
-JN = 1
+do 40 i = is,32,is
+   iq = ip(i)
+   t = u*fv1(km) - v*fv2(km)
+   v = u*fv2(km) + v*fv1(km)
+   u = t
+   call fun(x + u, y + v, a1(iq), a2(iq))
+   call fun(x - u, y - v, a1(iq-1), a2(iq-1))
+40 continue
+ln = 2
+jn = 1
 !
 !  THE LOOP  DO 70 ... CONSTITUTES THE FFT.
 !
-do 70 L = 1,KM
-   U = 1.0
-   V = 0.0
-   do 60 J = 1,JN
-      do 50 I = J,IX,LN
-         IT = I + JN
-         S = U*A1(IT) - V*A2(IT)
-         T = U*A2(IT) + V*A1(IT)
-         A1(IT) = A1(I) - S
-         A2(IT) = A2(I) - T
-         A1(I) = A1(I) + S
-50 A2(I) = A2(I) + T
-      T = U*FV1(L) - V*FV2(L)
-      V = U*FV2(L) + V*FV1(L)
-60 U = T
-   LN = LN + LN
-70 JN = JN + JN
-CX = 0.D0
-B = 1.D0
+do 70 l = 1,km
+   u = 1.0
+   v = 0.0
+   do 60 j = 1,jn
+      do 50 i = j,ix,ln
+         it = i + jn
+         s = u*a1(it) - v*a2(it)
+         t = u*a2(it) + v*a1(it)
+         a1(it) = a1(i) - s
+         a2(it) = a2(i) - t
+         a1(i) = a1(i) + s
+50 a2(i) = a2(i) + t
+      t = u*fv1(l) - v*fv2(l)
+      v = u*fv2(l) + v*fv1(l)
+60 u = t
+   ln = ln + ln
+70 jn = jn + jn
+cx = 0.d0
+b = 1.d0
 !
 !  TEST ON HOW FAST THE COEFFICIENTS OBTAINED DECREASE.
 !
-do 80 I = 1,IX
-   CT = DCPABS(A1(I),A2(I))/B
-   IF (CT .LT. CX) GO TO 80
-   CX = CT
-   INR = I
-80 B = B*C(KL)
-IF (M .LE. 1) GO TO 100
+do 80 i = 1,ix
+   ct = dcpabs(a1(i),a2(i))/b
+   if (ct .lt. cx) go to 80
+   cx = ct
+   inr = i
+80 b = b*c(kl)
+if (m .le. 1) go to 100
 !
 !  ESTIMATE OF THE ROUNDING ERROR LEVEL FOR THE LAST RADIUS.
 !
-ERR(1) = CX*EPS
-do 90 I = 2,N
-90 ERR(I) = ERR(I-1)/R
+err(1) = cx*eps
+do 90 i = 2,n
+90 err(i) = err(i-1)/r
 !
-100 SF = SC(KL)
-do 110 I = 1,IX
-   A1(I) = SF*A1(I)
-   A2(I) = SF*A2(I)
-110 SF = SF/R
-L1 = L2
-L2 = 1
-IF (INR .GT. IW(KM)) GO TO 150
-IF (LF .EQ. 1) GO TO 140
+100 sf = sc(kl)
+do 110 i = 1,ix
+   a1(i) = sf*a1(i)
+   a2(i) = sf*a2(i)
+110 sf = sf/r
+l1 = l2
+l2 = 1
+if (inr .gt. iw(km)) go to 150
+if (lf .eq. 1) go to 140
 !
 !  TEST IF THE SERIES IS A TAYLOR OR A LAURENT SERIES.
 !
-SR = 0.D0
-SP = 0.D0
-do 130 J = 1,3
-   S = A1(IX)
-   T = A2(IX)
-   U = R*RV1(J)
-   V = R*RV2(J)
-   do 120 I = 2,IX
-      IA = IX + 1 - I
-      W = (S*U - T*V) + A1(IA)
-      T = (S*V + T*U) + A2(IA)
-120 S = W
-   CP = DCPABS(S,T)
-   IF (CP .GT. SP) SP = CP
-   CALL FUN(X + U, Y + V, U, V)
-   CM = DCPABS(S - U, T - V)
-130 IF (CM .GT. SR) SR = CM
-IF (SR .GT. 1.D-3*SP) GO TO 150
-LF = 1
-140 L2 = -1
+sr = 0.d0
+sp = 0.d0
+do 130 j = 1,3
+   s = a1(ix)
+   t = a2(ix)
+   u = r*rv1(j)
+   v = r*rv2(j)
+   do 120 i = 2,ix
+      ia = ix + 1 - i
+      w = (s*u - t*v) + a1(ia)
+      t = (s*v + t*u) + a2(ia)
+120 s = w
+   cp = dcpabs(s,t)
+   if (cp .gt. sp) sp = cp
+   call fun(x + u, y + v, u, v)
+   cm = dcpabs(s - u, t - v)
+130 if (cm .gt. sr) sr = cm
+if (sr .gt. 1.d-3*sp) go to 150
+lf = 1
+140 l2 = -1
 !
 !  DETERMINATION OF THE NEXT RADIUS TO BE USED.
 !
-150 IF (NR .GE. 0) GO TO 160
-   FACT = 2.D0
-   IF (L2 .EQ. 1) FACT = 0.5D0
-   L1 = L2
-   NR = 0
-160 IF (L1 .NE. L2) GO TO 180
-   IF (NR .GT. 0) GO TO 170
-      NP = NP + 1
-      IF (NP-15) 190,190,260
-170 FACT = 1.D0/FACT
-180 FACT = 1.D0/DSQRT(FACT)
-NR = NR + 1
-190 R = R*FACT
-M = NR - KL - 1
-IF (M .LE. 0) GO TO 30
+150 if (nr .ge. 0) go to 160
+   fact = 2.d0
+   if (l2 .eq. 1) fact = 0.5d0
+   l1 = l2
+   nr = 0
+160 if (l1 .ne. l2) go to 180
+   if (nr .gt. 0) go to 170
+      np = np + 1
+      if (np-15) 190,190,260
+170 fact = 1.d0/fact
+180 fact = 1.d0/dsqrt(fact)
+nr = nr + 1
+190 r = r*fact
+m = nr - kl - 1
+if (m .le. 0) go to 30
 !
 !  THE RESULTS FOR THE LAST THREE RADII ARE STORED.
 !
-do 200 I = 1,N
-   RT1(I,M) = A1(I)
-200 RT2(I,M) = A2(I)
-IF (M .EQ. 1) GO TO 220
+do 200 i = 1,n
+   rt1(i,m) = a1(i)
+200 rt2(i,m) = a2(i)
+if (m .eq. 1) go to 220
 !
 !  EXTRAPOLATION.
 !
-MM1 = M - 1
-do 210 I = 1,N
-   U = RT1(I,MM1) - RT1(I,M)
-   V = RT2(I,MM1) - RT2(I,M)
-   RT1(I,MM1) = RT1(I,M) - FC(MM1)*U
-210 RT2(I,MM1) = RT2(I,M) - FC(MM1)*V
-IF (M .EQ. 3) GO TO 230
+mm1 = m - 1
+do 210 i = 1,n
+   u = rt1(i,mm1) - rt1(i,m)
+   v = rt2(i,mm1) - rt2(i,m)
+   rt1(i,mm1) = rt1(i,m) - fc(mm1)*u
+210 rt2(i,mm1) = rt2(i,m) - fc(mm1)*v
+if (m .eq. 3) go to 230
 !
 !  CALCULATION OF THE EXTRAPOLATION CONSTANTS.
 !
-220 FC(M) = 1.5D0 + DSIGN(0.5D0,FACT-1.D0)
-IF (M .EQ. 2) FC(M) = FC(M) + RA
-IF (FACT .GT. 1.D0) FC(M) = -FC(M)
-GO TO 30
-230 FC(3) = FC(1)*FC(2)/(FC(1) + FC(2) + 1.D0)
+220 fc(m) = 1.5d0 + dsign(0.5d0,fact-1.d0)
+if (m .eq. 2) fc(m) = fc(m) + ra
+if (fact .gt. 1.d0) fc(m) = -fc(m)
+go to 30
+230 fc(3) = fc(1)*fc(2)/(fc(1) + fc(2) + 1.d0)
 !
 !  FINAL EXTRAPOLATION AND ERROR ESTIMATE.
 !
-do 240 I = 1,N
-   U = RT1(I,1) - RT1(I,2)
-   V = RT2(I,1) - RT2(I,2)
-   ERR(I) = ERR(I) + EP6*DCPABS(U,V)
-   RS1(I) = RT1(I,2) - FC(3)*U
-240 RS2(I) = RT2(I,2) - FC(3)*V
+do 240 i = 1,n
+   u = rt1(i,1) - rt1(i,2)
+   v = rt2(i,1) - rt2(i,2)
+   err(i) = err(i) + ep6*dcpabs(u,v)
+   rs1(i) = rt1(i,2) - fc(3)*u
+240 rs2(i) = rt2(i,2) - fc(3)*v
 !
 !  MULTIPLY POWER SERIES COEFFICIENTS AND ERROR ESTIMATE BY FACTORIALS
 !  IF DERIVATIVES WANTED.
 !
-IF (IC .EQ. 0) RETURN
-FAC = 0.D0
-FACT = 1.D0
-do 250 I = 1,N
-   RS1(I) = FACT*RS1(I)
-   RS2(I) = FACT*RS2(I)
-   ERR(I) = FACT*ERR(I)
-   FAC = FAC + 1.D0
-250 FACT = FACT*FAC
-RETURN
+if (ic .eq. 0) return
+fac = 0.d0
+fact = 1.d0
+do 250 i = 1,n
+   rs1(i) = fact*rs1(i)
+   rs2(i) = fact*rs2(i)
+   err(i) = fact*err(i)
+   fac = fac + 1.d0
+250 fact = fact*fac
+return
 !
 !  ERROR RETURN.
 !
-260 do 270 I = 1,N
-   RS1(I) = 0.D0
-   RS2(I) = 0.D0
-270 ERR(I) = 1.D10
-RETURN
-END SUBROUTINE DCPSC
+260 do 270 i = 1,n
+   rs1(i) = 0.d0
+   rs2(i) = 0.d0
+270 err(i) = 1.d10
+return
+end subroutine dcpsc
 
-FUNCTION TRP(A,N,X,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A
-REAL :: X(N), Y(N)
-INTEGER :: I, IL, IR, NM1
-REAL :: R
-REAL :: TRP
+function trp(a,n,x,y)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a
+real :: x(n), y(n)
+integer :: i, il, ir, nm1
+real :: r
+real :: trp
 !
-NM1 = N-1
-IF (A.LT.X(2)) GO TO 50
-IF (A.GE.X(NM1)) GO TO 40
-IL = 2
-IR = NM1
+nm1 = n-1
+if (a.lt.x(2)) go to 50
+if (a.ge.x(nm1)) go to 40
+il = 2
+ir = nm1
 !
 !     BISECTION SEARCH
 !
-10 I = (IL+IR)/2
-IF (I.EQ.IL) GO TO 60
-IF (A-X(I)) 20,60,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il+ir)/2
+if (i.eq.il) go to 60
+if (a-x(i)) 20,60,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     A.LT.X(2) .OR. A.GE.X(N-1)
 !
-40 I = NM1
-GO TO 60
-50 I = 1
+40 i = nm1
+go to 60
+50 i = 1
 !
 !     EVALUATION
 !
-60 R = (A-X(I))/(X(I+1)-X(I))
-TRP = Y(I)+R*(Y(I+1)-Y(I))
-RETURN
-END FUNCTION TRP
+60 r = (a-x(i))/(x(i+1)-x(i))
+trp = y(i)+r*(y(i+1)-y(i))
+return
+end function trp
 
-SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: M, N, NI
-REAL, INTENT(INOUT) :: T(M)
-REAL :: X(N), XI(NI), Y(N)
-REAL, INTENT(INOUT) :: YI(NI)
-INTEGER :: I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, &
-&MM1, NUM
-REAL :: DL, DR, XX
+subroutine ltrp (m,x,y,n,xi,yi,ni,t,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n, ni
+real, intent(inout) :: t(m)
+real :: x(n), xi(ni), y(n)
+real, intent(inout) :: yi(ni)
+integer :: i, ii, il, ilm1, ilold, ipm, ir, istep, j, jmax, k, l, &
+&mm1, num
+real :: dl, dr, xx
 !     ******************************************************************
 !     LAGRANGE INTERPOLATION
 !     ******************************************************************
 !
 !     CHECK INPUT
 !
-IF (M.LT.2) GO TO 130
-IF (M.GT.N) GO TO 131
-IF (NI.LT.1) GO TO 132
-IERR = 0
+if (m.lt.2) go to 130
+if (m.gt.n) go to 131
+if (ni.lt.1) go to 132
+ierr = 0
 !
 !     INITIALIZATION
 !
-MM1 = M-1
-K  = 1
-XX = XI(1)
-ILOLD = 0
+mm1 = m-1
+k  = 1
+xx = xi(1)
+ilold = 0
 !
 !     FIND THE SUBINTERVAL WHICH CONTAINS XX. I = 1 IF XX.LT.X(2)
 !     AND I = N IF XX.GE.X(N). OTHERWISE X(I).LE.XX.LT.X(I+1).
 !
-IF (XX-X(1)) 10,11,20
-10 I = 1
-IL = 1
-IR = M
-GO TO 80
-11 I = 1
-YI(K) = Y(1)
-GO TO 110
+if (xx-x(1)) 10,11,20
+10 i = 1
+il = 1
+ir = m
+go to 80
+11 i = 1
+yi(k) = y(1)
+go to 110
 !
-20 IF (X(N)-XX) 21,22,23
-21 I = N
-IL = N-M+1
-IR = N
-GO TO 80
-22 I = N
-YI(K) = Y(N)
-GO TO 110
-23 IL = 1
-IR = N
+20 if (x(n)-xx) 21,22,23
+21 i = n
+il = n-m+1
+ir = n
+go to 80
+22 i = n
+yi(k) = y(n)
+go to 110
+23 il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-30 I = (IL+IR)/2
-IF (I.EQ.IL) GO TO 50
-IF (XX-X(I)) 31,32,33
-31 IR = I
-GO TO 30
-32 YI(K) = Y(I)
-GO TO 110
-33 IL = I
-GO TO 30
+30 i = (il+ir)/2
+if (i.eq.il) go to 50
+if (xx-x(i)) 31,32,33
+31 ir = i
+go to 30
+32 yi(k) = y(i)
+go to 110
+33 il = i
+go to 30
 !
 !     LINEAR FORWARD SEARCH
 !
-40 IF (XX-X(I+1)) 50,41,42
-41 I = I+1
-YI(K) = Y(I)
-GO TO 110
-42 I = I+1
-GO TO 40
+40 if (xx-x(i+1)) 50,41,42
+41 i = i+1
+yi(k) = y(i)
+go to 110
+42 i = i+1
+go to 40
 !
 !     POINT XX LIES IN THE OPEN SUBINTERVAL (X(I),X(I+1)).
 !     FIND THE M CLOSEST POINTS X(IL),...,X(IR) TO XX.
 !
-50 IF (I.GT.M) GO TO 51
-IL = 1
-NUM = I
-GO TO 60
-51 IL = I-M+1
-NUM = M
+50 if (i.gt.m) go to 51
+il = 1
+num = i
+go to 60
+51 il = i-m+1
+num = m
 !
-60 IPM = I+M
-IF (IPM.LE.N) GO TO 61
-IR = N
-NUM = NUM+N-I
-GO TO 70
-61 IR = IPM
-NUM = NUM+M
+60 ipm = i+m
+if (ipm.le.n) go to 61
+ir = n
+num = num+n-i
+go to 70
+61 ir = ipm
+num = num+m
 !
-70 NUM = NUM-M
-IF (NUM.EQ.0) GO TO 80
-DL = XX-X(IL)
-DR = X(IR)-XX
-do 72 L = 1,NUM
-IF (DL.LE.DR) GO TO 71
-IL = IL+1
-DL = XX-X(IL)
-GO TO 72
-71 IR = IR-1
-DR = X(IR)-XX
-72 CONTINUE
+70 num = num-m
+if (num.eq.0) go to 80
+dl = xx-x(il)
+dr = x(ir)-xx
+do 72 l = 1,num
+if (dl.le.dr) go to 71
+il = il+1
+dl = xx-x(il)
+go to 72
+71 ir = ir-1
+dr = x(ir)-xx
+72 continue
 !
 !     COMPUTE THE COEFFICIENTS T(1),...,T(M) OF THE BACKWARD
 !     NEWTON FORM OF THE INTERPOLATING POLYNOMIAL.
 !
-80 IF (IL.EQ.ILOLD) GO TO 100
-ILOLD = IL
-ILM1 = IL-1
-do 81 J = 1,M
-L = ILM1+J
-81 T(J) = Y(L)
+80 if (il.eq.ilold) go to 100
+ilold = il
+ilm1 = il-1
+do 81 j = 1,m
+l = ilm1+j
+81 t(j) = y(l)
 !
-DO ISTEP=1,MM1
-JMAX = M-ISTEP
-do 90 J = 1,JMAX
-II = ILM1+J
-L = II+ISTEP
-90 T(J) = (T(J)-T(J+1))/(X(II)-X(L))
-END DO
+do istep=1,mm1
+jmax = m-istep
+do 90 j = 1,jmax
+ii = ilm1+j
+l = ii+istep
+90 t(j) = (t(j)-t(j+1))/(x(ii)-x(l))
+end do
 !
 !     EVALUATION OF THE INTERPOLATING POLYNOMIAL
 !
-100 YI(K) = T(1)
-do 101 J = 2,M
-L = ILM1+J
-101 YI(K) = T(J)+YI(K)*(XX-X(L))
+100 yi(k) = t(1)
+do 101 j = 2,m
+l = ilm1+j
+101 yi(k) = t(j)+yi(k)*(xx-x(l))
 !
 !     NEXT POINT
 !
-110 IF (K.GE.NI) RETURN
-K = K+1
-XX = XI(K)
-IF (XX-X(1)) 10,11,111
-111 IF (X(N)-XX) 21,22,120
+110 if (k.ge.ni) return
+k = k+1
+xx = xi(k)
+if (xx-x(1)) 10,11,111
+111 if (x(n)-xx) 21,22,120
 !
-120 IF (XX-XI(K-1)) 121,122,40
-121 IL = 1
-IR = MIN0(I+1,N)
-GO TO 30
-122 YI(K) = YI(K-1)
-GO TO 110
+120 if (xx-xi(k-1)) 121,122,40
+121 il = 1
+ir = min0(i+1,n)
+go to 30
+122 yi(k) = yi(k-1)
+go to 110
 !
 !     ERROR RETURN
 !
-130 IERR = 1
-RETURN
-131 IERR = 2
-RETURN
-132 IERR = 3
-RETURN
-END SUBROUTINE LTRP
+130 ierr = 1
+return
+131 ierr = 2
+return
+132 ierr = 3
+return
+end subroutine ltrp
 
-SUBROUTINE HTRP (N,X,Y,A,T,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(INOUT) :: A(N), T(N)
-REAL :: X(N), Y(N)
-INTEGER :: I, IBEG, IEND, K
-REAL :: DIFF, F, R
+subroutine htrp (n,x,y,a,t,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+real, intent(inout) :: a(n), t(n)
+real :: x(n), y(n)
+integer :: i, ibeg, iend, k
+real :: diff, f, r
 !     ******************************************************************
 !     HERMITE INTERPOLATION
 !     ******************************************************************
-IF (N.LE.0) GO TO 30
-IERR = 0
-A(1) = Y(1)
-IF (N.EQ.1) RETURN
-F = 1.0
-R = 0.0
-IEND = 0
-IBEG = 1
+if (n.le.0) go to 30
+ierr = 0
+a(1) = y(1)
+if (n.eq.1) return
+f = 1.0
+r = 0.0
+iend = 0
+ibeg = 1
 !
-do 22 K = 2,N
-IF (X(K)-X(K-1)) 10,20,10
+do 22 k = 2,n
+if (x(k)-x(k-1)) 10,20,10
 !
-10 F = 1.0
-R = 0.0
-IEND = K-1
-IBEG = K
-T(1) = Y(K)
-do 11 I = 1,IEND
-DIFF = X(I)-X(K)
-IF (DIFF) 11,31,11
-11 T(I+1) = (A(I)-T(I))/DIFF
-GO TO 22
+10 f = 1.0
+r = 0.0
+iend = k-1
+ibeg = k
+t(1) = y(k)
+do 11 i = 1,iend
+diff = x(i)-x(k)
+if (diff) 11,31,11
+11 t(i+1) = (a(i)-t(i))/diff
+go to 22
 !
-20 R = R+1.0
-F = F*R
-T(1) = Y(K)/F
-IF (IEND.EQ.0) GO TO 22
-do 21 I = 1,IEND
-21 T(I+1) = (T(I+1)-T(I))/(X(I)-X(K))
-22 A(K) = T(IBEG)
-RETURN
+20 r = r+1.0
+f = f*r
+t(1) = y(k)/f
+if (iend.eq.0) go to 22
+do 21 i = 1,iend
+21 t(i+1) = (t(i+1)-t(i))/(x(i)-x(k))
+22 a(k) = t(ibeg)
+return
 !
-30 IERR = 1
-RETURN
-31 IERR = 2
-T(1) = I
-T(2) = K
-RETURN
-END SUBROUTINE HTRP
+30 ierr = 1
+return
+31 ierr = 2
+t(1) = i
+t(2) = k
+return
+end subroutine htrp
 
-SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: ALPHA
-INTEGER :: I, J, K, NM1
-REAL, INTENT(IN) :: X(*), A(N)
-REAL, INTENT(INOUT) :: C(N)
-DOUBLE PRECISION :: XX, R
-DOUBLE PRECISION, INTENT(INOUT) :: T(N)
-IF (N.GT.1) GO TO 10
-C(1) = A(1)
-RETURN
+subroutine pcoeff(alpha,n,x,a,c,t)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: alpha
+integer :: i, j, k, nm1
+real, intent(in) :: x(*), a(n)
+real, intent(inout) :: c(n)
+double precision :: xx, r
+double precision, intent(inout) :: t(n)
+if (n.gt.1) go to 10
+c(1) = a(1)
+return
 !
-10 XX = ALPHA
-NM1 = N-1
-do 11 I = 1,N
-11 T(I) = A(I)
+10 xx = alpha
+nm1 = n-1
+do 11 i = 1,n
+11 t(i) = a(i)
 !
-DO I=1,NM1
-J = N-I
-R = XX-DBLE(X(J))
-do 20 K = J,NM1
-20 T(K) = T(K)+R*T(K+1)
-END DO
+do i=1,nm1
+j = n-i
+r = xx-dble(x(j))
+do 20 k = j,nm1
+20 t(k) = t(k)+r*t(k+1)
+end do
 !
-do 30 I = 1,N
-30 C(I) = T(I)
-RETURN
-END SUBROUTINE PCOEFF
+do 30 i = 1,n
+30 c(i) = t(i)
+return
+end subroutine pcoeff
 
-SUBROUTINE PFIT(ND,NP,X,Y,A,RNORM,PHI,PHIX,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: ND, NP
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: K, LA, LB, LS, M, MP1, ND1
-REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
+subroutine pfit(nd,np,x,y,a,rnorm,phi,phix,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: nd, np
+real, intent(inout) :: rnorm
+integer :: k, la, lb, ls, m, mp1, nd1
+real :: alpha, c, temp, xmax, xmin, za, zb
 !     ******************************************************************
 !     UNWEIGHTED LEAST SQUARES POLYNOMIAL FIT
 !     ******************************************************************
-REAL, INTENT(IN) :: X(NP), Y(NP)
-REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
-REAL :: LAMBDA
-DOUBLE PRECISION :: DALPHA, DSUM
+real, intent(in) :: x(np), y(np)
+real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+real :: lambda
+double precision :: dalpha, dsum
 !     ---------------------
-IERR=0
-IF (1.LE.ND.AND.ND.LT.NP) GO TO 10
-IERR=1
-RETURN
+ierr=0
+if (1.le.nd.and.nd.lt.np) go to 10
+ierr=1
+return
 !
 !                      INITIALIZATION
 !
-10 ND1=ND+1
-do 11 K = 1,ND1
-A(K)=0.0
-PHI(1,K)=0.0
-11 PHI(2,K)=0.0
+10 nd1=nd+1
+do 11 k = 1,nd1
+a(k)=0.0
+phi(1,k)=0.0
+11 phi(2,k)=0.0
 !
 !                SET Z=A+B*X WHERE ABS(Z).LE.1
 !
-XMIN=X(1)
-XMAX=X(1)
-do 21 K = 2,NP
-IF (X(K).GE.XMIN) GO TO 20
-XMIN=X(K)
-GO TO 21
-20 IF (X(K).GT.XMAX) XMAX=X(K)
-21 CONTINUE
-ZB=2.0/(XMAX-XMIN)
-ZA=-XMIN*ZB-1.0
-do 22 K = 1,NP
-22 PHIX(3,K)=ZA+ZB*X(K)
+xmin=x(1)
+xmax=x(1)
+do 21 k = 2,np
+if (x(k).ge.xmin) go to 20
+xmin=x(k)
+go to 21
+20 if (x(k).gt.xmax) xmax=x(k)
+21 continue
+zb=2.0/(xmax-xmin)
+za=-xmin*zb-1.0
+do 22 k = 1,np
+22 phix(3,k)=za+zb*x(k)
 !
 !           COMPUTE THE CLOSEST POLYNOMIAL OF DEGREE 0
 !
-LAMBDA=NP
-PHI(1,1)=1.0/SQRT(LAMBDA)
-DALPHA=0.D0
-DSUM=0.D0
-do 30 K = 1,NP
-PHIX(1,K)=PHI(1,1)
-DALPHA=DALPHA+DBLE(PHIX(3,K))
-30 DSUM=DSUM+DBLE(Y(K))
-ALPHA=SNGL(DALPHA)/LAMBDA
-A(1)=SNGL(DSUM)/LAMBDA
-do 31 K = 1,NP
-31 PHIX(4,K)=A(1)
+lambda=np
+phi(1,1)=1.0/sqrt(lambda)
+dalpha=0.d0
+dsum=0.d0
+do 30 k = 1,np
+phix(1,k)=phi(1,1)
+dalpha=dalpha+dble(phix(3,k))
+30 dsum=dsum+dble(y(k))
+alpha=sngl(dalpha)/lambda
+a(1)=sngl(dsum)/lambda
+do 31 k = 1,np
+31 phix(4,k)=a(1)
 !
-LA=2
-LB=1
-do 90 M = 1,ND
-MP1=M+1
+la=2
+lb=1
+do 90 m = 1,nd
+mp1=m+1
 !
 !          GENERATE LAMBDA(M)*PHI(M) AND EVALUATE IT AT Z
 !
-IF (M.NE.1) GO TO 50
-PHI(2,1)=-ALPHA*PHI(1,1)
-PHI(2,2)=PHI(1,1)
-do 40 K = 1,NP
-40 PHIX(2,K)=(PHIX(3,K)-ALPHA)*PHI(1,1)
-GO TO 60
+if (m.ne.1) go to 50
+phi(2,1)=-alpha*phi(1,1)
+phi(2,2)=phi(1,1)
+do 40 k = 1,np
+40 phix(2,k)=(phix(3,k)-alpha)*phi(1,1)
+go to 60
 !
-50 C=0.0
-do 51 K = 1,M
-PHI(LA,K)=DBLE(C)-DBLE(ALPHA*PHI(LB,K))-DBLE(LAMBDA*PHI(LA,K))
-51 C=PHI(LB,K)
-PHI(LA,MP1)=C
-do 52 K = 1,NP
-52 PHIX(LA,K)=(PHIX(3,K)-ALPHA)*PHIX(LB,K)-LAMBDA*PHIX(LA,K)
+50 c=0.0
+do 51 k = 1,m
+phi(la,k)=dble(c)-dble(alpha*phi(lb,k))-dble(lambda*phi(la,k))
+51 c=phi(lb,k)
+phi(la,mp1)=c
+do 52 k = 1,np
+52 phix(la,k)=(phix(3,k)-alpha)*phix(lb,k)-lambda*phix(la,k)
 !
 !                COMPUTE ALPHA(M) AND LAMBDA(M)
 !
-60 DALPHA=0.D0
-DSUM=0.D0
-do 61 K = 1,NP
-C=PHIX(LA,K)*PHIX(LA,K)
-DALPHA=DALPHA+DBLE(C*PHIX(3,K))
-61 DSUM=DSUM+DBLE(C)
-LAMBDA=DSUM
-ALPHA=SNGL(DALPHA)/LAMBDA
-LAMBDA=SQRT(LAMBDA)
+60 dalpha=0.d0
+dsum=0.d0
+do 61 k = 1,np
+c=phix(la,k)*phix(la,k)
+dalpha=dalpha+dble(c*phix(3,k))
+61 dsum=dsum+dble(c)
+lambda=dsum
+alpha=sngl(dalpha)/lambda
+lambda=sqrt(lambda)
 !
 !              GENERATE PHI(M) AND EVALUATE IT AT Z
 !
-do 70 K = 1,MP1
-70 PHI(LA,K)=PHI(LA,K)/LAMBDA
-do 71 K = 1,NP
-71 PHIX(LA,K)=PHIX(LA,K)/LAMBDA
+do 70 k = 1,mp1
+70 phi(la,k)=phi(la,k)/lambda
+do 71 k = 1,np
+71 phix(la,k)=phix(la,k)/lambda
 !
 !        COMPUTE THE CLOSEST POLYNOMIAL OF DEGREE M OR LESS
 !                     AND EVALUATE IT AT Z
 !
-DSUM=0.D0
-do 80 K = 1,NP
-80 DSUM=DSUM+DBLE((Y(K)-PHIX(4,K))*PHIX(LA,K))
-C=DSUM
-do 81 K = 1,MP1
-81 A(K)=A(K)+C*PHI(LA,K)
-do 82 K = 1,NP
-82 PHIX(4,K)=PHIX(4,K)+C*PHIX(LA,K)
+dsum=0.d0
+do 80 k = 1,np
+80 dsum=dsum+dble((y(k)-phix(4,k))*phix(la,k))
+c=dsum
+do 81 k = 1,mp1
+81 a(k)=a(k)+c*phi(la,k)
+do 82 k = 1,np
+82 phix(4,k)=phix(4,k)+c*phix(la,k)
 !
-LS=LA
-LA=LB
-90 LB=LS
+ls=la
+la=lb
+90 lb=ls
 !
 !                        COMPUTE RNORM
 !
-DSUM=0.D0
-do 95 K = 1,NP
-95 DSUM=DSUM+DBLE((Y(K)-PHIX(4,K))**2)
-RNORM=SQRT(SNGL(DSUM))
+dsum=0.d0
+do 95 k = 1,np
+95 dsum=dsum+dble((y(k)-phix(4,k))**2)
+rnorm=sqrt(sngl(dsum))
 !
 !        CONVERT THE CLOSEST POLYNOMIAL FROM A POLYNOMIAL
 !                  IN Z TO A POLYNOMIAL IN X
 !
-A(1)=A(1)+ZA*A(2)
-A(2)=ZB*A(2)
-IF (ND.EQ.1) RETURN
-PHI(1,1)=ZA
-PHI(1,2)=ZB
-do 102 M = 2,ND
-MP1=M+1
-C=0.0
-do 100 K = 1,M
-TEMP=PHI(1,K)*ZB
-PHI(1,K)=PHI(1,K)*ZA+C
-100 C=TEMP
-PHI(1,MP1)=C
-do 101 K = 1,M
-101 A(K)=A(K)+A(MP1)*PHI(1,K)
-102 A(MP1)=A(MP1)*PHI(1,MP1)
-RETURN
-END SUBROUTINE PFIT
+a(1)=a(1)+za*a(2)
+a(2)=zb*a(2)
+if (nd.eq.1) return
+phi(1,1)=za
+phi(1,2)=zb
+do 102 m = 2,nd
+mp1=m+1
+c=0.0
+do 100 k = 1,m
+temp=phi(1,k)*zb
+phi(1,k)=phi(1,k)*za+c
+100 c=temp
+phi(1,mp1)=c
+do 101 k = 1,m
+101 a(k)=a(k)+a(mp1)*phi(1,k)
+102 a(mp1)=a(mp1)*phi(1,mp1)
+return
+end subroutine pfit
 
-SUBROUTINE WPFIT(ND,NP,X,Y,W,A,RNORM,PHI,PHIX,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: ND, NP
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: K, LA, LB, LS, M, MP1, ND1, NW
-REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
+subroutine wpfit(nd,np,x,y,w,a,rnorm,phi,phix,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: nd, np
+real, intent(inout) :: rnorm
+integer :: k, la, lb, ls, m, mp1, nd1, nw
+real :: alpha, c, temp, xmax, xmin, za, zb
 !     ******************************************************************
 !     WEIGHTED LEAST SQUARES POLYNOMIAL FIT
 !     ******************************************************************
-REAL, INTENT(IN) :: X(NP), Y(NP), W(NP)
-REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
-REAL :: LAMBDA
-DOUBLE PRECISION :: DALPHA, DSUM
+real, intent(in) :: x(np), y(np), w(np)
+real, intent(inout) :: a(*), phi(2,*), phix(4,np)
+real :: lambda
+double precision :: dalpha, dsum
 !     ---------------------
 !
 !                      ERROR CHECKING
 !
-IF (ND.LT.1.OR.NP.LT.2) GO TO 200
-NW=0
-DSUM=0.D0
-do 13 K = 1,NP
-IF (W(K)) 202,13,10
-10 NW=NW+1
-DSUM=DSUM+DBLE(W(K))
-IF (NW.GT.1) GO TO 11
-XMIN=X(K)
-XMAX=X(K)
-GO TO 13
-11 IF (X(K).GE.XMIN) GO TO 12
-XMIN=X(K)
-GO TO 13
-12 IF (X(K).GT.XMAX) XMAX=X(K)
-13 CONTINUE
-IF (ND.GE.NW) GO TO 200
+if (nd.lt.1.or.np.lt.2) go to 200
+nw=0
+dsum=0.d0
+do 13 k = 1,np
+if (w(k)) 202,13,10
+10 nw=nw+1
+dsum=dsum+dble(w(k))
+if (nw.gt.1) go to 11
+xmin=x(k)
+xmax=x(k)
+go to 13
+11 if (x(k).ge.xmin) go to 12
+xmin=x(k)
+go to 13
+12 if (x(k).gt.xmax) xmax=x(k)
+13 continue
+if (nd.ge.nw) go to 200
 !
 !                      INITIALIZATION
 !
-IERR=0
-ND1=ND+1
-do 20 K = 1,ND1
-A(K)=0.0
-PHI(1,K)=0.0
-20 PHI(2,K)=0.0
+ierr=0
+nd1=nd+1
+do 20 k = 1,nd1
+a(k)=0.0
+phi(1,k)=0.0
+20 phi(2,k)=0.0
 !
 !                SET Z=A+B*X WHERE ABS(Z).LE.1
 !
-ZB=2.0/(XMAX-XMIN)
-ZA=-XMIN*ZB-1.0
-do 25 K = 1,NP
-25 PHIX(3,K)=ZA+ZB*X(K)
+zb=2.0/(xmax-xmin)
+za=-xmin*zb-1.0
+do 25 k = 1,np
+25 phix(3,k)=za+zb*x(k)
 !
 !           COMPUTE THE CLOSEST POLYNOMIAL OF DEGREE 0
 !
-LAMBDA=DSUM
-PHI(1,1)=1.0/SQRT(LAMBDA)
-DALPHA=0.D0
-DSUM=0.D0
-do 30 K = 1,NP
-PHIX(1,K)=PHI(1,1)
-DALPHA=DALPHA+DBLE(W(K)*PHIX(3,K))
-30 DSUM=DSUM+DBLE(W(K)*Y(K))
-ALPHA=SNGL(DALPHA)/LAMBDA
-A(1)=SNGL(DSUM)/LAMBDA
-do 31 K = 1,NP
-31 PHIX(4,K)=A(1)
+lambda=dsum
+phi(1,1)=1.0/sqrt(lambda)
+dalpha=0.d0
+dsum=0.d0
+do 30 k = 1,np
+phix(1,k)=phi(1,1)
+dalpha=dalpha+dble(w(k)*phix(3,k))
+30 dsum=dsum+dble(w(k)*y(k))
+alpha=sngl(dalpha)/lambda
+a(1)=sngl(dsum)/lambda
+do 31 k = 1,np
+31 phix(4,k)=a(1)
 !
-LA=2
-LB=1
-do 90 M = 1,ND
-MP1=M+1
+la=2
+lb=1
+do 90 m = 1,nd
+mp1=m+1
 !
 !          GENERATE LAMBDA(M)*PHI(M) AND EVALUATE IT AT Z
 !
-IF (M.NE.1) GO TO 50
-PHI(2,1)=-ALPHA*PHI(1,1)
-PHI(2,2)=PHI(1,1)
-do 40 K = 1,NP
-40 PHIX(2,K)=(PHIX(3,K)-ALPHA)*PHI(1,1)
-GO TO 60
+if (m.ne.1) go to 50
+phi(2,1)=-alpha*phi(1,1)
+phi(2,2)=phi(1,1)
+do 40 k = 1,np
+40 phix(2,k)=(phix(3,k)-alpha)*phi(1,1)
+go to 60
 !
-50 C=0.0
-do 51 K = 1,M
-PHI(LA,K)=DBLE(C)-DBLE(ALPHA*PHI(LB,K))-DBLE(LAMBDA*PHI(LA,K))
-51 C=PHI(LB,K)
-PHI(LA,MP1)=C
-do 52 K = 1,NP
-52 PHIX(LA,K)=(PHIX(3,K)-ALPHA)*PHIX(LB,K)-LAMBDA*PHIX(LA,K)
+50 c=0.0
+do 51 k = 1,m
+phi(la,k)=dble(c)-dble(alpha*phi(lb,k))-dble(lambda*phi(la,k))
+51 c=phi(lb,k)
+phi(la,mp1)=c
+do 52 k = 1,np
+52 phix(la,k)=(phix(3,k)-alpha)*phix(lb,k)-lambda*phix(la,k)
 !
 !                COMPUTE ALPHA(M) AND LAMBDA(M)
 !
-60 DALPHA=0.D0
-DSUM=0.D0
-do 61 K = 1,NP
-C=W(K)*PHIX(LA,K)*PHIX(LA,K)
-DALPHA=DALPHA+DBLE(C*PHIX(3,K))
-61 DSUM=DSUM+DBLE(C)
-LAMBDA=DSUM
-ALPHA=SNGL(DALPHA)/LAMBDA
-LAMBDA=SQRT(LAMBDA)
+60 dalpha=0.d0
+dsum=0.d0
+do 61 k = 1,np
+c=w(k)*phix(la,k)*phix(la,k)
+dalpha=dalpha+dble(c*phix(3,k))
+61 dsum=dsum+dble(c)
+lambda=dsum
+alpha=sngl(dalpha)/lambda
+lambda=sqrt(lambda)
 !
 !              GENERATE PHI(M) AND EVALUATE IT AT Z
 !
-do 70 K = 1,MP1
-70 PHI(LA,K)=PHI(LA,K)/LAMBDA
-do 71 K = 1,NP
-71 PHIX(LA,K)=PHIX(LA,K)/LAMBDA
+do 70 k = 1,mp1
+70 phi(la,k)=phi(la,k)/lambda
+do 71 k = 1,np
+71 phix(la,k)=phix(la,k)/lambda
 !
 !        COMPUTE THE CLOSEST POLYNOMIAL OF DEGREE M OR LESS
 !                     AND EVALUATE IT AT Z
 !
-DSUM=0.D0
-do 80 K = 1,NP
-80 DSUM=DSUM+DBLE(W(K)*(Y(K)-PHIX(4,K))*PHIX(LA,K))
-C=DSUM
-do 81 K = 1,MP1
-81 A(K)=A(K)+C*PHI(LA,K)
-do 82 K = 1,NP
-82 PHIX(4,K)=PHIX(4,K)+C*PHIX(LA,K)
+dsum=0.d0
+do 80 k = 1,np
+80 dsum=dsum+dble(w(k)*(y(k)-phix(4,k))*phix(la,k))
+c=dsum
+do 81 k = 1,mp1
+81 a(k)=a(k)+c*phi(la,k)
+do 82 k = 1,np
+82 phix(4,k)=phix(4,k)+c*phix(la,k)
 !
-LS=LA
-LA=LB
-90 LB=LS
+ls=la
+la=lb
+90 lb=ls
 !
 !                        COMPUTE RNORM
 !
-DSUM=0.D0
-do 95 K = 1,NP
-95 DSUM=DSUM+DBLE(W(K)*(Y(K)-PHIX(4,K))**2)
-RNORM=SQRT(SNGL(DSUM))
+dsum=0.d0
+do 95 k = 1,np
+95 dsum=dsum+dble(w(k)*(y(k)-phix(4,k))**2)
+rnorm=sqrt(sngl(dsum))
 !
 !        CONVERT THE CLOSEST POLYNOMIAL FROM A POLYNOMIAL
 !                  IN Z TO A POLYNOMIAL IN X
 !
-A(1)=A(1)+ZA*A(2)
-A(2)=ZB*A(2)
-IF (ND.EQ.1) RETURN
-PHI(1,1)=ZA
-PHI(1,2)=ZB
-do 102 M = 2,ND
-MP1=M+1
-C=0.0
-do 100 K = 1,M
-TEMP=PHI(1,K)*ZB
-PHI(1,K)=PHI(1,K)*ZA+C
-100 C=TEMP
-PHI(1,MP1)=C
-do 101 K = 1,M
-101 A(K)=A(K)+A(MP1)*PHI(1,K)
-102 A(MP1)=A(MP1)*PHI(1,MP1)
-RETURN
+a(1)=a(1)+za*a(2)
+a(2)=zb*a(2)
+if (nd.eq.1) return
+phi(1,1)=za
+phi(1,2)=zb
+do 102 m = 2,nd
+mp1=m+1
+c=0.0
+do 100 k = 1,m
+temp=phi(1,k)*zb
+phi(1,k)=phi(1,k)*za+c
+100 c=temp
+phi(1,mp1)=c
+do 101 k = 1,m
+101 a(k)=a(k)+a(mp1)*phi(1,k)
+102 a(mp1)=a(mp1)*phi(1,mp1)
+return
 !
 !                        ERROR RETURN
 !
-200 IERR=1
-RETURN
-202 IERR=3
-RETURN
-END SUBROUTINE WPFIT
+200 ierr=1
+return
+202 ierr=3
+return
+end subroutine wpfit
 
-SUBROUTINE CBSPL (X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBEG, IEND
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: ALPHA, BETA
-INTEGER :: I, J, M, NM1
-REAL :: DEL, H, R, T
+subroutine cbspl (x, y, a, b, c, n, ibeg, iend, alpha, beta, ierr)
+implicit none
+integer, intent(in) :: ibeg, iend
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+real, intent(in) :: alpha, beta
+integer :: i, j, m, nm1
+real :: del, h, r, t
 !-----------------------------------------------------------------------
 !                   CUBIC SPLINE INTERPOLATION
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N)
-REAL, INTENT(INOUT) :: A(N), B(N), C(N)
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: a(n), b(n), c(n)
 !
-IF (N .LT. 3) GO TO 200
+if (n .lt. 3) go to 200
 
 !     A TRIDIAGONAL LINEAR SYSTEM FOR THE UNKNOWN SLOPES S(I) OF
 !     F AT X(I), I=1,...,N, IS GENERATED AND THEN SOLVED BY GAUSS
 !     ELIMINATION, WITH S(I) ENDING UP IN A(I) FOR ALL I. A, B, C
 !     ARE USED INITIALLY FOR WORK SPACES.
 !
-DO M = 2,N
-   B(M) = X(M) - X(M-1)
-   IF (B(M) .LE. 0.0) GO TO 210
-   C(M) = (Y(M) - Y(M-1))/B(M)
-END DO
-IERR = 0
+do m = 2,n
+   b(m) = x(m) - x(m-1)
+   if (b(m) .le. 0.0) go to 210
+   c(m) = (y(m) - y(m-1))/b(m)
+end do
+ierr = 0
 !
 !     CONSTRUCT THE FIRST EQUATION FROM THE BOUNDARY CONDITION, OF
 !     THE FORM
 !
 !             C(1)*S(1) + B(1)*S(2) = A(1)
 !
-IF (IBEG - 1) 20,30,40
+if (ibeg - 1) 20,30,40
 !
 !     NO CONDITION AT LEFT END.
 !
-20 C(1) = B(3)
-B(1) = X(3) - X(1)
-A(1) = ((B(2) + 2.0*B(1))*B(3)*C(2) + B(2)*B(2)*C(3))/B(1)
-GO TO 50
+20 c(1) = b(3)
+b(1) = x(3) - x(1)
+a(1) = ((b(2) + 2.0*b(1))*b(3)*c(2) + b(2)*b(2)*c(3))/b(1)
+go to 50
 !
 !     SLOPE PRESCRIBED AT LEFT END.
 !
-30 C(1) = 1.0
-B(1) = 0.0
-A(1) = ALPHA
-GO TO 50
+30 c(1) = 1.0
+b(1) = 0.0
+a(1) = alpha
+go to 50
 !
 !     SECOND DERIVATIVE PRESCRIBED AT LEFT END.
 !
-40 C(1) = 2.0
-B(1) = 1.0
-A(1) = 3.0*C(2) - 0.5*ALPHA*B(2)
+40 c(1) = 2.0
+b(1) = 1.0
+a(1) = 3.0*c(2) - 0.5*alpha*b(2)
 !
 !     FOR THE INTERIOR KNOTS, GENERATE THE CORRESPONDING EQUATIONS AND
 !     CARRY OUT THE FORWARD PASS OF GAUSS ELIMINATION, AFTER WHICH THE
 !     M-TH EQUATION READS  C(M)*S(M) + B(M)*S(M+1) = A(M).
 !
-50 NM1 = N - 1
-DO M = 2,NM1
-   T = -B(M+1)/C(M-1)
-   A(M) = T*A(M-1) + 3.0*(B(M)*C(M+1) + B(M+1)*C(M))
-   C(M) = T*B(M-1) + 2.0*(B(M) + B(M+1))
-END DO
+50 nm1 = n - 1
+do m = 2,nm1
+   t = -b(m+1)/c(m-1)
+   a(m) = t*a(m-1) + 3.0*(b(m)*c(m+1) + b(m+1)*c(m))
+   c(m) = t*b(m-1) + 2.0*(b(m) + b(m+1))
+end do
 !
 !     IF THE SLOPE AT THE RIGHT END IS GIVEN, THEN SET A(N) TO THE
 !     SLOPE AND GO TO BACK SUBSTITUTION. OTHERWISE, CONSTRUCT THE
@@ -4438,76 +4438,76 @@ END DO
 !
 !                R*S(N-1) + C(N)*S(N) = A(N)
 !
-IF (IEND - 1) 60,80,90
-60 IF (N .EQ. 3 .AND. IBEG .EQ. 0) GO TO 70
+if (iend - 1) 60,80,90
+60 if (n .eq. 3 .and. ibeg .eq. 0) go to 70
 !
 !     NO CONDITION AT THE RIGHT END. EITHER  N .GE. 4  OR
 !     THERE IS A CONDITION AT THE LEFT END.
 !
-R = X(N) - X(N-2)
-DEL  = (Y(NM1) - Y(N-2))/B(NM1)
-A(N) = ((B(N) + 2.0*R)*B(NM1)*C(N) + B(N)*B(N)*DEL)/R
-C(N) = B(NM1)
-GO TO 100
+r = x(n) - x(n-2)
+del  = (y(nm1) - y(n-2))/b(nm1)
+a(n) = ((b(n) + 2.0*r)*b(nm1)*c(n) + b(n)*b(n)*del)/r
+c(n) = b(nm1)
+go to 100
 !
 !     NO CONDITIONS AT THE END POINTS AND N = 3. IN THIS CASE,
 !     THE SECOND BOUNDARY CONDITION DOES NOT PROVIDE US WITH A
 !     NEW EQUATION. FOR CONVENIENCE, WE USE THE FOLLOWING...
 !
-70 A(N) = 2.0*C(N)
-C(N) = 1.0
-R = 1.0
-GO TO 100
+70 a(n) = 2.0*c(n)
+c(n) = 1.0
+r = 1.0
+go to 100
 !
 !     SLOPE PRESCRIBED AT RIGHT END.
 !
-80 A(N) = BETA
-GO TO 110
+80 a(n) = beta
+go to 110
 !
 !     SECOND DERIVATIVE PRESCRIBED AT RIGHT END.
 !
-90 A(N) = 3.0*C(N) + 0.5*BETA*B(N)
-C(N) = 2.0
-R = 1.0
+90 a(n) = 3.0*c(n) + 0.5*beta*b(n)
+c(n) = 2.0
+r = 1.0
 !
 !     COMPLETE FORWARD PASS OF GAUSS ELIMINATION.
 !
-100 T = -R/C(NM1)
-A(N) = (T*A(NM1) + A(N))/(T*B(NM1) + C(N))
+100 t = -r/c(nm1)
+a(n) = (t*a(nm1) + a(n))/(t*b(nm1) + c(n))
 !
 !     CARRY OUT BACK SUBSTITUTION.
 !
-110 DO I = 1,NM1
-   J = N - I
-   A(J) = (A(J) - B(J)*A(J+1))/C(J)
-END DO
+110 do i = 1,nm1
+   j = n - i
+   a(j) = (a(j) - b(j)*a(j+1))/c(j)
+end do
 !
 !     GENERATE THE CUBIC COEFFICIENTS B(I) AND C(I).
 !
-DO I = 1,NM1
-   H = B(I+1)
-   DEL = (Y(I+1) - Y(I))/H
-   T = A(I) + A(I+1) - 2.0*DEL
-   B(I) = (DEL - A(I) - T)/H
-   C(I) = (T/H)/H
-END DO
-RETURN
+do i = 1,nm1
+   h = b(i+1)
+   del = (y(i+1) - y(i))/h
+   t = a(i) + a(i+1) - 2.0*del
+   b(i) = (del - a(i) - t)/h
+   c(i) = (t/h)/h
+end do
+return
 !
 !     ERROR RETURN
 !
-200 IERR = 1
-RETURN
-210 IERR = 2
-RETURN
-END SUBROUTINE CBSPL
+200 ierr = 1
+return
+210 ierr = 2
+return
+end subroutine cbspl
 
-SUBROUTINE SPLIFT (X,Y,YP,YPP,N,W,IERR,ISX,A1,B1,AN,BN)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: ISX, N
-REAL, INTENT(IN) :: A1, AN, B1, BN
-INTEGER :: I, J, NM1, NM2
-REAL :: DNEW, DOLD, H
+subroutine splift (x,y,yp,ypp,n,w,ierr,isx,a1,b1,an,bn)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: isx, n
+real, intent(in) :: a1, an, b1, bn
+integer :: i, j, nm1, nm2
+real :: dnew, dold, h
 !
 !     WRITTEN BY RONDALL E. JONES
 !        SANDIA LABORATORIES
@@ -4583,172 +4583,172 @@ REAL :: DNEW, DOLD, H
 !
 !         W    - ARRAY OF WORKING STORAGE DIMENSIONED AT LEAST 3N.
 !
-REAL, INTENT(IN) :: X(N), Y(N)
-REAL, INTENT(INOUT) :: YP(N), YPP(N), W(N,3)
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: yp(n), ypp(n), w(n,3)
 !
-IF (ABS(A1) .GE. 1.0 .OR. ABS(AN) .GE. 1.0) GO TO 100
-IF (N .LT. 4) GO TO 200
-NM1 = N - 1
-NM2 = N - 2
-IF (ISX .GT. 0) GO TO 40
-do 10 I = 2,N
-   IF (X(I) .LE. X(I-1)) GO TO 300
-10 CONTINUE
+if (abs(a1) .ge. 1.0 .or. abs(an) .ge. 1.0) go to 100
+if (n .lt. 4) go to 200
+nm1 = n - 1
+nm2 = n - 2
+if (isx .gt. 0) go to 40
+do 10 i = 2,n
+   if (x(i) .le. x(i-1)) go to 300
+10 continue
 !
 !     DEFINE THE TRIDIAGONAL MATRIX
 !
-W(1,3) = X(2) - X(1)
-do 20 I = 2,NM1
-   W(I,2) = W(I-1,3)
-   W(I,3) = X(I+1) - X(I)
-   W(I,1) = 2.0*(W(I,2) + W(I,3))
-20 CONTINUE
-W(1,1) = 4.0
-W(1,3) =-4.0*A1
-W(N,1) = 4.0
-W(N,2) =-4.0*AN
+w(1,3) = x(2) - x(1)
+do 20 i = 2,nm1
+   w(i,2) = w(i-1,3)
+   w(i,3) = x(i+1) - x(i)
+   w(i,1) = 2.0*(w(i,2) + w(i,3))
+20 continue
+w(1,1) = 4.0
+w(1,3) =-4.0*a1
+w(n,1) = 4.0
+w(n,2) =-4.0*an
 !
 !     LU DECOMPOSITION
 !
-do 30 I = 2,N
-   W(I-1,3) = W(I-1,3)/W(I-1,1)
-   W(I,1)   = W(I,1) - W(I,2)*W(I-1,3)
-30 CONTINUE
+do 30 i = 2,n
+   w(i-1,3) = w(i-1,3)/w(i-1,1)
+   w(i,1)   = w(i,1) - w(i,2)*w(i-1,3)
+30 continue
 !
 !     DEFINE *CONSTANT* VECTOR
 !
-40 YPP(1) = 4.0*B1
-DOLD = (Y(2) - Y(1))/W(2,2)
-do 50 I = 2,NM2
-   DNEW   = (Y(I+1) - Y(I))/W(I+1,2)
-   YPP(I) = 6.0*(DNEW - DOLD)
-   YP(I)  = DOLD
-   DOLD   = DNEW
-50 CONTINUE
-DNEW = (Y(N) - Y(NM1))/(X(N) - X(NM1))
-YPP(NM1) = 6.0*(DNEW - DOLD)
-YPP(N) = 4.0*BN
-YP(NM1)= DOLD
-YP(N)  = DNEW
+40 ypp(1) = 4.0*b1
+dold = (y(2) - y(1))/w(2,2)
+do 50 i = 2,nm2
+   dnew   = (y(i+1) - y(i))/w(i+1,2)
+   ypp(i) = 6.0*(dnew - dold)
+   yp(i)  = dold
+   dold   = dnew
+50 continue
+dnew = (y(n) - y(nm1))/(x(n) - x(nm1))
+ypp(nm1) = 6.0*(dnew - dold)
+ypp(n) = 4.0*bn
+yp(nm1)= dold
+yp(n)  = dnew
 !
 !     FORWARD SUBSTITUTION
 !
-YPP(1) = YPP(1)/W(1,1)
-do 60 I = 2,N
-   YPP(I) = (YPP(I) - W(I,2)*YPP(I-1))/W(I,1)
-60 CONTINUE
+ypp(1) = ypp(1)/w(1,1)
+do 60 i = 2,n
+   ypp(i) = (ypp(i) - w(i,2)*ypp(i-1))/w(i,1)
+60 continue
 !
 !     BACKWARD SUBSTITUTION
 !
-do 70 J = 1,NM1
-   I = N - J
-   YPP(I) = YPP(I) - W(I,3)*YPP(I+1)
-70 CONTINUE
+do 70 j = 1,nm1
+   i = n - j
+   ypp(i) = ypp(i) - w(i,3)*ypp(i+1)
+70 continue
 !
 !     COMPUTE FIRST DERIVATIVES
 !
-H = X(2) - X(1)
-YP(1) = (Y(2) - Y(1))/H - H*(2.0*YPP(1) + YPP(2))/6.0
-do 80 I = 2,NM1
-   YP(I) = YP(I) + W(I,2)*(YPP(I-1) + 2.0*YPP(I))/6.0
-80 CONTINUE
-YP(N) = YP(N) + (X(N) - X(NM1))*(YPP(NM1) + 2.0*YPP(N))/6.0
-IERR = 0
-RETURN
+h = x(2) - x(1)
+yp(1) = (y(2) - y(1))/h - h*(2.0*ypp(1) + ypp(2))/6.0
+do 80 i = 2,nm1
+   yp(i) = yp(i) + w(i,2)*(ypp(i-1) + 2.0*ypp(i))/6.0
+80 continue
+yp(n) = yp(n) + (x(n) - x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0
+ierr = 0
+return
 !
-100 IERR = 1
-RETURN
-200 IERR = 2
-RETURN
-300 IERR = 3
-RETURN
-END SUBROUTINE SPLIFT
+100 ierr = 1
+return
+200 ierr = 2
+return
+300 ierr = 3
+return
+end subroutine splift
 
-SUBROUTINE SPFIT (X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: L, M
-INTEGER :: J, K, LA, LM1, LQ, LW, N
+subroutine spfit (x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, m
+integer :: j, k, la, lm1, lq, lw, n
 !-----------------------------------------------------------------------
 !            WEIGHTED LEAST SQUARES CUBIC SPLINE FITTING
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(M), Y(M), WGT(M)
-REAL, INTENT(INOUT) :: BREAK(L)
-REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
-REAL :: TEMP(20)
+real, intent(in) :: x(m), y(m), wgt(m)
+real, intent(inout) :: break(l)
+real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+real :: temp(20)
 !---------------------
 !     REAL Z(L-1), A(L-1), B(L-1), C(L-1), WK(7*L + 18)
 !---------------------
-IF (L .LT. 2) GO TO 100
-N = L + 2
+if (l .lt. 2) go to 100
+n = l + 2
 !
 !                DEFINE THE KNOTS FOR THE B-SPLINES
 !
-WK(1) = BREAK(1)
-WK(2) = BREAK(1)
-WK(3) = BREAK(1)
-WK(4) = BREAK(1)
-DO J = 2,L
-   IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
-   WK(J + 3) = BREAK(J)
-END DO
-WK(L + 4) = BREAK(L)
-WK(L + 5) = BREAK(L)
-WK(L + 6) = BREAK(L)
+wk(1) = break(1)
+wk(2) = break(1)
+wk(3) = break(1)
+wk(4) = break(1)
+do j = 2,l
+   if (break(j - 1) .ge. break(j)) go to 110
+   wk(j + 3) = break(j)
+end do
+wk(l + 4) = break(l)
+wk(l + 5) = break(l)
+wk(l + 6) = break(l)
 !
 !     OBTAIN THE B-SPLINE COEFFICIENTS OF THE LEAST SQUARES FIT
 !
-LA = N + 5
-LW = LA + N
-LQ = LW + N
-CALL BSLSQ (X, Y, WGT, M, WK(1), N, 4, WK(LA), &
-&WK(LW), WK(LQ), IERR)
-IF (IERR .LT. 0) GO TO 120
-IERR = 0
+la = n + 5
+lw = la + n
+lq = lw + n
+call bslsq (x, y, wgt, m, wk(1), n, 4, wk(la), &
+&wk(lw), wk(lq), ierr)
+if (ierr .lt. 0) go to 120
+ierr = 0
 !
 !     OBTAIN THE COEFFICIENTS OF THE FIT IN TAYLOR SERIES FORM
 !
-CALL BSPP (WK(1), WK(LA), N, 4, BREAK, &
-&WK(LQ), LM1, TEMP)
-K = LQ
-do 20 J = 1,LM1
-   Z(J) = WK(K)
-   A(J) = WK(K + 1)
-   B(J) = WK(K + 2)
-   C(J) = WK(K + 3)
-   K = K + 4
-20 CONTINUE
-RETURN
+call bspp (wk(1), wk(la), n, 4, break, &
+&wk(lq), lm1, temp)
+k = lq
+do 20 j = 1,lm1
+   z(j) = wk(k)
+   a(j) = wk(k + 1)
+   b(j) = wk(k + 2)
+   c(j) = wk(k + 3)
+   k = k + 4
+20 continue
+return
 !
 !                       ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE SPFIT
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine spfit
 
-SUBROUTINE CSPFIT (X, Y, M, BREAK, L, XCON, CON, NDER, NC, &
-&Z, A, B, C, WK, IWK, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: L, M, NC
-INTEGER :: J, K, LA, LM1, LW, N
-REAL :: R
+subroutine cspfit (x, y, m, break, l, xcon, con, nder, nc, &
+&z, a, b, c, wk, iwk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, m, nc
+integer :: j, k, la, lm1, lw, n
+real :: r
 !-----------------------------------------------------------------------
 !                LEAST SQUARES CUBIC SPLINE FITTING WITH
 !                  EQUALITY AND INEQUALITY CONSTRAINTS
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(M), Y(M)
-REAL, INTENT(INOUT) :: BREAK(L)
-REAL, INTENT(IN) :: XCON(*), CON(*)
-REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
-INTEGER, INTENT(IN) :: NDER(*)
-INTEGER, INTENT(INOUT) :: IWK(*)
+real, intent(in) :: x(m), y(m)
+real, intent(inout) :: break(l)
+real, intent(in) :: xcon(*), con(*)
+real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+integer, intent(in) :: nder(*)
+integer, intent(inout) :: iwk(*)
 !
-REAL :: TEMP(20)
+real :: temp(20)
 !---------------------
 !     XCON, CON, NDER ARE ARRAYS OF DIMENSION MAX(1,NC).
 !     Z, A, B, C ARE ARRAYS OF DIMENSION L - 1.
@@ -4757,71 +4757,71 @@ REAL :: TEMP(20)
 !        AND IWK(1) .GE. 7(L + 7) FOR ALL NC. IF NC .GE. 1
 !        THEN MORE STORAGE WILL BE NEEDED.
 !---------------------
-IF (L .LT. 2) GO TO 100
-N = L + 2
+if (l .lt. 2) go to 100
+n = l + 2
 !
 !                DEFINE THE KNOTS FOR THE B-SPLINES
 !
-WK(1) = BREAK(1)
-WK(2) = BREAK(1)
-WK(3) = BREAK(1)
-WK(4) = BREAK(1)
-DO J = 2,L
-   IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
-   WK(J + 3) = BREAK(J)
-END DO
-WK(L + 4) = BREAK(L)
-WK(L + 5) = BREAK(L)
-WK(L + 6) = BREAK(L)
+wk(1) = break(1)
+wk(2) = break(1)
+wk(3) = break(1)
+wk(4) = break(1)
+do j = 2,l
+   if (break(j - 1) .ge. break(j)) go to 110
+   wk(j + 3) = break(j)
+end do
+wk(l + 4) = break(l)
+wk(l + 5) = break(l)
+wk(l + 6) = break(l)
 !
 !     OBTAIN THE B-SPLINE COEFFICIENTS OF THE LEAST SQUARES FIT
 !
-K = 7*N + 35
-IF (IWK(1) .LT. K) GO TO 120
-LA = N + 5
-LW = LA + N
-IERR = 0
+k = 7*n + 35
+if (iwk(1) .lt. k) go to 120
+la = n + 5
+lw = la + n
+ierr = 0
 !
-K = LW - 1
-IWK(1) = IWK(1) - K
-CALL BFIT (WK(1), N, 4, X, Y, M, XCON, CON, NDER, NC, IERR, &
-&WK(LA), R, WK(LW), IWK)
-IWK(1) = IWK(1) + K
-IF (IERR .LT. 0 .OR. IERR .EQ. 2) RETURN
+k = lw - 1
+iwk(1) = iwk(1) - k
+call bfit (wk(1), n, 4, x, y, m, xcon, con, nder, nc, ierr, &
+&wk(la), r, wk(lw), iwk)
+iwk(1) = iwk(1) + k
+if (ierr .lt. 0 .or. ierr .eq. 2) return
 !
 !     OBTAIN THE COEFFICIENTS OF THE FIT IN TAYLOR SERIES FORM
 !
-CALL BSPP (WK(1), WK(LA), N, 4, BREAK, &
-&WK(LW), LM1, TEMP)
-K = LW
-do 20 J = 1,LM1
-   Z(J) = WK(K)
-   A(J) = WK(K + 1)
-   B(J) = WK(K + 2)
-   C(J) = WK(K + 3)
-   K = K + 4
-20 CONTINUE
-RETURN
+call bspp (wk(1), wk(la), n, 4, break, &
+&wk(lw), lm1, temp)
+k = lw
+do 20 j = 1,lm1
+   z(j) = wk(k)
+   a(j) = wk(k + 1)
+   b(j) = wk(k + 2)
+   c(j) = wk(k + 3)
+   k = k + 4
+20 continue
+return
 !
 !                       ERROR RETURN
 !
-100 IERR = -1
-RETURN
+100 ierr = -1
+return
 !
-110 IERR = -3
-RETURN
+110 ierr = -3
+return
 !
-120 IERR = -6
-IWK(1) = K
-RETURN
-END SUBROUTINE CSPFIT
+120 ierr = -6
+iwk(1) = k
+return
+end subroutine cspfit
 
-SUBROUTINE SCOMP (X,Y,A,B,C,N,XI,YI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K
-REAL :: DX, XX
+subroutine scomp (x,y,a,b,c,n,xi,yi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k
+real :: dx, xx
 !
 !     ABSTRACT
 !
@@ -4858,72 +4858,72 @@ REAL :: DX, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI)
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real, intent(inout) :: yi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IL = 1
-IR = N
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = N
-GO TO 100
-90 I = 1
+80 i = n
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 DX = XX - X(I)
-YI(K) = Y(I) + DX*(A(I) + DX*(B(I) + DX*C(I)))
+100 dx = xx - x(i)
+yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,N)
-GO TO 10
-END SUBROUTINE SCOMP
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,n)
+go to 10
+end subroutine scomp
 
-SUBROUTINE SCOMP1 (X,Y,YP,N,XI,YI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K, NM1
-REAL :: A, B, C, D, DX, H, XX
+subroutine scomp1 (x,y,yp,n,xi,yi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k, nm1
+real :: a, b, c, d, dx, h, xx
 !
 !     ABSTRACT
 !
@@ -4956,78 +4956,78 @@ REAL :: A, B, C, D, DX, H, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI)
+real, intent(in) :: x(n), y(n), yp(n), xi(ni)
+real, intent(inout) :: yi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-NM1 = N - 1
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+nm1 = n - 1
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IL = 1
-IR = NM1
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+il = 1
+ir = nm1
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = NM1
-GO TO 100
-90 I = 1
+80 i = nm1
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 H = X(I+1) - X(I)
-D = (Y(I+1) - Y(I))/H
-A = YP(I) + YP(I+1)
-B = (-A - YP(I) + 3.0*D)/H
-C = (A - D - D)/(H*H)
-DX = XX - X(I)
-YI(K) = Y(I) + DX*(YP(I) + DX*(B + DX*C))
+100 h = x(i+1) - x(i)
+d = (y(i+1) - y(i))/h
+a = yp(i) + yp(i+1)
+b = (-a - yp(i) + 3.0*d)/h
+c = (a - d - d)/(h*h)
+dx = xx - x(i)
+yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,NM1)
-GO TO 10
-END SUBROUTINE SCOMP1
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,nm1)
+go to 10
+end subroutine scomp1
 
-SUBROUTINE SCOMP2 (X,Y,YPP,N,XI,YI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K, NM1
-REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
+subroutine scomp2 (x,y,ypp,n,xi,yi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k, nm1
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
 !     ABSTRACT
 !
@@ -5060,81 +5060,81 @@ REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI)
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-NM1 = N - 1
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+nm1 = n - 1
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IL = 1
-IR = NM1
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+il = 1
+ir = nm1
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = NM1
-GO TO 100
-90 I = 1
+80 i = nm1
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 H  = X(I+1) - X(I)
-H2 = H*H
-XR = (X(I+1) - XX)/H
-XR2 = XR*XR
-XR3 = XR*XR2
-XL = (XX - X(I))/H
-XL2 = XL*XL
-XL3 = XL*XL2
-YI(K) = Y(I)*XR + Y(I+1)*XL &
-&- H2*(YPP(I)*(XR-XR3) + YPP(I+1)*(XL-XL3))/6.0
+100 h  = x(i+1) - x(i)
+h2 = h*h
+xr = (x(i+1) - xx)/h
+xr2 = xr*xr
+xr3 = xr*xr2
+xl = (xx - x(i))/h
+xl2 = xl*xl
+xl3 = xl*xl2
+yi(k) = y(i)*xr + y(i+1)*xl &
+&- h2*(ypp(i)*(xr-xr3) + ypp(i+1)*(xl-xl3))/6.0
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,NM1)
-GO TO 10
-END SUBROUTINE SCOMP2
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,nm1)
+go to 10
+end subroutine scomp2
 
-SUBROUTINE SEVAL (X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K
-REAL :: BI, CI, DX, XX
+subroutine seval (x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k
+real :: bi, ci, dx, xx
 !
 !     ABSTRACT
 !
@@ -5174,76 +5174,76 @@ REAL :: BI, CI, DX, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IL = 1
-IR = N
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = N
-GO TO 100
-90 I = 1
+80 i = n
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 DX = XX - X(I)
-YI(K) = Y(I) + DX*(A(I) + DX*(B(I) + DX*C(I)))
-BI = B(I) + B(I)
-CI = 3.0*C(I)
-YPI(K) = A(I) + DX*(BI + DX*CI)
-YPPI(K) = BI + DX*(CI + CI)
+100 dx = xx - x(i)
+yi(k) = y(i) + dx*(a(i) + dx*(b(i) + dx*c(i)))
+bi = b(i) + b(i)
+ci = 3.0*c(i)
+ypi(k) = a(i) + dx*(bi + dx*ci)
+yppi(k) = bi + dx*(ci + ci)
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,N)
-GO TO 10
-END SUBROUTINE SEVAL
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,n)
+go to 10
+end subroutine seval
 
-SUBROUTINE SEVAL1 (X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K, NM1
-REAL :: A, B, C, D, DX, H, XX
+subroutine seval1 (x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k, nm1
+real :: a, b, c, d, dx, h, xx
 !
 !     ABSTRACT
 !
@@ -5278,82 +5278,82 @@ REAL :: A, B, C, D, DX, H, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+real, intent(in) :: x(n), y(n), yp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-NM1 = N - 1
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+nm1 = n - 1
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IL = 1
-IR = NM1
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+il = 1
+ir = nm1
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = NM1
-GO TO 100
-90 I = 1
+80 i = nm1
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 H = X(I+1) - X(I)
-D = (Y(I+1) - Y(I))/H
-A = YP(I) + YP(I+1)
-B = (-A - YP(I) + 3.0*D)/H
-C = (A - D - D)/(H*H)
-DX = XX - X(I)
-YI(K) = Y(I) + DX*(YP(I) + DX*(B + DX*C))
-B = B + B
-C = 3.0*C
-YPI(K) = YP(I) + DX*(B + DX*C)
-YPPI(K) = B + DX*(C + C)
+100 h = x(i+1) - x(i)
+d = (y(i+1) - y(i))/h
+a = yp(i) + yp(i+1)
+b = (-a - yp(i) + 3.0*d)/h
+c = (a - d - d)/(h*h)
+dx = xx - x(i)
+yi(k) = y(i) + dx*(yp(i) + dx*(b + dx*c))
+b = b + b
+c = 3.0*c
+ypi(k) = yp(i) + dx*(b + dx*c)
+yppi(k) = b + dx*(c + c)
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,NM1)
-GO TO 10
-END SUBROUTINE SEVAL1
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,nm1)
+go to 10
+end subroutine seval1
 
-SUBROUTINE SEVAL2 (X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N, NI
-INTEGER :: I, IL, IR, K, NM1
-REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
+subroutine seval2 (x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n, ni
+integer :: i, il, ir, k, nm1
+real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
 !     ABSTRACT
 !
@@ -5388,85 +5388,85 @@ REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 !               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 !               1  INPUT ERROR - NI IS NOT POSITIVE.
 !
-REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     CHECK INPUT
 !
-IF (NI .GT. 0) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-NM1 = N - 1
+if (ni .gt. 0) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+nm1 = n - 1
 !
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
 !
-K  = 1
-XX = XI(1)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IL = 1
-IR = NM1
+k  = 1
+xx = xi(1)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+il = 1
+ir = nm1
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-50 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 50
+50 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 50
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = NM1
-GO TO 100
-90 I = 1
+80 i = nm1
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 H  = X(I+1) - X(I)
-H2 = H*H
-XR = (X(I+1) - XX)/H
-XR2 = XR*XR
-XR3 = XR*XR2
-XL = (XX - X(I))/H
-XL2 = XL*XL
-XL3 = XL*XL2
-YI(K) = Y(I)*XR + Y(I+1)*XL &
-&- H2*(YPP(I)*(XR-XR3) + YPP(I+1)*(XL-XL3))/6.0
-YPI(K) = (Y(I+1)-Y(I))/H &
-&+ H*(YPP(I)*(1.0-3.0*XR2) - YPP(I+1)*(1.0-3.0*XL2))/6.0
-YPPI(K) = YPP(I)*XR + YPP(I+1)*XL
+100 h  = x(i+1) - x(i)
+h2 = h*h
+xr = (x(i+1) - xx)/h
+xr2 = xr*xr
+xr3 = xr*xr2
+xl = (xx - x(i))/h
+xl2 = xl*xl
+xl3 = xl*xl2
+yi(k) = y(i)*xr + y(i+1)*xl &
+&- h2*(ypp(i)*(xr-xr3) + ypp(i+1)*(xl-xl3))/6.0
+ypi(k) = (y(i+1)-y(i))/h &
+&+ h*(ypp(i)*(1.0-3.0*xr2) - ypp(i+1)*(1.0-3.0*xl2))/6.0
+yppi(k) = ypp(i)*xr + ypp(i+1)*xl
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(NM1)) GO TO 80
-IF (XX - XI(K-1)) 110,100,50
-110 IL = 1
-IR = MIN0(I+1,NM1)
-GO TO 10
-END SUBROUTINE SEVAL2
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(nm1)) go to 80
+if (xx - xi(k-1)) 110,100,50
+110 il = 1
+ir = min0(i+1,nm1)
+go to 10
+end subroutine seval2
 
-REAL function CSINT (X, Y, A, B, C, N, ALPHA, BETA)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: ALPHA, BETA
-INTEGER :: I, K, KP1, L, LM1
-REAL :: A0, B0, D, D2, H, H2, R, S, SUM
-INTEGER :: INTRVL
+real function csint (x, y, a, b, c, n, alpha, beta)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: alpha, beta
+integer :: i, k, kp1, l, lm1
+real :: a0, b0, d, d2, h, h2, r, s, sum
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !                    INTEGRATING A CUBIC SPLINE
@@ -5494,80 +5494,80 @@ INTEGER :: INTRVL
 !            OR GREATER THAN ALPHA.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N)
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
 !
-CSINT = 0.0
-H = BETA - ALPHA
-IF (H .EQ. 0.0) RETURN
-IF (H .GT. 0.0) GO TO 10
-   A0 = BETA
-   B0 = ALPHA
-   GO TO 20
-10 A0 = ALPHA
-B0 = BETA
+csint = 0.0
+h = beta - alpha
+if (h .eq. 0.0) return
+if (h .gt. 0.0) go to 10
+   a0 = beta
+   b0 = alpha
+   go to 20
+10 a0 = alpha
+b0 = beta
 !
 !     LOCATE THE INTERVALS CONTAINING A0 AND B0
 !
-20 IF (N .EQ. 1) GO TO 50
-IF (A0 .GE. X(N)) GO TO 50
-K = INTRVL (A0, X, N)
-L = INTRVL (B0, X, N)
-IF (B0 .GE. X(N)) L = N
-IF (K .EQ. L) GO TO 51
+20 if (n .eq. 1) go to 50
+if (a0 .ge. x(n)) go to 50
+k = intrvl (a0, x, n)
+l = intrvl (b0, x, n)
+if (b0 .ge. x(n)) l = n
+if (k .eq. l) go to 51
 !
 !     INTEGRATE FROM A0 TO X(K + 1)
 !
-KP1 = K + 1
-H = X(KP1) - X(K)
-D = A0 - X(K)
-R = H + D
-H2 = H*H
-D2 = D*D
-S = H2 + D2
-SUM = Y(K) + 0.5*A(K)*R + B(K)*(S + H*D)/3.0 &
-&+ 0.25*C(K)*R*S
-SUM = (X(KP1) - A0)*SUM
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
+&+ 0.25*c(k)*r*s
+sum = (x(kp1) - a0)*sum
 !
 !     INTEGRATE OVER THE INTERIOR INTERVALS
 !
-IF (KP1 .EQ. L) GO TO 40
-LM1 = L - 1
-DO I = KP1,LM1
-   H = X(I + 1) - X(I)
-   S = (((0.25*C(I)*H + B(I)/3.0)*H + 0.5*A(I))*H + Y(I))*H
-   SUM = SUM + S
-END DO
+if (kp1 .eq. l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   h = x(i + 1) - x(i)
+   s = (((0.25*c(i)*h + b(i)/3.0)*h + 0.5*a(i))*h + y(i))*h
+   sum = sum + s
+end do
 !
 !     INTEGRATE FROM X(L) TO B0
 !
-40 H = B0 - X(L)
-S = (((0.25*C(L)*H + B(L)/3.0)*H + 0.5*A(L))*H + Y(L))*H
-CSINT = SUM + S
-IF (ALPHA .GT. BETA) CSINT = -CSINT
-RETURN
+40 h = b0 - x(l)
+s = (((0.25*c(l)*h + b(l)/3.0)*h + 0.5*a(l))*h + y(l))*h
+csint = sum + s
+if (alpha .gt. beta) csint = -csint
+return
 !
 !     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
 !
-50 K = N
-51 H = B0 - X(K)
-D = A0 - X(K)
-R = H + D
-H2 = H*H
-D2 = D*D
-S = H2 + D2
-SUM = Y(K) + 0.5*A(K)*R + B(K)*(S + H*D)/3.0 &
-&+ 0.25*C(K)*R*S
-CSINT = (BETA - ALPHA)*SUM
-RETURN
-END FUNCTION CSINT
+50 k = n
+51 h = b0 - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*a(k)*r + b(k)*(s + h*d)/3.0 &
+&+ 0.25*c(k)*r*s
+csint = (beta - alpha)*sum
+return
+end function csint
 
-REAL function CSINT1 (X, Y, YP, N, A, B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A, B
-INTEGER :: I, IP1, K, KP1, L, LM1, LP1
-REAL :: A0, B0, BI, CI, D, D2, H, H2, R, S, SUM
-INTEGER :: INTRVL
+real function csint1 (x, y, yp, n, a, b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a, b
+integer :: i, ip1, k, kp1, l, lm1, lp1
+real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !                    INTEGRATING A CUBIC SPLINE
@@ -5590,99 +5590,99 @@ INTEGER :: INTRVL
 !          OR GREATER THAN A.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N), YP(N)
+real, intent(in) :: x(n), y(n), yp(n)
 !
-CSINT1 = 0.0
-H = B - A
-IF (H .EQ. 0.0) RETURN
-IF (H .GT. 0.0) GO TO 10
-   A0 = B
-   B0 = A
-   GO TO 20
-10 A0 = A
-B0 = B
+csint1 = 0.0
+h = b - a
+if (h .eq. 0.0) return
+if (h .gt. 0.0) go to 10
+   a0 = b
+   b0 = a
+   go to 20
+10 a0 = a
+b0 = b
 !
 !     LOCATE THE INTERVALS CONTAINING A0 AND B0
 !
-20 K = INTRVL (A0, X, N)
-L = INTRVL (B0, X, N)
-IF (K .EQ. L) GO TO 50
+20 k = intrvl (a0, x, n)
+l = intrvl (b0, x, n)
+if (k .eq. l) go to 50
 !
 !     INTEGRATE FROM A0 TO X(K + 1)
 !
-KP1 = K + 1
-H = X(KP1) - X(K)
-D = (Y(KP1) - Y(K))/H
-R = YP(K) + YP(KP1)
-BI = (-R - YP(K) + 3.0*D)/H
-CI = (R - D - D)/(H*H)
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = (y(kp1) - y(k))/h
+r = yp(k) + yp(kp1)
+bi = (-r - yp(k) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
 !
-D = A0 - X(K)
-R = H + D
-H2 = H*H
-D2 = D*D
-S = H2 + D2
-SUM = Y(K) + 0.5*YP(K)*R + BI*(S + H*D)/3.0 &
-&+ 0.25*CI*R*S
-SUM = (X(KP1) - A0)*SUM
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
+&+ 0.25*ci*r*s
+sum = (x(kp1) - a0)*sum
 !
 !     INTEGRATE OVER THE INTERIOR INTERVALS
 !
-IF (KP1 .EQ. L) GO TO 40
-LM1 = L - 1
-DO I = KP1,LM1
-   IP1 = I + 1
-   H = X(IP1) - X(I)
-   D = (Y(IP1) - Y(I))/H
-   R = YP(I) + YP(IP1)
-   BI = (-R - YP(I) + 3.0*D)/H
-   CI = (R - D - D)/(H*H)
-   S = (((0.25*CI*H + BI/3.0)*H + 0.5*YP(I))*H + Y(I))*H
-   SUM = SUM + S
-END DO
+if (kp1 .eq. l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   ip1 = i + 1
+   h = x(ip1) - x(i)
+   d = (y(ip1) - y(i))/h
+   r = yp(i) + yp(ip1)
+   bi = (-r - yp(i) + 3.0*d)/h
+   ci = (r - d - d)/(h*h)
+   s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(i))*h + y(i))*h
+   sum = sum + s
+end do
 !
 !     INTEGRATE FROM X(L) TO B0
 !
-40 LP1 = L + 1
-H = X(LP1) - X(L)
-D = (Y(LP1) - Y(L))/H
-R = YP(L) + YP(LP1)
-BI = (-R - YP(L) + 3.0*D)/H
-CI = (R - D - D)/(H*H)
-H = B0 - X(L)
-S = (((0.25*CI*H + BI/3.0)*H + 0.5*YP(L))*H + Y(L))*H
-CSINT1 = SUM + S
-IF (A .GT. B) CSINT1 = -CSINT1
-RETURN
+40 lp1 = l + 1
+h = x(lp1) - x(l)
+d = (y(lp1) - y(l))/h
+r = yp(l) + yp(lp1)
+bi = (-r - yp(l) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
+h = b0 - x(l)
+s = (((0.25*ci*h + bi/3.0)*h + 0.5*yp(l))*h + y(l))*h
+csint1 = sum + s
+if (a .gt. b) csint1 = -csint1
+return
 !
 !     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
 !
-50 KP1 = K + 1
-H = X(KP1) - X(K)
-D = (Y(KP1) - Y(K))/H
-R = YP(K) + YP(KP1)
-BI = (-R - YP(K) + 3.0*D)/H
-CI = (R - D - D)/(H*H)
+50 kp1 = k + 1
+h = x(kp1) - x(k)
+d = (y(kp1) - y(k))/h
+r = yp(k) + yp(kp1)
+bi = (-r - yp(k) + 3.0*d)/h
+ci = (r - d - d)/(h*h)
 !
-H = B0 - X(K)
-D = A0 - X(K)
-R = H + D
-H2 = H*H
-D2 = D*D
-S = H2 + D2
-SUM = Y(K) + 0.5*YP(K)*R + BI*(S + H*D)/3.0 &
-&+ 0.25*CI*R*S
-CSINT1 = (B - A)*SUM
-RETURN
-END FUNCTION CSINT1
+h = b0 - x(k)
+d = a0 - x(k)
+r = h + d
+h2 = h*h
+d2 = d*d
+s = h2 + d2
+sum = y(k) + 0.5*yp(k)*r + bi*(s + h*d)/3.0 &
+&+ 0.25*ci*r*s
+csint1 = (b - a)*sum
+return
+end function csint1
 
-REAL function CSINT2 (X, Y, YPP, N, A, B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A, B
-INTEGER :: I, IP1, K, KP1, L, LM1, LP1
-REAL :: A0, B0, D, DMA, DMB, DPA, DPB, H, R, S, SUM
-INTEGER :: INTRVL
+real function csint2 (x, y, ypp, n, a, b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a, b
+integer :: i, ip1, k, kp1, l, lm1, lp1
+real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !                    INTEGRATING A CUBIC SPLINE
@@ -5705,90 +5705,90 @@ INTEGER :: INTRVL
 !          OR GREATER THAN A.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(N), YPP(N)
+real, intent(in) :: x(n), y(n), ypp(n)
 !
-CSINT2 = 0.0
-H = B - A
-IF (H .EQ. 0.0) RETURN
-IF (H .GT. 0.0) GO TO 10
-   A0 = B
-   B0 = A
-   GO TO 20
-10 A0 = A
-B0 = B
+csint2 = 0.0
+h = b - a
+if (h .eq. 0.0) return
+if (h .gt. 0.0) go to 10
+   a0 = b
+   b0 = a
+   go to 20
+10 a0 = a
+b0 = b
 !
 !     LOCATE THE INTERVALS CONTAINING A0 AND B0
 !
-20 K = INTRVL (A0, X, N)
-L = INTRVL (B0, X, N)
-IF (K .EQ. L) GO TO 50
+20 k = intrvl (a0, x, n)
+l = intrvl (b0, x, n)
+if (k .eq. l) go to 50
 !
 !     INTEGRATE FROM A0 TO X(K + 1)
 !
-KP1 = K + 1
-H = X(KP1) - X(K)
-D = (X(KP1) - A0)/H
-R = Y(K)*D + Y(KP1)*(2.0 - D)
-S = YPP(K)*(2.0 - D*D) + YPP(KP1)*(2.0 - D)**2
-SUM = H*D*(0.5*R - H*H*D*S/24.0)
+kp1 = k + 1
+h = x(kp1) - x(k)
+d = (x(kp1) - a0)/h
+r = y(k)*d + y(kp1)*(2.0 - d)
+s = ypp(k)*(2.0 - d*d) + ypp(kp1)*(2.0 - d)**2
+sum = h*d*(0.5*r - h*h*d*s/24.0)
 !
 !
 !     INTEGRATE OVER THE INTERIOR INTERVALS
 !
-IF (KP1 .EQ. L) GO TO 40
-LM1 = L - 1
-DO I = KP1,LM1
-   IP1 = I + 1
-   H = X(IP1) - X(I)
-   R = Y(I) + Y(IP1)
-   S = YPP(I) + YPP(IP1)
-   SUM = SUM + H*(0.5*R - H*H*S/24.0)
-END DO
+if (kp1 .eq. l) go to 40
+lm1 = l - 1
+do i = kp1,lm1
+   ip1 = i + 1
+   h = x(ip1) - x(i)
+   r = y(i) + y(ip1)
+   s = ypp(i) + ypp(ip1)
+   sum = sum + h*(0.5*r - h*h*s/24.0)
+end do
 !
 !     INTEGRATE FROM X(L) TO B0
 !
-40 LP1 = L + 1
-H = X(LP1) - X(L)
-D = (B0 - X(L))/H
-R = Y(L)*(2.0 - D) + Y(LP1)*D
-S = YPP(L)*(2.0 - D)**2 + YPP(LP1)*(2.0 - D*D)
-CSINT2 = SUM + H*D*(0.5*R - H*H*D*S/24.0)
-IF (A .GT. B) CSINT2 = -CSINT2
-RETURN
+40 lp1 = l + 1
+h = x(lp1) - x(l)
+d = (b0 - x(l))/h
+r = y(l)*(2.0 - d) + y(lp1)*d
+s = ypp(l)*(2.0 - d)**2 + ypp(lp1)*(2.0 - d*d)
+csint2 = sum + h*d*(0.5*r - h*h*d*s/24.0)
+if (a .gt. b) csint2 = -csint2
+return
 !
 !     CASE WHEN A0 AND B0 ARE IN THE SAME INTERVAL
 !
-50 KP1 = K + 1
-H = X(KP1) - X(K)
-DMA = (A - X(K))/H
-DMB = (B - X(K))/H
-DPA = (X(KP1) - A)/H
-DPB = (X(KP1) - B)/H
-R = (DPA + DPB)*Y(K) + (DMA + DMB)*Y(KP1)
-S = YPP(K) * (DPA + DPB)*(DMA*(2.0 - DMA) + DMB*(2.0 - DMB)) + &
-&YPP(KP1)*(DMA + DMB)*(DPA*(2.0 - DPA) + DPB*(2.0 - DPB))
-CSINT2 = (B - A)*(0.5*R - H*H*S/24.0)
-RETURN
-END FUNCTION CSINT2
+50 kp1 = k + 1
+h = x(kp1) - x(k)
+dma = (a - x(k))/h
+dmb = (b - x(k))/h
+dpa = (x(kp1) - a)/h
+dpb = (x(kp1) - b)/h
+r = (dpa + dpb)*y(k) + (dma + dmb)*y(kp1)
+s = ypp(k) * (dpa + dpb)*(dma*(2.0 - dma) + dmb*(2.0 - dmb)) + &
+&ypp(kp1)*(dma + dmb)*(dpa*(2.0 - dpa) + dpb*(2.0 - dpb))
+csint2 = (b - a)*(0.5*r - h*h*s/24.0)
+return
+end function csint2
 
-SUBROUTINE PDSPL (X, Y, A, B, C, N, T, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, J, NM1, NM2, NM3
-REAL :: ALPHA, DEL, DEL0, DELI, DELTA, E, H, HI, R, S, SI, W
+subroutine pdspl (x, y, a, b, c, n, t, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer :: i, j, nm1, nm2, nm3
+real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
 !-----------------------------------------------------------------------
 !                PERIODIC CUBIC SPLINE INTERPOLATION
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(*)
-REAL, INTENT(INOUT) :: A(*), B(*), C(*), T(*)
+real, intent(in) :: x(n), y(*)
+real, intent(inout) :: a(*), b(*), c(*), t(*)
 !----------------------
 !     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), T(N-2)
 !----------------------
-IF (N .LT. 3) GO TO 100
-NM1 = N - 1
-NM2 = N - 2
-NM3 = N - 3
+if (n .lt. 3) go to 100
+nm1 = n - 1
+nm2 = n - 2
+nm3 = n - 3
 !
 !     A STRICTLY DIAGONALLY DOMINANT SET OF EQUATIONS FOR THE
 !     SLOPES S(I) OF THE SPLINE AT X(I) (I = 1,...,N-1) IS
@@ -5798,16 +5798,16 @@ NM3 = N - 3
 !
 !        A(1)*S(1) + B(1)*S(2) + C(1)*S(N-1) = T(1)
 !
-B(1) = X(N) - X(NM1)
-H = X(2) - X(1)
-IF (H .LE. 0.0 .OR. B(1) .LE. 0.0) GO TO 110
-DEL = (Y(1) - Y(NM1))/B(1)
-DELI = (Y(2) - Y(1))/H
+b(1) = x(n) - x(nm1)
+h = x(2) - x(1)
+if (h .le. 0.0 .or. b(1) .le. 0.0) go to 110
+del = (y(1) - y(nm1))/b(1)
+deli = (y(2) - y(1))/h
 !
-C(1) = H
-A(1) = 2.0*(H + B(1))
-T(1) = 3.0*(H*DEL + B(1)*DELI)
-IF (N .EQ. 3) GO TO 20
+c(1) = h
+a(1) = 2.0*(h + b(1))
+t(1) = 3.0*(h*del + b(1)*deli)
+if (n .eq. 3) go to 20
 !
 !     FOR THE KNOTS X(I) (I = 2,...N-2) GENERATE THE CORRESPOND-
 !     ING EQUATIONS AND CARRY OUT THE PIVOT REDUCTION OF GAUSS
@@ -5815,22 +5815,22 @@ IF (N .EQ. 3) GO TO 20
 !
 !        A(I)*S(I) + B(I)*S(I+1) + C(I)*S(N-1) = T(I)
 !
-DO I = 2,NM2
-   B(I) = H
-   H = X(I+1) - X(I)
-   IF (H .LE. 0.0) GO TO 110
+do i = 2,nm2
+   b(i) = h
+   h = x(i+1) - x(i)
+   if (h .le. 0.0) go to 110
 !
-   E = H/A(I-1)
-   C(I) = - E*C(I-1)
-   A(I) = 2.0*(B(I) + H) - E*B(I-1)
+   e = h/a(i-1)
+   c(i) = - e*c(i-1)
+   a(i) = 2.0*(b(i) + h) - e*b(i-1)
 !
-   DEL0 = DELI
-   DELI = (Y(I+1) - Y(I))/H
-   T(I) = 3.0*(H*DEL0 + B(I)*DELI) - E*T(I-1)
-END DO
+   del0 = deli
+   deli = (y(i+1) - y(i))/h
+   t(i) = 3.0*(h*del0 + b(i)*deli) - e*t(i-1)
+end do
 !
-20 IERR = 0
-B(NM1) = H
+20 ierr = 0
+b(nm1) = h
 !
 !     SINCE IT IS REQUIRED THAT THE SPLINE BE PERIODIC, THE
 !     EQUATION FOR THE KNOT X(N-1) HAS THE FORM ...
@@ -5847,329 +5847,329 @@ B(NM1) = H
 !
 !        (ALPHA + B(1))*S(N-2) + DELTA*S(N-1) = R
 !
-ALPHA = H
-DELTA = 2.0*(H + B(1))
-R = 3.0*(B(1)*DELI + H*DEL)
-IF (N .EQ. 3) GO TO 40
+alpha = h
+delta = 2.0*(h + b(1))
+r = 3.0*(b(1)*deli + h*del)
+if (n .eq. 3) go to 40
 !
-DO I = 1,NM3
-   E = ALPHA/A(I)
-   ALPHA = - E*B(I)
-   DELTA = DELTA - E*C(I)
-   R = R - E*T(I)
-END DO
+do i = 1,nm3
+   e = alpha/a(i)
+   alpha = - e*b(i)
+   delta = delta - e*c(i)
+   r = r - e*t(i)
+end do
 !
 !     SOLVE THE LAST TWO EQUATIONS FOR S(N-1) AND S(N-2), AND
 !     STORE THESE SLOPES IN A.
 !
-40 E = (ALPHA + B(1))/A(NM2)
-W = B(NM2) + C(NM2)
-S = (R - E*T(NM2))/(DELTA - E*W)
-A(NM1) = S
-A(NM2) = (T(NM2) - W*S)/A(NM2)
-IF (N .EQ. 3) GO TO 60
+40 e = (alpha + b(1))/a(nm2)
+w = b(nm2) + c(nm2)
+s = (r - e*t(nm2))/(delta - e*w)
+a(nm1) = s
+a(nm2) = (t(nm2) - w*s)/a(nm2)
+if (n .eq. 3) go to 60
 !
 !     BACK SUBSTITUTION TO OBTAIN THE REMAINING SLOPES S(I).
 !     THESE SLOPES ARE STORED IN A.
 !
-SI = A(NM2)
-DO J = 3,NM1
-   I = N - J
-   SI = (T(I) - B(I)*SI - C(I)*S)/A(I)
-   A(I) = SI
-END DO
+si = a(nm2)
+do j = 3,nm1
+   i = n - j
+   si = (t(i) - b(i)*si - c(i)*s)/a(i)
+   a(i) = si
+end do
 !
 !     GENERATE THE CUBIC COEFFICIENTS B(I) AND C(I)
 !
-60 H = B(1)
-DO I = 1,NM2
-   HI = B(I + 1)
-   DELI = (Y(I+1) - Y(I))/HI
-   W = A(I) + A(I+1) - 2.0*DELI
-   B(I) = (DELI - A(I) - W)/HI
-   C(I) = (W/HI)/HI
-END DO
-W = A(1) + A(NM1) - 2.0*DEL
-B(NM1) = (DEL - A(NM1) - W)/H
-C(NM1) = (W/H)/H
-RETURN
+60 h = b(1)
+do i = 1,nm2
+   hi = b(i + 1)
+   deli = (y(i+1) - y(i))/hi
+   w = a(i) + a(i+1) - 2.0*deli
+   b(i) = (deli - a(i) - w)/hi
+   c(i) = (w/hi)/hi
+end do
+w = a(1) + a(nm1) - 2.0*del
+b(nm1) = (del - a(nm1) - w)/h
+c(nm1) = (w/h)/h
+return
 !
 !     ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE PDSPL
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine pdspl
 
-SUBROUTINE PDFIT (X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: L, M
-INTEGER :: J, K, LA, LM1, LW, N
-REAL :: R
+subroutine pdfit (x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: l, m
+integer :: j, k, la, lm1, lw, n
+real :: r
 !-----------------------------------------------------------------------
 !            LEAST SQUARES PERIODIC CUBIC SPLINE FITTING
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(M), Y(M)
-REAL, INTENT(INOUT) :: BREAK(L)
-REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
-INTEGER, INTENT(INOUT) :: IWK(*)
+real, intent(in) :: x(m), y(m)
+real, intent(inout) :: break(l)
+real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+integer, intent(inout) :: iwk(*)
 !--------------------
 !     REAL Z(L-1), A(L-1), B(L-1), C(L-1)
 !     REAL WK((L + 6)*(L + 15) + 10)
 !     INTEGER IWK(2*L + 6)
 !--------------------
-REAL :: TEMP(20)
-REAL :: CON(3), XCON(3)
-INTEGER :: NDER(3)
+real :: temp(20)
+real :: con(3), xcon(3)
+integer :: nder(3)
 !--------------------
-DATA NDER(1) /3/, NDER(2) /7/, NDER(3) /11/
+data nder(1) /3/, nder(2) /7/, nder(3) /11/
 !--------------------
-IF (M .LE. 0 .OR. L .LT. 2) GO TO 100
-N = L + 2
+if (m .le. 0 .or. l .lt. 2) go to 100
+n = l + 2
 !
 !                DEFINE THE NODES FOR THE B-SPLINES
 !
-WK(1) = BREAK(1)
-WK(2) = BREAK(1)
-WK(3) = BREAK(1)
-WK(4) = BREAK(1)
-DO J = 2,L
-   IF (BREAK(J - 1) .GE. BREAK(J)) GO TO 110
-   WK(J + 3) = BREAK(J)
-END DO
-WK(L + 4) = BREAK(L)
-WK(L + 5) = BREAK(L)
-WK(L + 6) = BREAK(L)
+wk(1) = break(1)
+wk(2) = break(1)
+wk(3) = break(1)
+wk(4) = break(1)
+do j = 2,l
+   if (break(j - 1) .ge. break(j)) go to 110
+   wk(j + 3) = break(j)
+end do
+wk(l + 4) = break(l)
+wk(l + 5) = break(l)
+wk(l + 6) = break(l)
 !
 !                DEFINE THE PERIODICITY CONSTRAINTS
 !
-CON(1) = BREAK(1)
-CON(2) = BREAK(1)
-CON(3) = BREAK(1)
-XCON(1) = BREAK(L)
-XCON(2) = BREAK(L)
-XCON(3) = BREAK(L)
+con(1) = break(1)
+con(2) = break(1)
+con(3) = break(1)
+xcon(1) = break(l)
+xcon(2) = break(l)
+xcon(3) = break(l)
 !
 !     OBTAIN THE B-SPLINE COEFFICIENTS OF THE PERIODIC SPLINE
 !
-IERR = 0
-LA = N + 5
-LW = LA + N
-IWK(1) = IWK(1) - (L + L + 8)
-CALL BFIT (WK(1), N, 4, X, Y, M, XCON, CON, NDER, 3, IERR, &
-&WK(LA), R, WK(LW), IWK)
-IWK(1) = IWK(1) + (L + L + 8)
-IF (IERR .NE. 0) GO TO 30
+ierr = 0
+la = n + 5
+lw = la + n
+iwk(1) = iwk(1) - (l + l + 8)
+call bfit (wk(1), n, 4, x, y, m, xcon, con, nder, 3, ierr, &
+&wk(la), r, wk(lw), iwk)
+iwk(1) = iwk(1) + (l + l + 8)
+if (ierr .ne. 0) go to 30
 !
 !     OBTAIN THE COEFFICIENTS OF THE SPLINE IN TAYLOR SERIES FORM
 !
-CALL BSPP (WK(1), WK(LA), N, 4, BREAK, WK(LW), LM1, TEMP)
-K = LW
-do 20 J = 1,LM1
-   Z(J) = WK(K)
-   A(J) = WK(K + 1)
-   B(J) = WK(K + 2)
-   C(J) = WK(K + 3)
-   K = K + 4
-20 CONTINUE
-RETURN
+call bspp (wk(1), wk(la), n, 4, break, wk(lw), lm1, temp)
+k = lw
+do 20 j = 1,lm1
+   z(j) = wk(k)
+   a(j) = wk(k + 1)
+   b(j) = wk(k + 2)
+   c(j) = wk(k + 3)
+   k = k + 4
+20 continue
+return
 !
 !                THE COEFFICIENTS WERE NOT OBTAINED
 !
-30 IF (IERR .EQ. -4) GO TO 120
-IF (IERR .EQ. -6) GO TO 130
-IF (IERR .EQ. -7) GO TO 140
-IERR = 1
-RETURN
+30 if (ierr .eq. -4) go to 120
+if (ierr .eq. -6) go to 130
+if (ierr .eq. -7) go to 140
+ierr = 1
+return
 !
 !                           ERROR RETURN
 !
-100 IERR = 2
-RETURN
-110 IERR = 3
-RETURN
-120 IERR = 4
-RETURN
-130 IERR = 5
-RETURN
-140 IERR = 6
-RETURN
-END SUBROUTINE PDFIT
+100 ierr = 2
+return
+110 ierr = 3
+return
+120 ierr = 4
+return
+130 ierr = 5
+return
+140 ierr = 6
+return
+end subroutine pdfit
 
-SUBROUTINE PSCMP (X, Y, A, B, C, N, XI, YI, M, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: M, N
-INTEGER :: I, IL, IR, J, K
-REAL :: DX, H, T, T0, X1, XOLD, XX
+subroutine pscmp (x, y, a, b, c, n, xi, yi, m, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n
+integer :: i, il, ir, j, k
+real :: dx, h, t, t0, x1, xold, xx
 !-----------------------------------------------------------------------
 !              EVALUATION OF A PERIODIC CUBIC SPLINE
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
-REAL, INTENT(INOUT) :: YI(M)
+real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real, intent(inout) :: yi(m)
 !----------------------
 !     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), XI(M), YI(M)
 !----------------------
-IF (N .GE. 3 .AND. M .GE. 1) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-X1 = X(1)
-H = X(N) - X1
+if (n .ge. 3 .and. m .ge. 1) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+x1 = x(1)
+h = x(n) - x1
 !
 !     REDUCTION OF XI(K) TO XX WHERE X(1) .LE. XX .LT. X(N)
 !
-K = 1
-T = (XI(1) - X1)/H
-J = T
-T0 = T - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-XX = X1 + T0*H
-IF (XX .GE. X(N)) GO TO 120
-IL = 1
-IR = N
+k = 1
+t = (xi(1) - x1)/h
+j = t
+t0 = t - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx .ge. x(n)) go to 120
+il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 90
-IF (XX - X(I)) 20,90,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 90
+if (xx - x(i)) 20,90,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-40 IF (XX .LT. X(I+1)) GO TO 90
-I = I + 1
-GO TO 40
+40 if (xx .lt. x(i+1)) go to 90
+i = i + 1
+go to 40
 !
 !     COMPUTATION WHEN X(I) .LE. XX .LT. X(I+1)
 !
-90 DX = XX - X(I)
-YI(K) = ((C(I)*DX + B(I))*DX + A(I))*DX + Y(I)
+90 dx = xx - x(i)
+yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
 !
 !     NEXT POINT
 !
-100 IF (K .GE. M) RETURN
-XOLD = XX
-K = K + 1
-T = (XI(K) - X1)/H
-J = T
-T0 = T - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-XX = X1 + T0*H
-IF (XX .GE. X(N)) GO TO 120
-IF (XX - XOLD) 110,90,40
+100 if (k .ge. m) return
+xold = xx
+k = k + 1
+t = (xi(k) - x1)/h
+j = t
+t0 = t - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx .ge. x(n)) go to 120
+if (xx - xold) 110,90,40
 !
-110 IL = 1
-IR = MIN0(I+1,N)
-GO TO 10
+110 il = 1
+ir = min0(i+1,n)
+go to 10
 !
 !     CASE WHEN ROUNDOFF PRODUCES A VALUE FOR XX WHERE
 !     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
 !
-120 I = 1
-XX = X1
-YI(K) = Y(1)
-GO TO 100
-END SUBROUTINE PSCMP
+120 i = 1
+xx = x1
+yi(k) = y(1)
+go to 100
+end subroutine pscmp
 
-SUBROUTINE PSEVL (X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: M, N
-INTEGER :: I, IL, IR, J, K
-REAL :: BI2, CI3, DX, H, T, T0, X1, XOLD, XX
+subroutine psevl (x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: m, n
+integer :: i, il, ir, j, k
+real :: bi2, ci3, dx, h, t, t0, x1, xold, xx
 !-----------------------------------------------------------------------
 !     EVALUATION AND DIFFERENTIATION OF A PERIODIC CUBIC SPLINE
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
-REAL, INTENT(INOUT) :: YI(M), YPI(M), YPPI(M)
+real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real, intent(inout) :: yi(m), ypi(m), yppi(m)
 !----------------------
 !     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), XI(M), YI(M), YPI(M),
 !    *     YPPI(M)
 !----------------------
-IF (N .GE. 3 .AND. M .GE. 1) GO TO 1
-   IERR = 1
-   RETURN
-1 IERR = 0
-X1 = X(1)
-H = X(N) - X1
+if (n .ge. 3 .and. m .ge. 1) go to 1
+   ierr = 1
+   return
+1 ierr = 0
+x1 = x(1)
+h = x(n) - x1
 !
 !     REDUCTION OF XI(K) TO XX WHERE X(1) .LE. XX .LT. X(N)
 !
-K = 1
-T = (XI(1) - X1)/H
-J = T
-T0 = T - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-XX = X1 + T0*H
-IF (XX .GE. X(N)) GO TO 120
-IL = 1
-IR = N
+k = 1
+t = (xi(1) - x1)/h
+j = t
+t0 = t - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx .ge. x(n)) go to 120
+il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 90
-IF (XX - X(I)) 20,90,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 90
+if (xx - x(i)) 20,90,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-40 IF (XX .LT. X(I+1)) GO TO 90
-I = I + 1
-GO TO 40
+40 if (xx .lt. x(i+1)) go to 90
+i = i + 1
+go to 40
 !
 !     COMPUTATION WHEN X(I) .LE. XX .LT. X(I+1)
 !
-90 DX = XX - X(I)
-YI(K) = ((C(I)*DX + B(I))*DX + A(I))*DX + Y(I)
-BI2 = B(I) + B(I)
-CI3 = 3.0*C(I)
-YPI(K) = (CI3*DX + BI2)*DX + A(I)
-YPPI(K) = BI2 + (CI3 + CI3)*DX
+90 dx = xx - x(i)
+yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
+bi2 = b(i) + b(i)
+ci3 = 3.0*c(i)
+ypi(k) = (ci3*dx + bi2)*dx + a(i)
+yppi(k) = bi2 + (ci3 + ci3)*dx
 !
 !     NEXT POINT
 !
-100 IF (K .GE. M) RETURN
-XOLD = XX
-K = K + 1
-T = (XI(K) - X1)/H
-J = T
-T0 = T - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-XX = X1 + T0*H
-IF (XX .GE. X(N)) GO TO 120
-IF (XX - XOLD) 110,90,40
+100 if (k .ge. m) return
+xold = xx
+k = k + 1
+t = (xi(k) - x1)/h
+j = t
+t0 = t - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+xx = x1 + t0*h
+if (xx .ge. x(n)) go to 120
+if (xx - xold) 110,90,40
 !
-110 IL = 1
-IR = MIN0(I+1,N)
-GO TO 10
+110 il = 1
+ir = min0(i+1,n)
+go to 10
 !
 !     CASE WHEN ROUNDOFF PRODUCES A VALUE FOR XX WHERE
 !     XX .GE. X(N). THIS CASE MAY NEVER OCCUR.
 !
-120 I = 1
-XX = X1
-YI(K) = Y(1)
-YPI(K) = A(1)
-YPPI(K) = B(1) + B(1)
-GO TO 100
-END SUBROUTINE PSEVL
+120 i = 1
+xx = x1
+yi(k) = y(1)
+ypi(k) = a(1)
+yppi(k) = b(1) + b(1)
+go to 100
+end subroutine psevl
 
-SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KDX, KX, M, N
-INTEGER :: IA, IB, IC, IE, MM1
+subroutine csloop (m, n, x, kx, t, dx, kdx, wk, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdx, kx, m, n
+integer :: ia, ib, ic, ie, mm1
 !-----------------------------------------------------------------------
 !               CLOSED CURVE CUBIC SPLINE FITTING
 !                    IN N-DIMENSIONAL SPACE
@@ -6179,75 +6179,75 @@ INTEGER :: IA, IB, IC, IE, MM1
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN, VIRGINIA
 !----------------------
-REAL, INTENT(IN) :: X(KX,N)
-REAL, INTENT(INOUT) :: T(M), DX(KDX,N), WK(*)
+real, intent(in) :: x(kx,n)
+real, intent(inout) :: t(m), dx(kdx,n), wk(*)
 !----------------------
 !     M = THE NUMBER OF N-DIMENSIONAL POINTS GIVEN IN X
 !     WK IS AN ARRAY OF DIMENSION 4*(M-1)
 !----------------------
-IF (MIN0(M, N) .LT. 2) GO TO 10
+if (min0(m, n) .lt. 2) go to 10
 !
-MM1 = M - 1
-IE = 1
-IA = MM1
-IB = IA + MM1
-IC = IB + M
-CALL CSLOP1 (M, N, X, KX, T, DX, KDX, WK(IA), WK(IB), &
-&WK(IC), WK(IE), IERR)
-RETURN
+mm1 = m - 1
+ie = 1
+ia = mm1
+ib = ia + mm1
+ic = ib + m
+call cslop1 (m, n, x, kx, t, dx, kdx, wk(ia), wk(ib), &
+&wk(ic), wk(ie), ierr)
+return
 !
 !     ERROR RETURN
 !
-10 IERR = 1
-RETURN
-END SUBROUTINE CSLOOP
+10 ierr = 1
+return
+end subroutine csloop
 
-SUBROUTINE CSLOP1 (M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KDX, KX, M, N
-INTEGER :: I, IM1, J, L, MM1, MM2
-REAL :: ALPHA, DEL, DEL0, DEL1, DELI, DELM, ETA, H, HM, P, R, SI, &
-&SM, SUM, TAU
-REAL :: SNRM2
+subroutine cslop1 (m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: kdx, kx, m, n
+integer :: i, im1, j, l, mm1, mm2
+real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
+&sm, sum, tau
+real :: snrm2
 !-----------------------------------------------------------------------
 !               CLOSED CURVE CUBIC SPLINE FITTING
 !                    IN N-DIMENSIONAL SPACE
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(KX,N)
-REAL, INTENT(INOUT) :: T(M), DX(KDX,N), A(*), B(M), C(*), E(*)
+real, intent(in) :: x(kx,n)
+real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
 !----------------------
 !     REAL A(M-1), C(M-1), E(K)  (K = MAX0(1,M-2))
 !     THE E ARRAY IS NOT USED WHEN M = 2.
 !----------------------
-MM1 = M - 1
-MM2 = M - 2
+mm1 = m - 1
+mm2 = m - 2
 !
 !     DEFINITION OF THE KNOTS T(I) (I = 1,...,M). ALSO T(M+1) = 1.
 !     THIS LAST KNOT IS NOT STORED.
 !
-T(1) = 0.0
-DO I = 2,M
-   IM1 = I - 1
-   DO J = 1,N
-      DX(I,J) = X(I,J) - X(IM1,J)
-   END DO
-   T(I) = T(IM1) + SNRM2(N,DX(I,1),KDX)
-   R = T(I) - T(IM1)
-   IF (R .EQ. 0.0) GO TO 200
-END DO
+t(1) = 0.0
+do i = 2,m
+   im1 = i - 1
+   do j = 1,n
+      dx(i,j) = x(i,j) - x(im1,j)
+   end do
+   t(i) = t(im1) + snrm2(n,dx(i,1),kdx)
+   r = t(i) - t(im1)
+   if (r .eq. 0.0) go to 200
+end do
 !
-DO J = 1,N
-   DX(1,J) = X(1,J) - X(M,J)
-END DO
-SUM = T(M) + SNRM2(N,DX(1,1),KDX)
-R = SUM - T(M)
-IF (R .EQ. 0.0) GO TO 210
+do j = 1,n
+   dx(1,j) = x(1,j) - x(m,j)
+end do
+sum = t(m) + snrm2(n,dx(1,1),kdx)
+r = sum - t(m)
+if (r .eq. 0.0) go to 210
 !
-DO I = 2,M
-   T(I) = T(I)/SUM
-END DO
-IERR = 0
+do i = 2,m
+   t(i) = t(i)/sum
+end do
+ierr = 0
 !
 !     FOR J = 1,...,N, A DIAGONALLY DOMINANT SET OF EQUATIONS
 !     FOR THE SLOPES S(I,J) OF THE J-TH PERIODIC SPLINE AT T(I)
@@ -6257,20 +6257,20 @@ IERR = 0
 !
 !        A(1)*S(1,J) + B(1)*S(2,J) + C(1)*S(M,J) = DX(1,J)
 !
-H = T(2)
-HM = 1.0 - T(M)
-C(1) = H
-B(1) = HM
-A(1) = 2.0*(H + HM)
-B(2) = H
+h = t(2)
+hm = 1.0 - t(m)
+c(1) = h
+b(1) = hm
+a(1) = 2.0*(h + hm)
+b(2) = h
 !
-DO J = 1,N
-   DELM = DX(1,J)/HM
-   DEL1 = DX(2,J)/H
-   DX(1,J) = 3.0*(H*DELM + HM*DEL1)
-   DX(2,J) = DEL1
-END DO
-IF (M .EQ. 2) GO TO 70
+do j = 1,n
+   delm = dx(1,j)/hm
+   del1 = dx(2,j)/h
+   dx(1,j) = 3.0*(h*delm + hm*del1)
+   dx(2,j) = del1
+end do
+if (m .eq. 2) go to 70
 !
 !     FOR THE KNOTS T(I) (I = 2,...M-1), GENERATE THE CORRESPOND-
 !     ING EQUATIONS AND CARRY OUT THE PIVOT REDUCTION OF GAUSS
@@ -6278,26 +6278,26 @@ IF (M .EQ. 2) GO TO 70
 !
 !        A(I)*S(I,J) + B(I)*S(I+1,J) + C(I)*S(M,J) = DX(I,J)
 !
-DO I = 2,MM1
-   IM1 = I - 1
-   B(I) = H
-   H = T(I+1) - T(I)
-   E(IM1) = H/A(IM1)
-   C(I) = - E(IM1)*C(IM1)
-   A(I) = 2.0*(B(I) + H) - E(IM1)*B(IM1)
-END DO
-B(M) = H
+do i = 2,mm1
+   im1 = i - 1
+   b(i) = h
+   h = t(i+1) - t(i)
+   e(im1) = h/a(im1)
+   c(i) = - e(im1)*c(im1)
+   a(i) = 2.0*(b(i) + h) - e(im1)*b(im1)
+end do
+b(m) = h
 !
-DO J = 1,N
-   DELI = DX(2,J)
-   DO I = 2,MM1
-      H = B(I+1)
-      DEL0 = DELI
-      DELI = DX(I+1,J)/H
-      DX(I,J) = 3.0*(H*DEL0 + B(I)*DELI) - E(I-1)*DX(I-1,J)
-   END DO
-   DX(M,J) = DELI
-END DO
+do j = 1,n
+   deli = dx(2,j)
+   do i = 2,mm1
+      h = b(i+1)
+      del0 = deli
+      deli = dx(i+1,j)/h
+      dx(i,j) = 3.0*(h*del0 + b(i)*deli) - e(i-1)*dx(i-1,j)
+   end do
+   dx(m,j) = deli
+end do
 !
 !     SINCE IT IS REQUIRED THAT THE SPLINE BE PERIODIC, THE
 !     EQUATION FOR THE KNOT T(M) HAS THE FORM ...
@@ -6314,222 +6314,222 @@ END DO
 !
 !        (ALPHA + HM)*S(M-1,J) + ETA*S(M,J) = DX(M,J)
 !
-70 ALPHA = H
-ETA = 2.0*(H + HM)
-DO J = 1,N
-   DEL  = DX(M,J)
-   DELM = (X(1,J) - X(M,J))/HM
-   DX(M,J) = 3.0*(HM*DEL + H*DELM)
-END DO
-IF (M .EQ. 2) GO TO 90
+70 alpha = h
+eta = 2.0*(h + hm)
+do j = 1,n
+   del  = dx(m,j)
+   delm = (x(1,j) - x(m,j))/hm
+   dx(m,j) = 3.0*(hm*del + h*delm)
+end do
+if (m .eq. 2) go to 90
 !
-DO I = 1,MM2
-   P = ALPHA/A(I)
-   ALPHA = - P*B(I)
-   ETA = ETA - P*C(I)
-   DO J = 1,N
-      DX(M,J) = DX(M,J) - P*DX(I,J)
-   END DO
-END DO
+do i = 1,mm2
+   p = alpha/a(i)
+   alpha = - p*b(i)
+   eta = eta - p*c(i)
+   do j = 1,n
+      dx(m,j) = dx(m,j) - p*dx(i,j)
+   end do
+end do
 !
 !     SOLVE THE LAST TWO EQUATIONS FOR S(M,J) AND S(M-1,J),
 !     AND STORE THESE SLOPES IN DX.
 !
-90 P = (ALPHA + HM)/A(MM1)
-TAU = B(MM1) + C(MM1)
-DO J = 1,N
-   SM = (DX(M,J) - P*DX(MM1,J))/(ETA - P*TAU)
-   DX(M,J) = SM
-   DX(MM1,J) = (DX(MM1,J) - TAU*SM)/A(MM1)
-END DO
-IF (M .EQ. 2) RETURN
+90 p = (alpha + hm)/a(mm1)
+tau = b(mm1) + c(mm1)
+do j = 1,n
+   sm = (dx(m,j) - p*dx(mm1,j))/(eta - p*tau)
+   dx(m,j) = sm
+   dx(mm1,j) = (dx(mm1,j) - tau*sm)/a(mm1)
+end do
+if (m .eq. 2) return
 !
 !     BACK SUBSTITUTION TO OBTAIN THE REMAINING SLOPES S(I,J).
 !     THESE SLOPES ARE STORED IN DX.
 !
-DO J = 1,N
-   SM = DX(M,J)
-   SI = DX(MM1,J)
-   I = MM1
-   DO L = 3,M
-      I = I - 1
-      SI = (DX(I,J) - B(I)*SI - C(I)*SM)/A(I)
-      DX(I,J) = SI
-   END DO
-END DO
-RETURN
+do j = 1,n
+   sm = dx(m,j)
+   si = dx(mm1,j)
+   i = mm1
+   do l = 3,m
+      i = i - 1
+      si = (dx(i,j) - b(i)*si - c(i)*sm)/a(i)
+      dx(i,j) = si
+   end do
+end do
+return
 !
 !     ERROR RETURN
 !
-200 IERR = 2
-RETURN
-210 IERR = 3
-RETURN
-END SUBROUTINE CSLOP1
+200 ierr = 2
+return
+210 ierr = 3
+return
+end subroutine cslop1
 
-SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KDX, KX, KZ, L, M, N
-INTEGER :: I, IL, IR, J, K
-REAL :: A, B, C, D, DT, H, T0, TOLD, W
+subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
+implicit none
+integer, intent(in) :: kdx, kx, kz, l, m, n
+integer :: i, il, ir, j, k
+real :: a, b, c, d, dt, h, t0, told, w
 !-----------------------------------------------------------------------
 !            EVALUATION OF A CUBIC SPLINE CLOSED CURVE
 !                     IN N-DIMENSIONAL SPACE
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N), TI(L)
-REAL, INTENT(INOUT) :: Z(KZ, N)
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
+real, intent(inout) :: z(kz, n)
 !
 !     REDUCTION OF TI(K) TO T0 WHERE 0 .LE. T0 .LT. 1
 !
-K = 1
-J = TI(1)
-T0 = TI(1) - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-IF (T0 .GE. T(M)) GO TO 60
-IL = 1
-IR = M
+k = 1
+j = ti(1)
+t0 = ti(1) - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 60
+il = 1
+ir = m
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 50
-IF (T0 - T(I)) 20,50,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 50
+if (t0 - t(i)) 20,50,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-40 IF (T0 .LT. T(I+1)) GO TO 50
-I = I + 1
-GO TO 40
+40 if (t0 .lt. t(i+1)) go to 50
+i = i + 1
+go to 40
 !
 !     COMPUTATION WHEN T(I) .LE. T0 .LT. T(I+1)
 !
-50 H = T(I+1) - T(I)
-DT = T0 - T(I)
-DO J = 1,N
-   A = DX(I,J)
-   D = (X(I+1,J) - X(I,J))/H
-   W = A + DX(I+1,J)
-   B = (-W - A + 3.0*D)/H
-   C = ((W - D - D)/H)/H
-   Z(K,J) = X(I,J) + DT*(A + DT*(B + DT*C))
-END DO
-GO TO 100
+50 h = t(i+1) - t(i)
+dt = t0 - t(i)
+do j = 1,n
+   a = dx(i,j)
+   d = (x(i+1,j) - x(i,j))/h
+   w = a + dx(i+1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(k,j) = x(i,j) + dt*(a + dt*(b + dt*c))
+end do
+go to 100
 !
 !     COMPUTATION WHEN T0 .GE. T(M)
 !
-60 I = M
-H = 1.0 - T(M)
-DT = T0 - T(M)
-DO J = 1,N
-   A = DX(M,J)
-   D = (X(1,J) - X(M,J))/H
-   W = A + DX(1,J)
-   B = (-W - A + 3.0*D)/H
-   C = ((W - D - D)/H)/H
-   Z(K,J) = X(M,J) + DT*(A + DT*(B + DT*C))
-END DO
+60 i = m
+h = 1.0 - t(m)
+dt = t0 - t(m)
+do j = 1,n
+   a = dx(m,j)
+   d = (x(1,j) - x(m,j))/h
+   w = a + dx(1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(k,j) = x(m,j) + dt*(a + dt*(b + dt*c))
+end do
 !
 !     NEXT POINT
 !
-100 IF (K .GE. L) RETURN
-TOLD = T0
-K = K + 1
-J = TI(K)
-T0 = TI(K) - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-IF (T0 .GE. T(M)) GO TO 60
-IF (T0 - TOLD) 110,50,40
+100 if (k .ge. l) return
+told = t0
+k = k + 1
+j = ti(k)
+t0 = ti(k) - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 60
+if (t0 - told) 110,50,40
 !
-110 IL = 1
-IR = MIN0(I+1,M)
-GO TO 10
-END SUBROUTINE LOPCMP
+110 il = 1
+ir = min0(i+1,m)
+go to 10
+end subroutine lopcmp
 
-SUBROUTINE LOPDF (M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KDX, KX, M, N
-REAL, INTENT(IN) :: TI
-INTEGER :: I, IL, IR, J
-REAL :: A, B, C, D, DT, H, T0, W
+subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
+implicit none
+integer, intent(in) :: kdx, kx, m, n
+real, intent(in) :: ti
+integer :: i, il, ir, j
+real :: a, b, c, d, dt, h, t0, w
 !-----------------------------------------------------------------------
 !          EVALUATION AND DIFFERENTIATION OF A CUBIC SPLINE
 !                CLOSED CURVE IN N-DIMENSIONAL SPACE
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N)
-REAL, INTENT(INOUT) :: Z(N), DZ(N), DDZ(N)
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
+real, intent(inout) :: z(n), dz(n), ddz(n)
 !
 !     REDUCTION OF TI TO T0 WHERE 0 .LE. T0 .LT. 1
 !
-J = TI
-T0 = TI - J
-IF (T0 .LT. 0.0) T0 = 1.0 + T0
-IF (T0 .GE. T(M)) GO TO 50
-IL = 1
-IR = M
+j = ti
+t0 = ti - j
+if (t0 .lt. 0.0) t0 = 1.0 + t0
+if (t0 .ge. t(m)) go to 50
+il = 1
+ir = m
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 40
-IF (T0 - T(I)) 20,40,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 40
+if (t0 - t(i)) 20,40,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     COMPUTATION WHEN T(I) .LE. T0 .LT. T(I+1)
 !
-40 H = T(I+1) - T(I)
-DT = T0 - T(I)
-DO J = 1,N
-   A = DX(I,J)
-   D = (X(I+1,J) - X(I,J))/H
-   W = A + DX(I+1,J)
-   B = (-W - A + 3.0*D)/H
-   C = ((W - D - D)/H)/H
-   Z(J) = X(I,J) + DT*(A + DT*(B + DT*C))
-   B = B + B
-   C = 3.0*C
-   DZ(J) = A + DT*(B + C*DT)
-   DDZ(J) = B + (C + C)*DT
-END DO
-RETURN
+40 h = t(i+1) - t(i)
+dt = t0 - t(i)
+do j = 1,n
+   a = dx(i,j)
+   d = (x(i+1,j) - x(i,j))/h
+   w = a + dx(i+1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(j) = x(i,j) + dt*(a + dt*(b + dt*c))
+   b = b + b
+   c = 3.0*c
+   dz(j) = a + dt*(b + c*dt)
+   ddz(j) = b + (c + c)*dt
+end do
+return
 !
 !     COMPUTATION WHEN T0 .GE. T(M)
 !
-50 H = 1.0 - T(M)
-DT = T0 - T(M)
-DO J = 1,N
-   A = DX(M,J)
-   D = (X(1,J) - X(M,J))/H
-   W = A + DX(1,J)
-   B = (-W - A + 3.0*D)/H
-   C = ((W - D - D)/H)/H
-   Z(J) = X(M,J) + DT*(A + DT*(B + DT*C))
-   B = B + B
-   C = 3.0*C
-   DZ(J) = A + DT*(B + C*DT)
-   DDZ(J) = B + (C + C)*DT
-END DO
-RETURN
-END SUBROUTINE LOPDF
+50 h = 1.0 - t(m)
+dt = t0 - t(m)
+do j = 1,n
+   a = dx(m,j)
+   d = (x(1,j) - x(m,j))/h
+   w = a + dx(1,j)
+   b = (-w - a + 3.0*d)/h
+   c = ((w - d - d)/h)/h
+   z(j) = x(m,j) + dt*(a + dt*(b + dt*c))
+   b = b + b
+   c = 3.0*c
+   dz(j) = a + dt*(b + c*dt)
+   ddz(j) = b + (c + c)*dt
+end do
+return
+end subroutine lopdf
 
-SUBROUTINE CURV1 (N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP, &
-&SIGMA,IERR)
-IMPLICIT NONE
-INTEGER :: I, IBAK, NM1, NP1
-REAL :: C1, C2, C3, DELX1, DELX2, DELXN, DELXNM, DIAG, DIAG1, &
-&DIAG2, DX1, DX2, SDIAG1, SDIAG2, SIGMAP, SLPP1, SLPPN
+subroutine curv1 (n,x,y,slp1,slpn,islpsw,yp,temp, &
+&sigma,ierr)
+implicit none
+integer :: i, ibak, nm1, np1
+real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
+&diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
 !
-INTEGER, INTENT(IN) :: N, ISLPSW
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
-REAL, INTENT(INOUT) :: YP(N), TEMP(N)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), slp1, slpn
+real, intent(inout) :: yp(n), temp(n)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -6601,91 +6601,91 @@ REAL, INTENT(IN) :: SIGMA
 !
 !-----------------------------------------------------------
 !
-NM1 = N-1
-NP1 = N+1
-IERR = 0
-IF (N .LE. 1) GO TO 8
-IF (X(N) .LE. X(1)) GO TO 9
+nm1 = n-1
+np1 = n+1
+ierr = 0
+if (n .le. 1) go to 8
+if (x(n) .le. x(1)) go to 9
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/(X(N)-X(1))
+sigmap = abs(sigma)*float(n-1)/(x(n)-x(1))
 !
 ! APPROXIMATE END SLOPES
 !
-IF (ISLPSW .GE. 2) GO TO 1
-SLPP1 = SLP1
-GO TO 2
-1 DELX1 = X(2)-X(1)
-DELX2 = DELX1+DELX1
-IF (N .GT. 2) DELX2 = X(3)-X(1)
-IF (DELX1 .LE. 0. .OR. DELX2 .LE. DELX1) GO TO 9
-CALL CEEZ (DELX1,DELX2,SIGMAP,C1,C2,C3,N)
-SLPP1 = C1*Y(1)+C2*Y(2)
-IF (N .GT. 2) SLPP1 = SLPP1+C3*Y(3)
-2 IF (ISLPSW .EQ. 1 .OR. ISLPSW .EQ. 3) GO TO 3
-SLPPN = SLPN
-GO TO 4
-3 DELXN = X(N)-X(NM1)
-DELXNM = DELXN+DELXN
-IF (N .GT. 2) DELXNM = X(N)-X(N-2)
-IF (DELXN .LE. 0. .OR. DELXNM .LE. DELXN) GO TO 9
-CALL CEEZ (-DELXN,-DELXNM,SIGMAP,C1,C2,C3,N)
-SLPPN = C1*Y(N)+C2*Y(NM1)
-IF (N .GT. 2) SLPPN = SLPPN+C3*Y(N-2)
+if (islpsw .ge. 2) go to 1
+slpp1 = slp1
+go to 2
+1 delx1 = x(2)-x(1)
+delx2 = delx1+delx1
+if (n .gt. 2) delx2 = x(3)-x(1)
+if (delx1 .le. 0. .or. delx2 .le. delx1) go to 9
+call ceez (delx1,delx2,sigmap,c1,c2,c3,n)
+slpp1 = c1*y(1)+c2*y(2)
+if (n .gt. 2) slpp1 = slpp1+c3*y(3)
+2 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 3
+slppn = slpn
+go to 4
+3 delxn = x(n)-x(nm1)
+delxnm = delxn+delxn
+if (n .gt. 2) delxnm = x(n)-x(n-2)
+if (delxn .le. 0. .or. delxnm .le. delxn) go to 9
+call ceez (-delxn,-delxnm,sigmap,c1,c2,c3,n)
+slppn = c1*y(n)+c2*y(nm1)
+if (n .gt. 2) slppn = slppn+c3*y(n-2)
 !
 ! SET UP RIGHT HAND SIDE AND TRIDIAGONAL SYSTEM FOR YP AND
 ! PERFORM FORWARD ELIMINATION
 !
-4 DELX1 = X(2)-X(1)
-IF (DELX1 .LE. 0.) GO TO 9
-DX1 = (Y(2)-Y(1))/DELX1
-CALL TERMS (DIAG1,SDIAG1,SIGMAP,DELX1)
-YP(1) = (DX1-SLPP1)/DIAG1
-TEMP(1) = SDIAG1/DIAG1
-IF (N .EQ. 2) GO TO 6
-do 5 I = 2,NM1
-  DELX2 = X(I+1)-X(I)
-  IF (DELX2 .LE. 0.) GO TO 9
-  DX2 = (Y(I+1)-Y(I))/DELX2
-  CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELX2)
-  DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
-  YP(I) = (DX2-DX1-SDIAG1*YP(I-1))/DIAG
-  TEMP(I) = SDIAG2/DIAG
-  DX1 = DX2
-  DIAG1 = DIAG2
-5 SDIAG1 = SDIAG2
-6 DIAG = DIAG1-SDIAG1*TEMP(NM1)
-YP(N) = (SLPPN-DX1-SDIAG1*YP(NM1))/DIAG
+4 delx1 = x(2)-x(1)
+if (delx1 .le. 0.) go to 9
+dx1 = (y(2)-y(1))/delx1
+call terms (diag1,sdiag1,sigmap,delx1)
+yp(1) = (dx1-slpp1)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 6
+do 5 i = 2,nm1
+  delx2 = x(i+1)-x(i)
+  if (delx2 .le. 0.) go to 9
+  dx2 = (y(i+1)-y(i))/delx2
+  call terms (diag2,sdiag2,sigmap,delx2)
+  diag = diag1+diag2-sdiag1*temp(i-1)
+  yp(i) = (dx2-dx1-sdiag1*yp(i-1))/diag
+  temp(i) = sdiag2/diag
+  dx1 = dx2
+  diag1 = diag2
+5 sdiag1 = sdiag2
+6 diag = diag1-sdiag1*temp(nm1)
+yp(n) = (slppn-dx1-sdiag1*yp(nm1))/diag
 !
 ! PERFORM BACK SUBSTITUTION
 !
-do 7 I = 2,N
-  IBAK = NP1-I
-7 YP(IBAK) = YP(IBAK)-TEMP(IBAK)*YP(IBAK+1)
-RETURN
+do 7 i = 2,n
+  ibak = np1-i
+7 yp(ibak) = yp(ibak)-temp(ibak)*yp(ibak+1)
+return
 !
 ! TOO FEW POINTS
 !
-8 IERR = 1
-RETURN
+8 ierr = 1
+return
 !
 ! X-VALUES NOT STRICTLY INCREASING
 !
-9 IERR = 2
-RETURN
-END SUBROUTINE CURV1
+9 ierr = 2
+return
+end subroutine curv1
 
-FUNCTION CURV2 (T,N,X,Y,YP,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1
-REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY, &
-&SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUM
-INTEGER :: INTRVL
-REAL :: CURV2
+function curv2 (t,n,x,y,yp,sigma)
+implicit none
+integer :: i, im1
+real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
+&sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
+integer :: intrvl
+real :: curv2
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -6731,50 +6731,50 @@ REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
 !
 ! DETERMINE INTERVAL
 !
-IM1 = INTRVL(T,X,N)
-I = IM1+1
+im1 = intrvl(t,x,n)
+i = im1+1
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/(X(N)-X(1))
+sigmap = abs(sigma)*float(n-1)/(x(n)-x(1))
 !
 ! SET UP AND PERFORM INTERPOLATION
 !
-DEL1 = T-X(IM1)
-DEL2 = X(I)-T
-DELS = X(I)-X(IM1)
-SUM = (Y(I)*DEL1+Y(IM1)*DEL2)/DELS
-IF (SIGMAP .NE. 0.) GO TO 1
-CURV2 = SUM-DEL1*DEL2*(YP(I)*(DEL1+DELS)+YP(IM1)* &
-&(DEL2+DELS))/(6.*DELS)
-RETURN
-1 DELP1 = SIGMAP*(DEL1+DELS)/2.
-DELP2 = SIGMAP*(DEL2+DELS)/2.
-CALL SNHCSH (SINHM1,DUMMY,SIGMAP*DEL1,-1)
-CALL SNHCSH (SINHM2,DUMMY,SIGMAP*DEL2,-1)
-CALL SNHCSH (SINHMS,DUMMY,SIGMAP*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
-CURV2 = SUM+(YP(I)*(SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)* &
-&SINHP2+SIGMAP*COSHP1*DEL2))+YP(IM1)*(SINHM2* &
-&DEL1-DEL2*(2.*(COSHP2+1.)*SINHP1+SIGMAP* &
-&COSHP2*DEL1)))/(SIGMAP*SIGMAP*DELS*(SINHMS+ &
-&SIGMAP*DELS))
-RETURN
-END FUNCTION CURV2
+del1 = t-x(im1)
+del2 = x(i)-t
+dels = x(i)-x(im1)
+sum = (y(i)*del1+y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+curv2 = sum-del1*del2*(yp(i)*(del1+dels)+yp(im1)* &
+&(del2+dels))/(6.*dels)
+return
+1 delp1 = sigmap*(del1+dels)/2.
+delp2 = sigmap*(del2+dels)/2.
+call snhcsh (sinhm1,dummy,sigmap*del1,-1)
+call snhcsh (sinhm2,dummy,sigmap*del2,-1)
+call snhcsh (sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+curv2 = sum+(yp(i)*(sinhm1*del2-del1*(2.*(coshp1+1.)* &
+&sinhp2+sigmap*coshp1*del2))+yp(im1)*(sinhm2* &
+&del1-del2*(2.*(coshp2+1.)*sinhp1+sigmap* &
+&coshp2*del1)))/(sigmap*sigmap*dels*(sinhms+ &
+&sigmap*dels))
+return
+end function curv2
 
-FUNCTION CURVD (T,N,X,Y,YP,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1
-REAL :: COSHM1, COSHM2, DEL1, DEL2, DELS, DUMMY, SIGMAP, SINHMS, &
-&SUM
-INTEGER :: INTRVL
-REAL :: CURVD
+function curvd (t,n,x,y,yp,sigma)
+implicit none
+integer :: i, im1
+real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
+&sum
+integer :: intrvl
+real :: curvd
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -6820,45 +6820,45 @@ REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
 !
 ! DETERMINE INTERVAL
 !
-IM1 = INTRVL(T,X,N)
-I = IM1+1
+im1 = intrvl(t,x,n)
+i = im1+1
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/(X(N)-X(1))
+sigmap = abs(sigma)*float(n-1)/(x(n)-x(1))
 !
 ! SET UP AND PERFORM DIFFERENTIATION
 !
-DEL1 = T-X(IM1)
-DEL2 = X(I)-T
-DELS = X(I)-X(IM1)
-SUM = (Y(I)-Y(IM1))/DELS
-IF (SIGMAP .NE. 0.) GO TO 1
-CURVD = SUM+(YP(I)*(2.*DEL1*DEL1-DEL2*(DEL1+DELS))- &
-&YP(IM1)*(2.*DEL2*DEL2-DEL1*(DEL2+DELS))) &
-&/(6.*DELS)
-RETURN
-1 CALL SNHCSH (DUMMY,COSHM1,SIGMAP*DEL1,1)
-CALL SNHCSH (DUMMY,COSHM2,SIGMAP*DEL2,1)
-CALL SNHCSH (SINHMS,DUMMY,SIGMAP*DELS,-1)
-CURVD = SUM+(YP(I)*(DELS*SIGMAP*COSHM1-SINHMS)- &
-&YP(IM1)*(DELS*SIGMAP*COSHM2-SINHMS))/ &
-&(SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS))
-RETURN
-END FUNCTION CURVD
+del1 = t-x(im1)
+del2 = x(i)-t
+dels = x(i)-x(im1)
+sum = (y(i)-y(im1))/dels
+if (sigmap .ne. 0.) go to 1
+curvd = sum+(yp(i)*(2.*del1*del1-del2*(del1+dels))- &
+&yp(im1)*(2.*del2*del2-del1*(del2+dels))) &
+&/(6.*dels)
+return
+1 call snhcsh (dummy,coshm1,sigmap*del1,1)
+call snhcsh (dummy,coshm2,sigmap*del2,1)
+call snhcsh (sinhms,dummy,sigmap*dels,-1)
+curvd = sum+(yp(i)*(dels*sigmap*coshm1-sinhms)- &
+&yp(im1)*(dels*sigmap*coshm2-sinhms))/ &
+&(sigmap*sigmap*dels*(sinhms+sigmap*dels))
+return
+end function curvd
 
-FUNCTION CURVI (XL,XU,N,X,Y,YP,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IL, ILM1, ILP1, IU, IUM1
-REAL :: C1, C2, CL1, CL2, CMM1, CMM2, CS, CU1, CU2, DEL1, DEL2, &
-&DELI, DELL1, DELL2, DELS, DELU1, DELU2, DUMMY, SIGMAP, SS, SSIGN, &
-&SUM, T, T1, T2, XXL, XXU
-INTEGER :: INTRVL
-REAL :: CURVI
-REAL :: TERM
+function curvi (xl,xu,n,x,y,yp,sigma)
+implicit none
+integer :: i, il, ilm1, ilp1, iu, ium1
+real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
+&deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
+&sum, t, t1, t2, xxl, xxu
+integer :: intrvl
+real :: curvi
+real :: term
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
+integer, intent(in) :: n
+real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -6906,136 +6906,136 @@ REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
 ! STATEMENT FUNCTION FOR COEFFICIENT ASSOCIATED WITH
 ! DERIVATIVE TERMS
 !
-TERM (CMM1,CMM2,T) = (CMM1-CMM2-SIGMAP*T*SS)/(SIGMAP* &
-&SIGMAP*SIGMAP*(SS+SIGMAP*DELS))
+term (cmm1,cmm2,t) = (cmm1-cmm2-sigmap*t*ss)/(sigmap* &
+&sigmap*sigmap*(ss+sigmap*dels))
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/(X(N)-X(1))
+sigmap = abs(sigma)*float(n-1)/(x(n)-x(1))
 !
 ! DETERMINE ACTUAL UPPER AND LOWER BOUNDS
 !
-XXL = XL
-XXU = XU
-SSIGN = 1.
-IF (XL .LT. XU) GO TO 1
-XXL = XU
-XXU = XL
-SSIGN = -1.
-IF (XL .GT. XU) GO TO 1
+xxl = xl
+xxu = xu
+ssign = 1.
+if (xl .lt. xu) go to 1
+xxl = xu
+xxu = xl
+ssign = -1.
+if (xl .gt. xu) go to 1
 !
 ! RETURN ZERO IF XL .EQ. XU
 !
-CURVI = 0.
-RETURN
+curvi = 0.
+return
 !
 ! SEARCH FOR PROPER INTERVALS
 !
-1 ILM1 = INTRVL (XXL,X,N)
-IL = ILM1+1
-IUM1 = INTRVL (XXU,X,N)
-IU = IUM1+1
-IF (IL .EQ. IU) GO TO 8
+1 ilm1 = intrvl (xxl,x,n)
+il = ilm1+1
+ium1 = intrvl (xxu,x,n)
+iu = ium1+1
+if (il .eq. iu) go to 8
 !
 ! INTEGRATE FROM XXL TO X(IL)
 !
-SUM = 0.
-IF (XXL .EQ. X(IL)) GO TO 3
-DEL1 = XXL-X(ILM1)
-DEL2 = X(IL)-XXL
-DELS = X(IL)-X(ILM1)
-T1 = (DEL1+DELS)*DEL2/(2.*DELS)
-T2 = DEL2*DEL2/(2.*DELS)
-SUM = T1*Y(IL)+T2*Y(ILM1)
-IF (SIGMA .EQ. 0.) GO TO 2
-CALL SNHCSH (DUMMY,C1,SIGMAP*DEL1,2)
-CALL SNHCSH (DUMMY,C2,SIGMAP*DEL2,2)
-CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
-SUM = SUM+TERM(CS,C1,T1)*YP(IL) &
-&+TERM(C2,0.,T2)*YP(ILM1)
-GO TO 3
-2 SUM = SUM-T1*T1*DELS*YP(IL)/6. &
-&-T2*(DEL1*(DEL2+DELS)+DELS*DELS)*YP(ILM1)/12.
+sum = 0.
+if (xxl .eq. x(il)) go to 3
+del1 = xxl-x(ilm1)
+del2 = x(il)-xxl
+dels = x(il)-x(ilm1)
+t1 = (del1+dels)*del2/(2.*dels)
+t2 = del2*del2/(2.*dels)
+sum = t1*y(il)+t2*y(ilm1)
+if (sigma .eq. 0.) go to 2
+call snhcsh (dummy,c1,sigmap*del1,2)
+call snhcsh (dummy,c2,sigmap*del2,2)
+call snhcsh (ss,cs,sigmap*dels,3)
+sum = sum+term(cs,c1,t1)*yp(il) &
+&+term(c2,0.,t2)*yp(ilm1)
+go to 3
+2 sum = sum-t1*t1*dels*yp(il)/6. &
+&-t2*(del1*(del2+dels)+dels*dels)*yp(ilm1)/12.
 !
 ! INTEGRATE OVER INTERIOR INTERVALS
 !
-3 IF (IU-IL .EQ. 1) GO TO 6
-ILP1 = IL+1
-do 5 I = ILP1,IUM1
-  DELS = X(I)-X(I-1)
-  SUM = SUM+(Y(I)+Y(I-1))*DELS/2.
-  IF (SIGMA .EQ. 0.) GO TO 4
-  CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
-  SUM = SUM+(YP(I)+YP(I-1))*(CS-SS*SIGMAP*DELS/2.)/ &
-&(SIGMAP*SIGMAP*SIGMAP*(SS+SIGMAP*DELS))
-  GO TO 5
-4 SUM = SUM-(YP(I)+YP(I-1))*DELS*DELS*DELS/24.
-5 CONTINUE
+3 if (iu-il .eq. 1) go to 6
+ilp1 = il+1
+do 5 i = ilp1,ium1
+  dels = x(i)-x(i-1)
+  sum = sum+(y(i)+y(i-1))*dels/2.
+  if (sigma .eq. 0.) go to 4
+  call snhcsh (ss,cs,sigmap*dels,3)
+  sum = sum+(yp(i)+yp(i-1))*(cs-ss*sigmap*dels/2.)/ &
+&(sigmap*sigmap*sigmap*(ss+sigmap*dels))
+  go to 5
+4 sum = sum-(yp(i)+yp(i-1))*dels*dels*dels/24.
+5 continue
 !
 ! INTEGRATE FROM X(IU-1) TO XXU
 !
-6 IF (XXU .EQ. X(IUM1)) GO TO 10
-DEL1 = XXU-X(IUM1)
-DEL2 = X(IU)-XXU
-DELS = X(IU)-X(IUM1)
-T1 = DEL1*DEL1/(2.*DELS)
-T2 = (DEL2+DELS)*DEL1/(2.*DELS)
-SUM = SUM+T1*Y(IU)+T2*Y(IUM1)
-IF (SIGMA .EQ. 0.) GO TO 7
-CALL SNHCSH (DUMMY,C1,SIGMAP*DEL1,2)
-CALL SNHCSH (DUMMY,C2,SIGMAP*DEL2,2)
-CALL SNHCSH (SS,CS,SIGMAP*DELS,3)
-SUM = SUM+TERM(C1,0.,T1)*YP(IU) &
-&+TERM(CS,C2,T2)*YP(IUM1)
-GO TO 10
-7 SUM = SUM-T1*(DEL2*(DEL1+DELS)+DELS*DELS)*YP(IU)/12. &
-&-T2*T2*DELS*YP(IUM1)/6.
-GO TO 10
+6 if (xxu .eq. x(ium1)) go to 10
+del1 = xxu-x(ium1)
+del2 = x(iu)-xxu
+dels = x(iu)-x(ium1)
+t1 = del1*del1/(2.*dels)
+t2 = (del2+dels)*del1/(2.*dels)
+sum = sum+t1*y(iu)+t2*y(ium1)
+if (sigma .eq. 0.) go to 7
+call snhcsh (dummy,c1,sigmap*del1,2)
+call snhcsh (dummy,c2,sigmap*del2,2)
+call snhcsh (ss,cs,sigmap*dels,3)
+sum = sum+term(c1,0.,t1)*yp(iu) &
+&+term(cs,c2,t2)*yp(ium1)
+go to 10
+7 sum = sum-t1*(del2*(del1+dels)+dels*dels)*yp(iu)/12. &
+&-t2*t2*dels*yp(ium1)/6.
+go to 10
 !
 ! INTEGRATE FROM XXL TO XXU
 !
-8 DELU1 = XXU-X(IUM1)
-DELU2 = X(IU)-XXU
-DELL1 = XXL-X(IUM1)
-DELL2 = X(IU)-XXL
-DELS = X(IU)-X(IUM1)
-DELI = XXU-XXL
-T1 = (DELU1+DELL1)*DELI/(2.*DELS)
-T2 = (DELU2+DELL2)*DELI/(2.*DELS)
-SUM = T1*Y(IU)+T2*Y(IUM1)
-IF (SIGMA .EQ. 0.) GO TO 9
-CALL SNHCSH (DUMMY,CU1,SIGMAP*DELU1,2)
-CALL SNHCSH (DUMMY,CU2,SIGMAP*DELU2,2)
-CALL SNHCSH (DUMMY,CL1,SIGMAP*DELL1,2)
-CALL SNHCSH (DUMMY,CL2,SIGMAP*DELL2,2)
-CALL SNHCSH (SS,DUMMY,SIGMAP*DELS,-1)
-SUM = SUM+TERM(CU1,CL1,T1)*YP(IU) &
-&+TERM(CL2,CU2,T2)*YP(IUM1)
-GO TO 10
-9 SUM = SUM-T1*(DELU2*(DELS+DELU1)+DELL2*(DELS+DELL1))* &
-&YP(IU)/12. &
-&-T2*(DELL1*(DELS+DELL2)+DELU1*(DELS+DELU2))* &
-&YP(IUM1)/12.
+8 delu1 = xxu-x(ium1)
+delu2 = x(iu)-xxu
+dell1 = xxl-x(ium1)
+dell2 = x(iu)-xxl
+dels = x(iu)-x(ium1)
+deli = xxu-xxl
+t1 = (delu1+dell1)*deli/(2.*dels)
+t2 = (delu2+dell2)*deli/(2.*dels)
+sum = t1*y(iu)+t2*y(ium1)
+if (sigma .eq. 0.) go to 9
+call snhcsh (dummy,cu1,sigmap*delu1,2)
+call snhcsh (dummy,cu2,sigmap*delu2,2)
+call snhcsh (dummy,cl1,sigmap*dell1,2)
+call snhcsh (dummy,cl2,sigmap*dell2,2)
+call snhcsh (ss,dummy,sigmap*dels,-1)
+sum = sum+term(cu1,cl1,t1)*yp(iu) &
+&+term(cl2,cu2,t2)*yp(ium1)
+go to 10
+9 sum = sum-t1*(delu2*(dels+delu1)+dell2*(dels+dell1))* &
+&yp(iu)/12. &
+&-t2*(dell1*(dels+dell2)+delu1*(dels+delu2))* &
+&yp(ium1)/12.
 !
 ! CORRECT SIGN AND RETURN
 !
-10 CURVI = SSIGN*SUM
-RETURN
-END FUNCTION CURVI
+10 curvi = ssign*sum
+return
+end function curvi
 
-SUBROUTINE KURV1 (N,X,Y,SLP1,SLPN,ISLPSW,XP,YP,TEMP,S, &
-&SIGMA,IERR)
-IMPLICIT NONE
-INTEGER :: I, IBAK, IM1, NM1, NP1
-REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG, &
-&DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, SDIAG1, SDIAG2, SIGMAP, &
-&SLPP1X, SLPP1Y, SLPPNX, SLPPNY, SX, SY
+subroutine kurv1 (n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
+&sigma,ierr)
+implicit none
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+&diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
+&slpp1x, slpp1y, slppnx, slppny, sx, sy
 !
-INTEGER, INTENT(IN) :: N, ISLPSW
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
-REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(N), S(N)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), slp1, slpn
+real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7115,120 +7115,120 @@ REAL, INTENT(IN) :: SIGMA
 !
 !-----------------------------------------------------------
 !
-NM1 = N-1
-NP1 = N+1
-IERR = 0
-IF (N .LE. 1) GO TO 11
+nm1 = n-1
+np1 = n+1
+ierr = 0
+if (n .le. 1) go to 11
 !
 ! DETERMINE POLYGONAL ARCLENGTHS
 !
-S(1) = 0.
-do 1 I = 2,N
-  IM1 = I-1
-1 S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+ &
-&(Y(I)-Y(IM1))**2)
+s(1) = 0.
+do 1 i = 2,n
+  im1 = i-1
+1 s(i) = s(im1)+sqrt((x(i)-x(im1))**2+ &
+&(y(i)-y(im1))**2)
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/S(N)
+sigmap = abs(sigma)*float(n-1)/s(n)
 !
 ! APPROXIMATE END SLOPES
 !
-IF (ISLPSW .GE. 2) GO TO 2
-SLPP1X = COS(SLP1)
-SLPP1Y = SIN(SLP1)
-GO TO 4
-2 DELS1 = S(2)-S(1)
-DELS2 = DELS1+DELS1
-IF (N .GT. 2) DELS2 = S(3)-S(1)
-IF (DELS1 .EQ. 0. .OR. DELS2 .EQ. 0.) GO TO 12
-CALL CEEZ (DELS1,DELS2,SIGMAP,C1,C2,C3,N)
-SX = C1*X(1)+C2*X(2)
-SY = C1*Y(1)+C2*Y(2)
-IF (N .EQ. 2) GO TO 3
-SX = SX+C3*X(3)
-SY = SY+C3*Y(3)
-3 DELT = SQRT(SX*SX+SY*SY)
-SLPP1X = SX/DELT
-SLPP1Y = SY/DELT
-4 IF (ISLPSW .EQ. 1 .OR. ISLPSW .EQ. 3) GO TO 5
-SLPPNX = COS(SLPN)
-SLPPNY = SIN(SLPN)
-GO TO 7
-5 DELSN = S(N)-S(NM1)
-DELSNM = DELSN+DELSN
-IF (N .GT. 2) DELSNM = S(N)-S(N-2)
-IF (DELSN .EQ. 0. .OR. DELSNM .EQ. 0.) GO TO 12
-CALL CEEZ (-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
-SX = C1*X(N)+C2*X(NM1)
-SY = C1*Y(N)+C2*Y(NM1)
-IF (N .EQ. 2) GO TO 6
-SX = SX+C3*X(N-2)
-SY = SY+C3*Y(N-2)
-6 DELT = SQRT(SX*SX+SY*SY)
-SLPPNX = SX/DELT
-SLPPNY = SY/DELT
+if (islpsw .ge. 2) go to 2
+slpp1x = cos(slp1)
+slpp1y = sin(slp1)
+go to 4
+2 dels1 = s(2)-s(1)
+dels2 = dels1+dels1
+if (n .gt. 2) dels2 = s(3)-s(1)
+if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 12
+call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+sx = c1*x(1)+c2*x(2)
+sy = c1*y(1)+c2*y(2)
+if (n .eq. 2) go to 3
+sx = sx+c3*x(3)
+sy = sy+c3*y(3)
+3 delt = sqrt(sx*sx+sy*sy)
+slpp1x = sx/delt
+slpp1y = sy/delt
+4 if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 5
+slppnx = cos(slpn)
+slppny = sin(slpn)
+go to 7
+5 delsn = s(n)-s(nm1)
+delsnm = delsn+delsn
+if (n .gt. 2) delsnm = s(n)-s(n-2)
+if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 12
+call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+sx = c1*x(n)+c2*x(nm1)
+sy = c1*y(n)+c2*y(nm1)
+if (n .eq. 2) go to 6
+sx = sx+c3*x(n-2)
+sy = sy+c3*y(n-2)
+6 delt = sqrt(sx*sx+sy*sy)
+slppnx = sx/delt
+slppny = sy/delt
 !
 ! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR XP AND
 ! YP AND PERFORM FORWARD ELIMINATION
 !
-7 DX1 = (X(2)-X(1))/S(2)
-DY1 = (Y(2)-Y(1))/S(2)
-CALL TERMS (DIAG1,SDIAG1,SIGMAP,S(2))
-XP(1) = (DX1-SLPP1X)/DIAG1
-YP(1) = (DY1-SLPP1Y)/DIAG1
-TEMP(1) = SDIAG1/DIAG1
-IF (N .EQ. 2) GO TO 9
-do 8 I = 2,NM1
-  DELS2 = S(I+1)-S(I)
-  IF (DELS2 .EQ. 0.) GO TO 12
-  DX2 = (X(I+1)-X(I))/DELS2
-  DY2 = (Y(I+1)-Y(I))/DELS2
-  CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELS2)
-  DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
-  DIAGIN = 1./DIAG
-  XP(I) = (DX2-DX1-SDIAG1*XP(I-1))*DIAGIN
-  YP(I) = (DY2-DY1-SDIAG1*YP(I-1))*DIAGIN
-  TEMP(I) = SDIAG2*DIAGIN
-  DX1 = DX2
-  DY1 = DY2
-  DIAG1 = DIAG2
-8 SDIAG1 = SDIAG2
-9 DIAG = DIAG1-SDIAG1*TEMP(NM1)
-XP(N) = (SLPPNX-DX1-SDIAG1*XP(NM1))/DIAG
-YP(N) = (SLPPNY-DY1-SDIAG1*YP(NM1))/DIAG
+7 dx1 = (x(2)-x(1))/s(2)
+dy1 = (y(2)-y(1))/s(2)
+call terms (diag1,sdiag1,sigmap,s(2))
+xp(1) = (dx1-slpp1x)/diag1
+yp(1) = (dy1-slpp1y)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 9
+do 8 i = 2,nm1
+  dels2 = s(i+1)-s(i)
+  if (dels2 .eq. 0.) go to 12
+  dx2 = (x(i+1)-x(i))/dels2
+  dy2 = (y(i+1)-y(i))/dels2
+  call terms (diag2,sdiag2,sigmap,dels2)
+  diag = diag1+diag2-sdiag1*temp(i-1)
+  diagin = 1./diag
+  xp(i) = (dx2-dx1-sdiag1*xp(i-1))*diagin
+  yp(i) = (dy2-dy1-sdiag1*yp(i-1))*diagin
+  temp(i) = sdiag2*diagin
+  dx1 = dx2
+  dy1 = dy2
+  diag1 = diag2
+8 sdiag1 = sdiag2
+9 diag = diag1-sdiag1*temp(nm1)
+xp(n) = (slppnx-dx1-sdiag1*xp(nm1))/diag
+yp(n) = (slppny-dy1-sdiag1*yp(nm1))/diag
 !
 ! PERFORM BACK SUBSTITUTION
 !
-do 10 I = 2,N
-  IBAK = NP1-I
-  XP(IBAK) = XP(IBAK)-TEMP(IBAK)*XP(IBAK+1)
-10 YP(IBAK) = YP(IBAK)-TEMP(IBAK)*YP(IBAK+1)
-RETURN
+do 10 i = 2,n
+  ibak = np1-i
+  xp(ibak) = xp(ibak)-temp(ibak)*xp(ibak+1)
+10 yp(ibak) = yp(ibak)-temp(ibak)*yp(ibak+1)
+return
 !
 ! TOO FEW POINTS
 !
-11 IERR = 1
-RETURN
+11 ierr = 1
+return
 !
 ! COINCIDENT ADJACENT POINTS
 !
-12 IERR = 2
-RETURN
-END SUBROUTINE KURV1
+12 ierr = 2
+return
+end subroutine kurv1
 
-SUBROUTINE KURV2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1
-REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS, &
-&DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY, &
-&TN
-INTEGER :: INTRVL
+subroutine kurv2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+&dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+&tn
+integer :: intrvl
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: T
-REAL, INTENT(INOUT) :: XS, YS
-REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7284,58 +7284,58 @@ REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
 !
 ! DETERMINE INTERVAL
 !
-TN = S(N)*T
-IM1 = INTRVL(TN,S,N)
-I = IM1+1
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1+1
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/S(N)
+sigmap = abs(sigma)*float(n-1)/s(n)
 !
 ! SET UP AND PERFORM INTERPOLATION
 !
-DEL1 = TN-S(IM1)
-DEL2 = S(I)-TN
-DELS = S(I)-S(IM1)
-SUMX = (X(I)*DEL1+X(IM1)*DEL2)/DELS
-SUMY = (Y(I)*DEL1+Y(IM1)*DEL2)/DELS
-IF (SIGMAP .NE. 0.) GO TO 1
-D = DEL1*DEL2/(6.*DELS)
-C1 = (DEL1+DELS)*D
-C2 = (DEL2+DELS)*D
-XS = SUMX-XP(I)*C1-XP(IM1)*C2
-YS = SUMY-YP(I)*C1-YP(IM1)*C2
-RETURN
-1 DELP1 = SIGMAP*(DEL1+DELS)/2.
-DELP2 = SIGMAP*(DEL2+DELS)/2.
-CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
-CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
-CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
-D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
-C1 = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP* &
-&COSHP1*DEL2))/D
-C2 = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*SINHP1+SIGMAP* &
-&COSHP2*DEL1))/D
-XS = SUMX+XP(I)*C1+XP(IM1)*C2
-YS = SUMY+YP(I)*C1+YP(IM1)*C2
-RETURN
-END SUBROUTINE KURV2
+del1 = tn-s(im1)
+del2 = s(i)-tn
+dels = s(i)-s(im1)
+sumx = (x(i)*del1+x(im1)*del2)/dels
+sumy = (y(i)*del1+y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1+dels)*d
+c2 = (del2+dels)*d
+xs = sumx-xp(i)*c1-xp(im1)*c2
+ys = sumy-yp(i)*c1-yp(im1)*c2
+return
+1 delp1 = sigmap*(del1+dels)/2.
+delp2 = sigmap*(del2+dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms+sigmap*dels)
+c1 = (sinhm1*del2-del1*(2.*(coshp1+1.)*sinhp2+sigmap* &
+&coshp1*del2))/d
+c2 = (sinhm2*del1-del2*(2.*(coshp2+1.)*sinhp1+sigmap* &
+&coshp2*del1))/d
+xs = sumx+xp(i)*c1+xp(im1)*c2
+ys = sumy+yp(i)*c1+yp(im1)*c2
+return
+end subroutine kurv2
 
-SUBROUTINE KURVP1 (N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
-IMPLICIT NONE
-INTEGER :: I, IBAK, IM1, NM1, NP1, NPI, NPIBAK
-REAL :: DELS1, DELS2, DIAG, DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, &
-&DY2, SDIAG1, SDIAG2, SIGMAP, XPN, YPN
+subroutine kurvp1 (n,x,y,xp,yp,temp,s,sigma,ierr)
+implicit none
+integer :: i, ibak, im1, nm1, np1, npi, npibak
+real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
+&dy2, sdiag1, sdiag2, sigmap, xpn, ypn
 !
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(IN) :: X(N), Y(N)
-REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(*), S(N)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: n
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7399,118 +7399,118 @@ REAL, INTENT(IN) :: SIGMA
 !
 !-----------------------------------------------------------
 !
-NM1 = N-1
-NP1 = N+1
-IERR = 0
-IF (N .LE. 1) GO TO 7
+nm1 = n-1
+np1 = n+1
+ierr = 0
+if (n .le. 1) go to 7
 !
 ! DETERMINE POLYGONAL ARCLENGTHS
 !
-S(1) = SQRT((X(N)-X(1))**2+(Y(N)-Y(1))**2)
-do 1 I = 2,N
-  IM1 = I-1
-1 S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+ &
-&(Y(I)-Y(IM1))**2)
+s(1) = sqrt((x(n)-x(1))**2+(y(n)-y(1))**2)
+do 1 i = 2,n
+  im1 = i-1
+1 s(i) = s(im1)+sqrt((x(i)-x(im1))**2+ &
+&(y(i)-y(im1))**2)
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N)/S(N)
+sigmap = abs(sigma)*float(n)/s(n)
 !
 ! SET UP RIGHT HAND SIDES OF TRIDIAGONAL (WITH CORNER
 ! ELEMENTS) LINEAR SYSTEM FOR XP AND YP
 !
-DELS1 = S(1)
-IF (DELS1 .EQ. 0.) GO TO 8
-DX1 = (X(1)-X(N))/DELS1
-DY1 = (Y(1)-Y(N))/DELS1
-CALL TERMS(DIAG1,SDIAG1,SIGMAP,DELS1)
-DELS2 = S(2)-S(1)
-IF (DELS2 .EQ. 0.) GO TO 8
-DX2 = (X(2)-X(1))/DELS2
-DY2 = (Y(2)-Y(1))/DELS2
-CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELS2)
-DIAG = DIAG1+DIAG2
-DIAGIN = 1./DIAG
-XP(1) = (DX2-DX1)*DIAGIN
-YP(1) = (DY2-DY1)*DIAGIN
-TEMP(NP1) = -SDIAG1*DIAGIN
-TEMP(1) = SDIAG2*DIAGIN
-DX1 = DX2
-DY1 = DY2
-DIAG1 = DIAG2
-SDIAG1 = SDIAG2
-IF (N .EQ. 2) GO TO 3
-do 2 I = 2,NM1
-  NPI = N+I
-  DELS2 = S(I+1)-S(I)
-  IF (DELS2 .EQ. 0.) GO TO 8
-  DX2 = (X(I+1)-X(I))/DELS2
-  DY2 = (Y(I+1)-Y(I))/DELS2
-  CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELS2)
-  DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
-  DIAGIN = 1./DIAG
-  XP(I) = (DX2-DX1-SDIAG1*XP(I-1))*DIAGIN
-  YP(I) = (DY2-DY1-SDIAG1*YP(I-1))*DIAGIN
-  TEMP(NPI) = -TEMP(NPI-1)*SDIAG1*DIAGIN
-  TEMP(I) = SDIAG2*DIAGIN
-  DX1 = DX2
-  DY1 = DY2
-  DIAG1 = DIAG2
-2 SDIAG1 = SDIAG2
-3 DELS2 = S(1)
-DX2 = (X(1)-X(N))/DELS2
-DY2 = (Y(1)-Y(N))/DELS2
-CALL TERMS(DIAG2,SDIAG2,SIGMAP,DELS2)
-XP(N) = DX2-DX1
-YP(N) = DY2-DY1
-TEMP(NM1) = TEMP(2*N-1)-TEMP(NM1)
-IF (N.EQ.2) GO TO 5
+dels1 = s(1)
+if (dels1 .eq. 0.) go to 8
+dx1 = (x(1)-x(n))/dels1
+dy1 = (y(1)-y(n))/dels1
+call terms(diag1,sdiag1,sigmap,dels1)
+dels2 = s(2)-s(1)
+if (dels2 .eq. 0.) go to 8
+dx2 = (x(2)-x(1))/dels2
+dy2 = (y(2)-y(1))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+diag = diag1+diag2
+diagin = 1./diag
+xp(1) = (dx2-dx1)*diagin
+yp(1) = (dy2-dy1)*diagin
+temp(np1) = -sdiag1*diagin
+temp(1) = sdiag2*diagin
+dx1 = dx2
+dy1 = dy2
+diag1 = diag2
+sdiag1 = sdiag2
+if (n .eq. 2) go to 3
+do 2 i = 2,nm1
+  npi = n+i
+  dels2 = s(i+1)-s(i)
+  if (dels2 .eq. 0.) go to 8
+  dx2 = (x(i+1)-x(i))/dels2
+  dy2 = (y(i+1)-y(i))/dels2
+  call terms(diag2,sdiag2,sigmap,dels2)
+  diag = diag1+diag2-sdiag1*temp(i-1)
+  diagin = 1./diag
+  xp(i) = (dx2-dx1-sdiag1*xp(i-1))*diagin
+  yp(i) = (dy2-dy1-sdiag1*yp(i-1))*diagin
+  temp(npi) = -temp(npi-1)*sdiag1*diagin
+  temp(i) = sdiag2*diagin
+  dx1 = dx2
+  dy1 = dy2
+  diag1 = diag2
+2 sdiag1 = sdiag2
+3 dels2 = s(1)
+dx2 = (x(1)-x(n))/dels2
+dy2 = (y(1)-y(n))/dels2
+call terms(diag2,sdiag2,sigmap,dels2)
+xp(n) = dx2-dx1
+yp(n) = dy2-dy1
+temp(nm1) = temp(2*n-1)-temp(nm1)
+if (n.eq.2) go to 5
 !
 ! PERFORM FIRST STEP OF BACK SUBSTITUTION
 !
-do 4 I = 3,N
-  IBAK = NP1-I
-  NPIBAK = N+IBAK
-  XP(IBAK) = XP(IBAK)-TEMP(IBAK)*XP(IBAK+1)
-  YP(IBAK) = YP(IBAK)-TEMP(IBAK)*YP(IBAK+1)
-4 TEMP(IBAK) = TEMP(NPIBAK)-TEMP(IBAK)*TEMP(IBAK+1)
-5 XP(N) = (XP(N)-SDIAG2*XP(1)-SDIAG1*XP(NM1))/ &
-&(DIAG1+DIAG2+SDIAG2*TEMP(1)+SDIAG1*TEMP(NM1))
-YP(N) = (YP(N)-SDIAG2*YP(1)-SDIAG1*YP(NM1))/ &
-&(DIAG1+DIAG2+SDIAG2*TEMP(1)+SDIAG1*TEMP(NM1))
+do 4 i = 3,n
+  ibak = np1-i
+  npibak = n+ibak
+  xp(ibak) = xp(ibak)-temp(ibak)*xp(ibak+1)
+  yp(ibak) = yp(ibak)-temp(ibak)*yp(ibak+1)
+4 temp(ibak) = temp(npibak)-temp(ibak)*temp(ibak+1)
+5 xp(n) = (xp(n)-sdiag2*xp(1)-sdiag1*xp(nm1))/ &
+&(diag1+diag2+sdiag2*temp(1)+sdiag1*temp(nm1))
+yp(n) = (yp(n)-sdiag2*yp(1)-sdiag1*yp(nm1))/ &
+&(diag1+diag2+sdiag2*temp(1)+sdiag1*temp(nm1))
 !
 ! PERFORM SECOND STEP OF BACK SUBSTITUTION
 !
-XPN = XP(N)
-YPN = YP(N)
-do 6 I = 1,NM1
-  XP(I) = XP(I)+TEMP(I)*XPN
-6 YP(I) = YP(I)+TEMP(I)*YPN
-RETURN
+xpn = xp(n)
+ypn = yp(n)
+do 6 i = 1,nm1
+  xp(i) = xp(i)+temp(i)*xpn
+6 yp(i) = yp(i)+temp(i)*ypn
+return
 !
 ! TOO FEW POINTS
 !
-7 IERR = 1
-RETURN
+7 ierr = 1
+return
 !
 ! COINCIDENT ADJACENT POINTS
 !
-8 IERR = 2
-RETURN
-END SUBROUTINE KURVP1
+8 ierr = 2
+return
+end subroutine kurvp1
 
-SUBROUTINE KURVP2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1
-REAL :: C1, C2, CI, CIM1, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, &
-&DELP2, DELS, DUMMY, SI, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, &
-&SINHP2, SUMX, SUMY, TN
-INTEGER :: INTRVL
+subroutine kurvp2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
+implicit none
+integer :: i, im1
+real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
+&delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
+&sinhp2, sumx, sumy, tn
+integer :: intrvl
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: T
-REAL, INTENT(INOUT) :: XS, YS
-REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7566,68 +7566,68 @@ REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
 !
 ! DETERMINE INTERVAL
 !
-TN = T-FLOAT(IFIX(T))
-IF (TN .LT. 0.) TN = TN+1.
-TN = S(N)*TN+S(1)
-IM1 = N
-IF (TN .LT. S(N)) IM1 = INTRVL(TN,S,N)
-I = IM1+1
-IF (I .GT. N) I = 1
+tn = t-float(ifix(t))
+if (tn .lt. 0.) tn = tn+1.
+tn = s(n)*tn+s(1)
+im1 = n
+if (tn .lt. s(n)) im1 = intrvl(tn,s,n)
+i = im1+1
+if (i .gt. n) i = 1
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N)/S(N)
+sigmap = abs(sigma)*float(n)/s(n)
 !
 ! SET UP AND PERFORM INTERPOLATION
 !
-SI = S(I)
-IF (IM1 .EQ. N) SI = S(N)+S(1)
-DEL1 = TN-S(IM1)
-DEL2 = SI-TN
-DELS = SI-S(IM1)
-SUMX = (X(I)*DEL1+X(IM1)*DEL2)/DELS
-SUMY = (Y(I)*DEL1+Y(IM1)*DEL2)/DELS
-IF (SIGMAP .NE. 0.) GO TO 1
-D = DEL1*DEL2/(6.*DELS)
-C1 = (DEL1+DELS)*D
-C2 = (DEL2+DELS)*D
-XS = SUMX-XP(I)*C1-XP(IM1)*C2
-YS = SUMY-YP(I)*C1-YP(IM1)*C2
-RETURN
-1 DELP1 = SIGMAP*(DEL1+DELS)/2.
-DELP2 = SIGMAP*(DEL2+DELS)/2.
-CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
-CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
-CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
-D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
-CI = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP* &
-&COSHP1*DEL2))/D
-CIM1 = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*SINHP1+ &
-&SIGMAP*COSHP2*DEL1))/D
-XS = SUMX+CI*XP(I)+CIM1*XP(IM1)
-YS = SUMY+CI*YP(I)+CIM1*YP(IM1)
-RETURN
-END SUBROUTINE KURVP2
+si = s(i)
+if (im1 .eq. n) si = s(n)+s(1)
+del1 = tn-s(im1)
+del2 = si-tn
+dels = si-s(im1)
+sumx = (x(i)*del1+x(im1)*del2)/dels
+sumy = (y(i)*del1+y(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1+dels)*d
+c2 = (del2+dels)*d
+xs = sumx-xp(i)*c1-xp(im1)*c2
+ys = sumy-yp(i)*c1-yp(im1)*c2
+return
+1 delp1 = sigmap*(del1+dels)/2.
+delp2 = sigmap*(del2+dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms+sigmap*dels)
+ci = (sinhm1*del2-del1*(2.*(coshp1+1.)*sinhp2+sigmap* &
+&coshp1*del2))/d
+cim1 = (sinhm2*del1-del2*(2.*(coshp2+1.)*sinhp1+ &
+&sigmap*coshp2*del1))/d
+xs = sumx+ci*xp(i)+cim1*xp(im1)
+ys = sumy+ci*yp(i)+cim1*yp(im1)
+return
+end subroutine kurvp2
 
-SUBROUTINE QURV1 (N,X,Y,Z,SLP1X,SLP1Y,SLP1Z,SLPNX, &
-&SLPNY,SLPNZ,ISLPSW,XP,YP,ZP,TEMP, &
-&S,SIGMA,IERR)
-IMPLICIT NONE
-INTEGER :: I, IBAK, IM1, NM1, NP1
-REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG, &
-&DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, DZ1, DZ2, SDIAG1, &
-&SDIAG2, SIGMAP, SLPP1X, SLPP1Y, SLPP1Z, SLPPNX, SLPPNY, SLPPNZ, T
+subroutine qurv1 (n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
+&slpny,slpnz,islpsw,xp,yp,zp,temp, &
+&s,sigma,ierr)
+implicit none
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+&diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
+&sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
 !
-INTEGER, INTENT(IN) :: N, ISLPSW
-INTEGER, INTENT(OUT) :: IERR
-REAL, INTENT(IN) :: X(N), Y(N), Z(N), SLP1X, SLP1Y, SLP1Z, SLPNX, &
-&SLPNY, SLPNZ
-REAL, INTENT(INOUT) :: XP(N), YP(N), ZP(N), TEMP(N), S(N)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: n, islpsw
+integer, intent(out) :: ierr
+real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
+&slpny, slpnz
+real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7715,137 +7715,137 @@ REAL, INTENT(IN) :: SIGMA
 !
 !-----------------------------------------------------------
 !
-NM1 = N-1
-NP1 = N+1
-IERR = 0
-IF (N .LE. 1) GO TO 9
+nm1 = n-1
+np1 = n+1
+ierr = 0
+if (n .le. 1) go to 9
 !
 ! DETERMINE POLYGONAL ARCLENGTHS
 !
-S(1) = 0.
-do 1 I = 2,N
-  IM1 = I-1
-1 S(I) = S(IM1)+SQRT((X(I)-X(IM1))**2+(Y(I)-Y(IM1))**2 &
-&+(Z(I)-Z(IM1))**2)
+s(1) = 0.
+do 1 i = 2,n
+  im1 = i-1
+1 s(i) = s(im1)+sqrt((x(i)-x(im1))**2+(y(i)-y(im1))**2 &
+&+(z(i)-z(im1))**2)
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/S(N)
+sigmap = abs(sigma)*float(n-1)/s(n)
 !
 ! APPROXIMATE END SLOPES
 !
-IF (ISLPSW .GE. 2) GO TO 2
-SLPP1X = SLP1X
-SLPP1Y = SLP1Y
-SLPP1Z = SLP1Z
-GO TO 3
-2 DELS1 = S(2)-S(1)
-DELS2 = DELS1+DELS1
-IF (N .GT. 2) DELS2 = S(3)-S(1)
-IF (DELS1 .EQ. 0. .OR. DELS2 .EQ. 0.) GO TO 9
-CALL CEEZ (DELS1,DELS2,SIGMAP,C1,C2,C3,N)
-SLPP1X = C1*X(1)+C2*X(2)
-SLPP1Y = C1*Y(1)+C2*Y(2)
-SLPP1Z = C1*Z(1)+C2*Z(2)
-IF (N .EQ. 2) GO TO 3
-SLPP1X = SLPP1X+C3*X(3)
-SLPP1Y = SLPP1Y+C3*Y(3)
-SLPP1Z = SLPP1Z+C3*Z(3)
-3 DELT = SQRT(SLPP1X*SLPP1X+SLPP1Y*SLPP1Y+SLPP1Z*SLPP1Z)
-SLPP1X = SLPP1X/DELT
-SLPP1Y = SLPP1Y/DELT
-SLPP1Z = SLPP1Z/DELT
-IF (ISLPSW .EQ. 1 .OR. ISLPSW .EQ. 3) GO TO 4
-SLPPNX = SLPNX
-SLPPNY = SLPNY
-SLPPNZ = SLPNZ
-GO TO 5
-4 DELSN = S(N)-S(NM1)
-DELSNM = DELSN+DELSN
-IF (N .GT. 2) DELSNM = S(N)-S(N-2)
-IF (DELSN .EQ. 0. .OR. DELSNM .EQ. 0.) GO TO 10
-CALL CEEZ (-DELSN,-DELSNM,SIGMAP,C1,C2,C3,N)
-SLPPNX = C1*X(N)+C2*X(NM1)
-SLPPNY = C1*Y(N)+C2*Y(NM1)
-SLPPNZ = C1*Z(N)+C2*Z(NM1)
-IF (N .EQ. 2) GO TO 5
-SLPPNX = SLPPNX+C3*X(N-2)
-SLPPNY = SLPPNY+C3*Y(N-2)
-SLPPNZ = SLPPNZ+C3*Z(N-2)
-5 DELT = SQRT(SLPPNX*SLPPNX+SLPPNY*SLPPNY+SLPPNZ*SLPPNZ)
-SLPPNX = SLPPNX/DELT
-SLPPNY = SLPPNY/DELT
-SLPPNZ = SLPPNZ/DELT
+if (islpsw .ge. 2) go to 2
+slpp1x = slp1x
+slpp1y = slp1y
+slpp1z = slp1z
+go to 3
+2 dels1 = s(2)-s(1)
+dels2 = dels1+dels1
+if (n .gt. 2) dels2 = s(3)-s(1)
+if (dels1 .eq. 0. .or. dels2 .eq. 0.) go to 9
+call ceez (dels1,dels2,sigmap,c1,c2,c3,n)
+slpp1x = c1*x(1)+c2*x(2)
+slpp1y = c1*y(1)+c2*y(2)
+slpp1z = c1*z(1)+c2*z(2)
+if (n .eq. 2) go to 3
+slpp1x = slpp1x+c3*x(3)
+slpp1y = slpp1y+c3*y(3)
+slpp1z = slpp1z+c3*z(3)
+3 delt = sqrt(slpp1x*slpp1x+slpp1y*slpp1y+slpp1z*slpp1z)
+slpp1x = slpp1x/delt
+slpp1y = slpp1y/delt
+slpp1z = slpp1z/delt
+if (islpsw .eq. 1 .or. islpsw .eq. 3) go to 4
+slppnx = slpnx
+slppny = slpny
+slppnz = slpnz
+go to 5
+4 delsn = s(n)-s(nm1)
+delsnm = delsn+delsn
+if (n .gt. 2) delsnm = s(n)-s(n-2)
+if (delsn .eq. 0. .or. delsnm .eq. 0.) go to 10
+call ceez (-delsn,-delsnm,sigmap,c1,c2,c3,n)
+slppnx = c1*x(n)+c2*x(nm1)
+slppny = c1*y(n)+c2*y(nm1)
+slppnz = c1*z(n)+c2*z(nm1)
+if (n .eq. 2) go to 5
+slppnx = slppnx+c3*x(n-2)
+slppny = slppny+c3*y(n-2)
+slppnz = slppnz+c3*z(n-2)
+5 delt = sqrt(slppnx*slppnx+slppny*slppny+slppnz*slppnz)
+slppnx = slppnx/delt
+slppny = slppny/delt
+slppnz = slppnz/delt
 !
 ! SET UP RIGHT HAND SIDES AND TRIDIAGONAL SYSTEM FOR XP, YP
 ! AND ZP AND PERFORM FORWARD ELIMINATION
 !
-DX1 = (X(2)-X(1))/S(2)
-DY1 = (Y(2)-Y(1))/S(2)
-DZ1 = (Z(2)-Z(1))/S(2)
-CALL TERMS (DIAG1,SDIAG1,SIGMAP,S(2))
-XP(1) = (DX1-SLPP1X)/DIAG1
-YP(1) = (DY1-SLPP1Y)/DIAG1
-ZP(1) = (DZ1-SLPP1Z)/DIAG1
-TEMP(1) = SDIAG1/DIAG1
-IF (N .EQ. 2) GO TO 7
-do 6 I = 2,NM1
-  DELS2 = S(I+1)-S(I)
-  IF (DELS2 .EQ. 0.) GO TO 10
-  DX2 = (X(I+1)-X(I))/DELS2
-  DY2 = (Y(I+1)-Y(I))/DELS2
-  DZ2 = (Z(I+1)-Z(I))/DELS2
-  CALL TERMS (DIAG2,SDIAG2,SIGMAP,DELS2)
-  DIAG = DIAG1+DIAG2-SDIAG1*TEMP(I-1)
-  DIAGIN = 1./DIAG
-  XP(I) = (DX2-DX1-SDIAG1*XP(I-1))*DIAGIN
-  YP(I) = (DY2-DY1-SDIAG1*YP(I-1))*DIAGIN
-  ZP(I) = (DZ2-DZ1-SDIAG1*ZP(I-1))*DIAGIN
-  TEMP(I) = SDIAG2*DIAGIN
-  DX1 = DX2
-  DY1 = DY2
-  DZ1 = DZ2
-  DIAG1 = DIAG2
-6 SDIAG1 = SDIAG2
-7 DIAG = DIAG1-SDIAG1*TEMP(NM1)
-XP(N) = (SLPPNX-DX1-SDIAG1*XP(NM1))/DIAG
-YP(N) = (SLPPNY-DY1-SDIAG1*YP(NM1))/DIAG
-ZP(N) = (SLPPNZ-DZ1-SDIAG1*ZP(NM1))/DIAG
+dx1 = (x(2)-x(1))/s(2)
+dy1 = (y(2)-y(1))/s(2)
+dz1 = (z(2)-z(1))/s(2)
+call terms (diag1,sdiag1,sigmap,s(2))
+xp(1) = (dx1-slpp1x)/diag1
+yp(1) = (dy1-slpp1y)/diag1
+zp(1) = (dz1-slpp1z)/diag1
+temp(1) = sdiag1/diag1
+if (n .eq. 2) go to 7
+do 6 i = 2,nm1
+  dels2 = s(i+1)-s(i)
+  if (dels2 .eq. 0.) go to 10
+  dx2 = (x(i+1)-x(i))/dels2
+  dy2 = (y(i+1)-y(i))/dels2
+  dz2 = (z(i+1)-z(i))/dels2
+  call terms (diag2,sdiag2,sigmap,dels2)
+  diag = diag1+diag2-sdiag1*temp(i-1)
+  diagin = 1./diag
+  xp(i) = (dx2-dx1-sdiag1*xp(i-1))*diagin
+  yp(i) = (dy2-dy1-sdiag1*yp(i-1))*diagin
+  zp(i) = (dz2-dz1-sdiag1*zp(i-1))*diagin
+  temp(i) = sdiag2*diagin
+  dx1 = dx2
+  dy1 = dy2
+  dz1 = dz2
+  diag1 = diag2
+6 sdiag1 = sdiag2
+7 diag = diag1-sdiag1*temp(nm1)
+xp(n) = (slppnx-dx1-sdiag1*xp(nm1))/diag
+yp(n) = (slppny-dy1-sdiag1*yp(nm1))/diag
+zp(n) = (slppnz-dz1-sdiag1*zp(nm1))/diag
 !
 ! PERFORM BACK SUBSTITUTION
 !
-do 8 I = 2,N
-  IBAK = NP1-I
-  T = TEMP(IBAK)
-  XP(IBAK) = XP(IBAK)-T*XP(IBAK+1)
-  YP(IBAK) = YP(IBAK)-T*YP(IBAK+1)
-8 ZP(IBAK) = ZP(IBAK)-T*ZP(IBAK+1)
-RETURN
+do 8 i = 2,n
+  ibak = np1-i
+  t = temp(ibak)
+  xp(ibak) = xp(ibak)-t*xp(ibak+1)
+  yp(ibak) = yp(ibak)-t*yp(ibak+1)
+8 zp(ibak) = zp(ibak)-t*zp(ibak+1)
+return
 !
 ! TOO FEW POINTS
 !
-9 IERR = 1
-RETURN
+9 ierr = 1
+return
 !
 ! COINCIDENT ADJACENT POINTS
 !
-10 IERR = 2
-RETURN
-END SUBROUTINE QURV1
+10 ierr = 2
+return
+end subroutine qurv1
 
-SUBROUTINE QURV2 (T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
-IMPLICIT NONE
-INTEGER :: I, IM1
-REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS, &
-&DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY, &
-&SUMZ, TN
-INTEGER :: INTRVL
+subroutine qurv2 (t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
+implicit none
+integer :: i, im1
+real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
+&dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
+&sumz, tn
+integer :: intrvl
 !
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: T
-REAL, INTENT(INOUT) :: XS, YS, ZS
-REAL, INTENT(IN) :: X(N), Y(N), Z(N), XP(N), YP(N), ZP(N), S(N)
-REAL, INTENT(IN) :: SIGMA
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys, zs
+real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
+real, intent(in) :: sigma
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7901,58 +7901,58 @@ REAL, INTENT(IN) :: SIGMA
 !
 ! DETERMINE INTERVAL
 !
-TN = S(N)*T
-IM1 = INTRVL(TN,S,N)
-I = IM1+1
+tn = s(n)*t
+im1 = intrvl(tn,s,n)
+i = im1+1
 !
 ! DENORMALIZE TENSION FACTOR
 !
-SIGMAP = ABS(SIGMA)*FLOAT(N-1)/S(N)
+sigmap = abs(sigma)*float(n-1)/s(n)
 !
 ! SET UP AND PERFORM INTERPOLATION
 !
-DEL1 = TN-S(IM1)
-DEL2 = S(I)-TN
-DELS = S(I)-S(IM1)
-SUMX = (X(I)*DEL1+X(IM1)*DEL2)/DELS
-SUMY = (Y(I)*DEL1+Y(IM1)*DEL2)/DELS
-SUMZ = (Z(I)*DEL1+Z(IM1)*DEL2)/DELS
-IF (SIGMAP .NE. 0.) GO TO 1
-D = DEL1*DEL2/(6.*DELS)
-C1 = (DEL1+DELS)*D
-C2 = (DEL2+DELS)*D
-XS = SUMX-XP(I)*C1-XP(IM1)*C2
-YS = SUMY-YP(I)*C1-YP(IM1)*C2
-ZS = SUMZ-ZP(I)*C1-ZP(IM1)*C2
-RETURN
-1 DELP1 = SIGMAP*(DEL1+DELS)/2.
-DELP2 = SIGMAP*(DEL2+DELS)/2.
-CALL SNHCSH(SINHM1,DUMMY,SIGMAP*DEL1,-1)
-CALL SNHCSH(SINHM2,DUMMY,SIGMAP*DEL2,-1)
-CALL SNHCSH(SINHMS,DUMMY,SIGMAP*DELS,-1)
-CALL SNHCSH (SINHP1,DUMMY,SIGMAP*DEL1/2.,-1)
-CALL SNHCSH (SINHP2,DUMMY,SIGMAP*DEL2/2.,-1)
-CALL SNHCSH (DUMMY,COSHP1,DELP1,1)
-CALL SNHCSH (DUMMY,COSHP2,DELP2,1)
-D = SIGMAP*SIGMAP*DELS*(SINHMS+SIGMAP*DELS)
-C1 = (SINHM1*DEL2-DEL1*(2.*(COSHP1+1.)*SINHP2+SIGMAP* &
-&COSHP1*DEL2))/D
-C2 = (SINHM2*DEL1-DEL2*(2.*(COSHP2+1.)*SINHP1+SIGMAP* &
-&COSHP2*DEL1))/D
-XS = SUMX+XP(I)*C1+XP(IM1)*C2
-YS = SUMY+YP(I)*C1+YP(IM1)*C2
-ZS = SUMZ+ZP(I)*C1+ZP(IM1)*C2
-RETURN
-END SUBROUTINE QURV2
+del1 = tn-s(im1)
+del2 = s(i)-tn
+dels = s(i)-s(im1)
+sumx = (x(i)*del1+x(im1)*del2)/dels
+sumy = (y(i)*del1+y(im1)*del2)/dels
+sumz = (z(i)*del1+z(im1)*del2)/dels
+if (sigmap .ne. 0.) go to 1
+d = del1*del2/(6.*dels)
+c1 = (del1+dels)*d
+c2 = (del2+dels)*d
+xs = sumx-xp(i)*c1-xp(im1)*c2
+ys = sumy-yp(i)*c1-yp(im1)*c2
+zs = sumz-zp(i)*c1-zp(im1)*c2
+return
+1 delp1 = sigmap*(del1+dels)/2.
+delp2 = sigmap*(del2+dels)/2.
+call snhcsh(sinhm1,dummy,sigmap*del1,-1)
+call snhcsh(sinhm2,dummy,sigmap*del2,-1)
+call snhcsh(sinhms,dummy,sigmap*dels,-1)
+call snhcsh (sinhp1,dummy,sigmap*del1/2.,-1)
+call snhcsh (sinhp2,dummy,sigmap*del2/2.,-1)
+call snhcsh (dummy,coshp1,delp1,1)
+call snhcsh (dummy,coshp2,delp2,1)
+d = sigmap*sigmap*dels*(sinhms+sigmap*dels)
+c1 = (sinhm1*del2-del1*(2.*(coshp1+1.)*sinhp2+sigmap* &
+&coshp1*del2))/d
+c2 = (sinhm2*del1-del2*(2.*(coshp2+1.)*sinhp1+sigmap* &
+&coshp2*del1))/d
+xs = sumx+xp(i)*c1+xp(im1)*c2
+ys = sumy+yp(i)*c1+yp(im1)*c2
+zs = sumz+zp(i)*c1+zp(im1)*c2
+return
+end subroutine qurv2
 
-SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL :: COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM, &
-&SINHMP
+subroutine ceez (del1,del2,sigma,c1,c2,c3,n)
+implicit none
+integer, intent(in) :: n
+real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
+&sinhmp
 !
-REAL, INTENT(IN) :: DEL1, DEL2, SIGMA
-REAL, INTENT(INOUT) :: C1, C2, C3
+real, intent(in) :: del1, del2, sigma
+real, intent(inout) :: c1, c2, c3
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -7993,45 +7993,45 @@ REAL, INTENT(INOUT) :: C1, C2, C3
 !
 !-----------------------------------------------------------
 !
-IF (N .EQ. 2) GO TO 2
-IF (SIGMA .NE. 0.) GO TO 1
-DEL = DEL2-DEL1
+if (n .eq. 2) go to 2
+if (sigma .ne. 0.) go to 1
+del = del2-del1
 !
 ! TENSION .EQ. 0.
 !
-C1 = -(DEL1+DEL2)/(DEL1*DEL2)
-C2 = DEL2/(DEL1*DEL)
-C3 = -DEL1/(DEL2*DEL)
-RETURN
+c1 = -(del1+del2)/(del1*del2)
+c2 = del2/(del1*del)
+c3 = -del1/(del2*del)
+return
 !
 ! TENSION .NE. 0.
 !
-1 CALL SNHCSH (DUMMY,COSHM1,SIGMA*DEL1,1)
-CALL SNHCSH (DUMMY,COSHM2,SIGMA*DEL2,1)
-DELP = SIGMA*(DEL2+DEL1)/2.
-DELM = SIGMA*(DEL2-DEL1)/2.
-CALL SNHCSH (SINHMP,DUMMY,DELP,-1)
-CALL SNHCSH (SINHMM,DUMMY,DELM,-1)
-DENOM = COSHM1*(DEL2-DEL1)-2.*DEL1*(SINHMP+DELP)* &
-&(SINHMM+DELM)
-C1 = 2.*(SINHMP+DELP)*(SINHMM+DELM)/DENOM
-C2 = -COSHM2/DENOM
-C3 = COSHM1/DENOM
-RETURN
+1 call snhcsh (dummy,coshm1,sigma*del1,1)
+call snhcsh (dummy,coshm2,sigma*del2,1)
+delp = sigma*(del2+del1)/2.
+delm = sigma*(del2-del1)/2.
+call snhcsh (sinhmp,dummy,delp,-1)
+call snhcsh (sinhmm,dummy,delm,-1)
+denom = coshm1*(del2-del1)-2.*del1*(sinhmp+delp)* &
+&(sinhmm+delm)
+c1 = 2.*(sinhmp+delp)*(sinhmm+delm)/denom
+c2 = -coshm2/denom
+c3 = coshm1/denom
+return
 !
 ! TWO COEFFICIENTS
 !
-2 C1 = -1./DEL1
-C2 = -C1
-RETURN
-END SUBROUTINE CEEZ
+2 c1 = -1./del1
+c2 = -c1
+return
+end subroutine ceez
 
-SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
-IMPLICIT NONE
-REAL :: COSHM, DENOM, SIGDEL, SINHM
+subroutine terms (diag,sdiag,sigma,del)
+implicit none
+real :: coshm, denom, sigdel, sinhm
 !
-REAL, INTENT(INOUT) :: DIAG, SDIAG
-REAL, INTENT(IN) :: SIGMA, DEL
+real, intent(inout) :: diag, sdiag
+real, intent(in) :: sigma, del
 !
 !                      FROM THE SPLINE UNDER TENSION PACKAGE
 !                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -8068,24 +8068,24 @@ REAL, INTENT(IN) :: SIGMA, DEL
 !
 !-----------------------------------------------------------
 !
-IF (SIGMA .NE. 0.) GO TO 1
-DIAG = DEL/3.
-SDIAG = DEL/6.
-RETURN
-1 SIGDEL = SIGMA*DEL
-CALL SNHCSH (SINHM,COSHM,SIGDEL,0)
-DENOM = DEL/((SINHM+SIGDEL)*SIGDEL*SIGDEL)
-DIAG = DENOM*(SIGDEL*COSHM-SINHM)
-SDIAG = DENOM*SINHM
-RETURN
-END SUBROUTINE TERMS
+if (sigma .ne. 0.) go to 1
+diag = del/3.
+sdiag = del/6.
+return
+1 sigdel = sigma*del
+call snhcsh (sinhm,coshm,sigdel,0)
+denom = del/((sinhm+sigdel)*sigdel*sigdel)
+diag = denom*(sigdel*coshm-sinhm)
+sdiag = denom*sinhm
+return
+end subroutine terms
 
-INTEGER function INTRVL (X, T, M)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M
-INTEGER :: I, IL, IR
-REAL :: TM
-REAL, INTENT(IN) :: X, T(M)
+integer function intrvl (x, t, m)
+implicit none
+integer, intent(in) :: m
+integer :: i, il, ir
+real :: tm
+real, intent(in) :: x, t(m)
 !-----------------------------------------------------------------------
 !
 !             LOCATION OF A VALUE X IN A SEQUENCE T
@@ -8111,52 +8111,52 @@ REAL, INTENT(IN) :: X, T(M)
 !                  I = L   IF X .GE. T(L)
 !
 !-----------------------------------------------------------------------
-IF (X .LT. T(2)) GO TO 100
-TM = T(M)
-I = M - 1
-10 IF (T(I) .LT. TM) GO TO 20
-   I = I - 1
-   GO TO 10
-20 IF (X .GE. T(I)) GO TO 110
-IL = 2
-IR = I
+if (x .lt. t(2)) go to 100
+tm = t(m)
+i = m - 1
+10 if (t(i) .lt. tm) go to 20
+   i = i - 1
+   go to 10
+20 if (x .ge. t(i)) go to 110
+il = 2
+ir = i
 !
 !     BISECTION SEARCH
 !
-30 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 110
-IF (X - T(I)) 40,60,50
-40 IR = I
-GO TO 30
-50 IL = I
-GO TO 30
+30 i = (il + ir)/2
+if (i .eq. il) go to 110
+if (x - t(i)) 40,60,50
+40 ir = i
+go to 30
+50 il = i
+go to 30
 !
 !     CASE WHEN X = T(I) FOR SOME I
 !
-60 IF (X .LT. T(I+1)) GO TO 110
-I = I + 1
-GO TO 60
+60 if (x .lt. t(i+1)) go to 110
+i = i + 1
+go to 60
 !
 !     LEFT END
 !
-100 INTRVL = 1
-RETURN
+100 intrvl = 1
+return
 !
 !     NORMAL EXIT
 !
-110 INTRVL = I
-RETURN
-END FUNCTION INTRVL
+110 intrvl = i
+return
+end function intrvl
 
-SUBROUTINE BVAL (T, BCOEF, N, K, X, JDERIV, W, WK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: JDERIV, K, N
-REAL, INTENT(INOUT) :: W
-REAL, INTENT(IN) :: X
-INTEGER :: I, IMK, IPJ, J, JC, JCMAX, JCMIN, JDRVP1, JJ, KM1, KMJ, &
-&L, NMI, NPK
-REAL :: DL, DR, FKMJ
-INTEGER :: INTRVL
+subroutine bval (t, bcoef, n, k, x, jderiv, w, wk)
+implicit none
+integer, intent(in) :: jderiv, k, n
+real, intent(inout) :: w
+real, intent(in) :: x
+integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
+&l, nmi, npk
+real :: dl, dr, fkmj
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !     BVAL CALCULATES THE VALUE AT X OF THE JDERIV-TH DERIVATIVE
@@ -8216,26 +8216,26 @@ INTEGER :: INTRVL
 !  REFERENCE. DE BOOR, CARL, A PRATICAL GUIDE TO SPLINES, SPRINGER-
 !  VERLAG, NEW YORK, 1978.
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*), BCOEF(N)
-REAL, INTENT(INOUT) :: WK(K,3)
+real, intent(in) :: t(*), bcoef(n)
+real, intent(inout) :: wk(k,3)
 !
-W = 0.0
-IF (JDERIV .GE. K) RETURN
+w = 0.0
+if (jderiv .ge. k) return
 !
 ! *** FIND I WHERE 1 .LE. I .LT. N+K  AND  T(I) .LE. X .LT. T(I+1).
 !     IF NO SUCH I EXISTS, THEN X LIES OUTSIDE THE SUPPORT OF THE
 !     SPLINE F AND W = 0.
 !
-NPK = N + K
-IF (X .LT. T(1) .OR. X .GT. T(NPK)) RETURN
-I = INTRVL(X, T, NPK)
+npk = n + k
+if (x .lt. t(1) .or. x .gt. t(npk)) return
+i = intrvl(x, t, npk)
 !
 !  *** IF K = 1 (AND JDERIV = 0), W = BCOEF(I).
 !
-KM1 = K - 1
-IF (KM1 .GT. 0) GO TO 10
-   W = BCOEF(I)
-   RETURN
+km1 = k - 1
+if (km1 .gt. 0) go to 10
+   w = bcoef(i)
+   return
 !
 !  *** STORE THE K B-SPLINE COEFFICIENTS RELEVANT FOR THE KNOT INTERVAL
 !     (T(I),T(I+1)) IN THE FIRST COLUMN OF WK AND COMPUTE WK(J,2) =
@@ -8243,142 +8243,142 @@ IF (KM1 .GT. 0) GO TO 10
 !     WK(J,1) NOT OBTAINABLE FROM INPUT TO ZERO. SET ANY T.S NOT OBTAIN-
 !     ABLE EQUAL TO T(1) OR TO T(N+K) APPROPRIATELY.
 !
-10 JCMIN = 1
-IMK = I - K
-IF (IMK .GE. 0) GO TO 40
+10 jcmin = 1
+imk = i - k
+if (imk .ge. 0) go to 40
 !
-   JCMIN = 1 - IMK
-   L = I
-   DO J = 1,I
-      WK(J,2) = X - T(L)
-      L = L - 1
-   END DO
-   DO J = I,KM1
-      L = K - J
-      WK(L,1) = 0.0
-      WK(J,2) = WK(I,2)
-   END DO
-   GO TO 60
+   jcmin = 1 - imk
+   l = i
+   do j = 1,i
+      wk(j,2) = x - t(l)
+      l = l - 1
+   end do
+   do j = i,km1
+      l = k - j
+      wk(l,1) = 0.0
+      wk(j,2) = wk(i,2)
+   end do
+   go to 60
 !
-40 L = I
-DO J = 1,KM1
-   WK(J,2) = X - T(L)
-   L = L - 1
-END DO
+40 l = i
+do j = 1,km1
+   wk(j,2) = x - t(l)
+   l = l - 1
+end do
 !
-60 JCMAX = K
-NMI = N - I
-IF (NMI .GE. 0) GO TO 100
+60 jcmax = k
+nmi = n - i
+if (nmi .ge. 0) go to 100
 !
-   JCMAX = K + NMI
-   DO J = 1,JCMAX
-      IPJ = I + J
-      WK(J,3) = T(IPJ) - X
-   END DO
-   DO J = JCMAX,KM1
-      WK(J+1,1) = 0.0
-      WK(J,3) = WK(JCMAX,3)
-   END DO
-   GO TO 120
+   jcmax = k + nmi
+   do j = 1,jcmax
+      ipj = i + j
+      wk(j,3) = t(ipj) - x
+   end do
+   do j = jcmax,km1
+      wk(j+1,1) = 0.0
+      wk(j,3) = wk(jcmax,3)
+   end do
+   go to 120
 !
-100 DO J = 1,KM1
-   IPJ = I + J
-   WK(J,3) = T(IPJ) - X
-END DO
+100 do j = 1,km1
+   ipj = i + j
+   wk(j,3) = t(ipj) - x
+end do
 !
-120 DO JC = JCMIN,JCMAX
-   L = IMK + JC
-   WK(JC,1) = BCOEF(L)
-END DO
+120 do jc = jcmin,jcmax
+   l = imk + jc
+   wk(jc,1) = bcoef(l)
+end do
 !
 !               *** DIFFERENCE THE COEFFICIENTS  JDERIV  TIMES.
 !
-IF (JDERIV .EQ. 0) GO TO 170
-DO J = 1,JDERIV
-   KMJ = K - J
-   FKMJ = KMJ
-   L = KMJ
-   do 150 JJ = 1,KMJ
-      DL = WK(L,2)
-      DR = WK(JJ,3)
-      WK(JJ,1) = ((WK(JJ+1,1) - WK(JJ,1))/(DL + DR))*FKMJ
-150 L = L - 1
-END DO
+if (jderiv .eq. 0) go to 170
+do j = 1,jderiv
+   kmj = k - j
+   fkmj = kmj
+   l = kmj
+   do 150 jj = 1,kmj
+      dl = wk(l,2)
+      dr = wk(jj,3)
+      wk(jj,1) = ((wk(jj+1,1) - wk(jj,1))/(dl + dr))*fkmj
+150 l = l - 1
+end do
 !
 !  *** COMPUTE VALUE AT X IN (T(I),T(I+1)) OF JDERIV-TH DERIVATIVE,
 !     GIVEN ITS RELEVANT B-SPLINE COEFFS IN WK(1,1),...,WK(K-JDERIV,1).
 !
-170 IF (JDERIV .EQ. KM1) GO TO 200
-JDRVP1 = JDERIV + 1
-DO J = JDRVP1,KM1
-   KMJ = K - J
-   L = KMJ
-   do 180 JJ = 1,KMJ
-      DL = WK(L,2)
-      DR = WK(JJ,3)
-      WK(JJ,1) = (WK(JJ+1,1)*DL + WK(JJ,1)*DR)/(DL + DR)
-180 L = L - 1
-END DO
+170 if (jderiv .eq. km1) go to 200
+jdrvp1 = jderiv + 1
+do j = jdrvp1,km1
+   kmj = k - j
+   l = kmj
+   do 180 jj = 1,kmj
+      dl = wk(l,2)
+      dr = wk(jj,3)
+      wk(jj,1) = (wk(jj+1,1)*dl + wk(jj,1)*dr)/(dl + dr)
+180 l = l - 1
+end do
 !
-200 W = WK(1,1)
-RETURN
-END SUBROUTINE BVAL
+200 w = wk(1,1)
+return
+end subroutine bval
 
-SUBROUTINE BVALI (T, BCOEFF, N, K, X, W, WK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K, N
-REAL, INTENT(OUT) :: W
-REAL, INTENT(IN) :: X
-INTEGER :: I, IPK, KP1, NP1, NPK
-REAL :: SUM, TLAST, TNEW, XVAL
+subroutine bvali (t, bcoeff, n, k, x, w, wk)
+implicit none
+integer, intent(in) :: k, n
+real, intent(out) :: w
+real, intent(in) :: x
+integer :: i, ipk, kp1, np1, npk
+real :: sum, tlast, tnew, xval
 !-----------------------------------------------------------------------
 !           INTEGRAL OF A PIECEWISE POLYNOMIAL FROM T(1) TO X
 !                   USING ITS B-SPLINE REPRESENTATION
 !-----------------------------------------------------------------------
 !     REAL T(N + K), WK(N + 3*(K + 1))
 !---------------------------
-REAL, INTENT(IN) :: T(*), BCOEFF(N)
-REAL, INTENT(INOUT) :: WK(*)
+real, intent(in) :: t(*), bcoeff(n)
+real, intent(inout) :: wk(*)
 !
-W = 0.0
-IF (X .LE. T(1)) RETURN
-NPK = N + K
-TLAST = T(NPK)
-XVAL = AMIN1(X, TLAST)
+w = 0.0
+if (x .le. t(1)) return
+npk = n + k
+tlast = t(npk)
+xval = amin1(x, tlast)
 !
 !     DEFINE THE FIRST NEW KNOT. THE REMAINING NEW KNOTS
 !         ARE ASSUMED TO BE THE SAME AS THIS KNOT.
 !
-TNEW = 0.1
-IF (TLAST .LT. -0.1) TNEW = 0.9*TLAST
-IF (TLAST .GT.  0.0) TNEW = 1.1*TLAST
+tnew = 0.1
+if (tlast .lt. -0.1) tnew = 0.9*tlast
+if (tlast .gt.  0.0) tnew = 1.1*tlast
 !
 !     COMPUTE THE FIRST N COEFFICIENTS OF THE ANTIDERIVATIVE
 !
-SUM = 0.0
-DO I = 1,N
-   IPK = I + K
-   SUM = SUM + BCOEFF(I)*(T(IPK) - T(I))
-   WK(I) = SUM/K
-END DO
+sum = 0.0
+do i = 1,n
+   ipk = i + k
+   sum = sum + bcoeff(i)*(t(ipk) - t(i))
+   wk(i) = sum/k
+end do
 !
 !     COMPUTE THE ANTIDERIVATIVE
 !
-KP1 = K + 1
-NP1 = N + 1
-CALL BVALI0 (T, TNEW, WK(1), N, KP1, XVAL, W, WK(NP1))
-RETURN
-END SUBROUTINE BVALI
+kp1 = k + 1
+np1 = n + 1
+call bvali0 (t, tnew, wk(1), n, kp1, xval, w, wk(np1))
+return
+end subroutine bvali
 
-SUBROUTINE BVALI0 (T, TNEW, BCOEF, N, K, X, W, WK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K, N
-REAL, INTENT(IN) :: TNEW
-REAL, INTENT(OUT) :: W
-REAL, INTENT(IN) :: X
-INTEGER :: I, IMK, IPJ, J, JC, JCMIN, JJ, KM1, KMJ, L, M
-REAL :: DL, DR, TIPJ
-INTEGER :: INTRVL
+subroutine bvali0 (t, tnew, bcoef, n, k, x, w, wk)
+implicit none
+integer, intent(in) :: k, n
+real, intent(in) :: tnew
+real, intent(out) :: w
+real, intent(in) :: x
+integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
+real :: dl, dr, tipj
+integer :: intrvl
 !-----------------------------------------------------------------------
 !
 !     BVALI0 CALCULATES THE VALUE AT X OF AN ANTIDERIVATIVE
@@ -8407,13 +8407,13 @@ INTEGER :: INTRVL
 !     REMARK. BVALI0 IS AN ADAPTATION BY A.H. MORRIS (NSWC) OF THE
 !     SUBROUTINE BVAL.
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*), BCOEF(N)
-REAL, INTENT(INOUT) :: WK(K,3)
+real, intent(in) :: t(*), bcoef(n)
+real, intent(inout) :: wk(k,3)
 !
-W = 0.0
-KM1 = K - 1
-M = N + KM1
-I = INTRVL(X, T, M)
+w = 0.0
+km1 = k - 1
+m = n + km1
+i = intrvl(x, t, m)
 !
 !  *** STORE THE K B-SPLINE COEFFICIENTS RELEVANT FOR THE KNOT INTERVAL
 !     (T(I),T(I+1)) IN THE FIRST COLUMN OF WK AND COMPUTE WK(J,2) =
@@ -8421,65 +8421,65 @@ I = INTRVL(X, T, M)
 !     WK(J,1) NOT OBTAINABLE FROM INPUT TO ZERO. SET ANY T.S NOT OBTAIN-
 !     ABLE EQUAL TO T(1) OR TNEW APPROPRIATELY.
 !
-JCMIN = 1
-IMK = I - K
-IF (IMK .GE. 0) GO TO 30
+jcmin = 1
+imk = i - k
+if (imk .ge. 0) go to 30
 !
-   JCMIN = 1 - IMK
-   L = I
-   DO J = 1,I
-      WK(J,2) = X - T(L)
-      L = L - 1
-   END DO
-   DO J = I,KM1
-      L = K - J
-      WK(L,1) = 0.0
-      WK(J,2) = WK(I,2)
-   END DO
-   GO TO 50
+   jcmin = 1 - imk
+   l = i
+   do j = 1,i
+      wk(j,2) = x - t(l)
+      l = l - 1
+   end do
+   do j = i,km1
+      l = k - j
+      wk(l,1) = 0.0
+      wk(j,2) = wk(i,2)
+   end do
+   go to 50
 !
-30 L = I
-DO J = 1,KM1
-   WK(J,2) = X - T(L)
-   L = L - 1
-END DO
+30 l = i
+do j = 1,km1
+   wk(j,2) = x - t(l)
+   l = l - 1
+end do
 !
-50 DO J = 1,KM1
-   TIPJ = TNEW
-   IPJ = I + J
-   IF (IPJ .LE. M) TIPJ = T(IPJ)
-   WK(J,3) = TIPJ - X
-END DO
+50 do j = 1,km1
+   tipj = tnew
+   ipj = i + j
+   if (ipj .le. m) tipj = t(ipj)
+   wk(j,3) = tipj - x
+end do
 !
-DO JC = JCMIN,K
-   L = MIN0(IMK + JC, N)
-   WK(JC,1) = BCOEF(L)
-END DO
+do jc = jcmin,k
+   l = min0(imk + jc, n)
+   wk(jc,1) = bcoef(l)
+end do
 !
 !  *** COMPUTE VALUE AT X IN (T(I),T(I+1)), GIVEN ITS RELEVANT
 !     B-SPLINE COEFFS IN WK(1,1),...,WK(K,1).
 !
-DO J = 1,KM1
-   KMJ = K - J
-   L = KMJ
-   do 100 JJ = 1,KMJ
-      DL = WK(L,2)
-      DR = WK(JJ,3)
-      WK(JJ,1) = (WK(JJ+1,1)*DL + WK(JJ,1)*DR)/(DL + DR)
-100 L = L - 1
-END DO
+do j = 1,km1
+   kmj = k - j
+   l = kmj
+   do 100 jj = 1,kmj
+      dl = wk(l,2)
+      dr = wk(jj,3)
+      wk(jj,1) = (wk(jj+1,1)*dl + wk(jj,1)*dr)/(dl + dr)
+100 l = l - 1
+end do
 !
-W = WK(1,1)
-RETURN
-END SUBROUTINE BVALI0
+w = wk(1,1)
+return
+end subroutine bvali0
 
-SUBROUTINE BSPP (T, A, N, K, BREAK, C, L, WK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K
-INTEGER, INTENT(OUT) :: L
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, KM1, KMJ, KP1, LEFT
-REAL :: DIFF, R, S, TERM, X
+subroutine bspp (t, a, n, k, break, c, l, wk)
+implicit none
+integer, intent(in) :: k
+integer, intent(out) :: l
+integer, intent(in) :: n
+integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
+real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
 !
 !              CONVERSION FROM B-SPLINE REPRESENTATION
@@ -8507,82 +8507,82 @@ REAL :: DIFF, R, S, TERM, X
 !       WK    2-DIMENSIONAL ARRAY OF DIMENSION (K,K+1)
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*), A(N)
-REAL, INTENT(INOUT) :: BREAK(*), C(K,*), WK(K,*)
+real, intent(in) :: t(*), a(n)
+real, intent(inout) :: break(*), c(k,*), wk(k,*)
 !
-L = 0
-BREAK(1) = T(K)
-IF (K .EQ. 1) GO TO 100
-KM1 = K - 1
-KP1 = K + 1
+l = 0
+break(1) = t(k)
+if (k .eq. 1) go to 100
+km1 = k - 1
+kp1 = k + 1
 !
 !          GENERAL K-TH ORDER CASE
 !
-do 60 LEFT = K,N
-   IF (T(LEFT) .EQ. T(LEFT + 1)) GO TO 60
-   L = L + 1
-   BREAK(L + 1) = T(LEFT + 1)
-   DO J = 1,K
-      JJ = LEFT - K + J
-      WK(J,1) = A(JJ)
-   END DO
+do 60 left = k,n
+   if (t(left) .eq. t(left + 1)) go to 60
+   l = l + 1
+   break(l + 1) = t(left + 1)
+   do j = 1,k
+      jj = left - k + j
+      wk(j,1) = a(jj)
+   end do
 !
-   DO J = 1,KM1
-      JP1 = J + 1
-      KMJ = K - J
-      DO I = 1,KMJ
-         IL = I + LEFT
-         ILKJ = IL - KMJ
-         DIFF = T(IL) - T(ILKJ)
-         WK(I,JP1) = (WK(I+1,J) - WK(I,J))/DIFF
-      END DO
-   END DO
+   do j = 1,km1
+      jp1 = j + 1
+      kmj = k - j
+      do i = 1,kmj
+         il = i + left
+         ilkj = il - kmj
+         diff = t(il) - t(ilkj)
+         wk(i,jp1) = (wk(i+1,j) - wk(i,j))/diff
+      end do
+   end do
 !
-   WK(1,KP1) = 1.0
-   X = T(LEFT)
-   C(K,L) = WK(1,K)
-   R = 1.0
-   DO J = 1,KM1
-      JP1 = J + 1
-      S = 0.0
-      DO I = 1,J
-         IL = I + LEFT
-         ILJ = IL - J
-         TERM = WK(I,KP1)/(T(IL) - T(ILJ))
-         WK(I,KP1) = S + (T(IL) - X)*TERM
-         S = (X - T(ILJ))*TERM
-      END DO
-      WK(JP1,KP1) = S
+   wk(1,kp1) = 1.0
+   x = t(left)
+   c(k,l) = wk(1,k)
+   r = 1.0
+   do j = 1,km1
+      jp1 = j + 1
+      s = 0.0
+      do i = 1,j
+         il = i + left
+         ilj = il - j
+         term = wk(i,kp1)/(t(il) - t(ilj))
+         wk(i,kp1) = s + (t(il) - x)*term
+         s = (x - t(ilj))*term
+      end do
+      wk(jp1,kp1) = s
 !
-      S = 0.0
-      KMJ = K - J
-      DO I = 1,JP1
-         S = S + WK(I,KMJ)*WK(I,KP1)
-      END DO
-      R = (R*FLOAT(KMJ))/FLOAT(J)
-      C(KMJ,L) = R*S
-   END DO
-60 CONTINUE
-RETURN
+      s = 0.0
+      kmj = k - j
+      do i = 1,jp1
+         s = s + wk(i,kmj)*wk(i,kp1)
+      end do
+      r = (r*float(kmj))/float(j)
+      c(kmj,l) = r*s
+   end do
+60 continue
+return
 !
 !          PIECEWISE CONSTANT CASE
 !
-100 do 110 LEFT = K,N
-   IF (T(LEFT) .EQ. T(LEFT + 1)) GO TO 110
-   L = L + 1
-   BREAK(L + 1) = T(LEFT + 1)
-   C(1,L) = A(LEFT)
-110 CONTINUE
-RETURN
-END SUBROUTINE BSPP
+100 do 110 left = k,n
+   if (t(left) .eq. t(left + 1)) go to 110
+   l = l + 1
+   break(l + 1) = t(left + 1)
+   c(1,l) = a(left)
+110 continue
+return
+end subroutine bspp
 
-SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: L, N, NI
-REAL :: A(L,N), X(N), XI(NI)
-REAL, INTENT(INOUT) :: YI(NI)
-INTEGER :: I, IL, IR, J, K, LM1, LMJ
-REAL :: DX, S, XX
+subroutine ppval (x, a, l, n, xi, yi, ni)
+implicit none
+integer, intent(in) :: l, n, ni
+real :: a(l,n), x(n), xi(ni)
+real, intent(inout) :: yi(ni)
+integer :: i, il, ir, j, k, lm1, lmj
+real :: dx, s, xx
 !-----------------------------------------------------------------------
 !
 !         THIS ROUTINE EVALUATES A PIECEWISE POLYNOMIAL AT THE
@@ -8615,67 +8615,67 @@ REAL :: DX, S, XX
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS THE CURRENT INDEX IN THE X ARRAY.
 !
-K  = 1
-XX = XI(1)
-LM1 = L - 1
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IL = 1
-IR = N
+k  = 1
+xx = xi(1)
+lm1 = l - 1
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+il = 1
+ir = n
 !
 !     BISECTION SEARCH
 !
-10 I = (IL + IR)/2
-IF (I .EQ. IL) GO TO 100
-IF (XX - X(I)) 20,100,30
-20 IR = I
-GO TO 10
-30 IL = I
-GO TO 10
+10 i = (il + ir)/2
+if (i .eq. il) go to 100
+if (xx - x(i)) 20,100,30
+20 ir = i
+go to 10
+30 il = i
+go to 10
 !
 !     LINEAR FORWARD SEARCH
 !
-40 IF (XX .LT. X(I+1)) GO TO 100
-I = I + 1
-GO TO 40
+40 if (xx .lt. x(i+1)) go to 100
+i = i + 1
+go to 40
 !
 !     XX IS GREATER THAN X(N) OR LESS THAN X(1)
 !
-80 I = N
-GO TO 100
-90 I = 1
+80 i = n
+go to 100
+90 i = 1
 !
 !     EVALUATION
 !
-100 DX = XX - X(I)
-S = A(L,I)
-IF (L .EQ. 1) GO TO 120
-DO J = 1,LM1
-   LMJ = L - J
-   S = A(LMJ,I) + DX*S
-END DO
-120 YI(K) = S
+100 dx = xx - x(i)
+s = a(l,i)
+if (l .eq. 1) go to 120
+do j = 1,lm1
+   lmj = l - j
+   s = a(lmj,i) + dx*s
+end do
+120 yi(k) = s
 !
 !     NEXT POINT
 !
-IF (K .GE. NI) RETURN
-K = K + 1
-XX = XI(K)
-IF (XX .LT. X(1)) GO TO 90
-IF (XX .GE. X(N)) GO TO 80
-IF (XX - XI(K-1)) 130,120,40
-130 IL = 1
-IR = MIN0(I + 1, N)
-GO TO 10
-END SUBROUTINE PPVAL
+if (k .ge. ni) return
+k = k + 1
+xx = xi(k)
+if (xx .lt. x(1)) go to 90
+if (xx .ge. x(n)) go to 80
+if (xx - xi(k-1)) 130,120,40
+130 il = 1
+ir = min0(i + 1, n)
+go to 10
+end subroutine ppval
 
-SUBROUTINE BSPVB (T, K, JHIGH, J, X, LEFT, BLIST)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: J
-INTEGER, INTENT(IN) :: JHIGH, K, LEFT
-REAL, INTENT(IN) :: X
-INTEGER :: I, IMJ, L
-REAL :: S, TERM, TI, TIMJ
+subroutine bspvb (t, k, jhigh, j, x, left, blist)
+implicit none
+integer, intent(inout) :: j
+integer, intent(in) :: jhigh, k, left
+real, intent(in) :: x
+integer :: i, imj, l
+real :: s, term, ti, timj
 !-----------------------------------------------------------------------
 !
 !     BSPVB CALCULATES THE VALUE OF ALL POSSIBLY NONZERO B-SPLINES
@@ -8708,38 +8708,38 @@ REAL :: S, TERM, TI, TIMJ
 !     WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
 !         BY A.H. MORRIS (NSWC).
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*)
-REAL, INTENT(INOUT) :: BLIST(K)
+real, intent(in) :: t(*)
+real, intent(inout) :: blist(k)
 !
-IF (J .GT. 0) GO TO 10
-   J = 1
-   BLIST(1) = 1.0
-   IF (J .GE. JHIGH) RETURN
+if (j .gt. 0) go to 10
+   j = 1
+   blist(1) = 1.0
+   if (j .ge. jhigh) return
 !
-10 S = 0.0
-DO L = 1,J
-   I = LEFT + L
-   IMJ = I - J
-   TIMJ = T(IMJ)
-   TI = T(I)
-   TERM = BLIST(L)/(TI - TIMJ)
-   BLIST(L) = S + (TI - X)*TERM
-   S = (X - TIMJ)*TERM
-END DO
-J = J + 1
-BLIST(J) = S
-IF (J .LT. JHIGH) GO TO 10
+10 s = 0.0
+do l = 1,j
+   i = left + l
+   imj = i - j
+   timj = t(imj)
+   ti = t(i)
+   term = blist(l)/(ti - timj)
+   blist(l) = s + (ti - x)*term
+   s = (x - timj)*term
+end do
+j = j + 1
+blist(j) = s
+if (j .lt. jhigh) go to 10
 !
-RETURN
-END SUBROUTINE BSPVB
+return
+end subroutine bspvb
 
-SUBROUTINE BSPVD (T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDIM, K, LEFT, NDERIV
-REAL, INTENT(IN) :: X
-INTEGER :: I, IDERIV, IL, J, JJ, JLOW, JP1MID, KP1, KP1MM, L, &
-&LDUMMY, M, MHIGH
-REAL :: FACTOR, FKP1MM, SUM
+subroutine bspvd (t, k, x, left, dbiatx, idim, nderiv, a)
+implicit none
+integer, intent(in) :: idim, k, left, nderiv
+real, intent(in) :: x
+integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
+&ldummy, m, mhigh
+real :: factor, fkp1mm, sum
 !-----------------------------------------------------------------------
 !
 ! CALCULATES VALUE AND DERIV.S OF ALL B-SPLINES WHICH DO NOT VANISH AT X
@@ -8789,30 +8789,30 @@ REAL :: FACTOR, FKP1MM, SUM
 !  WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
 !     BY A.H. MORRIS (NSWC).
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: T(*)
-REAL, INTENT(INOUT) :: DBIATX(IDIM,NDERIV), A(K,K)
+real, intent(in) :: t(*)
+real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
 !
-MHIGH = MAX0(MIN0(NDERIV,K),1)
+mhigh = max0(min0(nderiv,k),1)
 !     MHIGH IS USUALLY EQUAL TO NDERIV.
-KP1 = K + 1
-JJ = 0
-CALL BSPVB (T, K, KP1 - MHIGH, JJ, X, LEFT, DBIATX)
-IF (MHIGH .EQ. 1) RETURN
+kp1 = k + 1
+jj = 0
+call bspvb (t, k, kp1 - mhigh, jj, x, left, dbiatx)
+if (mhigh .eq. 1) return
 !
 !     THE FIRST COLUMN OF DBIATX ALWAYS CONTAINS THE B-SPLINE VALUES
 !     FOR THE CURRENT ORDER. THESE ARE STORED IN COLUMN K+1-CURRENT
 !     ORDER  BEFORE  BSPVB  IS CALLED TO PUT VALUES FOR THE NEXT
 !     HIGHER ORDER ON TOP OF IT.
 !
-IDERIV = MHIGH
-DO M = 2,MHIGH
-   JP1MID = 1
-   do 10 J = IDERIV,K
-      DBIATX(J,IDERIV) = DBIATX(JP1MID,1)
-10 JP1MID = JP1MID + 1
-   IDERIV = IDERIV - 1
-   CALL BSPVB (T, K, KP1 - IDERIV, JJ, X, LEFT, DBIATX)
-END DO
+ideriv = mhigh
+do m = 2,mhigh
+   jp1mid = 1
+   do 10 j = ideriv,k
+      dbiatx(j,ideriv) = dbiatx(jp1mid,1)
+10 jp1mid = jp1mid + 1
+   ideriv = ideriv - 1
+   call bspvb (t, k, kp1 - ideriv, jj, x, left, dbiatx)
+end do
 !
 !     AT THIS POINT, B(LEFT-K+I, K+1-J)(X) IS IN DBIATX(I,J) FOR
 !     I = J,...,K AND J = 1,...,MHIGH. IN PARTICULAR, THE FIRST
@@ -8820,39 +8820,39 @@ END DO
 !     RESPONDING DERIVATIVES OF B-SPLINES IN SUBSEQUENT COLUMNS,
 !     GENERATE THEIR B-REPR. BY DIFFERENCING. THEN EVALUATE AT X.
 !
-JLOW = 1
-do 20 I = 1,K
-   do 19 J = JLOW,K
-19 A(J,I) = 0.0
-   JLOW = I
-20 A(I,I) = 1.0
+jlow = 1
+do 20 i = 1,k
+   do 19 j = jlow,k
+19 a(j,i) = 0.0
+   jlow = i
+20 a(i,i) = 1.0
 !
 !     AT THIS POINT, A(.,J) CONTAINS THE B-COEFFS FOR THE J-TH OF THE
 !     K  B-SPLINES OF INTEREST HERE.
 !
-DO M = 2,MHIGH
-   KP1MM = KP1 - M
-   FKP1MM = FLOAT(KP1MM)
-   IL = LEFT
-   I = K
+do m = 2,mhigh
+   kp1mm = kp1 - m
+   fkp1mm = float(kp1mm)
+   il = left
+   i = k
 !
 !        FOR J = 1,...,K, CONSTRUCT B-COEFFS OF (M-1)ST  DERIVATIVE OF
 !        B-SPLINES FROM THOSE FOR PRECEDING DERIVATIVE BY DIFFERENCING
 !        AND STORE AGAIN IN  A(.,J) . THE FACT THAT  A(I,J) = 0  FOR
 !        I .LT. J  IS USED.
 !
-   DO LDUMMY = 1,KP1MM
-      L = IL + KP1MM
-      FACTOR = FKP1MM/(T(L) - T(IL))
+   do ldummy = 1,kp1mm
+      l = il + kp1mm
+      factor = fkp1mm/(t(l) - t(il))
 !
 !           THE ASSUMPTION THAT T(LEFT).LT.T(LEFT+1) MAKES DENOMINATOR
 !           IN THE FACTOR NONZERO.
 !
-      do 25 J = 1,I
-25 A(I,J) = (A(I,J) - A(I-1,J))*FACTOR
-      IL = IL - 1
-      I = I - 1
-   END DO
+      do 25 j = 1,i
+25 a(i,j) = (a(i,j) - a(i-1,j))*factor
+      il = il - 1
+      i = i - 1
+   end do
 !
 !        FOR I = 1,...,K, COMBINE B-COEFFS A(.,I) WITH B-SPLINE VALUES
 !        STORED IN DBIATX(.,M) TO GET VALUE OF  (M-1)ST  DERIVATIVE OF
@@ -8862,23 +8862,23 @@ DO M = 2,MHIGH
 !        IVES OF THE SAME ORDER DO NOT USE THIS VALUE DUE TO THE FACT
 !        THAT  A(J,I) = 0  FOR J .LT. I .
 !
-   DO I = 1,K
-      SUM = 0.0
-      JLOW = MAX0(I,M)
-      do 35 J = JLOW,K
-35 SUM = A(J,I)*DBIATX(J,M) + SUM
-      DBIATX(I,M) = SUM
-   END DO
-END DO
-RETURN
-END SUBROUTINE BSPVD
+   do i = 1,k
+      sum = 0.0
+      jlow = max0(i,m)
+      do 35 j = jlow,k
+35 sum = a(j,i)*dbiatx(j,m) + sum
+      dbiatx(i,m) = sum
+   end do
+end do
+return
+end subroutine bspvd
 
-SUBROUTINE BSTRP (TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: K, N
-INTEGER :: I, ILP1MX, J, JJ, KM1, KPKM2, LEFT, LENQ, NP1
-REAL :: TAUI
+subroutine bstrp (tau, gtau, t, n, k, bcoef, q, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: k, n
+integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
+real :: taui
 !-----------------------------------------------------------------------
 !   THIS ROUTINE PRODUCES THE B-SPLINE COEFF.S BCOEF OF THE PIECEWISE
 !   POLYNOMIAL OF ORDER K WITH KNOTS T(I) (I=1,...,N+K) WHICH HAS THE
@@ -8925,49 +8925,49 @@ REAL :: TAUI
 !     BANFAC PERFORMS NO PIVOTING SINCE THE TOTAL POSITIVITY OF THE
 !  MATRIX A MAKES THIS UNNECESSARY.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: BCOEF(N)
-REAL, INTENT(IN) :: GTAU(N)
-REAL, INTENT(INOUT) :: Q(*)
-REAL, INTENT(IN) :: T(*), TAU(N)
+real, intent(inout) :: bcoef(n)
+real, intent(in) :: gtau(n)
+real, intent(inout) :: q(*)
+real, intent(in) :: t(*), tau(n)
 !
-KM1 = K - 1
-IF (IFLAG .EQ. 0) GO TO 60
-NP1 = N + 1
-KPKM2 = 2*KM1
-IF (N .EQ. 1) GO TO 20
+km1 = k - 1
+if (iflag .eq. 0) go to 60
+np1 = n + 1
+kpkm2 = 2*km1
+if (n .eq. 1) go to 20
 !
 !        CHECK IF TAU(I) IS AN INCREASING SEQUENCE
 !
-DO I = 2,N
-   IF (TAU(I) .LE. TAU(I-1)) GO TO 100
-END DO
+do i = 2,n
+   if (tau(i) .le. tau(i-1)) go to 100
+end do
 !
 !                ZERO OUT ALL ENTRIES OF Q
 !
-20 IF (TAU(N) .GT. T(NP1)) GO TO 100
-LENQ = N*(K + KM1)
-DO I = 1,LENQ
-   Q(I) = 0.0
-END DO
+20 if (tau(n) .gt. t(np1)) go to 100
+lenq = n*(k + km1)
+do i = 1,lenq
+   q(i) = 0.0
+end do
 !
 !  ***   LOOP OVER I TO CONSTRUCT THE N INTERPOLATION EQUATIONS
 !
-LEFT = K
-DO I = 1,N
-   TAUI = TAU(I)
-   ILP1MX = MIN0(I + K,NP1)
+left = k
+do i = 1,n
+   taui = tau(i)
+   ilp1mx = min0(i + k,np1)
 !
 !        *** FIND  LEFT  IN THE CLOSED INTERVAL (I,I+K-1) SUCH THAT
 !                T(LEFT) .LE. TAU(I) .LT. T(LEFT+1)
 !        MATRIX IS SINGULAR IF THIS IS NOT POSSIBLE
 !
-   LEFT = MAX0(LEFT,I)
-   IF (TAUI .LT. T(LEFT)) GO TO 100
-30 IF (TAUI .LT. T(LEFT+1)) GO TO 40
-      LEFT = LEFT + 1
-      IF (LEFT .LT. ILP1MX) GO TO 30
-   IF (LEFT .EQ. I + K) GO TO 100
-   LEFT = N
+   left = max0(left,i)
+   if (taui .lt. t(left)) go to 100
+30 if (taui .lt. t(left+1)) go to 40
+      left = left + 1
+      if (left .lt. ilp1mx) go to 30
+   if (left .eq. i + k) go to 100
+   left = n
 !
 !        *** THE I-TH EQUATION ENFORCES INTERPOLATION AT TAUI, HENCE
 !        A(I,J) = B(J,K,T)(TAUI), ALL J. ONLY THE  K  ENTRIES WITH  J =
@@ -8975,8 +8975,8 @@ DO I = 1,N
 !        ARE RETURNED, IN  BCOEF (USED FOR TEMP.STORAGE HERE), BY THE
 !        FOLLOWING
 !
-40 JJ = 0
-   CALL BSPVB (T, K, K, JJ, TAUI, LEFT, BCOEF)
+40 jj = 0
+   call bspvb (t, k, k, jj, taui, left, bcoef)
 !
 !        LET Q DENOTE A TWO-DIMENSIONAL ARRAY OF DIMENSION (2*K-1,N).
 !        WE THEREFORE WANT  BCOEF(J) = B(LEFT-K+J)(TAUI) TO GO INTO
@@ -8988,39 +8988,39 @@ DO I = 1,N
 !                   =  I-LEFT+1 + (LEFT - K)*(2*K-1) + (2*K-2)*J
 !        OF  Q .
 !
-   JJ = I - LEFT + 1 + (LEFT - K)*(K + KM1)
-   DO J = 1,K
-      JJ = JJ + KPKM2
-      Q(JJ) = BCOEF(J)
-   END DO
-END DO
+   jj = i - left + 1 + (left - k)*(k + km1)
+   do j = 1,k
+      jj = jj + kpkm2
+      q(jj) = bcoef(j)
+   end do
+end do
 !
 !     ***OBTAIN FACTORIZATION OF  A  , STORED AGAIN IN  Q.
 !
-CALL BANFAC (Q, K + KM1, N, KM1, KM1, IFLAG)
-IFLAG = IFLAG - 1
-IF (IFLAG .NE. 0) RETURN
+call banfac (q, k + km1, n, km1, km1, iflag)
+iflag = iflag - 1
+if (iflag .ne. 0) return
 !
 !     *** SOLVE  A*BCOEF = GTAU  BY BACKSUBSTITUTION
 !
-60 DO I = 1,N
-   BCOEF(I) = GTAU(I)
-END DO
-CALL BANSLV (Q, K + KM1, N, KM1, KM1, BCOEF)
-RETURN
+60 do i = 1,n
+   bcoef(i) = gtau(i)
+end do
+call banslv (q, k + km1, n, km1, km1, bcoef)
+return
 !
 !     *** ERROR RETURN
 !
-100 IFLAG = 1
-RETURN
-END SUBROUTINE BSTRP
+100 iflag = 1
+return
+end subroutine bstrp
 
-SUBROUTINE BANFAC ( W, NROWW, NROW, NBANDL, NBANDU, IFLAG )
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IFLAG
-INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
-INTEGER :: I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE, &
-&MIDMK, MJ, NROWM1
+subroutine banfac ( w, nroww, nrow, nbandl, nbandu, iflag )
+implicit none
+integer, intent(out) :: iflag
+integer, intent(in) :: nbandl, nbandu, nrow, nroww
+integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
+&midmk, mj, nrowm1
 !  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 !  RETURNS IN  W  THE LU-FACTORIZATION (WITHOUT PIVOTING) OF THE BANDED
 !  MATRIX  A  OF ORDER  NROW  WITH  (NBANDL + 1 + NBANDU) BANDS OR DIAG-
@@ -9076,70 +9076,70 @@ INTEGER :: I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE, &
 !  P O S I T I V E  MATRICES WHICH OCCUR IN SPLINE CALCULATIONS.
 !     THE ROUTINE SHOULD NOT BE USED FOR AN ARBITRARY BANDED MATRIX.
 !
-REAL, INTENT(INOUT) :: W(NROWW,NROW)
-REAL :: FACTOR, PIVOT
+real, intent(inout) :: w(nroww,nrow)
+real :: factor, pivot
 !
-IFLAG = 1
-MIDDLE = NBANDU + 1
+iflag = 1
+middle = nbandu + 1
 !                         W(MIDDLE,.) CONTAINS THE MAIN DIAGONAL OF  A .
-NROWM1 = NROW - 1
-IF (NROWM1)                       999,900,1
-1 IF (NBANDL .GT. 0)                GO TO 10
+nrowm1 = nrow - 1
+if (nrowm1)                       999,900,1
+1 if (nbandl .gt. 0)                go to 10
 !                A IS UPPER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO .
-DO I=1,NROWM1
-   IF (W(MIDDLE,I) .EQ. 0.)       GO TO 999
-   END DO
-                                  GO TO 900
-10 IF (NBANDU .GT. 0)                GO TO 20
+do i=1,nrowm1
+   if (w(middle,i) .eq. 0.)       go to 999
+   end do
+                                  go to 900
+10 if (nbandu .gt. 0)                go to 20
 !              A IS LOWER TRIANGULAR. CHECK THAT DIAGONAL IS NONZERO AND
 !                 DIVIDE EACH COLUMN BY ITS DIAGONAL .
-do 15 I = 1,NROWM1
-   PIVOT = W(MIDDLE,I)
-   IF(PIVOT .EQ. 0.)              GO TO 999
-   JMAX = MIN0(NBANDL, NROW - I)
-   JBEG = MIDDLE + 1
-   JEND = MIDDLE + JMAX
-   do 15 J = JBEG,JEND
-15 W(J,I) = W(J,I)/PIVOT
-                                  GO TO 900
+do 15 i = 1,nrowm1
+   pivot = w(middle,i)
+   if(pivot .eq. 0.)              go to 999
+   jmax = min0(nbandl, nrow - i)
+   jbeg = middle + 1
+   jend = middle + jmax
+   do 15 j = jbeg,jend
+15 w(j,i) = w(j,i)/pivot
+                                  go to 900
 !
 !        A  IS NOT JUST A TRIANGULAR MATRIX. CONSTRUCT LU FACTORIZATION
-20 DO I=1,NROWM1
+20 do i=1,nrowm1
 !                                  W(MIDDLE,I)  IS PIVOT FOR I-TH STEP .
-   PIVOT = W(MIDDLE,I)
-   IF (PIVOT .EQ. 0.)             GO TO 999
+   pivot = w(middle,i)
+   if (pivot .eq. 0.)             go to 999
 !                 JMAX  IS THE NUMBER OF (NONZERO) ENTRIES IN COLUMN  I
 !                     BELOW THE DIAGONAL .
-   JMAX = MIN0(NBANDL,NROW - I)
+   jmax = min0(nbandl,nrow - i)
 !              DIVIDE EACH ENTRY IN COLUMN  I  BELOW DIAGONAL BY PIVOT .
-   JBEG = MIDDLE + 1
-   JEND = MIDDLE + JMAX
-   do 32 J = JBEG,JEND
-32 W(J,I) = W(J,I)/PIVOT
+   jbeg = middle + 1
+   jend = middle + jmax
+   do 32 j = jbeg,jend
+32 w(j,i) = w(j,i)/pivot
 !                 KMAX  IS THE NUMBER OF (NONZERO) ENTRIES IN ROW  I  TO
 !                     THE RIGHT OF THE DIAGONAL .
-   KMAX = MIN0(NBANDU,NROW - I)
+   kmax = min0(nbandu,nrow - i)
 !                  SUBTRACT  A(I,I+K)*(I-TH COLUMN) FROM (I+K)-TH COLUMN
 !                  (BELOW ROW  I ) .
-   do 40 K = 1,KMAX
-      IPK = I + K
-      MIDMK = MIDDLE - K
-      FACTOR = W(MIDMK,IPK)
-      do 40 J = 1,JMAX
-         MJ = MIDDLE + J
-         MDJ = MIDMK + J
-40 W(MDJ,IPK) = W(MDJ,IPK) - W(MJ,I)*FACTOR
-   END DO
+   do 40 k = 1,kmax
+      ipk = i + k
+      midmk = middle - k
+      factor = w(midmk,ipk)
+      do 40 j = 1,jmax
+         mj = middle + j
+         mdj = midmk + j
+40 w(mdj,ipk) = w(mdj,ipk) - w(mj,i)*factor
+   end do
 !                                       CHECK THE LAST DIAGONAL ENTRY .
-900 IF (W(MIDDLE,NROW) .NE. 0.)       RETURN
-999 IFLAG = 2
-                                  RETURN
-END SUBROUTINE BANFAC
+900 if (w(middle,nrow) .ne. 0.)       return
+999 iflag = 2
+                                  return
+end subroutine banfac
 
-SUBROUTINE BANSLV ( W, NROWW, NROW, NBANDL, NBANDU, B )
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
-INTEGER :: I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1
+subroutine banslv ( w, nroww, nrow, nbandl, nbandu, b )
+implicit none
+integer, intent(in) :: nbandl, nbandu, nrow, nroww
+integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 !  COMPANION ROUTINE TO  BANFAC . IT RETURNS THE SOLUTION  X  OF THE
 !  LINEAR SYSTEM  A*X = B  IN PLACE OF  B , GIVEN THE LU-FACTORIZATION
@@ -9160,49 +9160,49 @@ INTEGER :: I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1
 !  UPPER TRIANGULAR SYSTEM  U*X = Y  IS SOLVED FOR  X  . THE CALCUL-
 !  ATIONS ARE SO ARRANGED THAT THE INNERMOST LOOPS STAY WITHIN COLUMNS.
 !
-REAL, INTENT(IN) :: W(NROWW,NROW)
-REAL, INTENT(INOUT) :: B(NROW)
-MIDDLE = NBANDU + 1
-IF (NROW .EQ. 1)                  GO TO 49
-NROWM1 = NROW - 1
-IF (NBANDL .EQ. 0)                GO TO 30
+real, intent(in) :: w(nroww,nrow)
+real, intent(inout) :: b(nrow)
+middle = nbandu + 1
+if (nrow .eq. 1)                  go to 49
+nrowm1 = nrow - 1
+if (nbandl .eq. 0)                go to 30
 !                                 FORWARD PASS
 !            FOR I=1,2,...,NROW-1, SUBTRACT  RIGHT SIDE(I)*(I-TH COLUMN
 !            OF  L )  FROM RIGHT SIDE  (BELOW I-TH ROW) .
-do 21 I = 1,NROWM1
-   JMAX = MIN0(NBANDL, NROW-I)
-   do 21 J = 1,JMAX
-      IPJ = I + J
-      MPJ = MIDDLE + J
-21 B(IPJ) = B(IPJ) - B(I)*W(MPJ,I)
+do 21 i = 1,nrowm1
+   jmax = min0(nbandl, nrow-i)
+   do 21 j = 1,jmax
+      ipj = i + j
+      mpj = middle + j
+21 b(ipj) = b(ipj) - b(i)*w(mpj,i)
 !                                 BACKWARD PASS
 !            FOR I=NROW,NROW-1,...,1, DIVIDE RIGHT SIDE(I) BY I-TH DIAG-
 !            ONAL ENTRY OF  U, THEN SUBTRACT  RIGHT SIDE(I)*(I-TH COLUMN
 !            OF  U)  FROM RIGHT SIDE  (ABOVE I-TH ROW).
-30 IF (NBANDU .GT. 0)                GO TO 40
+30 if (nbandu .gt. 0)                go to 40
 !                                A  IS LOWER TRIANGULAR .
-do 31 I = 1,NROW
-31 B(I) = B(I)/W(1,I)
-                                  RETURN
-40 I = NROW
-41 B(I) = B(I)/W(MIDDLE,I)
-   JMAX = MIN0(NBANDU,I-1)
-   do 45 J = 1,JMAX
-      IMJ = I - J
-      MMJ = MIDDLE - J
-45 B(IMJ) = B(IMJ) - B(I)*W(MMJ,I)
-   I = I - 1
-   IF (I .GT. 1)                  GO TO 41
-49 B(1) = B(1)/W(MIDDLE,1)
-                                  RETURN
-END SUBROUTINE BANSLV
+do 31 i = 1,nrow
+31 b(i) = b(i)/w(1,i)
+                                  return
+40 i = nrow
+41 b(i) = b(i)/w(middle,i)
+   jmax = min0(nbandu,i-1)
+   do 45 j = 1,jmax
+      imj = i - j
+      mmj = middle - j
+45 b(imj) = b(imj) - b(i)*w(mmj,i)
+   i = i - 1
+   if (i .gt. 1)                  go to 41
+49 b(1) = b(1)/w(middle,1)
+                                  return
+end subroutine banslv
 
-SUBROUTINE BSLSQ (TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: K, N, NTAU
-INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
-REAL :: DW
+subroutine bslsq (tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: k, n, ntau
+integer :: i, j, jj, l, left, leftmk, mm
+real :: dw
 !-----------------------------------------------------------------------
 !
 !        BSLSQ PRODUCES THE B-SPLINE COEFFICIENTS OF A PIECEWISE
@@ -9235,69 +9235,69 @@ REAL :: DW
 !            -1  INPUT ERRORS WERE DETECTED.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: TAU(NTAU), GTAU(NTAU), WGT(NTAU)
-REAL, INTENT(IN) :: T(*)
-REAL, INTENT(INOUT) :: A(N), WK(N), Q(K,N)
+real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
+real, intent(in) :: t(*)
+real, intent(inout) :: a(n), wk(n), q(k,n)
 !
-IF (NTAU .LT. MAX0(2,K)) GO TO 100
-IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
+if (ntau .lt. max0(2,k)) go to 100
+if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
 !
-DO I = 2,NTAU
-   IF (TAU(I - 1) .GT. TAU(I)) GO TO 100
-END DO
+do i = 2,ntau
+   if (tau(i - 1) .gt. tau(i)) go to 100
+end do
 !
-DO J = 1,N
-   A(J) = 0.0
-   DO I = 1,K
-      Q(I,J) = 0.0
-   END DO
-END DO
+do j = 1,n
+   a(j) = 0.0
+   do i = 1,k
+      q(i,j) = 0.0
+   end do
+end do
 !
-LEFT = K
-DO L = 1,NTAU
+left = k
+do l = 1,ntau
 !
 !        *** FIND THE INDEX LEFT SUCH THAT
 !            T(LEFT) .LE. TAU(L) .LT. T(LEFT+1)
 !
-30 IF (LEFT .EQ. N) GO TO 40
-      IF (TAU(L) .LT. T(LEFT+1)) GO TO 40
-      LEFT = LEFT + 1
-      GO TO 30
+30 if (left .eq. n) go to 40
+      if (tau(l) .lt. t(left+1)) go to 40
+      left = left + 1
+      go to 30
 !
-40 JJ = 0
-   CALL BSPVB (T, K, K, JJ, TAU(L), LEFT, WK)
+40 jj = 0
+   call bspvb (t, k, k, jj, tau(l), left, wk)
 !
-   LEFTMK = LEFT - K
-   DO MM = 1,K
-      DW = WK(MM)*WGT(L)
-      J = LEFTMK + MM
-      A(J) = DW*GTAU(L) + A(J)
-      I = 1
-      DO JJ = MM,K
-         Q(I,J) = WK(JJ)*DW + Q(I,J)
-         I = I + 1
-      END DO
-   END DO
-END DO
+   leftmk = left - k
+   do mm = 1,k
+      dw = wk(mm)*wgt(l)
+      j = leftmk + mm
+      a(j) = dw*gtau(l) + a(j)
+      i = 1
+      do jj = mm,k
+         q(i,j) = wk(jj)*dw + q(i,j)
+         i = i + 1
+      end do
+   end do
+end do
 !
 !        SOLVE THE NORMAL EQUATIONS
 !
-CALL BCHFAC (Q, K, N, WK, IERR)
-CALL BCHSLV (Q, K, N, A)
-RETURN
+call bchfac (q, k, n, wk, ierr)
+call bchslv (q, k, n, a)
+return
 !
 !             ERROR RETURN
 !
-100 IERR = -1
-RETURN
-END SUBROUTINE BSLSQ
+100 ierr = -1
+return
+end subroutine bslsq
 
-SUBROUTINE BCHFAC (W, NB, N, DIAG, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: N, NB
-INTEGER :: I, IMAX, IPJ, J, JMAX, K, KPI
-REAL :: RATIO, T
+subroutine bchfac (w, nb, n, diag, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: n, nb
+integer :: i, imax, ipj, j, jmax, k, kpi
+real :: ratio, t
 !-----------------------------------------------------------------------
 !  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 !  CONSTRUCTS CHOLESKY FACTORIZATION
@@ -9364,56 +9364,56 @@ REAL :: RATIO, T
 !     CALL BCHFAC (W, NB, N, DIAG, IFLAG)   , TO GET FACTORIZATION
 !     CALL BCHSLV (W, NB, N, B, X )            , TO SOLVE FOR X.
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: W(NB,N), DIAG(N)
+real, intent(inout) :: w(nb,n), diag(n)
 !
-IF (N .GT. 1) GO TO 10
-   IFLAG = 1
-   IF (W(1,1) .EQ. 0.0) RETURN
-   IFLAG = 0
-   W(1,1) = 1.0/W(1,1)
-   RETURN
+if (n .gt. 1) go to 10
+   iflag = 1
+   if (w(1,1) .eq. 0.0) return
+   iflag = 0
+   w(1,1) = 1.0/w(1,1)
+   return
 !
 !     STORE THE DIAGONAL OF C IN DIAG
 !
-10 DO K = 1,N
-   DIAG(K) = W(1,K)
-END DO
+10 do k = 1,n
+   diag(k) = w(1,k)
+end do
 !
 !     FACTORIZATION
 !
-IFLAG = 0
-do 60 K = 1,N
-   T = W(1,K) + DIAG(K)
-   IF (T .NE. DIAG(K)) GO TO 30
-      IFLAG = 1
-      DO J = 1,NB
-         W(J,K) = 0.0
-      END DO
-      GO TO 60
+iflag = 0
+do 60 k = 1,n
+   t = w(1,k) + diag(k)
+   if (t .ne. diag(k)) go to 30
+      iflag = 1
+      do j = 1,nb
+         w(j,k) = 0.0
+      end do
+      go to 60
 !
-30 T = 1.0/W(1,K)
-   W(1,K) = T
-   IMAX = MIN0(NB - 1,N - K)
-   IF (IMAX .LT. 1) GO TO 60
-   JMAX = IMAX
-   DO I = 1,IMAX
-      RATIO = T*W(I+1,K)
-      KPI = K + I
-      DO J = 1,JMAX
-         IPJ = I + J
-         W(J,KPI) = W(J,KPI) - W(IPJ,K)*RATIO
-      END DO
-      JMAX = JMAX - 1
-      W(I+1,K) = RATIO
-   END DO
-60 CONTINUE
-RETURN
-END SUBROUTINE BCHFAC
+30 t = 1.0/w(1,k)
+   w(1,k) = t
+   imax = min0(nb - 1,n - k)
+   if (imax .lt. 1) go to 60
+   jmax = imax
+   do i = 1,imax
+      ratio = t*w(i+1,k)
+      kpi = k + i
+      do j = 1,jmax
+         ipj = i + j
+         w(j,kpi) = w(j,kpi) - w(ipj,k)*ratio
+      end do
+      jmax = jmax - 1
+      w(i+1,k) = ratio
+   end do
+60 continue
+return
+end subroutine bchfac
 
-SUBROUTINE BCHSLV (W, NB, N, B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, NB
-INTEGER :: J, JMAX, JPK, K, NBM1
+subroutine bchslv (w, nb, n, b)
+implicit none
+integer, intent(in) :: n, nb
+integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !
 !     BCHSLV SOLVES THE LINEAR SYSTEM C*X = B FOR X WHEN W CONTAINS
@@ -9436,48 +9436,48 @@ INTEGER :: J, JMAX, JPK, K, NBM1
 !     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: W(NB,N)
-REAL, INTENT(INOUT) :: B(N)
+real, intent(in) :: w(nb,n)
+real, intent(inout) :: b(n)
 !
-IF (N .GT. 1) GO TO 10
-B(1) = B(1)*W(1,1)
-RETURN
+if (n .gt. 1) go to 10
+b(1) = b(1)*w(1,1)
+return
 !
 !     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
 !
-10 NBM1 = NB - 1
-do 30 K = 1,N
-   JMAX = MIN0(NBM1,N - K)
-   IF (JMAX .LT. 1) GO TO 30
-   DO J = 1,JMAX
-      JPK = J + K
-      B(JPK) = B(JPK) - W(J + 1,K)*B(K)
-   END DO
-30 CONTINUE
+10 nbm1 = nb - 1
+do 30 k = 1,n
+   jmax = min0(nbm1,n - k)
+   if (jmax .lt. 1) go to 30
+   do j = 1,jmax
+      jpk = j + k
+      b(jpk) = b(jpk) - w(j + 1,k)*b(k)
+   end do
+30 continue
 !                              T     -1
 !     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
 !
-K = N
-40 B(K) = B(K)*W(1,K)
-   JMAX = MIN0(NBM1,N - K)
-   IF (JMAX .LT. 1) GO TO 60
-   DO J = 1,JMAX
-      JPK = J + K
-      B(K) = B(K) - W(J + 1,K)*B(JPK)
-   END DO
-60 K = K - 1
-   IF (K .GT. 0) GO TO 40
-RETURN
-END SUBROUTINE BCHSLV
+k = n
+40 b(k) = b(k)*w(1,k)
+   jmax = min0(nbm1,n - k)
+   if (jmax .lt. 1) go to 60
+   do j = 1,jmax
+      jpk = j + k
+      b(k) = b(k) - w(j + 1,k)*b(jpk)
+   end do
+60 k = k - 1
+   if (k .gt. 0) go to 40
+return
+end subroutine bchslv
 
-SUBROUTINE BFIT (BKPT, N, NORD, XDATA, YDATA, NDATA, &
-&XCONST, YCONST, NDERIV, NCONST, &
-&MODE, COEFF, RNORM, W, IW)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: MODE
-INTEGER, INTENT(IN) :: N, NCONST, NDATA, NORD
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: I1, I2, I3, I7, MDG, MDW, NBKPT
+subroutine bfit (bkpt, n, nord, xdata, ydata, ndata, &
+&xconst, yconst, nderiv, nconst, &
+&mode, coeff, rnorm, w, iw)
+implicit none
+integer, intent(inout) :: mode
+integer, intent(in) :: n, nconst, ndata, nord
+real, intent(inout) :: rnorm
+integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !-----------------------------------------------------------------------
 !
 !      THIS SUBPROGRAM FITS A PIECE-WISE POLYNOMIAL CURVE
@@ -9682,15 +9682,15 @@ INTEGER :: I1, I2, I3, I7, MDG, MDW, NBKPT
 !     SANDIA LABORATORIES
 !   MODIFIED BY A.H. MORRIS (NSWC)
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: BKPT(*), XDATA(NDATA), YDATA(NDATA)
-REAL, INTENT(IN) :: XCONST(*), YCONST(*)
-REAL, INTENT(INOUT) :: COEFF(N), W(*)
-INTEGER, INTENT(IN) :: NDERIV(*)
-INTEGER, INTENT(INOUT) :: IW(*)
+real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
+real, intent(in) :: xconst(*), yconst(*)
+real, intent(inout) :: coeff(n), w(*)
+integer, intent(in) :: nderiv(*)
+integer, intent(inout) :: iw(*)
 !
-NBKPT = N + NORD
-MDG = N + 3
-MDW = N + 1 + NCONST
+nbkpt = n + nord
+mdg = n + 3
+mdw = n + 1 + nconst
 !
 !                         USAGE IN BFIT0( ) OF W(*)..
 !
@@ -9702,120 +9702,120 @@ MDW = N + 1 + NCONST
 !
 !      I7,...           WORK(*) FOR BSPVD( ) AND LSEI( )
 !
-I1 = 1
-I2 = I1 + MDG*(NORD + 1)
-I3 = I2 + NORD*NORD
-I7 = I3 + MDW*(N + 1)
+i1 = 1
+i2 = i1 + mdg*(nord + 1)
+i3 = i2 + nord*nord
+i7 = i3 + mdw*(n + 1)
 !
-CALL BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT, NCONST, &
-&XCONST, YCONST, NDERIV, MODE, COEFF, RNORM, W(I2), &
-&W(I1), MDG, W(I3), MDW, W(I7), IW)
-RETURN
-END SUBROUTINE BFIT
+call bfit0 (ndata, xdata, ydata, nord, nbkpt, bkpt, nconst, &
+&xconst, yconst, nderiv, mode, coeff, rnorm, w(i2), &
+&w(i1), mdg, w(i3), mdw, w(i7), iw)
+return
+end subroutine bfit
 
-SUBROUTINE BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT, &
-&NCONST, XCONST, YCONST, NDERIV, MODE, COEFF, RNORM, &
-&BF, G, MDG, W, MDW, WORK, IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: MDG, MDW
-INTEGER, INTENT(INOUT) :: MODE
-INTEGER, INTENT(IN) :: NBKPT, NCONST, NDATA, NORD
-REAL, INTENT(INOUT) :: RNORM
-INTEGER :: I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1, &
-&IR, IROW, ITYPE, IW1, IW2, J, L, LW, M, MT, N, NB, NEQCON, NINCON, &
-&NORDM1, NORDP1, NP1
-REAL :: RNORME, XMAX, XMIN, XVAL, YVAL
+subroutine bfit0 (ndata, xdata, ydata, nord, nbkpt, bkpt, &
+&nconst, xconst, yconst, nderiv, mode, coeff, rnorm, &
+&bf, g, mdg, w, mdw, work, iwork)
+implicit none
+integer, intent(in) :: mdg, mdw
+integer, intent(inout) :: mode
+integer, intent(in) :: nbkpt, nconst, ndata, nord
+real, intent(inout) :: rnorm
+integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
+&ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
+&nordm1, nordp1, np1
+real :: rnorme, xmax, xmin, xval, yval
 !---------------------
-REAL, INTENT(IN) :: BKPT(NBKPT), XDATA(NDATA), YDATA(NDATA)
-REAL, INTENT(IN) :: XCONST(*), YCONST(*)
-REAL, INTENT(INOUT) :: COEFF(*)
-REAL, INTENT(INOUT) :: BF(NORD,NORD), G(MDG,*), W(MDW,*), WORK(*)
-INTEGER, INTENT(IN) :: NDERIV(*)
-INTEGER, INTENT(INOUT) :: IWORK(*)
+real, intent(in) :: bkpt(nbkpt), xdata(ndata), ydata(ndata)
+real, intent(in) :: xconst(*), yconst(*)
+real, intent(inout) :: coeff(*)
+real, intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
+integer, intent(in) :: nderiv(*)
+integer, intent(inout) :: iwork(*)
 !
-REAL :: PRGOPT(7)
-LOGICAL :: BAND, NEW
+real :: prgopt(7)
+logical :: band, new
 !
-GO TO 100
+go to 100
 !
-10 IF (.NOT. BAND) GO TO 20
-CALL BNDSL (1, G, MDG, NORD, IP, IR, COEFF, N, RNORM, IERR)
-IF (IERR .EQ. 0) RETURN
+10 if (.not. band) go to 20
+call bndsl (1, g, mdg, nord, ip, ir, coeff, n, rnorm, ierr)
+if (ierr .eq. 0) return
 !
 !     CHECK FURTHER FOR SUFFICIENT STORAGE IN WORKING ARRAYS.
 !
-20 IF (IW1 .LT. LW) GO TO 850
-IF (IW2 .LT. INTW1) GO TO 860
-GO TO 300
+20 if (iw1 .lt. lw) go to 850
+if (iw2 .lt. intw1) go to 860
+go to 300
 !
 !     SOLVE THE EQUATIONS
 !
-30 CALL LSEI(W, MDW, NEQCON, NP1, NINCON, N, PRGOPT, COEFF, RNORME, &
-&RNORM, MODE, WORK, IWORK)
-IWORK(1) = IW1
-IWORK(2) = IW2
-RETURN
+30 call lsei(w, mdw, neqcon, np1, nincon, n, prgopt, coeff, rnorme, &
+&rnorm, mode, work, iwork)
+iwork(1) = iw1
+iwork(2) = iw2
+return
 !-----------------------------------------------------------------------
 !               INITIALIZE-VARIABLES-AND-ANALYZE-INPUT
 !-----------------------------------------------------------------------
-100 N = NBKPT - NORD
-IF (NORD .LT. 1 .OR. NORD .GT. N) GO TO 800
-IF (NDATA .LT. 1 .OR. NCONST .LT. 0) GO TO 810
+100 n = nbkpt - nord
+if (nord .lt. 1 .or. nord .gt. n) go to 800
+if (ndata .lt. 1 .or. nconst .lt. 0) go to 810
 !
 !     CHECK THE BREAK POINTS
 !
-IF (MODE .NE. 0) GO TO 120
-M = NBKPT - 1
-DO I = 1,M
-   IF (BKPT(I) .GT. BKPT(I+1)) GO TO 820
-END DO
+if (mode .ne. 0) go to 120
+m = nbkpt - 1
+do i = 1,m
+   if (bkpt(i) .gt. bkpt(i+1)) go to 820
+end do
 !
 !     AMOUNT OF STORAGE ALLOCATED FOR W(*),IW(*)
 !
-120 IW1 = IWORK(1)
-IW2 = IWORK(2)
-NB = (N + 3)*(NORD + 1) + NORD*NORD
-LW = NB
-IF (IW1 .LT. NB) GO TO 850
+120 iw1 = iwork(1)
+iw2 = iwork(2)
+nb = (n + 3)*(nord + 1) + nord*nord
+lw = nb
+if (iw1 .lt. nb) go to 850
 !
 !     COMPUTE THE AMOUNT OF STORAGE NEEDED FOR LSEI
 !
-NEQCON = 0
-NINCON = 0
-IF (NCONST .EQ. 0) GO TO 150
-do 140 I = 1,NCONST
-   L = NDERIV(I)
-   IF (L .LT. 0) GO TO 140
-   ITYPE = L - 4*(L/4)
-   IF (ITYPE .GT. 1) GO TO 130
-      NINCON = NINCON + 1
-      GO TO 140
-130 NEQCON = NEQCON + 1
-140 CONTINUE
+neqcon = 0
+nincon = 0
+if (nconst .eq. 0) go to 150
+do 140 i = 1,nconst
+   l = nderiv(i)
+   if (l .lt. 0) go to 140
+   itype = l - 4*(l/4)
+   if (itype .gt. 1) go to 130
+      nincon = nincon + 1
+      go to 140
+130 neqcon = neqcon + 1
+140 continue
 !
-150 NP1 = N + 1
-L = NP1
-LW = NB + (L+NCONST)*L + 2*(NEQCON+L) + (NINCON+L) + &
-&(NINCON+2)*(L+6)
-INTW1 = NINCON + 2*L
+150 np1 = n + 1
+l = np1
+lw = nb + (l+nconst)*l + 2*(neqcon+l) + (nincon+l) + &
+&(nincon+2)*(l+6)
+intw1 = nincon + 2*l
 !
 !     CHECK THE XCONST(*) ARRAY
 !
-XMIN = BKPT(NORD)
-XMAX = BKPT(NP1)
-IF (NCONST .EQ. 0) GO TO 170
-DO I = 1,NCONST
-   IF (XCONST(I) .LT. XMIN .OR. XCONST(I) .GT. XMAX) &
-&GO TO 840
-END DO
+xmin = bkpt(nord)
+xmax = bkpt(np1)
+if (nconst .eq. 0) go to 170
+do i = 1,nconst
+   if (xconst(i) .lt. xmin .or. xconst(i) .gt. xmax) &
+&go to 840
+end do
 !
 !     INITIALIZE PARAMETERS
 !
-170 NEW = MODE .EQ. 0
-BAND = NCONST .EQ. 0
-MODE = 0
-NORDM1 = NORD - 1
-NORDP1 = NORD + 1
+170 new = mode .eq. 0
+band = nconst .eq. 0
+mode = 0
+nordm1 = nord - 1
+nordp1 = nord + 1
 !
 !     DEFINE THE OPTION VECTOR FOR USE IN LSEI( )
 !
@@ -9823,216 +9823,216 @@ NORDP1 = NORD + 1
 !     FOR BOTH EQUALITY CONSTRAINT EQUATIONS AND
 !     LEAST SQUARES EQUATIONS.
 !
-PRGOPT(1) = 4
-PRGOPT(2) = 4
-PRGOPT(3) = 1.E-3
+prgopt(1) = 4
+prgopt(2) = 4
+prgopt(3) = 1.e-3
 !
-PRGOPT(4) = 7
-PRGOPT(5) = 5
-PRGOPT(6) = 1.E-3
+prgopt(4) = 7
+prgopt(5) = 5
+prgopt(6) = 1.e-3
 !
-PRGOPT(7) = 1
+prgopt(7) = 1
 !
-IF (.NOT. NEW) GO TO 260
+if (.not. new) go to 260
 !
 !     CHECK THE XDATA(*) ARRAY
 !
-IF (XDATA(1) .LT. XMIN .OR. XDATA(NDATA) .GT. XMAX) &
-&GO TO 830
-IF (NDATA .EQ. 1) GO TO 200
+if (xdata(1) .lt. xmin .or. xdata(ndata) .gt. xmax) &
+&go to 830
+if (ndata .eq. 1) go to 200
 !
-M = NDATA - 1
-DO I = 1,M
-   IF (XDATA(I) .GE. XDATA(I+1)) GO TO 830
-END DO
+m = ndata - 1
+do i = 1,m
+   if (xdata(i) .ge. xdata(i+1)) go to 830
+end do
 !
 !     INITIALIZE PARAMETERS OF BANDED MATRIX PROCESSOR, BNDACC( )
 !
-200 MT = 0
-IP = 1
-IR = 1
-IDATA = 1
-ILEFT = NORD
+200 mt = 0
+ip = 1
+ir = 1
+idata = 1
+ileft = nord
 !
-210 IF (IDATA .GT. NDATA) GO TO 250
-XVAL = XDATA(IDATA)
-IF (ILEFT .EQ. N) GO TO 230
+210 if (idata .gt. ndata) go to 250
+xval = xdata(idata)
+if (ileft .eq. n) go to 230
 !
 !     WHEN INTERVAL CHANGES, PROCESS EQUATIONS IN THE LAST BLOCK.
 !
-IP1 = ILEFT + 1
-IF (XVAL .LT. BKPT(IP1)) GO TO 230
-INTRVL = ILEFT - NORDM1
-CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
-MT = 0
+ip1 = ileft + 1
+if (xval .lt. bkpt(ip1)) go to 230
+intrvl = ileft - nordm1
+call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
+mt = 0
 !
 !     MOVE POINTER UP SO THAT XVAL .GE. BKPT(ILEFT).
 !
-do 220 I = IP1,N
-   IF (XVAL .LT. BKPT(I)) GO TO 230
-220 ILEFT = I
+do 220 i = ip1,n
+   if (xval .lt. bkpt(i)) go to 230
+220 ileft = i
 !
 !     OBTAIN B-SPLINE FUNCTION VALUE
 !
-230 J = 0
-CALL BSPVB (BKPT, NORD, NORD, J, XVAL, ILEFT, BF)
+230 j = 0
+call bspvb (bkpt, nord, nord, j, xval, ileft, bf)
 !
 !     MOVE ROW INTO PLACE
 !
-IROW = IR + MT
-MT = MT + 1
-CALL SCOPY (NORD, BF, 1, G(IROW,1), MDG)
-G(IROW,NORDP1) = YDATA(IDATA)
+irow = ir + mt
+mt = mt + 1
+call scopy (nord, bf, 1, g(irow,1), mdg)
+g(irow,nordp1) = ydata(idata)
 !
 !     WHEN STAGING WORK AREA IS EXHAUSTED, PROCESS ROWS
 !
-IF (IROW .NE. MDG - 1) GO TO 240
-   INTRVL = ILEFT - NORDM1
-   CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
-   MT = 0
-240 IDATA = IDATA + 1
-GO TO 210
+if (irow .ne. mdg - 1) go to 240
+   intrvl = ileft - nordm1
+   call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
+   mt = 0
+240 idata = idata + 1
+go to 210
 !
 !     PROCESS  BLOCK OF EQUATIONS
 !
-250 INTRVL = ILEFT - NORDM1
-CALL BNDACC (G, MDG, NORD, IP, IR, MT, INTRVL)
+250 intrvl = ileft - nordm1
+call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
 !
 !     LAST CALL TO ADJUST BLOCK POSITIONING
 !
-G(IR,1) = 0.0
-CALL SCOPY (NORDP1, G(IR,1), 0, G(IR,1), MDG)
-CALL BNDACC (G, MDG, NORD, IP, IR, 1, NP1)
+g(ir,1) = 0.0
+call scopy (nordp1, g(ir,1), 0, g(ir,1), mdg)
+call bndacc (g, mdg, nord, ip, ir, 1, np1)
 !
-260 DO I = 1,N
-  BAND = BAND .AND. G(I,1) .NE. 0.0
-END DO
-GO TO 10
+260 do i = 1,n
+  band = band .and. g(i,1) .ne. 0.0
+end do
+go to 10
 !-----------------------------------------------------------------------
 !       ANALYZE CONSTRAINT INDICATORS FOR EQUALITY CONSTRAINTS
 !-----------------------------------------------------------------------
-300 IDATA = 0
-NEQCON = 0
+300 idata = 0
+neqcon = 0
 !
-310 IDATA = IDATA + 1
-IF (IDATA .GT. NCONST) GO TO 400
-L = NDERIV(IDATA)
-IF (L .LT. 0) GO TO 310
-IDERIV = L/4
-ITYPE = L - 4*IDERIV
+310 idata = idata + 1
+if (idata .gt. nconst) go to 400
+l = nderiv(idata)
+if (l .lt. 0) go to 310
+ideriv = l/4
+itype = l - 4*ideriv
 !
-IF (ITYPE .LT. 2) GO TO 310
-NEQCON = NEQCON + 1
-XVAL = XCONST(IDATA)
-ILEFT = NORD
-IF (NORD .EQ. N) GO TO 330
-do 320 I = NORDP1,N
-   IF (XVAL .LT. BKPT(I)) GO TO 330
-320 ILEFT = I
-330 CALL BSPVD (BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
-W(NEQCON,1) = 0.0
-CALL SCOPY (N, W(NEQCON,1), 0, W(NEQCON,1), MDW)
-INTRVL = ILEFT - NORDM1
-CALL SCOPY (NORD, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
-IF (ITYPE .NE. 2) GO TO 340
-W(NEQCON,NP1) = YCONST(IDATA)
-GO TO 310
+if (itype .lt. 2) go to 310
+neqcon = neqcon + 1
+xval = xconst(idata)
+ileft = nord
+if (nord .eq. n) go to 330
+do 320 i = nordp1,n
+   if (xval .lt. bkpt(i)) go to 330
+320 ileft = i
+330 call bspvd (bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
+w(neqcon,1) = 0.0
+call scopy (n, w(neqcon,1), 0, w(neqcon,1), mdw)
+intrvl = ileft - nordm1
+call scopy (nord, bf(1,ideriv+1), 1, w(neqcon,intrvl), mdw)
+if (itype .ne. 2) go to 340
+w(neqcon,np1) = yconst(idata)
+go to 310
 !
-340 W(NEQCON,NP1) = 0.0
-YVAL = YCONST(IDATA)
-I = IDATA
-IF (YVAL .LT. XMIN .OR. YVAL .GT. XMAX) GO TO 840
-ILEFT = NORD
-IF (NORD .EQ. N) GO TO 360
-do 350 I = NORDP1,N
-   IF (YVAL .LT. BKPT(I)) GO TO 360
-350 ILEFT = I
-360 CALL BSPVD (BKPT, NORD, YVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
-INTRVL = ILEFT - NORDM1
-CALL SAXPY (NORD, -1.0, BF(1,IDERIV+1), 1, W(NEQCON,INTRVL), MDW)
-GO TO 310
+340 w(neqcon,np1) = 0.0
+yval = yconst(idata)
+i = idata
+if (yval .lt. xmin .or. yval .gt. xmax) go to 840
+ileft = nord
+if (nord .eq. n) go to 360
+do 350 i = nordp1,n
+   if (yval .lt. bkpt(i)) go to 360
+350 ileft = i
+360 call bspvd (bkpt, nord, yval, ileft, bf, nord, ideriv + 1, work)
+intrvl = ileft - nordm1
+call saxpy (nord, -1.0, bf(1,ideriv+1), 1, w(neqcon,intrvl), mdw)
+go to 310
 !-----------------------------------------------------------------------
 !                    TRANSFER-LEAST-SQUARES DATA
 !-----------------------------------------------------------------------
-400 DO I = 1,NP1
-  IROW = I + NEQCON
-  W(IROW,1) = 0.0
-  CALL SCOPY (N, W(IROW,1), 0, W(IROW,1), MDW)
-  CALL SCOPY (MIN0(NP1-I,NORD), G(I,1), MDG, W(IROW,I), MDW)
-  W(IROW,NP1) = G(I,NORDP1)
-END DO
+400 do i = 1,np1
+  irow = i + neqcon
+  w(irow,1) = 0.0
+  call scopy (n, w(irow,1), 0, w(irow,1), mdw)
+  call scopy (min0(np1-i,nord), g(i,1), mdg, w(irow,i), mdw)
+  w(irow,np1) = g(i,nordp1)
+end do
 !-----------------------------------------------------------------------
 !      ANALYZE CONSTRAINT INDICATORS FOR INEQUALITY CONSTRAINTS
 !-----------------------------------------------------------------------
-IDATA = 0
-NINCON = 0
+idata = 0
+nincon = 0
 !
-500 IDATA = IDATA + 1
-IF (IDATA .GT. NCONST) GO TO 30
-L = NDERIV(IDATA)
-IF (L .LT. 0) GO TO 500
-IDERIV = L/4
-ITYPE = L - 4*IDERIV
+500 idata = idata + 1
+if (idata .gt. nconst) go to 30
+l = nderiv(idata)
+if (l .lt. 0) go to 500
+ideriv = l/4
+itype = l - 4*ideriv
 !
-IF (ITYPE .GT. 1) GO TO 500
-NINCON = NINCON + 1
-XVAL = XCONST(IDATA)
-ILEFT = NORD
-IF (NORD .EQ. N) GO TO 520
-do 510 I = NORDP1,N
-   IF (XVAL .LT. BKPT(I)) GO TO 520
-510 ILEFT = I
-520 CALL BSPVD (BKPT, NORD, XVAL, ILEFT, BF, NORD, IDERIV + 1, WORK)
-IROW = NEQCON + NP1 + NINCON
-W(IROW,1) = 0.0
-CALL SCOPY (N, W(IROW,1), 0, W(IROW,1), MDW)
-INTRVL = ILEFT - NORDM1
-CALL SCOPY (NORD, BF(1,IDERIV+1), 1, W(IROW,INTRVL), MDW)
-W(IROW,NP1) = YCONST(IDATA)
-IF (ITYPE .NE. 0) GO TO 500
-W(IROW,NP1) = -W(IROW,NP1)
-CALL SSCAL(NORD, -1.0, W(IROW,INTRVL), MDW)
-GO TO 500
+if (itype .gt. 1) go to 500
+nincon = nincon + 1
+xval = xconst(idata)
+ileft = nord
+if (nord .eq. n) go to 520
+do 510 i = nordp1,n
+   if (xval .lt. bkpt(i)) go to 520
+510 ileft = i
+520 call bspvd (bkpt, nord, xval, ileft, bf, nord, ideriv + 1, work)
+irow = neqcon + np1 + nincon
+w(irow,1) = 0.0
+call scopy (n, w(irow,1), 0, w(irow,1), mdw)
+intrvl = ileft - nordm1
+call scopy (nord, bf(1,ideriv+1), 1, w(irow,intrvl), mdw)
+w(irow,np1) = yconst(idata)
+if (itype .ne. 0) go to 500
+w(irow,np1) = -w(irow,np1)
+call sscal(nord, -1.0, w(irow,intrvl), mdw)
+go to 500
 !-----------------------------------------------------------------------
 !                         ERROR RETURN
 !-----------------------------------------------------------------------
 !                       EITHER NORD .LT. 1 OR NORD .GT. N.
-800 MODE = -1
-RETURN
+800 mode = -1
+return
 !                       EITHER NDATA .LT. 1 OR NCONST .LT. 0.
-810 MODE = -2
-RETURN
+810 mode = -2
+return
 !                       THE SEQUENCE OF KNOTS IS NOT NONDECREASING.
-820 MODE = -3
-RETURN
+820 mode = -3
+return
 !                       XDATA(*) IS NOT AN INCREASING SEQUENCE IN THE
 !                       CLOSED INTERVAL (BKPT(1),BKPT(N+1)).
-830 MODE = -4
-RETURN
+830 mode = -4
+return
 !                       THE I-TH CONSTRAINT IS INCORRECT FOR THE
 !                       VALUE OF I STORED IN IWORK(2).
-840 IWORK(2) = I
-MODE = -5
-RETURN
+840 iwork(2) = i
+mode = -5
+return
 !                       INSUFF. STORAGE FOR W(*). IWORK(1) HAS BEEN SET
 !                       TO THE AMOUNT OF STORAGE NEEDED BY W(*).
-850 IWORK(1) = LW
-MODE = -6
-RETURN
+850 iwork(1) = lw
+mode = -6
+return
 !                       INSUFF. STORAGE FOR IW(*). IWORK(2) HAS BEEN SET
 !                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
-860 IWORK(2) = INTW1
-MODE = -7
-RETURN
-END SUBROUTINE BFIT0
+860 iwork(2) = intw1
+mode = -7
+return
+end subroutine bfit0
 
-SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IP, IR
-INTEGER, INTENT(IN) :: JT, MDG, MT, NB
-REAL, INTENT(INOUT) :: G(MDG,*)
-INTEGER :: I, IE, IG, IG1, IG2, J, JG, K, KH, L, LP1, MH, MU, NBP1
-REAL :: RHO
+subroutine bndacc (g,mdg,nb,ip,ir,mt,jt)
+implicit none
+integer, intent(inout) :: ip, ir
+integer, intent(in) :: jt, mdg, mt, nb
+real, intent(inout) :: g(mdg,*)
+integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
+real :: rho
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
 !           HANSON, R. J., (SNLA)
@@ -10177,83 +10177,83 @@ REAL :: RHO
 !
 !              ALG. STEPS 1-4 ARE PERFORMED EXTERNAL TO THIS SUBROUTINE.
 !
-NBP1 = NB + 1
-IF (MT .LE. 0 .OR. NB .LE. 0) RETURN
+nbp1 = nb + 1
+if (mt .le. 0 .or. nb .le. 0) return
 !                                             ALG. STEP 5
-IF (JT .EQ. IP) GO TO 70
+if (jt .eq. ip) go to 70
 !                                             ALG. STEPS 6-7
-IF (JT .LE. IR) GO TO 30
+if (jt .le. ir) go to 30
 !                                             ALG. STEPS 8-9
-DO I = 1,MT
-   IG1 = JT + MT - I
-   IG2 = IR + MT - I
-   DO J = 1,NBP1
-      G(IG1,J) = G(IG2,J)
-   END DO
-END DO
+do i = 1,mt
+   ig1 = jt + mt - i
+   ig2 = ir + mt - i
+   do j = 1,nbp1
+      g(ig1,j) = g(ig2,j)
+   end do
+end do
 !                                             ALG. STEP 10
-IE = JT - IR
-DO I = 1,IE
-   IG = IR + I - 1
-   DO J = 1,NBP1
-     G(IG,J) = 0.0
-   END DO
-END DO
+ie = jt - ir
+do i = 1,ie
+   ig = ir + i - 1
+   do j = 1,nbp1
+     g(ig,j) = 0.0
+   end do
+end do
 !                                             ALG. STEP 11
-IR = JT
+ir = jt
 !                                             ALG. STEP 12
-30 MU = MIN0(NB - 1, IR - IP - 1)
-IF (MU .EQ. 0) GO TO 60
+30 mu = min0(nb - 1, ir - ip - 1)
+if (mu .eq. 0) go to 60
 !                                             ALG. STEP 13
-DO L = 1,MU
+do l = 1,mu
 !                                             ALG. STEP 14
-   K = MIN0(L, JT - IP)
+   k = min0(l, jt - ip)
 !                                             ALG. STEP 15
-   LP1 = L + 1
-   IG = IP + L
-   DO I = LP1,NB
-      JG = I - K
-      G(IG,JG) = G(IG,I)
-   END DO
+   lp1 = l + 1
+   ig = ip + l
+   do i = lp1,nb
+      jg = i - k
+      g(ig,jg) = g(ig,i)
+   end do
 !                                             ALG. STEP 16
-   DO I = 1,K
-      JG = NBP1 - I
-      G(IG,JG) = 0.0
-   END DO
-END DO
+   do i = 1,k
+      jg = nbp1 - i
+      g(ig,jg) = 0.0
+   end do
+end do
 !                                             ALG. STEP 17
-60 IP = JT
+60 ip = jt
 !                                             ALG. STEPS 18-19
-70 MH = IR + MT - IP
-KH = MIN0(NBP1, MH)
+70 mh = ir + mt - ip
+kh = min0(nbp1, mh)
 !                                             ALG. STEP 20
-DO I = 1,KH
-   CALL H12 (1,I,MAX0(I+1,IR-IP+1),MH,G(IP,I),1,RHO, &
-&G(IP,I+1),1,MDG,NBP1-I)
-END DO
+do i = 1,kh
+   call h12 (1,i,max0(i+1,ir-ip+1),mh,g(ip,i),1,rho, &
+&g(ip,i+1),1,mdg,nbp1-i)
+end do
 !                                             ALG. STEP 21
-IR = IP + KH
+ir = ip + kh
 !                                             ALG. STEP 22
-IF (KH .LT. NBP1) GO TO 100
+if (kh .lt. nbp1) go to 100
 !                                             ALG. STEP 23
-DO I = 1,NB
-   G(IR-1,I) = 0.0
-END DO
+do i = 1,nb
+   g(ir-1,i) = 0.0
+end do
 !                                             ALG. STEP 24
-100 CONTINUE
+100 continue
 !                                             ALG. STEP 25
-RETURN
-END SUBROUTINE BNDACC
+return
+end subroutine bndacc
 
-SUBROUTINE BNDSL (MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: IP, IR, MDG, MODE, N, NB
-REAL :: G(MDG,*)
-REAL, INTENT(OUT) :: RNORM
-REAL, INTENT(INOUT) :: X(N)
-INTEGER :: I, I1, I2, IE, II, IRM1, IX, J, JG, L, NP1
-REAL :: RSQ, S
+subroutine bndsl (mode,g,mdg,nb,ip,ir,x,n,rnorm,ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ip, ir, mdg, mode, n, nb
+real :: g(mdg,*)
+real, intent(out) :: rnorm
+real, intent(inout) :: x(n)
+integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
+real :: rsq, s
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
 !           HANSON, R. J., (SNLA)
@@ -10373,73 +10373,73 @@ REAL :: RSQ, S
 !                 (1974), CHAPTER 27
 !
 !
-IERR = 0
-RNORM = 0.0
-GO TO (10,90,50), MODE
+ierr = 0
+rnorm = 0.0
+go to (10,90,50), mode
 !                                   ********************* MODE = 1
 !                                   ALG. STEP 26
-10 DO J = 1,N
-   X(J) = G(J, NB+1)
-END DO
-RSQ = 0.0
-NP1 = N + 1
-IRM1 = IR - 1
-IF (NP1 .GT. IRM1) GO TO 40
-   DO J = NP1,IRM1
-      RSQ = RSQ + G(J, NB+1)**2
-   END DO
-   RNORM = SQRT(RSQ)
-40 CONTINUE
+10 do j = 1,n
+   x(j) = g(j, nb+1)
+end do
+rsq = 0.0
+np1 = n + 1
+irm1 = ir - 1
+if (np1 .gt. irm1) go to 40
+   do j = np1,irm1
+      rsq = rsq + g(j, nb+1)**2
+   end do
+   rnorm = sqrt(rsq)
+40 continue
 !                                   ********************* MODE = 3
 !                                   ALG. STEP 27
-50 DO II = 1,N
-   I = N + 1 - II
+50 do ii = 1,n
+   i = n + 1 - ii
 !                                   ALG. STEP 28
-   S = 0.0
-   L = MAX0(0, I - IP)
+   s = 0.0
+   l = max0(0, i - ip)
 !                                   ALG. STEP 29
-   IF (I .EQ. N) GO TO 70
+   if (i .eq. n) go to 70
 !                                   ALG. STEP 30
-      IE = MIN0(N + 1 - I, NB)
-      DO J = 2,IE
-         JG = J + L
-         IX = I - 1 + J
-         S = S + G(I,JG)*X(IX)
-      END DO
+      ie = min0(n + 1 - i, nb)
+      do j = 2,ie
+         jg = j + l
+         ix = i - 1 + j
+         s = s + g(i,jg)*x(ix)
+      end do
 !                                   ALG. STEP 31
-70 IF (G(I,L+1) .EQ. 0.0) GO TO 130
-   X(I) = (X(I) - S)/G(I,L+1)
-END DO
+70 if (g(i,l+1) .eq. 0.0) go to 130
+   x(i) = (x(i) - s)/g(i,l+1)
+end do
 !                                   ALG. STEP 32
-RETURN
+return
 !                                   ********************* MODE = 2
-90 DO J = 1,N
-   S = 0.0
-   IF (J .EQ. 1) GO TO 110
-      I1 = MAX0(1, J - NB + 1)
-      I2 = J - 1
-      DO I = I1,I2
-         L = J - I + 1 + MAX0(0, I - IP)
-         S = S + X(I)*G(I,L)
-      END DO
-110 L = MAX0(0, J - IP)
-   IF (G(J,L+1) .EQ. 0.0) GO TO 130
-   X(J) = (X(J) - S)/G(J,L+1)
-END DO
-RETURN
+90 do j = 1,n
+   s = 0.0
+   if (j .eq. 1) go to 110
+      i1 = max0(1, j - nb + 1)
+      i2 = j - 1
+      do i = i1,i2
+         l = j - i + 1 + max0(0, i - ip)
+         s = s + x(i)*g(i,l)
+      end do
+110 l = max0(0, j - ip)
+   if (g(j,l+1) .eq. 0.0) go to 130
+   x(j) = (x(j) - s)/g(j,l+1)
+end do
+return
 !
 !            A ZERO DIAGONAL TERM OCCURS
 !
-130 IERR = 1
-RETURN
-END SUBROUTINE BNDSL
+130 ierr = 1
+return
+end subroutine bndsl
 
-SUBROUTINE SPFIT2 (X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, &
-&YBREAK, NY, F, S, T, WK, NUM, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KZ, MX, MY, NUM, NX, NY
-INTEGER :: I, IMAX, J, L, LD, M, N, NU
+subroutine spfit2 (x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
+&ybreak, ny, f, s, t, wk, num, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: kz, mx, my, num, nx, ny
+integer :: i, imax, j, l, ld, m, n, nu
 !-----------------------------------------------------------------------
 !
 !            WEIGHTED LEAST SQUARES BICUBIC SPLINE FITTING
@@ -10475,58 +10475,58 @@ INTEGER :: I, IMAX, J, L, LD, M, N, NU
 !        NAVAL SURFACE WARFARE CENTER
 !        DAHLGREN, VIRGINIA
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ, MY)
-REAL, INTENT(IN) :: XBREAK(NX), YBREAK(NY)
-REAL, INTENT(INOUT) :: F(*)
-REAL, INTENT(INOUT) :: S(*), T(*), WK(NUM)
+real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
+real, intent(in) :: xbreak(nx), ybreak(ny)
+real, intent(inout) :: f(*)
+real, intent(inout) :: s(*), t(*), wk(num)
 !---------------------
 !     REAL F(4*NX*NY), S(NX + 6), T(NY + 6)
 !---------------------
-IF (NX .LT. 2) GO TO 100
-IF (NY .LT. 2) GO TO 120
-M = NX + 2
-N = NY + 2
-L = MAX0(M*N, M*MY + 5*MAX0(M,N))
-IF (NUM .LT. L) GO TO 130
+if (nx .lt. 2) go to 100
+if (ny .lt. 2) go to 120
+m = nx + 2
+n = ny + 2
+l = max0(m*n, m*my + 5*max0(m,n))
+if (num .lt. l) go to 130
 !
 !     DEFINE THE KNOT SQUENCES
 !
-S(1) = XBREAK(1)
-S(2) = XBREAK(1)
-S(3) = XBREAK(1)
-S(4) = XBREAK(1)
-DO I = 2,NX
-   IF (XBREAK(I - 1) .GE. XBREAK(I)) GO TO 100
-   S(I + 3) = XBREAK(I)
-END DO
-S(NX + 4) = XBREAK(NX)
-S(NX + 5) = XBREAK(NX)
-S(NX + 6) = XBREAK(NX)
+s(1) = xbreak(1)
+s(2) = xbreak(1)
+s(3) = xbreak(1)
+s(4) = xbreak(1)
+do i = 2,nx
+   if (xbreak(i - 1) .ge. xbreak(i)) go to 100
+   s(i + 3) = xbreak(i)
+end do
+s(nx + 4) = xbreak(nx)
+s(nx + 5) = xbreak(nx)
+s(nx + 6) = xbreak(nx)
 !
-T(1) = YBREAK(1)
-T(2) = YBREAK(1)
-T(3) = YBREAK(1)
-T(4) = YBREAK(1)
-DO J = 2,NY
-   IF (YBREAK(J - 1) .GE. YBREAK(J)) GO TO 120
-   T(J + 3) = YBREAK(J)
-END DO
-T(NY + 4) = YBREAK(NY)
-T(NY + 5) = YBREAK(NY)
-T(NY + 6) = YBREAK(NY)
+t(1) = ybreak(1)
+t(2) = ybreak(1)
+t(3) = ybreak(1)
+t(4) = ybreak(1)
+do j = 2,ny
+   if (ybreak(j - 1) .ge. ybreak(j)) go to 120
+   t(j + 3) = ybreak(j)
+end do
+t(ny + 4) = ybreak(ny)
+t(ny + 5) = ybreak(ny)
+t(ny + 6) = ybreak(ny)
 !
 !     OBTAIN THE B-SPLINE COEFFICIENTS OF THE BIVARIATE
 !     LEAST SQUARES FIT AND STORE THEM IN WK.
 !
-CALL BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, S, M, 4, &
-&T, N, 4, F, M, WK, NUM, IERR)
-IF (IERR .LT. 0) GO TO 110
-IERR = 0
+call bslsq2 (x, wx, mx, y, wy, my, z, kz, s, m, 4, &
+&t, n, 4, f, m, wk, num, ierr)
+if (ierr .lt. 0) go to 110
+ierr = 0
 !
-L = M*N
-DO I = 1,L
-   WK(I) = F(I)
-END DO
+l = m*n
+do i = 1,l
+   wk(i) = f(i)
+end do
 !
 !     COMPUTE THE N CUBIC SPLINES G (X) AND THEIR FIRST
 !                                  J
@@ -10534,40 +10534,40 @@ END DO
 !     DERIVATIVES IN WK. (THE VALUES OF THE SPLINES WILL
 !     BE IN THE LATTER HALF OF F.)
 !
-NU = NX*NY
-L = 2*NU + 1
-CALL CSPP (S, WK, M, M, N, F(L), N, F(1), N)
+nu = nx*ny
+l = 2*nu + 1
+call cspp (s, wk, m, m, n, f(l), n, f(1), n)
 !
-IMAX = N*NX
-DO I = 1,IMAX
-   WK(I) = F(I)
-END DO
+imax = n*nx
+do i = 1,imax
+   wk(i) = f(i)
+end do
 !
 !     COMPUTE THE VALUES OF THE BISPLINE AND THEIR PARTIAL
 !     DERIVATIVES WITH RESPECT TO Y. THE RESULTS ARE STORED
 !     IN THE FIRST HALF OF F.
 !
-LD = NU + 1
-CALL CSPP (T, F(L), N, N, NX, F(1), NX, F(LD), NX)
+ld = nu + 1
+call cspp (t, f(l), n, n, nx, f(1), nx, f(ld), nx)
 !
 !     COMPUTE THE REMAINING PARTIAL DERIVATIVES AND STORE
 !     THE RESULTS IN THE LATTER HALF OF F.
 !
-LD = L + NU
-CALL CSPP (T, WK, N, N, NX, F(L), NX, F(LD), NX)
-RETURN
+ld = l + nu
+call cspp (t, wk, n, n, nx, f(l), nx, f(ld), nx)
+return
 !
 !     ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-IF (IERR .EQ. -2) IERR = 4
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 5
-WK(1) = L
-RETURN
-END SUBROUTINE SPFIT2
+100 ierr = 1
+return
+110 ierr = 2
+if (ierr .eq. -2) ierr = 4
+return
+120 ierr = 3
+return
+130 ierr = 5
+wk(1) = l
+return
+end subroutine spfit2
 

@@ -1,562 +1,562 @@
-SUBROUTINE SEPEL1 (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C, &
-&D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,AN,BN, &
-&CN,DN,UN,ZN,AM,BM,CM,DM,UM,ZM,GRHS,MN,USOL, &
-&IDMN,W,PERTRB,IERROR)
-IMPLICIT NONE
-INTEGER :: IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
-REAL :: A, ALPHA, AM(*), AN(*), B, BDA(*), BDB(*), BDC(*), BDD(*), &
-&BETA, BM(*), BN(*), C, CM(*), CN(*), D, DM(*), DN(*), GAMA, &
-&GRHS(MN,*), PERTRB, UM(*), UN(*), USOL(IDMN,*), W(*), XNU, ZM(*), &
-&ZN(*)
-INTEGER :: I, I1, IORD, J, MP, NP
-REAL :: AI, AX1, AXI, BI, BXI, CI, CXI, CXM, DJ, DY1, DYJ, EJ, &
-&EYJ, FJ, FYJ, FYN, PRTRB, XI, YJ
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+&d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,an,bn, &
+&cn,dn,un,zn,am,bm,cm,dm,um,zm,grhs,mn,usol, &
+&idmn,w,pertrb,ierror)
+implicit none
+integer :: idmn, ierror, intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
+&beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
+&grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
+&zn(*)
+integer :: i, i1, iord, j, mp, np
+real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
+&eyj, fj, fyj, fyn, prtrb, xi, yj
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     SEPEL1 SETS UP VECTORS AND ARRAYS FOR INPUT TO BLKTRI
 !     AND COMPUTES A SECOND ORDER SOLUTION IN USOL.  A RETURN JUMP TO
 !     SEPELL OCCURRS IF IORDER=2.  IF IORDER=4 A FOURTH ORDER
 !     SOLUTION IS GENERATED IN USOL.
 !
-LOGICAL :: SINGLR
-EXTERNAL        COFX, COFY
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+logical :: singlr
+external        cofx, cofy
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     SET PARAMETERS INTERNALLY
 !
-KSWX = MBDCND+1
-KSWY = NBDCND+1
-K = M+1
-L = N+1
-AIT = A
-BIT = B
-CIT = C
-DIT = D
+kswx = mbdcnd+1
+kswy = nbdcnd+1
+k = m+1
+l = n+1
+ait = a
+bit = b
+cit = c
+dit = d
 !
 !     SET RIGHT HAND SIDE VALUES FROM GRHS IN USOL ON THE INTERIOR
 !     AND NON-SPECIFIED BOUNDARIES.
 !
-DO I=2,M
-   DO J=2,N
-      USOL(I,J) = GRHS(I,J)
-   END DO
-END DO
-IF (KSWX.EQ.2 .OR. KSWX.EQ.3) GO TO  40
-DO J=2,N
-   USOL(1,J) = GRHS(1,J)
-END DO
-40 CONTINUE
-IF (KSWX.EQ.2 .OR. KSWX.EQ.5) GO TO  60
-DO J=2,N
-   USOL(K,J) = GRHS(K,J)
-END DO
-60 CONTINUE
-IF (KSWY.EQ.2 .OR. KSWY.EQ.3) GO TO  80
-DO I=2,M
-   USOL(I,1) = GRHS(I,1)
-END DO
-80 CONTINUE
-IF (KSWY.EQ.2 .OR. KSWY.EQ.5) GO TO 100
-DO I=2,M
-   USOL(I,L) = GRHS(I,L)
-END DO
-100 CONTINUE
-IF (KSWX.NE.2 .AND. KSWX.NE.3 .AND. KSWY.NE.2 .AND. KSWY.NE.3) &
-&USOL(1,1) = GRHS(1,1)
-IF (KSWX.NE.2 .AND. KSWX.NE.5 .AND. KSWY.NE.2 .AND. KSWY.NE.3) &
-&USOL(K,1) = GRHS(K,1)
-IF (KSWX.NE.2 .AND. KSWX.NE.3 .AND. KSWY.NE.2 .AND. KSWY.NE.5) &
-&USOL(1,L) = GRHS(1,L)
-IF (KSWX.NE.2 .AND. KSWX.NE.5 .AND. KSWY.NE.2 .AND. KSWY.NE.5) &
-&USOL(K,L) = GRHS(K,L)
-I1 = 1
+do i=2,m
+   do j=2,n
+      usol(i,j) = grhs(i,j)
+   end do
+end do
+if (kswx.eq.2 .or. kswx.eq.3) go to  40
+do j=2,n
+   usol(1,j) = grhs(1,j)
+end do
+40 continue
+if (kswx.eq.2 .or. kswx.eq.5) go to  60
+do j=2,n
+   usol(k,j) = grhs(k,j)
+end do
+60 continue
+if (kswy.eq.2 .or. kswy.eq.3) go to  80
+do i=2,m
+   usol(i,1) = grhs(i,1)
+end do
+80 continue
+if (kswy.eq.2 .or. kswy.eq.5) go to 100
+do i=2,m
+   usol(i,l) = grhs(i,l)
+end do
+100 continue
+if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.3) &
+&usol(1,1) = grhs(1,1)
+if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.3) &
+&usol(k,1) = grhs(k,1)
+if (kswx.ne.2 .and. kswx.ne.3 .and. kswy.ne.2 .and. kswy.ne.5) &
+&usol(1,l) = grhs(1,l)
+if (kswx.ne.2 .and. kswx.ne.5 .and. kswy.ne.2 .and. kswy.ne.5) &
+&usol(k,l) = grhs(k,l)
+i1 = 1
 !
 !     SET SWITCHES FOR PERIODIC OR NON-PERIODIC BOUNDARIES
 !
-MP = 1
-NP = 1
-IF (KSWX .EQ. 1) MP = 0
-IF (KSWY .EQ. 1) NP = 0
+mp = 1
+np = 1
+if (kswx .eq. 1) mp = 0
+if (kswy .eq. 1) np = 0
 !
 !     SET DLX,DLY AND SIZE OF BLOCK TRI-DIAGONAL SYSTEM GENERATED
 !     IN NINT,MINT
 !
-DLX = (BIT-AIT)/FLOAT(M)
-MIT = K-1
-IF (KSWX .EQ. 2) MIT = K-2
-IF (KSWX .EQ. 4) MIT = K
-DLY = (DIT-CIT)/FLOAT(N)
-NIT = L-1
-IF (KSWY .EQ. 2) NIT = L-2
-IF (KSWY .EQ. 4) NIT = L
-TDLX3 = 2.0*DLX**3
-DLX4 = DLX**4
-TDLY3 = 2.0*DLY**3
-DLY4 = DLY**4
+dlx = (bit-ait)/float(m)
+mit = k-1
+if (kswx .eq. 2) mit = k-2
+if (kswx .eq. 4) mit = k
+dly = (dit-cit)/float(n)
+nit = l-1
+if (kswy .eq. 2) nit = l-2
+if (kswy .eq. 4) nit = l
+tdlx3 = 2.0*dlx**3
+dlx4 = dlx**4
+tdly3 = 2.0*dly**3
+dly4 = dly**4
 !
 !     SET SUBSCRIPT LIMITS FOR PORTION OF ARRAY TO INPUT TO BLKTRI
 !
-IS = 1
-JS = 1
-IF (KSWX.EQ.2 .OR. KSWX.EQ.3) IS = 2
-IF (KSWY.EQ.2 .OR. KSWY.EQ.3) JS = 2
-NS = NIT+JS-1
-MS = MIT+IS-1
+is = 1
+js = 1
+if (kswx.eq.2 .or. kswx.eq.3) is = 2
+if (kswy.eq.2 .or. kswy.eq.3) js = 2
+ns = nit+js-1
+ms = mit+is-1
 !
 !     SET X - DIRECTION
 !
-DO I=1,MIT
-   XI = AIT+FLOAT(IS+I-2)*DLX
-   CALL COFX (XI,AI,BI,CI)
-   AXI = (AI/DLX-0.5*BI)/DLX
-   BXI = -2.*AI/DLX**2+CI
-   CXI = (AI/DLX+0.5*BI)/DLX
-   AM(I) = AXI
-   BM(I) = BXI
-   CM(I) = CXI
-END DO
+do i=1,mit
+   xi = ait+float(is+i-2)*dlx
+   call cofx (xi,ai,bi,ci)
+   axi = (ai/dlx-0.5*bi)/dlx
+   bxi = -2.*ai/dlx**2+ci
+   cxi = (ai/dlx+0.5*bi)/dlx
+   am(i) = axi
+   bm(i) = bxi
+   cm(i) = cxi
+end do
 !
 !     SET Y DIRECTION
 !
-DO J=1,NIT
-   YJ = CIT+FLOAT(JS+J-2)*DLY
-   CALL COFY (YJ,DJ,EJ,FJ)
-   DYJ = (DJ/DLY-0.5*EJ)/DLY
-   EYJ = (-2.*DJ/DLY**2+FJ)
-   FYJ = (DJ/DLY+0.5*EJ)/DLY
-   AN(J) = DYJ
-   BN(J) = EYJ
-   CN(J) = FYJ
-END DO
+do j=1,nit
+   yj = cit+float(js+j-2)*dly
+   call cofy (yj,dj,ej,fj)
+   dyj = (dj/dly-0.5*ej)/dly
+   eyj = (-2.*dj/dly**2+fj)
+   fyj = (dj/dly+0.5*ej)/dly
+   an(j) = dyj
+   bn(j) = eyj
+   cn(j) = fyj
+end do
 !
 !     ADJUST EDGES IN X DIRECTION UNLESS PERIODIC
 !
-AX1 = AM(1)
-CXM = CM(MIT)
-GO TO (170,130,150,160,140),KSWX
+ax1 = am(1)
+cxm = cm(mit)
+go to (170,130,150,160,140),kswx
 !
 !     DIRICHLET-DIRICHLET IN X DIRECTION
 !
-130 AM(1) = 0.0
-CM(MIT) = 0.0
-GO TO 170
+130 am(1) = 0.0
+cm(mit) = 0.0
+go to 170
 !
 !     MIXED-DIRICHLET IN X DIRECTION
 !
-140 AM(1) = 0.0
-BM(1) = BM(1)+2.*ALPHA*DLX*AX1
-CM(1) = CM(1)+AX1
-CM(MIT) = 0.0
-GO TO 170
+140 am(1) = 0.0
+bm(1) = bm(1)+2.*alpha*dlx*ax1
+cm(1) = cm(1)+ax1
+cm(mit) = 0.0
+go to 170
 !
 !     DIRICHLET-MIXED IN X DIRECTION
 !
-150 AM(1) = 0.0
-AM(MIT) = AM(MIT)+CXM
-BM(MIT) = BM(MIT)-2.*BETA*DLX*CXM
-CM(MIT) = 0.0
-GO TO 170
+150 am(1) = 0.0
+am(mit) = am(mit)+cxm
+bm(mit) = bm(mit)-2.*beta*dlx*cxm
+cm(mit) = 0.0
+go to 170
 !
 !     MIXED - MIXED IN X DIRECTION
 !
-160 CONTINUE
-AM(1) = 0.0
-BM(1) = BM(1)+2.*DLX*ALPHA*AX1
-CM(1) = CM(1)+AX1
-AM(MIT) = AM(MIT)+CXM
-BM(MIT) = BM(MIT)-2.*DLX*BETA*CXM
-CM(MIT) = 0.0
-170 CONTINUE
+160 continue
+am(1) = 0.0
+bm(1) = bm(1)+2.*dlx*alpha*ax1
+cm(1) = cm(1)+ax1
+am(mit) = am(mit)+cxm
+bm(mit) = bm(mit)-2.*dlx*beta*cxm
+cm(mit) = 0.0
+170 continue
 !
 !     ADJUST IN Y DIRECTION UNLESS PERIODIC
 !
-DY1 = AN(1)
-FYN = CN(NIT)
-GO TO (220,180,200,210,190),KSWY
+dy1 = an(1)
+fyn = cn(nit)
+go to (220,180,200,210,190),kswy
 !
 !     DIRICHLET-DIRICHLET IN Y DIRECTION
 !
-180 CONTINUE
-AN(1) = 0.0
-CN(NIT) = 0.0
-GO TO 220
+180 continue
+an(1) = 0.0
+cn(nit) = 0.0
+go to 220
 !
 !     MIXED-DIRICHLET IN Y DIRECTION
 !
-190 CONTINUE
-AN(1) = 0.0
-BN(1) = BN(1)+2.*DLY*GAMA*DY1
-CN(1) = CN(1)+DY1
-CN(NIT) = 0.0
-GO TO 220
+190 continue
+an(1) = 0.0
+bn(1) = bn(1)+2.*dly*gama*dy1
+cn(1) = cn(1)+dy1
+cn(nit) = 0.0
+go to 220
 !
 !     DIRICHLET-MIXED IN Y DIRECTION
 !
-200 AN(1) = 0.0
-AN(NIT) = AN(NIT)+FYN
-BN(NIT) = BN(NIT)-2.*DLY*XNU*FYN
-CN(NIT) = 0.0
-GO TO 220
+200 an(1) = 0.0
+an(nit) = an(nit)+fyn
+bn(nit) = bn(nit)-2.*dly*xnu*fyn
+cn(nit) = 0.0
+go to 220
 !
 !     MIXED - MIXED DIRECTION IN Y DIRECTION
 !
-210 CONTINUE
-AN(1) = 0.0
-BN(1) = BN(1)+2.*DLY*GAMA*DY1
-CN(1) = CN(1)+DY1
-AN(NIT) = AN(NIT)+FYN
-BN(NIT) = BN(NIT)-2.0*DLY*XNU*FYN
-CN(NIT) = 0.0
-220 IF (KSWX .EQ. 1) GO TO 270
+210 continue
+an(1) = 0.0
+bn(1) = bn(1)+2.*dly*gama*dy1
+cn(1) = cn(1)+dy1
+an(nit) = an(nit)+fyn
+bn(nit) = bn(nit)-2.0*dly*xnu*fyn
+cn(nit) = 0.0
+220 if (kswx .eq. 1) go to 270
 !
 !     ADJUST USOL ALONG X EDGE
 !
-do 260 J = JS,NS
-   IF (KSWX.NE.2 .AND. KSWX.NE.3) GO TO 230
-   USOL(IS,J) = USOL(IS,J)-AX1*USOL(1,J)
-   GO TO 240
-230 USOL(IS,J) = USOL(IS,J)+2.0*DLX*AX1*BDA(J)
-240 IF (KSWX.NE.2 .AND. KSWX.NE.5) GO TO 250
-   USOL(MS,J) = USOL(MS,J)-CXM*USOL(K,J)
-   GO TO 260
-250 USOL(MS,J) = USOL(MS,J)-2.0*DLX*CXM*BDB(J)
-260 CONTINUE
-270 IF (KSWY .EQ. 1) GO TO 320
+do 260 j = js,ns
+   if (kswx.ne.2 .and. kswx.ne.3) go to 230
+   usol(is,j) = usol(is,j)-ax1*usol(1,j)
+   go to 240
+230 usol(is,j) = usol(is,j)+2.0*dlx*ax1*bda(j)
+240 if (kswx.ne.2 .and. kswx.ne.5) go to 250
+   usol(ms,j) = usol(ms,j)-cxm*usol(k,j)
+   go to 260
+250 usol(ms,j) = usol(ms,j)-2.0*dlx*cxm*bdb(j)
+260 continue
+270 if (kswy .eq. 1) go to 320
 !
 !     ADJUST USOL ALONG Y EDGE
 !
-do 310 I = IS,MS
-   IF (KSWY.NE.2 .AND. KSWY.NE.3) GO TO 280
-   USOL(I,JS) = USOL(I,JS)-DY1*USOL(I,1)
-   GO TO 290
-280 USOL(I,JS) = USOL(I,JS)+2.0*DLY*DY1*BDC(I)
-290 IF (KSWY.NE.2 .AND. KSWY.NE.5) GO TO 300
-   USOL(I,NS) = USOL(I,NS)-FYN*USOL(I,L)
-   GO TO 310
-300 USOL(I,NS) = USOL(I,NS)-2.0*DLY*FYN*BDD(I)
-310 CONTINUE
-320 CONTINUE
+do 310 i = is,ms
+   if (kswy.ne.2 .and. kswy.ne.3) go to 280
+   usol(i,js) = usol(i,js)-dy1*usol(i,1)
+   go to 290
+280 usol(i,js) = usol(i,js)+2.0*dly*dy1*bdc(i)
+290 if (kswy.ne.2 .and. kswy.ne.5) go to 300
+   usol(i,ns) = usol(i,ns)-fyn*usol(i,l)
+   go to 310
+300 usol(i,ns) = usol(i,ns)-2.0*dly*fyn*bdd(i)
+310 continue
+320 continue
 !
 !     SAVE ADJUSTED EDGES IN GRHS IF IORDER=4
 !
-IF (IORDER .NE. 4) GO TO 350
-DO J=JS,NS
-   GRHS(IS,J) = USOL(IS,J)
-   GRHS(MS,J) = USOL(MS,J)
-END DO
-DO I=IS,MS
-   GRHS(I,JS) = USOL(I,JS)
-   GRHS(I,NS) = USOL(I,NS)
-END DO
-350 CONTINUE
-IORD = IORDER
-PERTRB = 0.0
+if (iorder .ne. 4) go to 350
+do j=js,ns
+   grhs(is,j) = usol(is,j)
+   grhs(ms,j) = usol(ms,j)
+end do
+do i=is,ms
+   grhs(i,js) = usol(i,js)
+   grhs(i,ns) = usol(i,ns)
+end do
+350 continue
+iord = iorder
+pertrb = 0.0
 !
 !     CHECK IF OPERATOR IS SINGULAR
 !
-CALL CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,SINGLR)
+call chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy,singlr)
 !
 !     COMPUTE NON-ZERO EIGENVECTOR IN NULL SPACE OF TRANSPOSE
 !     IF SINGULAR
 !
-IF (SINGLR) CALL TRISP (MIT,AM,BM,CM,DM,UM,ZM)
-IF (SINGLR) CALL TRISP (NIT,AN,BN,CN,DN,UN,ZN)
+if (singlr) call trisp (mit,am,bm,cm,dm,um,zm)
+if (singlr) call trisp (nit,an,bn,cn,dn,un,zn)
 !
 !     MAKE INITIALIZATION CALL TO BLKTRI
 !
-IF (INTL .EQ. 0) &
-&CALL BLKTRI (INTL,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN, &
-&USOL(IS,JS),IERROR,W)
-IF (IERROR .NE. 0) RETURN
+if (intl .eq. 0) &
+&call blktri (intl,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn, &
+&usol(is,js),ierror,w)
+if (ierror .ne. 0) return
 !
 !     ADJUST RIGHT HAND SIDE IF NECESSARY
 !
-360 CONTINUE
-IF (SINGLR) CALL ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
+360 continue
+if (singlr) call orthg (usol,idmn,zn,zm,pertrb)
 !
 !     COMPUTE SOLUTION
 !
-CALL BLKTRI (I1,NP,NIT,AN,BN,CN,MP,MIT,AM,BM,CM,IDMN,USOL(IS,JS), &
-&IERROR,W)
-IF (IERROR .NE. 0) RETURN
+call blktri (i1,np,nit,an,bn,cn,mp,mit,am,bm,cm,idmn,usol(is,js), &
+&ierror,w)
+if (ierror .ne. 0) return
 !
 !     SET PERIODIC BOUNDARIES IF NECESSARY
 !
-IF (KSWX .NE. 1) GO TO 380
-DO J=1,L
-   USOL(K,J) = USOL(1,J)
-END DO
-380 IF (KSWY .NE. 1) GO TO 400
-DO I=1,K
-   USOL(I,L) = USOL(I,1)
-END DO
-400 CONTINUE
+if (kswx .ne. 1) go to 380
+do j=1,l
+   usol(k,j) = usol(1,j)
+end do
+380 if (kswy .ne. 1) go to 400
+do i=1,k
+   usol(i,l) = usol(i,1)
+end do
+400 continue
 !
 !     MINIMIZE SOLUTION WITH RESPECT TO WEIGHTED LEAST SQUARES
 !     NORM IF OPERATOR IS SINGULAR
 !
-IF (SINGLR) CALL MINSOL (USOL,IDMN,ZN,ZM,PRTRB)
+if (singlr) call minsol (usol,idmn,zn,zm,prtrb)
 !
 !     RETURN IF DEFERRED CORRECTIONS AND A FOURTH ORDER SOLUTION ARE
 !     NOT FLAGGED
 !
-IF (IORD .EQ. 2) RETURN
-IORD = 2
+if (iord .eq. 2) return
+iord = 2
 !
 !     COMPUTE NEW RIGHT HAND SIDE FOR FOURTH ORDER SOLUTION
 !
-CALL DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
-GO TO 360
-END SUBROUTINE SEPEL1
+call defer (cofx,cofy,usol,idmn,grhs,mn)
+go to 360
+end subroutine sepel1
 
-SUBROUTINE CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX, &
-&COFY,IDMN,MN,IERROR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IDMN
-INTEGER, INTENT(OUT) :: IERROR
-INTEGER, INTENT(IN) :: INTL, IORDER, M, MBDCND, MN, N, NBDCND
-REAL, INTENT(IN) :: A, B, C, D
-INTEGER :: I, J
-REAL :: AI, BI, CI, DJ, DLX, DLY, EJ, FJ, XI, YJ
+subroutine chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx, &
+&cofy,idmn,mn,ierror)
+implicit none
+integer, intent(in) :: idmn
+integer, intent(out) :: ierror
+integer, intent(in) :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real, intent(in) :: a, b, c, d
+integer :: i, j
+real :: ai, bi, ci, dj, dlx, dly, ej, fj, xi, yj
 !
 !     THIS PROGRAM CHECKS THE INPUT PARAMETERS FOR ERRORS
 !
 !
 !     CHECK DEFINITION OF SOLUTION REGION
 !
-IERROR = 1
-IF (A.GE.B .OR. C.GE.D) RETURN
+ierror = 1
+if (a.ge.b .or. c.ge.d) return
 !
 !     CHECK BOUNDARY SWITCHES
 !
-IERROR = 2
-IF (MBDCND.LT.0 .OR. MBDCND.GT.4) RETURN
-IERROR = 3
-IF (NBDCND.LT.0 .OR. NBDCND.GT.4) RETURN
+ierror = 2
+if (mbdcnd.lt.0 .or. mbdcnd.gt.4) return
+ierror = 3
+if (nbdcnd.lt.0 .or. nbdcnd.gt.4) return
 !
 !     CHECK FIRST DIMENSION IN CALLING ROUTINE
 !
-IERROR = 5
-IF (MN .LT. 7 .OR. IDMN .LT. 7) RETURN
+ierror = 5
+if (mn .lt. 7 .or. idmn .lt. 7) return
 !
 !     CHECK M
 !
-IERROR = 6
-IF (M .GT. (IDMN-1) .OR. M.LT.6) RETURN
-IF (M .GT. MN - 1) RETURN
+ierror = 6
+if (m .gt. (idmn-1) .or. m.lt.6) return
+if (m .gt. mn - 1) return
 !
 !     CHECK N
 !
-IERROR = 7
-IF (N .LT. 5) RETURN
+ierror = 7
+if (n .lt. 5) return
 !
 !     CHECK IORDER
 !
-IERROR = 8
-IF (IORDER.NE.2 .AND. IORDER.NE.4) RETURN
+ierror = 8
+if (iorder.ne.2 .and. iorder.ne.4) return
 !
 !     CHECK INTL
 !
-IERROR = 9
-IF (INTL.NE.0 .AND. INTL.NE.1) RETURN
+ierror = 9
+if (intl.ne.0 .and. intl.ne.1) return
 !
 !     CHECK THAT EQUATION IS ELLIPTIC
 !
-DLX = (B-A)/FLOAT(M)
-DLY = (D-C)/FLOAT(N)
-DO I=2,M
-   XI = A+FLOAT(I-1)*DLX
-   CALL COFX (XI,AI,BI,CI)
-   DO J=2,N
-      YJ = C+FLOAT(J-1)*DLY
-      CALL COFY (YJ,DJ,EJ,FJ)
-      IF (AI*DJ .GT. 0.0) GO TO  10
-      IERROR = 10
-      RETURN
-10 CONTINUE
-   END DO
-END DO
+dlx = (b-a)/float(m)
+dly = (d-c)/float(n)
+do i=2,m
+   xi = a+float(i-1)*dlx
+   call cofx (xi,ai,bi,ci)
+   do j=2,n
+      yj = c+float(j-1)*dly
+      call cofy (yj,dj,ej,fj)
+      if (ai*dj .gt. 0.0) go to  10
+      ierror = 10
+      return
+10 continue
+   end do
+end do
 !
 !     NO ERROR FOUND
 !
-IERROR = 0
-RETURN
-END SUBROUTINE CHKPRM
+ierror = 0
+return
+end subroutine chkprm
 
-SUBROUTINE CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY, &
-&SINGLR)
-IMPLICIT NONE
-INTEGER :: MBDCND, NBDCND
-REAL :: ALPHA, BETA, GAMA, XNU
-INTEGER :: I, J
-REAL :: AI, BI, CI, DJ, EJ, FJ, XI, YJ
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
+&singlr)
+implicit none
+integer :: mbdcnd, nbdcnd
+real :: alpha, beta, gama, xnu
+integer :: i, j
+real :: ai, bi, ci, dj, ej, fj, xi, yj
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE CHECKS IF THE PDE   SEPELL
 !     MUST SOLVE IS A SINGULAR OPERATOR
 !
-LOGICAL :: SINGLR
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+logical :: singlr
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
-SINGLR = .FALSE.
+singlr = .false.
 !
 !     CHECK IF THE BOUNDARY CONDITIONS ARE
 !     ENTIRELY PERIODIC AND/OR MIXED
 !
-IF ((MBDCND.NE.0 .AND. MBDCND.NE.3) .OR. &
-&(NBDCND.NE.0 .AND. NBDCND.NE.3)) RETURN
+if ((mbdcnd.ne.0 .and. mbdcnd.ne.3) .or. &
+&(nbdcnd.ne.0 .and. nbdcnd.ne.3)) return
 !
 !     CHECK THAT MIXED CONDITIONS ARE PURE NEUMAN
 !
-IF (MBDCND .NE. 3) GO TO  10
-IF (ALPHA.NE.0.0 .OR. BETA.NE.0.0) RETURN
-10 IF (NBDCND .NE. 3) GO TO  20
-IF (GAMA.NE.0.0 .OR. XNU.NE.0.0) RETURN
-20 CONTINUE
+if (mbdcnd .ne. 3) go to  10
+if (alpha.ne.0.0 .or. beta.ne.0.0) return
+10 if (nbdcnd .ne. 3) go to  20
+if (gama.ne.0.0 .or. xnu.ne.0.0) return
+20 continue
 !
 !     CHECK THAT NON-DERIVATIVE COEFFICIENT FUNCTIONS
 !     ARE ZERO
 !
-DO I=IS,MS
-   XI = AIT+FLOAT(I-1)*DLX
-   CALL COFX (XI,AI,BI,CI)
-   IF (CI .NE. 0.0) RETURN
-END DO
-DO J=JS,NS
-   YJ = CIT+FLOAT(J-1)*DLY
-   CALL COFY (YJ,DJ,EJ,FJ)
-   IF (FJ .NE. 0.0) RETURN
-END DO
+do i=is,ms
+   xi = ait+float(i-1)*dlx
+   call cofx (xi,ai,bi,ci)
+   if (ci .ne. 0.0) return
+end do
+do j=js,ns
+   yj = cit+float(j-1)*dly
+   call cofy (yj,dj,ej,fj)
+   if (fj .ne. 0.0) return
+end do
 !
 !     THE OPERATOR MUST BE SINGULAR IF THIS POINT IS REACHED
 !
-SINGLR = .TRUE.
-RETURN
-END SUBROUTINE CHKSNG
+singlr = .true.
+return
+end subroutine chksng
 
-SUBROUTINE ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
-IMPLICIT NONE
-INTEGER :: IDMN
-REAL :: PERTRB, USOL(IDMN,*), ZM(*), ZN(*)
-INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
-REAL :: ETE, UTE
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine orthg (usol,idmn,zn,zm,pertrb)
+implicit none
+integer :: idmn
+real :: pertrb, usol(idmn,*), zm(*), zn(*)
+integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
+real :: ete, ute
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
 !     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
 !
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-ISTR = IS
-IFNL = MS
-JSTR = JS
-JFNL = NS
+istr = is
+ifnl = ms
+jstr = js
+jfnl = ns
 !
 !     COMPUTE WEIGHTED INNER PRODUCTS
 !
-UTE = 0.0
-ETE = 0.0
-DO I=IS,MS
-   II = I-IS+1
-   DO J=JS,NS
-      JJ = J-JS+1
-      ETE = ETE+ZM(II)*ZN(JJ)
-      UTE = UTE+USOL(I,J)*ZM(II)*ZN(JJ)
-   END DO
-END DO
+ute = 0.0
+ete = 0.0
+do i=is,ms
+   ii = i-is+1
+   do j=js,ns
+      jj = j-js+1
+      ete = ete+zm(ii)*zn(jj)
+      ute = ute+usol(i,j)*zm(ii)*zn(jj)
+   end do
+end do
 !
 !     SET PERTURBATION PARAMETER
 !
-PERTRB = UTE/ETE
+pertrb = ute/ete
 !
 !     SUBTRACT OFF CONSTANT PERTRB
 !
-DO I=ISTR,IFNL
-   DO J=JSTR,JFNL
-      USOL(I,J) = USOL(I,J)-PERTRB
-   END DO
-END DO
-RETURN
-END SUBROUTINE ORTHG
+do i=istr,ifnl
+   do j=jstr,jfnl
+      usol(i,j) = usol(i,j)-pertrb
+   end do
+end do
+return
+end subroutine orthg
 
-SUBROUTINE MINSOL (USOL,IDMN,ZN,ZM,PERTB)
-IMPLICIT NONE
-INTEGER :: IDMN
-REAL :: PERTB, USOL(IDMN,*), ZM(*), ZN(*)
-INTEGER :: I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
-REAL :: ETE, PERTRB, UTE
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine minsol (usol,idmn,zn,zm,pertb)
+implicit none
+integer :: idmn
+real :: pertb, usol(idmn,*), zm(*), zn(*)
+integer :: i, ifnl, ii, istr, j, jfnl, jj, jstr
+real :: ete, pertrb, ute
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
 !     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
 !
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !     ENTRY AT MINSOL OCCURRS WHEN THE FINAL SOLUTION IS
 !     TO BE MINIMIZED WITH RESPECT TO THE WEIGHTED
 !     LEAST SQUARES NORM
 !
-ISTR = 1
-IFNL = K
-JSTR = 1
-JFNL = L
+istr = 1
+ifnl = k
+jstr = 1
+jfnl = l
 !
 !     COMPUTE WEIGHTED INNER PRODUCTS
 !
-UTE = 0.0
-ETE = 0.0
-DO I=IS,MS
-   II = I-IS+1
-   DO J=JS,NS
-      JJ = J-JS+1
-      ETE = ETE+ZM(II)*ZN(JJ)
-      UTE = UTE+USOL(I,J)*ZM(II)*ZN(JJ)
-   END DO
-END DO
+ute = 0.0
+ete = 0.0
+do i=is,ms
+   ii = i-is+1
+   do j=js,ns
+      jj = j-js+1
+      ete = ete+zm(ii)*zn(jj)
+      ute = ute+usol(i,j)*zm(ii)*zn(jj)
+   end do
+end do
 !
 !     SET PERTURBATION PARAMETER
 !
-PERTRB = UTE/ETE
+pertrb = ute/ete
 !
 !     SUBTRACT OFF CONSTANT PERTRB
 !
-DO I=ISTR,IFNL
-   DO J=JSTR,JFNL
-      USOL(I,J) = USOL(I,J)-PERTRB
-   END DO
-END DO
-RETURN
-END SUBROUTINE MINSOL
+do i=istr,ifnl
+   do j=jstr,jfnl
+      usol(i,j) = usol(i,j)-pertrb
+   end do
+end do
+return
+end subroutine minsol
 
-SUBROUTINE TRISP (N,A,B,C,D,U,Z)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL :: A(N), B(N), C(N)
-REAL, INTENT(INOUT) :: D(N), U(N), Z(N)
-INTEGER :: J, K, NM1, NM2
-REAL :: AN, BN, DEN, V
+subroutine trisp (n,a,b,c,d,u,z)
+implicit none
+integer, intent(in) :: n
+real :: a(n), b(n), c(n)
+real, intent(inout) :: d(n), u(n), z(n)
+integer :: j, k, nm1, nm2
+real :: an, bn, den, v
 !
 !     THIS SUBROUTINE SOLVES FOR A NON-ZERO EIGENVECTOR CORRESPONDING
 !     TO THE ZERO EIGENVALUE OF THE TRANSPOSE OF THE RANK
@@ -565,45 +565,45 @@ REAL :: AN, BN, DEN, V
 !     C(N) IN THE (N,1) POSITION, AND ALL OTHER ELEMENTS ZERO.
 !
 !
-BN = B(N)
-D(1) = A(2)/B(1)
-V = A(1)
-U(1) = C(N)/B(1)
-NM2 = N-2
-DO J=2,NM2
-   DEN = B(J)-C(J-1)*D(J-1)
-   D(J) = A(J+1)/DEN
-   U(J) = -C(J-1)*U(J-1)/DEN
-   BN = BN-V*U(J-1)
-   V = -V*D(J-1)
-END DO
-DEN = B(N-1)-C(N-2)*D(N-2)
-D(N-1) = (A(N)-C(N-2)*U(N-2))/DEN
-AN = C(N-1)-V*D(N-2)
-BN = BN-V*U(N-2)
-DEN = BN-AN*D(N-1)
+bn = b(n)
+d(1) = a(2)/b(1)
+v = a(1)
+u(1) = c(n)/b(1)
+nm2 = n-2
+do j=2,nm2
+   den = b(j)-c(j-1)*d(j-1)
+   d(j) = a(j+1)/den
+   u(j) = -c(j-1)*u(j-1)/den
+   bn = bn-v*u(j-1)
+   v = -v*d(j-1)
+end do
+den = b(n-1)-c(n-2)*d(n-2)
+d(n-1) = (a(n)-c(n-2)*u(n-2))/den
+an = c(n-1)-v*d(n-2)
+bn = bn-v*u(n-2)
+den = bn-an*d(n-1)
 !
 !     SET LAST COMPONENT EQUAL TO ONE
 !
-Z(N) = 1.0
-Z(N-1) = -D(N-1)
-NM1 = N-1
-DO J=2,NM1
-   K = N-J
-   Z(K) = -D(K)*Z(K+1)-U(K)*Z(N)
-END DO
-RETURN
-END SUBROUTINE TRISP
+z(n) = 1.0
+z(n-1) = -d(n-1)
+nm1 = n-1
+do j=2,nm1
+   k = n-j
+   z(k) = -d(k)*z(k+1)-u(k)*z(n)
+end do
+return
+end subroutine trisp
 
-SUBROUTINE DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
-IMPLICIT NONE
-INTEGER :: IDMN, MN
-REAL :: GRHS(MN,*), USOL(IDMN,*)
-INTEGER :: I, J
-REAL :: AI, BI, CI, DJ, EJ, FJ, TX, TY, UXXX, UXXXX, UYYY, UYYYY, &
-&XI, YJ
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine defer (cofx,cofy,usol,idmn,grhs,mn)
+implicit none
+integer :: idmn, mn
+real :: grhs(mn,*), usol(idmn,*)
+integer :: i, j
+real :: ai, bi, ci, dj, ej, fj, tx, ty, uxxx, uxxxx, uyyy, uyyyy, &
+&xi, yj
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS SUBROUTINE FIRST APPROXIMATES THE TRUNCATION ERROR GIVEN
 !     BY  TRUN1(X,Y)=DLX**2*TX+DLY**2*TY WHERE
@@ -620,230 +620,230 @@ REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 !     AND THEN TRANSFERRED TO USOL TO BE USED AS A NEW RIGHT
 !     HAND SIDE WHEN CALLING BLKTRI FOR A FOURTH ORDER SOLUTION.
 !
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
 !
 !     COMPUTE TRUNCATION ERROR APPROXIMATION OVER THE ENTIRE MESH
 !
-DO J=JS,NS
-   YJ = CIT+FLOAT(J-1)*DLY
-   CALL COFY (YJ,DJ,EJ,FJ)
-   DO I=IS,MS
-      XI = AIT+FLOAT(I-1)*DLX
-      CALL COFX (XI,AI,BI,CI)
+do j=js,ns
+   yj = cit+float(j-1)*dly
+   call cofy (yj,dj,ej,fj)
+   do i=is,ms
+      xi = ait+float(i-1)*dlx
+      call cofx (xi,ai,bi,ci)
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT (XI,YJ)
 !
-      CALL DXFN (USOL,IDMN,I,J,UXXX,UXXXX)
-      CALL DYFN (USOL,IDMN,I,J,UYYY,UYYYY)
-      TX = AI*UXXXX/12.0+BI*UXXX/6.0
-      TY = DJ*UYYYY/12.0+EJ*UYYY/6.0
+      call dxfn (usol,idmn,i,j,uxxx,uxxxx)
+      call dyfn (usol,idmn,i,j,uyyy,uyyyy)
+      tx = ai*uxxxx/12.0+bi*uxxx/6.0
+      ty = dj*uyyyy/12.0+ej*uyyy/6.0
 !
 !     RESET FORM OF TRUNCATION IF AT BOUNDARY WHICH IS NON-PERIODIC
 !
-      IF (KSWX.EQ.1 .OR. (I.GT.1 .AND. I.LT.K)) GO TO  10
-      TX = AI/3.0*(UXXXX/4.0+UXXX/DLX)
-10 IF (KSWY.EQ.1 .OR. (J.GT.1 .AND. J.LT.L)) GO TO  20
-      TY = DJ/3.0*(UYYYY/4.0+UYYY/DLY)
-20 GRHS(I,J) = GRHS(I,J)+DLX**2*TX+DLY**2*TY
-   END DO
-END DO
+      if (kswx.eq.1 .or. (i.gt.1 .and. i.lt.k)) go to  10
+      tx = ai/3.0*(uxxxx/4.0+uxxx/dlx)
+10 if (kswy.eq.1 .or. (j.gt.1 .and. j.lt.l)) go to  20
+      ty = dj/3.0*(uyyyy/4.0+uyyy/dly)
+20 grhs(i,j) = grhs(i,j)+dlx**2*tx+dly**2*ty
+   end do
+end do
 !
 !     RESET THE RIGHT HAND SIDE IN USOL
 !
-DO I=IS,MS
-   DO J=JS,NS
-      USOL(I,J) = GRHS(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE DEFER
+do i=is,ms
+   do j=js,ns
+      usol(i,j) = grhs(i,j)
+   end do
+end do
+return
+end subroutine defer
 
-SUBROUTINE DXFN (U,IDMN,I,J,UXXX,UXXXX)
-IMPLICIT NONE
-INTEGER :: I, IDMN, J
-REAL :: U(IDMN,*), UXXX, UXXXX
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine dxfn (u,idmn,i,j,uxxx,uxxxx)
+implicit none
+integer :: i, idmn, j
+real :: u(idmn,*), uxxx, uxxxx
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
 !     APPROXIMATIONS TO THE THIRD AND FOURTH X
 !     PARTIAL DERIVATIVES OF U AT THE (I,J) MESH POINT
 !
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-IF (I.GT.2 .AND. I.LT.(K-1)) GO TO  50
-IF (I .EQ. 1) GO TO  10
-IF (I .EQ. 2) GO TO  30
-IF (I .EQ. K-1) GO TO  60
-IF (I .EQ. K) GO TO  80
+if (i.gt.2 .and. i.lt.(k-1)) go to  50
+if (i .eq. 1) go to  10
+if (i .eq. 2) go to  30
+if (i .eq. k-1) go to  60
+if (i .eq. k) go to  80
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=A
 !
-10 IF (KSWX .EQ. 1) GO TO  20
-UXXX = (-5.0*U(1,J)+18.0*U(2,J)-24.0*U(3,J)+14.0*U(4,J)- &
-&3.0*U(5,J))/(TDLX3)
-UXXXX = (3.0*U(1,J)-14.0*U(2,J)+26.0*U(3,J)-24.0*U(4,J)+ &
-&11.0*U(5,J)-2.0*U(6,J))/DLX4
-RETURN
+10 if (kswx .eq. 1) go to  20
+uxxx = (-5.0*u(1,j)+18.0*u(2,j)-24.0*u(3,j)+14.0*u(4,j)- &
+&3.0*u(5,j))/(tdlx3)
+uxxxx = (3.0*u(1,j)-14.0*u(2,j)+26.0*u(3,j)-24.0*u(4,j)+ &
+&11.0*u(5,j)-2.0*u(6,j))/dlx4
+return
 !
 !     PERIODIC AT X=A
 !
-20 UXXX = (-U(K-2,J)+2.0*U(K-1,J)-2.0*U(2,J)+U(3,J))/(TDLX3)
-UXXXX = (U(K-2,J)-4.0*U(K-1,J)+6.0*U(1,J)-4.0*U(2,J)+U(3,J))/DLX4
-RETURN
+20 uxxx = (-u(k-2,j)+2.0*u(k-1,j)-2.0*u(2,j)+u(3,j))/(tdlx3)
+uxxxx = (u(k-2,j)-4.0*u(k-1,j)+6.0*u(1,j)-4.0*u(2,j)+u(3,j))/dlx4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=A+DLX
 !
-30 IF (KSWX .EQ. 1) GO TO  40
-UXXX = (-3.0*U(1,J)+10.0*U(2,J)-12.0*U(3,J)+6.0*U(4,J)-U(5,J))/ &
-&TDLX3
-UXXXX = (2.0*U(1,J)-9.0*U(2,J)+16.0*U(3,J)-14.0*U(4,J)+6.0*U(5,J)- &
-&U(6,J))/DLX4
-RETURN
+30 if (kswx .eq. 1) go to  40
+uxxx = (-3.0*u(1,j)+10.0*u(2,j)-12.0*u(3,j)+6.0*u(4,j)-u(5,j))/ &
+&tdlx3
+uxxxx = (2.0*u(1,j)-9.0*u(2,j)+16.0*u(3,j)-14.0*u(4,j)+6.0*u(5,j)- &
+&u(6,j))/dlx4
+return
 !
 !     PERIODIC AT X=A+DLX
 !
-40 UXXX = (-U(K-1,J)+2.0*U(1,J)-2.0*U(3,J)+U(4,J))/(TDLX3)
-UXXXX = (U(K-1,J)-4.0*U(1,J)+6.0*U(2,J)-4.0*U(3,J)+U(4,J))/DLX4
-RETURN
+40 uxxx = (-u(k-1,j)+2.0*u(1,j)-2.0*u(3,j)+u(4,j))/(tdlx3)
+uxxxx = (u(k-1,j)-4.0*u(1,j)+6.0*u(2,j)-4.0*u(3,j)+u(4,j))/dlx4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS ON THE INTERIOR
 !
-50 CONTINUE
-UXXX = (-U(I-2,J)+2.0*U(I-1,J)-2.0*U(I+1,J)+U(I+2,J))/TDLX3
-UXXXX = (U(I-2,J)-4.0*U(I-1,J)+6.0*U(I,J)-4.0*U(I+1,J)+U(I+2,J))/ &
-&DLX4
-RETURN
+50 continue
+uxxx = (-u(i-2,j)+2.0*u(i-1,j)-2.0*u(i+1,j)+u(i+2,j))/tdlx3
+uxxxx = (u(i-2,j)-4.0*u(i-1,j)+6.0*u(i,j)-4.0*u(i+1,j)+u(i+2,j))/ &
+&dlx4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B-DLX
 !
-60 IF (KSWX .EQ. 1) GO TO  70
-UXXX = (U(K-4,J)-6.0*U(K-3,J)+12.0*U(K-2,J)-10.0*U(K-1,J)+ &
-&3.0*U(K,J))/TDLX3
-UXXXX = (-U(K-5,J)+6.0*U(K-4,J)-14.0*U(K-3,J)+16.0*U(K-2,J)- &
-&9.0*U(K-1,J)+2.0*U(K,J))/DLX4
-RETURN
+60 if (kswx .eq. 1) go to  70
+uxxx = (u(k-4,j)-6.0*u(k-3,j)+12.0*u(k-2,j)-10.0*u(k-1,j)+ &
+&3.0*u(k,j))/tdlx3
+uxxxx = (-u(k-5,j)+6.0*u(k-4,j)-14.0*u(k-3,j)+16.0*u(k-2,j)- &
+&9.0*u(k-1,j)+2.0*u(k,j))/dlx4
+return
 !
 !     PERIODIC AT X=B-DLX
 !
-70 UXXX = (-U(K-3,J)+2.0*U(K-2,J)-2.0*U(1,J)+U(2,J))/TDLX3
-UXXXX = (U(K-3,J)-4.0*U(K-2,J)+6.0*U(K-1,J)-4.0*U(1,J)+U(2,J))/ &
-&DLX4
-RETURN
+70 uxxx = (-u(k-3,j)+2.0*u(k-2,j)-2.0*u(1,j)+u(2,j))/tdlx3
+uxxxx = (u(k-3,j)-4.0*u(k-2,j)+6.0*u(k-1,j)-4.0*u(1,j)+u(2,j))/ &
+&dlx4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B
 !
-80 UXXX = -(3.0*U(K-4,J)-14.0*U(K-3,J)+24.0*U(K-2,J)-18.0*U(K-1,J)+ &
-&5.0*U(K,J))/TDLX3
-UXXXX = (-2.0*U(K-5,J)+11.0*U(K-4,J)-24.0*U(K-3,J)+26.0*U(K-2,J)- &
-&14.0*U(K-1,J)+3.0*U(K,J))/DLX4
-RETURN
-END SUBROUTINE DXFN
+80 uxxx = -(3.0*u(k-4,j)-14.0*u(k-3,j)+24.0*u(k-2,j)-18.0*u(k-1,j)+ &
+&5.0*u(k,j))/tdlx3
+uxxxx = (-2.0*u(k-5,j)+11.0*u(k-4,j)-24.0*u(k-3,j)+26.0*u(k-2,j)- &
+&14.0*u(k-1,j)+3.0*u(k,j))/dlx4
+return
+end subroutine dxfn
 
-SUBROUTINE DYFN (U,IDMN,I,J,UYYY,UYYYY)
-IMPLICIT NONE
-INTEGER :: I, IDMN, J
-REAL :: U(IDMN,*), UYYY, UYYYY
-INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
-REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+subroutine dyfn (u,idmn,i,j,uyyy,uyyyy)
+implicit none
+integer :: i, idmn, j
+real :: u(idmn,*), uyyy, uyyyy
+integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
+real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
 !     APPROXIMATIONS TO THE THIRD AND FOURTH Y
 !     PARTIAL DERIVATIVES OF U AT THE (I,J) MESH POINT
 !
-COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          , &
-&AIT        ,BIT        ,CIT        ,DIT        , &
-&MIT        ,NIT        ,IS         ,MS         , &
-&JS         ,NS         ,DLX        ,DLY        , &
-&TDLX3      ,TDLY3      ,DLX4       ,DLY4
+common /splp/   kswx       ,kswy       ,k          ,l          , &
+&ait        ,bit        ,cit        ,dit        , &
+&mit        ,nit        ,is         ,ms         , &
+&js         ,ns         ,dlx        ,dly        , &
+&tdlx3      ,tdly3      ,dlx4       ,dly4
 !
-IF (J.GT.2 .AND. J.LT.(L-1)) GO TO  50
-IF (J .EQ. 1) GO TO  10
-IF (J .EQ. 2) GO TO  30
-IF (J .EQ. L-1) GO TO  60
-IF (J .EQ. L) GO TO  80
+if (j.gt.2 .and. j.lt.(l-1)) go to  50
+if (j .eq. 1) go to  10
+if (j .eq. 2) go to  30
+if (j .eq. l-1) go to  60
+if (j .eq. l) go to  80
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=C
 !
-10 IF (KSWY .EQ. 1) GO TO  20
-UYYY = (-5.0*U(I,1)+18.0*U(I,2)-24.0*U(I,3)+14.0*U(I,4)- &
-&3.0*U(I,5))/TDLY3
-UYYYY = (3.0*U(I,1)-14.0*U(I,2)+26.0*U(I,3)-24.0*U(I,4)+ &
-&11.0*U(I,5)-2.0*U(I,6))/DLY4
-RETURN
+10 if (kswy .eq. 1) go to  20
+uyyy = (-5.0*u(i,1)+18.0*u(i,2)-24.0*u(i,3)+14.0*u(i,4)- &
+&3.0*u(i,5))/tdly3
+uyyyy = (3.0*u(i,1)-14.0*u(i,2)+26.0*u(i,3)-24.0*u(i,4)+ &
+&11.0*u(i,5)-2.0*u(i,6))/dly4
+return
 !
 !     PERIODIC AT X=A
 !
-20 UYYY = (-U(I,L-2)+2.0*U(I,L-1)-2.0*U(I,2)+U(I,3))/TDLY3
-UYYYY = (U(I,L-2)-4.0*U(I,L-1)+6.0*U(I,1)-4.0*U(I,2)+U(I,3))/DLY4
-RETURN
+20 uyyy = (-u(i,l-2)+2.0*u(i,l-1)-2.0*u(i,2)+u(i,3))/tdly3
+uyyyy = (u(i,l-2)-4.0*u(i,l-1)+6.0*u(i,1)-4.0*u(i,2)+u(i,3))/dly4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=C+DLY
 !
-30 IF (KSWY .EQ. 1) GO TO  40
-UYYY = (-3.0*U(I,1)+10.0*U(I,2)-12.0*U(I,3)+6.0*U(I,4)-U(I,5))/ &
-&TDLY3
-UYYYY = (2.0*U(I,1)-9.0*U(I,2)+16.0*U(I,3)-14.0*U(I,4)+6.0*U(I,5)- &
-&U(I,6))/DLY4
-RETURN
+30 if (kswy .eq. 1) go to  40
+uyyy = (-3.0*u(i,1)+10.0*u(i,2)-12.0*u(i,3)+6.0*u(i,4)-u(i,5))/ &
+&tdly3
+uyyyy = (2.0*u(i,1)-9.0*u(i,2)+16.0*u(i,3)-14.0*u(i,4)+6.0*u(i,5)- &
+&u(i,6))/dly4
+return
 !
 !     PERIODIC AT Y=C+DLY
 !
-40 UYYY = (-U(I,L-1)+2.0*U(I,1)-2.0*U(I,3)+U(I,4))/TDLY3
-UYYYY = (U(I,L-1)-4.0*U(I,1)+6.0*U(I,2)-4.0*U(I,3)+U(I,4))/DLY4
-RETURN
+40 uyyy = (-u(i,l-1)+2.0*u(i,1)-2.0*u(i,3)+u(i,4))/tdly3
+uyyyy = (u(i,l-1)-4.0*u(i,1)+6.0*u(i,2)-4.0*u(i,3)+u(i,4))/dly4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS ON THE INTERIOR
 !
-50 CONTINUE
-UYYY = (-U(I,J-2)+2.0*U(I,J-1)-2.0*U(I,J+1)+U(I,J+2))/TDLY3
-UYYYY = (U(I,J-2)-4.0*U(I,J-1)+6.0*U(I,J)-4.0*U(I,J+1)+U(I,J+2))/ &
-&DLY4
-RETURN
+50 continue
+uyyy = (-u(i,j-2)+2.0*u(i,j-1)-2.0*u(i,j+1)+u(i,j+2))/tdly3
+uyyyy = (u(i,j-2)-4.0*u(i,j-1)+6.0*u(i,j)-4.0*u(i,j+1)+u(i,j+2))/ &
+&dly4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D-DLY
 !
-60 IF (KSWY .EQ. 1) GO TO  70
-UYYY = (U(I,L-4)-6.0*U(I,L-3)+12.0*U(I,L-2)-10.0*U(I,L-1)+ &
-&3.0*U(I,L))/TDLY3
-UYYYY = (-U(I,L-5)+6.0*U(I,L-4)-14.0*U(I,L-3)+16.0*U(I,L-2)- &
-&9.0*U(I,L-1)+2.0*U(I,L))/DLY4
-RETURN
+60 if (kswy .eq. 1) go to  70
+uyyy = (u(i,l-4)-6.0*u(i,l-3)+12.0*u(i,l-2)-10.0*u(i,l-1)+ &
+&3.0*u(i,l))/tdly3
+uyyyy = (-u(i,l-5)+6.0*u(i,l-4)-14.0*u(i,l-3)+16.0*u(i,l-2)- &
+&9.0*u(i,l-1)+2.0*u(i,l))/dly4
+return
 !
 !     PERIODIC AT Y=D-DLY
 !
-70 CONTINUE
-UYYY = (-U(I,L-3)+2.0*U(I,L-2)-2.0*U(I,1)+U(I,2))/TDLY3
-UYYYY = (U(I,L-3)-4.0*U(I,L-2)+6.0*U(I,L-1)-4.0*U(I,1)+U(I,2))/ &
-&DLY4
-RETURN
+70 continue
+uyyy = (-u(i,l-3)+2.0*u(i,l-2)-2.0*u(i,1)+u(i,2))/tdly3
+uyyyy = (u(i,l-3)-4.0*u(i,l-2)+6.0*u(i,l-1)-4.0*u(i,1)+u(i,2))/ &
+&dly4
+return
 !
 !     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D
 !
-80 UYYY = -(3.0*U(I,L-4)-14.0*U(I,L-3)+24.0*U(I,L-2)-18.0*U(I,L-1)+ &
-&5.0*U(I,L))/TDLY3
-UYYYY = (-2.0*U(I,L-5)+11.0*U(I,L-4)-24.0*U(I,L-3)+26.0*U(I,L-2)- &
-&14.0*U(I,L-1)+3.0*U(I,L))/DLY4
-RETURN
-END SUBROUTINE DYFN
+80 uyyy = -(3.0*u(i,l-4)-14.0*u(i,l-3)+24.0*u(i,l-2)-18.0*u(i,l-1)+ &
+&5.0*u(i,l))/tdly3
+uyyyy = (-2.0*u(i,l-5)+11.0*u(i,l-4)-24.0*u(i,l-3)+26.0*u(i,l-2)- &
+&14.0*u(i,l-1)+3.0*u(i,l))/dly4
+return
+end subroutine dyfn
 
-SUBROUTINE BLKTRI (IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y, &
-&IERROR,W)
-IMPLICIT NONE
-INTEGER :: IDIMY, IERROR, IFLG, M, MP, N, NP
-REAL :: AM(*), AN(*), BM(*), BN(*), CM(*), CN(*), W(*), Y(IDIMY,*)
-INTEGER :: IW1, IW2, IW3, IWAH, IWBH, IWD, IWU, IWW, NH, NL
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
+subroutine blktri (iflg,np,n,an,bn,cn,mp,m,am,bm,cm,idimy,y, &
+&ierror,w)
+implicit none
+integer :: idimy, ierror, iflg, m, mp, n, np
+real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
+integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
 !
 !
 !***********************************************************************
@@ -981,85 +981,85 @@ REAL :: CNV, EPS
 !
 !
 !
-EXTERNAL        PROD0      ,PRODP      ,CPROD0     ,CPRODP
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+external        prod0      ,prodp      ,cprod0     ,cprodp
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
 ! TEST M AND N FOR THE PROPER FORM
 !
-NM = N
-IERROR = 0
-IF (M-5)  10, 20, 20
-10 IERROR = 1
-GO TO 190
-20 IF (NM-3)  30, 40, 40
-30 IERROR = 2
-GO TO 190
-40 IF (IDIMY-M)  50, 60, 60
-50 IERROR = 3
-GO TO 190
-60 NH = N
-NPP = NP
-IF (NPP)  70, 80, 70
-70 NH = NH+1
-80 IK = 2
-K = 1
-90 IK = IK+IK
-K = K+1
-IF (NH-IK) 100,100, 90
-100 NL = IK
-IK = IK+IK
-NL = NL-1
-IWAH = (K-2)*IK+K+6
-IF (NPP) 110,120,110
+nm = n
+ierror = 0
+if (m-5)  10, 20, 20
+10 ierror = 1
+go to 190
+20 if (nm-3)  30, 40, 40
+30 ierror = 2
+go to 190
+40 if (idimy-m)  50, 60, 60
+50 ierror = 3
+go to 190
+60 nh = n
+npp = np
+if (npp)  70, 80, 70
+70 nh = nh+1
+80 ik = 2
+k = 1
+90 ik = ik+ik
+k = k+1
+if (nh-ik) 100,100, 90
+100 nl = ik
+ik = ik+ik
+nl = nl-1
+iwah = (k-2)*ik+k+6
+if (npp) 110,120,110
 !
 !     DIVIDE W INTO WORKING SUB ARRAYS
 !
-110 IW1 = IWAH
-IWBH = IW1+NM
-W(1) = FLOAT(IW1-1+MAX0(2*NM,6*M))
-GO TO 130
-120 IWBH = IWAH+NM+NM
-IW1 = IWBH
-W(1) = FLOAT(IW1-1+MAX0(2*NM,6*M))
-NM = NM-1
+110 iw1 = iwah
+iwbh = iw1+nm
+w(1) = float(iw1-1+max0(2*nm,6*m))
+go to 130
+120 iwbh = iwah+nm+nm
+iw1 = iwbh
+w(1) = float(iw1-1+max0(2*nm,6*m))
+nm = nm-1
 !
 ! SUBROUTINE COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS
 !
-130 IF (IERROR) 190,140,190
-140 IW2 = IW1+M
-IW3 = IW2+M
-IWD = IW3+M
-IWW = IWD+M
-IWU = IWW+M
-IF (IFLG) 160,150,160
-150 CALL COMPB (NL,IERROR,AN,BN,CN,W(2),W(IWAH),W(IWBH))
-GO TO 190
-160 IF (MP) 170,180,170
+130 if (ierror) 190,140,190
+140 iw2 = iw1+m
+iw3 = iw2+m
+iwd = iw3+m
+iww = iwd+m
+iwu = iww+m
+if (iflg) 160,150,160
+150 call compb (nl,ierror,an,bn,cn,w(2),w(iwah),w(iwbh))
+go to 190
+160 if (mp) 170,180,170
 !
 ! SUBROUTINE BLKTR1 SOLVES THE LINEAR SYSTEM
 !
-170 CALL BLKTR1 (NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2), &
-&W(IW3),W(IWD),W(IWW),W(IWU),PROD0,CPROD0)
-GO TO 190
-180 CALL BLKTR1 (NL,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,W(2),W(IW1),W(IW2), &
-&W(IW3),W(IWD),W(IWW),W(IWU),PRODP,CPRODP)
-190 CONTINUE
-RETURN
-END SUBROUTINE BLKTRI
+170 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
+&w(iw3),w(iwd),w(iww),w(iwu),prod0,cprod0)
+go to 190
+180 call blktr1 (nl,an,bn,cn,m,am,bm,cm,idimy,y,w(2),w(iw1),w(iw2), &
+&w(iw3),w(iwd),w(iww),w(iwu),prodp,cprodp)
+190 continue
+return
+end subroutine blktri
 
-SUBROUTINE BLKTR1 (N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD, &
-&WW,WU,PRDCT,CPRDCT)
-IMPLICIT NONE
-INTEGER :: IDIMY, M, N
-REAL :: AM(*), AN(*), B(*), BM(*), BN(*), CM(*), CN(*), W1(*), &
-&W2(*), W3(*), WD(*), WU(*), WW(*), Y(IDIMY,*)
-INTEGER :: I, I1, I2, I3, I4, IDXA, IDXC, IF, IFD, IM1, IM2, IM3, &
-&IMI1, IMI2, IP, IP1, IP2, IP3, IPI1, IPI2, IPI3, IR, IRM1, IZ, &
-&IZR, J, KDO, L, LL, NA, NC, NM1, NM2, NM3, NP, NP1, NP2, NP3, NZ
-REAL :: DUM
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
+subroutine blktr1 (n,an,bn,cn,m,am,bm,cm,idimy,y,b,w1,w2,w3,wd, &
+&ww,wu,prdct,cprdct)
+implicit none
+integer :: idimy, m, n
+real :: am(*), an(*), b(*), bm(*), bn(*), cm(*), cn(*), w1(*), &
+&w2(*), w3(*), wd(*), wu(*), ww(*), y(idimy,*)
+integer :: i, i1, i2, i3, i4, idxa, idxc, if, ifd, im1, im2, im3, &
+&imi1, imi2, ip, ip1, ip2, ip3, ipi1, ipi2, ipi3, ir, irm1, iz, &
+&izr, j, kdo, l, ll, na, nc, nm1, nm2, nm3, np, np1, np2, np3, nz
+real :: dum
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
 !
 ! BLKTR1 SOLVES THE LINEAR SYSTEM
 !
@@ -1072,296 +1072,296 @@ REAL :: CNV, EPS
 ! OF THE ROOTS OF THE B SUB P POLYNOMIAL ARE COMPLEX
 !
 !
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
 ! BEGIN REDUCTION PHASE
 !
-KDO = K-1
-DO L=1,KDO
-   IR = L-1
-   I2 = 2**IR
-   I1 = I2/2
-   I3 = I2+I1
-   I4 = I2+I2
-   IRM1 = IR-1
-   CALL INDXB (I2,IR,IM2,NM2)
-   CALL INDXB (I1,IRM1,IM3,NM3)
-   CALL INDXB (I3,IRM1,IM1,NM1)
-   CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,Y(1,I2),W3, &
-&M,AM,BM,CM,WD,WW,WU)
-   IF = 2**K
-   do 80 I = I4,IF,I4
-      IF (I-NM)  10, 10, 80
-10 IPI1 = I+I1
-      IPI2 = I+I2
-      IPI3 = I+I3
-      CALL INDXC (I,IR,IDXC,NC)
-      IF (I-IF)  20, 80, 80
-20 CALL INDXA (I,IR,IDXA,NA)
-      CALL INDXB (I-I1,IRM1,IM1,NM1)
-      CALL INDXB (IPI2,IR,IP2,NP2)
-      CALL INDXB (IPI1,IRM1,IP1,NP1)
-      CALL INDXB (IPI3,IRM1,IP3,NP3)
-      CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W3,W1,M,AM, &
-&BM,CM,WD,WW,WU)
-      IF (IPI2-NM)  50, 50, 30
-30 DO J=1,M
-         W3(J) = 0.
-         W2(J) = 0.
-      END DO
-      GO TO  60
-50 CALL PRDCT (NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM, &
-&Y(1,IPI2),W3,M,AM,BM,CM,WD,WW,WU)
-      CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W3,W2,M,AM, &
-&BM,CM,WD,WW,WU)
-60 DO J=1,M
-         Y(J,I) = W1(J)+W2(J)+Y(J,I)
-      END DO
-80 CONTINUE
-END DO
-IF (NPP) 320,100,320
+kdo = k-1
+do l=1,kdo
+   ir = l-1
+   i2 = 2**ir
+   i1 = i2/2
+   i3 = i2+i1
+   i4 = i2+i2
+   irm1 = ir-1
+   call indxb (i2,ir,im2,nm2)
+   call indxb (i1,irm1,im3,nm3)
+   call indxb (i3,irm1,im1,nm1)
+   call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,y(1,i2),w3, &
+&m,am,bm,cm,wd,ww,wu)
+   if = 2**k
+   do 80 i = i4,if,i4
+      if (i-nm)  10, 10, 80
+10 ipi1 = i+i1
+      ipi2 = i+i2
+      ipi3 = i+i3
+      call indxc (i,ir,idxc,nc)
+      if (i-if)  20, 80, 80
+20 call indxa (i,ir,idxa,na)
+      call indxb (i-i1,irm1,im1,nm1)
+      call indxb (ipi2,ir,ip2,np2)
+      call indxb (ipi1,irm1,ip1,np1)
+      call indxb (ipi3,irm1,ip3,np3)
+      call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w3,w1,m,am, &
+&bm,cm,wd,ww,wu)
+      if (ipi2-nm)  50, 50, 30
+30 do j=1,m
+         w3(j) = 0.
+         w2(j) = 0.
+      end do
+      go to  60
+50 call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum, &
+&y(1,ipi2),w3,m,am,bm,cm,wd,ww,wu)
+      call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w3,w2,m,am, &
+&bm,cm,wd,ww,wu)
+60 do j=1,m
+         y(j,i) = w1(j)+w2(j)+y(j,i)
+      end do
+80 continue
+end do
+if (npp) 320,100,320
 !
 !     THE PERIODIC CASE IS TREATED USING THE CAPACITANCE MATRIX METHOD
 !
-100 IF = 2**K
-I = IF/2
-I1 = I/2
-CALL INDXB (I-I1,K-2,IM1,NM1)
-CALL INDXB (I+I1,K-2,IP1,NP1)
-CALL INDXB (I,K-1,IZ,NZ)
-CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,Y(1,I),W1,M,AM, &
-&BM,CM,WD,WW,WU)
-IZR = I
-DO J=1,M
-   W2(J) = W1(J)
-END DO
-DO LL=2,K
-   L = K-LL+1
-   IR = L-1
-   I2 = 2**IR
-   I1 = I2/2
-   I = I2
-   CALL INDXC (I,IR,IDXC,NC)
-   CALL INDXB (I,IR,IZ,NZ)
-   CALL INDXB (I-I1,IR-1,IM1,NM1)
-   CALL INDXB (I+I1,IR-1,IP1,NP1)
-   CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W1,W1,M,AM,BM, &
-&CM,WD,WW,WU)
-   DO J=1,M
-      W1(J) = Y(J,I)+W1(J)
-   END DO
-   CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,W1,M,AM, &
-&BM,CM,WD,WW,WU)
-END DO
-do 180 LL = 2,K
-   L = K-LL+1
-   IR = L-1
-   I2 = 2**IR
-   I1 = I2/2
-   I4 = I2+I2
-   IFD = IF-I2
-   do 170 I = I2,IFD,I4
-      IF (I-I2-IZR) 170,140,170
-140 IF (I-NM) 150,150,180
-150 CALL INDXA (I,IR,IDXA,NA)
-      CALL INDXB (I,IR,IZ,NZ)
-      CALL INDXB (I-I1,IR-1,IM1,NM1)
-      CALL INDXB (I+I1,IR-1,IP1,NP1)
-      CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W2,W2,M,AM, &
-&BM,CM,WD,WW,WU)
-      DO J=1,M
-         W2(J) = Y(J,I)+W2(J)
-      END DO
-      CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W2,W2,M, &
-&AM,BM,CM,WD,WW,WU)
-      IZR = I
-      IF (I-NM) 170,190,170
-170 CONTINUE
-180 CONTINUE
-190 DO J=1,M
-   Y(J,NM+1) = Y(J,NM+1)-CN(NM+1)*W1(J)-AN(NM+1)*W2(J)
-END DO
-CALL INDXB (IF/2,K-1,IM1,NM1)
-CALL INDXB (IF,K-1,IP,NP)
-IF (NCMPLX) 210,220,210
-210 CALL CPRDCT (NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1), &
-&Y(1,NM+1),M,AM,BM,CM,W1,W3,WW)
-GO TO 230
-220 CALL PRDCT (NM+1,B(IP),NM1,B(IM1),0,DUM,0,DUM,Y(1,NM+1), &
-&Y(1,NM+1),M,AM,BM,CM,WD,WW,WU)
-230 DO J=1,M
-   W1(J) = AN(1)*Y(J,NM+1)
-   W2(J) = CN(NM)*Y(J,NM+1)
-   Y(J,1) = Y(J,1)-W1(J)
-   Y(J,NM) = Y(J,NM)-W2(J)
-END DO
-DO L=1,KDO
-   IR = L-1
-   I2 = 2**IR
-   I4 = I2+I2
-   I1 = I2/2
-   I = I4
-   CALL INDXA (I,IR,IDXA,NA)
-   CALL INDXB (I-I2,IR,IM2,NM2)
-   CALL INDXB (I-I2-I1,IR-1,IM3,NM3)
-   CALL INDXB (I-I1,IR-1,IM1,NM1)
-   CALL PRDCT (NM2,B(IM2),NM3,B(IM3),NM1,B(IM1),0,DUM,W1,W1,M,AM, &
-&BM,CM,WD,WW,WU)
-   CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),W1,W1,M,AM,BM, &
-&CM,WD,WW,WU)
-   DO J=1,M
-      Y(J,I) = Y(J,I)-W1(J)
-   END DO
-END DO
+100 if = 2**k
+i = if/2
+i1 = i/2
+call indxb (i-i1,k-2,im1,nm1)
+call indxb (i+i1,k-2,ip1,np1)
+call indxb (i,k-1,iz,nz)
+call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,y(1,i),w1,m,am, &
+&bm,cm,wd,ww,wu)
+izr = i
+do j=1,m
+   w2(j) = w1(j)
+end do
+do ll=2,k
+   l = k-ll+1
+   ir = l-1
+   i2 = 2**ir
+   i1 = i2/2
+   i = i2
+   call indxc (i,ir,idxc,nc)
+   call indxb (i,ir,iz,nz)
+   call indxb (i-i1,ir-1,im1,nm1)
+   call indxb (i+i1,ir-1,ip1,np1)
+   call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w1,w1,m,am,bm, &
+&cm,wd,ww,wu)
+   do j=1,m
+      w1(j) = y(j,i)+w1(j)
+   end do
+   call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,w1,m,am, &
+&bm,cm,wd,ww,wu)
+end do
+do 180 ll = 2,k
+   l = k-ll+1
+   ir = l-1
+   i2 = 2**ir
+   i1 = i2/2
+   i4 = i2+i2
+   ifd = if-i2
+   do 170 i = i2,ifd,i4
+      if (i-i2-izr) 170,140,170
+140 if (i-nm) 150,150,180
+150 call indxa (i,ir,idxa,na)
+      call indxb (i,ir,iz,nz)
+      call indxb (i-i1,ir-1,im1,nm1)
+      call indxb (i+i1,ir-1,ip1,np1)
+      call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w2,w2,m,am, &
+&bm,cm,wd,ww,wu)
+      do j=1,m
+         w2(j) = y(j,i)+w2(j)
+      end do
+      call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w2,w2,m, &
+&am,bm,cm,wd,ww,wu)
+      izr = i
+      if (i-nm) 170,190,170
+170 continue
+180 continue
+190 do j=1,m
+   y(j,nm+1) = y(j,nm+1)-cn(nm+1)*w1(j)-an(nm+1)*w2(j)
+end do
+call indxb (if/2,k-1,im1,nm1)
+call indxb (if,k-1,ip,np)
+if (ncmplx) 210,220,210
+210 call cprdct (nm+1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm+1), &
+&y(1,nm+1),m,am,bm,cm,w1,w3,ww)
+go to 230
+220 call prdct (nm+1,b(ip),nm1,b(im1),0,dum,0,dum,y(1,nm+1), &
+&y(1,nm+1),m,am,bm,cm,wd,ww,wu)
+230 do j=1,m
+   w1(j) = an(1)*y(j,nm+1)
+   w2(j) = cn(nm)*y(j,nm+1)
+   y(j,1) = y(j,1)-w1(j)
+   y(j,nm) = y(j,nm)-w2(j)
+end do
+do l=1,kdo
+   ir = l-1
+   i2 = 2**ir
+   i4 = i2+i2
+   i1 = i2/2
+   i = i4
+   call indxa (i,ir,idxa,na)
+   call indxb (i-i2,ir,im2,nm2)
+   call indxb (i-i2-i1,ir-1,im3,nm3)
+   call indxb (i-i1,ir-1,im1,nm1)
+   call prdct (nm2,b(im2),nm3,b(im3),nm1,b(im1),0,dum,w1,w1,m,am, &
+&bm,cm,wd,ww,wu)
+   call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),w1,w1,m,am,bm, &
+&cm,wd,ww,wu)
+   do j=1,m
+      y(j,i) = y(j,i)-w1(j)
+   end do
+end do
 !
-IZR = NM
-do 310 L = 1,KDO
-   IR = L-1
-   I2 = 2**IR
-   I1 = I2/2
-   I3 = I2+I1
-   I4 = I2+I2
-   IRM1 = IR-1
-   do 300 I = I4,IF,I4
-      IPI1 = I+I1
-      IPI2 = I+I2
-      IPI3 = I+I3
-      IF (IPI2-IZR) 270,280,270
-270 IF (I-IZR) 300,310,300
-280 CALL INDXC (I,IR,IDXC,NC)
-      CALL INDXB (IPI2,IR,IP2,NP2)
-      CALL INDXB (IPI1,IRM1,IP1,NP1)
-      CALL INDXB (IPI3,IRM1,IP3,NP3)
-      CALL PRDCT (NP2,B(IP2),NP1,B(IP1),NP3,B(IP3),0,DUM,W2,W2,M, &
-&AM,BM,CM,WD,WW,WU)
-      CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),W2,W2,M,AM, &
-&BM,CM,WD,WW,WU)
-      DO J=1,M
-         Y(J,I) = Y(J,I)-W2(J)
-      END DO
-      IZR = I
-      GO TO 310
-300 CONTINUE
-310 CONTINUE
+izr = nm
+do 310 l = 1,kdo
+   ir = l-1
+   i2 = 2**ir
+   i1 = i2/2
+   i3 = i2+i1
+   i4 = i2+i2
+   irm1 = ir-1
+   do 300 i = i4,if,i4
+      ipi1 = i+i1
+      ipi2 = i+i2
+      ipi3 = i+i3
+      if (ipi2-izr) 270,280,270
+270 if (i-izr) 300,310,300
+280 call indxc (i,ir,idxc,nc)
+      call indxb (ipi2,ir,ip2,np2)
+      call indxb (ipi1,irm1,ip1,np1)
+      call indxb (ipi3,irm1,ip3,np3)
+      call prdct (np2,b(ip2),np1,b(ip1),np3,b(ip3),0,dum,w2,w2,m, &
+&am,bm,cm,wd,ww,wu)
+      call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),w2,w2,m,am, &
+&bm,cm,wd,ww,wu)
+      do j=1,m
+         y(j,i) = y(j,i)-w2(j)
+      end do
+      izr = i
+      go to 310
+300 continue
+310 continue
 !
 ! BEGIN BACK SUBSTITUTION PHASE
 !
-320 DO LL=1,K
-   L = K-LL+1
-   IR = L-1
-   IRM1 = IR-1
-   I2 = 2**IR
-   I1 = I2/2
-   I4 = I2+I2
-   IFD = IF-I2
-   do 430 I = I2,IFD,I4
-      IF (I-NM) 330,330,430
-330 IMI1 = I-I1
-      IMI2 = I-I2
-      IPI1 = I+I1
-      IPI2 = I+I2
-      CALL INDXA (I,IR,IDXA,NA)
-      CALL INDXC (I,IR,IDXC,NC)
-      CALL INDXB (I,IR,IZ,NZ)
-      CALL INDXB (IMI1,IRM1,IM1,NM1)
-      CALL INDXB (IPI1,IRM1,IP1,NP1)
-      IF (I-I2) 340,340,360
-340 DO J=1,M
-         W1(J) = 0.
-      END DO
-      GO TO 370
-360 CALL PRDCT (NM1,B(IM1),0,DUM,0,DUM,NA,AN(IDXA),Y(1,IMI2), &
-&W1,M,AM,BM,CM,WD,WW,WU)
-370 IF (IPI2-NM) 400,400,380
-380 DO J=1,M
-         W2(J) = 0.
-      END DO
-      GO TO 410
-400 CALL PRDCT (NP1,B(IP1),0,DUM,0,DUM,NC,CN(IDXC),Y(1,IPI2), &
-&W2,M,AM,BM,CM,WD,WW,WU)
-410 DO J=1,M
-         W1(J) = Y(J,I)+W1(J)+W2(J)
-      END DO
-      CALL PRDCT (NZ,B(IZ),NM1,B(IM1),NP1,B(IP1),0,DUM,W1,Y(1,I), &
-&M,AM,BM,CM,WD,WW,WU)
-430 CONTINUE
-END DO
-RETURN
-END SUBROUTINE BLKTR1
+320 do ll=1,k
+   l = k-ll+1
+   ir = l-1
+   irm1 = ir-1
+   i2 = 2**ir
+   i1 = i2/2
+   i4 = i2+i2
+   ifd = if-i2
+   do 430 i = i2,ifd,i4
+      if (i-nm) 330,330,430
+330 imi1 = i-i1
+      imi2 = i-i2
+      ipi1 = i+i1
+      ipi2 = i+i2
+      call indxa (i,ir,idxa,na)
+      call indxc (i,ir,idxc,nc)
+      call indxb (i,ir,iz,nz)
+      call indxb (imi1,irm1,im1,nm1)
+      call indxb (ipi1,irm1,ip1,np1)
+      if (i-i2) 340,340,360
+340 do j=1,m
+         w1(j) = 0.
+      end do
+      go to 370
+360 call prdct (nm1,b(im1),0,dum,0,dum,na,an(idxa),y(1,imi2), &
+&w1,m,am,bm,cm,wd,ww,wu)
+370 if (ipi2-nm) 400,400,380
+380 do j=1,m
+         w2(j) = 0.
+      end do
+      go to 410
+400 call prdct (np1,b(ip1),0,dum,0,dum,nc,cn(idxc),y(1,ipi2), &
+&w2,m,am,bm,cm,wd,ww,wu)
+410 do j=1,m
+         w1(j) = y(j,i)+w1(j)+w2(j)
+      end do
+      call prdct (nz,b(iz),nm1,b(im1),np1,b(ip1),0,dum,w1,y(1,i), &
+&m,am,bm,cm,wd,ww,wu)
+430 continue
+end do
+return
+end subroutine blktr1
 
-SUBROUTINE INDXA (I,IR,IDXA,NA)
-IMPLICIT NONE
-INTEGER :: I, IDXA, IR, NA
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+subroutine indxa (i,ir,idxa,na)
+implicit none
+integer :: i, idxa, ir, na
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
-NA = 2**IR
-IDXA = I-NA+1
-IF (I-NM)  20, 20, 10
-10 NA = 0
-20 RETURN
-END SUBROUTINE INDXA
+na = 2**ir
+idxa = i-na+1
+if (i-nm)  20, 20, 10
+10 na = 0
+20 return
+end subroutine indxa
 
-SUBROUTINE INDXC (I,IR,IDXC,NC)
-IMPLICIT NONE
-INTEGER :: I, IDXC, IR, NC
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+subroutine indxc (i,ir,idxc,nc)
+implicit none
+integer :: i, idxc, ir, nc
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
-NC = 2**IR
-IDXC = I
-IF (IDXC+NC-1-NM)  20, 20, 10
-10 NC = 0
-20 RETURN
-END SUBROUTINE INDXC
+nc = 2**ir
+idxc = i
+if (idxc+nc-1-nm)  20, 20, 10
+10 nc = 0
+20 return
+end subroutine indxc
 
-SUBROUTINE INDXB (I,IR,IDX,IDP)
-IMPLICIT NONE
-INTEGER :: I, IDP, IDX, IR
-INTEGER :: ID, IPL, IZH
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
+subroutine indxb (i,ir,idx,idp)
+implicit none
+integer :: i, idp, idx, ir
+integer :: id, ipl, izh
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
 !
 ! B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
 !
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
-IDP = 0
-IF (IR)  70, 10, 30
-10 IF (I-NM)  20, 20, 70
-20 IDX = I
-IDP = 1
-RETURN
-30 IZH = 2**IR
-ID = I-IZH-IZH
-IDX = ID+ID+(IR-1)*IK+IR+(IK-I)/IZH+4
-IPL = IZH-1
-IDP = IZH+IZH-1
-IF (I-IPL-NM)  50, 50, 40
-40 IDP = 0
-RETURN
-50 IF (I+IPL-NM)  70, 70, 60
-60 IDP = NM+IPL-I+1
-70 RETURN
-END SUBROUTINE INDXB
+idp = 0
+if (ir)  70, 10, 30
+10 if (i-nm)  20, 20, 70
+20 idx = i
+idp = 1
+return
+30 izh = 2**ir
+id = i-izh-izh
+idx = id+id+(ir-1)*ik+ir+(ik-i)/izh+4
+ipl = izh-1
+idp = izh+izh-1
+if (i-ipl-nm)  50, 50, 40
+40 idp = 0
+return
+50 if (i+ipl-nm)  70, 70, 60
+60 idp = nm+ipl-i+1
+70 return
+end subroutine indxb
 
-SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
-REAL :: A(*), AA(*), B(*), BD(*), BM1(*), BM2(*), C(*)
-REAL, INTENT(INOUT) :: D(*)
-REAL :: U(*)
-REAL, INTENT(INOUT) :: W(*)
-REAL :: X(*)
-REAL, INTENT(INOUT) :: Y(*)
-INTEGER :: IA, IBR, ID, J, K, M1, M2, MM
-REAL :: DEN, RT
+subroutine prod0 (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,w,u)
+implicit none
+integer, intent(in) :: m, na, nd, nm1, nm2
+real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
+real, intent(inout) :: d(*)
+real :: u(*)
+real, intent(inout) :: w(*)
+real :: x(*)
+real, intent(inout) :: y(*)
+integer :: ia, ibr, id, j, k, m1, m2, mm
+real :: den, rt
 !
 ! PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 ! STORES THE RESULT IN Y.
@@ -1377,83 +1377,83 @@ REAL :: DEN, RT
 ! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-DO J=1,M
-   W(J) = X(J)
-   Y(J) = W(J)
-END DO
-MM = M-1
-ID = ND
-IBR = 0
-M1 = NM1
-M2 = NM2
-IA = NA
-20 IF (IA)  50, 50, 30
-30 RT = AA(IA)
-IF (ND .EQ. 0) RT = -RT
-IA = IA-1
+do j=1,m
+   w(j) = x(j)
+   y(j) = w(j)
+end do
+mm = m-1
+id = nd
+ibr = 0
+m1 = nm1
+m2 = nm2
+ia = na
+20 if (ia)  50, 50, 30
+30 rt = aa(ia)
+if (nd .eq. 0) rt = -rt
+ia = ia-1
 !
 ! SCALAR MULTIPLICATION
 !
-DO J=1,M
-   Y(J) = RT*W(J)
-END DO
-50 IF (ID) 250,250, 60
-60 RT = BD(ID)
-ID = ID-1
-IF (ID .EQ. 0) IBR = 1
+do j=1,m
+   y(j) = rt*w(j)
+end do
+50 if (id) 250,250, 60
+60 rt = bd(id)
+id = id-1
+if (id .eq. 0) ibr = 1
 !
 ! BEGIN SOLUTION TO SYSTEM
 !
-D(M) = A(M)/(B(M)-RT)
-W(M) = Y(M)/(B(M)-RT)
-DO J=2,MM
-   K = M-J
-   DEN = B(K+1)-RT-C(K+1)*D(K+2)
-   D(K+1) = A(K+1)/DEN
-   W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
-END DO
-DEN = B(1)-RT-C(1)*D(2)
-W(1) = 1.
-IF (DEN)  80, 90, 80
-80 W(1) = (Y(1)-C(1)*W(2))/DEN
-90 DO J=2,M
-   W(J) = W(J)-D(J)*W(J-1)
-END DO
-IF (NA) 130,130, 20
-110 DO J=1,M
-   Y(J) = W(J)
-END DO
-IBR = 1
-GO TO  20
-130 IF (M1) 140,140,150
-140 IF (M2) 110,110,200
-150 IF (M2) 170,170,160
-160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 200,200,170
-170 IF (IBR) 180,180,190
-180 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 110,190,190
-190 RT = RT-BM1(M1)
-M1 = M1-1
-GO TO 230
-200 IF (IBR) 210,210,220
-210 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 110,220,220
-220 RT = RT-BM2(M2)
-M2 = M2-1
-230 DO J=1,M
-   Y(J) = Y(J)+RT*W(J)
-END DO
-GO TO  20
-250 RETURN
-END SUBROUTINE PROD0
+d(m) = a(m)/(b(m)-rt)
+w(m) = y(m)/(b(m)-rt)
+do j=2,mm
+   k = m-j
+   den = b(k+1)-rt-c(k+1)*d(k+2)
+   d(k+1) = a(k+1)/den
+   w(k+1) = (y(k+1)-c(k+1)*w(k+2))/den
+end do
+den = b(1)-rt-c(1)*d(2)
+w(1) = 1.
+if (den)  80, 90, 80
+80 w(1) = (y(1)-c(1)*w(2))/den
+90 do j=2,m
+   w(j) = w(j)-d(j)*w(j-1)
+end do
+if (na) 130,130, 20
+110 do j=1,m
+   y(j) = w(j)
+end do
+ibr = 1
+go to  20
+130 if (m1) 140,140,150
+140 if (m2) 110,110,200
+150 if (m2) 170,170,160
+160 if (abs(bm1(m1))-abs(bm2(m2))) 200,200,170
+170 if (ibr) 180,180,190
+180 if (abs(bm1(m1)-bd(id))-abs(bm1(m1)-rt)) 110,190,190
+190 rt = rt-bm1(m1)
+m1 = m1-1
+go to 230
+200 if (ibr) 210,210,220
+210 if (abs(bm2(m2)-bd(id))-abs(bm2(m2)-rt)) 110,220,220
+220 rt = rt-bm2(m2)
+m2 = m2-1
+230 do j=1,m
+   y(j) = y(j)+rt*w(j)
+end do
+go to  20
+250 return
+end subroutine prod0
 
-SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
-REAL :: A(*), AA(*), B(*), BD(*), BM1(*), BM2(*), C(*)
-REAL, INTENT(INOUT) :: D(*), U(*), W(*)
-REAL :: X(*)
-REAL, INTENT(INOUT) :: Y(*)
-INTEGER :: IA, IBR, ID, J, K, M1, M2, MM, MM2
-REAL :: AM, BH, DEN, RT, V, YM
+subroutine prodp (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,y,m,a,b,c,d,u,w)
+implicit none
+integer, intent(in) :: m, na, nd, nm1, nm2
+real :: a(*), aa(*), b(*), bd(*), bm1(*), bm2(*), c(*)
+real, intent(inout) :: d(*), u(*), w(*)
+real :: x(*)
+real, intent(inout) :: y(*)
+integer :: ia, ibr, id, j, k, m1, m2, mm, mm2
+real :: am, bh, den, rt, v, ym
 !
 ! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 ! STORES THE RESULT IN Y.   (PERIODIC BOUNDARY CONDITIONS)
@@ -1469,97 +1469,97 @@ REAL :: AM, BH, DEN, RT, V, YM
 ! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
 !
-DO J=1,M
-   Y(J) = X(J)
-   W(J) = Y(J)
-END DO
-MM = M-1
-MM2 = M-2
-ID = ND
-IBR = 0
-M1 = NM1
-M2 = NM2
-IA = NA
-20 IF (IA)  50, 50, 30
-30 RT = AA(IA)
-IF (ND .EQ. 0) RT = -RT
-IA = IA-1
-DO J=1,M
-   Y(J) = RT*W(J)
-END DO
-50 IF (ID) 280,280, 60
-60 RT = BD(ID)
-ID = ID-1
-IF (ID .EQ. 0) IBR = 1
+do j=1,m
+   y(j) = x(j)
+   w(j) = y(j)
+end do
+mm = m-1
+mm2 = m-2
+id = nd
+ibr = 0
+m1 = nm1
+m2 = nm2
+ia = na
+20 if (ia)  50, 50, 30
+30 rt = aa(ia)
+if (nd .eq. 0) rt = -rt
+ia = ia-1
+do j=1,m
+   y(j) = rt*w(j)
+end do
+50 if (id) 280,280, 60
+60 rt = bd(id)
+id = id-1
+if (id .eq. 0) ibr = 1
 !
 ! BEGIN SOLUTION TO SYSTEM
 !
-BH = B(M)-RT
-YM = Y(M)
-DEN = B(1)-RT
-D(1) = C(1)/DEN
-U(1) = A(1)/DEN
-W(1) = Y(1)/DEN
-V = C(M)
-IF (MM2-2)  90, 70, 70
-70 DO J=2,MM2
-   DEN = B(J)-RT-A(J)*D(J-1)
-   D(J) = C(J)/DEN
-   U(J) = -A(J)*U(J-1)/DEN
-   W(J) = (Y(J)-A(J)*W(J-1))/DEN
-   BH = BH-V*U(J-1)
-   YM = YM-V*W(J-1)
-   V = -V*D(J-1)
-END DO
-90 DEN = B(M-1)-RT-A(M-1)*D(M-2)
-D(M-1) = (C(M-1)-A(M-1)*U(M-2))/DEN
-W(M-1) = (Y(M-1)-A(M-1)*W(M-2))/DEN
-AM = A(M)-V*D(M-2)
-BH = BH-V*U(M-2)
-YM = YM-V*W(M-2)
-DEN = BH-AM*D(M-1)
-IF (DEN) 100,110,100
-100 W(M) = (YM-AM*W(M-1))/DEN
-GO TO 120
-110 W(M) = 1.
-120 W(M-1) = W(M-1)-D(M-1)*W(M)
-DO J=2,MM
-   K = M-J
-   W(K) = W(K)-D(K)*W(K+1)-U(K)*W(M)
-END DO
-IF (NA) 160,160, 20
-140 DO J=1,M
-   Y(J) = W(J)
-END DO
-IBR = 1
-GO TO  20
-160 IF (M1) 170,170,180
-170 IF (M2) 140,140,230
-180 IF (M2) 200,200,190
-190 IF (ABS(BM1(M1))-ABS(BM2(M2))) 230,230,200
-200 IF (IBR) 210,210,220
-210 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 140,220,220
-220 RT = RT-BM1(M1)
-M1 = M1-1
-GO TO 260
-230 IF (IBR) 240,240,250
-240 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 140,250,250
-250 RT = RT-BM2(M2)
-M2 = M2-1
-260 DO J=1,M
-   Y(J) = Y(J)+RT*W(J)
-END DO
-GO TO  20
-280 RETURN
-END SUBROUTINE PRODP
+bh = b(m)-rt
+ym = y(m)
+den = b(1)-rt
+d(1) = c(1)/den
+u(1) = a(1)/den
+w(1) = y(1)/den
+v = c(m)
+if (mm2-2)  90, 70, 70
+70 do j=2,mm2
+   den = b(j)-rt-a(j)*d(j-1)
+   d(j) = c(j)/den
+   u(j) = -a(j)*u(j-1)/den
+   w(j) = (y(j)-a(j)*w(j-1))/den
+   bh = bh-v*u(j-1)
+   ym = ym-v*w(j-1)
+   v = -v*d(j-1)
+end do
+90 den = b(m-1)-rt-a(m-1)*d(m-2)
+d(m-1) = (c(m-1)-a(m-1)*u(m-2))/den
+w(m-1) = (y(m-1)-a(m-1)*w(m-2))/den
+am = a(m)-v*d(m-2)
+bh = bh-v*u(m-2)
+ym = ym-v*w(m-2)
+den = bh-am*d(m-1)
+if (den) 100,110,100
+100 w(m) = (ym-am*w(m-1))/den
+go to 120
+110 w(m) = 1.
+120 w(m-1) = w(m-1)-d(m-1)*w(m)
+do j=2,mm
+   k = m-j
+   w(k) = w(k)-d(k)*w(k+1)-u(k)*w(m)
+end do
+if (na) 160,160, 20
+140 do j=1,m
+   y(j) = w(j)
+end do
+ibr = 1
+go to  20
+160 if (m1) 170,170,180
+170 if (m2) 140,140,230
+180 if (m2) 200,200,190
+190 if (abs(bm1(m1))-abs(bm2(m2))) 230,230,200
+200 if (ibr) 210,210,220
+210 if (abs(bm1(m1)-bd(id))-abs(bm1(m1)-rt)) 140,220,220
+220 rt = rt-bm1(m1)
+m1 = m1-1
+go to 260
+230 if (ibr) 240,240,250
+240 if (abs(bm2(m2)-bd(id))-abs(bm2(m2)-rt)) 140,250,250
+250 rt = rt-bm2(m2)
+m2 = m2-1
+260 do j=1,m
+   y(j) = y(j)+rt*w(j)
+end do
+go to  20
+280 return
+end subroutine prodp
 
-SUBROUTINE CPROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,W,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
-REAL :: A(*), AA(*), B(*), BM1(*), BM2(*), C(*), X(*)
-REAL, INTENT(INOUT) :: YY(*)
-INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM
-REAL :: RT
+subroutine cprod0(nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,w,y)
+implicit none
+integer, intent(in) :: m, na, nd, nm1, nm2
+real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
+real, intent(inout) :: yy(*)
+integer :: ia, id, iflg, j, k, m1, m2, mm
+real :: rt
 !
 ! CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 ! STORES THE RESULT IN YY.   (COMPLEX CASE)
@@ -1574,93 +1574,93 @@ REAL :: RT
 ! D,W,Y      WORKING ARRAYS.
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
-COMPLEX, INTENT(INOUT) :: Y(*), D(*), W(*)
-COMPLEX :: BD(*), CRT, DEN, Y1, Y2
+complex, intent(inout) :: y(*), d(*), w(*)
+complex :: bd(*), crt, den, y1, y2
 !
-DO J=1,M
-   Y(J) = CMPLX(X(J),0.)
-END DO
-MM = M-1
-ID = ND
-M1 = NM1
-M2 = NM2
-IA = NA
-20 IFLG = 0
-IF (ID)  90, 90, 30
-30 CRT = BD(ID)
-ID = ID-1
+do j=1,m
+   y(j) = cmplx(x(j),0.)
+end do
+mm = m-1
+id = nd
+m1 = nm1
+m2 = nm2
+ia = na
+20 iflg = 0
+if (id)  90, 90, 30
+30 crt = bd(id)
+id = id-1
 !
 ! BEGIN SOLUTION TO SYSTEM
 !
-D(M) = A(M)/(B(M)-CRT)
-W(M) = Y(M)/(B(M)-CRT)
-DO J=2,MM
-   K = M-J
-   DEN = B(K+1)-CRT-C(K+1)*D(K+2)
-   D(K+1) = A(K+1)/DEN
-   W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
-END DO
-DEN = B(1)-CRT-C(1)*D(2)
-IF (CABS(DEN))  50, 60, 50
-50 Y(1) = (Y(1)-C(1)*W(2))/DEN
-GO TO  70
-60 Y(1) = (1.,0.)
-70 DO J=2,M
-   Y(J) = W(J)-D(J)*Y(J-1)
-END DO
-90 IF (M1) 100,100,120
-100 IF (M2) 210,210,110
-110 RT = BM2(M2)
-M2 = M2-1
-GO TO 170
-120 IF (M2) 130,130,140
-130 RT = BM1(M1)
-M1 = M1-1
-GO TO 170
-140 IF (ABS(BM1(M1))-ABS(BM2(M2))) 160,160,150
-150 RT = BM1(M1)
-M1 = M1-1
-GO TO 170
-160 RT = BM2(M2)
-M2 = M2-1
-170 Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)
-IF (MM-2) 200,180,180
+d(m) = a(m)/(b(m)-crt)
+w(m) = y(m)/(b(m)-crt)
+do j=2,mm
+   k = m-j
+   den = b(k+1)-crt-c(k+1)*d(k+2)
+   d(k+1) = a(k+1)/den
+   w(k+1) = (y(k+1)-c(k+1)*w(k+2))/den
+end do
+den = b(1)-crt-c(1)*d(2)
+if (cabs(den))  50, 60, 50
+50 y(1) = (y(1)-c(1)*w(2))/den
+go to  70
+60 y(1) = (1.,0.)
+70 do j=2,m
+   y(j) = w(j)-d(j)*y(j-1)
+end do
+90 if (m1) 100,100,120
+100 if (m2) 210,210,110
+110 rt = bm2(m2)
+m2 = m2-1
+go to 170
+120 if (m2) 130,130,140
+130 rt = bm1(m1)
+m1 = m1-1
+go to 170
+140 if (abs(bm1(m1))-abs(bm2(m2))) 160,160,150
+150 rt = bm1(m1)
+m1 = m1-1
+go to 170
+160 rt = bm2(m2)
+m2 = m2-1
+170 y1 = (b(1)-rt)*y(1)+c(1)*y(2)
+if (mm-2) 200,180,180
 !
 ! MATRIX MULTIPLICATION
 !
-180 DO J=2,MM
-   Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
-   Y(J-1) = Y1
-   Y1 = Y2
-END DO
-200 Y(M) = A(M)*Y(M-1)+(B(M)-RT)*Y(M)
-Y(M-1) = Y1
-IFLG = 1
-GO TO  20
-210 IF (IA) 240,240,220
-220 RT = AA(IA)
-IA = IA-1
-IFLG = 1
+180 do j=2,mm
+   y2 = a(j)*y(j-1)+(b(j)-rt)*y(j)+c(j)*y(j+1)
+   y(j-1) = y1
+   y1 = y2
+end do
+200 y(m) = a(m)*y(m-1)+(b(m)-rt)*y(m)
+y(m-1) = y1
+iflg = 1
+go to  20
+210 if (ia) 240,240,220
+220 rt = aa(ia)
+ia = ia-1
+iflg = 1
 !
 ! SCALAR MULTIPLICATION
 !
-DO J=1,M
-   Y(J) = RT*Y(J)
-END DO
-240 IF (IFLG) 250,250, 20
-250 DO J=1,M
-   YY(J) = REAL(Y(J))
-END DO
-RETURN
-END SUBROUTINE CPROD0
+do j=1,m
+   y(j) = rt*y(j)
+end do
+240 if (iflg) 250,250, 20
+250 do j=1,m
+   yy(j) = real(y(j))
+end do
+return
+end subroutine cprod0
 
-SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
-REAL :: A(*), AA(*), B(*), BM1(*), BM2(*), C(*), X(*)
-REAL, INTENT(INOUT) :: YY(*)
-INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM, MM2
-REAL :: RT
+subroutine cprodp (nd,bd,nm1,bm1,nm2,bm2,na,aa,x,yy,m,a,b,c,d,u,y)
+implicit none
+integer, intent(in) :: m, na, nd, nm1, nm2
+real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
+real, intent(inout) :: yy(*)
+integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
+real :: rt
 !
 ! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 ! STORES THE RESULT IN YY.  (PERIODIC BOUNDARY CONDITIONS AND
@@ -1676,223 +1676,223 @@ REAL :: RT
 ! D,U,Y      WORKING ARRAYS.
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
-COMPLEX, INTENT(INOUT) :: Y(*), D(*), U(*)
-COMPLEX :: V, DEN, BH, YM, AM, Y1, Y2, YH, BD(*), CRT
+complex, intent(inout) :: y(*), d(*), u(*)
+complex :: v, den, bh, ym, am, y1, y2, yh, bd(*), crt
 !
-DO J=1,M
-   Y(J) = CMPLX(X(J),0.)
-END DO
-MM = M-1
-MM2 = M-2
-ID = ND
-M1 = NM1
-M2 = NM2
-IA = NA
-20 IFLG = 0
-IF (ID) 110,110, 30
-30 CRT = BD(ID)
-ID = ID-1
-IFLG = 1
+do j=1,m
+   y(j) = cmplx(x(j),0.)
+end do
+mm = m-1
+mm2 = m-2
+id = nd
+m1 = nm1
+m2 = nm2
+ia = na
+20 iflg = 0
+if (id) 110,110, 30
+30 crt = bd(id)
+id = id-1
+iflg = 1
 !
 ! BEGIN SOLUTION TO SYSTEM
 !
-BH = B(M)-CRT
-YM = Y(M)
-DEN = B(1)-CRT
-D(1) = C(1)/DEN
-U(1) = A(1)/DEN
-Y(1) = Y(1)/DEN
-V = CMPLX(C(M),0.)
-IF (MM2-2)  60, 40, 40
-40 DO J=2,MM2
-   DEN = B(J)-CRT-A(J)*D(J-1)
-   D(J) = C(J)/DEN
-   U(J) = -A(J)*U(J-1)/DEN
-   Y(J) = (Y(J)-A(J)*Y(J-1))/DEN
-   BH = BH-V*U(J-1)
-   YM = YM-V*Y(J-1)
-   V = -V*D(J-1)
-END DO
-60 DEN = B(M-1)-CRT-A(M-1)*D(M-2)
-D(M-1) = (C(M-1)-A(M-1)*U(M-2))/DEN
-Y(M-1) = (Y(M-1)-A(M-1)*Y(M-2))/DEN
-AM = A(M)-V*D(M-2)
-BH = BH-V*U(M-2)
-YM = YM-V*Y(M-2)
-DEN = BH-AM*D(M-1)
-IF (CABS(DEN))  70, 80, 70
-70 Y(M) = (YM-AM*Y(M-1))/DEN
-GO TO  90
-80 Y(M) = (1.,0.)
-90 Y(M-1) = Y(M-1)-D(M-1)*Y(M)
-DO J=2,MM
-   K = M-J
-   Y(K) = Y(K)-D(K)*Y(K+1)-U(K)*Y(M)
-END DO
-110 IF (M1) 120,120,140
-120 IF (M2) 230,230,130
-130 RT = BM2(M2)
-M2 = M2-1
-GO TO 190
-140 IF (M2) 150,150,160
-150 RT = BM1(M1)
-M1 = M1-1
-GO TO 190
-160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 180,180,170
-170 RT = BM1(M1)
-M1 = M1-1
-GO TO 190
-180 RT = BM2(M2)
-M2 = M2-1
+bh = b(m)-crt
+ym = y(m)
+den = b(1)-crt
+d(1) = c(1)/den
+u(1) = a(1)/den
+y(1) = y(1)/den
+v = cmplx(c(m),0.)
+if (mm2-2)  60, 40, 40
+40 do j=2,mm2
+   den = b(j)-crt-a(j)*d(j-1)
+   d(j) = c(j)/den
+   u(j) = -a(j)*u(j-1)/den
+   y(j) = (y(j)-a(j)*y(j-1))/den
+   bh = bh-v*u(j-1)
+   ym = ym-v*y(j-1)
+   v = -v*d(j-1)
+end do
+60 den = b(m-1)-crt-a(m-1)*d(m-2)
+d(m-1) = (c(m-1)-a(m-1)*u(m-2))/den
+y(m-1) = (y(m-1)-a(m-1)*y(m-2))/den
+am = a(m)-v*d(m-2)
+bh = bh-v*u(m-2)
+ym = ym-v*y(m-2)
+den = bh-am*d(m-1)
+if (cabs(den))  70, 80, 70
+70 y(m) = (ym-am*y(m-1))/den
+go to  90
+80 y(m) = (1.,0.)
+90 y(m-1) = y(m-1)-d(m-1)*y(m)
+do j=2,mm
+   k = m-j
+   y(k) = y(k)-d(k)*y(k+1)-u(k)*y(m)
+end do
+110 if (m1) 120,120,140
+120 if (m2) 230,230,130
+130 rt = bm2(m2)
+m2 = m2-1
+go to 190
+140 if (m2) 150,150,160
+150 rt = bm1(m1)
+m1 = m1-1
+go to 190
+160 if (abs(bm1(m1))-abs(bm2(m2))) 180,180,170
+170 rt = bm1(m1)
+m1 = m1-1
+go to 190
+180 rt = bm2(m2)
+m2 = m2-1
 !
 ! MATRIX MULTIPLICATION
 !
-190 YH = Y(1)
-Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)+A(1)*Y(M)
-IF (MM-2) 220,200,200
-200 DO J=2,MM
-   Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
-   Y(J-1) = Y1
-   Y1 = Y2
-END DO
-220 Y(M) = A(M)*Y(M-1)+(B(M)-RT)*Y(M)+C(M)*YH
-Y(M-1) = Y1
-IFLG = 1
-GO TO  20
-230 IF (IA) 260,260,240
-240 RT = AA(IA)
-IA = IA-1
-IFLG = 1
+190 yh = y(1)
+y1 = (b(1)-rt)*y(1)+c(1)*y(2)+a(1)*y(m)
+if (mm-2) 220,200,200
+200 do j=2,mm
+   y2 = a(j)*y(j-1)+(b(j)-rt)*y(j)+c(j)*y(j+1)
+   y(j-1) = y1
+   y1 = y2
+end do
+220 y(m) = a(m)*y(m-1)+(b(m)-rt)*y(m)+c(m)*yh
+y(m-1) = y1
+iflg = 1
+go to  20
+230 if (ia) 260,260,240
+240 rt = aa(ia)
+ia = ia-1
+iflg = 1
 !
 ! SCALAR MULTIPLICATION
 !
-DO J=1,M
-   Y(J) = RT*Y(J)
-END DO
-260 IF (IFLG) 270,270, 20
-270 DO J=1,M
-   YY(J) = REAL(Y(J))
-END DO
-RETURN
-END SUBROUTINE CPRODP
+do j=1,m
+   y(j) = rt*y(j)
+end do
+260 if (iflg) 270,270, 20
+270 do j=1,m
+   yy(j) = real(y(j))
+end do
+return
+end subroutine cprodp
 
-SUBROUTINE COMPB (N,IERROR,AN,BN,CN,B,AH,BH)
-IMPLICIT NONE
-INTEGER :: IERROR, N
-REAL :: AH(*), AN(*), B(*), BH(*), BN(*), CN(*)
-INTEGER :: I, I2, I4, IB, IF, IFD, IPL, IR, J, J1, J2, JF, JS, &
-&KDO, L, L1, L2, LH, LS, N2M2, NB, NMP
-REAL :: ARG, BNORM, D1, D2, D3
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
-REAL :: SPMPAR
+subroutine compb (n,ierror,an,bn,cn,b,ah,bh)
+implicit none
+integer :: ierror, n
+real :: ah(*), an(*), b(*), bh(*), bn(*), cn(*)
+integer :: i, i2, i4, ib, if, ifd, ipl, ir, j, j1, j2, jf, js, &
+&kdo, l, l1, l2, lh, ls, n2m2, nb, nmp
+real :: arg, bnorm, d1, d2, d3
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
+real :: spmpar
 !
 !     COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS USING TQLRT0,
 !     WHICH IS A MODIFICATION OF THE EISPACK SUBROUTINE TQLRAT.
 !     IERROR IS SET TO 4 IF EITHER TQLRT0 FAILS OR A(J+1)*C(J) IS
 !     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
 !
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
-EPS = SPMPAR(1)
-BNORM = ABS(BN(1))
-DO J=2,NM
-   BNORM = AMAX1(BNORM,ABS(BN(J)))
-   ARG = AN(J)*CN(J-1)
-   IF (ARG) 220, 30, 30
-30 B(J) = SIGN(SQRT(ARG),AN(J))
-END DO
-CNV = EPS*BNORM
-IF = 2**K
-KDO = K-1
-do 100 L = 1,KDO
-   IR = L-1
-   I2 = 2**IR
-   I4 = I2+I2
-   IPL = I4-1
-   IFD = IF-I4
-   DO I=I4,IFD,I4
-      CALL INDXB (I,L,IB,NB)
-      IF (NB) 100,100, 50
-50 JS = I-IPL
-      JF = JS+NB-1
-      LS = 0
-      DO J=JS,JF
-         LS = LS+1
-         BH(LS) = BN(J)
-         AH(LS) = B(J)
-      END DO
-      CALL TQLRT0 (NB,BH,AH,IERROR)
-      IF (IERROR) 210, 70,210
-70 LH = IB-1
-      DO J=1,NB
-         LH = LH+1
-         B(LH) = -BH(J)
-      END DO
-   END DO
-100 CONTINUE
-DO J=1,NM
-   B(J) = -BN(J)
-END DO
-IF (NPP .NE. 0) RETURN
+eps = spmpar(1)
+bnorm = abs(bn(1))
+do j=2,nm
+   bnorm = amax1(bnorm,abs(bn(j)))
+   arg = an(j)*cn(j-1)
+   if (arg) 220, 30, 30
+30 b(j) = sign(sqrt(arg),an(j))
+end do
+cnv = eps*bnorm
+if = 2**k
+kdo = k-1
+do 100 l = 1,kdo
+   ir = l-1
+   i2 = 2**ir
+   i4 = i2+i2
+   ipl = i4-1
+   ifd = if-i4
+   do i=i4,ifd,i4
+      call indxb (i,l,ib,nb)
+      if (nb) 100,100, 50
+50 js = i-ipl
+      jf = js+nb-1
+      ls = 0
+      do j=js,jf
+         ls = ls+1
+         bh(ls) = bn(j)
+         ah(ls) = b(j)
+      end do
+      call tqlrt0 (nb,bh,ah,ierror)
+      if (ierror) 210, 70,210
+70 lh = ib-1
+      do j=1,nb
+         lh = lh+1
+         b(lh) = -bh(j)
+      end do
+   end do
+100 continue
+do j=1,nm
+   b(j) = -bn(j)
+end do
+if (npp .ne. 0) return
 !
-NMP = NM+1
-NB = NM+NMP
-DO J=1,NB
-   L1 = MOD(J-1,NMP)+1
-   L2 = MOD(J+NM-1,NMP)+1
-   ARG = AN(L1)*CN(L2)
-   IF (ARG .LT. 0.0) GO TO 220
-   BH(J) = SIGN(SQRT(ARG),-AN(L1))
-   AH(J) = -BN(L1)
-END DO
-CALL TQLRT0 (NB,AH,BH,IERROR)
-IF (IERROR .NE. 0) GO TO 210
+nmp = nm+1
+nb = nm+nmp
+do j=1,nb
+   l1 = mod(j-1,nmp)+1
+   l2 = mod(j+nm-1,nmp)+1
+   arg = an(l1)*cn(l2)
+   if (arg .lt. 0.0) go to 220
+   bh(j) = sign(sqrt(arg),-an(l1))
+   ah(j) = -bn(l1)
+end do
+call tqlrt0 (nb,ah,bh,ierror)
+if (ierror .ne. 0) go to 210
 !
-CALL INDXB (IF,K-1,J2,LH)
-CALL INDXB (IF/2,K-1,J1,LH)
-J2 = J2+1
-LH = J2
-N2M2 = J2+NM+NM-2
-170 D1 = ABS(B(J1)-B(J2-1))
-D2 = ABS(B(J1)-B(J2))
-D3 = ABS(B(J1)-B(J2+1))
-IF ((D2 .LT.D1) .AND. (D2 .LT.D3)) GO TO 180
-B(LH) = B(J2)
-J2 = J2+1
-LH = LH+1
-IF (J2-N2M2) 170,170,190
-180 J2 = J2+1
-J1 = J1+1
-IF (J2-N2M2) 170,170,190
-190 B(LH) = B(N2M2+1)
-CALL INDXB (IF,K-1,J1,J2)
-J2 = J1+NMP+NMP
-CALL PPADD (NM+1,IERROR,AN,CN,B(J1),B(J1),B(J2))
-RETURN
+call indxb (if,k-1,j2,lh)
+call indxb (if/2,k-1,j1,lh)
+j2 = j2+1
+lh = j2
+n2m2 = j2+nm+nm-2
+170 d1 = abs(b(j1)-b(j2-1))
+d2 = abs(b(j1)-b(j2))
+d3 = abs(b(j1)-b(j2+1))
+if ((d2 .lt.d1) .and. (d2 .lt.d3)) go to 180
+b(lh) = b(j2)
+j2 = j2+1
+lh = lh+1
+if (j2-n2m2) 170,170,190
+180 j2 = j2+1
+j1 = j1+1
+if (j2-n2m2) 170,170,190
+190 b(lh) = b(n2m2+1)
+call indxb (if,k-1,j1,j2)
+j2 = j1+nmp+nmp
+call ppadd (nm+1,ierror,an,cn,b(j1),b(j1),b(j2))
+return
 !
 !     ERROR RETURN
 !
-210 IERROR = 4
-RETURN
-220 IERROR = 5
-RETURN
-END SUBROUTINE COMPB
+210 ierror = 4
+return
+220 ierror = 5
+return
+end subroutine compb
 
-SUBROUTINE TQLRT0 (N,D,E2,IERR)
-IMPLICIT NONE
-INTEGER :: NHALF, NTOP
-REAL :: DHOLD
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV
+subroutine tqlrt0 (n,d,e2,ierr)
+implicit none
+integer :: nhalf, ntop
+real :: dhold
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv
 !
-INTEGER :: I, J, L, M, N, II, L1, MML, IERR
-REAL :: D(N), E2(N)
-REAL :: B, C, F, G, H, P, R, S, MACHEP
+integer :: i, j, l, m, n, ii, l1, mml, ierr
+real :: d(n), e2(n)
+real :: b, c, f, g, h, p, r, s, machep
 !
-COMMON /CBLKT/  NPP        ,K          ,MACHEP     ,CNV        , &
-&NM         ,NCMPLX     ,IK
+common /cblkt/  npp        ,k          ,machep     ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
 !
 !     THIS SUBROUTINE IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -1928,133 +1928,133 @@ COMMON /CBLKT/  NPP        ,K          ,MACHEP     ,CNV        , &
 !
 !                **********
 !
-IERR = 0
-IF (N .EQ. 1) GO TO 150
+ierr = 0
+if (n .eq. 1) go to 150
 !
-DO I=2,N
-   E2(I-1) = E2(I)*E2(I)
-END DO
+do i=2,n
+   e2(i-1) = e2(i)*e2(i)
+end do
 !
-F = 0.0
-B = 0.0
-E2(N) = 0.0
+f = 0.0
+b = 0.0
+e2(n) = 0.0
 !
-DO L=1,N
-   J = 0
-   H = MACHEP*(ABS(D(L))+SQRT(E2(L)))
-   IF (B .GT. H) GO TO  20
-   B = H
-   C = B*B
+do l=1,n
+   j = 0
+   h = machep*(abs(d(l))+sqrt(e2(l)))
+   if (b .gt. h) go to  20
+   b = h
+   c = b*b
 !
 !     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
 !
-20 do 30 M = L,N
-      IF (E2(M) .LE. C) GO TO  40
+20 do 30 m = l,n
+      if (e2(m) .le. c) go to  40
 !
 !     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
 !
-30 CONTINUE
+30 continue
 !
-40 IF (M .EQ. L) GO TO  80
-50 IF (J .EQ. 30) GO TO 140
-   J = J+1
+40 if (m .eq. l) go to  80
+50 if (j .eq. 30) go to 140
+   j = j+1
 !
 !     ********** FORM SHIFT **********
 !
-   L1 = L+1
-   S = SQRT(E2(L))
-   G = D(L)
-   P = (D(L1)-G)/(2.0*S)
-   R = SQRT(P*P+1.0)
-   D(L) = S/(P+SIGN(R,P))
-   H = G-D(L)
+   l1 = l+1
+   s = sqrt(e2(l))
+   g = d(l)
+   p = (d(l1)-g)/(2.0*s)
+   r = sqrt(p*p+1.0)
+   d(l) = s/(p+sign(r,p))
+   h = g-d(l)
 !
-   DO I=L1,N
-      D(I) = D(I)-H
-   END DO
+   do i=l1,n
+      d(i) = d(i)-h
+   end do
 !
-   F = F+H
+   f = f+h
 !
 !     ********** RATIONAL QL TRANSFORMATION **********
 !
-   G = D(M)
-   IF (G .EQ. 0.0) G = B
-   H = G
-   S = 0.0
-   MML = M-L
+   g = d(m)
+   if (g .eq. 0.0) g = b
+   h = g
+   s = 0.0
+   mml = m-l
 !
 !     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
 !
-   DO II=1,MML
-      I = M-II
-      P = G*H
-      R = P+E2(I)
-      E2(I+1) = S*R
-      S = E2(I)/R
-      D(I+1) = H+S*(H+D(I))
-      G = D(I)-E2(I)/G
-      IF (G .EQ. 0.0) G = B
-      H = G*P/R
-   END DO
+   do ii=1,mml
+      i = m-ii
+      p = g*h
+      r = p+e2(i)
+      e2(i+1) = s*r
+      s = e2(i)/r
+      d(i+1) = h+s*(h+d(i))
+      g = d(i)-e2(i)/g
+      if (g .eq. 0.0) g = b
+      h = g*p/r
+   end do
 !
-   E2(L) = S*G
-   D(L) = H
+   e2(l) = s*g
+   d(l) = h
 !
 !     ********** GUARD AGAINST UNDERFLOWED H **********
 !
-   IF (H .EQ. 0.0) GO TO  80
-   IF (ABS(E2(L)) .LE. ABS(C/H)) GO TO  80
-   E2(L) = H*E2(L)
-   IF (E2(L) .NE. 0.0) GO TO  50
-80 P = D(L)+F
+   if (h .eq. 0.0) go to  80
+   if (abs(e2(l)) .le. abs(c/h)) go to  80
+   e2(l) = h*e2(l)
+   if (e2(l) .ne. 0.0) go to  50
+80 p = d(l)+f
 !
 !     ********** ORDER EIGENVALUES **********
 !
-   IF (L .EQ. 1) GO TO 100
+   if (l .eq. 1) go to 100
 !
 !     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
 !
-   DO II=2,L
-      I = L+2-II
-      IF (P .GE. D(I-1)) GO TO 110
-      D(I) = D(I-1)
-   END DO
+   do ii=2,l
+      i = l+2-ii
+      if (p .ge. d(i-1)) go to 110
+      d(i) = d(i-1)
+   end do
 !
-100 I = 1
-110 D(I) = P
-END DO
+100 i = 1
+110 d(i) = p
+end do
 !
-IF (ABS(D(N)) .GE. ABS(D(1))) GO TO 150
-NHALF = N/2
-DO I=1,NHALF
-   NTOP = N-I
-   DHOLD = D(I)
-   D(I) = D(NTOP+1)
-   D(NTOP+1) = DHOLD
-END DO
-GO TO 150
+if (abs(d(n)) .ge. abs(d(1))) go to 150
+nhalf = n/2
+do i=1,nhalf
+   ntop = n-i
+   dhold = d(i)
+   d(i) = d(ntop+1)
+   d(ntop+1) = dhold
+end do
+go to 150
 !
 !     ********** SET ERROR -- NO CONVERGENCE TO AN
 !                EIGENVALUE AFTER 30 ITERATIONS **********
 !
-140 IERR = L
-150 RETURN
-END SUBROUTINE TQLRT0
+140 ierr = l
+150 return
+end subroutine tqlrt0
 
-SUBROUTINE PPADD (N,IERROR,A,C,CBP,BP,BH)
-IMPLICIT NONE
-INTEGER :: IERROR, N
-REAL :: A(*), BH(*), BP(*), C(*)
-INTEGER :: I2, I3, ICV, IF, IG, IS, IT, IZ, IZM, IZM2, J, MODIZ, &
-&NHALF, NT
-REAL :: DB, PSG, SCNV, SGN, XL, XM, XR
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
-REAL :: PPSGF
-REAL :: PPSPF
-REAL :: BSRH
-REAL :: PSGF
+subroutine ppadd (n,ierror,a,c,cbp,bp,bh)
+implicit none
+integer :: ierror, n
+real :: a(*), bh(*), bp(*), c(*)
+integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
+&nhalf, nt
+real :: db, psg, scnv, sgn, xl, xm, xr
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
+real :: ppsgf
+real :: ppspf
+real :: bsrh
+real :: psgf
 !
 !     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
 !     WITH COEFFICIENTS AN,BN,CN
@@ -2065,227 +2065,227 @@ REAL :: PSGF
 ! BH  IS USED TO TEMPORARILY STORE THE ROOTS OF THE B HAT POLYNOMIAL
 !     WHICH ENTERS THROUGH BP.
 !
-COMPLEX :: CF, CX, FSG, HSG, DD, F, FP, FPP, CDIS, R1, R2, R3, &
-&CBP(*)
-EXTERNAL        PSGF       ,PPSPF      ,PPSGF
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
+complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3, &
+&cbp(*)
+external        psgf       ,ppspf      ,ppsgf
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
 !
-SCNV = SQRT(CNV)
-IZ = N
-IZM = IZ-1
-IZM2 = IZ-2
-IF (BP(N)-BP(1))  10,420, 30
-10 DO J=1,N
-   NT = N-J
-   BH(J) = BP(NT+1)
-END DO
-GO TO  50
-30 DO J=1,N
-   BH(J) = BP(J)
-END DO
-50 NCMPLX = 0
-MODIZ = MOD(IZ,2)
-IS = 1
-IF (MODIZ)  60, 70, 60
-60 IF (A(1)) 100,420, 70
-70 XL = BH(1)
-DB = BH(3)-BH(1)
-80 XL = XL-DB
-IF (PSGF(XL,IZ,C,A,BH))  80, 80, 90
-90 SGN = -1.
-CBP(1) = CMPLX(BSRH(XL,BH(1),IZ,C,A,BH,PSGF,SGN),0.)
-IS = 2
-100 IF = IZ-1
-IF (MODIZ) 110,120,110
-110 IF (A(1)) 120,420,150
-120 XR = BH(IZ)
-DB = BH(IZ)-BH(IZ-2)
-130 XR = XR+DB
-IF (PSGF(XR,IZ,C,A,BH)) 130,140,140
-140 SGN = 1.
-CBP(IZ) = CMPLX(BSRH(BH(IZ),XR,IZ,C,A,BH,PSGF,SGN),0.)
-IF = IZ-2
-150 do 360 IG = IS,IF,2
-   XL = BH(IG)
-   XR = BH(IG+1)
-   SGN = -1.
-   XM = BSRH(XL,XR,IZ,C,A,BH,PPSPF,SGN)
-   PSG = PSGF(XM,IZ,C,A,BH)
-   IF (ABS(PSG)-EPS) 180,180,160
-160 IF (PSG*PPSGF(XM,IZ,C,A,BH)) 170,180,190
+scnv = sqrt(cnv)
+iz = n
+izm = iz-1
+izm2 = iz-2
+if (bp(n)-bp(1))  10,420, 30
+10 do j=1,n
+   nt = n-j
+   bh(j) = bp(nt+1)
+end do
+go to  50
+30 do j=1,n
+   bh(j) = bp(j)
+end do
+50 ncmplx = 0
+modiz = mod(iz,2)
+is = 1
+if (modiz)  60, 70, 60
+60 if (a(1)) 100,420, 70
+70 xl = bh(1)
+db = bh(3)-bh(1)
+80 xl = xl-db
+if (psgf(xl,iz,c,a,bh))  80, 80, 90
+90 sgn = -1.
+cbp(1) = cmplx(bsrh(xl,bh(1),iz,c,a,bh,psgf,sgn),0.)
+is = 2
+100 if = iz-1
+if (modiz) 110,120,110
+110 if (a(1)) 120,420,150
+120 xr = bh(iz)
+db = bh(iz)-bh(iz-2)
+130 xr = xr+db
+if (psgf(xr,iz,c,a,bh)) 130,140,140
+140 sgn = 1.
+cbp(iz) = cmplx(bsrh(bh(iz),xr,iz,c,a,bh,psgf,sgn),0.)
+if = iz-2
+150 do 360 ig = is,if,2
+   xl = bh(ig)
+   xr = bh(ig+1)
+   sgn = -1.
+   xm = bsrh(xl,xr,iz,c,a,bh,ppspf,sgn)
+   psg = psgf(xm,iz,c,a,bh)
+   if (abs(psg)-eps) 180,180,160
+160 if (psg*ppsgf(xm,iz,c,a,bh)) 170,180,190
 !
 !     CASE OF A REAL ZERO
 !
-170 SGN = 1.
-   CBP(IG) = CMPLX(BSRH(BH(IG),XM,IZ,C,A,BH,PSGF,SGN),0.)
-   SGN = -1.
-   CBP(IG+1) = CMPLX(BSRH(XM,BH(IG+1),IZ,C,A,BH,PSGF,SGN),0.)
-   GO TO 360
+170 sgn = 1.
+   cbp(ig) = cmplx(bsrh(bh(ig),xm,iz,c,a,bh,psgf,sgn),0.)
+   sgn = -1.
+   cbp(ig+1) = cmplx(bsrh(xm,bh(ig+1),iz,c,a,bh,psgf,sgn),0.)
+   go to 360
 !
 !     CASE OF A MULTIPLE ZERO
 !
-180 CBP(IG) = CMPLX(XM,0.)
-   CBP(IG+1) = CMPLX(XM,0.)
-   GO TO 360
+180 cbp(ig) = cmplx(xm,0.)
+   cbp(ig+1) = cmplx(xm,0.)
+   go to 360
 !
 !     CASE OF A COMPLEX ZERO
 !
-190 IT = 0
-   ICV = 0
-   CX = CMPLX(XM,0.)
-200 FSG = (1.,0.)
-   HSG = (1.,0.)
-   FP = (0.,0.)
-   FPP = (0.,0.)
-   DO J=1,IZ
-      DD = 1./(CX-BH(J))
-      FSG = FSG*A(J)*DD
-      HSG = HSG*C(J)*DD
-      FP = FP+DD
-      FPP = FPP-DD*DD
-   END DO
-   IF (MODIZ) 230,220,230
-220 F = (1.,0.)-FSG-HSG
-   GO TO 240
-230 F = (1.,0.)+FSG+HSG
-240 I3 = 0
-   IF (CABS(FP)) 260,260,250
-250 I3 = 1
-   R3 = -F/FP
-260 I2 = 0
-   IF (CABS(FPP)) 320,320,270
-270 I2 = 1
-   CDIS = CSQRT(FP**2-2.*F*FPP)
-   R1 = CDIS-FP
-   R2 = -FP-CDIS
-   IF (CABS(R1)-CABS(R2)) 290,290,280
-280 R1 = R1/FPP
-   GO TO 300
-290 R1 = R2/FPP
-300 R2 = 2.*F/FPP/R1
-   IF (CABS(R2) .LT. CABS(R1)) R1 = R2
-   IF (I3) 330,330,310
-310 IF (CABS(R3) .LT. CABS(R1)) R1 = R3
-   GO TO 330
-320 R1 = R3
-330 CX = CX+R1
-   IT = IT+1
-   IF (IT .GT. 50) GO TO 420
-   IF (CABS(R1) .GT. SCNV) GO TO 200
-   IF (ICV) 340,340,350
-340 ICV = 1
-   GO TO 200
-350 CBP(IG) = CX
-   CBP(IG+1) = CONJG(CX)
-360 CONTINUE
-IF (CABS(CBP(N))-CABS(CBP(1))) 370,420,390
-370 NHALF = N/2
-DO J=1,NHALF
-   NT = N-J
-   CX = CBP(J)
-   CBP(J) = CBP(NT+1)
-   CBP(NT+1) = CX
-END DO
-390 NCMPLX = 1
-do 400 J = 2,IZ
-   IF (AIMAG(CBP(J))) 430,400,430
-400 CONTINUE
-NCMPLX = 0
-DO J=2,IZ
-   BP(J) = REAL(CBP(J))
-END DO
-GO TO 430
-420 IERROR = 4
-430 CONTINUE
-RETURN
-END SUBROUTINE PPADD
+190 it = 0
+   icv = 0
+   cx = cmplx(xm,0.)
+200 fsg = (1.,0.)
+   hsg = (1.,0.)
+   fp = (0.,0.)
+   fpp = (0.,0.)
+   do j=1,iz
+      dd = 1./(cx-bh(j))
+      fsg = fsg*a(j)*dd
+      hsg = hsg*c(j)*dd
+      fp = fp+dd
+      fpp = fpp-dd*dd
+   end do
+   if (modiz) 230,220,230
+220 f = (1.,0.)-fsg-hsg
+   go to 240
+230 f = (1.,0.)+fsg+hsg
+240 i3 = 0
+   if (cabs(fp)) 260,260,250
+250 i3 = 1
+   r3 = -f/fp
+260 i2 = 0
+   if (cabs(fpp)) 320,320,270
+270 i2 = 1
+   cdis = csqrt(fp**2-2.*f*fpp)
+   r1 = cdis-fp
+   r2 = -fp-cdis
+   if (cabs(r1)-cabs(r2)) 290,290,280
+280 r1 = r1/fpp
+   go to 300
+290 r1 = r2/fpp
+300 r2 = 2.*f/fpp/r1
+   if (cabs(r2) .lt. cabs(r1)) r1 = r2
+   if (i3) 330,330,310
+310 if (cabs(r3) .lt. cabs(r1)) r1 = r3
+   go to 330
+320 r1 = r3
+330 cx = cx+r1
+   it = it+1
+   if (it .gt. 50) go to 420
+   if (cabs(r1) .gt. scnv) go to 200
+   if (icv) 340,340,350
+340 icv = 1
+   go to 200
+350 cbp(ig) = cx
+   cbp(ig+1) = conjg(cx)
+360 continue
+if (cabs(cbp(n))-cabs(cbp(1))) 370,420,390
+370 nhalf = n/2
+do j=1,nhalf
+   nt = n-j
+   cx = cbp(j)
+   cbp(j) = cbp(nt+1)
+   cbp(nt+1) = cx
+end do
+390 ncmplx = 1
+do 400 j = 2,iz
+   if (aimag(cbp(j))) 430,400,430
+400 continue
+ncmplx = 0
+do j=2,iz
+   bp(j) = real(cbp(j))
+end do
+go to 430
+420 ierror = 4
+430 continue
+return
+end subroutine ppadd
 
-FUNCTION PSGF (X,IZ,C,A,BH)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IZ
-REAL :: A(*), BH(*), C(*)
-REAL, INTENT(IN) :: X
-INTEGER :: J
-REAL :: DD, FSG, HSG
-REAL :: PSGF
-FSG = 1.
-HSG = 1.
-DO J=1,IZ
-   DD = 1./(X-BH(J))
-   FSG = FSG*A(J)*DD
-   HSG = HSG*C(J)*DD
-END DO
-IF (MOD(IZ,2))  30, 20, 30
-20 PSGF = 1.-FSG-HSG
-RETURN
-30 PSGF = 1.+FSG+HSG
-RETURN
-END FUNCTION PSGF
+function psgf (x,iz,c,a,bh)
+implicit none
+integer, intent(in) :: iz
+real :: a(*), bh(*), c(*)
+real, intent(in) :: x
+integer :: j
+real :: dd, fsg, hsg
+real :: psgf
+fsg = 1.
+hsg = 1.
+do j=1,iz
+   dd = 1./(x-bh(j))
+   fsg = fsg*a(j)*dd
+   hsg = hsg*c(j)*dd
+end do
+if (mod(iz,2))  30, 20, 30
+20 psgf = 1.-fsg-hsg
+return
+30 psgf = 1.+fsg+hsg
+return
+end function psgf
 
-FUNCTION BSRH (XLL,XRR,IZ,C,A,BH,F,SGN)
-IMPLICIT NONE
-INTEGER :: IZ
-REAL :: A(*), BH(*), C(*), SGN, XLL, XRR
-REAL :: DX, X, XL, XR
-INTEGER :: IK, K, NCMPLX, NM, NPP
-REAL :: CNV, EPS
-REAL :: BSRH
-REAL :: F
-COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
-&NM         ,NCMPLX     ,IK
-XL = XLL
-XR = XRR
-DX = .5*ABS(XR-XL)
-10 X = .5*(XL+XR)
-IF (SGN*F(X,IZ,C,A,BH))  30, 50, 20
-20 XR = X
-GO TO  40
-30 XL = X
-40 DX = .5*DX
-IF (DX-CNV)  50, 50, 10
-50 BSRH = .5*(XL+XR)
-RETURN
-END FUNCTION BSRH
+function bsrh (xll,xrr,iz,c,a,bh,f,sgn)
+implicit none
+integer :: iz
+real :: a(*), bh(*), c(*), sgn, xll, xrr
+real :: dx, x, xl, xr
+integer :: ik, k, ncmplx, nm, npp
+real :: cnv, eps
+real :: bsrh
+real :: f
+common /cblkt/  npp        ,k          ,eps        ,cnv        , &
+&nm         ,ncmplx     ,ik
+xl = xll
+xr = xrr
+dx = .5*abs(xr-xl)
+10 x = .5*(xl+xr)
+if (sgn*f(x,iz,c,a,bh))  30, 50, 20
+20 xr = x
+go to  40
+30 xl = x
+40 dx = .5*dx
+if (dx-cnv)  50, 50, 10
+50 bsrh = .5*(xl+xr)
+return
+end function bsrh
 
-FUNCTION PPSGF (X,IZ,C,A,BH)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IZ
-REAL :: A(*), BH(*), C(*)
-REAL, INTENT(IN) :: X
-INTEGER :: J
-REAL :: SUM
-REAL :: PPSGF
-SUM = 0.
-DO J=1,IZ
-   SUM = SUM-1./(X-BH(J))**2
-END DO
-PPSGF = SUM
-RETURN
-END FUNCTION PPSGF
+function ppsgf (x,iz,c,a,bh)
+implicit none
+integer, intent(in) :: iz
+real :: a(*), bh(*), c(*)
+real, intent(in) :: x
+integer :: j
+real :: sum
+real :: ppsgf
+sum = 0.
+do j=1,iz
+   sum = sum-1./(x-bh(j))**2
+end do
+ppsgf = sum
+return
+end function ppsgf
 
-FUNCTION PPSPF (X,IZ,C,A,BH)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IZ
-REAL :: A(*), BH(*), C(*)
-REAL, INTENT(IN) :: X
-INTEGER :: J
-REAL :: SUM
-REAL :: PPSPF
-SUM = 0.
-DO J=1,IZ
-   SUM = SUM+1./(X-BH(J))
-END DO
-PPSPF = SUM
-RETURN
-END FUNCTION PPSPF
+function ppspf (x,iz,c,a,bh)
+implicit none
+integer, intent(in) :: iz
+real :: a(*), bh(*), c(*)
+real, intent(in) :: x
+integer :: j
+real :: sum
+real :: ppspf
+sum = 0.
+do j=1,iz
+   sum = sum+1./(x-bh(j))
+end do
+ppspf = sum
+return
+end function ppspf
 
-SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IBEG, IEND
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, K, LEFTLO
+subroutine urget (n, ibeg, iend, ix, l, ierr)
+implicit none
+integer, intent(in) :: ibeg, iend
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, k, leftlo
 !-----------------------------------------------------------------------
 !
 !               UNIFORM RANDOM SELECTION OF VALUES FROM
@@ -2324,9 +2324,9 @@ INTEGER :: I, K, LEFTLO
 !                 3 - SEED OUT OF RANGE )
 !
 !-----------------------------------------------------------------------
-INTEGER, INTENT(INOUT) :: L(N)
-INTEGER :: A, B15, B16, FHI, P, XALO, XHI
-DOUBLE PRECISION :: C, M, S, T
+integer, intent(inout) :: l(n)
+integer :: a, b15, b16, fhi, p, xalo, xhi
+double precision :: c, m, s, t
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     S = 1/(P-1)   (IT IS ASSUMED THAT THE ARITHMETIC BEING
@@ -2336,19 +2336,19 @@ DOUBLE PRECISION :: C, M, S, T
 !                    ERROR DOES NOT PRODUCE VARIATES THAT
 !                    EXCEED IEND.)
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA S /.4656612877413D-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data s /.4656612877413d-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IBEG .GE. IEND) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 120
-M = IEND - IBEG + 1
-T = P
-IF (M .GE. T) GO TO 110
+if (n .le. 0) go to 100
+if (ibeg .ge. iend) go to 110
+if (ix .le. 0 .or. ix .ge. p) go to 120
+m = iend - ibeg + 1
+t = p
+if (m .ge. t) go to 110
 !
-IERR = 0
-C = M*S
-DO I = 1,N
+ierr = 0
+c = m*s
+do i = 1,n
 !
 !        USE THE LINUS SCHRAGE CODE TO OBTAIN THE NEXT SEED IX.
 !
@@ -2356,41 +2356,41 @@ DO I = 1,N
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
 !        (1979), PP. 132-138.
 !
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
 !
 !        MAP IX TO AN INTEGER IN THE CLOSED INTERVAL (IBEG,IEND).
 !        THIS MAPPING IS 1-1 ONLY WHEN M = P - 1, IN WHICH CASE
 !        IX IS MAPPED TO THE VALUE (IBEG - 1) + IX.
 !
-   T = IX
-   K = C*T
-   L(I) = IBEG + K
-END DO
-RETURN
+   t = ix
+   k = c*t
+   l(i) = ibeg + k
+end do
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE URGET
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine urget
 
-SUBROUTINE URNG (IX, X, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, L, LEFTLO
-REAL :: S, T
-REAL, INTENT(INOUT) :: X(N)
+subroutine urng (ix, x, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: k, l, leftlo
+real :: s, t
+real, intent(inout) :: x(n)
 !-----------------------------------------------------------------------
 !         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2403,46 +2403,46 @@ REAL, INTENT(INOUT) :: X(N)
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-INTEGER :: A, B15, B16, FHI, P, XALO, XHI
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA S/.465661E-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data s/.465661e-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
-DO L = 1,N
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
+do l = 1,n
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-   XHI = IX/B16
+   xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-   XALO = (IX - XHI*B16)*A
+   xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-   LEFTLO = XALO/B16
+   leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-   FHI = XHI*A + LEFTLO
+   fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-   K = FHI/B15
+   k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-   IF (IX .LT. 0) IX = IX + P
+   if (ix .lt. 0) ix = ix + p
 !
 !     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
 !     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
@@ -2452,25 +2452,25 @@ DO L = 1,N
 !     IS LESS THAN 1 FOR ANY FLOATING POINT ARITHMETIC OF 6
 !     OR MORE DIGITS.
 !
-   T = IX
-   X(L) = S*T
-END DO
-RETURN
+   t = ix
+   x(l) = s*t
+end do
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE URNG
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine urng
 
-SUBROUTINE DURNG (IX, X, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, L, LEFTLO
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+subroutine durng (ix, x, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: k, l, leftlo
+double precision, intent(inout) :: x(n)
 !-----------------------------------------------------------------------
 !         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2483,47 +2483,47 @@ DOUBLE PRECISION, INTENT(INOUT) :: X(N)
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-INTEGER :: A, B15, B16, FHI, P, XALO, XHI
-DOUBLE PRECISION :: S, T
+integer :: a, b15, b16, fhi, p, xalo, xhi
+double precision :: s, t
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA S/.465661D-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data s/.465661d-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
-DO L = 1,N
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
+do l = 1,n
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-   XHI = IX/B16
+   xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-   XALO = (IX - XHI*B16)*A
+   xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-   LEFTLO = XALO/B16
+   leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-   FHI = XHI*A + LEFTLO
+   fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-   K = FHI/B15
+   k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-   IF (IX .LT. 0) IX = IX + P
+   if (ix .lt. 0) ix = ix + p
 !
 !     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
 !     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
@@ -2532,25 +2532,25 @@ DO L = 1,N
 !     IS FROM 1. THE CURRENT VALUE FOR S ASSURES US THAT X(L)
 !     IS LESS THAN 1 FOR ANY DOUBLE PRECISION ARITHMETIC.
 !
-   T = IX
-   X(L) = S*T
-END DO
-RETURN
+   t = ix
+   x(l) = s*t
+end do
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE DURNG
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine durng
 
-SUBROUTINE URNG0 (IX, U, V)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IX
-REAL, INTENT(INOUT) :: U, V
-INTEGER :: K, LEFTLO
-REAL :: T
+subroutine urng0 (ix, u, v)
+implicit none
+integer, intent(inout) :: ix
+real, intent(inout) :: u, v
+integer :: k, leftlo
+real :: t
 !-----------------------------------------------------------------------
 !       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2564,62 +2564,62 @@ REAL :: T
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     DATA P0/2**30 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
 !-------------------
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-XHI = IX/B16
+xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-XALO = (IX - XHI*B16)*A
+xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-LEFTLO = XALO/B16
+leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-FHI = XHI*A + LEFTLO
+fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-K = FHI/B15
+k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-IF (IX .LT. 0) IX = IX + P
+if (ix .lt. 0) ix = ix + p
 !
 !         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
 !
-T = P
-IF (IX .GT. P0) GO TO 10
-   U = IX
-   U = U/T
-   V = 0.5 + (0.5 - U)
-   RETURN
-10 V = P - IX
-V = V/T
-U = 0.5 + (0.5 - V)
-RETURN
-END SUBROUTINE URNG0
+t = p
+if (ix .gt. p0) go to 10
+   u = ix
+   u = u/t
+   v = 0.5 + (0.5 - u)
+   return
+10 v = p - ix
+v = v/t
+u = 0.5 + (0.5 - v)
+return
+end subroutine urng0
 
-SUBROUTINE DURNG0 (IX, U, V)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IX
-INTEGER :: K, LEFTLO
+subroutine durng0 (ix, u, v)
+implicit none
+integer, intent(inout) :: ix
+integer :: k, leftlo
 !-----------------------------------------------------------------------
 !       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2633,66 +2633,66 @@ INTEGER :: K, LEFTLO
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-DOUBLE PRECISION, INTENT(INOUT) :: U, V
-DOUBLE PRECISION :: T
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+double precision, intent(inout) :: u, v
+double precision :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     DATA P0/2**30 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
 !-------------------
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-XHI = IX/B16
+xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-XALO = (IX - XHI*B16)*A
+xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-LEFTLO = XALO/B16
+leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-FHI = XHI*A + LEFTLO
+fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-K = FHI/B15
+k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-IF (IX .LT. 0) IX = IX + P
+if (ix .lt. 0) ix = ix + p
 !
 !         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
 !
-T = P
-IF (IX .GT. P0) GO TO 10
-   U = IX
-   U = U/T
-   V = 0.5D0 + (0.5D0 - U)
-   RETURN
-10 V = P - IX
-V = V/T
-U = 0.5D0 + (0.5D0 - V)
-RETURN
-END SUBROUTINE DURNG0
+t = p
+if (ix .gt. p0) go to 10
+   u = ix
+   u = u/t
+   v = 0.5d0 + (0.5d0 - u)
+   return
+10 v = p - ix
+v = v/t
+u = 0.5d0 + (0.5d0 - v)
+return
+end subroutine durng0
 
-SUBROUTINE URNG1 (IX, U, V, D)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IX
-REAL, INTENT(INOUT) :: D, U, V
-INTEGER :: J, K, LEFTLO
-REAL :: T
+subroutine urng1 (ix, u, v, d)
+implicit none
+integer, intent(inout) :: ix
+real, intent(inout) :: d, u, v
+integer :: j, k, leftlo
+real :: t
 !-----------------------------------------------------------------------
 !       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2707,65 +2707,65 @@ REAL :: T
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     DATA P0/2**30 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
 !-------------------
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-XHI = IX/B16
+xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-XALO = (IX - XHI*B16)*A
+xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-LEFTLO = XALO/B16
+leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-FHI = XHI*A + LEFTLO
+fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-K = FHI/B15
+k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-IF (IX .LT. 0) IX = IX + P
+if (ix .lt. 0) ix = ix + p
 !
 !         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
 !
-J = P - IX
-T = P
-D = IX - J
-D = 0.5*(D/T)
-IF (IX .GT. P0) GO TO 10
-   U = IX
-   U = U/T
-   V = 0.5 + (0.5 - U)
-   RETURN
-10 V = J
-V = V/T
-U = 0.5 + (0.5 - V)
-RETURN
-END SUBROUTINE URNG1
+j = p - ix
+t = p
+d = ix - j
+d = 0.5*(d/t)
+if (ix .gt. p0) go to 10
+   u = ix
+   u = u/t
+   v = 0.5 + (0.5 - u)
+   return
+10 v = j
+v = v/t
+u = 0.5 + (0.5 - v)
+return
+end subroutine urng1
 
-SUBROUTINE DURNG1 (IX, U, V, D)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IX
-INTEGER :: J, K, LEFTLO
+subroutine durng1 (ix, u, v, d)
+implicit none
+integer, intent(inout) :: ix
+integer :: j, k, leftlo
 !-----------------------------------------------------------------------
 !       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 !
@@ -2780,69 +2780,69 @@ INTEGER :: J, K, LEFTLO
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-DOUBLE PRECISION, INTENT(INOUT) :: U, V, D
-DOUBLE PRECISION :: T
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+double precision, intent(inout) :: u, v, d
+double precision :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     DATA P0/2**30 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
 !-------------------
 !
 !                 GET 15 HIGH ORDER BITS OF IX
 !
-XHI = IX/B16
+xhi = ix/b16
 !
 !           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
 !
-XALO = (IX - XHI*B16)*A
+xalo = (ix - xhi*b16)*a
 !
 !             GET 15 HIGH ORDER BITS OF THE PRODUCT
 !
-LEFTLO = XALO/B16
+leftlo = xalo/b16
 !
 !               FORM THE 31 HIGHEST BITS OF A*IX
 !
-FHI = XHI*A + LEFTLO
+fhi = xhi*a + leftlo
 !
 !           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
 !
-K = FHI/B15
+k = fhi/b15
 !
 !             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
 !                  THE PARENTHESES ARE ESSENTIAL
 !
-IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
 !
 !                      ADD P IF NECESSARY
 !
-IF (IX .LT. 0) IX = IX + P
+if (ix .lt. 0) ix = ix + p
 !
 !         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
 !
-J = P - IX
-T = P
-D = IX - J
-D = 0.5D0*(D/T)
-IF (IX .GT. P0) GO TO 10
-   U = IX
-   U = U/T
-   V = 0.5D0 + (0.5D0 - U)
-   RETURN
-10 V = J
-V = V/T
-U = 0.5D0 + (0.5D0 - V)
-RETURN
-END SUBROUTINE DURNG1
+j = p - ix
+t = p
+d = ix - j
+d = 0.5d0*(d/t)
+if (ix .gt. p0) go to 10
+   u = ix
+   u = u/t
+   v = 0.5d0 + (0.5d0 - u)
+   return
+10 v = j
+v = v/t
+u = 0.5d0 + (0.5d0 - v)
+return
+end subroutine durng1
 
-SUBROUTINE URNG2 (IX, X, Y, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, L, LEFTLO
-REAL :: S, T
+subroutine urng2 (ix, x, y, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: k, l, leftlo
+real :: s, t
 !-----------------------------------------------------------------------
 !
 !         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -2858,57 +2858,57 @@ REAL :: S, T
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-REAL, INTENT(INOUT) :: X(N), Y(N)
-INTEGER :: A, B15, B16, FHI, P, XALO, XHI
+real, intent(inout) :: x(n), y(n)
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA S/.465661E-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data s/.465661e-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
 !
 !         SEE THE COMMENTS IN THE SUBROUTINE URNG FOR THE
 !                STATEMENTS IN THE FOLLOWING LOOP
 !
-DO L = 1,N
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   T = IX
-   X(L) = S*T
+do l = 1,n
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   t = ix
+   x(l) = s*t
 !
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   T = IX
-   Y(L) = S*T
-END DO
-RETURN
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   t = ix
+   y(l) = s*t
+end do
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE URNG2
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine urng2
 
-SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, L, LEFTLO
+subroutine durng2 (ix, x, y, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: k, l, leftlo
 !-----------------------------------------------------------------------
 !
 !         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -2924,75 +2924,75 @@ INTEGER :: K, L, LEFTLO
 !        UNIVERSITY OF CHICAGO
 !     ADAPTED BY A.H. MORRIS (NSWC)
 !-------------------
-DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
-DOUBLE PRECISION :: S, T
-INTEGER :: A, B15, B16, FHI, P, XALO, XHI
+double precision, intent(inout) :: x(n), y(n)
+double precision :: s, t
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA S/.465661D-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data s/.465661d-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
 !
 !         SEE THE COMMENTS IN THE SUBROUTINE DURNG FOR THE
 !                 STATEMENTS IN THE FOLLOWING LOOP
 !
-DO L = 1,N
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   T = IX
-   X(L) = S*T
+do l = 1,n
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   t = ix
+   x(l) = s*t
 !
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   T = IX
-   Y(L) = S*T
-END DO
-RETURN
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   t = ix
+   y(l) = s*t
+end do
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE DURNG2
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine durng2
 
-SUBROUTINE RCIR (N, IX, X, Y, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
+subroutine rcir (n, ix, x, y, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 !              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(N), Y(N)
+real, intent(inout) :: x(n), y(n)
 !------------------
-CALL RCIR1 (N, IX, X, 1, Y, 1, IERR)
-RETURN
-END SUBROUTINE RCIR
+call rcir1 (n, ix, x, 1, y, 1, ierr)
+return
+end subroutine rcir
 
-SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, KY, N
-INTEGER :: I, I1, I2, J, K, LEFTLO
-REAL :: R, S, U, V
+subroutine rcir1 (n, ix, x, kx, y, ky, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, ky, n
+integer :: i, i1, i2, j, k, leftlo
+real :: r, s, u, v
 !-----------------------------------------------------------------------
 !
 !      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -3003,24 +3003,24 @@ REAL :: R, S, U, V
 !                      I2 = 1 + KY*(I - 1) .
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(*), Y(*)
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+real, intent(inout) :: x(*), y(*)
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     P0 = 2**30 - 1
 !     S  = 2/P
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
-DATA S/.931322E-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
+data s/.931322e-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
 !
-I1 = 1
-I2 = 1
-DO I = 1,N
+i1 = 1
+i2 = 1
+do i = 1,n
 !
 !        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
 !
@@ -3028,74 +3028,74 @@ DO I = 1,N
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
 !        (1979), PP. 132-138.
 !
-10 XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   J = IX
+10 xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   j = ix
 !
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
 !
 !        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
 !          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
 !
-   U = J - P0
-   U = S*U
-   V = IX - P0
-   V = S*V
+   u = j - p0
+   u = s*u
+   v = ix - p0
+   v = s*v
 !
 !         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
 !
-   R = (U*U + V*V) - 1.0
-   IF (R .GE. 0.0) GO TO 10
+   r = (u*u + v*v) - 1.0
+   if (r .ge. 0.0) go to 10
 !
 !            STORE THE POINT WHEN IT IS IN THE CIRCLE
 !
-   X(I1) = U
-   Y(I2) = V
-   I1 = I1 + KX
-   I2 = I2 + KY
-END DO
-RETURN
+   x(i1) = u
+   y(i2) = v
+   i1 = i1 + kx
+   i2 = i2 + ky
+end do
+return
 !
 !                          ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE RCIR1
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine rcir1
 
-SUBROUTINE DRCIR (N, IX, X, Y, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
+subroutine drcir (n, ix, x, y, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 !              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+double precision, intent(inout) :: x(n), y(n)
 !------------------
-CALL DRCIR1 (N, IX, X, 1, Y, 1, IERR)
-RETURN
-END SUBROUTINE DRCIR
+call drcir1 (n, ix, x, 1, y, 1, ierr)
+return
+end subroutine drcir
 
-SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, KY, N
-INTEGER :: I, I1, I2, J, K, LEFTLO
+subroutine drcir1 (n, ix, x, kx, y, ky, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, ky, n
+integer :: i, i1, i2, j, k, leftlo
 !-----------------------------------------------------------------------
 !
 !      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -3106,25 +3106,25 @@ INTEGER :: I, I1, I2, J, K, LEFTLO
 !                      I2 = 1 + KY*(I - 1) .
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: X(*), Y(*)
-DOUBLE PRECISION :: R, S, U, V
-INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
+double precision, intent(inout) :: x(*), y(*)
+double precision :: r, s, u, v
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 !     P0 = 2**30 - 1
 !     S  = 2/P
 !-------------------
-DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
-DATA P0/1073741823/
-DATA S/.931322D-09/
+data a/16807/, b15/32768/, b16/65536/, p/2147483647/
+data p0/1073741823/
+data s/.931322d-09/
 !-------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. p) go to 110
+ierr = 0
 !
-I1 = 1
-I2 = 1
-DO I = 1,N
+i1 = 1
+i2 = 1
+do i = 1,n
 !
 !        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
 !
@@ -3132,224 +3132,224 @@ DO I = 1,N
 !        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
 !        (1979), PP. 132-138.
 !
-10 XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
-   J = IX
+10 xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
+   j = ix
 !
-   XHI = IX/B16
-   XALO = (IX - XHI*B16)*A
-   LEFTLO = XALO/B16
-   FHI = XHI*A + LEFTLO
-   K = FHI/B15
-   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
-   IF (IX .LT. 0) IX = IX + P
+   xhi = ix/b16
+   xalo = (ix - xhi*b16)*a
+   leftlo = xalo/b16
+   fhi = xhi*a + leftlo
+   k = fhi/b15
+   ix = (((xalo - leftlo*b16) - p) + (fhi - k*b15)*b16) + k
+   if (ix .lt. 0) ix = ix + p
 !
 !        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
 !          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
 !
-   U = J - P0
-   U = S*U
-   V = IX - P0
-   V = S*V
+   u = j - p0
+   u = s*u
+   v = ix - p0
+   v = s*v
 !
 !         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
 !
-   R = (U*U + V*V) - 1.D0
-   IF (R .GE. 0.D0) GO TO 10
+   r = (u*u + v*v) - 1.d0
+   if (r .ge. 0.d0) go to 10
 !
 !            STORE THE POINT WHEN IT IS IN THE CIRCLE
 !
-   X(I1) = U
-   Y(I2) = V
-   I1 = I1 + KX
-   I2 = I2 + KY
-END DO
-RETURN
+   x(i1) = u
+   y(i2) = v
+   i1 = i1 + kx
+   i2 = i2 + ky
+end do
+return
 !
 !                          ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE DRCIR1
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine drcir1
 
-SUBROUTINE RNOR (IX, A, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, M, MAX
-REAL :: R, S, U, V
+subroutine rnor (ix, a, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, m, max
+real :: r, s, u, v
 !-----------------------------------------------------------------------
 !                 NORMAL RANDOM NUMBER GENERATOR
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-REAL :: T(2)
+real, intent(inout) :: a(n)
+real :: t(2)
 !---------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !---------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. max) go to 110
+ierr = 0
 !
-IF (N .EQ. 1) GO TO 20
-M = N/2
-CALL RCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
-M = M + M
+if (n .eq. 1) go to 20
+m = n/2
+call rcir1 (m, ix, a(1), 2, a(2), 2, ierr)
+m = m + m
 !
 !                  OBTAIN THE FIRST M VARIATES
 !
-DO I = 1,M,2
-   U = A(I)
-   V = A(I + 1)
-   R = U*U + V*V
-   S = SQRT(-2.0*ALOG(R)/R)
-   A(I) = S*U
-   A(I + 1) = S*V
-END DO
-IF (M .EQ. N) RETURN
+do i = 1,m,2
+   u = a(i)
+   v = a(i + 1)
+   r = u*u + v*v
+   s = sqrt(-2.0*alog(r)/r)
+   a(i) = s*u
+   a(i + 1) = s*v
+end do
+if (m .eq. n) return
 !
 !            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
 !
-20 CALL RCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
-R = T(1)*T(1) + T(2)*T(2)
-S = SQRT(-2.0*ALOG(R)/R)
-A(N) = S*T(1)
-RETURN
+20 call rcir1 (1, ix, t(1), 1, t(2), 1, ierr)
+r = t(1)*t(1) + t(2)*t(2)
+s = sqrt(-2.0*alog(r)/r)
+a(n) = s*t(1)
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE RNOR
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine rnor
 
-SUBROUTINE DRNOR (IX, A, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, M, MAX
+subroutine drnor (ix, a, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, m, max
 !-----------------------------------------------------------------------
 !                 NORMAL RANDOM NUMBER GENERATOR
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-DOUBLE PRECISION :: R, S, U, V, T(2)
+double precision, intent(inout) :: a(n)
+double precision :: r, s, u, v, t(2)
 !---------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !---------------------
-IF (N .LE. 0) GO TO 100
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 110
-IERR = 0
+if (n .le. 0) go to 100
+if (ix .le. 0 .or. ix .ge. max) go to 110
+ierr = 0
 !
-IF (N .EQ. 1) GO TO 20
-M = N/2
-CALL DRCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
-M = M + M
+if (n .eq. 1) go to 20
+m = n/2
+call drcir1 (m, ix, a(1), 2, a(2), 2, ierr)
+m = m + m
 !
 !                  OBTAIN THE FIRST M VARIATES
 !
-DO I = 1,M,2
-   U = A(I)
-   V = A(I + 1)
-   R = U*U + V*V
-   S = DSQRT(-2.D0*DLOG(R)/R)
-   A(I) = S*U
-   A(I + 1) = S*V
-END DO
-IF (M .EQ. N) RETURN
+do i = 1,m,2
+   u = a(i)
+   v = a(i + 1)
+   r = u*u + v*v
+   s = dsqrt(-2.d0*dlog(r)/r)
+   a(i) = s*u
+   a(i + 1) = s*v
+end do
+if (m .eq. n) return
 !
 !            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
 !
-20 CALL DRCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
-R = T(1)*T(1) + T(2)*T(2)
-S = DSQRT(-2.D0*DLOG(R)/R)
-A(N) = S*T(1)
-RETURN
+20 call drcir1 (1, ix, t(1), 1, t(2), 1, ierr)
+r = t(1)*t(1) + t(2)*t(2)
+s = dsqrt(-2.d0*dlog(r)/r)
+a(n) = s*t(1)
+return
 !
 !                         ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-END SUBROUTINE DRNOR
+100 ierr = 1
+return
+110 ierr = 2
+return
+end subroutine drnor
 
-SUBROUTINE NRNG (IX, A, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, M
-REAL :: PHI, PI2, R
+subroutine nrng (ix, a, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, m
+real :: phi, pi2, r
 !-----------------------------------------------------------------------
 !                 GAUSSIAN RANDOM NUMBER GENERATOR
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(N)
-REAL :: TEMP(1)
-DATA PI2 /6.2831853071796/
+real, intent(inout) :: a(n)
+real :: temp(1)
+data pi2 /6.2831853071796/
 !
-CALL URNG (IX,A,N,IERR)
-IF (IERR .NE. 0) RETURN
-IF (N .EQ. 1) GO TO 20
+call urng (ix,a,n,ierr)
+if (ierr .ne. 0) return
+if (n .eq. 1) go to 20
 !
-M = N/2
-M = M + M
-do 10 I = 1,M,2
-   R = SQRT(-2.0*ALOG(A(I)))
-   PHI = PI2*A(I+1)
-   A(I) = R*COS(PHI)
-10 A(I+1) = R*SIN(PHI)
-IF (M .EQ. N) RETURN
+m = n/2
+m = m + m
+do 10 i = 1,m,2
+   r = sqrt(-2.0*alog(a(i)))
+   phi = pi2*a(i+1)
+   a(i) = r*cos(phi)
+10 a(i+1) = r*sin(phi)
+if (m .eq. n) return
 !
-20 CALL URNG (IX,TEMP,1,IERR)
-R = SQRT(-2.0*ALOG(A(N)))
-A(N) = R*COS(PI2*TEMP(1))
-RETURN
-END SUBROUTINE NRNG
+20 call urng (ix,temp,1,ierr)
+r = sqrt(-2.0*alog(a(n)))
+a(n) = r*cos(pi2*temp(1))
+return
+end subroutine nrng
 
-SUBROUTINE DNRNG (IX, A, N, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, M
+subroutine dnrng (ix, a, n, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, m
 !-----------------------------------------------------------------------
 !                 GAUSSIAN RANDOM NUMBER GENERATOR
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-DOUBLE PRECISION :: PHI, PI2, R, TEMP(1)
+double precision, intent(inout) :: a(n)
+double precision :: phi, pi2, r, temp(1)
 !
-DATA PI2 /6.28318530717958647692528676656D0/
+data pi2 /6.28318530717958647692528676656d0/
 !
-CALL DURNG (IX, A, N, IERR)
-IF (IERR .NE. 0) RETURN
-IF (N .EQ. 1) GO TO 20
+call durng (ix, a, n, ierr)
+if (ierr .ne. 0) return
+if (n .eq. 1) go to 20
 !
-M = N/2
-M = M + M
-do 10 I = 1,M,2
-   R = DSQRT(-2.D0*DLOG(A(I)))
-   PHI = PI2*A(I+1)
-   A(I) = R*DCOS(PHI)
-10 A(I+1) = R*DSIN(PHI)
-IF (M .EQ. N) RETURN
+m = n/2
+m = m + m
+do 10 i = 1,m,2
+   r = dsqrt(-2.d0*dlog(a(i)))
+   phi = pi2*a(i+1)
+   a(i) = r*dcos(phi)
+10 a(i+1) = r*dsin(phi)
+if (m .eq. n) return
 !
-20 CALL DURNG (IX, TEMP, 1, IERR)
-R = DSQRT(-2.D0*DLOG(A(N)))
-A(N) = R*DCOS(PI2*TEMP(1))
-RETURN
-END SUBROUTINE DNRNG
+20 call durng (ix, temp, 1, ierr)
+r = dsqrt(-2.d0*dlog(a(n)))
+a(n) = r*dcos(pi2*temp(1))
+return
+end subroutine dnrng
 
-SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, M, MO, N
-INTEGER :: I, II, J, K, L, L0, LDIM, MAX
-REAL :: SUM
+subroutine nrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, m, mo, n
+integer :: i, ii, j, k, l, l0, ldim, max
+real :: sum
 !-----------------------------------------------------------------------
 !
 !           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -3429,65 +3429,65 @@ REAL :: SUM
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(*)
-REAL, INTENT(IN) :: FMU(M)
-REAL, INTENT(INOUT) :: X(KX,N)
+real, intent(inout) :: a(*)
+real, intent(in) :: fmu(m)
+real, intent(inout) :: x(kx,n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (m .le. 1 .or. m .gt. kx) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !           COMPUTE THE LOWER TRIANGULAR MATRIX
 !           L HAVING POSITIVE DIAGONAL ELEMENTS
 !           AND SATISFYING A = L*TRANSPOSE(L).
 !
-IF (MO .NE. 0) GO TO 10
-CALL SPPFA (A, M, IERR)
-IF (IERR .NE. 0) GO TO 120
+if (mo .ne. 0) go to 10
+call sppfa (a, m, ierr)
+if (ierr .ne. 0) go to 120
 !
 !           GENERATE THE N RANDOM NORMAL VECTORS
 !
-10 LDIM = (M*(M + 1))/2
-DO J = 1,N
-   CALL RNOR (IX, X(1,J), M, IERR)
+10 ldim = (m*(m + 1))/2
+do j = 1,n
+   call rnor (ix, x(1,j), m, ierr)
 !
 !         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
 !                    IN REVERSE ORDER
 !
-   L0 = LDIM
-   I = M
-   DO II = 1,M
-      L0 = L0 - I
-      L = L0
-      SUM = 0.0
-      do 20 K = 1,I
-         L = L + 1
-20 SUM = SUM + A(L)*X(K,J)
-      X(I,J) = SUM + FMU(I)
-      I = I - 1
-   END DO
-END DO
-RETURN
+   l0 = ldim
+   i = m
+   do ii = 1,m
+      l0 = l0 - i
+      l = l0
+      sum = 0.0
+      do 20 k = 1,i
+         l = l + 1
+20 sum = sum + a(l)*x(k,j)
+      x(i,j) = sum + fmu(i)
+      i = i - 1
+   end do
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE NRVG
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine nrvg
 
-SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, M, MO, N
-INTEGER :: I, J, MAX
+subroutine nrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, m, mo, n
+integer :: i, j, max
 !-----------------------------------------------------------------------
 !
 !           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -3553,51 +3553,51 @@ INTEGER :: I, J, MAX
 !                   4 - SEED OUT OF RANGE      )
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(M)
-REAL, INTENT(IN) :: FMU(M)
-REAL, INTENT(INOUT) :: X(KX,N)
+real, intent(inout) :: a(m)
+real, intent(in) :: fmu(m)
+real, intent(inout) :: x(kx,n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (m .le. 1 .or. m .gt. kx) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
 !
-IF (MO .NE. 0) GO TO 20
-DO I = 1,M
-   IF (A(I) .LE. 0.0) GO TO 120
-   A(I) = SQRT(A(I))
-END DO
+if (mo .ne. 0) go to 20
+do i = 1,m
+   if (a(i) .le. 0.0) go to 120
+   a(i) = sqrt(a(i))
+end do
 !
 !           GENERATE THE N RANDOM NORMAL VECTORS
 !
-20 DO J = 1,N
-   CALL RNOR (IX, X(1,J), M, IERR)
-   DO I = 1,M
-      X(I,J) = A(I)*X(I,J) + FMU(I)
-   END DO
-END DO
-RETURN
+20 do j = 1,n
+   call rnor (ix, x(1,j), m, ierr)
+   do i = 1,m
+      x(i,j) = a(i)*x(i,j) + fmu(i)
+   end do
+end do
+return
 !
 !                       ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE NRVG1
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine nrvg1
 
-SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, M, MO, N
-INTEGER :: I, II, J, K, L, L0, LDIM, MAX
+subroutine dnrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, m, mo, n
+integer :: i, ii, j, k, l, l0, ldim, max
 !-----------------------------------------------------------------------
 !
 !           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -3677,66 +3677,66 @@ INTEGER :: I, II, J, K, L, L0, LDIM, MAX
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(*)
-DOUBLE PRECISION, INTENT(IN) :: FMU(M)
-DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
-DOUBLE PRECISION :: SUM
+double precision, intent(inout) :: a(*)
+double precision, intent(in) :: fmu(m)
+double precision, intent(inout) :: x(kx,n)
+double precision :: sum
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (m .le. 1 .or. m .gt. kx) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !           COMPUTE THE LOWER TRIANGULAR MATRIX
 !           L HAVING POSITIVE DIAGONAL ELEMENTS
 !           AND SATISFYING A = L*TRANSPOSE(L).
 !
-IF (MO .NE. 0) GO TO 10
-CALL DPPFA (A, M, IERR)
-IF (IERR .NE. 0) GO TO 120
+if (mo .ne. 0) go to 10
+call dppfa (a, m, ierr)
+if (ierr .ne. 0) go to 120
 !
 !           GENERATE THE N RANDOM NORMAL VECTORS
 !
-10 LDIM = (M*(M + 1))/2
-DO J = 1,N
-   CALL DRNOR (IX, X(1,J), M, IERR)
+10 ldim = (m*(m + 1))/2
+do j = 1,n
+   call drnor (ix, x(1,j), m, ierr)
 !
 !         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
 !                    IN REVERSE ORDER
 !
-   L0 = LDIM
-   I = M
-   DO II = 1,M
-      L0 = L0 - I
-      L = L0
-      SUM = 0.D0
-      do 20 K = 1,I
-         L = L + 1
-20 SUM = SUM + A(L)*X(K,J)
-      X(I,J) = SUM + FMU(I)
-      I = I - 1
-   END DO
-END DO
-RETURN
+   l0 = ldim
+   i = m
+   do ii = 1,m
+      l0 = l0 - i
+      l = l0
+      sum = 0.d0
+      do 20 k = 1,i
+         l = l + 1
+20 sum = sum + a(l)*x(k,j)
+      x(i,j) = sum + fmu(i)
+      i = i - 1
+   end do
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE DNRVG
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine dnrvg
 
-SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: KX, M, MO, N
-INTEGER :: I, J, MAX
+subroutine dnrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: kx, m, mo, n
+integer :: i, j, max
 !-----------------------------------------------------------------------
 !
 !           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -3802,52 +3802,52 @@ INTEGER :: I, J, MAX
 !                   4 - SEED OUT OF RANGE      )
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(M)
-DOUBLE PRECISION, INTENT(IN) :: FMU(M)
-DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
+double precision, intent(inout) :: a(m)
+double precision, intent(in) :: fmu(m)
+double precision, intent(inout) :: x(kx,n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (m .le. 1 .or. m .gt. kx) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
 !
-IF (MO .NE. 0) GO TO 20
-DO I = 1,M
-   IF (A(I) .LE. 0.D0) GO TO 120
-   A(I) = DSQRT(A(I))
-END DO
+if (mo .ne. 0) go to 20
+do i = 1,m
+   if (a(i) .le. 0.d0) go to 120
+   a(i) = dsqrt(a(i))
+end do
 !
 !           GENERATE THE N RANDOM NORMAL VECTORS
 !
-20 DO J = 1,N
-   CALL DRNOR (IX, X(1,J), M, IERR)
-   DO I = 1,M
-      X(I,J) = A(I)*X(I,J) + FMU(I)
-   END DO
-END DO
-RETURN
+20 do j = 1,n
+   call drnor (ix, x(1,j), m, ierr)
+   do i = 1,m
+      x(i,j) = a(i)*x(i,j) + fmu(i)
+   end do
+end do
+return
 !
 !                       ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE DNRVG1
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine dnrvg1
 
-SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERROR, ISEED
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A
-INTEGER :: I
+subroutine ranexp (n,a,iseed,x,ierror)
+implicit none
+integer, intent(inout) :: ierror, iseed
+integer, intent(in) :: n
+real, intent(in) :: a
+integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
@@ -3895,45 +3895,45 @@ INTEGER :: I
 !           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 !           P. 203.
 !
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !
 !        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
 !        ACCEPTABLE RANGE
 !
-IF (N .LE. 0) GO TO 100
+if (n .le. 0) go to 100
 !
 !        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
 !        PROPERLY SPECIFIED
 !
-IF (A .LE. 0.0) GO TO 110
+if (a .le. 0.0) go to 110
 !
 !        GENERATION OF UNIFORM RANDOM VARIATES
 !
-CALL URNG (ISEED, X, N, IERROR)
-IF (IERROR .NE. 0) GO TO 120
+call urng (iseed, x, n, ierror)
+if (ierror .ne. 0) go to 120
 !
 !        LOOP WHICH GENERATES THE N DESIRED VARIATES
 !
-DO I=1,N
-   X(I) = - A*ALOG(X(I))
-END DO
-RETURN
+do i=1,n
+   x(i) = - a*alog(x(i))
+end do
+return
 !
 !              ERROR RETURN
 !
-100 IERROR = 1
-RETURN
-110 IERROR = 2
-RETURN
-120 IERROR = 3
-RETURN
-END SUBROUTINE RANEXP
+100 ierror = 1
+return
+110 ierror = 2
+return
+120 ierror = 3
+return
+end subroutine ranexp
 
-SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERROR, ISEED
-INTEGER, INTENT(IN) :: N
-INTEGER :: I
+subroutine drnexp (n,a,iseed,x,ierror)
+implicit none
+integer, intent(inout) :: ierror, iseed
+integer, intent(in) :: n
+integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
@@ -3981,48 +3981,48 @@ INTEGER :: I
 !           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 !           P. 203.
 !
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
 !
 !        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
 !        ACCEPTABLE RANGE
 !
-IF (N .LE. 0) GO TO 100
+if (n .le. 0) go to 100
 !
 !        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
 !        PROPERLY SPECIFIED
 !
-IF (A .LE. 0.D0) GO TO 110
+if (a .le. 0.d0) go to 110
 !
 !        GENERATION OF UNIFORM RANDOM VARIATES
 !
-CALL DURNG (ISEED, X, N, IERROR)
-IF (IERROR .NE. 0) GO TO 120
+call durng (iseed, x, n, ierror)
+if (ierror .ne. 0) go to 120
 !
 !        LOOP WHICH GENERATES THE N DESIRED VARIATES
 !
-DO I=1,N
-   X(I) = - A*DLOG(X(I))
-END DO
-RETURN
+do i=1,n
+   x(i) = - a*dlog(x(i))
+end do
+return
 !
 !              ERROR RETURN
 !
-100 IERROR = 1
-RETURN
-110 IERROR = 2
-RETURN
-120 IERROR = 3
-RETURN
-END SUBROUTINE DRNEXP
+100 ierror = 1
+return
+110 ierror = 2
+return
+120 ierror = 3
+return
+end subroutine drnexp
 
-SUBROUTINE RGAM (IX, A, N, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A
-INTEGER :: I, IND, MAX
-REAL :: U, V, W
+subroutine rgam (ix, a, n, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+real, intent(in) :: a
+integer :: i, ind, max
+real :: u, v, w
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF N VARIATES X(1),...,X(N)
@@ -4048,42 +4048,42 @@ REAL :: U, V, W
 !                      SEED.
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !
-DATA MAX /2147483647/
+data max /2147483647/
 !
-IF (N .LE. 0) GO TO 100
-IF (A .LT. 0.1) GO TO 110
-IF (IX .LT. 1 .OR. IX .GE. MAX) GO TO 120
-IERR = 0
+if (n .le. 0) go to 100
+if (a .lt. 0.1) go to 110
+if (ix .lt. 1 .or. ix .ge. max) go to 120
+ierr = 0
 !
 !             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !                   THE SETTING IND = -8 IS AVOIDED
 !
-DO I = 1,N
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (A, W, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.0
-   X(I) = W
-END DO
-RETURN
+do i = 1,n
+   call urng0 (ix, u, v)
+   call gaminv (a, w, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) w = 0.0
+   x(i) = w
+end do
+return
 !
 !                            ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE RGAM
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine rgam
 
-SUBROUTINE DRGAM (IX, A, N, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IND, MAX
+subroutine drgam (ix, a, n, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
 !             COMPUTATION OF N DOUBLE PRECISION VARIATES
@@ -4109,46 +4109,46 @@ INTEGER :: I, IND, MAX
 !                      SEED.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-DOUBLE PRECISION :: U, V, W
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
+double precision :: u, v, w
 !
-DATA MAX /2147483647/
+data max /2147483647/
 !
-IF (N .LE. 0) GO TO 100
-IF (A .LT. 0.1D0) GO TO 110
-IF (IX .LT. 1 .OR. IX .GE. MAX) GO TO 120
-IERR = 0
+if (n .le. 0) go to 100
+if (a .lt. 0.1d0) go to 110
+if (ix .lt. 1 .or. ix .ge. max) go to 120
+ierr = 0
 !
 !             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !                   THE SETTING IND = -8 IS AVOIDED
 !
-DO I = 1,N
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (A, W, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.D0
-   X(I) = W
-END DO
-RETURN
+do i = 1,n
+   call durng0 (ix, u, v)
+   call dginv (a, w, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) w = 0.d0
+   x(i) = w
+end do
+return
 !
 !                            ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE DRGAM
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine drgam
 
-SUBROUTINE RBETA (N, A, B, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A, B
-INTEGER :: I, IND, MAX
-REAL :: U, V, X1, X2
+subroutine rbeta (n, a, b, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+real, intent(in) :: a, b
+integer :: i, ind, max
+real :: u, v, x1, x2
 !-----------------------------------------------------------------------
 !
 !                GENERATION OF BETA RANDOM VARIATES
@@ -4196,52 +4196,52 @@ REAL :: U, V, X1, X2
 !                   3 - SEED OUT OF RANGE        )
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (AMIN1(A,B) .LT. 0.25) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
-IERR = 0
+if (n .le. 0) go to 100
+if (amin1(a,b) .lt. 0.25) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 120
+ierr = 0
 !
-DO I = 1,N
+do i = 1,n
 !
 !        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (A, X1, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.0
+   call urng0 (ix, u, v)
+   call gaminv (a, x1, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
 !
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (B, X2, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.0
+   call urng0 (ix, u, v)
+   call gaminv (b, x2, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.0
 !
 !        IT IS REQUIRED THAT A AND B NOT BE LESS
 !        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
 !
-   X(I) = X1/(X1 + X2)
+   x(i) = x1/(x1 + x2)
 !
-END DO
-RETURN
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE RBETA
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine rbeta
 
-SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IND, MAX
+subroutine drbeta (n, a, b, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
 !                         DOUBLE PRECISION
@@ -4290,57 +4290,57 @@ INTEGER :: I, IND, MAX
 !                   3 - SEED OUT OF RANGE        )
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A, B
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-DOUBLE PRECISION :: U, V, X1, X2
+double precision, intent(in) :: a, b
+double precision, intent(inout) :: x(n)
+double precision :: u, v, x1, x2
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (DMIN1(A,B) .LT. 0.25D0) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
-IERR = 0
+if (n .le. 0) go to 100
+if (dmin1(a,b) .lt. 0.25d0) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 120
+ierr = 0
 !
-DO I = 1,N
+do i = 1,n
 !
 !        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (A, X1, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.D0
+   call durng0 (ix, u, v)
+   call dginv (a, x1, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
 !
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (B, X2, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.D0
+   call durng0 (ix, u, v)
+   call dginv (b, x2, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x2 = 0.d0
 !
 !        IT IS REQUIRED THAT A AND B NOT BE LESS
 !        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
 !
-   X(I) = X1/(X1 + X2)
+   x(i) = x1/(x1 + x2)
 !
-END DO
-RETURN
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-END SUBROUTINE DRBETA
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+end subroutine drbeta
 
-SUBROUTINE FRAN (N, A, B, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A, B
-INTEGER :: I, IND, MAX
-REAL :: AHALF, BHALF, BIG, BOUND, C, T, U, V, X1, X2, XMAX
-REAL :: SPMPAR
+subroutine fran (n, a, b, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+real, intent(in) :: a, b
+integer :: i, ind, max
+real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF VARIATES FROM THE F-DISTRIBUTION
@@ -4379,70 +4379,70 @@ REAL :: SPMPAR
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
 !            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
 !
-             XMAX = SPMPAR(3)
+             xmax = spmpar(3)
 !
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (AMIN1(A,B) .LT. 0.5) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
-IERR = 0
+if (n .le. 0) go to 100
+if (amin1(a,b) .lt. 0.5) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
+ierr = 0
 !
-AHALF = 0.5*A
-BHALF = 0.5*B
-C = B/A
-BIG = 0.5*XMAX
-BOUND = AMAX1(C, 1.0)
+ahalf = 0.5*a
+bhalf = 0.5*b
+c = b/a
+big = 0.5*xmax
+bound = amax1(c, 1.0)
 !
-DO I = 1,N
+do i = 1,n
 !
 !        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (AHALF, X1, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.0
+   call urng0 (ix, u, v)
+   call gaminv (ahalf, x1, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.0
 !
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (BHALF, X2, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
+   call urng0 (ix, u, v)
+   call gaminv (bhalf, x2, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
 !        PROTECT AGAINST OVERFLOW IN COMPUTING THE
 !        VARIATE C*(X1/X2).
 !
-   T = X1 + X2
-   X1 = X1/T
-   X2 = X2/T
-   IF (X2*BIG .LE. BOUND) GO TO 120
-   X(I) = C * (X1/X2)
-END DO
-RETURN
+   t = x1 + x2
+   x1 = x1/t
+   x2 = x2/t
+   if (x2*big .le. bound) go to 120
+   x(i) = c * (x1/x2)
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE FRAN
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine fran
 
-SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IND, MAX
+subroutine dfran (n, a, b, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION GENERATION OF
@@ -4482,76 +4482,76 @@ INTEGER :: I, IND, MAX
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A, B
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-DOUBLE PRECISION :: AHALF, BHALF, BIG, BOUND, C, T, U, V, XMAX, &
-&X1, X2
-DOUBLE PRECISION :: DPMPAR
+double precision, intent(in) :: a, b
+double precision, intent(inout) :: x(n)
+double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
+&x1, x2
+double precision :: dpmpar
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
 !
 !     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
 !            LARGEST NUMBER IN THE FLOATING ARITHMETIC USED.
 !
-             XMAX = DPMPAR(3)
+             xmax = dpmpar(3)
 !
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (DMIN1(A,B) .LT. 0.5D0) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
-IERR = 0
+if (n .le. 0) go to 100
+if (dmin1(a,b) .lt. 0.5d0) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
+ierr = 0
 !
-AHALF = 0.5D0*A
-BHALF = 0.5D0*B
-C = B/A
-BIG = 0.5D0*XMAX
-BOUND = DMAX1(C, 1.D0)
+ahalf = 0.5d0*a
+bhalf = 0.5d0*b
+c = b/a
+big = 0.5d0*xmax
+bound = dmax1(c, 1.d0)
 !
-DO I = 1,N
+do i = 1,n
 !
 !        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (AHALF, X1, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.D0
+   call durng0 (ix, u, v)
+   call dginv (ahalf, x1, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) x1 = 0.d0
 !
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (BHALF, X2, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
+   call durng0 (ix, u, v)
+   call dginv (bhalf, x2, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
 !        PROTECT AGAINST OVERFLOW IN COMPUTING THE
 !        VARIATE C*(X1/X2).
 !
-   T = X1 + X2
-   X1 = X1/T
-   X2 = X2/T
-   IF (X2*BIG .LE. BOUND) GO TO 120
-   X(I) = C * (X1/X2)
-END DO
-RETURN
+   t = x1 + x2
+   x1 = x1/t
+   x2 = x2/t
+   if (x2*big .le. bound) go to 120
+   x(i) = c * (x1/x2)
+end do
+return
 !
 !                      ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE DFRAN
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine dfran
 
-SUBROUTINE TRAN (N, A, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A
-INTEGER :: I, IND, MAX
-REAL :: AHALF, D, S, U, V, W, Z
+subroutine tran (n, a, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+real, intent(in) :: a
+integer :: i, ind, max
+real :: ahalf, d, s, u, v, w, z
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF VARIATES FROM THE T-DISTRIBUTION
@@ -4588,23 +4588,23 @@ REAL :: AHALF, D, S, U, V, W, Z
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (A .LT. 0.5) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (a .lt. 0.5) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-IERR = 0
-AHALF = 0.5*A
+ierr = 0
+ahalf = 0.5*a
 !
-DO I = 1,N
+do i = 1,n
 !
 !                    GET A NORMAL VARIATE
 !
-   CALL URNG1 (IX, U, V, D)
-   CALL PNI (U, V, D, Z, IND)
+   call urng1 (ix, u, v, d)
+   call pni (u, v, d, z, ind)
 !
 !                    GET A GAMMA VARIATE
 !
@@ -4612,32 +4612,32 @@ DO I = 1,N
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL URNG0 (IX, U, V)
-   CALL GAMINV (AHALF, W, 0.0, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
+   call urng0 (ix, u, v)
+   call gaminv (ahalf, w, 0.0, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
-   S = SQRT(W/AHALF)
-   X(I) = Z/S
-END DO
-RETURN
+   s = sqrt(w/ahalf)
+   x(i) = z/s
+end do
+return
 !
 !              ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE TRAN
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine tran
 
-SUBROUTINE DTRAN (N, A, IX, X, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IX
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, IND, MAX
+subroutine dtran (n, a, ix, x, ierr)
+implicit none
+integer, intent(inout) :: ierr, ix
+integer, intent(in) :: n
+integer :: i, ind, max
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION GENERATION OF
@@ -4675,25 +4675,25 @@ INTEGER :: I, IND, MAX
 !                   4 - SEED OUT OF RANGE       )
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-DOUBLE PRECISION :: AHALF, D, S, U, V, W, Z
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
+double precision :: ahalf, d, s, u, v, w, z
 !--------------------
-DATA MAX /2147483647/
+data max /2147483647/
 !--------------------
-IF (N .LE. 0) GO TO 100
-IF (A .LT. 0.5D0) GO TO 110
-IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+if (n .le. 0) go to 100
+if (a .lt. 0.5d0) go to 110
+if (ix .le. 0 .or. ix .ge. max) go to 130
 !
-IERR = 0
-AHALF = 0.5D0*A
+ierr = 0
+ahalf = 0.5d0*a
 !
-DO I = 1,N
+do i = 1,n
 !
 !                    GET A NORMAL VARIATE
 !
-   CALL DURNG1 (IX, U, V, D)
-   CALL DPNI (U, V, D, Z, IND)
+   call durng1 (ix, u, v, d)
+   call dpni (u, v, d, z, ind)
 !
 !                    GET A GAMMA VARIATE
 !
@@ -4701,34 +4701,34 @@ DO I = 1,N
 !        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
 !        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
 !
-   CALL DURNG0 (IX, U, V)
-   CALL DGINV (AHALF, W, U, V, IND)
-   IF (IND .EQ. -3 .OR. IND .EQ. -7) GO TO 120
+   call durng0 (ix, u, v)
+   call dginv (ahalf, w, u, v, ind)
+   if (ind .eq. -3 .or. ind .eq. -7) go to 120
 !
-   S = DSQRT(W/AHALF)
-   X(I) = Z/S
-END DO
-RETURN
+   s = dsqrt(w/ahalf)
+   x(i) = z/s
+end do
+return
 !
 !              ERROR RETURN
 !
-100 IERR = 1
-RETURN
-110 IERR = 2
-RETURN
-120 IERR = 3
-RETURN
-130 IERR = 4
-RETURN
-END SUBROUTINE DTRAN
+100 ierr = 1
+return
+110 ierr = 2
+return
+120 ierr = 3
+return
+130 ierr = 4
+return
+end subroutine dtran
 
-SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERROR, ISEED
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: ALPHA, FMU, SIG
-INTEGER :: I
-REAL :: C, SIGI, T
+subroutine rmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+implicit none
+integer, intent(inout) :: ierror, iseed
+integer, intent(in) :: n
+real, intent(in) :: alpha, fmu, sig
+integer :: i
+real :: c, sigi, t
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
@@ -4786,67 +4786,67 @@ REAL :: C, SIGI, T
 !           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 !           PP. 236 - 237.
 !
-REAL, INTENT(INOUT) :: X(N)
+real, intent(inout) :: x(n)
 !
 !        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
 !        ACCEPTABLE RANGE
 !
-IF (N .LE. 1) GO TO 100
+if (n .le. 1) go to 100
 !
 !        CHECK TO ENSURE THAT THE STANDARD DEVIATION OF THE ERROR TERM
 !        IS WITHIN ACCEPTABLE RANGE
 !
-IF (SIG .LE. 0.0) GO TO 110
+if (sig .le. 0.0) go to 110
 !
 !        CHECK TO ENSURE THAT THE FIRST-ORDER MARKOV MODEL
 !        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
 !        PROCESS STATIONARITY
 !
-IF (ABS(ALPHA) .GE. 1.0) GO TO 120
+if (abs(alpha) .ge. 1.0) go to 120
 !
 !        GENERATION OF STANDARD NORMAL RANDOM VARIATES
 !
-CALL RNOR (ISEED,X,N,IERROR)
-IF (IERROR .NE. 0) GO TO 130
+call rnor (iseed,x,n,ierror)
+if (ierror .ne. 0) go to 130
 !
 !        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
 !        AUTOCORRELATED SEQUENCE
 !
-C = 0.5 + (0.5 - ALPHA)
-T = 0.5 + (0.5 + ALPHA)
-SIGI = SIG/SQRT(C*T)
+c = 0.5 + (0.5 - alpha)
+t = 0.5 + (0.5 + alpha)
+sigi = sig/sqrt(c*t)
 !
 !        COMPUTES THE INITIAL TERM OF THE REQUIRED AUTOCORRELATED
 !        SEQUENCE
 !
-X(1) = FMU + SIGI*X(1)
+x(1) = fmu + sigi*x(1)
 !
 !        GENERATES THE LAST N - 1 TERMS OF THE REQUIRED AUTOCORRELATED
 !        SEQUENCE
 !
-C = FMU*C
-DO I=2,N
-   X(I) = ALPHA*X(I-1) + C + SIG*X(I)
-END DO
-RETURN
+c = fmu*c
+do i=2,n
+   x(i) = alpha*x(i-1) + c + sig*x(i)
+end do
+return
 !
 !        ERROR RETURN
 !
-100 IERROR = 1
-RETURN
-110 IERROR = 2
-RETURN
-120 IERROR = 3
-RETURN
-130 IERROR = 4
-RETURN
-END SUBROUTINE RMK1
+100 ierror = 1
+return
+110 ierror = 2
+return
+120 ierror = 3
+return
+130 ierror = 4
+return
+end subroutine rmk1
 
-SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERROR, ISEED
-INTEGER, INTENT(IN) :: N
-INTEGER :: I
+subroutine drmk1 (n, fmu, sig, alpha, iseed, x, ierror)
+implicit none
+integer, intent(inout) :: ierror, iseed
+integer, intent(in) :: n
+integer :: i
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
@@ -4904,60 +4904,60 @@ INTEGER :: I
 !           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 !           PP. 236 - 237.
 !
-DOUBLE PRECISION, INTENT(IN) :: FMU, SIG, ALPHA
-DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-DOUBLE PRECISION :: C, SIGI, T
+double precision, intent(in) :: fmu, sig, alpha
+double precision, intent(inout) :: x(n)
+double precision :: c, sigi, t
 !
 !        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
 !        ACCEPTABLE RANGE
 !
-IF (N .LE. 1) GO TO 100
+if (n .le. 1) go to 100
 !
 !        CHECK TO ENSURE THAT THE STANDARD DEVIATION OF THE ERROR TERM
 !        IS WITHIN ACCEPTABLE RANGE
 !
-IF (SIG .LE. 0.D0) GO TO 110
+if (sig .le. 0.d0) go to 110
 !
 !        CHECK TO ENSURE THAT THE FIRST-ORDER MARKOV MODEL
 !        PARAMETER IS WITHIN THE RANGE REQUIRED TO GUARANTEE
 !        PROCESS STATIONARITY
 !
-IF (DABS(ALPHA) .GE. 1.D0) GO TO 120
+if (dabs(alpha) .ge. 1.d0) go to 120
 !
 !        GENERATION OF STANDARD NORMAL RANDOM VARIATES
 !
-CALL DRNOR (ISEED,X,N,IERROR)
-IF (IERROR .NE. 0) GO TO 130
+call drnor (iseed,x,n,ierror)
+if (ierror .ne. 0) go to 130
 !
 !        COMPUTES THE STANDARD DEVIATION OF THE INITIAL TERM OF THE
 !        AUTOCORRELATED SEQUENCE
 !
-C = 0.5D0 + (0.5D0 - ALPHA)
-T = 0.5D0 + (0.5D0 + ALPHA)
-SIGI = SIG/DSQRT(C*T)
+c = 0.5d0 + (0.5d0 - alpha)
+t = 0.5d0 + (0.5d0 + alpha)
+sigi = sig/dsqrt(c*t)
 !
 !        COMPUTES THE INITIAL TERM OF THE REQUIRED AUTOCORRELATED
 !        SEQUENCE
 !
-X(1) = FMU + SIGI*X(1)
+x(1) = fmu + sigi*x(1)
 !
 !        GENERATES THE LAST N - 1 TERMS OF THE REQUIRED AUTOCORRELATED
 !        SEQUENCE
 !
-C = FMU*C
-DO I=2,N
-   X(I) = ALPHA*X(I-1) + C + SIG*X(I)
-END DO
-RETURN
+c = fmu*c
+do i=2,n
+   x(i) = alpha*x(i-1) + c + sig*x(i)
+end do
+return
 !
 !        ERROR RETURN
 !
-100 IERROR = 1
-RETURN
-110 IERROR = 2
-RETURN
-120 IERROR = 3
-RETURN
-130 IERROR = 4
-RETURN
-END SUBROUTINE DRMK1
+100 ierror = 1
+return
+110 ierror = 2
+return
+120 ierror = 3
+return
+130 ierror = 4
+return
+end subroutine drmk1

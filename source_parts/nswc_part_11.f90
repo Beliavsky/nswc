@@ -1,6 +1,6 @@
-SUBROUTINE DQK21 (F, A, B, RESULT, ABSERR, RESABS, RESASC, &
-&EPMACH, UFLOW, ISIG)
-IMPLICIT NONE
+subroutine dqk21 (f, a, b, result, abserr, resabs, resasc, &
+&epmach, uflow, isig)
+implicit none
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -57,25 +57,25 @@ IMPLICIT NONE
 !                 - F (USER-PROVIDED FUNCTION)
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION :: ABSC
-DOUBLE PRECISION, INTENT(INOUT) :: ABSERR
-DOUBLE PRECISION, INTENT(IN) :: B
-DOUBLE PRECISION :: CENTR, DHLGTH
-DOUBLE PRECISION, INTENT(IN) :: EPMACH
-DOUBLE PRECISION :: F, FC, FSUM, FVAL1, FVAL2, FV1(10), FV2(10), &
-&HLGTH
-DOUBLE PRECISION, INTENT(INOUT) :: RESABS
-DOUBLE PRECISION :: RESG, RESK, RESKH
-DOUBLE PRECISION, INTENT(INOUT) :: RESULT
-DOUBLE PRECISION :: TOL
-DOUBLE PRECISION, INTENT(IN) :: UFLOW
-DOUBLE PRECISION :: WG(5), WGK(11), XGK(11)
-DOUBLE PRECISION, INTENT(INOUT) :: RESASC
-INTEGER, INTENT(OUT) :: ISIG
-INTEGER :: J, JTW, JTWM1
+double precision, intent(in) :: a
+double precision :: absc
+double precision, intent(inout) :: abserr
+double precision, intent(in) :: b
+double precision :: centr, dhlgth
+double precision, intent(in) :: epmach
+double precision :: f, fc, fsum, fval1, fval2, fv1(10), fv2(10), &
+&hlgth
+double precision, intent(inout) :: resabs
+double precision :: resg, resk, reskh
+double precision, intent(inout) :: result
+double precision :: tol
+double precision, intent(in) :: uflow
+double precision :: wg(5), wgk(11), xgk(11)
+double precision, intent(inout) :: resasc
+integer, intent(out) :: isig
+integer :: j, jtw, jtwm1
 !
-EXTERNAL F
+external f
 !
 !           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
 !           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
@@ -91,40 +91,40 @@ EXTERNAL F
 !
 !           WG     - WEIGHTS OF THE 10-POINT GAUSS RULE
 !
-DATA XGK(1),XGK(2),XGK(3),XGK(4),XGK(5),XGK(6),XGK(7), &
-&XGK(8),XGK(9),XGK(10),XGK(11)/ &
-&0.995657163025808080735527280689D+00, &
-&0.973906528517171720077964012084D+00, &
-&0.930157491355708226001207180060D+00, &
-&0.865063366688984510732096688423D+00, &
-&0.780817726586416897063717578345D+00, &
-&0.679409568299024406234327365115D+00, &
-&0.562757134668604683339000099273D+00, &
-&0.433395394129247190799265943166D+00, &
-&0.294392862701460198131126603104D+00, &
-&0.148874338981631210884826001130D+00, &
-&0.000000000000000000000000000000D+00/
+data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
+&xgk(8),xgk(9),xgk(10),xgk(11)/ &
+&0.995657163025808080735527280689d+00, &
+&0.973906528517171720077964012084d+00, &
+&0.930157491355708226001207180060d+00, &
+&0.865063366688984510732096688423d+00, &
+&0.780817726586416897063717578345d+00, &
+&0.679409568299024406234327365115d+00, &
+&0.562757134668604683339000099273d+00, &
+&0.433395394129247190799265943166d+00, &
+&0.294392862701460198131126603104d+00, &
+&0.148874338981631210884826001130d+00, &
+&0.000000000000000000000000000000d+00/
 !
-DATA WGK(1),WGK(2),WGK(3),WGK(4),WGK(5),WGK(6),WGK(7), &
-&WGK(8),WGK(9),WGK(10),WGK(11)/ &
-&0.116946388673718742780643960622D-01, &
-&0.325581623079647274788189724594D-01, &
-&0.547558965743519960313813002446D-01, &
-&0.750396748109199527670431409162D-01, &
-&0.931254545836976055350654650834D-01, &
-&0.109387158802297641899210590326D+00, &
-&0.123491976262065851077958109831D+00, &
-&0.134709217311473325928054001772D+00, &
-&0.142775938577060080797094273139D+00, &
-&0.147739104901338491374841515972D+00, &
-&0.149445554002916905664936468390D+00/
+data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
+&wgk(8),wgk(9),wgk(10),wgk(11)/ &
+&0.116946388673718742780643960622d-01, &
+&0.325581623079647274788189724594d-01, &
+&0.547558965743519960313813002446d-01, &
+&0.750396748109199527670431409162d-01, &
+&0.931254545836976055350654650834d-01, &
+&0.109387158802297641899210590326d+00, &
+&0.123491976262065851077958109831d+00, &
+&0.134709217311473325928054001772d+00, &
+&0.142775938577060080797094273139d+00, &
+&0.147739104901338491374841515972d+00, &
+&0.149445554002916905664936468390d+00/
 !
-DATA WG(1),WG(2),WG(3),WG(4),WG(5)/ &
-&0.666713443086881375935688098933D-01, &
-&0.149451349150580593145776339658D+00, &
-&0.219086362515982043995534934228D+00, &
-&0.269266719309996355091226921569D+00, &
-&0.295524224714752870173892994651D+00/
+data wg(1),wg(2),wg(3),wg(4),wg(5)/ &
+&0.666713443086881375935688098933d-01, &
+&0.149451349150580593145776339658d+00, &
+&0.219086362515982043995534934228d+00, &
+&0.269266719309996355091226921569d+00, &
+&0.295524224714752870173892994651d+00/
 !
 !
 !           LIST OF MAJOR VARIABLES
@@ -140,70 +140,70 @@ DATA WG(1),WG(2),WG(3),WG(4),WG(5)/ &
 !                    I.E. TO I/(B-A)
 !
 !
-CENTR = 0.5D0*(A + B)
-HLGTH = 0.5D0*(B - A)
-DHLGTH = DABS(HLGTH)
+centr = 0.5d0*(a + b)
+hlgth = 0.5d0*(b - a)
+dhlgth = dabs(hlgth)
 !
 !             CHECK IF THE INTERVAL (A,B) IS TOO SHORT
 !
-ISIG = 5
-ABSC = DABS(CENTR) + DHLGTH*0.14D0
-IF (ABSC .EQ. DABS(CENTR)) RETURN
+isig = 5
+absc = dabs(centr) + dhlgth*0.14d0
+if (absc .eq. dabs(centr)) return
 !
 !           COMPUTE THE 21-POINT KRONROD APPROXIMATION TO
 !           THE INTEGRAL, AND ESTIMATE THE ABSOLUTE ERROR.
 !
-ISIG = 0
-RESG = 0.D0
-FC = F(CENTR)
-RESK = WGK(11)*FC
-RESABS = DABS(RESK)
-do 10 J = 1,5
-  JTW = 2*J
-  ABSC = HLGTH*XGK(JTW)
-  FVAL1 = F(CENTR - ABSC)
-  FVAL2 = F(CENTR + ABSC)
-  FV1(JTW) = FVAL1
-  FV2(JTW) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESG = RESG + WG(J)*FSUM
-  RESK = RESK + WGK(JTW)*FSUM
-  RESABS = RESABS + WGK(JTW)*(DABS(FVAL1) + DABS(FVAL2))
-10 CONTINUE
-DO J = 1,5
-  JTWM1 = 2*J - 1
-  ABSC = HLGTH*XGK(JTWM1)
-  FVAL1 = F(CENTR - ABSC)
-  FVAL2 = F(CENTR + ABSC)
-  FV1(JTWM1) = FVAL1
-  FV2(JTWM1) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESK = RESK + WGK(JTWM1)*FSUM
-  RESABS = RESABS + WGK(JTWM1)*(DABS(FVAL1) + DABS(FVAL2))
-END DO
-RESKH = RESK*0.5D0
-RESASC = WGK(11)*DABS(FC - RESKH)
-DO J = 1,10
-  RESASC = RESASC + WGK(J)*(DABS(FV1(J)-RESKH) &
-&+ DABS(FV2(J)-RESKH))
-END DO
-RESULT = RESK*HLGTH
-RESABS = RESABS*DHLGTH
-RESASC = RESASC*DHLGTH
-ABSERR = DABS((RESK - RESG)*HLGTH)
-IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0) &
-&ABSERR = RESASC*DMIN1(1.D0, &
-&(0.2D+03*ABSERR/RESASC)**1.5D0)
-TOL = EPMACH*0.5D+02
-IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR,TOL*RESABS)
-RETURN
-END SUBROUTINE DQK21
+isig = 0
+resg = 0.d0
+fc = f(centr)
+resk = wgk(11)*fc
+resabs = dabs(resk)
+do 10 j = 1,5
+  jtw = 2*j
+  absc = hlgth*xgk(jtw)
+  fval1 = f(centr - absc)
+  fval2 = f(centr + absc)
+  fv1(jtw) = fval1
+  fv2(jtw) = fval2
+  fsum = fval1 + fval2
+  resg = resg + wg(j)*fsum
+  resk = resk + wgk(jtw)*fsum
+  resabs = resabs + wgk(jtw)*(dabs(fval1) + dabs(fval2))
+10 continue
+do j = 1,5
+  jtwm1 = 2*j - 1
+  absc = hlgth*xgk(jtwm1)
+  fval1 = f(centr - absc)
+  fval2 = f(centr + absc)
+  fv1(jtwm1) = fval1
+  fv2(jtwm1) = fval2
+  fsum = fval1 + fval2
+  resk = resk + wgk(jtwm1)*fsum
+  resabs = resabs + wgk(jtwm1)*(dabs(fval1) + dabs(fval2))
+end do
+reskh = resk*0.5d0
+resasc = wgk(11)*dabs(fc - reskh)
+do j = 1,10
+  resasc = resasc + wgk(j)*(dabs(fv1(j)-reskh) &
+&+ dabs(fv2(j)-reskh))
+end do
+result = resk*hlgth
+resabs = resabs*dhlgth
+resasc = resasc*dhlgth
+abserr = dabs((resk - resg)*hlgth)
+if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
+&abserr = resasc*dmin1(1.d0, &
+&(0.2d+03*abserr/resasc)**1.5d0)
+tol = epmach*0.5d+02
+if (resabs .gt. uflow/tol) abserr = dmax1(abserr,tol*resabs)
+return
+end subroutine dqk21
 
-SUBROUTINE DQAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, &
-&NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INF
-INTEGER, INTENT(OUT) :: LAST
+subroutine dqagi (f, bound, inf, epsabs, epsrel, result, abserr, &
+&neval, ier, limit, lenw, last, iwork, work)
+implicit none
+integer, intent(in) :: inf
+integer, intent(out) :: last
 !-----------------------------------------------------------------------
 !
 !         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
@@ -357,44 +357,44 @@ INTEGER, INTENT(OUT) :: LAST
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION, INTENT(IN) :: BOUND, EPSABS, EPSREL
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION, INTENT(INOUT) :: WORK
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(INOUT) :: IWORK
-INTEGER, INTENT(IN) :: LENW, LIMIT
-INTEGER :: L1, L2, L3
-INTEGER, INTENT(OUT) :: NEVAL
+double precision, intent(out) :: abserr
+double precision, intent(in) :: bound, epsabs, epsrel
+double precision :: f
+double precision, intent(out) :: result
+double precision, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(in) :: lenw, limit
+integer :: l1, l2, l3
+integer, intent(out) :: neval
 !
-DIMENSION IWORK(LIMIT),WORK(LENW)
+dimension iwork(limit),work(lenw)
 !
-EXTERNAL F
+external f
 !
 !         CHECK VALIDITY OF LIMIT AND LENW.
 !
-IER = 6
-NEVAL = 0
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-IF (LIMIT .LT. 1 .OR. LENW .LT. LIMIT*4) RETURN
+ier = 6
+neval = 0
+last = 0
+result = 0.d0
+abserr = 0.d0
+if (limit .lt. 1 .or. lenw .lt. limit*4) return
 !
 !         PREPARE CALL FOR DQAGIE
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
 !
-CALL DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST)
-RETURN
-END SUBROUTINE DQAGI
+call dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,work(1),work(l1),work(l2),work(l3),iwork,last)
+return
+end subroutine dqagi
 
-SUBROUTINE DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
-IMPLICIT NONE
+subroutine dqagie (f,bound,inf,epsabs,epsrel,limit,result,abserr, &
+&neval,ier,alist,blist,rlist,elist,iord,last)
+implicit none
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -544,41 +544,41 @@ IMPLICIT NONE
 !              - DPMPAR
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION :: ABSEPS
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
-DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-DOUBLE PRECISION :: BOUN
-DOUBLE PRECISION, INTENT(IN) :: BOUND
-DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES, &
-&DPMPAR
-DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-DOUBLE PRECISION :: EPMACH
-DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, &
-&ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION :: RES3LA(3)
-DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(IN) :: INF
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR
-INTEGER, INTENT(OUT) :: NEVAL
-INTEGER :: NRES, NRMAX, NUMRL2
-LOGICAL :: EXTRAP, NOEXT
+double precision :: abseps
+double precision, intent(out) :: abserr
+double precision, intent(inout) :: alist
+double precision :: area, area1, area12, area2, a1, a2
+double precision, intent(inout) :: blist
+double precision :: boun
+double precision, intent(in) :: bound
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres, &
+&dpmpar
+double precision, intent(inout) :: elist
+double precision :: epmach
+double precision, intent(in) :: epsabs, epsrel
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision, intent(out) :: result
+double precision :: res3la(3)
+double precision, intent(inout) :: rlist
+double precision :: rlist2(52), small, t, uflow
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(in) :: inf
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr
+integer, intent(out) :: neval
+integer :: nres, nrmax, numrl2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit)
 !
-EXTERNAL F
+external f
 !
 !            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 !            LIMEXP IN SUBROUTINE DQELG.
@@ -633,26 +633,26 @@ EXTERNAL F
 !           UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !           OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = DPMPAR(1)
-UFLOW = DPMPAR(2)
-OFLOW = DPMPAR(3)
+epmach = dpmpar(1)
+uflow = dpmpar(2)
+oflow = dpmpar(3)
 !
 !           CHECK EPSABS AND EPSREL
 !           -----------------------
 !
-NEVAL = 0
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-ALIST(1) = 0.D0
-BLIST(1) = 1.D0
-RLIST(1) = 0.D0
-ELIST(1) = 0.D0
-IORD(1) = 0
-IER = 6
-IF (EPSABS .LT. 0.D0 .OR. EPSREL .LT. 0.D0) GO TO 999
-IER = 0
-RERR = DMAX1(EPSREL, 50.D0*EPMACH, 0.5D-28)
+neval = 0
+last = 0
+result = 0.d0
+abserr = 0.d0
+alist(1) = 0.d0
+blist(1) = 1.d0
+rlist(1) = 0.d0
+elist(1) = 0.d0
+iord(1) = 0
+ier = 6
+if (epsabs .lt. 0.d0 .or. epsrel .lt. 0.d0) go to 999
+ier = 0
+rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
@@ -662,228 +662,228 @@ RERR = DMAX1(EPSREL, 50.D0*EPMACH, 0.5D-28)
 !           I1 = INTEGRAL OF F OVER (-INFINITY,0),
 !           I2 = INTEGRAL OF F OVER (0,+INFINITY).
 !
-BOUN = BOUND
-IF (INF .EQ. 2) BOUN = 0.D0
-CALL DQK15I (F, BOUN, INF, 0.D0, 1.D0, RESULT, ABSERR, &
-&DEFABS, RESABS, EPMACH, UFLOW)
+boun = bound
+if (inf .eq. 2) boun = 0.d0
+call dqk15i (f, boun, inf, 0.d0, 1.d0, result, abserr, &
+&defabs, resabs, epmach, uflow)
 !
 !           TEST ON ACCURACY
 !
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-DRES = DABS(RESULT)
-ERRBND = DMAX1(EPSABS,RERR*DRES)
-IF (ABSERR .LE. 100.D0*EPMACH*DEFABS .AND. ABSERR .GT. ERRBND) &
-&IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0 .OR. (ABSERR .LE. ERRBND .AND. ABSERR .NE. RESABS) &
-&.OR. ABSERR .EQ. 0.D0) GO TO 130
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+dres = dabs(result)
+errbnd = dmax1(epsabs,rerr*dres)
+if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. errbnd) &
+&ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0 .or. (abserr .le. errbnd .and. abserr .ne. resabs) &
+&.or. abserr .eq. 0.d0) go to 130
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-CORREC = 0.D0
-NRMAX = 1
-NRES = 0
-KTMIN = 0
-NUMRL2 = 2
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IERRO = 0
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.D0 - 50.D0*EPMACH)*DEFABS) KSGN = 1
-T = 1.D0 + 100.D0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+correc = 0.d0
+nrmax = 1
+nres = 0
+ktmin = 0
+numrl2 = 2
+extrap = .false.
+noext = .false.
+ierro = 0
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
+t = 1.d0 + 100.d0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH NRMAX-TH LARGEST
 !           ERROR ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5D0*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL DQK15I (F, BOUN, INF, A1, B1, AREA1, ERROR1, &
-&RESABS, DEFAB1, EPMACH, UFLOW)
-  CALL DQK15I (F, BOUN, INF, A2, B2, AREA2, ERROR2, &
-&RESABS, DEFAB2, EPMACH, UFLOW)
+  a1 = alist(maxerr)
+  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call dqk15i (f, boun, inf, a1, b1, area1, error1, &
+&resabs, defab1, epmach, uflow)
+  call dqk15i (f, boun, inf, a2, b2, area2, error2, &
+&resabs, defab2, epmach, uflow)
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST .GT. 10 .AND. ERRO12 .GT. ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+&.or. erro12 .lt. 0.99d0*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last .gt. 10 .and. erro12 .gt. errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY
 !           SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF
 !           SUBINTERVALS EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT SOME POINTS OF THE INTEGRATION RANGE.
 !
 
-  IF (DMAX1(DABS(A1),DABS(B2)) .LE. &
-&T*(DABS(A2) + 0.1D+04*UFLOW)) IER = 4
+  if (dmax1(dabs(a1),dabs(b2)) .le. &
+&t*(dabs(a2) + 0.1d+04*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  GO TO 30
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  go to 30
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE
 !           SUBINTERVAL WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE
 !           BISECTED NEXT).
 !
-30 CALL DQPSRT (LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
-  IF (ERRSUM .LE. ERRBND) GO TO 115
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+30 call dqpsrt (limit,last,maxerr,errmax,elist,iord,nrmax)
+  if (errsum .le. errbnd) go to 115
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. ERTEST) GO TO 60
+  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
+40 if (ierro .eq. 3 .or. erlarg .le. ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS
 !           OVER THE LARGER INTERVALS (ERLARG) AND PERFORM
 !           EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
-    IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
+    if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL DQELG (NUMRL2, RLIST2, RESEPS, ABSEPS, RES3LA, NRES, &
-&EPMACH, OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
-  IF (ABSERR .LE. ERTEST) GO TO 100
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call dqelg (numrl2, rlist2, reseps, abseps, res3la, nres, &
+&epmach, oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = dmax1(epsabs,rerr*dabs(reseps))
+  if (abserr .le. ertest) go to 100
 !
 !            PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5D0
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = 0.375D0
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5d0
+  erlarg = errsum
+  go to 90
+80 small = 0.375d0
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.D0 .AND. AREA .NE. 0.D0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.D0) GO TO 130
-GO TO 110
-105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.d0 .and. area .ne. 0.d0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.d0) go to 130
+go to 110
+105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
 !           TEST ON DIVERGENCE
 !
-110 IF (KSGN .EQ. -1 .AND. DMAX1(DABS(RESULT),DABS(AREA)) .LE. &
-&DEFABS*0.1D-01) GO TO 130
-IF (0.1D-01 .GT. (RESULT/AREA) .OR. (RESULT/AREA) .GT. 0.1D+03 &
-&.OR. ERRSUM .GT. DABS(AREA)) IER = 6
-GO TO 130
+110 if (ksgn .eq. -1 .and. dmax1(dabs(result),dabs(area)) .le. &
+&defabs*0.1d-01) go to 130
+if (0.1d-01 .gt. (result/area) .or. (result/area) .gt. 0.1d+03 &
+&.or. errsum .gt. dabs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.D0
-DO K = 1,LAST
-  RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 NEVAL = 30*LAST - 15
-IF (INF .EQ. 2) NEVAL = 2*NEVAL
-IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE DQAGIE
+115 result = 0.d0
+do k = 1,last
+  result = result + rlist(k)
+end do
+abserr = errsum
+130 neval = 30*last - 15
+if (inf .eq. 2) neval = 2*neval
+if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine dqagie
 
-SUBROUTINE DQK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS, &
-&RESASC, EPMACH, UFLOW)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INF
-INTEGER :: J
+subroutine dqk15i (f, boun, inf, a, b, result, abserr, resabs, &
+&resasc, epmach, uflow)
+implicit none
+integer, intent(in) :: inf
+integer :: j
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -955,20 +955,20 @@ INTEGER :: J
 !                 - F (USER-PROVIDED FUNCTION)
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A
-DOUBLE PRECISION :: ABSC, ABSC1, ABSC2
-DOUBLE PRECISION, INTENT(INOUT) :: ABSERR
-DOUBLE PRECISION, INTENT(IN) :: B, BOUN
-DOUBLE PRECISION :: CENTR, DINF
-DOUBLE PRECISION, INTENT(IN) :: EPMACH
-DOUBLE PRECISION :: F, FC, FSUM, FVAL1, FVAL2, HLGTH
-DOUBLE PRECISION, INTENT(INOUT) :: RESABS, RESASC
-DOUBLE PRECISION :: RESG, RESK, RESKH
-DOUBLE PRECISION, INTENT(INOUT) :: RESULT
-DOUBLE PRECISION :: TABSC1, TABSC2, TOL
-DOUBLE PRECISION, INTENT(IN) :: UFLOW
-DOUBLE PRECISION :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
-EXTERNAL F
+double precision, intent(in) :: a
+double precision :: absc, absc1, absc2
+double precision, intent(inout) :: abserr
+double precision, intent(in) :: b, boun
+double precision :: centr, dinf
+double precision, intent(in) :: epmach
+double precision :: f, fc, fsum, fval1, fval2, hlgth
+double precision, intent(inout) :: resabs, resasc
+double precision :: resg, resk, reskh
+double precision, intent(inout) :: result
+double precision :: tabsc1, tabsc2, tol
+double precision, intent(in) :: uflow
+double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
+external f
 !
 !           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
 !           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
@@ -986,33 +986,33 @@ EXTERNAL F
 !                    TO THE ABSCISSAE XGK(2), XGK(4), ...
 !                    WG(1), WG(3), ... ARE SET TO ZERO.
 !
-DATA XGK(1),XGK(2),XGK(3),XGK(4),XGK(5),XGK(6),XGK(7), &
-&XGK(8)/ &
-&0.991455371120812639206854697526D+00, &
-&0.949107912342758524526189684048D+00, &
-&0.864864423359769072789712788641D+00, &
-&0.741531185599394439863864773281D+00, &
-&0.586087235467691130294144838259D+00, &
-&0.405845151377397166906606412077D+00, &
-&0.207784955007898467600689403773D+00, &
-&0.000000000000000000000000000000D+00/
+data xgk(1),xgk(2),xgk(3),xgk(4),xgk(5),xgk(6),xgk(7), &
+&xgk(8)/ &
+&0.991455371120812639206854697526d+00, &
+&0.949107912342758524526189684048d+00, &
+&0.864864423359769072789712788641d+00, &
+&0.741531185599394439863864773281d+00, &
+&0.586087235467691130294144838259d+00, &
+&0.405845151377397166906606412077d+00, &
+&0.207784955007898467600689403773d+00, &
+&0.000000000000000000000000000000d+00/
 !
-DATA WGK(1),WGK(2),WGK(3),WGK(4),WGK(5),WGK(6),WGK(7), &
-&WGK(8)/ &
-&0.229353220105292249637320080590D-01, &
-&0.630920926299785532907006631892D-01, &
-&0.104790010322250183839876322542D+00, &
-&0.140653259715525918745189590510D+00, &
-&0.169004726639267902826583426599D+00, &
-&0.190350578064785409913256402421D+00, &
-&0.204432940075298892414161999235D+00, &
-&0.209482141084727828012999174892D+00/
+data wgk(1),wgk(2),wgk(3),wgk(4),wgk(5),wgk(6),wgk(7), &
+&wgk(8)/ &
+&0.229353220105292249637320080590d-01, &
+&0.630920926299785532907006631892d-01, &
+&0.104790010322250183839876322542d+00, &
+&0.140653259715525918745189590510d+00, &
+&0.169004726639267902826583426599d+00, &
+&0.190350578064785409913256402421d+00, &
+&0.204432940075298892414161999235d+00, &
+&0.209482141084727828012999174892d+00/
 !
-DATA WG(1),WG(2),WG(3),WG(4),WG(5),WG(6),WG(7),WG(8)/ &
-&0.0D+00,    0.129484966168869693270611432679D+00, &
-&0.0D+00,    0.279705391489276667901467771424D+00, &
-&0.0D+00,    0.381830050505118944950369775489D+00, &
-&0.0D+00,    0.417959183673469387755102040816D+00/
+data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
+&0.0d+00,    0.129484966168869693270611432679d+00, &
+&0.0d+00,    0.279705391489276667901467771424d+00, &
+&0.0d+00,    0.381830050505118944950369775489d+00, &
+&0.0d+00,    0.417959183673469387755102040816d+00/
 !
 !
 !           LIST OF MAJOR VARIABLES
@@ -1029,59 +1029,59 @@ DATA WG(1),WG(2),WG(3),WG(4),WG(5),WG(6),WG(7),WG(8)/ &
 !                    INTEGRAND OVER (A,B), I.E. TO I/(B-A)
 !
 !
-DINF = MIN0(1,INF)
+dinf = min0(1,inf)
 !
-CENTR = 0.5D0*(A + B)
-HLGTH = 0.5D0*(B - A)
-TABSC1 = BOUN + DINF*(1.D0 - CENTR)/CENTR
-FVAL1 = F(TABSC1)
-IF (INF .EQ. 2) FVAL1 = FVAL1 + F(-TABSC1)
-FC = (FVAL1/CENTR)/CENTR
+centr = 0.5d0*(a + b)
+hlgth = 0.5d0*(b - a)
+tabsc1 = boun + dinf*(1.d0 - centr)/centr
+fval1 = f(tabsc1)
+if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+fc = (fval1/centr)/centr
 !
 !           COMPUTE THE 15-POINT KRONROD APPROXIMATION TO
 !           THE INTEGRAL, AND ESTIMATE THE ERROR.
 !
-RESG = WG(8)*FC
-RESK = WGK(8)*FC
-RESABS = DABS(RESK)
-DO J = 1,7
-  ABSC = HLGTH*XGK(J)
-  ABSC1 = CENTR - ABSC
-  ABSC2 = CENTR + ABSC
-  TABSC1 = BOUN + DINF*(1.D0 - ABSC1)/ABSC1
-  TABSC2 = BOUN + DINF*(1.D0 - ABSC2)/ABSC2
-  FVAL1 = F(TABSC1)
-  FVAL2 = F(TABSC2)
-  IF (INF .EQ. 2) FVAL1 = FVAL1 + F(-TABSC1)
-  IF (INF .EQ. 2) FVAL2 = FVAL2 + F(-TABSC2)
-  FVAL1 = (FVAL1/ABSC1)/ABSC1
-  FVAL2 = (FVAL2/ABSC2)/ABSC2
-  FV1(J) = FVAL1
-  FV2(J) = FVAL2
-  FSUM = FVAL1 + FVAL2
-  RESG = RESG + WG(J)*FSUM
-  RESK = RESK + WGK(J)*FSUM
-  RESABS = RESABS + WGK(J)*(DABS(FVAL1) + DABS(FVAL2))
-END DO
-RESKH = RESK*0.5D0
-RESASC = WGK(8)*DABS(FC - RESKH)
-DO J = 1,7
-  RESASC = RESASC + WGK(J)*(DABS(FV1(J)-RESKH) + &
-&DABS(FV2(J)-RESKH))
-END DO
-RESULT = RESK*HLGTH
-RESASC = RESASC*HLGTH
-RESABS = RESABS*HLGTH
-ABSERR = DABS((RESK - RESG)*HLGTH)
-IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0) ABSERR = RESASC* &
-&DMIN1(1.D0, (0.2D+03*ABSERR/RESASC)**1.5D0)
-TOL = 50.D0*EPMACH
-IF (RESABS .GT. UFLOW/TOL) ABSERR = DMAX1(ABSERR, TOL*RESABS)
-RETURN
-END SUBROUTINE DQK15I
+resg = wg(8)*fc
+resk = wgk(8)*fc
+resabs = dabs(resk)
+do j = 1,7
+  absc = hlgth*xgk(j)
+  absc1 = centr - absc
+  absc2 = centr + absc
+  tabsc1 = boun + dinf*(1.d0 - absc1)/absc1
+  tabsc2 = boun + dinf*(1.d0 - absc2)/absc2
+  fval1 = f(tabsc1)
+  fval2 = f(tabsc2)
+  if (inf .eq. 2) fval1 = fval1 + f(-tabsc1)
+  if (inf .eq. 2) fval2 = fval2 + f(-tabsc2)
+  fval1 = (fval1/absc1)/absc1
+  fval2 = (fval2/absc2)/absc2
+  fv1(j) = fval1
+  fv2(j) = fval2
+  fsum = fval1 + fval2
+  resg = resg + wg(j)*fsum
+  resk = resk + wgk(j)*fsum
+  resabs = resabs + wgk(j)*(dabs(fval1) + dabs(fval2))
+end do
+reskh = resk*0.5d0
+resasc = wgk(8)*dabs(fc - reskh)
+do j = 1,7
+  resasc = resasc + wgk(j)*(dabs(fv1(j)-reskh) + &
+&dabs(fv2(j)-reskh))
+end do
+result = resk*hlgth
+resasc = resasc*hlgth
+resabs = resabs*hlgth
+abserr = dabs((resk - resg)*hlgth)
+if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) abserr = resasc* &
+&dmin1(1.d0, (0.2d+03*abserr/resasc)**1.5d0)
+tol = 50.d0*epmach
+if (resabs .gt. uflow/tol) abserr = dmax1(abserr, tol*resabs)
+return
+end subroutine dqk15i
 
-SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
-IMPLICIT NONE
+subroutine dqpsrt(limit,last,maxerr,ermax,elist,iord,nrmax)
+implicit none
 !     ..................................................................
 !
 ! 1.        DQPSRT
@@ -1137,24 +1137,24 @@ IMPLICIT NONE
 !
 !     ..................................................................
 !
-DOUBLE PRECISION :: ELIST
-DOUBLE PRECISION, INTENT(INOUT) :: ERMAX
-DOUBLE PRECISION :: ERRMAX, ERRMIN
-INTEGER :: I, IBEG, IDO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: ISUCC, J, JBND, JUPBN, K
-INTEGER, INTENT(IN) :: LAST, LIMIT
-INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
-DIMENSION ELIST(LAST),IORD(LAST)
+double precision :: elist
+double precision, intent(inout) :: ermax
+double precision :: errmax, errmin
+integer :: i, ibeg, ido
+integer, intent(inout) :: iord
+integer :: isucc, j, jbnd, jupbn, k
+integer, intent(in) :: last, limit
+integer, intent(inout) :: maxerr, nrmax
+dimension elist(last),iord(last)
 !
 !           CHECK WHETHER THE LIST CONTAINS MORE THAN
 !           TWO ERROR ESTIMATES.
 !
 !***FIRST EXECUTABLE STATEMENT DQPSRT
-IF(LAST.GT.2) GO TO 10
-IORD(1) = 1
-IORD(2) = 2
-GO TO 90
+if(last.gt.2) go to 10
+iord(1) = 1
+iord(2) = 2
+go to 90
 !
 !           THIS PART OF THE ROUTINE IS ONLY EXECUTED
 !           IF, DUE TO A DIFFICULT INTEGRAND, SUBDIVISION
@@ -1162,67 +1162,67 @@ GO TO 90
 !           THE INSERT PROCEDURE SHOULD START AFTER THE
 !           NRMAX-TH LARGEST ERROR ESTIMATE.
 !
-10 ERRMAX = ELIST(MAXERR)
-IF(NRMAX.EQ.1) GO TO 30
-IDO = NRMAX-1
-DO I = 1,IDO
-  ISUCC = IORD(NRMAX-1)
+10 errmax = elist(maxerr)
+if(nrmax.eq.1) go to 30
+ido = nrmax-1
+do i = 1,ido
+  isucc = iord(nrmax-1)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMAX.LE.ELIST(ISUCC)) GO TO 30
-  IORD(NRMAX) = ISUCC
-  NRMAX = NRMAX-1
-   END DO
+  if(errmax.le.elist(isucc)) go to 30
+  iord(nrmax) = isucc
+  nrmax = nrmax-1
+   end do
 !
 !           COMPUTE THE NUMBER OF ELEMENTS IN THE LIST TO
 !           BE MAINTAINED IN DESCENDING ORDER. THIS NUMBER
 !           DEPENDS ON THE NUMBER OF SUBDIVISIONS STILL
 !           ALLOWED.
 !
-30 JUPBN = LAST
-IF(LAST.GT.(LIMIT/2+2)) JUPBN = LIMIT+3-LAST
-ERRMIN = ELIST(LAST)
+30 jupbn = last
+if(last.gt.(limit/2+2)) jupbn = limit+3-last
+errmin = elist(last)
 !
 !           INSERT ERRMAX BY TRAVERSING THE LIST TOP-DOWN,
 !           STARTING COMPARISON FROM THE ELEMENT ELIST(IORD(NRMAX+1)).
 !
-JBND = JUPBN-1
-IBEG = NRMAX+1
-IF(IBEG.GT.JBND) GO TO 50
-DO I=IBEG,JBND
-  ISUCC = IORD(I)
+jbnd = jupbn-1
+ibeg = nrmax+1
+if(ibeg.gt.jbnd) go to 50
+do i=ibeg,jbnd
+  isucc = iord(i)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMAX.GE.ELIST(ISUCC)) GO TO 60
-  IORD(I-1) = ISUCC
-END DO
-50 IORD(JBND) = MAXERR
-IORD(JUPBN) = LAST
-GO TO 90
+  if(errmax.ge.elist(isucc)) go to 60
+  iord(i-1) = isucc
+end do
+50 iord(jbnd) = maxerr
+iord(jupbn) = last
+go to 90
 !
 !           INSERT ERRMIN BY TRAVERSING THE LIST BOTTOM-UP.
 !
-60 IORD(I-1) = MAXERR
-K = JBND
-DO J=I,JBND
-  ISUCC = IORD(K)
+60 iord(i-1) = maxerr
+k = jbnd
+do j=i,jbnd
+  isucc = iord(k)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRMIN.LT.ELIST(ISUCC)) GO TO 80
-  IORD(K+1) = ISUCC
-  K = K-1
-END DO
-IORD(I) = LAST
-GO TO 90
-80 IORD(K+1) = LAST
+  if(errmin.lt.elist(isucc)) go to 80
+  iord(k+1) = isucc
+  k = k-1
+end do
+iord(i) = last
+go to 90
+80 iord(k+1) = last
 !
 !           SET MAXERR AND ERMAX.
 !
-90 MAXERR = IORD(NRMAX)
-ERMAX = ELIST(MAXERR)
-RETURN
-END SUBROUTINE DQPSRT
+90 maxerr = iord(nrmax)
+ermax = elist(maxerr)
+return
+end subroutine dqpsrt
 
-SUBROUTINE DQELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES, &
-&EPMACH, OFLOW)
-IMPLICIT NONE
+subroutine dqelg (n, epstab, result, abserr, res3la, nres, &
+&epmach, oflow)
+implicit none
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -1271,22 +1271,22 @@ IMPLICIT NONE
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION :: DELTA1, DELTA2, DELTA3
-DOUBLE PRECISION, INTENT(IN) :: EPMACH
-DOUBLE PRECISION :: EPSINF
-DOUBLE PRECISION, INTENT(INOUT) :: EPSTAB(52)
-DOUBLE PRECISION :: ERROR, ERR1, ERR2, ERR3, E0, E1, E1ABS, E2, E3
-DOUBLE PRECISION, INTENT(IN) :: OFLOW
-DOUBLE PRECISION :: RES
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION, INTENT(INOUT) :: RES3LA(3)
-DOUBLE PRECISION :: SS, TOL1, TOL2, TOL3
-INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP
-INTEGER, INTENT(INOUT) :: N
-INTEGER :: NEWELM
-INTEGER, INTENT(INOUT) :: NRES
-INTEGER :: NUM
+double precision, intent(out) :: abserr
+double precision :: delta1, delta2, delta3
+double precision, intent(in) :: epmach
+double precision :: epsinf
+double precision, intent(inout) :: epstab(52)
+double precision :: error, err1, err2, err3, e0, e1, e1abs, e2, e3
+double precision, intent(in) :: oflow
+double precision :: res
+double precision, intent(out) :: result
+double precision, intent(inout) :: res3la(3)
+double precision :: ss, tol1, tol2, tol3
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
+integer, intent(inout) :: n
+integer :: newelm
+integer, intent(inout) :: nres
+integer :: num
 !---------------------
 !
 !           LIST OF MAJOR VARIABLES
@@ -1308,111 +1308,111 @@ INTEGER :: NUM
 !           TABLE CAN CONTAIN. IF THIS NUMBER IS REACHED, THE UPPER
 !           DIAGONAL OF THE EPSILON TABLE IS DELETED.
 !
-NRES = NRES + 1
-ABSERR = OFLOW
-RESULT = EPSTAB(N)
-IF (N .LT. 3) GO TO 100
-LIMEXP = 50
-EPSTAB(N + 2) = EPSTAB(N)
-NEWELM = (N - 1)/2
-EPSTAB(N) = OFLOW
-NUM = N
-K1 = N
-do 40 I = 1,NEWELM
-  K2 = K1 - 1
-  K3 = K1 - 2
-  RES = EPSTAB(K1 + 2)
-  E0 = EPSTAB(K3)
-  E1 = EPSTAB(K2)
-  E2 = RES
-  E1ABS = DABS(E1)
-  DELTA2 = E2 - E1
-  ERR2 = DABS(DELTA2)
-  TOL2 = DMAX1(DABS(E2),E1ABS)*EPMACH
-  DELTA3 = E1 - E0
-  ERR3 = DABS(DELTA3)
-  TOL3 = DMAX1(E1ABS,DABS(E0))*EPMACH
-  IF (ERR2 .GT. TOL2 .OR. ERR3 .GT. TOL3) GO TO 10
+nres = nres + 1
+abserr = oflow
+result = epstab(n)
+if (n .lt. 3) go to 100
+limexp = 50
+epstab(n + 2) = epstab(n)
+newelm = (n - 1)/2
+epstab(n) = oflow
+num = n
+k1 = n
+do 40 i = 1,newelm
+  k2 = k1 - 1
+  k3 = k1 - 2
+  res = epstab(k1 + 2)
+  e0 = epstab(k3)
+  e1 = epstab(k2)
+  e2 = res
+  e1abs = dabs(e1)
+  delta2 = e2 - e1
+  err2 = dabs(delta2)
+  tol2 = dmax1(dabs(e2),e1abs)*epmach
+  delta3 = e1 - e0
+  err3 = dabs(delta3)
+  tol3 = dmax1(e1abs,dabs(e0))*epmach
+  if (err2 .gt. tol2 .or. err3 .gt. tol3) go to 10
 !
 !           IF E0, E1 AND E2 ARE EQUAL TO WITHIN MACHINE
 !           ACCURACY, CONVERGENCE IS ASSUMED.
 !           RESULT = E2
 !           ABSERR = ABS(E1-E0) + ABS(E2-E1)
 !
-  RESULT = RES
-  ABSERR = ERR2 + ERR3
+  result = res
+  abserr = err2 + err3
 ! ***JUMP OUT OF DO-LOOP
-  GO TO 100
-10 E3 = EPSTAB(K1)
-  EPSTAB(K1) = E1
-  DELTA1 = E1 - E3
-  ERR1 = DABS(DELTA1)
-  TOL1 = DMAX1(E1ABS,DABS(E3))*EPMACH
+  go to 100
+10 e3 = epstab(k1)
+  epstab(k1) = e1
+  delta1 = e1 - e3
+  err1 = dabs(delta1)
+  tol1 = dmax1(e1abs,dabs(e3))*epmach
 !
 !           IF TWO ELEMENTS ARE VERY CLOSE TO EACH OTHER, OMIT
 !           A PART OF THE TABLE BY ADJUSTING THE VALUE OF N
 !
-  IF (ERR1.LE.TOL1 .OR. ERR2.LE.TOL2 .OR. ERR3.LE.TOL3) GO TO 20
-  SS = 1.D0/DELTA1 + 1.D0/DELTA2 - 1.D0/DELTA3
-  EPSINF = DABS(SS*E1)
+  if (err1.le.tol1 .or. err2.le.tol2 .or. err3.le.tol3) go to 20
+  ss = 1.d0/delta1 + 1.d0/delta2 - 1.d0/delta3
+  epsinf = dabs(ss*e1)
 !
 !           TEST TO DETECT IRREGULAR BEHAVIOUR IN THE TABLE, AND
 !           EVENTUALLY OMIT A PART OF THE TABLE ADJUSTING THE VALUE
 !           OF N.
 !
-  IF (EPSINF .GT. 0.1D-03) GO TO 30
-20 N = I + I - 1
+  if (epsinf .gt. 0.1d-03) go to 30
+20 n = i + i - 1
 ! ***JUMP OUT OF DO-LOOP
-  GO TO 50
+  go to 50
 !
 !           COMPUTE A NEW ELEMENT AND EVENTUALLY ADJUST
 !           THE VALUE OF RESULT.
 !
-30 RES = E1 + 1.D0/SS
-  EPSTAB(K1) = RES
-  K1 = K1 - 2
-  ERROR = ERR2 + DABS(RES - E2) + ERR3
-  IF (ERROR .GT. ABSERR) GO TO 40
-  ABSERR = ERROR
-  RESULT = RES
-40 CONTINUE
+30 res = e1 + 1.d0/ss
+  epstab(k1) = res
+  k1 = k1 - 2
+  error = err2 + dabs(res - e2) + err3
+  if (error .gt. abserr) go to 40
+  abserr = error
+  result = res
+40 continue
 !
 !           SHIFT THE TABLE.
 !
-50 IF (N .EQ. LIMEXP) N = 2*(LIMEXP/2) - 1
-IB = 1
-IF ((NUM/2)*2 .EQ. NUM) IB = 2
-IE = NEWELM + 1
-DO I = 1,IE
-  IB2 = IB + 2
-  EPSTAB(IB) = EPSTAB(IB2)
-  IB = IB2
-END DO
-IF (NUM .EQ. N) GO TO 80
-INDX = NUM - N + 1
-DO I = 1,N
-  EPSTAB(I) = EPSTAB(INDX)
-  INDX = INDX + 1
-END DO
-80 IF (NRES .GE. 4) GO TO 90
-RES3LA(NRES) = RESULT
-ABSERR = OFLOW
-GO TO 100
+50 if (n .eq. limexp) n = 2*(limexp/2) - 1
+ib = 1
+if ((num/2)*2 .eq. num) ib = 2
+ie = newelm + 1
+do i = 1,ie
+  ib2 = ib + 2
+  epstab(ib) = epstab(ib2)
+  ib = ib2
+end do
+if (num .eq. n) go to 80
+indx = num - n + 1
+do i = 1,n
+  epstab(i) = epstab(indx)
+  indx = indx + 1
+end do
+80 if (nres .ge. 4) go to 90
+res3la(nres) = result
+abserr = oflow
+go to 100
 !
 !           COMPUTE ERROR ESTIMATE
 !
-90 ABSERR = DABS(RESULT - RES3LA(3)) + DABS(RESULT - RES3LA(2)) + &
-&DABS(RESULT - RES3LA(1))
-RES3LA(1) = RES3LA(2)
-RES3LA(2) = RES3LA(3)
-RES3LA(3) = RESULT
-100 ABSERR = DMAX1(ABSERR,5.D0*EPMACH*DABS(RESULT))
-RETURN
-END SUBROUTINE DQELG
+90 abserr = dabs(result - res3la(3)) + dabs(result - res3la(2)) + &
+&dabs(result - res3la(1))
+res3la(1) = res3la(2)
+res3la(2) = res3la(3)
+res3la(3) = result
+100 abserr = dmax1(abserr,5.d0*epmach*dabs(result))
+return
+end subroutine dqelg
 
-SUBROUTINE DQXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER, &
-&LIMIT,LENIW,LENW,LAST,IWORK,WORK)
-IMPLICIT NONE
+subroutine dqxgs (f,a,b,epsabs,epsrel,result,abserr,ier, &
+&limit,leniw,lenw,last,iwork,work)
+implicit none
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -1549,50 +1549,50 @@ IMPLICIT NONE
 !                    WORK(LIMIT*4+1), ... IS THE AREA RESERVED TO STORE
 !                     FUNCTIONAL VALUES.
 !
-DOUBLE PRECISION :: A
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION :: B
-DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION, INTENT(INOUT) :: WORK
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(INOUT) :: IWORK
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
-INTEGER :: L1, L2, L3, L4, L5
+double precision :: a
+double precision, intent(out) :: abserr
+double precision :: b
+double precision, intent(in) :: epsabs, epsrel
+double precision :: f
+double precision, intent(out) :: result
+double precision, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(out) :: last
+integer, intent(in) :: leniw, lenw, limit
+integer :: l1, l2, l3, l4, l5
 !
-DIMENSION IWORK(LENIW),WORK(LENW)
+dimension iwork(leniw),work(lenw)
 !
-EXTERNAL F
+external f
 !
 !         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
 !
-IER = 6
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-IF (LIMIT.LT.1 .OR. LENIW.LT.LIMIT*3 .OR. LENW.LT.LIMIT*46) &
-&RETURN
+ier = 6
+last = 0
+result = 0.d0
+abserr = 0.d0
+if (limit.lt.1 .or. leniw.lt.limit*3 .or. lenw.lt.limit*46) &
+&return
 !
 !         PREPARE CALL FOR DQXGSE.
 !
-L1 = LIMIT + 1
-L2 = LIMIT + L1
-L3 = LIMIT + L2
-L4 = LIMIT + L3
-L5 = 21*LIMIT + L4
+l1 = limit + 1
+l2 = limit + l1
+l3 = limit + l2
+l4 = limit + l3
+l5 = 21*limit + l4
 !
-CALL DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&IER,WORK(1),WORK(L1),WORK(L2),WORK(L3),IWORK,LAST, &
-&WORK(L4),WORK(L5),IWORK(L1),IWORK(L2))
+call dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+&ier,work(1),work(l1),work(l2),work(l3),iwork,last, &
+&work(l4),work(l5),iwork(l1),iwork(l2))
 !
-RETURN
-END SUBROUTINE DQXGS
+return
+end subroutine dqxgs
 
-SUBROUTINE DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
-IMPLICIT NONE
+subroutine dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
+&ier,alist,blist,rlist,elist,iord,last,valp,valn,lp,ln)
+implicit none
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 !            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -1727,39 +1727,39 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
 !
-DOUBLE PRECISION :: A, ABSEPS
-DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2, B
-DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
-DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-DOUBLE PRECISION :: EPMACH
-DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, &
-&ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
-DOUBLE PRECISION, INTENT(OUT) :: RESULT
-DOUBLE PRECISION :: RES3LA(3)
-DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
-DOUBLE PRECISION, INTENT(INOUT) :: VALP, VALN
-DOUBLE PRECISION :: VP1(21), VP2(21), VN1(21), VN2(21), DPMPAR
-INTEGER :: ID
-INTEGER, INTENT(OUT) :: IER
-INTEGER :: IERRO
-INTEGER, INTENT(INOUT) :: IORD
-INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
-INTEGER, INTENT(OUT) :: LAST
-INTEGER, INTENT(IN) :: LIMIT
-INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
-INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
-INTEGER :: LP1, LP2, LN1, LN2
-LOGICAL :: EXTRAP, NOEXT
+double precision :: a, abseps
+double precision, intent(out) :: abserr
+double precision, intent(inout) :: alist
+double precision :: area, area1, area12, area2, a1, a2, b
+double precision, intent(inout) :: blist
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres
+double precision, intent(inout) :: elist
+double precision :: epmach
+double precision, intent(in) :: epsabs, epsrel
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision, intent(out) :: result
+double precision :: res3la(3)
+double precision, intent(inout) :: rlist
+double precision :: rlist2(52), small, t, uflow
+double precision, intent(inout) :: valp, valn
+double precision :: vp1(21), vp2(21), vn1(21), vn2(21), dpmpar
+integer :: id
+integer, intent(out) :: ier
+integer :: ierro
+integer, intent(inout) :: iord
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer, intent(out) :: last
+integer, intent(in) :: limit
+integer :: maxerr, nres, nrmax, numrl2
+integer, intent(inout) :: lp(limit), ln(limit)
+integer :: lp1, lp2, ln1, ln2
+logical :: extrap, noext
 !
-DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT), &
-&RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
+dimension alist(limit), blist(limit), elist(limit), iord(limit), &
+&rlist(limit), valp(21,limit), valn(21,limit)
 !
-EXTERNAL F
+external f
 !
 !            MACHINE DEPENDENT CONSTANTS
 !            ---------------------------
@@ -1768,287 +1768,287 @@ EXTERNAL F
 !          UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
 !          OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
 !
-EPMACH = DPMPAR(1)
-UFLOW = DPMPAR(2)
-OFLOW = DPMPAR(3)
+epmach = dpmpar(1)
+uflow = dpmpar(2)
+oflow = dpmpar(3)
 !
 !            TEST ON VALIDITY OF PARAMETERS
 !            ------------------------------
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-ALIST(1) = A
-BLIST(1) = B
-RLIST(1) = 0.D0
-ELIST(1) = 0.D0
-IER = 6
-IF (EPSABS .LT. 0.D0 .OR. EPSREL.LT. 0.D0) GO TO 999
-IER = 0
-RERR = DMAX1(EPSREL, 50.D0*EPMACH)
+last = 0
+result = 0.d0
+abserr = 0.d0
+alist(1) = a
+blist(1) = b
+rlist(1) = 0.d0
+elist(1) = 0.d0
+ier = 6
+if (epsabs .lt. 0.d0 .or. epsrel.lt. 0.d0) go to 999
+ier = 0
+rerr = dmax1(epsrel, 50.d0*epmach)
 !
 !           FIRST APPROXIMATION TO THE INTEGRAL
 !           -----------------------------------
 !
-IERRO = 0
-LP(1) = 1
-LN(1) = 1
-VALP(1,1) = F((A + B)*0.5D0)
-VALN(1,1) = VALP(1,1)
-CALL DQXLQM (F,A,B,RESULT,ABSERR,DEFABS,RESABS, &
-&VALP(1,1),VALN(1,1),LP(1),LN(1),2, &
-&EPMACH,UFLOW,OFLOW)
+ierro = 0
+lp(1) = 1
+ln(1) = 1
+valp(1,1) = f((a + b)*0.5d0)
+valn(1,1) = valp(1,1)
+call dqxlqm (f,a,b,result,abserr,defabs,resabs, &
+&valp(1,1),valn(1,1),lp(1),ln(1),2, &
+&epmach,uflow,oflow)
 !
 !           TEST ON ACCURACY.
 !
-DRES = DABS(RESULT)
-ERRBND = DMAX1(EPSABS,RERR*DRES)
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-IF (ABSERR .LE. 100.D0*EPMACH*DEFABS .AND. ABSERR .GT. &
-&ERRBND) IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0 .OR. (ABSERR.LE.ERRBND.AND.ABSERR.NE.RESABS) .OR. &
-&ABSERR .EQ. 0.D0) GO TO 999
+dres = dabs(result)
+errbnd = dmax1(epsabs,rerr*dres)
+last = 1
+rlist(1) = result
+elist(1) = abserr
+iord(1) = 1
+if (abserr .le. 100.d0*epmach*defabs .and. abserr .gt. &
+&errbnd) ier = 2
+if (limit .eq. 1) ier = 1
+if (ier .ne. 0 .or. (abserr.le.errbnd.and.abserr.ne.resabs) .or. &
+&abserr .eq. 0.d0) go to 999
 !
 !           INITIALIZATION
 !           --------------
 !
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-NRMAX = 1
-NRES = 0
-NUMRL2 = 2
-KTMIN = 0
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.D0 - 50.D0*EPMACH)*DEFABS) KSGN = 1
-T = 1.D0 + 100.D0*EPMACH
+rlist2(1) = result
+errmax = abserr
+maxerr = 1
+area = result
+errsum = abserr
+abserr = oflow
+nrmax = 1
+nres = 0
+numrl2 = 2
+ktmin = 0
+extrap = .false.
+noext = .false.
+iroff1 = 0
+iroff2 = 0
+iroff3 = 0
+ksgn = -1
+if (dres .ge. (1.d0 - 50.d0*epmach)*defabs) ksgn = 1
+t = 1.d0 + 100.d0*epmach
 !
 !           MAIN DO-LOOP
 !           ------------
 !
-do 90 LAST = 2,LIMIT
+do 90 last = 2,limit
 !
 !           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST ERROR
 !           ESTIMATE.
 !
-  A1 = ALIST(MAXERR)
-  B1 = 0.5D0*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL DQXRRD(F,VALN(1,MAXERR),LN(MAXERR),B1,A1,VN1,VP1,LN1,LP1)
-  CALL DQXLQM(F,A1,B1,AREA1,ERROR1,RESABS,DEFAB1,VP1,VN1,LP1,LN1, &
-&2,EPMACH,UFLOW,OFLOW)
-  CALL DQXRRD(F,VALP(1,MAXERR),LP(MAXERR),A2,B2,VP2,VN2,LP2,LN2)
-  CALL DQXLQM(F,A2,B2,AREA2,ERROR2,RESABS,DEFAB2,VP2,VN2,LP2,LN2, &
-&2,EPMACH,UFLOW,OFLOW)
+  a1 = alist(maxerr)
+  b1 = 0.5d0*(alist(maxerr) + blist(maxerr))
+  a2 = b1
+  b2 = blist(maxerr)
+  erlast = errmax
+  call dqxrrd(f,valn(1,maxerr),ln(maxerr),b1,a1,vn1,vp1,ln1,lp1)
+  call dqxlqm(f,a1,b1,area1,error1,resabs,defab1,vp1,vn1,lp1,ln1, &
+&2,epmach,uflow,oflow)
+  call dqxrrd(f,valp(1,maxerr),lp(maxerr),a2,b2,vp2,vn2,lp2,ln2)
+  call dqxlqm(f,a2,b2,area2,error2,resabs,defab2,vp2,vn2,lp2,ln2, &
+&2,epmach,uflow,oflow)
 !
 !           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
 !           AND ERROR AND TEST FOR ACCURACY.
 !
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST.GT.10 .AND. ERRO12.GT.ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
+  area12 = area1 + area2
+  erro12 = error1 + error2
+  errsum = errsum + erro12 - errmax
+  area = area + area12 - rlist(maxerr)
+  if (defab1 .eq. error1 .or. defab2 .eq. error2) go to 15
+  if (dabs(rlist(maxerr) - area12) .gt. 0.1d-04*dabs(area12) &
+&.or. erro12 .lt. 0.99d0*errmax) go to 10
+  if (extrap) iroff2 = iroff2 + 1
+  if (.not.extrap) iroff1 = iroff1 + 1
+10 if (last.gt.10 .and. erro12.gt.errmax) iroff3 = iroff3 + 1
+15 rlist(maxerr) = area1
+  rlist(last) = area2
+  errbnd = dmax1(epsabs,rerr*dabs(area))
 !
 !           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
 !
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
+  if (iroff1 + iroff2 .ge. 10 .or. iroff3 .ge. 20) ier = 2
+  if (iroff2 .ge. 5) ierro = 3
 !
 !           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF SUBINTERVALS
 !           EQUALS LIMIT.
 !
-  IF (LAST .EQ. LIMIT) IER = 1
+  if (last .eq. limit) ier = 1
 !
 !           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
 !           AT A POINT OF THE INTEGRATION RANGE.
 !
-  IF (DMAX1(DABS(A1),DABS(B2)) .LE. &
-&T*(DABS(A2) + 1.D+03*UFLOW)) IER = 4
+  if (dmax1(dabs(a1),dabs(b2)) .le. &
+&t*(dabs(a2) + 1.d+03*uflow)) ier = 4
 !
 !           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
 !
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  CALL DQXCPY(VALP(1,MAXERR),VP1,LP1)
-  LP(MAXERR) = LP1
-  CALL DQXCPY(VALN(1,MAXERR),VN1,LN1)
-  LN(MAXERR) = LN1
-  CALL DQXCPY(VALP(1,LAST),VP2,LP2)
-  LP(LAST) = LP2
-  CALL DQXCPY(VALN(1,LAST),VN2,LN2)
-  LN(LAST) = LN2
-  GO TO 30
+  if (error2 .gt. error1) go to 20
+  alist(last) = a2
+  blist(maxerr) = b1
+  blist(last) = b2
+  elist(maxerr) = error1
+  elist(last) = error2
+  call dqxcpy(valp(1,maxerr),vp1,lp1)
+  lp(maxerr) = lp1
+  call dqxcpy(valn(1,maxerr),vn1,ln1)
+  ln(maxerr) = ln1
+  call dqxcpy(valp(1,last),vp2,lp2)
+  lp(last) = lp2
+  call dqxcpy(valn(1,last),vn2,ln2)
+  ln(last) = ln2
+  go to 30
 !
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
-  CALL DQXCPY(VALP(1,MAXERR),VP2,LP2)
-  LP(MAXERR) = LP2
-  CALL DQXCPY(VALN(1,MAXERR),VN2,LN2)
-  LN(MAXERR) = LN2
-  CALL DQXCPY(VALP(1,LAST),VP1,LP1)
-  LP(LAST) = LP1
-  CALL DQXCPY(VALN(1,LAST),VN1,LN1)
-  LN(LAST) = LN1
+20 alist(maxerr) = a2
+  alist(last) = a1
+  blist(last) = b1
+  rlist(maxerr) = area2
+  rlist(last) = area1
+  elist(maxerr) = error2
+  elist(last) = error1
+  call dqxcpy(valp(1,maxerr),vp2,lp2)
+  lp(maxerr) = lp2
+  call dqxcpy(valn(1,maxerr),vn2,ln2)
+  ln(maxerr) = ln2
+  call dqxcpy(valp(1,last),vp1,lp1)
+  lp(last) = lp1
+  call dqxcpy(valn(1,last),vn1,ln1)
+  ln(last) = ln1
 !
 !           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
 !           IN THE LIST OF ERROR ESTIMATES AND SELECT THE SUBINTERVAL
 !           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
 !
-30 CALL DQPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
+30 call dqpsrt(limit,last,maxerr,errmax,elist,iord,nrmax)
 ! ***JUMP OUT OF DO-LOOP
-  IF(ERRSUM .LE. ERRBND) GO TO 115
+  if(errsum .le. errbnd) go to 115
 ! ***JUMP OUT OF DO-LOOP
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
+  if (ier .ne. 0) go to 100
+  if (last .eq. 2) go to 80
+  if (noext) go to 90
+  erlarg = erlarg - erlast
+  if (dabs(b1 - a1) .gt. small) erlarg = erlarg + erro12
+  if (extrap) go to 40
 !
 !           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
 !           SMALLEST INTERVAL.
 !
-  IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
+  if (dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+  extrap = .true.
+  nrmax = 2
 !
 !           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
 !           MORE CAUTIOUS EXTRAPOLATION THAN IN THE ORIGINAL DQAGSE
 !           ROUTINE
 !
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. 0.3D0*ERTEST) GO TO 60
+40 if (ierro .eq. 3 .or. erlarg .le. 0.3d0*ertest) go to 60
 !
 !           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
 !           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS OVER THE
 !           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
 !
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
+  id = nrmax
+  jupbnd = last
+  if (last .gt. (2 + limit/2)) jupbnd = limit + 3 - last
+  do 50 k = id,jupbnd
+    maxerr = iord(nrmax)
+    errmax = elist(maxerr)
 ! ***JUMP OUT OF DO-LOOP
-    IF(DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
+    if(dabs(blist(maxerr) - alist(maxerr)) .gt. small) go to 90
+    nrmax = nrmax + 1
+50 continue
 !
 !           PERFORM EXTRAPOLATION.
 !
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL DQELG (NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES, &
-&EPMACH,OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
+60 numrl2 = numrl2 + 1
+  rlist2(numrl2) = area
+  call dqelg (numrl2,rlist2,reseps,abseps,res3la,nres, &
+&epmach,oflow)
+  ktmin = ktmin + 1
+  if (ktmin .gt. 5 .and. abserr .lt. 0.1d-02*errsum) ier = 5
+  if (abseps .ge. abserr) go to 70
+  ktmin = 0
+  abserr = abseps
+  result = reseps
+  correc = erlarg
+  ertest = dmax1(epsabs,rerr*dabs(reseps))
 ! ***JUMP OUT OF DO-LOOP
-  IF (ABSERR .LE. ERTEST) GO TO 100
+  if (abserr .le. ertest) go to 100
 !
 !           PREPARE BISECTION OF THE SMALLEST INTERVAL.
 !
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5D0
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = DABS(B - A)*0.375D0
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
+70 if (numrl2 .eq. 1) noext = .true.
+  if (ier .eq. 5) go to 100
+  maxerr = iord(1)
+  errmax = elist(maxerr)
+  nrmax = 1
+  extrap = .false.
+  small = small*0.5d0
+  erlarg = errsum
+  go to 90
+80 small = dabs(b - a)*0.375d0
+  erlarg = errsum
+  ertest = errbnd
+  rlist2(2) = area
+90 continue
 !
 !           SET FINAL RESULT AND ERROR ESTIMATE.
 !           ------------------------------------
 !
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.D0 .AND. AREA .NE. 0.D0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.D0) GO TO 130
-GO TO 110
-105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
+100 if (abserr .eq. oflow) go to 115
+if (ier + ierro .eq. 0) go to 110
+if (ierro .eq. 3) abserr = abserr + correc
+if (ier .eq. 0) ier = 3
+if (result .ne. 0.d0 .and. area .ne. 0.d0) go to 105
+if (abserr .gt. errsum) go to 115
+if (area .eq. 0.d0) go to 130
+go to 110
+105 if (abserr/dabs(result) .gt. errsum/dabs(area)) go to 115
 !
 !           TEST ON DIVERGENCE.
 !
-110 IF(KSGN.EQ.(-1).AND.DMAX1(DABS(RESULT),DABS(AREA)).LE. &
-&DEFABS*0.1D-01) GO TO 130
-IF(0.1D-01.GT.(RESULT/AREA).OR.(RESULT/AREA).GT.0.1D+03 &
-&.OR.ERRSUM.GT.DABS(AREA)) IER = 6
-GO TO 130
+110 if(ksgn.eq.(-1).and.dmax1(dabs(result),dabs(area)).le. &
+&defabs*0.1d-01) go to 130
+if(0.1d-01.gt.(result/area).or.(result/area).gt.0.1d+03 &
+&.or.errsum.gt.dabs(area)) ier = 6
+go to 130
 !
 !           COMPUTE GLOBAL INTEGRAL SUM.
 !
-115 RESULT = 0.D0
-DO K = 1,LAST
-   RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE DQXGSE
+115 result = 0.d0
+do k = 1,last
+   result = result + rlist(k)
+end do
+abserr = errsum
+130 if (ier .gt. 2) ier = ier - 1
+999 return
+end subroutine dqxgse
 
-SUBROUTINE DQXCPY (A, B, L)
-IMPLICIT NONE
-INTEGER :: I
+subroutine dqxcpy (a, b, l)
+implicit none
+integer :: i
 !
 !  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
 !          THE DOUBLE PRECISION VECTOR A OF LENGTH L
 !
-INTEGER, INTENT(IN) :: L
-DOUBLE PRECISION, INTENT(INOUT) :: A(L)
-DOUBLE PRECISION, INTENT(IN) :: B(L)
+integer, intent(in) :: l
+double precision, intent(inout) :: a(l)
+double precision, intent(in) :: b(l)
 !
-do 10 I = 1,L
-10 A(I) = B(I)
-RETURN
-END SUBROUTINE DQXCPY
+do 10 i = 1,l
+10 a(i) = b(i)
+return
+end subroutine dqxcpy
 
-SUBROUTINE DQXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS, &
-&KEY,EPMACH,UFLOW,OFLOW)
-IMPLICIT NONE
+subroutine dqxlqm (f,a,b,result,abserr,resabs,resasc,vr,vs,lr,ls, &
+&key,epmach,uflow,oflow)
+implicit none
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -2130,47 +2130,47 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  DQXRUL
 !
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(IN) :: A, B
-DOUBLE PRECISION, INTENT(INOUT) :: RESULT, ABSERR, RESABS, RESASC
-DOUBLE PRECISION :: T
-DOUBLE PRECISION, INTENT(IN) :: EPMACH, OFLOW, UFLOW
-DOUBLE PRECISION :: RESG, RESK, ERROLD
-DOUBLE PRECISION, INTENT(INOUT) :: VR(21), VS(21)
-INTEGER :: K, K0, K1, K2
-INTEGER, INTENT(IN) :: KEY
-INTEGER :: KEY1
-INTEGER, INTENT(INOUT) :: LR, LS
-EXTERNAL F
+double precision :: f
+double precision, intent(in) :: a, b
+double precision, intent(inout) :: result, abserr, resabs, resasc
+double precision :: t
+double precision, intent(in) :: epmach, oflow, uflow
+double precision :: resg, resk, errold
+double precision, intent(inout) :: vr(21), vs(21)
+integer :: k, k0, k1, k2
+integer, intent(in) :: key
+integer :: key1
+integer, intent(inout) :: lr, ls
+external f
 !
-KEY1 = MAX0(KEY ,  0)
-KEY1 = MIN0(KEY1,  4)
-K0   = MAX0(KEY1-2,0)
-K1   = K0 + 1
-K2   = MIN0(KEY1+1,3)
+key1 = max0(key ,  0)
+key1 = min0(key1,  4)
+k0   = max0(key1-2,0)
+k1   = k0 + 1
+k2   = min0(key1+1,3)
 !
-CALL DQXRUL (F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
-ERROLD = OFLOW
-T = 10.D0*EPMACH
-do 10 K = K1,K2
-  CALL DQXRUL (F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
-  RESULT = RESK
-  ABSERR = DABS(RESK - RESG)
-  IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0) &
-&ABSERR = RESASC*DMIN1(1.D0,(200.D0*ABSERR/RESASC)**1.5D0)
-  IF (RESABS .GT. UFLOW/T) ABSERR = DMAX1(T*RESABS,ABSERR)
-  RESG = RESK
-  IF (ABSERR .GT. ERROLD*0.16D0) GO TO 3000
-  IF (ABSERR .LT. 1000.D0*EPMACH*RESABS) GO TO 3000
-  ERROLD = ABSERR
-10 CONTINUE
-3000 CONTINUE
-RETURN
-END SUBROUTINE DQXLQM
+call dqxrul (f,a,b,resg,resabs,resasc,k0,k1,vr,vs,lr,ls)
+errold = oflow
+t = 10.d0*epmach
+do 10 k = k1,k2
+  call dqxrul (f,a,b,resk,resabs,resasc,k,k1,vr,vs,lr,ls)
+  result = resk
+  abserr = dabs(resk - resg)
+  if (resasc .ne. 0.d0 .and. abserr .ne. 0.d0) &
+&abserr = resasc*dmin1(1.d0,(200.d0*abserr/resasc)**1.5d0)
+  if (resabs .gt. uflow/t) abserr = dmax1(t*resabs,abserr)
+  resg = resk
+  if (abserr .gt. errold*0.16d0) go to 3000
+  if (abserr .lt. 1000.d0*epmach*resabs) go to 3000
+  errold = abserr
+10 continue
+3000 continue
+return
+end subroutine dqxlqm
 
-SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
-IMPLICIT NONE
-INTEGER :: I, IS, K, KS
+subroutine dqxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
+implicit none
+integer :: i, is, k, ks
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -2240,141 +2240,141 @@ INTEGER :: I, IS, K, KS
 !              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 !
 !------------------------
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(IN) :: XL, XU
-DOUBLE PRECISION :: LDL
-DOUBLE PRECISION, INTENT(OUT) :: Y
-DOUBLE PRECISION, INTENT(INOUT) :: YA, YM
-DOUBLE PRECISION :: Y2, XX(41), WW(52)
-DOUBLE PRECISION, INTENT(INOUT) :: FV1(21), FV2(21)
-DOUBLE PRECISION :: AA, BB, C
-INTEGER :: ISTART(4), LEN(4), J
-INTEGER, INTENT(IN) :: KE, K1
-INTEGER, INTENT(INOUT) :: L1, L2
-EXTERNAL F
+double precision :: f
+double precision, intent(in) :: xl, xu
+double precision :: ldl
+double precision, intent(out) :: y
+double precision, intent(inout) :: ya, ym
+double precision :: y2, xx(41), ww(52)
+double precision, intent(inout) :: fv1(21), fv2(21)
+double precision :: aa, bb, c
+integer :: istart(4), len(4), j
+integer, intent(in) :: ke, k1
+integer, intent(inout) :: l1, l2
+external f
 !------------------------
-DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
-DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
+data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
+data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
 !------------------------
-DATA XX( 1)/0.D0                     /
-DATA XX( 2)/.25000000000000000000D+00/
-DATA XX( 3)/.50000000000000000000D+00/
-DATA XX( 4)/.75000000000000000000D+00/
-DATA XX( 5)/.87500000000000000000D+00/
-DATA XX( 6)/.93750000000000000000D+00/
-DATA XX( 7)/.10000000000000000000D+01/
-DATA XX( 8)/.37500000000000000000D+00/
-DATA XX( 9)/.62500000000000000000D+00/
-DATA XX(10)/.96875000000000000000D+00/
-DATA XX(11)/.12500000000000000000D+00/
-DATA XX(12)/.68750000000000000000D+00/
-DATA XX(13)/.81250000000000000000D+00/
-DATA XX(14)/.98437500000000000000D+00/
-DATA XX(15)/.18750000000000000000D+00/
-DATA XX(16)/.31250000000000000000D+00/
-DATA XX(17)/.43750000000000000000D+00/
-DATA XX(18)/.56250000000000000000D+00/
-DATA XX(19)/.84375000000000000000D+00/
-DATA XX(20)/.90625000000000000000D+00/
-DATA XX(21)/.99218750000000000000D+00/
+data xx( 1)/0.d0                     /
+data xx( 2)/.25000000000000000000d+00/
+data xx( 3)/.50000000000000000000d+00/
+data xx( 4)/.75000000000000000000d+00/
+data xx( 5)/.87500000000000000000d+00/
+data xx( 6)/.93750000000000000000d+00/
+data xx( 7)/.10000000000000000000d+01/
+data xx( 8)/.37500000000000000000d+00/
+data xx( 9)/.62500000000000000000d+00/
+data xx(10)/.96875000000000000000d+00/
+data xx(11)/.12500000000000000000d+00/
+data xx(12)/.68750000000000000000d+00/
+data xx(13)/.81250000000000000000d+00/
+data xx(14)/.98437500000000000000d+00/
+data xx(15)/.18750000000000000000d+00/
+data xx(16)/.31250000000000000000d+00/
+data xx(17)/.43750000000000000000d+00/
+data xx(18)/.56250000000000000000d+00/
+data xx(19)/.84375000000000000000d+00/
+data xx(20)/.90625000000000000000d+00/
+data xx(21)/.99218750000000000000d+00/
 !   NUMBER OF NODES 13
-DATA WW(1)/1.303262173284849021810473057638590518409112513421D-1/
-DATA WW(2)/2.390632866847646220320329836544615917290026806242D-1/
-DATA WW(3)/2.630626354774670227333506083741355715758124943143D-1/
-DATA WW(4)/2.186819313830574175167853094864355208948886875898D-1/
-DATA WW(5)/2.757897646642836865859601197607471574336674206700D-2/
-DATA WW(6)/1.055750100538458443365034879086669791305550493830D-1/
-DATA WW(7)/1.571194260595182254168429283636656908546309467968D-2/
+data ww(1)/1.303262173284849021810473057638590518409112513421d-1/
+data ww(2)/2.390632866847646220320329836544615917290026806242d-1/
+data ww(3)/2.630626354774670227333506083741355715758124943143d-1/
+data ww(4)/2.186819313830574175167853094864355208948886875898d-1/
+data ww(5)/2.757897646642836865859601197607471574336674206700d-2/
+data ww(6)/1.055750100538458443365034879086669791305550493830d-1/
+data ww(7)/1.571194260595182254168429283636656908546309467968d-2/
 !   NUMBER OF NODES 19
-DATA WW(8)/1.298751627936015783241173611320651866834051160074D-1/
-DATA WW(9)/2.249996826462523640447834514709508786970828213187D-1/
-DATA WW(15)/5.542699233295875168406783695143646338274805359780D-2/
-DATA WW(10)/1.680415725925575286319046726692683040162290325505D-1/
-DATA WW(16)/9.986735247403367525720377847755415293097913496236D-2/
-DATA WW(11)/1.415567675701225879892811622832845252125600939627D-1/
-DATA WW(12)/1.006482260551160175038684459742336605269707889822D-1/
-DATA WW(13)/2.510604860724282479058338820428989444699235030871D-2/
-DATA WW(17)/4.507523056810492466415880450799432587809828791196D-2/
-DATA WW(14)/9.402964360009747110031098328922608224934320397592D-3/
+data ww(8)/1.298751627936015783241173611320651866834051160074d-1/
+data ww(9)/2.249996826462523640447834514709508786970828213187d-1/
+data ww(15)/5.542699233295875168406783695143646338274805359780d-2/
+data ww(10)/1.680415725925575286319046726692683040162290325505d-1/
+data ww(16)/9.986735247403367525720377847755415293097913496236d-2/
+data ww(11)/1.415567675701225879892811622832845252125600939627d-1/
+data ww(12)/1.006482260551160175038684459742336605269707889822d-1/
+data ww(13)/2.510604860724282479058338820428989444699235030871d-2/
+data ww(17)/4.507523056810492466415880450799432587809828791196d-2/
+data ww(14)/9.402964360009747110031098328922608224934320397592d-3/
 !   NUMBER OF NODES 27
-DATA WW(18)/6.300942249647773931746170540321811473310938661469D-2/
-DATA WW(28)/1.239572396231834242194189674243818619042280816640D-1/
-DATA WW(19)/1.261383225537664703012999637242003647020326905948D-1/
-DATA WW(25)/1.235837891364555000245004813294817451524633100256D-1/
-DATA WW(20)/1.273864433581028272878709981850307363453523117880D-1/
-DATA WW(26)/1.148933497158144016800199601785309838604146040215D-1/
-DATA WW(29)/2.501306413750310579525950767549691151739047969345D-2/
-DATA WW(21)/8.576500414311820514214087864326799153427368592787D-2/
-DATA WW(30)/4.915957918146130094258849161350510503556792927578D-2/
-DATA WW(22)/7.102884842310253397447305465997026228407227220665D-2/
-DATA WW(23)/5.026383572857942403759829860675892897279675661654D-2/
-DATA WW(27)/1.252575774226122633391477702593585307254527198070D-2/
-DATA WW(31)/2.259167374956474713302030584548274729936249753832D-2/
-DATA WW(24)/4.683670010609093810432609684738393586390722052124D-3/
+data ww(18)/6.300942249647773931746170540321811473310938661469d-2/
+data ww(28)/1.239572396231834242194189674243818619042280816640d-1/
+data ww(19)/1.261383225537664703012999637242003647020326905948d-1/
+data ww(25)/1.235837891364555000245004813294817451524633100256d-1/
+data ww(20)/1.273864433581028272878709981850307363453523117880d-1/
+data ww(26)/1.148933497158144016800199601785309838604146040215d-1/
+data ww(29)/2.501306413750310579525950767549691151739047969345d-2/
+data ww(21)/8.576500414311820514214087864326799153427368592787d-2/
+data ww(30)/4.915957918146130094258849161350510503556792927578d-2/
+data ww(22)/7.102884842310253397447305465997026228407227220665d-2/
+data ww(23)/5.026383572857942403759829860675892897279675661654d-2/
+data ww(27)/1.252575774226122633391477702593585307254527198070d-2/
+data ww(31)/2.259167374956474713302030584548274729936249753832d-2/
+data ww(24)/4.683670010609093810432609684738393586390722052124d-3/
 !   NUMBER OF NODES 41
-DATA WW(32)/6.362762978782724559269342300509058175967124446839D-2/
-DATA WW(42)/1.187141856692283347609436153545356484256869129472D-1/
-DATA WW(46)/1.533126874056586959338368742803997744815413565014D-2/
-DATA WW(33)/9.950065827346794643193261975720606296171462239514D-2/
-DATA WW(47)/3.527159369750123100455704702965541866345781113903D-2/
-DATA WW(39)/8.140326425945938045967829319725797511040878579808D-2/
-DATA WW(48)/5.000556431653955124212795201196389006184693561679D-2/
-DATA WW(34)/7.048220002718565366098742295389607994441704889441D-2/
-DATA WW(49)/5.744164831179720106340717579281831675999717767532D-2/
-DATA WW(40)/6.583213447600552906273539578430361199084485578379D-2/
-DATA WW(43)/5.999947605385971985589674757013565610751028128731D-2/
-DATA WW(35)/6.512297339398335645872697307762912795346716454337D-2/
-DATA WW(44)/5.500937980198041736910257988346101839062581489820D-2/
-DATA WW(50)/1.598823797283813438301248206397233634639162043386D-2/
-DATA WW(36)/3.998229150313659724790527138690215186863915308702D-2/
-DATA WW(51)/2.635660410220884993472478832884065450876913559421D-2/
-DATA WW(37)/3.456512257080287509832054272964315588028252136044D-2/
-DATA WW(41)/2.592913726450792546064232192976262988065252032902D-2/
-DATA WW(45)/5.264422421764655969760271538981443718440340270116D-3/
-DATA WW(52)/1.196003937945541091670106760660561117114584656319D-2/
-DATA WW(38)/2.212167975884114432760321569298651047876071264944D-3/
+data ww(32)/6.362762978782724559269342300509058175967124446839d-2/
+data ww(42)/1.187141856692283347609436153545356484256869129472d-1/
+data ww(46)/1.533126874056586959338368742803997744815413565014d-2/
+data ww(33)/9.950065827346794643193261975720606296171462239514d-2/
+data ww(47)/3.527159369750123100455704702965541866345781113903d-2/
+data ww(39)/8.140326425945938045967829319725797511040878579808d-2/
+data ww(48)/5.000556431653955124212795201196389006184693561679d-2/
+data ww(34)/7.048220002718565366098742295389607994441704889441d-2/
+data ww(49)/5.744164831179720106340717579281831675999717767532d-2/
+data ww(40)/6.583213447600552906273539578430361199084485578379d-2/
+data ww(43)/5.999947605385971985589674757013565610751028128731d-2/
+data ww(35)/6.512297339398335645872697307762912795346716454337d-2/
+data ww(44)/5.500937980198041736910257988346101839062581489820d-2/
+data ww(50)/1.598823797283813438301248206397233634639162043386d-2/
+data ww(36)/3.998229150313659724790527138690215186863915308702d-2/
+data ww(51)/2.635660410220884993472478832884065450876913559421d-2/
+data ww(37)/3.456512257080287509832054272964315588028252136044d-2/
+data ww(41)/2.592913726450792546064232192976262988065252032902d-2/
+data ww(45)/5.264422421764655969760271538981443718440340270116d-3/
+data ww(52)/1.196003937945541091670106760660561117114584656319d-2/
+data ww(38)/2.212167975884114432760321569298651047876071264944d-3/
 !------------------------
-K = KE + 1
-IS = ISTART(K)
-KS = LEN(K)
-LDL = XU - XL
-BB = LDL*0.5D0
-AA = XL + BB
+k = ke + 1
+is = istart(k)
+ks = len(k)
+ldl = xu - xl
+bb = ldl*0.5d0
+aa = xl + bb
 !
-Y = 0.D0
-do 10 I = 1,KS
-   C = BB*XX(I)
-   IF (I .GT. L1) FV1(I) = F(AA + C)
-   IF (I .GT. L2) FV2(I) = F(AA - C)
-   J = IS + I
-   Y = Y + (FV1(I) + FV2(I))*WW(J)
-10 CONTINUE
+y = 0.d0
+do 10 i = 1,ks
+   c = bb*xx(i)
+   if (i .gt. l1) fv1(i) = f(aa + c)
+   if (i .gt. l2) fv2(i) = f(aa - c)
+   j = is + i
+   y = y + (fv1(i) + fv2(i))*ww(j)
+10 continue
 !
-Y2 = Y
-Y = Y*BB
-IF (L1 .LT. KS) L1 = KS
-IF (L2 .LT. KS) L2 = KS
-IF (KE .NE. K1) RETURN
+y2 = y
+y = y*bb
+if (l1 .lt. ks) l1 = ks
+if (l2 .lt. ks) l2 = ks
+if (ke .ne. k1) return
 !
-YA = 0.D0
-do 20 I = 1,KS
-   J = IS + I
-   YA = YA + (DABS(FV1(I)) + DABS(FV2(I)))*WW(J)
-20 CONTINUE
-YA = YA*DABS(BB)
+ya = 0.d0
+do 20 i = 1,ks
+   j = is + i
+   ya = ya + (dabs(fv1(i)) + dabs(fv2(i)))*ww(j)
+20 continue
+ya = ya*dabs(bb)
 !
-Y2 = Y2*0.5D0
-YM = 0.D0
-do 30 I = 1,KS
-   J = IS + I
-   YM = YM + (DABS(FV1(I) - Y2) + DABS(FV2(I) - Y2))*WW(J)
-30 CONTINUE
-YM = YM*DABS(BB)
-RETURN
-END SUBROUTINE DQXRUL
+y2 = y2*0.5d0
+ym = 0.d0
+do 30 i = 1,ks
+   j = is + i
+   ym = ym + (dabs(fv1(i) - y2) + dabs(fv2(i) - y2))*ww(j)
+30 continue
+ym = ym*dabs(bb)
+return
+end subroutine dqxrul
 
-SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
-IMPLICIT NONE
+subroutine dqxrrd (f,z,lz,xl,xu,r,s,lr,ls)
+implicit none
 !
 !            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 !            THE BISECTION OF AN INTERVAL
@@ -2409,77 +2409,77 @@ IMPLICIT NONE
 !
 !***ROUTINES CALLED  F
 !
-DOUBLE PRECISION :: F
-DOUBLE PRECISION, INTENT(INOUT) :: R(21), S(21)
-DOUBLE PRECISION :: Z(21)
-DOUBLE PRECISION, INTENT(IN) :: XU, XL
-DOUBLE PRECISION :: DLEN, CENTR
-INTEGER, INTENT(INOUT) :: LR, LS
-INTEGER, INTENT(IN) :: LZ
+double precision :: f
+double precision, intent(inout) :: r(21), s(21)
+double precision :: z(21)
+double precision, intent(in) :: xu, xl
+double precision :: dlen, centr
+integer, intent(inout) :: lr, ls
+integer, intent(in) :: lz
 !
-DLEN = (XU - XL)*0.5D0
-CENTR = XL + DLEN
-R(1) =  Z(3)
-R(2) =  Z(9)
-R(3) =  Z(4)
-R(4) =  Z(5)
-R(5) =  Z(6)
-R(6) =  Z(10)
-R(7) =  Z(7)
-S(1) =  Z(3)
-S(2) =  Z(8)
-S(3) =  Z(2)
-S(7) =  Z(1)
-IF (LZ .GT. 11) GO TO 10
+dlen = (xu - xl)*0.5d0
+centr = xl + dlen
+r(1) =  z(3)
+r(2) =  z(9)
+r(3) =  z(4)
+r(4) =  z(5)
+r(5) =  z(6)
+r(6) =  z(10)
+r(7) =  z(7)
+s(1) =  z(3)
+s(2) =  z(8)
+s(3) =  z(2)
+s(7) =  z(1)
+if (lz .gt. 11) go to 10
 !
-R(8) =  F(CENTR + DLEN*0.375D0)
-R(9) =  F(CENTR + DLEN*0.625D0)
-R(10) = F(CENTR + DLEN*0.96875D0)
-LR = 10
-IF (LZ .NE. 11) S(4) = F(CENTR - DLEN*0.75D0)
-IF (LZ .EQ. 11) S(4) = Z(11)
-S(5) =  F(CENTR - DLEN*0.875D0)
-S(6) =  F(CENTR - DLEN*0.9375D0)
-S(8) =  F(CENTR - DLEN*0.375D0)
-S(9) =  F(CENTR - DLEN*0.625D0)
-S(10) = F(CENTR - DLEN*0.96875D0)
-LS = 10
-RETURN
+r(8) =  f(centr + dlen*0.375d0)
+r(9) =  f(centr + dlen*0.625d0)
+r(10) = f(centr + dlen*0.96875d0)
+lr = 10
+if (lz .ne. 11) s(4) = f(centr - dlen*0.75d0)
+if (lz .eq. 11) s(4) = z(11)
+s(5) =  f(centr - dlen*0.875d0)
+s(6) =  f(centr - dlen*0.9375d0)
+s(8) =  f(centr - dlen*0.375d0)
+s(9) =  f(centr - dlen*0.625d0)
+s(10) = f(centr - dlen*0.96875d0)
+ls = 10
+return
 !
-10 R(8) = Z(12)
-R(9) = Z(13)
-R(10) = Z(14)
-LR = 10
-S(4) = Z(11)
-S(5) = F(CENTR - DLEN*0.875D0)
-S(6) = F(CENTR - DLEN*0.9375D0)
-IF (LZ .GT. 14) GO TO 20
-S(8)  = F(CENTR - DLEN*0.375D0)
-S(9)  = F(CENTR - DLEN*0.625D0)
-S(10) = F(CENTR - DLEN*0.96875D0)
-LS = 10
-RETURN
+10 r(8) = z(12)
+r(9) = z(13)
+r(10) = z(14)
+lr = 10
+s(4) = z(11)
+s(5) = f(centr - dlen*0.875d0)
+s(6) = f(centr - dlen*0.9375d0)
+if (lz .gt. 14) go to 20
+s(8)  = f(centr - dlen*0.375d0)
+s(9)  = f(centr - dlen*0.625d0)
+s(10) = f(centr - dlen*0.96875d0)
+ls = 10
+return
 !
-20 R(11) = Z(18)
-R(12) = Z(19)
-R(13) = Z(20)
-R(14) = Z(21)
-LR = 14
-S(8) = Z(16)
-S(9) = Z(15)
-S(10) = F(CENTR - DLEN*0.96875D0)
-S(11) = Z(17)
-LS = 11
-RETURN
-END SUBROUTINE DQXRRD
+20 r(11) = z(18)
+r(12) = z(19)
+r(13) = z(20)
+r(14) = z(21)
+lr = 14
+s(8) = z(16)
+s(9) = z(15)
+s(10) = f(centr - dlen*0.96875d0)
+s(11) = z(17)
+ls = 11
+return
+end subroutine dqxrrd
 
-SUBROUTINE CUBTRI(F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, &
-&IDATA, RDATA, IER)
-IMPLICIT NONE
-INTEGER :: I, J, JKP, K, L, MAXC, MAXK, MW, NFE
-REAL :: ONE, POINT5, ZERO
-REAL :: RNDERR
-REAL :: F
+subroutine cubtri(f, t, eps, mcalls, ans, err, ncalls, w, nw, &
+&idata, rdata, ier)
+implicit none
+integer :: i, j, jkp, k, l, maxc, maxk, mw, nfe
+real :: one, point5, zero
+real :: rnderr
+real :: f
 !
 !       ADAPTIVE CUBATURE OVER A TRIANGLE
 !
@@ -2543,138 +2543,138 @@ REAL :: F
 !       ERROR TEST BY REMOVING THE IF STATEMENT IMMEDIATELY PRECEDING
 !       STATEMENT NUMBER 90.
 !
-EXTERNAL F
-INTEGER :: IDATA(*), IER, MCALLS, NCALLS, NW
-REAL :: ALFA, ANS, ANSKP, AREA, EPS, ERR, ERRMAX, H, Q1, Q2, R1, &
-&R2, RDATA(*), D(2,4), S(4), T(2,*), VEC(2,3), W(6,NW), X(2)
+external f
+integer :: idata(*), ier, mcalls, ncalls, nw
+real :: alfa, ans, anskp, area, eps, err, errmax, h, q1, q2, r1, &
+&r2, rdata(*), d(2,4), s(4), t(2,*), vec(2,3), w(6,nw), x(2)
 !       ACTUAL DIMENSION OF W IS (6,NW/6)
 !
-DOUBLE PRECISION :: TANS, TERR, DZERO
-COMMON /CUBSTA/ TANS, TERR
+double precision :: tans, terr, dzero
+common /cubsta/ tans, terr
 !       THIS COMMON IS REQUIRED TO PRESERVE TANS AND TERR BETWEEN CALLS
 !       AND TO SAVE VARIABLES IN FUNCTION RNDERR
-DATA NFE /19/, S(1), S(2), S(3), S(4) /3*1E0,-1E0/, D(1,1), &
-&D(2,1) /0.0,0.0/, D(1,2), D(2,2) /0.0,1.0/, D(1,3), D(2,3) &
-&/1.0,0.0/, D(1,4), D(2,4) /1.0,1.0/
+data nfe /19/, s(1), s(2), s(3), s(4) /3*1e0,-1e0/, d(1,1), &
+&d(2,1) /0.0,0.0/, d(1,2), d(2,2) /0.0,1.0/, d(1,3), d(2,3) &
+&/1.0,0.0/, d(1,4), d(2,4) /1.0,1.0/
 !       NFE IS THE NUMBER OF FUNCTION EVALUATIONS PER CALL TO CUBRUL.
-DATA ZERO /0.E0/, ONE /1.E0/, DZERO /0.D0/, POINT5 /.5E0/
+data zero /0.e0/, one /1.e0/, dzero /0.d0/, point5 /.5e0/
 !
 !      CALCULATE DIRECTION VECTORS, AREA AND MAXIMUM NUMBER
 !      OF SUBDIVISIONS THAT MAY BE PERFORMED
-DO I=1,2
-  VEC(I,3) = T(I,3)
-  DO J=1,2
-    VEC(I,J) = T(I,J) - T(I,3)
-  END DO
-END DO
-MAXC = (MCALLS/NFE+3)/4
-IER = 1
-MAXK = MIN0(MAXC,(NW/6+2)/3)
-IF (MAXC.GT.MAXK) IER = 2
-AREA = ABS(VEC(1,1)*VEC(2,2)-VEC(1,2)*VEC(2,1))*POINT5
-K = (NCALLS/NFE+3)/4
-MW = 3*(K-1) + 1
-IF (NCALLS.GT.0) GO TO 30
+do i=1,2
+  vec(i,3) = t(i,3)
+  do j=1,2
+    vec(i,j) = t(i,j) - t(i,3)
+  end do
+end do
+maxc = (mcalls/nfe+3)/4
+ier = 1
+maxk = min0(maxc,(nw/6+2)/3)
+if (maxc.gt.maxk) ier = 2
+area = abs(vec(1,1)*vec(2,2)-vec(1,2)*vec(2,1))*point5
+k = (ncalls/nfe+3)/4
+mw = 3*(k-1) + 1
+if (ncalls.gt.0) go to 30
 !
 !       TEST FOR TRIVIAL CASES
-TANS = DZERO
-TERR = DZERO
-IF (AREA.EQ.ZERO) GO TO 90
-IF (MCALLS.LT.NFE) GO TO 100
-IF (NW.LT.6) GO TO 110
+tans = dzero
+terr = dzero
+if (area.eq.zero) go to 90
+if (mcalls.lt.nfe) go to 100
+if (nw.lt.6) go to 110
 !
 !       INITIALIZE DATA LIST
-K = 1
-MW = 1
-W(1,1) = ZERO
-W(2,1) = ZERO
-W(3,1) = ONE
-CALL CUBRUL(F, VEC, W(1,1), IDATA, RDATA)
-TANS = W(5,1)
-TERR = W(6,1)
-NCALLS = NFE
+k = 1
+mw = 1
+w(1,1) = zero
+w(2,1) = zero
+w(3,1) = one
+call cubrul(f, vec, w(1,1), idata, rdata)
+tans = w(5,1)
+terr = w(6,1)
+ncalls = nfe
 !
 !       TEST TERMINATION CRITERIA
-30 ANS = TANS
-ERR = TERR
-IF (ERR.LT.AMAX1(ONE,ABS(ANS))*EPS) GO TO 90
-IF (K.EQ.MAXK) GO TO 120
+30 ans = tans
+err = terr
+if (err.lt.amax1(one,abs(ans))*eps) go to 90
+if (k.eq.maxk) go to 120
 !
 !       FIND TRIANGLE WITH LARGEST ERROR
-ERRMAX = ZERO
-do 40 I = 1,MW
-  IF (W(6,I).LE.ERRMAX) GO TO 40
-  ERRMAX = W(6,I)
-  J = I
-40 CONTINUE
+errmax = zero
+do 40 i = 1,mw
+  if (w(6,i).le.errmax) go to 40
+  errmax = w(6,i)
+  j = i
+40 continue
 !
 !       SUBDIVIDE TRIANGLE INTO FOUR SUBTRIANGLES AND UPDATE DATA LIST
-DO I=1,2
-  X(I) = W(I,J)
-END DO
-H = W(3,J)*POINT5
-IF (RNDERR(X(1),H,X(1),H).NE.ZERO) GO TO 130
-IF (RNDERR(X(2),H,X(2),H).NE.ZERO) GO TO 130
-ANSKP = SNGL(TANS)
-TANS = TANS - DBLE(W(5,J))
-TERR = TERR - DBLE(W(6,J))
-R1 = W(4,J)
-R2 = W(5,J)
-JKP = J
-Q1 = ZERO
-Q2 = ZERO
-DO I=1,4
-  DO L=1,2
-    W(L,J) = X(L) + H*D(L,I)
-  END DO
-  W(3,J) = H*S(I)
-  CALL CUBRUL(F, VEC, W(1,J), IDATA, RDATA)
-  Q2 = Q2 + W(5,J)
-  Q1 = Q1 + W(4,J)
-  J = MW + I
-END DO
-ALFA = 1E15
-IF (Q2.NE.R2) ALFA = ABS((Q1-R1)/(Q2-R2)-ONE)
-J = JKP
-DO I=1,4
-  W(6,J) = W(6,J)/ALFA
-  TANS = TANS + W(5,J)
-  TERR = TERR + W(6,J)
-  J = MW + I
-END DO
-MW = MW + 3
-NCALLS = NCALLS + 4*NFE
-K = K + 1
+do i=1,2
+  x(i) = w(i,j)
+end do
+h = w(3,j)*point5
+if (rnderr(x(1),h,x(1),h).ne.zero) go to 130
+if (rnderr(x(2),h,x(2),h).ne.zero) go to 130
+anskp = sngl(tans)
+tans = tans - dble(w(5,j))
+terr = terr - dble(w(6,j))
+r1 = w(4,j)
+r2 = w(5,j)
+jkp = j
+q1 = zero
+q2 = zero
+do i=1,4
+  do l=1,2
+    w(l,j) = x(l) + h*d(l,i)
+  end do
+  w(3,j) = h*s(i)
+  call cubrul(f, vec, w(1,j), idata, rdata)
+  q2 = q2 + w(5,j)
+  q1 = q1 + w(4,j)
+  j = mw + i
+end do
+alfa = 1e15
+if (q2.ne.r2) alfa = abs((q1-r1)/(q2-r2)-one)
+j = jkp
+do i=1,4
+  w(6,j) = w(6,j)/alfa
+  tans = tans + w(5,j)
+  terr = terr + w(6,j)
+  j = mw + i
+end do
+mw = mw + 3
+ncalls = ncalls + 4*nfe
+k = k + 1
 !
 !       IF ANSWER IS UNCHANGED, IT CANNOT BE IMPROVED
-IF (ANSKP.EQ.SNGL(TANS)) GO TO 150
+if (anskp.eq.sngl(tans)) go to 150
 !
 !       REMOVE THIS IF STATEMENT TO DISABLE ROUNDING ERROR TEST
-IF (K.GT.3 .AND. ABS(Q2-R2).GT.ABS(Q1-R1)) GO TO 140
-GO TO 30
+if (k.gt.3 .and. abs(q2-r2).gt.abs(q1-r1)) go to 140
+go to 30
 !
 !       EXITS FROM SUBROUTINE
-90 IER = 0
-GO TO 120
-100 IER = 1
-GO TO 120
-110 IER = 2
-120 ANS = TANS
-ERR = TERR
-RETURN
-130 IER = 3
-GO TO 120
-140 IER = 4
-GO TO 120
-150 IER = 5
-GO TO 120
-END SUBROUTINE CUBTRI
+90 ier = 0
+go to 120
+100 ier = 1
+go to 120
+110 ier = 2
+120 ans = tans
+err = terr
+return
+130 ier = 3
+go to 120
+140 ier = 4
+go to 120
+150 ier = 5
+go to 120
+end subroutine cubtri
 
-FUNCTION RNDERR(X, A, Y, B)
-IMPLICIT NONE
-REAL :: A, B, X, Y
-REAL :: S, T
-REAL :: RNDERR
+function rnderr(x, a, y, b)
+implicit none
+real :: a, b, x, y
+real :: s, t
+real :: rnderr
 !       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
 !       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
 !       AS X AND B MUST BE THE SAME AS A.  THEY ARE DECLARED AS
@@ -2682,18 +2682,18 @@ REAL :: RNDERR
 !       VARIABLES S AND T ARE PUT INTO COMMON, IN ORDER TO DEFEND
 !       AGAINST THE WELL-MEANING ACTIONS OF SOME OFFICIOUS OPTIMIZING
 !       FORTRAN COMPILERS.
-COMMON /CUBATB/ S, T
-S = X + A
-T = S - Y
-RNDERR = T - B
-RETURN
-END FUNCTION RNDERR
+common /cubatb/ s, t
+s = x + a
+t = s - y
+rnderr = t - b
+return
+end function rnderr
 
-SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
-IMPLICIT NONE
-INTEGER :: I, J, K, NQUAD
-REAL :: POINT5, X, Y
-REAL :: F
+subroutine cubrul(f, vec, p, idata, rdata)
+implicit none
+integer :: i, j, k, nquad
+real :: point5, x, y
+real :: f
 !
 !       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
 !
@@ -2723,14 +2723,14 @@ REAL :: F
 !       THEY MAY BE DECLARED SINGLE PRECISION IF DOUBLE PRECISION IS
 !       NOT AVAILABLE AND FULL ACCURACY IS NOT NEEDED.
 !
-DOUBLE PRECISION :: A1, A2, S, SN, DZERO, DONE, DTHREE, DSIX
-REAL :: AREA, ORIGIN(2)
-REAL, INTENT(INOUT) :: P(*)
-REAL :: RDATA(*), TVEC(2,3)
-REAL, INTENT(IN) :: VEC(2,*)
-REAL :: W(5,6)
-INTEGER :: IDATA(*)
-EXTERNAL F
+double precision :: a1, a2, s, sn, dzero, done, dthree, dsix
+real :: area, origin(2)
+real, intent(inout) :: p(*)
+real :: rdata(*), tvec(2,3)
+real, intent(in) :: vec(2,*)
+real :: w(5,6)
+integer :: idata(*)
+external f
 !
 !       W CONTAINS POINTS AND WEIGHTS OF THE INTEGRATION FORMULAE
 !       NQUAD - NUMBER OF BASIC RULES USED
@@ -2761,88 +2761,88 @@ EXTERNAL F
 !     W(4,6) = 0
 !     W(5,6) = 11075/8064 - 125*SIGMA/288
 !
-DATA NQUAD /6/
-DATA W(1,1), W(2,1), W(3,1) /3*.3333333333333333333333333E0/, &
-&W(4,1), W(5,1) /.225E0,.3786109120031468330830822E-1/, &
-&W(1,2), W(2,2), W(3,2) /.7974269853530873223980253E0,2* &
-&.1012865073234563388009874E0/, W(4,2), W(5,2) &
-&/.3778175416344814577870518E0,.1128612762395489164329420E0/, &
-&W(1,3), W(2,3), W(3,3) /.5971587178976982045911758E-1,2* &
-&.4701420641051150897704412E0/, W(4,3), W(5,3) &
-&/.3971824583655185422129482E0,.2350720567323520126663380E0/
-DATA W(1,4), W(2,4), W(3,4) /.5357953464498992646629509E0,2* &
-&.2321023267750503676685246E0/, W(4,4), W(5,4) &
-&/0.E0,.3488144389708976891842461E0/, W(1,5), W(2,5), W(3,5) &
-&/.9410382782311208665596304E0,2*.2948086088443956672018481E-1/, &
-&W(4,5), W(5,5) /0.E0,.4033280212549620569433320E-1/, W(1,6), &
-&W(2,6), W(3,6) /.7384168123405100656112906E0, &
-&.2321023267750503676685246E0,.2948086088443956672018481E-1/, &
-&W(4,6), W(5,6) /0.E0,.2250583347313904927138324E0/
+data nquad /6/
+data w(1,1), w(2,1), w(3,1) /3*.3333333333333333333333333e0/, &
+&w(4,1), w(5,1) /.225e0,.3786109120031468330830822e-1/, &
+&w(1,2), w(2,2), w(3,2) /.7974269853530873223980253e0,2* &
+&.1012865073234563388009874e0/, w(4,2), w(5,2) &
+&/.3778175416344814577870518e0,.1128612762395489164329420e0/, &
+&w(1,3), w(2,3), w(3,3) /.5971587178976982045911758e-1,2* &
+&.4701420641051150897704412e0/, w(4,3), w(5,3) &
+&/.3971824583655185422129482e0,.2350720567323520126663380e0/
+data w(1,4), w(2,4), w(3,4) /.5357953464498992646629509e0,2* &
+&.2321023267750503676685246e0/, w(4,4), w(5,4) &
+&/0.e0,.3488144389708976891842461e0/, w(1,5), w(2,5), w(3,5) &
+&/.9410382782311208665596304e0,2*.2948086088443956672018481e-1/, &
+&w(4,5), w(5,5) /0.e0,.4033280212549620569433320e-1/, w(1,6), &
+&w(2,6), w(3,6) /.7384168123405100656112906e0, &
+&.2321023267750503676685246e0,.2948086088443956672018481e-1/, &
+&w(4,6), w(5,6) /0.e0,.2250583347313904927138324e0/
 !
-DATA DZERO /0.D0/, DONE /1.D0/, DTHREE /3.D0/, DSIX /6.D0/, &
-&POINT5 /.5E0/
+data dzero /0.d0/, done /1.d0/, dthree /3.d0/, dsix /6.d0/, &
+&point5 /.5e0/
 !
 !       SCALE BASE VECTORS AND OBTAIN AREA
 !
-DO I=1,2
-  ORIGIN(I) = VEC(I,3) + P(1)*VEC(I,1) + P(2)*VEC(I,2)
-  DO J=1,2
-    TVEC(I,J) = P(3)*VEC(I,J)
-  END DO
-END DO
-AREA = POINT5*ABS(TVEC(1,1)*TVEC(2,2)-TVEC(1,2)*TVEC(2,1))
-A1 = DZERO
-A2 = DZERO
+do i=1,2
+  origin(i) = vec(i,3) + p(1)*vec(i,1) + p(2)*vec(i,2)
+  do j=1,2
+    tvec(i,j) = p(3)*vec(i,j)
+  end do
+end do
+area = point5*abs(tvec(1,1)*tvec(2,2)-tvec(1,2)*tvec(2,1))
+a1 = dzero
+a2 = dzero
 !
 !       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
 !
-DO K=1,NQUAD
-  X = ORIGIN(1) + W(1,K)*TVEC(1,1) + W(2,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(1,K)*TVEC(2,1) + W(2,K)*TVEC(2,2)
-  S = DBLE(F(X,Y,IDATA,RDATA))
-  SN = DONE
-  IF (W(1,K).EQ.W(2,K)) GO TO 30
-  X = ORIGIN(1) + W(2,K)*TVEC(1,1) + W(1,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(2,K)*TVEC(2,1) + W(1,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(2,K)*TVEC(1,1) + W(3,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(2,K)*TVEC(2,1) + W(3,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  SN = DTHREE
-  IF (W(2,K).EQ.W(3,K)) GO TO 30
-  X = ORIGIN(1) + W(1,K)*TVEC(1,1) + W(3,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(1,K)*TVEC(2,1) + W(3,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(3,K)*TVEC(1,1) + W(1,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(3,K)*TVEC(2,1) + W(1,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(3,K)*TVEC(1,1) + W(2,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(3,K)*TVEC(2,1) + W(2,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  SN = DSIX
-30 S = S/SN
-  A1 = A1 + W(4,K)*S
-  A2 = A2 + W(5,K)*S
-END DO
-P(4) = SNGL(A1)*AREA
-P(5) = SNGL(A2)*AREA
-P(6) = ABS(P(5)-P(4))
-RETURN
-END SUBROUTINE CUBRUL
+do k=1,nquad
+  x = origin(1) + w(1,k)*tvec(1,1) + w(2,k)*tvec(1,2)
+  y = origin(2) + w(1,k)*tvec(2,1) + w(2,k)*tvec(2,2)
+  s = dble(f(x,y,idata,rdata))
+  sn = done
+  if (w(1,k).eq.w(2,k)) go to 30
+  x = origin(1) + w(2,k)*tvec(1,1) + w(1,k)*tvec(1,2)
+  y = origin(2) + w(2,k)*tvec(2,1) + w(1,k)*tvec(2,2)
+  s = s + dble(f(x,y,idata,rdata))
+  x = origin(1) + w(2,k)*tvec(1,1) + w(3,k)*tvec(1,2)
+  y = origin(2) + w(2,k)*tvec(2,1) + w(3,k)*tvec(2,2)
+  s = s + dble(f(x,y,idata,rdata))
+  sn = dthree
+  if (w(2,k).eq.w(3,k)) go to 30
+  x = origin(1) + w(1,k)*tvec(1,1) + w(3,k)*tvec(1,2)
+  y = origin(2) + w(1,k)*tvec(2,1) + w(3,k)*tvec(2,2)
+  s = s + dble(f(x,y,idata,rdata))
+  x = origin(1) + w(3,k)*tvec(1,1) + w(1,k)*tvec(1,2)
+  y = origin(2) + w(3,k)*tvec(2,1) + w(1,k)*tvec(2,2)
+  s = s + dble(f(x,y,idata,rdata))
+  x = origin(1) + w(3,k)*tvec(1,1) + w(2,k)*tvec(1,2)
+  y = origin(2) + w(3,k)*tvec(2,1) + w(2,k)*tvec(2,2)
+  s = s + dble(f(x,y,idata,rdata))
+  sn = dsix
+30 s = s/sn
+  a1 = a1 + w(4,k)*s
+  a2 = a2 + w(5,k)*s
+end do
+p(4) = sngl(a1)*area
+p(5) = sngl(a2)*area
+p(6) = abs(p(5)-p(4))
+return
+end subroutine cubrul
 
-SUBROUTINE IESLV (KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER, &
-&MUPPER,NF,MF,NORM,W,IER)
-IMPLICIT NONE
-INTEGER :: IER, IFLAG, MF, MUPPER, NF, NT, NUPPER
-REAL :: A, B, EP, T(*), W(*), X(*)
-INTEGER :: I1, I10, I11, I12, I13, I14, I15, I16, I17, I18, I19, &
-&I2, I20, I21, I3, I4, I5, I6, I7, I8, I9, M, N, NHALF, NMAX, NSQ, &
-&NUP
-REAL :: CUTOFF, ROOTRT, UNITRD
-INTEGER :: MFINAL, NFINAL
-REAL :: FINLEP, R1, R2
-REAL :: RHFCN
-REAL :: SPMPAR
+subroutine ieslv (kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
+&mupper,nf,mf,norm,w,ier)
+implicit none
+integer :: ier, iflag, mf, mupper, nf, nt, nupper
+real :: a, b, ep, t(*), w(*), x(*)
+integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, &
+&i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nmax, nsq, &
+&nup
+real :: cutoff, rootrt, unitrd
+integer :: mfinal, nfinal
+real :: finlep, r1, r2
+real :: rhfcn
+real :: spmpar
 !
 !   THE INTEGRAL EQUATION BEING SOLVED IS
 !
@@ -2924,12 +2924,12 @@ REAL :: SPMPAR
 !       INTEGRAL EQUATIONS OF THE SECOND KIND, SIAM PUB., 1976,
 !       PART II, CHAP. 5.
 !
-REAL :: KERNEL, NORM, NORMK
-EXTERNAL KERNEL,RHFCN
+real :: kernel, norm, normk
+external kernel,rhfcn
 !
 !*******************************************************************
 !                                                                  *
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
+common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
 !                                                                  *
 !   THE NUMBERS IN XXINFO GIVE ADDITIONAL INFORMATION ABOUT THE    *
 !   FUNCTIONING OF IESLV. R1 IS THE ITERATIVE RATE OF CONVERGENCE  *
@@ -2951,7 +2951,7 @@ COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
 !   USED. THERE IS ALSO AN UPPER LIMIT OF 128 ON N IMPOSED BY THE  *
 !   SUBROUTINE LNSYS.                                              *
 !                                                                  *
-        DATA NMAX /64/
+        data nmax /64/
 !                                                                  *
 !*******************************************************************
 !                                                                  *
@@ -2959,126 +2959,126 @@ COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
 !     VALUE U WHERE U IS THE SMALLEST FLOATING POINT NUMBER SUCH   *
 !     THAT 1.0 + U .GT. 1.0.                                       *
 !                                                                  *
-        UNITRD = SPMPAR(1)
+        unitrd = spmpar(1)
 !                                                                  *
 !*******************************************************************
 !
-CUTOFF = 0.5
-ROOTRT = 0.1
-NUP = MIN0(NUPPER,NMAX)
+cutoff = 0.5
+rootrt = 0.1
+nup = min0(nupper,nmax)
 !
 !   SET UP THE RELATIVE BASE ADDRESSES FOR THE VARIOUS ARRAYS INTO
 !   WHICH W IS TO BE SPLIT.
-N=NUP
-M=MUPPER
-NSQ=N*N
-I1=1
-I2=I1+NSQ
-I3=I2+NSQ
-I4=I3+NSQ/2
-I5=I4+NSQ/2
-I6=I5+M
-I7=I6+M
-I8=I7+N
-I9=I8+N
-I10=I9+M
-I11=I10+N
-I12=I11+M
-I13=I12+M
-I14=I13+M
-I15=I14+N
-I16=I15+M
-I17=I16+M
-I18=I17+N
-I19=I18+M
-I20=I19+4*N
-I21=I20+NSQ
-NHALF=N/2
-CALL IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUPPER,IER, &
-&CUTOFF,ROOTRT,UNITRD,NHALF,W(I1),W(I2),W(I3),W(I4),W(I5), &
-&W(I6),W(I7),W(I8),W(I9),W(I10),W(I11),W(I12),W(I13), &
-&W(I14),W(I15),W(I16),W(I17),W(I18),W(I19),W(I20),W(I21))
-NORM=NORMK
-NF=NFINAL
-MF=MFINAL
-RETURN
-END SUBROUTINE IESLV
+n=nup
+m=mupper
+nsq=n*n
+i1=1
+i2=i1+nsq
+i3=i2+nsq
+i4=i3+nsq/2
+i5=i4+nsq/2
+i6=i5+m
+i7=i6+m
+i8=i7+n
+i9=i8+n
+i10=i9+m
+i11=i10+n
+i12=i11+m
+i13=i12+m
+i14=i13+m
+i15=i14+n
+i16=i15+m
+i17=i16+m
+i18=i17+n
+i19=i18+m
+i20=i19+4*n
+i21=i20+nsq
+nhalf=n/2
+call iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mupper,ier, &
+&cutoff,rootrt,unitrd,nhalf,w(i1),w(i2),w(i3),w(i4),w(i5), &
+&w(i6),w(i7),w(i8),w(i9),w(i10),w(i11),w(i12),w(i13), &
+&w(i14),w(i15),w(i16),w(i17),w(i18),w(i19),w(i20),w(i21))
+norm=normk
+nf=nfinal
+mf=mfinal
+return
+end subroutine ieslv
 
-SUBROUTINE IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUP,IER, &
-&CUTOFF,ROOTRT,UNITRD,NHALF,LUFACT,KMM,KMN,KNM,RHS,R,RH, &
-&DELN,TM,TN,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3, &
-&IMKNN)
-IMPLICIT NONE
-INTEGER :: IER, IFLAG, MUP, NHALF, NT, NUP
-REAL :: A, ASIDE(NUP,*), ASIDE3(NUP,NUP), B, CUTOFF, DELN(NUP), &
-&EP, OLDX(MUP), R(MUP), RH(NUP), RHS(MUP), ROOTRT, SAVE(MUP), &
-&SAVE2(MUP), T(*), TM(MUP), TN(NUP), UNITRD, WM(MUP), WN(NUP), &
-&X(*), XM(MUP), XMZ(MUP), XN(NUP)
-INTEGER :: I, IND, J, LOOP, M, MNEW, N
-REAL :: ASIDE2(5), AVERR, COND, DENR1, DENR2, EPS, ERROR, ESTERR, &
-&PASTC, PASTRE, R1RAT, RATE, RELERR, RELMIN, RT, TEMP, TEMP2, TEST, &
-&XNORM
-INTEGER :: MFINAL, NFINAL
-REAL :: FINLEP, R1, R2
-REAL :: ELINSY, RELRSD
-REAL :: RHFCN
-REAL :: RNRM
-REAL :: CONEW
-REAL :: RMIN
+subroutine iegs(kernel,rhfcn,a,b,ep,iflag,x,t,nt,nup,mup,ier, &
+&cutoff,rootrt,unitrd,nhalf,lufact,kmm,kmn,knm,rhs,r,rh, &
+&deln,tm,tn,xm,xmz,wm,wn,oldx,save,xn,save2,aside,aside3, &
+&imknn)
+implicit none
+integer :: ier, iflag, mup, nhalf, nt, nup
+real :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
+&ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
+&save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
+&x(*), xm(mup), xmz(mup), xn(nup)
+integer :: i, ind, j, loop, m, mnew, n
+real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
+&pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
+&xnorm
+integer :: mfinal, nfinal
+real :: finlep, r1, r2
+real :: elinsy, relrsd
+real :: rhfcn
+real :: rnrm
+real :: conew
+real :: rmin
 !
 !   THIS ROUTINE CONTROLS THE SOLUTION OF THE INTEGRAL EQUATION.
 !
-REAL :: KERNEL, LUFACT(NUP,NUP), KMM(NUP,NUP), KMN(NUP,NHALF), &
-&KNM(NHALF,NUP), IMKNN(NUP,NUP), NORMK, NUMR1, NUMR2
-INTEGER :: FLAG, OLDM, PIVOT(128)
-COMMON/XXLIN/ELINSY,RELRSD,PIVOT
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-EXTERNAL KERNEL,RHFCN
+real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
+&knm(nhalf,nup), imknn(nup,nup), normk, numr1, numr2
+integer :: flag, oldm, pivot(128)
+common/xxlin/elinsy,relrsd,pivot
+common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
+external kernel,rhfcn
 !
 !   INITIALIZATION
 !
-LOOP=1
-N=2
-R2=0.5
-M=2*N
-R1RAT=ROOTRT
-COND=1.0
-PASTC=1.0
-PASTRE=0.0
-EPS=EP
+loop=1
+n=2
+r2=0.5
+m=2*n
+r1rat=rootrt
+cond=1.0
+pastc=1.0
+pastre=0.0
+eps=ep
 !
 !   STAGE A. DIRECT SOLUTION OF LINEAR SYSTEM (I-KN)*XN=RHS, WHILE
 !   TRYING TO FIND A GOOD APPROXIMATE INVERSE TO IMPLEMENT
 !   ITERATIVE METHOD OF SOLUTION.
 !
 !   CREATE THE NODES AND WEIGHTS TN(I) AND WN(I), I=1,...,N
-CALL WANDT(WN,TN,N,A,B)
+call wandt(wn,tn,n,a,b)
 !   SET UP MATRIX FOR (I-KN)*XN=RHFCN
-do 2 J = 1,N
-do 1 I = 1,N
-1 IMKNN(I,J)=-WN(J)*KERNEL(TN(I),TN(J))
-XMZ(J)=RHFCN(TN(J))
-2 IMKNN(J,J)=IMKNN(J,J)+1.0
-GO TO 6
+do 2 j = 1,n
+do 1 i = 1,n
+1 imknn(i,j)=-wn(j)*kernel(tn(i),tn(j))
+xmz(j)=rhfcn(tn(j))
+2 imknn(j,j)=imknn(j,j)+1.0
+go to 6
 !   THIS IS ENTRANCE FOR AN INCREASED VALUE OF N, USING PREVIOUSLY
 !   STORED VALUES IN KMM TO DEFINE MATRIX FOR (I-KN)*XN=RHFCN WITH
 !   NEW VALUE OF N.
-3 do 5 J = 1,N
-do 4 I = 1,N
-4 IMKNN(I,J)=-KMM(I,J)
-WN(J)=WM(J)
-TN(J)=TM(J)
-XMZ(J)=RHS(J)
-5 IMKNN(J,J)=IMKNN(J,J)+1.0
+3 do 5 j = 1,n
+do 4 i = 1,n
+4 imknn(i,j)=-kmm(i,j)
+wn(j)=wm(j)
+tn(j)=tm(j)
+xmz(j)=rhs(j)
+5 imknn(j,j)=imknn(j,j)+1.0
 !   THIS IS THE ENTRANCE WHEN ITERATION IN STAGE B FAILS AND WE NEED
 !   TO INCREASE N TO OBTAIN A BETTER ITERATIVE RATE.
-6 CONTINUE
+6 continue
 !   SOLVE (I-KN)*XN=RHFCN AT ALL TN(I).ALSO OBTAIN THE LU
 !   DECOMPOSITION FOR LATER USE IN THE STAGE B ITERATIVE METHOD.
 !
 !*******************************************************************
 !                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,XMZ,XN,2,IND)
+call lnsys(imknn,lufact,nup,n,xmz,xn,2,ind)
 !                                                                  *
 !   LNSYS IS A GENERAL LINEAR EQUATION SOLVER. IT HAS SPECIAL      *
 !   OPTIONS WHICH ARE USED IN THE FOLLOWING PROGRAM. THUS IT       *
@@ -3087,273 +3087,273 @@ CALL LNSYS(IMKNN,LUFACT,NUP,N,XMZ,XN,2,IND)
 !                                                                  *
 !*******************************************************************
 !
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-RELMIN=RMIN(N,N,COND,UNITRD,AVERR)
-IF(LOOP .EQ. 1) GO TO 11
-IF(LOOP .EQ. 2) GO TO 9
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+relmin=rmin(n,n,cond,unitrd,averr)
+if(loop .eq. 1) go to 11
+if(loop .eq. 2) go to 9
 !   SET UP APPROXIMATE RATE OF CONVERGENCE OF SOLUTIONS XN TO TRUE
 !   SOLUTION X. ALSO SET UP DESIRED RATIO FOR ITERATIVE METHOD.
-NUMR2=RNRM(XN,OLDX,N,1)
-R2=AMIN1(0.5,AMAX1(NUMR2/DENR2,1.0E-4))
-R1RAT=AMIN1(ROOTRT,SQRT(R2))
+numr2=rnrm(xn,oldx,n,1)
+r2=amin1(0.5,amax1(numr2/denr2,1.0e-4))
+r1rat=amin1(rootrt,sqrt(r2))
 !   CHECK FOR ERROR IN XN USING TEST INVOLVING R2 AND OLDX,ACCORDING
 !   TO THEORY FOR ASYMPTOTIC ERROR BOUNDS. MODIFY ERROR IF IT IS
 !   OUTSIDE PRECISION RANGE OF COMPUTER, POSSIBLY DUE TO
 !   ILL-CONDITIONING.
-8 ERROR=(R2/(1.0-R2))*NUMR2
-XNORM=RNRM(XN,XN,N,0)
-RELERR=ERROR/XNORM
-IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
-IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN)) &
-&ERROR=RELMIN*XNORM
-IF(ERROR .LE. EPS) GO TO 10
-DENR2=NUMR2
-GO TO 11
+8 error=(r2/(1.0-r2))*numr2
+xnorm=rnrm(xn,xn,n,0)
+relerr=error/xnorm
+if(iflag .eq. 0) eps=amax1(ep,xnorm*relmin)
+if(iflag .eq. 1) eps=amax1(ep,relmin)
+if(iflag .eq. 1)error=amax1(relerr,relmin)
+if((iflag .eq. 0) .and. (relerr .lt. relmin)) &
+&error=relmin*xnorm
+if(error .le. eps) go to 10
+denr2=numr2
+go to 11
 !   ENTRANCE FOR LOOP=2.
-9 NUMR2=RNRM(XN,OLDX,N,1)
-DENR2=0.0
-GO TO 8
+9 numr2=rnrm(xn,oldx,n,1)
+denr2=0.0
+go to 8
 !   EXIT FOR SUCCESSFUL RETURN. ITERATION WAS NOT NECESSARY.
-10 CALL LEAVE(0,N,N,XN,TN,WN,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
+10 call leave(0,n,n,xn,tn,wn,error, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
 !
 !   ATTEMPT TO SOLVE (I-KM)*XM=RHFCN ITERATIVELY, CHECKING TO SEE IF
 !   THE RATE OF CONVERGENCE IS SUFFICIENTLY FAST SO AS TO ENTER
 !   STAGE B.
 !
 !   CALCULATE TM(I) AND WM(I), I=1,...,M.
-11 CALL WANDT(WM,TM,M,A,B)
-FLAG=0
+11 call wandt(wm,tm,m,a,b)
+flag=0
 !   CALCULATE INITIAL GUESS XMZ FOR ITERATION METHOD.
-CALL NSTERP(TM,WM,XMZ,M,TN,WN,XN,N, &
-&KERNEL,RHFCN,RHS,KMN,NHALF,NUP)
-do 12 I = 1,M
-12 OLDX(I)=XMZ(I)
+call nsterp(tm,wm,xmz,m,tn,wn,xn,n, &
+&kernel,rhfcn,rhs,kmn,nhalf,nup)
+do 12 i = 1,m
+12 oldx(i)=xmz(i)
 !   CALCULATE FIRST ITERATE.
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-DENR1=RNRM(XM,XMZ,M,1)
-FLAG=1
-do 13 I = 1,M
-13 XMZ(I)=XM(I)
+call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+denr1=rnrm(xm,xmz,m,1)
+flag=1
+do 13 i = 1,m
+13 xmz(i)=xm(i)
 !   CALCULATE SECOND ITERATE.
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
+call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1=rnrm(xm,xmz,m,1)
 !   CHECK ON THE SPEED OF CONVERGENCE OF ITERATIVE METHOD. IF IT IS
 !   SUFFICIENTLY RAPID, THEN FIX N AND GO TO STAGE B.
-R1=AMAX1(NUMR1/DENR1,.0001)
-RATE=R1
-IF(M .GT. NUP) GO TO 19
-IF(R1 .LE. R1RAT) GO TO 15
+r1=amax1(numr1/denr1,.0001)
+rate=r1
+if(m .gt. nup) go to 19
+if(r1 .le. r1rat) go to 15
 !   THE ITERATION DID NOT WORK WELL ENOUGH, AND STAGE A IS TO BE
 !   REPEATED. RE-INITIALIZE FOR SOLVING (I-KN)*XN=RHFCN AGAIN
 !   WITH A LARGER N.
-14 N=M
-LOOP=LOOP+1
-M=2*N
-GO TO 3
+14 n=m
+loop=loop+1
+m=2*n
+go to 3
 !   THE ITERATIVE RATE IS SUFFICIENTLY RAPID, AND CONTROL WILL GO TO
 !   STAGE B. SAVE INFORMATION IN CASE STAGE B ABORTS AT A LARGER
 !   VALUE OF M AND STAGE A HAS TO BE RETURNED TO.
-15 do 16 I = 1,M
-ASIDE(I,1)=OLDX(I)
-ASIDE(I,2)=WM(I)
-ASIDE(I,3)=TM(I)
-16 ASIDE(I,4)=RHS(I)
-ASIDE2(1)=LOOP
-ASIDE2(3)=R2
-ASIDE2(4)=DENR2
-ASIDE2(5)=R1RAT
-do 17 J = 1,M
-do 17 I = 1,M
-17 ASIDE3(I,J)=KMM(I,J)
+15 do 16 i = 1,m
+aside(i,1)=oldx(i)
+aside(i,2)=wm(i)
+aside(i,3)=tm(i)
+16 aside(i,4)=rhs(i)
+aside2(1)=loop
+aside2(3)=r2
+aside2(4)=denr2
+aside2(5)=r1rat
+do 17 j = 1,m
+do 17 i = 1,m
+17 aside3(i,j)=kmm(i,j)
 !
 !   STAGE B. ITERATIVE METHOD OF SOLUTION OF (I-KM)*XM=RHS.
 !
-19 OLDM=N
-ASIDE2(2)=M
-IF(R1 .LE. CUTOFF) GO TO 22
+19 oldm=n
+aside2(2)=m
+if(r1 .le. cutoff) go to 22
 !   THE ITERATES ARE CONVERGING VERY SLOWLY OR NOT AT ALL. THUS
 !   RETURN WITHOUT FURTHER ATTEMPTS TO LESSEN THE ERROR.
-IF(LOOP .NE. 1) GO TO 21
-20 CALL LEAVE(2,N,N,XN,TN,WN,0.0, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-21 CALL LEAVE(1,N,N,XN,TN,WN,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
+if(loop .ne. 1) go to 21
+20 call leave(2,n,n,xn,tn,wn,0.0, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
+21 call leave(1,n,n,xn,tn,wn,error, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
 !   TEST TO SEE IF THE CURRENT ITERATE XM IS SUFFICIENTLY ACCURATE
 !   COMPARED TO THE TRUE XM.
-22 RATE=R1*RATE
-TEMP=RNRM(XM,OLDX,M,1)
-IF(LOOP .EQ. 1) TEMP2=0.5
-IF(LOOP .GT. 1) TEMP2=TEMP/DENR2
-RT=  AMIN1(0.01,AMAX1(TEMP2,0.0001))/2.0
-XNORM=RNRM(XM,XM,M,0)
-ESTERR=(RT/(1.0-RT))*TEMP/XNORM
-IF(ESTERR .LT. RELMIN) ESTERR=RELMIN
-ESTERR=ESTERR*XNORM
-TEST=((1.0-R1)/R1)*ESTERR
-IF(NUMR1 .LE. TEST) GO TO 33
+22 rate=r1*rate
+temp=rnrm(xm,oldx,m,1)
+if(loop .eq. 1) temp2=0.5
+if(loop .gt. 1) temp2=temp/denr2
+rt=  amin1(0.01,amax1(temp2,0.0001))/2.0
+xnorm=rnrm(xm,xm,m,0)
+esterr=(rt/(1.0-rt))*temp/xnorm
+if(esterr .lt. relmin) esterr=relmin
+esterr=esterr*xnorm
+test=((1.0-r1)/r1)*esterr
+if(numr1 .le. test) go to 33
 !   ITERATE NOT SUFFICIENTLY ACCURATE. INITIALIZE FOR COMPUTATION
 !   OF ANOTHER ITERATE.
-25 DENR1=NUMR1
-do 26 I = 1,M
-26 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
-R1=AMAX1(NUMR1/DENR1,.0001)
-IF(R1 .LE. CUTOFF) GO TO 22
+25 denr1=numr1
+do 26 i = 1,m
+26 xmz(i)=xm(i)
+call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1=rnrm(xm,xmz,m,1)
+r1=amax1(numr1/denr1,.0001)
+if(r1 .le. cutoff) go to 22
 !   THIS IS ENTRANCE FOR CASE WHERE ITERATION FAILS IN STAGE B.
 !   PARAMETERS MUST BE RESET FOR A RETURN TO STAGE A OR FOR AN
 !   ABORTIVE EXIT IF N CANNOT BE INCREASED ANY FURTHER.
-27 MNEW=ASIDE2(2)
-IF(MNEW .GT. NUP) GO TO 30
-N=MNEW
-do 29 J = 1,N
-do 28 I = 1,N
-28 IMKNN(I,J)=-ASIDE3(I,J)
-OLDX(J)=ASIDE(J,1)
-WN(J)=ASIDE(J,2)
-TN(J)=ASIDE(J,3)
-XMZ(J)=ASIDE(J,4)
-29 IMKNN(J,J)=IMKNN(J,J)+1.0
-M=2*N
-LOOP=ASIDE2(1)+1.0
-R2=ASIDE2(3)
-DENR2=ASIDE2(4)
-R1RAT=ASIDE2(5)
-GO TO 6
+27 mnew=aside2(2)
+if(mnew .gt. nup) go to 30
+n=mnew
+do 29 j = 1,n
+do 28 i = 1,n
+28 imknn(i,j)=-aside3(i,j)
+oldx(j)=aside(j,1)
+wn(j)=aside(j,2)
+tn(j)=aside(j,3)
+xmz(j)=aside(j,4)
+29 imknn(j,j)=imknn(j,j)+1.0
+m=2*n
+loop=aside2(1)+1.0
+r2=aside2(3)
+denr2=aside2(4)
+r1rat=aside2(5)
+go to 6
 !   ABORTIVE EXIT FROM STAGE B. N CANNOT BE INCREASED FURTHER, AND
 !   R1 IS NOT SUFFICIENTLY SMALL.
-30 IF(LOOP .EQ. 1) GO TO 20
-CALL WANDT(WM,TM,OLDM,A,B)
-CALL LEAVE(1,N,OLDM,SAVE,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
+30 if(loop .eq. 1) go to 20
+call wandt(wm,tm,oldm,a,b)
+call leave(1,n,oldm,save,tm,wm,error, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
 !   AN ACCURATE VALUE OF XM HAS BEEN OBTAINED. R2 IS TO BE TESTED AS
 !   TO WHETHER IT SHOULD BE RESET. THEN CHECK ERROR IN XM COMPARED
 !   WITH THE TRUE SOLUTION X.
-33 IF(LOOP .EQ. 1) GO TO 37
-NUMR2=TEMP
-R2=AMAX1(1.0E-4,RATE,AMIN1(NUMR2/DENR2,0.5))
-DENR2=NUMR2
-34 ERROR=(R2/(1.0-R2))*TEMP
-XNORM=RNRM(XM,XM,M,0)
-RELERR=ERROR/XNORM
-RELMIN=RMIN(N,M,COND,UNITRD,AVERR)
-IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
-IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN)) &
-&ERROR=RELMIN*XNORM
-IF(ERROR .GT. EPS) GO TO 35
-CALL LEAVE(0,N,M,XM,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-35 MNEW=2*M
-IF(MNEW .LE. MUP) GO TO 39
+33 if(loop .eq. 1) go to 37
+numr2=temp
+r2=amax1(1.0e-4,rate,amin1(numr2/denr2,0.5))
+denr2=numr2
+34 error=(r2/(1.0-r2))*temp
+xnorm=rnrm(xm,xm,m,0)
+relerr=error/xnorm
+relmin=rmin(n,m,cond,unitrd,averr)
+if(iflag .eq. 0) eps=amax1(ep,xnorm*relmin)
+if(iflag .eq. 1) eps=amax1(ep,relmin)
+if(iflag .eq. 1)error=amax1(relerr,relmin)
+if((iflag .eq. 0) .and. (relerr .lt. relmin)) &
+&error=relmin*xnorm
+if(error .gt. eps) go to 35
+call leave(0,n,m,xm,tm,wm,error, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
+35 mnew=2*m
+if(mnew .le. mup) go to 39
 !   M CANNOT BE INCREASED ANY FURTHER.
-CALL LEAVE(1,N,M,XM,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-37 DENR2=TEMP
-LOOP=2
-GO TO 34
+call leave(1,n,m,xm,tm,wm,error, &
+&kernel,rhfcn,ep,iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm, &
+&xmz,kmm,kmn,knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+return
+37 denr2=temp
+loop=2
+go to 34
 !   ERROR NOT SUFFICIENTLY SMALL. M IS INCREASED AND TWO MORE
 !   MORE ITERATES ARE COMPUTED WITH THE NEW M.
-39 OLDM=M
-M=MNEW
-do 41 I = 1,OLDM
-SAVE2(I)=WM(I)
-41 SAVE(I)=TM(I)
-CALL WANDT(WM,TM,M,A,B)
-FLAG=0
-CALL NSTERP(TM,WM,XMZ,M,SAVE,SAVE2,XM,OLDM, &
-&KERNEL,RHFCN,RHS,KMN,NHALF,NUP)
-do 43 I = 1,OLDM
-43 SAVE(I)=XM(I)
-do 45 I = 1,M
-45 OLDX(I)=XMZ(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-DENR1=RNRM(XM,XMZ,M,1)
-FLAG=1
-do 47 I = 1,M
-47 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
-R1=AMAX1(NUMR1/DENR1,.0001)
-RATE=R1
-IF(R1 .LE. CUTOFF) GO TO 22
-GO TO 27
-END SUBROUTINE IEGS
+39 oldm=m
+m=mnew
+do 41 i = 1,oldm
+save2(i)=wm(i)
+41 save(i)=tm(i)
+call wandt(wm,tm,m,a,b)
+flag=0
+call nsterp(tm,wm,xmz,m,save,save2,xm,oldm, &
+&kernel,rhfcn,rhs,kmn,nhalf,nup)
+do 43 i = 1,oldm
+43 save(i)=xm(i)
+do 45 i = 1,m
+45 oldx(i)=xmz(i)
+call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+denr1=rnrm(xm,xmz,m,1)
+flag=1
+do 47 i = 1,m
+47 xmz(i)=xm(i)
+call itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,flag)
+cond=conew(cond,elinsy,relrsd,averr,pastc,pastre)
+numr1=rnrm(xm,xmz,m,1)
+r1=amax1(numr1/denr1,.0001)
+rate=r1
+if(r1 .le. cutoff) go to 22
+go to 27
+end subroutine iegs
 
-SUBROUTINE NSTERP(TM,WM,XM,M,TN,WN,XN,N,KERNEL,RHFCN,RHS,KMN, &
-&NHALF,NUP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, N, NHALF, NUP
-REAL, INTENT(INOUT) :: RHS(M)
-REAL :: TM(M), TN(N), WM(M), WN(N)
-REAL, INTENT(INOUT) :: XM(M)
-REAL :: XN(N)
-INTEGER :: I, J
-REAL :: RHFCN
+subroutine nsterp(tm,wm,xm,m,tn,wn,xn,n,kernel,rhfcn,rhs,kmn, &
+&nhalf,nup)
+implicit none
+integer, intent(in) :: m, n, nhalf, nup
+real, intent(inout) :: rhs(m)
+real :: tm(m), tn(n), wm(m), wn(n)
+real, intent(inout) :: xm(m)
+real :: xn(n)
+integer :: i, j
+real :: rhfcn
 !
 !   USE THE VALUES OF XN(I), I=1,...,N, TO CALCULATE THE NYSTROM
 !   INTERPOLATES XM(I), I=1,...,M.
 !
-REAL :: KERNEL
-REAL, INTENT(INOUT) :: KMN(NUP,NHALF)
-EXTERNAL KERNEL,RHFCN
+real :: kernel
+real, intent(inout) :: kmn(nup,nhalf)
+external kernel,rhfcn
 !
-IF(M .GT. NUP) GO TO 4
+if(m .gt. nup) go to 4
 !   SINCE M .LE. NUPPER, SAVE K(TM(I),TN(J))=KMN(I,J) AND
 !   RHS(I)=RHFCN(TM(I)) FOR LATER USE IN ITERT.
-do 1 I = 1,M
-do 1 J = 1,N
-1 KMN(I,J)=WN(J)*KERNEL(TM(I),TN(J))
-do 2 I = 1,M
-RHS(I)=RHFCN(TM(I))
-2 XM(I)=RHS(I)
+do 1 i = 1,m
+do 1 j = 1,n
+1 kmn(i,j)=wn(j)*kernel(tm(i),tn(j))
+do 2 i = 1,m
+rhs(i)=rhfcn(tm(i))
+2 xm(i)=rhs(i)
 !   CALCULATE NYSTROM INTERPOLATING FORMULA.
-do 3 I = 1,M
-do 3 J = 1,N
-3 XM(I)=XM(I)+KMN(I,J)*XN(J)
-RETURN
+do 3 i = 1,m
+do 3 j = 1,n
+3 xm(i)=xm(i)+kmn(i,j)*xn(j)
+return
 !   M .GT. NUPPER, SO SAVE JUST RHS(I) FOR LATER USE IN ITERT.
 !   CALCULATE NYSTROM INTERPOLATING FORMULA.
-4 do 5 I = 1,M
-RHS(I)=RHFCN(TM(I))
-XM(I)=RHS(I)
-do 5 J = 1,N
-5 XM(I)=XM(I)+WN(J)*KERNEL(TM(I),TN(J))*XN(J)
-RETURN
-END SUBROUTINE NSTERP
+4 do 5 i = 1,m
+rhs(i)=rhfcn(tm(i))
+xm(i)=rhs(i)
+do 5 j = 1,n
+5 xm(i)=xm(i)+wn(j)*kernel(tm(i),tn(j))*xn(j)
+return
+end subroutine nsterp
 
-FUNCTION RMIN(N,M,COND,UNITRD,AVERR)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M, N
-REAL, INTENT(IN) :: AVERR, COND, UNITRD
-REAL :: FLOAT1, FLOAT2
-REAL :: RMIN
+function rmin(n,m,cond,unitrd,averr)
+implicit none
+integer, intent(in) :: m, n
+real, intent(in) :: averr, cond, unitrd
+real :: float1, float2
+real :: rmin
 !
 !   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
 !   VALUE OF RELMIN USED IN IEGS. THE VARIABLE UNITRD IS DEFINED IN
@@ -3362,65 +3362,65 @@ REAL :: RMIN
 !   IT IS UNLIKELY THAT A SOLUTION X CAN BE FOUND FOR THE ORIGINAL
 !   INTEGRAL EQUATION WITH A SMALLER RELATIVE ERROR THAN RMIN.
 !
-FLOAT1=M
-FLOAT2=FLOAT(M)/FLOAT(N)
-RMIN=AMAX1((FLOAT1**1.5)*COND*UNITRD, &
-&(FLOAT2**1.5)*AVERR)
-RETURN
-END FUNCTION RMIN
+float1=m
+float2=float(m)/float(n)
+rmin=amax1((float1**1.5)*cond*unitrd, &
+&(float2**1.5)*averr)
+return
+end function rmin
 
-REAL function RNRM(X,Y,N,IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IFLAG, N
-REAL :: X(N), Y(N)
-INTEGER :: I
+real function rnrm(x,y,n,iflag)
+implicit none
+integer, intent(in) :: iflag, n
+real :: x(n), y(n)
+integer :: i
 !
 !   IFLAG=0    CALCULATE THE MAXIMUM NORM OF X.
 !   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
 !
-IF(IFLAG .EQ. 1) GO TO 2
+if(iflag .eq. 1) go to 2
 !   FIND THE NORM OF X.
-RNRM=0.0
-do 1 I = 1,N
-1 RNRM=AMAX1(RNRM,ABS(X(I)))
-RETURN
+rnrm=0.0
+do 1 i = 1,n
+1 rnrm=amax1(rnrm,abs(x(i)))
+return
 !   FIND THE NORM OF X-Y.
-2 RNRM=0.0
-do 3 I = 1,N
-3 RNRM=AMAX1(RNRM,ABS(X(I)-Y(I)))
-RETURN
-END FUNCTION RNRM
+2 rnrm=0.0
+do 3 i = 1,n
+3 rnrm=amax1(rnrm,abs(x(i)-y(i)))
+return
+end function rnrm
 
-FUNCTION CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-IMPLICIT NONE
-REAL, INTENT(OUT) :: AVERR
-REAL, INTENT(IN) :: COND, ELINSY
-REAL, INTENT(INOUT) :: PASTC, PASTRE
-REAL, INTENT(IN) :: RELRSD
-REAL :: C
-REAL :: CONEW
+function conew(cond,elinsy,relrsd,averr,pastc,pastre)
+implicit none
+real, intent(out) :: averr
+real, intent(in) :: cond, elinsy
+real, intent(inout) :: pastc, pastre
+real, intent(in) :: relrsd
+real :: c
+real :: conew
 !
 !   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
 !   IN IEGS.
 !
-AVERR=SQRT(ELINSY*PASTRE)
-PASTRE=ELINSY
-IF(RELRSD .EQ. 0.0) GO TO 1
-C=AMAX1(1.0,ELINSY/RELRSD)
-CONEW=SQRT(C*PASTC)
-PASTC=C
-RETURN
-1 CONEW=COND
-RETURN
-END FUNCTION CONEW
+averr=sqrt(elinsy*pastre)
+pastre=elinsy
+if(relrsd .eq. 0.0) go to 1
+c=amax1(1.0,elinsy/relrsd)
+conew=sqrt(c*pastc)
+pastc=c
+return
+1 conew=cond
+return
+end function conew
 
-SUBROUTINE WANDT(WV,TV,N,A,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: A, B
-REAL, INTENT(INOUT) :: TV(N), WV(N)
-INTEGER :: I, I1, I2, K, L, LOOP, M, MT, NPI, NPLACE
-REAL :: AL, BL, FL, FLOOP, H, R, S, SCALE, T(255), W(255)
+subroutine wandt(wv,tv,n,a,b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: a, b
+real, intent(inout) :: tv(n), wv(n)
+integer :: i, i1, i2, k, l, loop, m, mt, npi, nplace
+real :: al, bl, fl, floop, h, r, s, scale, t(255), w(255)
 !
 !   INTEGRATION WEIGHTS AND NODES ARE TO BE CALCULATED AND STORED IN
 !   WV AND TV, RESPECTIVELY. N IS ASSUMED TO BE A POWER OF TWO. IF
@@ -3428,481 +3428,481 @@ REAL :: AL, BL, FL, FLOOP, H, R, S, SCALE, T(255), W(255)
 !   256, THEN THE INTERVAL (A,B) IS DIVIDED N/256 TIMES AND THE 256
 !   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
 !
-DATA T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8),T(9),T(10),T(11), &
-&T(12),T(13),T(14),T(15)/.577350269189626E0, &
-&.861136311594053E0,.339981043584856E0,.960289856497536E0, &
-&.796666477413627E0,.525532409916329E0,.183434642495650E0, &
-&.989400934991650E0,.944575023073233E0,.865631202387832E0, &
-&.755404408355003E0,.617876244402644E0,.458016777657227E0, &
-&.281603550779259E0,.950125098376374E-1/
-DATA T(16),T(17),T(18),T(19),T(20),T(21),T(22),T(23),T(24),T(25), &
-&T(26),T(27),T(28),T(29),T(30),T(31)/.997263861849482E0, &
-&.985611511545268E0,.964762255587506E0,.934906075937740E0, &
-&.896321155766052E0,.849367613732570E0,.794483795967942E0, &
-&.732182118740290E0,.663044266930215E0,.587715757240762E0, &
-&.506899908932229E0,.421351276130635E0,.331868602282128E0, &
-&.239287362252137E0,.144471961582796E0,.483076656877383E-1/
-DATA T(32),T(33),T(34),T(35),T(36),T(37),T(38),T(39),T(40),T(41), &
-&T(42),T(43),T(44),T(45),T(46),T(47)/.999305041735772E0, &
-&.996340116771955E0,.991013371476744E0,.983336253884626E0, &
-&.973326827789911E0,.961008799652054E0,.946411374858403E0, &
-&.929569172131940E0,.910522137078503E0,.889315445995114E0, &
-&.865999398154093E0,.840629296252580E0,.813265315122798E0, &
-&.783972358943341E0,.752819907260532E0,.719881850171611E0/
-DATA T(48),T(49),T(50),T(51),T(52),T(53),T(54),T(55),T(56),T(57), &
-&T(58),T(59),T(60),T(61),T(62),T(63)/.685236313054233E0, &
-&.648965471254657E0,.611155355172393E0,.571895646202634E0, &
-&.531279464019895E0,.489403145707053E0,.446366017253464E0, &
-&.402270157963992E0,.357220158337668E0,.311322871990211E0, &
-&.264687162208767E0,.217423643740007E0,.169644420423993E0, &
-&.121462819296121E0,.729931217877990E-1,.243502926634244E-1/
-DATA T(64),T(65),T(66),T(67),T(68),T(69),T(70),T(71),T(72),T(73), &
-&T(74),T(75),T(76),T(77),T(78),T(79)/.999824887947132E0, &
-&.999077459977376E0,.997733248625514E0,.995792758534981E0, &
-&.993257112900213E0,.990127818491734E0,.986406742724586E0, &
-&.982096108435719E0,.977198491463907E0,.971716818747137E0, &
-&.965654366431965E0,.959014757853700E0,.951801961341264E0, &
-&.944020287830220E0,.935674388277916E0,.926769250878948E0/
-DATA T(80),T(81),T(82),T(83),T(84),T(85),T(86),T(87),T(88),T(89), &
-&T(90),T(91),T(92),T(93),T(94),T(95),T(96),T(97)/ &
-&.917310198080961E0,.907302883401757E0,.896753288049158E0, &
-&.885667717345397E0,.874052796958032E0,.861915468939548E0, &
-&.849262987577969E0,.836102915060907E0,.822443116955644E0, &
-&.808291757507914E0,.793657294762193E0,.778548475506412E0, &
-&.762974330044095E0,.746944166797062E0,.730467566741909E0, &
-&.713554377683587E0,.696214708369514E0,.678458922447719E0/
-DATA T(98),T(99),T(100),T(101),T(102),T(103),T(104),T(105),T(106), &
-&T(107),T(108),T(109),T(110),T(111),T(112),T(113),T(114)/ &
-&.660297632272646E0,.641741692562308E0,.622802193910585E0, &
-&.603490456158549E0,.583818021628763E0,.563796648226618E0, &
-&.543438302412810E0,.522755152051175E0,.501759559136144E0, &
-&.480464072404172E0,.458881419833552E0,.437024501037104E0, &
-&.414906379552275E0,.392540275033267E0,.369939555349859E0, &
-&.347117728597636E0,.324088435024413E0/
-DATA T(115),T(116),T(117),T(118),T(119),T(120),T(121),T(122), &
-&T(123),T(124),T(125),T(126),T(127)/.300865438877677E0, &
-&.277462620177904E0,.253893966422694E0,.230173564226660E0, &
-&.206315590902079E0,.182334305985337E0,.158244042714225E0, &
-&.134059199461188E0,.109794231127644E0, &
-&.854636405045155E-1,.610819696041396E-1,.366637909687335E-1, &
-&.122236989606158E-1/
-DATA T(128),T(129),T(130),T(131),T(132),T(133),T(134),T(135), &
-&T(136),T(137),T(138),T(139),T(140),T(141),T(142)/ &
-&.999956050018992E0,.999768437409263E0,.999430937466261E0, &
-&.998943525843409E0,.998306266473006E0,.997519252756721E0, &
-&.996582602023382E0,.995496454481096E0,.994260972922410E0, &
-&.992876342608822E0,.991342771207583E0,.989660488745065E0, &
-&.987829747564861E0,.985850822286126E0,.983724009760315E0/
-DATA T(143),T(144),T(145),T(146),T(147),T(148),T(149),T(150), &
-&T(151),T(152),T(153),T(154),T(155),T(156),T(157)/ &
-&.981449629025464E0,.979028021257622E0,.976459549719234E0, &
-&.973744599704370E0,.970883578480743E0,.967876915228489E0, &
-&.964725060975706E0,.961428488530732E0,.957987692411178E0, &
-&.954403188769716E0,.950675515316628E0,.946805231239127E0, &
-&.942792917117462E0,.938639174837814E0, .934344627502003E0/
-DATA T(158),T(159),T(160),T(161),T(162),T(163),T(164),T(165), &
-&T(166),T(167),T(168),T(169),T(170),T(171),T(172)/ &
-&.929909919334006E0,.925335715583316E0,.920622702425146E0, &
-&.915771586857490E0,.910783096595065E0,.905657979960145E0, &
-&.900397005770304E0,.895000963223085E0,.889470661777611E0, &
-&.883806931033158E0,.878010620604707E0,.872082599995488E0, &
-&.866023758466555E0,.859835004903376E0,.853517267679503E0/
-DATA T(173),T(174),T(175),T(176),T(177),T(178),T(179),T(180), &
-&T(181),T(182),T(183),T(184),T(185),T(186),T(187)/ &
-&.847071494517296E0,.840498652345763E0,.833799727155505E0, &
-&.826975723850813E0,.820027666098917E0,.812956596176432E0, &
-&.805763574812999E0,.798449681032171E0,.791016011989546E0, &
-&.783463682808184E0,.775793826411326E0,.768007593352446E0, &
-&.760106151642655E0,.752090686575492E0,.743962400549112E0/
-DATA T(188),T(189),T(190),T(191),T(192),T(193),T(194),T(195), &
-&T(196),T(197),T(198),T(199),T(200),T(201),T(202)/ &
-&.735722512885918E0,.727372259649652E0,.718912893459971E0, &
-&.710345683304543E0,.701671914348685E0,.692892887742577E0, &
-&.684009920426076E0,.675024344931163E0,.665937509182049E0, &
-&.656750776292973E0,.647465524363725E0,.638083146272911E0, &
-&.628605049469015E0,.619032655759261E0,.609367401096334E0/
-DATA T(203),T(204),T(205),T(206),T(207),T(208),T(209),T(210), &
-&T(211),T(212),T(213),T(214),T(215),T(216),T(217)/ &
-&.599610735362968E0,.589764122154454E0,.579829038559083E0, &
-&.569806974936569E0,.559699434694481E0,.549507934062719E0, &
-&.539234001866059E0,.528879179294822E0,.518445019673674E0, &
-&.507933088228616E0,.497344961852181E0,.486682228866890E0, &
-&.475946488786983E0,.465139352078479E0,.454262439917590E0/
-DATA T(218),T(219),T(220),T(221),T(222),T(223),T(224),T(225), &
-&T(226),T(227),T(228),T(229),T(230),T(231),T(232)/ &
-&.443317383947527E0,.432305826033741E0,.421229418017624E0, &
-&.410089821468717E0,.398888707435459E0,.387627756194516E0, &
-&.376308656998716E0,.364933107823654E0,.353502815112970E0, &
-&.342019493522372E0,.330484865662417E0,.318900661840106E0, &
-&.307268619799319E0,.295590484460136E0,.283868007657082E0/
-DATA T(233),T(234),T(235),T(236),T(237),T(238),T(239),T(240), &
-&T(241),T(242),T(243),T(244),T(245),T(246),T(247)/ &
-&.272102947876337E0,.260297069991943E0,.248452145001057E0, &
-&.236569949758284E0,.224652266709132E0,.212700883622626E0, &
-&.200717593323127E0,.188704193421389E0,.176662486044902E0, &
-&.164594277567554E0,.152501378338656E0,.140385602411376E0, &
-&.128248767270607E0,.116092693560333E0,.103919204810509E0/
-DATA   T(248),T(249),T(250),T(251),T(252),T(253),T(254),T(255)/ &
-&.917301271635196E-1,.795272891002330E-1,.673125211657164E-1, &
-&.550876556946340E-1,.428545265363791E-1,.306149687799790E-1, &
-&.183708184788137E-1,.612391237518953E-2/
-DATA W(1),W(2),W(3),W(4),W(5),W(6),W(7),W(8),W(9),W(10),W(11), &
-&W(12),W(13),W(14),W(15)/1.0E0,.347854845137454E0, &
-&.652145154862546E0,.101228536290376E0,.222381034453374E0, &
-&.313706645877887E0,.362683783378362E0,.271524594117541E-1, &
-&.622535239386479E-1,.951585116824928E-1,.124628971255534E0, &
-&.149595988816577E0,.169156519395003E0,.182603415044924E0, &
-&.189450610455068E0/
-DATA W(16),W(17),W(18),W(19),W(20),W(21),W(22),W(23),W(24),W(25), &
-&W(26),W(27),W(28),W(29),W(30),W(31)/.701861000947010E-2, &
-&.162743947309057E-1,.253920653092621E-1,.342738629130214E-1, &
-&.428358980222267E-1,.509980592623762E-1,.586840934785355E-1, &
-&.658222227763618E-1,.723457941088485E-1,.781938957870703E-1, &
-&.833119242269468E-1,.876520930044038E-1,.911738786957639E-1, &
-&.938443990808046E-1,.956387200792749E-1,.965400885147278E-1/
-DATA W(32),W(33),W(34),W(35),W(36),W(37),W(38),W(39),W(40),W(41), &
-&W(42),W(43),W(44),W(45),W(46),W(47)/.178328072169643E-2, &
-&.414703326056247E-2,.650445796897836E-2,.884675982636395E-2, &
-&.111681394601311E-1,.134630478967186E-1,.157260304760247E-1, &
-&.179517157756973E-1,.201348231535302E-1,.222701738083833E-1, &
-&.243527025687109E-1,.263774697150547E-1,.283396726142595E-1, &
-&.302346570724025E-1,.320579283548516E-1,.338051618371416E-1/
-DATA W(48),W(49),W(50),W(51),W(52),W(53),W(54),W(55),W(56),W(57), &
-&W(58),W(59),W(60),W(61),W(62),W(63)/ .354722132568824E-1, &
-&.370551285402400E-1,.385501531786156E-1,.399537411327203E-1, &
-&.412625632426235E-1,.424735151236536E-1,.435837245293235E-1, &
-&.445905581637566E-1,.454916279274181E-1, .462847965813144E-1, &
-&.469681828162100E-1,.475401657148303E-1,.479993885964583E-1, &
-&.483447622348030E-1,.485754674415034E-1,.486909570091397E-1/
-DATA W(64),W(65),W(66),W(67),W(68),W(69),W(70),W(71),W(72),W(73), &
-&W(74),W(75),W(76),W(77),W(78),W(79)/ .449380960292090E-3, &
-&.104581267934035E-2,.164250301866903E-2,.223828843096262E-2, &
-&.283275147145799E-2,.342552604091022E-2,.401625498373864E-2, &
-&.460458425670296E-2,.519016183267633E-2,.577263754286570E-2, &
-&.635166316170719E-2,.692689256689881E-2,.749798192563473E-2, &
-&.806458989048606E-2,.862637779861675E-2,.918300987166087E-2/
-DATA W(80),W(81),W(82),W(83),W(84),W(85),W(86),W(87),W(88), &
-&W(89),W(90),W(91),W(92),W(93),W(94),W(95)/.973415341500681E-2, &
-&.102794790158322E-1,.108186607395031E-1,.113513763240804E-1, &
-&.118773073727403E-1,.123961395439509E-1,.129075627392673E-1, &
-&.134112712886163E-1,.139069641329520E-1,.143943450041668E-1, &
-&.148731226021473E-1,.153430107688651E-1,.158037286593993E-1, &
-&.162550009097852E-1,.166965578015892E-1,.171281354231114E-1/
-DATA W(96),W(97),W(98),W(99),W(100),W(101),W(102),W(103),W(104), &
-&W(105),W(106),W(107),W(108),W(109),W(110),W(111),W(112)/ &
-&.175494758271177E-1,.179603271850087E-1,.183604439373313E-1, &
-&.187495869405447E-1,.191275236099509E-1,.194940280587066E-1, &
-&.198488812328309E-1,.201918710421300E-1,.205227924869601E-1, &
-&.208414477807511E-1,.211476464682213E-1,.214412055392085E-1, &
-&.217219495380521E-1,.219897106684605E-1,.222443288937998E-1, &
-&.224856520327450E-1,.227135358502365E-1/
-DATA W(113),W(114),W(115),W(116),W(117),W(118),W(119),W(120), &
-&W(121),W(122),W(123),W(124),W(125),W(126),W(127)/ &
-&.229278441436868E-1,.231284488243870E-1,.233152299940628E-1, &
-&.234880760165359E-1,.236468835844476E-1,.237915577810034E-1, &
-&.239220121367035E-1,.240381686810241E-1,.241399579890193E-1, &
-&.242273192228152E-1,.243002001679719E-1,.243585572646906E-1, &
-&.244023556338496E-1,.244315690978500E-1,.244461801962625E-1/
-DATA W(128),W(129),W(130),W(131),W(132),W(133),W(134),W(135), &
-&W(136),W(137),W(138),W(139),W(140),W(141),W(142)/ &
-&.112789017822272E-3,.262534944296446E-3,.412463254426176E-3, &
-&.562348954031410E-3,.712154163473321E-3,.861853701420089E-3, &
-&.101142439320844E-2,.116084355756772E-2,.131008868190250E-2, &
-&.145913733331073E-2,.160796713074933E-2,.175655573633073E-2, &
-&.190488085349972E-2,.205292022796614E-2,.220065164983991E-2/
-DATA W(143),W(144),W(145),W(146),W(147),W(148),W(149),W(150), &
-&W(151),W(152),W(153),W(154),W(155),W(156),W(157)/ &
-&.234805295632731E-2,.249510203470371E-2,.264177682542749E-2, &
-&.278805532532771E-2,.293391559082972E-2,.307933574119934E-2, &
-&.322429396179420E-2,.336876850731555E-2,.351273770505631E-2, &
-&.365617995814250E-2,.379907374876626E-2,.394139764140883E-2, &
-&.408313028605267E-2,.422425042138154E-2,.436473687796806E-2/
-DATA W(158),W(159),W(160),W(161),W(162),W(163),W(164),W(165), &
-&W(166),W(167),W(168),W(169),W(170),W(171),W(172)/ &
-&.450456858144790E-2,.464372455568006E-2,.478218392589269E-2, &
-&.491992592181387E-2,.505692988078684E-2,.519317525086928E-2, &
-&.532864159391593E-2,.546330858864431E-2,.559715603368291E-2, &
-&.573016385060144E-2,.586231208692265E-2,.599358091911534E-2, &
-&.612395065556793E-2,.625340173954240E-2,.638191475210788E-2/
-DATA W(173),W(174),W(175),W(176),W(177),W(178),W(179),W(180), &
-&W(181),W(182),W(183),W(184),W(185),W(186),W(187)/ &
-&.650947041505366E-2,.663604959378107E-2,.676163330017380E-2, &
-&.688620269544632E-2,.700973909296982E-2,.713222396107539E-2, &
-&.725363892583391E-2,.737396577381235E-2,.749318645480588E-2, &
-&.761128308454566E-2,.772823794738156E-2,.784403349893971E-2, &
-&.795865236875435E-2,.807207736287350E-2,.818429146643827E-2/
-DATA W(188),W(189),W(190),W(191),W(192),W(193),W(194),W(195), &
-&W(196),W(197),W(198),W(199),W(200),W(201),W(202)/ &
-&.829527784623523E-2,.840501985322154E-2,.851350102502249E-2, &
-&.862070508840101E-2,.872661596169881E-2,.883121775724875E-2, &
-&.893449478375821E-2,.903643154866287E-2,.913701276045081E-2, &
-&.923622333095630E-2,.933404837762327E-2,.943047322573775E-2, &
-&.952548341062928E-2,.961906467984073E-2,.971120299526628E-2/
-DATA W(203),W(204),W(205),W(206),W(207),W(208),W(209),W(210), &
-&W(211),W(212),W(213),W(214),W(215),W(216),W(217)/ &
-&.980188453525733E-2,.989109569669583E-2,.997882309703491E-2, &
-&.100650535763064E-1,.101497741990949E-1,.102329722564782E-1, &
-&.103146352679340E-1,.103947509832117E-1,.104733073841704E-1, &
-&.105502926865815E-1,.106256953418966E-1,.106995040389798E-1, &
-&.107717077058046E-1,.108422955111148E-1,.109112568660490E-1/
-DATA W(218),W(219),W(220),W(221),W(222),W(223),W(224),W(225), &
-&W(226),W(227),W(228),W(229),W(230),W(231),W(232)/ &
-&.109785814257296E-1,.110442590908139E-1,.111082800090098E-1, &
-&.111706345765534E-1,.112313134396497E-1,.112903074958755E-1, &
-&.113476078955455E-1,.114032060430392E-1,.114570935980906E-1, &
-&.115092624770395E-1,.115597048540436E-1,.116084131622531E-1, &
-&.116553800949452E-1,.117005986066207E-1,.117440619140606E-1/
-DATA W(233),W(234),W(235),W(236),W(237),W(238),W(239),W(240), &
-&W(241),W(242),W(243),W(244),W(245),W(246),W(247)/ &
-&.117857634973434E-1,.118256971008240E-1,.118638567340711E-1, &
-&.119002366727665E-1,.119348314595636E-1,.119676359049059E-1, &
-&.119986450878058E-1,.120278543565826E-1,.120552593295601E-1, &
-&.120808558957245E-1,.121046402153405E-1,.121266087205273E-1, &
-&.121467581157945E-1,.121650853785355E-1,.121815877594818E-1/
-DATA W(248),W(249),W(250),W(251),W(252),W(253),W(254),W(255)/ &
-&.121962627831147E-1,.122091082480372E-1,.122201222273040E-1, &
-&.122293030687103E-1,.122366493950402E-1,.122421601042728E-1, &
-&.122458343697479E-1,.122476716402898E-1/
-LOOP=MAX0(1,N/256)
-FLOOP=LOOP
-H=(B-A)/FLOOP
-SCALE=H/2.0
-M=MIN0(128,N/2)
-MT=2*M
-NPLACE=M-1
-do 1 L = 1,LOOP
-FL=L
-AL=A+(FL-1.0)*H
-BL=A+FL*H
-K=256*(L-1)
-do 1 I = 1,M
-NPI=NPLACE+I
-S=T(NPI)
-R=W(NPI)*SCALE
-I1=K+I
-I2=K+MT+1-I
-TV(I1)=  (AL*(1.0+S)+(1.0-S)*BL)/2.0
-TV(I2)=  (AL*(1.0-S)+(1.0+S)*BL)/2.0
-WV(I1)=R
-1 WV(I2)=R
-RETURN
-END SUBROUTINE WANDT
+data t(1),t(2),t(3),t(4),t(5),t(6),t(7),t(8),t(9),t(10),t(11), &
+&t(12),t(13),t(14),t(15)/.577350269189626e0, &
+&.861136311594053e0,.339981043584856e0,.960289856497536e0, &
+&.796666477413627e0,.525532409916329e0,.183434642495650e0, &
+&.989400934991650e0,.944575023073233e0,.865631202387832e0, &
+&.755404408355003e0,.617876244402644e0,.458016777657227e0, &
+&.281603550779259e0,.950125098376374e-1/
+data t(16),t(17),t(18),t(19),t(20),t(21),t(22),t(23),t(24),t(25), &
+&t(26),t(27),t(28),t(29),t(30),t(31)/.997263861849482e0, &
+&.985611511545268e0,.964762255587506e0,.934906075937740e0, &
+&.896321155766052e0,.849367613732570e0,.794483795967942e0, &
+&.732182118740290e0,.663044266930215e0,.587715757240762e0, &
+&.506899908932229e0,.421351276130635e0,.331868602282128e0, &
+&.239287362252137e0,.144471961582796e0,.483076656877383e-1/
+data t(32),t(33),t(34),t(35),t(36),t(37),t(38),t(39),t(40),t(41), &
+&t(42),t(43),t(44),t(45),t(46),t(47)/.999305041735772e0, &
+&.996340116771955e0,.991013371476744e0,.983336253884626e0, &
+&.973326827789911e0,.961008799652054e0,.946411374858403e0, &
+&.929569172131940e0,.910522137078503e0,.889315445995114e0, &
+&.865999398154093e0,.840629296252580e0,.813265315122798e0, &
+&.783972358943341e0,.752819907260532e0,.719881850171611e0/
+data t(48),t(49),t(50),t(51),t(52),t(53),t(54),t(55),t(56),t(57), &
+&t(58),t(59),t(60),t(61),t(62),t(63)/.685236313054233e0, &
+&.648965471254657e0,.611155355172393e0,.571895646202634e0, &
+&.531279464019895e0,.489403145707053e0,.446366017253464e0, &
+&.402270157963992e0,.357220158337668e0,.311322871990211e0, &
+&.264687162208767e0,.217423643740007e0,.169644420423993e0, &
+&.121462819296121e0,.729931217877990e-1,.243502926634244e-1/
+data t(64),t(65),t(66),t(67),t(68),t(69),t(70),t(71),t(72),t(73), &
+&t(74),t(75),t(76),t(77),t(78),t(79)/.999824887947132e0, &
+&.999077459977376e0,.997733248625514e0,.995792758534981e0, &
+&.993257112900213e0,.990127818491734e0,.986406742724586e0, &
+&.982096108435719e0,.977198491463907e0,.971716818747137e0, &
+&.965654366431965e0,.959014757853700e0,.951801961341264e0, &
+&.944020287830220e0,.935674388277916e0,.926769250878948e0/
+data t(80),t(81),t(82),t(83),t(84),t(85),t(86),t(87),t(88),t(89), &
+&t(90),t(91),t(92),t(93),t(94),t(95),t(96),t(97)/ &
+&.917310198080961e0,.907302883401757e0,.896753288049158e0, &
+&.885667717345397e0,.874052796958032e0,.861915468939548e0, &
+&.849262987577969e0,.836102915060907e0,.822443116955644e0, &
+&.808291757507914e0,.793657294762193e0,.778548475506412e0, &
+&.762974330044095e0,.746944166797062e0,.730467566741909e0, &
+&.713554377683587e0,.696214708369514e0,.678458922447719e0/
+data t(98),t(99),t(100),t(101),t(102),t(103),t(104),t(105),t(106), &
+&t(107),t(108),t(109),t(110),t(111),t(112),t(113),t(114)/ &
+&.660297632272646e0,.641741692562308e0,.622802193910585e0, &
+&.603490456158549e0,.583818021628763e0,.563796648226618e0, &
+&.543438302412810e0,.522755152051175e0,.501759559136144e0, &
+&.480464072404172e0,.458881419833552e0,.437024501037104e0, &
+&.414906379552275e0,.392540275033267e0,.369939555349859e0, &
+&.347117728597636e0,.324088435024413e0/
+data t(115),t(116),t(117),t(118),t(119),t(120),t(121),t(122), &
+&t(123),t(124),t(125),t(126),t(127)/.300865438877677e0, &
+&.277462620177904e0,.253893966422694e0,.230173564226660e0, &
+&.206315590902079e0,.182334305985337e0,.158244042714225e0, &
+&.134059199461188e0,.109794231127644e0, &
+&.854636405045155e-1,.610819696041396e-1,.366637909687335e-1, &
+&.122236989606158e-1/
+data t(128),t(129),t(130),t(131),t(132),t(133),t(134),t(135), &
+&t(136),t(137),t(138),t(139),t(140),t(141),t(142)/ &
+&.999956050018992e0,.999768437409263e0,.999430937466261e0, &
+&.998943525843409e0,.998306266473006e0,.997519252756721e0, &
+&.996582602023382e0,.995496454481096e0,.994260972922410e0, &
+&.992876342608822e0,.991342771207583e0,.989660488745065e0, &
+&.987829747564861e0,.985850822286126e0,.983724009760315e0/
+data t(143),t(144),t(145),t(146),t(147),t(148),t(149),t(150), &
+&t(151),t(152),t(153),t(154),t(155),t(156),t(157)/ &
+&.981449629025464e0,.979028021257622e0,.976459549719234e0, &
+&.973744599704370e0,.970883578480743e0,.967876915228489e0, &
+&.964725060975706e0,.961428488530732e0,.957987692411178e0, &
+&.954403188769716e0,.950675515316628e0,.946805231239127e0, &
+&.942792917117462e0,.938639174837814e0, .934344627502003e0/
+data t(158),t(159),t(160),t(161),t(162),t(163),t(164),t(165), &
+&t(166),t(167),t(168),t(169),t(170),t(171),t(172)/ &
+&.929909919334006e0,.925335715583316e0,.920622702425146e0, &
+&.915771586857490e0,.910783096595065e0,.905657979960145e0, &
+&.900397005770304e0,.895000963223085e0,.889470661777611e0, &
+&.883806931033158e0,.878010620604707e0,.872082599995488e0, &
+&.866023758466555e0,.859835004903376e0,.853517267679503e0/
+data t(173),t(174),t(175),t(176),t(177),t(178),t(179),t(180), &
+&t(181),t(182),t(183),t(184),t(185),t(186),t(187)/ &
+&.847071494517296e0,.840498652345763e0,.833799727155505e0, &
+&.826975723850813e0,.820027666098917e0,.812956596176432e0, &
+&.805763574812999e0,.798449681032171e0,.791016011989546e0, &
+&.783463682808184e0,.775793826411326e0,.768007593352446e0, &
+&.760106151642655e0,.752090686575492e0,.743962400549112e0/
+data t(188),t(189),t(190),t(191),t(192),t(193),t(194),t(195), &
+&t(196),t(197),t(198),t(199),t(200),t(201),t(202)/ &
+&.735722512885918e0,.727372259649652e0,.718912893459971e0, &
+&.710345683304543e0,.701671914348685e0,.692892887742577e0, &
+&.684009920426076e0,.675024344931163e0,.665937509182049e0, &
+&.656750776292973e0,.647465524363725e0,.638083146272911e0, &
+&.628605049469015e0,.619032655759261e0,.609367401096334e0/
+data t(203),t(204),t(205),t(206),t(207),t(208),t(209),t(210), &
+&t(211),t(212),t(213),t(214),t(215),t(216),t(217)/ &
+&.599610735362968e0,.589764122154454e0,.579829038559083e0, &
+&.569806974936569e0,.559699434694481e0,.549507934062719e0, &
+&.539234001866059e0,.528879179294822e0,.518445019673674e0, &
+&.507933088228616e0,.497344961852181e0,.486682228866890e0, &
+&.475946488786983e0,.465139352078479e0,.454262439917590e0/
+data t(218),t(219),t(220),t(221),t(222),t(223),t(224),t(225), &
+&t(226),t(227),t(228),t(229),t(230),t(231),t(232)/ &
+&.443317383947527e0,.432305826033741e0,.421229418017624e0, &
+&.410089821468717e0,.398888707435459e0,.387627756194516e0, &
+&.376308656998716e0,.364933107823654e0,.353502815112970e0, &
+&.342019493522372e0,.330484865662417e0,.318900661840106e0, &
+&.307268619799319e0,.295590484460136e0,.283868007657082e0/
+data t(233),t(234),t(235),t(236),t(237),t(238),t(239),t(240), &
+&t(241),t(242),t(243),t(244),t(245),t(246),t(247)/ &
+&.272102947876337e0,.260297069991943e0,.248452145001057e0, &
+&.236569949758284e0,.224652266709132e0,.212700883622626e0, &
+&.200717593323127e0,.188704193421389e0,.176662486044902e0, &
+&.164594277567554e0,.152501378338656e0,.140385602411376e0, &
+&.128248767270607e0,.116092693560333e0,.103919204810509e0/
+data   t(248),t(249),t(250),t(251),t(252),t(253),t(254),t(255)/ &
+&.917301271635196e-1,.795272891002330e-1,.673125211657164e-1, &
+&.550876556946340e-1,.428545265363791e-1,.306149687799790e-1, &
+&.183708184788137e-1,.612391237518953e-2/
+data w(1),w(2),w(3),w(4),w(5),w(6),w(7),w(8),w(9),w(10),w(11), &
+&w(12),w(13),w(14),w(15)/1.0e0,.347854845137454e0, &
+&.652145154862546e0,.101228536290376e0,.222381034453374e0, &
+&.313706645877887e0,.362683783378362e0,.271524594117541e-1, &
+&.622535239386479e-1,.951585116824928e-1,.124628971255534e0, &
+&.149595988816577e0,.169156519395003e0,.182603415044924e0, &
+&.189450610455068e0/
+data w(16),w(17),w(18),w(19),w(20),w(21),w(22),w(23),w(24),w(25), &
+&w(26),w(27),w(28),w(29),w(30),w(31)/.701861000947010e-2, &
+&.162743947309057e-1,.253920653092621e-1,.342738629130214e-1, &
+&.428358980222267e-1,.509980592623762e-1,.586840934785355e-1, &
+&.658222227763618e-1,.723457941088485e-1,.781938957870703e-1, &
+&.833119242269468e-1,.876520930044038e-1,.911738786957639e-1, &
+&.938443990808046e-1,.956387200792749e-1,.965400885147278e-1/
+data w(32),w(33),w(34),w(35),w(36),w(37),w(38),w(39),w(40),w(41), &
+&w(42),w(43),w(44),w(45),w(46),w(47)/.178328072169643e-2, &
+&.414703326056247e-2,.650445796897836e-2,.884675982636395e-2, &
+&.111681394601311e-1,.134630478967186e-1,.157260304760247e-1, &
+&.179517157756973e-1,.201348231535302e-1,.222701738083833e-1, &
+&.243527025687109e-1,.263774697150547e-1,.283396726142595e-1, &
+&.302346570724025e-1,.320579283548516e-1,.338051618371416e-1/
+data w(48),w(49),w(50),w(51),w(52),w(53),w(54),w(55),w(56),w(57), &
+&w(58),w(59),w(60),w(61),w(62),w(63)/ .354722132568824e-1, &
+&.370551285402400e-1,.385501531786156e-1,.399537411327203e-1, &
+&.412625632426235e-1,.424735151236536e-1,.435837245293235e-1, &
+&.445905581637566e-1,.454916279274181e-1, .462847965813144e-1, &
+&.469681828162100e-1,.475401657148303e-1,.479993885964583e-1, &
+&.483447622348030e-1,.485754674415034e-1,.486909570091397e-1/
+data w(64),w(65),w(66),w(67),w(68),w(69),w(70),w(71),w(72),w(73), &
+&w(74),w(75),w(76),w(77),w(78),w(79)/ .449380960292090e-3, &
+&.104581267934035e-2,.164250301866903e-2,.223828843096262e-2, &
+&.283275147145799e-2,.342552604091022e-2,.401625498373864e-2, &
+&.460458425670296e-2,.519016183267633e-2,.577263754286570e-2, &
+&.635166316170719e-2,.692689256689881e-2,.749798192563473e-2, &
+&.806458989048606e-2,.862637779861675e-2,.918300987166087e-2/
+data w(80),w(81),w(82),w(83),w(84),w(85),w(86),w(87),w(88), &
+&w(89),w(90),w(91),w(92),w(93),w(94),w(95)/.973415341500681e-2, &
+&.102794790158322e-1,.108186607395031e-1,.113513763240804e-1, &
+&.118773073727403e-1,.123961395439509e-1,.129075627392673e-1, &
+&.134112712886163e-1,.139069641329520e-1,.143943450041668e-1, &
+&.148731226021473e-1,.153430107688651e-1,.158037286593993e-1, &
+&.162550009097852e-1,.166965578015892e-1,.171281354231114e-1/
+data w(96),w(97),w(98),w(99),w(100),w(101),w(102),w(103),w(104), &
+&w(105),w(106),w(107),w(108),w(109),w(110),w(111),w(112)/ &
+&.175494758271177e-1,.179603271850087e-1,.183604439373313e-1, &
+&.187495869405447e-1,.191275236099509e-1,.194940280587066e-1, &
+&.198488812328309e-1,.201918710421300e-1,.205227924869601e-1, &
+&.208414477807511e-1,.211476464682213e-1,.214412055392085e-1, &
+&.217219495380521e-1,.219897106684605e-1,.222443288937998e-1, &
+&.224856520327450e-1,.227135358502365e-1/
+data w(113),w(114),w(115),w(116),w(117),w(118),w(119),w(120), &
+&w(121),w(122),w(123),w(124),w(125),w(126),w(127)/ &
+&.229278441436868e-1,.231284488243870e-1,.233152299940628e-1, &
+&.234880760165359e-1,.236468835844476e-1,.237915577810034e-1, &
+&.239220121367035e-1,.240381686810241e-1,.241399579890193e-1, &
+&.242273192228152e-1,.243002001679719e-1,.243585572646906e-1, &
+&.244023556338496e-1,.244315690978500e-1,.244461801962625e-1/
+data w(128),w(129),w(130),w(131),w(132),w(133),w(134),w(135), &
+&w(136),w(137),w(138),w(139),w(140),w(141),w(142)/ &
+&.112789017822272e-3,.262534944296446e-3,.412463254426176e-3, &
+&.562348954031410e-3,.712154163473321e-3,.861853701420089e-3, &
+&.101142439320844e-2,.116084355756772e-2,.131008868190250e-2, &
+&.145913733331073e-2,.160796713074933e-2,.175655573633073e-2, &
+&.190488085349972e-2,.205292022796614e-2,.220065164983991e-2/
+data w(143),w(144),w(145),w(146),w(147),w(148),w(149),w(150), &
+&w(151),w(152),w(153),w(154),w(155),w(156),w(157)/ &
+&.234805295632731e-2,.249510203470371e-2,.264177682542749e-2, &
+&.278805532532771e-2,.293391559082972e-2,.307933574119934e-2, &
+&.322429396179420e-2,.336876850731555e-2,.351273770505631e-2, &
+&.365617995814250e-2,.379907374876626e-2,.394139764140883e-2, &
+&.408313028605267e-2,.422425042138154e-2,.436473687796806e-2/
+data w(158),w(159),w(160),w(161),w(162),w(163),w(164),w(165), &
+&w(166),w(167),w(168),w(169),w(170),w(171),w(172)/ &
+&.450456858144790e-2,.464372455568006e-2,.478218392589269e-2, &
+&.491992592181387e-2,.505692988078684e-2,.519317525086928e-2, &
+&.532864159391593e-2,.546330858864431e-2,.559715603368291e-2, &
+&.573016385060144e-2,.586231208692265e-2,.599358091911534e-2, &
+&.612395065556793e-2,.625340173954240e-2,.638191475210788e-2/
+data w(173),w(174),w(175),w(176),w(177),w(178),w(179),w(180), &
+&w(181),w(182),w(183),w(184),w(185),w(186),w(187)/ &
+&.650947041505366e-2,.663604959378107e-2,.676163330017380e-2, &
+&.688620269544632e-2,.700973909296982e-2,.713222396107539e-2, &
+&.725363892583391e-2,.737396577381235e-2,.749318645480588e-2, &
+&.761128308454566e-2,.772823794738156e-2,.784403349893971e-2, &
+&.795865236875435e-2,.807207736287350e-2,.818429146643827e-2/
+data w(188),w(189),w(190),w(191),w(192),w(193),w(194),w(195), &
+&w(196),w(197),w(198),w(199),w(200),w(201),w(202)/ &
+&.829527784623523e-2,.840501985322154e-2,.851350102502249e-2, &
+&.862070508840101e-2,.872661596169881e-2,.883121775724875e-2, &
+&.893449478375821e-2,.903643154866287e-2,.913701276045081e-2, &
+&.923622333095630e-2,.933404837762327e-2,.943047322573775e-2, &
+&.952548341062928e-2,.961906467984073e-2,.971120299526628e-2/
+data w(203),w(204),w(205),w(206),w(207),w(208),w(209),w(210), &
+&w(211),w(212),w(213),w(214),w(215),w(216),w(217)/ &
+&.980188453525733e-2,.989109569669583e-2,.997882309703491e-2, &
+&.100650535763064e-1,.101497741990949e-1,.102329722564782e-1, &
+&.103146352679340e-1,.103947509832117e-1,.104733073841704e-1, &
+&.105502926865815e-1,.106256953418966e-1,.106995040389798e-1, &
+&.107717077058046e-1,.108422955111148e-1,.109112568660490e-1/
+data w(218),w(219),w(220),w(221),w(222),w(223),w(224),w(225), &
+&w(226),w(227),w(228),w(229),w(230),w(231),w(232)/ &
+&.109785814257296e-1,.110442590908139e-1,.111082800090098e-1, &
+&.111706345765534e-1,.112313134396497e-1,.112903074958755e-1, &
+&.113476078955455e-1,.114032060430392e-1,.114570935980906e-1, &
+&.115092624770395e-1,.115597048540436e-1,.116084131622531e-1, &
+&.116553800949452e-1,.117005986066207e-1,.117440619140606e-1/
+data w(233),w(234),w(235),w(236),w(237),w(238),w(239),w(240), &
+&w(241),w(242),w(243),w(244),w(245),w(246),w(247)/ &
+&.117857634973434e-1,.118256971008240e-1,.118638567340711e-1, &
+&.119002366727665e-1,.119348314595636e-1,.119676359049059e-1, &
+&.119986450878058e-1,.120278543565826e-1,.120552593295601e-1, &
+&.120808558957245e-1,.121046402153405e-1,.121266087205273e-1, &
+&.121467581157945e-1,.121650853785355e-1,.121815877594818e-1/
+data w(248),w(249),w(250),w(251),w(252),w(253),w(254),w(255)/ &
+&.121962627831147e-1,.122091082480372e-1,.122201222273040e-1, &
+&.122293030687103e-1,.122366493950402e-1,.122421601042728e-1, &
+&.122458343697479e-1,.122476716402898e-1/
+loop=max0(1,n/256)
+floop=loop
+h=(b-a)/floop
+scale=h/2.0
+m=min0(128,n/2)
+mt=2*m
+nplace=m-1
+do 1 l = 1,loop
+fl=l
+al=a+(fl-1.0)*h
+bl=a+fl*h
+k=256*(l-1)
+do 1 i = 1,m
+npi=nplace+i
+s=t(npi)
+r=w(npi)*scale
+i1=k+i
+i2=k+mt+1-i
+tv(i1)=  (al*(1.0+s)+(1.0-s)*bl)/2.0
+tv(i2)=  (al*(1.0-s)+(1.0+s)*bl)/2.0
+wv(i1)=r
+1 wv(i2)=r
+return
+end subroutine wandt
 
-SUBROUTINE LEAVE(IERSET,NF,MF,XV,TV,WV,ERROR,KERNEL,RHFCN,EP, &
-&IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-IMPLICIT NONE
-INTEGER :: IER, IERSET, IFLAG, MF, NF, NHALF, NT, NUP
-REAL :: DELN(NF), ELINSY, EP, EPS, ERROR, R(MF), RH(NF), RHS(MF), &
-&T(*), TM(MF), TN(NF), TV(MF), WM(MF), WN(NF), WV(MF), X(*), &
-&XM(MF), XMZ(MF), XNORM, XV(MF)
-INTEGER :: I, ITLOOP, J
-REAL :: DERROR, SAVEP, SUM, TEMP
-INTEGER :: MFINAL, NFINAL
-REAL :: FINLEP, R1, R2
-REAL :: RHFCN
-REAL :: RNRM
+subroutine leave(ierset,nf,mf,xv,tv,wv,error,kernel,rhfcn,ep, &
+&iflag,x,t,nt,ier,eps,elinsy,tn,wn,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,xnorm)
+implicit none
+integer :: ier, ierset, iflag, mf, nf, nhalf, nt, nup
+real :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
+&t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
+&xm(mf), xmz(mf), xnorm, xv(mf)
+integer :: i, itloop, j
+real :: derror, savep, sum, temp
+integer :: mfinal, nfinal
+real :: finlep, r1, r2
+real :: rhfcn
+real :: rnrm
 !
 !   THIS ROUTINE SETS ALL NECESSARY PARAMETERS FOR LEAVING IEGAUS.
 !   IF NT .GT. 0, IT ALSO PERFORMS THE NECESSARY NYSTROM
 !   INTERPOLATION AT THE NODES GIVEN IN T.
 !
-REAL :: KERNEL, KMM(NUP,NUP), KMN(NUP,NHALF), KNM(NHALF,NUP), &
-&IMKNN(NUP,NUP), LUFACT(NUP,NUP), NORMK, NUMR1
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-EXTERNAL KERNEL,RHFCN
+real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
+&imknn(nup,nup), lufact(nup,nup), normk, numr1
+common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
+external kernel,rhfcn
 !
 !   SET ERROR PARAMETERS FOR RETURN.
 !
-NORMK=0.0
-NFINAL=NF
-MFINAL=MF
-FINLEP=EPS
-IF((EPS .GT. EP) .AND. (ERROR .LE. EPS)) GO TO 10
-IER=IERSET
-EP=ERROR
-IF(NT .EQ. 0) GO TO 20
-GO TO 30
-10 IER=3
+normk=0.0
+nfinal=nf
+mfinal=mf
+finlep=eps
+if((eps .gt. ep) .and. (error .le. eps)) go to 10
+ier=ierset
+ep=error
+if(nt .eq. 0) go to 20
+go to 30
+10 ier=3
 !
 !   SINCE EPS IS THE SMALLEST ERROR POSSIBLE, SET EP=EPS FOR THE
 !   RETURN ERROR ESTIMATE.
 !
-EP=EPS
-IF(NT .GT. 0) GO TO 30
+ep=eps
+if(nt .gt. 0) go to 30
 !
 !   NO NYSTROM INTERPOLATION IS DESIRED. RETURN THE VALUES AT THE
 !   GAUSSIAN NODE POINTS.
 !
-20 do 21 I = 1,MF
-X(I)=XV(I)
-21 T(I)=TV(I)
-NT=MF
-RETURN
+20 do 21 i = 1,mf
+x(i)=xv(i)
+21 t(i)=tv(i)
+nt=mf
+return
 !   CALCULATE NORM(K).
-30 SAVEP=EP
-do 31 I = 1,NF
-31 IMKNN(I,I)=IMKNN(I,I)-1.0
-NORMK=0.0
-do 33 I = 1,NF
-SUM=0.0
-do 32 J = 1,NF
-32 SUM=SUM+ABS(IMKNN(I,J))
-33 NORMK=AMAX1(NORMK,SUM)
-do 34 I = 1,NF
-34 IMKNN(I,I)=IMKNN(I,I)+1.0
-IF(NF .EQ. MF) GO TO 50
+30 savep=ep
+do 31 i = 1,nf
+31 imknn(i,i)=imknn(i,i)-1.0
+normk=0.0
+do 33 i = 1,nf
+sum=0.0
+do 32 j = 1,nf
+32 sum=sum+abs(imknn(i,j))
+33 normk=amax1(normk,sum)
+do 34 i = 1,nf
+34 imknn(i,i)=imknn(i,i)+1.0
+if(nf .eq. mf) go to 50
 !
 !   ITERATE TO DECREASE THE NOISE LEVEL IN X. THIS SHOULD REDUCE
 !   POSSIBLE ERRORS IN NYSTROM INTERPOLATION.
 !
-DERROR=((1.0-R1)/R1)*EPS/NORMK
-IF(IFLAG .EQ. 1) DERROR=DERROR*XNORM
-ITLOOP=0
-do 41 I = 1,MF
-41 XM(I)=XV(I)
-42 do 43 I = 1,MF
-43 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,NF,TN,WN,MF,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,1)
-NUMR1=RNRM(XM,XMZ,MF,1)
-ITLOOP=ITLOOP+1
-IF((NUMR1 .GT. DERROR) .AND. (ITLOOP .LT. 5)) GO TO 42
-do 44 I = 1,MF
-44 XV(I)=XM(I)
+derror=((1.0-r1)/r1)*eps/normk
+if(iflag .eq. 1) derror=derror*xnorm
+itloop=0
+do 41 i = 1,mf
+41 xm(i)=xv(i)
+42 do 43 i = 1,mf
+43 xmz(i)=xm(i)
+call itert(kernel,rhfcn,nf,tn,wn,mf,tm,wm,xm,xmz,kmm,kmn,knm, &
+&rhs,imknn,lufact,r,rh,deln,nup,nhalf,1)
+numr1=rnrm(xm,xmz,mf,1)
+itloop=itloop+1
+if((numr1 .gt. derror) .and. (itloop .lt. 5)) go to 42
+do 44 i = 1,mf
+44 xv(i)=xm(i)
 !
 !   ESTIMATE NEW ERROR BOUND FOR NYSTROM INTERPOLATES.
 !
-TEMP=NORMK*(R1/(1.0-R1))*NUMR1
-IF(IFLAG .EQ. 1) TEMP=TEMP/XNORM
-EP=AMAX1(EP,TEMP)
-GO TO 60
+temp=normk*(r1/(1.0-r1))*numr1
+if(iflag .eq. 1) temp=temp/xnorm
+ep=amax1(ep,temp)
+go to 60
 !
 !   NO ITERATION USED IN COMPUTING X. JUST COMPUTE ERROR ESTIMATE
 !   IN NYSTROM INTERPOLATE.
 !
-50 TEMP=NORMK*ELINSY
-IF(IFLAG .EQ. 0) TEMP=TEMP*XNORM
-IF(IER .NE. 2) EP=AMAX1(EP,TEMP)
+50 temp=normk*elinsy
+if(iflag .eq. 0) temp=temp*xnorm
+if(ier .ne. 2) ep=amax1(ep,temp)
 !
 !   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
 !
-60 do 62 I = 1,NT
-SUM=0.0
-do 61 J = 1,MF
-61 SUM=SUM+WV(J)*KERNEL(T(I),TV(J))*XV(J)
-62 X(I)=RHFCN(T(I))+SUM
-IF((IER .EQ. 0) .AND. (EP .GT. EPS)) IER=4
-IF((IER .EQ. 1) .AND. (EP .GT. ERROR)) IER=5
-IF((IER .EQ. 3) .AND. (EP .GT. EPS)) IER=6
-EP=SAVEP
-RETURN
-END SUBROUTINE LEAVE
+60 do 62 i = 1,nt
+sum=0.0
+do 61 j = 1,mf
+61 sum=sum+wv(j)*kernel(t(i),tv(j))*xv(j)
+62 x(i)=rhfcn(t(i))+sum
+if((ier .eq. 0) .and. (ep .gt. eps)) ier=4
+if((ier .eq. 1) .and. (ep .gt. error)) ier=5
+if((ier .eq. 3) .and. (ep .gt. eps)) ier=6
+ep=savep
+return
+end subroutine leave
 
-SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN, &
-&KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: IFLG, M
-INTEGER :: N
-INTEGER, INTENT(IN) :: NHALF
-INTEGER :: NUP
-REAL, INTENT(INOUT) :: DELN(N), R(M), RH(N)
-REAL :: RHFCN, RHS(M), TM(M), TN(N), WM(M), WN(N)
-REAL, INTENT(INOUT) :: XM(M)
-REAL :: XMZ(M)
-INTEGER :: I, IND, J
-REAL :: SUM
+subroutine itert(kernel,rhfcn,n,tn,wn,m,tm,wm,xm,xmz,kmm,kmn, &
+&knm,rhs,imknn,lufact,r,rh,deln,nup,nhalf,iflg)
+implicit none
+integer, intent(in) :: iflg, m
+integer :: n
+integer, intent(in) :: nhalf
+integer :: nup
+real, intent(inout) :: deln(n), r(m), rh(n)
+real :: rhfcn, rhs(m), tm(m), tn(n), wm(m), wn(n)
+real, intent(inout) :: xm(m)
+real :: xmz(m)
+integer :: i, ind, j
+real :: sum
 !
 !   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
 !   XMZ. THE ROUTINE IS DIVIDED ACCORDING TO WHETHER OR NOT
 !   M .GT. NUPPER.
 !
-REAL :: KERNEL
-REAL, INTENT(INOUT) :: KMM(NUP,NUP)
-REAL :: KMN(NUP,NHALF)
-REAL, INTENT(INOUT) :: KNM(NHALF,NUP)
-REAL :: IMKNN(NUP,NUP)
-REAL, INTENT(INOUT) :: LUFACT(NUP,NUP)
-EXTERNAL KERNEL,RHFCN
+real :: kernel
+real, intent(inout) :: kmm(nup,nup)
+real :: kmn(nup,nhalf)
+real, intent(inout) :: knm(nhalf,nup)
+real :: imknn(nup,nup)
+real, intent(inout) :: lufact(nup,nup)
+external kernel,rhfcn
 !
 !   M .GT. NUPPER MEANS THAT THE MATRICES KMM,KMN,KNM CAN NO LONGER
 !   BE STORED DUE TO LACK OF SPACE.
-IF (M .GT. NUP) GO TO 13
-IF(IFLG .EQ. 1) GO TO 3
+if (m .gt. nup) go to 13
+if(iflg .eq. 1) go to 3
 !   IF IFLG=0, THEN THE MATRICES KMM AND KNM MUST BE COMPUTED
 !   AND STORED.
-do 2 J = 1,M
-do 1 I = 1,M
-1 KMM(I,J)=WM(J)*KERNEL(TM(I),TM(J))
-do 2 I = 1,N
-2 KNM(I,J)=WM(J)*KERNEL(TN(I),TM(J))
+do 2 j = 1,m
+do 1 i = 1,m
+1 kmm(i,j)=wm(j)*kernel(tm(i),tm(j))
+do 2 i = 1,n
+2 knm(i,j)=wm(j)*kernel(tn(i),tm(j))
 !   COMPUTE  RESIDUALS R(I)=RHFCN(TM(I))-XMZ(I)+KM(TM(I))*XMZ(I)
-3 do 5 I = 1,M
-SUM=0.0
-do 4 J = 1,M
-4 SUM=SUM+KMM(I,J)*XMZ(J)
-5 R(I)=RHS(I)-(XMZ(I)-SUM)
+3 do 5 i = 1,m
+sum=0.0
+do 4 j = 1,m
+4 sum=sum+kmm(i,j)*xmz(j)
+5 r(i)=rhs(i)-(xmz(i)-sum)
 !
 !   COMPUTE RH=KM*R AT ALL TN(I).
-do 7 I = 1,N
-RH(I)=0.0
-do 7 J = 1,M
-7 RH(I)=RH(I)+KNM(I,J)*R(J)
+do 7 i = 1,n
+rh(i)=0.0
+do 7 j = 1,m
+7 rh(i)=rh(i)+knm(i,j)*r(j)
 !   CALCULATE DELN=((I-KN)**(-1))*KM*R AT ALL TN(I).
 !
 !*******************************************************************
 !                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,RH,DELN,4,IND)
+call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 !                                                                  *
 !   SEE THE ORIGINAL REFERENCE IN IEGS.                            *
 !*******************************************************************
 !
 !   CALCULATE NEW XM.
-do 12 I = 1,M
-SUM=0.0
-do 10 J = 1,M
-10 SUM=SUM+KMM(I,J)*R(J)
-do 11 J = 1,N
-11 SUM=SUM+KMN(I,J)*DELN(J)
-12 XM(I)=SUM+R(I)+XMZ(I)
-RETURN
+do 12 i = 1,m
+sum=0.0
+do 10 j = 1,m
+10 sum=sum+kmm(i,j)*r(j)
+do 11 j = 1,n
+11 sum=sum+kmn(i,j)*deln(j)
+12 xm(i)=sum+r(i)+xmz(i)
+return
 !   ENTRANCE WHEN M .GT. NUP.
 !   CALCULATE RESIDUALS.
-13 do 15 I = 1,M
-SUM=0.0
-do 14 J = 1,M
-14 SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*XMZ(J)
-15 R(I)=RHS(I)-(XMZ(I)-SUM)
+13 do 15 i = 1,m
+sum=0.0
+do 14 j = 1,m
+14 sum=sum+wm(j)*kernel(tm(i),tm(j))*xmz(j)
+15 r(i)=rhs(i)-(xmz(i)-sum)
 !   CALCULATE RH=KM*R.
-do 17 I = 1,N
-RH(I)=0.0
-do 17 J = 1,M
-17 RH(I)=RH(I)+WM(J)*KERNEL(TN(I),TM(J))*R(J)
+do 17 i = 1,n
+rh(i)=0.0
+do 17 j = 1,m
+17 rh(i)=rh(i)+wm(j)*kernel(tn(i),tm(j))*r(j)
 !
 !*******************************************************************
 !                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,RH,DELN,4,IND)
+call lnsys(imknn,lufact,nup,n,rh,deln,4,ind)
 !                                                                  *
 !   SEE THE ORIGINAL REFERENCE IN IEGS.                            *
 !*******************************************************************
 !
 !   CALCULATE XM.
-do 22 I = 1,M
-SUM=0.0
-do 20 J = 1,M
-20 SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*R(J)
-do 21 J = 1,N
-21 SUM=SUM+WN(J)*KERNEL(TM(I),TN(J))*DELN(J)
-22 XM(I)=SUM+R(I)+XMZ(I)
-RETURN
-END SUBROUTINE ITERT
+do 22 i = 1,m
+sum=0.0
+do 20 j = 1,m
+20 sum=sum+wm(j)*kernel(tm(i),tm(j))*r(j)
+do 21 j = 1,n
+21 sum=sum+wn(j)*kernel(tm(i),tn(j))*deln(j)
+22 xm(i)=sum+r(i)+xmz(i)
+return
+end subroutine itert
 
-SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
-IMPLICIT NONE
-INTEGER :: IERR, M, N
-INTEGER :: I, IP1, ISWIT, J, K, KP1, L, NM1, NMI
-REAL :: C, SUM, T
-REAL :: ERROR, RELRSD
+subroutine lnsys(a,d,m,n,b,x,option,ierr)
+implicit none
+integer :: ierr, m, n
+integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
+real :: c, sum, t
+real :: error, relrsd
 !
 !   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
 !   ROWS IN THE DIMENSION STATEMENT FOR A IN THE CALLING PROGRAM.
@@ -3937,143 +3937,143 @@ REAL :: ERROR, RELRSD
 !   AND SCALE. ALSO MODIFY THE DIMENSION STATEMENT FOR PIVOT IN THE
 !   SUBROUTINE IEGS.
 !
-REAL :: A(M,N), D(M,N), B(N), X(N)
-INTEGER :: OPTION, PIVOT(128)
-REAL :: NORMX, NORME, NORMB, NORMR, R(128), SCALE(128)
-COMMON /XXLIN/ ERROR,RELRSD,PIVOT
+real :: a(m,n), d(m,n), b(n), x(n)
+integer :: option, pivot(128)
+real :: normx, norme, normb, normr, r(128), scale(128)
+common /xxlin/ error,relrsd,pivot
 !
-NM1 = N - 1
-ISWIT = 1
-IF (OPTION .GT. 2) GO TO 100
+nm1 = n - 1
+iswit = 1
+if (option .gt. 2) go to 100
 !
-do 11 I = 1,N
-SCALE(I) = 0.0
-  do 10 J = 1,N
-  D(I,J) = A(I,J)
-10 SCALE(I) = SCALE(I) + ABS(D(I,J))
-IF (SCALE(I) .NE. 0.0) GO TO 11
-IERR = -I
-RETURN
-11 CONTINUE
+do 11 i = 1,n
+scale(i) = 0.0
+  do 10 j = 1,n
+  d(i,j) = a(i,j)
+10 scale(i) = scale(i) + abs(d(i,j))
+if (scale(i) .ne. 0.0) go to 11
+ierr = -i
+return
+11 continue
 !
 !             OBTAIN THE LU DECOMPOSITION OF A
 !
-IERR = 0
-DO K = 1,NM1
-C = ABS(D(K,K))/SCALE(K)
-L = K
-KP1 = K + 1
-  do 20 I = KP1,N
-  T = ABS(D(I,K))/SCALE(I)
-  IF (T .LE. C) GO TO 20
-  C = T
-  L = I
-20 CONTINUE
+ierr = 0
+do k = 1,nm1
+c = abs(d(k,k))/scale(k)
+l = k
+kp1 = k + 1
+  do 20 i = kp1,n
+  t = abs(d(i,k))/scale(i)
+  if (t .le. c) go to 20
+  c = t
+  l = i
+20 continue
 !
-IF (C .NE. 0.0) GO TO 30
-IERR = K
-RETURN
+if (c .ne. 0.0) go to 30
+ierr = k
+return
 !
 !     INTERCHANGE ROWS K AND L
 !
-30 PIVOT(K) = L
-IF (K .EQ. L) GO TO 40
-  do 31 J = K,N
-  T = D(K,J)
-  D(K,J) = D(L,J)
-31 D(L,J) = T
-T = SCALE(K)
-SCALE(K) = SCALE(L)
-SCALE(L) = T
+30 pivot(k) = l
+if (k .eq. l) go to 40
+  do 31 j = k,n
+  t = d(k,j)
+  d(k,j) = d(l,j)
+31 d(l,j) = t
+t = scale(k)
+scale(k) = scale(l)
+scale(l) = t
 !
 !     ELIMINATE THE K-TH UNKNOWN BELOW THE DIAGONAL
 !
-40 DO I = KP1,N
-  D(I,K) = D(I,K)/D(K,K)
-  T = D(I,K)
-    do 41 J = KP1,N
-41 D(I,J) = D(I,J) - T*D(K,J)
-  END DO
-END DO
+40 do i = kp1,n
+  d(i,k) = d(i,k)/d(k,k)
+  t = d(i,k)
+    do 41 j = kp1,n
+41 d(i,j) = d(i,j) - t*d(k,j)
+  end do
+end do
 !
-IF (D(N,N) .NE. 0.0) GO TO 100
-IERR = N
-RETURN
+if (d(n,n) .ne. 0.0) go to 100
+ierr = n
+return
 !
 !               STORE B IN R AND SET X = 0
 !
-100 do 110 I = 1,N
-R(I) = B(I)
-110 X(I) = 0.0
-GO TO 200
+100 do 110 i = 1,n
+r(i) = b(i)
+110 x(i) = 0.0
+go to 200
 !
 !             COMPUTE THE RESIDUAL R = B - AX
 !
-120 do 131 I = 1,N
-SUM = 0.0
-  do 130 J = 1,N
-130 SUM = SUM + A(I,J)*X(J)
-131 R(I) = B(I) - SUM
+120 do 131 i = 1,n
+sum = 0.0
+  do 130 j = 1,n
+130 sum = sum + a(i,j)*x(j)
+131 r(i) = b(i) - sum
 !
-NORMB = 0.0
-NORMR = 0.0
-do 140 I = 1,N
-NORMB = AMAX1(NORMB,ABS(B(I)))
-140 NORMR = AMAX1(NORMR,ABS(R(I)))
-RELRSD = 0.0
-IF (NORMB .NE. 0.0) RELRSD = NORMR/NORMB
-ISWIT = 2
+normb = 0.0
+normr = 0.0
+do 140 i = 1,n
+normb = amax1(normb,abs(b(i)))
+140 normr = amax1(normr,abs(r(i)))
+relrsd = 0.0
+if (normb .ne. 0.0) relrsd = normr/normb
+iswit = 2
 !
 !             SOLVE LZ = R AND STORE Z IN R
 !
-200 DO K = 1,NM1
-L = PIVOT(K)
-IF (K .EQ. L) GO TO 210
-T = R(K)
-R(K) = R(L)
-R(L) = T
-210 KP1 = K + 1
-  do 211 I = KP1,N
-211 R(I) = R(I) - D(I,K)*R(K)
-END DO
+200 do k = 1,nm1
+l = pivot(k)
+if (k .eq. l) go to 210
+t = r(k)
+r(k) = r(l)
+r(l) = t
+210 kp1 = k + 1
+  do 211 i = kp1,n
+211 r(i) = r(i) - d(i,k)*r(k)
+end do
 !
 !      SOLVE UE = R, STORE E IN R, AND SET X = X + E
 !
-R(N) = R(N)/D(N,N)
-X(N) = X(N) + R(N)
-do 221 NMI = 1,NM1
-I = N - NMI
-IP1 = I + 1
-SUM = 0.0
-  do 220 J = IP1,N
-220 SUM = SUM + D(I,J)*R(J)
-R(I) = (R(I) - SUM)/D(I,I)
-221 X(I) = X(I) + R(I)
+r(n) = r(n)/d(n,n)
+x(n) = x(n) + r(n)
+do 221 nmi = 1,nm1
+i = n - nmi
+ip1 = i + 1
+sum = 0.0
+  do 220 j = ip1,n
+220 sum = sum + d(i,j)*r(j)
+r(i) = (r(i) - sum)/d(i,i)
+221 x(i) = x(i) + r(i)
 !
-GO TO (300,230,300,230),OPTION
-230 IF (ISWIT .EQ. 1) GO TO 120
+go to (300,230,300,230),option
+230 if (iswit .eq. 1) go to 120
 !
 !             CALCULATE THE CORRECTION ERROR
 !
-NORMX = 0.0
-NORME = 0.0
-do 250 I = 1,N
-NORMX = AMAX1(NORMX,ABS(X(I)))
-250 NORME = AMAX1(NORME,ABS(R(I)))
-ERROR = 0.0
-IF (NORMX .NE. 0.0) ERROR = NORME/NORMX
-300 RETURN
-END SUBROUTINE LNSYS
+normx = 0.0
+norme = 0.0
+do 250 i = 1,n
+normx = amax1(normx,abs(x(i)))
+250 norme = amax1(norme,abs(r(i)))
+error = 0.0
+if (normx .ne. 0.0) error = norme/normx
+300 return
+end subroutine lnsys
 
-SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, IWORK(5)
-INTEGER, INTENT(IN) :: NEQN
-REAL, INTENT(INOUT) :: ABSERR, RELERR, T
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
-INTEGER :: IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI, &
-&IPSI, ISIG, ISTART, ITOLD, IV, IW, IWT, IX, IYP, IYPOUT, IYY
+subroutine ode(f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(inout) :: abserr, relerr, t
+real, intent(in) :: tout
+real, intent(inout) :: work(*), y(neqn)
+integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
+&ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
 !
 !     SANDIA MATHEMATICAL PROGRAM LIBRARY
 !     APPLIED MATHEMATICS DIVISION 2642
@@ -4203,52 +4203,52 @@ INTEGER :: IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI, &
 !   BE CHANGED BY THE USER BEFORE CONTINUING.  ALL OTHER PARAMETERS MUST
 !   REMAIN UNCHANGED.
 !
-LOGICAL :: START, PHASE1, NORND
-EXTERNAL F
-DATA IALPHA,IBETA,ISIG,IV,IW,IG,IPHASE,IPSI,IX,IH,IHOLD,ISTART, &
-&ITOLD,IDELSN/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
+logical :: start, phase1, nornd
+external f
+data ialpha,ibeta,isig,iv,iw,ig,iphase,ipsi,ix,ih,ihold,istart, &
+&itold,idelsn/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
 !
-IYY = 100
-IWT = IYY + NEQN
-IP = IWT + NEQN
-IYP = IP + NEQN
-IYPOUT = IYP + NEQN
-IPHI = IYPOUT + NEQN
-IF(IABS(IFLAG) .LT. 2  .OR.  IABS(IFLAG) .GT. 6) GO TO 1
-START = WORK(ISTART) .GT. 0.0
-PHASE1 = WORK(IPHASE) .GT. 0.0
-NORND = IWORK(2) .NE. -1
-1 CALL DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK(IYY), &
-&WORK(IWT),WORK(IP),WORK(IYP),WORK(IYPOUT),WORK(IPHI), &
-&WORK(IALPHA),WORK(IBETA),WORK(ISIG),WORK(IV),WORK(IW),WORK(IG), &
-&PHASE1,WORK(IPSI),WORK(IX),WORK(IH),WORK(IHOLD),START, &
-&WORK(ITOLD),WORK(IDELSN),IWORK(1),NORND,IWORK(3),IWORK(4), &
-&IWORK(5))
-WORK(ISTART) = -1.0
-IF(START) WORK(ISTART) = 1.0
-WORK(IPHASE) = -1.0
-IF(PHASE1) WORK(IPHASE) = 1.0
-IWORK(2) = -1
-IF(NORND) IWORK(2) = 1
-RETURN
-END SUBROUTINE ODE
+iyy = 100
+iwt = iyy + neqn
+ip = iwt + neqn
+iyp = ip + neqn
+iypout = iyp + neqn
+iphi = iypout + neqn
+if(iabs(iflag) .lt. 2  .or.  iabs(iflag) .gt. 6) go to 1
+start = work(istart) .gt. 0.0
+phase1 = work(iphase) .gt. 0.0
+nornd = iwork(2) .ne. -1
+1 call de1(f,neqn,y,t,tout,relerr,abserr,iflag,work(iyy), &
+&work(iwt),work(ip),work(iyp),work(iypout),work(iphi), &
+&work(ialpha),work(ibeta),work(isig),work(iv),work(iw),work(ig), &
+&phase1,work(ipsi),work(ix),work(ih),work(ihold),start, &
+&work(itold),work(idelsn),iwork(1),nornd,iwork(3),iwork(4), &
+&iwork(5))
+work(istart) = -1.0
+if(start) work(istart) = 1.0
+work(iphase) = -1.0
+if(phase1) work(iphase) = 1.0
+iwork(2) = -1
+if(nornd) iwork(2) = 1
+return
+end subroutine ode
 
-SUBROUTINE DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG, &
-&YY,WT,P,YP,YPOUT,PHI,ALPHA,BETA,SIG,V,W,G,PHASE1,PSI,X,H,HOLD, &
-&START,TOLD,DELSGN,NS,NORND,K,KOLD,ISNOLD)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, ISNOLD, K, KOLD
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: NS
-REAL, INTENT(INOUT) :: ABSERR, ALPHA(12), BETA(12), DELSGN, G(13), &
-&H, HOLD, P(NEQN), PHI(NEQN,16), PSI(12), RELERR, SIG(13), T, TOLD
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: V(12), W(12), WT(NEQN), X, Y(NEQN)
-REAL :: YP(NEQN)
-REAL, INTENT(INOUT) :: YPOUT(NEQN), YY(NEQN)
-INTEGER :: ISN, KLE4, L, MAXNUM, NOSTEP
-REAL :: ABSDEL, ABSEPS, DEL, EPS, FOURU, RELEPS, TEND, U
-REAL :: SPMPAR
+subroutine de1(f,neqn,y,t,tout,relerr,abserr,iflag, &
+&yy,wt,p,yp,ypout,phi,alpha,beta,sig,v,w,g,phase1,psi,x,h,hold, &
+&start,told,delsgn,ns,nornd,k,kold,isnold)
+implicit none
+integer, intent(inout) :: iflag, isnold, k, kold
+integer, intent(in) :: neqn
+integer, intent(inout) :: ns
+real, intent(inout) :: abserr, alpha(12), beta(12), delsgn, g(13), &
+&h, hold, p(neqn), phi(neqn,16), psi(12), relerr, sig(13), t, told
+real, intent(in) :: tout
+real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
+real :: yp(neqn)
+real, intent(inout) :: ypout(neqn), yy(neqn)
+integer :: isn, kle4, l, maxnum, nostep
+real :: absdel, abseps, del, eps, fouru, releps, tend, u
+real :: spmpar
 !
 !   ODE  MERELY ALLOCATES STORAGE FOR  DE1 TO RELIEVE THE USER OF THE
 !   INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY  DE1 IS USED AS
@@ -4258,165 +4258,165 @@ REAL :: SPMPAR
 !   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
 !   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
 !
-LOGICAL :: STIFF, CRASH
-LOGICAL, INTENT(INOUT) :: START, PHASE1, NORND
-EXTERNAL F
+logical :: stiff, crash
+logical, intent(inout) :: start, phase1, nornd
+external f
 !
 !   THE CONSTANT  MAXNUM  IS THE MAXIMUM NUMBER OF STEPS ALLOWED IN ONE
 !   CALL TO  DE1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
 !   FOLLOWING STATEMENT
 !
-DATA MAXNUM/500/
+data maxnum/500/
 !
 !   ****** U IS A MACHINE DEPENDENT PARAMETER. U IS THE SMALLEST
 !          POSITIVE NUMBER FOR WHICH 1.0 + U .GT. 1.0.
 !
-U = SPMPAR(1)
-FOURU = 4.0*U
+u = spmpar(1)
+fouru = 4.0*u
 !
 !            ***            ***            ***
 !
 !   TEST FOR IMPROPER PARAMETERS
 !
-IF(NEQN .LT. 1) GO TO 10
-IF(T .EQ. TOUT) GO TO 10
-IF(RELERR .LT. 0.0  .OR.  ABSERR .LT. 0.0) GO TO 10
-EPS = AMAX1(RELERR,ABSERR)
-IF(EPS .LE. 0.0) GO TO 10
-IF(IFLAG .EQ. 0) GO TO 10
-ISN = ISIGN(1,IFLAG)
-IFLAG = IABS(IFLAG)
-IF(IFLAG .EQ. 1) GO TO 20
-IF(T .NE. TOLD) GO TO 10
-IF(IFLAG .GE. 2  .AND.  IFLAG .LE. 5) GO TO 20
-IF(IFLAG .EQ. 6  .AND.  ABSERR .GT. 0.0) GO TO 20
-10 IFLAG = 7
-RETURN
+if(neqn .lt. 1) go to 10
+if(t .eq. tout) go to 10
+if(relerr .lt. 0.0  .or.  abserr .lt. 0.0) go to 10
+eps = amax1(relerr,abserr)
+if(eps .le. 0.0) go to 10
+if(iflag .eq. 0) go to 10
+isn = isign(1,iflag)
+iflag = iabs(iflag)
+if(iflag .eq. 1) go to 20
+if(t .ne. told) go to 10
+if(iflag .ge. 2  .and.  iflag .le. 5) go to 20
+if(iflag .eq. 6  .and.  abserr .gt. 0.0) go to 20
+10 iflag = 7
+return
 !
 !   ON EACH CALL SET INTERVAL OF INTEGRATION AND COUNTER FOR NUMBER OF
 !   STEPS.  ADJUST INPUT ERROR TOLERANCES TO DEFINE WEIGHT VECTOR FOR
 !   SUBROUTINE  STEP1
 !
-20 DEL = TOUT - T
-ABSDEL = ABS(DEL)
-TEND = T + 10.0*DEL
-IF(ISN .LT. 0) TEND = TOUT
-NOSTEP = 0
-KLE4 = 0
-STIFF = .FALSE.
-RELEPS = RELERR/EPS
-ABSEPS = ABSERR/EPS
-IF(IFLAG .EQ. 1) GO TO 30
-IF(ISNOLD .LT. 0) GO TO 30
-IF(DELSGN*DEL .GT. 0.0) GO TO 50
+20 del = tout - t
+absdel = abs(del)
+tend = t + 10.0*del
+if(isn .lt. 0) tend = tout
+nostep = 0
+kle4 = 0
+stiff = .false.
+releps = relerr/eps
+abseps = abserr/eps
+if(iflag .eq. 1) go to 30
+if(isnold .lt. 0) go to 30
+if(delsgn*del .gt. 0.0) go to 50
 !
 !   ON START AND RESTART ALSO SET WORK VARIABLES X AND YY(*), STORE THE
 !   DIRECTION OF INTEGRATION AND INITIALIZE THE STEP SIZE
 !
-30 START = .TRUE.
-X = T
-do 40 L = 1,NEQN
-40 YY(L) = Y(L)
-DELSGN = SIGN(1.0,DEL)
-H = SIGN(AMAX1(FOURU*ABS(X),ABS(TOUT-X)),TOUT-X)
+30 start = .true.
+x = t
+do 40 l = 1,neqn
+40 yy(l) = y(l)
+delsgn = sign(1.0,del)
+h = sign(amax1(fouru*abs(x),abs(tout-x)),tout-x)
 !
 !   IF ALREADY PAST OUTPUT POINT, INTERPOLATE AND RETURN
 !
-50 IF(ABS(X-T) .LT. ABSDEL) GO TO 60
-CALL INTRP(X,YY,TOUT,Y,YPOUT,NEQN,KOLD,PHI,PSI)
-IFLAG = 2
-T = TOUT
-TOLD = T
-ISNOLD = ISN
-RETURN
+50 if(abs(x-t) .lt. absdel) go to 60
+call intrp(x,yy,tout,y,ypout,neqn,kold,phi,psi)
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
 !
 !   IF CANNOT GO PAST OUTPUT POINT AND SUFFICIENTLY CLOSE,
 !   EXTRAPOLATE AND RETURN
 !
-60 IF(ISN .GT. 0  .OR.  ABS(TOUT-X) .GE. FOURU*ABS(X)) GO TO 80
-H = TOUT - X
-CALL F(X,YY,YP)
-do 70 L = 1,NEQN
-70 Y(L) = YY(L) + H*YP(L)
-IFLAG = 2
-T = TOUT
-TOLD = T
-ISNOLD = ISN
-RETURN
+60 if(isn .gt. 0  .or.  abs(tout-x) .ge. fouru*abs(x)) go to 80
+h = tout - x
+call f(x,yy,yp)
+do 70 l = 1,neqn
+70 y(l) = yy(l) + h*yp(l)
+iflag = 2
+t = tout
+told = t
+isnold = isn
+return
 !
 !   TEST FOR TOO MANY STEPS
 !
-80 IF(NOSTEP .LT. MAXNUM) GO TO 100
-IFLAG = ISN*4
-IF(STIFF) IFLAG = ISN*5
-do 90 L = 1,NEQN
-90 Y(L) = YY(L)
-T = X
-TOLD = T
-ISNOLD = 1
-RETURN
+80 if(nostep .lt. maxnum) go to 100
+iflag = isn*4
+if(stiff) iflag = isn*5
+do 90 l = 1,neqn
+90 y(l) = yy(l)
+t = x
+told = t
+isnold = 1
+return
 !
 !   LIMIT STEP SIZE, SET WEIGHT VECTOR AND TAKE A STEP
 !
-100 H = SIGN(AMIN1(ABS(H),ABS(TEND-X)),H)
-DO L = 1,NEQN
-  WT(L) = RELEPS*ABS(YY(L)) + ABSEPS
-  IF(WT(L) .LE. 0.0) GO TO 140
-  END DO
-CALL STEP1(F,NEQN,YY,X,H,EPS,WT,START, &
-&HOLD,K,KOLD,CRASH,PHI,P,YP,PSI, &
-&ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
+100 h = sign(amin1(abs(h),abs(tend-x)),h)
+do l = 1,neqn
+  wt(l) = releps*abs(yy(l)) + abseps
+  if(wt(l) .le. 0.0) go to 140
+  end do
+call step1(f,neqn,yy,x,h,eps,wt,start, &
+&hold,k,kold,crash,phi,p,yp,psi, &
+&alpha,beta,sig,v,w,g,phase1,ns,nornd)
 !
 !   TEST FOR TOLERANCES TOO SMALL
 !
-IF(.NOT.CRASH) GO TO 130
-IFLAG = ISN*3
-RELERR = EPS*RELEPS
-ABSERR = EPS*ABSEPS
-do 120 L = 1,NEQN
-120 Y(L) = YY(L)
-T = X
-TOLD = T
-ISNOLD = 1
-RETURN
+if(.not.crash) go to 130
+iflag = isn*3
+relerr = eps*releps
+abserr = eps*abseps
+do 120 l = 1,neqn
+120 y(l) = yy(l)
+t = x
+told = t
+isnold = 1
+return
 !
 !   AUGMENT COUNTER ON NUMBER OF STEPS AND TEST FOR STIFFNESS
 !
-130 NOSTEP = NOSTEP + 1
-KLE4 = KLE4 + 1
-IF(KOLD .GT. 4) KLE4 = 0
-IF(KLE4 .GE. 50) STIFF = .TRUE.
-GO TO 50
+130 nostep = nostep + 1
+kle4 = kle4 + 1
+if(kold .gt. 4) kle4 = 0
+if(kle4 .ge. 50) stiff = .true.
+go to 50
 !
 !   RELATIVE ERROR CRITERION INAPPROPRIATE
 !
-140 IFLAG = ISN*6
-do 150 L = 1,NEQN
-150 Y(L) = YY(L)
-T = X
-TOLD = T
-ISNOLD = 1
-RETURN
-END SUBROUTINE DE1
+140 iflag = isn*6
+do 150 l = 1,neqn
+150 y(l) = yy(l)
+t = x
+told = t
+isnold = 1
+return
+end subroutine de1
 
-SUBROUTINE STEP1(F,NEQN,Y,X,H,EPS,WT,START, &
-&HOLD,K,KOLD,CRASH,PHI,P,YP,PSI, &
-&ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: K, KOLD
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: NS
-REAL, INTENT(INOUT) :: ALPHA(12), BETA(12), EPS, G(13), H, HOLD, &
-&P(NEQN), PHI(NEQN,16), PSI(12), SIG(13), V(12), W(12)
-REAL :: WT(NEQN)
-REAL, INTENT(INOUT) :: X, Y(NEQN)
-REAL :: YP(NEQN)
-INTEGER :: I, IFAIL, IM1, IP1, IQ, J, KM1, KM2, KNEW, KP1, KP2, L, &
-&LIMIT1, LIMIT2, NSM2, NSP1, NSP2
-REAL :: ABSH, ERK, ERKM1, ERKM2, ERKP1, ERR, FOURU, GSTR(13), &
-&HNEW, P5EPS, R, REALI, REALNS, RHO, ROUND, SUM, TAU, TEMP1, TEMP2, &
-&TEMP3, TEMP4, TEMP5, TEMP6, TWO(13), TWOU, U, XOLD
-REAL :: SPMPAR
+subroutine step1(f,neqn,y,x,h,eps,wt,start, &
+&hold,k,kold,crash,phi,p,yp,psi, &
+&alpha,beta,sig,v,w,g,phase1,ns,nornd)
+implicit none
+integer, intent(inout) :: k, kold
+integer, intent(in) :: neqn
+integer, intent(inout) :: ns
+real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
+&p(neqn), phi(neqn,16), psi(12), sig(13), v(12), w(12)
+real :: wt(neqn)
+real, intent(inout) :: x, y(neqn)
+real :: yp(neqn)
+integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
+&limit1, limit2, nsm2, nsp1, nsp2
+real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
+&hnew, p5eps, r, reali, realns, rho, round, sum, tau, temp1, temp2, &
+&temp3, temp4, temp5, temp6, two(13), twou, u, xold
+real :: spmpar
 !
 !   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 !
@@ -4541,27 +4541,27 @@ REAL :: SPMPAR
 !   JUST CALLS THE CODE AGAIN.  A RESTART IS NEITHER REQUIRED NOR
 !   DESIRABLE.
 !
-LOGICAL, INTENT(INOUT) :: START
-LOGICAL, INTENT(OUT) :: CRASH
-LOGICAL, INTENT(INOUT) :: PHASE1, NORND
-EXTERNAL F
+logical, intent(inout) :: start
+logical, intent(out) :: crash
+logical, intent(inout) :: phase1, nornd
+external f
 !
-DATA TWO(1)/2.0/, TWO(2)/4.0/, TWO(3)/8.0/, TWO(4)/16.0/, &
-&TWO(5)/32.0/, TWO(6)/64.0/, TWO(7)/128.0/, TWO(8)/256.0/, &
-&TWO(9)/512.0/, TWO(10)/1024.0/, TWO(11)/2048.0/, &
-&TWO(12)/4096.0/, TWO(13)/8192.0/
-DATA GSTR(1)/0.500/, GSTR(2)/0.0833/, GSTR(3)/0.0417/, &
-&GSTR(4)/0.0264/, GSTR(5)/0.0188/, GSTR(6)/0.0143/, &
-&GSTR(7)/0.0114/, GSTR(8)/0.00936/, GSTR(9)/0.00789/, &
-&GSTR(10)/0.00679/, GSTR(11)/0.00592/, GSTR(12)/0.00524/, &
-&GSTR(13)/0.00468/
+data two(1)/2.0/, two(2)/4.0/, two(3)/8.0/, two(4)/16.0/, &
+&two(5)/32.0/, two(6)/64.0/, two(7)/128.0/, two(8)/256.0/, &
+&two(9)/512.0/, two(10)/1024.0/, two(11)/2048.0/, &
+&two(12)/4096.0/, two(13)/8192.0/
+data gstr(1)/0.500/, gstr(2)/0.0833/, gstr(3)/0.0417/, &
+&gstr(4)/0.0264/, gstr(5)/0.0188/, gstr(6)/0.0143/, &
+&gstr(7)/0.0114/, gstr(8)/0.00936/, gstr(9)/0.00789/, &
+&gstr(10)/0.00679/, gstr(11)/0.00592/, gstr(12)/0.00524/, &
+&gstr(13)/0.00468/
 !
 !   ****** U IS A MACHINE DEPENDENT PARAMETER. IT IS THE SMALLEST
 !          POSITIVE NUMBER FOR WHICH 1.0 + U .GT. 1.0.
 !
-U = SPMPAR(1)
-TWOU = 2.0*U
-FOURU = 4.0*U
+u = spmpar(1)
+twou = 2.0*u
+fouru = 4.0*u
 !
 !       ***     BEGIN BLOCK 0     ***
 !
@@ -4573,50 +4573,50 @@ FOURU = 4.0*U
 !
 !   IF STEP SIZE IS TOO SMALL, DETERMINE AN ACCEPTABLE ONE
 !
-CRASH = .TRUE.
-IF(ABS(H) .GE. FOURU*ABS(X)) GO TO 5
-H = SIGN(FOURU*ABS(X),H)
-RETURN
-5 P5EPS = 0.5*EPS
+crash = .true.
+if(abs(h) .ge. fouru*abs(x)) go to 5
+h = sign(fouru*abs(x),h)
+return
+5 p5eps = 0.5*eps
 !
 !   IF ERROR TOLERANCE IS TOO SMALL, INCREASE IT TO AN ACCEPTABLE VALUE
 !
-ROUND = 0.0
-do 10 L = 1,NEQN
-10 ROUND = ROUND + (Y(L)/WT(L))**2
-ROUND = TWOU*SQRT(ROUND)
-IF(P5EPS .GE. ROUND) GO TO 15
-EPS = 2.0*ROUND*(1.0 + FOURU)
-RETURN
-15 CRASH = .FALSE.
-G(1) = 1.0
-G(2) = 0.5
-SIG(1) = 1.0
-IF(.NOT.START) GO TO 99
+round = 0.0
+do 10 l = 1,neqn
+10 round = round + (y(l)/wt(l))**2
+round = twou*sqrt(round)
+if(p5eps .ge. round) go to 15
+eps = 2.0*round*(1.0 + fouru)
+return
+15 crash = .false.
+g(1) = 1.0
+g(2) = 0.5
+sig(1) = 1.0
+if(.not.start) go to 99
 !
 !   INITIALIZE.  COMPUTE APPROPRIATE STEP SIZE FOR FIRST STEP
 !
-CALL F(X,Y,YP)
-SUM = 0.0
-do 20 L = 1,NEQN
-  PHI(L,1) = YP(L)
-  PHI(L,2) = 0.0
-20 SUM = SUM + (YP(L)/WT(L))**2
-SUM = SQRT(SUM)
-ABSH = ABS(H)
-IF(EPS .LT. 16.0*SUM*H*H) ABSH = 0.25*SQRT(EPS/SUM)
-H = SIGN(AMAX1(ABSH,FOURU*ABS(X)),H)
-HOLD = 0.0
-K = 1
-KOLD = 0
-START = .FALSE.
-PHASE1 = .TRUE.
-NORND = .TRUE.
-IF(P5EPS .GT. 100.0*ROUND) GO TO 99
-NORND = .FALSE.
-do 25 L = 1,NEQN
-25 PHI(L,15) = 0.0
-99 IFAIL = 0
+call f(x,y,yp)
+sum = 0.0
+do 20 l = 1,neqn
+  phi(l,1) = yp(l)
+  phi(l,2) = 0.0
+20 sum = sum + (yp(l)/wt(l))**2
+sum = sqrt(sum)
+absh = abs(h)
+if(eps .lt. 16.0*sum*h*h) absh = 0.25*sqrt(eps/sum)
+h = sign(amax1(absh,fouru*abs(x)),h)
+hold = 0.0
+k = 1
+kold = 0
+start = .false.
+phase1 = .true.
+nornd = .true.
+if(p5eps .gt. 100.0*round) go to 99
+nornd = .false.
+do 25 l = 1,neqn
+25 phi(l,15) = 0.0
+99 ifail = 0
 !
 !       ***     END BLOCK 0     ***
 !
@@ -4627,81 +4627,81 @@ do 25 L = 1,NEQN
 !
 !                   ***
 !
-100 KP1 = K+1
-KP2 = K+2
-KM1 = K-1
-KM2 = K-2
+100 kp1 = k+1
+kp2 = k+2
+km1 = k-1
+km2 = k-2
 !
 !   NS IS THE NUMBER OF STEPS TAKEN WITH SIZE H, INCLUDING THE CURRENT
 !   ONE.  WHEN K.LT.NS, NO COEFFICIENTS CHANGE
 !
-IF(H .NE. HOLD) NS = 0
-IF (NS.LE.KOLD) NS = NS+1
-NSP1 = NS+1
-IF (K .LT. NS) GO TO 199
+if(h .ne. hold) ns = 0
+if (ns.le.kold) ns = ns+1
+nsp1 = ns+1
+if (k .lt. ns) go to 199
 !
 !   COMPUTE THOSE COMPONENTS OF ALPHA(*),BETA(*),PSI(*),SIG(*) WHICH
 !   ARE CHANGED
 !
-BETA(NS) = 1.0
-REALNS = NS
-ALPHA(NS) = 1.0/REALNS
-TEMP1 = H*REALNS
-SIG(NSP1) = 1.0
-IF(K .LT. NSP1) GO TO 110
-do 105 I = NSP1,K
-  IM1 = I-1
-  TEMP2 = PSI(IM1)
-  PSI(IM1) = TEMP1
-  BETA(I) = BETA(IM1)*PSI(IM1)/TEMP2
-  TEMP1 = TEMP2 + H
-  ALPHA(I) = H/TEMP1
-  REALI = I
-105 SIG(I+1) = REALI*ALPHA(I)*SIG(I)
-110 PSI(K) = TEMP1
+beta(ns) = 1.0
+realns = ns
+alpha(ns) = 1.0/realns
+temp1 = h*realns
+sig(nsp1) = 1.0
+if(k .lt. nsp1) go to 110
+do 105 i = nsp1,k
+  im1 = i-1
+  temp2 = psi(im1)
+  psi(im1) = temp1
+  beta(i) = beta(im1)*psi(im1)/temp2
+  temp1 = temp2 + h
+  alpha(i) = h/temp1
+  reali = i
+105 sig(i+1) = reali*alpha(i)*sig(i)
+110 psi(k) = temp1
 !
 !   COMPUTE COEFFICIENTS G(*)
 !
 !   INITIALIZE V(*) AND SET W(*).
 !
-IF(NS .GT. 1) GO TO 120
-do 115 IQ = 1,K
-  TEMP3 = IQ*(IQ+1)
-  V(IQ) = 1.0/TEMP3
-115 W(IQ) = V(IQ)
-GO TO 140
+if(ns .gt. 1) go to 120
+do 115 iq = 1,k
+  temp3 = iq*(iq+1)
+  v(iq) = 1.0/temp3
+115 w(iq) = v(iq)
+go to 140
 !
 !   IF ORDER WAS RAISED, UPDATE DIAGONAL PART OF V(*)
 !
-120 IF(K .LE. KOLD) GO TO 130
-TEMP4 = K*KP1
-V(K) = 1.0/TEMP4
-NSM2 = NS-2
-IF(NSM2 .LT. 1) GO TO 130
-do 125 J = 1,NSM2
-  I = K-J
-125 V(I) = V(I) - ALPHA(J+1)*V(I+1)
+120 if(k .le. kold) go to 130
+temp4 = k*kp1
+v(k) = 1.0/temp4
+nsm2 = ns-2
+if(nsm2 .lt. 1) go to 130
+do 125 j = 1,nsm2
+  i = k-j
+125 v(i) = v(i) - alpha(j+1)*v(i+1)
 !
 !   UPDATE V(*) AND SET W(*)
 !
-130 LIMIT1 = KP1 - NS
-TEMP5 = ALPHA(NS)
-do 135 IQ = 1,LIMIT1
-  V(IQ) = V(IQ) - TEMP5*V(IQ+1)
-135 W(IQ) = V(IQ)
-G(NSP1) = W(1)
+130 limit1 = kp1 - ns
+temp5 = alpha(ns)
+do 135 iq = 1,limit1
+  v(iq) = v(iq) - temp5*v(iq+1)
+135 w(iq) = v(iq)
+g(nsp1) = w(1)
 !
 !   COMPUTE THE G(*) IN THE WORK VECTOR W(*)
 !
-140 NSP2 = NS + 2
-IF(KP1 .LT. NSP2) GO TO 199
-do 150 I = NSP2,KP1
-  LIMIT2 = KP2 - I
-  TEMP6 = ALPHA(I-1)
-  do 145 IQ = 1,LIMIT2
-145 W(IQ) = W(IQ) - TEMP6*W(IQ+1)
-150 G(I) = W(1)
-199 CONTINUE
+140 nsp2 = ns + 2
+if(kp1 .lt. nsp2) go to 199
+do 150 i = nsp2,kp1
+  limit2 = kp2 - i
+  temp6 = alpha(i-1)
+  do 145 iq = 1,limit2
+145 w(iq) = w(iq) - temp6*w(iq+1)
+150 g(i) = w(1)
+199 continue
 !
 !       ***     END BLOCK 1     ***
 !
@@ -4715,70 +4715,70 @@ do 150 I = NSP2,KP1
 !
 !   CHANGE PHI TO PHI STAR
 !
-IF(K .LT. NSP1) GO TO 215
-DO I = NSP1,K
-  TEMP1 = BETA(I)
-  do 205 L = 1,NEQN
-205 PHI(L,I) = TEMP1*PHI(L,I)
-  END DO
+if(k .lt. nsp1) go to 215
+do i = nsp1,k
+  temp1 = beta(i)
+  do 205 l = 1,neqn
+205 phi(l,i) = temp1*phi(l,i)
+  end do
 !
 !   PREDICT SOLUTION AND DIFFERENCES
 !
-215 do 220 L = 1,NEQN
-  PHI(L,KP2) = PHI(L,KP1)
-  PHI(L,KP1) = 0.0
-220 P(L) = 0.0
-DO J = 1,K
-  I = KP1 - J
-  IP1 = I+1
-  TEMP2 = G(I)
-  do 225 L = 1,NEQN
-    P(L) = P(L) + TEMP2*PHI(L,I)
-225 PHI(L,I) = PHI(L,I) + PHI(L,IP1)
-  END DO
-IF(NORND) GO TO 240
-do 235 L = 1,NEQN
-  TAU = H*P(L) - PHI(L,15)
-  P(L) = Y(L) + TAU
-235 PHI(L,16) = (P(L) - Y(L)) - TAU
-GO TO 250
-240 do 245 L = 1,NEQN
-245 P(L) = Y(L) + H*P(L)
-250 XOLD = X
-X = X + H
-ABSH = ABS(H)
-CALL F(X,P,YP)
+215 do 220 l = 1,neqn
+  phi(l,kp2) = phi(l,kp1)
+  phi(l,kp1) = 0.0
+220 p(l) = 0.0
+do j = 1,k
+  i = kp1 - j
+  ip1 = i+1
+  temp2 = g(i)
+  do 225 l = 1,neqn
+    p(l) = p(l) + temp2*phi(l,i)
+225 phi(l,i) = phi(l,i) + phi(l,ip1)
+  end do
+if(nornd) go to 240
+do 235 l = 1,neqn
+  tau = h*p(l) - phi(l,15)
+  p(l) = y(l) + tau
+235 phi(l,16) = (p(l) - y(l)) - tau
+go to 250
+240 do 245 l = 1,neqn
+245 p(l) = y(l) + h*p(l)
+250 xold = x
+x = x + h
+absh = abs(h)
+call f(x,p,yp)
 !
 !   ESTIMATE ERRORS AT ORDERS K,K-1,K-2
 !
-ERKM2 = 0.0
-ERKM1 = 0.0
-ERK = 0.0
-do 265 L = 1,NEQN
-  TEMP3 = 1.0/WT(L)
-  TEMP4 = YP(L) - PHI(L,1)
-  IF(KM2)265,260,255
-255 ERKM2 = ERKM2 + ((PHI(L,KM1)+TEMP4)*TEMP3)**2
-260 ERKM1 = ERKM1 + ((PHI(L,K)+TEMP4)*TEMP3)**2
-265 ERK = ERK + (TEMP4*TEMP3)**2
-IF(KM2)280,275,270
-270 ERKM2 = ABSH*SIG(KM1)*GSTR(KM2)*SQRT(ERKM2)
-275 ERKM1 = ABSH*SIG(K)*GSTR(KM1)*SQRT(ERKM1)
-280 TEMP5 = ABSH*SQRT(ERK)
-ERR = TEMP5*(G(K)-G(KP1))
-ERK = TEMP5*SIG(KP1)*GSTR(K)
-KNEW = K
+erkm2 = 0.0
+erkm1 = 0.0
+erk = 0.0
+do 265 l = 1,neqn
+  temp3 = 1.0/wt(l)
+  temp4 = yp(l) - phi(l,1)
+  if(km2)265,260,255
+255 erkm2 = erkm2 + ((phi(l,km1)+temp4)*temp3)**2
+260 erkm1 = erkm1 + ((phi(l,k)+temp4)*temp3)**2
+265 erk = erk + (temp4*temp3)**2
+if(km2)280,275,270
+270 erkm2 = absh*sig(km1)*gstr(km2)*sqrt(erkm2)
+275 erkm1 = absh*sig(k)*gstr(km1)*sqrt(erkm1)
+280 temp5 = absh*sqrt(erk)
+err = temp5*(g(k)-g(kp1))
+erk = temp5*sig(kp1)*gstr(k)
+knew = k
 !
 !   TEST IF ORDER SHOULD BE LOWERED
 !
-IF(KM2)299,290,285
-285 IF(AMAX1(ERKM1,ERKM2) .LE. ERK) KNEW = KM1
-GO TO 299
-290 IF(ERKM1 .LE. 0.5*ERK) KNEW = KM1
+if(km2)299,290,285
+285 if(amax1(erkm1,erkm2) .le. erk) knew = km1
+go to 299
+290 if(erkm1 .le. 0.5*erk) knew = km1
 !
 !   TEST IF STEP SUCCESSFUL
 !
-299 IF(ERR .LE. EPS) GO TO 400
+299 if(err .le. eps) go to 400
 !
 !       ***     END BLOCK 2     ***
 !
@@ -4793,34 +4793,34 @@ GO TO 299
 !
 !   RESTORE X, PHI(*,*) AND PSI(*)
 !
-PHASE1 = .FALSE.
-X = XOLD
-DO I = 1,K
-  TEMP1 = 1.0/BETA(I)
-  IP1 = I+1
-  do 305 L = 1,NEQN
-305 PHI(L,I) = TEMP1*(PHI(L,I) - PHI(L,IP1))
-  END DO
-IF(K .LT. 2) GO TO 320
-do 315 I = 2,K
-315 PSI(I-1) = PSI(I) - H
+phase1 = .false.
+x = xold
+do i = 1,k
+  temp1 = 1.0/beta(i)
+  ip1 = i+1
+  do 305 l = 1,neqn
+305 phi(l,i) = temp1*(phi(l,i) - phi(l,ip1))
+  end do
+if(k .lt. 2) go to 320
+do 315 i = 2,k
+315 psi(i-1) = psi(i) - h
 !
 !   ON THIRD FAILURE, SET ORDER TO ONE.  THEREAFTER, USE OPTIMAL STEP
 !   SIZE
 !
-320 IFAIL = IFAIL + 1
-TEMP2 = 0.5
-IF(IFAIL - 3) 335,330,325
-325 IF(P5EPS .LT. 0.25*ERK) TEMP2 = SQRT(P5EPS/ERK)
-330 KNEW = 1
-335 H = TEMP2*H
-K = KNEW
-IF(ABS(H) .GE. FOURU*ABS(X)) GO TO 340
-CRASH = .TRUE.
-H = SIGN(FOURU*ABS(X),H)
-EPS = EPS + EPS
-RETURN
-340 GO TO 100
+320 ifail = ifail + 1
+temp2 = 0.5
+if(ifail - 3) 335,330,325
+325 if(p5eps .lt. 0.25*erk) temp2 = sqrt(p5eps/erk)
+330 knew = 1
+335 h = temp2*h
+k = knew
+if(abs(h) .ge. fouru*abs(x)) go to 340
+crash = .true.
+h = sign(fouru*abs(x),h)
+eps = eps + eps
+return
+340 go to 100
 !
 !       ***     END BLOCK 3     ***
 !
@@ -4831,97 +4831,97 @@ RETURN
 !   DIFFERENCES.  DETERMINE BEST ORDER AND STEP SIZE FOR NEXT STEP.
 !
 !                   ***
-400 KOLD = K
-HOLD = H
+400 kold = k
+hold = h
 !
 !   CORRECT AND EVALUATE
 !
-TEMP1 = H*G(KP1)
-IF(NORND) GO TO 410
-do 405 L = 1,NEQN
-  RHO = TEMP1*(YP(L) - PHI(L,1)) - PHI(L,16)
-  Y(L) = P(L) + RHO
-405 PHI(L,15) = (Y(L) - P(L)) - RHO
-GO TO 420
-410 do 415 L = 1,NEQN
-415 Y(L) = P(L) + TEMP1*(YP(L) - PHI(L,1))
-420 CALL F(X,Y,YP)
+temp1 = h*g(kp1)
+if(nornd) go to 410
+do 405 l = 1,neqn
+  rho = temp1*(yp(l) - phi(l,1)) - phi(l,16)
+  y(l) = p(l) + rho
+405 phi(l,15) = (y(l) - p(l)) - rho
+go to 420
+410 do 415 l = 1,neqn
+415 y(l) = p(l) + temp1*(yp(l) - phi(l,1))
+420 call f(x,y,yp)
 !
 !   UPDATE DIFFERENCES FOR NEXT STEP
 !
-do 425 L = 1,NEQN
-  PHI(L,KP1) = YP(L) - PHI(L,1)
-425 PHI(L,KP2) = PHI(L,KP1) - PHI(L,KP2)
-DO I = 1,K
-  do 430 L = 1,NEQN
-430 PHI(L,I) = PHI(L,I) + PHI(L,KP1)
-  END DO
+do 425 l = 1,neqn
+  phi(l,kp1) = yp(l) - phi(l,1)
+425 phi(l,kp2) = phi(l,kp1) - phi(l,kp2)
+do i = 1,k
+  do 430 l = 1,neqn
+430 phi(l,i) = phi(l,i) + phi(l,kp1)
+  end do
 !
 !   ESTIMATE ERROR AT ORDER K+1 UNLESS...
 !     IN FIRST PHASE WHEN ALWAYS RAISE ORDER,
 !     ALREADY DECIDED TO LOWER ORDER,
 !     STEP SIZE NOT CONSTANT SO ESTIMATE UNRELIABLE
 !
-ERKP1 = 0.0
-IF(KNEW .EQ. KM1  .OR.  K .EQ. 12) PHASE1 = .FALSE.
-IF(PHASE1) GO TO 450
-IF(KNEW .EQ. KM1) GO TO 455
-IF(KP1 .GT. NS) GO TO 460
-do 440 L = 1,NEQN
-440 ERKP1 = ERKP1 + (PHI(L,KP2)/WT(L))**2
-ERKP1 = ABSH*GSTR(KP1)*SQRT(ERKP1)
+erkp1 = 0.0
+if(knew .eq. km1  .or.  k .eq. 12) phase1 = .false.
+if(phase1) go to 450
+if(knew .eq. km1) go to 455
+if(kp1 .gt. ns) go to 460
+do 440 l = 1,neqn
+440 erkp1 = erkp1 + (phi(l,kp2)/wt(l))**2
+erkp1 = absh*gstr(kp1)*sqrt(erkp1)
 !
 !   USING ESTIMATED ERROR AT ORDER K+1, DETERMINE APPROPRIATE ORDER
 !   FOR NEXT STEP
 !
-IF(K .GT. 1) GO TO 445
-IF(ERKP1 .GE. 0.5*ERK) GO TO 460
-GO TO 450
-445 IF(ERKM1 .LE. AMIN1(ERK,ERKP1)) GO TO 455
-IF(ERKP1 .GE. ERK  .OR.  K .EQ. 12) GO TO 460
+if(k .gt. 1) go to 445
+if(erkp1 .ge. 0.5*erk) go to 460
+go to 450
+445 if(erkm1 .le. amin1(erk,erkp1)) go to 455
+if(erkp1 .ge. erk  .or.  k .eq. 12) go to 460
 !
 !   HERE ERKP1 .LT. ERK .LT. AMAX1(ERKM1,ERKM2) ELSE ORDER WOULD HAVE
 !   BEEN LOWERED IN BLOCK 2.  THUS ORDER IS TO BE RAISED
 !
 !   RAISE ORDER
 !
-450 K = KP1
-ERK = ERKP1
-GO TO 460
+450 k = kp1
+erk = erkp1
+go to 460
 !
 !   LOWER ORDER
 !
-455 K = KM1
-ERK = ERKM1
+455 k = km1
+erk = erkm1
 !
 !   WITH NEW ORDER DETERMINE APPROPRIATE STEP SIZE FOR NEXT STEP
 !
-460 HNEW = H + H
-IF(PHASE1) GO TO 465
-IF(P5EPS .GE. ERK*TWO(K+1)) GO TO 465
-HNEW = H
-IF(P5EPS .GE. ERK) GO TO 465
-TEMP2 = K+1
-R = (P5EPS/ERK)**(1.0/TEMP2)
-HNEW = ABSH*AMAX1(0.5,AMIN1(0.9,R))
-HNEW = SIGN(AMAX1(HNEW,FOURU*ABS(X)),H)
-465 H = HNEW
-RETURN
+460 hnew = h + h
+if(phase1) go to 465
+if(p5eps .ge. erk*two(k+1)) go to 465
+hnew = h
+if(p5eps .ge. erk) go to 465
+temp2 = k+1
+r = (p5eps/erk)**(1.0/temp2)
+hnew = absh*amax1(0.5,amin1(0.9,r))
+hnew = sign(amax1(hnew,fouru*abs(x)),h)
+465 h = hnew
+return
 !
 !       ***     END BLOCK 4     ***
 !
-END SUBROUTINE STEP1
+end subroutine step1
 
-SUBROUTINE INTRP(X,Y,XOUT,YOUT,YPOUT,NEQN,KOLD,PHI,PSI)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KOLD, NEQN
-REAL :: PHI(NEQN,16), PSI(12)
-REAL, INTENT(IN) :: X, XOUT
-REAL :: Y(NEQN)
-REAL, INTENT(INOUT) :: YOUT(NEQN), YPOUT(NEQN)
-INTEGER :: I, J, JM1, KI, KIP1, L, LIMIT1
-REAL :: ETA, G(13), GAMMA, HI, PSIJM1, RHO(13), TEMP1, TEMP2, &
-&TEMP3, TERM, W(13)
+subroutine intrp(x,y,xout,yout,ypout,neqn,kold,phi,psi)
+implicit none
+integer, intent(in) :: kold, neqn
+real :: phi(neqn,16), psi(12)
+real, intent(in) :: x, xout
+real :: y(neqn)
+real, intent(inout) :: yout(neqn), ypout(neqn)
+integer :: i, j, jm1, ki, kip1, l, limit1
+real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
+&temp3, term, w(13)
 !
 !   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 !
@@ -4953,62 +4953,62 @@ REAL :: ETA, G(13), GAMMA, HI, PSIJM1, RHO(13), TEMP1, TEMP2, &
 !   THE REMAINING PARAMETERS ARE RETURNED UNALTERED FROM THEIR INPUT
 !   VALUES.  INTEGRATION WITH  STEP1  MAY BE CONTINUED.
 !
-DATA G(1)/1.0/,RHO(1)/1.0/
+data g(1)/1.0/,rho(1)/1.0/
 !
-HI = XOUT - X
-KI = KOLD + 1
-KIP1 = KI + 1
+hi = xout - x
+ki = kold + 1
+kip1 = ki + 1
 !
 !   INITIALIZE W(*) FOR COMPUTING G(*)
 !
-do 5 I = 1,KI
-  TEMP1 = I
-5 W(I) = 1.0/TEMP1
-TERM = 0.0
+do 5 i = 1,ki
+  temp1 = i
+5 w(i) = 1.0/temp1
+term = 0.0
 !
 !   COMPUTE G(*)
 !
-do 15 J = 2,KI
-  JM1 = J - 1
-  PSIJM1 = PSI(JM1)
-  GAMMA = (HI + TERM)/PSIJM1
-  ETA = HI/PSIJM1
-  LIMIT1 = KIP1 - J
-  do 10 I = 1,LIMIT1
-10 W(I) = GAMMA*W(I) - ETA*W(I+1)
-  G(J) = W(1)
-  RHO(J) = GAMMA*RHO(JM1)
-15 TERM = PSIJM1
+do 15 j = 2,ki
+  jm1 = j - 1
+  psijm1 = psi(jm1)
+  gamma = (hi + term)/psijm1
+  eta = hi/psijm1
+  limit1 = kip1 - j
+  do 10 i = 1,limit1
+10 w(i) = gamma*w(i) - eta*w(i+1)
+  g(j) = w(1)
+  rho(j) = gamma*rho(jm1)
+15 term = psijm1
 !
 !   INTERPOLATE
 !
-do 20 L = 1,NEQN
-  YPOUT(L) = 0.0
-20 YOUT(L) = 0.0
-DO J = 1,KI
-  I = KIP1 - J
-  TEMP2 = G(I)
-  TEMP3 = RHO(I)
-  do 25 L = 1,NEQN
-    YOUT(L) = YOUT(L) + TEMP2*PHI(L,I)
-25 YPOUT(L) = YPOUT(L) + TEMP3*PHI(L,I)
-  END DO
-do 35 L = 1,NEQN
-35 YOUT(L) = Y(L) + HI*YOUT(L)
-RETURN
-END SUBROUTINE INTRP
+do 20 l = 1,neqn
+  ypout(l) = 0.0
+20 yout(l) = 0.0
+do j = 1,ki
+  i = kip1 - j
+  temp2 = g(i)
+  temp3 = rho(i)
+  do 25 l = 1,neqn
+    yout(l) = yout(l) + temp2*phi(l,i)
+25 ypout(l) = ypout(l) + temp3*phi(l,i)
+  end do
+do 35 l = 1,neqn
+35 yout(l) = y(l) + hi*yout(l)
+return
+end subroutine intrp
 
-SUBROUTINE BRKF45 (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG, &
-&WORK,IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, IWORK(5)
-INTEGER, INTENT(IN) :: NEQN
-REAL, INTENT(IN) :: ABSERR
-REAL, INTENT(INOUT) :: RELERR, T
-REAL, INTENT(IN) :: TEND, TOUT
-REAL, INTENT(INOUT) :: WORK(*), Y(NEQN), YP(NEQN)
-INTEGER :: KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW, &
-&KWP, KX, KY1, KY2
+subroutine brkf45 (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+&work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(in) :: abserr
+real, intent(inout) :: relerr, t
+real, intent(in) :: tend, tout
+real, intent(inout) :: work(*), y(neqn), yp(neqn)
+integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
+&kwp, kx, ky1, ky2
 !
 !     BLOCK FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD ADVANCING
 !     A BLOCK OF TWO EQUAL STEPS.  THE FORMULA AT THE FIRST STEP IS
@@ -5240,32 +5240,32 @@ INTEGER :: KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW, &
 !
 !***********************************************************************
 !
-LOGICAL :: ENDPNT, BLKOUT
-EXTERNAL FCN
+logical :: endpnt, blkout
+external fcn
 !
 !     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
 !
-KW = 1
-KWP = KW + NEQN
-KX = KWP + NEQN
-KHI = KX + 1
-KH = KHI + 1
-KY1 = KH + 1
-KY2 = KY1 + NEQN
-KF1 = KY2 + NEQN
-KF2 = KF1 + NEQN
-KF3 = KF2 + NEQN
-KF4 = KF3 + NEQN
-KF7 = KF4 + NEQN
-KSR = KF7 + NEQN
-KSA = KSR + 1
-KT = KSA + 1
+kw = 1
+kwp = kw + neqn
+kx = kwp + neqn
+khi = kx + 1
+kh = khi + 1
+ky1 = kh + 1
+ky2 = ky1 + neqn
+kf1 = ky2 + neqn
+kf2 = kf1 + neqn
+kf3 = kf2 + neqn
+kf4 = kf3 + neqn
+kf7 = kf4 + neqn
+ksr = kf7 + neqn
+ksa = ksr + 1
+kt = ksa + 1
 !
 !     THE WORK SPACE TOTALS  6 + 9*NEQN .
 !
-IF (IABS(IFLAG) .EQ. 1) GO TO 10
-   ENDPNT = (IWORK(4) .EQ. -1)
-   BLKOUT = (IWORK(5) .EQ. -1)
+if (iabs(iflag) .eq. 1) go to 10
+   endpnt = (iwork(4) .eq. -1)
+   blkout = (iwork(5) .eq. -1)
 !
 !***********************************************************************
 !     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
@@ -5274,55 +5274,55 @@ IF (IABS(IFLAG) .EQ. 1) GO TO 10
 !     HE MUST USE RKFC DIRECTLY.
 !***********************************************************************
 !
-10 CALL RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,WORK(KW), &
-&WORK(KWP),WORK(KX),WORK(KHI),WORK(KH),WORK(KY1),WORK(KY2), &
-&WORK(KF1),WORK(KF2),WORK(KF3),WORK(KF4),WORK(KF7),WORK(KSR), &
-&WORK(KSA),WORK(KT),IWORK(1),IWORK(2),IWORK(3),ENDPNT,BLKOUT)
+10 call rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag,work(kw), &
+&work(kwp),work(kx),work(khi),work(kh),work(ky1),work(ky2), &
+&work(kf1),work(kf2),work(kf3),work(kf4),work(kf7),work(ksr), &
+&work(ksa),work(kt),iwork(1),iwork(2),iwork(3),endpnt,blkout)
 !
-IWORK(4) = 0
-IF (ENDPNT) IWORK(4) = -1
-IWORK(5) = 0
-IF (BLKOUT) IWORK(5) = -1
+iwork(4) = 0
+if (endpnt) iwork(4) = -1
+iwork(5) = 0
+if (blkout) iwork(5) = -1
 !
-RETURN
-END SUBROUTINE BRKF45
+return
+end subroutine brkf45
 
-SUBROUTINE RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG, &
-&W,WP,X,HINT,H,Y1,Y2,F1,F2,F3,F4,F7,SAVRE,SAVAE, &
-&TOLD,NFE,JFLAG,KFLAG,ENDPNT,BLKOUT)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, JFLAG, KFLAG
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: NFE
-REAL, INTENT(IN) :: ABSERR
-REAL :: F1(NEQN)
-REAL, INTENT(INOUT) :: F2(NEQN), F3(NEQN)
-REAL :: F4(NEQN), F7(NEQN)
-REAL, INTENT(INOUT) :: H, HINT, RELERR, SAVAE, SAVRE, T
-REAL, INTENT(IN) :: TEND
-REAL, INTENT(INOUT) :: TOLD
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: W(NEQN), WP(NEQN), X, Y(NEQN), Y1(NEQN), &
-&Y2(NEQN), YP(NEQN)
-INTEGER :: K, MAXNFE, MFLAG, N
-REAL :: A, A21, A31, A32, A41, A42, A43, A51, A52, A53, A54, A61, &
-&A62, A63, A64, A65, A81, A82, A83, A84, A85, A86, A87, A91, A92, &
-&A93, A94, A95, A96, A97, A98, AE, B1, B1B, B3, B3B, B4, B4B, B5, &
-&B5B, B6, B6B, B7, B8, B9, C2, C3, C4, C6, C8, C9, DT, DTSIGN, EE, &
-&EEOET, ERC11, ERC13, ERC14, ERC15, ERC21, ERC23, ERC24, ERC25, &
-&ERC26, ERC27, ERC28, ERC29, ERRTOL, ESTTOL, EZ, HMIN, HSTOP, &
-&REMIN, RER, S, SCALE, SF, SWAP, TOL, TOLER, TOLN, U, U26, YPK
-REAL :: SPMPAR
+subroutine rkfc (fcn,neqn,y,t,tout,tend,yp,relerr,abserr,iflag, &
+&w,wp,x,hint,h,y1,y2,f1,f2,f3,f4,f7,savre,savae, &
+&told,nfe,jflag,kflag,endpnt,blkout)
+implicit none
+integer, intent(inout) :: iflag, jflag, kflag
+integer, intent(in) :: neqn
+integer, intent(inout) :: nfe
+real, intent(in) :: abserr
+real :: f1(neqn)
+real, intent(inout) :: f2(neqn), f3(neqn)
+real :: f4(neqn), f7(neqn)
+real, intent(inout) :: h, hint, relerr, savae, savre, t
+real, intent(in) :: tend
+real, intent(inout) :: told
+real, intent(in) :: tout
+real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
+&y2(neqn), yp(neqn)
+integer :: k, maxnfe, mflag, n
+real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
+&a62, a63, a64, a65, a81, a82, a83, a84, a85, a86, a87, a91, a92, &
+&a93, a94, a95, a96, a97, a98, ae, b1, b1b, b3, b3b, b4, b4b, b5, &
+&b5b, b6, b6b, b7, b8, b9, c2, c3, c4, c6, c8, c9, dt, dtsign, ee, &
+&eeoet, erc11, erc13, erc14, erc15, erc21, erc23, erc24, erc25, &
+&erc26, erc27, erc28, erc29, errtol, esttol, ez, hmin, hstop, &
+&remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
+real :: spmpar
 !
 !     TWO STEP BLOCK RUNGE-KUTTA FEHLBERG METHOD.
 !     A STANDARD 5(4) FORMULA IS USED AT THE FIRST POINT IN THE BLOCK
 !     AND A 6(4) FORMULA IS USED AT THE SECOND POINT.
 !
-LOGICAL :: HFAILD
-LOGICAL, INTENT(INOUT) :: ENDPNT
-LOGICAL :: INTERP
-LOGICAL, INTENT(INOUT) :: BLKOUT
-EXTERNAL FCN
+logical :: hfaild
+logical, intent(inout) :: endpnt
+logical :: interp
+logical, intent(inout) :: blkout
+external fcn
 !
 !***********************************************************************
 !
@@ -5362,25 +5362,25 @@ EXTERNAL FCN
 !                ERC14=-2197.0E+0/75240.0E+0
 !                ERC15=1.0E+0/50.0E+0
 !
-DATA C2 /.250000000000000E+00/, C3 /.375000000000000E+00/, &
-&C4 /.923076923076923E+00/, C6 /.500000000000000E+00/, &
-&C8 /.150000000000000E+01/, C9 /.200000000000000E+01/
+data c2 /.250000000000000e+00/, c3 /.375000000000000e+00/, &
+&c4 /.923076923076923e+00/, c6 /.500000000000000e+00/, &
+&c8 /.150000000000000e+01/, c9 /.200000000000000e+01/
 !
-DATA A21 / .250000000000000E+00/, A31 / .937500000000000E-01/, &
-&A32 / .281250000000000E+00/, A41 / .879380974055530E+00/, &
-&A42 /-.327719617660446E+01/, A43 / .332089212562585E+01/, &
-&A51 / .203240740740741E+01/, A52 /-.800000000000000E+01/, &
-&A53 / .717348927875244E+01/, A54 /-.205896686159844E+00/, &
-&A61 /-.296296296296296E+00/, A62 / .200000000000000E+01/, &
-&A63 /-.138167641325536E+01/, A64 / .452972709551657E+00/, &
-&A65 /-.275000000000000E+00/
+data a21 / .250000000000000e+00/, a31 / .937500000000000e-01/, &
+&a32 / .281250000000000e+00/, a41 / .879380974055530e+00/, &
+&a42 /-.327719617660446e+01/, a43 / .332089212562585e+01/, &
+&a51 / .203240740740741e+01/, a52 /-.800000000000000e+01/, &
+&a53 / .717348927875244e+01/, a54 /-.205896686159844e+00/, &
+&a61 /-.296296296296296e+00/, a62 / .200000000000000e+01/, &
+&a63 /-.138167641325536e+01/, a64 / .452972709551657e+00/, &
+&a65 /-.275000000000000e+00/
 !
-DATA B1B /.118518518518519E+00/, B3B / .518986354775828E+00/, &
-&B4B /.506131490342017E+00/, B5B /-.180000000000000E+00/, &
-&B6B /.363636363636364E-01/
+data b1b /.118518518518519e+00/, b3b / .518986354775828e+00/, &
+&b4b /.506131490342017e+00/, b5b /-.180000000000000e+00/, &
+&b6b /.363636363636364e-01/
 !
-DATA ERC11/ .277777777777778E-02/, ERC13/-.299415204678363E-01/, &
-&ERC14/-.291998936735779E-01/, ERC15/ .200000000000000E-01/
+data erc11/ .277777777777778e-02/, erc13/-.299415204678363e-01/, &
+&erc14/-.291998936735779e-01/, erc15/ .200000000000000e-01/
 !
 !     THE ABOVE DEFINE THE COEFFICIENTS FOR BRKF45 USED TO GENERATE
 !     THE SOLUTION AT THE FIRST BLOCK POINT. BELOW ARE ADDITIONAL
@@ -5413,20 +5413,20 @@ DATA ERC11/ .277777777777778E-02/, ERC13/-.299415204678363E-01/, &
 !                A97=-3385330161.0E+0/243117160.0E+0
 !                A98=232648.0E+0/96795.0E+0
 !
-DATA B1 /.143672839506173E+00/, B3 / .210187767614668E+00/, &
-&B4 /.603140025990903E+00/, B5 / .200000000000000E-01/, &
-&B6 /.400000000000000E+00/, B7 /-.266666666666667E+00/, &
-&B8 /.736460905349794E+00/, B9 / .153205128205128E+00/
+data b1 /.143672839506173e+00/, b3 / .210187767614668e+00/, &
+&b4 /.603140025990903e+00/, b5 / .200000000000000e-01/, &
+&b6 /.400000000000000e+00/, b7 /-.266666666666667e+00/, &
+&b8 /.736460905349794e+00/, b9 / .153205128205128e+00/
 !
-DATA A81 /-.785774430040232E+00/, A82 / .269557443004023E+01/, &
-&A83 /-.387868820553843E+00/, A84 /-.323463729234086E+01/, &
-&A85 / .141740175234689E+01/, A86 /-.739340252773601E+00/, &
-&A87 / .253464461332141E+01/
+data a81 /-.785774430040232e+00/, a82 / .269557443004023e+01/, &
+&a83 /-.387868820553843e+00/, a84 /-.323463729234086e+01/, &
+&a85 / .141740175234689e+01/, a86 /-.739340252773601e+00/, &
+&a87 / .253464461332141e+01/
 !
-DATA A91 / .277678804896947E+01/, A92 /-.461924686192469E+01/, &
-&A93 /-.540556629238679E+01/, A94 / .195138152603181E+02/, &
-&A95 /-.627825575453278E+01/, A96 / .753363921389629E+01/, &
-&A97 /-.139246861924514E+02/, A98 / .240351257812904E+01/
+data a91 / .277678804896947e+01/, a92 /-.461924686192469e+01/, &
+&a93 /-.540556629238679e+01/, a94 / .195138152603181e+02/, &
+&a95 /-.627825575453278e+01/, a96 / .753363921389629e+01/, &
+&a97 /-.139246861924514e+02/, a98 / .240351257812904e+01/
 !
 !     NEXT WE DEFINE COEFFICIENTS FOR THE ERROR ESTIMATE FORMULA.
 !
@@ -5449,10 +5449,10 @@ DATA A91 / .277678804896947E+01/, A92 /-.461924686192469E+01/, &
 !     ERC28 = (B8 - B8E)/2.0E+0
 !     ERC29 = -0.005E+0
 !
-DATA ERC21 /.224905375494686E-01/, ERC23 /-.186601479161668E+00/, &
-&ERC24 /.224620349650851E+00/, ERC25 /-.384622777202128E-01/, &
-&ERC26 /.180000000000000E+00/, ERC27 /-.233333333333333E+00/, &
-&ERC28 /.362862030148937E-01/, ERC29 /-.500000000000000E-02/
+data erc21 /.224905375494686e-01/, erc23 /-.186601479161668e+00/, &
+&erc24 /.224620349650851e+00/, erc25 /-.384622777202128e-01/, &
+&erc26 /.180000000000000e+00/, erc27 /-.233333333333333e+00/, &
+&erc28 /.362862030148937e-01/, erc29 /-.500000000000000e-02/
 !
 !***********************************************************************
 !
@@ -5462,97 +5462,97 @@ DATA ERC21 /.224905375494686E-01/, ERC23 /-.186601479161668E+00/, &
 !  PRECISION ON COMPUTERS WITH LONG WORDLENGTHS. THIS DOES NOT HAVE
 !  TO BE CHANGED FOR DIFFERENT MACHINES.
 !
-DATA REMIN / 1.E-12 /
+data remin / 1.e-12 /
 !
 !***********************************************************************
 !
 !     THE EXPENSE IS CONTROLLED BY RESTRICTING THE NUMBER
 !     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
 !
-DATA MAXNFE / 18000 /
+data maxnfe / 18000 /
 !
 !***********************************************************************
 !
 !  THE COMPUTER UNIT ROUNDOFF ERROR U IS THE SMALLEST POSITIVE VALUE
 !  REPRESENTABLE IN THE MACHINE SUCH THAT  1 + U .GT. 1.
 !
- U = SPMPAR(1)
+ u = spmpar(1)
 !
 !***********************************************************************
 !
 !     CHECK INPUT PARAMETERS
 !
-IF (NEQN .LT. 1) GO TO 500
-IF (RELERR .LT. 0.0 .OR. ABSERR .LT. 0.0) GO TO 500
-IF (T .EQ. TEND) GO TO 500
-MFLAG = IABS(IFLAG)
-IF (MFLAG .NE. 1) GO TO 10
-   TOLD = T
-   IF (TOUT .EQ. T) GO TO 70
-   IF (SIGN(1.0, TEND-T) .NE. SIGN(1.0, TOUT-T)) GO TO 500
-   GO TO 70
-10 IF (MFLAG .EQ. 0 .OR. MFLAG .GT. 7) GO TO 500
-IF (TOUT .EQ. TOLD) GO TO 20
-IF (SIGN(1.0, TEND-TOLD) .NE. SIGN(1.0, TOUT-TOLD)) GO TO 500
+if (neqn .lt. 1) go to 500
+if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 500
+if (t .eq. tend) go to 500
+mflag = iabs(iflag)
+if (mflag .ne. 1) go to 10
+   told = t
+   if (tout .eq. t) go to 70
+   if (sign(1.0, tend-t) .ne. sign(1.0, tout-t)) go to 500
+   go to 70
+10 if (mflag .eq. 0 .or. mflag .gt. 7) go to 500
+if (tout .eq. told) go to 20
+if (sign(1.0, tend-told) .ne. sign(1.0, tout-told)) go to 500
 !
 !     CHECK CONTINUATION POSSIBILITIES
 !
-20 IF (MFLAG .NE. 2) GO TO 30
+20 if (mflag .ne. 2) go to 30
 !
 !     IFLAG = +2 OR -2
 !
-IF (KFLAG .LT. 3) GO TO 70
-IF (KFLAG .EQ. 3) GO TO 60
-IF (KFLAG .EQ. 4) GO TO 50
-IF (KFLAG .EQ. 5 .AND. ABSERR .EQ. 0.0) GO TO 40
-IF (KFLAG .EQ. 6 .AND. RELERR .LE. SAVRE .AND. ABSERR .LE. SAVAE) &
-&GO TO 40
-GO TO 70
+if (kflag .lt. 3) go to 70
+if (kflag .eq. 3) go to 60
+if (kflag .eq. 4) go to 50
+if (kflag .eq. 5 .and. abserr .eq. 0.0) go to 40
+if (kflag .eq. 6 .and. relerr .le. savre .and. abserr .le. savae) &
+&go to 40
+go to 70
 !
 !     IFLAG = 3,4,5,6 OR 7
 !
-30 IF (IFLAG .EQ. 3) GO TO 60
-IF (IFLAG .EQ. 4) GO TO 50
-IF (IFLAG .EQ. 5 .AND. ABSERR .GT. 0.0) GO TO 60
+30 if (iflag .eq. 3) go to 60
+if (iflag .eq. 4) go to 50
+if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 60
 !
 !     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=5,6 OR 7
 !
-40 STOP
+40 stop
 !
 !***********************************************************************
 !
 !     RESET FUNCTION EVALUATION COUNTER
 !
-50 NFE = 0
-IF (MFLAG .EQ. 2) GO TO 70
+50 nfe = 0
+if (mflag .eq. 2) go to 70
 !
 !     RESET FLAG VALUE FROM PREVIOUS CALL
 !
-60 IFLAG = JFLAG
-IF (KFLAG .EQ. 3) MFLAG = IABS(IFLAG)
+60 iflag = jflag
+if (kflag .eq. 3) mflag = iabs(iflag)
 !
 !     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
 !     INPUT CHECKING
 !
-70 JFLAG = IFLAG
-KFLAG = 0
+70 jflag = iflag
+kflag = 0
 !
 !     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
 !
-SAVRE = RELERR
-SAVAE = ABSERR
+savre = relerr
+savae = abserr
 !
 !     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
 !     2U+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING FROM
 !     IMPOSSIBLE ACCURACY REQUESTS. IF TOLERANCE TOO SMALL, INCREASE
 !     AND RETURN.
 !
-RER = 2.0*U + REMIN
-IF (RELERR .LT. RER) GO TO 520
+rer = 2.0*u + remin
+if (relerr .lt. rer) go to 520
 !
-U26 = 26.0*U
-IF (MFLAG .NE. 1) GO TO 100
+u26 = 26.0*u
+if (mflag .ne. 1) go to 100
 !
 !***********************************************************************
 !
@@ -5563,35 +5563,35 @@ IF (MFLAG .NE. 1) GO TO 100
 !                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
 !                       ESTIMATE STARTING STEPSIZE
 !
-X = T
-ENDPNT = .FALSE.
-BLKOUT = .FALSE.
+x = t
+endpnt = .false.
+blkout = .false.
 !
-A = T
-CALL FCN (A, Y, YP)
-NFE = 1
-DO N = 1, NEQN
-   W(N) = Y(N)
-   WP(N) = YP(N)
-END DO
+a = t
+call fcn (a, y, yp)
+nfe = 1
+do n = 1, neqn
+   w(n) = y(n)
+   wp(n) = yp(n)
+end do
 !
 !     COMPUTE INITIAL STEPLENGTH.
 !
-DT = TOUT - T
-IF (DT .EQ. 0.0) DT = TEND - T
-H = ABS(DT)
-TOLN = 0.0
-do 90 K = 1, NEQN
-   TOL = RELERR*ABS(Y(K)) + ABSERR
-   IF (TOL .LE. 0.0) GO TO 90
-   TOLN = TOL
-   YPK = ABS(YP(K))
-   IF (YPK*H**5 .GT. TOL) H = (TOL/YPK)**0.2
-90 CONTINUE
-IF (TOLN .LE. 0.0) H = 0.0
-H = AMAX1(H, U26*AMAX1(ABS(T),ABS(DT)))
-JFLAG = ISIGN(2,IFLAG)
-H = SIGN(H,DT)
+dt = tout - t
+if (dt .eq. 0.0) dt = tend - t
+h = abs(dt)
+toln = 0.0
+do 90 k = 1, neqn
+   tol = relerr*abs(y(k)) + abserr
+   if (tol .le. 0.0) go to 90
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 .gt. tol) h = (tol/ypk)**0.2
+90 continue
+if (toln .le. 0.0) h = 0.0
+h = amax1(h, u26*amax1(abs(t),abs(dt)))
+jflag = isign(2,iflag)
+h = sign(h,dt)
 !
 !     INITIAL STEPLENGTH NOW COMPUTED. COMPUTE FIRST SOLUTION.
 !
@@ -5600,21 +5600,21 @@ H = SIGN(H,DT)
 !     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
 !     SCALE THE ERROR TOLERANCES.
 !
-100 SCALE = 2.0/RELERR
-AE = SCALE*ABSERR
+100 scale = 2.0/relerr
+ae = scale*abserr
 !
 !     SET SAFETY FACTOR FOR STEPSIZE ADJUSTMENT, BASED ON TOLERANCES.
 !
-TOLER = AMAX1(ABSERR,RELERR)
-SF = 0.85
-IF (TOLER .GE. 1.E-5) SF = 0.8
-IF (TOLER .LE. 1.E-9) SF = 0.9
+toler = amax1(abserr,relerr)
+sf = 0.85
+if (toler .ge. 1.e-5) sf = 0.8
+if (toler .le. 1.e-9) sf = 0.9
 !
 !     RESTORE INTEGRATION VARIABLE TO END OF LAST BLOCK STEP TAKEN
 !     AND SET THE SIGN OF THE DIRECTION OF INTEGRATION.
 !
-T = X
-DTSIGN = SIGN(1.0, TEND-T)
+t = x
+dtsign = sign(1.0, tend-t)
 !
 !     HAVE WE ALREADY INTEGRATED PAST THE PRESENT DATA OUTPUT POINT?
 !     IF SO JUMP TO 390 AND PERFORM INTERPOLATION.
@@ -5622,13 +5622,13 @@ DTSIGN = SIGN(1.0, TEND-T)
 !     IF NOT, SEE IF RESULTS AT THE END OF THE BLOCK STEP NEED TO BE
 !     REPORTED.
 !
-IF ((TOUT-T)*DTSIGN .GT. 0.0) GO TO 110
-   IF (TOUT .EQ. T) GO TO 510
-   GO TO 390
-110 IF (ENDPNT) GO TO 510
-IF (IFLAG .NE. -2  .OR. .NOT.BLKOUT) GO TO 150
-   BLKOUT = .FALSE.
-   GO TO 400
+if ((tout-t)*dtsign .gt. 0.0) go to 110
+   if (tout .eq. t) go to 510
+   go to 390
+110 if (endpnt) go to 510
+if (iflag .ne. -2  .or. .not.blkout) go to 150
+   blkout = .false.
+   go to 400
 !
 !***********************************************************************
 !***********************************************************************
@@ -5637,41 +5637,41 @@ IF (IFLAG .NE. -2  .OR. .NOT.BLKOUT) GO TO 150
 !     SEE IF WE ARE TOO CLOSE TO THE END POINT.  IF SO, DO LINEAR
 !     EXTRAPOLATION AND RETURN.
 !
-150 IF (ABS(TEND-T) .GT. U26*ABS(T)) GO TO 190
-IF (DTSIGN*(TEND-TOUT) .LE. 0.0) GO TO 160
-   DT = TOUT - T
-   ENDPNT = .FALSE.
-   T = TOUT
-   GO TO 170
-160 DT = TEND - T
-ENDPNT = .TRUE.
-T = TEND
-X = TEND
+150 if (abs(tend-t) .gt. u26*abs(t)) go to 190
+if (dtsign*(tend-tout) .le. 0.0) go to 160
+   dt = tout - t
+   endpnt = .false.
+   t = tout
+   go to 170
+160 dt = tend - t
+endpnt = .true.
+t = tend
+x = tend
 !
-170 DO K = 1, NEQN
-   Y(K) = W(K) + DT*WP(K)
-END DO
-CALL FCN (T, Y, YP)
-NFE = NFE + 1
-IFLAG = 2
-IF (.NOT.ENDPNT) RETURN
+170 do k = 1, neqn
+   y(k) = w(k) + dt*wp(k)
+end do
+call fcn (t, y, yp)
+nfe = nfe + 1
+iflag = 2
+if (.not.endpnt) return
 !
-DO N = 1,NEQN
-   W(N) = Y(N)
-   WP(N) = YP(N)
-END DO
-ENDPNT = .FALSE.
-RETURN
+do n = 1,neqn
+   w(n) = y(n)
+   wp(n) = yp(n)
+end do
+endpnt = .false.
+return
 !
 !     SET SMALLEST ALLOWABLE STEPSIZE AND STEP FAILURE FLAG.
 !     ADJUST STEPSIZE IF NECESSARY TO HIT THE END POINT OF INTEGRATION.
 !
-190 HMIN = U26*ABS(T)
-HFAILD = .FALSE.
-HSTOP = 0.5*(TEND-T)
-IF (ABS(HSTOP) .GT. ABS(H)) GO TO 200
-ENDPNT = .TRUE.
-H = HSTOP
+190 hmin = u26*abs(t)
+hfaild = .false.
+hstop = 0.5*(tend-t)
+if (abs(hstop) .gt. abs(h)) go to 200
+endpnt = .true.
+h = hstop
 !
 !***********************************************************************
 !     CORE INTEGRATOR FOR A SINGLE BLOCK
@@ -5691,139 +5691,139 @@ H = HSTOP
 !     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
 !     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
 !
-200 IF (NFE .GT. MAXNFE) GO TO 530
+200 if (nfe .gt. maxnfe) go to 530
 !
 !     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
 !
-DO N = 1, NEQN
-   Y1(N) = W(N) + A21*H*WP(N)
-END DO
-CALL FCN (T + C2*H, Y1, F2)
-DO N = 1, NEQN
-   Y1(N) = W(N) + H*(A31*WP(N) + A32*F2(N))
-END DO
-CALL FCN (T + C3*H, Y1, F3)
-DO N = 1, NEQN
-   Y1(N) = W(N) + H*(A41*WP(N) + A42*F2(N) + A43*F3(N))
-END DO
-CALL FCN (T + C4*H, Y1, F4)
-DO N = 1, NEQN
-   Y1(N) = W(N) + H*(A51*WP(N)+A52*F2(N)+A53*F3(N)+A54*F4(N))
-END DO
-CALL FCN (T + H, Y1, Y)
-DO N = 1, NEQN
-   Y1(N) = W(N) + H*(A61*WP(N)+A62*F2(N)+A63*F3(N)+A64*F4(N)+ &
-&A65*Y(N))
-END DO
-CALL FCN (T + C6*H, Y1, YP)
-NFE = NFE + 5
-EEOET = 0.0
-DO N = 1, NEQN
-   Y1(N) = W(N) + H*(B1B*WP(N)+B3B*F3(N)+B4B*F4(N)+B5B*Y(N)+ &
-&B6B*YP(N))
-   ERRTOL = ABS(W(N)) + ABS(Y1(N)) + AE
-   IF (ERRTOL .LE. 0.0) GO TO 540
-   EZ = ABS(H*(ERC11*WP(N)+ERC13*F3(N)+ERC14*F4(N)+ERC15*Y(N)+ &
-&B6B*YP(N)))
-   EEOET = AMAX1(EEOET,EZ/ERRTOL)
-END DO
-ESTTOL = EEOET*SCALE
+do n = 1, neqn
+   y1(n) = w(n) + a21*h*wp(n)
+end do
+call fcn (t + c2*h, y1, f2)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a31*wp(n) + a32*f2(n))
+end do
+call fcn (t + c3*h, y1, f3)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a41*wp(n) + a42*f2(n) + a43*f3(n))
+end do
+call fcn (t + c4*h, y1, f4)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a51*wp(n)+a52*f2(n)+a53*f3(n)+a54*f4(n))
+end do
+call fcn (t + h, y1, y)
+do n = 1, neqn
+   y1(n) = w(n) + h*(a61*wp(n)+a62*f2(n)+a63*f3(n)+a64*f4(n)+ &
+&a65*y(n))
+end do
+call fcn (t + c6*h, y1, yp)
+nfe = nfe + 5
+eeoet = 0.0
+do n = 1, neqn
+   y1(n) = w(n) + h*(b1b*wp(n)+b3b*f3(n)+b4b*f4(n)+b5b*y(n)+ &
+&b6b*yp(n))
+   errtol = abs(w(n)) + abs(y1(n)) + ae
+   if (errtol .le. 0.0) go to 540
+   ez = abs(h*(erc11*wp(n)+erc13*f3(n)+erc14*f4(n)+erc15*y(n)+ &
+&b6b*yp(n)))
+   eeoet = amax1(eeoet,ez/errtol)
+end do
+esttol = eeoet*scale
 !
 !     CHECK THE ERROR ESTIMATE. IF STEPLENGTH HAS FAILED FOR FIRST STEP
 !     IN THE BLOCK, GO AND COMPUTE A SMALLER STEP FOR A RE-TRY.
 !
-IF (ESTTOL .GT. 1.0) GO TO 320
+if (esttol .gt. 1.0) go to 320
 !
 !     INTEGRATION SUCCESSFUL FOR FIRST STEP.  NOW INTEGRATE OVER
 !     THE SECOND STEP IN THE BLOCK
 !
-CALL FCN (T + H, Y1, F1)
-DO N = 1, NEQN
-   Y2(N) = W(N) + H*(A81*WP(N)+A82*F2(N)+A83*F3(N)+A84*F4(N)+ &
-&A85*Y(N)+A86*YP(N)+A87*F1(N))
-END DO
-CALL FCN (T + C8*H, Y2, F7)
-DO N = 1, NEQN
-   Y2(N) = W(N) + H*(A91*WP(N)+A92*F2(N)+A93*F3(N)+A94*F4(N)+ &
-&A95*Y(N)+A96*YP(N)+A97*F1(N)+A98*F7(N))
-END DO
-CALL FCN (T + C9*H, Y2, F2)
-NFE = NFE + 3
-EEOET = 0.0
-DO N = 1, NEQN
-   EE = ABS(H*(ERC21*WP(N)+ERC23*F3(N)+ERC24*F4(N)+ERC25*Y(N)+ &
-&ERC26*YP(N)+ERC27*F1(N)+ERC28*F7(N)+ERC29*F2(N)))
-   Y2(N) = W(N)+H*(B1*WP(N)+B3*F3(N)+B4*F4(N)+B5*Y(N)+B6*YP(N)+ &
-&B7*F1(N)+B8*F7(N)+B9*F2(N))
-   ERRTOL = ABS(Y2(N)) + ABS(Y1(N)) + AE
-   IF (ERRTOL .LE. 0.0) GO TO 540
-   EEOET = AMAX1(EEOET,EE/ERRTOL)
-END DO
-ESTTOL = EEOET*SCALE
+call fcn (t + h, y1, f1)
+do n = 1, neqn
+   y2(n) = w(n) + h*(a81*wp(n)+a82*f2(n)+a83*f3(n)+a84*f4(n)+ &
+&a85*y(n)+a86*yp(n)+a87*f1(n))
+end do
+call fcn (t + c8*h, y2, f7)
+do n = 1, neqn
+   y2(n) = w(n) + h*(a91*wp(n)+a92*f2(n)+a93*f3(n)+a94*f4(n)+ &
+&a95*y(n)+a96*yp(n)+a97*f1(n)+a98*f7(n))
+end do
+call fcn (t + c9*h, y2, f2)
+nfe = nfe + 3
+eeoet = 0.0
+do n = 1, neqn
+   ee = abs(h*(erc21*wp(n)+erc23*f3(n)+erc24*f4(n)+erc25*y(n)+ &
+&erc26*yp(n)+erc27*f1(n)+erc28*f7(n)+erc29*f2(n)))
+   y2(n) = w(n)+h*(b1*wp(n)+b3*f3(n)+b4*f4(n)+b5*y(n)+b6*yp(n)+ &
+&b7*f1(n)+b8*f7(n)+b9*f2(n))
+   errtol = abs(y2(n)) + abs(y1(n)) + ae
+   if (errtol .le. 0.0) go to 540
+   eeoet = amax1(eeoet,ee/errtol)
+end do
+esttol = eeoet*scale
 !
 !     THE FIRST OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
 !     DERIVATIVE MORE STABLE IS THE FOLLOWING DO-LOOP.
 !
-DO N = 1, NEQN
-   Y1(N) = B1B*WP(N)+B3B*F3(N)+B4B*F4(N)+B5B*Y(N)+ &
-&B6B*YP(N)
-   F3(N) = B1*WP(N)+B3*F3(N)+B4*F4(N)+B5*Y(N)+B6*YP(N)+ &
-&B7*F1(N)+B8*F7(N)+B9*F2(N)
-END DO
+do n = 1, neqn
+   y1(n) = b1b*wp(n)+b3b*f3(n)+b4b*f4(n)+b5b*y(n)+ &
+&b6b*yp(n)
+   f3(n) = b1*wp(n)+b3*f3(n)+b4*f4(n)+b5*y(n)+b6*yp(n)+ &
+&b7*f1(n)+b8*f7(n)+b9*f2(n)
+end do
 !
 !     CHECK THE ERROR ESTIMATE OVER THE SECOND STEP OF THE BLOCK.
 !
-IF (ESTTOL .LE. 1.0) GO TO 330
+if (esttol .le. 1.0) go to 330
 !
 !     UNSUCCESSFUL BLOCK
 !     REDUCE THE STEPSIZE , TRY AGAIN
 !     THE DECREASE IS LIMITED TO A FACTOR OF ABOUT 1/10
 !
-320 HFAILD = .TRUE.
-S = 0.1
-ENDPNT = .FALSE.
-IF (ESTTOL .LT. 1.0E+5) S = SF/ESTTOL**0.2
-H = S*H
-IF (ABS(H) .LT. HMIN) GO TO 550
-GO TO 200
+320 hfaild = .true.
+s = 0.1
+endpnt = .false.
+if (esttol .lt. 1.0e+5) s = sf/esttol**0.2
+h = s*h
+if (abs(h) .lt. hmin) go to 550
+go to 200
 !
 !     SUCCESSFUL BLOCK. CHECK FOR NEED TO INTERPOLATE.
 !     STORE SOLUTION AT T+2*H.
 !
-330 T = T + 2.0*H
-IF (ENDPNT) T = TEND
-TOLD = X
-X = T
-HINT = H
-INTERP = .FALSE.
-IF ((T-TOUT)*DTSIGN .GE. 0.0) INTERP = .TRUE.
+330 t = t + 2.0*h
+if (endpnt) t = tend
+told = x
+x = t
+hint = h
+interp = .false.
+if ((t-tout)*dtsign .ge. 0.0) interp = .true.
 !
-IF (INTERP) GO TO 350
-   DO N = 1,NEQN
-      W(N) = Y2(N)
-   END DO
-   GO TO 360
+if (interp) go to 350
+   do n = 1,neqn
+      w(n) = y2(n)
+   end do
+   go to 360
 !
-350 DO N = 1,NEQN
-   SWAP = W(N)
-   W(N) = Y2(N)
-   Y2(N) = SWAP
-   F2(N) = WP(N)
-END DO
+350 do n = 1,neqn
+   swap = w(n)
+   w(n) = y2(n)
+   y2(n) = swap
+   f2(n) = wp(n)
+end do
 !
-360 A = T
-CALL FCN (A, W, WP)
-NFE = NFE + 1
+360 a = t
+call fcn (a, w, wp)
+nfe = nfe + 1
 !
 !     CHOOSE NEXT STEPSIZE
 !     THE INCREASE IS LIMITED TO A FACTOR OF ABOUT 10
 !     IF STEP FAILURE HAS JUST OCCURED, NEXT STEP IS NOT ALLOWED
 !     TO INCREASE.
 !
-S = 10.0
-IF (ESTTOL .GT. 1.E-5) S = SF/ESTTOL**0.2
-IF (HFAILD) S = AMIN1(S,1.0)
-H = SIGN(AMAX1(S*ABS(H),HMIN), H)
+s = 10.0
+if (esttol .gt. 1.e-5) s = sf/esttol**0.2
+if (hfaild) s = amin1(s,1.0)
+h = sign(amax1(s*abs(h),hmin), h)
 !
 !     HAVE WE INTEGRATED PAST AN OUTPUT POINT?
 !     IF SO, CALL THE INTERPOLATION ROUTINE AT T=TOUT.
@@ -5831,80 +5831,80 @@ H = SIGN(AMAX1(S*ABS(H),HMIN), H)
 !     OTHERWISE, CHECK IF USER WANTS SOLUTIONS AT THE END OF THE BLOCK
 !     STEP, OR ELSE CONTINUE THE INTEGRATION.
 !
-IF (INTERP) GO TO 390
-IF (ENDPNT) GO TO 510
-IF (IFLAG .GT. 0) GO TO 150
-IFLAG = -2
-GO TO 400
+if (interp) go to 390
+if (endpnt) go to 510
+if (iflag .gt. 0) go to 150
+iflag = -2
+go to 400
 !
 !     INTERPOLATE TO GET DATA AT OFF-STEP POINT AND RETURN.
 !
 !     THE SECOND OF THE THREE CHANGES NEEDED TO MAKE THE INTERPOLANT
 !     DERIVATIVE MORE STABLE IS THE NEW STATEMENT 390 GIVEN BELOW.
 !
-390 CALL EXTRA (NEQN,F3,WP,X,HINT,Y1,Y2,F1,F2,TOUT,Y,YP)
-T = TOUT
-IF (IFLAG .LT. 0 .AND. TOUT .NE. X) BLKOUT = .TRUE.
-IFLAG = 2
-RETURN
+390 call extra (neqn,f3,wp,x,hint,y1,y2,f1,f2,tout,y,yp)
+t = tout
+if (iflag .lt. 0 .and. tout .ne. x) blkout = .true.
+iflag = 2
+return
 !
 !     RETURN WITH THE SOLUTION AT THE END OF THE LAST SUCCESSFUL
 !     BLOCK STEP.
 !
-400 DO N = 1,NEQN
-   Y(N) = W(N)
-   YP(N) = WP(N)
-END DO
-RETURN
+400 do n = 1,neqn
+   y(n) = w(n)
+   yp(n) = wp(n)
+end do
+return
 !
 !     INVALID INPUT, RETURN
 !
-500 IFLAG = 7
-RETURN
+500 iflag = 7
+return
 !
 !     WE HAVE REACHED THE ENDPOINT
 !
-510 IFLAG = 2
-ENDPNT = .FALSE.
-GO TO 400
+510 iflag = 2
+endpnt = .false.
+go to 400
 !
 !     RELATIVE ERROR TOLERANCE TOO SMALL
 !
-520 RELERR = RER
-IFLAG = 3
-KFLAG = 3
-RETURN
+520 relerr = rer
+iflag = 3
+kflag = 3
+return
 !
 !     TOO MUCH WORK
 !
-530 IFLAG = 4
-KFLAG = 4
-GO TO 400
+530 iflag = 4
+kflag = 4
+go to 400
 !
 !     INAPPROPRIATE ERROR TOLERANCE
 !
-540 IFLAG = 5
-KFLAG = 5
-GO TO 400
+540 iflag = 5
+kflag = 5
+go to 400
 !
 !     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
 !
-550 IFLAG = 6
-KFLAG = 6
-GO TO 400
-END SUBROUTINE RKFC
+550 iflag = 6
+kflag = 6
+go to 400
+end subroutine rkfc
 
-SUBROUTINE EXTRA (NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NEQN
-REAL :: F(NEQN), F1(NEQN), F2(NEQN)
-REAL, INTENT(IN) :: H, T, TEX
-REAL :: Y(NEQN)
-REAL, INTENT(INOUT) :: YEX(NEQN)
-REAL :: YINC1(NEQN), YINC2(NEQN)
-REAL, INTENT(INOUT) :: YPEX(NEQN)
-INTEGER :: N
-REAL :: A1, A2, A3, A4, HF, HF1, HF2, SIG
+subroutine extra (neqn,yinc2,f2,t,h,yinc1,y,f1,f,tex,yex,ypex)
+implicit none
+integer, intent(in) :: neqn
+real :: f(neqn), f1(neqn), f2(neqn)
+real, intent(in) :: h, t, tex
+real :: y(neqn)
+real, intent(inout) :: yex(neqn)
+real :: yinc1(neqn), yinc2(neqn)
+real, intent(inout) :: ypex(neqn)
+integer :: n
+real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !
 !     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
 !     NEEDED TO MAKE THE INTERPOLANT DERIVATIVE MORE STABLE.
@@ -5926,26 +5926,26 @@ REAL :: A1, A2, A3, A4, HF, HF1, HF2, SIG
 !     IS ALSO EVALUATED AT TEX TO OBTAIN AN APPROXIMATION TO DY/DT
 !     AT THIS POINT AND THIS APPROXIMATION IS STORED IN YPEX.
 !
-SIG = (TEX - T)/H + 2.0
-DO N = 1, NEQN
-   HF = H*F(N)
-   HF1 = H*F1(N)
-   HF2 = H*F2(N)
-   A1 = 2.0*(HF2 + HF) - 6.0*H*YINC2(N) + 8.0*HF1
-   A2 = H*YINC2(N) + 4.0*H*YINC1(N) - 4.0*HF1 - 2.0*HF
-   A3 = HF1 + HF - 2.0*H*YINC1(N)
-   A4 = H*YINC1(N) - HF
-   YEX(N) = ((((A1*0.125*(SIG - 2.0) + 0.25*A2)*(SIG - 1.0) + &
-&A3)*(SIG - 1.0) + A4)*SIG + HF)*SIG + Y(N)
-   YPEX(N) = ((((0.625*A1*SIG + (A2 - 2.0*A1))*SIG + (1.875*A1 - &
-&1.5*A2 + 3.0*A3))*SIG + (0.5*(A2 - A1) - &
-&2.0*(A3 - A4)))*SIG + HF)/H
-END DO
-RETURN
-END SUBROUTINE EXTRA
+sig = (tex - t)/h + 2.0
+do n = 1, neqn
+   hf = h*f(n)
+   hf1 = h*f1(n)
+   hf2 = h*f2(n)
+   a1 = 2.0*(hf2 + hf) - 6.0*h*yinc2(n) + 8.0*hf1
+   a2 = h*yinc2(n) + 4.0*h*yinc1(n) - 4.0*hf1 - 2.0*hf
+   a3 = hf1 + hf - 2.0*h*yinc1(n)
+   a4 = h*yinc1(n) - hf
+   yex(n) = ((((a1*0.125*(sig - 2.0) + 0.25*a2)*(sig - 1.0) + &
+&a3)*(sig - 1.0) + a4)*sig + hf)*sig + y(n)
+   ypex(n) = ((((0.625*a1*sig + (a2 - 2.0*a1))*sig + (1.875*a1 - &
+&1.5*a2 + 3.0*a3))*sig + (0.5*(a2 - a1) - &
+&2.0*(a3 - a4)))*sig + hf)/h
+end do
+return
+end subroutine extra
 
-SUBROUTINE RKF45 (F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
-IMPLICIT NONE
+subroutine rkf45 (f,neqn,y,t,tout,relerr,abserr,iflag,work,iwork)
+implicit none
 !
 !     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 !
@@ -6109,43 +6109,43 @@ IMPLICIT NONE
 !    REQUIRED FOR SUBSEQUENT INTEGRATION. ACCORDINGLY, WORK AND IWORK
 !    SHOULD NOT BE ALTERED.
 !
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: IFLAG, IWORK(5)
-REAL, INTENT(INOUT) :: Y(NEQN), T
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: RELERR
-REAL, INTENT(IN) :: ABSERR
-REAL, INTENT(INOUT) :: WORK(*)
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, iwork(5)
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: work(*)
 !
-EXTERNAL F
+external f
 !
-INTEGER :: K1, K2, K3, K4, K5, K6, K1M
+integer :: k1, k2, k3, k4, k5, k6, k1m
 !
 !     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
 !
-K1M=NEQN+1
-K1=K1M+1
-K2=K1+NEQN
-K3=K2+NEQN
-K4=K3+NEQN
-K5=K4+NEQN
-K6=K5+NEQN
+k1m=neqn+1
+k1=k1m+1
+k2=k1+neqn
+k3=k2+neqn
+k4=k3+neqn
+k5=k4+neqn
+k6=k5+neqn
 !
 !     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
 !     CALLING LIST VIA THE SPLITTING APART OF TWO WORKING STORAGE
 !     ARRAYS. IF THIS IS NOT COMPATIBLE WITH THE USERS COMPILER,
 !     HE MUST USE RKFS DIRECTLY.
 !
-CALL RKFS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK(1),WORK(K1M), &
-&WORK(K1),WORK(K2),WORK(K3),WORK(K4),WORK(K5),WORK(K6), &
-&WORK(K6+1),IWORK(1),IWORK(2),IWORK(3),IWORK(4),IWORK(5))
+call rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,work(1),work(k1m), &
+&work(k1),work(k2),work(k3),work(k4),work(k5),work(k6), &
+&work(k6+1),iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
 !
-RETURN
-END SUBROUTINE RKF45
+return
+end subroutine rkf45
 
-SUBROUTINE RKFS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,YP,H,F1,F2,F3, &
-&F4,F5,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
-IMPLICIT NONE
+subroutine rkfs(f,neqn,y,t,tout,relerr,abserr,iflag,yp,h,f1,f2,f3, &
+&f4,f5,savre,savae,nfe,kop,init,jflag,kflag)
+implicit none
 !
 !
 !     RKFS INTEGRATES A SYSTEM OF FIRST ORDER ORDINARY DIFFERENTIAL
@@ -6159,124 +6159,124 @@ IMPLICIT NONE
 !         H  - AN APPROPRIATE STEPSIZE TO BE USED FOR THE NEXT STEP
 !         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
 !
-LOGICAL :: HFAILD, OUTPUT
+logical :: hfaild, output
 !
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: IFLAG, NFE, KOP, INIT, JFLAG, KFLAG
-REAL, INTENT(INOUT) :: Y(NEQN), T
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: RELERR
-REAL, INTENT(IN) :: ABSERR
-REAL, INTENT(INOUT) :: H
-REAL :: YP(NEQN)
-REAL, INTENT(INOUT) :: F1(NEQN)
-REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
-REAL, INTENT(INOUT) :: F5(NEQN), SAVRE, SAVAE
+integer, intent(in) :: neqn
+integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
+real, intent(inout) :: y(neqn), t
+real, intent(in) :: tout
+real, intent(inout) :: relerr
+real, intent(in) :: abserr
+real, intent(inout) :: h
+real :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), savre, savae
 !
-EXTERNAL F
+external f
 !
-REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HMIN, REMIN, RER, S, &
-&SCALE, TOL, TOLN, U26, EPS, YPK, SPMPAR
+real :: a, ae, dt, ee, eeoet, esttol, et, hmin, remin, rer, s, &
+&scale, tol, toln, u26, eps, ypk, spmpar
 !
-INTEGER :: K, MAXNFE, MFLAG
+integer :: k, maxnfe, mflag
 !
 !     REMIN IS THE MINIMUM ACCEPTABLE VALUE OF RELERR.  ATTEMPTS
 !     TO OBTAIN HIGHER ACCURACY WITH THIS SUBROUTINE ARE USUALLY
 !     VERY EXPENSIVE AND OFTEN UNSUCCESSFUL.
 !
-DATA REMIN/1.E-12/
+data remin/1.e-12/
 !
 !     THE EXPENSE IS CONTROLLED BY RESTRICTING THE NUMBER
 !     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
 !     AS SET, THIS CORRESPONDS TO ABOUT 500 STEPS.
 !
-DATA MAXNFE/3000/
+data maxnfe/3000/
 !
 !     CHECK INPUT PARAMETERS
 !
-IF (NEQN .LT. 1) GO TO 10
-IF (RELERR .LT. 0.0 .OR. ABSERR .LT. 0.0) GO TO 10
-MFLAG = IABS(IFLAG)
-IF (MFLAG .EQ. 0 .OR. MFLAG .GT. 8) GO TO 10
+if (neqn .lt. 1) go to 10
+if (relerr .lt. 0.0 .or. abserr .lt. 0.0) go to 10
+mflag = iabs(iflag)
+if (mflag .eq. 0 .or. mflag .gt. 8) go to 10
 !
 !     COMPUTE THE RELATIVE MACHINE PRECISION
 !
-EPS = SPMPAR(1)
-U26 = 26.0*EPS
-IF (MFLAG .NE. 1) GO TO 20
-GO TO 50
+eps = spmpar(1)
+u26 = 26.0*eps
+if (mflag .ne. 1) go to 20
+go to 50
 !
 !     INVALID INPUT
 !
-10 IFLAG = 8
-RETURN
+10 iflag = 8
+return
 !
 !     CHECK CONTINUATION POSSIBILITIES
 !
-20 IF (T .EQ. TOUT .AND. KFLAG .NE. 3) GO TO 10
-IF (MFLAG .NE. 2) GO TO 25
+20 if (t .eq. tout .and. kflag .ne. 3) go to 10
+if (mflag .ne. 2) go to 25
 !
 !     IFLAG = +2 OR -2
 !
-IF (KFLAG .EQ. 3) GO TO 45
-IF (INIT .EQ. 0) GO TO 45
-IF (KFLAG .EQ. 4) GO TO 40
-IF ((KFLAG .EQ. 5)  .AND.  (ABSERR .EQ. 0.0)) GO TO 30
-IF ((KFLAG .EQ. 6)  .AND.  (RELERR .LE. SAVRE)  .AND. &
-&(ABSERR .LE. SAVAE)) GO TO 30
-GO TO 50
+if (kflag .eq. 3) go to 45
+if (init .eq. 0) go to 45
+if (kflag .eq. 4) go to 40
+if ((kflag .eq. 5)  .and.  (abserr .eq. 0.0)) go to 30
+if ((kflag .eq. 6)  .and.  (relerr .le. savre)  .and. &
+&(abserr .le. savae)) go to 30
+go to 50
 !
 !     IFLAG = 3,4,5,6,7 OR 8
 !
-25 IF (IFLAG .EQ. 3) GO TO 45
-IF (IFLAG .EQ. 4) GO TO 40
-IF (IFLAG .EQ. 5 .AND. ABSERR .GT. 0.0) GO TO 45
+25 if (iflag .eq. 3) go to 45
+if (iflag .eq. 4) go to 40
+if (iflag .eq. 5 .and. abserr .gt. 0.0) go to 45
 !
 !     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=5,6,7 OR 8
 !
-30 STOP
+30 stop
 !
 !     RESET FUNCTION EVALUATION COUNTER
 !
-40 NFE = 0
-IF (MFLAG .EQ. 2) GO TO 50
+40 nfe = 0
+if (mflag .eq. 2) go to 50
 !
 !     RESET FLAG VALUE FROM PREVIOUS CALL
 !
-45 IFLAG = JFLAG
-IF (KFLAG .EQ. 3) MFLAG = IABS(IFLAG)
+45 iflag = jflag
+if (kflag .eq. 3) mflag = iabs(iflag)
 !
 !     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
 !     INPUT CHECKING
 !
-50 JFLAG = IFLAG
-KFLAG = 0
+50 jflag = iflag
+kflag = 0
 !
 !     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
 !
-SAVRE = RELERR
-SAVAE = ABSERR
+savre = relerr
+savae = abserr
 !
 !     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
 !     2*EPS+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING
 !     FROM IMPOSSIBLE ACCURACY REQUESTS
 !
-RER = 2.0*EPS + REMIN
-IF (RELERR .GE. RER) GO TO 55
+rer = 2.0*eps + remin
+if (relerr .ge. rer) go to 55
 !
 !     RELATIVE ERROR TOLERANCE TOO SMALL
 !
-RELERR = RER
-IFLAG = 3
-KFLAG = 3
-RETURN
+relerr = rer
+iflag = 3
+kflag = 3
+return
 !
-55 DT = TOUT - T
+55 dt = tout - t
 !
-IF (MFLAG .EQ. 1) GO TO 60
-IF (INIT .EQ. 0) GO TO 65
-GO TO 80
+if (mflag .eq. 1) go to 60
+if (init .eq. 0) go to 65
+go to 80
 !
 !     INITIALIZATION --
 !                       SET INITIALIZATION COMPLETION INDICATOR,INIT
@@ -6285,91 +6285,91 @@ GO TO 80
 !                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
 !                       ESTIMATE STARTING STEPSIZE
 !
-60 INIT = 0
-KOP = 0
+60 init = 0
+kop = 0
 !
-A = T
-CALL F(A,Y,YP)
-NFE = 1
-IF (T .NE. TOUT) GO TO 65
-IFLAG = 2
-RETURN
+a = t
+call f(a,y,yp)
+nfe = 1
+if (t .ne. tout) go to 65
+iflag = 2
+return
 !
-65 INIT = 1
-H = ABS(DT)
-TOLN = 0.0
-do 70 K = 1,NEQN
-   TOL = RELERR*ABS(Y(K)) + ABSERR
-   IF (TOL .LE. 0.) GO TO 70
-   TOLN = TOL
-   YPK = ABS(YP(K))
-   IF (YPK*H**5 .GT. TOL) H=(TOL/YPK)**0.2
-70 CONTINUE
-IF (TOLN .LE. 0.0) H=0.0
-H = AMAX1(H,U26*AMAX1(ABS(T),ABS(DT)))
-JFLAG = ISIGN(2,IFLAG)
+65 init = 1
+h = abs(dt)
+toln = 0.0
+do 70 k = 1,neqn
+   tol = relerr*abs(y(k)) + abserr
+   if (tol .le. 0.) go to 70
+   toln = tol
+   ypk = abs(yp(k))
+   if (ypk*h**5 .gt. tol) h=(tol/ypk)**0.2
+70 continue
+if (toln .le. 0.0) h=0.0
+h = amax1(h,u26*amax1(abs(t),abs(dt)))
+jflag = isign(2,iflag)
 !
 !     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
 !
-80 H = SIGN(H,DT)
+80 h = sign(h,dt)
 !
 !     TEST TO SEE IF RKF45 IS BEING SEVERELY IMPACTED BY TOO MANY
 !     OUTPUT POINTS
 !
-IF (ABS(H) .GE. 2.0*ABS(DT)) KOP = KOP + 1
-IF (KOP .NE. 100) GO TO 85
+if (abs(h) .ge. 2.0*abs(dt)) kop = kop + 1
+if (kop .ne. 100) go to 85
 !
 !     UNNECESSARY FREQUENCY OF OUTPUT
-KOP = 0
-IFLAG = 7
-RETURN
+kop = 0
+iflag = 7
+return
 !
-85 IF (ABS(DT) .GT. U26*ABS(T)) GO TO 95
+85 if (abs(dt) .gt. u26*abs(t)) go to 95
 !
 !     IF TOO CLOSE TO OUTPUT POINT,EXTRAPOLATE AND RETURN
 !
-do 90 K = 1,NEQN
-90 Y(K) = Y(K) + DT*YP(K)
-A = TOUT
-CALL F(A,Y,YP)
-NFE = NFE + 1
-GO TO 300
+do 90 k = 1,neqn
+90 y(k) = y(k) + dt*yp(k)
+a = tout
+call f(a,y,yp)
+nfe = nfe + 1
+go to 300
 !
 !
 !     INITIALIZE OUTPUT POINT INDICATOR
 !
-95 OUTPUT = .FALSE.
+95 output = .false.
 !
 !     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
 !     SCALE THE ERROR TOLERANCES
 !
-SCALE = 2.0/RELERR
-AE = SCALE*ABSERR
+scale = 2.0/relerr
+ae = scale*abserr
 !
 !     STEP BY STEP INTEGRATION
 !
-100 HFAILD = .FALSE.
+100 hfaild = .false.
 !
 !     SET SMALLEST ALLOWABLE STEPSIZE
 !
-HMIN = U26*ABS(T)
+hmin = u26*abs(t)
 !
 !     ADJUST STEPSIZE IF NECESSARY TO HIT THE OUTPUT POINT.
 !     LOOK AHEAD TWO STEPS TO AVOID DRASTIC CHANGES IN THE STEPSIZE AND
 !     THUS LESSEN THE IMPACT OF OUTPUT POINTS ON THE CODE.
 !
-DT = TOUT - T
-IF (ABS(DT) .GE. 2.0*ABS(H)) GO TO 200
-IF (ABS(DT) .GT. ABS(H)) GO TO 150
+dt = tout - t
+if (abs(dt) .ge. 2.0*abs(h)) go to 200
+if (abs(dt) .gt. abs(h)) go to 150
 !
 !     THE NEXT SUCCESSFUL STEP WILL COMPLETE THE INTEGRATION TO THE
 !     OUTPUT POINT
 !
-OUTPUT = .TRUE.
-H = DT
-GO TO 200
+output = .true.
+h = dt
+go to 200
 !
-150 H=0.5*DT
+150 h=0.5*dt
 !
 !
 !     CORE INTEGRATOR FOR TAKING A SINGLE STEP
@@ -6397,103 +6397,103 @@ GO TO 200
 !     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
 !     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
 !
-200 IF (NFE .LE. MAXNFE) GO TO 220
+200 if (nfe .le. maxnfe) go to 220
 !
 !     TOO MUCH WORK
 !
-IFLAG = 4
-KFLAG = 4
-RETURN
+iflag = 4
+kflag = 4
+return
 !
 !     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
 !
-220 CALL FEHL (F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,F1)
-NFE = NFE + 5
+220 call fehl (f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,f1)
+nfe = nfe + 5
 !
 !     COMPUTE AND TEST ALLOWABLE TOLERANCES VERSUS LOCAL ERROR ESTIMATES
 !     AND REMOVE SCALING OF TOLERANCES. NOTE THAT RELATIVE ERROR IS
 !     MEASURED WITH RESPECT TO THE AVERAGE OF THE MAGNITUDES OF THE
 !     SOLUTION AT THE BEGINNING AND END OF THE STEP.
 !
-EEOET = 0.0
-do 250 K = 1,NEQN
-   ET = ABS(Y(K)) + ABS(F1(K)) + AE
-   IF (ET .GT. 0.0) GO TO 240
+eeoet = 0.0
+do 250 k = 1,neqn
+   et = abs(y(k)) + abs(f1(k)) + ae
+   if (et .gt. 0.0) go to 240
 !
 !        INAPPROPRIATE ERROR TOLERANCE
 !
-   IFLAG = 5
-   RETURN
+   iflag = 5
+   return
 !
-240 EE = ABS((-2090.0*YP(K)+(21970.0*F3(K)-15048.0*F4(K)))+ &
-&(22528.0*F2(K)-27360.0*F5(K)))
-250 EEOET = AMAX1(EEOET,EE/ET)
+240 ee = abs((-2090.0*yp(k)+(21970.0*f3(k)-15048.0*f4(k)))+ &
+&(22528.0*f2(k)-27360.0*f5(k)))
+250 eeoet = amax1(eeoet,ee/et)
 !
-ESTTOL = ABS(H)*EEOET*SCALE/752400.0
-IF (ESTTOL .LE. 1.0) GO TO 260
+esttol = abs(h)*eeoet*scale/752400.0
+if (esttol .le. 1.0) go to 260
 !
 !     UNSUCCESSFUL STEP
 !                       REDUCE THE STEPSIZE , TRY AGAIN
 !                       THE DECREASE IS LIMITED TO A FACTOR OF 1/10
 !
-HFAILD = .TRUE.
-OUTPUT = .FALSE.
-S = 0.1
-IF (ESTTOL .LT. 59049.0) S = 0.9/ESTTOL**0.2
-H = S*H
-IF (ABS(H) .GT. HMIN) GO TO 200
+hfaild = .true.
+output = .false.
+s = 0.1
+if (esttol .lt. 59049.0) s = 0.9/esttol**0.2
+h = s*h
+if (abs(h) .gt. hmin) go to 200
 !
 !     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
 !
-IFLAG = 6
-KFLAG = 6
-RETURN
+iflag = 6
+kflag = 6
+return
 !
 !     SUCCESSFUL STEP
 !                        STORE SOLUTION AT T+H
 !                        AND EVALUATE DERIVATIVES THERE
 !
-260 T = T + H
-do 270 K = 1,NEQN
-270 Y(K) = F1(K)
-A = T
-CALL F(A,Y,YP)
-NFE = NFE + 1
+260 t = t + h
+do 270 k = 1,neqn
+270 y(k) = f1(k)
+a = t
+call f(a,y,yp)
+nfe = nfe + 1
 !
 !                       CHOOSE NEXT STEPSIZE
 !                       THE INCREASE IS LIMITED TO A FACTOR OF 5
 !                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
 !                          STEPSIZE IS NOT ALLOWED TO INCREASE
 !
-S=5.0
-IF (ESTTOL .GT. 1.889568E-4) S=0.9/ESTTOL**0.2
-IF (HFAILD) S=AMIN1(S,1.0)
-H=SIGN(AMAX1(S*ABS(H),HMIN),H)
+s=5.0
+if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
+if (hfaild) s=amin1(s,1.0)
+h=sign(amax1(s*abs(h),hmin),h)
 !
 !     END OF CORE INTEGRATOR
 !
 !
 !     SHOULD WE TAKE ANOTHER STEP
 !
-IF (OUTPUT) GO TO 300
-IF (IFLAG .GT. 0) GO TO 100
+if (output) go to 300
+if (iflag .gt. 0) go to 100
 !
 !     INTEGRATION SUCCESSFULLY COMPLETED
 !
 !     ONE-STEP MODE
 !
-IFLAG = -2
-RETURN
+iflag = -2
+return
 !
 !     INTERVAL MODE
 !
-300 T = TOUT
-IFLAG = 2
-RETURN
-END SUBROUTINE RKFS
+300 t = tout
+iflag = 2
+return
+end subroutine rkfs
 
-SUBROUTINE FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,S)
-IMPLICIT NONE
+subroutine fehl(f,neqn,y,t,h,yp,f1,f2,f3,f4,f5,s)
+implicit none
 !
 !     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 !
@@ -6513,68 +6513,68 @@ IMPLICIT NONE
 !    DISTINGUISHED.
 !
 !
-INTEGER, INTENT(IN) :: NEQN
-REAL, INTENT(IN) :: Y(NEQN)
-REAL :: T, H
-REAL, INTENT(IN) :: YP(NEQN)
-REAL, INTENT(INOUT) :: F1(NEQN)
-REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
-REAL, INTENT(INOUT) :: F5(NEQN), S(NEQN)
+integer, intent(in) :: neqn
+real, intent(in) :: y(neqn)
+real :: t, h
+real, intent(in) :: yp(neqn)
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), s(neqn)
 !
-REAL :: CH
-INTEGER :: K
-EXTERNAL F
+real :: ch
+integer :: k
+external f
 !
-CH=H/4.0
-do 221 K = 1,NEQN
-221 F5(K)=Y(K)+CH*YP(K)
-CALL F(T+CH,F5,F1)
+ch=h/4.0
+do 221 k = 1,neqn
+221 f5(k)=y(k)+ch*yp(k)
+call f(t+ch,f5,f1)
 !
-CH=3.0*H/32.0
-do 222 K = 1,NEQN
-222 F5(K)=Y(K)+CH*(YP(K)+3.0*F1(K))
-CALL F(T+3.0*H/8.0,F5,F2)
+ch=3.0*h/32.0
+do 222 k = 1,neqn
+222 f5(k)=y(k)+ch*(yp(k)+3.0*f1(k))
+call f(t+3.0*h/8.0,f5,f2)
 !
-CH=H/2197.0
-do 223 K = 1,NEQN
-223 F5(K)=Y(K)+CH*(1932.0*YP(K)+(7296.0*F2(K)-7200.0*F1(K)))
-CALL F(T+12.0*H/13.0,F5,F3)
+ch=h/2197.0
+do 223 k = 1,neqn
+223 f5(k)=y(k)+ch*(1932.0*yp(k)+(7296.0*f2(k)-7200.0*f1(k)))
+call f(t+12.0*h/13.0,f5,f3)
 !
-CH=H/4104.0
-do 224 K = 1,NEQN
-224 F5(K)=Y(K)+CH*((8341.0*YP(K)-845.0*F3(K))+ &
-&(29440.0*F2(K)-32832.0*F1(K)))
-CALL F(T+H,F5,F4)
+ch=h/4104.0
+do 224 k = 1,neqn
+224 f5(k)=y(k)+ch*((8341.0*yp(k)-845.0*f3(k))+ &
+&(29440.0*f2(k)-32832.0*f1(k)))
+call f(t+h,f5,f4)
 !
-CH=H/20520.0
-do 225 K = 1,NEQN
-225 F1(K)=Y(K)+CH*((-6080.0*YP(K)+(9295.0*F3(K)- &
-&5643.0*F4(K)))+(41040.0*F1(K)-28352.0*F2(K)))
-CALL F(T+H/2.0,F1,F5)
+ch=h/20520.0
+do 225 k = 1,neqn
+225 f1(k)=y(k)+ch*((-6080.0*yp(k)+(9295.0*f3(k)- &
+&5643.0*f4(k)))+(41040.0*f1(k)-28352.0*f2(k)))
+call f(t+h/2.0,f1,f5)
 !
 !     COMPUTE APPROXIMATE SOLUTION AT T+H
 !
-CH=H/7618050.0
-do 230 K = 1,NEQN
-230 S(K)=Y(K)+CH*((902880.0*YP(K)+(3855735.0*F3(K)- &
-&1371249.0*F4(K)))+(3953664.0*F2(K)+ &
-&277020.0*F5(K)))
+ch=h/7618050.0
+do 230 k = 1,neqn
+230 s(k)=y(k)+ch*((902880.0*yp(k)+(3855735.0*f3(k)- &
+&1371249.0*f4(k)))+(3953664.0*f2(k)+ &
+&277020.0*f5(k)))
 !
-RETURN
-END SUBROUTINE FEHL
+return
+end subroutine fehl
 
-SUBROUTINE GERK(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR, &
-&WORK,IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, IWORK(5)
-INTEGER, INTENT(IN) :: NEQN
-REAL, INTENT(IN) :: ABSERR
-REAL, INTENT(INOUT) :: GERROR(NEQN)
-REAL, INTENT(IN) :: RELERR
-REAL, INTENT(INOUT) :: T
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
-INTEGER :: K1, K1M, K2, K3, K4, K5, K6, K7, K8
+subroutine gerk(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+&work,iwork)
+implicit none
+integer, intent(inout) :: iflag, iwork(5)
+integer, intent(in) :: neqn
+real, intent(in) :: abserr
+real, intent(inout) :: gerror(neqn)
+real, intent(in) :: relerr
+real, intent(inout) :: t
+real, intent(in) :: tout
+real, intent(inout) :: work(*), y(neqn)
+integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !
 !     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 !     GLOBAL ERROR ASSESSMENT
@@ -6754,20 +6754,20 @@ INTEGER :: K1, K1M, K2, K3, K4, K5, K6, K7, K8
 !***********************************************************************
 !
 !
-EXTERNAL F
+external f
 !
 !
 !     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
 !
-K1M=NEQN+1
-K1=K1M+1
-K2=K1+NEQN
-K3=K2+NEQN
-K4=K3+NEQN
-K5=K4+NEQN
-K6=K5+NEQN
-K7=K6+NEQN
-K8=K7+NEQN
+k1m=neqn+1
+k1=k1m+1
+k2=k1+neqn
+k3=k2+neqn
+k4=k3+neqn
+k5=k4+neqn
+k6=k5+neqn
+k7=k6+neqn
+k8=k7+neqn
 !
 !***********************************************************************
 !     THIS INTERFACING ROUTINE MERELY RELIEVES THE USER OF A LONG
@@ -6776,34 +6776,34 @@ K8=K7+NEQN
 !     HE MUST USE GERKS DIRECTLY.
 !***********************************************************************
 !
-CALL GERKS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR, &
-&WORK(1),WORK(K1M),WORK(K1),WORK(K2),WORK(K3),WORK(K4), &
-&WORK(K5),WORK(K6),WORK(K7),WORK(K8),WORK(K8+1), &
-&IWORK(1),IWORK(2),IWORK(3),IWORK(4),IWORK(5))
+call gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+&work(1),work(k1m),work(k1),work(k2),work(k3),work(k4), &
+&work(k5),work(k6),work(k7),work(k8),work(k8+1), &
+&iwork(1),iwork(2),iwork(3),iwork(4),iwork(5))
 !
-RETURN
-END SUBROUTINE GERK
+return
+end subroutine gerk
 
-SUBROUTINE GERKS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR, &
-&YP,H,F1,F2,F3,F4,F5,YG,YGP,SAVRE,SAVAE, &
-&NFE,KOP,INIT,JFLAG,KFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, INIT, JFLAG, KFLAG, KOP
-INTEGER, INTENT(IN) :: NEQN
-INTEGER, INTENT(INOUT) :: NFE
-REAL, INTENT(IN) :: ABSERR
-REAL, INTENT(INOUT) :: F1(NEQN)
-REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
-REAL, INTENT(INOUT) :: F5(NEQN), GERROR(NEQN), H
-REAL, INTENT(IN) :: RELERR
-REAL, INTENT(INOUT) :: SAVAE, SAVRE, T
-REAL, INTENT(IN) :: TOUT
-REAL, INTENT(INOUT) :: Y(NEQN), YG(NEQN), YGP(NEQN)
-REAL :: YP(NEQN)
-INTEGER :: K, MAXNFE, MFLAG
-REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HH, HMIN, REMIN, RER, S, &
-&SCALE, TOL, TOLN, TS, U, U26, YPK
-REAL :: SPMPAR
+subroutine gerks(f,neqn,y,t,tout,relerr,abserr,iflag,gerror, &
+&yp,h,f1,f2,f3,f4,f5,yg,ygp,savre,savae, &
+&nfe,kop,init,jflag,kflag)
+implicit none
+integer, intent(inout) :: iflag, init, jflag, kflag, kop
+integer, intent(in) :: neqn
+integer, intent(inout) :: nfe
+real, intent(in) :: abserr
+real, intent(inout) :: f1(neqn)
+real :: f2(neqn), f3(neqn), f4(neqn)
+real, intent(inout) :: f5(neqn), gerror(neqn), h
+real, intent(in) :: relerr
+real, intent(inout) :: savae, savre, t
+real, intent(in) :: tout
+real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
+real :: yp(neqn)
+integer :: k, maxnfe, mflag
+real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
+&scale, tol, toln, ts, u, u26, ypk
+real :: spmpar
 !
 !     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 !     GLOBAL ERROR ASSESSMENT
@@ -6823,16 +6823,16 @@ REAL :: SPMPAR
 !
 !***********************************************************************
 !
-LOGICAL :: HFAILD, OUTPUT
+logical :: hfaild, output
 !
 !
-EXTERNAL F
+external f
 !
 !***********************************************************************
 !  THE COMPUTER UNIT ROUNDOFF ERROR U IS THE SMALLEST POSITIVE VALUE
 !  REPRESENTABLE IN THE MACHINE SUCH THAT  1.+ U .GT. 1.
 !
-U = SPMPAR(1)
+u = spmpar(1)
 !
 !***********************************************************************
 !
@@ -6841,7 +6841,7 @@ U = SPMPAR(1)
 !  GENERALLY NOT BE CAPABLE OF DELIVERING ACCURACIES NEAR LIMITING
 !  PRECISION ON COMPUTERS WITH LONG WORDLENGTHS.
 !
-REMIN = 3.E-11
+remin = 3.e-11
 !
 !***********************************************************************
 !
@@ -6849,7 +6849,7 @@ REMIN = 3.E-11
 !     OF FUNCTION EVALUATIONS TO BE APPROXIMATELY MAXNFE.
 !     AS SET,THIS CORRESPONDS TO ABOUT 500 STEPS.
 !
-MAXNFE = 9000
+maxnfe = 9000
 !
 !***********************************************************************
 !
@@ -6857,70 +6857,70 @@ MAXNFE = 9000
 !     CHECK INPUT PARAMETERS
 !
 !
-IF (NEQN .LT. 1) GO TO 10
-IF ((RELERR .LT. 0.)  .OR.  (ABSERR .LT. 0.)) GO TO 10
-MFLAG=IABS(IFLAG)
-IF ((MFLAG .GE. 1)  .AND.  (MFLAG .LE. 7)) GO TO 20
+if (neqn .lt. 1) go to 10
+if ((relerr .lt. 0.)  .or.  (abserr .lt. 0.)) go to 10
+mflag=iabs(iflag)
+if ((mflag .ge. 1)  .and.  (mflag .le. 7)) go to 20
 !
 !     INVALID INPUT
-10 IFLAG=7
-RETURN
+10 iflag=7
+return
 !
 !     IS THIS THE FIRST CALL
-20 IF (MFLAG .EQ. 1) GO TO 50
+20 if (mflag .eq. 1) go to 50
 !
 !     CHECK CONTINUATION POSSIBILITIES
 !
-IF (T .EQ. TOUT) GO TO 10
-IF (MFLAG .NE. 2) GO TO 25
+if (t .eq. tout) go to 10
+if (mflag .ne. 2) go to 25
 !
 !     IFLAG = +2 OR -2
-IF (INIT .EQ. 0) GO TO 45
-IF (KFLAG .EQ. 3) GO TO 40
-IF ((KFLAG .EQ. 4)  .AND.  (ABSERR .EQ. 0.)) GO TO 30
-IF ((KFLAG .EQ. 5)  .AND.  (RELERR .LE. SAVRE)  .AND. &
-&(ABSERR .LE. SAVAE)) GO TO 30
-GO TO 50
+if (init .eq. 0) go to 45
+if (kflag .eq. 3) go to 40
+if ((kflag .eq. 4)  .and.  (abserr .eq. 0.)) go to 30
+if ((kflag .eq. 5)  .and.  (relerr .le. savre)  .and. &
+&(abserr .le. savae)) go to 30
+go to 50
 !
 !     IFLAG = 3,4,5,6, OR 7
-25 IF (IFLAG .EQ. 3) GO TO 40
-IF ((IFLAG .EQ. 4) .AND. (ABSERR .GT. 0.)) GO TO 45
+25 if (iflag .eq. 3) go to 40
+if ((iflag .eq. 4) .and. (abserr .gt. 0.)) go to 45
 !
 !     INTEGRATION CANNOT BE CONTINUED SINCE USER DID NOT RESPOND TO
 !     THE INSTRUCTIONS PERTAINING TO IFLAG=4,5,6 OR 7
-30 STOP
+30 stop
 !
 !***********************************************************************
 !
 !     RESET FUNCTION EVALUATION COUNTER
-40 NFE=0
-IF (MFLAG .EQ. 2) GO TO 50
+40 nfe=0
+if (mflag .eq. 2) go to 50
 !
 !     RESET FLAG VALUE FROM PREVIOUS CALL
-45 IFLAG=JFLAG
+45 iflag=jflag
 !
 !     SAVE INPUT IFLAG AND SET CONTINUATION FLAG VALUE FOR SUBSEQUENT
 !     INPUT CHECKING
-50 JFLAG=IFLAG
-KFLAG=0
+50 jflag=iflag
+kflag=0
 !
 !     SAVE RELERR AND ABSERR FOR CHECKING INPUT ON SUBSEQUENT CALLS
-SAVRE=RELERR
-SAVAE=ABSERR
+savre=relerr
+savae=abserr
 !
 !     RESTRICT RELATIVE ERROR TOLERANCE TO BE AT LEAST AS LARGE AS
 !     32U+REMIN TO AVOID LIMITING PRECISION DIFFICULTIES ARISING FROM
 !     IMPOSSIBLE ACCURACY REQUESTS
 !
-RER=AMAX1(RELERR,32.*U+REMIN)
+rer=amax1(relerr,32.*u+remin)
 !
-U26=26.*U
+u26=26.*u
 !
-DT=TOUT-T
+dt=tout-t
 !
-IF (MFLAG .EQ. 1) GO TO 60
-IF (INIT .EQ. 0) GO TO 65
-GO TO 80
+if (mflag .eq. 1) go to 60
+if (init .eq. 0) go to 65
+go to 80
 !
 !
 !***********************************************************************
@@ -6934,98 +6934,98 @@ GO TO 80
 !                       SET COUNTER FOR FUNCTION EVALUATIONS,NFE
 !                       ESTIMATE STARTING STEPSIZE
 !
-60 INIT=0
-KOP=0
+60 init=0
+kop=0
 !
-A=T
-CALL F(A,Y,YP)
-NFE=1
-IF (T .NE. TOUT) GO TO 65
-IFLAG=2
-RETURN
+a=t
+call f(a,y,yp)
+nfe=1
+if (t .ne. tout) go to 65
+iflag=2
+return
 !
 !
-65 INIT=1
-H=ABS(DT)
-TOLN=0.
-do 70 K = 1,NEQN
-  YG(K)=Y(K)
-  YGP(K)=YP(K)
-  TOL=RER*ABS(Y(K))+ABSERR
-  IF (TOL .LE. 0.) GO TO 70
-  TOLN=TOL
-  YPK=ABS(YP(K))
-  IF (YPK*H**5 .GT. TOL) H=(TOL/YPK)**0.2
-70 CONTINUE
-IF (TOLN .LE. 0.) H=0.
-H=AMAX1(H,U26*AMAX1(ABS(T),ABS(DT)))
+65 init=1
+h=abs(dt)
+toln=0.
+do 70 k = 1,neqn
+  yg(k)=y(k)
+  ygp(k)=yp(k)
+  tol=rer*abs(y(k))+abserr
+  if (tol .le. 0.) go to 70
+  toln=tol
+  ypk=abs(yp(k))
+  if (ypk*h**5 .gt. tol) h=(tol/ypk)**0.2
+70 continue
+if (toln .le. 0.) h=0.
+h=amax1(h,u26*amax1(abs(t),abs(dt)))
 !
 !
 !***********************************************************************
 !
 !     SET STEPSIZE FOR INTEGRATION IN THE DIRECTION FROM T TO TOUT
 !
-80 H=SIGN(H,DT)
+80 h=sign(h,dt)
 !
 !     TEST TO SEE IF GERK IS BEING SEVERELY IMPACTED BY TOO MANY
 !     OUTPUT POINTS
 !
-IF (ABS(H) .GT. 2.*ABS(DT)) KOP=KOP+1
-IF (KOP .NE. 100) GO TO 85
-KOP=0
-IFLAG=6
-RETURN
+if (abs(h) .gt. 2.*abs(dt)) kop=kop+1
+if (kop .ne. 100) go to 85
+kop=0
+iflag=6
+return
 !
-85 IF (ABS(DT) .GT. U26*ABS(T)) GO TO 95
+85 if (abs(dt) .gt. u26*abs(t)) go to 95
 !
 !     IF TOO CLOSE TO OUTPUT POINT,EXTRAPOLATE AND RETURN
 !
-do 90 K = 1,NEQN
-  YG(K)=YG(K)+DT*YGP(K)
-90 Y(K)=Y(K)+DT*YP(K)
-A=TOUT
-CALL F(A,YG,YGP)
-CALL F(A,Y,YP)
-NFE=NFE+2
-GO TO 300
+do 90 k = 1,neqn
+  yg(k)=yg(k)+dt*ygp(k)
+90 y(k)=y(k)+dt*yp(k)
+a=tout
+call f(a,yg,ygp)
+call f(a,y,yp)
+nfe=nfe+2
+go to 300
 !
 !     INITIALIZE OUTPUT POINT INDICATOR
 !
-95 OUTPUT= .FALSE.
+95 output= .false.
 !
 !     TO AVOID PREMATURE UNDERFLOW IN THE ERROR TOLERANCE FUNCTION,
 !     SCALE THE ERROR TOLERANCES
 !
-SCALE=2./RER
-AE=SCALE*ABSERR
+scale=2./rer
+ae=scale*abserr
 !
 !
 !***********************************************************************
 !***********************************************************************
 !     STEP BY STEP INTEGRATION
 !
-100 HFAILD= .FALSE.
+100 hfaild= .false.
 !
 !     SET SMALLEST ALLOWABLE STEPSIZE
 !
-HMIN=U26*ABS(T)
+hmin=u26*abs(t)
 !
 !     ADJUST STEPSIZE IF NECESSARY TO HIT THE OUTPUT POINT.
 !     LOOK AHEAD TWO STEPS TO AVOID DRASTIC CHANGES IN THE STEPSIZE
 !     AND THUS LESSEN THE IMPACT OF OUTPUT POINTS ON THE CODE.
 !
-DT=TOUT-T
-IF (ABS(DT) .GE. 2.*ABS(H)) GO TO 200
-IF (ABS(DT) .GT. ABS(H)) GO TO 150
+dt=tout-t
+if (abs(dt) .ge. 2.*abs(h)) go to 200
+if (abs(dt) .gt. abs(h)) go to 150
 !
 !     THE NEXT SUCCESSFUL STEP WILL COMPLETE THE INTEGRATION TO THE
 !     OUTPUT POINT
 !
-OUTPUT= .TRUE.
-H=DT
-GO TO 200
+output= .true.
+h=dt
+go to 200
 !
-150 H=0.5*DT
+150 h=0.5*dt
 !
 !
 !
@@ -7057,83 +7057,83 @@ GO TO 200
 !     TEST NUMBER OF DERIVATIVE FUNCTION EVALUATIONS.
 !     IF OKAY,TRY TO ADVANCE THE INTEGRATION FROM T TO T+H
 !
-200 IF (NFE .LE. MAXNFE) GO TO 220
+200 if (nfe .le. maxnfe) go to 220
 !
 !     TOO MUCH WORK
-IFLAG=3
-KFLAG=3
-RETURN
+iflag=3
+kflag=3
+return
 !
 !     ADVANCE AN APPROXIMATE SOLUTION OVER ONE STEP OF LENGTH H
 !
-220 CALL FEHL(F,NEQN,YG,T,H,YGP,F1,F2,F3,F4,F5,F1)
-NFE=NFE+5
+220 call fehl(f,neqn,yg,t,h,ygp,f1,f2,f3,f4,f5,f1)
+nfe=nfe+5
 !
 !     COMPUTE AND TEST ALLOWABLE TOLERANCES VERSUS LOCAL ERROR ESTIMATES
 !     AND REMOVE SCALING OF TOLERANCES. NOTE THAT RELATIVE ERROR IS
 !     MEASURED WITH RESPECT TO THE AVERAGE OF THE MAGNITUDES OF THE
 !     SOLUTION AT THE BEGINNING AND END OF THE STEP.
 !
-EEOET=0.
-do 250 K = 1,NEQN
-  ET=ABS(YG(K))+ABS(F1(K))+AE
-  IF (ET .GT. 0.) GO TO 240
+eeoet=0.
+do 250 k = 1,neqn
+  et=abs(yg(k))+abs(f1(k))+ae
+  if (et .gt. 0.) go to 240
 !
 !       INAPPROPRIATE ERROR TOLERANCE
-  IFLAG=4
-  KFLAG=4
-  RETURN
+  iflag=4
+  kflag=4
+  return
 !
-240 EE=ABS((-2090.*YGP(K)+(21970.*F3(K)-15048.*F4(K)))+ &
-&(22528.*F2(K)-27360.*F5(K)))
-250 EEOET=AMAX1(EEOET,EE/ET)
+240 ee=abs((-2090.*ygp(k)+(21970.*f3(k)-15048.*f4(k)))+ &
+&(22528.*f2(k)-27360.*f5(k)))
+250 eeoet=amax1(eeoet,ee/et)
 !
-ESTTOL=ABS(H)*EEOET*SCALE/752400.
+esttol=abs(h)*eeoet*scale/752400.
 !
-IF (ESTTOL .LE. 1.) GO TO 260
+if (esttol .le. 1.) go to 260
 !
 !
 !     UNSUCCESSFUL STEP
 !                       REDUCE THE STEPSIZE , TRY AGAIN
 !                       THE DECREASE IS LIMITED TO A FACTOR OF 1/10
 !
-HFAILD= .TRUE.
-OUTPUT= .FALSE.
-S=0.1
-IF (ESTTOL .LT. 59049.) S=0.9/ESTTOL**0.2
-H=S*H
-IF (ABS(H) .GT. HMIN) GO TO 200
+hfaild= .true.
+output= .false.
+s=0.1
+if (esttol .lt. 59049.) s=0.9/esttol**0.2
+h=s*h
+if (abs(h) .gt. hmin) go to 200
 !
 !     REQUESTED ERROR UNATTAINABLE AT SMALLEST ALLOWABLE STEPSIZE
-IFLAG=5
-KFLAG=5
-RETURN
+iflag=5
+kflag=5
+return
 !
 !
 !     SUCCESSFUL STEP
 !                        STORE ONE-STEP SOLUTION YG AT T+H
 !                        AND EVALUATE DERIVATIVES THERE
 !
-260 TS=T
-T=T+H
-do 270 K = 1,NEQN
-270 YG(K)=F1(K)
-A=T
-CALL F(A,YG,YGP)
-NFE=NFE+1
+260 ts=t
+t=t+h
+do 270 k = 1,neqn
+270 yg(k)=f1(k)
+a=t
+call f(a,yg,ygp)
+nfe=nfe+1
 !
 !                        NOW ADVANCE THE Y SOLUTION OVER TWO STEPS OF
 !                        LENGTH H/2 AND EVALUATE DERIVATIVES THERE
 !
-HH=0.5*H
-CALL FEHL(F,NEQN,Y,TS,HH,YP,F1,F2,F3,F4,F5,Y)
-TS=TS+HH
-A=TS
-CALL F(A,Y,YP)
-CALL FEHL(F,NEQN,Y,TS,HH,YP,F1,F2,F3,F4,F5,Y)
-A=T
-CALL F(A,Y,YP)
-NFE=NFE+12
+hh=0.5*h
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+ts=ts+hh
+a=ts
+call f(a,y,yp)
+call fehl(f,neqn,y,ts,hh,yp,f1,f2,f3,f4,f5,y)
+a=t
+call f(a,y,yp)
+nfe=nfe+12
 !
 !
 !                       CHOOSE NEXT STEPSIZE
@@ -7141,10 +7141,10 @@ NFE=NFE+12
 !                       IF STEP FAILURE HAS JUST OCCURRED, NEXT
 !                          STEPSIZE IS NOT ALLOWED TO INCREASE
 !
-S=5.
-IF (ESTTOL .GT. 1.889568E-4) S=0.9/ESTTOL**0.2
-IF (HFAILD) S=AMIN1(S,1.)
-H=SIGN(AMAX1(S*ABS(H),HMIN),H)
+s=5.
+if (esttol .gt. 1.889568e-4) s=0.9/esttol**0.2
+if (hfaild) s=amin1(s,1.)
+h=sign(amax1(s*abs(h),hmin),h)
 !
 !***********************************************************************
 !     END OF CORE INTEGRATOR
@@ -7154,8 +7154,8 @@ H=SIGN(AMAX1(S*ABS(H),HMIN),H)
 !
 !     SHOULD WE TAKE ANOTHER STEP
 !
-IF (OUTPUT) GO TO 300
-IF (IFLAG .GT. 0) GO TO 100
+if (output) go to 300
+if (iflag .gt. 0) go to 100
 !
 !***********************************************************************
 !***********************************************************************
@@ -7164,109 +7164,109 @@ IF (IFLAG .GT. 0) GO TO 100
 !     INTEGRATION SUCCESSFULLY COMPLETED
 !
 !     ONE-STEP MODE
-IFLAG=-2
-GO TO 400
+iflag=-2
+go to 400
 !
 !     INTERVAL MODE
-300 T=TOUT
-IFLAG=2
+300 t=tout
+iflag=2
 !
-400 do 450 K = 1,NEQN
-450 GERROR(K)=(YG(K)-Y(K))/31.
+400 do 450 k = 1,neqn
+450 gerror(k)=(yg(k)-y(k))/31.
 !
-RETURN
-END SUBROUTINE GERKS
+return
+end subroutine gerks
 
-SUBROUTINE SFODE (F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID, &
-&RWORK,LRW,IWORK,LIW,RPAR,IPAR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IDID
-INTEGER :: LIW, LRW, NEQ
-REAL, INTENT(INOUT) :: AERR, RERR, T
-REAL :: TOUT
+subroutine sfode (f,neq,y,t,tout,info,rerr,aerr,idid, &
+&rwork,lrw,iwork,liw,rpar,ipar)
+implicit none
+integer, intent(inout) :: idid
+integer :: liw, lrw, neq
+real, intent(inout) :: aerr, rerr, t
+real :: tout
 !     --------------
-EXTERNAL F, ZZZJAC
-REAL, INTENT(INOUT) :: Y(NEQ)
-REAL :: RTOL(1), ATOL(1)
-REAL, INTENT(INOUT) :: RWORK(LRW)
-REAL :: RPAR(*)
-INTEGER, INTENT(INOUT) :: INFO(*)
-INTEGER :: INFO1(15)
-INTEGER, INTENT(INOUT) :: IWORK(LIW)
-INTEGER :: IPAR(*)
+external f, zzzjac
+real, intent(inout) :: y(neq)
+real :: rtol(1), atol(1)
+real, intent(inout) :: rwork(lrw)
+real :: rpar(*)
+integer, intent(inout) :: info(*)
+integer :: info1(15)
+integer, intent(inout) :: iwork(liw)
+integer :: ipar(*)
 !     --------------
-INFO1(1) = INFO(1)
-INFO1(2) = 0
-INFO1(3) = INFO(2)
-INFO1(4) = INFO(3)
-INFO1(5) = 0
-INFO1(6) = INFO(4)
+info1(1) = info(1)
+info1(2) = 0
+info1(3) = info(2)
+info1(4) = info(3)
+info1(5) = 0
+info1(6) = info(4)
 !
-RTOL(1) = RERR
-ATOL(1) = AERR
-CALL STFODE (F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID, &
-&RWORK,LRW,IWORK,LIW,RPAR,IPAR,ZZZJAC)
-INFO(1) = INFO1(1)
-RERR = RTOL(1)
-AERR = ATOL(1)
-RETURN
-END SUBROUTINE SFODE
+rtol(1) = rerr
+atol(1) = aerr
+call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+&rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+info(1) = info1(1)
+rerr = rtol(1)
+aerr = atol(1)
+return
+end subroutine sfode
 
-SUBROUTINE SFODE1 (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID, &
-&RWORK,LRW,IWORK,LIW,RPAR,IPAR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IDID
-INTEGER :: LIW, LRW, NEQ
-REAL, INTENT(INOUT) :: T
-REAL :: TOUT
+subroutine sfode1 (f,neq,y,t,tout,info,rtol,atol,idid, &
+&rwork,lrw,iwork,liw,rpar,ipar)
+implicit none
+integer, intent(inout) :: idid
+integer :: liw, lrw, neq
+real, intent(inout) :: t
+real :: tout
 !     --------------
-EXTERNAL F, ZZZJAC
-REAL, INTENT(INOUT) :: Y(NEQ), RTOL(NEQ), ATOL(NEQ), RWORK(LRW)
-REAL :: RPAR(*)
-INTEGER, INTENT(INOUT) :: INFO(*)
-INTEGER :: INFO1(15)
-INTEGER, INTENT(INOUT) :: IWORK(LIW)
-INTEGER :: IPAR(*)
+external f, zzzjac
+real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
+real :: rpar(*)
+integer, intent(inout) :: info(*)
+integer :: info1(15)
+integer, intent(inout) :: iwork(liw)
+integer :: ipar(*)
 !     --------------
-INFO1(1) = INFO(1)
-INFO1(2) = 1
-INFO1(3) = INFO(2)
-INFO1(4) = INFO(3)
-INFO1(5) = 0
-INFO1(6) = INFO(4)
+info1(1) = info(1)
+info1(2) = 1
+info1(3) = info(2)
+info1(4) = info(3)
+info1(5) = 0
+info1(6) = info(4)
 !
-CALL STFODE (F,NEQ,Y,T,TOUT,INFO1,RTOL,ATOL,IDID, &
-&RWORK,LRW,IWORK,LIW,RPAR,IPAR,ZZZJAC)
-INFO(1) = INFO1(1)
-RETURN
-END SUBROUTINE SFODE1
+call stfode (f,neq,y,t,tout,info1,rtol,atol,idid, &
+&rwork,lrw,iwork,liw,rpar,ipar,zzzjac)
+info(1) = info1(1)
+return
+end subroutine sfode1
 
-SUBROUTINE ZZZJAC(T,Y,PD,N,RPAR,IPAR)
-IMPLICIT NONE
-INTEGER :: IPAR(*)
-INTEGER, INTENT(IN) :: N
-REAL :: PD(N,*), RPAR(*)
-REAL, INTENT(OUT) :: T
-REAL :: Y(N)
+subroutine zzzjac(t,y,pd,n,rpar,ipar)
+implicit none
+integer :: ipar(*)
+integer, intent(in) :: n
+real :: pd(n,*), rpar(*)
+real, intent(out) :: t
+real :: y(n)
 !     -------------
 !     DUMMY JACOBIAN SUBROUTINE
 !     -------------
 !     -------------
-T = 0.0
-RETURN
-END SUBROUTINE ZZZJAC
+t = 0.0
+return
+end subroutine zzzjac
 
-SUBROUTINE STFODE (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID, &
-&RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
-IMPLICIT NONE
-INTEGER :: IDID, INFO( *), IPAR(*), IWORK, LIW, LRW, NEQ
-REAL :: ATOL(*), RPAR(*), RTOL(*), RWORK(LRW), T, TOUT, Y(NEQ)
-INTEGER :: ICOMI, ICOMR, IDELSN, IINOUT, ILRW, ITSTAR, IYPOUT, ML, &
-&MU
-INTEGER :: IACOR, IBAND, IBEGIN, IER, IEWT, IINTEG, IJAC, INIT, &
-&IOWNS, IQUIT, ISAVF, ITOL, ITSTOP, IWM, IYH, JSTART, KFLAG, &
-&KSTEPS, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
-REAL :: EL0, H, HMIN, HMXI, HU, ROWNS, TN, TOLD, UROUND
+subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
+&rwork,lrw,iwork,liw,rpar,ipar,jac)
+implicit none
+integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
+real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
+integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
+&mu
+integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
+&iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
+&ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !***********************************************************************
 !***PURPOSE
 !   STFODE SOLVES INITIAL VALUE PROBLEMS IN ORDINARY DIFFERENTIAL
@@ -7953,129 +7953,129 @@ REAL :: EL0, H, HMIN, HMXI, HU, ROWNS, TN, TOLD, UROUND
 !   PACKAGE OF ODE SOLVERS*, SAND79-2374, SANDIA LABORATORIES, 1979.
 !
 !
-LOGICAL :: INTOUT
+logical :: intout
 !
-DIMENSION IWORK(LIW)
+dimension iwork(liw)
 !
-COMMON /DEBDF1/ TOLD, ROWNS(210), &
-&EL0, H, HMIN, HMXI, HU, TN, UROUND, &
-&IQUIT, INIT, IYH, IEWT, IACOR, ISAVF, IWM, KSTEPS, &
-&IBEGIN, ITOL, IINTEG, ITSTOP, IJAC, IBAND, IOWNS(6), &
-&IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE, &
-&NJE, NQU
+common /debdf1/ told, rowns(210), &
+&el0, h, hmin, hmxi, hu, tn, uround, &
+&iquit, init, iyh, iewt, iacor, isavf, iwm, ksteps, &
+&ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
+&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+&nje, nqu
 !
-EXTERNAL F , JAC
+external f , jac
 !
 !.......................................................................
 !
-IDID = 0
+idid = 0
 !
-IF (INFO(1) .EQ. 0) GO TO 20
-IF (INFO(1) .NE. 1) GO TO 10
-IF (IQUIT .EQ. 0) GO TO 20
-10 IDID = -44
-RETURN
+if (info(1) .eq. 0) go to 20
+if (info(1) .ne. 1) go to 10
+if (iquit .eq. 0) go to 20
+10 idid = -44
+return
 !
-20 IF (INFO(2) .NE. 0) INFO(2) = 1
-IF (INFO(3) .NE. 0) INFO(3) = 1
-IF (INFO(4) .NE. 0) INFO(4) = 1
-IF (INFO(5) .NE. 0) INFO(5) = 1
-IF (INFO(6) .NE. 0) INFO(6) = 1
+20 if (info(2) .ne. 0) info(2) = 1
+if (info(3) .ne. 0) info(3) = 1
+if (info(4) .ne. 0) info(4) = 1
+if (info(5) .ne. 0) info(5) = 1
+if (info(6) .ne. 0) info(6) = 1
 !
-ILRW = NEQ
-IF (INFO(6) .EQ. 0) GO TO 80
+ilrw = neq
+if (info(6) .eq. 0) go to 80
 !
 !     CHECK BANDWIDTH PARAMETERS
 !
-ML = IWORK(1)
-MU = IWORK(2)
-ILRW = 2*ML + MU + 1
-IF (ML .GE. 0  .AND.  ML .LT. NEQ      .AND. &
-&MU .GE. 0  .AND.  MU .LT. NEQ)    GO TO 80
-IDID = -40
-RETURN
+ml = iwork(1)
+mu = iwork(2)
+ilrw = 2*ml + mu + 1
+if (ml .ge. 0  .and.  ml .lt. neq      .and. &
+&mu .ge. 0  .and.  mu .lt. neq)    go to 80
+idid = -40
+return
 !
 !     CHECK LRW AND LIW FOR SUFFICIENT STORAGE ALLOCATION
 !
-80 IF (LRW .GE. 250+(10+ILRW)*NEQ) GO TO 100
+80 if (lrw .ge. 250+(10+ilrw)*neq) go to 100
 !
-IF (INFO(6) .EQ. 1) GO TO 90
-IDID = -41
-RETURN
+if (info(6) .eq. 1) go to 90
+idid = -41
+return
 !
-90 IDID = -42
-RETURN
+90 idid = -42
+return
 !
-100 IF (LIW .GE. 55+NEQ) GO TO 200
-IDID = -43
-RETURN
+100 if (liw .ge. 55+neq) go to 200
+idid = -43
+return
 !
 !     COMPUTE THE INDICES FOR THE ARRAYS TO BE STORED IN THE WORK ARRAY
 !     AND RESTORE COMMON BLOCK DATA
 !
-200 ICOMI = 21 + NEQ
-IINOUT = ICOMI + 33
+200 icomi = 21 + neq
+iinout = icomi + 33
 !
-IYPOUT = 21
-ITSTAR = 21 + NEQ
-ICOMR = 22 + NEQ
+iypout = 21
+itstar = 21 + neq
+icomr = 22 + neq
 !
-IF (INFO(1) .EQ. 0) GO TO 250
-INTOUT = IWORK(IINOUT) .NE. (-1)
+if (info(1) .eq. 0) go to 250
+intout = iwork(iinout) .ne. (-1)
 !     CALL RSCO(RWORK(ICOMR),IWORK(ICOMI))
 !
-250 IYH = ICOMR + 218
-IEWT = IYH + 6*NEQ
-ISAVF = IEWT + NEQ
-IACOR = ISAVF + NEQ
-IWM = IACOR + NEQ
-IDELSN = IWM + 2+ILRW*NEQ
+250 iyh = icomr + 218
+iewt = iyh + 6*neq
+isavf = iewt + neq
+iacor = isavf + neq
+iwm = iacor + neq
+idelsn = iwm + 2+ilrw*neq
 !
-IBEGIN = INFO(1)
-ITOL = INFO(2)
-IINTEG = INFO(3)
-ITSTOP = INFO(4)
-IJAC = INFO(5)
-IBAND = INFO(6)
-RWORK(ITSTAR) = T
+ibegin = info(1)
+itol = info(2)
+iinteg = info(3)
+itstop = info(4)
+ijac = info(5)
+iband = info(6)
+rwork(itstar) = t
 !
-CALL LSOD1(F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,RWORK(IYPOUT), &
-&RWORK(IYH),RWORK(IYH),RWORK(IEWT),RWORK(ISAVF), &
-&RWORK(IACOR),RWORK(IWM),IWORK(1),JAC,INTOUT, &
-&RWORK(1),RWORK(12),RWORK(IDELSN),RPAR,IPAR)
+call lsod1(f,neq,t,y,tout,rtol,atol,idid,rwork(iypout), &
+&rwork(iyh),rwork(iyh),rwork(iewt),rwork(isavf), &
+&rwork(iacor),rwork(iwm),iwork(1),jac,intout, &
+&rwork(1),rwork(12),rwork(idelsn),rpar,ipar)
 !
-IWORK(IINOUT) = -1
-IF (INTOUT) IWORK(IINOUT) = 1
+iwork(iinout) = -1
+if (intout) iwork(iinout) = 1
 !
 !     CALL SVCO(RWORK(ICOMR),IWORK(ICOMI))
-RWORK(11) = H
-RWORK(13) = TN
-INFO(1) = IBEGIN
+rwork(11) = h
+rwork(13) = tn
+info(1) = ibegin
 !
-RETURN
-END SUBROUTINE STFODE
+return
+end subroutine stfode
 
-SUBROUTINE RSCO (RSAV, ISAV)
-IMPLICIT NONE
+subroutine rsco (rsav, isav)
+implicit none
 !-----------------------------------------------------------------------
 ! THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
 ! BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
 !-----------------------------------------------------------------------
-INTEGER :: ISAV(*), I, ILS, LENILS, LENRLS
-REAL :: RSAV(*), RLS
-COMMON /DEBDF1/ RLS(218), ILS(33)
-DATA LENRLS/218/, LENILS/33/
+integer :: isav(*), i, ils, lenils, lenrls
+real :: rsav(*), rls
+common /debdf1/ rls(218), ils(33)
+data lenrls/218/, lenils/33/
 !
-do 10 I = 1,LENRLS
-10 RLS(I) = RSAV(I)
-do 20 I = 1,LENILS
-20 ILS(I) = ISAV(I)
-RETURN
+do 10 i = 1,lenrls
+10 rls(i) = rsav(i)
+do 20 i = 1,lenils
+20 ils(i) = isav(i)
+return
 !----------------------- END OF SUBROUTINE RSCO -----------------------
-END SUBROUTINE RSCO
+end subroutine rsco
 
-SUBROUTINE SVCO (RSAV, ISAV)
-IMPLICIT NONE
+subroutine svco (rsav, isav)
+implicit none
 !-----------------------------------------------------------------------
 ! THIS ROUTINE STORES IN RSAV AND ISAV THE CONTENTS OF COMMON BLOCK
 ! DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
@@ -8083,35 +8083,35 @@ IMPLICIT NONE
 ! RSAV = REAL ARRAY OF LENGTH 218 OR MORE.
 ! ISAV = INTEGER ARRAY OF LENGTH 33 OR MORE.
 !-----------------------------------------------------------------------
-INTEGER :: ISAV(*), I, ILS, LENILS, LENRLS
-REAL :: RSAV(*), RLS
-COMMON /DEBDF1/ RLS(218), ILS(33)
-DATA LENRLS/218/, LENILS/33/
+integer :: isav(*), i, ils, lenils, lenrls
+real :: rsav(*), rls
+common /debdf1/ rls(218), ils(33)
+data lenrls/218/, lenils/33/
 !
-do 10 I = 1,LENRLS
-10 RSAV(I) = RLS(I)
-do 20 I = 1,LENILS
-20 ISAV(I) = ILS(I)
-RETURN
+do 10 i = 1,lenrls
+10 rsav(i) = rls(i)
+do 20 i = 1,lenils
+20 isav(i) = ils(i)
+return
 !----------------------- END OF SUBROUTINE SVCO -----------------------
-END SUBROUTINE SVCO
+end subroutine svco
 
-SUBROUTINE LSOD1 (F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT, &
-&YH,YH1,EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT, &
-&TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
-IMPLICIT NONE
-INTEGER :: IDID, IPAR(*), IWM(*), NEQ
-REAL :: ACOR(NEQ), ATOL(*), DELSGN, EWT(NEQ), RPAR(*), RTOL(*), &
-&SAVF(NEQ), T, TOLFAC, TOUT, TSTOP, WM(*), Y(NEQ), YH(NEQ,*), &
-&YH1(*), YPOUT(NEQ)
-INTEGER :: INTFLG, K, L, LTOL, MAX, MAXNUM
-REAL :: ABSDEL, BIG, DEL, DT, HA, TOL
-INTEGER :: IBAND, IBEGIN, IER, IINTEG, IJAC, INIT, IOWNS, IQUIT, &
-&ITOL, ITSTOP, JSTART, KFLAG, KSTEPS, LACOR, LDUM, LEWT, LSAVF, &
-&LWM, LYH, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
-REAL :: EL0, H, HMIN, HMXI, HU, ROWNS, TOLD, U, X
-REAL :: VNWRMS
-REAL :: SPMPAR
+subroutine lsod1 (f,neq,t,y,tout,rtol,atol,idid,ypout, &
+&yh,yh1,ewt,savf,acor,wm,iwm,jac,intout, &
+&tstop,tolfac,delsgn,rpar,ipar)
+implicit none
+integer :: idid, ipar(*), iwm(*), neq
+real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
+&savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
+&yh1(*), ypout(neq)
+integer :: intflg, k, l, ltol, max, maxnum
+real :: absdel, big, del, dt, ha, tol
+integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
+&itol, itstop, jstart, kflag, ksteps, lacor, ldum, lewt, lsavf, &
+&lwm, lyh, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+real :: el0, h, hmin, hmxi, hu, rowns, told, u, x
+real :: vnwrms
+real :: spmpar
 !
 !   STFODE  MERELY ALLOCATES STORAGE FOR LSOD1 TO RELIEVE THE USER OF
 !   THE INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY LSOD1 IS USED
@@ -8119,17 +8119,17 @@ REAL :: SPMPAR
 !
 !***ROUTINES CALLED  STOD,INTYD,VNWRMS,HSTART,SPMPAR
 !
-LOGICAL :: INTOUT
+logical :: intout
 !
 !
-COMMON /DEBDF1/ TOLD, ROWNS(210), &
-&EL0, H, HMIN, HMXI, HU, X, U, &
-&IQUIT, INIT, LYH, LEWT, LACOR, LSAVF, LWM, KSTEPS, &
-&IBEGIN, ITOL, IINTEG, ITSTOP, IJAC, IBAND, IOWNS(6), &
-&IER, JSTART, KFLAG, LDUM, METH, MITER, MAXORD, N, NQ, NST, &
-&NFE, NJE, NQU
+common /debdf1/ told, rowns(210), &
+&el0, h, hmin, hmxi, hu, x, u, &
+&iquit, init, lyh, lewt, lacor, lsavf, lwm, ksteps, &
+&ibegin, itol, iinteg, itstop, ijac, iband, iowns(6), &
+&ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
+&nfe, nje, nqu
 !
-EXTERNAL F , JAC
+external f , jac
 !
 !.......................................................................
 !
@@ -8138,94 +8138,94 @@ EXTERNAL F , JAC
 !  IS RESET TO ZERO AND THE USER IS INFORMED ABOUT POSSIBLE EXCESSIVE
 !  WORK.
 !
-DATA MAXNUM/500/
+data maxnum/500/
 !
 !.......................................................................
 !
-IF (IBEGIN .NE. 0) GO TO 10
+if (ibegin .ne. 0) go to 10
 !
 ! ON THE FIRST CALL , PERFORM INITIALIZATION --
 !        DEFINE THE MACHINE UNIT ROUNDOFF QUANTITY  U  BY CALLING THE
 !        FUNCTION ROUTINE  SPMPAR. THE USER MUST MAKE SURE THAT THE
 !        VALUES SET IN SPMPAR ARE RELEVANT TO THE COMPUTER BEING USED.
 !
-U=SPMPAR(1)
+u=spmpar(1)
 !                       -- SET ASSOCIATED MACHINE DEPENDENT PARAMETER
-WM(1)=SQRT(U)
+wm(1)=sqrt(u)
 !                       -- SET TERMINATION FLAG
-IQUIT=0
+iquit=0
 !                       -- SET INITIALIZATION INDICATOR
-INIT=0
+init=0
 !                       -- SET COUNTER FOR ATTEMPTED STEPS
-KSTEPS=0
+ksteps=0
 !                       -- SET INDICATOR FOR INTERMEDIATE-OUTPUT
-INTOUT= .FALSE.
+intout= .false.
 !                       -- SET START INDICATOR FOR STOD CODE
-JSTART= 0
+jstart= 0
 !                       -- SET BDF METHOD INDICATOR
-METH = 2
+meth = 2
 !                       -- SET MAXIMUM ORDER FOR BDF METHOD
-MAXORD = 5
+maxord = 5
 !                       -- SET ITERATION MATRIX INDICATOR
 !
-IF (IJAC .EQ. 0  .AND.  IBAND .EQ. 0) MITER = 2
-IF (IJAC .EQ. 1  .AND.  IBAND .EQ. 0) MITER = 1
-IF (IJAC .EQ. 0  .AND.  IBAND .EQ. 1) MITER = 5
-IF (IJAC .EQ. 1  .AND.  IBAND .EQ. 1) MITER = 4
+if (ijac .eq. 0  .and.  iband .eq. 0) miter = 2
+if (ijac .eq. 1  .and.  iband .eq. 0) miter = 1
+if (ijac .eq. 0  .and.  iband .eq. 1) miter = 5
+if (ijac .eq. 1  .and.  iband .eq. 1) miter = 4
 !
 !                       -- SET OTHER NECESSARY ITEMS IN COMMON BLOCK
-N = NEQ
-NST = 0
-NJE = 0
-HMXI = 0.
-NQ = 1
-H = 1.
+n = neq
+nst = 0
+nje = 0
+hmxi = 0.
+nq = 1
+h = 1.
 !                       -- RESET IBEGIN FOR SUBSEQUENT CALLS
-IBEGIN = 1
+ibegin = 1
 !
 !.......................................................................
 !
 !      CHECK VALIDITY OF INPUT PARAMATERS ON EACH ENTRY
 !
-10 IF (NEQ .GE. 1) GO TO 20
-IDID = -33
-GO TO 110
+10 if (neq .ge. 1) go to 20
+idid = -33
+go to 110
 !
-20 MAX = 1
-IF (ITOL .NE. 0) MAX = NEQ
-do 60 K = 1,MAX
-  IF (RTOL(K) .GE. 0.) GO TO 30
-     IDID = -34
-     GO TO 110
-30 IF (ATOL(K) .GE. 0.) GO TO 60
-     IDID = -35
-     GO TO 110
-60 CONTINUE
+20 max = 1
+if (itol .ne. 0) max = neq
+do 60 k = 1,max
+  if (rtol(k) .ge. 0.) go to 30
+     idid = -34
+     go to 110
+30 if (atol(k) .ge. 0.) go to 60
+     idid = -35
+     go to 110
+60 continue
 !
-IF (ITSTOP .NE. 1) GO TO 80
-IF ((TOUT - T)*(TSTOP - T) .GE. 0.0 &
-&.AND. ABS(TOUT-T) .LE. ABS(TSTOP-T)) GO TO 80
-IDID = -36
-GO TO 110
+if (itstop .ne. 1) go to 80
+if ((tout - t)*(tstop - t) .ge. 0.0 &
+&.and. abs(tout-t) .le. abs(tstop-t)) go to 80
+idid = -36
+go to 110
 !
-80 IF (INIT .EQ. 0) GO TO 150
+80 if (init .eq. 0) go to 150
 !                       CHECK SOME CONTINUATION POSSIBILITIES
-IF (T .NE. TOUT) GO TO 90
-IDID = -37
-GO TO 110
+if (t .ne. tout) go to 90
+idid = -37
+go to 110
 !
-90 IF (T .EQ. TOLD) GO TO 100
-IDID = -38
-GO TO 110
+90 if (t .eq. told) go to 100
+idid = -38
+go to 110
 !
-100 IF (INIT .EQ. 1) GO TO 150
-IF (DELSGN*(TOUT-T) .GE. 0.) GO TO 150
-IDID = -39
+100 if (init .eq. 1) go to 150
+if (delsgn*(tout-t) .ge. 0.) go to 150
+idid = -39
 !
 !                       INVALID INPUT DETECTED
-110 IQUIT = -33
-IBEGIN = -1
-RETURN
+110 iquit = -33
+ibegin = -1
+return
 !
 !.......................................................................
 !
@@ -8234,12 +8234,12 @@ RETURN
 !     THE RELATIVE ERROR TOLERANCE RTOL IS RESET TO THE SMALLEST VALUE
 !     100*U WHICH IS LIKELY TO BE REASONABLE FOR THIS METHOD AND MACHINE
 !
-150 do 170 K = 1,MAX
-  IF (RTOL(K) + ATOL(K) .GT. 0.) GO TO 170
-  RTOL(K) = 100.*U
-  IDID = -2
-170 CONTINUE
-IF (IDID .EQ. -2) RETURN
+150 do 170 k = 1,max
+  if (rtol(k) + atol(k) .gt. 0.) go to 170
+  rtol(k) = 100.*u
+  idid = -2
+170 continue
+if (idid .eq. -2) return
 !
 !     BRANCH ON STATUS OF INITIALIZATION INDICATOR
 !            INIT=0 MEANS INITIAL DERIVATIVES AND NOMINAL STEP SIZE
@@ -8247,191 +8247,191 @@ IF (IDID .EQ. -2) RETURN
 !            INIT=1 MEANS NOMINAL STEP SIZE AND DIRECTION NOT YET SET
 !            INIT=2 MEANS NO FUTHER INITIALIZATION REQUIRED
 !
-IF (INIT .EQ. 0) GO TO 200
-IF (INIT .EQ. 1) GO TO 220
-GO TO 240
+if (init .eq. 0) go to 200
+if (init .eq. 1) go to 220
+go to 240
 !
 !.......................................................................
 !
 !     MORE INITIALIZATION --
 !                         -- EVALUATE INITIAL DERIVATIVES
 !
-200 INIT = 1
-CALL F(T,Y,YH(1,2),RPAR,IPAR)
-NFE = 1
-IF (T .NE. TOUT) GO TO 220
-IDID = 2
-do 210 L = 1,NEQ
-210 YPOUT(L) = YH(L,2)
-TOLD = T
-RETURN
+200 init = 1
+call f(t,y,yh(1,2),rpar,ipar)
+nfe = 1
+if (t .ne. tout) go to 220
+idid = 2
+do 210 l = 1,neq
+210 ypout(l) = yh(l,2)
+told = t
+return
 !
 !                         -- COMPUTE INITIAL STEP SIZE
 !                         -- SAVE SIGN OF INTEGRATION DIRECTION
 !                         -- SET INDEPENDENT AND DEPENDENT VARIABLES
 !                                              X AND YH(*) FOR STOD
 !
-220 LTOL = 1
-do 225 L = 1,NEQ
-  IF (ITOL .EQ. 1) LTOL = L
-  TOL = RTOL(LTOL)*ABS(Y(L)) + ATOL(LTOL)
-  IF (TOL .EQ. 0.) GO TO 380
-225 EWT(L) = TOL
+220 ltol = 1
+do 225 l = 1,neq
+  if (itol .eq. 1) ltol = l
+  tol = rtol(ltol)*abs(y(l)) + atol(ltol)
+  if (tol .eq. 0.) go to 380
+225 ewt(l) = tol
 !
-BIG = SQRT(SPMPAR(3))
-CALL HSTART (F,NEQ,T,TOUT,Y,YH(1,2),EWT,1,U,BIG, &
-&YH(1,3),YH(1,4),YH(1,5),YH(1,6),RPAR,IPAR,H)
+big = sqrt(spmpar(3))
+call hstart (f,neq,t,tout,y,yh(1,2),ewt,1,u,big, &
+&yh(1,3),yh(1,4),yh(1,5),yh(1,6),rpar,ipar,h)
 !
-DELSGN = SIGN(1.0,TOUT-T)
-X = T
-do 230 L = 1,NEQ
-  YH(L,1) = Y(L)
-230 YH(L,2) = H*YH(L,2)
-INIT = 2
+delsgn = sign(1.0,tout-t)
+x = t
+do 230 l = 1,neq
+  yh(l,1) = y(l)
+230 yh(l,2) = h*yh(l,2)
+init = 2
 !
 !.......................................................................
 !
 !   ON EACH CALL SET INFORMATION WHICH DETERMINES THE ALLOWED INTERVAL
 !   OF INTEGRATION BEFORE RETURNING WITH AN ANSWER AT TOUT
 !
-240 DEL = TOUT - T
-ABSDEL = ABS(DEL)
+240 del = tout - t
+absdel = abs(del)
 !
 !.......................................................................
 !
 !   IF ALREADY PAST OUTPUT POINT, INTERPOLATE AND RETURN
 !
-250 IF (ABS(X-T) .LT. ABSDEL) GO TO 270
-CALL INTYD(TOUT,0,YH,NEQ,Y,INTFLG)
-CALL INTYD(TOUT,1,YH,NEQ,YPOUT,INTFLG)
-IDID = 3
-IF (X .NE. TOUT) GO TO 260
-IDID = 2
-INTOUT = .FALSE.
-260 T = TOUT
-TOLD = T
-RETURN
+250 if (abs(x-t) .lt. absdel) go to 270
+call intyd(tout,0,yh,neq,y,intflg)
+call intyd(tout,1,yh,neq,ypout,intflg)
+idid = 3
+if (x .ne. tout) go to 260
+idid = 2
+intout = .false.
+260 t = tout
+told = t
+return
 !
 !   IF CANNOT GO PAST TSTOP AND SUFFICIENTLY CLOSE,
 !   EXTRAPOLATE AND RETURN
 !
-270 IF (ITSTOP .NE. 1) GO TO 290
-IF (ABS(TSTOP-X) .GE. 100.*U*ABS(X)) GO TO 290
-DT = TOUT - X
-do 280 L = 1,NEQ
-280 Y(L) = YH(L,1) + (DT/H)*YH(L,2)
-CALL F(TOUT,Y,YPOUT,RPAR,IPAR)
-NFE = NFE + 1
-IDID = 3
-T = TOUT
-TOLD = T
-RETURN
+270 if (itstop .ne. 1) go to 290
+if (abs(tstop-x) .ge. 100.*u*abs(x)) go to 290
+dt = tout - x
+do 280 l = 1,neq
+280 y(l) = yh(l,1) + (dt/h)*yh(l,2)
+call f(tout,y,ypout,rpar,ipar)
+nfe = nfe + 1
+idid = 3
+t = tout
+told = t
+return
 !
-290 IF (IINTEG .EQ. 0  .OR.  .NOT.INTOUT) GO TO 300
+290 if (iinteg .eq. 0  .or.  .not.intout) go to 300
 !
 !   INTERMEDIATE-OUTPUT MODE
 !
-IDID = 1
-GO TO 500
+idid = 1
+go to 500
 !
 !.......................................................................
 !
 !     MONITOR NUMBER OF STEPS ATTEMPTED
 !
-300 IF (KSTEPS .LE. MAXNUM) GO TO 330
+300 if (ksteps .le. maxnum) go to 330
 !
 !                       A SIGNIFICANT AMOUNT OF WORK HAS BEEN EXPENDED
-IDID = -1
-KSTEPS = 0
-GO TO 500
+idid = -1
+ksteps = 0
+go to 500
 !
 !.......................................................................
 !
 !   LIMIT STEP SIZE AND SET WEIGHT VECTOR
 !
-330 HMIN = 100.*U*ABS(X)
-HA = AMAX1(ABS(H),HMIN)
-IF (ITSTOP .NE. 1) GO TO 340
-HA = AMIN1(HA,ABS(TSTOP-X))
-340 H = SIGN(HA,H)
-LTOL = 1
-DO L = 1,NEQ
-  IF (ITOL .EQ. 1) LTOL = L
-  EWT(L) = RTOL(LTOL)*ABS(YH(L,1)) + ATOL(LTOL)
-  IF (EWT(L) .LE. 0.0) GO TO 380
-  END DO
-TOLFAC = U*VNWRMS(NEQ,YH,EWT)
-IF (TOLFAC .LE. 1.) GO TO 400
+330 hmin = 100.*u*abs(x)
+ha = amax1(abs(h),hmin)
+if (itstop .ne. 1) go to 340
+ha = amin1(ha,abs(tstop-x))
+340 h = sign(ha,h)
+ltol = 1
+do l = 1,neq
+  if (itol .eq. 1) ltol = l
+  ewt(l) = rtol(ltol)*abs(yh(l,1)) + atol(ltol)
+  if (ewt(l) .le. 0.0) go to 380
+  end do
+tolfac = u*vnwrms(neq,yh,ewt)
+if (tolfac .le. 1.) go to 400
 !
 !                       TOLERANCES TOO SMALL
-IDID = -2
-TOLFAC = 2.*TOLFAC
-do 360 L = 1,MAX
-  RTOL(L) = TOLFAC*RTOL(L)
-360 ATOL(L) = TOLFAC*ATOL(L)
-GO TO 500
+idid = -2
+tolfac = 2.*tolfac
+do 360 l = 1,max
+  rtol(l) = tolfac*rtol(l)
+360 atol(l) = tolfac*atol(l)
+go to 500
 !
 !                       RELATIVE ERROR CRITERION INAPPROPRIATE
-380 IDID = -3
-IBEGIN = -L
-GO TO 500
+380 idid = -3
+ibegin = -l
+go to 500
 !
 !.......................................................................
 !
 !     TAKE A STEP
 !
-400 CALL STOD(NEQ,Y,YH,NEQ,YH1,EWT,SAVF,ACOR,WM,IWM,F,JAC,RPAR,IPAR)
+400 call stod(neq,y,yh,neq,yh1,ewt,savf,acor,wm,iwm,f,jac,rpar,ipar)
 !
-JSTART = -2
-INTOUT = .TRUE.
-IF (KFLAG .EQ. 0) GO TO 250
+jstart = -2
+intout = .true.
+if (kflag .eq. 0) go to 250
 !
 !.......................................................................
 !
-IF (KFLAG .EQ. -1) GO TO 450
+if (kflag .eq. -1) go to 450
 !
 !                       REPEATED CORRECTOR CONVERGENCE FAILURES
-IDID = -6
-IQUIT = -6
-IBEGIN = -1
-GO TO 500
+idid = -6
+iquit = -6
+ibegin = -1
+go to 500
 !
 !                       REPEATED ERROR TEST FAILURES
-450 IDID = -7
-IQUIT = -7
-IBEGIN = -1
+450 idid = -7
+iquit = -7
+ibegin = -1
 !
 !.......................................................................
 !
 !                       STORE VALUES BEFORE RETURNING TO STFODE
-500 do 555 L = 1,NEQ
-  Y(L) = YH(L,1)
-555 YPOUT(L) = YH(L,2)/H
-T = X
-TOLD = T
-INTOUT = .FALSE.
-RETURN
-END SUBROUTINE LSOD1
+500 do 555 l = 1,neq
+  y(l) = yh(l,1)
+555 ypout(l) = yh(l,2)/h
+t = x
+told = t
+intout = .false.
+return
+end subroutine lsod1
 
-SUBROUTINE HSTART(F,NEQ,A,B,Y,YPRIME,ETOL,MORDER,SMALL,BIG, &
-&SPY,PV,YP,SF,RPAR,IPAR,H)
-IMPLICIT NONE
-INTEGER :: IPAR(*)
-INTEGER, INTENT(IN) :: MORDER, NEQ
-REAL :: A
-REAL, INTENT(IN) :: B, BIG
-REAL :: ETOL(NEQ)
-REAL, INTENT(INOUT) :: H, PV(NEQ)
-REAL :: RPAR(*), SF(NEQ)
-REAL, INTENT(IN) :: SMALL
-REAL, INTENT(INOUT) :: SPY(NEQ)
-REAL :: Y(NEQ)
-REAL, INTENT(INOUT) :: YP(NEQ)
-REAL :: YPRIME(NEQ)
-INTEGER :: J, K, LK
-REAL :: ABSDX, DA, DELF, DELY, DFDUB, DFDXB, DX, DY, FBND, RELPER, &
-&SRYDPB, TOLEXP, TOLMIN, TOLP, TOLSUM, YDPB
-REAL :: VNORM
+subroutine hstart(f,neq,a,b,y,yprime,etol,morder,small,big, &
+&spy,pv,yp,sf,rpar,ipar,h)
+implicit none
+integer :: ipar(*)
+integer, intent(in) :: morder, neq
+real :: a
+real, intent(in) :: b, big
+real :: etol(neq)
+real, intent(inout) :: h, pv(neq)
+real :: rpar(*), sf(neq)
+real, intent(in) :: small
+real, intent(inout) :: spy(neq)
+real :: y(neq)
+real, intent(inout) :: yp(neq)
+real :: yprime(neq)
+integer :: j, k, lk
+real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
+&srydpb, tolexp, tolmin, tolp, tolsum, ydpb
+real :: vnorm
 !
 !   HSTART COMPUTES A STARTING STEP SIZE TO BE USED IN SOLVING INITIAL
 !   VALUE PROBLEMS IN ORDINARY DIFFERENTIAL EQUATIONS.
@@ -8553,13 +8553,13 @@ REAL :: VNORM
 !
 !***ROUTINES CALLED  VNORM
 !
-EXTERNAL F
+external f
 !
 !.......................................................................
 !
-DX=B-A
-ABSDX=ABS(DX)
-RELPER=SMALL**0.375
+dx=b-a
+absdx=abs(dx)
+relper=small**0.375
 !
 !.......................................................................
 !
@@ -8568,15 +8568,15 @@ RELPER=SMALL**0.375
 !     INDEPENDENT VARIABLE. PROTECT AGAINST AN OVERFLOW.
 !     ALSO COMPUTE A BOUND (FBND) ON THE FIRST DERIVATIVE LOCALLY.
 !
-DA=SIGN(AMAX1(AMIN1(RELPER*ABS(A),ABSDX),100.*SMALL*ABS(A)),DX)
-IF (DA .EQ. 0.) DA=RELPER*DX
-CALL F(A+DA,Y,SF,RPAR,IPAR)
-do 10 J = 1,NEQ
-10 YP(J)=SF(J)-YPRIME(J)
-DELF=VNORM(YP,NEQ)
-DFDXB=BIG
-IF (DELF .LT. BIG*ABS(DA)) DFDXB=DELF/ABS(DA)
-FBND=VNORM(SF,NEQ)
+da=sign(amax1(amin1(relper*abs(a),absdx),100.*small*abs(a)),dx)
+if (da .eq. 0.) da=relper*dx
+call f(a+da,y,sf,rpar,ipar)
+do 10 j = 1,neq
+10 yp(j)=sf(j)-yprime(j)
+delf=vnorm(yp,neq)
+dfdxb=big
+if (delf .lt. big*abs(da)) dfdxb=delf/abs(da)
+fbnd=vnorm(sf,neq)
 !
 !.......................................................................
 !
@@ -8599,70 +8599,70 @@ FBND=VNORM(SF,NEQ)
 !                       PERTURBATION VECTOR SIZE IS HELD CONSTANT FOR
 !                       ALL ITERATIONS. COMPUTE THIS CHANGE FROM THE
 !                               SIZE OF THE VECTOR OF INITIAL VALUES.
-DELY=RELPER*VNORM(Y,NEQ)
-IF (DELY .EQ. 0.) DELY=RELPER
-DELY=SIGN(DELY,DX)
-DELF=VNORM(YPRIME,NEQ)
-FBND=AMAX1(FBND,DELF)
-IF (DELF .EQ. 0.) GO TO 30
+dely=relper*vnorm(y,neq)
+if (dely .eq. 0.) dely=relper
+dely=sign(dely,dx)
+delf=vnorm(yprime,neq)
+fbnd=amax1(fbnd,delf)
+if (delf .eq. 0.) go to 30
 !                       USE INITIAL DERIVATIVES FOR FIRST PERTURBATION
-do 20 J = 1,NEQ
-  SPY(J)=YPRIME(J)
-20 YP(J)=YPRIME(J)
-GO TO 50
+do 20 j = 1,neq
+  spy(j)=yprime(j)
+20 yp(j)=yprime(j)
+go to 50
 !                       CANNOT HAVE A NULL PERTURBATION VECTOR
-30 do 40 J = 1,NEQ
-  SPY(J)=0.
-40 YP(J)=1.
-DELF=VNORM(YP,NEQ)
+30 do 40 j = 1,neq
+  spy(j)=0.
+40 yp(j)=1.
+delf=vnorm(yp,neq)
 !
-50 DFDUB=0.
-LK=MIN0(NEQ+1,3)
-do 140 K = 1,LK
+50 dfdub=0.
+lk=min0(neq+1,3)
+do 140 k = 1,lk
 !                       DEFINE PERTURBED VECTOR OF INITIAL VALUES
-  do 60 J = 1,NEQ
-60 PV(J)=Y(J)+DELY*(YP(J)/DELF)
-  IF (K .EQ. 2) GO TO 80
+  do 60 j = 1,neq
+60 pv(j)=y(j)+dely*(yp(j)/delf)
+  if (k .eq. 2) go to 80
 !                       EVALUATE DERIVATIVES ASSOCIATED WITH PERTURBED
 !                       VECTOR  AND  COMPUTE CORRESPONDING DIFFERENCES
-  CALL F(A,PV,YP,RPAR,IPAR)
-  do 70 J = 1,NEQ
-70 PV(J)=YP(J)-YPRIME(J)
-  GO TO 100
+  call f(a,pv,yp,rpar,ipar)
+  do 70 j = 1,neq
+70 pv(j)=yp(j)-yprime(j)
+  go to 100
 !                       USE A SHIFTED VALUE OF THE INDEPENDENT VARIABLE
 !                                             IN COMPUTING ONE ESTIMATE
-80 CALL F(A+DA,PV,YP,RPAR,IPAR)
-  do 90 J = 1,NEQ
-90 PV(J)=YP(J)-SF(J)
+80 call f(a+da,pv,yp,rpar,ipar)
+  do 90 j = 1,neq
+90 pv(j)=yp(j)-sf(j)
 !                       CHOOSE LARGEST BOUNDS ON THE FIRST DERIVATIVE
 !                                      AND A LOCAL LIPSCHITZ CONSTANT
-100 FBND=AMAX1(FBND,VNORM(YP,NEQ))
-  DELF=VNORM(PV,NEQ)
-  IF (DELF .GE. BIG*ABS(DELY)) GO TO 150
-  DFDUB=AMAX1(DFDUB,DELF/ABS(DELY))
-  IF (K .EQ. LK) GO TO 160
+100 fbnd=amax1(fbnd,vnorm(yp,neq))
+  delf=vnorm(pv,neq)
+  if (delf .ge. big*abs(dely)) go to 150
+  dfdub=amax1(dfdub,delf/abs(dely))
+  if (k .eq. lk) go to 160
 !                       CHOOSE NEXT PERTURBATION VECTOR
-  IF (DELF .EQ. 0.) DELF=1.
-  do 130 J = 1,NEQ
-    IF (K .EQ. 2) GO TO 110
-    DY=ABS(PV(J))
-    IF (DY .EQ. 0.) DY=DELF
-    GO TO 120
-110 DY=Y(J)
-    IF (DY .EQ. 0.) DY=DELY/RELPER
-120 IF (SPY(J) .EQ. 0.) SPY(J)=YP(J)
-    IF (SPY(J) .NE. 0.) DY=SIGN(DY,SPY(J))
-130 YP(J)=DY
-140 DELF=VNORM(YP,NEQ)
+  if (delf .eq. 0.) delf=1.
+  do 130 j = 1,neq
+    if (k .eq. 2) go to 110
+    dy=abs(pv(j))
+    if (dy .eq. 0.) dy=delf
+    go to 120
+110 dy=y(j)
+    if (dy .eq. 0.) dy=dely/relper
+120 if (spy(j) .eq. 0.) spy(j)=yp(j)
+    if (spy(j) .ne. 0.) dy=sign(dy,spy(j))
+130 yp(j)=dy
+140 delf=vnorm(yp,neq)
 !
 !                       PROTECT AGAINST AN OVERFLOW
-150 DFDUB=BIG
+150 dfdub=big
 !
 !.......................................................................
 !
 !     COMPUTE A BOUND (YDPB) ON THE NORM OF THE SECOND DERIVATIVE
 !
-160 YDPB=DFDXB+DFDUB*FBND
+160 ydpb=dfdxb+dfdub*fbnd
 !
 !.......................................................................
 !
@@ -8670,13 +8670,13 @@ do 140 K = 1,LK
 !     IS TO BE BASED.  A VALUE IN THE MIDDLE OF THE ERROR TOLERANCE
 !     RANGE IS SELECTED.
 !
-TOLMIN=BIG
-TOLSUM=0.
-do 170 K = 1,NEQ
-  TOLEXP=ALOG10(ETOL(K))
-  TOLMIN=AMIN1(TOLMIN,TOLEXP)
-170 TOLSUM=TOLSUM+TOLEXP
-TOLP=10.**(0.5*(TOLSUM/FLOAT(NEQ)+TOLMIN)/FLOAT(MORDER+1))
+tolmin=big
+tolsum=0.
+do 170 k = 1,neq
+  tolexp=alog10(etol(k))
+  tolmin=amin1(tolmin,tolexp)
+170 tolsum=tolsum+tolexp
+tolp=10.**(0.5*(tolsum/float(neq)+tolmin)/float(morder+1))
 !
 !.......................................................................
 !
@@ -8685,45 +8685,45 @@ TOLP=10.**(0.5*(TOLSUM/FLOAT(NEQ)+TOLMIN)/FLOAT(MORDER+1))
 !
 !                       RESTRICT THE STEP LENGTH TO BE NOT BIGGER THAN
 !                       ABS(B-A).   (UNLESS  B  IS TOO CLOSE TO  A)
-H=ABSDX
+h=absdx
 !
-IF (YDPB .NE. 0.  .OR.  FBND .NE. 0.) GO TO 180
+if (ydpb .ne. 0.  .or.  fbnd .ne. 0.) go to 180
 !
 !                       BOTH FIRST DERIVATIVE TERM (FBND) AND SECOND
 !                                    DERIVATIVE TERM (YDPB) ARE ZERO
-IF (TOLP .LT. 1.) H=ABSDX*TOLP
-GO TO 200
+if (tolp .lt. 1.) h=absdx*tolp
+go to 200
 !
-180 IF (YDPB .NE. 0.) GO TO 190
+180 if (ydpb .ne. 0.) go to 190
 !
 !                       ONLY SECOND DERIVATIVE TERM (YDPB) IS ZERO
-IF (TOLP .LT. FBND*ABSDX) H=TOLP/FBND
-GO TO 200
+if (tolp .lt. fbnd*absdx) h=tolp/fbnd
+go to 200
 !
 !                       SECOND DERIVATIVE TERM (YDPB) IS NON-ZERO
-190 SRYDPB=SQRT(0.5*YDPB)
-IF (TOLP .LT. SRYDPB*ABSDX) H=TOLP/SRYDPB
+190 srydpb=sqrt(0.5*ydpb)
+if (tolp .lt. srydpb*absdx) h=tolp/srydpb
 !
 !                       FURTHER RESTRICT THE STEP LENGTH TO BE NOT
 !                                                 BIGGER THAN  1/DFDUB
-200 IF (H*DFDUB .GT. 1.) H=1./DFDUB
+200 if (h*dfdub .gt. 1.) h=1./dfdub
 !
 !                       FINALLY, RESTRICT THE STEP LENGTH TO BE NOT
 !                       SMALLER THAN  100*SMALL*ABS(A).  HOWEVER, IF
 !                       A=0. AND THE COMPUTED H UNDERFLOWED TO ZERO,
 !                       THE ALGORITHM RETURNS  SMALL*ABS(B)  FOR THE
 !                                                       STEP LENGTH.
-H=AMAX1(H,100.*SMALL*ABS(A))
-IF (H .EQ. 0.) H=SMALL*ABS(B)
+h=amax1(h,100.*small*abs(a))
+if (h .eq. 0.) h=small*abs(b)
 !
 !                       NOW SET DIRECTION OF INTEGRATION
-H=SIGN(H,DX)
+h=sign(h,dx)
 !
-RETURN
-END SUBROUTINE HSTART
+return
+end subroutine hstart
 
-SUBROUTINE INTYD (T, K, YH, NYH, DKY, IFLAG)
-IMPLICIT NONE
+subroutine intyd (t, k, yh, nyh, dky, iflag)
+implicit none
 !
 !   INTYD APPROXIMATES THE SOLUTION AND DERIVATIVES AT T BY POLYNOMIAL
 !   INTERPOLATION. MUST BE USED IN CONJUNCTION WITH THE INTEGRATOR
@@ -8748,64 +8748,64 @@ IMPLICIT NONE
 ! COMMUNICATED BY COMMON.  THE ABOVE SUM IS DONE IN REVERSE ORDER.
 ! IFLAG IS RETURNED NEGATIVE IF EITHER K OR T IS OUT OF BOUNDS.
 !-----------------------------------------------------------------------
-INTEGER :: K, NYH, IFLAG, I, IC, IER, IOWND, IOWNS, J, JB, JB2, &
-&JJ, JJ1, JP1, JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE, &
-&NQ, NQU, NST
-REAL :: T, YH(NYH,*), DKY(*), ROWND, ROWNS, EL0, H, HMIN, HMXI, &
-&HU, TN, UROUND, C, R, S, TP
-COMMON /DEBDF1/ ROWND, ROWNS(210), &
-&EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6), &
-&IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE, &
-&NJE, NQU
+integer :: k, nyh, iflag, i, ic, ier, iownd, iowns, j, jb, jb2, &
+&jj, jj1, jp1, jstart, kflag, l, maxord, meth, miter, n, nfe, nje, &
+&nq, nqu, nst
+real :: t, yh(nyh,*), dky(*), rownd, rowns, el0, h, hmin, hmxi, &
+&hu, tn, uround, c, r, s, tp
+common /debdf1/ rownd, rowns(210), &
+&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+&nje, nqu
 !
-IFLAG = 0
-IF (K .LT. 0 .OR. K .GT. NQ) GO TO 80
-TP = TN - HU*(1.0E0 + 100.0E0*UROUND)
-IF ((T-TP)*(T-TN) .GT. 0.0E0) GO TO 90
+iflag = 0
+if (k .lt. 0 .or. k .gt. nq) go to 80
+tp = tn - hu*(1.0e0 + 100.0e0*uround)
+if ((t-tp)*(t-tn) .gt. 0.0e0) go to 90
 !
-S = (T - TN)/H
-IC = 1
-IF (K .EQ. 0) GO TO 15
-JJ1 = L - K
-do 10 JJ = JJ1,NQ
-10 IC = IC*JJ
-15 C = FLOAT(IC)
-do 20 I = 1,N
-20 DKY(I) = C*YH(I,L)
-IF (K .EQ. NQ) GO TO 55
-JB2 = NQ - K
-DO JB = 1,JB2
-  J = NQ - JB
-  JP1 = J + 1
-  IC = 1
-  IF (K .EQ. 0) GO TO 35
-  JJ1 = JP1 - K
-  do 30 JJ = JJ1,J
-30 IC = IC*JJ
-35 C = FLOAT(IC)
-  do 40 I = 1,N
-40 DKY(I) = C*YH(I,JP1) + S*DKY(I)
-  END DO
-IF (K .EQ. 0) RETURN
-55 R = H**(-K)
-do 60 I = 1,N
-60 DKY(I) = R*DKY(I)
-RETURN
+s = (t - tn)/h
+ic = 1
+if (k .eq. 0) go to 15
+jj1 = l - k
+do 10 jj = jj1,nq
+10 ic = ic*jj
+15 c = float(ic)
+do 20 i = 1,n
+20 dky(i) = c*yh(i,l)
+if (k .eq. nq) go to 55
+jb2 = nq - k
+do jb = 1,jb2
+  j = nq - jb
+  jp1 = j + 1
+  ic = 1
+  if (k .eq. 0) go to 35
+  jj1 = jp1 - k
+  do 30 jj = jj1,j
+30 ic = ic*jj
+35 c = float(ic)
+  do 40 i = 1,n
+40 dky(i) = c*yh(i,jp1) + s*dky(i)
+  end do
+if (k .eq. 0) return
+55 r = h**(-k)
+do 60 i = 1,n
+60 dky(i) = r*dky(i)
+return
 !
-80 IFLAG = -1
-RETURN
-90 IFLAG = -2
-RETURN
+80 iflag = -1
+return
+90 iflag = -2
+return
 !----------------------- END OF SUBROUTINE INTYD -----------------------
-END SUBROUTINE INTYD
+end subroutine intyd
 
-SUBROUTINE STOD  (NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR, &
-&WM, IWM, F, JAC, RPAR, IPAR)
-IMPLICIT NONE
-INTEGER :: IPAR(*)
-REAL :: RPAR(*)
-INTEGER :: IPNYH
-INTEGER :: IOD, KSTEPS
+subroutine stod  (neq, y, yh, nyh, yh1, ewt, savf, acor, &
+&wm, iwm, f, jac, rpar, ipar)
+implicit none
+integer :: ipar(*)
+real :: rpar(*)
+integer :: ipnyh
+integer :: iod, ksteps
 !-----------------------------------------------------------------------
 ! STOD  PERFORMS ONE STEP OF THE INTEGRATION OF AN INITIAL VALUE
 ! PROBLEM FOR A SYSTEM OF ORDINARY DIFFERENTIAL EQUATIONS.
@@ -8871,29 +8871,29 @@ INTEGER :: IOD, KSTEPS
 !-----------------------------------------------------------------------
 !***ROUTINES CALLED  CFOD,SLVS,PJAC,VNWRMS
 !
-EXTERNAL F, JAC
+external f, jac
 !
-INTEGER :: NEQ, NYH, IWM(*), I, I1, IALTH, IER, IOWND, IREDO, &
-&IRET, IPUP, J, JB, JSTART, KFLAG, L, LMAX, M, MAXORD, MEO, METH, &
-&MITER, N, NCF, NEWQ, NFE, NJE, NQ, NQNYH, NQU, NST, NSTEPJ
-REAL :: Y(*), YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*), &
-&ROWND, CONIT, CRATE, EL, ELCO, HOLD, RC, RMAX, TESCO, EL0, H, &
-&HMIN, HMXI, HU, TN, UROUND, DCON, DDN, DEL, DELP, DSM, DUP, EXDN, &
-&EXSM, EXUP, R, RH, RHDN, RHSM, RHUP, TOLD, VNWRMS
-COMMON /DEBDF1/ ROWND, CONIT, CRATE, EL(13), ELCO(13,12), &
-&HOLD, RC, RMAX, TESCO(3,12), &
-&EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(7), KSTEPS, IOD(6), &
-&IALTH, IPUP, LMAX, MEO, NQNYH, NSTEPJ, &
-&IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE, &
-&NJE, NQU
+integer :: neq, nyh, iwm(*), i, i1, ialth, ier, iownd, iredo, &
+&iret, ipup, j, jb, jstart, kflag, l, lmax, m, maxord, meo, meth, &
+&miter, n, ncf, newq, nfe, nje, nq, nqnyh, nqu, nst, nstepj
+real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*), &
+&rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, h, &
+&hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, exdn, &
+&exsm, exup, r, rh, rhdn, rhsm, rhup, told, vnwrms
+common /debdf1/ rownd, conit, crate, el(13), elco(13,12), &
+&hold, rc, rmax, tesco(3,12), &
+&el0, h, hmin, hmxi, hu, tn, uround, iownd(7), ksteps, iod(6), &
+&ialth, ipup, lmax, meo, nqnyh, nstepj, &
+&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+&nje, nqu
 !
 !
-KFLAG = 0
-TOLD = TN
-NCF = 0
-IF (JSTART .GT. 0) GO TO 200
-IF (JSTART .EQ. -1) GO TO 100
-IF (JSTART .EQ. -2) GO TO 160
+kflag = 0
+told = tn
+ncf = 0
+if (jstart .gt. 0) go to 200
+if (jstart .eq. -1) go to 100
+if (jstart .eq. -2) go to 160
 !-----------------------------------------------------------------------
 ! ON THE FIRST CALL, THE ORDER IS SET TO 1, AND OTHER VARIABLES ARE
 ! INITIALIZED.  RMAX IS THE MAXIMUM RATIO BY WHICH H CAN BE INCREASED
@@ -8902,20 +8902,20 @@ IF (JSTART .EQ. -2) GO TO 160
 ! OCCURS (IN CORRECTOR CONVERGENCE OR ERROR TEST), RMAX IS SET AT 2
 ! FOR THE NEXT INCREASE.
 !-----------------------------------------------------------------------
-LMAX = MAXORD + 1
-NQ = 1
-L = 2
-IALTH = 2
-RMAX = 10000.0E0
-RC = 0.0E0
-EL0 = 1.0E0
-CRATE = 0.7E0
-DELP = 0.0E0
-HOLD = H
-MEO = METH
-NSTEPJ = 0
-IRET = 3
-GO TO 140
+lmax = maxord + 1
+nq = 1
+l = 2
+ialth = 2
+rmax = 10000.0e0
+rc = 0.0e0
+el0 = 1.0e0
+crate = 0.7e0
+delp = 0.0e0
+hold = h
+meo = meth
+nstepj = 0
+iret = 3
+go to 140
 !-----------------------------------------------------------------------
 ! THE FOLLOWING BLOCK HANDLES PRELIMINARIES NEEDED WHEN JSTART = -1.
 ! IPUP IS SET TO MITER TO FORCE A MATRIX UPDATE.
@@ -8929,70 +8929,70 @@ GO TO 140
 ! IF H OR METH IS BEING CHANGED, IALTH IS RESET TO L = NQ + 1
 ! TO PREVENT FURTHER CHANGES IN H FOR THAT MANY STEPS.
 !-----------------------------------------------------------------------
-100 IPUP = MITER
-LMAX = MAXORD + 1
-IF (IALTH .EQ. 1) IALTH = 2
-IF (METH .EQ. MEO) GO TO 110
-CALL CFOD  (METH, ELCO, TESCO)
-MEO = METH
-IF (NQ .GT. MAXORD) GO TO 120
-IALTH = L
-IRET = 1
-GO TO 150
-110 IF (NQ .LE. MAXORD) GO TO 160
-120 NQ = MAXORD
-L = LMAX
-do 125 I = 1,L
-125 EL(I) = ELCO(I,NQ)
-NQNYH = NQ*NYH
-RC = RC*EL(1)/EL0
-EL0 = EL(1)
-CONIT = 0.5E0/FLOAT(NQ+2)
-DDN = VNWRMS (N, SAVF, EWT)/TESCO(1,L)
-EXDN = 1.0E0/FLOAT(L)
-RHDN = 1.0E0/(1.3E0*DDN**EXDN + 0.0000013E0)
-RH = AMIN1(RHDN,1.0E0)
-IREDO = 3
-IF (H .EQ. HOLD) GO TO 170
-RH = AMIN1(RH,ABS(H/HOLD))
-H = HOLD
-GO TO 175
+100 ipup = miter
+lmax = maxord + 1
+if (ialth .eq. 1) ialth = 2
+if (meth .eq. meo) go to 110
+call cfod  (meth, elco, tesco)
+meo = meth
+if (nq .gt. maxord) go to 120
+ialth = l
+iret = 1
+go to 150
+110 if (nq .le. maxord) go to 160
+120 nq = maxord
+l = lmax
+do 125 i = 1,l
+125 el(i) = elco(i,nq)
+nqnyh = nq*nyh
+rc = rc*el(1)/el0
+el0 = el(1)
+conit = 0.5e0/float(nq+2)
+ddn = vnwrms (n, savf, ewt)/tesco(1,l)
+exdn = 1.0e0/float(l)
+rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
+rh = amin1(rhdn,1.0e0)
+iredo = 3
+if (h .eq. hold) go to 170
+rh = amin1(rh,abs(h/hold))
+h = hold
+go to 175
 !-----------------------------------------------------------------------
 ! CFOD  IS CALLED TO GET ALL THE INTEGRATION COEFFICIENTS FOR THE
 ! CURRENT METH.  THEN THE EL VECTOR AND RELATED CONSTANTS ARE RESET
 ! WHENEVER THE ORDER NQ IS CHANGED, OR AT THE START OF THE PROBLEM.
 !-----------------------------------------------------------------------
-140 CALL CFOD  (METH, ELCO, TESCO)
-150 do 155 I = 1,L
-155 EL(I) = ELCO(I,NQ)
-NQNYH = NQ*NYH
-RC = RC*EL(1)/EL0
-EL0 = EL(1)
-CONIT = 0.5E0/FLOAT(NQ+2)
-GO TO (160, 170, 200), IRET
+140 call cfod  (meth, elco, tesco)
+150 do 155 i = 1,l
+155 el(i) = elco(i,nq)
+nqnyh = nq*nyh
+rc = rc*el(1)/el0
+el0 = el(1)
+conit = 0.5e0/float(nq+2)
+go to (160, 170, 200), iret
 !-----------------------------------------------------------------------
 ! IF H IS BEING CHANGED, THE H RATIO RH IS CHECKED AGAINST
 ! RMAX, HMIN, AND HMXI, AND THE YH ARRAY RESCALED.  IALTH IS SET TO
 ! L = NQ + 1 TO PREVENT A CHANGE OF H FOR THAT MANY STEPS, UNLESS
 ! FORCED BY A CONVERGENCE OR ERROR TEST FAILURE.
 !-----------------------------------------------------------------------
-160 IF (H .EQ. HOLD) GO TO 200
-RH = H/HOLD
-H = HOLD
-IREDO = 3
-GO TO 175
-170 RH = AMAX1(RH,HMIN/ABS(H))
-175 RH = AMIN1(RH,RMAX)
-RH = RH/AMAX1(1.0E0,ABS(H)*HMXI*RH)
-R = 1.0E0
-do 180 J = 2,L
-  R = R*RH
-  do 180 I = 1,N
-180 YH(I,J) = YH(I,J)*R
-H = H*RH
-RC = RC*RH
-IALTH = L
-IF (IREDO .EQ. 0) GO TO 680
+160 if (h .eq. hold) go to 200
+rh = h/hold
+h = hold
+iredo = 3
+go to 175
+170 rh = amax1(rh,hmin/abs(h))
+175 rh = amin1(rh,rmax)
+rh = rh/amax1(1.0e0,abs(h)*hmxi*rh)
+r = 1.0e0
+do 180 j = 2,l
+  r = r*rh
+  do 180 i = 1,n
+180 yh(i,j) = yh(i,j)*r
+h = h*rh
+rc = rc*rh
+ialth = l
+if (iredo .eq. 0) go to 680
 !-----------------------------------------------------------------------
 ! THIS SECTION COMPUTES THE PREDICTED VALUES BY EFFECTIVELY
 ! MULTIPLYING THE YH ARRAY BY THE PASCAL TRIANGLE MATRIX.
@@ -9001,83 +9001,83 @@ IF (IREDO .EQ. 0) GO TO 680
 ! TO FORCE PJAC TO BE CALLED, IF A JACOBIAN IS INVOLVED.
 ! IN ANY CASE, PJAC IS CALLED AT LEAST EVERY 20-TH STEP.
 !-----------------------------------------------------------------------
-200 IF (ABS(RC-1.0E0) .GT. 0.3E0) IPUP = MITER
-IF (NST .GE. NSTEPJ+20) IPUP = MITER
-TN = TN + H
-I1 = NQNYH + 1
-DO JB = 1,NQ
-  I1 = I1 - NYH
-  do 210 I = I1,NQNYH
-    IPNYH = I + NYH
-210 YH1(I) = YH1(I) + YH1(IPNYH)
-  END DO
-KSTEPS = KSTEPS + 1
+200 if (abs(rc-1.0e0) .gt. 0.3e0) ipup = miter
+if (nst .ge. nstepj+20) ipup = miter
+tn = tn + h
+i1 = nqnyh + 1
+do jb = 1,nq
+  i1 = i1 - nyh
+  do 210 i = i1,nqnyh
+    ipnyh = i + nyh
+210 yh1(i) = yh1(i) + yh1(ipnyh)
+  end do
+ksteps = ksteps + 1
 !-----------------------------------------------------------------------
 ! UP TO 3 CORRECTOR ITERATIONS ARE TAKEN.  A CONVERGENCE TEST IS
 ! MADE ON THE R.M.S. NORM OF EACH CORRECTION, WEIGHTED BY THE ERROR
 ! WEIGHT VECTOR EWT.  THE SUM OF THE CORRECTIONS IS ACCUMULATED IN THE
 ! VECTOR ACOR(I).  THE YH ARRAY IS NOT ALTERED IN THE CORRECTOR LOOP.
 !-----------------------------------------------------------------------
-220 M = 0
-do 230 I = 1,N
-230 Y(I) = YH(I,1)
-CALL F (TN, Y, SAVF, RPAR, IPAR)
-NFE = NFE + 1
-IF (IPUP .LE. 0) GO TO 250
+220 m = 0
+do 230 i = 1,n
+230 y(i) = yh(i,1)
+call f (tn, y, savf, rpar, ipar)
+nfe = nfe + 1
+if (ipup .le. 0) go to 250
 !-----------------------------------------------------------------------
 ! IF INDICATED, THE MATRIX P = I - H*EL(1)*J IS REEVALUATED AND
 ! PREPROCESSED BEFORE STARTING THE CORRECTOR ITERATION.  IPUP IS SET
 ! TO 0 AS AN INDICATOR THAT THIS HAS BEEN DONE.
 !-----------------------------------------------------------------------
-IPUP = 0
-RC = 1.0E0
-NSTEPJ = NST
-CRATE = 0.7E0
-CALL PJAC (NEQ, Y, YH, NYH, EWT, ACOR, SAVF, WM, IWM, F, JAC, &
-&RPAR, IPAR)
-IF (IER .NE. 0) GO TO 430
-250 do 260 I = 1,N
-260 ACOR(I) = 0.0E0
-270 IF (MITER .NE. 0) GO TO 350
+ipup = 0
+rc = 1.0e0
+nstepj = nst
+crate = 0.7e0
+call pjac (neq, y, yh, nyh, ewt, acor, savf, wm, iwm, f, jac, &
+&rpar, ipar)
+if (ier .ne. 0) go to 430
+250 do 260 i = 1,n
+260 acor(i) = 0.0e0
+270 if (miter .ne. 0) go to 350
 !-----------------------------------------------------------------------
 ! IN THE CASE OF FUNCTIONAL ITERATION, UPDATE Y DIRECTLY FROM
 ! THE RESULT OF THE LAST FUNCTION EVALUATION.
 !-----------------------------------------------------------------------
-do 290 I = 1,N
-  SAVF(I) = H*SAVF(I) - YH(I,2)
-290 Y(I) = SAVF(I) - ACOR(I)
-DEL = VNWRMS (N, Y, EWT)
-do 300 I = 1,N
-  Y(I) = YH(I,1) + EL(1)*SAVF(I)
-300 ACOR(I) = SAVF(I)
-GO TO 400
+do 290 i = 1,n
+  savf(i) = h*savf(i) - yh(i,2)
+290 y(i) = savf(i) - acor(i)
+del = vnwrms (n, y, ewt)
+do 300 i = 1,n
+  y(i) = yh(i,1) + el(1)*savf(i)
+300 acor(i) = savf(i)
+go to 400
 !-----------------------------------------------------------------------
 ! IN THE CASE OF THE CHORD METHOD, COMPUTE THE CORRECTOR ERROR,
 ! AND SOLVE THE LINEAR SYSTEM WITH THAT AS RIGHT-HAND SIDE AND
 ! P AS COEFFICIENT MATRIX.
 !-----------------------------------------------------------------------
-350 do 360 I = 1,N
-360 Y(I) = H*SAVF(I) - (YH(I,2) + ACOR(I))
-CALL SLVS (WM, IWM, Y, SAVF)
-IF (IER .NE. 0) GO TO 410
-DEL = VNWRMS (N, Y, EWT)
-do 380 I = 1,N
-  ACOR(I) = ACOR(I) + Y(I)
-380 Y(I) = YH(I,1) + EL(1)*ACOR(I)
+350 do 360 i = 1,n
+360 y(i) = h*savf(i) - (yh(i,2) + acor(i))
+call slvs (wm, iwm, y, savf)
+if (ier .ne. 0) go to 410
+del = vnwrms (n, y, ewt)
+do 380 i = 1,n
+  acor(i) = acor(i) + y(i)
+380 y(i) = yh(i,1) + el(1)*acor(i)
 !-----------------------------------------------------------------------
 ! TEST FOR CONVERGENCE.  IF M.GT.0, AN ESTIMATE OF THE CONVERGENCE
 ! RATE CONSTANT IS STORED IN CRATE, AND THIS IS USED IN THE TEST.
 !-----------------------------------------------------------------------
-400 IF (M .NE. 0) CRATE = AMAX1(0.2E0*CRATE,DEL/DELP)
-DCON = DEL*AMIN1(1.0E0,1.5E0*CRATE)/(TESCO(2,NQ)*CONIT)
-IF (DCON .LE. 1.0E0) GO TO 450
-M = M + 1
-IF (M .EQ. 3) GO TO 410
-IF (M .GE. 2 .AND. DEL .GT. 2.0E0*DELP) GO TO 410
-DELP = DEL
-CALL F (TN, Y, SAVF, RPAR, IPAR)
-NFE = NFE + 1
-GO TO 270
+400 if (m .ne. 0) crate = amax1(0.2e0*crate,del/delp)
+dcon = del*amin1(1.0e0,1.5e0*crate)/(tesco(2,nq)*conit)
+if (dcon .le. 1.0e0) go to 450
+m = m + 1
+if (m .eq. 3) go to 410
+if (m .ge. 2 .and. del .gt. 2.0e0*delp) go to 410
+delp = del
+call f (tn, y, savf, rpar, ipar)
+nfe = nfe + 1
+go to 270
 !-----------------------------------------------------------------------
 ! THE CORRECTOR ITERATION FAILED TO CONVERGE IN 3 TRIES.
 ! IF MITER .NE. 0 AND THE JACOBIAN IS OUT OF DATE, PJAC IS CALLED FOR
@@ -9085,35 +9085,35 @@ GO TO 270
 ! BEFORE PREDICTION, AND H IS REDUCED, IF POSSIBLE.  IF H CANNOT BE
 ! REDUCED OR 10 FAILURES HAVE OCCURRED, EXIT WITH KFLAG = -2.
 !-----------------------------------------------------------------------
-410 IF (IPUP .EQ. 0) GO TO 430
-IPUP = MITER
-GO TO 220
-430 TN = TOLD
-NCF = NCF + 1
-RMAX = 2.0E0
-I1 = NQNYH + 1
-DO JB = 1,NQ
-  I1 = I1 - NYH
-  do 440 I = I1,NQNYH
-    IPNYH = I + NYH
-440 YH1(I) = YH1(I) - YH1(IPNYH)
-  END DO
-IF (ABS(H) .LE. HMIN*1.00001E0) GO TO 670
-IF (NCF .EQ. 10) GO TO 670
-RH = 0.25E0
-IPUP = MITER
-IREDO = 1
-GO TO 170
+410 if (ipup .eq. 0) go to 430
+ipup = miter
+go to 220
+430 tn = told
+ncf = ncf + 1
+rmax = 2.0e0
+i1 = nqnyh + 1
+do jb = 1,nq
+  i1 = i1 - nyh
+  do 440 i = i1,nqnyh
+    ipnyh = i + nyh
+440 yh1(i) = yh1(i) - yh1(ipnyh)
+  end do
+if (abs(h) .le. hmin*1.00001e0) go to 670
+if (ncf .eq. 10) go to 670
+rh = 0.25e0
+ipup = miter
+iredo = 1
+go to 170
 !-----------------------------------------------------------------------
 ! THE CORRECTOR HAS CONVERGED.  IPUP IS SET TO -1 IF MITER .NE. 0,
 ! TO SIGNAL THAT THE JACOBIAN INVOLVED MAY NEED UPDATING LATER.
 ! THE LOCAL ERROR TEST IS MADE AND CONTROL PASSES TO STATEMENT 500
 ! IF IT FAILS.
 !-----------------------------------------------------------------------
-450 IF (MITER .NE. 0) IPUP = -1
-IF (M .EQ. 0) DSM = DEL/TESCO(2,NQ)
-IF (M .GT. 0) DSM = VNWRMS (N, ACOR, EWT)/TESCO(2,NQ)
-IF (DSM .GT. 1.0E0) GO TO 500
+450 if (miter .ne. 0) ipup = -1
+if (m .eq. 0) dsm = del/tesco(2,nq)
+if (m .gt. 0) dsm = vnwrms (n, acor, ewt)/tesco(2,nq)
+if (dsm .gt. 1.0e0) go to 500
 !-----------------------------------------------------------------------
 ! AFTER A SUCCESSFUL STEP, UPDATE THE YH ARRAY.
 ! CONSIDER CHANGING H IF IALTH = 1.  OTHERWISE DECREASE IALTH BY 1.
@@ -9124,21 +9124,21 @@ IF (DSM .GT. 1.0E0) GO TO 500
 ! FACTOR OF AT LEAST 1.1.  IF NOT, IALTH IS SET TO 3 TO PREVENT
 ! TESTING FOR THAT MANY STEPS.
 !-----------------------------------------------------------------------
-KFLAG = 0
-IREDO = 0
-NST = NST + 1
-HU = H
-NQU = NQ
-do 470 J = 1,L
-  do 470 I = 1,N
-470 YH(I,J) = YH(I,J) + EL(J)*ACOR(I)
-IALTH = IALTH - 1
-IF (IALTH .EQ. 0) GO TO 520
-IF (IALTH .GT. 1) GO TO 690
-IF (L .EQ. LMAX) GO TO 690
-do 490 I = 1,N
-490 YH(I,LMAX) = ACOR(I)
-GO TO 690
+kflag = 0
+iredo = 0
+nst = nst + 1
+hu = h
+nqu = nq
+do 470 j = 1,l
+  do 470 i = 1,n
+470 yh(i,j) = yh(i,j) + el(j)*acor(i)
+ialth = ialth - 1
+if (ialth .eq. 0) go to 520
+if (ialth .gt. 1) go to 690
+if (l .eq. lmax) go to 690
+do 490 i = 1,n
+490 yh(i,lmax) = acor(i)
+go to 690
 !-----------------------------------------------------------------------
 ! THE ERROR TEST FAILED.  KFLAG KEEPS TRACK OF MULTIPLE FAILURES.
 ! RESTORE TN AND THE YH ARRAY TO THEIR PREVIOUS VALUES, AND PREPARE
@@ -9146,21 +9146,21 @@ GO TO 690
 ! ONE LOWER ORDER.  AFTER 2 OR MORE FAILURES, H IS FORCED TO DECREASE
 ! BY A FACTOR OF 0.2 OR LESS.
 !-----------------------------------------------------------------------
-500 KFLAG = KFLAG - 1
-TN = TOLD
-I1 = NQNYH + 1
-DO JB = 1,NQ
-  I1 = I1 - NYH
-  do 510 I = I1,NQNYH
-    IPNYH = I + NYH
-510 YH1(I) = YH1(I) - YH1(IPNYH)
-  END DO
-RMAX = 2.0E0
-IF (ABS(H) .LE. HMIN*1.00001E0) GO TO 660
-IF (KFLAG .LE. -3) GO TO 640
-IREDO = 2
-RHUP = 0.0E0
-GO TO 540
+500 kflag = kflag - 1
+tn = told
+i1 = nqnyh + 1
+do jb = 1,nq
+  i1 = i1 - nyh
+  do 510 i = i1,nqnyh
+    ipnyh = i + nyh
+510 yh1(i) = yh1(i) - yh1(ipnyh)
+  end do
+rmax = 2.0e0
+if (abs(h) .le. hmin*1.00001e0) go to 660
+if (kflag .le. -3) go to 640
+iredo = 2
+rhup = 0.0e0
+go to 540
 !-----------------------------------------------------------------------
 ! REGARDLESS OF THE SUCCESS OR FAILURE OF THE STEP, FACTORS
 ! RHDN, RHSM, AND RHUP ARE COMPUTED, BY WHICH H COULD BE MULTIPLIED
@@ -9170,52 +9170,52 @@ GO TO 540
 ! ACCORDINGLY.  IF THE ORDER IS TO BE INCREASED, WE COMPUTE ONE
 ! ADDITIONAL SCALED DERIVATIVE.
 !-----------------------------------------------------------------------
-520 RHUP = 0.0E0
-IF (L .EQ. LMAX) GO TO 540
-do 530 I = 1,N
-530 SAVF(I) = ACOR(I) - YH(I,LMAX)
-DUP = VNWRMS (N, SAVF, EWT)/TESCO(3,NQ)
-EXUP = 1.0E0/FLOAT(L+1)
-RHUP = 1.0E0/(1.4E0*DUP**EXUP + 0.0000014E0)
-540 EXSM = 1.0E0/FLOAT(L)
-RHSM = 1.0E0/(1.2E0*DSM**EXSM + 0.0000012E0)
-RHDN = 0.0E0
-IF (NQ .EQ. 1) GO TO 560
-DDN = VNWRMS (N, YH(1,L), EWT)/TESCO(1,NQ)
-EXDN = 1.0E0/FLOAT(NQ)
-RHDN = 1.0E0/(1.3E0*DDN**EXDN + 0.0000013E0)
-560 IF (RHSM .GE. RHUP) GO TO 570
-IF (RHUP .GT. RHDN) GO TO 590
-GO TO 580
-570 IF (RHSM .LT. RHDN) GO TO 580
-NEWQ = NQ
-RH = RHSM
-GO TO 620
-580 NEWQ = NQ - 1
-RH = RHDN
-IF (KFLAG .LT. 0 .AND. RH .GT. 1.0E0) RH = 1.0E0
-GO TO 620
-590 NEWQ = L
-RH = RHUP
-IF (RH .LT. 1.1E0) GO TO 610
-R = EL(L)/FLOAT(L)
-do 600 I = 1,N
-600 YH(I,NEWQ+1) = ACOR(I)*R
-GO TO 630
-610 IALTH = 3
-GO TO 690
-620 IF ((KFLAG .EQ. 0) .AND. (RH .LT. 1.1E0)) GO TO 610
-IF (KFLAG .LE. -2) RH = AMIN1(RH,0.2E0)
+520 rhup = 0.0e0
+if (l .eq. lmax) go to 540
+do 530 i = 1,n
+530 savf(i) = acor(i) - yh(i,lmax)
+dup = vnwrms (n, savf, ewt)/tesco(3,nq)
+exup = 1.0e0/float(l+1)
+rhup = 1.0e0/(1.4e0*dup**exup + 0.0000014e0)
+540 exsm = 1.0e0/float(l)
+rhsm = 1.0e0/(1.2e0*dsm**exsm + 0.0000012e0)
+rhdn = 0.0e0
+if (nq .eq. 1) go to 560
+ddn = vnwrms (n, yh(1,l), ewt)/tesco(1,nq)
+exdn = 1.0e0/float(nq)
+rhdn = 1.0e0/(1.3e0*ddn**exdn + 0.0000013e0)
+560 if (rhsm .ge. rhup) go to 570
+if (rhup .gt. rhdn) go to 590
+go to 580
+570 if (rhsm .lt. rhdn) go to 580
+newq = nq
+rh = rhsm
+go to 620
+580 newq = nq - 1
+rh = rhdn
+if (kflag .lt. 0 .and. rh .gt. 1.0e0) rh = 1.0e0
+go to 620
+590 newq = l
+rh = rhup
+if (rh .lt. 1.1e0) go to 610
+r = el(l)/float(l)
+do 600 i = 1,n
+600 yh(i,newq+1) = acor(i)*r
+go to 630
+610 ialth = 3
+go to 690
+620 if ((kflag .eq. 0) .and. (rh .lt. 1.1e0)) go to 610
+if (kflag .le. -2) rh = amin1(rh,0.2e0)
 !-----------------------------------------------------------------------
 ! IF THERE IS A CHANGE OF ORDER, RESET NQ, L, AND THE COEFFICIENTS.
 ! IN ANY CASE H IS RESET ACCORDING TO RH AND THE YH ARRAY IS RESCALED.
 ! THEN EXIT FROM 680 IF THE STEP WAS OK, OR REDO THE STEP OTHERWISE.
 !-----------------------------------------------------------------------
-IF (NEWQ .EQ. NQ) GO TO 170
-630 NQ = NEWQ
-L = NQ + 1
-IRET = 2
-GO TO 150
+if (newq .eq. nq) go to 170
+630 nq = newq
+l = nq + 1
+iret = 2
+go to 150
 !-----------------------------------------------------------------------
 ! CONTROL REACHES THIS SECTION IF 3 OR MORE FAILURES HAVE OCCURED.
 ! IF 10 FAILURES HAVE OCCURRED, EXIT WITH KFLAG = -1.
@@ -9225,51 +9225,51 @@ GO TO 150
 ! H IS REDUCED BY A FACTOR OF 10, AND THE STEP IS RETRIED,
 ! UNTIL IT SUCCEEDS OR H REACHES HMIN.
 !-----------------------------------------------------------------------
-640 IF (KFLAG .EQ. -10) GO TO 660
-RH = 0.1E0
-RH = AMAX1(HMIN/ABS(H),RH)
-H = H*RH
-do 645 I = 1,N
-645 Y(I) = YH(I,1)
-CALL F (TN, Y, SAVF, RPAR, IPAR)
-NFE = NFE + 1
-do 650 I = 1,N
-650 YH(I,2) = H*SAVF(I)
-IPUP = MITER
-IALTH = 5
-IF (NQ .EQ. 1) GO TO 200
-NQ = 1
-L = 2
-IRET = 3
-GO TO 150
+640 if (kflag .eq. -10) go to 660
+rh = 0.1e0
+rh = amax1(hmin/abs(h),rh)
+h = h*rh
+do 645 i = 1,n
+645 y(i) = yh(i,1)
+call f (tn, y, savf, rpar, ipar)
+nfe = nfe + 1
+do 650 i = 1,n
+650 yh(i,2) = h*savf(i)
+ipup = miter
+ialth = 5
+if (nq .eq. 1) go to 200
+nq = 1
+l = 2
+iret = 3
+go to 150
 !-----------------------------------------------------------------------
 ! ALL RETURNS ARE MADE THROUGH THIS SECTION.  H IS SAVED IN HOLD
 ! TO ALLOW THE CALLER TO CHANGE H ON THE NEXT STEP.
 !-----------------------------------------------------------------------
-660 KFLAG = -1
-GO TO 700
-670 KFLAG = -2
-GO TO 700
-680 RMAX = 10.0E0
-690 R = 1.0E0/TESCO(2,NQU)
-do 695 I = 1,N
-695 ACOR(I) = ACOR(I)*R
-700 HOLD = H
-JSTART = 1
-RETURN
+660 kflag = -1
+go to 700
+670 kflag = -2
+go to 700
+680 rmax = 10.0e0
+690 r = 1.0e0/tesco(2,nqu)
+do 695 i = 1,n
+695 acor(i) = acor(i)*r
+700 hold = h
+jstart = 1
+return
 !----------------------- END OF SUBROUTINE STOD  -----------------------
-END SUBROUTINE STOD
+end subroutine stod
 
-SUBROUTINE CFOD  (METH, ELCO, TESCO)
-IMPLICIT NONE
+subroutine cfod  (meth, elco, tesco)
+implicit none
 !
 !   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
 !
-INTEGER, INTENT(IN) :: METH
-INTEGER :: I, IB, NQ, NQM1, NQP1
-REAL, INTENT(INOUT) :: ELCO(13, *), TESCO(3, *)
-REAL :: AGAMQ, FNQ, FNQM1, PC(12), PINT, RAGQ, RQFAC, RQ1FAC, &
-&TSIGN, XPIN
+integer, intent(in) :: meth
+integer :: i, ib, nq, nqm1, nqp1
+real, intent(inout) :: elco(13, *), tesco(3, *)
+real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
+&tsign, xpin
 !-----------------------------------------------------------------------
 ! CFOD  IS CALLED BY THE INTEGRATOR ROUTINE TO SET COEFFICIENTS
 ! NEEDED THERE.  THE COEFFICIENTS FOR THE CURRENT METHOD, AS
@@ -9297,105 +9297,105 @@ REAL :: AGAMQ, FNQ, FNQM1, PC(12), PINT, RAGQ, RQFAC, RQ1FAC, &
 ! NQ + 1 IF K = 3.
 !-----------------------------------------------------------------------
 !
-GO TO (100, 200), METH
+go to (100, 200), meth
 !
-100 ELCO(1,1) = 1.0E0
-ELCO(2,1) = 1.0E0
-TESCO(1,1) = 0.0E0
-TESCO(2,1) = 2.0E0
-TESCO(1,2) = 1.0E0
-TESCO(3,12) = 0.0E0
-PC(1) = 1.0E0
-RQFAC = 1.0E0
-DO NQ = 2,12
+100 elco(1,1) = 1.0e0
+elco(2,1) = 1.0e0
+tesco(1,1) = 0.0e0
+tesco(2,1) = 2.0e0
+tesco(1,2) = 1.0e0
+tesco(3,12) = 0.0e0
+pc(1) = 1.0e0
+rqfac = 1.0e0
+do nq = 2,12
 !-----------------------------------------------------------------------
 ! THE PC ARRAY WILL CONTAIN THE COEFFICIENTS OF THE POLYNOMIAL
 !     P(X) = (X+1)*(X+2)*...*(X+NQ-1).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
-  RQ1FAC = RQFAC
-  RQFAC = RQFAC/FLOAT(NQ)
-  NQM1 = NQ - 1
-  FNQM1 = FLOAT(NQM1)
-  NQP1 = NQ + 1
+  rq1fac = rqfac
+  rqfac = rqfac/float(nq)
+  nqm1 = nq - 1
+  fnqm1 = float(nqm1)
+  nqp1 = nq + 1
 ! FORM COEFFICIENTS OF P(X)*(X+NQ-1). ----------------------------------
-  PC(NQ) = 0.0E0
-  do 110 IB = 1,NQM1
-    I = NQP1 - IB
-110 PC(I) = PC(I-1) + FNQM1*PC(I)
-  PC(1) = FNQM1*PC(1)
+  pc(nq) = 0.0e0
+  do 110 ib = 1,nqm1
+    i = nqp1 - ib
+110 pc(i) = pc(i-1) + fnqm1*pc(i)
+  pc(1) = fnqm1*pc(1)
 ! COMPUTE INTEGRAL, -1 TO 0, OF P(X) AND X*P(X). -----------------------
-  PINT = PC(1)
-  XPIN = PC(1)/2.0E0
-  TSIGN = 1.0E0
-  do 120 I = 2,NQ
-    TSIGN = -TSIGN
-    PINT = PINT + TSIGN*PC(I)/FLOAT(I)
-120 XPIN = XPIN + TSIGN*PC(I)/FLOAT(I+1)
+  pint = pc(1)
+  xpin = pc(1)/2.0e0
+  tsign = 1.0e0
+  do 120 i = 2,nq
+    tsign = -tsign
+    pint = pint + tsign*pc(i)/float(i)
+120 xpin = xpin + tsign*pc(i)/float(i+1)
 ! STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
-  ELCO(1,NQ) = PINT*RQ1FAC
-  ELCO(2,NQ) = 1.0E0
-  do 130 I = 2,NQ
-130 ELCO(I+1,NQ) = RQ1FAC*PC(I)/FLOAT(I)
-  AGAMQ = RQFAC*XPIN
-  RAGQ = 1.0E0/AGAMQ
-  TESCO(2,NQ) = RAGQ
-IF(NQ.LT.12)TESCO(1,NQP1)=RAGQ*RQFAC/FLOAT(NQP1)
-  TESCO(3,NQM1) = RAGQ
-  END DO
-RETURN
+  elco(1,nq) = pint*rq1fac
+  elco(2,nq) = 1.0e0
+  do 130 i = 2,nq
+130 elco(i+1,nq) = rq1fac*pc(i)/float(i)
+  agamq = rqfac*xpin
+  ragq = 1.0e0/agamq
+  tesco(2,nq) = ragq
+if(nq.lt.12)tesco(1,nqp1)=ragq*rqfac/float(nqp1)
+  tesco(3,nqm1) = ragq
+  end do
+return
 !
-200 PC(1) = 1.0E0
-RQ1FAC = 1.0E0
-DO NQ = 1,5
+200 pc(1) = 1.0e0
+rq1fac = 1.0e0
+do nq = 1,5
 !-----------------------------------------------------------------------
 ! THE PC ARRAY WILL CONTAIN THE COEFFICIENTS OF THE POLYNOMIAL
 !     P(X) = (X+1)*(X+2)*...*(X+NQ).
 ! INITIALLY, P(X) = 1.
 !-----------------------------------------------------------------------
-  FNQ = FLOAT(NQ)
-  NQP1 = NQ + 1
+  fnq = float(nq)
+  nqp1 = nq + 1
 ! FORM COEFFICIENTS OF P(X)*(X+NQ). ------------------------------------
-  PC(NQP1) = 0.0E0
-  do 210 IB = 1,NQ
-    I = NQ + 2 - IB
-210 PC(I) = PC(I-1) + FNQ*PC(I)
-  PC(1) = FNQ*PC(1)
+  pc(nqp1) = 0.0e0
+  do 210 ib = 1,nq
+    i = nq + 2 - ib
+210 pc(i) = pc(i-1) + fnq*pc(i)
+  pc(1) = fnq*pc(1)
 ! STORE COEFFICIENTS IN ELCO AND TESCO. --------------------------------
-  do 220 I = 1,NQP1
-220 ELCO(I,NQ) = PC(I)/PC(2)
-  ELCO(2,NQ) = 1.0E0
-  TESCO(1,NQ) = RQ1FAC
-  TESCO(2,NQ) = FLOAT(NQP1)/ELCO(1,NQ)
-  TESCO(3,NQ) = FLOAT(NQ+2)/ELCO(1,NQ)
-  RQ1FAC = RQ1FAC/FNQ
-  END DO
-RETURN
+  do 220 i = 1,nqp1
+220 elco(i,nq) = pc(i)/pc(2)
+  elco(2,nq) = 1.0e0
+  tesco(1,nq) = rq1fac
+  tesco(2,nq) = float(nqp1)/elco(1,nq)
+  tesco(3,nq) = float(nq+2)/elco(1,nq)
+  rq1fac = rq1fac/fnq
+  end do
+return
 !----------------------- END OF SUBROUTINE CFOD  -----------------------
-END SUBROUTINE CFOD
+end subroutine cfod
 
-SUBROUTINE PJAC (NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM, &
-&F, JAC, RPAR, IPAR)
-IMPLICIT NONE
-INTEGER :: IPAR(*)
-REAL :: RPAR(*)
+subroutine pjac (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
+&f, jac, rpar, ipar)
+implicit none
+integer :: ipar(*)
+real :: rpar(*)
 !
 !   PJAC SETS UP THE ITERATION MATRIX (INVOLVING THE JACOBIAN) FOR THE
 !   INTEGRATION PACKAGE SFODE.
 !
 !***ROUTINES CALLED  VNWRMS,SGEFA,SGBFA
 !
-INTEGER :: NEQ, NYH, IWM( *), I, I1, I2, IER, II, IOWND, IOWNS, J, &
-&J1, JJ, JSTART, KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND, &
-&METH, MITER, ML, ML3, MU, N, NFE, NJE, NQ, NQU, NST
-EXTERNAL F, JAC
-REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*), ROWND, &
-&ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, CON, DI, FAC, HL0, R, &
-&R0, SRUR, YI, YJ, YJJ, VNWRMS
-COMMON /DEBDF1/ ROWND, ROWNS(210), &
-&EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6), &
-&IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE, &
-&NJE, NQU
+integer :: neq, nyh, iwm( *), i, i1, i2, ier, ii, iownd, iowns, j, &
+&j1, jj, jstart, kflag, l, lenp, maxord, mba, mband, meb1, meband, &
+&meth, miter, ml, ml3, mu, n, nfe, nje, nq, nqu, nst
+external f, jac
+real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*), rownd, &
+&rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, fac, hl0, r, &
+&r0, srur, yi, yj, yjj, vnwrms
+common /debdf1/ rownd, rowns(210), &
+&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+&nje, nqu
 !-----------------------------------------------------------------------
 ! PJAC IS CALLED BY STOD  TO COMPUTE AND PROCESS THE MATRIX
 ! P = I - H*EL(1)*J , WHERE J IS AN APPROXIMATION TO THE JACOBIAN.
@@ -9428,134 +9428,134 @@ COMMON /DEBDF1/ ROWND, ROWNS(210), &
 ! THIS ROUTINE ALSO USES THE COMMON VARIABLES EL0, H, TN, UROUND,
 ! MITER, N, NFE, AND NJE.
 !-----------------------------------------------------------------------
-NJE = NJE + 1
-HL0 = H*EL0
-GO TO (100, 200, 300, 400, 500), MITER
+nje = nje + 1
+hl0 = h*el0
+go to (100, 200, 300, 400, 500), miter
 ! IF MITER = 1, CALL JAC AND MULTIPLY BY SCALAR. -----------------------
-100 LENP = N*N
-do 110 I = 1,LENP
-110 WM(I+2) = 0.0E0
-CALL JAC (TN, Y, WM(3), N, RPAR, IPAR)
-CON = -HL0
-do 120 I = 1,LENP
-120 WM(I+2) = WM(I+2)*CON
-GO TO 240
+100 lenp = n*n
+do 110 i = 1,lenp
+110 wm(i+2) = 0.0e0
+call jac (tn, y, wm(3), n, rpar, ipar)
+con = -hl0
+do 120 i = 1,lenp
+120 wm(i+2) = wm(i+2)*con
+go to 240
 ! IF MITER = 2, MAKE N CALLS TO F TO APPROXIMATE J. --------------------
-200 FAC = VNWRMS (N, SAVF, EWT)
-R0 = 1000.0E0*ABS(H)*UROUND*FLOAT(N)*FAC
-IF (R0 .EQ. 0.0E0) R0 = 1.0E0
-SRUR = WM(1)
-J1 = 2
-DO J = 1,N
-  YJ = Y(J)
-  R = AMAX1(SRUR*ABS(YJ),R0*EWT(J))
-  Y(J) = Y(J) + R
-  FAC = -HL0/R
-  CALL F (TN, Y, FTEM, RPAR, IPAR)
-  do 220 I = 1,N
-220 WM(I+J1) = (FTEM(I) - SAVF(I))*FAC
-  Y(J) = YJ
-  J1 = J1 + N
-  END DO
-NFE = NFE + N
+200 fac = vnwrms (n, savf, ewt)
+r0 = 1000.0e0*abs(h)*uround*float(n)*fac
+if (r0 .eq. 0.0e0) r0 = 1.0e0
+srur = wm(1)
+j1 = 2
+do j = 1,n
+  yj = y(j)
+  r = amax1(srur*abs(yj),r0*ewt(j))
+  y(j) = y(j) + r
+  fac = -hl0/r
+  call f (tn, y, ftem, rpar, ipar)
+  do 220 i = 1,n
+220 wm(i+j1) = (ftem(i) - savf(i))*fac
+  y(j) = yj
+  j1 = j1 + n
+  end do
+nfe = nfe + n
 ! ADD IDENTITY MATRIX. -------------------------------------------------
-240 J = 3
-do 250 I = 1,N
-  WM(J) = WM(J) + 1.0E0
-250 J = J + (N + 1)
+240 j = 3
+do 250 i = 1,n
+  wm(j) = wm(j) + 1.0e0
+250 j = j + (n + 1)
 ! DO LU DECOMPOSITION ON P. --------------------------------------------
-CALL SGEFA (WM(3), N, N, IWM(21), IER)
-RETURN
+call sgefa (wm(3), n, n, iwm(21), ier)
+return
 ! IF MITER = 3, CONSTRUCT A DIAGONAL APPROXIMATION TO J AND P. ---------
-300 WM(2) = HL0
-IER = 0
-R = EL0*0.1E0
-do 310 I = 1,N
-310 Y(I) = Y(I) + R*(H*SAVF(I) - YH(I,2))
-CALL F (TN, Y, WM(3), RPAR, IPAR)
-NFE = NFE + 1
-do 320 I = 1,N
-  R0 = H*SAVF(I) - YH(I,2)
-  DI = 0.1E0*R0 - H*(WM(I+2) - SAVF(I))
-  WM(I+2) = 1.0E0
-  IF (ABS(R0) .LT. UROUND*EWT(I)) GO TO 320
-  IF (ABS(DI) .EQ. 0.0E0) GO TO 330
-  WM(I+2) = 0.1E0*R0/DI
-320 CONTINUE
-RETURN
-330 IER = -1
-RETURN
+300 wm(2) = hl0
+ier = 0
+r = el0*0.1e0
+do 310 i = 1,n
+310 y(i) = y(i) + r*(h*savf(i) - yh(i,2))
+call f (tn, y, wm(3), rpar, ipar)
+nfe = nfe + 1
+do 320 i = 1,n
+  r0 = h*savf(i) - yh(i,2)
+  di = 0.1e0*r0 - h*(wm(i+2) - savf(i))
+  wm(i+2) = 1.0e0
+  if (abs(r0) .lt. uround*ewt(i)) go to 320
+  if (abs(di) .eq. 0.0e0) go to 330
+  wm(i+2) = 0.1e0*r0/di
+320 continue
+return
+330 ier = -1
+return
 ! IF MITER = 4, CALL JAC AND MULTIPLY BY SCALAR. -----------------------
-400 ML = IWM(1)
-MU = IWM(2)
-ML3 =  3
-MBAND = ML + MU + 1
-MEBAND = MBAND + ML
-LENP = MEBAND*N
-do 410 I = 1,LENP
-410 WM(I+2) = 0.0E0
-CALL JAC (TN, Y, WM(ML3), MEBAND, RPAR, IPAR)
-CON = -HL0
-do 420 I = 1,LENP
-420 WM(I+2) = WM(I+2)*CON
-GO TO 570
+400 ml = iwm(1)
+mu = iwm(2)
+ml3 =  3
+mband = ml + mu + 1
+meband = mband + ml
+lenp = meband*n
+do 410 i = 1,lenp
+410 wm(i+2) = 0.0e0
+call jac (tn, y, wm(ml3), meband, rpar, ipar)
+con = -hl0
+do 420 i = 1,lenp
+420 wm(i+2) = wm(i+2)*con
+go to 570
 ! IF MITER = 5, MAKE MBAND CALLS TO F TO APPROXIMATE J. ----------------
-500 ML = IWM(1)
-MU = IWM(2)
-MBAND = ML + MU + 1
-MBA = MIN0(MBAND,N)
-MEBAND = MBAND + ML
-MEB1 = MEBAND - 1
-SRUR = WM(1)
-FAC = VNWRMS (N, SAVF, EWT)
-R0 = 1000.0E0*ABS(H)*UROUND*FLOAT(N)*FAC
-IF (R0 .EQ. 0.0E0) R0 = 1.0E0
-DO J = 1,MBA
-  do 530 I = J,N,MBAND
-    YI = Y(I)
-    R = AMAX1(SRUR*ABS(YI),R0*EWT(I))
-530 Y(I) = Y(I) + R
-  CALL F (TN, Y, FTEM, RPAR, IPAR)
-  DO JJ = J,N,MBAND
-    Y(JJ) = YH(JJ,1)
-    YJJ = Y(JJ)
-    R = AMAX1(SRUR*ABS(YJJ),R0*EWT(JJ))
-    FAC = -HL0/R
-    I1 = MAX0(JJ-MU,1)
-    I2 = MIN0(JJ+ML,N)
-    II = JJ*MEB1 - ML + 2
-    do 540 I = I1,I2
-540 WM(II+I) = (FTEM(I) - SAVF(I))*FAC
-    END DO
-  END DO
-NFE = NFE + MBA
+500 ml = iwm(1)
+mu = iwm(2)
+mband = ml + mu + 1
+mba = min0(mband,n)
+meband = mband + ml
+meb1 = meband - 1
+srur = wm(1)
+fac = vnwrms (n, savf, ewt)
+r0 = 1000.0e0*abs(h)*uround*float(n)*fac
+if (r0 .eq. 0.0e0) r0 = 1.0e0
+do j = 1,mba
+  do 530 i = j,n,mband
+    yi = y(i)
+    r = amax1(srur*abs(yi),r0*ewt(i))
+530 y(i) = y(i) + r
+  call f (tn, y, ftem, rpar, ipar)
+  do jj = j,n,mband
+    y(jj) = yh(jj,1)
+    yjj = y(jj)
+    r = amax1(srur*abs(yjj),r0*ewt(jj))
+    fac = -hl0/r
+    i1 = max0(jj-mu,1)
+    i2 = min0(jj+ml,n)
+    ii = jj*meb1 - ml + 2
+    do 540 i = i1,i2
+540 wm(ii+i) = (ftem(i) - savf(i))*fac
+    end do
+  end do
+nfe = nfe + mba
 ! ADD IDENTITY MATRIX. -------------------------------------------------
-570 II = MBAND + 2
-do 580 I = 1,N
-  WM(II) = WM(II) + 1.0E0
-580 II = II + MEBAND
+570 ii = mband + 2
+do 580 i = 1,n
+  wm(ii) = wm(ii) + 1.0e0
+580 ii = ii + meband
 ! DO LU DECOMPOSITION OF P. --------------------------------------------
-CALL SGBFA (WM(3), MEBAND, N, ML, MU, IWM(21), IER)
-RETURN
+call sgbfa (wm(3), meband, n, ml, mu, iwm(21), ier)
+return
 !----------------------- END OF SUBROUTINE PJAC -----------------------
-END SUBROUTINE PJAC
+end subroutine pjac
 
-SUBROUTINE SLVS (WM, IWM, X, TEM)
-IMPLICIT NONE
+subroutine slvs (wm, iwm, x, tem)
+implicit none
 !
 !   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
 !   INTEGRATOR PACKAGE SFODE.
 !
 !***ROUTINES CALLED  SGESL,SGBSL
 !
-INTEGER :: IWM( *), I, IER, IOWND, IOWNS, JSTART, KFLAG, L, &
-&MAXORD, MEBAND, METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
-REAL :: WM(*), X(*), TEM(*), ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, &
-&TN, UROUND, DI, HL0, PHL0, R
-COMMON /DEBDF1/ ROWND, ROWNS(210), &
-&EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6), &
-&IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE, &
-&NJE, NQU
+integer :: iwm( *), i, ier, iownd, iowns, jstart, kflag, l, &
+&maxord, meband, meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
+real :: wm(*), x(*), tem(*), rownd, rowns, el0, h, hmin, hmxi, hu, &
+&tn, uround, di, hl0, phl0, r
+common /debdf1/ rownd, rowns(210), &
+&el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
+&ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
+&nje, nqu
 !-----------------------------------------------------------------------
 ! THIS ROUTINE MANAGES THE SOLUTION OF THE LINEAR SYSTEM ARISING FROM
 ! A CHORD ITERATION.  IT IS CALLED BY STOD  IF MITER .NE. 0.
@@ -9580,40 +9580,40 @@ COMMON /DEBDF1/ ROWND, ROWNS(210), &
 !       IER = -1 IF A SINGULAR MATRIX AROSE WITH MITER = 3.
 ! THIS ROUTINE ALSO USES THE COMMON VARIABLES EL0, H, MITER, AND N.
 !-----------------------------------------------------------------------
-IER = 0
-GO TO (100, 100, 300, 400, 400), MITER
-100 CALL SGESL (WM(3), N, N, IWM(21), X, 0)
-RETURN
+ier = 0
+go to (100, 100, 300, 400, 400), miter
+100 call sgesl (wm(3), n, n, iwm(21), x, 0)
+return
 !
-300 PHL0 = WM(2)
-HL0 = H*EL0
-WM(2) = HL0
-IF (HL0 .EQ. PHL0) GO TO 330
-R = HL0/PHL0
-do 320 I = 1,N
-  DI = 1.0E0 - R*(1.0E0 - 1.0E0/WM(I+2))
-  IF (ABS(DI) .EQ. 0.0E0) GO TO 390
-320 WM(I+2) = 1.0E0/DI
-330 do 340 I = 1,N
-340 X(I) = WM(I+2)*X(I)
-RETURN
-390 IER = -1
-RETURN
+300 phl0 = wm(2)
+hl0 = h*el0
+wm(2) = hl0
+if (hl0 .eq. phl0) go to 330
+r = hl0/phl0
+do 320 i = 1,n
+  di = 1.0e0 - r*(1.0e0 - 1.0e0/wm(i+2))
+  if (abs(di) .eq. 0.0e0) go to 390
+320 wm(i+2) = 1.0e0/di
+330 do 340 i = 1,n
+340 x(i) = wm(i+2)*x(i)
+return
+390 ier = -1
+return
 !
-400 ML = IWM(1)
-MU = IWM(2)
-MEBAND = 2*ML + MU + 1
-CALL SGBSL (WM(3), MEBAND, N, ML, MU, IWM(21), X, 0)
-RETURN
+400 ml = iwm(1)
+mu = iwm(2)
+meband = 2*ml + mu + 1
+call sgbsl (wm(3), meband, n, ml, mu, iwm(21), x, 0)
+return
 !----------------------- END OF SUBROUTINE SLVS -----------------------
-END SUBROUTINE SLVS
+end subroutine slvs
 
-SUBROUTINE SGBFA(ABD,LDA,N,ML,MU,IPVT,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, ML, MU
-INTEGER, INTENT(INOUT) :: IPVT(*)
-INTEGER, INTENT(OUT) :: INFO
-REAL, INTENT(INOUT) :: ABD(LDA,*)
+subroutine sgbfa(abd,lda,n,ml,mu,ipvt,info)
+implicit none
+integer, intent(in) :: lda, n, ml, mu
+integer, intent(inout) :: ipvt(*)
+integer, intent(out) :: info
+real, intent(inout) :: abd(lda,*)
 !
 !     SGBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
 !
@@ -9695,100 +9695,100 @@ REAL, INTENT(INOUT) :: ABD(LDA,*)
 !     BLAS SAXPY,SSCAL,ISAMAX
 !     FORTRAN MAX0,MIN0
 !
-REAL :: T
-INTEGER :: I, ISAMAX, I0, J, JU, JZ, J0, J1, K, KP1, L, LM, M, MM, &
-&NM1
+real :: t
+integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
+&nm1
 !
-M = ML + MU + 1
-INFO = 0
+m = ml + mu + 1
+info = 0
 !
 !     ZERO INITIAL FILL-IN COLUMNS
 !
-J0 = MU + 2
-J1 = MIN0(N,M) - 1
-IF (J1 .LT. J0) GO TO 30
-DO JZ = J0, J1
-   I0 = M + 1 - JZ
-   DO I = I0, ML
-      ABD(I,JZ) = 0.0E0
-   END DO
-END DO
-30 CONTINUE
-JZ = J1
-JU = 0
+j0 = mu + 2
+j1 = min0(n,m) - 1
+if (j1 .lt. j0) go to 30
+do jz = j0, j1
+   i0 = m + 1 - jz
+   do i = i0, ml
+      abd(i,jz) = 0.0e0
+   end do
+end do
+30 continue
+jz = j1
+ju = 0
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
-NM1 = N - 1
-IF (NM1 .LT. 1) GO TO 130
-DO K = 1, NM1
-   KP1 = K + 1
+nm1 = n - 1
+if (nm1 .lt. 1) go to 130
+do k = 1, nm1
+   kp1 = k + 1
 !
 !        ZERO NEXT FILL-IN COLUMN
 !
-   JZ = JZ + 1
-   IF (JZ .GT. N) GO TO 50
-   IF (ML .LT. 1) GO TO 50
-      DO I = 1, ML
-         ABD(I,JZ) = 0.0E0
-      END DO
-50 CONTINUE
+   jz = jz + 1
+   if (jz .gt. n) go to 50
+   if (ml .lt. 1) go to 50
+      do i = 1, ml
+         abd(i,jz) = 0.0e0
+      end do
+50 continue
 !
 !        FIND L = PIVOT INDEX
 !
-   LM = MIN0(ML,N-K)
-   L = ISAMAX(LM+1,ABD(M,K),1) + M - 1
-   IPVT(K) = L + K - M
+   lm = min0(ml,n-k)
+   l = isamax(lm+1,abd(m,k),1) + m - 1
+   ipvt(k) = l + k - m
 !
 !        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
 !
-   IF (ABD(L,K) .EQ. 0.0E0) GO TO 100
+   if (abd(l,k) .eq. 0.0e0) go to 100
 !
 !           INTERCHANGE IF NECESSARY
 !
-      IF (L .EQ. M) GO TO 60
-         T = ABD(L,K)
-         ABD(L,K) = ABD(M,K)
-         ABD(M,K) = T
-60 CONTINUE
+      if (l .eq. m) go to 60
+         t = abd(l,k)
+         abd(l,k) = abd(m,k)
+         abd(m,k) = t
+60 continue
 !
 !           COMPUTE MULTIPLIERS
 !
-      T = -1.0E0/ABD(M,K)
-      CALL SSCAL(LM,T,ABD(M+1,K),1)
+      t = -1.0e0/abd(m,k)
+      call sscal(lm,t,abd(m+1,k),1)
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      JU = MIN0(MAX0(JU,MU+IPVT(K)),N)
-      MM = M
-      IF (JU .LT. KP1) GO TO 90
-      DO J = KP1, JU
-         L = L - 1
-         MM = MM - 1
-         T = ABD(L,J)
-         IF (L .EQ. MM) GO TO 70
-            ABD(L,J) = ABD(MM,J)
-            ABD(MM,J) = T
-70 CONTINUE
-         CALL SAXPY(LM,T,ABD(M+1,K),1,ABD(MM+1,J),1)
-      END DO
-90 CONTINUE
-   GO TO 110
-100 CONTINUE
-      INFO = K
-110 CONTINUE
-END DO
-130 CONTINUE
-IPVT(N) = N
-IF (ABD(M,N) .EQ. 0.0E0) INFO = N
-RETURN
-END SUBROUTINE SGBFA
+      ju = min0(max0(ju,mu+ipvt(k)),n)
+      mm = m
+      if (ju .lt. kp1) go to 90
+      do j = kp1, ju
+         l = l - 1
+         mm = mm - 1
+         t = abd(l,j)
+         if (l .eq. mm) go to 70
+            abd(l,j) = abd(mm,j)
+            abd(mm,j) = t
+70 continue
+         call saxpy(lm,t,abd(m+1,k),1,abd(mm+1,j),1)
+      end do
+90 continue
+   go to 110
+100 continue
+      info = k
+110 continue
+end do
+130 continue
+ipvt(n) = n
+if (abd(m,n) .eq. 0.0e0) info = n
+return
+end subroutine sgbfa
 
-SUBROUTINE SGBSL(ABD,LDA,N,ML,MU,IPVT,B,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, ML, MU, IPVT(*), JOB
-REAL, INTENT(IN) :: ABD(LDA,*)
-REAL, INTENT(INOUT) :: B(*)
+subroutine sgbsl(abd,lda,n,ml,mu,ipvt,b,job)
+implicit none
+integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
+real, intent(in) :: abd(lda,*)
+real, intent(inout) :: b(*)
 !
 !     SGBSL SOLVES THE REAL BAND SYSTEM
 !     A * X = B  OR  TRANS(A) * X = B
@@ -9851,522 +9851,522 @@ REAL, INTENT(INOUT) :: B(*)
 !     BLAS SAXPY,SDOT
 !     FORTRAN MIN0
 !
-REAL :: SDOT, T
-INTEGER :: K, KB, L, LA, LB, LM, M, NM1
+real :: sdot, t
+integer :: k, kb, l, la, lb, lm, m, nm1
 !
-M = MU + ML + 1
-NM1 = N - 1
-IF (JOB .NE. 0) GO TO 50
+m = mu + ml + 1
+nm1 = n - 1
+if (job .ne. 0) go to 50
 !
 !        JOB = 0 , SOLVE  A * X = B
 !        FIRST SOLVE L*Y = B
 !
-   IF (ML .EQ. 0) GO TO 30
-   IF (NM1 .LT. 1) GO TO 30
-      DO K = 1, NM1
-         LM = MIN0(ML,N-K)
-         L = IPVT(K)
-         T = B(L)
-         IF (L .EQ. K) GO TO 10
-            B(L) = B(K)
-            B(K) = T
-10 CONTINUE
-         CALL SAXPY(LM,T,ABD(M+1,K),1,B(K+1),1)
-      END DO
-30 CONTINUE
+   if (ml .eq. 0) go to 30
+   if (nm1 .lt. 1) go to 30
+      do k = 1, nm1
+         lm = min0(ml,n-k)
+         l = ipvt(k)
+         t = b(l)
+         if (l .eq. k) go to 10
+            b(l) = b(k)
+            b(k) = t
+10 continue
+         call saxpy(lm,t,abd(m+1,k),1,b(k+1),1)
+      end do
+30 continue
 !
 !        NOW SOLVE  U*X = Y
 !
-   DO KB = 1, N
-      K = N + 1 - KB
-      B(K) = B(K)/ABD(M,K)
-      LM = MIN0(K,M) - 1
-      LA = M - LM
-      LB = K - LM
-      T = -B(K)
-      CALL SAXPY(LM,T,ABD(LA,K),1,B(LB),1)
-   END DO
-GO TO 100
-50 CONTINUE
+   do kb = 1, n
+      k = n + 1 - kb
+      b(k) = b(k)/abd(m,k)
+      lm = min0(k,m) - 1
+      la = m - lm
+      lb = k - lm
+      t = -b(k)
+      call saxpy(lm,t,abd(la,k),1,b(lb),1)
+   end do
+go to 100
+50 continue
 !
 !        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 !        FIRST SOLVE  TRANS(U)*Y = B
 !
-   DO K = 1, N
-      LM = MIN0(K,M) - 1
-      LA = M - LM
-      LB = K - LM
-      T = SDOT(LM,ABD(LA,K),1,B(LB),1)
-      B(K) = (B(K) - T)/ABD(M,K)
-   END DO
+   do k = 1, n
+      lm = min0(k,m) - 1
+      la = m - lm
+      lb = k - lm
+      t = sdot(lm,abd(la,k),1,b(lb),1)
+      b(k) = (b(k) - t)/abd(m,k)
+   end do
 !
 !        NOW SOLVE TRANS(L)*X = Y
 !
-   IF (ML .EQ. 0) GO TO 90
-   IF (NM1 .LT. 1) GO TO 90
-      DO KB = 1, NM1
-         K = N - KB
-         LM = MIN0(ML,N-K)
-         B(K) = B(K) + SDOT(LM,ABD(M+1,K),1,B(K+1),1)
-         L = IPVT(K)
-         IF (L .EQ. K) GO TO 70
-            T = B(L)
-            B(L) = B(K)
-            B(K) = T
-70 CONTINUE
-      END DO
-90 CONTINUE
-100 CONTINUE
-RETURN
-END SUBROUTINE SGBSL
+   if (ml .eq. 0) go to 90
+   if (nm1 .lt. 1) go to 90
+      do kb = 1, nm1
+         k = n - kb
+         lm = min0(ml,n-k)
+         b(k) = b(k) + sdot(lm,abd(m+1,k),1,b(k+1),1)
+         l = ipvt(k)
+         if (l .eq. k) go to 70
+            t = b(l)
+            b(l) = b(k)
+            b(k) = t
+70 continue
+      end do
+90 continue
+100 continue
+return
+end subroutine sgbsl
 
-FUNCTION VNORM(V,NCOMP)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCOMP
-REAL :: V(NCOMP)
-INTEGER :: K
-REAL :: VNORM
+function vnorm(v,ncomp)
+implicit none
+integer, intent(in) :: ncomp
+real :: v(ncomp)
+integer :: k
+real :: vnorm
 !
 !     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
 !     RETURN THE RESULT AS VNORM
 !
 !
-VNORM=0.
-do 10 K = 1,NCOMP
-10 VNORM=AMAX1(VNORM,ABS(V(K)))
-RETURN
-END FUNCTION VNORM
+vnorm=0.
+do 10 k = 1,ncomp
+10 vnorm=amax1(vnorm,abs(v(k)))
+return
+end function vnorm
 
-REAL function VNWRMS (N, V, W)
-IMPLICIT NONE
+real function vnwrms (n, v, w)
+implicit none
 !-----------------------------------------------------------------------
 ! THIS FUNCTION ROUTINE COMPUTES THE WEIGHTED ROOT-MEAN-SQUARE NORM
 ! OF THE VECTOR OF LENGTH N CONTAINED IN THE ARRAY V, WITH WEIGHTS
 ! CONTAINED IN THE ARRAY W OF LENGTH N..
 !   VNWRMS = SQRT( (1/N) * SUM( V(I)/W(I) )**2 )
 !-----------------------------------------------------------------------
-INTEGER, INTENT(IN) :: N
-INTEGER :: I
-REAL :: V(N), W(N), SUM
+integer, intent(in) :: n
+integer :: i
+real :: v(n), w(n), sum
 !
-SUM = 0.0E0
-do 10 I = 1,N
-10 SUM = SUM + (V(I)/W(I))**2
-VNWRMS = SQRT(SUM/FLOAT(N))
-RETURN
+sum = 0.0e0
+do 10 i = 1,n
+10 sum = sum + (v(i)/w(i))**2
+vnwrms = sqrt(sum/float(n))
+return
 !----------------------- END OF FUNCTION VNWRMS ------------------------
-END FUNCTION VNWRMS
+end function vnwrms
 
-SUBROUTINE RK(N,T,H,A,F)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(INOUT) :: A(*)
-REAL, INTENT(IN) :: H
-REAL, INTENT(INOUT) :: T
-INTEGER :: K, M, M1, MK, NK, NP1
-REAL :: HA, TA
+subroutine rk(n,t,h,a,f)
+implicit none
+integer, intent(in) :: n
+real, intent(inout) :: a(*)
+real, intent(in) :: h
+real, intent(inout) :: t
+integer :: k, m, m1, mk, nk, np1
+real :: ha, ta
 !     ******************************************************************
 !     FOURTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 !     ******************************************************************
-EXTERNAL F
-NP1=N+1
-IF (H.EQ.0.0) GO TO 50
+external f
+np1=n+1
+if (h.eq.0.0) go to 50
 !
-HA=.5*H
-TA=T+HA
-M=N+N
-M1=M+1
+ha=.5*h
+ta=t+ha
+m=n+n
+m1=m+1
 !
-do 10 K = 1,N
-NK=N+K
-MK=M+K
-A(NK)=HA*A(NK)
-10 A(MK)=A(K)+A(NK)
-CALL F(TA,A(M1))
+do 10 k = 1,n
+nk=n+k
+mk=m+k
+a(nk)=ha*a(nk)
+10 a(mk)=a(k)+a(nk)
+call f(ta,a(m1))
 !
-do 20 K = 1,N
-NK=N+K
-MK=M+K
-A(NK)=A(NK)+H*A(MK)
-20 A(MK)=A(K)+HA*A(MK)
-CALL F(TA,A(M1))
+do 20 k = 1,n
+nk=n+k
+mk=m+k
+a(nk)=a(nk)+h*a(mk)
+20 a(mk)=a(k)+ha*a(mk)
+call f(ta,a(m1))
 !
-T=T+H
-do 30 K = 1,N
-NK=N+K
-MK=M+K
-A(MK)=H*A(MK)
-A(NK)=A(NK)+A(MK)
-30 A(MK)=A(K)+A(MK)
-CALL F(T,A(M1))
+t=t+h
+do 30 k = 1,n
+nk=n+k
+mk=m+k
+a(mk)=h*a(mk)
+a(nk)=a(nk)+a(mk)
+30 a(mk)=a(k)+a(mk)
+call f(t,a(m1))
 !
-do 40 K = 1,N
-NK=N+K
-MK=M+K
-A(K)=A(K)+(A(NK)+HA*A(MK))/3.0
-40 A(NK)=A(K)
-CALL F(T,A(NP1))
-RETURN
+do 40 k = 1,n
+nk=n+k
+mk=m+k
+a(k)=a(k)+(a(nk)+ha*a(mk))/3.0
+40 a(nk)=a(k)
+call f(t,a(np1))
+return
 !
-50 do 51 K = 1,N
-NK=N+K
-51 A(NK)=A(K)
-CALL F(T,A(NP1))
-RETURN
-END SUBROUTINE RK
+50 do 51 k = 1,n
+nk=n+k
+51 a(nk)=a(k)
+call f(t,a(np1))
+return
+end subroutine rk
 
-SUBROUTINE RK8(N,T,H,Y,DY,W,F)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL :: H
-REAL, INTENT(INOUT) :: T
-INTEGER :: I, J, K, L, M, M1
-REAL :: HA, SUM
+subroutine rk8(n,t,h,y,dy,w,f)
+implicit none
+integer, intent(in) :: n
+real :: h
+real, intent(inout) :: t
+integer :: i, j, k, l, m, m1
+real :: ha, sum
 !     ******************************************************************
 !     EIGHTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 !     ******************************************************************
-REAL, INTENT(INOUT) :: Y(N), DY(N), W(*)
-REAL :: A(7), B(8,7), C(7), D(9)
-EXTERNAL F
+real, intent(inout) :: y(n), dy(n), w(*)
+real :: a(7), b(8,7), c(7), d(9)
+external f
 !     -------------------
-DATA A(1)/.3333333333333333/,  A(2)/.5/,  A(3)/.6666666666666666/, &
-&A(4)/.1666666666666666/,  A(5)/1./,  A(6)/.8333333333333333/, &
-&A(7)/1./
-DATA B(1,1)/1./,  B(2,1)/3./
-DATA B(1,2)/1./,  B(2,2)/0./,  B(3,2)/3./
-DATA B(1,3)/13./,  B(2,3)/-27./,  B(3,3)/42./,  B(4,3)/8./
-DATA B(1,4)/389./,  B(2,4)/-54./,  B(3,4)/966./,  B(4,4)/-824./, &
-&B(5,4)/243./
-DATA B(1,5)/-231./,  B(2,5)/81./,  B(3,5)/-1164./,  B(4,5)/656./, &
-&B(5,5)/-122./,  B(6,5)/800./
-DATA B(1,6)/-127./,  B(2,6)/18./,  B(3,6)/-678./,  B(4,6)/456./, &
-&B(5,6)/-9./,  B(6,6)/576./,  B(7,6)/4./
-DATA B(1,7)/1481./,  B(2,7)/-81./,  B(3,7)/7104./, &
-&B(4,7)/-3376./,  B(5,7)/72./,  B(6,7)/-5040./, &
-&B(7,7)/-60./,  B(8,7)/720./
-DATA C(1)/12./,  C(2)/8./,  C(3)/54./,  C(4)/4320./,  C(5)/20./, &
-&C(6)/288./,  C(7)/820./
-DATA D(1)/41./,  D(2)/0./,  D(3)/27./,  D(4)/272./,  D(5)/27./, &
-&D(6)/216./,  D(7)/0./,  D(8)/216./,  D(9)/41./
+data a(1)/.3333333333333333/,  a(2)/.5/,  a(3)/.6666666666666666/, &
+&a(4)/.1666666666666666/,  a(5)/1./,  a(6)/.8333333333333333/, &
+&a(7)/1./
+data b(1,1)/1./,  b(2,1)/3./
+data b(1,2)/1./,  b(2,2)/0./,  b(3,2)/3./
+data b(1,3)/13./,  b(2,3)/-27./,  b(3,3)/42./,  b(4,3)/8./
+data b(1,4)/389./,  b(2,4)/-54./,  b(3,4)/966./,  b(4,4)/-824./, &
+&b(5,4)/243./
+data b(1,5)/-231./,  b(2,5)/81./,  b(3,5)/-1164./,  b(4,5)/656./, &
+&b(5,5)/-122./,  b(6,5)/800./
+data b(1,6)/-127./,  b(2,6)/18./,  b(3,6)/-678./,  b(4,6)/456./, &
+&b(5,6)/-9./,  b(6,6)/576./,  b(7,6)/4./
+data b(1,7)/1481./,  b(2,7)/-81./,  b(3,7)/7104./, &
+&b(4,7)/-3376./,  b(5,7)/72./,  b(6,7)/-5040./, &
+&b(7,7)/-60./,  b(8,7)/720./
+data c(1)/12./,  c(2)/8./,  c(3)/54./,  c(4)/4320./,  c(5)/20./, &
+&c(6)/288./,  c(7)/820./
+data d(1)/41./,  d(2)/0./,  d(3)/27./,  d(4)/272./,  d(5)/27./, &
+&d(6)/216./,  d(7)/0./,  d(8)/216./,  d(9)/41./
 !     -------------------
-IF (H.EQ.0.) GO TO 40
-HA=H*4./27.
-do 10 K = 1,N
-10 W(K)=Y(K)+HA*DY(K)
-CALL F(T+HA,W(1))
-do 11 K = 1,N
-11 W(K)=Y(K)+H*(DY(K)/18.+W(K)/6.)
-CALL F(T+H*2./9.,W(1))
+if (h.eq.0.) go to 40
+ha=h*4./27.
+do 10 k = 1,n
+10 w(k)=y(k)+ha*dy(k)
+call f(t+ha,w(1))
+do 11 k = 1,n
+11 w(k)=y(k)+h*(dy(k)/18.+w(k)/6.)
+call f(t+h*2./9.,w(1))
 !
-I=1
-do 22 M = 2,8
-I=I+N
-M1=M-1
-do 21 K = 1,N
-SUM=B(1,M1)*DY(K)
-L=K
-do 20 J = 2,M
-SUM=SUM+B(J,M1)*W(L)
-20 L=L+N
-21 W(L)=Y(K)+SUM*H/C(M1)
-22 CALL F(T+A(M1)*H,W(I))
+i=1
+do 22 m = 2,8
+i=i+n
+m1=m-1
+do 21 k = 1,n
+sum=b(1,m1)*dy(k)
+l=k
+do 20 j = 2,m
+sum=sum+b(j,m1)*w(l)
+20 l=l+n
+21 w(l)=y(k)+sum*h/c(m1)
+22 call f(t+a(m1)*h,w(i))
 !
-do 31 K = 1,N
-SUM=D(1)*DY(K)
-L=K
-do 30 M = 2,9
-SUM=SUM+D(M)*W(L)
-30 L=L+N
-Y(K)=Y(K)+H*SUM/840.
-31 DY(K)=Y(K)
-T=T+H
-CALL F(T,DY)
-RETURN
+do 31 k = 1,n
+sum=d(1)*dy(k)
+l=k
+do 30 m = 2,9
+sum=sum+d(m)*w(l)
+30 l=l+n
+y(k)=y(k)+h*sum/840.
+31 dy(k)=y(k)
+t=t+h
+call f(t,dy)
+return
 !
-40 do 41 K = 1,N
-41 DY(K)=Y(K)
-CALL F(T,DY)
-RETURN
-END SUBROUTINE RK8
+40 do 41 k = 1,n
+41 dy(k)=y(k)
+call f(t,dy)
+return
+end subroutine rk8
 
-SUBROUTINE SEPDE (COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1, &
-&C, D, NP1, U, KU, W, NW, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER :: IORD, KU, MP1
-INTEGER, INTENT(IN) :: NP1
-INTEGER, INTENT(INOUT) :: NW
-REAL :: A, B, C, D
-INTEGER :: I, IA, IB, IC, ID, IJ, IMAX, IMIN, INDX, INDY, IW, J, &
-&JCOL, JMAX, JMIN, L, M, MN, N
-REAL :: ALPHA, BETA, DEL, GAM, HX, HY, P, XI, XMIN, YJ, YMIN
-REAL :: G
-REAL :: BVAL
+subroutine sepde (cofx, cofy, g, edge, bval, iord, a, b, mp1, &
+&c, d, np1, u, ku, w, nw, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer :: iord, ku, mp1
+integer, intent(in) :: np1
+integer, intent(inout) :: nw
+real :: a, b, c, d
+integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
+&jcol, jmax, jmin, l, m, mn, n
+real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin
+real :: g
+real :: bval
 ! ----------------------------------------------------------------------
 !     SOLUTION OF SEPARABLE ELLIPTIC PARTIAL DIFFERENTIAL EQUATIONS
 !                     ON RECTANGULAR DOMAINS
 ! ----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: U(KU,NP1), W(NW)
-REAL :: DUM(1)
-INTEGER, INTENT(IN) :: EDGE(4)
-EXTERNAL COFX, COFY
+real, intent(inout) :: u(ku,np1), w(nw)
+real :: dum(1)
+integer, intent(in) :: edge(4)
+external cofx, cofy
 !     --------------
-DATA ALPHA/0.0/, BETA/0.0/, GAM/0.0/, DEL/0.0/
+data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
 !     --------------
-CALL PDEDGE (EDGE, INDX, INDY, IERR)
-IF (IERR .NE. 0) RETURN
+call pdedge (edge, indx, indy, ierr)
+if (ierr .ne. 0) return
 !
-IF (A .GE. B .OR. C .GE. D) GO TO 300
-IF (MP1 .LT. 7) GO TO 320
-IF (NP1 .LT. 6) GO TO 330
-M = MP1 - 1
-N = NP1 - 1
-HX = (B - A)/FLOAT(M)
-HY = (D - C)/FLOAT(N)
+if (a .ge. b .or. c .ge. d) go to 300
+if (mp1 .lt. 7) go to 320
+if (np1 .lt. 6) go to 330
+m = mp1 - 1
+n = np1 - 1
+hx = (b - a)/float(m)
+hy = (d - c)/float(n)
 !
 !     DEFINE THE MAXIMUM AND MINIMUM ROW AND COLUMN
 !     THAT IS NEEDED FOR THE RIGHT-HAND SIDE MATRIX
 !
-XMIN = A
-YMIN = C
-IMIN = 1
-IMAX = MP1
-JMIN = 1
-JMAX = NP1
-JCOL = 0
-IF (EDGE(1) .NE. 0) GO TO 10
-JMIN = 2
-YMIN = C + HY
-JCOL = MP1
-10 IF (EDGE(2) .NE. 0) GO TO 20
-IMIN = 2
-XMIN = A + HX
-20 IF (EDGE(3) .EQ. 0) JMAX = N
-IF (EDGE(4) .EQ. 0) IMAX = M
+xmin = a
+ymin = c
+imin = 1
+imax = mp1
+jmin = 1
+jmax = np1
+jcol = 0
+if (edge(1) .ne. 0) go to 10
+jmin = 2
+ymin = c + hy
+jcol = mp1
+10 if (edge(2) .ne. 0) go to 20
+imin = 2
+xmin = a + hx
+20 if (edge(3) .eq. 0) jmax = n
+if (edge(4) .eq. 0) imax = m
 !
 !     DEFINE THE RIGHT-HAND SIDE MATRIX FOR IORD = 2
 !
-IF (KU .LT. MP1) GO TO 310
-IF (IORD .NE. 2) GO TO 40
-MN = 0
+if (ku .lt. mp1) go to 310
+if (iord .ne. 2) go to 40
+mn = 0
 !
-YJ = YMIN
-do 31 J = JMIN,JMAX
-XI = XMIN
-   do 30 I = IMIN,IMAX
-   U(I,J) = G(XI, YJ)
-30 XI = XI + HX
-31 YJ = YJ + HY
-GO TO 60
+yj = ymin
+do 31 j = jmin,jmax
+xi = xmin
+   do 30 i = imin,imax
+   u(i,j) = g(xi, yj)
+30 xi = xi + hx
+31 yj = yj + hy
+go to 60
 !
 !     DEFINE THE RIGHT-HAND SIDE MATRIX FOR IORD = 4
 !
-40 IF (IORD .NE. 4) GO TO 340
-MN = MP1*NP1
-IF (MN .GE. NW) GO TO 100
+40 if (iord .ne. 4) go to 340
+mn = mp1*np1
+if (mn .ge. nw) go to 100
 !
-YJ = YMIN
-do 51 J = JMIN,JMAX
-XI = XMIN
-   do 50 I = IMIN,IMAX
-   IJ = I + JCOL
-   W(IJ) = G(XI, YJ)
-50 XI = XI + HX
-YJ = YJ + HY
-51 JCOL = JCOL + MP1
+yj = ymin
+do 51 j = jmin,jmax
+xi = xmin
+   do 50 i = imin,imax
+   ij = i + jcol
+   w(ij) = g(xi, yj)
+50 xi = xi + hx
+yj = yj + hy
+51 jcol = jcol + mp1
 !
 !     STORE THE BOUNDARY VALUES OF U
 !
-60 IF (EDGE(1) .NE. 0) GO TO 70
-XI = A
-do 61 I = 1,MP1
-   U(I,1) = BVAL(1,XI,C)
-61 XI = XI + HX
+60 if (edge(1) .ne. 0) go to 70
+xi = a
+do 61 i = 1,mp1
+   u(i,1) = bval(1,xi,c)
+61 xi = xi + hx
 !
-70 IF (EDGE(2) .NE. 0) GO TO 80
-YJ = C
-do 71 J = 1,NP1
-   U(1,J) = BVAL(2,A,YJ)
-71 YJ = YJ + HY
+70 if (edge(2) .ne. 0) go to 80
+yj = c
+do 71 j = 1,np1
+   u(1,j) = bval(2,a,yj)
+71 yj = yj + hy
 !
-80 IF (EDGE(3) .NE. 0) GO TO 90
-XI = A
-do 81 I = 1,MP1
-   U(I,NP1) = BVAL(3,XI,D)
-81 XI = XI + HX
+80 if (edge(3) .ne. 0) go to 90
+xi = a
+do 81 i = 1,mp1
+   u(i,np1) = bval(3,xi,d)
+81 xi = xi + hx
 !
-90 IF (EDGE(4) .NE. 0) GO TO 100
-YJ = C
-do 91 J = 1,NP1
-   U(MP1,J) = BVAL(4,B,YJ)
-91 YJ = YJ + HY
+90 if (edge(4) .ne. 0) go to 100
+yj = c
+do 91 j = 1,np1
+   u(mp1,j) = bval(4,b,yj)
+91 yj = yj + hy
 !
 !     STORE THE MIXED BOUNDARY CONDITIONS
 !
-100 IC = MN + 1
-IF (EDGE(1) .NE. 1) GO TO 120
-MN = MN + MP1
-IF (MN .GE. NW) GO TO 120
+100 ic = mn + 1
+if (edge(1) .ne. 1) go to 120
+mn = mn + mp1
+if (mn .ge. nw) go to 120
 !
-XI = A
-L = IC
-DO I = 1,MP1
-   W(L) = BVAL(1,XI,C)
-   XI = XI + HX
-   L = L + 1
-END DO
+xi = a
+l = ic
+do i = 1,mp1
+   w(l) = bval(1,xi,c)
+   xi = xi + hx
+   l = l + 1
+end do
 !
-120 IA = MN + 1
-IF (EDGE(2) .NE. 1) GO TO 140
-MN = MN + NP1
-IF (MN .GE. NW) GO TO 140
+120 ia = mn + 1
+if (edge(2) .ne. 1) go to 140
+mn = mn + np1
+if (mn .ge. nw) go to 140
 !
-YJ = C
-L = IA
-DO J = 1,NP1
-   W(L) = BVAL(2,A,YJ)
-   YJ = YJ + HY
-   L = L + 1
-END DO
+yj = c
+l = ia
+do j = 1,np1
+   w(l) = bval(2,a,yj)
+   yj = yj + hy
+   l = l + 1
+end do
 !
-140 ID = MN + 1
-IF (EDGE(3) .NE. 1) GO TO 160
-MN = MN + MP1
-IF (MN .GE. NW) GO TO 160
+140 id = mn + 1
+if (edge(3) .ne. 1) go to 160
+mn = mn + mp1
+if (mn .ge. nw) go to 160
 !
-XI = A
-L = ID
-DO I = 1,MP1
-   W(L) = BVAL(3,XI,D)
-   XI = XI + HX
-   L = L + 1
-END DO
+xi = a
+l = id
+do i = 1,mp1
+   w(l) = bval(3,xi,d)
+   xi = xi + hx
+   l = l + 1
+end do
 !
-160 IB = MN + 1
-IF (EDGE(4) .NE. 1) GO TO 200
-MN = MN + NP1
-IF (MN .GE. NW) GO TO 200
+160 ib = mn + 1
+if (edge(4) .ne. 1) go to 200
+mn = mn + np1
+if (mn .ge. nw) go to 200
 !
-YJ = C
-L = IB
-DO J = 1,NP1
-   W(L) = BVAL(4,B,YJ)
-   YJ = YJ + HY
-   L = L + 1
-END DO
+yj = c
+l = ib
+do j = 1,np1
+   w(l) = bval(4,b,yj)
+   yj = yj + hy
+   l = l + 1
+end do
 !
 !     CALL THE DIFFERENTIAL EQUATION SOLVER
 !
-200 IF (MN .GE. NW) GO TO 350
-IW = MN + 1
-W(IW) = NW - MN
-IF (IORD .EQ. 4) GO TO 210
+200 if (mn .ge. nw) go to 350
+iw = mn + 1
+w(iw) = nw - mn
+if (iord .eq. 4) go to 210
 !
-CALL SEPELL (0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA, &
-&C, D, N, INDY, W(IC), GAM, W(ID), DEL, COFX, COFY, &
-&U, KU, U, KU, W(IW), P, IERR)
-GO TO 220
+call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+&c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+&u, ku, u, ku, w(iw), p, ierr)
+go to 220
 !
-210 CALL SEPELL (0, IORD, A, B, M, INDX, W(IA), ALPHA, W(IB), BETA, &
-&C, D, N, INDY, W(IC), GAM, W(ID), DEL, COFX, COFY, &
-&W(1),MP1, U, KU, W(IW), P, IERR)
+210 call sepell (0, iord, a, b, m, indx, w(ia), alpha, w(ib), beta, &
+&c, d, n, indy, w(ic), gam, w(id), del, cofx, cofy, &
+&w(1),mp1, u, ku, w(iw), p, ierr)
 !
-220 NW = W(IW) + MN
-IF (IERR .NE. 0) RETURN
-IF (P .EQ. 0.0) RETURN
-IERR = -1
-W(1) = P
-RETURN
+220 nw = w(iw) + mn
+if (ierr .ne. 0) return
+if (p .eq. 0.0) return
+ierr = -1
+w(1) = p
+return
 !
 !     ERROR RETURN
 !
-300 IERR = 1
-RETURN
+300 ierr = 1
+return
 !
-310 IERR = 5
-RETURN
+310 ierr = 5
+return
 !
-320 IERR = 6
-RETURN
+320 ierr = 6
+return
 !
-330 IERR = 7
-RETURN
+330 ierr = 7
+return
 !
-340 IERR = 8
-RETURN
+340 ierr = 8
+return
 !
-350 DUM(1) = 1.0
-CALL SEPELL (0, IORD, A, B, M, INDX, DUM, ALPHA, DUM, BETA, &
-&C, D, N, INDY, DUM, GAM, DUM, DEL, COFX, COFY, &
-&U, KU, U, KU, DUM, P, IERR)
-NW = DUM(1) + MN
-RETURN
-END SUBROUTINE SEPDE
+350 dum(1) = 1.0
+call sepell (0, iord, a, b, m, indx, dum, alpha, dum, beta, &
+&c, d, n, indy, dum, gam, dum, del, cofx, cofy, &
+&u, ku, u, ku, dum, p, ierr)
+nw = dum(1) + mn
+return
+end subroutine sepde
 
-SUBROUTINE PDEDGE (EDGE, INDX, INDY, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, INDX, INDY
-INTEGER, INTENT(IN) :: EDGE(4)
+subroutine pdedge (edge, indx, indy, ierr)
+implicit none
+integer, intent(inout) :: ierr, indx, indy
+integer, intent(in) :: edge(4)
 !
-IF (IABS(EDGE(1)) .GT. 1) GO TO 200
-IF (IABS(EDGE(2)) .GT. 1) GO TO 200
-IF (IABS(EDGE(3)) .GT. 1) GO TO 200
-IF (IABS(EDGE(4)) .GT. 1) GO TO 200
-IERR = 0
+if (iabs(edge(1)) .gt. 1) go to 200
+if (iabs(edge(2)) .gt. 1) go to 200
+if (iabs(edge(3)) .gt. 1) go to 200
+if (iabs(edge(4)) .gt. 1) go to 200
+ierr = 0
 !
 !               PROCESS EDGES 1 AND 3
 !
-IF (EDGE(1)) 10,20,30
+if (edge(1)) 10,20,30
 !
-10 IF (EDGE(3) .NE. -1) GO TO 210
-INDY = 0
-GO TO 100
+10 if (edge(3) .ne. -1) go to 210
+indy = 0
+go to 100
 !
-20 IF (EDGE(3) .EQ. -1) GO TO 210
-INDY = 1 + EDGE(3)
-GO TO 100
+20 if (edge(3) .eq. -1) go to 210
+indy = 1 + edge(3)
+go to 100
 !
-30 IF (EDGE(3) .EQ. -1) GO TO 210
-INDY = 4 - EDGE(3)
+30 if (edge(3) .eq. -1) go to 210
+indy = 4 - edge(3)
 !
 !               PROCESS EDGES 2 AND 4
 !
-100 IF (EDGE(2)) 110,120,130
+100 if (edge(2)) 110,120,130
 !
-110 IF (EDGE(4) .NE. -1) GO TO 220
-INDX = 0
-RETURN
+110 if (edge(4) .ne. -1) go to 220
+indx = 0
+return
 !
-120 IF (EDGE(4) .EQ. -1) GO TO 220
-INDX = 1 + EDGE(4)
-RETURN
+120 if (edge(4) .eq. -1) go to 220
+indx = 1 + edge(4)
+return
 !
-130 IF (EDGE(4) .EQ. -1) GO TO 220
-INDX = 4 - EDGE(4)
-RETURN
+130 if (edge(4) .eq. -1) go to 220
+indx = 4 - edge(4)
+return
 !
 !                   ERROR RETURN
 !
-200 IERR = 2
-RETURN
-210 IERR = 12
-RETURN
-220 IERR = 13
-RETURN
-END SUBROUTINE PDEDGE
+200 ierr = 2
+return
+210 ierr = 12
+return
+220 ierr = 13
+return
+end subroutine pdedge
 
-SUBROUTINE SEPELL (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C, &
-&D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN, &
-&USOL,IDMN,W,PERTRB,IERROR)
-IMPLICIT NONE
-INTEGER :: IDMN
-INTEGER, INTENT(INOUT) :: IERROR
-INTEGER :: INTL, IORDER, M, MBDCND, MN, N, NBDCND
-REAL :: A, ALPHA, B, BETA, C, D, GAMA
-REAL, INTENT(INOUT) :: PERTRB
-REAL :: XNU
-INTEGER :: I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9, &
-&K, L, LENGTH, LINPUT, LL, LOGB2N, LOUTPT
+subroutine sepell (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c, &
+&d,n,nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,grhs,mn, &
+&usol,idmn,w,pertrb,ierror)
+implicit none
+integer :: idmn
+integer, intent(inout) :: ierror
+integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
+real :: a, alpha, b, beta, c, d, gama
+real, intent(inout) :: pertrb
+real :: xnu
+integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
+&k, l, length, linput, ll, logb2n, loutpt
 !
 !
 ! DIMENSION OF           BDA(N+1), BDB(N+1), BDC(M+1), BDD(M+1),
@@ -10804,54 +10804,54 @@ INTEGER :: I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9, &
 !
 !
 !
-REAL, INTENT(INOUT) :: GRHS(MN,*), USOL(IDMN,*)
-REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
-REAL, INTENT(INOUT) :: W(*)
-EXTERNAL COFX, COFY
+real, intent(inout) :: grhs(mn,*), usol(idmn,*)
+real :: bda(*), bdb(*), bdc(*), bdd(*)
+real, intent(inout) :: w(*)
+external cofx, cofy
 !
 !
 !     CHECK INPUT PARAMETERS
 !
-CALL CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,COFY, &
-&IDMN,MN,IERROR)
-IF (IERROR .NE. 0) RETURN
+call chkprm (intl,iorder,a,b,m,mbdcnd,c,d,n,nbdcnd,cofx,cofy, &
+&idmn,mn,ierror)
+if (ierror .ne. 0) return
 !
 !     COMPUTE MINIMUM WORK SPACE AND CHECK WORK SPACE LENGTH INPUT
 !
-L = N+1
-IF (NBDCND .EQ. 0) L = N
-LOGB2N = INT(ALOG(FLOAT(L)+0.5)/ALOG(2.0))+1
-LL = 2**(LOGB2N+1)
-K = M+1
-L = N+1
-LENGTH = (LOGB2N-2)*LL+LOGB2N+MAX0(2*L,6*K)+5
-IF (NBDCND .EQ. 0) LENGTH = LENGTH+2*L
-IERROR = 11
-LINPUT = INT(W(1)+0.5)
-LOUTPT = LENGTH+6*(K+L)+1
-W(1) = FLOAT(LOUTPT)
-IF (LOUTPT .GT. LINPUT) RETURN
-IERROR = 0
+l = n+1
+if (nbdcnd .eq. 0) l = n
+logb2n = int(alog(float(l)+0.5)/alog(2.0))+1
+ll = 2**(logb2n+1)
+k = m+1
+l = n+1
+length = (logb2n-2)*ll+logb2n+max0(2*l,6*k)+5
+if (nbdcnd .eq. 0) length = length+2*l
+ierror = 11
+linput = int(w(1)+0.5)
+loutpt = length+6*(k+l)+1
+w(1) = float(loutpt)
+if (loutpt .gt. linput) return
+ierror = 0
 !
 !     SET WORK SPACE INDICES
 !
-I1 = LENGTH+2
-I2 = I1+L
-I3 = I2+L
-I4 = I3+L
-I5 = I4+L
-I6 = I5+L
-I7 = I6+L
-I8 = I7+K
-I9 = I8+K
-I10 = I9+K
-I11 = I10+K
-I12 = I11+K
-I13 = 2
-CALL SEPEL1 (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,D,N, &
-&NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,W(I1),W(I2),W(I3), &
-&W(I4),W(I5),W(I6),W(I7),W(I8),W(I9),W(I10),W(I11), &
-&W(I12),GRHS,MN,USOL,IDMN,W(I13),PERTRB,IERROR)
-RETURN
-END SUBROUTINE SEPELL
+i1 = length+2
+i2 = i1+l
+i3 = i2+l
+i4 = i3+l
+i5 = i4+l
+i6 = i5+l
+i7 = i6+l
+i8 = i7+k
+i9 = i8+k
+i10 = i9+k
+i11 = i10+k
+i12 = i11+k
+i13 = 2
+call sepel1 (intl,iorder,a,b,m,mbdcnd,bda,alpha,bdb,beta,c,d,n, &
+&nbdcnd,bdc,gama,bdd,xnu,cofx,cofy,w(i1),w(i2),w(i3), &
+&w(i4),w(i5),w(i6),w(i7),w(i8),w(i9),w(i10),w(i11), &
+&w(i12),grhs,mn,usol,idmn,w(i13),pertrb,ierror)
+return
+end subroutine sepell
 

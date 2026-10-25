@@ -1,100 +1,100 @@
-SUBROUTINE CALCT(BOOL,N,SR,SI,TR,TI,PVR,PVI,ARE,HR,HI,QHR,QHI)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
+subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
+implicit none
+integer, intent(in) :: n
 !
 !     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
 !
 !     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
 !            ESSENTIALLY ZERO.
 !
-LOGICAL, INTENT(INOUT) :: BOOL
-DOUBLE PRECISION, INTENT(IN) :: SR, SI
-DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
-DOUBLE PRECISION, INTENT(IN) :: PVR, PVI, ARE, HR(N), HI(N)
-DOUBLE PRECISION, INTENT(INOUT) :: QHR(N), QHI(N)
-DOUBLE PRECISION :: HVR, HVI, DCPABS
+logical, intent(inout) :: bool
+double precision, intent(in) :: sr, si
+double precision, intent(inout) :: tr, ti
+double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
+double precision, intent(inout) :: qhr(n), qhi(n)
+double precision :: hvr, hvi, dcpabs
 !
 !     EVALUATE H(S)
 !
-CALL POLYEV (N,SR,SI,HR,HI,QHR,QHI,HVR,HVI)
-BOOL = DCPABS(HVR,HVI) .LE. 10.D0*ARE*DCPABS(HR(N),HI(N))
-IF (BOOL) GO TO 10
-   CALL CDIVID(-PVR,-PVI,HVR,HVI,TR,TI)
-   RETURN
-10 TR = 0.D0
-TI = 0.D0
-RETURN
-END SUBROUTINE CALCT
+call polyev (n,sr,si,hr,hi,qhr,qhi,hvr,hvi)
+bool = dcpabs(hvr,hvi) .le. 10.d0*are*dcpabs(hr(n),hi(n))
+if (bool) go to 10
+   call cdivid(-pvr,-pvi,hvr,hvi,tr,ti)
+   return
+10 tr = 0.d0
+ti = 0.d0
+return
+end subroutine calct
 
-SUBROUTINE NEXTH(BOOL,N,TR,TI,HR,HI,QPR,QPI,QHR,QHI)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: J
+subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
+implicit none
+integer, intent(in) :: n
+integer :: j
 !
 !     CALCULATES THE NEXT SHIFTED H POLYNOMIAL.
 !
 !     BOOL - LOGICAL VARIABLE. IF .TRUE. H(S) IS ESSENTIALLY ZERO.
 !
-LOGICAL, INTENT(IN) :: BOOL
-DOUBLE PRECISION, INTENT(IN) :: TR, TI
-DOUBLE PRECISION, INTENT(INOUT) :: HR(N), HI(N)
-DOUBLE PRECISION, INTENT(IN) :: QPR(N), QPI(N), QHR(N), QHI(N)
-DOUBLE PRECISION :: T1, T2
+logical, intent(in) :: bool
+double precision, intent(in) :: tr, ti
+double precision, intent(inout) :: hr(n), hi(n)
+double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
+double precision :: t1, t2
 !
-IF (BOOL) GO TO 20
-   DO J = 2,N
-      T1 = QHR(J - 1)
-      T2 = QHI(J - 1)
-      HR(J) = TR*T1 - TI*T2 + QPR(J)
-      HI(J) = TR*T2 + TI*T1 + QPI(J)
-   END DO
-   HR(1) = QPR(1)
-   HI(1) = QPI(1)
-   RETURN
+if (bool) go to 20
+   do j = 2,n
+      t1 = qhr(j - 1)
+      t2 = qhi(j - 1)
+      hr(j) = tr*t1 - ti*t2 + qpr(j)
+      hi(j) = tr*t2 + ti*t1 + qpi(j)
+   end do
+   hr(1) = qpr(1)
+   hi(1) = qpi(1)
+   return
 !
 !     IF H(S) IS ZERO THEN REPLACE H WITH QH.
 !
-20 DO J = 2,N
-   HR(J) = QHR(J - 1)
-   HI(J) = QHI(J - 1)
-END DO
-HR(1) = 0.D0
-HI(1) = 0.D0
-RETURN
-END SUBROUTINE NEXTH
+20 do j = 2,n
+   hr(j) = qhr(j - 1)
+   hi(j) = qhi(j - 1)
+end do
+hr(1) = 0.d0
+hi(1) = 0.d0
+return
+end subroutine nexth
 
-SUBROUTINE POLYEV(N,SR,SI,PR,PI,QR,QI,PVR,PVI)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I
+subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
+implicit none
+integer, intent(in) :: n
+integer :: i
 !
 !     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
 !     PLACING THE PARTIAL SUMS IN Q AND THE COMPUTED VALUE IN PV.
 !
-DOUBLE PRECISION, INTENT(IN) :: PR(N), PI(N)
-DOUBLE PRECISION, INTENT(INOUT) :: QR(N), QI(N)
-DOUBLE PRECISION, INTENT(IN) :: SR, SI
-DOUBLE PRECISION, INTENT(OUT) :: PVR, PVI
-DOUBLE PRECISION :: T
+double precision, intent(in) :: pr(n), pi(n)
+double precision, intent(inout) :: qr(n), qi(n)
+double precision, intent(in) :: sr, si
+double precision, intent(out) :: pvr, pvi
+double precision :: t
 !
-QR(1) = PR(1)
-QI(1) = PI(1)
-PVR = QR(1)
-PVI = QI(1)
-DO I = 2,N
-   T = PVR*SR - PVI*SI + PR(I)
-   PVI = PVR*SI + PVI*SR + PI(I)
-   PVR = T
-   QR(I) = PVR
-   QI(I) = PVI
-END DO
-RETURN
-END SUBROUTINE POLYEV
+qr(1) = pr(1)
+qi(1) = pi(1)
+pvr = qr(1)
+pvi = qi(1)
+do i = 2,n
+   t = pvr*sr - pvi*si + pr(i)
+   pvi = pvr*si + pvi*sr + pi(i)
+   pvr = t
+   qr(i) = pvr
+   qi(i) = pvi
+end do
+return
+end subroutine polyev
 
-double precision function ERREV(NN,QR,QI,MS,MP,ARE,MRE)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NN
-INTEGER :: I
+double precision function errev(nn,qr,qi,ms,mp,are,mre)
+implicit none
+integer, intent(in) :: nn
+integer :: i
 !
 !     BOUNDS THE ERROR IN EVALUATING THE POLYNOMIAL BY THE HORNER
 !     RECURRENCE ALGORITHM.
@@ -104,25 +104,25 @@ INTEGER :: I
 !     MP      - MODULUS OF THE POLYNOMIAL VALUE
 !     ARE,MRE - ERROR BOUNDS ON COMPLEX ADDITION AND MULTIPLICATION
 !
-DOUBLE PRECISION, INTENT(IN) :: QR(NN), QI(NN), MS, MP, ARE, MRE
-DOUBLE PRECISION :: E, DCPABS
+double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
+double precision :: e, dcpabs
 !
-E = DCPABS(QR(1),QI(1))*MRE/(ARE + MRE)
-DO I = 1,NN
-   E = E*MS + DCPABS(QR(I),QI(I))
-END DO
-ERREV = E*(ARE + MRE) - MP*MRE
-RETURN
-END FUNCTION ERREV
+e = dcpabs(qr(1),qi(1))*mre/(are + mre)
+do i = 1,nn
+   e = e*ms + dcpabs(qr(i),qi(i))
+end do
+errev = e*(are + mre) - mp*mre
+return
+end function errev
 
-SUBROUTINE RBND (N, C, W, ABSERR, RELERR, KLUST, KER)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: KER
-INTEGER, INTENT(IN) :: N
-INTEGER :: J, JP1, K, L, M, NM1, NP1
-REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
-REAL :: SPMPAR
-REAL :: CPABS
+subroutine rbnd (n, c, w, abserr, relerr, klust, ker)
+implicit none
+integer, intent(inout) :: ker
+integer, intent(in) :: n
+integer :: j, jp1, k, l, m, nm1, np1
+real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+real :: spmpar
+real :: cpabs
 !-----------------------------------------------------------------------
 !
 !     ABSTRACT
@@ -175,111 +175,111 @@ REAL :: CPABS
 !        JANUARY 1976
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: W(N)
-COMPLEX :: Z
-INTEGER, INTENT(INOUT) :: KLUST(N)
-REAL, INTENT(IN) :: C(*)
-REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
-DOUBLE PRECISION :: XR, XI, VR, VI, VT
-LOGICAL :: SHRUNK
+complex, intent(in) :: w(n)
+complex :: z
+integer, intent(inout) :: klust(n)
+real, intent(in) :: c(*)
+real, intent(inout) :: abserr(n), relerr(n)
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
 !
-                EPS = SPMPAR(1)
+                eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
-IF (N .LT. 1) GO TO 200
-NP1 = N + 1
-POWER = 1.0/FLOAT(N)
-P = ABS(C(NP1))
-IF (P .EQ. 0.0) GO TO 210
-RAT = 4.0*EPS*ABS(C(1))/P
+if (n .lt. 1) go to 200
+np1 = n + 1
+power = 1.0/float(n)
+p = abs(c(np1))
+if (p .eq. 0.0) go to 210
+rat = 4.0*eps*abs(c(1))/p
 !
-DO L = 1,N
-   XR = REAL(W(L))
-   XI = AIMAG(W(L))
-   VR = C(NP1)
-   VI = 0.0D0
-   DO J = 1,N
-      M = NP1 - J
-      VT = XR*VR - XI*VI + DBLE(C(M))
-      VI = XR*VI + XI*VR
-      VR = VT
-   END DO
-   B = AMAX1(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
+do l = 1,n
+   xr = real(w(l))
+   xi = aimag(w(l))
+   vr = c(np1)
+   vi = 0.0d0
+   do j = 1,n
+      m = np1 - j
+      vt = xr*vr - xi*vi + dble(c(m))
+      vi = xr*vi + xi*vr
+      vr = vt
+   end do
+   b = amax1(rat,cpabs(sngl(vr),sngl(vi))/p)
 !
 !        SAVE PRODUCT OF DISTANCES TEMPORARILY
 !
-   RELERR(L) = B
-   ABSERR(L) = B ** POWER
-END DO
+   relerr(l) = b
+   abserr(l) = b ** power
+end do
 !
-30 SHRUNK = .FALSE.
-do 50 J = 1,N
-   IF (ABSERR(J) .EQ. 0.0) GO TO 50
-   P = 1.0
-   M = N
-   do 40 K = 1,N
-      IF (K .EQ. J) GO TO 40
-      Z = W(J) - W(K)
-      DIST = CPABS(REAL(Z),AIMAG(Z))
-      CERT = DIST - ABSERR(K)
-      IF (CERT .LT. ABSERR(J)) GO TO 40
-         P = P*CERT
-         M = M - 1
-40 CONTINUE
-   OLDERR = ABSERR(J)
-   ABSERR(J) = RELERR(J)/P
-   IF (M .GT. 1) ABSERR(J) = ABSERR(J)**(1.0/FLOAT(M))
-   IF (ABSERR(J) .LT. OLDERR*0.99) SHRUNK = .TRUE.
-50 CONTINUE
-IF (SHRUNK) GO TO 30
+30 shrunk = .false.
+do 50 j = 1,n
+   if (abserr(j) .eq. 0.0) go to 50
+   p = 1.0
+   m = n
+   do 40 k = 1,n
+      if (k .eq. j) go to 40
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      cert = dist - abserr(k)
+      if (cert .lt. abserr(j)) go to 40
+         p = p*cert
+         m = m - 1
+40 continue
+   olderr = abserr(j)
+   abserr(j) = relerr(j)/p
+   if (m .gt. 1) abserr(j) = abserr(j)**(1.0/float(m))
+   if (abserr(j) .lt. olderr*0.99) shrunk = .true.
+50 continue
+if (shrunk) go to 30
 !
-do 80 J = 1,N
-   KLUST(J) = 1
-   WRAD = ABSERR(J)
-   WNRM = CPABS(REAL(W(J)),AIMAG(W(J)))
-   IF (WRAD .NE. 0.0) GO TO 60
-      R = 0.0
-      GO TO 80
-60 IF (WNRM .NE. 0.0) GO TO 70
-      R = -1.0
-      GO TO 80
-70 R = WRAD/WNRM
-80 RELERR(J) = R
+do 80 j = 1,n
+   klust(j) = 1
+   wrad = abserr(j)
+   wnrm = cpabs(real(w(j)),aimag(w(j)))
+   if (wrad .ne. 0.0) go to 60
+      r = 0.0
+      go to 80
+60 if (wnrm .ne. 0.0) go to 70
+      r = -1.0
+      go to 80
+70 r = wrad/wnrm
+80 relerr(j) = r
 !
-NM1 = N - 1
-DO J = 1,NM1
-   JP1 = J + 1
-   do 90 K = JP1,N
-      Z = W(J) - W(K)
-      DIST = CPABS(REAL(Z),AIMAG(Z))
-      IF (DIST .GT. (ABSERR(J) + ABSERR(K))) GO TO 90
-         KLUST(J) = KLUST(J) + 1
-         KLUST(K) = KLUST(K) + 1
-90 CONTINUE
-END DO
-KER = 0
-RETURN
+nm1 = n - 1
+do j = 1,nm1
+   jp1 = j + 1
+   do 90 k = jp1,n
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      if (dist .gt. (abserr(j) + abserr(k))) go to 90
+         klust(j) = klust(j) + 1
+         klust(k) = klust(k) + 1
+90 continue
+end do
+ker = 0
+return
 !
 !             ERROR RETURN
 !
-200 KER = 1
-RETURN
-210 KER = 2
-RETURN
-END SUBROUTINE RBND
+200 ker = 1
+return
+210 ker = 2
+return
+end subroutine rbnd
 
-SUBROUTINE CBND (N, C, W, ABSERR, RELERR, KLUST, KER)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: KER
-INTEGER, INTENT(IN) :: N
-INTEGER :: J, JP1, K, L, M, NM1, NP1
-REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
-REAL :: SPMPAR
-REAL :: CPABS
+subroutine cbnd (n, c, w, abserr, relerr, klust, ker)
+implicit none
+integer, intent(inout) :: ker
+integer, intent(in) :: n
+integer :: j, jp1, k, l, m, nm1, np1
+real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
+real :: spmpar
+real :: cpabs
 !-----------------------------------------------------------------------
 !
 !     ABSTRACT
@@ -332,254 +332,254 @@ REAL :: CPABS
 !        JANUARY 1976
 !     MODIFIED BY A.H. MORRIS (NSWC)
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: C(*), W(N)
-COMPLEX :: Z
-INTEGER, INTENT(INOUT) :: KLUST(N)
-REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
-DOUBLE PRECISION :: XR, XI, VR, VI, VT
-LOGICAL :: SHRUNK
+complex, intent(in) :: c(*), w(n)
+complex :: z
+integer, intent(inout) :: klust(n)
+real, intent(inout) :: abserr(n), relerr(n)
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
 !            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
 !
-                EPS = SPMPAR(1)
+                eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
-IF (N .LT. 1) GO TO 200
-NP1 = N + 1
-POWER = 1.0/FLOAT(N)
-P = CPABS(REAL(C(NP1)),AIMAG(C(NP1)))
-IF (P .EQ. 0.0) GO TO 210
-RAT = 4.0*EPS*CPABS(REAL(C(1)),AIMAG(C(1)))/P
+if (n .lt. 1) go to 200
+np1 = n + 1
+power = 1.0/float(n)
+p = cpabs(real(c(np1)),aimag(c(np1)))
+if (p .eq. 0.0) go to 210
+rat = 4.0*eps*cpabs(real(c(1)),aimag(c(1)))/p
 !
-DO L = 1,N
-   XR = REAL(W(L))
-   XI = AIMAG(W(L))
-   VR = REAL(C(NP1))
-   VI = AIMAG(C(NP1))
-   DO J = 1,N
-      M = NP1 - J
-      VT = XR*VR - XI*VI + DBLE(REAL(C(M)))
-      VI = XR*VI + XI*VR + DBLE(AIMAG(C(M)))
-      VR = VT
-   END DO
-   B = AMAX1(RAT,CPABS(SNGL(VR),SNGL(VI))/P)
+do l = 1,n
+   xr = real(w(l))
+   xi = aimag(w(l))
+   vr = real(c(np1))
+   vi = aimag(c(np1))
+   do j = 1,n
+      m = np1 - j
+      vt = xr*vr - xi*vi + dble(real(c(m)))
+      vi = xr*vi + xi*vr + dble(aimag(c(m)))
+      vr = vt
+   end do
+   b = amax1(rat,cpabs(sngl(vr),sngl(vi))/p)
 !
 !        SAVE PRODUCT OF DISTANCES TEMPORARILY
 !
-   RELERR(L) = B
-   ABSERR(L) = B ** POWER
-END DO
+   relerr(l) = b
+   abserr(l) = b ** power
+end do
 !
-30 SHRUNK = .FALSE.
-do 50 J = 1,N
-   IF (ABSERR(J) .EQ. 0.0) GO TO 50
-   P = 1.0
-   M = N
-   do 40 K = 1,N
-      IF (K .EQ. J) GO TO 40
-      Z = W(J) - W(K)
-      DIST = CPABS(REAL(Z),AIMAG(Z))
-      CERT = DIST - ABSERR(K)
-      IF (CERT .LT. ABSERR(J)) GO TO 40
-         P = P*CERT
-         M = M - 1
-40 CONTINUE
-   OLDERR = ABSERR(J)
-   ABSERR(J) = RELERR(J)/P
-   IF (M .GT. 1) ABSERR(J) = ABSERR(J)**(1.0/FLOAT(M))
-   IF (ABSERR(J) .LT. OLDERR*0.99) SHRUNK = .TRUE.
-50 CONTINUE
-IF (SHRUNK) GO TO 30
+30 shrunk = .false.
+do 50 j = 1,n
+   if (abserr(j) .eq. 0.0) go to 50
+   p = 1.0
+   m = n
+   do 40 k = 1,n
+      if (k .eq. j) go to 40
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      cert = dist - abserr(k)
+      if (cert .lt. abserr(j)) go to 40
+         p = p*cert
+         m = m - 1
+40 continue
+   olderr = abserr(j)
+   abserr(j) = relerr(j)/p
+   if (m .gt. 1) abserr(j) = abserr(j)**(1.0/float(m))
+   if (abserr(j) .lt. olderr*0.99) shrunk = .true.
+50 continue
+if (shrunk) go to 30
 !
-do 80 J = 1,N
-   KLUST(J) = 1
-   WRAD = ABSERR(J)
-   WNRM = CPABS(REAL(W(J)),AIMAG(W(J)))
-   IF (WRAD .NE. 0.0) GO TO 60
-      R = 0.0
-      GO TO 80
-60 IF (WNRM .NE. 0.0) GO TO 70
-      R = -1.0
-      GO TO 80
-70 R = WRAD/WNRM
-80 RELERR(J) = R
+do 80 j = 1,n
+   klust(j) = 1
+   wrad = abserr(j)
+   wnrm = cpabs(real(w(j)),aimag(w(j)))
+   if (wrad .ne. 0.0) go to 60
+      r = 0.0
+      go to 80
+60 if (wnrm .ne. 0.0) go to 70
+      r = -1.0
+      go to 80
+70 r = wrad/wnrm
+80 relerr(j) = r
 !
-NM1 = N - 1
-DO J = 1,NM1
-   JP1 = J + 1
-   do 90 K = JP1,N
-      Z = W(J) - W(K)
-      DIST = CPABS(REAL(Z),AIMAG(Z))
-      IF (DIST .GT. (ABSERR(J) + ABSERR(K))) GO TO 90
-         KLUST(J) = KLUST(J) + 1
-         KLUST(K) = KLUST(K) + 1
-90 CONTINUE
-END DO
-KER = 0
-RETURN
+nm1 = n - 1
+do j = 1,nm1
+   jp1 = j + 1
+   do 90 k = jp1,n
+      z = w(j) - w(k)
+      dist = cpabs(real(z),aimag(z))
+      if (dist .gt. (abserr(j) + abserr(k))) go to 90
+         klust(j) = klust(j) + 1
+         klust(k) = klust(k) + 1
+90 continue
+end do
+ker = 0
+return
 !
 !             ERROR RETURN
 !
-200 KER = 1
-RETURN
-210 KER = 2
-RETURN
-END SUBROUTINE CBND
+200 ker = 1
+return
+210 ker = 2
+return
+end subroutine cbnd
 
-SUBROUTINE  SCOPY(N,SX,INCX,SY,INCY)
-IMPLICIT NONE
+subroutine  scopy(n,sx,incx,sy,incy)
+implicit none
 !
 !     COPIES A VECTOR, X, TO A VECTOR, Y.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SX(*)
-REAL, INTENT(INOUT) :: SY(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+real, intent(in) :: sx(*)
+real, intent(inout) :: sy(*)
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  SY(IY) = SX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  sy(iy) = sx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,7)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  SY(I) = SX(I)
-END DO
-IF( N .LT. 7 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,7
-  SY(I) = SX(I)
-  SY(I + 1) = SX(I + 1)
-  SY(I + 2) = SX(I + 2)
-  SY(I + 3) = SX(I + 3)
-  SY(I + 4) = SX(I + 4)
-  SY(I + 5) = SX(I + 5)
-  SY(I + 6) = SX(I + 6)
-END DO
-RETURN
-END SUBROUTINE SCOPY
+20 m = mod(n,7)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  sy(i) = sx(i)
+end do
+if( n .lt. 7 ) return
+40 mp1 = m + 1
+do i = mp1,n,7
+  sy(i) = sx(i)
+  sy(i + 1) = sx(i + 1)
+  sy(i + 2) = sx(i + 2)
+  sy(i + 3) = sx(i + 3)
+  sy(i + 4) = sx(i + 4)
+  sy(i + 5) = sx(i + 5)
+  sy(i + 6) = sx(i + 6)
+end do
+return
+end subroutine scopy
 
-SUBROUTINE  DCOPY(N,DX,INCX,DY,INCY)
-IMPLICIT NONE
+subroutine  dcopy(n,dx,incx,dy,incy)
+implicit none
 !
 !     COPIES A VECTOR, X, TO A VECTOR, Y.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DX(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+double precision, intent(in) :: dx(*)
+double precision, intent(inout) :: dy(*)
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  DY(IY) = DX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  dy(iy) = dx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,7)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DY(I) = DX(I)
-END DO
-IF( N .LT. 7 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,7
-  DY(I) = DX(I)
-  DY(I + 1) = DX(I + 1)
-  DY(I + 2) = DX(I + 2)
-  DY(I + 3) = DX(I + 3)
-  DY(I + 4) = DX(I + 4)
-  DY(I + 5) = DX(I + 5)
-  DY(I + 6) = DX(I + 6)
-END DO
-RETURN
-END SUBROUTINE DCOPY
+20 m = mod(n,7)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dy(i) = dx(i)
+end do
+if( n .lt. 7 ) return
+40 mp1 = m + 1
+do i = mp1,n,7
+  dy(i) = dx(i)
+  dy(i + 1) = dx(i + 1)
+  dy(i + 2) = dx(i + 2)
+  dy(i + 3) = dx(i + 3)
+  dy(i + 4) = dx(i + 4)
+  dy(i + 5) = dx(i + 5)
+  dy(i + 6) = dx(i + 6)
+end do
+return
+end subroutine dcopy
 
-SUBROUTINE  CCOPY(N,CX,INCX,CY,INCY)
-IMPLICIT NONE
+subroutine  ccopy(n,cx,incx,cy,incy)
+implicit none
 !
 !     COPIES A VECTOR, X, TO A VECTOR, Y.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(IN) :: CX(*)
-COMPLEX, INTENT(INOUT) :: CY(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(in) :: cx(*)
+complex, intent(inout) :: cy(*)
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CY(IY) = CX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  cy(iy) = cx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  CY(I) = CX(I)
-END DO
-RETURN
-END SUBROUTINE CCOPY
+20 do i = 1,n
+  cy(i) = cx(i)
+end do
+return
+end subroutine ccopy
 
-SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, INCY, N
-INTEGER :: I, IIX, IIY, M, MP1, NS
+subroutine iswap (n,ix,incx,iy,incy)
+implicit none
+integer, intent(in) :: incx, incy, n
+integer :: i, iix, iiy, m, mp1, ns
 !
 !                EXTENDED B L A S  SUBPROGRAM
 !
@@ -603,367 +603,367 @@ INTEGER :: I, IIX, IIY, M, MP1, NS
 !
 !***AUTHOR  VANDEVENDER, W. (SNLA), 1985
 !
-INTEGER, INTENT(INOUT) :: IX(*), IY(*)
-INTEGER :: ITEMP1, ITEMP2, ITEMP3
+integer, intent(inout) :: ix(*), iy(*)
+integer :: itemp1, itemp2, itemp3
 !
-IF (N .LE. 0) RETURN
-IF (INCX .NE. INCY) GO TO 5
-IF (INCX-1) 5,20,60
-5 CONTINUE
+if (n .le. 0) return
+if (incx .ne. incy) go to 5
+if (incx-1) 5,20,60
+5 continue
 !
 !       CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS.
 !
-IIX = 1
-IIY = 1
-IF (INCX .LT. 0) IIX = (1-N)*INCX + 1
-IF (INCY .LT. 0) IIY = (1-N)*INCY + 1
-DO I = 1,N
-   ITEMP1 = IX(IIX)
-   IX(IIX) = IY(IIY)
-   IY(IIY) = ITEMP1
-   IIX = IIX + INCX
-   IIY = IIY + INCY
-END DO
-RETURN
+iix = 1
+iiy = 1
+if (incx .lt. 0) iix = (1-n)*incx + 1
+if (incy .lt. 0) iiy = (1-n)*incy + 1
+do i = 1,n
+   itemp1 = ix(iix)
+   ix(iix) = iy(iiy)
+   iy(iiy) = itemp1
+   iix = iix + incx
+   iiy = iiy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !       CLEAN-UP LOOP SO REMAINING VECTOR LENGTH IS A MULTIPLE OF 3.
 !
-20 M = MOD(N,3)
-IF (M .EQ. 0) GO TO 40
-DO I = 1,M
-   ITEMP1 = IX(I)
-   IX(I) = IY(I)
-   IY(I) = ITEMP1
-END DO
-IF (N .LT. 3) RETURN
+20 m = mod(n,3)
+if (m .eq. 0) go to 40
+do i = 1,m
+   itemp1 = ix(i)
+   ix(i) = iy(i)
+   iy(i) = itemp1
+end do
+if (n .lt. 3) return
 !
-40 MP1 = M + 1
-DO I = MP1,N,3
-   ITEMP1 = IX(I)
-   ITEMP2 = IX(I+1)
-   ITEMP3 = IX(I+2)
-   IX(I) = IY(I)
-   IX(I+1) = IY(I+1)
-   IX(I+2) = IY(I+2)
-   IY(I) = ITEMP1
-   IY(I+1) = ITEMP2
-   IY(I+2) = ITEMP3
-END DO
-RETURN
+40 mp1 = m + 1
+do i = mp1,n,3
+   itemp1 = ix(i)
+   itemp2 = ix(i+1)
+   itemp3 = ix(i+2)
+   ix(i) = iy(i)
+   ix(i+1) = iy(i+1)
+   ix(i+2) = iy(i+2)
+   iy(i) = itemp1
+   iy(i+1) = itemp2
+   iy(i+2) = itemp3
+end do
+return
 !
 !     CODE FOR EQUAL, POSITIVE, NONUNIT INCREMENTS.
 !
-60 NS = N*INCX
-DO I = 1,NS,INCX
-   ITEMP1 = IX(I)
-   IX(I) = IY(I)
-   IY(I) = ITEMP1
-END DO
-RETURN
-END SUBROUTINE ISWAP
+60 ns = n*incx
+do i = 1,ns,incx
+   itemp1 = ix(i)
+   ix(i) = iy(i)
+   iy(i) = itemp1
+end do
+return
+end subroutine iswap
 
-SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
-IMPLICIT NONE
+subroutine  sswap (n,sx,incx,sy,incy)
+implicit none
 !
 !     INTERCHANGES TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(INOUT) :: SX(*), SY(*)
-REAL :: STEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+real, intent(inout) :: sx(*), sy(*)
+real :: stemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  STEMP = SX(IX)
-  SX(IX) = SY(IY)
-  SY(IY) = STEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  stemp = sx(ix)
+  sx(ix) = sy(iy)
+  sy(iy) = stemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !       CLEAN-UP LOOP
 !
-20 M = MOD(N,3)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  STEMP = SX(I)
-  SX(I) = SY(I)
-  SY(I) = STEMP
-END DO
-IF( N .LT. 3 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,3
-  STEMP = SX(I)
-  SX(I) = SY(I)
-  SY(I) = STEMP
-  STEMP = SX(I + 1)
-  SX(I + 1) = SY(I + 1)
-  SY(I + 1) = STEMP
-  STEMP = SX(I + 2)
-  SX(I + 2) = SY(I + 2)
-  SY(I + 2) = STEMP
-END DO
-RETURN
-END SUBROUTINE SSWAP
+20 m = mod(n,3)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  stemp = sx(i)
+  sx(i) = sy(i)
+  sy(i) = stemp
+end do
+if( n .lt. 3 ) return
+40 mp1 = m + 1
+do i = mp1,n,3
+  stemp = sx(i)
+  sx(i) = sy(i)
+  sy(i) = stemp
+  stemp = sx(i + 1)
+  sx(i + 1) = sy(i + 1)
+  sy(i + 1) = stemp
+  stemp = sx(i + 2)
+  sx(i + 2) = sy(i + 2)
+  sy(i + 2) = stemp
+end do
+return
+end subroutine sswap
 
-SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
-IMPLICIT NONE
+subroutine  dswap (n,dx,incx,dy,incy)
+implicit none
 !
 !     INTERCHANGES TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: DX(*), DY(*)
-DOUBLE PRECISION :: DTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+double precision, intent(inout) :: dx(*), dy(*)
+double precision :: dtemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  DTEMP = DX(IX)
-  DX(IX) = DY(IY)
-  DY(IY) = DTEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  dtemp = dx(ix)
+  dx(ix) = dy(iy)
+  dy(iy) = dtemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !       CLEAN-UP LOOP
 !
-20 M = MOD(N,3)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DTEMP = DX(I)
-  DX(I) = DY(I)
-  DY(I) = DTEMP
-END DO
-IF( N .LT. 3 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,3
-  DTEMP = DX(I)
-  DX(I) = DY(I)
-  DY(I) = DTEMP
-  DTEMP = DX(I + 1)
-  DX(I + 1) = DY(I + 1)
-  DY(I + 1) = DTEMP
-  DTEMP = DX(I + 2)
-  DX(I + 2) = DY(I + 2)
-  DY(I + 2) = DTEMP
-END DO
-RETURN
-END SUBROUTINE DSWAP
+20 m = mod(n,3)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dtemp = dx(i)
+  dx(i) = dy(i)
+  dy(i) = dtemp
+end do
+if( n .lt. 3 ) return
+40 mp1 = m + 1
+do i = mp1,n,3
+  dtemp = dx(i)
+  dx(i) = dy(i)
+  dy(i) = dtemp
+  dtemp = dx(i + 1)
+  dx(i + 1) = dy(i + 1)
+  dy(i + 1) = dtemp
+  dtemp = dx(i + 2)
+  dx(i + 2) = dy(i + 2)
+  dy(i + 2) = dtemp
+end do
+return
+end subroutine dswap
 
-SUBROUTINE  CSWAP (N,CX,INCX,CY,INCY)
-IMPLICIT NONE
+subroutine  cswap (n,cx,incx,cy,incy)
+implicit none
 !
 !     INTERCHANGES TWO VECTORS.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(INOUT) :: CX(*), CY(*)
-COMPLEX :: CTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(inout) :: cx(*), cy(*)
+complex :: ctemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CTEMP = CX(IX)
-  CX(IX) = CY(IY)
-  CY(IY) = CTEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  ctemp = cx(ix)
+  cx(ix) = cy(iy)
+  cy(iy) = ctemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
-20 DO I = 1,N
-  CTEMP = CX(I)
-  CX(I) = CY(I)
-  CY(I) = CTEMP
-END DO
-RETURN
-END SUBROUTINE CSWAP
+20 do i = 1,n
+  ctemp = cx(i)
+  cx(i) = cy(i)
+  cy(i) = ctemp
+end do
+return
+end subroutine cswap
 
-SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
-IMPLICIT NONE
+subroutine  srot (n,sx,incx,sy,incy,c,s)
+implicit none
 !
 !     APPLIES A PLANE ROTATION.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(INOUT) :: SX(*), SY(*)
-REAL :: STEMP
-REAL, INTENT(IN) :: C, S
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+real, intent(inout) :: sx(*), sy(*)
+real :: stemp
+real, intent(in) :: c, s
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  STEMP = C*SX(IX) + S*SY(IY)
-  SY(IY) = C*SY(IY) - S*SX(IX)
-  SX(IX) = STEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  stemp = c*sx(ix) + s*sy(iy)
+  sy(iy) = c*sy(iy) - s*sx(ix)
+  sx(ix) = stemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  STEMP = C*SX(I) + S*SY(I)
-  SY(I) = C*SY(I) - S*SX(I)
-  SX(I) = STEMP
-END DO
-RETURN
-END SUBROUTINE SROT
+20 do i = 1,n
+  stemp = c*sx(i) + s*sy(i)
+  sy(i) = c*sy(i) - s*sx(i)
+  sx(i) = stemp
+end do
+return
+end subroutine srot
 
-SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
-IMPLICIT NONE
+subroutine  drot (n,dx,incx,dy,incy,c,s)
+implicit none
 !
 !     APPLIES A PLANE ROTATION.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(INOUT) :: DX(*), DY(*)
-DOUBLE PRECISION :: DTEMP
-DOUBLE PRECISION, INTENT(IN) :: C, S
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+double precision, intent(inout) :: dx(*), dy(*)
+double precision :: dtemp
+double precision, intent(in) :: c, s
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  DTEMP = C*DX(IX) + S*DY(IY)
-  DY(IY) = C*DY(IY) - S*DX(IX)
-  DX(IX) = DTEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  dtemp = c*dx(ix) + s*dy(iy)
+  dy(iy) = c*dy(iy) - s*dx(ix)
+  dx(ix) = dtemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  DTEMP = C*DX(I) + S*DY(I)
-  DY(I) = C*DY(I) - S*DX(I)
-  DX(I) = DTEMP
-END DO
-RETURN
-END SUBROUTINE DROT
+20 do i = 1,n
+  dtemp = c*dx(i) + s*dy(i)
+  dy(i) = c*dy(i) - s*dx(i)
+  dx(i) = dtemp
+end do
+return
+end subroutine drot
 
-SUBROUTINE  CSROT (N,CX,INCX,CY,INCY,C,S)
-IMPLICIT NONE
+subroutine  csrot (n,cx,incx,cy,incy,c,s)
+implicit none
 !
 !     APPLIES A PLANE ROTATION, WHERE THE COS AND SIN (C AND S) ARE REAL
 !     AND THE VECTORS CX AND CY ARE COMPLEX.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(INOUT) :: CX(*), CY(*)
-COMPLEX :: CTEMP
-REAL, INTENT(IN) :: C, S
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(inout) :: cx(*), cy(*)
+complex :: ctemp
+real, intent(in) :: c, s
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !       CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS NOT EQUAL
 !         TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CTEMP = C*CX(IX) + S*CY(IY)
-  CY(IY) = C*CY(IY) - S*CX(IX)
-  CX(IX) = CTEMP
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  ctemp = c*cx(ix) + s*cy(iy)
+  cy(iy) = c*cy(iy) - s*cx(ix)
+  cx(ix) = ctemp
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !       CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  CTEMP = C*CX(I) + S*CY(I)
-  CY(I) = C*CY(I) - S*CX(I)
-  CX(I) = CTEMP
-END DO
-RETURN
-END SUBROUTINE CSROT
+20 do i = 1,n
+  ctemp = c*cx(i) + s*cy(i)
+  cy(i) = c*cy(i) - s*cx(i)
+  cx(i) = ctemp
+end do
+return
+end subroutine csrot
 
-SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
-IMPLICIT NONE
-REAL, INTENT(INOUT) :: SD1, SD2, SPARAM(5), SX1
-REAL, INTENT(IN) :: SY1
-REAL :: GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, &
-&SP1, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
+subroutine srotmg (sd1,sd2,sx1,sy1,sparam)
+implicit none
+real, intent(inout) :: sd1, sd2, sparam(5), sx1
+real, intent(in) :: sy1
+real :: gam, gamsq, one, rgamsq, sflag, sh11, sh12, sh21, sh22, &
+&sp1, sp2, sq1, sq2, stemp, su, two, zero
 !
 !     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 !     THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*
@@ -986,136 +986,136 @@ REAL :: GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, &
 !     OF SD1 AND SD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
 !
 !
-DATA ZERO,ONE,TWO /0.E0,1.E0,2.E0/
-DATA GAM,GAMSQ,RGAMSQ/4096.E0,1.67772E7,5.96046E-8/
+data zero,one,two /0.e0,1.e0,2.e0/
+data gam,gamsq,rgamsq/4096.e0,1.67772e7,5.96046e-8/
 !
-IF (SD1 .LT. ZERO) GO TO 60
-SP2 = SD2*SY1
-IF (SP2 .NE. ZERO) GO TO 20
-    SFLAG = -TWO
-    GO TO 260
+if (sd1 .lt. zero) go to 60
+sp2 = sd2*sy1
+if (sp2 .ne. zero) go to 20
+    sflag = -two
+    go to 260
 !
 !     REGULAR-CASE..
 !
-20 SP1 = SD1*SX1
-SQ1 = SP1*SX1
-SQ2 = SP2*SY1
+20 sp1 = sd1*sx1
+sq1 = sp1*sx1
+sq2 = sp2*sy1
 !
-IF (ABS(SQ1) .LE. ABS(SQ2)) GO TO 40
-    SH21 = -SY1/SX1
-    SH12 = SP2/SP1
+if (abs(sq1) .le. abs(sq2)) go to 40
+    sh21 = -sy1/sx1
+    sh12 = sp2/sp1
 !
-    SU = ONE - SH12*SH21
-    IF (SU .LE. ZERO) GO TO 60
+    su = one - sh12*sh21
+    if (su .le. zero) go to 60
 !
-         SFLAG = ZERO
-         SH11 = ONE
-         SH22 = ONE
-         SD1 = SD1/SU
-         SD2 = SD2/SU
-         SX1 = SX1*SU
+         sflag = zero
+         sh11 = one
+         sh22 = one
+         sd1 = sd1/su
+         sd2 = sd2/su
+         sx1 = sx1*su
 !         GO SCALE-CHECK..
-         GO TO 100
+         go to 100
 !
-40 CONTINUE
-    IF (SD2 .LT. ZERO) GO TO 60
-         SFLAG = ONE
-         SH11 = SP1/SP2
-         SH21 = -ONE
-         SH12 = ONE
-         SH22 = SX1/SY1
+40 continue
+    if (sd2 .lt. zero) go to 60
+         sflag = one
+         sh11 = sp1/sp2
+         sh21 = -one
+         sh12 = one
+         sh22 = sx1/sy1
 !
-         SU = ONE + SH11*SH22
-         STEMP = SD2/SU
-         SD2 = SD1/SU
-         SD1 = STEMP
-         SX1 = SY1*SU
+         su = one + sh11*sh22
+         stemp = sd2/su
+         sd2 = sd1/su
+         sd1 = stemp
+         sx1 = sy1*su
 !         GO SCALE-CHECK
-         GO TO 100
+         go to 100
 !
 !     PROCEDURE..ZERO-H-D-AND-SX1..
 !
-60 CONTINUE
-    SFLAG = -ONE
-    SH11 = ZERO
-    SH12 = ZERO
-    SH21 = ZERO
-    SH22 = ZERO
+60 continue
+    sflag = -one
+    sh11 = zero
+    sh12 = zero
+    sh21 = zero
+    sh22 = zero
 !
-    SD1 = ZERO
-    SD2 = ZERO
-    SX1 = ZERO
-    GO TO 250
+    sd1 = zero
+    sd2 = zero
+    sx1 = zero
+    go to 250
 !
 !     PROCEDURE..SCALE-CHECK
 !
-100 CONTINUE
-110 CONTINUE
-    IF (SD1 .GT. RGAMSQ) GO TO 130
-         IF (SD1 .EQ. ZERO) GO TO 160
-         SFLAG = -ONE
-         SD1 = SD1*(GAM*GAM)
-         SX1 = SX1/GAM
-         SH11 = SH11/GAM
-         SH12 = SH12/GAM
-    GO TO 110
+100 continue
+110 continue
+    if (sd1 .gt. rgamsq) go to 130
+         if (sd1 .eq. zero) go to 160
+         sflag = -one
+         sd1 = sd1*(gam*gam)
+         sx1 = sx1/gam
+         sh11 = sh11/gam
+         sh12 = sh12/gam
+    go to 110
 !
-130 CONTINUE
-140 CONTINUE
-    IF (SD1 .LT. GAMSQ) GO TO 160
-         SFLAG = -ONE
-         SD1 = SD1/(GAM*GAM)
-         SX1 = SX1*GAM
-         SH11 = SH11*GAM
-         SH12 = SH12*GAM
-    GO TO 140
+130 continue
+140 continue
+    if (sd1 .lt. gamsq) go to 160
+         sflag = -one
+         sd1 = sd1/(gam*gam)
+         sx1 = sx1*gam
+         sh11 = sh11*gam
+         sh12 = sh12*gam
+    go to 140
 !
-160 CONTINUE
-170 CONTINUE
-    IF (ABS(SD2) .GT. RGAMSQ) GO TO 190
-         IF (SD2 .EQ. ZERO) GO TO 220
-         SFLAG = -ONE
-         SD2 = SD2*(GAM*GAM)
-         SH21 = SH21/GAM
-         SH22 = SH22/GAM
-    GO TO 170
+160 continue
+170 continue
+    if (abs(sd2) .gt. rgamsq) go to 190
+         if (sd2 .eq. zero) go to 220
+         sflag = -one
+         sd2 = sd2*(gam*gam)
+         sh21 = sh21/gam
+         sh22 = sh22/gam
+    go to 170
 !
-190 CONTINUE
-200 CONTINUE
-    IF (ABS(SD2) .LT. GAMSQ) GO TO 220
-         SFLAG = -ONE
-         SD2 = SD2/(GAM*GAM)
-         SH21 = SH21*GAM
-         SH22 = SH22*GAM
-    GO TO 200
+190 continue
+200 continue
+    if (abs(sd2) .lt. gamsq) go to 220
+         sflag = -one
+         sd2 = sd2/(gam*gam)
+         sh21 = sh21*gam
+         sh22 = sh22*gam
+    go to 200
 !
-220 CONTINUE
-    IF(SFLAG)250,230,240
-230 CONTINUE
-         SPARAM(3)=SH21
-         SPARAM(4)=SH12
-         GO TO 260
-240 CONTINUE
-         SPARAM(2)=SH11
-         SPARAM(5)=SH22
-         GO TO 260
-250 CONTINUE
-         SPARAM(2)=SH11
-         SPARAM(3)=SH21
-         SPARAM(4)=SH12
-         SPARAM(5)=SH22
-260 CONTINUE
-    SPARAM(1)=SFLAG
-    RETURN
-END SUBROUTINE SROTMG
+220 continue
+    if(sflag)250,230,240
+230 continue
+         sparam(3)=sh21
+         sparam(4)=sh12
+         go to 260
+240 continue
+         sparam(2)=sh11
+         sparam(5)=sh22
+         go to 260
+250 continue
+         sparam(2)=sh11
+         sparam(3)=sh21
+         sparam(4)=sh12
+         sparam(5)=sh22
+260 continue
+    sparam(1)=sflag
+    return
+end subroutine srotmg
 
-SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, INCY, N
-REAL :: SPARAM(5)
-REAL, INTENT(INOUT) :: SX(*), SY(*)
-INTEGER :: I, KX, KY, NSTEPS
-REAL :: SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
+subroutine srotm (n,sx,incx,sy,incy,sparam)
+implicit none
+integer, intent(in) :: incx, incy, n
+real :: sparam(5)
+real, intent(inout) :: sx(*), sy(*)
+integer :: i, kx, ky, nsteps
+real :: sflag, sh11, sh12, sh21, sh22, two, w, z, zero
 !
 !     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 !
@@ -1134,96 +1134,96 @@ REAL :: SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
 !       (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
 !
 !
-DATA ZERO,TWO/0.E0,2.E0/
+data zero,two/0.e0,2.e0/
 !
-SFLAG=SPARAM(1)
-IF(N .LE. 0 .OR.(SFLAG+TWO.EQ.ZERO)) GO TO 140
-    IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
+sflag=sparam(1)
+if(n .le. 0 .or.(sflag+two.eq.zero)) go to 140
+    if(.not.(incx.eq.incy.and. incx .gt.0)) go to 70
 !
-         NSTEPS=N*INCX
-         IF(SFLAG) 50,10,30
-10 CONTINUE
-         SH21=SPARAM(3)
-         SH12=SPARAM(4)
-              DO I=1,NSTEPS,INCX
-              W=SX(I)
-              Z=SY(I)
-              SX(I)=W+Z*SH12
-              SY(I)=W*SH21+Z
-              END DO
-         GO TO 140
-30 CONTINUE
-         SH11=SPARAM(2)
-         SH22=SPARAM(5)
-              DO I=1,NSTEPS,INCX
-              W=SX(I)
-              Z=SY(I)
-              SX(I)=W*SH11+Z
-              SY(I)=-W+SH22*Z
-              END DO
-         GO TO 140
-50 CONTINUE
-         SH11=SPARAM(2)
-         SH21=SPARAM(3)
-         SH12=SPARAM(4)
-         SH22=SPARAM(5)
-              DO I=1,NSTEPS,INCX
-              W=SX(I)
-              Z=SY(I)
-              SX(I)=W*SH11+Z*SH12
-              SY(I)=W*SH21+Z*SH22
-              END DO
-         GO TO 140
-70 CONTINUE
-    KX=1
-    KY=1
-    IF(INCX .LT. 0) KX=1+(1-N)*INCX
-    IF(INCY .LT. 0) KY=1+(1-N)*INCY
+         nsteps=n*incx
+         if(sflag) 50,10,30
+10 continue
+         sh21=sparam(3)
+         sh12=sparam(4)
+              do i=1,nsteps,incx
+              w=sx(i)
+              z=sy(i)
+              sx(i)=w+z*sh12
+              sy(i)=w*sh21+z
+              end do
+         go to 140
+30 continue
+         sh11=sparam(2)
+         sh22=sparam(5)
+              do i=1,nsteps,incx
+              w=sx(i)
+              z=sy(i)
+              sx(i)=w*sh11+z
+              sy(i)=-w+sh22*z
+              end do
+         go to 140
+50 continue
+         sh11=sparam(2)
+         sh21=sparam(3)
+         sh12=sparam(4)
+         sh22=sparam(5)
+              do i=1,nsteps,incx
+              w=sx(i)
+              z=sy(i)
+              sx(i)=w*sh11+z*sh12
+              sy(i)=w*sh21+z*sh22
+              end do
+         go to 140
+70 continue
+    kx=1
+    ky=1
+    if(incx .lt. 0) kx=1+(1-n)*incx
+    if(incy .lt. 0) ky=1+(1-n)*incy
 !
-    IF(SFLAG)120,80,100
-80 CONTINUE
-    SH21=SPARAM(3)
-    SH12=SPARAM(4)
-         DO I=1,N
-         W=SX(KX)
-         Z=SY(KY)
-         SX(KX)=W+Z*SH12
-         SY(KY)=W*SH21+Z
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-    GO TO 140
-100 CONTINUE
-    SH11=SPARAM(2)
-    SH22=SPARAM(5)
-         DO I=1,N
-         W=SX(KX)
-         Z=SY(KY)
-         SX(KX)=W*SH11+Z
-         SY(KY)=-W+SH22*Z
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-    GO TO 140
-120 CONTINUE
-    SH11=SPARAM(2)
-    SH21=SPARAM(3)
-    SH12=SPARAM(4)
-    SH22=SPARAM(5)
-         DO I=1,N
-         W=SX(KX)
-         Z=SY(KY)
-         SX(KX)=W*SH11+Z*SH12
-         SY(KY)=W*SH21+Z*SH22
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-140 CONTINUE
-    RETURN
-    END SUBROUTINE SROTM
+    if(sflag)120,80,100
+80 continue
+    sh21=sparam(3)
+    sh12=sparam(4)
+         do i=1,n
+         w=sx(kx)
+         z=sy(ky)
+         sx(kx)=w+z*sh12
+         sy(ky)=w*sh21+z
+         kx=kx+incx
+         ky=ky+incy
+         end do
+    go to 140
+100 continue
+    sh11=sparam(2)
+    sh22=sparam(5)
+         do i=1,n
+         w=sx(kx)
+         z=sy(ky)
+         sx(kx)=w*sh11+z
+         sy(ky)=-w+sh22*z
+         kx=kx+incx
+         ky=ky+incy
+         end do
+    go to 140
+120 continue
+    sh11=sparam(2)
+    sh21=sparam(3)
+    sh12=sparam(4)
+    sh22=sparam(5)
+         do i=1,n
+         w=sx(kx)
+         z=sy(ky)
+         sx(kx)=w*sh11+z*sh12
+         sy(ky)=w*sh21+z*sh22
+         kx=kx+incx
+         ky=ky+incy
+         end do
+140 continue
+    return
+    end subroutine srotm
 
-SUBROUTINE DROTMG (DD1,DD2,DX1,DY1,DPARAM)
-IMPLICIT NONE
+subroutine drotmg (dd1,dd2,dx1,dy1,dparam)
+implicit none
 !
 !     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 !     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
@@ -1245,145 +1245,145 @@ IMPLICIT NONE
 !     INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
 !     OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
 !
-DOUBLE PRECISION :: GAM, ONE, RGAMSQ
-DOUBLE PRECISION, INTENT(INOUT) :: DD2
-DOUBLE PRECISION :: DH11, DH21
-DOUBLE PRECISION, INTENT(INOUT) :: DPARAM(5)
-DOUBLE PRECISION :: DP2, DQ2, DU
-DOUBLE PRECISION, INTENT(IN) :: DY1
-DOUBLE PRECISION :: ZERO, GAMSQ
-DOUBLE PRECISION, INTENT(INOUT) :: DD1
-DOUBLE PRECISION :: DFLAG, DH12, DH22, DP1, DQ1, DTEMP
-DOUBLE PRECISION, INTENT(INOUT) :: DX1
-DOUBLE PRECISION :: TWO
+double precision :: gam, one, rgamsq
+double precision, intent(inout) :: dd2
+double precision :: dh11, dh21
+double precision, intent(inout) :: dparam(5)
+double precision :: dp2, dq2, du
+double precision, intent(in) :: dy1
+double precision :: zero, gamsq
+double precision, intent(inout) :: dd1
+double precision :: dflag, dh12, dh22, dp1, dq1, dtemp
+double precision, intent(inout) :: dx1
+double precision :: two
 !
-DATA ZERO,ONE,TWO /0.D0,1.D0,2.D0/
-DATA GAM,GAMSQ,RGAMSQ/4096.D0,16777216.D0,5.9604645D-8/
+data zero,one,two /0.d0,1.d0,2.d0/
+data gam,gamsq,rgamsq/4096.d0,16777216.d0,5.9604645d-8/
 !
-IF (DD1 .LT. ZERO) GO TO 60
-DP2 = DD2*DY1
-IF (DP2 .NE. ZERO) GO TO 20
-    DFLAG = -TWO
-    GO TO 260
+if (dd1 .lt. zero) go to 60
+dp2 = dd2*dy1
+if (dp2 .ne. zero) go to 20
+    dflag = -two
+    go to 260
 !
 !     REGULAR-CASE..
 !
-20 DP1 = DD1*DX1
-DQ1 = DP1*DX1
-DQ2 = DP2*DY1
+20 dp1 = dd1*dx1
+dq1 = dp1*dx1
+dq2 = dp2*dy1
 !
-IF (DABS(DQ1) .LE. DABS(DQ2)) GO TO 40
-    DH21 = -DY1/DX1
-    DH12 = DP2/DP1
+if (dabs(dq1) .le. dabs(dq2)) go to 40
+    dh21 = -dy1/dx1
+    dh12 = dp2/dp1
 !
-    DU = ONE - DH12*DH21
-    IF (DU .LE. ZERO) GO TO 60
+    du = one - dh12*dh21
+    if (du .le. zero) go to 60
 !
-         DFLAG = ZERO
-         DH11 = ONE
-         DH22 = ONE
-         DD1 = DD1/DU
-         DD2 = DD2/DU
-         DX1 = DX1*DU
+         dflag = zero
+         dh11 = one
+         dh22 = one
+         dd1 = dd1/du
+         dd2 = dd2/du
+         dx1 = dx1*du
 !         GO SCALE-CHECK..
-         GO TO 100
+         go to 100
 !
-40 CONTINUE
-    IF (DD2 .LT. ZERO) GO TO 60
-         DFLAG = ONE
-         DH11 = DP1/DP2
-         DH21 = -ONE
-         DH12 = ONE
-         DH22 = DX1/DY1
+40 continue
+    if (dd2 .lt. zero) go to 60
+         dflag = one
+         dh11 = dp1/dp2
+         dh21 = -one
+         dh12 = one
+         dh22 = dx1/dy1
 !
-         DU = ONE + DH11*DH22
-         DTEMP = DD2/DU
-         DD2 = DD1/DU
-         DD1 = DTEMP
-         DX1 = DY1*DU
+         du = one + dh11*dh22
+         dtemp = dd2/du
+         dd2 = dd1/du
+         dd1 = dtemp
+         dx1 = dy1*du
 !         GO SCALE-CHECK
-         GO TO 100
+         go to 100
 !
 !     PROCEDURE..ZERO-H-D-AND-DX1..
 !
-60 CONTINUE
-    DFLAG = -ONE
-    DH11 = ZERO
-    DH12 = ZERO
-    DH21 = ZERO
-    DH22 = ZERO
+60 continue
+    dflag = -one
+    dh11 = zero
+    dh12 = zero
+    dh21 = zero
+    dh22 = zero
 !
-    DD1 = ZERO
-    DD2 = ZERO
-    DX1 = ZERO
-    GO TO 250
+    dd1 = zero
+    dd2 = zero
+    dx1 = zero
+    go to 250
 !
 !     PROCEDURE..SCALE-CHECK
 !
-100 CONTINUE
-110 CONTINUE
-    IF (DD1 .GT. RGAMSQ) GO TO 130
-         IF (DD1 .EQ. ZERO) GO TO 160
-         DFLAG = -ONE
-         DD1 = DD1*(GAM*GAM)
-         DX1 = DX1/GAM
-         DH11 = DH11/GAM
-         DH12 = DH12/GAM
-    GO TO 110
+100 continue
+110 continue
+    if (dd1 .gt. rgamsq) go to 130
+         if (dd1 .eq. zero) go to 160
+         dflag = -one
+         dd1 = dd1*(gam*gam)
+         dx1 = dx1/gam
+         dh11 = dh11/gam
+         dh12 = dh12/gam
+    go to 110
 !
-130 CONTINUE
-140 CONTINUE
-    IF (DD1 .LT. GAMSQ) GO TO 160
-         DFLAG = -ONE
-         DD1 = DD1/(GAM*GAM)
-         DX1 = DX1*GAM
-         DH11 = DH11*GAM
-         DH12 = DH12*GAM
-    GO TO 140
+130 continue
+140 continue
+    if (dd1 .lt. gamsq) go to 160
+         dflag = -one
+         dd1 = dd1/(gam*gam)
+         dx1 = dx1*gam
+         dh11 = dh11*gam
+         dh12 = dh12*gam
+    go to 140
 !
-160 CONTINUE
-170 CONTINUE
-    IF (DABS(DD2) .GT. RGAMSQ) GO TO 190
-         IF (DD2 .EQ. ZERO) GO TO 220
-         DFLAG = -ONE
-         DD2 = DD2*(GAM*GAM)
-         DH21 = DH21/GAM
-         DH22 = DH22/GAM
-    GO TO 170
+160 continue
+170 continue
+    if (dabs(dd2) .gt. rgamsq) go to 190
+         if (dd2 .eq. zero) go to 220
+         dflag = -one
+         dd2 = dd2*(gam*gam)
+         dh21 = dh21/gam
+         dh22 = dh22/gam
+    go to 170
 !
-190 CONTINUE
-200 CONTINUE
-    IF (DABS(DD2) .LT. GAMSQ) GO TO 220
-         DFLAG = -ONE
-         DD2 = DD2/(GAM*GAM)
-         DH21 = DH21*GAM
-         DH22 = DH22*GAM
-    GO TO 200
+190 continue
+200 continue
+    if (dabs(dd2) .lt. gamsq) go to 220
+         dflag = -one
+         dd2 = dd2/(gam*gam)
+         dh21 = dh21*gam
+         dh22 = dh22*gam
+    go to 200
 !
-220 CONTINUE
-    IF(DFLAG)250,230,240
-230 CONTINUE
-         DPARAM(3)=DH21
-         DPARAM(4)=DH12
-         GO TO 260
-240 CONTINUE
-         DPARAM(2)=DH11
-         DPARAM(5)=DH22
-         GO TO 260
-250 CONTINUE
-         DPARAM(2)=DH11
-         DPARAM(3)=DH21
-         DPARAM(4)=DH12
-         DPARAM(5)=DH22
-260 CONTINUE
-    DPARAM(1)=DFLAG
-    RETURN
-END SUBROUTINE DROTMG
+220 continue
+    if(dflag)250,230,240
+230 continue
+         dparam(3)=dh21
+         dparam(4)=dh12
+         go to 260
+240 continue
+         dparam(2)=dh11
+         dparam(5)=dh22
+         go to 260
+250 continue
+         dparam(2)=dh11
+         dparam(3)=dh21
+         dparam(4)=dh12
+         dparam(5)=dh22
+260 continue
+    dparam(1)=dflag
+    return
+end subroutine drotmg
 
-SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, INCY, N
-INTEGER :: I, KX, KY, NSTEPS
+subroutine drotm (n,dx,incx,dy,incy,dparam)
+implicit none
+integer, intent(in) :: incx, incy, n
+integer :: i, kx, ky, nsteps
 !
 !     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 !
@@ -1401,740 +1401,740 @@ INTEGER :: I, KX, KY, NSTEPS
 !     H=(          )    (          )    (          )    (          )
 !       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
 !
-DOUBLE PRECISION :: DFLAG, DH12, DH22
-DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
-DOUBLE PRECISION :: TWO, Z, DH11, DH21, DPARAM(5)
-DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
-DOUBLE PRECISION :: W, ZERO
+double precision :: dflag, dh12, dh22
+double precision, intent(inout) :: dx(*)
+double precision :: two, z, dh11, dh21, dparam(5)
+double precision, intent(inout) :: dy(*)
+double precision :: w, zero
 !
-DATA ZERO,TWO/0.D0,2.D0/
+data zero,two/0.d0,2.d0/
 !
-DFLAG=DPARAM(1)
-IF(N .LE. 0 .OR.(DFLAG+TWO.EQ.ZERO)) GO TO 140
-    IF(.NOT.(INCX.EQ.INCY.AND. INCX .GT.0)) GO TO 70
+dflag=dparam(1)
+if(n .le. 0 .or.(dflag+two.eq.zero)) go to 140
+    if(.not.(incx.eq.incy.and. incx .gt.0)) go to 70
 !
-         NSTEPS=N*INCX
-         IF(DFLAG) 50,10,30
-10 CONTINUE
-         DH21=DPARAM(3)
-         DH12=DPARAM(4)
-              DO I=1,NSTEPS,INCX
-              W=DX(I)
-              Z=DY(I)
-              DX(I)=W+Z*DH12
-              DY(I)=W*DH21+Z
-              END DO
-         GO TO 140
-30 CONTINUE
-         DH11=DPARAM(2)
-         DH22=DPARAM(5)
-              DO I=1,NSTEPS,INCX
-              W=DX(I)
-              Z=DY(I)
-              DX(I)=W*DH11+Z
-              DY(I)=-W+DH22*Z
-              END DO
-         GO TO 140
-50 CONTINUE
-         DH11=DPARAM(2)
-         DH21=DPARAM(3)
-         DH12=DPARAM(4)
-         DH22=DPARAM(5)
-              DO I=1,NSTEPS,INCX
-              W=DX(I)
-              Z=DY(I)
-              DX(I)=W*DH11+Z*DH12
-              DY(I)=W*DH21+Z*DH22
-              END DO
-         GO TO 140
-70 CONTINUE
-    KX=1
-    KY=1
-    IF(INCX .LT. 0) KX=1+(1-N)*INCX
-    IF(INCY .LT. 0) KY=1+(1-N)*INCY
+         nsteps=n*incx
+         if(dflag) 50,10,30
+10 continue
+         dh21=dparam(3)
+         dh12=dparam(4)
+              do i=1,nsteps,incx
+              w=dx(i)
+              z=dy(i)
+              dx(i)=w+z*dh12
+              dy(i)=w*dh21+z
+              end do
+         go to 140
+30 continue
+         dh11=dparam(2)
+         dh22=dparam(5)
+              do i=1,nsteps,incx
+              w=dx(i)
+              z=dy(i)
+              dx(i)=w*dh11+z
+              dy(i)=-w+dh22*z
+              end do
+         go to 140
+50 continue
+         dh11=dparam(2)
+         dh21=dparam(3)
+         dh12=dparam(4)
+         dh22=dparam(5)
+              do i=1,nsteps,incx
+              w=dx(i)
+              z=dy(i)
+              dx(i)=w*dh11+z*dh12
+              dy(i)=w*dh21+z*dh22
+              end do
+         go to 140
+70 continue
+    kx=1
+    ky=1
+    if(incx .lt. 0) kx=1+(1-n)*incx
+    if(incy .lt. 0) ky=1+(1-n)*incy
 !
-    IF(DFLAG)120,80,100
-80 CONTINUE
-    DH21=DPARAM(3)
-    DH12=DPARAM(4)
-         DO I=1,N
-         W=DX(KX)
-         Z=DY(KY)
-         DX(KX)=W+Z*DH12
-         DY(KY)=W*DH21+Z
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-    GO TO 140
-100 CONTINUE
-    DH11=DPARAM(2)
-    DH22=DPARAM(5)
-         DO I=1,N
-         W=DX(KX)
-         Z=DY(KY)
-         DX(KX)=W*DH11+Z
-         DY(KY)=-W+DH22*Z
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-    GO TO 140
-120 CONTINUE
-    DH11=DPARAM(2)
-    DH21=DPARAM(3)
-    DH12=DPARAM(4)
-    DH22=DPARAM(5)
-         DO I=1,N
-         W=DX(KX)
-         Z=DY(KY)
-         DX(KX)=W*DH11+Z*DH12
-         DY(KY)=W*DH21+Z*DH22
-         KX=KX+INCX
-         KY=KY+INCY
-         END DO
-140 CONTINUE
-    RETURN
-    END SUBROUTINE DROTM
+    if(dflag)120,80,100
+80 continue
+    dh21=dparam(3)
+    dh12=dparam(4)
+         do i=1,n
+         w=dx(kx)
+         z=dy(ky)
+         dx(kx)=w+z*dh12
+         dy(ky)=w*dh21+z
+         kx=kx+incx
+         ky=ky+incy
+         end do
+    go to 140
+100 continue
+    dh11=dparam(2)
+    dh22=dparam(5)
+         do i=1,n
+         w=dx(kx)
+         z=dy(ky)
+         dx(kx)=w*dh11+z
+         dy(ky)=-w+dh22*z
+         kx=kx+incx
+         ky=ky+incy
+         end do
+    go to 140
+120 continue
+    dh11=dparam(2)
+    dh21=dparam(3)
+    dh12=dparam(4)
+    dh22=dparam(5)
+         do i=1,n
+         w=dx(kx)
+         z=dy(ky)
+         dx(kx)=w*dh11+z*dh12
+         dy(ky)=w*dh21+z*dh22
+         kx=kx+incx
+         ky=ky+incy
+         end do
+140 continue
+    return
+    end subroutine drotm
 
-REAL function SDOT(N,SX,INCX,SY,INCY)
-IMPLICIT NONE
+real function sdot(n,sx,incx,sy,incy)
+implicit none
 !
 !     FORMS THE DOT PRODUCT OF TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SX(*), SY(*)
-REAL :: STEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+real, intent(in) :: sx(*), sy(*)
+real :: stemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-STEMP = 0.0E0
-SDOT = 0.0E0
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+stemp = 0.0e0
+sdot = 0.0e0
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  STEMP = STEMP + SX(IX)*SY(IY)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-SDOT = STEMP
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  stemp = stemp + sx(ix)*sy(iy)
+  ix = ix + incx
+  iy = iy + incy
+end do
+sdot = stemp
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,5)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  STEMP = STEMP + SX(I)*SY(I)
-END DO
-IF( N .LT. 5 ) GO TO 60
-40 MP1 = M + 1
-DO I = MP1,N,5
-  STEMP = STEMP + SX(I)*SY(I) + SX(I + 1)*SY(I + 1) + &
-&SX(I + 2)*SY(I + 2) + SX(I + 3)*SY(I + 3) + SX(I + 4)*SY(I + 4)
-END DO
-60 SDOT = STEMP
-RETURN
-END FUNCTION SDOT
+20 m = mod(n,5)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  stemp = stemp + sx(i)*sy(i)
+end do
+if( n .lt. 5 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,5
+  stemp = stemp + sx(i)*sy(i) + sx(i + 1)*sy(i + 1) + &
+&sx(i + 2)*sy(i + 2) + sx(i + 3)*sy(i + 3) + sx(i + 4)*sy(i + 4)
+end do
+60 sdot = stemp
+return
+end function sdot
 
-double precision function DDOT(N,DX,INCX,DY,INCY)
-IMPLICIT NONE
+double precision function ddot(n,dx,incx,dy,incy)
+implicit none
 !
 !     FORMS THE DOT PRODUCT OF TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DX(*), DY(*)
-DOUBLE PRECISION :: DTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+double precision, intent(in) :: dx(*), dy(*)
+double precision :: dtemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-DDOT = 0.0D0
-DTEMP = 0.0D0
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+ddot = 0.0d0
+dtemp = 0.0d0
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  DTEMP = DTEMP + DX(IX)*DY(IY)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-DDOT = DTEMP
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  dtemp = dtemp + dx(ix)*dy(iy)
+  ix = ix + incx
+  iy = iy + incy
+end do
+ddot = dtemp
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,5)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DTEMP = DTEMP + DX(I)*DY(I)
-END DO
-IF( N .LT. 5 ) GO TO 60
-40 MP1 = M + 1
-DO I = MP1,N,5
-  DTEMP = DTEMP + DX(I)*DY(I) + DX(I + 1)*DY(I + 1) + &
-&DX(I + 2)*DY(I + 2) + DX(I + 3)*DY(I + 3) + DX(I + 4)*DY(I + 4)
-END DO
-60 DDOT = DTEMP
-RETURN
-END FUNCTION DDOT
+20 m = mod(n,5)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dtemp = dtemp + dx(i)*dy(i)
+end do
+if( n .lt. 5 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,5
+  dtemp = dtemp + dx(i)*dy(i) + dx(i + 1)*dy(i + 1) + &
+&dx(i + 2)*dy(i + 2) + dx(i + 3)*dy(i + 3) + dx(i + 4)*dy(i + 4)
+end do
+60 ddot = dtemp
+return
+end function ddot
 
-COMPLEX function CDOTC(N,CX,INCX,CY,INCY)
-IMPLICIT NONE
+complex function cdotc(n,cx,incx,cy,incy)
+implicit none
 !
 !     FORMS THE DOT PRODUCT OF TWO VECTORS, CONJUGATING THE FIRST
 !     VECTOR.
 !     JACK DONGARRA, LINPACK,  3/11/78.
 !
-COMPLEX, INTENT(IN) :: CX(*), CY(*)
-COMPLEX :: CTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(in) :: cx(*), cy(*)
+complex :: ctemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-CTEMP = (0.0,0.0)
-CDOTC = (0.0,0.0)
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+ctemp = (0.0,0.0)
+cdotc = (0.0,0.0)
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CTEMP = CTEMP + CONJG(CX(IX))*CY(IY)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-CDOTC = CTEMP
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  ctemp = ctemp + conjg(cx(ix))*cy(iy)
+  ix = ix + incx
+  iy = iy + incy
+end do
+cdotc = ctemp
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  CTEMP = CTEMP + CONJG(CX(I))*CY(I)
-END DO
-CDOTC = CTEMP
-RETURN
-END FUNCTION CDOTC
+20 do i = 1,n
+  ctemp = ctemp + conjg(cx(i))*cy(i)
+end do
+cdotc = ctemp
+return
+end function cdotc
 
-COMPLEX function CDOTU(N,CX,INCX,CY,INCY)
-IMPLICIT NONE
+complex function cdotu(n,cx,incx,cy,incy)
+implicit none
 !
 !     FORMS THE DOT PRODUCT OF TWO VECTORS.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(IN) :: CX(*), CY(*)
-COMPLEX :: CTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(in) :: cx(*), cy(*)
+complex :: ctemp
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-CTEMP = (0.0,0.0)
-CDOTU = (0.0,0.0)
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+ctemp = (0.0,0.0)
+cdotu = (0.0,0.0)
+if(n.le.0)return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CTEMP = CTEMP + CX(IX)*CY(IY)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-CDOTU = CTEMP
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  ctemp = ctemp + cx(ix)*cy(iy)
+  ix = ix + incx
+  iy = iy + incy
+end do
+cdotu = ctemp
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  CTEMP = CTEMP + CX(I)*CY(I)
-END DO
-CDOTU = CTEMP
-RETURN
-END FUNCTION CDOTU
+20 do i = 1,n
+  ctemp = ctemp + cx(i)*cy(i)
+end do
+cdotu = ctemp
+return
+end function cdotu
 
-SUBROUTINE  SSCAL(N,SA,SX,INCX)
-IMPLICIT NONE
+subroutine  sscal(n,sa,sx,incx)
+implicit none
 !
 !     SCALES A VECTOR BY A CONSTANT.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO 1.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SA
-REAL, INTENT(INOUT) :: SX(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: M, MP1
-INTEGER, INTENT(IN) :: N
-INTEGER :: NINCX
+real, intent(in) :: sa
+real, intent(inout) :: sx(*)
+integer :: i
+integer, intent(in) :: incx
+integer :: m, mp1
+integer, intent(in) :: n
+integer :: nincx
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  SX(I) = SA*SX(I)
-END DO
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  sx(i) = sa*sx(i)
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,5)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  SX(I) = SA*SX(I)
-END DO
-IF( N .LT. 5 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,5
-  SX(I) = SA*SX(I)
-  SX(I + 1) = SA*SX(I + 1)
-  SX(I + 2) = SA*SX(I + 2)
-  SX(I + 3) = SA*SX(I + 3)
-  SX(I + 4) = SA*SX(I + 4)
-END DO
-RETURN
-END SUBROUTINE SSCAL
+20 m = mod(n,5)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  sx(i) = sa*sx(i)
+end do
+if( n .lt. 5 ) return
+40 mp1 = m + 1
+do i = mp1,n,5
+  sx(i) = sa*sx(i)
+  sx(i + 1) = sa*sx(i + 1)
+  sx(i + 2) = sa*sx(i + 2)
+  sx(i + 3) = sa*sx(i + 3)
+  sx(i + 4) = sa*sx(i + 4)
+end do
+return
+end subroutine sscal
 
-SUBROUTINE  DSCAL(N,DA,DX,INCX)
-IMPLICIT NONE
+subroutine  dscal(n,da,dx,incx)
+implicit none
 !
 !     SCALES A VECTOR BY A CONSTANT.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DA
-DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: M, MP1
-INTEGER, INTENT(IN) :: N
-INTEGER :: NINCX
+double precision, intent(in) :: da
+double precision, intent(inout) :: dx(*)
+integer :: i
+integer, intent(in) :: incx
+integer :: m, mp1
+integer, intent(in) :: n
+integer :: nincx
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  DX(I) = DA*DX(I)
-END DO
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  dx(i) = da*dx(i)
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,5)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DX(I) = DA*DX(I)
-END DO
-IF( N .LT. 5 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,5
-  DX(I) = DA*DX(I)
-  DX(I + 1) = DA*DX(I + 1)
-  DX(I + 2) = DA*DX(I + 2)
-  DX(I + 3) = DA*DX(I + 3)
-  DX(I + 4) = DA*DX(I + 4)
-END DO
-RETURN
-END SUBROUTINE DSCAL
+20 m = mod(n,5)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dx(i) = da*dx(i)
+end do
+if( n .lt. 5 ) return
+40 mp1 = m + 1
+do i = mp1,n,5
+  dx(i) = da*dx(i)
+  dx(i + 1) = da*dx(i + 1)
+  dx(i + 2) = da*dx(i + 2)
+  dx(i + 3) = da*dx(i + 3)
+  dx(i + 4) = da*dx(i + 4)
+end do
+return
+end subroutine dscal
 
-SUBROUTINE  CSCAL(N,CA,CX,INCX)
-IMPLICIT NONE
+subroutine  cscal(n,ca,cx,incx)
+implicit none
 !
 !     SCALES A VECTOR BY A CONSTANT.
 !     JACK DONGARRA, LINPACK,  3/11/78.
 !
-COMPLEX, INTENT(IN) :: CA
-COMPLEX, INTENT(INOUT) :: CX(*)
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: NINCX
+complex, intent(in) :: ca
+complex, intent(inout) :: cx(*)
+integer :: i
+integer, intent(in) :: incx, n
+integer :: nincx
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  CX(I) = CA*CX(I)
-END DO
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  cx(i) = ca*cx(i)
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 DO I = 1,N
-  CX(I) = CA*CX(I)
-END DO
-RETURN
-END SUBROUTINE CSCAL
+20 do i = 1,n
+  cx(i) = ca*cx(i)
+end do
+return
+end subroutine cscal
 
-SUBROUTINE  CSSCAL(N,SA,CX,INCX)
-IMPLICIT NONE
+subroutine  csscal(n,sa,cx,incx)
+implicit none
 !
 !     SCALES A COMPLEX VECTOR BY A REAL CONSTANT.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(INOUT) :: CX(*)
-REAL, INTENT(IN) :: SA
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: NINCX
+complex, intent(inout) :: cx(*)
+real, intent(in) :: sa
+integer :: i
+integer, intent(in) :: incx, n
+integer :: nincx
 !
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-END DO
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 DO I = 1,N
-  CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-END DO
-RETURN
-END SUBROUTINE CSSCAL
+20 do i = 1,n
+  cx(i) = cmplx(sa*real(cx(i)),sa*aimag(cx(i)))
+end do
+return
+end subroutine csscal
 
-SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
-IMPLICIT NONE
+subroutine saxpy(n,sa,sx,incx,sy,incy)
+implicit none
 !
 !     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 !     USES UNROLLED LOOP FOR INCREMENTS EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SX(*)
-REAL, INTENT(INOUT) :: SY(*)
-REAL, INTENT(IN) :: SA
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+real, intent(in) :: sx(*)
+real, intent(inout) :: sy(*)
+real, intent(in) :: sa
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF (SA .EQ. 0.0) RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if (sa .eq. 0.0) return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  SY(IY) = SY(IY) + SA*SX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  sy(iy) = sy(iy) + sa*sx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,4)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  SY(I) = SY(I) + SA*SX(I)
-END DO
-IF( N .LT. 4 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,4
-  SY(I) = SY(I) + SA*SX(I)
-  SY(I + 1) = SY(I + 1) + SA*SX(I + 1)
-  SY(I + 2) = SY(I + 2) + SA*SX(I + 2)
-  SY(I + 3) = SY(I + 3) + SA*SX(I + 3)
-END DO
-RETURN
-END SUBROUTINE SAXPY
+20 m = mod(n,4)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  sy(i) = sy(i) + sa*sx(i)
+end do
+if( n .lt. 4 ) return
+40 mp1 = m + 1
+do i = mp1,n,4
+  sy(i) = sy(i) + sa*sx(i)
+  sy(i + 1) = sy(i + 1) + sa*sx(i + 1)
+  sy(i + 2) = sy(i + 2) + sa*sx(i + 2)
+  sy(i + 3) = sy(i + 3) + sa*sx(i + 3)
+end do
+return
+end subroutine saxpy
 
-SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
-IMPLICIT NONE
+subroutine daxpy(n,da,dx,incx,dy,incy)
+implicit none
 !
 !     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DX(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
-DOUBLE PRECISION, INTENT(IN) :: DA
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY, M, MP1
-INTEGER, INTENT(IN) :: N
+double precision, intent(in) :: dx(*)
+double precision, intent(inout) :: dy(*)
+double precision, intent(in) :: da
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy, m, mp1
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF (DA .EQ. 0.0D0) RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if (da .eq. 0.0d0) return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  DY(IY) = DY(IY) + DA*DX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  dy(iy) = dy(iy) + da*dx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,4)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DY(I) = DY(I) + DA*DX(I)
-END DO
-IF( N .LT. 4 ) RETURN
-40 MP1 = M + 1
-DO I = MP1,N,4
-  DY(I) = DY(I) + DA*DX(I)
-  DY(I + 1) = DY(I + 1) + DA*DX(I + 1)
-  DY(I + 2) = DY(I + 2) + DA*DX(I + 2)
-  DY(I + 3) = DY(I + 3) + DA*DX(I + 3)
-END DO
-RETURN
-END SUBROUTINE DAXPY
+20 m = mod(n,4)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dy(i) = dy(i) + da*dx(i)
+end do
+if( n .lt. 4 ) return
+40 mp1 = m + 1
+do i = mp1,n,4
+  dy(i) = dy(i) + da*dx(i)
+  dy(i + 1) = dy(i + 1) + da*dx(i + 1)
+  dy(i + 2) = dy(i + 2) + da*dx(i + 2)
+  dy(i + 3) = dy(i + 3) + da*dx(i + 3)
+end do
+return
+end subroutine daxpy
 
-SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
-IMPLICIT NONE
+subroutine caxpy(n,ca,cx,incx,cy,incy)
+implicit none
 !
 !     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(IN) :: CX(*)
-COMPLEX, INTENT(INOUT) :: CY(*)
-COMPLEX, INTENT(IN) :: CA
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, INCY
-INTEGER :: IX, IY
-INTEGER, INTENT(IN) :: N
+complex, intent(in) :: cx(*)
+complex, intent(inout) :: cy(*)
+complex, intent(in) :: ca
+integer :: i
+integer, intent(in) :: incx, incy
+integer :: ix, iy
+integer, intent(in) :: n
 !
-IF(N.LE.0)RETURN
-IF (ABS(REAL(CA)) + ABS(AIMAG(CA)) .EQ. 0.0 ) RETURN
-IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
+if(n.le.0)return
+if (abs(real(ca)) + abs(aimag(ca)) .eq. 0.0 ) return
+if(incx.eq.1.and.incy.eq.1)go to 20
 !
 !        CODE FOR UNEQUAL INCREMENTS OR EQUAL INCREMENTS
 !          NOT EQUAL TO 1
 !
-IX = 1
-IY = 1
-IF(INCX.LT.0)IX = (-N+1)*INCX + 1
-IF(INCY.LT.0)IY = (-N+1)*INCY + 1
-DO I = 1,N
-  CY(IY) = CY(IY) + CA*CX(IX)
-  IX = IX + INCX
-  IY = IY + INCY
-END DO
-RETURN
+ix = 1
+iy = 1
+if(incx.lt.0)ix = (-n+1)*incx + 1
+if(incy.lt.0)iy = (-n+1)*incy + 1
+do i = 1,n
+  cy(iy) = cy(iy) + ca*cx(ix)
+  ix = ix + incx
+  iy = iy + incy
+end do
+return
 !
 !        CODE FOR BOTH INCREMENTS EQUAL TO 1
 !
-20 DO I = 1,N
-  CY(I) = CY(I) + CA*CX(I)
-END DO
-RETURN
-END SUBROUTINE CAXPY
+20 do i = 1,n
+  cy(i) = cy(i) + ca*cx(i)
+end do
+return
+end subroutine caxpy
 
-REAL function SASUM(N,SX,INCX)
-IMPLICIT NONE
+real function sasum(n,sx,incx)
+implicit none
 !
 !     TAKES THE SUM OF THE ABSOLUTE VALUES.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SX(*)
-REAL :: STEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: M, MP1
-INTEGER, INTENT(IN) :: N
-INTEGER :: NINCX
+real, intent(in) :: sx(*)
+real :: stemp
+integer :: i
+integer, intent(in) :: incx
+integer :: m, mp1
+integer, intent(in) :: n
+integer :: nincx
 !
-SASUM = 0.0E0
-STEMP = 0.0E0
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+sasum = 0.0e0
+stemp = 0.0e0
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  STEMP = STEMP + ABS(SX(I))
-END DO
-SASUM = STEMP
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  stemp = stemp + abs(sx(i))
+end do
+sasum = stemp
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,6)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  STEMP = STEMP + ABS(SX(I))
-END DO
-IF( N .LT. 6 ) GO TO 60
-40 MP1 = M + 1
-DO I = MP1,N,6
-  STEMP = STEMP + ABS(SX(I)) + ABS(SX(I + 1)) + ABS(SX(I + 2)) &
-&+ ABS(SX(I + 3)) + ABS(SX(I + 4)) + ABS(SX(I + 5))
-END DO
-60 SASUM = STEMP
-RETURN
-END FUNCTION SASUM
+20 m = mod(n,6)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  stemp = stemp + abs(sx(i))
+end do
+if( n .lt. 6 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,6
+  stemp = stemp + abs(sx(i)) + abs(sx(i + 1)) + abs(sx(i + 2)) &
+&+ abs(sx(i + 3)) + abs(sx(i + 4)) + abs(sx(i + 5))
+end do
+60 sasum = stemp
+return
+end function sasum
 
-double precision function DASUM(N,DX,INCX)
-IMPLICIT NONE
+double precision function dasum(n,dx,incx)
+implicit none
 !
 !     TAKES THE SUM OF THE ABSOLUTE VALUES.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DX(*)
-DOUBLE PRECISION :: DTEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: M, MP1
-INTEGER, INTENT(IN) :: N
-INTEGER :: NINCX
+double precision, intent(in) :: dx(*)
+double precision :: dtemp
+integer :: i
+integer, intent(in) :: incx
+integer :: m, mp1
+integer, intent(in) :: n
+integer :: nincx
 !
-DASUM = 0.0D0
-DTEMP = 0.0D0
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+dasum = 0.0d0
+dtemp = 0.0d0
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  DTEMP = DTEMP + DABS(DX(I))
-END DO
-DASUM = DTEMP
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  dtemp = dtemp + dabs(dx(i))
+end do
+dasum = dtemp
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
 !
 !        CLEAN-UP LOOP
 !
-20 M = MOD(N,6)
-IF( M .EQ. 0 ) GO TO 40
-DO I = 1,M
-  DTEMP = DTEMP + DABS(DX(I))
-END DO
-IF( N .LT. 6 ) GO TO 60
-40 MP1 = M + 1
-DO I = MP1,N,6
-  DTEMP = DTEMP + DABS(DX(I)) + DABS(DX(I + 1)) + DABS(DX(I + 2)) &
-&+ DABS(DX(I + 3)) + DABS(DX(I + 4)) + DABS(DX(I + 5))
-END DO
-60 DASUM = DTEMP
-RETURN
-END FUNCTION DASUM
+20 m = mod(n,6)
+if( m .eq. 0 ) go to 40
+do i = 1,m
+  dtemp = dtemp + dabs(dx(i))
+end do
+if( n .lt. 6 ) go to 60
+40 mp1 = m + 1
+do i = mp1,n,6
+  dtemp = dtemp + dabs(dx(i)) + dabs(dx(i + 1)) + dabs(dx(i + 2)) &
+&+ dabs(dx(i + 3)) + dabs(dx(i + 4)) + dabs(dx(i + 5))
+end do
+60 dasum = dtemp
+return
+end function dasum
 
-REAL function SCASUM(N,CX,INCX)
-IMPLICIT NONE
+real function scasum(n,cx,incx)
+implicit none
 !
 !     TAKES THE SUM OF THE ABSOLUTE VALUES OF A COMPLEX VECTOR AND
 !     RETURNS A SINGLE PRECISION RESULT.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX, INTENT(IN) :: CX(*)
-REAL :: STEMP
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: NINCX
+complex, intent(in) :: cx(*)
+real :: stemp
+integer :: i
+integer, intent(in) :: incx, n
+integer :: nincx
 !
-SCASUM = 0.0E0
-STEMP = 0.0E0
-IF(N.LE.0)RETURN
-IF(INCX.EQ.1)GO TO 20
+scasum = 0.0e0
+stemp = 0.0e0
+if(n.le.0)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-NINCX = N*INCX
-DO I = 1,NINCX,INCX
-  STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-END DO
-SCASUM = STEMP
-RETURN
+nincx = n*incx
+do i = 1,nincx,incx
+  stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
+end do
+scasum = stemp
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 DO I = 1,N
-  STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-END DO
-SCASUM = STEMP
-RETURN
-END FUNCTION SCASUM
+20 do i = 1,n
+  stemp = stemp + abs(real(cx(i))) + abs(aimag(cx(i)))
+end do
+scasum = stemp
+return
+end function scasum
 
-REAL function SNRM2 ( N, SX, INCX)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: I, J, NN
-INTEGER :: NEXT
-REAL, INTENT(IN) :: SX(*)
-REAL :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
-DATA   ZERO, ONE /0.0E0, 1.0E0/
+real function snrm2 ( n, sx, incx)
+implicit none
+integer, intent(in) :: incx, n
+integer :: i, j, nn
+integer :: next
+real, intent(in) :: sx(*)
+real :: cutlo, cuthi, hitest, sum, xmax, zero, one
+data   zero, one /0.0e0, 1.0e0/
 !
 !     EUCLIDEAN NORM OF THE N-VECTOR STORED IN SX() WITH STORAGE
 !     INCREMENT INCX .
@@ -2173,95 +2173,95 @@ DATA   ZERO, ONE /0.0E0, 1.0E0/
 !     CUTHI, D.P.   SAME AS S.P.  CUTHI = 1.30438D19
 !     DATA CUTLO, CUTHI / 8.232D-11,  1.304D19 /
 !     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
-DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
+data cutlo, cuthi / 4.441e-16,  1.304e19 /
 !
-IF(N .GT. 0) GO TO 10
-   SNRM2  = ZERO
-   GO TO 300
+if(n .gt. 0) go to 10
+   snrm2  = zero
+   go to 300
 !
-10 assign 30 to NEXT
-SUM = ZERO
-NN = N * INCX
+10 assign 30 to next
+sum = zero
+nn = n * incx
 !                                                 BEGIN MAIN LOOP
-I = 1
-20 GO TO NEXT,(30, 50, 70, 110)
-30 IF( ABS(SX(I)) .GT. CUTLO) GO TO 85
-assign 50 to NEXT
-XMAX = ZERO
+i = 1
+20 go to next,(30, 50, 70, 110)
+30 if( abs(sx(i)) .gt. cutlo) go to 85
+assign 50 to next
+xmax = zero
 !
 !                        PHASE 1.  SUM IS ZERO
 !
-50 IF( SX(I) .EQ. ZERO) GO TO 200
-IF( ABS(SX(I)) .GT. CUTLO) GO TO 85
+50 if( sx(i) .eq. zero) go to 200
+if( abs(sx(i)) .gt. cutlo) go to 85
 !
 !                                PREPARE FOR PHASE 2.
-assign 70 to NEXT
-GO TO 105
+assign 70 to next
+go to 105
 !
 !                                PREPARE FOR PHASE 4.
 !
-100 I = J
-assign 110 to NEXT
-SUM = (SUM / SX(I)) / SX(I)
-105 XMAX = ABS(SX(I))
-GO TO 115
+100 i = j
+assign 110 to next
+sum = (sum / sx(i)) / sx(i)
+105 xmax = abs(sx(i))
+go to 115
 !
 !                   PHASE 2.  SUM IS SMALL.
 !                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
 !
-70 IF( ABS(SX(I)) .GT. CUTLO ) GO TO 75
+70 if( abs(sx(i)) .gt. cutlo ) go to 75
 !
 !                     COMMON CODE FOR PHASES 2 AND 4.
 !                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
 !
-110 IF( ABS(SX(I)) .LE. XMAX ) GO TO 115
-   SUM = ONE + SUM * (XMAX / SX(I))**2
-   XMAX = ABS(SX(I))
-   GO TO 200
+110 if( abs(sx(i)) .le. xmax ) go to 115
+   sum = one + sum * (xmax / sx(i))**2
+   xmax = abs(sx(i))
+   go to 200
 !
-115 SUM = SUM + (SX(I)/XMAX)**2
-GO TO 200
+115 sum = sum + (sx(i)/xmax)**2
+go to 200
 !
 !
 !                  PREPARE FOR PHASE 3.
 !
-75 SUM = (SUM * XMAX) * XMAX
+75 sum = (sum * xmax) * xmax
 !
 !
 !     FOR REAL OR D.P. SET HITEST = CUTHI/N
 !     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
 !
-85 HITEST = CUTHI/FLOAT( N )
+85 hitest = cuthi/float( n )
 !
 !                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
 !
-do 95 J = I,NN,INCX
-IF(ABS(SX(J)) .GE. HITEST) GO TO 100
-95 SUM = SUM + SX(J)**2
-SNRM2 = SQRT( SUM )
-GO TO 300
+do 95 j = i,nn,incx
+if(abs(sx(j)) .ge. hitest) go to 100
+95 sum = sum + sx(j)**2
+snrm2 = sqrt( sum )
+go to 300
 !
-200 CONTINUE
-I = I + INCX
-IF ( I .LE. NN ) GO TO 20
+200 continue
+i = i + incx
+if ( i .le. nn ) go to 20
 !
 !              END OF MAIN LOOP.
 !
 !              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
 !
-SNRM2 = XMAX * SQRT(SUM)
-300 CONTINUE
-RETURN
-END FUNCTION SNRM2
+snrm2 = xmax * sqrt(sum)
+300 continue
+return
+end function snrm2
 
-double precision function DNRM2 ( N, DX, INCX)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: I, J, NN
-INTEGER :: NEXT
-DOUBLE PRECISION, INTENT(IN) :: DX(*)
-DOUBLE PRECISION :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
-DATA   ZERO, ONE /0.0D0, 1.0D0/
+double precision function dnrm2 ( n, dx, incx)
+implicit none
+integer, intent(in) :: incx, n
+integer :: i, j, nn
+integer :: next
+double precision, intent(in) :: dx(*)
+double precision :: cutlo, cuthi, hitest, sum, xmax, zero, one
+data   zero, one /0.0d0, 1.0d0/
 !
 !     EUCLIDEAN NORM OF THE N-VECTOR STORED IN DX() WITH STORAGE
 !     INCREMENT INCX .
@@ -2300,96 +2300,96 @@ DATA   ZERO, ONE /0.0D0, 1.0D0/
 !     CUTHI, D.P.   SAME AS S.P.  CUTHI = 1.30438D19
 !     DATA CUTLO, CUTHI / 8.232D-11,  1.304D19 /
 !     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
-DATA CUTLO, CUTHI / 8.232D-11,  1.304D19 /
+data cutlo, cuthi / 8.232d-11,  1.304d19 /
 !
-IF(N .GT. 0) GO TO 10
-   DNRM2  = ZERO
-   GO TO 300
+if(n .gt. 0) go to 10
+   dnrm2  = zero
+   go to 300
 !
-10 assign 30 to NEXT
-SUM = ZERO
-NN = N * INCX
+10 assign 30 to next
+sum = zero
+nn = n * incx
 !                                                 BEGIN MAIN LOOP
-I = 1
-20 GO TO NEXT,(30, 50, 70, 110)
-30 IF( DABS(DX(I)) .GT. CUTLO) GO TO 85
-assign 50 to NEXT
-XMAX = ZERO
+i = 1
+20 go to next,(30, 50, 70, 110)
+30 if( dabs(dx(i)) .gt. cutlo) go to 85
+assign 50 to next
+xmax = zero
 !
 !                        PHASE 1.  SUM IS ZERO
 !
-50 IF( DX(I) .EQ. ZERO) GO TO 200
-IF( DABS(DX(I)) .GT. CUTLO) GO TO 85
+50 if( dx(i) .eq. zero) go to 200
+if( dabs(dx(i)) .gt. cutlo) go to 85
 !
 !                                PREPARE FOR PHASE 2.
-assign 70 to NEXT
-GO TO 105
+assign 70 to next
+go to 105
 !
 !                                PREPARE FOR PHASE 4.
 !
-100 I = J
-assign 110 to NEXT
-SUM = (SUM / DX(I)) / DX(I)
-105 XMAX = DABS(DX(I))
-GO TO 115
+100 i = j
+assign 110 to next
+sum = (sum / dx(i)) / dx(i)
+105 xmax = dabs(dx(i))
+go to 115
 !
 !                   PHASE 2.  SUM IS SMALL.
 !                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
 !
-70 IF( DABS(DX(I)) .GT. CUTLO ) GO TO 75
+70 if( dabs(dx(i)) .gt. cutlo ) go to 75
 !
 !                     COMMON CODE FOR PHASES 2 AND 4.
 !                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
 !
-110 IF( DABS(DX(I)) .LE. XMAX ) GO TO 115
-   SUM = ONE + SUM * (XMAX / DX(I))**2
-   XMAX = DABS(DX(I))
-   GO TO 200
+110 if( dabs(dx(i)) .le. xmax ) go to 115
+   sum = one + sum * (xmax / dx(i))**2
+   xmax = dabs(dx(i))
+   go to 200
 !
-115 SUM = SUM + (DX(I)/XMAX)**2
-GO TO 200
+115 sum = sum + (dx(i)/xmax)**2
+go to 200
 !
 !
 !                  PREPARE FOR PHASE 3.
 !
-75 SUM = (SUM * XMAX) * XMAX
+75 sum = (sum * xmax) * xmax
 !
 !
 !     FOR REAL OR D.P. SET HITEST = CUTHI/N
 !     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
 !
-85 HITEST = CUTHI/FLOAT( N )
+85 hitest = cuthi/float( n )
 !
 !                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
 !
-do 95 J = I,NN,INCX
-IF(DABS(DX(J)) .GE. HITEST) GO TO 100
-95 SUM = SUM + DX(J)**2
-DNRM2 = DSQRT( SUM )
-GO TO 300
+do 95 j = i,nn,incx
+if(dabs(dx(j)) .ge. hitest) go to 100
+95 sum = sum + dx(j)**2
+dnrm2 = dsqrt( sum )
+go to 300
 !
-200 CONTINUE
-I = I + INCX
-IF ( I .LE. NN ) GO TO 20
+200 continue
+i = i + incx
+if ( i .le. nn ) go to 20
 !
 !              END OF MAIN LOOP.
 !
 !              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
 !
-DNRM2 = XMAX * DSQRT(SUM)
-300 CONTINUE
-RETURN
-END FUNCTION DNRM2
+dnrm2 = xmax * dsqrt(sum)
+300 continue
+return
+end function dnrm2
 
-REAL function SCNRM2( N, CX, INCX)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: INCX, N
-INTEGER :: I, NN
-LOGICAL :: IMAG, SCALE
-INTEGER :: NEXT
-REAL :: CUTLO, CUTHI, HITEST, SUM, XMAX, ABSX, ZERO, ONE
-COMPLEX, INTENT(IN) :: CX(*)
-DATA         ZERO, ONE /0.0E0, 1.0E0/
+real function scnrm2( n, cx, incx)
+implicit none
+integer, intent(in) :: incx, n
+integer :: i, nn
+logical :: imag, scale
+integer :: next
+real :: cutlo, cuthi, hitest, sum, xmax, absx, zero, one
+complex, intent(in) :: cx(*)
+data         zero, one /0.0e0, 1.0e0/
 !
 !     UNITARY NORM OF THE COMPLEX N-VECTOR STORED IN CX() WITH STORAGE
 !     INCREMENT INCX .
@@ -2428,503 +2428,503 @@ DATA         ZERO, ONE /0.0E0, 1.0E0/
 !     CUTHI, D.P.   SAME AS S.P.  CUTHI = 1.30438D19
 !     DATA CUTLO, CUTHI / 8.232D-11,  1.304D19 /
 !     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
-DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
+data cutlo, cuthi / 4.441e-16,  1.304e19 /
 !
-IF(N .GT. 0) GO TO 10
-   SCNRM2  = ZERO
-   GO TO 300
+if(n .gt. 0) go to 10
+   scnrm2  = zero
+   go to 300
 !
-10 assign 30 to NEXT
-SUM = ZERO
-NN = N * INCX
+10 assign 30 to next
+sum = zero
+nn = n * incx
 !                                                 BEGIN MAIN LOOP
-do 210 I = 1,NN,INCX
-   ABSX = ABS(REAL(CX(I)))
-   IMAG = .FALSE.
-   GO TO NEXT,(30, 50, 70, 90, 110)
-30 IF( ABSX .GT. CUTLO) GO TO 85
-assign 50 to NEXT
-SCALE = .FALSE.
+do 210 i = 1,nn,incx
+   absx = abs(real(cx(i)))
+   imag = .false.
+   go to next,(30, 50, 70, 90, 110)
+30 if( absx .gt. cutlo) go to 85
+assign 50 to next
+scale = .false.
 !
 !                        PHASE 1.  SUM IS ZERO
 !
-50 IF( ABSX .EQ. ZERO) GO TO 200
-IF( ABSX .GT. CUTLO) GO TO 85
+50 if( absx .eq. zero) go to 200
+if( absx .gt. cutlo) go to 85
 !
 !                                PREPARE FOR PHASE 2.
-assign 70 to NEXT
-GO TO 105
+assign 70 to next
+go to 105
 !
 !                                PREPARE FOR PHASE 4.
 !
-100 assign 110 to NEXT
-SUM = (SUM / ABSX) / ABSX
-105 SCALE = .TRUE.
-XMAX = ABSX
-GO TO 115
+100 assign 110 to next
+sum = (sum / absx) / absx
+105 scale = .true.
+xmax = absx
+go to 115
 !
 !                   PHASE 2.  SUM IS SMALL.
 !                             SCALE TO AVOID DESTRUCTIVE UNDERFLOW.
 !
-70 IF( ABSX .GT. CUTLO ) GO TO 75
+70 if( absx .gt. cutlo ) go to 75
 !
 !                     COMMON CODE FOR PHASES 2 AND 4.
 !                     IN PHASE 4 SUM IS LARGE.  SCALE TO AVOID OVERFLOW.
 !
-110 IF( ABSX .LE. XMAX ) GO TO 115
-   SUM = ONE + SUM * (XMAX / ABSX)**2
-   XMAX = ABSX
-   GO TO 200
+110 if( absx .le. xmax ) go to 115
+   sum = one + sum * (xmax / absx)**2
+   xmax = absx
+   go to 200
 !
-115 SUM = SUM + (ABSX/XMAX)**2
-GO TO 200
+115 sum = sum + (absx/xmax)**2
+go to 200
 !
 !
 !                  PREPARE FOR PHASE 3.
 !
-75 SUM = (SUM * XMAX) * XMAX
+75 sum = (sum * xmax) * xmax
 !
-85 assign 90 to NEXT
-SCALE = .FALSE.
+85 assign 90 to next
+scale = .false.
 !
 !     FOR REAL OR D.P. SET HITEST = CUTHI/N
 !     FOR COMPLEX      SET HITEST = CUTHI/(2*N)
 !
-HITEST = CUTHI/FLOAT( N )
-HITEST = HITEST * 0.5
+hitest = cuthi/float( n )
+hitest = hitest * 0.5
 !
 !                   PHASE 3.  SUM IS MID-RANGE.  NO SCALING.
 !
-90 IF(ABSX .GE. HITEST) GO TO 100
-   SUM = SUM + ABSX**2
-200 CONTINUE
+90 if(absx .ge. hitest) go to 100
+   sum = sum + absx**2
+200 continue
 !                  CONTROL SELECTION OF REAL AND IMAGINARY PARTS.
 !
-IF(IMAG) GO TO 210
-   ABSX = ABS(AIMAG(CX(I)))
-   IMAG = .TRUE.
-GO TO NEXT,(  50, 70, 90, 110 )
+if(imag) go to 210
+   absx = abs(aimag(cx(i)))
+   imag = .true.
+go to next,(  50, 70, 90, 110 )
 !
-210 CONTINUE
+210 continue
 !
 !              END OF MAIN LOOP.
 !              COMPUTE SQUARE ROOT AND ADJUST FOR SCALING.
 !
-SCNRM2 = SQRT(SUM)
-IF(SCALE) SCNRM2 = SCNRM2 * XMAX
-300 CONTINUE
-RETURN
-END FUNCTION SCNRM2
+scnrm2 = sqrt(sum)
+if(scale) scnrm2 = scnrm2 * xmax
+300 continue
+return
+end function scnrm2
 
-INTEGER function ISAMAX(N,SX,INCX)
-IMPLICIT NONE
+integer function isamax(n,sx,incx)
+implicit none
 !
 !     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-REAL, INTENT(IN) :: SX(*)
-REAL :: SMAX
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: IX
-INTEGER, INTENT(IN) :: N
+real, intent(in) :: sx(*)
+real :: smax
+integer :: i
+integer, intent(in) :: incx
+integer :: ix
+integer, intent(in) :: n
 !
-ISAMAX = 0
-IF( N .LT. 1 ) RETURN
-ISAMAX = 1
-IF(N.EQ.1)RETURN
-IF(INCX.EQ.1)GO TO 20
+isamax = 0
+if( n .lt. 1 ) return
+isamax = 1
+if(n.eq.1)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-IX = 1
-SMAX = ABS(SX(1))
-IX = IX + INCX
-DO I = 2,N
-   IF(ABS(SX(IX)).LE.SMAX) GO TO 5
-   ISAMAX = I
-   SMAX = ABS(SX(IX))
-5 IX = IX + INCX
-END DO
-RETURN
+ix = 1
+smax = abs(sx(1))
+ix = ix + incx
+do i = 2,n
+   if(abs(sx(ix)).le.smax) go to 5
+   isamax = i
+   smax = abs(sx(ix))
+5 ix = ix + incx
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 SMAX = ABS(SX(1))
-do 30 I = 2,N
-   IF(ABS(SX(I)).LE.SMAX) GO TO 30
-   ISAMAX = I
-   SMAX = ABS(SX(I))
-30 CONTINUE
-RETURN
-END FUNCTION ISAMAX
+20 smax = abs(sx(1))
+do 30 i = 2,n
+   if(abs(sx(i)).le.smax) go to 30
+   isamax = i
+   smax = abs(sx(i))
+30 continue
+return
+end function isamax
 
-INTEGER function IDAMAX(N,DX,INCX)
-IMPLICIT NONE
+integer function idamax(n,dx,incx)
+implicit none
 !
 !     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-DOUBLE PRECISION, INTENT(IN) :: DX(*)
-DOUBLE PRECISION :: DMAX
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: IX
-INTEGER, INTENT(IN) :: N
+double precision, intent(in) :: dx(*)
+double precision :: dmax
+integer :: i
+integer, intent(in) :: incx
+integer :: ix
+integer, intent(in) :: n
 !
-IDAMAX = 0
-IF( N .LT. 1 ) RETURN
-IDAMAX = 1
-IF(N.EQ.1)RETURN
-IF(INCX.EQ.1)GO TO 20
+idamax = 0
+if( n .lt. 1 ) return
+idamax = 1
+if(n.eq.1)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-IX = 1
-DMAX = DABS(DX(1))
-IX = IX + INCX
-DO I = 2,N
-   IF(DABS(DX(IX)).LE.DMAX) GO TO 5
-   IDAMAX = I
-   DMAX = DABS(DX(IX))
-5 IX = IX + INCX
-END DO
-RETURN
+ix = 1
+dmax = dabs(dx(1))
+ix = ix + incx
+do i = 2,n
+   if(dabs(dx(ix)).le.dmax) go to 5
+   idamax = i
+   dmax = dabs(dx(ix))
+5 ix = ix + incx
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 DMAX = DABS(DX(1))
-do 30 I = 2,N
-   IF(DABS(DX(I)).LE.DMAX) GO TO 30
-   IDAMAX = I
-   DMAX = DABS(DX(I))
-30 CONTINUE
-RETURN
-END FUNCTION IDAMAX
+20 dmax = dabs(dx(1))
+do 30 i = 2,n
+   if(dabs(dx(i)).le.dmax) go to 30
+   idamax = i
+   dmax = dabs(dx(i))
+30 continue
+return
+end function idamax
 
-INTEGER function ICAMAX(N,CX,INCX)
-IMPLICIT NONE
+integer function icamax(n,cx,incx)
+implicit none
 !
 !     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
 !
-COMPLEX :: CX(*)
-REAL :: SMAX
-INTEGER :: I
-INTEGER, INTENT(IN) :: INCX
-INTEGER :: IX
-INTEGER, INTENT(IN) :: N
-COMPLEX :: ZDUM
-REAL :: CABS1
-CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
+complex :: cx(*)
+real :: smax
+integer :: i
+integer, intent(in) :: incx
+integer :: ix
+integer, intent(in) :: n
+complex :: zdum
+real :: cabs1
+cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
-ICAMAX = 0
-IF( N .LT. 1 ) RETURN
-ICAMAX = 1
-IF(N.EQ.1)RETURN
-IF(INCX.EQ.1)GO TO 20
+icamax = 0
+if( n .lt. 1 ) return
+icamax = 1
+if(n.eq.1)return
+if(incx.eq.1)go to 20
 !
 !        CODE FOR INCREMENT NOT EQUAL TO 1
 !
-IX = 1
-SMAX = CABS1(CX(1))
-IX = IX + INCX
-DO I = 2,N
-   IF(CABS1(CX(IX)).LE.SMAX) GO TO 5
-   ICAMAX = I
-   SMAX = CABS1(CX(IX))
-5 IX = IX + INCX
-END DO
-RETURN
+ix = 1
+smax = cabs1(cx(1))
+ix = ix + incx
+do i = 2,n
+   if(cabs1(cx(ix)).le.smax) go to 5
+   icamax = i
+   smax = cabs1(cx(ix))
+5 ix = ix + incx
+end do
+return
 !
 !        CODE FOR INCREMENT EQUAL TO 1
 !
-20 SMAX = CABS1(CX(1))
-do 30 I = 2,N
-   IF(CABS1(CX(I)).LE.SMAX) GO TO 30
-   ICAMAX = I
-   SMAX = CABS1(CX(I))
-30 CONTINUE
-RETURN
-END FUNCTION ICAMAX
+20 smax = cabs1(cx(1))
+do 30 i = 2,n
+   if(cabs1(cx(i)).le.smax) go to 30
+   icamax = i
+   smax = cabs1(cx(i))
+30 continue
+return
+end function icamax
 
-SUBROUTINE MCVFS(A,KA,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I, J, L
-REAL, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(*)
+subroutine mcvfs(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+integer :: i, j, l
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(*)
 !
-L = 0
-DO J = 1,N
-   do 10 I = 1,J
-   L = L + 1
-10 B(L) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE MCVFS
+l = 0
+do j = 1,n
+   do 10 i = 1,j
+   l = l + 1
+10 b(l) = a(i,j)
+end do
+return
+end subroutine mcvfs
 
-SUBROUTINE DMCVFS(A,KA,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I, J, L
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+subroutine dmcvfs(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+integer :: i, j, l
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(*)
 !
-L = 0
-DO J = 1,N
-   do 10 I = 1,J
-   L = L + 1
-10 B(L) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE DMCVFS
+l = 0
+do j = 1,n
+   do 10 i = 1,j
+   l = l + 1
+10 b(l) = a(i,j)
+end do
+return
+end subroutine dmcvfs
 
-SUBROUTINE MCVSF(A,KA,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I, II, IM1, J, JJ, L
-REAL, INTENT(INOUT) :: A(KA,N)
-REAL, INTENT(IN) :: B(*)
+subroutine mcvsf(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+integer :: i, ii, im1, j, jj, l
+real, intent(inout) :: a(ka,n)
+real, intent(in) :: b(*)
 !
-A(1,1) = B(1)
-IF (N .LT. 2) RETURN
-L = (N*(N + 1))/2
+a(1,1) = b(1)
+if (n .lt. 2) return
+l = (n*(n + 1))/2
 !
-J = N
-do 11 JJ = 2,N
-I = J
-   do 10 II = 1,J
-   A(I,J) = B(L)
-   I = I - 1
-10 L = L - 1
-11 J = J - 1
+j = n
+do 11 jj = 2,n
+i = j
+   do 10 ii = 1,j
+   a(i,j) = b(l)
+   i = i - 1
+10 l = l - 1
+11 j = j - 1
 !
-DO I = 2,N
-IM1 = I - 1
-   do 20 J = 1,IM1
-20 A(I,J) = A(J,I)
-END DO
-RETURN
-END SUBROUTINE MCVSF
+do i = 2,n
+im1 = i - 1
+   do 20 j = 1,im1
+20 a(i,j) = a(j,i)
+end do
+return
+end subroutine mcvsf
 
-SUBROUTINE DMCVSF(A,KA,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, N
-INTEGER :: I, II, IM1, J, JJ, L
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
-DOUBLE PRECISION, INTENT(IN) :: B(*)
+subroutine dmcvsf(a,ka,n,b)
+implicit none
+integer, intent(in) :: ka, n
+integer :: i, ii, im1, j, jj, l
+double precision, intent(inout) :: a(ka,n)
+double precision, intent(in) :: b(*)
 !
-A(1,1) = B(1)
-IF (N .LT. 2) RETURN
-L = (N*(N + 1))/2
+a(1,1) = b(1)
+if (n .lt. 2) return
+l = (n*(n + 1))/2
 !
-J = N
-do 11 JJ = 2,N
-I = J
-   do 10 II = 1,J
-   A(I,J) = B(L)
-   I = I - 1
-10 L = L - 1
-11 J = J - 1
+j = n
+do 11 jj = 2,n
+i = j
+   do 10 ii = 1,j
+   a(i,j) = b(l)
+   i = i - 1
+10 l = l - 1
+11 j = j - 1
 !
-DO I = 2,N
-IM1 = I - 1
-   do 20 J = 1,IM1
-20 A(I,J) = A(J,I)
-END DO
-RETURN
-END SUBROUTINE DMCVSF
+do i = 2,n
+im1 = i - 1
+   do 20 j = 1,im1
+20 a(i,j) = a(j,i)
+end do
+return
+end subroutine dmcvsf
 
-SUBROUTINE MCVRD(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-REAL, INTENT(IN) :: A(KA,N)
-DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+subroutine mcvrd(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+real, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE MCVRD
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = a(i,j)
+end do
+return
+end subroutine mcvrd
 
-SUBROUTINE MCVDR(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,N)
+subroutine mcvdr(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+double precision, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE MCVDR
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = a(i,j)
+end do
+return
+end subroutine mcvdr
 
-SUBROUTINE MCVRC(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-REAL, INTENT(IN) :: A(KA,N)
-COMPLEX, INTENT(INOUT) :: B(KB,N)
+subroutine mcvrc(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+real, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = CMPLX(A(I,J),0.0)
-END DO
-RETURN
-END SUBROUTINE MCVRC
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = cmplx(a(i,j),0.0)
+end do
+return
+end subroutine mcvrc
 
-SUBROUTINE CMREAL(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,N)
+subroutine cmreal(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = REAL(A(I,J))
-END DO
-RETURN
-END SUBROUTINE CMREAL
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = real(a(i,j))
+end do
+return
+end subroutine cmreal
 
-SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,N)
+subroutine cmimag(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = AIMAG(A(I,J))
-END DO
-RETURN
-END SUBROUTINE CMIMAG
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = aimag(a(i,j))
+end do
+return
+end subroutine cmimag
 
-SUBROUTINE MCOPY(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-REAL, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,N)
+subroutine mcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE MCOPY
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = a(i,j)
+end do
+return
+end subroutine mcopy
 
-SUBROUTINE SMCOPY(N,A,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, L
-REAL, INTENT(IN) :: A(*)
-REAL, INTENT(INOUT) :: B(*)
+subroutine smcopy(n,a,b)
+implicit none
+integer, intent(in) :: n
+integer :: k, l
+real, intent(in) :: a(*)
+real, intent(inout) :: b(*)
 !
-L = (N*(N + 1))/2
-do 10 K = 1,L
-10 B(K) = A(K)
-RETURN
-END SUBROUTINE SMCOPY
+l = (n*(n + 1))/2
+do 10 k = 1,l
+10 b(k) = a(k)
+return
+end subroutine smcopy
 
-SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+subroutine dmcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE DMCOPY
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = a(i,j)
+end do
+return
+end subroutine dmcopy
 
-SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-COMPLEX, INTENT(INOUT) :: B(KB,N)
+subroutine cmcopy(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE CMCOPY
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = a(i,j)
+end do
+return
+end subroutine cmcopy
 
-SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-COMPLEX, INTENT(INOUT) :: B(KB,N)
+subroutine cmconj(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,n)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(I,J) = CONJG(A(I,J))
-END DO
-RETURN
-END SUBROUTINE CMCONJ
+do j = 1,n
+   do 10 i = 1,m
+10 b(i,j) = conjg(a(i,j))
+end do
+return
+end subroutine cmconj
 
-SUBROUTINE TPOSE(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-REAL, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(KB,M)
+subroutine tpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,m)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(J,I) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE TPOSE
+do j = 1,n
+   do 10 i = 1,m
+10 b(j,i) = a(i,j)
+end do
+return
+end subroutine tpose
 
-SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-DOUBLE PRECISION, INTENT(INOUT) :: B(KB,M)
+subroutine dtpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,m)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(J,I) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE DTPOSE
+do j = 1,n
+   do 10 i = 1,m
+10 b(j,i) = a(i,j)
+end do
+return
+end subroutine dtpose
 
-SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-COMPLEX, INTENT(INOUT) :: B(KB,M)
+subroutine ctpose(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,m)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(J,I) = A(I,J)
-END DO
-RETURN
-END SUBROUTINE CTPOSE
+do j = 1,n
+   do 10 i = 1,m
+10 b(j,i) = a(i,j)
+end do
+return
+end subroutine ctpose
 
-SUBROUTINE TIP (A, N1, N2, MOVED, NWORK, NDIM)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N1, N2
-INTEGER, INTENT(INOUT) :: NDIM
-INTEGER, INTENT(IN) :: NWORK
-INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
-&ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, &
-&NPOWER
+subroutine tip (a, n1, n2, moved, nwork, ndim)
+implicit none
+integer, intent(in) :: n1, n2
+integer, intent(inout) :: ndim
+integer, intent(in) :: nwork
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
+&istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+&npower
 ! ----------------------------------------------------------
 ! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 ! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -2933,114 +2933,114 @@ INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
 ! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 ! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 ! ----------------------------------------------------------
-REAL, INTENT(INOUT) :: A(*)
-REAL :: ATEMP, BTEMP
-INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
-IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
-N12 = N1*N2
-N = N1
-M = N12 - 1
-IF (N1.NE.N2) GO TO 30
+real, intent(inout) :: a(*)
+real :: atemp, btemp
+integer, intent(inout) :: moved(nwork)
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+if (n1.lt.2 .or. n2.lt.2) go to 200
+n12 = n1*n2
+n = n1
+m = n12 - 1
+if (n1.ne.n2) go to 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
-I1MIN = 2
-DO I1MAX=N,M,N
-  I2 = I1MIN + N - 1
-  DO I1=I1MIN,I1MAX
-    ATEMP = A(I1)
-    A(I1) = A(I2)
-    A(I2) = ATEMP
-    I2 = I2 + N
-  END DO
-  I1MIN = I1MIN + N + 1
-END DO
-RETURN
+i1min = 2
+do i1max=n,m,n
+  i2 = i1min + n - 1
+  do i1=i1min,i1max
+    atemp = a(i1)
+    a(i1) = a(i2)
+    a(i2) = atemp
+    i2 = i2 + n
+  end do
+  i1min = i1min + n + 1
+end do
+return
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
-30 NDIM = 0
-CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-DO IP=1,NPOWER
-  IEXP(IP) = 0
-END DO
+30 ndim = 0
+call infctr(m, ifact, ipower, nexp, npower)
+do ip=1,npower
+  iexp(ip) = 0
+end do
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
-IDIV = 1
-MHALF = M/2
-50 IF (IDIV.GE.MHALF) RETURN
+idiv = 1
+mhalf = m/2
+50 if (idiv.ge.mhalf) return
 ! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
 ! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
 ! FUNCTION, PHI(M/IDIV).
-NCOUNT = M/IDIV
-do 60 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 60
-  NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
-60 CONTINUE
-IF (NWORK.LE.0) GO TO 75
-DO I=1,NWORK
-  MOVED(I) = 0
-END DO
-75 ISTART = IDIV
+ncount = m/idiv
+do 60 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 60
+  ncount = (ncount/ifact(ip))*(ifact(ip)-1)
+60 continue
+if (nwork.le.0) go to 75
+do i=1,nwork
+  moved(i) = 0
+end do
+75 istart = idiv
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
-80 MMIST = M - ISTART
-IF (ISTART.EQ.IDIV) GO TO 120
-NDIM = MAX0(NDIM,ISTART)
-IF (ISTART.GT.NWORK) GO TO 90
-IF (MOVED(ISTART).NE.0) GO TO 160
-90 ISOID = ISTART/IDIV
-do 100 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 100
-  IF (MOD(ISOID,IFACT(IP)).EQ.0) GO TO 160
-100 CONTINUE
-IF (ISTART.LE.NWORK) GO TO 120
-ITEST = ISTART
-110 ITEST = MOD(N*ITEST,M)
-IF (ITEST.LT.ISTART .OR. ITEST.GT.MMIST) GO TO 160
-IF (ITEST.GT.ISTART .AND. ITEST.LT.MMIST) GO TO 110
-120 ATEMP = A(ISTART+1)
-BTEMP = A(MMIST+1)
-IA1 = ISTART
-130 IA2 = MOD(N*IA1,M)
-MMIA1 = M - IA1
-MMIA2 = M - IA2
-IF (IA1.LE.NWORK) MOVED(IA1) = 1
-IF (MMIA1.LE.NWORK) MOVED(MMIA1) = 1
-NCOUNT = NCOUNT - 2
+80 mmist = m - istart
+if (istart.eq.idiv) go to 120
+ndim = max0(ndim,istart)
+if (istart.gt.nwork) go to 90
+if (moved(istart).ne.0) go to 160
+90 isoid = istart/idiv
+do 100 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 100
+  if (mod(isoid,ifact(ip)).eq.0) go to 160
+100 continue
+if (istart.le.nwork) go to 120
+itest = istart
+110 itest = mod(n*itest,m)
+if (itest.lt.istart .or. itest.gt.mmist) go to 160
+if (itest.gt.istart .and. itest.lt.mmist) go to 110
+120 atemp = a(istart+1)
+btemp = a(mmist+1)
+ia1 = istart
+130 ia2 = mod(n*ia1,m)
+mmia1 = m - ia1
+mmia2 = m - ia2
+if (ia1.le.nwork) moved(ia1) = 1
+if (mmia1.le.nwork) moved(mmia1) = 1
+ncount = ncount - 2
 ! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
 ! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
-IF (IA2.EQ.ISTART) GO TO 140
-IF (MMIA2.EQ.ISTART) GO TO 150
-A(IA1+1) = A(IA2+1)
-A(MMIA1+1) = A(MMIA2+1)
-IA1 = IA2
-GO TO 130
-140 A(IA1+1) = ATEMP
-A(MMIA1+1) = BTEMP
-GO TO 160
-150 A(IA1+1) = BTEMP
-A(MMIA1+1) = ATEMP
-160 ISTART = ISTART + IDIV
-IF (NCOUNT.GT.0) GO TO 80
-DO IP=1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
-  IEXP(IP) = IEXP(IP) + 1
-  IDIV = IDIV*IFACT(IP)
-  GO TO 50
-170 IEXP(IP) = 0
-  IDIV = IDIV/IPOWER(IP)
-END DO
-RETURN
-200 IF (N1.NE.N2) NDIM = 0
-RETURN
-END SUBROUTINE TIP
+if (ia2.eq.istart) go to 140
+if (mmia2.eq.istart) go to 150
+a(ia1+1) = a(ia2+1)
+a(mmia1+1) = a(mmia2+1)
+ia1 = ia2
+go to 130
+140 a(ia1+1) = atemp
+a(mmia1+1) = btemp
+go to 160
+150 a(ia1+1) = btemp
+a(mmia1+1) = atemp
+160 istart = istart + idiv
+if (ncount.gt.0) go to 80
+do ip=1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 170
+  iexp(ip) = iexp(ip) + 1
+  idiv = idiv*ifact(ip)
+  go to 50
+170 iexp(ip) = 0
+  idiv = idiv/ipower(ip)
+end do
+return
+200 if (n1.ne.n2) ndim = 0
+return
+end subroutine tip
 
-SUBROUTINE DTIP (A, N1, N2, MOVED, NWORK, NDIM)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N1, N2
-INTEGER, INTENT(INOUT) :: NDIM
-INTEGER, INTENT(IN) :: NWORK
-INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
-&ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, &
-&NPOWER
+subroutine dtip (a, n1, n2, moved, nwork, ndim)
+implicit none
+integer, intent(in) :: n1, n2
+integer, intent(inout) :: ndim
+integer, intent(in) :: nwork
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
+&istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+&npower
 ! ----------------------------------------------------------
 ! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 ! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -3049,114 +3049,114 @@ INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
 ! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 ! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 ! ----------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(*)
-DOUBLE PRECISION :: ATEMP, BTEMP
-INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
-IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
-N12 = N1*N2
-N = N1
-M = N12 - 1
-IF (N1.NE.N2) GO TO 30
+double precision, intent(inout) :: a(*)
+double precision :: atemp, btemp
+integer, intent(inout) :: moved(nwork)
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+if (n1.lt.2 .or. n2.lt.2) go to 200
+n12 = n1*n2
+n = n1
+m = n12 - 1
+if (n1.ne.n2) go to 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
-I1MIN = 2
-DO I1MAX=N,M,N
-  I2 = I1MIN + N - 1
-  DO I1=I1MIN,I1MAX
-    ATEMP = A(I1)
-    A(I1) = A(I2)
-    A(I2) = ATEMP
-    I2 = I2 + N
-  END DO
-  I1MIN = I1MIN + N + 1
-END DO
-RETURN
+i1min = 2
+do i1max=n,m,n
+  i2 = i1min + n - 1
+  do i1=i1min,i1max
+    atemp = a(i1)
+    a(i1) = a(i2)
+    a(i2) = atemp
+    i2 = i2 + n
+  end do
+  i1min = i1min + n + 1
+end do
+return
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
-30 NDIM = 0
-CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-DO IP=1,NPOWER
-  IEXP(IP) = 0
-END DO
+30 ndim = 0
+call infctr(m, ifact, ipower, nexp, npower)
+do ip=1,npower
+  iexp(ip) = 0
+end do
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
-IDIV = 1
-MHALF = M/2
-50 IF (IDIV.GE.MHALF) RETURN
+idiv = 1
+mhalf = m/2
+50 if (idiv.ge.mhalf) return
 ! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
 ! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
 ! FUNCTION, PHI(M/IDIV).
-NCOUNT = M/IDIV
-do 60 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 60
-  NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
-60 CONTINUE
-IF (NWORK.LE.0) GO TO 75
-DO I=1,NWORK
-  MOVED(I) = 0
-END DO
-75 ISTART = IDIV
+ncount = m/idiv
+do 60 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 60
+  ncount = (ncount/ifact(ip))*(ifact(ip)-1)
+60 continue
+if (nwork.le.0) go to 75
+do i=1,nwork
+  moved(i) = 0
+end do
+75 istart = idiv
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
-80 MMIST = M - ISTART
-IF (ISTART.EQ.IDIV) GO TO 120
-NDIM = MAX0(NDIM,ISTART)
-IF (ISTART.GT.NWORK) GO TO 90
-IF (MOVED(ISTART).NE.0) GO TO 160
-90 ISOID = ISTART/IDIV
-do 100 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 100
-  IF (MOD(ISOID,IFACT(IP)).EQ.0) GO TO 160
-100 CONTINUE
-IF (ISTART.LE.NWORK) GO TO 120
-ITEST = ISTART
-110 ITEST = MOD(N*ITEST,M)
-IF (ITEST.LT.ISTART .OR. ITEST.GT.MMIST) GO TO 160
-IF (ITEST.GT.ISTART .AND. ITEST.LT.MMIST) GO TO 110
-120 ATEMP = A(ISTART+1)
-BTEMP = A(MMIST+1)
-IA1 = ISTART
-130 IA2 = MOD(N*IA1,M)
-MMIA1 = M - IA1
-MMIA2 = M - IA2
-IF (IA1.LE.NWORK) MOVED(IA1) = 1
-IF (MMIA1.LE.NWORK) MOVED(MMIA1) = 1
-NCOUNT = NCOUNT - 2
+80 mmist = m - istart
+if (istart.eq.idiv) go to 120
+ndim = max0(ndim,istart)
+if (istart.gt.nwork) go to 90
+if (moved(istart).ne.0) go to 160
+90 isoid = istart/idiv
+do 100 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 100
+  if (mod(isoid,ifact(ip)).eq.0) go to 160
+100 continue
+if (istart.le.nwork) go to 120
+itest = istart
+110 itest = mod(n*itest,m)
+if (itest.lt.istart .or. itest.gt.mmist) go to 160
+if (itest.gt.istart .and. itest.lt.mmist) go to 110
+120 atemp = a(istart+1)
+btemp = a(mmist+1)
+ia1 = istart
+130 ia2 = mod(n*ia1,m)
+mmia1 = m - ia1
+mmia2 = m - ia2
+if (ia1.le.nwork) moved(ia1) = 1
+if (mmia1.le.nwork) moved(mmia1) = 1
+ncount = ncount - 2
 ! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
 ! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
-IF (IA2.EQ.ISTART) GO TO 140
-IF (MMIA2.EQ.ISTART) GO TO 150
-A(IA1+1) = A(IA2+1)
-A(MMIA1+1) = A(MMIA2+1)
-IA1 = IA2
-GO TO 130
-140 A(IA1+1) = ATEMP
-A(MMIA1+1) = BTEMP
-GO TO 160
-150 A(IA1+1) = BTEMP
-A(MMIA1+1) = ATEMP
-160 ISTART = ISTART + IDIV
-IF (NCOUNT.GT.0) GO TO 80
-DO IP=1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
-  IEXP(IP) = IEXP(IP) + 1
-  IDIV = IDIV*IFACT(IP)
-  GO TO 50
-170 IEXP(IP) = 0
-  IDIV = IDIV/IPOWER(IP)
-END DO
-RETURN
-200 IF (N1.NE.N2) NDIM = 0
-RETURN
-END SUBROUTINE DTIP
+if (ia2.eq.istart) go to 140
+if (mmia2.eq.istart) go to 150
+a(ia1+1) = a(ia2+1)
+a(mmia1+1) = a(mmia2+1)
+ia1 = ia2
+go to 130
+140 a(ia1+1) = atemp
+a(mmia1+1) = btemp
+go to 160
+150 a(ia1+1) = btemp
+a(mmia1+1) = atemp
+160 istart = istart + idiv
+if (ncount.gt.0) go to 80
+do ip=1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 170
+  iexp(ip) = iexp(ip) + 1
+  idiv = idiv*ifact(ip)
+  go to 50
+170 iexp(ip) = 0
+  idiv = idiv/ipower(ip)
+end do
+return
+200 if (n1.ne.n2) ndim = 0
+return
+end subroutine dtip
 
-SUBROUTINE CTIP (A, N1, N2, MOVED, NWORK, NDIM)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N1, N2
-INTEGER, INTENT(INOUT) :: NDIM
-INTEGER, INTENT(IN) :: NWORK
-INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
-&ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, &
-&NPOWER
+subroutine ctip (a, n1, n2, moved, nwork, ndim)
+implicit none
+integer, intent(in) :: n1, n2
+integer, intent(inout) :: ndim
+integer, intent(in) :: nwork
+integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
+&istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
+&npower
 ! ----------------------------------------------------------
 ! TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 ! BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -3165,167 +3165,167 @@ INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, &
 ! WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 ! EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 ! ----------------------------------------------------------
-COMPLEX, INTENT(INOUT) :: A(*)
-COMPLEX :: ATEMP, BTEMP
-INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
-IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
-N12 = N1*N2
-N = N1
-M = N12 - 1
-IF (N1.NE.N2) GO TO 30
+complex, intent(inout) :: a(*)
+complex :: atemp, btemp
+integer, intent(inout) :: moved(nwork)
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
+if (n1.lt.2 .or. n2.lt.2) go to 200
+n12 = n1*n2
+n = n1
+m = n12 - 1
+if (n1.ne.n2) go to 30
 ! SQUARE MATRICES ARE DONE SEPARATELY FOR SPEED
-I1MIN = 2
-DO I1MAX=N,M,N
-  I2 = I1MIN + N - 1
-  DO I1=I1MIN,I1MAX
-    ATEMP = A(I1)
-    A(I1) = A(I2)
-    A(I2) = ATEMP
-    I2 = I2 + N
-  END DO
-  I1MIN = I1MIN + N + 1
-END DO
-RETURN
+i1min = 2
+do i1max=n,m,n
+  i2 = i1min + n - 1
+  do i1=i1min,i1max
+    atemp = a(i1)
+    a(i1) = a(i2)
+    a(i2) = atemp
+    i2 = i2 + n
+  end do
+  i1min = i1min + n + 1
+end do
+return
 ! MODULUS M IS FACTORED INTO PRIME POWERS.  EIGHT FACTORS
 ! SUFFICE UP TO M = 2*3*5*7*11*13*17*19 = 9,767,520.
-30 NDIM = 0
-CALL INFCTR(M, IFACT, IPOWER, NEXP, NPOWER)
-DO IP=1,NPOWER
-  IEXP(IP) = 0
-END DO
+30 ndim = 0
+call infctr(m, ifact, ipower, nexp, npower)
+do ip=1,npower
+  iexp(ip) = 0
+end do
 ! GENERATE EVERY DIVISOR OF M LESS THAN M/2
-IDIV = 1
-MHALF = M/2
-50 IF (IDIV.GE.MHALF) RETURN
+idiv = 1
+mhalf = m/2
+50 if (idiv.ge.mhalf) return
 ! THE NUMBER OF ELEMENTS WHOSE INDEX IS DIVISIBLE BY IDIV
 ! AND BY NO OTHER DIVISOR OF M IS THE EULER TOTIENT
 ! FUNCTION, PHI(M/IDIV).
-NCOUNT = M/IDIV
-do 60 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 60
-  NCOUNT = (NCOUNT/IFACT(IP))*(IFACT(IP)-1)
-60 CONTINUE
-IF (NWORK.LE.0) GO TO 75
-DO I=1,NWORK
-  MOVED(I) = 0
-END DO
-75 ISTART = IDIV
+ncount = m/idiv
+do 60 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 60
+  ncount = (ncount/ifact(ip))*(ifact(ip)-1)
+60 continue
+if (nwork.le.0) go to 75
+do i=1,nwork
+  moved(i) = 0
+end do
+75 istart = idiv
 ! THE STARTING POINT OF A SUBCYCLE IS DIVISIBLE ONLY BY IDIV
 ! AND MUST NOT APPEAR IN ANY OTHER SUBCYCLE.
-80 MMIST = M - ISTART
-IF (ISTART.EQ.IDIV) GO TO 120
-NDIM = MAX0(NDIM,ISTART)
-IF (ISTART.GT.NWORK) GO TO 90
-IF (MOVED(ISTART).NE.0) GO TO 160
-90 ISOID = ISTART/IDIV
-do 100 IP = 1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 100
-  IF (MOD(ISOID,IFACT(IP)).EQ.0) GO TO 160
-100 CONTINUE
-IF (ISTART.LE.NWORK) GO TO 120
-ITEST = ISTART
-110 ITEST = MOD(N*ITEST,M)
-IF (ITEST.LT.ISTART .OR. ITEST.GT.MMIST) GO TO 160
-IF (ITEST.GT.ISTART .AND. ITEST.LT.MMIST) GO TO 110
-120 ATEMP = A(ISTART+1)
-BTEMP = A(MMIST+1)
-IA1 = ISTART
-130 IA2 = MOD(N*IA1,M)
-MMIA1 = M - IA1
-MMIA2 = M - IA2
-IF (IA1.LE.NWORK) MOVED(IA1) = 1
-IF (MMIA1.LE.NWORK) MOVED(MMIA1) = 1
-NCOUNT = NCOUNT - 2
+80 mmist = m - istart
+if (istart.eq.idiv) go to 120
+ndim = max0(ndim,istart)
+if (istart.gt.nwork) go to 90
+if (moved(istart).ne.0) go to 160
+90 isoid = istart/idiv
+do 100 ip = 1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 100
+  if (mod(isoid,ifact(ip)).eq.0) go to 160
+100 continue
+if (istart.le.nwork) go to 120
+itest = istart
+110 itest = mod(n*itest,m)
+if (itest.lt.istart .or. itest.gt.mmist) go to 160
+if (itest.gt.istart .and. itest.lt.mmist) go to 110
+120 atemp = a(istart+1)
+btemp = a(mmist+1)
+ia1 = istart
+130 ia2 = mod(n*ia1,m)
+mmia1 = m - ia1
+mmia2 = m - ia2
+if (ia1.le.nwork) moved(ia1) = 1
+if (mmia1.le.nwork) moved(mmia1) = 1
+ncount = ncount - 2
 ! MOVE TWO ELEMENTS, THE SECOND FROM THE NEGATIVE
 ! SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
-IF (IA2.EQ.ISTART) GO TO 140
-IF (MMIA2.EQ.ISTART) GO TO 150
-A(IA1+1) = A(IA2+1)
-A(MMIA1+1) = A(MMIA2+1)
-IA1 = IA2
-GO TO 130
-140 A(IA1+1) = ATEMP
-A(MMIA1+1) = BTEMP
-GO TO 160
-150 A(IA1+1) = BTEMP
-A(MMIA1+1) = ATEMP
-160 ISTART = ISTART + IDIV
-IF (NCOUNT.GT.0) GO TO 80
-DO IP=1,NPOWER
-  IF (IEXP(IP).EQ.NEXP(IP)) GO TO 170
-  IEXP(IP) = IEXP(IP) + 1
-  IDIV = IDIV*IFACT(IP)
-  GO TO 50
-170 IEXP(IP) = 0
-  IDIV = IDIV/IPOWER(IP)
-END DO
-RETURN
-200 IF (N1.NE.N2) NDIM = 0
-RETURN
-END SUBROUTINE CTIP
+if (ia2.eq.istart) go to 140
+if (mmia2.eq.istart) go to 150
+a(ia1+1) = a(ia2+1)
+a(mmia1+1) = a(mmia2+1)
+ia1 = ia2
+go to 130
+140 a(ia1+1) = atemp
+a(mmia1+1) = btemp
+go to 160
+150 a(ia1+1) = btemp
+a(mmia1+1) = atemp
+160 istart = istart + idiv
+if (ncount.gt.0) go to 80
+do ip=1,npower
+  if (iexp(ip).eq.nexp(ip)) go to 170
+  iexp(ip) = iexp(ip) + 1
+  idiv = idiv*ifact(ip)
+  go to 50
+170 iexp(ip) = 0
+  idiv = idiv/ipower(ip)
+end do
+return
+200 if (n1.ne.n2) ndim = 0
+return
+end subroutine ctip
 
-SUBROUTINE INFCTR(N, IFACT, IPOWER, NEXP, NPOWER)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFACT(*), IPOWER(*)
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: NEXP(*), NPOWER
-INTEGER :: IDIV, IFCUR, IP, IQUOT, NPART
+subroutine infctr(n, ifact, ipower, nexp, npower)
+implicit none
+integer, intent(inout) :: ifact(*), ipower(*)
+integer, intent(in) :: n
+integer, intent(inout) :: nexp(*), npower
+integer :: idiv, ifcur, ip, iquot, npart
 ! FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
 ! E.G., FOR N=1960=2**3 *5 *7**2, NPOWER=3, IFACT=2,5,7,
 ! IPOWER=8,5,49, AND NEXP=3,1,2.
-IP = 0
-IFCUR = 0
-NPART = N
-IDIV = 2
-10 IQUOT = NPART/IDIV
-IF (NPART-IDIV*IQUOT) 60, 20, 60
-20 IF (IDIV-IFCUR) 40, 40, 30
-30 IP = IP + 1
-IFACT(IP) = IDIV
-IPOWER(IP) = IDIV
-IFCUR = IDIV
-NEXP(IP) = 1
-GO TO 50
-40 IPOWER(IP) = IDIV*IPOWER(IP)
-NEXP(IP) = NEXP(IP) + 1
-50 NPART = IQUOT
-GO TO 10
-60 IF (IQUOT-IDIV) 100, 100, 70
-70 IF (IDIV-2) 80, 80, 90
-80 IDIV = 3
-GO TO 10
-90 IDIV = IDIV + 2
-GO TO 10
-100 IF (NPART-1) 140, 140, 110
-110 IF (NPART-IFCUR) 130, 130, 120
-120 IP = IP + 1
-IFACT(IP) = NPART
-IPOWER(IP) = NPART
-NEXP(IP) = 1
-GO TO 140
-130 IPOWER(IP) = NPART*IPOWER(IP)
-NEXP(IP) = NEXP(IP) + 1
-140 NPOWER = IP
-RETURN
-END SUBROUTINE INFCTR
+ip = 0
+ifcur = 0
+npart = n
+idiv = 2
+10 iquot = npart/idiv
+if (npart-idiv*iquot) 60, 20, 60
+20 if (idiv-ifcur) 40, 40, 30
+30 ip = ip + 1
+ifact(ip) = idiv
+ipower(ip) = idiv
+ifcur = idiv
+nexp(ip) = 1
+go to 50
+40 ipower(ip) = idiv*ipower(ip)
+nexp(ip) = nexp(ip) + 1
+50 npart = iquot
+go to 10
+60 if (iquot-idiv) 100, 100, 70
+70 if (idiv-2) 80, 80, 90
+80 idiv = 3
+go to 10
+90 idiv = idiv + 2
+go to 10
+100 if (npart-1) 140, 140, 110
+110 if (npart-ifcur) 130, 130, 120
+120 ip = ip + 1
+ifact(ip) = npart
+ipower(ip) = npart
+nexp(ip) = 1
+go to 140
+130 ipower(ip) = npart*ipower(ip)
+nexp(ip) = nexp(ip) + 1
+140 npower = ip
+return
+end subroutine infctr
 
-SUBROUTINE CMADJ(M,N,A,KA,B,KB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J
-COMPLEX, INTENT(IN) :: A(KA,N)
-COMPLEX, INTENT(INOUT) :: B(KB,M)
+subroutine cmadj(m,n,a,ka,b,kb)
+implicit none
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,m)
 !
-DO J = 1,N
-   do 10 I = 1,M
-10 B(J,I) = CONJG(A(I,J))
-END DO
-RETURN
-END SUBROUTINE CMADJ
+do j = 1,n
+   do 10 i = 1,m
+10 b(j,i) = conjg(a(i,j))
+end do
+return
+end subroutine cmadj
 
-SUBROUTINE CTRANS (NM, N, A)
-IMPLICIT NONE
+subroutine ctrans (nm, n, a)
+implicit none
 !
 !
 !     SUBROUTINE CTRANS FINDS THE COMPLEX CONJUGATE OF AN INPUT
@@ -3346,282 +3346,282 @@ IMPLICIT NONE
 !     A  CONTAINS ITS CONJUGATE TRANSPOSE.
 !
 !
-INTEGER :: I, J
-INTEGER, INTENT(IN) :: N, NM
-COMPLEX, INTENT(INOUT) :: A(NM,N)
-COMPLEX :: TEMP
+integer :: i, j
+integer, intent(in) :: n, nm
+complex, intent(inout) :: a(nm,n)
+complex :: temp
 !
-DO I = 1,N
-  DO J = I,N
-    TEMP = A(I,J)
-    A(I,J) = CONJG(A(J,I))
-    A(J,I) = CONJG(TEMP)
-  END DO
-END DO
-RETURN
-END SUBROUTINE CTRANS
+do i = 1,n
+  do j = i,n
+    temp = a(i,j)
+    a(i,j) = conjg(a(j,i))
+    a(j,i) = conjg(temp)
+  end do
+end do
+return
+end subroutine ctrans
 
-SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine madd (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !                      ADDITION OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: A(KA,N), B(KB,N)
-REAL, INTENT(INOUT) :: C(KC,N)
+real, intent(in) :: a(ka,n), b(kb,n)
+real, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) + B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE MADD
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) + b(i,j)
+   end do
+end do
+return
+end subroutine madd
 
-SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine dmadd (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !                ADDITION OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
-DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
+double precision, intent(in) :: a(ka,n), b(kb,n)
+double precision, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) + B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE DMADD
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) + b(i,j)
+   end do
+end do
+return
+end subroutine dmadd
 
-SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine cmadd (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !                   ADDITION OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
-COMPLEX, INTENT(INOUT) :: C(KC,N)
+complex, intent(in) :: a(ka,n), b(kb,n)
+complex, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) + B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE CMADD
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) + b(i,j)
+   end do
+end do
+return
+end subroutine cmadd
 
-SUBROUTINE SMADD(N,A,B,C)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, M
-REAL, INTENT(IN) :: A(*), B(*)
-REAL, INTENT(INOUT) :: C(*)
-M=(N*(N+1))/2
-do 10 K = 1,M
-10 C(K)=A(K)+B(K)
-RETURN
-END SUBROUTINE SMADD
+subroutine smadd(n,a,b,c)
+implicit none
+integer, intent(in) :: n
+integer :: k, m
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
+m=(n*(n+1))/2
+do 10 k = 1,m
+10 c(k)=a(k)+b(k)
+return
+end subroutine smadd
 
-SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine msubt (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !                     SUBTRACTION OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: A(KA,N), B(KB,N)
-REAL, INTENT(INOUT) :: C(KC,N)
+real, intent(in) :: a(ka,n), b(kb,n)
+real, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) - B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE MSUBT
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) - b(i,j)
+   end do
+end do
+return
+end subroutine msubt
 
-SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine dmsubt (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !              SUBTRACTION OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
-DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
+double precision, intent(in) :: a(ka,n), b(kb,n)
+double precision, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) - B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE DMSUBT
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) - b(i,j)
+   end do
+end do
+return
+end subroutine dmsubt
 
-SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, M, N
-INTEGER :: I, J
+subroutine cmsubt (m, n, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, m, n
+integer :: i, j
 !-----------------------------------------------------------------------
 !                  SUBTRACTION OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
-COMPLEX, INTENT(INOUT) :: C(KC,N)
+complex, intent(in) :: a(ka,n), b(kb,n)
+complex, intent(inout) :: c(kc,n)
 !
-DO J = 1,N
-   DO I = 1,M
-      C(I,J) = A(I,J) - B(I,J)
-   END DO
-END DO
-RETURN
-END SUBROUTINE CMSUBT
+do j = 1,n
+   do i = 1,m
+      c(i,j) = a(i,j) - b(i,j)
+   end do
+end do
+return
+end subroutine cmsubt
 
-SUBROUTINE SMSUBT(N,A,B,C)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: K, M
-REAL, INTENT(IN) :: A(*), B(*)
-REAL, INTENT(INOUT) :: C(*)
-M=(N*(N+1))/2
-do 10 K = 1,M
-10 C(K)=A(K)-B(K)
-RETURN
-END SUBROUTINE SMSUBT
+subroutine smsubt(n,a,b,c)
+implicit none
+integer, intent(in) :: n
+integer :: k, m
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
+m=(n*(n+1))/2
+do 10 k = 1,m
+10 c(k)=a(k)-b(k)
+return
+end subroutine smsubt
 
-SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
+subroutine mtms (m, n, l, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
 !-----------------------------------------------------------------------
 !                     PRODUCT OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: A(KA,N), B(KB,L)
-REAL, INTENT(INOUT) :: C(KC,L)
-DOUBLE PRECISION :: W
+real, intent(in) :: a(ka,n), b(kb,l)
+real, intent(inout) :: c(kc,l)
+double precision :: w
 !
-DO J = 1,L
-   DO I = 1,M
-      W = 0.D0
-      DO K = 1,N
-         W = W + DBLE(A(I,K))*DBLE(B(K,J))
-      END DO
-      C(I,J) = W
-   END DO
-END DO
-RETURN
-END SUBROUTINE MTMS
+do j = 1,l
+   do i = 1,m
+      w = 0.d0
+      do k = 1,n
+         w = w + dble(a(i,k))*dble(b(k,j))
+      end do
+      c(i,j) = w
+   end do
+end do
+return
+end subroutine mtms
 
-SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
+subroutine dmtms (m, n, l, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
 !-----------------------------------------------------------------------
 !                PRODUCT OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
-DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
-DOUBLE PRECISION :: W
+double precision, intent(in) :: a(ka,n), b(kb,l)
+double precision, intent(inout) :: c(kc,l)
+double precision :: w
 !
-DO J = 1,L
-   DO I = 1,M
-      W = 0.D0
-      DO K = 1,N
-         W = W + A(I,K)*B(K,J)
-      END DO
-      C(I,J) = W
-   END DO
-END DO
-RETURN
-END SUBROUTINE DMTMS
+do j = 1,l
+   do i = 1,m
+      w = 0.d0
+      do k = 1,n
+         w = w + a(i,k)*b(k,j)
+      end do
+      c(i,j) = w
+   end do
+end do
+return
+end subroutine dmtms
 
-SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
+subroutine cmtms (m, n, l, a, ka, b, kb, c, kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
 !-----------------------------------------------------------------------
 !                   PRODUCT OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
-COMPLEX, INTENT(INOUT) :: C(KC,L)
-COMPLEX :: W
+complex, intent(in) :: a(ka,n), b(kb,l)
+complex, intent(inout) :: c(kc,l)
+complex :: w
 !
-DO J = 1,L
-   DO I = 1,M
-      W = (0.0,0.0)
-      DO K = 1,N
-         W = W + A(I,K)*B(K,J)
-      END DO
-      C(I,J) = W
-   END DO
-END DO
-RETURN
-END SUBROUTINE CMTMS
+do j = 1,l
+   do i = 1,m
+      w = (0.0,0.0)
+      do k = 1,n
+         w = w + a(i,k)*b(k,j)
+      end do
+      c(i,j) = w
+   end do
+end do
+return
+end subroutine cmtms
 
-SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
-REAL :: SAVE
+subroutine mprod (m, n, l, a, ka, b, kb, c, kc, row)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
+real :: save
 !-----------------------------------------------------------------------
 !                     PRODUCT OF REAL MATRICES
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
-DOUBLE PRECISION :: W
-LOGICAL :: RLOC
+real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+double precision :: w
+logical :: rloc
 !
-SAVE = C(1,1)
-C(1,1) = 1.0
-IF (RLOC(C,A)) GO TO 20
-IF (RLOC(C,B)) GO TO 30
+save = c(1,1)
+c(1,1) = 1.0
+if (rloc(c,a)) go to 20
+if (rloc(c,b)) go to 30
 !
-DO J = 1,L
-   do 11 I = 1,M
-   W = 0.D0
-      do 10 K = 1,N
-10 W = W + DBLE(A(I,K))*DBLE(B(K,J))
-11 C(I,J) = W
-END DO
-RETURN
+do j = 1,l
+   do 11 i = 1,m
+   w = 0.d0
+      do 10 k = 1,n
+10 w = w + dble(a(i,k))*dble(b(k,j))
+11 c(i,j) = w
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
-20 A(1,1) = SAVE
-DO I = 1,M
-   do 22 J = 1,L
-   W = 0.D0
-      do 21 K = 1,N
-21 W = W + DBLE(A(I,K))*DBLE(B(K,J))
-22 ROW(J) = W
-   do 23 J = 1,L
-23 A(I,J) = ROW(J)
-END DO
-RETURN
+20 a(1,1) = save
+do i = 1,m
+   do 22 j = 1,l
+   w = 0.d0
+      do 21 k = 1,n
+21 w = w + dble(a(i,k))*dble(b(k,j))
+22 row(j) = w
+   do 23 j = 1,l
+23 a(i,j) = row(j)
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
-30 B(1,1) = SAVE
-DO J = 1,L
-   do 32 I = 1,M
-   W = 0.D0
-      do 31 K = 1,N
-31 W = W + DBLE(A(I,K))*DBLE(B(K,J))
-32 ROW(I) = W
-   do 33 I = 1,M
-33 B(I,J) = ROW(I)
-END DO
-RETURN
-END SUBROUTINE MPROD
+30 b(1,1) = save
+do j = 1,l
+   do 32 i = 1,m
+   w = 0.d0
+      do 31 k = 1,n
+31 w = w + dble(a(i,k))*dble(b(k,j))
+32 row(i) = w
+   do 33 i = 1,m
+33 b(i,j) = row(i)
+end do
+return
+end subroutine mprod
 
-LOGICAL function RLOC (X, Y)
-IMPLICIT NONE
-REAL :: XOLD, YOLD
+logical function rloc (x, y)
+implicit none
+real :: xold, yold
 !-----------------------------------------------------------------------
 !     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 !
@@ -3632,97 +3632,97 @@ REAL :: XOLD, YOLD
 !     THE SUBROUTINE YCHG. IF IT IS OPTIMIZED THEN RLOC MAY NOT COMPILE
 !     PROPERLY.
 !-----------------------------------------------------------------------
-REAL, INTENT(IN) :: X(*)
-REAL, INTENT(INOUT) :: Y(*)
+real, intent(in) :: x(*)
+real, intent(inout) :: y(*)
 !
-XOLD = X(1)
-YOLD = Y(1)
-CALL YCHG(X,Y,YOLD)
-IF (X(1) .EQ. XOLD) GO TO 10
+xold = x(1)
+yold = y(1)
+call ychg(x,y,yold)
+if (x(1) .eq. xold) go to 10
 !
 !     X AND Y BEGIN IN THE SAME LOCATION
 !
-Y(1) = YOLD
-RLOC = .TRUE.
-RETURN
+y(1) = yold
+rloc = .true.
+return
 !
 !     X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-10 Y(1) = YOLD
-RLOC = .FALSE.
-RETURN
-END FUNCTION RLOC
+10 y(1) = yold
+rloc = .false.
+return
+end function rloc
 
-SUBROUTINE YCHG (X, Y, YOLD)
-IMPLICIT NONE
-REAL, INTENT(IN) :: YOLD
-REAL, INTENT(IN) :: X(*)
-REAL, INTENT(INOUT) :: Y(*)
+subroutine ychg (x, y, yold)
+implicit none
+real, intent(in) :: yold
+real, intent(in) :: x(*)
+real, intent(inout) :: y(*)
 !
-Y(1) = 0.0
-IF (YOLD .EQ. 0.0) Y(1) = 1.0
-RETURN
-END SUBROUTINE YCHG
+y(1) = 0.0
+if (yold .eq. 0.0) y(1) = 1.0
+return
+end subroutine ychg
 
-SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
+subroutine dmprod (m, n, l, a, ka, b, kb, c, kc, row)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
 !-----------------------------------------------------------------------
 !                PRODUCT OF DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), &
-&ROW(*)
-DOUBLE PRECISION :: W
-LOGICAL :: DLOC
+double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
+&row(*)
+double precision :: w
+logical :: dloc
 !
-W = C(1,1)
-C(1,1) = 1.D0
-IF (DLOC(C,A)) GO TO 20
-IF (DLOC(C,B)) GO TO 30
+w = c(1,1)
+c(1,1) = 1.d0
+if (dloc(c,a)) go to 20
+if (dloc(c,b)) go to 30
 !
-DO J = 1,L
-   do 11 I = 1,M
-   W = 0.D0
-      do 10 K = 1,N
-10 W = W + A(I,K)*B(K,J)
-11 C(I,J) = W
-END DO
-RETURN
+do j = 1,l
+   do 11 i = 1,m
+   w = 0.d0
+      do 10 k = 1,n
+10 w = w + a(i,k)*b(k,j)
+11 c(i,j) = w
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
-20 A(1,1) = W
-DO I = 1,M
-   do 22 J = 1,L
-   W = 0.D0
-      do 21 K = 1,N
-21 W = W + A(I,K)*B(K,J)
-22 ROW(J) = W
-   do 23 J = 1,L
-23 A(I,J) = ROW(J)
-END DO
-RETURN
+20 a(1,1) = w
+do i = 1,m
+   do 22 j = 1,l
+   w = 0.d0
+      do 21 k = 1,n
+21 w = w + a(i,k)*b(k,j)
+22 row(j) = w
+   do 23 j = 1,l
+23 a(i,j) = row(j)
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
-30 B(1,1) = W
-DO J = 1,L
-   do 32 I = 1,M
-   W = 0.D0
-      do 31 K = 1,N
-31 W = W + A(I,K)*B(K,J)
-32 ROW(I) = W
-   do 33 I = 1,M
-33 B(I,J) = ROW(I)
-END DO
-RETURN
-END SUBROUTINE DMPROD
+30 b(1,1) = w
+do j = 1,l
+   do 32 i = 1,m
+   w = 0.d0
+      do 31 k = 1,n
+31 w = w + a(i,k)*b(k,j)
+32 row(i) = w
+   do 33 i = 1,m
+33 b(i,j) = row(i)
+end do
+return
+end subroutine dmprod
 
-LOGICAL function DLOC (X, Y)
-IMPLICIT NONE
+logical function dloc (x, y)
+implicit none
 !-----------------------------------------------------------------------
 !     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 !
@@ -3733,97 +3733,97 @@ IMPLICIT NONE
 !     THE SUBROUTINE DYCHG. IF IT IS OPTIMIZED THEN DLOC MAY NOT COMPILE
 !     PROPERLY.
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(IN) :: X(*)
-DOUBLE PRECISION, INTENT(INOUT) :: Y(*)
-DOUBLE PRECISION :: XOLD, YOLD
+double precision, intent(in) :: x(*)
+double precision, intent(inout) :: y(*)
+double precision :: xold, yold
 !
-XOLD = X(1)
-YOLD = Y(1)
-CALL DYCHG(X,Y,YOLD)
-IF (X(1) .EQ. XOLD) GO TO 10
+xold = x(1)
+yold = y(1)
+call dychg(x,y,yold)
+if (x(1) .eq. xold) go to 10
 !
 !     X AND Y BEGIN IN THE SAME LOCATION
 !
-Y(1) = YOLD
-DLOC = .TRUE.
-RETURN
+y(1) = yold
+dloc = .true.
+return
 !
 !     X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-10 Y(1) = YOLD
-DLOC = .FALSE.
-RETURN
-END FUNCTION DLOC
+10 y(1) = yold
+dloc = .false.
+return
+end function dloc
 
-SUBROUTINE DYCHG (X, Y, YOLD)
-IMPLICIT NONE
-DOUBLE PRECISION, INTENT(IN) :: X(*)
-DOUBLE PRECISION, INTENT(INOUT) :: Y(*)
-DOUBLE PRECISION, INTENT(IN) :: YOLD
+subroutine dychg (x, y, yold)
+implicit none
+double precision, intent(in) :: x(*)
+double precision, intent(inout) :: y(*)
+double precision, intent(in) :: yold
 !
-Y(1) = 0.D0
-IF (YOLD .EQ. 0.D0) Y(1) = 1.D0
-RETURN
-END SUBROUTINE DYCHG
+y(1) = 0.d0
+if (yold .eq. 0.d0) y(1) = 1.d0
+return
+end subroutine dychg
 
-SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
+subroutine cmprod (m, n, l, a, ka, b, kb, c, kc, row)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
 !-----------------------------------------------------------------------
 !                   PRODUCT OF COMPLEX MATRICES
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
-COMPLEX :: W
-LOGICAL :: CLOC
+complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
+complex :: w
+logical :: cloc
 !
-W = C(1,1)
-C(1,1) = (1.0,0.0)
-IF (CLOC(C,A)) GO TO 20
-IF (CLOC(C,B)) GO TO 30
+w = c(1,1)
+c(1,1) = (1.0,0.0)
+if (cloc(c,a)) go to 20
+if (cloc(c,b)) go to 30
 !
-DO J = 1,L
-   do 11 I = 1,M
-   W = (0.0,0.0)
-      do 10 K = 1,N
-10 W = W + A(I,K)*B(K,J)
-11 C(I,J) = W
-END DO
-RETURN
+do j = 1,l
+   do 11 i = 1,m
+   w = (0.0,0.0)
+      do 10 k = 1,n
+10 w = w + a(i,k)*b(k,j)
+11 c(i,j) = w
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS A. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO L. IT IS ASSUMED THAT KC=KA.
 !
-20 A(1,1) = W
-DO I = 1,M
-   do 22 J = 1,L
-   W = (0.0,0.0)
-      do 21 K = 1,N
-21 W = W + A(I,K)*B(K,J)
-22 ROW(J) = W
-   do 23 J = 1,L
-23 A(I,J) = ROW(J)
-END DO
-RETURN
+20 a(1,1) = w
+do i = 1,m
+   do 22 j = 1,l
+   w = (0.0,0.0)
+      do 21 k = 1,n
+21 w = w + a(i,k)*b(k,j)
+22 row(j) = w
+   do 23 j = 1,l
+23 a(i,j) = row(j)
+end do
+return
 !
 !     HERE C BEGINS IN THE SAME LOCATION AS B. THE DIMENSION OF ROW
 !     MUST BE GREATER THAN OR EQUAL TO M. IT IS ASSUMED THAT KC=KB.
 !
-30 B(1,1) = W
-DO J = 1,L
-   do 32 I = 1,M
-   W = (0.0,0.0)
-      do 31 K = 1,N
-31 W = W + A(I,K)*B(K,J)
-32 ROW(I) = W
-   do 33 I = 1,M
-33 B(I,J) = ROW(I)
-END DO
-RETURN
-END SUBROUTINE CMPROD
+30 b(1,1) = w
+do j = 1,l
+   do 32 i = 1,m
+   w = (0.0,0.0)
+      do 31 k = 1,n
+31 w = w + a(i,k)*b(k,j)
+32 row(i) = w
+   do 33 i = 1,m
+33 b(i,j) = row(i)
+end do
+return
+end subroutine cmprod
 
-LOGICAL function CLOC (X, Y)
-IMPLICIT NONE
+logical function cloc (x, y)
+implicit none
 !-----------------------------------------------------------------------
 !     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 !
@@ -3834,227 +3834,227 @@ IMPLICIT NONE
 !     THE SUBROUTINE CYCHG. IF IT IS OPTIMIZED THEN CLOC MAY NOT COMPILE
 !     PROPERLY.
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(IN) :: X(*)
-COMPLEX, INTENT(INOUT) :: Y(*)
-COMPLEX :: XOLD, YOLD
+complex, intent(in) :: x(*)
+complex, intent(inout) :: y(*)
+complex :: xold, yold
 !
-XOLD = X(1)
-YOLD = Y(1)
-CALL CYCHG(X,Y,YOLD)
-IF (X(1) .EQ. XOLD) GO TO 10
+xold = x(1)
+yold = y(1)
+call cychg(x,y,yold)
+if (x(1) .eq. xold) go to 10
 !
 !     X AND Y BEGIN IN THE SAME LOCATION
 !
-Y(1) = YOLD
-CLOC = .TRUE.
-RETURN
+y(1) = yold
+cloc = .true.
+return
 !
 !     X AND Y BEGIN IN DIFFERENT LOCATIONS
 !
-10 Y(1) = YOLD
-CLOC = .FALSE.
-RETURN
-END FUNCTION CLOC
+10 y(1) = yold
+cloc = .false.
+return
+end function cloc
 
-SUBROUTINE CYCHG (X, Y, YOLD)
-IMPLICIT NONE
-COMPLEX, INTENT(IN) :: X(*)
-COMPLEX, INTENT(INOUT) :: Y(*)
-COMPLEX, INTENT(IN) :: YOLD
-COMPLEX :: ZERO, ONE
-DATA ZERO/(0.0,0.0)/, ONE/(1.0,0.0)/
+subroutine cychg (x, y, yold)
+implicit none
+complex, intent(in) :: x(*)
+complex, intent(inout) :: y(*)
+complex, intent(in) :: yold
+complex :: zero, one
+data zero/(0.0,0.0)/, one/(1.0,0.0)/
 !
-Y(1) = ZERO
-IF (YOLD .EQ. ZERO) Y(1) = ONE
-RETURN
-END SUBROUTINE CYCHG
+y(1) = zero
+if (yold .eq. zero) y(1) = one
+return
+end subroutine cychg
 
-SUBROUTINE SVPRD(A,N,X,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, K, KM1, L
-REAL :: XK, YK
-REAL, INTENT(IN) :: A(*), X(N)
-REAL, INTENT(INOUT) :: Y(N)
-Y(1) = A(1)*X(1)
-IF (N .EQ. 1) RETURN
+subroutine svprd(a,n,x,y)
+implicit none
+integer, intent(in) :: n
+integer :: i, k, km1, l
+real :: xk, yk
+real, intent(in) :: a(*), x(n)
+real, intent(inout) :: y(n)
+y(1) = a(1)*x(1)
+if (n .eq. 1) return
 !
-L = 1
-do 20 K = 2,N
-KM1 = K - 1
-XK = X(K)
-YK = 0.0
+l = 1
+do 20 k = 2,n
+km1 = k - 1
+xk = x(k)
+yk = 0.0
 !
-do 10 I = 1,KM1
-L = L + 1
-Y(I) = Y(I) + A(L)*XK
-10 YK = YK + A(L)*X(I)
+do 10 i = 1,km1
+l = l + 1
+y(i) = y(i) + a(l)*xk
+10 yk = yk + a(l)*x(i)
 !
-L = L + 1
-20 Y(K) = YK + A(L)*XK
-RETURN
-END SUBROUTINE SVPRD
+l = l + 1
+20 y(k) = yk + a(l)*xk
+return
+end subroutine svprd
 
-SUBROUTINE DSVPRD(A,N,X,Y)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER :: I, K, KM1, L
-DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
-DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
-DOUBLE PRECISION :: XK, YK
-Y(1) = A(1)*X(1)
-IF (N .EQ. 1) RETURN
+subroutine dsvprd(a,n,x,y)
+implicit none
+integer, intent(in) :: n
+integer :: i, k, km1, l
+double precision, intent(in) :: a(*), x(n)
+double precision, intent(inout) :: y(n)
+double precision :: xk, yk
+y(1) = a(1)*x(1)
+if (n .eq. 1) return
 !
-L = 1
-do 20 K = 2,N
-KM1 = K - 1
-XK = X(K)
-YK = 0.D0
+l = 1
+do 20 k = 2,n
+km1 = k - 1
+xk = x(k)
+yk = 0.d0
 !
-do 10 I = 1,KM1
-L = L + 1
-Y(I) = Y(I) + A(L)*XK
-10 YK = YK + A(L)*X(I)
+do 10 i = 1,km1
+l = l + 1
+y(i) = y(i) + a(l)*xk
+10 yk = yk + a(l)*x(i)
 !
-L = L + 1
-20 Y(K) = YK + A(L)*XK
-RETURN
-END SUBROUTINE DSVPRD
+l = l + 1
+20 y(k) = yk + a(l)*xk
+return
+end subroutine dsvprd
 
-SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-INTEGER :: I, J, K
-REAL, INTENT(IN) :: A(KA,N), B(KB,L)
-REAL, INTENT(INOUT) :: C(KC,L)
-DOUBLE PRECISION :: S
-DO J=1,L
-do 11 I = 1,N
-S = 0.D0
-do 10 K = 1,M
-10 S = S + DBLE(A(K,I))*DBLE(B(K,J))
-11 C(I,J) = S
-END DO
-RETURN
-END SUBROUTINE TMPROD
+subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
+implicit none
+integer, intent(in) :: ka, kb, kc, l, m, n
+integer :: i, j, k
+real, intent(in) :: a(ka,n), b(kb,l)
+real, intent(inout) :: c(kc,l)
+double precision :: s
+do j=1,l
+do 11 i = 1,n
+s = 0.d0
+do 10 k = 1,m
+10 s = s + dble(a(k,i))*dble(b(k,j))
+11 c(i,j) = s
+end do
+return
+end subroutine tmprod
 
-SUBROUTINE SMPROD(M,N,A,KA,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: KA, M, N
-INTEGER :: I, II, J, K
-REAL, INTENT(IN) :: A(KA,N)
-REAL, INTENT(INOUT) :: B(*)
-DOUBLE PRECISION :: S
-II=1
-DO I=1,N
-do 11 J = 1,I
-S = 0.D0
-do 10 K = 1,M
-10 S = S + DBLE(A(K,I))*DBLE(A(K,J))
-B(II) = S
-11 II = II + 1
-END DO
-RETURN
-END SUBROUTINE SMPROD
+subroutine smprod(m,n,a,ka,b)
+implicit none
+integer, intent(in) :: ka, m, n
+integer :: i, ii, j, k
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(*)
+double precision :: s
+ii=1
+do i=1,n
+do 11 j = 1,i
+s = 0.d0
+do 10 k = 1,m
+10 s = s + dble(a(k,i))*dble(a(k,j))
+b(ii) = s
+11 ii = ii + 1
+end do
+return
+end subroutine smprod
 
-SUBROUTINE KPROD(A,KA,M,N,B,KB,K,L,C,KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
-INTEGER :: I, II, J, JJ
+subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
+implicit none
+integer, intent(in) :: k, ka, kb, kc, l, m, n
+integer :: i, ii, j, jj
 !     ******************************************************************
 !     KRONECKER PRODUCT OF REAL MATRICES A AND B
 !     ******************************************************************
-REAL, INTENT(IN) :: A(KA,N), B(KB,L)
-REAL, INTENT(INOUT) :: C(KC,*)
-INTEGER :: R, S
+real, intent(in) :: a(ka,n), b(kb,l)
+real, intent(inout) :: c(kc,*)
+integer :: r, s
 !
-J = 0
-DO S = 1,N
-   DO JJ = 1,L
-   J = J + 1
+j = 0
+do s = 1,n
+   do jj = 1,l
+   j = j + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
-      I = 0
-      DO R = 1,M
-         do 10 II = 1,K
-         I = I + 1
-10 C(I,J) = A(R,S)*B(II,JJ)
-      END DO
+      i = 0
+      do r = 1,m
+         do 10 ii = 1,k
+         i = i + 1
+10 c(i,j) = a(r,s)*b(ii,jj)
+      end do
 !
-   END DO
-END DO
-RETURN
-END SUBROUTINE KPROD
+   end do
+end do
+return
+end subroutine kprod
 
-SUBROUTINE DKPROD(A,KA,M,N,B,KB,K,L,C,KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
-INTEGER :: I, II, J, JJ
+subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
+implicit none
+integer, intent(in) :: k, ka, kb, kc, l, m, n
+integer :: i, ii, j, jj
 !     ******************************************************************
 !     KRONECKER PRODUCT OF DOUBLE PRECISION MATRICES A AND B
 !     ******************************************************************
-DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
-DOUBLE PRECISION, INTENT(INOUT) :: C(KC,*)
-INTEGER :: R, S
+double precision, intent(in) :: a(ka,n), b(kb,l)
+double precision, intent(inout) :: c(kc,*)
+integer :: r, s
 !
-J = 0
-DO S = 1,N
-   DO JJ = 1,L
-   J = J + 1
+j = 0
+do s = 1,n
+   do jj = 1,l
+   j = j + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
-      I = 0
-      DO R = 1,M
-         do 10 II = 1,K
-         I = I + 1
-10 C(I,J) = A(R,S)*B(II,JJ)
-      END DO
+      i = 0
+      do r = 1,m
+         do 10 ii = 1,k
+         i = i + 1
+10 c(i,j) = a(r,s)*b(ii,jj)
+      end do
 !
-   END DO
-END DO
-RETURN
-END SUBROUTINE DKPROD
+   end do
+end do
+return
+end subroutine dkprod
 
-SUBROUTINE CKPROD(A,KA,M,N,B,KB,K,L,C,KC)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
-INTEGER :: I, II, J, JJ
+subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
+implicit none
+integer, intent(in) :: k, ka, kb, kc, l, m, n
+integer :: i, ii, j, jj
 !     ******************************************************************
 !     KRONECKER PRODUCT OF COMPLEX MATRICES A AND B
 !     ******************************************************************
-COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
-COMPLEX, INTENT(INOUT) :: C(KC,*)
-INTEGER :: R, S
+complex, intent(in) :: a(ka,n), b(kb,l)
+complex, intent(inout) :: c(kc,*)
+integer :: r, s
 !
-J = 0
-DO S = 1,N
-   DO JJ = 1,L
-   J = J + 1
+j = 0
+do s = 1,n
+   do jj = 1,l
+   j = j + 1
 !
 !        COMPUTE THE J-TH COLUMN OF C
 !
-      I = 0
-      DO R = 1,M
-         do 10 II = 1,K
-         I = I + 1
-10 C(I,J) = A(R,S)*B(II,JJ)
-      END DO
+      i = 0
+      do r = 1,m
+         do 10 ii = 1,k
+         i = i + 1
+10 c(i,j) = a(r,s)*b(ii,jj)
+      end do
 !
-   END DO
-END DO
-RETURN
-END SUBROUTINE CKPROD
+   end do
+end do
+return
+end subroutine ckprod
 
-SUBROUTINE RNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: KRANK, KSURE
-INTEGER, INTENT(IN) :: M, MDA, N
-REAL, INTENT(IN) :: AE, RE
-INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
-REAL :: EPS, RERR
-REAL :: SPMPAR
+subroutine rnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+implicit none
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: m, mda, n
+real, intent(in) :: ae, re
+integer :: i, imax, m0, m1, m2, m3, m4, m5
+real :: eps, rerr
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !          UPPER AND LOWER BOUNDS OF THE RANK OF A REAL MATRIX
@@ -4063,49 +4063,49 @@ REAL :: SPMPAR
 !     REAL WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 !     INTEGER IWORK(M + N)
 !--------------------
-REAL, INTENT(INOUT) :: A(MDA,N), WORK(*)
-INTEGER, INTENT(INOUT) :: IWORK(*)
+real, intent(inout) :: a(mda,n), work(*)
+integer, intent(inout) :: iwork(*)
 !
-M0 = MIN0(M,N)
+m0 = min0(m,n)
 !
 !     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 !
-M1 = 1
-M2 = M1 + M0
-M3 = M2 + M0
-M4 = M3 + M0
-M5 = M4 + M0
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
 !
-EPS = 10.0*SPMPAR(1)
-RERR = AMAX1(EPS,RE)
+eps = 10.0*spmpar(1)
+rerr = amax1(eps,re)
 !
-IMAX = M5 - 1
-DO I = M4,IMAX
-   WORK(I) = RERR
-END DO
-IMAX = IMAX + M0
-DO I = M5,IMAX
-   WORK(I) = AE
-END DO
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
 !
 !     FACTOR THE MATRIX A
 !
-IF (M .LT. N) GO TO 40
+if (m .lt. n) go to 40
 !
-   CALL U11LS (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-   RETURN
+   call u11ls (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+   return
 !
-40 CALL U11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-RETURN
-END SUBROUTINE RNK
+40 call u11us (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+return
+end subroutine rnk
 
-SUBROUTINE DRNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: KRANK, KSURE
-INTEGER, INTENT(IN) :: M, MDA, N
-INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
+subroutine drnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
+implicit none
+integer, intent(inout) :: krank, ksure
+integer, intent(in) :: m, mda, n
+integer :: i, imax, m0, m1, m2, m3, m4, m5
 !-----------------------------------------------------------------------
 !
 !              UPPER AND LOWER BOUNDS OF THE RANK OF A
@@ -4115,56 +4115,56 @@ INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
 !     DOUBLE PRECISION WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 !     INTEGER IWORK(M + N)
 !--------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N)
-DOUBLE PRECISION, INTENT(IN) :: RE, AE
-DOUBLE PRECISION, INTENT(INOUT) :: WORK(*)
-INTEGER, INTENT(INOUT) :: IWORK(*)
-DOUBLE PRECISION :: EPS, RERR
-DOUBLE PRECISION :: DPMPAR
+double precision, intent(inout) :: a(mda,n)
+double precision, intent(in) :: re, ae
+double precision, intent(inout) :: work(*)
+integer, intent(inout) :: iwork(*)
+double precision :: eps, rerr
+double precision :: dpmpar
 !
-M0 = MIN0(M,N)
+m0 = min0(m,n)
 !
 !     DEFINE THE RELATIVE AND ABSOLUTE TOLERANCE LISTS
 !
-M1 = 1
-M2 = M1 + M0
-M3 = M2 + M0
-M4 = M3 + M0
-M5 = M4 + M0
+m1 = 1
+m2 = m1 + m0
+m3 = m2 + m0
+m4 = m3 + m0
+m5 = m4 + m0
 !
-EPS = 10.D0*DPMPAR(1)
-RERR = DMAX1(EPS,RE)
+eps = 10.d0*dpmpar(1)
+rerr = dmax1(eps,re)
 !
-IMAX = M5 - 1
-DO I = M4,IMAX
-   WORK(I) = RERR
-END DO
-IMAX = IMAX + M0
-DO I = M5,IMAX
-   WORK(I) = AE
-END DO
+imax = m5 - 1
+do i = m4,imax
+   work(i) = rerr
+end do
+imax = imax + m0
+do i = m5,imax
+   work(i) = ae
+end do
 !
 !     FACTOR THE MATRIX A
 !
-IF (M .LT. N) GO TO 40
+if (m .lt. n) go to 40
 !
-   CALL DU11LS (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-   RETURN
+   call du11ls (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+   return
 !
-40 CALL DU11US (A,MDA,M,N,WORK(M4),WORK(M5),1,0,KRANK,KSURE, &
-&WORK(M1),WORK(M2),WORK(M3),IWORK(M1),IWORK(M2))
-RETURN
-END SUBROUTINE DRNK
+40 call du11us (a,mda,m,n,work(m4),work(m5),1,0,krank,ksure, &
+&work(m1),work(m2),work(m3),iwork(m1),iwork(m2))
+return
+end subroutine drnk
 
-SUBROUTINE CROUT(MO,N,M,A,KA,B,KB,D,INDEX,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: INDEX(*)
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-REAL, INTENT(INOUT) :: A(KA,N), B(*), D, TEMP(*)
-INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, &
-&NMJ, NMK
-REAL :: P, T
+subroutine crout(mo,n,m,a,ka,b,kb,d,index,temp)
+implicit none
+integer, intent(inout) :: index(*)
+integer, intent(in) :: ka, kb, m, mo, n
+real, intent(inout) :: a(ka,n), b(*), d, temp(*)
+integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
+&nmj, nmk
+real :: p, t
 !-----------------------------------------------------------------------
 !     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 !-----------------------------------------------------------------------
@@ -4189,182 +4189,182 @@ REAL :: P, T
 !     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
 !     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
 !-----------------------------------------------------------------------
-INTEGER :: ONEJ
-DOUBLE PRECISION :: DSUM
+integer :: onej
+double precision :: dsum
 !
-IF (N .LT. 2) GO TO 200
-D = 1.0
-NM1 = N - 1
-DO K = 1,NM1
-   KP1 = K + 1
+if (n .lt. 2) go to 200
+d = 1.0
+nm1 = n - 1
+do k = 1,nm1
+   kp1 = k + 1
 !
 !               SEARCH FOR THE K-TH PIVOT ELEMENT
 !
-   P = ABS(A(K,K))
-   L = K
-   do 10 I = KP1,N
-      T = ABS(A(I,K))
-      IF (P .GE. T) GO TO 10
-      P = T
-      L = I
-10 CONTINUE
+   p = abs(a(k,k))
+   l = k
+   do 10 i = kp1,n
+      t = abs(a(i,k))
+      if (p .ge. t) go to 10
+      p = t
+      l = i
+10 continue
 !
-   P = A(L,K)
-   D = P*D
-   IF (D .EQ. 0.0) RETURN
-   IF (MO .EQ. 0) INDEX(K) = L
-   IF (K .EQ. L) GO TO 40
-   D = -D
+   p = a(l,k)
+   d = p*d
+   if (d .eq. 0.0) return
+   if (mo .eq. 0) index(k) = l
+   if (k .eq. l) go to 40
+   d = -d
 !
 !                  INTERCHANGING ROWS K AND L
 !
-   do 20 J = 1,N
-      T = A(K,J)
-      A(K,J) = A(L,J)
-20 A(L,J) = T
+   do 20 j = 1,n
+      t = a(k,j)
+      a(k,j) = a(l,j)
+20 a(l,j) = t
 !
-   IF (M .LE. 0) GO TO 40
-   KJ = K
-   LJ = L
-   do 30 J = 1,M
-      T = B(KJ)
-      B(KJ) = B(LJ)
-      B(LJ) = T
-      KJ = KJ + KB
-30 LJ = LJ + KB
+   if (m .le. 0) go to 40
+   kj = k
+   lj = l
+   do 30 j = 1,m
+      t = b(kj)
+      b(kj) = b(lj)
+      b(lj) = t
+      kj = kj + kb
+30 lj = lj + kb
 !
 !                  COMPUTE THE K-TH ROW OF U
 !
-40 IF (K .GT. 1) GO TO 50
-      do 41 J = KP1,N
-41 A(K,J) = A(K,J)/P
-      GO TO 60
+40 if (k .gt. 1) go to 50
+      do 41 j = kp1,n
+41 a(k,j) = a(k,j)/p
+      go to 60
 !
-50 DO J = KP1,N
-      DSUM = A(K,J)
-      do 51 L = 1,KM1
-51 DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))
-      A(K,J) = SNGL(DSUM)/P
-   END DO
+50 do j = kp1,n
+      dsum = a(k,j)
+      do 51 l = 1,km1
+51 dsum = dsum - dble(a(k,l))*dble(a(l,j))
+      a(k,j) = sngl(dsum)/p
+   end do
 !
 !               COMPUTE THE (K+1)-ST COLUMN OF L
 !
-60 DO I = KP1,N
-      DSUM = A(I,KP1)
-      do 61 L = 1,K
-61 DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))
-      A(I,KP1) = DSUM
-   END DO
+60 do i = kp1,n
+      dsum = a(i,kp1)
+      do 61 l = 1,k
+61 dsum = dsum - dble(a(i,l))*dble(a(l,kp1))
+      a(i,kp1) = dsum
+   end do
 !
-   KM1 = K
-END DO
+   km1 = k
+end do
 !
 !                 CHECK THE N-TH PIVOT ELEMENT
 !
-D = A(N,N)*D
-IF (D .EQ. 0.0) RETURN
+d = a(n,n)*d
+if (d .eq. 0.0) return
 !
 !                 SOLVING THE EQUATION LY = B
 !
-IF (M .LE. 0) GO TO 120
-MAXB = KB*M
-DO ONEJ = 1,MAXB,KB
-   KJ = ONEJ
-   B(KJ) = B(KJ)/A(1,1)
-   do 101 K = 2,N
-      KJ = KJ + 1
-      DSUM = B(KJ)
-      KM1 = K - 1
-      LJ = ONEJ
-      do 100 L = 1,KM1
-         DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
-100 LJ = LJ + 1
-101 B(KJ) = SNGL(DSUM)/A(K,K)
-END DO
+if (m .le. 0) go to 120
+maxb = kb*m
+do onej = 1,maxb,kb
+   kj = onej
+   b(kj) = b(kj)/a(1,1)
+   do 101 k = 2,n
+      kj = kj + 1
+      dsum = b(kj)
+      km1 = k - 1
+      lj = onej
+      do 100 l = 1,km1
+         dsum = dsum - dble(a(k,l))*dble(b(lj))
+100 lj = lj + 1
+101 b(kj) = sngl(dsum)/a(k,k)
+end do
 !
 !                 SOLVING THE EQUATION UX = Y
 !
-DO NJ = N,MAXB,KB
-   KJ = NJ
-   DO NMK = 1,NM1
-      K = N - NMK
-      LJ = KJ
-      KJ = KJ - 1
-      DSUM = B(KJ)
-      KP1 = K + 1
-      do 110 L = KP1,N
-         DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
-110 LJ = LJ + 1
-      B(KJ) = DSUM
-   END DO
-END DO
+do nj = n,maxb,kb
+   kj = nj
+   do nmk = 1,nm1
+      k = n - nmk
+      lj = kj
+      kj = kj - 1
+      dsum = b(kj)
+      kp1 = k + 1
+      do 110 l = kp1,n
+         dsum = dsum - dble(a(k,l))*dble(b(lj))
+110 lj = lj + 1
+      b(kj) = dsum
+   end do
+end do
 !
 !               REPLACE L WITH THE INVERSE OF L
 !
-120 IF (MO .NE. 0) RETURN
-DO J = 1,NM1
-   A(J,J) = 1.0/A(J,J)
-   JP1 = J + 1
-   do 131 I = JP1,N
-      DSUM = 0.D0
-      IM1 = I - 1
-      do 130 L = J,IM1
-130 DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))
-131 A(I,J) = -SNGL(DSUM)/A(I,I)
-END DO
-A(N,N) = 1.0/A(N,N)
+120 if (mo .ne. 0) return
+do j = 1,nm1
+   a(j,j) = 1.0/a(j,j)
+   jp1 = j + 1
+   do 131 i = jp1,n
+      dsum = 0.d0
+      im1 = i - 1
+      do 130 l = j,im1
+130 dsum = dsum + dble(a(i,l))*dble(a(l,j))
+131 a(i,j) = -sngl(dsum)/a(i,i)
+end do
+a(n,n) = 1.0/a(n,n)
 !
 !           SOLVE UX = Y WHERE Y IS THE INVERSE OF L
 !
-DO NMK = 1,NM1
-   K = N - NMK
-   KP1 = K + 1
-   do 140 J = KP1,N
-      TEMP(J) = A(K,J)
-140 A(K,J) = 0.0
+do nmk = 1,nm1
+   k = n - nmk
+   kp1 = k + 1
+   do 140 j = kp1,n
+      temp(j) = a(k,j)
+140 a(k,j) = 0.0
 !
-   DO J = 1,N
-      DSUM = A(K,J)
-      do 150 L = KP1,N
-150 DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))
-      A(K,J) = DSUM
-   END DO
-END DO
+   do j = 1,n
+      dsum = a(k,j)
+      do 150 l = kp1,n
+150 dsum = dsum - dble(temp(l))*dble(a(l,j))
+      a(k,j) = dsum
+   end do
+end do
 !
 !                    COLUMN INTERCHANGES
 !
-do 161 NMJ = 1,NM1
-   J = N - NMJ
-   K = INDEX(J)
-   IF (J .EQ. K) GO TO 161
-   do 160 I = 1,N
-      T = A(I,J)
-      A(I,J) = A(I,K)
-160 A(I,K) = T
-161 CONTINUE
-RETURN
+do 161 nmj = 1,nm1
+   j = n - nmj
+   k = index(j)
+   if (j .eq. k) go to 161
+   do 160 i = 1,n
+      t = a(i,j)
+      a(i,j) = a(i,k)
+160 a(i,k) = t
+161 continue
+return
 !
 !                      CASE WHEN N = 1
 !
-200 D = A(1,1)
-IF (D .EQ. 0.0) RETURN
-IF (MO .EQ. 0) A(1,1) = 1.0/D
+200 d = a(1,1)
+if (d .eq. 0.0) return
+if (mo .eq. 0) a(1,1) = 1.0/d
 !
-IF (M .LE. 0) RETURN
-MAXB = KB*M
-do 210 KJ = 1,MAXB,KB
-210 B(KJ) = B(KJ)/D
-RETURN
-END SUBROUTINE CROUT
+if (m .le. 0) return
+maxb = kb*m
+do 210 kj = 1,maxb,kb
+210 b(kj) = b(kj)/d
+return
+end subroutine crout
 
-SUBROUTINE KROUT(MO,N,M,A,KA,B,KB,IERR,INDEX,TEMP)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, INDEX(*)
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-REAL, INTENT(INOUT) :: A(KA,N), B(*), TEMP(*)
-INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, &
-&NMJ, NMK
-REAL :: D, P, T
+subroutine krout(mo,n,m,a,ka,b,kb,ierr,index,temp)
+implicit none
+integer, intent(inout) :: ierr, index(*)
+integer, intent(in) :: ka, kb, m, mo, n
+real, intent(inout) :: a(ka,n), b(*), temp(*)
+integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
+&nmj, nmk
+real :: d, p, t
 !-----------------------------------------------------------------------
 !     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 !-----------------------------------------------------------------------
@@ -4392,189 +4392,189 @@ REAL :: D, P, T
 !     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
 !     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
 !-----------------------------------------------------------------------
-INTEGER :: ONEJ
-DOUBLE PRECISION :: DSUM
+integer :: onej
+double precision :: dsum
 !
-IF (N .LT. 1 .OR. KA .LT. N) GO TO 320
-IF (M .LE. 0) GO TO 5
-IF (KB .LT. N) GO TO 320
+if (n .lt. 1 .or. ka .lt. n) go to 320
+if (m .le. 0) go to 5
+if (kb .lt. n) go to 320
 !
-5 IERR = 0
-IF (N .LT. 2) GO TO 200
-NM1 = N - 1
-DO K = 1,NM1
-   KP1 = K + 1
+5 ierr = 0
+if (n .lt. 2) go to 200
+nm1 = n - 1
+do k = 1,nm1
+   kp1 = k + 1
 !
 !               SEARCH FOR THE K-TH PIVOT ELEMENT
 !
-   P = ABS(A(K,K))
-   L = K
-   do 10 I = KP1,N
-      T = ABS(A(I,K))
-      IF (P .GE. T) GO TO 10
-      P = T
-      L = I
-10 CONTINUE
-   IF (P .EQ. 0.0) GO TO 300
+   p = abs(a(k,k))
+   l = k
+   do 10 i = kp1,n
+      t = abs(a(i,k))
+      if (p .ge. t) go to 10
+      p = t
+      l = i
+10 continue
+   if (p .eq. 0.0) go to 300
 !
-   P = A(L,K)
-   IF (MO .EQ. 0) INDEX(K) = L
-   IF (K .EQ. L) GO TO 40
+   p = a(l,k)
+   if (mo .eq. 0) index(k) = l
+   if (k .eq. l) go to 40
 !
 !                  INTERCHANGING ROWS K AND L
 !
-   do 20 J = 1,N
-      T = A(K,J)
-      A(K,J) = A(L,J)
-20 A(L,J) = T
+   do 20 j = 1,n
+      t = a(k,j)
+      a(k,j) = a(l,j)
+20 a(l,j) = t
 !
-   IF (M .LE. 0) GO TO 40
-   KJ = K
-   LJ = L
-   do 30 J = 1,M
-      T = B(KJ)
-      B(KJ) = B(LJ)
-      B(LJ) = T
-      KJ = KJ + KB
-30 LJ = LJ + KB
+   if (m .le. 0) go to 40
+   kj = k
+   lj = l
+   do 30 j = 1,m
+      t = b(kj)
+      b(kj) = b(lj)
+      b(lj) = t
+      kj = kj + kb
+30 lj = lj + kb
 !
 !                  COMPUTE THE K-TH ROW OF U
 !
-40 IF (K .GT. 1) GO TO 50
-      do 41 J = KP1,N
-41 A(K,J) = A(K,J)/P
-      GO TO 60
+40 if (k .gt. 1) go to 50
+      do 41 j = kp1,n
+41 a(k,j) = a(k,j)/p
+      go to 60
 !
-50 DO J = KP1,N
-      DSUM = A(K,J)
-      do 51 L = 1,KM1
-51 DSUM = DSUM - DBLE(A(K,L))*DBLE(A(L,J))
-      A(K,J) = SNGL(DSUM)/P
-   END DO
+50 do j = kp1,n
+      dsum = a(k,j)
+      do 51 l = 1,km1
+51 dsum = dsum - dble(a(k,l))*dble(a(l,j))
+      a(k,j) = sngl(dsum)/p
+   end do
 !
 !               COMPUTE THE (K+1)-ST COLUMN OF L
 !
-60 DO I = KP1,N
-      DSUM = A(I,KP1)
-      do 61 L = 1,K
-61 DSUM = DSUM - DBLE(A(I,L))*DBLE(A(L,KP1))
-      A(I,KP1) = DSUM
-   END DO
+60 do i = kp1,n
+      dsum = a(i,kp1)
+      do 61 l = 1,k
+61 dsum = dsum - dble(a(i,l))*dble(a(l,kp1))
+      a(i,kp1) = dsum
+   end do
 !
-   KM1 = K
-END DO
+   km1 = k
+end do
 !
 !                 CHECK THE N-TH PIVOT ELEMENT
 !
-IF (A(N,N) .EQ. 0.0) GO TO 310
+if (a(n,n) .eq. 0.0) go to 310
 !
 !                 SOLVING THE EQUATION LY = B
 !
-IF (M .LE. 0) GO TO 120
-MAXB = KB*M
-DO ONEJ = 1,MAXB,KB
-   KJ = ONEJ
-   B(KJ) = B(KJ)/A(1,1)
-   do 101 K = 2,N
-      KJ = KJ + 1
-      DSUM = B(KJ)
-      KM1 = K - 1
-      LJ = ONEJ
-      do 100 L = 1,KM1
-         DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
-100 LJ = LJ + 1
-101 B(KJ) = SNGL(DSUM)/A(K,K)
-END DO
+if (m .le. 0) go to 120
+maxb = kb*m
+do onej = 1,maxb,kb
+   kj = onej
+   b(kj) = b(kj)/a(1,1)
+   do 101 k = 2,n
+      kj = kj + 1
+      dsum = b(kj)
+      km1 = k - 1
+      lj = onej
+      do 100 l = 1,km1
+         dsum = dsum - dble(a(k,l))*dble(b(lj))
+100 lj = lj + 1
+101 b(kj) = sngl(dsum)/a(k,k)
+end do
 !
 !                 SOLVING THE EQUATION UX = Y
 !
-DO NJ = N,MAXB,KB
-   KJ = NJ
-   DO NMK = 1,NM1
-      K = N - NMK
-      LJ = KJ
-      KJ = KJ - 1
-      DSUM = B(KJ)
-      KP1 = K + 1
-      do 110 L = KP1,N
-         DSUM = DSUM - DBLE(A(K,L))*DBLE(B(LJ))
-110 LJ = LJ + 1
-      B(KJ) = DSUM
-   END DO
-END DO
+do nj = n,maxb,kb
+   kj = nj
+   do nmk = 1,nm1
+      k = n - nmk
+      lj = kj
+      kj = kj - 1
+      dsum = b(kj)
+      kp1 = k + 1
+      do 110 l = kp1,n
+         dsum = dsum - dble(a(k,l))*dble(b(lj))
+110 lj = lj + 1
+      b(kj) = dsum
+   end do
+end do
 !
 !               REPLACE L WITH THE INVERSE OF L
 !
-120 IF (MO .NE. 0) RETURN
-DO J = 1,NM1
-   A(J,J) = 1.0/A(J,J)
-   JP1 = J + 1
-   do 131 I = JP1,N
-      DSUM = 0.D0
-      IM1 = I - 1
-      do 130 L = J,IM1
-130 DSUM = DSUM + DBLE(A(I,L))*DBLE(A(L,J))
-131 A(I,J) = -SNGL(DSUM)/A(I,I)
-END DO
-A(N,N) = 1.0/A(N,N)
+120 if (mo .ne. 0) return
+do j = 1,nm1
+   a(j,j) = 1.0/a(j,j)
+   jp1 = j + 1
+   do 131 i = jp1,n
+      dsum = 0.d0
+      im1 = i - 1
+      do 130 l = j,im1
+130 dsum = dsum + dble(a(i,l))*dble(a(l,j))
+131 a(i,j) = -sngl(dsum)/a(i,i)
+end do
+a(n,n) = 1.0/a(n,n)
 !
 !           SOLVE UX = Y WHERE Y IS THE INVERSE OF L
 !
-DO NMK = 1,NM1
-   K = N - NMK
-   KP1 = K + 1
-   do 140 J = KP1,N
-      TEMP(J) = A(K,J)
-140 A(K,J) = 0.0
+do nmk = 1,nm1
+   k = n - nmk
+   kp1 = k + 1
+   do 140 j = kp1,n
+      temp(j) = a(k,j)
+140 a(k,j) = 0.0
 !
-   DO J = 1,N
-      DSUM = A(K,J)
-      do 150 L = KP1,N
-150 DSUM = DSUM - DBLE(TEMP(L))*DBLE(A(L,J))
-      A(K,J) = DSUM
-   END DO
-END DO
+   do j = 1,n
+      dsum = a(k,j)
+      do 150 l = kp1,n
+150 dsum = dsum - dble(temp(l))*dble(a(l,j))
+      a(k,j) = dsum
+   end do
+end do
 !
 !                    COLUMN INTERCHANGES
 !
-do 161 NMJ = 1,NM1
-   J = N - NMJ
-   K = INDEX(J)
-   IF (J .EQ. K) GO TO 161
-   do 160 I = 1,N
-      T = A(I,J)
-      A(I,J) = A(I,K)
-160 A(I,K) = T
-161 CONTINUE
-RETURN
+do 161 nmj = 1,nm1
+   j = n - nmj
+   k = index(j)
+   if (j .eq. k) go to 161
+   do 160 i = 1,n
+      t = a(i,j)
+      a(i,j) = a(i,k)
+160 a(i,k) = t
+161 continue
+return
 !
 !                      CASE WHEN N = 1
 !
-200 D = A(1,1)
-IF (D .EQ. 0.0) GO TO 310
-IF (MO .EQ. 0) A(1,1) = 1.0/D
+200 d = a(1,1)
+if (d .eq. 0.0) go to 310
+if (mo .eq. 0) a(1,1) = 1.0/d
 !
-IF (M .LE. 0) RETURN
-MAXB = KB*M
-do 210 KJ = 1,MAXB,KB
-210 B(KJ) = B(KJ)/D
-RETURN
+if (m .le. 0) return
+maxb = kb*m
+do 210 kj = 1,maxb,kb
+210 b(kj) = b(kj)/d
+return
 !
 !                  K-TH PIVOT ELEMENT IS 0
 !
-300 IERR = K
-RETURN
-310 IERR = N
-RETURN
+300 ierr = k
+return
+310 ierr = n
+return
 !
 !                        INPUT ERROR
 !
-320 IERR = -1
-RETURN
-END SUBROUTINE KROUT
+320 ierr = -1
+return
+end subroutine krout
 
-SUBROUTINE DEC (N, NDIM, A, IP, IER)
-IMPLICIT NONE
+subroutine dec (n, ndim, a, ip, ier)
+implicit none
 !-----------------------------------------------------------------------
 ! MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
 ! INPUT..
@@ -4597,56 +4597,56 @@ IMPLICIT NONE
 ! C. B. MOLER, ALGORITHM 423, LINEAR EQUATION SOLVER,
 ! COMM. ASSOC. COMPUT. MACH., 15 (1972), P. 274.
 !-----------------------------------------------------------------------
-INTEGER, INTENT(OUT) :: IER
-INTEGER, INTENT(INOUT) :: IP
-INTEGER, INTENT(IN) :: N, NDIM
-INTEGER :: I, J, K, KP1, M, NM1
-REAL, INTENT(INOUT) :: A(NDIM,N)
-REAL :: T
-DIMENSION IP(N)
+integer, intent(out) :: ier
+integer, intent(inout) :: ip
+integer, intent(in) :: n, ndim
+integer :: i, j, k, kp1, m, nm1
+real, intent(inout) :: a(ndim,n)
+real :: t
+dimension ip(n)
 !
-IER = 0
-IP(N) = 1
-IF (N .EQ. 1) GO TO 70
-NM1 = N - 1
-DO K = 1,NM1
-  KP1 = K + 1
+ier = 0
+ip(n) = 1
+if (n .eq. 1) go to 70
+nm1 = n - 1
+do k = 1,nm1
+  kp1 = k + 1
 !  FIND THE PIVOT IN COLUMN K.  SEARCH ROWS K TO N. --------------------
-  M = K
-  do 10 I = KP1,N
-10 IF (ABS(A(I,K)) .GT. ABS(A(M,K))) M = I
-  IP(K) = M
+  m = k
+  do 10 i = kp1,n
+10 if (abs(a(i,k)) .gt. abs(a(m,k))) m = i
+  ip(k) = m
 !  INTERCHANGE ELEMENTS IN ROWS K AND M. -------------------------------
-  T = A(M,K)
-  IF (M .EQ. K) GO TO 20
-  IP(N) = -IP(N)
-  A(M,K) = A(K,K)
-  A(K,K) = T
-20 IF (T .EQ. 0.0) GO TO 80
+  t = a(m,k)
+  if (m .eq. k) go to 20
+  ip(n) = -ip(n)
+  a(m,k) = a(k,k)
+  a(k,k) = t
+20 if (t .eq. 0.0) go to 80
 !  STORE MULTIPLIERS IN A(I,K), I = K+1,...,N. -------------------------
-  T = 1.0/T
-  do 30 I = KP1,N
-30 A(I,K) = -A(I,K)*T
+  t = 1.0/t
+  do 30 i = kp1,n
+30 a(i,k) = -a(i,k)*t
 !  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
-  do 50 J = KP1,N
-    T = A(M,J)
-    A(M,J) = A(K,J)
-    A(K,J) = T
-    IF (T .EQ. 0.0) GO TO 50
-    do 40 I = KP1,N
-40 A(I,J) = A(I,J) + A(I,K)*T
-50 CONTINUE
-  END DO
-70 K = N
-IF (A(N,N) .EQ. 0.0) GO TO 80
-RETURN
-80 IER = K
-IP(N) = 0
-RETURN
-END SUBROUTINE DEC
+  do 50 j = kp1,n
+    t = a(m,j)
+    a(m,j) = a(k,j)
+    a(k,j) = t
+    if (t .eq. 0.0) go to 50
+    do 40 i = kp1,n
+40 a(i,j) = a(i,j) + a(i,k)*t
+50 continue
+  end do
+70 k = n
+if (a(n,n) .eq. 0.0) go to 80
+return
+80 ier = k
+ip(n) = 0
+return
+end subroutine dec
 
-SUBROUTINE SOL (N, NDIM, A, B, IP)
-IMPLICIT NONE
+subroutine sol (n, ndim, a, b, ip)
+implicit none
 !-----------------------------------------------------------------------
 ! SOLUTION OF LINEAR SYSTEM, A*X = B .
 ! INPUT..
@@ -4659,104 +4659,104 @@ IMPLICIT NONE
 ! OUTPUT..
 !   B = SOLUTION VECTOR, X .
 !-----------------------------------------------------------------------
-INTEGER :: IP
-INTEGER, INTENT(IN) :: N, NDIM
-INTEGER :: I, K, KB, KM1, KP1, M, NM1
-REAL :: A(NDIM, N)
-REAL, INTENT(INOUT) :: B(N)
-REAL :: T
-DIMENSION IP(N)
+integer :: ip
+integer, intent(in) :: n, ndim
+integer :: i, k, kb, km1, kp1, m, nm1
+real :: a(ndim, n)
+real, intent(inout) :: b(n)
+real :: t
+dimension ip(n)
 !
-IF (N .EQ. 1) GO TO 50
-NM1 = N - 1
+if (n .eq. 1) go to 50
+nm1 = n - 1
 !  APPLY ROW PERMUTATIONS AND MULTIPLIERS TO B. ------------------------
-DO K = 1,NM1
-  KP1 = K + 1
-  M = IP(K)
-  T = B(M)
-  B(M) = B(K)
-  B(K) = T
-  do 10 I = KP1,N
-10 B(I) = B(I) + A(I,K)*T
-  END DO
+do k = 1,nm1
+  kp1 = k + 1
+  m = ip(k)
+  t = b(m)
+  b(m) = b(k)
+  b(k) = t
+  do 10 i = kp1,n
+10 b(i) = b(i) + a(i,k)*t
+  end do
 !  BACK SOLVE. ---------------------------------------------------------
-DO KB = 1,NM1
-  KM1 = N - KB
-  K = KM1 + 1
-  B(K) = B(K)/A(K,K)
-  T = -B(K)
-  do 30 I = 1,KM1
-30 B(I) = B(I) + A(I,K)*T
-  END DO
-50 B(1) = B(1)/A(1,1)
-RETURN
-END SUBROUTINE SOL
+do kb = 1,nm1
+  km1 = n - kb
+  k = km1 + 1
+  b(k) = b(k)/a(k,k)
+  t = -b(k)
+  do 30 i = 1,km1
+30 b(i) = b(i) + a(i,k)*t
+  end do
+50 b(1) = b(1)/a(1,1)
+return
+end subroutine sol
 
-SUBROUTINE NPIVOT (N, M, A, KA, B, KB, D, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, N
-REAL, INTENT(INOUT) :: D
-INTEGER :: J, JL, K, KL, L, MAXB
-REAL :: PIVOT, T
+subroutine npivot (n, m, a, ka, b, kb, d, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, n
+real, intent(inout) :: d
+integer :: j, jl, k, kl, l, maxb
+real :: pivot, t
 !-----------------------------------------------------------------------
 !     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(KA,N), B(*)
+real, intent(inout) :: a(ka,n), b(*)
 !
-IERR = 0
-MAXB = KB*M
-DO K = 1,N
+ierr = 0
+maxb = kb*m
+do k = 1,n
 !
 !     EXAMINE THE PIVOT ELEMENT
 !
-PIVOT = A(K,K)
-D = D*PIVOT
-IF (PIVOT .NE. 0.0) GO TO 10
-   IERR = 1
-   RETURN
+pivot = a(k,k)
+d = d*pivot
+if (pivot .ne. 0.0) go to 10
+   ierr = 1
+   return
 !
 !     DIVIDE THE PIVOT ROW BY THE PIVOT ELEMENT
 !
-10 A(K,K) = 1.0
-DO L = 1,N
-   A(K,L) = A(K,L)/PIVOT
-END DO
-IF (M .LE. 0) GO TO 40
+10 a(k,k) = 1.0
+do l = 1,n
+   a(k,l) = a(k,l)/pivot
+end do
+if (m .le. 0) go to 40
 !
-DO KL = K,MAXB,KB
-   B(KL) = B(KL)/PIVOT
-END DO
+do kl = k,maxb,kb
+   b(kl) = b(kl)/pivot
+end do
 !
 !     REDUCE THE NON-PIVOT ROWS
 !
-40 do 70 J = 1,N
-   IF (J .EQ. K) GO TO 70
-   T = A(J,K)
-   A(J,K) = 0.0
-   DO L = 1,N
-      A(J,L) = A(J,L) - A(K,L)*T
-   END DO
-   IF (M .LE. 0) GO TO 70
+40 do 70 j = 1,n
+   if (j .eq. k) go to 70
+   t = a(j,k)
+   a(j,k) = 0.0
+   do l = 1,n
+      a(j,l) = a(j,l) - a(k,l)*t
+   end do
+   if (m .le. 0) go to 70
 !
-   KL = K
-   DO JL = J,MAXB,KB
-      B(JL) = B(JL) - B(KL)*T
-      KL = KL + KB
-   END DO
-70 CONTINUE
+   kl = k
+   do jl = j,maxb,kb
+      b(jl) = b(jl) - b(kl)*t
+      kl = kl + kb
+   end do
+70 continue
 !
-END DO
-RETURN
-END SUBROUTINE NPIVOT
+end do
+return
+end subroutine npivot
 
-SUBROUTINE SLV (N, M, A, KA, B, KB, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, IP1, J, JP1, K, L, NM1
-REAL :: P, SUM, T
-REAL, INTENT(INOUT) :: A(KA,N), B(KB,M)
+subroutine slv (n, m, a, ka, b, kb, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, n
+integer :: i, ip1, j, jp1, k, l, nm1
+real :: p, sum, t
+real, intent(inout) :: a(ka,n), b(kb,m)
 !     ------------------------------------------------------------------
 !     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
 !     ORDER N AND B IS A MATRIX HAVING N ROWS AND M COLUMNS.
@@ -4766,90 +4766,90 @@ REAL, INTENT(INOUT) :: A(KA,N), B(KB,M)
 !        IERR = 0   THE EQUATIONS HAVE BEEN SOLVED.
 !        IERR = J   THE J-TH PIVOT ELEMENT WAS FOUND TO BE 0.
 !     ------------------------------------------------------------------
-IERR = 0
-NM1 = N - 1
-IF (NM1 .EQ. 0) GO TO 140
-DO J = 1,NM1
+ierr = 0
+nm1 = n - 1
+if (nm1 .eq. 0) go to 140
+do j = 1,nm1
 !
 !     SEARCH FOR THE J-TH PIVOT ELEMENT
 !
-   P = 0.0
-   do 10 I = J,N
-      T = ABS(A(I,J))
-      IF (T .LE. P) GO TO 10
-      P = T
-      L = I
-10 CONTINUE
-   IF (P .EQ. 0.0) GO TO 210
-   IF (J .EQ. L) GO TO 40
+   p = 0.0
+   do 10 i = j,n
+      t = abs(a(i,j))
+      if (t .le. p) go to 10
+      p = t
+      l = i
+10 continue
+   if (p .eq. 0.0) go to 210
+   if (j .eq. l) go to 40
 !
 !     INTERCHANGE ROWS J AND L
 !
-   DO K = J,N
-      T = A(J,K)
-      A(J,K) = A(L,K)
-      A(L,K) = T
-   END DO
-   DO K = 1,M
-      T = B(J,K)
-      B(J,K) = B(L,K)
-      B(L,K) = T
-   END DO
+   do k = j,n
+      t = a(j,k)
+      a(j,k) = a(l,k)
+      a(l,k) = t
+   end do
+   do k = 1,m
+      t = b(j,k)
+      b(j,k) = b(l,k)
+      b(l,k) = t
+   end do
 !
 !     ELIMINATE THE COEFFICIENTS OF X(J) IN ROWS I = J+1,...,N
 !
-40 P = A(J,J)
-   JP1 = J + 1
-   DO I = JP1,N
-      T = A(I,J)/P
-      do 50 K = JP1,N
-50 A(I,K) = A(I,K) - T*A(J,K)
-      do 60 K = 1,M
-60 B(I,K) = B(I,K) - T*B(J,K)
-   END DO
-END DO
-IF (A(N,N) .EQ. 0.0) GO TO 220
+40 p = a(j,j)
+   jp1 = j + 1
+   do i = jp1,n
+      t = a(i,j)/p
+      do 50 k = jp1,n
+50 a(i,k) = a(i,k) - t*a(j,k)
+      do 60 k = 1,m
+60 b(i,k) = b(i,k) - t*b(j,k)
+   end do
+end do
+if (a(n,n) .eq. 0.0) go to 220
 !
 !     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
 !
-do 100 J = 1,M
-100 B(N,J) = B(N,J)/A(N,N)
+do 100 j = 1,m
+100 b(n,j) = b(n,j)/a(n,n)
 !
-DO L = 1,NM1
-I = N - L
-IP1 = I + 1
-   do 120 J = 1,M
-   SUM = B(I,J)
-      do 110 K = IP1,N
-110 SUM = SUM - A(I,K)*B(K,J)
-120 B(I,J) = SUM/A(I,I)
-END DO
-RETURN
+do l = 1,nm1
+i = n - l
+ip1 = i + 1
+   do 120 j = 1,m
+   sum = b(i,j)
+      do 110 k = ip1,n
+110 sum = sum - a(i,k)*b(k,j)
+120 b(i,j) = sum/a(i,i)
+end do
+return
 !
 !     CASE WHEN N = 1
 !
-140 IF (A(1,1) .EQ. 0.0) GO TO 200
-do 150 J = 1,M
-150 B(1,J) = B(1,J)/A(1,1)
-RETURN
+140 if (a(1,1) .eq. 0.0) go to 200
+do 150 j = 1,m
+150 b(1,j) = b(1,j)/a(1,1)
+return
 !
 !     ERROR RETURN
 !
-200 IERR = 1
-RETURN
-210 IERR = J
-RETURN
-220 IERR = N
-RETURN
-END SUBROUTINE SLV
+200 ierr = 1
+return
+210 ierr = j
+return
+220 ierr = n
+return
+end subroutine slv
 
-SUBROUTINE DPSLV (N, M, A, KA, B, KB, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, N
-INTEGER :: I, J, K, KM1, KP1, L, NM1
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,M)
-DOUBLE PRECISION :: P, T
+subroutine dpslv (n, m, a, ka, b, kb, ierr)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, n
+integer :: i, j, k, km1, kp1, l, nm1
+double precision, intent(inout) :: a(ka,n), b(kb,m)
+double precision :: p, t
 !     ------------------------------------------------------------------
 !     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
 !     ORDER N AND B IS A MATRIX HAVING N ROWS AND M COLUMNS.
@@ -4859,215 +4859,215 @@ DOUBLE PRECISION :: P, T
 !        IERR = 0   THE EQUATIONS HAVE BEEN SOLVED.
 !        IERR = J   THE J-TH PIVOT ELEMENT WAS FOUND TO BE 0.
 !     ------------------------------------------------------------------
-IERR = 0
-NM1 = N - 1
-IF (NM1 .EQ. 0) GO TO 140
-DO K = 1,NM1
+ierr = 0
+nm1 = n - 1
+if (nm1 .eq. 0) go to 140
+do k = 1,nm1
 !
 !     SEARCH FOR THE K-TH PIVOT ELEMENT
 !
-   P = 0.D0
-   do 10 I = K,N
-      T = DABS(A(I,K))
-      IF (P .GE. T) GO TO 10
-      P = T
-      L = I
-10 CONTINUE
-   IF (P .EQ. 0.D0) GO TO 210
-   IF (K .EQ. L) GO TO 40
+   p = 0.d0
+   do 10 i = k,n
+      t = dabs(a(i,k))
+      if (p .ge. t) go to 10
+      p = t
+      l = i
+10 continue
+   if (p .eq. 0.d0) go to 210
+   if (k .eq. l) go to 40
 !
 !     INTERCHANGE ROWS K AND L
 !
-   DO J = K,N
-      T = A(K,J)
-      A(K,J) = A(L,J)
-      A(L,J) = T
-   END DO
-   DO J = 1,M
-      T = B(K,J)
-      B(K,J) = B(L,J)
-      B(L,J) = T
-   END DO
+   do j = k,n
+      t = a(k,j)
+      a(k,j) = a(l,j)
+      a(l,j) = t
+   end do
+   do j = 1,m
+      t = b(k,j)
+      b(k,j) = b(l,j)
+      b(l,j) = t
+   end do
 !
 !     ELIMINATE THE COEFFICIENTS OF X(K) IN ROWS I = K+1,...,N
 !
-40 P = A(K,K)
-   KP1 = K + 1
-   DO I = KP1,N
-      T = A(I,K)/P
-      do 50 J = KP1,N
-50 A(I,J) = A(I,J) - T*A(K,J)
-      do 60 J = 1,M
-60 B(I,J) = B(I,J) - T*B(K,J)
-   END DO
-END DO
-IF (A(N,N) .EQ. 0.D0) GO TO 220
+40 p = a(k,k)
+   kp1 = k + 1
+   do i = kp1,n
+      t = a(i,k)/p
+      do 50 j = kp1,n
+50 a(i,j) = a(i,j) - t*a(k,j)
+      do 60 j = 1,m
+60 b(i,j) = b(i,j) - t*b(k,j)
+   end do
+end do
+if (a(n,n) .eq. 0.d0) go to 220
 !
 !     BACKSOLVE THE TRIANGULAR SET OF EQUATIONS
 !
-do 120 J = 1,M
-K = N
-KM1 = NM1
-   do 110 L = 2,N
-   B(K,J) = B(K,J)/A(K,K)
-   T = B(K,J)
-      do 100 I = 1,KM1
-100 B(I,J) = B(I,J) - T*A(I,K)
-   K = KM1
-110 KM1 = K - 1
-120 B(1,J) = B(1,J)/A(1,1)
-RETURN
+do 120 j = 1,m
+k = n
+km1 = nm1
+   do 110 l = 2,n
+   b(k,j) = b(k,j)/a(k,k)
+   t = b(k,j)
+      do 100 i = 1,km1
+100 b(i,j) = b(i,j) - t*a(i,k)
+   k = km1
+110 km1 = k - 1
+120 b(1,j) = b(1,j)/a(1,1)
+return
 !
 !     CASE WHEN N = 1
 !
-140 IF (A(1,1) .EQ. 0.D0) GO TO 200
-do 150 J = 1,M
-150 B(1,J) = B(1,J)/A(1,1)
-RETURN
+140 if (a(1,1) .eq. 0.d0) go to 200
+do 150 j = 1,m
+150 b(1,j) = b(1,j)/a(1,1)
+return
 !
 !     ERROR RETURN
 !
-200 IERR = 1
-RETURN
-210 IERR = K
-RETURN
-220 IERR = N
-RETURN
-END SUBROUTINE DPSLV
+200 ierr = 1
+return
+210 ierr = k
+return
+220 ierr = n
+return
+end subroutine dpslv
 
-SUBROUTINE MSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-INTEGER :: J, JOB
+subroutine mslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, mo, n
+integer :: j, job
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 !     AND SOLVING REAL EQUATIONS
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(KA,N), B(*)
-REAL, INTENT(INOUT) :: DET(2), RCOND
-REAL :: T
-REAL, INTENT(INOUT) :: WK(N)
-INTEGER, INTENT(INOUT) :: IPVT(N)
-INTEGER :: ONEJ
+real, intent(inout) :: a(ka,n), b(*)
+real, intent(inout) :: det(2), rcond
+real :: t
+real, intent(inout) :: wk(n)
+integer, intent(inout) :: ipvt(n)
+integer :: onej
 !
 !          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 !
-IERR = 0
-CALL SGECO (A, KA, N, IPVT, RCOND, WK)
-T = 1.0 + RCOND
-IF (T .EQ. 1.0) GO TO 30
+ierr = 0
+call sgeco (a, ka, n, ipvt, rcond, wk)
+t = 1.0 + rcond
+if (t .eq. 1.0) go to 30
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-   CALL SGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-10 CONTINUE
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+   call sgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+10 continue
 !
 !             CALCULATION OF DET AND THE INVERSE OF A
 !
-20 JOB = 10
-IF (MO .EQ. 0) JOB = 11
-CALL SGEDI (A, KA, N, IPVT, DET, WK, JOB)
-RETURN
+20 job = 10
+if (mo .eq. 0) job = 11
+call sgedi (a, ka, n, ipvt, det, wk, job)
+return
 !
 !                  THE PROBLEM CANNOT BE SOLVED
 !
-30 IERR = 1
-RETURN
-END SUBROUTINE MSLV
+30 ierr = 1
+return
+end subroutine mslv
 
-SUBROUTINE MSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-INTEGER :: J
+subroutine mslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, kb, m, mo, n
+integer :: j
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 !     AND SOLVING REAL EQUATIONS
 !-----------------------------------------------------------------------
-REAL, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-INTEGER, INTENT(INOUT) :: IPVT(N)
-REAL :: DET(2)
-INTEGER :: ONEJ
+real, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
+real :: det(2)
+integer :: onej
 !
-IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
-IF (M .LE. 0) GO TO 10
-IF (KB .LT. N) GO TO 40
+if (n .lt. 1 .or. ka .lt. n) go to 40
+if (m .le. 0) go to 10
+if (kb .lt. n) go to 40
 !
 !                      MATRIX FACTORIZATION
 !
-10 CALL SGEFA (A, KA, N, IPVT, IERR)
-IF (IERR .NE. 0) RETURN
+10 call sgefa (a, ka, n, ipvt, ierr)
+if (ierr .ne. 0) return
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LE. 0) GO TO 30
-ONEJ = 1
-DO J = 1,M
-   CALL SGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-END DO
+if (m .le. 0) go to 30
+onej = 1
+do j = 1,m
+   call sgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+end do
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
-30 IF (MO .EQ. 0) CALL SGEDI (A, KA, N, IPVT, DET, WK, 1)
-RETURN
+30 if (mo .eq. 0) call sgedi (a, ka, n, ipvt, det, wk, 1)
+return
 !
 !                          ERROR RETURN
 !
-40 IERR = -1
-RETURN
-END SUBROUTINE MSLV1
+40 ierr = -1
+return
+end subroutine mslv1
 
-SUBROUTINE SLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR, IWK
-INTEGER, INTENT(IN) :: KA, MO, N
-REAL :: A(KA,N), B(N)
-REAL, INTENT(INOUT) :: WK(*), X(N)
-INTEGER :: I, IR
+subroutine slvmp(mo, n, a, ka, b, x, wk, iwk, ierr)
+implicit none
+integer, intent(inout) :: ierr, iwk
+integer, intent(in) :: ka, mo, n
+real :: a(ka,n), b(n)
+real, intent(inout) :: wk(*), x(n)
+integer :: i, ir
 !     ******************************************************************
 !     SOLUTION OF REAL LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
 !     ******************************************************************
-DIMENSION IWK(N)
+dimension iwk(n)
 !     -------------------
 !     DIMENSION WK(N*N + N)
 !     -------------------
-IF (MO .NE. 0) GO TO 10
+if (mo .ne. 0) go to 10
 !
 !             COMPUTE THE LU DECOMPOSITION OF A
 !
-CALL MCOPY(N, N, A, KA, WK, N)
-CALL SGEFA(WK, N, N, IWK, IERR)
-IF (IERR .EQ. 0) GO TO 10
-IERR = -IERR
-RETURN
+call mcopy(n, n, a, ka, wk, n)
+call sgefa(wk, n, n, iwk, ierr)
+if (ierr .eq. 0) go to 10
+ierr = -ierr
+return
 !
 !            SOLVE THE SYSTEM OF EQUATIONS AX = B
 !
-10 do 11 I = 1,N
-11 X(I) = B(I)
+10 do 11 i = 1,n
+11 x(i) = b(i)
 !
-IR = N*N + 1
-CALL SGESL(WK, N, N, IWK, X, 0)
-CALL LUIMP(A, KA, N, WK(1), N, IWK, B, X, WK(IR), IERR)
-RETURN
-END SUBROUTINE SLVMP
+ir = n*n + 1
+call sgesl(wk, n, n, iwk, x, 0)
+call luimp(a, ka, n, wk(1), n, iwk, b, x, wk(ir), ierr)
+return
+end subroutine slvmp
 
-SUBROUTINE LUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IND
-INTEGER :: IPVT
-INTEGER, INTENT(IN) :: KA, KQ, N
-REAL :: A(KA,N), B(N), Q(KQ,N)
-REAL, INTENT(INOUT) :: R(N), X(N)
-INTEGER :: I, J
-REAL :: EPS, EPS2, RAT, RATIO, RNRM, XNRM
-REAL :: SPMPAR
+subroutine luimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
+implicit none
+integer, intent(out) :: ind
+integer :: ipvt
+integer, intent(in) :: ka, kq, n
+real :: a(ka,n), b(n), q(kq,n)
+real, intent(inout) :: r(n), x(n)
+integer :: i, j
+real :: eps, eps2, rat, ratio, rnrm, xnrm
+real :: spmpar
 ! ----------------------------------------------------------------------
 !     PURPOSE
 !       GIVEN AN APPROXIMATE SOLUTION X OF A LINEAR SYSTEM AX = B
@@ -5100,62 +5100,62 @@ REAL :: SPMPAR
 !       IS THEN USED TO SOLVE (1).
 !
 ! ----------------------------------------------------------------------
-DIMENSION IPVT(N)
-DOUBLE PRECISION :: DSUM
+dimension ipvt(n)
+double precision :: dsum
 !
 !     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 !                THE VALUE U WHERE U IS THE SMALLEST FLOATING POINT
 !                NUMBER SUCH THAT 1.0 + U .GT. 1.0.
 !
-EPS = SPMPAR(1)
+eps = spmpar(1)
 !
-IND = 0
-XNRM = 0.0
-do 10 I = 1,N
-10 XNRM = XNRM + X(I)*X(I)
-IF (XNRM .EQ. 0.0) RETURN
-EPS2 = EPS*EPS
-RATIO = 1.0
+ind = 0
+xnrm = 0.0
+do 10 i = 1,n
+10 xnrm = xnrm + x(i)*x(i)
+if (xnrm .eq. 0.0) return
+eps2 = eps*eps
+ratio = 1.0
 !
 !                  COMPUTE THE RESIDUAL VECTOR
 !
-20 do 22 I = 1,N
-DSUM = B(I)
-  do 21 J = 1,N
-21 DSUM = DSUM - DBLE(A(I,J))*DBLE(X(J))
-22 R(I) = DSUM
+20 do 22 i = 1,n
+dsum = b(i)
+  do 21 j = 1,n
+21 dsum = dsum - dble(a(i,j))*dble(x(j))
+22 r(i) = dsum
 !
 !                  FIND THE CORRECTION VECTOR
 !
-CALL SGESL(Q, KQ, N, IPVT, R, 0)
-RNRM = 0.0
-do 30 I = 1,N
-30 RNRM = RNRM + R(I)*R(I)
-IF (RNRM .LE. EPS2*XNRM) RETURN
+call sgesl(q, kq, n, ipvt, r, 0)
+rnrm = 0.0
+do 30 i = 1,n
+30 rnrm = rnrm + r(i)*r(i)
+if (rnrm .le. eps2*xnrm) return
 !
 !                FORM A NEW APPROXIMATE SOLUTION
 !
-do 40 I = 1,N
-40 X(I) = X(I) + R(I)
-XNRM = 0.0
-do 41 I = 1,N
-41 XNRM = XNRM + X(I)*X(I)
+do 40 i = 1,n
+40 x(i) = x(i) + r(i)
+xnrm = 0.0
+do 41 i = 1,n
+41 xnrm = xnrm + x(i)*x(i)
 !
-IF (XNRM .EQ. 0.0) RETURN
-RAT = RATIO
-RATIO = RNRM/XNRM
-IF (RATIO .LE. 0.25*RAT) GO TO 20
+if (xnrm .eq. 0.0) return
+rat = ratio
+ratio = rnrm/xnrm
+if (ratio .le. 0.25*rat) go to 20
 !
-IF (RATIO .GT. AMIN1(RAT,4.0*EPS2)) IND = 1
-RETURN
-END SUBROUTINE LUIMP
+if (ratio .gt. amin1(rat,4.0*eps2)) ind = 1
+return
+end subroutine luimp
 
-SUBROUTINE SGECO(A,LDA,N,IPVT,RCOND,Z)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N
-INTEGER, INTENT(INOUT) :: IPVT(*)
-REAL, INTENT(INOUT) :: A(LDA,*), Z(*)
-REAL, INTENT(INOUT) :: RCOND
+subroutine sgeco(a,lda,n,ipvt,rcond,z)
+implicit none
+integer, intent(in) :: lda, n
+integer, intent(inout) :: ipvt(*)
+real, intent(inout) :: a(lda,*), z(*)
+real, intent(inout) :: rcond
 !
 !     SGECO FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION
 !     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -5217,21 +5217,21 @@ REAL, INTENT(INOUT) :: RCOND
 !
 !     INTERNAL VARIABLES
 !
-REAL :: SDOT, EK, T, WK, WKM
-REAL :: ANORM, S, SASUM, SM, YNORM
-INTEGER :: INFO, J, K, KB, KP1, L
+real :: sdot, ek, t, wk, wkm
+real :: anorm, s, sasum, sm, ynorm
+integer :: info, j, k, kb, kp1, l
 !
 !
 !     COMPUTE 1-NORM OF A
 !
-ANORM = 0.0E0
-DO J = 1, N
-   ANORM = AMAX1(ANORM,SASUM(N,A(1,J),1))
-END DO
+anorm = 0.0e0
+do j = 1, n
+   anorm = amax1(anorm,sasum(n,a(1,j),1))
+end do
 !
 !     FACTOR
 !
-CALL SGEFA(A,LDA,N,IPVT,INFO)
+call sgefa(a,lda,n,ipvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  TRANS(A)*Y = E .
@@ -5242,116 +5242,116 @@ CALL SGEFA(A,LDA,N,IPVT,INFO)
 !
 !     SOLVE TRANS(U)*W = E
 !
-EK = 1.0E0
-DO J = 1, N
-   Z(J) = 0.0E0
-END DO
-DO K = 1, N
-   IF (Z(K) .NE. 0.0E0) EK = SIGN(EK,-Z(K))
-   IF (ABS(EK-Z(K)) .LE. ABS(A(K,K))) GO TO 30
-      S = ABS(A(K,K))/ABS(EK-Z(K))
-      CALL SSCAL(N,S,Z,1)
-      EK = S*EK
-30 CONTINUE
-   WK = EK - Z(K)
-   WKM = -EK - Z(K)
-   S = ABS(WK)
-   SM = ABS(WKM)
-   IF (A(K,K) .EQ. 0.0E0) GO TO 40
-      WK = WK/A(K,K)
-      WKM = WKM/A(K,K)
-   GO TO 50
-40 CONTINUE
-      WK = 1.0E0
-      WKM = 1.0E0
-50 CONTINUE
-   KP1 = K + 1
-   IF (KP1 .GT. N) GO TO 90
-      DO J = KP1, N
-         SM = SM + ABS(Z(J)+WKM*A(K,J))
-         Z(J) = Z(J) + WK*A(K,J)
-         S = S + ABS(Z(J))
-      END DO
-      IF (S .GE. SM) GO TO 80
-         T = WKM - WK
-         WK = WKM
-         DO J = KP1, N
-            Z(J) = Z(J) + T*A(K,J)
-         END DO
-80 CONTINUE
-90 CONTINUE
-   Z(K) = WK
-END DO
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
+ek = 1.0e0
+do j = 1, n
+   z(j) = 0.0e0
+end do
+do k = 1, n
+   if (z(k) .ne. 0.0e0) ek = sign(ek,-z(k))
+   if (abs(ek-z(k)) .le. abs(a(k,k))) go to 30
+      s = abs(a(k,k))/abs(ek-z(k))
+      call sscal(n,s,z,1)
+      ek = s*ek
+30 continue
+   wk = ek - z(k)
+   wkm = -ek - z(k)
+   s = abs(wk)
+   sm = abs(wkm)
+   if (a(k,k) .eq. 0.0e0) go to 40
+      wk = wk/a(k,k)
+      wkm = wkm/a(k,k)
+   go to 50
+40 continue
+      wk = 1.0e0
+      wkm = 1.0e0
+50 continue
+   kp1 = k + 1
+   if (kp1 .gt. n) go to 90
+      do j = kp1, n
+         sm = sm + abs(z(j)+wkm*a(k,j))
+         z(j) = z(j) + wk*a(k,j)
+         s = s + abs(z(j))
+      end do
+      if (s .ge. sm) go to 80
+         t = wkm - wk
+         wk = wkm
+         do j = kp1, n
+            z(j) = z(j) + t*a(k,j)
+         end do
+80 continue
+90 continue
+   z(k) = wk
+end do
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
 !
 !     SOLVE TRANS(L)*Y = W
 !
-DO KB = 1, N
-   K = N + 1 - KB
-   IF (K .LT. N) Z(K) = Z(K) + SDOT(N-K,A(K+1,K),1,Z(K+1),1)
-   IF (ABS(Z(K)) .LE. 1.0E0) GO TO 110
-      S = 1.0E0/ABS(Z(K))
-      CALL SSCAL(N,S,Z,1)
-110 CONTINUE
-   L = IPVT(K)
-   T = Z(L)
-   Z(L) = Z(K)
-   Z(K) = T
-END DO
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
+do kb = 1, n
+   k = n + 1 - kb
+   if (k .lt. n) z(k) = z(k) + sdot(n-k,a(k+1,k),1,z(k+1),1)
+   if (abs(z(k)) .le. 1.0e0) go to 110
+      s = 1.0e0/abs(z(k))
+      call sscal(n,s,z,1)
+110 continue
+   l = ipvt(k)
+   t = z(l)
+   z(l) = z(k)
+   z(k) = t
+end do
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
 !
-YNORM = 1.0E0
+ynorm = 1.0e0
 !
 !     SOLVE L*V = Y
 !
-DO K = 1, N
-   L = IPVT(K)
-   T = Z(L)
-   Z(L) = Z(K)
-   Z(K) = T
-   IF (K .LT. N) CALL SAXPY(N-K,T,A(K+1,K),1,Z(K+1),1)
-   IF (ABS(Z(K)) .LE. 1.0E0) GO TO 130
-      S = 1.0E0/ABS(Z(K))
-      CALL SSCAL(N,S,Z,1)
-      YNORM = S*YNORM
-130 CONTINUE
-END DO
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
-YNORM = S*YNORM
+do k = 1, n
+   l = ipvt(k)
+   t = z(l)
+   z(l) = z(k)
+   z(k) = t
+   if (k .lt. n) call saxpy(n-k,t,a(k+1,k),1,z(k+1),1)
+   if (abs(z(k)) .le. 1.0e0) go to 130
+      s = 1.0e0/abs(z(k))
+      call sscal(n,s,z,1)
+      ynorm = s*ynorm
+130 continue
+end do
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
+ynorm = s*ynorm
 !
 !     SOLVE  U*Z = V
 !
-DO KB = 1, N
-   K = N + 1 - KB
-   IF (ABS(Z(K)) .LE. ABS(A(K,K))) GO TO 150
-      S = ABS(A(K,K))/ABS(Z(K))
-      CALL SSCAL(N,S,Z,1)
-      YNORM = S*YNORM
-150 CONTINUE
-   IF (A(K,K) .NE. 0.0E0) Z(K) = Z(K)/A(K,K)
-   IF (A(K,K) .EQ. 0.0E0) Z(K) = 1.0E0
-   T = -Z(K)
-   CALL SAXPY(K-1,T,A(1,K),1,Z(1),1)
-END DO
+do kb = 1, n
+   k = n + 1 - kb
+   if (abs(z(k)) .le. abs(a(k,k))) go to 150
+      s = abs(a(k,k))/abs(z(k))
+      call sscal(n,s,z,1)
+      ynorm = s*ynorm
+150 continue
+   if (a(k,k) .ne. 0.0e0) z(k) = z(k)/a(k,k)
+   if (a(k,k) .eq. 0.0e0) z(k) = 1.0e0
+   t = -z(k)
+   call saxpy(k-1,t,a(1,k),1,z(1),1)
+end do
 !     MAKE ZNORM = 1.0
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
-YNORM = S*YNORM
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
+ynorm = s*ynorm
 !
-IF (ANORM .NE. 0.0E0) RCOND = YNORM/ANORM
-IF (ANORM .EQ. 0.0E0) RCOND = 0.0E0
-RETURN
-END SUBROUTINE SGECO
+if (anorm .ne. 0.0e0) rcond = ynorm/anorm
+if (anorm .eq. 0.0e0) rcond = 0.0e0
+return
+end subroutine sgeco
 
-SUBROUTINE SGEFA(A,LDA,N,IPVT,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N
-INTEGER, INTENT(INOUT) :: IPVT(*)
-INTEGER, INTENT(OUT) :: INFO
-REAL, INTENT(INOUT) :: A(LDA,*)
+subroutine sgefa(a,lda,n,ipvt,info)
+implicit none
+integer, intent(in) :: lda, n
+integer, intent(inout) :: ipvt(*)
+integer, intent(out) :: info
+real, intent(inout) :: a(lda,*)
 !
 !     SGEFA FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION.
 !
@@ -5398,66 +5398,66 @@ REAL, INTENT(INOUT) :: A(LDA,*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: T
-INTEGER :: ISAMAX, J, K, KP1, L, NM1
+real :: t
+integer :: isamax, j, k, kp1, l, nm1
 !
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
-INFO = 0
-NM1 = N - 1
-IF (NM1 .LT. 1) GO TO 70
-DO K = 1, NM1
-   KP1 = K + 1
+info = 0
+nm1 = n - 1
+if (nm1 .lt. 1) go to 70
+do k = 1, nm1
+   kp1 = k + 1
 !
 !        FIND L = PIVOT INDEX
 !
-   L = ISAMAX(N-K+1,A(K,K),1) + K - 1
-   IPVT(K) = L
+   l = isamax(n-k+1,a(k,k),1) + k - 1
+   ipvt(k) = l
 !
 !        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
 !
-   IF (A(L,K) .EQ. 0.0E0) GO TO 40
+   if (a(l,k) .eq. 0.0e0) go to 40
 !
 !           INTERCHANGE IF NECESSARY
 !
-      IF (L .EQ. K) GO TO 10
-         T = A(L,K)
-         A(L,K) = A(K,K)
-         A(K,K) = T
-10 CONTINUE
+      if (l .eq. k) go to 10
+         t = a(l,k)
+         a(l,k) = a(k,k)
+         a(k,k) = t
+10 continue
 !
 !           COMPUTE MULTIPLIERS
 !
-      T = -1.0E0/A(K,K)
-      CALL SSCAL(N-K,T,A(K+1,K),1)
+      t = -1.0e0/a(k,k)
+      call sscal(n-k,t,a(k+1,k),1)
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      DO J = KP1, N
-         T = A(L,J)
-         IF (L .EQ. K) GO TO 20
-            A(L,J) = A(K,J)
-            A(K,J) = T
-20 CONTINUE
-         CALL SAXPY(N-K,T,A(K+1,K),1,A(K+1,J),1)
-      END DO
-   GO TO 50
-40 CONTINUE
-      INFO = K
-50 CONTINUE
-END DO
-70 CONTINUE
-IPVT(N) = N
-IF (A(N,N) .EQ. 0.0E0) INFO = N
-RETURN
-END SUBROUTINE SGEFA
+      do j = kp1, n
+         t = a(l,j)
+         if (l .eq. k) go to 20
+            a(l,j) = a(k,j)
+            a(k,j) = t
+20 continue
+         call saxpy(n-k,t,a(k+1,k),1,a(k+1,j),1)
+      end do
+   go to 50
+40 continue
+      info = k
+50 continue
+end do
+70 continue
+ipvt(n) = n
+if (a(n,n) .eq. 0.0e0) info = n
+return
+end subroutine sgefa
 
-SUBROUTINE SGESL(A,LDA,N,IPVT,B,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
-REAL, INTENT(IN) :: A(LDA,*)
-REAL, INTENT(INOUT) :: B(*)
+subroutine sgesl(a,lda,n,ipvt,b,job)
+implicit none
+integer, intent(in) :: lda, n, ipvt(*), job
+real, intent(in) :: a(lda,*)
+real, intent(inout) :: b(*)
 !
 !     SGESL SOLVES THE REAL SYSTEM
 !     A * X = B  OR  TRANS(A) * X = B
@@ -5515,68 +5515,68 @@ REAL, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: SDOT, T
-INTEGER :: K, KB, L, NM1
+real :: sdot, t
+integer :: k, kb, l, nm1
 !
-NM1 = N - 1
-IF (JOB .NE. 0) GO TO 50
+nm1 = n - 1
+if (job .ne. 0) go to 50
 !
 !        JOB = 0 , SOLVE  A * X = B
 !        FIRST SOLVE  L*Y = B
 !
-   IF (NM1 .LT. 1) GO TO 30
-   DO K = 1, NM1
-      L = IPVT(K)
-      T = B(L)
-      IF (L .EQ. K) GO TO 10
-         B(L) = B(K)
-         B(K) = T
-10 CONTINUE
-      CALL SAXPY(N-K,T,A(K+1,K),1,B(K+1),1)
-   END DO
-30 CONTINUE
+   if (nm1 .lt. 1) go to 30
+   do k = 1, nm1
+      l = ipvt(k)
+      t = b(l)
+      if (l .eq. k) go to 10
+         b(l) = b(k)
+         b(k) = t
+10 continue
+      call saxpy(n-k,t,a(k+1,k),1,b(k+1),1)
+   end do
+30 continue
 !
 !        NOW SOLVE  U*X = Y
 !
-   DO KB = 1, N
-      K = N + 1 - KB
-      B(K) = B(K)/A(K,K)
-      T = -B(K)
-      CALL SAXPY(K-1,T,A(1,K),1,B(1),1)
-   END DO
-GO TO 100
-50 CONTINUE
+   do kb = 1, n
+      k = n + 1 - kb
+      b(k) = b(k)/a(k,k)
+      t = -b(k)
+      call saxpy(k-1,t,a(1,k),1,b(1),1)
+   end do
+go to 100
+50 continue
 !
 !        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 !        FIRST SOLVE  TRANS(U)*Y = B
 !
-   DO K = 1, N
-      T = SDOT(K-1,A(1,K),1,B(1),1)
-      B(K) = (B(K) - T)/A(K,K)
-   END DO
+   do k = 1, n
+      t = sdot(k-1,a(1,k),1,b(1),1)
+      b(k) = (b(k) - t)/a(k,k)
+   end do
 !
 !        NOW SOLVE TRANS(L)*X = Y
 !
-   IF (NM1 .LT. 1) GO TO 90
-   DO KB = 1, NM1
-      K = N - KB
-      B(K) = B(K) + SDOT(N-K,A(K+1,K),1,B(K+1),1)
-      L = IPVT(K)
-      IF (L .EQ. K) GO TO 70
-         T = B(L)
-         B(L) = B(K)
-         B(K) = T
-70 CONTINUE
-   END DO
-90 CONTINUE
-100 CONTINUE
-RETURN
-END SUBROUTINE SGESL
+   if (nm1 .lt. 1) go to 90
+   do kb = 1, nm1
+      k = n - kb
+      b(k) = b(k) + sdot(n-k,a(k+1,k),1,b(k+1),1)
+      l = ipvt(k)
+      if (l .eq. k) go to 70
+         t = b(l)
+         b(l) = b(k)
+         b(k) = t
+70 continue
+   end do
+90 continue
+100 continue
+return
+end subroutine sgesl
 
-SUBROUTINE SGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
-REAL, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+subroutine sgedi(a,lda,n,ipvt,det,work,job)
+implicit none
+integer, intent(in) :: lda, n, ipvt(*), job
+real, intent(inout) :: a(lda,*), det(2), work(*)
 !
 !     SGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
 !     USING THE FACTORS COMPUTED BY SGECO OR SGEFA.
@@ -5633,170 +5633,170 @@ REAL, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: T
-REAL :: TEN
-INTEGER :: I, J, K, KB, KP1, L, NM1
+real :: t
+real :: ten
+integer :: i, j, k, kb, kp1, l, nm1
 !
 !
 !     COMPUTE DETERMINANT
 !
-IF (JOB/10 .EQ. 0) GO TO 70
-   DET(1) = 1.0E0
-   DET(2) = 0.0E0
-   TEN = 10.0E0
-   do 50 I = 1, N
-      IF (IPVT(I) .NE. I) DET(1) = -DET(1)
-      DET(1) = A(I,I)*DET(1)
+if (job/10 .eq. 0) go to 70
+   det(1) = 1.0e0
+   det(2) = 0.0e0
+   ten = 10.0e0
+   do 50 i = 1, n
+      if (ipvt(i) .ne. i) det(1) = -det(1)
+      det(1) = a(i,i)*det(1)
 !        ...EXIT
-      IF (DET(1) .EQ. 0.0E0) GO TO 60
-10 IF (ABS(DET(1)) .GE. 1.0E0) GO TO 20
-         DET(1) = TEN*DET(1)
-         DET(2) = DET(2) - 1.0E0
-      GO TO 10
-20 CONTINUE
-30 IF (ABS(DET(1)) .LT. TEN) GO TO 40
-         DET(1) = DET(1)/TEN
-         DET(2) = DET(2) + 1.0E0
-      GO TO 30
-40 CONTINUE
-50 CONTINUE
-60 CONTINUE
-70 CONTINUE
+      if (det(1) .eq. 0.0e0) go to 60
+10 if (abs(det(1)) .ge. 1.0e0) go to 20
+         det(1) = ten*det(1)
+         det(2) = det(2) - 1.0e0
+      go to 10
+20 continue
+30 if (abs(det(1)) .lt. ten) go to 40
+         det(1) = det(1)/ten
+         det(2) = det(2) + 1.0e0
+      go to 30
+40 continue
+50 continue
+60 continue
+70 continue
 !
 !     COMPUTE INVERSE(U)
 !
-IF (MOD(JOB,10) .EQ. 0) GO TO 150
-   DO K = 1, N
-      A(K,K) = 1.0E0/A(K,K)
-      T = -A(K,K)
-      CALL SSCAL(K-1,T,A(1,K),1)
-      KP1 = K + 1
-      IF (N .LT. KP1) GO TO 90
-      DO J = KP1, N
-         T = A(K,J)
-         A(K,J) = 0.0E0
-         CALL SAXPY(K,T,A(1,K),1,A(1,J),1)
-      END DO
-90 CONTINUE
-   END DO
+if (mod(job,10) .eq. 0) go to 150
+   do k = 1, n
+      a(k,k) = 1.0e0/a(k,k)
+      t = -a(k,k)
+      call sscal(k-1,t,a(1,k),1)
+      kp1 = k + 1
+      if (n .lt. kp1) go to 90
+      do j = kp1, n
+         t = a(k,j)
+         a(k,j) = 0.0e0
+         call saxpy(k,t,a(1,k),1,a(1,j),1)
+      end do
+90 continue
+   end do
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
-   NM1 = N - 1
-   IF (NM1 .LT. 1) GO TO 140
-   DO KB = 1, NM1
-      K = N - KB
-      KP1 = K + 1
-      DO I = KP1, N
-         WORK(I) = A(I,K)
-         A(I,K) = 0.0E0
-      END DO
-      DO J = KP1, N
-         T = WORK(J)
-         CALL SAXPY(N,T,A(1,J),1,A(1,K),1)
-      END DO
-      L = IPVT(K)
-      IF (L .NE. K) CALL SSWAP(N,A(1,K),1,A(1,L),1)
-   END DO
-140 CONTINUE
-150 CONTINUE
-RETURN
-END SUBROUTINE SGEDI
+   nm1 = n - 1
+   if (nm1 .lt. 1) go to 140
+   do kb = 1, nm1
+      k = n - kb
+      kp1 = k + 1
+      do i = kp1, n
+         work(i) = a(i,k)
+         a(i,k) = 0.0e0
+      end do
+      do j = kp1, n
+         t = work(j)
+         call saxpy(n,t,a(1,j),1,a(1,k),1)
+      end do
+      l = ipvt(k)
+      if (l .ne. k) call sswap(n,a(1,k),1,a(1,l),1)
+   end do
+140 continue
+150 continue
+return
+end subroutine sgedi
 
-SUBROUTINE DMSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-INTEGER :: J, JOB
+subroutine dmslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, mo, n
+integer :: j, job
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 !     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
-DOUBLE PRECISION :: T
-DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
-INTEGER, INTENT(INOUT) :: IPVT(N)
-INTEGER :: ONEJ
+double precision, intent(inout) :: a(ka,n), b(*)
+double precision, intent(inout) :: det(2), rcond
+double precision :: t
+double precision, intent(inout) :: wk(n)
+integer, intent(inout) :: ipvt(n)
+integer :: onej
 !
 !          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 !
-IERR = 0
-CALL DGECO (A, KA, N, IPVT, RCOND, WK)
-T = 1.D0 + RCOND
-IF (T .EQ. 1.D0) GO TO 30
+ierr = 0
+call dgeco (a, ka, n, ipvt, rcond, wk)
+t = 1.d0 + rcond
+if (t .eq. 1.d0) go to 30
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-   CALL DGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-10 CONTINUE
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+   call dgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+10 continue
 !
 !             CALCULATION OF DET AND THE INVERSE OF A
 !
-20 JOB = 10
-IF (MO .EQ. 0) JOB = 11
-CALL DGEDI (A, KA, N, IPVT, DET, WK, JOB)
-RETURN
+20 job = 10
+if (mo .eq. 0) job = 11
+call dgedi (a, ka, n, ipvt, det, wk, job)
+return
 !
 !                  THE PROBLEM CANNOT BE SOLVED
 !
-30 IERR = 1
-RETURN
-END SUBROUTINE DMSLV
+30 ierr = 1
+return
+end subroutine dmslv
 
-SUBROUTINE DMSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO, N
-INTEGER :: J
+subroutine dmslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, kb, m, mo, n
+integer :: j
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 !     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
 !-----------------------------------------------------------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-INTEGER, INTENT(INOUT) :: IPVT(N)
-DOUBLE PRECISION :: DET(2)
-INTEGER :: ONEJ
+double precision, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
+double precision :: det(2)
+integer :: onej
 !
-IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
-IF (M .LE. 0) GO TO 10
-IF (KB .LT. N) GO TO 40
+if (n .lt. 1 .or. ka .lt. n) go to 40
+if (m .le. 0) go to 10
+if (kb .lt. n) go to 40
 !
 !                      MATRIX FACTORIZATION
 !
-10 CALL DGEFA (A, KA, N, IPVT, IERR)
-IF (IERR .NE. 0) RETURN
+10 call dgefa (a, ka, n, ipvt, ierr)
+if (ierr .ne. 0) return
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LE. 0) GO TO 30
-ONEJ = 1
-DO J = 1,M
-   CALL DGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-END DO
+if (m .le. 0) go to 30
+onej = 1
+do j = 1,m
+   call dgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+end do
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
-30 IF (MO .EQ. 0) CALL DGEDI (A, KA, N, IPVT, DET, WK, 1)
-RETURN
+30 if (mo .eq. 0) call dgedi (a, ka, n, ipvt, det, wk, 1)
+return
 !
 !                          ERROR RETURN
 !
-40 IERR = -1
-RETURN
-END SUBROUTINE DMSLV1
+40 ierr = -1
+return
+end subroutine dmslv1
 
-SUBROUTINE DGECO(A,LDA,N,IPVT,RCOND,Z)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N
-INTEGER, INTENT(INOUT) :: IPVT(*)
-DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), Z(*)
-DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+subroutine dgeco(a,lda,n,ipvt,rcond,z)
+implicit none
+integer, intent(in) :: lda, n
+integer, intent(inout) :: ipvt(*)
+double precision, intent(inout) :: a(lda,*), z(*)
+double precision, intent(inout) :: rcond
 !
 !     DGECO FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION
 !     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -5858,21 +5858,21 @@ DOUBLE PRECISION, INTENT(INOUT) :: RCOND
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: DDOT, EK, T, WK, WKM
-DOUBLE PRECISION :: ANORM, S, DASUM, SM, YNORM
-INTEGER :: INFO, J, K, KB, KP1, L
+double precision :: ddot, ek, t, wk, wkm
+double precision :: anorm, s, dasum, sm, ynorm
+integer :: info, j, k, kb, kp1, l
 !
 !
 !     COMPUTE 1-NORM OF A
 !
-ANORM = 0.0D0
-DO J = 1, N
-   ANORM = DMAX1(ANORM,DASUM(N,A(1,J),1))
-END DO
+anorm = 0.0d0
+do j = 1, n
+   anorm = dmax1(anorm,dasum(n,a(1,j),1))
+end do
 !
 !     FACTOR
 !
-CALL DGEFA(A,LDA,N,IPVT,INFO)
+call dgefa(a,lda,n,ipvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  TRANS(A)*Y = E .
@@ -5883,116 +5883,116 @@ CALL DGEFA(A,LDA,N,IPVT,INFO)
 !
 !     SOLVE TRANS(U)*W = E
 !
-EK = 1.0D0
-DO J = 1, N
-   Z(J) = 0.0D0
-END DO
-DO K = 1, N
-   IF (Z(K) .NE. 0.0D0) EK = DSIGN(EK,-Z(K))
-   IF (DABS(EK-Z(K)) .LE. DABS(A(K,K))) GO TO 30
-      S = DABS(A(K,K))/DABS(EK-Z(K))
-      CALL DSCAL(N,S,Z,1)
-      EK = S*EK
-30 CONTINUE
-   WK = EK - Z(K)
-   WKM = -EK - Z(K)
-   S = DABS(WK)
-   SM = DABS(WKM)
-   IF (A(K,K) .EQ. 0.0D0) GO TO 40
-      WK = WK/A(K,K)
-      WKM = WKM/A(K,K)
-   GO TO 50
-40 CONTINUE
-      WK = 1.0D0
-      WKM = 1.0D0
-50 CONTINUE
-   KP1 = K + 1
-   IF (KP1 .GT. N) GO TO 90
-      DO J = KP1, N
-         SM = SM + DABS(Z(J)+WKM*A(K,J))
-         Z(J) = Z(J) + WK*A(K,J)
-         S = S + DABS(Z(J))
-      END DO
-      IF (S .GE. SM) GO TO 80
-         T = WKM - WK
-         WK = WKM
-         DO J = KP1, N
-            Z(J) = Z(J) + T*A(K,J)
-         END DO
-80 CONTINUE
-90 CONTINUE
-   Z(K) = WK
-END DO
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
+ek = 1.0d0
+do j = 1, n
+   z(j) = 0.0d0
+end do
+do k = 1, n
+   if (z(k) .ne. 0.0d0) ek = dsign(ek,-z(k))
+   if (dabs(ek-z(k)) .le. dabs(a(k,k))) go to 30
+      s = dabs(a(k,k))/dabs(ek-z(k))
+      call dscal(n,s,z,1)
+      ek = s*ek
+30 continue
+   wk = ek - z(k)
+   wkm = -ek - z(k)
+   s = dabs(wk)
+   sm = dabs(wkm)
+   if (a(k,k) .eq. 0.0d0) go to 40
+      wk = wk/a(k,k)
+      wkm = wkm/a(k,k)
+   go to 50
+40 continue
+      wk = 1.0d0
+      wkm = 1.0d0
+50 continue
+   kp1 = k + 1
+   if (kp1 .gt. n) go to 90
+      do j = kp1, n
+         sm = sm + dabs(z(j)+wkm*a(k,j))
+         z(j) = z(j) + wk*a(k,j)
+         s = s + dabs(z(j))
+      end do
+      if (s .ge. sm) go to 80
+         t = wkm - wk
+         wk = wkm
+         do j = kp1, n
+            z(j) = z(j) + t*a(k,j)
+         end do
+80 continue
+90 continue
+   z(k) = wk
+end do
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
 !
 !     SOLVE TRANS(L)*Y = W
 !
-DO KB = 1, N
-   K = N + 1 - KB
-   IF (K .LT. N) Z(K) = Z(K) + DDOT(N-K,A(K+1,K),1,Z(K+1),1)
-   IF (DABS(Z(K)) .LE. 1.0D0) GO TO 110
-      S = 1.0D0/DABS(Z(K))
-      CALL DSCAL(N,S,Z,1)
-110 CONTINUE
-   L = IPVT(K)
-   T = Z(L)
-   Z(L) = Z(K)
-   Z(K) = T
-END DO
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
+do kb = 1, n
+   k = n + 1 - kb
+   if (k .lt. n) z(k) = z(k) + ddot(n-k,a(k+1,k),1,z(k+1),1)
+   if (dabs(z(k)) .le. 1.0d0) go to 110
+      s = 1.0d0/dabs(z(k))
+      call dscal(n,s,z,1)
+110 continue
+   l = ipvt(k)
+   t = z(l)
+   z(l) = z(k)
+   z(k) = t
+end do
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
 !
-YNORM = 1.0D0
+ynorm = 1.0d0
 !
 !     SOLVE L*V = Y
 !
-DO K = 1, N
-   L = IPVT(K)
-   T = Z(L)
-   Z(L) = Z(K)
-   Z(K) = T
-   IF (K .LT. N) CALL DAXPY(N-K,T,A(K+1,K),1,Z(K+1),1)
-   IF (DABS(Z(K)) .LE. 1.0D0) GO TO 130
-      S = 1.0D0/DABS(Z(K))
-      CALL DSCAL(N,S,Z,1)
-      YNORM = S*YNORM
-130 CONTINUE
-END DO
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
-YNORM = S*YNORM
+do k = 1, n
+   l = ipvt(k)
+   t = z(l)
+   z(l) = z(k)
+   z(k) = t
+   if (k .lt. n) call daxpy(n-k,t,a(k+1,k),1,z(k+1),1)
+   if (dabs(z(k)) .le. 1.0d0) go to 130
+      s = 1.0d0/dabs(z(k))
+      call dscal(n,s,z,1)
+      ynorm = s*ynorm
+130 continue
+end do
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
 !
 !     SOLVE  U*Z = V
 !
-DO KB = 1, N
-   K = N + 1 - KB
-   IF (DABS(Z(K)) .LE. DABS(A(K,K))) GO TO 150
-      S = DABS(A(K,K))/DABS(Z(K))
-      CALL DSCAL(N,S,Z,1)
-      YNORM = S*YNORM
-150 CONTINUE
-   IF (A(K,K) .NE. 0.0D0) Z(K) = Z(K)/A(K,K)
-   IF (A(K,K) .EQ. 0.0D0) Z(K) = 1.0D0
-   T = -Z(K)
-   CALL DAXPY(K-1,T,A(1,K),1,Z(1),1)
-END DO
+do kb = 1, n
+   k = n + 1 - kb
+   if (dabs(z(k)) .le. dabs(a(k,k))) go to 150
+      s = dabs(a(k,k))/dabs(z(k))
+      call dscal(n,s,z,1)
+      ynorm = s*ynorm
+150 continue
+   if (a(k,k) .ne. 0.0d0) z(k) = z(k)/a(k,k)
+   if (a(k,k) .eq. 0.0d0) z(k) = 1.0d0
+   t = -z(k)
+   call daxpy(k-1,t,a(1,k),1,z(1),1)
+end do
 !     MAKE ZNORM = 1.0
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
-YNORM = S*YNORM
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
 !
-IF (ANORM .NE. 0.0D0) RCOND = YNORM/ANORM
-IF (ANORM .EQ. 0.0D0) RCOND = 0.0D0
-RETURN
-END SUBROUTINE DGECO
+if (anorm .ne. 0.0d0) rcond = ynorm/anorm
+if (anorm .eq. 0.0d0) rcond = 0.0d0
+return
+end subroutine dgeco
 
-SUBROUTINE DGEFA(A,LDA,N,IPVT,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N
-INTEGER, INTENT(INOUT) :: IPVT(*)
-INTEGER, INTENT(OUT) :: INFO
-DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
+subroutine dgefa(a,lda,n,ipvt,info)
+implicit none
+integer, intent(in) :: lda, n
+integer, intent(inout) :: ipvt(*)
+integer, intent(out) :: info
+double precision, intent(inout) :: a(lda,*)
 !
 !     DGEFA FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION.
 !
@@ -6039,66 +6039,66 @@ DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: T
-INTEGER :: IDAMAX, J, K, KP1, L, NM1
+double precision :: t
+integer :: idamax, j, k, kp1, l, nm1
 !
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
-INFO = 0
-NM1 = N - 1
-IF (NM1 .LT. 1) GO TO 70
-DO K = 1, NM1
-   KP1 = K + 1
+info = 0
+nm1 = n - 1
+if (nm1 .lt. 1) go to 70
+do k = 1, nm1
+   kp1 = k + 1
 !
 !        FIND L = PIVOT INDEX
 !
-   L = IDAMAX(N-K+1,A(K,K),1) + K - 1
-   IPVT(K) = L
+   l = idamax(n-k+1,a(k,k),1) + k - 1
+   ipvt(k) = l
 !
 !        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
 !
-   IF (A(L,K) .EQ. 0.0D0) GO TO 40
+   if (a(l,k) .eq. 0.0d0) go to 40
 !
 !           INTERCHANGE IF NECESSARY
 !
-      IF (L .EQ. K) GO TO 10
-         T = A(L,K)
-         A(L,K) = A(K,K)
-         A(K,K) = T
-10 CONTINUE
+      if (l .eq. k) go to 10
+         t = a(l,k)
+         a(l,k) = a(k,k)
+         a(k,k) = t
+10 continue
 !
 !           COMPUTE MULTIPLIERS
 !
-      T = -1.0D0/A(K,K)
-      CALL DSCAL(N-K,T,A(K+1,K),1)
+      t = -1.0d0/a(k,k)
+      call dscal(n-k,t,a(k+1,k),1)
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-      DO J = KP1, N
-         T = A(L,J)
-         IF (L .EQ. K) GO TO 20
-            A(L,J) = A(K,J)
-            A(K,J) = T
-20 CONTINUE
-         CALL DAXPY(N-K,T,A(K+1,K),1,A(K+1,J),1)
-      END DO
-   GO TO 50
-40 CONTINUE
-      INFO = K
-50 CONTINUE
-END DO
-70 CONTINUE
-IPVT(N) = N
-IF (A(N,N) .EQ. 0.0D0) INFO = N
-RETURN
-END SUBROUTINE DGEFA
+      do j = kp1, n
+         t = a(l,j)
+         if (l .eq. k) go to 20
+            a(l,j) = a(k,j)
+            a(k,j) = t
+20 continue
+         call daxpy(n-k,t,a(k+1,k),1,a(k+1,j),1)
+      end do
+   go to 50
+40 continue
+      info = k
+50 continue
+end do
+70 continue
+ipvt(n) = n
+if (a(n,n) .eq. 0.0d0) info = n
+return
+end subroutine dgefa
 
-SUBROUTINE DGESL(A,LDA,N,IPVT,B,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
-DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
-DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+subroutine dgesl(a,lda,n,ipvt,b,job)
+implicit none
+integer, intent(in) :: lda, n, ipvt(*), job
+double precision, intent(in) :: a(lda,*)
+double precision, intent(inout) :: b(*)
 !
 !     DGESL SOLVES THE DOUBLE PRECISION SYSTEM
 !     A * X = B  OR  TRANS(A) * X = B
@@ -6156,68 +6156,68 @@ DOUBLE PRECISION, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: DDOT, T
-INTEGER :: K, KB, L, NM1
+double precision :: ddot, t
+integer :: k, kb, l, nm1
 !
-NM1 = N - 1
-IF (JOB .NE. 0) GO TO 50
+nm1 = n - 1
+if (job .ne. 0) go to 50
 !
 !        JOB = 0 , SOLVE  A * X = B
 !        FIRST SOLVE  L*Y = B
 !
-   IF (NM1 .LT. 1) GO TO 30
-   DO K = 1, NM1
-      L = IPVT(K)
-      T = B(L)
-      IF (L .EQ. K) GO TO 10
-         B(L) = B(K)
-         B(K) = T
-10 CONTINUE
-      CALL DAXPY(N-K,T,A(K+1,K),1,B(K+1),1)
-   END DO
-30 CONTINUE
+   if (nm1 .lt. 1) go to 30
+   do k = 1, nm1
+      l = ipvt(k)
+      t = b(l)
+      if (l .eq. k) go to 10
+         b(l) = b(k)
+         b(k) = t
+10 continue
+      call daxpy(n-k,t,a(k+1,k),1,b(k+1),1)
+   end do
+30 continue
 !
 !        NOW SOLVE  U*X = Y
 !
-   DO KB = 1, N
-      K = N + 1 - KB
-      B(K) = B(K)/A(K,K)
-      T = -B(K)
-      CALL DAXPY(K-1,T,A(1,K),1,B(1),1)
-   END DO
-GO TO 100
-50 CONTINUE
+   do kb = 1, n
+      k = n + 1 - kb
+      b(k) = b(k)/a(k,k)
+      t = -b(k)
+      call daxpy(k-1,t,a(1,k),1,b(1),1)
+   end do
+go to 100
+50 continue
 !
 !        JOB = NONZERO, SOLVE  TRANS(A) * X = B
 !        FIRST SOLVE  TRANS(U)*Y = B
 !
-   DO K = 1, N
-      T = DDOT(K-1,A(1,K),1,B(1),1)
-      B(K) = (B(K) - T)/A(K,K)
-   END DO
+   do k = 1, n
+      t = ddot(k-1,a(1,k),1,b(1),1)
+      b(k) = (b(k) - t)/a(k,k)
+   end do
 !
 !        NOW SOLVE TRANS(L)*X = Y
 !
-   IF (NM1 .LT. 1) GO TO 90
-   DO KB = 1, NM1
-      K = N - KB
-      B(K) = B(K) + DDOT(N-K,A(K+1,K),1,B(K+1),1)
-      L = IPVT(K)
-      IF (L .EQ. K) GO TO 70
-         T = B(L)
-         B(L) = B(K)
-         B(K) = T
-70 CONTINUE
-   END DO
-90 CONTINUE
-100 CONTINUE
-RETURN
-END SUBROUTINE DGESL
+   if (nm1 .lt. 1) go to 90
+   do kb = 1, nm1
+      k = n - kb
+      b(k) = b(k) + ddot(n-k,a(k+1,k),1,b(k+1),1)
+      l = ipvt(k)
+      if (l .eq. k) go to 70
+         t = b(l)
+         b(l) = b(k)
+         b(k) = t
+70 continue
+   end do
+90 continue
+100 continue
+return
+end subroutine dgesl
 
-SUBROUTINE DGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
-DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+subroutine dgedi(a,lda,n,ipvt,det,work,job)
+implicit none
+integer, intent(in) :: lda, n, ipvt(*), job
+double precision, intent(inout) :: a(lda,*), det(2), work(*)
 !
 !     DGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
 !     USING THE FACTORS COMPUTED BY DGECO OR DGEFA.
@@ -6274,80 +6274,80 @@ DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: T
-DOUBLE PRECISION :: TEN
-INTEGER :: I, J, K, KB, KP1, L, NM1
+double precision :: t
+double precision :: ten
+integer :: i, j, k, kb, kp1, l, nm1
 !
 !
 !     COMPUTE DETERMINANT
 !
-IF (JOB/10 .EQ. 0) GO TO 70
-   DET(1) = 1.0D0
-   DET(2) = 0.0D0
-   TEN = 10.0D0
-   do 50 I = 1, N
-      IF (IPVT(I) .NE. I) DET(1) = -DET(1)
-      DET(1) = A(I,I)*DET(1)
+if (job/10 .eq. 0) go to 70
+   det(1) = 1.0d0
+   det(2) = 0.0d0
+   ten = 10.0d0
+   do 50 i = 1, n
+      if (ipvt(i) .ne. i) det(1) = -det(1)
+      det(1) = a(i,i)*det(1)
 !        ...EXIT
-      IF (DET(1) .EQ. 0.0D0) GO TO 60
-10 IF (DABS(DET(1)) .GE. 1.0D0) GO TO 20
-         DET(1) = TEN*DET(1)
-         DET(2) = DET(2) - 1.0D0
-      GO TO 10
-20 CONTINUE
-30 IF (DABS(DET(1)) .LT. TEN) GO TO 40
-         DET(1) = DET(1)/TEN
-         DET(2) = DET(2) + 1.0D0
-      GO TO 30
-40 CONTINUE
-50 CONTINUE
-60 CONTINUE
-70 CONTINUE
+      if (det(1) .eq. 0.0d0) go to 60
+10 if (dabs(det(1)) .ge. 1.0d0) go to 20
+         det(1) = ten*det(1)
+         det(2) = det(2) - 1.0d0
+      go to 10
+20 continue
+30 if (dabs(det(1)) .lt. ten) go to 40
+         det(1) = det(1)/ten
+         det(2) = det(2) + 1.0d0
+      go to 30
+40 continue
+50 continue
+60 continue
+70 continue
 !
 !     COMPUTE INVERSE(U)
 !
-IF (MOD(JOB,10) .EQ. 0) GO TO 150
-   DO K = 1, N
-      A(K,K) = 1.0D0/A(K,K)
-      T = -A(K,K)
-      CALL DSCAL(K-1,T,A(1,K),1)
-      KP1 = K + 1
-      IF (N .LT. KP1) GO TO 90
-      DO J = KP1, N
-         T = A(K,J)
-         A(K,J) = 0.0D0
-         CALL DAXPY(K,T,A(1,K),1,A(1,J),1)
-      END DO
-90 CONTINUE
-   END DO
+if (mod(job,10) .eq. 0) go to 150
+   do k = 1, n
+      a(k,k) = 1.0d0/a(k,k)
+      t = -a(k,k)
+      call dscal(k-1,t,a(1,k),1)
+      kp1 = k + 1
+      if (n .lt. kp1) go to 90
+      do j = kp1, n
+         t = a(k,j)
+         a(k,j) = 0.0d0
+         call daxpy(k,t,a(1,k),1,a(1,j),1)
+      end do
+90 continue
+   end do
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
-   NM1 = N - 1
-   IF (NM1 .LT. 1) GO TO 140
-   DO KB = 1, NM1
-      K = N - KB
-      KP1 = K + 1
-      DO I = KP1, N
-         WORK(I) = A(I,K)
-         A(I,K) = 0.0D0
-      END DO
-      DO J = KP1, N
-         T = WORK(J)
-         CALL DAXPY(N,T,A(1,J),1,A(1,K),1)
-      END DO
-      L = IPVT(K)
-      IF (L .NE. K) CALL DSWAP(N,A(1,K),1,A(1,L),1)
-   END DO
-140 CONTINUE
-150 CONTINUE
-RETURN
-END SUBROUTINE DGEDI
+   nm1 = n - 1
+   if (nm1 .lt. 1) go to 140
+   do kb = 1, nm1
+      k = n - kb
+      kp1 = k + 1
+      do i = kp1, n
+         work(i) = a(i,k)
+         a(i,k) = 0.0d0
+      end do
+      do j = kp1, n
+         t = work(j)
+         call daxpy(n,t,a(1,j),1,a(1,k),1)
+      end do
+      l = ipvt(k)
+      if (l .ne. k) call dswap(n,a(1,k),1,a(1,l),1)
+   end do
+140 continue
+150 continue
+return
+end subroutine dgedi
 
-SUBROUTINE ARCECO(N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: N, NMBLKS
+subroutine arceco(n, array, mtrstr, nmblks, pivot, b, x, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: n, nmblks
 !
 !***************************************************************
 !
@@ -6476,20 +6476,20 @@ INTEGER, INTENT(IN) :: N, NMBLKS
 !  TO  A R C E C O .
 !
 !**********************************************************************
-REAL, INTENT(INOUT) :: ARRAY(*), B(*), X(*)
-INTEGER, INTENT(INOUT) :: MTRSTR(3,*), PIVOT(*)
-CALL ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
-IF (IFLAG.NE.0) RETURN
-CALL ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
-RETURN
-END SUBROUTINE ARCECO
+real, intent(inout) :: array(*), b(*), x(*)
+integer, intent(inout) :: mtrstr(3,*), pivot(*)
+call arcedc(n, array, mtrstr, nmblks, pivot, iflag)
+if (iflag.ne.0) return
+call arcesl(array, mtrstr, nmblks, pivot, b, x)
+return
+end subroutine arceco
 
-SUBROUTINE ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG, MTRSTR(3,*)
-INTEGER, INTENT(IN) :: N, NMBLKS
-INTEGER :: INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K, &
-&NCLBLK, NCLPIV, NOVRLP, NRWBK2, NRWBLK, NRWPIV
+subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
+implicit none
+integer, intent(inout) :: iflag, mtrstr(3,*)
+integer, intent(in) :: n, nmblks
+integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
+&nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
 !
 !***************************************************************
 !
@@ -6574,10 +6574,10 @@ INTEGER :: INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K, &
 !
 !***************************************************************
 !
-REAL, INTENT(INOUT) :: ARRAY(*)
-REAL :: PIVMAX, ZERO
-INTEGER, INTENT(INOUT) :: PIVOT(*)
-DATA ZERO /0.0/
+real, intent(inout) :: array(*)
+real :: pivmax, zero
+integer, intent(inout) :: pivot(*)
+data zero /0.0/
 !
 !***************************************************************
 !
@@ -6589,18 +6589,18 @@ DATA ZERO /0.0/
 !***************************************************************
 !
 !
-MTRSTR(3,NMBLKS) = 0
-DO K=2,NMBLKS
-  IF (MTRSTR(3,K-1)+MTRSTR(3,K).GT.MTRSTR(2,K)) GO TO 30
-END DO
-ISUM1 = 0
-ISUM2 = 0
-DO K=1,NMBLKS
-  ISUM1 = ISUM1 + MTRSTR(1,K)
-  ISUM2 = ISUM2 + MTRSTR(2,K) - MTRSTR(3,K)
-END DO
-IF (ISUM1.NE.ISUM2) GO TO 30
-IF (ISUM1.NE.N) GO TO 30
+mtrstr(3,nmblks) = 0
+do k=2,nmblks
+  if (mtrstr(3,k-1)+mtrstr(3,k).gt.mtrstr(2,k)) go to 30
+end do
+isum1 = 0
+isum2 = 0
+do k=1,nmblks
+  isum1 = isum1 + mtrstr(1,k)
+  isum2 = isum2 + mtrstr(2,k) - mtrstr(3,k)
+end do
+if (isum1.ne.isum2) go to 30
+if (isum1.ne.n) go to 30
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
@@ -6608,8 +6608,8 @@ IF (ISUM1.NE.N) GO TO 30
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-GO TO 40
-30 CONTINUE
+go to 40
+30 continue
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
@@ -6617,9 +6617,9 @@ GO TO 40
 !
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IFLAG = 1
-RETURN
-40 CONTINUE
+iflag = 1
+return
+40 continue
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6652,14 +6652,14 @@ RETURN
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-PIVMAX = ZERO
-IFLAG = 0
-INDEX1 = 1
-INDPIV = 1
-NRWBLK = MTRSTR(1,1)
-NCLBLK = MTRSTR(2,1)
-NOVRLP = MTRSTR(3,1)
-NRWPIV = NCLBLK - NOVRLP
+pivmax = zero
+iflag = 0
+index1 = 1
+indpiv = 1
+nrwblk = mtrstr(1,1)
+nclblk = mtrstr(2,1)
+novrlp = mtrstr(3,1)
+nrwpiv = nclblk - novrlp
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6668,8 +6668,8 @@ NRWPIV = NCLBLK - NOVRLP
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IF (NRWPIV.GT.0) CALL ARCEPR(ARRAY(INDEX1), NRWBLK, NCLBLK, &
-&NRWPIV, PIVOT(INDPIV), PIVMAX, IFLAG)
+if (nrwpiv.gt.0) call arcepr(array(index1), nrwblk, nclblk, &
+&nrwpiv, pivot(indpiv), pivmax, iflag)
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6677,7 +6677,7 @@ IF (NRWPIV.GT.0) CALL ARCEPR(ARRAY(INDEX1), NRWBLK, NCLBLK, &
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IF (IFLAG.LT.0) RETURN
+if (iflag.lt.0) return
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6686,12 +6686,12 @@ IF (IFLAG.LT.0) RETURN
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-DO K=2,NMBLKS
-  INDPIV = INDPIV + NRWPIV
-  INDEX2 = INDEX1 + NRWBLK*NRWPIV
-  INDEX3 = INDEX2 + NRWBLK*NOVRLP
-  NCLPIV = NRWBLK - NRWPIV
-  NRWBK2 = MTRSTR(1,K)
+do k=2,nmblks
+  indpiv = indpiv + nrwpiv
+  index2 = index1 + nrwblk*nrwpiv
+  index3 = index2 + nrwblk*novrlp
+  nclpiv = nrwblk - nrwpiv
+  nrwbk2 = mtrstr(1,k)
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6699,9 +6699,9 @@ DO K=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NCLPIV.EQ.0) GO TO 50
-  CALL ARCEPC(ARRAY(INDEX2), NRWBLK, NOVRLP, ARRAY(INDEX3), &
-&NRWBK2, NCLPIV, PIVOT(INDPIV), PIVMAX, IFLAG)
+  if (nclpiv.eq.0) go to 50
+  call arcepc(array(index2), nrwblk, novrlp, array(index3), &
+&nrwbk2, nclpiv, pivot(indpiv), pivmax, iflag)
 !
 !             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !             C
@@ -6709,14 +6709,14 @@ DO K=2,NMBLKS
 !             C
 !             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (IFLAG.LT.0) RETURN
-50 CONTINUE
-  NRWBLK = NRWBK2
-  INDEX1 = INDEX3 + NRWBLK*NCLPIV
-  NCLBLK = MTRSTR(2,K) - NCLPIV
-  NOVRLP = MTRSTR(3,K)
-  NRWPIV = NCLBLK - NOVRLP
-  INDPIV = INDPIV + NCLPIV
+  if (iflag.lt.0) return
+50 continue
+  nrwblk = nrwbk2
+  index1 = index3 + nrwblk*nclpiv
+  nclblk = mtrstr(2,k) - nclpiv
+  novrlp = mtrstr(3,k)
+  nrwpiv = nclblk - novrlp
+  indpiv = indpiv + nclpiv
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6724,27 +6724,27 @@ DO K=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NRWPIV.EQ.0) GO TO 60
-  CALL ARCEPR(ARRAY(INDEX1), NRWBLK, NCLBLK, NRWPIV, &
-&PIVOT(INDPIV), PIVMAX, IFLAG)
+  if (nrwpiv.eq.0) go to 60
+  call arcepr(array(index1), nrwblk, nclblk, nrwpiv, &
+&pivot(indpiv), pivmax, iflag)
 !             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !             C
 !             C    IF MATRIX IS SINGULAR RETURN.
 !             C
 !             CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (IFLAG.LT.0) RETURN
-60 CONTINUE
-END DO
-RETURN
-END SUBROUTINE ARCEDC
+  if (iflag.lt.0) return
+60 continue
+end do
+return
+end subroutine arcedc
 
-SUBROUTINE ARCEPR(BLOCK, NRWBLK, NCLBLK, NRWPIV, PIVOT, PIVMAX, &
-&IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
-INTEGER :: I1, J, J1, JPLUS1, L1, MAX
+subroutine arcepr(block, nrwblk, nclblk, nrwpiv, pivot, pivmax, &
+&iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: nclblk, nrwblk, nrwpiv
+integer :: i1, j, j1, jplus1, l1, max
 !
 !***************************************************************
 !
@@ -6753,11 +6753,11 @@ INTEGER :: I1, J, J1, JPLUS1, L1, MAX
 !
 !***************************************************************
 !
-INTEGER, INTENT(INOUT) :: PIVOT(NRWBLK)
-REAL, INTENT(INOUT) :: BLOCK(NRWBLK,NCLBLK)
-REAL :: ROWMAX
-REAL, INTENT(INOUT) :: PIVMAX
-REAL :: TEMPIV, ROWPIV, SWAP
+integer, intent(inout) :: pivot(nrwblk)
+real, intent(inout) :: block(nrwblk,nclblk)
+real :: rowmax
+real, intent(inout) :: pivmax
+real :: tempiv, rowpiv, swap
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6765,8 +6765,8 @@ REAL :: TEMPIV, ROWPIV, SWAP
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-DO J=1,NRWPIV
-  JPLUS1 = J + 1
+do j=1,nrwpiv
+  jplus1 = j + 1
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6774,17 +6774,17 @@ DO J=1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  MAX = J
-  ROWMAX = ABS(BLOCK(J,J))
-  IF (J.EQ.NRWBLK) GO TO 30
-  DO I1=JPLUS1,NRWBLK
-    TEMPIV = ABS(BLOCK(I1,J))
-    IF (TEMPIV.LE.ROWMAX) GO TO 10
-    ROWMAX = TEMPIV
-    MAX = I1
-10 CONTINUE
-  END DO
-30 CONTINUE
+  max = j
+  rowmax = abs(block(j,j))
+  if (j.eq.nrwblk) go to 30
+  do i1=jplus1,nrwblk
+    tempiv = abs(block(i1,j))
+    if (tempiv.le.rowmax) go to 10
+    rowmax = tempiv
+    max = i1
+10 continue
+  end do
+30 continue
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6795,8 +6795,8 @@ DO J=1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (PIVMAX+ROWMAX.EQ.PIVMAX) GO TO 100
-  PIVMAX = AMAX1(PIVMAX,ROWMAX)
+  if (pivmax+rowmax.eq.pivmax) go to 100
+  pivmax = amax1(pivmax,rowmax)
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6804,15 +6804,15 @@ DO J=1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  PIVOT(J) = MAX
-  IF (J.EQ.MAX) GO TO 50
-  DO J1=J,NCLBLK
-    SWAP = BLOCK(MAX,J1)
-    BLOCK(MAX,J1) = BLOCK(J,J1)
-    BLOCK(J,J1) = SWAP
-  END DO
-50 CONTINUE
-  IF (J.EQ.NRWBLK) RETURN
+  pivot(j) = max
+  if (j.eq.max) go to 50
+  do j1=j,nclblk
+    swap = block(max,j1)
+    block(max,j1) = block(j,j1)
+    block(j,j1) = swap
+  end do
+50 continue
+  if (j.eq.nrwblk) return
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6820,10 +6820,10 @@ DO J=1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  ROWPIV = BLOCK(J,J)
-  DO I1=JPLUS1,NRWBLK
-    BLOCK(I1,J) = BLOCK(I1,J)/ROWPIV
-  END DO
+  rowpiv = block(j,j)
+  do i1=jplus1,nrwblk
+    block(i1,j) = block(i1,j)/rowpiv
+  end do
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6831,14 +6831,14 @@ DO J=1,NRWPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  DO J1=JPLUS1,NCLBLK
-    DO L1=JPLUS1,NRWBLK
-      BLOCK(L1,J1) = BLOCK(L1,J1) - BLOCK(L1,J)*BLOCK(J,J1)
-    END DO
-  END DO
-END DO
-RETURN
-100 CONTINUE
+  do j1=jplus1,nclblk
+    do l1=jplus1,nrwblk
+      block(l1,j1) = block(l1,j1) - block(l1,j)*block(j,j1)
+    end do
+  end do
+end do
+return
+100 continue
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6847,16 +6847,16 @@ RETURN
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IFLAG = -1
-RETURN
-END SUBROUTINE ARCEPR
+iflag = -1
+return
+end subroutine arcepr
 
-SUBROUTINE ARCEPC(TOPBLK, NRWTOP, NOVRLP, BOTBLK, NRWBOT, NCLPIV, &
-&PIVOT, PIVMAX, IFLAG)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IFLAG
-INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBOT, NRWTOP
-INTEGER :: I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
+subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
+&pivot, pivmax, iflag)
+implicit none
+integer, intent(inout) :: iflag
+integer, intent(in) :: nclpiv, novrlp, nrwbot, nrwtop
+integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
 !
 !***************************************************************
 !
@@ -6864,13 +6864,13 @@ INTEGER :: I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
 !                 MATRICES TOPBLK AND BOTBLK
 !***************************************************************
 !
-REAL, INTENT(INOUT) :: TOPBLK(NRWTOP,NOVRLP), &
-&BOTBLK(NRWBOT,NOVRLP)
-REAL :: COLMAX
-REAL, INTENT(INOUT) :: PIVMAX
-REAL :: COLMLT
-REAL :: TEMPIV, SWAP
-INTEGER, INTENT(INOUT) :: PIVOT(NRWTOP)
+real, intent(inout) :: topblk(nrwtop,novrlp), &
+&botblk(nrwbot,novrlp)
+real :: colmax
+real, intent(inout) :: pivmax
+real :: colmlt
+real :: tempiv, swap
+integer, intent(inout) :: pivot(nrwtop)
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6878,8 +6878,8 @@ INTEGER, INTENT(INOUT) :: PIVOT(NRWTOP)
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-DO J=1,NCLPIV
-  I = NRWTOP - NCLPIV + J
+do j=1,nclpiv
+  i = nrwtop - nclpiv + j
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6887,18 +6887,18 @@ DO J=1,NCLPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  MAX = J
-  COLMAX = ABS(TOPBLK(I,J))
-  IF (J.EQ.NOVRLP) GO TO 30
-  JPLUS1 = J + 1
-  DO J1=JPLUS1,NOVRLP
-    TEMPIV = ABS(TOPBLK(I,J1))
-    IF (TEMPIV.LE.COLMAX) GO TO 10
-    COLMAX = TEMPIV
-    MAX = J1
-10 CONTINUE
-  END DO
-30 CONTINUE
+  max = j
+  colmax = abs(topblk(i,j))
+  if (j.eq.novrlp) go to 30
+  jplus1 = j + 1
+  do j1=jplus1,novrlp
+    tempiv = abs(topblk(i,j1))
+    if (tempiv.le.colmax) go to 10
+    colmax = tempiv
+    max = j1
+10 continue
+  end do
+30 continue
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6909,8 +6909,8 @@ DO J=1,NCLPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (PIVMAX+COLMAX.EQ.PIVMAX) GO TO 120
-  PIVMAX = AMAX1(PIVMAX,COLMAX)
+  if (pivmax+colmax.eq.pivmax) go to 120
+  pivmax = amax1(pivmax,colmax)
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6918,20 +6918,20 @@ DO J=1,NCLPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  PIVOT(J) = MAX
-  IF (J.EQ.MAX) GO TO 60
-  DO I1=I,NRWTOP
-    SWAP = TOPBLK(I1,J)
-    TOPBLK(I1,J) = TOPBLK(I1,MAX)
-    TOPBLK(I1,MAX) = SWAP
-  END DO
-  DO I2=1,NRWBOT
-    SWAP = BOTBLK(I2,J)
-    BOTBLK(I2,J) = BOTBLK(I2,MAX)
-    BOTBLK(I2,MAX) = SWAP
-  END DO
-60 CONTINUE
-  IF (J.EQ.NOVRLP) RETURN
+  pivot(j) = max
+  if (j.eq.max) go to 60
+  do i1=i,nrwtop
+    swap = topblk(i1,j)
+    topblk(i1,j) = topblk(i1,max)
+    topblk(i1,max) = swap
+  end do
+  do i2=1,nrwbot
+    swap = botblk(i2,j)
+    botblk(i2,j) = botblk(i2,max)
+    botblk(i2,max) = swap
+  end do
+60 continue
+  if (j.eq.novrlp) return
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -6940,22 +6940,22 @@ DO J=1,NCLPIV
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  DO J1=JPLUS1,NOVRLP
-    COLMLT = TOPBLK(I,J1)/TOPBLK(I,J)
-    TOPBLK(I,J1) = COLMLT
-    IF (I.EQ.NRWTOP) GO TO 80
-    IPLUS1 = I + 1
-    DO L1=IPLUS1,NRWTOP
-      TOPBLK(L1,J1) = TOPBLK(L1,J1) - COLMLT*TOPBLK(L1,J)
-    END DO
-80 CONTINUE
-    DO L1=1,NRWBOT
-      BOTBLK(L1,J1) = BOTBLK(L1,J1) - COLMLT*BOTBLK(L1,J)
-    END DO
-  END DO
-END DO
-RETURN
-120 CONTINUE
+  do j1=jplus1,novrlp
+    colmlt = topblk(i,j1)/topblk(i,j)
+    topblk(i,j1) = colmlt
+    if (i.eq.nrwtop) go to 80
+    iplus1 = i + 1
+    do l1=iplus1,nrwtop
+      topblk(l1,j1) = topblk(l1,j1) - colmlt*topblk(l1,j)
+    end do
+80 continue
+    do l1=1,nrwbot
+      botblk(l1,j1) = botblk(l1,j1) - colmlt*botblk(l1,j)
+    end do
+  end do
+end do
+return
+120 continue
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -6964,16 +6964,16 @@ RETURN
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IFLAG = -1
-RETURN
-END SUBROUTINE ARCEPC
+iflag = -1
+return
+end subroutine arcepc
 
-SUBROUTINE ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
-IMPLICIT NONE
-INTEGER :: MTRSTR(3,*)
-INTEGER, INTENT(IN) :: NMBLKS
-INTEGER :: INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK, &
-&NRWPIV
+subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
+implicit none
+integer :: mtrstr(3,*)
+integer, intent(in) :: nmblks
+integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
+&nrwpiv
 !
 !***************************************************************
 !
@@ -7048,10 +7048,10 @@ INTEGER :: INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK, &
 !
 !***************************************************************
 !
-REAL :: ARRAY(*)
-REAL, INTENT(INOUT) :: B(*), X(*)
-INTEGER, INTENT(IN) :: PIVOT(*)
-INDPIV = 1
+real :: array(*)
+real, intent(inout) :: b(*), x(*)
+integer, intent(in) :: pivot(*)
+indpiv = 1
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -7066,11 +7066,11 @@ INDPIV = 1
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-INDEXA = 1
-NRWBLK = MTRSTR(1,1)
-NCLBLK = MTRSTR(2,1)
-NOVRLP = MTRSTR(3,1)
-NRWPIV = NCLBLK - NOVRLP
+indexa = 1
+nrwblk = mtrstr(1,1)
+nclblk = mtrstr(2,1)
+novrlp = mtrstr(3,1)
+nrwpiv = nclblk - novrlp
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -7078,8 +7078,8 @@ NRWPIV = NCLBLK - NOVRLP
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IF (NRWPIV.GT.0) CALL ARCEFE(ARRAY(INDEXA), NRWBLK, NRWPIV, &
-&PIVOT(INDPIV), B(INDPIV))
+if (nrwpiv.gt.0) call arcefe(array(indexa), nrwblk, nrwpiv, &
+&pivot(indpiv), b(indpiv))
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -7087,10 +7087,10 @@ IF (NRWPIV.GT.0) CALL ARCEFE(ARRAY(INDEXA), NRWBLK, NRWPIV, &
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-DO K=2,NMBLKS
-  INDEXA = INDEXA + NRWBLK*NRWPIV
-  NCLPIV = NRWBLK - NRWPIV
-  INDPIV = INDPIV + NRWPIV
+do k=2,nmblks
+  indexa = indexa + nrwblk*nrwpiv
+  nclpiv = nrwblk - nrwpiv
+  indpiv = indpiv + nrwpiv
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7098,10 +7098,10 @@ DO K=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NCLPIV.GT.0) CALL ARCEFS(ARRAY(INDEXA), NRWBLK, NCLPIV, &
-&NOVRLP, B(INDPIV), X(INDPIV))
-  INDEXA = INDEXA + NOVRLP*NRWBLK
-  NRWBLK = MTRSTR(1,K)
+  if (nclpiv.gt.0) call arcefs(array(indexa), nrwblk, nclpiv, &
+&novrlp, b(indpiv), x(indpiv))
+  indexa = indexa + novrlp*nrwblk
+  nrwblk = mtrstr(1,k)
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7109,13 +7109,13 @@ DO K=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NCLPIV.GT.0) CALL ARCEFM(ARRAY(INDEXA), NRWBLK, NCLPIV, &
-&B(INDPIV), X(INDPIV))
-  INDEXA = INDEXA + NRWBLK*NCLPIV
-  NCLBLK = MTRSTR(2,K) - NCLPIV
-  NOVRLP = MTRSTR(3,K)
-  NRWPIV = NCLBLK - NOVRLP
-  INDPIV = INDPIV + NCLPIV
+  if (nclpiv.gt.0) call arcefm(array(indexa), nrwblk, nclpiv, &
+&b(indpiv), x(indpiv))
+  indexa = indexa + nrwblk*nclpiv
+  nclblk = mtrstr(2,k) - nclpiv
+  novrlp = mtrstr(3,k)
+  nrwpiv = nclblk - novrlp
+  indpiv = indpiv + nclpiv
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7123,9 +7123,9 @@ DO K=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NRWPIV.GT.0) CALL ARCEFE(ARRAY(INDEXA), NRWBLK, NRWPIV, &
-&PIVOT(INDPIV), B(INDPIV))
-END DO
+  if (nrwpiv.gt.0) call arcefe(array(indexa), nrwblk, nrwpiv, &
+&pivot(indpiv), b(indpiv))
+end do
 !     INDEXB = INDPIV + NRWPIV - 1
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -7134,8 +7134,8 @@ END DO
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-DO LL=2,NMBLKS
-  K = NMBLKS - LL + 1
+do ll=2,nmblks
+  k = nmblks - ll + 1
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7143,9 +7143,9 @@ DO LL=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NRWPIV.EQ.0) GO TO 20
-  IF (NRWPIV.NE.NCLBLK) CALL ARCEBM(ARRAY(INDEXA), NRWBLK, &
-&NCLBLK, NRWPIV, B(INDPIV), X(INDPIV))
+  if (nrwpiv.eq.0) go to 20
+  if (nrwpiv.ne.nclblk) call arcebm(array(indexa), nrwblk, &
+&nclblk, nrwpiv, b(indpiv), x(indpiv))
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7153,14 +7153,14 @@ DO LL=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  CALL ARCEBS(ARRAY(INDEXA), NRWBLK, NCLBLK, NRWPIV, B(INDPIV), &
-&X(INDPIV))
-20 CONTINUE
-  INDEXA = INDEXA - NRWBLK*NCLPIV
-  NRWBLK = MTRSTR(1,K)
-  NOVRLP = MTRSTR(3,K)
-  INDEXA = INDEXA - NRWBLK*NOVRLP
-  INDPIV = INDPIV - NCLPIV
+  call arcebs(array(indexa), nrwblk, nclblk, nrwpiv, b(indpiv), &
+&x(indpiv))
+20 continue
+  indexa = indexa - nrwblk*nclpiv
+  nrwblk = mtrstr(1,k)
+  novrlp = mtrstr(3,k)
+  indexa = indexa - nrwblk*novrlp
+  indpiv = indpiv - nclpiv
 !
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !          C
@@ -7168,14 +7168,14 @@ DO LL=2,NMBLKS
 !          C
 !          CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-  IF (NCLPIV.GT.0) CALL ARCEBE(ARRAY(INDEXA), NRWBLK, NCLPIV, &
-&NOVRLP, PIVOT(INDPIV), X(INDPIV))
-  NRWPIV = NRWBLK - NCLPIV
-  NCLBLK = NOVRLP + NRWPIV
-  INDEXA = INDEXA - NRWBLK*NRWPIV
-  INDPIV = INDPIV - NRWPIV
-  NCLPIV = MTRSTR(2,K) - NCLBLK
-END DO
+  if (nclpiv.gt.0) call arcebe(array(indexa), nrwblk, nclpiv, &
+&novrlp, pivot(indpiv), x(indpiv))
+  nrwpiv = nrwblk - nclpiv
+  nclblk = novrlp + nrwpiv
+  indexa = indexa - nrwblk*nrwpiv
+  indpiv = indpiv - nrwpiv
+  nclpiv = mtrstr(2,k) - nclblk
+end do
 !
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !       C
@@ -7184,18 +7184,18 @@ END DO
 !       C
 !       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !
-IF (NRWPIV.EQ.0) RETURN
-IF (NRWPIV.NE.NCLBLK) CALL ARCEBM(ARRAY(INDEXA), NRWBLK, NCLBLK, &
-&NRWPIV, B(INDPIV), X(INDPIV))
-CALL ARCEBS(ARRAY(INDEXA), NRWBLK, NCLBLK, NRWPIV, B(INDPIV), &
-&X(INDPIV))
-RETURN
-END SUBROUTINE ARCESL
+if (nrwpiv.eq.0) return
+if (nrwpiv.ne.nclblk) call arcebm(array(indexa), nrwblk, nclblk, &
+&nrwpiv, b(indpiv), x(indpiv))
+call arcebs(array(indexa), nrwblk, nclblk, nrwpiv, b(indpiv), &
+&x(indpiv))
+return
+end subroutine arcesl
 
-SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
-INTEGER :: I, IPLUSL, J, JPLUSL, L, LONG
+subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
+implicit none
+integer, intent(in) :: nclpiv, novrlp, nrwblk
+integer :: i, iplusl, j, jplusl, l, long
 !
 !***************************************************************
 !
@@ -7204,28 +7204,28 @@ INTEGER :: I, IPLUSL, J, JPLUSL, L, LONG
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NOVRLP)
-REAL, INTENT(INOUT) :: B(*), X(*)
-REAL :: XJ
-DO J=1,NCLPIV
-  I = NRWBLK - NCLPIV + J
-  X(J) = B(J)/BLOCK(I,J)
-  IF (I.EQ.NRWBLK) RETURN
-  LONG = NRWBLK - I
-  XJ = X(J)
-  DO L=1,LONG
-    IPLUSL = I + L
-    JPLUSL = J + L
-    B(JPLUSL) = B(JPLUSL) - BLOCK(IPLUSL,J)*XJ
-  END DO
-END DO
-RETURN
-END SUBROUTINE ARCEFS
+real :: block(nrwblk,novrlp)
+real, intent(inout) :: b(*), x(*)
+real :: xj
+do j=1,nclpiv
+  i = nrwblk - nclpiv + j
+  x(j) = b(j)/block(i,j)
+  if (i.eq.nrwblk) return
+  long = nrwblk - i
+  xj = x(j)
+  do l=1,long
+    iplusl = i + l
+    jplusl = j + l
+    b(jplusl) = b(jplusl) - block(iplusl,j)*xj
+  end do
+end do
+return
+end subroutine arcefs
 
-SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCLPIV, NRWBLK
-INTEGER :: J, L, NCLPVL
+subroutine arcefm(block, nrwblk, nclpiv, b, x)
+implicit none
+integer, intent(in) :: nclpiv, nrwblk
+integer :: j, l, nclpvl
 !
 !***************************************************************
 !
@@ -7234,23 +7234,23 @@ INTEGER :: J, L, NCLPVL
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NCLPIV)
-REAL, INTENT(INOUT) :: B(*)
-REAL :: X(*), XJ
-DO J=1,NCLPIV
-  XJ = X(J)
-  DO L=1,NRWBLK
-    NCLPVL = NCLPIV + L
-    B(NCLPVL) = B(NCLPVL) - BLOCK(L,J)*XJ
-  END DO
-END DO
-RETURN
-END SUBROUTINE ARCEFM
+real :: block(nrwblk,nclpiv)
+real, intent(inout) :: b(*)
+real :: x(*), xj
+do j=1,nclpiv
+  xj = x(j)
+  do l=1,nrwblk
+    nclpvl = nclpiv + l
+    b(nclpvl) = b(nclpvl) - block(l,j)*xj
+  end do
+end do
+return
+end subroutine arcefm
 
-SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NRWBLK, NRWPIV
-INTEGER :: I, IPLUS1, L
+subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
+implicit none
+integer, intent(in) :: nrwblk, nrwpiv
+integer :: i, iplus1, l
 !
 !***************************************************************
 !
@@ -7259,32 +7259,32 @@ INTEGER :: I, IPLUS1, L
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NRWPIV)
-REAL, INTENT(INOUT) :: B(*)
-REAL :: BI, SWAP
-INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
-INTEGER :: PIVOTI
-DO I=1,NRWPIV
-  PIVOTI = PIVOT(I)
-  IF (PIVOTI.EQ.I) GO TO 10
-  SWAP = B(I)
-  B(I) = B(PIVOTI)
-  B(PIVOTI) = SWAP
-10 CONTINUE
-  IF (I.EQ.NRWBLK) RETURN
-  BI = B(I)
-  IPLUS1 = I + 1
-  DO L=IPLUS1,NRWBLK
-    B(L) = B(L) - BLOCK(L,I)*BI
-  END DO
-END DO
-RETURN
-END SUBROUTINE ARCEFE
+real :: block(nrwblk,nrwpiv)
+real, intent(inout) :: b(*)
+real :: bi, swap
+integer, intent(in) :: pivot(nrwpiv)
+integer :: pivoti
+do i=1,nrwpiv
+  pivoti = pivot(i)
+  if (pivoti.eq.i) go to 10
+  swap = b(i)
+  b(i) = b(pivoti)
+  b(pivoti) = swap
+10 continue
+  if (i.eq.nrwblk) return
+  bi = b(i)
+  iplus1 = i + 1
+  do l=iplus1,nrwblk
+    b(l) = b(l) - block(l,i)*bi
+  end do
+end do
+return
+end subroutine arcefe
 
-SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
-INTEGER :: J, JMIN1, L, NJ
+subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
+implicit none
+integer, intent(in) :: nclblk, nrwblk, nrwpiv
+integer :: j, jmin1, l, nj
 !
 !***************************************************************
 !
@@ -7293,26 +7293,26 @@ INTEGER :: J, JMIN1, L, NJ
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NCLBLK)
-REAL, INTENT(INOUT) :: B(*), X(*)
-REAL :: XJ
-DO NJ=1,NRWPIV
-  J = NRWPIV - NJ + 1
-  X(J) = B(J)/BLOCK(J,J)
-  IF (J.EQ.1) RETURN
-  JMIN1 = J - 1
-  XJ = X(J)
-  DO L=1,JMIN1
-    B(L) = B(L) - BLOCK(L,J)*XJ
-  END DO
-END DO
-RETURN
-END SUBROUTINE ARCEBS
+real :: block(nrwblk,nclblk)
+real, intent(inout) :: b(*), x(*)
+real :: xj
+do nj=1,nrwpiv
+  j = nrwpiv - nj + 1
+  x(j) = b(j)/block(j,j)
+  if (j.eq.1) return
+  jmin1 = j - 1
+  xj = x(j)
+  do l=1,jmin1
+    b(l) = b(l) - block(l,j)*xj
+  end do
+end do
+return
+end subroutine arcebs
 
-SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
-INTEGER :: J, L, NRWPV1
+subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
+implicit none
+integer, intent(in) :: nclblk, nrwblk, nrwpiv
+integer :: j, l, nrwpv1
 !
 !***************************************************************
 !
@@ -7321,23 +7321,23 @@ INTEGER :: J, L, NRWPV1
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NCLBLK)
-REAL, INTENT(INOUT) :: B(*)
-REAL :: X(*), XJ
-NRWPV1 = NRWPIV + 1
-DO J=NRWPV1,NCLBLK
-  XJ = X(J)
-  DO L=1,NRWPIV
-    B(L) = B(L) - BLOCK(L,J)*XJ
-  END DO
-END DO
-RETURN
-END SUBROUTINE ARCEBM
+real :: block(nrwblk,nclblk)
+real, intent(inout) :: b(*)
+real :: x(*), xj
+nrwpv1 = nrwpiv + 1
+do j=nrwpv1,nclblk
+  xj = x(j)
+  do l=1,nrwpiv
+    b(l) = b(l) - block(l,j)*xj
+  end do
+end do
+return
+end subroutine arcebm
 
-SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
-INTEGER :: I, J, J1, JPLUS1, NJ
+subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
+implicit none
+integer, intent(in) :: nclpiv, novrlp, nrwblk
+integer :: i, j, j1, jplus1, nj
 !
 !***************************************************************
 !
@@ -7346,58 +7346,58 @@ INTEGER :: I, J, J1, JPLUS1, NJ
 !
 !***************************************************************
 !
-REAL :: BLOCK(NRWBLK,NOVRLP)
-REAL, INTENT(INOUT) :: X(*)
-REAL :: DOTPRD, SWAP
-INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
-INTEGER :: PIVOTJ
-do 40 NJ = 1,NCLPIV
-  J = NCLPIV + 1 - NJ
-  I = NRWBLK + 1 - NJ
-  DOTPRD = X(J)
-  IF (J.EQ.NOVRLP) GO TO 20
-  JPLUS1 = J + 1
-  do 10 J1 = JPLUS1,NOVRLP
-    DOTPRD = DOTPRD - X(J1)*BLOCK(I,J1)
-10 CONTINUE
-20 CONTINUE
-  X(J) = DOTPRD
-  PIVOTJ = PIVOT(J)
-  IF (PIVOTJ.EQ.J) GO TO 30
-  SWAP = X(PIVOTJ)
-  X(PIVOTJ) = X(J)
-  X(J) = SWAP
-30 CONTINUE
-40 CONTINUE
-RETURN
-END SUBROUTINE ARCEBE
+real :: block(nrwblk,novrlp)
+real, intent(inout) :: x(*)
+real :: dotprd, swap
+integer, intent(in) :: pivot(nrwblk)
+integer :: pivotj
+do 40 nj = 1,nclpiv
+  j = nclpiv + 1 - nj
+  i = nrwblk + 1 - nj
+  dotprd = x(j)
+  if (j.eq.novrlp) go to 20
+  jplus1 = j + 1
+  do 10 j1 = jplus1,novrlp
+    dotprd = dotprd - x(j1)*block(i,j1)
+10 continue
+20 continue
+  x(j) = dotprd
+  pivotj = pivot(j)
+  if (pivotj.eq.j) go to 30
+  swap = x(pivotj)
+  x(pivotj) = x(j)
+  x(j) = swap
+30 continue
+40 continue
+return
+end subroutine arcebe
 
-SUBROUTINE BTSLV(MO, M, N, A, B, C, X, IP, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: MO, M
-INTEGER :: N
-INTEGER, INTENT(INOUT) :: IP(M,N)
-REAL, INTENT(INOUT) :: A(M,M,N), B(M,M,N), C(M,M,N), X(*)
+subroutine btslv(mo, m, n, a, b, c, x, ip, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: mo, m
+integer :: n
+integer, intent(inout) :: ip(m,n)
+real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n), x(*)
 !
 !     DECOMPOSE THE COEFFICIENT MATRIX
 !
-IF (MO .NE. 0) GO TO 10
-CALL DECBT(M, N, A, B, C, IP, IERR)
-IF (IERR .NE. 0) RETURN
+if (mo .ne. 0) go to 10
+call decbt(m, n, a, b, c, ip, ierr)
+if (ierr .ne. 0) return
 !
 !     SOLVE THE SYSTEM OF EQUATIONS
 !
-10 CALL SOLBT(M, N, A, B, C, X, IP)
-RETURN
-END SUBROUTINE BTSLV
+10 call solbt(m, n, a, b, c, x, ip)
+return
+end subroutine btslv
 
-SUBROUTINE DECBT (M, N, A, B, C, IP, IER)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: M
-INTEGER :: N
-INTEGER, INTENT(INOUT) :: IP(M,N), IER
-REAL, INTENT(INOUT) :: A(M,M,N), B(M,M,N), C(M,M,N)
+subroutine decbt (m, n, a, b, c, ip, ier)
+implicit none
+integer, intent(in) :: m
+integer :: n
+integer, intent(inout) :: ip(m,n), ier
+real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
 !-----------------------------------------------------------------------
 ! BLOCK-TRIDIAGONAL MATRIX DECOMPOSITION ROUTINE.
 ! WRITTEN BY A. C. HINDMARSH.
@@ -7437,82 +7437,82 @@ REAL, INTENT(INOUT) :: A(M,M,N), B(M,M,N), C(M,M,N)
 ! DECBT CALLS SUBROUTINES  DEC(M,M0,A,IP,IER)  AND  SOL(M,M0,A,Y,IP)
 ! FOR SOLUTION OF M BY M LINEAR SYSTEMS.
 !-----------------------------------------------------------------------
-INTEGER :: NM1, NM2, KM1, I, J, K, L
-REAL :: DP
+integer :: nm1, nm2, km1, i, j, k, l
+real :: dp
 !
-IF (M .LT. 1 .OR. N .LT. 4) GO TO 210
-NM1 = N - 1
-NM2 = N - 2
+if (m .lt. 1 .or. n .lt. 4) go to 210
+nm1 = n - 1
+nm2 = n - 2
 ! PROCESS THE FIRST BLOCK-ROW. -----------------------------------------
-CALL DEC (M, M, A, IP, IER)
-K = 1
-IF (IER .NE. 0) GO TO 200
-DO J = 1,M
-  CALL SOL (M, M, A, B(1,J,1), IP)
-  CALL SOL (M, M, A, C(1,J,1), IP)
-  END DO
+call dec (m, m, a, ip, ier)
+k = 1
+if (ier .ne. 0) go to 200
+do j = 1,m
+  call sol (m, m, a, b(1,j,1), ip)
+  call sol (m, m, a, c(1,j,1), ip)
+  end do
 ! ADJUST B(*,*,2). -----------------------------------------------------
-DO J = 1,M
-  DO I = 1,M
-    DP = 0.
-    do 20 L = 1,M
-20 DP = DP + C(I,L,2)*C(L,J,1)
-    B(I,J,2) = B(I,J,2) - DP
-    END DO
-  END DO
+do j = 1,m
+  do i = 1,m
+    dp = 0.
+    do 20 l = 1,m
+20 dp = dp + c(i,l,2)*c(l,j,1)
+    b(i,j,2) = b(i,j,2) - dp
+    end do
+  end do
 ! MAIN LOOP.  PROCESS BLOCK-ROWS 2 TO N-1. -----------------------------
-DO K = 2,NM1
-  KM1 = K - 1
-  DO J = 1,M
-    DO I = 1,M
-      DP = 0.
-      do 50 L = 1,M
-50 DP = DP + C(I,L,K)*B(L,J,KM1)
-      A(I,J,K) = A(I,J,K) - DP
-      END DO
-    END DO
-  CALL DEC (M, M, A(1,1,K), IP(1,K), IER)
-  IF (IER .NE. 0) GO TO 200
-  do 80 J = 1,M
-80 CALL SOL (M, M, A(1,1,K), B(1,J,K), IP(1,K))
-  END DO
+do k = 2,nm1
+  km1 = k - 1
+  do j = 1,m
+    do i = 1,m
+      dp = 0.
+      do 50 l = 1,m
+50 dp = dp + c(i,l,k)*b(l,j,km1)
+      a(i,j,k) = a(i,j,k) - dp
+      end do
+    end do
+  call dec (m, m, a(1,1,k), ip(1,k), ier)
+  if (ier .ne. 0) go to 200
+  do 80 j = 1,m
+80 call sol (m, m, a(1,1,k), b(1,j,k), ip(1,k))
+  end do
 ! PROCESS LAST BLOCK-ROW AND RETURN. -----------------------------------
-DO J = 1,M
-  DO I = 1,M
-    DP = 0.
-    do 110 L = 1,M
-110 DP = DP + B(I,L,N)*B(L,J,NM2)
-    C(I,J,N) = C(I,J,N) - DP
-    END DO
-  END DO
-DO J = 1,M
-  DO I = 1,M
-    DP = 0.
-    do 140 L = 1,M
-140 DP = DP + C(I,L,N)*B(L,J,NM1)
-    A(I,J,N) = A(I,J,N) - DP
-    END DO
-  END DO
-CALL DEC (M, M, A(1,1,N), IP(1,N), IER)
-K = N
-IF (IER .NE. 0) GO TO 200
-RETURN
+do j = 1,m
+  do i = 1,m
+    dp = 0.
+    do 110 l = 1,m
+110 dp = dp + b(i,l,n)*b(l,j,nm2)
+    c(i,j,n) = c(i,j,n) - dp
+    end do
+  end do
+do j = 1,m
+  do i = 1,m
+    dp = 0.
+    do 140 l = 1,m
+140 dp = dp + c(i,l,n)*b(l,j,nm1)
+    a(i,j,n) = a(i,j,n) - dp
+    end do
+  end do
+call dec (m, m, a(1,1,n), ip(1,n), ier)
+k = n
+if (ier .ne. 0) go to 200
+return
 ! ERROR RETURNS. -------------------------------------------------------
-200 IER = K
-RETURN
-210 IER = -1
-RETURN
+200 ier = k
+return
+210 ier = -1
+return
 !-----------------------  END OF SUBROUTINE DECBT  ---------------------
-END SUBROUTINE DECBT
+end subroutine decbt
 
-SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
-IMPLICIT NONE
-INTEGER :: KB, KP1
-INTEGER, INTENT(IN) :: M
-INTEGER :: N, IP(M,N)
-REAL :: A(M,M,N)
-REAL, INTENT(IN) :: B(M,M,N), C(M,M,N)
-REAL, INTENT(INOUT) :: Y(M,N)
+subroutine solbt (m, n, a, b, c, y, ip)
+implicit none
+integer :: kb, kp1
+integer, intent(in) :: m
+integer :: n, ip(m,n)
+real :: a(m,m,n)
+real, intent(in) :: b(m,m,n), c(m,m,n)
+real, intent(inout) :: y(m,n)
 !-----------------------------------------------------------------------
 ! SOLUTION OF BLOCK-TRIDIAGONAL LINEAR SYSTEM.
 ! COEFFICIENT MATRIX MUST HAVE BEEN PREVIOUSLY PROCESSED BY DECBT.
@@ -7531,99 +7531,99 @@ REAL, INTENT(INOUT) :: Y(M,N)
 ! SOLBT MAKES CALLS TO SUBROUTINE SOL(M,M0,A,Y,IP)
 ! FOR SOLUTION OF M BY M LINEAR SYSTEMS.
 !-----------------------------------------------------------------------
-INTEGER :: NM1, NM2, KM1, I, J, K
-REAL :: DP
+integer :: nm1, nm2, km1, i, j, k
+real :: dp
 !
-NM1 = N - 1
-NM2 = N - 2
+nm1 = n - 1
+nm2 = n - 2
 ! FORWARD SOLUTION SWEEP. ----------------------------------------------
-CALL SOL (M, M, A, Y, IP)
-DO K = 2,NM1
-  KM1 = K - 1
-  DO I = 1,M
-    DP = 0.
-    do 10 J = 1,M
-10 DP = DP + C(I,J,K)*Y(J,KM1)
-    Y(I,K) = Y(I,K) - DP
-    END DO
-  CALL SOL (M, M, A(1,1,K), Y(1,K), IP(1,K))
-  END DO
-DO I = 1,M
-  DP = 0.
-  do 40 J = 1,M
-40 DP = DP + C(I,J,N)*Y(J,NM1) + B(I,J,N)*Y(J,NM2)
-  Y(I,N) = Y(I,N) - DP
-  END DO
-CALL SOL (M, M, A(1,1,N), Y(1,N), IP(1,N))
+call sol (m, m, a, y, ip)
+do k = 2,nm1
+  km1 = k - 1
+  do i = 1,m
+    dp = 0.
+    do 10 j = 1,m
+10 dp = dp + c(i,j,k)*y(j,km1)
+    y(i,k) = y(i,k) - dp
+    end do
+  call sol (m, m, a(1,1,k), y(1,k), ip(1,k))
+  end do
+do i = 1,m
+  dp = 0.
+  do 40 j = 1,m
+40 dp = dp + c(i,j,n)*y(j,nm1) + b(i,j,n)*y(j,nm2)
+  y(i,n) = y(i,n) - dp
+  end do
+call sol (m, m, a(1,1,n), y(1,n), ip(1,n))
 ! BACKWARD SOLUTION SWEEP. ---------------------------------------------
-DO KB = 1,NM1
-  K = N - KB
-  KP1 = K + 1
-  DO I = 1,M
-    DP = 0.
-    do 60 J = 1,M
-60 DP = DP + B(I,J,K)*Y(J,KP1)
-    Y(I,K) = Y(I,K) - DP
-    END DO
-  END DO
-DO I = 1,M
-  DP = 0.
-  do 90 J = 1,M
-90 DP = DP + C(I,J,1)*Y(J,3)
-  Y(I,1) = Y(I,1) - DP
-  END DO
-RETURN
+do kb = 1,nm1
+  k = n - kb
+  kp1 = k + 1
+  do i = 1,m
+    dp = 0.
+    do 60 j = 1,m
+60 dp = dp + b(i,j,k)*y(j,kp1)
+    y(i,k) = y(i,k) - dp
+    end do
+  end do
+do i = 1,m
+  dp = 0.
+  do 90 j = 1,m
+90 dp = dp + c(i,j,1)*y(j,3)
+  y(i,1) = y(i,1) - dp
+  end do
+return
 !-----------------------  END OF SUBROUTINE SOLBT  ---------------------
-END SUBROUTINE SOLBT
+end subroutine solbt
 
-SUBROUTINE SMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KB, M, MO, N
-INTEGER :: J, JOB
+subroutine smslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: kb, m, mo, n
+integer :: j, job
 !     ------------------
-REAL, INTENT(INOUT) :: A(*), B(*)
-REAL, INTENT(INOUT) :: DET(2), RCOND
-REAL :: T
-REAL, INTENT(INOUT) :: WK(N)
-INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
-INTEGER :: ONEJ
+real, intent(inout) :: a(*), b(*)
+real, intent(inout) :: det(2), rcond
+real :: t
+real, intent(inout) :: wk(n)
+integer, intent(inout) :: inert(3), ipvt(n)
+integer :: onej
 !     ------------------
 !
 !          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 !
-IERR = 0
-CALL SSPCO(A,N,IPVT,RCOND,WK)
-T = 1.0 + RCOND
-IF (T .EQ. 1.0) GO TO 30
+ierr = 0
+call sspco(a,n,ipvt,rcond,wk)
+t = 1.0 + rcond
+if (t .eq. 1.0) go to 30
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-CALL SSPSL(A,N,IPVT,B(ONEJ))
-10 ONEJ = ONEJ + KB
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+call sspsl(a,n,ipvt,b(onej))
+10 onej = onej + kb
 !
 !             CALCULATION OF DET AND THE INVERSE OF A
 !
-20 JOB = 110
-IF (MO .EQ. 0) JOB = 111
-CALL SSPDI(A,N,IPVT,DET,INERT,WK,JOB)
-RETURN
+20 job = 110
+if (mo .eq. 0) job = 111
+call sspdi(a,n,ipvt,det,inert,wk,job)
+return
 !
 !                  THE PROBLEM CANNOT BE SOLVED
 !
-30 IERR = 1
-RETURN
-END SUBROUTINE SMSLV
+30 ierr = 1
+return
+end subroutine smslv
 
-SUBROUTINE SSPCO(AP,N,KPVT,RCOND,Z)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: KPVT(*)
-REAL, INTENT(INOUT) :: AP(*), Z(*)
-REAL, INTENT(INOUT) :: RCOND
+subroutine sspco(ap,n,kpvt,rcond,z)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+real, intent(inout) :: ap(*), z(*)
+real, intent(inout) :: rcond
 !
 !     SSPCO FACTORS A REAL SYMMETRIC MATRIX STORED IN PACKED
 !     FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
@@ -7702,35 +7702,35 @@ REAL, INTENT(INOUT) :: RCOND
 !
 !     INTERNAL VARIABLES
 !
-REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, EK, T
-REAL :: ANORM, S, SASUM, YNORM
-INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
-INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
+real :: ak, akm1, bk, bkm1, sdot, denom, ek, t
+real :: anorm, s, sasum, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
+integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
 !     FIND NORM OF A USING ONLY UPPER HALF
 !
-J1 = 1
-DO J = 1, N
-   Z(J) = SASUM(J,AP(J1),1)
-   IJ = J1
-   J1 = J1 + J
-   JM1 = J - 1
-   IF (JM1 .LT. 1) GO TO 20
-   DO I = 1, JM1
-      Z(I) = Z(I) + ABS(AP(IJ))
-      IJ = IJ + 1
-   END DO
-20 CONTINUE
-END DO
-ANORM = 0.0E0
-DO J = 1, N
-   ANORM = AMAX1(ANORM,Z(J))
-END DO
+j1 = 1
+do j = 1, n
+   z(j) = sasum(j,ap(j1),1)
+   ij = j1
+   j1 = j1 + j
+   jm1 = j - 1
+   if (jm1 .lt. 1) go to 20
+   do i = 1, jm1
+      z(i) = z(i) + abs(ap(ij))
+      ij = ij + 1
+   end do
+20 continue
+end do
+anorm = 0.0e0
+do j = 1, n
+   anorm = amax1(anorm,z(j))
+end do
 !
 !     FACTOR
 !
-CALL SSPFA(AP,N,KPVT,INFO)
+call sspfa(ap,n,kpvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  A*Y = E .
@@ -7740,178 +7740,178 @@ CALL SSPFA(AP,N,KPVT,INFO)
 !
 !     SOLVE U*D*W = E
 !
-EK = 1.0E0
-DO J = 1, N
-   Z(J) = 0.0E0
-END DO
-K = N
-IK = (N*(N - 1))/2
-60 IF (K .EQ. 0) GO TO 120
-   KK = IK + K
-   IKM1 = IK - (K - 1)
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   KP = IABS(KPVT(K))
-   KPS = K + 1 - KS
-   IF (KP .EQ. KPS) GO TO 70
-      T = Z(KPS)
-      Z(KPS) = Z(KP)
-      Z(KP) = T
-70 CONTINUE
-   IF (Z(K) .NE. 0.0E0) EK = SIGN(EK,Z(K))
-   Z(K) = Z(K) + EK
-   CALL SAXPY(K-KS,Z(K),AP(IK+1),1,Z(1),1)
-   IF (KS .EQ. 1) GO TO 80
-      IF (Z(K-1) .NE. 0.0E0) EK = SIGN(EK,Z(K-1))
-      Z(K-1) = Z(K-1) + EK
-      CALL SAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
-80 CONTINUE
-   IF (KS .EQ. 2) GO TO 100
-      IF (ABS(Z(K)) .LE. ABS(AP(KK))) GO TO 90
-         S = ABS(AP(KK))/ABS(Z(K))
-         CALL SSCAL(N,S,Z,1)
-         EK = S*EK
-90 CONTINUE
-      IF (AP(KK) .NE. 0.0E0) Z(K) = Z(K)/AP(KK)
-      IF (AP(KK) .EQ. 0.0E0) Z(K) = 1.0E0
-   GO TO 110
-100 CONTINUE
-      KM1K = IK + K - 1
-      KM1KM1 = IKM1 + K - 1
-      AK = AP(KK)/AP(KM1K)
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = Z(K)/AP(KM1K)
-      BKM1 = Z(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0E0
-      Z(K) = (AKM1*BK - BKM1)/DENOM
-      Z(K-1) = (AK*BKM1 - BK)/DENOM
-110 CONTINUE
-   K = K - KS
-   IK = IK - K
-   IF (KS .EQ. 2) IK = IK - (K + 1)
-GO TO 60
-120 CONTINUE
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
+ek = 1.0e0
+do j = 1, n
+   z(j) = 0.0e0
+end do
+k = n
+ik = (n*(n - 1))/2
+60 if (k .eq. 0) go to 120
+   kk = ik + k
+   ikm1 = ik - (k - 1)
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   kp = iabs(kpvt(k))
+   kps = k + 1 - ks
+   if (kp .eq. kps) go to 70
+      t = z(kps)
+      z(kps) = z(kp)
+      z(kp) = t
+70 continue
+   if (z(k) .ne. 0.0e0) ek = sign(ek,z(k))
+   z(k) = z(k) + ek
+   call saxpy(k-ks,z(k),ap(ik+1),1,z(1),1)
+   if (ks .eq. 1) go to 80
+      if (z(k-1) .ne. 0.0e0) ek = sign(ek,z(k-1))
+      z(k-1) = z(k-1) + ek
+      call saxpy(k-ks,z(k-1),ap(ikm1+1),1,z(1),1)
+80 continue
+   if (ks .eq. 2) go to 100
+      if (abs(z(k)) .le. abs(ap(kk))) go to 90
+         s = abs(ap(kk))/abs(z(k))
+         call sscal(n,s,z,1)
+         ek = s*ek
+90 continue
+      if (ap(kk) .ne. 0.0e0) z(k) = z(k)/ap(kk)
+      if (ap(kk) .eq. 0.0e0) z(k) = 1.0e0
+   go to 110
+100 continue
+      km1k = ik + k - 1
+      km1km1 = ikm1 + k - 1
+      ak = ap(kk)/ap(km1k)
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = z(k)/ap(km1k)
+      bkm1 = z(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0e0
+      z(k) = (akm1*bk - bkm1)/denom
+      z(k-1) = (ak*bkm1 - bk)/denom
+110 continue
+   k = k - ks
+   ik = ik - k
+   if (ks .eq. 2) ik = ik - (k + 1)
+go to 60
+120 continue
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
 !
 !     SOLVE TRANS(U)*Y = W
 !
-K = 1
-IK = 0
-130 IF (K .GT. N) GO TO 160
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. 1) GO TO 150
-      Z(K) = Z(K) + SDOT(K-1,AP(IK+1),1,Z(1),1)
-      IKP1 = IK + K
-      IF (KS .EQ. 2) &
-&Z(K+1) = Z(K+1) + SDOT(K-1,AP(IKP1+1),1,Z(1),1)
-      KP = IABS(KPVT(K))
-      IF (KP .EQ. K) GO TO 140
-         T = Z(K)
-         Z(K) = Z(KP)
-         Z(KP) = T
-140 CONTINUE
-150 CONTINUE
-   IK = IK + K
-   IF (KS .EQ. 2) IK = IK + (K + 1)
-   K = K + KS
-GO TO 130
-160 CONTINUE
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
+k = 1
+ik = 0
+130 if (k .gt. n) go to 160
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. 1) go to 150
+      z(k) = z(k) + sdot(k-1,ap(ik+1),1,z(1),1)
+      ikp1 = ik + k
+      if (ks .eq. 2) &
+&z(k+1) = z(k+1) + sdot(k-1,ap(ikp1+1),1,z(1),1)
+      kp = iabs(kpvt(k))
+      if (kp .eq. k) go to 140
+         t = z(k)
+         z(k) = z(kp)
+         z(kp) = t
+140 continue
+150 continue
+   ik = ik + k
+   if (ks .eq. 2) ik = ik + (k + 1)
+   k = k + ks
+go to 130
+160 continue
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
 !
-YNORM = 1.0E0
+ynorm = 1.0e0
 !
 !     SOLVE U*D*V = Y
 !
-K = N
-IK = N*(N - 1)/2
-170 IF (K .EQ. 0) GO TO 230
-   KK = IK + K
-   IKM1 = IK - (K - 1)
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. KS) GO TO 190
-      KP = IABS(KPVT(K))
-      KPS = K + 1 - KS
-      IF (KP .EQ. KPS) GO TO 180
-         T = Z(KPS)
-         Z(KPS) = Z(KP)
-         Z(KP) = T
-180 CONTINUE
-      CALL SAXPY(K-KS,Z(K),AP(IK+1),1,Z(1),1)
-      IF (KS .EQ. 2) CALL SAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
-190 CONTINUE
-   IF (KS .EQ. 2) GO TO 210
-      IF (ABS(Z(K)) .LE. ABS(AP(KK))) GO TO 200
-         S = ABS(AP(KK))/ABS(Z(K))
-         CALL SSCAL(N,S,Z,1)
-         YNORM = S*YNORM
-200 CONTINUE
-      IF (AP(KK) .NE. 0.0E0) Z(K) = Z(K)/AP(KK)
-      IF (AP(KK) .EQ. 0.0E0) Z(K) = 1.0E0
-   GO TO 220
-210 CONTINUE
-      KM1K = IK + K - 1
-      KM1KM1 = IKM1 + K - 1
-      AK = AP(KK)/AP(KM1K)
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = Z(K)/AP(KM1K)
-      BKM1 = Z(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0E0
-      Z(K) = (AKM1*BK - BKM1)/DENOM
-      Z(K-1) = (AK*BKM1 - BK)/DENOM
-220 CONTINUE
-   K = K - KS
-   IK = IK - K
-   IF (KS .EQ. 2) IK = IK - (K + 1)
-GO TO 170
-230 CONTINUE
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
-YNORM = S*YNORM
+k = n
+ik = n*(n - 1)/2
+170 if (k .eq. 0) go to 230
+   kk = ik + k
+   ikm1 = ik - (k - 1)
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. ks) go to 190
+      kp = iabs(kpvt(k))
+      kps = k + 1 - ks
+      if (kp .eq. kps) go to 180
+         t = z(kps)
+         z(kps) = z(kp)
+         z(kp) = t
+180 continue
+      call saxpy(k-ks,z(k),ap(ik+1),1,z(1),1)
+      if (ks .eq. 2) call saxpy(k-ks,z(k-1),ap(ikm1+1),1,z(1),1)
+190 continue
+   if (ks .eq. 2) go to 210
+      if (abs(z(k)) .le. abs(ap(kk))) go to 200
+         s = abs(ap(kk))/abs(z(k))
+         call sscal(n,s,z,1)
+         ynorm = s*ynorm
+200 continue
+      if (ap(kk) .ne. 0.0e0) z(k) = z(k)/ap(kk)
+      if (ap(kk) .eq. 0.0e0) z(k) = 1.0e0
+   go to 220
+210 continue
+      km1k = ik + k - 1
+      km1km1 = ikm1 + k - 1
+      ak = ap(kk)/ap(km1k)
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = z(k)/ap(km1k)
+      bkm1 = z(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0e0
+      z(k) = (akm1*bk - bkm1)/denom
+      z(k-1) = (ak*bkm1 - bk)/denom
+220 continue
+   k = k - ks
+   ik = ik - k
+   if (ks .eq. 2) ik = ik - (k + 1)
+go to 170
+230 continue
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
+ynorm = s*ynorm
 !
 !     SOLVE TRANS(U)*Z = V
 !
-K = 1
-IK = 0
-240 IF (K .GT. N) GO TO 270
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. 1) GO TO 260
-      Z(K) = Z(K) + SDOT(K-1,AP(IK+1),1,Z(1),1)
-      IKP1 = IK + K
-      IF (KS .EQ. 2) &
-&Z(K+1) = Z(K+1) + SDOT(K-1,AP(IKP1+1),1,Z(1),1)
-      KP = IABS(KPVT(K))
-      IF (KP .EQ. K) GO TO 250
-         T = Z(K)
-         Z(K) = Z(KP)
-         Z(KP) = T
-250 CONTINUE
-260 CONTINUE
-   IK = IK + K
-   IF (KS .EQ. 2) IK = IK + (K + 1)
-   K = K + KS
-GO TO 240
-270 CONTINUE
+k = 1
+ik = 0
+240 if (k .gt. n) go to 270
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. 1) go to 260
+      z(k) = z(k) + sdot(k-1,ap(ik+1),1,z(1),1)
+      ikp1 = ik + k
+      if (ks .eq. 2) &
+&z(k+1) = z(k+1) + sdot(k-1,ap(ikp1+1),1,z(1),1)
+      kp = iabs(kpvt(k))
+      if (kp .eq. k) go to 250
+         t = z(k)
+         z(k) = z(kp)
+         z(kp) = t
+250 continue
+260 continue
+   ik = ik + k
+   if (ks .eq. 2) ik = ik + (k + 1)
+   k = k + ks
+go to 240
+270 continue
 !     MAKE ZNORM = 1.0
-S = 1.0E0/SASUM(N,Z,1)
-CALL SSCAL(N,S,Z,1)
-YNORM = S*YNORM
+s = 1.0e0/sasum(n,z,1)
+call sscal(n,s,z,1)
+ynorm = s*ynorm
 !
-IF (ANORM .NE. 0.0E0) RCOND = YNORM/ANORM
-IF (ANORM .EQ. 0.0E0) RCOND = 0.0E0
-RETURN
-END SUBROUTINE SSPCO
+if (anorm .ne. 0.0e0) rcond = ynorm/anorm
+if (anorm .eq. 0.0e0) rcond = 0.0e0
+return
+end subroutine sspco
 
-SUBROUTINE SSPFA(AP,N,KPVT,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: KPVT(*)
-INTEGER, INTENT(OUT) :: INFO
-REAL, INTENT(INOUT) :: AP(*)
+subroutine sspfa(ap,n,kpvt,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+integer, intent(out) :: info
+real, intent(inout) :: ap(*)
 !
 !     SSPFA FACTORS A REAL SYMMETRIC MATRIX STORED IN
 !     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
@@ -7976,38 +7976,38 @@ REAL, INTENT(INOUT) :: AP(*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
-REAL :: ABSAKK, ALPHA, COLMAX, ROWMAX
-INTEGER :: ISAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ, &
-&IMK
-INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1, &
-&KM2, KSTEP
-LOGICAL :: SWAP
+real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
+real :: absakk, alpha, colmax, rowmax
+integer :: isamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
+&imk
+integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
+&km2, kstep
+logical :: swap
 !
 !
 !     INITIALIZE
 !
 !     ALPHA IS USED IN CHOOSING PIVOT BLOCK SIZE.
-ALPHA = (1.0E0 + SQRT(17.0E0))/8.0E0
+alpha = (1.0e0 + sqrt(17.0e0))/8.0e0
 !
-INFO = 0
+info = 0
 !
 !     MAIN LOOP ON K, WHICH GOES FROM N TO 1.
 !
-K = N
-IK = (N*(N - 1))/2
-10 CONTINUE
+k = n
+ik = (n*(n - 1))/2
+10 continue
 !
 !        LEAVE THE LOOP IF K=0 OR K=1.
 !
 !     ...EXIT
-   IF (K .EQ. 0) GO TO 200
-   IF (K .GT. 1) GO TO 20
-      KPVT(1) = 1
-      IF (AP(1) .EQ. 0.0E0) INFO = 1
+   if (k .eq. 0) go to 200
+   if (k .gt. 1) go to 20
+      kpvt(1) = 1
+      if (ap(1) .eq. 0.0e0) info = 1
 !     ......EXIT
-      GO TO 200
-20 CONTINUE
+      go to 200
+20 continue
 !
 !        THIS SECTION OF CODE DETERMINES THE KIND OF
 !        ELIMINATION TO BE PERFORMED.  WHEN IT IS COMPLETED,
@@ -8015,172 +8015,172 @@ IK = (N*(N - 1))/2
 !        SWAP WILL BE SET TO .TRUE. IF AN INTERCHANGE IS
 !        REQUIRED.
 !
-   KM1 = K - 1
-   KK = IK + K
-   ABSAKK = ABS(AP(KK))
+   km1 = k - 1
+   kk = ik + k
+   absakk = abs(ap(kk))
 !
 !        DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
 !        COLUMN K.
 !
-   IMAX = ISAMAX(K-1,AP(IK+1),1)
-   IMK = IK + IMAX
-   COLMAX = ABS(AP(IMK))
-   IF (ABSAKK .LT. ALPHA*COLMAX) GO TO 30
-      KSTEP = 1
-      SWAP = .FALSE.
-   GO TO 90
-30 CONTINUE
+   imax = isamax(k-1,ap(ik+1),1)
+   imk = ik + imax
+   colmax = abs(ap(imk))
+   if (absakk .lt. alpha*colmax) go to 30
+      kstep = 1
+      swap = .false.
+   go to 90
+30 continue
 !
 !           DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
 !           ROW IMAX.
 !
-      ROWMAX = 0.0E0
-      IMAXP1 = IMAX + 1
-      IM = IMAX*(IMAX - 1)/2
-      IMJ = IM + 2*IMAX
-      DO J = IMAXP1, K
-         ROWMAX = AMAX1(ROWMAX,ABS(AP(IMJ)))
-         IMJ = IMJ + J
-      END DO
-      IF (IMAX .EQ. 1) GO TO 50
-         JMAX = ISAMAX(IMAX-1,AP(IM+1),1)
-         JMIM = JMAX + IM
-         ROWMAX = AMAX1(ROWMAX,ABS(AP(JMIM)))
-50 CONTINUE
-      IMIM = IMAX + IM
-      IF (ABS(AP(IMIM)) .LT. ALPHA*ROWMAX) GO TO 60
-         KSTEP = 1
-         SWAP = .TRUE.
-      GO TO 80
-60 CONTINUE
-      IF (ABSAKK .LT. ALPHA*COLMAX*(COLMAX/ROWMAX)) GO TO 70
-         KSTEP = 1
-         SWAP = .FALSE.
-      GO TO 80
-70 CONTINUE
-         KSTEP = 2
-         SWAP = IMAX .NE. KM1
-80 CONTINUE
-90 CONTINUE
-   IF (AMAX1(ABSAKK,COLMAX) .NE. 0.0E0) GO TO 100
+      rowmax = 0.0e0
+      imaxp1 = imax + 1
+      im = imax*(imax - 1)/2
+      imj = im + 2*imax
+      do j = imaxp1, k
+         rowmax = amax1(rowmax,abs(ap(imj)))
+         imj = imj + j
+      end do
+      if (imax .eq. 1) go to 50
+         jmax = isamax(imax-1,ap(im+1),1)
+         jmim = jmax + im
+         rowmax = amax1(rowmax,abs(ap(jmim)))
+50 continue
+      imim = imax + im
+      if (abs(ap(imim)) .lt. alpha*rowmax) go to 60
+         kstep = 1
+         swap = .true.
+      go to 80
+60 continue
+      if (absakk .lt. alpha*colmax*(colmax/rowmax)) go to 70
+         kstep = 1
+         swap = .false.
+      go to 80
+70 continue
+         kstep = 2
+         swap = imax .ne. km1
+80 continue
+90 continue
+   if (amax1(absakk,colmax) .ne. 0.0e0) go to 100
 !
 !           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
 !
-      KPVT(K) = K
-      INFO = K
-   GO TO 190
-100 CONTINUE
-   IF (KSTEP .EQ. 2) GO TO 140
+      kpvt(k) = k
+      info = k
+   go to 190
+100 continue
+   if (kstep .eq. 2) go to 140
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (.NOT.SWAP) GO TO 120
+      if (.not.swap) go to 120
 !
 !              PERFORM AN INTERCHANGE.
 !
-         CALL SSWAP(IMAX,AP(IM+1),1,AP(IK+1),1)
-         IMJ = IK + IMAX
-         DO JJ = IMAX, K
-            J = K + IMAX - JJ
-            JK = IK + J
-            T = AP(JK)
-            AP(JK) = AP(IMJ)
-            AP(IMJ) = T
-            IMJ = IMJ - (J - 1)
-         END DO
-120 CONTINUE
+         call sswap(imax,ap(im+1),1,ap(ik+1),1)
+         imj = ik + imax
+         do jj = imax, k
+            j = k + imax - jj
+            jk = ik + j
+            t = ap(jk)
+            ap(jk) = ap(imj)
+            ap(imj) = t
+            imj = imj - (j - 1)
+         end do
+120 continue
 !
 !           PERFORM THE ELIMINATION.
 !
-      IJ = IK - (K - 1)
-      DO JJ = 1, KM1
-         J = K - JJ
-         JK = IK + J
-         MULK = -AP(JK)/AP(KK)
-         T = MULK
-         CALL SAXPY(J,T,AP(IK+1),1,AP(IJ+1),1)
-         IJJ = IJ + J
-         AP(JK) = MULK
-         IJ = IJ - (J - 1)
-      END DO
+      ij = ik - (k - 1)
+      do jj = 1, km1
+         j = k - jj
+         jk = ik + j
+         mulk = -ap(jk)/ap(kk)
+         t = mulk
+         call saxpy(j,t,ap(ik+1),1,ap(ij+1),1)
+         ijj = ij + j
+         ap(jk) = mulk
+         ij = ij - (j - 1)
+      end do
 !
 !           SET THE PIVOT ARRAY.
 !
-      KPVT(K) = K
-      IF (SWAP) KPVT(K) = IMAX
-   GO TO 190
-140 CONTINUE
+      kpvt(k) = k
+      if (swap) kpvt(k) = imax
+   go to 190
+140 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      KM1K = IK + K - 1
-      IKM1 = IK - (K - 1)
-      IF (.NOT.SWAP) GO TO 160
+      km1k = ik + k - 1
+      ikm1 = ik - (k - 1)
+      if (.not.swap) go to 160
 !
 !              PERFORM AN INTERCHANGE.
 !
-         CALL SSWAP(IMAX,AP(IM+1),1,AP(IKM1+1),1)
-         IMJ = IKM1 + IMAX
-         DO JJ = IMAX, KM1
-            J = KM1 + IMAX - JJ
-            JKM1 = IKM1 + J
-            T = AP(JKM1)
-            AP(JKM1) = AP(IMJ)
-            AP(IMJ) = T
-            IMJ = IMJ - (J - 1)
-         END DO
-         T = AP(KM1K)
-         AP(KM1K) = AP(IMK)
-         AP(IMK) = T
-160 CONTINUE
+         call sswap(imax,ap(im+1),1,ap(ikm1+1),1)
+         imj = ikm1 + imax
+         do jj = imax, km1
+            j = km1 + imax - jj
+            jkm1 = ikm1 + j
+            t = ap(jkm1)
+            ap(jkm1) = ap(imj)
+            ap(imj) = t
+            imj = imj - (j - 1)
+         end do
+         t = ap(km1k)
+         ap(km1k) = ap(imk)
+         ap(imk) = t
+160 continue
 !
 !           PERFORM THE ELIMINATION.
 !
-      KM2 = K - 2
-      IF (KM2 .EQ. 0) GO TO 180
-         AK = AP(KK)/AP(KM1K)
-         KM1KM1 = IKM1 + K - 1
-         AKM1 = AP(KM1KM1)/AP(KM1K)
-         DENOM = 1.0E0 - AK*AKM1
-         IJ = IK - (K - 1) - (K - 2)
-         DO JJ = 1, KM2
-            J = KM1 - JJ
-            JK = IK + J
-            BK = AP(JK)/AP(KM1K)
-            JKM1 = IKM1 + J
-            BKM1 = AP(JKM1)/AP(KM1K)
-            MULK = (AKM1*BK - BKM1)/DENOM
-            MULKM1 = (AK*BKM1 - BK)/DENOM
-            T = MULK
-            CALL SAXPY(J,T,AP(IK+1),1,AP(IJ+1),1)
-            T = MULKM1
-            CALL SAXPY(J,T,AP(IKM1+1),1,AP(IJ+1),1)
-            AP(JK) = MULK
-            AP(JKM1) = MULKM1
-            IJJ = IJ + J
-            IJ = IJ - (J - 1)
-         END DO
-180 CONTINUE
+      km2 = k - 2
+      if (km2 .eq. 0) go to 180
+         ak = ap(kk)/ap(km1k)
+         km1km1 = ikm1 + k - 1
+         akm1 = ap(km1km1)/ap(km1k)
+         denom = 1.0e0 - ak*akm1
+         ij = ik - (k - 1) - (k - 2)
+         do jj = 1, km2
+            j = km1 - jj
+            jk = ik + j
+            bk = ap(jk)/ap(km1k)
+            jkm1 = ikm1 + j
+            bkm1 = ap(jkm1)/ap(km1k)
+            mulk = (akm1*bk - bkm1)/denom
+            mulkm1 = (ak*bkm1 - bk)/denom
+            t = mulk
+            call saxpy(j,t,ap(ik+1),1,ap(ij+1),1)
+            t = mulkm1
+            call saxpy(j,t,ap(ikm1+1),1,ap(ij+1),1)
+            ap(jk) = mulk
+            ap(jkm1) = mulkm1
+            ijj = ij + j
+            ij = ij - (j - 1)
+         end do
+180 continue
 !
 !           SET THE PIVOT ARRAY.
 !
-      KPVT(K) = 1 - K
-      IF (SWAP) KPVT(K) = -IMAX
-      KPVT(K-1) = KPVT(K)
-190 CONTINUE
-   IK = IK - (K - 1)
-   IF (KSTEP .EQ. 2) IK = IK - (K - 2)
-   K = K - KSTEP
-GO TO 10
-200 CONTINUE
-RETURN
-END SUBROUTINE SSPFA
+      kpvt(k) = 1 - k
+      if (swap) kpvt(k) = -imax
+      kpvt(k-1) = kpvt(k)
+190 continue
+   ik = ik - (k - 1)
+   if (kstep .eq. 2) ik = ik - (k - 2)
+   k = k - kstep
+go to 10
+200 continue
+return
+end subroutine sspfa
 
-SUBROUTINE SSPSL(AP,N,KPVT,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, KPVT(*)
-REAL, INTENT(IN) :: AP(*)
-REAL, INTENT(INOUT) :: B(*)
+subroutine sspsl(ap,n,kpvt,b)
+implicit none
+integer, intent(in) :: n, kpvt(*)
+real, intent(in) :: ap(*)
+real, intent(inout) :: b(*)
 !
 !     SSISL SOLVES THE REAL SYMMETRIC SYSTEM
 !     A * X = B
@@ -8227,145 +8227,145 @@ REAL, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES.
 !
-REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, TEMP
-INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
+real :: ak, akm1, bk, bkm1, sdot, denom, temp
+integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
 !     D INVERSE TO B.
 !
-K = N
-IK = (N*(N - 1))/2
-10 IF (K .EQ. 0) GO TO 80
-   KK = IK + K
-   IF (KPVT(K) .LT. 0) GO TO 40
+k = n
+ik = (n*(n - 1))/2
+10 if (k .eq. 0) go to 80
+   kk = ik + k
+   if (kpvt(k) .lt. 0) go to 40
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 30
-         KP = KPVT(K)
-         IF (KP .EQ. K) GO TO 20
+      if (k .eq. 1) go to 30
+         kp = kpvt(k)
+         if (kp .eq. k) go to 20
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-20 CONTINUE
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+20 continue
 !
 !              APPLY THE TRANSFORMATION.
 !
-         CALL SAXPY(K-1,B(K),AP(IK+1),1,B(1),1)
-30 CONTINUE
+         call saxpy(k-1,b(k),ap(ik+1),1,b(1),1)
+30 continue
 !
 !           APPLY D INVERSE.
 !
-      B(K) = B(K)/AP(KK)
-      K = K - 1
-      IK = IK - K
-   GO TO 70
-40 CONTINUE
+      b(k) = b(k)/ap(kk)
+      k = k - 1
+      ik = ik - k
+   go to 70
+40 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      IKM1 = IK - (K - 1)
-      IF (K .EQ. 2) GO TO 60
-         KP = IABS(KPVT(K))
-         IF (KP .EQ. K - 1) GO TO 50
+      ikm1 = ik - (k - 1)
+      if (k .eq. 2) go to 60
+         kp = iabs(kpvt(k))
+         if (kp .eq. k - 1) go to 50
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K-1)
-            B(K-1) = B(KP)
-            B(KP) = TEMP
-50 CONTINUE
+            temp = b(k-1)
+            b(k-1) = b(kp)
+            b(kp) = temp
+50 continue
 !
 !              APPLY THE TRANSFORMATION.
 !
-         CALL SAXPY(K-2,B(K),AP(IK+1),1,B(1),1)
-         CALL SAXPY(K-2,B(K-1),AP(IKM1+1),1,B(1),1)
-60 CONTINUE
+         call saxpy(k-2,b(k),ap(ik+1),1,b(1),1)
+         call saxpy(k-2,b(k-1),ap(ikm1+1),1,b(1),1)
+60 continue
 !
 !           APPLY D INVERSE.
 !
-      KM1K = IK + K - 1
-      KK = IK + K
-      AK = AP(KK)/AP(KM1K)
-      KM1KM1 = IKM1 + K - 1
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = B(K)/AP(KM1K)
-      BKM1 = B(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0E0
-      B(K) = (AKM1*BK - BKM1)/DENOM
-      B(K-1) = (AK*BKM1 - BK)/DENOM
-      K = K - 2
-      IK = IK - (K + 1) - K
-70 CONTINUE
-GO TO 10
-80 CONTINUE
+      km1k = ik + k - 1
+      kk = ik + k
+      ak = ap(kk)/ap(km1k)
+      km1km1 = ikm1 + k - 1
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = b(k)/ap(km1k)
+      bkm1 = b(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0e0
+      b(k) = (akm1*bk - bkm1)/denom
+      b(k-1) = (ak*bkm1 - bk)/denom
+      k = k - 2
+      ik = ik - (k + 1) - k
+70 continue
+go to 10
+80 continue
 !
 !     LOOP FORWARD APPLYING THE TRANSFORMATIONS.
 !
-K = 1
-IK = 0
-90 IF (K .GT. N) GO TO 160
-   IF (KPVT(K) .LT. 0) GO TO 120
+k = 1
+ik = 0
+90 if (k .gt. n) go to 160
+   if (kpvt(k) .lt. 0) go to 120
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 110
+      if (k .eq. 1) go to 110
 !
 !              APPLY THE TRANSFORMATION.
 !
-         B(K) = B(K) + SDOT(K-1,AP(IK+1),1,B(1),1)
-         KP = KPVT(K)
-         IF (KP .EQ. K) GO TO 100
+         b(k) = b(k) + sdot(k-1,ap(ik+1),1,b(1),1)
+         kp = kpvt(k)
+         if (kp .eq. k) go to 100
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-100 CONTINUE
-110 CONTINUE
-      IK = IK + K
-      K = K + 1
-   GO TO 150
-120 CONTINUE
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+100 continue
+110 continue
+      ik = ik + k
+      k = k + 1
+   go to 150
+120 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 140
+      if (k .eq. 1) go to 140
 !
 !              APPLY THE TRANSFORMATION.
 !
-         B(K) = B(K) + SDOT(K-1,AP(IK+1),1,B(1),1)
-         IKP1 = IK + K
-         B(K+1) = B(K+1) + SDOT(K-1,AP(IKP1+1),1,B(1),1)
-         KP = IABS(KPVT(K))
-         IF (KP .EQ. K) GO TO 130
+         b(k) = b(k) + sdot(k-1,ap(ik+1),1,b(1),1)
+         ikp1 = ik + k
+         b(k+1) = b(k+1) + sdot(k-1,ap(ikp1+1),1,b(1),1)
+         kp = iabs(kpvt(k))
+         if (kp .eq. k) go to 130
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-130 CONTINUE
-140 CONTINUE
-      IK = IK + K + K + 1
-      K = K + 2
-150 CONTINUE
-GO TO 90
-160 CONTINUE
-RETURN
-END SUBROUTINE SSPSL
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+130 continue
+140 continue
+      ik = ik + k + k + 1
+      k = k + 2
+150 continue
+go to 90
+160 continue
+return
+end subroutine sspsl
 
-SUBROUTINE SSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, JOB
-REAL, INTENT(INOUT) :: AP(*), WORK(*)
-REAL, INTENT(INOUT) :: DET(2)
-INTEGER, INTENT(IN) :: KPVT(*)
-INTEGER, INTENT(INOUT) :: INERT(3)
+subroutine sspdi(ap,n,kpvt,det,inert,work,job)
+implicit none
+integer, intent(in) :: n, job
+real, intent(inout) :: ap(*), work(*)
+real, intent(inout) :: det(2)
+integer, intent(in) :: kpvt(*)
+integer, intent(inout) :: inert(3)
 !
 !     SSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
 !     OF A REAL SYMMETRIC MATRIX USING THE FACTORS FROM SSPFA,
@@ -8430,36 +8430,36 @@ INTEGER, INTENT(INOUT) :: INERT(3)
 !
 !     INTERNAL VARIABLES.
 !
-REAL :: AKKP1, SDOT, TEMP
-REAL :: TEN, D, T, AK, AKP1
-INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
-INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
-LOGICAL :: NOINV, NODET, NOERT
+real :: akkp1, sdot, temp
+real :: ten, d, t, ak, akp1
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
+integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+logical :: noinv, nodet, noert
 !
-NOINV = MOD(JOB,10) .EQ. 0
-NODET = MOD(JOB,100)/10 .EQ. 0
-NOERT = MOD(JOB,1000)/100 .EQ. 0
+noinv = mod(job,10) .eq. 0
+nodet = mod(job,100)/10 .eq. 0
+noert = mod(job,1000)/100 .eq. 0
 !
-IF (NODET .AND. NOERT) GO TO 140
-   IF (NOERT) GO TO 10
-      INERT(1) = 0
-      INERT(2) = 0
-      INERT(3) = 0
-10 CONTINUE
-   IF (NODET) GO TO 20
-      DET(1) = 1.0E0
-      DET(2) = 0.0E0
-      TEN = 10.0E0
-20 CONTINUE
-   T = 0.0E0
-   IK = 0
-   do 130 K = 1, N
-      KK = IK + K
-      D = AP(KK)
+if (nodet .and. noert) go to 140
+   if (noert) go to 10
+      inert(1) = 0
+      inert(2) = 0
+      inert(3) = 0
+10 continue
+   if (nodet) go to 20
+      det(1) = 1.0e0
+      det(2) = 0.0e0
+      ten = 10.0e0
+20 continue
+   t = 0.0e0
+   ik = 0
+   do 130 k = 1, n
+      kk = ik + k
+      d = ap(kk)
 !
 !           CHECK IF 1 BY 1
 !
-      IF (KPVT(K) .GT. 0) GO TO 50
+      if (kpvt(k) .gt. 0) go to 50
 !
 !              2 BY 2 BLOCK
 !              USE DET (D  S)  =  (D/T * C - T) * T  ,  T = ABS(S)
@@ -8467,188 +8467,188 @@ IF (NODET .AND. NOERT) GO TO 140
 !              TO AVOID UNDERFLOW/OVERFLOW TROUBLES.
 !              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
 !
-         IF (T .NE. 0.0E0) GO TO 30
-            IKP1 = IK + K
-            KKP1 = IKP1 + K
-            T = ABS(AP(KKP1))
-            D = (D/T)*AP(KKP1+1) - T
-         GO TO 40
-30 CONTINUE
-            D = T
-            T = 0.0E0
-40 CONTINUE
-50 CONTINUE
+         if (t .ne. 0.0e0) go to 30
+            ikp1 = ik + k
+            kkp1 = ikp1 + k
+            t = abs(ap(kkp1))
+            d = (d/t)*ap(kkp1+1) - t
+         go to 40
+30 continue
+            d = t
+            t = 0.0e0
+40 continue
+50 continue
 !
-      IF (NOERT) GO TO 60
-         IF (D .GT. 0.0E0) INERT(1) = INERT(1) + 1
-         IF (D .LT. 0.0E0) INERT(2) = INERT(2) + 1
-         IF (D .EQ. 0.0E0) INERT(3) = INERT(3) + 1
-60 CONTINUE
+      if (noert) go to 60
+         if (d .gt. 0.0e0) inert(1) = inert(1) + 1
+         if (d .lt. 0.0e0) inert(2) = inert(2) + 1
+         if (d .eq. 0.0e0) inert(3) = inert(3) + 1
+60 continue
 !
-      IF (NODET) GO TO 120
-         DET(1) = D*DET(1)
-         IF (DET(1) .EQ. 0.0E0) GO TO 110
-70 IF (ABS(DET(1)) .GE. 1.0E0) GO TO 80
-               DET(1) = TEN*DET(1)
-               DET(2) = DET(2) - 1.0E0
-            GO TO 70
-80 CONTINUE
-90 IF (ABS(DET(1)) .LT. TEN) GO TO 100
-               DET(1) = DET(1)/TEN
-               DET(2) = DET(2) + 1.0E0
-            GO TO 90
-100 CONTINUE
-110 CONTINUE
-120 CONTINUE
-      IK = IK + K
-130 CONTINUE
-140 CONTINUE
+      if (nodet) go to 120
+         det(1) = d*det(1)
+         if (det(1) .eq. 0.0e0) go to 110
+70 if (abs(det(1)) .ge. 1.0e0) go to 80
+               det(1) = ten*det(1)
+               det(2) = det(2) - 1.0e0
+            go to 70
+80 continue
+90 if (abs(det(1)) .lt. ten) go to 100
+               det(1) = det(1)/ten
+               det(2) = det(2) + 1.0e0
+            go to 90
+100 continue
+110 continue
+120 continue
+      ik = ik + k
+130 continue
+140 continue
 !
 !     COMPUTE INVERSE(A)
 !
-IF (NOINV) GO TO 270
-   K = 1
-   IK = 0
-150 IF (K .GT. N) GO TO 260
-      KM1 = K - 1
-      KK = IK + K
-      IKP1 = IK + K
-      KKP1 = IKP1 + K
-      IF (KPVT(K) .LT. 0) GO TO 180
+if (noinv) go to 270
+   k = 1
+   ik = 0
+150 if (k .gt. n) go to 260
+      km1 = k - 1
+      kk = ik + k
+      ikp1 = ik + k
+      kkp1 = ikp1 + k
+      if (kpvt(k) .lt. 0) go to 180
 !
 !              1 BY 1
 !
-         AP(KK) = 1.0E0/AP(KK)
-         IF (KM1 .LT. 1) GO TO 170
-            CALL SCOPY(KM1,AP(IK+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JK = IK + J
-               AP(JK) = SDOT(J,AP(IJ+1),1,WORK,1)
-               CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KK) = AP(KK) + SDOT(KM1,WORK,1,AP(IK+1),1)
-170 CONTINUE
-         KSTEP = 1
-      GO TO 220
-180 CONTINUE
+         ap(kk) = 1.0e0/ap(kk)
+         if (km1 .lt. 1) go to 170
+            call scopy(km1,ap(ik+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jk = ik + j
+               ap(jk) = sdot(j,ap(ij+1),1,work,1)
+               call saxpy(j-1,work(j),ap(ij+1),1,ap(ik+1),1)
+               ij = ij + j
+            end do
+            ap(kk) = ap(kk) + sdot(km1,work,1,ap(ik+1),1)
+170 continue
+         kstep = 1
+      go to 220
+180 continue
 !
 !              2 BY 2
 !
-         T = ABS(AP(KKP1))
-         AK = AP(KK)/T
-         AKP1 = AP(KKP1+1)/T
-         AKKP1 = AP(KKP1)/T
-         D = T*(AK*AKP1 - 1.0E0)
-         AP(KK) = AKP1/D
-         AP(KKP1+1) = AK/D
-         AP(KKP1) = -AKKP1/D
-         IF (KM1 .LT. 1) GO TO 210
-            CALL SCOPY(KM1,AP(IKP1+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JKP1 = IKP1 + J
-               AP(JKP1) = SDOT(J,AP(IJ+1),1,WORK,1)
-               CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IKP1+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KKP1+1) = AP(KKP1+1) &
-&+ SDOT(KM1,WORK,1,AP(IKP1+1),1)
-            AP(KKP1) = AP(KKP1) &
-&+ SDOT(KM1,AP(IK+1),1,AP(IKP1+1),1)
-            CALL SCOPY(KM1,AP(IK+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JK = IK + J
-               AP(JK) = SDOT(J,AP(IJ+1),1,WORK,1)
-               CALL SAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KK) = AP(KK) + SDOT(KM1,WORK,1,AP(IK+1),1)
-210 CONTINUE
-         KSTEP = 2
-220 CONTINUE
+         t = abs(ap(kkp1))
+         ak = ap(kk)/t
+         akp1 = ap(kkp1+1)/t
+         akkp1 = ap(kkp1)/t
+         d = t*(ak*akp1 - 1.0e0)
+         ap(kk) = akp1/d
+         ap(kkp1+1) = ak/d
+         ap(kkp1) = -akkp1/d
+         if (km1 .lt. 1) go to 210
+            call scopy(km1,ap(ikp1+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jkp1 = ikp1 + j
+               ap(jkp1) = sdot(j,ap(ij+1),1,work,1)
+               call saxpy(j-1,work(j),ap(ij+1),1,ap(ikp1+1),1)
+               ij = ij + j
+            end do
+            ap(kkp1+1) = ap(kkp1+1) &
+&+ sdot(km1,work,1,ap(ikp1+1),1)
+            ap(kkp1) = ap(kkp1) &
+&+ sdot(km1,ap(ik+1),1,ap(ikp1+1),1)
+            call scopy(km1,ap(ik+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jk = ik + j
+               ap(jk) = sdot(j,ap(ij+1),1,work,1)
+               call saxpy(j-1,work(j),ap(ij+1),1,ap(ik+1),1)
+               ij = ij + j
+            end do
+            ap(kk) = ap(kk) + sdot(km1,work,1,ap(ik+1),1)
+210 continue
+         kstep = 2
+220 continue
 !
 !           SWAP
 !
-      KS = IABS(KPVT(K))
-      IF (KS .EQ. K) GO TO 250
-         IKS = (KS*(KS - 1))/2
-         CALL SSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
-         KSJ = IK + KS
-         DO JB = KS, K
-            J = K + KS - JB
-            JK = IK + J
-            TEMP = AP(JK)
-            AP(JK) = AP(KSJ)
-            AP(KSJ) = TEMP
-            KSJ = KSJ - (J - 1)
-         END DO
-         IF (KSTEP .EQ. 1) GO TO 240
-            KSKP1 = IKP1 + KS
-            TEMP = AP(KSKP1)
-            AP(KSKP1) = AP(KKP1)
-            AP(KKP1) = TEMP
-240 CONTINUE
-250 CONTINUE
-      IK = IK + K
-      IF (KSTEP .EQ. 2) IK = IK + K + 1
-      K = K + KSTEP
-   GO TO 150
-260 CONTINUE
-270 CONTINUE
-RETURN
-END SUBROUTINE SSPDI
+      ks = iabs(kpvt(k))
+      if (ks .eq. k) go to 250
+         iks = (ks*(ks - 1))/2
+         call sswap(ks,ap(iks+1),1,ap(ik+1),1)
+         ksj = ik + ks
+         do jb = ks, k
+            j = k + ks - jb
+            jk = ik + j
+            temp = ap(jk)
+            ap(jk) = ap(ksj)
+            ap(ksj) = temp
+            ksj = ksj - (j - 1)
+         end do
+         if (kstep .eq. 1) go to 240
+            kskp1 = ikp1 + ks
+            temp = ap(kskp1)
+            ap(kskp1) = ap(kkp1)
+            ap(kkp1) = temp
+240 continue
+250 continue
+      ik = ik + k
+      if (kstep .eq. 2) ik = ik + k + 1
+      k = k + kstep
+   go to 150
+260 continue
+270 continue
+return
+end subroutine sspdi
 
-SUBROUTINE DSMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KB, M, MO, N
-INTEGER :: J, JOB
+subroutine dsmslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: kb, m, mo, n
+integer :: j, job
 !     ------------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(*), B(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
-DOUBLE PRECISION :: T
-DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
-INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
-INTEGER :: ONEJ
+double precision, intent(inout) :: a(*), b(*)
+double precision, intent(inout) :: det(2), rcond
+double precision :: t
+double precision, intent(inout) :: wk(n)
+integer, intent(inout) :: inert(3), ipvt(n)
+integer :: onej
 !     ------------------
 !
 !          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 !
-IERR = 0
-CALL DSPCO(A,N,IPVT,RCOND,WK)
-T = 1.D0 + RCOND
-IF (T .EQ. 1.D0) GO TO 30
+ierr = 0
+call dspco(a,n,ipvt,rcond,wk)
+t = 1.d0 + rcond
+if (t .eq. 1.d0) go to 30
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-CALL DSPSL(A,N,IPVT,B(ONEJ))
-10 ONEJ = ONEJ + KB
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+call dspsl(a,n,ipvt,b(onej))
+10 onej = onej + kb
 !
 !             CALCULATION OF DET AND THE INVERSE OF A
 !
-20 JOB = 110
-IF (MO .EQ. 0) JOB = 111
-CALL DSPDI(A,N,IPVT,DET,INERT,WK,JOB)
-RETURN
+20 job = 110
+if (mo .eq. 0) job = 111
+call dspdi(a,n,ipvt,det,inert,wk,job)
+return
 !
 !                  THE PROBLEM CANNOT BE SOLVED
 !
-30 IERR = 1
-RETURN
-END SUBROUTINE DSMSLV
+30 ierr = 1
+return
+end subroutine dsmslv
 
-SUBROUTINE DSPCO(AP,N,KPVT,RCOND,Z)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: KPVT(*)
-DOUBLE PRECISION, INTENT(INOUT) :: AP(*), Z(*)
-DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+subroutine dspco(ap,n,kpvt,rcond,z)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+double precision, intent(inout) :: ap(*), z(*)
+double precision, intent(inout) :: rcond
 !
 !     DSPCO FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
 !     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
@@ -8727,35 +8727,35 @@ DOUBLE PRECISION, INTENT(INOUT) :: RCOND
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, EK, T
-DOUBLE PRECISION :: ANORM, S, DASUM, YNORM
-INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
-INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
+double precision :: ak, akm1, bk, bkm1, ddot, denom, ek, t
+double precision :: anorm, s, dasum, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
+integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
 !     FIND NORM OF A USING ONLY UPPER HALF
 !
-J1 = 1
-DO J = 1, N
-   Z(J) = DASUM(J,AP(J1),1)
-   IJ = J1
-   J1 = J1 + J
-   JM1 = J - 1
-   IF (JM1 .LT. 1) GO TO 20
-   DO I = 1, JM1
-      Z(I) = Z(I) + DABS(AP(IJ))
-      IJ = IJ + 1
-   END DO
-20 CONTINUE
-END DO
-ANORM = 0.0D0
-DO J = 1, N
-   ANORM = DMAX1(ANORM,Z(J))
-END DO
+j1 = 1
+do j = 1, n
+   z(j) = dasum(j,ap(j1),1)
+   ij = j1
+   j1 = j1 + j
+   jm1 = j - 1
+   if (jm1 .lt. 1) go to 20
+   do i = 1, jm1
+      z(i) = z(i) + dabs(ap(ij))
+      ij = ij + 1
+   end do
+20 continue
+end do
+anorm = 0.0d0
+do j = 1, n
+   anorm = dmax1(anorm,z(j))
+end do
 !
 !     FACTOR
 !
-CALL DSPFA(AP,N,KPVT,INFO)
+call dspfa(ap,n,kpvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  A*Y = E .
@@ -8765,178 +8765,178 @@ CALL DSPFA(AP,N,KPVT,INFO)
 !
 !     SOLVE U*D*W = E
 !
-EK = 1.0D0
-DO J = 1, N
-   Z(J) = 0.0D0
-END DO
-K = N
-IK = (N*(N - 1))/2
-60 IF (K .EQ. 0) GO TO 120
-   KK = IK + K
-   IKM1 = IK - (K - 1)
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   KP = IABS(KPVT(K))
-   KPS = K + 1 - KS
-   IF (KP .EQ. KPS) GO TO 70
-      T = Z(KPS)
-      Z(KPS) = Z(KP)
-      Z(KP) = T
-70 CONTINUE
-   IF (Z(K) .NE. 0.0D0) EK = DSIGN(EK,Z(K))
-   Z(K) = Z(K) + EK
-   CALL DAXPY(K-KS,Z(K),AP(IK+1),1,Z(1),1)
-   IF (KS .EQ. 1) GO TO 80
-      IF (Z(K-1) .NE. 0.0D0) EK = DSIGN(EK,Z(K-1))
-      Z(K-1) = Z(K-1) + EK
-      CALL DAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
-80 CONTINUE
-   IF (KS .EQ. 2) GO TO 100
-      IF (DABS(Z(K)) .LE. DABS(AP(KK))) GO TO 90
-         S = DABS(AP(KK))/DABS(Z(K))
-         CALL DSCAL(N,S,Z,1)
-         EK = S*EK
-90 CONTINUE
-      IF (AP(KK) .NE. 0.0D0) Z(K) = Z(K)/AP(KK)
-      IF (AP(KK) .EQ. 0.0D0) Z(K) = 1.0D0
-   GO TO 110
-100 CONTINUE
-      KM1K = IK + K - 1
-      KM1KM1 = IKM1 + K - 1
-      AK = AP(KK)/AP(KM1K)
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = Z(K)/AP(KM1K)
-      BKM1 = Z(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0D0
-      Z(K) = (AKM1*BK - BKM1)/DENOM
-      Z(K-1) = (AK*BKM1 - BK)/DENOM
-110 CONTINUE
-   K = K - KS
-   IK = IK - K
-   IF (KS .EQ. 2) IK = IK - (K + 1)
-GO TO 60
-120 CONTINUE
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
+ek = 1.0d0
+do j = 1, n
+   z(j) = 0.0d0
+end do
+k = n
+ik = (n*(n - 1))/2
+60 if (k .eq. 0) go to 120
+   kk = ik + k
+   ikm1 = ik - (k - 1)
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   kp = iabs(kpvt(k))
+   kps = k + 1 - ks
+   if (kp .eq. kps) go to 70
+      t = z(kps)
+      z(kps) = z(kp)
+      z(kp) = t
+70 continue
+   if (z(k) .ne. 0.0d0) ek = dsign(ek,z(k))
+   z(k) = z(k) + ek
+   call daxpy(k-ks,z(k),ap(ik+1),1,z(1),1)
+   if (ks .eq. 1) go to 80
+      if (z(k-1) .ne. 0.0d0) ek = dsign(ek,z(k-1))
+      z(k-1) = z(k-1) + ek
+      call daxpy(k-ks,z(k-1),ap(ikm1+1),1,z(1),1)
+80 continue
+   if (ks .eq. 2) go to 100
+      if (dabs(z(k)) .le. dabs(ap(kk))) go to 90
+         s = dabs(ap(kk))/dabs(z(k))
+         call dscal(n,s,z,1)
+         ek = s*ek
+90 continue
+      if (ap(kk) .ne. 0.0d0) z(k) = z(k)/ap(kk)
+      if (ap(kk) .eq. 0.0d0) z(k) = 1.0d0
+   go to 110
+100 continue
+      km1k = ik + k - 1
+      km1km1 = ikm1 + k - 1
+      ak = ap(kk)/ap(km1k)
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = z(k)/ap(km1k)
+      bkm1 = z(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0d0
+      z(k) = (akm1*bk - bkm1)/denom
+      z(k-1) = (ak*bkm1 - bk)/denom
+110 continue
+   k = k - ks
+   ik = ik - k
+   if (ks .eq. 2) ik = ik - (k + 1)
+go to 60
+120 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
 !
 !     SOLVE TRANS(U)*Y = W
 !
-K = 1
-IK = 0
-130 IF (K .GT. N) GO TO 160
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. 1) GO TO 150
-      Z(K) = Z(K) + DDOT(K-1,AP(IK+1),1,Z(1),1)
-      IKP1 = IK + K
-      IF (KS .EQ. 2) &
-&Z(K+1) = Z(K+1) + DDOT(K-1,AP(IKP1+1),1,Z(1),1)
-      KP = IABS(KPVT(K))
-      IF (KP .EQ. K) GO TO 140
-         T = Z(K)
-         Z(K) = Z(KP)
-         Z(KP) = T
-140 CONTINUE
-150 CONTINUE
-   IK = IK + K
-   IF (KS .EQ. 2) IK = IK + (K + 1)
-   K = K + KS
-GO TO 130
-160 CONTINUE
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
+k = 1
+ik = 0
+130 if (k .gt. n) go to 160
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. 1) go to 150
+      z(k) = z(k) + ddot(k-1,ap(ik+1),1,z(1),1)
+      ikp1 = ik + k
+      if (ks .eq. 2) &
+&z(k+1) = z(k+1) + ddot(k-1,ap(ikp1+1),1,z(1),1)
+      kp = iabs(kpvt(k))
+      if (kp .eq. k) go to 140
+         t = z(k)
+         z(k) = z(kp)
+         z(kp) = t
+140 continue
+150 continue
+   ik = ik + k
+   if (ks .eq. 2) ik = ik + (k + 1)
+   k = k + ks
+go to 130
+160 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
 !
-YNORM = 1.0D0
+ynorm = 1.0d0
 !
 !     SOLVE U*D*V = Y
 !
-K = N
-IK = N*(N - 1)/2
-170 IF (K .EQ. 0) GO TO 230
-   KK = IK + K
-   IKM1 = IK - (K - 1)
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. KS) GO TO 190
-      KP = IABS(KPVT(K))
-      KPS = K + 1 - KS
-      IF (KP .EQ. KPS) GO TO 180
-         T = Z(KPS)
-         Z(KPS) = Z(KP)
-         Z(KP) = T
-180 CONTINUE
-      CALL DAXPY(K-KS,Z(K),AP(IK+1),1,Z(1),1)
-      IF (KS .EQ. 2) CALL DAXPY(K-KS,Z(K-1),AP(IKM1+1),1,Z(1),1)
-190 CONTINUE
-   IF (KS .EQ. 2) GO TO 210
-      IF (DABS(Z(K)) .LE. DABS(AP(KK))) GO TO 200
-         S = DABS(AP(KK))/DABS(Z(K))
-         CALL DSCAL(N,S,Z,1)
-         YNORM = S*YNORM
-200 CONTINUE
-      IF (AP(KK) .NE. 0.0D0) Z(K) = Z(K)/AP(KK)
-      IF (AP(KK) .EQ. 0.0D0) Z(K) = 1.0D0
-   GO TO 220
-210 CONTINUE
-      KM1K = IK + K - 1
-      KM1KM1 = IKM1 + K - 1
-      AK = AP(KK)/AP(KM1K)
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = Z(K)/AP(KM1K)
-      BKM1 = Z(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0D0
-      Z(K) = (AKM1*BK - BKM1)/DENOM
-      Z(K-1) = (AK*BKM1 - BK)/DENOM
-220 CONTINUE
-   K = K - KS
-   IK = IK - K
-   IF (KS .EQ. 2) IK = IK - (K + 1)
-GO TO 170
-230 CONTINUE
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
-YNORM = S*YNORM
+k = n
+ik = n*(n - 1)/2
+170 if (k .eq. 0) go to 230
+   kk = ik + k
+   ikm1 = ik - (k - 1)
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. ks) go to 190
+      kp = iabs(kpvt(k))
+      kps = k + 1 - ks
+      if (kp .eq. kps) go to 180
+         t = z(kps)
+         z(kps) = z(kp)
+         z(kp) = t
+180 continue
+      call daxpy(k-ks,z(k),ap(ik+1),1,z(1),1)
+      if (ks .eq. 2) call daxpy(k-ks,z(k-1),ap(ikm1+1),1,z(1),1)
+190 continue
+   if (ks .eq. 2) go to 210
+      if (dabs(z(k)) .le. dabs(ap(kk))) go to 200
+         s = dabs(ap(kk))/dabs(z(k))
+         call dscal(n,s,z,1)
+         ynorm = s*ynorm
+200 continue
+      if (ap(kk) .ne. 0.0d0) z(k) = z(k)/ap(kk)
+      if (ap(kk) .eq. 0.0d0) z(k) = 1.0d0
+   go to 220
+210 continue
+      km1k = ik + k - 1
+      km1km1 = ikm1 + k - 1
+      ak = ap(kk)/ap(km1k)
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = z(k)/ap(km1k)
+      bkm1 = z(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0d0
+      z(k) = (akm1*bk - bkm1)/denom
+      z(k-1) = (ak*bkm1 - bk)/denom
+220 continue
+   k = k - ks
+   ik = ik - k
+   if (ks .eq. 2) ik = ik - (k + 1)
+go to 170
+230 continue
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
 !
 !     SOLVE TRANS(U)*Z = V
 !
-K = 1
-IK = 0
-240 IF (K .GT. N) GO TO 270
-   KS = 1
-   IF (KPVT(K) .LT. 0) KS = 2
-   IF (K .EQ. 1) GO TO 260
-      Z(K) = Z(K) + DDOT(K-1,AP(IK+1),1,Z(1),1)
-      IKP1 = IK + K
-      IF (KS .EQ. 2) &
-&Z(K+1) = Z(K+1) + DDOT(K-1,AP(IKP1+1),1,Z(1),1)
-      KP = IABS(KPVT(K))
-      IF (KP .EQ. K) GO TO 250
-         T = Z(K)
-         Z(K) = Z(KP)
-         Z(KP) = T
-250 CONTINUE
-260 CONTINUE
-   IK = IK + K
-   IF (KS .EQ. 2) IK = IK + (K + 1)
-   K = K + KS
-GO TO 240
-270 CONTINUE
+k = 1
+ik = 0
+240 if (k .gt. n) go to 270
+   ks = 1
+   if (kpvt(k) .lt. 0) ks = 2
+   if (k .eq. 1) go to 260
+      z(k) = z(k) + ddot(k-1,ap(ik+1),1,z(1),1)
+      ikp1 = ik + k
+      if (ks .eq. 2) &
+&z(k+1) = z(k+1) + ddot(k-1,ap(ikp1+1),1,z(1),1)
+      kp = iabs(kpvt(k))
+      if (kp .eq. k) go to 250
+         t = z(k)
+         z(k) = z(kp)
+         z(kp) = t
+250 continue
+260 continue
+   ik = ik + k
+   if (ks .eq. 2) ik = ik + (k + 1)
+   k = k + ks
+go to 240
+270 continue
 !     MAKE ZNORM = 1.0
-S = 1.0D0/DASUM(N,Z,1)
-CALL DSCAL(N,S,Z,1)
-YNORM = S*YNORM
+s = 1.0d0/dasum(n,z,1)
+call dscal(n,s,z,1)
+ynorm = s*ynorm
 !
-IF (ANORM .NE. 0.0D0) RCOND = YNORM/ANORM
-IF (ANORM .EQ. 0.0D0) RCOND = 0.0D0
-RETURN
-END SUBROUTINE DSPCO
+if (anorm .ne. 0.0d0) rcond = ynorm/anorm
+if (anorm .eq. 0.0d0) rcond = 0.0d0
+return
+end subroutine dspco
 
-SUBROUTINE DSPFA(AP,N,KPVT,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: KPVT(*)
-INTEGER, INTENT(OUT) :: INFO
-DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+subroutine dspfa(ap,n,kpvt,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: kpvt(*)
+integer, intent(out) :: info
+double precision, intent(inout) :: ap(*)
 !
 !     DSPFA FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
 !     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
@@ -9001,38 +9001,38 @@ DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
-DOUBLE PRECISION :: ABSAKK, ALPHA, COLMAX, ROWMAX
-INTEGER :: IDAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ, &
-&IMK
-INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1, &
-&KM2, KSTEP
-LOGICAL :: SWAP
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
+double precision :: absakk, alpha, colmax, rowmax
+integer :: idamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
+&imk
+integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
+&km2, kstep
+logical :: swap
 !
 !
 !     INITIALIZE
 !
 !     ALPHA IS USED IN CHOOSING PIVOT BLOCK SIZE.
-ALPHA = (1.0D0 + DSQRT(17.0D0))/8.0D0
+alpha = (1.0d0 + dsqrt(17.0d0))/8.0d0
 !
-INFO = 0
+info = 0
 !
 !     MAIN LOOP ON K, WHICH GOES FROM N TO 1.
 !
-K = N
-IK = (N*(N - 1))/2
-10 CONTINUE
+k = n
+ik = (n*(n - 1))/2
+10 continue
 !
 !        LEAVE THE LOOP IF K=0 OR K=1.
 !
 !     ...EXIT
-   IF (K .EQ. 0) GO TO 200
-   IF (K .GT. 1) GO TO 20
-      KPVT(1) = 1
-      IF (AP(1) .EQ. 0.0D0) INFO = 1
+   if (k .eq. 0) go to 200
+   if (k .gt. 1) go to 20
+      kpvt(1) = 1
+      if (ap(1) .eq. 0.0d0) info = 1
 !     ......EXIT
-      GO TO 200
-20 CONTINUE
+      go to 200
+20 continue
 !
 !        THIS SECTION OF CODE DETERMINES THE KIND OF
 !        ELIMINATION TO BE PERFORMED.  WHEN IT IS COMPLETED,
@@ -9040,172 +9040,172 @@ IK = (N*(N - 1))/2
 !        SWAP WILL BE SET TO .TRUE. IF AN INTERCHANGE IS
 !        REQUIRED.
 !
-   KM1 = K - 1
-   KK = IK + K
-   ABSAKK = DABS(AP(KK))
+   km1 = k - 1
+   kk = ik + k
+   absakk = dabs(ap(kk))
 !
 !        DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
 !        COLUMN K.
 !
-   IMAX = IDAMAX(K-1,AP(IK+1),1)
-   IMK = IK + IMAX
-   COLMAX = DABS(AP(IMK))
-   IF (ABSAKK .LT. ALPHA*COLMAX) GO TO 30
-      KSTEP = 1
-      SWAP = .FALSE.
-   GO TO 90
-30 CONTINUE
+   imax = idamax(k-1,ap(ik+1),1)
+   imk = ik + imax
+   colmax = dabs(ap(imk))
+   if (absakk .lt. alpha*colmax) go to 30
+      kstep = 1
+      swap = .false.
+   go to 90
+30 continue
 !
 !           DETERMINE THE LARGEST OFF-DIAGONAL ELEMENT IN
 !           ROW IMAX.
 !
-      ROWMAX = 0.0D0
-      IMAXP1 = IMAX + 1
-      IM = IMAX*(IMAX - 1)/2
-      IMJ = IM + 2*IMAX
-      DO J = IMAXP1, K
-         ROWMAX = DMAX1(ROWMAX,DABS(AP(IMJ)))
-         IMJ = IMJ + J
-      END DO
-      IF (IMAX .EQ. 1) GO TO 50
-         JMAX = IDAMAX(IMAX-1,AP(IM+1),1)
-         JMIM = JMAX + IM
-         ROWMAX = DMAX1(ROWMAX,DABS(AP(JMIM)))
-50 CONTINUE
-      IMIM = IMAX + IM
-      IF (DABS(AP(IMIM)) .LT. ALPHA*ROWMAX) GO TO 60
-         KSTEP = 1
-         SWAP = .TRUE.
-      GO TO 80
-60 CONTINUE
-      IF (ABSAKK .LT. ALPHA*COLMAX*(COLMAX/ROWMAX)) GO TO 70
-         KSTEP = 1
-         SWAP = .FALSE.
-      GO TO 80
-70 CONTINUE
-         KSTEP = 2
-         SWAP = IMAX .NE. KM1
-80 CONTINUE
-90 CONTINUE
-   IF (DMAX1(ABSAKK,COLMAX) .NE. 0.0D0) GO TO 100
+      rowmax = 0.0d0
+      imaxp1 = imax + 1
+      im = imax*(imax - 1)/2
+      imj = im + 2*imax
+      do j = imaxp1, k
+         rowmax = dmax1(rowmax,dabs(ap(imj)))
+         imj = imj + j
+      end do
+      if (imax .eq. 1) go to 50
+         jmax = idamax(imax-1,ap(im+1),1)
+         jmim = jmax + im
+         rowmax = dmax1(rowmax,dabs(ap(jmim)))
+50 continue
+      imim = imax + im
+      if (dabs(ap(imim)) .lt. alpha*rowmax) go to 60
+         kstep = 1
+         swap = .true.
+      go to 80
+60 continue
+      if (absakk .lt. alpha*colmax*(colmax/rowmax)) go to 70
+         kstep = 1
+         swap = .false.
+      go to 80
+70 continue
+         kstep = 2
+         swap = imax .ne. km1
+80 continue
+90 continue
+   if (dmax1(absakk,colmax) .ne. 0.0d0) go to 100
 !
 !           COLUMN K IS ZERO.  SET INFO AND ITERATE THE LOOP.
 !
-      KPVT(K) = K
-      INFO = K
-   GO TO 190
-100 CONTINUE
-   IF (KSTEP .EQ. 2) GO TO 140
+      kpvt(k) = k
+      info = k
+   go to 190
+100 continue
+   if (kstep .eq. 2) go to 140
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (.NOT.SWAP) GO TO 120
+      if (.not.swap) go to 120
 !
 !              PERFORM AN INTERCHANGE.
 !
-         CALL DSWAP(IMAX,AP(IM+1),1,AP(IK+1),1)
-         IMJ = IK + IMAX
-         DO JJ = IMAX, K
-            J = K + IMAX - JJ
-            JK = IK + J
-            T = AP(JK)
-            AP(JK) = AP(IMJ)
-            AP(IMJ) = T
-            IMJ = IMJ - (J - 1)
-         END DO
-120 CONTINUE
+         call dswap(imax,ap(im+1),1,ap(ik+1),1)
+         imj = ik + imax
+         do jj = imax, k
+            j = k + imax - jj
+            jk = ik + j
+            t = ap(jk)
+            ap(jk) = ap(imj)
+            ap(imj) = t
+            imj = imj - (j - 1)
+         end do
+120 continue
 !
 !           PERFORM THE ELIMINATION.
 !
-      IJ = IK - (K - 1)
-      DO JJ = 1, KM1
-         J = K - JJ
-         JK = IK + J
-         MULK = -AP(JK)/AP(KK)
-         T = MULK
-         CALL DAXPY(J,T,AP(IK+1),1,AP(IJ+1),1)
-         IJJ = IJ + J
-         AP(JK) = MULK
-         IJ = IJ - (J - 1)
-      END DO
+      ij = ik - (k - 1)
+      do jj = 1, km1
+         j = k - jj
+         jk = ik + j
+         mulk = -ap(jk)/ap(kk)
+         t = mulk
+         call daxpy(j,t,ap(ik+1),1,ap(ij+1),1)
+         ijj = ij + j
+         ap(jk) = mulk
+         ij = ij - (j - 1)
+      end do
 !
 !           SET THE PIVOT ARRAY.
 !
-      KPVT(K) = K
-      IF (SWAP) KPVT(K) = IMAX
-   GO TO 190
-140 CONTINUE
+      kpvt(k) = k
+      if (swap) kpvt(k) = imax
+   go to 190
+140 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      KM1K = IK + K - 1
-      IKM1 = IK - (K - 1)
-      IF (.NOT.SWAP) GO TO 160
+      km1k = ik + k - 1
+      ikm1 = ik - (k - 1)
+      if (.not.swap) go to 160
 !
 !              PERFORM AN INTERCHANGE.
 !
-         CALL DSWAP(IMAX,AP(IM+1),1,AP(IKM1+1),1)
-         IMJ = IKM1 + IMAX
-         DO JJ = IMAX, KM1
-            J = KM1 + IMAX - JJ
-            JKM1 = IKM1 + J
-            T = AP(JKM1)
-            AP(JKM1) = AP(IMJ)
-            AP(IMJ) = T
-            IMJ = IMJ - (J - 1)
-         END DO
-         T = AP(KM1K)
-         AP(KM1K) = AP(IMK)
-         AP(IMK) = T
-160 CONTINUE
+         call dswap(imax,ap(im+1),1,ap(ikm1+1),1)
+         imj = ikm1 + imax
+         do jj = imax, km1
+            j = km1 + imax - jj
+            jkm1 = ikm1 + j
+            t = ap(jkm1)
+            ap(jkm1) = ap(imj)
+            ap(imj) = t
+            imj = imj - (j - 1)
+         end do
+         t = ap(km1k)
+         ap(km1k) = ap(imk)
+         ap(imk) = t
+160 continue
 !
 !           PERFORM THE ELIMINATION.
 !
-      KM2 = K - 2
-      IF (KM2 .EQ. 0) GO TO 180
-         AK = AP(KK)/AP(KM1K)
-         KM1KM1 = IKM1 + K - 1
-         AKM1 = AP(KM1KM1)/AP(KM1K)
-         DENOM = 1.0D0 - AK*AKM1
-         IJ = IK - (K - 1) - (K - 2)
-         DO JJ = 1, KM2
-            J = KM1 - JJ
-            JK = IK + J
-            BK = AP(JK)/AP(KM1K)
-            JKM1 = IKM1 + J
-            BKM1 = AP(JKM1)/AP(KM1K)
-            MULK = (AKM1*BK - BKM1)/DENOM
-            MULKM1 = (AK*BKM1 - BK)/DENOM
-            T = MULK
-            CALL DAXPY(J,T,AP(IK+1),1,AP(IJ+1),1)
-            T = MULKM1
-            CALL DAXPY(J,T,AP(IKM1+1),1,AP(IJ+1),1)
-            AP(JK) = MULK
-            AP(JKM1) = MULKM1
-            IJJ = IJ + J
-            IJ = IJ - (J - 1)
-         END DO
-180 CONTINUE
+      km2 = k - 2
+      if (km2 .eq. 0) go to 180
+         ak = ap(kk)/ap(km1k)
+         km1km1 = ikm1 + k - 1
+         akm1 = ap(km1km1)/ap(km1k)
+         denom = 1.0d0 - ak*akm1
+         ij = ik - (k - 1) - (k - 2)
+         do jj = 1, km2
+            j = km1 - jj
+            jk = ik + j
+            bk = ap(jk)/ap(km1k)
+            jkm1 = ikm1 + j
+            bkm1 = ap(jkm1)/ap(km1k)
+            mulk = (akm1*bk - bkm1)/denom
+            mulkm1 = (ak*bkm1 - bk)/denom
+            t = mulk
+            call daxpy(j,t,ap(ik+1),1,ap(ij+1),1)
+            t = mulkm1
+            call daxpy(j,t,ap(ikm1+1),1,ap(ij+1),1)
+            ap(jk) = mulk
+            ap(jkm1) = mulkm1
+            ijj = ij + j
+            ij = ij - (j - 1)
+         end do
+180 continue
 !
 !           SET THE PIVOT ARRAY.
 !
-      KPVT(K) = 1 - K
-      IF (SWAP) KPVT(K) = -IMAX
-      KPVT(K-1) = KPVT(K)
-190 CONTINUE
-   IK = IK - (K - 1)
-   IF (KSTEP .EQ. 2) IK = IK - (K - 2)
-   K = K - KSTEP
-GO TO 10
-200 CONTINUE
-RETURN
-END SUBROUTINE DSPFA
+      kpvt(k) = 1 - k
+      if (swap) kpvt(k) = -imax
+      kpvt(k-1) = kpvt(k)
+190 continue
+   ik = ik - (k - 1)
+   if (kstep .eq. 2) ik = ik - (k - 2)
+   k = k - kstep
+go to 10
+200 continue
+return
+end subroutine dspfa
 
-SUBROUTINE DSPSL(AP,N,KPVT,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, KPVT(*)
-DOUBLE PRECISION, INTENT(IN) :: AP(*)
-DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+subroutine dspsl(ap,n,kpvt,b)
+implicit none
+integer, intent(in) :: n, kpvt(*)
+double precision, intent(in) :: ap(*)
+double precision, intent(inout) :: b(*)
 !
 !     DSISL SOLVES THE DOUBLE PRECISION SYMMETRIC SYSTEM
 !     A * X = B
@@ -9252,145 +9252,145 @@ DOUBLE PRECISION, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES.
 !
-DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, TEMP
-INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
+double precision :: ak, akm1, bk, bkm1, ddot, denom, temp
+integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
 !     D INVERSE TO B.
 !
-K = N
-IK = (N*(N - 1))/2
-10 IF (K .EQ. 0) GO TO 80
-   KK = IK + K
-   IF (KPVT(K) .LT. 0) GO TO 40
+k = n
+ik = (n*(n - 1))/2
+10 if (k .eq. 0) go to 80
+   kk = ik + k
+   if (kpvt(k) .lt. 0) go to 40
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 30
-         KP = KPVT(K)
-         IF (KP .EQ. K) GO TO 20
+      if (k .eq. 1) go to 30
+         kp = kpvt(k)
+         if (kp .eq. k) go to 20
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-20 CONTINUE
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+20 continue
 !
 !              APPLY THE TRANSFORMATION.
 !
-         CALL DAXPY(K-1,B(K),AP(IK+1),1,B(1),1)
-30 CONTINUE
+         call daxpy(k-1,b(k),ap(ik+1),1,b(1),1)
+30 continue
 !
 !           APPLY D INVERSE.
 !
-      B(K) = B(K)/AP(KK)
-      K = K - 1
-      IK = IK - K
-   GO TO 70
-40 CONTINUE
+      b(k) = b(k)/ap(kk)
+      k = k - 1
+      ik = ik - k
+   go to 70
+40 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      IKM1 = IK - (K - 1)
-      IF (K .EQ. 2) GO TO 60
-         KP = IABS(KPVT(K))
-         IF (KP .EQ. K - 1) GO TO 50
+      ikm1 = ik - (k - 1)
+      if (k .eq. 2) go to 60
+         kp = iabs(kpvt(k))
+         if (kp .eq. k - 1) go to 50
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K-1)
-            B(K-1) = B(KP)
-            B(KP) = TEMP
-50 CONTINUE
+            temp = b(k-1)
+            b(k-1) = b(kp)
+            b(kp) = temp
+50 continue
 !
 !              APPLY THE TRANSFORMATION.
 !
-         CALL DAXPY(K-2,B(K),AP(IK+1),1,B(1),1)
-         CALL DAXPY(K-2,B(K-1),AP(IKM1+1),1,B(1),1)
-60 CONTINUE
+         call daxpy(k-2,b(k),ap(ik+1),1,b(1),1)
+         call daxpy(k-2,b(k-1),ap(ikm1+1),1,b(1),1)
+60 continue
 !
 !           APPLY D INVERSE.
 !
-      KM1K = IK + K - 1
-      KK = IK + K
-      AK = AP(KK)/AP(KM1K)
-      KM1KM1 = IKM1 + K - 1
-      AKM1 = AP(KM1KM1)/AP(KM1K)
-      BK = B(K)/AP(KM1K)
-      BKM1 = B(K-1)/AP(KM1K)
-      DENOM = AK*AKM1 - 1.0D0
-      B(K) = (AKM1*BK - BKM1)/DENOM
-      B(K-1) = (AK*BKM1 - BK)/DENOM
-      K = K - 2
-      IK = IK - (K + 1) - K
-70 CONTINUE
-GO TO 10
-80 CONTINUE
+      km1k = ik + k - 1
+      kk = ik + k
+      ak = ap(kk)/ap(km1k)
+      km1km1 = ikm1 + k - 1
+      akm1 = ap(km1km1)/ap(km1k)
+      bk = b(k)/ap(km1k)
+      bkm1 = b(k-1)/ap(km1k)
+      denom = ak*akm1 - 1.0d0
+      b(k) = (akm1*bk - bkm1)/denom
+      b(k-1) = (ak*bkm1 - bk)/denom
+      k = k - 2
+      ik = ik - (k + 1) - k
+70 continue
+go to 10
+80 continue
 !
 !     LOOP FORWARD APPLYING THE TRANSFORMATIONS.
 !
-K = 1
-IK = 0
-90 IF (K .GT. N) GO TO 160
-   IF (KPVT(K) .LT. 0) GO TO 120
+k = 1
+ik = 0
+90 if (k .gt. n) go to 160
+   if (kpvt(k) .lt. 0) go to 120
 !
 !           1 X 1 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 110
+      if (k .eq. 1) go to 110
 !
 !              APPLY THE TRANSFORMATION.
 !
-         B(K) = B(K) + DDOT(K-1,AP(IK+1),1,B(1),1)
-         KP = KPVT(K)
-         IF (KP .EQ. K) GO TO 100
+         b(k) = b(k) + ddot(k-1,ap(ik+1),1,b(1),1)
+         kp = kpvt(k)
+         if (kp .eq. k) go to 100
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-100 CONTINUE
-110 CONTINUE
-      IK = IK + K
-      K = K + 1
-   GO TO 150
-120 CONTINUE
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+100 continue
+110 continue
+      ik = ik + k
+      k = k + 1
+   go to 150
+120 continue
 !
 !           2 X 2 PIVOT BLOCK.
 !
-      IF (K .EQ. 1) GO TO 140
+      if (k .eq. 1) go to 140
 !
 !              APPLY THE TRANSFORMATION.
 !
-         B(K) = B(K) + DDOT(K-1,AP(IK+1),1,B(1),1)
-         IKP1 = IK + K
-         B(K+1) = B(K+1) + DDOT(K-1,AP(IKP1+1),1,B(1),1)
-         KP = IABS(KPVT(K))
-         IF (KP .EQ. K) GO TO 130
+         b(k) = b(k) + ddot(k-1,ap(ik+1),1,b(1),1)
+         ikp1 = ik + k
+         b(k+1) = b(k+1) + ddot(k-1,ap(ikp1+1),1,b(1),1)
+         kp = iabs(kpvt(k))
+         if (kp .eq. k) go to 130
 !
 !                 INTERCHANGE.
 !
-            TEMP = B(K)
-            B(K) = B(KP)
-            B(KP) = TEMP
-130 CONTINUE
-140 CONTINUE
-      IK = IK + K + K + 1
-      K = K + 2
-150 CONTINUE
-GO TO 90
-160 CONTINUE
-RETURN
-END SUBROUTINE DSPSL
+            temp = b(k)
+            b(k) = b(kp)
+            b(kp) = temp
+130 continue
+140 continue
+      ik = ik + k + k + 1
+      k = k + 2
+150 continue
+go to 90
+160 continue
+return
+end subroutine dspsl
 
-SUBROUTINE DSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, JOB
-DOUBLE PRECISION, INTENT(INOUT) :: AP(*), WORK(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
-INTEGER, INTENT(IN) :: KPVT(*)
-INTEGER, INTENT(INOUT) :: INERT(3)
+subroutine dspdi(ap,n,kpvt,det,inert,work,job)
+implicit none
+integer, intent(in) :: n, job
+double precision, intent(inout) :: ap(*), work(*)
+double precision, intent(inout) :: det(2)
+integer, intent(in) :: kpvt(*)
+integer, intent(inout) :: inert(3)
 !
 !     DSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
 !     OF A DOUBLE PRECISION SYMMETRIC MATRIX USING THE FACTORS FROM
@@ -9455,36 +9455,36 @@ INTEGER, INTENT(INOUT) :: INERT(3)
 !
 !     INTERNAL VARIABLES.
 !
-DOUBLE PRECISION :: AKKP1, DDOT, TEMP
-DOUBLE PRECISION :: TEN, D, T, AK, AKP1
-INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
-INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
-LOGICAL :: NOINV, NODET, NOERT
+double precision :: akkp1, ddot, temp
+double precision :: ten, d, t, ak, akp1
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
+integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+logical :: noinv, nodet, noert
 !
-NOINV = MOD(JOB,10) .EQ. 0
-NODET = MOD(JOB,100)/10 .EQ. 0
-NOERT = MOD(JOB,1000)/100 .EQ. 0
+noinv = mod(job,10) .eq. 0
+nodet = mod(job,100)/10 .eq. 0
+noert = mod(job,1000)/100 .eq. 0
 !
-IF (NODET .AND. NOERT) GO TO 140
-   IF (NOERT) GO TO 10
-      INERT(1) = 0
-      INERT(2) = 0
-      INERT(3) = 0
-10 CONTINUE
-   IF (NODET) GO TO 20
-      DET(1) = 1.0D0
-      DET(2) = 0.0D0
-      TEN = 10.0D0
-20 CONTINUE
-   T = 0.0D0
-   IK = 0
-   do 130 K = 1, N
-      KK = IK + K
-      D = AP(KK)
+if (nodet .and. noert) go to 140
+   if (noert) go to 10
+      inert(1) = 0
+      inert(2) = 0
+      inert(3) = 0
+10 continue
+   if (nodet) go to 20
+      det(1) = 1.0d0
+      det(2) = 0.0d0
+      ten = 10.0d0
+20 continue
+   t = 0.0d0
+   ik = 0
+   do 130 k = 1, n
+      kk = ik + k
+      d = ap(kk)
 !
 !           CHECK IF 1 BY 1
 !
-      IF (KPVT(K) .GT. 0) GO TO 50
+      if (kpvt(k) .gt. 0) go to 50
 !
 !              2 BY 2 BLOCK
 !              USE DET (D  S)  =  (D/T * C - T) * T  ,  T = DABS(S)
@@ -9492,175 +9492,175 @@ IF (NODET .AND. NOERT) GO TO 140
 !              TO AVOID UNDERFLOW/OVERFLOW TROUBLES.
 !              TAKE TWO PASSES THROUGH SCALING.  USE  T  FOR FLAG.
 !
-         IF (T .NE. 0.0D0) GO TO 30
-            IKP1 = IK + K
-            KKP1 = IKP1 + K
-            T = DABS(AP(KKP1))
-            D = (D/T)*AP(KKP1+1) - T
-         GO TO 40
-30 CONTINUE
-            D = T
-            T = 0.0D0
-40 CONTINUE
-50 CONTINUE
+         if (t .ne. 0.0d0) go to 30
+            ikp1 = ik + k
+            kkp1 = ikp1 + k
+            t = dabs(ap(kkp1))
+            d = (d/t)*ap(kkp1+1) - t
+         go to 40
+30 continue
+            d = t
+            t = 0.0d0
+40 continue
+50 continue
 !
-      IF (NOERT) GO TO 60
-         IF (D .GT. 0.0D0) INERT(1) = INERT(1) + 1
-         IF (D .LT. 0.0D0) INERT(2) = INERT(2) + 1
-         IF (D .EQ. 0.0D0) INERT(3) = INERT(3) + 1
-60 CONTINUE
+      if (noert) go to 60
+         if (d .gt. 0.0d0) inert(1) = inert(1) + 1
+         if (d .lt. 0.0d0) inert(2) = inert(2) + 1
+         if (d .eq. 0.0d0) inert(3) = inert(3) + 1
+60 continue
 !
-      IF (NODET) GO TO 120
-         DET(1) = D*DET(1)
-         IF (DET(1) .EQ. 0.0D0) GO TO 110
-70 IF (DABS(DET(1)) .GE. 1.0D0) GO TO 80
-               DET(1) = TEN*DET(1)
-               DET(2) = DET(2) - 1.0D0
-            GO TO 70
-80 CONTINUE
-90 IF (DABS(DET(1)) .LT. TEN) GO TO 100
-               DET(1) = DET(1)/TEN
-               DET(2) = DET(2) + 1.0D0
-            GO TO 90
-100 CONTINUE
-110 CONTINUE
-120 CONTINUE
-      IK = IK + K
-130 CONTINUE
-140 CONTINUE
+      if (nodet) go to 120
+         det(1) = d*det(1)
+         if (det(1) .eq. 0.0d0) go to 110
+70 if (dabs(det(1)) .ge. 1.0d0) go to 80
+               det(1) = ten*det(1)
+               det(2) = det(2) - 1.0d0
+            go to 70
+80 continue
+90 if (dabs(det(1)) .lt. ten) go to 100
+               det(1) = det(1)/ten
+               det(2) = det(2) + 1.0d0
+            go to 90
+100 continue
+110 continue
+120 continue
+      ik = ik + k
+130 continue
+140 continue
 !
 !     COMPUTE INVERSE(A)
 !
-IF (NOINV) GO TO 270
-   K = 1
-   IK = 0
-150 IF (K .GT. N) GO TO 260
-      KM1 = K - 1
-      KK = IK + K
-      IKP1 = IK + K
-      KKP1 = IKP1 + K
-      IF (KPVT(K) .LT. 0) GO TO 180
+if (noinv) go to 270
+   k = 1
+   ik = 0
+150 if (k .gt. n) go to 260
+      km1 = k - 1
+      kk = ik + k
+      ikp1 = ik + k
+      kkp1 = ikp1 + k
+      if (kpvt(k) .lt. 0) go to 180
 !
 !              1 BY 1
 !
-         AP(KK) = 1.0D0/AP(KK)
-         IF (KM1 .LT. 1) GO TO 170
-            CALL DCOPY(KM1,AP(IK+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JK = IK + J
-               AP(JK) = DDOT(J,AP(IJ+1),1,WORK,1)
-               CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KK) = AP(KK) + DDOT(KM1,WORK,1,AP(IK+1),1)
-170 CONTINUE
-         KSTEP = 1
-      GO TO 220
-180 CONTINUE
+         ap(kk) = 1.0d0/ap(kk)
+         if (km1 .lt. 1) go to 170
+            call dcopy(km1,ap(ik+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jk = ik + j
+               ap(jk) = ddot(j,ap(ij+1),1,work,1)
+               call daxpy(j-1,work(j),ap(ij+1),1,ap(ik+1),1)
+               ij = ij + j
+            end do
+            ap(kk) = ap(kk) + ddot(km1,work,1,ap(ik+1),1)
+170 continue
+         kstep = 1
+      go to 220
+180 continue
 !
 !              2 BY 2
 !
-         T = DABS(AP(KKP1))
-         AK = AP(KK)/T
-         AKP1 = AP(KKP1+1)/T
-         AKKP1 = AP(KKP1)/T
-         D = T*(AK*AKP1 - 1.0D0)
-         AP(KK) = AKP1/D
-         AP(KKP1+1) = AK/D
-         AP(KKP1) = -AKKP1/D
-         IF (KM1 .LT. 1) GO TO 210
-            CALL DCOPY(KM1,AP(IKP1+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JKP1 = IKP1 + J
-               AP(JKP1) = DDOT(J,AP(IJ+1),1,WORK,1)
-               CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IKP1+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KKP1+1) = AP(KKP1+1) &
-&+ DDOT(KM1,WORK,1,AP(IKP1+1),1)
-            AP(KKP1) = AP(KKP1) &
-&+ DDOT(KM1,AP(IK+1),1,AP(IKP1+1),1)
-            CALL DCOPY(KM1,AP(IK+1),1,WORK,1)
-            IJ = 0
-            DO J = 1, KM1
-               JK = IK + J
-               AP(JK) = DDOT(J,AP(IJ+1),1,WORK,1)
-               CALL DAXPY(J-1,WORK(J),AP(IJ+1),1,AP(IK+1),1)
-               IJ = IJ + J
-            END DO
-            AP(KK) = AP(KK) + DDOT(KM1,WORK,1,AP(IK+1),1)
-210 CONTINUE
-         KSTEP = 2
-220 CONTINUE
+         t = dabs(ap(kkp1))
+         ak = ap(kk)/t
+         akp1 = ap(kkp1+1)/t
+         akkp1 = ap(kkp1)/t
+         d = t*(ak*akp1 - 1.0d0)
+         ap(kk) = akp1/d
+         ap(kkp1+1) = ak/d
+         ap(kkp1) = -akkp1/d
+         if (km1 .lt. 1) go to 210
+            call dcopy(km1,ap(ikp1+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jkp1 = ikp1 + j
+               ap(jkp1) = ddot(j,ap(ij+1),1,work,1)
+               call daxpy(j-1,work(j),ap(ij+1),1,ap(ikp1+1),1)
+               ij = ij + j
+            end do
+            ap(kkp1+1) = ap(kkp1+1) &
+&+ ddot(km1,work,1,ap(ikp1+1),1)
+            ap(kkp1) = ap(kkp1) &
+&+ ddot(km1,ap(ik+1),1,ap(ikp1+1),1)
+            call dcopy(km1,ap(ik+1),1,work,1)
+            ij = 0
+            do j = 1, km1
+               jk = ik + j
+               ap(jk) = ddot(j,ap(ij+1),1,work,1)
+               call daxpy(j-1,work(j),ap(ij+1),1,ap(ik+1),1)
+               ij = ij + j
+            end do
+            ap(kk) = ap(kk) + ddot(km1,work,1,ap(ik+1),1)
+210 continue
+         kstep = 2
+220 continue
 !
 !           SWAP
 !
-      KS = IABS(KPVT(K))
-      IF (KS .EQ. K) GO TO 250
-         IKS = (KS*(KS - 1))/2
-         CALL DSWAP(KS,AP(IKS+1),1,AP(IK+1),1)
-         KSJ = IK + KS
-         DO JB = KS, K
-            J = K + KS - JB
-            JK = IK + J
-            TEMP = AP(JK)
-            AP(JK) = AP(KSJ)
-            AP(KSJ) = TEMP
-            KSJ = KSJ - (J - 1)
-         END DO
-         IF (KSTEP .EQ. 1) GO TO 240
-            KSKP1 = IKP1 + KS
-            TEMP = AP(KSKP1)
-            AP(KSKP1) = AP(KKP1)
-            AP(KKP1) = TEMP
-240 CONTINUE
-250 CONTINUE
-      IK = IK + K
-      IF (KSTEP .EQ. 2) IK = IK + K + 1
-      K = K + KSTEP
-   GO TO 150
-260 CONTINUE
-270 CONTINUE
-RETURN
-END SUBROUTINE DSPDI
+      ks = iabs(kpvt(k))
+      if (ks .eq. k) go to 250
+         iks = (ks*(ks - 1))/2
+         call dswap(ks,ap(iks+1),1,ap(ik+1),1)
+         ksj = ik + ks
+         do jb = ks, k
+            j = k + ks - jb
+            jk = ik + j
+            temp = ap(jk)
+            ap(jk) = ap(ksj)
+            ap(ksj) = temp
+            ksj = ksj - (j - 1)
+         end do
+         if (kstep .eq. 1) go to 240
+            kskp1 = ikp1 + ks
+            temp = ap(kskp1)
+            ap(kskp1) = ap(kkp1)
+            ap(kkp1) = temp
+240 continue
+250 continue
+      ik = ik + k
+      if (kstep .eq. 2) ik = ik + k + 1
+      k = k + kstep
+   go to 150
+260 continue
+270 continue
+return
+end subroutine dspdi
 
-SUBROUTINE PCHOL (MO,N,M,A,B,KB,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KB, M, MO, N
-INTEGER :: J
+subroutine pchol (mo,n,m,a,b,kb,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: kb, m, mo, n
+integer :: j
 !     -----------------
-REAL, INTENT(INOUT) :: A(*), B(*)
-REAL :: D(2)
-INTEGER :: ONEJ
+real, intent(inout) :: a(*), b(*)
+real :: d(2)
+integer :: onej
 !     -----------------
 !
 !              MATRIX FACTORIZATION
 !
-CALL SPPFA (A,N,IERR)
-IF (IERR .NE. 0) RETURN
+call sppfa (a,n,ierr)
+if (ierr .ne. 0) return
 !
 !          SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-   CALL SPPSL (A,N,B(ONEJ))
-10 ONEJ = ONEJ + KB
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+   call sppsl (a,n,b(onej))
+10 onej = onej + kb
 !
 !         COMPUTATION OF THE INVERSE OF A
 !
-20 IF (MO .EQ. 0) CALL SPPDI (A,N,D,1)
-RETURN
-END SUBROUTINE PCHOL
+20 if (mo .eq. 0) call sppdi (a,n,d,1)
+return
+end subroutine pchol
 
-SUBROUTINE SPPFA(AP,N,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: INFO
-REAL, INTENT(INOUT) :: AP(*)
+subroutine sppfa(ap,n,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: info
+real, intent(inout) :: ap(*)
 !
 !     SPPFA FACTORS A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
 !     STORED IN PACKED FORM.
@@ -9714,45 +9714,45 @@ REAL, INTENT(INOUT) :: AP(*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: SDOT, T
-REAL :: S
-INTEGER :: J, JJ, JM1, K, KJ, KK
+real :: sdot, t
+real :: s
+integer :: j, jj, jm1, k, kj, kk
 !     BEGIN BLOCK WITH ...EXITS TO 40
 !
 !
-   JJ = 0
-   DO J = 1, N
-      INFO = J
-      S = 0.0E0
-      JM1 = J - 1
-      KJ = JJ
-      KK = 0
-      IF (JM1 .LT. 1) GO TO 20
-      DO K = 1, JM1
-         KJ = KJ + 1
-         T = AP(KJ) - SDOT(K-1,AP(KK+1),1,AP(JJ+1),1)
-         KK = KK + K
-         T = T/AP(KK)
-         AP(KJ) = T
-         S = S + T*T
-      END DO
-20 CONTINUE
-      JJ = JJ + J
-      S = AP(JJ) - S
+   jj = 0
+   do j = 1, n
+      info = j
+      s = 0.0e0
+      jm1 = j - 1
+      kj = jj
+      kk = 0
+      if (jm1 .lt. 1) go to 20
+      do k = 1, jm1
+         kj = kj + 1
+         t = ap(kj) - sdot(k-1,ap(kk+1),1,ap(jj+1),1)
+         kk = kk + k
+         t = t/ap(kk)
+         ap(kj) = t
+         s = s + t*t
+      end do
+20 continue
+      jj = jj + j
+      s = ap(jj) - s
 !     ......EXIT
-      IF (S .LE. 0.0E0) GO TO 40
-      AP(JJ) = SQRT(S)
-   END DO
-   INFO = 0
-40 CONTINUE
-RETURN
-END SUBROUTINE SPPFA
+      if (s .le. 0.0e0) go to 40
+      ap(jj) = sqrt(s)
+   end do
+   info = 0
+40 continue
+return
+end subroutine sppfa
 
-SUBROUTINE SPPSL(AP,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-REAL, INTENT(IN) :: AP(*)
-REAL, INTENT(INOUT) :: B(*)
+subroutine sppsl(ap,n,b)
+implicit none
+integer, intent(in) :: n
+real, intent(in) :: ap(*)
+real, intent(inout) :: b(*)
 !
 !     SPPSL SOLVES THE REAL SYMMETRIC POSITIVE DEFINITE SYSTEM
 !     A * X = B
@@ -9798,30 +9798,30 @@ REAL, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: SDOT, T
-INTEGER :: K, KB, KK
+real :: sdot, t
+integer :: k, kb, kk
 !
-KK = 0
-DO K = 1, N
-   T = SDOT(K-1,AP(KK+1),1,B(1),1)
-   KK = KK + K
-   B(K) = (B(K) - T)/AP(KK)
-END DO
-DO KB = 1, N
-   K = N + 1 - KB
-   B(K) = B(K)/AP(KK)
-   KK = KK - K
-   T = -B(K)
-   CALL SAXPY(K-1,T,AP(KK+1),1,B(1),1)
-END DO
-RETURN
-END SUBROUTINE SPPSL
+kk = 0
+do k = 1, n
+   t = sdot(k-1,ap(kk+1),1,b(1),1)
+   kk = kk + k
+   b(k) = (b(k) - t)/ap(kk)
+end do
+do kb = 1, n
+   k = n + 1 - kb
+   b(k) = b(k)/ap(kk)
+   kk = kk - k
+   t = -b(k)
+   call saxpy(k-1,t,ap(kk+1),1,b(1),1)
+end do
+return
+end subroutine sppsl
 
-SUBROUTINE SPPDI(AP,N,DET,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, JOB
-REAL, INTENT(INOUT) :: AP(*)
-REAL, INTENT(INOUT) :: DET(2)
+subroutine sppdi(ap,n,det,job)
+implicit none
+integer, intent(in) :: n, job
+real, intent(inout) :: ap(*)
+real, intent(inout) :: det(2)
 !
 !     SPPDI COMPUTES THE DETERMINANT AND INVERSE
 !     OF A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
@@ -9868,119 +9868,119 @@ REAL, INTENT(INOUT) :: DET(2)
 !
 !     INTERNAL VARIABLES
 !
-REAL :: T
-REAL :: S
-INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
+real :: t
+real :: s
+integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     COMPUTE DETERMINANT
 !
-IF (JOB/10 .EQ. 0) GO TO 70
-   DET(1) = 1.0E0
-   DET(2) = 0.0E0
-   S = 10.0E0
-   II = 0
-   do 50 I = 1, N
-      II = II + I
-      DET(1) = AP(II)**2*DET(1)
+if (job/10 .eq. 0) go to 70
+   det(1) = 1.0e0
+   det(2) = 0.0e0
+   s = 10.0e0
+   ii = 0
+   do 50 i = 1, n
+      ii = ii + i
+      det(1) = ap(ii)**2*det(1)
 !        ...EXIT
-      IF (DET(1) .EQ. 0.0E0) GO TO 60
-10 IF (DET(1) .GE. 1.0E0) GO TO 20
-         DET(1) = S*DET(1)
-         DET(2) = DET(2) - 1.0E0
-      GO TO 10
-20 CONTINUE
-30 IF (DET(1) .LT. S) GO TO 40
-         DET(1) = DET(1)/S
-         DET(2) = DET(2) + 1.0E0
-      GO TO 30
-40 CONTINUE
-50 CONTINUE
-60 CONTINUE
-70 CONTINUE
+      if (det(1) .eq. 0.0e0) go to 60
+10 if (det(1) .ge. 1.0e0) go to 20
+         det(1) = s*det(1)
+         det(2) = det(2) - 1.0e0
+      go to 10
+20 continue
+30 if (det(1) .lt. s) go to 40
+         det(1) = det(1)/s
+         det(2) = det(2) + 1.0e0
+      go to 30
+40 continue
+50 continue
+60 continue
+70 continue
 !
 !     COMPUTE INVERSE(R)
 !
-IF (MOD(JOB,10) .EQ. 0) GO TO 140
-   KK = 0
-   DO K = 1, N
-      K1 = KK + 1
-      KK = KK + K
-      AP(KK) = 1.0E0/AP(KK)
-      T = -AP(KK)
-      CALL SSCAL(K-1,T,AP(K1),1)
-      KP1 = K + 1
-      J1 = KK + 1
-      KJ = KK + K
-      IF (N .LT. KP1) GO TO 90
-      DO J = KP1, N
-         T = AP(KJ)
-         AP(KJ) = 0.0E0
-         CALL SAXPY(K,T,AP(K1),1,AP(J1),1)
-         J1 = J1 + J
-         KJ = KJ + J
-      END DO
-90 CONTINUE
-   END DO
+if (mod(job,10) .eq. 0) go to 140
+   kk = 0
+   do k = 1, n
+      k1 = kk + 1
+      kk = kk + k
+      ap(kk) = 1.0e0/ap(kk)
+      t = -ap(kk)
+      call sscal(k-1,t,ap(k1),1)
+      kp1 = k + 1
+      j1 = kk + 1
+      kj = kk + k
+      if (n .lt. kp1) go to 90
+      do j = kp1, n
+         t = ap(kj)
+         ap(kj) = 0.0e0
+         call saxpy(k,t,ap(k1),1,ap(j1),1)
+         j1 = j1 + j
+         kj = kj + j
+      end do
+90 continue
+   end do
 !
 !        FORM  INVERSE(R) * TRANS(INVERSE(R))
 !
-   JJ = 0
-   DO J = 1, N
-      J1 = JJ + 1
-      JJ = JJ + J
-      JM1 = J - 1
-      K1 = 1
-      KJ = J1
-      IF (JM1 .LT. 1) GO TO 120
-      DO K = 1, JM1
-         T = AP(KJ)
-         CALL SAXPY(K,T,AP(J1),1,AP(K1),1)
-         K1 = K1 + K
-         KJ = KJ + 1
-      END DO
-120 CONTINUE
-      T = AP(JJ)
-      CALL SSCAL(J,T,AP(J1),1)
-   END DO
-140 CONTINUE
-RETURN
-END SUBROUTINE SPPDI
+   jj = 0
+   do j = 1, n
+      j1 = jj + 1
+      jj = jj + j
+      jm1 = j - 1
+      k1 = 1
+      kj = j1
+      if (jm1 .lt. 1) go to 120
+      do k = 1, jm1
+         t = ap(kj)
+         call saxpy(k,t,ap(j1),1,ap(k1),1)
+         k1 = k1 + k
+         kj = kj + 1
+      end do
+120 continue
+      t = ap(jj)
+      call sscal(j,t,ap(j1),1)
+   end do
+140 continue
+return
+end subroutine sppdi
 
-SUBROUTINE DPCHOL (MO,N,M,A,B,KB,IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KB, M, MO, N
-INTEGER :: J
+subroutine dpchol (mo,n,m,a,b,kb,ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: kb, m, mo, n
+integer :: j
 !     -----------------
-DOUBLE PRECISION, INTENT(INOUT) :: A(*), B(*)
-DOUBLE PRECISION :: D(2)
-INTEGER :: ONEJ
+double precision, intent(inout) :: a(*), b(*)
+double precision :: d(2)
+integer :: onej
 !     -----------------
 !
 !              MATRIX FACTORIZATION
 !
-CALL DPPFA (A,N,IERR)
-IF (IERR .NE. 0) RETURN
+call dppfa (a,n,ierr)
+if (ierr .ne. 0) return
 !
 !          SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-   CALL DPPSL (A,N,B(ONEJ))
-10 ONEJ = ONEJ + KB
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+   call dppsl (a,n,b(onej))
+10 onej = onej + kb
 !
 !         COMPUTATION OF THE INVERSE OF A
 !
-20 IF (MO .EQ. 0) CALL DPPDI (A,N,D,1)
-RETURN
-END SUBROUTINE DPCHOL
+20 if (mo .eq. 0) call dppdi (a,n,d,1)
+return
+end subroutine dpchol
 
-SUBROUTINE DPPFA(AP,N,INFO)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-INTEGER, INTENT(INOUT) :: INFO
-DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+subroutine dppfa(ap,n,info)
+implicit none
+integer, intent(in) :: n
+integer, intent(inout) :: info
+double precision, intent(inout) :: ap(*)
 !
 !     DPPFA FACTORS A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
 !     MATRIX STORED IN PACKED FORM.
@@ -10034,45 +10034,45 @@ DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: DDOT, T
-DOUBLE PRECISION :: S
-INTEGER :: J, JJ, JM1, K, KJ, KK
+double precision :: ddot, t
+double precision :: s
+integer :: j, jj, jm1, k, kj, kk
 !     BEGIN BLOCK WITH ...EXITS TO 40
 !
 !
-   JJ = 0
-   DO J = 1, N
-      INFO = J
-      S = 0.0D0
-      JM1 = J - 1
-      KJ = JJ
-      KK = 0
-      IF (JM1 .LT. 1) GO TO 20
-      DO K = 1, JM1
-         KJ = KJ + 1
-         T = AP(KJ) - DDOT(K-1,AP(KK+1),1,AP(JJ+1),1)
-         KK = KK + K
-         T = T/AP(KK)
-         AP(KJ) = T
-         S = S + T*T
-      END DO
-20 CONTINUE
-      JJ = JJ + J
-      S = AP(JJ) - S
+   jj = 0
+   do j = 1, n
+      info = j
+      s = 0.0d0
+      jm1 = j - 1
+      kj = jj
+      kk = 0
+      if (jm1 .lt. 1) go to 20
+      do k = 1, jm1
+         kj = kj + 1
+         t = ap(kj) - ddot(k-1,ap(kk+1),1,ap(jj+1),1)
+         kk = kk + k
+         t = t/ap(kk)
+         ap(kj) = t
+         s = s + t*t
+      end do
+20 continue
+      jj = jj + j
+      s = ap(jj) - s
 !     ......EXIT
-      IF (S .LE. 0.0D0) GO TO 40
-      AP(JJ) = DSQRT(S)
-   END DO
-   INFO = 0
-40 CONTINUE
-RETURN
-END SUBROUTINE DPPFA
+      if (s .le. 0.0d0) go to 40
+      ap(jj) = dsqrt(s)
+   end do
+   info = 0
+40 continue
+return
+end subroutine dppfa
 
-SUBROUTINE DPPSL(AP,N,B)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N
-DOUBLE PRECISION, INTENT(IN) :: AP(*)
-DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+subroutine dppsl(ap,n,b)
+implicit none
+integer, intent(in) :: n
+double precision, intent(in) :: ap(*)
+double precision, intent(inout) :: b(*)
 !
 !     DPPSL SOLVES THE DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
 !     SYSTEM A * X = B
@@ -10118,30 +10118,30 @@ DOUBLE PRECISION, INTENT(INOUT) :: B(*)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: DDOT, T
-INTEGER :: K, KB, KK
+double precision :: ddot, t
+integer :: k, kb, kk
 !
-KK = 0
-DO K = 1, N
-   T = DDOT(K-1,AP(KK+1),1,B(1),1)
-   KK = KK + K
-   B(K) = (B(K) - T)/AP(KK)
-END DO
-DO KB = 1, N
-   K = N + 1 - KB
-   B(K) = B(K)/AP(KK)
-   KK = KK - K
-   T = -B(K)
-   CALL DAXPY(K-1,T,AP(KK+1),1,B(1),1)
-END DO
-RETURN
-END SUBROUTINE DPPSL
+kk = 0
+do k = 1, n
+   t = ddot(k-1,ap(kk+1),1,b(1),1)
+   kk = kk + k
+   b(k) = (b(k) - t)/ap(kk)
+end do
+do kb = 1, n
+   k = n + 1 - kb
+   b(k) = b(k)/ap(kk)
+   kk = kk - k
+   t = -b(k)
+   call daxpy(k-1,t,ap(kk+1),1,b(1),1)
+end do
+return
+end subroutine dppsl
 
-SUBROUTINE DPPDI(AP,N,DET,JOB)
-IMPLICIT NONE
-INTEGER, INTENT(IN) :: N, JOB
-DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
-DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
+subroutine dppdi(ap,n,det,job)
+implicit none
+integer, intent(in) :: n, job
+double precision, intent(inout) :: ap(*)
+double precision, intent(inout) :: det(2)
 !
 !     DPPDI COMPUTES THE DETERMINANT AND INVERSE
 !     OF A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE MATRIX
@@ -10188,90 +10188,90 @@ DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
 !
 !     INTERNAL VARIABLES
 !
-DOUBLE PRECISION :: T
-DOUBLE PRECISION :: S
-INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
+double precision :: t
+double precision :: s
+integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     COMPUTE DETERMINANT
 !
-IF (JOB/10 .EQ. 0) GO TO 70
-   DET(1) = 1.0D0
-   DET(2) = 0.0D0
-   S = 10.0D0
-   II = 0
-   do 50 I = 1, N
-      II = II + I
-      DET(1) = AP(II)**2*DET(1)
+if (job/10 .eq. 0) go to 70
+   det(1) = 1.0d0
+   det(2) = 0.0d0
+   s = 10.0d0
+   ii = 0
+   do 50 i = 1, n
+      ii = ii + i
+      det(1) = ap(ii)**2*det(1)
 !        ...EXIT
-      IF (DET(1) .EQ. 0.0D0) GO TO 60
-10 IF (DET(1) .GE. 1.0D0) GO TO 20
-         DET(1) = S*DET(1)
-         DET(2) = DET(2) - 1.0D0
-      GO TO 10
-20 CONTINUE
-30 IF (DET(1) .LT. S) GO TO 40
-         DET(1) = DET(1)/S
-         DET(2) = DET(2) + 1.0D0
-      GO TO 30
-40 CONTINUE
-50 CONTINUE
-60 CONTINUE
-70 CONTINUE
+      if (det(1) .eq. 0.0d0) go to 60
+10 if (det(1) .ge. 1.0d0) go to 20
+         det(1) = s*det(1)
+         det(2) = det(2) - 1.0d0
+      go to 10
+20 continue
+30 if (det(1) .lt. s) go to 40
+         det(1) = det(1)/s
+         det(2) = det(2) + 1.0d0
+      go to 30
+40 continue
+50 continue
+60 continue
+70 continue
 !
 !     COMPUTE INVERSE(R)
 !
-IF (MOD(JOB,10) .EQ. 0) GO TO 140
-   KK = 0
-   DO K = 1, N
-      K1 = KK + 1
-      KK = KK + K
-      AP(KK) = 1.0D0/AP(KK)
-      T = -AP(KK)
-      CALL DSCAL(K-1,T,AP(K1),1)
-      KP1 = K + 1
-      J1 = KK + 1
-      KJ = KK + K
-      IF (N .LT. KP1) GO TO 90
-      DO J = KP1, N
-         T = AP(KJ)
-         AP(KJ) = 0.0D0
-         CALL DAXPY(K,T,AP(K1),1,AP(J1),1)
-         J1 = J1 + J
-         KJ = KJ + J
-      END DO
-90 CONTINUE
-   END DO
+if (mod(job,10) .eq. 0) go to 140
+   kk = 0
+   do k = 1, n
+      k1 = kk + 1
+      kk = kk + k
+      ap(kk) = 1.0d0/ap(kk)
+      t = -ap(kk)
+      call dscal(k-1,t,ap(k1),1)
+      kp1 = k + 1
+      j1 = kk + 1
+      kj = kk + k
+      if (n .lt. kp1) go to 90
+      do j = kp1, n
+         t = ap(kj)
+         ap(kj) = 0.0d0
+         call daxpy(k,t,ap(k1),1,ap(j1),1)
+         j1 = j1 + j
+         kj = kj + j
+      end do
+90 continue
+   end do
 !
 !        FORM  INVERSE(R) * TRANS(INVERSE(R))
 !
-   JJ = 0
-   DO J = 1, N
-      J1 = JJ + 1
-      JJ = JJ + J
-      JM1 = J - 1
-      K1 = 1
-      KJ = J1
-      IF (JM1 .LT. 1) GO TO 120
-      DO K = 1, JM1
-         T = AP(KJ)
-         CALL DAXPY(K,T,AP(J1),1,AP(K1),1)
-         K1 = K1 + K
-         KJ = KJ + 1
-      END DO
-120 CONTINUE
-      T = AP(JJ)
-      CALL DSCAL(J,T,AP(J1),1)
-   END DO
-140 CONTINUE
-RETURN
-END SUBROUTINE DPPDI
+   jj = 0
+   do j = 1, n
+      j1 = jj + 1
+      jj = jj + j
+      jm1 = j - 1
+      k1 = 1
+      kj = j1
+      if (jm1 .lt. 1) go to 120
+      do k = 1, jm1
+         t = ap(kj)
+         call daxpy(k,t,ap(j1),1,ap(k1),1)
+         k1 = k1 + k
+         kj = kj + 1
+      end do
+120 continue
+      t = ap(jj)
+      call dscal(j,t,ap(j1),1)
+   end do
+140 continue
+return
+end subroutine dppdi
 
-SUBROUTINE TOPLX (A, B, X, N, G, H, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
-REAL :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
+subroutine toplx (a, b, x, n, g, h, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer :: j, k, l, m, max, mp1, nml, npl
+real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
 !            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
 !
@@ -10281,86 +10281,86 @@ REAL :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 !-----------------------------------------------------------------------
 !     REAL A(2*N - 1)
 !----------------------
-REAL, INTENT(IN) :: A(*), B(N)
-REAL, INTENT(INOUT) :: X(N), G(N), H(N)
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: x(n), g(n), h(n)
 !
-IF (A(N) .EQ. 0.0) GO TO 100
-IERR = 0
-X(1) = B(1)/A(N)
-IF (N .EQ. 1) RETURN
-G(1) = A(N - 1)/A(N)
-H(1) = A(N + 1)/A(N)
-MP1 = 1
+if (a(n) .eq. 0.0) go to 100
+ierr = 0
+x(1) = b(1)/a(n)
+if (n .eq. 1) return
+g(1) = a(n - 1)/a(n)
+h(1) = a(n + 1)/a(n)
+mp1 = 1
 !
 !     COMPUTE NUMERATOR AND DENOMINATOR OF X(M+1)
 !
-10 M = MP1
-MP1 = M + 1
-XN = -B(MP1)
-XD = -A(N)
-do 20 J = 1,M
-   L = MP1 - J
-   NPL = N + L
-   XN = XN + A(NPL)*X(J)
-20 XD = XD + A(NPL)*G(L)
-IF (XD .EQ. 0.0) GO TO 100
-X(MP1) = XN/XD
+10 m = mp1
+mp1 = m + 1
+xn = -b(mp1)
+xd = -a(n)
+do 20 j = 1,m
+   l = mp1 - j
+   npl = n + l
+   xn = xn + a(npl)*x(j)
+20 xd = xd + a(npl)*g(l)
+if (xd .eq. 0.0) go to 100
+x(mp1) = xn/xd
 !
 !        COMPUTE X
 !
-C = X(MP1)
-do 30 J = 1,M
-   L = MP1 - J
-30 X(J) = X(J) - C*G(L)
-IF (MP1 .EQ. N) RETURN
+c = x(mp1)
+do 30 j = 1,m
+   l = mp1 - j
+30 x(j) = x(j) - c*g(l)
+if (mp1 .eq. n) return
 !
 !     COMPUTE NUMERATOR AND DENOMINATOR OF G(M+1) AND H(M+1)
 !
-L = N - MP1
-GN = -A(L)
-GD = -A(N)
-L = N + MP1
-HN = -A(L)
-do 40 J = 1,M
-   L = MP1 - J
-   NML = N - L
-   NPL = N + L
-   GN = GN + A(NML)*G(J)
-   GD = GD + A(NML)*H(L)
-40 HN = HN + A(NPL)*H(J)
-IF (GD .EQ. 0.0) GO TO 100
-G(MP1) = GN/GD
-H(MP1) = HN/XD
+l = n - mp1
+gn = -a(l)
+gd = -a(n)
+l = n + mp1
+hn = -a(l)
+do 40 j = 1,m
+   l = mp1 - j
+   nml = n - l
+   npl = n + l
+   gn = gn + a(nml)*g(j)
+   gd = gd + a(nml)*h(l)
+40 hn = hn + a(npl)*h(j)
+if (gd .eq. 0.0) go to 100
+g(mp1) = gn/gd
+h(mp1) = hn/xd
 !
 !     COMPUTE G AND H
 !
-C1 = G(MP1)
-C2 = H(MP1)
-MAX = MP1/2
-K = M
-do 50 J = 1,MAX
-   GJ = G(J)
-   GK = G(K)
-   HJ = H(J)
-   HK = H(K)
-   G(J) = GJ - C1*HK
-   G(K) = GK - C1*HJ
-   H(J) = HJ - C2*GK
-   H(K) = HK - C2*GJ
-50 K = K - 1
-GO TO 10
+c1 = g(mp1)
+c2 = h(mp1)
+max = mp1/2
+k = m
+do 50 j = 1,max
+   gj = g(j)
+   gk = g(k)
+   hj = h(j)
+   hk = h(k)
+   g(j) = gj - c1*hk
+   g(k) = gk - c1*hj
+   h(j) = hj - c2*gk
+   h(k) = hk - c2*gj
+50 k = k - 1
+go to 10
 !
 !     ERROR RETURN
 !
-100 IERR = 1
-RETURN
-END SUBROUTINE TOPLX
+100 ierr = 1
+return
+end subroutine toplx
 
-SUBROUTINE DTOPLX (A, B, X, N, G, H, IERR)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: N
-INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
+subroutine dtoplx (a, b, x, n, g, h, ierr)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: n
+integer :: j, k, l, m, max, mp1, nml, npl
 !-----------------------------------------------------------------------
 !            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
 !
@@ -10370,168 +10370,168 @@ INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION A(2*N - 1)
 !----------------------
-DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-DOUBLE PRECISION, INTENT(INOUT) :: X(N), G(N), H(N)
-DOUBLE PRECISION :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: x(n), g(n), h(n)
+double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !
-IF (A(N) .EQ. 0.D0) GO TO 100
-IERR = 0
-X(1) = B(1)/A(N)
-IF (N .EQ. 1) RETURN
-G(1) = A(N - 1)/A(N)
-H(1) = A(N + 1)/A(N)
-MP1 = 1
+if (a(n) .eq. 0.d0) go to 100
+ierr = 0
+x(1) = b(1)/a(n)
+if (n .eq. 1) return
+g(1) = a(n - 1)/a(n)
+h(1) = a(n + 1)/a(n)
+mp1 = 1
 !
 !     COMPUTE NUMERATOR AND DENOMINATOR OF X(M+1)
 !
-10 M = MP1
-MP1 = M + 1
-XN = -B(MP1)
-XD = -A(N)
-do 20 J = 1,M
-   L = MP1 - J
-   NPL = N + L
-   XN = XN + A(NPL)*X(J)
-20 XD = XD + A(NPL)*G(L)
-IF (XD .EQ. 0.D0) GO TO 100
-X(MP1) = XN/XD
+10 m = mp1
+mp1 = m + 1
+xn = -b(mp1)
+xd = -a(n)
+do 20 j = 1,m
+   l = mp1 - j
+   npl = n + l
+   xn = xn + a(npl)*x(j)
+20 xd = xd + a(npl)*g(l)
+if (xd .eq. 0.d0) go to 100
+x(mp1) = xn/xd
 !
 !        COMPUTE X
 !
-C = X(MP1)
-do 30 J = 1,M
-   L = MP1 - J
-30 X(J) = X(J) - C*G(L)
-IF (MP1 .EQ. N) RETURN
+c = x(mp1)
+do 30 j = 1,m
+   l = mp1 - j
+30 x(j) = x(j) - c*g(l)
+if (mp1 .eq. n) return
 !
 !     COMPUTE NUMERATOR AND DENOMINATOR OF G(M+1) AND H(M+1)
 !
-L = N - MP1
-GN = -A(L)
-GD = -A(N)
-L = N + MP1
-HN = -A(L)
-do 40 J = 1,M
-   L = MP1 - J
-   NML = N - L
-   NPL = N + L
-   GN = GN + A(NML)*G(J)
-   GD = GD + A(NML)*H(L)
-40 HN = HN + A(NPL)*H(J)
-IF (GD .EQ. 0.D0) GO TO 100
-G(MP1) = GN/GD
-H(MP1) = HN/XD
+l = n - mp1
+gn = -a(l)
+gd = -a(n)
+l = n + mp1
+hn = -a(l)
+do 40 j = 1,m
+   l = mp1 - j
+   nml = n - l
+   npl = n + l
+   gn = gn + a(nml)*g(j)
+   gd = gd + a(nml)*h(l)
+40 hn = hn + a(npl)*h(j)
+if (gd .eq. 0.d0) go to 100
+g(mp1) = gn/gd
+h(mp1) = hn/xd
 !
 !     COMPUTE G AND H
 !
-C1 = G(MP1)
-C2 = H(MP1)
-MAX = MP1/2
-K = M
-do 50 J = 1,MAX
-   GJ = G(J)
-   GK = G(K)
-   HJ = H(J)
-   HK = H(K)
-   G(J) = GJ - C1*HK
-   G(K) = GK - C1*HJ
-   H(J) = HJ - C2*GK
-   H(K) = HK - C2*GJ
-50 K = K - 1
-GO TO 10
+c1 = g(mp1)
+c2 = h(mp1)
+max = mp1/2
+k = m
+do 50 j = 1,max
+   gj = g(j)
+   gk = g(k)
+   hj = h(j)
+   hk = h(k)
+   g(j) = gj - c1*hk
+   g(k) = gk - c1*hj
+   h(j) = hj - c2*gk
+   h(k) = hk - c2*gj
+50 k = k - 1
+go to 10
 !
 !     ERROR RETURN
 !
-100 IERR = 1
-RETURN
-END SUBROUTINE DTOPLX
+100 ierr = 1
+return
+end subroutine dtoplx
 
-SUBROUTINE CMSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
-IMPLICIT NONE
-INTEGER, INTENT(OUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO
-INTEGER :: N
-INTEGER :: J, JOB
+subroutine cmslv(mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
+implicit none
+integer, intent(out) :: ierr
+integer, intent(in) :: ka, kb, m, mo
+integer :: n
+integer :: j, job
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 !     AND SOLVING COMPLEX EQUATIONS
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), DET(2), WK(N)
-REAL, INTENT(INOUT) :: RCOND
-REAL :: T
-INTEGER, INTENT(INOUT) :: IPVT(N)
-INTEGER :: ONEJ
+complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
+real, intent(inout) :: rcond
+real :: t
+integer, intent(inout) :: ipvt(n)
+integer :: onej
 !
 !          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 !
-IERR = 0
-CALL CGECO (A, KA, N, IPVT, RCOND, WK)
-T = 1.0 + RCOND
-IF (T .EQ. 1.0) GO TO 30
+ierr = 0
+call cgeco (a, ka, n, ipvt, rcond, wk)
+t = 1.0 + rcond
+if (t .eq. 1.0) go to 30
 !
 !                  SOLUTION OF THE EQUATION AX=B
 !
-IF (M .LT. 1) GO TO 20
-ONEJ = 1
-do 10 J = 1,M
-   CALL CGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-10 CONTINUE
+if (m .lt. 1) go to 20
+onej = 1
+do 10 j = 1,m
+   call cgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+10 continue
 !
 !             CALCULATION OF DET AND THE INVERSE OF A
 !
-20 JOB = 10
-IF (MO .EQ. 0) JOB = 11
-CALL CGEDI (A, KA, N, IPVT, DET, WK, JOB)
-RETURN
+20 job = 10
+if (mo .eq. 0) job = 11
+call cgedi (a, ka, n, ipvt, det, wk, job)
+return
 !
 !                  THE PROBLEM CANNOT BE SOLVED
 !
-30 IERR = 1
-RETURN
-END SUBROUTINE CMSLV
+30 ierr = 1
+return
+end subroutine cmslv
 
-SUBROUTINE CMSLV1 (MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
-IMPLICIT NONE
-INTEGER, INTENT(INOUT) :: IERR
-INTEGER, INTENT(IN) :: KA, KB, M, MO
-INTEGER :: N
-INTEGER :: J
+subroutine cmslv1 (mo, n, m, a, ka, b, kb, ierr, ipvt, wk)
+implicit none
+integer, intent(inout) :: ierr
+integer, intent(in) :: ka, kb, m, mo
+integer :: n
+integer :: j
 !-----------------------------------------------------------------------
 !     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 !     AND SOLVING COMPLEX EQUATIONS
 !-----------------------------------------------------------------------
-COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-INTEGER, INTENT(INOUT) :: IPVT(N)
-COMPLEX :: D(2)
-INTEGER :: ONEJ
+complex, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
+complex :: d(2)
+integer :: onej
 !
-IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
-IF (M .LE. 0) GO TO 10
-IF (KB .LT. N) GO TO 40
+if (n .lt. 1 .or. ka .lt. n) go to 40
+if (m .le. 0) go to 10
+if (kb .lt. n) go to 40
 !
 !                      MATRIX FACTORIZATION
 !
-10 CALL CGEFA (A, KA, N, IPVT, IERR)
-IF (IERR .NE. 0) RETURN
+10 call cgefa (a, ka, n, ipvt, ierr)
+if (ierr .ne. 0) return
 !
 !                 SOLUTION OF THE EQUATION AX = B
 !
-IF (M .LE. 0) GO TO 30
-ONEJ = 1
-DO J = 1,M
-   CALL CGESL (A, KA, N, IPVT, B(ONEJ), 0)
-   ONEJ = ONEJ + KB
-END DO
+if (m .le. 0) go to 30
+onej = 1
+do j = 1,m
+   call cgesl (a, ka, n, ipvt, b(onej), 0)
+   onej = onej + kb
+end do
 !
 !                 CALCULATION OF THE INVERSE OF A
 !
-30 IF (MO .EQ. 0) CALL CGEDI (A, KA, N, IPVT, D, WK, 1)
-RETURN
+30 if (mo .eq. 0) call cgedi (a, ka, n, ipvt, d, wk, 1)
+return
 !
 !                          ERROR RETURN
 !
-40 IERR = -1
-RETURN
-END SUBROUTINE CMSLV1
+40 ierr = -1
+return
+end subroutine cmslv1
 

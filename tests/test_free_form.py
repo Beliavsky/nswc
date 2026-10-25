@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from fixed_to_free import convert_text
 from regenerate_sources import generate, HEADER, LINK
+from lowercase_fortran import lowercase
 
 
 def canonical(statement):
@@ -95,7 +96,15 @@ class FreeFormTests(unittest.TestCase):
 
     def test_complete_library_statements(self):
         source = (ROOT / "nswc.f").read_text()
-        converted = convert_text(source)
+        converted = lowercase(convert_text(source))
+        # Full-line comments and every quoted value must survive conversion.
+        original_free = convert_text(source)
+        self.assertEqual(len(original_free), len(converted))
+        for before, after in zip(original_free.splitlines(True), converted.splitlines(True)):
+            if before.lstrip().startswith('!'):
+                self.assertEqual(before, after)
+            for old, new in zip(before, after):
+                self.assertTrue(old == new or ('A' <= old <= 'Z' and new == old.lower()))
         self.assertEqual(statements(source, True), statements(converted, False))
         self.assertEqual(converted, (ROOT / "nswc.f90").read_text())
 
