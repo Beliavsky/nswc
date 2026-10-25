@@ -13,8 +13,8 @@
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
 | `IPMPAR` | `INTEGER FUNCTION` | `I` | [`L1`](../source_parts/nswc_part_01.f90#L1) |
-| `SPMPAR` | `REAL FUNCTION` | `I` | [`L1239`](../source_parts/nswc_part_01.f90#L1239) |
-| `DPMPAR` | `DOUBLE PRECISION FUNCTION` | `I` | [`L1297`](../source_parts/nswc_part_01.f90#L1297) |
+| `SPMPAR` | `REAL FUNCTION` | `I` | [`L1241`](../source_parts/nswc_part_01.f90#L1241) |
+| `DPMPAR` | `DOUBLE PRECISION FUNCTION` | `I` | [`L1300`](../source_parts/nswc_part_01.f90#L1300) |
 
 
 For the integer arithmetic, let $a$ be the radix and $n$ the number of base-$a$
@@ -81,10 +81,10 @@ Original documentation: [page 17](../scans/page_0017.png),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EPSLN` | `REAL FUNCTION` | `L` | [`L1355`](../source_parts/nswc_part_01.f90#L1355) |
-| `DEPSLN` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1384`](../source_parts/nswc_part_01.f90#L1384) |
-| `EXPARG` | `REAL FUNCTION` | `L` | [`L1413`](../source_parts/nswc_part_01.f90#L1413) |
-| `DXPARG` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1451`](../source_parts/nswc_part_01.f90#L1451) |
+| `EPSLN` | `REAL FUNCTION` | `L` | [`L1359`](../source_parts/nswc_part_01.f90#L1359) |
+| `DEPSLN` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1389`](../source_parts/nswc_part_01.f90#L1389) |
+| `EXPARG` | `REAL FUNCTION` | `L` | [`L1419`](../source_parts/nswc_part_01.f90#L1419) |
+| `DXPARG` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1458`](../source_parts/nswc_part_01.f90#L1458) |
 
 
 `EPSLN(L)` returns $\ln(\epsilon)$ for the single-precision arithmetic,
@@ -116,21 +116,21 @@ Original documentation: [page 19](../scans/page_0019.png),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ISHELL` | `SUBROUTINE` | `A, N` | [`L1490`](../source_parts/nswc_part_01.f90#L1490) |
-| `SHELL` | `SUBROUTINE` | `A, N` | [`L1538`](../source_parts/nswc_part_01.f90#L1538) |
-| `SHELL2` | `SUBROUTINE` | `A, B, N` | [`L1588`](../source_parts/nswc_part_01.f90#L1588) |
-| `RISORT` | `SUBROUTINE` | `A, M, N` | [`L1693`](../source_parts/nswc_part_01.f90#L1693) |
-| `DSORT` | `SUBROUTINE` | `A, N` | [`L1804`](../source_parts/nswc_part_01.f90#L1804) |
-| `DISORT` | `SUBROUTINE` | `A, M, N` | [`L1853`](../source_parts/nswc_part_01.f90#L1853) |
-| `DDSORT` | `SUBROUTINE` | `A, B, N` | [`L1908`](../source_parts/nswc_part_01.f90#L1908) |
-| `AORD` | `SUBROUTINE` | `A, N` | [`L1962`](../source_parts/nswc_part_01.f90#L1962) |
-| `DAORD` | `SUBROUTINE` | `A, N` | [`L2013`](../source_parts/nswc_part_01.f90#L2013) |
-| `QSORTI` | `SUBROUTINE` | `X, IND, N` | [`L2063`](../source_parts/nswc_part_01.f90#L2063) |
-| `QSORTR` | `SUBROUTINE` | `X, IND, N` | [`L2263`](../source_parts/nswc_part_01.f90#L2263) |
-| `QSORTD` | `SUBROUTINE` | `X, IND, N` | [`L2464`](../source_parts/nswc_part_01.f90#L2464) |
-| `IORDER` | `SUBROUTINE` | `A, IP, N` | [`L2666`](../source_parts/nswc_part_01.f90#L2666) |
-| `RORDER` | `SUBROUTINE` | `A, IP, N` | [`L2738`](../source_parts/nswc_part_01.f90#L2738) |
-| `DORDER` | `SUBROUTINE` | `A, IP, N` | [`L2812`](../source_parts/nswc_part_01.f90#L2812) |
+| `ISHELL` | `SUBROUTINE` | `A, N` | [`L1498`](../source_parts/nswc_part_01.f90#L1498) |
+| `SHELL` | `SUBROUTINE` | `A, N` | [`L1547`](../source_parts/nswc_part_01.f90#L1547) |
+| `SHELL2` | `SUBROUTINE` | `A, B, N` | [`L1598`](../source_parts/nswc_part_01.f90#L1598) |
+| `RISORT` | `SUBROUTINE` | `A, M, N` | [`L1705`](../source_parts/nswc_part_01.f90#L1705) |
+| `DSORT` | `SUBROUTINE` | `A, N` | [`L1818`](../source_parts/nswc_part_01.f90#L1818) |
+| `DISORT` | `SUBROUTINE` | `A, M, N` | [`L1868`](../source_parts/nswc_part_01.f90#L1868) |
+| `DDSORT` | `SUBROUTINE` | `A, B, N` | [`L1924`](../source_parts/nswc_part_01.f90#L1924) |
+| `AORD` | `SUBROUTINE` | `A, N` | [`L1979`](../source_parts/nswc_part_01.f90#L1979) |
+| `DAORD` | `SUBROUTINE` | `A, N` | [`L2031`](../source_parts/nswc_part_01.f90#L2031) |
+| `QSORTI` | `SUBROUTINE` | `X, IND, N` | [`L2082`](../source_parts/nswc_part_01.f90#L2082) |
+| `QSORTR` | `SUBROUTINE` | `X, IND, N` | [`L2283`](../source_parts/nswc_part_01.f90#L2283) |
+| `QSORTD` | `SUBROUTINE` | `X, IND, N` | [`L2485`](../source_parts/nswc_part_01.f90#L2485) |
+| `IORDER` | `SUBROUTINE` | `A, IP, N` | [`L2688`](../source_parts/nswc_part_01.f90#L2688) |
+| `RORDER` | `SUBROUTINE` | `A, IP, N` | [`L2761`](../source_parts/nswc_part_01.f90#L2761) |
+| `DORDER` | `SUBROUTINE` | `A, IP, N` | [`L2836`](../source_parts/nswc_part_01.f90#L2836) |
 
 
 Let A be an array containing n > 1 elements aj, ...,a¢,. Then the following subroutines are available for reordering the elements of A.
@@ -228,8 +228,8 @@ Programmers. Robert Renka (Oak Ridge National Laboratory).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBRT` | `REAL FUNCTION` | `X` | [`L2886`](../source_parts/nswc_part_01.f90#L2886) |
-| `DCBRT` | `DOUBLE PRECISION FUNCTION` | `X` | [`L2904`](../source_parts/nswc_part_01.f90#L2904) |
+| `CBRT` | `REAL FUNCTION` | `X` | [`L2911`](../source_parts/nswc_part_01.f90#L2911) |
+| `DCBRT` | `DOUBLE PRECISION FUNCTION` | `X` | [`L2930`](../source_parts/nswc_part_01.f90#L2930) |
 
 
 The following functions are available for computing the real cube root of a real number.
@@ -249,8 +249,8 @@ CBRT is used if x is a single precision number, and DCBRT is used if x is a doub
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ARTNQ` | `FUNCTION` | `Y, X` | [`L2922`](../source_parts/nswc_part_01.f90#L2922) |
-| `DARTNQ` | `DOUBLE PRECISION FUNCTION` | `Y, X` | [`L2943`](../source_parts/nswc_part_01.f90#L2943) |
+| `ARTNQ` | `FUNCTION` | `Y, X` | [`L2949`](../source_parts/nswc_part_01.f90#L2949) |
+| `DARTNQ` | `DOUBLE PRECISION FUNCTION` | `Y, X` | [`L2971`](../source_parts/nswc_part_01.f90#L2971) |
 
 
 The function ARTNQ is similar to the ATAN2 function, the differences being that its value lies in the interval (0,27) and its value at the origin is 0. DARTNQ is the double precision counterpart of ARTNQ.
@@ -272,8 +272,8 @@ if (z,y) is a point in the plane other than the origin (0,0), let L denote the s
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPABS` | `REAL FUNCTION` | `X, Y` | [`L2963`](../source_parts/nswc_part_01.f90#L2963) |
-| `DCPABS` | `DOUBLE PRECISION FUNCTION` | `X, Y` | [`L2982`](../source_parts/nswc_part_01.f90#L2982) |
+| `CPABS` | `REAL FUNCTION` | `X, Y` | [`L2992`](../source_parts/nswc_part_01.f90#L2992) |
+| `DCPABS` | `DOUBLE PRECISION FUNCTION` | `X, Y` | [`L3012`](../source_parts/nswc_part_01.f90#L3012) |
 
 
 The following functions are available for computing the length of a real vector (2, y).
@@ -299,8 +299,8 @@ CPABS is used if x and y are single precision values, and DCPABS is used if a an
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3002`](../source_parts/nswc_part_01.f90#L3002) |
-| `DCREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3022`](../source_parts/nswc_part_01.f90#L3022) |
+| `CREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3033`](../source_parts/nswc_part_01.f90#L3033) |
+| `DCREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3054`](../source_parts/nswc_part_01.f90#L3054) |
 
 
 The following subroutines are available for computing the reciprocal of a complex number.
@@ -321,8 +321,8 @@ CREC is used if x and + are single precision real numbers and u and v real varia
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CDIV` | `COMPLEX FUNCTION` | `A, B` | [`L3043`](../source_parts/nswc_part_01.f90#L3043) |
-| `CDIVID` | `SUBROUTINE` | `AR, AI, BR, BI, CR, CI` | [`L3071`](../source_parts/nswc_part_01.f90#L3071) |
+| `CDIV` | `COMPLEX FUNCTION` | `A, B` | [`L3076`](../source_parts/nswc_part_01.f90#L3076) |
+| `CDIVID` | `SUBROUTINE` | `AR, AI, BR, BI, CR, CI` | [`L3105`](../source_parts/nswc_part_01.f90#L3105) |
 
 
 The function CDIV and subroutine CDIVID ave available for dividing complex numbers.
@@ -344,7 +344,7 @@ The arguments 2,,@2,6,,0) are double precision numbers, and u and v are double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCSQRT` | `SUBROUTINE` | `Z, W` | [`L3105`](../source_parts/nswc_part_01.f90#L3105) |
+| `DCSQRT` | `SUBROUTINE` | `Z, W` | [`L3140`](../source_parts/nswc_part_01.f90#L3140) |
 
 
 The following subroutine ts available for computing the square root of a double precision
@@ -374,7 +374,7 @@ Z and W are double precision arrays of dimension 2. It is assumed that Z(1) and 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `POCA` | `SUBROUTINE` | `R, A, X, Y` | [`L3153`](../source_parts/nswc_part_01.f90#L3153) |
+| `POCA` | `SUBROUTINE` | `R, A, X, Y` | [`L3189`](../source_parts/nswc_part_01.f90#L3189) |
 
 
 The following subroutine is available for converting polar coordinates {r, @) to cartesian coordinates (2, y).
@@ -392,7 +392,7 @@ Let (r,@) be the polar coordinates of a point in the plane and let +,y be variab
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CAPO` | `SUBROUTINE` | `X, Y, R, THETA` | [`L3161`](../source_parts/nswc_part_01.f90#L3161) |
+| `CAPO` | `SUBROUTINE` | `X, Y, R, THETA` | [`L3198`](../source_parts/nswc_part_01.f90#L3198) |
 
 
 The following subroutine is available for converting cartesian coordinates (zx, y) to polar coordinates (r, 8).
@@ -412,7 +412,7 @@ CAPO is called, r is assigned the value \/2? + y? and @ is defined to be the ang
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ROTA` | `SUBROUTINE` | `X1, Y1, A, X2, Y2` | [`L3180`](../source_parts/nswc_part_01.f90#L3180) |
+| `ROTA` | `SUBROUTINE` | `X1, Y1, A, X2, Y2` | [`L3218`](../source_parts/nswc_part_01.f90#L3218) |
 
 
 Let (r1,y1) be the (cartesian) coordinates for a point in the plane. The following subroutine computes the new coordinates (z2,y2) for the point after the z,y axes have been rotated py an angle @.
@@ -441,8 +441,8 @@ we in
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROTG` | `SUBROUTINE` | `SA, SB, SC, SS` | [`L3191`](../source_parts/nswc_part_01.f90#L3191) |
-| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3267`](../source_parts/nswc_part_01.f90#L3267) |
+| `SROTG` | `SUBROUTINE` | `SA, SB, SC, SS` | [`L3230`](../source_parts/nswc_part_01.f90#L3230) |
+| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3306`](../source_parts/nswc_part_01.f90#L3306) |
 
 
 If a and 6 are real numbers where a? + b? # 0, then there is an orthogonal matrix
@@ -492,7 +492,7 @@ When SROTG is used then AR, BZ, C, and S are real variables. Otherwise, when DRO
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3342`](../source_parts/nswc_part_01.f90#L3342) |
+| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3381`](../source_parts/nswc_part_01.f90#L3381) |
 
 
 if A = (a,;) is a 3 x 3 orthogonal matrix, then A can be represented in the form
@@ -536,7 +536,7 @@ and ay, tl.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3385`](../source_parts/nswc_part_01.f90#L3385) |
+| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3424`](../source_parts/nswc_part_01.f90#L3424) |
 
 
 Given the point (x,y,z) where z? -+y? 42? = 1. Then there exist orthogonal matrices 1 0 0 cy 0 ~8, a= (6 Cy -s.] man = (4 i oO QO 8s, ey sy 0 fe
@@ -563,7 +563,7 @@ the values cz, 81,Cy, Sy.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3431`](../source_parts/nswc_part_01.f90#L3431) |
+| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3471`](../source_parts/nswc_part_01.f90#L3471) |
 
 
 Given the points z = (r1, ...,2,) and y= (yi, ..., yn) where n > 2,40, andy 40. Let L, denote the straight line connecting 0 and x, and L, the straight line connecting 0 and y. Then the function ANG is available for computing the angle ¢ between the two lines Lz, and Ly.
@@ -588,10 +588,10 @@ X and ¥ are arrays of dimension n containing 21, ...,%, and yi, ..., yn. ANG(n,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SIN1` | `REAL FUNCTION` | `X` | [`L3503`](../source_parts/nswc_part_01.f90#L3503) |
-| `COS1` | `REAL FUNCTION` | `X` | [`L3559`](../source_parts/nswc_part_01.f90#L3559) |
-| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3615`](../source_parts/nswc_part_01.f90#L3615) |
-| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3712`](../source_parts/nswc_part_01.f90#L3712) |
+| `SIN1` | `REAL FUNCTION` | `X` | [`L3546`](../source_parts/nswc_part_01.f90#L3546) |
+| `COS1` | `REAL FUNCTION` | `X` | [`L3603`](../source_parts/nswc_part_01.f90#L3603) |
+| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3660`](../source_parts/nswc_part_01.f90#L3660) |
+| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3758`](../source_parts/nswc_part_01.f90#L3758) |
 
 
 The following functions are available for computing sin xz and cos wz for real ‘x. SIN1(z) SIN1{z) = sin wa for all real z. Algorithm. Minimax approximations are used for sinaz and cos mz when |a2| < 1/4. Precision. SIN1(z) is accurate to within 1 unit of the 14" significant digit when 0 < z < 1. Programming. SIN1 was written by A.H. Morris. The function IPMPAR is used. COS1(z) COS1(z) = cos wz for all real z. Algorithm. Minimax approximations are used for sinaz and cosmz when |x| < 1/4.
@@ -645,7 +645,7 @@ Algorithm. For |z| < 7/4, sin wz and cos wz are computed by the power series cor
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3809`](../source_parts/nswc_part_01.f90#L3809) |
+| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3856`](../source_parts/nswc_part_01.f90#L3856) |
 
 
 The following subroutine is available for computing sinh(z) — z, cosh(z) — 1, and cosh(z) — 1 — x? /2 for real z.
@@ -680,8 +680,8 @@ cosh(z) — 1 - x?/2 is computed then the value is stored in C.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `REXP` | `REAL FUNCTION` | `X` | [`L3967`](../source_parts/nswc_part_01.f90#L3967) |
-| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3994`](../source_parts/nswc_part_01.f90#L3994) |
+| `REXP` | `REAL FUNCTION` | `X` | [`L4017`](../source_parts/nswc_part_01.f90#L4017) |
+| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4045`](../source_parts/nswc_part_01.f90#L4045) |
 
 
 The following functions compute $e^x-1$, including for arguments near zero,
@@ -711,12 +711,12 @@ Software* **12** (1986), 377-393.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ALNREL` | `REAL FUNCTION` | `A` | [`L4150`](../source_parts/nswc_part_01.f90#L4150) |
-| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4176`](../source_parts/nswc_part_01.f90#L4176) |
-| `RLOG` | `REAL FUNCTION` | `X` | [`L4228`](../source_parts/nswc_part_01.f90#L4228) |
-| `RLOG1` | `REAL FUNCTION` | `X` | [`L4280`](../source_parts/nswc_part_01.f90#L4280) |
-| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4332`](../source_parts/nswc_part_01.f90#L4332) |
-| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4412`](../source_parts/nswc_part_01.f90#L4412) |
+| `ALNREL` | `REAL FUNCTION` | `A` | [`L4204`](../source_parts/nswc_part_01.f90#L4204) |
+| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4231`](../source_parts/nswc_part_01.f90#L4231) |
+| `RLOG` | `REAL FUNCTION` | `X` | [`L4284`](../source_parts/nswc_part_01.f90#L4284) |
+| `RLOG1` | `REAL FUNCTION` | `X` | [`L4337`](../source_parts/nswc_part_01.f90#L4337) |
+| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4390`](../source_parts/nswc_part_01.f90#L4390) |
+| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4471`](../source_parts/nswc_part_01.f90#L4471) |
 
 
 The functions ALNREL, RLOG, RLOG1, DLNREL, DRLOG, and DRLOG1 are available for computing In(1 + a), z — 1 — In(z), and a — In(1+ a). DLNREL, DRLOG, and DRLOG1 are double precision functions.

@@ -12,9 +12,9 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47386`](../source_parts/nswc_part_05.f90#L5147) |
-| `DPLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47554`](../source_parts/nswc_part_05.f90#L5315) |
-| `CLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47722`](../source_parts/nswc_part_05.f90#L5483) |
+| `LE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47845`](../source_parts/nswc_part_05.f90#L5410) |
+| `DPLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L48014`](../source_parts/nswc_part_05.f90#L5579) |
+| `CLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L48183`](../source_parts/nswc_part_05.f90#L5748) |
 
 
 For n > 1, let A denote ann x n matrix and 6 a column vector of dimension n. Then the subroutines LE, DPLE, and CLE are available for solving the equations Az = 6 where A is not stored in-core. For large n, these routines require a work space of dimension x n?7/4. This permits the solution of systems of equations of double the order permitted by the standard solution procedures.

@@ -104,6 +104,10 @@ shapes, storage attributes, and argument lists, with reviewed refinements for
 forwarded procedures that older compiler dumps leave unresolved. The
 [typing record](docs/explicit-typing.md) describes the batches, scope, and limitations.
 
+A first argument-intent pass adds `INTENT(IN)` to 4,177 arguments in 976
+procedures. Its reviewed manifest and call-dependency checks are described in
+the [intent guide](docs/argument-intents.md). The archived source is unchanged.
+
 ## GitHub structure
 
 ```

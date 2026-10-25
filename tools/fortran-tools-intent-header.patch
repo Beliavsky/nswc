@@ -1,0 +1,13 @@
+--- a/xintent.py
++++ b/xintent.py
+@@ -1475,6 +1475,10 @@
+             low_nolab = strip_statement_label(low)
+             low_exec = strip_one_line_if_prefix(low_nolab)
+             low_exec = strip_one_line_where_prefix(low_exec)
++            # A declaration/header is not a recursive call of this procedure.
++            # In particular, SUBROUTINE S(X) must not mark X as passed to S.
++            if fscan.PROC_START_RE.match(low_exec):
++                continue
+             if is_declaration_statement(low_exec):
+                 declared_here = parse_declared_names_any(low_exec)
+                 rhs_decl = ""

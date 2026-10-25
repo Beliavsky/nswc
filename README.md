@@ -160,3 +160,11 @@ the same variable and function types, shapes, and argument lists. The guide
 also records reviewed classifications for forwarded procedures, checked against
 their original calling conventions and return types. The archived `nswc_orig.f`
 retains its original typing.
+
+## Argument intents
+
+The first reviewed pass adds `INTENT(IN)` to 4,177 arguments in 976 procedures.
+The [intent guide](docs/argument-intents.md) describes the repaired analyzer,
+call-dependency checks, exclusions, and reproduction commands. Output and
+uncertain arguments retain their existing declarations. The compiler comparison
+checks every added input attribute as well as the original types and shapes.

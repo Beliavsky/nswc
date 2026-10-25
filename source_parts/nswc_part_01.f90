@@ -1,5 +1,6 @@
 INTEGER function IPMPAR (I)
 IMPLICIT NONE
+INTENT(IN) I
 INTEGER I
 !-----------------------------------------------------------------------
 !
@@ -436,6 +437,7 @@ END FUNCTION IPMPAR
 !-----------------------------------------------------------------------
 SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
 IMPLICIT NONE
+INTENT(IN) IDMAX, IMAX, MO, N
 INTEGER IBETA, IDMAX, IMAX, MO, N
 INTEGER M, MAXEXP, MINEXP, N0
 REAL EPS, XINT, XMAX, XMIN
@@ -1238,6 +1240,7 @@ END SUBROUTINE DSTOR2
 
 REAL function SPMPAR (I)
 IMPLICIT NONE
+INTENT(IN) I
 INTEGER I
 INTEGER IBETA, M
 REAL B, BINV, BM1, ONE, W, Z
@@ -1296,6 +1299,7 @@ END FUNCTION SPMPAR
 
 double precision function DPMPAR (I)
 IMPLICIT NONE
+INTENT(IN) I
 INTEGER I
 INTEGER IBETA, M
 INTEGER IPMPAR
@@ -1354,6 +1358,7 @@ END FUNCTION DPMPAR
 
 REAL function EPSLN (L)
 IMPLICIT NONE
+INTENT(IN) L
 INTEGER L
 INTEGER M
 INTEGER IPMPAR
@@ -1383,6 +1388,7 @@ END FUNCTION EPSLN
 
 double precision function DEPSLN (L)
 IMPLICIT NONE
+INTENT(IN) L
 INTEGER L
 INTEGER IPMPAR
 !--------------------------------------------------------------------
@@ -1412,6 +1418,7 @@ END FUNCTION DEPSLN
 
 REAL function EXPARG (L)
 IMPLICIT NONE
+INTENT(IN) L
 INTEGER L
 INTEGER M
 INTEGER IPMPAR
@@ -1450,6 +1457,7 @@ END FUNCTION EXPARG
 
 double precision function DXPARG (L)
 IMPLICIT NONE
+INTENT(IN) L
 INTEGER L
 INTEGER M
 INTEGER IPMPAR
@@ -1489,6 +1497,7 @@ END FUNCTION DXPARG
 
 SUBROUTINE ISHELL (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
@@ -1537,6 +1546,7 @@ END SUBROUTINE ISHELL
 
 SUBROUTINE SHELL (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S
@@ -1587,6 +1597,7 @@ END SUBROUTINE SHELL
 
 SUBROUTINE SHELL2 (A, B, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S, T
@@ -1642,6 +1653,7 @@ END SUBROUTINE SHELL2
 
 SUBROUTINE RSORT (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S
@@ -1692,6 +1704,7 @@ END SUBROUTINE RSORT
 
 SUBROUTINE RISORT (A, M, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S
@@ -1748,6 +1761,7 @@ END SUBROUTINE RISORT
 
 SUBROUTINE RRSORT (A, B, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S, T
@@ -1803,6 +1817,7 @@ END SUBROUTINE RRSORT
 
 SUBROUTINE DSORT (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
@@ -1852,6 +1867,7 @@ END SUBROUTINE DSORT
 
 SUBROUTINE DISORT (A, M, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
@@ -1907,6 +1923,7 @@ END SUBROUTINE DISORT
 
 SUBROUTINE DDSORT (A, B, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
@@ -1961,6 +1978,7 @@ END SUBROUTINE DDSORT
 
 SUBROUTINE AORD (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 REAL S
@@ -2012,6 +2030,7 @@ END SUBROUTINE AORD
 
 SUBROUTINE DAORD (A, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N
 INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
@@ -2062,6 +2081,7 @@ END SUBROUTINE DAORD
 
 SUBROUTINE QSORTI (X, IND, N)
 IMPLICIT NONE
+INTENT(IN) N, X
 INTEGER N, X(N), IND(N)
 !
 !***********************************************************
@@ -2262,6 +2282,7 @@ END SUBROUTINE QSORTI
 
 SUBROUTINE QSORTR (X, IND, N)
 IMPLICIT NONE
+INTENT(IN) N, X
 INTEGER N, IND(N)
 REAL X(N)
 !
@@ -2463,6 +2484,7 @@ END SUBROUTINE QSORTR
 
 SUBROUTINE QSORTD (X, IND, N)
 IMPLICIT NONE
+INTENT(IN) N, X
 INTEGER N, IND(N)
 DOUBLE PRECISION X(N)
 !
@@ -2665,6 +2687,7 @@ END SUBROUTINE QSORTD
 
 SUBROUTINE IORDER (A, IP, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N, A(N), IP(N)
 !
 !***********************************************************
@@ -2737,6 +2760,7 @@ END SUBROUTINE IORDER
 
 SUBROUTINE RORDER (A, IP, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N, IP(N)
 REAL A(N)
 !
@@ -2811,6 +2835,7 @@ END SUBROUTINE RORDER
 
 SUBROUTINE DORDER (A, IP, N)
 IMPLICIT NONE
+INTENT(IN) N
 INTEGER N, IP(N)
 DOUBLE PRECISION A(N)
 !
@@ -2885,6 +2910,7 @@ END SUBROUTINE DORDER
 
 REAL function CBRT (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL R
 !-----------------------------------------------------------------------
@@ -2903,6 +2929,7 @@ END FUNCTION CBRT
 
 double precision function DCBRT (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
@@ -2921,6 +2948,7 @@ END FUNCTION DCBRT
 
 FUNCTION ARTNQ(Y,X)
 IMPLICIT NONE
+INTENT(IN) X, Y
 REAL X, Y
 REAL ARTNQ
 IF (X) 1,2,5
@@ -2942,6 +2970,7 @@ END FUNCTION ARTNQ
 
 double precision function DARTNQ(Y,X)
 IMPLICIT NONE
+INTENT(IN) X, Y
 DOUBLE PRECISION X,Y
 IF (X) 1,2,5
 1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
@@ -2962,6 +2991,7 @@ END FUNCTION DARTNQ
 
 REAL function CPABS(X, Y)
 IMPLICIT NONE
+INTENT(IN) X, Y
 REAL X, Y
 REAL A
 !     --------------------------------------
@@ -2981,6 +3011,7 @@ END FUNCTION CPABS
 
 double precision function DCPABS(X, Y)
 IMPLICIT NONE
+INTENT(IN) X, Y
 DOUBLE PRECISION X, Y
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
@@ -3001,6 +3032,7 @@ END FUNCTION DCPABS
 
 SUBROUTINE CREC (X, Y, U, V)
 IMPLICIT NONE
+INTENT(IN) X, Y
 REAL U, V, X, Y
 REAL D, T
 !-----------------------------------------------------------------------
@@ -3021,6 +3053,7 @@ END SUBROUTINE CREC
 
 SUBROUTINE DCREC (X, Y, U, V)
 IMPLICIT NONE
+INTENT(IN) X, Y
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
@@ -3042,6 +3075,7 @@ END SUBROUTINE DCREC
 
 COMPLEX function CDIV (A, B)
 IMPLICIT NONE
+INTENT(IN) A, B
 REAL AI, AR, BI, BR, D, T, U, V
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION A/B WHERE B IS NONZERO
@@ -3070,6 +3104,7 @@ END FUNCTION CDIV
 
 SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
 IMPLICIT NONE
+INTENT(IN) AI, AR, BI, BR
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 !-----------------------------------------------------------------------
@@ -3104,6 +3139,7 @@ END SUBROUTINE CDIVID
 
 SUBROUTINE DCSQRT (Z, W)
 IMPLICIT NONE
+INTENT(IN) Z
 DOUBLE PRECISION Z(2), W(2)
 ! ----------------------------------------------------------------------
 !        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
@@ -3152,6 +3188,7 @@ END SUBROUTINE DCSQRT
 
 SUBROUTINE POCA(R,A,X,Y)
 IMPLICIT NONE
+INTENT(IN) A, R
 REAL A, R, X, Y
 X=R*COS(A)
 Y=R*SIN(A)
@@ -3160,6 +3197,7 @@ END SUBROUTINE POCA
 
 SUBROUTINE CAPO(X,Y,R,THETA)
 IMPLICIT NONE
+INTENT(IN) X, Y
 REAL R, THETA, X, Y
 REAL A
 IF (ABS(X).LE.ABS(Y)) GO TO 10
@@ -3179,6 +3217,7 @@ END SUBROUTINE CAPO
 
 SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
 IMPLICIT NONE
+INTENT(IN) A, X1, Y1
 REAL A, X1, X2, Y1, Y2
 REAL COSA, SINA
 SINA=SIN(A)
@@ -3384,6 +3423,7 @@ END SUBROUTINE ROT3
 
 SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
 IMPLICIT NONE
+INTENT(IN) XK, YK, ZK
 REAL XK, YK, ZK, CX, SX, CY, SY
 !
 !***********************************************************
@@ -3430,6 +3470,7 @@ END SUBROUTINE CONSTR
 
 REAL function ANG (N, X, Y)
 IMPLICIT NONE
+INTENT(IN) N, X, Y
 INTEGER N
 INTEGER I
 REAL D, RX, RY
@@ -3468,6 +3509,7 @@ END FUNCTION ANG
 
 REAL function SIN0 (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL A0, A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
@@ -3486,6 +3528,7 @@ END FUNCTION SIN0
 
 REAL function COS0 (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
@@ -3502,6 +3545,7 @@ END FUNCTION COS0
 
 REAL function SIN1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 INTEGER MAX, N
 REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
@@ -3558,6 +3602,7 @@ END FUNCTION SIN1
 
 REAL function COS1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 INTEGER MAX, N
 REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
@@ -3614,6 +3659,7 @@ END FUNCTION COS1
 
 double precision function DSIN1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER MAX, N
 INTEGER IPMPAR
 !-----------------------------------------------------------------------
@@ -3711,6 +3757,7 @@ END FUNCTION DSIN1
 
 double precision function DCOS1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER MAX, N
 INTEGER IPMPAR
 !-----------------------------------------------------------------------
@@ -3808,6 +3855,7 @@ END FUNCTION DCOS1
 
 SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
 IMPLICIT NONE
+INTENT(IN) ISW, X
 REAL AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, SP4 &
 &, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
 !
@@ -3912,6 +3960,7 @@ END SUBROUTINE SNHCSH
 
 REAL function ESUM (MU, X)
 IMPLICIT NONE
+INTENT(IN) MU, X
 INTEGER MU
 REAL X
 REAL W
@@ -3939,6 +3988,7 @@ END FUNCTION ESUM
 
 double precision function DESUM (MU, X)
 IMPLICIT NONE
+INTENT(IN) MU, X
 INTEGER MU
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
@@ -3966,6 +4016,7 @@ END FUNCTION DESUM
 
 REAL function REXP (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL E, P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
@@ -3993,6 +4044,7 @@ END FUNCTION REXP
 
 double precision function DREXP (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -4050,6 +4102,7 @@ END FUNCTION DREXP
 
 SUBROUTINE REXP1 (X, E, W)
 IMPLICIT NONE
+INTENT(IN) X
 REAL E, W, X
 REAL P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
@@ -4084,6 +4137,7 @@ END SUBROUTINE REXP1
 
 SUBROUTINE DREXP1 (X, E, W)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4149,6 +4203,7 @@ END SUBROUTINE DREXP1
 
 REAL function ALNREL(A)
 IMPLICIT NONE
+INTENT(IN) A
 REAL A
 REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 !-----------------------------------------------------------------------
@@ -4175,6 +4230,7 @@ END FUNCTION ALNREL
 
 double precision function DLNREL (A)
 IMPLICIT NONE
+INTENT(IN) A
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4227,6 +4283,7 @@ END FUNCTION DLNREL
 
 REAL function RLOG(X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
@@ -4279,6 +4336,7 @@ END FUNCTION RLOG
 
 REAL function RLOG1(X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
@@ -4331,6 +4389,7 @@ END FUNCTION RLOG1
 
 double precision function DRLOG (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
@@ -4411,6 +4470,7 @@ END FUNCTION DRLOG
 
 double precision function DRLOG1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -4491,6 +4551,7 @@ END FUNCTION DRLOG1
 
 SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
 IMPLICIT NONE
+INTENT(IN) N, X, X0, Y, Y0
 INTEGER L, M, N
 REAL X0, Y0
 INTEGER I, N0
@@ -4574,6 +4635,7 @@ END SUBROUTINE LOCPT
 
 SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
 IMPLICIT NONE
+INTENT(IN) A, B, M, N, X, Y
 INTEGER IERR, M, N, NUM
 INTEGER I, IND, NM1
 REAL D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX &
@@ -4739,6 +4801,7 @@ END SUBROUTINE PFIND
 
 SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
 IMPLICIT NONE
+INTENT(IN) M
 INTEGER K, M, N
 INTEGER I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN &
 &, LSAV, MM1, MP1, NN
@@ -5128,6 +5191,7 @@ END SUBROUTINE HULL
 
 REAL function PAREA(X, Y, NB)
 IMPLICIT NONE
+INTENT(IN) NB, X, Y
 INTEGER I, N, NM1
 REAL A
 INTEGER NB
@@ -5165,6 +5229,7 @@ END FUNCTION PAREA
 
 SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
 IMPLICIT NONE
+INTENT(IN) M, N, NUM, PR
 INTEGER IND, M, N, NB, NUM
 INTEGER I, II, NP1
 !
@@ -5272,6 +5337,7 @@ END SUBROUTINE HC
 SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR, &
 &VC, P, SUBR, RBUS, TOR, JR, K, IND0)
 IMPLICIT NONE
+INTENT(IN) M, N, NP1, PR
 INTEGER IND, IND0, JR, K, M, N, NB, NP1
 INTEGER I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, JSUBR &
 &, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
@@ -5607,6 +5673,7 @@ END SUBROUTINE HC1
 SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K, &
 &JR, M, NP1)
 IMPLICIT NONE
+INTENT(IN) AR, I, J, JR, K, M, N, NP1, PR, SUBR
 INTEGER I, I1, I2, J, JR, K, M, N, NP, NP1
 INTEGER JA, K1, L, L1, L2
 !
@@ -5670,6 +5737,7 @@ END SUBROUTINE IPATH
 
 SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
 IMPLICIT NONE
+INTENT(IN) I1, K1, M, N, NP1, P1, P2
 INTEGER I1, K1, M, N, NP1
 INTEGER IA, J, J1, J2, L, L1, L2
 !
@@ -5697,6 +5765,7 @@ END SUBROUTINE FUPD
 
 SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
 IMPLICIT NONE
+INTENT(IN) II, K1, K2, M, N, NP1, P1, P2
 INTEGER II, K1, K2, M, N, NP1
 INTEGER IA, L, L1, L2, LL, LL1, LL2
 !
@@ -5725,6 +5794,7 @@ END SUBROUTINE BUPD
 
 SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
 IMPLICIT NONE
+INTENT(IN) IB, K1, L, M, N, NP1, P1, P2
 INTEGER IA, IB, K1, L, M, N, NP1
 INTEGER IARC, J1, J2, JJ, M1, M2, MM
 !
@@ -5759,6 +5829,7 @@ END SUBROUTINE IUPD
 SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, &
 &NP1)
 IMPLICIT NONE
+INTENT(IN) IA, IB, K1, M, N, NP1, PC, PR
 INTEGER IA, IB, JJ, K1, LL, M, N, NP1
 INTEGER J1, J2, L1, L2
 !
@@ -5804,6 +5875,7 @@ END SUBROUTINE RARC
 
 SUBROUTINE CERF (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 INTEGER I
 REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
@@ -5960,6 +6032,7 @@ END SUBROUTINE CERF
 
 SUBROUTINE CERFC (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 INTEGER I
 REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
@@ -6139,6 +6212,7 @@ END SUBROUTINE CERFC
 
 REAL function ERF (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL AX, BOT, C, T, TOP, X2
 !-----------------------------------------------------------------------
@@ -6202,6 +6276,7 @@ END FUNCTION ERF
 
 REAL function ERFC (X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 REAL AX, BOT, C, E, T, TOP
 REAL EXPARG
@@ -6289,6 +6364,7 @@ END FUNCTION ERFC
 
 REAL function ERFC1 (IND, X)
 IMPLICIT NONE
+INTENT(IN) IND, X
 REAL EXPARG
 INTEGER IND
 REAL X
@@ -6386,6 +6462,7 @@ END FUNCTION ERFC1
 
 SUBROUTINE DCERF (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 !-----------------------------------------------------------------------
 !
@@ -6666,6 +6743,7 @@ END SUBROUTINE DCERF
 
 SUBROUTINE DCERFC (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 !-----------------------------------------------------------------------
 !
@@ -6951,6 +7029,7 @@ END SUBROUTINE DCERFC
 
 SUBROUTINE ERFCM2 (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 INTEGER J, N
 !-----------------------------------------------------------------------
@@ -7091,6 +7170,7 @@ END SUBROUTINE ERFCM2
 
 double precision function DERF (X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER I, K
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
@@ -7150,6 +7230,7 @@ END FUNCTION DERF
 
 double precision function DERFC (X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER I, K
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -7215,6 +7296,7 @@ END FUNCTION DERFC
 
 double precision function DERFC1 (IND, X)
 IMPLICIT NONE
+INTENT(IN) IND, X
 INTEGER IND
 INTEGER I, K
 !-----------------------------------------------------------------------
@@ -7297,6 +7379,7 @@ END FUNCTION DERFC1
 
 double precision function DERFC0 (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -7461,6 +7544,7 @@ END FUNCTION DERFC0
 
 REAL function ERFI (P, Q)
 IMPLICIT NONE
+INTENT(IN) P, Q
 REAL P, Q
 REAL C, C1, C2, EPS, S, T, V, V1
 REAL SPMPAR
@@ -7583,6 +7667,7 @@ END FUNCTION ERFI
 
 double precision function DERFI (P, Q)
 IMPLICIT NONE
+INTENT(IN) P, Q
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION COMPUTATION OF
@@ -7747,6 +7832,7 @@ END FUNCTION DERFI
 
 REAL function AERF (X, H)
 IMPLICIT NONE
+INTENT(IN) H, X
 REAL H, X
 INTEGER J, N, N1
 REAL A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, U, V &
@@ -7877,6 +7963,7 @@ END FUNCTION AERF
 
 double precision function DAERF (X, H)
 IMPLICIT NONE
+INTENT(IN) H, X
 INTEGER J
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
@@ -8007,6 +8094,7 @@ END FUNCTION DAERF
 
 FUNCTION PNDF(X,IND)
 IMPLICIT NONE
+INTENT(IN) IND, X
 INTEGER IND
 REAL X
 REAL A, C, T
@@ -8035,6 +8123,7 @@ END FUNCTION PNDF
 
 SUBROUTINE PNI (P, Q, D, W, IERR)
 IMPLICIT NONE
+INTENT(IN) D, P, Q
 INTEGER IERR
 REAL D, P, Q, W
 REAL EPS, RT2, T, U, V
@@ -8091,6 +8180,7 @@ END SUBROUTINE PNI
 
 SUBROUTINE DPNI (P, Q, D, W, IERR)
 IMPLICIT NONE
+INTENT(IN) D, P, Q
 INTEGER IERR
 !-----------------------------------------------------------------------
 !
@@ -8147,6 +8237,7 @@ END SUBROUTINE DPNI
 
 REAL function DAW(X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER I
 !-----------------------------------------------------------------------
 !
@@ -8291,6 +8382,7 @@ END FUNCTION DAW
 
 double precision function DPDAW (X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER I, K
 !-----------------------------------------------------------------------
 !            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
@@ -8398,6 +8490,7 @@ END FUNCTION DPDAW
 
 double precision function DPDAW0 (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF X*DAW(X) FOR X .GE. 4
@@ -8598,6 +8691,7 @@ END FUNCTION DPDAW0
 
 SUBROUTINE CFRNLI (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 INTEGER I
 REAL C, C0, DM, PM, QM, R, SS, X, Y
@@ -8776,6 +8870,7 @@ END SUBROUTINE CFRNLI
 
 SUBROUTINE FRNL (T, C, S)
 IMPLICIT NONE
+INTENT(IN) T
 REAL C, S, T
 INTEGER I, L, M, MAX
 REAL CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
@@ -8998,6 +9093,7 @@ END SUBROUTINE FRNL
 
 SUBROUTINE CEXPLI (MO, Z, W)
 IMPLICIT NONE
+INTENT(IN) MO, Z
 INTEGER MO
 INTEGER I
 REAL C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
@@ -9187,6 +9283,7 @@ END SUBROUTINE CEXPLI
 
 SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
 IMPLICIT NONE
+INTENT(IN) ARG, INT
 INTEGER M
 REAL CSEVL
 REAL ALNREL
@@ -9524,6 +9621,7 @@ END SUBROUTINE EXPLI
 
 double precision function DEI (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
@@ -9537,6 +9635,7 @@ END FUNCTION DEI
 
 double precision function DEI1 (X)
 IMPLICIT NONE
+INTENT(IN) X
 !-----------------------------------------------------------------------
 !          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
 !-----------------------------------------------------------------------
@@ -9551,6 +9650,7 @@ END FUNCTION DEI1
 
 double precision function DE1E(X)
 IMPLICIT NONE
+INTENT(IN) X
 INTEGER M
 !-----------------------------------------------------------------------
 !
@@ -10024,6 +10124,7 @@ END FUNCTION DE1E
 
 double precision function DEI0 (X, EPS)
 IMPLICIT NONE
+INTENT(IN) EPS, X
 INTEGER N
 !-----------------------------------------------------------------------
 !
@@ -10118,6 +10219,7 @@ END FUNCTION DEI0
 
 FUNCTION SI(X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 INTEGER I, J, M1, M2, N1, N2
 REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, PIO2, RC, TEMP, TX
@@ -10239,6 +10341,7 @@ END FUNCTION SI
 
 FUNCTION CIN(X)
 IMPLICIT NONE
+INTENT(IN) X
 REAL X
 INTEGER I, J, M1, M2, N1, N2
 REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, ECON, RC, TEMP, TX
@@ -10360,6 +10463,7 @@ END FUNCTION CIN
 
 SUBROUTINE CEXEXI (Z, W)
 IMPLICIT NONE
+INTENT(IN) Z
 INTEGER I
 REAL CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
 !-----------------------------------------------------------------------

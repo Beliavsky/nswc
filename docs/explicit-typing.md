@@ -483,8 +483,10 @@ python tools/validate_explicit_typing.py
 
 Use `--compiler PATH` if necessary. This reconstructs the source before explicit typing
 from the archived original and earlier readability transformations, applies the
-reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
-dumps are then compared before and after the additions. The local check preserved
+reviewed typing and [input intent manifests](argument-intents.md), and verifies
+that it reproduces `nswc.f`. GNU Fortran's symbol dumps confirm the added input
+attributes before those attributes are removed for comparison with the original
+symbol records. The local check preserved
 25,873 variable and external procedure records across all 1,062 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;

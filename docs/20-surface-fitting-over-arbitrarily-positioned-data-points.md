@@ -12,11 +12,11 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRMESH` | `SUBROUTINE` | `N, X, Y, IADJ, IEND, IER` | [`L95372`](../source_parts/nswc_part_10.f90#L134) |
-| `GRADG` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L96820`](../source_parts/nswc_part_10.f90#L1582) |
-| `GRADL` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L97069`](../source_parts/nswc_part_10.f90#L1831) |
-| `SFVAL` | `SUBROUTINE` | `N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L97622`](../source_parts/nswc_part_10.f90#L2384) |
-| `SFVAL2` | `SUBROUTINE` | `N, X, Y, Z, L, M, NROWS, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L97652`](../source_parts/nswc_part_10.f90#L2414) |
+| `TRMESH` | `SUBROUTINE` | `N, X, Y, IADJ, IEND, IER` | [`L96228`](../source_parts/nswc_part_10.f90#L734) |
+| `GRADG` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L97685`](../source_parts/nswc_part_10.f90#L2191) |
+| `GRADL` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L97936`](../source_parts/nswc_part_10.f90#L2442) |
+| `SFVAL` | `SUBROUTINE` | `N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L98493`](../source_parts/nswc_part_10.f90#L2999) |
+| `SFVAL2` | `SUBROUTINE` | `N, X, Y, Z, L, M, NROWS, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L98524`](../source_parts/nswc_part_10.f90#L3030) |
 
 
 ```text

@@ -14,7 +14,7 @@ from name_procedure_ends import transform as name_ends
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def symbols(dump):
+def symbols(dump, include_intrinsics=False):
     result = {}
     scope = None
     symbol = None
@@ -37,7 +37,7 @@ def symbols(dump):
     # NONE. Intrinsic result types are resolved from the actual call arguments;
     # those placeholders are not variable or external-function declarations.
     return {scope: {name: entry for name, entry in entries.items()
-                    if not name.startswith("__") and "INTRINSIC-PROC" not in entry.get("attributes", "")}
+                    if not name.startswith("__") and (include_intrinsics or "INTRINSIC-PROC" not in entry.get("attributes", ""))}
             for scope, entries in result.items()}
 
 
@@ -92,6 +92,8 @@ def scope_preserved(before, after, reviewed_subroutines=(), reviewed_functions=N
 
 
 def main():
+    # Import here: the intent analyzer reuses this module's dump parser.
+    from argument_intents import apply_intents, normalize_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compiler", default="gfortran")
     args = parser.parse_args()
@@ -99,6 +101,9 @@ def main():
     manifest = json.loads(DEFAULT_MANIFEST.read_text())
     before = modernize_loops(name_ends((ROOT / "nswc_orig.f").read_bytes()).data).data
     after = apply_manifest(before, manifest)
+    intents = json.loads(INTENT_MANIFEST.read_text()) if INTENT_MANIFEST.exists() else None
+    if intents:
+        after = apply_intents(after, intents)
     if after != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing batches")
     inventories = []
@@ -111,7 +116,10 @@ def main():
                                     cwd=folder, capture_output=True, text=True, timeout=180)
             if result.returncode:
                 raise RuntimeError(result.stderr)
-            inventories.append(symbols(result.stdout))
+            inventory = symbols(result.stdout)
+            if label == "after" and intents:
+                inventory = normalize_intents(inventory, intents)
+            inventories.append(inventory)
     count = 0
     mismatches = {}
     for name in manifest["procedures"]:
@@ -138,6 +146,9 @@ def main():
         raise RuntimeError("Type, attributes, shape, or argument list changed:\n"
                            + json.dumps(mismatches, indent=2))
     print(f"Preserved {count} compiler symbol records across {len(manifest['procedures'])} procedures.")
+    if intents:
+        count_intents = sum(len(entry["arguments"]) for entry in intents["procedures"].values())
+        print(f"Confirmed {count_intents} reviewed input argument intents.")
     reviews = manifest.get("subroutine_classification_reviews", {})
     if reviews:
         print(f"Checked {sum(map(len, reviews.values()))} reviewed forwarded subroutine classifications.")
