@@ -92,13 +92,22 @@ def main():
                 raise RuntimeError(result.stderr)
             inventories.append(symbols(result.stdout))
     count = 0
+    mismatches = {}
     for name in manifest["procedures"]:
         if name not in inventories[0] or name not in inventories[1]:
             raise RuntimeError(f"Missing procedure in compiler dump: {name}")
         reviewed = manifest.get("subroutine_classification_reviews", {}).get(name, {})
         if not scope_preserved(inventories[0][name], inventories[1][name], reviewed):
-            raise RuntimeError(f"Type, attributes, shape, or argument list changed: {name}")
+            original, converted = inventories[0][name], inventories[1][name]
+            mismatches[name] = {
+                symbol: {"before": original.get(symbol), "after": converted.get(symbol)}
+                for symbol in sorted(original.keys() | converted.keys())
+                if original.get(symbol) != converted.get(symbol)
+            }
         count += len(inventories[0][name])
+    if mismatches:
+        raise RuntimeError("Type, attributes, shape, or argument list changed:\n"
+                           + json.dumps(mismatches, indent=2))
     print(f"Preserved {count} compiler symbol records across {len(manifest['procedures'])} procedures.")
     reviews = manifest.get("subroutine_classification_reviews", {})
     if reviews:
