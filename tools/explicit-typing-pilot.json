@@ -1,7 +1,7 @@
 {
   "generator": "ftnchek 3.3.1",
   "options": "undeclared-only,suppress-array-dimensions,compact,use-continuation-lines",
-  "input_sha256": "b565c0e64221a8924635279687ae9aac48903069d5b0b8b169f539939775e819",
+  "input_sha256": "8cfeae3e57a6acc942a4e3428328e734391dc4a80ecf371043b1d88f8bdb9c00",
   "review_notes": {
     "BRATIO": "Added REAL return types for APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR. The undeclared-only report omitted these EXTERNAL names; its full declaration report and original source confirm their types.",
     "QAGS": "Added REAL F. F is a function forwarded to QAGSE; leaving it untyped under IMPLICIT NONE changes its classification and produces a new compiler warning.",
@@ -2968,7 +2968,7 @@
       ]
     },
     "MACH1": {
-      "sha256": "04186c9d53b3fc8999b398757fdf0cd6b582faaaacb9de28ee83091d58bac7d7",
+      "sha256": "b52c18e23877c92e37d924be765607971b68ad16b56137a6f8ec585d774db4fd",
       "declarations": [
         "      INTEGER IBETA, M, MAXEXP, MINEXP, N",
         "      INTEGER J, K, KM, L"
@@ -2982,7 +2982,7 @@
       ]
     },
     "MACH2": {
-      "sha256": "911660aa2d4b04b32a1ec85f6409eda394aab978163b028e52dfaff15d4e4587",
+      "sha256": "ad01376eafd2551a9da7f6d26df485f496fb1347a12f0412e7c71358004e2f5d",
       "declarations": [
         "      INTEGER IBETA, M, MAXEXP, MINEXP, N",
         "      INTEGER J, K, KM, L"
@@ -4647,7 +4647,7 @@
       ]
     },
     "DQDCRT": {
-      "sha256": "924e57c0d44081c72042cc6eeb55ef51126452fc7adbc5e81cc860591a4b8bf8",
+      "sha256": "e847805fdec7860289acff080cf1af8f683ac0d6acc0f260016d2f6fbe559ad1",
       "declarations": []
     },
     "CBCRT": {
@@ -7182,7 +7182,7 @@
       ]
     },
     "ITERT": {
-      "sha256": "0f104fab4d6789dd5d2b94b1db8f0be0c40671531fbb9d0b05fce161182c9e61",
+      "sha256": "59c52b829ae1e138ec9cb0d0b10290b3a2c75c248d76cac8ee0d680c7d29568e",
       "declarations": [
         "      INTEGER IFLG, M, N, NHALF, NUP",
         "      REAL DELN, R, RH, RHFCN, RHS, TM, TN, WM, WN, XM, XMZ",
@@ -9165,5 +9165,6 @@
         "evidence": "GNU 13 leaves this forwarded EXTERNAL unresolved before explicit typing. The original function definition or receiving worker confirms REAL; GNU 17 also resolves the original to REAL."
       }
     }
-  }
+  },
+  "source_corrections": "reviewed-source-fixes.json"
 }

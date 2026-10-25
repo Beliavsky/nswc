@@ -8581,7 +8581,7 @@ INTENT(INOUT) ZI, ZR
 !     A(3) IS NONZERO.
 !
 !-----------------------------------------------------------------------
-DOUBLE PRECISION A(3), ZR(3), ZI(3)
+DOUBLE PRECISION A(3), ZR(2), ZI(2)
 DOUBLE PRECISION D, EPS, R, W
 DOUBLE PRECISION DPMPAR
 !-----------------------------------------------------------------------

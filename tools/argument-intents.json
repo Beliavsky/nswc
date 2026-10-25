@@ -1,6 +1,6 @@
 {
   "generator": "Fortran-Tools input proof and compiler-guided writable argument analysis",
-  "input_sha256": "ca4a28fe2adb4a2a38fbf6802e65b95c489d6a2d1a63de3370b30dc0994ab87d",
+  "input_sha256": "43e9ae1de3e510471434c01d4d6c7f382fe44ebae283f3a6c478bcb68d6ac24a",
   "procedures": {
     "IPMPAR": {
       "sha256": "d6c443f48a5bbcc75a115d8882435c111ba9ea3270d49e068d80a14b860f86bf",
@@ -10950,7 +10950,7 @@
       }
     },
     "DQDCRT": {
-      "sha256": "7e03f6093f1f37eed736f3d7a399c2799fbf28faac6c398e53c9c9ec6cf0e5ac",
+      "sha256": "6443fabfaeb4a855e28679ffa2f00c1c4de73c63da9e2f76214413bb9c5820e6",
       "arguments": {
         "A": "IN",
         "ZI": "INOUT",
@@ -72208,12 +72208,11 @@
       }
     },
     "ITERT": {
-      "sha256": "f0f964777dc89f51f6a75d0f5bdaf97d18f9386a9a593c03863e5f29b2d4ab6d",
+      "sha256": "c4f2f1e6b0e2e5234cb001b100d7d62ffa1f55fc65390b2778539439979ab6dd",
       "arguments": {
         "IFLG": "IN",
         "M": "IN",
         "NHALF": "IN",
-        "RHFCN": "IN",
         "DELN": "INOUT",
         "KMM": "INOUT",
         "KNM": "INOUT",
@@ -80173,6 +80172,11 @@
       "out": 262,
       "inout": 2821,
       "method": "Direct writes and known-call propagation, whole scalar prefix initializations, specification dependencies, and all internal call-site definability and shared-storage checks."
+    },
+    "callback_correction": {
+      "procedure": "ITERT",
+      "argument": "RHFCN",
+      "reason": "EXTERNAL callback, unused in this worker; remove the earlier data-argument IN annotation."
     }
   },
   "writable_analysis": {
@@ -80241,10 +80245,10 @@
     "nonvariable_actuals": {}
   },
   "coverage": {
-    "IN": 4177,
+    "IN": 4176,
     "OUT": 262,
     "INOUT": 2821,
-    "data_arguments": 8102,
+    "data_arguments": 8101,
     "unannotated_data_arguments": 842,
     "procedures": 1007
   }

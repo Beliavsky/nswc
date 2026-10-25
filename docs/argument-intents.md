@@ -1,11 +1,15 @@
 # Argument intents
 
-The maintained sources have 4,177 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
+The maintained sources have 4,176 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
 `INTENT(INOUT)` data arguments across 1,007 of the 1,062 library procedures.
-Of 8,102 data arguments, 842 remain without intents pending further review.
+Of 8,101 data arguments, 842 remain without intents pending further review.
 Procedure callbacks are excluded from these data-argument counts.
 The maintained `nswc.f`, generated `nswc.f90`, and source partitions contain the
 same annotations. The archived `nswc_orig.f` is unchanged.
+
+The [warning review](compiler-warnings.md) identified `ITERT`'s unused `RHFCN`
+as a procedure callback. Its earlier data-argument `IN` annotation was removed,
+reducing both the input count and the data-argument count by one.
 
 Output annotations require checks of incoming values, partial array writes,
 early returns, and storage associations. Passing the representative numerical
@@ -126,14 +130,15 @@ and declaration changes, applies the intent manifest, and compares the result
 with `nswc.f`. GNU Fortran's compiler dump must confirm every reviewed `IN`,
 `OUT`, and `INOUT` attribute. Only those attributes are removed for the comparison
 of 25,873 symbol records; types, shapes, storage attributes, and argument lists
-must still match, subject to the existing reviewed forwarded procedure cases.
+must still match, subject to the reviewed forwarded procedure cases and the
+separately confirmed warning corrections.
 
-The local compilation retains the original 28 warnings. All 42 numerical main
-programs are run against each source version, giving 126 numerical runs with
+The local compilation now has 12 reviewed warnings, compared with the original
+28. All 44 numerical main programs run against each source version, giving 132 runs with
 matching diagnostics. Regression tests cover dependency propagation, unresolved
 calls and cycles, array elements passed to procedures, keyword arguments, stale
 manifests, compiler attribute confirmation, scalar initialization, specification
 dependencies, and writable call restrictions. The BLAS checks verify that
 copies with a stride and zero-length calls preserve untouched elements. Another
-84 local runs test the original and recommended sources with `-O2` optimization.
+88 local runs test the original and recommended sources with `-O2` optimization.
 The standard checks also run in GitHub Actions.

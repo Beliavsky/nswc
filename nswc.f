@@ -963,20 +963,20 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     FORMAT STATEMENTS
 C-----------------------------------------------------------------------
-  200 FORMAT (50H THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS//
+  200 FORMAT (' THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS'//
      *        I25//
-     *        47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/
-     *        50H THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN/
-     *        39H THIS APPROXIMATION AND RERUN THE CODE.//)
-  210 FORMAT (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/
-     *        48H BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER/
-     *        14H THAT FOLLOWS.//I25)
+     *        ' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/
+     *        ' THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/
+     *        ' THIS APPROXIMATION AND RERUN THE CODE.'//)
+  210 FORMAT (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/
+     *        ' BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER'/
+     *        ' THAT FOLLOWS.'//I25)
   220 FORMAT (I25)
-  230 FORMAT(/32H   ****** OVERFLOW OCCURS ******)
-  240 FORMAT(/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./
-     *        45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./
-     *        43H        IF ONE WISHES, SET IMAX (OR MAXEXP)/
-     *        45H        TO A LARGER VALUE AND RERUN THE CODE./)
+  230 FORMAT(/'   ****** OVERFLOW OCCURS ******')
+  240 FORMAT(/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/
+     *        '        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/
+     *        '        IF ONE WISHES, SET IMAX (OR MAXEXP)'/
+     *        '        TO A LARGER VALUE AND RERUN THE CODE.'/)
 C-----------------------------------------------------------------------
       END SUBROUTINE MACH1
 
@@ -1220,20 +1220,20 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     FORMAT STATEMENTS
 C-----------------------------------------------------------------------
-  200 FORMAT (51H THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS//
+  200 FORMAT (' THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS'//
      *        I25//
-     *        47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/
-     *        51H THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN/
-     *        39H THIS APPROXIMATION AND RERUN THE CODE.//)
-  210 FORMAT (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/
-     *        49H BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER/
-     *        14H THAT FOLLOWS.//I25)
+     *        ' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/
+     *        ' THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/
+     *        ' THIS APPROXIMATION AND RERUN THE CODE.'//)
+  210 FORMAT (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/
+     *        ' BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER'/
+     *        ' THAT FOLLOWS.'//I25)
   220 FORMAT (I25)
-  230 FORMAT (32H0  ****** OVERFLOW OCCURS ******)
-  240 FORMAT(/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./
-     *        45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./
-     *        44H        IF ONE WISHES, SET IDMAX (OR MAXEXP)/
-     *        45H        TO A LARGER VALUE AND RERUN THE CODE./)
+  230 FORMAT ('0  ****** OVERFLOW OCCURS ******')
+  240 FORMAT(/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/
+     *        '        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/
+     *        '        IF ONE WISHES, SET IDMAX (OR MAXEXP)'/
+     *        '        TO A LARGER VALUE AND RERUN THE CODE.'/)
 C-----------------------------------------------------------------------
       END SUBROUTINE MACH2
 
@@ -29643,7 +29643,7 @@ C     AND STORES THE RESULTS IN ZR AND ZI. IT IS ASSUMED THAT
 C     A(3) IS NONZERO.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION A(3), ZR(3), ZI(3)
+      DOUBLE PRECISION A(3), ZR(2), ZI(2)
       DOUBLE PRECISION D, EPS, R, W
       DOUBLE PRECISION DPMPAR
 C-----------------------------------------------------------------------
@@ -109921,7 +109921,7 @@ C
       SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,
      *   KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
       IMPLICIT NONE
-      INTENT(IN) IFLG, M, NHALF, RHFCN
+      INTENT(IN) IFLG, M, NHALF
       INTENT(INOUT) DELN, KMM, KNM, LUFACT, R, RH, XM
       INTEGER IFLG, M, N, NHALF, NUP
       REAL DELN, R, RH, RHFCN, RHS, TM, TN, WM, WN, XM, XMZ
@@ -109936,7 +109936,7 @@ C
       DIMENSION TN(N),WN(N),TM(M),WM(M),XM(M),XMZ(M),KMM(NUP,NUP),
      *   KMN(NUP,NHALF),KNM(NHALF,NUP),RHS(M),IMKNN(NUP,NUP),
      *   LUFACT(NUP,NUP),R(M),RH(N),DELN(N)
-      EXTERNAL KERNEL
+      EXTERNAL KERNEL,RHFCN
 C
 C   M .GT. NUPPER MEANS THAT THE MATRICES KMM,KMN,KNM CAN NO LONGER
 C   BE STORED DUE TO LACK OF SPACE.

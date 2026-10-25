@@ -1,0 +1,234 @@
+{
+  "baseline_commit": "cce452e",
+  "stage": "After named ends and loop modernization, before explicit typing",
+  "procedures": {
+    "MACH1": {
+      "before_sha256": "04186c9d53b3fc8999b398757fdf0cd6b582faaaacb9de28ee83091d58bac7d7",
+      "after_sha256": "b52c18e23877c92e37d924be765607971b68ad16b56137a6f8ec585d774db4fd",
+      "reason": "Use quoted FORMAT text with identical characters, spacing, and record controls.",
+      "replacements": [
+        {
+          "before": "  200 FORMAT (50H THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS//\n",
+          "after": "  200 FORMAT (' THE INITIAL APPROXIMATION FOR IMAX (OR MAXEXP) IS'//\n"
+        },
+        {
+          "before": "     *        47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/\n",
+          "after": "     *        ' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/\n"
+        },
+        {
+          "before": "     *        50H THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN/\n",
+          "after": "     *        ' THEN SET IMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/\n"
+        },
+        {
+          "before": "     *        39H THIS APPROXIMATION AND RERUN THE CODE.//)\n",
+          "after": "     *        ' THIS APPROXIMATION AND RERUN THE CODE.'//)\n"
+        },
+        {
+          "before": "  210 FORMAT (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/\n",
+          "after": "  210 FORMAT (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/\n"
+        },
+        {
+          "before": "     *        48H BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER/\n",
+          "after": "     *        ' BEGUN. SET IMAX (OR MAXEXP) TO THE LAST INTEGER'/\n"
+        },
+        {
+          "before": "     *        14H THAT FOLLOWS.//I25)\n",
+          "after": "     *        ' THAT FOLLOWS.'//I25)\n"
+        },
+        {
+          "before": "  230 FORMAT(/32H   ****** OVERFLOW OCCURS ******)\n",
+          "after": "  230 FORMAT(/'   ****** OVERFLOW OCCURS ******')\n"
+        },
+        {
+          "before": "  240 FORMAT(/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./\n",
+          "after": "  240 FORMAT(/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/\n"
+        },
+        {
+          "before": "     *        45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./\n",
+          "after": "     *        '        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/\n"
+        },
+        {
+          "before": "     *        43H        IF ONE WISHES, SET IMAX (OR MAXEXP)/\n",
+          "after": "     *        '        IF ONE WISHES, SET IMAX (OR MAXEXP)'/\n"
+        },
+        {
+          "before": "     *        45H        TO A LARGER VALUE AND RERUN THE CODE./)\n",
+          "after": "     *        '        TO A LARGER VALUE AND RERUN THE CODE.'/)\n"
+        }
+      ]
+    },
+    "MACH2": {
+      "before_sha256": "911660aa2d4b04b32a1ec85f6409eda394aab978163b028e52dfaff15d4e4587",
+      "after_sha256": "ad01376eafd2551a9da7f6d26df485f496fb1347a12f0412e7c71358004e2f5d",
+      "reason": "Use quoted FORMAT text with identical characters, spacing, and record controls.",
+      "replacements": [
+        {
+          "before": "  200 FORMAT (51H THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS//\n",
+          "after": "  200 FORMAT (' THE INITIAL APPROXIMATION FOR IDMAX (OR MAXEXP) IS'//\n"
+        },
+        {
+          "before": "     *        47H IF NO FURTHER INFORMATION APPEARS ON THIS FILE/\n",
+          "after": "     *        ' IF NO FURTHER INFORMATION APPEARS ON THIS FILE'/\n"
+        },
+        {
+          "before": "     *        51H THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN/\n",
+          "after": "     *        ' THEN SET IDMAX (OR MAXEXP) TO A SMALLER VALUE THAN'/\n"
+        },
+        {
+          "before": "     *        39H THIS APPROXIMATION AND RERUN THE CODE.//)\n",
+          "after": "     *        ' THIS APPROXIMATION AND RERUN THE CODE.'//)\n"
+        },
+        {
+          "before": "  210 FORMAT (51H THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS/\n",
+          "after": "  210 FORMAT (' THE LOOP TO FIND THE LARGEST POSSIBLE EXPONENT HAS'/\n"
+        },
+        {
+          "before": "     *        49H BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER/\n",
+          "after": "     *        ' BEGUN. SET IDMAX (OR MAXEXP) TO THE LAST INTEGER'/\n"
+        },
+        {
+          "before": "     *        14H THAT FOLLOWS.//I25)\n",
+          "after": "     *        ' THAT FOLLOWS.'//I25)\n"
+        },
+        {
+          "before": "  230 FORMAT (32H0  ****** OVERFLOW OCCURS ******)\n",
+          "after": "  230 FORMAT ('0  ****** OVERFLOW OCCURS ******')\n"
+        },
+        {
+          "before": "  240 FORMAT(/46H ****** 500 PASSES WERE MADE THROUGH THE LOOP./\n",
+          "after": "  240 FORMAT(/' ****** 500 PASSES WERE MADE THROUGH THE LOOP.'/\n"
+        },
+        {
+          "before": "     *        45H        THE MAXIMUM EXPONENT CANNOT BE FOUND./\n",
+          "after": "     *        '        THE MAXIMUM EXPONENT CANNOT BE FOUND.'/\n"
+        },
+        {
+          "before": "     *        44H        IF ONE WISHES, SET IDMAX (OR MAXEXP)/\n",
+          "after": "     *        '        IF ONE WISHES, SET IDMAX (OR MAXEXP)'/\n"
+        },
+        {
+          "before": "     *        45H        TO A LARGER VALUE AND RERUN THE CODE./)\n",
+          "after": "     *        '        TO A LARGER VALUE AND RERUN THE CODE.'/)\n"
+        }
+      ]
+    },
+    "DQDCRT": {
+      "before_sha256": "924e57c0d44081c72042cc6eeb55ef51126452fc7adbc5e81cc860591a4b8bf8",
+      "after_sha256": "e847805fdec7860289acff080cf1af8f683ac0d6acc0f260016d2f6fbe559ad1",
+      "reason": "A quadratic has two roots; the complete routine accesses only ZR(1:2) and ZI(1:2).",
+      "replacements": [
+        {
+          "before": "      DOUBLE PRECISION A(3), ZR(3), ZI(3)",
+          "after": "      DOUBLE PRECISION A(3), ZR(2), ZI(2)"
+        }
+      ]
+    },
+    "ITERT": {
+      "before_sha256": "0f104fab4d6789dd5d2b94b1db8f0be0c40671531fbb9d0b05fce161182c9e61",
+      "after_sha256": "59c52b829ae1e138ec9cb0d0b10290b3a2c75c248d76cac8ee0d680c7d29568e",
+      "reason": "Unused RHFCN is a forwarded real function, matching all six internal calls; its slot is retained.",
+      "replacements": [
+        {
+          "before": "      EXTERNAL KERNEL\n",
+          "after": "      EXTERNAL KERNEL,RHFCN\n"
+        }
+      ]
+    }
+  },
+  "symbol_reviews": [
+    {
+      "procedure": "ITERT",
+      "symbol": "rhfcn",
+      "before": {
+        "type spec": "type spec : (REAL 4)",
+        "attributes": "attributes: (VARIABLE DUMMY)"
+      },
+      "after": {
+        "type spec": "type spec : (REAL 4)",
+        "attributes": "attributes: (PROCEDURE EXTERNAL DUMMY FUNCTION ARRAY-OUTER-DEPENDENCY)"
+      },
+      "optional_attributes": [
+        "FUNCTION",
+        "ARRAY-OUTER-DEPENDENCY"
+      ]
+    },
+    {
+      "procedure": "DQDCRT",
+      "symbol": "zr",
+      "before": {
+        "type spec": "type spec : (REAL 8)",
+        "attributes": "attributes: (VARIABLE DIMENSION DUMMY)",
+        "Array spec": "Array spec:(1 [0] AS_EXPLICIT 1 3)"
+      },
+      "after": {
+        "type spec": "type spec : (REAL 8)",
+        "attributes": "attributes: (VARIABLE DIMENSION DUMMY)",
+        "Array spec": "Array spec:(1 [0] AS_EXPLICIT 1 2)"
+      }
+    },
+    {
+      "procedure": "DQDCRT",
+      "symbol": "zi",
+      "before": {
+        "type spec": "type spec : (REAL 8)",
+        "attributes": "attributes: (VARIABLE DIMENSION DUMMY)",
+        "Array spec": "Array spec:(1 [0] AS_EXPLICIT 1 3)"
+      },
+      "after": {
+        "type spec": "type spec : (REAL 8)",
+        "attributes": "attributes: (VARIABLE DIMENSION DUMMY)",
+        "Array spec": "Array spec:(1 [0] AS_EXPLICIT 1 2)"
+      }
+    }
+  ],
+  "remaining_warnings": [
+    {
+      "procedure": "ADAPT",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADAPT1",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADSET",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADTAKE",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADCOMP",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ERRINT",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "NEWTON",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "POLYDD",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADCHK",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADPUT",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "ADTRAN",
+      "pattern": "Padding of \\d+ bytes required before .*buffer.* in COMMON .*kontrl"
+    },
+    {
+      "procedure": "COMPB",
+      "pattern": "Type mismatch in argument .*cbp.*; passed REAL\\(4\\) to COMPLEX\\(4\\)"
+    }
+  ]
+}

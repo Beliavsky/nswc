@@ -473,6 +473,10 @@ rules are rejected for separate review rather than silently replaced.
 After editing the maintained source, regenerate its other representations with
 `python tools/regenerate_sources.py`.
 
+The current cumulative manifest expects the earlier
+[reviewed warning fixes](compiler-warnings.md) to be applied to its input first.
+Those fixes are separate from the typing declarations and have their own hashes.
+
 ## Validation
 
 Run the compiler comparison with:
@@ -483,20 +487,22 @@ python tools/validate_explicit_typing.py
 
 Use `--compiler PATH` if necessary. This reconstructs the source before explicit typing
 from the archived original and earlier readability transformations, applies the
-reviewed typing and [argument intent manifests](argument-intents.md), and verifies
-that it reproduces `nswc.f`. GNU Fortran's symbol dumps confirm the added input
+reviewed warning fixes, typing, and [argument intent manifests](argument-intents.md),
+and verifies that it reproduces `nswc.f`. GNU Fortran's symbol dumps confirm the added intent
 attributes before those attributes are removed for comparison with the original
-symbol records. The local check preserved
+symbol records. The local check compares
 25,873 variable and external procedure records across all 1,062 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear. The reviewed
 forwarded procedure resolutions described above are checked separately against
 their original calling conventions and return types; all other attributes must
-match.
+match. The warning review separately verifies three corrected records: the
+unused callback classification and the two quadratic output extents.
 
-The maintained source compiles with the original 28 warnings in the local compiler check.
-All 42 numerical test programs must still pass against each source version,
+The maintained source compiles with 12 reviewed warnings, compared with 28 in
+the original source. The compiler check rejects added or missing warnings.
+All 44 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so future source changes need
 compiler comparison and appropriate numerical checks rather than relying on

@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -10,6 +11,7 @@ import tempfile
 from explicit_typing import apply_manifest, DEFAULT_MANIFEST
 from modernize_do import transform as modernize_loops
 from name_procedure_ends import transform as name_ends
+from reviewed_source_fixes import apply_fixes, normalize_reviewed_symbols, check_warning_inventory
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -100,7 +102,7 @@ def main():
     compiler = str(Path(args.compiler).resolve()) if Path(args.compiler).is_file() else args.compiler
     manifest = json.loads(DEFAULT_MANIFEST.read_text())
     before = modernize_loops(name_ends((ROOT / "nswc_orig.f").read_bytes()).data).data
-    after = apply_manifest(before, manifest)
+    after = apply_manifest(apply_fixes(before), manifest)
     intents = json.loads(INTENT_MANIFEST.read_text()) if INTENT_MANIFEST.exists() else None
     if intents:
         after = apply_intents(after, intents)
@@ -113,12 +115,16 @@ def main():
             source.write_bytes(data)
             result = subprocess.run([compiler, "-fsyntax-only", "-std=legacy",
                                      "-fallow-argument-mismatch", "-fdump-fortran-original", str(source)],
-                                    cwd=folder, capture_output=True, text=True, timeout=180)
+                                    cwd=folder, capture_output=True, text=True, timeout=180,
+                                    env={**os.environ, "LC_ALL": "C"})
             if result.returncode:
                 raise RuntimeError(result.stderr)
             inventory = symbols(result.stdout)
             if label == "after" and intents:
                 inventory = normalize_intents(inventory, intents)
+            if label == "after":
+                warning_count = check_warning_inventory(result.stderr, data)
+                inventory = normalize_reviewed_symbols(inventories[0], inventory)
             inventories.append(inventory)
     count = 0
     mismatches = {}
@@ -145,7 +151,9 @@ def main():
     if mismatches:
         raise RuntimeError("Type, attributes, shape, or argument list changed:\n"
                            + json.dumps(mismatches, indent=2))
-    print(f"Preserved {count} compiler symbol records across {len(manifest['procedures'])} procedures.")
+    print(f"Checked {count} compiler symbol records across {len(manifest['procedures'])} procedures; "
+          "preserved all except three separately confirmed warning corrections.")
+    print(f"Confirmed {warning_count} remaining compiler warnings against the reviewed inventory.")
     if intents:
         counts = {mode: sum(v == mode for e in intents["procedures"].values() for v in e["arguments"].values())
                   for mode in ("IN", "OUT", "INOUT")}

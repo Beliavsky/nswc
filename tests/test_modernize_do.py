@@ -130,7 +130,8 @@ class ModernizeDoTests(unittest.TestCase):
         result = transform(readable)
         self.assertEqual(len(result.loops), 4247)
         self.assertEqual(sum(r.status == "converted" for r in result.loops), 2548)
-        reviewed = apply_manifest(result.data, json.loads(DEFAULT_MANIFEST.read_text()))
+        from reviewed_source_fixes import apply_fixes
+        reviewed = apply_manifest(apply_fixes(result.data), json.loads(DEFAULT_MANIFEST.read_text()))
         from argument_intents import apply_intents, DEFAULT_MANIFEST as INTENT_MANIFEST
         if INTENT_MANIFEST.exists():
             reviewed = apply_intents(reviewed, json.loads(INTENT_MANIFEST.read_text()))

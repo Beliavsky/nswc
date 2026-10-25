@@ -23,6 +23,7 @@ viewable code partitions.
 - [Spelling and OCR checks](docs/spelling-checks.md)
 - [Numerical test programs](docs/numerical-tests.md)
 - [Explicit typing progress](docs/explicit-typing.md)
+- [Compiler warning review](docs/compiler-warnings.md)
 - [Original report cover](scans/page_0001.png)
 - [Recommended free-form Fortran source](nswc.f90)
 - [Readable fixed-form alternative](nswc.f)
@@ -113,9 +114,9 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 42 numerical test programs
-against all three versions with GNU Fortran (126 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 41 main
+Run `python tools/validate_sources.py` to build and run 44 numerical test programs
+against all three versions with GNU Fortran (132 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 43 main
 programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
@@ -155,18 +156,29 @@ The declarations were generated with `ftnchek` and supplemented where function
 return types were omitted. `tools/explicit_typing.py` applies the
 reviewed manifest; it does not guess types. The [typing guide](docs/explicit-typing.md)
 records the affected procedures, tool limitations, and reproduction commands.
-Run `python tools/validate_explicit_typing.py` to check that the compiler sees
-the same variable and function types, shapes, and argument lists. The guide
+Run `python tools/validate_explicit_typing.py` to check preservation of variable
+and function types, shapes, and argument lists, with separately reviewed warning
+corrections. The guide
 also records reviewed classifications for forwarded procedures, checked against
 their original calling conventions and return types. The archived `nswc_orig.f`
 retains its original typing.
 
 ## Argument intents
 
-The maintained sources have 4,177 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
-`INTENT(INOUT)` arguments across 1,007 procedures. Of the 8,102 data arguments,
+The maintained sources have 4,176 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
+`INTENT(INOUT)` arguments across 1,007 procedures. Of the 8,101 data arguments,
 842 remain without intents pending further review. Arrays that may retain
 incoming values use `INOUT`; `OUT` is restricted to scalars initialized before
 any possible branch or read. The [intent guide](docs/argument-intents.md)
 describes the analysis, exclusions, and reproduction commands. The compiler
 comparison checks every added intent as well as the original types and shapes.
+
+## Compiler warnings
+
+The warning review reduces the local GNU Fortran build from 28 warnings to 12.
+It corrects the unused `ITERT` callback declaration and quadratic output extents,
+and replaces old FORMAT text with quoted strings. The external procedure names
+and argument order are unchanged. The remaining warnings involve shared storage
+and a real/complex workspace overlap; the legacy compiler options are still
+required. The [warning review](docs/compiler-warnings.md) records the changes,
+remaining issues, and the checks that reject new compiler warnings.

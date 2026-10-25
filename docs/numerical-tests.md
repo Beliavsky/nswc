@@ -1,12 +1,13 @@
 # Numerical test programs
 
-The suite contains the original `tests/source_smoke.f90` and 41 standalone main
-programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`. Each adapted
+The suite contains the original `tests/source_smoke.f90`, 41 standalone main
+programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`, and two new
+programs checking quadratic/cubic roots and integral iteration. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 42 programs against each of the three source versions:
+Run all 44 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -20,7 +21,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 126 numerical
+working directories are temporary. The default therefore performs 132 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -69,6 +70,8 @@ directly with any one of those library files.
 | `test_double_special.f90` | Gamma and error functions against compiler intrinsics, known values, and small argument references |
 | `test_incomplete_beta_compat.f90` | Probability values and complements, supporting functions, and invalid input status codes |
 | `test_general_polynomial_roots.f90` | Real and complex polynomial root counts and independently evaluated residuals |
+| `test_quadratic_cubic.f90` | Quadratic roots, cubic reductions with a zero constant term, and untouched output elements |
+| `test_integral_iteration.f90` | Zero-kernel integral iteration in both storage paths, including reuse and an unused callback |
 | `test_interpolation_compat.f90` | Cubic polynomial reproduction, piecewise evaluation, and polygon area |
 | `test_spline.f90` | Spline derivatives, exact polynomial integrals, and plane and space curve interpolation |
 | `test_quadrature.f90` | Known integrals and the sum of integration weights |
