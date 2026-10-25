@@ -46858,6 +46858,9 @@ C
       END SUBROUTINE CLE
 
       SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM BANDED TO
 C                         STANDARD FORM
@@ -46924,6 +46927,9 @@ C
       END SUBROUTINE CVBR
 
       SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
 C                    FORM WHEN ML AND MU ARE GIVEN
@@ -46990,6 +46996,9 @@ C
       END SUBROUTINE CVRB
 
       SUBROUTINE CVRB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, ML, MU, N, NB
+      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM STANDARD
 C                        TO BANDED FORM
@@ -47040,6 +47049,9 @@ C
       END SUBROUTINE CVRB1
 
       SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 C                         TO STANDARD FORM
@@ -47106,6 +47118,9 @@ C
       END SUBROUTINE CVBD
 
       SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 C               TO BANDED FORM WHEN ML AND MU ARE GIVEN
@@ -47172,6 +47187,9 @@ C
       END SUBROUTINE CVDB
 
       SUBROUTINE CVDB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, ML, MU, N, NB
+      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 C                         TO BANDED FORM
@@ -47222,6 +47240,9 @@ C
       END SUBROUTINE CVDB1
 
       SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
 C                          STANDARD FORM
@@ -47288,6 +47309,9 @@ C
       END SUBROUTINE CVBC
 
       SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
 C                    FORM WHEN ML AND MU ARE GIVEN
@@ -47354,6 +47378,9 @@ C
       END SUBROUTINE CVCB
 
       SUBROUTINE CVCB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, ML, MU, N, NB
+      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF COMPLEX MATRICES FROM STANDARD
 C                          TO BANDED FORM
@@ -47464,6 +47491,9 @@ C
       END SUBROUTINE MCVBS
 
       SUBROUTINE DMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, ML, MU, N, NUM
+      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 C                            TO SPARSE FORM
@@ -47641,6 +47671,9 @@ C
       END SUBROUTINE MCVSB
 
       SUBROUTINE DMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KB, M, ML, MU, N, NB
+      INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
 C                            TO BANDED FORM
@@ -47755,6 +47788,9 @@ C
       END SUBROUTINE CMCVSB
 
       SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
 C                          PRECISION FORM
@@ -47772,6 +47808,9 @@ C
       END SUBROUTINE BCVRD
 
       SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
 C                          PRECISION FORM
@@ -47789,6 +47828,9 @@ C
       END SUBROUTINE BCVDR
 
       SUBROUTINE BREAL (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C              REAL PART OF A BANDED COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -47840,6 +47882,9 @@ C
       END SUBROUTINE BREAL
 
       SUBROUTINE BIMAG (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A BANDED COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -47972,6 +48017,9 @@ C
       END SUBROUTINE BCVRC
 
       SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C                TRANSPOSITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48025,6 +48073,9 @@ C
       END SUBROUTINE BPOSE
 
       SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C          TRANSPOSITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48078,6 +48129,9 @@ C
       END SUBROUTINE DBPOSE
 
       SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C              TRANSPOSITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48131,6 +48185,9 @@ C
       END SUBROUTINE CBPOSE
 
       SUBROUTINE BADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                 ADDITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48271,6 +48328,9 @@ C
       END SUBROUTINE BADD
 
       SUBROUTINE DBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C           ADDITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48411,6 +48471,9 @@ C
       END SUBROUTINE DBADD
 
       SUBROUTINE CBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                ADDITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48551,6 +48614,9 @@ C
       END SUBROUTINE CBADD
 
       SUBROUTINE BSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                SUBTRACTION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48691,6 +48757,9 @@ C
       END SUBROUTINE BSUBT
 
       SUBROUTINE DBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48831,6 +48900,9 @@ C
       END SUBROUTINE DBSUBT
 
       SUBROUTINE CBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -48972,6 +49044,11 @@ C
 
       SUBROUTINE BPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                  C, KC, NC, MCL, MCU, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
+     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
+      REAL SUM
 C-----------------------------------------------------------------------
 C                MULTIPLICATION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -49118,6 +49195,10 @@ C
 
       SUBROUTINE DBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
+     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
 C-----------------------------------------------------------------------
 C          MULTIPLICATION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -49265,6 +49346,10 @@ C
 
       SUBROUTINE CBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU,
      *                   C, KC, NC, MCL, MCU, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
+     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
 C-----------------------------------------------------------------------
 C             MULTIPLICATION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
@@ -49411,6 +49496,10 @@ C
       END SUBROUTINE CBPROD
 
       SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
+      REAL SUM
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL BANDED MATRIX AND A REAL VECTOR
 C-----------------------------------------------------------------------
@@ -49504,6 +49593,9 @@ C
       END SUBROUTINE BVPRD1
 
       SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
 C           PRODUCT OF A DOUBLE PRECISION BANDED MATRIX
 C                  AND A DOUBLE PRECISION VECTOR
@@ -49554,6 +49646,9 @@ C
       END SUBROUTINE DBVPD
 
       SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
 C         SETTING Y = A*X + Y WHERE A IS A DOUBLE PRECISION
 C         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
@@ -49596,6 +49691,9 @@ C
       END SUBROUTINE DBVPD1
 
       SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX BANDED MATRIX AND A COMPLEX VECTOR
 C-----------------------------------------------------------------------
@@ -49645,6 +49743,9 @@ C
       END SUBROUTINE CBVPD
 
       SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A COMPLEX BANDED MATRIX
 C                     AND X,Y ARE COMPLEX VECTORS
@@ -49687,6 +49788,10 @@ C
       END SUBROUTINE CBVPD1
 
       SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      REAL SUM
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL VECTOR AND A REAL BANDED MATRIX
 C-----------------------------------------------------------------------
@@ -49778,6 +49883,9 @@ C
       END SUBROUTINE BTPRD1
 
       SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
 C              PRODUCT OF A DOUBLE PRECISION VECTOR AND
 C                  A DOUBLE PRECISION BANDED MATRIX
@@ -49827,6 +49935,9 @@ C
       END SUBROUTINE DBTPD
 
       SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
 C         SETTING Y = X*A + Y WHERE A IS A DOUBLE PRECISION
 C         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
@@ -49868,6 +49979,9 @@ C
       END SUBROUTINE DBTPD1
 
       SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX VECTOR AND A COMPLEX BANDED MATRIX
 C-----------------------------------------------------------------------
@@ -49916,6 +50030,9 @@ C
       END SUBROUTINE CBTPD
 
       SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A COMPLEX BANDED MATRIX
 C                     AND X,Y ARE COMPLEX VECTORS

@@ -1814,6 +1814,271 @@
         "      INTEGER N, NB",
         "      INTEGER J, JMAX, JPK, K, NBM1"
       ]
+    },
+    "CVBR": {
+      "sha256": "9e8fb4af924f95f07d6cb6f7ac7a7d8b74824a7ce653a907161c69c6c565acf4",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVRB": {
+      "sha256": "7b560d2f692213f7f4ca42b97be727bc863f142950880a2ef4fffeb00400bcd2",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVRB1": {
+      "sha256": "d829fbc9613e0dc1396a4d3488acd5b1d32e03654f4eeb630255aafbcb1f65ab",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, M, ML, MU, N, NB",
+        "      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1"
+      ]
+    },
+    "CVBD": {
+      "sha256": "990d6158cbaed3c157c0166d904c3f81a190d511e5878883869b8f536bc726a3",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVDB": {
+      "sha256": "f12ce9a9a16a72e9f95b4f0213b5f5f22b2e2be1e6beb5523dfa99d7a511f0ed",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVDB1": {
+      "sha256": "120a92fc2a905d8d958f0615c38bcb864ab172f8f28ba3db3a23144179ea0dd7",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, M, ML, MU, N, NB",
+        "      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1"
+      ]
+    },
+    "CVBC": {
+      "sha256": "f44a8d222c2953b9df4019509fae859d340b61a30eeaea88a910f541cc5c798a",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVCB": {
+      "sha256": "27c09ea66844120d392333919f4faaad5499c7026b49b08b3f2c8e78b416f31e",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L"
+      ]
+    },
+    "CVCB1": {
+      "sha256": "08fb7827f491e64eb05374794f1471df625468cd6811237e63cc334012b5e524",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, M, ML, MU, N, NB",
+        "      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1"
+      ]
+    },
+    "DMCVBS": {
+      "sha256": "f2c47262930bbcc6b971e596607fef38224adec186076b9452e66fd395c71a09",
+      "declarations": [
+        "      INTEGER IERR, KA, M, ML, MU, N, NUM",
+        "      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1"
+      ]
+    },
+    "DMCVSB": {
+      "sha256": "4bbbc729fdc1b0c2147c85782fcd3973253c14ec896371ffb894d2bc7d329c8f",
+      "declarations": [
+        "      INTEGER IERR, KB, M, ML, MU, N, NB",
+        "      INTEGER I, J0, K, KMAX, L, LMAX, LMIN"
+      ]
+    },
+    "BCVRD": {
+      "sha256": "7ae294bcaf1e7d7cbc4fd713ca34e96a272952835cf8b8e1505729f415cc335b",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, J, NUM"
+      ]
+    },
+    "BCVDR": {
+      "sha256": "ec6546e11dd9b0e82fc00be76cb0df849babb4ad50244570db2518e45e996bed",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, J, NUM"
+      ]
+    },
+    "BREAL": {
+      "sha256": "c77f90c6e783bb9866aedecb50bd47edec86e4d6e947b41f5112ee580cbf796b",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, K, NUM"
+      ]
+    },
+    "BIMAG": {
+      "sha256": "fe4574e2abba489140fff39e4be81d6613fc559c1740d5261afca7e74cba1dbd",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, K, NUM"
+      ]
+    },
+    "BPOSE": {
+      "sha256": "4337ca3da4abe19add0f764308cf0cd670a62a5bcdab869a006e1c55534976c7",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG"
+      ]
+    },
+    "DBPOSE": {
+      "sha256": "ab50fcf5052fe3e0905b6e266448d7c42b10f6a8e86aaf3933467498a1223584",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG"
+      ]
+    },
+    "CBPOSE": {
+      "sha256": "c24b7bc45e35b7c987e963c5da2f78af1ae9ee8cbb6dffea20751176003c15cb",
+      "declarations": [
+        "      INTEGER KA, KB, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG"
+      ]
+    },
+    "BADD": {
+      "sha256": "8085c1320b229dc557297c222b49ba51debf26641861d2f0d5ebc792830392a7",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "DBADD": {
+      "sha256": "1d5962f8637659a671f3fea7978aed8ab179c3c43ace8cf90e6cce1244550da5",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "CBADD": {
+      "sha256": "d043a18633f50ac3e18b817f8ba0a9619120b95b52375cf8ddebc09c0b7700eb",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "BSUBT": {
+      "sha256": "19cea89cdc7b616393e744a1000be7afe25d3043bcd833ad788cf42830a179f1",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "DBSUBT": {
+      "sha256": "d194264033d2e2218e5fcb17d9ef0575ef7ffec2494a0dd0c3c71b7f8d1f31f1",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "CBSUBT": {
+      "sha256": "edaaa61ac233765e251d2844e8366c011f86095c7fc631b4d806fa6a70668cdc",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU",
+        "      INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM"
+      ]
+    },
+    "BPROD": {
+      "sha256": "6ade0c5076743e96dd4b3c0976a2a21d401b16c6967bb2f7b5e8a506e55a8624",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU",
+        "      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN",
+        "     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU",
+        "      REAL SUM"
+      ]
+    },
+    "DBPROD": {
+      "sha256": "f324c219b5375db9a56268e7a3dd3773b14b45cf281ef7f99634b3644ddc686a",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU",
+        "      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN",
+        "     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU"
+      ]
+    },
+    "CBPROD": {
+      "sha256": "77a7c314ae1c758cdbde4a3ae3ec07003d468b118f13766b8477ddaf77d4f463",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU",
+        "      INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN",
+        "     x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU"
+      ]
+    },
+    "BVPRD": {
+      "sha256": "13a89d36e70f696ad98a36de94bd477317961121c18b9cd1a533639ad8ec40a4",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1",
+        "      REAL SUM"
+      ]
+    },
+    "DBVPD": {
+      "sha256": "c2e48188e5d002e2508d0ca7b6da635f85b159458024f63b848711849821b78e",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1"
+      ]
+    },
+    "DBVPD1": {
+      "sha256": "97dfdb3a05230fd9dc2981f3df11cb334f64e9a1981f84e78e933ad0eccabc5d",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1"
+      ]
+    },
+    "CBVPD": {
+      "sha256": "e467a2b92d8f4377fc52ad5d90dfdcdb7d35b27aedb28eac83e28c154e9a9f6b",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1"
+      ]
+    },
+    "CBVPD1": {
+      "sha256": "18f07a3c728fd569f8f0b081f668c4ba5d0742715d0cbc1d8067678aae39f76b",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1"
+      ]
+    },
+    "BTPRD": {
+      "sha256": "f1a43076cc36e5cf7945d9350eb4ab1b997f534808b0a4061d64f67cb9ea61cf",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM",
+        "      REAL SUM"
+      ]
+    },
+    "DBTPD": {
+      "sha256": "af2160e2574baf57f60571732eadad88c82044f65cee7992de93b8aae9d82fbc",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM"
+      ]
+    },
+    "DBTPD1": {
+      "sha256": "267bf9edd32cccec62475606396ba6ce13ca1b93ec5dcadbcf1683dce5fbad28",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM"
+      ]
+    },
+    "CBTPD": {
+      "sha256": "79899bbe54748402e1b96c094e58341bf36221d38392e443fbed0c320aa344b8",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM"
+      ]
+    },
+    "CBTPD1": {
+      "sha256": "a5877b678c8bb9904df024bcbeb359bebff482a041d972641d82da79f9e25dab",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM"
+      ]
     }
   },
   "batches": [
@@ -2137,6 +2402,50 @@
         "BANSLV",
         "BCHFAC",
         "BCHSLV"
+      ]
+    },
+    {
+      "id": "batch-10",
+      "source_commit": "d881af7",
+      "input_sha256": "8903cd825abd7dcbc5e9416c7d9cefd3ed7d4440fa405bfcb8114829630fdc9a",
+      "procedures": [
+        "CVBR",
+        "CVRB",
+        "CVRB1",
+        "CVBD",
+        "CVDB",
+        "CVDB1",
+        "CVBC",
+        "CVCB",
+        "CVCB1",
+        "DMCVBS",
+        "DMCVSB",
+        "BCVRD",
+        "BCVDR",
+        "BREAL",
+        "BIMAG",
+        "BPOSE",
+        "DBPOSE",
+        "CBPOSE",
+        "BADD",
+        "DBADD",
+        "CBADD",
+        "BSUBT",
+        "DBSUBT",
+        "CBSUBT",
+        "BPROD",
+        "DBPROD",
+        "CBPROD",
+        "BVPRD",
+        "DBVPD",
+        "DBVPD1",
+        "CBVPD",
+        "CBVPD1",
+        "BTPRD",
+        "DBTPD",
+        "DBTPD1",
+        "CBTPD",
+        "CBTPD1"
       ]
     }
   ]

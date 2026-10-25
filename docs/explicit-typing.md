@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 259 of the library's 1,062 procedures in nine
-batches of 17, 40, 29, 34, 32, 32, 31, 22, and 22. The remaining 803 procedures
+The reviewed conversions cover 296 of the library's 1,062 procedures in ten
+batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, and 37. The remaining 766 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -213,6 +213,34 @@ singular diagonal matrix produces zero. It does not require the estimate to
 equal the exact value, as the Miller driver did. The suite now runs 21 programs
 against each library version, for 63 runs.
 
+## Batch 10: banded matrix conversions and arithmetic
+
+The tenth batch adds 37 procedures:
+
+- Dense/band conversions: `CVBR`, `CVRB`, `CVRB1`, `CVBD`, `CVDB`, `CVDB1`,
+  `CVBC`, `CVCB`, and `CVCB1`.
+- Sparse/band conversions: `DMCVBS` and `DMCVSB`.
+- Precision and component conversions: `BCVRD`, `BCVDR`, `BREAL`, and `BIMAG`.
+- Transposes: `BPOSE`, `DBPOSE`, and `CBPOSE`.
+- Addition and subtraction: `BADD`, `DBADD`, `CBADD`, `BSUBT`, `DBSUBT`, and `CBSUBT`.
+- Matrix products: `BPROD`, `DBPROD`, and `CBPROD`.
+- Vector products and accumulation: `BVPRD`, `DBVPD`, `DBVPD1`, `CBVPD`,
+  `CBVPD1`, `BTPRD`, `DBTPD`, `DBTPD1`, `CBTPD`, and `CBTPD1`.
+
+The generated declarations needed no supplemental return types. Compiler
+comparisons preserved all 796 non-intrinsic symbol records in this batch.
+No argument intents, precision choices, dimensions, storage statements, or
+executable library code were changed.
+
+The adapted `test_banded_double` and `test_banded_arithmetic` drivers compare
+real, double precision, and complex operations with dense reference results.
+The double precision driver now checks arithmetic, transpose, and matrix-product
+values as well as status codes. Its original-library interfaces supply the
+extra column-count argument to `BCVRD` and `BCVDR`, and the bandwidth and status
+arguments to `BREAL` and `BIMAG`. The absent `BCVR` helper was replaced by direct
+construction of the complex test input. The suite now runs 23 programs against
+each library version, for 69 numerical runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -280,13 +308,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-4,976 variable and external procedure records across the 259 procedures, including
+5,772 variable and external procedure records across the 296 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 21 numerical test programs must still pass against each source version,
+All 23 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.

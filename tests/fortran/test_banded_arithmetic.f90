@@ -1,0 +1,264 @@
+! Adapted from test_banded_arithmetic_legacy.f90 in the amiller-nswc test suite.
+! Standalone legacy-interface driver: link one NSWC source version at a time.
+program test_banded_arithmetic
+   implicit none
+   integer, parameter :: m=3, n=3
+   real :: ad(m,n), bd(m,n), a(m,3), b(m,3), c(m,5), t(m,3), p(m,5)
+   real :: rback(m,n), rbauto(m,3)
+   real :: x(m), y(m), y0(m)
+   complex :: cad(m,n), cbd(m,n), ca(m,3), cb(m,3), cc(m,5), ct(m,3), cp(m,5)
+   complex :: cback(m,n), cbauto(m,3)
+   complex :: cx(m), cy(m), cy0(m)
+   integer :: mcl, mcu, ierr
+
+   interface
+      subroutine badd(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,ka,ml,mu,kb,nl,nu,kc,l
+         real, intent(in) :: a(ka,*), b(kb,*)
+         real, intent(out) :: c(kc,l)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine badd
+      subroutine bsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,ka,ml,mu,kb,nl,nu,kc,l
+         real, intent(in) :: a(ka,*), b(kb,*)
+         real, intent(out) :: c(kc,l)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine bsubt
+      subroutine bpose(a,ka,m,n,ml,mu,b,kb)
+         integer, intent(in) :: ka,m,n,ml,mu,kb
+         real, intent(in) :: a(ka,*)
+         real, intent(out) :: b(kb,*)
+      end subroutine bpose
+      subroutine bprod(m,n,l,a,ka,ml,mu,b,kb,nl,nu,c,kc,nc,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,l,ka,ml,mu,kb,nl,nu,kc,nc
+         real, intent(in) :: a(ka,*), b(kb,*)
+         real, intent(out) :: c(kc,nc)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine bprod
+      subroutine btprd(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         real, intent(in) :: a(ka,*),x(m)
+         real, intent(out) :: y(n)
+      end subroutine btprd
+      subroutine btprd1(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         real, intent(in) :: a(ka,*),x(m)
+         real, intent(inout) :: y(n)
+      end subroutine btprd1
+      subroutine bvprd(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         real, intent(in) :: a(ka,*),x(n)
+         real, intent(out) :: y(m)
+      end subroutine bvprd
+      subroutine bvprd1(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         real, intent(in) :: a(ka,*),x(n)
+         real, intent(inout) :: y(m)
+      end subroutine bvprd1
+      subroutine cbadd(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,ka,ml,mu,kb,nl,nu,kc,l
+         complex, intent(in) :: a(ka,*), b(kb,*)
+         complex, intent(out) :: c(kc,l)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine cbadd
+      subroutine cbsubt(m,n,a,ka,ml,mu,b,kb,nl,nu,c,kc,l,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,ka,ml,mu,kb,nl,nu,kc,l
+         complex, intent(in) :: a(ka,*), b(kb,*)
+         complex, intent(out) :: c(kc,l)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine cbsubt
+      subroutine cbpose(a,ka,m,n,ml,mu,b,kb)
+         integer, intent(in) :: ka,m,n,ml,mu,kb
+         complex, intent(in) :: a(ka,*)
+         complex, intent(out) :: b(kb,*)
+      end subroutine cbpose
+      subroutine cbprod(m,n,l,a,ka,ml,mu,b,kb,nl,nu,c,kc,nc,mcl,mcu,ierr)
+         integer, intent(in) :: m,n,l,ka,ml,mu,kb,nl,nu,kc,nc
+         complex, intent(in) :: a(ka,*), b(kb,*)
+         complex, intent(out) :: c(kc,nc)
+         integer, intent(out) :: mcl,mcu,ierr
+      end subroutine cbprod
+      subroutine cbtpd(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         complex, intent(in) :: a(ka,*),x(m)
+         complex, intent(out) :: y(n)
+      end subroutine cbtpd
+      subroutine cbtpd1(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         complex, intent(in) :: a(ka,*),x(m)
+         complex, intent(inout) :: y(n)
+      end subroutine cbtpd1
+      subroutine cbvpd(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         complex, intent(in) :: a(ka,*),x(n)
+         complex, intent(out) :: y(m)
+      end subroutine cbvpd
+      subroutine cbvpd1(m,n,a,ka,ml,mu,x,y)
+         integer, intent(in) :: m,n,ka,ml,mu
+         complex, intent(in) :: a(ka,*),x(n)
+         complex, intent(inout) :: y(m)
+      end subroutine cbvpd1
+      subroutine cvbc(b,kb,m,n,ml,mu,a,ka)
+         integer, intent(in) :: kb,m,n,ml,mu,ka
+         complex, intent(in) :: b(kb,*)
+         complex, intent(out) :: a(ka,*)
+      end subroutine cvbc
+      subroutine cvbr(b,kb,m,n,ml,mu,a,ka)
+         integer, intent(in) :: kb,m,n,ml,mu,ka
+         real, intent(in) :: b(kb,*)
+         real, intent(out) :: a(ka,*)
+      end subroutine cvbr
+      subroutine cvcb(a,ka,m,n,ml,mu,b,kb)
+         integer, intent(in) :: ka,m,n,ml,mu,kb
+         complex, intent(in) :: a(ka,*)
+         complex, intent(out) :: b(kb,*)
+      end subroutine cvcb
+      subroutine cvcb1(a,ka,m,n,ml,mu,b,kb,nb,ierr)
+         integer, intent(in) :: ka,m,n,kb,nb
+         complex, intent(in) :: a(ka,*)
+         integer, intent(out) :: ml,mu,ierr
+         complex, intent(out) :: b(kb,*)
+      end subroutine cvcb1
+      subroutine cvrb(a,ka,m,n,ml,mu,b,kb)
+         integer, intent(in) :: ka,m,n,ml,mu,kb
+         real, intent(in) :: a(ka,*)
+         real, intent(out) :: b(kb,*)
+      end subroutine cvrb
+      subroutine cvrb1(a,ka,m,n,ml,mu,b,kb,nb,ierr)
+         integer, intent(in) :: ka,m,n,kb,nb
+         real, intent(in) :: a(ka,*)
+         integer, intent(out) :: ml,mu,ierr
+         real, intent(out) :: b(kb,*)
+      end subroutine cvrb1
+   end interface
+
+   ad = 0.0
+   bd = 0.0
+   ad(1,1)=2.0; ad(1,2)=3.0
+   ad(2,1)=1.0; ad(2,2)=4.0; ad(2,3)=-1.0
+   ad(3,2)=2.0; ad(3,3)=5.0
+   bd(1,1)=1.0; bd(1,2)=-2.0
+   bd(2,1)=-0.5; bd(2,2)=1.5; bd(2,3)=2.0
+   bd(3,2)=0.25; bd(3,3)=-1.0
+   call packr(ad,a)
+   call packr(bd,b)
+
+   call badd(m,n,a,m,1,1,b,m,1,1,c,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackr(c,mcl,mcu)-(ad+bd))) > 2.0e-6) error stop 'legacy BADD'
+   call bsubt(m,n,a,m,1,1,b,m,1,1,c,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackr(c,mcl,mcu)-(ad-bd))) > 2.0e-6) error stop 'legacy BSUBT'
+   call bpose(a,m,m,n,1,1,t,m)
+   if (maxval(abs(unpackr(t,1,1)-transpose(ad))) > 2.0e-6) error stop 'legacy BPOSE'
+   call bprod(m,n,n,a,m,1,1,b,m,1,1,p,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackr(p,mcl,mcu)-matmul(ad,bd))) > 8.0e-6) error stop 'legacy BPROD'
+
+   x = [1.0,-0.5,2.0]
+   call btprd(m,n,a,m,1,1,x,y)
+   if (maxval(abs(y-matmul(x,ad))) > 3.0e-6) error stop 'legacy BTPRD'
+   y0 = [0.2,0.3,0.4]; y=y0
+   call btprd1(m,n,a,m,1,1,x,y)
+   if (maxval(abs(y-(y0+matmul(x,ad)))) > 3.0e-6) error stop 'legacy BTPRD1'
+   call bvprd(m,n,a,m,1,1,x,y)
+   if (maxval(abs(y-matmul(ad,x))) > 3.0e-6) error stop 'legacy BVPRD'
+   y=y0
+   call bvprd1(m,n,a,m,1,1,x,y)
+   if (maxval(abs(y-(y0+matmul(ad,x)))) > 3.0e-6) error stop 'legacy BVPRD1'
+
+   call cvrb(ad,m,m,n,1,1,rbauto,m)
+   call cvbr(rbauto,m,m,n,1,1,rback,m)
+   if (maxval(abs(rback-ad)) > 2.0e-6) error stop 'legacy CVRB/CVBR'
+   call cvrb1(ad,m,m,n,mcl,mcu,rbauto,m,3,ierr)
+   if (ierr /= 0 .or. mcl /= 1 .or. mcu /= 1) error stop 'legacy CVRB1'
+   call cvrb1(ad,m,m,n,mcl,mcu,rbauto,m,2,ierr)
+   if (ierr /= 3) error stop 'legacy CVRB1 storage'
+
+   cad = cmplx(ad,0.15*bd)
+   cbd = cmplx(bd,-0.1*ad)
+   call packc(cad,ca)
+   call packc(cbd,cb)
+   call cbadd(m,n,ca,m,1,1,cb,m,1,1,cc,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackc(cc,mcl,mcu)-(cad+cbd))) > 3.0e-6) error stop 'legacy CBADD'
+   call cbsubt(m,n,ca,m,1,1,cb,m,1,1,cc,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackc(cc,mcl,mcu)-(cad-cbd))) > 3.0e-6) error stop 'legacy CBSUBT'
+   call cbpose(ca,m,m,n,1,1,ct,m)
+   if (maxval(abs(unpackc(ct,1,1)-transpose(cad))) > 3.0e-6) error stop 'legacy CBPOSE'
+   call cbprod(m,n,n,ca,m,1,1,cb,m,1,1,cp,m,5,mcl,mcu,ierr)
+   if (ierr /= 0 .or. maxval(abs(unpackc(cp,mcl,mcu)-matmul(cad,cbd))) > 1.0e-5) error stop 'legacy CBPROD'
+
+   cx = [cmplx(1.0,0.2),cmplx(-0.5,0.4),cmplx(2.0,-0.3)]
+   call cbtpd(m,n,ca,m,1,1,cx,cy)
+   if (maxval(abs(cy-matmul(cx,cad))) > 5.0e-6) error stop 'legacy CBTPD'
+   cy0 = [cmplx(0.2,-0.1),cmplx(0.3,0.2),cmplx(0.4,-0.2)]; cy=cy0
+   call cbtpd1(m,n,ca,m,1,1,cx,cy)
+   if (maxval(abs(cy-(cy0+matmul(cx,cad)))) > 5.0e-6) error stop 'legacy CBTPD1'
+   call cbvpd(m,n,ca,m,1,1,cx,cy)
+   if (maxval(abs(cy-matmul(cad,cx))) > 5.0e-6) error stop 'legacy CBVPD'
+   cy=cy0
+   call cbvpd1(m,n,ca,m,1,1,cx,cy)
+   if (maxval(abs(cy-(cy0+matmul(cad,cx)))) > 5.0e-6) error stop 'legacy CBVPD1'
+
+   call cvcb(cad,m,m,n,1,1,cbauto,m)
+   call cvbc(cbauto,m,m,n,1,1,cback,m)
+   if (maxval(abs(cback-cad)) > 3.0e-6) error stop 'legacy CVCB/CVBC'
+   call cvcb1(cad,m,m,n,mcl,mcu,cbauto,m,3,ierr)
+   if (ierr /= 0 .or. mcl /= 1 .or. mcu /= 1) error stop 'legacy CVCB1'
+   call cvcb1(cad,m,m,n,mcl,mcu,cbauto,m,2,ierr)
+   if (ierr /= 3) error stop 'legacy CVCB1 storage'
+
+   print '(a,3es25.16)', 'Real band-vector product: ',y
+   print '(a,6es25.16)', 'Complex band-vector product: ',cy
+   print '(a)', 'test_banded_arithmetic: PASS'
+
+contains
+
+   subroutine packr(d,band)
+      real, intent(in) :: d(m,n)
+      real, intent(out) :: band(m,3)
+      integer :: i,j,k
+      band=0.0
+      do i=1,m
+         do j=max(1,i-1),min(n,i+1)
+            k=j-i+2; band(i,k)=d(i,j)
+         end do
+      end do
+   end subroutine packr
+
+   subroutine packc(d,band)
+      complex, intent(in) :: d(m,n)
+      complex, intent(out) :: band(m,3)
+      integer :: i,j,k
+      band=cmplx(0.0,0.0)
+      do i=1,m
+         do j=max(1,i-1),min(n,i+1)
+            k=j-i+2; band(i,k)=d(i,j)
+         end do
+      end do
+   end subroutine packc
+
+   function unpackr(band,lo,up) result(d)
+      integer, intent(in) :: lo,up
+      real, intent(in) :: band(m,*)
+      real :: d(m,n)
+      integer :: i,j,k
+      d=0.0
+      do i=1,m
+         do j=max(1,i-lo),min(n,i+up)
+            k=j-i+lo+1; d(i,j)=band(i,k)
+         end do
+      end do
+   end function unpackr
+
+   function unpackc(band,lo,up) result(d)
+      integer, intent(in) :: lo,up
+      complex, intent(in) :: band(m,*)
+      complex :: d(m,n)
+      integer :: i,j,k
+      d=cmplx(0.0,0.0)
+      do i=1,m
+         do j=max(1,i-lo),min(n,i+up)
+            k=j-i+lo+1; d(i,j)=band(i,k)
+         end do
+      end do
+   end function unpackc
+
+end program test_banded_arithmetic

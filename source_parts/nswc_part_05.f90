@@ -4167,6 +4167,9 @@ RETURN
 END SUBROUTINE CLE
 
 SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !           CONVERSION OF REAL MATRICES FROM BANDED TO
 !                         STANDARD FORM
@@ -4233,6 +4236,9 @@ RETURN
 END SUBROUTINE CVBR
 
 SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
 !                    FORM WHEN ML AND MU ARE GIVEN
@@ -4299,6 +4305,9 @@ RETURN
 END SUBROUTINE CVRB
 
 SUBROUTINE CVRB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, M, ML, MU, N, NB
+INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 !-----------------------------------------------------------------------
 !           CONVERSION OF REAL MATRICES FROM STANDARD
 !                        TO BANDED FORM
@@ -4349,6 +4358,9 @@ RETURN
 END SUBROUTINE CVRB1
 
 SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 !                         TO STANDARD FORM
@@ -4415,6 +4427,9 @@ RETURN
 END SUBROUTINE CVBD
 
 SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 !               TO BANDED FORM WHEN ML AND MU ARE GIVEN
@@ -4481,6 +4496,9 @@ RETURN
 END SUBROUTINE CVDB
 
 SUBROUTINE CVDB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, M, ML, MU, N, NB
+INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 !-----------------------------------------------------------------------
 !        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 !                         TO BANDED FORM
@@ -4531,6 +4549,9 @@ RETURN
 END SUBROUTINE CVDB1
 
 SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
 !                          STANDARD FORM
@@ -4597,6 +4618,9 @@ RETURN
 END SUBROUTINE CVBC
 
 SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 !-----------------------------------------------------------------------
 !        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
 !                    FORM WHEN ML AND MU ARE GIVEN
@@ -4663,6 +4687,9 @@ RETURN
 END SUBROUTINE CVCB
 
 SUBROUTINE CVCB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, M, ML, MU, N, NB
+INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 !-----------------------------------------------------------------------
 !           CONVERSION OF COMPLEX MATRICES FROM STANDARD
 !                          TO BANDED FORM
@@ -4773,6 +4800,9 @@ RETURN
 END SUBROUTINE MCVBS
 
 SUBROUTINE DMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M, ML, MU, N, NUM
+INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 !-----------------------------------------------------------------------
 !          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 !                            TO SPARSE FORM
@@ -4950,6 +4980,9 @@ RETURN
 END SUBROUTINE MCVSB
 
 SUBROUTINE DMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KB, M, ML, MU, N, NB
+INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
 !                            TO BANDED FORM
@@ -5064,6 +5097,9 @@ RETURN
 END SUBROUTINE CMCVSB
 
 SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, J, NUM
 !-----------------------------------------------------------------------
 !        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
 !                          PRECISION FORM
@@ -5081,6 +5117,9 @@ RETURN
 END SUBROUTINE BCVRD
 
 SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, J, NUM
 !-----------------------------------------------------------------------
 !        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
 !                          PRECISION FORM
@@ -5098,6 +5137,9 @@ RETURN
 END SUBROUTINE BCVDR
 
 SUBROUTINE BREAL (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, K, NUM
 !-----------------------------------------------------------------------
 !              REAL PART OF A BANDED COMPLEX MATRIX
 !-----------------------------------------------------------------------
@@ -5149,6 +5191,9 @@ RETURN
 END SUBROUTINE BREAL
 
 SUBROUTINE BIMAG (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, K, NUM
 !-----------------------------------------------------------------------
 !            IMAGINARY PART OF A BANDED COMPLEX MATRIX
 !-----------------------------------------------------------------------
@@ -5281,6 +5326,9 @@ RETURN
 END SUBROUTINE BCVRC
 
 SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 !-----------------------------------------------------------------------
 !                TRANSPOSITION OF REAL BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5334,6 +5382,9 @@ RETURN
 END SUBROUTINE BPOSE
 
 SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 !-----------------------------------------------------------------------
 !          TRANSPOSITION OF DOUBLE PRECISION BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5387,6 +5438,9 @@ RETURN
 END SUBROUTINE DBPOSE
 
 SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
+IMPLICIT NONE
+INTEGER KA, KB, M, ML, MU, N
+INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 !-----------------------------------------------------------------------
 !              TRANSPOSITION OF COMPLEX BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5440,6 +5494,9 @@ RETURN
 END SUBROUTINE CBPOSE
 
 SUBROUTINE BADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !                 ADDITION OF REAL BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5580,6 +5637,9 @@ RETURN
 END SUBROUTINE BADD
 
 SUBROUTINE DBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !           ADDITION OF DOUBLE PRECISION BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5720,6 +5780,9 @@ RETURN
 END SUBROUTINE DBADD
 
 SUBROUTINE CBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !                ADDITION OF COMPLEX BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -5860,6 +5923,9 @@ RETURN
 END SUBROUTINE CBADD
 
 SUBROUTINE BSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !                SUBTRACTION OF REAL BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6000,6 +6066,9 @@ RETURN
 END SUBROUTINE BSUBT
 
 SUBROUTINE DBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6140,6 +6209,9 @@ RETURN
 END SUBROUTINE DBSUBT
 
 SUBROUTINE CBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 !-----------------------------------------------------------------------
 !             SUBTRACTION OF COMPLEX BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6281,6 +6353,11 @@ END SUBROUTINE CBSUBT
 
 SUBROUTINE BPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU, &
 &C, KC, NC, MCL, MCU, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN &
+&, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
+REAL SUM
 !-----------------------------------------------------------------------
 !                MULTIPLICATION OF REAL BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6427,6 +6504,10 @@ END SUBROUTINE BPROD
 
 SUBROUTINE DBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU, &
 &C, KC, NC, MCL, MCU, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN &
+&, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
 !-----------------------------------------------------------------------
 !          MULTIPLICATION OF DOUBLE PRECISION BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6574,6 +6655,10 @@ END SUBROUTINE DBPROD
 
 SUBROUTINE CBPROD (M, N, L, A, KA, ML, MU, B, KB, NL, NU, &
 &C, KC, NC, MCL, MCU, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
+INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN &
+&, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
 !-----------------------------------------------------------------------
 !             MULTIPLICATION OF COMPLEX BANDED MATRICES
 !-----------------------------------------------------------------------
@@ -6720,6 +6805,10 @@ RETURN
 END SUBROUTINE CBPROD
 
 SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
+REAL SUM
 !-----------------------------------------------------------------------
 !         PRODUCT OF A REAL BANDED MATRIX AND A REAL VECTOR
 !-----------------------------------------------------------------------
@@ -6813,6 +6902,9 @@ RETURN
 END SUBROUTINE BVPRD1
 
 SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 !-----------------------------------------------------------------------
 !           PRODUCT OF A DOUBLE PRECISION BANDED MATRIX
 !                  AND A DOUBLE PRECISION VECTOR
@@ -6863,6 +6955,9 @@ RETURN
 END SUBROUTINE DBVPD
 
 SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 !-----------------------------------------------------------------------
 !         SETTING Y = A*X + Y WHERE A IS A DOUBLE PRECISION
 !         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
@@ -6905,6 +7000,9 @@ RETURN
 END SUBROUTINE DBVPD1
 
 SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 !-----------------------------------------------------------------------
 !        PRODUCT OF A COMPLEX BANDED MATRIX AND A COMPLEX VECTOR
 !-----------------------------------------------------------------------
@@ -6954,6 +7052,9 @@ RETURN
 END SUBROUTINE CBVPD
 
 SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 !-----------------------------------------------------------------------
 !        SETTING Y = A*X + Y WHERE A IS A COMPLEX BANDED MATRIX
 !                     AND X,Y ARE COMPLEX VECTORS
@@ -6996,6 +7097,10 @@ RETURN
 END SUBROUTINE CBVPD1
 
 SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+REAL SUM
 !-----------------------------------------------------------------------
 !         PRODUCT OF A REAL VECTOR AND A REAL BANDED MATRIX
 !-----------------------------------------------------------------------
@@ -7087,6 +7192,9 @@ RETURN
 END SUBROUTINE BTPRD1
 
 SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 !-----------------------------------------------------------------------
 !              PRODUCT OF A DOUBLE PRECISION VECTOR AND
 !                  A DOUBLE PRECISION BANDED MATRIX
@@ -7136,6 +7244,9 @@ RETURN
 END SUBROUTINE DBTPD
 
 SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 !-----------------------------------------------------------------------
 !         SETTING Y = X*A + Y WHERE A IS A DOUBLE PRECISION
 !         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
@@ -7177,6 +7288,9 @@ RETURN
 END SUBROUTINE DBTPD1
 
 SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 !-----------------------------------------------------------------------
 !        PRODUCT OF A COMPLEX VECTOR AND A COMPLEX BANDED MATRIX
 !-----------------------------------------------------------------------
@@ -7225,6 +7339,9 @@ RETURN
 END SUBROUTINE CBTPD
 
 SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 !-----------------------------------------------------------------------
 !        SETTING Y = X*A + Y WHERE A IS A COMPLEX BANDED MATRIX
 !                     AND X,Y ARE COMPLEX VECTORS
@@ -10392,130 +10509,4 @@ do 21 I = 1,M
 21 CONTINUE
 RETURN
 END SUBROUTINE DTPRD
-
-SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
-!-----------------------------------------------------------------------
-!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   T = X(I)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      Y(J) = Y(J) + T*A(L)
-   END DO
-11 CONTINUE
-RETURN
-END SUBROUTINE DTPRD1
-
-SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
-!-----------------------------------------------------------------------
-!              PRODUCT OF A SPARSE MATRIX AND A VECTOR
-!-----------------------------------------------------------------------
-COMPLEX A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   SUM = (0.0, 0.0)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      SUM = SUM + A(L)*X(J)
-   END DO
-11 Y(I) = SUM
-RETURN
-END SUBROUTINE CVPRD
-
-SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
-!-----------------------------------------------------------------------
-!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
-!-----------------------------------------------------------------------
-COMPLEX A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   SUM = Y(I)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      SUM = SUM + A(L)*X(J)
-   END DO
-11 Y(I) = SUM
-RETURN
-END SUBROUTINE CVPRD1
-
-SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
-!-----------------------------------------------------------------------
-!              PRODUCT OF A VECTOR AND A SPARSE MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
-!
-DO J = 1,N
-   Y(J) = (0.0, 0.0)
-END DO
-!
-do 21 I = 1,M
-   T = X(I)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 21
-   DO L = LMIN,LMAX
-      J = JA(L)
-      Y(J) = Y(J) + T*A(L)
-   END DO
-21 CONTINUE
-RETURN
-END SUBROUTINE CTPRD
-
-SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
-!-----------------------------------------------------------------------
-!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
-!-----------------------------------------------------------------------
-COMPLEX A(*), X(M), Y(N), T
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   T = X(I)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      Y(J) = Y(J) + T*A(L)
-   END DO
-11 CONTINUE
-RETURN
-END SUBROUTINE CTPRD1
-
-REAL function SNRM (A, IA, JA, M, N)
-!-----------------------------------------------------------------------
-!             COMPUTATION OF THE L-INFINITY NORM OF A
-!                      REAL SPARSE MATRIX A
-!-----------------------------------------------------------------------
-REAL A(*)
-INTEGER IA(*), JA(*)
-!
-SNRM = 0.0
-do 20 I = 1,M
-   IPMIN = IA(I)
-   IPMAX = IA(I + 1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 20
-   SUM = 0.0
-   DO IP = IPMIN,IPMAX
-      SUM = SUM + ABS(A(IP))
-   END DO
-   SNRM = AMAX1(SNRM, SUM)
-20 CONTINUE
-RETURN
-END FUNCTION SNRM
 
