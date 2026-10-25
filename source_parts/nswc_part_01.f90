@@ -1,4 +1,6 @@
 INTEGER function IPMPAR (I)
+IMPLICIT NONE
+INTEGER I
 !-----------------------------------------------------------------------
 !
 !     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -6836,6 +6838,8 @@ RETURN
 END SUBROUTINE ERFCM2
 
 double precision function DERF (X)
+IMPLICIT NONE
+INTEGER I, K
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
 !-----------------------------------------------------------------------

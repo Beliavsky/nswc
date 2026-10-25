@@ -899,6 +899,8 @@ RETURN
 END SUBROUTINE DCGAMA
 
 double precision function DGAMMA(A)
+IMPLICIT NONE
+INTEGER J, N
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF THE GAMMA FUNCTION FOR
@@ -4546,6 +4548,12 @@ RETURN
 END SUBROUTINE DGINV
 
 SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
+IMPLICIT NONE
+REAL APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
+INTEGER IERR
+REAL A, B, W, W1, X, Y
+INTEGER IERR1, IND, N
+REAL A0, B0, EPS, T, X0, Y0, Z
 !-----------------------------------------------------------------------
 !
 !            EVALUATION OF THE INCOMPLETE BETA FUNCTION IX(A,B)

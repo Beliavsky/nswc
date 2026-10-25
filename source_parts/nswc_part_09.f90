@@ -1983,6 +1983,9 @@ GO TO 100
 END SUBROUTINE PSEVL
 
 SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, KDX, KX, M, N
+INTEGER IA, IB, IC, IE, MM1
 !-----------------------------------------------------------------------
 !               CLOSED CURVE CUBIC SPLINE FITTING
 !                    IN N-DIMENSIONAL SPACE

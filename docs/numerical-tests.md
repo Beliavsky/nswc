@@ -79,8 +79,8 @@ and `RK8`.
 
 `SAMAX` and `BSPEV` from the Miller package are absent from this NSWC source.
 Their checks were omitted; `ISAMAX` still checks the maximum element index.
-The Fourier worker factor array is declared as an integer array to match the
-original routines. The cosine worker workspace is explicitly initialized with
+The Fourier worker factor array retains the original routines' `REAL` type.
+The cosine worker workspace is explicitly initialized with
 `RFFTI`; the Miller backend could initialize it on demand. Direct forward
 transform checks were added in addition to the adapted round trip checks.
 

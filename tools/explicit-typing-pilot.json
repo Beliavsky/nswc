@@ -1,0 +1,113 @@
+{
+  "generator": "ftnchek 3.3.1",
+  "options": "undeclared-only,suppress-array-dimensions,compact,use-continuation-lines",
+  "input_sha256": "b565c0e64221a8924635279687ae9aac48903069d5b0b8b169f539939775e819",
+  "review_notes": {
+    "BRATIO": "Added REAL return types for APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR. The undeclared-only report omitted these EXTERNAL names; its full declaration report and original source confirm their types.",
+    "QAGS": "Added REAL F. F is a function forwarded to QAGSE; leaving it untyped under IMPLICIT NONE changes its classification and produces a new compiler warning."
+  },
+  "procedures": {
+    "IPMPAR": {
+      "sha256": "9a0c5001ff45325ed511a016dd265141bd74d6fb62801ecd5887e5c2e2138d58",
+      "declarations": [
+        "      INTEGER I"
+      ]
+    },
+    "DERF": {
+      "sha256": "3c0c32ad24b2154f4c9db6ef7e03a2e5d9b5421258c2254c447ecfbe54cb237f",
+      "declarations": [
+        "      INTEGER I, K"
+      ]
+    },
+    "DGAMMA": {
+      "sha256": "0061526940aa1acbd2695fc748d64a55200552de2867d8ee83f370be44158b30",
+      "declarations": [
+        "      INTEGER J, N"
+      ]
+    },
+    "BRATIO": {
+      "sha256": "3a3d87fa1f0b8e0ffe18b583999206dab72d0b4c9ed63e8c96fbe5edee5c16e5",
+      "declarations": [
+        "      REAL APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR",
+        "      INTEGER IERR",
+        "      REAL A, B, W, W1, X, Y",
+        "      INTEGER IERR1, IND, N",
+        "      REAL A0, B0, EPS, T, X0, Y0, Z"
+      ]
+    },
+    "DCSEVL": {
+      "sha256": "b43b78280b7930ae75f386d536782b8b089edec49d1036b3fc25a131f8f05e4a",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, K"
+      ]
+    },
+    "DRPLY1": {
+      "sha256": "193179c3d18d26a6cce6e3a1f7faab0b5a3242a4a41e2baab12ab19db7cf8a13",
+      "declarations": [
+        "      INTEGER IDEG, IDP1, NUM",
+        "      INTEGER I, J, JJ, L, N, NM1, NN, NZ"
+      ]
+    },
+    "DDOT": {
+      "sha256": "cae7a5f461ca7b57eca9e4357a5055461211e280fe65f668df61675658cb94ae",
+      "declarations": []
+    },
+    "DAXPY": {
+      "sha256": "1efa39d27a93cef0e7dc7fc69bdc5df027d9602921af74ca97be4269a97d0109",
+      "declarations": []
+    },
+    "DNRM2": {
+      "sha256": "7c01bbb5d83982199a07136e580ce13a7c87f67a991d1bd7bcfd90927ca53bbd",
+      "declarations": [
+        "      INTEGER INCX, N",
+        "      INTEGER I, J, NN"
+      ]
+    },
+    "DGEFA": {
+      "sha256": "69a193bf7ba729388b6a8b74290b0eb5e5fabd56c5721e1e09701a91549ccbea",
+      "declarations": []
+    },
+    "DGESL": {
+      "sha256": "083eb3345ae9549bd74b2534067b3981c0da6478342f1efc48143bc3820a26f1",
+      "declarations": []
+    },
+    "DSVDC": {
+      "sha256": "bbc48d5925fe8ead2e492e5b93535f5055c79e90be2b7d470d1f16b4c68ad8a7",
+      "declarations": []
+    },
+    "CSVDC": {
+      "sha256": "ee17634e0bde9efd42222de754f79cc2ec908727c0d659bbb8d8d499fc5d641a",
+      "declarations": []
+    },
+    "RFFTI1": {
+      "sha256": "ba0a1855b18c7471bb020c2f209fbb5de8914d43eec6cf2f0a1d64db9ca4e92f",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF, NFM1",
+        "     x, NL, NQ, NR, NTRY",
+        "      REAL ARG, ARGH, ARGLD, FI, TPI"
+      ]
+    },
+    "CSLOOP": {
+      "sha256": "9b1ef0fb67d2f03a2066e1660e908bed3487e4b85317eb096bef120618afb346",
+      "declarations": [
+        "      INTEGER IERR, KDX, KX, M, N",
+        "      INTEGER IA, IB, IC, IE, MM1"
+      ]
+    },
+    "QAGS": {
+      "sha256": "9048672eec60d3ffe7ece19a7ed63a8ea6ff33d94655136a74acdb5259e24e9d",
+      "declarations": [
+        "      REAL F",
+        "      INTEGER IER, LAST, LENW, LIMIT, NEVAL",
+        "      REAL A, ABSERR, B, EPSABS, EPSREL, RESULT",
+        "      INTEGER L1, L2, L3"
+      ]
+    },
+    "RKF45": {
+      "sha256": "a70bc81518a7a4928618d47abcf84f1274a53b50e45fa34a8fbcba879fc9f0fd",
+      "declarations": []
+    }
+  }
+}

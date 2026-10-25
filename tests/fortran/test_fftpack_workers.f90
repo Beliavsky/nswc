@@ -4,8 +4,8 @@ program test_fftpack_workers
    implicit none
    integer, parameter :: n=8
    real, parameter :: tol=5.0e-4
-   real :: x(n),x0(n),ch(n),wa(n),w(n),xh(2*n+15)
-   integer :: i,j,k,ifac(15)
+   real :: x(n),x0(n),ch(n),wa(n),w(n),xh(2*n+15),ifac(15)
+   integer :: i,j,k
    real :: expected(n),pi,angle,rfft_error,cosq_error
    interface
       subroutine rffti(n,wsave)
@@ -14,18 +14,15 @@ program test_fftpack_workers
       end subroutine rffti
       subroutine rffti1(n,wa,ifac)
          integer, intent(in) :: n
-         real, intent(inout) :: wa(*)
-         integer, intent(inout) :: ifac(*)
+         real, intent(inout) :: wa(*),ifac(*)
       end subroutine rffti1
       subroutine rfftf1(n,c,ch,wa,ifac)
          integer, intent(in) :: n
-         real, intent(inout) :: c(*),ch(*),wa(*)
-         integer, intent(inout) :: ifac(*)
+         real, intent(inout) :: c(*),ch(*),wa(*),ifac(*)
       end subroutine rfftf1
       subroutine rfftb1(n,c,ch,wa,ifac)
          integer, intent(in) :: n
-         real, intent(inout) :: c(*),ch(*),wa(*)
-         integer, intent(inout) :: ifac(*)
+         real, intent(inout) :: c(*),ch(*),wa(*),ifac(*)
       end subroutine rfftb1
       subroutine cosqf1(n,x,w,xh)
          integer, intent(in) :: n
@@ -42,7 +39,7 @@ program test_fftpack_workers
    end do
    x0=x
    wa=0.0
-   ifac=0
+   ifac=0.0
    ch=0.0
    call rffti1(n,wa,ifac)
    call rfftf1(n,x,ch,wa,ifac)

@@ -1,4 +1,6 @@
       INTEGER FUNCTION IPMPAR (I)
+      IMPLICIT NONE
+      INTEGER I
 C-----------------------------------------------------------------------
 C
 C     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -6846,6 +6848,8 @@ C
       END SUBROUTINE ERFCM2
 
       DOUBLE PRECISION FUNCTION DERF (X)
+      IMPLICIT NONE
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
 C-----------------------------------------------------------------------
@@ -11432,6 +11436,8 @@ C-----------------------------------------------------------------------
       END SUBROUTINE DCGAMA
 
       DOUBLE PRECISION FUNCTION DGAMMA(A)
+      IMPLICIT NONE
+      INTEGER J, N
 C-----------------------------------------------------------------------
 C
 C                EVALUATION OF THE GAMMA FUNCTION FOR
@@ -15099,6 +15105,12 @@ C
       END SUBROUTINE DGINV
 
       SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
+      IMPLICIT NONE
+      REAL APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
+      INTEGER IERR
+      REAL A, B, W, W1, X, Y
+      INTEGER IERR1, IND, N
+      REAL A0, B0, EPS, T, X0, Y0, Z
 C-----------------------------------------------------------------------
 C
 C            EVALUATION OF THE INCOMPLETE BETA FUNCTION IX(A,B)
@@ -26923,6 +26935,9 @@ C
       END FUNCTION CSEVL
 
       DOUBLE PRECISION FUNCTION DCSEVL (X, A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
 C          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
@@ -29035,6 +29050,9 @@ C
 
       SUBROUTINE DRPLY1 (OP,IDEG,IDP1,ZEROR,ZEROI,P,QP,K,QK,SVK,
      *                   TEMP,PT,NUM)
+      IMPLICIT NONE
+      INTEGER IDEG, IDP1, NUM
+      INTEGER I, J, JJ, L, N, NM1, NN, NZ
 C-------------------------
       DOUBLE PRECISION OP(IDP1), ZEROR(IDEG), ZEROI(IDEG),
      *                 P(IDP1), QP(IDP1), K(IDP1), QK(IDP1),
@@ -31845,6 +31863,7 @@ C
       END FUNCTION SDOT
 
       DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -32156,6 +32175,7 @@ C
       END SUBROUTINE SAXPY
 
       SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -32479,6 +32499,9 @@ C
       END FUNCTION SNRM2
 
       DOUBLE PRECISION FUNCTION DNRM2 ( N, DX, INCX)
+      IMPLICIT NONE
+      INTEGER INCX, N
+      INTEGER I, J, NN
       INTEGER          NEXT
       DOUBLE PRECISION   DX(*), CUTLO, CUTHI, HITEST, SUM, XMAX,ZERO,ONE
       DATA   ZERO, ONE /0.0D0, 1.0D0/
@@ -35896,6 +35919,7 @@ C
       END SUBROUTINE DGECO
 
       SUBROUTINE DGEFA(A,LDA,N,IPVT,INFO)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),INFO
       DOUBLE PRECISION A(LDA,*)
 C
@@ -36000,6 +36024,7 @@ C
       END SUBROUTINE DGEFA
 
       SUBROUTINE DGESL(A,LDA,N,IPVT,B,JOB)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),B(*)
 C
@@ -41759,6 +41784,7 @@ C           ...EXIT
       END SUBROUTINE SSVDC
 
       SUBROUTINE DSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
+      IMPLICIT NONE
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       DOUBLE PRECISION X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -42240,6 +42266,7 @@ C           ...EXIT
       END SUBROUTINE DSVDC
 
       SUBROUTINE CSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
+      IMPLICIT NONE
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       COMPLEX X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -81192,6 +81219,11 @@ C
       END SUBROUTINE RFFTI
 
       SUBROUTINE RFFTI1 (N,WA,IFAC)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF, NFM1
+     x, NL, NQ, NR, NTRY
+      REAL ARG, ARGH, ARGLD, FI, TPI
       REAL WA(*), IFAC(*)
       INTEGER NTRYH(4)
       DATA NTRYH(1),NTRYH(2),NTRYH(3),NTRYH(4)/4,2,3,5/
@@ -86651,6 +86683,9 @@ C
       END SUBROUTINE PSEVL
 
       SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KDX, KX, M, N
+      INTEGER IA, IB, IC, IE, MM1
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
 C                    IN N-DIMENSIONAL SPACE
@@ -97598,6 +97633,11 @@ C TRIVIAL CASE
 
       SUBROUTINE QAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+      IMPLICIT NONE
+      REAL F
+      INTEGER IER, LAST, LENW, LIMIT, NEVAL
+      REAL A, ABSERR, B, EPSABS, EPSREL, RESULT
+      INTEGER L1, L2, L3
 C-----------------------------------------------------------------------
 C
 C                 COMPUTATION OF A DEFINITE INTEGRAL
@@ -106795,6 +106835,7 @@ C
       END SUBROUTINE EXTRA
 
       SUBROUTINE RKF45 (F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
+      IMPLICIT NONE
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 C

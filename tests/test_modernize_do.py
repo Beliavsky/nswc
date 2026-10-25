@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from modernize_do import transform, main
 from name_procedure_ends import ConversionError, transform as name_ends
+import json
+from explicit_typing import apply_manifest, DEFAULT_MANIFEST
 
 
 def procedure(body, name="S"):
@@ -128,7 +130,8 @@ class ModernizeDoTests(unittest.TestCase):
         result = transform(readable)
         self.assertEqual(len(result.loops), 4247)
         self.assertEqual(sum(r.status == "converted" for r in result.loops), 2548)
-        self.assertEqual(result.data, (ROOT / "nswc.f").read_bytes())
+        reviewed = apply_manifest(result.data, json.loads(DEFAULT_MANIFEST.read_text()))
+        self.assertEqual(reviewed, (ROOT / "nswc.f").read_bytes())
         self.assertEqual(transform(result.data).data, result.data)
 
 

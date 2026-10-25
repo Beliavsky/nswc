@@ -22,6 +22,7 @@ viewable code partitions.
 - [Review and limitations](NSWC_Source_Audit.md)
 - [Spelling and OCR checks](docs/spelling-checks.md)
 - [Numerical test programs](docs/numerical-tests.md)
+- [Explicit typing pilot](docs/explicit-typing.md)
 - [Original report cover](scans/page_0001.png)
 - [Recommended free-form Fortran source](nswc.f90)
 - [Readable fixed-form alternative](nswc.f)
@@ -127,7 +128,7 @@ with DO/END DO in fixed-form source. It starts from the approach in
 `C:/python/fortran/xloop.py`, with labels scoped to each external procedure.
 The applied pass converted 2,548 loops and left 1,699 unchanged. The
 [conversion record](docs/loop-modernization.csv) lists every original labelled
-loop, its line numbers in `nswc.f`, and the reason for each skipped case.
+loop, its line numbers in `nswc.f` at commit `696d50f`, and the reason for each skipped case.
 The conversion preserves physical line counts.
 
 ```sh
@@ -145,3 +146,13 @@ continued headers, indirect branches, and ambiguous control flow. It retains
 labels mentioned elsewhere in the procedure, conservatively treating numeric
 mentions as possible references. This can leave safe conversions for later
 review. It also skips loops with possible branches into their bodies.
+
+## Explicit typing
+
+A reviewed first batch adds `IMPLICIT NONE` and any missing declarations to
+17 procedures. The declarations were generated with `ftnchek` and supplemented
+where function return types were omitted. `tools/explicit_typing.py` applies the
+reviewed manifest; it does not guess types. The [pilot guide](docs/explicit-typing.md)
+records the affected procedures, tool limitations, and reproduction commands.
+Run `python tools/validate_explicit_typing.py` to check that the compiler sees
+the same variable and external procedure types, shapes, and argument lists.
