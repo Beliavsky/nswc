@@ -21,7 +21,13 @@
     "QURV2": "Added INTEGER INTRVL after checking the original calls, function definition, full declaration report, and compiler symbol records.",
     "QSUBA": "Added REAL F, SPMPAR after reviewing the original calls, callback use, and compiler symbol records.",
     "QUAD": "Added REAL F after reviewing the original calls, callback use, and compiler symbol records.",
-    "QK21F": "Added REAL F after reviewing the original calls, callback use, and compiler symbol records."
+    "QK21F": "Added REAL F after reviewing the original calls, callback use, and compiler symbol records.",
+    "LUIMP": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "TQLRAT": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "IMTQL1": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "TQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "IMTQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
+    "GERKS": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records."
   },
   "procedures": {
     "IPMPAR": {
@@ -617,6 +623,226 @@
         "      INTEGER I, I1, I2, K, L, LOOP, M, MT, NPI, NPLACE",
         "      REAL AL, BL, FL, FLOOP, H, R, S, SCALE, T, W"
       ]
+    },
+    "MSLV": {
+      "sha256": "2cebc6523eeb2768fde1f669e0fab797baf2995f49f47e8bdd97779fe5103cc2",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, M, MO, N",
+        "      INTEGER J, JOB"
+      ]
+    },
+    "SLVMP": {
+      "sha256": "3e70660e5f97c946aa6b2a51ebc47b27b3066aac1d6282a60a3e4aadb9c84c5c",
+      "declarations": [
+        "      INTEGER IERR, IWK, KA, MO, N",
+        "      REAL A, B, WK, X",
+        "      INTEGER I, IR"
+      ]
+    },
+    "LUIMP": {
+      "sha256": "be6e8539e0234dba5a30d128a4dd2ed60b751aa1a9c9e80718f162a76a0597ec",
+      "declarations": [
+        "      INTEGER IND, IPVT, KA, KQ, N",
+        "      REAL A, B, Q, R, X",
+        "      INTEGER I, J",
+        "      REAL EPS, EPS2, RAT, RATIO, RNRM, XNRM",
+        "      REAL SPMPAR"
+      ]
+    },
+    "SGECO": {
+      "sha256": "277d7cd49529d602df5ae2fbe75c4af556f495222bb013af84d1a81c6eca4fbf",
+      "declarations": []
+    },
+    "SGEFA": {
+      "sha256": "9d97a921c002f01755bc7544214c654f5866ee07cf5a0daf2c667074139c20ab",
+      "declarations": []
+    },
+    "SGESL": {
+      "sha256": "862884321858d66c2b6aa7eddda4b1404235aec3265cd02d0064c2cb9888f607",
+      "declarations": []
+    },
+    "CMSLV": {
+      "sha256": "8162b13540ad5921fbb3468e582a86a7280409de0eebb0f3cc4b405dac82f226",
+      "declarations": [
+        "      INTEGER IERR, KA, KB, M, MO, N",
+        "      INTEGER J, JOB"
+      ]
+    },
+    "CGECO": {
+      "sha256": "f5ce022efe4a7a07fa8fe7412ed73bb580ba8fa886cea2008a4a6260a3a62802",
+      "declarations": []
+    },
+    "CGEFA": {
+      "sha256": "9018acfbd61fb382e0029f51d940d92237bfc3833c7253af9f5e70830a7e6c66",
+      "declarations": []
+    },
+    "CGESL": {
+      "sha256": "3d6c1e6fbc53222994b5a13ef4fd4a207e630679fc0b116b275382a92d0874ea",
+      "declarations": []
+    },
+    "BVPRD1": {
+      "sha256": "c035efc85db747179236159f2fe9c1e3139493585113c65500505b8561b8a805",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1",
+        "      REAL SUM"
+      ]
+    },
+    "BTPRD1": {
+      "sha256": "d00607c6eff27a27dd70ca8dbd238628b90441227e4bc0288dfbe440ae74259b",
+      "declarations": [
+        "      INTEGER KA, M, ML, MU, N",
+        "      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM",
+        "      REAL SUM"
+      ]
+    },
+    "SEIG": {
+      "sha256": "72d6e6bd940716b859ccffc86893d9c93b18b5fe50e960cd7a6eeceaa57584ad",
+      "declarations": [
+        "      INTEGER IERR, KA, N",
+        "      INTEGER L"
+      ]
+    },
+    "SEIG1": {
+      "sha256": "9cebe2786d9daf9d043e23900ab6b815b0a388e400ed398cd0e60dd59ba19e66",
+      "declarations": [
+        "      INTEGER IERR, KA, N",
+        "      INTEGER L"
+      ]
+    },
+    "SEIGV": {
+      "sha256": "39ff39a2a929c327670673869230a8d36b0b0f8275f7a9205b6e6b4b180fe029",
+      "declarations": [
+        "      INTEGER IERR, KA, N"
+      ]
+    },
+    "SEIGV1": {
+      "sha256": "d9e8bba9213c5e547f3da21be9816811195bf8cb8e5a31794c65ece60e0d65d9",
+      "declarations": [
+        "      INTEGER IERR, KA, N"
+      ]
+    },
+    "TRED1": {
+      "sha256": "45647b0a35c3b9fc6c83b6506ec947284fac512df7ad2c3f834757570550fda6",
+      "declarations": []
+    },
+    "TQLRAT": {
+      "sha256": "14095728608eedf9b58c98a60f572d3aa00a723597003e710ff8424663dbbd14",
+      "declarations": [
+        "      REAL SPMPAR"
+      ]
+    },
+    "IMTQL1": {
+      "sha256": "986bfb00484b3cb03ec57ae545f2982dee58c3d7bf3c2a064766a8f71811a680",
+      "declarations": [
+        "      REAL SPMPAR"
+      ]
+    },
+    "TRED2": {
+      "sha256": "cc1f96fcb2336915564efb2178d5646fc884579960fdd2498c0b18c7c87c111e",
+      "declarations": []
+    },
+    "TQL2": {
+      "sha256": "0f8277bb19b1cf7859bac1bec792e27f51b48ba56af66e0fda3ccc7b56332de6",
+      "declarations": [
+        "      REAL SPMPAR"
+      ]
+    },
+    "IMTQL2": {
+      "sha256": "545931ec8f12bb9d67a465c447e693a1964d55e4ee0e4e34d52b39b3441b3f9f",
+      "declarations": [
+        "      REAL SPMPAR"
+      ]
+    },
+    "ORTHO": {
+      "sha256": "733bbb6551f51646e99c2456955cdbd28c5be26828ef5bb25390a2f4ccd98a63",
+      "declarations": [
+        "      INTEGER IP, M, MS, N",
+        "      REAL QR, S",
+        "      INTEGER I, J, JP, K, KJ, NN",
+        "      REAL AJJ, SAV, SS, Y"
+      ]
+    },
+    "ORSOL": {
+      "sha256": "125461a16767b0ef3ef1a0459e5b586595b96718e660b360e021c0c31b76419f",
+      "declarations": [
+        "      INTEGER IP, M, MS, N",
+        "      REAL QR, S, X",
+        "      INTEGER I, IJ, J, JP, K, NI, NM, NN",
+        "      REAL SAV, SS, Y"
+      ]
+    },
+    "NORMLZ": {
+      "sha256": "fe78aa8d16de69b2531197097256a73d5252d104c94bd856a0a378c2e2ba7398",
+      "declarations": []
+    },
+    "BLSQ": {
+      "sha256": "04f69e73a6619300010cb38c0176a4a80bb1dcff7d2fdf57f36e2af45f47dfc5",
+      "declarations": [
+        "      INTEGER NPI"
+      ]
+    },
+    "RKFS": {
+      "sha256": "b61bccd764a870696c77f26e585d50e8d25be3497cee5db998b79faad9d5af48",
+      "declarations": []
+    },
+    "FEHL": {
+      "sha256": "3a1ffe71dc81bcea3e33ef33c4997bb7f6c6bfd12205c53b3b3fc73b4c4e059d",
+      "declarations": []
+    },
+    "GERK": {
+      "sha256": "7165be07d89eb331715ba36b0658f6d0752e8fb0326a22b7f674b8c91a01b67e",
+      "declarations": [
+        "      INTEGER IFLAG, IWORK, NEQN",
+        "      REAL ABSERR, GERROR, RELERR, T, TOUT, WORK, Y",
+        "      INTEGER K1, K1M, K2, K3, K4, K5, K6, K7, K8"
+      ]
+    },
+    "GERKS": {
+      "sha256": "055c49b3f5e1f6f484860867ba1c363bcb8ce6b1d04a4f97883fe65909511dd8",
+      "declarations": [
+        "      INTEGER IFLAG, INIT, JFLAG, KFLAG, KOP, NEQN, NFE",
+        "      REAL ABSERR, F1, F2, F3, F4, F5, GERROR, H, RELERR, SAVAE, SAVRE",
+        "     x, T, TOUT, Y, YG, YGP, YP",
+        "      INTEGER K, MAXNFE, MFLAG",
+        "      REAL A, AE, DT, EE, EEOET, ESTTOL, ET, HH, HMIN, REMIN, RER, S",
+        "     x, SCALE, TOL, TOLN, TS, U, U26, YPK",
+        "      REAL SPMPAR"
+      ]
+    },
+    "RK": {
+      "sha256": "b85eeee87b746417806f52a375f2f6ba90246ce62f5be12906433d4e3e9e362a",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL A, H, T",
+        "      INTEGER K, M, M1, MK, NK, NP1",
+        "      REAL HA, TA"
+      ]
+    },
+    "RK8": {
+      "sha256": "a76046926887ac1d7f59ce8e518b8beb25e99ab3f8b4bc5262b0a3714af0a22a",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL H, T",
+        "      INTEGER I, J, K, L, M, M1",
+        "      REAL HA, SUM"
+      ]
+    },
+    "URNG": {
+      "sha256": "6dd7d07eb4820e2effa89f52366d6f061f389095d5ddbcb13c7e136abbe6f15a",
+      "declarations": [
+        "      INTEGER IERR, IX, N",
+        "      INTEGER K, L, LEFTLO",
+        "      REAL S, T"
+      ]
+    },
+    "NRNG": {
+      "sha256": "7268b617237ef522feffb211fad92d5bfaa3c3c3752927720e0fbfa8f7e6d719",
+      "declarations": [
+        "      INTEGER IERR, IX, N",
+        "      INTEGER I, M",
+        "      REAL PHI, PI2, R"
+      ]
     }
   },
   "batches": [
@@ -725,6 +951,47 @@
         "QPSRT",
         "QELG",
         "WANDT"
+      ]
+    },
+    {
+      "id": "batch-04",
+      "source_commit": "8c73379",
+      "input_sha256": "c30edb95e8d6f5d71294a8bb8cac2342d17a437fffe5cd673b9c067403e22822",
+      "procedures": [
+        "MSLV",
+        "SLVMP",
+        "LUIMP",
+        "SGECO",
+        "SGEFA",
+        "SGESL",
+        "CMSLV",
+        "CGECO",
+        "CGEFA",
+        "CGESL",
+        "BVPRD1",
+        "BTPRD1",
+        "SEIG",
+        "SEIG1",
+        "SEIGV",
+        "SEIGV1",
+        "TRED1",
+        "TQLRAT",
+        "IMTQL1",
+        "TRED2",
+        "TQL2",
+        "IMTQL2",
+        "ORTHO",
+        "ORSOL",
+        "NORMLZ",
+        "BLSQ",
+        "RKFS",
+        "FEHL",
+        "GERK",
+        "GERKS",
+        "RK",
+        "RK8",
+        "URNG",
+        "NRNG"
       ]
     }
   ]

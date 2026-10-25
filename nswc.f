@@ -35000,6 +35000,9 @@ C
       END SUBROUTINE DPSLV
 
       SUBROUTINE MSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J, JOB
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 C     AND SOLVING REAL EQUATIONS
@@ -35077,6 +35080,10 @@ C
       END SUBROUTINE MSLV1
 
       SUBROUTINE SLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IWK, KA, MO, N
+      REAL A, B, WK, X
+      INTEGER I, IR
 C     ******************************************************************
 C     SOLUTION OF REAL LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
 C     ******************************************************************
@@ -35106,6 +35113,12 @@ C
       END SUBROUTINE SLVMP
 
       SUBROUTINE LUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
+      IMPLICIT NONE
+      INTEGER IND, IPVT, KA, KQ, N
+      REAL A, B, Q, R, X
+      INTEGER I, J
+      REAL EPS, EPS2, RAT, RATIO, RNRM, XNRM
+      REAL SPMPAR
 C ----------------------------------------------------------------------
 C     PURPOSE
 C       GIVEN AN APPROXIMATE SOLUTION X OF A LINEAR SYSTEM AX = B
@@ -35189,6 +35202,7 @@ C
       END SUBROUTINE LUIMP
 
       SUBROUTINE SGECO(A,LDA,N,IPVT,RCOND,Z)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*)
       REAL A(LDA,*),Z(*)
       REAL RCOND
@@ -35383,6 +35397,7 @@ C
       END SUBROUTINE SGECO
 
       SUBROUTINE SGEFA(A,LDA,N,IPVT,INFO)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),INFO
       REAL A(LDA,*)
 C
@@ -35487,6 +35502,7 @@ C
       END SUBROUTINE SGEFA
 
       SUBROUTINE SGESL(A,LDA,N,IPVT,B,JOB)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),JOB
       REAL A(LDA,*),B(*)
 C
@@ -40330,6 +40346,9 @@ C
       END SUBROUTINE DTOPLX
 
       SUBROUTINE CMSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J, JOB
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 C     AND SOLVING COMPLEX EQUATIONS
@@ -40519,6 +40538,7 @@ C
       END SUBROUTINE CLUIMP
 
       SUBROUTINE CGECO(A,LDA,N,IPVT,RCOND,Z)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*)
       COMPLEX A(LDA,*),Z(*)
       REAL RCOND
@@ -40717,6 +40737,7 @@ C
       END SUBROUTINE CGECO
 
       SUBROUTINE CGEFA(A,LDA,N,IPVT,INFO)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),INFO
       COMPLEX A(LDA,*)
 C
@@ -40825,6 +40846,7 @@ C
       END SUBROUTINE CGEFA
 
       SUBROUTINE CGESL(A,LDA,N,IPVT,B,JOB)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),JOB
       COMPLEX A(LDA,*),B(*)
 C
@@ -49121,6 +49143,10 @@ C
       END SUBROUTINE BVPRD
 
       SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
+      REAL SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A REAL BANDED MATRIX
 C                     AND X,Y ARE REAL VECTORS
@@ -49392,6 +49418,10 @@ C
       END SUBROUTINE BTPRD
 
       SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      REAL SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A REAL BANDED MATRIX
 C                     AND X,Y ARE REAL VECTORS
@@ -59361,6 +59391,9 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       END SUBROUTINE DHQR2
 
       SUBROUTINE SEIG (A, KA, N, W, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
+      INTEGER L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59378,6 +59411,9 @@ C
       END SUBROUTINE SEIG
 
       SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
+      INTEGER L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59395,6 +59431,8 @@ C
       END SUBROUTINE SEIG1
 
       SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59406,6 +59444,8 @@ C
       END SUBROUTINE SEIGV
 
       SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
@@ -59417,6 +59457,7 @@ C
       END SUBROUTINE SEIGV1
 
       SUBROUTINE TRED1(NM,N,A,D,E,E2)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       REAL A(NM,N),D(N),E(N),E2(N)
@@ -59645,6 +59686,8 @@ C     ********** LAST CARD OF TRED3 **********
       END SUBROUTINE TRED3
 
       SUBROUTINE TQLRAT(N,D,E2,IERR)
+      IMPLICIT NONE
+      REAL SPMPAR
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
       REAL D(N),E2(N)
@@ -59780,6 +59823,8 @@ C     ********** LAST CARD OF TQLRAT **********
       END SUBROUTINE TQLRAT
 
       SUBROUTINE IMTQL1(N,D,E,IERR)
+      IMPLICIT NONE
+      REAL SPMPAR
 C
       INTEGER I,J,L,M,N,II,MML,IERR
       REAL D(N),E(N)
@@ -59908,6 +59953,7 @@ C     ********** LAST CARD OF IMTQL1 **********
       END SUBROUTINE IMTQL1
 
       SUBROUTINE TRED2(NM,N,A,D,E,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       REAL A(NM,N),D(N),E(N),Z(NM,N)
@@ -60047,6 +60093,8 @@ C     ********** LAST CARD OF TRED2 **********
       END SUBROUTINE TRED2
 
       SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
+      IMPLICIT NONE
+      REAL SPMPAR
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
       REAL D(N),E(N),Z(NM,N)
@@ -60219,6 +60267,8 @@ C     ********** LAST CARD OF TQL2 **********
       END SUBROUTINE TQL2
 
       SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
+      IMPLICIT NONE
+      REAL SPMPAR
 C
       INTEGER I,J,K,L,M,N,II,NM,MML,IERR
       REAL D(N),E(N),Z(NM,N)
@@ -63691,6 +63741,11 @@ C
       END SUBROUTINE LLSQMP
 
       SUBROUTINE ORTHO(M, N, QR, MS, S, IP, EXIT)
+      IMPLICIT NONE
+      INTEGER IP, M, MS, N
+      REAL QR, S
+      INTEGER I, J, JP, K, KJ, NN
+      REAL AJJ, SAV, SS, Y
 C***********************************************************************
 C      IDENTIFICATION
 C        ORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -63794,6 +63849,11 @@ C
       END SUBROUTINE ORTHO
 
       SUBROUTINE ORSOL(M, N, QR, MS, S, IP, X)
+      IMPLICIT NONE
+      INTEGER IP, M, MS, N
+      REAL QR, S, X
+      INTEGER I, IJ, J, JP, K, NI, NM, NN
+      REAL SAV, SS, Y
 C***********************************************************************
 C      IDENTIFICATION
 C        ORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -71179,6 +71239,7 @@ C
       END SUBROUTINE SPLSQ
 
       SUBROUTINE NORMLZ(N,X,BETA)
+      IMPLICIT NONE
       INTEGER N
       REAL X(N),BETA
 C
@@ -71614,6 +71675,8 @@ C
 
       SUBROUTINE BLSQ(M,N,A,KA,ML,MU,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
+      IMPLICIT NONE
+      INTEGER NPI
 C
       INTEGER M,N,KA,ML,MU,ITNLIM,ISTOP
       REAL    A(KA,N),DAMP,U(M),X(N),ATOL,BTOL,CONLIM,
@@ -107268,6 +107331,7 @@ C
 
       SUBROUTINE RKFS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,YP,H,F1,F2,F3,
      1                F4,F5,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
+      IMPLICIT NONE
 C
 C
 C     RKFS INTEGRATES A SYSTEM OF FIRST ORDER ORDINARY DIFFERENTIAL
@@ -107608,6 +107672,7 @@ C
       END SUBROUTINE RKFS
 
       SUBROUTINE FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,S)
+      IMPLICIT NONE
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 C
@@ -107675,6 +107740,10 @@ C
 
       SUBROUTINE GERK(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR,
      1                WORK,IWORK)
+      IMPLICIT NONE
+      INTEGER IFLAG, IWORK, NEQN
+      REAL ABSERR, GERROR, RELERR, T, TOUT, WORK, Y
+      INTEGER K1, K1M, K2, K3, K4, K5, K6, K7, K8
 C
 C     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 C     GLOBAL ERROR ASSESSMENT
@@ -107888,6 +107957,14 @@ C
       SUBROUTINE GERKS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR,
      1                YP,H,F1,F2,F3,F4,F5,YG,YGP,SAVRE,SAVAE,
      2                NFE,KOP,INIT,JFLAG,KFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, INIT, JFLAG, KFLAG, KOP, NEQN, NFE
+      REAL ABSERR, F1, F2, F3, F4, F5, GERROR, H, RELERR, SAVAE, SAVRE
+     x, T, TOUT, Y, YG, YGP, YP
+      INTEGER K, MAXNFE, MFLAG
+      REAL A, AE, DT, EE, EEOET, ESTTOL, ET, HH, HMIN, REMIN, RER, S
+     x, SCALE, TOL, TOLN, TS, U, U26, YPK
+      REAL SPMPAR
 C
 C     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 C     GLOBAL ERROR ASSESSMENT
@@ -110973,6 +111050,11 @@ C----------------------- END OF FUNCTION VNWRMS ------------------------
       END FUNCTION VNWRMS
 
       SUBROUTINE RK(N,T,H,A,F)
+      IMPLICIT NONE
+      INTEGER N
+      REAL A, H, T
+      INTEGER K, M, M1, MK, NK, NP1
+      REAL HA, TA
 C     ******************************************************************
 C     FOURTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 C     ******************************************************************
@@ -111025,6 +111107,11 @@ C
       END SUBROUTINE RK
 
       SUBROUTINE RK8(N,T,H,Y,DY,W,F)
+      IMPLICIT NONE
+      INTEGER N
+      REAL H, T
+      INTEGER I, J, K, L, M, M1
+      REAL HA, SUM
 C     ******************************************************************
 C     EIGHTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 C     ******************************************************************
@@ -114087,6 +114174,10 @@ C
       END SUBROUTINE URGET
 
       SUBROUTINE URNG (IX, X, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER K, L, LEFTLO
+      REAL S, T
       REAL X(N)
 C-----------------------------------------------------------------------
 C         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -114922,6 +115013,10 @@ C
       END SUBROUTINE DRNOR
 
       SUBROUTINE NRNG (IX, A, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, M
+      REAL PHI, PI2, R
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------

@@ -6768,6 +6768,10 @@ RETURN
 END SUBROUTINE BVPRD
 
 SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
+REAL SUM
 !-----------------------------------------------------------------------
 !        SETTING Y = A*X + Y WHERE A IS A REAL BANDED MATRIX
 !                     AND X,Y ARE REAL VECTORS
@@ -7039,6 +7043,10 @@ RETURN
 END SUBROUTINE BTPRD
 
 SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+REAL SUM
 !-----------------------------------------------------------------------
 !        SETTING Y = X*A + Y WHERE A IS A REAL BANDED MATRIX
 !                     AND X,Y ARE REAL VECTORS
@@ -10490,33 +10498,4 @@ do 20 I = 1,M
 20 CONTINUE
 RETURN
 END FUNCTION SNRM
-
-SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
-!-----------------------------------------------------------------------
-!        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
-!-----------------------------------------------------------------------
-REAL A(*), WK(N)
-INTEGER IA(*), JA(*)
-!
-ANORM = 0.0
-IPMIN = IA(1)
-IPMAX = IA(M + 1) - 1
-IF (IPMIN .GT. IPMAX) RETURN
-!
-!     COMPUTE THE L1 NORM OF A
-!
-DO J = 1,N
-   WK(J) = 0.0
-END DO
-!
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   WK(J) = WK(J) + ABS(A(IP))
-END DO
-!
-DO J = 1,N
-   ANORM = AMAX1(ANORM,WK(J))
-END DO
-RETURN
-END SUBROUTINE S1NRM
 

@@ -12,7 +12,7 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FMIN` | `SUBROUTINE` | `F, A0, B0, X, W, AERR, RERR, ERROR, IND` | [`L72000`](../source_parts/nswc_part_07.f90#L8406) |
+| `FMIN` | `SUBROUTINE` | `F, A0, B0, X, W, AERR, RERR, ERROR, IND` | [`L72063`](../source_parts/nswc_part_07.f90#L8419) |
 
 
 Let F(z) be a continuous real-valued function defined for a < z < b. Then the following subroutine is available for finding a local minimum of F(z}.
@@ -45,7 +45,7 @@ AQT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `OPTF` | `SUBROUTINE` | `FCN, N, RERR, ITER, XPLS, FPLS, IERR, WRK` | [`L72167`](../source_parts/nswc_part_07.f90#L8573) |
+| `OPTF` | `SUBROUTINE` | `FCN, N, RERR, ITER, XPLS, FPLS, IERR, WRK` | [`L72230`](../source_parts/nswc_part_07.f90#L8586) |
 
 
 Let f(x) be a real-valued function of n variables x =: (z1,..,2,) where n > 2. If f(z) is twice continuously differentiable then the following subroutine is available for finding a local minimum of f(z).
@@ -116,7 +116,7 @@ Accuracy and Efficiency. OPTF is frequently extremely efficient in finding a val
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LMDIFF` | `SUBROUTINE` | `FCN, M, N, X, FVEC, EPSFCN, TOL, INFO, IWA, WA, LWA` | [`L73210`](../source_parts/nswc_part_07.f90#L9616) |
+| `LMDIFF` | `SUBROUTINE` | `FCN, M, N, X, FVEC, EPSFCN, TOL, INFO, IWA, WA, LWA` | [`L73273`](../source_parts/nswc_part_07.f90#L9629) |
 
 
 Let fi(z), ...,fm(z) be m real-valued functions of n real variables x = (zy, ...,2,) where m > n. The problem under consideration is to find a point x which minimizes the bid
@@ -195,8 +195,8 @@ References,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMPLX` | `SUBROUTINE` | `A, B0, C, KA, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L75360`](../source_parts/nswc_part_08.f90#L1128) |
-| `SSPLX` | `SUBROUTINE` | `TA, ITA, JTA, B0, C, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L76182`](../source_parts/nswc_part_08.f90#L1950) |
+| `SMPLX` | `SUBROUTINE` | `A, B0, C, KA, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L75423`](../source_parts/nswc_part_08.f90#L1128) |
+| `SSPLX` | `SUBROUTINE` | `TA, ITA, JTA, B0, C, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L76245`](../source_parts/nswc_part_08.f90#L1950) |
 
 
 Let A = (¢,;;) be an mx n matrix, B an array containing 61, ...,6m, and C an array containing cy, ...,¢€, where a,;,6,,c; are real. Consider the problem of finding nonnegative values 21, ...,2, which maximize or minimize the function cy7y +-++° + en2, subject to the constraints:
@@ -309,7 +309,7 @@ Check if there are any remaining negative variables. If not, then we are finishe
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ASSGN` | `SUBROUTINE` | `N, A, C, T, IWK, IERR` | [`L77255`](../source_parts/nswc_part_08.f90#L3023) |
+| `ASSGN` | `SUBROUTINE` | `N, A, C, T, IWK, IERR` | [`L77318`](../source_parts/nswc_part_08.f90#L3023) |
 
 
 Let C = (¢,;) be ann x n matrix (the cost matrix). The problem under consideration
@@ -366,7 +366,7 @@ tle
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MKP` | `SUBROUTINE` | `N, M, P, W, K, BCK, XSTAR, VSTAR, WK, IWK, NUM` | [`L77520`](../source_parts/nswc_part_08.f90#L3288) |
+| `MKP` | `SUBROUTINE` | `N, M, P, W, K, BCK, XSTAR, VSTAR, WK, IWK, NUM` | [`L77583`](../source_parts/nswc_part_08.f90#L3288) |
 
 
 Given n > 2 items, each having a profit p; > 0 and weight w; > 0, and m > 1 containers (knapsacks), each having a capacity k, > 0. Let z,; = 1 if item 7 is assigned to knapsack 1. Otherwise, let z;; == 0. Then the problem is to find an assignment z,; of the

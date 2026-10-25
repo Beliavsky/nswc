@@ -1,3 +1,32 @@
+SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
+!-----------------------------------------------------------------------
+!        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
+!-----------------------------------------------------------------------
+REAL A(*), WK(N)
+INTEGER IA(*), JA(*)
+!
+ANORM = 0.0
+IPMIN = IA(1)
+IPMAX = IA(M + 1) - 1
+IF (IPMIN .GT. IPMAX) RETURN
+!
+!     COMPUTE THE L1 NORM OF A
+!
+DO J = 1,N
+   WK(J) = 0.0
+END DO
+!
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   WK(J) = WK(J) + ABS(A(IP))
+END DO
+!
+DO J = 1,N
+   ANORM = AMAX1(ANORM,WK(J))
+END DO
+RETURN
+END SUBROUTINE S1NRM
+
 double precision function DSNRM (A, IA, JA, M, N)
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
@@ -6486,6 +6515,9 @@ GO TO 1001
 END SUBROUTINE DHQR2
 
 SUBROUTINE SEIG (A, KA, N, W, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
+INTEGER L
 !-----------------------------------------------------------------------
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
@@ -6503,6 +6535,9 @@ RETURN
 END SUBROUTINE SEIG
 
 SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
+INTEGER L
 !-----------------------------------------------------------------------
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
@@ -6520,6 +6555,8 @@ RETURN
 END SUBROUTINE SEIG1
 
 SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
 !-----------------------------------------------------------------------
 !        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
@@ -6531,6 +6568,8 @@ RETURN
 END SUBROUTINE SEIGV
 
 SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
 !-----------------------------------------------------------------------
 !        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 !-----------------------------------------------------------------------
@@ -6542,6 +6581,7 @@ RETURN
 END SUBROUTINE SEIGV1
 
 SUBROUTINE TRED1(NM,N,A,D,E,E2)
+IMPLICIT NONE
 !
 INTEGER I,J,K,L,N,II,NM,JP1
 REAL A(NM,N),D(N),E(N),E2(N)
@@ -6770,6 +6810,8 @@ RETURN
 END SUBROUTINE TRED3
 
 SUBROUTINE TQLRAT(N,D,E2,IERR)
+IMPLICIT NONE
+REAL SPMPAR
 !
 INTEGER I,J,L,M,N,II,L1,MML,IERR
 REAL D(N),E2(N)
@@ -6905,6 +6947,8 @@ GO TO 1001
 END SUBROUTINE TQLRAT
 
 SUBROUTINE IMTQL1(N,D,E,IERR)
+IMPLICIT NONE
+REAL SPMPAR
 !
 INTEGER I,J,L,M,N,II,MML,IERR
 REAL D(N),E(N)
@@ -7033,6 +7077,7 @@ GO TO 1001
 END SUBROUTINE IMTQL1
 
 SUBROUTINE TRED2(NM,N,A,D,E,Z)
+IMPLICIT NONE
 !
 INTEGER I,J,K,L,N,II,NM,JP1
 REAL A(NM,N),D(N),E(N),Z(NM,N)
@@ -7172,6 +7217,8 @@ RETURN
 END SUBROUTINE TRED2
 
 SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
+IMPLICIT NONE
+REAL SPMPAR
 !
 INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
 REAL D(N),E(N),Z(NM,N)
@@ -7344,6 +7391,8 @@ GO TO 1001
 END SUBROUTINE TQL2
 
 SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
+IMPLICIT NONE
+REAL SPMPAR
 !
 INTEGER I,J,K,L,M,N,II,NM,MML,IERR
 REAL D(N),E(N),Z(NM,N)

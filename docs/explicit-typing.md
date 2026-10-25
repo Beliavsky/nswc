@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 86 of the library's 1,062 procedures: the initial
-17 procedure pilot and subsequent batches of 40 and 29. The remaining 976 procedures
+The reviewed conversions cover 120 of the library's 1,062 procedures: the initial
+17 procedure pilot and subsequent batches of 40, 29, and 34. The remaining 942 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -63,6 +63,30 @@ The compiler comparison preserved all 801 non-intrinsic symbol records in this
 batch. In particular, the FFT factor arrays retain their original `REAL` type.
 No argument intents, precision choices, dimensions, storage statements, or
 executable code were changed.
+
+## Batch 4: ODEs, linear algebra, and random numbers
+
+The fourth batch adds 34 procedures exercised directly or through their callers
+by the existing numerical tests:
+
+- ODEs: `RK`, `RK8`, `FEHL`, `RKFS`, `GERK`, and `GERKS`.
+- Least squares and helpers: `ORTHO`, `ORSOL`, `BLSQ`, `NORMLZ`, `BTPRD1`,
+  and `BVPRD1`.
+- Symmetric eigenvalue routines: `SEIG`, `SEIG1`, `SEIGV`, `SEIGV1`, `TRED1`,
+  `TRED2`, `TQLRAT`, `TQL2`, `IMTQL1`, and `IMTQL2`.
+- Dense linear solvers and helpers: `MSLV`, `CMSLV`, `SLVMP`, `LUIMP`, `SGEFA`,
+  `SGESL`, `CGEFA`, `CGESL`, `SGECO`, and `CGECO`.
+- Random numbers: `URNG` and `NRNG`.
+
+The missing-only report omitted `REAL SPMPAR` in `LUIMP`, `TQLRAT`, `IMTQL1`,
+`TQL2`, `IMTQL2`, and `GERKS`. These types were confirmed against the original
+calls, function definition, full declaration report, and compiler symbol records.
+The ODE callbacks remain subroutines, declared with `EXTERNAL`; they do not need
+a function return type.
+
+The compiler comparison preserved all 714 non-intrinsic symbol records in this
+batch. No argument intents, precision choices, dimensions, storage statements,
+or executable code were changed.
 
 ## Declaration generator
 
@@ -131,7 +155,7 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-1,807 variable and external procedure records across the 86 procedures, including
+2,521 variable and external procedure records across the 120 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
