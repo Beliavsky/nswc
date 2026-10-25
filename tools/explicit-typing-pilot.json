@@ -4,7 +4,12 @@
   "input_sha256": "b565c0e64221a8924635279687ae9aac48903069d5b0b8b169f539939775e819",
   "review_notes": {
     "BRATIO": "Added REAL return types for APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR. The undeclared-only report omitted these EXTERNAL names; its full declaration report and original source confirm their types.",
-    "QAGS": "Added REAL F. F is a function forwarded to QAGSE; leaving it untyped under IMPLICIT NONE changes its classification and produces a new compiler warning."
+    "QAGS": "Added REAL F. F is a function forwarded to QAGSE; leaving it untyped under IMPLICIT NONE changes its classification and produces a new compiler warning.",
+    "ERFC1": "Added missing external-function return types; checked against original implicit typing, function definitions, and the full ftnchek declaration report: REAL EXPARG.",
+    "GAMLN": "Added missing external-function return types; checked against original implicit typing, function definitions, and the full ftnchek declaration report: REAL GAMLN1.",
+    "PSI": "Added missing external-function return types; checked against original implicit typing, function definitions, and the full ftnchek declaration report: INTEGER IPMPAR, REAL SPMPAR.",
+    "DPSI": "Added missing external-function return types; checked against original implicit typing, function definitions, and the full ftnchek declaration report: INTEGER IPMPAR.",
+    "ALGDIV": "Added missing external-function return types; checked against original implicit typing, function definitions, and the full ftnchek declaration report: REAL ALNREL."
   },
   "procedures": {
     "IPMPAR": {
@@ -108,6 +113,316 @@
     "RKF45": {
       "sha256": "a70bc81518a7a4928618d47abcf84f1274a53b50e45fa34a8fbcba879fc9f0fd",
       "declarations": []
+    },
+    "SROTG": {
+      "sha256": "55146453c295406e0d6a3c0f0b9c4769ee2b6a895ea6d866d91b334b963d6652",
+      "declarations": [
+        "      REAL SA, SB, SC, SS",
+        "      REAL R, U, V"
+      ]
+    },
+    "DROTG": {
+      "sha256": "1eeec730e5cf75fe26e64ee62a556754f692d80a78ab4ae84053ea2339b229d0",
+      "declarations": []
+    },
+    "ESUM": {
+      "sha256": "0448edcf5315b005c1b5a2f74bd6394cb629024ef93fe5c6bc2c2d18a98ccf8e",
+      "declarations": [
+        "      INTEGER MU",
+        "      REAL X",
+        "      REAL W"
+      ]
+    },
+    "REXP": {
+      "sha256": "39dca52e69a686fac102674ed5d0a9a389a7c29bd43cea37e9019d1a46965ebe",
+      "declarations": [
+        "      REAL X",
+        "      REAL E, P1, P2, Q1, Q2, Q3, Q4"
+      ]
+    },
+    "DREXP": {
+      "sha256": "2b974a47443460f2636b576f586803def5b02ebef144ae9c9d18734a911fd8a9",
+      "declarations": []
+    },
+    "ALNREL": {
+      "sha256": "826739f3b6ae4c2039b04509b7d79e6c0d15fbd4f087b6266abb90bb4c9a31bb",
+      "declarations": [
+        "      REAL A",
+        "      REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X"
+      ]
+    },
+    "DLNREL": {
+      "sha256": "4859f86300b0c2c4d8589fd609a109b27a34db6be38fd59f7e93f19a996c827b",
+      "declarations": []
+    },
+    "RLOG1": {
+      "sha256": "1ece52b249424fa06e2e7cfeacbfe798878c3bbc67a3cfb64b2048b02a0e8125",
+      "declarations": [
+        "      REAL X",
+        "      REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1"
+      ]
+    },
+    "DRLOG1": {
+      "sha256": "db6495f7f09b85cb99eafc2c2f6b0e0bdc9debb54f9f123c076211e3531cad13",
+      "declarations": []
+    },
+    "ERFC1": {
+      "sha256": "956369d32ef746c6d696592dd72c890c80baacaef9087cc8875f74cd08235e4d",
+      "declarations": [
+        "      REAL EXPARG",
+        "      INTEGER IND",
+        "      REAL X",
+        "      REAL AX, BOT, C, E, T, TOP"
+      ]
+    },
+    "DERFC": {
+      "sha256": "641a067644c7d67a56cad0b93d47428dcb9d9097a924d4f525d2e4c9611ae204",
+      "declarations": [
+        "      INTEGER I, K"
+      ]
+    },
+    "DERFC1": {
+      "sha256": "e82e066df18207a79cce9b43125c7e3a3a30c7f5b53bbbdc6fa8170d3436ecc0",
+      "declarations": [
+        "      INTEGER IND",
+        "      INTEGER I, K"
+      ]
+    },
+    "GAM1": {
+      "sha256": "e7b2ccdd7239d160f849b451cd5fc4bb1a677dd42ae28be5324fa42d3dcaddf5",
+      "declarations": [
+        "      REAL A",
+        "      REAL BOT, D, S1, S2, T, TOP, W"
+      ]
+    },
+    "GAMLN": {
+      "sha256": "e37f25bfd2698bd25b9dd2b6ab0fe43b5a9f8a0196ef59ccd72cf29af2aec967",
+      "declarations": [
+        "      REAL GAMLN1",
+        "      REAL A",
+        "      INTEGER I, N",
+        "      REAL C0, C1, C2, C3, C4, C5, D, T, W"
+      ]
+    },
+    "GAMLN1": {
+      "sha256": "e59a7427e28bb666c343df5d4ae81c89c860f5471304c8a581c8f1d23f3bbd87",
+      "declarations": [
+        "      REAL A",
+        "      REAL P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0, R1",
+        "     x, R2, R3, R4, R5, S1, S2, S3, S4, S5, W, X"
+      ]
+    },
+    "DGAM1": {
+      "sha256": "e44f045908cc0cab4df188daf8ee3a674f4b2176c05460f6428a8ffffcc966ea",
+      "declarations": []
+    },
+    "DGAMLN": {
+      "sha256": "c4eb1f5a4e2da232824e48e1bd5ba45bd64eecb7041aeae26ba68668a4e8b368",
+      "declarations": [
+        "      INTEGER I, N"
+      ]
+    },
+    "DGMLN1": {
+      "sha256": "3a6ae01d0d302361c7680e54e07abc927e25d221db5029c7a9b1be23970329c3",
+      "declarations": []
+    },
+    "PSI": {
+      "sha256": "a05e86c37dfd63e7e9e9462c3a33ffed15075e6c36b08b116d60c9a3664b79ac",
+      "declarations": [
+        "      INTEGER IPMPAR",
+        "      REAL SPMPAR",
+        "      REAL XX",
+        "      INTEGER I, M, N, NQ",
+        "      REAL AUG, DEN, PIOV4, SGN, UPPER, W, X, XMAX1, XMX0, XSMALL, Z"
+      ]
+    },
+    "DPSI": {
+      "sha256": "8ea0270b75505b055a4d9d5e5cc7e737b3c2f410604fb7780ed6a56d69275274",
+      "declarations": [
+        "      INTEGER IPMPAR",
+        "      INTEGER J, K, L, MAX, N"
+      ]
+    },
+    "ALGDIV": {
+      "sha256": "b85d699a0b518bb79f9da7a9a0d323d2086e979e4d91a3e319ba5fa7d245a6bf",
+      "declarations": [
+        "      REAL ALNREL",
+        "      REAL A, B",
+        "      REAL C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T, U, V",
+        "     x, W, X, X2"
+      ]
+    },
+    "SCOPY": {
+      "sha256": "fb3513ce35cca1ccfbafef857f6eef33d0537320b03008e541789322e119349e",
+      "declarations": []
+    },
+    "DCOPY": {
+      "sha256": "7fdfd1da4d6750e1162e4d4f7de99584850b40e2a39b804f50509a8d07afc2a1",
+      "declarations": []
+    },
+    "SSWAP": {
+      "sha256": "0e7748d52ece93532f07085ede7de3ddae0c2bdc4ca1e0e0ab26d943f7189312",
+      "declarations": []
+    },
+    "DSWAP": {
+      "sha256": "d305aa8d815dc770bb455084c153813b09bfa567dc11354cd8999e2734a0117f",
+      "declarations": []
+    },
+    "SROT": {
+      "sha256": "1ac25fac9d179d20ffb5e699fb1086df2c6ac7853174a543be09a7eeaba2c5b0",
+      "declarations": []
+    },
+    "DROT": {
+      "sha256": "514cceece5797848a089cdc43d60e51ed0c9985035e0dc41d3c63264890bbabe",
+      "declarations": []
+    },
+    "SROTMG": {
+      "sha256": "2a4a8239951a084a4f44b7c8e421ebf6c20718c61445b6e7267df0212633690e",
+      "declarations": [
+        "      REAL SD1, SD2, SPARAM, SX1, SY1",
+        "      REAL GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, SP1",
+        "     x, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO"
+      ]
+    },
+    "SROTM": {
+      "sha256": "bb04169a0744a5795703eebfbf62942d544cc05c64dab7d0949595d238124708",
+      "declarations": [
+        "      INTEGER INCX, INCY, N",
+        "      REAL SPARAM, SX, SY",
+        "      INTEGER I, KX, KY, NSTEPS",
+        "      REAL SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO"
+      ]
+    },
+    "SDOT": {
+      "sha256": "4b5d608244295c2cddf75ad3dd1300c2749f642dea3df4f69a5c4ec895121bb8",
+      "declarations": []
+    },
+    "SSCAL": {
+      "sha256": "9bdaec6223151b8f9e531513599ecf51b5166e7b04893ab595594ac674070f89",
+      "declarations": []
+    },
+    "DSCAL": {
+      "sha256": "1a9f8c9bcc116f901d503e0b682cc678cf919c1a97cd1f3127c0f0e77869faa5",
+      "declarations": []
+    },
+    "SAXPY": {
+      "sha256": "e682405413d790ab8f52518f05cde55667173e345db2f2cb88e5e425fd04e0e2",
+      "declarations": []
+    },
+    "SASUM": {
+      "sha256": "41b4a9ca29c2927a358d4042b0904dc6e51c8780a8e16aac51ada12ebebe6638",
+      "declarations": []
+    },
+    "DASUM": {
+      "sha256": "d476284431a0d2af55656637c9c2cd5d25d0cbd2bfc3acd122b850e330e4cd69",
+      "declarations": []
+    },
+    "SNRM2": {
+      "sha256": "6fa14862dbc5ba831f5d4247d23a8dec5f32a9113e0859305ce285386ed554cd",
+      "declarations": [
+        "      INTEGER INCX, N",
+        "      INTEGER I, J, NN"
+      ]
+    },
+    "ISAMAX": {
+      "sha256": "a1317e0f5aabb1a8b030c6e54106585b8a874842acc8945ed7fba0f40f974a80",
+      "declarations": []
+    },
+    "IDAMAX": {
+      "sha256": "87647e9ec121fc9eaf0944e33fc73a24b2cdc57a6be0a1925847312b232543bc",
+      "declarations": []
+    },
+    "LTRP": {
+      "sha256": "5778b8ef632513c2c64f9d67529dab9dc70c3cf53ece4a3a2a09e1e7494c38be",
+      "declarations": [
+        "      INTEGER IERR, M, N, NI",
+        "      REAL T, X, XI, Y, YI",
+        "      INTEGER I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, MM1",
+        "     x, NUM",
+        "      REAL DL, DR, XX"
+      ]
+    },
+    "PPVAL": {
+      "sha256": "808700932ea6c173789c8bfe84f06382346ed995a7aa91b35dc9ea61d483b2d7",
+      "declarations": [
+        "      INTEGER L, N, NI",
+        "      REAL A, X, XI, YI",
+        "      INTEGER I, IL, IR, J, K, LM1, LMJ",
+        "      REAL DX, S, XX"
+      ]
     }
-  }
+  },
+  "batches": [
+    {
+      "id": "pilot",
+      "source_commit": "5995536",
+      "input_sha256": "b565c0e64221a8924635279687ae9aac48903069d5b0b8b169f539939775e819",
+      "procedures": [
+        "IPMPAR",
+        "DERF",
+        "DGAMMA",
+        "BRATIO",
+        "DCSEVL",
+        "DRPLY1",
+        "DDOT",
+        "DAXPY",
+        "DNRM2",
+        "DGEFA",
+        "DGESL",
+        "DSVDC",
+        "CSVDC",
+        "RFFTI1",
+        "CSLOOP",
+        "QAGS",
+        "RKF45"
+      ]
+    },
+    {
+      "id": "batch-02",
+      "source_commit": "608aa4d",
+      "input_sha256": "6fdfc7f5d6b23d6cb0877586f4a221ae8719ed726292e805cde7f23e1e4f29a1",
+      "procedures": [
+        "SROTG",
+        "DROTG",
+        "ESUM",
+        "REXP",
+        "DREXP",
+        "ALNREL",
+        "DLNREL",
+        "RLOG1",
+        "DRLOG1",
+        "ERFC1",
+        "DERFC",
+        "DERFC1",
+        "GAM1",
+        "GAMLN",
+        "GAMLN1",
+        "DGAM1",
+        "DGAMLN",
+        "DGMLN1",
+        "PSI",
+        "DPSI",
+        "ALGDIV",
+        "SCOPY",
+        "DCOPY",
+        "SSWAP",
+        "DSWAP",
+        "SROT",
+        "DROT",
+        "SROTMG",
+        "SROTM",
+        "SDOT",
+        "SSCAL",
+        "DSCAL",
+        "SAXPY",
+        "SASUM",
+        "DASUM",
+        "SNRM2",
+        "ISAMAX",
+        "IDAMAX",
+        "LTRP",
+        "PPVAL"
+      ]
+    }
+  ]
 }

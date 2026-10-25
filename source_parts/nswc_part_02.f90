@@ -506,6 +506,9 @@ RETURN
 END FUNCTION GLOG
 
 REAL function GAM1(A)
+IMPLICIT NONE
+REAL A
+REAL BOT, D, S1, S2, T, TOP, W
 !-----------------------------------------------------------------------
 !     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
 !-----------------------------------------------------------------------
@@ -558,6 +561,11 @@ RETURN
 END FUNCTION GAM1
 
 REAL function GAMLN (A)
+IMPLICIT NONE
+REAL GAMLN1
+REAL A
+INTEGER I, N
+REAL C0, C1, C2, C3, C4, C5, D, T, W
 !-----------------------------------------------------------------------
 !            EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
 !-----------------------------------------------------------------------
@@ -597,6 +605,10 @@ GAMLN = (D + W) + (A - 0.5)*(ALOG(A) - 1.0)
 END FUNCTION GAMLN
 
 REAL function GAMLN1 (A)
+IMPLICIT NONE
+REAL A
+REAL P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0, R1 &
+&, R2, R3, R4, R5, S1, S2, S3, S4, S5, W, X
 !-----------------------------------------------------------------------
 !     EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
 !-----------------------------------------------------------------------
@@ -1041,6 +1053,7 @@ RETURN
 END FUNCTION DPDEL
 
 double precision function DGAM1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
 !-----------------------------------------------------------------------
@@ -1207,6 +1220,8 @@ RETURN
 END FUNCTION DGAM1
 
 double precision function DGAMLN (A)
+IMPLICIT NONE
+INTEGER I, N
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
@@ -1247,6 +1262,7 @@ DGAMLN = (D + W) + (A - 0.5D0)*(DLOG(A) - 1.D0)
 END FUNCTION DGAMLN
 
 double precision function DGMLN1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
 !-----------------------------------------------------------------------
@@ -1390,6 +1406,12 @@ RETURN
 END SUBROUTINE CPSI
 
 REAL function PSI(XX)
+IMPLICIT NONE
+INTEGER IPMPAR
+REAL SPMPAR
+REAL XX
+INTEGER I, M, N, NQ
+REAL AUG, DEN, PIOV4, SGN, UPPER, W, X, XMAX1, XMX0, XSMALL, Z
 !---------------------------------------------------------------------
 !
 !                 EVALUATION OF THE DIGAMMA FUNCTION
@@ -1733,6 +1755,9 @@ RETURN
 END SUBROUTINE DCPSI
 
 double precision function DPSI(A)
+IMPLICIT NONE
+INTEGER IPMPAR
+INTEGER J, K, L, MAX, N
 !-----------------------------------------------------------------------
 !
 !               EVALUATION OF THE DIGAMMA FUNCTION FOR
@@ -2444,6 +2469,11 @@ RETURN
 END FUNCTION BCORR
 
 REAL function ALGDIV (A, B)
+IMPLICIT NONE
+REAL ALNREL
+REAL A, B
+REAL C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T, U, V &
+&, W, X, X2
 !-----------------------------------------------------------------------
 !
 !     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
@@ -10479,33 +10509,4 @@ SM(1)=SR(1)+SM(1)
 SM(2)=SR(2)+SM(2)
 GO TO LK,(022,024,025)
 END SUBROUTINE BSSLK
-
-SUBROUTINE CAI(IND,Z,AI,AIP,IERR)
-!------------------------------------------------------------
-!     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
-!     FOR COMPLEX ARGUMENT Z.
-!------------------------------------------------------------
-COMPLEX Z,AI,BI,AIP,BIP
-IERR = 0
-A = REAL(Z)
-B = AIMAG(Z)
-R = CPABS(A,B)
-IF(R .GT. 1.0) GO TO 10
-!
-!     MACLAURIN EXPANSION
-!
-   CALL AIRM(IND,Z,AI,AIP,BI,BIP)
-   RETURN
-10 IF(R .GT. 10.0) GO TO 20
-!
-!     INTERMEDIATE RANGE CALCULATION
-!
-   CALL AII(IND,Z,AI,AIP,IERR)
-   RETURN
-!
-!     ASYMPTOTIC EXPANSION
-!
-20 CALL AIA(IND,Z,AI,AIP,IERR)
-RETURN
-END SUBROUTINE CAI
 

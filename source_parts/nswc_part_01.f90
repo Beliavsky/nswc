@@ -3074,6 +3074,9 @@ RETURN
 END SUBROUTINE ROTA
 
 SUBROUTINE SROTG(SA,SB,SC,SS)
+IMPLICIT NONE
+REAL SA, SB, SC, SS
+REAL R, U, V
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3147,6 +3150,7 @@ RETURN
 END SUBROUTINE SROTG
 
 SUBROUTINE DROTG(DA,DB,DC,DS)
+IMPLICIT NONE
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3758,6 +3762,10 @@ RETURN
 END SUBROUTINE SNHCSH
 
 REAL function ESUM (MU, X)
+IMPLICIT NONE
+INTEGER MU
+REAL X
+REAL W
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
@@ -3806,6 +3814,9 @@ RETURN
 END FUNCTION DESUM
 
 REAL function REXP (X)
+IMPLICIT NONE
+REAL X
+REAL E, P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -3830,6 +3841,7 @@ RETURN
 END FUNCTION REXP
 
 double precision function DREXP (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -3981,6 +3993,9 @@ RETURN
 END SUBROUTINE DREXP1
 
 REAL function ALNREL(A)
+IMPLICIT NONE
+REAL A
+REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4004,6 +4019,7 @@ RETURN
 END FUNCTION ALNREL
 
 double precision function DLNREL (A)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4104,6 +4120,9 @@ RETURN
 END FUNCTION RLOG
 
 REAL function RLOG1(X)
+IMPLICIT NONE
+REAL X
+REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -4232,6 +4251,7 @@ RETURN
 END FUNCTION DRLOG
 
 double precision function DRLOG1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -6048,6 +6068,11 @@ RETURN
 END FUNCTION ERFC
 
 REAL function ERFC1 (IND, X)
+IMPLICIT NONE
+REAL EXPARG
+INTEGER IND
+REAL X
+REAL AX, BOT, C, E, T, TOP
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !
@@ -6897,6 +6922,8 @@ RETURN
 END FUNCTION DERF
 
 double precision function DERFC (X)
+IMPLICIT NONE
+INTEGER I, K
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
@@ -6960,6 +6987,9 @@ RETURN
 END FUNCTION DERFC
 
 double precision function DERFC1 (IND, X)
+IMPLICIT NONE
+INTEGER IND
+INTEGER I, K
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION

@@ -1,3 +1,27 @@
+SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
+REAL X(*),A(N),C(N)
+DOUBLE PRECISION XX,R,T(N)
+IF (N.GT.1) GO TO 10
+C(1) = A(1)
+RETURN
+!
+10 XX = ALPHA
+NM1 = N-1
+do 11 I = 1,N
+11 T(I) = A(I)
+!
+DO I=1,NM1
+J = N-I
+R = XX-DBLE(X(J))
+do 20 K = J,NM1
+20 T(K) = T(K)+R*T(K+1)
+END DO
+!
+do 30 I = 1,N
+30 C(I) = T(I)
+RETURN
+END SUBROUTINE PCOEFF
+
 SUBROUTINE PFIT(ND,NP,X,Y,A,RNORM,PHI,PHIX,IERR)
 !     ******************************************************************
 !     UNWEIGHTED LEAST SQUARES POLYNOMIAL FIT
@@ -4256,6 +4280,11 @@ RETURN
 END SUBROUTINE BSPP
 
 SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
+IMPLICIT NONE
+INTEGER L, N, NI
+REAL A, X, XI, YI
+INTEGER I, IL, IR, J, K, LM1, LMJ
+REAL DX, S, XX
 !-----------------------------------------------------------------------
 !
 !         THIS ROUTINE EVALUATES A PIECEWISE POLYNOMIAL AT THE

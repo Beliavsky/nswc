@@ -3084,6 +3084,9 @@ C
       END SUBROUTINE ROTA
 
       SUBROUTINE SROTG(SA,SB,SC,SS)
+      IMPLICIT NONE
+      REAL SA, SB, SC, SS
+      REAL R, U, V
 C
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 C
@@ -3157,6 +3160,7 @@ C
       END SUBROUTINE SROTG
 
       SUBROUTINE DROTG(DA,DB,DC,DS)
+      IMPLICIT NONE
 C
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 C
@@ -3768,6 +3772,10 @@ C
       END SUBROUTINE SNHCSH
 
       REAL FUNCTION ESUM (MU, X)
+      IMPLICIT NONE
+      INTEGER MU
+      REAL X
+      REAL W
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
 C-----------------------------------------------------------------------
@@ -3816,6 +3824,9 @@ C
       END FUNCTION DESUM
 
       REAL FUNCTION REXP (X)
+      IMPLICIT NONE
+      REAL X
+      REAL E, P1, P2, Q1, Q2, Q3, Q4
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
 C-----------------------------------------------------------------------
@@ -3840,6 +3851,7 @@ C
       END FUNCTION REXP
 
       DOUBLE PRECISION FUNCTION DREXP (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION EXP(X) - 1
 C-----------------------------------------------------------------------
@@ -3991,6 +4003,9 @@ C
       END SUBROUTINE DREXP1
 
       REAL FUNCTION ALNREL(A)
+      IMPLICIT NONE
+      REAL A
+      REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
 C-----------------------------------------------------------------------
@@ -4014,6 +4029,7 @@ C
       END FUNCTION ALNREL
 
       DOUBLE PRECISION FUNCTION DLNREL (A)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C            EVALUATION OF THE FUNCTION LN(1 + A)
 C-----------------------------------------------------------------------
@@ -4114,6 +4130,9 @@ C
       END FUNCTION RLOG
 
       REAL FUNCTION RLOG1(X)
+      IMPLICIT NONE
+      REAL X
+      REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
 C-----------------------------------------------------------------------
@@ -4242,6 +4261,7 @@ C
       END FUNCTION DRLOG
 
       DOUBLE PRECISION FUNCTION DRLOG1 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - LN(1 + X)
 C-----------------------------------------------------------------------
@@ -6058,6 +6078,11 @@ C
       END FUNCTION ERFC
 
       REAL FUNCTION ERFC1 (IND, X)
+      IMPLICIT NONE
+      REAL EXPARG
+      INTEGER IND
+      REAL X
+      REAL AX, BOT, C, E, T, TOP
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C
@@ -6907,6 +6932,8 @@ C
       END FUNCTION DERF
 
       DOUBLE PRECISION FUNCTION DERFC (X)
+      IMPLICIT NONE
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C-----------------------------------------------------------------------
@@ -6970,6 +6997,9 @@ C
       END FUNCTION DERFC
 
       DOUBLE PRECISION FUNCTION DERFC1 (IND, X)
+      IMPLICIT NONE
+      INTEGER IND
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -11043,6 +11073,9 @@ C
       END FUNCTION GLOG
 
       REAL FUNCTION GAM1(A)
+      IMPLICIT NONE
+      REAL A
+      REAL BOT, D, S1, S2, T, TOP, W
 C-----------------------------------------------------------------------
 C     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
 C-----------------------------------------------------------------------
@@ -11095,6 +11128,11 @@ C
       END FUNCTION GAM1
 
       REAL FUNCTION GAMLN (A)
+      IMPLICIT NONE
+      REAL GAMLN1
+      REAL A
+      INTEGER I, N
+      REAL C0, C1, C2, C3, C4, C5, D, T, W
 C-----------------------------------------------------------------------
 C            EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
 C-----------------------------------------------------------------------
@@ -11134,6 +11172,10 @@ C
       END FUNCTION GAMLN
 
       REAL FUNCTION GAMLN1 (A)
+      IMPLICIT NONE
+      REAL A
+      REAL P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0, R1
+     x, R2, R3, R4, R5, S1, S2, S3, S4, S5, W, X
 C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
 C-----------------------------------------------------------------------
@@ -11578,6 +11620,7 @@ C-----------------------------------------------------------------------
       END FUNCTION DPDEL
 
       DOUBLE PRECISION FUNCTION DGAM1 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
 C-----------------------------------------------------------------------
@@ -11744,6 +11787,8 @@ C
       END FUNCTION DGAM1
 
       DOUBLE PRECISION FUNCTION DGAMLN (A)
+      IMPLICIT NONE
+      INTEGER I, N
 C-----------------------------------------------------------------------
 C
 C           EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
@@ -11784,6 +11829,7 @@ C
       END FUNCTION DGAMLN
 
       DOUBLE PRECISION FUNCTION DGMLN1 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
 C-----------------------------------------------------------------------
@@ -11927,6 +11973,12 @@ C-----------------------------------------------------------------------
       END SUBROUTINE CPSI
 
       REAL FUNCTION PSI(XX)
+      IMPLICIT NONE
+      INTEGER IPMPAR
+      REAL SPMPAR
+      REAL XX
+      INTEGER I, M, N, NQ
+      REAL AUG, DEN, PIOV4, SGN, UPPER, W, X, XMAX1, XMX0, XSMALL, Z
 C---------------------------------------------------------------------
 C
 C                 EVALUATION OF THE DIGAMMA FUNCTION
@@ -12270,6 +12322,9 @@ C-----------------------------------------------------------------------
       END SUBROUTINE DCPSI
 
       DOUBLE PRECISION FUNCTION DPSI(A)
+      IMPLICIT NONE
+      INTEGER IPMPAR
+      INTEGER J, K, L, MAX, N
 C-----------------------------------------------------------------------
 C
 C               EVALUATION OF THE DIGAMMA FUNCTION FOR
@@ -12981,6 +13036,11 @@ C
       END FUNCTION BCORR
 
       REAL FUNCTION ALGDIV (A, B)
+      IMPLICIT NONE
+      REAL ALNREL
+      REAL A, B
+      REAL C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T, U, V
+     x, W, X, X2
 C-----------------------------------------------------------------------
 C
 C     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
@@ -30820,6 +30880,7 @@ C
       END SUBROUTINE CBND
 
       SUBROUTINE  SCOPY(N,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -30870,6 +30931,7 @@ C
       END SUBROUTINE SCOPY
 
       SUBROUTINE  DCOPY(N,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -31038,6 +31100,7 @@ C
       END SUBROUTINE ISWAP
 
       SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 C
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -31094,6 +31157,7 @@ C
       END SUBROUTINE SSWAP
 
       SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
+      IMPLICIT NONE
 C
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
@@ -31186,6 +31250,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       END SUBROUTINE CSWAP
 
       SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
+      IMPLICIT NONE
 C
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -31223,6 +31288,7 @@ C
       END SUBROUTINE SROT
 
       SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
+      IMPLICIT NONE
 C
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -31299,6 +31365,10 @@ C
       END SUBROUTINE CSROT
 
       SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
+      IMPLICIT NONE
+      REAL SD1, SD2, SPARAM, SX1, SY1
+      REAL GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, SP1
+     x, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 C     THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*
@@ -31446,6 +31516,11 @@ C
       END SUBROUTINE SROTMG
 
       SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
+      IMPLICIT NONE
+      INTEGER INCX, INCY, N
+      REAL SPARAM, SX, SY
+      INTEGER I, KX, KY, NSTEPS
+      REAL SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 C
@@ -31814,6 +31889,7 @@ C
           END SUBROUTINE DROTM
 
       REAL FUNCTION SDOT(N,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -31988,6 +32064,7 @@ C
       END FUNCTION CDOTU
 
       SUBROUTINE  SSCAL(N,SA,SX,INCX)
+      IMPLICIT NONE
 C
 C     SCALES A VECTOR BY A CONSTANT.
 C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO 1.
@@ -32030,6 +32107,7 @@ C
       END SUBROUTINE SSCAL
 
       SUBROUTINE  DSCAL(N,DA,DX,INCX)
+      IMPLICIT NONE
 C
 C     SCALES A VECTOR BY A CONSTANT.
 C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
@@ -32127,6 +32205,7 @@ C
       END SUBROUTINE CSSCAL
 
       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+      IMPLICIT NONE
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 C     USES UNROLLED LOOP FOR INCREMENTS EQUAL TO ONE.
@@ -32258,6 +32337,7 @@ C
       END SUBROUTINE CAXPY
 
       REAL FUNCTION SASUM(N,SX,INCX)
+      IMPLICIT NONE
 C
 C     TAKES THE SUM OF THE ABSOLUTE VALUES.
 C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
@@ -32301,6 +32381,7 @@ C
       END FUNCTION SASUM
 
       DOUBLE PRECISION FUNCTION DASUM(N,DX,INCX)
+      IMPLICIT NONE
 C
 C     TAKES THE SUM OF THE ABSOLUTE VALUES.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32376,6 +32457,9 @@ C
       END FUNCTION SCASUM
 
       REAL FUNCTION SNRM2 ( N, SX, INCX)
+      IMPLICIT NONE
+      INTEGER INCX, N
+      INTEGER I, J, NN
       INTEGER          NEXT
       REAL   SX(*),  CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
       DATA   ZERO, ONE /0.0E0, 1.0E0/
@@ -32757,6 +32841,7 @@ C
       END FUNCTION SCNRM2
 
       INTEGER FUNCTION ISAMAX(N,SX,INCX)
+      IMPLICIT NONE
 C
 C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32795,6 +32880,7 @@ C
       END FUNCTION ISAMAX
 
       INTEGER FUNCTION IDAMAX(N,DX,INCX)
+      IMPLICIT NONE
 C
 C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -84485,6 +84571,12 @@ C
       END FUNCTION TRP
 
       SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N, NI
+      REAL T, X, XI, Y, YI
+      INTEGER I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, MM1
+     x, NUM
+      REAL DL, DR, XX
 C     ******************************************************************
 C     LAGRANGE INTERPOLATION
 C     ******************************************************************
@@ -88956,6 +89048,11 @@ C
       END SUBROUTINE BSPP
 
       SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
+      IMPLICIT NONE
+      INTEGER L, N, NI
+      REAL A, X, XI, YI
+      INTEGER I, IL, IR, J, K, LM1, LMJ
+      REAL DX, S, XX
 C-----------------------------------------------------------------------
 C
 C         THIS ROUTINE EVALUATES A PIECEWISE POLYNOMIAL AT THE

@@ -10308,6 +10308,12 @@ RETURN
 END FUNCTION TRP
 
 SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NI
+REAL T, X, XI, Y, YI
+INTEGER I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, MM1 &
+&, NUM
+REAL DL, DR, XX
 !     ******************************************************************
 !     LAGRANGE INTERPOLATION
 !     ******************************************************************
@@ -10496,28 +10502,4 @@ T(1) = I
 T(2) = K
 RETURN
 END SUBROUTINE HTRP
-
-SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
-REAL X(*),A(N),C(N)
-DOUBLE PRECISION XX,R,T(N)
-IF (N.GT.1) GO TO 10
-C(1) = A(1)
-RETURN
-!
-10 XX = ALPHA
-NM1 = N-1
-do 11 I = 1,N
-11 T(I) = A(I)
-!
-DO I=1,NM1
-J = N-I
-R = XX-DBLE(X(J))
-do 20 K = J,NM1
-20 T(K) = T(K)+R*T(K+1)
-END DO
-!
-do 30 I = 1,N
-30 C(I) = T(I)
-RETURN
-END SUBROUTINE PCOEFF
 

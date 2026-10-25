@@ -1,4 +1,11 @@
-# Explicit typing pilot
+# Explicit typing
+
+The reviewed conversions cover 57 of the library's 1,062 procedures: the initial
+17 procedure pilot and a subsequent batch of 40. The remaining 1,005 procedures
+retain their existing typing. Each batch preserves the original types and is
+checked with compiler symbol comparisons and the numerical regression suite.
+
+## Batch 1: pilot
 
 The first batch adds `IMPLICIT NONE` to 17 of the library's 1,062 procedures:
 
@@ -12,6 +19,27 @@ numerical test suite. Some already had all necessary type declarations; those
 only needed the new statement. The maintained input is `nswc.f`, and the
 corresponding free-form source and documentation links are regenerated together.
 `nswc_orig.f` remains unchanged.
+
+## Batch 2: vectors, special functions, and interpolation
+
+The second batch adds 40 procedures, all exercised by the existing numerical
+tests. The affected groups are:
+
+- Vector operations: `SASUM`, `SAXPY`, `SCOPY`, `SDOT`, `SNRM2`, `SROT`, `SROTG`,
+  `SROTM`, `SROTMG`, `SSCAL`, `SSWAP`, `ISAMAX`, `DASUM`, `DCOPY`, `DROT`,
+  `DROTG`, `DSCAL`, `DSWAP`, and `IDAMAX`.
+- Double precision functions: `DERFC`, `DERFC1`, `DGAMLN`, `DGAM1`, `DGMLN1`,
+  `DPSI`, `DLNREL`, `DREXP`, and `DRLOG1`.
+- Single precision functions: `ALNREL`, `REXP`, `RLOG1`, `GAMLN`, `GAMLN1`,
+  `GAM1`, `ALGDIV`, `ERFC1`, `PSI`, and `ESUM`.
+- Interpolation: `LTRP` and `PPVAL`.
+
+The missing return types in `ERFC1`, `GAMLN`, `PSI`, `DPSI`, and `ALGDIV` were
+supplemented after comparison with the original calls, function definitions,
+and the full declaration report. They retain `INTEGER` for `IPMPAR`, and `REAL`
+for `EXPARG`, `GAMLN1`, `SPMPAR`, and `ALNREL`. The compiler comparison preserved
+all 582 non-intrinsic symbol records in this batch. No argument intents,
+precision choices, dimensions, storage statements, or executable code were changed.
 
 ## Declaration generator
 
@@ -34,7 +62,7 @@ python tools/explicit_typing.py analyze input.f --ftnchek PATH_TO_FTNCHEK --proc
 
 The generated declarations must be checked against the original typing and
 compiler diagnostics before applying them. In particular, the trial showed two
-omissions that prevent using the output as an automatic whole-library rewrite:
+omissions in the pilot that prevent using the output as an automatic whole-library rewrite:
 
 - The missing-only report omitted the return types of seven functions already
   named in `BRATIO`'s `EXTERNAL` statements. Their `REAL` types were confirmed
@@ -43,8 +71,11 @@ omissions that prevent using the output as an automatic whole-library rewrite:
   it, the new statement caused a compiler warning that the forwarded callback
   was not a function. `EXTERNAL` alone does not preserve that return type.
 
-The reviewed declarations, original procedure hashes, generator options, and
-supplement notes are stored in `tools/explicit-typing-pilot.json`. The generator
+The reviewed declarations, original procedure hashes, generator options, batch
+records, and supplement notes are stored in `tools/explicit-typing-pilot.json`.
+Despite its historical filename, this is the cumulative manifest for all reviewed
+batches. Return types can be omitted even when a function has no explicit
+`EXTERNAL` statement; batch 2 checks these calls as well. The generator
 and its source archive are not dependencies of ordinary builds or CI.
 
 ## Applying reviewed declarations
@@ -73,16 +104,16 @@ Run the compiler comparison with:
 python tools/validate_explicit_typing.py
 ```
 
-Use `--compiler PATH` if necessary. This reconstructs the source before the pilot
+Use `--compiler PATH` if necessary. This reconstructs the source before explicit typing
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-424 variable and external procedure records across the 17 procedures, including
+1,006 variable and external procedure records across the 57 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
-The pilot compiles with the original 28 warnings in the local compiler check.
+The maintained source compiles with the original 28 warnings in the local compiler check.
 All 15 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same

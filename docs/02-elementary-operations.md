@@ -442,7 +442,7 @@ we in
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
 | `SROTG` | `SUBROUTINE` | `SA, SB, SC, SS` | [`L3076`](../source_parts/nswc_part_01.f90#L3076) |
-| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3149`](../source_parts/nswc_part_01.f90#L3149) |
+| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3152`](../source_parts/nswc_part_01.f90#L3152) |
 
 
 If a and 6 are real numbers where a? + b? # 0, then there is an orthogonal matrix
@@ -492,7 +492,7 @@ When SROTG is used then AR, BZ, C, and S are real variables. Otherwise, when DRO
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3223`](../source_parts/nswc_part_01.f90#L3223) |
+| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3227`](../source_parts/nswc_part_01.f90#L3227) |
 
 
 if A = (a,;) is a 3 x 3 orthogonal matrix, then A can be represented in the form
@@ -536,7 +536,7 @@ and ay, tl.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3263`](../source_parts/nswc_part_01.f90#L3263) |
+| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3267`](../source_parts/nswc_part_01.f90#L3267) |
 
 
 Given the point (x,y,z) where z? -+y? 42? = 1. Then there exist orthogonal matrices 1 0 0 cy 0 ~8, a= (6 Cy -s.] man = (4 i oO QO 8s, ey sy 0 fe
@@ -563,7 +563,7 @@ the values cz, 81,Cy, Sy.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3308`](../source_parts/nswc_part_01.f90#L3308) |
+| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3312`](../source_parts/nswc_part_01.f90#L3312) |
 
 
 Given the points z = (r1, ...,2,) and y= (yi, ..., yn) where n > 2,40, andy 40. Let L, denote the straight line connecting 0 and x, and L, the straight line connecting 0 and y. Then the function ANG is available for computing the angle ¢ between the two lines Lz, and Ly.
@@ -588,10 +588,10 @@ X and ¥ are arrays of dimension n containing 21, ...,%, and yi, ..., yn. ANG(n,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SIN1` | `REAL FUNCTION` | `X` | [`L3369`](../source_parts/nswc_part_01.f90#L3369) |
-| `COS1` | `REAL FUNCTION` | `X` | [`L3420`](../source_parts/nswc_part_01.f90#L3420) |
-| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3471`](../source_parts/nswc_part_01.f90#L3471) |
-| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3565`](../source_parts/nswc_part_01.f90#L3565) |
+| `SIN1` | `REAL FUNCTION` | `X` | [`L3373`](../source_parts/nswc_part_01.f90#L3373) |
+| `COS1` | `REAL FUNCTION` | `X` | [`L3424`](../source_parts/nswc_part_01.f90#L3424) |
+| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3475`](../source_parts/nswc_part_01.f90#L3475) |
+| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3569`](../source_parts/nswc_part_01.f90#L3569) |
 
 
 The following functions are available for computing sin xz and cos wz for real ‘x. SIN1(z) SIN1{z) = sin wa for all real z. Algorithm. Minimax approximations are used for sinaz and cos mz when |a2| < 1/4. Precision. SIN1(z) is accurate to within 1 unit of the 14" significant digit when 0 < z < 1. Programming. SIN1 was written by A.H. Morris. The function IPMPAR is used. COS1(z) COS1(z) = cos wz for all real z. Algorithm. Minimax approximations are used for sinaz and cosmz when |x| < 1/4.
@@ -645,7 +645,7 @@ Algorithm. For |z| < 7/4, sin wz and cos wz are computed by the power series cor
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3659`](../source_parts/nswc_part_01.f90#L3659) |
+| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3663`](../source_parts/nswc_part_01.f90#L3663) |
 
 
 The following subroutine is available for computing sinh(z) — z, cosh(z) — 1, and cosh(z) — 1 — x? /2 for real z.
@@ -680,8 +680,8 @@ cosh(z) — 1 - x?/2 is computed then the value is stored in C.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `REXP` | `REAL FUNCTION` | `X` | [`L3808`](../source_parts/nswc_part_01.f90#L3808) |
-| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3832`](../source_parts/nswc_part_01.f90#L3832) |
+| `REXP` | `REAL FUNCTION` | `X` | [`L3816`](../source_parts/nswc_part_01.f90#L3816) |
+| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3843`](../source_parts/nswc_part_01.f90#L3843) |
 
 
 The following functions compute $e^x-1$, including for arguments near zero,
@@ -711,12 +711,12 @@ Software* **12** (1986), 377-393.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ALNREL` | `REAL FUNCTION` | `A` | [`L3983`](../source_parts/nswc_part_01.f90#L3983) |
-| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4006`](../source_parts/nswc_part_01.f90#L4006) |
-| `RLOG` | `REAL FUNCTION` | `X` | [`L4057`](../source_parts/nswc_part_01.f90#L4057) |
-| `RLOG1` | `REAL FUNCTION` | `X` | [`L4106`](../source_parts/nswc_part_01.f90#L4106) |
-| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4155`](../source_parts/nswc_part_01.f90#L4155) |
-| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4234`](../source_parts/nswc_part_01.f90#L4234) |
+| `ALNREL` | `REAL FUNCTION` | `A` | [`L3995`](../source_parts/nswc_part_01.f90#L3995) |
+| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4021`](../source_parts/nswc_part_01.f90#L4021) |
+| `RLOG` | `REAL FUNCTION` | `X` | [`L4073`](../source_parts/nswc_part_01.f90#L4073) |
+| `RLOG1` | `REAL FUNCTION` | `X` | [`L4122`](../source_parts/nswc_part_01.f90#L4122) |
+| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4174`](../source_parts/nswc_part_01.f90#L4174) |
+| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4253`](../source_parts/nswc_part_01.f90#L4253) |
 
 
 The functions ALNREL, RLOG, RLOG1, DLNREL, DRLOG, and DRLOG1 are available for computing In(1 + a), z — 1 — In(z), and a — In(1+ a). DLNREL, DRLOG, and DRLOG1 are double precision functions.

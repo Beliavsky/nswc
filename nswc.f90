@@ -3074,6 +3074,9 @@ RETURN
 END SUBROUTINE ROTA
 
 SUBROUTINE SROTG(SA,SB,SC,SS)
+IMPLICIT NONE
+REAL SA, SB, SC, SS
+REAL R, U, V
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3147,6 +3150,7 @@ RETURN
 END SUBROUTINE SROTG
 
 SUBROUTINE DROTG(DA,DB,DC,DS)
+IMPLICIT NONE
 !
 !     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 !
@@ -3758,6 +3762,10 @@ RETURN
 END SUBROUTINE SNHCSH
 
 REAL function ESUM (MU, X)
+IMPLICIT NONE
+INTEGER MU
+REAL X
+REAL W
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
@@ -3806,6 +3814,9 @@ RETURN
 END FUNCTION DESUM
 
 REAL function REXP (X)
+IMPLICIT NONE
+REAL X
+REAL E, P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -3830,6 +3841,7 @@ RETURN
 END FUNCTION REXP
 
 double precision function DREXP (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION EXP(X) - 1
 !-----------------------------------------------------------------------
@@ -3981,6 +3993,9 @@ RETURN
 END SUBROUTINE DREXP1
 
 REAL function ALNREL(A)
+IMPLICIT NONE
+REAL A
+REAL P1, P2, P3, Q1, Q2, Q3, T, T2, W, X
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4004,6 +4019,7 @@ RETURN
 END FUNCTION ALNREL
 
 double precision function DLNREL (A)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !            EVALUATION OF THE FUNCTION LN(1 + A)
 !-----------------------------------------------------------------------
@@ -4104,6 +4120,9 @@ RETURN
 END FUNCTION RLOG
 
 REAL function RLOG1(X)
+IMPLICIT NONE
+REAL X
+REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -4232,6 +4251,7 @@ RETURN
 END FUNCTION DRLOG
 
 double precision function DRLOG1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - LN(1 + X)
 !-----------------------------------------------------------------------
@@ -6048,6 +6068,11 @@ RETURN
 END FUNCTION ERFC
 
 REAL function ERFC1 (IND, X)
+IMPLICIT NONE
+REAL EXPARG
+INTEGER IND
+REAL X
+REAL AX, BOT, C, E, T, TOP
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !
@@ -6897,6 +6922,8 @@ RETURN
 END FUNCTION DERF
 
 double precision function DERFC (X)
+IMPLICIT NONE
+INTEGER I, K
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
@@ -6960,6 +6987,9 @@ RETURN
 END FUNCTION DERFC
 
 double precision function DERFC1 (IND, X)
+IMPLICIT NONE
+INTEGER IND
+INTEGER I, K
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -11033,6 +11063,9 @@ RETURN
 END FUNCTION GLOG
 
 REAL function GAM1(A)
+IMPLICIT NONE
+REAL A
+REAL BOT, D, S1, S2, T, TOP, W
 !-----------------------------------------------------------------------
 !     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
 !-----------------------------------------------------------------------
@@ -11085,6 +11118,11 @@ RETURN
 END FUNCTION GAM1
 
 REAL function GAMLN (A)
+IMPLICIT NONE
+REAL GAMLN1
+REAL A
+INTEGER I, N
+REAL C0, C1, C2, C3, C4, C5, D, T, W
 !-----------------------------------------------------------------------
 !            EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
 !-----------------------------------------------------------------------
@@ -11124,6 +11162,10 @@ GAMLN = (D + W) + (A - 0.5)*(ALOG(A) - 1.0)
 END FUNCTION GAMLN
 
 REAL function GAMLN1 (A)
+IMPLICIT NONE
+REAL A
+REAL P0, P1, P2, P3, P4, P5, P6, Q1, Q2, Q3, Q4, Q5, Q6, R0, R1 &
+&, R2, R3, R4, R5, S1, S2, S3, S4, S5, W, X
 !-----------------------------------------------------------------------
 !     EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
 !-----------------------------------------------------------------------
@@ -11568,6 +11610,7 @@ RETURN
 END FUNCTION DPDEL
 
 double precision function DGAM1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
 !-----------------------------------------------------------------------
@@ -11734,6 +11777,8 @@ RETURN
 END FUNCTION DGAM1
 
 double precision function DGAMLN (A)
+IMPLICIT NONE
+INTEGER I, N
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
@@ -11774,6 +11819,7 @@ DGAMLN = (D + W) + (A - 0.5D0)*(DLOG(A) - 1.D0)
 END FUNCTION DGAMLN
 
 double precision function DGMLN1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
 !-----------------------------------------------------------------------
@@ -11917,6 +11963,12 @@ RETURN
 END SUBROUTINE CPSI
 
 REAL function PSI(XX)
+IMPLICIT NONE
+INTEGER IPMPAR
+REAL SPMPAR
+REAL XX
+INTEGER I, M, N, NQ
+REAL AUG, DEN, PIOV4, SGN, UPPER, W, X, XMAX1, XMX0, XSMALL, Z
 !---------------------------------------------------------------------
 !
 !                 EVALUATION OF THE DIGAMMA FUNCTION
@@ -12260,6 +12312,9 @@ RETURN
 END SUBROUTINE DCPSI
 
 double precision function DPSI(A)
+IMPLICIT NONE
+INTEGER IPMPAR
+INTEGER J, K, L, MAX, N
 !-----------------------------------------------------------------------
 !
 !               EVALUATION OF THE DIGAMMA FUNCTION FOR
@@ -12971,6 +13026,11 @@ RETURN
 END FUNCTION BCORR
 
 REAL function ALGDIV (A, B)
+IMPLICIT NONE
+REAL ALNREL
+REAL A, B
+REAL C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T, U, V &
+&, W, X, X2
 !-----------------------------------------------------------------------
 !
 !     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
@@ -30789,6 +30849,7 @@ RETURN
 END SUBROUTINE CBND
 
 SUBROUTINE  SCOPY(N,SX,INCX,SY,INCY)
+IMPLICIT NONE
 !
 !     COPIES A VECTOR, X, TO A VECTOR, Y.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -30839,6 +30900,7 @@ RETURN
 END SUBROUTINE SCOPY
 
 SUBROUTINE  DCOPY(N,DX,INCX,DY,INCY)
+IMPLICIT NONE
 !
 !     COPIES A VECTOR, X, TO A VECTOR, Y.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -31007,6 +31069,7 @@ RETURN
 END SUBROUTINE ISWAP
 
 SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
+IMPLICIT NONE
 !
 !     INTERCHANGES TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -31063,6 +31126,7 @@ RETURN
 END SUBROUTINE SSWAP
 
 SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
+IMPLICIT NONE
 !
 !     INTERCHANGES TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
@@ -31155,6 +31219,7 @@ RETURN
 END SUBROUTINE CSWAP
 
 SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
+IMPLICIT NONE
 !
 !     APPLIES A PLANE ROTATION.
 !     JACK DONGARRA, LINPACK, 3/11/78.
@@ -31192,6 +31257,7 @@ RETURN
 END SUBROUTINE SROT
 
 SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
+IMPLICIT NONE
 !
 !     APPLIES A PLANE ROTATION.
 !     JACK DONGARRA, LINPACK, 3/11/78.
@@ -31268,6 +31334,10 @@ RETURN
 END SUBROUTINE CSROT
 
 SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
+IMPLICIT NONE
+REAL SD1, SD2, SPARAM, SX1, SY1
+REAL GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, SP1 &
+&, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
 !
 !     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 !     THE SECOND COMPONENT OF THE 2-VECTOR  (SQRT(SD1)*SX1,SQRT(SD2)*
@@ -31415,6 +31485,11 @@ IF (ABS(SQ1) .LE. ABS(SQ2)) GO TO 40
 END SUBROUTINE SROTMG
 
 SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
+IMPLICIT NONE
+INTEGER INCX, INCY, N
+REAL SPARAM, SX, SY
+INTEGER I, KX, KY, NSTEPS
+REAL SFLAG, SH11, SH12, SH21, SH22, TWO, W, Z, ZERO
 !
 !     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 !
@@ -31783,6 +31858,7 @@ IF(N .LE. 0 .OR.(DFLAG+TWO.EQ.ZERO)) GO TO 140
     END SUBROUTINE DROTM
 
 REAL function SDOT(N,SX,INCX,SY,INCY)
+IMPLICIT NONE
 !
 !     FORMS THE DOT PRODUCT OF TWO VECTORS.
 !     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -31957,6 +32033,7 @@ RETURN
 END FUNCTION CDOTU
 
 SUBROUTINE  SSCAL(N,SA,SX,INCX)
+IMPLICIT NONE
 !
 !     SCALES A VECTOR BY A CONSTANT.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO 1.
@@ -31999,6 +32076,7 @@ RETURN
 END SUBROUTINE SSCAL
 
 SUBROUTINE  DSCAL(N,DA,DX,INCX)
+IMPLICIT NONE
 !
 !     SCALES A VECTOR BY A CONSTANT.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
@@ -32096,6 +32174,7 @@ RETURN
 END SUBROUTINE CSSCAL
 
 SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+IMPLICIT NONE
 !
 !     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 !     USES UNROLLED LOOP FOR INCREMENTS EQUAL TO ONE.
@@ -32227,6 +32306,7 @@ RETURN
 END SUBROUTINE CAXPY
 
 REAL function SASUM(N,SX,INCX)
+IMPLICIT NONE
 !
 !     TAKES THE SUM OF THE ABSOLUTE VALUES.
 !     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
@@ -32270,6 +32350,7 @@ RETURN
 END FUNCTION SASUM
 
 double precision function DASUM(N,DX,INCX)
+IMPLICIT NONE
 !
 !     TAKES THE SUM OF THE ABSOLUTE VALUES.
 !     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32345,6 +32426,9 @@ RETURN
 END FUNCTION SCASUM
 
 REAL function SNRM2 ( N, SX, INCX)
+IMPLICIT NONE
+INTEGER INCX, N
+INTEGER I, J, NN
 INTEGER NEXT
 REAL SX(*),  CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
 DATA   ZERO, ONE /0.0E0, 1.0E0/
@@ -32726,6 +32810,7 @@ RETURN
 END FUNCTION SCNRM2
 
 INTEGER function ISAMAX(N,SX,INCX)
+IMPLICIT NONE
 !
 !     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32764,6 +32849,7 @@ RETURN
 END FUNCTION ISAMAX
 
 INTEGER function IDAMAX(N,DX,INCX)
+IMPLICIT NONE
 !
 !     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 !     JACK DONGARRA, LINPACK, 3/11/78.
@@ -84454,6 +84540,12 @@ RETURN
 END FUNCTION TRP
 
 SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NI
+REAL T, X, XI, Y, YI
+INTEGER I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, MM1 &
+&, NUM
+REAL DL, DR, XX
 !     ******************************************************************
 !     LAGRANGE INTERPOLATION
 !     ******************************************************************
@@ -88925,6 +89017,11 @@ RETURN
 END SUBROUTINE BSPP
 
 SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
+IMPLICIT NONE
+INTEGER L, N, NI
+REAL A, X, XI, YI
+INTEGER I, IL, IR, J, K, LM1, LMJ
+REAL DX, S, XX
 !-----------------------------------------------------------------------
 !
 !         THIS ROUTINE EVALUATES A PIECEWISE POLYNOMIAL AT THE

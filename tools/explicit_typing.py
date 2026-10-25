@@ -1,7 +1,7 @@
 """Bridge reviewed ftnchek declarations into fixed-form external procedures.
 
 Analyze produces a draft manifest; apply previews or applies that manifest.
-The generator's undeclared-only output is incomplete for EXTERNAL functions:
+The generator's undeclared-only output can omit external function return types:
 review function return types and forwarded callbacks before applying a draft.
 Procedure hashes prevent applying declarations to changed procedure bodies.
 """

@@ -1,4 +1,4 @@
-"""Compare GNU Fortran's inferred types before and after the typing pilot."""
+"""Compare GNU Fortran's inferred types before and after reviewed typing batches."""
 
 import argparse
 import json
@@ -50,7 +50,7 @@ def main():
     before = modernize_loops(name_ends((ROOT / "nswc_orig.f").read_bytes()).data).data
     after = apply_manifest(before, manifest)
     if after != (ROOT / "nswc.f").read_bytes():
-        raise RuntimeError("Maintained source does not reproduce the reviewed pilot")
+        raise RuntimeError("Maintained source does not reproduce the reviewed typing batches")
     inventories = []
     with tempfile.TemporaryDirectory(prefix="nswc-typing-") as folder:
         for label, data in (("before", before), ("after", after)):
