@@ -113,7 +113,7 @@ def technical_comments(lines, vocabulary, proper_names):
         explicit = {m[1].upper() for m in CONTEXT.finditer(body)
                     if m[1].upper() in known_names or
                     (len(m[1]) > 1 and m[1].lower() not in vocabulary and m[1].upper() not in proper_names)}
-        field = re.match(r'^\s*(\w+)\s{2,}[-:]', body)
+        field = re.match(r'^\s*(\w+)\s*[-:=]', body)
         if field and field[1].upper() in local:
             explicit.add(field[1].upper())
         greek = {'ALPHA', 'BETA', 'GAMMA', 'DELTA', 'EPSILON', 'ZETA', 'ETA', 'THETA',
@@ -136,8 +136,11 @@ def technical_comments(lines, vocabulary, proper_names):
             function = key in intrinsic and re.match(r'\s*\(', body[item.end():])
             arithmetic = key in local and (re.search(r'[+*/=<>-]\s*$', body[:item.start()])
                                            or re.match(r'\s*(?:[+*/=<>-]|\.(?:LE|LT|GE|GT|EQ|NE)\.)', body[item.end():], re.I))
-            unambiguous = (key != 'A' and key.lower() not in vocabulary and key not in proper_names
-                           and (key in local or len(key) > 2))
+            suffix = key == 'JR' and re.match(r'\.', body[item.end():])
+            operator = re.match(r'\.', body[item.end():]) and body[:item.start()].endswith('.')
+            unambiguous = (key != 'A' and key.lower() not in vocabulary
+                           and (key not in proper_names or (key == 'JR' and key in local and not suffix))
+                           and not operator)
             if example or function or arithmetic or key in explicit or (symbolic and known) or (known and unambiguous):
                 return word.lower()
             return word
@@ -159,6 +162,12 @@ def sentence_case(text, vocabulary=None, rules=None):
     retained, unknown, uncertain = Counter(), {}, []
     changed_lines = changed_paragraphs = 0
 
+    def has_prose(body):
+        # Expressions and quoted text do not supply evidence of English prose.
+        clean = re.sub(r"'[^']*'|\"[^\"]*\"|\b\w+\s*\([^)]*\)|\.[A-Za-z]+\.", ' ', body)
+        return any(a.lower() in vocabulary and b.lower() in vocabulary
+                   for a, b in re.findall(r'\b([A-Za-z]+)\s+([A-Za-z]+)\b', clean))
+
     def classify(body):
         value = body.strip()
         if not value or not re.search('[A-Za-z]', value):
@@ -169,7 +178,11 @@ def sentence_case(text, vocabulary=None, rules=None):
             return 'code example'
         if re.fullmatch(r'(?:INTEGER|REAL|DOUBLE\s+PRECISION|COMPLEX|LOGICAL|EXTERNAL|SAVE)\s+\w+', value, re.I):
             return 'code example'
+        if re.match(r'^\w+(?:\([^)]*\))?\s+[-:]\s+', value) and has_prose(value):
+            return 'descriptive expression'
         if FORMULA.search(value):
+            if has_prose(value):
+                return 'descriptive expression'
             return 'formula or status expression'
         if re.search(r'\S {3,}\S', value) or re.match(r'^\(?\d+[.)]?\s+\d', value):
             return 'table or aligned fields'
@@ -190,7 +203,9 @@ def sentence_case(text, vocabulary=None, rules=None):
 
     def convert(body, sentence_start, line_number):
         nonlocal unknown
-        spans = [m.span() for m in re.finditer(r"'[^']*'|\"[^\"]*\"|\b\w+\([^)]*\)|\b(?:[A-Z]\.\s*){2,}", body)]
+        spans = [m.span() for m in re.finditer(r"'[^']*'|\"[^\"]*\"|\b(?:[A-Z]\.\s*){2,}|\.[A-Za-z]+\.", body)]
+        for literal in re.finditer(r'(?<!\w)(\d+)[hH]', body):
+            spans.append((literal.start(), literal.end() + int(literal[1])))
         for match in re.finditer(r'\([^)]*\)', body):
             inner = match[0][1:-1].strip()
             numeric = re.sub(r'\d+\.\d*(?:[ED][+-]?\d+)?', '0', inner, flags=re.I)
@@ -206,8 +221,14 @@ def sentence_case(text, vocabulary=None, rules=None):
         for match in WORD.finditer(body):
             word, key = match[0], match[0].upper()
             gap = body[last:match.start()]
+            # Each list entry starts a description after its identifier/status.
+            if re.search(r'(?:=|\s[-:])\s*(?:[+-]?\d+\s+)?$', gap):
+                sentence_start = True
             initial = len(previous) == 1 and re.match(r'^\.\s*$', gap)
-            if re.search(r'(?<!\.)[.!?](?![.\d])', gap) and previous not in abbreviations and not initial:
+            operator_end = body[last:last + 1] == '.' and re.search(r'\.[A-Za-z]+$', body[:last])
+            sentence_gap = gap[1:] if operator_end else gap
+            if (re.search(r'(?<!\.)[.!?](?![.\d])', sentence_gap) and previous not in abbreviations
+                    and not initial):
                 sentence_start = True
             protected = any(a <= match.start() < b for a, b in spans) or key in contextual
             possessive = key.endswith("'S")
@@ -260,7 +281,7 @@ def sentence_case(text, vocabulary=None, rules=None):
             kind = classify(match[2])
             if reference and kind in {'existing mixed/lower case', 'uncertain prose'}:
                 kind = 'prose'
-            if kind != 'prose':
+            if kind not in {'prose', 'descriptive expression'}:
                 retained[kind] += 1
                 if kind == 'uncertain prose':
                     uncertain.append({'line': start + offset + 1, 'text': match[2]})

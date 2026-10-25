@@ -121,7 +121,7 @@ do ii = 1, n
 !
    do j = 1, l
       g = 0.d0
-!     ********** FORM ELEMENT OF a*U **********
+!     ********** Form element of a*U **********
       do 180 k = 1, j
 180 g = g + a(j,k) * a(i,k)
 !
@@ -130,13 +130,13 @@ do ii = 1, n
 !
       do 200 k = jp1, l
 200 g = g + a(k,j) * a(i,k)
-!     ********** FORM ELEMENT OF P **********
+!     ********** Form element of P **********
 220 e(j) = g / h
       f = f + e(j) * a(i,j)
    end do
 !
    h = f / (h + h)
-!     ********** FORM REDUCED a **********
+!     ********** Form reduced a **********
    do 260 j = 1, l
       f = a(i,j)
       g = e(j) - h * f
@@ -155,7 +155,7 @@ do ii = 1, n
 end do
 !
 return
-!     ********** LAST CARD OF dtred1 **********
+!     ********** Last card of dtred1 **********
 end subroutine dtred1
 
 subroutine dtred3 (n,nv,a,d,e,e2)
@@ -243,20 +243,20 @@ do ii = 1, n
    do j = 1, l
       g = 0.d0
       jk = (j * (j-1)) / 2
-!     ********** FORM ELEMENT OF a*U **********
+!     ********** Form element of a*U **********
       do k = 1, l
          jk = jk + 1
          if (k .gt. j) jk = jk + k - 2
          g = g + a(jk) * d(k)
       end do
-!     ********** FORM ELEMENT OF P **********
+!     ********** Form element of P **********
       e(j) = g / h
       f = f + e(j) * d(j)
    end do
 !
    hh = f / (h + h)
    jk = 0
-!     ********** FORM REDUCED a **********
+!     ********** Form reduced a **********
    do 260 j = 1, l
       f = d(j)
       g = e(j) - hh * f
@@ -272,7 +272,7 @@ do ii = 1, n
 end do
 !
 return
-!     ********** LAST CARD OF dtred3 **********
+!     ********** Last card of dtred3 **********
 end subroutine dtred3
 
 subroutine dtql (n,d,e2,ierr)
@@ -318,9 +318,9 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !
-!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!     ********** machep is a machine dependent parameter. Assign
 !                machep the value U where U is the smallest positive
-!                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
+!                floating point number such that 1.0 + U .GT. 1.0 .
 !
            machep = dpmpar(1)
 !
@@ -342,17 +342,17 @@ do l = 1, n
    if (b .gt. h) go to 105
    b = h
    c = b * b
-!     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
+!     ********** Look for small squared sub-diagonal element **********
 105 do m = l, n
       if (e2(m) .le. c) go to 120
-!     ********** e2(n) IS ALWAYS ZERO, SO THERE IS NO EXIT
-!                THROUGH THE BOTTOM OF THE LOOP **********
+!     ********** e2(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
    end do
 !
 120 if (m .eq. l) go to 210
 130 if (j .eq. 50) go to 1000
    j = j + 1
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
    l1 = l + 1
    s = dsqrt(e2(l))
    g = d(l)
@@ -387,13 +387,13 @@ do l = 1, n
 !
    e2(l) = s * g
    d(l) = h
-!     ********** GUARD AGAINST UNDERFLOW IN CONVERGENCE TEST **********
+!     ********** Guard against underflow in convergence test **********
    if (h .eq. 0.d0) go to 210
    if (dabs(e2(l)) .le. dabs(c/h)) go to 210
    e2(l) = h * e2(l)
    if (e2(l) .ne. 0.d0) go to 130
 210 p = d(l) + f
-!     ********** ORDER EIGENVALUES **********
+!     ********** Order eigenvalues **********
    if (l .eq. 1) go to 250
 !     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
    do ii = 2, l
@@ -407,11 +407,11 @@ do l = 1, n
 end do
 !
 go to 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF dtql **********
+!     ********** Last card of dtql **********
 end subroutine dtql
 
 subroutine dtred2 (nm,n,a,d,e,z)
@@ -499,7 +499,7 @@ do ii = 2, n
    do j = 1, l
       z(j,i) = z(i,j) / h
       g = 0.d0
-!     ********** FORM ELEMENT OF a*U **********
+!     ********** Form element of a*U **********
       do 180 k = 1, j
 180 g = g + z(j,k) * z(i,k)
 !
@@ -508,13 +508,13 @@ do ii = 2, n
 !
       do 200 k = jp1, l
 200 g = g + z(k,j) * z(i,k)
-!     ********** FORM ELEMENT OF P **********
+!     ********** Form element of P **********
 220 e(j) = g / h
       f = f + e(j) * z(i,j)
    end do
 !
    hh = f / (h + h)
-!     ********** FORM REDUCED a **********
+!     ********** Form reduced a **********
    do 260 j = 1, l
       f = z(i,j)
       g = e(j) - hh * f
@@ -529,7 +529,7 @@ end do
 !
 320 d(1) = 0.d0
 e(1) = 0.d0
-!     ********** ACCUMULATION OF TRANSFORMATION MATRICES **********
+!     ********** Accumulation of transformation matrices **********
 do 500 i = 1, n
    l = i - 1
    if (d(i) .eq. 0.d0) go to 380
@@ -556,7 +556,7 @@ do 500 i = 1, n
 500 continue
 !
 return
-!     ********** LAST CARD OF dtred2 **********
+!     ********** Last card of dtred2 **********
 end subroutine dtred2
 
 subroutine dtql2 (nm,n,d,e,z,ierr)
@@ -622,9 +622,9 @@ double precision :: dpmpar
 !
 !-----------------------------------------------------------------------
 !
-!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!     ********** machep is a machine dependent parameter. Assign
 !                machep the value U where U is the smallest positive
-!                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
+!                floating point number such that 1.0 + U .GT. 1.0 .
 !
            machep = dpmpar(1)
 !
@@ -644,17 +644,17 @@ do l = 1, n
    j = 0
    h = machep * (dabs(d(l)) + dabs(e(l)))
    if (b .lt. h) b = h
-!     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
+!     ********** Look for small sub-diagonal element **********
    do m = l, n
       if (dabs(e(m)) .le. b) go to 120
-!     ********** e(n) IS ALWAYS ZERO, SO THERE IS NO EXIT
-!                THROUGH THE BOTTOM OF THE LOOP **********
+!     ********** e(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
    end do
 !
 120 if (m .eq. l) go to 220
 130 if (j .eq. 50) go to 1000
    j = j + 1
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
    l1 = l + 1
    g = d(l)
    p = (d(l1) - g) / (2.d0 * e(l))
@@ -691,7 +691,7 @@ do l = 1, n
       c = c * s
 160 p = c * d(i) - s * g
       d(i+1) = h + s * (c * g + s * d(i))
-!     ********** FORM VECTOR **********
+!     ********** Form vector **********
       do k = 1, n
          h = z(k,i+1)
          z(k,i+1) = s * z(k,i) + c * h
@@ -705,7 +705,7 @@ do l = 1, n
    if (dabs(e(l)) .gt. b) go to 130
 220 d(l) = d(l) + f
 end do
-!     ********** ORDER EIGENVALUES AND EIGENVECTORS **********
+!     ********** Order eigenvalues and eigenvectors **********
 do 300 ii = 2, n
    i = ii - 1
    k = i
@@ -730,11 +730,11 @@ do 300 ii = 2, n
 300 continue
 !
 go to 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF dtql2 **********
+!     ********** Last card of dtql2 **********
 end subroutine dtql2
 
 subroutine ceig(ibal,ar,ai,ka,n,wr,wi,ierr)
@@ -851,7 +851,7 @@ logical :: noconv
 !
 !-----------------------------------------------------------------------
 !
-!     ********** radix IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** radix is a machine dependent parameter specifying
 !                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
@@ -862,8 +862,8 @@ b2 = radix * radix
 k = 1
 l = n
 go to 100
-!     ********** IN-LINE PROCEDURE FOR ROW AND
-!                COLUMN EXCHANGE **********
+!     ********** In-line procedure for row and
+!                column exchange **********
 20 scale(m) = j
 if (j .eq. m) go to 50
 !
@@ -886,8 +886,8 @@ do i = k, n
 end do
 !
 50 go to (80,130), iexc
-!     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM DOWN **********
+!     ********** Search for rows isolating an eigenvalue
+!                and push them down **********
 80 if (l .eq. 1) go to 280
 l = l - 1
 !     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
@@ -905,8 +905,8 @@ l = l - 1
 120 continue
 !
 go to 140
-!     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM LEFT **********
+!     ********** Search for columns isolating an eigenvalue
+!                and push them left **********
 130 k = k + 1
 !
 140 do 170 j = k, l
@@ -920,10 +920,10 @@ go to 140
    iexc = 2
    go to 20
 170 continue
-!     ********** NOW BALANCE THE SUBMATRIX IN ROWS k TO l **********
+!     ********** Now balance the submatrix in rows k to l **********
 do 180 i = k, l
 180 scale(i) = 1.0
-!     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
+!     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
 !
 do 270 i = k, l
@@ -935,7 +935,7 @@ do 270 i = k, l
       c = c + abs(ar(j,i)) + abs(ai(j,i))
       r = r + abs(ar(i,j)) + abs(ai(i,j))
 200 continue
-!     ********** GUARD AGAINST ZERO c OR r DUE TO UNDERFLOW **********
+!     ********** Guard against zero c or r due to underflow **********
    if (c .eq. 0.0 .or. r .eq. 0.0) go to 270
    g = r / radix
    f = 1.0
@@ -949,7 +949,7 @@ do 270 i = k, l
    f = f / radix
    c = c / b2
    go to 230
-!     ********** NOW BALANCE **********
+!     ********** Now balance **********
 240 if ((c + r) / f .ge. 0.95 * s) go to 270
    g = 1.0 / f
    scale(i) = scale(i) * f
@@ -972,7 +972,7 @@ if (noconv) go to 190
 280 low = k
 igh = l
 return
-!     ********** LAST CARD OF cbal **********
+!     ********** Last card of cbal **********
 end subroutine cbal
 
 subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
@@ -1010,7 +1010,7 @@ real :: f, g, h, fi, fr, scale
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine  cbal.  If  cbal  has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        ar and ai contain the real and imaginary parts,
 !          respectively, of the complex input matrix.
@@ -1109,7 +1109,7 @@ do 180 m = kp1, la
 180 continue
 !
 200 return
-!     ********** LAST CARD OF corth **********
+!     ********** Last card of corth **********
 end subroutine corth
 
 subroutine comqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
@@ -1152,7 +1152,7 @@ real :: spmpar
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine  cbal.  If  cbal  has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        hr and hi contain the real and imaginary parts,
 !          respectively, of the complex upper Hessenberg matrix.
@@ -1183,7 +1183,7 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !
-!     ********** machep IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** machep is a machine dependent parameter specifying
 !                the relative precision of floating point arithmetic.
 !
            machep = spmpar(1)
@@ -1192,7 +1192,7 @@ real :: spmpar
 !
 ierr = 0
 if (low .eq. igh) go to 180
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+!     ********** Create real subdiagonal elements **********
 l = low + 1
 !
 do 170 i = l, igh
@@ -1217,7 +1217,7 @@ do 170 i = l, igh
    end do
 !
 170 continue
-!     ********** STORE ROOTS ISOLATED BY cbal **********
+!     ********** Store roots isolated by cbal **********
 180 do 200 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 200
    wr(i) = hr(i,i)
@@ -1227,12 +1227,12 @@ do 170 i = l, igh
 en = igh
 tr = 0.0
 ti = 0.0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
+!     ********** Search for next eigenvalue **********
 220 if (en .lt. low) go to 1001
 its = 0
 enm1 = en - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR l=en STEP -1 UNTIL low  -- **********
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 300
@@ -1240,7 +1240,7 @@ enm1 = en - 1
 &machep * (abs(hr(l-1,l-1)) + abs(hi(l-1,l-1)) &
 &+ abs(hr(l,l)) +abs(hi(l,l)))) go to 300
 end do
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
 300 if (l .eq. en) go to 660
 if (its .eq. 30) go to 1000
 if (its .eq. 10 .or. its .eq. 20) go to 320
@@ -1261,7 +1261,7 @@ zzi = -zzi
 sr = sr - real(z3)
 si = si - aimag(z3)
 go to 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
+!     ********** Form exceptional shift **********
 320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en-2))
 si = 0.0
 !
@@ -1273,7 +1273,7 @@ end do
 tr = tr + sr
 ti = ti + si
 its = its + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
+!     ********** Reduce to triangle (rows) **********
 lp1 = l + 1
 !
 do i = lp1, en
@@ -1344,11 +1344,11 @@ go to 240
 wi(en) = hi(en,en) + ti
 en = enm1
 go to 220
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 30 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
 1000 ierr = en
 1001 return
-!     ********** LAST CARD OF comqr **********
+!     ********** Last card of comqr **********
 end subroutine comqr
 
 subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
@@ -1403,7 +1403,7 @@ if (igh .eq. low) go to 120
 !
 do i = low, igh
    s = scale(i)
-!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
+!     ********** Left hand eigenvectors are back transformed
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
    do j = 1, m
@@ -1433,7 +1433,7 @@ end do
 140 continue
 !
 200 return
-!     ********** LAST CARD OF cbabk2 **********
+!     ********** Last card of cbabk2 **********
 end subroutine cbabk2
 
 subroutine comqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
@@ -1482,7 +1482,7 @@ real :: spmpar
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine  cbal.  If  cbal  has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        ORTR and ORTI contain information about the unitary trans-
 !          formations used in the reduction by  corth, if performed.
@@ -1524,7 +1524,7 @@ real :: spmpar
 !
 !-----------------------------------------------------------------------
 !
-!     ********** machep IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** machep is a machine dependent parameter specifying
 !                the relative precision of floating point arithmetic.
 !
            machep = spmpar(1)
@@ -1532,7 +1532,7 @@ real :: spmpar
 !                **********
 !
 ierr = 0
-!     ********** INITIALIZE EIGENVECTOR MATRIX **********
+!     ********** Initialize eigenvector matrix **********
 do 100 i = 1, n
 !
    do 100 j = 1, n
@@ -1540,16 +1540,16 @@ do 100 i = 1, n
       zi(i,j) = 0.0
       if (i .eq. j) zr(i,j) = 1.0
 100 continue
-!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
-!                FROM THE INFORMATION LEFT BY corth **********
+!     ********** Form the matrix of accumulated transformations
+!                from the information left by corth **********
 iend = igh - low - 1
 if (iend) 180, 150, 105
-!     ********** FOR i=igh-1 STEP -1 UNTIL low+1 DO -- **********
+!     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do 140 ii = 1, iend
    i = igh - ii
    if (ortr(i) .eq. 0.0 .and. orti(i) .eq. 0.0) go to 140
    if (hr(i,i-1) .eq. 0.0 .and. hi(i,i-1) .eq. 0.0) go to 140
-!     ********** norm BELOW IS NEGATIVE OF H FORMED IN corth **********
+!     ********** norm below is negative of H formed in corth **********
    norm = hr(i,i-1) * ortr(i) + hi(i,i-1) * orti(i)
    ip1 = i + 1
 !
@@ -1578,7 +1578,7 @@ if (iend) 180, 150, 105
    end do
 !
 140 continue
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+!     ********** Create real subdiagonal elements **********
 150 l = low + 1
 !
 do 170 i = l, igh
@@ -1609,7 +1609,7 @@ do 170 i = l, igh
    end do
 !
 170 continue
-!     ********** STORE ROOTS ISOLATED BY cbal **********
+!     ********** Store roots isolated by cbal **********
 180 do 200 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 200
    wr(i) = hr(i,i)
@@ -1619,12 +1619,12 @@ do 170 i = l, igh
 en = igh
 tr = 0.0
 ti = 0.0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
+!     ********** Search for next eigenvalue **********
 220 if (en .lt. low) go to 680
 its = 0
 enm1 = en - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR l=en STEP -1 UNTIL LOW DO -- **********
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 300
@@ -1632,7 +1632,7 @@ enm1 = en - 1
 &machep * (abs(hr(l-1,l-1)) + abs(hi(l-1,l-1)) &
 &+ abs(hr(l,l)) +abs(hi(l,l)))) go to 300
 end do
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
 300 if (l .eq. en) go to 660
 if (its .eq. 30) go to 1000
 if (its .eq. 10 .or. its .eq. 20) go to 320
@@ -1653,7 +1653,7 @@ zzi = -zzi
 sr = sr - real(z3)
 si = si - aimag(z3)
 go to 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
+!     ********** Form exceptional shift **********
 320 sr = abs(hr(en,enm1)) + abs(hr(enm1,en-2))
 si = 0.0
 !
@@ -1665,7 +1665,7 @@ end do
 tr = tr + sr
 ti = ti + si
 its = its + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
+!     ********** Reduce to triangle (rows) **********
 lp1 = l + 1
 !
 do i = lp1, en
@@ -1765,8 +1765,8 @@ hi(en,en) = hi(en,en) + ti
 wi(en) = hi(en,en)
 en = enm1
 go to 220
-!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
-!                VECTORS OF UPPER TRIANGULAR FORM **********
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
 680 norm = 0.0
 !
 do 720 i = 1, n
@@ -1804,9 +1804,9 @@ do nn = 2, n
    end do
 !
 end do
-!     ********** END BACKSUBSTITUTION **********
+!     ********** End backsubstitution **********
 enm1 = n - 1
-!     ********** VECTORS OF ISOLATED ROOTS **********
+!     ********** Vectors of isolated roots **********
 do 840 i = 1, enm1
    if (i .ge. low .and. i .le. igh) go to 840
    ip1 = i + 1
@@ -1817,9 +1817,9 @@ do 840 i = 1, enm1
    end do
 !
 840 continue
-!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
+!     ********** Multiply by transformation matrix to give
 !                vectors of original full matrix.
-!                FOR j=n STEP -1 UNTIL low+1 DO -- **********
+!                For j=n step -1 Until low+1 do -- **********
 do 880 jj = low, enm1
    j = n + low - jj
    m = min0(j-1,igh)
@@ -1838,11 +1838,11 @@ do 880 jj = low, enm1
 880 continue
 !
 go to 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 30 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
 1000 ierr = en
 1001 return
-!     ********** LAST CARD OF comqr2 **********
+!     ********** Last card of comqr2 **********
 end subroutine comqr2
 
 subroutine dceig(ibal,ar,ai,ka,n,wr,wi,ierr)
@@ -1961,7 +1961,7 @@ logical :: noconv
 !
 !-----------------------------------------------------------------------
 !
-!     ********** radix IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** radix is a machine dependent parameter specifying
 !                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
@@ -1972,8 +1972,8 @@ b2 = radix * radix
 k = 1
 l = n
 go to 100
-!     ********** IN-LINE PROCEDURE FOR ROW AND
-!                COLUMN EXCHANGE **********
+!     ********** In-line procedure for row and
+!                column exchange **********
 20 scale(m) = j
 if (j .eq. m) go to 50
 !
@@ -1996,8 +1996,8 @@ do i = k, n
 end do
 !
 50 go to (80,130), iexc
-!     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM DOWN **********
+!     ********** Search for rows isolating an eigenvalue
+!                and push them down **********
 80 if (l .eq. 1) go to 280
 l = l - 1
 !     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
@@ -2015,8 +2015,8 @@ l = l - 1
 120 continue
 !
 go to 140
-!     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM LEFT **********
+!     ********** Search for columns isolating an eigenvalue
+!                and push them left **********
 130 k = k + 1
 !
 140 do 170 j = k, l
@@ -2030,10 +2030,10 @@ go to 140
    iexc = 2
    go to 20
 170 continue
-!     ********** NOW BALANCE THE SUBMATRIX IN ROWS k TO l **********
+!     ********** Now balance the submatrix in rows k to l **********
 do 180 i = k, l
 180 scale(i) = 1.d0
-!     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
+!     ********** Iterative loop for norm reduction **********
 190 noconv = .false.
 !
 do 270 i = k, l
@@ -2045,7 +2045,7 @@ do 270 i = k, l
       c = c + dabs(ar(j,i)) + dabs(ai(j,i))
       r = r + dabs(ar(i,j)) + dabs(ai(i,j))
 200 continue
-!     ********** GUARD AGAINST ZERO c OR r DUE TO UNDERFLOW **********
+!     ********** Guard against zero c or r due to underflow **********
    if (c .eq. 0.d0 .or. r .eq. 0.d0) go to 270
    g = r / radix
    f = 1.d0
@@ -2059,7 +2059,7 @@ do 270 i = k, l
    f = f / radix
    c = c / b2
    go to 230
-!     ********** NOW BALANCE **********
+!     ********** Now balance **********
 240 if ((c + r) / f .ge. 0.95d0 * s) go to 270
    g = 1.d0 / f
    scale(i) = scale(i) * f
@@ -2082,7 +2082,7 @@ if (noconv) go to 190
 280 low = k
 igh = l
 return
-!     ********** LAST CARD OF dcbal **********
+!     ********** Last card of dcbal **********
 end subroutine dcbal
 
 subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
@@ -2120,7 +2120,7 @@ double precision :: dcpabs
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine dcbal.  If dcbal has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        ar and ai contain the real and imaginary parts,
 !          respectively, of the complex input matrix.
@@ -2219,7 +2219,7 @@ do 180 m = kp1, la
 180 continue
 !
 200 return
-!     ********** LAST CARD OF dcorth **********
+!     ********** Last card of dcorth **********
 end subroutine dcorth
 
 subroutine dcomqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
@@ -2261,7 +2261,7 @@ double precision :: dpmpar, dcpabs
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine dcbal.  If dcbal has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        hr and hi contain the real and imaginary parts,
 !          respectively, of the complex upper Hessenberg matrix.
@@ -2288,7 +2288,7 @@ double precision :: dpmpar, dcpabs
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** MACHEP is a machine dependent parameter specifying
 !                the relative precision of floating point arithmetic.
 !
            machep = dpmpar(1)
@@ -2297,7 +2297,7 @@ double precision :: dpmpar, dcpabs
 !
 ierr = 0
 if (low .eq. igh) go to 180
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+!     ********** Create real subdiagonal elements **********
 l = low + 1
 !
 do 170 i = l, igh
@@ -2322,7 +2322,7 @@ do 170 i = l, igh
    end do
 !
 170 continue
-!     ********** STORE ROOTS ISOLATED BY dcbal **********
+!     ********** Store roots isolated by dcbal **********
 180 do 200 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 200
    wr(i) = hr(i,i)
@@ -2332,12 +2332,12 @@ do 170 i = l, igh
 en = igh
 tr = 0.d0
 ti = 0.d0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
+!     ********** Search for next eigenvalue **********
 220 if (en .lt. low) go to 1001
 its = 0
 enm1 = en - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR l=en STEP -1 UNTIL low  -- **********
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low  -- **********
 240 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 300
@@ -2345,7 +2345,7 @@ enm1 = en - 1
 &machep * (dabs(hr(l-1,l-1)) + dabs(hi(l-1,l-1)) &
 &+ dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
 end do
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
 300 if (l .eq. en) go to 660
 if (its .eq. 50) go to 1000
 if (its .eq. 10 .or. its .eq. 20 .or. its .eq. 30) go to 320
@@ -2370,7 +2370,7 @@ r2 = z(1)**2 + z(2)**2
 sr = sr - (xr*z(1) + xi*z(2))/r2
 si = si - (xi*z(1) - xr*z(2))/r2
 go to 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
+!     ********** Form exceptional shift **********
 320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en-2))
 si = 0.d0
 !
@@ -2382,7 +2382,7 @@ end do
 tr = tr + sr
 ti = ti + si
 its = its + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
+!     ********** Reduce to triangle (rows) **********
 lp1 = l + 1
 !
 do i = lp1, en
@@ -2453,8 +2453,8 @@ go to 240
 wi(en) = hi(en,en) + ti
 en = enm1
 go to 220
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
 1000 ierr = en
 1001 return
 end subroutine dcomqr
@@ -2511,7 +2511,7 @@ if (igh .eq. low) go to 120
 !
 do i = low, igh
    s = scale(i)
-!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
+!     ********** Left hand eigenvectors are back transformed
 !                if the foregoing statement is replaced by
 !                s=1.0/scale(i). **********
    do j = 1, m
@@ -2542,7 +2542,7 @@ end do
 140 continue
 !
 200 return
-!     ********** LAST CARD OF dcbabk **********
+!     ********** Last card of dcbabk **********
 end subroutine dcbabk
 
 subroutine dcmqr2 (nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
@@ -2589,7 +2589,7 @@ double precision :: dpmpar, dcpabs
 !
 !        Low and igh are integers determined by the balancing
 !          subroutine dcbal.  If dcbal has not been used,
-!          SET low=1, igh=n,
+!          set low=1, igh=n,
 !
 !        ORTR and ORTI contain information about the unitary trans-
 !          formations used in the reduction by dcorth, if performed.
@@ -2627,7 +2627,7 @@ double precision :: dpmpar, dcpabs
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** MACHEP is a machine dependent parameter specifying
 !                the relative precision of floating point arithmetic.
 !
            machep = dpmpar(1)
@@ -2635,7 +2635,7 @@ double precision :: dpmpar, dcpabs
 !                **********
 !
 ierr = 0
-!     ********** INITIALIZE EIGENVECTOR MATRIX **********
+!     ********** Initialize eigenvector matrix **********
 do 100 i = 1, n
 !
    do 100 j = 1, n
@@ -2643,16 +2643,16 @@ do 100 i = 1, n
       zi(i,j) = 0.d0
       if (i .eq. j) zr(i,j) = 1.d0
 100 continue
-!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
-!                FROM THE INFORMATION LEFT BY dcorth **********
+!     ********** Form the matrix of accumulated transformations
+!                from the information left by dcorth **********
 iend = igh - low - 1
 if (iend) 180, 150, 105
-!     ********** FOR i=igh-1 STEP -1 UNTIL low+1 DO -- **********
+!     ********** For i=igh-1 step -1 Until low+1 do -- **********
 105 do 140 ii = 1, iend
    i = igh - ii
    if (ortr(i) .eq. 0.d0 .and. orti(i) .eq. 0.d0) go to 140
    if (hr(i,i-1) .eq. 0.d0 .and. hi(i,i-1) .eq. 0.d0) go to 140
-!     ********** NORM BELOW IS NEGATIVE OF H FORMED IN dcorth **********
+!     ********** Norm below is negative of H formed in dcorth **********
    norm = hr(i,i-1) * ortr(i) + hi(i,i-1) * orti(i)
    ip1 = i + 1
 !
@@ -2681,7 +2681,7 @@ if (iend) 180, 150, 105
    end do
 !
 140 continue
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+!     ********** Create real subdiagonal elements **********
 150 l = low + 1
 !
 do 170 i = l, igh
@@ -2712,7 +2712,7 @@ do 170 i = l, igh
    end do
 !
 170 continue
-!     ********** STORE ROOTS ISOLATED BY dcbal **********
+!     ********** Store roots isolated by dcbal **********
 180 do 200 i = 1, n
    if (i .ge. low .and. i .le. igh) go to 200
    wr(i) = hr(i,i)
@@ -2722,12 +2722,12 @@ do 170 i = l, igh
 en = igh
 tr = 0.d0
 ti = 0.d0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
+!     ********** Search for next eigenvalue **********
 220 if (en .lt. low) go to 680
 its = 0
 enm1 = en - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR l=en STEP -1 UNTIL LOW DO -- **********
+!     ********** Look for single small sub-diagonal element
+!                for l=en step -1 Until low do -- **********
 240 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 300
@@ -2735,7 +2735,7 @@ enm1 = en - 1
 &machep * (dabs(hr(l-1,l-1)) + dabs(hi(l-1,l-1)) &
 &+ dabs(hr(l,l)) + dabs(hi(l,l)))) go to 300
 end do
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
 300 if (l .eq. en) go to 660
 if (its .eq. 50) go to 1000
 if (its .eq. 10 .or. its .eq. 20 .or. its .eq. 30) go to 320
@@ -2760,7 +2760,7 @@ r2 = z(1)**2 + z(2)**2
 sr = sr - (xr*z(1) + xi*z(2))/r2
 si = si - (xi*z(1) - xr*z(2))/r2
 go to 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
+!     ********** Form exceptional shift **********
 320 sr = dabs(hr(en,enm1)) + dabs(hr(enm1,en-2))
 si = 0.d0
 !
@@ -2772,7 +2772,7 @@ end do
 tr = tr + sr
 ti = ti + si
 its = its + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
+!     ********** Reduce to triangle (rows) **********
 lp1 = l + 1
 !
 do i = lp1, en
@@ -2872,8 +2872,8 @@ hi(en,en) = hi(en,en) + ti
 wi(en) = hi(en,en)
 en = enm1
 go to 220
-!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
-!                VECTORS OF UPPER TRIANGULAR FORM **********
+!     ********** All roots found.  Backsubstitute to find
+!                vectors of upper triangular form **********
 680 norm = 0.d0
 !
 do 720 i = 1, n
@@ -2911,9 +2911,9 @@ do nn = 2, n
    end do
 !
 end do
-!     ********** END BACKSUBSTITUTION **********
+!     ********** End backsubstitution **********
 enm1 = n - 1
-!     ********** VECTORS OF ISOLATED ROOTS **********
+!     ********** Vectors of isolated roots **********
 do 840 i = 1, enm1
    if (i .ge. low .and. i .le. igh) go to 840
    ip1 = i + 1
@@ -2924,9 +2924,9 @@ do 840 i = 1, enm1
    end do
 !
 840 continue
-!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
+!     ********** Multiply by transformation matrix to give
 !                vectors of original full matrix.
-!                FOR j=n STEP -1 UNTIL low+1 DO -- **********
+!                For j=n step -1 Until low+1 do -- **********
 do 880 jj = low, enm1
    j = n + low - jj
    m = min0(j-1,igh)
@@ -2945,11 +2945,11 @@ do 880 jj = low, enm1
 880 continue
 !
 go to 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 50 iterations **********
 1000 ierr = en
 1001 return
-!     ********** LAST CARD OF dcmqr2 **********
+!     ********** Last card of dcmqr2 **********
 end subroutine dcmqr2
 
 subroutine cl1(k, l, m, n, q, kq, kode, toler, iter, x, res, &
@@ -2983,10 +2983,10 @@ implicit none
 ! and m linear inequality constraints
 !             EX.LE.F.
 ! Description of parameters
-! k      NUMBER OF ROWS OF THE MATRIX A (k.GE.1).
-! l      NUMBER OF ROWS OF THE MATRIX C (l.GE.0).
-! m      NUMBER OF ROWS OF THE MATRIX E (m.GE.0).
-! n      NUMBER OF COLUMNS OF THE MATRICES A,C,E (n.GE.1).
+! k      number of rows of the matrix A (k.GE.1).
+! l      number of rows of the matrix C (l.GE.0).
+! m      number of rows of the matrix E (m.GE.0).
+! n      number of columns of the matrices A,C,E (n.GE.1).
 ! klmd   SET TO AT LEAST k+l+m FOR ADJUSTABLE DIMENSIONS.
 ! klm2d  set to at least k+l+m+2 for adjustable dimensions.
 ! nklmd  set to at least n+k+l+m for adjustable dimensions.
@@ -3005,7 +3005,7 @@ implicit none
 !        On entry, this should normally be set to 0.
 !        However, if certain nonnegativity constraints
 !        are to be included implicitly, rather than
-!        EXPLICITLY IN THE CONSTRAINTS EX.LE.F, THEN kode
+!        explicitly in the constraints EX.LE.F, then kode
 !        should be set to 1, and the nonnegativity
 !        constraints included in the arrays x and
 !        res (see below).
@@ -3018,7 +3018,7 @@ implicit none
 !                prematurely due to rounding errors,
 !             3- maximum number of iterations reached.
 ! toler  a small positive tolerance. Empirical
-!        EVIDENCE SUGGESTS toler = 10**(-D*2/3),
+!        evidence suggests toler = 10**(-D*2/3),
 !        where D represents the number of decimal
 !        digits of accuracy available. Essentially,
 !        the subroutine CANNOT distinguish between zero
@@ -3031,23 +3031,23 @@ implicit none
 !        gives the number of simplex iterations.
 ! x      ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST n2d.
 !        On exit this array contains A
-!        SOLUTION TO THE L1 PROBLEM. IF kode=1
+!        solution to the L1 problem. If kode=1
 !        on entry, this array is also used to include
 !        simple nonnegativity constraints on the
 !        variables. The values -1, 0, or 1
 !        for x(j) indicate that the j-TH variable
-!        IS RESTRICTED TO BE .LE.0, UNRESTRICTED,
+!        is restricted to be .LE.0, unrestricted,
 !        OR .GE.0 RESPECTIVELY.
 ! RES    ONE DIMENSIONAL REAL ARRAY OF SIZE AT LEAST klmd.
 !        On exit this contains the residuals B-AX
 !        in the first k components, D-CX in the
 !        NEXT l COMPONENTS (THESE WILL BE =0),AND
-!        F-EX IN THE NEXT m COMPONENTS. IF kode=1 ON
+!        F-EX in the next m components. If kode=1 On
 !        entry, this array is also used to include simple
 !        nonnegativity constraints on the residuals
 !        B-AX. The values -1, 0, or 1 for res(i)
-!        INDICATE THAT THE i-TH RESIDUAL (1.le.i.le.k) IS
-!        RESTRICTED TO BE .LE.0, UNRESTRICTED, OR .GE.0
+!        indicate that the i-TH residual (1.le.i.le.k) is
+!        restricted to be .LE.0, unrestricted, or .GE.0
 !        respectively.
 ! Error  on exit, this gives the minimum sum of
 !        absolute values of the residuals.
@@ -3491,7 +3491,7 @@ integer :: i, j, jp, k, kj, nn
 real :: ajj, sav, ss, y
 !***********************************************************************
 !      Identification
-!        ortho - orthogonal transformation of a given general m by n
+!        ortho - Orthogonal transformation of a given general m by n
 !                matrix A to upper triangular form
 !        Fortran subroutine subprogram
 !        aerospace research laboratories
@@ -3499,9 +3499,9 @@ real :: ajj, sav, ss, y
 !      purpose
 !        ortho computes an implicit orthogonal matrix Q and an explicit
 !        upper triangular matrix R and a permutation matrix P satisfying
-!        qr = PA GIVEN AN m BY n REAL MATRIX A.  ORTHO IS INTENDED FOR
+!        qr = PA given an m by n real matrix A.  ortho is intended for
 !        use with the subroutine orsol to produce the least squares
-!        SOLUTION OF THE EQUATION AX = B.
+!        solution of the equation AX = B.
 !      Control
 !
 !        dimension qr(ms,n), s(n), ip(n)
@@ -3517,16 +3517,16 @@ real :: ajj, sav, ss, y
 !             (1 .LT. n .LE. m).
 !        QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
 !        QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
-!             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
+!             qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
 !             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
-!        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
+!        ip   is an integer output array containing in ip(i), i=1,...,n,
 !             the images of the permutation corresponding to the PERMU-
 !             TATION matrix P.
-!        Exit is set to the value .True. If the rank of A is equal to n
-!             and .False. Otherwise.
+!        Exit is set to the value .TRUE. if the rank of A is equal to n
+!             and .FALSE. otherwise.
 !      Method
 !        the matrix A in the array qr is reduced to upper triangular
 !        form using orthogonal transformation with partial pivoting.
@@ -3601,7 +3601,7 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 real :: sav, ss, y
 !***********************************************************************
 !      Identification
-!        orsol - least squares solution of a linear system given an
+!        orsol - Least squares solution of a linear system given an
 !                orthogonal-triangular factorization of the coefficient
 !                matrix produced by subroutine ortho
 !        Fortran subroutine subprogram
@@ -3609,7 +3609,7 @@ real :: sav, ss, y
 !        wright-patterson afb, ohio  45433
 !      purpose
 !        orsol computes the least squares solution of the linear system
-!        QRX = PAX = B WHERE Q, R, AND P ARE DETERMINED FROM A BY ORTHO.
+!        QRX = Pax = B where Q, R, and P are determined from a by ortho.
 !      Control
 !
 !        dimension qr(ms,n), s(n), ip(n), x(m)
@@ -3630,13 +3630,13 @@ real :: sav, ss, y
 !           ortho.
 !        ip is an integer input array, the permutation information
 !           produced by ortho.
-!        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
-!        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
-!           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
+!        x  as a real input array is the right-hand side B of AX = B.
+!        x  as a real output array is x(i), i = 1, ..., n, the least
+!           squares solution, and x(j), j = n+1, ..., m, the vector
 !           whose length is the minimum of all residual B - AX.
 !      Method
-!        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
-!        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
+!        the factored system QRX = Pax = PB are solved in the sequence
+!        of QY = PB and RX = y. full rank for the matrix A is assumed
 !        which can be checked by interrogating the logical output
 !        variable produced by ortho.
 !      References
@@ -3699,7 +3699,7 @@ real :: spmpar
 ! ----------------------------------------------------------------------
 !      Purpose
 !        given an approximate least squares solution x of a linear
-!        SYSTEM AX = b OBTAINED USING orsol. orimp ATTEMPTS TO COMPUTE
+!        system AX = b obtained using orsol. orimp attempts to compute
 !        an improved solution correct to machine precision.
 !
 !      Control
@@ -3718,7 +3718,7 @@ real :: spmpar
 !        A    IS A REAL INPUT ARRAY, THE GIVEN m BY n MATRIX.
 !        QR   IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR
 !             factors of a produced by ortho.
-!        b    IS A REAL INPUT ARRAY, THE RIGHT HAND SIDE OF AX = b.
+!        b    is a real input array, the right hand side of AX = b.
 !        x    AS A REAL INPUT ARRAY IS THE APPROXIMATE LEAST SQUARES
 !             solution together with the residual information produced
 !             BY orsol.
@@ -3733,9 +3733,9 @@ real :: spmpar
 !             ortho.
 !        ip   IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
 !             produced by ortho.
-!        Exit is set to the value .True. If improvement of x is success-
+!        Exit is set to the value .TRUE. if improvement of x is success-
 !             ful with a gain in accuracy of at least 50 per cent each
-!             iteration and .False. Otherwise.
+!             iteration and .FALSE. otherwise.
 !
 !      Method
 !        orimp executes the iteration cycle
@@ -3752,9 +3752,9 @@ logical, intent(out) :: exit
 double precision :: dsum
 data zero/0.0/, one/1.0/, four/4.0/, fourth/0.25/
 !
-!     ********** eps IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
+!     ********** eps is a machine dependent parameter. Assign eps
 !                the value U where U is the smallest positive floating
-!                POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0.
+!                point number such that 1.0 + U .GT. 1.0.
 !
 eps = spmpar(1)
 !
@@ -3843,7 +3843,7 @@ integer, intent(in) :: m, ms, n
 integer :: i, j, jp, k, kj, nn
 !***********************************************************************
 !      Identification
-!        dortho - orthogonal transformation of a given general m by n
+!        dortho - Orthogonal transformation of a given general m by n
 !                matrix A to upper triangular form
 !        Fortran subroutine subprogram
 !        aerospace research laboratories
@@ -3851,9 +3851,9 @@ integer :: i, j, jp, k, kj, nn
 !      purpose
 !        dortho computes an implicit orthogonal matrix Q and an explicit
 !        upper triangular matrix R and a permutation matrix P satisfying
-!        qr = PA GIVEN AN m BY n REAL MATRIX A.  dortho IS INTENDED FOR
+!        qr = PA given an m by n real matrix A.  dortho is intended for
 !        use with the subroutine dorsol to produce the least squares
-!        SOLUTION OF THE EQUATION AX = B.
+!        solution of the equation AX = B.
 !      Control
 !
 !        dimension qr(ms,n), s(n), ip(n)
@@ -3869,16 +3869,16 @@ integer :: i, j, jp, k, kj, nn
 !             (1 .LT. n .LE. m).
 !        QR   AS A REAL INPUT ARRAY IS MATRIX A TO BE TRIANGULARIZED.
 !        QR   AS A REAL OUTPUT ARRAY IS THE UPPER TRIANGULAR FACTOR R IN
-!             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
+!             qr(i,j), i .LE. j, and the relevant parts of Q in qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
 !             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
-!        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
+!        ip   is an integer output array containing in ip(i), i=1,...,n,
 !             the images of the permutation corresponding to the PERMU-
 !             TATION matrix P.
-!        Exit is set to the value .True. If the rank of A is equal to n
-!             and .False. Otherwise.
+!        Exit is set to the value .TRUE. if the rank of A is equal to n
+!             and .FALSE. otherwise.
 !      Method
 !        the matrix A in the array qr is reduced to upper triangular
 !        form using orthogonal transformation with partial pivoting.
@@ -3951,7 +3951,7 @@ integer, intent(in) :: m, ms, n
 integer :: i, ij, j, jp, k, ni, nm, nn
 !***********************************************************************
 !      Identification
-!        dorsol - least squares solution of a linear system given an
+!        dorsol - Least squares solution of a linear system given an
 !                orthogonal-triangular factorization of the coefficient
 !                matrix produced by subroutine dortho
 !        Fortran subroutine subprogram
@@ -3959,7 +3959,7 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !        wright-patterson afb, ohio  45433
 !      purpose
 !        dorsol computes the least squares solution of the linear system
-!        QRX = PAX = B WHERE Q, R, AND P ARE DETERMINED FROM A BY dortho
+!        QRX = Pax = B where Q, R, and P are determined from a by dortho
 !      control
 !
 !        dimension qr(ms,n), s(n), ip(n), x(m)
@@ -3980,13 +3980,13 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !           dortho.
 !        ip is an integer input array, the permutation information
 !           produced by dortho.
-!        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
-!        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
-!           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
+!        x  as a real input array is the right-hand side B of AX = B.
+!        x  as a real output array is x(i), i = 1, ..., n, the least
+!           squares solution, and x(j), j = n+1, ..., m, the vector
 !           whose length is the minimum of all residual B - AX.
 !      Method
-!        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
-!        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
+!        the factored system QRX = Pax = PB are solved in the sequence
+!        of QY = PB and RX = y. full rank for the matrix A is assumed
 !        which can be checked by interrogating the logical output
 !        variable produced by dortho.
 !      References
@@ -4055,11 +4055,11 @@ real :: spmpar
 !                            --------------
 !
 !     lsqr solves both underdetermined and overdetermined linear
-!     SYSTEMS AX = b, WHERE A IS AN m BY n MATRIX AND b IS AN m BY
-!     nb MATRIX OF RIGHT HAND SIDES. IF m .GE. n, THE LEAST SQUARES
+!     systems AX = b, where A is an m by n matrix and b is an m by
+!     nb matrix of right hand sides. If m .GE. n, the least squares
 !     solution is computed by decomposing the matrix a into the
 !     product of an orthogonal matrix Q and upper triangular matrix
-!     R (QR FACTORIZATION). IF m .LT. n, THE MINIMAL LENGTH SOLUTION
+!     R (QR factorization). If m .LT. n, the minimal length solution
 !     is computed by factoring the matrix a into the product of a
 !     lower triangular matrix L and orthogonal matrix Q (LQ factor-
 !     ization). If the matrix a is determined to be rank deficient,
@@ -4080,8 +4080,8 @@ real :: spmpar
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
 !                   called for the first time.
-!                      ind = 0      ORIGINAL CALL
-!                      ind .NE. 0   SUBSEQUENT CALLS
+!                      ind = 0      Original call
+!                      ind .NE. 0   subsequent calls
 !                   on subsequent calls a new set b of equations can
 !                   be solved (using the same coefficient matrix a).
 !                   It is assumed that A, mda, m, n, krank, iwork,
@@ -4089,23 +4089,23 @@ real :: spmpar
 !                   have not been modified by the user. re, ae, and
 !                   ksure are not used.
 !
-!     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
+!     a(,)          linear coefficient matrix of AX=b, with mda the
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
 !                   m is the row dimension (no. of equations of the
 !                   problem) and n the col dimension (no. of unknowns).
-!                   MUST HAVE mda .GE. m.
+!                   Must have mda .GE. m.
 !
 !     b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
 !      MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
 !                   number of m by 1 right hand sides. Must have
-!                   mdb .GE. max(m,n). IF nb .LE. 0 THEN b AND MDB
+!                   mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
 !                   are ignored.
 !
 !     re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
-!                   ELEMENTS OF THE MATRIX a (0 .le. re .LT. 1).
+!                   elements of the matrix a (0 .le. re .LT. 1).
 !
 !     ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
-!                   ELEMENTS OF THE MATRIX a (ae .GE. 0).
+!                   elements of the matrix a (ae .GE. 0).
 !
 !     work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
 !
@@ -4138,15 +4138,15 @@ real :: spmpar
 !                   factorization of A.
 !
 !     iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
-!                   WHICH THE ROWS AND COLUMNS WERE USED. IF m .GE. n
+!                   which the rows and columns were used. If m .GE. n
 !                   then the first n locations contain the order of
 !                   the columns and the next m locations the order of
-!                   THE ROWS. IF m .LT. n THEN THE ORDER OF THE ROWS
+!                   the rows. If m .LT. n then the order of the rows
 !                   precedes the order of the columns.
 !
 !     ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
-!                     0     - SATISFACTORY COMPLETION
-!                   .GT. 0  - INPUT ERROR
+!                     0     - Satisfactory completion
+!                   .GT. 0  - Input error
 !
 !----------------
 !     The subroutines u11ls, u12ls, u11us, and u12us were written by
@@ -4160,15 +4160,15 @@ real :: spmpar
 real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
 !----------------
-!     np            IF m .GE. n THEN THE FIRST np COLUMNS OF A
+!     np            if m .GE. n then the first np columns of A
 !                   are never interchanged.
-!                   IF m .LT. n THEN THE FIRST np ROWS OF A ARE
+!                   If m .LT. n then the first np rows of A are
 !                   never interchanged. np is not referenced on
 !                   a continuation call to the routine.
 !
 !     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
 !                   is to react if rank deficiency is detected.
-!                   IF mode = 0 RETURN IMMEDIATELY, NO SOLUTION
+!                   If mode = 0 Return immediately, no solution
 !                             1 compute truncated solution
 !                             2 compute minimal length solution
 !                   mode must not be modified on a continuation
@@ -4272,7 +4272,7 @@ return
 !
 !     Error return
 !
-!                             nb .LE. 0  ON A CONTINUATION CALL
+!                             nb .LE. 0  on a continuation call
 200 ierr = 7
 return
 !                             m .LT. 1 OR n .LT. 1
@@ -4387,7 +4387,7 @@ jm1 = j - 1
 kz = krank
 if (j .le. np) kz = j
 !
-!        EACH COL HAS MM=m-j+1 COMPONENTS
+!        Each col has MM=m-j+1 components
 !
 mm = m - j + 1
 !
@@ -4536,7 +4536,7 @@ do i = 1,krank
    ksure = ksure + 1
 end do
 !
-!     IF SYSTEM IS OF REDUCED RANK AND mode = 2
+!     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. n .or. mode .lt. 2) return
@@ -4583,11 +4583,11 @@ real :: snrm2
 real :: sdot
 !
 !        Given the Householder QR factorization of A, this
-!        SUBROUTINE SOLVES THE SYSTEM AX=b. IF THE SYSTEM
+!        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
 !        according to the selected mode.
 !
-!       NOTE - IF mode.NE.2, w IS NEVER ACCESSED.
+!       Note - If mode.NE.2, w is never accessed.
 !
 integer, intent(inout) :: ic(n), ir(m)
 !
@@ -4652,7 +4652,7 @@ do j = 1,k
    a(j,j) = tt
 end do
 !
-!        Find norms of residual VECTOR(S)..(before overwrite b)
+!        Find norms of residual vector(S)..(before overwrite b)
 !
 do jb = 1,nb
    rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
@@ -4809,7 +4809,7 @@ jm1 = j - 1
 kz = krank
 if (j .le. np) kz = j
 !
-!        EACH ROW HAS NN=n-j+1 COMPONENTS
+!        Each row has NN=n-j+1 components
 !
 nn = n - j + 1
 !
@@ -4958,7 +4958,7 @@ do i = 1,krank
    ksure = ksure + 1
 end do
 !
-!     IF SYSTEM IS OF REDUCED RANK AND mode = 2
+!     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. m .or. mode .lt. 2) return
@@ -5005,11 +5005,11 @@ real :: snrm2
 real :: sdot
 !
 !        Given the Householder LQ factorization of A, this
-!        SUBROUTINE SOLVES THE SYSTEM AX=b. IF THE SYSTEM
+!        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
 !        according to the selected mode.
 !
-!       NOTE - IF mode.NE.2, w IS NEVER ACCESSED.
+!       Note - If mode.NE.2, w is never accessed.
 !
 integer, intent(inout) :: ic(n), ir(m)
 !
@@ -5062,7 +5062,7 @@ return
    ir(i) = iabs(ir(i))
 end do
 !
-!     IF A IS OF REDUCED RANK AND mode=2,
+!     If A is of reduced rank and mode=2,
 !     apply Householder transformations to b
 !
 if (mode .lt. 2 .or. k .eq. m) go to 140
@@ -5077,7 +5077,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     Find norms of residual VECTOR(S)..(before overwrite b)
+!     Find norms of residual vector(S)..(before overwrite b)
 !
 140 do jb = 1,nb
    rnorm(jb) = snrm2(m-k,b(kp1,jb),1)
@@ -5155,11 +5155,11 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                            --------------
 !
 !     dlsqr solves both underdetermined and overdetermined linear
-!     SYSTEMS AX = b, WHERE A IS AN m BY n MATRIX AND b IS AN m BY
-!     nb MATRIX OF RIGHT HAND SIDES. IF m .GE. n, THE LEAST SQUARES
+!     systems AX = b, where A is an m by n matrix and b is an m by
+!     nb matrix of right hand sides. If m .GE. n, the least squares
 !     solution is computed by decomposing the matrix a into the
 !     product of an orthogonal matrix Q and upper triangular matrix
-!     R (QR FACTORIZATION). IF m .LT. n, THE MINIMAL LENGTH SOLUTION
+!     R (QR factorization). If m .LT. n, the minimal length solution
 !     is computed by factoring the matrix a into the product of a
 !     lower triangular matrix L and orthogonal matrix Q (LQ factor-
 !     ization). If the matrix a is determined to be rank deficient,
@@ -5180,8 +5180,8 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
 !                   called for the first time.
-!                      ind = 0      ORIGINAL CALL
-!                      ind .NE. 0   SUBSEQUENT CALLS
+!                      ind = 0      Original call
+!                      ind .NE. 0   subsequent calls
 !                   on subsequent calls a new set b of equations can
 !                   be solved (using the same coefficient matrix a).
 !                   It is assumed that A, mda, m, n, krank, iwork,
@@ -5189,23 +5189,23 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                   have not been modified by the user. re, ae, and
 !                   ksure are not used.
 !
-!     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
+!     a(,)          linear coefficient matrix of AX=b, with mda the
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
 !                   m is the row dimension (no. of equations of the
 !                   problem) and n the col dimension (no. of unknowns).
-!                   MUST HAVE mda .GE. m.
+!                   Must have mda .GE. m.
 !
 !     b(,)          RIGHT HAND SIDE(S), WITH MDB THE ACTUAL FIRST
 !      MDB,nb       DIMENSION OF b IN THE CALLING PROGRAM. nb IS THE
 !                   number of m by 1 right hand sides. Must have
-!                   mdb .GE. max(m,n). IF nb .LE. 0 THEN b AND MDB
+!                   mdb .GE. max(m,n). If nb .LE. 0 then b and mdb
 !                   are ignored.
 !
 !     re            re IS THE MAXIMUM RELATIVE UNCERTAINTY OF THE
-!                   ELEMENTS OF THE MATRIX a (0 .le. re .LT. 1).
+!                   elements of the matrix a (0 .le. re .LT. 1).
 !
 !     ae            ae IS THE MAXIMUM ABSOLUTE UNCERTAINTY OF THE
-!                   ELEMENTS OF THE MATRIX a (ae .GE. 0).
+!                   elements of the matrix a (ae .GE. 0).
 !
 !     work()        A REAL WORK ARRAY DIMENSIONED 5*min(m,n).
 !
@@ -5238,15 +5238,15 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                   factorization of A.
 !
 !     iwork()       AN ARRAY OF LENGTH m + n CONTAINING THE ORDERS IN
-!                   WHICH THE ROWS AND COLUMNS WERE USED. IF m .GE. n
+!                   which the rows and columns were used. If m .GE. n
 !                   then the first n locations contain the order of
 !                   the columns and the next m locations the order of
-!                   THE ROWS. IF m .LT. n THEN THE ORDER OF THE ROWS
+!                   the rows. If m .LT. n then the order of the rows
 !                   precedes the order of the columns.
 !
 !     ierr          FLAG TO INDICATE THE STATUS OF THE RESULTS
-!                     0     - SATISFACTORY COMPLETION
-!                   .GT. 0  - INPUT ERROR
+!                     0     - Satisfactory completion
+!                   .GT. 0  - Input error
 !
 !----------------
 !     The subroutines du11ls, du12ls, du11us, and du12us were written by
@@ -5264,15 +5264,15 @@ integer, intent(inout) :: iwork(liw)
 double precision :: eps, rerr
 double precision :: dpmpar
 !----------------
-!     np            IF m .GE. n THEN THE FIRST np COLUMNS OF A
+!     np            if m .GE. n then the first np columns of A
 !                   are never interchanged.
-!                   IF m .LT. n THEN THE FIRST np ROWS OF A ARE
+!                   If m .LT. n then the first np rows of A are
 !                   never interchanged. np is not referenced on
 !                   a continuation call to the routine.
 !
 !     MODE          THE INTEGER MODE INDICATES HOW THE ROUTINE
 !                   is to react if rank deficiency is detected.
-!                   IF mode = 0 RETURN IMMEDIATELY, NO SOLUTION
+!                   If mode = 0 Return immediately, no solution
 !                             1 compute truncated solution
 !                             2 compute minimal length solution
 !                   mode must not be modified on a continuation
@@ -5376,7 +5376,7 @@ return
 !
 !     Error return
 !
-!                             nb .LE. 0  ON A CONTINUATION CALL
+!                             nb .LE. 0  on a continuation call
 200 ierr = 7
 return
 !                             m .LT. 1 OR n .LT. 1
@@ -5491,7 +5491,7 @@ jm1 = j - 1
 kz = krank
 if (j .le. np) kz = j
 !
-!        EACH COL HAS MM=m-j+1 COMPONENTS
+!        Each col has MM=m-j+1 components
 !
 mm = m - j + 1
 !
@@ -5640,7 +5640,7 @@ do i = 1,krank
    ksure = ksure + 1
 end do
 !
-!     IF SYSTEM IS OF REDUCED RANK AND mode = 2
+!     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. n .or. mode .lt. 2) return
@@ -5680,11 +5680,11 @@ integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 integer :: i, ij, im1, j, jb, k, kp1, nmk
 !
 !        Given the Householder QR factorization of A, this
-!        SUBROUTINE SOLVES THE SYSTEM AX=b. IF THE SYSTEM
+!        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
 !        according to the selected mode.
 !
-!       NOTE - IF mode.NE.2, w IS NEVER ACCESSED.
+!       Note - If mode.NE.2, w is never accessed.
 !
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
 double precision, intent(in) :: h(n), w(n)
@@ -5753,7 +5753,7 @@ do j = 1,k
    a(j,j) = tt
 end do
 !
-!        Find norms of residual VECTOR(S)..(before overwrite b)
+!        Find norms of residual vector(S)..(before overwrite b)
 !
 do jb = 1,nb
    rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
@@ -5910,7 +5910,7 @@ jm1 = j - 1
 kz = krank
 if (j .le. np) kz = j
 !
-!        EACH ROW HAS NN=n-j+1 COMPONENTS
+!        Each row has NN=n-j+1 components
 !
 nn = n - j + 1
 !
@@ -6059,7 +6059,7 @@ do i = 1,krank
    ksure = ksure + 1
 end do
 !
-!     IF SYSTEM IS OF REDUCED RANK AND mode = 2
+!     If system is of reduced rank and mode = 2
 !     complete the decomposition for shortest least squares solution
 !
 330 if (krank .eq. m .or. mode .lt. 2) return
@@ -6099,11 +6099,11 @@ integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
 !
 !        Given the Householder LQ factorization of A, this
-!        SUBROUTINE SOLVES THE SYSTEM AX=b. IF THE SYSTEM
+!        subroutine solves the system AX=b. if the system
 !        is of reduced rank, this routine returns a solution
 !        according to the selected mode.
 !
-!       NOTE - IF mode.NE.2, w IS NEVER ACCESSED.
+!       Note - If mode.NE.2, w is never accessed.
 !
 double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
 double precision, intent(in) :: h(m), w(m)
@@ -6160,7 +6160,7 @@ return
    ir(i) = iabs(ir(i))
 end do
 !
-!     IF A IS OF REDUCED RANK AND mode=2,
+!     If A is of reduced rank and mode=2,
 !     apply Householder transformations to b
 !
 if (mode .lt. 2 .or. k .eq. m) go to 140
@@ -6175,7 +6175,7 @@ do jb = 1,nb
    end do
 end do
 !
-!     Find norms of residual VECTOR(S)..(before overwrite b)
+!     Find norms of residual vector(S)..(before overwrite b)
 !
 140 do jb = 1,nb
    rnorm(jb) = dnrm2(m-k,b(kp1,jb),1)
@@ -6301,27 +6301,27 @@ real :: factor, hmax, sm1, tmp, z
 !     Input..
 !
 !     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       MATRIX a OF THE LEAST SQUARES PROBLEM AX = b.
+!                       matrix a of the least squares problem AX = b.
 !                       The first dimensioning parameter of the array
-!                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
-!                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
 !                       is no restriction on the rank of A.  the
-!                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
+!                       condition mda.LT.m is considered an error.
 !
-!     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
 !                       orthogonal decomposition but will make no
-!                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
+!                       references to the array b(*).  If nb.GT.0
 !                       the array b(*) must initially contain the m by
-!                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
-!                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
 !                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
 !                       be either doubly or singly subscripted.  In
 !                       the latter case the value of mdb is arbitrary
 !                       but it should be set to some valid integer
-!                       VALUE SUCH AS mdb = m.
+!                       value such as mdb = m.
 !
-!                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
 !                       is considered an error.
 !
 !     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
@@ -6425,7 +6425,7 @@ if (nb .le. 0) go to 140
 120 tmp = tmp + b(i,jb)**2
 130 rnorm(jb) = sqrt(tmp)
 140 continue
-!                                           SPECIAL FOR PSEUDORANK = 0
+!                                           Special for pseudorank = 0
 if (k .gt. 0) go to 160
 if (nb .le. 0) go to 270
     do jb = 1,nb
@@ -6554,27 +6554,27 @@ real :: factor, hmax, sm1, tmp, z
 !     Input..
 !
 !     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       MATRIX a OF THE LEAST SQUARES PROBLEM AX = b.
+!                       matrix a of the least squares problem AX = b.
 !                       The first dimensioning parameter of the array
-!                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
-!                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
 !                       is no restriction on the rank of A.  the
-!                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
+!                       condition mda.LT.m is considered an error.
 !
-!     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
 !                       orthogonal decomposition but will make no
-!                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
+!                       references to the array b(*).  If nb.GT.0
 !                       the array b(*) must initially contain the m by
-!                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
-!                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
 !                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
 !                       be either doubly or singly subscripted.  In
 !                       the latter case the value of mdb is arbitrary
 !                       but it should be set to some valid integer
-!                       VALUE SUCH AS mdb = m.
+!                       value such as mdb = m.
 !
-!                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
 !                       is considered an error.
 !
 !     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
@@ -6615,7 +6615,7 @@ real :: factor, hmax, sm1, tmp, z
 !     ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
 !                       detected then ierr is set to 0. Otherwise
 !                          ierr = 1  IF mda.LT.m
-!                          ierr = 2  IF nb.GT.1 AND mdb.LT.max(m,n)
+!                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
 !                       these errors are fatal.
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ip(n)
@@ -6695,7 +6695,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 120 tmp = tmp + b(i,jb)**2
 130 rnorm(jb) = sqrt(tmp)
 140 continue
-!                                           SPECIAL FOR PSEUDORANK = 0
+!                                           Special for pseudorank = 0
 if (k .gt. 0) go to 160
 if (nb .le. 0) go to 270
     do jb = 1,nb
@@ -6775,11 +6775,11 @@ real :: cl, d, sm1
 !     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
-!     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
+!     Householder transformation..     Q = i + u*(u**T)/b
 !
-!     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
 !     lpivot is the index of the pivot element.
-!     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
 !            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
@@ -6795,7 +6795,7 @@ real :: cl, d, sm1
 !            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
-!     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
 !            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision :: sm, b
@@ -6804,7 +6804,7 @@ if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
 cl = abs(u(1,lpivot))
 if (mode .eq. 2) go to 60
 !
-!                            ****** CONSTRUCT THE TRANSFORMATION. ******
+!                            ****** Construct the transformation. ******
 !
     do 10 j = l1,m
 10 cl = amax1(abs(u(1,j)),cl)
@@ -6822,13 +6822,13 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !
-!            ****** APPLY THE TRANSFORMATION  i+u*(u**T)/b  TO c. ******
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
 !
 60 if (cl) 130,130,70
 70 if (ncv .le. 0) return
 b = dble(up)*dble(u(1,lpivot))
 !
-!                       b  MUST BE NONPOSITIVE HERE.  IF b = 0., RETURN.
+!                       b  must be nonpositive here.  If b = 0., Return.
 !
 if (b .ge. 0.d0) go to 130
 b = 1.d0/b
@@ -6914,27 +6914,27 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Input..
 !
 !     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       MATRIX a OF THE LEAST SQUARES PROBLEM AX = b.
+!                       matrix a of the least squares problem AX = b.
 !                       The first dimensioning parameter of the array
-!                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
-!                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
 !                       is no restriction on the rank of A.  the
-!                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
+!                       condition mda.LT.m is considered an error.
 !
-!     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
 !                       orthogonal decomposition but will make no
-!                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
+!                       references to the array b(*).  If nb.GT.0
 !                       the array b(*) must initially contain the m by
-!                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
-!                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
 !                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
 !                       be either doubly or singly subscripted.  In
 !                       the latter case the value of mdb is arbitrary
 !                       but it should be set to some valid integer
-!                       VALUE SUCH AS mdb = m.
+!                       value such as mdb = m.
 !
-!                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
 !                       is considered an error.
 !
 !     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
@@ -7041,7 +7041,7 @@ if (nb .le. 0) go to 140
 120 tmp = tmp + b(i,jb)**2
 130 rnorm(jb) = dsqrt(tmp)
 140 continue
-!                                           SPECIAL FOR PSEUDORANK = 0
+!                                           Special for pseudorank = 0
 if (k .gt. 0) go to 160
 if (nb .le. 0) go to 270
     do jb = 1,nb
@@ -7167,27 +7167,27 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Input..
 !
 !     a(*,*),mda,m,n    THE ARRAY a(*,*) INITIALLY CONTAINS THE m BY n
-!                       MATRIX a OF THE LEAST SQUARES PROBLEM AX = b.
+!                       matrix a of the least squares problem AX = b.
 !                       The first dimensioning parameter of the array
-!                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
-!                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
+!                       a(*,*) is mda, which must satisfy mda.GE.m
+!                       either m.GE.n or m.LT.n is permitted.  There
 !                       is no restriction on the rank of A.  the
-!                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
+!                       condition mda.LT.m is considered an error.
 !
-!     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
+!     b(*),mdb,nb       if nb = 0 The subroutine will perform the
 !                       orthogonal decomposition but will make no
-!                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
+!                       references to the array b(*).  If nb.GT.0
 !                       the array b(*) must initially contain the m by
-!                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
-!                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
+!                       nb matrix b of the least squares problem AX =
+!                       b.  if nb.GE.2 the array b(*) must be doubly
 !                       subscripted with first dimensioning parameter
-!                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
+!                       mdb.GE.max(m,n).  If nb = 1 The array b(*) may
 !                       be either doubly or singly subscripted.  In
 !                       the latter case the value of mdb is arbitrary
 !                       but it should be set to some valid integer
-!                       VALUE SUCH AS mdb = m.
+!                       value such as mdb = m.
 !
-!                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
+!                       The condition of nb.GT.1.AND.mdb.LT. max(m,n)
 !                       is considered an error.
 !
 !     tau               ABSOLUTE TOLERANCE PARAMETER PROVIDED BY USER
@@ -7228,7 +7228,7 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     ierr              ERROR INDICATOR. IF NO INPUT ERRORS ARE
 !                       detected then ierr is set to 0. Otherwise
 !                          ierr = 1  IF mda.LT.m
-!                          ierr = 2  IF nb.GT.1 AND mdb.LT.max(m,n)
+!                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
 !                       these errors are fatal.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
@@ -7311,7 +7311,7 @@ if (nb .gt. 1 .and. max0(m,n) .gt. mdb) go to 310
 120 tmp = tmp + b(i,jb)**2
 130 rnorm(jb) = dsqrt(tmp)
 140 continue
-!                                           SPECIAL FOR PSEUDORANK = 0
+!                                           Special for pseudorank = 0
 if (k .gt. 0) go to 160
 if (nb .le. 0) go to 270
     do jb = 1,nb
@@ -7389,11 +7389,11 @@ integer :: i, i2, i3, i4, incr, j
 !     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
-!     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
+!     Householder transformation..     Q = i + u*(u**T)/b
 !
-!     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
+!     mode    = 1 Or 2   to select algorithm  H1  or  H2 .
 !     lpivot is the index of the pivot element.
-!     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
+!     l1,m   if l1 .LE. m   the transformation will be constructed to
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
 !            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
@@ -7409,7 +7409,7 @@ integer :: i, i2, i3, i4, incr, j
 !            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
-!     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
+!     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
 !            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: u(iue,m), up, c(*)
@@ -7419,7 +7419,7 @@ if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
 cl = dabs(u(1,lpivot))
 if (mode .eq. 2) go to 60
 !
-!                            ****** CONSTRUCT THE TRANSFORMATION. ******
+!                            ****** Construct the transformation. ******
 !
     do 10 j = l1,m
 10 cl = dmax1(dabs(u(1,j)),cl)
@@ -7436,13 +7436,13 @@ up = u(1,lpivot) - cl
 u(1,lpivot) = cl
 go to 70
 !
-!            ****** APPLY THE TRANSFORMATION  i+u*(u**T)/b  TO c. ******
+!            ****** Apply the transformation  i+u*(u**T)/b  to c. ******
 !
 60 if (cl) 130,130,70
 70 if (ncv .le. 0) return
 b = up*u(1,lpivot)
 !
-!                       b  MUST BE NONPOSITIVE HERE.  IF b = 0., RETURN.
+!                       b  must be nonpositive here.  If b = 0., Return.
 !
 if (b .ge. 0.d0) go to 130
 b = 1.d0/b
@@ -7504,25 +7504,25 @@ real :: spmpar
 !     respective lengths me, ma and mg.  This subroutine solves the
 !     linearly constrained least squares problem
 !
-!                   EX = F, (E ME BY n) (EQUATIONS TO BE EXACTLY
+!                   EX = F, (E me by n) (equations to be exactly
 !                                       satisfied)
-!                   AX = B, (A ma BY n) (EQUATIONS TO BE
+!                   AX = B, (A ma by n) (equations to be
 !                                       approximately satisfied,
 !                                       least squares sense)
-!                   GX.GE.H,(G mg BY n) (INEQUALITY CONSTRAINTS)
+!                   GX.GE.H,(G mg by n) (inequality constraints)
 !
-!     THE INEQUALITIES GX.GE.H MEAN THAT EVERY COMPONENT OF THE PRODUCT
-!     GX MUST BE .GE. THE CORRESPONDING COMPONENT OF H.
+!     The inequalities GX.GE.H mean that every component of the product
+!     GX must be .GE. the corresponding component of H.
 !
 !     In case the equality constraints cannot be satisfied, A
 !     generalized inverse solution residual vector LENGTH is obtained
 !     for F-EX. This is the minimal length possible for F-EX.
 !
 !
-!     ANY VALUES me.GE.0, ma.GE.0, OR mg.GE.0 ARE PERMITTED.  THE
+!     Any values me.GE.0, ma.GE.0, or mg.GE.0 are permitted.  The
 !     rank of the matrix E is estimated during the computation. We call
 !     this value kranke. It is an output parameter in ip(1) defined
-!     BELOW. USING A GENERALIZED INVERSE SOLUTION OF EX=F, A REDUCED
+!     below. Using a generalized inverse solution of EX=F, a reduced
 !     least squares problem with inequality constraints is obtained.
 !     The tolerances used in these tests for determining the rank
 !     of E and the rank of the reduced least squares problem are
@@ -7532,7 +7532,7 @@ real :: spmpar
 !
 !     The user must dimension all arrays appearing in the call list..
 !     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
-!     WHERE k=max(ma+mg,n).  THIS ALLOWS FOR A SOLUTION OF A RANGE OF
+!     where k=max(ma+mg,n).  This allows for a solution of a range of
 !     problems in the given working space.  The dimension of ws(*)
 !     given is a necessary overestimate.  Once a particular problem
 !     has been run, the output parameter ip(3) gives the actual
@@ -7544,9 +7544,9 @@ real :: spmpar
 !
 !     w(*,*),mdw,   THE ARRAY w(*,*) IS DOUBLY SUBSCRIPTED WITH
 !     ME,ma,mg,n    FIRST DIMENSIONING PARAMETER EQUAL TO mdw.
-!                   FOR THIS DISCUSSION LET US CALL M = me+ma+mg.  THEN
-!                   mdw MUST SATISFY mdw.GE.M.  THE CONDITION
-!                   mdw.LT.M IS AN ERROR.
+!                   For this discussion let us call M = me+ma+mg.  Then
+!                   mdw must satisfy mdw.GE.M.  the condition
+!                   mdw.LT.M is an error.
 !
 !                   The array w(*,*) contains the matrices and vectors
 !
@@ -7581,7 +7581,7 @@ real :: spmpar
 !                  entry of the next group of data within
 !                  prgopt(*).  The exception is when there are
 !                  no more options to change.  In that
-!                  CASE LINK=1 AND THE VALUES KEY AND DATA SET
+!                  case link=1 And the values key and data set
 !                  are not referenced. The general layout of
 !                  prgopt(*) is as follows.
 !
@@ -7591,17 +7591,17 @@ real :: spmpar
 !               .       .
 !               .       .
 !               .       .
-!               ...prgopt(LINK1)=LINK2 (LINK TO THE FIRST ENTRY OF
+!               ...prgopt(LINK1)=LINK2 (link to the first entry of
 !               .                       NEXT GROUP)
 !               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
-!               .  prgopt(LINK1+2)=DATA VALUE
+!               .  prgopt(LINK1+2)=Data value
 !               ...     .
 !               .       .
 !               .       .
 !               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
 !
 !                  Values of link that are nonpositive are errors.
-!                  A VALUE OF LINK.GT.NLINK=100000 IS ALSO AN ERROR.
+!                  A value of link.GT.NLINK=100000 Is also an error.
 !                  This helps prevent using invalid but positive
 !                  values of link that will probably extend
 !                  beyond the program limits of prgopt(*).
@@ -7611,7 +7611,7 @@ real :: spmpar
 !                  restriction.  To prevent cycling in the
 !                  processing of the option array A count of the
 !                  number of options changed is maintained.
-!                  WHENEVER THIS COUNT EXCEEDS NOPT=1000 THE
+!                  Whenever this count exceeds NOPT=1000 The
 !                  routine terminates.
 !
 !                  Options..
@@ -7627,7 +7627,7 @@ real :: spmpar
 !                  is desired.  If it is zero, the covariance
 !                  matrix is not computed.  When the covariance matrix
 !                  is computed, the first dimensioning parameter
-!                  OF THE ARRAY w(*,*) MUST SATISFY mdw.GE.MAX0(M,n).
+!                  of the array w(*,*) must satisfy mdw.GE.MAX0(M,n).
 !
 !                  key=2
 !                         scale the nonzero columns of the
@@ -7658,8 +7658,8 @@ real :: spmpar
 !                  the nominal value of sqrt(SRELPR).  This quantity
 !                  can be no smaller than SRELPR, the arithmetic-
 !                  storage precision.  The quantity SRELPR is the
-!                  LARGEST POSITIVE NUMBER SUCH THAT T=1.+SRELPR
-!                  SATISFIES T.EQ.1.  THE QUANTITY USED
+!                  largest positive number such that T=1.+SRELPR
+!                  satisfies T.EQ.1.  the quantity used
 !                  here is internally restricted to be at
 !                  least SRELPR.  The data set for this option
 !                  is the new tolerance.
@@ -7689,7 +7689,7 @@ real :: spmpar
 !
 !                  prgopt(4)=7 (LINK TO ENTRY 7 IN prgopt(*))
 !                  prgopt(5)=5 (LEAST SQUARES EQUAS. TOLERANCE KEY)
-!                  prgopt(6)=... (NEW VALUE OF THE TOLERANCE)
+!                  prgopt(6)=... (new value of the tolerance)
 !
 !                  prgopt(7)=n+9 (LINK TO ENTRY n+9 IN prgopt(*))
 !                  prgopt(8)=3 (USER-PROVIDED COLUMN SCALING KEY)
@@ -7710,19 +7710,19 @@ real :: spmpar
 !     Output..
 !
 !     x(*),rnorme,  the array x(*) contains the solution parameters
-!     rnorml        IF THE INTEGER OUTPUT FLAG mode = 0 OR 1.
+!     rnorml        if the integer output flag mode = 0 Or 1.
 !                   The definition of mode is given directly below.
-!                   WHEN mode = 0 OR 1, rnorme AND rnorml
+!                   When mode = 0 Or 1, rnorme and rnorml
 !                   respectively contain the residual vector
 !                   Euclidean lengths of F - EX and B - AX.  When
-!                   mode=1 THE EQUALITY CONSTRAINT EQUATIONS EX=F
-!                   ARE CONTRADICTORY, SO rnorme.NE.0. THE RESIDUAL
+!                   mode=1 The equality constraint equations EX=F
+!                   are contradictory, so rnorme.NE.0. The residual
 !                   vector F-EX has minimal Euclidean length. For
-!                   mode.GE.2, NONE OF THESE PARAMETERS ARE
+!                   mode.GE.2, none of these parameters are
 !                   defined.
 !
 !     MODE          INTEGER FLAG THAT INDICATES THE SUBPROGRAM
-!                   STATUS AFTER COMPLETION.  IF mode.GE.2, NO
+!                   status after completion.  If mode.GE.2, no
 !                   solution has been computed.
 !
 !                   mode =
@@ -7731,7 +7731,7 @@ real :: spmpar
 !                      are compatible and have been satisfied.
 !
 !                   1  Equality constraints are contradictory.
-!                      A GENERALIZED INVERSE SOLUTION OF EX=F WAS USED
+!                      A generalized inverse solution of EX=F was used
 !                      to minimize the residual vector LENGTH F-EX.
 !                      In this sense, the solution is still meaningful.
 !
@@ -7739,8 +7739,8 @@ real :: spmpar
 !                      are contradictory.
 !
 !                   4  Usage error occurred.  The value
-!                      OF mdw IS .LT. me+ma+mg, mdw IS
-!                      .LT. n AND A COVARIANCE MATRIX IS
+!                      of mdw is .LT. me+ma+mg, mdw is
+!                      .LT. n and a covariance matrix is
 !                      requested, or the option vector
 !                      prgopt(*) is not properly defined.
 !
@@ -7748,20 +7748,20 @@ real :: spmpar
 !                   covariance matrix of the solution parameters,
 !                   provided this was requested on input with
 !                   the option vector prgopt(*) and the output
-!                   FLAG IS RETURNED WITH mode = 0 OR 1.
+!                   flag is returned with mode = 0 Or 1.
 !
 !     ip(*)         THE INTEGER WORKING ARRAY HAS THREE ENTRIES
 !                   that provide rank and working array LENGTH
 !                   information after completion.
 !
-!                      ip(1) = RANK OF EQUALITY CONSTRAINT
+!                      ip(1) = Rank of equality constraint
 !                              matrix.  Define this quantity
 !                              AS kranke.
 !
-!                      ip(2) = RANK OF REDUCED LEAST SQUARES
+!                      ip(2) = Rank of reduced least squares
 !                              problem.
 !
-!                      ip(3) = THE AMOUNT OF STORAGE IN THE
+!                      ip(3) = The amount of storage in the
 !                              working array ws(*) that was
 !                              actually used by the subprogram.
 !                              The formula given above for the length
@@ -7908,7 +7908,7 @@ do 260 i = mep1,m
 !     Compute equal. Constraint equas. Residual length.
 270 rnorme = snrm2(me-kranke,w(kranke+1,np1),1)
 !
-!     MOVE REDUCED PROBLEM DATA UPWARD IF kranke.LT.ME.
+!     Move reduced problem data upward if kranke.LT.me.
 !
 if (.not.(kranke.lt.me)) go to 290
 do j=1,np1
@@ -8101,11 +8101,11 @@ real :: spmpar
 !
 !      x(*),rnorm
 !
-!              SOLUTION VECTOR(UNLESS mode=2), LENGTH OF AX-B.
+!              Solution vector(unless mode=2), length of AX-B.
 !
 !      Mode
-!              =0   INEQUALITY CONSTRAINTS ARE COMPATIBLE.
-!              =2   INEQUALITY CONSTRAINTS CONTRADICTORY.
+!              =0   Inequality constraints are compatible.
+!              =2   Inequality constraints contradictory.
 !
 !      ws(*),
 !              working storage of dimension k+n+(mg+2)*(n+7),
@@ -8317,7 +8317,7 @@ do i=1,krank
   rb = ws(l-1)*ws(k-1)
   if (.not.(rb.lt.zero)) go to 420
 !
-!     IF rb.GE.ZERO, TRANSFORMATION CAN BE REGARDED AS ZERO.
+!     If rb.GE.zero, transformation can be regarded as zero.
   rb = one/rb
 !
 !     Store unscaled rank-one Householder update in work array.
@@ -8441,14 +8441,14 @@ real :: snrm2
 real :: sdot
 !
 !     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
-!     WHERE n=n1+n2.  THIS IS A SLIGHT OVERESTIMATE FOR ws(*).
+!     where n=n1+n2.  This is a slight overestimate for ws(*).
 !
 !     Written by R. J. Hanson and K. H. Haskell, sandia labs
 !
 !     Determine an n1-vector W, and
 !               an n2-vector Z
 !     which minimizes the Euclidean length of W
-!     SUBJECT TO G*W+H*Z .GE. Y.
+!     subject to G*W+H*Z .GE. Y.
 !     This is the least projected distance problem, lpdp.
 !     The matrices G and H are of respective
 !     dimensions m by n1 and m by n2.
@@ -8466,9 +8466,9 @@ real :: sdot
 !     The value of mode indicates the status of
 !     the computation after returning to the user.
 !
-!          mode=1  THE SOLUTION WAS SUCCESSFULLY OBTAINED.
+!          mode=1  The solution was successfully obtained.
 !
-!          mode=2  THE INEQUALITIES ARE INCONSISTENT.
+!          mode=2  The inequalities are inconsistent.
 !
 !     Subroutines called
 !
@@ -8555,7 +8555,7 @@ do j=1,n1
    x(j) = sc*sdot(m,a(1,j),1,ws(ix),1)
 end do
 !
-!     COMPUTE THE VECTOR Q=Y-GW.  OVERWRITE Y WITH THIS VECTOR.
+!     Compute the vector Q=Y-GW.  Overwrite Y with this vector.
 do i=1,m
    a(i,np1) = a(i,np1) - sdot(n1,a(i,1),mda,x,1)
 end do
@@ -8580,7 +8580,7 @@ iw = iw + 1
 ix = iw + 1
 iw = iw + m
 !
-!     SOLVE RV=S SUBJECT TO V.GE.0.  THE MATRIX R =(TRANSPOSE
+!     Solve RV=S subject to V.GE.0.  The matrix R =(transpose
 !     OF (H Q)), WHERE Q=Y-GW.  THE (n2+1)-VECTOR S =(TRANSPOSE
 !     of (0,...,0,1)).
 !
@@ -8625,14 +8625,14 @@ integer :: l1, l2, l3, l4, l5
 !     and B of respective lengths me and ma.  This subroutine
 !     solves the problem
 !
-!               EX = F, (EQUATIONS TO BE EXACTLY SATISFIED)
+!               EX = F, (equations to be exactly satisfied)
 !
-!               AX = B, (EQUATIONS TO BE APPROXIMATELY SATISFIED,
+!               AX = B, (equations to be approximately satisfied,
 !                        in the least squares sense)
 !
 !               Subject to components l+1,...,n nonnegative
 !
-!     ANY VALUES me.GE.0, ma.GE.0 AND 0.LE. l .LE.n ARE PERMITTED.
+!     Any values me.GE.0, ma.GE.0 and 0.LE. l .LE.n are permitted.
 !
 !     The problem is reposed as problem wnnls
 !
@@ -8648,8 +8648,8 @@ integer :: l1, l2, l3, l4, l5
 !
 !     w(*,*),mdw,  the array w(*,*) is double subscripted with first
 !     ME,ma,n,l    DIMENSIONING PARAMETER EQUAL TO mdw.  FOR THIS
-!                  DISCUSSION LET US CALL M = me + ma.  THEN mdw
-!                  MUST SATISFY mdw.GE.M.  THE CONDITION mdw.LT.M
+!                  discussion let us call M = me + ma.  Then mdw
+!                  must satisfy mdw.GE.M.  the condition mdw.LT.M
 !                  is an error.
 !
 !                  The array w(*,*) contains the matrices and vectors
@@ -8661,7 +8661,7 @@ integer :: l1, l2, l3, l4, l5
 !                  respectively.  Columns 1,...,l correspond to
 !                  unconstrained variables x(1),...,x(l).  The
 !                  remaining variables are constrained to be
-!                  NONNEGATIVE.  THE CONDITION l.LT.0 .OR. l.GT.n IS
+!                  nonnegative.  The condition l.LT.0 .OR. l.GT.n is
 !                  an error.
 !
 !     prgopt(*)    THIS ARRAY IS THE OPTION VECTOR.
@@ -8684,7 +8684,7 @@ integer :: l1, l2, l3, l4, l5
 !                  entry of the next group of data within
 !                  prgopt(*).  The exception is when there are
 !                  no more options to change.  In that
-!                  CASE LINK=1 AND THE VALUES KEY AND DATA SET
+!                  case link=1 And the values key and data set
 !                  are not referenced. The general layout of
 !                  prgopt(*) is as follows.
 !
@@ -8694,17 +8694,17 @@ integer :: l1, l2, l3, l4, l5
 !               .       .
 !               .       .
 !               .       .
-!               ...prgopt(LINK1)=LINK2 (LINK TO THE FIRST ENTRY OF
+!               ...prgopt(LINK1)=LINK2 (link to the first entry of
 !               .                       NEXT GROUP)
 !               .  prgopt(LINK1+1)=KEY2 (KEY TO THE OPTION CHANGE)
-!               .  prgopt(LINK1+2)=DATA VALUE
+!               .  prgopt(LINK1+2)=Data value
 !               ...     .
 !               .       .
 !               .       .
 !               ...prgopt(LINK)=1 (NO MORE OPTIONS TO CHANGE)
 !
 !                  Values of link that are nonpositive are errors.
-!                  A VALUE OF LINK.GT.NLINK=100000 IS ALSO AN ERROR.
+!                  A value of link.GT.NLINK=100000 Is also an error.
 !                  This helps prevent using invalid but positive
 !                  values of link that will probably extend
 !                  beyond the program limits of prgopt(*).
@@ -8714,7 +8714,7 @@ integer :: l1, l2, l3, l4, l5
 !                  restriction.  To prevent cycling in the
 !                  processing of the option array A count of the
 !                  number of options changed is maintained.
-!                  WHENEVER THIS COUNT EXCEEDS NOPT=1000 THE
+!                  Whenever this count exceeds NOPT=1000 The
 !                  routine terminates.
 !
 !                  Options..
@@ -8778,7 +8778,7 @@ integer :: l1, l2, l3, l4, l5
 !
 !                  prgopt(n+3)=n+6 (LINK TO ENTRY n+6 OF prgopt(*))
 !                  prgopt(n+4)=8 (LINEAR DEPENDENCE TOLERANCE KEY)
-!                  prgopt(n+5)=... (NEW VALUE OF THE TOLERANCE)
+!                  prgopt(n+5)=... (new value of the tolerance)
 !
 !                  prgopt(n+6)=1 (NO MORE OPTIONS TO CHANGE)
 !
@@ -8795,16 +8795,16 @@ integer :: l1, l2, l3, l4, l5
 !     MODE         THE VALUE OF MODE INDICATES THE SUCCESS OR FAILURE
 !                  of the subprogram.
 !
-!                  mode = 0  SUBPROGRAM COMPLETED SUCCESSFULLY.
+!                  mode = 0  Subprogram completed successfully.
 !
-!                       = 1  MAX. NUMBER OF ITERATIONS (EQUAL TO
+!                       = 1  Max. Number of iterations (equal to
 !                            3*(n-l)) exceeded. Nearly all problems
 !                            should complete in fewer than this
 !                            number of iterations. An approximate
 !                            solution and its corresponding residual
 !                            vector LENGTH are in x(*) and rnorm.
 !
-!                       = 2  USAGE ERROR OCCURRED.  EITHER
+!                       = 2  Usage error occurred.  Either
 !                            mdw .LT. me + ma, l .LT. 0, l .GT. n,
 !                            or the option vector prgopt(*) is
 !                            not properly defined.
@@ -8911,9 +8911,9 @@ integer :: isamax
 !
 !         itype(*)
 !            an array of length M which is used to keep track
-!         OF THE CLASSIFICATION OF THE EQUATIONS.  itype(i)=0
+!         of the classification of the equations.  itype(i)=0
 !         denotes equation i as an equality constraint.
-!         itype(i)=1 DENOTES EQUATION i AS A LEAST SQUARES
+!         itype(i)=1 Denotes equation i as a least squares
 !         equation.
 !
 !         wd(*)
@@ -8923,7 +8923,7 @@ integer :: isamax
 !         h(*)
 !            an array of length n.  upon completion it contains the
 !         pivot scalars of the Householder transformations performed
-!         IN THE CASE KRANK.LT.l.
+!         in the case KRANK.LT.L.
 !
 !         scale(*)
 !            an array of length M which is used by the subroutine
@@ -8963,7 +8963,7 @@ go to 180
 !
 !     Perform wnnls algorithm using the following steps.
 !
-!     UNTIL(done)
+!     Until(done)
 !
 !        Compute-search-direction-and-feasible-point
 !
@@ -9084,7 +9084,7 @@ alamda = eanorm/(srelpr*fac)
 alsq = alamda**2
 do 260 i = 1,m
 !
-!     WHEN EQU i IS HEAVILY WEIGHTED itype(i)=0, ELSE itype(i)=1.
+!     When EQU i is heavily weighted itype(i)=0, else itype(i)=1.
   if (.not.(i.le.me)) go to 240
   t = alsq
   itemp = 0
@@ -9319,7 +9319,7 @@ do 720 j = nsp1,n
 730 go to 750
 740 if (pos .or. done) go to 970
 !
-!     FIND J SUCH THAT wd(J)=WMAX IS MAXIMUM.  THIS DETERMINES
+!     Find J such that wd(J)=WMAX is maximum.  This determines
 !     that the incoming col J will reduce the residual vector
 !     and be positive.
 750 wmax = zero
@@ -9338,7 +9338,7 @@ go to 960
 !     Set dual COEFF to zero for incoming col.
 790 wd(iwmax) = zero
 !
-!     WMAX .GT. ZERO, SO OKAY TO MOVE COL IWMAX TO SOLN SET.
+!     WMAX .GT. zero, so okay to move col IWMAX to soln set.
 !     Perform transformation to retriangularize, and test
 !     for near linear dependence.
 !     Swap col IWMAX into NSOLN-TH position to maintain upper
@@ -9385,7 +9385,7 @@ call srotm(np1-nsoln, w(jp,nsp1), mdw, w(j,nsp1), mdw, sparam)
 860 j = jm1
 go to 810
 !
-!     SOLVE FOR z(NSOLN)=PROPOSED NEW VALUE FOR x(NSOLN).
+!     Solve for z(NSOLN)=Proposed new value for x(NSOLN).
 !     Test if this is nonpositive or too large.
 !     If this was true or if the pivot term was zero reject
 !     the col as dependent.
@@ -9446,7 +9446,7 @@ go to 1110
 !     Solve-system
 1010 call scopy(nsoln, z, 1, x, 1)
 !
-!     APPLY HOUSEHOLDER TRANSFORMATIONS TO x(*) IF KRANK.LT.l
+!     Apply Householder transformations to x(*) if KRANK.LT.l
 if (.not.(0.lt.krank .and. krank.lt.l)) go to 1030
 do 1020 i = 1,krank
   call h12(2, i, krp1, l, w(i,1), mdw, h(i), x, 1, 1, 1)
@@ -9563,7 +9563,7 @@ lb = min0(m-1,l)
 recalc = .true.
 rnorm = zero
 krank = 0
-!     WE SET factor=1.E0 SO THAT THE HEAVY WEIGHT ALAMDA WILL BE
+!     We set factor=1.E0 so that the heavy weight ALAMDA will be
 !     included in the test for col independence.
 factor = 1.e0
 i = 1
@@ -9683,7 +9683,7 @@ call srotm(np1-i, w(jm1,ip1), mdw, w(j,ip1), mdw, sparam)
 220 j = jm1
 go to 210
 !
-!     SET ic=i=COL BEING ELIMINATED
+!     Set ic=i=Col being eliminated
 230 ic = i
 assign 240 to igo990
 go to 520
@@ -9725,7 +9725,7 @@ if (.not.(krank.lt.l1)) go to 420
 !
 recalc = .true.
 !
-!     SET factor=alsq TO REMOVE EFFECT OF HEAVY WEIGHT FROM
+!     Set factor=alsq to remove effect of heavy weight from
 !     test for col independence.
 factor = alsq
 kk = krp1
@@ -9830,7 +9830,7 @@ return
 !     numerically necessary, these values will be recomputed.
 !
 if (.not.(ir.ne.1 .and. (.not.recalc))) go to 480
-!     UPDATE COL SS =SUM OF SQUARES.
+!     Update col SS =Sum of squares.
 do 470 j = i,lend
   h(j) = h(j) - scale(ir-1)*w(ir-1,j)**2
 470 continue
@@ -9863,14 +9863,14 @@ hbar = h(max)
 !     value of factor will have been set to 1.E0 before this
 !     procedure is invoked.  In the potentially rank deficient
 !     problem, the value of factor will have been
-!     SET TO alsq=ALAMDA**2 TO REMOVE THE EFFECT OF THE HEAVY WEIGHT
+!     set to alsq=ALAMDA**2 to remove the effect of the heavy weight
 !     from the test for independence.
 !
 !     Write new col as partitioned vector
-!             (A1)  NUMBER OF COMPONENTS IN SOLN SO FAR = NIV
+!             (A1)  number of components in soln so far = NIV
 !             (A2)  m-NIV COMPONENTS
-!     AND COMPUTE  sn = INVERSE WEIGHTED LENGTH OF A1
-!                  rn = INVERSE WEIGHTED LENGTH OF A2
+!     and compute  sn = Inverse weighted length of A1
+!                  rn = Inverse weighted length of A2
 !     CALL THE COL INDEPENDENT WHEN rn .GT. tau*sn
 sn = zero
 rn = zero
@@ -9925,17 +9925,17 @@ real :: spmpar
 ! on the behavior of the iterative refinement procedure.
 ! Matrix a is the given matrix of a system of m linear equations in n
 ! unknowns, and matrix w is a given diagonal matrix of weights with all
-! DIAGONAL ELEMENTS NONNEGATIVE.  LET H = w*a.
+! diagonal elements nonnegative.  Let H = w*a.
 ! In the event that n1 (the computed rank of matrix H) is less than n
 ! (the number of unknown coefficients), a unique solution vector having
 ! n elements can be obtained by imposing the condition that the
 ! solution be of minimal Euclidean norm.  Such a solution is sought in
 ! the case of underdetermined or rank-deficient problems.
 !
-! ** INPUT VARIABLES **
+! ** Input variables **
 ! m      TOTAL NUMBER OF EQUATIONS.
 ! n      NUMBER OF UNKNOWN COEFFICIENTS.
-! m1     NUMBER OF LINEAR CONSTRAINTS (0.LE.m1.LE.m AND m1.LE.n).
+! m1     number of linear constraints (0.LE.m1.LE.m and m1.LE.n).
 ! l      NUMBER OF RIGHT-HAND SIDES (VECTORS OF OBSERVATIONS).
 ! a      TWO-DIMENSIONAL ARRAY OF size (mm,n).  ON ENTRY, THE ARRAY a
 !        contains the given matrix of a system of m linear equations
@@ -9958,28 +9958,28 @@ real :: spmpar
 !            subroutine decom2.  The value of tol can be based on
 !            knowledge concerning the accuracy of the data.
 ! mm     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        THE ARRAY a.  mm MUST SATISFY mm.GE.m.
+!        the array a.  mm must satisfy mm.GE.M.
 ! mb     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        THE ARRAY b.  mb MUST SATISFY mb.GE.m.
+!        the array b.  mb must satisfy mb.GE.M.
 ! mr     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        THE ARRAY res.  mr MUST SATISFY mr.GE.m.
+!        the array res.  mr must satisfy mr.GE.M.
 ! nn     DIMENSIONING PARAMETER SPECIFYING MAXIMUM NUMBER OF ROWS IN
-!        THE ARRAY x.  nn MUST SATISFY nn.GE.n.
+!        the array x.  nn must satisfy nn.GE.N.
 ! mmpnn  dimensioning parameter specifying maximum number of rows in
-!        THE ARRAY qr.  mmpnn MUST SATISFY mmpnn.GE.m+n.
+!        the array qr.  mmpnn must satisfy mmpnn.GE.m+n.
 !
-! ** OUTPUT VARIABLES AND INTERNAL VARIABLES **
-! n1     COMPUTED RANK OF MATRIX H, WHERE H = w*a.
+! ** Output variables and internal variables **
+! n1     computed rank of matrix H, where H = w*a.
 ! ipivot vector of size n.  on exit, this array records the order
 !        in which the columns of H were selected by the pivoting
 !        scheme in the course of the orthogonal decomposition.
-!        WHENEVER n1.LT.n, THE FIRST n1 ELEMENTS OF ipivot INDICATE
+!        Whenever n1.LT.n, the first n1 elements of ipivot indicate
 !        which columns of H were found to be linearly independent.
 ! x      TWO-DIMENSIONAL ARRAY OF size (nn,l).  ON EXIT, x CONTAINS
 !        the solution vectors.
 ! RES    TWO-DIMENSIONAL ARRAY OF size (mr,l).  ON EXIT, RES CONTAINS
 !        the residual vectors.
-! QR     TWO-DIMENSIONAL ARRAY OF size (mmpnn,n).  ON EXIT, IF n1 = n
+! QR     two-dimensional array of size (mmpnn,n).  On exit, if n1 = n
 !        then QR contains the unscaled covariance matrix. (QR is used
 !        internally to store the results from the subroutine decom2.
 !        The results from decom2 are destroyed when the covariance
@@ -9990,11 +9990,11 @@ real :: spmpar
 !        (A) NUMIT is the number of iterations carried out during the
 !            iterative refinement in attempting to obtain a solution
 !            for the k-TH right-hand side.
-!            ON EXIT, c(k) = +NUMIT IF THE SOLUTION CONVERGED, AND
-!                     c(k) = -NUMIT IF THE SOLUTION FAILED TO CONVERGE.
+!            On exit, c(k) = +NUMIT if the solution converged, and
+!                     c(k) = -NUMIT if the solution failed to converge.
 !        (b) digitx gives an estimate of the number of correct digits
 !            in the initial solution of the coefficients for the k-TH
-!            RIGHT-HAND SIDE.  ON EXIT, c(k+l) = digitx.
+!            right-hand side.  On exit, c(k+l) = digitx.
 ! ifault fault indicator which is zero if no errors were encountered
 !        and positive if errors were detected or if evidence of severe
 !        ill-conditioning was found.  If ifault is set to 1, 2, 3, 4,
@@ -10002,28 +10002,28 @@ real :: spmpar
 !        ifault is set equal to 8, 9 or 10 provided that a solution
 !        was obtained for at least one right-hand side.  The value of
 !        ifault is used to indicate the following --
-!        0 = NO ERRORS ENCOUNTERED.
-!        1 = BAD INPUT PARAMETER (m, n OR l).
-!        2 = BAD INPUT PARAMETER (m1).
-!        3 = BAD DIMENSION.  EITHER m.GT.mm, m.GT.mb, m.GT.mr,
-!            n.GT.nn, OR m+n.GT.mmpnn.
-!        4 = AT LEAST ONE WEIGHT IS NEGATIVE.
-!        5 = EITHER MATRIX H OR MATRIX OF CONSTRAINTS EQUALS ZERO.
-!        6 = CONSTRAINTS ARE LINEARLY DEPENDENT.
-!        7 = ALL SOLUTIONS FAILED TO CONVERGE.
-!        8 = SOLUTION FAILED TO CONVERGE FOR AT LEAST ONE RIGHT-HAND
+!        0 = No errors encountered.
+!        1 = Bad input parameter (m, n or l).
+!        2 = Bad input parameter (m1).
+!        3 = Bad dimension.  Either m.GT.mm, m.GT.mb, m.GT.mr,
+!            n.GT.nn, OR m+n.GT.MMPNN.
+!        4 = At least one weight is negative.
+!        5 = Either matrix H or matrix of constraints equals zero.
+!        6 = Constraints are linearly dependent.
+!        7 = All solutions failed to converge.
+!        8 = Solution failed to converge for at least one right-hand
 !            side.
-!        9 = LARGE NUMBER OF ITERATIONS REQUIRED FOR CONVERGENCE.
-!       10 = ESTIMATED NUMBER OF DIGITS IN INITIAL SOLUTION OF
+!        9 = Large number of iterations required for convergence.
+!       10 = Estimated number of digits in initial solution of
 !            coefficients is small.
-!       11 = DIAGONAL ELEMENT OF COVARIANCE MATRIX WAS COMPUTED TO BE
+!       11 = Diagonal element of covariance matrix was computed to be
 !            negative owing to rounding error. No severe conditioning
 !            problems were detected.
-!       12 = DIAGONAL ELEMENT OF COVARIANCE MATRIX WAS COMPUTED TO BE
+!       12 = Diagonal element of covariance matrix was computed to be
 !            negative owing to rounding error. The problem appears to
 !            be extremely ill-conditioned.
 !
-! ** SUBROUTINES REQUIRED **
+! ** Subroutines required **
 ! SUBROUTINE decom2
 !        uses modified Gram-Schmidt algorithm with pivoting to
 !        obtain an orthogonal decomposition of the input matrix.
@@ -10035,14 +10035,14 @@ real :: spmpar
 ! SUBROUTINE covar
 !        computes unscaled covariance matrix of the coefficients.
 !
-! ** STORAGE REQUIREMENTS **
+! ** Storage requirements **
 ! the storage required for the dimensioned arrays in l2slv is
 !   m*(2*n + 2*l + 7) + n*(n + l + 7) + 2*l
 ! locations.  All arrays required in subroutines called by l2slv are
 ! declared herein and are transmitted only through parameter lists of
 ! CALL-SEQUENCES.
 !
-! ** PRECISION OF ARITHMETIC CALCULATIONS **
+! ** Precision of arithmetic calculations **
 ! single precision arithmetic is used for all calculations except the
 ! double precision accumulation of inner products.  (The variable SUM
 ! is declared to be double precision in subroutines decom2, solve2,
@@ -10050,7 +10050,7 @@ real :: spmpar
 ! refinement procedure that inner products be accumulated in double
 ! precision.
 !
-! ** CONVERSION OF THE PROGRAM TO DOUBLE PRECISION **
+! ** Conversion of the program to double precision **
 ! *********************************************************************
 ! * On computers having short word length (as the IBM 360/370) it may *
 ! * be desirable to perform all calculations in double precision.  In *
@@ -10069,8 +10069,8 @@ real :: spmpar
 ! * 4. The value of eta (at L2B 1960) should be set so that it is the *
 ! *    SMALLEST POSITIVE DOUBLE PRECISION NUMBER SUCH THAT 1.0 + eta  *
 ! *    IS GREATER THAN 1.0 IN DOUBLE PRECISION ARITHMETIC.            *
-! *    FOR IBM COMPUTER TYPE, eta = 16.**(-13)                        *
-! *    FOR UNIVAC COMPUTER TYPE, eta = 2.**(-59)                      *
+! *    for IBM computer type, eta = 16.**(-13)                        *
+! *    for Univac computer type, eta = 2.**(-59)                      *
 ! * 5. THE FOLLOWING FORTRAN FUNCTIONS SHOULD BE CHANGED --           *
 ! *      SINGLE PRECISION NAME     DOUBLE PRECISION NAME              *
 ! *             dble(x)                x                              *
@@ -10302,7 +10302,7 @@ end subroutine l2slv
 !     (1) if tol equals zero, the tolerance used at statement DC2 1180
 !         will be based on machine precision.
 !         Under this approach, the tolerance (TOL2) is set equal to
-!         (FLOAT(n)*eta)**2*D(m1+1) AT STATEMENT DC2 1170.
+!         (float(n)*eta)**2*D(m1+1) at statement DC2 1170.
 !         If desired, the user can obtain a more conservative
 !         tolerance by replacing n in this statement by a larger
 !         quantity.
@@ -10316,12 +10316,12 @@ end subroutine l2slv
 ! decomposition which are needed for obtaining an initial solution
 ! and for iterative refinement.
 ! On exit, n1 is the computed rank of the input matrix qr.
-! On exit, sing is set equal to .True. Whenever
-!     (1) n1 = 0 (I.E., INPUT MATRIX qr EQUALS ZERO OR MATRIX OF
+! On exit, sing is set equal to .TRUE. whenever
+!     (1) n1 = 0 (I.E., input matrix qr equals zero or matrix of
 !         constraints equals zero), or
-!     (2) n1 is less than m1 (I.E., The m1 by n matrix of linear
+!     (2) n1 is less than m1 (I.E., the m1 by n matrix of linear
 !         constraints is singular).
-! OTHERWISE, ON EXIT FROM decom2, sing = .FALSE.
+! Otherwise, on exit from decom2, sing = .FALSE.
 ! On exit, the vector ipivot records the order in which the columns
 ! of QR were selected by the pivoting scheme in the course of the
 ! orthogonal decomposition.
@@ -10497,15 +10497,15 @@ end subroutine decom2
 ! (coefficients) and the vector RES (residuals).
 ! Iterative refinement is used to improve the accuracy of the initial
 ! solution.
-! On exit, fail is set equal to .True. If the solution fails to
-! IMPROVE SUFFICIENTLY.  OTHERWISE, FAIL = .FALSE.  INFORMATION ON THE
+! On exit, fail is set equal to .TRUE. if the solution fails to
+! improve sufficiently.  Otherwise, fail = .FALSE.  information on the
 ! behavior of the iterative refinement procedure is given by NUMIT and
 ! DIGITX.  NUMIT is the number of iterations carried out in attempting
 ! to obtain a solution.  DIGITX is an estimate of the number of
 ! correct digits in the initial solution of the coefficients.
 ! This subroutine calls subroutine solve3.
 !
-! ********* CONVERSION OF THIS SUBROUTINE TO DOUBLE PRECISION *********
+! ********* Conversion of this subroutine to double precision *********
 ! * if the program is converted so that all calculations are done in  *
 ! * DOUBLE PRECISION ARITHMETIC, THE ITERATIVE REFINEMENT PRESENTLY   *
 ! * INCLUDED IN solve2 SHOULD BE OMITTED, SINCE THE SUCCESS OF THIS   *

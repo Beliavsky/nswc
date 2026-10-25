@@ -109,7 +109,7 @@ if (kswy.eq.2 .or. kswy.eq.3) js = 2
 ns = nit+js-1
 ms = mit+is-1
 !
-!     Set X - direction
+!     Set X - Direction
 !
 do i=1,mit
    xi = ait+float(is+i-2)*dlx
@@ -163,7 +163,7 @@ bm(mit) = bm(mit)-2.*beta*dlx*cxm
 cm(mit) = 0.0
 go to 170
 !
-!     Mixed - mixed in X direction
+!     Mixed - Mixed in X direction
 !
 160 continue
 am(1) = 0.0
@@ -204,7 +204,7 @@ bn(nit) = bn(nit)-2.*dly*xnu*fyn
 cn(nit) = 0.0
 go to 220
 !
-!     Mixed - mixed direction in Y direction
+!     Mixed - Mixed direction in Y direction
 !
 210 continue
 an(1) = 0.0
@@ -243,7 +243,7 @@ do 310 i = is,ms
 310 continue
 320 continue
 !
-!     SAVE ADJUSTED EDGES IN GRHS IF iorder=4
+!     Save adjusted edges in GRHS if iorder=4
 !
 if (iorder .ne. 4) go to 350
 do j=js,ns
@@ -607,12 +607,12 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !
 !     This subroutine first approximates the truncation error given
 !     BY  TRUN1(X,Y)=dlx**2*tx+dly**2*ty WHERE
-!     tx=AFUN(X)*uxxxx/12.0+BFUN(X)*uxxx/6.0 ON THE INTERIOR AND
+!     tx=AFUN(X)*uxxxx/12.0+BFUN(X)*uxxx/6.0 on the interior and
 !     at the boundaries if periodic (here uxxx,uxxxx are the third
 !     and fourth partial derivatives of U with respect to X).
 !     tx is of the form AFUN(X)/3.0*(uxxxx/4.0+uxxx/dlx)
-!     AT X=A OR X=B IF THE BOUNDARY CONDITION THERE IS MIXED.
-!     tx=0.0 ALONG SPECIFIED BOUNDARIES.  ty HAS SYMMETRIC FORM
+!     at X=A or X=B if the boundary condition there is mixed.
+!     tx=0.0 along specified boundaries.  ty has symmetric form
 !     in Y with X,AFUN(X),BFUN(X) replaced by Y,DFUN(Y),EFUN(Y).
 !     The second order solution in usol is used to approximate
 !     (via second order finite differencing) the TRUN1ATION error
@@ -686,7 +686,7 @@ if (i .eq. 2) go to  30
 if (i .eq. k-1) go to  60
 if (i .eq. k) go to  80
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=A
+!     Compute partial derivative approximations at X=A
 !
 10 if (kswx .eq. 1) go to  20
 uxxx = (-5.0*u(1,j)+18.0*u(2,j)-24.0*u(3,j)+14.0*u(4,j)- &
@@ -695,13 +695,13 @@ uxxxx = (3.0*u(1,j)-14.0*u(2,j)+26.0*u(3,j)-24.0*u(4,j)+ &
 &11.0*u(5,j)-2.0*u(6,j))/dlx4
 return
 !
-!     PERIODIC AT X=A
+!     Periodic at X=A
 !
 20 uxxx = (-u(k-2,j)+2.0*u(k-1,j)-2.0*u(2,j)+u(3,j))/(tdlx3)
 uxxxx = (u(k-2,j)-4.0*u(k-1,j)+6.0*u(1,j)-4.0*u(2,j)+u(3,j))/dlx4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=A+dlx
+!     Compute partial derivative approximations at X=A+dlx
 !
 30 if (kswx .eq. 1) go to  40
 uxxx = (-3.0*u(1,j)+10.0*u(2,j)-12.0*u(3,j)+6.0*u(4,j)-u(5,j))/ &
@@ -710,7 +710,7 @@ uxxxx = (2.0*u(1,j)-9.0*u(2,j)+16.0*u(3,j)-14.0*u(4,j)+6.0*u(5,j)- &
 &u(6,j))/dlx4
 return
 !
-!     PERIODIC AT X=A+dlx
+!     Periodic at X=A+dlx
 !
 40 uxxx = (-u(k-1,j)+2.0*u(1,j)-2.0*u(3,j)+u(4,j))/(tdlx3)
 uxxxx = (u(k-1,j)-4.0*u(1,j)+6.0*u(2,j)-4.0*u(3,j)+u(4,j))/dlx4
@@ -724,7 +724,7 @@ uxxxx = (u(i-2,j)-4.0*u(i-1,j)+6.0*u(i,j)-4.0*u(i+1,j)+u(i+2,j))/ &
 &dlx4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B-dlx
+!     Compute partial derivative approximations at X=B-dlx
 !
 60 if (kswx .eq. 1) go to  70
 uxxx = (u(k-4,j)-6.0*u(k-3,j)+12.0*u(k-2,j)-10.0*u(k-1,j)+ &
@@ -733,14 +733,14 @@ uxxxx = (-u(k-5,j)+6.0*u(k-4,j)-14.0*u(k-3,j)+16.0*u(k-2,j)- &
 &9.0*u(k-1,j)+2.0*u(k,j))/dlx4
 return
 !
-!     PERIODIC AT X=B-dlx
+!     Periodic at X=B-dlx
 !
 70 uxxx = (-u(k-3,j)+2.0*u(k-2,j)-2.0*u(1,j)+u(2,j))/tdlx3
 uxxxx = (u(k-3,j)-4.0*u(k-2,j)+6.0*u(k-1,j)-4.0*u(1,j)+u(2,j))/ &
 &dlx4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT X=B
+!     Compute partial derivative approximations at X=B
 !
 80 uxxx = -(3.0*u(k-4,j)-14.0*u(k-3,j)+24.0*u(k-2,j)-18.0*u(k-1,j)+ &
 &5.0*u(k,j))/tdlx3
@@ -772,7 +772,7 @@ if (j .eq. 2) go to  30
 if (j .eq. l-1) go to  60
 if (j .eq. l) go to  80
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=C
+!     Compute partial derivative approximations at Y=C
 !
 10 if (kswy .eq. 1) go to  20
 uyyy = (-5.0*u(i,1)+18.0*u(i,2)-24.0*u(i,3)+14.0*u(i,4)- &
@@ -781,13 +781,13 @@ uyyyy = (3.0*u(i,1)-14.0*u(i,2)+26.0*u(i,3)-24.0*u(i,4)+ &
 &11.0*u(i,5)-2.0*u(i,6))/dly4
 return
 !
-!     PERIODIC AT X=A
+!     Periodic at X=A
 !
 20 uyyy = (-u(i,l-2)+2.0*u(i,l-1)-2.0*u(i,2)+u(i,3))/tdly3
 uyyyy = (u(i,l-2)-4.0*u(i,l-1)+6.0*u(i,1)-4.0*u(i,2)+u(i,3))/dly4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=C+dly
+!     Compute partial derivative approximations at Y=C+dly
 !
 30 if (kswy .eq. 1) go to  40
 uyyy = (-3.0*u(i,1)+10.0*u(i,2)-12.0*u(i,3)+6.0*u(i,4)-u(i,5))/ &
@@ -796,7 +796,7 @@ uyyyy = (2.0*u(i,1)-9.0*u(i,2)+16.0*u(i,3)-14.0*u(i,4)+6.0*u(i,5)- &
 &u(i,6))/dly4
 return
 !
-!     PERIODIC AT Y=C+dly
+!     Periodic at Y=C+dly
 !
 40 uyyy = (-u(i,l-1)+2.0*u(i,1)-2.0*u(i,3)+u(i,4))/tdly3
 uyyyy = (u(i,l-1)-4.0*u(i,1)+6.0*u(i,2)-4.0*u(i,3)+u(i,4))/dly4
@@ -810,7 +810,7 @@ uyyyy = (u(i,j-2)-4.0*u(i,j-1)+6.0*u(i,j)-4.0*u(i,j+1)+u(i,j+2))/ &
 &dly4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D-dly
+!     Compute partial derivative approximations at Y=D-dly
 !
 60 if (kswy .eq. 1) go to  70
 uyyy = (u(i,l-4)-6.0*u(i,l-3)+12.0*u(i,l-2)-10.0*u(i,l-1)+ &
@@ -819,7 +819,7 @@ uyyyy = (-u(i,l-5)+6.0*u(i,l-4)-14.0*u(i,l-3)+16.0*u(i,l-2)- &
 &9.0*u(i,l-1)+2.0*u(i,l))/dly4
 return
 !
-!     PERIODIC AT Y=D-dly
+!     Periodic at Y=D-dly
 !
 70 continue
 uyyy = (-u(i,l-3)+2.0*u(i,l-2)-2.0*u(i,1)+u(i,2))/tdly3
@@ -827,7 +827,7 @@ uyyyy = (u(i,l-3)-4.0*u(i,l-2)+6.0*u(i,l-1)-4.0*u(i,1)+u(i,2))/ &
 &dly4
 return
 !
-!     COMPUTE PARTIAL DERIVATIVE APPROXIMATIONS AT Y=D
+!     Compute partial derivative approximations at Y=D
 !
 80 uyyy = -(3.0*u(i,l-4)-14.0*u(i,l-3)+24.0*u(i,l-2)-18.0*u(i,l-1)+ &
 &5.0*u(i,l))/tdly3
@@ -859,7 +859,7 @@ real :: cnv, eps
 !
 !          PAUL SWARZTRAUBER   AND  ROLAND SWEET
 !
-!             TECHNICAL NOTE TN/IA-109   JULY 1975
+!             TECHNICAL NOTE TN/ia-109   JULY 1975
 !
 !       National center for atmospheric research  boulder,colorado 80307
 !
@@ -890,21 +890,21 @@ real :: cnv, eps
 !     * * * * * * * * * *     ON INPUT     * * * * * * * * * *
 !
 !     iflg
-!       = 0  INITIALIZATION ONLY.  CERTAIN QUANTITIES THAT DEPEND ON np,
+!       = 0  Initialization only.  Certain quantities that depend on np,
 !                                  n, an, bn, and cn are computed and
 !                                  STOR1D in the work array  w.
-!       = 1  THE QUANTITIES THAT WERE COMPUTED IN THE INITIALIZATION ARE
+!       = 1  The quantities that were computed in the initialization are
 !            used to obtain the solution X(I,J).
 !
-!       NOTE   A CALL WITH iflg=0 TAKES APPROXIMATELY ONE HALF THE TIME
-!              TIME AS A CALL WITH iflg = 1  .  HOWEVER, THE
+!       Note   a call with iflg=0 Takes approximately one half the time
+!              time as a call with iflg = 1  .  However, the
 !              initialization does not have to be repeated unless np, n,
 !              an, bn, or cn change.
 !
 !     np
-!       = 0  IF an(1) AND cn(n) ARE NOT ZERO, WHICH CORRESPONDS TO
+!       = 0  If an(1) and cn(n) are not zero, which corresponds to
 !            periodic bounary conditions.
-!       = 1  IF an(1) AND cn(n) ARE ZERO.
+!       = 1  If an(1) and cn(n) are zero.
 !
 !     n
 !       the number of unknowns in the J-direction. n must be greater
@@ -916,7 +916,7 @@ real :: cnv, eps
 !       in the linear equations given above.
 !
 !     MP
-!       = 0  IF am(1) AND cm(m) ARE NOT ZERO, WHICH CORRESPONDS TO
+!       = 0  If am(1) and cm(m) are not zero, which corresponds to
 !            periodic boundary conditions.
 !       = 1  IF am(1) = cm(m) = 0  .
 !
@@ -942,13 +942,13 @@ real :: cnv, eps
 !     w
 !       a one-dimensional array that must be provided by the user for
 !       work space.
-!             IF np=1 DEFINE k=int(LOG2(n))+1 AND SET L=2**(k+1) THEN
+!             If np=1 Define k=int(LOG2(n))+1 and set L=2**(k+1) then
 !                     w must have dimension (k-2)*L+k+4+max(2n,6m)
 !
-!             IF np=0 DEFINE k=int(LOG2(n-1))+1 AND SET L=2**(k+1) THEN
+!             If np=0 Define k=int(LOG2(n-1))+1 and set L=2**(k+1) then
 !                     w must have dimension (k-2)*L+k+4+2n+max(2n,6m)
 !
-!       **IMPORTANT** FOR PURPOSES OF CHECKING, THE REQUIRED DIMENSION
+!       **Important** for purposes of checking, the required dimension
 !                     of w is computed by blktri and STOR1D in w(1)
 !                     in floating point format.
 !
@@ -961,13 +961,13 @@ real :: cnv, eps
 !       an error flag that indicates invalid input parameters.  Except
 !       for number zero, a solution is not attempted.
 !
-!       = 0  NO ERROR.
-!       = 1  m IS LESS THAN 5
-!       = 2  n IS LESS THAN 3.
-!       = 3  idimy IS LESS THAN m.
-!       = 4  blktri FAILED WHILE COMPUTING RESULTS THAT DEPEND ON THE
+!       = 0  No error.
+!       = 1  m is less than 5
+!       = 2  n is less than 3.
+!       = 3  idimy is less than m.
+!       = 4  blktri failed while computing results that depend on the
 !            coefficient arrays an, bn, cn.  Check these arrays.
-!       = 5  an(J)*cn(J-1) IS LESS THAN 0 FOR SOME J. POSSIBLE REASONS
+!       = 5  an(J)*cn(J-1) is less than 0 for some J. possible reasons
 !            for this condition are
 !            1. The arrays an and cn are not correct
 !            2. Too large a grid spacing was used in the discretization
@@ -977,7 +977,7 @@ real :: cnv, eps
 !
 !     w
 !       contains intermediate values that must not be destroyed if
-!       blktri WILL BE CALLED AGAIN WITH iflg = 1  .
+!       blktri will be called again with iflg = 1  .
 !
 !
 !
@@ -1923,7 +1923,7 @@ common /cblkt/  npp        ,k          ,machep     ,cnv        , &
 !                     determined after 30 iterations.
 !
 !
-!     ********** machep IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** machep is a machine dependent parameter specifying
 !                the relative precision of floating point arithmetic.
 !
 !                **********
@@ -1946,13 +1946,13 @@ do l=1,n
    b = h
    c = b*b
 !
-!     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
+!     ********** Look for small squared sub-diagonal element **********
 !
 20 do 30 m = l,n
       if (e2(m) .le. c) go to  40
 !
-!     ********** e2(n) IS ALWAYS ZERO, SO THERE IS NO EXIT
-!                THROUGH THE BOTTOM OF THE LOOP **********
+!     ********** e2(n) is always zero, so there is no exit
+!                through the bottom of the loop **********
 !
 30 continue
 !
@@ -1960,7 +1960,7 @@ do l=1,n
 50 if (j .eq. 30) go to 140
    j = j+1
 !
-!     ********** FORM SHIFT **********
+!     ********** Form shift **********
 !
    l1 = l+1
    s = sqrt(e2(l))
@@ -2001,7 +2001,7 @@ do l=1,n
    e2(l) = s*g
    d(l) = h
 !
-!     ********** GUARD AGAINST UNDERFLOWED h **********
+!     ********** Guard against UNDERFLOWED h **********
 !
    if (h .eq. 0.0) go to  80
    if (abs(e2(l)) .le. abs(c/h)) go to  80
@@ -2009,7 +2009,7 @@ do l=1,n
    if (e2(l) .ne. 0.0) go to  50
 80 p = d(l)+f
 !
-!     ********** ORDER EIGENVALUES **********
+!     ********** Order eigenvalues **********
 !
    if (l .eq. 1) go to 100
 !
@@ -2035,8 +2035,8 @@ do i=1,nhalf
 end do
 go to 150
 !
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 30 ITERATIONS **********
+!     ********** Set error -- no convergence to an
+!                eigenvalue after 30 iterations **********
 !
 140 ierr = l
 150 return
@@ -2294,9 +2294,9 @@ integer :: i, k, leftlo
 !                           ----------------
 !
 !     urget selects n values from the set of integers from ibeg to
-!     iend WHERE ibeg .LT. iend. THE SELECTION IS PERFORMED SO THAT
+!     iend where ibeg .LT. iend. The selection is performed so that
 !     any integer is equally likely to occur with proability 1/m
-!     WHERE m = iend - ibeg + 1. AS n BECOMES LARGE THE MEAN AND
+!     where m = iend - ibeg + 1. As n becomes large the mean and
 !     variance of the values will closely approximate the mean and
 !     variance of the discrete uniform distribution where
 !
@@ -2306,19 +2306,19 @@ integer :: i, k, leftlo
 !
 !     Input...
 !
-!       n     - NUMBER OF VARIATES TO BE GENERATED
-!       ibeg  - lower limit of generation interval
-!       iend  - upper limit of generation interval
-!       ix    - INTEGER SEED USED TO INITIALIZE THE
+!       n     - Number of variates to be generated
+!       ibeg  - Lower limit of generation interval
+!       iend  - Upper limit of generation interval
+!       ix    - Integer seed used to initialize the
 !               sequence of variates generated
 !
 !     Output...
 !
-!       ix    - SEED FOR OBTAINING MORE VARIATES
-!       l     - OUTPUT ARRAY OF DIMENSION n CONTAINING
+!       ix    - Seed for obtaining more variates
+!       l     - Output array of dimension n containing
 !               the generated integers
-!       ierr  - input error flag
-!               ( 0 - no input errors
+!       ierr  - Input error flag
+!               ( 0 - No input errors
 !                 1 - n .LE. 0
 !                 2 - ibeg .GE. iend  OR  m .GE. p.
 !                 3 - Seed out of range )
@@ -2329,7 +2329,7 @@ integer :: a, b15, b16, fhi, p, xalo, xhi
 double precision :: c, m, s, t
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
-!     s = 1/(p-1)   (IT IS ASSUMED THAT THE ARITHMETIC BEING
+!     s = 1/(p-1)   (it is assumed that the arithmetic being
 !                    used is accurate to at least 14 digits.
 !                    s has been set to a value slightly less
 !                    than 1/(p-1) to ensure that rounding
@@ -2365,7 +2365,7 @@ do i = 1,n
    if (ix .lt. 0) ix = ix + p
 !
 !        Map ix to an integer in the closed interval (ibeg,iend).
-!        THIS MAPPING IS 1-1 ONLY WHEN m = p - 1, IN WHICH CASE
+!        This mapping is 1-1 only when m = p - 1, in which case
 !        ix is mapped to the value (ibeg - 1) + ix.
 !
    t = ix
@@ -2396,7 +2396,7 @@ real, intent(inout) :: x(n)
 !
 !                       ix = ix*a MOD p
 !
-!     IT IS ASSUMED THAT 0 .LT. ix .LT. p
+!     It is assumed that 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -2446,7 +2446,7 @@ do l = 1,n
 !
 !     Rescale ix, to interpret it as a value between 0 and 1.
 !     The scale factor s is selected to be as near 1/p as is
-!     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR ix = 1,
+!     appropriate in order that the floating value for ix = 1,
 !     namely s, be roughly the same distance from 0 as (p-1)*s
 !     is from 1. The current value for s assures us that x(l)
 !     is less than 1 for any floating point arithmetic of 6
@@ -2476,7 +2476,7 @@ double precision, intent(inout) :: x(n)
 !
 !                       ix = ix*a MOD p
 !
-!     IT IS ASSUMED THAT 0 .LT. ix .LT. p
+!     It is assumed that 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -2527,7 +2527,7 @@ do l = 1,n
 !
 !     Rescale ix, to interpret it as a value between 0 and 1.
 !     The scale factor s is selected to be as near 1/p as is
-!     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR ix = 1,
+!     appropriate in order that the floating value for ix = 1,
 !     namely s, be roughly the same distance from 0 as (p-1)*s
 !     is from 1. The current value for s assures us that x(l)
 !     is less than 1 for any double precision arithmetic.
@@ -2556,8 +2556,8 @@ real :: t
 !
 !                       ix = ix*a MOD p
 !
-!     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
-!     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
+!     u is the uniform variate that is generated and v = 1 - u.
+!     u and v are positive. It is assumed that 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -2625,8 +2625,8 @@ integer :: k, leftlo
 !
 !                       ix = ix*a MOD p
 !
-!     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
-!     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
+!     u is the uniform variate that is generated and v = 1 - u.
+!     u and v are positive. It is assumed that 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -2698,8 +2698,8 @@ real :: t
 !
 !                       ix = ix*a MOD p
 !
-!     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
-!     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
+!     u is the uniform variate that is generated and v = 1 - u.
+!     u and v are positive and d = u - 0.5. It is assumed that
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
 !     Written by
@@ -2771,8 +2771,8 @@ integer :: j, k, leftlo
 !
 !                       ix = ix*a MOD p
 !
-!     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
-!     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
+!     u is the uniform variate that is generated and v = 1 - u.
+!     u and v are positive and d = u - 0.5. It is assumed that
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
 !     Written by
@@ -2851,7 +2851,7 @@ real :: s, t
 !                      0 .LT. x(I) .LT. 1
 !                      0 .LT. y(I) .LT. 1
 !
-!     IT IS ASSUMED THAT 0 .LT. ix .LT. p
+!     It is assumed that 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -2917,7 +2917,7 @@ integer :: k, l, leftlo
 !                      0 .LT. x(I) .LT. 1
 !                      0 .LT. y(I) .LT. 1
 !
-!     IT IS ASSUMED THAT 0 .LT. ix .LT. p
+!     It is assumed that 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
 !     Written by
 !        linus schrage
@@ -3360,25 +3360,25 @@ real :: sum
 !
 !     Input...
 !
-!        mo      - INTEGER SPECIFYING IF THE ROUTINE IS
+!        mo      - Integer specifying if the routine is
 !                  being called for the first time to
 !                  generate normal vectors from a matrix
-!                  A. SET mo = 0 ON AN INITIAL CALL TO
-!                  THE ROUTINE, AND mo .NE. 0 ON A LATER
+!                  A. set mo = 0 On an initial call to
+!                  the routine, and mo .NE. 0 on a later
 !                  CALL TO GENERATE MORE VECTORS FROM
 !                  the same matrix a.
 !
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates.
 !
-!        n       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!        n       - Number of random vectors to be generated.
 !
-!        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
-!                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
+!        m       - Length of the desired random vectors.
+!                  It is assumed that m .GE. 2. m should
 !                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
-!        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
+!        a       - Variance-covariance matrix of order m.
 !                  A is a symmetric positive definite matrix
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
@@ -3390,28 +3390,28 @@ real :: sum
 !                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
-!        fmu     - MEAN VECTOR OF DIMENSION m OF THE
+!        fmu     - Mean vector of dimension m of the
 !                  multivariate normal distribution
 !
-!        kx      - ROW DIMENSION OF THE MATRIX x (SEE THE
+!        kx      - Row dimension of the matrix x (see the
 !                  description of x below). It is assumed
 !                  THAT kx .GE. m.
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!        ix      - Seed to be used for obtaining more variates.
 !
-!        x       - OUTPUT ARRAY OF DIMENSION kx BY n CONTAINING
+!        x       - Output array of dimension kx by n containing
 !                  the n generated random normal vectors. The
 !                  j-TH vector is stored in the j-TH column of
 !                  x FOR j = 1,...,n.
 !
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - m .LE. 1  OR  m .GT. kx
 !                   3 - a is not positive definite
-!                   4 - SEED OUT OF RANGE         )
+!                   4 - Seed out of range         )
 !
 !-----------------------------------------------------------------------
 !
@@ -3441,7 +3441,7 @@ if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !           Compute the lower triangular matrix
 !           l having positive diagonal elements
-!           AND SATISFYING a = l*TRANSPOSE(l).
+!           and satisfying a = l*transpose(l).
 !
 if (mo .ne. 0) go to 10
 call sppfa (a, m, ierr)
@@ -3499,25 +3499,25 @@ integer :: i, j, max
 !
 !     Input...
 !
-!        mo      - INTEGER SPECIFYING IF THE ROUTINE IS
+!        mo      - Integer specifying if the routine is
 !                  being called for the first time to
 !                  generate normal vectors from a matrix
-!                  A. SET mo = 0 ON AN INITIAL CALL TO
-!                  THE ROUTINE, AND mo .NE. 0 ON A LATER
+!                  A. set mo = 0 On an initial call to
+!                  the routine, and mo .NE. 0 on a later
 !                  CALL TO GENERATE MORE VECTORS FROM
 !                  the same matrix a.
 !
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates.
 !
-!        n       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!        n       - Number of random vectors to be generated.
 !
-!        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
-!                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
+!        m       - Length of the desired random vectors.
+!                  It is assumed that m .GE. 2. m should
 !                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
-!        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
+!        a       - Variance-covariance matrix of order m.
 !                  A is a diagonal matrix with positive
 !                  diagonal elements. The diagonal elements
 !                  are stored in the array a. a is an array
@@ -3529,28 +3529,28 @@ integer :: i, j, max
 !                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
-!        fmu     - MEAN VECTOR OF DIMENSION m OF THE
+!        fmu     - Mean vector of dimension m of the
 !                  multivariate normal distribution
 !
-!        kx      - ROW DIMENSION OF THE MATRIX x (SEE THE
+!        kx      - Row dimension of the matrix x (see the
 !                  description of x below). It is assumed
 !                  THAT kx .GE. m.
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!        ix      - Seed to be used for obtaining more variates.
 !
-!        x       - OUTPUT ARRAY OF DIMENSION kx BY n CONTAINING
+!        x       - Output array of dimension kx by n containing
 !                  the n generated random normal vectors. The
 !                  j-TH vector is stored in the j-TH column of
 !                  x FOR j = 1,...,n.
 !
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - m .LE. 1  OR  m .GT. kx
-!                   3 - a(i) .LE. 0 FOR SOME i
-!                   4 - SEED OUT OF RANGE      )
+!                   3 - a(i) .LE. 0 for some i
+!                   4 - Seed out of range      )
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(m)
@@ -3608,25 +3608,25 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !
 !     Input...
 !
-!        mo      - INTEGER SPECIFYING IF THE ROUTINE IS
+!        mo      - Integer specifying if the routine is
 !                  being called for the first time to
 !                  generate normal vectors from a matrix
-!                  A. SET mo = 0 ON AN INITIAL CALL TO
-!                  THE ROUTINE, AND mo .NE. 0 ON A LATER
+!                  A. set mo = 0 On an initial call to
+!                  the routine, and mo .NE. 0 on a later
 !                  CALL TO GENERATE MORE VECTORS FROM
 !                  the same matrix a.
 !
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates.
 !
-!        n       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!        n       - Number of random vectors to be generated.
 !
-!        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
-!                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
+!        m       - Length of the desired random vectors.
+!                  It is assumed that m .GE. 2. m should
 !                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
-!        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
+!        a       - Variance-covariance matrix of order m.
 !                  A is a symmetric positive definite matrix
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
@@ -3638,28 +3638,28 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
-!        fmu     - MEAN VECTOR OF DIMENSION m OF THE
+!        fmu     - Mean vector of dimension m of the
 !                  multivariate normal distribution
 !
-!        kx      - ROW DIMENSION OF THE MATRIX x (SEE THE
+!        kx      - Row dimension of the matrix x (see the
 !                  description of x below). It is assumed
 !                  THAT kx .GE. m.
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!        ix      - Seed to be used for obtaining more variates.
 !
-!        x       - OUTPUT ARRAY OF DIMENSION kx BY n CONTAINING
+!        x       - Output array of dimension kx by n containing
 !                  the n generated random normal vectors. The
 !                  j-TH vector is stored in the j-TH column of
 !                  x FOR j = 1,...,n.
 !
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - m .LE. 1  OR  m .GT. kx
 !                   3 - a is not positive definite
-!                   4 - SEED OUT OF RANGE         )
+!                   4 - Seed out of range         )
 !
 !-----------------------------------------------------------------------
 !
@@ -3690,7 +3690,7 @@ if (ix .le. 0 .or. ix .ge. max) go to 130
 !
 !           Compute the lower triangular matrix
 !           l having positive diagonal elements
-!           AND SATISFYING a = l*TRANSPOSE(l).
+!           and satisfying a = l*transpose(l).
 !
 if (mo .ne. 0) go to 10
 call dppfa (a, m, ierr)
@@ -3748,25 +3748,25 @@ integer :: i, j, max
 !
 !     Input...
 !
-!        mo      - INTEGER SPECIFYING IF THE ROUTINE IS
+!        mo      - Integer specifying if the routine is
 !                  being called for the first time to
 !                  generate normal vectors from a matrix
-!                  A. SET mo = 0 ON AN INITIAL CALL TO
-!                  THE ROUTINE, AND mo .NE. 0 ON A LATER
+!                  A. set mo = 0 On an initial call to
+!                  the routine, and mo .NE. 0 on a later
 !                  CALL TO GENERATE MORE VECTORS FROM
 !                  the same matrix a.
 !
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates.
 !
-!        n       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!        n       - Number of random vectors to be generated.
 !
-!        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
-!                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
+!        m       - Length of the desired random vectors.
+!                  It is assumed that m .GE. 2. m should
 !                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
-!        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
+!        a       - Variance-covariance matrix of order m.
 !                  A is a diagonal matrix with positive
 !                  diagonal elements. The diagonal elements
 !                  are stored in the array a. a is an array
@@ -3778,28 +3778,28 @@ integer :: i, j, max
 !                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
-!        fmu     - MEAN VECTOR OF DIMENSION m OF THE
+!        fmu     - Mean vector of dimension m of the
 !                  multivariate normal distribution
 !
-!        kx      - ROW DIMENSION OF THE MATRIX x (SEE THE
+!        kx      - Row dimension of the matrix x (see the
 !                  description of x below). It is assumed
 !                  THAT kx .GE. m.
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!        ix      - Seed to be used for obtaining more variates.
 !
-!        x       - OUTPUT ARRAY OF DIMENSION kx BY n CONTAINING
+!        x       - Output array of dimension kx by n containing
 !                  the n generated random normal vectors. The
 !                  j-TH vector is stored in the j-TH column of
 !                  x FOR j = 1,...,n.
 !
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - m .LE. 1  OR  m .GT. kx
-!                   3 - a(i) .LE. 0 FOR SOME i
-!                   4 - SEED OUT OF RANGE      )
+!                   3 - a(i) .LE. 0 for some i
+!                   4 - Seed out of range      )
 !
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(m)
@@ -3849,10 +3849,10 @@ integer, intent(in) :: n
 real, intent(in) :: a
 integer :: i
 !
-!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!              ***Subroutine purpose and description***
 !
 !           ranexp generates n exponential random variates from an
-!           EXPONENTIAL DISTRIBUTION WITH PARAMETER a (a .GT. 0).
+!           exponential distribution with parameter a (a .GT. 0).
 !           A is the mean of the distribution.  Hence, A is interpreted
 !           as the average rate per unit of time or the average time
 !           to failure (average lifetime).
@@ -3868,26 +3868,26 @@ integer :: i
 !
 !                    variance = a**2
 !
-!           ***PARAMETER LIST***
+!           ***Parameter list***
 !
 !           Input...
 !
-!           n       - NUMBER OF VARIATES TO BE GENERATED
-!           a       - MEAN OF THE EXPONENTIAL DISTRIBUTION
-!           iseed   - INTEGER SEED USED TO INITIALIZE THE
+!           n       - Number of variates to be generated
+!           a       - Mean of the exponential distribution
+!           iseed   - Integer seed used to initialize the
 !                     sequence of variates generated
 !
 !           Output...
 !
-!           iseed   - SEED TO BE USED ON THE NEXT CALL TO THE
+!           iseed   - Seed to be used on the next call to the
 !                     routine
-!           x       - OUTPUT ARRAY OF DIMENSION n CONTAINING
+!           x       - Output array of dimension n containing
 !                     the generated real variates
-!           ierror  - input error flag
-!                     ( 0 - no input errors
+!           ierror  - Input error flag
+!                     ( 0 - No input errors
 !                       1 - n .LE. 0
 !                       2 - a .LE. 0.0
-!                       3 - seed out of range )
+!                       3 - Seed out of range )
 !
 !           ***REFERENCE***
 !
@@ -3935,10 +3935,10 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 integer :: i
 !
-!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!              ***Subroutine purpose and description***
 !
 !           drnexp generates n exponential random variates from an
-!           EXPONENTIAL DISTRIBUTION WITH PARAMETER a (a .GT. 0).
+!           exponential distribution with parameter a (a .GT. 0).
 !           A is the mean of the distribution.  Hence, A is interpreted
 !           as the average rate per unit of time or the average time
 !           to failure (average lifetime).
@@ -3954,26 +3954,26 @@ integer :: i
 !
 !                    variance = a**2
 !
-!           ***PARAMETER LIST***
+!           ***Parameter list***
 !
 !           Input...
 !
-!           n       - NUMBER OF VARIATES TO BE GENERATED
-!           a       - MEAN OF THE EXPONENTIAL DISTRIBUTION
-!           iseed   - INTEGER SEED USED TO INITIALIZE THE
+!           n       - Number of variates to be generated
+!           a       - Mean of the exponential distribution
+!           iseed   - Integer seed used to initialize the
 !                     sequence of variates generated
 !
 !           Output...
 !
-!           iseed   - SEED TO BE USED ON THE NEXT CALL TO THE
+!           iseed   - Seed to be used on the next call to the
 !                     routine
-!           x       - OUTPUT ARRAY OF DIMENSION n CONTAINING
+!           x       - Output array of dimension n containing
 !                     the generated real variates
-!           ierror  - input error flag
-!                     ( 0 - no input errors
+!           ierror  - Input error flag
+!                     ( 0 - No input errors
 !                       1 - n .LE. 0
 !                       2 - a .LE. 0.0
-!                       3 - seed out of range )
+!                       3 - Seed out of range )
 !
 !           ***REFERENCE***
 !
@@ -4035,13 +4035,13 @@ real :: u, v, w
 !
 !     ix is a variable. On input ix is a seed for initializing the
 !     sequence of variates. On output ix is a new seed for obtaining
-!     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. ix .LT. 2**31 - 1.
+!     more variates. It is assumed that 1 .LE. ix .LT. 2**31 - 1.
 !
 !     ierr is a variable which reports the status of the results.
 !     When the subroutine terminates ierr has one of the following
 !     values ...
 !
-!          ierr = 0   THE GAMMA VARIATES WERE OBTAINED.
+!          ierr = 0   The gamma variates were obtained.
 !          ierr = 1   (INPUT ERROR) n .LE. 0
 !          ierr = 2   (INPUT ERROR) a .LT. 0.1
 !          ierr = 3   (INPUT ERROR) ix IS NOT A PROPER
@@ -4059,7 +4059,7 @@ ierr = 0
 !
 !             The following code assumes that the uniform
 !             variates are far enough from 0 and 1 so that
-!                   THE SETTING ind = -8 IS AVOIDED
+!                   the setting ind = -8 Is avoided
 !
 do i = 1,n
    call urng0 (ix, u, v)
@@ -4096,13 +4096,13 @@ integer :: i, ind, max
 !
 !     ix is a variable. On input ix is a seed for initializing the
 !     sequence of variates. On output ix is a new seed for obtaining
-!     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. ix .LT. 2**31 - 1.
+!     more variates. It is assumed that 1 .LE. ix .LT. 2**31 - 1.
 !
 !     ierr is a variable which reports the status of the results.
 !     When the subroutine terminates ierr has one of the following
 !     values ...
 !
-!          ierr = 0   THE GAMMA VARIATES WERE OBTAINED.
+!          ierr = 0   The gamma variates were obtained.
 !          ierr = 1   (INPUT ERROR) n .LE. 0
 !          ierr = 2   (INPUT ERROR) a .LT. 0.1
 !          ierr = 3   (INPUT ERROR) ix IS NOT A PROPER
@@ -4122,7 +4122,7 @@ ierr = 0
 !
 !             The following code assumes that the uniform
 !             variates are far enough from 0 and 1 so that
-!                   THE SETTING ind = -8 IS AVOIDED
+!                   the setting ind = -8 Is avoided
 !
 do i = 1,n
    call durng0 (ix, u, v)
@@ -4167,7 +4167,7 @@ real :: u, v, x1, x2
 !       f(x) = x**(a - 1) * (1 - x)**(b - 1) / beta(a,b)
 !
 !              WHERE  0 .LE. x .LE. 1  AND
-!              BETA(a,b) is the beta function.
+!              beta(a,b) is the beta function.
 !
 !     Mean and variance of the beta distribution...
 !
@@ -4177,23 +4177,23 @@ real :: u, v, x1, x2
 !
 !     Input...
 !
-!        n       - NUMBER OF VARIATES TO BE GENERATED
-!        a       - PARAMETER OF THE BETA DISTRIBUTION
-!        b       - PARAMETER OF THE BETA DISTRIBUTION
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        n       - Number of variates to be generated
+!        a       - Parameter of the beta distribution
+!        b       - Parameter of the beta distribution
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE
+!        ix      - Seed to be used for obtaining more
 !                  variates
-!        x       - ARRAY OF DIMENSION n CONTAINING THE
+!        x       - Array of dimension n containing the
 !                  beta variates
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a or b is less than 0.25
-!                   3 - SEED OUT OF RANGE        )
+!                   3 - Seed out of range        )
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n)
@@ -4209,7 +4209,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call urng0 (ix, u, v)
    call gaminv (a, x1, 0.0, u, v, ind)
@@ -4250,8 +4250,8 @@ integer :: i, ind, max
 !                           ------------
 !
 !     drbeta generates n double precision variates from the beta
-!     DISTRIBUTION WITH PARAMETERS A AND b WHERE a .GE. 0.25 AND
-!     b .GE. 0.25. THE GENERATION SCHEME IS BASED ON THE FACT
+!     distribution with parameters A and b where a .GE. 0.25 and
+!     b .GE. 0.25. The generation scheme is based on the fact
 !     that x1 / (x1 + x2) is a variate from the beta distribution
 !     when x1 and x2 are independent variates from the standard
 !     gamma distributions with parameters A and b respectively.
@@ -4261,7 +4261,7 @@ integer :: i, ind, max
 !       f(x) = x**(a - 1) * (1 - x)**(b - 1) / beta(a,b)
 !
 !              WHERE  0 .LE. x .LE. 1  AND
-!              BETA(a,b) is the beta function.
+!              beta(a,b) is the beta function.
 !
 !     Mean and variance of the beta distribution...
 !
@@ -4271,23 +4271,23 @@ integer :: i, ind, max
 !
 !     Input...
 !
-!        n       - NUMBER OF VARIATES TO BE GENERATED
-!        a       - PARAMETER OF THE BETA DISTRIBUTION
-!        b       - PARAMETER OF THE BETA DISTRIBUTION
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        n       - Number of variates to be generated
+!        a       - Parameter of the beta distribution
+!        b       - Parameter of the beta distribution
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE
+!        ix      - Seed to be used for obtaining more
 !                  variates
-!        x       - ARRAY OF DIMENSION n CONTAINING THE
+!        x       - Array of dimension n containing the
 !                  beta variates
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a or b is less than 0.25
-!                   3 - SEED OUT OF RANGE        )
+!                   3 - Seed out of range        )
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -4305,7 +4305,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call durng0 (ix, u, v)
    call dginv (a, x1, u, v, ind)
@@ -4349,7 +4349,7 @@ real :: spmpar
 !
 !     Fran generates n variates from the F-distribution with
 !     parameters A and b (called the numerator and denominator
-!     DEGREES OF FREEDOM) WHERE a .GE. 0.5 AND b .GE. 0.5. THE
+!     degrees of freedom) where a .GE. 0.5 and b .GE. 0.5. The
 !     generation scheme is based on the fact that (b/a)*(x1/x2)
 !     is a variate from the F-distribution when x1 and x2 are
 !     independent variates from the standard gamma distributions
@@ -4358,25 +4358,25 @@ real :: spmpar
 !
 !     Input...
 !
-!        n       - NUMBER OF VARIATES TO BE GENERATED
-!        a       - NUMERATOR DEGREES OF FREEDOM PARAMETER
-!        b       - DENOMINATOR DEGREES OF FREEDOM PARAMETER
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        n       - Number of variates to be generated
+!        a       - Numerator degrees of freedom parameter
+!        b       - Denominator degrees of freedom parameter
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE
+!        ix      - Seed to be used for obtaining more
 !                  variates
-!        x       - ARRAY OF DIMENSION n CONTAINING THE
+!        x       - Array of dimension n containing the
 !                  F distribution variates
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a or b is less than 0.5
 !                   3 - b is too small for the
 !                       floating arithmetic used
-!                   4 - SEED OUT OF RANGE       )
+!                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n)
@@ -4384,7 +4384,7 @@ real, intent(inout) :: x(n)
 data max /2147483647/
 !--------------------
 !
-!     ****** xmax IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
+!     ****** xmax is a machine dependent constant. Xmax is the
 !            largest number in the floating arithmetic used.
 !
              xmax = spmpar(3)
@@ -4405,7 +4405,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call urng0 (ix, u, v)
    call gaminv (ahalf, x1, 0.0, u, v, ind)
@@ -4452,7 +4452,7 @@ integer :: i, ind, max
 !
 !     dfran generates n variates from the F-distribution with
 !     parameters A and b (called the numerator and denominator
-!     DEGREES OF FREEDOM) WHERE a .GE. 0.5 AND b .GE. 0.5. THE
+!     degrees of freedom) where a .GE. 0.5 and b .GE. 0.5. The
 !     generation scheme is based on the fact that (b/a)*(X1/X2)
 !     is a variate from the F-distribution when X1 and X2 are
 !     independent variates from the standard gamma distributions
@@ -4461,25 +4461,25 @@ integer :: i, ind, max
 !
 !     Input...
 !
-!        n       - NUMBER OF VARIATES TO BE GENERATED
-!        a       - NUMERATOR DEGREES OF FREEDOM PARAMETER
-!        b       - DENOMINATOR DEGREES OF FREEDOM PARAMETER
-!        ix      - INTEGER SEED USED TO INITIALIZE THE
+!        n       - Number of variates to be generated
+!        a       - Numerator degrees of freedom parameter
+!        b       - Denominator degrees of freedom parameter
+!        ix      - Integer seed used to initialize the
 !                  sequence of variates
 !
 !     Output...
 !
-!        ix      - SEED TO BE USED FOR OBTAINING MORE
+!        ix      - Seed to be used for obtaining more
 !                  variates
-!        x       - ARRAY OF DIMENSION n CONTAINING THE
+!        x       - Array of dimension n containing the
 !                  F distribution variates
-!        ierr    - INPUT ERROR FLAG
-!                  (0 - no input errors
+!        ierr    - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a or b is less than 0.5
 !                   3 - b is too small for the
 !                       floating arithmetic used
-!                   4 - SEED OUT OF RANGE       )
+!                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -4491,7 +4491,7 @@ double precision :: dpmpar
 data max /2147483647/
 !--------------------
 !
-!     ****** xmax IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
+!     ****** xmax is a machine dependent constant. Xmax is the
 !            largest number in the floating arithmetic used.
 !
              xmax = dpmpar(3)
@@ -4512,7 +4512,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call durng0 (ix, u, v)
    call dginv (ahalf, x1, u, v, ind)
@@ -4560,7 +4560,7 @@ real :: ahalf, d, s, u, v, w, z
 !
 !        Tran generates n random variates from A T-distribution
 !        with parameter a (called the degrees of freedom) where
-!        a .GE. 0.5. THE GENERATION SCHEME IS BASED ON THE FACT
+!        a .GE. 0.5. The generation scheme is based on the fact
 !        that x/sqrt(Y/a) is a variate from the T-distribution
 !        when x is a standard normal variate and Y a chi-square
 !        variate with a degrees of freedom.
@@ -4568,24 +4568,24 @@ real :: ahalf, d, s, u, v, w, z
 !
 !        Input...
 !
-!           n    - NUMBER OF VARIATES TO BE GENERATED
-!           a    - DEGREES OF FREEDOM PARAMETER
-!           ix   - INTEGER SEED USED TO INITIALIZE THE
+!           n    - Number of variates to be generated
+!           a    - Degrees of freedom parameter
+!           ix   - Integer seed used to initialize the
 !                  sequence of variates
 !
 !        Output...
 !
-!           ix   - SEED TO BE USED FOR OBTAINING MORE
+!           ix   - Seed to be used for obtaining more
 !                  variates
-!           x    - ARRAY OF DIMENSION n CONTAINING THE
+!           x    - Array of dimension n containing the
 !                  T-distribution variates
-!           ierr - input error flag
-!                  (0 - no input errors
+!           ierr - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a .LT. 0.5
 !                   3 - a is too small for the
 !                       floating arithmetic used
-!                   4 - SEED OUT OF RANGE       )
+!                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
 real, intent(inout) :: x(n)
@@ -4610,7 +4610,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call urng0 (ix, u, v)
    call gaminv (ahalf, w, 0.0, u, v, ind)
@@ -4647,7 +4647,7 @@ integer :: i, ind, max
 !
 !        dtran generates n random variates from A T-distribution
 !        with parameter a (called the degrees of freedom) where
-!        a .GE. 0.5. THE GENERATION SCHEME IS BASED ON THE FACT
+!        a .GE. 0.5. The generation scheme is based on the fact
 !        that x/sqrt(Y/a) is a variate from the T-distribution
 !        when x is a standard normal variate and Y a chi-square
 !        variate with a degrees of freedom.
@@ -4655,24 +4655,24 @@ integer :: i, ind, max
 !
 !        Input...
 !
-!           n    - NUMBER OF VARIATES TO BE GENERATED
-!           a    - DEGREES OF FREEDOM PARAMETER
-!           ix   - INTEGER SEED USED TO INITIALIZE THE
+!           n    - Number of variates to be generated
+!           a    - Degrees of freedom parameter
+!           ix   - Integer seed used to initialize the
 !                  sequence of variates
 !
 !        Output...
 !
-!           ix   - SEED TO BE USED FOR OBTAINING MORE
+!           ix   - Seed to be used for obtaining more
 !                  variates
-!           x    - ARRAY OF DIMENSION n CONTAINING THE
+!           x    - Array of dimension n containing the
 !                  T-distribution variates
-!           ierr - input error flag
-!                  (0 - no input errors
+!           ierr - Input error flag
+!                  (0 - No input errors
 !                   1 - n .LE. 0
 !                   2 - a .LT. 0.5
 !                   3 - a is too small for the
 !                       floating arithmetic used
-!                   4 - SEED OUT OF RANGE       )
+!                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -4699,7 +4699,7 @@ do i = 1,n
 !
 !        The following code assumes that the uniform
 !        variates are far enough from 0 and 1 so that
-!        THE SETTING ind = -8 IN gaminv IS AVOIDED.
+!        the setting ind = -8 In gaminv is avoided.
 !
    call durng0 (ix, u, v)
    call dginv (ahalf, w, u, v, ind)
@@ -4730,55 +4730,55 @@ real, intent(in) :: alpha, fmu, sig
 integer :: i
 real :: c, sigi, t
 !
-!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!              ***Subroutine purpose and description***
 !
 !           rmk1 generates an autocorrelated sequence x of
 !           length n where x is a first-order markov process
-!           WITH PARAMETER alpha (abs(alpha) .LT. 1). THE SEQUENCE
-!           x(J) (J = 2,...,n) IS GENERATED BY
+!           with parameter alpha (abs(alpha) .LT. 1). The sequence
+!           x(J) (J = 2,...,n) is generated by
 !
 !                  x(J) - fmu = alpha*(x(J-1) - fmu) + Z(J).
 !
 !           Z(J) is the random error term, assumed to be normally
 !           distributed with mean 0 and standard deviation sig
-!           (sig .GE. 0). THE GENERATION SCHEME ASSUMES THAT x IS
+!           (sig .GE. 0). The generation scheme assumes that x is
 !           a normal process with mean fmu and variance
 !
 !                      sig*sig / (1 - alpha*alpha) .
 !
-!           x IS A STATIONARY PROCESS PROVIDED THAT abs(alpha) .LT.
+!           x is a stationary process provided that abs(alpha) .LT.
 !           1. The autocorrelation structure of the sequence is
 !           characterized by the fact that the correlation between
 !           terms becomes progressively weaker with increasing lag.
 !           We note that a first-order markov process is synonomous
 !           with a first-order autoregressive (AR) process.
 !
-!           ***PARAMETER LIST***
+!           ***Parameter list***
 !
 !           Input...
 !
-!           n       - LENGTH OF THE SEQUENCE TO BE GENERATED.
-!                     IT IS ASSUMED THAT n .GE. 2.
-!           fmu     - MEAN OF THE NORMAL PROCESS
-!           sig     - STANDARD DEVIATION OF THE NORMALLY
+!           n       - Length of the sequence to be generated.
+!                     It is assumed that n .GE. 2.
+!           fmu     - Mean of the normal process
+!           sig     - Standard deviation of the normally
 !                     distributed error term
-!           alpha   - VALUE OF THE MARKOV MODEL PARAMETER
-!           iseed   - INTEGER SEED USED TO INITIALIZE THE
+!           alpha   - Value of the markov model parameter
+!           iseed   - Integer seed used to initialize the
 !                     sequence of normal variates generated
 !                     by subroutine rnor
 !
 !           Output...
 !
-!           iseed   - SEED TO BE USED ON THE NEXT CALL TO THE
+!           iseed   - Seed to be used on the next call to the
 !                     routine
-!           x       - OUTPUT ARRAY OF DIMENSION n CONTAINING
+!           x       - Output array of dimension n containing
 !                     the generated first-order markov sequence
-!           ierror  - input error flag
-!                     ( 0 - no input errors
+!           ierror  - Input error flag
+!                     ( 0 - No input errors
 !                       1 - n .LE. 1
 !                       2 - sig .LT. 0
 !                       3 - abs(alpha) .GE. 1
-!                       4 - seed out of range )
+!                       4 - Seed out of range )
 !
 !           ***REFERENCE***
 !
@@ -4821,7 +4821,7 @@ sigi = sig/sqrt(c*t)
 !
 x(1) = fmu + sigi*x(1)
 !
-!        Generates the last n - 1 terms of the required autocorrelated
+!        Generates the last n - 1 Terms of the required autocorrelated
 !        sequence
 !
 c = fmu*c
@@ -4848,55 +4848,55 @@ integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 integer :: i
 !
-!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!              ***Subroutine purpose and description***
 !
 !           drmk1 generates an autocorrelated sequence x of
 !           length n where x is a first-order markov process
-!           WITH PARAMETER alpha (abs(alpha) .LT. 1). THE SEQUENCE
-!           x(J) (J = 2,...,n) IS GENERATED BY
+!           with parameter alpha (abs(alpha) .LT. 1). The sequence
+!           x(J) (J = 2,...,n) is generated by
 !
 !                  x(J) - fmu = alpha*(x(J-1) - fmu) + Z(J).
 !
 !           Z(J) is the random error term, assumed to be normally
 !           distributed with mean 0 and standard deviation sig
-!           (sig .GE. 0). THE GENERATION SCHEME ASSUMES THAT x IS
+!           (sig .GE. 0). The generation scheme assumes that x is
 !           a normal process with mean fmu and variance
 !
 !                      sig*sig / (1 - alpha*alpha) .
 !
-!           x IS A STATIONARY PROCESS PROVIDED THAT abs(alpha) .LT.
+!           x is a stationary process provided that abs(alpha) .LT.
 !           1. The autocorrelation structure of the sequence is
 !           characterized by the fact that the correlation between
 !           terms becomes progressively weaker with increasing lag.
 !           We note that a first-order markov process is synonomous
 !           with a first-order autoregressive (AR) process.
 !
-!           ***PARAMETER LIST***
+!           ***Parameter list***
 !
 !           Input...
 !
-!           n       - LENGTH OF THE SEQUENCE TO BE GENERATED.
-!                     IT IS ASSUMED THAT n .GE. 2.
-!           fmu     - MEAN OF THE NORMAL PROCESS
-!           sig     - STANDARD DEVIATION OF THE NORMALLY
+!           n       - Length of the sequence to be generated.
+!                     It is assumed that n .GE. 2.
+!           fmu     - Mean of the normal process
+!           sig     - Standard deviation of the normally
 !                     distributed error term
-!           alpha   - VALUE OF THE MARKOV MODEL PARAMETER
-!           iseed   - INTEGER SEED USED TO INITIALIZE THE
+!           alpha   - Value of the markov model parameter
+!           iseed   - Integer seed used to initialize the
 !                     sequence of normal variates generated
 !                     by subroutine drnor
 !
 !           Output...
 !
-!           iseed   - SEED TO BE USED ON THE NEXT CALL TO THE
+!           iseed   - Seed to be used on the next call to the
 !                     routine
-!           x       - OUTPUT ARRAY OF DIMENSION n CONTAINING
+!           x       - Output array of dimension n containing
 !                     the generated first-order markov sequence
-!           ierror  - input error flag
-!                     ( 0 - no input errors
+!           ierror  - Input error flag
+!                     ( 0 - No input errors
 !                       1 - n .LE. 1
 !                       2 - sig .LT. 0
 !                       3 - abs(alpha) .GE. 1
-!                       4 - seed out of range )
+!                       4 - Seed out of range )
 !
 !           ***REFERENCE***
 !
@@ -4941,7 +4941,7 @@ sigi = sig/dsqrt(c*t)
 !
 x(1) = fmu + sigi*x(1)
 !
-!        Generates the last n - 1 terms of the required autocorrelated
+!        Generates the last n - 1 Terms of the required autocorrelated
 !        sequence
 !
 c = fmu*c

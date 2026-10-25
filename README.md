@@ -146,6 +146,8 @@ executable code, inline comments, and directives are preserved. Prose sentence
 capitalization, proper names, and acronyms retain their intended case. Ambiguous
 passages retain their original case. Author and reference paragraphs use the same
 prose rules, with reviewed capitalization for author and institution names.
+Variable definitions and status lists also use sentence case for their prose,
+including descriptions alongside expressions such as `l .LT. n`.
 
 The generated [comment review report](tools/comment-case-review.json) records
 changed-line counts, protected categories, unfamiliar words, and uncertain

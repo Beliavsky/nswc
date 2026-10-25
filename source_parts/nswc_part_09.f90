@@ -53,7 +53,7 @@ end subroutine cosqi
 !
 !     X       FOR I=1,...,n
 !
-!                  X(I) = X(1) PLUS THE SUM FROM k=2 TO k=n OF
+!                  X(I) = X(1) plus the sum from k=2 To k=n of
 !
 !                     2*X(k)*cos((2*I-1)*(k-1)*pi/(2*n))
 !
@@ -149,7 +149,7 @@ end subroutine cosqf1
 !
 !     x       FOR i=1,...,n
 !
-!                  x(i)= THE SUM FROM k=1 TO k=n OF
+!                  x(i)= The sum from k=1 To k=n of
 !
 !                    4*x(k)*cos((2*k-1)*(i-1)*pi/(2*n))
 !
@@ -251,7 +251,7 @@ end subroutine cosqb1
 !
 !                  x(i) = (-1)**(i-1)*x(n)
 !
-!                     + THE SUM FROM k=1 TO k=n-1 OF
+!                     + The sum from k=1 To k=n-1 of
 !
 !                     2*x(k)*sin((2*i-1)*k*pi/(2*n))
 !
@@ -322,7 +322,7 @@ end subroutine sinqf
 !
 !     x       FOR I=1,...,n
 !
-!                  x(I)= THE SUM FROM k=1 TO k=n OF
+!                  x(I)= The sum from k=1 To k=n of
 !
 !                    4*x(k)*sin((2k-1)*I*pi/(2*n))
 !
@@ -484,19 +484,19 @@ end subroutine rffti1
 !
 !     Output parameters
 !
-!     R       FOR n EVEN AND FOR i = 1,...,n
+!     R       for n even and for i = 1,...,n
 !
 !                  r(i) = r(1)+(-1)**(i-1)*r(n)
 !
-!                       PLUS THE SUM FROM K=2 TO K=n/2 OF
+!                       Plus the sum from K=2 To K=n/2 of
 !
 !                        2.*R(2*K-2)*cos((K-1)*(i-1)*2*pi/n)
 !
 !                       -2.*R(2*K-1)*sin((K-1)*(i-1)*2*pi/n)
 !
-!             FOR n ODD AND FOR i = 1,...,n
+!             For n odd and for i = 1,...,n
 !
-!                  R(i) = R(1) PLUS THE SUM FROM K=2 TO K=(n+1)/2 OF
+!                  R(i) = R(1) plus the sum from K=2 To K=(n+1)/2 of
 !
 !                       2.*R(2*K-2)*cos((K-1)*(i-1)*2*pi/n)
 !
@@ -1101,23 +1101,23 @@ end subroutine radbg
 !
 !     Output parameters
 !
-!     R       R(1) = THE SUM FROM i=1 TO i=N OF R(i)
+!     R       R(1) = The sum from i=1 To i=N of R(i)
 !
-!             IF N IS EVEN SET l =N/2   , IF N IS ODD SET l = (N+1)/2
+!             If N is even set l =N/2   , if N is odd set l = (N+1)/2
 !
-!               THEN FOR k = 2,...,l
+!               Then for k = 2,...,l
 !
-!                  R(2*k-2) = THE SUM FROM i = 1 TO i = N OF
+!                  R(2*k-2) = The sum from i = 1 To i = N of
 !
 !                       R(i)*cos((k-1)*(i-1)*2*pi/N)
 !
-!                  R(2*k-1) = THE SUM FROM i = 1 TO i = N OF
+!                  R(2*k-1) = The sum from i = 1 To i = N of
 !
 !                      -R(i)*sin((k-1)*(i-1)*2*pi/N)
 !
 !             If N is even
 !
-!                  R(N) = THE SUM FROM i = 1 TO i = N OF
+!                  R(N) = The sum from i = 1 To i = N of
 !
 !                       (-1)**(i-1)*R(i)
 !
@@ -1803,7 +1803,7 @@ do 43 j = k,lpm
 44 c(i,np1) = sign*g(x(i))
 end do
 !
-!     SOLVE THE EQUATIONS CX = D AND STORE THE RESULTS IN D
+!     Solve the equations CX = D and store the results in D
 !
 call dpslv (np1, 1, c, np1, d, np1, ierr)
 if (ierr .ne. 0) go to 220
@@ -1983,7 +1983,7 @@ go to 30
 200 ierr = 1
 return
 !
-!     mxiter iterations were performed - more iterations are needed
+!     mxiter iterations were performed - More iterations are needed
 !
 210 ierr = 2
 return
@@ -2006,7 +2006,7 @@ return
 240 ierr = 5
 return
 !
-!     The routine HAS completely failed - the results should be ignored
+!     The routine HAS completely failed - The results should be ignored
 !
 250 ierr = 6
 return
@@ -2052,7 +2052,7 @@ return
 100 ierr = 1
 return
 !
-!     The routine HAS completely failed - the results should be ignored
+!     The routine HAS completely failed - The results should be ignored
 !
 110 ierr = 6
 return
@@ -2160,69 +2160,69 @@ integer :: knots
 !  of specified smoothness, accuracy and degree.  The input to the
 !  computation is
 !
-!   f      - FUNCTION BEING APPROXIMATED. IT MUST PROVIDE VALUES OF
+!   f      - Function being approximated. It must provide values of
 !            derivatives up to the order of smoothness specified for
 !            the approximation.  The calling sequence is f(X,FDERV) and
-!            FDERV contains the DERIVATIVES( SEE CONSTRAINT BELOW)
+!            FDERV contains the derivatives( see constraint below)
 !   A,b    - THE ENDPOINTS OF THE INTERVAL OF APPROXIMATION
-!   accur  - the accuracy required for the approximation
-!   smooth - the smoothness required for the approximation
-!              = 0  MEANS CONTINUOUS
-!              = 1  MEANS CONTINUOUS SLOPE
-!              = 2  MEANS CONTINUOUS SECOND DERIVATIVE, ETC.
-!   degree - the degree of the polynomial pieces.
+!   accur  - The accuracy required for the approximation
+!   smooth - The smoothness required for the approximation
+!              = 0  Means continuous
+!              = 1  Means continuous slope
+!              = 2  Means continuous second derivative, etc.
+!   degree - The degree of the polynomial pieces.
 !            Must have degree GT 2*smooth
-!   charf  - characteristic length of the function f(X). Pieces are not
+!   charf  - Characteristic length of the function f(X). Pieces are not
 !            longer than this length.
-!   NORM   - NORM TO MEASURE THE APPROXIMATION ERROR
+!   Norm   - Norm to measure the approximation error
 !              = 1  L1 APPROXIMATION (LEAST DEVIATIONS)
 !              = 2  L2 APPROXIMATION (LEAST SQUARES)
 !              = 3  TCHEBYCHEFF (MINIMAX) APPROXIMATION
 !              =-P  (NEGATIVE VALUE) GENERAL LP APPROXIMATION
-!   nbreak - number of special break points in the approximation.
+!   nbreak - Number of special break points in the approximation.
 !            Associated input variables are
-!              XBREAK(J)  - location of break points
-!              dbreak(J)  - derivative broken at XBREAK
-!              bleft (J)  - value from left for dbreak derivative
+!              XBREAK(J)  - Location of break points
+!              dbreak(J)  - Derivative broken at XBREAK
+!              bleft (J)  - Value from left for dbreak derivative
 !              bright(J)  -   -    -   right -    -        -
-!   edist  - switch to change from proportional error distribution
+!   edist  - Switch to change from proportional error distribution
 !            to fixed distribution. This is primarily of use in
 !            approximation of functions with singularities. One should
-!            USE NORM = 1. OR SO IN SUCH CASES
-!              = 0  PROPORTIONAL DISTRIBUTION
-!              = 1  APPROXIMATE FIXED ERROR DISTRIBUTION
+!            use norm = 1. Or so in such cases
+!              = 0  Proportional distribution
+!              = 1  Approximate fixed error distribution
 !                   attempts to achieve specified accuracy value accur
-!              = 2  TRUE FIXED ERROR DISTRIBUTION
+!              = 2  True fixed error distribution
 !
 !  ********** OUTPUT **********
 !     the output of the computation consists of 4 parts, each returned
 !     to the user in a different way. They are
 !
-!   xknots,coefs - arrays defining the piecewise polynomial result.
-!            xknots(K)  = knots OF THE APPROXIMATION ( K = 1 TO KNOTS)
+!   xknots,coefs - Arrays defining the piecewise polynomial result.
+!            xknots(K)  = knots of the approximation ( K = 1 To knots)
 !                         the last one is right end point of interval
-!            coefs(K,N) = COEFFICIENT OF (X - XKNOT(K))**(N-1) IN THE
+!            coefs(K,N) = Coefficient of (X - XKNOT(K))**(N-1) in the
 !                         interval XKNOT(K) to XKNOT(K+1)
-!                           K = 1 TO knots-1  AND  N = 1 TO degree+1
+!                           K = 1 To knots-1  and  N = 1 To degree+1
 !            these arrays are passed as arguments so as to use variable
 !            dimensions. The arrays are of dimension xknots(kdimen) and
-!            coefs(kmax,ndimen). IT IS ASSUMED THAT kdimen = kmax+1.
-!               ***** NOTE ***** SEVERAL SMALL ARRAYS HERE HAVE FIXED
+!            coefs(kmax,ndimen). It is assumed that kdimen = kmax+1.
+!               ***** Note ***** several small arrays here have fixed
 !                        dimensions that limit degree and thus ndimen
-!                        SHOULD NOT EXCEED THIS LIMIT (CURRENTLY = 20)
+!                        should not exceed this limit (currently = 20)
 !
 !   RESULZ - a labeled common block containing knots and error
-!              knots - number of knots of the approximation
-!              error - estimated accuracy of the approximation
+!              knots - Number of knots of the approximation
+!              error - Estimated accuracy of the approximation
 !
-!   ierr - status indicator. ierr takes the values
+!   ierr - Status indicator. ierr takes the values
 !      0   THE APPROXIMATION WAS SUCCESSFULLY CONSTRUCTED.
 !     -1   INPUT ERROR REPORTED BY adset.
 !     -2   A AND b ARE TOO CLOSE.
 !     -3   charf IS TOO SMALL.
 !     -4   EITHER ALL THE BREAK POINTS ARE NOT BETWEEN A AND b, OR
-!          XBREAK(I).GE.XBREAK(I+1) FOR SOME I.
-!     -5   dbreak(I).LT.0 .OR. dbreak(I).GT.(degree-1)/2 FOR SOME I.
+!          XBREAK(I).GE.XBREAK(I+1) for some I.
+!     -5   dbreak(I).LT.0 .OR. dbreak(I).GT.(degree-1)/2 for some I.
 !      1   THE KNOT LIMIT WAS EXCEEDED.
 !      2   BREAK POINT ADJUSTMENT REQUIRES THAT A SUBINTERVAL BE
 !          partitioned. However, this cannot be done either because
@@ -2236,26 +2236,26 @@ integer :: knots
 !          either because the interval stack is full, or partitioning
 !          will produce too small an interval.
 !
-!  ********** DIMENSION CONSTRAINTS **********
-!     maxknt - max number of knots taken from user via kdimen
+!  ********** Dimension constraints **********
+!     maxknt - Max number of knots taken from user via kdimen
 !              arrays with this dimension (or related values)
 !                   coefs   xknots
-!     maxpar - MAX NUMBER OF PARAMETERS PER INTERVAL (CURRENTLY = 20)
-!                   user provided ndimen must have ndimen LE maxpar
-!                   must have  degree + 1 LE maxpar
+!     maxpar - Max number of parameters per interval (currently = 20)
+!                   user provided ndimen must have ndimen le maxpar
+!                   must have  degree + 1 le maxpar
 !              arrays with this dimension (or related values)
 !                D       DDTEMP  FDERVL  FDERVR  FDUMB   FACTOR
 !                FINTRP  FLEFT   FRIGHT  POWERS  XTEMP   XINTRP  XDD
-!              ***** NOTE ***** maxpar ALSO AFFECTS ARGUMENT fderv
+!              ***** note ***** maxpar also affects argument fderv
 !              of function f.  FDERVL, FDERVR are also involved.
 !              Should declare FDERV of size 10 in f to be safe.
-!     maxaux - MAXIMUM NUMBER OF AUXILIARY INPUT ( = 20 NOW ). ARRAYS
+!     maxaux - Maximum number of auxiliary input ( = 20 Now ). Arrays
 !                 XBREAK  dbreak  bleft   BRIGHT
-!     maxstk - max size of active interval stack
-!              MIN INTERVAL LENGTH IS 2**(-maxstk)*(b-a). ARRAYS
+!     maxstk - Max size of active interval stack
+!              min interval length is 2**(-maxstk)*(b-a). Arrays
 !                 XLEFT   XRIGHT
 !
-!  **********  PORTABILITY CONSIDERATIONS  **********
+!  **********  Portability considerations  **********
 !
 !     All the routines in this package (except adapt) are written in
 !     ANSI standard Fortran. In addition, they meet all the requirements
@@ -2263,15 +2263,15 @@ integer :: knots
 !     routines are affected by a change in machine word length and
 !     changing to single precision.
 !
-!     ***** THE GAUSS WEIGHTS AND ABSCISSAE IN adcomp ARE GIVEN TO
+!     ***** The Gauss weights and abscissae in adcomp are given to
 !           30 digits. The parameter eps0 in adset specifies the
 !           accuracy of these constants. If the accuracy is changed
-!           TO K DECIMAL DIGITS THEN SET EPS0 = 10**(-K).
+!           to K decimal digits then set EPS0 = 10**(-K).
 !
-!     ***** THE INTERVAL STACK SIZE maxstk IS DEFINED IN adset TO
+!     ***** The interval stack size maxstk is defined in adset to
 !           be 50. If maxstk is modified then set the dimensions of
 !           XLEFT and XRIGHT to the new value for maxstk. Note that
-!           THE MINIMUM INTERVAL LENGTH IS 2**(-maxstk)*(b-a).
+!           the minimum interval length is 2**(-maxstk)*(b-a).
 !
 !  Single precision conversion -- requires four steps
 !     1. Declare all double precision variables to be real.
@@ -2299,44 +2299,44 @@ common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 !                      kntdim - kdimen, name changed to put in common
 !                      npardm - ndimen, name changed to put in common
 common /resulz/ error, knots
-!                      knots = FINAL NO. OF KNOTS, INCLUDES b AS ONE.
-!                      ERROR = ESTIMATE OF ERROR ACTUALLY ACHIEVED.
+!                      knots = Final no. of knots, includes b as one.
+!                      Error = Estimate of error actually achieved.
 common /kontrl/ dsctol, errori, xleft, xright, break, both, &
 &factor, ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack, right, discrd, buffer
 !             KONTRL contains generally useful variables
-!                      maxstk - see comments above
-!                      buffer - the machine dependent tolerance used
+!                      maxstk - See comments above
+!                      buffer - The machine dependent tolerance used
 !                               by the algorithm
-!                      NSTACK - counter for interval stack, consists of
+!                      NSTACK - Counter for interval stack, consists of
 !                               (XLEFT(J),XRIGHT(J))  J = 1 TO NSTACK
-!                      ERRORI - error estimate for top interval
-!                      DSCTOL - tolerance to check discarding intervals
-!                      discrd - switch to signal discard of top interval
-!                      factor - array of factorials
-!                      NPAR   - NUMBER OF PAREMETERS = degree + 1
-!                      interp - number of interior interpolation points
+!                      ERRORI - Error estimate for top interval
+!                      DSCTOL - Tolerance to check discarding intervals
+!                      discrd - Switch to signal discard of top interval
+!                      factor - Array of factorials
+!                      NPAR   - Number of PAREMETERS = degree + 1
+!                      interp - Number of interior interpolation points
 !                               in the normal interval
-!                      ibreak - counter on break points
-!                      break  - switch for break point in top interval
-!                               0     = NO BREAK PRESENT
-!                               left  = break AT XLEFT(NSTACK)
-!                               right = break AT XRIGHT(NSTACK)
-!                               both  = break AT BOTH ENDS
+!                      ibreak - Counter on break points
+!                      break  - Switch for break point in top interval
+!                               0     = No break present
+!                               left  = break at XLEFT(NSTACK)
+!                               right = break at XRIGHT(NSTACK)
+!                               both  = break at both ends
 common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
 &leftx, nintrp, rightx
 !             COMDIF contains variables used only by adcomp and friends.
-!                      nintrp - number of interior interpolation points
+!                      nintrp - Number of interior interpolation points
 !                               for the current interval
-!                      XINTRP - interior interpolation points
+!                      XINTRP - Interior interpolation points
 !                      FINTRP - f values at XINTRP points
-!                      leftx  - multiplicity of interpolation at XLEFT
-!                               = NO. OF DERIVATIVES MATCHED AT XLEFT
-!                      FLEFT  - values of f and its derivatives at XLEFT
-!                      rightx - multiplicity of interpolation at XRIGHT
-!                      fright - values of f and derivatives at XRIGHT
-!                      DDTEMP - the array of divided differences
-!                      XDD    - THE X VALUES FOR DDTEMP WITH PROPER
+!                      leftx  - Multiplicity of interpolation at XLEFT
+!                               = No. of derivatives matched at XLEFT
+!                      FLEFT  - Values of f and its derivatives at XLEFT
+!                      rightx - Multiplicity of interpolation at XRIGHT
+!                      fright - Values of f and derivatives at XRIGHT
+!                      DDTEMP - The array of divided differences
+!                      XDD    - The X values for DDTEMP with proper
 !                               multiplicities of XLEFT and XRIGHT
 !
 !------------------------ Main control program -------------------------
@@ -2384,7 +2384,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM CHECKS THE INPUT DATA AND INITIALIZES THE COMPUTATION
+! **  This program checks the input data and initializes the computation
 !
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
@@ -2527,7 +2527,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM TAKES AN ACTIVE INTERVAL OFF THE TOP OF THE STACK
+! **  This program takes an active interval off the top of the stack
 !     it also does most of the work of locating and handling
 !     break points
 !
@@ -2611,7 +2611,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM COMPUTES THE PIECEWISE POLYNOMIAL APPROXIMATION ON
+! **  This program computes the piecewise polynomial approximation on
 !     the current interval. It also estimates the error
 !
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
@@ -2644,10 +2644,10 @@ data r/1.5d0/
 !                    .347854845137453857373063949222D0
 !                    .652145154862546142626936050778D0
 !
-!     ***** THE ABSISSAE AND WEIGHTS ARE GIVEN BELOW TO 30 DIGITS.
+!     ***** The ABSISSAE and weights are given below to 30 digits.
 !           The parameter eps0 in adset specifies the accuracy of
 !           these constants. If the accuracy is changed to K decimal
-!           DIGITS THEN SET EPS0 = 10**(-K).
+!           digits then set EPS0 = 10**(-K).
 !
 data absc(1) /-.861136311594052575223946488893d0 /
 data absc(2) /-.339981043584856264802665759103d0 /
@@ -2726,8 +2726,8 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS FUNCTION DOES A FOUR POINT INTEGRATION RULE FOR THE
-!     absolute value of the difference of two FUNCTIONS( f AND FIT )
+! **  This function does a four point integration rule for the
+!     absolute value of the difference of two functions( f and fit )
 !                   abs( f(X) - fit(X) )**NORM
 !     the integration uses the points and weights given and scaled
 !     from (-1,1) to (aaa,bbb)
@@ -2755,7 +2755,7 @@ common /comdif/ ddtemp, fintrp, fleft, fright, xdd, xintrp, &
 !
 data two,three/2.0d0,3.0d0/
 !
-!         COMPUTE MIDPOINT = abmid AND HALF LENGTH = ba OF INTERVAL
+!         Compute midpoint = abmid and half length = ba of interval
 abmid = (aaa+bbb)/two
 ba = (bbb-aaa)/two
 pj = abmid + ba*points(1)
@@ -2805,28 +2805,28 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM COMPUTES THE DIVIDED DIFFERENCES ARRAY AS FOLLOWS
+! **  This program computes the divided differences array as follows
 !         nl COALESCED POINTS ON left   - DERIV VALUES IN FLEFT
 !         nr COALESCED POINTS ON right  -   -      -    - FRIGHT
 !         ni DISTINCT  POINTS INBETWEEN - FNCTN    -    - FINTRP
 !
-!     THE POINTS ARE ORDERED XL = XLEFT (NSTACK)
+!     The points are ordered XL = XLEFT (NSTACK)
 !                            xr = xright(nstack)
 !                            XINTRP ARRAY
 !
 !         Layout of the DDTEMP divided difference array
 !
 !     nl=6    llllll****ii
-!     nr=4    LLLLL****II     L = FIRST TRIANGLE
+!     nr=4    Lllll****II     L = First triangle
 !     ni=2    llll****ii
-!             LLL****II       R = SECOND TRIANGLE
+!             LLL****II       R = Second triangle
 !             LL****II
-!             L****II         * = FILL BETWEEN TRIANGLES
+!             L****II         * = Fill between triangles
 !             RRRRII
-!             RRRII           I = COMPLETION FOR INTERPOLATION POINTS
+!             RRRII           I = Completion for interpolation points
 !             RRII
-!             RII       idif = HORIZONTAL COORD. = DIFFERENCE ORDER
-!             II        ipt  = VERTICAL COORD. ASSOCIATED WITH POINTS
+!             RII       idif = Horizontal coord. = Difference order
+!             II        ipt  = Vertical coord. Associated with points
 !             I
 !
 !
@@ -2856,7 +2856,7 @@ nr1 = nr - 1
 nr2 = nr + 1
 nrl = nr + nl
 !
-!         PUT X-VALUES IN A SINGLE ARRAY WITH nddx = nl+nr+ni POINTS
+!         Put X-values in a single array with nddx = nl+nr+ni points
 do 10 nddx = 1,nl
   xdd(nddx) = xleft(nstack)
 10 continue
@@ -2872,7 +2872,7 @@ do k=1,ni
   xdd(nddx) = xintrp(k)
 end do
 !
-!           Fill border of first triangle - size nl.
+!           Fill border of first triangle - Size nl.
 40 continue
 !         Top border
 do 50 idif = 1,nl
@@ -2885,7 +2885,7 @@ do idif=1,nl1
   ddtemp(idif,ipt) = ddtemp(idif,1)
 end do
 !
-!          Fill border of second triangle - size nr
+!          Fill border of second triangle - Size nr
 70 continue
 !         Top border
 do idif=1,nr
@@ -2948,7 +2948,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS FUNCTION EVALUATES THE CURRENT POLYNOMIAL PIECE REPRESENTED
+! **  This function evaluates the current polynomial piece represented
 !     by the divided differences DDTEMP on the point set XDD.
 !
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
@@ -2987,7 +2987,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM CHECKS FOR DISCARDING INTERVAL, APPLIES VARIOUS
+! **  This program checks for discarding interval, applies various
 !     tests about discarding involving edist and charf.
 !
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
@@ -3021,7 +3021,7 @@ if (edist-1) 10,20,30
 10 dtest = dx*dsctol
 go to 40
 !         For the approximate fixed error distribution type we estimate
-!         the final number of knots BY( LIMITING IT A LITTLE )
+!         the final number of knots by( limiting it a little )
 !             (NSTACK+knots+2)((b-a)/(XRIGHT-a))
 20 aknots = nstack+knots+2
 dtest = dsctol/(aknots*dmin1((b-a)/(xright(nstack)-a),five))
@@ -3045,7 +3045,7 @@ integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 integer :: knots
 !
 !        ===============================================================
-! **  THIS PROGRAM PUTS INTERVALS ON THE STACK OR DISCARDS THEM.
+! **  This program puts intervals on the stack or discards them.
 !     When an interval is discarded a new knot is found. Then this
 !     program updates the error estimate, the XKNOT array, transforms
 !     the polynomial to the power form and put the coefficients into
@@ -3131,7 +3131,7 @@ integer :: knots
 !
 !        ===============================================================
 !
-! **  THIS PROGRAM CONVERTS POLYNOMIAL REPRESENTATION FROM DIVIDED
+! **  This program converts polynomial representation from divided
 !     difference to power form.  There are coalesced points on each
 !     END OF THE INTERVAL (xl,xr) = (XLEFT(NSTACK),XRIGHT(NSTACK)).
 !     The number coalesced at each end is leftx and rightx.
@@ -3168,7 +3168,7 @@ nri = nr + ni
 nri1 = nri - 1
 nrli = nrl + ni
 !
-!         STARTING REPRESENTATION IS (ASSUMING xl = 0 )
+!         Starting representation is (assuming xl = 0 )
 !
 !    d(1) +d(2)X +d(3)X**2 + --- +d(nl)X**(nl-1)
 !   +(X**nl)*( d(nl+1)(+d(nl+2)(X-xr)**2 + --- +d(nl+nr)*(X-xr)**(nr-1)
@@ -3209,7 +3209,7 @@ do k=1,ni
 end do
 !
 !         Do the repeated synthetic division to replace the xtemp
-!         = XINTRP POINTS OF THE NEWTON EXPANSION BY THE xr POINTS
+!         = XINTRP points of the Newton expansion by the xr points
 do 70 k = 1,ni1
 !              powers(ni) is fixed and set above
   do 50 ii = 1,ni1
@@ -3270,27 +3270,27 @@ real :: spmpar
 !
 !  Evaluation of complex power series coefficients or derivatives.
 !
-!  *** INPUT PARAMETERS ***
+!  *** Input parameters ***
 !    f   COMPLEX FUNCTION, OF WHICH THE COEFFICIENTS OR DERIVATIVES
 !        are sought. This function must be declared external in the
 !        calling program.
 !    z   COMPLEX POINT AROUND WHICH f IS TO BE EXPANDED OR AT WHICH
 !        derivatives are to be evaluated.
 !    n   INTEGER, NUMBER OF COEFFICIENTS OR DERIVATIVES WANTED.
-!        n must be GE 1 and LE 51.
+!        n must be GE 1 and le 51.
 !    ic  selects between power series coefficients and derivatives.
-!        ic .EQ. 0   ROUTINE RETURNS POWER SERIES COEFFICIENTS IN rs.
-!        ic .NE. 0   ROUTINE RETURNS DERIVATIVES IN rs.
+!        ic .EQ. 0   routine returns power series coefficients in rs.
+!        ic .NE. 0   routine returns derivatives in rs.
 !    tol estimated relative accuracy of f. it is assumed that tol
-!        IS NONNEGATIVE. IF tol = 0 THEN f IS ASSUMED TO BE CORRECT
+!        is nonnegative. If tol = 0 Then f is assumed to be correct
 !        to machine accuracy.
 !
-!  *** INPUT AND OUTPUT PARAMETER ***
+!  *** Input and output parameter ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
 !        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
-!  *** OUTPUT PARAMETERS ***
+!  *** Output parameters ***
 !    rs  complex array rs(n) containing the n first
 !        coefficients (corresponding to the powers 0 to n-1) or deriva-
 !        tives (orders 0 to n-1).
@@ -3322,8 +3322,8 @@ mult(re,co) = cmplx(re*real(co),re*aimag(co))
 !
 !  -------------------
 !
-!  ****** eps0 IS A MACHINE DEPENDENT CONSTANT. eps0 IS THE
-!         SMALLEST NUMBER SUCH THAT 1 + eps0 .GT. 1.
+!  ****** eps0 is a machine dependent constant. eps0 is the
+!         smallest number such that 1 + eps0 .GT. 1.
 !
               eps0 = spmpar(1)
 !
@@ -3515,11 +3515,11 @@ double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !
 !  Evaluation of complex power series coefficients or derivatives.
 !
-!  *** INPUT PARAMETERS ***
+!  *** Input parameters ***
 !    fun subroutine which computes the complex function F for which
 !        the coefficients or derivatives are sought. We write
 !                   call fun(u1,u2,w1,w2)
-!        WHEN W = F(U) IS TO BE COMPUTED FOR THE COMPLEX ARGUMENT U.
+!        when W = F(U) is to be computed for the complex argument U.
 !        Here U1 and U2 are the real and imaginary parts of U, and W1
 !        and W2 are the real and imaginary parts of W.  U1,U2,W1,W2
 !        have double precision values. The subroutine FUN must be
@@ -3529,21 +3529,21 @@ double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !    y   IMAGINARY PART OF THE COMPLEX POINT AROUND WHICH F IS TO BE
 !        expanded or at which its derivatives are to be computed.
 !    n   INTEGER, NUMBER OF COEFFICIENTS OR DERIVATIVES WANTED.
-!        n must be GE 1 and LE 51.
+!        n must be GE 1 and le 51.
 !    ic  selects between power series coefficients and derivatives.
-!        ic .EQ. 0   ROUTINE RETURNS POWER SERIES COEFFICIENTS IN
+!        ic .EQ. 0   routine returns power series coefficients in
 !                    rs1 AND rs2.
-!        ic .NE. 0   ROUTINE RETURNS DERIVATIVES IN rs1 AND rs2.
+!        ic .NE. 0   routine returns derivatives in rs1 and rs2.
 !    tol estimated relative accuracy of fun. It is assumed that tol
-!        IS NONNEGATIVE. IF tol = 0 THEN FUN IS ASSUMED TO BE CORRECT
+!        is nonnegative. If tol = 0 Then fun is assumed to be correct
 !        to machine accuracy.
 !
-!  *** INPUT AND OUTPUT PARAMETER ***
+!  *** Input and output parameter ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
 !        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
-!  *** OUTPUT PARAMETERS ***
+!  *** Output parameters ***
 !    rs1 array rs1(n) containing the real parts of the first n complex
 !        coefficients (corresponding to the powers 0 to n-1) or deriva-
 !        tives (orders 0 to n-1).
@@ -3580,8 +3580,8 @@ data rv1(1)/-.4d0/, rv2(1)/.3d0/, &
 !
 !  -------------------
 !
-!  ****** eps0 IS A MACHINE DEPENDENT CONSTANT. eps0 IS THE
-!         SMALLEST NUMBER SUCH THAT 1 + eps0 .GT. 1.
+!  ****** eps0 is a machine dependent constant. eps0 is the
+!         smallest number such that 1 + eps0 .GT. 1.
 !
               eps0 = dpmpar(1)
 !
@@ -3856,7 +3856,7 @@ k  = 1
 xx = xi(1)
 ilold = 0
 !
-!     FIND THE SUBINTERVAL WHICH CONTAINS xx. i = 1 IF xx.LT.x(2)
+!     Find the subinterval which contains xx. i = 1 If xx.LT.x(2)
 !     AND i = n IF xx.GE.x(n). OTHERWISE x(i).LE.xx.LT.x(i+1).
 !
 if (xx-x(1)) 10,11,20
@@ -4383,7 +4383,7 @@ real, intent(inout) :: a(n), b(n), c(n)
 if (n .lt. 3) go to 200
 
 !     A tridiagonal linear system for the unknown slopes S(i) of
-!     F AT x(i), i=1,...,n, IS GENERATED AND THEN SOLVED BY GAUSS
+!     F at x(i), i=1,...,n, is generated and then solved by Gauss
 !     elimination, with S(i) ending up in a(i) for all i. A, b, c
 !     are used initially for work spaces.
 !
@@ -4441,7 +4441,7 @@ end do
 if (iend - 1) 60,80,90
 60 if (n .eq. 3 .and. ibeg .eq. 0) go to 70
 !
-!     NO CONDITION AT THE RIGHT END. EITHER  n .GE. 4  OR
+!     No condition at the right end. Either  n .GE. 4  or
 !     there is a condition at the left end.
 !
 r = x(n) - x(n-2)
@@ -4450,7 +4450,7 @@ a(n) = ((b(n) + 2.0*r)*b(nm1)*c(n) + b(n)*b(n)*del)/r
 c(n) = b(nm1)
 go to 100
 !
-!     NO CONDITIONS AT THE END POINTS AND n = 3. IN THIS CASE,
+!     No conditions at the end points and n = 3. In this case,
 !     the second boundary condition does not provide us with A
 !     new equation. For convenience, we use the following...
 !
@@ -4523,17 +4523,17 @@ real :: dnew, dold, h
 !
 !       --Input--
 !
-!         x    - ARRAY OF ABSCISSAS OF DATA (IN INCREASING ORDER)
-!         y    - ARRAY OF ORDINATES OF DATA
-!         n    - THE NUMBER OF DATA POINTS.  THE ARRAYS x, y, yp, AND
-!                ypp MUST BE DIMENSIONED AT LEAST n.  (n .GE. 4)
-!         isx  - must be zero on the initial call to splift.
+!         x    - Array of abscissas of data (in increasing order)
+!         y    - Array of ordinates of data
+!         n    - The number of data points.  The arrays x, y, yp, and
+!                ypp must be dimensioned at least n.  (n .GE. 4)
+!         isx  - Must be zero on the initial call to splift.
 !                If a spline is to be fitted to a second set of data
 !                that has the same set of abscissas as a previous set,
 !                and if the contents of w have not been changed since
 !                that previous fit was computed, then isx may be
 !                set to one for faster execution.
-!         a1,b1,an,bn - specify the end conditions for the spline which
+!         a1,b1,an,bn - Specify the end conditions for the spline which
 !                are expressed as constraints on the second derivative
 !                of the spline at the end points (see ypp).
 !                The end condition constraints are
@@ -4543,15 +4543,15 @@ real :: dnew, dold, h
 !                where
 !                        abs(a1).LT. 1.0  AND  abs(an).LT. 1.0.
 !
-!                The smoothest spline (I.E., Least integral of square
-!                OF SECOND DERIVATIVE) IS OBTAINED BY a1=b1=an=bn=0.
+!                The smoothest spline (I.E., least integral of square
+!                of second derivative) is obtained by a1=b1=an=bn=0.
 !                In this case there is an inflection at x(1) and x(n).
 !                If the data is to be extrapolated (say, by using splint
 !                to evaluate the spline outside the range x(1) to x(n)),
-!                THEN TAKING a1=an=0.5 AND b1=bn=0 MAY YIELD BETTER
+!                then taking a1=an=0.5 and b1=bn=0 May yield better
 !                results.  In this case there is an inflection
 !                at x(1) - (x(2)-x(1)) and at x(n) + (x(n)-x(n-1)).
-!                IN THE MORE GENERAL CASE OF a1=an=A  AND b1=bn=0,
+!                In the more general case of a1=an=A  and b1=bn=0,
 !                there is an inflection at x(1) - (x(2)-x(1))*A/(1.0-A)
 !                and at x(n) + (x(n)-x(n-1))*A/(1.0-A).
 !
@@ -4569,19 +4569,19 @@ real :: dnew, dold, h
 !
 !       --Output--
 !
-!         yp   - ARRAY OF FIRST DERIVATIVES OF SPLINE (AT THE x(i))
-!         ypp  - array of second derivatives of spline (at the x(i))
-!         ierr - a status code
+!         yp   - Array of first derivatives of spline (at the x(i))
+!         ypp  - Array of second derivatives of spline (at the x(i))
+!         ierr - A status code
 !              --normal code
 !                 0 means that the requested spline was computed.
 !              --Abnormal codes
-!                 1 MEANS THAT abs(a1) OR abs(an) WAS .GE. 1.
-!                 2 MEANS THAT n, THE NUMBER OF POINTS, WAS .LT. 4.
+!                 1 means that abs(a1) or abs(an) was .GE. 1.
+!                 2 Means that n, the number of points, was .LT. 4.
 !                 3 Means the abscissas were not strictly increasing.
 !
 !       --Work--
 !
-!         w    - ARRAY OF WORKING STORAGE DIMENSIONED AT LEAST 3n.
+!         w    - Array of working storage dimensioned at least 3n.
 !
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: yp(n), ypp(n), w(n,3)
@@ -4753,8 +4753,8 @@ real :: temp(20)
 !     xcon, con, nder are arrays of dimension max(1,nc).
 !     z, A, b, c are arrays of dimension l - 1.
 !     wk and iwk are arrays of dimension iwk(1) and iwk(2)
-!        RESPECTIVELY. IT IS REQUIRED THAT iwk(2) .GE. 2
-!        AND iwk(1) .GE. 7(l + 7) FOR ALL nc. IF nc .GE. 1
+!        respectively. It is required that iwk(2) .GE. 2
+!        and iwk(1) .GE. 7(l + 7) for all nc. If nc .GE. 1
 !        then more storage will be needed.
 !---------------------
 if (l .lt. 2) go to 100
@@ -4833,27 +4833,27 @@ real :: dx, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!         x   - Array of the first n abscissas (in increasing order)
 !               that define the spline.
-!         y   - ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
+!         y   - Array of the first n ordinates that define the spline.
 !         A,b,c arrays that contain the coefficients of the polynomials
-!               WHICH FORM THE SPLINE. IF i = 1,...,n  THEN THE SPLINE
+!               which form the spline. If i = 1,...,n  then the spline
 !               has the value
 !                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
 !               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
-!         n   - THE NUMBER OF POLYNOMIALS THAT DEFINE THE SPLINE.
+!         n   - The number of polynomials that define the spline.
 !               The arrays x, y, A, b, c  must be dimensioned at
 !               least n.  n must be greater than or equal to 1.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1 then xi and yi
 !               must be arrays of dimension ni or larger.
 !               It is assumed that ni is greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
@@ -4935,23 +4935,23 @@ real :: a, b, c, d, dx, h, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF ABSCISSAS (IN INCREASING ORDER) THAT DEFINE THE
+!         x   - Array of abscissas (in increasing order) that define the
 !               spline.
-!         y   - ARRAY OF ORDINATES THAT DEFINE THE SPLINE.
-!         yp  - array of first derivatives that define the spline.
-!         n   - THE NUMBER OF DATA POINTS THAT DEFINE THE SPLINE.
+!         y   - Array of ordinates that define the spline.
+!         yp  - Array of first derivatives that define the spline.
+!         n   - The number of data points that define the spline.
 !               The arrays x, y, and yp must be dimensioned at least n.
 !               n must be greater than or equal to 2.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1 then xi and yi
 !               must be arrays of dimension ni or larger.
 !               It is assumed that ni is greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
@@ -5039,23 +5039,23 @@ real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF ABSCISSAS (IN INCREASING ORDER) THAT DEFINE THE
+!         x   - Array of abscissas (in increasing order) that define the
 !               spline.
-!         y   - ARRAY OF ORDINATES THAT DEFINE THE SPLINE.
-!         ypp - array of second derivatives that define the spline.
-!         n   - THE NUMBER OF DATA POINTS THAT DEFINE THE SPLINE.
+!         y   - Array of ordinates that define the spline.
+!         ypp - Array of second derivatives that define the spline.
+!         n   - The number of data points that define the spline.
 !               The arrays x, y, and ypp must be dimensioned at least n.
 !               n must be greater than or equal to 2.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1 then xi and yi
 !               must be arrays of dimension ni or larger.
 !               It is assumed that ni is greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
@@ -5147,28 +5147,28 @@ real :: bi, ci, dx, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!         x   - Array of the first n abscissas (in increasing order)
 !               that define the spline.
-!         y   - ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
+!         y   - Array of the first n ordinates that define the spline.
 !         A,b,c arrays that contain the coefficients of the polynomials
-!               WHICH FORM THE SPLINE. IF i = 1,...,n  THEN THE SPLINE
+!               which form the spline. If i = 1,...,n  then the spline
 !               has the value
 !                    y(i) + a(i)*dx + b(i)*dx**2 + c(i)*dx**3
 !               FOR x(i) .LE. xx .LE. x(i+1).  HERE dx = xx-x(i).
-!         n   - THE NUMBER OF POLYNOMIALS THAT DEFINE THE SPLINE.
+!         n   - The number of polynomials that define the spline.
 !               The arrays x, y, A, b, c  must be dimensioned at
 !               least n.  n must be greater than or equal to 1.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1, then xi, yi, ypi,
 !               and yppi must be arrays dimensioned at least ni.
 !               ni must be greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
-!         ypi - array of values of the first derivative of spline at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
 !         yppi- array of values of second derivatives of spline at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
@@ -5255,24 +5255,24 @@ real :: a, b, c, d, dx, h, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF ABSCISSAS (IN INCREASING ORDER) THAT DEFINE THE
+!         x   - Array of abscissas (in increasing order) that define the
 !               spline.
-!         y   - ARRAY OF ORDINATES THAT DEFINE THE SPLINE.
-!         yp  - array of first derivatives that define the spline.
-!         n   - THE NUMBER OF DATA POINTS THAT DEFINE THE SPLINE.
+!         y   - Array of ordinates that define the spline.
+!         yp  - Array of first derivatives that define the spline.
+!         n   - The number of data points that define the spline.
 !               The arrays x, y, and yp must be dimensioned at least n.
 !               n must be greater than or equal to 2.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1, then xi, yi, ypi,
 !               and yppi must be arrays dimensioned at least ni.
 !               ni must be greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
-!         ypi - array of values of the first derivative of spline at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
 !         yppi- array of values of second derivatives of spline at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
@@ -5365,24 +5365,24 @@ real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF ABSCISSAS (IN INCREASING ORDER) THAT DEFINE THE
+!         x   - Array of abscissas (in increasing order) that define the
 !               spline.
-!         y   - ARRAY OF ORDINATES THAT DEFINE THE SPLINE.
-!         ypp - array of second derivatives that define the spline.
-!         n   - THE NUMBER OF DATA POINTS THAT DEFINE THE SPLINE.
+!         y   - Array of ordinates that define the spline.
+!         ypp - Array of second derivatives that define the spline.
+!         n   - The number of data points that define the spline.
 !               The arrays x, y, and ypp must be dimensioned at least n.
 !               n must be greater than or equal to 2.
-!         xi  - the abscissa or array of abscissas (in arbitrary order)
+!         xi  - The abscissa or array of abscissas (in arbitrary order)
 !               at which the spline is to be evaluated.
-!         ni  - the number of abscissas at which the spline is to be
+!         ni  - The number of abscissas at which the spline is to be
 !               evaluated.  If ni is greater than 1, then xi, yi, ypi,
 !               and yppi must be arrays dimensioned at least ni.
 !               ni must be greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the spline (ordinates) at xi.
-!         ypi - array of values of the first derivative of spline at xi.
+!         yi  - Array of values of the spline (ordinates) at xi.
+!         ypi - Array of values of the first derivative of spline at xi.
 !         yppi- array of values of second derivatives of spline at xi.
 !         ierr- status code
 !               0  the spline was evaluated at each abscissa in xi.
@@ -5479,7 +5479,7 @@ integer :: intrvl
 !     y      ARRAY OF THE FIRST n ORDINATES THAT DEFINE THE SPLINE.
 !
 !     A,b,c  arrays that contain the coefficients of the polynomials
-!            WHICH FORM THE SPLINE. IF i = 1,...,n  THEN THE SPLINE
+!            which form the spline. If i = 1,...,n  then the spline
 !            has the value
 !                    y(i) + a(i)*DX + b(i)*DX**2 + c(i)*DX**3
 !            FOR x(i) .LE. XX .LE. x(i+1). HERE DX = XX - x(i).
@@ -5582,7 +5582,7 @@ integer :: intrvl
 !     yp   ARRAY OF THE FIRST DERIVATIVES THAT DEFINE THE SPLINE.
 !
 !     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          AND yp MUST HAVE DIMENSION AT LEAST n WHERE n .GE. 2.
+!          and yp must have dimension at least n where n .GE. 2.
 !
 !     A    LOWER LIMIT OF THE INTEGRAL.
 !
@@ -5697,7 +5697,7 @@ integer :: intrvl
 !     ypp  array of the second derivatives that define the spline.
 !
 !     n    THE NUMBER OF KNOTS OF THE SPLINE. THE ARRAYS x, y,
-!          AND ypp MUST HAVE DIMENSION AT LEAST n WHERE n .GE. 2.
+!          and ypp must have dimension at least n where n .GE. 2.
 !
 !     A    LOWER LIMIT OF THE INTEGRAL.
 !
@@ -5791,7 +5791,7 @@ nm2 = n - 2
 nm3 = n - 3
 !
 !     A strictly diagonally dominant set of equations for the
-!     SLOPES s(i) OF THE SPLINE AT x(i) (i = 1,...,n-1) IS
+!     slopes s(i) of the spline at x(i) (i = 1,...,n-1) is
 !     generated and solved by Gauss elimination. The first of
 !     these equations is obtained from the requirement that
 !     the spline be periodic. This equation has the form ...
@@ -5809,7 +5809,7 @@ a(1) = 2.0*(h + b(1))
 t(1) = 3.0*(h*del + b(1)*deli)
 if (n .eq. 3) go to 20
 !
-!     FOR THE KNOTS x(i) (i = 2,...n-2) GENERATE THE CORRESPOND-
+!     For the knots x(i) (i = 2,...n-2) generate the correspond-
 !     ing equations and carry out the pivot reduction of Gauss
 !     elimination. Then the i-TH equation has the form ...
 !
@@ -6019,7 +6019,7 @@ if (n .ge. 3 .and. m .ge. 1) go to 1
 x1 = x(1)
 h = x(n) - x1
 !
-!     REDUCTION OF xi(k) TO xx WHERE x(1) .LE. xx .LT. x(n)
+!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
 !
 k = 1
 t = (xi(1) - x1)/h
@@ -6047,7 +6047,7 @@ go to 10
 i = i + 1
 go to 40
 !
-!     COMPUTATION WHEN x(i) .LE. xx .LT. x(i+1)
+!     Computation when x(i) .LE. xx .LT. x(i+1)
 !
 90 dx = xx - x(i)
 yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
@@ -6070,7 +6070,7 @@ ir = min0(i+1,n)
 go to 10
 !
 !     Case when roundoff produces a value for xx where
-!     xx .GE. x(n). THIS CASE MAY NEVER OCCUR.
+!     xx .GE. x(n). This case may never occur.
 !
 120 i = 1
 xx = x1
@@ -6100,7 +6100,7 @@ if (n .ge. 3 .and. m .ge. 1) go to 1
 x1 = x(1)
 h = x(n) - x1
 !
-!     REDUCTION OF xi(k) TO xx WHERE x(1) .LE. xx .LT. x(n)
+!     Reduction of xi(k) to xx where x(1) .LE. xx .LT. x(n)
 !
 k = 1
 t = (xi(1) - x1)/h
@@ -6128,7 +6128,7 @@ go to 10
 i = i + 1
 go to 40
 !
-!     COMPUTATION WHEN x(i) .LE. xx .LT. x(i+1)
+!     Computation when x(i) .LE. xx .LT. x(i+1)
 !
 90 dx = xx - x(i)
 yi(k) = ((c(i)*dx + b(i))*dx + a(i))*dx + y(i)
@@ -6155,7 +6155,7 @@ ir = min0(i+1,n)
 go to 10
 !
 !     Case when roundoff produces a value for xx where
-!     xx .GE. x(n). THIS CASE MAY NEVER OCCUR.
+!     xx .GE. x(n). This case may never occur.
 !
 120 i = 1
 xx = x1
@@ -6182,7 +6182,7 @@ integer :: ia, ib, ic, ie, mm1
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), wk(*)
 !----------------------
-!     m = THE NUMBER OF n-DIMENSIONAL POINTS GIVEN IN x
+!     m = The number of n-dimensional points given in x
 !     wk is an array of dimension 4*(m-1)
 !----------------------
 if (min0(m, n) .lt. 2) go to 10
@@ -6218,12 +6218,12 @@ real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
 !----------------------
 !     real a(m-1), c(m-1), e(k)  (k = max0(1,m-2))
-!     THE e ARRAY IS NOT USED WHEN m = 2.
+!     the e array is not used when m = 2.
 !----------------------
 mm1 = m - 1
 mm2 = m - 2
 !
-!     DEFINITION OF THE KNOTS t(i) (i = 1,...,m). ALSO t(m+1) = 1.
+!     Definition of the knots t(i) (i = 1,...,m). Also t(m+1) = 1.
 !     This last knot is not stored.
 !
 t(1) = 0.0
@@ -6249,9 +6249,9 @@ do i = 2,m
 end do
 ierr = 0
 !
-!     FOR j = 1,...,n, A DIAGONALLY DOMINANT SET OF EQUATIONS
+!     For j = 1,...,n, a diagonally dominant set of equations
 !     for the slopes S(i,j) of the j-TH periodic spline at t(i)
-!     (i = 1,...,m) IS GENERATED AND SOLVED BY GAUSS ELIMINATION.
+!     (i = 1,...,m) is generated and solved by Gauss elimination.
 !     The first equation is obtained from the requirement that
 !     the spline be periodic. This equation has the form ...
 !
@@ -6272,7 +6272,7 @@ do j = 1,n
 end do
 if (m .eq. 2) go to 70
 !
-!     FOR THE KNOTS t(i) (i = 2,...m-1), GENERATE THE CORRESPOND-
+!     For the knots t(i) (i = 2,...m-1), generate the correspond-
 !     ing equations and carry out the pivot reduction of Gauss
 !     elimination. Then the i-TH equation has the form ...
 !
@@ -6379,7 +6379,7 @@ real :: a, b, c, d, dt, h, t0, told, w
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
 real, intent(inout) :: z(kz, n)
 !
-!     REDUCTION OF ti(k) TO t0 WHERE 0 .LE. t0 .LT. 1
+!     Reduction of ti(k) to t0 where 0 .LE. t0 .LT. 1
 !
 k = 1
 j = ti(1)
@@ -6405,7 +6405,7 @@ go to 10
 i = i + 1
 go to 40
 !
-!     COMPUTATION WHEN t(i) .LE. t0 .LT. t(i+1)
+!     Computation when t(i) .LE. t0 .LT. t(i+1)
 !
 50 h = t(i+1) - t(i)
 dt = t0 - t(i)
@@ -6419,7 +6419,7 @@ do j = 1,n
 end do
 go to 100
 !
-!     COMPUTATION WHEN t0 .GE. t(m)
+!     Computation when t0 .GE. t(m)
 !
 60 i = m
 h = 1.0 - t(m)
@@ -6462,7 +6462,7 @@ real :: a, b, c, d, dt, h, t0, w
 real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
 real, intent(inout) :: z(n), dz(n), ddz(n)
 !
-!     REDUCTION OF ti TO t0 WHERE 0 .LE. t0 .LT. 1
+!     Reduction of ti to t0 where 0 .LE. t0 .LT. 1
 !
 j = ti
 t0 = ti - j
@@ -6481,7 +6481,7 @@ go to 10
 30 il = i
 go to 10
 !
-!     COMPUTATION WHEN t(i) .LE. t0 .LT. t(i+1)
+!     Computation when t(i) .LE. t0 .LT. t(i+1)
 !
 40 h = t(i+1) - t(i)
 dt = t0 - t(i)
@@ -6499,7 +6499,7 @@ do j = 1,n
 end do
 return
 !
-!     COMPUTATION WHEN t0 .GE. t(m)
+!     Computation when t0 .GE. t(m)
 !
 50 h = 1.0 - t(m)
 dt = t0 - t(m)
@@ -6545,7 +6545,7 @@ real, intent(in) :: sigma
 !
 ! On input--
 !
-!   n IS THE NUMBER OF VALUES TO BE INTERPOLATED (n.GE.2).
+!   n is the number of values to be interpolated (n.GE.2).
 !
 !   x is an array of the n increasing abscissae of the
 !   functional values.
@@ -6561,10 +6561,10 @@ real, intent(in) :: sigma
 !   islpsw contains a switch indicating which slope data
 !   should be used and which should be estimated by this
 !   subroutine,
-!          = 0 IF slp1 AND slpn ARE TO BE USED,
-!          = 1 IF slp1 IS TO BE USED BUT NOT slpn,
-!          = 2 IF slpn IS TO BE USED BUT NOT slp1,
-!          = 3 IF BOTH slp1 AND slpn ARE TO BE ESTIMATED
+!          = 0 If slp1 and slpn are to be used,
+!          = 1 If slp1 is to be used but not slpn,
+!          = 2 If slpn is to be used but not slp1,
+!          = 3 If both slp1 and slpn are to be estimated
 !              internally.
 !
 !   yp is an array of length at least n.
@@ -6576,7 +6576,7 @@ real, intent(in) :: sigma
 !
 !   sigma contains the tension factor. This value indicates
 !   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) The resulting curve is approximately A
+!   (E.G. .001) the resulting curve is approximately A
 !   cubic spline. If abs(sigma) is large (E.G. 50.) The
 !   resulting curve is nearly a polygonal line. If sigma
 !   equals zero a cubic spline results.  A standard value
@@ -6588,9 +6588,9 @@ real, intent(in) :: sigma
 !   curve at the given nodes.
 !
 !   ierr contains an error flag,
-!        = 0 FOR NORMAL RETURN,
-!        = 1 IF n IS LESS THAN 2,
-!        = 2 IF x-VALUES ARE NOT STRICTLY INCREASING.
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If x-values are not strictly increasing.
 !
 ! And
 !
@@ -6874,7 +6874,7 @@ real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
 !   xl and xu contain the lower and upper limits of inte-
 !   gration, respectively. (xl need not be less than or
-!   EQUAL TO xu, curvi (xl,xu,...) .EQ. -curvi (xu,xl,...) ).
+!   equal to xu, curvi (xl,xu,...) .EQ. -curvi (xu,xl,...) ).
 !
 !   n contains the number of points which were specified to
 !   determine the curve.
@@ -7050,14 +7050,14 @@ real, intent(in) :: sigma
 !
 ! On input--
 !
-!   n IS THE NUMBER OF POINTS TO BE INTERPOLATED (n.GE.2).
+!   n is the number of points to be interpolated (n.GE.2).
 !
 !   x is an array containing the n x-coordinates of the
 !   points.
 !
 !   y is an array containing the n y-coordinates of the
 !   points. (Adjacent x-y pairs must be distinct, I. E.
-!   EITHER x(i) .NE. x(i+1) OR y(i) .NE. y(i+1), FOR
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
 !   i = 1,...,n-1.)
 !
 !   slp1 and slpn contain the desired values for the angles
@@ -7071,10 +7071,10 @@ real, intent(in) :: sigma
 !   islpsw contains a switch indicating which slope data
 !   should be used and which should be estimated by this
 !   subroutine,
-!          = 0 IF slp1 AND slpn ARE TO BE USED,
-!          = 1 IF slp1 IS TO BE USED BUT NOT slpn,
-!          = 2 IF slpn IS TO BE USED BUT NOT slp1,
-!          = 3 IF BOTH slp1 AND slpn ARE TO BE ESTIMATED
+!          = 0 If slp1 and slpn are to be used,
+!          = 1 If slp1 is to be used but not slpn,
+!          = 2 If slpn is to be used but not slp1,
+!          = 3 If both slp1 and slpn are to be estimated
 !              internally.
 !
 !   xp and yp are arrays of length at least n.
@@ -7088,7 +7088,7 @@ real, intent(in) :: sigma
 !
 !   sigma contains the tension factor. This value indicates
 !   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) The resulting curve is approximately a cubic
+!   (E.G. .001) the resulting curve is approximately a cubic
 !   spline. If abs(sigma) is large (E. G. 50.) The resulting
 !   curve is nearly a polygonal line. If sigma equals zero A
 !   cubic spline results. A standard value for sigma is
@@ -7102,9 +7102,9 @@ real, intent(in) :: sigma
 !   s contains the polygonal arclengths of the curve.
 !
 !   ierr contains an error flag,
-!        = 0 FOR NORMAL RETURN,
-!        = 1 IF n IS LESS THAN 2,
-!        = 2 IF ADJACENT COORDINATE PAIRS COINCIDE.
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent coordinate pairs coincide.
 !
 ! And
 !
@@ -7351,14 +7351,14 @@ real, intent(in) :: sigma
 !
 ! On input--
 !
-!   n IS THE NUMBER OF POINTS TO BE INTERPOLATED (n.GE.2).
+!   n is the number of points to be interpolated (n.GE.2).
 !
 !   x is an array containing the n x-coordinates of the
 !   points.
 !
 !   y is an array containing the n y-coordinates of the
 !   points. (Adjacent x-y pairs must be distinct, I. E.
-!   EITHER x(i) .NE. x(i+1) OR y(i) .NE. y(i+1), FOR
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1), for
 !   i = 1,...,n-1.)
 !
 !   xp and yp are arrays of length at least n.
@@ -7372,7 +7372,7 @@ real, intent(in) :: sigma
 !
 !   sigma contains the tension factor. This value indicates
 !   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) The resulting curve is approximately a cubic
+!   (E.G. .001) the resulting curve is approximately a cubic
 !   spline. If abs(sigma) is large (E. G. 50.) The resulting
 !   curve is nearly a polygonal line. If sigma equals zero A
 !   cubic spline results. A standard value for sigma is
@@ -7386,9 +7386,9 @@ real, intent(in) :: sigma
 !   s contains the polygonal arclengths of the curve.
 !
 !   ierr contains an error flag,
-!        = 0 FOR NORMAL RETURN,
-!        = 1 IF n IS LESS THAN 2,
-!        = 2 IF ADJACENT COORDINATE PAIRS COINCIDE.
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent coordinate pairs coincide.
 !
 ! And
 !
@@ -7643,7 +7643,7 @@ real, intent(in) :: sigma
 !
 ! On input--
 !
-!   n IS THE NUMBER OF POINTS TO BE INTERPOLATED (n.GE.2).
+!   n is the number of points to be interpolated (n.GE.2).
 !
 !   x is an array containing the n x-coordinates of the
 !   points.
@@ -7653,12 +7653,12 @@ real, intent(in) :: sigma
 !
 !   z is an array containing the n z-coordinates of the
 !   points. (Adjacent x-y-z triples must be distinct, I. E.
-!   EITHER x(i) .NE. x(i+1) OR y(i) .NE. y(i+1) OR z(i) .NE.
+!   Either x(i) .NE. x(i+1) or y(i) .NE. y(i+1) or z(i) .NE.
 !   z(i+1), FOR i = 1,...,n-1 ).
 !
 !   slp1x, slp1y, slp1z and slpnx, SLPNY, SLPNZ contain the
 !   desired values of the components of tangent vectors to
-!   the curve at (x(1),y(1),z(1)) AND(x(n),y(n),z(n)),
+!   the curve at (x(1),y(1),z(1)) and(x(n),y(n),z(n)),
 !   respectively. The positive sense of the curve is assumed
 !   to be that moving from point 1 to point n. the user may
 !   omit values for either or both of these triples and
@@ -7669,11 +7669,11 @@ real, intent(in) :: sigma
 !   subroutine,
 !          = 0 IF slp1x, slp1y, slp1z AND slpnx, SLPNY,
 !              SLPNZ are to be used,
-!          = 1 IF slp1x, slp1y, slp1z ARE TO BE USED BUT
+!          = 1 If slp1x, slp1y, slp1z are to be used but
 !              NOT slpnx, SLPNY, SLPNZ,
-!          = 2 IF slpnx, SLPNY, SLPNZ ARE TO BE USED BUT
+!          = 2 If slpnx, SLPNY, SLPNZ are to be used but
 !              NOT slp1x, slp1y, slp1z,
-!          = 3 IF BOTH END-TANGENTS ARE TO BE ESTIMATED
+!          = 3 If both end-tangents are to be estimated
 !              internally.
 !
 !   xp, yp, and zp are arrays of length at least n.
@@ -7687,7 +7687,7 @@ real, intent(in) :: sigma
 !
 !   sigma contains the tension factor. This value indicates
 !   the curviness desired. If abs(sigma) is nearly zero
-!   (E.G. .001) The resulting curve is approximately a cubic
+!   (E.G. .001) the resulting curve is approximately a cubic
 !   spline. If abs(sigma) is large (E. G. 50.) The resulting
 !   curve is nearly a polygonal line. If sigma equals zero A
 !   cubic spline results. A standard value for sigma is
@@ -7701,9 +7701,9 @@ real, intent(in) :: sigma
 !   s contains the polygonal arclengths of the curve.
 !
 !   ierr contains an error flag,
-!        = 0 FOR NORMAL RETURN,
-!        = 1 IF n IS LESS THAN 2,
-!        = 2 IF ADJACENT TRIPLES COINCIDE.
+!        = 0 For normal return,
+!        = 1 If n is less than 2,
+!        = 2 If adjacent triples coincide.
 !
 ! And
 !
@@ -7972,7 +7972,7 @@ real, intent(inout) :: c1, c2, c3
 !
 !   del1 IS X2-X1 (.GT. 0.).
 !
-!   del2 IS X3-X1 (.GT. 0.). IF n .EQ. 2, THIS PARAMETER IS
+!   del2 is X3-X1 (.GT. 0.). If n .EQ. 2, this parameter is
 !   ignored.
 !
 !   sigma is the tension factor.
@@ -7980,7 +7980,7 @@ real, intent(inout) :: c1, c2, c3
 ! And
 !
 !   n is a switch indicating the number of coefficients to
-!   BE RETURNED. IF n .EQ. 2 ONLY TWO COEFFICIENTS ARE
+!   be returned. If n .EQ. 2 only two coefficients are
 !   returned. Otherwise all three are returned.
 !
 ! On output--
@@ -8052,11 +8052,11 @@ real, intent(in) :: sigma, del
 !
 ! On output--
 !
-!               (sigma*del*COSH(sigma*del) - SINH(sigma*del)
+!               (sigma*del*cosh(sigma*del) - Sinh(sigma*del)
 !   diag = del*--------------------------------------------.
 !                     (sigma*del)**2 * SINH(sigma*del)
 !
-!                   SINH(sigma*del) - sigma*del
+!                   Sinh(sigma*del) - sigma*del
 !   sdiag = del*----------------------------------.
 !                (sigma*del)**2 * SINH(sigma*del)
 !
@@ -8097,15 +8097,15 @@ real, intent(in) :: x, t(m)
 !        x is a real number.
 !
 !        t is an array of nondecreasing values. It is
-!          ASSUMED THAT t(1) .LT. t(m).
+!          assumed that t(1) .LT. t(m).
 !
-!        m IS THE LENGTH OF t (m .GE. 2).
+!        m is the length of t (m .GE. 2).
 !
 !     Output--
 !
-!        intrvl HAS THE VALUE i WHEN  t(i) .LE. x .LT. t(i+1).
-!        OTHERWISE, IF L IS THE INTEGER WHERE t(L) .LT. t(L+1)
-!        AND t(L+1) = ... = t(m), THEN intrvl HAS THE VALUE i
+!        intrvl has the value i when  t(i) .LE. x .LT. t(i+1).
+!        Otherwise, if L is the integer where t(L) .LT. t(L+1)
+!        and t(L+1) = ... = t(m), then intrvl has the value i
 !        where
 !                  i = 1   IF x .LT. t(1)
 !                  i = L   IF x .GE. t(L)
@@ -8131,7 +8131,7 @@ go to 30
 50 il = i
 go to 30
 !
-!     CASE WHEN x = t(i) FOR SOME i
+!     Case when x = t(i) for some i
 !
 60 if (x .lt. t(i+1)) go to 110
 i = i + 1
@@ -8165,14 +8165,14 @@ integer :: intrvl
 !******  i n P U t ******
 !
 !  t     AN ARRAY OF DIMENSION n + k CONTAING THE KNOTS OF THE
-!        SPLINE. IT IS ASSUMED THAT t(i) .LE. t(i+1) FOR EACH i.
+!        spline. It is assumed that t(i) .LE. t(i+1) for each i.
 !  bcoef an array of dimension n containing the B-coefficients
 !        of the spline F.
 !  n     LENGTH OF bcoef (n .GE. 1).
 !  k     ORDER OF THE SPLINE.
 !  x     THE POINT AT WHICH TO EVALUATE.
 !  jderiv  integer giving the order of the derivative to be
-!        EVALUATED. IT IS ASSUMED THAT jderiv .GE. 0.
+!        evaluated. It is assumed that jderiv .GE. 0.
 !
 !******  O U t P U t  ******
 !
@@ -8188,7 +8188,7 @@ integer :: intrvl
 !  obtained. Then the  k  B-coefficients of F relevant for this interval
 !  are obtained from bcoef (or taken to be zero if not explicitly avail-
 !  able), and DIFFERENCED jderiv times to obtain the B-coefficients of
-!  (D**jderiv)F  RELEVANT FOR THE INTERVAL. SPECIFICALLY, IF j = jderiv
+!  (D**jderiv)F  relevant for the interval. Specifically, if j = jderiv
 !  then from x.(12) Of the reference we have
 !
 !     (D**j)F  =  sum ( bcoef(.,j)*B(.,k-j,t) )
@@ -8208,9 +8208,9 @@ integer :: intrvl
 !    a(.,x)  =    ---------------------------------------
 !                 (x - t(.))      + (t(.+M-1) - x)
 !
-!  TO WRITE (D**j)F(x) EVENTUALLY AS A LINEAR COMBINATION OF B-SPLINES
+!  To write (D**j)F(x) eventually as a linear combination of B-splines
 !  of order 1. The coefficient for B(i,1,t)(x) must then be the desired
-!  NUMBER  (D**j)F(x). (SEE x.(17)-(19) OF THE REFERENCE).
+!  number  (D**j)F(x). (See x.(17)-(19) Of the reference).
 !
 !-----------------------------------------------------------------------
 !  Reference. DE boor, carl, A PRATICAL guide to splines, springer-
@@ -8237,9 +8237,9 @@ if (km1 .gt. 0) go to 10
    w = bcoef(i)
    return
 !
-!  *** STORE THE k B-SPLINE COEFFICIENTS RELEVANT FOR THE KNOT INTERVAL
-!     (t(i),t(i+1)) IN THE FIRST COLUMN OF wk AND COMPUTE wk(j,2) =
-!     x - t(i+1-j), wk(j,3) = t(i+j) - x, j=1,...,k-1 . SET ANY OF THE
+!  *** Store the k B-spline coefficients relevant for the knot interval
+!     (t(i),t(i+1)) in the first column of wk and compute wk(j,2) =
+!     x - t(i+1-j), wk(j,3) = t(i+j) - x, j=1,...,k-1 . Set any of the
 !     wk(j,1) not obtainable from input to zero. Set any t.S not obtain-
 !     able equal to t(1) or to t(n+k) appropriately.
 !
@@ -8291,7 +8291,7 @@ end do
    wk(jc,1) = bcoef(l)
 end do
 !
-!               *** DIFFERENCE THE COEFFICIENTS  jderiv  TIMES.
+!               *** Difference the coefficients  jderiv  times.
 !
 if (jderiv .eq. 0) go to 170
 do j = 1,jderiv
@@ -8305,7 +8305,7 @@ do j = 1,jderiv
 150 l = l - 1
 end do
 !
-!  *** COMPUTE VALUE AT x IN (t(i),t(i+1)) OF jderiv-TH DERIVATIVE,
+!  *** Compute value at x in (t(i),t(i+1)) of jderiv-TH derivative,
 !     given its relevant B-spline coeffs in wk(1,1),...,wk(k-jderiv,1).
 !
 170 if (jderiv .eq. km1) go to 200
@@ -8415,9 +8415,9 @@ km1 = k - 1
 m = n + km1
 i = intrvl(x, t, m)
 !
-!  *** STORE THE k B-SPLINE COEFFICIENTS RELEVANT FOR THE KNOT INTERVAL
-!     (t(i),t(i+1)) IN THE FIRST COLUMN OF wk AND COMPUTE wk(j,2) =
-!     x - t(i+1-j), wk(j,3) = t(i+j) - x, j=1,...,k-1 . SET ANY OF THE
+!  *** Store the k B-spline coefficients relevant for the knot interval
+!     (t(i),t(i+1)) in the first column of wk and compute wk(j,2) =
+!     x - t(i+1-j), wk(j,3) = t(i+j) - x, j=1,...,k-1 . Set any of the
 !     wk(j,1) not obtainable from input to zero. Set any t.S not obtain-
 !     able equal to t(1) or tnew appropriately.
 !
@@ -8456,7 +8456,7 @@ do jc = jcmin,k
    wk(jc,1) = bcoef(l)
 end do
 !
-!  *** COMPUTE VALUE AT x IN (t(i),t(i+1)), GIVEN ITS RELEVANT
+!  *** Compute value at x in (t(i),t(i+1)), given its relevant
 !     B-spline coeffs in wk(1,1),...,wk(k,1).
 !
 do j = 1,km1
@@ -8498,8 +8498,8 @@ real :: diff, r, s, term, x
 !       Break breakpoint sequence, of length l+1, containing
 !             (in increasing order) the distinct points of the
 !             SEQUENCE t(k),...,t(n+1).
-!       c     KXL MATRIX WHERE c(i,j) = (i-1)ST RIGHT DERIVATIVE
-!             of the PP at break(j) divided by FACTORIAL(i-1).
+!       c     KXL matrix where c(i,j) = (i-1)ST right derivative
+!             of the PP at break(j) divided by factorial(i-1).
 !       l     NUMBER OF POLYNOMIALS WHICH FORM THE PP
 !
 !     Work area ...
@@ -8591,24 +8591,24 @@ real :: dx, s, xx
 !
 !       --Input--
 !
-!         x   - ARRAY OF THE FIRST n ABSCISSAS (IN INCREASING ORDER)
+!         x   - Array of the first n abscissas (in increasing order)
 !               that define the PP.
-!         a   - MATRIX THAT CONTAINS THE COEFFICIENTS OF THE POLY-
-!               NOMIALS  WHICH FORM THE PP. IF i = 1,...,n THEN THE
+!         a   - Matrix that contains the coefficients of the poly-
+!               NOMIALS  which form the PP. if i = 1,...,n then the
 !               PP has the value
 !                    a(1,i) + a(2,i)*dx + ... + a(l,i)*dx**(l-1)
 !               FOR x(i) .LE. xx .LT. x(i+1).  HERE dx = xx - x(i).
-!         l   - ORDER OF THE PIECEWISE POLYNOMIAL.
-!         n   - THE NUMBER OF POLYNOMIALS THAT DEFINE THE PP.
+!         l   - Order of the piecewise polynomial.
+!         n   - The number of polynomials that define the PP.
 !               n must be greater than or equal to 1.
-!         xi  - the array of abscissas (in arbitrary order) at which
+!         xi  - The array of abscissas (in arbitrary order) at which
 !               at which the PP is to be evaluated.
-!         ni  - the dimension of the arrays xi and yi. It is assumed
+!         ni  - The dimension of the arrays xi and yi. It is assumed
 !               that ni is greater than or equal to 1.
 !
 !       --Output--
 !
-!         yi  - array of values of the PP at the points in xi.
+!         yi  - Array of values of the PP at the points in xi.
 !
 !-----------------------------------------------------------------------
 !
@@ -8679,29 +8679,29 @@ real :: s, term, ti, timj
 !-----------------------------------------------------------------------
 !
 !     bspvb calculates the value of all possibly nonzero B-splines
-!     AT x OF ORDER max(jhigh,j + 1) WHERE t(k) .LE. x .LT. t(N+1).
+!     at x of order max(jhigh,j + 1) where t(k) .LE. x .LT. t(N+1).
 !
 !     Description of arguments
 !
 !         Input
 !
-!          t       - KNOT VECTOR OF LENGTH N + k.
-!          k       - HIGHEST POSSIBLE ORDER OF THE B-SPLINES.
-!          jhigh   - ORDER OF B-SPLINES (1 .le. jhigh .le. k).
-!          j       - j .LE. 0  GIVES B-SPLINES OF ORDER jhigh.
-!                    j .GE. 1  ON A PREVIOUS CALL TO bspvb THE
+!          t       - Knot vector of length N + k.
+!          k       - Highest possible order of the B-splines.
+!          jhigh   - Order of B-splines (1 .le. jhigh .le. k).
+!          j       - j .LE. 0  gives B-splines of order jhigh.
+!                    j .GE. 1  on a previous call to bspvb the
 !                              B-splines of order j were com-
 !                              puted and stored in blist. It is
 !                              assumed that work has not been
-!                              MODIFIED AND THAT j .LT. k.
-!          x       - ARGUMENT OF THE B-SPLINES.
-!          left    - LARGEST INTEGER SUCH THAT
+!                              modified and that j .LT. k.
+!          x       - Argument of the B-splines.
+!          left    - Largest integer such that
 !                    t(left) .LE. x .LT. t(left+1)
 !
 !         Output
 !
-!          blist   - VECTOR OF LENGTH k FOR SPLINE VALUES.
-!          j       - B-SPLINES OF ORDER j HAVE BEEN COMPUTED
+!          blist   - Vector of length k for spline values.
+!          j       - B-splines of order j have been computed
 !                    and stored in blist.
 !
 !-----------------------------------------------------------------------
@@ -8753,7 +8753,7 @@ real :: factor, fkp1mm, sum
 !        interest. The  k  B-splines whose support contains the interval
 !               (t(left), t(left+1))
 !        are to be considered.
-!  A S S U M P t i O N  - - -  it is assumed that
+!  A S S U M P t i O N  - - -  It is assumed that
 !               t(left) .LT. t(left+1)
 !        division by zero will result otherwise (in  B S P V B ).
 !        Also, the output is as advertised only if
@@ -8769,7 +8769,7 @@ real :: factor, fkp1mm, sum
 !
 !  dbiatx  an array of order (idim,nderiv). Its entry (i,M) contains
 !        value of  (M-1)ST  derivative of  (left-k+i)-TH  B-spline of
-!        ORDER  k  FOR KNOT SEQUENCE  t , i=M,...,k, M=1,...,nderiv.
+!        order  k  for knot sequence  t , i=M,...,k, M=1,...,nderiv.
 !
 !******  W O R k   A R E a  ******
 !
@@ -8815,7 +8815,7 @@ do m = 2,mhigh
 end do
 !
 !     At this point, B(left-k+i, k+1-j)(x) is in dbiatx(i,j) for
-!     i = j,...,k AND j = 1,...,MHIGH. IN PARTICULAR, THE FIRST
+!     i = j,...,k and j = 1,...,MHIGH. In particular, the first
 !     column of dbiatx is already in final form. To obtain cor-
 !     responding derivatives of B-splines in subsequent columns,
 !     generate their B-repr. By differencing. Then evaluate at x.
@@ -8836,16 +8836,16 @@ do m = 2,mhigh
    il = left
    i = k
 !
-!        FOR j = 1,...,k, CONSTRUCT B-COEFFS OF (M-1)ST  DERIVATIVE OF
+!        For j = 1,...,k, construct B-coeffs of (M-1)ST  derivative of
 !        B-splines from those for preceding derivative by differencing
-!        AND STORE AGAIN IN  a(.,j) . THE FACT THAT  a(i,j) = 0  FOR
-!        i .LT. j  IS USED.
+!        and store again in  a(.,j) . The fact that  a(i,j) = 0  For
+!        i .LT. j  is used.
 !
    do ldummy = 1,kp1mm
       l = il + kp1mm
       factor = fkp1mm/(t(l) - t(il))
 !
-!           THE ASSUMPTION THAT t(left).LT.t(left+1) MAKES DENOMINATOR
+!           The assumption that t(left).LT.t(left+1) makes denominator
 !           in the factor nonzero.
 !
       do 25 j = 1,i
@@ -8854,7 +8854,7 @@ do m = 2,mhigh
       i = i - 1
    end do
 !
-!        FOR i = 1,...,k, COMBINE B-COEFFS a(.,i) WITH B-SPLINE VALUES
+!        For i = 1,...,k, combine B-coeffs a(.,i) with B-spline values
 !        stored in dbiatx(.,M) to get value of  (M-1)ST  derivative of
 !        i-TH B-spline (of interest here) at x, and store in
 !        dbiatx(i,M). Storage of this value over the value of A B-spline
@@ -8881,8 +8881,8 @@ integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
 real :: taui
 !-----------------------------------------------------------------------
 !   This routine produces the B-spline COEFF.S bcoef of the piecewise
-!   POLYNOMIAL OF ORDER k WITH KNOTS t(i) (i=1,...,n+k) WHICH HAS THE
-!   VALUE gtau(i) AT tau(i) FOR i=1,...,n.
+!   polynomial of order k with knots t(i) (i=1,...,n+k) which has the
+!   value gtau(i) at tau(i) for i=1,...,n.
 !
 !******  i n P U t  ******
 !
@@ -8895,7 +8895,7 @@ real :: taui
 !  k.....order of the piecewise polynomial
 !  iflag.....on an initial call to the routine, iflag may be assigned
 !        any value except 0. The routine may be recalled when only gtau
-!        IS MODIFIED. iflag=0 WHEN THIS IS DONE.
+!        is modified. iflag=0 When this is done.
 !
 !******  O U t P U t  ******
 !
@@ -8903,17 +8903,17 @@ real :: taui
 !  q.....array of size  (2*k-1)*n , containing the triangular factoriz-
 !        ation of the coefficient matrix of the linear system for the B-
 !        coefficients of the spline interpolant.
-!  iflag.....AN INTEGER INDICATING SUCCESS (= 0)  OR FAILURE (= 1)
+!  iflag.....an integer indicating success (= 0)  or failure (= 1)
 !        the linear system to be solved is (theoretically) invertible if
 !        and only if
-!              B(i)(tau(i)) .NE. 0   FOR ALL i.
-!        VIOLATION OF THIS CONDITION IS CERTAIN TO LEAD TO iflag = 1.
+!              B(i)(tau(i)) .NE. 0   for all i.
+!        Violation of this condition is certain to lead to iflag = 1.
 !
 !******  M E t H O D  ******
 !
-!     THE i-TH EQUATION OF THE LINEAR SYSTEM  A*bcoef = B  FOR THE B-CO-
-!  EFFS OF THE INTERPOLANT ENFORCES INTERPOLATION AT  tau(i), i=1,...,n.
-!  HENCE,  B(i) = gtau(i), ALL i, AND  A  IS A BAND MATRIX WITH  2k-1
+!     The i-TH equation of the linear system  A*bcoef = B  for the B-CO-
+!  effs of the interpolant enforces interpolation at  tau(i), i=1,...,n.
+!  Hence,  B(i) = gtau(i), all i, and  A  is a band matrix with  2k-1
 !  bands (if it is invertible).
 !     The matrix  A  is generated row by row and stored, diagonal by DI-
 !  agonal, in the  R O W S  of the array  q , with the main diagonal go-
@@ -8950,14 +8950,14 @@ do i = 1,lenq
    q(i) = 0.0
 end do
 !
-!  ***   LOOP OVER i TO CONSTRUCT THE n INTERPOLATION EQUATIONS
+!  ***   Loop over i to construct the n interpolation equations
 !
 left = k
 do i = 1,n
    taui = tau(i)
    ilp1mx = min0(i + k,np1)
 !
-!        *** FIND  LEFT  IN THE CLOSED INTERVAL (i,i+k-1) SUCH THAT
+!        *** Find  left  in the closed interval (i,i+k-1) such that
 !                t(left) .LE. tau(i) .LT. t(left+1)
 !        matrix is singular if this is not possible
 !
@@ -8969,8 +8969,8 @@ do i = 1,n
    if (left .eq. i + k) go to 100
    left = n
 !
-!        *** THE i-TH EQUATION ENFORCES INTERPOLATION AT taui, HENCE
-!        A(i,j) = B(j,k,t)(taui), ALL j. ONLY THE  k  ENTRIES WITH  j =
+!        *** The i-TH equation enforces interpolation at taui, hence
+!        A(i,j) = B(j,k,t)(taui), all j. only the  k  entries with  j =
 !        left-k+1,...,left actually might be nonzero. These  k  numbers
 !        are returned, in  bcoef (used for temp.Storage here), by the
 !        following
@@ -8979,8 +8979,8 @@ do i = 1,n
    call bspvb (t, k, k, jj, taui, left, bcoef)
 !
 !        Let q denote a two-dimensional array of dimension (2*k-1,n).
-!        WE THEREFORE WANT  bcoef(j) = B(left-k+j)(taui) TO GO INTO
-!        A(i,left-k+j), I.E., Into  q(i-(left+j)+2*k,(left+j)-k) since
+!        We therefore want  bcoef(j) = B(left-k+j)(taui) to go into
+!        A(i,left-k+j), I.E., into  q(i-(left+j)+2*k,(left+j)-k) since
 !        A(i+j,j)  is to go into  q(i+k,j), all i,j.  in the current
 !        routine we treat q as an equivalent one-dimensional array.
 !        Thus we want bcoef(j) to be inserted into entry
@@ -8995,7 +8995,7 @@ do i = 1,n
    end do
 end do
 !
-!     ***OBTAIN FACTORIZATION OF  A  , STORED AGAIN IN  q.
+!     ***Obtain factorization of  A  , stored again in  q.
 !
 call banfac (q, k + km1, n, km1, km1, iflag)
 iflag = iflag - 1
@@ -9009,7 +9009,7 @@ end do
 call banslv (q, k + km1, n, km1, km1, bcoef)
 return
 !
-!     *** ERROR RETURN
+!     *** Error return
 !
 100 iflag = 1
 return
@@ -9035,11 +9035,11 @@ integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
 !           Explicitly,  A  has  nbandl  bands below the diagonal
 !                            +     1     (MAIN) DIAGONAL
 !                            +   nbandu  BANDS ABOVE THE DIAGONAL
-!        AND THUS, WITH    middle = nbandu + 1,
-!          A(i+j,j)  IS IN  w(i+middle,j)  FOR i=-nbandu,...,nbandl
+!        and thus, with    middle = nbandu + 1,
+!          A(i+j,j)  is in  w(i+middle,j)  for i=-nbandu,...,nbandl
 !                                              j=1,...,nrow .
 !        For example, the interesting entries of A (1,2)-banded matrix
-!        OF ORDER  9  WOULD APPEAR IN THE FIRST  1+1+2 = 4  ROWS OF  w
+!        of order  9  would appear in the first  1+1+2 = 4  Rows of  w
 !        as follows.
 !                          13 24 35 46 57 68 79
 !                       12 23 34 45 56 67 78 89
@@ -9049,12 +9049,12 @@ integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
 !        All other entries of  w  not identified in this way with an EN-
 !        try of  A  are never referenced .
 !  nroww.....row dimension of the work array  w .
-!        MUST BE  .GE.  nbandl + 1 + nbandu  .
+!        Must be  .GE.  nbandl + 1 + nbandu  .
 !  nbandl.....number of bands of  a  below the main diagonal
 !  nbandu.....number of bands of  a  above the main diagonal .
 !
 !******  O U T P U T  ******
-!  iflag.....INTEGER INDICATING SUCCESS( = 1) OR FAILURE ( = 2) .
+!  iflag.....integer indicating success( = 1) or failure ( = 2) .
 !     IF  iflag = 1, THEN
 !  w.....contains the LU-factorization of  a  into a unit lower triangu-
 !        lar matrix  L  and an upper triangular matrix  U (both banded)
@@ -9142,7 +9142,7 @@ integer, intent(in) :: nbandl, nbandu, nrow, nroww
 integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  From  * a practical guide to splines *  by C. DE boor
 !  companion routine to  banfac . It returns the solution  X  of the
-!  LINEAR SYSTEM  A*X = b  IN PLACE OF  b , GIVEN THE LU-FACTORIZATION
+!  linear system  A*X = b  in place of  b , given the LU-factorization
 !  for  A  in the workarray  w .
 !
 !******  i N P U T  ******
@@ -9155,9 +9155,9 @@ integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  b.....contains the solution  X , of order  nrow .
 !
 !******  M E T H O D  ******
-!     (WITH  A = L*U, AS STORED IN  w,) THE UNIT LOWER TRIANGULAR SYSTEM
-!  L(U*X) = b  IS SOLVED FOR  Y = U*X, AND  Y  STORED IN  b . THEN THE
-!  UPPER TRIANGULAR SYSTEM  U*X = Y  IS SOLVED FOR  X  . THE CALCUL-
+!     (with  A = L*U, as stored in  w,) the unit lower triangular system
+!  L(U*X) = b  is solved for  Y = U*X, and  Y  stored in  b . Then the
+!  upper triangular system  U*X = Y  is solved for  X  . The CALCUL-
 !  ations are so arranged that the innermost loops stay within columns.
 !
 real, intent(in) :: w(nroww,nrow)
@@ -9167,7 +9167,7 @@ if (nrow .eq. 1)                  go to 49
 nrowm1 = nrow - 1
 if (nbandl .eq. 0)                go to 30
 !                                 Forward pass
-!            FOR i=1,2,...,nrow-1, SUBTRACT  RIGHT SIDE(i)*(i-TH COLUMN
+!            for i=1,2,...,nrow-1, subtract  right side(i)*(i-TH column
 !            of  L )  from right side  (below i-TH row) .
 do 21 i = 1,nrowm1
    jmax = min0(nbandl, nrow-i)
@@ -9176,8 +9176,8 @@ do 21 i = 1,nrowm1
       mpj = middle + j
 21 b(ipj) = b(ipj) - b(i)*w(mpj,i)
 !                                 Backward pass
-!            FOR i=nrow,nrow-1,...,1, DIVIDE RIGHT SIDE(i) BY i-TH DIAG-
-!            onal entry of  U, then subtract  right SIDE(i)*(i-TH column
+!            for i=nrow,nrow-1,...,1, divide right side(i) by i-TH diag-
+!            onal entry of  U, then subtract  right side(i)*(i-TH column
 !            of  U)  from right side  (above i-TH row).
 30 if (nbandu .gt. 0)                go to 40
 !                                A  is lower triangular .
@@ -9256,7 +9256,7 @@ end do
 left = k
 do l = 1,ntau
 !
-!        *** FIND THE INDEX LEFT SUCH THAT
+!        *** Find the index left such that
 !            t(left) .LE. tau(l) .LT. t(left+1)
 !
 30 if (left .eq. n) go to 40
@@ -9331,7 +9331,7 @@ real :: ratio, t
 !
 !******  O U t P U t  ******
 !                                                         t
-!     w      CONTAINS THE CHOLESKY FACTORIZATION C = L*D*L   WHERE
+!     w      contains the Cholesky factorization C = L*D*L   where
 !            w(1,i) = 1/D(i,i) AND w(i,j) = L(i-1+j,j) (i=2,...,nb).
 !
 !     iflag  0 if C is nonsingular and 1 if C is singular.
@@ -9341,21 +9341,21 @@ real :: ratio, t
 !   Gauss elimination, adapted to the symmetry and bandedness of  C , is
 !   used .
 !     Near zero pivots are handled in a special way. The diagonal ele-
-!  MENT C(k,k) = w(1,k) IS SAVED INITIALLY IN  diag(k), ALL k. AT THE k-
+!  MENT C(k,k) = w(1,k) is saved initially in  diag(k), all k. at the k-
 !  TH elimination step, the current pivot element, viz.  w(1,k), is com-
 !  pared with its original value, diag(k). If, as the result of prior
 !  elimination steps, this element has been reduced by about a word
-!  LENGTH, (I.E., IF w(1,k)+diag(k) .LE. diag(k)), THEN THE PIVOT IS DE-
+!  length, (I.E., if w(1,k)+diag(k) .LE. diag(k)), then the pivot is DE-
 !  clared to be zero, and the entire k-TH row is declared to be linearly
 !  dependent on the preceding rows. This has the effect of producing
-!   X(k) = 0  WHEN SOLVING  C*X = B  FOR  X, REGARDLESS OF  B. JUSTIFIC-
+!   X(k) = 0  When solving  C*X = B  for  X, regardless of  B. JUSTIFIC-
 !  ation for this is as follows. In contemplated applications of this
 !  program, the given equations are the normal equations for some least-
-!  SQUARES APPROXIMATION PROBLEM, diag(k) = C(k,k) GIVES THE NORM-SQUARE
+!  squares approximation problem, diag(k) = C(k,k) gives the norm-square
 !  of the k-TH basis function, and, at this point,  w(1,k)  contains the
 !  norm-square of the error in the least-squares approximation to the k-
 !  TH basis function BY linear combinations of the first k-1 . Having
-!  w(1,k)+diag(k) .LE. diag(k) SIGNIFIES THAT THE k-TH FUNCTION IS LIN-
+!  w(1,k)+diag(k) .LE. diag(k) signifies that the k-TH function is lin-
 !  early dependent to machine accuracy on the first k-1 functions, there
 !  fore can safely be left out from the basis of approximating functions
 !     the solution of a linear system
@@ -9416,7 +9416,7 @@ integer, intent(in) :: n, nb
 integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !
-!     bchslv SOLVES THE LINEAR SYSTEM C*X = b FOR X WHEN w CONTAINS
+!     bchslv solves the linear system C*X = b for X when w contains
 !     the Cholesky factorization obtained by the subroutine bchfac
 !     for the banded symmetric positive definite matrix C.
 !
@@ -9429,10 +9429,10 @@ integer :: j, jmax, jpk, k, nbm1
 !
 !     Output ...
 !
-!        b   SOLUTION X OF THE LINEAR SYSTEM C*X = b
+!        b   solution X of the linear system C*X = b
 !
 !                                       T
-!     NOTE.  THE FACTORIZATION C = L*D*L  IS USED, WHERE L IS A
+!     note.  The factorization C = L*D*L  is used, where L is A
 !     unit lower triangular matrix and D a diagonal matrix.
 !
 !-----------------------------------------------------------------------
@@ -9443,7 +9443,7 @@ if (n .gt. 1) go to 10
 b(1) = b(1)*w(1,1)
 return
 !
-!     FORWARD SUBSTITUTION. SOLVE L*Y = b FOR Y AND STORE Y IN b.
+!     Forward substitution. Solve L*Y = b for Y and store Y in b.
 !
 10 nbm1 = nb - 1
 do 30 k = 1,n
@@ -9455,7 +9455,7 @@ do 30 k = 1,n
    end do
 30 continue
 !                              T     -1
-!     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN b.
+!     backsubstitution. Solve L X = D  Y  for X and store X in b.
 !
 k = n
 40 b(k) = b(k)*w(1,k)
@@ -9491,7 +9491,7 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !
 !      n,nord,bkpt(*)     n IS THE NUMBER OF COEFFICIENTS TO BE COM-
 !                         puted and nord is the order of the B-spline.
-!                         IT IS ASSUMED THAT n .GE. nord. THE n + nord
+!                         It is assumed that n .GE. nord. The n + nord
 !                         knots of the spline are in the array bkpt(*).
 !                         It is assumed that the knots form a nonde-
 !                         creasing sequence. The problem data interval
@@ -9503,7 +9503,7 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !
 !                         (The order of the B-spline is one more than
 !                         the degree of the piecewise polynomial. For
-!                         EXAMPLE, nord=4 WHEN WE ARE USING PIECEWISE
+!                         example, nord=4 When we are using piecewise
 !                         cubics.)
 !
 !      ndata,xdata(*),
@@ -9527,8 +9527,8 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !                         value of nderiv(*) is determined as follows.
 !                         Suppose the I-TH constraint applies to the
 !                         J-TH derivative of the B-spline.  (Any
-!                         NONNEGATIVE VALUE OF J .LT. nord IS PERMITTED.
-!                         IN PARTICULAR, THE VALUE J = 0 REFERS TO THE
+!                         nonnegative value of J .LT. nord is permitted.
+!                         In particular, the value J = 0 Refers to the
 !                         B-spline itself.)
 !                         for this I-TH constraint, set
 !                          xconst(i) = x,
@@ -9552,7 +9552,7 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !
 !                         mode = 0      A NEW PROBLEM.
 !
-!                         mode .NE. 0   AN OLD PROBLEM.
+!                         mode .NE. 0   an old problem.
 !
 !                         By an old problem it is meant that bfit( )
 !                         was last called with the same set of knots
@@ -9585,7 +9585,7 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !                         additional block of storage in w(*).  For the
 !                         discussion here define the integers
 !                         NEQCON and NINCON respectively as the
-!                         NUMBER OF EQUALITY (ITYPE=2,3) AND
+!                         number of equality (ITYPE=2,3) and
 !                         INEQUALITY (ITYPE=0,1) CONSTRAINTS
 !                         imposed on the fitted curve.  Define
 !
@@ -9616,47 +9616,47 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !
 !                         =-2  EITHER ndata .LT. 1 OR nconst .LT. 0.
 !
-!                         =-3  bkpt(I) .GT. bkpt(I+1) FOR SOME I.
+!                         =-3  bkpt(I) .GT. bkpt(I+1) for some I.
 !
-!                         =-4  xdata(*) IS NOT AN INCREASING
+!                         =-4  xdata(*) is not an increasing
 !                              sequence in the closed interval
 !                              (bkpt(nord), bkpt(n+1)).
 !
-!                         =-5  THE I-TH CONSTRAINT IS INCORRECT
+!                         =-5  The I-TH constraint is incorrect
 !                              for the value of I stored in iw(2).
 !
-!                         =-6  INSUFF. STORAGE FOR w(*). iw(1) HAS
+!                         =-6  Insuff. Storage for w(*). iw(1) has
 !                              been reset to the amount of storage
 !                              needed by w(*).
 !
-!                         =-7  INSUFF. STORAGE FOR iw(*). iw(2) HAS
+!                         =-7  Insuff. Storage for iw(*). iw(2) has
 !                              been reset to the amount of storage
 !                              needed by iw(*).
 !
-!                         = 0  SUCCESSFUL CONSTRAINED CURVE FIT.
+!                         = 0  Successful constrained curve fit.
 !
-!                         = 1  THE REQUESTED EQUALITY CONSTRAINTS
+!                         = 1  The requested equality constraints
 !                              are contradictory.
 !
-!                         = 2  THE PROBLEM CANNOT BE SOLVED. THE
+!                         = 2  The problem cannot be solved. The
 !                              constraints are contradictory.
 !
 !      coeff(*)
-!                         IF THE OUTPUT VALUE OF mode=0 OR 1, coeff(*)
+!                         if the output value of mode=0 Or 1, coeff(*)
 !                         contains the n unknowns obtained from the
 !                         least squares fitting process.  These n
 !                         parameters are the B-spline coefficients.
-!                         FOR mode=1, THE EQUALITY CONSTRAINTS ARE
+!                         For mode=1, the equality constraints are
 !                         contradictory.  To make the fitting process
 !                         more robust, the equality constraints are
 !                         satisfied in a least squares sense.  In
 !                         this case the array coeff(*) contains
 !                         B-spline coefficients for this extended
 !                         concept of a solution.
-!                         IF mode .LT. 0 OR mode = 2 ON OUTPUT, THE
+!                         If mode .LT. 0 or mode = 2 On output, the
 !                         array coeff(*) is undefined.
 !
-!      rnorm              IF THE OUTPUT VALUE OF mode = 0 OR 1 THEN
+!      rnorm              if the output value of mode = 0 Or 1 then
 !                         rnorm is the L2 norm of the vector
 !                         (ydata(I) - F(xdata(I)), I = 1,ndata).
 !
@@ -9668,11 +9668,11 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !                         in iw(1), iw(2) noted above. It is assumed
 !                         that w(1),...,w(NB) have not been modified
 !                         if bfit( ) is being recalled for the same
-!                         knots and data as before (I.E., If we have
+!                         knots and data as before (I.E., if we have
 !                         an old problem).
 !
 !
-!   Reference.  Hanson R.J., Constrained least squares curve fitting
+!   Reference.  Hanson R.J., constrained least squares curve fitting
 !               to discrete data using B-splines, a users guide.
 !               Sandia labs. Tech. Rept. Sand-78-1291, DEC, 1978.
 !
@@ -9866,7 +9866,7 @@ intrvl = ileft - nordm1
 call bndacc (g, mdg, nord, ip, ir, mt, intrvl)
 mt = 0
 !
-!     MOVE POINTER UP SO THAT xval .GE. bkpt(ileft).
+!     Move pointer up so that xval .GE. bkpt(ileft).
 !
 do 220 i = ip1,n
    if (xval .lt. bkpt(i)) go to 230
@@ -10034,16 +10034,16 @@ real, intent(inout) :: g(mdg,*)
 integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
 !
-!***AUTHOR  LAWSON, C. L., (JPL)
+!***Author  Lawson, C. L., (JPL)
 !           Hanson, R. J., (SNLA)
 !
-!***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
+!***Purpose  solve the least squares problem AX = B for banded
 !            matrices a using sequential accumulation of rows of
 !            the data matrix.  Exactly one right-handed side vector
 !            is permitted.
 !***DESCRIPTION
 !
-!     THESE SUBROUTINES SOLVE THE LEAST SQUARES PROBLEM AX = B FOR
+!     These subroutines solve the least squares problem AX = B for
 !     banded matrices a using sequential accumulation of rows of the
 !     data matrix.  Exactly one right-hand side vector is permitted.
 !
@@ -10051,22 +10051,22 @@ real :: rho
 !     systems that arise in applications such as curve or surface
 !     fitting of data.  The least squares equations are accumulated and
 !     processed using only part of the data.  This requires a certain
-!     USER INTERACTION DURING THE SOLUTION OF AX = B.
+!     user interaction during the solution of AX = B.
 !
 !     Specifically, suppose the data matrix (A B) is row partitioned
 !     into Q submatrices.  Let (E F) be the T-TH one of these
-!     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS mt BY N
+!     submatrices where E = (0 C 0).  Here the dimension of E is mt by N
 !     and the dimension of C is mt by nb.  The value of nb is the
 !     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are mt by jt-1.
 !
 !     The user of the subroutine bndacc provides mt,jt,C and F for
-!     T=1,...,Q.  NOT ALL OF THIS DATA MUST BE SUPPLIED AT ONCE.
+!     T=1,...,Q.  not all of this data must be supplied at once.
 !
 !     Following the processing of the various blocks (E F), the matrix
 !     (A B) has been transformed to the form (R D) where R is upper
 !     triangular and banded with bandwidth nb.  The least squares
-!     SYSTEM RX = D IS THEN EASILY SOLVED USING BACK SUBSTITUTION BY
+!     system RX = D is then easily solved using back substitution by
 !     executing the statement call bndsl(1,...). The sequence of
 !     values for jt must be nondecreasing.  This may require some
 !     preliminary interchanges of rows and columns of the matrix A.
@@ -10079,7 +10079,7 @@ real :: rho
 !
 !     Where N is the number of unknowns.
 !
-!     HERE THE MAXIMUM IS TAKEN OVER ALL VALUES OF mt FOR T=1,...,Q.
+!     Here the maximum is taken over all values of mt for T=1,...,Q.
 !     Notice that mt can be taken to be a small as one, showing that
 !     mu can be as small as N+2.  The subprogram bndacc processes the
 !     rows more efficiently if mu is large enough so that each new
@@ -10117,7 +10117,7 @@ real :: rho
 !                       See descriptions of ir and mt below.
 !
 !     mdg               THE NUMBER OF ROWS IN THE WORKING ARRAY
-!                       g(*,*).  THE VALUE OF mdg SHOULD BE .GE. mu.
+!                       g(*,*).  The value of mdg should be .GE. mu.
 !                       The value of mu is defined in the abstract
 !                       of these subprograms.
 !
@@ -10138,7 +10138,7 @@ real :: rho
 !     mt,jt             SET BY THE USER TO INDICATE RESPECTIVELY THE
 !                       number of new rows of data in the block and
 !                       the index of the first nonzero column in that
-!                       SET OF ROWS (E F) = (0 C 0 F) BEING PROCESSED.
+!                       set of rows (E F) = (0 C 0 F) being processed.
 !
 !     Output..
 !
@@ -10169,7 +10169,7 @@ real :: rho
 !
 !     call bndacc(g,mdg,nb,ip,ir,mt,jt)
 !
-!***REFERENCES  C. L. LAWSON AND R. J. HANSON,
+!***References  C. L. Lawson and R. J. Hanson,
 !                 solving least square problems,PRENCTICE-Hall, inc
 !                 (1974), chapter 27
 !
@@ -10255,15 +10255,15 @@ real, intent(inout) :: x(n)
 integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
 real :: rsq, s
 !
-!***AUTHOR  LAWSON, C. L., (JPL)
+!***Author  Lawson, C. L., (JPL)
 !           Hanson, R. J., (SNLA)
 !
-!***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
+!***Purpose  solve the least squares problem AX = B for banded
 !            matrices a using sequential accumulation of rows of
 !            the data matrix.  Exactly one right-handed side vector
 !            is permitted.
 !
-!     THESE SUBROUTINES SOLVE THE LEAST SQUARES PROBLEM AX = B FOR
+!     These subroutines solve the least squares problem AX = B for
 !     banded matrices a using sequential accumulation of rows of the
 !     data matrix.  Exactly one right-hand side vector is permitted.
 !
@@ -10271,22 +10271,22 @@ real :: rsq, s
 !     systems that arise in applications such as curve or surface
 !     fitting of data.  The least squares equations are accumulated and
 !     processed using only part of the data.  This requires a certain
-!     USER INTERACTION DURING THE SOLUTION OF AX = B.
+!     user interaction during the solution of AX = B.
 !
 !     Specifically, suppose the data matrix (A B) is row partitioned
 !     into Q submatrices.  Let (E F) be the T-TH one of these
-!     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS MT BY n
+!     submatrices where E = (0 C 0).  Here the dimension of E is MT by n
 !     and the dimension of C is MT by nb.  The value of nb is the
 !     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are MT by JT-1.
 !
 !     The user of the subroutine bndacc provides MT,JT,C and F for
-!     T=1,...,Q.  NOT ALL OF THIS DATA MUST BE SUPPLIED AT ONCE.
+!     T=1,...,Q.  not all of this data must be supplied at once.
 !
 !     Following the processing of the various blocks (E F), the matrix
 !     (A B) has been transformed to the form (R D) where R is upper
 !     triangular and banded with bandwidth nb.  The least squares
-!     SYSTEM RX = D IS THEN EASILY SOLVED USING BACK SUBSTITUTION BY
+!     system RX = D is then easily solved using back substitution by
 !     executing the statement call bndsl(1,...). The sequence of
 !     values for JT must be nondecreasing.  This may require some
 !     preliminary interchanges of rows and columns of the matrix A.
@@ -10299,7 +10299,7 @@ real :: rsq, s
 !
 !     Where n is the number of unknowns.
 !
-!     HERE THE MAXIMUM IS TAKEN OVER ALL VALUES OF MT FOR T=1,...,Q.
+!     Here the maximum is taken over all values of MT for T=1,...,Q.
 !     Notice that MT can be taken to be a small as one, showing that
 !     mu can be as small as n+2.  The subprogram bndacc processes the
 !     rows more efficiently if mu is large enough so that each new
@@ -10337,15 +10337,15 @@ real :: rsq, s
 !
 !     MODE              SET BY THE USER TO ONE OF THE VALUES 1, 2, OR
 !                       3.  These values respectively indicate that
-!                       THE SOLUTION OF AX = B, YR = H OR RZ = W IS
+!                       the solution of AX = B, YR = H or RZ = W is
 !                       required.
 !
 !     g(*,*),mdg,       THESE ARGUMENTS ALL HAVE THE SAME MEANING AND
 !      nb,ip,ir         CONTENTS AS FOLLOWING THE LAST CALL TO bndacc.
 !
-!     x(*)              WITH mode=2 OR 3 THIS ARRAY CONTAINS,
+!     x(*)              with mode=2 Or 3 this array contains,
 !                       respectively, the right-side vectors H or W of
-!                       THE SYSTEMS YR = H OR RZ = W.
+!                       the systems YR = H or RZ = W.
 !
 !     n                 THE NUMBER OF VARIABLES IN THE SOLUTION
 !                       vector.  If any of the n diagonal terms are
@@ -10356,19 +10356,19 @@ real :: rsq, s
 !     Output..
 !
 !     x(*)              THIS ARRAY CONTAINS THE SOLUTION VECTORS x,
-!                       Y OR Z OF THE SYSTEMS AX = B, YR = H OR
-!                       RZ = W DEPENDING ON THE VALUE OF mode=1,
+!                       Y or Z of the systems AX = B, YR = H or
+!                       RZ = W depending on the value of mode=1,
 !                       2 or 3.
 !
-!     rnorm             IF mode=1 rnorm IS THE EUCLIDEAN LENGTH OF THE
-!                       RESIDUAL VECTOR ax-B.  WHEN mode=2 OR 3 rnorm
+!     rnorm             if mode=1 rnorm is the Euclidean length of the
+!                       residual vector ax-B.  when mode=2 Or 3 rnorm
 !                       is set to zero.
 !
-!     ierr              ierr = 0 IF THE SOLUTION WAS OBTAINED.
-!                       ierr = 1 IF THE PROBLEM CANNOT BE SOLVED.
+!     ierr              ierr = 0 If the solution was obtained.
+!                       ierr = 1 If the problem cannot be solved.
 !
 !
-!***REFERENCES  C. L. LAWSON AND R. J. HANSON,
+!***References  C. L. Lawson and R. J. Hanson,
 !                 solving least square problems,PRENCTICE-Hall, inc
 !                 (1974), chapter 27
 !
@@ -10450,7 +10450,7 @@ integer :: i, imax, j, l, ld, m, n, nu
 !     B-splines, having the form
 !
 !                          m    n
-!              f(x,y)  =  SUM  SUM  A   U (x) V (y)
+!              f(x,y)  =  Sum  sum  A   U (x) V (y)
 !                         i=1  j=1   IJ  i     j
 !
 !     WHERE m = nx + 2 AND n = ny + 2, AND U  AND V  ARE B-SPLINE
@@ -10460,7 +10460,7 @@ integer :: i, imax, j, l, ld, m, n, nu
 !              G (x) = SUM A   U (x)
 !               j      i=1  IJ  i
 !
-!     FOR j = 1,...,n. THEN G (x),...,G (x) ARE CUBIC SPLINES AND
+!     For j = 1,...,n. then G (x),...,G (x) are cubic splines and
 !                            1         n
 !                        n
 !              f(x,y) = SUM G (x) V (y) .

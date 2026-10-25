@@ -1,16 +1,16 @@
 {
   "input_sha256": "7b246665fd069c890b72aafe7d6a6dab58e1d3900c96ab4935d1873ac08e22cc",
-  "output_sha256": "7fb905c465f17f63769b9482068baf2609a81d38d3491f3d1f94341dcce31014",
+  "output_sha256": "302e4bccc916b7c8b091ce8c1277e4bd84b9d324f9a8ee0ad3a5370d46d21fdd",
   "rules_sha256": "aad1b729a8132aea0af622902764aadd4f4f9e3dd91a13ab802e537b45aa8947",
   "vocabulary_sha256": "e13c433e8d8472ee7b186ca09901f0f4d964404eff21040392bcd0b3b3d4a0f0",
-  "changed_lines": 27347,
-  "changed_paragraphs": 9496,
-  "technical_comment_lines": 14941,
+  "changed_lines": 28238,
+  "changed_paragraphs": 10670,
+  "technical_comment_lines": 14661,
   "retained_lines": {
-    "formula or status expression": 5950,
+    "formula or status expression": 1898,
     "code example": 752,
     "uncertain prose": 718,
-    "table or aligned fields": 2077
+    "table or aligned fields": 1723
   },
   "unrecognized_prose_words": {
     "VE": {
@@ -21,16 +21,28 @@
       "count": 1,
       "first_line": 668
     },
+    "FOATING": {
+      "count": 2,
+      "first_line": 824
+    },
+    "COSHMM": {
+      "count": 3,
+      "first_line": 3877
+    },
     "LOGGAMMA": {
       "count": 2,
       "first_line": 10994
+    },
+    "NONEGATIVE": {
+      "count": 2,
+      "first_line": 14362
     },
     "IBESS": {
       "count": 2,
       "first_line": 18082
     },
     "JBESS": {
-      "count": 4,
+      "count": 6,
       "first_line": 18082
     },
     "YAIRY": {
@@ -45,6 +57,10 @@
       "count": 1,
       "first_line": 18587
     },
+    "DBI": {
+      "count": 1,
+      "first_line": 18594
+    },
     "BESK": {
       "count": 1,
       "first_line": 20517
@@ -54,16 +70,28 @@
       "first_line": 25629
     },
     "SMIN": {
-      "count": 1,
+      "count": 2,
       "first_line": 26742
+    },
+    "NXM": {
+      "count": 1,
+      "first_line": 28454
     },
     "OK": {
       "count": 3,
       "first_line": 32834
     },
+    "UX": {
+      "count": 8,
+      "first_line": 36134
+    },
     "COMPUT": {
       "count": 1,
       "first_line": 36447
+    },
+    "NUMELS": {
+      "count": 5,
+      "first_line": 38219
     },
     "AG": {
       "count": 1,
@@ -86,12 +114,28 @@
       "first_line": 41059
     },
     "SPPCO": {
-      "count": 5,
+      "count": 6,
       "first_line": 41517
     },
+    "SPOCO": {
+      "count": 1,
+      "first_line": 41708
+    },
+    "SPOFA": {
+      "count": 1,
+      "first_line": 41708
+    },
     "DPPCO": {
-      "count": 5,
+      "count": 6,
       "first_line": 41837
+    },
+    "DPOCO": {
+      "count": 1,
+      "first_line": 42028
+    },
+    "DPOFA": {
+      "count": 1,
+      "first_line": 42028
     },
     "NXP": {
       "count": 3,
@@ -101,17 +145,33 @@
       "count": 3,
       "first_line": 43451
     },
-    "NXN": {
+    "JOBA": {
       "count": 6,
+      "first_line": 43480
+    },
+    "JOBB": {
+      "count": 1,
+      "first_line": 44454
+    },
+    "NXN": {
+      "count": 18,
       "first_line": 44897
     },
     "AXPXB": {
       "count": 2,
       "first_line": 45174
     },
+    "REDUCEDTO": {
+      "count": 2,
+      "first_line": 46349
+    },
     "ATXPXA": {
       "count": 2,
       "first_line": 46365
+    },
+    "ES": {
+      "count": 1,
+      "first_line": 47135
     },
     "QZHES": {
       "count": 1,
@@ -121,17 +181,33 @@
       "count": 1,
       "first_line": 47523
     },
+    "CQZVEC": {
+      "count": 1,
+      "first_line": 47769
+    },
     "UY": {
-      "count": 3,
-      "first_line": 47791
+      "count": 5,
+      "first_line": 47779
     },
     "VYL": {
-      "count": 3,
-      "first_line": 47791
+      "count": 5,
+      "first_line": 47779
+    },
+    "DECOMPO": {
+      "count": 12,
+      "first_line": 52206
+    },
+    "XA": {
+      "count": 15,
+      "first_line": 52285
     },
     "MXN": {
       "count": 1,
       "first_line": 55676
+    },
+    "YU": {
+      "count": 3,
+      "first_line": 56758
     },
     "PL": {
       "count": 2,
@@ -157,6 +233,10 @@
       "count": 1,
       "first_line": 66618
     },
+    "PA": {
+      "count": 2,
+      "first_line": 67053
+    },
     "PERMU": {
       "count": 2,
       "first_line": 67077
@@ -177,6 +257,10 @@
       "count": 8,
       "first_line": 67089
     },
+    "QRX": {
+      "count": 4,
+      "first_line": 67163
+    },
     "REPTS": {
       "count": 1,
       "first_line": 71042
@@ -185,8 +269,20 @@
       "count": 10,
       "first_line": 71854
     },
+    "GW": {
+      "count": 6,
+      "first_line": 72109
+    },
+    "EQU": {
+      "count": 1,
+      "first_line": 72638
+    },
+    "RELPR": {
+      "count": 9,
+      "first_line": 74467
+    },
     "ABAR": {
-      "count": 15,
+      "count": 24,
       "first_line": 74510
     },
     "RBAR": {
@@ -198,12 +294,12 @@
       "first_line": 75966
     },
     "GV": {
-      "count": 1,
-      "first_line": 79006
+      "count": 5,
+      "first_line": 78897
     },
-    "GW": {
+    "TOLERACE": {
       "count": 1,
-      "first_line": 79006
+      "first_line": 79275
     },
     "MXM": {
       "count": 2,
@@ -221,13 +317,37 @@
       "count": 1,
       "first_line": 84402
     },
+    "SINQI": {
+      "count": 4,
+      "first_line": 85239
+    },
     "FDERV": {
-      "count": 2,
+      "count": 3,
       "first_line": 87175
     },
     "XKNOT": {
+      "count": 4,
+      "first_line": 87213
+    },
+    "PAREMETERS": {
       "count": 1,
-      "first_line": 88059
+      "first_line": 87326
+    },
+    "ABSISSAE": {
+      "count": 1,
+      "first_line": 87656
+    },
+    "LLL": {
+      "count": 1,
+      "first_line": 87831
+    },
+    "RRRII": {
+      "count": 1,
+      "first_line": 87835
+    },
+    "RII": {
+      "count": 1,
+      "first_line": 87837
     },
     "DIFFERENCED": {
       "count": 1,
@@ -236,6 +356,26 @@
     "PRATICAL": {
       "count": 1,
       "first_line": 93225
+    },
+    "KXL": {
+      "count": 1,
+      "first_line": 93510
+    },
+    "NOMIALS": {
+      "count": 1,
+      "first_line": 93606
+    },
+    "CALCUL": {
+      "count": 1,
+      "first_line": 94169
+    },
+    "MENT": {
+      "count": 1,
+      "first_line": 94353
+    },
+    "JUSTIFIC": {
+      "count": 1,
+      "first_line": 94360
     },
     "SNLA": {
       "count": 2,
@@ -249,9 +389,33 @@
       "count": 1,
       "first_line": 96132
     },
+    "INCRE": {
+      "count": 1,
+      "first_line": 98050
+    },
+    "CRI": {
+      "count": 1,
+      "first_line": 98751
+    },
+    "DG": {
+      "count": 1,
+      "first_line": 98785
+    },
     "SEG": {
       "count": 1,
       "first_line": 99660
+    },
+    "EVALUAT": {
+      "count": 1,
+      "first_line": 99662
+    },
+    "ZX": {
+      "count": 1,
+      "first_line": 99929
+    },
+    "ZY": {
+      "count": 1,
+      "first_line": 99932
     },
     "DWKLEN": {
       "count": 2,
@@ -265,9 +429,17 @@
       "count": 2,
       "first_line": 100997
     },
+    "DETEC": {
+      "count": 8,
+      "first_line": 102698
+    },
     "IEGAUS": {
       "count": 2,
       "first_line": 109719
+    },
+    "UE": {
+      "count": 1,
+      "first_line": 110399
     },
     "PECE": {
       "count": 2,
@@ -286,20 +458,48 @@
       "first_line": 113639
     },
     "UPRIME": {
-      "count": 2,
-      "first_line": 113747
+      "count": 6,
+      "first_line": 113742
     },
     "NROWPD": {
       "count": 2,
       "first_line": 114036
     },
-    "NQCUR": {
+    "FUTHER": {
       "count": 1,
+      "first_line": 114607
+    },
+    "UNDERFLOWED": {
+      "count": 2,
+      "first_line": 115072
+    },
+    "NQCUR": {
+      "count": 2,
       "first_line": 115099
     },
     "SGBCO": {
-      "count": 5,
+      "count": 6,
       "first_line": 115979
+    },
+    "AF": {
+      "count": 1,
+      "first_line": 116924
+    },
+    "AFUN": {
+      "count": 5,
+      "first_line": 117084
+    },
+    "DFUN": {
+      "count": 2,
+      "first_line": 117084
+    },
+    "CFUN": {
+      "count": 1,
+      "first_line": 117095
+    },
+    "BFUN": {
+      "count": 3,
+      "first_line": 117095
     },
     "WALTHAM": {
       "count": 1,
@@ -308,6 +508,10 @@
     "NINT": {
       "count": 1,
       "first_line": 117304
+    },
+    "EFUN": {
+      "count": 1,
+      "first_line": 117832
     }
   },
   "uncertain_prose": [

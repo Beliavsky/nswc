@@ -21,8 +21,8 @@ anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 data c /1.77245385090552/
 !--------------------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0 .
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1.0 + eps .GT. 1.0 .
 !
                 eps = spmpar(1)
 !
@@ -64,9 +64,9 @@ real :: gam1
 !                  w1 = k  (z)  AND  w2 = k    (z)
 !                        nu                nu+1
 !
-!     FOR A COMPLEX ARGUMENT z WHERE abs(z) .LE. 2  AND A REAL
-!     ORDER nu WHERE abs(nu) .LE. 0.5.  IT IS ASSUMED THAT
-!     -pi .LT. ARG z .LE. pi, r = abs(z/2), AND zr = 2/z. POWER
+!     For a complex argument z where abs(z) .LE. 2  and a real
+!     order nu where abs(nu) .LE. 0.5.  It is assumed that
+!     -pi .LT. arg z .LE. pi, r = abs(z/2), and zr = 2/z. power
 !     series expansions are used.
 !
 !-----------------------------------------------------------------------
@@ -87,8 +87,8 @@ data d(1) / .577215664901533e+00/,  d(2) /-.420026350340952e-01/, &
 anorm(w) = amax1(abs(real(w)), abs(aimag(w)))
 !-----------------------------------------------------------------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -118,7 +118,7 @@ gm2 = 0.5*(g1 + g2)
 if (abs(nu) .gt. 0.2) go to 30
 !
 !         The following is the Taylor series for
-!     t = (1/g2 - 1/g1)/(2*nu). NOTE THAT g1*g2 = a.
+!     t = (1/g2 - 1/g1)/(2*nu). Note that g1*g2 = a.
 !
    t = nu*nu
    t = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
@@ -186,7 +186,7 @@ real :: spmpar
 !     For real orders nu and nu + 1 and for complex argument z
 !     by use of the Miller algorithm. For the greatest accuracy,
 !     z should lie in a sector slightly larger than the right
-!     HALF PLANE. IT IS ASSUMED THAT abs(nu) .LT. 0.5, AND THAT
+!     half plane. It is assumed that abs(nu) .LT. 0.5, and that
 !     r = abs(z/2) AND zr = 2/z.
 !
 !-----------------------------------------------------------------------
@@ -202,8 +202,8 @@ real :: nu2
 data c1/1.25331413731559/
 !-----------------------------------------------------------------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant.  Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -275,8 +275,8 @@ real :: c, s
 real :: sin0
 real :: cos0
 !-----------------------------------------------------------------------
-!                 Computation of exp(-R*(PI/2)*I)
-!              WHERE R = n + nu FOR abs(nu) .LE. 0.5
+!                 Computation of exp(-R*(pi/2)*I)
+!              where R = n + nu for abs(nu) .LE. 0.5
 !-----------------------------------------------------------------------
 real, intent(in) :: nu
 !
@@ -311,10 +311,10 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 !     ******************************************************************
 !     Fortran subroutine for modified Bessel function of integral order
 !     ******************************************************************
-!     mo = MODE OF OPERATION
+!     mo = Mode of operation
 !     a  = ARGUMENT (COMPLEX NUMBER)
 !     in = order (integer)
-!     w  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
+!     w  = Function of second kind (complex number)
 !     -------------------
 complex, intent(in) :: a
 complex, intent(inout) :: w
@@ -681,7 +681,7 @@ real :: a, b, c1, r
 real :: cpabs
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
-!     FOR COMPLEX ARGUMENT z IN THE INTERMEDIATE RANGE 1 .LE.
+!     for complex argument z in the intermediate range 1 .LE.
 !     CABS(z) .LE. 10.0.
 !------------------------------------------------------------
 complex, intent(in) :: z
@@ -784,7 +784,7 @@ data c2 /.398942280401433/
 !------------------------
 !
 !     Eps, xpos, and xneg are machine dependent constants. Eps is
-!     THE SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0, XPOS IS THE
+!     the smallest number such that 1.0 + eps .GT. 1.0, xpos is the
 !     the largest postive number for which exp(X) can be computed,
 !     and xneg is the largest negative number for which exp(X) does
 !     not underflow.
@@ -954,7 +954,7 @@ real :: a, c1, r, sqt3, x, y
 real :: cpabs
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
-!     FOR COMPLEX ARGUMENT z IN THE INTERMEDIATE RANGE 1 .LE.
+!     for complex argument z in the intermediate range 1 .LE.
 !     CABS(z) .LE. 10.0.
 !------------------------------------------------------------
 complex, intent(in) :: z
@@ -1080,7 +1080,7 @@ data c3/7.07106781186548e-01/
 !--------------------------
 !
 !     Eps and XM are machine dependent constants. Eps is the
-!     SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0, XPOS IS THE
+!     smallest number such that 1.0 + eps .GT. 1.0, xpos is the
 !     largest positive number for which exp(XM) can be computed,
 !     and XNEG is the negative number of largest magnitude for
 !     which exp(X) does not underflow.
@@ -1267,7 +1267,7 @@ implicit none
 !-------------------------------------------------------------
 !     Calculates the modified Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     ARGUMENT z, WHERE -PI .LT. ARG(z) .LE. PI.  i1 AND i2
+!     argument z, where -Pi .LT. arg(z) .LE. pi.  i1 and i2
 !     are replaced by the functions of orders 1/3 and 2/3,
 !     respectively, and i1m and i2m by the functions of orders
 !     -1/3 and -2/3, respectively.
@@ -1288,7 +1288,7 @@ data ex23c/(-5.0e-01, -8.66025403784439e-01)/
 if(real(z) .ge. 0.0) go to 20
    cz = -z
 !
-!     CALCULATION OF i1, i2, i1m, AND i2m WHEN real(cz) .GT. 0.
+!     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.
 !
    call imc(cz, i1, i2, i1m, i2m)
 !
@@ -1320,7 +1320,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
-!     ACCURACY, z SHOULD LIE IN THE REGION real(z) .GE. 0.
+!     accuracy, z should lie in the region real(z) .GE. 0.
 !----------------------------------------------------------------
 complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
 complex, intent(inout) :: i1, i2, i1m, i2m
@@ -1385,7 +1385,7 @@ real :: anorm
 real :: spmpar
 !-------------------------------------------------------------
 !     Calculates the modified Bessel function of the first kind
-!     FOR REAL ORDER cn .GT. -1 AND COMPLEX ARGUMENT z BY MEANS
+!     for real order cn .GT. -1 And complex argument z by means
 !     of the Maclaurin expansion.  w is replaced by the
 !     calculated value.
 !-------------------------------------------------------------
@@ -1397,7 +1397,7 @@ complex :: sz, t
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
-!     NUMBER SUCH THAT 1 + eps .GT. 1.
+!     number such that 1 + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -1427,7 +1427,7 @@ implicit none
 !------------------------------------------------------------
 !     Calculates the Bessel function of the first kind for
 !     orders 1/3, 2/3, -1/3, and -2/3 and for complex argument
-!     z, WHERE -PI .LT. ARG(z) .LE. PI.  i1 AND i2 ARE REPLACED
+!     z, where -Pi .LT. arg(z) .LE. pi.  i1 and i2 are replaced
 !     by the functions of orders 1/3 and 2/3, respectively, and
 !     i1m and i2m by functions of orders -1/3 and -2/3,
 !     respectively.
@@ -1448,7 +1448,7 @@ data ex23c/(-5.0e-01, -8.66025403784439e-01)/
 if(real(z) .ge. 0.0) go to 20
    cz = -z
 !
-!     CALCULATION OF i1, i2, i1m, AND i2m WHEN real(cz) .GT. 0.0
+!     Calculation of i1, i2, i1m, and i2m when real(cz) .GT. 0.0
 !
    call jmc(cz, i1, i2, i1m, i2m)
 !
@@ -1480,7 +1480,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
-!     ACCURACY, z SHOULD LIE IN THE REGION real(z) .GE. 0.
+!     accuracy, z should lie in the region real(z) .GE. 0.
 !----------------------------------------------------------------
 complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
 complex, intent(inout) :: i1, i2, i1m, i2m
@@ -1545,7 +1545,7 @@ real :: anorm
 real :: spmpar
 !-------------------------------------------------------------
 !     Calculates the Bessel function of the first kind
-!     FOR REAL ORDER cn .GT. -1 AND COMPLEX ARGUMENT z BY MEANS
+!     for real order cn .GT. -1 And complex argument z by means
 !     of the Maclaurin expansion.  w is replaced by the
 !     calculated value.
 !-------------------------------------------------------------
@@ -1557,7 +1557,7 @@ complex :: sz, t
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the smallest
-!     NUMBER SUCH THAT 1 + eps .GT. 1.
+!     number such that 1 + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -1590,7 +1590,7 @@ real :: a, b, pi
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z,
-!     WHERE -pi .LT. ARG(z) .LE pi.  k1 IS REPLACED BY THE
+!     where -pi .LT. arg(z) .le pi.  k1 is replaced by the
 !     function of order 1/3, and k2 by the function of order
 !     2/3.
 !------------------------------------------------------------
@@ -2202,7 +2202,7 @@ real :: ad0, ad1, ad2, ad3, ad4, ad5, an0, an1, an2, an3, an4, &
 &pn3, pn4, pn5, qd0, qd1, qd2, qd3, qd4, qd5, qn0, qn1, qn2, qn3, &
 &qn4, rtx, z
 !-----------------------------------------------------------------------
-!     COMPUTATION OF THE AIRY MODULUS AND PHASE FOR x .GE. 1
+!     Computation of the Airy modulus and phase for x .GE. 1
 !-----------------------------------------------------------------------
 data pi4 /.785398163397448/
 !-----------------------
@@ -2299,8 +2299,8 @@ real :: spmpar
 real :: alnrel
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integral F(k)
-!     FOR COMPLEX VALUES OF THE MODULUS k. IT IS ASSUMED THAT l.NE.0
-!     AND THAT k**2 + l**2 = 1.
+!     for complex values of the modulus k. it is assumed that l.NE.0
+!     and that k**2 + l**2 = 1.
 !     ------------------------------------------------------------------
 complex, intent(in) :: k, l
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, &
@@ -2365,7 +2365,7 @@ data c1  /.20264236728467/, c2/.15915494309189/
 !     ---------------------------------------------------
 !
 !     Eps is a machine dependent constant.  Eps is the
-!     SMALLEST NUMBER SUCH THAT 1. + eps .GT. 1.
+!     smallest number such that 1. + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -2387,7 +2387,7 @@ v = aimag(al)
 if (amax1(x,abs(y)) .ge. 1.0/eps) go to 90
 if (amax1(u,abs(v)) .ge. 1.1/eps) go to 200
 !
-!     CHECK THAT k**2 + l**2 = 1
+!     Check that k**2 + l**2 = 1
 !
 if (x .lt. u) go to 1
    t = u/x
@@ -2398,7 +2398,7 @@ if (x .lt. u) go to 1
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 200
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 200
 !
-!     Uses  logarithmic series when CABS(al)
+!     Uses  logarithmic series when cabs(al)
 !     is less than or equal to 0.55
 !
 10 if (u .gt. 1.42 .or. abs(v) .gt. 1.42) go to 50
@@ -2460,8 +2460,8 @@ ak = al
 al = aktemp
 go to 31
 !
-!     Uses inverse modulus transformation when CABS(ak) is greater
-!     THAN 1 AND real(ak**2) IS GREATER THAN 0.5.
+!     Uses inverse modulus transformation when cabs(ak) is greater
+!     than 1 and real(ak**2) is greater than 0.5.
 !
 50 if (x*x .le. y*y + 0.5) go to 60
 ind = 1
@@ -2470,8 +2470,8 @@ ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
 !
-!     Uses complementary inverse modulus transformation when CABS(ak)
-!     IS GREATER THAN 1 AND real(ak**2) IS LESS THAN OR EQUAL TO 0.5
+!     Uses complementary inverse modulus transformation when cabs(ak)
+!     is greater than 1 and real(ak**2) is less than or equal to 0.5
 !
 60 ind = 2
 ak = cflect(j*ak1/al1)
@@ -2525,7 +2525,7 @@ complex function cflect(z)
 implicit none
 !---------------------------------------------------------
 !     Reflects z with respect to the origin if real(z)
-!     .LT. 0.0 OR IF z IS ON THE NEGATIVE IMAGINARY AXIS.
+!     .LT. 0.0 or if z is on the negative imaginary axis.
 !---------------------------------------------------------
 complex, intent(in) :: z
 !     ----------
@@ -2545,15 +2545,15 @@ real :: c, eps, hpi, ri, tol
 real :: spmpar
 complex, intent(in) :: k2
 !---------------------------------------------------------------------
-!     KM computes the complete elliptic integral F(K) for a given
-!     VALUE OF k2 = K**2 BY USE OF THE MACLAURIN EXPANSION.
+!     km computes the complete elliptic integral F(K) for a given
+!     value of k2 = K**2 by use of the Maclaurin expansion.
 !---------------------------------------------------------------------
 complex :: an, s1
 data hpi /1.5707963267949/
 ! ---------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -2583,9 +2583,9 @@ real :: alnrel
 complex, intent(in) :: l
 complex, intent(inout) :: fk, fl
 ! ----------------------------------------------------------------------
-!     KL computes the complete elliptic integrals F(K) and F(l) for
-!     A GIVEN VALUE OF l, WHERE CABS(l) .LT. 1 AND K**2 + l**2 = 1.
-!     IT IS ASSUMED THAT -PI .LE. ARG(l**2) .LT. PI FOR THE RESULTING
+!     kl computes the complete elliptic integrals F(K) and F(l) for
+!     a given value of l, where cabs(l) .LT. 1 and K**2 + l**2 = 1.
+!     It is assumed that -Pi .LE. arg(l**2) .LT. pi for the resulting
 !     value for F(K) to be meaningful.
 ! ----------------------------------------------------------------------
 complex :: an, l2, s1, s2, w
@@ -2595,8 +2595,8 @@ data hpi /1.5707963267949/
 data ln4 /1.3862943611199/
 ! ---------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -2657,7 +2657,7 @@ real :: spmpar
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
 !     and E(k) for complex values of the modulus k. it is assumed
-!     THAT l.NE.0 AND THAT k**2 + l**2 = 1.
+!     that l.NE.0 and that k**2 + l**2 = 1.
 !     ------------------------------------------------------------------
 complex, intent(in) :: k, l
 complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, j
@@ -2723,7 +2723,7 @@ data c1  /.20264236728467/, c2/.15915494309189/
 !     ---------------------------------------------------
 !
 !     Eps is a machine dependent constant.  Eps is the
-!     SMALLEST NUMBER SUCH THAT 1. + eps .GT. 1.
+!     smallest number such that 1. + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -2746,7 +2746,7 @@ v = aimag(al)
 if (amax1(x,abs(y)) .ge. 1.0/eps) go to 90
 if (amax1(u,abs(v)) .ge. 1.1/eps) go to 210
 !
-!     CHECK THAT k**2 + l**2 = 1
+!     Check that k**2 + l**2 = 1
 !
 if (x .lt. u) go to 1
    t = u/x
@@ -2757,7 +2757,7 @@ if (x .lt. u) go to 1
 if (abs(u*u/(y*y + 1.0/(1.0 + t*t)) - 1.0) .gt. tol) go to 210
 if (abs(v + t*y) .gt. tol*amax1(1.0, abs(y))) go to 210
 !
-!     Uses  logarithmic series when CABS(al)
+!     Uses  logarithmic series when cabs(al)
 !     is less than or equal to 0.55
 !
 10 if (u .gt. 1.42 .or. abs(v) .gt. 1.42) go to 50
@@ -2845,8 +2845,8 @@ ak = al
 al = aktemp
 go to 31
 !
-!     Uses inverse modulus transformation when CABS(ak) is greater
-!     THAN 1 AND real(ak**2) IS GREATER THAN 0.5.
+!     Uses inverse modulus transformation when cabs(ak) is greater
+!     than 1 and real(ak**2) is greater than 0.5.
 !
 50 if (x*x .le. y*y + 0.5) go to 60
 ind = 1
@@ -2855,8 +2855,8 @@ ak = 1.0/ak1
 al = cflect(j*al1/ak1)
 go to 11
 !
-!     Uses complementary inverse modulus transformation when CABS(ak)
-!     IS GREATER THAN 1 AND real(ak**2) IS LESS THAN OR EQUAL TO 0.5
+!     Uses complementary inverse modulus transformation when cabs(ak)
+!     is greater than 1 and real(ak**2) is less than or equal to 0.5
 !
 60 ind = 2
 ak = cflect(j*ak1/al1)
@@ -2928,7 +2928,7 @@ implicit none
 real :: atn1, atn2, d, da, db, t, x, y
 real :: alnrel
 !---------------------------------------------------
-!     CALCULATES COMPLEX FUNCTION atn(z) = z*ATAN(z)
+!     Calculates complex function atn(z) = z*atan(z)
 !     using double precision.
 !---------------------------------------------------
 complex, intent(in) :: z
@@ -2956,14 +2956,14 @@ complex, intent(in) :: k2
 complex, intent(inout) :: fk, ek
 ! ----------------------------------------------------------------------
 !     ekm computes the complete elliptic integrals F(K) and E(K) for
-!     A GIVEN VALUE OF k2 = K**2 BY USE OF THE MACLAURIN EXPANSIONS.
+!     a given value of k2 = K**2 by use of the Maclaurin expansions.
 ! ----------------------------------------------------------------------
 complex :: an, cn, s1, s2
 data hpi /1.5707963267949/
 ! ---------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -2999,10 +2999,10 @@ complex :: l2
 complex, intent(inout) :: fk, fl, ek, el, gk, gl
 ! ----------------------------------------------------------------------
 !     ekl computes the complete elliptic integrals F(K), F(l), E(K),
-!     E(l) FOR A GIVEN VALUE OF l2, WHERE l2 = l**2 AND K**2 + l**2 = 1.
-!     IT IS ASSUMED THAT -PI .LT. ARG(l2) .LE. PI FOR THE RESULTING
+!     E(l) for a given value of l2, where l2 = l**2 and K**2 + l**2 = 1.
+!     It is assumed that -Pi .LT. arg(l2) .LE. pi for the resulting
 !     value for F(K) to be meaningful.  The combinations of functions
-!     G(K) = E(K) - l**2*F(K) AND G(l) = E(l) - K**2*F(l) ARE ALSO
+!     G(K) = E(K) - l**2*F(K) and G(l) = E(l) - K**2*F(l) are also
 !     calculated.
 ! ----------------------------------------------------------------------
 complex :: an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
@@ -3012,8 +3012,8 @@ data hpi /1.5707963267949/
 data ln4 /1.3862943611199/
 ! ---------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -3107,8 +3107,8 @@ real :: cpabs
 !     cphi = pi/2 - phi                 (0.0 .le. cphi .le. pi/2)
 !     k = modulus                       (abs(k) .le. 1.0)
 !     l = comodulus = sqrt (1 - k*k)    (abs(l) .le. 1.0)
-!     f = ELLIPTIC INTEGRAL OF FIRST KIND = f(phi, k)
-!     e = ELLIPTIC INTEGRAL OF SECOND KIND = e(phi, k)
+!     f = Elliptic integral of first kind = f(phi, k)
+!     e = Elliptic integral of second kind = e(phi, k)
 !     ierr = ERROR INDICATOR (ierr = 0  IF NO ERRORS)
 !-----------------------------------------------------------------------
 real, intent(in) :: k, l
@@ -3142,7 +3142,7 @@ px = abs(k*sn)
 qx = abs(k*cn)
 if (px .ge. th1) go to 50
 !
-!     SERIES EXPANSION FOR abs(k*sin(phi)) .LE. TANH(1)
+!     Series expansion for abs(k*sin(phi)) .LE. tanh(1)
 !
 pn = 1.0
 qn = 2.0
@@ -3171,7 +3171,7 @@ go to 30
 e = phi - s2
 return
 !
-!     SERIES EXPANSION FOR abs(k*sin(phi)) .GT. TANH(1)
+!     Series expansion for abs(k*sin(phi)) .GT. tanh(1)
 !
 50 r = cpabs(l,qx)
 if (r .eq. 0.0) go to 120
@@ -3245,8 +3245,8 @@ integer, intent(inout) :: ierr
 !     cphi = pi/2 - phi                 (0.0 .le. cphi .le. pi/2)
 !     k = modulus                       (dabs(k) .le. 1.0)
 !     l = comodulus = sqrt (1 - k*k)    (dabs(l) .le. 1.0)
-!     f = ELLIPTIC INTEGRAL OF FIRST KIND = f(phi, k)
-!     e = ELLIPTIC INTEGRAL OF SECOND KIND = e(phi, k)
+!     f = Elliptic integral of first kind = f(phi, k)
+!     e = Elliptic integral of second kind = e(phi, k)
 !     ierr = ERROR INDICATOR (ierr = 0  IF NO ERRORS)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: phi, cphi, k, l
@@ -3284,7 +3284,7 @@ px = dabs(k*sn)
 qx = dabs(k*cn)
 if (px .ge. th1) go to 50
 !
-!     SERIES EXPANSION FOR abs(k*sin(phi)) .LE. TANH(1)
+!     Series expansion for abs(k*sin(phi)) .LE. tanh(1)
 !
 pn = 1.d0
 qn = 2.d0
@@ -3313,7 +3313,7 @@ go to 30
 e = phi - s2
 return
 !
-!     SERIES EXPANSION FOR abs(k*sin(phi)) .GT. TANH(1)
+!     Series expansion for abs(k*sin(phi)) .GT. tanh(1)
 !
 50 r = dcpabs(l,qx)
 if (r .eq. 0.d0) go to 120
@@ -3387,8 +3387,8 @@ real :: spmpar
 data pihalf /1.5707963267948966192/
 !-----------------------------------------------------------------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1.0 + eps .GT. 1.0.
 !
                 eps = spmpar(1)
 !
@@ -3451,8 +3451,8 @@ double precision :: dpmpar
 data pihalf /1.570796326794896619231321691639751442099d0/
 !-----------------------------------------------------------------------
 !
-!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.D0 + eps .GT. 1.D0.
+!     ****** eps is a machine dependent constant. Eps is the
+!            smallest number such that 1.D0 + eps .GT. 1.D0.
 !
                 eps = dpmpar(1)
 !
@@ -3507,7 +3507,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the first kind
 !
-!          rf(x,y,z) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rf(x,y,z) = Integral from zero to infinity of
 !
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
@@ -3545,10 +3545,10 @@ real :: spmpar
 !          rf is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, OR z IS NEGATIVE.
-!               ierr = 2  x+y, x+z, OR y+z IS TOO SMALL.
-!               ierr = 3  x, y, OR z IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, or z is negative.
+!               ierr = 2  x+y, x+z, or y+z is too small.
+!               ierr = 3  x, y, or z is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -3625,7 +3625,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the first kind
 !
-!          rf(x,y,z) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rf(x,y,z) = Integral from zero to infinity of
 !
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
@@ -3663,10 +3663,10 @@ double precision :: dpmpar
 !          rf is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, OR z IS NEGATIVE.
-!               ierr = 2  x+y, x+z, OR y+z IS TOO SMALL.
-!               ierr = 3  x, y, OR z IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, or z is negative.
+!               ierr = 2  x+y, x+z, or y+z is too small.
+!               ierr = 3  x, y, or z is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -3743,7 +3743,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the second kind
 !
-!          rd(x,y,z) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rd(x,y,z) = Integral from zero to infinity of
 !
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
@@ -3782,10 +3782,10 @@ real :: spmpar
 !          rd is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, OR z IS NEGATIVE.
-!               ierr = 2  x+y OR z IS TOO SMALL.
-!               ierr = 3  x, y, OR z IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, or z is negative.
+!               ierr = 2  x+y or z is too small.
+!               ierr = 3  x, y, or z is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -3798,7 +3798,7 @@ real :: spmpar
         errtol = (.28 * spmpar(1)) ** (1.0/6.0)
 !
 !          lolim and uplim determine the range of valid arguments.
-!          lolim IS NOT LESS THAN 2 / (MACHINE MAXIMUM) ** (2/3).
+!          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * errtol / machine
 !          MINIMUM) ** (2/3).
 !
@@ -3873,7 +3873,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the second kind
 !
-!          rd(x,y,z) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rd(x,y,z) = Integral from zero to infinity of
 !
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
@@ -3913,10 +3913,10 @@ double precision :: dpmpar
 !          rd is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, OR z IS NEGATIVE.
-!               ierr = 2  x+y OR z IS TOO SMALL.
-!               ierr = 3  x, y, OR z IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, or z is negative.
+!               ierr = 2  x+y or z is too small.
+!               ierr = 3  x, y, or z is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -3929,7 +3929,7 @@ double precision :: dpmpar
         errtol = (.28 * sngl(dpmpar(1)))**(1.0/6.0)
 !
 !          lolim and uplim determine the range of valid arguments.
-!          lolim IS NOT LESS THAN 2 / (MACHINE MAXIMUM) ** (2/3).
+!          lolim is not less than 2 / (machine maximum) ** (2/3).
 !          uplim is not greater than (0.1 * ERRTOL / machine
 !          MINIMUM) ** (2/3).
 !
@@ -4004,7 +4004,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the third kind
 !
-!          rj(x,y,z,p) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rj(x,y,z,p) = Integral from zero to infinity of
 !
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
@@ -4047,10 +4047,10 @@ real :: spmpar
 !          rj is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, z, OR p IS NEGATIVE.
-!               ierr = 2  x+y, x+z, y+z, OR p IS TOO SMALL.
-!               ierr = 3  x, y, z, OR p IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, z, or p is negative.
+!               ierr = 2  x+y, x+z, y+z, or p is too small.
+!               ierr = 3  x, y, z, or p is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -4069,7 +4069,7 @@ real :: spmpar
 !
 !          errtol is set to the desired error tolerance. The
 !          relative error due to truncation of the series for rj
-!          IS LESS THAN 3 * errtol ** 6 / (1 - errtol) ** 3/2.
+!          is less than 3 * errtol ** 6 / (1 - errtol) ** 3/2.
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
 !
@@ -4152,7 +4152,7 @@ implicit none
 !          This subroutine computes the incomplete elliptic integral
 !          of the third kind
 !
-!          rj(x,y,z,p) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rj(x,y,z,p) = Integral from zero to infinity of
 !
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
@@ -4196,10 +4196,10 @@ double precision :: dpmpar
 !          rj is the value of the incomplete elliptic integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
-!               ierr = 1  x, y, z, OR p IS NEGATIVE.
-!               ierr = 2  x+y, x+z, y+z, OR p IS TOO SMALL.
-!               ierr = 3  x, y, z, OR p IS TOO LARGE.
+!               ierr = 0  For normal completion of the subroutine.
+!               ierr = 1  x, y, z, or p is negative.
+!               ierr = 2  x+y, x+z, y+z, or p is too small.
+!               ierr = 3  x, y, z, or p is too large.
 !
 !-----------------------------------------------------------------------
 !
@@ -4218,7 +4218,7 @@ double precision :: dpmpar
 !
 !          errtol is set to the desired error tolerance.
 !          Relative error due to truncation of the series for rj
-!          IS LESS THAN 3 * errtol ** 6 / (1 - errtol) ** 3/2.
+!          is less than 3 * errtol ** 6 / (1 - errtol) ** 3/2.
 !          An error tolerance (etolrc) will be passed to the code for
 !          rc to make the truncation error for rc less than for rj.
 !
@@ -4300,7 +4300,7 @@ implicit none
 !
 !          This subroutine computes the integral
 !
-!          rc(x,y) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rc(x,y) = Integral from zero to infinity of
 !
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
@@ -4358,10 +4358,10 @@ real :: spmpar
 !          rc is the value of the integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
+!               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x OR y IS NEGATIVE, OR y = 0.
-!               ierr = 2  x+y IS TOO SMALL.
-!               ierr = 3  x OR y IS TOO LARGE.
+!               ierr = 2  x+y is too small.
+!               ierr = 3  x or y is too large.
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -4409,7 +4409,7 @@ implicit none
 !
 !          This subroutine computes the integral
 !
-!          rc(x,y) = INTEGRAL FROM ZERO TO INFINITY OF
+!          rc(x,y) = Integral from zero to infinity of
 !
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
@@ -4459,10 +4459,10 @@ double precision :: dpmpar
 !          rc is the value of the integral.
 !
 !          ierr is the return error code.
-!               ierr = 0  FOR NORMAL COMPLETION OF THE SUBROUTINE.
+!               ierr = 0  For normal completion of the subroutine.
 !               ierr = 1  x OR y IS NEGATIVE, OR y = 0.
-!               ierr = 2  x+y IS TOO SMALL.
-!               ierr = 3  x OR y IS TOO LARGE.
+!               ierr = 2  x+y is too small.
+!               ierr = 3  x or y is too large.
 !
 !-----------------------------------------------------------------------
 !          Warning. Changes in the program may improve speed at the
@@ -4521,16 +4521,16 @@ real :: spmpar
 real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     ----------------
-!     ****** max AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** max and eps are machine dependent constants.
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest real number
-!            FOR WHICH 1 + eps .GT. 1.
+!            for which 1 + eps .GT. 1.
 !
               max = ipmpar(3)
               eps = spmpar(1)
 !
 !     ----------------
-!     CALCULATION FOR l = 0.0
+!     Calculation for l = 0.0
 !
 if (l .ne. 0.0) go to 10
 s = tanh(u)
@@ -4540,7 +4540,7 @@ d = c
 ierr = 0
 return
 !
-!     CHECK THAT k**2 + l**2 = 1
+!     Check that k**2 + l**2 = 1
 !
 10 tol = 2.0*eps
 z = dble(k*k) + (dble(l*l) - 1.d0)
@@ -4566,7 +4566,7 @@ u1 = u1 - f2
 sg = -sg
 if (u1 .ge. 0.0) go to 30
 !
-!     CALCULATION OF ELLIPTIC FUNCTIONS FOR 0.0 .LE. u2 .LE. f(k)
+!     Calculation of elliptic functions for 0.0 .LE. u2 .LE. f(k)
 !
 20 u2 = abs(u1)
 call scd (u2,abs(k),abs(l),f,s,c,d)
@@ -4608,9 +4608,9 @@ real :: c1, d1, e1, f1, pihalf, s1, v
 !     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
 !     0.0 .LE. u .LE. f AND 0.0 .LE. k .LT. 1.0, WHERE
-!     f = f(k) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
-!     FIRST KIND, AND f1 = f(l) IS THE COMPLEMENTARY INTEGRAL.
-!     IT IS ASSUMED THAT k**2 + l**2 = 1.
+!     f = f(k) is the complete elliptic integral of the
+!     first kind, and f1 = f(l) is the complementary integral.
+!     It is assumed that k**2 + l**2 = 1.
 !     --------------------------------------------------------
 real, intent(in) :: k, l
 data pihalf /1.5707963267949/
@@ -4618,7 +4618,7 @@ data pihalf /1.5707963267949/
 if (k .eq. 0.0) go to 40
 v = f - u
 !
-!     USES MACLAURIN EXPANSION WHEN u OR v .LE. 0.01
+!     Uses Maclaurin expansion when u or v .LE. 0.01
 !
 if (u .gt. 0.01) go to 10
    call scdm (u,k,s,c,d)
@@ -4630,7 +4630,7 @@ c = l*s1/d1
 d = l/d1
 return
 !
-!     USES FOURIER EXPANSION WHEN k .LE. l
+!     Uses Fourier expansion when k .LE. l
 !
 20 call ellpi(pihalf,0.0,l,k,f1,e1,ierr)
 !
@@ -4639,12 +4639,12 @@ call scdf (u,k,l,f,f1,s,c,d)
 return
 !
 !     Uses imaginary transformation of Jacobi and Fourier
-!     EXPANSION WHEN k .GT. l
+!     expansion when k .GT. l
 !
 30 call scdj (u,k,l,f,f1,s,c,d)
 return
 !
-!     COMPUTATION FOR k = 0.0
+!     Computation for k = 0.0
 !
 40 s = sin(u)
 c = cos(u)
@@ -4659,7 +4659,7 @@ real, intent(in) :: u
 real :: c1, c2, c3, c4, u2
 !     -------------------------------------------------
 !     Calculates SN(u,k), CN(u,k), and DN(u,k) for
-!     0.0 .LE. u .LE. 0.01 AND FOR 0.0 .LE. k .LE. 1.0
+!     0.0 .LE. u .LE. 0.01 and for 0.0 .LE. k .LE. 1.0
 !     by use of the Maclaurin expansion for SN(u,k)
 !     -------------------------------------------------
 real, intent(in) :: k
@@ -4690,9 +4690,9 @@ real :: spmpar
 !     -------------------------------------------------------------
 !     scdf computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k by use of the Fourier expansion for SN(u,k).  It is
-!     ASSUMED THAT 0.0 .LE. k .LT. 1.0 AND 0.0 .LE. u .LE. f,
-!     WHERE f = f(k) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
-!     FIRST KIND AND f1 = f(l) IS THE COMPLEMENTARY INTEGRAL, WITH
+!     assumed that 0.0 .LE. k .LT. 1.0 and 0.0 .LE. u .LE. f,
+!     where f = f(k) is the complete elliptic integral of the
+!     first kind and f1 = f(l) is the complementary integral, with
 !     l .NE. 0. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
 real :: i
@@ -4700,7 +4700,7 @@ real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     -------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the
-!     SMALLEST NUMBER SUCH THAT 1. + eps .GT. 1.
+!     smallest number such that 1. + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -4716,7 +4716,7 @@ qd = q1
 w = amin1(u,v)
 x = pihalf*w/f
 !
-!     CALCULATION OF SERIES FOR W = AMIN1(u,V)
+!     Calculation of series for W = AMIN1(u,V)
 !
 i = 1.0
 sum = 0.0
@@ -4729,14 +4729,14 @@ qd = qd*q2
 i = i + 2.0
 go to 10
 !
-!     ASSEMBLY FOR u .LE. V
+!     Assembly for u .LE. V
 !
 20 s = coef*sum
 c = sqrt(1.0 - s*s)
 d = sqrt(1.0 - (k*s)**2)
 if (u .eq. w) return
 !
-!     ASSEMBLY FOR u .GT. V
+!     Assembly for u .GT. V
 !
 temp = s
 s = c/d
@@ -4757,10 +4757,10 @@ real :: spmpar
 !     ----------------------------------------------------------------
 !     scdj computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k using the imaginary transformation of Jacobi and A
-!     FOURIER EXPANSION.  IT IS ASSUMED THAT 0.0 .LE. k .LT. 1.0
-!     AND 0.0 .LE. u .LE. f, WHERE f = f(k) IS THE COMPLETE ELLIPTIC
-!     INTEGRAL OF THE FIRST KIND AND f1 = f(l) IS THE COMPLEMENTARY
-!     INTEGRAL, AND THAT l .NE. 0. AND k**2 + l**2 = 1.
+!     Fourier expansion.  It is assumed that 0.0 .LE. k .LT. 1.0
+!     and 0.0 .LE. u .LE. f, where f = f(k) is the complete elliptic
+!     integral of the first kind and f1 = f(l) is the complementary
+!     integral, and that l .NE. 0. And k**2 + l**2 = 1.
 !     ----------------------------------------------------------------
 real, intent(in) :: k, l
 real :: n
@@ -4768,7 +4768,7 @@ data pihalf /1.5707963267949/
 data pi /3.1415926535898/
 !     ------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the
-!     SMALLEST NUMBER SUCH THAT 1. + eps .GT. 1.
+!     smallest number such that 1. + eps .GT. 1.
 !
 eps = spmpar(1)
 !
@@ -4788,7 +4788,7 @@ coef = pihalf/(k*f1)
 x = pihalf*w/f1
 x2 = 2.0*x
 !
-!     CALCULATION OF SERIES FOR W = AMIN1(u,V)
+!     Calculation of series for W = AMIN1(u,V)
 !
 n = 1.0
 q1n = q1
@@ -4813,14 +4813,14 @@ e2n = e2n*e2
 n = n + 1.0
 go to 20
 !
-!     ASSEMBLY FOR u .LE. V
+!     Assembly for u .LE. V
 !
 50 s = coef*(tanh(x) + 2.0*sum)
 c = sqrt(1.0 - s*s)
 d = sqrt(1.0 - (k*s)**2)
 if (u .eq. w) return
 !
-!     ASSEMBLY FOR u .GT. V
+!     Assembly for u .GT. V
 !
 temp = s
 s = c/d
@@ -4850,7 +4850,7 @@ k2 = k*k
 if (u1 .eq. 0.0) go to 10
 if (u2 .ne. 0.0) go to 20
 !
-!     CALCULATION FOR U2 = 0.
+!     Calculation for U2 = 0.
 !
 call ellpf (u1,k,l,s1,c1,d1,ierr)
 if (ierr .ne. 0) return
@@ -4859,7 +4859,7 @@ c2 = 0.0
 d2 = 0.0
 go to 40
 !
-!     CALCULATION FOR U1 = 0.
+!     Calculation for U1 = 0.
 !
 10 call ellpf (u2,l,k,s2,c2,d2,ierr)
 if  (ierr .ne. 0) return
@@ -4872,7 +4872,7 @@ c1 = 1.0/c2
 c2 = 0.0
 go to 40
 !
-!     CALCULATION FOR U1 AND U2 .NE. 0.
+!     Calculation for U1 and U2 .NE. 0.
 !
 20 call ellpf (u1,k,l,sk,ck,dk,ierr)
 if (ierr .ne. 0) return
@@ -4942,7 +4942,7 @@ n = int(zr)
 if (zr.lt.0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
 !
-!     IF z1=0 THEN z COINCIDES WITH A LATTICE POINT.
+!     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for P.
 !
 w = z1*z1
@@ -4989,7 +4989,7 @@ n = int(zr)
 if (zr.lt.0e0) n = n - 1
 z1 = z - float(n) - (0.5e0,0.86602540378443865e0)*float(m)
 !
-!     IF z1=0 THEN z COINCIDES WITH A LATTICE POINT.
+!     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for DP.
 !
 z3 = z1*z1*z1
@@ -5036,7 +5036,7 @@ if (zr.lt.0e0) m = m - 1
 if (zi.lt.0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
 !
-!     IF z1=0 THEN z COINCIDES WITH A LATTICE POINT.
+!     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for P.
 !
 w = z1*z1
@@ -5084,7 +5084,7 @@ if (zr.lt.0e0) m = m - 1
 if (zi.lt.0e0) n = n - 1
 z1 = z - float(m) - (0e0,1e0)*float(n)
 !
-!     IF z1=0 THEN z COINCIDES WITH A LATTICE POINT.
+!     If z1=0 Then z coincides with a lattice point.
 !     The lattice points are poles for DP.
 !
 z3 = z1*z1*z1
@@ -5413,20 +5413,20 @@ real :: rcomp
 real :: rexp
 real :: spmpar
 !-----------------------------------------------------------------------
-!       IF j .NE. 0, OUTPUT IS p = CIRCULAR COVERAGE FUNCTION. p GIVES
+!       If j .NE. 0, output is p = Circular coverage function. p gives
 !       the probability of a shot falling, under a normal distribution
 !       with mean (0,0) and equal standard deviations, S, in a circle
 !       of radius R0, offset a distance D0 from (0,0).
-!       INPUT IS r = R0/S, d = D0/S.
+!       Input is r = R0/S, d = D0/S.
 !
-!       IF j = 0, OUTPUT IS p = GENERALIZED CIRCULAR ERROR FUNCTION.
+!       If j = 0, output is p = Generalized circular error function.
 !       p gives the probability of a shot falling ,under a normal
 !       bivariate distribution with mean (0,0) and standard deviations
 !       SMIN and S, in a circle of radius R0 centered at (0,0).
-!       INPUT FOR j = 0, r = R0/S, d = SMIN/S .LE. 1.
+!       Input for j = 0, r = R0/S, d = SMIN/S .LE. 1.
 !       IF SMIN = 0, S .NE. 0, p = erf(r/(SQR(2)).
 !
-!       IF ierr .NE. 0, SOME PORTION OF THE INPUT IS UNACCEPTABLE.
+!       If ierr .NE. 0, some portion of the input is unacceptable.
 !       IF r .LT. 0., THEN circv SETS ierr = 1.
 !       IF d .LT. 0, OR j = 0 AND d .GT. 1., THEN circv SETS ierr = 2.
 !
@@ -5458,7 +5458,7 @@ data c3 /6.28318530717959/
   z = - alog(eps0)
   if (j .ne. 0) goto 40
 !------------------------------------------------------------------
-!   FOR j = 0, ERROR IN d IF d .LT. 0 OR d .GT. 1
+!   For j = 0, error in d if d .LT. 0 or d .GT. 1
 !------------------------------------------------------------------
 !                j = 0
 !--------------------------------------------------
@@ -5660,11 +5660,11 @@ real :: ax, bot, c, eps, t, top
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !
-!               y = erfc(x)            IF ind = 0
+!               y = erfc(x)            if ind = 0
 !               y = exp(x*x)*erfc(x)   otherwise
 !
-!     e IS AN INPUT/OUTPUT VARIABLE. IF e .GE. 0 THEN IT IS ASSUMED
-!     THAT e = exp(-x*x). IN THIS CASE e IS NOT MODIFIED. IF e IS
+!     e is an input/output variable. If e .GE. 0 then it is assumed
+!     that e = exp(-x*x). In this case e is not modified. If e is
 !     negative then e is set to exp(-x*x) when this value is needed.
 !
 !-----------------------------------------------------------------------
@@ -5748,7 +5748,7 @@ y = 2.0/e
 return
 !
 !             Limit value for large positive x
-!                       WHEN ind = 0
+!                       when ind = 0
 !
 50 y = 0.0
 return
@@ -5759,7 +5759,7 @@ implicit none
 real, intent(in) :: x
 real :: bot, t, top
 !-----------------------------------------------------------------------
-!     COMPUTATION OF  1/sqrt(PI) - x*exp(x*x)*erfc(x)  FOR x .GE. 4
+!     Computation of  1/sqrt(PI) - x*exp(x*x)*erfc(x)  for x .GE. 4
 !-----------------------------------------------------------------------
 real :: r(5), s(4)
 !------------------------
@@ -5931,7 +5931,7 @@ h1 = h8
 h8 = k8
 k8 = h1
 !-----------------------------------------------
-!     LIMITING RESULTS FOR AMIN1(S1,S2) = 0
+!     Limiting results for AMIN1(S1,S2) = 0
 !-----------------------------------------------
 40 seps1 = amin1(6.71*sqeps,1.e-5)
 !-----------------------------------------------
@@ -6477,7 +6477,7 @@ ierr = 0
 c(1) = a(1)/b0
 if (n .eq. 1) return
 !
-!               CASE WHEN m = 1
+!               Case when m = 1
 !
 if (m .gt. 1) go to 20
 la = 1
@@ -6490,7 +6490,7 @@ do j = 2,n
 end do
 return
 !
-!              CASE WHEN m .GT. 1
+!              Case when m .GT. 1
 !
 20 la = 1
 lc = 1
@@ -6535,7 +6535,7 @@ ierr = 0
 c(1) = a(1)/b0
 if (n .eq. 1) return
 !
-!               CASE WHEN m = 1
+!               Case when m = 1
 !
 if (m .gt. 1) go to 20
 la = 1
@@ -6548,7 +6548,7 @@ do j = 2,n
 end do
 return
 !
-!              CASE WHEN m .GT. 1
+!              Case when m .GT. 1
 !
 20 la = 1
 lc = 1
@@ -6596,7 +6596,7 @@ ierr = 0
 b(1) = a0**r
 if (n .eq. 1) return
 !
-!            CASE WHEN m = 1 OR r = 0
+!            Case when m = 1 Or r = 0
 !
 if (m .gt. 1 .and. r .ne. 0.0) go to 20
 lb = 1
@@ -6640,7 +6640,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
 integer :: i, ia, ib, imax, j, lb
 !     ------------------------------------------------------------------
-!     SET b = a**r WHERE A IS A DOUBLE PRECISION POLYNOMIAL
+!     Set b = a**r where A is a double precision polynomial
 !     ------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
@@ -6653,7 +6653,7 @@ ierr = 0
 b(1) = a0**r
 if (n .eq. 1) return
 !
-!            CASE WHEN m = 1 OR r = 0
+!            Case when m = 1 Or r = 0
 !
 if (m .gt. 1 .and. r .ne. 0.d0) go to 20
 lb = 1
@@ -6824,16 +6824,16 @@ real :: ql
 !     ******************************************************************
 !     Fortran subroutine for multiplex polynomial evaluation
 !     ******************************************************************
-!     mo = MODE OF OPERATION
+!     mo = Mode of operation
 !     au = ARGUMENT U
-!     nc = NUMBER OF COEFFICIENTS
-!     ac = ARRAY OF COEFFICIENTS
+!     nc = Number of coefficients
+!     ac = Array of coefficients
 !     fv = FUNCTION V
 !
-!     mo = -1 FOR INTEGRAL
-!     mo =  0 FOR FUNCTION
-!     mo = +1 FOR FIRST DERIVATIVE
-!     mo = +2 FOR SECOND DERIVATIVE
+!     mo = -1 For integral
+!     mo =  0 For function
+!     mo = +1 For first derivative
+!     mo = +2 For second derivative
 !
 001 fv=0.0
 l=nc
@@ -6940,7 +6940,7 @@ real :: dm, tm
 !     Fortran subroutine for Lagrangian normalization factors
 !     ******************************************************************
 !     au = COORDINATE ARGUMENTS  (N-ARRAY)
-!     na = NUMBER OF ARGUMENTS   (N)
+!     na = Number of arguments   (N)
 !     an = NORMALIZATION FACTORS (N-ARRAY)
 !
 001 do k=1,na
@@ -6967,9 +6967,9 @@ real :: dm, rm, sm, tm
 !     ******************************************************************
 !     Fortran subroutine for Lagrangian function evaluation
 !     ******************************************************************
-!     mo = MODE OF OPERATION
-!     na = NUMBER OF STATIONS
-!     qu = ARGUMENT OF FUNCTIONS
+!     mo = Mode of operation
+!     na = Number of stations
+!     qu = Argument of functions
 !     au = STATION COORDINATES                    (N-ARRAY)
 !     an = NORMALIZATION FACTORS                  (N-ARRAY)
 !     ff = LAGRANGIAN FUNCTIONS                   (N-ARRAY)
@@ -7080,8 +7080,8 @@ real :: sm, td, tm
 !     Fortran subroutine for Lagrangian polynomial expansion
 !     ******************************************************************
 !     au = COORDINATE ARGUMENTS    (N-ARRAY)
-!     na = NUMBER OF ARGUMENTS     (N)
-!     ac = POLYNOMIAL COEFFICIENTS (NX(N+1) ARRAY)
+!     na = Number of arguments     (N)
+!     ac = Polynomial coefficients (NX(N+1) array)
 !
 001 do 003 i = 1,na
 k=(i-1)*na
@@ -7133,9 +7133,9 @@ real :: rm, rn, sm, sn
 !     Fortran subroutine for orthonormal polynomial synthesis
 !     ******************************************************************
 !     au = COORDINATE ARGUMENTS    (N ARRAY)
-!     ma = NUMBER OF COLUMNS       (m)
-!     aa = MATRIX OF POLYNOMIALS   (NXM ARRAY)
-!     na = NUMBER OF ROWS          (N)
+!     ma = Number of columns       (m)
+!     aa = Matrix of polynomials   (NXM array)
+!     na = Number of rows          (N)
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
 !
 001 sn=na
@@ -7216,11 +7216,11 @@ real :: rn, sn
 !     ******************************************************************
 !     Fortran subroutine for orthonormal polynomial evaluation
 !     ******************************************************************
-!     mo = MODE OF OPERATION
-!     na = NUMBER OF COORDINATES
-!     au = ARGUMENT OF FUNCTIONS
+!     mo = Mode of operation
+!     na = Number of coordinates
+!     au = Argument of functions
 !     ar = RECURRENCE COEFFICIENTS                (2*M-2 ARRAY)
-!     nf = NUMBER OF FUNCTIONS                    (M)
+!     nf = Number of functions                    (M)
 !     ff = ORTHONORMAL FUNCTIONS                  (M-ARRAY)
 !     df = FIRST DERIVATIVES                      (M-ARRAY)
 !     sf = SECOND DERIVATIVES                     (M-ARRAY)
@@ -7273,9 +7273,9 @@ real :: rn, sn, tm
 !     ******************************************************************
 !     Fortran subroutine for orthonormal polynomial expansion
 !     ******************************************************************
-!     na = NUMBER OF ARGUMENTS     (n)
+!     na = Number of arguments     (n)
 !     ar = RECURRENCE COEFFICIENTS (2*m-2 ARRAY)
-!     nc = NUMBER OF COEFFICIENTS  (m)
+!     nc = Number of coefficients  (m)
 !     ac = POLYNOMIAL COEFFICIENTS (m*m ARRAY)
 !
 001 do 002 n = 1,nc
@@ -7631,18 +7631,18 @@ external fcn
 !         value of IFLAG. See description of FCN. Otherwise,
 !         info is set as follows.
 !
-!         info = 0   IMPROPER INPUT PARAMETERS.
+!         info = 0   Improper input parameters.
 !
-!         info = 1   ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
+!         info = 1   Algorithm estimates that the relative error
 !                    between x and the solution is at most tol.
 !
-!         info = 2   NUMBER OF CALLS TO FCN HAS REACHED OR EXCEEDED
+!         info = 2   Number of calls to FCN has reached or exceeded
 !                    200*(n+1).
 !
-!         info = 3   tol IS TOO SMALL. NO FURTHER IMPROVEMENT IN
+!         info = 3   tol is too small. No further improvement in
 !                    the approximate solution x is possible.
 !
-!         info = 4   ITERATION IS NOT MAKING GOOD PROGRESS.
+!         info = 4   Iteration is not making good progress.
 !
 !       wa is a work array of length lwa.
 !
@@ -7779,15 +7779,15 @@ external fcn
 !         errors in the functions are of the order of the machine
 !         precision.
 !
-!       DIAG IS AN ARRAY OF LENGTH n. IF mode = 1 (SEE
-!         BELOW), DIAG IS INTERNALLY SET. IF mode = 2, DIAG
+!       Diag is an array of length n. if mode = 1 (see
+!         below), diag is internally set. If mode = 2, diag
 !         must contain positive entries that serve as
 !         multiplicative scale factors for the variables.
 !
-!       MODE IS AN INTEGER INPUT VARIABLE. IF mode = 1, THE
-!         VARIABLES WILL BE SCALED INTERNALLY. IF mode = 2,
+!       Mode is an integer input variable. If mode = 1, the
+!         variables will be scaled internally. If mode = 2,
 !         the scaling is specified by the input diag. Other
-!         VALUES OF MODE ARE EQUIVALENT TO mode = 1.
+!         values of mode are equivalent to mode = 1.
 !
 !       Factor is a positive input variable used in determining the
 !         initial step bound. This bound is set to the product of
@@ -7797,33 +7797,33 @@ external fcn
 !
 !       nprint is an integer input variable that enables controlled
 !         printing of iterates if it is positive. In this case,
-!         FCN IS CALLED WITH iflag = 0 AT THE BEGINNING OF THE FIRST
+!         FCN is called with iflag = 0 At the beginning of the first
 !         iteration and every nprint iterations thereafter and
 !         immediately prior to return, with x and fvec available
 !         for printing. If nprint is not positive, no special calls
-!         OF FCN WITH iflag = 0 ARE MADE.
+!         of FCN with iflag = 0 Are made.
 !
 !       Info is an integer output variable. If the user has
 !         terminated execution, info is set to the (negative)
 !         value of iflag. See description of FCN. Otherwise,
 !         info is set as follows.
 !
-!         info = 0   IMPROPER INPUT PARAMETERS.
+!         info = 0   Improper input parameters.
 !
-!         info = 1   RELATIVE ERROR BETWEEN TWO CONSECUTIVE ITERATES
+!         info = 1   Relative error between two consecutive iterates
 !                    is at most xtol.
 !
-!         info = 2   NUMBER OF CALLS TO FCN HAS REACHED OR EXCEEDED
+!         info = 2   Number of calls to FCN has reached or exceeded
 !                    maxfev.
 !
-!         info = 3   xtol IS TOO SMALL. NO FURTHER IMPROVEMENT IN
+!         info = 3   xtol is too small. No further improvement in
 !                    the approximate solution x is possible.
 !
-!         info = 4   ITERATION IS NOT MAKING GOOD PROGRESS, AS
+!         info = 4   Iteration is not making good progress, as
 !                    measured by the improvement from the last
 !                    five Jacobian evaluations.
 !
-!         info = 5   ITERATION IS NOT MAKING GOOD PROGRESS, AS
+!         info = 5   Iteration is not making good progress, as
 !                    measured by the improvement from the last
 !                    ten iterations.
 !
@@ -8174,8 +8174,8 @@ real, intent(in) :: a(3)
 complex, intent(inout) :: z(2)
 !-----------------------------------------------------------------------
 !
-!     ***** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!           SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0.
+!     ***** eps is a machine dependent constant. Eps is the
+!           smallest number such that 1.0 + eps .GT. 1.0.
 !
          eps = spmpar(1)
 !
@@ -8212,7 +8212,7 @@ z(1) = cmplx(x, y)
 z(2) = cmplx(x,-y)
 return
 !
-!                 CASE WHEN a(1) = 0
+!                 Case when a(1) = 0
 !
 40 z(1) = (0.0, 0.0)
 z(2) = cmplx(-a(2)/a(3), 0.0)
@@ -8235,8 +8235,8 @@ double precision :: d, eps, r, w
 double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
-!     ***** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!           SMALLEST NUMBER SUCH THAT 1.D0 + eps .GT. 1.D0.
+!     ***** eps is a machine dependent constant. Eps is the
+!           smallest number such that 1.D0 + eps .GT. 1.D0.
 !
          eps = dpmpar(1)
 !
@@ -8276,7 +8276,7 @@ zi(1) = dabs(0.5d0*r/a(3))
 zi(2) = -zi(1)
 return
 !
-!                 CASE WHEN a(1) = 0
+!                 Case when a(1) = 0
 !
 40 zr(1) = 0.d0
 zr(2) = -a(2)/a(3)
@@ -8311,8 +8311,8 @@ complex, intent(inout) :: z(3)
 data rt3/1.7320508075689/
 !-----------------------------------------------------------------------
 !
-!     ***** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!           SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0.
+!     ***** eps is a machine dependent constant. Eps is the
+!           smallest number such that 1.0 + eps .GT. 1.0.
 !
          eps = spmpar(1)
 !
@@ -8456,13 +8456,13 @@ z(1) = cmplx(w, 0.0)
 return
 !-----------------------------------------------------------------------
 !
-!                  CASE WHEN a(1) = 0
+!                  Case when a(1) = 0
 !
 100 z(1) = (0.0, 0.0)
 call qdcrt(a(2), z(2))
 return
 !
-!                   CASE WHEN d = 0
+!                   Case when d = 0
 !
 110 z(1) = cmplx(-p, 0.0)
 w = sqrt(abs(c))
@@ -8511,8 +8511,8 @@ double precision :: dpmpar, dcbrt
 data rt3 /1.732050807568877293527446341505872366943d0/
 !-----------------------------------------------------------------------
 !
-!     ***** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!           SMALLEST NUMBER SUCH THAT 1.D0 + eps .GT. 1.D0.
+!     ***** eps is a machine dependent constant. Eps is the
+!           smallest number such that 1.D0 + eps .GT. 1.D0.
 !
          eps = dpmpar(1)
 !
@@ -8669,14 +8669,14 @@ zi(1) = 0.d0
 return
 !-----------------------------------------------------------------------
 !
-!                  CASE WHEN a(1) = 0
+!                  Case when a(1) = 0
 !
 100 zr(1) = 0.d0
 zi(1) = 0.d0
 call dqdcrt(a(2), zr(2), zi(2))
 return
 !
-!                   CASE WHEN d = 0
+!                   Case when d = 0
 !
 110 zr(1) = -p
 zi(1) = 0.d0
@@ -8854,7 +8854,7 @@ z(3) = z(1)
 z(4) = z(2)
 return
 !
-!                         CASE WHEN a(1) = 0
+!                         Case when a(1) = 0
 !
 100 z(1) = (0.0, 0.0)
 call cbcrt(a(2), z(2))
@@ -9015,7 +9015,7 @@ zi(3) =  v
 zi(4) = -v
 return
 !
-!                         CASE WHEN a(1) = 0
+!                         Case when a(1) = 0
 !
 100 zr(1) = 0.d0
 zi(1) = 0.d0
@@ -9029,28 +9029,28 @@ integer :: idp1
 !
 !     This subroutine finds the zeros of a real polynomial.
 !
-!     op          - DOUBLE PRECISION ARRAY OF LENGTH ideg + 1.
+!     op          - Double precision array of length ideg + 1.
 !                   On input this array contains the coefficients
 !                   in order of decreasing powers.
 !
-!     ideg        - INTEGER DEGREE OF THE POLYNOMIAL.
+!     ideg        - Integer degree of the polynomial.
 !
-!     zeror,zeroi - double precision arrays if length ideg.
+!     zeror,zeroi - Double precision arrays if length ideg.
 !                   On output these arrays contain the real and
 !                   imaginary parts of the zeros.
 !
-!     num         - VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
-!                   IF num = -1 THEN THE LEADING COEFFICIENT OF THE
-!                   POLYNOMIAL IS 0 OR ideg .LT. 1. OTHERWISE, num
+!     num         - Variable that reports the status of the results.
+!                   If num = -1 Then the leading coefficient of the
+!                   polynomial is 0 or ideg .LT. 1. Otherwise, num
 !                   is the number of zeros that were obtained. If
-!                   num .GE. 1 THEN THE REAL AND IMAGINARY PARTS OF
+!                   num .GE. 1 then the real and imaginary parts of
 !                   the zeros are stored in zeror(J) and zeroi(J)
 !                   FOR J = 1,...,num.
 !
-!     wk          - REAL ARRAY OF LENGTH ideg + 1. THE ARRAY IS
+!     wk          - Real array of length ideg + 1. The array is
 !                   a work space for the routine.
 !
-!     DWK         - DOUBLE PRECISION ARRAY OF LENGTH 6*(ideg + 1).
+!     DWK         - Double precision array of length 6*(ideg + 1).
 !                   The array is a work space for the routine.
 !
 !     The subroutine uses single precision calculations for scaling,
@@ -9236,7 +9236,7 @@ if (pt(n) .eq. 0.0) go to 130
 xm = -pt(nn)/pt(n)
 if (xm .lt. x) x = xm
 !
-!     CHOP THE INTERVAL (0,x) UNTIL ff .LE. 0.
+!     Chop the interval (0,x) until ff .LE. 0.
 !
 130 xm = x*.1
 ff = pt(1)
@@ -9369,8 +9369,8 @@ integer :: n
 !     iterations and returns with the number of zeros
 !     found.
 !
-!     l2 - limit of fixed shift steps
-!     nz - number of zeros found
+!     l2 - Limit of fixed shift steps
+!     nz - Number of zeros found
 !
 double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
 double precision :: svu, svv, ui, vi, s
@@ -9517,8 +9517,8 @@ integer :: n
 !     quadratic factor converges only if the zeros are
 !     equimodular or nearly so.
 !
-!     uu,vv - coefficients of starting quadratic
-!     nz - number of zero found
+!     uu,vv - Coefficients of starting quadratic
+!     nz - Number of zero found
 !
 double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
 double precision :: ui, vi
@@ -9620,9 +9620,9 @@ integer :: i, j, n
 !
 !     Variable-shift H polynomial iteration for a real zero.
 !
-!     sss   - STARTING ITERATE
-!     nz    - NUMBER OF ZERO FOUND
-!     iflag - flag to indicate a pair of zeros near the real
+!     sss   - Starting iterate
+!     nz    - Number of zero found
+!     iflag - Flag to indicate a pair of zeros near the real
 !             axis.
 !
 double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
@@ -9733,7 +9733,7 @@ integer :: n
 !     compute the next k polynomial and new estimates of
 !     the quadratic coefficients.
 !
-!     type - integer variable SET here indicating how the
+!     type - Integer variable SET here indicating how the
 !            calculations are normalized to avoid overflow
 !
 integer :: type
@@ -9754,13 +9754,13 @@ if (dabs(c) .gt. tol*dabs(k(n))) go to 10
 if (dabs(d) .gt. tol*dabs(k(n - 1))) go to 10
 type = 3
 !
-!     type=3 INDICATES THE QUADRATIC IS ALMOST A FACTOR OF k
+!     type=3 Indicates the quadratic is almost a factor of k
 !
 return
 10 if (dabs(d) .lt. dabs(c)) go to 20
 type = 2
 !
-!     type=2 INDICATES THAT ALL FORMULAS ARE DIVIDED BY d
+!     type=2 Indicates that all formulas are divided by d
 !
 e = a/d
 f = c/d
@@ -9772,7 +9772,7 @@ a7 = (f + u)*a + h
 return
 20 type = 1
 !
-!     type=1 INDICATES THAT ALL FORMULAS ARE DIVIDED BY c
+!     type=1 Indicates that all formulas are divided by c
 !
 e = a/c
 f = d/c
@@ -9880,7 +9880,7 @@ uu = u - (u*(c3 + c2) + v*(b1*a1 + b2*a7))/temp
 vv = v*(1.d0 + c4/temp)
 return
 !
-!     IF type=3 THE QUADRATIC IS ZEROED
+!     If type=3 The quadratic is zeroed
 !
 30 uu = 0.d0
 vv = 0.d0
@@ -9917,7 +9917,7 @@ end subroutine quadsd
 subroutine quadpl(a, b1, c, sr, si, lr, li)
 implicit none
 !
-!     CALCULATE THE ZEROS OF THE QUADRATIC a*Z**2+b1*Z+c.
+!     Calculate the zeros of the quadratic a*Z**2+b1*Z+c.
 !     The quadratic formula, modified to avoid overflow,
 !     is used to find the larger zero if the zeros are
 !     real, and both zeros if the zeros are complex.
@@ -9983,21 +9983,21 @@ integer :: idp1
 !                   parts of the coefficients in order of decreasing
 !                   powers.
 !
-!     ideg        - INTEGER DEGREE OF THE POLYNOMIAL.
+!     ideg        - Integer degree of the polynomial.
 !
-!     zeror,zeroi - double precision arrays of length ideg.
+!     zeror,zeroi - Double precision arrays of length ideg.
 !                   On output these arrays contain the real and
 !                   imaginary parts of the zeros.
 !
-!     num         - VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
-!                   IF num = -1 THEN THE LEADING COEFFICIENT OF THE
-!                   POLYNOMIAL IS 0 OR ideg .LT. 1. OTHERWISE, num
+!     num         - Variable that reports the status of the results.
+!                   If num = -1 Then the leading coefficient of the
+!                   polynomial is 0 or ideg .LT. 1. Otherwise, num
 !                   is the number of zeros that were obtained. If
-!                   num .GE. 1 THEN THE REAL AND IMAGINARY PARTS OF
+!                   num .GE. 1 then the real and imaginary parts of
 !                   the zeros are stored in zeror(J) and zeroi(J)
 !                   FOR J = 1,...,num.
 !
-!     wk          - DOUBLE PRECISION ARRAY OF LENGTH 10*(ideg + 1).
+!     wk          - Double precision array of length 10*(ideg + 1).
 !                   The array is a work space for the routine.
 !
 !     The code has been written to reduce the chance of overflow
@@ -10198,8 +10198,8 @@ integer :: i, l
 !     undetected underflow interfering with the convergence criterion.
 !     The factor is a power of the base.
 !
-!     pt - modulus of the coefficients of P
-!     eta,infin,smalno,base - constants describing the
+!     pt - Modulus of the coefficients of P
+!     eta,infin,smalno,base - Constants describing the
 !            floating point arithmetic.
 !
 double precision, intent(in) :: pt(nn), eta, infin, smalno, base
@@ -10256,7 +10256,7 @@ if (pt(n) .eq. 0.d0) go to 20
    xm = -pt(nn)/pt(n)
    if (xm .lt. x) x = xm
 !
-!     CHOP THE INTERVAL (0,x) UNTIL f .LE. 0.
+!     Chop the interval (0,x) until f .LE. 0.
 !
 20 xm = 0.1d0*x
 f = pt(1)
@@ -10349,9 +10349,9 @@ integer :: i, j, n
 !     Initiates a variable-shift iteration and returns with the
 !     approximate zero if successful.
 !
-!     l2 - limit of fixed-shift steps
-!     zr,zi - approximate zero if conv is .True.
-!     conv - logical variable indicating convergence of stage 3
+!     l2 - Limit of fixed-shift steps
+!     zr,zi - Approximate zero if conv is .TRUE.
+!     conv - Logical variable indicating convergence of stage 3
 !            iteration
 !
 double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
@@ -10446,11 +10446,11 @@ integer :: i, j, n
 !
 !     Carries out the third stage iteration.
 !
-!     l3 - limit of steps in stage 3.
-!     zr,zi - on entry contain the initial iterate. If the
+!     l3 - Limit of steps in stage 3.
+!     zr,zi - On entry contain the initial iterate. If the
 !             iteration converges zr,zi contain the final
 !             iterate on exit.
-!     conv  - the value is .True. If the iteration converges.
+!     conv  - The value is .TRUE. if the iteration converges.
 !
 double precision, intent(out) :: sr, si
 double precision, intent(inout) :: tr, ti, pvr, pvi
