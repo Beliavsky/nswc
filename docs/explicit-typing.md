@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 152 of the library's 1,062 procedures: the initial
-17 procedure pilot and subsequent batches of 40, 29, 34, and 32. The remaining 910 procedures
+The reviewed conversions cover 184 of the library's 1,062 procedures in six
+batches of 17, 40, 29, 34, 32, and 32. The remaining 878 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -111,6 +111,32 @@ The compiler comparison preserved all 698 non-intrinsic symbol records in this
 batch, including the root solvers' shared storage. No argument intents, precision
 choices, dimensions, storage statements, or executable code were changed.
 
+## Batch 6: beta functions, machine constants, and FFT radices
+
+The sixth batch adds 32 procedures:
+
+- Beta-function helpers: `BETALN`, `GSUMLN`, `BCORR`, `FPSER`, `APSER`, `BPSER`,
+  `BUP`, `BFRAC`, `BRCOMP`, `BRCMP1`, `BGRAT`, `GRAT1`, and `BASYM`.
+- Machine constants and exponent limits: `SPMPAR`, `DPMPAR`, `EXPARG`, and `DXPARG`.
+- FFT radices and cosine transforms: `RADB2`, `RADB3`, `RADB4`, `RADB5`, `RADF2`,
+  `RADF3`, `RADF4`, `RADF5`, `COSQI`, `COSQF`, and `COSQB`.
+- Other helpers: `PAREA`, `INTRVL`, `SNHCSH`, and `DCPABS`.
+
+The missing-only report omitted external function return types in 16 procedures.
+The machine-constant routines retain `INTEGER IPMPAR`; the beta helpers retain
+the `REAL` return types listed in the manifest's review notes. Each supplement
+was checked against original calls, function definitions, the full declaration
+report, and compiler symbol records. All 632 non-intrinsic symbol records in
+this batch were preserved.
+
+The FFT regression test now also checks lengths 3, 5, 8, and 15 against direct
+Fourier sums, followed by inverse round trips. The public cosine-transform
+routines are checked against direct cosine sums and round trips at the same
+lengths. The existing beta-function, spline, interpolation, and polynomial-root
+tests remain part of the full suite; they do not cover every helper branch.
+No argument intents, precision choices, dimensions, storage statements, or
+executable library code were changed.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -178,7 +204,7 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-3,219 variable and external procedure records across the 152 procedures, including
+3,851 variable and external procedure records across the 184 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.

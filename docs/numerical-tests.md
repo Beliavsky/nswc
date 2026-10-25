@@ -50,7 +50,7 @@ directly with any one of those library files.
 | `test_spline.f90` | Spline derivatives, exact polynomial integrals, and plane and space curve interpolation |
 | `test_quadrature.f90` | Known integrals and the sum of integration weights |
 | `test_ode.f90` | Exponential solutions with fixed and adaptive integration interfaces |
-| `test_fftpack_workers.f90` | Direct Fourier and cosine sums as well as transform round trips |
+| `test_fftpack_workers.f90` | Direct Fourier and cosine sums and transform round trips at lengths 3, 5, 8, and 15, including public cosine-transform calls |
 | `test_random.f90` | Seed progression and a known normal sequence |
 
 The smoke program additionally exercises zero iteration counts, negative and

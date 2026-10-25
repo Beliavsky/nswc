@@ -2329,6 +2329,11 @@ RETURN
 END SUBROUTINE PSIDF
 
 REAL function BETALN (A0, B0)
+IMPLICIT NONE
+REAL A0, B0
+INTEGER I, N
+REAL A, B, C, E, H, U, V, W, Z
+REAL ALGDIV, ALNREL, BCORR, GAMLN, GSUMLN
 !-----------------------------------------------------------------------
 !     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
 !-----------------------------------------------------------------------
@@ -2412,6 +2417,10 @@ RETURN
 END FUNCTION BETALN
 
 REAL function GSUMLN (A, B)
+IMPLICIT NONE
+REAL A, B
+REAL X
+REAL ALNREL, GAMLN1
 !-----------------------------------------------------------------------
 !          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
 !          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
@@ -2428,6 +2437,10 @@ RETURN
 END FUNCTION GSUMLN
 
 REAL function BCORR (A0, B0)
+IMPLICIT NONE
+REAL A0, B0
+REAL A, B, C, C0, C1, C2, C3, C4, C5, H, S11, S3, S5, S7, S9, T, W &
+&, X, X2
 !-----------------------------------------------------------------------
 !
 !     EVALUATION OF  DEL(A0) + DEL(B0) - DEL(A0 + B0)  WHERE
@@ -4794,6 +4807,10 @@ RETURN
 END SUBROUTINE BRATIO
 
 REAL function FPSER (A, B, X, EPS)
+IMPLICIT NONE
+REAL A, B, EPS, X
+REAL AN, C, S, T, TOL
+REAL EXPARG
 !-----------------------------------------------------------------------
 !
 !                 EVALUATION OF I (A,B)
@@ -4830,6 +4847,10 @@ RETURN
 END FUNCTION FPSER
 
 REAL function APSER (A, B, X, EPS)
+IMPLICIT NONE
+REAL A, B, EPS, X
+REAL AJ, BX, C, G, S, T, TOL
+REAL PSI
 !-----------------------------------------------------------------------
 !     APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
 !     A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
@@ -4860,6 +4881,11 @@ RETURN
 END FUNCTION APSER
 
 REAL function BPSER(A, B, X, EPS)
+IMPLICIT NONE
+REAL A, B, EPS, X
+INTEGER I, M
+REAL A0, APB, B0, C, SUM, T, TOL, U, W, Z
+REAL ALGDIV, BETALN, GAM1, GAMLN1
 !-----------------------------------------------------------------------
 !     POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
 !     OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
@@ -4941,6 +4967,12 @@ RETURN
 END FUNCTION BPSER
 
 REAL function BUP(A, B, X, Y, N, EPS)
+IMPLICIT NONE
+INTEGER N
+REAL A, B, EPS, X, Y
+INTEGER I, K, KP1, MU, NM1
+REAL AP1, APB, D, R, T, W
+REAL BRCMP1, EXPARG
 !-----------------------------------------------------------------------
 !     EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
 !     EPS IS THE TOLERANCE USED.
@@ -5006,6 +5038,11 @@ RETURN
 END FUNCTION BUP
 
 REAL function BFRAC(A, B, X, Y, LAMBDA, EPS)
+IMPLICIT NONE
+REAL A, B, EPS, X, Y
+REAL ALPHA, AN, ANP1, BETA, BN, BNP1, C, C0, C1, E, P, R, R0, S, T &
+&, W, YP1
+REAL BRCOMP
 !-----------------------------------------------------------------------
 !     CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
 !     IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
@@ -5069,6 +5106,11 @@ RETURN
 END FUNCTION BFRAC
 
 REAL function BRCOMP (A, B, X, Y)
+IMPLICIT NONE
+REAL A, B, X, Y
+INTEGER I, N
+REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
+REAL ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1
 !-----------------------------------------------------------------------
 !               EVALUATION OF X**A*Y**B/BETA(A,B)
 !-----------------------------------------------------------------------
@@ -5182,6 +5224,12 @@ RETURN
 END FUNCTION BRCOMP
 
 REAL function BRCMP1 (MU, A, B, X, Y)
+IMPLICIT NONE
+INTEGER MU
+REAL A, B, X, Y
+INTEGER I, N
+REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
+REAL ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1
 !-----------------------------------------------------------------------
 !          EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
 !-----------------------------------------------------------------------
@@ -5293,6 +5341,12 @@ RETURN
 END FUNCTION BRCMP1
 
 SUBROUTINE BGRAT(A, B, X, Y, W, EPS, IERR)
+IMPLICIT NONE
+INTEGER IERR
+REAL A, B, EPS, W, X, Y
+INTEGER I, N, NM1
+REAL BM1, BP2N, CN, COEF, DJ, P, Q, R, S, SUM, T, T2, U, V, Z
+REAL ALGDIV, ALNREL, GAM1
 !-----------------------------------------------------------------------
 !     ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
 !     THE RESULT OF THE EXPANSION IS ADDED TO W. IT IS ASSUMED
@@ -5363,6 +5417,11 @@ RETURN
 END SUBROUTINE BGRAT
 
 SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
+IMPLICIT NONE
+REAL A, EPS, P, Q, R, X
+REAL A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM, T &
+&, TOL, W, Z
+REAL ERFC1, GAM1, REXP
 REAL J, L
 !-----------------------------------------------------------------------
 !        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -5452,6 +5511,12 @@ GO TO 110
 END SUBROUTINE GRAT1
 
 REAL function BASYM(A, B, LAMBDA, EPS)
+IMPLICIT NONE
+REAL A, B, EPS
+INTEGER I, IM1, IMJ, J, M, MM1, MMJ, N, NP1, NUM
+REAL BSUM, DSUM, E0, E1, F, H, H2, HN, R, R0, R1, S, SUM, T, T0 &
+&, T1, U, W, W0, Z, Z0, Z2, ZN, ZNM1
+REAL BCORR, ERFC1, RLOG1
 !-----------------------------------------------------------------------
 !     ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
 !     LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.

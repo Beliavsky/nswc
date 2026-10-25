@@ -32,6 +32,18 @@ program test_fftpack_workers
          integer, intent(in) :: n
          real, intent(inout) :: x(*),w(*),xh(*)
       end subroutine cosqb1
+      subroutine cosqi(n,wsave)
+         integer :: n
+         real :: wsave(*)
+      end subroutine cosqi
+      subroutine cosqf(n,x,wsave)
+         integer :: n
+         real :: x(*),wsave(*)
+      end subroutine cosqf
+      subroutine cosqb(n,x,wsave)
+         integer :: n
+         real :: x(*),wsave(*)
+      end subroutine cosqb
    end interface
 
    do i=1,n
@@ -82,9 +94,56 @@ program test_fftpack_workers
    call cosqb1(n,x,w,xh)
    call check(maxval(abs(x-4.0*real(n)*x0))<2.0e-3,'legacy COSQ worker round trip')
 
+   call check_radices(3)
+   call check_radices(5)
+   call check_radices(8)
+   call check_radices(15)
+
    print '(a,2es16.7)', 'Forward transform errors: ',rfft_error,cosq_error
    print *, 'test_fftpack_workers: PASS'
 contains
+   subroutine check_radices(m)
+      integer, intent(in) :: m
+      real :: input(m),actual(m),direct(m),scratch(m),twiddle(m),factors(15)
+      real :: workspace(3*m+15),theta,pi_local
+      integer :: j,k
+
+      pi_local=acos(-1.0)
+      input=[(sin(0.2*real(j))+0.1*real(j),j=1,m)]
+      actual=input
+      twiddle=0.0; factors=0.0; scratch=0.0
+      call rffti1(m,twiddle,factors)
+      call rfftf1(m,actual,scratch,twiddle,factors)
+      direct=0.0
+      direct(1)=sum(input)
+      do k=1,(m-1)/2
+         do j=1,m
+            theta=2.0*pi_local*real(k*(j-1))/real(m)
+            direct(2*k)=direct(2*k)+input(j)*cos(theta)
+            direct(2*k+1)=direct(2*k+1)-input(j)*sin(theta)
+         end do
+      end do
+      if (mod(m,2)==0) direct(m)=sum(input*[(real((-1)**(j-1)),j=1,m)])
+      call check(maxval(abs(actual-direct))<tol,'mixed radix forward DFT')
+      call rfftb1(m,actual,scratch,twiddle,factors)
+      call check(maxval(abs(actual-real(m)*input))<2.0e-3,'mixed radix round trip')
+
+      actual=input
+      workspace=0.0
+      call cosqi(m,workspace)
+      call cosqf(m,actual,workspace)
+      do k=1,m
+         direct(k)=input(1)
+         do j=2,m
+            theta=real((2*k-1)*(j-1))*pi_local/real(2*m)
+            direct(k)=direct(k)+2.0*input(j)*cos(theta)
+         end do
+      end do
+      call check(maxval(abs(actual-direct))<tol,'COSQ public forward cosine sum')
+      call cosqb(m,actual,workspace)
+      call check(maxval(abs(actual-4.0*real(m)*input))<2.0e-3,'COSQ public round trip')
+   end subroutine check_radices
+
    subroutine check(ok,msg)
       logical, intent(in) :: ok
       character(*), intent(in) :: msg

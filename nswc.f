@@ -1229,6 +1229,11 @@ C-----------------------------------------------------------------------
       END SUBROUTINE DSTOR2
 
       REAL FUNCTION SPMPAR (I)
+      IMPLICIT NONE
+      INTEGER I
+      INTEGER IBETA, M
+      REAL B, BINV, BM1, ONE, W, Z
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C
 C     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
@@ -1282,6 +1287,10 @@ C
       END FUNCTION SPMPAR
 
       DOUBLE PRECISION FUNCTION DPMPAR (I)
+      IMPLICIT NONE
+      INTEGER I
+      INTEGER IBETA, M
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C
 C     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
@@ -1387,6 +1396,10 @@ C
       END FUNCTION DEPSLN
 
       REAL FUNCTION EXPARG (L)
+      IMPLICIT NONE
+      INTEGER L
+      INTEGER M
+      INTEGER IPMPAR
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 C     EXP(W) CAN BE COMPUTED.
@@ -1421,6 +1434,10 @@ C
       END FUNCTION EXPARG
 
       DOUBLE PRECISION FUNCTION DXPARG (L)
+      IMPLICIT NONE
+      INTEGER L
+      INTEGER M
+      INTEGER IPMPAR
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 C     DEXP(W) CAN BE COMPUTED.
@@ -2892,6 +2909,7 @@ C     --------------------------------------
       END FUNCTION CPABS
 
       DOUBLE PRECISION FUNCTION DCPABS(X, Y)
+      IMPLICIT NONE
       DOUBLE PRECISION X, Y
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
@@ -3671,6 +3689,9 @@ C
       END FUNCTION DCOS1
 
       SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
+      IMPLICIT NONE
+      REAL AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, SP4
+     x, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
 C
       INTEGER ISW
       REAL SINHM,COSHM,X,CUT(5)
@@ -4959,6 +4980,9 @@ C
       END SUBROUTINE HULL
 
       REAL FUNCTION PAREA(X, Y, NB)
+      IMPLICIT NONE
+      INTEGER I, N, NM1
+      REAL A
       INTEGER NB
       REAL X(NB), Y(NB)
 C
@@ -12896,6 +12920,11 @@ C                            INCREASE THE DIMENSION OF TRMR(NMAX)
       END SUBROUTINE PSIDF
 
       REAL FUNCTION BETALN (A0, B0)
+      IMPLICIT NONE
+      REAL A0, B0
+      INTEGER I, N
+      REAL A, B, C, E, H, U, V, W, Z
+      REAL ALGDIV, ALNREL, BCORR, GAMLN, GSUMLN
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
 C-----------------------------------------------------------------------
@@ -12979,6 +13008,10 @@ C-----------------------------------------------------------------------
       END FUNCTION BETALN
 
       REAL FUNCTION GSUMLN (A, B)
+      IMPLICIT NONE
+      REAL A, B
+      REAL X
+      REAL ALNREL, GAMLN1
 C-----------------------------------------------------------------------
 C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
 C          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
@@ -12995,6 +13028,10 @@ C-----------------------------------------------------------------------
       END FUNCTION GSUMLN
 
       REAL FUNCTION BCORR (A0, B0)
+      IMPLICIT NONE
+      REAL A0, B0
+      REAL A, B, C, C0, C1, C2, C3, C4, C5, H, S11, S3, S5, S7, S9, T, W
+     x, X, X2
 C-----------------------------------------------------------------------
 C
 C     EVALUATION OF  DEL(A0) + DEL(B0) - DEL(A0 + B0)  WHERE
@@ -15381,6 +15418,10 @@ C
       END SUBROUTINE BRATIO
 
       REAL FUNCTION FPSER (A, B, X, EPS)
+      IMPLICIT NONE
+      REAL A, B, EPS, X
+      REAL AN, C, S, T, TOL
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C
 C                 EVALUATION OF I (A,B)
@@ -15417,6 +15458,10 @@ C
       END FUNCTION FPSER
 
       REAL FUNCTION APSER (A, B, X, EPS)
+      IMPLICIT NONE
+      REAL A, B, EPS, X
+      REAL AJ, BX, C, G, S, T, TOL
+      REAL PSI
 C-----------------------------------------------------------------------
 C     APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
 C     A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
@@ -15447,6 +15492,11 @@ C
       END FUNCTION APSER
 
       REAL FUNCTION BPSER(A, B, X, EPS)
+      IMPLICIT NONE
+      REAL A, B, EPS, X
+      INTEGER I, M
+      REAL A0, APB, B0, C, SUM, T, TOL, U, W, Z
+      REAL ALGDIV, BETALN, GAM1, GAMLN1
 C-----------------------------------------------------------------------
 C     POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
 C     OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
@@ -15528,6 +15578,12 @@ C-----------------------------------------------------------------------
       END FUNCTION BPSER
 
       REAL FUNCTION BUP(A, B, X, Y, N, EPS)
+      IMPLICIT NONE
+      INTEGER N
+      REAL A, B, EPS, X, Y
+      INTEGER I, K, KP1, MU, NM1
+      REAL AP1, APB, D, R, T, W
+      REAL BRCMP1, EXPARG
 C-----------------------------------------------------------------------
 C     EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
 C     EPS IS THE TOLERANCE USED.
@@ -15593,6 +15649,11 @@ C
       END FUNCTION BUP
 
       REAL FUNCTION BFRAC(A, B, X, Y, LAMBDA, EPS)
+      IMPLICIT NONE
+      REAL A, B, EPS, X, Y
+      REAL ALPHA, AN, ANP1, BETA, BN, BNP1, C, C0, C1, E, P, R, R0, S, T
+     x, W, YP1
+      REAL BRCOMP
 C-----------------------------------------------------------------------
 C     CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
 C     IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
@@ -15656,6 +15717,11 @@ C
       END FUNCTION BFRAC
 
       REAL FUNCTION BRCOMP (A, B, X, Y)
+      IMPLICIT NONE
+      REAL A, B, X, Y
+      INTEGER I, N
+      REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
+      REAL ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1
 C-----------------------------------------------------------------------
 C               EVALUATION OF X**A*Y**B/BETA(A,B)
 C-----------------------------------------------------------------------
@@ -15769,6 +15835,12 @@ C
       END FUNCTION BRCOMP
 
       REAL FUNCTION BRCMP1 (MU, A, B, X, Y)
+      IMPLICIT NONE
+      INTEGER MU
+      REAL A, B, X, Y
+      INTEGER I, N
+      REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
+      REAL ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1
 C-----------------------------------------------------------------------
 C          EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
 C-----------------------------------------------------------------------
@@ -15880,6 +15952,12 @@ C
       END FUNCTION BRCMP1
 
       SUBROUTINE BGRAT(A, B, X, Y, W, EPS, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL A, B, EPS, W, X, Y
+      INTEGER I, N, NM1
+      REAL BM1, BP2N, CN, COEF, DJ, P, Q, R, S, SUM, T, T2, U, V, Z
+      REAL ALGDIV, ALNREL, GAM1
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
 C     THE RESULT OF THE EXPANSION IS ADDED TO W. IT IS ASSUMED
@@ -15950,6 +16028,11 @@ C
       END SUBROUTINE BGRAT
 
       SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
+      IMPLICIT NONE
+      REAL A, EPS, P, Q, R, X
+      REAL A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM, T
+     x, TOL, W, Z
+      REAL ERFC1, GAM1, REXP
       REAL J, L
 C-----------------------------------------------------------------------
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -16039,6 +16122,12 @@ C
       END SUBROUTINE GRAT1
 
       REAL FUNCTION BASYM(A, B, LAMBDA, EPS)
+      IMPLICIT NONE
+      REAL A, B, EPS
+      INTEGER I, IM1, IMJ, J, M, MM1, MMJ, N, NP1, NUM
+      REAL BSUM, DSUM, E0, E1, F, H, H2, HN, R, R0, R1, S, SUM, T, T0
+     x, T1, U, W, W0, Z, Z0, Z2, ZN, ZNM1
+      REAL BCORR, ERFC1, RLOG1
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
 C     LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.
@@ -81077,6 +81166,11 @@ C             ARE REQUIRED FOR DIFFERENT VALUES OF N. THE CONTENTS OF
 C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
 C
       SUBROUTINE COSQI (N,WSAVE)
+      IMPLICIT NONE
+      INTEGER N
+      REAL WSAVE
+      INTEGER K
+      REAL DT, FK, PIH
       DIMENSION       WSAVE(*)
       DATA PIH /1.57079632679491/
       DT = PIH/FLOAT(N)
@@ -81140,6 +81234,10 @@ C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
 C
       SUBROUTINE COSQF (N,X,WSAVE)
+      IMPLICIT NONE
+      INTEGER N
+      REAL WSAVE, X
+      REAL SQRT2, TSQX
       DIMENSION X(*), WSAVE(*)
       DATA SQRT2 /1.4142135623731/
       IF (N-2) 102,101,103
@@ -81233,6 +81331,10 @@ C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
 C
       SUBROUTINE COSQB (N,X,WSAVE)
+      IMPLICIT NONE
+      INTEGER N
+      REAL WSAVE, X
+      REAL TSQRT2, X1
       DIMENSION X(*), WSAVE(*)
       DATA TSQRT2 /2.82842712474619/
       IF (N-2) 101,102,103
@@ -81646,6 +81748,11 @@ C
       END SUBROUTINE RFFTB1
 
       SUBROUTINE RADB2 (IDO,L1,CC,CH,WA1)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1
+      INTEGER I, IC, IDP2, K
+      REAL TI2, TR2
       DIMENSION       CC(IDO,2,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)
       DO K=1,L1
@@ -81687,6 +81794,11 @@ C
       END SUBROUTINE RADB2
 
       SUBROUTINE RADB3 (IDO,L1,CC,CH,WA1,WA2)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CI3, CR2, CR3, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TR2
       DIMENSION       CC(IDO,3,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)
       DATA TAUR,TAUI /-.5,.866025403784439/
@@ -81748,6 +81860,12 @@ C
       END SUBROUTINE RADB3
 
       SUBROUTINE RADB4 (IDO,L1,CC,CH,WA1,WA2,WA3)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2, WA3
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CI3, CI4, CR2, CR3, CR4, SQRT2, TI1, TI2, TI3, TI4, TR1
+     x, TR2, TR3, TR4
       DIMENSION       CC(IDO,4,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)
       DATA SQRT2 /1.414213562373095/
@@ -81834,6 +81952,13 @@ C
       END SUBROUTINE RADB4
 
       SUBROUTINE RADB5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2, WA3, WA4
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, DI5
+     x, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, TR12
+     x, TR2, TR3, TR4, TR5
       DIMENSION       CC(IDO,5,L1)           ,CH(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)     ,WA4(*)
       DATA TR11,TI11,TR12,TI12 /.309016994374947,.951056516295154,
@@ -82234,6 +82359,11 @@ C
       END SUBROUTINE RFFTF1
 
       SUBROUTINE RADF2 (IDO,L1,CC,CH,WA1)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1
+      INTEGER I, IC, IDP2, K
+      REAL TI2, TR2
       DIMENSION       CH(IDO,2,L1)           ,CC(IDO,L1,*)           ,
      1                WA1(*)
       DO K=1,L1
@@ -82275,6 +82405,11 @@ C
       END SUBROUTINE RADF2
 
       SUBROUTINE RADF3 (IDO,L1,CC,CH,WA1,WA2)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CR2, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TI3, TR2, TR3
       DIMENSION       CH(IDO,3,L1)           ,CC(IDO,L1,*)           ,
      1                WA1(*)     ,WA2(*)
       DATA TAUR,TAUI /-.5,.866025403784439/
@@ -82334,6 +82469,12 @@ C
       END SUBROUTINE RADF3
 
       SUBROUTINE RADF4 (IDO,L1,CC,CH,WA1,WA2,WA3)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2, WA3
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CI3, CI4, CR2, CR3, CR4, HSQT2, TI1, TI2, TI3, TI4, TR1
+     x, TR2, TR3, TR4
       DIMENSION       CC(IDO,L1,*)           ,CH(IDO,4,L1)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)
       DATA HSQT2 /.7071067811865475/
@@ -82416,6 +82557,13 @@ C
       END SUBROUTINE RADF4
 
       SUBROUTINE RADF5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
+      IMPLICIT NONE
+      INTEGER IDO, L1
+      REAL CC, CH, WA1, WA2, WA3, WA4
+      INTEGER I, IC, IDP2, K
+      REAL CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, DI5
+     x, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, TR12
+     x, TR2, TR3, TR4, TR5
       DIMENSION       CC(IDO,L1,*)           ,CH(IDO,5,L1)           ,
      1                WA1(*)     ,WA2(*)     ,WA3(*)     ,WA4(*)
       DATA TR11,TI11,TR12,TI12 /.309016994374947,.951056516295154,
@@ -88830,6 +88978,10 @@ C
       END SUBROUTINE TERMS
 
       INTEGER FUNCTION INTRVL (X, T, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IL, IR
+      REAL TM
       REAL X, T(M)
 C-----------------------------------------------------------------------
 C

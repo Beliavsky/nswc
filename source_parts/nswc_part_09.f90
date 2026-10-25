@@ -1,3 +1,48 @@
+SUBROUTINE HTRP (N,X,Y,A,T,IERR)
+!     ******************************************************************
+!     HERMITE INTERPOLATION
+!     ******************************************************************
+DIMENSION X(N),Y(N),A(N),T(N)
+IF (N.LE.0) GO TO 30
+IERR = 0
+A(1) = Y(1)
+IF (N.EQ.1) RETURN
+F = 1.0
+R = 0.0
+IEND = 0
+IBEG = 1
+!
+do 22 K = 2,N
+IF (X(K)-X(K-1)) 10,20,10
+!
+10 F = 1.0
+R = 0.0
+IEND = K-1
+IBEG = K
+T(1) = Y(K)
+do 11 I = 1,IEND
+DIFF = X(I)-X(K)
+IF (DIFF) 11,31,11
+11 T(I+1) = (A(I)-T(I))/DIFF
+GO TO 22
+!
+20 R = R+1.0
+F = F*R
+T(1) = Y(K)/F
+IF (IEND.EQ.0) GO TO 22
+do 21 I = 1,IEND
+21 T(I+1) = (T(I+1)-T(I))/(X(I)-X(K))
+22 A(K) = T(IBEG)
+RETURN
+!
+30 IERR = 1
+RETURN
+31 IERR = 2
+T(1) = I
+T(2) = K
+RETURN
+END SUBROUTINE HTRP
+
 SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
 REAL X(*),A(N),C(N)
 DOUBLE PRECISION XX,R,T(N)
@@ -3903,6 +3948,10 @@ RETURN
 END SUBROUTINE TERMS
 
 INTEGER function INTRVL (X, T, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IL, IR
+REAL TM
 REAL X, T(M)
 !-----------------------------------------------------------------------
 !

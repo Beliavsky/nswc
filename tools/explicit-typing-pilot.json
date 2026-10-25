@@ -28,7 +28,23 @@
     "TQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
     "IMTQL2": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
     "GERKS": "Added REAL SPMPAR after checking original calls, its function definition, the full declaration report, and compiler symbol records.",
-    "DCPLY1": "Added INTEGER IPMPAR after checking original calls, the INTEGER function definition, full declaration report, and compiler symbol records."
+    "DCPLY1": "Added INTEGER IPMPAR after checking original calls, the INTEGER function definition, full declaration report, and compiler symbol records.",
+    "SPMPAR": "Added INTEGER return types for IPMPAR. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "DPMPAR": "Added INTEGER return types for IPMPAR. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "EXPARG": "Added INTEGER return types for IPMPAR. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "DXPARG": "Added INTEGER return types for IPMPAR. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BETALN": "Added REAL return types for ALGDIV, ALNREL, BCORR, GAMLN, GSUMLN. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "GSUMLN": "Added REAL return types for ALNREL, GAMLN1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "FPSER": "Added REAL return types for EXPARG. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "APSER": "Added REAL return types for PSI. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BPSER": "Added REAL return types for ALGDIV, BETALN, GAM1, GAMLN1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BRCOMP": "Added REAL return types for ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BFRAC": "Added REAL return types for BRCOMP. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BUP": "Added REAL return types for BRCMP1, EXPARG. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BRCMP1": "Added REAL return types for ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BGRAT": "Added REAL return types for ALGDIV, ALNREL, GAM1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "GRAT1": "Added REAL return types for ERFC1, GAM1, REXP. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "BASYM": "Added REAL return types for BCORR, ERFC1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records."
   },
   "procedures": {
     "IPMPAR": {
@@ -1030,6 +1046,285 @@
     "CGEDI": {
       "sha256": "fa27af900264110ae4b60b2a70029b554708c00980fa8bda93129101032d0f7e",
       "declarations": []
+    },
+    "SPMPAR": {
+      "sha256": "98596f0a619cacef54a24ff386b304fa4eb6dfa6da9a0c8d7142f8c7054b3c12",
+      "declarations": [
+        "      INTEGER I",
+        "      INTEGER IBETA, M",
+        "      REAL B, BINV, BM1, ONE, W, Z",
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "DPMPAR": {
+      "sha256": "255ebf3702583d443e0c3563cf9541ec1e781d445719bce452d5d0a9a5acaa88",
+      "declarations": [
+        "      INTEGER I",
+        "      INTEGER IBETA, M",
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "EXPARG": {
+      "sha256": "9f4a717f82b6bb8df71073550403d0977ca7e7fa549eefcae6ae17f82c08181d",
+      "declarations": [
+        "      INTEGER L",
+        "      INTEGER M",
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "DXPARG": {
+      "sha256": "3f50c695408af351ae6b9a5dad0c427f8d15216a8b0866c8844c6dc307adada3",
+      "declarations": [
+        "      INTEGER L",
+        "      INTEGER M",
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "DCPABS": {
+      "sha256": "fc4f0dd29f8668f199bc9f4c7865375aa5122dfd9b88459f739420823ef4756e",
+      "declarations": []
+    },
+    "SNHCSH": {
+      "sha256": "a5b4ead57a9156a36ff5b9a829c48b582a80fbde31c90bc76f9da1a8a85cdefe",
+      "declarations": [
+        "      REAL AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, SP4",
+        "     x, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4"
+      ]
+    },
+    "PAREA": {
+      "sha256": "68d16e5b5fff03af48e533a693598bb111c696c084eae0bebe44322f66bbef2b",
+      "declarations": [
+        "      INTEGER I, N, NM1",
+        "      REAL A"
+      ]
+    },
+    "BETALN": {
+      "sha256": "85fceef9a79ec5e700d6c416cecd5bb0a95d35425945ad0424596458390fd3d7",
+      "declarations": [
+        "      REAL A0, B0",
+        "      INTEGER I, N",
+        "      REAL A, B, C, E, H, U, V, W, Z",
+        "      REAL ALGDIV, ALNREL, BCORR, GAMLN, GSUMLN"
+      ]
+    },
+    "GSUMLN": {
+      "sha256": "6885e8b7945be326562776f3402a388fe27a2e1145ab22109e62798a70ed095f",
+      "declarations": [
+        "      REAL A, B",
+        "      REAL X",
+        "      REAL ALNREL, GAMLN1"
+      ]
+    },
+    "BCORR": {
+      "sha256": "51ad46bb24a1f88d22e31e8c671ae0cc19e81f76977d3f404553921634e9db89",
+      "declarations": [
+        "      REAL A0, B0",
+        "      REAL A, B, C, C0, C1, C2, C3, C4, C5, H, S11, S3, S5, S7, S9, T, W",
+        "     x, X, X2"
+      ]
+    },
+    "FPSER": {
+      "sha256": "ba60e2d65a0933602a88f7355717e1639df2175bb5f105d9f3bd0f0239008dce",
+      "declarations": [
+        "      REAL A, B, EPS, X",
+        "      REAL AN, C, S, T, TOL",
+        "      REAL EXPARG"
+      ]
+    },
+    "APSER": {
+      "sha256": "af74fefa76c157ce974bd4beab612b89ee02271aaddedd1782a861ce4c1a8a2d",
+      "declarations": [
+        "      REAL A, B, EPS, X",
+        "      REAL AJ, BX, C, G, S, T, TOL",
+        "      REAL PSI"
+      ]
+    },
+    "BPSER": {
+      "sha256": "480917fcbe0ac8dd97fe78c5f1cef81aa5d414c2431ca06e32a18fb3563352d8",
+      "declarations": [
+        "      REAL A, B, EPS, X",
+        "      INTEGER I, M",
+        "      REAL A0, APB, B0, C, SUM, T, TOL, U, W, Z",
+        "      REAL ALGDIV, BETALN, GAM1, GAMLN1"
+      ]
+    },
+    "BUP": {
+      "sha256": "3e5928ebcfe3524ba778c3934321771354a5e63ec8712274b75a1870c0bfd452",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL A, B, EPS, X, Y",
+        "      INTEGER I, K, KP1, MU, NM1",
+        "      REAL AP1, APB, D, R, T, W",
+        "      REAL BRCMP1, EXPARG"
+      ]
+    },
+    "BFRAC": {
+      "sha256": "495f5fb8429cd1ae044a29a481d1e2b67e0ac8e5275bd0505b1383d6c53ca1f1",
+      "declarations": [
+        "      REAL A, B, EPS, X, Y",
+        "      REAL ALPHA, AN, ANP1, BETA, BN, BNP1, C, C0, C1, E, P, R, R0, S, T",
+        "     x, W, YP1",
+        "      REAL BRCOMP"
+      ]
+    },
+    "BRCOMP": {
+      "sha256": "f94a9eefb3af3468b9a6be3702fca083dcae1de484148e152e1ed6f2667380e3",
+      "declarations": [
+        "      REAL A, B, X, Y",
+        "      INTEGER I, N",
+        "      REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z",
+        "      REAL ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1"
+      ]
+    },
+    "BRCMP1": {
+      "sha256": "23c8a4c2afeb4c37cb6d11ef434378b5b6ffcd1c6033a909439b0b4385f45144",
+      "declarations": [
+        "      INTEGER MU",
+        "      REAL A, B, X, Y",
+        "      INTEGER I, N",
+        "      REAL A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z",
+        "      REAL ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1"
+      ]
+    },
+    "BGRAT": {
+      "sha256": "636896cad0021870c5d8f18949807f6873d2cfc5cfc83f7dd58412ae4ef8cdc7",
+      "declarations": [
+        "      INTEGER IERR",
+        "      REAL A, B, EPS, W, X, Y",
+        "      INTEGER I, N, NM1",
+        "      REAL BM1, BP2N, CN, COEF, DJ, P, Q, R, S, SUM, T, T2, U, V, Z",
+        "      REAL ALGDIV, ALNREL, GAM1"
+      ]
+    },
+    "GRAT1": {
+      "sha256": "ec3865c7435d907def750b3e91a8bbe64a82146acc4aec8f1fdc86de8c3b0530",
+      "declarations": [
+        "      REAL A, EPS, P, Q, R, X",
+        "      REAL A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM, T",
+        "     x, TOL, W, Z",
+        "      REAL ERFC1, GAM1, REXP"
+      ]
+    },
+    "BASYM": {
+      "sha256": "76cb5c8dfb1bdfab9795cda268520a2170941ba207164b79ce4ff21643882679",
+      "declarations": [
+        "      REAL A, B, EPS",
+        "      INTEGER I, IM1, IMJ, J, M, MM1, MMJ, N, NP1, NUM",
+        "      REAL BSUM, DSUM, E0, E1, F, H, H2, HN, R, R0, R1, S, SUM, T, T0",
+        "     x, T1, U, W, W0, Z, Z0, Z2, ZN, ZNM1",
+        "      REAL BCORR, ERFC1, RLOG1"
+      ]
+    },
+    "COSQI": {
+      "sha256": "ca7b208413e2ea5f0ab3a7a8bdbe00d30e9572a612726982dfced759a70d3907",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL WSAVE",
+        "      INTEGER K",
+        "      REAL DT, FK, PIH"
+      ]
+    },
+    "COSQF": {
+      "sha256": "6614dec6c66b62a7cbbb4ae4c8920f6c13982e9e9debd67bcdc555f7731dd2d4",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL WSAVE, X",
+        "      REAL SQRT2, TSQX"
+      ]
+    },
+    "COSQB": {
+      "sha256": "2e018d2685495679ab20b58fa9aadc404cf8147bf31cc49fb56371e10324ca13",
+      "declarations": [
+        "      INTEGER N",
+        "      REAL WSAVE, X",
+        "      REAL TSQRT2, X1"
+      ]
+    },
+    "RADB2": {
+      "sha256": "91ae73a4c74cd683eae6b88a89f166c760a483bc6598d6921f07b5863e58fdf3",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL TI2, TR2"
+      ]
+    },
+    "RADB3": {
+      "sha256": "86080ab4b9bc47216381fd09b3e1b329000e3318e1495e5af9bdfba53cb85d59",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CI3, CR2, CR3, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TR2"
+      ]
+    },
+    "RADB4": {
+      "sha256": "13638cd6ae056d0888d2a5ca223d3da076811192be7e6bcc54fca87b0519ea3f",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2, WA3",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CI3, CI4, CR2, CR3, CR4, SQRT2, TI1, TI2, TI3, TI4, TR1",
+        "     x, TR2, TR3, TR4"
+      ]
+    },
+    "RADB5": {
+      "sha256": "d214079d0bc864cc6113c3a149bb30f0b596671fb3d1bbd6594a7d5ab7a0ea18",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2, WA3, WA4",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, DI5",
+        "     x, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, TR12",
+        "     x, TR2, TR3, TR4, TR5"
+      ]
+    },
+    "RADF2": {
+      "sha256": "2b29108f8eb8fc5e756a2e983055ef90d27654fc2bec6c23574dfde0130bfe33",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL TI2, TR2"
+      ]
+    },
+    "RADF3": {
+      "sha256": "ea784088e1e33c808e15fa2bb908fcb2e8415fc9d33021ccc21598714b999589",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CR2, DI2, DI3, DR2, DR3, TAUI, TAUR, TI2, TI3, TR2, TR3"
+      ]
+    },
+    "RADF4": {
+      "sha256": "37605680256f6f5c6c1539a7b36527996b0eea6a812397866ccbcf1f826147da",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2, WA3",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CI3, CI4, CR2, CR3, CR4, HSQT2, TI1, TI2, TI3, TI4, TR1",
+        "     x, TR2, TR3, TR4"
+      ]
+    },
+    "RADF5": {
+      "sha256": "942a1a8d2f0b1a17e91b5734e8540d0620363a1072a843f909cc850c5484a0c4",
+      "declarations": [
+        "      INTEGER IDO, L1",
+        "      REAL CC, CH, WA1, WA2, WA3, WA4",
+        "      INTEGER I, IC, IDP2, K",
+        "      REAL CI2, CI3, CI4, CI5, CR2, CR3, CR4, CR5, DI2, DI3, DI4, DI5",
+        "     x, DR2, DR3, DR4, DR5, TI11, TI12, TI2, TI3, TI4, TI5, TR11, TR12",
+        "     x, TR2, TR3, TR4, TR5"
+      ]
+    },
+    "INTRVL": {
+      "sha256": "ef93047c0e5ce93a02154cdabc361d173b773a3da81aebc5c6c3be1bead66ce8",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IL, IR",
+        "      REAL TM"
+      ]
     }
   },
   "batches": [
@@ -1218,6 +1513,45 @@
         "ICAMAX",
         "SGEDI",
         "CGEDI"
+      ]
+    },
+    {
+      "id": "batch-06",
+      "source_commit": "8596ea7",
+      "input_sha256": "c6d998472846c6ef35165d9085bda048fda65017d022f81a746ccbd284657bbc",
+      "procedures": [
+        "SPMPAR",
+        "DPMPAR",
+        "EXPARG",
+        "DXPARG",
+        "DCPABS",
+        "SNHCSH",
+        "PAREA",
+        "BETALN",
+        "GSUMLN",
+        "BCORR",
+        "FPSER",
+        "APSER",
+        "BPSER",
+        "BUP",
+        "BFRAC",
+        "BRCOMP",
+        "BRCMP1",
+        "BGRAT",
+        "GRAT1",
+        "BASYM",
+        "COSQI",
+        "COSQF",
+        "COSQB",
+        "RADB2",
+        "RADB3",
+        "RADB4",
+        "RADB5",
+        "RADF2",
+        "RADF3",
+        "RADF4",
+        "RADF5",
+        "INTRVL"
       ]
     }
   ]
