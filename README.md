@@ -24,6 +24,7 @@ viewable code partitions.
 - [Numerical test programs](docs/numerical-tests.md)
 - [Explicit typing progress](docs/explicit-typing.md)
 - [Compiler warning review](docs/compiler-warnings.md)
+- [Optional procedure interfaces](docs/interfaces.md)
 - [Original report cover](scans/page_0001.png)
 - [Recommended free-form Fortran source](nswc.f90)
 - [Readable fixed-form alternative](nswc.f)
@@ -83,6 +84,30 @@ These options accommodate existing legacy constructs and argument mismatches;
 they do not establish correctness for every routine. Machine constants retain
 the original configuration; see the installation appendix before numerical use.
 Named procedure endings require Fortran 90 or newer, including in `nswc.f`.
+
+## Optional interfaces
+
+[`nswc_interfaces.f90`](nswc_interfaces.f90) provides explicit interfaces for all
+1,062 external procedures in the maintained sources. Its interfaces were
+generated with Intel `ifx` and checked independently with GNU Fortran. Existing
+callers can continue without it. To enable argument checking, compile the module
+with the same compiler as the library, then import selected procedures:
+
+```fortran
+use nswc_interfaces, only: sgefa, sgesl
+```
+
+For GNU Fortran, after compiling the library as above:
+
+```sh
+gfortran -c nswc_interfaces.f90
+gfortran myprogram.f90 nswc.o -o myprogram
+```
+
+The module contains interfaces only; link the library object as usual. The
+[interface guide](docs/interfaces.md) describes generation, verification, Intel
+commands, and callback limitations. Run `python tools/validate_interfaces.py`
+to compare all signatures and test callers using the module.
 
 ## Regenerating the source
 

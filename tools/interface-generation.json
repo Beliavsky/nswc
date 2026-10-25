@@ -1,0 +1,17 @@
+{
+  "source": "nswc.f90",
+  "source_sha256": "6b174f025588b51d5c586655140a80c26e81e8d5cf1c79231dd57956913602b4",
+  "module_sha256": "4403bbeba2f91d61647732864dfe8b857aa0d2934dabed5daf84f3ee399136c0",
+  "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
+  "procedures": 1062,
+  "kind_mappings": {
+    "REAL(KIND=4)": "REAL",
+    "REAL(KIND=8)": "DOUBLE PRECISION",
+    "COMPLEX(KIND=4)": "COMPLEX",
+    "INTEGER(KIND=4)": "INTEGER",
+    "LOGICAL(KIND=4)": "LOGICAL"
+  },
+  "isolated_procedures": {
+    "COMPB": "Known real/complex PPADD workspace alias; see docs/compiler-warnings.md"
+  }
+}
