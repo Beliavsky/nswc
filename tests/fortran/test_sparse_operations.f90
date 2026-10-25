@@ -153,6 +153,21 @@ program test_sparse_operations
          integer :: ia(*),ja(*),m,n
          real(dp) :: a(*),anorm,wk(n)
       end subroutine ds1nrm
+      subroutine rpose1(p,a,ia,ja,b,ib,jb,m,n)
+         import dp
+         integer :: m,n,p(m),ia(*),ja(*),ib(*),jb(*)
+         real :: a(*),b(*)
+      end subroutine rpose1
+      subroutine dpose1(p,a,ia,ja,b,ib,jb,m,n)
+         import dp
+         integer :: m,n,p(m),ia(*),ja(*),ib(*),jb(*)
+         real(dp) :: a(*),b(*)
+      end subroutine dpose1
+      subroutine cpose1(p,a,ia,ja,b,ib,jb,m,n)
+         import dp
+         integer :: m,n,p(m),ia(*),ja(*),ib(*),jb(*)
+         complex :: a(*),b(*)
+      end subroutine cpose1
    end interface
 
    ! A has an empty middle row; A+B cancels the final diagonal entry.
@@ -240,6 +255,12 @@ program test_sparse_operations
    call require(abs(dsnrm(ad,ia,ja,3,3)-maxval(sum(abs(dense_d),dim=2)))<1e-12_dp,'DSNRM')
    call ds1nrm(ad,ia,ja,3,3,dnorm,wd)
    call require(abs(dnorm-maxval(sum(abs(dense_d),dim=1)))<1e-12_dp,'DS1NRM')
+   call rpose1([3,1,2],ar,ia,ja,tr,it,jt,3,3)
+   call require(maxval(abs(unpack_r(tr,it,jt)-transpose(dense_r([3,1,2],:))))<1e-5,'RPOSE1')
+   call dpose1([3,1,2],ad,ia,ja,td,it,jt,3,3)
+   call require(maxval(abs(unpack_d(td,it,jt)-transpose(dense_d([3,1,2],:))))<1e-12_dp,'DPOSE1')
+   call cpose1([3,1,2],ac,ia,ja,tc,it,jt,3,3)
+   call require(maxval(abs(unpack_c(tc,it,jt)-transpose(dense_c([3,1,2],:))))<1e-5,'CPOSE1')
    print '(a,3es25.16)', 'Real accumulated transpose product: ',yr
    print '(a,3es25.16)', 'Double accumulated transpose product: ',yd
    print '(a,6es25.16)', 'Complex accumulated transpose product: ',yc

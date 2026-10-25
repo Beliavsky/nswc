@@ -2277,6 +2277,182 @@
         "      INTEGER M, N",
         "      INTEGER IP, IPMAX, IPMIN, J"
       ]
+    },
+    "MCVBS": {
+      "sha256": "012dc72cb5ea4efe62ada0f406f832b18593593ae70e50d5f8c564d251c50f22",
+      "declarations": [
+        "      INTEGER IERR, KA, M, ML, MU, N, NUM",
+        "      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1"
+      ]
+    },
+    "CMCVBS": {
+      "sha256": "a31bd8bab06b5021f504caf10db2ef0be8949103d287e957d6c80b7c9eb688ee",
+      "declarations": [
+        "      INTEGER IERR, KA, M, ML, MU, N, NUM",
+        "      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1"
+      ]
+    },
+    "MCVSB": {
+      "sha256": "780648898a955889b145834b9f655f85d065f3731690e3592bb01a21834183d0",
+      "declarations": [
+        "      INTEGER IERR, KB, M, ML, MU, N, NB",
+        "      INTEGER I, J0, K, KMAX, L, LMAX, LMIN"
+      ]
+    },
+    "CMCVSB": {
+      "sha256": "f46ef77a0eb8a190c9f177a3f7f6bca5acd38f1cee7b348a90e15d45b75ab11f",
+      "declarations": [
+        "      INTEGER IERR, KB, M, ML, MU, N, NB",
+        "      INTEGER I, J0, K, KMAX, L, LMAX, LMIN"
+      ]
+    },
+    "CVRS": {
+      "sha256": "ca250b0d133dbaf02562d3dea3cfe0bf0189a0d2497c0e4e2764050d5654b6f7",
+      "declarations": [
+        "      INTEGER IERR, KA, M, N, NUM",
+        "      INTEGER I, IP, J"
+      ]
+    },
+    "CVDS": {
+      "sha256": "07b16cc22af5c016ad95c10e4ddec519754e91474fc08e5b0c7e71cd6f3c785b",
+      "declarations": [
+        "      INTEGER IERR, KA, M, N, NUM",
+        "      INTEGER I, IP, J"
+      ]
+    },
+    "CVCS": {
+      "sha256": "2cb003a308462e92a78a485736e84f0557a537b9678c700324aa0e46225a733b",
+      "declarations": [
+        "      INTEGER IERR, KA, M, N, NUM",
+        "      INTEGER I, IP, J"
+      ]
+    },
+    "CVSR": {
+      "sha256": "ec071a64d6cc81626b5291686d648b286dd370db4857bd48cd78e15718d49246",
+      "declarations": [
+        "      INTEGER KB, M, N",
+        "      INTEGER I, IP, IPMAX, IPMIN, J"
+      ]
+    },
+    "CVSD": {
+      "sha256": "8078c76b7d01e3d8faec84794816bbae80133dcf522fc40b8a703434c25cd587",
+      "declarations": [
+        "      INTEGER KB, M, N",
+        "      INTEGER I, IP, IPMAX, IPMIN, J"
+      ]
+    },
+    "CVSC": {
+      "sha256": "379f0093f2197f06a27f14b98d60be27035e609ac51f9bb5d2fcfebd86f48aa0",
+      "declarations": [
+        "      INTEGER KB, M, N",
+        "      INTEGER I, IP, IPMAX, IPMIN, J"
+      ]
+    },
+    "SCVRD": {
+      "sha256": "f21dd77b63c515452775f20b9a5b9a4d16527cec9b72fb8b1bb90fd674502628",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IBEG, IEND, IP, L"
+      ]
+    },
+    "SCVDR": {
+      "sha256": "619f7c37cf31eda9be042c518f201239e45c5ae234533bdcf8698130dbceadff",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IBEG, IEND, IP, L"
+      ]
+    },
+    "CSREAL": {
+      "sha256": "3297572355869be2427db9b515ddc04bdd043dfa4471d92e38a6aedfcc963d9e",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IBEG, IEND, IP, L",
+        "      REAL T"
+      ]
+    },
+    "CSIMAG": {
+      "sha256": "1c1798b74967c07282f218db2511f5d269fc962d2e3c4c51d8276146c464d6a5",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IBEG, IEND, IP, L",
+        "      REAL T"
+      ]
+    },
+    "SCVRC": {
+      "sha256": "8dc5163ec46459d95a720a3c7a76310ecb4537fdada598a3d9a2d0de99d676fb",
+      "declarations": [
+        "      INTEGER IERR, M, N, NUM",
+        "      INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB"
+      ]
+    },
+    "SCONJ": {
+      "sha256": "50c808108f882da6e78307ca60c2798ecbf542ec3a4db8af7075b6f7ec1246fb",
+      "declarations": [
+        "      INTEGER M",
+        "      INTEGER I, IBEG, IEND, IP, L, MP1"
+      ]
+    },
+    "RPOSE1": {
+      "sha256": "60d13a1af2bd14aca83b8b79c136e3f4d4e91bc8927cb314bfb7a697dcd90142",
+      "declarations": [
+        "      INTEGER M, N",
+        "      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM"
+      ]
+    },
+    "DPOSE1": {
+      "sha256": "044fd79316420713c16727c8bdeac803cbf4ebc6dae39563c543851aeed811f1",
+      "declarations": [
+        "      INTEGER M, N",
+        "      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM"
+      ]
+    },
+    "CPOSE1": {
+      "sha256": "cddb04f5a339688146985c2eedc418ac0781e2441433a05772c50b59f71e98bd",
+      "declarations": [
+        "      INTEGER M, N",
+        "      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM"
+      ]
+    },
+    "SPORD": {
+      "sha256": "593f22401ec3cd2ad1616ebe6fce578324d93900d8b5e925981b08bbfc5e95e5",
+      "declarations": [
+        "      INTEGER M, N",
+        "      INTEGER I, II, K, L, NP1, NUM"
+      ]
+    },
+    "BLKORD": {
+      "sha256": "4196819e4674bfcc301732008b00013a404d50ce1303780c111e6f6f28d80e38",
+      "declarations": [
+        "      INTEGER IERR, N, NUM",
+        "      INTEGER I, LENGTH, LI, NP1, NPI"
+      ]
+    },
+    "MC21A": {
+      "sha256": "d3a9c4d9ded39176b422cc5dcd624fca34813310b6f99d02c041c17c5adc4bf5",
+      "declarations": [
+        "      INTEGER LICN, N, NUMNZ"
+      ]
+    },
+    "MC21B": {
+      "sha256": "3ce9218c832cef0e5ae36e2a4906e670c4c43f02278fc27f11cb3bb17c058c67",
+      "declarations": [
+        "      INTEGER LICN, N, NUMNZ",
+        "      INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK"
+      ]
+    },
+    "MC13D": {
+      "sha256": "9aa19dc711c154e729bfa9d63234eaf9d9761fc60bedaa3e875ba251f48a3314",
+      "declarations": [
+        "      INTEGER LICN, N, NUM"
+      ]
+    },
+    "MC13E": {
+      "sha256": "20dc5b0577db8b70bcb7697abd3c98e737849d67b7f0e3d4f5a171318095418c",
+      "declarations": [
+        "      INTEGER LICN, N, NUM",
+        "      INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT",
+        "     x, NNM1"
+      ]
     }
   },
   "batches": [
@@ -2679,6 +2855,38 @@
         "S1NRM",
         "DSNRM",
         "DS1NRM"
+      ]
+    },
+    {
+      "id": "batch-12",
+      "source_commit": "fa48e55",
+      "input_sha256": "def1ee37802e137a35d34cbeda9975a96c723384ded9ba7a47e71f54d481e860",
+      "procedures": [
+        "MCVBS",
+        "CMCVBS",
+        "MCVSB",
+        "CMCVSB",
+        "CVRS",
+        "CVDS",
+        "CVCS",
+        "CVSR",
+        "CVSD",
+        "CVSC",
+        "SCVRD",
+        "SCVDR",
+        "CSREAL",
+        "CSIMAG",
+        "SCVRC",
+        "SCONJ",
+        "RPOSE1",
+        "DPOSE1",
+        "CPOSE1",
+        "SPORD",
+        "BLKORD",
+        "MC21A",
+        "MC21B",
+        "MC13D",
+        "MC13E"
       ]
     }
   ]

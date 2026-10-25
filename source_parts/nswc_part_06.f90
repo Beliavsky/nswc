@@ -1,3 +1,76 @@
+SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!              PRODUCT OF A VECTOR AND A SPARSE MATRIX
+!-----------------------------------------------------------------------
+REAL A(*), X(M), Y(N), T
+INTEGER IA(*), JA(*)
+!
+DO J = 1,N
+   Y(J) = 0.0
+END DO
+!
+do 21 I = 1,M
+   T = X(I)
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 21
+   DO L = LMIN,LMAX
+      J = JA(L)
+      Y(J) = Y(J) + T*A(L)
+   END DO
+21 CONTINUE
+RETURN
+END SUBROUTINE MTPRD
+
+SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!-----------------------------------------------------------------------
+REAL A(*), X(M), Y(N), T
+INTEGER IA(*), JA(*)
+!
+do 11 I = 1,M
+   T = X(I)
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 11
+   DO L = LMIN,LMAX
+      J = JA(L)
+      Y(J) = Y(J) + T*A(L)
+   END DO
+11 CONTINUE
+RETURN
+END SUBROUTINE MTPRD1
+
+SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!              PRODUCT OF A SPARSE MATRIX AND A VECTOR
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), X(N), Y(M), SUM
+INTEGER IA(*), JA(*)
+!
+do 11 I = 1,M
+   SUM = 0.D0
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 11
+   DO L = LMIN,LMAX
+      J = JA(L)
+      SUM = SUM + A(L)*X(J)
+   END DO
+11 Y(I) = SUM
+RETURN
+END SUBROUTINE DVPRD
+
 SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
 INTEGER M, N
@@ -285,6 +358,9 @@ RETURN
 END SUBROUTINE DS1NRM
 
 SUBROUTINE SPORD (M, N, IA, R, IWK)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, II, K, L, NP1, NUM
 !-----------------------------------------------------------------------
 !        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
 !        BY INCREASING LENGTH. THE ROW ORDERING IS GIVEN IN R.
@@ -322,6 +398,9 @@ RETURN
 END SUBROUTINE SPORD
 
 SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
+IMPLICIT NONE
+INTEGER IERR, N, NUM
+INTEGER I, LENGTH, LI, NP1, NPI
 !-----------------------------------------------------------------------
 !        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
 !-----------------------------------------------------------------------
@@ -357,6 +436,8 @@ RETURN
 END SUBROUTINE BLKORD
 
 SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
+IMPLICIT NONE
+INTEGER LICN, N, NUMNZ
 !-----------------------------------------------------------------------
 ! DESCRIPTION OF PARAMETERS.
 ! INPUT VARIABLES   N,ICN,LICN,IP,LENR
@@ -388,6 +469,9 @@ RETURN
 END SUBROUTINE MC21A
 
 SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
+IMPLICIT NONE
+INTEGER LICN, N, NUMNZ
+INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 !-----------------------------------------------------------------------
 !     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
 !
@@ -514,6 +598,8 @@ do 170 I = 1,N
 END SUBROUTINE MC21B
 
 SUBROUTINE MC13D(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW)
+IMPLICIT NONE
+INTEGER LICN, N, NUM
 !
 ! DESCRIPTION OF PARAMETERS.
 ! INPUT VARIABLES  .... N,ICN,LICN,IP,LENR.
@@ -545,6 +631,10 @@ END SUBROUTINE MC13D
 
 SUBROUTINE MC13E(N, ICN, LICN, IP, LENR, ARP, IB, NUM, LOWL, &
 &NUMB, PREV)
+IMPLICIT NONE
+INTEGER LICN, N, NUM
+INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT &
+&, NNM1
 INTEGER STP, DUMMY
 INTEGER IP(N)
 !

@@ -47431,6 +47431,9 @@ C
       END SUBROUTINE CVCB1
 
       SUBROUTINE MCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, ML, MU, N, NUM
+      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM BANDED
 C                            TO SPARSE FORM
@@ -47554,6 +47557,9 @@ C
       END SUBROUTINE DMCVBS
 
       SUBROUTINE CMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, ML, MU, N, NUM
+      INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM BANDED
 C                            TO SPARSE FORM
@@ -47614,6 +47620,9 @@ C
       END SUBROUTINE CMCVBS
 
       SUBROUTINE MCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KB, M, ML, MU, N, NB
+      INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM SPARSE
 C                            TO BANDED FORM
@@ -47731,6 +47740,9 @@ C
       END SUBROUTINE DMCVSB
 
       SUBROUTINE CMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KB, M, ML, MU, N, NB
+      INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM SPARSE
 C                            TO BANDED FORM
@@ -51758,6 +51770,9 @@ C
       END SUBROUTINE CBSL
 
       SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, N, NUM
+      INTEGER I, IP, J
       REAL A(KA,N), B(*)
       INTEGER IB(*), JB(*)
 C
@@ -51788,6 +51803,9 @@ C
       END SUBROUTINE CVRS
 
       SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, N, NUM
+      INTEGER I, IP, J
       DOUBLE PRECISION A(KA,N), B(*)
       INTEGER IB(*), JB(*)
 C
@@ -51818,6 +51836,9 @@ C
       END SUBROUTINE CVDS
 
       SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M, N, NUM
+      INTEGER I, IP, J
       COMPLEX A(KA,N), B(*), ZERO
       INTEGER IB(*), JB(*)
       DATA ZERO /(0.0,0.0)/
@@ -51849,6 +51870,9 @@ C
       END SUBROUTINE CVCS
 
       SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
+      IMPLICIT NONE
+      INTEGER KB, M, N
+      INTEGER I, IP, IPMAX, IPMIN, J
       REAL A(*), B(KB,N)
       INTEGER IA(*), JA(*)
 C
@@ -51875,6 +51899,9 @@ C
       END SUBROUTINE CVSR
 
       SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
+      IMPLICIT NONE
+      INTEGER KB, M, N
+      INTEGER I, IP, IPMAX, IPMIN, J
       DOUBLE PRECISION A(*), B(KB,N)
       INTEGER IA(*), JA(*)
 C
@@ -51901,6 +51928,9 @@ C
       END SUBROUTINE CVSD
 
       SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
+      IMPLICIT NONE
+      INTEGER KB, M, N
+      INTEGER I, IP, IPMAX, IPMIN, J
       COMPLEX A(*), B(KB,N)
       INTEGER IA(*), JA(*)
 C
@@ -51927,6 +51957,9 @@ C
       END SUBROUTINE CVSC
 
       SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
       REAL A(*)
       DOUBLE PRECISION B(*)
       INTEGER IA(*), JA(*), IB(*), JB(*)
@@ -51949,6 +51982,9 @@ C
       END SUBROUTINE SCVRD
 
       SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
       DOUBLE PRECISION A(*)
       REAL B(*)
       INTEGER IA(*), JA(*), IB(*), JB(*)
@@ -51971,6 +52007,10 @@ C
       END SUBROUTINE SCVDR
 
       SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
+      REAL T
 C-----------------------------------------------------------------------
 C              REAL PART OF A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -51997,6 +52037,10 @@ C
       END SUBROUTINE CSREAL
 
       SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
+      REAL T
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -52023,6 +52067,9 @@ C
       END SUBROUTINE CSIMAG
 
       SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N, NUM
+      INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
 C       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
 C-----------------------------------------------------------------------
@@ -52156,6 +52203,9 @@ C
       END SUBROUTINE CSCOPY
 
       SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L, MP1
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -52243,6 +52293,9 @@ C
       END SUBROUTINE RPOSE
 
       SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      IMPLICIT NONE
+      INTEGER M, N
+      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C                 TRANSPOSING A SPARSE REAL MATRIX
 C                 WHERE THE ROWS ARE INTERCHANGED
@@ -52367,6 +52420,9 @@ C
       END SUBROUTINE DPOSE
 
       SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      IMPLICIT NONE
+      INTEGER M, N
+      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
 C                 WHERE THE ROWS ARE INTERCHANGED
@@ -52491,6 +52547,9 @@ C
       END SUBROUTINE CPOSE
 
       SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+      IMPLICIT NONE
+      INTEGER M, N
+      INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
 C               TRANSPOSING A SPARSE COMPLEX MATRIX
 C                 WHERE THE ROWS ARE INTERCHANGED
@@ -53495,6 +53554,9 @@ C
       END SUBROUTINE DS1NRM
 
       SUBROUTINE SPORD (M, N, IA, R, IWK)
+      IMPLICIT NONE
+      INTEGER M, N
+      INTEGER I, II, K, L, NP1, NUM
 C-----------------------------------------------------------------------
 C        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
 C        BY INCREASING LENGTH. THE ROW ORDERING IS GIVEN IN R.
@@ -53532,6 +53594,9 @@ C
       END SUBROUTINE SPORD
 
       SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NUM
+      INTEGER I, LENGTH, LI, NP1, NPI
 C-----------------------------------------------------------------------
 C        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
 C-----------------------------------------------------------------------
@@ -53567,6 +53632,8 @@ C
       END SUBROUTINE BLKORD
 
       SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
+      IMPLICIT NONE
+      INTEGER LICN, N, NUMNZ
 C-----------------------------------------------------------------------
 C DESCRIPTION OF PARAMETERS.
 C INPUT VARIABLES   N,ICN,LICN,IP,LENR
@@ -53598,6 +53665,9 @@ C
       END SUBROUTINE MC21A
 
       SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
+      IMPLICIT NONE
+      INTEGER LICN, N, NUMNZ
+      INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 C-----------------------------------------------------------------------
 C     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
 C
@@ -53724,6 +53794,8 @@ C
       END SUBROUTINE MC21B
 
       SUBROUTINE MC13D(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW)
+      IMPLICIT NONE
+      INTEGER LICN, N, NUM
 C
 C DESCRIPTION OF PARAMETERS.
 C INPUT VARIABLES  .... N,ICN,LICN,IP,LENR.
@@ -53755,6 +53827,10 @@ C
 
       SUBROUTINE MC13E(N, ICN, LICN, IP, LENR, ARP, IB, NUM, LOWL,
      *  NUMB, PREV)
+      IMPLICIT NONE
+      INTEGER LICN, N, NUM
+      INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT
+     x, NNM1
       INTEGER STP, DUMMY
       INTEGER IP(N)
 C
