@@ -1,3 +1,293 @@
+SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1, &
+&ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY, &
+&IER)
+INTEGER IFLAG, IER
+REAL X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, &
+&ZX1, ZX2, ZX3, ZY1, ZY2, ZY3, W, WX, WY
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   GIVEN FUNCTION VALUES AND FIRST PARTIAL DERIVATIVES AT
+! THE THREE VERTICES OF A TRIANGLE, THIS ROUTINE DETERMINES
+! A FUNCTION W WHICH AGREES WITH THE GIVEN DATA, RETURNING
+! THE VALUE AND (OPTIONALLY) FIRST PARTIAL DERIVATIVES OF W
+! AT A POINT (X,Y) IN THE TRIANGLE.  THE INTERPOLATION
+! METHOD IS EXACT FOR QUADRATIC POLYNOMIAL DATA.  THE
+! TRIANGLE IS PARTITIONED INTO THREE SUBTRIANGLES WITH
+! EQUAL AREAS.  W IS CUBIC IN EACH SUBTRIANGLE AND ALONG
+! THE EDGES, BUT HAS ONLY ONE CONTINUOUS DERIVATIVE ACROSS
+! EDGES.  THE NORMAL DERIVATIVE OF W VARIES LINEARLY ALONG
+! EACH OUTER EDGE.  THE VALUES AND PARTIAL DERIVATIVES OF W
+! ALONG A TRIANGLE EDGE DEPEND ONLY ON THE DATA VALUES AT
+! THE ENDPOINTS OF THE EDGE.  THUS THE METHOD YIELDS C-1
+! CONTINUITY WHEN USED TO INTERPOLATE OVER A TRIANGULAR
+! GRID.  THIS ALGORITHM IS DUE TO C. L. LAWSON.
+!
+! INPUT PARAMETERS -   X,Y - COORDINATES OF A POINT AT WHICH
+!                            W IS TO BE EVALUATED.
+!
+!        X1,X2,X3,Y1,Y2,Y3 - COORDINATES OF THE VERTICES OF
+!                            A TRIANGLE CONTAINING (X,Y).
+!
+!                 Z1,Z2,Z3 - FUNCTION VALUES AT THE VERTICES
+!                            TO BE INTERPOLATED.
+!
+!              ZX1,ZX2,ZX3 - X-DERIVATIVE VALUES AT THE
+!                            VERTICES.
+!
+!              ZY1,ZY2,ZY3 - Y-DERIVATIVE VALUES AT THE
+!                            VERTICES.
+!
+!                    IFLAG - OPTION INDICATOR
+!                            IFLAG = 0 IF ONLY W IS TO BE
+!                                      COMPUTED.
+!                            IFLAG = 1 IF W, WX, AND WY ARE
+!                                      TO BE RETURNED.
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS -   W - ESTIMATED VALUE OF THE INTERP-
+!                           OLATORY FUNCTION AT (X,Y) IF
+!                           IER = 0.  OTHERWISE W = 0.
+!
+!                   WX,WY - PARTIAL DERIVATIVES OF W AT
+!                           (X,Y) IF IER = 0 AND IFLAG = 1,
+!                           UNCHANGED IF IFLAG .NE. 1, ZERO
+!                           IF IER .NE. 0 AND IFLAG = 1.
+!
+!                     IER - ERROR INDICATOR
+!                           IER = 0 IF NO ERRORS WERE
+!                                   ENCOUNTERED.
+!                           IER = 1 IF THE VERTICES OF THE
+!                                   TRIANGLE ARE COLLINEAR.
+!
+! MODULES REFERENCED BY TVAL - NONE
+!
+! INTRINSIC FUNCTION CALLED BY TVAL - AMIN1
+!
+!***********************************************************
+!
+INTEGER I, IP1, IP2, IP3
+REAL U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), &
+&RY(3), PHI(3), PHIX(3), PHIY(3), RMIN, C1, C2, &
+&RO(3), ROX(3), ROY(3), F(3), G(3), GX(3), &
+&GY(3), P(3), PX(3), PY(3), Q(3), QX(3), QY(3), &
+&A(3), AX(3), AY(3), B(3), BX(3), BY(3), C(3), &
+&CX(3), CY(3)
+!
+! LOCAL PARAMETERS -
+!
+! I =               DO-LOOP INDEX
+! IP1,IP2,IP3 =     PERMUTED INDICES FOR COMPUTING RO, ROX,
+!                     AND ROY
+! U(K) =            X-COMPONENT OF THE VECTOR REPRESENTING
+!                     THE SIDE OPPOSITE VERTEX K
+! V(K) =            Y-COMPONENT OF THE VECTOR REPRESENTING
+!                     THE SIDE OPPOSITE VERTEX K
+! SL(K) =           SQUARE OF THE LENGTH OF THE SIDE
+!                     OPPOSITE VERTEX K
+! AREA =            TWICE THE AREA OF THE TRIANGLE
+! XP,YP =           X-X1, Y-Y1
+! R(K) =            K-TH BARYCENTRIC COORDINATE
+! RX(K),RY(K) =     X,Y PARTIAL DERIVATIVES OF R(K)
+! PHI(K)            R(K-1)*R(K+1) -- QUADRATIC
+! PHIX(K),PHIY(K) = X,Y PARTIALS OF PHI(K)
+! RMIN =            MIN(R1,R2,R3)
+! C1,C2 =           FACTORS FOR COMPUTING RO
+! RO(K) =           FACTORS FOR COMPUTING G -- CUBIC
+!                     CORRECTION TERMS
+! ROX(K),ROY(K) =   X,Y PARTIALS OF RO(K)
+! F(K) =            FACTORS FOR COMPUTING G, GX, AND GY --
+!                     CONSTANT
+! G(K) =            FACTORS FOR COMPUTING THE CARDINAL
+!                     FUNCTIONS -- CUBIC
+! GX(K),GY(K) =     X,Y PARTIALS OF G(K)
+! P(K) =            G(K) + PHI(K)
+! PX(K),PY(K) =     X,Y PARTIALS OF P(K)
+! Q(K) =            G(K) - PHI(K)
+! QX(K),QY(K) =     X,Y PARTIALS OF Q(K)
+! A(K) =            CARDINAL FUNCTION WHOSE COEFFICIENT IS
+!                     Z(K)
+! AX(K),AY(K) =     X,Y PARTIALS OF A(K) -- CARDINAL
+!                     FUNCTIONS FOR WX AND WY
+! B(K) =            TWICE THE CARDINAL FUNCTION WHOSE
+!                     COEFFICIENT IS ZX(K)
+! BX(K),BY(K) =     X,Y PARTIALS OF B(K)
+! C(K) =            TWICE THE CARDINAL FUNCTION WHOSE
+!                     COEFFICIENT IS ZY(K)
+! CX(K),CY(K) =     X,Y PARTIALS OF C(K)
+!
+U(1) = X3 - X2
+U(2) = X1 - X3
+U(3) = X2 - X1
+!
+V(1) = Y3 - Y2
+V(2) = Y1 - Y3
+V(3) = Y2 - Y1
+!
+do 1 I = 1,3
+  SL(I) = U(I)*U(I) + V(I)*V(I)
+1 CONTINUE
+!
+! AREA = 3-1 X 3-2
+!
+AREA = U(1)*V(2) - U(2)*V(1)
+IF (AREA .EQ. 0.) GO TO 9
+!
+! R(1) = (2-3 X 2-(X,Y))/AREA, R(2) = (1-(X,Y) X 1-3)/AREA,
+!   R(3) = (1-2 X 1-(X,Y))/AREA
+!
+R(1) = (U(1)*(Y-Y2) - V(1)*(X-X2))/AREA
+XP = X - X1
+YP = Y - Y1
+R(2) = (U(2)*YP - V(2)*XP)/AREA
+R(3) = (U(3)*YP - V(3)*XP)/AREA
+IER = 0
+!
+PHI(1) = R(2)*R(3)
+PHI(2) = R(3)*R(1)
+PHI(3) = R(1)*R(2)
+!
+RMIN = AMIN1(R(1),R(2),R(3))
+IF (RMIN .NE. R(1)) GO TO 3
+IP1 = 1
+IP2 = 2
+IP3 = 3
+GO TO 5
+3 IF (RMIN .NE. R(2)) GO TO 4
+IP1 = 2
+IP2 = 3
+IP3 = 1
+GO TO 5
+4 IP1 = 3
+IP2 = 1
+IP3 = 2
+!
+5 C1 = RMIN*RMIN/2.
+C2 = RMIN/3.
+RO(IP1) = (PHI(IP1) + 5.*C1/3.)*R(IP1) - C1
+RO(IP2) = C1*(R(IP3) - C2)
+RO(IP3) = C1*(R(IP2) - C2)
+!
+F(1) = 3.*(SL(2)-SL(3))/SL(1)
+F(2) = 3.*(SL(3)-SL(1))/SL(2)
+F(3) = 3.*(SL(1)-SL(2))/SL(3)
+!
+G(1) = (R(2)-R(3))*PHI(1) + F(1)*RO(1) - RO(2) + RO(3)
+G(2) = (R(3)-R(1))*PHI(2) + F(2)*RO(2) - RO(3) + RO(1)
+G(3) = (R(1)-R(2))*PHI(3) + F(3)*RO(3) - RO(1) + RO(2)
+!
+DO I = 1,3
+  P(I) = G(I) + PHI(I)
+  Q(I) = G(I) - PHI(I)
+  END DO
+!
+A(1) = R(1) + G(3) - G(2)
+A(2) = R(2) + G(1) - G(3)
+A(3) = R(3) + G(2) - G(1)
+!
+B(1) = U(3)*P(3) + U(2)*Q(2)
+B(2) = U(1)*P(1) + U(3)*Q(3)
+B(3) = U(2)*P(2) + U(1)*Q(1)
+!
+C(1) = V(3)*P(3) + V(2)*Q(2)
+C(2) = V(1)*P(1) + V(3)*Q(3)
+C(3) = V(2)*P(2) + V(1)*Q(1)
+!
+! W IS A LINEAR COMBINATION OF THE CARDINAL FUNCTIONS
+!
+W = A(1)*Z1 + A(2)*Z2 + A(3)*Z3 + (B(1)*ZX1 + B(2)*ZX2 &
+&+ B(3)*ZX3 + C(1)*ZY1 + C(2)*ZY2 + C(3)*ZY3)/2.
+IF (IFLAG .NE. 1) RETURN
+!
+! COMPUTE WX AND WY
+!
+DO I = 1,3
+  RX(I) = -V(I)/AREA
+  RY(I) = U(I)/AREA
+  END DO
+PHIX(1) = R(2)*RX(3) + RX(2)*R(3)
+PHIY(1) = R(2)*RY(3) + RY(2)*R(3)
+PHIX(2) = R(3)*RX(1) + RX(3)*R(1)
+PHIY(2) = R(3)*RY(1) + RY(3)*R(1)
+PHIX(3) = R(1)*RX(2) + RX(1)*R(2)
+PHIY(3) = R(1)*RY(2) + RY(1)*R(2)
+!
+ROX(IP1) = RX(IP1)*(PHI(IP1) + 5.*C1) + &
+&R(IP1)*(PHIX(IP1) - RX(IP1))
+ROY(IP1) = RY(IP1)*(PHI(IP1) + 5.*C1) + &
+&R(IP1)*(PHIY(IP1) - RY(IP1))
+ROX(IP2) = RX(IP1)*(PHI(IP2) - C1) + C1*RX(IP3)
+ROY(IP2) = RY(IP1)*(PHI(IP2) - C1) + C1*RY(IP3)
+ROX(IP3) = RX(IP1)*(PHI(IP3) - C1) + C1*RX(IP2)
+ROY(IP3) = RY(IP1)*(PHI(IP3) - C1) + C1*RY(IP2)
+!
+GX(1) = (RX(2) - RX(3))*PHI(1) + (R(2) - R(3))*PHIX(1) &
+&+ F(1)*ROX(1) - ROX(2) + ROX(3)
+GY(1) = (RY(2) - RY(3))*PHI(1) + (R(2) - R(3))*PHIY(1) &
+&+ F(1)*ROY(1) - ROY(2) + ROY(3)
+GX(2) = (RX(3) - RX(1))*PHI(2) + (R(3) - R(1))*PHIX(2) &
+&+ F(2)*ROX(2) - ROX(3) + ROX(1)
+GY(2) = (RY(3) - RY(1))*PHI(2) + (R(3) - R(1))*PHIY(2) &
+&+ F(2)*ROY(2) - ROY(3) + ROY(1)
+GX(3) = (RX(1) - RX(2))*PHI(3) + (R(1) - R(2))*PHIX(3) &
+&+ F(3)*ROX(3) - ROX(1) + ROX(2)
+GY(3) = (RY(1) - RY(2))*PHI(3) + (R(1) - R(2))*PHIY(3) &
+&+ F(3)*ROY(3) - ROY(1) + ROY(2)
+!
+DO I = 1,3
+  PX(I) = GX(I) + PHIX(I)
+  PY(I) = GY(I) + PHIY(I)
+  QX(I) = GX(I) - PHIX(I)
+  QY(I) = GY(I) - PHIY(I)
+  END DO
+!
+AX(1) = RX(1) + GX(3) - GX(2)
+AY(1) = RY(1) + GY(3) - GY(2)
+AX(2) = RX(2) + GX(1) - GX(3)
+AY(2) = RY(2) + GY(1) - GY(3)
+AX(3) = RX(3) + GX(2) - GX(1)
+AY(3) = RY(3) + GY(2) - GY(1)
+!
+BX(1) = U(3)*PX(3) + U(2)*QX(2)
+BY(1) = U(3)*PY(3) + U(2)*QY(2)
+BX(2) = U(1)*PX(1) + U(3)*QX(3)
+BY(2) = U(1)*PY(1) + U(3)*QY(3)
+BX(3) = U(2)*PX(2) + U(1)*QX(1)
+BY(3) = U(2)*PY(2) + U(1)*QY(1)
+!
+CX(1) = V(3)*PX(3) + V(2)*QX(2)
+CY(1) = V(3)*PY(3) + V(2)*QY(2)
+CX(2) = V(1)*PX(1) + V(3)*QX(3)
+CY(2) = V(1)*PY(1) + V(3)*QY(3)
+CX(3) = V(2)*PX(2) + V(1)*QX(1)
+CY(3) = V(2)*PY(2) + V(1)*QY(1)
+!
+! WX AND WY ARE LINEAR COMBINATIONS OF THE CARDINAL
+!   FUNCTIONS
+!
+WX = AX(1)*Z1 + AX(2)*Z2 + AX(3)*Z3 + (BX(1)*ZX1 + &
+&BX(2)*ZX2 + BX(3)*ZX3 + CX(1)*ZY1 + CX(2)*ZY2 + &
+&CX(3)*ZY3)/2.
+WY = AY(1)*Z1 + AY(2)*Z2 + AY(3)*Z3 + (BY(1)*ZX1 + &
+&BY(2)*ZX2 + BY(3)*ZX3 + CY(1)*ZY1 + CY(2)*ZY2 + &
+&CY(3)*ZY3)/2.
+RETURN
+!
+! VERTICES ARE COLLINEAR
+!
+9 IER = 1
+W = 0.
+IF (IFLAG .NE. 1) RETURN
+WX = 0.
+WY = 0.
+RETURN
+END SUBROUTINE TVAL
+
 SUBROUTINE MFIT(DIMEN,FITDEG,NFPOLS,NFPTS, &
 &FITCDS,NCROWS,FITVLS,WTS, &
 &RESIDS,ERROR,FITIWK,FITDWK, &

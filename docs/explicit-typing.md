@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 237 of the library's 1,062 procedures in eight
-batches of 17, 40, 29, 34, 32, 32, 31, and 22. The remaining 825 procedures
+The reviewed conversions cover 259 of the library's 1,062 procedures in nine
+batches of 17, 40, 29, 34, 32, 32, 31, 22, and 22. The remaining 803 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -186,6 +186,33 @@ products. Real, double precision, and complex results are checked with suitable
 tolerances. The suite now runs 18 programs against each library version, for
 54 numerical runs.
 
+## Batch 9: packed and banded linear solvers
+
+The ninth batch adds 22 procedures:
+
+- Packed symmetric solvers: `DPPFA`, `DPPSL`, `DPPDI`, `DSPCO`, `DSPFA`,
+  `DSPSL`, `DSPDI`, `DPCHOL`, and `DSMSLV`.
+- Pivoted banded solvers: `SNBFA`, `SNBSL`, `BSLV`, `BSLV1`, `CBFA`, `CBSL`,
+  `CBSLV`, and `CBSLV1`.
+- Cholesky and banded workers: `LLTSLV`, `BANFAC`, `BANSLV`, `BCHFAC`, and `BCHSLV`.
+
+The generator omitted `INTEGER ISAMAX` in `SNBFA` and `INTEGER ICAMAX` in
+`CBFA`. Both types were confirmed against original calls, function definitions,
+the full declaration report, and compiler records. All 448 non-intrinsic symbol
+records in this batch were preserved. No argument intents, precision choices,
+dimensions, storage statements, or executable library code were changed.
+
+Three more Miller drivers were adapted: `test_packed_linpack`,
+`test_pivoted_banded`, and `test_symmetric_banded`. They check known solutions,
+determinants, inertia, condition estimates, pivoting, transpose solves, and
+banded Cholesky factors. The original `BCHFAC` interface has a fifth `IFLAG`
+argument absent from the Miller driver; the adapted test supplies and checks
+it. The packed condition test accepts an estimate within a factor of two of
+the exact reciprocal condition number and separately checks that an exactly
+singular diagonal matrix produces zero. It does not require the estimate to
+equal the exact value, as the Miller driver did. The suite now runs 21 programs
+against each library version, for 63 runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -253,13 +280,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-4,528 variable and external procedure records across the 237 procedures, including
+4,976 variable and external procedure records across the 259 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 18 numerical test programs must still pass against each source version,
+All 21 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.

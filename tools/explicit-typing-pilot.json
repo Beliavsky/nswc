@@ -44,7 +44,9 @@
     "BRCMP1": "Added REAL return types for ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
     "BGRAT": "Added REAL return types for ALGDIV, ALNREL, GAM1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
     "GRAT1": "Added REAL return types for ERFC1, GAM1, REXP. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
-    "BASYM": "Added REAL return types for BCORR, ERFC1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records."
+    "BASYM": "Added REAL return types for BCORR, ERFC1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
+    "SNBFA": "Added INTEGER ISAMAX after checking original calls, the integer function definition, the full declaration report, and compiler symbol records.",
+    "CBFA": "Added INTEGER ICAMAX after checking original calls, the integer function definition, the full declaration report, and compiler symbol records."
   },
   "procedures": {
     "IPMPAR": {
@@ -1680,6 +1682,138 @@
         "      INTEGER K, KA, KB, KC, L, M, N",
         "      INTEGER I, II, J, JJ"
       ]
+    },
+    "DSMSLV": {
+      "sha256": "f30ff5edd8cfbda7fd4dd54abfff29bfa30b2facbcb1a1e78caf5002dee16fbd",
+      "declarations": [
+        "      INTEGER IERR, KB, M, MO, N",
+        "      INTEGER J, JOB"
+      ]
+    },
+    "DSPCO": {
+      "sha256": "9194c1c31fe414f44ba308c68528671dd5752550f200330e16d64508b83b55c0",
+      "declarations": []
+    },
+    "DSPFA": {
+      "sha256": "2502990410b209421ff9b642f1a4a42a67fdede2505ab8df94ea376ca75a31df",
+      "declarations": []
+    },
+    "DSPSL": {
+      "sha256": "481532b20ff8dd53339db92205619123861bd3b46c8f5c4fde81d92bef412839",
+      "declarations": []
+    },
+    "DSPDI": {
+      "sha256": "e0e0b1181c47d2578c20df0adecc1f4e413da0345d4f85547b94415351b42fc7",
+      "declarations": []
+    },
+    "DPCHOL": {
+      "sha256": "550e47fab7f0bbbf79fbc86248ae8380642b55f52c97ba2fce2fa6ff353646e9",
+      "declarations": [
+        "      INTEGER IERR, KB, M, MO, N",
+        "      INTEGER J"
+      ]
+    },
+    "DPPFA": {
+      "sha256": "924d6d0f4623661c3e5670ed9a9431cbef69f964662b18afd9b3569a7cc11484",
+      "declarations": []
+    },
+    "DPPSL": {
+      "sha256": "2bf5b4fd8071289fdcb8fd08e3602962ab52cef035ff17ec817f9ea24bf0c01a",
+      "declarations": []
+    },
+    "DPPDI": {
+      "sha256": "debf3e1c9ec663c29e3cd9889a21ee196b514311b72694ea1d311defb4a197f9",
+      "declarations": []
+    },
+    "BSLV": {
+      "sha256": "f5af2e73ba93e78102ac5f0ddeb41b6e1116abffbe5f7311688fa3f44c0e7ae2",
+      "declarations": [
+        "      INTEGER IERR, KA, M0, ML, MU, N"
+      ]
+    },
+    "BSLV1": {
+      "sha256": "7d47d5b460260bdaab85de25e82d5571435cef3fcfd384d754a243b1aa50ccb9",
+      "declarations": [
+        "      INTEGER IERR, KA, M0, ML, MU, N"
+      ]
+    },
+    "SNBFA": {
+      "sha256": "2ccd0ae861124b270d16976eb72224bbc59efc39f372ca06eb7e4e937898f92a",
+      "declarations": [
+        "      INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1",
+        "     x, MP, N1",
+        "      INTEGER ISAMAX"
+      ]
+    },
+    "SNBSL": {
+      "sha256": "cca03e68042b1882475dd8feec3ba1158ef865a66f7c0da32c4ad9db7794806e",
+      "declarations": [
+        "      INTEGER ML1, ML2"
+      ]
+    },
+    "CBSLV": {
+      "sha256": "8386041856a1bdcfd76a4fbed579bf988061c24fb712c54d1e783c3831d339ef",
+      "declarations": [
+        "      INTEGER IERR, KA, M0, ML, MU, N"
+      ]
+    },
+    "CBSLV1": {
+      "sha256": "7b1382e26f1ae62038caaf60d552ff4f72e7e38353befaa4bf76e0239079c352",
+      "declarations": [
+        "      INTEGER IERR, KA, M0, ML, MU, N"
+      ]
+    },
+    "CBFA": {
+      "sha256": "9d3e64a41cee000f04743338d2c03e047858c5f2b2af77ef5e8366ed7997f9ac",
+      "declarations": [
+        "      INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1",
+        "     x, MP, N1",
+        "      INTEGER ICAMAX"
+      ]
+    },
+    "CBSL": {
+      "sha256": "eec868b50e6a91ff5276f4f4c2c7b42a42a564592b40517abc9dcf3a0db30d82",
+      "declarations": [
+        "      INTEGER ML1, ML2"
+      ]
+    },
+    "LLTSLV": {
+      "sha256": "beda72e828b992423da2984baf430fbd973f93dfa1f5e049536fd9e59bee1dcb",
+      "declarations": [
+        "      INTEGER N, NR",
+        "      INTEGER I, II, IM1, IP1, J",
+        "      REAL SUM"
+      ]
+    },
+    "BANFAC": {
+      "sha256": "53a32b77e207d294cb8891665f5db2a95766d04bfdfecd156be02eccae08ca4a",
+      "declarations": [
+        "      INTEGER IFLAG, NBANDL, NBANDU, NROW, NROWW",
+        "      INTEGER I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE, MIDMK",
+        "     x, MJ, NROWM1"
+      ]
+    },
+    "BANSLV": {
+      "sha256": "7e5d49b3bfa8c73278336b6778a111586cffe632179db2ec234d5c6d210e777f",
+      "declarations": [
+        "      INTEGER NBANDL, NBANDU, NROW, NROWW",
+        "      INTEGER I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1"
+      ]
+    },
+    "BCHFAC": {
+      "sha256": "92bf3f8c42dbe26d0306e571bf2d2f6aa10876e8a805b873f14370107af001ad",
+      "declarations": [
+        "      INTEGER IFLAG, N, NB",
+        "      INTEGER I, IMAX, IPJ, J, JMAX, K, KPI",
+        "      REAL RATIO, T"
+      ]
+    },
+    "BCHSLV": {
+      "sha256": "252df5d7af6cf921045eef7ff2c99315b53a9da7ad466268fa76237babc257f5",
+      "declarations": [
+        "      INTEGER N, NB",
+        "      INTEGER J, JMAX, JPK, K, NBM1"
+      ]
     }
   },
   "batches": [
@@ -1974,6 +2108,35 @@
         "KPROD",
         "DKPROD",
         "CKPROD"
+      ]
+    },
+    {
+      "id": "batch-09",
+      "source_commit": "7907c88",
+      "input_sha256": "f57a37c47812dde6d1ee0e7b9e29981556e6747e84ba207c1ec866f60c982df8",
+      "procedures": [
+        "DSMSLV",
+        "DSPCO",
+        "DSPFA",
+        "DSPSL",
+        "DSPDI",
+        "DPCHOL",
+        "DPPFA",
+        "DPPSL",
+        "DPPDI",
+        "BSLV",
+        "BSLV1",
+        "SNBFA",
+        "SNBSL",
+        "CBSLV",
+        "CBSLV1",
+        "CBFA",
+        "CBSL",
+        "LLTSLV",
+        "BANFAC",
+        "BANSLV",
+        "BCHFAC",
+        "BCHSLV"
       ]
     }
   ]

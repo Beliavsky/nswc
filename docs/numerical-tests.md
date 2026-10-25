@@ -1,12 +1,12 @@
 # Numerical test programs
 
-The suite contains the original `tests/source_smoke.f90` and 17 standalone main
+The suite contains the original `tests/source_smoke.f90` and 20 standalone main
 programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 18 programs against each of the three source versions:
+Run all 21 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -20,7 +20,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 54 numerical
+working directories are temporary. The default therefore performs 63 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -43,6 +43,9 @@ directly with any one of those library files.
 | `test_dense_matrix_utils.f90` | Real, double precision, and complex matrix products, conversions, transposes, and adjoints |
 | `test_matrix_utility_continuation.f90` | In-place rectangular transposes, transpose products, Gram matrices, and packed symmetric products |
 | `test_matrix_arithmetic.f90` | Matrix copies, conjugation, arithmetic, full/packed symmetric conversions, and Kronecker products |
+| `test_packed_linpack.f90` | Packed positive definite and indefinite solves, determinants, condition estimates, and inertia |
+| `test_pivoted_banded.f90` | Real and complex banded solves with pivoting, including transpose systems |
+| `test_symmetric_banded.f90` | Packed symmetric systems, triangular-factor solves, and banded LU and Cholesky factors |
 | `test_least_squares.f90` | Known solutions using orthogonal and banded least squares |
 | `test_svd.f90` | Matrix reconstruction from single, double, and complex singular value decompositions |
 | `test_symmetric_eigensystem.f90` | Known eigenvalues and eigenvector residuals |
