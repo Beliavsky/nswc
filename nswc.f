@@ -435,6 +435,10 @@ C
 
 C-----------------------------------------------------------------------
       SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+      IMPLICIT NONE
+      INTEGER IBETA, IDMAX, IMAX, MO, N
+      INTEGER M, MAXEXP, MINEXP, N0
+      REAL EPS, XINT, XMAX, XMIN
 C-----------------------------------------------------------------------
       REAL RMACH(3)
       DOUBLE PRECISION DMACH(3)
@@ -703,6 +707,10 @@ C-----------------------------------------------------------------------
       END SUBROUTINE MACH
 
       SUBROUTINE RADIX (IBETA)
+      IMPLICIT NONE
+      INTEGER IBETA
+      REAL A, B, ONE, Y
+      REAL D1, D2
 C-----------------------------------------------------------------------
 C     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
 C-----------------------------------------------------------------------
@@ -727,6 +735,9 @@ C
 
       SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
+      IMPLICIT NONE
+      INTEGER IBETA, M, MAXEXP, MINEXP, N
+      INTEGER J, K, KM, L
       REAL EPS, XINT, XMIN, XMAX
 C-----------------------------------------------------------------------
 C
@@ -967,6 +978,9 @@ C-----------------------------------------------------------------------
       END SUBROUTINE MACH1
 
       SUBROUTINE STORE2 (A, B)
+      IMPLICIT NONE
+      REAL A, B
+      REAL D1, D2
 C-----------------------------------------------------------------------
 C     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
 C-----------------------------------------------------------------------
@@ -978,6 +992,9 @@ C-----------------------------------------------------------------------
 
       SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT,
      *                  XMIN, XMAX)
+      IMPLICIT NONE
+      INTEGER IBETA, M, MAXEXP, MINEXP, N
+      INTEGER J, K, KM, L
       DOUBLE PRECISION EPS, XINT, XMIN, XMAX
 C-----------------------------------------------------------------------
 C
@@ -1218,6 +1235,7 @@ C-----------------------------------------------------------------------
       END SUBROUTINE MACH2
 
       SUBROUTINE DSTOR2 (A, B)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 C-----------------------------------------------------------------------
@@ -1345,6 +1363,10 @@ C
       END FUNCTION DPMPAR
 
       REAL FUNCTION EPSLN (L)
+      IMPLICIT NONE
+      INTEGER L
+      INTEGER M
+      INTEGER IPMPAR
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 C     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
@@ -1370,6 +1392,9 @@ C
       END FUNCTION EPSLN
 
       DOUBLE PRECISION FUNCTION DEPSLN (L)
+      IMPLICIT NONE
+      INTEGER L
+      INTEGER IPMPAR
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 C     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
@@ -1473,6 +1498,9 @@ C
       END FUNCTION DXPARG
 
       SUBROUTINE ISHELL (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1518,6 +1546,10 @@ C
       END SUBROUTINE ISHELL
 
       SUBROUTINE SHELL (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1564,6 +1596,10 @@ C
       END SUBROUTINE SHELL
 
       SUBROUTINE SHELL2 (A, B, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S, T
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1615,6 +1651,10 @@ C
       END SUBROUTINE SHELL2
 
       SUBROUTINE RSORT (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1661,6 +1701,10 @@ C
       END SUBROUTINE RSORT
 
       SUBROUTINE RISORT (A, M, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1713,6 +1757,10 @@ C
       END SUBROUTINE RISORT
 
       SUBROUTINE RRSORT (A, B, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S, T
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1764,6 +1812,9 @@ C
       END SUBROUTINE RRSORT
 
       SUBROUTINE DSORT (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1810,6 +1861,9 @@ C
       END SUBROUTINE DSORT
 
       SUBROUTINE DISORT (A, M, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1862,6 +1916,9 @@ C
       END SUBROUTINE DISORT
 
       SUBROUTINE DDSORT (A, B, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1913,6 +1970,10 @@ C
       END SUBROUTINE DDSORT
 
       SUBROUTINE AORD (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+      REAL S
 C-----------------------------------------------------------------------
 C     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
 C     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
@@ -1960,6 +2021,9 @@ C
       END SUBROUTINE AORD
 
       SUBROUTINE DAORD (A, N)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
 C     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
 C     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
@@ -2007,6 +2071,7 @@ C
       END SUBROUTINE DAORD
 
       SUBROUTINE QSORTI (X, IND, N)
+      IMPLICIT NONE
       INTEGER N, X(N), IND(N)
 C
 C***********************************************************
@@ -2206,6 +2271,7 @@ C
       END SUBROUTINE QSORTI
 
       SUBROUTINE QSORTR (X, IND, N)
+      IMPLICIT NONE
       INTEGER N, IND(N)
       REAL    X(N)
 C
@@ -2406,6 +2472,7 @@ C
       END SUBROUTINE QSORTR
 
       SUBROUTINE QSORTD (X, IND, N)
+      IMPLICIT NONE
       INTEGER N, IND(N)
       DOUBLE PRECISION X(N)
 C
@@ -2607,6 +2674,7 @@ C
       END SUBROUTINE QSORTD
 
       SUBROUTINE IORDER (A, IP, N)
+      IMPLICIT NONE
       INTEGER N, A(N), IP(N)
 C
 C***********************************************************
@@ -2678,6 +2746,7 @@ C
       END SUBROUTINE IORDER
 
       SUBROUTINE RORDER (A, IP, N)
+      IMPLICIT NONE
       INTEGER N, IP(N)
       REAL    A(N)
 C
@@ -2751,6 +2820,7 @@ C
       END SUBROUTINE RORDER
 
       SUBROUTINE DORDER (A, IP, N)
+      IMPLICIT NONE
       INTEGER N, IP(N)
       DOUBLE PRECISION A(N)
 C
@@ -2824,6 +2894,9 @@ C
       END SUBROUTINE DORDER
 
       REAL FUNCTION CBRT (X)
+      IMPLICIT NONE
+      REAL X
+      REAL R
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
@@ -2839,6 +2912,7 @@ C-----------------------------------------------------------------------
       END FUNCTION CBRT
 
       DOUBLE PRECISION FUNCTION DCBRT (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C                   CUBE ROOT OF A REAL NUMBER
 C-----------------------------------------------------------------------
@@ -2856,6 +2930,9 @@ C
       END FUNCTION DCBRT
 
       FUNCTION ARTNQ(Y,X)
+      IMPLICIT NONE
+      REAL X, Y
+      REAL ARTNQ
       IF (X) 1,2,5
     1 ARTNQ=ATAN(Y/X)+3.1415926535898
       RETURN
@@ -2874,6 +2951,7 @@ C
       END FUNCTION ARTNQ
 
       DOUBLE PRECISION FUNCTION DARTNQ(Y,X)
+      IMPLICIT NONE
       DOUBLE PRECISION X,Y
       IF (X) 1,2,5
     1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
@@ -2893,6 +2971,9 @@ C
       END FUNCTION DARTNQ
 
       REAL FUNCTION CPABS(X, Y)
+      IMPLICIT NONE
+      REAL X, Y
+      REAL A
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
 C     --------------------------------------
@@ -2929,6 +3010,9 @@ C
       END FUNCTION DCPABS
 
       SUBROUTINE CREC (X, Y, U, V)
+      IMPLICIT NONE
+      REAL U, V, X, Y
+      REAL D, T
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 C-----------------------------------------------------------------------
@@ -2946,6 +3030,7 @@ C-----------------------------------------------------------------------
       END SUBROUTINE CREC
 
       SUBROUTINE DCREC (X, Y, U, V)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 C-----------------------------------------------------------------------
@@ -2966,6 +3051,8 @@ C
       END SUBROUTINE DCREC
 
       COMPLEX FUNCTION CDIV (A, B)
+      IMPLICIT NONE
+      REAL AI, AR, BI, BR, D, T, U, V
 C-----------------------------------------------------------------------
 C              COMPLEX DIVISION A/B WHERE B IS NONZERO
 C-----------------------------------------------------------------------
@@ -2992,6 +3079,7 @@ C
       END FUNCTION CDIV
 
       SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 C-----------------------------------------------------------------------
@@ -3025,6 +3113,7 @@ C
       END SUBROUTINE CDIVID
 
       SUBROUTINE DCSQRT (Z, W)
+      IMPLICIT NONE
       DOUBLE PRECISION Z(2), W(2)
 C ----------------------------------------------------------------------
 C        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
@@ -3072,12 +3161,17 @@ C
       END SUBROUTINE DCSQRT
 
       SUBROUTINE POCA(R,A,X,Y)
+      IMPLICIT NONE
+      REAL A, R, X, Y
       X=R*COS(A)
       Y=R*SIN(A)
       RETURN
       END SUBROUTINE POCA
 
       SUBROUTINE CAPO(X,Y,R,THETA)
+      IMPLICIT NONE
+      REAL R, THETA, X, Y
+      REAL A
       IF (ABS(X).LE.ABS(Y)) GO TO 10
       A=Y/X
       R=ABS(X)*SQRT(1.0+A*A)
@@ -3094,6 +3188,9 @@ C
       END SUBROUTINE CAPO
 
       SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
+      IMPLICIT NONE
+      REAL A, X1, X2, Y1, Y2
+      REAL COSA, SINA
       SINA=SIN(A)
       COSA=COS(A)
       X2= X1*COSA+Y1*SINA
@@ -3253,6 +3350,9 @@ C
       END SUBROUTINE DROTG
 
       SUBROUTINE ROT3 (A, THETA)
+      IMPLICIT NONE
+      REAL A, THETA
+      REAL PIHALF, R, T, U, V
       DIMENSION A(3,3), THETA(3)
       DATA PIHALF/1.5707963267949/
 C     --------------------
@@ -3293,6 +3393,7 @@ C
       END SUBROUTINE ROT3
 
       SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
+      IMPLICIT NONE
       REAL XK, YK, ZK, CX, SX, CY, SY
 C
 C***********************************************************
@@ -3338,6 +3439,11 @@ C
       END SUBROUTINE CONSTR
 
       REAL FUNCTION ANG (N, X, Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I
+      REAL D, RX, RY
+      REAL SNRM2
 C-----------------------------------------------------------------------
 C           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
 C-----------------------------------------------------------------------
@@ -3371,6 +3477,9 @@ C
       END FUNCTION ANG
 
       REAL FUNCTION SIN0 (X)
+      IMPLICIT NONE
+      REAL X
+      REAL A0, A1, A2, A3, A4, A5, A6, T
 C-----------------------------------------------------------------------
 C          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
 C-----------------------------------------------------------------------
@@ -3386,6 +3495,9 @@ C------------------------
       END FUNCTION SIN0
 
       REAL FUNCTION COS0 (X)
+      IMPLICIT NONE
+      REAL X
+      REAL A1, A2, A3, A4, A5, A6, T
 C-----------------------------------------------------------------------
 C          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
 C-----------------------------------------------------------------------
@@ -3399,6 +3511,11 @@ C------------------------
       END FUNCTION COS0
 
       REAL FUNCTION SIN1 (X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER MAX, N
+      REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C                   EVALUATION  OF SIN(X*PI)
 C-----------------------------------------------------------------------
@@ -3450,6 +3567,11 @@ C
       END FUNCTION SIN1
 
       REAL FUNCTION COS1 (X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER MAX, N
+      REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C                   EVALUATION  OF COS(X*PI)
 C-----------------------------------------------------------------------
@@ -3501,6 +3623,9 @@ C
       END FUNCTION COS1
 
       DOUBLE PRECISION FUNCTION DSIN1 (X)
+      IMPLICIT NONE
+      INTEGER MAX, N
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C
 C                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
@@ -3595,6 +3720,9 @@ C
       END FUNCTION DSIN1
 
       DOUBLE PRECISION FUNCTION DCOS1 (X)
+      IMPLICIT NONE
+      INTEGER MAX, N
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C
 C                DOUBLE PRECISION EVALUATION OF COS(PI*X)
@@ -3820,6 +3948,8 @@ C
       END FUNCTION ESUM
 
       DOUBLE PRECISION FUNCTION DESUM (MU, X)
+      IMPLICIT NONE
+      INTEGER MU
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
 C-----------------------------------------------------------------------
@@ -3929,6 +4059,9 @@ C
       END FUNCTION DREXP
 
       SUBROUTINE REXP1 (X, E, W)
+      IMPLICIT NONE
+      REAL E, W, X
+      REAL P1, P2, Q1, Q2, Q3, Q4
 C-----------------------------------------------------------------------
 C
 C                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -3960,6 +4093,7 @@ C
       END SUBROUTINE REXP1
 
       SUBROUTINE DREXP1 (X, E, W)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4102,6 +4236,9 @@ C
       END FUNCTION DLNREL
 
       REAL FUNCTION RLOG(X)
+      IMPLICIT NONE
+      REAL X
+      REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 C-----------------------------------------------------------------------
@@ -4203,6 +4340,7 @@ C
       END FUNCTION RLOG1
 
       DOUBLE PRECISION FUNCTION DRLOG (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 C-----------------------------------------------------------------------
@@ -4362,6 +4500,12 @@ C
       END FUNCTION DRLOG1
 
       SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
+      IMPLICIT NONE
+      INTEGER L, M, N
+      REAL X0, Y0
+      INTEGER I, N0
+      REAL ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
+      REAL SPMPAR
       REAL X(N), Y(N)
 C-----------------------------------------------------------------------
 C     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
@@ -4439,6 +4583,12 @@ C
       END SUBROUTINE LOCPT
 
       SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N, NUM
+      INTEGER I, IND, NM1
+      REAL D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX
+     x, TMIN, TOL, TOL0
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C                 INTERSECTION OF A STRIGHT LINE
@@ -4598,6 +4748,13 @@ C
       END SUBROUTINE PFIND
 
       SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
+      IMPLICIT NONE
+      INTEGER K, M, N
+      INTEGER I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN
+     x, LSAV, MM1, MP1, NN
+      REAL DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN, YMAX
+     x, YMIN
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
 C-----------------------------------------------------------------------
@@ -5017,6 +5174,9 @@ C
       END FUNCTION PAREA
 
       SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
+      IMPLICIT NONE
+      INTEGER IND, M, N, NB, NUM
+      INTEGER I, II, NP1
 C
 C SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
 C DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
@@ -5121,6 +5281,11 @@ C
 
       SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR,
      *                VC, P, SUBR, RBUS, TOR, JR, K, IND0)
+      IMPLICIT NONE
+      INTEGER IND, IND0, JR, K, M, N, NB, NP1
+      INTEGER I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, JSUBR
+     x, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
+      REAL DENS, SCORE
 C
 C MEANING OF THE WORK ARRAYS ...
 C
@@ -5451,6 +5616,9 @@ C
 
       SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K,
      * JR, M, NP1)
+      IMPLICIT NONE
+      INTEGER I, I1, I2, J, JR, K, M, N, NP, NP1
+      INTEGER JA, K1, L, L1, L2
 C
 C SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
 C VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
@@ -5511,6 +5679,9 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
       END SUBROUTINE IPATH
 
       SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
+      IMPLICIT NONE
+      INTEGER I1, K1, M, N, NP1
+      INTEGER IA, J, J1, J2, L, L1, L2
 C
 C FORWARD STEP UPDATING
 C
@@ -5535,6 +5706,9 @@ C
       END SUBROUTINE FUPD
 
       SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
+      IMPLICIT NONE
+      INTEGER II, K1, K2, M, N, NP1
+      INTEGER IA, L, L1, L2, LL, LL1, LL2
 C
 C BACKTRACKING STEP UPDATING
 C
@@ -5560,6 +5734,9 @@ C
       END SUBROUTINE BUPD
 
       SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
+      IMPLICIT NONE
+      INTEGER IA, IB, K1, L, M, N, NP1
+      INTEGER IARC, J1, J2, JJ, M1, M2, MM
 C
 C UPDATING FOR IMPLIED ARC
 C
@@ -5591,6 +5768,9 @@ C
 
       SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M,
      * NP1)
+      IMPLICIT NONE
+      INTEGER IA, IB, JJ, K1, LL, M, N, NP1
+      INTEGER J1, J2, L1, L2
 C
 C SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
 C
@@ -5633,6 +5813,10 @@ C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
       END SUBROUTINE RARC
 
       SUBROUTINE CERF (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER I
+      REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
 C-----------------------------------------------------------------------
 C
 C               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -5785,6 +5969,11 @@ C
       END SUBROUTINE CERF
 
       SUBROUTINE CERFC (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER I
+      REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C
 C              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -5959,6 +6148,9 @@ C
       END SUBROUTINE CERFC
 
       REAL FUNCTION ERF (X)
+      IMPLICIT NONE
+      REAL X
+      REAL AX, BOT, C, T, TOP, X2
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE REAL ERROR FUNCTION
 C-----------------------------------------------------------------------
@@ -6019,6 +6211,10 @@ C
       END FUNCTION ERF
 
       REAL FUNCTION ERFC (X)
+      IMPLICIT NONE
+      REAL X
+      REAL AX, BOT, C, E, T, TOP
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C-----------------------------------------------------------------------
@@ -6199,6 +6395,8 @@ C
       END FUNCTION ERFC1
 
       SUBROUTINE DCERF (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
 C-----------------------------------------------------------------------
 C
 C               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -6477,6 +6675,8 @@ C
       END SUBROUTINE DCERF
 
       SUBROUTINE DCERFC (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
 C-----------------------------------------------------------------------
 C
 C              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6760,6 +6960,9 @@ C
       END SUBROUTINE DCERFC
 
       SUBROUTINE ERFCM2 (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER J, N
 C-----------------------------------------------------------------------
 C           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 C                          AROUND Z0 = 2
@@ -7103,6 +7306,7 @@ C
       END FUNCTION DERFC1
 
       DOUBLE PRECISION FUNCTION DERFC0 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -7266,6 +7470,10 @@ C
       END FUNCTION DERFC0
 
       REAL FUNCTION ERFI (P, Q)
+      IMPLICIT NONE
+      REAL P, Q
+      REAL C, C1, C2, EPS, S, T, V, V1
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C              EVALUATION OF THE INVERSE ERROR FUNCTION
@@ -7384,6 +7592,7 @@ C
       END FUNCTION ERFI
 
       DOUBLE PRECISION FUNCTION DERFI (P, Q)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION COMPUTATION OF
@@ -7547,6 +7756,14 @@ C
       END FUNCTION DERFI
 
       REAL FUNCTION AERF (X, H)
+      IMPLICIT NONE
+      REAL H, X
+      INTEGER J, N, N1
+      REAL A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, U, V
+     x, X2, XMH, XPH, Z
+      REAL EPSLN
+      REAL EXPARG
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C             COMPUTATION OF ERF(X + H) - ERF(X - H)
 C-----------------------------------------------------------------------
@@ -7669,6 +7886,8 @@ C
       END FUNCTION AERF
 
       DOUBLE PRECISION FUNCTION DAERF (X, H)
+      IMPLICIT NONE
+      INTEGER J
 C-----------------------------------------------------------------------
 C             COMPUTATION OF ERF(X + H) - ERF(X - H)
 C-----------------------------------------------------------------------
@@ -7797,6 +8016,12 @@ C
       END FUNCTION DAERF
 
       FUNCTION PNDF(X,IND)
+      IMPLICIT NONE
+      INTEGER IND
+      REAL X
+      REAL A, C, T
+      REAL PNDF
+      REAL ERFC1
 C     ---------------
 C     A = 1/SQRT(2)
 C     C = SQRT(2/PI)
@@ -7819,6 +8044,12 @@ C     ---------------
       END FUNCTION PNDF
 
       SUBROUTINE PNI (P, Q, D, W, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL D, P, Q, W
+      REAL EPS, RT2, T, U, V
+      REAL ERFI
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -7869,6 +8100,8 @@ C
       END SUBROUTINE PNI
 
       SUBROUTINE DPNI (P, Q, D, W, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -7923,6 +8156,8 @@ C
       END SUBROUTINE DPNI
 
       REAL FUNCTION DAW(X)
+      IMPLICIT NONE
+      INTEGER I
 C-----------------------------------------------------------------------
 C
 C     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
@@ -8065,6 +8300,8 @@ C
       END FUNCTION DAW
 
       DOUBLE PRECISION FUNCTION DPDAW (X)
+      IMPLICIT NONE
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
 C-----------------------------------------------------------------------
@@ -8170,6 +8407,7 @@ C
       END FUNCTION DPDAW
 
       DOUBLE PRECISION FUNCTION DPDAW0 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C                EVALUATION OF X*DAW(X) FOR X .GE. 4
@@ -8369,6 +8607,12 @@ C
       END FUNCTION DPDAW0
 
       SUBROUTINE CFRNLI (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER I
+      REAL C, C0, DM, PM, QM, R, SS, X, Y
+      REAL EXPARG
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
@@ -8541,6 +8785,13 @@ C
       END SUBROUTINE CFRNLI
 
       SUBROUTINE FRNL (T, C, S)
+      IMPLICIT NONE
+      REAL C, S, T
+      INTEGER I, L, M, MAX
+      REAL CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
+      REAL SIN1
+      REAL COS1
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE REAL FRESNEL INTEGRALS
 C-----------------------------------------------------------------------
@@ -8756,6 +9007,13 @@ C
       END SUBROUTINE FRNL
 
       SUBROUTINE CEXPLI (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER I
+      REAL C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
+      REAL ANORM
+      REAL SPMPAR
+      REAL CPABS
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
 C-----------------------------------------------------------------------
@@ -8938,6 +9196,10 @@ C
       END SUBROUTINE CEXPLI
 
       SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
+      IMPLICIT NONE
+      INTEGER M
+      REAL CSEVL
+      REAL ALNREL
 C
       REAL A(6),B(5),C(7),D(7),E(7),F(7),P1(8),Q1(8),P2(8),Q2(7),
      1        P3(8),Q3(7),P4(8),Q4(7),R(20),PX(9),QX(9),
@@ -9271,6 +9533,7 @@ C                ARGUMENT IN E-SUB-1 ----------
       END SUBROUTINE EXPLI
 
       DOUBLE PRECISION FUNCTION DEI (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
 C-----------------------------------------------------------------------
@@ -9283,6 +9546,7 @@ C
       END FUNCTION DEI
 
       DOUBLE PRECISION FUNCTION DEI1 (X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
 C-----------------------------------------------------------------------
@@ -9296,6 +9560,8 @@ C
       END FUNCTION DEI1
 
       DOUBLE PRECISION FUNCTION DE1E(X)
+      IMPLICIT NONE
+      INTEGER M
 C-----------------------------------------------------------------------
 C
 C     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
@@ -9767,6 +10033,8 @@ C
       END FUNCTION DE1E
 
       DOUBLE PRECISION FUNCTION DEI0 (X, EPS)
+      IMPLICIT NONE
+      INTEGER N
 C-----------------------------------------------------------------------
 C
 C            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
@@ -9859,6 +10127,12 @@ C
       END FUNCTION DEI0
 
       FUNCTION SI(X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER I, J, M1, M2, N1, N2
+      REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, PIO2, RC, TEMP, TX
+      REAL SI
+      REAL SPMPAR
 C
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
 C     MODIFIED BY A.H. MORRIS
@@ -9974,6 +10248,12 @@ C
       END FUNCTION SI
 
       FUNCTION CIN(X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER I, J, M1, M2, N1, N2
+      REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, ECON, RC, TEMP, TX
+      REAL CIN
+      REAL SPMPAR
 C
 C     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
 C     MODIFIED BY A.H. MORRIS
@@ -10089,6 +10369,9 @@ C
       END FUNCTION CIN
 
       SUBROUTINE CEXEXI (Z, W)
+      IMPLICIT NONE
+      INTEGER I
+      REAL CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
 C-----------------------------------------------------------------------
@@ -10320,6 +10603,9 @@ C-----------------------------------------------------------------------
       END SUBROUTINE CEXEXI
 
       COMPLEX FUNCTION CLI(Z)
+      IMPLICIT NONE
+      INTEGER N
+      REAL CPABS
 C     ******************************************************************
 C     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
 C     ******************************************************************
@@ -10435,6 +10721,10 @@ C
       END FUNCTION CLI
 
       REAL FUNCTION ALI(X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER I, L
+      REAL CONST, T, W
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
 C-----------------------------------------------------------------------
@@ -10590,6 +10880,15 @@ C
       END FUNCTION ALI
 
       SUBROUTINE CGAMMA (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER J, K, L, M, MAX, N, NM1
+      REAL A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2, HL2P
+     x, PI, PI2, S, S1, S2, SN, T, T1, T2, U, U1, U2, V1, V2, W1, W2, X
+     x, Y, Y2
+      REAL REXP
+      INTEGER IPMPAR
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -10821,6 +11120,9 @@ C-----------------------------------------------------------------------
       END SUBROUTINE CGAMMA
 
       COMPLEX FUNCTION CGAM0 (Z)
+      IMPLICIT NONE
+      INTEGER I, K, N
+      REAL X, Y
 C-----------------------------------------------------------------------
 C          EVALUATION OF 1/GAMMA(1 + Z)  FOR ABS(Z) .LT. 1.0
 C-----------------------------------------------------------------------
@@ -10857,6 +11159,12 @@ C
       END FUNCTION CGAM0
 
       REAL FUNCTION GAMMA(A)
+      IMPLICIT NONE
+      REAL A
+      INTEGER I, J, M, N
+      REAL BOT, PI, R1, R2, R3, R4, R5, S, T, TOP, W, X
+      REAL EXPARG
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE GAMMA FUNCTION FOR REAL ARGUMENTS
@@ -10985,6 +11293,9 @@ C
       END FUNCTION GAMMA
 
       DOUBLE PRECISION FUNCTION GLOG(X)
+      IMPLICIT NONE
+      INTEGER N
+      REAL C1, C2, C3, T, T2
 C     -------------------
 C     EVALUATION OF LN(X) FOR X .GE. 15
 C     -------------------
@@ -11232,6 +11543,10 @@ C
       END FUNCTION GAMLN1
 
       SUBROUTINE DCGAMA (MO, Z, W)
+      IMPLICIT NONE
+      INTEGER MO
+      INTEGER J, K, MAX, N, NM1
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -11603,6 +11918,8 @@ C
       END FUNCTION DGAMMA
 
       DOUBLE PRECISION FUNCTION DPDEL(X)
+      IMPLICIT NONE
+      INTEGER I, K
 C-----------------------------------------------------------------------
 C
 C     COMPUTATION OF THE FUNCTION DEL(X) FOR  X .GE. 10  WHERE
@@ -11866,6 +12183,13 @@ C-----------------------
       END FUNCTION DGMLN1
 
       SUBROUTINE CPSI (Z, W)
+      IMPLICIT NONE
+      INTEGER J, K, L, M, MAX
+      REAL A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1, S2
+     x, SN, T, U, W1, W2, X, Y, Y2
+      REAL REXP
+      INTEGER IPMPAR
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
 C-----------------------------------------------------------------------
@@ -12175,6 +12499,9 @@ C---------------------------------------------------------------------
       END FUNCTION PSI
 
       SUBROUTINE DCPSI (Z, W)
+      IMPLICIT NONE
+      INTEGER J, K, M, MAX
+      INTEGER IPMPAR
 C-----------------------------------------------------------------------
 C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
 C-----------------------------------------------------------------------
@@ -12539,6 +12866,8 @@ C
       END FUNCTION DPSI
 
       DOUBLE PRECISION FUNCTION DPSI0 (X)
+      IMPLICIT NONE
+      INTEGER I, L, N, NM1
 C-----------------------------------------------------------------------
 C
 C            TAYLOR SERIES EXPANSION OF PSI(X) AROUND X0,
@@ -12609,6 +12938,9 @@ C
       END FUNCTION DPSI0
 
       SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, M, N
+      INTEGER I, J, K, MX, NMAX, NN, NP, NX
 C-----------------------------------------------------------------------
 C
 C         PSIDF COMPUTES M MEMBER SEQUENCES OF SCALED DERIVATIVES OF
@@ -13130,6 +13462,8 @@ C
       END FUNCTION ALGDIV
 
       DOUBLE PRECISION FUNCTION DBETLN (A0, B0)
+      IMPLICIT NONE
+      INTEGER I, N
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
 C-----------------------------------------------------------------------
@@ -13218,6 +13552,7 @@ C-----------------------------------------------------------------------
       END FUNCTION DBETLN
 
       DOUBLE PRECISION FUNCTION DGSMLN (A, B)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
 C          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
@@ -13237,6 +13572,8 @@ C
       END FUNCTION DGSMLN
 
       DOUBLE PRECISION FUNCTION DBCORR (A0, B0)
+      IMPLICIT NONE
+      INTEGER J, K
 C-----------------------------------------------------------------------
 C
 C     EVALUATION OF DEL(A) + DEL(B0) - DEL(A) + B0) WHERE
@@ -13308,6 +13645,8 @@ C
       END FUNCTION DBCORR
 
       DOUBLE PRECISION FUNCTION DLGDIV (A, B)
+      IMPLICIT NONE
+      INTEGER J, K
 C-----------------------------------------------------------------------
 C
 C     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) FOR B .GE. 10
@@ -13383,6 +13722,20 @@ C
       END FUNCTION DLGDIV
 
       SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
+      IMPLICIT NONE
+      INTEGER IND
+      REAL A, ANS, QANS, X
+      INTEGER I, IOP, M, MAX, N
+      REAL A2N, A2NM1, ACC, ALOG10, AMN, APN, B2N, B2NM1, C, C0, C1, C2
+     x, C3, C4, C5, C6, C7, C8, D00, D10, D20, D30, D40, D50, D60, D70
+     x, D80, E, G, H, R, RT2PIN, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U
+     x, W, Y, Z
+      REAL REXP
+      REAL GAM1
+      REAL ERFC1
+      REAL RCOMP
+      REAL RLOG
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -13802,6 +14155,12 @@ C
       END SUBROUTINE GRATIO
 
       REAL FUNCTION RCOMP (A, X)
+      IMPLICIT NONE
+      REAL A, X
+      REAL RT2PIN, T, T1, U
+      REAL EXPARG
+      REAL RLOG
+      REAL GAM1
 C-----------------------------------------------------------------------
 C                EVALUATION OF EXP(-X)*X**A/GAMMA(A)
 C-----------------------------------------------------------------------
@@ -13831,6 +14190,7 @@ C
       END FUNCTION RCOMP
 
       DOUBLE PRECISION FUNCTION DRCOMP (A, X)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
 C-----------------------------------------------------------------------
@@ -13861,6 +14221,18 @@ C
       END FUNCTION DRCOMP
 
       SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL A, P, Q, X, X0
+      INTEGER IER, IOP
+      REAL AM1, AMAX, AMIN, AP1, AP2, AP3, APN, B, C, C1, C2, C3, C4, C5
+     x, D, E, E2, EPS, G, H, PN, QG, QN, R, RTA, S, S2, SUM, T, TOL, U
+     x, W, XMIN, XN, Y, Z
+      REAL GAMLN1
+      REAL RCOMP
+      REAL SPMPAR
+      REAL ALNREL
+      REAL GAMLN
 C-----------------------------------------------------------------------
 C
 C             INVERSE INCOMPLETE GAMMA RATIO FUNCTION
@@ -14185,6 +14557,9 @@ C
       END SUBROUTINE GAMINV
 
       SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      INTEGER I, M, MAX, N
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -14444,6 +14819,7 @@ C
       END SUBROUTINE DGRAT
 
       SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -14753,6 +15129,7 @@ C
       END SUBROUTINE DGR29
 
       SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -14880,6 +15257,9 @@ C
       END SUBROUTINE DGR17
 
       SUBROUTINE DGINV (A, X, P, Q, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      INTEGER IER, IND
 C-----------------------------------------------------------------------
 C
 C                        DOUBLE PRECISION
@@ -16224,6 +16604,16 @@ C
       END FUNCTION BASYM
 
       SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL A0, B0, EPS, P, X0
+      INTEGER IND, L, MAX
+      REAL A, AFRAC, AM1, AN, B, BFRAC, C, GAMRAT, P0, PIHALF, RPINV
+     x, RTY, SUM, T, TEMP, TOL, X, Y
+      REAL ALGDIV
+      INTEGER IPMPAR
+      REAL BLND
+      REAL ALNREL
       REAL I, J, K, LAMBDA, M, N, W(10), Z(10)
 C     -------------------
       DATA W(1) /6.6671344308688E-2/,  W(2) /1.4945134915058E-1/,
@@ -16466,6 +16856,9 @@ C
       END SUBROUTINE ISUBX
 
       REAL FUNCTION BLND(A,B)
+      IMPLICIT NONE
+      REAL A, B
+      REAL ALGDIV
       REAL LOGAM
 C
       IF (A .GT. 20.0) GO TO 10
@@ -16476,6 +16869,10 @@ C
       END FUNCTION BLND
 
       REAL FUNCTION LOGAM (X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER N
+      REAL D, T, Z
       REAL W(200)
 C     ------------------------------------------------------------------
 C     COMPUTATION OF LN(GAMMA(X)) FOR X = N/2  WHERE N IS AN INTEGER
@@ -16596,6 +16993,11 @@ C     ------------------------------------------------------------------
       END FUNCTION LOGAM
 
       SUBROUTINE CBSSLJ (Z, CNU, W)
+      IMPLICIT NONE
+      INTEGER I, K, M, N
+      REAL A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN, T1
+     x, T2, U, V, X, Y
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (Z)
@@ -16795,6 +17197,11 @@ C
       END SUBROUTINE CBSSLJ
 
       SUBROUTINE CBJM (Z, CNU, W)
+      IMPLICIT NONE
+      INTEGER I, IMIN, K, KM1, KM2
+      REAL A, A0, EPS, RNU
+      REAL ANORM
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C       COMPUTATION OF  (Z/2)**(-CNU) * GAMMA(CNU + 1) * J(CNU,Z)
@@ -16895,6 +17302,11 @@ C
       END SUBROUTINE CBJM
 
       SUBROUTINE CBDB (CZ, CNU, FN, W)
+      IMPLICIT NONE
+      REAL FN
+      INTEGER IND, K, L, M
+      REAL ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V, X
+     x, Y
 C-----------------------------------------------------------------------
 C
 C         CALCULATION OF J   (CZ) BY THE DEBYE APPROXIMATION
@@ -17124,6 +17536,13 @@ C
       END SUBROUTINE CBDB
 
       SUBROUTINE CBJA (CZ, CNU, W)
+      IMPLICIT NONE
+      INTEGER I, IND
+      REAL C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
+      REAL SIN1
+      REAL COS1
+      REAL ANORM
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C        COMPUTATION OF J(NU,Z) BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
@@ -17216,6 +17635,11 @@ C
       END SUBROUTINE CBJA
 
       SUBROUTINE BSSLJ (A, IN, W)
+      IMPLICIT NONE
+      INTEGER IN
+      INTEGER I, M, N
+      REAL AN, AQ, AZ, CD, CE, FJ, PM, PN, QF, QM, QN, QZ, RM, RZ, SM
+     x, SN, SS, SZ, TM, TS, ZM, ZR, ZS
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
 C     ******************************************************************
@@ -17521,6 +17945,7 @@ C     -------------------
       END SUBROUTINE BSSLJ
 
       SUBROUTINE BESJ(X, ALPHA, N, Y, NZ)
+      IMPLICIT NONE
 C
 C     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
 C
@@ -17990,6 +18415,7 @@ C
       END SUBROUTINE BESJ
 
       SUBROUTINE ASJY(FUNJY,X,FNU,FLGJY,IN,TOL,ELIM,Y,WK,IFLW)
+      IMPLICIT NONE
 C
 C               ASJY COMPUTES BESSEL FUNCTIONS J AND Y
 C               FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35.0
@@ -18435,6 +18861,13 @@ C
       END SUBROUTINE ASJY
 
       SUBROUTINE JAIRY(X,RX,C,AI,DAI)
+      IMPLICIT NONE
+      REAL AI, C, DAI, RX, X
+      INTEGER I, J, M1, M1D, M2, M2D, M3, M3D, M4, M4D, N1, N1D, N2, N2D
+     x, N3, N3D, N4, N4D
+      REAL A, AJN, AJP, AK1, AK2, AK3, B, CCV, CON1, CON2, CON3, CON4
+     x, CON5, CV, DA, DAJN, DAJP, DAK1, DAK2, DAK3, DB, E1, E2, EC, F1
+     x, F2, FPI12, RTRX, SCV, T, TEMP1, TEMP2, TT
 C
 C                  JAIRY COMPUTES THE AIRY FUNCTION AI(X)
 C                   AND ITS DERIVATIVE DAI(X) FOR JBESS
@@ -18778,6 +19211,11 @@ C
       END SUBROUTINE JAIRY
 
       SUBROUTINE BSSLY (A, IN, W)
+      IMPLICIT NONE
+      INTEGER IN
+      INTEGER I, LA, LR, LY, M, N
+      REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, QZ, RM, RN, RZ, SL
+     x, SM, SN, SQ, SR, SS, SZ, TM, TS, ZL, ZS
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
 C     ******************************************************************
@@ -19089,6 +19527,11 @@ C     -------------------
       END SUBROUTINE BSSLY
 
       SUBROUTINE CBSSLI (Z, CNU, W)
+      IMPLICIT NONE
+      REAL PIHALF, T, X, Y
+      REAL SIN1
+      REAL COS1
+      REAL EXPARG
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 C     FIRST KIND FOR COMPLEX ORDER CNU AND COMPLEX ARGUMENT
@@ -19120,6 +19563,11 @@ C
       END SUBROUTINE CBSSLI
 
       SUBROUTINE BSSLI (MO, A, IN, W)
+      IMPLICIT NONE
+      INTEGER IN, MO
+      INTEGER I, M, N
+      REAL AN, AQ, AZ, CD, CE, FI, PM, PN, QF, QM, QN, QZ, RM, RZ, SM
+     x, SN, SS, SZ, TM, TS, ZM, ZR, ZS
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
 C     ******************************************************************
@@ -19445,6 +19893,7 @@ C     -------------------
       END SUBROUTINE BSSLI
 
       SUBROUTINE BESI(X, ALPHA, KODE, N, Y, NZ)
+      IMPLICIT NONE
 C
 C     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
 C
@@ -19909,6 +20358,7 @@ C
       END SUBROUTINE BESI
 
       SUBROUTINE ASIK(X,FNU,KODE,FLGIK,RA,ARG,IN,TOL,Y)
+      IMPLICIT NONE
 C
 C                  ASIK COMPUTES BESSEL FUNCTIONS I AND K
 C                  FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35
@@ -20036,6 +20486,9 @@ C     ---------------------
       END SUBROUTINE ASIK
 
       SUBROUTINE CBESK (Z, CNU, W)
+      IMPLICIT NONE
+      REAL A, B, C, E, RN, RZ, S, TAU, X, Y
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -20149,6 +20602,10 @@ C
       END SUBROUTINE CBESK
 
       SUBROUTINE CBKI (Z, CNU, W)
+      IMPLICIT NONE
+      REAL A, B, PI, PIHALF, U1, U2
+      REAL SIN1
+      REAL COS1
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 C     SECOND KIND WITH COMPLEX ORDER AND ARGUMENT IN TERMS
@@ -20171,6 +20628,11 @@ C
       END SUBROUTINE CBKI
 
       SUBROUTINE CBKA (Z, CNU, W)
+      IMPLICIT NONE
+      INTEGER I
+      REAL C, EPS, U, V
+      REAL ANORM
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR COMPLEX ORDER
 C        CNU AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
@@ -20215,6 +20677,10 @@ C
       END SUBROUTINE CBKA
 
       SUBROUTINE CBKM (Z, RZ, CNU, W)
+      IMPLICIT NONE
+      REAL RZ
+      INTEGER I, IND, M, N, N1
+      REAL A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
 C-------------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND WITH COMPLEX ORDER AND ARGUMENT BY MEANS OF MACLAURIN
@@ -20328,6 +20794,12 @@ C
       END SUBROUTINE CBKM
 
       SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
+      IMPLICIT NONE
+      REAL R
+      INTEGER K
+      REAL AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
+      REAL ANORM
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
@@ -20446,6 +20918,13 @@ C
       END SUBROUTINE CKPS
 
       SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
+      IMPLICIT NONE
+      INTEGER N
+      REAL R
+      INTEGER I, M, NUM
+      REAL A, B, C, C1, C2, E, EPS, EPS0, F, RNU, T, TH, X, Y
+      REAL COS1
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE SCALED BESSEL FUNCTION
@@ -20555,6 +21034,11 @@ C
       END SUBROUTINE CBKML
 
       SUBROUTINE CBSSLK (Z, R, W)
+      IMPLICIT NONE
+      REAL R
+      INTEGER I, IND, M, N, N1
+      REAL A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C         CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -20673,6 +21157,11 @@ C
       END SUBROUTINE CBSSLK
 
       SUBROUTINE CKA (Z, NU, W)
+      IMPLICIT NONE
+      INTEGER I
+      REAL A, C, EPS, U, V
+      REAL ANORM
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
 C        AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
@@ -20717,6 +21206,13 @@ C
       END SUBROUTINE CKA
 
       SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
+      IMPLICIT NONE
+      REAL R
+      INTEGER K
+      REAL A, AK, EPS, EPS0, G1, G2, GM1, GM2, PHI, PI, T, TOL, X, Y
+      REAL ANORM
+      REAL SPMPAR
+      REAL GAM1
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
@@ -20826,6 +21322,12 @@ C
       END SUBROUTINE CKM
 
       SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
+      IMPLICIT NONE
+      REAL R
+      INTEGER I, M
+      REAL A, AL, B, C, C1, E, EPS, EPS0, TH, X, Y
+      REAL COS1
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE SCALED BESSEL FUNCTIONS
@@ -20917,6 +21419,12 @@ C
       END SUBROUTINE CKML
 
       COMPLEX FUNCTION CXP (N, NU)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER K
+      REAL C, S
+      REAL SIN0
+      REAL COS0
 C-----------------------------------------------------------------------
 C                 COMPUTATION OF EXP(-R*(PI/2)*I)
 C              WHERE R = N + NU FOR ABS(NU) .LE. 0.5
@@ -20945,6 +21453,11 @@ C
       END FUNCTION CXP
 
       SUBROUTINE BSSLK (MO, A, IN, W)
+      IMPLICIT NONE
+      INTEGER IN, MO
+      INTEGER I, LA, LK, LR, M, N
+      REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, RM, RN, RZ, SL, SM
+     x, SN, SQ, SR, SS, SZ, TM, TS, ZL, ZS
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
 C     ******************************************************************
@@ -21187,6 +21700,10 @@ C     -------------------
       END SUBROUTINE BSSLK
 
       SUBROUTINE CAI(IND,Z,AI,AIP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      REAL A, B, R
+      REAL CPABS
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
 C     FOR COMPLEX ARGUMENT Z.
@@ -21216,6 +21733,10 @@ C
       END SUBROUTINE CAI
 
       SUBROUTINE AIRM (IND,Z,AI,AIP,BI,BIP)
+      IMPLICIT NONE
+      INTEGER IND
+      INTEGER I, N
+      REAL C1, C2, SQT3, X, Y
 C--------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTIONS AI AND BI AND THEIR
 C     DERIVATIVES AIP AND BIP BY USE OF THEIR MACLAURIN
@@ -21300,6 +21821,10 @@ C
       END SUBROUTINE AIRM
 
       SUBROUTINE AII(IND, Z, AI, AIP, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      REAL A, B, C1, R
+      REAL CPABS
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
 C     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
@@ -21346,6 +21871,12 @@ C
       END SUBROUTINE AII
 
       SUBROUTINE AIA (IND, Z, AI, AIP, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      INTEGER I, K, M, M2
+      REAL C1, C2, EPS, R, T, U, U1, V, V1, XM, XNEG, XPOS
+      REAL EXPARG
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP FOR
 C     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
@@ -21519,6 +22050,10 @@ C
       END SUBROUTINE AIA
 
       SUBROUTINE CBI(IND,Z,BI,BIP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      REAL A, B, R
+      REAL CPABS
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
 C     FOR COMPLEX ARGUMENT Z.
@@ -21548,6 +22083,10 @@ C
       END SUBROUTINE CBI
 
       SUBROUTINE BII(IND, Z, BI, BIP, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      REAL A, C1, R, SQT3, X, Y
+      REAL CPABS
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
 C     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
@@ -21605,6 +22144,13 @@ C
       END SUBROUTINE BII
 
       SUBROUTINE BIA(IND,Z,BI,BIP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND
+      INTEGER I, K, M, M2
+      REAL C, C1, C2, C3, CE, CF, D, EPS, R, S, SQT3, T, U, U1, V, V1, X
+     x, XNEG, XPOS, Y
+      REAL EXPARG
+      REAL SPMPAR
 C---------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP FOR
 C     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
@@ -21848,6 +22394,7 @@ C
       END SUBROUTINE BIA
 
       SUBROUTINE IA(Z, I1, I2, I1M, I2M)
+      IMPLICIT NONE
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -21892,6 +22439,9 @@ C
          END SUBROUTINE IA
 
       SUBROUTINE IMC(Z, I1, I2, I1M, I2M)
+      IMPLICIT NONE
+      INTEGER I, N, N1
+      REAL A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
 C----------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -21956,6 +22506,11 @@ C
       END SUBROUTINE IMC
 
       SUBROUTINE BIM(Z,CN,W)
+      IMPLICIT NONE
+      REAL CN
+      REAL D, EPS
+      REAL ANORM
+      REAL SPMPAR
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND
 C     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
@@ -21994,6 +22549,7 @@ C
       END SUBROUTINE BIM
 
       SUBROUTINE JA(Z, I1, I2, I1M, I2M)
+      IMPLICIT NONE
 C------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND FOR
 C     ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX ARGUMENT
@@ -22038,6 +22594,9 @@ C
          END SUBROUTINE JA
 
       SUBROUTINE JMC(Z, I1, I2, I1M, I2M)
+      IMPLICIT NONE
+      INTEGER I, N, N1
+      REAL A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
 C----------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -22102,6 +22661,11 @@ C
       END SUBROUTINE JMC
 
       SUBROUTINE BJM(Z,CN,W)
+      IMPLICIT NONE
+      REAL CN
+      REAL D, EPS
+      REAL ANORM
+      REAL SPMPAR
 C-------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND
 C     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
@@ -22140,6 +22704,10 @@ C
       END SUBROUTINE BJM
 
       SUBROUTINE KA(IND, Z, K1, K2)
+      IMPLICIT NONE
+      INTEGER IND
+      INTEGER IND1
+      REAL A, B, PI
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z,
@@ -22185,6 +22753,11 @@ C
       END SUBROUTINE KA
 
       SUBROUTINE KML(IND, Z, K1, K2)
+      IMPLICIT NONE
+      INTEGER IND
+      INTEGER I, L, M
+      REAL A, AI, AL, B, C, C1, EPS, R, TH, X1, X2
+      REAL SPMPAR
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z
@@ -22239,6 +22812,16 @@ C
       END SUBROUTINE KML
 
       REAL FUNCTION AI(X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER N, N2
+      REAL AD0, AD1, AD2, AD3, AN0, AN1, AN2, AN3, AN4, AN5, AN6, AN7
+     x, AN8, AN9, BD0, BD1, BD2, BD3, BD4, BD5, BN0, BN1, BN2, BN3, BN4
+     x, BN5, BN6, BN7, C, PD0, PD1, PD2, PD3, PD4, PD5, PHI, PN0, PN1
+     x, PN2, PN3, PN4, QD0, QD1, QD2, QD3, QD4, QD5, QN0, QN1, QN2, QN3
+     x, QN4, QN5, R, RD0, RD1, RD2, RD3, RD4, RD5, RN0, RN1, RN2, RN3
+     x, RN4, RTX, T, W, X0
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE AIRY FUNCTION AI(X)
 C-----------------------------------------------------------------------
@@ -22332,6 +22915,14 @@ C
       END FUNCTION AI
 
       REAL FUNCTION AIE(X)
+      IMPLICIT NONE
+      REAL X
+      REAL AD0, AD1, AD2, AD3, AN0, AN1, AN2, AN3, AN4, AN5, AN6, AN7
+     x, AN8, AN9, BD0, BD1, BD2, BD3, BD4, BD5, BN0, BN1, BN2, BN3, BN4
+     x, BN5, BN6, BN7, PD0, PD1, PD2, PD3, PD4, PD5, PHI, PN0, PN1, PN2
+     x, PN3, PN4, QD0, QD1, QD2, QD3, QD4, QD5, QN0, QN1, QN2, QN3, QN4
+     x, QN5, R, RD0, RD1, RD2, RD3, RD4, RD5, RN0, RN1, RN2, RN3, RN4
+     x, RTX, T, W, X0
 C-----------------------------------------------------------------------
 C
 C                   SCALED AIRY FUNCTION AI(X)
@@ -22429,6 +23020,18 @@ C
       END FUNCTION AIE
 
       REAL FUNCTION BI(X)
+      IMPLICIT NONE
+      REAL X
+      INTEGER N, N2
+      REAL AD0, AD1, AD2, AD3, AN0, AN1, AN10, AN2, AN3, AN4, AN5, AN6
+     x, AN7, AN8, AN9, BD0, BD1, BD2, BD3, BN0, BN1, BN10, BN2, BN3, BN4
+     x, BN5, BN6, BN7, BN8, BN9, C, PD0, PD1, PD2, PD3, PD4, PD5, PD6
+     x, PD7, PHI, PN0, PN1, PN2, PN3, PN4, PN5, PN6, QD0, QD1, QD2, QD3
+     x, QD4, QD5, QD6, QD7, QD8, QN0, QN1, QN2, QN3, QN4, QN5, QN6, QN7
+     x, R, RD0, RD1, RD2, RN0, RN1, RN10, RN11, RN2, RN3, RN4, RN5, RN6
+     x, RN7, RN8, RN9, RTX, SD0, SD1, SN0, SN1, SN10, SN11, SN12, SN13
+     x, SN2, SN3, SN4, SN5, SN6, SN7, SN8, SN9, T, W, X0
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OF THE AIRY FUNCTION BI(X)
@@ -22563,6 +23166,16 @@ C
       END FUNCTION BI
 
       REAL FUNCTION BIE(X)
+      IMPLICIT NONE
+      REAL X
+      REAL AD0, AD1, AD2, AD3, AN0, AN1, AN10, AN2, AN3, AN4, AN5, AN6
+     x, AN7, AN8, AN9, BD0, BD1, BD2, BD3, BN0, BN1, BN10, BN2, BN3, BN4
+     x, BN5, BN6, BN7, BN8, BN9, PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7
+     x, PHI, PN0, PN1, PN2, PN3, PN4, PN5, PN6, QD0, QD1, QD2, QD3, QD4
+     x, QD5, QD6, QD7, QD8, QN0, QN1, QN2, QN3, QN4, QN5, QN6, QN7, R
+     x, RD0, RD1, RD2, RN0, RN1, RN10, RN11, RN2, RN3, RN4, RN5, RN6
+     x, RN7, RN8, RN9, RTX, SD0, SD1, SN0, SN1, SN10, SN11, SN12, SN13
+     x, SN2, SN3, SN4, SN5, SN6, SN7, SN8, SN9, T, W, X0
 C-----------------------------------------------------------------------
 C
 C                    SCALED AIRY FUNCTION BI(X)
@@ -22695,6 +23308,15 @@ C
       END FUNCTION BIE
 
       SUBROUTINE AIMP (X, R, PHI)
+      IMPLICIT NONE
+      REAL PHI, R, X
+      REAL AD0, AD1, AD2, AD3, AD4, AD5, AN0, AN1, AN2, AN3, AN4, AN5
+     x, AN6, BD0, BD1, BD2, BD3, BD4, BD5, BD6, BN0, BN1, BN2, BN3, BN4
+     x, BN5, BN6, CD0, CD1, CD2, CD3, CD4, CD5, CD6, CN0, CN1, CN2, CN3
+     x, CN4, CN5, DD0, DD1, DD2, DD3, DD4, DD5, DD6, DN0, DN1, DN2, DN3
+     x, DN4, DN5, PD0, PD1, PD2, PD3, PD4, PD5, PI4, PN0, PN1, PN2, PN3
+     x, PN4, PN5, QD0, QD1, QD2, QD3, QD4, QD5, QN0, QN1, QN2, QN3, QN4
+     x, RTX, Z
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE AIRY MODULUS AND PHASE FOR X .GE. 1
 C-----------------------------------------------------------------------
@@ -22786,6 +23408,11 @@ C
       END SUBROUTINE AIMP
 
       COMPLEX FUNCTION CK(K,L)
+      IMPLICIT NONE
+      INTEGER I, IND
+      REAL C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
+      REAL SPMPAR
+      REAL ALNREL
 C     ------------------------------------------------------------------
 C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRAL F(K)
 C     FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED THAT L.NE.0
@@ -23008,6 +23635,7 @@ C
       END FUNCTION CK
 
       COMPLEX FUNCTION CFLECT(Z)
+      IMPLICIT NONE
 C---------------------------------------------------------
 C     REFLECTS Z WITH RESPECT TO THE ORIGIN IF REAL(Z)
 C     .LT. 0.0 OR IF Z IS ON THE NEGATIVE IMAGINARY AXIS.
@@ -23024,6 +23652,10 @@ C     ----------
       END FUNCTION CFLECT
 
       COMPLEX FUNCTION KM(K2)
+      IMPLICIT NONE
+      INTEGER I
+      REAL C, EPS, HPI, RI, TOL
+      REAL SPMPAR
       COMPLEX K2
 C---------------------------------------------------------------------
 C     KM COMPUTES THE COMPLETE ELLIPTIC INTEGRAL F(K) FOR A GIVEN
@@ -23056,6 +23688,11 @@ C
       END FUNCTION KM
 
       SUBROUTINE KL (L, FK, FL)
+      IMPLICIT NONE
+      INTEGER I
+      REAL BN, C, EPS, HPI, RI, TOL, U, X, Y
+      REAL SPMPAR
+      REAL ALNREL
       COMPLEX L, FK, FL
 C ----------------------------------------------------------------------
 C     KL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND F(L) FOR
@@ -23123,6 +23760,12 @@ C
       END SUBROUTINE KL
 
       SUBROUTINE CKE(K,L,CK,CE,IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      INTEGER I, IND
+      REAL C, C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
+      REAL ALNREL
+      REAL SPMPAR
 C     ------------------------------------------------------------------
 C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRALS F(K)
 C     AND E(K) FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED
@@ -23390,6 +24033,9 @@ C
       END SUBROUTINE CKE
 
       COMPLEX FUNCTION ATN(Z)
+      IMPLICIT NONE
+      REAL ATN1, ATN2, D, DA, DB, T, X, Y
+      REAL ALNREL
 C---------------------------------------------------
 C     CALCULATES COMPLEX FUNCTION ATN(Z) = Z*ATAN(Z)
 C     USING DOUBLE PRECISION.
@@ -23411,6 +24057,10 @@ C---------------------------------------------------
       END FUNCTION ATN
 
       SUBROUTINE EKM (K2, FK, EK)
+      IMPLICIT NONE
+      INTEGER I
+      REAL C, EPS, HPI, RI, TOL
+      REAL SPMPAR
       COMPLEX K2,FK,EK
 C ----------------------------------------------------------------------
 C     EKM COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND E(K) FOR
@@ -23447,6 +24097,11 @@ C
       END SUBROUTINE EKM
 
       SUBROUTINE EKL (L,FK,FL,EK,EL,GK,GL)
+      IMPLICIT NONE
+      INTEGER I
+      REAL BN, C, DN, EPS, FN, GN, HPI, RI, TOL, U, X, Y
+      REAL SPMPAR
+      REAL ALNREL
       COMPLEX L,L2,FK,FL,EK,EL,GK,GL
 C ----------------------------------------------------------------------
 C     EKL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K), F(L), E(K),
@@ -23538,6 +24193,14 @@ C
       END SUBROUTINE EKL
 
       SUBROUTINE ELLPI (PHI, CPHI, K, L, F, E, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL CPHI, E, F, PHI
+      REAL AN, CN, D1, D2, D3, D4, DN, HN, P, PN, PX, QN, QX, R, R0, R2
+     x, RI, RJ, RK, RM, RN, S0, S1, S2, S3, S4, SI, SJ, SK, SN, SS, T1
+     x, T2, TD, TH1, TR, TS, W
+      REAL ALNREL
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C          REAL ELLIPTIC INTEGRALS OF THE FIRST AND SECOND KINDS
@@ -23672,6 +24335,8 @@ C
       END SUBROUTINE ELLPI
 
       SUBROUTINE DELLPI (PHI, CPHI, K, L, F, E, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION COMPUTATION OF THE
@@ -23812,6 +24477,8 @@ C
       END SUBROUTINE DELLPI
 
       SUBROUTINE EPI (PHI, CPHI, K2, L2, N, M, P, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
 C-----------------------------------------------------------------------
 C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
 C-----------------------------------------------------------------------
@@ -23872,6 +24539,8 @@ C
       END SUBROUTINE EPI
 
       SUBROUTINE DEPI (PHI, CPHI, K2, L2, N, M, P, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
 C-----------------------------------------------------------------------
 C               DOUBLE PRECISION COMPUTATION OF THE
 C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
@@ -23933,6 +24602,7 @@ C
       END SUBROUTINE DEPI
 
       SUBROUTINE RFVAL (X, Y, Z, RF, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24044,6 +24714,7 @@ C
       END SUBROUTINE RFVAL
 
       SUBROUTINE DRFVAL (X, Y, Z, RF, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24155,6 +24826,7 @@ C
       END SUBROUTINE DRFVAL
 
       SUBROUTINE RDVAL (X, Y, Z, RD, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24277,6 +24949,7 @@ C
       END SUBROUTINE RDVAL
 
       SUBROUTINE DRDVAL (X, Y, Z, RD, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24399,6 +25072,7 @@ C
       END SUBROUTINE DRDVAL
 
       SUBROUTINE RJVAL (X, Y, Z, P, RJ, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24537,6 +25211,7 @@ C
       END SUBROUTINE RJVAL
 
       SUBROUTINE DRJVAL (X, Y, Z, P, RJ, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24675,6 +25350,7 @@ C
       END SUBROUTINE DRJVAL
 
       SUBROUTINE RCVAL1 (X, Y, ERRTOL, RC, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -24776,6 +25452,7 @@ C
       END SUBROUTINE RCVAL1
 
       SUBROUTINE DRCVL1 (X, Y, ERRTOL, RC, IERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -24869,6 +25546,13 @@ C
       END SUBROUTINE DRCVL1
 
       SUBROUTINE ELLPF(U,K,L,S,C,D,IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL C, D, S, U
+      INTEGER MAX, N
+      REAL E, EPS, F, F2, PIHALF, R, SG, TOL, U1, U2, Z
+      INTEGER IPMPAR
+      REAL SPMPAR
 C     -------------------------------------------------------------
 C     ELLPF CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K), AND
 C     DN(U,K) FOR REAL U AND REAL MODULUS K.  IT IS ASSUMED THAT
@@ -24953,6 +25637,10 @@ C
       END SUBROUTINE ELLPF
 
       SUBROUTINE SCD(U,K,L,F,S,C,D)
+      IMPLICIT NONE
+      REAL C, D, F, S, U
+      INTEGER IERR
+      REAL C1, D1, E1, F1, PIHALF, S1, V
 C     --------------------------------------------------------
 C     SCD COMPUTES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
 C     AND DN(U,K) FOR REAL U AND REAL MODULUS K SUCH THAT
@@ -25002,6 +25690,9 @@ C
       END SUBROUTINE SCD
 
       SUBROUTINE SCDM(U,K,S,C,D)
+      IMPLICIT NONE
+      REAL C, D, S, U
+      REAL C1, C2, C3, C4, U2
 C     -------------------------------------------------
 C     CALCULATES SN(U,K), CN(U,K), AND DN(U,K) FOR
 C     0.0 .LE. U .LE. 0.01 AND FOR 0.0 .LE. K .LE. 1.0
@@ -25023,6 +25714,11 @@ C
       END SUBROUTINE SCDM
 
       SUBROUTINE SCDF(U,K,L,F,F1,S,C,D)
+      IMPLICIT NONE
+      REAL C, D, F, F1, S, U
+      REAL A, AI, COEF, EPS, PIHALF, Q1, Q2, QD, QH, QN, SUM, TEMP, TOL
+     x, V, W, X
+      REAL SPMPAR
 C     -------------------------------------------------------------
 C     SCDF COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
 C     K BY USE OF THE FOURIER EXPANSION FOR SN(U,K).  IT IS
@@ -25081,6 +25777,11 @@ C
       END SUBROUTINE SCDF
 
       SUBROUTINE SCDJ(U,K,L,F,F1,S,C,D)
+      IMPLICIT NONE
+      REAL C, D, F, F1, S, U
+      REAL A, CH, COEF, E1, E1N, E2, E2N, EPS, PI, PIHALF, Q1, Q1N, Q2
+     x, Q2N, SH, SUM, TEMP, TOL, V, W, X, X2, XN
+      REAL SPMPAR
 C     ----------------------------------------------------------------
 C     SCDJ COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
 C     K USING THE IMAGINARY TRANSFORMATION OF JACOBI AND A
@@ -25156,6 +25857,10 @@ C
       END SUBROUTINE SCDJ
 
       SUBROUTINE ELPFC1 (U,K,L,S,C,D,IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      REAL C1, C2, CK, CL, COEF, D1, D2, DK, DL, R, S1, S2, SK, SL, T
+     x, T1, T2, TD1, TD2, U1, U2
 C     -------------------------------------------------------------
 C     ELPFC1 CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
 C     DN(U,K) FOR COMPLEX U AND REAL MODULUS K.  IT IS ASSUMED THAT
@@ -25240,6 +25945,7 @@ C
       END SUBROUTINE ELPFC1
 
       SUBROUTINE PEQ(Z, W, IERR)
+      IMPLICIT NONE
 C
 C     WEIERSTRASS P-FUNCTION IN THE EQUIANHARMONIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
@@ -25282,6 +25988,7 @@ C
       END SUBROUTINE PEQ
 
       SUBROUTINE PEQ1(Z, W, IERR)
+      IMPLICIT NONE
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
 C     EQUIANHARMONIC CASE FOR COMPLEX ARGUMENT
@@ -25326,6 +26033,7 @@ C
       END SUBROUTINE PEQ1
 
       SUBROUTINE PLEM(Z, W, IERR)
+      IMPLICIT NONE
 C
 C     WEIERSTRASS P-FUNCTION IN THE LEMNISCATIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
@@ -25370,6 +26078,7 @@ C
       END SUBROUTINE PLEM
 
       SUBROUTINE PLEM1(Z, W, IERR)
+      IMPLICIT NONE
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
 C     LEMNISCATIC CASE FOR COMPLEX ARGUMENT
@@ -25417,6 +26126,16 @@ C
       END SUBROUTINE PLEM1
 
       SUBROUTINE VALR2(X,Y,N0,P,IOP,A,IND,KO)
+      IMPLICIT NONE
+      INTEGER IND, IOP, KO, N0
+      REAL A, P, X, Y
+      INTEGER K, M, N
+      REAL A3D8, AJ0, AJ1, ALNPI, APH1, APH2, APH4, B, BGD1, BGD2, C
+     x, CAPE, CAPH, CAPV, CEE, CIRCM, CST, D1SQ, D2SQ, E, E2, E3, F, G
+     x, H, P1, PI, PSI1, RSQ, RTPI, RTPII, SUM, T, T1, TAU, TAUSQ, TWOPI
+     x, U, V, W, XK, YK, YKM1, Z
+      REAL ERFC1
+      REAL SPMPAR
 C     -------------------
       DIMENSION X(*),Y(*),G(2),H(2)
       DIMENSION E(5),E2(10),E3(15)
@@ -25693,6 +26412,18 @@ C
       END SUBROUTINE VALR2
 
       SUBROUTINE CIRCV (R, D, J, P, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, J
+      REAL D, P, R
+      INTEGER I, N
+      REAL A, A1, AN, ANM1, BK2, C0, C1, C2, C3, CONST, D2, DELTA, E
+     x, EPS, EPS0, EXPT, F, S, S0, S1, S2, SUM, T, T0, T2, TD, TN, TR, W
+     x, X, X0, Y1, Z, ZM, ZP, ZR, ZRS
+      REAL EXPARG
+      REAL ERFCR
+      REAL RCOMP
+      REAL REXP
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C       IF J .NE. 0, OUTPUT IS P = CIRCULAR COVERAGE FUNCTION. P GIVES
 C       THE PROBABILITY OF A SHOT FALLING, UNDER A NORMAL DISTRIBUTION
@@ -25932,6 +26663,10 @@ C
         END SUBROUTINE CIRCV
 
       SUBROUTINE ERFC0 (IND, X, E, Y)
+      IMPLICIT NONE
+      INTEGER IND
+      REAL E, X, Y
+      REAL AX, BOT, C, EPS, T, TOP
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C
@@ -26030,6 +26765,9 @@ C
       END SUBROUTINE ERFC0
 
       REAL FUNCTION ERFCR (X)
+      IMPLICIT NONE
+      REAL X
+      REAL BOT, T, TOP
 C-----------------------------------------------------------------------
 C     COMPUTATION OF  1/SQRT(PI) - X*EXP(X*X)*ERFC(X)  FOR X .GE. 4
 C-----------------------------------------------------------------------
@@ -26049,6 +26787,17 @@ C------------------------
       END FUNCTION ERFCR
 
       SUBROUTINE PKILL (R0, SX, SY, H, K, P)
+      IMPLICIT NONE
+      REAL H, P, R0, SX, SY
+      INTEGER I, II, IY, IZ, IZ3, J, J8, N1, NT
+      REAL A, A1, A2, A3, A4, C, C8, D, D1, D2, DM, E3, E4, EPS, F, G2
+     x, G3, H1, H2, H3, H5, H6, H8, Q, Q1, R, R8, RPI, RT2, S0, S1, S2
+     x, S9, SA, SEPS1, SQEPS, T, T1, T2, T3, T4, T5, T9, U, X1, X5, YY
+     x, Z, Z1, Z2, Z3, Z8, Z9
+      REAL EXPARG
+      REAL AERF
+      REAL EPSLN
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C           COMPUTATION OF THE ELLIPTICAL COVERAGE FUNCTION
@@ -26483,6 +27232,9 @@ C
       END SUBROUTINE PKILL
 
       SUBROUTINE PLCOPY (A,KA,M,B,KB,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING REAL POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26507,6 +27259,9 @@ C
       END SUBROUTINE PLCOPY
 
       SUBROUTINE DPCOPY (A,KA,M,B,KB,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26531,6 +27286,9 @@ C
       END SUBROUTINE DPCOPY
 
       SUBROUTINE PADD (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26551,6 +27309,9 @@ C
       END SUBROUTINE PADD
 
       SUBROUTINE DPADD (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26571,6 +27332,9 @@ C
       END SUBROUTINE DPADD
 
       SUBROUTINE PSUBT (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26591,6 +27355,9 @@ C
       END SUBROUTINE PSUBT
 
       SUBROUTINE DPSUBT (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26611,6 +27378,9 @@ C
       END SUBROUTINE DPSUBT
 
       SUBROUTINE PMULT (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26648,6 +27418,9 @@ C
       END SUBROUTINE PMULT
 
       SUBROUTINE DPMULT (A,KA,L,B,KB,M,C,KC,N)
+      IMPLICIT NONE
+      INTEGER KA, KB, KC, L, M, N
+      INTEGER I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26685,6 +27458,10 @@ C
       END SUBROUTINE DPMULT
 
       SUBROUTINE PDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, N
+      INTEGER I, IB, IC, IMAX, J, LA, LC
+      REAL B0
 C     ------------------------------------------------------------------
 C     DIVISION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26738,6 +27515,9 @@ C
       END SUBROUTINE PDIV
 
       SUBROUTINE DPDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, N
+      INTEGER I, IB, IC, IMAX, J, LA, LC
 C     ------------------------------------------------------------------
 C     DIVISION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
@@ -26791,6 +27571,11 @@ C
       END SUBROUTINE DPDIV
 
       SUBROUTINE PLPWR(R,A,KA,M,B,KB,N,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N
+      REAL R
+      INTEGER I, IA, IB, IMAX, J, LB
+      REAL A0
 C     ------------------------------------------------------------------
 C     SET B = A**R WHERE A IS A REAL POLYNOMIAL
 C     ------------------------------------------------------------------
@@ -26843,6 +27628,9 @@ C
       END SUBROUTINE PLPWR
 
       SUBROUTINE DPLPWR(R,A,KA,M,B,KB,N,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N
+      INTEGER I, IA, IB, IMAX, J, LB
 C     ------------------------------------------------------------------
 C     SET B = A**R WHERE A IS A DOUBLE PRECISION POLYNOMIAL
 C     ------------------------------------------------------------------
@@ -26894,6 +27682,10 @@ C
       END SUBROUTINE DPLPWR
 
       SUBROUTINE PINV (A, D, N, Q)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, K, L, L0, LL, M
+      REAL S, SUM, T, U
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
 C                  SUM (A(I)*X**I, I = 1,2,...)
@@ -26950,6 +27742,9 @@ C
       END SUBROUTINE PINV
 
       SUBROUTINE DPINV (A, D, N, Q)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, K, L, L0, LL, M
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
 C                  SUM (A(I)*X**I, I = 1,2,...)
@@ -27007,6 +27802,11 @@ C
       END SUBROUTINE DPINV
 
       SUBROUTINE MPLNMV (MO, AU, NC, AC, FV)
+      IMPLICIT NONE
+      INTEGER MO, NC
+      REAL AC, AU, FV
+      INTEGER K, L
+      REAL QL
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR MULTIPLEX POLYNOMIAL EVALUATION
 C     ******************************************************************
@@ -27060,6 +27860,11 @@ C
       END SUBROUTINE MPLNMV
 
       REAL FUNCTION CSEVL (X, A, N)
+      IMPLICIT NONE
+      INTEGER N
+      REAL X
+      INTEGER I, K
+      REAL S0, S1, S2, X2
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
 C          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
@@ -27111,6 +27916,11 @@ C
       END FUNCTION DCSEVL
 
       SUBROUTINE LGRNGN (AU, NA, AN)
+      IMPLICIT NONE
+      INTEGER NA
+      REAL AN, AU
+      INTEGER K, M
+      REAL DM, TM
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN NORMALIZATION FACTORS
 C     ******************************************************************
@@ -27132,6 +27942,11 @@ C
       END SUBROUTINE LGRNGN
 
       SUBROUTINE LGRNGV (MO, NA, QU, AU, AN, FF, DF, SF)
+      IMPLICIT NONE
+      INTEGER MO, NA
+      REAL AN, AU, DF, FF, QU, SF
+      INTEGER K, L
+      REAL DM, RM, SM, TM
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN FUNCTION EVALUATION
 C     ******************************************************************
@@ -27239,6 +28054,11 @@ C
       END SUBROUTINE LGRNGV
 
       SUBROUTINE LGRNGX (AU, NA, AC)
+      IMPLICIT NONE
+      INTEGER NA
+      REAL AC, AU
+      INTEGER I, J, K, L
+      REAL SM, TD, TM
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN POLYNOMIAL EXPANSION
 C     ******************************************************************
@@ -27287,6 +28107,11 @@ C
       END SUBROUTINE LGRNGX
 
       SUBROUTINE ORTHOS (AU, MA, AA, NA, AR)
+      IMPLICIT NONE
+      INTEGER MA, NA
+      REAL AA, AR, AU
+      INTEGER I, J, K, L, M
+      REAL RM, RN, SM, SN
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL SYNTHESIS
 C     ******************************************************************
@@ -27365,6 +28190,11 @@ C
       END SUBROUTINE ORTHOS
 
       SUBROUTINE ORTHOV (MO, NA, AU, AR, NF, FF, DF, SF)
+      IMPLICIT NONE
+      INTEGER MO, NA, NF
+      REAL AR, AU, DF, FF, SF
+      INTEGER K, L
+      REAL RN, SN
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EVALUATION
 C     ******************************************************************
@@ -27417,6 +28247,11 @@ C
       END SUBROUTINE ORTHOV
 
       SUBROUTINE ORTHOX (NA, AR, NC, AC)
+      IMPLICIT NONE
+      INTEGER NA, NC
+      REAL AC, AR
+      INTEGER J, K, L, M, N
+      REAL RN, SN, TM
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR ORTHONORMAL POLYNOMIAL EXPANSION
 C     ******************************************************************
@@ -27456,6 +28291,7 @@ C
       END SUBROUTINE ORTHOX
 
       REAL FUNCTION ZEROIN (F, AX, BX, AERR, RERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
@@ -27579,6 +28415,7 @@ C
       END FUNCTION ZEROIN
 
       DOUBLE PRECISION FUNCTION DZERO (F, AX, BX, AERR, RERR)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C         FINDING A ZERO OF THE FUNCTION F(X) IN THE INTERVAL (AX,BX)
@@ -27702,6 +28539,7 @@ C
       END FUNCTION DZERO
 
       SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
+      IMPLICIT NONE
       INTEGER N,INFO,LWA
       REAL EPSFCN,TOL
       REAL X(N),FVEC(N),WA(LWA)
@@ -27835,6 +28673,7 @@ C
       SUBROUTINE HYBRD(FCN,N,X,FVEC,XTOL,MAXFEV,ML,MU,EPSFCN,DIAG,
      *                 MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,R,LR,
      *                 QTF,WA1,WA2,WA3,WA4)
+      IMPLICIT NONE
       INTEGER N,MAXFEV,ML,MU,MODE,NPRINT,INFO,NFEV,LDFJAC,LR
       REAL XTOL,EPSFCN,FACTOR
       REAL X(N),FVEC(N),DIAG(N),FJAC(LDFJAC,N),R(LR),QTF(N),WA1(N),
@@ -28292,6 +29131,9 @@ C
       END SUBROUTINE HYBRD
 
       SUBROUTINE QDCRT (A, Z)
+      IMPLICIT NONE
+      REAL D, EPS, R, W, X, Y
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C        QDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -28350,6 +29192,7 @@ C
       END SUBROUTINE QDCRT
 
       SUBROUTINE DQDCRT (A, ZR, ZI)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C        DQDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -28414,6 +29257,12 @@ C
       END SUBROUTINE DQDCRT
 
       SUBROUTINE CBCRT (A, Z)
+      IMPLICIT NONE
+      REAL ARG, C, CF, D, EPS, P, P1, Q, Q1, R, R1, RA, RB, RQ, RT, RT3
+     x, S, SF, SQ, SUM, T, T1, TOL, W, W1, W2, X, X1, X2, X3, Y, Y1, Y2
+     x, Y3
+      REAL CBRT
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C        CBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -28609,6 +29458,7 @@ C
       END SUBROUTINE CBCRT
 
       SUBROUTINE DCBCRT (A, ZR, ZI)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C        DCBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -28829,6 +29679,8 @@ C
       END SUBROUTINE DCBCRT
 
       SUBROUTINE QTCRT (A, Z)
+      IMPLICIT NONE
+      REAL B, B2, C, D, E, H, P, Q, R, T, U, V, V1, V2, X, X1, X2, X3, Y
 C-----------------------------------------------------------------------
 C
 C         QTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -28977,6 +29829,7 @@ C
       END SUBROUTINE QTCRT
 
       SUBROUTINE DQTCRT (A, ZR, ZI)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C         DQTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -30729,6 +31582,12 @@ C
       END FUNCTION ERREV
 
       SUBROUTINE RBND (N, C, W, ABSERR, RELERR, KLUST, KER)
+      IMPLICIT NONE
+      INTEGER KER, N
+      INTEGER J, JP1, K, L, M, NM1, NP1
+      REAL B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
+      REAL SPMPAR
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C     ABSTRACT
@@ -30877,6 +31736,12 @@ C
       END SUBROUTINE RBND
 
       SUBROUTINE CBND (N, C, W, ABSERR, RELERR, KLUST, KER)
+      IMPLICIT NONE
+      INTEGER KER, N
+      INTEGER J, JP1, K, L, M, NM1, NP1
+      REAL B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
+      REAL SPMPAR
+      REAL CPABS
 C-----------------------------------------------------------------------
 C
 C     ABSTRACT
@@ -31161,6 +32026,9 @@ C
       END SUBROUTINE CCOPY
 
       SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
+      IMPLICIT NONE
+      INTEGER INCX, INCY, N
+      INTEGER I, IIX, IIY, M, MP1, NS
 C
 C                EXTENDED B L A S  SUBPROGRAM
 C
@@ -31777,6 +32645,7 @@ C
           END SUBROUTINE SROTM
 
       SUBROUTINE DROTMG (DD1,DD2,DX1,DY1,DPARAM)
+      IMPLICIT NONE
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 C     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
@@ -31927,6 +32796,9 @@ C
       END SUBROUTINE DROTMG
 
       SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
+      IMPLICIT NONE
+      INTEGER INCX, INCY, N
+      INTEGER I, KX, KY, NSTEPS
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 C
@@ -32176,6 +33048,7 @@ C
       END FUNCTION CDOTC
 
       COMPLEX FUNCTION CDOTU(N,CX,INCX,CY,INCY)
+      IMPLICIT NONE
 C
 C     FORMS THE DOT PRODUCT OF TWO VECTORS.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -34459,6 +35332,12 @@ C
       END SUBROUTINE CKPROD
 
       SUBROUTINE RNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, N
+      REAL AE, RE
+      INTEGER I, IMAX, M0, M1, M2, M3, M4, M5
+      REAL EPS, RERR
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C          UPPER AND LOWER BOUNDS OF THE RANK OF A REAL MATRIX
@@ -34506,6 +35385,9 @@ C
       END SUBROUTINE RNK
 
       SUBROUTINE DRNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, N
+      INTEGER I, IMAX, M0, M1, M2, M3, M4, M5
 C-----------------------------------------------------------------------
 C
 C              UPPER AND LOWER BOUNDS OF THE RANK OF A
@@ -34556,6 +35438,12 @@ C
       END SUBROUTINE DRNK
 
       SUBROUTINE CROUT(MO,N,M,A,KA,B,KB,D,INDEX,TEMP)
+      IMPLICIT NONE
+      INTEGER INDEX, KA, KB, M, MO, N
+      REAL A, B, D, TEMP
+      INTEGER I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, NMJ
+     x, NMK
+      REAL P, T
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 C-----------------------------------------------------------------------
@@ -34750,6 +35638,12 @@ C
       END SUBROUTINE CROUT
 
       SUBROUTINE KROUT(MO,N,M,A,KA,B,KB,IERR,INDEX,TEMP)
+      IMPLICIT NONE
+      INTEGER IERR, INDEX, KA, KB, M, MO, N
+      REAL A, B, TEMP
+      INTEGER I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, NMJ
+     x, NMK
+      REAL D, P, T
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 C-----------------------------------------------------------------------
@@ -34960,6 +35854,7 @@ C
       END SUBROUTINE KROUT
 
       SUBROUTINE DEC (N, NDIM, A, IP, IER)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
 C INPUT..
@@ -35029,6 +35924,7 @@ C  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
       END SUBROUTINE DEC
 
       SUBROUTINE SOL (N, NDIM, A, B, IP)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C SOLUTION OF LINEAR SYSTEM, A*X = B .
 C INPUT..
@@ -35073,6 +35969,11 @@ C  BACK SOLVE. ---------------------------------------------------------
       END SUBROUTINE SOL
 
       SUBROUTINE NPIVOT (N, M, A, KA, B, KB, D, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N
+      REAL D
+      INTEGER J, JL, K, KL, L, MAXB
+      REAL PIVOT, T
 C-----------------------------------------------------------------------
 C     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
 C-----------------------------------------------------------------------
@@ -35125,6 +36026,10 @@ C
       END SUBROUTINE NPIVOT
 
       SUBROUTINE SLV (N, M, A, KA, B, KB, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N
+      INTEGER I, IP1, J, JP1, K, L, NM1
+      REAL P, SUM, T
       REAL A(KA,N), B(KB,M)
 C     ------------------------------------------------------------------
 C     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
@@ -35213,6 +36118,9 @@ C
       END SUBROUTINE SLV
 
       SUBROUTINE DPSLV (N, M, A, KA, B, KB, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N
+      INTEGER I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION A(KA,N), B(KB,M), P, T
 C     ------------------------------------------------------------------
 C     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
@@ -35341,6 +36249,9 @@ C
       END SUBROUTINE MSLV
 
       SUBROUTINE MSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 C     AND SOLVING REAL EQUATIONS
@@ -36051,6 +36962,9 @@ C
       END SUBROUTINE SGEDI
 
       SUBROUTINE DMSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J, JOB
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
@@ -36089,6 +37003,9 @@ C
       END SUBROUTINE DMSLV
 
       SUBROUTINE DMSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
@@ -36128,6 +37045,7 @@ C
       END SUBROUTINE DMSLV1
 
       SUBROUTINE DGECO(A,LDA,N,IPVT,RCOND,Z)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*)
       DOUBLE PRECISION A(LDA,*),Z(*)
       DOUBLE PRECISION RCOND
@@ -36546,6 +37464,7 @@ C
       END SUBROUTINE DGESL
 
       SUBROUTINE DGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
+      IMPLICIT NONE
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),DET(2),WORK(*)
 C
@@ -36675,6 +37594,8 @@ C
       END SUBROUTINE DGEDI
 
       SUBROUTINE ARCECO(N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, N, NMBLKS
 C
 C***************************************************************
 C
@@ -36813,6 +37734,10 @@ C**********************************************************************
       END SUBROUTINE ARCECO
 
       SUBROUTINE ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, MTRSTR, N, NMBLKS
+      INTEGER INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K, NCLBLK
+     x, NCLPIV, NOVRLP, NRWBK2, NRWBLK, NRWPIV
 C
 C***************************************************************
 C
@@ -37064,6 +37989,9 @@ C
 
       SUBROUTINE ARCEPR(BLOCK, NRWBLK, NCLBLK, NRWPIV, PIVOT, PIVMAX,
      * IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, NCLBLK, NRWBLK, NRWPIV
+      INTEGER I1, J, J1, JPLUS1, L1, MAX
 C
 C***************************************************************
 C
@@ -37170,6 +38098,9 @@ C
 
       SUBROUTINE ARCEPC(TOPBLK, NRWTOP, NOVRLP, BOTBLK, NRWBOT, NCLPIV,
      * PIVOT, PIVMAX, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, NCLPIV, NOVRLP, NRWBOT, NRWTOP
+      INTEGER I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
 C
 C***************************************************************
 C
@@ -37279,6 +38210,10 @@ C
       END SUBROUTINE ARCEPC
 
       SUBROUTINE ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
+      IMPLICIT NONE
+      INTEGER MTRSTR, NMBLKS
+      INTEGER INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK
+     x, NRWPIV
 C
 C***************************************************************
 C
@@ -37498,6 +38433,9 @@ C
       END SUBROUTINE ARCESL
 
       SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
+      IMPLICIT NONE
+      INTEGER NCLPIV, NOVRLP, NRWBLK
+      INTEGER I, IPLUSL, J, JPLUSL, L, LONG
 C
 C***************************************************************
 C
@@ -37524,6 +38462,9 @@ C
       END SUBROUTINE ARCEFS
 
       SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
+      IMPLICIT NONE
+      INTEGER NCLPIV, NRWBLK
+      INTEGER J, L, NCLPVL
 C
 C***************************************************************
 C
@@ -37545,6 +38486,9 @@ C
       END SUBROUTINE ARCEFM
 
       SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
+      IMPLICIT NONE
+      INTEGER NRWBLK, NRWPIV
+      INTEGER I, IPLUS1, L
 C
 C***************************************************************
 C
@@ -37574,6 +38518,9 @@ C
       END SUBROUTINE ARCEFE
 
       SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
+      IMPLICIT NONE
+      INTEGER NCLBLK, NRWBLK, NRWPIV
+      INTEGER J, JMIN1, L, NJ
 C
 C***************************************************************
 C
@@ -37598,6 +38545,9 @@ C
       END SUBROUTINE ARCEBS
 
       SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
+      IMPLICIT NONE
+      INTEGER NCLBLK, NRWBLK, NRWPIV
+      INTEGER J, L, NRWPV1
 C
 C***************************************************************
 C
@@ -37619,6 +38569,9 @@ C
       END SUBROUTINE ARCEBM
 
       SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
+      IMPLICIT NONE
+      INTEGER NCLPIV, NOVRLP, NRWBLK
+      INTEGER I, J, J1, JPLUS1, NJ
 C
 C***************************************************************
 C
@@ -37652,6 +38605,8 @@ C
       END SUBROUTINE ARCEBE
 
       SUBROUTINE BTSLV(MO, M, N, A, B, C, X, IP, IERR)
+      IMPLICIT NONE
+      INTEGER IERR
       INTEGER MO, M , N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), X(*)
 C
@@ -37668,6 +38623,7 @@ C
       END SUBROUTINE BTSLV
 
       SUBROUTINE DECBT (M, N, A, B, C, IP, IER)
+      IMPLICIT NONE
       INTEGER M, N, IP(M,N), IER
       REAL A(M,M,N), B(M,M,N), C(M,M,N)
 C-----------------------------------------------------------------------
@@ -37778,6 +38734,8 @@ C-----------------------  END OF SUBROUTINE DECBT  ---------------------
       END SUBROUTINE DECBT
 
       SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
+      IMPLICIT NONE
+      INTEGER KB, KP1
       INTEGER M, N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), Y(M,N)
 C-----------------------------------------------------------------------
@@ -37844,6 +38802,9 @@ C-----------------------  END OF SUBROUTINE SOLBT  ---------------------
       END SUBROUTINE SOLBT
 
       SUBROUTINE SMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KB, M, MO, N
+      INTEGER J, JOB
 C     ------------------
       REAL A(*),B(*)
       REAL DET(2),RCOND,T,WK(N)
@@ -37879,6 +38840,7 @@ C
       END SUBROUTINE SMSLV
 
       SUBROUTINE SSPCO(AP,N,KPVT,RCOND,Z)
+      IMPLICIT NONE
       INTEGER N,KPVT(*)
       REAL AP(*),Z(*)
       REAL RCOND
@@ -38165,6 +39127,7 @@ C
       END SUBROUTINE SSPCO
 
       SUBROUTINE SSPFA(AP,N,KPVT,INFO)
+      IMPLICIT NONE
       INTEGER N,KPVT(*),INFO
       REAL AP(*)
 C
@@ -38430,6 +39393,7 @@ C
       END SUBROUTINE SSPFA
 
       SUBROUTINE SSPSL(AP,N,KPVT,B)
+      IMPLICIT NONE
       INTEGER N,KPVT(*)
       REAL AP(*),B(*)
 C
@@ -38611,6 +39575,7 @@ C
       END SUBROUTINE SSPSL
 
       SUBROUTINE SSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
+      IMPLICIT NONE
       INTEGER N,JOB
       REAL AP(*),WORK(*)
       REAL DET(2)
@@ -39865,6 +40830,9 @@ C
       END SUBROUTINE DSPDI
 
       SUBROUTINE PCHOL (MO,N,M,A,B,KB,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KB, M, MO, N
+      INTEGER J
 C     -----------------
       REAL A(*), B(*), D(2)
       INTEGER ONEJ
@@ -39890,6 +40858,7 @@ C
       END SUBROUTINE PCHOL
 
       SUBROUTINE SPPFA(AP,N,INFO)
+      IMPLICIT NONE
       INTEGER N,INFO
       REAL AP(*)
 C
@@ -39980,6 +40949,7 @@ C     ......EXIT
       END SUBROUTINE SPPFA
 
       SUBROUTINE SPPSL(AP,N,B)
+      IMPLICIT NONE
       INTEGER N
       REAL AP(*),B(*)
 C
@@ -40047,6 +41017,7 @@ C
       END SUBROUTINE SPPSL
 
       SUBROUTINE SPPDI(AP,N,DET,JOB)
+      IMPLICIT NONE
       INTEGER N,JOB
       REAL AP(*)
       REAL DET(2)
@@ -40491,6 +41462,10 @@ C
       END SUBROUTINE DPPDI
 
       SUBROUTINE TOPLX (A, B, X, N, G, H, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER J, K, L, M, MAX, MP1, NML, NPL
+      REAL C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C-----------------------------------------------------------------------
 C            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
 C
@@ -40575,6 +41550,9 @@ C
       END SUBROUTINE TOPLX
 
       SUBROUTINE DTOPLX (A, B, X, N, G, H, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER J, K, L, M, MAX, MP1, NML, NPL
 C-----------------------------------------------------------------------
 C            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
 C
@@ -40701,6 +41679,9 @@ C
       END SUBROUTINE CMSLV
 
       SUBROUTINE CMSLV1 (MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
+      INTEGER J
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 C     AND SOLVING COMPLEX EQUATIONS
@@ -40740,6 +41721,9 @@ C
       END SUBROUTINE CMSLV1
 
       SUBROUTINE CSLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, MO, N
+      INTEGER I, IR
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
 C     ******************************************************************
@@ -40770,6 +41754,11 @@ C
       END SUBROUTINE CSLVMP
 
       SUBROUTINE CLUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
+      IMPLICIT NONE
+      INTEGER IND, KA, KQ, N
+      INTEGER I, J
+      REAL EPS, EPS2, RAT, RATIO, RNRM, XNRM
+      REAL SPMPAR
 C ----------------------------------------------------------------------
 C     PURPOSE
 C       GIVEN AN APPROXIMATE SOLUTION X OF A COMPLEX SYSTEM AX = B
@@ -41413,6 +42402,8 @@ C
       END SUBROUTINE CGEDI
 
       SUBROUTINE DCMSLV (MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, MO, N
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     COMPLEX MATRICES AND SOLVING DOUBLE PRECISION COMPLEX EQUATIONS
@@ -41446,6 +42437,9 @@ C
       END SUBROUTINE DCMSLV
 
       SUBROUTINE DCFACT (AR, AI, KA, N, IPVT, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
+      INTEGER I, J, K, KP1, L, NM1
 C-----------------------------------------------------------------------
 C     DECOMPOSES A COMPLEX MATRIX BY PARTIAL PIVOT GAUSS ELIMINATION
 C-----------------------------------------------------------------------
@@ -41549,6 +42543,9 @@ C
       END SUBROUTINE DCFACT
 
       SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
+      IMPLICIT NONE
+      INTEGER KA, KB, M, N
+      INTEGER I, J, K, KM1, KP1, L, NM1
 C-----------------------------------------------------------------------
 C     SOLUTION OF THE SYSTEM OF M EQUATIONS A*X = B USING THE
 C     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT BE
@@ -41637,6 +42634,9 @@ C
       END SUBROUTINE DCSOL
 
       SUBROUTINE DCMINV (AR, AI, KA, N, IPVT, TEMP)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, IP1, J, JB, K, KP1, L, NM1, NMI, NMK, NP1
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE INVERSE OF A MATRIX A USING THE LU
 C     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT
@@ -43200,6 +44200,12 @@ C           ...EXIT
       END SUBROUTINE CSVDC
 
       FUNCTION DET(A,KA,N,X)
+      IMPLICIT NONE
+      INTEGER KA, N
+      REAL A, X
+      INTEGER I, J, K, KP1, L, NM1
+      REAL C, PIVOT, S
+      REAL DET
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -43266,6 +44272,9 @@ C
       END FUNCTION DET
 
       DOUBLE PRECISION FUNCTION DPDET(A,KA,N,X)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, J, K, KP1, L, NM1
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -43333,6 +44342,9 @@ C
       END FUNCTION DPDET
 
       COMPLEX FUNCTION CDET(A,KA,N,X)
+      IMPLICIT NONE
+      INTEGER KA, N
+      INTEGER I, J, K, KP1, L, NM1
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -43403,6 +44415,9 @@ C
       END FUNCTION CDET
 
       SUBROUTINE ABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, MO, N, NA, NB, NC
+      INTEGER IU, IV, IW
       REAL A(NA,M), B(NB,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
 C     ABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -43481,6 +44496,9 @@ C ----------------------------------------------------------------------
       END SUBROUTINE ABSLV
 
       SUBROUTINE ABSLV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
+      INTEGER I, J, K
 C ----------------------------------------------------------------------
 C     ABSLV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -43593,6 +44611,8 @@ C
       END SUBROUTINE ABSLV1
 
       SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+      IMPLICIT NONE
+      INTEGER IP1
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. SCHUR
 C     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH TRANSPOSE(Q)*H*Q
@@ -43866,6 +44886,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       END SUBROUTINE SCHUR
 
       SUBROUTINE SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      IMPLICIT NONE
 C     ------------------------------------------------------------------
 C     SHRSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 C     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -43980,6 +45001,9 @@ C
       END SUBROUTINE SHRSLV
 
       SUBROUTINE DABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, MO, N, NA, NB, NC
+      INTEGER IU, IV, IW
       DOUBLE PRECISION A(NA,M), B(NB,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
 C     DABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -44058,6 +45082,9 @@ C ----------------------------------------------------------------------
       END SUBROUTINE DABSLV
 
       SUBROUTINE DABSV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
+      INTEGER I, J, K
 C ----------------------------------------------------------------------
 C     DABSV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -44170,6 +45197,8 @@ C
       END SUBROUTINE DABSV1
 
       SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+      IMPLICIT NONE
+      INTEGER IP1
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. DSCHUR
 C     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH  TRANSPOSE(Q)*H*Q
@@ -44443,6 +45472,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       END SUBROUTINE DSCHUR
 
       SUBROUTINE DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
+      IMPLICIT NONE
 C     ------------------------------------------------------------------
 C     DSHSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 C     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -44557,6 +45587,9 @@ C
       END SUBROUTINE DSHSLV
 
       SUBROUTINE TASLV (MO,N,A,NA,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, N, NA, NC
+      INTEGER IW
       REAL A(NA,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
 C     TASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -44615,6 +45648,9 @@ C ----------------------------------------------------------------------
       END SUBROUTINE TASLV
 
       SUBROUTINE TASLV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, N, NA, NC, NU
+      INTEGER I, J, K
 C ----------------------------------------------------------------------
 C     TASLV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -44719,6 +45755,7 @@ C
       END SUBROUTINE TASLV1
 
       SUBROUTINE SYMSLV (A,C,N,NA,NC,IERR)
+      IMPLICIT NONE
 C ----------------------------------------------------------------------
 C     SYMSLV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -44854,6 +45891,9 @@ C
       END SUBROUTINE SYMSLV
 
       SUBROUTINE DTASLV (MO,N,A,NA,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, N, NA, NC
+      INTEGER IW
       DOUBLE PRECISION A(NA,N), C(NC,N), WK(*)
 C ----------------------------------------------------------------------
 C     DTASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -44912,6 +45952,9 @@ C ----------------------------------------------------------------------
       END SUBROUTINE DTASLV
 
       SUBROUTINE DTASV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, N, NA, NC, NU
+      INTEGER I, J, K
 C ----------------------------------------------------------------------
 C     DTASV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -45016,6 +46059,7 @@ C
       END SUBROUTINE DTASV1
 
       SUBROUTINE DSYMSV (A,C,N,NA,NC,IERR)
+      IMPLICIT NONE
 C ----------------------------------------------------------------------
 C     DSYMSV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -45152,6 +46196,7 @@ C
 
       SUBROUTINE SQUINT(NM, N, A, B, C, IGUESS, S, WORK, NW, TOL,
      * MAXITS, IERR)
+      IMPLICIT NONE
 C
 C
 C     SUBROUTINE SQUINT BREAKS DOWN THE WORK ARRAY  WORK  INTO
@@ -45251,6 +46296,7 @@ C
 
       SUBROUTINE SQUIN2(NM, N, A, B, C, IGUESS, S, L, U, V, Z, R, XOLD,
      * EYE, TEMP, NW, TOL, MAXITS, IERR)
+      IMPLICIT NONE
 C
 C     SUBROUTINE SQUIN2 FINDS A RIGHT SOLVENT OF THE MATRIX
 C     EQUATION AX**2 + BX + C = 0.
@@ -45498,6 +46544,7 @@ C     ********** ERROR RETURNS **********
       END SUBROUTINE SQUIN2
 
       SUBROUTINE CQZHES(NM, N, A, B, MATS, Z, F, G, H)
+      IMPLICIT NONE
 C
 C
 C     SUBROUTINE CQZHES IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -45707,6 +46754,7 @@ C     ********** ZERO B(L+1,L) **********
       END SUBROUTINE CQZHES
 
       SUBROUTINE CQZIT(NM, N, A, B, EPS1, MATS, Z, F, IERR)
+      IMPLICIT NONE
 C
 C
 C     SUBROUTINE CQZIT IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -45955,6 +47003,7 @@ C     ********** SAVE EPSB FOR USE BY CQZVEC **********
       END SUBROUTINE CQZIT
 
       SUBROUTINE TRISLV(NM, N, U, V, L, F, TEMP, IERR)
+      IMPLICIT NONE
 C
 C
 C     SUBROUTINE TRISLV BACKSOLVES A SYSTEM OF THE FORM
@@ -46054,6 +47103,10 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
       END SUBROUTINE TRISLV
 
       SUBROUTINE MEXP (A, KA, N, Z, KZ, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KZ, N
+      INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP6
+      REAL ANORM, ANORM1, FACTOR, P, Q, S, S1
       REAL A(KA,N),Z(KZ,N),WK(N,*),C(8)
 C ----------------------------------------------------------------------
 C     MEXP COMPUTES EXP(A) AND STORES IT IN Z WHERE A IS A MATRIX
@@ -46202,6 +47255,9 @@ C
       END SUBROUTINE MEXP
 
       SUBROUTINE DMEXP (A, KA, N, Z, KZ, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KZ, N
+      INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
       DOUBLE PRECISION A(KA,N),Z(KZ,N),WK(N,*)
       DOUBLE PRECISION ANORM,ANORM1,C(12),FACTOR,P,Q,S,S1
 C ----------------------------------------------------------------------
@@ -46359,6 +47415,11 @@ C
       END SUBROUTINE DMEXP
 
       SUBROUTINE LE (ROWK,N,B,C,D,IP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
+     x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+      REAL BK, C1, CJ, CK, DKJ, ZERO
 C     ******************************************************************
 C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
 C     ******************************************************************
@@ -46522,6 +47583,10 @@ C
       END SUBROUTINE LE
 
       SUBROUTINE DPLE (ROWK,N,B,C,D,IP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
+     x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
 C     ******************************************************************
 C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
 C     ******************************************************************
@@ -46686,6 +47751,11 @@ C
       END SUBROUTINE DPLE
 
       SUBROUTINE CLE (ROWK,N,B,C,D,IP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
+     x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+      REAL S, SI
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH REDUCED STORAGE
 C     ******************************************************************
@@ -47948,6 +49018,9 @@ C
       END SUBROUTINE BIMAG
 
       SUBROUTINE BCVRC (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+      INTEGER I, J, JA, JB, JC, JMAX, K, NUM
 C-----------------------------------------------------------------------
 C        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
 C-----------------------------------------------------------------------
@@ -50086,6 +51159,10 @@ C
       END SUBROUTINE CBTPD1
 
       REAL FUNCTION BNRM (A, KA, M, N, ML, MU)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, J, NUM
+      REAL SUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                      REAL BANDED MATRIX A
@@ -50105,6 +51182,10 @@ C
       END FUNCTION BNRM
 
       REAL FUNCTION B1NRM (A, KA, M, N, ML, MU)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
+      REAL SASUM
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A BANDED MATRIX A
 C-----------------------------------------------------------------------
@@ -50155,6 +51236,9 @@ C
       END FUNCTION B1NRM
 
       DOUBLE PRECISION FUNCTION DBNRM (A, KA, M, N, ML, MU)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, J, NUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                DOUBLE PRECISION BANDED MATRIX A
@@ -50175,6 +51259,9 @@ C
       END FUNCTION DBNRM
 
       DOUBLE PRECISION FUNCTION DB1NRM (A, KA, M, N, ML, MU)
+      IMPLICIT NONE
+      INTEGER KA, M, ML, MU, N
+      INTEGER I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A DOUBLE PRECISION
 C                            BANDED MATRIX A
@@ -50700,6 +51787,8 @@ C
       END SUBROUTINE SNBSL
 
       SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -50779,6 +51868,8 @@ C
       END SUBROUTINE DBSLV
 
       SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -50858,6 +51949,10 @@ C
       END SUBROUTINE DBSLV1
 
       SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
+      IMPLICIT NONE
+      INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1
+     x, MP, N1
+      INTEGER IDAMAX
 C ----------------------------------------------------------------------
 C
 C               DBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
@@ -51028,6 +52123,8 @@ C
       END SUBROUTINE DBFA
 
       SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
+      IMPLICIT NONE
+      INTEGER ML1, ML2
 C ----------------------------------------------------------------------
 C
 C     DBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -51163,6 +52260,12 @@ C
       END SUBROUTINE DBSL
 
       SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, ML, MU, N
+      REAL COND
+      INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+      REAL AINORM, ANORM
+      REAL B1NRM
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A BANDED MATRIX A
@@ -51228,6 +52331,9 @@ C
       END SUBROUTINE B1CND
 
       SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, ML, MU, N
+      INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 CONDITION NUMBER OF
 C               A DOUBLE PRECISION BANDED MATRIX A
@@ -52130,6 +53236,9 @@ C
       END SUBROUTINE SCVRC
 
       SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
 C                  COPYING A SPARSE REAL MATRIX
 C-----------------------------------------------------------------------
@@ -52154,6 +53263,9 @@ C
       END SUBROUTINE RSCOPY
 
       SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
 C              COPYING A SPARSE DOUBLE PRECISION MATRIX
 C-----------------------------------------------------------------------
@@ -52178,6 +53290,9 @@ C
       END SUBROUTINE DSCOPY
 
       SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
+      IMPLICIT NONE
+      INTEGER M
+      INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
 C                 COPYING A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
@@ -55784,6 +56899,11 @@ C
       END SUBROUTINE DSPLU
 
       SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      REAL COND
+      INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+      REAL AINORM, ANORM
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A SPARSE MATRIX A
@@ -55845,6 +56965,9 @@ C
       END SUBROUTINE S1CND
 
       SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A SPARSE MATRIX A
@@ -55906,6 +57029,13 @@ C
       END SUBROUTINE DS1CND
 
       SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+      IMPLICIT NONE
+      INTEGER ITER, J, JUMP, KASE, N
+      REAL ANORM
+      INTEGER I, ITMAX, JLAST, L
+      REAL ALTSGN, ANRM, T
+      INTEGER ISAMAX
+      REAL SASUM
       REAL V(N), X(N)
       INTEGER ISGN(N)
 C-----------------------------------------------------------------------
@@ -56063,6 +57193,10 @@ C
       END SUBROUTINE SONEST
 
       SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+      IMPLICIT NONE
+      INTEGER ITER, J, JUMP, KASE, N
+      INTEGER I, ITMAX, JLAST, L
+      INTEGER IDAMAX
       DOUBLE PRECISION ANORM, V(N), X(N)
       INTEGER ISGN(N)
       DOUBLE PRECISION ALTSGN, AN, ANM1, ANRM, T
@@ -58319,6 +59453,7 @@ C
       END SUBROUTINE ORTRAN
 
       SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
       REAL A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -59603,6 +60738,7 @@ C
       END SUBROUTINE DORTRN
 
       SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
+      IMPLICIT NONE
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
       DOUBLE PRECISION A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -61147,6 +62283,9 @@ C     ********** LAST CARD OF IMTQL2 **********
       END SUBROUTINE IMTQL2
 
       SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
+      INTEGER L
 C-----------------------------------------------------------------------
 C                DOUBLE PRECISION COMPUTATION OF THE
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -61165,6 +62304,8 @@ C
       END SUBROUTINE DSEIG
 
       SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C                 DOUBLE PRECISION COMPUTATION OF
 C                 EIGENVALUES AND EIGENVECTORS OF
@@ -61178,6 +62319,7 @@ C
       END SUBROUTINE DSEIGV
 
       SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       DOUBLE PRECISION A(NM,N),D(N),E(N),E2(N)
@@ -61407,6 +62549,7 @@ C     ********** LAST CARD OF DTRED3 **********
       END SUBROUTINE DTRED3
 
       SUBROUTINE DTQL (N,D,E2,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
       DOUBLE PRECISION D(N),E2(N)
@@ -61542,6 +62685,7 @@ C     ********** LAST CARD OF DTQL **********
       END SUBROUTINE DTQL
 
       SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       DOUBLE PRECISION A(NM,N),D(N),E(N),Z(NM,N)
@@ -61681,6 +62825,7 @@ C     ********** LAST CARD OF DTRED2 **********
       END SUBROUTINE DTRED2
 
       SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
+      IMPLICIT NONE
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
       DOUBLE PRECISION D(N),E(N),Z(NM,N)
@@ -63997,6 +65142,10 @@ C     ********** LAST CARD OF DCMQR2 **********
 
       SUBROUTINE CL1(K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES,
      *                  ERROR, WK, IWK)
+      IMPLICIT NONE
+      INTEGER ITER, IWK, K, KODE, KQ, L, M, N
+      REAL ERROR, Q, RES, TOLER, WK, X
+      INTEGER KLM
       DIMENSION Q(KQ,*), X(*), RES(*), WK(*), IWK(*)
 C     -------------------
       KLM = K + L + M
@@ -64007,6 +65156,7 @@ C     -------------------
 
       SUBROUTINE XL1(K, L, M, N, KLMD, KLM2D, NKLMD, N2D,
      * Q, KODE, TOLER, ITER, X, RES, ERROR, CU, IU, S)
+      IMPLICIT NONE
 C
 C THIS SUBROUTINE USES A MODIFICATION OF THE SIMPLEX
 C METHOD OF LINEAR PROGRAMMING TO CALCULATE AN L1 SOLUTION
@@ -64414,6 +65564,11 @@ C PREPARE OUTPUT.
       END SUBROUTINE XL1
 
       SUBROUTINE LLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IWK, KA, KB, M, N, NB
+      REAL A, B, WK
+      INTEGER I, J, NP1
+      REAL RNORM
       DIMENSION A(KA,N),B(KB,NB),WK(N),IWK(N)
       LOGICAL EXIT
 C     --------------
@@ -64440,6 +65595,11 @@ C
       END SUBROUTINE LLSQ
 
       SUBROUTINE LLSQMP(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IWK, KA, KB, M, N, NB
+      REAL A, B, WK
+      INTEGER I, J, LQ, LR, LS, NP1
+      REAL RNORM
       DIMENSION A(KA,N),B(KB,NB),WK(*),IWK(N)
       LOGICAL EXIT
 C     -------------------
@@ -64680,6 +65840,12 @@ C                                       LEAST SQUARES SOLUTION.
       END SUBROUTINE ORSOL
 
       SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
+      IMPLICIT NONE
+      INTEGER IP, KA, M, MS, N
+      REAL A, B, QR, R, S, X
+      INTEGER I, J, K, NP1
+      REAL EPS, EPS2, FOUR, FOURTH, ONE, RAT, RATIO, RNRM2, XNRM2, ZERO
+      REAL SPMPAR
 C ----------------------------------------------------------------------
 C      PURPOSE
 C        GIVEN AN APPROXIMATE LEAST SQUARES SOLUTION X OF A LINEAR
@@ -64790,6 +65956,9 @@ C
       END SUBROUTINE ORIMP
 
       SUBROUTINE DLLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KA, KB, M, N, NB
+      INTEGER I, J, NP1
       DOUBLE PRECISION A(KA,N),B(KB,NB),WK(N)
       INTEGER IWK(N)
       DOUBLE PRECISION RNORM
@@ -64818,6 +65987,9 @@ C
       END SUBROUTINE DLLSQ
 
       SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
+      IMPLICIT NONE
+      INTEGER M, MS, N
+      INTEGER I, J, JP, K, KJ, NN
 C***********************************************************************
 C      IDENTIFICATION
 C        DORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -64923,6 +66095,9 @@ C
       END SUBROUTINE DORTHO
 
       SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
+      IMPLICIT NONE
+      INTEGER M, MS, N
+      INTEGER I, IJ, J, JP, K, NI, NM, NN
 C***********************************************************************
 C      IDENTIFICATION
 C        DORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -65012,6 +66187,12 @@ C                                       LEAST SQUARES SOLUTION.
 
       SUBROUTINE LSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                 KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
+      REAL AE, RE
+      INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
+      REAL EPS, RERR
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -65264,6 +66445,15 @@ C     RETURN
 
       SUBROUTINE U11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IC,IR)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+      REAL A, DB, EB, H, UB, W
+      INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
+     x, KZ, L, LM1, MM, NMK
+      REAL BB, R2, RMIN, SUM, T, TEMP, TN, TT
+      REAL SNRM2
+      REAL SDOT
+      INTEGER ISAMAX
 C
 C       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 C       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -65525,6 +66715,13 @@ C
       END SUBROUTINE U11LS
 
       SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+      IMPLICIT NONE
+      INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+      REAL A, B, H, RNORM, W
+      INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
+      REAL BB, TT
+      REAL SNRM2
+      REAL SDOT
 C
 C        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -65667,6 +66864,15 @@ C
 
       SUBROUTINE U11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                  IR,IC)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+      REAL A, DB, EB, H, UB, W
+      INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
+     x, KZ, L, LM1, MMK, NN
+      REAL BB, R2, RMIN, SUM, T, TEMP, TN, TT
+      REAL SNRM2
+      REAL SDOT
+      INTEGER ISAMAX
 C
 C       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 C       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -65928,6 +67134,13 @@ C
       END SUBROUTINE U11US
 
       SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+      IMPLICIT NONE
+      INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+      REAL A, B, H, RNORM, W
+      INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
+      REAL BB, TT
+      REAL SNRM2
+      REAL SDOT
 C
 C        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -66068,6 +67281,9 @@ C
 
       SUBROUTINE DLSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK,
      *                  KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
+      INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
 C-----------------------------------------------------------------------
 C
 C              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -66322,6 +67538,11 @@ C     RETURN
 
       SUBROUTINE DU11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IC,IR)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+      INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
+     x, KZ, L, LM1, MM, NMK
+      INTEGER IDAMAX
 C
 C       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 C       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -66585,6 +67806,9 @@ C
       END SUBROUTINE DU11LS
 
       SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+      IMPLICIT NONE
+      INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+      INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
 C
 C        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -66729,6 +67953,11 @@ C
 
       SUBROUTINE DU11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB,
      *                   IR,IC)
+      IMPLICIT NONE
+      INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+      INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
+     x, KZ, L, LM1, MMK, NN
+      INTEGER IDAMAX
 C
 C       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 C       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -66992,6 +68221,9 @@ C
       END SUBROUTINE DU11US
 
       SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+      IMPLICIT NONE
+      INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+      INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
 C
 C        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -67133,6 +68365,11 @@ C
       END SUBROUTINE DU12US
 
       SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+      IMPLICIT NONE
+      INTEGER K, M, MDA, MDB, N, NB
+      REAL A, B, G, H, RNORM, TAU
+      INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+      REAL FACTOR, HMAX, SM1, TMP, Z
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M)),RNORM(NB),H(N),G(N),IP(N)
 C
@@ -67375,6 +68612,11 @@ C
       END SUBROUTINE HFTI
 
       SUBROUTINE HFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, K, M, MDA, MDB, N, NB
+      REAL A, B, D, G, H, RNORM, TAU
+      INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+      REAL FACTOR, HMAX, SM1, TMP, Z
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DIMENSION D(L) WHERE L = MIN(M,N)
@@ -67645,6 +68887,11 @@ C
       END SUBROUTINE HFTI2
 
       SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+      IMPLICIT NONE
+      INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+      REAL C, U, UP
+      INTEGER I, I2, I3, I4, INCR, J
+      REAL CL, D, SM1
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 C     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -67729,6 +68976,9 @@ C
       END SUBROUTINE H12
 
       SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+      IMPLICIT NONE
+      INTEGER K, M, MDA, MDB, N, NB
+      INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
@@ -67973,6 +69223,9 @@ C
       END SUBROUTINE DHFTI
 
       SUBROUTINE DHFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, K, M, MDA, MDB, N, NB
+      INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DOUBLE PRECISION D(L) WHERE L = MIN(M,N)
@@ -68244,6 +69497,9 @@ C
       END SUBROUTINE DHFTI2
 
       SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+      IMPLICIT NONE
+      INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+      INTEGER I, I2, I3, I4, INCR, J
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 C     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -68328,6 +69584,18 @@ C
 
       SUBROUTINE LSEI(W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML,
      * MODE, WS, IP)
+      IMPLICIT NONE
+      INTEGER MA, MDW, ME, MG, MODE, N
+      REAL RNORME, RNORML
+      INTEGER I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST, LINK
+     x, M, MAPKE1, MDEQC, MEND, MEP1, N1, N2, NEXT, NLINK, NOPT, NP1
+     x, NTIMES
+      REAL ENORM, FNORM, GAM, HALF, ONE, RB, RN, RNMAX, SIZE, SN, SNMAX
+     x, SRELPR, T, TAU, UJ, UP, VJ, XNORM, XNRME, ZERO
+      REAL SNRM2
+      REAL SASUM
+      REAL SDOT
+      REAL SPMPAR
 C
 C     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),
 C     WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)
@@ -68904,6 +70172,17 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
       END SUBROUTINE LSEI
 
       SUBROUTINE LSI(W, MDW, MA, MG, N, PRGOPT, X, RNORM, MODE, WS, IP)
+      IMPLICIT NONE
+      INTEGER MA, MDW, MG, MODE, N
+      REAL RNORM
+      INTEGER I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK, KRM1
+     x, KRP1, L, LAST, LINK, M, MAP1, MDLPDP, MINMAN, N1, N2, N3, NEXT
+     x, NP1
+      REAL ANORM, BLOWUP, EPS, FAC, GAM, HALF, ONE, RB, SRELPR, TAU, TOL
+     x, XNORM, ZERO
+      REAL SASUM
+      REAL SDOT
+      REAL SPMPAR
 C
 C     THIS IS A COMPANION SUBPROGRAM TO LSEI( ).
 C     THE DOCUMENTATION FOR LSEI( ) HAS MORE COMPLETE
@@ -69255,6 +70534,13 @@ C
       END SUBROUTINE LSI
 
       SUBROUTINE LPDP(A, MDA, M, N1, N2, PRGOPT, X, WNORM, MODE, WS, IS)
+      IMPLICIT NONE
+      INTEGER IS, M, MDA, MODE, N1, N2
+      REAL A, PRGOPT, WNORM, WS, X
+      INTEGER I, IW, IX, J, L, MODEW, N, NP1
+      REAL FAC, ONE, RNORM, SC, YNORM, ZERO
+      REAL SNRM2
+      REAL SDOT
 C
 C     DIMENSION A(MDA,N+1),PRGOPT(*),X(N),WS((M+2)*(N+7)),IS(M+N+1),
 C     WHERE N=N1+N2.  THIS IS A SLIGHT OVERESTIMATE FOR WS(*).
@@ -69425,6 +70711,10 @@ C     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
 
       SUBROUTINE WNNLS(W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE,
      * IWORK, WORK)
+      IMPLICIT NONE
+      INTEGER L, MA, MDW, ME, MODE, N
+      REAL RNORM
+      INTEGER L1, L2, L3, L4, L5
 C
 C     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
 C
@@ -69685,6 +70975,19 @@ C
 
       SUBROUTINE WNLSM(W, MDW, MME, MA, N, L, PRGOPT, X, RNORM, MODE,
      * IPIVOT, ITYPE, WD, H, SCALE, Z, TEMP, D)
+      IMPLICIT NONE
+      INTEGER L, MA, MDW, MME, MODE, N
+      REAL RNORM
+      INTEGER I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER, ITMAX
+     x, IWMAX, J, JCON, JJ, JM1, JP, KEY, KRANK, KRP1, L1, LAST, LINK
+     x, LP1, M, ME, MEP1, NEXT, NIV, NIV1, NLINK, NM1, NOPT, NP1, NSOLN
+     x, NSP1, NTIMES
+      REAL ALAMDA, ALPHA, ALSQ, AMAX, BLOWUP, BNORM, EANORM, FAC, ONE
+     x, SM, SRELPR, T, TAU, TWO, WMAX, Z2, ZERO, ZZ
+      REAL SNRM2
+      REAL SASUM
+      REAL SPMPAR
+      INTEGER ISAMAX
 C
 C     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 C     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -70303,6 +71606,14 @@ C
 
       SUBROUTINE WNLIT(W, MDW, M, N, L, IPIVOT, ITYPE, H, SCALE, RNORM,
      * IDOPE, DOPE, DONE)
+      IMPLICIT NONE
+      INTEGER L, M, MDW, N
+      REAL RNORM
+      INTEGER I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1, ITEMP, J
+     x, J1, JJ, JM1, JP, K, KK, KRANK, KRP1, L1, LB, LEND, LP1, MAX, ME
+     x, MEND, MEP1, NIV, NIV1, NP1, NSOLN
+      REAL ALSQ, EANORM, FAC, FACTOR, HBAR, ONE, RN, SN, T, TAU, TENM3
+     x, ZERO
 C
 C     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 C     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -70684,6 +71995,11 @@ C     INTERCHANGES.
 
       SUBROUTINE L2SLV(M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT,
      *                 X, NN, RES, MR, QR, MMPNN, C, IFAULT)
+      IMPLICIT NONE
+      INTEGER IFAULT, L, M, M1, MB, MM, MMPNN, MR, N, N1, NN
+      INTEGER I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4, K5
+     x, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
+      REAL SPMPAR
 C ** PURPOSE **
 C SUBROUTINE L2SLV COMPUTES LEAST SQUARES SOLUTIONS TO OVERDETERMINED
 C AND UNDERDETERMINED SYSTEMS OF LINEAR EQUATIONS.  THE METHOD USED IS
@@ -71094,6 +72410,10 @@ C OF QR WERE SELECTED BY THE PIVOTING SCHEME IN THE COURSE OF THE
 C ORTHOGONAL DECOMPOSITION.
       SUBROUTINE DECOM2(M, N, M1, ETA, TOL, QR, D, N1, IPIVOT, SING,
      * MMPNN)
+      IMPLICIT NONE
+      INTEGER M, M1, MMPNN, N, N1
+      INTEGER IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP, NS
+     x, NSP1
       INTEGER IPIVOT(N)
       REAL C, D(*), DM, DS, ETA, QR(MMPNN,N), RSJ, TOL, TOL2
       DOUBLE PRECISION SUM
@@ -71283,6 +72603,9 @@ C
       SUBROUTINE SOLVE2(M, N, M1, A, B, W, N1, IPIVOT, QR, D,
      * ETA, FAIL, NUMIT, DIGITX,
      * X, RES, WRES, Y1, Y2, Y, F, G, MM, MMPNN)
+      IMPLICIT NONE
+      INTEGER M, M1, MM, MMPNN, N, N1, NUMIT
+      INTEGER I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
       INTEGER IPIVOT(N)
       REAL A(MM,N), B(*), C, D(*), F(*), G(*),
      * QR(MMPNN,N), RES(*), W(M), WRES(*), X(*), Y(*), Y1(*), Y2(*)
@@ -71432,6 +72755,9 @@ C END K-TH ITERATION STEP.
       END SUBROUTINE SOLVE2
 
       SUBROUTINE SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
+      IMPLICIT NONE
+      INTEGER M, M1, MMPNN, N1
+      INTEGER J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
 C SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
 C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       REAL C, D(*), F(*), QR(MMPNN,N1), Y(*)
@@ -71497,6 +72823,9 @@ C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       END SUBROUTINE SOLVE3
 
       SUBROUTINE COVAR(N, M1, N1, IPIVOT, C, D, Z, NN)
+      IMPLICIT NONE
+      INTEGER M1, N, N1, NN
+      INTEGER I, J, K, KA, L, N1P1
 C SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
 C STORED IN C, D AND IPIVOT TO COMPUTE THE UNSCALED COVARIANCE MATRIX
 C OF THE LEAST SQUARES COEFFICIENTS.
@@ -71570,6 +72899,8 @@ C PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
 
       SUBROUTINE SPLSQ(M,N,A,IA,JA,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
+      IMPLICIT NONE
+      INTEGER NPI
 C
       INTEGER M,N,ITNLIM,ISTOP
       INTEGER IA(*),JA(*)
@@ -72003,6 +73334,8 @@ C
 
       SUBROUTINE STLSQ(M,N,TA,ITA,JTA,DAMP,U,X,ATOL,BTOL,CONLIM,
      *                 ITNLIM,ISTOP,ITN,ACOND,RNORM,XNORM,W)
+      IMPLICIT NONE
+      INTEGER NPI
 C
       INTEGER M,N,ITNLIM,ISTOP
       INTEGER ITA(*),JTA(*)
@@ -72832,6 +74165,8 @@ C
       END SUBROUTINE BLSQ
 
       SUBROUTINE FMIN(F, A0, B0, X, W, AERR, RERR, ERROR, IND)
+      IMPLICIT NONE
+      INTEGER IND
 C     ******************************************************************
 C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
 C     ******************************************************************
@@ -72999,6 +74334,12 @@ C
       END SUBROUTINE FMIN
 
       SUBROUTINE OPTF (FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
+      IMPLICIT NONE
+      INTEGER IERR, ITER, N
+      REAL FPLS, RERR
+      INTEGER I, ITNCNT, ITNLIM, MO
+      REAL EPS, FSCALE, GRADTL, STEPMX, STEPTL
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C                 INTERFACE TO MINIMIZATION PACKAGE
 C-----------------------------------------------------------------------
@@ -73076,6 +74417,13 @@ C
       SUBROUTINE OPTDRV (MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR,
      *        ITNLIM,ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,GPLS,
      *        IERR,A,G,P,WRK0,WRK1,WRK2)
+      IMPLICIT NONE
+      INTEGER IERR, ITNCNT, ITNLIM, MO, N, NR
+      REAL A, FPLS, FSCALE, G, GPLS, GRADTL, P, RERR, STEPMX, STEPTL
+     x, TYPSIZ, WRK0, WRK1, WRK2, X, XPLS
+      INTEGER I, IAGFLG, ICSCMX, IRETCD, J, JP1, NM1, NS
+      REAL CBRNF, F, FSTACK, RNF, SQRNF, STMX
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C             DRIVER FOR NON-LINEAR OPTIMIZATION PROBLEM
 C-----------------------------------------------------------------------
@@ -73278,6 +74626,11 @@ C
 
       SUBROUTINE OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,
      *                       STEPMX,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ITNLIM, N
+      REAL FSCALE, GRADTL, RERR, STEPMX
+      INTEGER I
+      REAL STPSIZ
 C-----------------------------------------------------------------------
 C                  CHECK INPUT FOR REASONABLENESS
 C-----------------------------------------------------------------------
@@ -73367,6 +74720,11 @@ C
       SUBROUTINE OPSTP(N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR,
      *           GRADTL,STEPTL,TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,
      *           FSTACK,NS,SPTR)
+      IMPLICIT NONE
+      INTEGER ICSCMX, IERR, IRETCD, ITNCNT, ITNLIM, N, NS
+      REAL FPLS, FSCALE, GRADTL, STEPTL
+      INTEGER I, JERR
+      REAL D, GRD, RELSTP, RGX, RSX
 C-----------------------------------------------------------------------
 C            UNCONSTRAINED MINIMIZATION STOPPING CRITERIA
 C-----------------------------------------------------------------------
@@ -73478,6 +74836,11 @@ C
       END SUBROUTINE OPSTP
 
       SUBROUTINE FXDEC (FCN, N, X, FX, R)
+      IMPLICIT NONE
+      INTEGER N
+      REAL FX, R
+      INTEGER I
+      REAL FMINUS, FPLUS, H, XI, XMINUS, XPLUS
 C-----------------------------------------------------------------------
 C     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
 C-----------------------------------------------------------------------
@@ -73506,6 +74869,11 @@ C
       END SUBROUTINE FXDEC
 
       SUBROUTINE SCALEX (MO, X, TYPSIZ, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, N
+      INTEGER I
+      REAL BIG, C, T, XMIN
+      REAL SPMPAR
       REAL X(N), TYPSIZ(N)
 C-----------------------------------------------------------------------
 C     RESCALE THE VARIABLES
@@ -73591,6 +74959,11 @@ C
       END SUBROUTINE LLTSLV
 
       SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
+      IMPLICIT NONE
+      INTEGER N
+      REAL FX, G, R, TYPSIZ, X
+      INTEGER J
+      REAL FPLUS, STEPSZ, XTMPJ
 C-----------------------------------------------------------------------
 C     FIND FORWARD DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
 C     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
@@ -73625,6 +74998,11 @@ C
       END SUBROUTINE FSTOFD
 
       SUBROUTINE FSTOCD (N, X, FCN, TYPSIZ, R, G)
+      IMPLICIT NONE
+      INTEGER N
+      REAL R
+      INTEGER I
+      REAL FMINUS, FPLUS, STEPI, XTEMPI
 C-----------------------------------------------------------------------
 C     FIND CENTRAL DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
 C     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
@@ -73664,6 +75042,13 @@ C
 
       SUBROUTINE LNSRCH(N,X,F,G,P,XPLS,FPLS,FCN,MXTAKE,IRETCD,
      *                  STEPMX,STEPTL,TYPSIZ)
+      IMPLICIT NONE
+      INTEGER IRETCD, N
+      REAL F, FPLS, STEPMX, STEPTL
+      INTEGER I
+      REAL A, B, DISC, PFPLS, PLMBDA, RLN, RMNLMB, SCL, SLN, SLP, T1, T2
+     x, T3, TLMBDA, TMP, W
+      REAL SDOT
 C-----------------------------------------------------------------------
 C             FIND A NEXT NEWTON ITERATE BY LINE SEARCH
 C-----------------------------------------------------------------------
@@ -73803,6 +75188,13 @@ C
 
       SUBROUTINE SECFAC (NR,N,X,G,A,XPLS,GPLS,ITNCNT,TOL,
      *                      NOUPDT,S,Y,W)
+      IMPLICIT NONE
+      INTEGER ITNCNT, N, NR
+      REAL TOL
+      INTEGER I, IM1, J
+      REAL ALP, DEN1, DEN2, SNORM2, SUM, YNRM2
+      REAL SNRM2
+      REAL SDOT
 C-----------------------------------------------------------------------
 C           UPDATE HESSIAN BY THE BFGS FACTORED METHOD
 C-----------------------------------------------------------------------
@@ -73933,6 +75325,10 @@ C
       END SUBROUTINE SECFAC
 
       SUBROUTINE QRUPDT (NR,N,A,U,V)
+      IMPLICIT NONE
+      INTEGER N, NR
+      INTEGER I, II, J, K, KM1
+      REAL R
 C-----------------------------------------------------------------------
 C     FIND AN ORTHOGONAL MATRIX (Q*) AND AN UPPER TRIANGULAR
 C          MATRIX (R*) SUCH THAT (Q*)(R*) = R + U(V+)
@@ -73986,6 +75382,11 @@ C
       END SUBROUTINE QRUPDT
 
       SUBROUTINE JROT (NR,N,H,I,A,B,R)
+      IMPLICIT NONE
+      INTEGER I, N, NR
+      REAL A, B, R
+      INTEGER J
+      REAL C, S, T, Z
 C-----------------------------------------------------------------------
 C         PRE-MULTIPLICATION OF AN UPPER HESSENBERG MATRIX H
 C               BY THE JACOBIAN ROTATION J(I,I+1,A,B)
@@ -74046,6 +75447,7 @@ C
       END SUBROUTINE JROT
 
       SUBROUTINE LMDIFF (FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
+      IMPLICIT NONE
       INTEGER M,N,INFO,LWA
       INTEGER IWA(N)
       REAL EPSFCN,TOL
@@ -74188,6 +75590,7 @@ C
       SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN,
      *                 DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,
      *                 IPVT,QTF,WA1,WA2,WA3,WA4)
+      IMPLICIT NONE
       INTEGER M,N,MAXFEV,MODE,NPRINT,INFO,NFEV,LDFJAC
       INTEGER IPVT(N)
       REAL FTOL,XTOL,GTOL,EPSFCN,FACTOR
@@ -74638,6 +76041,7 @@ C
       END SUBROUTINE LMDIF
 
       REAL FUNCTION ENORM(N,X)
+      IMPLICIT NONE
       INTEGER N
       REAL X(N)
 C     **********
@@ -74744,6 +76148,7 @@ C
       END FUNCTION ENORM
 
       SUBROUTINE DOGLEG(N,R,LR,DIAG,QTB,DELTA,X,WA1,WA2)
+      IMPLICIT NONE
       INTEGER N,LR
       REAL DELTA
       REAL R(LR),DIAG(N),QTB(N),X(N),WA1(N),WA2(N)
@@ -74918,6 +76323,7 @@ C
 
       SUBROUTINE FDJAC1(FCN,N,X,FVEC,FJAC,LDFJAC,IFLAG,ML,MU,EPSFCN,
      *                  WA1,WA2)
+      IMPLICIT NONE
       INTEGER N,LDFJAC,IFLAG,ML,MU
       REAL EPSFCN
       REAL X(N),FVEC(N),FJAC(LDFJAC,N),WA1(N),WA2(N)
@@ -75069,6 +76475,7 @@ C
       END SUBROUTINE FDJAC1
 
       SUBROUTINE FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA)
+      IMPLICIT NONE
       INTEGER M,N,LDFJAC,IFLAG
       REAL EPSFCN
       REAL X(N),FVEC(M),FJAC(LDFJAC,N),WA(M)
@@ -75179,6 +76586,7 @@ C
 
       SUBROUTINE LMPAR(N,R,LDR,IPVT,DIAG,QTB,DELTA,PAR,X,SDIAG,WA1,
      *                 WA2)
+      IMPLICIT NONE
       INTEGER N,LDR
       INTEGER IPVT(N)
       REAL DELTA,PAR
@@ -75441,6 +76849,7 @@ C
       END SUBROUTINE LMPAR
 
       SUBROUTINE QFORM(M,N,Q,LDQ,WA)
+      IMPLICIT NONE
       INTEGER M,N,LDQ
       REAL Q(LDQ,M),WA(M)
 C     **********
@@ -75537,6 +76946,7 @@ C
       END SUBROUTINE QFORM
 
       SUBROUTINE QRFAC(M,N,A,LDA,PIVOT,IPVT,LIPVT,RDIAG,ACNORM,WA)
+      IMPLICIT NONE
       INTEGER M,N,LDA,LIPVT
       INTEGER IPVT(LIPVT)
       LOGICAL PIVOT
@@ -75702,6 +77112,7 @@ C
       END SUBROUTINE QRFAC
 
       SUBROUTINE QRSOLV(N,R,LDR,IPVT,DIAG,QTB,X,SDIAG,WA)
+      IMPLICIT NONE
       INTEGER N,LDR
       INTEGER IPVT(N)
       REAL R(LDR,N),DIAG(N),QTB(N),X(N),SDIAG(N),WA(N)
@@ -75896,6 +77307,7 @@ C
       END SUBROUTINE QRSOLV
 
       SUBROUTINE R1MPYQ(M,N,A,LDA,V,W)
+      IMPLICIT NONE
       INTEGER M,N,LDA
       REAL A(LDA,N),V(N),W(N)
 C     **********
@@ -75989,6 +77401,7 @@ C
       END SUBROUTINE R1MPYQ
 
       SUBROUTINE R1UPDT(M,N,S,LS,U,V,W,SING)
+      IMPLICIT NONE
       INTEGER M,N,LS
       LOGICAL SING
       REAL S(LS),U(M),V(N),W(M)
@@ -76197,6 +77610,12 @@ C
 
       SUBROUTINE SMPLX (A,B0,C,KA,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
+      IMPLICIT NONE
+      INTEGER IBASIS, IND, ITER, IWK, KA, M, MXITER, N0, NUMGE, NUMLE
+      REAL A, B0, BI, C, WK, X, Z
+      INTEGER IP
+      REAL EPS0, RERR, RERRMN, RERRMX
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C     SIMPLEX PROCEDURE FOR SOLVING LINEAR PROGRAMMING PROBLEMS
 C-----------------------------------------------------------------------
@@ -76235,6 +77654,15 @@ C
 
       SUBROUTINE SMPLX1 (A,B0,C,KA,M,N0,IND,IBASIS,R,Z,ITER,MXITER,
      *     EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,BI,XB,Y,BASIS,INDEX)
+      IMPLICIT NONE
+      INTEGER IND, ITER, KA, M, MXITER, N0, NUMGE, NUMLE
+      REAL EPS0, RERR, RERRMN, RERRMX, Z
+      INTEGER I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J
+     x, JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LROW, M0, MCHECK, MS, N
+     x, NPOS, NROW, NS, NSTEP, NUM
+      REAL AMAX, BINORM, BMAX, BMIN, BNORM, CMIN, CONST, EPS, EPSI
+     x, RATIO, RERR1, RMIN, RTOL, S, SGN, SUM, T, TOL, W, XMAX
+      REAL SPMPAR
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -77019,6 +78447,13 @@ C
 
       SUBROUTINE SSPLX (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,X,Z,ITER,MXITER,
      *                       NUMLE,NUMGE,BI,WK,IWK)
+      IMPLICIT NONE
+      INTEGER IBASIS, IND, ITA, ITER, IWK, JTA, M, MXITER, N0, NUMGE
+     x, NUMLE
+      REAL B0, BI, C, TA, WK, X, Z
+      INTEGER IP
+      REAL EPS0, RERR, RERRMN, RERRMX
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C     SIMPLEX PROCEDURE FOR SOLVING LINEAR PROGRAMMING PROBLEMS
 C-----------------------------------------------------------------------
@@ -77059,6 +78494,15 @@ C
       SUBROUTINE SSPLX1 (TA,ITA,JTA,B0,C,M,N0,IND,IBASIS,R,Z,
      1       ITER,MXITER,EPS0,RERRMN,RERRMX,RERR,NUMLE,NUMGE,
      2       BI,XB,Y,BASIS,INDEX)
+      IMPLICIT NONE
+      INTEGER IND, ITER, M, MXITER, N0, NUMGE, NUMLE
+      REAL EPS0, RERR, RERRMN, RERRMX, Z
+      INTEGER I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J
+     x, JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LMAX, LMIN, LROW, M0
+     x, MCHECK, MS, N, NPOS, NS, NSTEP, NUM
+      REAL AMAX, BINORM, BMAX, BMIN, BNORM, CMIN, CONST, EPS, EPSI
+     x, RATIO, RERR1, RMIN, RTOL, S, SGN, SUM, T, TOL, W, XMAX
+      REAL SPMPAR
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -77869,6 +79313,13 @@ C
       END SUBROUTINE SSPLX1
 
       SUBROUTINE CROUT1(A,KA,N,IEND,INDEX,TEMP,JP,IERR)
+      IMPLICIT NONE
+      INTEGER IEND, IERR, INDEX, JP, KA, N
+      REAL A, TEMP
+      INTEGER I, IBEG, IJ, IK, IL, J, JCOL, JJ, K, KCOL, KCOUNT, KJ, KJ0
+     x, KK, KL, KM1, KP1, L, LJ, LJ0, LK, LMIN, MAX, MCOL, NCOL, NK, NM1
+     x, NMJ, NMK, NN
+      REAL C, PMIN, S
 C     ******************************************************************
 C     CROUT PROCEDURE FOR INVERTING MATRICES
 C     ******************************************************************
@@ -78091,6 +79542,9 @@ C
       END SUBROUTINE CROUT1
 
       SUBROUTINE ASSGN (N,A,C,T,IWK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I1, I2, I3, I4, I5, I6
 C     -------------------
 C     SOLUTION OF THE ASSIGNMENT PROBLEM
 C     -------------------
@@ -78109,6 +79563,10 @@ C
 
       SUBROUTINE ASSGN1(N,A,C,T,CH,LC,LR,LZ,NZ,RH,SLC,SLR,
      *                  U,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I, J, K, KSLC, KSLR, L, LJ, LM, M, MAXNUM, MM, NL, NM, NP1
+      INTEGER IPMPAR
       INTEGER A(N,*), C(N), CH(N), LC(N), LR(N), LZ(N),
      *        NZ(N), RH(*), SLC(N), SLR(N), U(*)
       INTEGER H, Q, R, S, T
@@ -78356,6 +79814,11 @@ C ERROR RETURN - INTEGER OVERFLOW OCCURS
       END SUBROUTINE ASSGN1
 
       SUBROUTINE MKP (N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
+      IMPLICIT NONE
+      INTEGER M, N, NUM
+      INTEGER I, ISUMW, J, JJ, JN, JNN, L, LX, LXI, MAXW, MINW, MN, N5
+     x, NP1, NPL
+      REAL AP, AW
 C
 C SUBROUTINE TO SOLVE A 0-1 MULTIPLE KNAPSACK PROBLEM OF N
 C ITEMS (WITH  N .GE. 2) AND  M  KNAPSACKS (WITH  M .GE. 1 ,
@@ -78553,6 +80016,10 @@ C
       SUBROUTINE MKP1 (N, M, P, W, K, BCK, XSTAR, VSTAR, NP1, N5,
      1                 BB, BL, X, XL, B, UBB, LX, LXI,
      2                 F, PBL, Q, V, BS, PS, WS, XS, IWK)
+      IMPLICIT NONE
+      INTEGER M, N, N5, NP1
+      INTEGER I, I1, IBV, IFLAG, II, IP, IP1, IUV, J, JBCK, JJ, K1, KUB
+     x, LB, LI, LJ, LR, LRI, LUB, LUBI, M1, N1
 C
 C MEANING OF THE MAIN INTERNAL VARIABLES AND ARRAYS ...
 C
@@ -78742,6 +80209,9 @@ C
 
       SUBROUTINE SIGMA1 (N,M,P,W,Q,I,B,KUB,UB,NP1,N5,LX,LR,
      *                   BS,PS,WS,XS,IWK)
+      IMPLICIT NONE
+      INTEGER I, KUB, LR, M, N, N5, NP1
+      INTEGER J, JJ, NS
 C
 C SUBROUTINE TO COMPUTE AN UPPER BOUND  UB  ON THE BEST
 C FINAL SOLUTION WHICH CAN BE OBTAINED FROM THE CURRENT
@@ -78786,6 +80256,9 @@ C
 
       SUBROUTINE PI1 (N,M,P,W,Q,I,B,BB,KUB,BL,LB,PBL,V,XL,
      *                NP1,N5,BS,PS,WS,XS,IWK)
+      IMPLICIT NONE
+      INTEGER I, KUB, LB, M, N, N5, NP1
+      INTEGER II, IKUB, J, JB, JBS, JJ, NS
 C
 C SUBROUTINE TO COMPUTE A FEASIBLE SOLUTION TO THE CURRENT
 C PROBLEM. THE SOLUTION IS STORED IN ARRAY  XL , THE
@@ -78879,6 +80352,9 @@ C
 
       SUBROUTINE PARC (I,II,UB,IFLAG,VB,LUB,LJ,LI,F,BB,Q,B,N,M,NP1,
      *                 LX,LXI,LR,LRI,LUBI)
+      IMPLICIT NONE
+      INTEGER I, IFLAG, II, LI, LJ, LR, LRI, LUB, LUBI, M, N, NP1
+      INTEGER I1, IQ, J
 C
 C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
 C
@@ -78924,6 +80400,9 @@ C
       END SUBROUTINE PARC
 
       SUBROUTINE SKNP (NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
+      IMPLICIT NONE
+      INTEGER KUB, N, N5, NP1, NS
+      INTEGER I1, I2, I3, I4, I5
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
 C
@@ -78950,6 +80429,11 @@ C
 
       SUBROUTINE SKNP1 (NS,QS,KUB,VS,N,NP1,PS,WS,XS,D,MIN,
      *                  PBAR,WBAR,ZBAR)
+      IMPLICIT NONE
+      INTEGER KUB, N, NP1, NS
+      INTEGER II, II1, IN, IP, J, J1, JJ, KK, L, LIM, LIM1, LL, LOLD
+     x, MFIRST, MINK, MS, N1, NN
+      REAL A, B, C
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
 C
@@ -79153,6 +80637,12 @@ C
       END SUBROUTINE SKNP1
 
       SUBROUTINE LAINV (MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MO, NUM
+      REAL AERR, C, ERROR, RERR, T, Y
+      INTEGER IER, IERC, NUM1
+      REAL A
+      REAL EXPARG
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE INVERSE LAPLACE TRANSFORM
@@ -79285,6 +80775,11 @@ C
       END SUBROUTINE LAINV
 
       SUBROUTINE ABCON (FUN, C, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, NUM
+      REAL C
+      INTEGER NUM1
+      REAL ETA, X0, XMIN
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
@@ -79352,6 +80847,11 @@ C
       END SUBROUTINE ABCON
 
       SUBROUTINE SRCH (FUN,COND,XL,ETA,X,NUM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, NUM
+      REAL ETA, X, XL
+      INTEGER I, IER, NUM1
+      REAL DX, TOL, X1, X2, XBAR, XM
 C-----------------------------------------------------------------------
 C     SRCH COMPUTES AN UPPER BOUND FOR THE SMALLEST NUMBER X SUCH
 C     THAT A GIVEN CONDITION IS SATISFIED. IT IS ASSUMED THAT THE
@@ -79467,6 +80967,11 @@ C
       END SUBROUTINE SRCH
 
       SUBROUTINE ABCON1 (FUN, C, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, NUM
+      REAL C
+      INTEGER I, NUM1
+      REAL DX, ETA, TOL, X1, X2, XBAR, XM
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
@@ -79590,6 +81095,13 @@ C
       END SUBROUTINE ABCON1
 
       SUBROUTINE ACOND (FUN, X, COND, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, NUM
+      REAL X
+      INTEGER IER, IER1, IER2, IWK, L, M, N, NUM1, NUM2
+      REAL A, AERR, C, ERROR1, ERROR2, RERR, TOL, WK, Y, Z1, Z2
+      REAL ACONDG
+      REAL ACONDF
 C-----------------------------------------------------------------------
 C
 C        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
@@ -79654,6 +81166,10 @@ C
       END SUBROUTINE ACOND
 
       FUNCTION ACONDF (X, Y, C, FUN)
+      IMPLICIT NONE
+      REAL C, X, Y
+      REAL A, B, T
+      REAL ACONDF
 C-----------------------------------------------------------------------
 C        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
 C        ACOND. Y IS A DUMMY VARIABLE.
@@ -79667,6 +81183,10 @@ C
       END FUNCTION ACONDF
 
       FUNCTION ACONDG (X, Y, C, FUN)
+      IMPLICIT NONE
+      REAL C, X, Y
+      REAL A, B, S, T, U, V
+      REAL ACONDG
 C-----------------------------------------------------------------------
 C        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
 C        IN ACOND. Y IS A DUMMY VARIABLE.
@@ -79682,6 +81202,13 @@ C
       END FUNCTION ACONDG
 
       SUBROUTINE XCOND (FUN, X, COND, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, NUM
+      REAL X
+      INTEGER IWK, L, M, N
+      REAL AERR, C, EPSR, ERROR, RERR, T, TOL, WK, Y, Y1, Z
+      REAL XCONDY
+      REAL XCONDX
 C-----------------------------------------------------------------------
 C
 C        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
@@ -79748,6 +81275,10 @@ C
       END SUBROUTINE XCOND
 
       FUNCTION XCONDX (X,Y,C,FUN)
+      IMPLICIT NONE
+      REAL C, X, Y
+      REAL A, B, S, T, U, V
+      REAL XCONDX
 C
 C     REAL PART OF THE INTEGRAND IN XCOND
 C
@@ -79762,6 +81293,10 @@ C
       END FUNCTION XCONDX
 
       FUNCTION XCONDY (X,Y,C,FUN)
+      IMPLICIT NONE
+      REAL C, X, Y
+      REAL A, B, S, T, U, V
+      REAL XCONDY
 C
 C     IMAGINARY PART OF INTEGRAND IN XCOND
 C
@@ -79777,6 +81312,12 @@ C
 
        SUBROUTINE LAINV1(FUN,T,C,EPSRE,EPSAB,RESULT,ESTERR,NUM,
      *   IER)
+      IMPLICIT NONE
+      REAL C, EPSAB, EPSRE, ESTERR, RESULT, T
+      INTEGER MAX
+      REAL A, AIM, AK, ARE, ARG, B, BB, E, EPS, EPSR1, F, FIM, FRE
+     x, PID16, R, S, SI, TOL
+      REAL SPMPAR
 C
 C ......................................................................
 C
@@ -79982,6 +81523,11 @@ C
       END SUBROUTINE LAINV1
 
       SUBROUTINE CQEXT(N,EPSTAB,RESULT,ABSERR,RES3LA,NRES)
+      IMPLICIT NONE
+      REAL ABSERR
+      REAL A1, A2, B1, B2, C1, C2, D1, D2, E1ABS, EPMACH, EPSINF, ERR1
+     x, ERR2, ERR3, ERROR, OFLOW, RES1, RES2
+      REAL SPMPAR
 C
 C 1.        CQEXT
 C           EPSILON ALGORITHM
@@ -80197,6 +81743,11 @@ C
 
       SUBROUTINE QAGI1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,RESULT,ABSERR,
      *                 NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
+      IMPLICIT NONE
+      INTEGER IER, INF, LAST, LENW, LIMIT, NEVAL
+      REAL ABSERR, BOUND, C, EPSABS, EPSREL, RESULT, Y
+      INTEGER L1, L2, L3
+      REAL F
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -80392,6 +81943,18 @@ C
 
       SUBROUTINE QAGIE1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,
      *              ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPLICIT NONE
+      INTEGER IER, INF, IORD, LAST, LIMIT, NEVAL
+      REAL ABSERR, ALIST, BLIST, BOUND, C, ELIST, EPSABS, EPSREL, RESULT
+     x, RLIST, Y
+      INTEGER ID, IERRO, IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+     x, MAXERR, NRES, NRMAX, NUMRL2
+      REAL A1, A2, ABSEPS, AREA, AREA1, AREA12, AREA2, B1, B2, BOUN
+     x, CORREC, DEFAB1, DEFAB2, DEFABS, DRES, EPMACH, ERLARG, ERLAST
+     x, ERRBND, ERRMAX, ERRO12, ERROR1, ERROR2, ERRSUM, ERTEST, OFLOW
+     x, RERR, RES3LA, RESABS, RESEPS, RLIST2, SMALL, T, UFLOW
+      REAL SPMPAR
+      REAL F
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -80863,6 +82426,14 @@ C
 
       SUBROUTINE QK15I1 (F, PHI, Y, C, BOUN, INF, A, B, RESULT, ABSERR,
      *                   RESABS, RESASC, EPMACH, UFLOW)
+      IMPLICIT NONE
+      INTEGER INF
+      REAL A, ABSERR, B, BOUN, C, EPMACH, RESABS, RESASC, RESULT, UFLOW
+     x, Y
+      INTEGER J
+      REAL ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2
+     x, HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
+      REAL F
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -81048,6 +82619,8 @@ C
       END SUBROUTINE QK15I1
 
       SUBROUTINE FFT (C,N,ISN,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ISN, N
       REAL C(*)
 C-----------------------------------------------------------------------
 C     THE COMPLEX ARRAY C OF DIMENSION N IS INTERPRETED BY THE CODE
@@ -81063,6 +82636,8 @@ C-----------------------------------------------------------------------
       END SUBROUTINE FFT
 
       SUBROUTINE FFT1 (A,B,N,ISN,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ISN, N
       REAL A(N), B(N)
 C     ------------
       IF (IABS(ISN) .NE. 1) GO TO 10
@@ -81073,6 +82648,9 @@ C     ------------
       END SUBROUTINE FFT1
 
       SUBROUTINE MFFT (C,N,NDIM,ISN,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ISN, NDIM
+      INTEGER I, ISIGN, NSPAN, NTOT
       REAL C(*)
       INTEGER N(NDIM)
 C-----------------------------------------------------------------------
@@ -81108,6 +82686,9 @@ C
       END SUBROUTINE MFFT
 
       SUBROUTINE MFFT1 (A,B,N,NDIM,ISN,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ISN, NDIM
+      INTEGER I, NSPAN, NTOT
       REAL A(*), B(*)
       INTEGER N(NDIM)
 C     ------------
@@ -81136,6 +82717,15 @@ C
       END SUBROUTINE MFFT1
 
       SUBROUTINE SFFT(A,B,NTOT,N,NSPAN,ISN,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ISN, N, NSPAN, NTOT
+      REAL A, B
+      INTEGER I, II, INC, J, JC, JF, JJ, K, K1, K2, K3, K4, KK, KS
+     x, KSPAN, KSPNN, KT, L, M, MAX, MAXF, MAXN, MAXP, NFAC, NN, NP, NT
+     x, NUM
+      REAL AA, AJ, AJM, AJP, AK, AKM, AKP, AT, BB, BJ, BJM, BJP, BK, BKM
+     x, BKP, BT, C1, C2, C3, C72, CD, CK, RAD, RADF, S1, S120, S2, S3
+     x, S72, SD, SK, U, V
 C  MULTIVARIATE COMPLEX FOURIER TRANSFORM, COMPUTED IN PLACE
 C    USING MIXED-RADIX FAST FOURIER TRANSFORM ALGORITHM.
 C  BY R. C. SINGLETON, STANFORD RESEARCH INSTITUTE, OCT. 1968
@@ -82019,6 +83609,11 @@ C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
 C
       SUBROUTINE SINQF (N,X,WSAVE)
+      IMPLICIT NONE
+      INTEGER N
+      REAL WSAVE, X
+      INTEGER K, KC, NS2
+      REAL XHOLD
       DIMENSION       X(*)       ,WSAVE(*)
       IF (N .EQ. 1) RETURN
       NS2 = N/2
@@ -82086,6 +83681,11 @@ C     WSAVE   CONTAINS INITIALIZATION CALCULATIONS WHICH MUST NOT
 C             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
 C
       SUBROUTINE SINQB (N,X,WSAVE)
+      IMPLICIT NONE
+      INTEGER N
+      REAL WSAVE, X
+      INTEGER K, KC, NS2
+      REAL XHOLD
       DIMENSION       X(*)       ,WSAVE(*)
       IF (N .GT. 1) GO TO 101
       X(1) = 4.*X(1)
@@ -82649,6 +84249,12 @@ C
       END SUBROUTINE RADB5
 
       SUBROUTINE RADBG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
+      IMPLICIT NONE
+      INTEGER IDL1, IDO, IP, L1
+      REAL C1, C2, CC, CH, CH2, WA
+      INTEGER I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, LC
+     x, NBD
+      REAL AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP, TPI
       DIMENSION       CH(IDO,L1,IP)          ,CC(IDO,IP,L1)          ,
      1                C1(IDO,L1,IP)          ,C2(IDL1,IP),
      2                CH2(IDL1,IP)           ,WA(*)
@@ -83250,6 +84856,12 @@ C
       END SUBROUTINE RADF5
 
       SUBROUTINE RADFG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
+      IMPLICIT NONE
+      INTEGER IDL1, IDO, IP, L1
+      REAL C1, C2, CC, CH, CH2, WA
+      INTEGER I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, LC
+     x, NBD
+      REAL AI1, AI2, AR1, AR1H, AR2, AR2H, ARG, DC2, DCP, DS2, DSP, TPI
       DIMENSION       CH(IDO,L1,IP)          ,CC(IDO,IP,L1)          ,
      1                C1(IDO,L1,IP)          ,C2(IDL1,IP),
      2                CH2(IDL1,IP)           ,WA(*)
@@ -83418,6 +85030,9 @@ C
 
       SUBROUTINE CHEBY (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      X                    P, Q, ERROR, IERR, W)
+      IMPLICIT NONE
+      INTEGER IERR, ITNO, L, M, MXITER
+      INTEGER I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
 C     ******************************************************************
 C     RATIONAL CHEBYCHEV APPROXIMATION OF CONTINUOUS FUNCTIONS
 C     ******************************************************************
@@ -83451,6 +85066,9 @@ C     ------------------------------------------------------------------
       SUBROUTINE CHEBY1 (A, B, F, G, PHI, EPS, ITNO, MXITER, L, M,
      1                   P, Q, ERROR, IERR, LP1, MP1, LPM, N, NP1,
      2                   X, XVAL, C, D, ERR, H)
+      IMPLICIT NONE
+      INTEGER IERR, ITNO, L, LP1, LPM, M, MP1, MXITER, N, NP1
+      INTEGER I, II, J, K, KOUNT, LPI
 C     ------------------------------------------------------------------
       DOUBLE PRECISION A, B, F, G, PHI, EPS, ERROR
       DOUBLE PRECISION P(LP1), Q(MP1), X(NP1), XVAL(NP1), C(NP1,NP1),
@@ -83730,6 +85348,9 @@ C
       END SUBROUTINE CHEBY1
 
       SUBROUTINE CERR (T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
+      IMPLICIT NONE
+      INTEGER IERR, L, LP1, M, NP1
+      INTEGER I, II
 C     ------------------------------------------------------------------
 C     COMPUTE THE APPROXIMATION ERROR AT POINT T
 C     ------------------------------------------------------------------
@@ -83772,6 +85393,14 @@ C
       SUBROUTINE ADAPT (F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS,
      * COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT,
      * KDIFF, VALLFT, VALRGT)
+      IMPLICIT NONE
+      INTEGER IERR, KBREAK, KDIFF, KMAX, MO, NDEG, NPIECE, NSMTH
+      INTEGER K, KDIMEN, NDIMEN
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -83854,6 +85483,13 @@ C
       END SUBROUTINE ADAPT
 
       SUBROUTINE ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KDIMEN, KMAX, NDIMEN
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C     THIS ALGORITHM COMPUTES A PIECEWISE POLYNOMIAL APPROXIMATION
 C  OF SPECIFIED SMOOTHNESS, ACCURACY AND DEGREE.  THE INPUT TO THE
@@ -84074,6 +85710,14 @@ C
       END SUBROUTINE ADAPT1
 
       SUBROUTINE ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KDIMEN, KMAX, NDIMEN
+      INTEGER J, K, KBOTH, KLEFT, KRIGHT, LIMSM
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84212,6 +85856,13 @@ C
       END SUBROUTINE ADSET
 
       SUBROUTINE ADTAKE(IERR)
+      IMPLICIT NONE
+      INTEGER IERR
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84291,6 +85942,13 @@ C
       END SUBROUTINE ADTAKE
 
       SUBROUTINE ADCOMP(F)
+      IMPLICIT NONE
+      INTEGER J
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84401,6 +86059,13 @@ C         ADD 50 PERCENT FUDGE FACTOR
       END SUBROUTINE ADCOMP
 
       DOUBLE PRECISION FUNCTION ERRINT(F, FIT, AAA, BBB, POINTS, WEIGHT)
+      IMPLICIT NONE
+      INTEGER J
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84474,6 +86139,15 @@ C              LOOP THROUGH THE REMAINING POINTS
       END FUNCTION ERRINT
 
       SUBROUTINE NEWTON(NL, NR, NI)
+      IMPLICIT NONE
+      INTEGER NI, NL, NR
+      INTEGER IDIF, IPT, IPT2, J, K, NDDX, NL1, NL2, NR1, NR2, NRL, NRLJ
+     x, NRLJ1
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84612,6 +86286,13 @@ C         LOOP THROUGH THE DIFFERENCES (IDIF INDEX)
       END SUBROUTINE NEWTON
 
       DOUBLE PRECISION FUNCTION POLYDD(X)
+      IMPLICIT NONE
+      INTEGER J, K
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84647,6 +86328,12 @@ C
       END FUNCTION POLYDD
 
       SUBROUTINE ADCHK
+      IMPLICIT NONE
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84700,6 +86387,14 @@ C
       END SUBROUTINE ADCHK
 
       SUBROUTINE ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KDIMEN, KMAX, NDIMEN
+      INTEGER K
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C **  THIS PROGRAM PUTS INTERVALS ON THE STACK OR DISCARDS THEM.
@@ -84780,6 +86475,14 @@ C            PUT THE NEW KNOTS IN XKNOTS
       END SUBROUTINE ADPUT
 
       SUBROUTINE ADTRAN(D, POWERS)
+      IMPLICIT NONE
+      INTEGER I, II, J, K, KHI, KOEF, L, LTOP, NI, NI1, NL, NR, NRI
+     x, NRI1, NRL, NRLI, NRLK
+      INTEGER LEFTX, NINTRP
+      INTEGER KNTDIM, LEVEL, NBREAK, NPARDM
+      INTEGER IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK, NPAR
+     x, NSTACK
+      INTEGER KNOTS
 C
 C        ===============================================================
 C
@@ -84913,6 +86616,14 @@ C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       END SUBROUTINE ADTRAN
 
       SUBROUTINE CPSC (F, Z, N, IC, TOL, R, RS, ERR)
+      IMPLICIT NONE
+      INTEGER IC, N
+      REAL ERR, R, TOL
+      INTEGER I, IA, INR, IP, IQ, IS, IT, IW, IX, J, JN, KL, KM, KN, L
+     x, L1, L2, LF, LN, M, NP, NR
+      REAL ANG, B, C, CM, CP, CT, CX, EP6, EPS, EPS0, FAC, FACT, FC, PI
+     x, R1, RA, RE, SC, SF, SP, SR
+      REAL SPMPAR
 C
 C  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
 C
@@ -85151,6 +86862,10 @@ C
       END SUBROUTINE CPSC
 
       SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
+      IMPLICIT NONE
+      INTEGER IC, N
+      INTEGER I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1, L2
+     x, LF, LN, M, MM1, NP, NR
       DOUBLE PRECISION X, Y, TOL, R, RS1(N), RS2(N), ERR(N)
 C
 C  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
@@ -85431,6 +87146,12 @@ C
       END SUBROUTINE DCPSC
 
       FUNCTION TRP(A,N,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      REAL A, X, Y
+      INTEGER I, IL, IR, NM1
+      REAL R
+      REAL TRP
       DIMENSION X(N),Y(N)
 C
       NM1 = N-1
@@ -85614,6 +87335,11 @@ C
       END SUBROUTINE LTRP
 
       SUBROUTINE HTRP (N,X,Y,A,T,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      REAL A, T, X, Y
+      INTEGER I, IBEG, IEND, K
+      REAL DIFF, F, R
 C     ******************************************************************
 C     HERMITE INTERPOLATION
 C     ******************************************************************
@@ -85659,6 +87385,10 @@ C
       END SUBROUTINE HTRP
 
       SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
+      IMPLICIT NONE
+      INTEGER N
+      REAL ALPHA
+      INTEGER I, J, K, NM1
       REAL X(*),A(N),C(N)
       DOUBLE PRECISION XX,R,T(N)
       IF (N.GT.1) GO TO 10
@@ -85683,6 +87413,11 @@ C
       END SUBROUTINE PCOEFF
 
       SUBROUTINE PFIT(ND,NP,X,Y,A,RNORM,PHI,PHIX,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ND, NP
+      REAL RNORM
+      INTEGER K, LA, LB, LS, M, MP1, ND1
+      REAL ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
 C     ******************************************************************
 C     UNWEIGHTED LEAST SQUARES POLYNOMIAL FIT
 C     ******************************************************************
@@ -85820,6 +87555,11 @@ C
       END SUBROUTINE PFIT
 
       SUBROUTINE WPFIT(ND,NP,X,Y,W,A,RNORM,PHI,PHIX,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, ND, NP
+      REAL RNORM
+      INTEGER K, LA, LB, LS, M, MP1, ND1, NW
+      REAL ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
 C     ******************************************************************
 C     WEIGHTED LEAST SQUARES POLYNOMIAL FIT
 C     ******************************************************************
@@ -86266,6 +88006,9 @@ C
       END SUBROUTINE SPLIFT
 
       SUBROUTINE SPFIT (X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, L, M
+      INTEGER J, K, LA, LM1, LQ, LW, N
 C-----------------------------------------------------------------------
 C            WEIGHTED LEAST SQUARES CUBIC SPLINE FITTING
 C-----------------------------------------------------------------------
@@ -86328,6 +88071,10 @@ C
 
       SUBROUTINE CSPFIT (X, Y, M, BREAK, L, XCON, CON, NDER, NC,
      *                   Z, A, B, C, WK, IWK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, L, M, NC
+      INTEGER J, K, LA, LM1, LW, N
+      REAL R
 C-----------------------------------------------------------------------
 C                LEAST SQUARES CUBIC SPLINE FITTING WITH
 C                  EQUALITY AND INEQUALITY CONSTRAINTS
@@ -86406,6 +88153,10 @@ C
       END SUBROUTINE CSPFIT
 
       SUBROUTINE SCOMP (X,Y,A,B,C,N,XI,YI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K
+      REAL DX, XX
 C
 C     ABSTRACT
 C
@@ -86502,6 +88253,10 @@ C
       END SUBROUTINE SCOMP
 
       SUBROUTINE SCOMP1 (X,Y,YP,N,XI,YI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K, NM1
+      REAL A, B, C, D, DX, H, XX
 C
 C     ABSTRACT
 C
@@ -86600,6 +88355,10 @@ C
       END SUBROUTINE SCOMP1
 
       SUBROUTINE SCOMP2 (X,Y,YPP,N,XI,YI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K, NM1
+      REAL H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 C
 C     ABSTRACT
 C
@@ -86701,6 +88460,10 @@ C
       END SUBROUTINE SCOMP2
 
       SUBROUTINE SEVAL (X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K
+      REAL BI, CI, DX, XX
 C
 C     ABSTRACT
 C
@@ -86804,6 +88567,10 @@ C
       END SUBROUTINE SEVAL
 
       SUBROUTINE SEVAL1 (X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K, NM1
+      REAL A, B, C, D, DX, H, XX
 C
 C     ABSTRACT
 C
@@ -86908,6 +88675,10 @@ C
       END SUBROUTINE SEVAL1
 
       SUBROUTINE SEVAL2 (X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N, NI
+      INTEGER I, IL, IR, K, NM1
+      REAL H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 C
 C     ABSTRACT
 C
@@ -87325,6 +89096,10 @@ C
       END FUNCTION CSINT2
 
       SUBROUTINE PDSPL (X, Y, A, B, C, N, T, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER I, J, NM1, NM2, NM3
+      REAL ALPHA, DEL, DEL0, DELI, DELTA, E, H, HI, R, S, SI, W
 C-----------------------------------------------------------------------
 C                PERIODIC CUBIC SPLINE INTERPOLATION
 C-----------------------------------------------------------------------
@@ -87450,6 +89225,10 @@ C
       END SUBROUTINE PDSPL
 
       SUBROUTINE PDFIT (X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, L, M
+      INTEGER J, K, LA, LM1, LW, N
+      REAL R
 C-----------------------------------------------------------------------
 C            LEAST SQUARES PERIODIC CUBIC SPLINE FITTING
 C-----------------------------------------------------------------------
@@ -87540,6 +89319,10 @@ C
       END SUBROUTINE PDFIT
 
       SUBROUTINE PSCMP (X, Y, A, B, C, N, XI, YI, M, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N
+      INTEGER I, IL, IR, J, K
+      REAL DX, H, T, T0, X1, XOLD, XX
 C-----------------------------------------------------------------------
 C              EVALUATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
@@ -87614,6 +89397,10 @@ C
       END SUBROUTINE PSCMP
 
       SUBROUTINE PSEVL (X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N
+      INTEGER I, IL, IR, J, K
+      REAL BI2, CI3, DX, H, T, T0, X1, XOLD, XX
 C-----------------------------------------------------------------------
 C     EVALUATION AND DIFFERENTIATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
@@ -87730,6 +89517,12 @@ C
       END SUBROUTINE CSLOOP
 
       SUBROUTINE CSLOP1 (M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KDX, KX, M, N
+      INTEGER I, IM1, J, L, MM1, MM2
+      REAL ALPHA, DEL, DEL0, DEL1, DELI, DELM, ETA, H, HM, P, R, SI, SM
+     x, SUM, TAU
+      REAL SNRM2
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
 C                    IN N-DIMENSIONAL SPACE
@@ -87887,6 +89680,10 @@ C
       END SUBROUTINE CSLOP1
 
       SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
+      IMPLICIT NONE
+      INTEGER KDX, KX, KZ, L, M, N
+      INTEGER I, IL, IR, J, K
+      REAL A, B, C, D, DT, H, T0, TOLD, W
 C-----------------------------------------------------------------------
 C            EVALUATION OF A CUBIC SPLINE CLOSED CURVE
 C                     IN N-DIMENSIONAL SPACE
@@ -87964,6 +89761,11 @@ C
       END SUBROUTINE LOPCMP
 
       SUBROUTINE LOPDF (M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
+      IMPLICIT NONE
+      INTEGER KDX, KX, M, N
+      REAL TI
+      INTEGER I, IL, IR, J
+      REAL A, B, C, D, DT, H, T0, W
 C-----------------------------------------------------------------------
 C          EVALUATION AND DIFFERENTIATION OF A CUBIC SPLINE
 C                CLOSED CURVE IN N-DIMENSIONAL SPACE
@@ -89636,6 +91438,13 @@ C
       END FUNCTION INTRVL
 
       SUBROUTINE BVAL (T, BCOEF, N, K, X, JDERIV, W, WK)
+      IMPLICIT NONE
+      INTEGER JDERIV, K, N
+      REAL W, X
+      INTEGER I, IMK, IPJ, J, JC, JCMAX, JCMIN, JDRVP1, JJ, KM1, KMJ, L
+     x, NMI, NPK
+      REAL DL, DR, FKMJ
+      INTEGER INTRVL
 C-----------------------------------------------------------------------
 C
 C     BVAL CALCULATES THE VALUE AT X OF THE JDERIV-TH DERIVATIVE
@@ -89803,6 +91612,11 @@ C
       END SUBROUTINE BVAL
 
       SUBROUTINE BVALI (T, BCOEFF, N, K, X, W, WK)
+      IMPLICIT NONE
+      INTEGER K, N
+      REAL W, X
+      INTEGER I, IPK, KP1, NP1, NPK
+      REAL SUM, TLAST, TNEW, XVAL
 C-----------------------------------------------------------------------
 C           INTEGRAL OF A PIECEWISE POLYNOMIAL FROM T(1) TO X
 C                   USING ITS B-SPLINE REPRESENTATION
@@ -89842,6 +91656,12 @@ C
       END SUBROUTINE BVALI
 
       SUBROUTINE BVALI0 (T, TNEW, BCOEF, N, K, X, W, WK)
+      IMPLICIT NONE
+      INTEGER K, N
+      REAL TNEW, W, X
+      INTEGER I, IMK, IPJ, J, JC, JCMIN, JJ, KM1, KMJ, L, M
+      REAL DL, DR, TIPJ
+      INTEGER INTRVL
 C-----------------------------------------------------------------------
 C
 C     BVALI0 CALCULATES THE VALUE AT X OF AN ANTIDERIVATIVE
@@ -89936,6 +91756,10 @@ C
       END SUBROUTINE BVALI0
 
       SUBROUTINE BSPP (T, A, N, K, BREAK, C, L, WK)
+      IMPLICIT NONE
+      INTEGER K, L, N
+      INTEGER I, IL, ILJ, ILKJ, J, JJ, JP1, KM1, KMJ, KP1, LEFT
+      REAL DIFF, R, S, TERM, X
 C-----------------------------------------------------------------------
 C
 C              CONVERSION FROM B-SPLINE REPRESENTATION
@@ -90125,6 +91949,11 @@ C
       END SUBROUTINE PPVAL
 
       SUBROUTINE BSPVB (T, K, JHIGH, J, X, LEFT, BLIST)
+      IMPLICIT NONE
+      INTEGER J, JHIGH, K, LEFT
+      REAL X
+      INTEGER I, IMJ, L
+      REAL S, TERM, TI, TIMJ
 C-----------------------------------------------------------------------
 C
 C     BSPVB CALCULATES THE VALUE OF ALL POSSIBLY NONZERO B-SPLINES
@@ -90182,6 +92011,12 @@ C
       END SUBROUTINE BSPVB
 
       SUBROUTINE BSPVD (T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
+      IMPLICIT NONE
+      INTEGER IDIM, K, LEFT, NDERIV
+      REAL X
+      INTEGER I, IDERIV, IL, J, JJ, JLOW, JP1MID, KP1, KP1MM, L, LDUMMY
+     x, M, MHIGH
+      REAL FACTOR, FKP1MM, SUM
 C-----------------------------------------------------------------------
 C
 C CALCULATES VALUE AND DERIV.S OF ALL B-SPLINES WHICH DO NOT VANISH AT X
@@ -90315,6 +92150,10 @@ C
       END SUBROUTINE BSPVD
 
       SUBROUTINE BSTRP (TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, K, N
+      INTEGER I, ILP1MX, J, JJ, KM1, KPKM2, LEFT, LENQ, NP1
+      REAL TAUI
 C-----------------------------------------------------------------------
 C   THIS ROUTINE PRODUCES THE B-SPLINE COEFF.S BCOEF OF THE PIECEWISE
 C   POLYNOMIAL OF ORDER K WITH KNOTS T(I) (I=1,...,N+K) WHICH HAS THE
@@ -90628,6 +92467,10 @@ C                                A  IS LOWER TRIANGULAR .
       END SUBROUTINE BANSLV
 
       SUBROUTINE BSLSQ (TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, K, N, NTAU
+      INTEGER I, J, JJ, L, LEFT, LEFTMK, MM
+      REAL DW
 C-----------------------------------------------------------------------
 C
 C        BSLSQ PRODUCES THE B-SPLINE COEFFICIENTS OF A PIECEWISE
@@ -90895,6 +92738,10 @@ C
       SUBROUTINE BFIT (BKPT, N, NORD, XDATA, YDATA, NDATA,
      *                 XCONST, YCONST, NDERIV, NCONST,
      *                 MODE, COEFF, RNORM, W, IW)
+      IMPLICIT NONE
+      INTEGER MODE, N, NCONST, NDATA, NORD
+      REAL RNORM
+      INTEGER I1, I2, I3, I7, MDG, MDW, NBKPT
 C-----------------------------------------------------------------------
 C
 C      THIS SUBPROGRAM FITS A PIECE-WISE POLYNOMIAL CURVE
@@ -91131,6 +92978,13 @@ C
       SUBROUTINE BFIT0 (NDATA, XDATA, YDATA, NORD, NBKPT, BKPT,
      1        NCONST, XCONST, YCONST, NDERIV, MODE, COEFF, RNORM,
      2        BF, G, MDG, W, MDW, WORK, IWORK)
+      IMPLICIT NONE
+      INTEGER MDG, MDW, MODE, NBKPT, NCONST, NDATA, NORD
+      REAL RNORM
+      INTEGER I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1, IR
+     x, IROW, ITYPE, IW1, IW2, J, L, LW, M, MT, N, NB, NEQCON, NINCON
+     x, NORDM1, NORDP1, NP1
+      REAL RNORME, XMAX, XMIN, XVAL, YVAL
 C---------------------
       REAL BKPT(NBKPT), XDATA(NDATA), YDATA(NDATA)
       REAL XCONST(*), YCONST(*), COEFF(*)
@@ -91431,6 +93285,11 @@ C                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
       END SUBROUTINE BFIT0
 
       SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)
+      IMPLICIT NONE
+      INTEGER IP, IR, JT, MDG, MT, NB
+      REAL G
+      INTEGER I, IE, IG, IG1, IG2, J, JG, K, KH, L, LP1, MH, MU, NBP1
+      REAL RHO
 C
 C***AUTHOR  LAWSON, C. L., (JPL)
 C           HANSON, R. J., (SNLA)
@@ -91645,6 +93504,11 @@ C                                             ALG. STEP 25
       END SUBROUTINE BNDACC
 
       SUBROUTINE BNDSL (MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IP, IR, MDG, MODE, N, NB
+      REAL G, RNORM, X
+      INTEGER I, I1, I2, IE, II, IRM1, IX, J, JG, L, NP1
+      REAL RSQ, S
 C
 C***AUTHOR  LAWSON, C. L., (JPL)
 C           HANSON, R. J., (SNLA)
@@ -91828,6 +93692,9 @@ C
 
       SUBROUTINE SPFIT2 (X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX,
      *                   YBREAK, NY, F, S, T, WK, NUM, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, KZ, MX, MY, NUM, NX, NY
+      INTEGER I, IMAX, J, L, LD, M, N, NU
 C-----------------------------------------------------------------------
 C
 C            WEIGHTED LEAST SQUARES BICUBIC SPLINE FITTING
@@ -91959,6 +93826,10 @@ C
       END SUBROUTINE SPFIT2
 
       SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
+      IMPLICIT NONE
+      INTEGER KA, KDZ, KZ, M, N
+      INTEGER I, IL, ILJ, ILKJ, J, JJ, JP1, K, KMJ, L, LEFT, MP1, MU
+      REAL DEL, DIFF, R, S, TERM, X
 C-----------------------------------------------------------------------
 C
 C            COMPUTATION OF N CUBIC SPLINES AND THEIR FIRST
@@ -92069,6 +93940,12 @@ C
 
       SUBROUTINE CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, F1, KF1, F2, KF2, F12, KF12)
+      IMPLICIT NONE
+      INTEGER IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, MY, N
+      INTEGER I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
+      REAL A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS
+     x, DT, DX, DY, FI, FIP1, XX, YY
+      INTEGER INTRVL
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -92223,6 +94100,8 @@ C
       END SUBROUTINE CSURF
 
       SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
+      IMPLICIT NONE
+      INTEGER IDER, JDER, KZ, M, MX, MY, N
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -92239,6 +94118,12 @@ C
 
       SUBROUTINE CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                 F, KF, F1, KF1, F2, KF2, F12, KF12)
+      IMPLICIT NONE
+      INTEGER IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, MY, N
+      INTEGER I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
+      REAL A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS, DT
+     x, DX, DY, FI, FIP1, XX, YY
+      INTEGER INTRVL
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -92389,6 +94274,8 @@ C
 
       SUBROUTINE CSRF2 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N,
      *                  F, KF, DDF)
+      IMPLICIT NONE
+      INTEGER IDER, JDER, KF, KZ, M, MX, MY, N
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
@@ -92404,6 +94291,12 @@ C
       END SUBROUTINE CSRF2
 
       SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
+      IMPLICIT NONE
+      INTEGER I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1, KEY
+     x, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
+      REAL C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM
+     x, DELY1, DELY2, DELYN, DELYNM, DIAG1, DIAG2, DIAGI, DIAGIN, SDIAG1
+     x, SDIAG2, SIGMAX, SIGMAY, T, ZXY1NS, ZXYMNS
 C
       INTEGER M,N,IZ,IERR
       REAL X(M),Y(N),Z(IZ,N),OPT(*),ZP(M,N,*),TEMP(*),SIGMA
@@ -92785,6 +94678,15 @@ C
       END SUBROUTINE SURF
 
       FUNCTION SURF2 (XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
+      IMPLICIT NONE
+      INTEGER I, IM1, J, JM1
+      REAL COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY, F1, F2
+     x, FP1, FP2, SIGMAP, SIGMAX, SIGMAY, SINHM1, SINHM2, SINHMS, SINHP1
+     x, SINHP2, ZI, ZIM1, ZXXI, ZXXIM1
+      REAL HERMNZ
+      REAL SURF2
+      REAL HERMZ
+      INTEGER INTRVL
 C
       INTEGER M,N,IZ
       REAL XX,YY,X(M),Y(N),Z(IZ,N),ZP(M,N,*),SIGMA
@@ -92927,6 +94829,11 @@ C
 
       SUBROUTINE NSURF2 (DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ,
      *                   IDZ,M,N,X,Y,Z,IZ,ZP,WORK,SIGMA)
+      IMPLICIT NONE
+      INTEGER I, II, IM1, J, JJ, JM1, LASTI, LASTJ
+      REAL C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2
+     x, DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2
+     x, SINHMS, SINHP1, SINHP2, TEMP, XII, YJJ, ZI, ZIM1, ZXXI, ZXXIM1
 C
       INTEGER MD,ND,IDZ,M,N,IZ
       REAL DXMIN,DXMAX,DYMIN,DYMAX,DZ(IDZ,ND),X(M),Y(N),
@@ -93105,6 +95012,9 @@ C
 
       SUBROUTINE BSTRP2 (X, Y, Z, KZ, TX, NX, KX, TY, NY, KY,
      *                   A, KA, WK, L, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, KA, KX, KY, KZ, L, NX, NY
+      INTEGER IW, M
 C-----------------------------------------------------------------------
 C
 C         PIECEWISE POLYNOMIAL INTERPOLATION IN TWO VARIABLES
@@ -93151,6 +95061,9 @@ C
       END SUBROUTINE BSTRP2
 
       SUBROUTINE BSTRP1 (X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, K, KA, KZ, M, N
+      INTEGER I, J, MP1
 C-------------------------------------------------------------------
 C     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
 C     N SETS OF DATA STORED IN THE COLUMNS OF THE ARRAY Z. THE
@@ -93187,6 +95100,9 @@ C
 
       SUBROUTINE BSLSQ2 (X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX,
      *                   TY, NY, KY, A, KA, WK, L, IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, KA, KX, KY, KZ, L, MX, MY, NX, NY
+      INTEGER IERR, IQ, IW, M
 C-----------------------------------------------------------------------
 C
 C             WEIGHTED LEAST SQUARES FITTING OF PIECEWISE
@@ -93242,6 +95158,10 @@ C
 
       SUBROUTINE BSLSQ1 (TAU, WGT, NTAU, Z, KZ, M, T, N, K,
      *                   A, KA, WK, Q, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, K, KA, KZ, M, N, NTAU
+      INTEGER I, J, JJ, L, LEFT, LEFTMK, MM
+      REAL DW
 C-----------------------------------------------------------------------
 C
 C     BSLSQ1 PRODUCES THE B-SPLINE COEFFICIENTS A(J,1),...,A(J,N)
@@ -93348,6 +95268,10 @@ C
       END SUBROUTINE BSLSQ1
 
       SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
+      IMPLICIT NONE
+      INTEGER KB, M, N, NB
+      INTEGER I, J, JMAX, JPK, K, NBM1
+      REAL T
 C-----------------------------------------------------------------------
 C
 C     BCHSV1 SOLVES M LINEAR SYSTEMS C*X = B  (I = 1,...,M), WHERE
@@ -93425,6 +95349,11 @@ C
 
       SUBROUTINE BVAL2 (A, KA, TX, NX, KX, TY, NY, KY, X0, Y0,
      *                  IDX, IDY, F, WK)
+      IMPLICIT NONE
+      INTEGER IDX, IDY, KA, KX, KY, NX, NY
+      REAL F, X0, Y0
+      INTEGER I, IW, J, L, M
+      INTEGER INTRVL
 C-----------------------------------------------------------------------
 C
 C                EVALUATION AND PARTIAL DIFFERENTIATION
@@ -93472,6 +95401,7 @@ C
       END SUBROUTINE BVAL2
 
       SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
+      IMPLICIT NONE
       INTEGER N, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N)
 C
@@ -93724,6 +95654,7 @@ C
       END SUBROUTINE TRMESH
 
       SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
+      IMPLICIT NONE
       INTEGER KK, IADJ(*), IEND(KK), IER
       REAL    X(KK), Y(KK)
       LOGICAL SWPTST
@@ -93869,6 +95800,7 @@ C
       END SUBROUTINE ADNODE
 
       SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
+      IMPLICIT NONE
       INTEGER KK, I1, I2, IADJ(*), IEND(KK)
 C
 C***********************************************************
@@ -94005,6 +95937,7 @@ C
       END SUBROUTINE BDYADD
 
       SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
+      IMPLICIT NONE
       INTEGER KK, I1, I2, I3, IADJ(*), IEND(KK)
 C
 C***********************************************************
@@ -94162,6 +96095,7 @@ C
       END SUBROUTINE INTADD
 
       SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
+      IMPLICIT NONE
       INTEGER NFRST, NLAST, KK, IARR(*)
 C
 C***********************************************************
@@ -94274,6 +96208,7 @@ C
       END SUBROUTINE SHIFTD
 
       SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
+      IMPLICIT NONE
       INTEGER NIN1, NIN2, NOUT1, NOUT2, IADJ(*), IEND(*)
       INTEGER TINDX
 C
@@ -94460,6 +96395,7 @@ C
       END SUBROUTINE SWAPD
 
       LOGICAL FUNCTION SWPTST (IN1,IN2,IO1,IO2,X,Y)
+      IMPLICIT NONE
       INTEGER IN1, IN2, IO1, IO2
       REAL    X(*), Y(*)
 C
@@ -94560,6 +96496,7 @@ C
       END FUNCTION SWPTST
 
       INTEGER FUNCTION TINDX (NVERTX,NABOR,IADJ,IEND)
+      IMPLICIT NONE
       INTEGER NVERTX, NABOR, IADJ(*), IEND(*)
 C
 C***********************************************************
@@ -94614,6 +96551,8 @@ C
       END FUNCTION TINDX
 
       SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
+      IMPLICIT NONE
+      REAL X0, X1, X2, Y0, Y1, Y2
       INTEGER NST, IADJ(*), IEND(*), I1, I2, I3
       REAL    PX, PY, X(*), Y(*)
 C
@@ -94910,6 +96849,10 @@ C
       END SUBROUTINE TRFIND
 
       SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER J, MITER
+      REAL EPS
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
 C-----------------------------------------------------------------------
@@ -94936,6 +96879,7 @@ C
 
       SUBROUTINE GRADG1 (N,X,Y,Z,IADJ,IEND,EPS, NIT,
      .                   ZXZY, IER)
+      IMPLICIT NONE
       INTEGER N, IADJ(*), IEND(N), NIT, IER
       REAL    X(N), Y(N), Z(N), EPS, ZXZY(2,N)
 C
@@ -95154,6 +97098,9 @@ C
       END SUBROUTINE GRADG1
 
       SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, N
+      INTEGER J
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
 C-----------------------------------------------------------------------
@@ -95180,6 +97127,7 @@ C
       END SUBROUTINE GRADL
 
       SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
+      IMPLICIT NONE
       INTEGER N, K, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N), Z(N), DX, DY
 C
@@ -95474,6 +97422,7 @@ C
       END SUBROUTINE GRADL1
 
       SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
+      IMPLICIT NONE
       REAL XK, YK, ZK, XI, YI, ZI, S1, S2, R, ROW(6)
 C
 C***********************************************************
@@ -95557,6 +97506,7 @@ C
       END SUBROUTINE SETRM
 
       SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
+      IMPLICIT NONE
       INTEGER IADJ(*), IEND(*), L, NPTS(L), IER
       REAL    X(*), Y(*), DS
 C
@@ -95702,6 +97652,9 @@ C
 
       SUBROUTINE SFVAL (N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND,
      *                  ZXZY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N
+      INTEGER IST, J
 C-----------------------------------------------------------------------
 C                    EVALUATION OF THE SURFACE
 C-----------------------------------------------------------------------
@@ -95729,6 +97682,9 @@ C
 
       SUBROUTINE SFVAL2 (N, X, Y, Z, L, M, NROWS, XI, YI, ZI,
      *                   IADJ, IEND, ZXZY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, L, M, N, NROWS
+      INTEGER I, IST, J
 C-----------------------------------------------------------------------
 C                EVALUATION OF THE SURFACE OVER A GRID
 C-----------------------------------------------------------------------
@@ -95760,6 +97716,7 @@ C
 
       SUBROUTINE INTRC1 (N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG,
      .                   ZXZY, IST, PZ,IER)
+      IMPLICIT NONE
       INTEGER N, IADJ(*), IEND(N), IFLAG, IST, IER
       REAL    PX, PY, X(N), Y(N), Z(N), ZXZY(2,N), PZ
 C
@@ -96037,6 +97994,7 @@ C
       SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1,
      .                 ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY,
      .                 IER)
+      IMPLICIT NONE
       INTEGER IFLAG, IER
       REAL    X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3,
      .        ZX1, ZX2, ZX3, ZY1, ZY2, ZY3, W, WX, WY
@@ -96328,6 +98286,7 @@ C
      +                FITCDS,NCROWS,FITVLS,WTS,
      +                RESIDS,ERROR,FITIWK,FITDWK,
      +                FIWKLN,FDWKLN,IREQD,DREQD)
+      IMPLICIT NONE
 C
       INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
       INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -96498,6 +98457,7 @@ C
 
       SUBROUTINE ALLOT(DEGREE,NPOLYS,NPTS,DIMEN,IWORK,IWKLEN,
      +                 IREQD,DREQD,ERROR)
+      IMPLICIT NONE
 C
       INTEGER IREQD,DREQD,ALFL,ERROR,NPOLYS,DEGREE,DIMEN,NPTS
       INTEGER NEWSTT,PSIWID,KMXBAS,STARTJ,KJP1D2,INDEX,IWKLEN
@@ -96700,6 +98660,7 @@ C
       END SUBROUTINE ALLOT
 
       SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
+      IMPLICIT NONE
 C
       INTEGER TOP,BOT,DEGREE,NPTS,DIMEN,NPOLYS,ERROR,I,ROWLEN
 C
@@ -96785,6 +98746,7 @@ C
       END SUBROUTINE BASIZ
 
       SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
+      IMPLICIT NONE
 C
       INTEGER J,KJ,CURDEG,JPRIME,NWITHK,I,CURM1,RALEN,DIMM1,DIMM2
       INTEGER NPOLYS,DIMEN,DEGREE,ALFLP1,DIMP1
@@ -96932,6 +98894,8 @@ C
      +                 NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS,
      +                 DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
      +                 ALFL,DIMP1,MAXABS,ERROR)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
       INTEGER ERROR,DIMP1
@@ -97007,6 +98971,8 @@ C
      +                 SUMSQS,COORD,NCROWS,NPOLYS,
      +                 DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
      +                 ALFL,ONPLYS,STTDEG,ERROR)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
       INTEGER M,START,JINDEX,JPINDX,Q,J3,J1,J1MJ2,ERROR
@@ -97202,6 +99168,7 @@ C
       END SUBROUTINE INCDG
 
       SUBROUTINE SCALPM(COORD,NPTS,MAXABS)
+      IMPLICIT NONE
 C
       INTEGER NPTS,P
       REAL    MAXABS,A
@@ -97238,6 +99205,7 @@ C
       END SUBROUTINE SCALPM
 
       SUBROUTINE SCALDN(COORD,NPTS,MAXABS)
+      IMPLICIT NONE
 C
       INTEGER NPTS,P
       REAL    MAXABS
@@ -97266,6 +99234,8 @@ C
 
       SUBROUTINE MEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS,
      +                 ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
+      IMPLICIT NONE
+      INTEGER NEROWS
 C
       INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
       INTEGER GBASIZ,ALFL,DIMP1,EVLDEG,TOP,BOT,CURDEG,PSISTT
@@ -97416,6 +99386,8 @@ C
 
       SUBROUTINE MEVAL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
       INTEGER JM1,JPRIME,M,P,K,I,J,INDEX
@@ -97499,6 +99471,7 @@ C
      +                 FITCDS,NCROWS,FITVLS,WTS,
      +                 RESIDS,ERROR,FITIWK,FITDWK,
      +                 FIWKLN,FDWKLN,IREQD,DREQD)
+      IMPLICIT NONE
 C
       INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
       INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -97671,6 +99644,8 @@ C
      +                  NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS,
      +                  DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
      +                  ALFL,DIMP1,MAXABS,ERROR)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
       INTEGER ERROR,DIMP1
@@ -97746,6 +99721,8 @@ C
      +                  SUMSQS,COORD,NCROWS,NPOLYS,
      +                  DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT,
      +                  ALFL,ONPLYS,STTDEG,ERROR)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
       INTEGER M,START,JINDEX,JPINDX,Q,J3,J1,J1MJ2,ERROR
@@ -97941,6 +99918,7 @@ C
       END SUBROUTINE DINCDG
 
       SUBROUTINE DSCALP(COORD,NPTS,MAXABS)
+      IMPLICIT NONE
 C
       INTEGER NPTS,P
       DOUBLE PRECISION MAXABS,A
@@ -97977,6 +99955,7 @@ C
       END SUBROUTINE DSCALP
 
       SUBROUTINE DSCALD(COORD,NPTS,MAXABS)
+      IMPLICIT NONE
 C
       INTEGER NPTS,P
       DOUBLE PRECISION MAXABS
@@ -98005,6 +99984,8 @@ C
 
       SUBROUTINE DMEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS,
      +                  ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
+      IMPLICIT NONE
+      INTEGER NEROWS
 C
       INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
       INTEGER GBASIZ,ALFL,DIMP1,EVLDEG,TOP,BOT,CURDEG,PSISTT
@@ -98156,6 +100137,8 @@ C
 
       SUBROUTINE DMEVL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA,
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
+      IMPLICIT NONE
+      INTEGER NCROWS
 C
       INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
       INTEGER JM1,JPRIME,M,P,K,I,J,INDEX
@@ -99546,6 +101529,11 @@ C
 
       SUBROUTINE QAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+      IMPLICIT NONE
+      INTEGER IER, INF, LAST, LENW, LIMIT, NEVAL
+      REAL ABSERR, BOUND, EPSABS, EPSREL, RESULT
+      INTEGER L1, L2, L3
+      REAL F
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -99725,6 +101713,7 @@ C
 
       SUBROUTINE QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                  NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -100189,6 +102178,13 @@ C
 
       SUBROUTINE QK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                  RESASC, EPMACH, UFLOW)
+      IMPLICIT NONE
+      INTEGER INF
+      REAL A, ABSERR, B, BOUN, EPMACH, RESABS, RESASC, RESULT, UFLOW
+      INTEGER J
+      REAL ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2
+     x, HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
+      REAL F
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -100682,6 +102678,7 @@ C
 
       SUBROUTINE QXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                 LIMIT,LENIW,LENW,LAST,IWORK,WORK)
+      IMPLICIT NONE
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 C            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -100851,6 +102848,7 @@ C
 
       SUBROUTINE QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
+      IMPLICIT NONE
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 C            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -101273,6 +103271,8 @@ C
       END SUBROUTINE QXGSE
 
       SUBROUTINE QXCPY (A, B, L)
+      IMPLICIT NONE
+      INTEGER I
 C
 C  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
 C          THE REAL VECTOR A OF LENGTH L
@@ -101287,6 +103287,7 @@ C
 
       SUBROUTINE QXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                  KEY,EPMACH,UFLOW,OFLOW)
+      IMPLICIT NONE
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -101399,6 +103400,8 @@ C
       END SUBROUTINE QXLQM
 
       SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      IMPLICIT NONE
+      INTEGER I, IS, K, KS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -101594,6 +103597,7 @@ C
       END SUBROUTINE QXRUL
 
       SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
+      IMPLICIT NONE
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -101690,6 +103694,8 @@ C
 
       SUBROUTINE DQAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+      IMPLICIT NONE
+      INTEGER LAST
 C-----------------------------------------------------------------------
 C
 C           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -101864,6 +103870,7 @@ C
 
       SUBROUTINE DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *               NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -102315,6 +104322,7 @@ C
 
       SUBROUTINE DQK21 (F, A, B, RESULT, ABSERR, RESABS, RESASC,
      *                  EPMACH, UFLOW, ISIG)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -102503,6 +104511,8 @@ C
 
       SUBROUTINE DQAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR,
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+      IMPLICIT NONE
+      INTEGER INF, LAST
 C-----------------------------------------------------------------------
 C
 C         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
@@ -102685,6 +104695,7 @@ C
 
       SUBROUTINE DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *                   NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -103149,6 +105160,9 @@ C
 
       SUBROUTINE DQK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS,
      *                   RESASC, EPMACH, UFLOW)
+      IMPLICIT NONE
+      INTEGER INF
+      INTEGER J
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -103337,6 +105351,7 @@ C
       END SUBROUTINE DQK15I
 
       SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
+      IMPLICIT NONE
 C     ..................................................................
 C
 C 1.        DQPSRT
@@ -103472,6 +105487,7 @@ C
 
       SUBROUTINE DQELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES,
      *                  EPMACH, OFLOW)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -103650,6 +105666,7 @@ C
 
       SUBROUTINE DQXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,
      *                  LIMIT,LENIW,LENW,LAST,IWORK,WORK)
+      IMPLICIT NONE
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 C            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -103819,6 +105836,7 @@ C
 
       SUBROUTINE DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
+      IMPLICIT NONE
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 C            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -104242,6 +106260,8 @@ C
       END SUBROUTINE DQXGSE
 
       SUBROUTINE DQXCPY (A, B, L)
+      IMPLICIT NONE
+      INTEGER I
 C
 C  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
 C          THE DOUBLE PRECISION VECTOR A OF LENGTH L
@@ -104256,6 +106276,7 @@ C
 
       SUBROUTINE DQXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS,
      *                   KEY,EPMACH,UFLOW,OFLOW)
+      IMPLICIT NONE
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -104368,6 +106389,8 @@ C
       END SUBROUTINE DQXLQM
 
       SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      IMPLICIT NONE
+      INTEGER I, IS, K, KS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -104563,6 +106586,7 @@ C
       END SUBROUTINE DQXRUL
 
       SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
+      IMPLICIT NONE
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -104659,6 +106683,11 @@ C
 
       SUBROUTINE CUBTRI(F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW,
      * IDATA, RDATA, IER)
+      IMPLICIT NONE
+      INTEGER I, J, JKP, K, L, MAXC, MAXK, MW, NFE
+      REAL ONE, POINT5, ZERO
+      REAL RNDERR
+      REAL F
 C
 C       ADAPTIVE CUBATURE OVER A TRIANGLE
 C
@@ -104850,6 +106879,10 @@ C       EXITS FROM SUBROUTINE
       END SUBROUTINE CUBTRI
 
       FUNCTION RNDERR(X, A, Y, B)
+      IMPLICIT NONE
+      REAL A, B, X, Y
+      REAL S, T
+      REAL RNDERR
 C       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
 C       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
 C       AS X AND B MUST BE THE SAME AS A.  THEY ARE DECLARED AS
@@ -104865,6 +106898,10 @@ C       FORTRAN COMPILERS.
       END FUNCTION RNDERR
 
       SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
+      IMPLICIT NONE
+      INTEGER I, J, K, NQUAD
+      REAL POINT5, X, Y
+      REAL F
 C
 C       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
 C
@@ -104999,6 +107036,17 @@ C
 
       SUBROUTINE IESLV (KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,
      *                     MUPPER,NF,MF,NORM,W,IER)
+      IMPLICIT NONE
+      INTEGER IER, IFLAG, MF, MUPPER, NF, NT, NUPPER
+      REAL A, B, EP, T, W, X
+      INTEGER I1, I10, I11, I12, I13, I14, I15, I16, I17, I18, I19, I2
+     x, I20, I21, I3, I4, I5, I6, I7, I8, I9, M, N, NHALF, NMAX, NSQ
+     x, NUP
+      REAL CUTOFF, ROOTRT, UNITRD
+      INTEGER MFINAL, NFINAL
+      REAL FINLEP, R1, R2
+      REAL RHFCN
+      REAL SPMPAR
 C
 C   THE INTEGRAL EQUATION BEING SOLVED IS
 C
@@ -105165,6 +107213,21 @@ C   WHICH W IS TO BE SPLIT.
      *   CUTOFF,ROOTRT,UNITRD,NHALF,LUFACT,KMM,KMN,KNM,RHS,R,RH,
      *   DELN,TM,TN,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3,
      *   IMKNN)
+      IMPLICIT NONE
+      INTEGER IER, IFLAG, MUP, NHALF, NT, NUP
+      REAL A, ASIDE, ASIDE3, B, CUTOFF, DELN, EP, OLDX, R, RH, RHS
+     x, ROOTRT, SAVE, SAVE2, T, TM, TN, UNITRD, WM, WN, X, XM, XMZ, XN
+      INTEGER I, IND, J, LOOP, M, MNEW, N
+      REAL ASIDE2, AVERR, COND, DENR1, DENR2, EPS, ERROR, ESTERR, PASTC
+     x, PASTRE, R1RAT, RATE, RELERR, RELMIN, RT, TEMP, TEMP2, TEST
+     x, XNORM
+      INTEGER MFINAL, NFINAL
+      REAL FINLEP, R1, R2
+      REAL ELINSY, RELRSD
+      REAL RHFCN
+      REAL RNRM
+      REAL CONEW
+      REAL RMIN
 C
 C   THIS ROUTINE CONTROLS THE SOLUTION OF THE INTEGRAL EQUATION.
 C
@@ -105452,6 +107515,11 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
 
       SUBROUTINE NSTERP(TM,WM,XM,M,TN,WN,XN,N,KERNEL,RHFCN,RHS,KMN,
      *   NHALF,NUP)
+      IMPLICIT NONE
+      INTEGER M, N, NHALF, NUP
+      REAL RHS, TM, TN, WM, WN, XM, XN
+      INTEGER I, J
+      REAL RHFCN
 C
 C   USE THE VALUES OF XN(I), I=1,...,N, TO CALCULATE THE NYSTROM
 C   INTERPOLATES XM(I), I=1,...,M.
@@ -105486,6 +107554,11 @@ C   CALCULATE NYSTROM INTERPOLATING FORMULA.
       END SUBROUTINE NSTERP
 
       FUNCTION RMIN(N,M,COND,UNITRD,AVERR)
+      IMPLICIT NONE
+      INTEGER M, N
+      REAL AVERR, COND, UNITRD
+      REAL FLOAT1, FLOAT2
+      REAL RMIN
 C
 C   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
 C   VALUE OF RELMIN USED IN IEGS. THE VARIABLE UNITRD IS DEFINED IN
@@ -105502,6 +107575,10 @@ C
       END FUNCTION RMIN
 
       REAL FUNCTION RNRM(X,Y,N,IFLAG)
+      IMPLICIT NONE
+      INTEGER IFLAG, N
+      REAL X, Y
+      INTEGER I
 C
 C   IFLAG=0    CALCULATE THE MAXIMUM NORM OF X.
 C   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
@@ -105521,6 +107598,10 @@ C   FIND THE NORM OF X-Y.
       END FUNCTION RNRM
 
       FUNCTION CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
+      IMPLICIT NONE
+      REAL AVERR, COND, ELINSY, PASTC, PASTRE, RELRSD
+      REAL C
+      REAL CONEW
 C
 C   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
 C   IN IEGS.
@@ -105814,6 +107895,16 @@ C
       SUBROUTINE LEAVE(IERSET,NF,MF,XV,TV,WV,ERROR,KERNEL,RHFCN,EP,
      *   IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM,
      *   RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
+      IMPLICIT NONE
+      INTEGER IER, IERSET, IFLAG, MF, NF, NHALF, NT, NUP
+      REAL DELN, ELINSY, EP, EPS, ERROR, R, RH, RHS, T, TM, TN, TV, WM
+     x, WN, WV, X, XM, XMZ, XNORM, XV
+      INTEGER I, ITLOOP, J
+      REAL DERROR, SAVEP, SUM, TEMP
+      INTEGER MFINAL, NFINAL
+      REAL FINLEP, R1, R2
+      REAL RHFCN
+      REAL RNRM
 C
 C   THIS ROUTINE SETS ALL NECESSARY PARAMETERS FOR LEAVING IEGAUS.
 C   IF NT .GT. 0, IT ALSO PERFORMS THE NECESSARY NYSTROM
@@ -105916,6 +108007,11 @@ C
 
       SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,
      *   KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
+      IMPLICIT NONE
+      INTEGER IFLG, M, N, NHALF, NUP
+      REAL DELN, R, RH, RHFCN, RHS, TM, TN, WM, WN, XM, XMZ
+      INTEGER I, IND, J
+      REAL SUM
 C
 C   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
 C   XMZ. THE ROUTINE IS DIVIDED ACCORDING TO WHETHER OR NOT
@@ -106000,6 +108096,11 @@ C   CALCULATE XM.
       END SUBROUTINE ITERT
 
       SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M, N
+      INTEGER I, IP1, ISWIT, J, K, KP1, L, NM1, NMI
+      REAL C, SUM, T
+      REAL ERROR, RELRSD
 C
 C   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
 C   ROWS IN THE DIMENSION STATEMENT FOR A IN THE CALLING PROGRAM.
@@ -106163,6 +108264,11 @@ C
       END SUBROUTINE LNSYS
 
       SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
+      IMPLICIT NONE
+      INTEGER IFLAG, IWORK, NEQN
+      REAL ABSERR, RELERR, T, TOUT, WORK, Y
+      INTEGER IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI
+     x, IPSI, ISIG, ISTART, ITOLD, IV, IW, IWT, IX, IYP, IYPOUT, IYY
 C
 C     SANDIA MATHEMATICAL PROGRAM LIBRARY
 C     APPLIED MATHEMATICS DIVISION 2642
@@ -106326,6 +108432,13 @@ C
       SUBROUTINE DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,
      1  YY,WT,P,YP,YPOUT,PHI,ALPHA,BETA,SIG,V,W,G,PHASE1,PSI,X,H,HOLD,
      2  START,TOLD,DELSGN,NS,NORND,K,KOLD,ISNOLD)
+      IMPLICIT NONE
+      INTEGER IFLAG, ISNOLD, K, KOLD, NEQN, NS
+      REAL ABSERR, ALPHA, BETA, DELSGN, G, H, HOLD, P, PHI, PSI, RELERR
+     x, SIG, T, TOLD, TOUT, V, W, WT, X, Y, YP, YPOUT, YY
+      INTEGER ISN, KLE4, L, MAXNUM, NOSTEP
+      REAL ABSDEL, ABSEPS, DEL, EPS, FOURU, RELEPS, TEND, U
+      REAL SPMPAR
 C
 C   ODE  MERELY ALLOCATES STORAGE FOR  DE1 TO RELIEVE THE USER OF THE
 C   INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY  DE1 IS USED AS
@@ -106480,6 +108593,16 @@ C
       SUBROUTINE STEP1(F,NEQN,Y,X,H,EPS,WT,START,
      1 HOLD,K,KOLD,CRASH,PHI,P,YP,PSI,
      2 ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
+      IMPLICIT NONE
+      INTEGER K, KOLD, NEQN, NS
+      REAL ALPHA, BETA, EPS, G, H, HOLD, P, PHI, PSI, SIG, V, W, WT, X
+     x, Y, YP
+      INTEGER I, IFAIL, IM1, IP1, IQ, J, KM1, KM2, KNEW, KP1, KP2, L
+     x, LIMIT1, LIMIT2, NSM2, NSP1, NSP2
+      REAL ABSH, ERK, ERKM1, ERKM2, ERKP1, ERR, FOURU, GSTR, HNEW, P5EPS
+     x, R, REALI, REALNS, RHO, ROUND, SUM, TAU, TEMP1, TEMP2, TEMP3
+     x, TEMP4, TEMP5, TEMP6, TWO, TWOU, U, XOLD
+      REAL SPMPAR
 C
 C   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 C
@@ -106977,6 +109100,11 @@ C
       END SUBROUTINE STEP1
 
       SUBROUTINE INTRP(X,Y,XOUT,YOUT,YPOUT,NEQN,KOLD,PHI,PSI)
+      IMPLICIT NONE
+      INTEGER KOLD, NEQN
+      REAL PHI, PSI, X, XOUT, Y, YOUT, YPOUT
+      INTEGER I, J, JM1, KI, KIP1, L, LIMIT1
+      REAL ETA, G, GAMMA, HI, PSIJM1, RHO, TEMP1, TEMP2, TEMP3, TERM, W
 C
 C   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
 C
@@ -107057,6 +109185,11 @@ C
 
       SUBROUTINE BRKF45 (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                   WORK,IWORK)
+      IMPLICIT NONE
+      INTEGER IFLAG, IWORK, NEQN
+      REAL ABSERR, RELERR, T, TEND, TOUT, WORK, Y, YP
+      INTEGER KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW, KWP
+     x, KX, KY1, KY2
 C
 C     BLOCK FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD ADVANCING
 C     A BLOCK OF TWO EQUAL STEPS.  THE FORMULA AT THE FIRST STEP IS
@@ -107339,6 +109472,19 @@ C
       SUBROUTINE RKFC (FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,IFLAG,
      *                 W,WP,X,HINT,H,Y1,Y2,F1,F2,F3,F4,F7,SAVRE,SAVAE,
      *                 TOLD,NFE,JFLAG,KFLAG,ENDPNT,BLKOUT)
+      IMPLICIT NONE
+      INTEGER IFLAG, JFLAG, KFLAG, NEQN, NFE
+      REAL ABSERR, F1, F2, F3, F4, F7, H, HINT, RELERR, SAVAE, SAVRE, T
+     x, TEND, TOLD, TOUT, W, WP, X, Y, Y1, Y2, YP
+      INTEGER K, MAXNFE, MFLAG, N
+      REAL A, A21, A31, A32, A41, A42, A43, A51, A52, A53, A54, A61, A62
+     x, A63, A64, A65, A81, A82, A83, A84, A85, A86, A87, A91, A92, A93
+     x, A94, A95, A96, A97, A98, AE, B1, B1B, B3, B3B, B4, B4B, B5, B5B
+     x, B6, B6B, B7, B8, B9, C2, C3, C4, C6, C8, C9, DT, DTSIGN, EE
+     x, EEOET, ERC11, ERC13, ERC14, ERC15, ERC21, ERC23, ERC24, ERC25
+     x, ERC26, ERC27, ERC28, ERC29, ERRTOL, ESTTOL, EZ, HMIN, HSTOP
+     x, REMIN, RER, S, SCALE, SF, SWAP, TOL, TOLER, TOLN, U, U26, YPK
+      REAL SPMPAR
 C
 C     TWO STEP BLOCK RUNGE-KUTTA FEHLBERG METHOD.
 C     A STANDARD 5(4) FORMULA IS USED AT THE FIRST POINT IN THE BLOCK
@@ -107920,6 +110066,11 @@ C
       END SUBROUTINE RKFC
 
       SUBROUTINE EXTRA (NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
+      IMPLICIT NONE
+      INTEGER NEQN
+      REAL F, F1, F2, H, T, TEX, Y, YEX, YINC1, YINC2, YPEX
+      INTEGER N
+      REAL A1, A2, A3, A4, HF, HF1, HF2, SIG
 C
 C     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
 C     NEEDED TO MAKE THE INTERPOLANT DERIVATIVE MORE STABLE.
@@ -109168,6 +111319,9 @@ C
 
       SUBROUTINE SFODE (F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,
      *                  RWORK,LRW,IWORK,LIW,RPAR,IPAR)
+      IMPLICIT NONE
+      INTEGER IDID, LIW, LRW, NEQ
+      REAL AERR, RERR, T, TOUT
 C     --------------
       EXTERNAL F, ZZZJAC
       REAL Y(NEQ), RTOL(1), ATOL(1), RWORK(LRW), RPAR(*)
@@ -109192,6 +111346,9 @@ C
 
       SUBROUTINE SFODE1 (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      *                   RWORK,LRW,IWORK,LIW,RPAR,IPAR)
+      IMPLICIT NONE
+      INTEGER IDID, LIW, LRW, NEQ
+      REAL T, TOUT
 C     --------------
       EXTERNAL F, ZZZJAC
       REAL Y(NEQ), RTOL(NEQ), ATOL(NEQ), RWORK(LRW), RPAR(*)
@@ -109211,6 +111368,9 @@ C
       END SUBROUTINE SFODE1
 
       SUBROUTINE ZZZJAC(T,Y,PD,N,RPAR,IPAR)
+      IMPLICIT NONE
+      INTEGER IPAR, N
+      REAL PD, RPAR, T, Y
 C     -------------
 C     DUMMY JACOBIAN SUBROUTINE
 C     -------------
@@ -109223,6 +111383,14 @@ C     -------------
 
       SUBROUTINE STFODE (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      1                   RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC)
+      IMPLICIT NONE
+      INTEGER IDID, INFO, IPAR, IWORK, LIW, LRW, NEQ
+      REAL ATOL, RPAR, RTOL, RWORK, T, TOUT, Y
+      INTEGER ICOMI, ICOMR, IDELSN, IINOUT, ILRW, ITSTAR, IYPOUT, ML, MU
+      INTEGER IACOR, IBAND, IBEGIN, IER, IEWT, IINTEG, IJAC, INIT, IOWNS
+     x, IQUIT, ISAVF, ITOL, ITSTOP, IWM, IYH, JSTART, KFLAG, KSTEPS, L
+     x, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
+      REAL EL0, H, HMIN, HMXI, HU, ROWNS, TN, TOLD, UROUND
 C***********************************************************************
 C***PURPOSE
 C   STFODE SOLVES INITIAL VALUE PROBLEMS IN ORDINARY DIFFERENTIAL
@@ -110013,6 +112181,7 @@ C
       END SUBROUTINE STFODE
 
       SUBROUTINE RSCO (RSAV, ISAV)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
 C BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
@@ -110032,6 +112201,7 @@ C----------------------- END OF SUBROUTINE RSCO -----------------------
       END SUBROUTINE RSCO
 
       SUBROUTINE SVCO (RSAV, ISAV)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS ROUTINE STORES IN RSAV AND ISAV THE CONTENTS OF COMMON BLOCK
 C DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
@@ -110056,6 +112226,18 @@ C----------------------- END OF SUBROUTINE SVCO -----------------------
       SUBROUTINE LSOD1 (F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT,
      1                YH,YH1,EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,
      2                TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
+      IMPLICIT NONE
+      INTEGER IDID, IPAR, IWM, NEQ
+      REAL ACOR, ATOL, DELSGN, EWT, RPAR, RTOL, SAVF, T, TOLFAC, TOUT
+     x, TSTOP, WM, Y, YH, YH1, YPOUT
+      INTEGER INTFLG, K, L, LTOL, MAX, MAXNUM
+      REAL ABSDEL, BIG, DEL, DT, HA, TOL
+      INTEGER IBAND, IBEGIN, IER, IINTEG, IJAC, INIT, IOWNS, IQUIT, ITOL
+     x, ITSTOP, JSTART, KFLAG, KSTEPS, LACOR, LDUM, LEWT, LSAVF, LWM
+     x, LYH, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
+      REAL EL0, H, HMIN, HMXI, HU, ROWNS, TOLD, U, X
+      REAL VNWRMS
+      REAL SPMPAR
 C
 C   STFODE  MERELY ALLOCATES STORAGE FOR LSOD1 TO RELIEVE THE USER OF
 C   THE INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY LSOD1 IS USED
@@ -110361,6 +112543,13 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
 
       SUBROUTINE HSTART(F,NEQ,A,B,Y,YPRIME,ETOL,MORDER,SMALL,BIG,
      1                                    SPY,PV,YP,SF,RPAR,IPAR,H)
+      IMPLICIT NONE
+      INTEGER IPAR, MORDER, NEQ
+      REAL A, B, BIG, ETOL, H, PV, RPAR, SF, SMALL, SPY, Y, YP, YPRIME
+      INTEGER J, K, LK
+      REAL ABSDX, DA, DELF, DELY, DFDUB, DFDXB, DX, DY, FBND, RELPER
+     x, SRYDPB, TOLEXP, TOLMIN, TOLP, TOLSUM, YDPB
+      REAL VNORM
 C
 C   HSTART COMPUTES A STARTING STEP SIZE TO BE USED IN SOLVING INITIAL
 C   VALUE PROBLEMS IN ORDINARY DIFFERENTIAL EQUATIONS.
@@ -110654,6 +112843,7 @@ C
       END SUBROUTINE HSTART
 
       SUBROUTINE INTYD (T, K, YH, NYH, DKY, IFLAG)
+      IMPLICIT NONE
 C
 C   INTYD APPROXIMATES THE SOLUTION AND DERIVATIVES AT T BY POLYNOMIAL
 C   INTERPOLATION. MUST BE USED IN CONJUNCTION WITH THE INTEGRATOR
@@ -110733,6 +112923,11 @@ C----------------------- END OF SUBROUTINE INTYD -----------------------
 
       SUBROUTINE STOD  (NEQ, Y, YH, NYH, YH1, EWT, SAVF, ACOR,
      1   WM, IWM, F, JAC, RPAR, IPAR)
+      IMPLICIT NONE
+      INTEGER IPAR
+      REAL RPAR
+      INTEGER IPNYH
+      INTEGER IOD, KSTEPS
 C-----------------------------------------------------------------------
 C STOD  PERFORMS ONE STEP OF THE INTEGRATION OF AN INITIAL VALUE
 C PROBLEM FOR A SYSTEM OF ORDINARY DIFFERENTIAL EQUATIONS.
@@ -111191,6 +113386,7 @@ C----------------------- END OF SUBROUTINE STOD  -----------------------
       END SUBROUTINE STOD
 
       SUBROUTINE CFOD  (METH, ELCO, TESCO)
+      IMPLICIT NONE
 C
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
 C
@@ -111305,6 +113501,9 @@ C----------------------- END OF SUBROUTINE CFOD  -----------------------
 
       SUBROUTINE PJAC (NEQ, Y, YH, NYH, EWT, FTEM, SAVF, WM, IWM,
      1   F, JAC, RPAR, IPAR)
+      IMPLICIT NONE
+      INTEGER IPAR
+      REAL RPAR
 C
 C   PJAC SETS UP THE ITERATION MATRIX (INVOLVING THE JACOBIAN) FOR THE
 C   INTEGRATION PACKAGE SFODE.
@@ -111469,6 +113668,7 @@ C----------------------- END OF SUBROUTINE PJAC -----------------------
       END SUBROUTINE PJAC
 
       SUBROUTINE SLVS (WM, IWM, X, TEM)
+      IMPLICIT NONE
 C
 C   SLVS SOLVES THE LINEAR SYSTEM IN THE ITERATION SCHEME FOR THE
 C   INTEGRATOR PACKAGE SFODE.
@@ -111538,6 +113738,7 @@ C----------------------- END OF SUBROUTINE SLVS -----------------------
       END SUBROUTINE SLVS
 
       SUBROUTINE SGBFA(ABD,LDA,N,ML,MU,IPVT,INFO)
+      IMPLICIT NONE
       INTEGER LDA,N,ML,MU,IPVT(*),INFO
       REAL ABD(LDA,*)
 C
@@ -111710,6 +113911,7 @@ C
       END SUBROUTINE SGBFA
 
       SUBROUTINE SGBSL(ABD,LDA,N,ML,MU,IPVT,B,JOB)
+      IMPLICIT NONE
       INTEGER LDA,N,ML,MU,IPVT(*),JOB
       REAL ABD(LDA,*),B(*)
 C
@@ -111844,6 +114046,11 @@ C
       END SUBROUTINE SGBSL
 
       FUNCTION VNORM(V,NCOMP)
+      IMPLICIT NONE
+      INTEGER NCOMP
+      REAL V
+      INTEGER K
+      REAL VNORM
 C
 C     COMPUTE THE MAXIMUM NORM OF THE VECTOR V(*) OF LENGTH NCOMP AND
 C     RETURN THE RESULT AS VNORM
@@ -111857,6 +114064,7 @@ C
       END FUNCTION VNORM
 
       REAL FUNCTION VNWRMS (N, V, W)
+      IMPLICIT NONE
 C-----------------------------------------------------------------------
 C THIS FUNCTION ROUTINE COMPUTES THE WEIGHTED ROOT-MEAN-SQUARE NORM
 C OF THE VECTOR OF LENGTH N CONTAINED IN THE ARRAY V, WITH WEIGHTS
@@ -112007,6 +114215,14 @@ C
 
       SUBROUTINE SEPDE (COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1,
      *                         C, D, NP1, U, KU, W, NW, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IORD, KU, MP1, NP1, NW
+      REAL A, B, C, D
+      INTEGER I, IA, IB, IC, ID, IJ, IMAX, IMIN, INDX, INDY, IW, J, JCOL
+     x, JMAX, JMIN, L, M, MN, N
+      REAL ALPHA, BETA, DEL, GAM, HX, HY, P, XI, XMIN, YJ, YMIN
+      REAL G
+      REAL BVAL
 C ----------------------------------------------------------------------
 C     SOLUTION OF SEPARABLE ELLIPTIC PARTIAL DIFFERENTIAL EQUATIONS
 C                     ON RECTANGULAR DOMAINS
@@ -112208,6 +114424,8 @@ C
       END SUBROUTINE SEPDE
 
       SUBROUTINE PDEDGE (EDGE, INDX, INDY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, INDX, INDY
       INTEGER EDGE(4)
 C
       IF (IABS(EDGE(1)) .GT. 1) GO TO 200
@@ -112260,6 +114478,11 @@ C
       SUBROUTINE SEPELL (INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,BETA,C,
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,
      2                   USOL,IDMN,W,PERTRB,IERROR)
+      IMPLICIT NONE
+      INTEGER IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
+      REAL A, ALPHA, B, BETA, C, D, GAMA, PERTRB, XNU
+      INTEGER I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9, K
+     x, L, LENGTH, LINPUT, LL, LOGB2N, LOUTPT
 C
 C
 C DIMENSION OF           BDA(N+1), BDB(N+1), BDC(M+1), BDD(M+1),
@@ -112751,6 +114974,15 @@ C
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,AN,BN,
      2                   CN,DN,UN,ZN,AM,BM,CM,DM,UM,ZM,GRHS,MN,USOL,
      3                   IDMN,W,PERTRB,IERROR)
+      IMPLICIT NONE
+      INTEGER IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
+      REAL A, ALPHA, AM, AN, B, BDA, BDB, BDC, BDD, BETA, BM, BN, C, CM
+     x, CN, D, DM, DN, GAMA, GRHS, PERTRB, UM, UN, USOL, W, XNU, ZM, ZN
+      INTEGER I, I1, IORD, J, MP, NP
+      REAL AI, AX1, AXI, BI, BXI, CI, CXI, CXM, DJ, DY1, DYJ, EJ, EYJ
+     x, FJ, FYJ, FYN, PRTRB, XI, YJ
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     SEPEL1 SETS UP VECTORS AND ARRAYS FOR INPUT TO BLKTRI
 C     AND COMPUTES A SECOND ORDER SOLUTION IN USOL.  A RETURN JUMP TO
@@ -113062,6 +115294,11 @@ C
 
       SUBROUTINE CHKPRM (INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX,
      1                   COFY,IDMN,MN,IERROR)
+      IMPLICIT NONE
+      INTEGER IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
+      REAL A, B, C, D
+      INTEGER I, J
+      REAL AI, BI, CI, DJ, DLX, DLY, EJ, FJ, XI, YJ
 C
 C     THIS PROGRAM CHECKS THE INPUT PARAMETERS FOR ERRORS
 C
@@ -113129,6 +115366,13 @@ C
 
       SUBROUTINE CHKSNG (MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,COFY,
      1                   SINGLR)
+      IMPLICIT NONE
+      INTEGER MBDCND, NBDCND
+      REAL ALPHA, BETA, GAMA, XNU
+      INTEGER I, J
+      REAL AI, BI, CI, DJ, EJ, FJ, XI, YJ
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS SUBROUTINE CHECKS IF THE PDE   SEPELL
 C     MUST SOLVE IS A SINGULAR OPERATOR
@@ -113178,6 +115422,13 @@ C
       END SUBROUTINE CHKSNG
 
       SUBROUTINE ORTHG (USOL,IDMN,ZN,ZM,PERTRB)
+      IMPLICIT NONE
+      INTEGER IDMN
+      REAL PERTRB, USOL, ZM, ZN
+      INTEGER I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
+      REAL ETE, UTE
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
 C     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
@@ -113222,6 +115473,13 @@ C
       END SUBROUTINE ORTHG
 
       SUBROUTINE MINSOL (USOL,IDMN,ZN,ZM,PERTB)
+      IMPLICIT NONE
+      INTEGER IDMN
+      REAL PERTB, USOL, ZM, ZN
+      INTEGER I, IFNL, II, ISTR, J, JFNL, JJ, JSTR
+      REAL ETE, PERTRB, UTE
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS SUBROUTINE ORTHOGONALIZES THE ARRAY USOL WITH RESPECT TO
 C     THE CONSTANT ARRAY IN A WEIGHTED LEAST SQUARES NORM
@@ -113270,6 +115528,11 @@ C
       END SUBROUTINE MINSOL
 
       SUBROUTINE TRISP (N,A,B,C,D,U,Z)
+      IMPLICIT NONE
+      INTEGER N
+      REAL A, B, C, D, U, Z
+      INTEGER J, K, NM1, NM2
+      REAL AN, BN, DEN, V
 C
 C     THIS SUBROUTINE SOLVES FOR A NON-ZERO EIGENVECTOR CORRESPONDING
 C     TO THE ZERO EIGENVALUE OF THE TRANSPOSE OF THE RANK
@@ -113311,6 +115574,14 @@ C
       END SUBROUTINE TRISP
 
       SUBROUTINE DEFER (COFX,COFY,USOL,IDMN,GRHS,MN)
+      IMPLICIT NONE
+      INTEGER IDMN, MN
+      REAL GRHS, USOL
+      INTEGER I, J
+      REAL AI, BI, CI, DJ, EJ, FJ, TX, TY, UXXX, UXXXX, UYYY, UYYYY, XI
+     x, YJ
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS SUBROUTINE FIRST APPROXIMATES THE TRUNCATION ERROR GIVEN
 C     BY  TRUN1(X,Y)=DLX**2*TX+DLY**2*TY WHERE
@@ -113372,6 +115643,11 @@ C
       END SUBROUTINE DEFER
 
       SUBROUTINE DXFN (U,IDMN,I,J,UXXX,UXXXX)
+      IMPLICIT NONE
+      INTEGER I, IDMN, J
+      REAL U, UXXX, UXXXX
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
 C     APPROXIMATIONS TO THE THIRD AND FOURTH X
@@ -113454,6 +115730,11 @@ C
       END SUBROUTINE DXFN
 
       SUBROUTINE DYFN (U,IDMN,I,J,UYYY,UYYYY)
+      IMPLICIT NONE
+      INTEGER I, IDMN, J
+      REAL U, UYYY, UYYYY
+      INTEGER IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
+      REAL AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
 C
 C     THIS PROGRAM COMPUTES SECOND ORDER FINITE DIFFERENCE
 C     APPROXIMATIONS TO THE THIRD AND FOURTH Y
@@ -113538,6 +115819,12 @@ C
 
       SUBROUTINE BLKTRI (IFLG,NP,N,AN,BN,CN,MP,M,AM,BM,CM,IDIMY,Y,
      1                   IERROR,W)
+      IMPLICIT NONE
+      INTEGER IDIMY, IERROR, IFLG, M, MP, N, NP
+      REAL AM, AN, BM, BN, CM, CN, W, Y
+      INTEGER IW1, IW2, IW3, IWAH, IWBH, IWD, IWU, IWW, NH, NL
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
 C
 C
 C***********************************************************************
@@ -113746,6 +116033,15 @@ C
 
       SUBROUTINE BLKTR1 (N,AN,BN,CN,M,AM,BM,CM,IDIMY,Y,B,W1,W2,W3,WD,
      1                   WW,WU,PRDCT,CPRDCT)
+      IMPLICIT NONE
+      INTEGER IDIMY, M, N
+      REAL AM, AN, B, BM, BN, CM, CN, W1, W2, W3, WD, WU, WW, Y
+      INTEGER I, I1, I2, I3, I4, IDXA, IDXC, IF, IFD, IM1, IM2, IM3
+     x, IMI1, IMI2, IP, IP1, IP2, IP3, IPI1, IPI2, IPI3, IR, IRM1, IZ
+     x, IZR, J, KDO, L, LL, NA, NC, NM1, NM2, NM3, NP, NP1, NP2, NP3, NZ
+      REAL DUM
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
 C
 C BLKTR1 SOLVES THE LINEAR SYSTEM
 C
@@ -113981,6 +116277,10 @@ C
       END SUBROUTINE BLKTR1
 
       SUBROUTINE INDXA (I,IR,IDXA,NA)
+      IMPLICIT NONE
+      INTEGER I, IDXA, IR, NA
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
 C
@@ -113992,6 +116292,10 @@ C
       END SUBROUTINE INDXA
 
       SUBROUTINE INDXC (I,IR,IDXC,NC)
+      IMPLICIT NONE
+      INTEGER I, IDXC, IR, NC
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
 C
@@ -114003,6 +116307,11 @@ C
       END SUBROUTINE INDXC
 
       SUBROUTINE INDXB (I,IR,IDX,IDP)
+      IMPLICIT NONE
+      INTEGER I, IDP, IDX, IR
+      INTEGER ID, IPL, IZH
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
 C
 C B(IDX) IS THE LOCATION OF THE FIRST ROOT OF THE B(I,IR) POLYNOMIAL
 C
@@ -114029,6 +116338,11 @@ C
       END SUBROUTINE INDXB
 
       SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
+      IMPLICIT NONE
+      INTEGER M, NA, ND, NM1, NM2
+      REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
+      INTEGER IA, IBR, ID, J, K, M1, M2, MM
+      REAL DEN, RT
 C
 C PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN Y.
@@ -114116,6 +116430,11 @@ C
       END SUBROUTINE PROD0
 
       SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
+      IMPLICIT NONE
+      INTEGER M, NA, ND, NM1, NM2
+      REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
+      INTEGER IA, IBR, ID, J, K, M1, M2, MM, MM2
+      REAL AM, BH, DEN, RT, V, YM
 C
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN Y.   (PERIODIC BOUNDARY CONDITIONS)
@@ -114219,6 +116538,11 @@ C
       END SUBROUTINE PRODP
 
       SUBROUTINE CPROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,W,Y)
+      IMPLICIT NONE
+      INTEGER M, NA, ND, NM1, NM2
+      REAL A, AA, B, BM1, BM2, C, X, YY
+      INTEGER IA, ID, IFLG, J, K, M1, M2, MM
+      REAL RT
 C
 C CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN YY.   (COMPLEX CASE)
@@ -114317,6 +116641,11 @@ C
       END SUBROUTINE CPROD0
 
       SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
+      IMPLICIT NONE
+      INTEGER M, NA, ND, NM1, NM2
+      REAL A, AA, B, BM1, BM2, C, X, YY
+      INTEGER IA, ID, IFLG, J, K, M1, M2, MM, MM2
+      REAL RT
 C
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN YY.  (PERIODIC BOUNDARY CONDITIONS AND
@@ -114438,6 +116767,15 @@ C
       END SUBROUTINE CPRODP
 
       SUBROUTINE COMPB (N,IERROR,AN,BN,CN,B,AH,BH)
+      IMPLICIT NONE
+      INTEGER IERROR, N
+      REAL AH, AN, B, BH, BN, CN
+      INTEGER I, I2, I4, IB, IF, IFD, IPL, IR, J, J1, J2, JF, JS, KDO, L
+     x, L1, L2, LH, LS, N2M2, NB, NMP
+      REAL ARG, BNORM, D1, D2, D3
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
+      REAL SPMPAR
 C
 C     COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS USING TQLRT0,
 C     WHICH IS A MODIFICATION OF THE EISPACK SUBROUTINE TQLRAT.
@@ -114535,6 +116873,11 @@ C
       END SUBROUTINE COMPB
 
       SUBROUTINE TQLRT0 (N,D,E2,IERR)
+      IMPLICIT NONE
+      INTEGER NHALF, NTOP
+      REAL DHOLD
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV
 C
       INTEGER         I          ,J          ,L          ,M          ,
      1                N          ,II         ,L1         ,MML        ,
@@ -114696,6 +117039,18 @@ C
       END SUBROUTINE TQLRT0
 
       SUBROUTINE PPADD (N,IERROR,A,C,CBP,BP,BH)
+      IMPLICIT NONE
+      INTEGER IERROR, N
+      REAL A, BH, BP, C
+      INTEGER I2, I3, ICV, IF, IG, IS, IT, IZ, IZM, IZM2, J, MODIZ
+     x, NHALF, NT
+      REAL DB, PSG, SCNV, SGN, XL, XM, XR
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
+      REAL PPSGF
+      REAL PPSPF
+      REAL BSRH
+      REAL PSGF
 C
 C     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
 C     WITH COEFFICIENTS AN,BN,CN
@@ -114847,6 +117202,12 @@ C
       END SUBROUTINE PPADD
 
       FUNCTION PSGF (X,IZ,C,A,BH)
+      IMPLICIT NONE
+      INTEGER IZ
+      REAL A, BH, C, X
+      INTEGER J
+      REAL DD, FSG, HSG
+      REAL PSGF
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       FSG = 1.
       HSG = 1.
@@ -114863,6 +117224,14 @@ C
       END FUNCTION PSGF
 
       FUNCTION BSRH (XLL,XRR,IZ,C,A,BH,F,SGN)
+      IMPLICIT NONE
+      INTEGER IZ
+      REAL A, BH, C, SGN, XLL, XRR
+      REAL DX, X, XL, XR
+      INTEGER IK, K, NCMPLX, NM, NPP
+      REAL CNV, EPS
+      REAL BSRH
+      REAL F
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
@@ -114881,6 +117250,12 @@ C
       END FUNCTION BSRH
 
       FUNCTION PPSGF (X,IZ,C,A,BH)
+      IMPLICIT NONE
+      INTEGER IZ
+      REAL A, BH, C, X
+      INTEGER J
+      REAL SUM
+      REAL PPSGF
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       SUM = 0.
       DO J=1,IZ
@@ -114891,6 +117266,12 @@ C
       END FUNCTION PPSGF
 
       FUNCTION PPSPF (X,IZ,C,A,BH)
+      IMPLICIT NONE
+      INTEGER IZ
+      REAL A, BH, C, X
+      INTEGER J
+      REAL SUM
+      REAL PPSPF
       DIMENSION       A(*)       ,C(*)       ,BH(*)
       SUM = 0.
       DO J=1,IZ
@@ -114901,6 +117282,9 @@ C
       END FUNCTION PPSPF
 
       SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
+      IMPLICIT NONE
+      INTEGER IBEG, IEND, IERR, IX, N
+      INTEGER I, K, LEFTLO
 C-----------------------------------------------------------------------
 C
 C               UNIFORM RANDOM SELECTION OF VALUES FROM
@@ -115080,6 +117464,9 @@ C
       END SUBROUTINE URNG
 
       SUBROUTINE DURNG (IX, X, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER K, L, LEFTLO
       DOUBLE PRECISION X(N)
 C-----------------------------------------------------------------------
 C         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
@@ -115156,6 +117543,11 @@ C
       END SUBROUTINE DURNG
 
       SUBROUTINE URNG0 (IX, U, V)
+      IMPLICIT NONE
+      INTEGER IX
+      REAL U, V
+      INTEGER K, LEFTLO
+      REAL T
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -115222,6 +117614,9 @@ C
       END SUBROUTINE URNG0
 
       SUBROUTINE DURNG0 (IX, U, V)
+      IMPLICIT NONE
+      INTEGER IX
+      INTEGER K, LEFTLO
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -115289,6 +117684,11 @@ C
       END SUBROUTINE DURNG0
 
       SUBROUTINE URNG1 (IX, U, V, D)
+      IMPLICIT NONE
+      INTEGER IX
+      REAL D, U, V
+      INTEGER J, K, LEFTLO
+      REAL T
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -115359,6 +117759,9 @@ C
       END SUBROUTINE URNG1
 
       SUBROUTINE DURNG1 (IX, U, V, D)
+      IMPLICIT NONE
+      INTEGER IX
+      INTEGER J, K, LEFTLO
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -115430,6 +117833,10 @@ C
       END SUBROUTINE DURNG1
 
       SUBROUTINE URNG2 (IX, X, Y, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER K, L, LEFTLO
+      REAL S, T
 C-----------------------------------------------------------------------
 C
 C         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -115492,6 +117899,9 @@ C
       END SUBROUTINE URNG2
 
       SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER K, L, LEFTLO
 C-----------------------------------------------------------------------
 C
 C         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -115555,6 +117965,8 @@ C
       END SUBROUTINE DURNG2
 
       SUBROUTINE RCIR (N, IX, X, Y, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -115568,6 +117980,10 @@ C------------------
       END SUBROUTINE RCIR
 
       SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, KY, N
+      INTEGER I, I1, I2, J, K, LEFTLO
+      REAL R, S, U, V
 C-----------------------------------------------------------------------
 C
 C      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -115651,6 +118067,8 @@ C
       END SUBROUTINE RCIR1
 
       SUBROUTINE DRCIR (N, IX, X, Y, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -115664,6 +118082,9 @@ C------------------
       END SUBROUTINE DRCIR
 
       SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, KY, N
+      INTEGER I, I1, I2, J, K, LEFTLO
 C-----------------------------------------------------------------------
 C
 C      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -115748,6 +118169,10 @@ C
       END SUBROUTINE DRCIR1
 
       SUBROUTINE RNOR (IX, A, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, M, MAX
+      REAL R, S, U, V
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
@@ -115793,6 +118218,9 @@ C
       END SUBROUTINE RNOR
 
       SUBROUTINE DRNOR (IX, A, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, M, MAX
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
@@ -115869,6 +118297,9 @@ C
       END SUBROUTINE NRNG
 
       SUBROUTINE DNRNG (IX, A, N, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, M
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
@@ -115897,6 +118328,10 @@ C
       END SUBROUTINE DNRNG
 
       SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, M, MO, N
+      INTEGER I, II, J, K, L, L0, LDIM, MAX
+      REAL SUM
 C-----------------------------------------------------------------------
 C
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -116029,6 +118464,9 @@ C
       END SUBROUTINE NRVG
 
       SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, M, MO, N
+      INTEGER I, J, MAX
 C-----------------------------------------------------------------------
 C
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -116133,6 +118571,9 @@ C
       END SUBROUTINE NRVG1
 
       SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, M, MO, N
+      INTEGER I, II, J, K, L, L0, LDIM, MAX
 C-----------------------------------------------------------------------
 C
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -116265,6 +118706,9 @@ C
       END SUBROUTINE DNRVG
 
       SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, KX, M, MO, N
+      INTEGER I, J, MAX
 C-----------------------------------------------------------------------
 C
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -116369,6 +118813,10 @@ C
       END SUBROUTINE DNRVG1
 
       SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
+      IMPLICIT NONE
+      INTEGER IERROR, ISEED, N
+      REAL A
+      INTEGER I
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C
@@ -116451,6 +118899,9 @@ C
       END SUBROUTINE RANEXP
 
       SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
+      IMPLICIT NONE
+      INTEGER IERROR, ISEED, N
+      INTEGER I
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C
@@ -116533,6 +118984,11 @@ C
       END SUBROUTINE DRNEXP
 
       SUBROUTINE RGAM (IX, A, N, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      REAL A
+      INTEGER I, IND, MAX
+      REAL U, V, W
 C-----------------------------------------------------------------------
 C
 C               COMPUTATION OF N VARIATES X(1),...,X(N)
@@ -116590,6 +119046,9 @@ C
       END SUBROUTINE RGAM
 
       SUBROUTINE DRGAM (IX, A, N, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF N DOUBLE PRECISION VARIATES
@@ -116648,6 +119107,11 @@ C
       END SUBROUTINE DRGAM
 
       SUBROUTINE RBETA (N, A, B, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      REAL A, B
+      INTEGER I, IND, MAX
+      REAL U, V, X1, X2
 C-----------------------------------------------------------------------
 C
 C                GENERATION OF BETA RANDOM VARIATES
@@ -116737,6 +119201,9 @@ C
       END SUBROUTINE RBETA
 
       SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
 C
 C                         DOUBLE PRECISION
@@ -116828,6 +119295,12 @@ C
       END SUBROUTINE DRBETA
 
       SUBROUTINE FRAN (N, A, B, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      REAL A, B
+      INTEGER I, IND, MAX
+      REAL AHALF, BHALF, BIG, BOUND, C, T, U, V, X1, X2, XMAX
+      REAL SPMPAR
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF VARIATES FROM THE F-DISTRIBUTION
@@ -116926,6 +119399,9 @@ C
       END SUBROUTINE FRAN
 
       SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION GENERATION OF
@@ -117028,6 +119504,11 @@ C
       END SUBROUTINE DFRAN
 
       SUBROUTINE TRAN (N, A, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      REAL A
+      INTEGER I, IND, MAX
+      REAL AHALF, D, S, U, V, W, Z
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF VARIATES FROM THE T-DISTRIBUTION
@@ -117110,6 +119591,9 @@ C
       END SUBROUTINE TRAN
 
       SUBROUTINE DTRAN (N, A, IX, X, IERR)
+      IMPLICIT NONE
+      INTEGER IERR, IX, N
+      INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION GENERATION OF
@@ -117194,6 +119678,11 @@ C
       END SUBROUTINE DTRAN
 
       SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+      IMPLICIT NONE
+      INTEGER IERROR, ISEED, N
+      REAL ALPHA, FMU, SIG
+      INTEGER I
+      REAL C, SIGI, T
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C
@@ -117308,6 +119797,9 @@ C
       END SUBROUTINE RMK1
 
       SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+      IMPLICIT NONE
+      INTEGER IERROR, ISEED, N
+      INTEGER I
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C

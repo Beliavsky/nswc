@@ -1,4 +1,2967 @@
+SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
+IMPLICIT NONE
+INTEGER M, NA, ND, NM1, NM2
+REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
+INTEGER IA, IBR, ID, J, K, M1, M2, MM
+REAL DEN, RT
+!
+! PROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! STORES THE RESULT IN Y.
+!
+! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
+! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
+! NA         THE LENGTH OF THE ARRAY AA.
+! X,Y        MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS Y.
+! A,B,C      ARRAYS WHICH CONTAIN THE TRIDIAGONAL MATRIX.
+! M          THE ORDER OF THE MATRIX.
+! D,W,U      WORKING ARRAYS.
+! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
+!
+DIMENSION       A(*)       ,B(*)       ,C(*)       ,X(*)       , &
+&Y(*)       ,D(*)       ,W(*)       ,BD(*)      , &
+&BM1(*)     ,BM2(*)     ,AA(*)      ,U(*)
+!
+DO J=1,M
+   W(J) = X(J)
+   Y(J) = W(J)
+END DO
+MM = M-1
+ID = ND
+IBR = 0
+M1 = NM1
+M2 = NM2
+IA = NA
+20 IF (IA)  50, 50, 30
+30 RT = AA(IA)
+IF (ND .EQ. 0) RT = -RT
+IA = IA-1
+!
+! SCALAR MULTIPLICATION
+!
+DO J=1,M
+   Y(J) = RT*W(J)
+END DO
+50 IF (ID) 250,250, 60
+60 RT = BD(ID)
+ID = ID-1
+IF (ID .EQ. 0) IBR = 1
+!
+! BEGIN SOLUTION TO SYSTEM
+!
+D(M) = A(M)/(B(M)-RT)
+W(M) = Y(M)/(B(M)-RT)
+DO J=2,MM
+   K = M-J
+   DEN = B(K+1)-RT-C(K+1)*D(K+2)
+   D(K+1) = A(K+1)/DEN
+   W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
+END DO
+DEN = B(1)-RT-C(1)*D(2)
+W(1) = 1.
+IF (DEN)  80, 90, 80
+80 W(1) = (Y(1)-C(1)*W(2))/DEN
+90 DO J=2,M
+   W(J) = W(J)-D(J)*W(J-1)
+END DO
+IF (NA) 130,130, 20
+110 DO J=1,M
+   Y(J) = W(J)
+END DO
+IBR = 1
+GO TO  20
+130 IF (M1) 140,140,150
+140 IF (M2) 110,110,200
+150 IF (M2) 170,170,160
+160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 200,200,170
+170 IF (IBR) 180,180,190
+180 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 110,190,190
+190 RT = RT-BM1(M1)
+M1 = M1-1
+GO TO 230
+200 IF (IBR) 210,210,220
+210 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 110,220,220
+220 RT = RT-BM2(M2)
+M2 = M2-1
+230 DO J=1,M
+   Y(J) = Y(J)+RT*W(J)
+END DO
+GO TO  20
+250 RETURN
+END SUBROUTINE PROD0
+
+SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
+IMPLICIT NONE
+INTEGER M, NA, ND, NM1, NM2
+REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
+INTEGER IA, IBR, ID, J, K, M1, M2, MM, MM2
+REAL AM, BH, DEN, RT, V, YM
+!
+! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! STORES THE RESULT IN Y.   (PERIODIC BOUNDARY CONDITIONS)
+!
+! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
+! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
+! NA         LENGTH OF THE ARRAY AA.
+! X,Y        MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS Y.
+! A,B,C      ARRAYS WHICH CONTAIN THE TRIDIAGONAL MATRIX.
+! M          THE ORDER OF THE MATRIX.
+! D,U,W      WORKING ARRAYS.
+! IS         DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
+!
+DIMENSION       A(*)       ,B(*)       ,C(*)       ,X(*)       , &
+&Y(*)       ,D(*)       ,U(*)       ,BD(*)      , &
+&BM1(*)     ,BM2(*)     ,AA(*)      ,W(*)
+!
+DO J=1,M
+   Y(J) = X(J)
+   W(J) = Y(J)
+END DO
+MM = M-1
+MM2 = M-2
+ID = ND
+IBR = 0
+M1 = NM1
+M2 = NM2
+IA = NA
+20 IF (IA)  50, 50, 30
+30 RT = AA(IA)
+IF (ND .EQ. 0) RT = -RT
+IA = IA-1
+DO J=1,M
+   Y(J) = RT*W(J)
+END DO
+50 IF (ID) 280,280, 60
+60 RT = BD(ID)
+ID = ID-1
+IF (ID .EQ. 0) IBR = 1
+!
+! BEGIN SOLUTION TO SYSTEM
+!
+BH = B(M)-RT
+YM = Y(M)
+DEN = B(1)-RT
+D(1) = C(1)/DEN
+U(1) = A(1)/DEN
+W(1) = Y(1)/DEN
+V = C(M)
+IF (MM2-2)  90, 70, 70
+70 DO J=2,MM2
+   DEN = B(J)-RT-A(J)*D(J-1)
+   D(J) = C(J)/DEN
+   U(J) = -A(J)*U(J-1)/DEN
+   W(J) = (Y(J)-A(J)*W(J-1))/DEN
+   BH = BH-V*U(J-1)
+   YM = YM-V*W(J-1)
+   V = -V*D(J-1)
+END DO
+90 DEN = B(M-1)-RT-A(M-1)*D(M-2)
+D(M-1) = (C(M-1)-A(M-1)*U(M-2))/DEN
+W(M-1) = (Y(M-1)-A(M-1)*W(M-2))/DEN
+AM = A(M)-V*D(M-2)
+BH = BH-V*U(M-2)
+YM = YM-V*W(M-2)
+DEN = BH-AM*D(M-1)
+IF (DEN) 100,110,100
+100 W(M) = (YM-AM*W(M-1))/DEN
+GO TO 120
+110 W(M) = 1.
+120 W(M-1) = W(M-1)-D(M-1)*W(M)
+DO J=2,MM
+   K = M-J
+   W(K) = W(K)-D(K)*W(K+1)-U(K)*W(M)
+END DO
+IF (NA) 160,160, 20
+140 DO J=1,M
+   Y(J) = W(J)
+END DO
+IBR = 1
+GO TO  20
+160 IF (M1) 170,170,180
+170 IF (M2) 140,140,230
+180 IF (M2) 200,200,190
+190 IF (ABS(BM1(M1))-ABS(BM2(M2))) 230,230,200
+200 IF (IBR) 210,210,220
+210 IF (ABS(BM1(M1)-BD(ID))-ABS(BM1(M1)-RT)) 140,220,220
+220 RT = RT-BM1(M1)
+M1 = M1-1
+GO TO 260
+230 IF (IBR) 240,240,250
+240 IF (ABS(BM2(M2)-BD(ID))-ABS(BM2(M2)-RT)) 140,250,250
+250 RT = RT-BM2(M2)
+M2 = M2-1
+260 DO J=1,M
+   Y(J) = Y(J)+RT*W(J)
+END DO
+GO TO  20
+280 RETURN
+END SUBROUTINE PRODP
+
+SUBROUTINE CPROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,W,Y)
+IMPLICIT NONE
+INTEGER M, NA, ND, NM1, NM2
+REAL A, AA, B, BM1, BM2, C, X, YY
+INTEGER IA, ID, IFLG, J, K, M1, M2, MM
+REAL RT
+!
+! CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! STORES THE RESULT IN YY.   (COMPLEX CASE)
+!
+! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
+! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
+! NA         THE LENGTH OF THE ARRAY AA.
+! X,YY       MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS YY.
+! A,B,C      ARRAYS WHICH CONTAIN THE TRIDIAGONAL MATRIX.
+! M          THE ORDER OF THE MATRIX.
+! D,W,Y      WORKING ARRAYS.
+! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
+!
+COMPLEX Y          ,D          ,W          ,BD         , &
+&CRT        ,DEN        ,Y1         ,Y2
+DIMENSION       A(*)       ,B(*)       ,C(*)       ,X(*)       , &
+&Y(*)       ,D(*)       ,W(*)       ,BD(*)      , &
+&BM1(*)     ,BM2(*)     ,AA(*)      ,YY(*)
+!
+DO J=1,M
+   Y(J) = CMPLX(X(J),0.)
+END DO
+MM = M-1
+ID = ND
+M1 = NM1
+M2 = NM2
+IA = NA
+20 IFLG = 0
+IF (ID)  90, 90, 30
+30 CRT = BD(ID)
+ID = ID-1
+!
+! BEGIN SOLUTION TO SYSTEM
+!
+D(M) = A(M)/(B(M)-CRT)
+W(M) = Y(M)/(B(M)-CRT)
+DO J=2,MM
+   K = M-J
+   DEN = B(K+1)-CRT-C(K+1)*D(K+2)
+   D(K+1) = A(K+1)/DEN
+   W(K+1) = (Y(K+1)-C(K+1)*W(K+2))/DEN
+END DO
+DEN = B(1)-CRT-C(1)*D(2)
+IF (CABS(DEN))  50, 60, 50
+50 Y(1) = (Y(1)-C(1)*W(2))/DEN
+GO TO  70
+60 Y(1) = (1.,0.)
+70 DO J=2,M
+   Y(J) = W(J)-D(J)*Y(J-1)
+END DO
+90 IF (M1) 100,100,120
+100 IF (M2) 210,210,110
+110 RT = BM2(M2)
+M2 = M2-1
+GO TO 170
+120 IF (M2) 130,130,140
+130 RT = BM1(M1)
+M1 = M1-1
+GO TO 170
+140 IF (ABS(BM1(M1))-ABS(BM2(M2))) 160,160,150
+150 RT = BM1(M1)
+M1 = M1-1
+GO TO 170
+160 RT = BM2(M2)
+M2 = M2-1
+170 Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)
+IF (MM-2) 200,180,180
+!
+! MATRIX MULTIPLICATION
+!
+180 DO J=2,MM
+   Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
+   Y(J-1) = Y1
+   Y1 = Y2
+END DO
+200 Y(M) = A(M)*Y(M-1)+(B(M)-RT)*Y(M)
+Y(M-1) = Y1
+IFLG = 1
+GO TO  20
+210 IF (IA) 240,240,220
+220 RT = AA(IA)
+IA = IA-1
+IFLG = 1
+!
+! SCALAR MULTIPLICATION
+!
+DO J=1,M
+   Y(J) = RT*Y(J)
+END DO
+240 IF (IFLG) 250,250, 20
+250 DO J=1,M
+   YY(J) = REAL(Y(J))
+END DO
+RETURN
+END SUBROUTINE CPROD0
+
+SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
+IMPLICIT NONE
+INTEGER M, NA, ND, NM1, NM2
+REAL A, AA, B, BM1, BM2, C, X, YY
+INTEGER IA, ID, IFLG, J, K, M1, M2, MM, MM2
+REAL RT
+!
+! PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
+! STORES THE RESULT IN YY.  (PERIODIC BOUNDARY CONDITIONS AND
+! COMPLEX CASE)
+!
+! BD,BM1,BM2 ARRAYS CONTAINING ROOTS OF CERTIAN B POLYNOMIALS.
+! ND,NM1,NM2 THE LENGTHS OF THE ARRAYS BD,BM1,BM2 RESPECTIVELY.
+! AA         ARRAY CONTAINING SCALAR MULTIPLIERS OF THE VECTOR X.
+! NA         THE LENGTH OF THE ARRAY AA.
+! X,YY       MATRIX OPERATIONS ARE APPLIED TO X AND THE RESULT IS YY.
+! A,B,C      ARRAYS WHICH CONTAIN THE TRIDIAGONAL MATRIX.
+! M          THE ORDER OF THE MATRIX.
+! D,U,Y      WORKING ARRAYS.
+! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
+!
+COMPLEX Y          ,D          ,U          ,V          , &
+&DEN        ,BH         ,YM         ,AM         , &
+&Y1         ,Y2         ,YH         ,BD         , &
+&CRT
+DIMENSION       A(*)       ,B(*)       ,C(*)       ,X(*)       , &
+&Y(*)       ,D(*)       ,U(*)       ,BD(*)      , &
+&BM1(*)     ,BM2(*)     ,AA(*)      ,YY(*)
+!
+DO J=1,M
+   Y(J) = CMPLX(X(J),0.)
+END DO
+MM = M-1
+MM2 = M-2
+ID = ND
+M1 = NM1
+M2 = NM2
+IA = NA
+20 IFLG = 0
+IF (ID) 110,110, 30
+30 CRT = BD(ID)
+ID = ID-1
+IFLG = 1
+!
+! BEGIN SOLUTION TO SYSTEM
+!
+BH = B(M)-CRT
+YM = Y(M)
+DEN = B(1)-CRT
+D(1) = C(1)/DEN
+U(1) = A(1)/DEN
+Y(1) = Y(1)/DEN
+V = CMPLX(C(M),0.)
+IF (MM2-2)  60, 40, 40
+40 DO J=2,MM2
+   DEN = B(J)-CRT-A(J)*D(J-1)
+   D(J) = C(J)/DEN
+   U(J) = -A(J)*U(J-1)/DEN
+   Y(J) = (Y(J)-A(J)*Y(J-1))/DEN
+   BH = BH-V*U(J-1)
+   YM = YM-V*Y(J-1)
+   V = -V*D(J-1)
+END DO
+60 DEN = B(M-1)-CRT-A(M-1)*D(M-2)
+D(M-1) = (C(M-1)-A(M-1)*U(M-2))/DEN
+Y(M-1) = (Y(M-1)-A(M-1)*Y(M-2))/DEN
+AM = A(M)-V*D(M-2)
+BH = BH-V*U(M-2)
+YM = YM-V*Y(M-2)
+DEN = BH-AM*D(M-1)
+IF (CABS(DEN))  70, 80, 70
+70 Y(M) = (YM-AM*Y(M-1))/DEN
+GO TO  90
+80 Y(M) = (1.,0.)
+90 Y(M-1) = Y(M-1)-D(M-1)*Y(M)
+DO J=2,MM
+   K = M-J
+   Y(K) = Y(K)-D(K)*Y(K+1)-U(K)*Y(M)
+END DO
+110 IF (M1) 120,120,140
+120 IF (M2) 230,230,130
+130 RT = BM2(M2)
+M2 = M2-1
+GO TO 190
+140 IF (M2) 150,150,160
+150 RT = BM1(M1)
+M1 = M1-1
+GO TO 190
+160 IF (ABS(BM1(M1))-ABS(BM2(M2))) 180,180,170
+170 RT = BM1(M1)
+M1 = M1-1
+GO TO 190
+180 RT = BM2(M2)
+M2 = M2-1
+!
+! MATRIX MULTIPLICATION
+!
+190 YH = Y(1)
+Y1 = (B(1)-RT)*Y(1)+C(1)*Y(2)+A(1)*Y(M)
+IF (MM-2) 220,200,200
+200 DO J=2,MM
+   Y2 = A(J)*Y(J-1)+(B(J)-RT)*Y(J)+C(J)*Y(J+1)
+   Y(J-1) = Y1
+   Y1 = Y2
+END DO
+220 Y(M) = A(M)*Y(M-1)+(B(M)-RT)*Y(M)+C(M)*YH
+Y(M-1) = Y1
+IFLG = 1
+GO TO  20
+230 IF (IA) 260,260,240
+240 RT = AA(IA)
+IA = IA-1
+IFLG = 1
+!
+! SCALAR MULTIPLICATION
+!
+DO J=1,M
+   Y(J) = RT*Y(J)
+END DO
+260 IF (IFLG) 270,270, 20
+270 DO J=1,M
+   YY(J) = REAL(Y(J))
+END DO
+RETURN
+END SUBROUTINE CPRODP
+
+SUBROUTINE COMPB (N,IERROR,AN,BN,CN,B,AH,BH)
+IMPLICIT NONE
+INTEGER IERROR, N
+REAL AH, AN, B, BH, BN, CN
+INTEGER I, I2, I4, IB, IF, IFD, IPL, IR, J, J1, J2, JF, JS, KDO, L &
+&, L1, L2, LH, LS, N2M2, NB, NMP
+REAL ARG, BNORM, D1, D2, D3
+INTEGER IK, K, NCMPLX, NM, NPP
+REAL CNV, EPS
+REAL SPMPAR
+!
+!     COMPB COMPUTES THE ROOTS OF THE B POLYNOMIALS USING TQLRT0,
+!     WHICH IS A MODIFICATION OF THE EISPACK SUBROUTINE TQLRAT.
+!     IERROR IS SET TO 4 IF EITHER TQLRT0 FAILS OR A(J+1)*C(J) IS
+!     LESS THAN 0 FOR SOME J. AH AND BH ARE TEMPORARY WORK ARRAYS.
+!
+DIMENSION       AN(*)      ,BN(*)      ,CN(*)      ,B(*)       , &
+&AH(*)      ,BH(*)
+COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
+&NM         ,NCMPLX     ,IK
+!
+EPS = SPMPAR(1)
+BNORM = ABS(BN(1))
+DO J=2,NM
+   BNORM = AMAX1(BNORM,ABS(BN(J)))
+   ARG = AN(J)*CN(J-1)
+   IF (ARG) 220, 30, 30
+30 B(J) = SIGN(SQRT(ARG),AN(J))
+END DO
+CNV = EPS*BNORM
+IF = 2**K
+KDO = K-1
+do 100 L = 1,KDO
+   IR = L-1
+   I2 = 2**IR
+   I4 = I2+I2
+   IPL = I4-1
+   IFD = IF-I4
+   DO I=I4,IFD,I4
+      CALL INDXB (I,L,IB,NB)
+      IF (NB) 100,100, 50
+50 JS = I-IPL
+      JF = JS+NB-1
+      LS = 0
+      DO J=JS,JF
+         LS = LS+1
+         BH(LS) = BN(J)
+         AH(LS) = B(J)
+      END DO
+      CALL TQLRT0 (NB,BH,AH,IERROR)
+      IF (IERROR) 210, 70,210
+70 LH = IB-1
+      DO J=1,NB
+         LH = LH+1
+         B(LH) = -BH(J)
+      END DO
+   END DO
+100 CONTINUE
+DO J=1,NM
+   B(J) = -BN(J)
+END DO
+IF (NPP .NE. 0) RETURN
+!
+NMP = NM+1
+NB = NM+NMP
+DO J=1,NB
+   L1 = MOD(J-1,NMP)+1
+   L2 = MOD(J+NM-1,NMP)+1
+   ARG = AN(L1)*CN(L2)
+   IF (ARG .LT. 0.0) GO TO 220
+   BH(J) = SIGN(SQRT(ARG),-AN(L1))
+   AH(J) = -BN(L1)
+END DO
+CALL TQLRT0 (NB,AH,BH,IERROR)
+IF (IERROR .NE. 0) GO TO 210
+!
+CALL INDXB (IF,K-1,J2,LH)
+CALL INDXB (IF/2,K-1,J1,LH)
+J2 = J2+1
+LH = J2
+N2M2 = J2+NM+NM-2
+170 D1 = ABS(B(J1)-B(J2-1))
+D2 = ABS(B(J1)-B(J2))
+D3 = ABS(B(J1)-B(J2+1))
+IF ((D2 .LT.D1) .AND. (D2 .LT.D3)) GO TO 180
+B(LH) = B(J2)
+J2 = J2+1
+LH = LH+1
+IF (J2-N2M2) 170,170,190
+180 J2 = J2+1
+J1 = J1+1
+IF (J2-N2M2) 170,170,190
+190 B(LH) = B(N2M2+1)
+CALL INDXB (IF,K-1,J1,J2)
+J2 = J1+NMP+NMP
+CALL PPADD (NM+1,IERROR,AN,CN,B(J1),B(J1),B(J2))
+RETURN
+!
+!     ERROR RETURN
+!
+210 IERROR = 4
+RETURN
+220 IERROR = 5
+RETURN
+END SUBROUTINE COMPB
+
+SUBROUTINE TQLRT0 (N,D,E2,IERR)
+IMPLICIT NONE
+INTEGER NHALF, NTOP
+REAL DHOLD
+INTEGER IK, K, NCMPLX, NM, NPP
+REAL CNV
+!
+INTEGER I          ,J          ,L          ,M          , &
+&N          ,II         ,L1         ,MML        , &
+&IERR
+REAL D(N)       ,E2(N)
+REAL B          ,C          ,F          ,G          , &
+&H          ,P          ,R          ,S          , &
+&MACHEP
+!
+COMMON /CBLKT/  NPP        ,K          ,MACHEP     ,CNV        , &
+&NM         ,NCMPLX     ,IK
+!
+!
+!     THIS SUBROUTINE IS A MODIFICATION OF THE EISPACK SUBROUTINE
+!     TQLRAT. THE SUBROUTINE FINDS THE EIGENVALUES OF A SYMMETRIC
+!     TRIDIAGONAL MATRIX BY THE RATIONAL QL METHOD.
+!
+!     ON INPUT-
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX,
+!
+!        E2 CONTAINS THE                SUBDIAGONAL ELEMENTS OF THE
+!          INPUT MATRIX IN ITS LAST N-1 POSITIONS.  E2(1) IS ARBITRARY.
+!
+!      ON OUTPUT-
+!
+!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER.  IF AN
+!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT AND
+!          ORDERED FOR INDICES 1,2,...IERR-1, BUT MAY NOT BE
+!          THE SMALLEST EIGENVALUES,
+!
+!        E2 HAS BEEN DESTROYED,
+!
+!        IERR IS SET TO
+!          ZERO       FOR NORMAL RETURN,
+!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!                     DETERMINED AFTER 30 ITERATIONS.
+!
+!
+!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!
+!                **********
+!
+IERR = 0
+IF (N .EQ. 1) GO TO 150
+!
+DO I=2,N
+   E2(I-1) = E2(I)*E2(I)
+END DO
+!
+F = 0.0
+B = 0.0
+E2(N) = 0.0
+!
+DO L=1,N
+   J = 0
+   H = MACHEP*(ABS(D(L))+SQRT(E2(L)))
+   IF (B .GT. H) GO TO  20
+   B = H
+   C = B*B
+!
+!     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
+!
+20 do 30 M = L,N
+      IF (E2(M) .LE. C) GO TO  40
+!
+!     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
+!                THROUGH THE BOTTOM OF THE LOOP **********
+!
+30 CONTINUE
+!
+40 IF (M .EQ. L) GO TO  80
+50 IF (J .EQ. 30) GO TO 140
+   J = J+1
+!
+!     ********** FORM SHIFT **********
+!
+   L1 = L+1
+   S = SQRT(E2(L))
+   G = D(L)
+   P = (D(L1)-G)/(2.0*S)
+   R = SQRT(P*P+1.0)
+   D(L) = S/(P+SIGN(R,P))
+   H = G-D(L)
+!
+   DO I=L1,N
+      D(I) = D(I)-H
+   END DO
+!
+   F = F+H
+!
+!     ********** RATIONAL QL TRANSFORMATION **********
+!
+   G = D(M)
+   IF (G .EQ. 0.0) G = B
+   H = G
+   S = 0.0
+   MML = M-L
+!
+!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+!
+   DO II=1,MML
+      I = M-II
+      P = G*H
+      R = P+E2(I)
+      E2(I+1) = S*R
+      S = E2(I)/R
+      D(I+1) = H+S*(H+D(I))
+      G = D(I)-E2(I)/G
+      IF (G .EQ. 0.0) G = B
+      H = G*P/R
+   END DO
+!
+   E2(L) = S*G
+   D(L) = H
+!
+!     ********** GUARD AGAINST UNDERFLOWED H **********
+!
+   IF (H .EQ. 0.0) GO TO  80
+   IF (ABS(E2(L)) .LE. ABS(C/H)) GO TO  80
+   E2(L) = H*E2(L)
+   IF (E2(L) .NE. 0.0) GO TO  50
+80 P = D(L)+F
+!
+!     ********** ORDER EIGENVALUES **********
+!
+   IF (L .EQ. 1) GO TO 100
+!
+!     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
+!
+   DO II=2,L
+      I = L+2-II
+      IF (P .GE. D(I-1)) GO TO 110
+      D(I) = D(I-1)
+   END DO
+!
+100 I = 1
+110 D(I) = P
+END DO
+!
+IF (ABS(D(N)) .GE. ABS(D(1))) GO TO 150
+NHALF = N/2
+DO I=1,NHALF
+   NTOP = N-I
+   DHOLD = D(I)
+   D(I) = D(NTOP+1)
+   D(NTOP+1) = DHOLD
+END DO
+GO TO 150
+!
+!     ********** SET ERROR -- NO CONVERGENCE TO AN
+!                EIGENVALUE AFTER 30 ITERATIONS **********
+!
+140 IERR = L
+150 RETURN
+END SUBROUTINE TQLRT0
+
+SUBROUTINE PPADD (N,IERROR,A,C,CBP,BP,BH)
+IMPLICIT NONE
+INTEGER IERROR, N
+REAL A, BH, BP, C
+INTEGER I2, I3, ICV, IF, IG, IS, IT, IZ, IZM, IZM2, J, MODIZ &
+&, NHALF, NT
+REAL DB, PSG, SCNV, SGN, XL, XM, XR
+INTEGER IK, K, NCMPLX, NM, NPP
+REAL CNV, EPS
+REAL PPSGF
+REAL PPSPF
+REAL BSRH
+REAL PSGF
+!
+!     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
+!     WITH COEFFICIENTS AN,BN,CN
+!
+! N   IS THE ORDER OF THE BH AND BP POLYNOMIALS.
+!     ON OUTPUT BP CONTAINS THE EIGENVALUES.
+! CBP IS THE SAME AS BP EXCEPT TYPE COMPLEX.
+! BH  IS USED TO TEMPORARILY STORE THE ROOTS OF THE B HAT POLYNOMIAL
+!     WHICH ENTERS THROUGH BP.
+!
+COMPLEX CF         ,CX         ,FSG        ,HSG        , &
+&DD         ,F          ,FP         ,FPP        , &
+&CDIS       ,R1         ,R2         ,R3         , &
+&CBP
+DIMENSION       A(*)       ,C(*)       ,BP(*)      ,BH(*)      , &
+&CBP(*)
+EXTERNAL        PSGF       ,PPSPF      ,PPSGF
+COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
+&NM         ,NCMPLX     ,IK
+!
+SCNV = SQRT(CNV)
+IZ = N
+IZM = IZ-1
+IZM2 = IZ-2
+IF (BP(N)-BP(1))  10,420, 30
+10 DO J=1,N
+   NT = N-J
+   BH(J) = BP(NT+1)
+END DO
+GO TO  50
+30 DO J=1,N
+   BH(J) = BP(J)
+END DO
+50 NCMPLX = 0
+MODIZ = MOD(IZ,2)
+IS = 1
+IF (MODIZ)  60, 70, 60
+60 IF (A(1)) 100,420, 70
+70 XL = BH(1)
+DB = BH(3)-BH(1)
+80 XL = XL-DB
+IF (PSGF(XL,IZ,C,A,BH))  80, 80, 90
+90 SGN = -1.
+CBP(1) = CMPLX(BSRH(XL,BH(1),IZ,C,A,BH,PSGF,SGN),0.)
+IS = 2
+100 IF = IZ-1
+IF (MODIZ) 110,120,110
+110 IF (A(1)) 120,420,150
+120 XR = BH(IZ)
+DB = BH(IZ)-BH(IZ-2)
+130 XR = XR+DB
+IF (PSGF(XR,IZ,C,A,BH)) 130,140,140
+140 SGN = 1.
+CBP(IZ) = CMPLX(BSRH(BH(IZ),XR,IZ,C,A,BH,PSGF,SGN),0.)
+IF = IZ-2
+150 do 360 IG = IS,IF,2
+   XL = BH(IG)
+   XR = BH(IG+1)
+   SGN = -1.
+   XM = BSRH(XL,XR,IZ,C,A,BH,PPSPF,SGN)
+   PSG = PSGF(XM,IZ,C,A,BH)
+   IF (ABS(PSG)-EPS) 180,180,160
+160 IF (PSG*PPSGF(XM,IZ,C,A,BH)) 170,180,190
+!
+!     CASE OF A REAL ZERO
+!
+170 SGN = 1.
+   CBP(IG) = CMPLX(BSRH(BH(IG),XM,IZ,C,A,BH,PSGF,SGN),0.)
+   SGN = -1.
+   CBP(IG+1) = CMPLX(BSRH(XM,BH(IG+1),IZ,C,A,BH,PSGF,SGN),0.)
+   GO TO 360
+!
+!     CASE OF A MULTIPLE ZERO
+!
+180 CBP(IG) = CMPLX(XM,0.)
+   CBP(IG+1) = CMPLX(XM,0.)
+   GO TO 360
+!
+!     CASE OF A COMPLEX ZERO
+!
+190 IT = 0
+   ICV = 0
+   CX = CMPLX(XM,0.)
+200 FSG = (1.,0.)
+   HSG = (1.,0.)
+   FP = (0.,0.)
+   FPP = (0.,0.)
+   DO J=1,IZ
+      DD = 1./(CX-BH(J))
+      FSG = FSG*A(J)*DD
+      HSG = HSG*C(J)*DD
+      FP = FP+DD
+      FPP = FPP-DD*DD
+   END DO
+   IF (MODIZ) 230,220,230
+220 F = (1.,0.)-FSG-HSG
+   GO TO 240
+230 F = (1.,0.)+FSG+HSG
+240 I3 = 0
+   IF (CABS(FP)) 260,260,250
+250 I3 = 1
+   R3 = -F/FP
+260 I2 = 0
+   IF (CABS(FPP)) 320,320,270
+270 I2 = 1
+   CDIS = CSQRT(FP**2-2.*F*FPP)
+   R1 = CDIS-FP
+   R2 = -FP-CDIS
+   IF (CABS(R1)-CABS(R2)) 290,290,280
+280 R1 = R1/FPP
+   GO TO 300
+290 R1 = R2/FPP
+300 R2 = 2.*F/FPP/R1
+   IF (CABS(R2) .LT. CABS(R1)) R1 = R2
+   IF (I3) 330,330,310
+310 IF (CABS(R3) .LT. CABS(R1)) R1 = R3
+   GO TO 330
+320 R1 = R3
+330 CX = CX+R1
+   IT = IT+1
+   IF (IT .GT. 50) GO TO 420
+   IF (CABS(R1) .GT. SCNV) GO TO 200
+   IF (ICV) 340,340,350
+340 ICV = 1
+   GO TO 200
+350 CBP(IG) = CX
+   CBP(IG+1) = CONJG(CX)
+360 CONTINUE
+IF (CABS(CBP(N))-CABS(CBP(1))) 370,420,390
+370 NHALF = N/2
+DO J=1,NHALF
+   NT = N-J
+   CX = CBP(J)
+   CBP(J) = CBP(NT+1)
+   CBP(NT+1) = CX
+END DO
+390 NCMPLX = 1
+do 400 J = 2,IZ
+   IF (AIMAG(CBP(J))) 430,400,430
+400 CONTINUE
+NCMPLX = 0
+DO J=2,IZ
+   BP(J) = REAL(CBP(J))
+END DO
+GO TO 430
+420 IERROR = 4
+430 CONTINUE
+RETURN
+END SUBROUTINE PPADD
+
+FUNCTION PSGF (X,IZ,C,A,BH)
+IMPLICIT NONE
+INTEGER IZ
+REAL A, BH, C, X
+INTEGER J
+REAL DD, FSG, HSG
+REAL PSGF
+DIMENSION       A(*)       ,C(*)       ,BH(*)
+FSG = 1.
+HSG = 1.
+DO J=1,IZ
+   DD = 1./(X-BH(J))
+   FSG = FSG*A(J)*DD
+   HSG = HSG*C(J)*DD
+END DO
+IF (MOD(IZ,2))  30, 20, 30
+20 PSGF = 1.-FSG-HSG
+RETURN
+30 PSGF = 1.+FSG+HSG
+RETURN
+END FUNCTION PSGF
+
+FUNCTION BSRH (XLL,XRR,IZ,C,A,BH,F,SGN)
+IMPLICIT NONE
+INTEGER IZ
+REAL A, BH, C, SGN, XLL, XRR
+REAL DX, X, XL, XR
+INTEGER IK, K, NCMPLX, NM, NPP
+REAL CNV, EPS
+REAL BSRH
+REAL F
+DIMENSION       A(*)       ,C(*)       ,BH(*)
+COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        , &
+&NM         ,NCMPLX     ,IK
+XL = XLL
+XR = XRR
+DX = .5*ABS(XR-XL)
+10 X = .5*(XL+XR)
+IF (SGN*F(X,IZ,C,A,BH))  30, 50, 20
+20 XR = X
+GO TO  40
+30 XL = X
+40 DX = .5*DX
+IF (DX-CNV)  50, 50, 10
+50 BSRH = .5*(XL+XR)
+RETURN
+END FUNCTION BSRH
+
+FUNCTION PPSGF (X,IZ,C,A,BH)
+IMPLICIT NONE
+INTEGER IZ
+REAL A, BH, C, X
+INTEGER J
+REAL SUM
+REAL PPSGF
+DIMENSION       A(*)       ,C(*)       ,BH(*)
+SUM = 0.
+DO J=1,IZ
+   SUM = SUM-1./(X-BH(J))**2
+END DO
+PPSGF = SUM
+RETURN
+END FUNCTION PPSGF
+
+FUNCTION PPSPF (X,IZ,C,A,BH)
+IMPLICIT NONE
+INTEGER IZ
+REAL A, BH, C, X
+INTEGER J
+REAL SUM
+REAL PPSPF
+DIMENSION       A(*)       ,C(*)       ,BH(*)
+SUM = 0.
+DO J=1,IZ
+   SUM = SUM+1./(X-BH(J))
+END DO
+PPSPF = SUM
+RETURN
+END FUNCTION PPSPF
+
+SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
+IMPLICIT NONE
+INTEGER IBEG, IEND, IERR, IX, N
+INTEGER I, K, LEFTLO
+!-----------------------------------------------------------------------
+!
+!               UNIFORM RANDOM SELECTION OF VALUES FROM
+!                       A FINITE SET OF INTEGERS
+!
+!                           ----------------
+!
+!     URGET SELECTS N VALUES FROM THE SET OF INTEGERS FROM IBEG TO
+!     IEND WHERE IBEG .LT. IEND. THE SELECTION IS PERFORMED SO THAT
+!     ANY INTEGER IS EQUALLY LIKELY TO OCCUR WITH PROABILITY 1/M
+!     WHERE M = IEND - IBEG + 1. AS N BECOMES LARGE THE MEAN AND
+!     VARIANCE OF THE VALUES WILL CLOSELY APPROXIMATE THE MEAN AND
+!     VARIANCE OF THE DISCRETE UNIFORM DISTRIBUTION WHERE
+!
+!               MEAN = IBEG + (IEND - IBEG)/2
+!
+!               VARIANCE = (M**2 - 1)/12 .
+!
+!     INPUT...
+!
+!       N     - NUMBER OF VARIATES TO BE GENERATED
+!       IBEG  - LOWER LIMIT OF GENERATION INTERVAL
+!       IEND  - UPPER LIMIT OF GENERATION INTERVAL
+!       IX    - INTEGER SEED USED TO INITIALIZE THE
+!               SEQUENCE OF VARIATES GENERATED
+!
+!     OUTPUT...
+!
+!       IX    - SEED FOR OBTAINING MORE VARIATES
+!       L     - OUTPUT ARRAY OF DIMENSION N CONTAINING
+!               THE GENERATED INTEGERS
+!       IERR  - INPUT ERROR FLAG
+!               ( 0 - NO INPUT ERRORS
+!                 1 - N .LE. 0
+!                 2 - IBEG .GE. IEND  OR  M .GE. P.
+!                 3 - SEED OUT OF RANGE )
+!
+!-----------------------------------------------------------------------
+INTEGER L(N)
+INTEGER A, B15, B16, FHI, P, XALO, XHI
+DOUBLE PRECISION C, M, S, T
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     S = 1/(P-1)   (IT IS ASSUMED THAT THE ARITHMETIC BEING
+!                    USED IS ACCURATE TO AT LEAST 14 DIGITS.
+!                    S HAS BEEN SET TO A VALUE SLIGHTLY LESS
+!                    THAN 1/(P-1) TO ENSURE THAT ROUNDING
+!                    ERROR DOES NOT PRODUCE VARIATES THAT
+!                    EXCEED IEND.)
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA S /.4656612877413D-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IBEG .GE. IEND) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 120
+M = IEND - IBEG + 1
+T = P
+IF (M .GE. T) GO TO 110
+!
+IERR = 0
+C = M*S
+DO I = 1,N
+!
+!        USE THE LINUS SCHRAGE CODE TO OBTAIN THE NEXT SEED IX.
+!
+!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
+!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        (1979), PP. 132-138.
+!
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+!
+!        MAP IX TO AN INTEGER IN THE CLOSED INTERVAL (IBEG,IEND).
+!        THIS MAPPING IS 1-1 ONLY WHEN M = P - 1, IN WHICH CASE
+!        IX IS MAPPED TO THE VALUE (IBEG - 1) + IX.
+!
+   T = IX
+   K = C*T
+   L(I) = IBEG + K
+END DO
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+END SUBROUTINE URGET
+
+SUBROUTINE URNG (IX, X, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER K, L, LEFTLO
+REAL S, T
+REAL X(N)
+!-----------------------------------------------------------------------
+!         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     IT IS ASSUMED THAT 0 .LT. IX .LT. P
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+INTEGER A, B15, B16, FHI, P, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA S/.465661E-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+DO L = 1,N
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+   XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+   XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+   LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+   FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+   K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+   IF (IX .LT. 0) IX = IX + P
+!
+!     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
+!     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
+!     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR IX = 1,
+!     NAMELY S, BE ROUGHLY THE SAME DISTANCE FROM 0 AS (P-1)*S
+!     IS FROM 1. THE CURRENT VALUE FOR S ASSURES US THAT X(L)
+!     IS LESS THAN 1 FOR ANY FLOATING POINT ARITHMETIC OF 6
+!     OR MORE DIGITS.
+!
+   T = IX
+   X(L) = S*T
+END DO
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE URNG
+
+SUBROUTINE DURNG (IX, X, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER K, L, LEFTLO
+DOUBLE PRECISION X(N)
+!-----------------------------------------------------------------------
+!         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     IT IS ASSUMED THAT 0 .LT. IX .LT. P
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+INTEGER A, B15, B16, FHI, P, XALO, XHI
+DOUBLE PRECISION S, T
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA S/.465661D-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+DO L = 1,N
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+   XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+   XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+   LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+   FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+   K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+   IF (IX .LT. 0) IX = IX + P
+!
+!     RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1.
+!     THE SCALE FACTOR S IS SELECTED TO BE AS NEAR 1/P AS IS
+!     APPROPRIATE IN ORDER THAT THE FLOATING VALUE FOR IX = 1,
+!     NAMELY S, BE ROUGHLY THE SAME DISTANCE FROM 0 AS (P-1)*S
+!     IS FROM 1. THE CURRENT VALUE FOR S ASSURES US THAT X(L)
+!     IS LESS THAN 1 FOR ANY DOUBLE PRECISION ARITHMETIC.
+!
+   T = IX
+   X(L) = S*T
+END DO
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE DURNG
+
+SUBROUTINE URNG0 (IX, U, V)
+IMPLICIT NONE
+INTEGER IX
+REAL U, V
+INTEGER K, LEFTLO
+REAL T
+!-----------------------------------------------------------------------
+!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     U IS THE UNIFORM VARIATE THAT IS GENERATED AND V = 1 - U.
+!     U AND V ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. IX .LT. P.
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     DATA P0/2**30 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+!-------------------
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+IF (IX .LT. 0) IX = IX + P
+!
+!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!
+T = P
+IF (IX .GT. P0) GO TO 10
+   U = IX
+   U = U/T
+   V = 0.5 + (0.5 - U)
+   RETURN
+10 V = P - IX
+V = V/T
+U = 0.5 + (0.5 - V)
+RETURN
+END SUBROUTINE URNG0
+
+SUBROUTINE DURNG0 (IX, U, V)
+IMPLICIT NONE
+INTEGER IX
+INTEGER K, LEFTLO
+!-----------------------------------------------------------------------
+!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     U IS THE UNIFORM VARIATE THAT IS GENERATED AND V = 1 - U.
+!     U AND V ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. IX .LT. P.
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+DOUBLE PRECISION U, V, T
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     DATA P0/2**30 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+!-------------------
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+IF (IX .LT. 0) IX = IX + P
+!
+!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!
+T = P
+IF (IX .GT. P0) GO TO 10
+   U = IX
+   U = U/T
+   V = 0.5D0 + (0.5D0 - U)
+   RETURN
+10 V = P - IX
+V = V/T
+U = 0.5D0 + (0.5D0 - V)
+RETURN
+END SUBROUTINE DURNG0
+
+SUBROUTINE URNG1 (IX, U, V, D)
+IMPLICIT NONE
+INTEGER IX
+REAL D, U, V
+INTEGER J, K, LEFTLO
+REAL T
+!-----------------------------------------------------------------------
+!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     U IS THE UNIFORM VARIATE THAT IS GENERATED AND V = 1 - U.
+!     U AND V ARE POSITIVE AND D = U - 0.5. IT IS ASSUMED THAT
+!     1 .LE. IX .LT. P.
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     DATA P0/2**30 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+!-------------------
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+IF (IX .LT. 0) IX = IX + P
+!
+!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!
+J = P - IX
+T = P
+D = IX - J
+D = 0.5*(D/T)
+IF (IX .GT. P0) GO TO 10
+   U = IX
+   U = U/T
+   V = 0.5 + (0.5 - U)
+   RETURN
+10 V = J
+V = V/T
+U = 0.5 + (0.5 - V)
+RETURN
+END SUBROUTINE URNG1
+
+SUBROUTINE DURNG1 (IX, U, V, D)
+IMPLICIT NONE
+INTEGER IX
+INTEGER J, K, LEFTLO
+!-----------------------------------------------------------------------
+!       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
+!
+!                       IX = IX*A MOD P
+!
+!     U IS THE UNIFORM VARIATE THAT IS GENERATED AND V = 1 - U.
+!     U AND V ARE POSITIVE AND D = U - 0.5. IT IS ASSUMED THAT
+!     1 .LE. IX .LT. P.
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+DOUBLE PRECISION U, V, D, T
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     DATA P0/2**30 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+!-------------------
+!
+!                 GET 15 HIGH ORDER BITS OF IX
+!
+XHI = IX/B16
+!
+!           GET 16 LOWER BITS OF IX AND MULTIPLY WITH A
+!
+XALO = (IX - XHI*B16)*A
+!
+!             GET 15 HIGH ORDER BITS OF THE PRODUCT
+!
+LEFTLO = XALO/B16
+!
+!               FORM THE 31 HIGHEST BITS OF A*IX
+!
+FHI = XHI*A + LEFTLO
+!
+!           OBTAIN THE OVERFLOW PAST THE 31ST BIT OF A*IX
+!
+K = FHI/B15
+!
+!             ASSEMBLE ALL THE PARTS AND PRESUBTRACT P
+!                  THE PARENTHESES ARE ESSENTIAL
+!
+IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+!
+!                      ADD P IF NECESSARY
+!
+IF (IX .LT. 0) IX = IX + P
+!
+!         RESCALE IX, TO INTERPRET IT AS A VALUE BETWEEN 0 AND 1
+!
+J = P - IX
+T = P
+D = IX - J
+D = 0.5D0*(D/T)
+IF (IX .GT. P0) GO TO 10
+   U = IX
+   U = U/T
+   V = 0.5D0 + (0.5D0 - U)
+   RETURN
+10 V = J
+V = V/T
+U = 0.5D0 + (0.5D0 - V)
+RETURN
+END SUBROUTINE DURNG1
+
+SUBROUTINE URNG2 (IX, X, Y, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER K, L, LEFTLO
+REAL S, T
+!-----------------------------------------------------------------------
+!
+!         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
+!                     FOR I = 1,...,N WHERE
+!
+!                      0 .LT. X(I) .LT. 1
+!                      0 .LT. Y(I) .LT. 1
+!
+!     IT IS ASSUMED THAT 0 .LT. IX .LT. P
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+REAL X(N), Y(N)
+INTEGER A, B15, B16, FHI, P, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA S/.465661E-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+!
+!         SEE THE COMMENTS IN THE SUBROUTINE URNG FOR THE
+!                STATEMENTS IN THE FOLLOWING LOOP
+!
+DO L = 1,N
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   T = IX
+   X(L) = S*T
+!
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   T = IX
+   Y(L) = S*T
+END DO
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE URNG2
+
+SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER K, L, LEFTLO
+!-----------------------------------------------------------------------
+!
+!         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
+!                     FOR I = 1,...,N WHERE
+!
+!                      0 .LT. X(I) .LT. 1
+!                      0 .LT. Y(I) .LT. 1
+!
+!     IT IS ASSUMED THAT 0 .LT. IX .LT. P
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        LINUS SCHRAGE
+!        UNIVERSITY OF CHICAGO
+!     ADAPTED BY A.H. MORRIS (NSWC)
+!-------------------
+DOUBLE PRECISION X(N), Y(N)
+DOUBLE PRECISION S, T
+INTEGER A, B15, B16, FHI, P, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA S/.465661D-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+!
+!         SEE THE COMMENTS IN THE SUBROUTINE DURNG FOR THE
+!                 STATEMENTS IN THE FOLLOWING LOOP
+!
+DO L = 1,N
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   T = IX
+   X(L) = S*T
+!
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   T = IX
+   Y(L) = S*T
+END DO
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE DURNG2
+
+SUBROUTINE RCIR (N, IX, X, Y, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+!-----------------------------------------------------------------------
+!
+!          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
+!              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
+!
+!-----------------------------------------------------------------------
+REAL X(N), Y(N)
+!------------------
+CALL RCIR1 (N, IX, X, 1, Y, 1, IERR)
+RETURN
+END SUBROUTINE RCIR
+
+SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, KY, N
+INTEGER I, I1, I2, J, K, LEFTLO
+REAL R, S, U, V
+!-----------------------------------------------------------------------
+!
+!      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
+!      CENTERED AT THE ORIGIN. THE ABSCISSA AND ORDINATE OF THE
+!      I-TH POINT ARE STORED IN X(I1) AND Y(I2) WHERE
+!
+!                      I1 = 1 + KX*(I - 1)
+!                      I2 = 1 + KY*(I - 1) .
+!
+!-----------------------------------------------------------------------
+REAL X(*), Y(*)
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     P0 = 2**30 - 1
+!     S  = 2/P
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+DATA S/.931322E-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+!
+I1 = 1
+I2 = 1
+DO I = 1,N
+!
+!        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
+!
+!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
+!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        (1979), PP. 132-138.
+!
+10 XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   J = IX
+!
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+!
+!        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
+!          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
+!
+   U = J - P0
+   U = S*U
+   V = IX - P0
+   V = S*V
+!
+!         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
+!
+   R = (U*U + V*V) - 1.0
+   IF (R .GE. 0.0) GO TO 10
+!
+!            STORE THE POINT WHEN IT IS IN THE CIRCLE
+!
+   X(I1) = U
+   Y(I2) = V
+   I1 = I1 + KX
+   I2 = I2 + KY
+END DO
+RETURN
+!
+!                          ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE RCIR1
+
+SUBROUTINE DRCIR (N, IX, X, Y, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+!-----------------------------------------------------------------------
+!
+!          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
+!              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X(N), Y(N)
+!------------------
+CALL DRCIR1 (N, IX, X, 1, Y, 1, IERR)
+RETURN
+END SUBROUTINE DRCIR
+
+SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, KY, N
+INTEGER I, I1, I2, J, K, LEFTLO
+!-----------------------------------------------------------------------
+!
+!      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
+!      CENTERED AT THE ORIGIN. THE ABSCISSA AND ORDINATE OF THE
+!      I-TH POINT ARE STORED IN X(I1) AND Y(I2) WHERE
+!
+!                      I1 = 1 + KX*(I - 1)
+!                      I2 = 1 + KY*(I - 1) .
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION X(*), Y(*)
+DOUBLE PRECISION R, S, U, V
+INTEGER A, B15, B16, FHI, P, P0, XALO, XHI
+!-------------------
+!     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
+!     P0 = 2**30 - 1
+!     S  = 2/P
+!-------------------
+DATA A/16807/, B15/32768/, B16/65536/, P/2147483647/
+DATA P0/1073741823/
+DATA S/.931322D-09/
+!-------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. P) GO TO 110
+IERR = 0
+!
+I1 = 1
+I2 = 1
+DO I = 1,N
+!
+!        USE THE LINUS SCHRAGE CODE TO OBTAIN NEW SEEDS IX.
+!
+!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
+!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        (1979), PP. 132-138.
+!
+10 XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+   J = IX
+!
+   XHI = IX/B16
+   XALO = (IX - XHI*B16)*A
+   LEFTLO = XALO/B16
+   FHI = XHI*A + LEFTLO
+   K = FHI/B15
+   IX = (((XALO - LEFTLO*B16) - P) + (FHI - K*B15)*B16) + K
+   IF (IX .LT. 0) IX = IX + P
+!
+!        SUBTRACT THE MIDPOINT P0 AND RESCALE SO THAT THE
+!          UNIFORM VARIATES ARE IN THE INTERVAL (-1,1).
+!
+   U = J - P0
+   U = S*U
+   V = IX - P0
+   V = S*V
+!
+!         CHECK IF THE POINT (U,V) IS IN THE UNIT CIRCLE
+!
+   R = (U*U + V*V) - 1.D0
+   IF (R .GE. 0.D0) GO TO 10
+!
+!            STORE THE POINT WHEN IT IS IN THE CIRCLE
+!
+   X(I1) = U
+   Y(I2) = V
+   I1 = I1 + KX
+   I2 = I2 + KY
+END DO
+RETURN
+!
+!                          ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE DRCIR1
+
+SUBROUTINE RNOR (IX, A, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, M, MAX
+REAL R, S, U, V
+!-----------------------------------------------------------------------
+!                 NORMAL RANDOM NUMBER GENERATOR
+!-----------------------------------------------------------------------
+REAL A(N), T(2)
+!---------------------
+DATA MAX /2147483647/
+!---------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 110
+IERR = 0
+!
+IF (N .EQ. 1) GO TO 20
+M = N/2
+CALL RCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
+M = M + M
+!
+!                  OBTAIN THE FIRST M VARIATES
+!
+DO I = 1,M,2
+   U = A(I)
+   V = A(I + 1)
+   R = U*U + V*V
+   S = SQRT(-2.0*ALOG(R)/R)
+   A(I) = S*U
+   A(I + 1) = S*V
+END DO
+IF (M .EQ. N) RETURN
+!
+!            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
+!
+20 CALL RCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
+R = T(1)*T(1) + T(2)*T(2)
+S = SQRT(-2.0*ALOG(R)/R)
+A(N) = S*T(1)
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE RNOR
+
+SUBROUTINE DRNOR (IX, A, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, M, MAX
+!-----------------------------------------------------------------------
+!                 NORMAL RANDOM NUMBER GENERATOR
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N)
+DOUBLE PRECISION R, S, U, V, T(2)
+!---------------------
+DATA MAX /2147483647/
+!---------------------
+IF (N .LE. 0) GO TO 100
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 110
+IERR = 0
+!
+IF (N .EQ. 1) GO TO 20
+M = N/2
+CALL DRCIR1 (M, IX, A(1), 2, A(2), 2, IERR)
+M = M + M
+!
+!                  OBTAIN THE FIRST M VARIATES
+!
+DO I = 1,M,2
+   U = A(I)
+   V = A(I + 1)
+   R = U*U + V*V
+   S = DSQRT(-2.D0*DLOG(R)/R)
+   A(I) = S*U
+   A(I + 1) = S*V
+END DO
+IF (M .EQ. N) RETURN
+!
+!            OBTAIN THE LAST VARIATE (WHEN N IS ODD)
+!
+20 CALL DRCIR1 (1, IX, T(1), 1, T(2), 1, IERR)
+R = T(1)*T(1) + T(2)*T(2)
+S = DSQRT(-2.D0*DLOG(R)/R)
+A(N) = S*T(1)
+RETURN
+!
+!                         ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+END SUBROUTINE DRNOR
+
+SUBROUTINE NRNG (IX, A, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, M
+REAL PHI, PI2, R
+!-----------------------------------------------------------------------
+!                 GAUSSIAN RANDOM NUMBER GENERATOR
+!-----------------------------------------------------------------------
+REAL A(N), TEMP(1)
+DATA PI2 /6.2831853071796/
+!
+CALL URNG (IX,A,N,IERR)
+IF (IERR .NE. 0) RETURN
+IF (N .EQ. 1) GO TO 20
+!
+M = N/2
+M = M + M
+do 10 I = 1,M,2
+   R = SQRT(-2.0*ALOG(A(I)))
+   PHI = PI2*A(I+1)
+   A(I) = R*COS(PHI)
+10 A(I+1) = R*SIN(PHI)
+IF (M .EQ. N) RETURN
+!
+20 CALL URNG (IX,TEMP,1,IERR)
+R = SQRT(-2.0*ALOG(A(N)))
+A(N) = R*COS(PI2*TEMP(1))
+RETURN
+END SUBROUTINE NRNG
+
+SUBROUTINE DNRNG (IX, A, N, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, M
+!-----------------------------------------------------------------------
+!                 GAUSSIAN RANDOM NUMBER GENERATOR
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(N)
+DOUBLE PRECISION PHI, PI2, R, TEMP(1)
+!
+DATA PI2 /6.28318530717958647692528676656D0/
+!
+CALL DURNG (IX, A, N, IERR)
+IF (IERR .NE. 0) RETURN
+IF (N .EQ. 1) GO TO 20
+!
+M = N/2
+M = M + M
+do 10 I = 1,M,2
+   R = DSQRT(-2.D0*DLOG(A(I)))
+   PHI = PI2*A(I+1)
+   A(I) = R*DCOS(PHI)
+10 A(I+1) = R*DSIN(PHI)
+IF (M .EQ. N) RETURN
+!
+20 CALL DURNG (IX, TEMP, 1, IERR)
+R = DSQRT(-2.D0*DLOG(A(N)))
+A(N) = R*DCOS(PI2*TEMP(1))
+RETURN
+END SUBROUTINE DNRNG
+
+SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, M, MO, N
+INTEGER I, II, J, K, L, L0, LDIM, MAX
+REAL SUM
+!-----------------------------------------------------------------------
+!
+!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
+!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
+!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A.
+!
+!                          ---------------
+!
+!     INPUT...
+!
+!        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
+!                  BEING CALLED FOR THE FIRST TIME TO
+!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  A. SET MO = 0 ON AN INITIAL CALL TO
+!                  THE ROUTINE, AND MO .NE. 0 ON A LATER
+!                  CALL TO GENERATE MORE VECTORS FROM
+!                  THE SAME MATRIX A.
+!
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES.
+!
+!        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!
+!        M       - LENGTH OF THE DESIRED RANDOM VECTORS.
+!                  IT IS ASSUMED THAT M .GE. 2. M SHOULD
+!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
+!
+!        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
+!                  A IS A SYMMETRIC POSITIVE DEFINITE MATRIX
+!                  STORED IN PACKED FORM. THE ARRAY A MUST
+!                  BE OF LENGTH (M*(M + 1))/2 OR LARGER.
+!
+!                  ON AN INITIAL CALL TO THE ROUTINE, THE
+!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
+!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
+!                  DATA IN THE ARRAY A. A SHOULD NEVER BE
+!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  THE ROUTINE (WHEN MO .NE. 0).
+!
+!        FMU     - MEAN VECTOR OF DIMENSION M OF THE
+!                  MULTIVARIATE NORMAL DISTRIBUTION
+!
+!        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
+!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  THAT KX .GE. M.
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!
+!        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
+!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
+!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  X FOR J = 1,...,N.
+!
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - M .LE. 1  OR  M .GT. KX
+!                   3 - A IS NOT POSITIVE DEFINITE
+!                   4 - SEED OUT OF RANGE         )
+!
+!-----------------------------------------------------------------------
+!
+!        ***REFERENCES***
+!
+!     FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
+!     DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!     PP. 215 - 217.
+!
+!     MORRISON, DONALD F., MULTIVARIATE STATISTICAL METHODS,
+!     MCGRAW-HILL, NEW YORK, 1967, PP. 80 - 81.
+!
+!     SCHEUER, E. AND STOLLER, D. S., ON THE GENERATION OF
+!     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
+!     PP. 278 - 281.
+!
+!-----------------------------------------------------------------------
+REAL A(*), FMU(M), X(KX,N)
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+!
+!           COMPUTE THE LOWER TRIANGULAR MATRIX
+!           L HAVING POSITIVE DIAGONAL ELEMENTS
+!           AND SATISFYING A = L*TRANSPOSE(L).
+!
+IF (MO .NE. 0) GO TO 10
+CALL SPPFA (A, M, IERR)
+IF (IERR .NE. 0) GO TO 120
+!
+!           GENERATE THE N RANDOM NORMAL VECTORS
+!
+10 LDIM = (M*(M + 1))/2
+DO J = 1,N
+   CALL RNOR (IX, X(1,J), M, IERR)
+!
+!         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
+!                    IN REVERSE ORDER
+!
+   L0 = LDIM
+   I = M
+   DO II = 1,M
+      L0 = L0 - I
+      L = L0
+      SUM = 0.0
+      do 20 K = 1,I
+         L = L + 1
+20 SUM = SUM + A(L)*X(K,J)
+      X(I,J) = SUM + FMU(I)
+      I = I - 1
+   END DO
+END DO
+RETURN
+!
+!                      ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+130 IERR = 4
+RETURN
+END SUBROUTINE NRVG
+
+SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, M, MO, N
+INTEGER I, J, MAX
+!-----------------------------------------------------------------------
+!
+!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
+!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
+!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A. IT IS
+!           ASSUMED THAT A IS A DIAGONAL MATRIX.
+!
+!                          ---------------
+!
+!     INPUT...
+!
+!        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
+!                  BEING CALLED FOR THE FIRST TIME TO
+!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  A. SET MO = 0 ON AN INITIAL CALL TO
+!                  THE ROUTINE, AND MO .NE. 0 ON A LATER
+!                  CALL TO GENERATE MORE VECTORS FROM
+!                  THE SAME MATRIX A.
+!
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES.
+!
+!        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!
+!        M       - LENGTH OF THE DESIRED RANDOM VECTORS.
+!                  IT IS ASSUMED THAT M .GE. 2. M SHOULD
+!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
+!
+!        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
+!                  A IS A DIAGONAL MATRIX WITH POSITIVE
+!                  DIAGONAL ELEMENTS. THE DIAGONAL ELEMENTS
+!                  ARE STORED IN THE ARRAY A. A IS AN ARRAY
+!                  OF LENGTH M OR LARGER.
+!
+!                  ON AN INITIAL CALL TO THE ROUTINE, THE
+!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
+!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
+!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  THE ROUTINE (WHEN MO .NE. 0).
+!
+!        FMU     - MEAN VECTOR OF DIMENSION M OF THE
+!                  MULTIVARIATE NORMAL DISTRIBUTION
+!
+!        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
+!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  THAT KX .GE. M.
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!
+!        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
+!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
+!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  X FOR J = 1,...,N.
+!
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - M .LE. 1  OR  M .GT. KX
+!                   3 - A(I) .LE. 0 FOR SOME I
+!                   4 - SEED OUT OF RANGE      )
+!
+!-----------------------------------------------------------------------
+REAL A(M), FMU(M), X(KX,N)
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+!
+!        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
+!
+IF (MO .NE. 0) GO TO 20
+DO I = 1,M
+   IF (A(I) .LE. 0.0) GO TO 120
+   A(I) = SQRT(A(I))
+END DO
+!
+!           GENERATE THE N RANDOM NORMAL VECTORS
+!
+20 DO J = 1,N
+   CALL RNOR (IX, X(1,J), M, IERR)
+   DO I = 1,M
+      X(I,J) = A(I)*X(I,J) + FMU(I)
+   END DO
+END DO
+RETURN
+!
+!                       ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+130 IERR = 4
+RETURN
+END SUBROUTINE NRVG1
+
+SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, M, MO, N
+INTEGER I, II, J, K, L, L0, LDIM, MAX
+!-----------------------------------------------------------------------
+!
+!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
+!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
+!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A.
+!
+!                          ---------------
+!
+!     INPUT...
+!
+!        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
+!                  BEING CALLED FOR THE FIRST TIME TO
+!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  A. SET MO = 0 ON AN INITIAL CALL TO
+!                  THE ROUTINE, AND MO .NE. 0 ON A LATER
+!                  CALL TO GENERATE MORE VECTORS FROM
+!                  THE SAME MATRIX A.
+!
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES.
+!
+!        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!
+!        M       - LENGTH OF THE DESIRED RANDOM VECTORS.
+!                  IT IS ASSUMED THAT M .GE. 2. M SHOULD
+!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
+!
+!        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
+!                  A IS A SYMMETRIC POSITIVE DEFINITE MATRIX
+!                  STORED IN PACKED FORM. THE ARRAY A MUST
+!                  BE OF LENGTH (M*(M + 1))/2 OR LARGER.
+!
+!                  ON AN INITIAL CALL TO THE ROUTINE, THE
+!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
+!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
+!                  DATA IN THE ARRAY A. A SHOULD NEVER BE
+!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  THE ROUTINE (WHEN MO .NE. 0).
+!
+!        FMU     - MEAN VECTOR OF DIMENSION M OF THE
+!                  MULTIVARIATE NORMAL DISTRIBUTION
+!
+!        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
+!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  THAT KX .GE. M.
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!
+!        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
+!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
+!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  X FOR J = 1,...,N.
+!
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - M .LE. 1  OR  M .GT. KX
+!                   3 - A IS NOT POSITIVE DEFINITE
+!                   4 - SEED OUT OF RANGE         )
+!
+!-----------------------------------------------------------------------
+!
+!        ***REFERENCES***
+!
+!     FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
+!     DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!     PP. 215 - 217.
+!
+!     MORRISON, DONALD F., MULTIVARIATE STATISTICAL METHODS,
+!     MCGRAW-HILL, NEW YORK, 1967, PP. 80 - 81.
+!
+!     SCHEUER, E. AND STOLLER, D. S., ON THE GENERATION OF
+!     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
+!     PP. 278 - 281.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), FMU(M), X(KX,N), SUM
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+!
+!           COMPUTE THE LOWER TRIANGULAR MATRIX
+!           L HAVING POSITIVE DIAGONAL ELEMENTS
+!           AND SATISFYING A = L*TRANSPOSE(L).
+!
+IF (MO .NE. 0) GO TO 10
+CALL DPPFA (A, M, IERR)
+IF (IERR .NE. 0) GO TO 120
+!
+!           GENERATE THE N RANDOM NORMAL VECTORS
+!
+10 LDIM = (M*(M + 1))/2
+DO J = 1,N
+   CALL DRNOR (IX, X(1,J), M, IERR)
+!
+!         OBTAIN THE COMPONENTS OF THE J-TH VECTOR
+!                    IN REVERSE ORDER
+!
+   L0 = LDIM
+   I = M
+   DO II = 1,M
+      L0 = L0 - I
+      L = L0
+      SUM = 0.D0
+      do 20 K = 1,I
+         L = L + 1
+20 SUM = SUM + A(L)*X(K,J)
+      X(I,J) = SUM + FMU(I)
+      I = I - 1
+   END DO
+END DO
+RETURN
+!
+!                      ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+130 IERR = 4
+RETURN
+END SUBROUTINE DNRVG
+
+SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, KX, M, MO, N
+INTEGER I, J, MAX
+!-----------------------------------------------------------------------
+!
+!           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
+!           FROM A MULTIVARIATE NORMAL DISTRIBUTION WITH MEAN
+!           VECTOR FMU AND VARIANCE-COVARIANCE MATRIX A. IT IS
+!           ASSUMED THAT A IS A DIAGONAL MATRIX.
+!
+!                          ---------------
+!
+!     INPUT...
+!
+!        MO      - INTEGER SPECIFYING IF THE ROUTINE IS
+!                  BEING CALLED FOR THE FIRST TIME TO
+!                  GENERATE NORMAL VECTORS FROM A MATRIX
+!                  A. SET MO = 0 ON AN INITIAL CALL TO
+!                  THE ROUTINE, AND MO .NE. 0 ON A LATER
+!                  CALL TO GENERATE MORE VECTORS FROM
+!                  THE SAME MATRIX A.
+!
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES.
+!
+!        N       - NUMBER OF RANDOM VECTORS TO BE GENERATED.
+!
+!        M       - LENGTH OF THE DESIRED RANDOM VECTORS.
+!                  IT IS ASSUMED THAT M .GE. 2. M SHOULD
+!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  CALL TO THE ROUTINE (WHEN MO .NE. 0).
+!
+!        A       - VARIANCE-COVARIANCE MATRIX OF ORDER M.
+!                  A IS A DIAGONAL MATRIX WITH POSITIVE
+!                  DIAGONAL ELEMENTS. THE DIAGONAL ELEMENTS
+!                  ARE STORED IN THE ARRAY A. A IS AN ARRAY
+!                  OF LENGTH M OR LARGER.
+!
+!                  ON AN INITIAL CALL TO THE ROUTINE, THE
+!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
+!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
+!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  THE ROUTINE (WHEN MO .NE. 0).
+!
+!        FMU     - MEAN VECTOR OF DIMENSION M OF THE
+!                  MULTIVARIATE NORMAL DISTRIBUTION
+!
+!        KX      - ROW DIMENSION OF THE MATRIX X (SEE THE
+!                  DESCRIPTION OF X BELOW). IT IS ASSUMED
+!                  THAT KX .GE. M.
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE VARIATES.
+!
+!        X       - OUTPUT ARRAY OF DIMENSION KX BY N CONTAINING
+!                  THE N GENERATED RANDOM NORMAL VECTORS. THE
+!                  J-TH VECTOR IS STORED IN THE J-TH COLUMN OF
+!                  X FOR J = 1,...,N.
+!
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - M .LE. 1  OR  M .GT. KX
+!                   3 - A(I) .LE. 0 FOR SOME I
+!                   4 - SEED OUT OF RANGE      )
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(M), FMU(M), X(KX,N)
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (M .LE. 1 .OR. M .GT. KX) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 130
+!
+!        COMPUTE THE ROOTS OF THE DIAGONAL ELEMENTS
+!
+IF (MO .NE. 0) GO TO 20
+DO I = 1,M
+   IF (A(I) .LE. 0.D0) GO TO 120
+   A(I) = DSQRT(A(I))
+END DO
+!
+!           GENERATE THE N RANDOM NORMAL VECTORS
+!
+20 DO J = 1,N
+   CALL DRNOR (IX, X(1,J), M, IERR)
+   DO I = 1,M
+      X(I,J) = A(I)*X(I,J) + FMU(I)
+   END DO
+END DO
+RETURN
+!
+!                       ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+130 IERR = 4
+RETURN
+END SUBROUTINE DNRVG1
+
+SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
+IMPLICIT NONE
+INTEGER IERROR, ISEED, N
+REAL A
+INTEGER I
+!
+!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!
+!           RANEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
+!           EXPONENTIAL DISTRIBUTION WITH PARAMETER A (A .GT. 0).
+!           A IS THE MEAN OF THE DISTRIBUTION.  HENCE, A IS INTERPRETED
+!           AS THE AVERAGE RATE PER UNIT OF TIME OR THE AVERAGE TIME
+!           TO FAILURE (AVERAGE LIFETIME).
+!
+!           FORM OF THE EXPONENTIAL PROBABILITY DENSITY FUNCTION...
+!
+!                   F(X) = (1/A) * EXP(-X/A)      , X .GE. 0
+!                                                   A .GT. 0
+!
+!           MEAN AND VARIANCE OF THE EXPONENTIAL DISTRIBUTION...
+!
+!                    MEAN = A
+!
+!                    VARIANCE = A**2
+!
+!           ***PARAMETER LIST***
+!
+!           INPUT...
+!
+!           N       - NUMBER OF VARIATES TO BE GENERATED
+!           A       - MEAN OF THE EXPONENTIAL DISTRIBUTION
+!           ISEED   - INTEGER SEED USED TO INITIALIZE THE
+!                     SEQUENCE OF VARIATES GENERATED
+!
+!           OUTPUT...
+!
+!           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
+!                     ROUTINE
+!           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
+!                     THE GENERATED REAL VARIATES
+!           IERROR  - INPUT ERROR FLAG
+!                     ( 0 - NO INPUT ERRORS
+!                       1 - N .LE. 0
+!                       2 - A .LE. 0.0
+!                       3 - SEED OUT OF RANGE )
+!
+!           ***REFERENCE***
+!
+!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
+!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           P. 203.
+!
+REAL X(N)
+!
+!        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
+!        ACCEPTABLE RANGE
+!
+IF (N .LE. 0) GO TO 100
+!
+!        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
+!        PROPERLY SPECIFIED
+!
+IF (A .LE. 0.0) GO TO 110
+!
+!        GENERATION OF UNIFORM RANDOM VARIATES
+!
+CALL URNG (ISEED, X, N, IERROR)
+IF (IERROR .NE. 0) GO TO 120
+!
+!        LOOP WHICH GENERATES THE N DESIRED VARIATES
+!
+DO I=1,N
+   X(I) = - A*ALOG(X(I))
+END DO
+RETURN
+!
+!              ERROR RETURN
+!
+100 IERROR = 1
+RETURN
+110 IERROR = 2
+RETURN
+120 IERROR = 3
+RETURN
+END SUBROUTINE RANEXP
+
+SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
+IMPLICIT NONE
+INTEGER IERROR, ISEED, N
+INTEGER I
+!
+!              ***SUBROUTINE PURPOSE AND DESCRIPTION***
+!
+!           DRNEXP GENERATES N EXPONENTIAL RANDOM VARIATES FROM AN
+!           EXPONENTIAL DISTRIBUTION WITH PARAMETER A (A .GT. 0).
+!           A IS THE MEAN OF THE DISTRIBUTION.  HENCE, A IS INTERPRETED
+!           AS THE AVERAGE RATE PER UNIT OF TIME OR THE AVERAGE TIME
+!           TO FAILURE (AVERAGE LIFETIME).
+!
+!           FORM OF THE EXPONENTIAL PROBABILITY DENSITY FUNCTION...
+!
+!                   F(X) = (1/A) * EXP(-X/A)      , X .GE. 0
+!                                                   A .GT. 0
+!
+!           MEAN AND VARIANCE OF THE EXPONENTIAL DISTRIBUTION...
+!
+!                    MEAN = A
+!
+!                    VARIANCE = A**2
+!
+!           ***PARAMETER LIST***
+!
+!           INPUT...
+!
+!           N       - NUMBER OF VARIATES TO BE GENERATED
+!           A       - MEAN OF THE EXPONENTIAL DISTRIBUTION
+!           ISEED   - INTEGER SEED USED TO INITIALIZE THE
+!                     SEQUENCE OF VARIATES GENERATED
+!
+!           OUTPUT...
+!
+!           ISEED   - SEED TO BE USED ON THE NEXT CALL TO THE
+!                     ROUTINE
+!           X       - OUTPUT ARRAY OF DIMENSION N CONTAINING
+!                     THE GENERATED REAL VARIATES
+!           IERROR  - INPUT ERROR FLAG
+!                     ( 0 - NO INPUT ERRORS
+!                       1 - N .LE. 0
+!                       2 - A .LE. 0.0
+!                       3 - SEED OUT OF RANGE )
+!
+!           ***REFERENCE***
+!
+!           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
+!           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
+!           P. 203.
+!
+DOUBLE PRECISION A, X(N)
+!
+!        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
+!        ACCEPTABLE RANGE
+!
+IF (N .LE. 0) GO TO 100
+!
+!        CHECK TO ENSURE THAT THE EXPONENTIAL PARAMETER HAS BEEN
+!        PROPERLY SPECIFIED
+!
+IF (A .LE. 0.D0) GO TO 110
+!
+!        GENERATION OF UNIFORM RANDOM VARIATES
+!
+CALL DURNG (ISEED, X, N, IERROR)
+IF (IERROR .NE. 0) GO TO 120
+!
+!        LOOP WHICH GENERATES THE N DESIRED VARIATES
+!
+DO I=1,N
+   X(I) = - A*DLOG(X(I))
+END DO
+RETURN
+!
+!              ERROR RETURN
+!
+100 IERROR = 1
+RETURN
+110 IERROR = 2
+RETURN
+120 IERROR = 3
+RETURN
+END SUBROUTINE DRNEXP
+
+SUBROUTINE RGAM (IX, A, N, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+REAL A
+INTEGER I, IND, MAX
+REAL U, V, W
+!-----------------------------------------------------------------------
+!
+!               COMPUTATION OF N VARIATES X(1),...,X(N)
+!               FROM THE GAMMA DISTRIBUTION HAVING THE
+!                    PROBABILITY DENSITY FUNCTION
+!
+!                 F(T) = EXP(-T)*T**(A-1)/GAMMA(A)
+!
+!                        ------------------
+!
+!     IX IS A VARIABLE. ON INPUT IX IS A SEED FOR INITIALIZING THE
+!     SEQUENCE OF VARIATES. ON OUTPUT IX IS A NEW SEED FOR OBTAINING
+!     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. IX .LT. 2**31 - 1.
+!
+!     IERR IS A VARIABLE WHICH REPORTS THE STATUS OF THE RESULTS.
+!     WHEN THE SUBROUTINE TERMINATES IERR HAS ONE OF THE FOLLOWING
+!     VALUES ...
+!
+!          IERR = 0   THE GAMMA VARIATES WERE OBTAINED.
+!          IERR = 1   (INPUT ERROR) N .LE. 0
+!          IERR = 2   (INPUT ERROR) A .LT. 0.1
+!          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
+!                      SEED.
+!
+!-----------------------------------------------------------------------
+REAL X(N)
+!
+DATA MAX /2147483647/
+!
+IF (N .LE. 0) GO TO 100
+IF (A .LT. 0.1) GO TO 110
+IF (IX .LT. 1 .OR. IX .GE. MAX) GO TO 120
+IERR = 0
+!
+!             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
+!             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!                   THE SETTING IND = -8 IS AVOIDED
+!
+DO I = 1,N
+   CALL URNG0 (IX, U, V)
+   CALL GAMINV (A, W, 0.0, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.0
+   X(I) = W
+END DO
+RETURN
+!
+!                            ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+END SUBROUTINE RGAM
+
+SUBROUTINE DRGAM (IX, A, N, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, IND, MAX
+!-----------------------------------------------------------------------
+!
+!             COMPUTATION OF N DOUBLE PRECISION VARIATES
+!             X(1),...,X(N)  FROM THE GAMMA DISTRIBUTION
+!              HAVING THE PROBABILITY DENSITY FUNCTION
+!
+!                 F(T) = EXP(-T)*T**(A-1)/GAMMA(A)
+!
+!                        ------------------
+!
+!     IX IS A VARIABLE. ON INPUT IX IS A SEED FOR INITIALIZING THE
+!     SEQUENCE OF VARIATES. ON OUTPUT IX IS A NEW SEED FOR OBTAINING
+!     MORE VARIATES. IT IS ASSUMED THAT 1 .LE. IX .LT. 2**31 - 1.
+!
+!     IERR IS A VARIABLE WHICH REPORTS THE STATUS OF THE RESULTS.
+!     WHEN THE SUBROUTINE TERMINATES IERR HAS ONE OF THE FOLLOWING
+!     VALUES ...
+!
+!          IERR = 0   THE GAMMA VARIATES WERE OBTAINED.
+!          IERR = 1   (INPUT ERROR) N .LE. 0
+!          IERR = 2   (INPUT ERROR) A .LT. 0.1
+!          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
+!                      SEED.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A, X(N)
+DOUBLE PRECISION U, V, W
+!
+DATA MAX /2147483647/
+!
+IF (N .LE. 0) GO TO 100
+IF (A .LT. 0.1D0) GO TO 110
+IF (IX .LT. 1 .OR. IX .GE. MAX) GO TO 120
+IERR = 0
+!
+!             THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
+!             VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!                   THE SETTING IND = -8 IS AVOIDED
+!
+DO I = 1,N
+   CALL DURNG0 (IX, U, V)
+   CALL DGINV (A, W, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) W = 0.D0
+   X(I) = W
+END DO
+RETURN
+!
+!                            ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+END SUBROUTINE DRGAM
+
+SUBROUTINE RBETA (N, A, B, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+REAL A, B
+INTEGER I, IND, MAX
+REAL U, V, X1, X2
+!-----------------------------------------------------------------------
+!
+!                GENERATION OF BETA RANDOM VARIATES
+!
+!                           ------------
+!
+!     RBETA GENERATES N VARIATES FROM THE BETA DISTRIBUTION WITH
+!     PARAMETERS A AND B WHERE A .GE. 0.25 AND B .GE. 0.25. THE
+!     GENERATION SCHEME IS BASED ON THE FACT THAT X1 / (X1 + X2)
+!     IS A VARIATE FROM THE BETA DISTRIBUTION WHEN X1 AND X2 ARE
+!     INDEPENDENT VARIATES FROM THE STANDARD GAMMA DISTRIBUTIONS
+!     WITH PARAMETERS A AND B RESPECTIVELY.
+!
+!     FORM OF THE BETA PROBABILITY DENSITY FUNCTION USED...
+!
+!       F(X) = X**(A - 1) * (1 - X)**(B - 1) / BETA(A,B)
+!
+!              WHERE  0 .LE. X .LE. 1  AND
+!              BETA(A,B) IS THE BETA FUNCTION.
+!
+!     MEAN AND VARIANCE OF THE BETA DISTRIBUTION...
+!
+!              MEAN = A / (A + B)
+!
+!              VARIANCE = (A * B) / ((A + B)**2 * (A + B + 1))
+!
+!     INPUT...
+!
+!        N       - NUMBER OF VARIATES TO BE GENERATED
+!        A       - PARAMETER OF THE BETA DISTRIBUTION
+!        B       - PARAMETER OF THE BETA DISTRIBUTION
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE
+!                  VARIATES
+!        X       - ARRAY OF DIMENSION N CONTAINING THE
+!                  BETA VARIATES
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - A OR B IS LESS THAN 0.25
+!                   3 - SEED OUT OF RANGE        )
+!
+!-----------------------------------------------------------------------
+REAL X(N)
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (AMIN1(A,B) .LT. 0.25) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
+IERR = 0
+!
+DO I = 1,N
+!
+!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
+!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
+!
+   CALL URNG0 (IX, U, V)
+   CALL GAMINV (A, X1, 0.0, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.0
+!
+   CALL URNG0 (IX, U, V)
+   CALL GAMINV (B, X2, 0.0, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.0
+!
+!        IT IS REQUIRED THAT A AND B NOT BE LESS
+!        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
+!
+   X(I) = X1/(X1 + X2)
+!
+END DO
+RETURN
+!
+!                      ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+END SUBROUTINE RBETA
+
+SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, IND, MAX
+!-----------------------------------------------------------------------
+!
+!                         DOUBLE PRECISION
+!                GENERATION OF BETA RANDOM VARIATES
+!
+!                           ------------
+!
+!     DRBETA GENERATES N DOUBLE PRECISION VARIATES FROM THE BETA
+!     DISTRIBUTION WITH PARAMETERS A AND B WHERE A .GE. 0.25 AND
+!     B .GE. 0.25. THE GENERATION SCHEME IS BASED ON THE FACT
+!     THAT X1 / (X1 + X2) IS A VARIATE FROM THE BETA DISTRIBUTION
+!     WHEN X1 AND X2 ARE INDEPENDENT VARIATES FROM THE STANDARD
+!     GAMMA DISTRIBUTIONS WITH PARAMETERS A AND B RESPECTIVELY.
+!
+!     FORM OF THE BETA PROBABILITY DENSITY FUNCTION USED...
+!
+!       F(X) = X**(A - 1) * (1 - X)**(B - 1) / BETA(A,B)
+!
+!              WHERE  0 .LE. X .LE. 1  AND
+!              BETA(A,B) IS THE BETA FUNCTION.
+!
+!     MEAN AND VARIANCE OF THE BETA DISTRIBUTION...
+!
+!              MEAN = A / (A + B)
+!
+!              VARIANCE = (A * B) / ((A + B)**2 * (A + B + 1))
+!
+!     INPUT...
+!
+!        N       - NUMBER OF VARIATES TO BE GENERATED
+!        A       - PARAMETER OF THE BETA DISTRIBUTION
+!        B       - PARAMETER OF THE BETA DISTRIBUTION
+!        IX      - INTEGER SEED USED TO INITIALIZE THE
+!                  SEQUENCE OF VARIATES
+!
+!     OUTPUT...
+!
+!        IX      - SEED TO BE USED FOR OBTAINING MORE
+!                  VARIATES
+!        X       - ARRAY OF DIMENSION N CONTAINING THE
+!                  BETA VARIATES
+!        IERR    - INPUT ERROR FLAG
+!                  (0 - NO INPUT ERRORS
+!                   1 - N .LE. 0
+!                   2 - A OR B IS LESS THAN 0.25
+!                   3 - SEED OUT OF RANGE        )
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A, B, X(N)
+DOUBLE PRECISION U, V, X1, X2
+!--------------------
+DATA MAX /2147483647/
+!--------------------
+IF (N .LE. 0) GO TO 100
+IF (DMIN1(A,B) .LT. 0.25D0) GO TO 110
+IF (IX .LE. 0 .OR. IX .GE. MAX) GO TO 120
+IERR = 0
+!
+DO I = 1,N
+!
+!        THE FOLLOWING CODE ASSUMES THAT THE UNIFORM
+!        VARIATES ARE FAR ENOUGH FROM 0 AND 1 SO THAT
+!        THE SETTING IND = -8 IN GAMINV IS AVOIDED.
+!
+   CALL DURNG0 (IX, U, V)
+   CALL DGINV (A, X1, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) X1 = 0.D0
+!
+   CALL DURNG0 (IX, U, V)
+   CALL DGINV (B, X2, U, V, IND)
+   IF (IND .EQ. -3 .OR. IND .EQ. -7) X2 = 0.D0
+!
+!        IT IS REQUIRED THAT A AND B NOT BE LESS
+!        THAN 0.25 SO THAT X1 + X2 IS NONZERO.
+!
+   X(I) = X1/(X1 + X2)
+!
+END DO
+RETURN
+!
+!                      ERROR RETURN
+!
+100 IERR = 1
+RETURN
+110 IERR = 2
+RETURN
+120 IERR = 3
+RETURN
+END SUBROUTINE DRBETA
+
 SUBROUTINE FRAN (N, A, B, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+REAL A, B
+INTEGER I, IND, MAX
+REAL AHALF, BHALF, BIG, BOUND, C, T, U, V, X1, X2, XMAX
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF VARIATES FROM THE F-DISTRIBUTION
@@ -97,6 +3060,9 @@ RETURN
 END SUBROUTINE FRAN
 
 SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, IND, MAX
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION GENERATION OF
@@ -199,6 +3165,11 @@ RETURN
 END SUBROUTINE DFRAN
 
 SUBROUTINE TRAN (N, A, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+REAL A
+INTEGER I, IND, MAX
+REAL AHALF, D, S, U, V, W, Z
 !-----------------------------------------------------------------------
 !
 !          GENERATION OF VARIATES FROM THE T-DISTRIBUTION
@@ -281,6 +3252,9 @@ RETURN
 END SUBROUTINE TRAN
 
 SUBROUTINE DTRAN (N, A, IX, X, IERR)
+IMPLICIT NONE
+INTEGER IERR, IX, N
+INTEGER I, IND, MAX
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION GENERATION OF
@@ -365,6 +3339,11 @@ RETURN
 END SUBROUTINE DTRAN
 
 SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+IMPLICIT NONE
+INTEGER IERROR, ISEED, N
+REAL ALPHA, FMU, SIG
+INTEGER I
+REAL C, SIGI, T
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !
@@ -479,6 +3458,9 @@ RETURN
 END SUBROUTINE RMK1
 
 SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
+IMPLICIT NONE
+INTEGER IERROR, ISEED, N
+INTEGER I
 !
 !              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 !

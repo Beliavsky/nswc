@@ -113,9 +113,9 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 38 numerical test programs
-against all three versions with GNU Fortran (114 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 37 main
+Run `python tools/validate_sources.py` to build and run 42 numerical test programs
+against all three versions with GNU Fortran (126 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 41 main
 programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
@@ -149,10 +149,13 @@ review. It also skips loops with possible branches into their bodies.
 
 ## Explicit typing
 
-Fifteen reviewed batches add `IMPLICIT NONE` and any missing declarations to
-410 procedures. The declarations were generated with `ftnchek` and supplemented
-where function return types were omitted. `tools/explicit_typing.py` applies the
+All 1,062 procedures in `nswc.f` and the generated `nswc.f90` now have
+`IMPLICIT NONE` and explicit types, completed in sixteen reviewed batches.
+The declarations were generated with `ftnchek` and supplemented where function
+return types were omitted. `tools/explicit_typing.py` applies the
 reviewed manifest; it does not guess types. The [typing guide](docs/explicit-typing.md)
 records the affected procedures, tool limitations, and reproduction commands.
 Run `python tools/validate_explicit_typing.py` to check that the compiler sees
-the same variable and external procedure types, shapes, and argument lists.
+the same variable and function types, shapes, and argument lists. The guide
+also records eleven forwarded subroutine classifications checked against their
+original calling conventions. The archived `nswc_orig.f` retains its original typing.

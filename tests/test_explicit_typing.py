@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from explicit_typing import apply_manifest, analyze, digest, parse_declarations, units, main
 from name_procedure_ends import ConversionError
-from validate_explicit_typing import symbols
+from validate_explicit_typing import symbols, scope_preserved
 
 
 def manifest_for(source, declarations=None):
@@ -101,6 +101,25 @@ class ExplicitTypingTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(set(first["S"]), {"x", "f"})
         self.assertNotEqual(first, symbols(text.replace("REAL 8", "REAL 4")))
+
+    def test_reviewed_forwarded_subroutine_classification(self):
+        before = {"jac": {"type spec": "type spec : (UNKNOWN 0)",
+                          "attributes": "attributes: (PROCEDURE EXTERNAL DUMMY)"}}
+        after = {"jac": {**before["jac"],
+                         "attributes": "attributes: (PROCEDURE EXTERNAL DUMMY SUBROUTINE)"}}
+        self.assertFalse(scope_preserved(before, after))
+        self.assertTrue(scope_preserved(before, after, ["jac"]))
+        self.assertTrue(scope_preserved(before, before, ["jac"]))
+        self.assertEqual(after["jac"]["attributes"],
+                         "attributes: (PROCEDURE EXTERNAL DUMMY SUBROUTINE)")
+        for field, value in (("type spec", "type spec : (REAL 4)"),
+                             ("Array spec", "Array spec: (1 [0] AS_EXPLICIT 1 3)"),
+                             ("attributes", "attributes: (PROCEDURE EXTERNAL SUBROUTINE)")):
+            changed = {"jac": {**after["jac"], field: value}}
+            self.assertFalse(scope_preserved(before, changed, ["jac"]))
+        typed = {"jac": {**before["jac"], "type spec": "type spec : (REAL 4)"}}
+        self.assertFalse(scope_preserved(typed, after, ["jac"]))
+        self.assertFalse(scope_preserved(before, {**after, "extra": {}}, ["jac"]))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,290 @@
+COMPLEX function CLI(Z)
+IMPLICIT NONE
+INTEGER N
+REAL CPABS
+!     ******************************************************************
+!     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
+!     ******************************************************************
+COMPLEX Z
+REAL QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
+REAL AZ(2), C, PM, R, SM(2), TM(2), TS(2), SR(2)
+!     ---------------------
+!     C = PI**2/6
+!     ---------------------
+DATA C /1.64493406684823/
+!     ---------------------
+DATA QB(1) / 2.77777777777778E-2/,  QB(2) /-1.00000000000000E-2/, &
+&QB(3) /-1.70068027210884E-2/,  QB(4) /-1.94444444444444E-2/, &
+&QB(5) /-2.06611570247934E-2/,  QB(6) /-2.14173006480699E-2/, &
+&QB(7) /-2.19488663772311E-2/,  QB(8) /-2.23492338111715E-2/, &
+&QB(9) /-2.26636891351914E-2/,  QB(10)/-2.29178211549926E-2/, &
+&QB(11)/-2.31276449354844E-2/,  QB(12)/-2.33038680700203E-2/, &
+&QB(13)/-2.34539766464373E-2/,  QB(14)/-2.35833786876607E-2/, &
+&QB(15)/-2.36960832049849E-2/,  QB(16)/-2.37951264448373E-2/, &
+&QB(17)/-2.38828504258091E-2/,  QB(18)/-2.39610907251825E-2/, &
+&QB(19)/-2.40313063764460E-2/,  QB(20)/-2.40946717197585E-2/, &
+&QB(21)/-2.41521426124012E-2/,  QB(22)/-2.42045049812210E-2/, &
+&QB(23)/-2.42524109782181E-2/,  QB(24)/-2.42964062815807E-2/, &
+&QB(25)/-2.43369509729144E-2/
+!     ---------------------
+AZ(1) = REAL(Z)
+AZ(2) = AIMAG(Z)
+R = CPABS(AZ(1),AZ(2))
+IF (R .GT. 0.5) GO TO 10
+SR(1) = 0.0
+SR(2) = 0.0
+QF(1) = -AZ(1)
+QF(2) = -AZ(2)
+TM(1) =  AZ(1)
+TM(2) =  AZ(2)
+GO TO 30
+!
+10 IF (R .LT. 3.0) GO TO 20
+ZL(1) = ALOG(R)
+ZL(2) = ATAN2(AZ(2),AZ(1))
+SR(1) = C + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
+SR(2) = ZL(1)*ZL(2)
+QF(1) = (-AZ(1)/R)/R
+QF(2) = (AZ(2)/R)/R
+TM(1) = QF(1)
+TM(2) = QF(2)
+GO TO 30
+!
+20 ZD(1) = 1.0 + AZ(1)
+ZD(2) = AZ(2)
+DS = ZD(1)*ZD(1) + ZD(2)*ZD(2)
+IF (DS .EQ. 0.0) GO TO 100
+DL(1) = 0.5*ALOG(DS)
+DL(2) = ATAN2(ZD(2),ZD(1))
+IF (DS .GT. 0.25) GO TO 50
+   ZL(1) = ALOG(R)
+   ZL(2) = ATAN2(-AZ(2),-AZ(1))
+   SR(1) = -C + (DL(1)*ZL(1) - DL(2)*ZL(2))
+   SR(2) = DL(1)*ZL(2) + DL(2)*ZL(1)
+   QF(1) = ZD(1)
+   QF(2) = ZD(2)
+   TM(1) = QF(1)
+   TM(2) = QF(2)
+!
+!             EVALUATION OF THE TAYLOR SERIES
+!
+30 SR(1) = SR(1) + TM(1)
+SR(2) = SR(2) + TM(2)
+SM(1) = 0.0
+SM(2) = 0.0
+PM = 1.0
+40 PM = PM + 1.0
+   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = TS(1)
+   TM(2) = TS(2)
+   TS(1) = TM(1)/(PM*PM)
+   TS(2) = TM(2)/(PM*PM)
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 41
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
+41 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 40
+!
+!        EVALUATION OF THE SERIES IN  U = -LN(1 + Z)
+!
+50 QF(1) = DL(1)*DL(1) - DL(2)*DL(2)
+QF(2) = 2.0*DL(1)*DL(2)
+SR(1) = DL(1) + 0.25*QF(1)
+SR(2) = DL(2) + 0.25*QF(2)
+SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = DL(1)
+TM(2) = DL(2)
+DO N = 1,25
+   TS(1) = QB(N)*(TM(1)*QF(1) - TM(2)*QF(2))
+   TS(2) = QB(N)*(TM(1)*QF(2) + TM(2)*QF(1))
+   TM(1) = TS(1)
+   TM(2) = TS(2)
+   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 60
+   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
+60 SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+!
+80 CLI = CMPLX(SR(1) + SM(1), SR(2) + SM(2))
+RETURN
+!
+!                  EVALUATION AT Z = -1
+!
+100 CLI = CMPLX(-C, 0.0)
+RETURN
+END FUNCTION CLI
+
+REAL function ALI(X)
+IMPLICIT NONE
+REAL X
+INTEGER I, L
+REAL CONST, T, W
+!-----------------------------------------------------------------------
+!            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
+!-----------------------------------------------------------------------
+!     WRITTEN BY
+!        ALFRED H. MORRIS, JR.
+!        NAVAL SURFACE WEAPONS CENTER
+!        DAHLGREN VIRGINIA
+!-----------------------------------------------------------------------
+REAL A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
+DOUBLE PRECISION X0
+!--------------------------
+!     CONST = PI**2/6
+!     X0 = ZERO OF THE REAL DILOGARITHM FUNCTION
+!--------------------------
+DATA CONST /1.64493406684823/
+DATA X0 /-12.5951703698450161286398965D0/
+!--------------------------
+DATA A(1)/.217590467528373E+01/, A(2)/.165569610692639E+01/, &
+&A(3)/.522944061702389E+00/, A(4)/.626073688152965E-01/, &
+&A(5)/.187280204672313E-02/
+DATA B(1)/.242590467528371E+01/, B(2)/.215106116463796E+01/, &
+&B(3)/.853664388896516E+00/, B(4)/.148635712775060E+00/, &
+&B(5)/.936304016023909E-02/, B(6)/.115362459229893E-03/
+!--------------------------
+DATA C(1)/-.139792925233661E+01/, C(2) /.368504569727477E+00/, &
+&C(3) /.467406917183686E-01/, C(4) /.113795257294490E-01/, &
+&C(5) /.369638462505741E-02/, C(6) /.140888669464352E-02/, &
+&C(7) /.580505641503297E-03/, C(8) /.279065584075104E-03/, &
+&C(9) /.727678355839120E-04/, C(10)/.941452067850052E-04/
+DATA D(1)/-.164792925233634E+01/, D(2) /.669375771675355E+00/
+!--------------------------
+DATA E(1)/-.194565741631859E+00/, E(2)/-.430017756528812E-02/, &
+&E(3)/-.129188263110634E-03/, E(4)/-.344864872694838E-05/, &
+&E(5) /.566899694553089E-09/, E(6) /.126641834906132E-07/, &
+&E(7) /.163966793864421E-08/, E(8) /.164221074630109E-09/, &
+&E(9) /.149644905021032E-10/, E(10)/.130214292886747E-11/, &
+&E(11)/.110415518123737E-12/, E(12)/.921674760163207E-14/, &
+&E(13)/.761646464974859E-15/, E(14)/.625216733700975E-16/, &
+&E(15)/.510910937990370E-17/, E(16)/.416215390793180E-18/, &
+&E(17)/.338357379188308E-19/, E(18)/.274674744366340E-20/
+!--------------------------
+DATA P(1)/-.124827318209942E+01/, P(2)/-.593706951284264E-01/, &
+&P(3)/ .368603360394688E-01/, P(4)/ .243497524184253E-02/
+DATA Q(1)/ .100000000000000E+01/, Q(2)/ .252618047164349E+00/, &
+&Q(3)/ .171618729068655E-01/, Q(4)/ .234444792844727E-03/, &
+&Q(5)/-.174928841869743E-05/, Q(6)/ .347369010951250E-07/, &
+&Q(7)/-.713275908929482E-09/, Q(8)/ .958397514026421E-11/
+!--------------------------
+DATA R(1)/.265189940015693E+00/, R(2)/.230201018075415E+00/, &
+&R(3)/.315999623504943E-01/, R(4)/.154066621939470E-02/, &
+&R(5)/.286697611038892E-04/, R(6)/.163031291368652E-06/, &
+&R(7)/.838957807732251E-10/
+DATA S(1)/.100000000000000E+01/, S(2)/.177195068872258E+00/, &
+&S(3)/.110559275223905E-01/, S(4)/.291916852717175E-03/, &
+&S(5)/.304793254397420E-05/, S(6)/.882114921507386E-08/
+!--------------------------
+!
+IF (X .GT. 1.0) GO TO 50
+IF (X .GE. 0.0) GO TO 40
+IF (X .GE.-0.5) GO TO 30
+IF (X .GE.-1.0) GO TO 20
+IF (X .GE.-2.0) GO TO 10
+!
+!                            X .LT. -2
+!
+IF (X .GE. -26.63 .AND. X .LE. -6.97) GO TO 100
+T = -1.0/X
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = 0.5*ALOG(-X)**2 - (2.0*CONST + W/X)
+RETURN
+!
+!                        -2 .LE. X .LT. -1
+!
+10 T = -(1.0 + X)
+W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
+&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
+&B(1))*T + 1.0)
+ALI = -(CONST + T*W) + ALOG(-X)*ALOG(T)
+RETURN
+!
+!                       -1 .LE. X .LT. -1/2
+!
+20 T = 0.5 + (0.5 + X)
+ALI = -CONST
+IF (T .EQ. 0.0) RETURN
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = (-CONST + T*W) + ALOG(-X)*ALOG(T)
+RETURN
+!
+!                       -1/2 .LE. X .LT. 0
+!
+30 T = -X
+W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
+&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
+&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
+ALI = X*W
+RETURN
+!
+!                         0 .LE. X .LE. 1
+!
+40 W = (((((A(5)*X + A(4))*X + A(3))*X + A(2))*X + A(1))*X + 1.0)/ &
+&((((((B(6)*X + B(5))*X + B(4))*X + B(3))*X + B(2))*X + &
+&B(1))*X + 1.0)
+ALI = X*W
+RETURN
+!
+!                            X .GT. 1
+!
+50 T = 1.0/X
+W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
+&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
+&B(1))*T + 1.0)
+ALI = (CONST - W/X) + 0.5*ALOG(X)**2
+RETURN
+!
+!-----------------------------------------------------------------------
+!              EVALUATION FOR  -26.63 .LE. X .LE. -6.97
+!-----------------------------------------------------------------------
+!
+100 IF (X .LE. -14.0) GO TO 120
+IF (X .LE. -11.1) GO TO 110
+!
+!                    -11.1 .LT. X .LE. -6.97
+!
+T = -(X + 7.0)
+ALI = (((P(4)*T + P(3))*T + P(2))*T + P(1)) / (((((((Q(8)*T + &
+&Q(7))*T + Q(6))*T + Q(5))*T + Q(4))*T + Q(3))*T + &
+&Q(2))*T + Q(1))
+RETURN
+
+!
+!                     -14 .LT. X .LE. -11.1
+!
+110 T = DBLE(X) - X0
+W = E(14)
+do 111 L = 1,13
+   I = 14 - L
+111 W = W*T + E(I)
+ALI = T*W
+RETURN
+!
+!                     -26.63 .LE. X .LE. -14
+!
+120 T = -(X + 14.0)
+ALI = ((((((R(7)*T + R(6))*T + R(5))*T + R(4))*T + R(3))*T + &
+&R(2))*T + R(1)) / (((((S(6)*T + S(5))*T + &
+&S(4))*T + S(3))*T + S(2))*T + S(1))
+RETURN
+END FUNCTION ALI
+
 SUBROUTINE CGAMMA (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER J, K, L, M, MAX, N, NM1
+REAL A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2, HL2P &
+&, PI, PI2, S, S1, S2, SN, T, T1, T2, U, U1, U2, V1, V2, W1, W2, X &
+&, Y, Y2
+REAL REXP
+INTEGER IPMPAR
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -230,6 +516,9 @@ RETURN
 END SUBROUTINE CGAMMA
 
 COMPLEX function CGAM0 (Z)
+IMPLICIT NONE
+INTEGER I, K, N
+REAL X, Y
 !-----------------------------------------------------------------------
 !          EVALUATION OF 1/GAMMA(1 + Z)  FOR ABS(Z) .LT. 1.0
 !-----------------------------------------------------------------------
@@ -266,6 +555,12 @@ RETURN
 END FUNCTION CGAM0
 
 REAL function GAMMA(A)
+IMPLICIT NONE
+REAL A
+INTEGER I, J, M, N
+REAL BOT, PI, R1, R2, R3, R4, R5, S, T, TOP, W, X
+REAL EXPARG
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE GAMMA FUNCTION FOR REAL ARGUMENTS
@@ -394,6 +689,9 @@ RETURN
 END FUNCTION GAMMA
 
 double precision function GLOG(X)
+IMPLICIT NONE
+INTEGER N
+REAL C1, C2, C3, T, T2
 !     -------------------
 !     EVALUATION OF LN(X) FOR X .GE. 15
 !     -------------------
@@ -641,6 +939,10 @@ RETURN
 END FUNCTION GAMLN1
 
 SUBROUTINE DCGAMA (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER J, K, MAX, N, NM1
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !
 !        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -1012,6 +1314,8 @@ RETURN
 END FUNCTION DGAMMA
 
 double precision function DPDEL(X)
+IMPLICIT NONE
+INTEGER I, K
 !-----------------------------------------------------------------------
 !
 !     COMPUTATION OF THE FUNCTION DEL(X) FOR  X .GE. 10  WHERE
@@ -1275,6 +1579,13 @@ RETURN
 END FUNCTION DGMLN1
 
 SUBROUTINE CPSI (Z, W)
+IMPLICIT NONE
+INTEGER J, K, L, M, MAX
+REAL A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1, S2 &
+&, SN, T, U, W1, W2, X, Y, Y2
+REAL REXP
+INTEGER IPMPAR
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
 !-----------------------------------------------------------------------
@@ -1584,6 +1895,9 @@ RETURN
 END FUNCTION PSI
 
 SUBROUTINE DCPSI (Z, W)
+IMPLICIT NONE
+INTEGER J, K, M, MAX
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
 !-----------------------------------------------------------------------
@@ -1948,6 +2262,8 @@ RETURN
 END FUNCTION DPSI
 
 double precision function DPSI0 (X)
+IMPLICIT NONE
+INTEGER I, L, N, NM1
 !-----------------------------------------------------------------------
 !
 !            TAYLOR SERIES EXPANSION OF PSI(X) AROUND X0,
@@ -2018,6 +2334,9 @@ RETURN
 END FUNCTION DPSI0
 
 SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
+IMPLICIT NONE
+INTEGER IFLAG, M, N
+INTEGER I, J, K, MX, NMAX, NN, NP, NX
 !-----------------------------------------------------------------------
 !
 !         PSIDF COMPUTES M MEMBER SEQUENCES OF SCALED DERIVATIVES OF
@@ -2539,6 +2858,8 @@ RETURN
 END FUNCTION ALGDIV
 
 double precision function DBETLN (A0, B0)
+IMPLICIT NONE
+INTEGER I, N
 !-----------------------------------------------------------------------
 !     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
 !-----------------------------------------------------------------------
@@ -2627,6 +2948,7 @@ RETURN
 END FUNCTION DBETLN
 
 double precision function DGSMLN (A, B)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !          EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
 !          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
@@ -2646,6 +2968,8 @@ RETURN
 END FUNCTION DGSMLN
 
 double precision function DBCORR (A0, B0)
+IMPLICIT NONE
+INTEGER J, K
 !-----------------------------------------------------------------------
 !
 !     EVALUATION OF DEL(A) + DEL(B0) - DEL(A) + B0) WHERE
@@ -2717,6 +3041,8 @@ RETURN
 END FUNCTION DBCORR
 
 double precision function DLGDIV (A, B)
+IMPLICIT NONE
+INTEGER J, K
 !-----------------------------------------------------------------------
 !
 !     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) FOR B .GE. 10
@@ -2792,6 +3118,20 @@ RETURN
 END FUNCTION DLGDIV
 
 SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
+IMPLICIT NONE
+INTEGER IND
+REAL A, ANS, QANS, X
+INTEGER I, IOP, M, MAX, N
+REAL A2N, A2NM1, ACC, ALOG10, AMN, APN, B2N, B2NM1, C, C0, C1, C2 &
+&, C3, C4, C5, C6, C7, C8, D00, D10, D20, D30, D40, D50, D60, D70 &
+&, D80, E, G, H, R, RT2PIN, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U &
+&, W, Y, Z
+REAL REXP
+REAL GAM1
+REAL ERFC1
+REAL RCOMP
+REAL RLOG
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -3211,6 +3551,12 @@ RETURN
 END SUBROUTINE GRATIO
 
 REAL function RCOMP (A, X)
+IMPLICIT NONE
+REAL A, X
+REAL RT2PIN, T, T1, U
+REAL EXPARG
+REAL RLOG
+REAL GAM1
 !-----------------------------------------------------------------------
 !                EVALUATION OF EXP(-X)*X**A/GAMMA(A)
 !-----------------------------------------------------------------------
@@ -3240,6 +3586,7 @@ RETURN
 END FUNCTION RCOMP
 
 double precision function DRCOMP (A, X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
 !-----------------------------------------------------------------------
@@ -3270,6 +3617,18 @@ RETURN
 END FUNCTION DRCOMP
 
 SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
+IMPLICIT NONE
+INTEGER IERR
+REAL A, P, Q, X, X0
+INTEGER IER, IOP
+REAL AM1, AMAX, AMIN, AP1, AP2, AP3, APN, B, C, C1, C2, C3, C4, C5 &
+&, D, E, E2, EPS, G, H, PN, QG, QN, R, RTA, S, S2, SUM, T, TOL, U &
+&, W, XMIN, XN, Y, Z
+REAL GAMLN1
+REAL RCOMP
+REAL SPMPAR
+REAL ALNREL
+REAL GAMLN
 !-----------------------------------------------------------------------
 !
 !             INVERSE INCOMPLETE GAMMA RATIO FUNCTION
@@ -3594,6 +3953,9 @@ RETURN
 END SUBROUTINE GAMINV
 
 SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
+IMPLICIT NONE
+INTEGER IERR
+INTEGER I, M, MAX, N
 !-----------------------------------------------------------------------
 !
 !        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -3853,6 +4215,7 @@ RETURN
 END SUBROUTINE DGRAT
 
 SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -4162,6 +4525,7 @@ RETURN
 END SUBROUTINE DGR29
 
 SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -4269,6 +4633,9 @@ RETURN
 END SUBROUTINE DGR17
 
 SUBROUTINE DGINV (A, X, P, Q, IERR)
+IMPLICIT NONE
+INTEGER IERR
+INTEGER IER, IND
 !-----------------------------------------------------------------------
 !
 !                        DOUBLE PRECISION
@@ -5613,6 +5980,16 @@ RETURN
 END FUNCTION BASYM
 
 SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
+IMPLICIT NONE
+INTEGER IERR
+REAL A0, B0, EPS, P, X0
+INTEGER IND, L, MAX
+REAL A, AFRAC, AM1, AN, B, BFRAC, C, GAMRAT, P0, PIHALF, RPINV &
+&, RTY, SUM, T, TEMP, TOL, X, Y
+REAL ALGDIV
+INTEGER IPMPAR
+REAL BLND
+REAL ALNREL
 REAL I, J, K, LAMBDA, M, N, W(10), Z(10)
 !     -------------------
 DATA W(1) /6.6671344308688E-2/,  W(2) /1.4945134915058E-1/, &
@@ -5855,6 +6232,9 @@ RETURN
 END SUBROUTINE ISUBX
 
 REAL function BLND(A,B)
+IMPLICIT NONE
+REAL A, B
+REAL ALGDIV
 REAL LOGAM
 !
 IF (A .GT. 20.0) GO TO 10
@@ -5865,6 +6245,10 @@ RETURN
 END FUNCTION BLND
 
 REAL function LOGAM (X)
+IMPLICIT NONE
+REAL X
+INTEGER N
+REAL D, T, Z
 REAL W(200)
 !     ------------------------------------------------------------------
 !     COMPUTATION OF LN(GAMMA(X)) FOR X = N/2  WHERE N IS AN INTEGER
@@ -5985,6 +6369,11 @@ RETURN
 END FUNCTION LOGAM
 
 SUBROUTINE CBSSLJ (Z, CNU, W)
+IMPLICIT NONE
+INTEGER I, K, M, N
+REAL A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN, T1 &
+&, T2, U, V, X, Y
+REAL CPABS
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (Z)
@@ -6184,6 +6573,11 @@ RETURN
 END SUBROUTINE CBSSLJ
 
 SUBROUTINE CBJM (Z, CNU, W)
+IMPLICIT NONE
+INTEGER I, IMIN, K, KM1, KM2
+REAL A, A0, EPS, RNU
+REAL ANORM
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !       COMPUTATION OF  (Z/2)**(-CNU) * GAMMA(CNU + 1) * J(CNU,Z)
@@ -6284,6 +6678,11 @@ RETURN
 END SUBROUTINE CBJM
 
 SUBROUTINE CBDB (CZ, CNU, FN, W)
+IMPLICIT NONE
+REAL FN
+INTEGER IND, K, L, M
+REAL ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V, X &
+&, Y
 !-----------------------------------------------------------------------
 !
 !         CALCULATION OF J   (CZ) BY THE DEBYE APPROXIMATION
@@ -6513,6 +6912,13 @@ RETURN
 END SUBROUTINE CBDB
 
 SUBROUTINE CBJA (CZ, CNU, W)
+IMPLICIT NONE
+INTEGER I, IND
+REAL C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
+REAL SIN1
+REAL COS1
+REAL ANORM
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !        COMPUTATION OF J(NU,Z) BY THE ASYMPTOTIC EXPANSION
 !-----------------------------------------------------------------------
@@ -6605,6 +7011,11 @@ RETURN
 END SUBROUTINE CBJA
 
 SUBROUTINE BSSLJ (A, IN, W)
+IMPLICIT NONE
+INTEGER IN
+INTEGER I, M, N
+REAL AN, AQ, AZ, CD, CE, FJ, PM, PN, QF, QM, QN, QZ, RM, RZ, SM &
+&, SN, SS, SZ, TM, TS, ZM, ZR, ZS
 !     ******************************************************************
 !     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
 !     ******************************************************************
@@ -6910,6 +7321,7 @@ RETURN
 END SUBROUTINE BSSLJ
 
 SUBROUTINE BESJ(X, ALPHA, N, Y, NZ)
+IMPLICIT NONE
 !
 !     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
 !
@@ -7379,6 +7791,7 @@ RETURN
 END SUBROUTINE BESJ
 
 SUBROUTINE ASJY(FUNJY,X,FNU,FLGJY,IN,TOL,ELIM,Y,WK,IFLW)
+IMPLICIT NONE
 !
 !               ASJY COMPUTES BESSEL FUNCTIONS J AND Y
 !               FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35.0
@@ -7824,6 +8237,13 @@ RETURN
 END SUBROUTINE ASJY
 
 SUBROUTINE JAIRY(X,RX,C,AI,DAI)
+IMPLICIT NONE
+REAL AI, C, DAI, RX, X
+INTEGER I, J, M1, M1D, M2, M2D, M3, M3D, M4, M4D, N1, N1D, N2, N2D &
+&, N3, N3D, N4, N4D
+REAL A, AJN, AJP, AK1, AK2, AK3, B, CCV, CON1, CON2, CON3, CON4 &
+&, CON5, CV, DA, DAJN, DAJP, DAK1, DAK2, DAK3, DB, E1, E2, EC, F1 &
+&, F2, FPI12, RTRX, SCV, T, TEMP1, TEMP2, TT
 !
 !                  JAIRY COMPUTES THE AIRY FUNCTION AI(X)
 !                   AND ITS DERIVATIVE DAI(X) FOR JBESS
@@ -8167,6 +8587,11 @@ RETURN
 END SUBROUTINE JAIRY
 
 SUBROUTINE BSSLY (A, IN, W)
+IMPLICIT NONE
+INTEGER IN
+INTEGER I, LA, LR, LY, M, N
+REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, QZ, RM, RN, RZ, SL &
+&, SM, SN, SQ, SR, SS, SZ, TM, TS, ZL, ZS
 !     ******************************************************************
 !     FORTRAN SUBROUTINE FOR ORDINARY BESSEL FUNCTION OF INTEGRAL ORDER
 !     ******************************************************************
@@ -8478,6 +8903,11 @@ GO TO LY,(022,024,025)
 END SUBROUTINE BSSLY
 
 SUBROUTINE CBSSLI (Z, CNU, W)
+IMPLICIT NONE
+REAL PIHALF, T, X, Y
+REAL SIN1
+REAL COS1
+REAL EXPARG
 !------------------------------------------------------------
 !     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 !     FIRST KIND FOR COMPLEX ORDER CNU AND COMPLEX ARGUMENT
@@ -8509,6 +8939,11 @@ RETURN
 END SUBROUTINE CBSSLI
 
 SUBROUTINE BSSLI (MO, A, IN, W)
+IMPLICIT NONE
+INTEGER IN, MO
+INTEGER I, M, N
+REAL AN, AQ, AZ, CD, CE, FI, PM, PN, QF, QM, QN, QZ, RM, RZ, SM &
+&, SN, SS, SZ, TM, TS, ZM, ZR, ZS
 !     ******************************************************************
 !     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
 !     ******************************************************************
@@ -8834,6 +9269,7 @@ RETURN
 END SUBROUTINE BSSLI
 
 SUBROUTINE BESI(X, ALPHA, KODE, N, Y, NZ)
+IMPLICIT NONE
 !
 !     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
 !
@@ -9298,6 +9734,7 @@ RETURN
 END SUBROUTINE BESI
 
 SUBROUTINE ASIK(X,FNU,KODE,FLGIK,RA,ARG,IN,TOL,Y)
+IMPLICIT NONE
 !
 !                  ASIK COMPUTES BESSEL FUNCTIONS I AND K
 !                  FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35
@@ -9425,6 +9862,9 @@ RETURN
 END SUBROUTINE ASIK
 
 SUBROUTINE CBESK (Z, CNU, W)
+IMPLICIT NONE
+REAL A, B, C, E, RN, RZ, S, TAU, X, Y
+REAL CPABS
 !-----------------------------------------------------------------------
 !
 !        CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -9538,6 +9978,10 @@ RETURN
 END SUBROUTINE CBESK
 
 SUBROUTINE CBKI (Z, CNU, W)
+IMPLICIT NONE
+REAL A, B, PI, PIHALF, U1, U2
+REAL SIN1
+REAL COS1
 !------------------------------------------------------------
 !     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 !     SECOND KIND WITH COMPLEX ORDER AND ARGUMENT IN TERMS
@@ -9560,6 +10004,11 @@ RETURN
 END SUBROUTINE CBKI
 
 SUBROUTINE CBKA (Z, CNU, W)
+IMPLICIT NONE
+INTEGER I
+REAL C, EPS, U, V
+REAL ANORM
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE BESSEL FUNCTION K FOR COMPLEX ORDER
 !        CNU AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
@@ -9604,6 +10053,10 @@ RETURN
 END SUBROUTINE CBKA
 
 SUBROUTINE CBKM (Z, RZ, CNU, W)
+IMPLICIT NONE
+REAL RZ
+INTEGER I, IND, M, N, N1
+REAL A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
 !-------------------------------------------------------------------
 !     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE SECOND
 !     KIND WITH COMPLEX ORDER AND ARGUMENT BY MEANS OF MACLAURIN
@@ -9717,6 +10170,12 @@ RETURN
 END SUBROUTINE CBKM
 
 SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
+IMPLICIT NONE
+REAL R
+INTEGER K
+REAL AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
+REAL ANORM
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
@@ -9835,6 +10294,13 @@ RETURN
 END SUBROUTINE CKPS
 
 SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
+IMPLICIT NONE
+INTEGER N
+REAL R
+INTEGER I, M, NUM
+REAL A, B, C, C1, C2, E, EPS, EPS0, F, RNU, T, TH, X, Y
+REAL COS1
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !             COMPUTATION OF THE SCALED BESSEL FUNCTION
@@ -9944,6 +10410,11 @@ RETURN
 END SUBROUTINE CBKML
 
 SUBROUTINE CBSSLK (Z, R, W)
+IMPLICIT NONE
+REAL R
+INTEGER I, IND, M, N, N1
+REAL A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
+REAL CPABS
 !-----------------------------------------------------------------------
 !
 !         CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -10060,518 +10531,4 @@ W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
 W = EX*(EX*W + W2)
 RETURN
 END SUBROUTINE CBSSLK
-
-SUBROUTINE CKA (Z, NU, W)
-!-----------------------------------------------------------------------
-!        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
-!        AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
-!-----------------------------------------------------------------------
-COMPLEX Z, W
-REAL M, NU
-COMPLEX P, T, ZR
-!--------------------------
-ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
-!--------------------------
-!     C = PI**(1/2)
-!--------------------------
-DATA C /1.77245385090552/
-!--------------------------
-!
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
-!
-                EPS = SPMPAR(1)
-!
-!--------------------------
-CALL CREC (REAL(Z), AIMAG(Z), U, V)
-ZR = CMPLX(0.5*U, 0.5*V)
-A = NU*NU - 0.25
-M = 1.0
-T = A*ZR
-P = T
-!
-DO I = 1, 16
-   A = A - 2.0*M
-   M = M + 1.0
-   T = (A/M)*T*ZR
-   P = P + T
-   IF (ANORM(T) .LE. EPS*ANORM(P)) GO TO 20
-END DO
-!
-20 P = P + 1.0
-T = CSQRT(ZR)
-IF (AIMAG(Z) .EQ. 0.0) T = CONJG(T)
-W = C*T*P*CEXP(-Z)
-RETURN
-END SUBROUTINE CKA
-
-SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
-!-----------------------------------------------------------------------
-!
-!        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
-!
-!                  W1 = K  (Z)  AND  W2 = K    (Z)
-!                        NU                NU+1
-!
-!     FOR A COMPLEX ARGUMENT Z WHERE ABS(Z) .LE. 2  AND A REAL
-!     ORDER NU WHERE ABS(NU) .LE. 0.5.  IT IS ASSUMED THAT
-!     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z. POWER
-!     SERIES EXPANSIONS ARE USED.
-!
-!-----------------------------------------------------------------------
-COMPLEX Z, ZR, W1, W2
-REAL NU, D(7)
-COMPLEX C, CH, CL, F, MU, P, Q, SH, T1, T2, W
-!-----------------------
-DATA TOL /1.E-10/
-DATA PI /3.14159265358979/
-!-----------------------
-DATA D(1) / .577215664901533E+00/,  D(2) /-.420026350340952E-01/, &
-&D(3) /-.421977345555443E-01/,  D(4) / .721894324666310E-02/, &
-&D(5) /-.215241674114951E-03/,  D(6) /-.201348547807882E-04/, &
-&D(7) / .113302723198170E-05/
-!-----------------------
-ANORM(W) = AMAX1(ABS(REAL(W)), ABS(AIMAG(W)))
-!-----------------------------------------------------------------------
-!
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
-!
-                EPS = SPMPAR(1)
-!
-!-----------------------------------------------------------------------
-EPS0 = AMAX1(EPS, 5.E-15)
-!
-!                     CL = - LN(Z/2)
-!
-PHI = ATAN2(AIMAG(Z),REAL(Z))
-CL = CMPLX(-ALOG(R), -PHI)
-MU = NU*CL
-C = CEXP(MU)
-!
-!                   G1 = GAMMA(1 + NU)
-!                   G2 = GAMMA(1 - NU)
-!
-T = PI*NU
-IF (ABS(NU) .GT. TOL) GO TO 10
-   A = 1.0 + (T*T)/6.0
-   GO TO 20
-10 A = T/SIN(T)
-!
-20 T = 0.5 + (0.5 + GAM1(NU))
-G1 = 1.0/T
-G2 = A*T
-GM2 = 0.5*(G1 + G2)
-IF (ABS(NU) .GT. 0.2) GO TO 30
-!
-!         THE FOLLOWING IS THE TAYLOR SERIES FOR
-!     T = (1/G2 - 1/G1)/(2*NU). NOTE THAT G1*G2 = A.
-!
-   T = NU*NU
-   T = -((((((D(7)*T + D(6))*T + D(5))*T + D(4))*T + &
-&D(3))*T + D(2))*T + D(1))
-   GM1 = A*T
-   GO TO 40
-30 GM1 = 0.5*(G1 - G2)/NU
-!
-!            INITIALIZATION OF THE SUMMATION
-!
-40 P = (0.5*G1)*C
-Q = (0.5*G2)/C
-X = REAL(MU)
-Y = AIMAG(MU)
-IF (ANORM(MU) .GT. TOL) GO TO 50
-   T = X*Y
-   SH = CMPLX(1.0, T/3.0)
-   CH = CMPLX(1.0, T)
-   GO TO 60
-50 W = CMPLX (-Y, X)
-SH = CSIN(W)/W
-CH = CCOS(W)
-!
-60 F = GM1*CH + GM2*CL*SH
-C = (1.0, 0.0)
-W1 = F
-W2 = P
-!
-!                 SUMMATION OF SERIES
-!
-W = 0.25*(Z*Z)
-DO K = 1, 50
-   AK = K
-   F = (AK*F + P + Q)/((AK - NU)*(AK + NU))
-   P = P/(AK - NU)
-   Q = Q/(AK + NU)
-   C = C*W/AK
-   T1 = C*F
-   W1 = W1 + T1
-   T2 = C*(P - AK*F)
-   W2 = W2 + T2
-   IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80
-END DO
-!
-80 W2 = W2 * ZR
-RETURN
-END SUBROUTINE CKM
-
-SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
-!-----------------------------------------------------------------------
-!
-!             COMPUTATION OF THE SCALED BESSEL FUNCTIONS
-!
-!                   K1 = (EXP(Z)*SQRT(Z)) K  (Z)
-!                                          NU
-!                   K2 = (EXP(Z)*SQRT(Z)) K    (Z)
-!                                          NU+1
-!
-!     FOR REAL ORDERS NU AND NU + 1 AND FOR COMPLEX ARGUMENT Z
-!     BY USE OF THE MILLER ALGORITHM. FOR THE GREATEST ACCURACY,
-!     Z SHOULD LIE IN A SECTOR SLIGHTLY LARGER THAN THE RIGHT
-!     HALF PLANE. IT IS ASSUMED THAT ABS(NU) .LT. 0.5, AND THAT
-!     R = ABS(Z/2) AND ZR = 2/Z.
-!
-!-----------------------------------------------------------------------
-COMPLEX Z, ZR, K1, K2
-COMPLEX BL, S, U1, U2, U3
-REAL L, NU, NU2
-!---------------------
-!     C1 = SQRT(PI/2)
-!---------------------
-DATA C1/1.25331413731559/
-!-----------------------------------------------------------------------
-!
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
-!
-                EPS = SPMPAR(1)
-!
-!-----------------------------------------------------------------------
-EPS0 = AMAX1(EPS, 5.E-15)
-X = REAL(Z)
-Y = AIMAG(Z)
-NU2 = NU*NU
-!
-!     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
-!
-TH = ATAN2(Y,X)
-A = 3.0/(1.0 + R)
-B = 14.7/(28.0 + R)
-C = 4.0*COS1(NU)/(C1*EPS0*(2.0*R)**(0.25))
-M = (0.485/R)*(ALOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/ &
-&(2.0*COS(B*TH))**2 + 1.5
-!
-!     BACKWARD RECURRENCE IN MILLER ALGORITHM.
-!
-U2 = (0.0, 0.0)
-U1 = (1.0, 0.0)
-S = U1
-L = M
-do 10 I = 2, M
-   U3 = U2
-   U2 = U1
-   E = L - 0.5
-   AL = (E*E - NU2)/(L*(L + 1.0))
-   BL = (2.0/(L + 1.0))*(L + Z)
-   U1 = (BL*U2 - U3)/AL
-   S = S + U1
-   C = ABS(REAL(U1)) + ABS(AIMAG(U1))
-   IF (I .EQ. M .OR. C .LT. 1.E+6) GO TO 10
-!
-!           RESCALE TO AVOID OVERFLOW
-!
-      U2 = U2/C
-      U1 = U1/C
-      S = S/C
-!
-10 L = L - 1.0
-!
-!     LAST STEP IN THE MILLER ALGORITHM.
-!
-IF (C .LT. 2.0) GO TO 20
-   U2 = U2/C
-   U1 = U1/C
-   S = S/C
-20 U3 = U2
-U2 = U1
-AL = 0.5*(0.5 - NU)*(0.5 + NU)
-BL = 1.0 + Z
-U1 = (BL*U2 - U3)/AL
-S = S + U1
-!
-!     FINAL ASSEMBLY
-!
-K1 = C1*(U1/S)
-K2 = K1*(1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR)
-RETURN
-END SUBROUTINE CKML
-
-COMPLEX function CXP (N, NU)
-!-----------------------------------------------------------------------
-!                 COMPUTATION OF EXP(-R*(PI/2)*I)
-!              WHERE R = N + NU FOR ABS(NU) .LE. 0.5
-!-----------------------------------------------------------------------
-REAL NU
-!
-C = COS0(NU)
-S = SIN0(NU)
-K = MOD(N,4)
-IF (K .EQ. 0) GO TO 10
-IF (K .EQ. 1) GO TO 20
-IF (K .EQ. 2) GO TO 30
-GO TO 40
-!
-10 CXP = CMPLX (C, -S)
-RETURN
-!
-20 CXP = CMPLX (-S, -C)
-RETURN
-!
-30 CXP = CMPLX (-C, S)
-RETURN
-!
-40 CXP = CMPLX (S, C)
-RETURN
-END FUNCTION CXP
-
-SUBROUTINE BSSLK (MO, A, IN, W)
-!     ******************************************************************
-!     FORTRAN SUBROUTINE FOR MODIFIED BESSEL FUNCTION OF INTEGRAL ORDER
-!     ******************************************************************
-!     MO = MODE OF OPERATION
-!     A  = ARGUMENT (COMPLEX NUMBER)
-!     IN = ORDER (INTEGER)
-!     W  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
-!     -------------------
-COMPLEX A, W
-DIMENSION AZ(2)
-DIMENSION CD(30), CE(30)
-DIMENSION SZ(2), RZ(2), ZL(2)
-DIMENSION TS(2), TM(2), SM(2), SL(2), SQ(2), SR(2), AQ(2), QF(2)
-DATA CD(1) / 0.00000000000000E00/,  CD(2) /-1.64899505142212E-2/, &
-&CD(3) /-7.18621880068536E-2/,  CD(4) /-1.67086878124866E-1/, &
-&CD(5) /-3.02582250219469E-1/,  CD(6) /-4.80613945245927E-1/, &
-&CD(7) /-7.07075239357898E-1/,  CD(8) /-9.92995790539516E-1/, &
-&CD(9) /-1.35583925612592E00/,  CD(10)/-1.82105907899132E00/, &
-&CD(11)/-2.42482175310879E00/,  CD(12)/-3.21956655708750E00/, &
-&CD(13)/-4.28658077248384E00/,  CD(14)/-5.77022816798128E00/, &
-&CD(15)/-8.01371260952526E00/
-DATA CD(16)/ 0.00000000000000E00/,  CD(17)/-5.57742429879505E-3/, &
-&CD(18)/-4.99112944172476E-2/,  CD(19)/-1.37440911652397E-1/, &
-&CD(20)/-2.67233784710566E-1/,  CD(21)/-4.40380166808682E-1/, &
-&CD(22)/-6.61813614872541E-1/,  CD(23)/-9.41861077665017E-1/, &
-&CD(24)/-1.29754130468326E00/,  CD(25)/-1.75407696719816E00/, &
-&CD(26)/-2.34755299882276E00/,  CD(27)/-3.13041332689196E00/, &
-&CD(28)/-4.18397120563729E00/,  CD(29)/-5.65251799214994E00/, &
-&CD(30)/-7.87863959810677E00/
-DATA CE(1) / 0.00000000000000E00/,  CE(2) /-4.80942336387447E-3/, &
-&CE(3) /-1.31366200347759E-2/,  CE(4) /-1.94843834008458E-2/, &
-&CE(5) /-2.19948900032003E-2/,  CE(6) /-2.09396625676519E-2/, &
-&CE(7) /-1.74600268458650E-2/,  CE(8) /-1.27937813362085E-2/, &
-&CE(9) /-8.05234421796592E-3/,  CE(10)/-4.15817375002760E-3/, &
-&CE(11)/-1.64317738747922E-3/,  CE(12)/-4.49175585314709E-4/, &
-&CE(13)/-7.28594765574007E-5/,  CE(14)/-5.38265230658285E-6/, &
-&CE(15)/-9.93779048036289E-8/
-DATA CE(16)/ 0.00000000000000E00/,  CE(17)/ 7.53805779200591E-2/, &
-&CE(18)/ 7.12293537403464E-2/,  CE(19)/ 6.33116224228200E-2/, &
-&CE(20)/ 5.28240264523301E-2/,  CE(21)/ 4.13305359441492E-2/, &
-&CE(22)/ 3.01350573947510E-2/,  CE(23)/ 2.01043439592720E-2/, &
-&CE(24)/ 1.18552223068074E-2/,  CE(25)/ 5.86055510956010E-3/, &
-&CE(26)/ 2.25465148267325E-3/,  CE(27)/ 6.08173041536336E-4/, &
-&CE(28)/ 9.84215550625747E-5/,  CE(29)/ 7.32139093038089E-6/, &
-&CE(30)/ 1.37279667384666E-7/
-!     -------------------
-AZ(1)=REAL(A)
-AZ(2)=AIMAG(A)
-ZS=AZ(1)*AZ(1)+AZ(2)*AZ(2)
-ZL(1)=0.5*ALOG(ZS)
-ZL(2)=ATAN2(AZ(2),AZ(1))
-AN=IABS(IN)
-TM(1)=0.0
-TM(2)=0.0
-IF(MO.NE.0)GO TO 002
-TM(1)=AZ(1)
-TM(2)=AZ(2)
-002 IF(ZS-1.0)020,020,003
-003 IF(ZS-289.0)004,010,010
-004 IF(AZ(1)+0.096*AZ(2)*AZ(2))020,020,015
-010 QM=1.25331413731550*EXP(-0.5*ZL(1)-TM(1))
-QF(1)=QM*COS(-0.5*ZL(2)-TM(2))
-QF(2)=QM*SIN(-0.5*ZL(2)-TM(2))
-IF(AN.GT.1.0)GO TO 012
-PN=AN
-assign 011 to LA
-GO TO 100
-011 TS(1)=QF(1)*SM(1)-QF(2)*SM(2)
-TS(2)=QF(1)*SM(2)+QF(2)*SM(1)
-SM(1)=TS(1)
-SM(2)=TS(2)
-GO TO 029
-012 PN=1.0
-assign 013 to LA
-GO TO 100
-013 SQ(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SQ(2)=QF(1)*SM(2)+QF(2)*SM(1)
-PN=0.0
-assign 014 to LA
-GO TO 100
-014 SR(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SR(2)=QF(1)*SM(2)+QF(2)*SM(1)
-GO TO 026
-015 QM=1.25331413731550*EXP(-0.5*ZL(1)-TM(1))
-QF(1)=QM*COS(-0.5*ZL(2)-TM(2))
-QF(2)=QM*SIN(-0.5*ZL(2)-TM(2))
-IF(AN.GT.1.0)GO TO 017
-PN=AN
-assign 016 to LR
-GO TO 104
-016 TS(1)=QF(1)*SM(1)-QF(2)*SM(2)
-TS(2)=QF(1)*SM(2)+QF(2)*SM(1)
-SM(1)=TS(1)
-SM(2)=TS(2)
-GO TO 029
-017 PN=1.0
-assign 018 to LR
-GO TO 104
-018 SQ(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SQ(2)=QF(1)*SM(2)+QF(2)*SM(1)
-PN=0.0
-assign 019 to LR
-GO TO 104
-019 SR(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SR(2)=QF(1)*SM(2)+QF(2)*SM(1)
-GO TO 026
-020 QF(1)=1.0
-QF(2)=0.0
-IF(MO.EQ.0)GO TO 021
-QM=EXP(AZ(1))
-QF(1)=QM*COS(AZ(2))
-QF(2)=QM*SIN(AZ(2))
-021 IF(AN.GT.1.0)GO TO 023
-PN=AN
-assign 022 to LK
-GO TO 106
-022 TS(1)=QF(1)*SM(1)-QF(2)*SM(2)
-TS(2)=QF(1)*SM(2)+QF(2)*SM(1)
-SM(1)=TS(1)
-SM(2)=TS(2)
-GO TO 029
-023 PN=1.0
-assign 024 to LK
-GO TO 106
-024 SQ(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SQ(2)=QF(1)*SM(2)+QF(2)*SM(1)
-PN=0.0
-assign 025 to LK
-GO TO 106
-025 SR(1)=QF(1)*SM(1)-QF(2)*SM(2)
-SR(2)=QF(1)*SM(2)+QF(2)*SM(1)
-026 RZ(1)=+AZ(1)/ZS
-RZ(2)=-AZ(2)/ZS
-PN=0.0
-GO TO 028
-027 SQ(1)=SR(1)
-SQ(2)=SR(2)
-SR(1)=SM(1)
-SR(2)=SM(2)
-028 SM(1)=2.0*PN*(RZ(1)*SR(1)-RZ(2)*SR(2))+SQ(1)
-SM(2)=2.0*PN*(RZ(1)*SR(2)+RZ(2)*SR(1))+SQ(2)
-PN=PN+1.0
-IF(PN.LT.AN)GO TO 027
-029 W=CMPLX(SM(1),SM(2))
-RETURN
-100 SM(1)=0.0
-SM(2)=0.0
-RZ(1)=+0.5*AZ(1)/ZS
-RZ(2)=-0.5*AZ(2)/ZS
-QN=(PN-0.5)*(PN+0.5)
-TM(1)=1.0
-TM(2)=0.0
-PM=0.0
-GO TO 102
-101 QN=QN-2.0*PM
-PM=PM+1.0
-TS(1)=RZ(1)*TM(1)-RZ(2)*TM(2)
-TS(2)=RZ(1)*TM(2)+RZ(2)*TM(1)
-TM(1)=QN*TS(1)/PM
-TM(2)=QN*TS(2)/PM
-IF(ABS(SM(1))+ABS(TM(1)).NE.ABS(SM(1)))GO TO 102
-IF(ABS(SM(2))+ABS(TM(2)).EQ.ABS(SM(2)))GO TO 103
-102 SM(1)=SM(1)+TM(1)
-SM(2)=SM(2)+TM(2)
-IF(PM.LT.36.0)GO TO 101
-103 GO TO LA,(011,013,014)
-104 SM(1)=1.0
-SM(2)=0.0
-M=15.0*PN+2.0
-N=15.0*PN+15.0
-do 105 I = M,N
-TS(1)=AZ(1)-CD(I)
-TS(2)=AZ(2)
-SS=TS(1)*TS(1)+TS(2)*TS(2)
-TM(1)=+CE(I)*TS(1)/SS
-TM(2)=-CE(I)*TS(2)/SS
-SM(1)=SM(1)+TM(1)
-SM(2)=SM(2)+TM(2)
-105 CONTINUE
-GO TO LR,(016,018,019)
-106 AQ(1)=1.0
-AQ(2)=0.0
-RN=0.0
-SN=-1.0
-PM=0.0
-GO TO 108
-107 PM=PM+1.0
-RN=RN+0.5/PM
-SN=-SN
-TS(1)=0.5*(AZ(1)*AQ(1)-AZ(2)*AQ(2))
-TS(2)=0.5*(AZ(1)*AQ(2)+AZ(2)*AQ(1))
-AQ(1)=TS(1)/PM
-AQ(2)=TS(2)/PM
-108 IF(PM.LT.PN)GO TO 107
-SZ(1)=0.25*(AZ(1)-AZ(2))*(AZ(1)+AZ(2))
-SZ(2)=0.5*AZ(1)*AZ(2)
-SR(1)=0.0
-SR(2)=0.0
-SS=AQ(1)*AQ(1)+AQ(2)*AQ(2)
-TM(1)=+AQ(1)/SS
-TM(2)=-AQ(2)/SS
-PM=0.0
-GO TO 110
-109 TM(1)=TM(1)/(PN-PM)
-TM(2)=TM(2)/(PN-PM)
-SR(1)=SR(1)+0.5*TM(1)
-SR(2)=SR(2)+0.5*TM(2)
-PM=PM+1.0
-TS(1)=SZ(1)*TM(1)-SZ(2)*TM(2)
-TS(2)=SZ(1)*TM(2)+SZ(2)*TM(1)
-TM(1)=-TS(1)/PM
-TM(2)=-TS(2)/PM
-110 IF(PM.LT.PN)GO TO 109
-SM(1)=0.0
-SM(2)=0.0
-RM=1.0
-QM=0.0
-AQ(1)=SN*AQ(1)
-AQ(2)=SN*AQ(2)
-SL(1)=-0.115931515658412+ZL(1)-RN
-SL(2)=+ZL(2)
-PM=0.0
-GO TO 112
-111 QM=QM+RM
-PM=PM+1.0
-RM=0.25*ZS*RM/(PM*(PN+PM))
-TS(1)=SZ(1)*AQ(1)-SZ(2)*AQ(2)
-TS(2)=SZ(1)*AQ(2)+SZ(2)*AQ(1)
-AQ(1)=TS(1)/(PM*(PN+PM))
-AQ(2)=TS(2)/(PM*(PN+PM))
-SL(1)=SL(1)-0.5/PM-0.5/(PN+PM)
-112 TM(1)=AQ(1)*SL(1)-AQ(2)*SL(2)
-TM(2)=AQ(1)*SL(2)+AQ(2)*SL(1)
-SM(1)=SM(1)+TM(1)
-SM(2)=SM(2)+TM(2)
-IF(QM+RM.GT.QM)GO TO 111
-SM(1)=SR(1)+SM(1)
-SM(2)=SR(2)+SM(2)
-GO TO LK,(022,024,025)
-END SUBROUTINE BSSLK
 

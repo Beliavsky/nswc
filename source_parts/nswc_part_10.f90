@@ -1,5 +1,2391 @@
+SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
+IMPLICIT NONE
+INTEGER KB, M, N, NB
+INTEGER I, J, JMAX, JPK, K, NBM1
+REAL T
+!-----------------------------------------------------------------------
+!
+!     BCHSV1 SOLVES M LINEAR SYSTEMS C*X = B  (I = 1,...,M), WHERE
+!                                       I   I
+!     EACH B  IS A VECTOR STORED IN THE I-TH ROW OF A MATRIX B.
+!           I
+!                       ------------------
+!
+!     INPUT ...
+!
+!        N   THE ORDER OF THE MATRIX C
+!        NB  THE BANDWIDTH OF C
+!        W   THE CHOLESKY FACTORIZATION OF THE BANDED SYMMETRIC
+!            POSITIVE DEFINITE MATRIX C OBTAINED BY THE ROUTINE
+!            BCHFAC.
+!        B   MATRIX WHOSE ROWS ARE THE VECTORS TO BE SOLVED FOR
+!            IN THE M LINEAR SYSTEMS OF EQUATIONS.
+!        KB  THE NUMBER OF ROWS OF B SPECIFIED IN THE CALLING
+!            PROGRAM. IT IS ASSUMED THAT KB .GE. M.
+!        M   NUMBER OF LINEAR SYSTEMS TO BE SOLVED.
+!
+!     OUTPUT ...
+!
+!        B   MATRIX WHOSE ROWS ARE THE SOLUTIONS X  OF THE M
+!            LINEAR SYSTEMS OF EQUATIONS.         I
+!
+!                                       T
+!     NOTE.  THE FACTORIZATION C = L*D*L  IS USED, WHERE L IS A
+!     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
+!
+!-----------------------------------------------------------------------
+REAL W(NB,N), B(KB,N)
+!
+IF (N .GT. 1) GO TO 20
+DO I = 1,M
+   B(I,1) = B(I,1)*W(1,1)
+END DO
+RETURN
+!
+!     FORWARD SUBSTITUTION. SOLVE L*Y = B FOR Y AND STORE Y IN B.
+!
+20 NBM1 = NB - 1
+do 40 K = 1,N
+   JMAX = MIN0(NBM1,N - K)
+   IF (JMAX .LT. 1) GO TO 40
+   DO J = 1,JMAX
+      JPK = J + K
+      T = W(J + 1,K)
+      DO I = 1,M
+         B(I,JPK) = B(I,JPK) - T*B(I,K)
+      END DO
+   END DO
+40 CONTINUE
+!                              T     -1
+!     BACKSUBSTITUTION. SOLVE L X = D  Y  FOR X AND STORE X IN B.
+!
+K = N
+50 T = W(1,K)
+   DO I = 1,M
+      B(I,K) = T*B(I,K)
+   END DO
+   JMAX = MIN0(NBM1,N - K)
+   IF (JMAX .LT. 1) GO TO 80
+   DO J = 1,JMAX
+      JPK = J + K
+      T = W(J + 1,K)
+      DO I = 1,M
+         B(I,K) = B(I,K) - T*B(I,JPK)
+      END DO
+   END DO
+80 K = K - 1
+   IF (K .GT. 0) GO TO 50
+RETURN
+END SUBROUTINE BCHSV1
+
+SUBROUTINE BVAL2 (A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, &
+&IDX, IDY, F, WK)
+IMPLICIT NONE
+INTEGER IDX, IDY, KA, KX, KY, NX, NY
+REAL F, X0, Y0
+INTEGER I, IW, J, L, M
+INTEGER INTRVL
+!-----------------------------------------------------------------------
+!
+!                EVALUATION AND PARTIAL DIFFERENTIATION
+!                      OF A PIECEWISE POLYNOMIAL
+!
+!                            NX   NY
+!                F(X,Y)  =  SUM  SUM  A   U (X) V (Y)
+!                           I=1  J=1   IJ  I     J
+!
+!     WHERE U  AND V  ARE ONE-DIMENSIONAL B-SPLINE BASIS FUNCTIONS.
+!            I      J
+!-----------------------------------------------------------------------
+!     REAL TX(NX + KX), TY(NY + KY), WK(KY + 3*MAX(KX,KY))
+!-----------------------------
+REAL A(KA,NY), TX(*), TY(*), WK(*)
+!
+F = 0.0
+M = NX + KX
+IF (X0 .LT. TX(1) .OR. X0 .GT. TX(M)) RETURN
+M = NY + KY
+IF (Y0 .LT. TY(1) .OR. Y0 .GT. TY(M)) RETURN
+!
+IW = KY + 1
+J = INTRVL(Y0, TY, M)
+IF (J .GT. KY) GO TO 20
+!
+!     CASE WHEN  J .LE. KY
+!
+DO L = 1,J
+   CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(L), WK(IW))
+END DO
+CALL BVAL (TY, WK(1), J, KY, Y0, IDY, F, WK(IW))
+RETURN
+!
+!     CASE WHEN  J .GT. KY
+!
+20 L = J - KY
+DO I = 1,KY
+   L = L + 1
+   CALL BVAL (TX, A(1,L), NX, KX, X0, IDX, WK(I), WK(IW))
+END DO
+L = J - KY + 1
+CALL BVAL (TY(L), WK(1), KY, KY, Y0, IDY, F, WK(IW))
+RETURN
+END SUBROUTINE BVAL2
+
+SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
+IMPLICIT NONE
+INTEGER N, IADJ(*), IEND(N), IER
+REAL X(N), Y(N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE CREATES A THIESSEN TRIANGULATION OF N
+! ARBITRARILY SPACED POINTS IN THE PLANE REFERRED TO AS
+! NODES.  THE TRIANGULATION IS OPTIMAL IN THE SENSE THAT IT
+! IS AS NEARLY EQUIANGULAR AS POSSIBLE.  TRMESH IS PART OF
+! AN INTERPOLATION PACKAGE WHICH ALSO PROVIDES SUBROUTINES
+! TO REORDER THE NODES, ADD A NEW NODE, DELETE AN ARC, PLOT
+! THE MESH, AND PRINT THE DATA STRUCTURE.
+!   UNLESS THE NODES ARE ALREADY ORDERED IN SOME REASONABLE
+! FASHION, THEY SHOULD BE REORDERED BY SUBROUTINE REORDR FOR
+! INCREASED EFFICIENCY BEFORE CALLING TRMESH.
+!
+! INPUT PARAMETERS -     N - NUMBER OF NODES IN THE MESH.
+!                            N .GE. 3.
+!
+!                      X,Y - N-VECTORS OF COORDINATES.
+!                            (X(I),Y(I)) DEFINES NODE I.
+!
+!                     IADJ - VECTOR OF LENGTH .GE. 6*N-9.
+!
+!                     IEND - VECTOR OF LENGTH .GE. N.
+!
+! N, X, AND Y ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - IADJ - ADJACENCY LISTS OF NEIGHBORS IN
+!                            COUNTERCLOCKWISE ORDER.  THE
+!                            LIST FOR NODE I+1 FOLLOWS THAT
+!                            FOR NODE I WHERE X AND Y DEFINE
+!                            THE ORDER.  THE VALUE 0 DENOTES
+!                            THE BOUNDARY (OR A PSEUDO-NODE
+!                            AT INFINITY) AND IS ALWAYS THE
+!                            LAST NEIGHBOR OF A BOUNDARY
+!                            NODE.  IADJ IS UNCHANGED IF IER
+!                            .NE. 0.
+!
+!                     IEND - POINTERS TO THE ENDS OF
+!                            ADJACENCY LISTS (SETS OF
+!                            NEIGHBORS) IN IADJ.  THE
+!                            NEIGHBORS OF NODE 1 BEGIN IN
+!                            IADJ(1).  FOR K .GT. 1, THE
+!                            NEIGHBORS OF NODE K BEGIN IN
+!                            IADJ(IEND(K-1)+1) AND K HAS
+!                            IEND(K) - IEND(K-1) NEIGHBORS
+!                            INCLUDING (POSSIBLY) THE
+!                            BOUNDARY.  IADJ(IEND(K)) .EQ. 0
+!                            IFF NODE K IS ON THE BOUNDARY.
+!                            IEND IS UNCHANGED IF IER = 1.
+!                            IF IER = 2 IEND CONTAINS THE
+!                            INDICES OF A SEQUENCE OF N
+!                            NODES ORDERED FROM LEFT TO
+!                            RIGHT WHERE LEFT AND RIGHT ARE
+!                            DEFINED BY ASSUMING NODE 1 IS
+!                            TO THE LEFT OF NODE 2.
+!
+!                      IER - ERROR INDICATOR
+!                            IER = 0 IF NO ERRORS WERE
+!                                    ENCOUNTERED.
+!                            IER = 1 IF N .LT. 3.
+!                            IER = 2 IF N .GE. 3 AND ALL
+!                                    NODES ARE COLLINEAR.
+!
+! MODULES REFERENCED BY TRMESH - SHIFTD, ADNODE, TRFIND,
+!                                INTADD, BDYADD, SWPTST,
+!                                SWAPD, TINDX
+!
+!***********************************************************
+!
+INTEGER NN, K, KM1, NL, NR, IND, INDX, N0, ITEMP, &
+&IERR, KM1D2, KMI, I, KMIN
+REAL XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, &
+&CPROD, SPROD
+!
+! LOCAL PARAMETERS -
+!
+! NN =          LOCAL COPY OF N
+! K =           NODE (INDEX) TO BE INSERTED INTO IEND
+! KM1 =         K-1 - (VARIABLE) LENGTH OF IEND
+! NL,NR =       IEND(1), IEND(KM1) -- LEFTMOST AND RIGHTMOST
+!                 NODES IN IEND AS VIEWED FROM THE RIGHT OF
+!                 1-2 WHEN IEND CONTAINS THE INITIAL ORDERED
+!                 SET OF NODAL INDICES
+! XL,YL,XR,YR = X AND Y COORDINATES OF NL AND NR
+! DXR,DYR =     XR-XL, YR-YL
+! XK,YK =       X AND Y COORDINATES OF NODE K
+! DXK,DYK =     XK-XL, YK-YL
+! CPROD =       VECTOR CROSS PRODUCT OF NL-NR AND NL-K --
+!                 USED TO DETERMINE THE POSITION OF NODE K
+!                 WITH RESPECT TO THE LINE DEFINED BY THE
+!                 NODES IN IEND
+! SPROD =       SCALAR PRODUCT USED TO DETERMINE THE
+!                 INTERVAL CONTAINING NODE K WHEN K IS ON
+!                 THE LINE DEFINED BY THE NODES IN IEND
+! IND,INDX =    INDICES FOR IEND AND IADJ, RESPECTIVELY
+! N0,ITEMP =    TEMPORARY NODES (INDICES)
+! IERR =        DUMMY PARAMETER FOR CALL TO ADNODE
+! KM1D2,KMI,I = KM1/2, K-I, DO-LOOP INDEX -- USED IN IEND
+!                 REORDERING LOOP
+! KMIN =        FIRST NODE INDEX SENT TO ADNODE
+!
+NN = N
+IER = 1
+IF (NN .LT. 3) RETURN
+IER = 0
+!
+! INITIALIZE IEND, NL, NR, AND K
+!
+IEND(1) = 1
+IEND(2) = 2
+XL = X(1)
+YL = Y(1)
+XR = X(2)
+YR = Y(2)
+K = 2
+!
+! BEGIN LOOP ON NODES 3,4,...
+!
+1 DXR = XR-XL
+DYR = YR-YL
+!
+! NEXT LOOP BEGINS HERE IF NL AND NR ARE UNCHANGED
+!
+2 IF (K .EQ. NN) GO TO 13
+KM1 = K
+K = KM1 + 1
+XK = X(K)
+YK = Y(K)
+DXK = XK-XL
+DYK = YK-YL
+CPROD = DXR*DYK - DXK*DYR
+IF (CPROD .GT. 0.) GO TO 6
+IF (CPROD .LT. 0.) GO TO 8
+!
+! NODE K LIES ON THE LINE CONTAINING NODES 1,2,...,K-1.
+!   SET SPROD TO (NL-NR,NL-K).
+!
+SPROD = DXR*DXK + DYR*DYK
+IF (SPROD .GT. 0.) GO TO 3
+!
+! NODE K IS TO THE LEFT OF NL.  INSERT K AS THE FIRST
+!   (LEFTMOST) NODE IN IEND AND SET NL TO K.
+!
+CALL SHIFTD(1,KM1,1, IEND )
+IEND(1) = K
+XL = XK
+YL = YK
+GO TO 1
+!
+! NODE K IS TO THE RIGHT OF NL.  FIND THE LEFTMOST NODE
+!   N0 WHICH LIES TO THE RIGHT OF K.
+!   SET SPROD TO (N0-NL,N0-K).
+!
+3 do 4 IND = 2,KM1
+  N0 = IEND(IND)
+  SPROD = (XL-X(N0))*(XK-X(N0)) + &
+&(YL-Y(N0))*(YK-Y(N0))
+  IF (SPROD .GE. 0.) GO TO 5
+4 CONTINUE
+!
+! NODE K IS TO THE RIGHT OF NR.  INSERT K AS THE LAST
+!   (RIGHTMOST) NODE IN IEND AND SET NR TO K.
+!
+IEND(K) = K
+XR = XK
+YR = YK
+GO TO 1
+!
+! NODE K LIES BETWEEN IEND(IND-1) AND IEND(IND).  INSERT K
+!   IN IEND.
+!
+5 CALL SHIFTD(IND,KM1,1, IEND )
+IEND(IND) = K
+GO TO 2
+!
+! NODE K IS TO THE LEFT OF NL-NR.  REORDER IEND SO THAT NL
+!   IS THE LEFTMOST NODE AS VIEWED FROM K.
+!
+6 KM1D2 = KM1/2
+DO I = 1,KM1D2
+  KMI = K-I
+  ITEMP = IEND(I)
+  IEND(I) = IEND(KMI)
+  IEND(KMI) = ITEMP
+  END DO
+!
+! NODE K IS TO THE RIGHT OF NL-NR.  CREATE A TRIANGULATION
+!   CONSISTING OF NODES 1,2,...,K.
+!
+8 NL = IEND(1)
+NR = IEND(KM1)
+!
+! CREATE THE ADJACENCY LISTS FOR THE FIRST K-1 NODES.
+!   INSERT NEIGHBORS IN REVERSE ORDER.  EACH NODE HAS FOUR
+!   NEIGHBORS EXCEPT NL AND NR WHICH HAVE THREE.
+!
+do 9 IND = 1,KM1
+  N0 = IEND(IND)
+  INDX = 4*N0
+  IF (N0 .GE. NL) INDX = INDX-1
+  IF (N0 .GE. NR) INDX = INDX-1
+  IADJ(INDX) = 0
+  INDX = INDX-1
+  IF (IND .LT. KM1) IADJ(INDX) = IEND(IND+1)
+  IF (IND .LT. KM1) INDX = INDX-1
+  IADJ(INDX) = K
+  IF (IND .EQ. 1) GO TO 9
+  IADJ(INDX-1) = IEND(IND-1)
+9 CONTINUE
+!
+! CREATE THE ADJACENCY LIST FOR NODE K
+!
+INDX = 5*KM1 - 1
+IADJ(INDX) = 0
+DO IND = 1,KM1
+  INDX = INDX-1
+  IADJ(INDX) = IEND(IND)
+  END DO
+!
+! REPLACE IEND ELEMENTS WITH POINTERS TO IADJ
+!
+INDX = 0
+DO IND = 1,KM1
+  INDX = INDX + 4
+  IF (IND .EQ. NL  .OR.  IND .EQ. NR) INDX = INDX-1
+  IEND(IND) = INDX
+  END DO
+INDX = INDX + K
+IEND(K) = INDX
+!
+! ADD THE REMAINING NODES TO THE TRIANGULATION
+!
+IF (K .EQ. NN) RETURN
+KMIN = K+1
+DO K = KMIN,NN
+  CALL ADNODE(K,X,Y, IADJ,IEND, IERR)
+  END DO
+RETURN
+!
+! ALL NODES ARE COLLINEAR
+!
+13 IER = 2
+RETURN
+END SUBROUTINE TRMESH
+
+SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
+IMPLICIT NONE
+INTEGER KK, IADJ(*), IEND(KK), IER
+REAL X(KK), Y(KK)
+LOGICAL SWPTST
+INTEGER TINDX
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE ADDS NODE KK TO A TRIANGULATION OF A SET
+! OF POINTS IN THE PLANE PRODUCING A NEW TRIANGULATION.  A
+! SEQUENCE OF EDGE SWAPS IS THEN APPLIED TO THE MESH,
+! RESULTING IN AN OPTIMAL TRIANGULATION.  ADNODE IS PART
+! OF AN INTERPOLATION PACKAGE WHICH ALSO PROVIDES ROUTINES
+! TO INITIALIZE THE DATA STRUCTURE, PLOT THE MESH, AND
+! DELETE ARCS.
+!
+! INPUT PARAMETERS -   KK - INDEX OF THE NODE TO BE ADDED
+!                           TO THE MESH.  KK .GE. 4.
+!
+!                     X,Y - VECTORS OF COORDINATES OF THE
+!                           NODES IN THE MESH.  (X(I),Y(I))
+!                           DEFINES NODE I FOR I = 1,..,KK.
+!
+!                    IADJ - SET OF ADJACENCY LISTS OF NODES
+!                           1,..,KK-1.
+!
+!                    IEND - POINTERS TO THE ENDS OF
+!                           ADJACENCY LISTS IN IADJ FOR
+!                           EACH NODE IN THE MESH.
+!
+! IADJ AND IEND MAY BE CREATED BY TRMESH.
+!
+! KK, X, AND Y ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
+!                                 OF NODE KK AS THE LAST
+!                                 ENTRY.
+!
+!                           IER - ERROR INDICATOR
+!                                 IER = 0 IF NO ERRORS
+!                                         WERE ENCOUNTERED.
+!                                 IER = 1 IF ALL NODES
+!                                         (INCLUDING KK) ARE
+!                                         COLLINEAR.
+!
+! MODULES REFERENCED BY ADNODE - TRFIND, INTADD, BDYADD,
+!                                SHIFTD, TINDX, SWPTST,
+!                                SWAPD
+!
+!***********************************************************
+!
+INTEGER K, KM1, I1, I2, I3, INDKF, INDKL, NABOR1, &
+&IO1, IO2, IN1, INDK1, IND2F, IND21
+REAL XK, YK
+!
+! LOCAL PARAMETERS -
+!
+! K =        LOCAL COPY OF KK
+! KM1 =      K - 1
+! I1,I2,I3 = VERTICES OF A TRIANGLE CONTAINING K
+! INDKF =    IADJ INDEX OF THE FIRST NEIGHBOR OF K
+! INDKL =    IADJ INDEX OF THE LAST NEIGHBOR OF K
+! NABOR1 =   FIRST NEIGHBOR OF K BEFORE ANY SWAPS OCCUR
+! IO1,IO2 =  ADJACENT NEIGHBORS OF K DEFINING AN ARC TO
+!              BE TESTED FOR A SWAP
+! IN1 =      VERTEX OPPOSITE K -- FIRST NEIGHBOR OF IO2
+!              WHICH PRECEDES IO1.  IN1,IO1,IO2 ARE IN
+!              COUNTERCLOCKWISE ORDER.
+! INDK1 =    INDEX OF IO1 IN THE ADJACENCY LIST FOR K
+! IND2F =    INDEX OF THE FIRST NEIGHBOR OF IO2
+! IND21 =    INDEX OF IO1 IN THE ADJACENCY LIST FOR IO2
+! XK,YK =    X(K), Y(K)
+!
+IER = 0
+K = KK
+!
+! INITIALIZATION
+!
+KM1 = K - 1
+XK = X(K)
+YK = Y(K)
+!
+! ADD NODE K TO THE MESH
+!
+CALL TRFIND(KM1,XK,YK,X,Y,IADJ,IEND, I1,I2,I3)
+IF (I1 .EQ. 0) GO TO 5
+IF (I3 .EQ. 0) CALL BDYADD(K,I1,I2, IADJ,IEND )
+IF (I3 .NE. 0) CALL INTADD(K,I1,I2,I3, IADJ,IEND )
+!
+! INITIALIZE VARIABLES FOR OPTIMIZATION OF THE MESH
+!
+INDKF = IEND(KM1) + 1
+INDKL = IEND(K)
+NABOR1 = IADJ(INDKF)
+IO2 = NABOR1
+INDK1 = INDKF + 1
+IO1 = IADJ(INDK1)
+!
+! BEGIN LOOP -- FIND THE VERTEX OPPOSITE K
+!
+1 IND2F = 1
+IF (IO2 .NE. 1) IND2F = IEND(IO2-1) + 1
+IND21 = TINDX(IO2,IO1,IADJ,IEND)
+IF (IND2F .EQ. IND21) GO TO 2
+IN1 = IADJ(IND21-1)
+GO TO 3
+!
+! IN1 IS THE LAST NEIGHBOR OF IO2
+!
+2 IND21 = IEND(IO2)
+IN1 = IADJ(IND21)
+IF (IN1 .EQ. 0) GO TO 4
+!
+! SWAP TEST -- IF A SWAP OCCURS, TWO NEW ARCS ARE OPPOSITE K
+!              AND MUST BE TESTED.  INDK1 AND INDKF MUST BE
+!              DECREMENTED.
+!
+3 IF ( .NOT. SWPTST(IN1,K,IO1,IO2,X,Y) ) GO TO 4
+CALL SWAPD (IN1,K,IO1,IO2, IADJ,IEND)
+IO1 = IN1
+INDK1 = INDK1 - 1
+INDKF = INDKF - 1
+GO TO 1
+!
+! NO SWAP OCCURRED.  RESET IO2 AND IO1, AND TEST FOR
+!   TERMINATION.
+!
+4 IF (IO1 .EQ. NABOR1) RETURN
+IO2 = IO1
+INDK1 = INDK1 + 1
+IF (INDK1 .GT. INDKL) INDK1 = INDKF
+IO1 = IADJ(INDK1)
+IF (IO1 .NE. 0) GO TO 1
+RETURN
+!
+! ALL NODES ARE COLLINEAR
+!
+5 IER = 1
+RETURN
+END SUBROUTINE ADNODE
+
+SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
+IMPLICIT NONE
+INTEGER KK, I1, I2, IADJ(*), IEND(KK)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE ADDS A BOUNDARY NODE TO A TRIANGULATION
+! OF A SET OF KK-1 POINTS IN THE PLANE.  IADJ AND IEND ARE
+! UPDATED WITH THE INSERTION OF NODE KK.
+!
+! INPUT PARAMETERS -   KK - INDEX OF AN EXTERIOR NODE TO BE
+!                           ADDED.  KK .GE. 4.
+!
+!                      I1 - FIRST (RIGHTMOST AS VIEWED FROM
+!                           KK) BOUNDARY NODE IN THE MESH
+!                           WHICH IS VISIBLE FROM KK - THE
+!                           LINE SEGMENT KK-I1 INTERSECTS
+!                           NO ARCS.
+!
+!                      I2 - LAST (LEFTMOST) BOUNDARY NODE
+!                           WHICH IS VISIBLE FROM KK.
+!
+!                    IADJ - SET OF ADJACENCY LISTS OF NODES
+!                           IN THE MESH.
+!
+!                    IEND - POINTERS TO THE ENDS OF
+!                           ADJACENCY LISTS IN IADJ FOR
+!                           EACH NODE IN THE MESH.
+!
+!   IADJ AND IEND MAY BE CREATED BY TRMESH AND MUST CONTAIN
+! THE VERTICES I1 AND I2.  I1 AND I2 MAY BE DETERMINED BY
+! TRFIND.
+!
+! KK, I1, AND I2 ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
+!                                 OF NODE KK AS THE LAST
+!                                 ENTRY.  NODE KK WILL BE
+!                                 CONNECTED TO I1, I2, AND
+!                                 ALL BOUNDARY NODES BETWEEN
+!                                 THEM.  NO OPTIMIZATION OF
+!                                 THE MESH IS PERFORMED.
+!
+! MODULE REFERENCED BY BDYADD - SHIFTD
+!
+! INTRINSIC FUNCTIONS CALLED BY BDYADD - MIN0, MAX0
+!
+!***********************************************************
+!
+INTEGER K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, &
+&IMIN, IMAX, KEND, NEXT, INDX
+!
+! LOCAL PARAMETERS -
+!
+! K =            LOCAL COPY OF KK
+! KM1 =          K - 1
+! NRIGHT,NLEFT = LOCAL COPIES OF I1, I2
+! NF,NL =        INDICES OF IADJ BOUNDING THE PORTION OF THE
+!                  ARRAY TO BE SHIFTED
+! N1 =           IADJ INDEX OF THE FIRST NEIGHBOR OF NLEFT
+! N2 =           IADJ INDEX OF THE LAST NEIGHBOR OF NRIGHT
+! I =            DO-LOOP INDEX
+! IMIN,IMAX =    BOUNDS ON DO-LOOP INDEX -- FIRST AND LAST
+!                  ELEMENTS OF IEND TO BE INCREMENTED
+! KEND =         POINTER TO THE LAST NEIGHBOR OF K IN IADJ
+! NEXT =         NEXT BOUNDARY NODE TO BE CONNECTED TO KK
+! INDX =         INDEX FOR IADJ
+!
+K = KK
+KM1 = K - 1
+NRIGHT = I1
+NLEFT = I2
+!
+! INITIALIZE VARIABLES
+!
+NL = IEND(KM1)
+N1 = 1
+IF (NLEFT .NE. 1) N1 = IEND(NLEFT-1) + 1
+N2 = IEND(NRIGHT)
+NF = MAX0(N1,N2)
+!
+! INSERT K AS A NEIGHBOR OF MAX(NRIGHT,NLEFT)
+!
+CALL SHIFTD(NF,NL,2, IADJ )
+IADJ(NF+1) = K
+IMIN = MAX0(NRIGHT,NLEFT)
+do 1 I = IMIN,KM1
+  IEND(I) = IEND(I) + 2
+1 CONTINUE
+!
+! INITIALIZE KEND AND INSERT K AS A NEIGHBOR OF
+!   MIN(NRIGHT,NLEFT)
+!
+KEND = NL + 3
+NL = NF - 1
+NF = MIN0(N1,N2)
+CALL SHIFTD(NF,NL,1, IADJ )
+IADJ(NF) = K
+IMAX = IMIN - 1
+IMIN = MIN0(NRIGHT,NLEFT)
+do 2 I = IMIN,IMAX
+  IEND(I) = IEND(I) + 1
+2 CONTINUE
+!
+! INSERT NRIGHT AS THE FIRST NEIGHBOR OF K
+!
+IADJ(KEND) = NRIGHT
+!
+! INITIALIZE INDX FOR LOOP ON BOUNDARY NODES BETWEEN NRIGHT
+!   AND NLEFT
+!
+INDX = IEND(NRIGHT) - 2
+3 NEXT = IADJ(INDX)
+IF (NEXT .EQ. NLEFT) GO TO 4
+!
+! CONNECT NEXT AND K
+!
+KEND = KEND + 1
+IADJ(KEND) = NEXT
+INDX = IEND(NEXT)
+IADJ(INDX) = K
+INDX = INDX - 1
+GO TO 3
+!
+! INSERT NLEFT AND 0 AS THE LAST NEIGHBORS OF K
+!
+4 IADJ(KEND+1) = NLEFT
+KEND = KEND + 2
+IADJ(KEND) = 0
+IEND(K) = KEND
+RETURN
+END SUBROUTINE BDYADD
+
+SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
+IMPLICIT NONE
+INTEGER KK, I1, I2, I3, IADJ(*), IEND(KK)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE ADDS AN INTERIOR NODE TO A TRIANGULATION
+! OF A SET OF KK-1 POINTS IN THE PLANE.  IADJ AND IEND ARE
+! UPDATED WITH THE INSERTION OF NODE KK IN THE TRIANGLE
+! WHOSE VERTICES ARE I1, I2, AND I3.
+!
+! INPUT PARAMETERS -        KK - INDEX OF NODE TO BE
+!                                INSERTED.  KK .GE. 4.
+!
+!                     I1,I2,I3 - INDICES OF THE VERTICES OF
+!                                A TRIANGLE CONTAINING NODE
+!                                KK -- IN COUNTERCLOCKWISE
+!                                ORDER.
+!
+!                         IADJ - SET OF ADJACENCY LISTS
+!                                OF NODES IN THE MESH.
+!
+!                         IEND - POINTERS TO THE ENDS OF
+!                                ADJACENCY LISTS IN IADJ FOR
+!                                EACH NODE IN THE MESH.
+!
+!   IADJ AND IEND MAY BE CREATED BY TRMESH AND MUST CONTAIN
+! THE VERTICES I1, I2, AND I3.  I1,I2,I3 MAY BE DETERMINED
+! BY TRFIND.
+!
+! KK, I1, I2, AND I3 ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ADDITION
+!                                 OF NODE KK AS THE LAST
+!                                 ENTRY.  NODE KK WILL BE
+!                                 CONNECTED TO NODES I1, I2,
+!                                 AND I3.  NO OPTIMIZATION
+!                                 OF THE MESH IS PERFORMED.
+!
+! MODULE REFERENCED BY INTADD - SHIFTD
+!
+! INTRINSIC FUNCTION CALLED BY INTADD - MOD
+!
+!***********************************************************
+!
+INTEGER K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, &
+&NL, N1, N2, IMIN, IMAX, I, ITEMP
+!
+! LOCAL PARAMETERS -
+!
+! K =           LOCAL COPY OF KK
+! KM1 =         K - 1
+! N =           VECTOR CONTAINING I1, I2, I3
+! NFT =         POINTERS TO THE TOPS OF THE 3 SETS OF IADJ
+!                 ELEMENTS TO BE SHIFTED DOWNWARD
+! IP1,IP2,IP3 = PERMUTATION INDICES FOR N AND NFT
+! INDX =        INDEX FOR IADJ AND N
+! NF,NL =       INDICES OF FIRST AND LAST ENTRIES IN IADJ
+!                 TO BE SHIFTED DOWN
+! N1,N2 =       FIRST 2 VERTICES OF A NEW TRIANGLE --
+!                 (N1,N2,KK)
+! IMIN,IMAX =   BOUNDS ON DO-LOOP INDEX -- FIRST AND LAST
+!                 ELEMENTS OF IEND TO BE INCREMENTED
+! I =           DO-LOOP INDEX
+! ITEMP =       TEMPORARY STORAGE LOCATION
+!
+K = KK
+!
+! INITIALIZATION
+!
+N(1) = I1
+N(2) = I2
+N(3) = I3
+!
+! SET UP NFT
+!
+do 2 I = 1,3
+  N1 = N(I)
+  INDX = MOD(I,3) + 1
+  N2 = N(INDX)
+  INDX = IEND(N1) + 1
+!
+! FIND THE INDEX OF N2 AS A NEIGHBOR OF N1
+!
+1 INDX = INDX - 1
+  IF (IADJ(INDX) .NE. N2) GO TO 1
+  NFT(I) = INDX + 1
+2 CONTINUE
+!
+! ORDER THE VERTICES BY DECREASING MAGNITUDE.
+!   N(IP(I+1)) PRECEDES N(IP(I)) IN IEND FOR
+!   I = 1,2.
+!
+IP1 = 1
+IP2 = 2
+IP3 = 3
+IF ( N(2) .LE. N(1) ) GO TO 3
+IP1 = 2
+IP2 = 1
+3 IF ( N(3) .LE. N(IP1) ) GO TO 4
+IP3 = IP1
+IP1 = 3
+4 IF ( N(IP3) .LE. N(IP2) )  GO TO 5
+ITEMP = IP2
+IP2 = IP3
+IP3 = ITEMP
+!
+! ADD NODE K TO THE ADJACENCY LISTS OF EACH VERTEX AND
+!   UPDATE IEND.  FOR EACH VERTEX, A SET OF IADJ ELEMENTS
+!   IS SHIFTED DOWNWARD AND K IS INSERTED.  SHIFTING STARTS
+!   AT THE END OF THE ARRAY.
+!
+5 KM1 = K - 1
+NL = IEND(KM1)
+NF = NFT(IP1)
+IF (NF .LE. NL) CALL SHIFTD(NF,NL,3, IADJ )
+IADJ(NF+2) = K
+IMIN = N(IP1)
+IMAX = KM1
+DO I = IMIN,IMAX
+  IEND(I) = IEND(I) + 3
+  END DO
+!
+NL = NF - 1
+NF = NFT(IP2)
+CALL SHIFTD(NF,NL,2, IADJ )
+IADJ(NF+1) = K
+IMAX = IMIN - 1
+IMIN = N(IP2)
+DO I = IMIN,IMAX
+  IEND(I) = IEND(I) + 2
+  END DO
+!
+NL = NF - 1
+NF = NFT(IP3)
+CALL SHIFTD(NF,NL,1, IADJ )
+IADJ(NF) = K
+IMAX = IMIN - 1
+IMIN = N(IP3)
+DO I = IMIN,IMAX
+  IEND(I) = IEND(I) + 1
+  END DO
+!
+! ADD NODE K TO IEND AND ITS NEIGHBORS TO IADJ
+!
+INDX = IEND(KM1)
+IEND(K) = INDX + 3
+DO I = 1,3
+  INDX = INDX + 1
+  IADJ(INDX) = N(I)
+  END DO
+RETURN
+END SUBROUTINE INTADD
+
+SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
+IMPLICIT NONE
+INTEGER NFRST, NLAST, KK, IARR(*)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE SHIFTS A SET OF CONTIGUOUS ELEMENTS OF AN
+! INTEGER ARRAY KK POSITIONS DOWNWARD (UPWARD IF KK .LT. 0).
+! THE LOOPS ARE UNROLLED IN ORDER TO INCREASE EFFICIENCY.
+!
+! INPUT PARAMETERS - NFRST,NLAST - BOUNDS ON THE PORTION OF
+!                                  IARR TO BE SHIFTED.  ALL
+!                                  ELEMENTS BETWEEN AND
+!                                  INCLUDING THE BOUNDS ARE
+!                                  SHIFTED UNLESS NFRST .GT.
+!                                  NLAST, IN WHICH CASE NO
+!                                  SHIFT OCCURS.
+!
+!                             KK - NUMBER OF POSITIONS EACH
+!                                  ELEMENT IS TO BE SHIFTED.
+!                                  IF KK .LT. 0 SHIFT UP.
+!                                  IF KK .GT. 0 SHIFT DOWN.
+!
+!                           IARR - INTEGER ARRAY OF LENGTH
+!                                  .GE. NLAST + MAX(KK,0).
+!
+! NFRST, NLAST, AND KK ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER -        IARR - SHIFTED ARRAY.
+!
+! MODULES REFERENCED BY SHIFTD - NONE
+!
+!***********************************************************
+!
+INTEGER INC, K, NF, NL, NLP1, NS, NSL, I, IBAK, INDX, &
+&IMAX
+DATA    INC/5/
+!
+! LOCAL PARAMETERS -
+!
+! INC =  DO-LOOP INCREMENT (UNROLLING FACTOR) -- IF INC IS
+!          CHANGED, STATEMENTS MUST BE ADDED TO OR DELETED
+!          FROM THE DO-LOOPS
+! K =    LOCAL COPY OF KK
+! NF =   LOCAL COPY OF NFRST
+! NL =   LOCAL COPY OF NLAST
+! NLP1 = NL + 1
+! NS =   NUMBER OF SHIFTS
+! NSL =  NUMBER OF SHIFTS DONE IN UNROLLED DO-LOOP (MULTIPLE
+!          OF INC)
+! I =    DO-LOOP INDEX AND INDEX FOR IARR
+! IBAK = INDEX FOR DOWNWARD SHIFT OF IARR
+! INDX = INDEX FOR IARR
+! IMAX = BOUND ON DO-LOOP INDEX
+!
+K = KK
+NF = NFRST
+NL = NLAST
+IF (NF .GT. NL  .OR.  K .EQ. 0) RETURN
+NLP1 = NL + 1
+NS = NLP1 - NF
+NSL = INC*(NS/INC)
+IF ( K .LT. 0) GO TO 4
+!
+! SHIFT DOWNWARD STARTING FROM THE BOTTOM
+!
+IF (NSL .LE. 0) GO TO 2
+do 1 I = 1,NSL,INC
+  IBAK = NLP1 - I
+  INDX = IBAK + K
+  IARR(INDX) = IARR(IBAK)
+  IARR(INDX-1) = IARR(IBAK-1)
+  IARR(INDX-2) = IARR(IBAK-2)
+  IARR(INDX-3) = IARR(IBAK-3)
+  IARR(INDX-4) = IARR(IBAK-4)
+1 CONTINUE
+!
+! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
+!
+2 IBAK = NLP1 - NSL
+3 IF (IBAK .LE. NF) RETURN
+IBAK = IBAK - 1
+INDX = IBAK + K
+IARR(INDX) = IARR(IBAK)
+GO TO 3
+!
+! SHIFT UPWARD STARTING FROM THE TOP
+!
+4 IF (NSL .LE. 0) GO TO 6
+IMAX = NLP1 - INC
+do 5 I = NF,IMAX,INC
+  INDX = I + K
+  IARR(INDX) = IARR(I)
+  IARR(INDX+1) = IARR(I+1)
+  IARR(INDX+2) = IARR(I+2)
+  IARR(INDX+3) = IARR(I+3)
+  IARR(INDX+4) = IARR(I+4)
+5 CONTINUE
+!
+! PERFORM THE REMAINING NS-NSL SHIFTS ONE AT A TIME
+!
+6 I = NSL + NF
+7 IF (I .GT. NL) RETURN
+INDX = I + K
+IARR(INDX) = IARR(I)
+I = I + 1
+GO TO 7
+END SUBROUTINE SHIFTD
+
+SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
+IMPLICIT NONE
+INTEGER NIN1, NIN2, NOUT1, NOUT2, IADJ(*), IEND(*)
+INTEGER TINDX
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS SUBROUTINE SWAPS THE DIAGONALS IN A CONVEX QUADRI-
+! LATERAL.
+!
+! INPUT PARAMETERS -  NIN1,NIN2,NOUT1,NOUT2 - NODAL INDICES
+!                            OF A PAIR OF ADJACENT TRIANGLES
+!                            WHICH FORM A CONVEX QUADRILAT-
+!                            ERAL.  NOUT1 AND NOUT2 ARE CON-
+!                            NECTED BY AN ARC WHICH IS TO BE
+!                            REPLACED BY THE ARC NIN1-NIN2.
+!                            (NIN1,NOUT1,NOUT2) MUST BE TRI-
+!                            ANGLE VERTICES IN COUNTERCLOCK-
+!                            WISE ORDER.
+!
+! THE ABOVE PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+!                IADJ,IEND - TRIANGULATION DATA STRUCTURE
+!                            (SEE SUBROUTINE TRMESH).
+!
+! OUTPUT PARAMETERS - IADJ,IEND - UPDATED WITH THE ARC
+!                                 REPLACEMENT.
+!
+! MODULES REFERENCED BY SWAPD - TINDX, SHIFTD
+!
+!***********************************************************
+!
+INTEGER IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, &
+&IMIN, IMAX
+!
+! LOCAL PARAMETERS -
+!
+! IN =        NIN1 AND NIN2 ORDERED BY INCREASING MAGNITUDE
+!               (THE NEIGHBORS OF IN(1) PRECEDE THOSE OF
+!               IN(2) IN IADJ)
+! IO =        NOUT1 AND NOUT2 IN INCREASING ORDER
+! IP1,IP2 =   PERMUTATION OF (1,2) SUCH THAT IO(IP1)
+!               PRECEDES IO(IP2) AS A NEIGHBOR OF IN(1)
+! J,K =       PERMUTATION OF (1,2) USED AS INDICES OF IN
+!               AND IO
+! NF,NL =     IADJ INDICES BOUNDARY A PORTION OF THE ARRAY
+!               TO BE SHIFTED
+! I =         IEND INDEX
+! IMIN,IMAX = BOUNDS ON THE PORTION OF IEND TO BE INCRE-
+!               MENTED OR DECREMENTED
+!
+IN(1) = NIN1
+IN(2) = NIN2
+IO(1) = NOUT1
+IO(2) = NOUT2
+IP1 = 1
+!
+! ORDER THE INDICES SO THAT IN(1) .LT. IN(2) AND IO(1) .LT.
+!   IO(2), AND CHOOSE IP1 AND IP2 SUCH THAT (IN(1),IO(IP1),
+!   IO(IP2)) FORMS A TRIANGLE.
+!
+IF (IN(1) .LT. IN(2)) GO TO 1
+IN(1) = IN(2)
+IN(2) = NIN1
+IP1 = 2
+1 IF (IO(1) .LT. IO(2)) GO TO 2
+IO(1) = IO(2)
+IO(2) = NOUT1
+IP1 = 3 - IP1
+2 IP2 = 3 - IP1
+IF (IO(2) .LT. IN(1)) GO TO 8
+IF (IN(2) .LT. IO(1)) GO TO 12
+!
+! IN(1) AND IO(1) PRECEDE IN(2) AND IO(2).  FOR (J,K) =
+!   (1,2) AND (2,1), DELETE IO(K) AS A NEIGHBOR OF IO(J)
+!   BY SHIFTING A PORTION OF IADJ EITHER UP OR DOWN AND
+!   AND INSERT IN(K) AS A NEIGHBOR OF IN(J).
+!
+do 7 J = 1,2
+  K = 3 - J
+  IF (IN(J) .GT. IO(J)) GO TO 4
+!
+!   THE NEIGHBORS OF IN(J) PRECEDE THOSE OF IO(J) -- SHIFT
+!     DOWN BY 1
+!
+  NF = 1 + TINDX(IN(J),IO(IP1),IADJ,IEND)
+  NL = -1 + TINDX(IO(J),IO(K),IADJ,IEND)
+  IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
+  IADJ(NF) = IN(K)
+  IMIN = IN(J)
+  IMAX = IO(J)-1
+  do 3 I = IMIN,IMAX
+3 IEND(I) = IEND(I) + 1
+  GO TO 6
+!
+!   THE NEIGHBORS OF IO(J) PRECEDE THOSE OF IN(J) -- SHIFT
+!     UP BY 1
+!
+4 NF = 1 + TINDX(IO(J),IO(K),IADJ,IEND)
+  NL = -1 + TINDX(IN(J),IO(IP2),IADJ,IEND)
+  IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
+  IADJ(NL) = IN(K)
+  IMIN = IO(J)
+  IMAX = IN(J) - 1
+  do 5 I = IMIN,IMAX
+5 IEND(I) = IEND(I) - 1
+!
+!   REVERSE (IP1,IP2) FOR (J,K) = (2,1)
+!
+6 IP1 = IP2
+  IP2 = 3 - IP1
+7 CONTINUE
+RETURN
+!
+! THE VERTICES ARE ORDERED (IO(1),IO(2),IN(1),IN(2)).
+!   DELETE IO(2) BY SHIFTING UP BY 1
+!
+8 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
+NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
+IF (NF .LE. NL) CALL SHIFTD(NF,NL,-1, IADJ )
+IMIN = IO(1)
+IMAX = IO(2)-1
+do 9 I = IMIN,IMAX
+9 IEND(I) = IEND(I) - 1
+!
+!   DELETE IO(1) BY SHIFTING UP BY 2 AND INSERT IN(2)
+!
+NF = NL + 2
+NL = -1 + TINDX(IN(1),IO(IP2),IADJ,IEND)
+IF (NF .LE. NL) CALL SHIFTD(NF,NL,-2, IADJ )
+IADJ(NL-1) = IN(2)
+IMIN = IO(2)
+IMAX = IN(1)-1
+do 10 I = IMIN,IMAX
+10 IEND(I) = IEND(I) - 2
+!
+!   SHIFT UP BY 1 AND INSERT IN(1)
+!
+NF = NL + 1
+NL = -1 + TINDX(IN(2),IO(IP1),IADJ,IEND)
+CALL SHIFTD(NF,NL,-1, IADJ )
+IADJ(NL) = IN(1)
+IMIN = IN(1)
+IMAX = IN(2)-1
+do 11 I = IMIN,IMAX
+11 IEND(I) = IEND(I) - 1
+RETURN
+!
+! THE VERTICES ARE ORDERED (IN(1),IN(2),IO(1),IO(2)).
+!   DELETE IO(1) BY SHIFTING DOWN BY 1
+!
+12 NF = 1 + TINDX(IO(1),IO(2),IADJ,IEND)
+NL = -1 + TINDX(IO(2),IO(1),IADJ,IEND)
+IF (NF .LE. NL) CALL SHIFTD(NF,NL,1, IADJ )
+IMIN = IO(1)
+IMAX = IO(2) - 1
+do 13 I = IMIN,IMAX
+13 IEND(I) = IEND(I) + 1
+!
+!   DELETE IO(2) BY SHIFTING DOWN BY 2 AND INSERT IN(1)
+!
+NL = NF - 2
+NF = 1 + TINDX(IN(2),IO(IP2),IADJ,IEND)
+IF (NF .LE. NL) CALL SHIFTD(NF,NL,2, IADJ )
+IADJ(NF+1) = IN(1)
+IMIN = IN(2)
+IMAX = IO(1) - 1
+do 14 I = IMIN,IMAX
+14 IEND(I) = IEND(I) + 2
+!
+!   SHIFT DOWN BY 1 AND INSERT IN(2)
+!
+NL = NF - 1
+NF = 1 + TINDX(IN(1),IO(IP1),IADJ,IEND)
+CALL SHIFTD(NF,NL,1, IADJ )
+IADJ(NF) = IN(2)
+IMIN = IN(1)
+IMAX = IN(2) - 1
+do 15 I = IMIN,IMAX
+15 IEND(I) = IEND(I) + 1
+RETURN
+END SUBROUTINE SWAPD
+
+LOGICAL function SWPTST (IN1,IN2,IO1,IO2,X,Y)
+IMPLICIT NONE
+INTEGER IN1, IN2, IO1, IO2
+REAL X(*), Y(*)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS FUNCTION DECIDES WHETHER OR NOT TO REPLACE A
+! DIAGONAL ARC IN A QUADRILATERAL WITH THE OTHER DIAGONAL.
+! THE DETERMINATION IS BASED ON THE SIZES OF THE ANGLES
+! CONTAINED IN THE 2 TRIANGLES DEFINED BY THE DIAGONAL.
+! THE DIAGONAL IS CHOSEN TO MAXIMIZE THE SMALLEST OF THE
+! SIX ANGLES OVER THE TWO PAIRS OF TRIANGLES.
+!
+! INPUT PARAMETERS -  IN1,IN2,IO1,IO2 - NODE INDICES OF THE
+!                              FOUR POINTS DEFINING THE
+!                              QUADRILATERAL.  IO1 AND IO2
+!                              ARE CURRENTLY CONNECTED BY A
+!                              DIAGONAL ARC.  THIS ARC
+!                              SHOULD BE REPLACED BY AN ARC
+!                              CONNECTING IN1, IN2 IF THE
+!                              DECISION IS MADE TO SWAP.
+!                              IN1,IO1,IO2 MUST BE IN
+!                              COUNTERCLOCKWISE ORDER.
+!
+!                        X,Y - VECTORS OF NODAL COORDINATES.
+!                              (X(I),Y(I)) ARE THE COORD-
+!                              INATES OF NODE I FOR I = IN1,
+!                              IN2, IO1, OR IO2.
+!
+! NONE OF THE INPUT PARAMETERS ARE ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER -  SWPTST - .TRUE. IFF THE ARC CONNECTING
+!                              IO1 AND IO2 IS TO BE REPLACED
+!
+! MODULES REFERENCED BY SWPTST - NONE
+!
+!***********************************************************
+!
+REAL DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, &
+&SIN1, SIN2, COS1, COS2, SIN12
+!
+! LOCAL PARAMETERS -
+!
+! DX11,DY11 = X,Y COORDINATES OF THE VECTOR IN1-IO1
+! DX12,DY12 = X,Y COORDINATES OF THE VECTOR IN1-IO2
+! DX22,DY22 = X,Y COORDINATES OF THE VECTOR IN2-IO2
+! DX21,DY21 = X,Y COORDINATES OF THE VECTOR IN2-IO1
+! SIN1 =      CROSS PRODUCT OF THE VECTORS IN1-IO1 AND
+!               IN1-IO2 -- PROPORTIONAL TO SIN(T1) WHERE T1
+!               IS THE ANGLE AT IN1 FORMED BY THE VECTORS
+! COS1 =      INNER PRODUCT OF THE VECTORS IN1-IO1 AND
+!               IN1-IO2 -- PROPORTIONAL TO COS(T1)
+! SIN2 =      CROSS PRODUCT OF THE VECTORS IN2-IO2 AND
+!               IN2-IO1 -- PROPORTIONAL TO SIN(T2) WHERE T2
+!               IS THE ANGLE AT IN2 FORMED BY THE VECTORS
+! COS2 =      INNER PRODUCT OF THE VECTORS IN2-IO2 AND
+!               IN2-IO1 -- PROPORTIONAL TO COS(T2)
+! SIN12 =     SIN1*COS2 + COS1*SIN2 -- PROPORTIONAL TO
+!               SIN(T1+T2)
+!
+SWPTST = .FALSE.
+!
+! COMPUTE THE VECTORS CONTAINING THE ANGLES T1, T2
+!
+DX11 = X(IO1) - X(IN1)
+DX12 = X(IO2) - X(IN1)
+DX22 = X(IO2) - X(IN2)
+DX21 = X(IO1) - X(IN2)
+!
+DY11 = Y(IO1) - Y(IN1)
+DY12 = Y(IO2) - Y(IN1)
+DY22 = Y(IO2) - Y(IN2)
+DY21 = Y(IO1) - Y(IN2)
+!
+! COMPUTE INNER PRODUCTS
+!
+COS1 = DX11*DX12 + DY11*DY12
+COS2 = DX22*DX21 + DY22*DY21
+!
+! THE DIAGONALS SHOULD BE SWAPPED IFF (T1+T2) .GT. 180
+!   DEGREES.  THE FOLLOWING TWO TESTS INSURE NUMERICAL
+!   STABILITY.
+!
+IF (COS1 .GE. 0.  .AND.  COS2 .GE. 0.) RETURN
+IF (COS1 .LT. 0.  .AND.  COS2 .LT. 0.) GO TO 1
+!
+! COMPUTE VECTOR CROSS PRODUCTS
+!
+SIN1 = DX11*DY12 - DX12*DY11
+SIN2 = DX22*DY21 - DX21*DY22
+SIN12 = SIN1*COS2 + COS1*SIN2
+IF (SIN12 .GE. 0.) RETURN
+1 SWPTST = .TRUE.
+RETURN
+END FUNCTION SWPTST
+
+INTEGER function TINDX (NVERTX,NABOR,IADJ,IEND)
+IMPLICIT NONE
+INTEGER NVERTX, NABOR, IADJ(*), IEND(*)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS FUNCTION RETURNS THE INDEX OF NABOR IN THE
+! ADJACENCY LIST FOR NVERTX.
+!
+! INPUT PARAMETERS - NVERTX - NODE WHOSE ADJACENCY LIST IS
+!                             TO BE SEARCHED.
+!
+!                     NABOR - NODE WHOSE INDEX IS TO BE
+!                             RETURNED.  NABOR MUST BE
+!                             CONNECTED TO NVERTX.
+!
+!                      IADJ - SET OF ADJACENCY LISTS.
+!
+!                      IEND - POINTERS TO THE ENDS OF
+!                             ADJACENCY LISTS IN IADJ.
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS FUNCTION.
+!
+! OUTPUT PARAMETER -  TINDX - IADJ(TINDX) = NABOR.
+!
+! MODULES REFERENCED BY TINDX - NONE
+!
+!***********************************************************
+!
+INTEGER NB, INDX
+!
+! LOCAL PARAMETERS -
+!
+! NB =   LOCAL COPY OF NABOR
+! INDX = INDEX FOR IADJ
+!
+NB = NABOR
+!
+! INITIALIZATION
+!
+INDX = IEND(NVERTX) + 1
+!
+! SEARCH THE LIST OF NVERTX NEIGHBORS FOR NB
+!
+1 INDX = INDX - 1
+IF (IADJ(INDX) .NE. NB) GO TO 1
+!
+TINDX = INDX
+RETURN
+END FUNCTION TINDX
+
+SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
+IMPLICIT NONE
+REAL X0, X1, X2, Y0, Y1, Y2
+INTEGER NST, IADJ(*), IEND(*), I1, I2, I3
+REAL PX, PY, X(*), Y(*)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE LOCATES A POINT P IN A THIESSEN TRIANGU-
+! LATION, RETURNING THE VERTEX INDICES OF A TRIANGLE WHICH
+! CONTAINS P.  TRFIND IS PART OF AN INTERPOLATION PACKAGE
+! WHICH PROVIDES SUBROUTINES FOR CREATING THE MESH.
+!
+! INPUT PARAMETERS -    NST - INDEX OF NODE AT WHICH TRFIND
+!                             BEGINS SEARCH.  SEARCH TIME
+!                             DEPENDS ON THE PROXIMITY OF
+!                             NST TO P.
+!
+!                     PX,PY - X AND Y-COORDINATES OF THE
+!                             POINT TO BE LOCATED.
+!
+!                       X,Y - VECTORS OF COORDINATES OF
+!                             NODES IN THE MESH.  (X(I),Y(I))
+!                             DEFINES NODE I FOR I = 1,...,N
+!                             WHERE N .GE. 3.
+!
+!                      IADJ - SET OF ADJACENCY LISTS OF
+!                             NODES IN THE MESH.
+!
+!                      IEND - POINTERS TO THE ENDS OF
+!                             ADJACENCY LISTS IN IADJ FOR
+!                             EACH NODE IN THE MESH.
+!
+! IADJ AND IEND MAY BE CREATED BY TRMESH.
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - I1,I2,I3 - VERTEX INDICES IN COUNTER-
+!                                CLOCKWISE ORDER - VERTICES
+!                                OF A TRIANGLE CONTAINING P
+!                                IF P IS AN INTERIOR NODE.
+!                                IF P IS OUTSIDE OF THE
+!                                BOUNDARY OF THE MESH, I1
+!                                AND I2 ARE THE FIRST (RIGHT
+!                                -MOST) AND LAST (LEFTMOST)
+!                                NODES WHICH ARE VISIBLE
+!                                FROM P, AND I3 = 0.  IF P
+!                                AND ALL OF THE NODES LIE ON
+!                                A SINGLE LINE THEN I1 = I2
+!                                = I3 = 0.
+!
+! MODULES REFERENCED BY TRFIND - NONE
+!
+! INTRINSIC FUNCTION CALLED BY TRFIND - MAX0
+!
+!***********************************************************
+!
+INTEGER N0, N1, N2, N3, N4, INDX, IND, NF, &
+&NL, NEXT
+REAL XP, YP
+LOGICAL LEFT
+!
+! LOCAL PARAMETERS -
+!
+! XP,YP =     LOCAL VARIABLES CONTAINING PX AND PY
+! N0,N1,N2 =  NODES IN COUNTERCLOCKWISE ORDER DEFINING A
+!               CONE (WITH VERTEX N0) CONTAINING P
+! N3,N4 =     NODES OPPOSITE N1-N2 AND N2-N1, RESPECTIVELY
+! INDX,IND =  INDICES FOR IADJ
+! NF,NL =     FIRST AND LAST NEIGHBORS OF N0 IN IADJ, OR
+!               FIRST (RIGHTMOST) AND LAST (LEFTMOST) NODES
+!               VISIBLE FROM P WHEN P IS OUTSIDE THE
+!               BOUNDARY
+! NEXT =      CANDIDATE FOR I1 OR I2 WHEN P IS OUTSIDE OF
+!               THE BOUNDARY
+! LEFT =      STATEMENT FUNCTION WHICH COMPUTES THE SIGN OF
+!               A CROSS PRODUCT (Z-COMPONENT).  LEFT(X1,...,
+!               Y0) = .TRUE. IFF (X0,Y0) IS ON OR TO THE
+!               LEFT OF THE VECTOR FROM (X1,Y1) TO (X2,Y2).
+!
+LEFT(X1,Y1,X2,Y2,X0,Y0) = (X2-X1)*(Y0-Y1) .GE. &
+&(X0-X1)*(Y2-Y1)
+XP = PX
+YP = PY
+!
+! INITIALIZE VARIABLES AND FIND A CONE CONTAINING P
+!
+N0 = MAX0(NST,1)
+1 INDX = IEND(N0)
+NL = IADJ(INDX)
+INDX = 1
+IF (N0 .NE. 1) INDX = IEND(N0-1) + 1
+NF = IADJ(INDX)
+N1 = NF
+IF (NL .NE. 0) GO TO 3
+!
+! N0 IS A BOUNDARY NODE.  SET NL TO THE LAST NONZERO
+!   NEIGHBOR OF N0.
+!
+IND = IEND(N0) - 1
+NL = IADJ(IND)
+IF ( LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) ) GO TO 2
+!
+! P IS OUTSIDE THE BOUNDARY
+!
+NL = N0
+GO TO 16
+2 IF ( LEFT(X(NL),Y(NL),X(N0),Y(N0),XP,YP) ) GO TO 4
+!
+! P IS OUTSIDE THE BOUNDARY AND N0 IS THE RIGHTMOST
+!   VISIBLE BOUNDARY NODE
+!
+I1 = N0
+GO TO 18
+!
+! N0 IS AN INTERIOR NODE.  FIND N1.
+!
+3 IF ( LEFT(X(N0),Y(N0),X(N1),Y(N1),XP,YP) ) GO TO 4
+INDX = INDX + 1
+N1 = IADJ(INDX)
+IF (N1 .EQ. NL) GO TO 7
+GO TO 3
+!
+! P IS TO THE LEFT OF ARC N0-N1.  INITIALIZE N2 TO THE NEXT
+!   NEIGHBOR OF N0.
+!
+4 INDX = INDX + 1
+N2 = IADJ(INDX)
+IF ( .NOT. LEFT(X(N0),Y(N0),X(N2),Y(N2),XP,YP) ) &
+&GO TO 8
+N1 = N2
+IF (N1 .NE. NL) GO TO 4
+IF ( .NOT. LEFT(X(N0),Y(N0),X(NF),Y(NF),XP,YP) ) &
+&GO TO 7
+IF (XP .EQ. X(N0) .AND. YP .EQ. Y(N0)) GO TO 6
+!
+! P IS LEFT OF OR ON ARCS N0-NB FOR ALL NEIGHBORS NB
+!   OF N0.
+! ALL POINTS ARE COLLINEAR IFF P IS LEFT OF NB-N0 FOR
+!   ALL NEIGHBORS NB OF N0.  SEARCH THE NEIGHBORS OF N0
+!   IN REVERSE ORDER.  NOTE -- N1 = NL AND INDX POINTS TO
+!   NL.
+!
+5 IF ( .NOT. LEFT(X(N1),Y(N1),X(N0),Y(N0),XP,YP) ) &
+&GO TO 6
+IF (N1 .EQ. NF) GO TO 20
+INDX = INDX - 1
+N1 = IADJ(INDX)
+GO TO 5
+!
+! P IS TO THE RIGHT OF N1-N0, OR P=N0.  SET N0 TO N1 AND
+!   START OVER.
+!
+6 N0 = N1
+GO TO 1
+!
+! P IS BETWEEN ARCS N0-N1 AND N0-NF
+!
+7 N2 = NF
+!
+! P IS CONTAINED IN A CONE DEFINED BY LINE SEGMENTS N0-N1
+!   AND N0-N2 WHERE N1 IS ADJACENT TO N2
+!
+8 N3 = N0
+9 IF ( LEFT(X(N1),Y(N1),X(N2),Y(N2),XP,YP) ) GO TO 13
+!
+! SET N4 TO THE FIRST NEIGHBOR OF N2 FOLLOWING N1
+!
+INDX = IEND(N2)
+IF (IADJ(INDX) .NE. N1) GO TO 10
+!
+! N1 IS THE LAST NEIGHBOR OF N2.
+! SET N4 TO THE FIRST NEIGHBOR.
+!
+INDX = 1
+IF (N2 .NE. 1) INDX = IEND(N2-1) + 1
+N4 = IADJ(INDX)
+GO TO 11
+!
+! N1 IS NOT THE LAST NEIGHBOR OF N2
+!
+10 INDX = INDX-1
+IF (IADJ(INDX) .NE. N1) GO TO 10
+N4 = IADJ(INDX+1)
+IF (N4 .NE. 0) GO TO 11
+!
+! P IS OUTSIDE THE BOUNDARY
+!
+NF = N2
+NL = N1
+GO TO 16
+!
+! DEFINE A NEW ARC N1-N2 WHICH INTERSECTS THE LINE
+!   SEGMENT N0-P
+!
+11 IF ( LEFT(X(N0),Y(N0),X(N4),Y(N4),XP,YP) ) GO TO 12
+N3 = N2
+N2 = N4
+GO TO 9
+12 N3 = N1
+N1 = N4
+GO TO 9
+!
+! P IS IN THE TRIANGLE (N1,N2,N3) AND NOT ON N2-N3.  IF
+!   N3-N1 OR N1-N2 IS A BOUNDARY ARC CONTAINING P, TREAT P
+!   AS EXTERIOR.
+!
+13 INDX = IEND(N1)
+IF (IADJ(INDX) .NE. 0) GO TO 15
+!
+! N1 IS A BOUNDARY NODE.  N3-N1 IS A BOUNDARY ARC IFF N3
+!   IS THE LAST NONZERO NEIGHBOR OF N1.
+!
+IF (N3 .NE. IADJ(INDX-1)) GO TO 14
+!
+! N3-N1 IS A BOUNDARY ARC
+!
+IF ( .NOT. LEFT(X(N1),Y(N1),X(N3),Y(N3),XP,YP) ) &
+&GO TO 14
+!
+! P LIES ON N1-N3
+!
+I1 = N1
+I2 = N3
+I3 = 0
+RETURN
+!
+! N3-N1 IS NOT A BOUNDARY ARC CONTAINING P.  N1-N2 IS A
+!   BOUNDARY ARC IFF N2 IS THE FIRST NEIGHBOR OF N1.
+!
+14 INDX = 1
+IF (N1 .NE. 1) INDX = IEND(N1-1) + 1
+IF (N2 .NE. IADJ(INDX)) GO TO 15
+!
+! N1-N2 IS A BOUNDARY ARC
+!
+IF ( .NOT. LEFT(X(N2),Y(N2),X(N1),Y(N1),XP,YP) ) &
+&GO TO 15
+!
+! P LIES ON N1-N2
+!
+I1 = N2
+I2 = N1
+I3 = 0
+RETURN
+!
+! P DOES NOT LIE ON A BOUNDARY ARC.
+!
+15 I1 = N1
+I2 = N2
+I3 = N3
+RETURN
+!
+! NF AND NL ARE ADJACENT BOUNDARY NODES WHICH ARE VISIBLE
+!   FROM P.  FIND THE FIRST VISIBLE BOUNDARY NODE.
+! SET NEXT TO THE FIRST NEIGHBOR OF NF.
+!
+16 INDX = 1
+IF (NF .NE. 1) INDX = IEND(NF-1) + 1
+NEXT = IADJ(INDX)
+IF ( LEFT(X(NF),Y(NF),X(NEXT),Y(NEXT),XP,YP) ) &
+&GO TO 17
+NF = NEXT
+GO TO 16
+!
+! NF IS THE FIRST (RIGHTMOST) VISIBLE BOUNDARY NODE
+!
+17 I1 = NF
+!
+! FIND THE LAST VISIBLE BOUNDARY NODE.  NL IS THE FIRST
+!   CANDIDATE FOR I2.
+! SET NEXT TO THE LAST NEIGHBOR OF NL.
+!
+18 INDX = IEND(NL) - 1
+NEXT = IADJ(INDX)
+IF ( LEFT(X(NEXT),Y(NEXT),X(NL),Y(NL),XP,YP) ) &
+&GO TO 19
+NL = NEXT
+GO TO 18
+!
+! NL IS THE LAST (LEFTMOST) VISIBLE BOUNDARY NODE
+!
+19 I2 = NL
+I3 = 0
+RETURN
+!
+! ALL POINTS ARE COLLINEAR
+!
+20 I1 = 0
+I2 = 0
+I3 = 0
+RETURN
+END SUBROUTINE TRFIND
+
+SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+IMPLICIT NONE
+INTEGER IERR, N
+INTEGER J, MITER
+REAL EPS
+!-----------------------------------------------------------------------
+!                      DERIVATIVE ESTIMATION
+!-----------------------------------------------------------------------
+REAL X(N), Y(N), Z(N), ZXZY(2,N)
+INTEGER IADJ(*), IEND(N)
+!
+IF (N .LT. 3) GO TO 20
+!
+EPS = 0.0
+MITER = 5
+DO J = 1,N
+   ZXZY(1,J) = 0.0
+   ZXZY(2,J) = 0.0
+END DO
+CALL GRADG1 (N, X, Y, Z, IADJ, IEND, EPS, MITER, ZXZY, IERR)
+IERR = 0
+RETURN
+!
+!     ERROR RETURN
+!
+20 IERR = 1
+RETURN
+END SUBROUTINE GRADG
+
+SUBROUTINE GRADG1 (N,X,Y,Z,IADJ,IEND,EPS, NIT, &
+&ZXZY, IER)
+IMPLICIT NONE
+INTEGER N, IADJ(*), IEND(N), NIT, IER
+REAL X(N), Y(N), Z(N), EPS, ZXZY(2,N)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   GIVEN A TRIANGULATION OF N NODES IN THE PLANE WITH
+! ASSOCIATED DATA VALUES, THIS ROUTINE USES A GLOBAL METHOD
+! TO COMPUTE ESTIMATED GRADIENTS AT THE NODES.  THE METHOD
+! CONSISTS OF MINIMIZING A QUADRATIC FUNCTIONAL Q(G) OVER
+! THE N-VECTOR G OF GRADIENTS WHERE Q APPROXIMATES THE LIN-
+! EARIZED CURVATURE OF AN INTERPOLANT F OVER THE TRIANGULA-
+! TION.  THE RESTRICTION OF F TO AN ARC OF THE TRIANGULATION
+! IS TAKEN TO BE THE HERMITE CUBIC INTERPOLANT OF THE DATA
+! VALUES AND TANGENTIAL GRADIENT COMPONENTS AT THE END-
+! POINTS OF THE ARC, AND Q IS THE SUM OF THE LINEARIZED
+! CURVATURES OF F ALONG THE ARCS -- THE INTEGRALS OVER THE
+! ARCS OF D2F(T)**2 WHERE D2F(T) IS THE SECOND DERIVATIVE
+! OF F WITH RESPECT TO DISTANCE T ALONG THE ARC.  THIS MIN-
+! IMIZATION PROBLEM CORRESPONDS TO AN ORDER 2N SYMMETRIC
+! POSITIVE-DEFINITE SPARSE LINEAR SYSTEM WHICH IS SOLVED FOR
+! THE X AND Y PARTIAL DERIVATIVES BY THE BLOCK GAUSS-SEIDEL
+! METHOD WITH 2 BY 2 BLOCKS.
+!   AN ALTERNATIVE METHOD, SUBROUTINE GRADL, COMPUTES A
+! LOCAL APPROXIMATION TO THE PARTIALS AT A SINGLE NODE AND
+! MAY BE MORE ACCURATE, DEPENDING ON THE DATA VALUES AND
+! DISTRIBUTION OF NODES (NEITHER METHOD EMERGED AS SUPERIOR
+! IN TESTS FOR ACCURACY).  HOWEVER, IN TESTS RUN ON AN IBM
+! 370, GRADG1 WAS FOUND TO BE ABOUT 3.6 TIMES AS FAST FOR
+! NIT = 4.
+!
+! INPUT PARAMETERS - N - NUMBER OF NODES.  N .GE. 3.
+!
+!                  X,Y - CARTESIAN COORDINATES OF THE NODES.
+!
+!                    Z - DATA VALUES AT THE NODES.  Z(I) IS
+!                        ASSOCIATED WITH (X(I),Y(I)).
+!
+!            IADJ,IEND - DATA STRUCTURE DEFINING THE TRIAN-
+!                        GULATION.  SEE SUBROUTINE TRMESH.
+!
+!                  EPS - NONNEGATIVE CONVERGENCE CRITERION.
+!                        THE METHOD IS TERMINATED WHEN THE
+!                        MAXIMUM CHANGE IN A GRADIENT COMPO-
+!                        NENT BETWEEN ITERATIONS IS AT MOST
+!                        EPS.  EPS = 1.E-2 IS SUFFICIENT FOR
+!                        EFFECTIVE CONVERGENCE.
+!
+! THE ABOVE PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+!                  NIT - MAXIMUM NUMBER OF GAUSS-SEIDEL
+!                        ITERATIONS TO BE APPLIED.  THIS
+!                        MAXIMUM WILL LIKELY BE ACHIEVED IF
+!                        EPS IS SMALLER THAN THE MACHINE
+!                        PRECISION.  OPTIMAL EFFICIENCY WAS
+!                        ACHIEVED IN TESTING WITH EPS = 0
+!                        AND NIT = 3 OR 4.
+!
+!                 ZXZY - 2 BY N ARRAY WHOSE COLUMNS CONTAIN
+!                        INITIAL ESTIMATES OF THE PARTIAL
+!                        DERIVATIVES (ZERO VECTORS ARE
+!                        SUFFICIENT).
+!
+! OUTPUT PARAMETERS - NIT - NUMBER OF GAUSS-SEIDEL ITERA-
+!                           TIONS EMPLOYED.
+!
+!                    ZXZY - ESTIMATED X AND Y PARTIAL DERIV-
+!                           ATIVES AT THE NODES WITH X PAR-
+!                           TIALS IN THE FIRST ROW.  ZXZY IS
+!                           NOT CHANGED IF IER = 2.
+!
+!                     IER - ERROR INDICATOR
+!                           IER = 0 IF THE CONVERGENCE CRI-
+!                                   TERION WAS ACHIEVED.
+!                           IER = 1 IF CONVERGENCE WAS NOT
+!                                   ACHIEVED WITHIN NIT
+!                                   ITERATIONS.
+!                           IER = 2 IF N OR EPS IS OUT OF
+!                                   RANGE OR NIT .LT. 0 ON
+!                                   INPUT.
+!
+! MODULES REFERENCED BY GRADG1 - NONE
+!
+! INTRINSIC FUNCTIONS CALLED BY GRADG1 - SQRT, AMAX1, ABS
+!
+!***********************************************************
+!
+INTEGER NN, MAXIT, ITER, K, INDF, INDL, INDX, NB
+REAL TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, &
+&A22, R1, R2, DELX, DELY, DELXS, DELYS, DSQ, &
+&DCUB, T, DZX, DZY
+!
+! LOCAL PARAMETERS -
+!
+! NN =          LOCAL COPY OF N
+! MAXIT =       INPUT VALUE OF NIT
+! ITER =        NUMBER OF ITERATIONS USED
+! K =           DO-LOOP AND NODE INDEX
+! INDF,INDL =   IADJ INDICES OF THE FIRST AND LAST NEIGHBORS
+!                 OF K
+! INDX =        IADJ INDEX IN THE RANGE INDF,...,INDL
+! NB =          NEIGHBOR OF K
+! TOL =         LOCAL COPY OF EPS
+! DGMAX =       MAXIMUM CHANGE IN A GRADIENT COMPONENT BE-
+!                 TWEEN ITERATIONS
+! XK,YK,ZK =    X(K), Y(K), Z(K)
+! ZXK,ZYK =     INITIAL VALUES OF ZXZY(1,K) AND ZXZY(2,K)
+! A11,A12,A22 = MATRIX COMPONENTS OF THE 2 BY 2 BLOCK A*DG
+!                 = R WHERE A IS SYMMETRIC, DG = (DZX,DZY)
+!                 IS THE CHANGE IN THE GRADIENT AT K, AND R
+!                 IS THE RESIDUAL
+! R1,R2 =       COMPONENTS OF THE RESIDUAL -- DERIVATIVES OF
+!                 Q WITH RESPECT TO THE COMPONENTS OF THE
+!                 GRADIENT AT NODE K
+! DELX,DELY =   COMPONENTS OF THE ARC NB-K
+! DELXS,DELYS = DELX**2, DELY**2
+! DSQ =         SQUARE OF THE DISTANCE D BETWEEN K AND NB
+! DCUB =        D**3
+! T =           FACTOR OF R1 AND R2
+! DZX,DZY =     SOLUTION OF THE 2 BY 2 SYSTEM -- CHANGE IN
+!                 DERIVATIVES AT K FROM THE PREVIOUS ITERATE
+!
+NN = N
+TOL = EPS
+MAXIT = NIT
+!
+! ERROR CHECKS AND INITIALIZATION
+!
+IF (NN .LT. 3  .OR.  TOL .LT. 0.  .OR.  MAXIT .LT. 0) &
+&GO TO 5
+ITER = 0
+!
+! TOP OF ITERATION LOOP
+!
+1 IF (ITER .EQ. MAXIT) GO TO 4
+DGMAX = 0.
+INDL = 0
+do 3 K = 1,NN
+  XK = X(K)
+  YK = Y(K)
+  ZK = Z(K)
+  ZXK = ZXZY(1,K)
+  ZYK = ZXZY(2,K)
+!
+!   INITIALIZE COMPONENTS OF THE 2 BY 2 SYSTEM
+!
+  A11 = 0.
+  A12 = 0.
+  A22 = 0.
+  R1 = 0.
+  R2 = 0.
+!
+!   LOOP ON NEIGHBORS NB OF K
+!
+  INDF = INDL + 1
+  INDL = IEND(K)
+  do 2 INDX = INDF,INDL
+    NB = IADJ(INDX)
+    IF (NB .EQ. 0) GO TO 2
+!
+!   COMPUTE THE COMPONENTS OF ARC NB-K
+!
+    DELX = X(NB) - XK
+    DELY = Y(NB) - YK
+    DELXS = DELX*DELX
+    DELYS = DELY*DELY
+    DSQ = DELXS + DELYS
+    DCUB = DSQ*SQRT(DSQ)
+!
+!   UPDATE THE SYSTEM COMPONENTS FOR NODE NB
+!
+    A11 = A11 + DELXS/DCUB
+    A12 = A12 + DELX*DELY/DCUB
+    A22 = A22 + DELYS/DCUB
+    T = ( 1.5*(Z(NB)-ZK) - ((ZXZY(1,NB)/2.+ZXK)*DELX + &
+&(ZXZY(2,NB)/2.+ZYK)*DELY) )/DCUB
+    R1 = R1 + T*DELX
+    R2 = R2 + T*DELY
+2 CONTINUE
+!
+!   SOLVE THE 2 BY 2 SYSTEM AND UPDATE DGMAX
+!
+  DZY = (A11*R2 - A12*R1)/(A11*A22 - A12*A12)
+  DZX = (R1 - A12*DZY)/A11
+  DGMAX = AMAX1(DGMAX,ABS(DZX),ABS(DZY))
+!
+!   UPDATE THE PARTIALS AT NODE K
+!
+  ZXZY(1,K) = ZXK + DZX
+3 ZXZY(2,K) = ZYK + DZY
+!
+!   INCREMENT ITER AND TEST FOR CONVERGENCE
+!
+ITER = ITER + 1
+IF (DGMAX .GT. TOL) GO TO 1
+!
+! METHOD CONVERGED
+!
+NIT = ITER
+IER = 0
+RETURN
+!
+! METHOD FAILED TO CONVERGE WITHIN NIT ITERATIONS
+!
+4 IER = 1
+RETURN
+!
+! PARAMETER OUT OF RANGE
+!
+5 NIT = 0
+IER = 2
+RETURN
+END SUBROUTINE GRADG1
+
+SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
+IMPLICIT NONE
+INTEGER IERR, N
+INTEGER J
+!-----------------------------------------------------------------------
+!                      DERIVATIVE ESTIMATION
+!-----------------------------------------------------------------------
+REAL X(N), Y(N), Z(N), ZXZY(2,N)
+INTEGER IADJ(*), IEND(N)
+!
+IF (N .LT. 3) GO TO 20
+!
+DO J = 1,N
+   CALL GRADL1 (N, J, X, Y, Z, IADJ, IEND, ZXZY(1,J), &
+&ZXZY(2,J), IERR)
+   IF (IERR .LT. 0) GO TO 30
+END DO
+IERR = 0
+RETURN
+!
+!     ERROR RETURN
+!
+20 IERR = 1
+RETURN
+!
+30 IERR = 2
+RETURN
+END SUBROUTINE GRADL
+
+SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
+IMPLICIT NONE
+INTEGER N, K, IADJ(*), IEND(N), IER
+REAL X(N), Y(N), Z(N), DX, DY
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   GIVEN A THIESSEN TRIANGULATION OF N POINTS IN THE PLANE
+! WITH ASSOCIATED DATA VALUES Z, THIS SUBROUTINE ESTIMATES
+! X AND Y PARTIAL DERIVATIVES AT NODE K.  THE DERIVATIVES
+! ARE TAKEN TO BE THE PARTIALS AT K OF A QUADRATIC FUNCTION
+! WHICH INTERPOLATES Z(K) AND FITS THE DATA VALUES AT A SET
+! OF NEARBY NODES IN A WEIGHTED LEAST SQUARES SENSE. A MAR-
+! QUARDT STABILIZATION FACTOR IS USED IF NECESSARY TO ENSURE
+! A WELL-CONDITIONED SYSTEM AND A LINEAR FITTING FUNCTION IS
+! USED IF N .LT. 6.  THUS, A UNIQUE SOLUTION EXISTS UNLESS
+! THE NODES ARE COLLINEAR.
+!   AN ALTERNATIVE ROUTINE, GRADG, EMPLOYS A GLOBAL METHOD
+! TO COMPUTE THE PARTIAL DERIVATIVES AT ALL OF THE NODES AT
+! ONCE.  THAT METHOD IS MORE EFFICIENT (WHEN ALL PARTIALS
+! ARE NEEDED) AND MAY BE MORE ACCURATE, DEPENDING ON THE
+! DATA.
+!
+! INPUT PARAMETERS - N - NUMBER OF NODES IN THE TRIANGULA-
+!                        TION.  N .GE. 3.
+!
+!                    K - NODE AT WHICH DERIVATIVES ARE
+!                        SOUGHT.  1 .LE. K .LE. N.
+!
+!                  X,Y - N-VECTORS CONTAINING THE CARTESIAN
+!                        COORDINATES OF THE NODES.
+!
+!                    Z - N-VECTOR CONTAINING THE DATA VALUES
+!                        ASSOCIATED WITH THE NODES.
+!
+!                 IADJ - SET OF ADJACENCY LISTS.
+!
+!                 IEND - POINTERS TO THE ENDS OF ADJACENCY
+!                        LISTS FOR EACH NODE.
+!
+! IADJ AND IEND MAY BE CREATED BY SUBROUTINE TRMESH.
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETERS - DX,DY - ESTIMATED PARTIAL DERIVATIVES
+!                             AT NODE K UNLESS IER .LT. 0.
+!
+!                       IER - ERROR INDICATOR
+!                             IER .GT. 0 IF NO ERRORS WERE
+!                                      ENCOUNTERED.  IER
+!                                      CONTAINS THE NUMBER
+!                                      OF NODES (INCLUDING
+!                                      K) USED IN THE FIT.
+!                                      IER = 3, 4, OR 5 IM-
+!                                      PLIES A LINEAR FIT.
+!                             IER = -1 IF N OR K IS OUT OF
+!                                      RANGE.
+!                             IER = -2 IF ALL NODES ARE
+!                                      COLLINEAR.
+!
+! MODULES REFERENCED BY GRADL1 - GETNP, SETRM, SROTG, SROT
+!
+! INTRINSIC FUNCTIONS CALLED BY GRADL1 - MIN0, FLOAT, SQRT,
+!                                       AMIN1, ABS
+!
+!***********************************************************
+!
+INTEGER NN, KK, LMN, LMX, LMIN, LMAX, LM1, LNP, &
+&NPTS(30), IERR, NP, I, J, IM1, JP1, IP1, L
+REAL SUM, DS, R, RS, RTOL, AVSQ, AV, XK, YK, ZK, &
+&A(6,6), C, S, DMIN, DTOL, SF
+DATA    LMN/10/
+DATA    LMX/30/, RTOL/1.E-5/, DTOL/.01/, SF/1./
+!
+! LOCAL PARAMETERS -
+!
+! NN,KK =     LOCAL COPIES OF N AND K
+! LMN,LMX =   MINIMUM AND MAXIMUM VALUES OF LNP FOR N
+!               SUFFICIENTLY LARGE.  IN MOST CASES LMN-1
+!               NODES ARE USED IN THE FIT.  4 .LE. LMN .LE.
+!               LMX.
+! LMIN,LMAX = MIN(LMN,N), MIN(LMX,N)
+! LM1 =       LMIN-1 OR LNP-1
+! LNP =       LENGTH OF NPTS
+! NPTS =      ARRAY CONTAINING THE INDICES OF A SEQUENCE OF
+!               NODES ORDERED BY DISTANCE FROM K.  NPTS(1)=K
+!               AND THE FIRST LNP-1 ELEMENTS OF NPTS ARE
+!               USED IN THE LEAST SQUARES FIT.  UNLESS LNP
+!               EXCEEDS LMAX, NPTS(LNP) DETERMINES R.
+! IERR =      ERROR FLAG FOR CALLS TO GETNP (NOT CHECKED)
+! NP =        ELEMENT OF NPTS TO BE ADDED TO THE SYSTEM
+! I,J =       DO-LOOP INDICES
+! IM1,JP1 =   I-1, J+1
+! IP1 =       I+1
+! L =         NUMBER OF COLUMNS OF A**T TO WHICH A ROTATION
+!               IS APPLIED
+! SUM =       SUM OF SQUARED EUCLIDEAN DISTANCES BETWEEN
+!               NODE K AND THE NODES USED IN THE LEAST
+!               SQUARES FIT
+! DS =        SQUARED DISTANCE BETWEEN NODE K AND AN ELE-
+!               MENT OF NPTS
+! R =         DISTANCE BETWEEN NODE K AND NPTS(LNP) OR SOME
+!               POINT FURTHER FROM K THAN NPTS(LMAX) IF
+!               NPTS(LMAX) IS USED IN THE FIT.  R IS A
+!               RADIUS OF INFLUENCE WHICH ENTERS INTO THE
+!               WEIGHTS (SEE SUBROUTINE SETRM).
+! RS =        R*R
+! RTOL =      TOLERANCE FOR DETERMINING R.  IF THE RELATIVE
+!               CHANGE IN DS BETWEEN TWO ELEMENTS OF NPTS IS
+!               NOT GREATER THAN RTOL THEY ARE TREATED AS
+!               BEING THE SAME DISTANCE FROM NODE K
+! AVSQ =      AV*AV
+! AV =        ROOT-MEAN-SQUARE DISTANCE BETWEEN K AND THE
+!               NODES (OTHER THAN K) IN THE LEAST SQUARES
+!               FIT.  THE FIRST 3 COLUMNS OF THE SYSTEM ARE
+!               SCALED BY 1/AVSQ, THE NEXT 2 BY 1/AV.
+! XK,YK,ZK =  COORDINATES AND DATA VALUE ASSOCIATED WITH K
+! A =         TRANSPOSE OF THE AUGMENTED REGRESSION MATRIX
+! C,S =       COMPONENTS OF THE PLANE ROTATION DETERMINED
+!               BY SUBROUTINE SROTG
+! DMIN =      MINIMUM OF THE MAGNITUDES OF THE DIAGONAL
+!               ELEMENTS OF THE REGRESSION MATRIX AFTER
+!               ZEROS ARE INTRODUCED BELOW THE DIAGONAL
+! DTOL =      TOLERANCE FOR DETECTING AN ILL-CONDITIONED
+!               SYSTEM.  THE SYSTEM IS ACCEPTED WHEN DMIN
+!               .GE. DTOL
+! SF =        MARQUARDT STABILIZATION FACTOR USED TO DAMP
+!               OUT THE FIRST 3 SOLUTION COMPONENTS (SECOND
+!               PARTIALS OF THE QUADRATIC) WHEN THE SYSTEM
+!               IS ILL-CONDITIONED.  AS SF INCREASES, THE
+!               FITTING FUNCTION APPROACHES A LINEAR
+!
+NN = N
+KK = K
+!
+! CHECK FOR ERRORS AND INITIALIZE LMIN, LMAX
+!
+IF (NN .LT. 3  .OR.  KK .LT. 1  .OR.  KK .GT. NN) &
+&GO TO 16
+LMIN = MIN0(LMN,NN)
+LMAX = MIN0(LMX,NN)
+!
+! COMPUTE NPTS, LNP, AVSQ, AV, AND R.
+!   SET NPTS TO THE CLOSEST LMIN-1 NODES TO K.
+!
+SUM = 0.
+NPTS(1) = KK
+LM1 = LMIN - 1
+do 1 LNP = 2,LM1
+  CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, DS,IERR)
+1 SUM = SUM + DS
+!
+! ADD ADDITIONAL NODES TO NPTS UNTIL THE RELATIVE INCREASE
+!   IN DS IS AT LEAST RTOL.
+!
+do 2 LNP = LMIN,LMAX
+  CALL GETNP (X,Y,IADJ,IEND,LNP, NPTS, RS,IERR)
+  IF ((RS-DS)/DS .LE. RTOL) GO TO 2
+  IF (LNP .GT. 6) GO TO 3
+2 SUM = SUM + RS
+!
+! USE ALL LMAX NODES IN THE LEAST SQUARES FIT.  RS IS
+!   ARBITRARILY INCREASED BY 10 PER CENT.
+!
+RS = 1.1*RS
+LNP = LMAX + 1
+!
+! THERE ARE LNP-2 EQUATIONS CORRESPONDING TO NODES NPTS(2),
+!   ...,NPTS(LNP-1).
+!
+3 AVSQ = SUM/FLOAT(LNP-2)
+AV = SQRT(AVSQ)
+R = SQRT(RS)
+XK = X(KK)
+YK = Y(KK)
+ZK = Z(KK)
+IF (LNP .LT. 7) GO TO 12
+!
+! SET UP THE FIRST 5 EQUATIONS OF THE AUGMENTED REGRESSION
+!   MATRIX (TRANSPOSED) AS THE COLUMNS OF A, AND ZERO OUT
+!   THE LOWER TRIANGLE (UPPER TRIANGLE OF A) WITH GIVENS
+!   ROTATIONS
+!
+do 5 I = 1,5
+  NP = NPTS(I+1)
+  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
+&R, A(1,I))
+  IF (I .EQ. 1) GO TO 5
+  IM1 = I - 1
+  do 4 J = 1,IM1
+    JP1 = J + 1
+    L = 6 - J
+    CALL SROTG (A(J,J),A(J,I),C,S)
+4 CALL SROT (L,A(JP1,J),1,A(JP1,I),1,C,S)
+5 CONTINUE
+!
+! ADD THE ADDITIONAL EQUATIONS TO THE SYSTEM USING
+!   THE LAST COLUMN OF A -- I .LE. LNP.
+!
+I = 7
+6 IF (I .EQ. LNP) GO TO 8
+  NP = NPTS(I)
+  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
+&R, A(1,6))
+  do 7 J = 1,5
+    JP1 = J + 1
+    L = 6 - J
+    CALL SROTG (A(J,J),A(J,6),C,S)
+7 CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
+  I = I + 1
+  GO TO 6
+!
+! TEST THE SYSTEM FOR ILL-CONDITIONING
+!
+8 DMIN = AMIN1( ABS(A(1,1)),ABS(A(2,2)),ABS(A(3,3)), &
+&ABS(A(4,4)),ABS(A(5,5)) )
+IF (DMIN .GE. DTOL) GO TO 15
+IF (LNP .GT. LMAX) GO TO 9
+!
+! ADD ANOTHER NODE TO THE SYSTEM AND INCREASE R --
+!   I .EQ. LNP
+!
+LNP = LNP + 1
+IF (LNP .LE. LMAX) CALL GETNP (X,Y,IADJ,IEND,LNP, &
+&NPTS, RS,IERR)
+R = SQRT(1.1*RS)
+GO TO 6
+!
+! STABILIZE THE SYSTEM BY DAMPING SECOND PARTIALS --ADD
+!   MULTIPLES OF THE FIRST THREE UNIT VECTORS TO THE FIRST
+!   THREE EQUATIONS.
+!
+9 do 11 I = 1,3
+  A(I,6) = SF
+  IP1 = I + 1
+  do 10 J = IP1,6
+10 A(J,6) = 0.
+  do 11 J = I,5
+    JP1 = J + 1
+    L = 6 - J
+    CALL SROTG (A(J,J),A(J,6),C,S)
+11 CALL SROT (L,A(JP1,J),1,A(JP1,6),1,C,S)
+GO TO 14
+!
+! 4 .LE. LNP .LE. 6 (2, 3, OR 4 EQUATIONS) -- FIT A PLANE TO
+!   THE DATA USING THE LAST 3 COLUMNS OF A.
+!
+12 NP = NPTS(2)
+CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
+&R, A(1,4))
+NP = NPTS(3)
+CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
+&R, A(1,5))
+CALL SROTG (A(4,4),A(4,5),C,S)
+CALL SROT (2,A(5,4),1,A(5,5),1,C,S)
+IF (LNP .EQ. 4) GO TO 14
+!
+LM1 = LNP - 1
+do 13 I = 4,LM1
+  NP = NPTS(I)
+  CALL SETRM (XK,YK,ZK,X(NP),Y(NP),Z(NP),AV,AVSQ, &
+&R, A(1,6))
+  CALL SROTG (A(4,4),A(4,6),C,S)
+  CALL SROT (2,A(5,4),1,A(5,6),1,C,S)
+  CALL SROTG (A(5,5),A(5,6),C,S)
+13 CALL SROT (1,A(6,5),1,A(6,6),1,C,S)
+!
+! TEST THE LINEAR FIT FOR ILL-CONDITIONING
+!
+14 DMIN = AMIN1( ABS(A(4,4)),ABS(A(5,5)) )
+IF (DMIN .LT. DTOL) GO TO 17
+!
+! SOLVE THE 2 BY 2 TRIANGULAR SYSTEM FOR THE DERIVATIVES
+!
+15 DY = A(6,5)/A(5,5)
+DX = (A(6,4) - A(5,4)*DY)/A(4,4)/AV
+DY = DY/AV
+IER = LNP - 1
+RETURN
+!
+! N OR K IS OUT OF RANGE
+!
+16 IER = -1
+RETURN
+!
+! NO UNIQUE SOLUTION DUE TO COLLINEAR NODES
+!
+17 IER = -2
+RETURN
+END SUBROUTINE GRADL1
+
+SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
+IMPLICIT NONE
+REAL XK, YK, ZK, XI, YI, ZI, S1, S2, R, ROW(6)
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   THIS ROUTINE SETS UP THE I-TH ROW OF AN AUGMENTED RE-
+! GRESSION MATRIX FOR A WEIGHTED LEAST-SQUARES FIT OF A
+! QUADRATIC FUNCTION Q(X,Y) TO A SET OF DATA VALUES Z WHERE
+! Q(XK,YK) = ZK.  THE FIRST 3 COLUMNS (QUADRATIC TERMS) ARE
+! SCALED BY 1/S2 AND THE FOURTH AND FIFTH COLUMNS (LINEAR
+! TERMS) ARE SCALED BY 1/S1.  THE WEIGHT IS (R-D)/(R*D) IF
+! R .GT. D AND 0 IF R .LE. D, WHERE D IS THE DISTANCE
+! BETWEEN NODES I AND K.
+!
+! INPUT PARAMETERS - XK,YK,ZK - COORDINATES AND DATA VALUE
+!                               AT NODE K -- INTERPOLATED
+!                               BY Q.
+!
+!                    XI,YI,ZI - COORDINATES AND DATA VALUE
+!                               AT NODE I.
+!
+!                       S1,S2 - INVERSE SCALE FACTORS.
+!
+!                           R - RADIUS OF INFLUENCE ABOUT
+!                               NODE K DEFINING THE WEIGHT.
+!
+!                         ROW - VECTOR OF LENGTH 6.
+!
+! INPUT PARAMETERS ARE NOT ALTERED BY THIS ROUTINE.
+!
+! OUTPUT PARAMETER - ROW - VECTOR CONTAINING A ROW OF THE
+!                          AUGMENTED REGRESSION MATRIX.
+!
+! MODULES REFERENCED BY SETRM - NONE
+!
+! INTRINSIC FUNCTION CALLED BY SETRM - SQRT
+!
+!***********************************************************
+!
+INTEGER I
+REAL DX, DY, DXSQ, DYSQ, D, W, W1, W2
+!
+! LOCAL PARAMETERS -
+!
+! I =    DO-LOOP INDEX
+! DX =   XI - XK
+! DY =   YI - YK
+! DXSQ = DX*DX
+! DYSQ = DY*DY
+! D =    DISTANCE BETWEEN NODES K AND I
+! W =    WEIGHT ASSOCIATED WITH THE ROW
+! W1 =   W/S1
+! W2 =   W/S2
+!
+DX = XI - XK
+DY = YI - YK
+DXSQ = DX*DX
+DYSQ = DY*DY
+D = SQRT(DXSQ + DYSQ)
+IF (D .LE. 0.  .OR.  D .GE. R) GO TO 1
+W = (R-D)/R/D
+W1 = W/S1
+W2 = W/S2
+ROW(1) = DXSQ*W2
+ROW(2) = DX*DY*W2
+ROW(3) = DYSQ*W2
+ROW(4) = DX*W1
+ROW(5) = DY*W1
+ROW(6) = (ZI - ZK)*W
+RETURN
+!
+! NODES K AND I COINCIDE OR NODE I IS OUTSIDE OF THE RADIUS
+!   OF INFLUENCE.  SET ROW TO THE ZERO VECTOR.
+!
+1 do 2 I = 1,6
+2 ROW(I) = 0.
+RETURN
+END SUBROUTINE SETRM
+
+SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
+IMPLICIT NONE
+INTEGER IADJ(*), IEND(*), L, NPTS(L), IER
+REAL X(*), Y(*), DS
+!
+!***********************************************************
+!
+!                                               ROBERT RENKA
+!                                       OAK RIDGE NATL. LAB.
+!                                             (615) 576-5139
+!
+!   GIVEN A THIESSEN TRIANGULATION OF N NODES AND AN ARRAY
+! NPTS CONTAINING THE INDICES OF L-1 NODES ORDERED BY
+! EUCLIDEAN DISTANCE FROM NPTS(1), THIS SUBROUTINE SETS
+! NPTS(L) TO THE INDEX OF THE NEXT NODE IN THE SEQUENCE --
+! THE NODE, OTHER THAN NPTS(1),...,NPTS(L-1), WHICH IS
+! CLOSEST TO NPTS(1).  THUS, THE ORDERED SEQUENCE OF K
+! CLOSEST NODES TO N1 (INCLUDING N1) MAY BE DETERMINED BY
+! K-1 CALLS TO GETNP WITH NPTS(1) = N1 AND L = 2,3,...,K
+! FOR K .GE. 2.
+!   THE ALGORITHM USES THE FACT THAT, IN A THIESSEN TRIAN-
+! GULATION, THE K-TH CLOSEST NODE TO A GIVEN NODE N1 IS A
+! NEIGHBOR OF ONE OF THE K-1 CLOSEST NODES TO N1.
+!
+! INPUT PARAMETERS - X,Y - VECTORS OF LENGTH N CONTAINING
+!                          THE CARTESIAN COORDINATES OF THE
+!                          NODES.
+!
+!                   IADJ - SET OF ADJACENCY LISTS OF NODES
+!                          IN THE TRIANGULATION.
+!
+!                   IEND - POINTERS TO THE ENDS OF ADJACENCY
+!                          LISTS FOR EACH NODE IN THE TRI-
+!                          ANGULATION.
+!
+!                      L - NUMBER OF NODES IN THE SEQUENCE
+!                          ON OUTPUT.  2 .LE. L .LE. N.
+!
+!                   NPTS - ARRAY OF LENGTH .GE. L CONTAIN-
+!                          ING THE INDICES OF THE L-1 CLOS-
+!                          EST NODES TO NPTS(1) IN THE FIRST
+!                          L-1 LOCATIONS.
+!
+! IADJ AND IEND MAY BE CREATED BY SUBROUTINE TRMESH.
+!
+! INPUT PARAMETERS OTHER THAN NPTS ARE NOT ALTERED BY THIS
+!   ROUTINE.
+!
+! OUTPUT PARAMETERS - NPTS - UPDATED WITH THE INDEX OF THE
+!                            L-TH CLOSEST NODE TO NPTS(1) IN
+!                            POSITION L UNLESS IER = 1.
+!
+!                       DS - SQUARED EUCLIDEAN DISTANCE BE-
+!                            TWEEN NPTS(1) AND NPTS(L)
+!                            UNLESS IER = 1.
+!
+!                      IER - ERROR INDICATOR
+!                            IER = 0 IF NO ERRORS WERE EN-
+!                                    COUNTERED.
+!                            IER = 1 IF L IS OUT OF RANGE.
+!
+! MODULES REFERENCED BY GETNP - NONE
+!
+! INTRINSIC FUNCTION CALLED BY GETNP - IABS
+!
+!***********************************************************
+!
+INTEGER LM1, N1, I, NI, NP, INDF, INDL, INDX, NB
+REAL X1, Y1, DNP, DNB
+!
+! LOCAL PARAMETERS -
+!
+! LM1 =     L - 1
+! N1 =      NPTS(1)
+! I =       NPTS INDEX AND DO-LOOP INDEX
+! NI =      NPTS(I)
+! NP =      CANDIDATE FOR NPTS(L)
+! INDF =    IADJ INDEX OF THE FIRST NEIGHBOR OF NI
+! INDL =    IADJ INDEX OF THE LAST NEIGHBOR OF NI
+! INDX =    IADJ INDEX IN THE RANGE INDF,...,INDL
+! NB =      NEIGHBOR OF NI AND CANDIDATE FOR NP
+! X1,Y1 =   COORDINATES OF N1
+! DNP,DNB = SQUARED DISTANCES FROM N1 TO NP AND NB,
+!             RESPECTIVELY
+!
+LM1 = L - 1
+IF (LM1 .LT. 1) GO TO 4
+IER = 0
+N1 = NPTS(1)
+X1 = X(N1)
+Y1 = Y(N1)
+!
+! MARK THE ELEMENTS OF NPTS
+!
+do 1 I = 1,LM1
+  NI = NPTS(I)
+  IEND(NI) = -IEND(NI)
+1 CONTINUE
+!
+! CANDIDATES FOR NP = NPTS(L) ARE THE UNMARKED NEIGHBORS
+!   OF NODES IN NPTS.  NP=0 IS A FLAG TO SET NP TO THE
+!   FIRST CANDIDATE ENCOUNTERED.
+!
+NP = 0
+DNP = 0.
+!
+! LOOP ON NODES NI IN NPTS
+!
+do 2 I = 1,LM1
+  NI = NPTS(I)
+  INDF = 1
+  IF (NI .GT. 1) INDF = IABS(IEND(NI-1)) + 1
+  INDL = -IEND(NI)
+!
+! LOOP ON NEIGHBORS NB OF NI
+!
+  do 2 INDX = INDF,INDL
+    NB = IADJ(INDX)
+    IF (NB .EQ. 0  .OR.  IEND(NB) .LT. 0) GO TO 2
+!
+! NB IS AN UNMARKED NEIGHBOR OF NI.  REPLACE NP IF NB IS
+!   CLOSER TO N1 OR IS THE FIRST CANDIDATE ENCOUNTERED.
+!
+    DNB = (X(NB)-X1)**2 + (Y(NB)-Y1)**2
+    IF (NP .NE. 0  .AND.  DNB .GE. DNP) GO TO 2
+    NP = NB
+    DNP = DNB
+2 CONTINUE
+NPTS(L) = NP
+DS = DNP
+!
+! UNMARK THE ELEMENTS OF NPTS
+!
+DO I = 1,LM1
+  NI = NPTS(I)
+  IEND(NI) = -IEND(NI)
+  END DO
+RETURN
+!
+! L IS OUT OF RANGE
+!
+4 IER = 1
+RETURN
+END SUBROUTINE GETNP
+
 SUBROUTINE SFVAL (N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, &
 &ZXZY, IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N
+INTEGER IST, J
 !-----------------------------------------------------------------------
 !                    EVALUATION OF THE SURFACE
 !-----------------------------------------------------------------------
@@ -27,6 +2413,9 @@ END SUBROUTINE SFVAL
 
 SUBROUTINE SFVAL2 (N, X, Y, Z, L, M, NROWS, XI, YI, ZI, &
 &IADJ, IEND, ZXZY, IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NROWS
+INTEGER I, IST, J
 !-----------------------------------------------------------------------
 !                EVALUATION OF THE SURFACE OVER A GRID
 !-----------------------------------------------------------------------
@@ -58,6 +2447,7 @@ END SUBROUTINE SFVAL2
 
 SUBROUTINE INTRC1 (N,PX,PY,X,Y,Z,IADJ,IEND,IFLAG, &
 &ZXZY, IST, PZ,IER)
+IMPLICIT NONE
 INTEGER N, IADJ(*), IEND(N), IFLAG, IST, IER
 REAL PX, PY, X(N), Y(N), Z(N), ZXZY(2,N), PZ
 !
@@ -335,6 +2725,7 @@ END SUBROUTINE INTRC1
 SUBROUTINE TVAL (X,Y,X1,X2,X3,Y1,Y2,Y3,Z1,Z2,Z3,ZX1, &
 &ZX2,ZX3,ZY1,ZY2,ZY3,IFLAG, W,WX,WY, &
 &IER)
+IMPLICIT NONE
 INTEGER IFLAG, IER
 REAL X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, &
 &ZX1, ZX2, ZX3, ZY1, ZY2, ZY3, W, WX, WY
@@ -626,6 +3017,7 @@ SUBROUTINE MFIT(DIMEN,FITDEG,NFPOLS,NFPTS, &
 &FITCDS,NCROWS,FITVLS,WTS, &
 &RESIDS,ERROR,FITIWK,FITDWK, &
 &FIWKLN,FDWKLN,IREQD,DREQD)
+IMPLICIT NONE
 !
 INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
 INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -796,6 +3188,7 @@ END SUBROUTINE MFIT
 
 SUBROUTINE ALLOT(DEGREE,NPOLYS,NPTS,DIMEN,IWORK,IWKLEN, &
 &IREQD,DREQD,ERROR)
+IMPLICIT NONE
 !
 INTEGER IREQD,DREQD,ALFL,ERROR,NPOLYS,DEGREE,DIMEN,NPTS
 INTEGER NEWSTT,PSIWID,KMXBAS,STARTJ,KJP1D2,INDEX,IWKLEN
@@ -998,6 +3391,7 @@ RETURN
 END SUBROUTINE ALLOT
 
 SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
+IMPLICIT NONE
 !
 INTEGER TOP,BOT,DEGREE,NPTS,DIMEN,NPOLYS,ERROR,I,ROWLEN
 !
@@ -1083,6 +3477,7 @@ RETURN
 END SUBROUTINE BASIZ
 
 SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
+IMPLICIT NONE
 !
 INTEGER J,KJ,CURDEG,JPRIME,NWITHK,I,CURM1,RALEN,DIMM1,DIMM2
 INTEGER NPOLYS,DIMEN,DEGREE,ALFLP1,DIMP1
@@ -1230,6 +3625,8 @@ SUBROUTINE GNRTP(DEGREE,ALPHA,PSI,INDEXS, &
 &NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS, &
 &DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
 &ALFL,DIMP1,MAXABS,ERROR)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
 INTEGER ERROR,DIMP1
@@ -1305,6 +3702,8 @@ SUBROUTINE INCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ, &
 &SUMSQS,COORD,NCROWS,NPOLYS, &
 &DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
 &ALFL,ONPLYS,STTDEG,ERROR)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
 INTEGER M,START,JINDEX,JPINDX,Q,J3,J1,J1MJ2,ERROR
@@ -1500,6 +3899,7 @@ RETURN
 END SUBROUTINE INCDG
 
 SUBROUTINE SCALPM(COORD,NPTS,MAXABS)
+IMPLICIT NONE
 !
 INTEGER NPTS,P
 REAL MAXABS,A
@@ -1536,6 +3936,7 @@ RETURN
 END SUBROUTINE SCALPM
 
 SUBROUTINE SCALDN(COORD,NPTS,MAXABS)
+IMPLICIT NONE
 !
 INTEGER NPTS,P
 REAL MAXABS
@@ -1564,6 +3965,8 @@ END SUBROUTINE SCALDN
 
 SUBROUTINE MEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS, &
 &ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
+IMPLICIT NONE
+INTEGER NEROWS
 !
 INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
 INTEGER GBASIZ,ALFL,DIMP1,EVLDEG,TOP,BOT,CURDEG,PSISTT
@@ -1714,6 +4117,8 @@ END SUBROUTINE MEVAL
 
 SUBROUTINE MEVAL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA, &
 &INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
 INTEGER JM1,JPRIME,M,P,K,I,J,INDEX
@@ -1797,6 +4202,7 @@ SUBROUTINE DMFIT(DIMEN,FITDEG,NFPOLS,NFPTS, &
 &FITCDS,NCROWS,FITVLS,WTS, &
 &RESIDS,ERROR,FITIWK,FITDWK, &
 &FIWKLN,FDWKLN,IREQD,DREQD)
+IMPLICIT NONE
 !
 INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
 INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -1969,6 +4375,8 @@ SUBROUTINE DGNRTP(DEGREE,ALPHA,PSI,INDEXS, &
 &NEWKJ,SUMSQS,COORD,NCROWS,NPOLYS, &
 &DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
 &ALFL,DIMP1,MAXABS,ERROR)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
 INTEGER ERROR,DIMP1
@@ -2044,6 +4452,8 @@ SUBROUTINE DINCDG(DEGREE,ALPHA,PSI,INDEXS,NEWKJ, &
 &SUMSQS,COORD,NCROWS,NPOLYS, &
 &DIMEN,NPTS,F,Z,C,PSIWID,WEIGHT, &
 &ALFL,ONPLYS,STTDEG,ERROR)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
 INTEGER M,START,JINDEX,JPINDX,Q,J3,J1,J1MJ2,ERROR
@@ -2239,6 +4649,7 @@ RETURN
 END SUBROUTINE DINCDG
 
 SUBROUTINE DSCALP(COORD,NPTS,MAXABS)
+IMPLICIT NONE
 !
 INTEGER NPTS,P
 DOUBLE PRECISION MAXABS,A
@@ -2275,6 +4686,7 @@ RETURN
 END SUBROUTINE DSCALP
 
 SUBROUTINE DSCALD(COORD,NPTS,MAXABS)
+IMPLICIT NONE
 !
 INTEGER NPTS,P
 DOUBLE PRECISION MAXABS
@@ -2303,6 +4715,8 @@ END SUBROUTINE DSCALD
 
 SUBROUTINE DMEVAL(DIMEN,EVLDEG,NEPOLS,NEPTS,EVLCDS,NEROWS,EVLVLS, &
 &ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
+IMPLICIT NONE
+INTEGER NEROWS
 !
 INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
 INTEGER GBASIZ,ALFL,DIMP1,EVLDEG,TOP,BOT,CURDEG,PSISTT
@@ -2454,6 +4868,8 @@ END SUBROUTINE DMEVAL
 
 SUBROUTINE DMEVL1 (COORD,NCROWS,C,NEPTS,DIMEN,NPOLYS,ALPHA, &
 &INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
+IMPLICIT NONE
+INTEGER NCROWS
 !
 INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
 INTEGER JM1,JPRIME,M,P,K,I,J,INDEX
@@ -3830,6 +6246,11 @@ END SUBROUTINE QK21F
 
 SUBROUTINE QAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, &
 &NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+IMPLICIT NONE
+INTEGER IER, INF, LAST, LENW, LIMIT, NEVAL
+REAL ABSERR, BOUND, EPSABS, EPSREL, RESULT
+INTEGER L1, L2, L3
+REAL F
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -4009,6 +6430,7 @@ END SUBROUTINE QAGI
 
 SUBROUTINE QAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
 &NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -4473,6 +6895,13 @@ END SUBROUTINE QAGIE
 
 SUBROUTINE QK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS, &
 &RESASC, EPMACH, UFLOW)
+IMPLICIT NONE
+INTEGER INF
+REAL A, ABSERR, B, BOUN, EPMACH, RESABS, RESASC, RESULT, UFLOW
+INTEGER J
+REAL ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2 &
+&, HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
+REAL F
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -4966,6 +7395,7 @@ END SUBROUTINE QELG
 
 SUBROUTINE QXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER, &
 &LIMIT,LENIW,LENW,LAST,IWORK,WORK)
+IMPLICIT NONE
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -5135,6 +7565,7 @@ END SUBROUTINE QXGS
 
 SUBROUTINE QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
 &IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
+IMPLICIT NONE
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 !            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -5557,6 +7988,8 @@ ABSERR = ERRSUM
 END SUBROUTINE QXGSE
 
 SUBROUTINE QXCPY (A, B, L)
+IMPLICIT NONE
+INTEGER I
 !
 !  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
 !          THE REAL VECTOR A OF LENGTH L
@@ -5571,6 +8004,7 @@ END SUBROUTINE QXCPY
 
 SUBROUTINE QXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS, &
 &KEY,EPMACH,UFLOW,OFLOW)
+IMPLICIT NONE
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -5683,6 +8117,8 @@ RETURN
 END SUBROUTINE QXLQM
 
 SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+IMPLICIT NONE
+INTEGER I, IS, K, KS
 !
 !            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 !                           ESTIMATE
@@ -5878,6 +8314,7 @@ RETURN
 END SUBROUTINE QXRUL
 
 SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
+IMPLICIT NONE
 !
 !            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 !            THE BISECTION OF AN INTERVAL
@@ -5974,6 +8411,8 @@ END SUBROUTINE QXRRD
 
 SUBROUTINE DQAGS (F, A, B, EPSABS, EPSREL, RESULT, ABSERR, &
 &NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+IMPLICIT NONE
+INTEGER LAST
 !-----------------------------------------------------------------------
 !
 !           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -6148,6 +8587,7 @@ END SUBROUTINE DQAGS
 
 SUBROUTINE DQAGSE (F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
 &NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -6599,6 +9039,7 @@ END SUBROUTINE DQAGSE
 
 SUBROUTINE DQK21 (F, A, B, RESULT, ABSERR, RESABS, RESASC, &
 &EPMACH, UFLOW, ISIG)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -6787,6 +9228,8 @@ END SUBROUTINE DQK21
 
 SUBROUTINE DQAGI (F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, &
 &NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
+IMPLICIT NONE
+INTEGER INF, LAST
 !-----------------------------------------------------------------------
 !
 !         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
@@ -6969,6 +9412,7 @@ END SUBROUTINE DQAGI
 
 SUBROUTINE DQAGIE (F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
 &NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !                   INTEGRATION OVER INFINITE INTERVALS
@@ -7433,6 +9877,9 @@ END SUBROUTINE DQAGIE
 
 SUBROUTINE DQK15I (F, BOUN, INF, A, B, RESULT, ABSERR, RESABS, &
 &RESASC, EPMACH, UFLOW)
+IMPLICIT NONE
+INTEGER INF
+INTEGER J
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -7621,6 +10068,7 @@ RETURN
 END SUBROUTINE DQK15I
 
 SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
+IMPLICIT NONE
 !     ..................................................................
 !
 ! 1.        DQPSRT
@@ -7756,6 +10204,7 @@ END SUBROUTINE DQPSRT
 
 SUBROUTINE DQELG (N, EPSTAB, RESULT, ABSERR, RES3LA, NRES, &
 &EPMACH, OFLOW)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -7934,6 +10383,7 @@ END SUBROUTINE DQELG
 
 SUBROUTINE DQXGS (F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER, &
 &LIMIT,LENIW,LENW,LAST,IWORK,WORK)
+IMPLICIT NONE
 !
 !            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 !            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -8100,2509 +10550,4 @@ CALL DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
 !
 RETURN
 END SUBROUTINE DQXGS
-
-SUBROUTINE DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR, &
-&IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
-!
-!            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
-!            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
-!            HOPEFULLY SATISFYING FOLLOWING CLAIM FOR ACCURACY
-!            DABS(I-RESULT).LE.MAX(EPSABS,EPSREL*DABS(I)).
-!
-!        PARAMETERS
-!         ON ENTRY
-!            F      - DOUBLE PRECISION
-!                     FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
-!                     FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                     DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!
-!            A      - DOUBLE PRECISION
-!                     LOWER LIMIT OF INTEGRATION
-!
-!            B      - DOUBLE PRECISION
-!                     UPPER LIMIT OF INTEGRATION
-!
-!            EPSABS - DOUBLE PRECISION
-!                     ABSOLUTE ACCURACY REQUESTED
-!
-!            EPSREL - DOUBLE PRECISION
-!                     RELATIVE ACCURACY REQUESTED
-!
-!            LIMIT  - INTEGER
-!                     GIVES AN UPPERBOUND ON THE NUMBER OF SUBINTERVALS
-!                     IN THE PARTITION OF (A,B)
-!
-!         ON RETURN
-!            RESULT - DOUBLE PRECISION
-!                     APPROXIMATION TO THE INTEGRAL
-!
-!            ABSERR - DOUBLE PRECISION
-!                     ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                     WHICH SHOULD EQUAL OR EXCEED DABS(I-RESULT)
-!
-!            IER    - INTEGER
-!                     IER = 0 NORMAL AND RELIABLE TERMINATION OF THE
-!                             ROUTINE. IT IS ASSUMED THAT THE REQUESTED
-!                             ACCURACY HAS BEEN ACHIEVED.
-!                     IER.GT.0 ABNORMAL TERMINATION OF THE ROUTINE
-!                             THE ESTIMATES FOR INTEGRAL AND ERROR ARE
-!                             LESS RELIABLE. IT IS ASSUMED THAT THE
-!                             REQUESTED ACCURACY HAS NOT BEEN ACHIEVED.
-!            ERROR MESSAGES
-!                         = 1 MAXIMUM NUMBER OF SUBDIVISIONS ALLOWED
-!                             HAS BEEN ACHIEVED. ONE CAN ALLOW MORE SUB-
-!                             DIVISIONS BY INCREASING THE VALUE OF LIMIT
-!                             (AND TAKING THE ACCORDING DIMENSION
-!                             ADJUSTMENTS INTO ACCOUNT). HOWEVER, IF
-!                             THIS YIELDS NO IMPROVEMENT IT IS ADVISED
-!                             TO ANALYZE THE INTEGRAND IN ORDER TO
-!                             DETERMINE THE INTEGRATION DIFFICULTIES. IF
-!                             THE POSITION OF A LOCAL DIFFICULTY CAN BE
-!                             DETERMINED (E.G. SINGULARITY,
-!                             DISCONTINUITY WITHIN THE INTERVAL) ONE
-!                             WILL PROBABLY GAIN FROM SPLITTING UP THE
-!                             INTERVAL AT THIS POINT AND CALLING THE
-!                             INTEGRATOR ON THE SUBRANGES. IF POSSIBLE,
-!                             AN APPROPRIATE SPECIAL-PURPOSE INTEGRATOR
-!                             SHOULD BE USED, WHICH IS DESIGNED FOR
-!                             HANDLING THE TYPE OF DIFFICULTY INVOLVED.
-!                         = 2 THE OCCURRENCE OF ROUNDOFF ERROR IS DETEC-
-!                             TED, WHICH PREVENTS THE REQUESTED
-!                             TOLERANCE FROM BEING ACHIEVED.
-!                             THE ERROR MAY BE UNDER-ESTIMATED.
-!                         = 3 EXTREMELY BAD INTEGRAND BEHAVIOUR
-!                             OCCURS AT SOME POINTS OF THE INTEGRATION
-!                             INTERVAL.
-!                         = 4 THE ALGORITHM DOES NOT CONVERGE.
-!                             ROUNDOFF ERROR IS DETECTED IN THE
-!                             EXTRAPOLATION TABLE.
-!                             IT IS PRESUMED THAT THE REQUESTED
-!                             TOLERANCE CANNOT BE ACHIEVED, AND THAT THE
-!                             RETURNED RESULT IS THE BEST WHICH CAN BE
-!                             OBTAINED.
-!                         = 5 THE INTEGRAL IS PROBABLY DIVERGENT, OR
-!                             SLOWLY CONVERGENT. IT MUST BE NOTED THAT
-!                             DIVERGENCE CAN OCCUR WITH ANY OTHER VALUE
-!                             OF IER.
-!                         = 6 THE INPUT IS INVALID BECAUSE EPSABS OR
-!                             EPSREL IS NEGATIVE. RESULT, ABSERR,
-!                             LAST, RLIST(1), IORD(1), AND ELIST(1)
-!                             ARE SET TO ZERO. ALIST(1) AND BLIST(1)
-!                             ARE SET TO A AND B RESPECTIVELY.
-!
-!            ALIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE LEFT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE
-!                     GIVEN INTEGRATION RANGE (A,B)
-!
-!            BLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE RIGHT END POINTS
-!                     OF THE SUBINTERVALS IN THE PARTITION OF THE GIVEN
-!                     INTEGRATION RANGE (A,B)
-!
-!            RLIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE INTEGRAL
-!                     APPROXIMATIONS ON THE SUBINTERVALS
-!
-!            ELIST  - DOUBLE PRECISION
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST
-!                      LAST  ELEMENTS OF WHICH ARE THE MODULI OF THE
-!                     ABSOLUTE ERROR ESTIMATES ON THE SUBINTERVALS
-!
-!            IORD   - INTEGER
-!                     VECTOR OF DIMENSION AT LEAST LIMIT, THE FIRST K
-!                     ELEMENTS OF WHICH ARE POINTERS TO THE
-!                     ERROR ESTIMATES OVER THE SUBINTERVALS,
-!                     SUCH THAT ELIST(IORD(1)), ..., ELIST(IORD(K))
-!                     FORM A DECREASING SEQUENCE, WITH K = LAST
-!                     IF LAST.LE.(LIMIT/2+2), AND K = LIMIT+1-LAST
-!                     OTHERWISE
-!
-!            LAST   - INTEGER
-!                     NUMBER OF SUBINTERVALS ACTUALLY PRODUCED IN THE
-!                     SUBDIVISION PROCESS
-!
-!            VALP   - DOUBLE PRECISION
-!            VALN     ARRAYS OF DIMENSION AT LEAST (21,LIMIT) USED TO
-!                     SAVE THE FUNCTIONAL VALUES
-!
-!            LP     - INTEGER
-!            LN       VECTORS OF DIMENSION AT LEAST LIMIT, USED TO
-!                     STORE THE ACTUAL NUMBER OF FUNCTIONAL VALUES
-!                     SAVED IN THE CORRESPONDING COLUMN
-!                     OF VALP,VALN
-!
-!***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
-!
-DOUBLE PRECISION A,ABSEPS,ABSERR,ALIST,AREA,AREA1,AREA12,AREA2,A1,A2, &
-&B,BLIST,B1,B2,CORREC,DEFABS,DEFAB1,DEFAB2,DRES,ELIST, &
-&EPMACH,EPSABS,EPSREL,ERLARG,ERLAST,ERRBND,ERRMAX, &
-&ERROR1,ERROR2,ERRO12,ERRSUM,ERTEST,F,OFLOW,RERR,RESABS, &
-&RESEPS,RESULT,RES3LA,RLIST,RLIST2,SMALL,T,UFLOW, &
-&VALP,VALN,VP1,VP2,VN1,VN2,DPMPAR
-INTEGER ID,IER,IERRO,IORD,IROFF1,IROFF2,IROFF3,JUPBND,K,KSGN, &
-&KTMIN,LAST,LIMIT,MAXERR,NRES,NRMAX,NUMRL2, &
-&LP,LN,LP1,LP2,LN1,LN2
-LOGICAL EXTRAP,NOEXT
-!
-DIMENSION ALIST(LIMIT),BLIST(LIMIT),ELIST(LIMIT),IORD(LIMIT), &
-&RES3LA(3),RLIST(LIMIT),RLIST2(52), &
-&VALP(21,LIMIT),VALN(21,LIMIT),LP(LIMIT),LN(LIMIT), &
-&VP1(21),VP2(21),VN1(21),VN2(21)
-!
-EXTERNAL F
-!
-!            MACHINE DEPENDENT CONSTANTS
-!            ---------------------------
-!
-!          EPMACH IS THE LARGEST RELATIVE SPACING.
-!          UFLOW IS THE SMALLEST POSITIVE MAGNITUDE.
-!          OFLOW IS THE LARGEST POSITIVE MAGNITUDE.
-!
-EPMACH = DPMPAR(1)
-UFLOW = DPMPAR(2)
-OFLOW = DPMPAR(3)
-!
-!            TEST ON VALIDITY OF PARAMETERS
-!            ------------------------------
-LAST = 0
-RESULT = 0.D0
-ABSERR = 0.D0
-ALIST(1) = A
-BLIST(1) = B
-RLIST(1) = 0.D0
-ELIST(1) = 0.D0
-IER = 6
-IF (EPSABS .LT. 0.D0 .OR. EPSREL.LT. 0.D0) GO TO 999
-IER = 0
-RERR = DMAX1(EPSREL, 50.D0*EPMACH)
-!
-!           FIRST APPROXIMATION TO THE INTEGRAL
-!           -----------------------------------
-!
-IERRO = 0
-LP(1) = 1
-LN(1) = 1
-VALP(1,1) = F((A + B)*0.5D0)
-VALN(1,1) = VALP(1,1)
-CALL DQXLQM (F,A,B,RESULT,ABSERR,DEFABS,RESABS, &
-&VALP(1,1),VALN(1,1),LP(1),LN(1),2, &
-&EPMACH,UFLOW,OFLOW)
-!
-!           TEST ON ACCURACY.
-!
-DRES = DABS(RESULT)
-ERRBND = DMAX1(EPSABS,RERR*DRES)
-LAST = 1
-RLIST(1) = RESULT
-ELIST(1) = ABSERR
-IORD(1) = 1
-IF (ABSERR .LE. 100.D0*EPMACH*DEFABS .AND. ABSERR .GT. &
-&ERRBND) IER = 2
-IF (LIMIT .EQ. 1) IER = 1
-IF (IER .NE. 0 .OR. (ABSERR.LE.ERRBND.AND.ABSERR.NE.RESABS) .OR. &
-&ABSERR .EQ. 0.D0) GO TO 999
-!
-!           INITIALIZATION
-!           --------------
-!
-RLIST2(1) = RESULT
-ERRMAX = ABSERR
-MAXERR = 1
-AREA = RESULT
-ERRSUM = ABSERR
-ABSERR = OFLOW
-NRMAX = 1
-NRES = 0
-NUMRL2 = 2
-KTMIN = 0
-EXTRAP = .FALSE.
-NOEXT = .FALSE.
-IROFF1 = 0
-IROFF2 = 0
-IROFF3 = 0
-KSGN = -1
-IF (DRES .GE. (1.D0 - 50.D0*EPMACH)*DEFABS) KSGN = 1
-T = 1.D0 + 100.D0*EPMACH
-!
-!           MAIN DO-LOOP
-!           ------------
-!
-do 90 LAST = 2,LIMIT
-!
-!           BISECT THE SUBINTERVAL WITH THE NRMAX-TH LARGEST ERROR
-!           ESTIMATE.
-!
-  A1 = ALIST(MAXERR)
-  B1 = 0.5D0*(ALIST(MAXERR) + BLIST(MAXERR))
-  A2 = B1
-  B2 = BLIST(MAXERR)
-  ERLAST = ERRMAX
-  CALL DQXRRD(F,VALN(1,MAXERR),LN(MAXERR),B1,A1,VN1,VP1,LN1,LP1)
-  CALL DQXLQM(F,A1,B1,AREA1,ERROR1,RESABS,DEFAB1,VP1,VN1,LP1,LN1, &
-&2,EPMACH,UFLOW,OFLOW)
-  CALL DQXRRD(F,VALP(1,MAXERR),LP(MAXERR),A2,B2,VP2,VN2,LP2,LN2)
-  CALL DQXLQM(F,A2,B2,AREA2,ERROR2,RESABS,DEFAB2,VP2,VN2,LP2,LN2, &
-&2,EPMACH,UFLOW,OFLOW)
-!
-!           IMPROVE PREVIOUS APPROXIMATIONS TO INTEGRAL
-!           AND ERROR AND TEST FOR ACCURACY.
-!
-  AREA12 = AREA1 + AREA2
-  ERRO12 = ERROR1 + ERROR2
-  ERRSUM = ERRSUM + ERRO12 - ERRMAX
-  AREA = AREA + AREA12 - RLIST(MAXERR)
-  IF (DEFAB1 .EQ. ERROR1 .OR. DEFAB2 .EQ. ERROR2) GO TO 15
-  IF (DABS(RLIST(MAXERR) - AREA12) .GT. 0.1D-04*DABS(AREA12) &
-&.OR. ERRO12 .LT. 0.99D0*ERRMAX) GO TO 10
-  IF (EXTRAP) IROFF2 = IROFF2 + 1
-  IF (.NOT.EXTRAP) IROFF1 = IROFF1 + 1
-10 IF (LAST.GT.10 .AND. ERRO12.GT.ERRMAX) IROFF3 = IROFF3 + 1
-15 RLIST(MAXERR) = AREA1
-  RLIST(LAST) = AREA2
-  ERRBND = DMAX1(EPSABS,RERR*DABS(AREA))
-!
-!           TEST FOR ROUNDOFF ERROR AND EVENTUALLY SET ERROR FLAG.
-!
-  IF (IROFF1 + IROFF2 .GE. 10 .OR. IROFF3 .GE. 20) IER = 2
-  IF (IROFF2 .GE. 5) IERRO = 3
-!
-!           SET ERROR FLAG IN THE CASE THAT THE NUMBER OF SUBINTERVALS
-!           EQUALS LIMIT.
-!
-  IF (LAST .EQ. LIMIT) IER = 1
-!
-!           SET ERROR FLAG IN THE CASE OF BAD INTEGRAND BEHAVIOUR
-!           AT A POINT OF THE INTEGRATION RANGE.
-!
-  IF (DMAX1(DABS(A1),DABS(B2)) .LE. &
-&T*(DABS(A2) + 1.D+03*UFLOW)) IER = 4
-!
-!           APPEND THE NEWLY-CREATED INTERVALS TO THE LIST.
-!
-  IF (ERROR2 .GT. ERROR1) GO TO 20
-  ALIST(LAST) = A2
-  BLIST(MAXERR) = B1
-  BLIST(LAST) = B2
-  ELIST(MAXERR) = ERROR1
-  ELIST(LAST) = ERROR2
-  CALL DQXCPY(VALP(1,MAXERR),VP1,LP1)
-  LP(MAXERR) = LP1
-  CALL DQXCPY(VALN(1,MAXERR),VN1,LN1)
-  LN(MAXERR) = LN1
-  CALL DQXCPY(VALP(1,LAST),VP2,LP2)
-  LP(LAST) = LP2
-  CALL DQXCPY(VALN(1,LAST),VN2,LN2)
-  LN(LAST) = LN2
-  GO TO 30
-!
-20 ALIST(MAXERR) = A2
-  ALIST(LAST) = A1
-  BLIST(LAST) = B1
-  RLIST(MAXERR) = AREA2
-  RLIST(LAST) = AREA1
-  ELIST(MAXERR) = ERROR2
-  ELIST(LAST) = ERROR1
-  CALL DQXCPY(VALP(1,MAXERR),VP2,LP2)
-  LP(MAXERR) = LP2
-  CALL DQXCPY(VALN(1,MAXERR),VN2,LN2)
-  LN(MAXERR) = LN2
-  CALL DQXCPY(VALP(1,LAST),VP1,LP1)
-  LP(LAST) = LP1
-  CALL DQXCPY(VALN(1,LAST),VN1,LN1)
-  LN(LAST) = LN1
-!
-!           CALL SUBROUTINE DQPSRT TO MAINTAIN THE DESCENDING ORDERING
-!           IN THE LIST OF ERROR ESTIMATES AND SELECT THE SUBINTERVAL
-!           WITH NRMAX-TH LARGEST ERROR ESTIMATE (TO BE BISECTED NEXT).
-!
-30 CALL DQPSRT(LIMIT,LAST,MAXERR,ERRMAX,ELIST,IORD,NRMAX)
-! ***JUMP OUT OF DO-LOOP
-  IF(ERRSUM .LE. ERRBND) GO TO 115
-! ***JUMP OUT OF DO-LOOP
-  IF (IER .NE. 0) GO TO 100
-  IF (LAST .EQ. 2) GO TO 80
-  IF (NOEXT) GO TO 90
-  ERLARG = ERLARG - ERLAST
-  IF (DABS(B1 - A1) .GT. SMALL) ERLARG = ERLARG + ERRO12
-  IF (EXTRAP) GO TO 40
-!
-!           TEST WHETHER THE INTERVAL TO BE BISECTED NEXT IS THE
-!           SMALLEST INTERVAL.
-!
-  IF (DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-  EXTRAP = .TRUE.
-  NRMAX = 2
-!
-!           THE BOUND 0.3*ERTEST HAS BEEN INTRODUCED TO PERFORM A
-!           MORE CAUTIOUS EXTRAPOLATION THAN IN THE ORIGINAL DQAGSE
-!           ROUTINE
-!
-40 IF (IERRO .EQ. 3 .OR. ERLARG .LE. 0.3D0*ERTEST) GO TO 60
-!
-!           THE SMALLEST INTERVAL HAS THE LARGEST ERROR.
-!           BEFORE BISECTING DECREASE THE SUM OF THE ERRORS OVER THE
-!           LARGER INTERVALS (ERLARG) AND PERFORM EXTRAPOLATION.
-!
-  ID = NRMAX
-  JUPBND = LAST
-  IF (LAST .GT. (2 + LIMIT/2)) JUPBND = LIMIT + 3 - LAST
-  do 50 K = ID,JUPBND
-    MAXERR = IORD(NRMAX)
-    ERRMAX = ELIST(MAXERR)
-! ***JUMP OUT OF DO-LOOP
-    IF(DABS(BLIST(MAXERR) - ALIST(MAXERR)) .GT. SMALL) GO TO 90
-    NRMAX = NRMAX + 1
-50 CONTINUE
-!
-!           PERFORM EXTRAPOLATION.
-!
-60 NUMRL2 = NUMRL2 + 1
-  RLIST2(NUMRL2) = AREA
-  CALL DQELG (NUMRL2,RLIST2,RESEPS,ABSEPS,RES3LA,NRES, &
-&EPMACH,OFLOW)
-  KTMIN = KTMIN + 1
-  IF (KTMIN .GT. 5 .AND. ABSERR .LT. 0.1D-02*ERRSUM) IER = 5
-  IF (ABSEPS .GE. ABSERR) GO TO 70
-  KTMIN = 0
-  ABSERR = ABSEPS
-  RESULT = RESEPS
-  CORREC = ERLARG
-  ERTEST = DMAX1(EPSABS,RERR*DABS(RESEPS))
-! ***JUMP OUT OF DO-LOOP
-  IF (ABSERR .LE. ERTEST) GO TO 100
-!
-!           PREPARE BISECTION OF THE SMALLEST INTERVAL.
-!
-70 IF (NUMRL2 .EQ. 1) NOEXT = .TRUE.
-  IF (IER .EQ. 5) GO TO 100
-  MAXERR = IORD(1)
-  ERRMAX = ELIST(MAXERR)
-  NRMAX = 1
-  EXTRAP = .FALSE.
-  SMALL = SMALL*0.5D0
-  ERLARG = ERRSUM
-  GO TO 90
-80 SMALL = DABS(B - A)*0.375D0
-  ERLARG = ERRSUM
-  ERTEST = ERRBND
-  RLIST2(2) = AREA
-90 CONTINUE
-!
-!           SET FINAL RESULT AND ERROR ESTIMATE.
-!           ------------------------------------
-!
-100 IF (ABSERR .EQ. OFLOW) GO TO 115
-IF (IER + IERRO .EQ. 0) GO TO 110
-IF (IERRO .EQ. 3) ABSERR = ABSERR + CORREC
-IF (IER .EQ. 0) IER = 3
-IF (RESULT .NE. 0.D0 .AND. AREA .NE. 0.D0) GO TO 105
-IF (ABSERR .GT. ERRSUM) GO TO 115
-IF (AREA .EQ. 0.D0) GO TO 130
-GO TO 110
-105 IF (ABSERR/DABS(RESULT) .GT. ERRSUM/DABS(AREA)) GO TO 115
-!
-!           TEST ON DIVERGENCE.
-!
-110 IF(KSGN.EQ.(-1).AND.DMAX1(DABS(RESULT),DABS(AREA)).LE. &
-&DEFABS*0.1D-01) GO TO 130
-IF(0.1D-01.GT.(RESULT/AREA).OR.(RESULT/AREA).GT.0.1D+03 &
-&.OR.ERRSUM.GT.DABS(AREA)) IER = 6
-GO TO 130
-!
-!           COMPUTE GLOBAL INTEGRAL SUM.
-!
-115 RESULT = 0.D0
-DO K = 1,LAST
-   RESULT = RESULT + RLIST(K)
-END DO
-ABSERR = ERRSUM
-130 IF (IER .GT. 2) IER = IER - 1
-999 RETURN
-END SUBROUTINE DQXGSE
-
-SUBROUTINE DQXCPY (A, B, L)
-!
-!  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
-!          THE DOUBLE PRECISION VECTOR A OF LENGTH L
-!
-INTEGER L
-DOUBLE PRECISION A(L),B(L)
-!
-do 10 I = 1,L
-10 A(I) = B(I)
-RETURN
-END SUBROUTINE DQXCPY
-
-SUBROUTINE DQXLQM (F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,LS, &
-&KEY,EPMACH,UFLOW,OFLOW)
-!
-!            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
-!                       J = INTEGRAL OF DABS(F) OVER (A,B)
-!
-!           PARAMETERS
-!            ON ENTRY
-!              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
-!                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!
-!              A      - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTEGRATION
-!
-!              B      - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTEGRATION
-!
-!              VR     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
-!
-!              VS     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
-!
-!              LR     - INTEGER
-!              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
-!
-!            KEY    - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     RMS FORMULAS ARE USED WITH
-!                      13 - 19               POINTS IF KEY.LT.1,
-!                      13 - 19 - (27)        POINTS IF KEY = 1,
-!                      13 - 19 - (27) - (41) POINTS IF KEY = 2,
-!                           19 -  27  - (41) POINTS IF KEY = 3,
-!                                 27  -  41  POINTS IF KEY.GT.3.
-!
-!                         (RULES) USED IF THE FUNCTION APPEARS
-!                         ENOUGH REGULAR
-!
-!              EPMACH - DOUBLE PRECISION
-!                       THE RELATIVE PRECISION OF THE FLOATING
-!                       ARITHMETIC BEING USED.
-!
-!              UFLOW  - DOUBLE PRECISION
-!                       THE SMALLEST POSITIVE MAGNITUDE.
-!
-!              OFLOW  - DOUBLE PRECISION
-!                       THE LARGEST POSITIVE MAGNITUDE.
-!
-!            ON RETURN
-!              RESULT - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
-!
-!              ABSERR - DOUBLE PRECISION
-!                       ESTIMATE OF THE MODULUS OF THE ABSOLUTE ERROR,
-!                       WHICH SHOULD NOT EXCEED DABS(I-RESULT)
-!
-!              RESABS - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL J
-!
-!              RESASC - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL OF DABS(F-I/(B-A))
-!                       OVER (A,B)
-!
-!              VR     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LR CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
-!
-!              VS     - DOUBLE PRECISION
-!                       VECTOR OF LENGTH LS CONTAINING THE
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
-!
-!              LR     - INTEGER
-!              LS       NUMBER OF ELEMENTS IN
-!                       VR,VS RESPECTIVELY
-!
-!***ROUTINES CALLED  DQXRUL
-!
-DOUBLE PRECISION F,A,B,RESULT,ABSERR,RESABS,RESASC, T, &
-&EPMACH,OFLOW,UFLOW,RESG,RESK,ERROLD,VR(21),VS(21)
-INTEGER K,K0,K1,K2,KEY,KEY1,LR,LS
-EXTERNAL F
-!
-KEY1 = MAX0(KEY ,  0)
-KEY1 = MIN0(KEY1,  4)
-K0   = MAX0(KEY1-2,0)
-K1   = K0 + 1
-K2   = MIN0(KEY1+1,3)
-!
-CALL DQXRUL (F,A,B,RESG,RESABS,RESASC,K0,K1,VR,VS,LR,LS)
-ERROLD = OFLOW
-T = 10.D0*EPMACH
-do 10 K = K1,K2
-  CALL DQXRUL (F,A,B,RESK,RESABS,RESASC,K,K1,VR,VS,LR,LS)
-  RESULT = RESK
-  ABSERR = DABS(RESK - RESG)
-  IF (RESASC .NE. 0.D0 .AND. ABSERR .NE. 0.D0) &
-&ABSERR = RESASC*DMIN1(1.D0,(200.D0*ABSERR/RESASC)**1.5D0)
-  IF (RESABS .GT. UFLOW/T) ABSERR = DMAX1(T*RESABS,ABSERR)
-  RESG = RESK
-  IF (ABSERR .GT. ERROLD*0.16D0) GO TO 3000
-  IF (ABSERR .LT. 1000.D0*EPMACH*RESABS) GO TO 3000
-  ERROLD = ABSERR
-10 CONTINUE
-3000 CONTINUE
-RETURN
-END SUBROUTINE DQXLQM
-
-SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
-!
-!            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
-!                           ESTIMATE
-!            AND CONDITIONALLY COMPUTE
-!                       J = INTEGRAL OF DABS(F) OVER (A,B)
-!                       BY USING AN  RMS RULE
-!           PARAMETERS
-!            ON ENTRY
-!              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
-!                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!
-!              XL     - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTEGRATION
-!
-!              XU     - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTEGRATION
-!
-!              KE     - INTEGER
-!                     KEY FOR CHOICE OF LOCAL INTEGRATION RULE
-!                     AN RMS RULE IS USED WITH
-!                         13      POINTS IF KE  = 2,
-!                         19      POINTS IF KE  = 3,
-!                         27      POINTS IF KE  = 4,
-!                         42      POINTS IF KE  = 5
-!
-!              K1     INTEGER
-!                     VALUE OF KEY FOR WHICH THE ADDITIONAL ESTIMATES
-!                     YA, YM ARE TO BE COMPUTED
-!
-!              FV1    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
-!
-!              FV2    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
-!
-!              L1     - INTEGER
-!              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
-!
-!            ON RETURN
-!              Y      - DOUBLE PRECISION
-!                       APPROXIMATION TO THE INTEGRAL I
-!                       RESULT IS COMPUTED BY APPLYING THE
-!                       REQUESTED RMS RULE
-!
-!              YA     - DOUBLE PRECISION
-!                       IF KEY = K1  APPROXIMATION TO THE INTEGRAL J
-!                       ELSE UNCHANGED
-!
-!              YM     - DOUBLE PRECISION
-!                       IF KEY = K1  APPROXIMATION TO THE INTEGRAL OF
-!                                      DABS(F-I/(XU-XL)   OVER (XL,XU)
-!                       ELSE UNCHANGED
-!
-!              FV1    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L1
-!                       SAVED  FUNCTIONAL VALUES OF POSITIVE ABSCISSAS
-!
-!              FV2    - DOUBLE PRECISION
-!                       VECTOR CONTAINING L2
-!                       SAVED  FUNCTIONAL VALUES OF NEGATIVE ABSCISSAS
-!
-!              L1     - INTEGER
-!              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
-!
-!------------------------
-DOUBLE PRECISION F,XL,XU,LDL,Y,YA,YM,Y2,XX(41),WW(52), &
-&FV1(21),FV2(21),AA,BB,C
-INTEGER ISTART(4),LEN(4),J,KE,K1,L1,L2
-EXTERNAL F
-!------------------------
-DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
-DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
-!------------------------
-DATA XX( 1)/0.D0                     /
-DATA XX( 2)/.25000000000000000000D+00/
-DATA XX( 3)/.50000000000000000000D+00/
-DATA XX( 4)/.75000000000000000000D+00/
-DATA XX( 5)/.87500000000000000000D+00/
-DATA XX( 6)/.93750000000000000000D+00/
-DATA XX( 7)/.10000000000000000000D+01/
-DATA XX( 8)/.37500000000000000000D+00/
-DATA XX( 9)/.62500000000000000000D+00/
-DATA XX(10)/.96875000000000000000D+00/
-DATA XX(11)/.12500000000000000000D+00/
-DATA XX(12)/.68750000000000000000D+00/
-DATA XX(13)/.81250000000000000000D+00/
-DATA XX(14)/.98437500000000000000D+00/
-DATA XX(15)/.18750000000000000000D+00/
-DATA XX(16)/.31250000000000000000D+00/
-DATA XX(17)/.43750000000000000000D+00/
-DATA XX(18)/.56250000000000000000D+00/
-DATA XX(19)/.84375000000000000000D+00/
-DATA XX(20)/.90625000000000000000D+00/
-DATA XX(21)/.99218750000000000000D+00/
-!   NUMBER OF NODES 13
-DATA WW(1)/1.303262173284849021810473057638590518409112513421D-1/
-DATA WW(2)/2.390632866847646220320329836544615917290026806242D-1/
-DATA WW(3)/2.630626354774670227333506083741355715758124943143D-1/
-DATA WW(4)/2.186819313830574175167853094864355208948886875898D-1/
-DATA WW(5)/2.757897646642836865859601197607471574336674206700D-2/
-DATA WW(6)/1.055750100538458443365034879086669791305550493830D-1/
-DATA WW(7)/1.571194260595182254168429283636656908546309467968D-2/
-!   NUMBER OF NODES 19
-DATA WW(8)/1.298751627936015783241173611320651866834051160074D-1/
-DATA WW(9)/2.249996826462523640447834514709508786970828213187D-1/
-DATA WW(15)/5.542699233295875168406783695143646338274805359780D-2/
-DATA WW(10)/1.680415725925575286319046726692683040162290325505D-1/
-DATA WW(16)/9.986735247403367525720377847755415293097913496236D-2/
-DATA WW(11)/1.415567675701225879892811622832845252125600939627D-1/
-DATA WW(12)/1.006482260551160175038684459742336605269707889822D-1/
-DATA WW(13)/2.510604860724282479058338820428989444699235030871D-2/
-DATA WW(17)/4.507523056810492466415880450799432587809828791196D-2/
-DATA WW(14)/9.402964360009747110031098328922608224934320397592D-3/
-!   NUMBER OF NODES 27
-DATA WW(18)/6.300942249647773931746170540321811473310938661469D-2/
-DATA WW(28)/1.239572396231834242194189674243818619042280816640D-1/
-DATA WW(19)/1.261383225537664703012999637242003647020326905948D-1/
-DATA WW(25)/1.235837891364555000245004813294817451524633100256D-1/
-DATA WW(20)/1.273864433581028272878709981850307363453523117880D-1/
-DATA WW(26)/1.148933497158144016800199601785309838604146040215D-1/
-DATA WW(29)/2.501306413750310579525950767549691151739047969345D-2/
-DATA WW(21)/8.576500414311820514214087864326799153427368592787D-2/
-DATA WW(30)/4.915957918146130094258849161350510503556792927578D-2/
-DATA WW(22)/7.102884842310253397447305465997026228407227220665D-2/
-DATA WW(23)/5.026383572857942403759829860675892897279675661654D-2/
-DATA WW(27)/1.252575774226122633391477702593585307254527198070D-2/
-DATA WW(31)/2.259167374956474713302030584548274729936249753832D-2/
-DATA WW(24)/4.683670010609093810432609684738393586390722052124D-3/
-!   NUMBER OF NODES 41
-DATA WW(32)/6.362762978782724559269342300509058175967124446839D-2/
-DATA WW(42)/1.187141856692283347609436153545356484256869129472D-1/
-DATA WW(46)/1.533126874056586959338368742803997744815413565014D-2/
-DATA WW(33)/9.950065827346794643193261975720606296171462239514D-2/
-DATA WW(47)/3.527159369750123100455704702965541866345781113903D-2/
-DATA WW(39)/8.140326425945938045967829319725797511040878579808D-2/
-DATA WW(48)/5.000556431653955124212795201196389006184693561679D-2/
-DATA WW(34)/7.048220002718565366098742295389607994441704889441D-2/
-DATA WW(49)/5.744164831179720106340717579281831675999717767532D-2/
-DATA WW(40)/6.583213447600552906273539578430361199084485578379D-2/
-DATA WW(43)/5.999947605385971985589674757013565610751028128731D-2/
-DATA WW(35)/6.512297339398335645872697307762912795346716454337D-2/
-DATA WW(44)/5.500937980198041736910257988346101839062581489820D-2/
-DATA WW(50)/1.598823797283813438301248206397233634639162043386D-2/
-DATA WW(36)/3.998229150313659724790527138690215186863915308702D-2/
-DATA WW(51)/2.635660410220884993472478832884065450876913559421D-2/
-DATA WW(37)/3.456512257080287509832054272964315588028252136044D-2/
-DATA WW(41)/2.592913726450792546064232192976262988065252032902D-2/
-DATA WW(45)/5.264422421764655969760271538981443718440340270116D-3/
-DATA WW(52)/1.196003937945541091670106760660561117114584656319D-2/
-DATA WW(38)/2.212167975884114432760321569298651047876071264944D-3/
-!------------------------
-K = KE + 1
-IS = ISTART(K)
-KS = LEN(K)
-LDL = XU - XL
-BB = LDL*0.5D0
-AA = XL + BB
-!
-Y = 0.D0
-do 10 I = 1,KS
-   C = BB*XX(I)
-   IF (I .GT. L1) FV1(I) = F(AA + C)
-   IF (I .GT. L2) FV2(I) = F(AA - C)
-   J = IS + I
-   Y = Y + (FV1(I) + FV2(I))*WW(J)
-10 CONTINUE
-!
-Y2 = Y
-Y = Y*BB
-IF (L1 .LT. KS) L1 = KS
-IF (L2 .LT. KS) L2 = KS
-IF (KE .NE. K1) RETURN
-!
-YA = 0.D0
-do 20 I = 1,KS
-   J = IS + I
-   YA = YA + (DABS(FV1(I)) + DABS(FV2(I)))*WW(J)
-20 CONTINUE
-YA = YA*DABS(BB)
-!
-Y2 = Y2*0.5D0
-YM = 0.D0
-do 30 I = 1,KS
-   J = IS + I
-   YM = YM + (DABS(FV1(I) - Y2) + DABS(FV2(I) - Y2))*WW(J)
-30 CONTINUE
-YM = YM*DABS(BB)
-RETURN
-END SUBROUTINE DQXRUL
-
-SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
-!
-!            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
-!            THE BISECTION OF AN INTERVAL
-!
-!           PARAMETERS
-!            ON ENTRY
-!              F      - DOUBLE PRECISION
-!                       FUNCTION SUBPROGRAM DEFINING THE INTEGRAND
-!                       FUNCTION F(X). THE ACTUAL NAME FOR F NEEDS TO BE
-!                       DECLARED E X T E R N A L IN THE DRIVER PROGRAM.
-!
-!              XL     - DOUBLE PRECISION
-!                       LOWER LIMIT OF INTERVAL
-!
-!              XU     - DOUBLE PRECISION
-!                       UPPER LIMIT OF INTERVAL
-!
-!              Z      - DOUBLE PRECISION
-!                       VECTOR CONTAINING LZ
-!                       SAVED  FUNCTIONAL VALUES
-!
-!              LZ     - INTEGER
-!                       NUMBER OF ELEMENTS IN LZ
-!
-!            ON RETURN
-!              R      - DOUBLE PRECISION
-!              S        VECTORS CONTAINING LR, LS
-!                       SAVED  FUNCTIONAL VALUES FOR THE NEW INTERVALS
-!
-!              LR     - INTEGER
-!              LS       NUMBER OF ELEMENTES IN R,S RESPECTIVELY
-!
-!***ROUTINES CALLED  F
-!
-DOUBLE PRECISION F,R,S,Z,XU,XL,DLEN,CENTR
-INTEGER LR,LS,LZ
-DIMENSION R(21),S(21),Z(21)
-!
-DLEN = (XU - XL)*0.5D0
-CENTR = XL + DLEN
-R(1) =  Z(3)
-R(2) =  Z(9)
-R(3) =  Z(4)
-R(4) =  Z(5)
-R(5) =  Z(6)
-R(6) =  Z(10)
-R(7) =  Z(7)
-S(1) =  Z(3)
-S(2) =  Z(8)
-S(3) =  Z(2)
-S(7) =  Z(1)
-IF (LZ .GT. 11) GO TO 10
-!
-R(8) =  F(CENTR + DLEN*0.375D0)
-R(9) =  F(CENTR + DLEN*0.625D0)
-R(10) = F(CENTR + DLEN*0.96875D0)
-LR = 10
-IF (LZ .NE. 11) S(4) = F(CENTR - DLEN*0.75D0)
-IF (LZ .EQ. 11) S(4) = Z(11)
-S(5) =  F(CENTR - DLEN*0.875D0)
-S(6) =  F(CENTR - DLEN*0.9375D0)
-S(8) =  F(CENTR - DLEN*0.375D0)
-S(9) =  F(CENTR - DLEN*0.625D0)
-S(10) = F(CENTR - DLEN*0.96875D0)
-LS = 10
-RETURN
-!
-10 R(8) = Z(12)
-R(9) = Z(13)
-R(10) = Z(14)
-LR = 10
-S(4) = Z(11)
-S(5) = F(CENTR - DLEN*0.875D0)
-S(6) = F(CENTR - DLEN*0.9375D0)
-IF (LZ .GT. 14) GO TO 20
-S(8)  = F(CENTR - DLEN*0.375D0)
-S(9)  = F(CENTR - DLEN*0.625D0)
-S(10) = F(CENTR - DLEN*0.96875D0)
-LS = 10
-RETURN
-!
-20 R(11) = Z(18)
-R(12) = Z(19)
-R(13) = Z(20)
-R(14) = Z(21)
-LR = 14
-S(8) = Z(16)
-S(9) = Z(15)
-S(10) = F(CENTR - DLEN*0.96875D0)
-S(11) = Z(17)
-LS = 11
-RETURN
-END SUBROUTINE DQXRRD
-
-SUBROUTINE CUBTRI(F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, &
-&IDATA, RDATA, IER)
-!
-!       ADAPTIVE CUBATURE OVER A TRIANGLE
-!
-!       PARAMETERS
-!          F     - USER SUPPLIED EXTERNAL FUNCTION OF THE FORM
-!                  F(X,Y,IDATA,RDATA)
-!                  WHERE X AND Y ARE THE CARTESIAN COORDINATES OF A
-!                  POINT IN THE PLANE, AND IDATA AND RDATA ARE INTEGER
-!                  AND REAL VECTORS IN WHICH DATA MAY BE PASSED.
-!          T     - ARRAY OF DIMENSION (2,3) WHERE T(1,J) AND T(2,J)
-!                  ARE THE X AND Y COORDINATES OF THE J-TH VERTEX OF
-!                  THE GIVEN TRIANGLE (INPUT)
-!          EPS   - REQUIRED TOLERANCE (INPUT).  IF THE COMPUTED
-!                  INTEGRAL IS BETWEEN-1 AND 1, AN ABSOLUTE ERROR
-!                  TEST IS USED, ELSE A RELATIVE ERROR TEST IS USED.
-!          MCALLS- MAXIMUM PERMITTED NUMBER OF CALLS TO F (INPUT)
-!          ANS   - ESTIMATE FOR THE VALUE OF THE INTEGRAL OF F OVER
-!                  THE GIVEN TRIANGLE (OUTPUT)
-!          ERR   - ESTIMATED ABSOLUTE ERROR IN ANS (OUTPUT)
-!          NCALLS- ACTUAL NUMBER OF CALLS TO F (OUTPUT).  THIS
-!                  PARAMETER MUST BE INITIALIZED TO 0 ON THE FIRST
-!                  CALL TO CUBTRI FOR A GIVEN INTEGRAL (INPUT)
-!          W     - WORK SPACE.  MAY NOT BE DESTROYED BETWEEN CALLS TO
-!                  CUBTRI IF RESTARTING IS INTENDED
-!          NW    - LENGTH OF WORK SPACE (INPUT).
-!                  IF NW .GE. 3*(19+3*MCALLS)/38, TERMINATION DUE TO
-!                  FULL WORK SPACE WILL NOT OCCUR.
-!          IER   - TERMINATION INDICATOR (OUTPUT)
-!                  IER=0   NORMAL TERMINATION, TOLERANCE SATISFIED
-!                  IER=1   MAXIMUM NUMBER OF CALLS REACHED
-!                  IER=2   WORK SPACE FULL
-!                  IER=3   FURTHER SUBDIVISION OF TRIANGLES IMPOSSIBLE
-!                  IER=4   NO FURTHER IMPROVEMENT IN ACCURACY IS
-!                        POSSIBLE DUE TO ROUNDING ERRORS IN FUNCTION
-!                        VALUES
-!                  IER=5   NO FURTHER IMPROVEMENT IN ACCURACY IS
-!                        POSSIBLE BECAUSE SUBDIVISION DOES NOT
-!                        CHANGE THE ESTIMATED INTEGRAL. MACHINE
-!                        ACCURACY HAS PROBABLY BEEN REACHED BUT
-!                        THE ERROR ESTIMATE IS NOT SHARP ENOUGH.
-!
-!       CUBTRI IS DESIGNED TO BE CALLED REPEATEDLY WITHOUT WASTING
-!       EARLIER WORK.  THE PARAMETER NCALLS IS USED TO INDICATE TO
-!       CUBTRI AT WHAT POINT TO RESTART, AND MUST BE RE-INITIALIZED
-!       TO 0 WHEN A NEW INTEGRAL IS TO BE COMPUTED.  AT LEAST ONE OF
-!       THE PARAMETERS EPS, MCALLS AND NW MUST BE CHANGED BETWEEN
-!       CALLS TO CUBTRI, ACCORDING TO THE RETURNED VALUE OF IER. NONE
-!       OF THE OTHER PARAMETERS MAY BE CHANGED IF RESTARTING IS DONE.
-!       IF IER=3 IS ENCOUNTERED, THERE PROBABLY IS A SINGULARITY
-!       SOMEWHERE IN THE REGION.  THE ERROR MESSAGE INDICATES THAT
-!       FURTHER SUBDIVISION IS IMPOSSIBLE BECAUSE THE VERTICES OF THE
-!       SMALLER TRIANGLES PRODUCED WILL BEGIN TO COALESCE TO THE
-!       PRECISION OF THE COMPUTER.  THIS SITUATION CAN USUALLY BE
-!       RELIEVED BY SPECIFYING THE REGION IN SUCH A WAY THAT THE
-!       SINGULARITY IS LOCATED AT THE THIRD VERTEX OF THE TRIANGLE.
-!       IF IER=4 IS ENCOUNTERED, THE VALUE OF THE INTEGRAL CANNOT BE
-!       IMPROVED ANY FURTHER. THE ONLY EXCEPTION TO THIS OCCURS WHEN A
-!       FUNCTION WITH HIGHLY IRREGULAR BEHAVIOUR IS INTEGRATED (E.G.
-!       FUNCTIONS WITH JUMP DISCONTINUITIES OR VERY HIGHLY OSCILLATORY
-!       FUNCTIONS). IN SUCH A CASE THE USER CAN DISABLE THE ROUNDING
-!       ERROR TEST BY REMOVING THE IF STATEMENT IMMEDIATELY PRECEDING
-!       STATEMENT NUMBER 90.
-!
-EXTERNAL F
-INTEGER IDATA(*), IER, MCALLS, NCALLS, NW
-REAL ALFA, ANS, ANSKP, AREA, EPS, ERR, ERRMAX, H, Q1, Q2, R1, R2, &
-&RDATA(*), D(2,4), S(4), T(2,*), VEC(2,3), W(6,NW), X(2)
-!       ACTUAL DIMENSION OF W IS (6,NW/6)
-!
-DOUBLE PRECISION TANS, TERR, DZERO
-COMMON /CUBSTA/ TANS, TERR
-!       THIS COMMON IS REQUIRED TO PRESERVE TANS AND TERR BETWEEN CALLS
-!       AND TO SAVE VARIABLES IN FUNCTION RNDERR
-DATA NFE /19/, S(1), S(2), S(3), S(4) /3*1E0,-1E0/, D(1,1), &
-&D(2,1) /0.0,0.0/, D(1,2), D(2,2) /0.0,1.0/, D(1,3), D(2,3) &
-&/1.0,0.0/, D(1,4), D(2,4) /1.0,1.0/
-!       NFE IS THE NUMBER OF FUNCTION EVALUATIONS PER CALL TO CUBRUL.
-DATA ZERO /0.E0/, ONE /1.E0/, DZERO /0.D0/, POINT5 /.5E0/
-!
-!      CALCULATE DIRECTION VECTORS, AREA AND MAXIMUM NUMBER
-!      OF SUBDIVISIONS THAT MAY BE PERFORMED
-DO I=1,2
-  VEC(I,3) = T(I,3)
-  DO J=1,2
-    VEC(I,J) = T(I,J) - T(I,3)
-  END DO
-END DO
-MAXC = (MCALLS/NFE+3)/4
-IER = 1
-MAXK = MIN0(MAXC,(NW/6+2)/3)
-IF (MAXC.GT.MAXK) IER = 2
-AREA = ABS(VEC(1,1)*VEC(2,2)-VEC(1,2)*VEC(2,1))*POINT5
-K = (NCALLS/NFE+3)/4
-MW = 3*(K-1) + 1
-IF (NCALLS.GT.0) GO TO 30
-!
-!       TEST FOR TRIVIAL CASES
-TANS = DZERO
-TERR = DZERO
-IF (AREA.EQ.ZERO) GO TO 90
-IF (MCALLS.LT.NFE) GO TO 100
-IF (NW.LT.6) GO TO 110
-!
-!       INITIALIZE DATA LIST
-K = 1
-MW = 1
-W(1,1) = ZERO
-W(2,1) = ZERO
-W(3,1) = ONE
-CALL CUBRUL(F, VEC, W(1,1), IDATA, RDATA)
-TANS = W(5,1)
-TERR = W(6,1)
-NCALLS = NFE
-!
-!       TEST TERMINATION CRITERIA
-30 ANS = TANS
-ERR = TERR
-IF (ERR.LT.AMAX1(ONE,ABS(ANS))*EPS) GO TO 90
-IF (K.EQ.MAXK) GO TO 120
-!
-!       FIND TRIANGLE WITH LARGEST ERROR
-ERRMAX = ZERO
-do 40 I = 1,MW
-  IF (W(6,I).LE.ERRMAX) GO TO 40
-  ERRMAX = W(6,I)
-  J = I
-40 CONTINUE
-!
-!       SUBDIVIDE TRIANGLE INTO FOUR SUBTRIANGLES AND UPDATE DATA LIST
-DO I=1,2
-  X(I) = W(I,J)
-END DO
-H = W(3,J)*POINT5
-IF (RNDERR(X(1),H,X(1),H).NE.ZERO) GO TO 130
-IF (RNDERR(X(2),H,X(2),H).NE.ZERO) GO TO 130
-ANSKP = SNGL(TANS)
-TANS = TANS - DBLE(W(5,J))
-TERR = TERR - DBLE(W(6,J))
-R1 = W(4,J)
-R2 = W(5,J)
-JKP = J
-Q1 = ZERO
-Q2 = ZERO
-DO I=1,4
-  DO L=1,2
-    W(L,J) = X(L) + H*D(L,I)
-  END DO
-  W(3,J) = H*S(I)
-  CALL CUBRUL(F, VEC, W(1,J), IDATA, RDATA)
-  Q2 = Q2 + W(5,J)
-  Q1 = Q1 + W(4,J)
-  J = MW + I
-END DO
-ALFA = 1E15
-IF (Q2.NE.R2) ALFA = ABS((Q1-R1)/(Q2-R2)-ONE)
-J = JKP
-DO I=1,4
-  W(6,J) = W(6,J)/ALFA
-  TANS = TANS + W(5,J)
-  TERR = TERR + W(6,J)
-  J = MW + I
-END DO
-MW = MW + 3
-NCALLS = NCALLS + 4*NFE
-K = K + 1
-!
-!       IF ANSWER IS UNCHANGED, IT CANNOT BE IMPROVED
-IF (ANSKP.EQ.SNGL(TANS)) GO TO 150
-!
-!       REMOVE THIS IF STATEMENT TO DISABLE ROUNDING ERROR TEST
-IF (K.GT.3 .AND. ABS(Q2-R2).GT.ABS(Q1-R1)) GO TO 140
-GO TO 30
-!
-!       EXITS FROM SUBROUTINE
-90 IER = 0
-GO TO 120
-100 IER = 1
-GO TO 120
-110 IER = 2
-120 ANS = TANS
-ERR = TERR
-RETURN
-130 IER = 3
-GO TO 120
-140 IER = 4
-GO TO 120
-150 IER = 5
-GO TO 120
-END SUBROUTINE CUBTRI
-
-FUNCTION RNDERR(X, A, Y, B)
-!       THIS FUNCTION COMPUTES THE ROUNDING ERROR COMMITTED WHEN THE
-!       SUM X+A IS FORMED.  IN THE CALLING PROGRAM, Y MUST BE THE SAME
-!       AS X AND B MUST BE THE SAME AS A.  THEY ARE DECLARED AS
-!       DISTINCT VARIABLES IN THIS FUNCTION, AND THE INTERMEDIATE
-!       VARIABLES S AND T ARE PUT INTO COMMON, IN ORDER TO DEFEND
-!       AGAINST THE WELL-MEANING ACTIONS OF SOME OFFICIOUS OPTIMIZING
-!       FORTRAN COMPILERS.
-COMMON /CUBATB/ S, T
-S = X + A
-T = S - Y
-RNDERR = T - B
-RETURN
-END FUNCTION RNDERR
-
-SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
-!
-!       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
-!
-!       PARAMETERS
-!         F  - EXTERNAL FUNCTION - SEE COMMENTS TO CUBTRI
-!         VEC- MATRIX OF BASE VECTORS AND ORIGIN (INPUT)
-!         P  - TRIANGLE DESCRIPTION VECTOR OF DIMENSION 6
-!               P(1) - TRANSFORMED X COORDINATE OF ORIGIN VERTEX(INPUT)
-!               P(2) - TRANSFORMED Y COORDINATE OF ORIGIN VERTEX(INPUT)
-!               P(3) - DISTANCE OF OTHER VERTICES IN THE DIRECTIONS
-!                     OF THE BASE VECTORS (INPUT)
-!               P(4) - LESS ACCURATE ESTIMATED INTEGRAL (OUTPUT)
-!               P(5) - MORE ACCURATE ESTIMATED INTEGRAL (OUTPUT)
-!               P(6) - ABS(P(5)-P(4))   (OUTPUT)
-!
-!       CUBRUL EVALUATES A LINEAR COMBINATION OF BASIC INTEGRATION
-!       RULES HAVING D3 SYMMETRY.  THE AREAL COORDINATES PERTAINING TO
-!       THE J-TH RULE ARE STORED IN W(I,J),I=1,2,3.  THE CORRESPONDING
-!       WEIGHTS ARE W(4,J) AND W(5,J), WITH W(5,J) BELONGING TO THE
-!       MORE ACCURATE FORMULA.  IF W(1,J).EQ.W(2,J), THE INTEGRATION
-!       POINT IS THE CENTROID, ELSE IF W(2,J).EQ.W(3,J), THE EVALUATION
-!       POINTS ARE ON THE MEDIANS.  IN BOTH CASES ADVANTAGE IS TAKEN OF
-!       SYMMETRY TO AVOID REPEATING FUNCTION EVALUATIONS.
-!
-!       THE FOLLOWING DOUBLE PRECISION VARIABLES ARE USED TO AVOID
-!       UNNECESSARY ROUNDING ERRORS IN FLOATING POINT ADDITION.
-!       THEY MAY BE DECLARED SINGLE PRECISION IF DOUBLE PRECISION IS
-!       NOT AVAILABLE AND FULL ACCURACY IS NOT NEEDED.
-!
-DOUBLE PRECISION A1, A2, S, SN, DZERO, DONE, DTHREE, DSIX
-REAL AREA, ORIGIN(2), P(*), RDATA(*), TVEC(2,3), VEC(2,*), W(5,6)
-INTEGER IDATA(*)
-EXTERNAL F
-!
-!       W CONTAINS POINTS AND WEIGHTS OF THE INTEGRATION FORMULAE
-!       NQUAD - NUMBER OF BASIC RULES USED
-!
-!       THIS PARTICULAR RULE IS THE 19 POINT EXTENSION (DEGREE 8) OF
-!       THE FAMILIAR 7 POINT RULE (DEGREE 5).
-!
-!     SIGMA=SQRT(7)
-!     PHI=SQRT(15)
-!     W(1,1),W(2,1),W(3,1) = 1/3
-!     W(4,1) = 9/40
-!     W(5,1) = 7137/62720 - 45*SIGMA/1568
-!     W(1,2) = 3/7 + 2*PHI/21
-!     W(2,2),W(3,2) = 2/7 - PHI/21
-!     W(4,2) = 31/80 - PHI/400
-!     W(5,2) = - 9301697/4695040 - 13517313*PHI/23475200
-!            + 764885*SIGMA/939008 + 198763*PHI*SIGMA/939008
-!     W(*,3) = W(*,2) WITH PHI REPLACED BY -PHI
-!     W(1,5) = 4/9 + PHI/9 + SIGMA/9 - SIGMA*PHI/45
-!     W(2,5),W(3,5) = 5/18 - PHI/18 - SIGMA/18 + SIGMA*PHI/90
-!     W(4,5) = 0
-!     W(5,5) = 102791225/59157504 + 23876225*PHI/59157504
-!            - 34500875*SIGMA/59157504 - 9914825*PHI*SIGMA/59157504
-!     W(*,4) = W(*,5) WITH PHI REPLACED BY -PHI
-!     W(1,6) = 4/9 + SIGMA/9
-!     W(2,6) = W(2,4)
-!     W(3,6) = W(2,5)
-!     W(4,6) = 0
-!     W(5,6) = 11075/8064 - 125*SIGMA/288
-!
-DATA NQUAD /6/
-DATA W(1,1), W(2,1), W(3,1) /3*.3333333333333333333333333E0/, &
-&W(4,1), W(5,1) /.225E0,.3786109120031468330830822E-1/, &
-&W(1,2), W(2,2), W(3,2) /.7974269853530873223980253E0,2* &
-&.1012865073234563388009874E0/, W(4,2), W(5,2) &
-&/.3778175416344814577870518E0,.1128612762395489164329420E0/, &
-&W(1,3), W(2,3), W(3,3) /.5971587178976982045911758E-1,2* &
-&.4701420641051150897704412E0/, W(4,3), W(5,3) &
-&/.3971824583655185422129482E0,.2350720567323520126663380E0/
-DATA W(1,4), W(2,4), W(3,4) /.5357953464498992646629509E0,2* &
-&.2321023267750503676685246E0/, W(4,4), W(5,4) &
-&/0.E0,.3488144389708976891842461E0/, W(1,5), W(2,5), W(3,5) &
-&/.9410382782311208665596304E0,2*.2948086088443956672018481E-1/, &
-&W(4,5), W(5,5) /0.E0,.4033280212549620569433320E-1/, W(1,6), &
-&W(2,6), W(3,6) /.7384168123405100656112906E0, &
-&.2321023267750503676685246E0,.2948086088443956672018481E-1/, &
-&W(4,6), W(5,6) /0.E0,.2250583347313904927138324E0/
-!
-DATA DZERO /0.D0/, DONE /1.D0/, DTHREE /3.D0/, DSIX /6.D0/, &
-&POINT5 /.5E0/
-!
-!       SCALE BASE VECTORS AND OBTAIN AREA
-!
-DO I=1,2
-  ORIGIN(I) = VEC(I,3) + P(1)*VEC(I,1) + P(2)*VEC(I,2)
-  DO J=1,2
-    TVEC(I,J) = P(3)*VEC(I,J)
-  END DO
-END DO
-AREA = POINT5*ABS(TVEC(1,1)*TVEC(2,2)-TVEC(1,2)*TVEC(2,1))
-A1 = DZERO
-A2 = DZERO
-!
-!       COMPUTE ESTIMATES FOR INTEGRAL AND ERROR
-!
-DO K=1,NQUAD
-  X = ORIGIN(1) + W(1,K)*TVEC(1,1) + W(2,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(1,K)*TVEC(2,1) + W(2,K)*TVEC(2,2)
-  S = DBLE(F(X,Y,IDATA,RDATA))
-  SN = DONE
-  IF (W(1,K).EQ.W(2,K)) GO TO 30
-  X = ORIGIN(1) + W(2,K)*TVEC(1,1) + W(1,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(2,K)*TVEC(2,1) + W(1,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(2,K)*TVEC(1,1) + W(3,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(2,K)*TVEC(2,1) + W(3,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  SN = DTHREE
-  IF (W(2,K).EQ.W(3,K)) GO TO 30
-  X = ORIGIN(1) + W(1,K)*TVEC(1,1) + W(3,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(1,K)*TVEC(2,1) + W(3,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(3,K)*TVEC(1,1) + W(1,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(3,K)*TVEC(2,1) + W(1,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  X = ORIGIN(1) + W(3,K)*TVEC(1,1) + W(2,K)*TVEC(1,2)
-  Y = ORIGIN(2) + W(3,K)*TVEC(2,1) + W(2,K)*TVEC(2,2)
-  S = S + DBLE(F(X,Y,IDATA,RDATA))
-  SN = DSIX
-30 S = S/SN
-  A1 = A1 + W(4,K)*S
-  A2 = A2 + W(5,K)*S
-END DO
-P(4) = SNGL(A1)*AREA
-P(5) = SNGL(A2)*AREA
-P(6) = ABS(P(5)-P(4))
-RETURN
-END SUBROUTINE CUBRUL
-
-SUBROUTINE IESLV (KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER, &
-&MUPPER,NF,MF,NORM,W,IER)
-!
-!   THE INTEGRAL EQUATION BEING SOLVED IS
-!
-!                     B
-!          X(S) -  INT  KERNEL(S,T)*X(T)*DT = RHFCN(S)
-!                     A
-!
-!   THE METHOD BEING USED IS BASED ON THE NYSTROM METHOD WITH
-!   GAUSSIAN QUADRATURE, WITH AN ITERATIVE TECHNIQUE OF SOLUTION
-!   FOR THE RESULTING LINEAR SYSTEM.
-!
-!   KERNEL     THESE ARE REAL FUNCTIONS OF TWO AND ONE
-!   RHFCN      VARIABLES, RESPECTIVELY. THEY MUST BE DECLARED IN AN
-!              EXTERNAL STATEMENT IN THE PROGRAM CALLING IESLV.
-!   EP         THE DESIRED ERROR. THE VARIABLE EP IS CHANGED ON
-!              COMPLETION OF THE PROGRAM. SEE THE DISCUSSION OF IER
-!              AND IFLAG FOR MORE INFORMATION.
-!   IFLAG =0   EP IS INTERPRETED AS AN ABSOLUTE ERROR TOLERANCE.
-!         =1   EP IS INTERPRETED AS A RELATIVE ERROR TOLERANCE.
-!   T          CONTAINS THE NODE POINTS AT WHICH THE SOLUTION OF THE
-!              INTEGRAL EQUATION IS DESIRED. SEE THE VARIABLE NT FOR
-!              MORE INFORMATION.
-!   X          THE COMPUTED APPROXIMATE SOLUTION OF THE INTEGRAL
-!              EQUATION, EVALUATED AT THE NODE POINTS IN T, IS
-!              STORED IN X ON COMPLETION OF THE ROUTINE. THIS IS
-!              TRUE IRREGARDLESS OF WHETHER OR NOT THE DESIRED ERROR
-!              TOLERANCE WAS ATTAINED.
-!   NT         IF NT=0, THEN T AND X WILL BE SET EQUAL TO THE FINAL
-!              GAUSSIAN NODES AND THE CORRESPONDING SOLUTION VALUES,
-!              AND NT WILL BE SET TO THE NUMBER OF THE SOLUTION
-!              VALUES STORED IN X AND T. THE ARRAYS T AND X SHOULD
-!              HAVE DIMENSION AT LEAST MUPPER, ASSIGNED IN THE
-!              CALLING PROGRAM.
-!              IF NT .GT. 0, THEN T CONTAINS NT USER SUPPLIED NODES
-!              AT WHICH THE SOLUTION X IS DESIRED.
-!   NUPPER     AN UPPER LIMIT ON THE VARIABLE N IN THIS PROGRAM.
-!              N IS THE ORDER OF A LINEAR SYSTEM WHICH IS BEING
-!              USED TO ITERATIVELY SOLVE A LARGER LINEAR SYSTEM OF
-!              ORDER M WHICH APPROXIMATES THE INTEGRAL EQUATION.
-!              (FOR FURTHER DETAILS CONCERNING THE MAXIMUM VALUE
-!              THAT N CAN TAKE, SEE THE DESCRIPTION OF NMAX BELOW.)
-!   MUPPER     AN UPPER LIMIT ON THE VARIABLE M IN THE PROGRAM.
-!              N AND M ARE ALWAYS POWERS OF TWO.
-!   NF         SAME AS NFINAL (SEE BELOW)
-!   MF         SAME AS MFINAL (SEE BELOW)
-!   NORM       SAME AS NORMK (SEE BELOW)
-!   W          TEMPORARY WORKING STORAGE FOR THE PROGRAM. IT MUST
-!              CONTAIN AT LEAST 5*NU*NU+9*(NU+MU) POSITIONS, WITH
-!              NU=NUPPER, MU=MUPPER.
-!   IER =0     THIS ERROR COMPLETION CODE MEANS THE ROUTINE WAS
-!              COMPLETED SATISFACTORILY. EP CONTAINS THE PREDICTED
-!              ERROR.
-!       =1     THE ERROR TEST WAS NOT SATISFIED. EP CONTAINS THE
-!              PREDICTED ERROR.
-!       =2     THE ERROR TEST WAS NOT SATISFIED. EP HAS BEEN SET
-!              TO ZERO.
-!       =3     THE ORIGINAL VALUE OF EP WAS TOO SMALL, DUE TO
-!              POSSIBLE ILL-CONDITIONING PROBLEMS IN THE INTEGRAL
-!              EQUATION. THE VALUE OF EP WAS RESET TO A MORE
-!              REALISTIC VALUE, AND THAT TOLERANCE WAS ATTAINED.
-!       =4     THE ERROR WAS SATISFACTORY AT THE GAUSSIAN NODE
-!              POINTS (IER=0), BUT THE INTERPOLATION PROCESS(DUE TO
-!              NT .GT. 0) MAY NOT PRESERVE THIS ACCURACY. CHECK THE
-!              VALUE OF NORM(K) FOR POSSIBLE INDICATIONS THAT THE
-!              INTEGRAL EQUATION MAY BE ALMOST FIRST KIND. SUCH
-!              EQUATIONS ARE QUITE ILL-CONDITIONED. THE ERROR IN EP
-!              IS THE PREDICTED ERROR FOR THE SOLUTION AT THE
-!              GAUSSIAN NODE POINTS OF ORDER MFINAL.
-!       =5     THE ANALOGUE OF IER=4, BUT WITH IER=1 AT THE
-!              GAUSSIAN NODE POINTS.
-!       =6     THE ANALOGUE OF IER=4, BUT WITH IER=3 AT THE
-!              GAUSSIAN NODE POINTS.
-!
-!
-!   *** REFERENCES ***
-!   (1) AN AUTOMATIC PROGRAM FOR FREDHOLM INTEGRAL EQUATIONS OF THE
-!       SECOND KIND, ACM TRANS. MATH SOFTWARE 2(1976), PP.154-171.
-!   (2) A SURVEY OF NUMERICAL METHODS FOR THE SOLUTION OF FREDHOLM
-!       INTEGRAL EQUATIONS OF THE SECOND KIND, SIAM PUB., 1976,
-!       PART II, CHAP. 5.
-!
-REAL KERNEL,NORM,NORMK
-DIMENSION X(*),T(*),W(*)
-EXTERNAL KERNEL,RHFCN
-!
-!*******************************************************************
-!                                                                  *
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-!                                                                  *
-!   THE NUMBERS IN XXINFO GIVE ADDITIONAL INFORMATION ABOUT THE    *
-!   FUNCTIONING OF IESLV. R1 IS THE ITERATIVE RATE OF CONVERGENCE  *
-!   IN THE MOST RECENTLY COMPUTED LINEAR SYSTEM. R2 IS THE RATE OF *
-!   CONVERGENCE OF THE GAUSSIAN QUADRATURE VARIANT OF THE NYSTROM  *
-!   METHOD. FINLEP IS THE FINAL VALUE OF EP USED AS THE DESIRED    *
-!   ERROR TOLERANCE. USUALLY FINLEP WILL EQUAL THE INPUT VALUE OF  *
-!   EP, UNLESS EP WAS MUCH TOO SMALL. NORMK IS AN APPROXIMATE      *
-!   VALUE FOR THE NORM OF THE INTEGRAL OPERATOR K, AND IT IS       *
-!   CALCULATED ONLY IF NT .GT. 0.                                  *
-!   NFINAL AND MFINAL ARE THE FINAL VALUES OF N AND M USED IN      *
-!   IESLV.  IF NFINAL=MFINAL, THEN ITERATION WAS NOT INVOKED       *
-!   SUCCESSFULLY.                                                  *
-!                                                                  *
-!*******************************************************************
-!                                                                  *
-!   NMAX IS THE MAXIMUM VALUE FOR N THAT IS PERMITTED BY IESLV.    *
-!   THUS MIN0(NUPPER,NMAX) IS THE MAXIMUM VALUE FOR N THAT CAN BE  *
-!   USED. THERE IS ALSO AN UPPER LIMIT OF 128 ON N IMPOSED BY THE  *
-!   SUBROUTINE LNSYS.                                              *
-!                                                                  *
-        DATA NMAX /64/
-!                                                                  *
-!*******************************************************************
-!                                                                  *
-!     UNITRD IS A MACHINE DEPENDENT PARAMETER. ASSIGN UNITRD THE   *
-!     VALUE U WHERE U IS THE SMALLEST FLOATING POINT NUMBER SUCH   *
-!     THAT 1.0 + U .GT. 1.0.                                       *
-!                                                                  *
-        UNITRD = SPMPAR(1)
-!                                                                  *
-!*******************************************************************
-!
-CUTOFF = 0.5
-ROOTRT = 0.1
-NUP = MIN0(NUPPER,NMAX)
-!
-!   SET UP THE RELATIVE BASE ADDRESSES FOR THE VARIOUS ARRAYS INTO
-!   WHICH W IS TO BE SPLIT.
-N=NUP
-M=MUPPER
-NSQ=N*N
-I1=1
-I2=I1+NSQ
-I3=I2+NSQ
-I4=I3+NSQ/2
-I5=I4+NSQ/2
-I6=I5+M
-I7=I6+M
-I8=I7+N
-I9=I8+N
-I10=I9+M
-I11=I10+N
-I12=I11+M
-I13=I12+M
-I14=I13+M
-I15=I14+N
-I16=I15+M
-I17=I16+M
-I18=I17+N
-I19=I18+M
-I20=I19+4*N
-I21=I20+NSQ
-NHALF=N/2
-CALL IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUPPER,IER, &
-&CUTOFF,ROOTRT,UNITRD,NHALF,W(I1),W(I2),W(I3),W(I4),W(I5), &
-&W(I6),W(I7),W(I8),W(I9),W(I10),W(I11),W(I12),W(I13), &
-&W(I14),W(I15),W(I16),W(I17),W(I18),W(I19),W(I20),W(I21))
-NORM=NORMK
-NF=NFINAL
-MF=MFINAL
-RETURN
-END SUBROUTINE IESLV
-
-SUBROUTINE IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUP,IER, &
-&CUTOFF,ROOTRT,UNITRD,NHALF,LUFACT,KMM,KMN,KNM,RHS,R,RH, &
-&DELN,TM,TN,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3, &
-&IMKNN)
-!
-!   THIS ROUTINE CONTROLS THE SOLUTION OF THE INTEGRAL EQUATION.
-!
-REAL KERNEL,LUFACT,KMM,KMN,KNM,IMKNN,NORMK,NUMR1,NUMR2
-INTEGER FLAG,OLDM,PIVOT(128)
-DIMENSION X(*),T(*),LUFACT(NUP,NUP),KMM(NUP,NUP),RHS(MUP), &
-&KNM(NHALF,NUP),KMN(NUP,NHALF),R(MUP),RH(NUP),DELN(NUP), &
-&TM(MUP),TN(NUP),XM(MUP),XMZ(MUP),WM(MUP),WN(NUP),OLDX(MUP), &
-&SAVE(MUP),XN(NUP),SAVE2(MUP),ASIDE(NUP,*),ASIDE2(5), &
-&ASIDE3(NUP,NUP),IMKNN(NUP,NUP)
-COMMON/XXLIN/ELINSY,RELRSD,PIVOT
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-EXTERNAL KERNEL,RHFCN
-!
-!   INITIALIZATION
-!
-LOOP=1
-N=2
-R2=0.5
-M=2*N
-R1RAT=ROOTRT
-COND=1.0
-PASTC=1.0
-PASTRE=0.0
-EPS=EP
-!
-!   STAGE A. DIRECT SOLUTION OF LINEAR SYSTEM (I-KN)*XN=RHS, WHILE
-!   TRYING TO FIND A GOOD APPROXIMATE INVERSE TO IMPLEMENT
-!   ITERATIVE METHOD OF SOLUTION.
-!
-!   CREATE THE NODES AND WEIGHTS TN(I) AND WN(I), I=1,...,N
-CALL WANDT(WN,TN,N,A,B)
-!   SET UP MATRIX FOR (I-KN)*XN=RHFCN
-do 2 J = 1,N
-do 1 I = 1,N
-1 IMKNN(I,J)=-WN(J)*KERNEL(TN(I),TN(J))
-XMZ(J)=RHFCN(TN(J))
-2 IMKNN(J,J)=IMKNN(J,J)+1.0
-GO TO 6
-!   THIS IS ENTRANCE FOR AN INCREASED VALUE OF N, USING PREVIOUSLY
-!   STORED VALUES IN KMM TO DEFINE MATRIX FOR (I-KN)*XN=RHFCN WITH
-!   NEW VALUE OF N.
-3 do 5 J = 1,N
-do 4 I = 1,N
-4 IMKNN(I,J)=-KMM(I,J)
-WN(J)=WM(J)
-TN(J)=TM(J)
-XMZ(J)=RHS(J)
-5 IMKNN(J,J)=IMKNN(J,J)+1.0
-!   THIS IS THE ENTRANCE WHEN ITERATION IN STAGE B FAILS AND WE NEED
-!   TO INCREASE N TO OBTAIN A BETTER ITERATIVE RATE.
-6 CONTINUE
-!   SOLVE (I-KN)*XN=RHFCN AT ALL TN(I).ALSO OBTAIN THE LU
-!   DECOMPOSITION FOR LATER USE IN THE STAGE B ITERATIVE METHOD.
-!
-!*******************************************************************
-!                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,XMZ,XN,2,IND)
-!                                                                  *
-!   LNSYS IS A GENERAL LINEAR EQUATION SOLVER. IT HAS SPECIAL      *
-!   OPTIONS WHICH ARE USED IN THE FOLLOWING PROGRAM. THUS IT       *
-!   SHOULD NOT BE REPLACED WITH ANOTHER SOLVER. LNSYS IS ALSO      *
-!   USED IN THE SUBROUTINE ITERT.                                  *
-!                                                                  *
-!*******************************************************************
-!
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-RELMIN=RMIN(N,N,COND,UNITRD,AVERR)
-IF(LOOP .EQ. 1) GO TO 11
-IF(LOOP .EQ. 2) GO TO 9
-!   SET UP APPROXIMATE RATE OF CONVERGENCE OF SOLUTIONS XN TO TRUE
-!   SOLUTION X. ALSO SET UP DESIRED RATIO FOR ITERATIVE METHOD.
-NUMR2=RNRM(XN,OLDX,N,1)
-R2=AMIN1(0.5,AMAX1(NUMR2/DENR2,1.0E-4))
-R1RAT=AMIN1(ROOTRT,SQRT(R2))
-!   CHECK FOR ERROR IN XN USING TEST INVOLVING R2 AND OLDX,ACCORDING
-!   TO THEORY FOR ASYMPTOTIC ERROR BOUNDS. MODIFY ERROR IF IT IS
-!   OUTSIDE PRECISION RANGE OF COMPUTER, POSSIBLY DUE TO
-!   ILL-CONDITIONING.
-8 ERROR=(R2/(1.0-R2))*NUMR2
-XNORM=RNRM(XN,XN,N,0)
-RELERR=ERROR/XNORM
-IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
-IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN)) &
-&ERROR=RELMIN*XNORM
-IF(ERROR .LE. EPS) GO TO 10
-DENR2=NUMR2
-GO TO 11
-!   ENTRANCE FOR LOOP=2.
-9 NUMR2=RNRM(XN,OLDX,N,1)
-DENR2=0.0
-GO TO 8
-!   EXIT FOR SUCCESSFUL RETURN. ITERATION WAS NOT NECESSARY.
-10 CALL LEAVE(0,N,N,XN,TN,WN,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-!
-!   ATTEMPT TO SOLVE (I-KM)*XM=RHFCN ITERATIVELY, CHECKING TO SEE IF
-!   THE RATE OF CONVERGENCE IS SUFFICIENTLY FAST SO AS TO ENTER
-!   STAGE B.
-!
-!   CALCULATE TM(I) AND WM(I), I=1,...,M.
-11 CALL WANDT(WM,TM,M,A,B)
-FLAG=0
-!   CALCULATE INITIAL GUESS XMZ FOR ITERATION METHOD.
-CALL NSTERP(TM,WM,XMZ,M,TN,WN,XN,N, &
-&KERNEL,RHFCN,RHS,KMN,NHALF,NUP)
-do 12 I = 1,M
-12 OLDX(I)=XMZ(I)
-!   CALCULATE FIRST ITERATE.
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-DENR1=RNRM(XM,XMZ,M,1)
-FLAG=1
-do 13 I = 1,M
-13 XMZ(I)=XM(I)
-!   CALCULATE SECOND ITERATE.
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
-!   CHECK ON THE SPEED OF CONVERGENCE OF ITERATIVE METHOD. IF IT IS
-!   SUFFICIENTLY RAPID, THEN FIX N AND GO TO STAGE B.
-R1=AMAX1(NUMR1/DENR1,.0001)
-RATE=R1
-IF(M .GT. NUP) GO TO 19
-IF(R1 .LE. R1RAT) GO TO 15
-!   THE ITERATION DID NOT WORK WELL ENOUGH, AND STAGE A IS TO BE
-!   REPEATED. RE-INITIALIZE FOR SOLVING (I-KN)*XN=RHFCN AGAIN
-!   WITH A LARGER N.
-14 N=M
-LOOP=LOOP+1
-M=2*N
-GO TO 3
-!   THE ITERATIVE RATE IS SUFFICIENTLY RAPID, AND CONTROL WILL GO TO
-!   STAGE B. SAVE INFORMATION IN CASE STAGE B ABORTS AT A LARGER
-!   VALUE OF M AND STAGE A HAS TO BE RETURNED TO.
-15 do 16 I = 1,M
-ASIDE(I,1)=OLDX(I)
-ASIDE(I,2)=WM(I)
-ASIDE(I,3)=TM(I)
-16 ASIDE(I,4)=RHS(I)
-ASIDE2(1)=LOOP
-ASIDE2(3)=R2
-ASIDE2(4)=DENR2
-ASIDE2(5)=R1RAT
-do 17 J = 1,M
-do 17 I = 1,M
-17 ASIDE3(I,J)=KMM(I,J)
-!
-!   STAGE B. ITERATIVE METHOD OF SOLUTION OF (I-KM)*XM=RHS.
-!
-19 OLDM=N
-ASIDE2(2)=M
-IF(R1 .LE. CUTOFF) GO TO 22
-!   THE ITERATES ARE CONVERGING VERY SLOWLY OR NOT AT ALL. THUS
-!   RETURN WITHOUT FURTHER ATTEMPTS TO LESSEN THE ERROR.
-IF(LOOP .NE. 1) GO TO 21
-20 CALL LEAVE(2,N,N,XN,TN,WN,0.0, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-21 CALL LEAVE(1,N,N,XN,TN,WN,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-!   TEST TO SEE IF THE CURRENT ITERATE XM IS SUFFICIENTLY ACCURATE
-!   COMPARED TO THE TRUE XM.
-22 RATE=R1*RATE
-TEMP=RNRM(XM,OLDX,M,1)
-IF(LOOP .EQ. 1) TEMP2=0.5
-IF(LOOP .GT. 1) TEMP2=TEMP/DENR2
-RT=  AMIN1(0.01,AMAX1(TEMP2,0.0001))/2.0
-XNORM=RNRM(XM,XM,M,0)
-ESTERR=(RT/(1.0-RT))*TEMP/XNORM
-IF(ESTERR .LT. RELMIN) ESTERR=RELMIN
-ESTERR=ESTERR*XNORM
-TEST=((1.0-R1)/R1)*ESTERR
-IF(NUMR1 .LE. TEST) GO TO 33
-!   ITERATE NOT SUFFICIENTLY ACCURATE. INITIALIZE FOR COMPUTATION
-!   OF ANOTHER ITERATE.
-25 DENR1=NUMR1
-do 26 I = 1,M
-26 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
-R1=AMAX1(NUMR1/DENR1,.0001)
-IF(R1 .LE. CUTOFF) GO TO 22
-!   THIS IS ENTRANCE FOR CASE WHERE ITERATION FAILS IN STAGE B.
-!   PARAMETERS MUST BE RESET FOR A RETURN TO STAGE A OR FOR AN
-!   ABORTIVE EXIT IF N CANNOT BE INCREASED ANY FURTHER.
-27 MNEW=ASIDE2(2)
-IF(MNEW .GT. NUP) GO TO 30
-N=MNEW
-do 29 J = 1,N
-do 28 I = 1,N
-28 IMKNN(I,J)=-ASIDE3(I,J)
-OLDX(J)=ASIDE(J,1)
-WN(J)=ASIDE(J,2)
-TN(J)=ASIDE(J,3)
-XMZ(J)=ASIDE(J,4)
-29 IMKNN(J,J)=IMKNN(J,J)+1.0
-M=2*N
-LOOP=ASIDE2(1)+1.0
-R2=ASIDE2(3)
-DENR2=ASIDE2(4)
-R1RAT=ASIDE2(5)
-GO TO 6
-!   ABORTIVE EXIT FROM STAGE B. N CANNOT BE INCREASED FURTHER, AND
-!   R1 IS NOT SUFFICIENTLY SMALL.
-30 IF(LOOP .EQ. 1) GO TO 20
-CALL WANDT(WM,TM,OLDM,A,B)
-CALL LEAVE(1,N,OLDM,SAVE,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-!   AN ACCURATE VALUE OF XM HAS BEEN OBTAINED. R2 IS TO BE TESTED AS
-!   TO WHETHER IT SHOULD BE RESET. THEN CHECK ERROR IN XM COMPARED
-!   WITH THE TRUE SOLUTION X.
-33 IF(LOOP .EQ. 1) GO TO 37
-NUMR2=TEMP
-R2=AMAX1(1.0E-4,RATE,AMIN1(NUMR2/DENR2,0.5))
-DENR2=NUMR2
-34 ERROR=(R2/(1.0-R2))*TEMP
-XNORM=RNRM(XM,XM,M,0)
-RELERR=ERROR/XNORM
-RELMIN=RMIN(N,M,COND,UNITRD,AVERR)
-IF(IFLAG .EQ. 0) EPS=AMAX1(EP,XNORM*RELMIN)
-IF(IFLAG .EQ. 1) EPS=AMAX1(EP,RELMIN)
-IF(IFLAG .EQ. 1)ERROR=AMAX1(RELERR,RELMIN)
-IF((IFLAG .EQ. 0) .AND. (RELERR .LT. RELMIN)) &
-&ERROR=RELMIN*XNORM
-IF(ERROR .GT. EPS) GO TO 35
-CALL LEAVE(0,N,M,XM,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-35 MNEW=2*M
-IF(MNEW .LE. MUP) GO TO 39
-!   M CANNOT BE INCREASED ANY FURTHER.
-CALL LEAVE(1,N,M,XM,TM,WM,ERROR, &
-&KERNEL,RHFCN,EP,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM, &
-&XMZ,KMM,KMN,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-RETURN
-37 DENR2=TEMP
-LOOP=2
-GO TO 34
-!   ERROR NOT SUFFICIENTLY SMALL. M IS INCREASED AND TWO MORE
-!   MORE ITERATES ARE COMPUTED WITH THE NEW M.
-39 OLDM=M
-M=MNEW
-do 41 I = 1,OLDM
-SAVE2(I)=WM(I)
-41 SAVE(I)=TM(I)
-CALL WANDT(WM,TM,M,A,B)
-FLAG=0
-CALL NSTERP(TM,WM,XMZ,M,SAVE,SAVE2,XM,OLDM, &
-&KERNEL,RHFCN,RHS,KMN,NHALF,NUP)
-do 43 I = 1,OLDM
-43 SAVE(I)=XM(I)
-do 45 I = 1,M
-45 OLDX(I)=XMZ(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-DENR1=RNRM(XM,XMZ,M,1)
-FLAG=1
-do 47 I = 1,M
-47 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,FLAG)
-COND=CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-NUMR1=RNRM(XM,XMZ,M,1)
-R1=AMAX1(NUMR1/DENR1,.0001)
-RATE=R1
-IF(R1 .LE. CUTOFF) GO TO 22
-GO TO 27
-END SUBROUTINE IEGS
-
-SUBROUTINE NSTERP(TM,WM,XM,M,TN,WN,XN,N,KERNEL,RHFCN,RHS,KMN, &
-&NHALF,NUP)
-!
-!   USE THE VALUES OF XN(I), I=1,...,N, TO CALCULATE THE NYSTROM
-!   INTERPOLATES XM(I), I=1,...,M.
-!
-REAL KERNEL,KMN
-DIMENSION TM(M),WM(M),XM(M),TN(N),WN(N),XN(N),RHS(M), &
-&KMN(NUP,NHALF)
-EXTERNAL KERNEL,RHFCN
-!
-IF(M .GT. NUP) GO TO 4
-!   SINCE M .LE. NUPPER, SAVE K(TM(I),TN(J))=KMN(I,J) AND
-!   RHS(I)=RHFCN(TM(I)) FOR LATER USE IN ITERT.
-do 1 I = 1,M
-do 1 J = 1,N
-1 KMN(I,J)=WN(J)*KERNEL(TM(I),TN(J))
-do 2 I = 1,M
-RHS(I)=RHFCN(TM(I))
-2 XM(I)=RHS(I)
-!   CALCULATE NYSTROM INTERPOLATING FORMULA.
-do 3 I = 1,M
-do 3 J = 1,N
-3 XM(I)=XM(I)+KMN(I,J)*XN(J)
-RETURN
-!   M .GT. NUPPER, SO SAVE JUST RHS(I) FOR LATER USE IN ITERT.
-!   CALCULATE NYSTROM INTERPOLATING FORMULA.
-4 do 5 I = 1,M
-RHS(I)=RHFCN(TM(I))
-XM(I)=RHS(I)
-do 5 J = 1,N
-5 XM(I)=XM(I)+WN(J)*KERNEL(TM(I),TN(J))*XN(J)
-RETURN
-END SUBROUTINE NSTERP
-
-FUNCTION RMIN(N,M,COND,UNITRD,AVERR)
-!
-!   FOR A LINEAR SYSTEM   (I-KMM)*XM=RHFCN   OF ORDER M, THIS IS THE
-!   VALUE OF RELMIN USED IN IEGS. THE VARIABLE UNITRD IS DEFINED IN
-!   IEGAUS, AND THE VARIABLES COND AND AVERR ARE DEFINED IN IEGS
-!   USING CONEW.
-!   IT IS UNLIKELY THAT A SOLUTION X CAN BE FOUND FOR THE ORIGINAL
-!   INTEGRAL EQUATION WITH A SMALLER RELATIVE ERROR THAN RMIN.
-!
-FLOAT1=M
-FLOAT2=FLOAT(M)/FLOAT(N)
-RMIN=AMAX1((FLOAT1**1.5)*COND*UNITRD, &
-&(FLOAT2**1.5)*AVERR)
-RETURN
-END FUNCTION RMIN
-
-REAL function RNRM(X,Y,N,IFLAG)
-!
-!   IFLAG=0    CALCULATE THE MAXIMUM NORM OF X.
-!   IFLAG=1    CALCULATE THE MAXIMUM NORM OF X-Y.
-!
-DIMENSION X(N),Y(N)
-IF(IFLAG .EQ. 1) GO TO 2
-!   FIND THE NORM OF X.
-RNRM=0.0
-do 1 I = 1,N
-1 RNRM=AMAX1(RNRM,ABS(X(I)))
-RETURN
-!   FIND THE NORM OF X-Y.
-2 RNRM=0.0
-do 3 I = 1,N
-3 RNRM=AMAX1(RNRM,ABS(X(I)-Y(I)))
-RETURN
-END FUNCTION RNRM
-
-FUNCTION CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
-!
-!   THIS IS USED IN UPDATING THE VALUE OF THE CONDITION NUMBER
-!   IN IEGS.
-!
-AVERR=SQRT(ELINSY*PASTRE)
-PASTRE=ELINSY
-IF(RELRSD .EQ. 0.0) GO TO 1
-C=AMAX1(1.0,ELINSY/RELRSD)
-CONEW=SQRT(C*PASTC)
-PASTC=C
-RETURN
-1 CONEW=COND
-RETURN
-END FUNCTION CONEW
-
-SUBROUTINE WANDT(WV,TV,N,A,B)
-IMPLICIT NONE
-INTEGER N
-REAL A, B, TV, WV
-INTEGER I, I1, I2, K, L, LOOP, M, MT, NPI, NPLACE
-REAL AL, BL, FL, FLOOP, H, R, S, SCALE, T, W
-!
-!   INTEGRATION WEIGHTS AND NODES ARE TO BE CALCULATED AND STORED IN
-!   WV AND TV, RESPECTIVELY. N IS ASSUMED TO BE A POWER OF TWO. IF
-!   2 .LE. N .LE. 256, THEN GAUSSIAN QUADRATURE IS USED. IF N .GT.
-!   256, THEN THE INTERVAL (A,B) IS DIVIDED N/256 TIMES AND THE 256
-!   POINT FORMULA IS APPLIED TO EACH SUBINTERVAL.
-!
-DIMENSION WV(N),TV(N)
-DIMENSION W(255),T(255)
-DATA T(1),T(2),T(3),T(4),T(5),T(6),T(7),T(8),T(9),T(10),T(11), &
-&T(12),T(13),T(14),T(15)/.577350269189626E0, &
-&.861136311594053E0,.339981043584856E0,.960289856497536E0, &
-&.796666477413627E0,.525532409916329E0,.183434642495650E0, &
-&.989400934991650E0,.944575023073233E0,.865631202387832E0, &
-&.755404408355003E0,.617876244402644E0,.458016777657227E0, &
-&.281603550779259E0,.950125098376374E-1/
-DATA T(16),T(17),T(18),T(19),T(20),T(21),T(22),T(23),T(24),T(25), &
-&T(26),T(27),T(28),T(29),T(30),T(31)/.997263861849482E0, &
-&.985611511545268E0,.964762255587506E0,.934906075937740E0, &
-&.896321155766052E0,.849367613732570E0,.794483795967942E0, &
-&.732182118740290E0,.663044266930215E0,.587715757240762E0, &
-&.506899908932229E0,.421351276130635E0,.331868602282128E0, &
-&.239287362252137E0,.144471961582796E0,.483076656877383E-1/
-DATA T(32),T(33),T(34),T(35),T(36),T(37),T(38),T(39),T(40),T(41), &
-&T(42),T(43),T(44),T(45),T(46),T(47)/.999305041735772E0, &
-&.996340116771955E0,.991013371476744E0,.983336253884626E0, &
-&.973326827789911E0,.961008799652054E0,.946411374858403E0, &
-&.929569172131940E0,.910522137078503E0,.889315445995114E0, &
-&.865999398154093E0,.840629296252580E0,.813265315122798E0, &
-&.783972358943341E0,.752819907260532E0,.719881850171611E0/
-DATA T(48),T(49),T(50),T(51),T(52),T(53),T(54),T(55),T(56),T(57), &
-&T(58),T(59),T(60),T(61),T(62),T(63)/.685236313054233E0, &
-&.648965471254657E0,.611155355172393E0,.571895646202634E0, &
-&.531279464019895E0,.489403145707053E0,.446366017253464E0, &
-&.402270157963992E0,.357220158337668E0,.311322871990211E0, &
-&.264687162208767E0,.217423643740007E0,.169644420423993E0, &
-&.121462819296121E0,.729931217877990E-1,.243502926634244E-1/
-DATA T(64),T(65),T(66),T(67),T(68),T(69),T(70),T(71),T(72),T(73), &
-&T(74),T(75),T(76),T(77),T(78),T(79)/.999824887947132E0, &
-&.999077459977376E0,.997733248625514E0,.995792758534981E0, &
-&.993257112900213E0,.990127818491734E0,.986406742724586E0, &
-&.982096108435719E0,.977198491463907E0,.971716818747137E0, &
-&.965654366431965E0,.959014757853700E0,.951801961341264E0, &
-&.944020287830220E0,.935674388277916E0,.926769250878948E0/
-DATA T(80),T(81),T(82),T(83),T(84),T(85),T(86),T(87),T(88),T(89), &
-&T(90),T(91),T(92),T(93),T(94),T(95),T(96),T(97)/ &
-&.917310198080961E0,.907302883401757E0,.896753288049158E0, &
-&.885667717345397E0,.874052796958032E0,.861915468939548E0, &
-&.849262987577969E0,.836102915060907E0,.822443116955644E0, &
-&.808291757507914E0,.793657294762193E0,.778548475506412E0, &
-&.762974330044095E0,.746944166797062E0,.730467566741909E0, &
-&.713554377683587E0,.696214708369514E0,.678458922447719E0/
-DATA T(98),T(99),T(100),T(101),T(102),T(103),T(104),T(105),T(106), &
-&T(107),T(108),T(109),T(110),T(111),T(112),T(113),T(114)/ &
-&.660297632272646E0,.641741692562308E0,.622802193910585E0, &
-&.603490456158549E0,.583818021628763E0,.563796648226618E0, &
-&.543438302412810E0,.522755152051175E0,.501759559136144E0, &
-&.480464072404172E0,.458881419833552E0,.437024501037104E0, &
-&.414906379552275E0,.392540275033267E0,.369939555349859E0, &
-&.347117728597636E0,.324088435024413E0/
-DATA T(115),T(116),T(117),T(118),T(119),T(120),T(121),T(122), &
-&T(123),T(124),T(125),T(126),T(127)/.300865438877677E0, &
-&.277462620177904E0,.253893966422694E0,.230173564226660E0, &
-&.206315590902079E0,.182334305985337E0,.158244042714225E0, &
-&.134059199461188E0,.109794231127644E0, &
-&.854636405045155E-1,.610819696041396E-1,.366637909687335E-1, &
-&.122236989606158E-1/
-DATA T(128),T(129),T(130),T(131),T(132),T(133),T(134),T(135), &
-&T(136),T(137),T(138),T(139),T(140),T(141),T(142)/ &
-&.999956050018992E0,.999768437409263E0,.999430937466261E0, &
-&.998943525843409E0,.998306266473006E0,.997519252756721E0, &
-&.996582602023382E0,.995496454481096E0,.994260972922410E0, &
-&.992876342608822E0,.991342771207583E0,.989660488745065E0, &
-&.987829747564861E0,.985850822286126E0,.983724009760315E0/
-DATA T(143),T(144),T(145),T(146),T(147),T(148),T(149),T(150), &
-&T(151),T(152),T(153),T(154),T(155),T(156),T(157)/ &
-&.981449629025464E0,.979028021257622E0,.976459549719234E0, &
-&.973744599704370E0,.970883578480743E0,.967876915228489E0, &
-&.964725060975706E0,.961428488530732E0,.957987692411178E0, &
-&.954403188769716E0,.950675515316628E0,.946805231239127E0, &
-&.942792917117462E0,.938639174837814E0, .934344627502003E0/
-DATA T(158),T(159),T(160),T(161),T(162),T(163),T(164),T(165), &
-&T(166),T(167),T(168),T(169),T(170),T(171),T(172)/ &
-&.929909919334006E0,.925335715583316E0,.920622702425146E0, &
-&.915771586857490E0,.910783096595065E0,.905657979960145E0, &
-&.900397005770304E0,.895000963223085E0,.889470661777611E0, &
-&.883806931033158E0,.878010620604707E0,.872082599995488E0, &
-&.866023758466555E0,.859835004903376E0,.853517267679503E0/
-DATA T(173),T(174),T(175),T(176),T(177),T(178),T(179),T(180), &
-&T(181),T(182),T(183),T(184),T(185),T(186),T(187)/ &
-&.847071494517296E0,.840498652345763E0,.833799727155505E0, &
-&.826975723850813E0,.820027666098917E0,.812956596176432E0, &
-&.805763574812999E0,.798449681032171E0,.791016011989546E0, &
-&.783463682808184E0,.775793826411326E0,.768007593352446E0, &
-&.760106151642655E0,.752090686575492E0,.743962400549112E0/
-DATA T(188),T(189),T(190),T(191),T(192),T(193),T(194),T(195), &
-&T(196),T(197),T(198),T(199),T(200),T(201),T(202)/ &
-&.735722512885918E0,.727372259649652E0,.718912893459971E0, &
-&.710345683304543E0,.701671914348685E0,.692892887742577E0, &
-&.684009920426076E0,.675024344931163E0,.665937509182049E0, &
-&.656750776292973E0,.647465524363725E0,.638083146272911E0, &
-&.628605049469015E0,.619032655759261E0,.609367401096334E0/
-DATA T(203),T(204),T(205),T(206),T(207),T(208),T(209),T(210), &
-&T(211),T(212),T(213),T(214),T(215),T(216),T(217)/ &
-&.599610735362968E0,.589764122154454E0,.579829038559083E0, &
-&.569806974936569E0,.559699434694481E0,.549507934062719E0, &
-&.539234001866059E0,.528879179294822E0,.518445019673674E0, &
-&.507933088228616E0,.497344961852181E0,.486682228866890E0, &
-&.475946488786983E0,.465139352078479E0,.454262439917590E0/
-DATA T(218),T(219),T(220),T(221),T(222),T(223),T(224),T(225), &
-&T(226),T(227),T(228),T(229),T(230),T(231),T(232)/ &
-&.443317383947527E0,.432305826033741E0,.421229418017624E0, &
-&.410089821468717E0,.398888707435459E0,.387627756194516E0, &
-&.376308656998716E0,.364933107823654E0,.353502815112970E0, &
-&.342019493522372E0,.330484865662417E0,.318900661840106E0, &
-&.307268619799319E0,.295590484460136E0,.283868007657082E0/
-DATA T(233),T(234),T(235),T(236),T(237),T(238),T(239),T(240), &
-&T(241),T(242),T(243),T(244),T(245),T(246),T(247)/ &
-&.272102947876337E0,.260297069991943E0,.248452145001057E0, &
-&.236569949758284E0,.224652266709132E0,.212700883622626E0, &
-&.200717593323127E0,.188704193421389E0,.176662486044902E0, &
-&.164594277567554E0,.152501378338656E0,.140385602411376E0, &
-&.128248767270607E0,.116092693560333E0,.103919204810509E0/
-DATA   T(248),T(249),T(250),T(251),T(252),T(253),T(254),T(255)/ &
-&.917301271635196E-1,.795272891002330E-1,.673125211657164E-1, &
-&.550876556946340E-1,.428545265363791E-1,.306149687799790E-1, &
-&.183708184788137E-1,.612391237518953E-2/
-DATA W(1),W(2),W(3),W(4),W(5),W(6),W(7),W(8),W(9),W(10),W(11), &
-&W(12),W(13),W(14),W(15)/1.0E0,.347854845137454E0, &
-&.652145154862546E0,.101228536290376E0,.222381034453374E0, &
-&.313706645877887E0,.362683783378362E0,.271524594117541E-1, &
-&.622535239386479E-1,.951585116824928E-1,.124628971255534E0, &
-&.149595988816577E0,.169156519395003E0,.182603415044924E0, &
-&.189450610455068E0/
-DATA W(16),W(17),W(18),W(19),W(20),W(21),W(22),W(23),W(24),W(25), &
-&W(26),W(27),W(28),W(29),W(30),W(31)/.701861000947010E-2, &
-&.162743947309057E-1,.253920653092621E-1,.342738629130214E-1, &
-&.428358980222267E-1,.509980592623762E-1,.586840934785355E-1, &
-&.658222227763618E-1,.723457941088485E-1,.781938957870703E-1, &
-&.833119242269468E-1,.876520930044038E-1,.911738786957639E-1, &
-&.938443990808046E-1,.956387200792749E-1,.965400885147278E-1/
-DATA W(32),W(33),W(34),W(35),W(36),W(37),W(38),W(39),W(40),W(41), &
-&W(42),W(43),W(44),W(45),W(46),W(47)/.178328072169643E-2, &
-&.414703326056247E-2,.650445796897836E-2,.884675982636395E-2, &
-&.111681394601311E-1,.134630478967186E-1,.157260304760247E-1, &
-&.179517157756973E-1,.201348231535302E-1,.222701738083833E-1, &
-&.243527025687109E-1,.263774697150547E-1,.283396726142595E-1, &
-&.302346570724025E-1,.320579283548516E-1,.338051618371416E-1/
-DATA W(48),W(49),W(50),W(51),W(52),W(53),W(54),W(55),W(56),W(57), &
-&W(58),W(59),W(60),W(61),W(62),W(63)/ .354722132568824E-1, &
-&.370551285402400E-1,.385501531786156E-1,.399537411327203E-1, &
-&.412625632426235E-1,.424735151236536E-1,.435837245293235E-1, &
-&.445905581637566E-1,.454916279274181E-1, .462847965813144E-1, &
-&.469681828162100E-1,.475401657148303E-1,.479993885964583E-1, &
-&.483447622348030E-1,.485754674415034E-1,.486909570091397E-1/
-DATA W(64),W(65),W(66),W(67),W(68),W(69),W(70),W(71),W(72),W(73), &
-&W(74),W(75),W(76),W(77),W(78),W(79)/ .449380960292090E-3, &
-&.104581267934035E-2,.164250301866903E-2,.223828843096262E-2, &
-&.283275147145799E-2,.342552604091022E-2,.401625498373864E-2, &
-&.460458425670296E-2,.519016183267633E-2,.577263754286570E-2, &
-&.635166316170719E-2,.692689256689881E-2,.749798192563473E-2, &
-&.806458989048606E-2,.862637779861675E-2,.918300987166087E-2/
-DATA W(80),W(81),W(82),W(83),W(84),W(85),W(86),W(87),W(88), &
-&W(89),W(90),W(91),W(92),W(93),W(94),W(95)/.973415341500681E-2, &
-&.102794790158322E-1,.108186607395031E-1,.113513763240804E-1, &
-&.118773073727403E-1,.123961395439509E-1,.129075627392673E-1, &
-&.134112712886163E-1,.139069641329520E-1,.143943450041668E-1, &
-&.148731226021473E-1,.153430107688651E-1,.158037286593993E-1, &
-&.162550009097852E-1,.166965578015892E-1,.171281354231114E-1/
-DATA W(96),W(97),W(98),W(99),W(100),W(101),W(102),W(103),W(104), &
-&W(105),W(106),W(107),W(108),W(109),W(110),W(111),W(112)/ &
-&.175494758271177E-1,.179603271850087E-1,.183604439373313E-1, &
-&.187495869405447E-1,.191275236099509E-1,.194940280587066E-1, &
-&.198488812328309E-1,.201918710421300E-1,.205227924869601E-1, &
-&.208414477807511E-1,.211476464682213E-1,.214412055392085E-1, &
-&.217219495380521E-1,.219897106684605E-1,.222443288937998E-1, &
-&.224856520327450E-1,.227135358502365E-1/
-DATA W(113),W(114),W(115),W(116),W(117),W(118),W(119),W(120), &
-&W(121),W(122),W(123),W(124),W(125),W(126),W(127)/ &
-&.229278441436868E-1,.231284488243870E-1,.233152299940628E-1, &
-&.234880760165359E-1,.236468835844476E-1,.237915577810034E-1, &
-&.239220121367035E-1,.240381686810241E-1,.241399579890193E-1, &
-&.242273192228152E-1,.243002001679719E-1,.243585572646906E-1, &
-&.244023556338496E-1,.244315690978500E-1,.244461801962625E-1/
-DATA W(128),W(129),W(130),W(131),W(132),W(133),W(134),W(135), &
-&W(136),W(137),W(138),W(139),W(140),W(141),W(142)/ &
-&.112789017822272E-3,.262534944296446E-3,.412463254426176E-3, &
-&.562348954031410E-3,.712154163473321E-3,.861853701420089E-3, &
-&.101142439320844E-2,.116084355756772E-2,.131008868190250E-2, &
-&.145913733331073E-2,.160796713074933E-2,.175655573633073E-2, &
-&.190488085349972E-2,.205292022796614E-2,.220065164983991E-2/
-DATA W(143),W(144),W(145),W(146),W(147),W(148),W(149),W(150), &
-&W(151),W(152),W(153),W(154),W(155),W(156),W(157)/ &
-&.234805295632731E-2,.249510203470371E-2,.264177682542749E-2, &
-&.278805532532771E-2,.293391559082972E-2,.307933574119934E-2, &
-&.322429396179420E-2,.336876850731555E-2,.351273770505631E-2, &
-&.365617995814250E-2,.379907374876626E-2,.394139764140883E-2, &
-&.408313028605267E-2,.422425042138154E-2,.436473687796806E-2/
-DATA W(158),W(159),W(160),W(161),W(162),W(163),W(164),W(165), &
-&W(166),W(167),W(168),W(169),W(170),W(171),W(172)/ &
-&.450456858144790E-2,.464372455568006E-2,.478218392589269E-2, &
-&.491992592181387E-2,.505692988078684E-2,.519317525086928E-2, &
-&.532864159391593E-2,.546330858864431E-2,.559715603368291E-2, &
-&.573016385060144E-2,.586231208692265E-2,.599358091911534E-2, &
-&.612395065556793E-2,.625340173954240E-2,.638191475210788E-2/
-DATA W(173),W(174),W(175),W(176),W(177),W(178),W(179),W(180), &
-&W(181),W(182),W(183),W(184),W(185),W(186),W(187)/ &
-&.650947041505366E-2,.663604959378107E-2,.676163330017380E-2, &
-&.688620269544632E-2,.700973909296982E-2,.713222396107539E-2, &
-&.725363892583391E-2,.737396577381235E-2,.749318645480588E-2, &
-&.761128308454566E-2,.772823794738156E-2,.784403349893971E-2, &
-&.795865236875435E-2,.807207736287350E-2,.818429146643827E-2/
-DATA W(188),W(189),W(190),W(191),W(192),W(193),W(194),W(195), &
-&W(196),W(197),W(198),W(199),W(200),W(201),W(202)/ &
-&.829527784623523E-2,.840501985322154E-2,.851350102502249E-2, &
-&.862070508840101E-2,.872661596169881E-2,.883121775724875E-2, &
-&.893449478375821E-2,.903643154866287E-2,.913701276045081E-2, &
-&.923622333095630E-2,.933404837762327E-2,.943047322573775E-2, &
-&.952548341062928E-2,.961906467984073E-2,.971120299526628E-2/
-DATA W(203),W(204),W(205),W(206),W(207),W(208),W(209),W(210), &
-&W(211),W(212),W(213),W(214),W(215),W(216),W(217)/ &
-&.980188453525733E-2,.989109569669583E-2,.997882309703491E-2, &
-&.100650535763064E-1,.101497741990949E-1,.102329722564782E-1, &
-&.103146352679340E-1,.103947509832117E-1,.104733073841704E-1, &
-&.105502926865815E-1,.106256953418966E-1,.106995040389798E-1, &
-&.107717077058046E-1,.108422955111148E-1,.109112568660490E-1/
-DATA W(218),W(219),W(220),W(221),W(222),W(223),W(224),W(225), &
-&W(226),W(227),W(228),W(229),W(230),W(231),W(232)/ &
-&.109785814257296E-1,.110442590908139E-1,.111082800090098E-1, &
-&.111706345765534E-1,.112313134396497E-1,.112903074958755E-1, &
-&.113476078955455E-1,.114032060430392E-1,.114570935980906E-1, &
-&.115092624770395E-1,.115597048540436E-1,.116084131622531E-1, &
-&.116553800949452E-1,.117005986066207E-1,.117440619140606E-1/
-DATA W(233),W(234),W(235),W(236),W(237),W(238),W(239),W(240), &
-&W(241),W(242),W(243),W(244),W(245),W(246),W(247)/ &
-&.117857634973434E-1,.118256971008240E-1,.118638567340711E-1, &
-&.119002366727665E-1,.119348314595636E-1,.119676359049059E-1, &
-&.119986450878058E-1,.120278543565826E-1,.120552593295601E-1, &
-&.120808558957245E-1,.121046402153405E-1,.121266087205273E-1, &
-&.121467581157945E-1,.121650853785355E-1,.121815877594818E-1/
-DATA W(248),W(249),W(250),W(251),W(252),W(253),W(254),W(255)/ &
-&.121962627831147E-1,.122091082480372E-1,.122201222273040E-1, &
-&.122293030687103E-1,.122366493950402E-1,.122421601042728E-1, &
-&.122458343697479E-1,.122476716402898E-1/
-LOOP=MAX0(1,N/256)
-FLOOP=LOOP
-H=(B-A)/FLOOP
-SCALE=H/2.0
-M=MIN0(128,N/2)
-MT=2*M
-NPLACE=M-1
-do 1 L = 1,LOOP
-FL=L
-AL=A+(FL-1.0)*H
-BL=A+FL*H
-K=256*(L-1)
-do 1 I = 1,M
-NPI=NPLACE+I
-S=T(NPI)
-R=W(NPI)*SCALE
-I1=K+I
-I2=K+MT+1-I
-TV(I1)=  (AL*(1.0+S)+(1.0-S)*BL)/2.0
-TV(I2)=  (AL*(1.0-S)+(1.0+S)*BL)/2.0
-WV(I1)=R
-1 WV(I2)=R
-RETURN
-END SUBROUTINE WANDT
-
-SUBROUTINE LEAVE(IERSET,NF,MF,XV,TV,WV,ERROR,KERNEL,RHFCN,EP, &
-&IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
-!
-!   THIS ROUTINE SETS ALL NECESSARY PARAMETERS FOR LEAVING IEGAUS.
-!   IF NT .GT. 0, IT ALSO PERFORMS THE NECESSARY NYSTROM
-!   INTERPOLATION AT THE NODES GIVEN IN T.
-!
-REAL KERNEL,KMM,KMN,KNM,IMKNN,LUFACT,NORMK,NUMR1
-DIMENSION X(*),T(*),XV(MF),TV(MF),WV(MF),TN(NF),WN(NF),WM(MF), &
-&XM(MF),XMZ(MF),KMM(NUP,NUP),KMN(NUP,NHALF),KNM(NHALF,NUP), &
-&RHS(MF),IMKNN(NUP,NUP),LUFACT(NUP,NUP),R(MF),RH(NF), &
-&TM(MF),DELN(NF)
-COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-EXTERNAL KERNEL,RHFCN
-!
-!   SET ERROR PARAMETERS FOR RETURN.
-!
-NORMK=0.0
-NFINAL=NF
-MFINAL=MF
-FINLEP=EPS
-IF((EPS .GT. EP) .AND. (ERROR .LE. EPS)) GO TO 10
-IER=IERSET
-EP=ERROR
-IF(NT .EQ. 0) GO TO 20
-GO TO 30
-10 IER=3
-!
-!   SINCE EPS IS THE SMALLEST ERROR POSSIBLE, SET EP=EPS FOR THE
-!   RETURN ERROR ESTIMATE.
-!
-EP=EPS
-IF(NT .GT. 0) GO TO 30
-!
-!   NO NYSTROM INTERPOLATION IS DESIRED. RETURN THE VALUES AT THE
-!   GAUSSIAN NODE POINTS.
-!
-20 do 21 I = 1,MF
-X(I)=XV(I)
-21 T(I)=TV(I)
-NT=MF
-RETURN
-!   CALCULATE NORM(K).
-30 SAVEP=EP
-do 31 I = 1,NF
-31 IMKNN(I,I)=IMKNN(I,I)-1.0
-NORMK=0.0
-do 33 I = 1,NF
-SUM=0.0
-do 32 J = 1,NF
-32 SUM=SUM+ABS(IMKNN(I,J))
-33 NORMK=AMAX1(NORMK,SUM)
-do 34 I = 1,NF
-34 IMKNN(I,I)=IMKNN(I,I)+1.0
-IF(NF .EQ. MF) GO TO 50
-!
-!   ITERATE TO DECREASE THE NOISE LEVEL IN X. THIS SHOULD REDUCE
-!   POSSIBLE ERRORS IN NYSTROM INTERPOLATION.
-!
-DERROR=((1.0-R1)/R1)*EPS/NORMK
-IF(IFLAG .EQ. 1) DERROR=DERROR*XNORM
-ITLOOP=0
-do 41 I = 1,MF
-41 XM(I)=XV(I)
-42 do 43 I = 1,MF
-43 XMZ(I)=XM(I)
-CALL ITERT(KERNEL,RHFCN,NF,TN,WN,MF,TM,WM,XM,XMZ,KMM,KMN,KNM, &
-&RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,1)
-NUMR1=RNRM(XM,XMZ,MF,1)
-ITLOOP=ITLOOP+1
-IF((NUMR1 .GT. DERROR) .AND. (ITLOOP .LT. 5)) GO TO 42
-do 44 I = 1,MF
-44 XV(I)=XM(I)
-!
-!   ESTIMATE NEW ERROR BOUND FOR NYSTROM INTERPOLATES.
-!
-TEMP=NORMK*(R1/(1.0-R1))*NUMR1
-IF(IFLAG .EQ. 1) TEMP=TEMP/XNORM
-EP=AMAX1(EP,TEMP)
-GO TO 60
-!
-!   NO ITERATION USED IN COMPUTING X. JUST COMPUTE ERROR ESTIMATE
-!   IN NYSTROM INTERPOLATE.
-!
-50 TEMP=NORMK*ELINSY
-IF(IFLAG .EQ. 0) TEMP=TEMP*XNORM
-IF(IER .NE. 2) EP=AMAX1(EP,TEMP)
-!
-!   COMPUTE NYSTROM INTERPOLATES AT THE NODES IN T.
-!
-60 do 62 I = 1,NT
-SUM=0.0
-do 61 J = 1,MF
-61 SUM=SUM+WV(J)*KERNEL(T(I),TV(J))*XV(J)
-62 X(I)=RHFCN(T(I))+SUM
-IF((IER .EQ. 0) .AND. (EP .GT. EPS)) IER=4
-IF((IER .EQ. 1) .AND. (EP .GT. ERROR)) IER=5
-IF((IER .EQ. 3) .AND. (EP .GT. EPS)) IER=6
-EP=SAVEP
-RETURN
-END SUBROUTINE LEAVE
-
-SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN, &
-&KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
-!
-!   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
-!   XMZ. THE ROUTINE IS DIVIDED ACCORDING TO WHETHER OR NOT
-!   M .GT. NUPPER.
-!
-REAL KERNEL,KMM,KMN,KNM,IMKNN,LUFACT
-DIMENSION TN(N),WN(N),TM(M),WM(M),XM(M),XMZ(M),KMM(NUP,NUP), &
-&KMN(NUP,NHALF),KNM(NHALF,NUP),RHS(M),IMKNN(NUP,NUP), &
-&LUFACT(NUP,NUP),R(M),RH(N),DELN(N)
-EXTERNAL KERNEL
-!
-!   M .GT. NUPPER MEANS THAT THE MATRICES KMM,KMN,KNM CAN NO LONGER
-!   BE STORED DUE TO LACK OF SPACE.
-IF (M .GT. NUP) GO TO 13
-IF(IFLG .EQ. 1) GO TO 3
-!   IF IFLG=0, THEN THE MATRICES KMM AND KNM MUST BE COMPUTED
-!   AND STORED.
-do 2 J = 1,M
-do 1 I = 1,M
-1 KMM(I,J)=WM(J)*KERNEL(TM(I),TM(J))
-do 2 I = 1,N
-2 KNM(I,J)=WM(J)*KERNEL(TN(I),TM(J))
-!   COMPUTE  RESIDUALS R(I)=RHFCN(TM(I))-XMZ(I)+KM(TM(I))*XMZ(I)
-3 do 5 I = 1,M
-SUM=0.0
-do 4 J = 1,M
-4 SUM=SUM+KMM(I,J)*XMZ(J)
-5 R(I)=RHS(I)-(XMZ(I)-SUM)
-!
-!   COMPUTE RH=KM*R AT ALL TN(I).
-do 7 I = 1,N
-RH(I)=0.0
-do 7 J = 1,M
-7 RH(I)=RH(I)+KNM(I,J)*R(J)
-!   CALCULATE DELN=((I-KN)**(-1))*KM*R AT ALL TN(I).
-!
-!*******************************************************************
-!                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,RH,DELN,4,IND)
-!                                                                  *
-!   SEE THE ORIGINAL REFERENCE IN IEGS.                            *
-!*******************************************************************
-!
-!   CALCULATE NEW XM.
-do 12 I = 1,M
-SUM=0.0
-do 10 J = 1,M
-10 SUM=SUM+KMM(I,J)*R(J)
-do 11 J = 1,N
-11 SUM=SUM+KMN(I,J)*DELN(J)
-12 XM(I)=SUM+R(I)+XMZ(I)
-RETURN
-!   ENTRANCE WHEN M .GT. NUP.
-!   CALCULATE RESIDUALS.
-13 do 15 I = 1,M
-SUM=0.0
-do 14 J = 1,M
-14 SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*XMZ(J)
-15 R(I)=RHS(I)-(XMZ(I)-SUM)
-!   CALCULATE RH=KM*R.
-do 17 I = 1,N
-RH(I)=0.0
-do 17 J = 1,M
-17 RH(I)=RH(I)+WM(J)*KERNEL(TN(I),TM(J))*R(J)
-!
-!*******************************************************************
-!                                                                  *
-CALL LNSYS(IMKNN,LUFACT,NUP,N,RH,DELN,4,IND)
-!                                                                  *
-!   SEE THE ORIGINAL REFERENCE IN IEGS.                            *
-!*******************************************************************
-!
-!   CALCULATE XM.
-do 22 I = 1,M
-SUM=0.0
-do 20 J = 1,M
-20 SUM=SUM+WM(J)*KERNEL(TM(I),TM(J))*R(J)
-do 21 J = 1,N
-21 SUM=SUM+WN(J)*KERNEL(TM(I),TN(J))*DELN(J)
-22 XM(I)=SUM+R(I)+XMZ(I)
-RETURN
-END SUBROUTINE ITERT
-
-SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
-!
-!   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
-!   ROWS IN THE DIMENSION STATEMENT FOR A IN THE CALLING PROGRAM.
-!
-!   OPTION=1   COMPUTE AN LU DECOMPOSITION OF A AND STORE IT IN D.
-!              STORE THE PIVOT INDICES IN PIVOT AND SOLVE AX = B.
-!   OPTION=2   COMPUTE AN LU DECOMPOSITION OF A AND STORE IT IN D.
-!              STORE THE PIVOT INDICES IN PIVOT AND SOLVE AX = B.
-!              THEN COMPUTE THE RESIDUAL AND ONE CORRECTION. THE
-!              CORRECTION IS STORED IN R, THE NEW VALUE X1 IN X,
-!              THE RELATIVE ERROR
-!                         NORM(X0-X1)/NORM(X1)
-!              IN THE VARIABLE ERROR, AND THE RELATIVE RESIDUAL
-!                         NORM(RESIDUAL)/NORM(B)
-!              IN THE VARIABLE RELRSD. THESE VALUES CAN BE OBTAINED
-!              USING THE COMMON/XXLIN/ GIVEN BELOW.
-!   OPTION=3   SAME AS OPTION=1, EXCEPT THAT THE LU DECOMPOSITION
-!              HAS ALREADY BEEN STORED IN D AND THE PIVOT INDICES
-!              IN PIVOT.
-!   OPTION=4   SAME AS OPTION=2, EXCEPT THAT THE LU DECOMPOSITION
-!              HAS ALREADY BEEN STORED IN D AND THE PIVOT INDICES
-!              IN PIVOT.
-!
-!   THE LU DECOMPOSITION IS OBTAINED USING SCALED PARTIAL PIVOTING.
-!   FOR OPTIONS 1 AND 2, IERR IS A VARIABLE THAT REPORTS THE STATUS
-!   OF THE RESULTS. IERR = 0 IF THE LU DECOMPOSITION IS OBTAINED.
-!   OTHERWISE, IERR = -K WHEN THE K-TH ROW OF A CONTAINS ONLY ZEROS
-!   OR IERR = K WHEN THE K-TH PIVOT ELEMENT IS 0.
-!
-!   IT IS ASSUMED THAT N .LE. 128. THIS ASSUMPTION MAY BE MODIFIED
-!   BY CHANGING THE DIMENSION STATEMENTS FOR THE ARRAYS PIVOT, R,
-!   AND SCALE. ALSO MODIFY THE DIMENSION STATEMENT FOR PIVOT IN THE
-!   SUBROUTINE IEGS.
-!
-REAL A(M,N),D(M,N),B(N),X(N)
-INTEGER OPTION,PIVOT(128)
-REAL NORMX,NORME,NORMB,NORMR,R(128),SCALE(128)
-COMMON /XXLIN/ ERROR,RELRSD,PIVOT
-!
-NM1 = N - 1
-ISWIT = 1
-IF (OPTION .GT. 2) GO TO 100
-!
-do 11 I = 1,N
-SCALE(I) = 0.0
-  do 10 J = 1,N
-  D(I,J) = A(I,J)
-10 SCALE(I) = SCALE(I) + ABS(D(I,J))
-IF (SCALE(I) .NE. 0.0) GO TO 11
-IERR = -I
-RETURN
-11 CONTINUE
-!
-!             OBTAIN THE LU DECOMPOSITION OF A
-!
-IERR = 0
-DO K = 1,NM1
-C = ABS(D(K,K))/SCALE(K)
-L = K
-KP1 = K + 1
-  do 20 I = KP1,N
-  T = ABS(D(I,K))/SCALE(I)
-  IF (T .LE. C) GO TO 20
-  C = T
-  L = I
-20 CONTINUE
-!
-IF (C .NE. 0.0) GO TO 30
-IERR = K
-RETURN
-!
-!     INTERCHANGE ROWS K AND L
-!
-30 PIVOT(K) = L
-IF (K .EQ. L) GO TO 40
-  do 31 J = K,N
-  T = D(K,J)
-  D(K,J) = D(L,J)
-31 D(L,J) = T
-T = SCALE(K)
-SCALE(K) = SCALE(L)
-SCALE(L) = T
-!
-!     ELIMINATE THE K-TH UNKNOWN BELOW THE DIAGONAL
-!
-40 DO I = KP1,N
-  D(I,K) = D(I,K)/D(K,K)
-  T = D(I,K)
-    do 41 J = KP1,N
-41 D(I,J) = D(I,J) - T*D(K,J)
-  END DO
-END DO
-!
-IF (D(N,N) .NE. 0.0) GO TO 100
-IERR = N
-RETURN
-!
-!               STORE B IN R AND SET X = 0
-!
-100 do 110 I = 1,N
-R(I) = B(I)
-110 X(I) = 0.0
-GO TO 200
-!
-!             COMPUTE THE RESIDUAL R = B - AX
-!
-120 do 131 I = 1,N
-SUM = 0.0
-  do 130 J = 1,N
-130 SUM = SUM + A(I,J)*X(J)
-131 R(I) = B(I) - SUM
-!
-NORMB = 0.0
-NORMR = 0.0
-do 140 I = 1,N
-NORMB = AMAX1(NORMB,ABS(B(I)))
-140 NORMR = AMAX1(NORMR,ABS(R(I)))
-RELRSD = 0.0
-IF (NORMB .NE. 0.0) RELRSD = NORMR/NORMB
-ISWIT = 2
-!
-!             SOLVE LZ = R AND STORE Z IN R
-!
-200 DO K = 1,NM1
-L = PIVOT(K)
-IF (K .EQ. L) GO TO 210
-T = R(K)
-R(K) = R(L)
-R(L) = T
-210 KP1 = K + 1
-  do 211 I = KP1,N
-211 R(I) = R(I) - D(I,K)*R(K)
-END DO
-!
-!      SOLVE UE = R, STORE E IN R, AND SET X = X + E
-!
-R(N) = R(N)/D(N,N)
-X(N) = X(N) + R(N)
-do 221 NMI = 1,NM1
-I = N - NMI
-IP1 = I + 1
-SUM = 0.0
-  do 220 J = IP1,N
-220 SUM = SUM + D(I,J)*R(J)
-R(I) = (R(I) - SUM)/D(I,I)
-221 X(I) = X(I) + R(I)
-!
-GO TO (300,230,300,230),OPTION
-230 IF (ISWIT .EQ. 1) GO TO 120
-!
-!             CALCULATE THE CORRECTION ERROR
-!
-NORMX = 0.0
-NORME = 0.0
-do 250 I = 1,N
-NORMX = AMAX1(NORMX,ABS(X(I)))
-250 NORME = AMAX1(NORME,ABS(R(I)))
-ERROR = 0.0
-IF (NORMX .NE. 0.0) ERROR = NORME/NORMX
-300 RETURN
-END SUBROUTINE LNSYS
-
-SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
-!
-!     SANDIA MATHEMATICAL PROGRAM LIBRARY
-!     APPLIED MATHEMATICS DIVISION 2642
-!     SANDIA LABORATORIES
-!     ALBUQUERQUE, NEW MEXICO  87115
-!     JANUARY 1976
-!   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-!   *                 ISSUED BY SANDIA LABORATORIES,
-!   *                   A PRIME CONTRACTOR TO THE
-!   *   UNITED STATES ENERGY RESEARCH AND DEVELOPMENT ADMINISTRATION
-!   * * * * * * * * * * * * * *  NOTICE   * * * * * * * * * * * * * * *
-!   * THIS REPORT WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY THE
-!   * UNITED STATES GOVERNMENT.  NEITHER THE UNITED STATES NOR THE
-!   * UNITED STATES ENERGY RESEARCH AND DEVELOPMENT ADMINISTRATION,
-!   * NOR ANY OF THEIR EMPLOYEES, NOR ANY OF THEIR CONTRACTORS,
-!   * SUBCONTRACTORS, OR THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS
-!   * OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY
-!   * FOR THE ACCURACY, COMPLETENESS OR USEFULNESS OF ANY INFORMATION,
-!   * APPARATUS, PRODUCT OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS
-!   * USE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.
-!   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-!
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
-!
-!   ABSTRACT
-!
-!   SUBROUTINE  ODE  INTEGRATES A SYSTEM OF  NEQN  FIRST ORDER
-!   ORDINARY DIFFERENTIAL EQUATIONS OF THE FORM
-!             DY(I)/DT = F(T,Y(1),Y(2),...,Y(NEQN))
-!             Y(I) GIVEN AT  T .
-!   THE SUBROUTINE INTEGRATES FROM  T  TO  TOUT .  ON RETURN THE
-!   PARAMETERS IN THE CALL LIST ARE SET FOR CONTINUING THE INTEGRATION.
-!   THE USER HAS ONLY TO DEFINE A NEW VALUE  TOUT  AND CALL  ODE  AGAIN.
-!
-!   THE DIFFERENTIAL EQUATIONS ARE ACTUALLY SOLVED BY A SUITE OF CODES
-!   DE1,  STEP1, AND  INTRP .  ODE  ALLOCATES VIRTUAL STORAGE IN THE
-!   ARRAYS  WORK  AND  IWORK  AND CALLS  DE1.  DE1 IS A SUPERVISOR WHICH
-!   DIRECTS THE SOLUTION.  IT CALLS ON THE ROUTINES  STEP1 AND  INTRP
-!   TO ADVANCE THE INTEGRATION AND TO INTERPOLATE AT OUTPUT POINTS.
-!   STEP1 USES A MODIFIED DIVIDED DIFFERENCE FORM OF THE ADAMS PECE
-!   FORMULAS AND LOCAL EXTRAPOLATION.  IT ADJUSTS THE ORDER AND STEP
-!   SIZE TO CONTROL THE LOCAL ERROR PER UNIT STEP IN A GENERALIZED
-!   SENSE.  NORMALLY EACH CALL TO  STEP1 ADVANCES THE SOLUTION ONE STEP
-!   IN THE DIRECTION OF  TOUT .  FOR REASONS OF EFFICIENCY  DE1
-!   INTEGRATES BEYOND  TOUT  INTERNALLY, THOUGH NEVER BEYOND
-!   T+10*(TOUT-T), AND CALLS  INTRP  TO INTERPOLATE THE SOLUTION AT
-!   TOUT .  AN OPTION IS PROVIDED TO STOP THE INTEGRATION AT  TOUT  BUT
-!   IT SHOULD BE USED ONLY IF IT IS IMPOSSIBLE TO CONTINUE THE
-!   INTEGRATION BEYOND  TOUT .
-!
-!   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
-!   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
-!   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
-!
-!   THE PARAMETERS REPRESENT...
-!      F -- SUBROUTINE F(T,Y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- SOLUTION VECTOR AT  T
-!      T -- INDEPENDENT VARIABLE
-!      TOUT -- POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE ERROR TOLERANCES FOR LOCAL
-!           ERROR TEST.  AT EACH STEP THE CODE REQUIRES
-!             ABS(LOCAL ERROR) .LE. ABS(Y)*RELERR + ABSERR
-!           FOR EACH COMPONENT OF THE LOCAL ERROR AND SOLUTION VECTORS
-!      IFLAG -- INDICATES STATUS OF INTEGRATION
-!      WORK(*),IWORK(*) -- ARRAYS TO HOLD INFORMATION INTERNAL TO CODE
-!           WHICH IS NECESSARY FOR SUBSEQUENT CALLS
-!
-!   FIRST CALL TO ODE --
-!
-!   THE USER MUST PROVIDE STORAGE IN HIS CALLING PROGRAM FOR THE ARRAYS
-!   IN THE CALL LIST,
-!      Y(NEQN), WORK(100+21*NEQN), IWORK(5),
-!   DECLARE  F  IN AN EXTERNAL STATEMENT, SUPPLY THE SUBROUTINE
-!   F(T,Y,YP) TO EVALUATE
-!      DY(I)/DT = YP(I) = F(T,Y(1),Y(2),...,Y(NEQN))
-!   AND INITIALIZE THE PARAMETERS...
-!      NEQN -- NUMBER OF EQUATIONS TO BE INTEGRATED
-!      Y(*) -- VECTOR OF INITIAL CONDITIONS
-!      T -- STARTING POINT OF INTEGRATION
-!      TOUT -- POINT AT WHICH SOLUTION IS DESIRED
-!      RELERR,ABSERR -- RELATIVE AND ABSOLUTE LOCAL ERROR TOLERANCES
-!      IFLAG -- +1,-1.  INDICATOR TO INITIALIZE THE CODE.  NORMAL INPUT
-!           IS +1.  THE USER SHOULD SET IFLAG=-1 ONLY IF IT IS
-!           IMPOSSIBLE TO CONTINUE THE INTEGRATION BEYOND  TOUT .
-!   ALL PARAMETERS EXCEPT  F ,  NEQN  AND  TOUT  MAY BE ALTERED BY THE
-!   CODE ON OUTPUT SO MUST BE VARIABLES IN THE CALLING PROGRAM.
-!
-!   OUTPUT FROM  ODE  --
-!
-!      NEQN -- UNCHANGED
-!      Y(*) -- SOLUTION AT  T
-!      T -- LAST POINT REACHED IN INTEGRATION.  NORMAL RETURN HAS
-!           T = TOUT .
-!      TOUT -- UNCHANGED
-!      RELERR,ABSERR -- NORMAL RETURN HAS TOLERANCES UNCHANGED.  IFLAG=3
-!           SIGNALS TOLERANCES INCREASED
-!      IFLAG = 2 -- NORMAL RETURN.  INTEGRATION REACHED  TOUT
-!            = 3 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE ERROR
-!                   TOLERANCES TOO SMALL.  RELERR ,  ABSERR  INCREASED
-!                   APPROPRIATELY FOR CONTINUING
-!            = 4 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE MORE THAN
-!                   MAXNUM STEPS NEEDED
-!            = 5 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE EQUATIONS
-!                   APPEAR TO BE STIFF
-!            = 6 -- INTEGRATION DID NOT REACH  TOUT  BECAUSE SOLUTION
-!                   VANISHED MAKING PURE RELATIVE ERROR IMPOSSIBLE.
-!                   MUST USE NON-ZERO  ABSERR  TO CONTINUE.
-!            = 7 -- INVALID INPUT PARAMETERS (FATAL ERROR)
-!           THE VALUE OF  IFLAG  IS RETURNED NEGATIVE WHEN THE INPUT
-!           VALUE IS NEGATIVE AND THE INTEGRATION DOES NOT REACH  TOUT ,
-!           I.E., -3, -4, -5, -6.
-!      WORK(*),IWORK(*) -- INFORMATION GENERALLY OF NO INTEREST TO THE
-!           USER BUT NECESSARY FOR SUBSEQUENT CALLS.
-!
-!   SUBSEQUENT CALLS TO  ODE --
-!
-!   SUBROUTINE  ODE  RETURNS WITH ALL INFORMATION NEEDED TO CONTINUE
-!   THE INTEGRATION.  IF THE INTEGRATION REACHED  TOUT , THE USER NEED
-!   ONLY DEFINE A NEW  TOUT  AND CALL AGAIN.  IF THE INTEGRATION DID NOT
-!   REACH  TOUT  AND THE USER WANTS TO CONTINUE, HE JUST CALLS AGAIN.
-!   IN THE CASE  IFLAG=6 , THE USER MUST ALSO ALTER THE ERROR CRITERION.
-!   THE OUTPUT VALUE OF  IFLAG  IS THE APPROPRIATE INPUT VALUE FOR
-!   SUBSEQUENT CALLS.  THE ONLY SITUATION IN WHICH IT SHOULD BE ALTERED
-!   IS TO STOP THE INTEGRATION INTERNALLY AT THE NEW  TOUT , I.E.,
-!   CHANGE OUTPUT  IFLAG=2  TO INPUT  IFLAG=-2 .  ERROR TOLERANCES MAY
-!   BE CHANGED BY THE USER BEFORE CONTINUING.  ALL OTHER PARAMETERS MUST
-!   REMAIN UNCHANGED.
-!
-LOGICAL START,PHASE1,NORND
-DIMENSION Y(NEQN),WORK(*),IWORK(5)
-EXTERNAL F
-DATA IALPHA,IBETA,ISIG,IV,IW,IG,IPHASE,IPSI,IX,IH,IHOLD,ISTART, &
-&ITOLD,IDELSN/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
-!
-IYY = 100
-IWT = IYY + NEQN
-IP = IWT + NEQN
-IYP = IP + NEQN
-IYPOUT = IYP + NEQN
-IPHI = IYPOUT + NEQN
-IF(IABS(IFLAG) .LT. 2  .OR.  IABS(IFLAG) .GT. 6) GO TO 1
-START = WORK(ISTART) .GT. 0.0
-PHASE1 = WORK(IPHASE) .GT. 0.0
-NORND = IWORK(2) .NE. -1
-1 CALL DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK(IYY), &
-&WORK(IWT),WORK(IP),WORK(IYP),WORK(IYPOUT),WORK(IPHI), &
-&WORK(IALPHA),WORK(IBETA),WORK(ISIG),WORK(IV),WORK(IW),WORK(IG), &
-&PHASE1,WORK(IPSI),WORK(IX),WORK(IH),WORK(IHOLD),START, &
-&WORK(ITOLD),WORK(IDELSN),IWORK(1),NORND,IWORK(3),IWORK(4), &
-&IWORK(5))
-WORK(ISTART) = -1.0
-IF(START) WORK(ISTART) = 1.0
-WORK(IPHASE) = -1.0
-IF(PHASE1) WORK(IPHASE) = 1.0
-IWORK(2) = -1
-IF(NORND) IWORK(2) = 1
-RETURN
-END SUBROUTINE ODE
 

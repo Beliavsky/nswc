@@ -1,0 +1,53 @@
+! Adapted from test_surface_legacy.f90 in the amiller-nswc test suite.
+program test_surface
+   implicit none
+   interface
+      subroutine surf(m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
+         integer, intent(in) :: m,n,iz
+         real, intent(in) :: x(m),y(n),z(iz,n),opt(*),sigma
+         real, intent(out) :: zp(m,n,*)
+         real, intent(inout) :: temp(*)
+         integer, intent(out) :: ierr
+      end subroutine surf
+      real function surf2(xx,yy,m,n,x,y,z,iz,zp,sigma)
+         real, intent(in) :: xx,yy
+         integer, intent(in) :: m,n,iz
+         real, intent(in) :: x(m),y(n),z(iz,n),zp(m,n,*),sigma
+      end function surf2
+   end interface
+
+   integer, parameter :: m=3,n=3
+   real :: x(m),y(n),z(m,n),zp(m,n,3),temp(2*n+m),opt(1)
+   real :: v,expected
+   integer :: i,j,ierr
+
+   x=[0.0,1.0,2.0]
+   y=[-1.0,0.0,2.0]
+   do j=1,n
+      do i=1,m
+         z(i,j)=1.0+2.0*x(i)-3.0*y(j)+x(i)*y(j)
+      end do
+   end do
+   opt=[0.0]
+   temp=0.0
+   call surf(m,n,x,y,z,m,opt,zp,temp,1.0,ierr)
+   call require(ierr==0,'legacy SURF status')
+   v=surf2(0.4,0.7,m,n,x,y,z,m,zp,1.0)
+   expected=1.0+2.0*0.4-3.0*0.7+0.4*0.7
+   call require(abs(v-expected)<3.0e-4,'legacy SURF2 value')
+
+   print '(a,2es24.15)', 'Surface interpolation: ',v,expected
+   print '(a)', 'test_surface: PASS'
+
+contains
+
+   subroutine require(ok,msg)
+      logical, intent(in) :: ok
+      character(len=*), intent(in) :: msg
+      if (.not.ok) then
+         print '(a)', 'FAIL: '//trim(msg)
+         error stop 1
+      end if
+   end subroutine require
+
+end program test_surface

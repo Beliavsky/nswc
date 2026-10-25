@@ -1,12 +1,12 @@
 # Numerical test programs
 
-The suite contains the original `tests/source_smoke.f90` and 37 standalone main
+The suite contains the original `tests/source_smoke.f90` and 41 standalone main
 programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 38 programs against each of the three source versions:
+Run all 42 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -20,7 +20,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 114 numerical
+working directories are temporary. The default therefore performs 126 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -74,6 +74,10 @@ directly with any one of those library files.
 | `test_quadrature.f90` | Known integrals and the sum of integration weights |
 | `test_ode.f90` | Exponential solutions with fixed and adaptive integration interfaces |
 | `test_fftpack_workers.f90` | Direct Fourier and cosine sums and transform round trips at lengths 3, 5, 8, and 15, including public cosine-transform calls |
+| `test_inverse_laplace.f90` | Known exponential inverse transforms and convergence checks on both sides of a pole, including forwarded subroutine callbacks |
+| `test_sfode.f90` | Scalar and vector tolerances for a stiff ODE with a known cosine solution |
+| `test_surface.f90` | Bilinear surface reproduction with splines under tension, including statement functions |
+| `test_cubature.f90` | Exact triangle integrals using direct and adaptive cubature with function callbacks |
 | `test_random.f90` | Seed progression and a known normal sequence |
 
 The smoke program additionally exercises zero iteration counts, negative and

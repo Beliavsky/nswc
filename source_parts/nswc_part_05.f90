@@ -1,3 +1,1424 @@
+SUBROUTINE CGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
+IMPLICIT NONE
+INTEGER LDA,N,IPVT(*),JOB
+COMPLEX A(LDA,*),DET(2),WORK(*)
+!
+!     CGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
+!     USING THE FACTORS COMPUTED BY CGECO OR CGEFA.
+!
+!     ON ENTRY
+!
+!        A       COMPLEX(LDA, N)
+!                THE OUTPUT FROM CGECO OR CGEFA.
+!
+!        LDA     INTEGER
+!                THE LEADING DIMENSION OF THE ARRAY  A .
+!
+!        N       INTEGER
+!                THE ORDER OF THE MATRIX  A .
+!
+!        IPVT    INTEGER(N)
+!                THE PIVOT VECTOR FROM CGECO OR CGEFA.
+!
+!        WORK    COMPLEX(N)
+!                WORK VECTOR.  CONTENTS DESTROYED.
+!
+!        JOB     INTEGER
+!                = 11   BOTH DETERMINANT AND INVERSE.
+!                = 01   INVERSE ONLY.
+!                = 10   DETERMINANT ONLY.
+!
+!     ON RETURN
+!
+!        A       INVERSE OF ORIGINAL MATRIX IF REQUESTED.
+!                OTHERWISE UNCHANGED.
+!
+!        DET     COMPLEX(2)
+!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
+!                OTHERWISE NOT REFERENCED.
+!                DETERMINANT = DET(1) * 10.0**DET(2)
+!                WITH  1.0 .LE. CABS1(DET(1)) .LT. 10.0
+!                OR  DET(1) .EQ. 0.0 .
+!
+!     ERROR CONDITION
+!
+!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
+!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
+!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
+!        AND IF CGECO HAS SET RCOND .GT. 0.0 OR CGEFA HAS SET
+!        INFO .EQ. 0 .
+!
+!     LINPACK. THIS VERSION DATED 08/14/78 .
+!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!
+!     SUBROUTINES AND FUNCTIONS
+!
+!     BLAS CAXPY,CSCAL,CSWAP
+!     FORTRAN ABS,AIMAG,CMPLX,MOD,REAL
+!
+!     INTERNAL VARIABLES
+!
+COMPLEX T
+REAL TEN
+INTEGER I,J,K,KB,KP1,L,NM1
+!
+COMPLEX ZDUM
+REAL CABS1
+CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
+!
+!     COMPUTE DETERMINANT
+!
+IF (JOB/10 .EQ. 0) GO TO 70
+   DET(1) = (1.0E0,0.0E0)
+   DET(2) = (0.0E0,0.0E0)
+   TEN = 10.0E0
+   do 50 I = 1, N
+      IF (IPVT(I) .NE. I) DET(1) = -DET(1)
+      DET(1) = A(I,I)*DET(1)
+!        ...EXIT
+      IF (CABS1(DET(1)) .EQ. 0.0E0) GO TO 60
+10 IF (CABS1(DET(1)) .GE. 1.0E0) GO TO 20
+         DET(1) = CMPLX(TEN,0.0E0)*DET(1)
+         DET(2) = DET(2) - (1.0E0,0.0E0)
+      GO TO 10
+20 CONTINUE
+30 IF (CABS1(DET(1)) .LT. TEN) GO TO 40
+         DET(1) = DET(1)/CMPLX(TEN,0.0E0)
+         DET(2) = DET(2) + (1.0E0,0.0E0)
+      GO TO 30
+40 CONTINUE
+50 CONTINUE
+60 CONTINUE
+70 CONTINUE
+!
+!     COMPUTE INVERSE(U)
+!
+IF (MOD(JOB,10) .EQ. 0) GO TO 150
+   DO K = 1, N
+      A(K,K) = (1.0E0,0.0E0)/A(K,K)
+      T = -A(K,K)
+      CALL CSCAL(K-1,T,A(1,K),1)
+      KP1 = K + 1
+      IF (N .LT. KP1) GO TO 90
+      DO J = KP1, N
+         T = A(K,J)
+         A(K,J) = (0.0E0,0.0E0)
+         CALL CAXPY(K,T,A(1,K),1,A(1,J),1)
+      END DO
+90 CONTINUE
+   END DO
+!
+!        FORM INVERSE(U)*INVERSE(L)
+!
+   NM1 = N - 1
+   IF (NM1 .LT. 1) GO TO 140
+   DO KB = 1, NM1
+      K = N - KB
+      KP1 = K + 1
+      DO I = KP1, N
+         WORK(I) = A(I,K)
+         A(I,K) = (0.0E0,0.0E0)
+      END DO
+      DO J = KP1, N
+         T = WORK(J)
+         CALL CAXPY(N,T,A(1,J),1,A(1,K),1)
+      END DO
+      L = IPVT(K)
+      IF (L .NE. K) CALL CSWAP(N,A(1,K),1,A(1,L),1)
+   END DO
+140 CONTINUE
+150 CONTINUE
+RETURN
+END SUBROUTINE CGEDI
+
+SUBROUTINE DCMSLV (MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, M, MO, N
+!-----------------------------------------------------------------------
+!     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
+!     COMPLEX MATRICES AND SOLVING DOUBLE PRECISION COMPLEX EQUATIONS
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N), AI(KA,N), BR(*), BI(*), WK(*)
+INTEGER IPVT(N)
+!
+IF (N .LT. 1 .OR. KA .LT. N) GO TO 30
+IF (M .LE. 0) GO TO 10
+IF (KB .LT. N) GO TO 30
+!
+!                      MATRIX FACTORIZATION
+!
+10 CALL DCFACT (AR, AI, KA, N, IPVT, IERR)
+IF (IERR .NE. 0) RETURN
+!
+!                 SOLUTION OF THE EQUATION AX = B
+!
+IF (M .LE. 0) GO TO 20
+CALL DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
+!
+!                 CALCULATION OF THE INVERSE OF A
+!
+20 IF (MO .EQ. 0) CALL DCMINV (AR, AI, KA, N, IPVT, WK)
+RETURN
+!
+!                          ERROR RETURN
+!
+30 IERR = -1
+RETURN
+END SUBROUTINE DCMSLV
+
+SUBROUTINE DCFACT (AR, AI, KA, N, IPVT, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
+INTEGER I, J, K, KP1, L, NM1
+!-----------------------------------------------------------------------
+!     DECOMPOSES A COMPLEX MATRIX BY PARTIAL PIVOT GAUSS ELIMINATION
+!-----------------------------------------------------------------------
+!
+!     INPUT ...
+!
+!        AR AND AI ARE THE REAL AND IMAGINARY PARTS OF THE MATRIX A
+!        TO BE DECOMPOSED.
+!
+!        KA = DECLARED ROW DIMENSION OF THE ARRAYS AR AND AI
+!
+!        N  = ORDER OF THE MATRIX A
+!
+!     OUTPUT ...
+!
+!        AR AND AI CONTAIN AN UPPER TRIANGULAR MATRIX U AND THE
+!        MULTIPLIERS NEEDED TO CONSTRUCT L SO THAT A = L*U .
+!
+!        IPVT = THE PIVOT VECTOR.
+!            IPVT(I) = THE INDEX OF THE K-TH PIVOT ROW (I .LT. N)
+!            IPVT(N) = (-1)**(NUMBER OF INTERCHANGES)
+!
+!        IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+!        IERR HAS ONE OF THE FOLLOWING VALUES ...
+!            IERR = 0   THE DECOMPOSITION OF A WAS OBTAINED.
+!            IERR = K   THE K-TH PIVOT ELEMENT IS 0.
+!
+!     IF IERR = 0 THEN THE DETERMINANT OF A HAS THE VALUE ...
+!        DET(A) = IPVT(N) * A(1,1) * A(2,2) * ... * A(N,N)
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N), AI(KA,N)
+INTEGER IPVT(N)
+DOUBLE PRECISION P, PR, PI, T, TR, TI
+!
+IERR = 0
+IPVT(N) = 1
+IF (N .EQ. 1) GO TO 50
+NM1 = N - 1
+!
+DO K = 1,NM1
+   KP1 = K + 1
+!
+!               SEARCH FOR THE K-TH PIVOT ELEMENT
+!
+   P = DABS(AR(K,K)) + DABS(AI(K,K))
+   L = K
+   do 10 I = KP1,N
+      T = DABS(AR(I,K)) + DABS(AI(I,K))
+      IF (P .GE. T) GO TO 10
+      P = T
+      L = I
+10 CONTINUE
+   IF (P .EQ. 0.D0) GO TO 100
+!
+   PR = AR(L,K)
+   PI = AI(L,K)
+   IPVT(K) = L
+   IF (L .EQ. K) GO TO 20
+   IPVT(N) = -IPVT(N)
+   AR(L,K) = AR(K,K)
+   AR(K,K) = PR
+   AI(L,K) = AI(K,K)
+   AI(K,K) = PI
+!
+!                    COMPUTE THE MULTIPLIERS
+!
+20 CALL CDIVID(1.D0, 0.D0, PR, PI, PR, PI)
+   DO I = KP1,N
+      TR = AR(I,K)
+      TI = AI(I,K)
+      AR(I,K) = TR*PR - TI*PI
+      AI(I,K) = TR*PI + TI*PR
+   END DO
+!
+!              INTERCHANGE AND ELIMINATE BY COLUMNS
+!
+   do 31 J = KP1,N
+      TR = AR(L,J)
+      AR(L,J) = AR(K,J)
+      AR(K,J) = TR
+      TI = AI(L,J)
+      AI(L,J) = AI(K,J)
+      AI(K,J) = TI
+      IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 31
+      DO I = KP1,N
+         AR(I,J) = AR(I,J) - AR(I,K)*TR + AI(I,K)*TI
+         AI(I,J) = AI(I,J) - AR(I,K)*TI - AI(I,K)*TR
+      END DO
+31 CONTINUE
+END DO
+!
+!                  CHECK THE N-TH PIVOT ELEMENT
+!
+50 IF (DABS(AR(N,N)) + DABS(AI(N,N)) .EQ. 0.D0) IERR = N
+RETURN
+!
+!                    K-TH PIVOT ELEMENT IS 0
+!
+100 IERR = K
+RETURN
+END SUBROUTINE DCFACT
+
+SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
+IMPLICIT NONE
+INTEGER KA, KB, M, N
+INTEGER I, J, K, KM1, KP1, L, NM1
+!-----------------------------------------------------------------------
+!     SOLUTION OF THE SYSTEM OF M EQUATIONS A*X = B USING THE
+!     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT BE
+!     USED WHEN DCFACT TERMINATES WITH NONZERO IERR.
+!-----------------------------------------------------------------------
+!
+!     INPUT ...
+!
+!        AR AND AI CONTAIN THE LU DECOMPOSITION OF THE MATRIX
+!        OBTAINED BY DCFACT.
+!
+!        KA = DECLARED ROW DIMENSION OF THE ARRAYS AR AND AI
+!
+!        N  = ORDER OF THE MATRIX
+!
+!        BR AND BI ARE THE REAL AND IMAGINARY PARTS OF THE
+!        RIGHT HAND SIDE MATRIX.
+!
+!        KB = DECLARED ROW DIMENSION OF THE ARRAYS BR AND BI
+!
+!        M  = NUMBER OF COLUMNS OF B
+!
+!        IPVT = PIVOT VECTOR OBTAINED FROM DCFACT
+!
+!     OUTPUT ...
+!
+!        BR AND BI CONTAIN THE REAL AND IMAGINARY PARTS OF THE
+!        SOLUTION X.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N), AI(KA,N), BR(KB,M), BI(KB,M)
+INTEGER IPVT(N)
+DOUBLE PRECISION PR, PI, TR, TI
+!
+!                    FORWARD ELIMINATION
+!
+IF (N .EQ. 1) GO TO 50
+NM1 = N - 1
+DO K = 1, NM1
+   KP1 = K + 1
+   L = IPVT(K)
+   do 11 J = 1,M
+      TR = BR(L,J)
+      BR(L,J) = BR(K,J)
+      BR(K,J) = TR
+      TI = BI(L,J)
+      BI(L,J) = BI(K,J)
+      BI(K,J) = TI
+      IF (DABS(TR) + DABS(TI) .EQ. 0.D0) GO TO 11
+      DO I = KP1, N
+         BR(I,J) = BR(I,J) - AR(I,K)*TR + AI(I,K)*TI
+         BI(I,J) = BI(I,J) - AR(I,K)*TI - AI(I,K)*TR
+      END DO
+11 CONTINUE
+END DO
+!
+!                   BACKWARD ELIMINATION
+!               FOR THE LAST N - 1 VARIABLES
+!
+DO L = 1,NM1
+   KM1 = N - L
+   K = KM1 + 1
+   CALL CDIVID (1.D0, 0.D0, AR(K,K), AI(K,K), PR, PI)
+   DO J = 1,M
+      TR = BR(K,J)
+      TI = BI(K,J)
+      BR(K,J) = TR*PR - TI*PI
+      BI(K,J) = TR*PI + TI*PR
+      TR = BR(K,J)
+      TI = BI(K,J)
+      DO I = 1, KM1
+         BR(I,J) = BR(I,J) - AR(I,K)*TR + AI(I,K)*TI
+         BI(I,J) = BI(I,J) - AR(I,K)*TI - AI(I,K)*TR
+      END DO
+   END DO
+END DO
+!
+50 CALL CDIVID (1.D0, 0.D0, AR(1,1), AI(1,1), PR, PI)
+DO J = 1,M
+   TR = BR(1,J)
+   TI = BI(1,J)
+   BR(1,J) = TR*PR - TI*PI
+   BI(1,J) = TR*PI + TI*PR
+END DO
+RETURN
+END SUBROUTINE DCSOL
+
+SUBROUTINE DCMINV (AR, AI, KA, N, IPVT, TEMP)
+IMPLICIT NONE
+INTEGER KA, N
+INTEGER I, IP1, J, JB, K, KP1, L, NM1, NMI, NMK, NP1
+!-----------------------------------------------------------------------
+!     COMPUTATION OF THE INVERSE OF A MATRIX A USING THE LU
+!     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT
+!     BE USED WHEN DCFACT TERMINATES WITH NONZERO IERR.
+!-----------------------------------------------------------------------
+!
+!     INPUT ...
+!
+!        AR AND AI CONTAIN THE LU DECOMPOSITION OF THE MATRIX
+!        OBTAINED BY DCFACT.
+!
+!        KA = DECLARED ROW DIMENSION OF THE ARRAYS AR AND AI
+!
+!        N  = ORDER OF THE MATRIX
+!
+!        IPVT = PIVOT VECTOR OBTAINED FROM DCFACT
+!
+!        TEMP = TEMPORARY STORAGE AREA FOR THE SUBROUTINE
+!
+!     OUTPUT ...
+!
+!        AR AND AI CONTAIN THE INVERSE OF THE MATRIX.
+!
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N), AI(KA,N), TEMP(2,N)
+INTEGER IPVT(N)
+DOUBLE PRECISION SR, SI, TR, TI
+!
+CALL CDIVID (1.D0, 0.D0, AR(N,N), AI(N,N), AR(N,N), AI(N,N))
+IF (N .EQ. 1) RETURN
+NP1 = N + 1
+NM1 = N - 1
+!
+!                REPLACE U WITH THE INVERSE OF U
+!
+DO NMI = 1,NM1
+   I = N - NMI
+   IP1 = I + 1
+   CALL CDIVID (1.D0, 0.D0, AR(I,I), AI(I,I), TR, TI)
+   DO JB = 1,NMI
+      J = NP1 - JB
+      SR = 0.D0
+      SI = 0.D0
+      DO L = IP1,J
+         SR = SR + AR(I,L)*AR(L,J) - AI(I,L)*AI(L,J)
+         SI = SI + AR(I,L)*AI(L,J) + AI(I,L)*AR(L,J)
+      END DO
+      AR(I,J) = -SR*TR + SI*TI
+      AI(I,J) = -SR*TI - SI*TR
+   END DO
+   AR(I,I) = TR
+   AI(I,I) = TI
+END DO
+!
+!                COMPUTE  INVERSE(U)*INVERSE(L)
+!
+do 60 NMK = 1,NM1
+   K = N - NMK
+   KP1 = K + 1
+   DO I = KP1,N
+      TEMP(1,I) = AR(I,K)
+      TEMP(2,I) = AI(I,K)
+      AR(I,K) = 0.D0
+      AI(I,K) = 0.D0
+   END DO
+!
+   DO J = KP1,N
+      TR = TEMP(1,J)
+      TI = TEMP(2,J)
+      DO I = 1,N
+         AR(I,K) = AR(I,K) - AR(I,J)*TR + AI(I,J)*TI
+         AI(I,K) = AI(I,K) - AR(I,J)*TI - AI(I,J)*TR
+      END DO
+   END DO
+!
+   L = IPVT(K)
+   IF (K .EQ. L) GO TO 60
+   do 50 I = 1,N
+      TR = AR(I,K)
+      AR(I,K) = AR(I,L)
+      AR(I,L) = TR
+      TI = AI(I,K)
+      AI(I,K) = AI(I,L)
+50 AI(I,L) = TI
+60 CONTINUE
+RETURN
+END SUBROUTINE DCMINV
+
+SUBROUTINE SSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
+IMPLICIT NONE
+INTEGER LDX,N,P,LDU,LDV,JOB,INFO
+REAL X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
+!
+!
+!     SSVDC IS A SUBROUTINE TO REDUCE A REAL NXP MATRIX X BY
+!     ORTHOGONAL TRANSFORMATIONS U AND V TO DIAGONAL FORM.  THE
+!     DIAGONAL ELEMENTS S(I) ARE THE SINGULAR VALUES OF X.  THE
+!     COLUMNS OF U ARE THE CORRESPONDING LEFT SINGULAR VECTORS,
+!     AND THE COLUMNS OF V THE RIGHT SINGULAR VECTORS.
+!
+!     ON ENTRY
+!
+!         X         REAL(LDX,P), WHERE LDX.GE.N.
+!                   X CONTAINS THE MATRIX WHOSE SINGULAR VALUE
+!                   DECOMPOSITION IS TO BE COMPUTED.  X IS
+!                   DESTROYED BY SSVDC.
+!
+!         LDX       INTEGER.
+!                   LDX IS THE LEADING DIMENSION OF THE ARRAY X.
+!
+!         N         INTEGER.
+!                   N IS THE NUMBER OF ROWS OF THE MATRIX X.
+!
+!         P         INTEGER.
+!                   P IS THE NUMBER OF COLUMNS OF THE MATRIX X.
+!
+!         LDU       INTEGER.
+!                   LDU IS THE LEADING DIMENSION OF THE ARRAY U.
+!                   (SEE BELOW).
+!
+!         LDV       INTEGER.
+!                   LDV IS THE LEADING DIMENSION OF THE ARRAY V.
+!                   (SEE BELOW).
+!
+!         WORK      REAL(N).
+!                   WORK IS A SCRATCH ARRAY.
+!
+!         JOB       INTEGER.
+!                   JOB CONTROLS THE COMPUTATION OF THE SINGULAR
+!                   VECTORS.  IT HAS THE DECIMAL EXPANSION AB
+!                   WITH THE FOLLOWING MEANING
+!
+!                        A.EQ.0    DO NOT COMPUTE THE LEFT SINGULAR
+!                                  VECTORS.
+!                        A.EQ.1    RETURN THE N LEFT SINGULAR VECTORS
+!                                  IN U.
+!                        A.GE.2    RETURN THE FIRST MIN(N,P) SINGULAR
+!                                  VECTORS IN U.
+!                        B.EQ.0    DO NOT COMPUTE THE RIGHT SINGULAR
+!                                  VECTORS.
+!                        B.EQ.1    RETURN THE RIGHT SINGULAR VECTORS
+!                                  IN V.
+!
+!     ON RETURN
+!
+!         S         REAL(MM), WHERE MM=MIN(N+1,P).
+!                   THE FIRST MIN(N,P) ENTRIES OF S CONTAIN THE
+!                   SINGULAR VALUES OF X ARRANGED IN DESCENDING
+!                   ORDER OF MAGNITUDE.
+!
+!         E         REAL(P).
+!                   E ORDINARILY CONTAINS ZEROS.  HOWEVER SEE THE
+!                   DISCUSSION OF INFO FOR EXCEPTIONS.
+!
+!         U         REAL(LDU,K), WHERE LDU.GE.N.  IF JOBA.EQ.1 THEN
+!                                   K.EQ.N, IF JOBA.GE.2 THEN
+!                                   K.EQ.MIN(N,P).
+!                   U CONTAINS THE MATRIX OF LEFT SINGULAR VECTORS.
+!                   U IS NOT REFERENCED IF JOBA.EQ.0.  IF N.LE.P
+!                   OR IF JOBA.EQ.2, THEN U MAY BE IDENTIFIED WITH X
+!                   IN THE SUBROUTINE CALL.
+!
+!         V         REAL(LDV,P), WHERE LDV.GE.P.
+!                   V CONTAINS THE MATRIX OF RIGHT SINGULAR VECTORS.
+!                   V IS NOT REFERENCED IF JOB.EQ.0.  IF P.LE.N,
+!                   THEN V MAY BE IDENTIFIED WITH X IN THE
+!                   SUBROUTINE CALL.
+!
+!         INFO      INTEGER.
+!                   THE SINGULAR VALUES (AND THEIR CORRESPONDING
+!                   SINGULAR VECTORS) S(INFO+1),S(INFO+2),...,S(M)
+!                   ARE CORRECT (HERE M=MIN(N,P)).  THUS IF
+!                   INFO.EQ.0, ALL THE SINGULAR VALUES AND THEIR
+!                   VECTORS ARE CORRECT.  IN ANY EVENT, THE MATRIX
+!                   B = TRANS(U)*X*V IS THE BIDIAGONAL MATRIX
+!                   WITH THE ELEMENTS OF S ON ITS DIAGONAL AND THE
+!                   ELEMENTS OF E ON ITS SUPER-DIAGONAL (TRANS(U)
+!                   IS THE TRANSPOSE OF U).  THUS THE SINGULAR
+!                   VALUES OF X AND B ARE THE SAME.
+!
+!     LINPACK. THIS VERSION DATED 03/19/79 .
+!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!
+!     ***** USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
+!
+!     EXTERNAL SROT
+!     BLAS SAXPY,SDOT,SSCAL,SSWAP,SNRM2,SROTG
+!     FORTRAN ABS,AMAX1,MAX0,MIN0,MOD,SQRT
+!
+!     INTERNAL VARIABLES
+!
+INTEGER I,ITER,J,JOBU,K,KASE,KK,L,LL,LLS,LM1,LP1,LS,LU,M,MAXIT, &
+&MM,MM1,MP1,NCT,NCTP1,NCU,NRT,NRTP1
+REAL SDOT,T
+REAL B,C,CS,EL,EMM1,F,G,SNRM2,SCALE,SHIFT,SL,SM,SN,SMM1,T1,TEST, &
+&ZTEST
+LOGICAL WANTU,WANTV
+!
+!
+!     SET THE MAXIMUM NUMBER OF ITERATIONS.
+!
+MAXIT = 30
+!
+!     DETERMINE WHAT IS TO BE COMPUTED.
+!
+WANTU = .FALSE.
+WANTV = .FALSE.
+JOBU = MOD(JOB,100)/10
+NCU = N
+IF (JOBU .GT. 1) NCU = MIN0(N,P)
+IF (JOBU .NE. 0) WANTU = .TRUE.
+IF (MOD(JOB,10) .NE. 0) WANTV = .TRUE.
+!
+!     REDUCE X TO BIDIAGONAL FORM, STORING THE DIAGONAL ELEMENTS
+!     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
+!
+INFO = 0
+NCT = MIN0(N-1,P)
+NRT = MAX0(0,MIN0(P-2,N))
+LU = MAX0(NCT,NRT)
+IF (LU .LT. 1) GO TO 170
+do 160 L = 1, LU
+   LP1 = L + 1
+   IF (L .GT. NCT) GO TO 20
+!
+!           COMPUTE THE TRANSFORMATION FOR THE L-TH COLUMN AND
+!           PLACE THE L-TH DIAGONAL IN S(L).
+!
+      S(L) = SNRM2(N-L+1,X(L,L),1)
+      IF (S(L) .EQ. 0.0E0) GO TO 10
+         IF (X(L,L) .NE. 0.0E0) S(L) = SIGN(S(L),X(L,L))
+         CALL SSCAL(N-L+1,1.0E0/S(L),X(L,L),1)
+         X(L,L) = 1.0E0 + X(L,L)
+10 CONTINUE
+      S(L) = -S(L)
+20 CONTINUE
+   IF (P .LT. LP1) GO TO 50
+   do 40 J = LP1, P
+      IF (L .GT. NCT) GO TO 30
+      IF (S(L) .EQ. 0.0E0) GO TO 30
+!
+!              APPLY THE TRANSFORMATION.
+!
+         T = -SDOT(N-L+1,X(L,L),1,X(L,J),1)/X(L,L)
+         CALL SAXPY(N-L+1,T,X(L,L),1,X(L,J),1)
+30 CONTINUE
+!
+!           PLACE THE L-TH ROW OF X INTO  E FOR THE
+!           SUBSEQUENT CALCULATION OF THE ROW TRANSFORMATION.
+!
+      E(J) = X(L,J)
+40 CONTINUE
+50 CONTINUE
+   IF (.NOT.WANTU .OR. L .GT. NCT) GO TO 70
+!
+!           PLACE THE TRANSFORMATION IN U FOR SUBSEQUENT BACK
+!           MULTIPLICATION.
+!
+      DO I = L, N
+         U(I,L) = X(I,L)
+      END DO
+70 CONTINUE
+   IF (L .GT. NRT) GO TO 150
+!
+!           COMPUTE THE L-TH ROW TRANSFORMATION AND PLACE THE
+!           L-TH SUPER-DIAGONAL IN E(L).
+!
+      E(L) = SNRM2(P-L,E(LP1),1)
+      IF (E(L) .EQ. 0.0E0) GO TO 80
+         IF (E(LP1) .NE. 0.0E0) E(L) = SIGN(E(L),E(LP1))
+         CALL SSCAL(P-L,1.0E0/E(L),E(LP1),1)
+         E(LP1) = 1.0E0 + E(LP1)
+80 CONTINUE
+      E(L) = -E(L)
+      IF (LP1 .GT. N .OR. E(L) .EQ. 0.0E0) GO TO 120
+!
+!              APPLY THE TRANSFORMATION.
+!
+         DO I = LP1, N
+            WORK(I) = 0.0E0
+         END DO
+         do 100 J = LP1, P
+            CALL SAXPY(N-L,E(J),X(LP1,J),1,WORK(LP1),1)
+100 CONTINUE
+         DO J = LP1, P
+            CALL SAXPY(N-L,-E(J)/E(LP1),WORK(LP1),1,X(LP1,J),1)
+         END DO
+120 CONTINUE
+      IF (.NOT.WANTV) GO TO 140
+!
+!              PLACE THE TRANSFORMATION IN V FOR SUBSEQUENT
+!              BACK MULTIPLICATION.
+!
+         DO I = LP1, P
+            V(I,L) = E(I)
+         END DO
+140 CONTINUE
+150 CONTINUE
+160 CONTINUE
+170 CONTINUE
+!
+!     SET UP THE FINAL BIDIAGONAL MATRIX OF ORDER M.
+!
+M = MIN0(P,N+1)
+NCTP1 = NCT + 1
+NRTP1 = NRT + 1
+IF (NCT .LT. P) S(NCTP1) = X(NCTP1,NCTP1)
+IF (N .LT. M) S(M) = 0.0E0
+IF (NRTP1 .LT. M) E(NRTP1) = X(NRTP1,M)
+E(M) = 0.0E0
+!
+!     IF REQUIRED, GENERATE U.
+!
+IF (.NOT.WANTU) GO TO 300
+   IF (NCU .LT. NCTP1) GO TO 200
+   DO J = NCTP1, NCU
+      DO I = 1, N
+         U(I,J) = 0.0E0
+      END DO
+      U(J,J) = 1.0E0
+   END DO
+200 CONTINUE
+   IF (NCT .LT. 1) GO TO 290
+   DO LL = 1, NCT
+      L = NCT - LL + 1
+      IF (S(L) .EQ. 0.0E0) GO TO 250
+         LP1 = L + 1
+         IF (NCU .LT. LP1) GO TO 220
+         DO J = LP1, NCU
+            T = -SDOT(N-L+1,U(L,L),1,U(L,J),1)/U(L,L)
+            CALL SAXPY(N-L+1,T,U(L,L),1,U(L,J),1)
+         END DO
+220 CONTINUE
+         CALL SSCAL(N-L+1,-1.0E0,U(L,L),1)
+         U(L,L) = 1.0E0 + U(L,L)
+         LM1 = L - 1
+         IF (LM1 .LT. 1) GO TO 240
+         DO I = 1, LM1
+            U(I,L) = 0.0E0
+         END DO
+240 CONTINUE
+      GO TO 270
+250 CONTINUE
+         DO I = 1, N
+            U(I,L) = 0.0E0
+         END DO
+         U(L,L) = 1.0E0
+270 CONTINUE
+   END DO
+290 CONTINUE
+300 CONTINUE
+!
+!     IF IT IS REQUIRED, GENERATE V.
+!
+IF (.NOT.WANTV) GO TO 350
+   DO LL = 1, P
+      L = P - LL + 1
+      LP1 = L + 1
+      IF (L .GT. NRT) GO TO 320
+      IF (E(L) .EQ. 0.0E0) GO TO 320
+         DO J = LP1, P
+            T = -SDOT(P-L,V(LP1,L),1,V(LP1,J),1)/V(LP1,L)
+            CALL SAXPY(P-L,T,V(LP1,L),1,V(LP1,J),1)
+         END DO
+320 CONTINUE
+      DO I = 1, P
+         V(I,L) = 0.0E0
+      END DO
+      V(L,L) = 1.0E0
+   END DO
+350 CONTINUE
+!
+!     MAIN ITERATION LOOP FOR THE SINGULAR VALUES.
+!
+MM = M
+ITER = 0
+360 CONTINUE
+!
+!        QUIT IF ALL THE SINGULAR VALUES HAVE BEEN FOUND.
+!
+!     ...EXIT
+   IF (M .EQ. 0) GO TO 620
+!
+!        IF TOO MANY ITERATIONS HAVE BEEN PERFORMED, SET
+!        FLAG AND RETURN.
+!
+   IF (ITER .LT. MAXIT) GO TO 370
+      INFO = M
+!     ......EXIT
+      GO TO 620
+370 CONTINUE
+!
+!        THIS SECTION OF THE PROGRAM INSPECTS FOR
+!        NEGLIGIBLE ELEMENTS IN THE S AND E ARRAYS.  ON
+!        COMPLETION THE VARIABLES KASE AND L ARE SET AS FOLLOWS.
+!
+!           KASE = 1     IF S(M) AND E(L-1) ARE NEGLIGIBLE AND L.LT.M
+!           KASE = 2     IF S(L) IS NEGLIGIBLE AND L.LT.M
+!           KASE = 3     IF E(L-1) IS NEGLIGIBLE, L.LT.M, AND
+!                        S(L), ..., S(M) ARE NOT NEGLIGIBLE (QR STEP).
+!           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
+!
+   DO LL = 1, M
+      L = M - LL
+!        ...EXIT
+      IF (L .EQ. 0) GO TO 400
+      TEST = ABS(S(L)) + ABS(S(L+1))
+      ZTEST = TEST + ABS(E(L))
+      IF (ZTEST .NE. TEST) GO TO 380
+         E(L) = 0.0E0
+!        ......EXIT
+         GO TO 400
+380 CONTINUE
+   END DO
+400 CONTINUE
+   IF (L .NE. M - 1) GO TO 410
+      KASE = 4
+   GO TO 480
+410 CONTINUE
+      LP1 = L + 1
+      MP1 = M + 1
+      DO LLS = LP1, MP1
+         LS = M - LLS + LP1
+!           ...EXIT
+         IF (LS .EQ. L) GO TO 440
+         TEST = 0.0E0
+         IF (LS .NE. M) TEST = TEST + ABS(E(LS))
+         IF (LS .NE. L + 1) TEST = TEST + ABS(E(LS-1))
+         ZTEST = TEST + ABS(S(LS))
+         IF (ZTEST .NE. TEST) GO TO 420
+            S(LS) = 0.0E0
+!           ......EXIT
+            GO TO 440
+420 CONTINUE
+      END DO
+440 CONTINUE
+      IF (LS .NE. L) GO TO 450
+         KASE = 3
+      GO TO 470
+450 CONTINUE
+      IF (LS .NE. M) GO TO 460
+         KASE = 1
+      GO TO 470
+460 CONTINUE
+         KASE = 2
+         L = LS
+470 CONTINUE
+480 CONTINUE
+   L = L + 1
+!
+!        PERFORM THE TASK INDICATED BY KASE.
+!
+   GO TO (490,520,540,570), KASE
+!
+!        DEFLATE NEGLIGIBLE S(M).
+!
+490 CONTINUE
+      MM1 = M - 1
+      F = E(M-1)
+      E(M-1) = 0.0E0
+      DO KK = L, MM1
+         K = MM1 - KK + L
+         T1 = S(K)
+         CALL SROTG(T1,F,CS,SN)
+         S(K) = T1
+         IF (K .EQ. L) GO TO 500
+            F = -SN*E(K-1)
+            E(K-1) = CS*E(K-1)
+500 CONTINUE
+         IF (WANTV) CALL SROT(P,V(1,K),1,V(1,M),1,CS,SN)
+      END DO
+   GO TO 610
+!
+!        SPLIT AT NEGLIGIBLE S(L).
+!
+520 CONTINUE
+      F = E(L-1)
+      E(L-1) = 0.0E0
+      DO K = L, M
+         T1 = S(K)
+         CALL SROTG(T1,F,CS,SN)
+         S(K) = T1
+         F = -SN*E(K)
+         E(K) = CS*E(K)
+         IF (WANTU) CALL SROT(N,U(1,K),1,U(1,L-1),1,CS,SN)
+      END DO
+   GO TO 610
+!
+!        PERFORM ONE QR STEP.
+!
+540 CONTINUE
+!
+!           CALCULATE THE SHIFT.
+!
+      SCALE = AMAX1(ABS(S(M)),ABS(S(M-1)),ABS(E(M-1)),ABS(S(L)), &
+&ABS(E(L)))
+      SM = S(M)/SCALE
+      SMM1 = S(M-1)/SCALE
+      EMM1 = E(M-1)/SCALE
+      SL = S(L)/SCALE
+      EL = E(L)/SCALE
+      B = ((SMM1 + SM)*(SMM1 - SM) + EMM1**2)/2.0E0
+      C = (SM*EMM1)**2
+      SHIFT = 0.0E0
+      IF (B .EQ. 0.0E0 .AND. C .EQ. 0.0E0) GO TO 550
+         SHIFT = SQRT(B**2+C)
+         IF (B .LT. 0.0E0) SHIFT = -SHIFT
+         SHIFT = C/(B + SHIFT)
+550 CONTINUE
+      F = (SL + SM)*(SL - SM) - SHIFT
+      G = SL*EL
+!
+!           CHASE ZEROS.
+!
+      MM1 = M - 1
+      DO K = L, MM1
+         CALL SROTG(F,G,CS,SN)
+         IF (K .NE. L) E(K-1) = F
+         F = CS*S(K) + SN*E(K)
+         E(K) = CS*E(K) - SN*S(K)
+         G = SN*S(K+1)
+         S(K+1) = CS*S(K+1)
+         IF (WANTV) CALL SROT(P,V(1,K),1,V(1,K+1),1,CS,SN)
+         CALL SROTG(F,G,CS,SN)
+         S(K) = F
+         F = CS*E(K) + SN*S(K+1)
+         S(K+1) = -SN*E(K) + CS*S(K+1)
+         G = SN*E(K+1)
+         E(K+1) = CS*E(K+1)
+         IF (WANTU .AND. K .LT. N) &
+&CALL SROT(N,U(1,K),1,U(1,K+1),1,CS,SN)
+      END DO
+      E(M-1) = F
+      ITER = ITER + 1
+   GO TO 610
+!
+!        CONVERGENCE.
+!
+570 CONTINUE
+!
+!           MAKE THE SINGULAR VALUE  POSITIVE.
+!
+      IF (S(L) .GE. 0.0E0) GO TO 580
+         S(L) = -S(L)
+         IF (WANTV) CALL SSCAL(P,-1.0E0,V(1,L),1)
+580 CONTINUE
+!
+!           ORDER THE SINGULAR VALUE.
+!
+590 IF (L .EQ. MM) GO TO 600
+!           ...EXIT
+         IF (S(L) .GE. S(L+1)) GO TO 600
+         T = S(L)
+         S(L) = S(L+1)
+         S(L+1) = T
+         IF (WANTV .AND. L .LT. P) &
+&CALL SSWAP(P,V(1,L),1,V(1,L+1),1)
+         IF (WANTU .AND. L .LT. N) &
+&CALL SSWAP(N,U(1,L),1,U(1,L+1),1)
+         L = L + 1
+      GO TO 590
+600 CONTINUE
+      ITER = 0
+      M = M - 1
+610 CONTINUE
+GO TO 360
+620 CONTINUE
+RETURN
+END SUBROUTINE SSVDC
+
+SUBROUTINE DSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
+IMPLICIT NONE
+INTEGER LDX,N,P,LDU,LDV,JOB,INFO
+DOUBLE PRECISION X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
+!
+!
+!     DSVDC IS A SUBROUTINE TO REDUCE A DOUBLE PRECISION NXP MATRIX X
+!     BY ORTHOGONAL TRANSFORMATIONS U AND V TO DIAGONAL FORM.  THE
+!     DIAGONAL ELEMENTS S(I) ARE THE SINGULAR VALUES OF X.  THE
+!     COLUMNS OF U ARE THE CORRESPONDING LEFT SINGULAR VECTORS,
+!     AND THE COLUMNS OF V THE RIGHT SINGULAR VECTORS.
+!
+!     ON ENTRY
+!
+!         X         DOUBLE PRECISION(LDX,P), WHERE LDX.GE.N.
+!                   X CONTAINS THE MATRIX WHOSE SINGULAR VALUE
+!                   DECOMPOSITION IS TO BE COMPUTED.  X IS
+!                   DESTROYED BY DSVDC.
+!
+!         LDX       INTEGER.
+!                   LDX IS THE LEADING DIMENSION OF THE ARRAY X.
+!
+!         N         INTEGER.
+!                   N IS THE NUMBER OF ROWS OF THE MATRIX X.
+!
+!         P         INTEGER.
+!                   P IS THE NUMBER OF COLUMNS OF THE MATRIX X.
+!
+!         LDU       INTEGER.
+!                   LDU IS THE LEADING DIMENSION OF THE ARRAY U.
+!                   (SEE BELOW).
+!
+!         LDV       INTEGER.
+!                   LDV IS THE LEADING DIMENSION OF THE ARRAY V.
+!                   (SEE BELOW).
+!
+!         WORK      DOUBLE PRECISION(N).
+!                   WORK IS A SCRATCH ARRAY.
+!
+!         JOB       INTEGER.
+!                   JOB CONTROLS THE COMPUTATION OF THE SINGULAR
+!                   VECTORS.  IT HAS THE DECIMAL EXPANSION AB
+!                   WITH THE FOLLOWING MEANING
+!
+!                        A.EQ.0    DO NOT COMPUTE THE LEFT SINGULAR
+!                                  VECTORS.
+!                        A.EQ.1    RETURN THE N LEFT SINGULAR VECTORS
+!                                  IN U.
+!                        A.GE.2    RETURN THE FIRST MIN(N,P) SINGULAR
+!                                  VECTORS IN U.
+!                        B.EQ.0    DO NOT COMPUTE THE RIGHT SINGULAR
+!                                  VECTORS.
+!                        B.EQ.1    RETURN THE RIGHT SINGULAR VECTORS
+!                                  IN V.
+!
+!     ON RETURN
+!
+!         S         DOUBLE PRECISION(MM), WHERE MM=MIN(N+1,P).
+!                   THE FIRST MIN(N,P) ENTRIES OF S CONTAIN THE
+!                   SINGULAR VALUES OF X ARRANGED IN DESCENDING
+!                   ORDER OF MAGNITUDE.
+!
+!         E         DOUBLE PRECISION(P).
+!                   E ORDINARILY CONTAINS ZEROS.  HOWEVER SEE THE
+!                   DISCUSSION OF INFO FOR EXCEPTIONS.
+!
+!         U         DOUBLE PRECISION(LDU,K), WHERE LDU.GE.N.  IF
+!                                   JOBA.EQ.1 THEN K.EQ.N, IF JOBA.GE.2
+!                                   THEN K.EQ.MIN(N,P).
+!                   U CONTAINS THE MATRIX OF LEFT SINGULAR VECTORS.
+!                   U IS NOT REFERENCED IF JOBA.EQ.0.  IF N.LE.P
+!                   OR IF JOBA.EQ.2, THEN U MAY BE IDENTIFIED WITH X
+!                   IN THE SUBROUTINE CALL.
+!
+!         V         DOUBLE PRECISION(LDV,P), WHERE LDV.GE.P.
+!                   V CONTAINS THE MATRIX OF RIGHT SINGULAR VECTORS.
+!                   V IS NOT REFERENCED IF JOB.EQ.0.  IF P.LE.N,
+!                   THEN V MAY BE IDENTIFIED WITH X IN THE
+!                   SUBROUTINE CALL.
+!
+!         INFO      INTEGER.
+!                   THE SINGULAR VALUES (AND THEIR CORRESPONDING
+!                   SINGULAR VECTORS) S(INFO+1),S(INFO+2),...,S(M)
+!                   ARE CORRECT (HERE M=MIN(N,P)).  THUS IF
+!                   INFO.EQ.0, ALL THE SINGULAR VALUES AND THEIR
+!                   VECTORS ARE CORRECT.  IN ANY EVENT, THE MATRIX
+!                   B = TRANS(U)*X*V IS THE BIDIAGONAL MATRIX
+!                   WITH THE ELEMENTS OF S ON ITS DIAGONAL AND THE
+!                   ELEMENTS OF E ON ITS SUPER-DIAGONAL (TRANS(U)
+!                   IS THE TRANSPOSE OF U).  THUS THE SINGULAR
+!                   VALUES OF X AND B ARE THE SAME.
+!
+!     LINPACK. THIS VERSION DATED 03/19/79 .
+!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!
+!     DSVDC USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
+!
+!     EXTERNAL DROT
+!     BLAS DAXPY,DDOT,DSCAL,DSWAP,DNRM2,DROTG
+!     FORTRAN DABS,DMAX1,MAX0,MIN0,MOD,DSQRT
+!
+!     INTERNAL VARIABLES
+!
+INTEGER I,ITER,J,JOBU,K,KASE,KK,L,LL,LLS,LM1,LP1,LS,LU,M,MAXIT, &
+&MM,MM1,MP1,NCT,NCTP1,NCU,NRT,NRTP1
+DOUBLE PRECISION DDOT,T
+DOUBLE PRECISION B,C,CS,EL,EMM1,F,G,DNRM2,SCALE,SHIFT,SL,SM,SN, &
+&SMM1,T1,TEST,ZTEST
+LOGICAL WANTU,WANTV
+!
+!
+!     SET THE MAXIMUM NUMBER OF ITERATIONS.
+!
+MAXIT = 30
+!
+!     DETERMINE WHAT IS TO BE COMPUTED.
+!
+WANTU = .FALSE.
+WANTV = .FALSE.
+JOBU = MOD(JOB,100)/10
+NCU = N
+IF (JOBU .GT. 1) NCU = MIN0(N,P)
+IF (JOBU .NE. 0) WANTU = .TRUE.
+IF (MOD(JOB,10) .NE. 0) WANTV = .TRUE.
+!
+!     REDUCE X TO BIDIAGONAL FORM, STORING THE DIAGONAL ELEMENTS
+!     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
+!
+INFO = 0
+NCT = MIN0(N-1,P)
+NRT = MAX0(0,MIN0(P-2,N))
+LU = MAX0(NCT,NRT)
+IF (LU .LT. 1) GO TO 170
+do 160 L = 1, LU
+   LP1 = L + 1
+   IF (L .GT. NCT) GO TO 20
+!
+!           COMPUTE THE TRANSFORMATION FOR THE L-TH COLUMN AND
+!           PLACE THE L-TH DIAGONAL IN S(L).
+!
+      S(L) = DNRM2(N-L+1,X(L,L),1)
+      IF (S(L) .EQ. 0.0D0) GO TO 10
+         IF (X(L,L) .NE. 0.0D0) S(L) = DSIGN(S(L),X(L,L))
+         CALL DSCAL(N-L+1,1.0D0/S(L),X(L,L),1)
+         X(L,L) = 1.0D0 + X(L,L)
+10 CONTINUE
+      S(L) = -S(L)
+20 CONTINUE
+   IF (P .LT. LP1) GO TO 50
+   do 40 J = LP1, P
+      IF (L .GT. NCT) GO TO 30
+      IF (S(L) .EQ. 0.0D0) GO TO 30
+!
+!              APPLY THE TRANSFORMATION.
+!
+         T = -DDOT(N-L+1,X(L,L),1,X(L,J),1)/X(L,L)
+         CALL DAXPY(N-L+1,T,X(L,L),1,X(L,J),1)
+30 CONTINUE
+!
+!           PLACE THE L-TH ROW OF X INTO  E FOR THE
+!           SUBSEQUENT CALCULATION OF THE ROW TRANSFORMATION.
+!
+      E(J) = X(L,J)
+40 CONTINUE
+50 CONTINUE
+   IF (.NOT.WANTU .OR. L .GT. NCT) GO TO 70
+!
+!           PLACE THE TRANSFORMATION IN U FOR SUBSEQUENT BACK
+!           MULTIPLICATION.
+!
+      DO I = L, N
+         U(I,L) = X(I,L)
+      END DO
+70 CONTINUE
+   IF (L .GT. NRT) GO TO 150
+!
+!           COMPUTE THE L-TH ROW TRANSFORMATION AND PLACE THE
+!           L-TH SUPER-DIAGONAL IN E(L).
+!
+      E(L) = DNRM2(P-L,E(LP1),1)
+      IF (E(L) .EQ. 0.0D0) GO TO 80
+         IF (E(LP1) .NE. 0.0D0) E(L) = DSIGN(E(L),E(LP1))
+         CALL DSCAL(P-L,1.0D0/E(L),E(LP1),1)
+         E(LP1) = 1.0D0 + E(LP1)
+80 CONTINUE
+      E(L) = -E(L)
+      IF (LP1 .GT. N .OR. E(L) .EQ. 0.0D0) GO TO 120
+!
+!              APPLY THE TRANSFORMATION.
+!
+         DO I = LP1, N
+            WORK(I) = 0.0D0
+         END DO
+         do 100 J = LP1, P
+            CALL DAXPY(N-L,E(J),X(LP1,J),1,WORK(LP1),1)
+100 CONTINUE
+         DO J = LP1, P
+            CALL DAXPY(N-L,-E(J)/E(LP1),WORK(LP1),1,X(LP1,J),1)
+         END DO
+120 CONTINUE
+      IF (.NOT.WANTV) GO TO 140
+!
+!              PLACE THE TRANSFORMATION IN V FOR SUBSEQUENT
+!              BACK MULTIPLICATION.
+!
+         DO I = LP1, P
+            V(I,L) = E(I)
+         END DO
+140 CONTINUE
+150 CONTINUE
+160 CONTINUE
+170 CONTINUE
+!
+!     SET UP THE FINAL BIDIAGONAL MATRIX OF ORDER M.
+!
+M = MIN0(P,N+1)
+NCTP1 = NCT + 1
+NRTP1 = NRT + 1
+IF (NCT .LT. P) S(NCTP1) = X(NCTP1,NCTP1)
+IF (N .LT. M) S(M) = 0.0D0
+IF (NRTP1 .LT. M) E(NRTP1) = X(NRTP1,M)
+E(M) = 0.0D0
+!
+!     IF REQUIRED, GENERATE U.
+!
+IF (.NOT.WANTU) GO TO 300
+   IF (NCU .LT. NCTP1) GO TO 200
+   DO J = NCTP1, NCU
+      DO I = 1, N
+         U(I,J) = 0.0D0
+      END DO
+      U(J,J) = 1.0D0
+   END DO
+200 CONTINUE
+   IF (NCT .LT. 1) GO TO 290
+   DO LL = 1, NCT
+      L = NCT - LL + 1
+      IF (S(L) .EQ. 0.0D0) GO TO 250
+         LP1 = L + 1
+         IF (NCU .LT. LP1) GO TO 220
+         DO J = LP1, NCU
+            T = -DDOT(N-L+1,U(L,L),1,U(L,J),1)/U(L,L)
+            CALL DAXPY(N-L+1,T,U(L,L),1,U(L,J),1)
+         END DO
+220 CONTINUE
+         CALL DSCAL(N-L+1,-1.0D0,U(L,L),1)
+         U(L,L) = 1.0D0 + U(L,L)
+         LM1 = L - 1
+         IF (LM1 .LT. 1) GO TO 240
+         DO I = 1, LM1
+            U(I,L) = 0.0D0
+         END DO
+240 CONTINUE
+      GO TO 270
+250 CONTINUE
+         DO I = 1, N
+            U(I,L) = 0.0D0
+         END DO
+         U(L,L) = 1.0D0
+270 CONTINUE
+   END DO
+290 CONTINUE
+300 CONTINUE
+!
+!     IF IT IS REQUIRED, GENERATE V.
+!
+IF (.NOT.WANTV) GO TO 350
+   DO LL = 1, P
+      L = P - LL + 1
+      LP1 = L + 1
+      IF (L .GT. NRT) GO TO 320
+      IF (E(L) .EQ. 0.0D0) GO TO 320
+         DO J = LP1, P
+            T = -DDOT(P-L,V(LP1,L),1,V(LP1,J),1)/V(LP1,L)
+            CALL DAXPY(P-L,T,V(LP1,L),1,V(LP1,J),1)
+         END DO
+320 CONTINUE
+      DO I = 1, P
+         V(I,L) = 0.0D0
+      END DO
+      V(L,L) = 1.0D0
+   END DO
+350 CONTINUE
+!
+!     MAIN ITERATION LOOP FOR THE SINGULAR VALUES.
+!
+MM = M
+ITER = 0
+360 CONTINUE
+!
+!        QUIT IF ALL THE SINGULAR VALUES HAVE BEEN FOUND.
+!
+!     ...EXIT
+   IF (M .EQ. 0) GO TO 620
+!
+!        IF TOO MANY ITERATIONS HAVE BEEN PERFORMED, SET
+!        FLAG AND RETURN.
+!
+   IF (ITER .LT. MAXIT) GO TO 370
+      INFO = M
+!     ......EXIT
+      GO TO 620
+370 CONTINUE
+!
+!        THIS SECTION OF THE PROGRAM INSPECTS FOR
+!        NEGLIGIBLE ELEMENTS IN THE S AND E ARRAYS.  ON
+!        COMPLETION THE VARIABLES KASE AND L ARE SET AS FOLLOWS.
+!
+!           KASE = 1     IF S(M) AND E(L-1) ARE NEGLIGIBLE AND L.LT.M
+!           KASE = 2     IF S(L) IS NEGLIGIBLE AND L.LT.M
+!           KASE = 3     IF E(L-1) IS NEGLIGIBLE, L.LT.M, AND
+!                        S(L), ..., S(M) ARE NOT NEGLIGIBLE (QR STEP).
+!           KASE = 4     IF E(M-1) IS NEGLIGIBLE (CONVERGENCE).
+!
+   DO LL = 1, M
+      L = M - LL
+!        ...EXIT
+      IF (L .EQ. 0) GO TO 400
+      TEST = DABS(S(L)) + DABS(S(L+1))
+      ZTEST = TEST + DABS(E(L))
+      IF (ZTEST .NE. TEST) GO TO 380
+         E(L) = 0.0D0
+!        ......EXIT
+         GO TO 400
+380 CONTINUE
+   END DO
+400 CONTINUE
+   IF (L .NE. M - 1) GO TO 410
+      KASE = 4
+   GO TO 480
+410 CONTINUE
+      LP1 = L + 1
+      MP1 = M + 1
+      DO LLS = LP1, MP1
+         LS = M - LLS + LP1
+!           ...EXIT
+         IF (LS .EQ. L) GO TO 440
+         TEST = 0.0D0
+         IF (LS .NE. M) TEST = TEST + DABS(E(LS))
+         IF (LS .NE. L + 1) TEST = TEST + DABS(E(LS-1))
+         ZTEST = TEST + DABS(S(LS))
+         IF (ZTEST .NE. TEST) GO TO 420
+            S(LS) = 0.0D0
+!           ......EXIT
+            GO TO 440
+420 CONTINUE
+      END DO
+440 CONTINUE
+      IF (LS .NE. L) GO TO 450
+         KASE = 3
+      GO TO 470
+450 CONTINUE
+      IF (LS .NE. M) GO TO 460
+         KASE = 1
+      GO TO 470
+460 CONTINUE
+         KASE = 2
+         L = LS
+470 CONTINUE
+480 CONTINUE
+   L = L + 1
+!
+!        PERFORM THE TASK INDICATED BY KASE.
+!
+   GO TO (490,520,540,570), KASE
+!
+!        DEFLATE NEGLIGIBLE S(M).
+!
+490 CONTINUE
+      MM1 = M - 1
+      F = E(M-1)
+      E(M-1) = 0.0D0
+      DO KK = L, MM1
+         K = MM1 - KK + L
+         T1 = S(K)
+         CALL DROTG(T1,F,CS,SN)
+         S(K) = T1
+         IF (K .EQ. L) GO TO 500
+            F = -SN*E(K-1)
+            E(K-1) = CS*E(K-1)
+500 CONTINUE
+         IF (WANTV) CALL DROT(P,V(1,K),1,V(1,M),1,CS,SN)
+      END DO
+   GO TO 610
+!
+!        SPLIT AT NEGLIGIBLE S(L).
+!
+520 CONTINUE
+      F = E(L-1)
+      E(L-1) = 0.0D0
+      DO K = L, M
+         T1 = S(K)
+         CALL DROTG(T1,F,CS,SN)
+         S(K) = T1
+         F = -SN*E(K)
+         E(K) = CS*E(K)
+         IF (WANTU) CALL DROT(N,U(1,K),1,U(1,L-1),1,CS,SN)
+      END DO
+   GO TO 610
+!
+!        PERFORM ONE QR STEP.
+!
+540 CONTINUE
+!
+!           CALCULATE THE SHIFT.
+!
+      SCALE = DMAX1(DABS(S(M)),DABS(S(M-1)),DABS(E(M-1)), &
+&DABS(S(L)),DABS(E(L)))
+      SM = S(M)/SCALE
+      SMM1 = S(M-1)/SCALE
+      EMM1 = E(M-1)/SCALE
+      SL = S(L)/SCALE
+      EL = E(L)/SCALE
+      B = ((SMM1 + SM)*(SMM1 - SM) + EMM1**2)/2.0D0
+      C = (SM*EMM1)**2
+      SHIFT = 0.0D0
+      IF (B .EQ. 0.0D0 .AND. C .EQ. 0.0D0) GO TO 550
+         SHIFT = DSQRT(B**2+C)
+         IF (B .LT. 0.0D0) SHIFT = -SHIFT
+         SHIFT = C/(B + SHIFT)
+550 CONTINUE
+      F = (SL + SM)*(SL - SM) - SHIFT
+      G = SL*EL
+!
+!           CHASE ZEROS.
+!
+      MM1 = M - 1
+      DO K = L, MM1
+         CALL DROTG(F,G,CS,SN)
+         IF (K .NE. L) E(K-1) = F
+         F = CS*S(K) + SN*E(K)
+         E(K) = CS*E(K) - SN*S(K)
+         G = SN*S(K+1)
+         S(K+1) = CS*S(K+1)
+         IF (WANTV) CALL DROT(P,V(1,K),1,V(1,K+1),1,CS,SN)
+         CALL DROTG(F,G,CS,SN)
+         S(K) = F
+         F = CS*E(K) + SN*S(K+1)
+         S(K+1) = -SN*E(K) + CS*S(K+1)
+         G = SN*E(K+1)
+         E(K+1) = CS*E(K+1)
+         IF (WANTU .AND. K .LT. N) &
+&CALL DROT(N,U(1,K),1,U(1,K+1),1,CS,SN)
+      END DO
+      E(M-1) = F
+      ITER = ITER + 1
+   GO TO 610
+!
+!        CONVERGENCE.
+!
+570 CONTINUE
+!
+!           MAKE THE SINGULAR VALUE  POSITIVE.
+!
+      IF (S(L) .GE. 0.0D0) GO TO 580
+         S(L) = -S(L)
+         IF (WANTV) CALL DSCAL(P,-1.0D0,V(1,L),1)
+580 CONTINUE
+!
+!           ORDER THE SINGULAR VALUE.
+!
+590 IF (L .EQ. MM) GO TO 600
+!           ...EXIT
+         IF (S(L) .GE. S(L+1)) GO TO 600
+         T = S(L)
+         S(L) = S(L+1)
+         S(L+1) = T
+         IF (WANTV .AND. L .LT. P) &
+&CALL DSWAP(P,V(1,L),1,V(1,L+1),1)
+         IF (WANTU .AND. L .LT. N) &
+&CALL DSWAP(N,U(1,L),1,U(1,L+1),1)
+         L = L + 1
+      GO TO 590
+600 CONTINUE
+      ITER = 0
+      M = M - 1
+610 CONTINUE
+GO TO 360
+620 CONTINUE
+RETURN
+END SUBROUTINE DSVDC
+
 SUBROUTINE CSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
 IMPLICIT NONE
 INTEGER LDX,N,P,LDU,LDV,JOB,INFO
@@ -509,6 +1930,12 @@ RETURN
 END SUBROUTINE CSVDC
 
 FUNCTION DET(A,KA,N,X)
+IMPLICIT NONE
+INTEGER KA, N
+REAL A, X
+INTEGER I, J, K, KP1, L, NM1
+REAL C, PIVOT, S
+REAL DET
 !     -------------------
 !     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 !     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -575,6 +2002,9 @@ RETURN
 END FUNCTION DET
 
 double precision function DPDET(A,KA,N,X)
+IMPLICIT NONE
+INTEGER KA, N
+INTEGER I, J, K, KP1, L, NM1
 !     -------------------
 !     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 !     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -642,6 +2072,9 @@ RETURN
 END FUNCTION DPDET
 
 COMPLEX function CDET(A,KA,N,X)
+IMPLICIT NONE
+INTEGER KA, N
+INTEGER I, J, K, KP1, L, NM1
 !     -------------------
 !     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 !     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -712,6 +2145,9 @@ RETURN
 END FUNCTION CDET
 
 SUBROUTINE ABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, MO, N, NA, NB, NC
+INTEGER IU, IV, IW
 REAL A(NA,M), B(NB,N), C(NC,N), WK(*)
 ! ----------------------------------------------------------------------
 !     ABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -790,6 +2226,9 @@ RETURN
 END SUBROUTINE ABSLV
 
 SUBROUTINE ABSLV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
+INTEGER I, J, K
 ! ----------------------------------------------------------------------
 !     ABSLV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 !     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -902,6 +2341,8 @@ RETURN
 END SUBROUTINE ABSLV1
 
 SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+IMPLICIT NONE
+INTEGER IP1
 ! ----------------------------------------------------------------------
 !     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. SCHUR
 !     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH TRANSPOSE(Q)*H*Q
@@ -1175,6 +2616,7 @@ RETURN
 END SUBROUTINE SCHUR
 
 SUBROUTINE SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
+IMPLICIT NONE
 !     ------------------------------------------------------------------
 !     SHRSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 !     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -1289,6 +2731,9 @@ RETURN
 END SUBROUTINE SHRSLV
 
 SUBROUTINE DABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, MO, N, NA, NB, NC
+INTEGER IU, IV, IW
 DOUBLE PRECISION A(NA,M), B(NB,N), C(NC,N), WK(*)
 ! ----------------------------------------------------------------------
 !     DABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
@@ -1367,6 +2812,9 @@ RETURN
 END SUBROUTINE DABSLV
 
 SUBROUTINE DABSV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
+INTEGER I, J, K
 ! ----------------------------------------------------------------------
 !     DABSV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 !     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -1479,6 +2927,8 @@ RETURN
 END SUBROUTINE DABSV1
 
 SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
+IMPLICIT NONE
+INTEGER IP1
 ! ----------------------------------------------------------------------
 !     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. DSCHUR
 !     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH  TRANSPOSE(Q)*H*Q
@@ -1752,6 +3202,7 @@ RETURN
 END SUBROUTINE DSCHUR
 
 SUBROUTINE DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
+IMPLICIT NONE
 !     ------------------------------------------------------------------
 !     DSHSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 !     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -1866,6 +3317,9 @@ RETURN
 END SUBROUTINE DSHSLV
 
 SUBROUTINE TASLV (MO,N,A,NA,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, MO, N, NA, NC
+INTEGER IW
 REAL A(NA,N), C(NC,N), WK(*)
 ! ----------------------------------------------------------------------
 !     TASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -1924,6 +3378,9 @@ RETURN
 END SUBROUTINE TASLV
 
 SUBROUTINE TASLV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, MO, N, NA, NC, NU
+INTEGER I, J, K
 ! ----------------------------------------------------------------------
 !     TASLV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 !     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -2028,6 +3485,7 @@ RETURN
 END SUBROUTINE TASLV1
 
 SUBROUTINE SYMSLV (A,C,N,NA,NC,IERR)
+IMPLICIT NONE
 ! ----------------------------------------------------------------------
 !     SYMSLV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 !     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -2163,6 +3621,9 @@ RETURN
 END SUBROUTINE SYMSLV
 
 SUBROUTINE DTASLV (MO,N,A,NA,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, MO, N, NA, NC
+INTEGER IW
 DOUBLE PRECISION A(NA,N), C(NC,N), WK(*)
 ! ----------------------------------------------------------------------
 !     DTASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
@@ -2221,6 +3682,9 @@ RETURN
 END SUBROUTINE DTASLV
 
 SUBROUTINE DTASV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, MO, N, NA, NC, NU
+INTEGER I, J, K
 ! ----------------------------------------------------------------------
 !     DTASV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 !     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -2325,6 +3789,7 @@ RETURN
 END SUBROUTINE DTASV1
 
 SUBROUTINE DSYMSV (A,C,N,NA,NC,IERR)
+IMPLICIT NONE
 ! ----------------------------------------------------------------------
 !     DSYMSV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 !     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -2461,6 +3926,7 @@ END SUBROUTINE DSYMSV
 
 SUBROUTINE SQUINT(NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, &
 &MAXITS, IERR)
+IMPLICIT NONE
 !
 !
 !     SUBROUTINE SQUINT BREAKS DOWN THE WORK ARRAY  WORK  INTO
@@ -2560,6 +4026,7 @@ END SUBROUTINE SQUINT
 
 SUBROUTINE SQUIN2(NM, N, A, B, C, IGUESS, S, L, U, V, Z, R, XOLD, &
 &EYE, TEMP, NW, TOL, MAXITS, IERR)
+IMPLICIT NONE
 !
 !     SUBROUTINE SQUIN2 FINDS A RIGHT SOLVENT OF THE MATRIX
 !     EQUATION AX**2 + BX + C = 0.
@@ -2807,6 +4274,7 @@ RETURN
 END SUBROUTINE SQUIN2
 
 SUBROUTINE CQZHES(NM, N, A, B, MATS, Z, F, G, H)
+IMPLICIT NONE
 !
 !
 !     SUBROUTINE CQZHES IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -3016,6 +4484,7 @@ END DO
 END SUBROUTINE CQZHES
 
 SUBROUTINE CQZIT(NM, N, A, B, EPS1, MATS, Z, F, IERR)
+IMPLICIT NONE
 !
 !
 !     SUBROUTINE CQZIT IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -3264,6 +4733,7 @@ RETURN
 END SUBROUTINE CQZIT
 
 SUBROUTINE TRISLV(NM, N, U, V, L, F, TEMP, IERR)
+IMPLICIT NONE
 !
 !
 !     SUBROUTINE TRISLV BACKSOLVES A SYSTEM OF THE FORM
@@ -3363,6 +4833,10 @@ RETURN
 END SUBROUTINE TRISLV
 
 SUBROUTINE MEXP (A, KA, N, Z, KZ, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KZ, N
+INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP6
+REAL ANORM, ANORM1, FACTOR, P, Q, S, S1
 REAL A(KA,N),Z(KZ,N),WK(N,*),C(8)
 ! ----------------------------------------------------------------------
 !     MEXP COMPUTES EXP(A) AND STORES IT IN Z WHERE A IS A MATRIX
@@ -3511,6 +4985,9 @@ RETURN
 END SUBROUTINE MEXP
 
 SUBROUTINE DMEXP (A, KA, N, Z, KZ, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KZ, N
+INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
 DOUBLE PRECISION A(KA,N),Z(KZ,N),WK(N,*)
 DOUBLE PRECISION ANORM,ANORM1,C(12),FACTOR,P,Q,S,S1
 ! ----------------------------------------------------------------------
@@ -3668,6 +5145,11 @@ RETURN
 END SUBROUTINE DMEXP
 
 SUBROUTINE LE (ROWK,N,B,C,D,IP,IERR)
+IMPLICIT NONE
+INTEGER IERR, N
+INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST &
+&, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+REAL BK, C1, CJ, CK, DKJ, ZERO
 !     ******************************************************************
 !     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
 !     ******************************************************************
@@ -3831,6 +5313,10 @@ RETURN
 END SUBROUTINE LE
 
 SUBROUTINE DPLE (ROWK,N,B,C,D,IP,IERR)
+IMPLICIT NONE
+INTEGER IERR, N
+INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST &
+&, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
 !     ******************************************************************
 !     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
 !     ******************************************************************
@@ -3995,6 +5481,11 @@ RETURN
 END SUBROUTINE DPLE
 
 SUBROUTINE CLE (ROWK,N,B,C,D,IP,IERR)
+IMPLICIT NONE
+INTEGER IERR, N
+INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST &
+&, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+REAL S, SI
 !     ******************************************************************
 !     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH REDUCED STORAGE
 !     ******************************************************************
@@ -5257,6 +6748,9 @@ RETURN
 END SUBROUTINE BIMAG
 
 SUBROUTINE BCVRC (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
+INTEGER I, J, JA, JB, JC, JMAX, K, NUM
 !-----------------------------------------------------------------------
 !        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
 !-----------------------------------------------------------------------
@@ -7395,6 +8889,10 @@ RETURN
 END SUBROUTINE CBTPD1
 
 REAL function BNRM (A, KA, M, N, ML, MU)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, J, NUM
+REAL SUM
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                      REAL BANDED MATRIX A
@@ -7414,6 +8912,10 @@ RETURN
 END FUNCTION BNRM
 
 REAL function B1NRM (A, KA, M, N, ML, MU)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
+REAL SASUM
 !-----------------------------------------------------------------------
 !            COMPUTATION OF THE L1 NORM OF A BANDED MATRIX A
 !-----------------------------------------------------------------------
@@ -7464,6 +8966,9 @@ J = JMAX
 END FUNCTION B1NRM
 
 double precision function DBNRM (A, KA, M, N, ML, MU)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, J, NUM
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                DOUBLE PRECISION BANDED MATRIX A
@@ -7484,6 +8989,9 @@ RETURN
 END FUNCTION DBNRM
 
 double precision function DB1NRM (A, KA, M, N, ML, MU)
+IMPLICIT NONE
+INTEGER KA, M, ML, MU, N
+INTEGER I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
 !-----------------------------------------------------------------------
 !            COMPUTATION OF THE L1 NORM OF A DOUBLE PRECISION
 !                            BANDED MATRIX A
@@ -8009,6 +9517,8 @@ RETURN
 END SUBROUTINE SNBSL
 
 SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M0, ML, MU, N
 ! ----------------------------------------------------------------------
 !     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 !     THE NXN BANDED LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -8088,6 +9598,8 @@ RETURN
 END SUBROUTINE DBSLV
 
 SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M0, ML, MU, N
 ! ----------------------------------------------------------------------
 !     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 !     THE NXN BANDED LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -8167,6 +9679,10 @@ RETURN
 END SUBROUTINE DBSLV1
 
 SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
+IMPLICIT NONE
+INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1 &
+&, MP, N1
+INTEGER IDAMAX
 ! ----------------------------------------------------------------------
 !
 !               DBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
@@ -8337,6 +9853,8 @@ RETURN
 END SUBROUTINE DBFA
 
 SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
+IMPLICIT NONE
+INTEGER ML1, ML2
 ! ----------------------------------------------------------------------
 !
 !     DBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -8472,6 +9990,12 @@ RETURN
 END SUBROUTINE DBSL
 
 SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, ML, MU, N
+REAL COND
+INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+REAL AINORM, ANORM
+REAL B1NRM
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A BANDED MATRIX A
@@ -8537,6 +10061,9 @@ RETURN
 END SUBROUTINE B1CND
 
 SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, ML, MU, N
+INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 !-----------------------------------------------------------------------
 !            COMPUTATION OF THE L1 CONDITION NUMBER OF
 !               A DOUBLE PRECISION BANDED MATRIX A
@@ -9077,1429 +10604,4 @@ RETURN
 110 B(K) = B(K)/A(K,1)
 RETURN
 END SUBROUTINE CBSL
-
-SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
-IMPLICIT NONE
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-REAL A(KA,N), B(*)
-INTEGER IB(*), JB(*)
-!
-!                 STORE THE I-TH ROW
-!
-IP = 1
-DO I = 1,M
-   IB(I) = IP
-   do 10 J = 1,N
-      IF (A(I,J) .EQ. 0.0) GO TO 10
-      IF (IP .GT. NUM) GO TO 20
-      B(IP) = A(I,J)
-      JB(IP) = J
-      IP = IP + 1
-10 CONTINUE
-END DO
-!
-!                 COMPLETE THE SETUP
-!
-IB(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                   ERROR RETURN
-!
-20 IERR = I
-RETURN
-END SUBROUTINE CVRS
-
-SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
-IMPLICIT NONE
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-DOUBLE PRECISION A(KA,N), B(*)
-INTEGER IB(*), JB(*)
-!
-!                 STORE THE I-TH ROW
-!
-IP = 1
-DO I = 1,M
-   IB(I) = IP
-   do 10 J = 1,N
-      IF (A(I,J) .EQ. 0.D0) GO TO 10
-      IF (IP .GT. NUM) GO TO 20
-      B(IP) = A(I,J)
-      JB(IP) = J
-      IP = IP + 1
-10 CONTINUE
-END DO
-!
-!                 COMPLETE THE SETUP
-!
-IB(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                   ERROR RETURN
-!
-20 IERR = I
-RETURN
-END SUBROUTINE CVDS
-
-SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
-IMPLICIT NONE
-INTEGER IERR, KA, M, N, NUM
-INTEGER I, IP, J
-COMPLEX A(KA,N), B(*), ZERO
-INTEGER IB(*), JB(*)
-DATA ZERO /(0.0,0.0)/
-!
-!                 STORE THE I-TH ROW
-!
-IP = 1
-DO I = 1,M
-   IB(I) = IP
-   do 10 J = 1,N
-      IF (A(I,J) .EQ. ZERO) GO TO 10
-      IF (IP .GT. NUM) GO TO 20
-      B(IP) = A(I,J)
-      JB(IP) = J
-      IP = IP + 1
-10 CONTINUE
-END DO
-!
-!                 COMPLETE THE SETUP
-!
-IB(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                   ERROR RETURN
-!
-20 IERR = I
-RETURN
-END SUBROUTINE CVCS
-
-SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
-IMPLICIT NONE
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-REAL A(*), B(KB,N)
-INTEGER IA(*), JA(*)
-!
-do 30 I = 1,M
-!
-!                 CLEAR THE I-TH ROW
-!
-   DO J = 1,N
-      B(I,J) = 0.0
-   END DO
-!
-!                 STORE THE I-TH ROW
-!
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 30
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      B(I,J) = A(IP)
-   END DO
-!
-30 CONTINUE
-RETURN
-END SUBROUTINE CVSR
-
-SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
-IMPLICIT NONE
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-DOUBLE PRECISION A(*), B(KB,N)
-INTEGER IA(*), JA(*)
-!
-do 30 I = 1,M
-!
-!                 CLEAR THE I-TH ROW
-!
-   DO J = 1,N
-      B(I,J) = 0.D0
-   END DO
-!
-!                 STORE THE I-TH ROW
-!
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 30
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      B(I,J) = A(IP)
-   END DO
-!
-30 CONTINUE
-RETURN
-END SUBROUTINE CVSD
-
-SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
-IMPLICIT NONE
-INTEGER KB, M, N
-INTEGER I, IP, IPMAX, IPMIN, J
-COMPLEX A(*), B(KB,N)
-INTEGER IA(*), JA(*)
-!
-do 30 I = 1,M
-!
-!                 CLEAR THE I-TH ROW
-!
-   DO J = 1,N
-      B(I,J) = (0.0,0.0)
-   END DO
-!
-!                 STORE THE I-TH ROW
-!
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 30
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      B(I,J) = A(IP)
-   END DO
-!
-30 CONTINUE
-RETURN
-END SUBROUTINE CVSC
-
-SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
-IMPLICIT NONE
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL A(*)
-DOUBLE PRECISION B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      IF (A(IP) .EQ. 0.0) GO TO 10
-      B(L) = A(IP)
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE SCVRD
-
-SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
-IMPLICIT NONE
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-DOUBLE PRECISION A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      IF (A(IP) .EQ. 0.D0) GO TO 10
-      B(L) = A(IP)
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE SCVDR
-
-SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
-IMPLICIT NONE
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL T
-!-----------------------------------------------------------------------
-!              REAL PART OF A SPARSE COMPLEX MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      T = REAL(A(IP))
-      IF (T .EQ. 0.0) GO TO 10
-      B(L) = T
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE CSREAL
-
-SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
-IMPLICIT NONE
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L
-REAL T
-!-----------------------------------------------------------------------
-!            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*)
-REAL B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      T = AIMAG(A(IP))
-      IF (T .EQ. 0.0) GO TO 10
-      B(L) = T
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE CSIMAG
-
-SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
-!-----------------------------------------------------------------------
-REAL A(*), B(*), WK(N)
-COMPLEX C(*), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = 0.0
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      IF (B(L) .EQ. 0.0) GO TO 31
-      J = JB(L)
-      T = CMPLX (WK(J), B(L))
-      WK(J) = 0.0
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. 0.0) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = CMPLX (WK(J), 0.0)
-      WK(J) = 0.0
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE SCVRC
-
-SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
-!-----------------------------------------------------------------------
-!                  COPYING A SPARSE REAL MATRIX
-!-----------------------------------------------------------------------
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      IF (A(IP) .EQ. 0.0) GO TO 10
-      B(L) = A(IP)
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE RSCOPY
-
-SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
-!-----------------------------------------------------------------------
-!              COPYING A SPARSE DOUBLE PRECISION MATRIX
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      IF (A(IP) .EQ. 0.D0) GO TO 10
-      B(L) = A(IP)
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE DSCOPY
-
-SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
-!-----------------------------------------------------------------------
-!                 COPYING A SPARSE COMPLEX MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*), ZERO
-INTEGER IA(*), JA(*), IB(*), JB(*)
-DATA ZERO /(0.0,0.0)/
-!
-L = 1
-do 20 I = 1,M
-   IB(I) = L
-   IBEG = IA(I)
-   IEND = IA(I+1) - 1
-   IF (IBEG .GT. IEND) GO TO 20
-   do 10 IP = IBEG,IEND
-      IF (A(IP) .EQ. ZERO) GO TO 10
-      B(L) = A(IP)
-      JB(L) = JA(IP)
-      L = L + 1
-10 CONTINUE
-20 CONTINUE
-IB(M + 1) = L
-RETURN
-END SUBROUTINE CSCOPY
-
-SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
-IMPLICIT NONE
-INTEGER M
-INTEGER I, IBEG, IEND, IP, L, MP1
-!-----------------------------------------------------------------------
-!     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-MP1 = M + 1
-L = IA(1) - 1
-DO I = 1,MP1
-   IB(I) = IA(I) - L
-END DO
-!
-IBEG = IA(1)
-IEND = IA(MP1) - 1
-IF (IBEG .GT. IEND) RETURN
-L = 1
-DO IP = IBEG,IEND
-   B(L) = CONJG(A(IP))
-   JB(L) = JA(IP)
-   L = L + 1
-END DO
-RETURN
-END SUBROUTINE SCONJ
-
-SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!                 TRANSPOSING A SPARSE REAL MATRIX
-!-----------------------------------------------------------------------
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE RPOSE
-
-SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!                 TRANSPOSING A SPARSE REAL MATRIX
-!                 WHERE THE ROWS ARE INTERCHANGED
-!-----------------------------------------------------------------------
-INTEGER P(M)
-REAL A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   II = P(I)
-   IPMIN = IA(II)
-   IPMAX = IA(II+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE RPOSE1
-
-SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE DPOSE
-
-SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
-!                 WHERE THE ROWS ARE INTERCHANGED
-!-----------------------------------------------------------------------
-INTEGER P(M)
-DOUBLE PRECISION A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   II = P(I)
-   IPMIN = IA(II)
-   IPMAX = IA(II+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE DPOSE1
-
-SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!               TRANSPOSING A SPARSE COMPLEX MATRIX
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   IPMIN = IA(I)
-   IPMAX = IA(I+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE CPOSE
-
-SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-!-----------------------------------------------------------------------
-!               TRANSPOSING A SPARSE COMPLEX MATRIX
-!                 WHERE THE ROWS ARE INTERCHANGED
-!-----------------------------------------------------------------------
-INTEGER P(M)
-COMPLEX A(*), B(*)
-INTEGER IA(*), JA(*), IB(*), JB(*)
-!
-!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
-!                 OF A AND STORE THE RESULTS IN IB
-!
-IPMIN = IA(1)
-IPMAX = IA(M+1) - 1
-IF (IPMIN .GT. IPMAX) GO TO 40
-DO J = 1,N
-   IB(J) = 0
-END DO
-DO IP = IPMIN,IPMAX
-   J = JA(IP)
-   IB(J) = IB(J) + 1
-END DO
-!
-!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
-!                AND STORE THEM IN IB(2),...,IB(N+1)
-!
-NUM = IA(M+1) - IA(1) + 1
-J = N
-DO JJ = 1,N
-   NUM = NUM - IB(J)
-   IB(J+1) = NUM
-   J = J - 1
-END DO
-!
-!                STORE THE I-TH ROW OF A IN B AND JB
-!                  AND UPDATE THE POINTERS IN IB
-!
-do 31 I = 1,M
-   II = P(I)
-   IPMIN = IA(II)
-   IPMAX = IA(II+1) - 1
-   IF (IPMIN .GT. IPMAX) GO TO 31
-   DO IP = IPMIN,IPMAX
-      J = JA(IP)
-      JP = IB(J+1)
-      JB(JP) = I
-      B(JP) = A(IP)
-      IB(J+1) = JP + 1
-   END DO
-31 CONTINUE
-IB(1) = 1
-RETURN
-!
-!                    TRANSPOSE A ZERO MATRIX A
-!
-40 NP1 = N + 1
-DO J = 1,NP1
-   IB(J) = 1
-END DO
-RETURN
-END SUBROUTINE CPOSE1
-
-SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!               ADDITION OF SPARSE REAL MATRICES
-!-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = 0.0
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) + B(L)
-      WK(J) = 0.0
-      IF (T .EQ. 0.0) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. 0.0) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = 0.0
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE SADD
-
-SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = 0.D0
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) + B(L)
-      WK(J) = 0.D0
-      IF (T .EQ. 0.D0) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. 0.D0) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = 0.D0
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE DSADD
-
-SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!              ADDITION OF SPARSE COMPLEX MATRICES
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = (0.0, 0.0)
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) + B(L)
-      WK(J) = (0.0, 0.0)
-      IF (T .EQ. (0.0, 0.0)) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. (0.0, 0.0)) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = (0.0, 0.0)
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE CSADD
-
-SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!             SUBTRACTION OF SPARSE REAL MATRICES
-!-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = 0.0
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) - B(L)
-      WK(J) = 0.0
-      IF (T .EQ. 0.0) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. 0.0) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = 0.0
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE SSUBT
-
-SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = 0.D0
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) - B(L)
-      WK(J) = 0.D0
-      IF (T .EQ. 0.D0) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. 0.D0) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = 0.D0
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE DSSUBT
-
-SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, M, N, NUM
-INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
-!-----------------------------------------------------------------------
-!            SUBTRACTION OF SPARSE COMPLEX MATRICES
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO J = 1,N
-   WK(J) = (0.0, 0.0)
-END DO
-!
-!                  COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 42 I = 1,M
-   IC(I) = IP
-   MINA = IA(I)
-   MAXA = IA(I+1) - 1
-   IF (MINA .GT. MAXA) GO TO 30
-   DO L = MINA,MAXA
-      J = JA(L)
-      WK(J) = A(L)
-   END DO
-!
-30 MINB = IB(I)
-   MAXB = IB(I+1) - 1
-   IF (MINB .GT. MAXB) GO TO 40
-   do 31 L = MINB,MAXB
-      J = JB(L)
-      T = WK(J) - B(L)
-      WK(J) = (0.0, 0.0)
-      IF (T .EQ. (0.0, 0.0)) GO TO 31
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = T
-      JC(IP) = J
-      IP = IP + 1
-31 CONTINUE
-!
-40 IF (MINA .GT. MAXA) GO TO 42
-   do 41 L = MINA,MAXA
-      J = JA(L)
-      IF (WK(J) .EQ. (0.0, 0.0)) GO TO 41
-      IF (IP .GT. NUM) GO TO 50
-      C(IP) = WK(J)
-      WK(J) = (0.0, 0.0)
-      JC(IP) = J
-      IP = IP + 1
-41 CONTINUE
-42 CONTINUE
-IC(M + 1) = IP
-IERR = 0
-RETURN
-!
-!                        ERROR RETURN
-!
-50 IERR = I
-RETURN
-END SUBROUTINE CSSUBT
-
-SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
-!-----------------------------------------------------------------------
-!               MULTIPLICATION OF SPARSE REAL MATRICES
-!-----------------------------------------------------------------------
-REAL A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO K = 1,N
-   WK(K) = 0.0
-END DO
-!
-!                     COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 31 I = 1,L
-   IC(I) = IP
-   JPMIN = IA(I)
-   JPMAX = IA(I+1) - 1
-   IF (JPMIN .GT. JPMAX) GO TO 31
-!
-   do 21 JP = JPMIN,JPMAX
-      T = A(JP)
-      IF (T .EQ. 0.0) GO TO 21
-      J = JA(JP)
-      KPMIN = IB(J)
-      KPMAX = IB(J+1) - 1
-      IF (KPMIN .GT. KPMAX) GO TO 21
-      DO KP = KPMIN,KPMAX
-         K = JB(KP)
-         WK(K) = WK(K) + T*B(KP)
-      END DO
-21 CONTINUE
-!
-   do 30 K = 1,N
-      IF (WK(K) .EQ. 0.0) GO TO 30
-      IF (IP .GT. NUM) GO TO 40
-      C(IP) = WK(K)
-      WK(K) = 0.0
-      JC(IP) = K
-      IP = IP + 1
-30 CONTINUE
-31 CONTINUE
-IC(L + 1) = IP
-IERR = 0
-RETURN
-!
-!                           ERROR RETURN
-!
-40 IERR = I
-RETURN
-END SUBROUTINE SPROD
-
-SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
-!-----------------------------------------------------------------------
-!         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
-!-----------------------------------------------------------------------
-DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO K = 1,N
-   WK(K) = 0.D0
-END DO
-!
-!                     COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 31 I = 1,L
-   IC(I) = IP
-   JPMIN = IA(I)
-   JPMAX = IA(I+1) - 1
-   IF (JPMIN .GT. JPMAX) GO TO 31
-!
-   do 21 JP = JPMIN,JPMAX
-      T = A(JP)
-      IF (T .EQ. 0.D0) GO TO 21
-      J = JA(JP)
-      KPMIN = IB(J)
-      KPMAX = IB(J+1) - 1
-      IF (KPMIN .GT. KPMAX) GO TO 21
-      DO KP = KPMIN,KPMAX
-         K = JB(KP)
-         WK(K) = WK(K) + T*B(KP)
-      END DO
-21 CONTINUE
-!
-   do 30 K = 1,N
-      IF (WK(K) .EQ. 0.D0) GO TO 30
-      IF (IP .GT. NUM) GO TO 40
-      C(IP) = WK(K)
-      WK(K) = 0.D0
-      JC(IP) = K
-      IP = IP + 1
-30 CONTINUE
-31 CONTINUE
-IC(L + 1) = IP
-IERR = 0
-RETURN
-!
-!                           ERROR RETURN
-!
-40 IERR = I
-RETURN
-END SUBROUTINE DSPROD
-
-SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
-IMPLICIT NONE
-INTEGER IERR, L, M, N, NUM
-INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
-!-----------------------------------------------------------------------
-!             MULTIPLICATION OF SPARSE COMPLEX MATRICES
-!-----------------------------------------------------------------------
-COMPLEX A(*), B(*), C(*), WK(N), T
-INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
-!-------------------------
-DO K = 1,N
-   WK(K) = (0.0, 0.0)
-END DO
-!
-!                     COMPUTE THE I-TH ROW OF C
-!
-IP = 1
-do 31 I = 1,L
-   IC(I) = IP
-   JPMIN = IA(I)
-   JPMAX = IA(I+1) - 1
-   IF (JPMIN .GT. JPMAX) GO TO 31
-!
-   do 21 JP = JPMIN,JPMAX
-      T = A(JP)
-      IF (T .EQ. (0.0, 0.0)) GO TO 21
-      J = JA(JP)
-      KPMIN = IB(J)
-      KPMAX = IB(J+1) - 1
-      IF (KPMIN .GT. KPMAX) GO TO 21
-      DO KP = KPMIN,KPMAX
-         K = JB(KP)
-         WK(K) = WK(K) + T*B(KP)
-      END DO
-21 CONTINUE
-!
-   do 30 K = 1,N
-      IF (WK(K) .EQ. (0.0, 0.0)) GO TO 30
-      IF (IP .GT. NUM) GO TO 40
-      C(IP) = WK(K)
-      WK(K) = (0.0, 0.0)
-      JC(IP) = K
-      IP = IP + 1
-30 CONTINUE
-31 CONTINUE
-IC(L + 1) = IP
-IERR = 0
-RETURN
-!
-!                           ERROR RETURN
-!
-40 IERR = I
-RETURN
-END SUBROUTINE CSPROD
-
-SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
-!-----------------------------------------------------------------------
-!              PRODUCT OF A SPARSE MATRIX AND A VECTOR
-!-----------------------------------------------------------------------
-REAL A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   SUM = 0.0
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      SUM = SUM + A(L)*X(J)
-   END DO
-11 Y(I) = SUM
-RETURN
-END SUBROUTINE MVPRD
-
-SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
-IMPLICIT NONE
-INTEGER M, N
-INTEGER I, J, L, LMAX, LMIN
-!-----------------------------------------------------------------------
-!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
-!-----------------------------------------------------------------------
-REAL A(*), X(N), Y(M), SUM
-INTEGER IA(*), JA(*)
-!
-do 11 I = 1,M
-   SUM = Y(I)
-   LMIN = IA(I)
-   LMAX = IA(I+1) - 1
-   IF (LMIN .GT. LMAX) GO TO 11
-   DO L = LMIN,LMAX
-      J = JA(L)
-      SUM = SUM + A(L)*X(J)
-   END DO
-11 Y(I) = SUM
-RETURN
-END SUBROUTINE MVPRD1
 

@@ -1,3 +1,1437 @@
+SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M, N, NUM
+INTEGER I, IP, J
+REAL A(KA,N), B(*)
+INTEGER IB(*), JB(*)
+!
+!                 STORE THE I-TH ROW
+!
+IP = 1
+DO I = 1,M
+   IB(I) = IP
+   do 10 J = 1,N
+      IF (A(I,J) .EQ. 0.0) GO TO 10
+      IF (IP .GT. NUM) GO TO 20
+      B(IP) = A(I,J)
+      JB(IP) = J
+      IP = IP + 1
+10 CONTINUE
+END DO
+!
+!                 COMPLETE THE SETUP
+!
+IB(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                   ERROR RETURN
+!
+20 IERR = I
+RETURN
+END SUBROUTINE CVRS
+
+SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M, N, NUM
+INTEGER I, IP, J
+DOUBLE PRECISION A(KA,N), B(*)
+INTEGER IB(*), JB(*)
+!
+!                 STORE THE I-TH ROW
+!
+IP = 1
+DO I = 1,M
+   IB(I) = IP
+   do 10 J = 1,N
+      IF (A(I,J) .EQ. 0.D0) GO TO 10
+      IF (IP .GT. NUM) GO TO 20
+      B(IP) = A(I,J)
+      JB(IP) = J
+      IP = IP + 1
+10 CONTINUE
+END DO
+!
+!                 COMPLETE THE SETUP
+!
+IB(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                   ERROR RETURN
+!
+20 IERR = I
+RETURN
+END SUBROUTINE CVDS
+
+SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, M, N, NUM
+INTEGER I, IP, J
+COMPLEX A(KA,N), B(*), ZERO
+INTEGER IB(*), JB(*)
+DATA ZERO /(0.0,0.0)/
+!
+!                 STORE THE I-TH ROW
+!
+IP = 1
+DO I = 1,M
+   IB(I) = IP
+   do 10 J = 1,N
+      IF (A(I,J) .EQ. ZERO) GO TO 10
+      IF (IP .GT. NUM) GO TO 20
+      B(IP) = A(I,J)
+      JB(IP) = J
+      IP = IP + 1
+10 CONTINUE
+END DO
+!
+!                 COMPLETE THE SETUP
+!
+IB(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                   ERROR RETURN
+!
+20 IERR = I
+RETURN
+END SUBROUTINE CVCS
+
+SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
+IMPLICIT NONE
+INTEGER KB, M, N
+INTEGER I, IP, IPMAX, IPMIN, J
+REAL A(*), B(KB,N)
+INTEGER IA(*), JA(*)
+!
+do 30 I = 1,M
+!
+!                 CLEAR THE I-TH ROW
+!
+   DO J = 1,N
+      B(I,J) = 0.0
+   END DO
+!
+!                 STORE THE I-TH ROW
+!
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 30
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      B(I,J) = A(IP)
+   END DO
+!
+30 CONTINUE
+RETURN
+END SUBROUTINE CVSR
+
+SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
+IMPLICIT NONE
+INTEGER KB, M, N
+INTEGER I, IP, IPMAX, IPMIN, J
+DOUBLE PRECISION A(*), B(KB,N)
+INTEGER IA(*), JA(*)
+!
+do 30 I = 1,M
+!
+!                 CLEAR THE I-TH ROW
+!
+   DO J = 1,N
+      B(I,J) = 0.D0
+   END DO
+!
+!                 STORE THE I-TH ROW
+!
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 30
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      B(I,J) = A(IP)
+   END DO
+!
+30 CONTINUE
+RETURN
+END SUBROUTINE CVSD
+
+SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
+IMPLICIT NONE
+INTEGER KB, M, N
+INTEGER I, IP, IPMAX, IPMIN, J
+COMPLEX A(*), B(KB,N)
+INTEGER IA(*), JA(*)
+!
+do 30 I = 1,M
+!
+!                 CLEAR THE I-TH ROW
+!
+   DO J = 1,N
+      B(I,J) = (0.0,0.0)
+   END DO
+!
+!                 STORE THE I-TH ROW
+!
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 30
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      B(I,J) = A(IP)
+   END DO
+!
+30 CONTINUE
+RETURN
+END SUBROUTINE CVSC
+
+SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+REAL A(*)
+DOUBLE PRECISION B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      IF (A(IP) .EQ. 0.0) GO TO 10
+      B(L) = A(IP)
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE SCVRD
+
+SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+DOUBLE PRECISION A(*)
+REAL B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      IF (A(IP) .EQ. 0.D0) GO TO 10
+      B(L) = A(IP)
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE SCVDR
+
+SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+REAL T
+!-----------------------------------------------------------------------
+!              REAL PART OF A SPARSE COMPLEX MATRIX
+!-----------------------------------------------------------------------
+COMPLEX A(*)
+REAL B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      T = REAL(A(IP))
+      IF (T .EQ. 0.0) GO TO 10
+      B(L) = T
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE CSREAL
+
+SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+REAL T
+!-----------------------------------------------------------------------
+!            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
+!-----------------------------------------------------------------------
+COMPLEX A(*)
+REAL B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      T = AIMAG(A(IP))
+      IF (T .EQ. 0.0) GO TO 10
+      B(L) = T
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE CSIMAG
+
+SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
+!-----------------------------------------------------------------------
+REAL A(*), B(*), WK(N)
+COMPLEX C(*), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = 0.0
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      IF (B(L) .EQ. 0.0) GO TO 31
+      J = JB(L)
+      T = CMPLX (WK(J), B(L))
+      WK(J) = 0.0
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. 0.0) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = CMPLX (WK(J), 0.0)
+      WK(J) = 0.0
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE SCVRC
+
+SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+!-----------------------------------------------------------------------
+!                  COPYING A SPARSE REAL MATRIX
+!-----------------------------------------------------------------------
+REAL A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      IF (A(IP) .EQ. 0.0) GO TO 10
+      B(L) = A(IP)
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE RSCOPY
+
+SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+!-----------------------------------------------------------------------
+!              COPYING A SPARSE DOUBLE PRECISION MATRIX
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      IF (A(IP) .EQ. 0.D0) GO TO 10
+      B(L) = A(IP)
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE DSCOPY
+
+SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L
+!-----------------------------------------------------------------------
+!                 COPYING A SPARSE COMPLEX MATRIX
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*), ZERO
+INTEGER IA(*), JA(*), IB(*), JB(*)
+DATA ZERO /(0.0,0.0)/
+!
+L = 1
+do 20 I = 1,M
+   IB(I) = L
+   IBEG = IA(I)
+   IEND = IA(I+1) - 1
+   IF (IBEG .GT. IEND) GO TO 20
+   do 10 IP = IBEG,IEND
+      IF (A(IP) .EQ. ZERO) GO TO 10
+      B(L) = A(IP)
+      JB(L) = JA(IP)
+      L = L + 1
+10 CONTINUE
+20 CONTINUE
+IB(M + 1) = L
+RETURN
+END SUBROUTINE CSCOPY
+
+SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
+IMPLICIT NONE
+INTEGER M
+INTEGER I, IBEG, IEND, IP, L, MP1
+!-----------------------------------------------------------------------
+!     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+MP1 = M + 1
+L = IA(1) - 1
+DO I = 1,MP1
+   IB(I) = IA(I) - L
+END DO
+!
+IBEG = IA(1)
+IEND = IA(MP1) - 1
+IF (IBEG .GT. IEND) RETURN
+L = 1
+DO IP = IBEG,IEND
+   B(L) = CONJG(A(IP))
+   JB(L) = JA(IP)
+   L = L + 1
+END DO
+RETURN
+END SUBROUTINE SCONJ
+
+SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!                 TRANSPOSING A SPARSE REAL MATRIX
+!-----------------------------------------------------------------------
+REAL A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE RPOSE
+
+SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!                 TRANSPOSING A SPARSE REAL MATRIX
+!                 WHERE THE ROWS ARE INTERCHANGED
+!-----------------------------------------------------------------------
+INTEGER P(M)
+REAL A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   II = P(I)
+   IPMIN = IA(II)
+   IPMAX = IA(II+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE RPOSE1
+
+SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE DPOSE
+
+SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
+!                 WHERE THE ROWS ARE INTERCHANGED
+!-----------------------------------------------------------------------
+INTEGER P(M)
+DOUBLE PRECISION A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   II = P(I)
+   IPMIN = IA(II)
+   IPMAX = IA(II+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE DPOSE1
+
+SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!               TRANSPOSING A SPARSE COMPLEX MATRIX
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   IPMIN = IA(I)
+   IPMAX = IA(I+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE CPOSE
+
+SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+!-----------------------------------------------------------------------
+!               TRANSPOSING A SPARSE COMPLEX MATRIX
+!                 WHERE THE ROWS ARE INTERCHANGED
+!-----------------------------------------------------------------------
+INTEGER P(M)
+COMPLEX A(*), B(*)
+INTEGER IA(*), JA(*), IB(*), JB(*)
+!
+!           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
+!                 OF A AND STORE THE RESULTS IN IB
+!
+IPMIN = IA(1)
+IPMAX = IA(M+1) - 1
+IF (IPMIN .GT. IPMAX) GO TO 40
+DO J = 1,N
+   IB(J) = 0
+END DO
+DO IP = IPMIN,IPMAX
+   J = JA(IP)
+   IB(J) = IB(J) + 1
+END DO
+!
+!          COMPUTE THE ROW POINTERS OF THE TRANSPOSE MATRIX
+!                AND STORE THEM IN IB(2),...,IB(N+1)
+!
+NUM = IA(M+1) - IA(1) + 1
+J = N
+DO JJ = 1,N
+   NUM = NUM - IB(J)
+   IB(J+1) = NUM
+   J = J - 1
+END DO
+!
+!                STORE THE I-TH ROW OF A IN B AND JB
+!                  AND UPDATE THE POINTERS IN IB
+!
+do 31 I = 1,M
+   II = P(I)
+   IPMIN = IA(II)
+   IPMAX = IA(II+1) - 1
+   IF (IPMIN .GT. IPMAX) GO TO 31
+   DO IP = IPMIN,IPMAX
+      J = JA(IP)
+      JP = IB(J+1)
+      JB(JP) = I
+      B(JP) = A(IP)
+      IB(J+1) = JP + 1
+   END DO
+31 CONTINUE
+IB(1) = 1
+RETURN
+!
+!                    TRANSPOSE A ZERO MATRIX A
+!
+40 NP1 = N + 1
+DO J = 1,NP1
+   IB(J) = 1
+END DO
+RETURN
+END SUBROUTINE CPOSE1
+
+SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!               ADDITION OF SPARSE REAL MATRICES
+!-----------------------------------------------------------------------
+REAL A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = 0.0
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) + B(L)
+      WK(J) = 0.0
+      IF (T .EQ. 0.0) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. 0.0) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = 0.0
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE SADD
+
+SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = 0.D0
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) + B(L)
+      WK(J) = 0.D0
+      IF (T .EQ. 0.D0) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. 0.D0) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = 0.D0
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE DSADD
+
+SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!              ADDITION OF SPARSE COMPLEX MATRICES
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = (0.0, 0.0)
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) + B(L)
+      WK(J) = (0.0, 0.0)
+      IF (T .EQ. (0.0, 0.0)) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. (0.0, 0.0)) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = (0.0, 0.0)
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE CSADD
+
+SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!             SUBTRACTION OF SPARSE REAL MATRICES
+!-----------------------------------------------------------------------
+REAL A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = 0.0
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) - B(L)
+      WK(J) = 0.0
+      IF (T .EQ. 0.0) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. 0.0) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = 0.0
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE SSUBT
+
+SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = 0.D0
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) - B(L)
+      WK(J) = 0.D0
+      IF (T .EQ. 0.D0) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. 0.D0) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = 0.D0
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE DSSUBT
+
+SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
+!-----------------------------------------------------------------------
+!            SUBTRACTION OF SPARSE COMPLEX MATRICES
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO J = 1,N
+   WK(J) = (0.0, 0.0)
+END DO
+!
+!                  COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 42 I = 1,M
+   IC(I) = IP
+   MINA = IA(I)
+   MAXA = IA(I+1) - 1
+   IF (MINA .GT. MAXA) GO TO 30
+   DO L = MINA,MAXA
+      J = JA(L)
+      WK(J) = A(L)
+   END DO
+!
+30 MINB = IB(I)
+   MAXB = IB(I+1) - 1
+   IF (MINB .GT. MAXB) GO TO 40
+   do 31 L = MINB,MAXB
+      J = JB(L)
+      T = WK(J) - B(L)
+      WK(J) = (0.0, 0.0)
+      IF (T .EQ. (0.0, 0.0)) GO TO 31
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = T
+      JC(IP) = J
+      IP = IP + 1
+31 CONTINUE
+!
+40 IF (MINA .GT. MAXA) GO TO 42
+   do 41 L = MINA,MAXA
+      J = JA(L)
+      IF (WK(J) .EQ. (0.0, 0.0)) GO TO 41
+      IF (IP .GT. NUM) GO TO 50
+      C(IP) = WK(J)
+      WK(J) = (0.0, 0.0)
+      JC(IP) = J
+      IP = IP + 1
+41 CONTINUE
+42 CONTINUE
+IC(M + 1) = IP
+IERR = 0
+RETURN
+!
+!                        ERROR RETURN
+!
+50 IERR = I
+RETURN
+END SUBROUTINE CSSUBT
+
+SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+!-----------------------------------------------------------------------
+!               MULTIPLICATION OF SPARSE REAL MATRICES
+!-----------------------------------------------------------------------
+REAL A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO K = 1,N
+   WK(K) = 0.0
+END DO
+!
+!                     COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 31 I = 1,L
+   IC(I) = IP
+   JPMIN = IA(I)
+   JPMAX = IA(I+1) - 1
+   IF (JPMIN .GT. JPMAX) GO TO 31
+!
+   do 21 JP = JPMIN,JPMAX
+      T = A(JP)
+      IF (T .EQ. 0.0) GO TO 21
+      J = JA(JP)
+      KPMIN = IB(J)
+      KPMAX = IB(J+1) - 1
+      IF (KPMIN .GT. KPMAX) GO TO 21
+      DO KP = KPMIN,KPMAX
+         K = JB(KP)
+         WK(K) = WK(K) + T*B(KP)
+      END DO
+21 CONTINUE
+!
+   do 30 K = 1,N
+      IF (WK(K) .EQ. 0.0) GO TO 30
+      IF (IP .GT. NUM) GO TO 40
+      C(IP) = WK(K)
+      WK(K) = 0.0
+      JC(IP) = K
+      IP = IP + 1
+30 CONTINUE
+31 CONTINUE
+IC(L + 1) = IP
+IERR = 0
+RETURN
+!
+!                           ERROR RETURN
+!
+40 IERR = I
+RETURN
+END SUBROUTINE SPROD
+
+SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+!-----------------------------------------------------------------------
+!         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO K = 1,N
+   WK(K) = 0.D0
+END DO
+!
+!                     COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 31 I = 1,L
+   IC(I) = IP
+   JPMIN = IA(I)
+   JPMAX = IA(I+1) - 1
+   IF (JPMIN .GT. JPMAX) GO TO 31
+!
+   do 21 JP = JPMIN,JPMAX
+      T = A(JP)
+      IF (T .EQ. 0.D0) GO TO 21
+      J = JA(JP)
+      KPMIN = IB(J)
+      KPMAX = IB(J+1) - 1
+      IF (KPMIN .GT. KPMAX) GO TO 21
+      DO KP = KPMIN,KPMAX
+         K = JB(KP)
+         WK(K) = WK(K) + T*B(KP)
+      END DO
+21 CONTINUE
+!
+   do 30 K = 1,N
+      IF (WK(K) .EQ. 0.D0) GO TO 30
+      IF (IP .GT. NUM) GO TO 40
+      C(IP) = WK(K)
+      WK(K) = 0.D0
+      JC(IP) = K
+      IP = IP + 1
+30 CONTINUE
+31 CONTINUE
+IC(L + 1) = IP
+IERR = 0
+RETURN
+!
+!                           ERROR RETURN
+!
+40 IERR = I
+RETURN
+END SUBROUTINE DSPROD
+
+SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+!-----------------------------------------------------------------------
+!             MULTIPLICATION OF SPARSE COMPLEX MATRICES
+!-----------------------------------------------------------------------
+COMPLEX A(*), B(*), C(*), WK(N), T
+INTEGER IA(*), JA(*), IB(*), JB(*), IC(*), JC(*)
+!-------------------------
+DO K = 1,N
+   WK(K) = (0.0, 0.0)
+END DO
+!
+!                     COMPUTE THE I-TH ROW OF C
+!
+IP = 1
+do 31 I = 1,L
+   IC(I) = IP
+   JPMIN = IA(I)
+   JPMAX = IA(I+1) - 1
+   IF (JPMIN .GT. JPMAX) GO TO 31
+!
+   do 21 JP = JPMIN,JPMAX
+      T = A(JP)
+      IF (T .EQ. (0.0, 0.0)) GO TO 21
+      J = JA(JP)
+      KPMIN = IB(J)
+      KPMAX = IB(J+1) - 1
+      IF (KPMIN .GT. KPMAX) GO TO 21
+      DO KP = KPMIN,KPMAX
+         K = JB(KP)
+         WK(K) = WK(K) + T*B(KP)
+      END DO
+21 CONTINUE
+!
+   do 30 K = 1,N
+      IF (WK(K) .EQ. (0.0, 0.0)) GO TO 30
+      IF (IP .GT. NUM) GO TO 40
+      C(IP) = WK(K)
+      WK(K) = (0.0, 0.0)
+      JC(IP) = K
+      IP = IP + 1
+30 CONTINUE
+31 CONTINUE
+IC(L + 1) = IP
+IERR = 0
+RETURN
+!
+!                           ERROR RETURN
+!
+40 IERR = I
+RETURN
+END SUBROUTINE CSPROD
+
+SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!              PRODUCT OF A SPARSE MATRIX AND A VECTOR
+!-----------------------------------------------------------------------
+REAL A(*), X(N), Y(M), SUM
+INTEGER IA(*), JA(*)
+!
+do 11 I = 1,M
+   SUM = 0.0
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 11
+   DO L = LMIN,LMAX
+      J = JA(L)
+      SUM = SUM + A(L)*X(J)
+   END DO
+11 Y(I) = SUM
+RETURN
+END SUBROUTINE MVPRD
+
+SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!-----------------------------------------------------------------------
+REAL A(*), X(N), Y(M), SUM
+INTEGER IA(*), JA(*)
+!
+do 11 I = 1,M
+   SUM = Y(I)
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 11
+   DO L = LMIN,LMAX
+      J = JA(L)
+      SUM = SUM + A(L)*X(J)
+   END DO
+11 Y(I) = SUM
+RETURN
+END SUBROUTINE MVPRD1
+
 SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
 IMPLICIT NONE
 INTEGER M, N
@@ -2588,6 +4022,11 @@ RETURN
 END SUBROUTINE DSPLU
 
 SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, MAX, N
+REAL COND
+INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
+REAL AINORM, ANORM
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A SPARSE MATRIX A
@@ -2649,6 +4088,9 @@ RETURN
 END SUBROUTINE S1CND
 
 SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
+IMPLICIT NONE
+INTEGER IERR, MAX, N
+INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 !-----------------------------------------------------------------------
 !              COMPUTATION OF THE L1 CONDITION NUMBER
 !                       OF A SPARSE MATRIX A
@@ -2710,6 +4152,13 @@ RETURN
 END SUBROUTINE DS1CND
 
 SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+IMPLICIT NONE
+INTEGER ITER, J, JUMP, KASE, N
+REAL ANORM
+INTEGER I, ITMAX, JLAST, L
+REAL ALTSGN, ANRM, T
+INTEGER ISAMAX
+REAL SASUM
 REAL V(N), X(N)
 INTEGER ISGN(N)
 !-----------------------------------------------------------------------
@@ -2867,6 +4316,10 @@ RETURN
 END SUBROUTINE SONEST
 
 SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
+IMPLICIT NONE
+INTEGER ITER, J, JUMP, KASE, N
+INTEGER I, ITMAX, JLAST, L
+INTEGER IDAMAX
 DOUBLE PRECISION ANORM, V(N), X(N)
 INTEGER ISGN(N)
 DOUBLE PRECISION ALTSGN, AN, ANM1, ANRM, T
@@ -5123,6 +6576,7 @@ do 140 MM = 1, KL
 END SUBROUTINE ORTRAN
 
 SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
+IMPLICIT NONE
 !
 INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
 REAL A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -6407,6 +7861,7 @@ do 140 MM = 1, KL
 END SUBROUTINE DORTRN
 
 SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
+IMPLICIT NONE
 !
 INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
 DOUBLE PRECISION A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -7951,6 +9406,9 @@ GO TO 1001
 END SUBROUTINE IMTQL2
 
 SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
+INTEGER L
 !-----------------------------------------------------------------------
 !                DOUBLE PRECISION COMPUTATION OF THE
 !               EIGENVALUES OF SYMMETRIC REAL MATRICES
@@ -7969,6 +9427,8 @@ RETURN
 END SUBROUTINE DSEIG
 
 SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, N
 !-----------------------------------------------------------------------
 !                 DOUBLE PRECISION COMPUTATION OF
 !                 EIGENVALUES AND EIGENVECTORS OF
@@ -7982,6 +9442,7 @@ RETURN
 END SUBROUTINE DSEIGV
 
 SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
+IMPLICIT NONE
 !
 INTEGER I,J,K,L,N,II,NM,JP1
 DOUBLE PRECISION A(NM,N),D(N),E(N),E2(N)
@@ -8211,6 +9672,7 @@ RETURN
 END SUBROUTINE DTRED3
 
 SUBROUTINE DTQL (N,D,E2,IERR)
+IMPLICIT NONE
 !
 INTEGER I,J,L,M,N,II,L1,MML,IERR
 DOUBLE PRECISION D(N),E2(N)
@@ -8346,6 +9808,7 @@ GO TO 1001
 END SUBROUTINE DTQL
 
 SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
+IMPLICIT NONE
 !
 INTEGER I,J,K,L,N,II,NM,JP1
 DOUBLE PRECISION A(NM,N),D(N),E(N),Z(NM,N)
@@ -8485,6 +9948,7 @@ RETURN
 END SUBROUTINE DTRED2
 
 SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
+IMPLICIT NONE
 !
 INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
 DOUBLE PRECISION D(N),E(N),Z(NM,N)
@@ -9247,1555 +10711,4 @@ GO TO 220
 1001 RETURN
 !     ********** LAST CARD OF COMQR **********
 END SUBROUTINE COMQR
-
-SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
-IMPLICIT NONE
-!
-INTEGER I,J,K,M,N,II,NM,IGH,LOW
-REAL SCALE(N),ZR(NM,M),ZI(NM,M)
-REAL S
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBABK2, WHICH IS A COMPLEX VERSION OF BALBAK,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
-!
-!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A COMPLEX GENERAL
-!     MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
-!     BALANCED MATRIX DETERMINED BY  CBAL.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY  CBAL,
-!
-!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
-!          AND SCALING FACTORS USED BY  CBAL,
-!
-!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
-!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
-!
-!     ON OUTPUT-
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
-!          IN THEIR FIRST M COLUMNS.
-!
-!-----------------------------------------------------------------------
-IF (M .EQ. 0) GO TO 200
-IF (IGH .EQ. LOW) GO TO 120
-!
-DO I = LOW, IGH
-   S = SCALE(I)
-!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
-!                IF THE FOREGOING STATEMENT IS REPLACED BY
-!                S=1.0/SCALE(I). **********
-   DO J = 1, M
-      ZR(I,J) = ZR(I,J) * S
-      ZI(I,J) = ZI(I,J) * S
-   END DO
-!
-END DO
-!     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
-!                IGH+1 STEP 1 UNTIL N DO -- **********
-120 do 140 II = 1, N
-   I = II
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
-   IF (I .LT. LOW) I = LOW - II
-   K = SCALE(I)
-   IF (K .EQ. I) GO TO 140
-!
-   DO J = 1, M
-      S = ZR(I,J)
-      ZR(I,J) = ZR(K,J)
-      ZR(K,J) = S
-      S = ZI(I,J)
-      ZI(I,J) = ZI(K,J)
-      ZI(K,J) = S
-   END DO
-!
-140 CONTINUE
-!
-200 RETURN
-!     ********** LAST CARD OF CBABK2 **********
-END SUBROUTINE CBABK2
-
-SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
-IMPLICIT NONE
-!
-INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1, &
-&ITS,LOW,LP1,ENM1,IEND,IERR
-REAL HR(NM,N),HI(NM,N),WR(N),WI(N),ZR(NM,N),ZI(NM,N), &
-&ORTR(IGH),ORTI(IGH)
-REAL SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
-COMPLEX Z3
-REAL SPMPAR
-!     INTEGER MIN0
-!     REAL SQRT,CABS,ABS,REAL,AIMAG
-!     COMPLEX CSQRT,CMPLX
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
-!
-!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
-!     OF A COMPLEX UPPER HESSENBERG MATRIX BY THE QR
-!     METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
-!     CAN ALSO BE FOUND IF  CORTH  HAS BEEN USED TO REDUCE
-!     THIS GENERAL MATRIX TO HESSENBERG FORM.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE  CBAL.  IF  CBAL  HAS NOT BEEN USED,
-!          SET LOW=1, IGH=N,
-!
-!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
-!          FORMATIONS USED IN THE REDUCTION BY  CORTH, IF PERFORMED.
-!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
-!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
-!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
-!
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
-!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
-!          REDUCTION BY  CORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
-!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
-!          ARBITRARY.
-!
-!     ON OUTPUT-
-!
-!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
-!          HAVE BEEN DESTROYED,
-!
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
-!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
-!          THE EIGENVECTORS HAS BEEN FOUND,
-!
-!        IERR IS SET TO
-!          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 30 ITERATIONS.
-!
-!     ARITHMETIC IS REAL EXCEPT FOR THE REPLACEMENT OF THE ALGOL
-!     PROCEDURE CDIV BY COMPLEX DIVISION AND USE OF THE SUBROUTINES
-!     CSQRT AND CMPLX IN COMPUTING COMPLEX SQUARE ROOTS.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
-!
-           MACHEP = SPMPAR(1)
-!
-!                **********
-!
-IERR = 0
-!     ********** INITIALIZE EIGENVECTOR MATRIX **********
-do 100 I = 1, N
-!
-   do 100 J = 1, N
-      ZR(I,J) = 0.0
-      ZI(I,J) = 0.0
-      IF (I .EQ. J) ZR(I,J) = 1.0
-100 CONTINUE
-!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
-!                FROM THE INFORMATION LEFT BY CORTH **********
-IEND = IGH - LOW - 1
-IF (IEND) 180, 150, 105
-!     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
-105 do 140 II = 1, IEND
-   I = IGH - II
-   IF (ORTR(I) .EQ. 0.0 .AND. ORTI(I) .EQ. 0.0) GO TO 140
-   IF (HR(I,I-1) .EQ. 0.0 .AND. HI(I,I-1) .EQ. 0.0) GO TO 140
-!     ********** NORM BELOW IS NEGATIVE OF H FORMED IN CORTH **********
-   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
-   IP1 = I + 1
-!
-   DO K = IP1, IGH
-      ORTR(K) = HR(K,I-1)
-      ORTI(K) = HI(K,I-1)
-   END DO
-!
-   DO J = I, IGH
-      SR = 0.0
-      SI = 0.0
-!
-      DO K = I, IGH
-         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
-         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-      END DO
-!
-      SR = SR / NORM
-      SI = SI / NORM
-!
-      DO K = I, IGH
-         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
-         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-      END DO
-!
-   END DO
-!
-140 CONTINUE
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-150 L = LOW + 1
-!
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.0) GO TO 170
-   NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.0
-!
-   DO J = I, N
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
-!
-   DO J = 1, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
-!
-   DO J = LOW, IGH
-      SI = YR * ZI(J,I) + YI * ZR(J,I)
-      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
-      ZI(J,I) = SI
-   END DO
-!
-170 CONTINUE
-!     ********** STORE ROOTS ISOLATED BY CBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
-!
-EN = IGH
-TR = 0.0
-TI = 0.0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 680
-ITS = 0
-ENM1 = EN - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (ABS(HR(L,L-1)) .LE. &
-&MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
-&+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
-END DO
-!     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 30) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.0
-YI = (HI(ENM1,ENM1) - SI) / 2.0
-Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
-ZZR = REAL(Z3)
-ZZI = AIMAG(Z3)
-IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z3 = CMPLX(XR,XI) / CMPLX(YR+ZZR,YI+ZZI)
-SR = SR - REAL(Z3)
-SI = SI - AIMAG(Z3)
-GO TO 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
-SI = 0.0
-!
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
-!
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
-!
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.0
-   NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.0
-   HI(I,I-1) = SR / NORM
-!
-   DO J = I, N
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
-!
-END DO
-!
-SI = HI(EN,EN)
-IF (SI .EQ. 0.0) GO TO 540
-NORM = CABS(CMPLX(HR(EN,EN),SI))
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.0
-IF (EN .EQ. N) GO TO 540
-IP1 = EN + 1
-!
-DO J = IP1, N
-   YR = HR(EN,J)
-   YI = HI(EN,J)
-   HR(EN,J) = SR * YR + SI * YI
-   HI(EN,J) = SR * YI - SI * YR
-END DO
-!     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
-!
-   DO I = 1, J
-      YR = HR(I,J-1)
-      YI = 0.0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
-!
-   DO I = LOW, IGH
-      YR = ZR(I,J-1)
-      YI = ZI(I,J-1)
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
-!
-END DO
-!
-IF (SI .EQ. 0.0) GO TO 240
-!
-DO I = 1, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
-!
-DO I = LOW, IGH
-   YR = ZR(I,EN)
-   YI = ZI(I,EN)
-   ZR(I,EN) = SR * YR - SI * YI
-   ZI(I,EN) = SR * YI + SI * YR
-END DO
-!
-GO TO 240
-!     ********** A ROOT FOUND **********
-660 HR(EN,EN) = HR(EN,EN) + TR
-WR(EN) = HR(EN,EN)
-HI(EN,EN) = HI(EN,EN) + TI
-WI(EN) = HI(EN,EN)
-EN = ENM1
-GO TO 220
-!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
-!                VECTORS OF UPPER TRIANGULAR FORM **********
-680 NORM = 0.0
-!
-do 720 I = 1, N
-!
-   do 720 J = I, N
-      NORM = NORM + ABS(HR(I,J)) + ABS(HI(I,J))
-720 CONTINUE
-!
-IF (N .EQ. 1 .OR. NORM .EQ. 0.0) GO TO 1001
-!     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-DO NN = 2, N
-   EN = N + 2 - NN
-   XR = WR(EN)
-   XI = WI(EN)
-   ENM1 = EN - 1
-!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   DO II = 1, ENM1
-      I = EN - II
-      ZZR = HR(I,EN)
-      ZZI = HI(I,EN)
-      IF (I .EQ. ENM1) GO TO 760
-      IP1 = I + 1
-!
-      DO J = IP1, ENM1
-         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
-         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-      END DO
-!
-760 YR = XR - WR(I)
-      YI = XI - WI(I)
-      IF (YR .EQ. 0.0 .AND. YI .EQ. 0.0) YR = MACHEP * NORM
-      Z3 = CMPLX(ZZR,ZZI) / CMPLX(YR,YI)
-      HR(I,EN) = REAL(Z3)
-      HI(I,EN) = AIMAG(Z3)
-   END DO
-!
-END DO
-!     ********** END BACKSUBSTITUTION **********
-ENM1 = N - 1
-!     ********** VECTORS OF ISOLATED ROOTS **********
-do 840 I = 1, ENM1
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
-   IP1 = I + 1
-!
-   DO J = IP1, N
-      ZR(I,J) = HR(I,J)
-      ZI(I,J) = HI(I,J)
-   END DO
-!
-840 CONTINUE
-!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
-!                VECTORS OF ORIGINAL FULL MATRIX.
-!                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
-do 880 JJ = LOW, ENM1
-   J = N + LOW - JJ
-   M = MIN0(J-1,IGH)
-!
-   do 880 I = LOW, IGH
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-!
-      DO K = LOW, M
-         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
-         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-      END DO
-!
-      ZR(I,J) = ZZR
-      ZI(I,J) = ZZI
-880 CONTINUE
-!
-GO TO 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 30 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
-!     ********** LAST CARD OF COMQR2 **********
-END SUBROUTINE COMQR2
-
-SUBROUTINE DCEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
-IMPLICIT NONE
-INTEGER IBAL, IERR, KA, N
-INTEGER IGH, LOW
-!-----------------------------------------------------------------------
-!            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
-!-----------------------------------------------------------------------
-DOUBLE PRECISION AR(KA,N), AI(KA,N), WR(N), WI(N)
-!
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,WR)
-CALL DCORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
-CALL DCOMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
-RETURN
-END SUBROUTINE DCEIG
-
-SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
-IMPLICIT NONE
-INTEGER IBAL, IERR, KA, N
-INTEGER I1, I2, I3, IGH, LOW
-!-----------------------------------------------------------------------
-!                     EIGENVALUES AND EIGENVECTORS
-!                 OF DOUBLE PRECISION COMPLEX MATRICES
-!-----------------------------------------------------------------------
-DOUBLE PRECISION AR(KA,N),AI(KA,N),WR(N),WI(N),ZR(KA,N),ZI(KA,N), &
-&TEMP(*)
-!----------------------
-!     TEMP IS A TEMPORARY STORAGE AREA
-!        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
-!        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
-!----------------------
-I2 = 1
-I3 = N + 1
-I1 = N + I3
-LOW = 1
-IGH = N
-IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,TEMP(I1))
-CALL DCORTH(KA,N,LOW,IGH,AR,AI,TEMP(I2),TEMP(I3))
-CALL DCMQR2(KA,N,LOW,IGH,TEMP(I2),TEMP(I3),AR,AI,WR,WI, &
-&ZR,ZI,IERR)
-IF (IERR .NE. 0) RETURN
-IF (IBAL .NE. 0) CALL DCBABK(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
-RETURN
-END SUBROUTINE DCEIGV
-
-SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
-IMPLICIT NONE
-INTEGER IPMPAR
-!
-INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
-DOUBLE PRECISION AR(NM,N),AI(NM,N),SCALE(N)
-DOUBLE PRECISION C,F,G,R,S,B2,RADIX
-LOGICAL NOCONV
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
-!
-!     DCBAL BALANCES A DOUBLE PRECISION COMPLEX MATRIX AND
-!     ISOLATES EIGENVALUES WHENEVER POSSIBLE.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX MATRIX TO BE BALANCED.
-!
-!     ON OUTPUT-
-!
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE BALANCED MATRIX,
-!
-!        LOW AND IGH ARE TWO INTEGERS SUCH THAT AR(I,J) AND AI(I,J)
-!          ARE EQUAL TO ZERO IF
-!           (1) I IS GREATER THAN J AND
-!           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
-!
-!        SCALE CONTAINS INFORMATION DETERMINING THE
-!           PERMUTATIONS AND SCALING FACTORS USED.
-!
-!     SUPPOSE THAT THE PRINCIPAL SUBMATRIX IN ROWS LOW THROUGH IGH
-!     HAS BEEN BALANCED, THAT P(J) DENOTES THE INDEX INTERCHANGED
-!     WITH J DURING THE PERMUTATION STEP, AND THAT THE ELEMENTS
-!     OF THE DIAGONAL MATRIX USED ARE DENOTED BY D(I,J).  THEN
-!        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
-!                 = D(J,J)       J = LOW,...,IGH
-!                 = P(J)         J = IGH+1,...,N.
-!     THE ORDER IN WHICH THE INTERCHANGES ARE MADE IS N TO IGH+1,
-!     THEN 1 TO LOW-1.
-!
-!     NOTE THAT 1 IS RETURNED FOR IGH IF IGH IS ZERO FORMALLY.
-!
-!     THE ALGOL PROCEDURE EXC CONTAINED IN CBALANCE APPEARS IN
-!     DCBAL IN LINE.  (NOTE THAT THE ALGOL ROLES OF IDENTIFIERS
-!     K,L HAVE BEEN REVERSED.)
-!
-!-----------------------------------------------------------------------
-!
-!     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
-!
-           RADIX = IPMPAR(4)
-!
-!                **********
-!
-B2 = RADIX * RADIX
-K = 1
-L = N
-GO TO 100
-!     ********** IN-LINE PROCEDURE FOR ROW AND
-!                COLUMN EXCHANGE **********
-20 SCALE(M) = J
-IF (J .EQ. M) GO TO 50
-!
-DO I = 1, L
-   F = AR(I,J)
-   AR(I,J) = AR(I,M)
-   AR(I,M) = F
-   F = AI(I,J)
-   AI(I,J) = AI(I,M)
-   AI(I,M) = F
-END DO
-!
-DO I = K, N
-   F = AR(J,I)
-   AR(J,I) = AR(M,I)
-   AR(M,I) = F
-   F = AI(J,I)
-   AI(J,I) = AI(M,I)
-   AI(M,I) = F
-END DO
-!
-50 GO TO (80,130), IEXC
-!     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM DOWN **********
-80 IF (L .EQ. 1) GO TO 280
-L = L - 1
-!     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
-100 do 120 JJ = 1, L
-   J = L + 1 - JJ
-!
-   do 110 I = 1, L
-      IF (I .EQ. J) GO TO 110
-      IF (AR(J,I) .NE. 0.D0 .OR. AI(J,I) .NE. 0.D0) GO TO 120
-110 CONTINUE
-!
-   M = L
-   IEXC = 1
-   GO TO 20
-120 CONTINUE
-!
-GO TO 140
-!     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
-!                AND PUSH THEM LEFT **********
-130 K = K + 1
-!
-140 do 170 J = K, L
-!
-   do 150 I = K, L
-      IF (I .EQ. J) GO TO 150
-      IF (AR(I,J) .NE. 0.D0 .OR. AI(I,J) .NE. 0.D0) GO TO 170
-150 CONTINUE
-!
-   M = K
-   IEXC = 2
-   GO TO 20
-170 CONTINUE
-!     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
-do 180 I = K, L
-180 SCALE(I) = 1.D0
-!     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
-190 NOCONV = .FALSE.
-!
-do 270 I = K, L
-   C = 0.D0
-   R = 0.D0
-!
-   do 200 J = K, L
-      IF (J .EQ. I) GO TO 200
-      C = C + DABS(AR(J,I)) + DABS(AI(J,I))
-      R = R + DABS(AR(I,J)) + DABS(AI(I,J))
-200 CONTINUE
-!     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
-   IF (C .EQ. 0.D0 .OR. R .EQ. 0.D0) GO TO 270
-   G = R / RADIX
-   F = 1.D0
-   S = C + R
-210 IF (C .GE. G) GO TO 220
-   F = F * RADIX
-   C = C * B2
-   GO TO 210
-220 G = R * RADIX
-230 IF (C .LT. G) GO TO 240
-   F = F / RADIX
-   C = C / B2
-   GO TO 230
-!     ********** NOW BALANCE **********
-240 IF ((C + R) / F .GE. 0.95D0 * S) GO TO 270
-   G = 1.D0 / F
-   SCALE(I) = SCALE(I) * F
-   NOCONV = .TRUE.
-!
-   DO J = K, N
-      AR(I,J) = AR(I,J) * G
-      AI(I,J) = AI(I,J) * G
-   END DO
-!
-   DO J = 1, L
-      AR(J,I) = AR(J,I) * F
-      AI(J,I) = AI(J,I) * F
-   END DO
-!
-270 CONTINUE
-!
-IF (NOCONV) GO TO 190
-!
-280 LOW = K
-IGH = L
-RETURN
-!     ********** LAST CARD OF DCBAL **********
-END SUBROUTINE DCBAL
-
-SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
-IMPLICIT NONE
-!
-INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
-DOUBLE PRECISION AR(NM,N),AI(NM,N),ORTR(IGH),ORTI(IGH)
-DOUBLE PRECISION F,G,H,FI,FR,SCALE
-DOUBLE PRECISION DCPABS
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
-!     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)
-!     BY MARTIN AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 339-358(1971).
-!
-!     GIVEN A DOUBLE PRECISION COMPLEX MATRIX, DCORTH
-!     REDUCES A SUBMATRIX SITUATED IN ROWS AND COLUMNS
-!     LOW THROUGH IGH TO UPPER HESSENBERG FORM BY
-!     UNITARY SIMILARITY TRANSFORMATIONS.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
-!          SET LOW=1, IGH=N,
-!
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX INPUT MATRIX.
-!
-!     ON OUTPUT-
-!
-!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE HESSENBERG MATRIX.  INFORMATION
-!          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION
-!          IS STORED IN THE REMAINING TRIANGLES UNDER THE
-!          HESSENBERG MATRIX,
-!
-!        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE
-!          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
-!
-!-----------------------------------------------------------------------
-LA = IGH - 1
-KP1 = LOW + 1
-IF (LA .LT. KP1) GO TO 200
-!
-do 180 M = KP1, LA
-   H = 0.D0
-   ORTR(M) = 0.D0
-   ORTI(M) = 0.D0
-   SCALE = 0.D0
-!     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
-   do 90 I = M, IGH
-90 SCALE = SCALE + DABS(AR(I,M-1)) + DABS(AI(I,M-1))
-!
-   IF (SCALE .EQ. 0.D0) GO TO 180
-   MP = M + IGH
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-   DO II = M, IGH
-      I = MP - II
-      ORTR(I) = AR(I,M-1) / SCALE
-      ORTI(I) = AI(I,M-1) / SCALE
-      H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
-   END DO
-!
-   G = DSQRT(H)
-   F = DCPABS(ORTR(M),ORTI(M))
-   IF (F .EQ. 0.D0) GO TO 103
-   H = H + F * G
-   G = G / F
-   ORTR(M) = (1.D0 + G) * ORTR(M)
-   ORTI(M) = (1.D0 + G) * ORTI(M)
-   GO TO 105
-!
-103 ORTR(M) = G
-   AR(M,M-1) = SCALE
-!     ********** FORM (I-(U*UT)/H) * A **********
-105 DO J = M, N
-      FR = 0.D0
-      FI = 0.D0
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
-      DO II = M, IGH
-         I = MP - II
-         FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
-         FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
-      END DO
-!
-      FR = FR / H
-      FI = FI / H
-!
-      DO I = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
-         AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
-      END DO
-!
-   END DO
-!     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
-   DO I = 1, IGH
-      FR = 0.D0
-      FI = 0.D0
-!     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
-      DO JJ = M, IGH
-         J = MP - JJ
-         FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
-         FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
-      END DO
-!
-      FR = FR / H
-      FI = FI / H
-!
-      DO J = M, IGH
-         AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
-         AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
-      END DO
-!
-   END DO
-!
-   ORTR(M) = SCALE * ORTR(M)
-   ORTI(M) = SCALE * ORTI(M)
-   AR(M,M-1) = -G * AR(M,M-1)
-   AI(M,M-1) = -G * AI(M,M-1)
-180 CONTINUE
-!
-200 RETURN
-!     ********** LAST CARD OF DCORTH **********
-END SUBROUTINE DCORTH
-
-SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
-IMPLICIT NONE
-!
-INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
-DOUBLE PRECISION HR(NM,N),HI(NM,N),WR(N),WI(N)
-DOUBLE PRECISION SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
-DOUBLE PRECISION R2,W(2),Z(2)
-DOUBLE PRECISION DPMPAR,DCPABS
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR, NUM. MATH. 12, 369-376(1968) BY MARTIN
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 396-403(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
-!
-!     THIS SUBROUTINE FINDS THE EIGENVALUES OF A DOUBLE PRECISION
-!     COMPLEX UPPER HESSENBERG MATRIX BY THE QR METHOD.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
-!          SET LOW=1, IGH=N,
-!
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN
-!          INFORMATION ABOUT THE UNITARY TRANSFORMATIONS USED IN
-!          THE REDUCTION BY DCORTH, IF PERFORMED.
-!
-!     ON OUTPUT-
-!
-!        THE UPPER HESSENBERG PORTIONS OF HR AND HI HAVE BEEN
-!          DESTROYED.  THEREFORE, THEY MUST BE SAVED BEFORE
-!          CALLING DCOMQR IF SUBSEQUENT CALCULATION OF
-!          EIGENVECTORS IS TO BE PERFORMED,
-!
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
-!
-!        IERR IS SET TO
-!          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
-!
-           MACHEP = DPMPAR(1)
-!
-!                **********
-!
-IERR = 0
-IF (LOW .EQ. IGH) GO TO 180
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-L = LOW + 1
-!
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
-   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.D0
-!
-   DO J = I, IGH
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
-!
-   DO J = LOW, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
-!
-170 CONTINUE
-!     ********** STORE ROOTS ISOLATED BY DCBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
-!
-EN = IGH
-TR = 0.D0
-TI = 0.D0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 1001
-ITS = 0
-ENM1 = EN - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW  -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (DABS(HR(L,L-1)) .LE. &
-&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
-&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-END DO
-!     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 50) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.D0
-YI = (HI(ENM1,ENM1) - SI) / 2.D0
-Z(1) = YR*YR - YI*YI + XR
-Z(2) = 2.D0*YR*YI + XI
-CALL DCSQRT(Z,W)
-ZZR = W(1)
-ZZI = W(2)
-IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z(1) = YR + ZZR
-Z(2) = YI + ZZI
-R2 = Z(1)**2 + Z(2)**2
-SR = SR - (XR*Z(1) + XI*Z(2))/R2
-SI = SI - (XI*Z(1) - XR*Z(2))/R2
-GO TO 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
-SI = 0.D0
-!
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
-!
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
-!
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.D0
-   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+ SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.D0
-   HI(I,I-1) = SR / NORM
-!
-   DO J = I, EN
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
-!
-END DO
-!
-SI = HI(EN,EN)
-IF (SI .EQ. 0.D0) GO TO 540
-NORM = DCPABS(HR(EN,EN),SI)
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.D0
-!     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
-!
-   DO I = L, J
-      YR = HR(I,J-1)
-      YI = 0.D0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
-!
-END DO
-!
-IF (SI .EQ. 0.D0) GO TO 240
-!
-DO I = L, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
-!
-GO TO 240
-!     ********** A ROOT FOUND **********
-660 WR(EN) = HR(EN,EN) + TR
-WI(EN) = HI(EN,EN) + TI
-EN = ENM1
-GO TO 220
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
-END SUBROUTINE DCOMQR
-
-SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
-IMPLICIT NONE
-!
-INTEGER I,J,K,M,N,II,NM,IGH,LOW
-DOUBLE PRECISION SCALE(N),ZR(NM,M),ZI(NM,M)
-DOUBLE PRECISION S
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBABK2, WHICH IS A COMPLEX VERSION OF BALBAK,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
-!
-!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A DOUBLE PRECISION
-!     COMPLEX MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
-!     BALANCED MATRIX DETERMINED BY DCBAL.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY DCBAL,
-!
-!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
-!          AND SCALING FACTORS USED BY DCBAL,
-!
-!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
-!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
-!
-!     ON OUTPUT-
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
-!          IN THEIR FIRST M COLUMNS.
-!
-!-----------------------------------------------------------------------
-IF (M .EQ. 0) GO TO 200
-IF (IGH .EQ. LOW) GO TO 120
-!
-DO I = LOW, IGH
-   S = SCALE(I)
-!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
-!                IF THE FOREGOING STATEMENT IS REPLACED BY
-!                S=1.0/SCALE(I). **********
-   DO J = 1, M
-      ZR(I,J) = ZR(I,J) * S
-      ZI(I,J) = ZI(I,J) * S
-   END DO
-!
-END DO
-!
-!     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
-!                IGH+1 STEP 1 UNTIL N DO -- **********
-120 do 140 II = 1, N
-   I = II
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
-   IF (I .LT. LOW) I = LOW - II
-   K = SCALE(I)
-   IF (K .EQ. I) GO TO 140
-!
-   DO J = 1, M
-      S = ZR(I,J)
-      ZR(I,J) = ZR(K,J)
-      ZR(K,J) = S
-      S = ZI(I,J)
-      ZI(I,J) = ZI(K,J)
-      ZI(K,J) = S
-   END DO
-!
-140 CONTINUE
-!
-200 RETURN
-!     ********** LAST CARD OF DCBABK **********
-END SUBROUTINE DCBABK
-
-SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
-IMPLICIT NONE
-!
-INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1, &
-&ITS,LOW,LP1,ENM1,IEND,IERR
-DOUBLE PRECISION HR(NM,N),HI(NM,N),WR(N),WI(N),ZR(NM,N),ZI(NM,N), &
-&ORTR(IGH),ORTI(IGH)
-DOUBLE PRECISION SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
-DOUBLE PRECISION R2,W(2),Z(2)
-DOUBLE PRECISION DPMPAR,DCPABS
-!-----------------------------------------------------------------------
-!
-!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
-!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
-!     AND WILKINSON.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
-!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
-!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
-!
-!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS OF
-!     A DOUBLE PRECISION COMPLEX UPPER HESSENBERG MATRIX BY THE
-!     QR METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
-!     CAN ALSO BE FOUND IF DCORTH HAS BEEN USED TO REDUCE
-!     THIS GENERAL MATRIX TO HESSENBERG FORM.
-!
-!     ON INPUT-
-!
-!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
-!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
-!          DIMENSION STATEMENT,
-!
-!        N IS THE ORDER OF THE MATRIX,
-!
-!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
-!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
-!          SET LOW=1, IGH=N,
-!
-!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
-!          FORMATIONS USED IN THE REDUCTION BY DCORTH, IF PERFORMED.
-!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
-!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
-!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
-!
-!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
-!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
-!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
-!          REDUCTION BY DCORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
-!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
-!          ARBITRARY.
-!
-!     ON OUTPUT-
-!
-!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
-!          HAVE BEEN DESTROYED,
-!
-!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
-!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
-!          FOR INDICES IERR+1,...,N,
-!
-!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
-!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
-!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
-!          THE EIGENVECTORS HAS BEEN FOUND,
-!
-!        IERR IS SET TO
-!          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
-!                     DETERMINED AFTER 50 ITERATIONS.
-!
-!-----------------------------------------------------------------------
-!
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
-!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
-!
-           MACHEP = DPMPAR(1)
-!
-!                **********
-!
-IERR = 0
-!     ********** INITIALIZE EIGENVECTOR MATRIX **********
-do 100 I = 1, N
-!
-   do 100 J = 1, N
-      ZR(I,J) = 0.D0
-      ZI(I,J) = 0.D0
-      IF (I .EQ. J) ZR(I,J) = 1.D0
-100 CONTINUE
-!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
-!                FROM THE INFORMATION LEFT BY DCORTH **********
-IEND = IGH - LOW - 1
-IF (IEND) 180, 150, 105
-!     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
-105 do 140 II = 1, IEND
-   I = IGH - II
-   IF (ORTR(I) .EQ. 0.D0 .AND. ORTI(I) .EQ. 0.D0) GO TO 140
-   IF (HR(I,I-1) .EQ. 0.D0 .AND. HI(I,I-1) .EQ. 0.D0) GO TO 140
-!     ********** NORM BELOW IS NEGATIVE OF H FORMED IN DCORTH **********
-   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
-   IP1 = I + 1
-!
-   DO K = IP1, IGH
-      ORTR(K) = HR(K,I-1)
-      ORTI(K) = HI(K,I-1)
-   END DO
-!
-   DO J = I, IGH
-      SR = 0.D0
-      SI = 0.D0
-!
-      DO K = I, IGH
-         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
-         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
-      END DO
-!
-      SR = SR / NORM
-      SI = SI / NORM
-!
-      DO K = I, IGH
-         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
-         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
-      END DO
-!
-   END DO
-!
-140 CONTINUE
-!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
-150 L = LOW + 1
-!
-do 170 I = L, IGH
-   LL = MIN0(I+1,IGH)
-   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
-   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
-   YR = HR(I,I-1) / NORM
-   YI = HI(I,I-1) / NORM
-   HR(I,I-1) = NORM
-   HI(I,I-1) = 0.D0
-!
-   DO J = I, N
-      SI = YR * HI(I,J) - YI * HR(I,J)
-      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
-      HI(I,J) = SI
-   END DO
-!
-   DO J = 1, LL
-      SI = YR * HI(J,I) + YI * HR(J,I)
-      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
-      HI(J,I) = SI
-   END DO
-!
-   DO J = LOW, IGH
-      SI = YR * ZI(J,I) + YI * ZR(J,I)
-      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
-      ZI(J,I) = SI
-   END DO
-!
-170 CONTINUE
-!     ********** STORE ROOTS ISOLATED BY DCBAL **********
-180 do 200 I = 1, N
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
-   WR(I) = HR(I,I)
-   WI(I) = HI(I,I)
-200 CONTINUE
-!
-EN = IGH
-TR = 0.D0
-TI = 0.D0
-!     ********** SEARCH FOR NEXT EIGENVALUE **********
-220 IF (EN .LT. LOW) GO TO 680
-ITS = 0
-ENM1 = EN - 1
-!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
-240 DO LL = LOW, EN
-   L = EN + LOW - LL
-   IF (L .EQ. LOW) GO TO 300
-   IF (DABS(HR(L,L-1)) .LE. &
-&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
-&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
-END DO
-!     ********** FORM SHIFT **********
-300 IF (L .EQ. EN) GO TO 660
-IF (ITS .EQ. 50) GO TO 1000
-IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
-SR = HR(EN,EN)
-SI = HI(EN,EN)
-XR = HR(ENM1,EN) * HR(EN,ENM1)
-XI = HI(ENM1,EN) * HR(EN,ENM1)
-IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
-YR = (HR(ENM1,ENM1) - SR) / 2.D0
-YI = (HI(ENM1,ENM1) - SI) / 2.D0
-Z(1) = YR*YR - YI*YI + XR
-Z(2) = 2.D0*YR*YI + XI
-CALL DCSQRT(Z,W)
-ZZR = W(1)
-ZZI = W(2)
-IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
-ZZR = -ZZR
-ZZI = -ZZI
-310 Z(1) = YR + ZZR
-Z(2) = YI + ZZI
-R2 = Z(1)**2 + Z(2)**2
-SR = SR - (XR*Z(1) + XI*Z(2))/R2
-SI = SI - (XI*Z(1) - XR*Z(2))/R2
-GO TO 340
-!     ********** FORM EXCEPTIONAL SHIFT **********
-320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
-SI = 0.D0
-!
-340 DO I = LOW, EN
-   HR(I,I) = HR(I,I) - SR
-   HI(I,I) = HI(I,I) - SI
-END DO
-!
-TR = TR + SR
-TI = TI + SI
-ITS = ITS + 1
-!     ********** REDUCE TO TRIANGLE (ROWS) **********
-LP1 = L + 1
-!
-DO I = LP1, EN
-   SR = HR(I,I-1)
-   HR(I,I-1) = 0.D0
-   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
-&+ SR*SR)
-   XR = HR(I-1,I-1) / NORM
-   WR(I-1) = XR
-   XI = HI(I-1,I-1) / NORM
-   WI(I-1) = XI
-   HR(I-1,I-1) = NORM
-   HI(I-1,I-1) = 0.D0
-   HI(I,I-1) = SR / NORM
-!
-   DO J = I, N
-      YR = HR(I-1,J)
-      YI = HI(I-1,J)
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
-      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
-      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
-      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
-   END DO
-!
-END DO
-!
-SI = HI(EN,EN)
-IF (SI .EQ. 0.D0) GO TO 540
-NORM = DCPABS(HR(EN,EN),SI)
-SR = HR(EN,EN) / NORM
-SI = SI / NORM
-HR(EN,EN) = NORM
-HI(EN,EN) = 0.D0
-IF (EN .EQ. N) GO TO 540
-IP1 = EN + 1
-!
-DO J = IP1, N
-   YR = HR(EN,J)
-   YI = HI(EN,J)
-   HR(EN,J) = SR * YR + SI * YI
-   HI(EN,J) = SR * YI - SI * YR
-END DO
-!     ********** INVERSE OPERATION (COLUMNS) **********
-540 DO J = LP1, EN
-   XR = WR(J-1)
-   XI = WI(J-1)
-!
-   DO I = 1, J
-      YR = HR(I,J-1)
-      YI = 0.D0
-      ZZR = HR(I,J)
-      ZZI = HI(I,J)
-      IF (I .EQ. J) GO TO 560
-      YI = HI(I,J-1)
-      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
-!
-   DO I = LOW, IGH
-      YR = ZR(I,J-1)
-      YI = ZI(I,J-1)
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
-      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
-      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
-      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
-   END DO
-!
-END DO
-!
-IF (SI .EQ. 0.D0) GO TO 240
-!
-DO I = 1, EN
-   YR = HR(I,EN)
-   YI = HI(I,EN)
-   HR(I,EN) = SR * YR - SI * YI
-   HI(I,EN) = SR * YI + SI * YR
-END DO
-!
-DO I = LOW, IGH
-   YR = ZR(I,EN)
-   YI = ZI(I,EN)
-   ZR(I,EN) = SR * YR - SI * YI
-   ZI(I,EN) = SR * YI + SI * YR
-END DO
-!
-GO TO 240
-!     ********** A ROOT FOUND **********
-660 HR(EN,EN) = HR(EN,EN) + TR
-WR(EN) = HR(EN,EN)
-HI(EN,EN) = HI(EN,EN) + TI
-WI(EN) = HI(EN,EN)
-EN = ENM1
-GO TO 220
-!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
-!                VECTORS OF UPPER TRIANGULAR FORM **********
-680 NORM = 0.D0
-!
-do 720 I = 1, N
-!
-   do 720 J = I, N
-      NORM = NORM + DABS(HR(I,J)) + DABS(HI(I,J))
-720 CONTINUE
-!
-IF (N .EQ. 1 .OR. NORM .EQ. 0.D0) GO TO 1001
-!     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
-DO NN = 2, N
-   EN = N + 2 - NN
-   XR = WR(EN)
-   XI = WI(EN)
-   ENM1 = EN - 1
-!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
-   DO II = 1, ENM1
-      I = EN - II
-      ZZR = HR(I,EN)
-      ZZI = HI(I,EN)
-      IF (I .EQ. ENM1) GO TO 760
-      IP1 = I + 1
-!
-      DO J = IP1, ENM1
-         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
-         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
-      END DO
-!
-760 YR = XR - WR(I)
-      YI = XI - WI(I)
-      IF (YR .EQ. 0.D0 .AND. YI .EQ. 0.D0) YR = MACHEP * NORM
-      R2 = YR*YR + YI*YI
-      HR(I,EN) = (ZZR*YR + ZZI*YI)/R2
-      HI(I,EN) = (ZZI*YR - ZZR*YI)/R2
-   END DO
-!
-END DO
-!     ********** END BACKSUBSTITUTION **********
-ENM1 = N - 1
-!     ********** VECTORS OF ISOLATED ROOTS **********
-do 840 I = 1, ENM1
-   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
-   IP1 = I + 1
-!
-   DO J = IP1, N
-      ZR(I,J) = HR(I,J)
-      ZI(I,J) = HI(I,J)
-   END DO
-!
-840 CONTINUE
-!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
-!                VECTORS OF ORIGINAL FULL MATRIX.
-!                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
-do 880 JJ = LOW, ENM1
-   J = N + LOW - JJ
-   M = MIN0(J-1,IGH)
-!
-   do 880 I = LOW, IGH
-      ZZR = ZR(I,J)
-      ZZI = ZI(I,J)
-!
-      DO K = LOW, M
-         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
-         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
-      END DO
-!
-      ZR(I,J) = ZZR
-      ZI(I,J) = ZZI
-880 CONTINUE
-!
-GO TO 1001
-!     ********** SET ERROR -- NO CONVERGENCE TO AN
-!                EIGENVALUE AFTER 50 ITERATIONS **********
-1000 IERR = EN
-1001 RETURN
-!     ********** LAST CARD OF DCMQR2 **********
-END SUBROUTINE DCMQR2
 

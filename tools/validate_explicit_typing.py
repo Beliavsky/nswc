@@ -41,6 +41,35 @@ def symbols(dump):
             for scope, entries in result.items()}
 
 
+def scope_preserved(before, after, reviewed_subroutines=()):
+    """Allow only reviewed UNKNOWN external procedures to gain SUBROUTINE.
+
+    IMPLICIT NONE lets GNU classify a forwarded, untyped EXTERNAL as a
+    subroutine. The manifest names cases checked against their receiving
+    workers' CALL statements. No return type or other attribute may change.
+    """
+    if before == after:
+        return True
+    adjusted = dict(after)
+    for name in reviewed_subroutines:
+        original, converted = before.get(name), after.get(name)
+        if not original or not converted:
+            return False
+        if original == converted:
+            continue
+        attributes = original.get("attributes", "")
+        if (original.get("type spec") != "type spec : (UNKNOWN 0)"
+                or "PROCEDURE" not in attributes or "EXTERNAL" not in attributes
+                or "SUBROUTINE" in attributes or "FUNCTION" in attributes):
+            return False
+        refined = dict(converted)
+        refined["attributes"] = converted.get("attributes", "").replace(" SUBROUTINE", "", 1)
+        if refined != original:
+            return False
+        adjusted[name] = refined
+    return before == adjusted
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compiler", default="gfortran")
@@ -66,10 +95,14 @@ def main():
     for name in manifest["procedures"]:
         if name not in inventories[0] or name not in inventories[1]:
             raise RuntimeError(f"Missing procedure in compiler dump: {name}")
-        if inventories[0][name] != inventories[1][name]:
+        reviewed = manifest.get("subroutine_classification_reviews", {}).get(name, {})
+        if not scope_preserved(inventories[0][name], inventories[1][name], reviewed):
             raise RuntimeError(f"Type, attributes, shape, or argument list changed: {name}")
         count += len(inventories[0][name])
     print(f"Preserved {count} compiler symbol records across {len(manifest['procedures'])} procedures.")
+    reviews = manifest.get("subroutine_classification_reviews", {})
+    if reviews:
+        print(f"Checked {sum(map(len, reviews.values()))} reviewed forwarded subroutine classifications.")
     return 0
 
 

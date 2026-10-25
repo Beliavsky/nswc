@@ -1,10 +1,14 @@
 # Explicit typing
 
-The reviewed conversions cover 410 of the library's 1,062 procedures in fifteen
-batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, 21, 20, and 20.
-The remaining 652 procedures retain their existing typing. Each batch preserves
-the original types and is checked with compiler symbol comparisons and the
-numerical regression suite.
+All 1,062 library procedures now have `IMPLICIT NONE` and explicit types in the
+maintained `nswc.f`, recommended `nswc.f90`, and generated source partitions.
+Sixteen batches covered 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, 21,
+20, 20, and 652 procedures. No procedures remain to convert. The archived
+`nswc_orig.f` retains its original implicit typing.
+
+Each batch preserves the original data and function types and is checked with
+compiler symbol comparisons and the numerical regression suite. Eleven
+forwarded subroutine classifications are reviewed separately below.
 
 ## Batch 1: pilot
 
@@ -361,6 +365,49 @@ balancing round trips, and symmetric packed reductions. Each driver also passes
 against the archived original. The suite runs 38 programs against each library
 version, for 114 numerical runs.
 
+## Batch 16: all remaining procedures
+
+The final batch adds `IMPLICIT NONE` and 1,840 type declaration lines to all 652
+remaining procedures. These cover machine constants, sorting, elementary and
+special functions, polynomial operations, dense and sparse linear algebra,
+eigenvalues, least squares, optimization, transforms, interpolation, surface
+fitting, quadrature, integral equations, ordinary and partial differential
+equation solvers, and random numbers.
+The complete procedure list and original hashes are in the `batch-16` record of
+`tools/explicit-typing-pilot.json`.
+
+The missing-only report needed 256 additional type declarations in 154
+procedures, including external function return types, forwarded function
+callbacks, function results, and statement functions. Original GNU compiler
+types were checked for every addition. The full declaration report confirmed
+228 of these types; the other 28 were checked against original function headers
+or forwarded callback contracts and receiving worker calls. Per-procedure
+evidence is recorded in the manifest's `review_notes`.
+
+All 17,764 non-intrinsic symbol records in the batch were compared. The only
+attribute refinements are eleven forwarded external procedures that GNU can
+label `SUBROUTINE` after implicit typing is disabled:
+
+- `FUN` in `ABCON`, `SRCH`, `ABCON1`, and `ACOND`, ultimately invoked by
+  `CALL FUN` in the inverse Laplace transform workers.
+- `PHI` in `QAGI1`, `QAGIE1`, and `QK15I1`, which forwards the same subroutine
+  to those workers through the integrand callback.
+- `ZZZJAC` in `SFODE` and `SFODE1`, whose original definition is a subroutine.
+- `JAC` in `STFODE` and `LSOD1`, ultimately invoked by `CALL JAC` in `PJAC`.
+
+These names retain `EXTERNAL` and no return type. The validator accepts only
+this additional attribute for the named, reviewed symbols; changes to their
+types, other attributes, shapes, or argument lists still fail. The manifest's
+`subroutine_classification_reviews` records the original calling evidence.
+No argument intents, precision choices, dimensions, storage statements, or
+executable library code were changed.
+
+Four more Miller drivers were adapted for inverse Laplace transforms, stiff
+ODEs, surface interpolation, and cubature. They exercise forwarded function and
+subroutine callbacks, unqualified function results, and statement functions.
+The suite now runs 42 programs against each library version, for 126 numerical
+runs. These remain representative checks rather than full numerical coverage.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -428,13 +475,16 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-8,109 variable and external procedure records across the 410 procedures, including
+25,873 variable and external procedure records across all 1,062 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
-the implicit type marker is expected to disappear.
+the implicit type marker is expected to disappear. The eleven reviewed
+subroutine classification refinements described above are checked separately;
+all other attributes must match.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 38 numerical test programs must still pass against each source version,
+All 42 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
-The numerical tests remain representative, so subsequent batches need the same
-declaration review and compiler comparison rather than relying on tests alone.
+The numerical tests remain representative, so future source changes need
+compiler comparison and appropriate numerical checks rather than relying on
+test coverage alone.

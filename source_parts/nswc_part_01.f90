@@ -435,6 +435,10 @@ END FUNCTION IPMPAR
 
 !-----------------------------------------------------------------------
 SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
+IMPLICIT NONE
+INTEGER IBETA, IDMAX, IMAX, MO, N
+INTEGER M, MAXEXP, MINEXP, N0
+REAL EPS, XINT, XMAX, XMIN
 !-----------------------------------------------------------------------
 REAL RMACH(3)
 DOUBLE PRECISION DMACH(3)
@@ -703,6 +707,10 @@ RETURN
 END SUBROUTINE MACH
 
 SUBROUTINE RADIX (IBETA)
+IMPLICIT NONE
+INTEGER IBETA
+REAL A, B, ONE, Y
+REAL D1, D2
 !-----------------------------------------------------------------------
 !     SET  IBETA = THE RADIX OF THE FLOATING POINT ARITHMETIC
 !-----------------------------------------------------------------------
@@ -727,6 +735,9 @@ END SUBROUTINE RADIX
 
 SUBROUTINE MACH1 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
 &XMIN, XMAX)
+IMPLICIT NONE
+INTEGER IBETA, M, MAXEXP, MINEXP, N
+INTEGER J, K, KM, L
 REAL EPS, XINT, XMIN, XMAX
 !-----------------------------------------------------------------------
 !
@@ -962,6 +973,9 @@ STOP
 END SUBROUTINE MACH1
 
 SUBROUTINE STORE2 (A, B)
+IMPLICIT NONE
+REAL A, B
+REAL D1, D2
 !-----------------------------------------------------------------------
 !     STORAGE OF SINGLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
@@ -973,6 +987,9 @@ END SUBROUTINE STORE2
 
 SUBROUTINE MACH2 (N, IBETA, M, MINEXP, MAXEXP, EPS, XINT, &
 &XMIN, XMAX)
+IMPLICIT NONE
+INTEGER IBETA, M, MAXEXP, MINEXP, N
+INTEGER J, K, KM, L
 DOUBLE PRECISION EPS, XINT, XMIN, XMAX
 !-----------------------------------------------------------------------
 !
@@ -1208,6 +1225,7 @@ STOP
 END SUBROUTINE MACH2
 
 SUBROUTINE DSTOR2 (A, B)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 !-----------------------------------------------------------------------
@@ -1335,6 +1353,10 @@ RETURN
 END FUNCTION DPMPAR
 
 REAL function EPSLN (L)
+IMPLICIT NONE
+INTEGER L
+INTEGER M
+INTEGER IPMPAR
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
@@ -1360,6 +1382,9 @@ RETURN
 END FUNCTION EPSLN
 
 double precision function DEPSLN (L)
+IMPLICIT NONE
+INTEGER L
+INTEGER IPMPAR
 !--------------------------------------------------------------------
 !     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 !     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
@@ -1463,6 +1488,9 @@ RETURN
 END FUNCTION DXPARG
 
 SUBROUTINE ISHELL (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1508,6 +1536,10 @@ RETURN
 END SUBROUTINE ISHELL
 
 SUBROUTINE SHELL (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1554,6 +1586,10 @@ RETURN
 END SUBROUTINE SHELL
 
 SUBROUTINE SHELL2 (A, B, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S, T
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1605,6 +1641,10 @@ RETURN
 END SUBROUTINE SHELL2
 
 SUBROUTINE RSORT (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1651,6 +1691,10 @@ RETURN
 END SUBROUTINE RSORT
 
 SUBROUTINE RISORT (A, M, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1703,6 +1747,10 @@ RETURN
 END SUBROUTINE RISORT
 
 SUBROUTINE RRSORT (A, B, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S, T
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1754,6 +1802,9 @@ RETURN
 END SUBROUTINE RRSORT
 
 SUBROUTINE DSORT (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
@@ -1800,6 +1851,9 @@ RETURN
 END SUBROUTINE DSORT
 
 SUBROUTINE DISORT (A, M, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1852,6 +1906,9 @@ RETURN
 END SUBROUTINE DISORT
 
 SUBROUTINE DDSORT (A, B, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 !     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
@@ -1903,6 +1960,10 @@ RETURN
 END SUBROUTINE DDSORT
 
 SUBROUTINE AORD (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
+REAL S
 !-----------------------------------------------------------------------
 !     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
 !     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
@@ -1950,6 +2011,9 @@ RETURN
 END SUBROUTINE AORD
 
 SUBROUTINE DAORD (A, N)
+IMPLICIT NONE
+INTEGER N
+INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 !-----------------------------------------------------------------------
 !     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
 !     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
@@ -1997,6 +2061,7 @@ RETURN
 END SUBROUTINE DAORD
 
 SUBROUTINE QSORTI (X, IND, N)
+IMPLICIT NONE
 INTEGER N, X(N), IND(N)
 !
 !***********************************************************
@@ -2196,6 +2261,7 @@ GO TO 12
 END SUBROUTINE QSORTI
 
 SUBROUTINE QSORTR (X, IND, N)
+IMPLICIT NONE
 INTEGER N, IND(N)
 REAL X(N)
 !
@@ -2396,6 +2462,7 @@ GO TO 12
 END SUBROUTINE QSORTR
 
 SUBROUTINE QSORTD (X, IND, N)
+IMPLICIT NONE
 INTEGER N, IND(N)
 DOUBLE PRECISION X(N)
 !
@@ -2597,6 +2664,7 @@ GO TO 12
 END SUBROUTINE QSORTD
 
 SUBROUTINE IORDER (A, IP, N)
+IMPLICIT NONE
 INTEGER N, A(N), IP(N)
 !
 !***********************************************************
@@ -2668,6 +2736,7 @@ RETURN
 END SUBROUTINE IORDER
 
 SUBROUTINE RORDER (A, IP, N)
+IMPLICIT NONE
 INTEGER N, IP(N)
 REAL A(N)
 !
@@ -2741,6 +2810,7 @@ RETURN
 END SUBROUTINE RORDER
 
 SUBROUTINE DORDER (A, IP, N)
+IMPLICIT NONE
 INTEGER N, IP(N)
 DOUBLE PRECISION A(N)
 !
@@ -2814,6 +2884,9 @@ RETURN
 END SUBROUTINE DORDER
 
 REAL function CBRT (X)
+IMPLICIT NONE
+REAL X
+REAL R
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
@@ -2829,6 +2902,7 @@ RETURN
 END FUNCTION CBRT
 
 double precision function DCBRT (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !                   CUBE ROOT OF A REAL NUMBER
 !-----------------------------------------------------------------------
@@ -2846,6 +2920,9 @@ RETURN
 END FUNCTION DCBRT
 
 FUNCTION ARTNQ(Y,X)
+IMPLICIT NONE
+REAL X, Y
+REAL ARTNQ
 IF (X) 1,2,5
 1 ARTNQ=ATAN(Y/X)+3.1415926535898
 RETURN
@@ -2864,6 +2941,7 @@ RETURN
 END FUNCTION ARTNQ
 
 double precision function DARTNQ(Y,X)
+IMPLICIT NONE
 DOUBLE PRECISION X,Y
 IF (X) 1,2,5
 1 DARTNQ=DATAN(Y/X)+3.14159265358979323846264338328D0
@@ -2883,6 +2961,9 @@ RETURN
 END FUNCTION DARTNQ
 
 REAL function CPABS(X, Y)
+IMPLICIT NONE
+REAL X, Y
+REAL A
 !     --------------------------------------
 !     EVALUATION OF SQRT(X*X + Y*Y)
 !     --------------------------------------
@@ -2919,6 +3000,9 @@ RETURN
 END FUNCTION DCPABS
 
 SUBROUTINE CREC (X, Y, U, V)
+IMPLICIT NONE
+REAL U, V, X, Y
+REAL D, T
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
@@ -2936,6 +3020,7 @@ RETURN
 END SUBROUTINE CREC
 
 SUBROUTINE DCREC (X, Y, U, V)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 !-----------------------------------------------------------------------
@@ -2956,6 +3041,8 @@ RETURN
 END SUBROUTINE DCREC
 
 COMPLEX function CDIV (A, B)
+IMPLICIT NONE
+REAL AI, AR, BI, BR, D, T, U, V
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION A/B WHERE B IS NONZERO
 !-----------------------------------------------------------------------
@@ -2982,6 +3069,7 @@ RETURN
 END FUNCTION CDIV
 
 SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 !-----------------------------------------------------------------------
@@ -3015,6 +3103,7 @@ RETURN
 END SUBROUTINE CDIVID
 
 SUBROUTINE DCSQRT (Z, W)
+IMPLICIT NONE
 DOUBLE PRECISION Z(2), W(2)
 ! ----------------------------------------------------------------------
 !        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
@@ -3062,12 +3151,17 @@ RETURN
 END SUBROUTINE DCSQRT
 
 SUBROUTINE POCA(R,A,X,Y)
+IMPLICIT NONE
+REAL A, R, X, Y
 X=R*COS(A)
 Y=R*SIN(A)
 RETURN
 END SUBROUTINE POCA
 
 SUBROUTINE CAPO(X,Y,R,THETA)
+IMPLICIT NONE
+REAL R, THETA, X, Y
+REAL A
 IF (ABS(X).LE.ABS(Y)) GO TO 10
 A=Y/X
 R=ABS(X)*SQRT(1.0+A*A)
@@ -3084,6 +3178,9 @@ RETURN
 END SUBROUTINE CAPO
 
 SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
+IMPLICIT NONE
+REAL A, X1, X2, Y1, Y2
+REAL COSA, SINA
 SINA=SIN(A)
 COSA=COS(A)
 X2= X1*COSA+Y1*SINA
@@ -3243,6 +3340,9 @@ RETURN
 END SUBROUTINE DROTG
 
 SUBROUTINE ROT3 (A, THETA)
+IMPLICIT NONE
+REAL A, THETA
+REAL PIHALF, R, T, U, V
 DIMENSION A(3,3), THETA(3)
 DATA PIHALF/1.5707963267949/
 !     --------------------
@@ -3283,6 +3383,7 @@ RETURN
 END SUBROUTINE ROT3
 
 SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
+IMPLICIT NONE
 REAL XK, YK, ZK, CX, SX, CY, SY
 !
 !***********************************************************
@@ -3328,6 +3429,11 @@ RETURN
 END SUBROUTINE CONSTR
 
 REAL function ANG (N, X, Y)
+IMPLICIT NONE
+INTEGER N
+INTEGER I
+REAL D, RX, RY
+REAL SNRM2
 !-----------------------------------------------------------------------
 !           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
 !-----------------------------------------------------------------------
@@ -3361,6 +3467,9 @@ RETURN
 END FUNCTION ANG
 
 REAL function SIN0 (X)
+IMPLICIT NONE
+REAL X
+REAL A0, A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
 !          COMPUTATION OF SIN(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -3376,6 +3485,9 @@ RETURN
 END FUNCTION SIN0
 
 REAL function COS0 (X)
+IMPLICIT NONE
+REAL X
+REAL A1, A2, A3, A4, A5, A6, T
 !-----------------------------------------------------------------------
 !          COMPUTATION OF COS(X*PI/2) FOR ABS(X) .LE. 0.5
 !-----------------------------------------------------------------------
@@ -3389,6 +3501,11 @@ RETURN
 END FUNCTION COS0
 
 REAL function SIN1 (X)
+IMPLICIT NONE
+REAL X
+INTEGER MAX, N
+REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF SIN(X*PI)
 !-----------------------------------------------------------------------
@@ -3440,6 +3557,11 @@ RETURN
 END FUNCTION SIN1
 
 REAL function COS1 (X)
+IMPLICIT NONE
+REAL X
+INTEGER MAX, N
+REAL A, A0, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4, B5, B6, T
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !                   EVALUATION  OF COS(X*PI)
 !-----------------------------------------------------------------------
@@ -3491,6 +3613,9 @@ RETURN
 END FUNCTION COS1
 
 double precision function DSIN1 (X)
+IMPLICIT NONE
+INTEGER MAX, N
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
@@ -3585,6 +3710,9 @@ RETURN
 END FUNCTION DSIN1
 
 double precision function DCOS1 (X)
+IMPLICIT NONE
+INTEGER MAX, N
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !
 !                DOUBLE PRECISION EVALUATION OF COS(PI*X)
@@ -3810,6 +3938,8 @@ RETURN
 END FUNCTION ESUM
 
 double precision function DESUM (MU, X)
+IMPLICIT NONE
+INTEGER MU
 !-----------------------------------------------------------------------
 !                    EVALUATION OF EXP(MU + X)
 !-----------------------------------------------------------------------
@@ -3919,6 +4049,9 @@ RETURN
 END FUNCTION DREXP
 
 SUBROUTINE REXP1 (X, E, W)
+IMPLICIT NONE
+REAL E, W, X
+REAL P1, P2, Q1, Q2, Q3, Q4
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -3950,6 +4083,7 @@ RETURN
 END SUBROUTINE REXP1
 
 SUBROUTINE DREXP1 (X, E, W)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4092,6 +4226,9 @@ RETURN
 END FUNCTION DLNREL
 
 REAL function RLOG(X)
+IMPLICIT NONE
+REAL X
+REAL A, B, P0, P1, P2, Q1, Q2, R, T, U, UP2, W, W1
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
@@ -4193,6 +4330,7 @@ RETURN
 END FUNCTION RLOG1
 
 double precision function DRLOG (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE FUNCTION X - 1 - LN(X)
 !-----------------------------------------------------------------------
@@ -4352,6 +4490,12 @@ RETURN
 END FUNCTION DRLOG1
 
 SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
+IMPLICIT NONE
+INTEGER L, M, N
+REAL X0, Y0
+INTEGER I, N0
+REAL ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
+REAL SPMPAR
 REAL X(N), Y(N)
 !-----------------------------------------------------------------------
 !     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
@@ -4429,6 +4573,12 @@ RETURN
 END SUBROUTINE LOCPT
 
 SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IND, NM1
+REAL D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX &
+&, TMIN, TOL, TOL0
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !                 INTERSECTION OF A STRIGHT LINE
@@ -4588,6 +4738,13 @@ RETURN
 END SUBROUTINE PFIND
 
 SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
+IMPLICIT NONE
+INTEGER K, M, N
+INTEGER I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN &
+&, LSAV, MM1, MP1, NN
+REAL DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN, YMAX &
+&, YMIN
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
 !-----------------------------------------------------------------------
@@ -5007,6 +5164,9 @@ RETURN
 END FUNCTION PAREA
 
 SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
+IMPLICIT NONE
+INTEGER IND, M, N, NB, NUM
+INTEGER I, II, NP1
 !
 ! SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
 ! DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
@@ -5111,6 +5271,11 @@ END SUBROUTINE HC
 
 SUBROUTINE HC1 (IND, M, N, PR, AR, NB, S, NP1, PC, AC, VR, &
 &VC, P, SUBR, RBUS, TOR, JR, K, IND0)
+IMPLICIT NONE
+INTEGER IND, IND0, JR, K, M, N, NB, NP1
+INTEGER I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, JSUBR &
+&, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
+REAL DENS, SCORE
 !
 ! MEANING OF THE WORK ARRAYS ...
 !
@@ -5441,6 +5606,9 @@ END SUBROUTINE HC1
 
 SUBROUTINE IPATH (I, J, SUBR, RBUS, AR, PR, S, N, NP, I1, I2, K, &
 &JR, M, NP1)
+IMPLICIT NONE
+INTEGER I, I1, I2, J, JR, K, M, N, NP, NP1
+INTEGER JA, K1, L, L1, L2
 !
 ! SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
 ! VERTEX  I2  OF THE LARGEST PATH OF IMPLIED ARCS CONTAINING
@@ -5501,6 +5669,9 @@ RETURN
 END SUBROUTINE IPATH
 
 SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
+IMPLICIT NONE
+INTEGER I1, K1, M, N, NP1
+INTEGER IA, J, J1, J2, L, L1, L2
 !
 ! FORWARD STEP UPDATING
 !
@@ -5525,6 +5696,9 @@ RETURN
 END SUBROUTINE FUPD
 
 SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
+IMPLICIT NONE
+INTEGER II, K1, K2, M, N, NP1
+INTEGER IA, L, L1, L2, LL, LL1, LL2
 !
 ! BACKTRACKING STEP UPDATING
 !
@@ -5550,6 +5724,9 @@ RETURN
 END SUBROUTINE BUPD
 
 SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
+IMPLICIT NONE
+INTEGER IA, IB, K1, L, M, N, NP1
+INTEGER IARC, J1, J2, JJ, M1, M2, MM
 !
 ! UPDATING FOR IMPLIED ARC
 !
@@ -5581,6 +5758,9 @@ END SUBROUTINE IUPD
 
 SUBROUTINE RARC(IA, IB, AR, AC, PR, PC, VR, VC, K1, JJ, LL, N, M, &
 &NP1)
+IMPLICIT NONE
+INTEGER IA, IB, JJ, K1, LL, M, N, NP1
+INTEGER J1, J2, L1, L2
 !
 ! SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
 !
@@ -5623,6 +5803,10 @@ RETURN
 END SUBROUTINE RARC
 
 SUBROUTINE CERF (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER I
+REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -5775,6 +5959,11 @@ RETURN
 END SUBROUTINE CERF
 
 SUBROUTINE CERFC (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER I
+REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
+REAL EXPARG
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -5949,6 +6138,9 @@ RETURN
 END SUBROUTINE CERFC
 
 REAL function ERF (X)
+IMPLICIT NONE
+REAL X
+REAL AX, BOT, C, T, TOP, X2
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL ERROR FUNCTION
 !-----------------------------------------------------------------------
@@ -6009,6 +6201,10 @@ RETURN
 END FUNCTION ERF
 
 REAL function ERFC (X)
+IMPLICIT NONE
+REAL X
+REAL AX, BOT, C, E, T, TOP
+REAL EXPARG
 !-----------------------------------------------------------------------
 !         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 !-----------------------------------------------------------------------
@@ -6189,6 +6385,8 @@ RETURN
 END FUNCTION ERFC1
 
 SUBROUTINE DCERF (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
 !-----------------------------------------------------------------------
 !
 !               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -6467,6 +6665,8 @@ RETURN
 END SUBROUTINE DCERF
 
 SUBROUTINE DCERFC (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
 !-----------------------------------------------------------------------
 !
 !              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6750,6 +6950,9 @@ RETURN
 END SUBROUTINE DCERFC
 
 SUBROUTINE ERFCM2 (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER J, N
 !-----------------------------------------------------------------------
 !           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 !                          AROUND Z0 = 2
@@ -7093,6 +7296,7 @@ RETURN
 END FUNCTION DERFC1
 
 double precision function DERFC0 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !           EVALUATION OF EXP(X**2)*ERFC(X) FOR X .GE. 1
@@ -7256,6 +7460,10 @@ RETURN
 END FUNCTION DERFC0
 
 REAL function ERFI (P, Q)
+IMPLICIT NONE
+REAL P, Q
+REAL C, C1, C2, EPS, S, T, V, V1
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !              EVALUATION OF THE INVERSE ERROR FUNCTION
@@ -7374,6 +7582,7 @@ RETURN
 END FUNCTION ERFI
 
 double precision function DERFI (P, Q)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !                  DOUBLE PRECISION COMPUTATION OF
@@ -7537,6 +7746,14 @@ RETURN
 END FUNCTION DERFI
 
 REAL function AERF (X, H)
+IMPLICIT NONE
+REAL H, X
+INTEGER J, N, N1
+REAL A2, AH, AX, C, DN2, E, EPS, H2, H3, HF, HG, P, S, ST, T, U, V &
+&, X2, XMH, XPH, Z
+REAL EPSLN
+REAL EXPARG
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
@@ -7659,6 +7876,8 @@ RETURN
 END FUNCTION AERF
 
 double precision function DAERF (X, H)
+IMPLICIT NONE
+INTEGER J
 !-----------------------------------------------------------------------
 !             COMPUTATION OF ERF(X + H) - ERF(X - H)
 !-----------------------------------------------------------------------
@@ -7787,6 +8006,12 @@ RETURN
 END FUNCTION DAERF
 
 FUNCTION PNDF(X,IND)
+IMPLICIT NONE
+INTEGER IND
+REAL X
+REAL A, C, T
+REAL PNDF
+REAL ERFC1
 !     ---------------
 !     A = 1/SQRT(2)
 !     C = SQRT(2/PI)
@@ -7809,6 +8034,12 @@ RETURN
 END FUNCTION PNDF
 
 SUBROUTINE PNI (P, Q, D, W, IERR)
+IMPLICIT NONE
+INTEGER IERR
+REAL D, P, Q, W
+REAL EPS, RT2, T, U, V
+REAL ERFI
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -7859,6 +8090,8 @@ RETURN
 END SUBROUTINE PNI
 
 SUBROUTINE DPNI (P, Q, D, W, IERR)
+IMPLICIT NONE
+INTEGER IERR
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -7913,6 +8146,8 @@ RETURN
 END SUBROUTINE DPNI
 
 REAL function DAW(X)
+IMPLICIT NONE
+INTEGER I
 !-----------------------------------------------------------------------
 !
 !     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
@@ -8055,6 +8290,8 @@ GO TO 1000
 END FUNCTION DAW
 
 double precision function DPDAW (X)
+IMPLICIT NONE
+INTEGER I, K
 !-----------------------------------------------------------------------
 !            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
 !-----------------------------------------------------------------------
@@ -8160,6 +8397,7 @@ RETURN
 END FUNCTION DPDAW
 
 double precision function DPDAW0 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !
 !                EVALUATION OF X*DAW(X) FOR X .GE. 4
@@ -8359,6 +8597,12 @@ RETURN
 END FUNCTION DPDAW0
 
 SUBROUTINE CFRNLI (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER I
+REAL C, C0, DM, PM, QM, R, SS, X, Y
+REAL EXPARG
+REAL CPABS
 !-----------------------------------------------------------------------
 !
 !            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
@@ -8531,6 +8775,13 @@ RETURN
 END SUBROUTINE CFRNLI
 
 SUBROUTINE FRNL (T, C, S)
+IMPLICIT NONE
+REAL C, S, T
+INTEGER I, L, M, MAX
+REAL CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
+REAL SIN1
+REAL COS1
+INTEGER IPMPAR
 !-----------------------------------------------------------------------
 !             EVALUATION OF THE REAL FRESNEL INTEGRALS
 !-----------------------------------------------------------------------
@@ -8746,6 +8997,13 @@ RETURN
 END SUBROUTINE FRNL
 
 SUBROUTINE CEXPLI (MO, Z, W)
+IMPLICIT NONE
+INTEGER MO
+INTEGER I
+REAL C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
+REAL ANORM
+REAL SPMPAR
+REAL CPABS
 !-----------------------------------------------------------------------
 !           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
@@ -8928,6 +9186,10 @@ RETURN
 END SUBROUTINE CEXPLI
 
 SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
+IMPLICIT NONE
+INTEGER M
+REAL CSEVL
+REAL ALNREL
 !
 REAL A(6),B(5),C(7),D(7),E(7),F(7),P1(8),Q1(8),P2(8),Q2(7), &
 &P3(8),Q3(7),P4(8),Q4(7),R(20),PX(9),QX(9), &
@@ -9261,6 +9523,7 @@ RETURN
 END SUBROUTINE EXPLI
 
 double precision function DEI (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !        DOUBLE PRECISION EVALUATION OF THE EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
@@ -9273,6 +9536,7 @@ RETURN
 END FUNCTION DEI
 
 double precision function DEI1 (X)
+IMPLICIT NONE
 !-----------------------------------------------------------------------
 !          DOUBLE PRECISION EVALUATION OF EXP(-X)*EI(X)
 !-----------------------------------------------------------------------
@@ -9286,6 +9550,8 @@ RETURN
 END FUNCTION DEI1
 
 double precision function DE1E(X)
+IMPLICIT NONE
+INTEGER M
 !-----------------------------------------------------------------------
 !
 !     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
@@ -9757,6 +10023,8 @@ RETURN
 END FUNCTION DE1E
 
 double precision function DEI0 (X, EPS)
+IMPLICIT NONE
+INTEGER N
 !-----------------------------------------------------------------------
 !
 !            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
@@ -9849,6 +10117,12 @@ RETURN
 END FUNCTION DEI0
 
 FUNCTION SI(X)
+IMPLICIT NONE
+REAL X
+INTEGER I, J, M1, M2, N1, N2
+REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, PIO2, RC, TEMP, TX
+REAL SI
+REAL SPMPAR
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
 !     MODIFIED BY A.H. MORRIS
@@ -9964,6 +10238,12 @@ RETURN
 END FUNCTION SI
 
 FUNCTION CIN(X)
+IMPLICIT NONE
+REAL X
+INTEGER I, J, M1, M2, N1, N2
+REAL AIC, AMAX, AX, B1, B2, BB, BX, CC, ECON, RC, TEMP, TX
+REAL CIN
+REAL SPMPAR
 !
 !     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
 !     MODIFIED BY A.H. MORRIS
@@ -10079,6 +10359,9 @@ RETURN
 END FUNCTION CIN
 
 SUBROUTINE CEXEXI (Z, W)
+IMPLICIT NONE
+INTEGER I
+REAL CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
 !-----------------------------------------------------------------------
@@ -10308,274 +10591,4 @@ SM(2) = SR(2) + SM(2)
 130 W = CMPLX(SM(1), SM(2))
 RETURN
 END SUBROUTINE CEXEXI
-
-COMPLEX function CLI(Z)
-!     ******************************************************************
-!     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
-!     ******************************************************************
-COMPLEX Z
-REAL QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
-REAL AZ(2), C, PM, R, SM(2), TM(2), TS(2), SR(2)
-!     ---------------------
-!     C = PI**2/6
-!     ---------------------
-DATA C /1.64493406684823/
-!     ---------------------
-DATA QB(1) / 2.77777777777778E-2/,  QB(2) /-1.00000000000000E-2/, &
-&QB(3) /-1.70068027210884E-2/,  QB(4) /-1.94444444444444E-2/, &
-&QB(5) /-2.06611570247934E-2/,  QB(6) /-2.14173006480699E-2/, &
-&QB(7) /-2.19488663772311E-2/,  QB(8) /-2.23492338111715E-2/, &
-&QB(9) /-2.26636891351914E-2/,  QB(10)/-2.29178211549926E-2/, &
-&QB(11)/-2.31276449354844E-2/,  QB(12)/-2.33038680700203E-2/, &
-&QB(13)/-2.34539766464373E-2/,  QB(14)/-2.35833786876607E-2/, &
-&QB(15)/-2.36960832049849E-2/,  QB(16)/-2.37951264448373E-2/, &
-&QB(17)/-2.38828504258091E-2/,  QB(18)/-2.39610907251825E-2/, &
-&QB(19)/-2.40313063764460E-2/,  QB(20)/-2.40946717197585E-2/, &
-&QB(21)/-2.41521426124012E-2/,  QB(22)/-2.42045049812210E-2/, &
-&QB(23)/-2.42524109782181E-2/,  QB(24)/-2.42964062815807E-2/, &
-&QB(25)/-2.43369509729144E-2/
-!     ---------------------
-AZ(1) = REAL(Z)
-AZ(2) = AIMAG(Z)
-R = CPABS(AZ(1),AZ(2))
-IF (R .GT. 0.5) GO TO 10
-SR(1) = 0.0
-SR(2) = 0.0
-QF(1) = -AZ(1)
-QF(2) = -AZ(2)
-TM(1) =  AZ(1)
-TM(2) =  AZ(2)
-GO TO 30
-!
-10 IF (R .LT. 3.0) GO TO 20
-ZL(1) = ALOG(R)
-ZL(2) = ATAN2(AZ(2),AZ(1))
-SR(1) = C + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
-SR(2) = ZL(1)*ZL(2)
-QF(1) = (-AZ(1)/R)/R
-QF(2) = (AZ(2)/R)/R
-TM(1) = QF(1)
-TM(2) = QF(2)
-GO TO 30
-!
-20 ZD(1) = 1.0 + AZ(1)
-ZD(2) = AZ(2)
-DS = ZD(1)*ZD(1) + ZD(2)*ZD(2)
-IF (DS .EQ. 0.0) GO TO 100
-DL(1) = 0.5*ALOG(DS)
-DL(2) = ATAN2(ZD(2),ZD(1))
-IF (DS .GT. 0.25) GO TO 50
-   ZL(1) = ALOG(R)
-   ZL(2) = ATAN2(-AZ(2),-AZ(1))
-   SR(1) = -C + (DL(1)*ZL(1) - DL(2)*ZL(2))
-   SR(2) = DL(1)*ZL(2) + DL(2)*ZL(1)
-   QF(1) = ZD(1)
-   QF(2) = ZD(2)
-   TM(1) = QF(1)
-   TM(2) = QF(2)
-!
-!             EVALUATION OF THE TAYLOR SERIES
-!
-30 SR(1) = SR(1) + TM(1)
-SR(2) = SR(2) + TM(2)
-SM(1) = 0.0
-SM(2) = 0.0
-PM = 1.0
-40 PM = PM + 1.0
-   TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
-   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
-   TM(1) = TS(1)
-   TM(2) = TS(2)
-   TS(1) = TM(1)/(PM*PM)
-   TS(2) = TM(2)/(PM*PM)
-   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 41
-   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
-41 SM(1) = SM(1) + TS(1)
-   SM(2) = SM(2) + TS(2)
-   GO TO 40
-!
-!        EVALUATION OF THE SERIES IN  U = -LN(1 + Z)
-!
-50 QF(1) = DL(1)*DL(1) - DL(2)*DL(2)
-QF(2) = 2.0*DL(1)*DL(2)
-SR(1) = DL(1) + 0.25*QF(1)
-SR(2) = DL(2) + 0.25*QF(2)
-SM(1) = 0.0
-SM(2) = 0.0
-TM(1) = DL(1)
-TM(2) = DL(2)
-DO N = 1,25
-   TS(1) = QB(N)*(TM(1)*QF(1) - TM(2)*QF(2))
-   TS(2) = QB(N)*(TM(1)*QF(2) + TM(2)*QF(1))
-   TM(1) = TS(1)
-   TM(2) = TS(2)
-   IF (ABS(SM(1)) + ABS(TM(1)) .NE. ABS(SM(1))) GO TO 60
-   IF (ABS(SM(2)) + ABS(TM(2)) .EQ. ABS(SM(2))) GO TO 80
-60 SM(1) = SM(1) + TM(1)
-   SM(2) = SM(2) + TM(2)
-END DO
-!
-80 CLI = CMPLX(SR(1) + SM(1), SR(2) + SM(2))
-RETURN
-!
-!                  EVALUATION AT Z = -1
-!
-100 CLI = CMPLX(-C, 0.0)
-RETURN
-END FUNCTION CLI
-
-REAL function ALI(X)
-!-----------------------------------------------------------------------
-!            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
-!-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
-!-----------------------------------------------------------------------
-REAL A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
-DOUBLE PRECISION X0
-!--------------------------
-!     CONST = PI**2/6
-!     X0 = ZERO OF THE REAL DILOGARITHM FUNCTION
-!--------------------------
-DATA CONST /1.64493406684823/
-DATA X0 /-12.5951703698450161286398965D0/
-!--------------------------
-DATA A(1)/.217590467528373E+01/, A(2)/.165569610692639E+01/, &
-&A(3)/.522944061702389E+00/, A(4)/.626073688152965E-01/, &
-&A(5)/.187280204672313E-02/
-DATA B(1)/.242590467528371E+01/, B(2)/.215106116463796E+01/, &
-&B(3)/.853664388896516E+00/, B(4)/.148635712775060E+00/, &
-&B(5)/.936304016023909E-02/, B(6)/.115362459229893E-03/
-!--------------------------
-DATA C(1)/-.139792925233661E+01/, C(2) /.368504569727477E+00/, &
-&C(3) /.467406917183686E-01/, C(4) /.113795257294490E-01/, &
-&C(5) /.369638462505741E-02/, C(6) /.140888669464352E-02/, &
-&C(7) /.580505641503297E-03/, C(8) /.279065584075104E-03/, &
-&C(9) /.727678355839120E-04/, C(10)/.941452067850052E-04/
-DATA D(1)/-.164792925233634E+01/, D(2) /.669375771675355E+00/
-!--------------------------
-DATA E(1)/-.194565741631859E+00/, E(2)/-.430017756528812E-02/, &
-&E(3)/-.129188263110634E-03/, E(4)/-.344864872694838E-05/, &
-&E(5) /.566899694553089E-09/, E(6) /.126641834906132E-07/, &
-&E(7) /.163966793864421E-08/, E(8) /.164221074630109E-09/, &
-&E(9) /.149644905021032E-10/, E(10)/.130214292886747E-11/, &
-&E(11)/.110415518123737E-12/, E(12)/.921674760163207E-14/, &
-&E(13)/.761646464974859E-15/, E(14)/.625216733700975E-16/, &
-&E(15)/.510910937990370E-17/, E(16)/.416215390793180E-18/, &
-&E(17)/.338357379188308E-19/, E(18)/.274674744366340E-20/
-!--------------------------
-DATA P(1)/-.124827318209942E+01/, P(2)/-.593706951284264E-01/, &
-&P(3)/ .368603360394688E-01/, P(4)/ .243497524184253E-02/
-DATA Q(1)/ .100000000000000E+01/, Q(2)/ .252618047164349E+00/, &
-&Q(3)/ .171618729068655E-01/, Q(4)/ .234444792844727E-03/, &
-&Q(5)/-.174928841869743E-05/, Q(6)/ .347369010951250E-07/, &
-&Q(7)/-.713275908929482E-09/, Q(8)/ .958397514026421E-11/
-!--------------------------
-DATA R(1)/.265189940015693E+00/, R(2)/.230201018075415E+00/, &
-&R(3)/.315999623504943E-01/, R(4)/.154066621939470E-02/, &
-&R(5)/.286697611038892E-04/, R(6)/.163031291368652E-06/, &
-&R(7)/.838957807732251E-10/
-DATA S(1)/.100000000000000E+01/, S(2)/.177195068872258E+00/, &
-&S(3)/.110559275223905E-01/, S(4)/.291916852717175E-03/, &
-&S(5)/.304793254397420E-05/, S(6)/.882114921507386E-08/
-!--------------------------
-!
-IF (X .GT. 1.0) GO TO 50
-IF (X .GE. 0.0) GO TO 40
-IF (X .GE.-0.5) GO TO 30
-IF (X .GE.-1.0) GO TO 20
-IF (X .GE.-2.0) GO TO 10
-!
-!                            X .LT. -2
-!
-IF (X .GE. -26.63 .AND. X .LE. -6.97) GO TO 100
-T = -1.0/X
-W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
-&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
-&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
-ALI = 0.5*ALOG(-X)**2 - (2.0*CONST + W/X)
-RETURN
-!
-!                        -2 .LE. X .LT. -1
-!
-10 T = -(1.0 + X)
-W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
-&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
-&B(1))*T + 1.0)
-ALI = -(CONST + T*W) + ALOG(-X)*ALOG(T)
-RETURN
-!
-!                       -1 .LE. X .LT. -1/2
-!
-20 T = 0.5 + (0.5 + X)
-ALI = -CONST
-IF (T .EQ. 0.0) RETURN
-W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
-&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
-&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
-ALI = (-CONST + T*W) + ALOG(-X)*ALOG(T)
-RETURN
-!
-!                       -1/2 .LE. X .LT. 0
-!
-30 T = -X
-W = (((((((((((C(10)*T + C(9))*T + C(8))*T + C(7))*T + C(6))*T + &
-&C(5))*T + C(4))*T + C(3))*T + C(2))*T + C(1))*T + &
-&0.5) + 0.5) / ((D(2)*T + D(1))*T + 1.0)
-ALI = X*W
-RETURN
-!
-!                         0 .LE. X .LE. 1
-!
-40 W = (((((A(5)*X + A(4))*X + A(3))*X + A(2))*X + A(1))*X + 1.0)/ &
-&((((((B(6)*X + B(5))*X + B(4))*X + B(3))*X + B(2))*X + &
-&B(1))*X + 1.0)
-ALI = X*W
-RETURN
-!
-!                            X .GT. 1
-!
-50 T = 1.0/X
-W = (((((A(5)*T + A(4))*T + A(3))*T + A(2))*T + A(1))*T + 1.0)/ &
-&((((((B(6)*T + B(5))*T + B(4))*T + B(3))*T + B(2))*T + &
-&B(1))*T + 1.0)
-ALI = (CONST - W/X) + 0.5*ALOG(X)**2
-RETURN
-!
-!-----------------------------------------------------------------------
-!              EVALUATION FOR  -26.63 .LE. X .LE. -6.97
-!-----------------------------------------------------------------------
-!
-100 IF (X .LE. -14.0) GO TO 120
-IF (X .LE. -11.1) GO TO 110
-!
-!                    -11.1 .LT. X .LE. -6.97
-!
-T = -(X + 7.0)
-ALI = (((P(4)*T + P(3))*T + P(2))*T + P(1)) / (((((((Q(8)*T + &
-&Q(7))*T + Q(6))*T + Q(5))*T + Q(4))*T + Q(3))*T + &
-&Q(2))*T + Q(1))
-RETURN
-
-!
-!                     -14 .LT. X .LE. -11.1
-!
-110 T = DBLE(X) - X0
-W = E(14)
-do 111 L = 1,13
-   I = 14 - L
-111 W = W*T + E(I)
-ALI = T*W
-RETURN
-!
-!                     -26.63 .LE. X .LE. -14
-!
-120 T = -(X + 14.0)
-ALI = ((((((R(7)*T + R(6))*T + R(5))*T + R(4))*T + R(3))*T + &
-&R(2))*T + R(1)) / (((((S(6)*T + S(5))*T + &
-&S(4))*T + S(3))*T + S(2))*T + S(1))
-RETURN
-END FUNCTION ALI
 

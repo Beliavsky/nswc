@@ -1,5 +1,1560 @@
+SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
+IMPLICIT NONE
+!
+INTEGER I,J,K,M,N,II,NM,IGH,LOW
+REAL SCALE(N),ZR(NM,M),ZI(NM,M)
+REAL S
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
+!     CBABK2, WHICH IS A COMPLEX VERSION OF BALBAK,
+!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!
+!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A COMPLEX GENERAL
+!     MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
+!     BALANCED MATRIX DETERMINED BY  CBAL.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY  CBAL,
+!
+!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
+!          AND SCALING FACTORS USED BY  CBAL,
+!
+!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
+!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
+!
+!     ON OUTPUT-
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
+!          IN THEIR FIRST M COLUMNS.
+!
+!-----------------------------------------------------------------------
+IF (M .EQ. 0) GO TO 200
+IF (IGH .EQ. LOW) GO TO 120
+!
+DO I = LOW, IGH
+   S = SCALE(I)
+!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
+!                IF THE FOREGOING STATEMENT IS REPLACED BY
+!                S=1.0/SCALE(I). **********
+   DO J = 1, M
+      ZR(I,J) = ZR(I,J) * S
+      ZI(I,J) = ZI(I,J) * S
+   END DO
+!
+END DO
+!     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
+!                IGH+1 STEP 1 UNTIL N DO -- **********
+120 do 140 II = 1, N
+   I = II
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
+   IF (I .LT. LOW) I = LOW - II
+   K = SCALE(I)
+   IF (K .EQ. I) GO TO 140
+!
+   DO J = 1, M
+      S = ZR(I,J)
+      ZR(I,J) = ZR(K,J)
+      ZR(K,J) = S
+      S = ZI(I,J)
+      ZI(I,J) = ZI(K,J)
+      ZI(K,J) = S
+   END DO
+!
+140 CONTINUE
+!
+200 RETURN
+!     ********** LAST CARD OF CBABK2 **********
+END SUBROUTINE CBABK2
+
+SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
+IMPLICIT NONE
+!
+INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1, &
+&ITS,LOW,LP1,ENM1,IEND,IERR
+REAL HR(NM,N),HI(NM,N),WR(N),WI(N),ZR(NM,N),ZI(NM,N), &
+&ORTR(IGH),ORTI(IGH)
+REAL SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
+COMPLEX Z3
+REAL SPMPAR
+!     INTEGER MIN0
+!     REAL SQRT,CABS,ABS,REAL,AIMAG
+!     COMPLEX CSQRT,CMPLX
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
+!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
+!     AND WILKINSON.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
+!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
+!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!
+!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS
+!     OF A COMPLEX UPPER HESSENBERG MATRIX BY THE QR
+!     METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
+!     CAN ALSO BE FOUND IF  CORTH  HAS BEEN USED TO REDUCE
+!     THIS GENERAL MATRIX TO HESSENBERG FORM.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
+!          SUBROUTINE  CBAL.  IF  CBAL  HAS NOT BEEN USED,
+!          SET LOW=1, IGH=N,
+!
+!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
+!          FORMATIONS USED IN THE REDUCTION BY  CORTH, IF PERFORMED.
+!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
+!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
+!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
+!
+!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
+!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
+!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
+!          REDUCTION BY  CORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
+!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
+!          ARBITRARY.
+!
+!     ON OUTPUT-
+!
+!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
+!          HAVE BEEN DESTROYED,
+!
+!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
+!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
+!          FOR INDICES IERR+1,...,N,
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
+!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
+!          THE EIGENVECTORS HAS BEEN FOUND,
+!
+!        IERR IS SET TO
+!          ZERO       FOR NORMAL RETURN,
+!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!                     DETERMINED AFTER 30 ITERATIONS.
+!
+!     ARITHMETIC IS REAL EXCEPT FOR THE REPLACEMENT OF THE ALGOL
+!     PROCEDURE CDIV BY COMPLEX DIVISION AND USE OF THE SUBROUTINES
+!     CSQRT AND CMPLX IN COMPUTING COMPLEX SQUARE ROOTS.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!
+           MACHEP = SPMPAR(1)
+!
+!                **********
+!
+IERR = 0
+!     ********** INITIALIZE EIGENVECTOR MATRIX **********
+do 100 I = 1, N
+!
+   do 100 J = 1, N
+      ZR(I,J) = 0.0
+      ZI(I,J) = 0.0
+      IF (I .EQ. J) ZR(I,J) = 1.0
+100 CONTINUE
+!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
+!                FROM THE INFORMATION LEFT BY CORTH **********
+IEND = IGH - LOW - 1
+IF (IEND) 180, 150, 105
+!     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+105 do 140 II = 1, IEND
+   I = IGH - II
+   IF (ORTR(I) .EQ. 0.0 .AND. ORTI(I) .EQ. 0.0) GO TO 140
+   IF (HR(I,I-1) .EQ. 0.0 .AND. HI(I,I-1) .EQ. 0.0) GO TO 140
+!     ********** NORM BELOW IS NEGATIVE OF H FORMED IN CORTH **********
+   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
+   IP1 = I + 1
+!
+   DO K = IP1, IGH
+      ORTR(K) = HR(K,I-1)
+      ORTI(K) = HI(K,I-1)
+   END DO
+!
+   DO J = I, IGH
+      SR = 0.0
+      SI = 0.0
+!
+      DO K = I, IGH
+         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
+         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
+      END DO
+!
+      SR = SR / NORM
+      SI = SI / NORM
+!
+      DO K = I, IGH
+         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
+         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
+      END DO
+!
+   END DO
+!
+140 CONTINUE
+!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+150 L = LOW + 1
+!
+do 170 I = L, IGH
+   LL = MIN0(I+1,IGH)
+   IF (HI(I,I-1) .EQ. 0.0) GO TO 170
+   NORM = CABS(CMPLX(HR(I,I-1),HI(I,I-1)))
+   YR = HR(I,I-1) / NORM
+   YI = HI(I,I-1) / NORM
+   HR(I,I-1) = NORM
+   HI(I,I-1) = 0.0
+!
+   DO J = I, N
+      SI = YR * HI(I,J) - YI * HR(I,J)
+      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
+      HI(I,J) = SI
+   END DO
+!
+   DO J = 1, LL
+      SI = YR * HI(J,I) + YI * HR(J,I)
+      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
+      HI(J,I) = SI
+   END DO
+!
+   DO J = LOW, IGH
+      SI = YR * ZI(J,I) + YI * ZR(J,I)
+      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
+      ZI(J,I) = SI
+   END DO
+!
+170 CONTINUE
+!     ********** STORE ROOTS ISOLATED BY CBAL **********
+180 do 200 I = 1, N
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
+   WR(I) = HR(I,I)
+   WI(I) = HI(I,I)
+200 CONTINUE
+!
+EN = IGH
+TR = 0.0
+TI = 0.0
+!     ********** SEARCH FOR NEXT EIGENVALUE **********
+220 IF (EN .LT. LOW) GO TO 680
+ITS = 0
+ENM1 = EN - 1
+!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
+!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+240 DO LL = LOW, EN
+   L = EN + LOW - LL
+   IF (L .EQ. LOW) GO TO 300
+   IF (ABS(HR(L,L-1)) .LE. &
+&MACHEP * (ABS(HR(L-1,L-1)) + ABS(HI(L-1,L-1)) &
+&+ ABS(HR(L,L)) +ABS(HI(L,L)))) GO TO 300
+END DO
+!     ********** FORM SHIFT **********
+300 IF (L .EQ. EN) GO TO 660
+IF (ITS .EQ. 30) GO TO 1000
+IF (ITS .EQ. 10 .OR. ITS .EQ. 20) GO TO 320
+SR = HR(EN,EN)
+SI = HI(EN,EN)
+XR = HR(ENM1,EN) * HR(EN,ENM1)
+XI = HI(ENM1,EN) * HR(EN,ENM1)
+IF (XR .EQ. 0.0 .AND. XI .EQ. 0.0) GO TO 340
+YR = (HR(ENM1,ENM1) - SR) / 2.0
+YI = (HI(ENM1,ENM1) - SI) / 2.0
+Z3 = CSQRT(CMPLX(YR**2-YI**2+XR,2.0*YR*YI+XI))
+ZZR = REAL(Z3)
+ZZI = AIMAG(Z3)
+IF (YR * ZZR + YI * ZZI .GE. 0.0) GO TO 310
+ZZR = -ZZR
+ZZI = -ZZI
+310 Z3 = CMPLX(XR,XI) / CMPLX(YR+ZZR,YI+ZZI)
+SR = SR - REAL(Z3)
+SI = SI - AIMAG(Z3)
+GO TO 340
+!     ********** FORM EXCEPTIONAL SHIFT **********
+320 SR = ABS(HR(EN,ENM1)) + ABS(HR(ENM1,EN-2))
+SI = 0.0
+!
+340 DO I = LOW, EN
+   HR(I,I) = HR(I,I) - SR
+   HI(I,I) = HI(I,I) - SI
+END DO
+!
+TR = TR + SR
+TI = TI + SI
+ITS = ITS + 1
+!     ********** REDUCE TO TRIANGLE (ROWS) **********
+LP1 = L + 1
+!
+DO I = LP1, EN
+   SR = HR(I,I-1)
+   HR(I,I-1) = 0.0
+   NORM = SQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
+&+SR*SR)
+   XR = HR(I-1,I-1) / NORM
+   WR(I-1) = XR
+   XI = HI(I-1,I-1) / NORM
+   WI(I-1) = XI
+   HR(I-1,I-1) = NORM
+   HI(I-1,I-1) = 0.0
+   HI(I,I-1) = SR / NORM
+!
+   DO J = I, N
+      YR = HR(I-1,J)
+      YI = HI(I-1,J)
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
+      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
+      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
+      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
+   END DO
+!
+END DO
+!
+SI = HI(EN,EN)
+IF (SI .EQ. 0.0) GO TO 540
+NORM = CABS(CMPLX(HR(EN,EN),SI))
+SR = HR(EN,EN) / NORM
+SI = SI / NORM
+HR(EN,EN) = NORM
+HI(EN,EN) = 0.0
+IF (EN .EQ. N) GO TO 540
+IP1 = EN + 1
+!
+DO J = IP1, N
+   YR = HR(EN,J)
+   YI = HI(EN,J)
+   HR(EN,J) = SR * YR + SI * YI
+   HI(EN,J) = SR * YI - SI * YR
+END DO
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 DO J = LP1, EN
+   XR = WR(J-1)
+   XI = WI(J-1)
+!
+   DO I = 1, J
+      YR = HR(I,J-1)
+      YI = 0.0
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      IF (I .EQ. J) GO TO 560
+      YI = HI(I,J-1)
+      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
+560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
+      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
+      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
+   END DO
+!
+   DO I = LOW, IGH
+      YR = ZR(I,J-1)
+      YI = ZI(I,J-1)
+      ZZR = ZR(I,J)
+      ZZI = ZI(I,J)
+      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
+      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
+      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
+      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
+   END DO
+!
+END DO
+!
+IF (SI .EQ. 0.0) GO TO 240
+!
+DO I = 1, EN
+   YR = HR(I,EN)
+   YI = HI(I,EN)
+   HR(I,EN) = SR * YR - SI * YI
+   HI(I,EN) = SR * YI + SI * YR
+END DO
+!
+DO I = LOW, IGH
+   YR = ZR(I,EN)
+   YI = ZI(I,EN)
+   ZR(I,EN) = SR * YR - SI * YI
+   ZI(I,EN) = SR * YI + SI * YR
+END DO
+!
+GO TO 240
+!     ********** A ROOT FOUND **********
+660 HR(EN,EN) = HR(EN,EN) + TR
+WR(EN) = HR(EN,EN)
+HI(EN,EN) = HI(EN,EN) + TI
+WI(EN) = HI(EN,EN)
+EN = ENM1
+GO TO 220
+!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
+!                VECTORS OF UPPER TRIANGULAR FORM **********
+680 NORM = 0.0
+!
+do 720 I = 1, N
+!
+   do 720 J = I, N
+      NORM = NORM + ABS(HR(I,J)) + ABS(HI(I,J))
+720 CONTINUE
+!
+IF (N .EQ. 1 .OR. NORM .EQ. 0.0) GO TO 1001
+!     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
+DO NN = 2, N
+   EN = N + 2 - NN
+   XR = WR(EN)
+   XI = WI(EN)
+   ENM1 = EN - 1
+!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
+   DO II = 1, ENM1
+      I = EN - II
+      ZZR = HR(I,EN)
+      ZZI = HI(I,EN)
+      IF (I .EQ. ENM1) GO TO 760
+      IP1 = I + 1
+!
+      DO J = IP1, ENM1
+         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
+         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
+      END DO
+!
+760 YR = XR - WR(I)
+      YI = XI - WI(I)
+      IF (YR .EQ. 0.0 .AND. YI .EQ. 0.0) YR = MACHEP * NORM
+      Z3 = CMPLX(ZZR,ZZI) / CMPLX(YR,YI)
+      HR(I,EN) = REAL(Z3)
+      HI(I,EN) = AIMAG(Z3)
+   END DO
+!
+END DO
+!     ********** END BACKSUBSTITUTION **********
+ENM1 = N - 1
+!     ********** VECTORS OF ISOLATED ROOTS **********
+do 840 I = 1, ENM1
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
+   IP1 = I + 1
+!
+   DO J = IP1, N
+      ZR(I,J) = HR(I,J)
+      ZI(I,J) = HI(I,J)
+   END DO
+!
+840 CONTINUE
+!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
+!                VECTORS OF ORIGINAL FULL MATRIX.
+!                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
+do 880 JJ = LOW, ENM1
+   J = N + LOW - JJ
+   M = MIN0(J-1,IGH)
+!
+   do 880 I = LOW, IGH
+      ZZR = ZR(I,J)
+      ZZI = ZI(I,J)
+!
+      DO K = LOW, M
+         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
+         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
+      END DO
+!
+      ZR(I,J) = ZZR
+      ZI(I,J) = ZZI
+880 CONTINUE
+!
+GO TO 1001
+!     ********** SET ERROR -- NO CONVERGENCE TO AN
+!                EIGENVALUE AFTER 30 ITERATIONS **********
+1000 IERR = EN
+1001 RETURN
+!     ********** LAST CARD OF COMQR2 **********
+END SUBROUTINE COMQR2
+
+SUBROUTINE DCEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
+IMPLICIT NONE
+INTEGER IBAL, IERR, KA, N
+INTEGER IGH, LOW
+!-----------------------------------------------------------------------
+!            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N), AI(KA,N), WR(N), WI(N)
+!
+LOW = 1
+IGH = N
+IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,WR)
+CALL DCORTH(KA,N,LOW,IGH,AR,AI,WR,WI)
+CALL DCOMQR(KA,N,LOW,IGH,AR,AI,WR,WI,IERR)
+RETURN
+END SUBROUTINE DCEIG
+
+SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
+IMPLICIT NONE
+INTEGER IBAL, IERR, KA, N
+INTEGER I1, I2, I3, IGH, LOW
+!-----------------------------------------------------------------------
+!                     EIGENVALUES AND EIGENVECTORS
+!                 OF DOUBLE PRECISION COMPLEX MATRICES
+!-----------------------------------------------------------------------
+DOUBLE PRECISION AR(KA,N),AI(KA,N),WR(N),WI(N),ZR(KA,N),ZI(KA,N), &
+&TEMP(*)
+!----------------------
+!     TEMP IS A TEMPORARY STORAGE AREA
+!        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
+!        DIMENSION(TEMP) .GE. 3*N    IF IBAL .NE. 0
+!----------------------
+I2 = 1
+I3 = N + 1
+I1 = N + I3
+LOW = 1
+IGH = N
+IF (IBAL .NE. 0) CALL DCBAL(KA,N,AR,AI,LOW,IGH,TEMP(I1))
+CALL DCORTH(KA,N,LOW,IGH,AR,AI,TEMP(I2),TEMP(I3))
+CALL DCMQR2(KA,N,LOW,IGH,TEMP(I2),TEMP(I3),AR,AI,WR,WI, &
+&ZR,ZI,IERR)
+IF (IERR .NE. 0) RETURN
+IF (IBAL .NE. 0) CALL DCBABK(KA,N,LOW,IGH,TEMP(I1),N,ZR,ZI)
+RETURN
+END SUBROUTINE DCEIGV
+
+SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
+IMPLICIT NONE
+INTEGER IPMPAR
+!
+INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
+DOUBLE PRECISION AR(NM,N),AI(NM,N),SCALE(N)
+DOUBLE PRECISION C,F,G,R,S,B2,RADIX
+LOGICAL NOCONV
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
+!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
+!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!
+!     DCBAL BALANCES A DOUBLE PRECISION COMPLEX MATRIX AND
+!     ISOLATES EIGENVALUES WHENEVER POSSIBLE.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE COMPLEX MATRIX TO BE BALANCED.
+!
+!     ON OUTPUT-
+!
+!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE BALANCED MATRIX,
+!
+!        LOW AND IGH ARE TWO INTEGERS SUCH THAT AR(I,J) AND AI(I,J)
+!          ARE EQUAL TO ZERO IF
+!           (1) I IS GREATER THAN J AND
+!           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
+!
+!        SCALE CONTAINS INFORMATION DETERMINING THE
+!           PERMUTATIONS AND SCALING FACTORS USED.
+!
+!     SUPPOSE THAT THE PRINCIPAL SUBMATRIX IN ROWS LOW THROUGH IGH
+!     HAS BEEN BALANCED, THAT P(J) DENOTES THE INDEX INTERCHANGED
+!     WITH J DURING THE PERMUTATION STEP, AND THAT THE ELEMENTS
+!     OF THE DIAGONAL MATRIX USED ARE DENOTED BY D(I,J).  THEN
+!        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
+!                 = D(J,J)       J = LOW,...,IGH
+!                 = P(J)         J = IGH+1,...,N.
+!     THE ORDER IN WHICH THE INTERCHANGES ARE MADE IS N TO IGH+1,
+!     THEN 1 TO LOW-1.
+!
+!     NOTE THAT 1 IS RETURNED FOR IGH IF IGH IS ZERO FORMALLY.
+!
+!     THE ALGOL PROCEDURE EXC CONTAINED IN CBALANCE APPEARS IN
+!     DCBAL IN LINE.  (NOTE THAT THE ALGOL ROLES OF IDENTIFIERS
+!     K,L HAVE BEEN REVERSED.)
+!
+!-----------------------------------------------------------------------
+!
+!     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!                THE BASE OF THE MACHINE FLOATING POINT REPRESENTATION.
+!
+           RADIX = IPMPAR(4)
+!
+!                **********
+!
+B2 = RADIX * RADIX
+K = 1
+L = N
+GO TO 100
+!     ********** IN-LINE PROCEDURE FOR ROW AND
+!                COLUMN EXCHANGE **********
+20 SCALE(M) = J
+IF (J .EQ. M) GO TO 50
+!
+DO I = 1, L
+   F = AR(I,J)
+   AR(I,J) = AR(I,M)
+   AR(I,M) = F
+   F = AI(I,J)
+   AI(I,J) = AI(I,M)
+   AI(I,M) = F
+END DO
+!
+DO I = K, N
+   F = AR(J,I)
+   AR(J,I) = AR(M,I)
+   AR(M,I) = F
+   F = AI(J,I)
+   AI(J,I) = AI(M,I)
+   AI(M,I) = F
+END DO
+!
+50 GO TO (80,130), IEXC
+!     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
+!                AND PUSH THEM DOWN **********
+80 IF (L .EQ. 1) GO TO 280
+L = L - 1
+!     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
+100 do 120 JJ = 1, L
+   J = L + 1 - JJ
+!
+   do 110 I = 1, L
+      IF (I .EQ. J) GO TO 110
+      IF (AR(J,I) .NE. 0.D0 .OR. AI(J,I) .NE. 0.D0) GO TO 120
+110 CONTINUE
+!
+   M = L
+   IEXC = 1
+   GO TO 20
+120 CONTINUE
+!
+GO TO 140
+!     ********** SEARCH FOR COLUMNS ISOLATING AN EIGENVALUE
+!                AND PUSH THEM LEFT **********
+130 K = K + 1
+!
+140 do 170 J = K, L
+!
+   do 150 I = K, L
+      IF (I .EQ. J) GO TO 150
+      IF (AR(I,J) .NE. 0.D0 .OR. AI(I,J) .NE. 0.D0) GO TO 170
+150 CONTINUE
+!
+   M = K
+   IEXC = 2
+   GO TO 20
+170 CONTINUE
+!     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
+do 180 I = K, L
+180 SCALE(I) = 1.D0
+!     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
+190 NOCONV = .FALSE.
+!
+do 270 I = K, L
+   C = 0.D0
+   R = 0.D0
+!
+   do 200 J = K, L
+      IF (J .EQ. I) GO TO 200
+      C = C + DABS(AR(J,I)) + DABS(AI(J,I))
+      R = R + DABS(AR(I,J)) + DABS(AI(I,J))
+200 CONTINUE
+!     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
+   IF (C .EQ. 0.D0 .OR. R .EQ. 0.D0) GO TO 270
+   G = R / RADIX
+   F = 1.D0
+   S = C + R
+210 IF (C .GE. G) GO TO 220
+   F = F * RADIX
+   C = C * B2
+   GO TO 210
+220 G = R * RADIX
+230 IF (C .LT. G) GO TO 240
+   F = F / RADIX
+   C = C / B2
+   GO TO 230
+!     ********** NOW BALANCE **********
+240 IF ((C + R) / F .GE. 0.95D0 * S) GO TO 270
+   G = 1.D0 / F
+   SCALE(I) = SCALE(I) * F
+   NOCONV = .TRUE.
+!
+   DO J = K, N
+      AR(I,J) = AR(I,J) * G
+      AI(I,J) = AI(I,J) * G
+   END DO
+!
+   DO J = 1, L
+      AR(J,I) = AR(J,I) * F
+      AI(J,I) = AI(J,I) * F
+   END DO
+!
+270 CONTINUE
+!
+IF (NOCONV) GO TO 190
+!
+280 LOW = K
+IGH = L
+RETURN
+!     ********** LAST CARD OF DCBAL **********
+END SUBROUTINE DCBAL
+
+SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
+IMPLICIT NONE
+!
+INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
+DOUBLE PRECISION AR(NM,N),AI(NM,N),ORTR(IGH),ORTI(IGH)
+DOUBLE PRECISION F,G,H,FI,FR,SCALE
+DOUBLE PRECISION DCPABS
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
+!     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)
+!     BY MARTIN AND WILKINSON.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 339-358(1971).
+!
+!     GIVEN A DOUBLE PRECISION COMPLEX MATRIX, DCORTH
+!     REDUCES A SUBMATRIX SITUATED IN ROWS AND COLUMNS
+!     LOW THROUGH IGH TO UPPER HESSENBERG FORM BY
+!     UNITARY SIMILARITY TRANSFORMATIONS.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
+!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!          SET LOW=1, IGH=N,
+!
+!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE COMPLEX INPUT MATRIX.
+!
+!     ON OUTPUT-
+!
+!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE HESSENBERG MATRIX.  INFORMATION
+!          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION
+!          IS STORED IN THE REMAINING TRIANGLES UNDER THE
+!          HESSENBERG MATRIX,
+!
+!        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE
+!          TRANSFORMATIONS.  ONLY ELEMENTS LOW THROUGH IGH ARE USED.
+!
+!-----------------------------------------------------------------------
+LA = IGH - 1
+KP1 = LOW + 1
+IF (LA .LT. KP1) GO TO 200
+!
+do 180 M = KP1, LA
+   H = 0.D0
+   ORTR(M) = 0.D0
+   ORTI(M) = 0.D0
+   SCALE = 0.D0
+!     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
+   do 90 I = M, IGH
+90 SCALE = SCALE + DABS(AR(I,M-1)) + DABS(AI(I,M-1))
+!
+   IF (SCALE .EQ. 0.D0) GO TO 180
+   MP = M + IGH
+!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+   DO II = M, IGH
+      I = MP - II
+      ORTR(I) = AR(I,M-1) / SCALE
+      ORTI(I) = AI(I,M-1) / SCALE
+      H = H + ORTR(I) * ORTR(I) + ORTI(I) * ORTI(I)
+   END DO
+!
+   G = DSQRT(H)
+   F = DCPABS(ORTR(M),ORTI(M))
+   IF (F .EQ. 0.D0) GO TO 103
+   H = H + F * G
+   G = G / F
+   ORTR(M) = (1.D0 + G) * ORTR(M)
+   ORTI(M) = (1.D0 + G) * ORTI(M)
+   GO TO 105
+!
+103 ORTR(M) = G
+   AR(M,M-1) = SCALE
+!     ********** FORM (I-(U*UT)/H) * A **********
+105 DO J = M, N
+      FR = 0.D0
+      FI = 0.D0
+!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+      DO II = M, IGH
+         I = MP - II
+         FR = FR + ORTR(I) * AR(I,J) + ORTI(I) * AI(I,J)
+         FI = FI + ORTR(I) * AI(I,J) - ORTI(I) * AR(I,J)
+      END DO
+!
+      FR = FR / H
+      FI = FI / H
+!
+      DO I = M, IGH
+         AR(I,J) = AR(I,J) - FR * ORTR(I) + FI * ORTI(I)
+         AI(I,J) = AI(I,J) - FR * ORTI(I) - FI * ORTR(I)
+      END DO
+!
+   END DO
+!     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
+   DO I = 1, IGH
+      FR = 0.D0
+      FI = 0.D0
+!     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
+      DO JJ = M, IGH
+         J = MP - JJ
+         FR = FR + ORTR(J) * AR(I,J) - ORTI(J) * AI(I,J)
+         FI = FI + ORTR(J) * AI(I,J) + ORTI(J) * AR(I,J)
+      END DO
+!
+      FR = FR / H
+      FI = FI / H
+!
+      DO J = M, IGH
+         AR(I,J) = AR(I,J) - FR * ORTR(J) - FI * ORTI(J)
+         AI(I,J) = AI(I,J) + FR * ORTI(J) - FI * ORTR(J)
+      END DO
+!
+   END DO
+!
+   ORTR(M) = SCALE * ORTR(M)
+   ORTI(M) = SCALE * ORTI(M)
+   AR(M,M-1) = -G * AR(M,M-1)
+   AI(M,M-1) = -G * AI(M,M-1)
+180 CONTINUE
+!
+200 RETURN
+!     ********** LAST CARD OF DCORTH **********
+END SUBROUTINE DCORTH
+
+SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
+IMPLICIT NONE
+!
+INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
+DOUBLE PRECISION HR(NM,N),HI(NM,N),WR(N),WI(N)
+DOUBLE PRECISION SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
+DOUBLE PRECISION R2,W(2),Z(2)
+DOUBLE PRECISION DPMPAR,DCPABS
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
+!     ALGOL PROCEDURE  COMLR, NUM. MATH. 12, 369-376(1968) BY MARTIN
+!     AND WILKINSON.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 396-403(1971).
+!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
+!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!
+!     THIS SUBROUTINE FINDS THE EIGENVALUES OF A DOUBLE PRECISION
+!     COMPLEX UPPER HESSENBERG MATRIX BY THE QR METHOD.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
+!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!          SET LOW=1, IGH=N,
+!
+!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
+!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN
+!          INFORMATION ABOUT THE UNITARY TRANSFORMATIONS USED IN
+!          THE REDUCTION BY DCORTH, IF PERFORMED.
+!
+!     ON OUTPUT-
+!
+!        THE UPPER HESSENBERG PORTIONS OF HR AND HI HAVE BEEN
+!          DESTROYED.  THEREFORE, THEY MUST BE SAVED BEFORE
+!          CALLING DCOMQR IF SUBSEQUENT CALCULATION OF
+!          EIGENVECTORS IS TO BE PERFORMED,
+!
+!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
+!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
+!          FOR INDICES IERR+1,...,N,
+!
+!        IERR IS SET TO
+!          ZERO       FOR NORMAL RETURN,
+!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!                     DETERMINED AFTER 50 ITERATIONS.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!
+           MACHEP = DPMPAR(1)
+!
+!                **********
+!
+IERR = 0
+IF (LOW .EQ. IGH) GO TO 180
+!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+L = LOW + 1
+!
+do 170 I = L, IGH
+   LL = MIN0(I+1,IGH)
+   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
+   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
+   YR = HR(I,I-1) / NORM
+   YI = HI(I,I-1) / NORM
+   HR(I,I-1) = NORM
+   HI(I,I-1) = 0.D0
+!
+   DO J = I, IGH
+      SI = YR * HI(I,J) - YI * HR(I,J)
+      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
+      HI(I,J) = SI
+   END DO
+!
+   DO J = LOW, LL
+      SI = YR * HI(J,I) + YI * HR(J,I)
+      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
+      HI(J,I) = SI
+   END DO
+!
+170 CONTINUE
+!     ********** STORE ROOTS ISOLATED BY DCBAL **********
+180 do 200 I = 1, N
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
+   WR(I) = HR(I,I)
+   WI(I) = HI(I,I)
+200 CONTINUE
+!
+EN = IGH
+TR = 0.D0
+TI = 0.D0
+!     ********** SEARCH FOR NEXT EIGENVALUE **********
+220 IF (EN .LT. LOW) GO TO 1001
+ITS = 0
+ENM1 = EN - 1
+!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
+!                FOR L=EN STEP -1 UNTIL LOW  -- **********
+240 DO LL = LOW, EN
+   L = EN + LOW - LL
+   IF (L .EQ. LOW) GO TO 300
+   IF (DABS(HR(L,L-1)) .LE. &
+&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
+&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
+END DO
+!     ********** FORM SHIFT **********
+300 IF (L .EQ. EN) GO TO 660
+IF (ITS .EQ. 50) GO TO 1000
+IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
+SR = HR(EN,EN)
+SI = HI(EN,EN)
+XR = HR(ENM1,EN) * HR(EN,ENM1)
+XI = HI(ENM1,EN) * HR(EN,ENM1)
+IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
+YR = (HR(ENM1,ENM1) - SR) / 2.D0
+YI = (HI(ENM1,ENM1) - SI) / 2.D0
+Z(1) = YR*YR - YI*YI + XR
+Z(2) = 2.D0*YR*YI + XI
+CALL DCSQRT(Z,W)
+ZZR = W(1)
+ZZI = W(2)
+IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
+ZZR = -ZZR
+ZZI = -ZZI
+310 Z(1) = YR + ZZR
+Z(2) = YI + ZZI
+R2 = Z(1)**2 + Z(2)**2
+SR = SR - (XR*Z(1) + XI*Z(2))/R2
+SI = SI - (XI*Z(1) - XR*Z(2))/R2
+GO TO 340
+!     ********** FORM EXCEPTIONAL SHIFT **********
+320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
+SI = 0.D0
+!
+340 DO I = LOW, EN
+   HR(I,I) = HR(I,I) - SR
+   HI(I,I) = HI(I,I) - SI
+END DO
+!
+TR = TR + SR
+TI = TI + SI
+ITS = ITS + 1
+!     ********** REDUCE TO TRIANGLE (ROWS) **********
+LP1 = L + 1
+!
+DO I = LP1, EN
+   SR = HR(I,I-1)
+   HR(I,I-1) = 0.D0
+   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
+&+ SR*SR)
+   XR = HR(I-1,I-1) / NORM
+   WR(I-1) = XR
+   XI = HI(I-1,I-1) / NORM
+   WI(I-1) = XI
+   HR(I-1,I-1) = NORM
+   HI(I-1,I-1) = 0.D0
+   HI(I,I-1) = SR / NORM
+!
+   DO J = I, EN
+      YR = HR(I-1,J)
+      YI = HI(I-1,J)
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
+      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
+      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
+      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
+   END DO
+!
+END DO
+!
+SI = HI(EN,EN)
+IF (SI .EQ. 0.D0) GO TO 540
+NORM = DCPABS(HR(EN,EN),SI)
+SR = HR(EN,EN) / NORM
+SI = SI / NORM
+HR(EN,EN) = NORM
+HI(EN,EN) = 0.D0
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 DO J = LP1, EN
+   XR = WR(J-1)
+   XI = WI(J-1)
+!
+   DO I = L, J
+      YR = HR(I,J-1)
+      YI = 0.D0
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      IF (I .EQ. J) GO TO 560
+      YI = HI(I,J-1)
+      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
+560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
+      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
+      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
+   END DO
+!
+END DO
+!
+IF (SI .EQ. 0.D0) GO TO 240
+!
+DO I = L, EN
+   YR = HR(I,EN)
+   YI = HI(I,EN)
+   HR(I,EN) = SR * YR - SI * YI
+   HI(I,EN) = SR * YI + SI * YR
+END DO
+!
+GO TO 240
+!     ********** A ROOT FOUND **********
+660 WR(EN) = HR(EN,EN) + TR
+WI(EN) = HI(EN,EN) + TI
+EN = ENM1
+GO TO 220
+!     ********** SET ERROR -- NO CONVERGENCE TO AN
+!                EIGENVALUE AFTER 50 ITERATIONS **********
+1000 IERR = EN
+1001 RETURN
+END SUBROUTINE DCOMQR
+
+SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
+IMPLICIT NONE
+!
+INTEGER I,J,K,M,N,II,NM,IGH,LOW
+DOUBLE PRECISION SCALE(N),ZR(NM,M),ZI(NM,M)
+DOUBLE PRECISION S
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
+!     CBABK2, WHICH IS A COMPLEX VERSION OF BALBAK,
+!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!
+!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A DOUBLE PRECISION
+!     COMPLEX MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING
+!     BALANCED MATRIX DETERMINED BY DCBAL.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY DCBAL,
+!
+!        SCALE CONTAINS INFORMATION DETERMINING THE PERMUTATIONS
+!          AND SCALING FACTORS USED BY DCBAL,
+!
+!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED,
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVECTORS TO BE
+!          BACK TRANSFORMED IN THEIR FIRST M COLUMNS.
+!
+!     ON OUTPUT-
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS
+!          IN THEIR FIRST M COLUMNS.
+!
+!-----------------------------------------------------------------------
+IF (M .EQ. 0) GO TO 200
+IF (IGH .EQ. LOW) GO TO 120
+!
+DO I = LOW, IGH
+   S = SCALE(I)
+!     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
+!                IF THE FOREGOING STATEMENT IS REPLACED BY
+!                S=1.0/SCALE(I). **********
+   DO J = 1, M
+      ZR(I,J) = ZR(I,J) * S
+      ZI(I,J) = ZI(I,J) * S
+   END DO
+!
+END DO
+!
+!     ********** FOR I=LOW-1 STEP -1 UNTIL 1,
+!                IGH+1 STEP 1 UNTIL N DO -- **********
+120 do 140 II = 1, N
+   I = II
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 140
+   IF (I .LT. LOW) I = LOW - II
+   K = SCALE(I)
+   IF (K .EQ. I) GO TO 140
+!
+   DO J = 1, M
+      S = ZR(I,J)
+      ZR(I,J) = ZR(K,J)
+      ZR(K,J) = S
+      S = ZI(I,J)
+      ZI(I,J) = ZI(K,J)
+      ZI(K,J) = S
+   END DO
+!
+140 CONTINUE
+!
+200 RETURN
+!     ********** LAST CARD OF DCBABK **********
+END SUBROUTINE DCBABK
+
+SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
+IMPLICIT NONE
+!
+INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1, &
+&ITS,LOW,LP1,ENM1,IEND,IERR
+DOUBLE PRECISION HR(NM,N),HI(NM,N),WR(N),WI(N),ZR(NM,N),ZI(NM,N), &
+&ORTR(IGH),ORTI(IGH)
+DOUBLE PRECISION SI,SR,TI,TR,XI,XR,YI,YR,ZZI,ZZR,NORM,MACHEP
+DOUBLE PRECISION R2,W(2),Z(2)
+DOUBLE PRECISION DPMPAR,DCPABS
+!-----------------------------------------------------------------------
+!
+!     THIS SUBROUTINE IS A TRANSLATION OF A UNITARY ANALOGUE OF THE
+!     ALGOL PROCEDURE  COMLR2, NUM. MATH. 16, 181-204(1970) BY PETERS
+!     AND WILKINSON.
+!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 372-395(1971).
+!     THE UNITARY ANALOGUE SUBSTITUTES THE QR ALGORITHM OF FRANCIS
+!     (COMP. JOUR. 4, 332-345(1962)) FOR THE LR ALGORITHM.
+!
+!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS OF
+!     A DOUBLE PRECISION COMPLEX UPPER HESSENBERG MATRIX BY THE
+!     QR METHOD.  THE EIGENVECTORS OF A COMPLEX GENERAL MATRIX
+!     CAN ALSO BE FOUND IF DCORTH HAS BEEN USED TO REDUCE
+!     THIS GENERAL MATRIX TO HESSENBERG FORM.
+!
+!     ON INPUT-
+!
+!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL
+!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM
+!          DIMENSION STATEMENT,
+!
+!        N IS THE ORDER OF THE MATRIX,
+!
+!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING
+!          SUBROUTINE DCBAL.  IF DCBAL HAS NOT BEEN USED,
+!          SET LOW=1, IGH=N,
+!
+!        ORTR AND ORTI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-
+!          FORMATIONS USED IN THE REDUCTION BY DCORTH, IF PERFORMED.
+!          ONLY ELEMENTS LOW THROUGH IGH ARE USED.  IF THE EIGENVECTORS
+!          OF THE HESSENBERG MATRIX ARE DESIRED, SET ORTR(J) AND
+!          ORTI(J) TO 0.0 FOR THESE ELEMENTS,
+!
+!        HR AND HI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE COMPLEX UPPER HESSENBERG MATRIX.
+!          THEIR LOWER TRIANGLES BELOW THE SUBDIAGONAL CONTAIN FURTHER
+!          INFORMATION ABOUT THE TRANSFORMATIONS WHICH WERE USED IN THE
+!          REDUCTION BY DCORTH, IF PERFORMED.  IF THE EIGENVECTORS OF
+!          THE HESSENBERG MATRIX ARE DESIRED, THESE ELEMENTS MAY BE
+!          ARBITRARY.
+!
+!     ON OUTPUT-
+!
+!        ORTR, ORTI, AND THE UPPER HESSENBERG PORTIONS OF HR AND HI
+!          HAVE BEEN DESTROYED,
+!
+!        WR AND WI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVALUES.  IF AN ERROR
+!          EXIT IS MADE, THE EIGENVALUES SHOULD BE CORRECT
+!          FOR INDICES IERR+1,...,N,
+!
+!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,
+!          RESPECTIVELY, OF THE EIGENVECTORS.  THE EIGENVECTORS
+!          ARE UNNORMALIZED.  IF AN ERROR EXIT IS MADE, NONE OF
+!          THE EIGENVECTORS HAS BEEN FOUND,
+!
+!        IERR IS SET TO
+!          ZERO       FOR NORMAL RETURN,
+!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!                     DETERMINED AFTER 50 ITERATIONS.
+!
+!-----------------------------------------------------------------------
+!
+!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!                THE RELATIVE PRECISION OF FLOATING POINT ARITHMETIC.
+!
+           MACHEP = DPMPAR(1)
+!
+!                **********
+!
+IERR = 0
+!     ********** INITIALIZE EIGENVECTOR MATRIX **********
+do 100 I = 1, N
+!
+   do 100 J = 1, N
+      ZR(I,J) = 0.D0
+      ZI(I,J) = 0.D0
+      IF (I .EQ. J) ZR(I,J) = 1.D0
+100 CONTINUE
+!     ********** FORM THE MATRIX OF ACCUMULATED TRANSFORMATIONS
+!                FROM THE INFORMATION LEFT BY DCORTH **********
+IEND = IGH - LOW - 1
+IF (IEND) 180, 150, 105
+!     ********** FOR I=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+105 do 140 II = 1, IEND
+   I = IGH - II
+   IF (ORTR(I) .EQ. 0.D0 .AND. ORTI(I) .EQ. 0.D0) GO TO 140
+   IF (HR(I,I-1) .EQ. 0.D0 .AND. HI(I,I-1) .EQ. 0.D0) GO TO 140
+!     ********** NORM BELOW IS NEGATIVE OF H FORMED IN DCORTH **********
+   NORM = HR(I,I-1) * ORTR(I) + HI(I,I-1) * ORTI(I)
+   IP1 = I + 1
+!
+   DO K = IP1, IGH
+      ORTR(K) = HR(K,I-1)
+      ORTI(K) = HI(K,I-1)
+   END DO
+!
+   DO J = I, IGH
+      SR = 0.D0
+      SI = 0.D0
+!
+      DO K = I, IGH
+         SR = SR + ORTR(K) * ZR(K,J) + ORTI(K) * ZI(K,J)
+         SI = SI + ORTR(K) * ZI(K,J) - ORTI(K) * ZR(K,J)
+      END DO
+!
+      SR = SR / NORM
+      SI = SI / NORM
+!
+      DO K = I, IGH
+         ZR(K,J) = ZR(K,J) + SR * ORTR(K) - SI * ORTI(K)
+         ZI(K,J) = ZI(K,J) + SR * ORTI(K) + SI * ORTR(K)
+      END DO
+!
+   END DO
+!
+140 CONTINUE
+!     ********** CREATE REAL SUBDIAGONAL ELEMENTS **********
+150 L = LOW + 1
+!
+do 170 I = L, IGH
+   LL = MIN0(I+1,IGH)
+   IF (HI(I,I-1) .EQ. 0.D0) GO TO 170
+   NORM = DCPABS(HR(I,I-1),HI(I,I-1))
+   YR = HR(I,I-1) / NORM
+   YI = HI(I,I-1) / NORM
+   HR(I,I-1) = NORM
+   HI(I,I-1) = 0.D0
+!
+   DO J = I, N
+      SI = YR * HI(I,J) - YI * HR(I,J)
+      HR(I,J) = YR * HR(I,J) + YI * HI(I,J)
+      HI(I,J) = SI
+   END DO
+!
+   DO J = 1, LL
+      SI = YR * HI(J,I) + YI * HR(J,I)
+      HR(J,I) = YR * HR(J,I) - YI * HI(J,I)
+      HI(J,I) = SI
+   END DO
+!
+   DO J = LOW, IGH
+      SI = YR * ZI(J,I) + YI * ZR(J,I)
+      ZR(J,I) = YR * ZR(J,I) - YI * ZI(J,I)
+      ZI(J,I) = SI
+   END DO
+!
+170 CONTINUE
+!     ********** STORE ROOTS ISOLATED BY DCBAL **********
+180 do 200 I = 1, N
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 200
+   WR(I) = HR(I,I)
+   WI(I) = HI(I,I)
+200 CONTINUE
+!
+EN = IGH
+TR = 0.D0
+TI = 0.D0
+!     ********** SEARCH FOR NEXT EIGENVALUE **********
+220 IF (EN .LT. LOW) GO TO 680
+ITS = 0
+ENM1 = EN - 1
+!     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
+!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+240 DO LL = LOW, EN
+   L = EN + LOW - LL
+   IF (L .EQ. LOW) GO TO 300
+   IF (DABS(HR(L,L-1)) .LE. &
+&MACHEP * (DABS(HR(L-1,L-1)) + DABS(HI(L-1,L-1)) &
+&+ DABS(HR(L,L)) + DABS(HI(L,L)))) GO TO 300
+END DO
+!     ********** FORM SHIFT **********
+300 IF (L .EQ. EN) GO TO 660
+IF (ITS .EQ. 50) GO TO 1000
+IF (ITS .EQ. 10 .OR. ITS .EQ. 20 .OR. ITS .EQ. 30) GO TO 320
+SR = HR(EN,EN)
+SI = HI(EN,EN)
+XR = HR(ENM1,EN) * HR(EN,ENM1)
+XI = HI(ENM1,EN) * HR(EN,ENM1)
+IF (XR .EQ. 0.D0 .AND. XI .EQ. 0.D0) GO TO 340
+YR = (HR(ENM1,ENM1) - SR) / 2.D0
+YI = (HI(ENM1,ENM1) - SI) / 2.D0
+Z(1) = YR*YR - YI*YI + XR
+Z(2) = 2.D0*YR*YI + XI
+CALL DCSQRT(Z,W)
+ZZR = W(1)
+ZZI = W(2)
+IF (YR * ZZR + YI * ZZI .GE. 0.D0) GO TO 310
+ZZR = -ZZR
+ZZI = -ZZI
+310 Z(1) = YR + ZZR
+Z(2) = YI + ZZI
+R2 = Z(1)**2 + Z(2)**2
+SR = SR - (XR*Z(1) + XI*Z(2))/R2
+SI = SI - (XI*Z(1) - XR*Z(2))/R2
+GO TO 340
+!     ********** FORM EXCEPTIONAL SHIFT **********
+320 SR = DABS(HR(EN,ENM1)) + DABS(HR(ENM1,EN-2))
+SI = 0.D0
+!
+340 DO I = LOW, EN
+   HR(I,I) = HR(I,I) - SR
+   HI(I,I) = HI(I,I) - SI
+END DO
+!
+TR = TR + SR
+TI = TI + SI
+ITS = ITS + 1
+!     ********** REDUCE TO TRIANGLE (ROWS) **********
+LP1 = L + 1
+!
+DO I = LP1, EN
+   SR = HR(I,I-1)
+   HR(I,I-1) = 0.D0
+   NORM = DSQRT(HR(I-1,I-1)*HR(I-1,I-1)+HI(I-1,I-1)*HI(I-1,I-1) &
+&+ SR*SR)
+   XR = HR(I-1,I-1) / NORM
+   WR(I-1) = XR
+   XI = HI(I-1,I-1) / NORM
+   WI(I-1) = XI
+   HR(I-1,I-1) = NORM
+   HI(I-1,I-1) = 0.D0
+   HI(I,I-1) = SR / NORM
+!
+   DO J = I, N
+      YR = HR(I-1,J)
+      YI = HI(I-1,J)
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      HR(I-1,J) = XR * YR + XI * YI + HI(I,I-1) * ZZR
+      HI(I-1,J) = XR * YI - XI * YR + HI(I,I-1) * ZZI
+      HR(I,J) = XR * ZZR - XI * ZZI - HI(I,I-1) * YR
+      HI(I,J) = XR * ZZI + XI * ZZR - HI(I,I-1) * YI
+   END DO
+!
+END DO
+!
+SI = HI(EN,EN)
+IF (SI .EQ. 0.D0) GO TO 540
+NORM = DCPABS(HR(EN,EN),SI)
+SR = HR(EN,EN) / NORM
+SI = SI / NORM
+HR(EN,EN) = NORM
+HI(EN,EN) = 0.D0
+IF (EN .EQ. N) GO TO 540
+IP1 = EN + 1
+!
+DO J = IP1, N
+   YR = HR(EN,J)
+   YI = HI(EN,J)
+   HR(EN,J) = SR * YR + SI * YI
+   HI(EN,J) = SR * YI - SI * YR
+END DO
+!     ********** INVERSE OPERATION (COLUMNS) **********
+540 DO J = LP1, EN
+   XR = WR(J-1)
+   XI = WI(J-1)
+!
+   DO I = 1, J
+      YR = HR(I,J-1)
+      YI = 0.D0
+      ZZR = HR(I,J)
+      ZZI = HI(I,J)
+      IF (I .EQ. J) GO TO 560
+      YI = HI(I,J-1)
+      HI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
+560 HR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
+      HR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
+      HI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
+   END DO
+!
+   DO I = LOW, IGH
+      YR = ZR(I,J-1)
+      YI = ZI(I,J-1)
+      ZZR = ZR(I,J)
+      ZZI = ZI(I,J)
+      ZR(I,J-1) = XR * YR - XI * YI + HI(J,J-1) * ZZR
+      ZI(I,J-1) = XR * YI + XI * YR + HI(J,J-1) * ZZI
+      ZR(I,J) = XR * ZZR + XI * ZZI - HI(J,J-1) * YR
+      ZI(I,J) = XR * ZZI - XI * ZZR - HI(J,J-1) * YI
+   END DO
+!
+END DO
+!
+IF (SI .EQ. 0.D0) GO TO 240
+!
+DO I = 1, EN
+   YR = HR(I,EN)
+   YI = HI(I,EN)
+   HR(I,EN) = SR * YR - SI * YI
+   HI(I,EN) = SR * YI + SI * YR
+END DO
+!
+DO I = LOW, IGH
+   YR = ZR(I,EN)
+   YI = ZI(I,EN)
+   ZR(I,EN) = SR * YR - SI * YI
+   ZI(I,EN) = SR * YI + SI * YR
+END DO
+!
+GO TO 240
+!     ********** A ROOT FOUND **********
+660 HR(EN,EN) = HR(EN,EN) + TR
+WR(EN) = HR(EN,EN)
+HI(EN,EN) = HI(EN,EN) + TI
+WI(EN) = HI(EN,EN)
+EN = ENM1
+GO TO 220
+!     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
+!                VECTORS OF UPPER TRIANGULAR FORM **********
+680 NORM = 0.D0
+!
+do 720 I = 1, N
+!
+   do 720 J = I, N
+      NORM = NORM + DABS(HR(I,J)) + DABS(HI(I,J))
+720 CONTINUE
+!
+IF (N .EQ. 1 .OR. NORM .EQ. 0.D0) GO TO 1001
+!     ********** FOR EN=N STEP -1 UNTIL 2 DO -- **********
+DO NN = 2, N
+   EN = N + 2 - NN
+   XR = WR(EN)
+   XI = WI(EN)
+   ENM1 = EN - 1
+!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
+   DO II = 1, ENM1
+      I = EN - II
+      ZZR = HR(I,EN)
+      ZZI = HI(I,EN)
+      IF (I .EQ. ENM1) GO TO 760
+      IP1 = I + 1
+!
+      DO J = IP1, ENM1
+         ZZR = ZZR + HR(I,J) * HR(J,EN) - HI(I,J) * HI(J,EN)
+         ZZI = ZZI + HR(I,J) * HI(J,EN) + HI(I,J) * HR(J,EN)
+      END DO
+!
+760 YR = XR - WR(I)
+      YI = XI - WI(I)
+      IF (YR .EQ. 0.D0 .AND. YI .EQ. 0.D0) YR = MACHEP * NORM
+      R2 = YR*YR + YI*YI
+      HR(I,EN) = (ZZR*YR + ZZI*YI)/R2
+      HI(I,EN) = (ZZI*YR - ZZR*YI)/R2
+   END DO
+!
+END DO
+!     ********** END BACKSUBSTITUTION **********
+ENM1 = N - 1
+!     ********** VECTORS OF ISOLATED ROOTS **********
+do 840 I = 1, ENM1
+   IF (I .GE. LOW .AND. I .LE. IGH) GO TO 840
+   IP1 = I + 1
+!
+   DO J = IP1, N
+      ZR(I,J) = HR(I,J)
+      ZI(I,J) = HI(I,J)
+   END DO
+!
+840 CONTINUE
+!     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
+!                VECTORS OF ORIGINAL FULL MATRIX.
+!                FOR J=N STEP -1 UNTIL LOW+1 DO -- **********
+do 880 JJ = LOW, ENM1
+   J = N + LOW - JJ
+   M = MIN0(J-1,IGH)
+!
+   do 880 I = LOW, IGH
+      ZZR = ZR(I,J)
+      ZZI = ZI(I,J)
+!
+      DO K = LOW, M
+         ZZR = ZZR + ZR(I,K) * HR(K,J) - ZI(I,K) * HI(K,J)
+         ZZI = ZZI + ZR(I,K) * HI(K,J) + ZI(I,K) * HR(K,J)
+      END DO
+!
+      ZR(I,J) = ZZR
+      ZI(I,J) = ZZI
+880 CONTINUE
+!
+GO TO 1001
+!     ********** SET ERROR -- NO CONVERGENCE TO AN
+!                EIGENVALUE AFTER 50 ITERATIONS **********
+1000 IERR = EN
+1001 RETURN
+!     ********** LAST CARD OF DCMQR2 **********
+END SUBROUTINE DCMQR2
+
 SUBROUTINE CL1(K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES, &
 &ERROR, WK, IWK)
+IMPLICIT NONE
+INTEGER ITER, IWK, K, KODE, KQ, L, M, N
+REAL ERROR, Q, RES, TOLER, WK, X
+INTEGER KLM
 DIMENSION Q(KQ,*), X(*), RES(*), WK(*), IWK(*)
 !     -------------------
 KLM = K + L + M
@@ -10,6 +1565,7 @@ END SUBROUTINE CL1
 
 SUBROUTINE XL1(K, L, M, N, KLMD, KLM2D, NKLMD, N2D, &
 &Q, KODE, TOLER, ITER, X, RES, ERROR, CU, IU, S)
+IMPLICIT NONE
 !
 ! THIS SUBROUTINE USES A MODIFICATION OF THE SIMPLEX
 ! METHOD OF LINEAR PROGRAMMING TO CALCULATE AN L1 SOLUTION
@@ -417,6 +1973,11 @@ RETURN
 END SUBROUTINE XL1
 
 SUBROUTINE LLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+IMPLICIT NONE
+INTEGER IERR, IWK, KA, KB, M, N, NB
+REAL A, B, WK
+INTEGER I, J, NP1
+REAL RNORM
 DIMENSION A(KA,N),B(KB,NB),WK(N),IWK(N)
 LOGICAL EXIT
 !     --------------
@@ -443,6 +2004,11 @@ RETURN
 END SUBROUTINE LLSQ
 
 SUBROUTINE LLSQMP(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+IMPLICIT NONE
+INTEGER IERR, IWK, KA, KB, M, N, NB
+REAL A, B, WK
+INTEGER I, J, LQ, LR, LS, NP1
+REAL RNORM
 DIMENSION A(KA,N),B(KB,NB),WK(*),IWK(N)
 LOGICAL EXIT
 !     -------------------
@@ -683,6 +2249,12 @@ RETURN
 END SUBROUTINE ORSOL
 
 SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
+IMPLICIT NONE
+INTEGER IP, KA, M, MS, N
+REAL A, B, QR, R, S, X
+INTEGER I, J, K, NP1
+REAL EPS, EPS2, FOUR, FOURTH, ONE, RAT, RATIO, RNRM2, XNRM2, ZERO
+REAL SPMPAR
 ! ----------------------------------------------------------------------
 !      PURPOSE
 !        GIVEN AN APPROXIMATE LEAST SQUARES SOLUTION X OF A LINEAR
@@ -793,6 +2365,9 @@ RETURN
 END SUBROUTINE ORIMP
 
 SUBROUTINE DLLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
+IMPLICIT NONE
+INTEGER IERR, KA, KB, M, N, NB
+INTEGER I, J, NP1
 DOUBLE PRECISION A(KA,N),B(KB,NB),WK(N)
 INTEGER IWK(N)
 DOUBLE PRECISION RNORM
@@ -821,6 +2396,9 @@ RETURN
 END SUBROUTINE DLLSQ
 
 SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
+IMPLICIT NONE
+INTEGER M, MS, N
+INTEGER I, J, JP, K, KJ, NN
 !***********************************************************************
 !      IDENTIFICATION
 !        DORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -926,6 +2504,9 @@ RETURN
 END SUBROUTINE DORTHO
 
 SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
+IMPLICIT NONE
+INTEGER M, MS, N
+INTEGER I, IJ, J, JP, K, NI, NM, NN
 !***********************************************************************
 !      IDENTIFICATION
 !        DORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -1015,6 +2596,12 @@ END SUBROUTINE DORSOL
 
 SUBROUTINE LSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, &
 &KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
+IMPLICIT NONE
+INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
+REAL AE, RE
+INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
+REAL EPS, RERR
+REAL SPMPAR
 !-----------------------------------------------------------------------
 !
 !              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -1267,6 +2854,15 @@ END SUBROUTINE LSQR
 
 SUBROUTINE U11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
 &IC,IR)
+IMPLICIT NONE
+INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+REAL A, DB, EB, H, UB, W
+INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1 &
+&, KZ, L, LM1, MM, NMK
+REAL BB, R2, RMIN, SUM, T, TEMP, TN, TT
+REAL SNRM2
+REAL SDOT
+INTEGER ISAMAX
 !
 !       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 !       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -1528,6 +3124,13 @@ RETURN
 END SUBROUTINE U11LS
 
 SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+IMPLICIT NONE
+INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+REAL A, B, H, RNORM, W
+INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
+REAL BB, TT
+REAL SNRM2
+REAL SDOT
 !
 !        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -1670,6 +3273,15 @@ END SUBROUTINE U12LS
 
 SUBROUTINE U11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
 &IR,IC)
+IMPLICIT NONE
+INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+REAL A, DB, EB, H, UB, W
+INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1 &
+&, KZ, L, LM1, MMK, NN
+REAL BB, R2, RMIN, SUM, T, TEMP, TN, TT
+REAL SNRM2
+REAL SDOT
+INTEGER ISAMAX
 !
 !       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 !       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -1931,6 +3543,13 @@ RETURN
 END SUBROUTINE U11US
 
 SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+IMPLICIT NONE
+INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+REAL A, B, H, RNORM, W
+INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
+REAL BB, TT
+REAL SNRM2
+REAL SDOT
 !
 !        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -2071,6 +3690,9 @@ END SUBROUTINE U12US
 
 SUBROUTINE DLSQR (IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, &
 &KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
+IMPLICIT NONE
+INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
+INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
 !-----------------------------------------------------------------------
 !
 !              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -2325,6 +3947,11 @@ END SUBROUTINE DLSQR
 
 SUBROUTINE DU11LS (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
 &IC,IR)
+IMPLICIT NONE
+INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1 &
+&, KZ, L, LM1, MM, NMK
+INTEGER IDAMAX
 !
 !       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 !       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -2588,6 +4215,9 @@ RETURN
 END SUBROUTINE DU11LS
 
 SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
+IMPLICIT NONE
+INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
 !
 !        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -2732,6 +4362,11 @@ END SUBROUTINE DU12LS
 
 SUBROUTINE DU11US (A,MDA,M,N,UB,DB,MODE,NP,KRANK,KSURE,H,W,EB, &
 &IR,IC)
+IMPLICIT NONE
+INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
+INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1 &
+&, KZ, L, LM1, MMK, NN
+INTEGER IDAMAX
 !
 !       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 !       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -2995,6 +4630,9 @@ RETURN
 END SUBROUTINE DU11US
 
 SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
+IMPLICIT NONE
+INTEGER KRANK, M, MDA, MDB, MODE, N, NB
+INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
 !
 !        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 !        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -3136,6 +4774,11 @@ RETURN
 END SUBROUTINE DU12US
 
 SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+IMPLICIT NONE
+INTEGER K, M, MDA, MDB, N, NB
+REAL A, B, G, H, RNORM, TAU
+INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+REAL FACTOR, HMAX, SM1, TMP, Z
 !-----------------------------------------------------------------------
 !     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M)),RNORM(NB),H(N),G(N),IP(N)
 !
@@ -3378,6 +5021,11 @@ IF (NB .LE. 0) GO TO 270
 END SUBROUTINE HFTI
 
 SUBROUTINE HFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
+IMPLICIT NONE
+INTEGER IERR, K, M, MDA, MDB, N, NB
+REAL A, B, D, G, H, RNORM, TAU
+INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+REAL FACTOR, HMAX, SM1, TMP, Z
 !-----------------------------------------------------------------------
 !     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DIMENSION D(L) WHERE L = MIN(M,N)
@@ -3648,6 +5296,11 @@ RETURN
 END SUBROUTINE HFTI2
 
 SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+IMPLICIT NONE
+INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+REAL C, U, UP
+INTEGER I, I2, I3, I4, INCR, J
+REAL CL, D, SM1
 !-----------------------------------------------------------------------
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -3732,6 +5385,9 @@ INCR = ICE*(L1 - LPIVOT)
 END SUBROUTINE H12
 
 SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
+IMPLICIT NONE
+INTEGER K, M, MDA, MDB, N, NB
+INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
@@ -3976,6 +5632,9 @@ IF (NB .LE. 0) GO TO 270
 END SUBROUTINE DHFTI
 
 SUBROUTINE DHFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
+IMPLICIT NONE
+INTEGER IERR, K, M, MDA, MDB, N, NB
+INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 !-----------------------------------------------------------------------
 !     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 !     DOUBLE PRECISION D(L) WHERE L = MIN(M,N)
@@ -4247,6 +5906,9 @@ RETURN
 END SUBROUTINE DHFTI2
 
 SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
+IMPLICIT NONE
+INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+INTEGER I, I2, I3, I4, INCR, J
 !-----------------------------------------------------------------------
 !     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 !     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -4331,6 +5993,18 @@ END SUBROUTINE DH12
 
 SUBROUTINE LSEI(W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, &
 &MODE, WS, IP)
+IMPLICIT NONE
+INTEGER MA, MDW, ME, MG, MODE, N
+REAL RNORME, RNORML
+INTEGER I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST, LINK &
+&, M, MAPKE1, MDEQC, MEND, MEP1, N1, N2, NEXT, NLINK, NOPT, NP1 &
+&, NTIMES
+REAL ENORM, FNORM, GAM, HALF, ONE, RB, RN, RNMAX, SIZE, SN, SNMAX &
+&, SRELPR, T, TAU, UJ, UP, VJ, XNORM, XNRME, ZERO
+REAL SNRM2
+REAL SASUM
+REAL SDOT
+REAL SPMPAR
 !
 !     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),
 !     WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)
@@ -4907,6 +6581,17 @@ GO TO 90
 END SUBROUTINE LSEI
 
 SUBROUTINE LSI(W, MDW, MA, MG, N, PRGOPT, X, RNORM, MODE, WS, IP)
+IMPLICIT NONE
+INTEGER MA, MDW, MG, MODE, N
+REAL RNORM
+INTEGER I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK, KRM1 &
+&, KRP1, L, LAST, LINK, M, MAP1, MDLPDP, MINMAN, N1, N2, N3, NEXT &
+&, NP1
+REAL ANORM, BLOWUP, EPS, FAC, GAM, HALF, ONE, RB, SRELPR, TAU, TOL &
+&, XNORM, ZERO
+REAL SASUM
+REAL SDOT
+REAL SPMPAR
 !
 !     THIS IS A COMPANION SUBPROGRAM TO LSEI( ).
 !     THE DOCUMENTATION FOR LSEI( ) HAS MORE COMPLETE
@@ -5258,6 +6943,13 @@ GO TO 40
 END SUBROUTINE LSI
 
 SUBROUTINE LPDP(A, MDA, M, N1, N2, PRGOPT, X, WNORM, MODE, WS, IS)
+IMPLICIT NONE
+INTEGER IS, M, MDA, MODE, N1, N2
+REAL A, PRGOPT, WNORM, WS, X
+INTEGER I, IW, IX, J, L, MODEW, N, NP1
+REAL FAC, ONE, RNORM, SC, YNORM, ZERO
+REAL SNRM2
+REAL SDOT
 !
 !     DIMENSION A(MDA,N+1),PRGOPT(*),X(N),WS((M+2)*(N+7)),IS(M+N+1),
 !     WHERE N=N1+N2.  THIS IS A SLIGHT OVERESTIMATE FOR WS(*).
@@ -5428,6 +7120,10 @@ END SUBROUTINE LPDP
 
 SUBROUTINE WNNLS(W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, &
 &IWORK, WORK)
+IMPLICIT NONE
+INTEGER L, MA, MDW, ME, MODE, N
+REAL RNORM
+INTEGER L1, L2, L3, L4, L5
 !
 !     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
 !
@@ -5688,6 +7384,19 @@ END SUBROUTINE WNNLS
 
 SUBROUTINE WNLSM(W, MDW, MME, MA, N, L, PRGOPT, X, RNORM, MODE, &
 &IPIVOT, ITYPE, WD, H, SCALE, Z, TEMP, D)
+IMPLICIT NONE
+INTEGER L, MA, MDW, MME, MODE, N
+REAL RNORM
+INTEGER I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER, ITMAX &
+&, IWMAX, J, JCON, JJ, JM1, JP, KEY, KRANK, KRP1, L1, LAST, LINK &
+&, LP1, M, ME, MEP1, NEXT, NIV, NIV1, NLINK, NM1, NOPT, NP1, NSOLN &
+&, NSP1, NTIMES
+REAL ALAMDA, ALPHA, ALSQ, AMAX, BLOWUP, BNORM, EANORM, FAC, ONE &
+&, SM, SRELPR, T, TAU, TWO, WMAX, Z2, ZERO, ZZ
+REAL SNRM2
+REAL SASUM
+REAL SPMPAR
+INTEGER ISAMAX
 !
 !     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 !     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -6306,6 +8015,14 @@ END SUBROUTINE WNLSM
 
 SUBROUTINE WNLIT(W, MDW, M, N, L, IPIVOT, ITYPE, H, SCALE, RNORM, &
 &IDOPE, DOPE, DONE)
+IMPLICIT NONE
+INTEGER L, M, MDW, N
+REAL RNORM
+INTEGER I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1, ITEMP, J &
+&, J1, JJ, JM1, JP, K, KK, KRANK, KRP1, L1, LB, LEND, LP1, MAX, ME &
+&, MEND, MEP1, NIV, NIV1, NP1, NSOLN
+REAL ALSQ, EANORM, FAC, FACTOR, HBAR, ONE, RN, SN, T, TAU, TENM3 &
+&, ZERO
 !
 !     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 !     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -6687,6 +8404,11 @@ END SUBROUTINE WNLIT
 
 SUBROUTINE L2SLV(M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, &
 &X, NN, RES, MR, QR, MMPNN, C, IFAULT)
+IMPLICIT NONE
+INTEGER IFAULT, L, M, M1, MB, MM, MMPNN, MR, N, N1, NN
+INTEGER I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4, K5 &
+&, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
+REAL SPMPAR
 ! ** PURPOSE **
 ! SUBROUTINE L2SLV COMPUTES LEAST SQUARES SOLUTIONS TO OVERDETERMINED
 ! AND UNDERDETERMINED SYSTEMS OF LINEAR EQUATIONS.  THE METHOD USED IS
@@ -7097,6 +8819,10 @@ END SUBROUTINE L2SLV
 ! ORTHOGONAL DECOMPOSITION.
 SUBROUTINE DECOM2(M, N, M1, ETA, TOL, QR, D, N1, IPIVOT, SING, &
 &MMPNN)
+IMPLICIT NONE
+INTEGER M, M1, MMPNN, N, N1
+INTEGER IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP, NS &
+&, NSP1
 INTEGER IPIVOT(N)
 REAL C, D(*), DM, DS, ETA, QR(MMPNN,N), RSJ, TOL, TOL2
 DOUBLE PRECISION SUM
@@ -7286,6 +9012,9 @@ END SUBROUTINE DECOM2
 SUBROUTINE SOLVE2(M, N, M1, A, B, W, N1, IPIVOT, QR, D, &
 &ETA, FAIL, NUMIT, DIGITX, &
 &X, RES, WRES, Y1, Y2, Y, F, G, MM, MMPNN)
+IMPLICIT NONE
+INTEGER M, M1, MM, MMPNN, N, N1, NUMIT
+INTEGER I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
 INTEGER IPIVOT(N)
 REAL A(MM,N), B(*), C, D(*), F(*), G(*), &
 &QR(MMPNN,N), RES(*), W(M), WRES(*), X(*), Y(*), Y1(*), Y2(*)
@@ -7435,6 +9164,9 @@ RETURN
 END SUBROUTINE SOLVE2
 
 SUBROUTINE SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
+IMPLICIT NONE
+INTEGER M, M1, MMPNN, N1
+INTEGER J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
 ! SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
 ! THIS SUBROUTINE CALCULATES NEW VALUES OF F.
 REAL C, D(*), F(*), QR(MMPNN,N1), Y(*)
@@ -7500,6 +9232,9 @@ RETURN
 END SUBROUTINE SOLVE3
 
 SUBROUTINE COVAR(N, M1, N1, IPIVOT, C, D, Z, NN)
+IMPLICIT NONE
+INTEGER M1, N, N1, NN
+INTEGER I, J, K, KA, L, N1P1
 ! SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
 ! STORED IN C, D AND IPIVOT TO COMPUTE THE UNSCALED COVARIANCE MATRIX
 ! OF THE LEAST SQUARES COEFFICIENTS.
@@ -7573,6 +9308,8 @@ END SUBROUTINE COVAR
 
 SUBROUTINE SPLSQ(M,N,A,IA,JA,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM, &
 &ISTOP,ITN,ACOND,RNORM,XNORM,W)
+IMPLICIT NONE
+INTEGER NPI
 !
 INTEGER M,N,ITNLIM,ISTOP
 INTEGER IA(*),JA(*)
@@ -8006,6 +9743,8 @@ END SUBROUTINE NORMLZ
 
 SUBROUTINE STLSQ(M,N,TA,ITA,JTA,DAMP,U,X,ATOL,BTOL,CONLIM, &
 &ITNLIM,ISTOP,ITN,ACOND,RNORM,XNORM,W)
+IMPLICIT NONE
+INTEGER NPI
 !
 INTEGER M,N,ITNLIM,ISTOP
 INTEGER ITA(*),JTA(*)
@@ -8833,1810 +10572,4 @@ IF (ISTOP .EQ. 0) GO TO 100
 !
 800 RETURN
 END SUBROUTINE BLSQ
-
-SUBROUTINE FMIN(F, A0, B0, X, W, AERR, RERR, ERROR, IND)
-!     ******************************************************************
-!     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
-!     ******************************************************************
-REAL F, A0, B0, X, W, AERR, RERR, ERROR
-REAL EPS, EPS0, ATOL, FTOL, RTOL, TOL
-REAL A, B, C1, C2, E, FU, FV, U, V
-REAL SPMPAR
-EXTERNAL F
-!     -------------------
-!     C1 = 1 - C2
-!     C2 = 0.5*(-1 + SQRT(5))
-!     -------------------
-DATA EPS0/5.E-3/
-DATA C1/.3819660112501052/
-DATA C2/.6180339887498948/
-!     -------------------
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
-!
-             EPS = SPMPAR(1)
-!     -------------------
-A = A0
-B = B0
-IND = 0
-ATOL = AMAX1(AERR,1.E-20)
-FTOL = AMAX1(2.0*EPS,RERR)
-RTOL = AMAX1(7.0*EPS,RERR)
-!
-E = B - A
-U = A + C1*E
-V = A + C2*E
-FU = F(U)
-FV = F(V)
-!
-!        LOCATION OF THE REGION OF A LOCAL MINIMUM
-!
-10 IF (E .LE. EPS0*(1.0 + ABS(A))) GO TO 40
-IF (FU - FV) 20,11,30
-11 IF (FU .GT. F(B)) GO TO 30
-!
-20 B = V
-E = B - A
-V = U
-U = A + C1*E
-FV = FU
-FU = F(U)
-GO TO 10
-!
-30 A = U
-E = B - A
-U = V
-V = A + C2*E
-FU = FV
-FV = F(V)
-GO TO 10
-!
-40 IF (A .GT. 0.0 .OR. B .LT. 0.0) GO TO 41
-   W = F(0.0)
-   IF (W .LE. AMIN1(FU,FV)) GO TO 100
-41 IF (A .NE. A0) GO TO 42
-   IF (A .EQ. 0.0) GO TO 201
-   W = F(A)
-   IF (W .LE. AMIN1(FU,FV)) GO TO 130
-   GO TO 201
-42 IF (B .NE. B0) GO TO 201
-   IF (B .EQ. 0.0) GO TO 201
-   W = F(B)
-   IF (W .LE. AMIN1(FU,FV)) GO TO 150
-   GO TO 201
-!
-!              CHECK IF 0 IS A LOCAL MINIMUM
-!
-100 IF (B .LE. ATOL) GO TO 110
-X = 0.01*B
-IF (W .GT. F(X)) GO TO 180
-B = X
-GO TO 100
-!
-110 IF (ABS(A) .LE. ATOL) GO TO 120
-X = 0.01*A
-IF (W .GT. F(X)) GO TO 180
-A = X
-GO TO 110
-!
-120 X = 0.0
-ERROR = AMAX1(ABS(A),B)
-RETURN
-!
-!             CHECK IF A0 IS A LOCAL MINIMUM
-!
-130 TOL = AMAX1(RTOL*ABS(A),ATOL)
-131 X = A + 0.01*E
-IF (W .GT. F(X)) GO TO 180
-B = X
-E = B - A
-IF (E .GT. TOL) GO TO 131
-!
-X = A
-ERROR = E
-RETURN
-!
-!             CHECK IF B0 IS A LOCAL MINIMUM
-!
-150 TOL = AMAX1(RTOL*ABS(B),ATOL)
-151 X = B - 0.01*E
-IF (W .GT. F(X)) GO TO 180
-A = X
-E = B - A
-IF (E .GT. TOL) GO TO 151
-!
-X = B
-ERROR = E
-RETURN
-!
-180 E = B - A
-U = A + C1*E
-V = A + C2*E
-FU = F(U)
-FV = F(V)
-!
-!             REFINEMENT OF THE LOCAL MINIMUM
-!
-200 IND = 0
-201 IF (FU .GT. FV) GO TO 210
-!
-B = V
-E = B - A
-V = U
-U = A + C1*E
-FV = FU
-FU = F(U)
-GO TO 220
-!
-210 A = U
-E = B - A
-U = V
-V = A + C2*E
-FU = FV
-FV = F(V)
-!
-!        CHECKING THE ACCURACY OF THE LOCAL MINIMUM
-!
-220 IF (E .LE. AMAX1(RTOL*ABS(A),ATOL)) GO TO 240
-IF (ABS(FV - FU) .GT. FTOL*AMAX1(ABS(FU),ABS(FV))) GO TO 200
-IF (IND .EQ. 1) GO TO 241
-IND = 1
-GO TO 201
-!
-!                    REPORT THE RESULTS
-!
-240 IND = 0
-241 IF (FU - FV) 242,243,244
-242 X = U
-W = FU
-ERROR = C1*E
-RETURN
-243 X = V
-W = FV
-ERROR = E
-RETURN
-244 X = V
-W = FV
-ERROR = C1*E
-RETURN
-END SUBROUTINE FMIN
-
-SUBROUTINE OPTF (FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
-!-----------------------------------------------------------------------
-!                 INTERFACE TO MINIMIZATION PACKAGE
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       FCN        NAME OF ROUTINE TO EVALUATE MINIMIZATION FUNCTION.
-!                  MUST BE DECLARED EXTERNAL IN CALLING ROUTINE.
-!       N          DIMENSION OF PROBLEM
-!       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN.
-!
-!     INPUT/OUTPUT ...
-!
-!       ITER       ON INPUT ITER IS THE MAXIMUM NUMBER OF ITERATIONS
-!                  THAT ARE PERMITTED. ON OUTPUT ITER IS THE NUMBER
-!                  OF ITERATIONS THAT WERE ACTUALLY PERFORMED.
-!       XPLS(N)    LOCAL MINIMUM
-!
-!     OUTPUT ...
-!
-!       FPLS       FUNCTION VALUE AT LOCAL MINIMUM XPLS
-!       IERR       TERMINATION CODE
-!
-!     WORKSPACE ...
-!
-!       WRK(N,N+8)
-!
-!-----------------------------------------------------------------------
-REAL XPLS(N), WRK(N,*)
-EXTERNAL FCN
-!
-!     EQUIVALENCE WRK(N,1) = X(N)
-!                 WRK(N,2) = TYPSIZ(N)
-!                 WRK(N,3) = GPLS(N)
-!                 WRK(N,4) = G(N)
-!                 WRK(N,5) = P(N)
-!                 WRK(N,6) = WRK0(N)
-!                 WRK(N,7) = WRK1(N)
-!                 WRK(N,8) = WRK2(N)
-!                 WRK(N,9) = A(N,N)
-!
-!
-!     SET TOLERANCES
-!
-EPS = AMAX1(SPMPAR(1),ABS(RERR))
-GRADTL = EPS**0.4
-STEPMX = 0.0
-STEPTL = EPS
-IF (EPS .LE. 1.E-10) STEPTL = 10.0*EPS
-IF (EPS .LT. 1.E-13) STEPTL = 1.E2*EPS
-!
-!     INITIALIZATION
-!
-MO = 0
-ITNLIM = ITER
-ITER = 0
-do 10 I = 1,N
-   WRK(I,1) = XPLS(I)
-   WRK(I,2) = 1.0
-10 CONTINUE
-FSCALE = 1.0
-!
-!     OPTIMIZE FCN
-!
-20 CALL OPTDRV(MO,N,N,WRK(1,1),FCN,WRK(1,2),FSCALE,RERR, &
-&ITNLIM,ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,WRK(1,3), &
-&IERR,WRK(1,9),WRK(1,4),WRK(1,5),WRK(1,6),WRK(1,7), &
-&WRK(1,8))
-ITER = ITER + ITNCNT
-IF (IERR .NE. -10) RETURN
-ITNLIM = ITNLIM - ITNCNT
-GO TO 20
-END SUBROUTINE OPTF
-
-SUBROUTINE OPTDRV (MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR, &
-&ITNLIM,ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,GPLS, &
-&IERR,A,G,P,WRK0,WRK1,WRK2)
-!-----------------------------------------------------------------------
-!             DRIVER FOR NON-LINEAR OPTIMIZATION PROBLEM
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       NR         ROW DIMENSION OF MATRIX
-!       N          DIMENSION OF PROBLEM
-!       FCN        SUBROUTINE.  FCN EVALUATES THE FUNCTION TO BE
-!                  OPTIMIZED. FCN MUST BE DECLARED EXTERNAL IN THE
-!                  CALLING PROGRAM. THE ROUTINE HAS THE FORMAT
-!                         CALL FCN (N, X, FVAL)
-!                  WHERE X IS A POINT AND FVAL IS THE VALUE OF THE
-!                  FUNCTION AT THE POINT.
-!       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN. IT IS
-!                  ASSUMED THAT RERR IS NONNEGATIVE. IF RERR = 0
-!                  THEN FCN IS ACCURATE TO MACHINE PRECISION.
-!       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
-!       GRADTL     TOLERANCE AT WHICH THE GRADIENT IS CONSIDERED
-!                  CLOSE ENOUGH TO ZERO TO TERMINATE ALGORITHM.
-!                  (USED ONLY IN THE SUBROUTINE OPSTP.)
-!       STEPTL     RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                  CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
-!
-!     INPUT/OUTPUT ...
-!
-!       MO         NUMBER OF RESCALINGS OF THE VARIABLES.
-!       X(N)       ESTIMATE OF A LOCAL MINIMUM OF FCN
-!       TYPSIZ(N)  TYPICAL SIZE FOR EACH COMPONENT OF X
-!       FSCALE     ESTIMATE OF SCALE OF MINIMUM VALUE OF FCN.
-!                  (USED ONLY IN THE SUBROUTINE OPSTP.)
-!       STEPMX     MAXIMUM ALLOWABLE STEP SIZE
-!
-!     OUTPUT ...
-!
-!       ITNCNT     NUMBER OF ITERATIONS COMPLETED
-!       XPLS(N)    ESTIMATE OF A LOCAL MINIMUM OF FCN
-!       FPLS       FUNCTION VALUE AT XPLS
-!       GPLS(N)    GRADIENT AT XPLS
-!       IERR       TERMINATION CODE
-!
-!     WORK SPACES ...
-!
-!       A(N,N)     CHOLESKY DECOMPOSITION OF HESSIAN
-!       G(N)       GRADIENT AT THE CURRENT ITERATE
-!       P(N)       STEP
-!       WRK0(N)    WORKSPACE
-!       WRK1(N)    WORKSPACE
-!       WRK2(N)    WORKSPACE
-!
-!-----------------------------------------------------------------------
-!     INTERNAL PARAMETERS ...
-!
-!       RNF        NOISE IN THE SUBROUTINE FCN
-!       F          FUNCTION VALUE  FCN(X)
-!       FSTACK(NS) STACK OF PREVIOUS FUNCTION VALUES
-!       NS         LENGTH OF THE ARRAY FSTACK
-!       SPTR       POINTER TO AN ELEMENT IN FSTACK
-!-----------------------------------------------------------------------
-DIMENSION X(N),XPLS(N),G(N),GPLS(N),P(N)
-DIMENSION TYPSIZ(N),A(NR,N)
-DIMENSION WRK0(N),WRK1(N),WRK2(N)
-DIMENSION FSTACK(30)
-INTEGER SPTR
-LOGICAL MXTAKE,NOUPDT
-EXTERNAL FCN
-!
-!     INITIALIZATION
-!     --------------
-NS = 30
-STMX = STEPMX
-STEPMX = 0.0
-CALL OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
-IF (IERR .LT. 0) RETURN
-IF (MO .NE. 0) STEPMX = AMAX1(STMX,STEPMX)
-!
-RNF = 2.0*AMAX1(RERR,SPMPAR(1))
-SQRNF = SQRT(RNF)
-!
-ITNCNT = 0
-IAGFLG = 0
-IRETCD = -1
-ICSCMX = 0
-!
-!     EVALUATE FCN(X)
-!
-CALL FCN(N,X,F)
-!
-!     EVALUATE FINITE DIFFERENCE GRADIENT
-!
-CALL FSTOFD (N, X, FCN, F, G, TYPSIZ, SQRNF)
-!
-CALL OPSTP (N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL, &
-&TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
-IF (IERR .EQ. 0) GO TO 10
-IF (MO .NE. 0) GO TO 210
-!
-!        APPLY THE FIXED STEP COORDINATE DESCENT PROCEDURE
-!        FOR ONE STEP AND CHECK IF THE GRADIENT IS NONZERO
-!
-   CALL FXDEC (FCN, N, X, F, 10.0)
-!
-   STEPMX = 0.0
-   CALL OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR,STEPMX,IERR)
-   CALL FSTOFD (N, X, FCN, F, G, TYPSIZ, SQRNF)
-   CALL OPSTP (N,X,F,G,WRK1,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL, &
-&TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
-   IF (IERR .NE. 0) GO TO 210
-!
-!     THE HESSIAN WILL BE OBTAINED BY SECANT UPDATES.
-!     SET A TO THE INITIAL HESSIAN.
-!
-10 NM1 = N - 1
-DO J = 1,NM1
-   A(J,J) = 1.0/TYPSIZ(J)
-   JP1 = J + 1
-   DO I = JP1,N
-      A(I,J) = 0.0
-   END DO
-END DO
-A(N,N) = 1.0/TYPSIZ(N)
-GO TO 101
-!
-!
-!     ITERATION
-!     ---------
-100 IF (MO .GT. 1) GO TO 101
-IF (MOD(ITNCNT,10) .NE. 0) GO TO 101
-IF (ITNCNT + 10 .GE. ITNLIM) GO TO 101
-   CALL SCALEX (MO, X, TYPSIZ, N, IERR)
-   IF (IERR .EQ. 0) GO TO 101
-   MO = MO + 1
-   RETURN
-101 ITNCNT = ITNCNT + 1
-!
-!     SOLVE  A*P = -G  FOR NEWTON STEP
-!
-105 DO I = 1,N
-  WRK1(I) = -G(I)
-END DO
-CALL LLTSLV(NR,N,A,P,WRK1)
-!
-!     TAKE A STEP, ARRIVING AT THE POINT XPLS
-!
-CALL LNSRCH(N,X,F,G,P,XPLS,FPLS,FCN,MXTAKE,IRETCD, &
-&STEPMX,STEPTL,TYPSIZ)
-!
-!     IF A SATISFACTORY STEP COULD NOT BE FOUND AND FORWARD DIFFERENCE
-!     GRADIENT WAS USED, RETRY USING A CENTRAL DIFFERENCE GRADIENT.
-!
-IF (IRETCD .NE. 1 .OR. IAGFLG .NE. 0) GO TO 120
-!
-!        SET IAGFLG FOR CENTRAL DIFFERENCES
-!
-   IAGFLG = -1
-   CBRNF = RNF**(1.0/3.0)
-   CALL FSTOCD (N, X, FCN, TYPSIZ, CBRNF, G)
-   GO TO 105
-!
-!     CALCULATE GRADIENT AT XPLS
-!
-120 IF (IAGFLG .EQ. 0) GO TO 130
-   CALL FSTOCD (N, XPLS, FCN, TYPSIZ, CBRNF, GPLS)
-   GO TO 140
-130 CALL FSTOFD (N, XPLS, FCN, FPLS, GPLS, TYPSIZ, SQRNF)
-!
-!     CHECK WHETHER THE STOPPING CRITERIA SATISFIED
-!
-140 CALL OPSTP (N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR,GRADTL,STEPTL, &
-&TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE,FSTACK,NS,SPTR)
-IF (IERR .NE. 0) GO TO 200
-!
-!     EVALUATE HESSIAN AT XPLS
-!
-CALL SECFAC(NR,N,X,G,A,XPLS,GPLS,ITNCNT,SQRNF, &
-&NOUPDT,WRK0,WRK1,WRK2)
-!
-!     UPDATE F, X, AND G
-!
-F = FPLS
-DO I = 1,N
-  X(I) = XPLS(I)
-  G(I) = GPLS(I)
-END DO
-GO TO 100
-!
-!     TERMINATION
-!     -----------
-!     RESET XPLS,FPLS,GPLS  IF PREVIOUS ITERATE SOLUTION
-!
-200 IF (IERR .NE. 3) RETURN
-!
-210 FPLS = F
-DO I = 1,N
-   XPLS(I) = X(I)
-   GPLS(I) = G(I)
-END DO
-RETURN
-END SUBROUTINE OPTDRV
-
-SUBROUTINE OPCHK1 (N,X,TYPSIZ,FSCALE,GRADTL,ITNLIM,RERR, &
-&STEPMX,IERR)
-!-----------------------------------------------------------------------
-!                  CHECK INPUT FOR REASONABLENESS
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       N          DIMENSION OF PROBLEM
-!       X(N)       ESTIMATE OF MINIMUM OF FCN
-!       GRADTL     TOLERANCE AT WHICH GRADIENT CONSIDERED CLOSE
-!                  ENOUGH TO ZERO TO TERMINATE ALGORITHM
-!       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
-!       RERR       RELATIVE ACCURACY OF SUBROUTINE FCN
-!
-!     INPUT/OUTPUT ...
-!
-!       TYPSIZ(N)  SCALING VECTOR FOR X
-!       FSCALE     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION FCN
-!       STEPMX     MAXIMUM STEP SIZE
-!
-!     OUTPUT ...
-!
-!       IERR       ERROR INDICATOR
-!
-!-----------------------------------------------------------------------
-REAL X(N), TYPSIZ(N)
-!
-!     CHECK THAT PARAMETERS ONLY TAKE ON ACCEPTABLE VALUES.
-!     IF NOT, SET THEM TO DEFAULT VALUES.
-!
-IERR = 0
-!
-!     CHECK DIMENSION OF PROBLEM
-!
-IF (N .LE. 0) GO TO 805
-IF (N .EQ. 1) GO TO 810
-!
-!     COMPUTE SCALE MATRIX
-!
-DO I = 1,N
-  TYPSIZ(I) = ABS(TYPSIZ(I))
-  IF (TYPSIZ(I) .EQ. 0.0) TYPSIZ(I) = 1.0
-END DO
-!
-!     CHECK MAXIMUM STEP SIZE
-!
-IF (STEPMX .GT. 0.0) GO TO 20
-STPSIZ = 0.0
-DO I = 1, N
-   STPSIZ = STPSIZ + (X(I)/TYPSIZ(I))**2
-END DO
-STPSIZ = SQRT(STPSIZ)
-STEPMX = AMAX1(1.0E3*STPSIZ, 1.0E3)
-20 CONTINUE
-!
-!     CHECK FUNCTION SCALE
-!
-FSCALE = ABS(FSCALE)
-IF (FSCALE .EQ. 0.0) FSCALE = 1.0
-!
-!     CHECK GRADIENT TOLERANCE
-!
-IF (GRADTL .LT. 0.0) GO TO 815
-!
-!     CHECK ITERATION LIMIT
-!
-IF (ITNLIM .LE. 0) GO TO 820
-!
-!     CHECK THE ACCURACY OF FCN
-!
-IF (RERR .LT. 0.0 .OR. RERR .GT. 1.E-4) GO TO 825
-RETURN
-!
-!     ERROR EXITS
-!
-805 IERR = -1
-GO TO 895
-810 IERR = -2
-GO TO 895
-815 IERR = -3
-GO TO 895
-820 IERR = -4
-GO TO 895
-825 IERR = -5
-895 RETURN
-END SUBROUTINE OPCHK1
-
-SUBROUTINE OPSTP(N,XPLS,FPLS,GPLS,X,ITNCNT,ICSCMX,IERR, &
-&GRADTL,STEPTL,TYPSIZ,FSCALE,ITNLIM,IRETCD,MXTAKE, &
-&FSTACK,NS,SPTR)
-!-----------------------------------------------------------------------
-!            UNCONSTRAINED MINIMIZATION STOPPING CRITERIA
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       N          DIMENSION OF PROBLEM
-!       XPLS(N)    NEW ITERATE X(K)
-!       FPLS       FUNCTION VALUE AT NEW ITERATE, F(XPLS)
-!       GPLS(N)    GRADIENT AT NEW ITERATE, G(XPLS), OR APPROXIMATE
-!       X(N)       OLD ITERATE X(K-1)
-!       ITNCNT     CURRENT ITERATION K
-!       ICSCMX     NUMBER CONSECUTIVE STEPS .GE. STEPMX
-!       GRADTL     TOLERANCE AT WHICH RELATIVE GRADIENT CONSIDERED CLOSE
-!                  ENOUGH TO ZERO TO TERMINATE ALGORITHM
-!       STEPTL     RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                  CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
-!       TYPSIZ(N)  SCALING VECTOR FOR X
-!       ITNLIM     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
-!       IRETCD     CODE WHICH WAS SET WHEN THE POINT XPLS WAS OBTAINED
-!       MXTAKE     BOOLEAN FLAG INDICATING STEP OF MAXIMUM LENGTH USED
-!       NS         LENGTH OF THE ARRAY FSTACK
-!
-!     INPUT/OUTPUT ...
-!
-!       FSCALE     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION
-!       FSTACK(NS) STACK OF PREVIOUS FUNCTION VALUES
-!       SPTR       POINTER TO AN ELEMENT IN FSTACK
-!
-!     OUTPUT ...
-!
-!       ICSCMX     NUMBER CONSECUTIVE STEPS .GE. STEPMX
-!                  (RETAIN VALUE BETWEEN SUCCESSIVE CALLS)
-!       IERR       TERMINATION CODE
-!
-!-----------------------------------------------------------------------
-REAL XPLS(N), GPLS(N), X(N), TYPSIZ(N), FSTACK(NS)
-INTEGER SPTR
-LOGICAL MXTAKE
-!
-IERR = 0
-!
-!     LAST GLOBAL STEP FAILED TO LOCATE A POINT LOWER THAN X
-!
-IF (IRETCD .NE. 1) GO TO 10
-   IERR = 3
-   RETURN
-10 CONTINUE
-!
-!     FIND DIRECTION IN WHICH RELATIVE GRADIENT MAXIMUM.
-!     CHECK WHETHER WITHIN TOLERANCE.
-!
-D = AMAX1(ABS(FPLS),FSCALE)
-RGX = 0.0
-do 20 I = 1,N
-   GRD = ABS(GPLS(I))*AMAX1(ABS(XPLS(I)),TYPSIZ(I))
-   RGX = AMAX1(RGX, GRD)
-20 CONTINUE
-JERR = 1
-IF (RGX .GT. GRADTL*D) GO TO 30
-   IF (ABS(FPLS) .LE. 1.E-9) GO TO 100
-   IF (ABS(FPLS) .GT. 0.5*FSCALE) GO TO 100
-   FSCALE = ABS(FPLS)
-30 IF (ITNCNT .EQ. 0) RETURN
-!
-!     FIND DIRECTION IN WHICH RELATIVE STEPSIZE MAXIMUM
-!     CHECK WHETHER WITHIN TOLERANCE.
-!
-RSX = 0.0
-DO I = 1,N
-   RELSTP = ABS(XPLS(I) - X(I))/AMAX1(ABS(XPLS(I)),TYPSIZ(I))
-   RSX = AMAX1(RSX,RELSTP)
-END DO
-JERR = 2
-IF (RSX .LE. STEPTL) GO TO 100
-!
-!     CHECK IF FPLS IS SUFFICIENTLY LESS THAN THE NS-TH
-!     PREVIOUS VALUE OF FCN.
-!
-IF (ITNCNT .GT. NS) GO TO 50
-   SPTR = ITNCNT
-   FSTACK(SPTR) = FPLS
-   GO TO 60
-50 SPTR = SPTR + 1
-IF (SPTR .GT. NS) SPTR = 1
-JERR = 3
-IF (FPLS .GE. (FSTACK(SPTR) - 1.E-3*ABS(FSTACK(SPTR)))) &
-&GO TO 100
-FSTACK(SPTR) = FPLS
-!
-!     CHECK ITERATION LIMIT
-!
-60 JERR = 4
-IF (ITNCNT .GE. ITNLIM) GO TO 100
-!
-!     CHECK NUMBER OF CONSECUTIVE STEPS OF SIZE STEPMX
-!
-IF (MXTAKE) GO TO 70
-   ICSCMX = 0
-   RETURN
-70 ICSCMX = ICSCMX + 1
-IF (ICSCMX .GE. 20) IERR = 5
-RETURN
-!
-!     TERMINATE
-!
-100 IERR = JERR
-RETURN
-END SUBROUTINE OPSTP
-
-SUBROUTINE FXDEC (FCN, N, X, FX, R)
-!-----------------------------------------------------------------------
-!     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
-!-----------------------------------------------------------------------
-REAL X(N)
-EXTERNAL FCN
-!
-do 20 I = 1,N
-   H = R * AMAX1(ABS(X(I)), 1.0)
-   XI = X(I)
-   XPLUS = XI + H
-   X(I) = XPLUS
-   CALL FCN (N, X, FPLUS)
-   XMINUS = XI - 1.1*H
-   X(I) = XMINUS
-   CALL FCN (N, X, FMINUS)
-   X(I) = XI
-!
-   IF (FX .LE. FPLUS) GO TO 10
-      FX = FPLUS
-      X(I) = XPLUS
-10 IF (FX .LE. FMINUS) GO TO 20
-      FX = FMINUS
-      X(I) = XMINUS
-20 CONTINUE
-RETURN
-END SUBROUTINE FXDEC
-
-SUBROUTINE SCALEX (MO, X, TYPSIZ, N, IERR)
-REAL X(N), TYPSIZ(N)
-!-----------------------------------------------------------------------
-!     RESCALE THE VARIABLES
-!-----------------------------------------------------------------------
-XMIN = 1.E-5*SPMPAR(3)
-do 10 I = 1,N
-   T = AMAX1(ABS(X(I)), 1.E-20)
-   XMIN = AMIN1(T, XMIN)
-10 CONTINUE
-!
-C = 1.E3
-IF (MO .NE. 0) C = 1.E2
-BIG = C*XMIN
-do 20 I = 1,N
-   IF (ABS(X(I)) .GE. BIG) GO TO 30
-20 CONTINUE
-IERR = 0
-RETURN
-!
-30 DO I = 1,N
-   T = ABS(X(I))/C
-   TYPSIZ(I) = AMAX1(T, XMIN)
-END DO
-IERR = -10
-RETURN
-END SUBROUTINE SCALEX
-
-SUBROUTINE LLTSLV (NR,N,A,X,B)
-IMPLICIT NONE
-INTEGER N, NR
-INTEGER I, II, IM1, IP1, J
-REAL SUM
-!-----------------------------------------------------------------------
-!        SOLUTION OF AX = B WHERE A HAS THE FORM L(L-TRANSPOSE)
-!           BUT ONLY THE LOWER TRIANGULAR PART L IS STORED.
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       NR       ROW DIMENSION OF MATRIX
-!       N        ORDER OF THE MATRIX
-!       A(N,N)   MATRIX OF FORM L(L-TRANSPOSE). A IS NOT
-!                MODIFIED BY THE ROUTINE.
-!       B(N)     RIGHT-HAND SIDE VECTOR
-!
-!     OUTPUT ...
-!
-!       X(N)     SOLUTION VECTOR
-!
-!-----------------------------------------------------------------------
-!     NOTE.  B AND X MAY SHARE THE SAME STORAGE AREA.
-!-----------------------------------------------------------------------
-REAL A(NR,N), X(N), B(N)
-!
-!                  FORWARD SOLVE, RESULT IN X
-!
-X(1) = B(1)/A(1,1)
-IF (N .EQ. 1) GO TO 30
-DO I = 2,N
-   SUM = 0.0
-   IM1 = I - 1
-   DO J = 1,IM1
-      SUM = SUM + A(I,J)*X(J)
-   END DO
-   X(I) = (B(I) - SUM)/A(I,I)
-END DO
-!
-!                   BACK SOLVE, RESULT IN X
-!
-30 X(N) = X(N)/A(N,N)
-IF (N .EQ. 1) RETURN
-I = N
-DO II = 2,N
-   IP1 = I
-   I = I - 1
-   SUM = 0.0
-   DO J = IP1,N
-      SUM = SUM + A(J,I)*X(J)
-   END DO
-   X(I) = (X(I) - SUM)/A(I,I)
-END DO
-RETURN
-END SUBROUTINE LLTSLV
-
-SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
-!-----------------------------------------------------------------------
-!     FIND FORWARD DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
-!     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       N          DIMENSION OF PROBLEM
-!       X(N)       POINT AT WHICH THE GRADIENT IS TO BE APPROXIMATED
-!       FCN        NAME OF SUBROUTINE TO EVALUATE FUNCTION
-!       FX         VALUE OF FCN AT THE POINT X
-!       TYPSIZ(N)  SCALING VECTOR FOR X
-!       R          STEPSIZE FACTOR
-!
-!     OUTPUT ...
-!
-!       G(N)       FINITE DIFFERENCE APPROXIMATION TO THE GRADIENT
-!
-!-----------------------------------------------------------------------
-DIMENSION X(N), G(N), TYPSIZ(N)
-EXTERNAL FCN
-!
-DO J = 1,N
-  STEPSZ = R * AMAX1(ABS(X(J)),TYPSIZ(J))
-  XTMPJ = X(J)
-  X(J) = XTMPJ + STEPSZ
-  CALL FCN (N, X, FPLUS)
-  X(J) = XTMPJ
-  G(J) = (FPLUS - FX)/STEPSZ
-END DO
-RETURN
-END SUBROUTINE FSTOFD
-
-SUBROUTINE FSTOCD (N, X, FCN, TYPSIZ, R, G)
-!-----------------------------------------------------------------------
-!     FIND CENTRAL DIFFERENCE APPROXIMATION G TO THE FIRST DERIVATIVE
-!     (GRADIENT) OF THE FUNCTION DEFINED BY FCN AT THE POINT X.
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       N          DIMENSION OF PROBLEM
-!       X(N)       POINT AT WHICH GRADIENT IS TO BE APPROXIMATED
-!       FCN        NAME OF SUBROUTINE TO EVALUATE FUNCTION
-!       TYPSIZ(N)  SCALING VECTOR FOR X
-!       R          STEPSIZE FACTOR
-!
-!     OUTPUT ...
-!
-!       G(N)       CENTRAL DIFFERENCE APPROXIMATION TO GRADIENT
-!
-!-----------------------------------------------------------------------
-REAL X(N), TYPSIZ(N), G(N)
-EXTERNAL FCN
-!
-!     FIND I-TH  STEPSIZE, EVALUATE TWO NEIGHBORS IN DIRECTION OF
-!     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
-!
-DO I = 1, N
-   STEPI = R * AMAX1(ABS(X(I)),TYPSIZ(I))
-   XTEMPI = X(I)
-   X(I) = XTEMPI + STEPI
-   CALL FCN (N, X, FPLUS)
-   X(I) = XTEMPI - STEPI
-   CALL FCN (N, X, FMINUS)
-   X(I) = XTEMPI
-   G(I) = (FPLUS - FMINUS)/(2.0*STEPI)
-END DO
-RETURN
-END SUBROUTINE FSTOCD
-
-SUBROUTINE LNSRCH(N,X,F,G,P,XPLS,FPLS,FCN,MXTAKE,IRETCD, &
-&STEPMX,STEPTL,TYPSIZ)
-!-----------------------------------------------------------------------
-!             FIND A NEXT NEWTON ITERATE BY LINE SEARCH
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       N         DIMENSION OF PROBLEM
-!       X(N)      OLD ITERATE X(K-1)
-!       F         FUNCTION VALUE AT OLD ITERATE, F(X)
-!       G(N)      GRADIENT AT OLD ITERATE, G(X)
-!       P(N)      NON-ZERO NEWTON STEP
-!       FCN       NAME OF SUBROUTINE TO EVALUATE FUNCTION
-!       STEPMX    MAXIMUM ALLOWABLE STEP SIZE
-!       STEPTL    RELATIVE STEP SIZE AT WHICH SUCCESSIVE ITERATES
-!                 CONSIDERED CLOSE ENOUGH TO TERMINATE ALGORITHM
-!       TYPSIZ(N) SCALING VECTOR FOR X
-!
-!     OUTPUT ...
-!
-!       XPLS(N)   NEW ITERATE X(K)
-!       FPLS      FUNCTION VALUE AT NEW ITERATE, F(XPLS)
-!       IRETCD    RETURN CODE
-!       MXTAKE    BOOLEAN FLAG INDICATING STEP OF MAXIMUM LENGTH USED
-!
-!-----------------------------------------------------------------------
-!     INTERNAL VARIABLES ...
-!
-!       SLN      NEWTON LENGTH
-!       RLN      RELATIVE LENGTH OF NEWTON STEP
-!-----------------------------------------------------------------------
-REAL X(N), G(N), P(N), XPLS(N), TYPSIZ(N)
-REAL LAMBDA
-LOGICAL MXTAKE
-EXTERNAL FCN
-!
-MXTAKE = .FALSE.
-IRETCD = 2
-TMP = 0.0
-do 10 I = 1,N
-   TMP = TMP + (P(I)/TYPSIZ(I))**2
-10 CONTINUE
-SLN = SQRT(TMP)
-!
-IF (SLN .LE. STEPMX) GO TO 30
-!
-!     NEWTON STEP LONGER THAN MAXIMUM ALLOWED
-!
-   SCL = STEPMX/SLN
-   DO I = 1,N
-      P(I) = SCL*P(I)
-   END DO
-   SLN = STEPMX
-!
-30 SLP = SDOT(N,G,1,P,1)
-RLN = 0.0
-DO I = 1,N
-   RLN = AMAX1(RLN,ABS(P(I))/AMAX1(ABS(X(I)),TYPSIZ(I)))
-END DO
-RMNLMB = STEPTL/RLN
-LAMBDA = 1.0
-!
-!     LOOP.  CHECK IF THE NEW ITERATE IS SATISFACTORY.
-!
-100 DO I = 1,N
-  XPLS(I) = X(I) + LAMBDA*P(I)
-END DO
-CALL FCN(N,XPLS,FPLS)
-IF (FPLS .LE. F + SLP*1.E-4*LAMBDA) GO TO 200
-!
-!     SOLUTION NOT (YET) FOUND
-!
-  IF (LAMBDA .LT. RMNLMB) GO TO 210
-!
-!     CALCULATE NEW LAMBDA
-!
-  IF (LAMBDA .NE. 1.0) GO TO 120
-!
-!     FIRST BACKTRACK. QUADRATIC FIT
-!
-      TLMBDA = AMIN1(-SLP/(2.0*(FPLS - F - SLP)), 0.9)
-      GO TO 170
-!
-!     ALL SUBSEQUENT BACKTRACKS. CUBIC FIT
-!
-120 T1 = (FPLS - F - LAMBDA*SLP)/(LAMBDA*LAMBDA)
-      T2 = (PFPLS - F - PLMBDA*SLP)/(PLMBDA*PLMBDA)
-      T3 = 1.0/(LAMBDA - PLMBDA)
-      A = T3*(T1 - T2)
-      B = T3*(T2*LAMBDA - T1*PLMBDA)
-      W = 10.0*ABS(T1*T3)
-      IF ((ABS(A) + W) .NE. W) GO TO 130
-!
-!     THE CUBIC FIT DEGENERATES TO A QUADRATIC FIT
-!
-         TLMBDA = -SLP/(2.0*B)
-         GO TO 160
-!
-!     THE CUBIC IS NONDEGENERATE
-!
-130 DISC = B*B - 3.0*A*SLP
-      IF (DISC .LE. B*B) GO TO 140
-!
-!     ONLY ONE POSITIVE CRITICAL POINT, MUST BE MINIMUM
-!
-         TLMBDA = (-B + SIGN(1.0,A)*SQRT(DISC))/(3.0*A)
-         GO TO 160
-!
-!     BOTH CRITICAL POINTS POSITIVE, FIRST IS MINIMUM
-!
-140 IF (DISC .GT. 0.0) GO TO 150
-            TLMBDA = -B/(3.0*A)
-            GO TO 160
-150 TLMBDA = (-B - SIGN(1.0,A)*SQRT(DISC))/(3.0*A)
-!
-160 IF (TLMBDA .GT. 0.5*LAMBDA) TLMBDA = 0.5*LAMBDA
-!
-!
-170 PLMBDA = LAMBDA
-    PFPLS = FPLS
-    IF (TLMBDA .GE. LAMBDA*0.1) GO TO 180
-      LAMBDA = LAMBDA*0.1
-      GO TO 100
-180 LAMBDA = TLMBDA
-    GO TO 100
-!
-!     A SUITABLE VALUE FOR XPLS HAS BEEN OBTAINED
-!
-200 IRETCD = 0
-IF (LAMBDA .EQ. 1.0 .AND. SLN .GT. 0.99*STEPMX) MXTAKE =.TRUE.
-RETURN
-!
-!     NO SATISFACTORY XPLS FOUND SUFFICIENTLY DISTINCT FROM X
-!
-210 IRETCD = 1
-RETURN
-END SUBROUTINE LNSRCH
-
-SUBROUTINE SECFAC (NR,N,X,G,A,XPLS,GPLS,ITNCNT,TOL, &
-&NOUPDT,S,Y,W)
-!-----------------------------------------------------------------------
-!           UPDATE HESSIAN BY THE BFGS FACTORED METHOD
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       NR        ROW DIMENSION OF MATRIX
-!       N         ORDER OF THE MATRIX
-!       X(N)      OLD ITERATE X(K-1)
-!       G(N)      GRADIENT AT THE OLD ITERATE
-!       XPLS(N)   NEW ITERATE X(K)
-!       GPLS(N)   GRADIENT AT THE NEW ITERATE
-!       ITNCNT    ITERATION COUNT
-!       TOL       RELATIVE TOLERANCE TO BE USED FOR NOISE
-!
-!     INPUT/OUTPUT ...
-!
-!       A(N,N)    ON ENTRY, CHOLESKY DECOMPOSITION OF HESSIAN IN
-!                    THE LOWER PART AND DIAGONAL.
-!                 ON EXIT,  UPDATED CHOLESKY DECOMPOSITION OF HESSIAN
-!                    IN THE LOWER TRIANGULAR PART AND DIAGONAL.
-!       NOUPDT    BOOLEAN. NO UPDATE YET.
-!
-!     WORK SPACES ...  S(N), Y(N), W(N)
-!
-!-----------------------------------------------------------------------
-REAL X(N), XPLS(N), G(N), GPLS(N)
-REAL A(NR,N)
-REAL S(N), Y(N), W(N)
-LOGICAL NOUPDT
-!
-IF (ITNCNT .EQ. 1) NOUPDT = .TRUE.
-DO I = 1,N
-   S(I) = XPLS(I) - X(I)
-   Y(I) = GPLS(I) - G(I)
-END DO
-DEN1 = SDOT(N,S,1,Y,1)
-SNORM2 = SNRM2(N,S,1)
-YNRM2 = SNRM2(N,Y,1)
-IF (DEN1 .LT. TOL*SNORM2*YNRM2) RETURN
-!
-!     SET S = TRANSPOSE(L)*S
-!
-DO I = 1,N
-   SUM = 0.0
-   DO J = I,N
-      SUM = SUM + A(J,I)*S(J)
-   END DO
-   S(I) = SUM
-END DO
-DEN2 = SDOT(N,S,1,S,1)
-!
-!     SET ALP = SQRT(DEN1/DEN2)
-!
-ALP = SQRT(DEN1/DEN2)
-IF (.NOT.NOUPDT) GO TO 40
-!
-!        ON THE INITIAL UPDATE SET L = ALP*L. THEN S MUST BE
-!        RESET TO ALP*S. AFTER THIS IS DONE THEN DEN2 = DEN1
-!        AND ALP HAS THE VALUE 1.
-!
-   DO J = 1,N
-      S(J) = ALP*S(J)
-      DO I = J,N
-         A(I,J) = ALP*A(I,J)
-      END DO
-   END DO
-   NOUPDT = .FALSE.
-   ALP = 1.0
-!
-!     SET W = L*S
-!
-40 DO I = 1,N
-   SUM = 0.0
-   DO J = 1,I
-      SUM = SUM + A(I,J)*S(J)
-   END DO
-   W(I) = SUM
-END DO
-!
-!     IF ABS(Y(I) - W(I)) IS LESS THAN THE ESTIMATED NOISE IN Y(I)
-!     FOR EACH I, THEN THE UPDATE IS SKIPPED.
-!
-DO I = 1,N
-IF (ABS(Y(I) - W(I)) .GE. TOL*AMAX1(ABS(G(I)),ABS(GPLS(I)))) &
-&GO TO 70
-END DO
-RETURN
-!
-!     W = Y - ALP*L*S
-!
-70 DO I = 1,N
-   W(I) = Y(I) - ALP*W(I)
-END DO
-!
-!     S = S/SQRT(DEN1*DEN2)
-!
-ALP = ALP/DEN1
-DO I = 1,N
-   S(I) = ALP*S(I)
-END DO
-!
-!     COPY L INTO UPPER TRIANGULAR PART.  ZERO L.
-!
-DO I = 2,N
-   IM1 = I - 1
-   DO J = 1,IM1
-      A(J,I) = A(I,J)
-      A(I,J) = 0.0
-   END DO
-END DO
-!
-!     FIND Q AND R SUCH THAT  Q*R = (L+) + S*(W+)
-!
-CALL QRUPDT (NR, N, A, S, W)
-!
-!     UPPER TRIANGULAR PART AND DIAGONAL OF A NOW CONTAIN UPDATED
-!     CHOLESKY DECOMPOSITION OF HESSIAN.  COPY BACK TO LOWER
-!     TRIANGULAR PART.
-!
-DO I = 2,N
-   IM1 = I - 1
-   DO J = 1,IM1
-      A(I,J) = A(J,I)
-   END DO
-END DO
-RETURN
-END SUBROUTINE SECFAC
-
-SUBROUTINE QRUPDT (NR,N,A,U,V)
-!-----------------------------------------------------------------------
-!     FIND AN ORTHOGONAL MATRIX (Q*) AND AN UPPER TRIANGULAR
-!          MATRIX (R*) SUCH THAT (Q*)(R*) = R + U(V+)
-!-----------------------------------------------------------------------
-!
-!     PARAMETERS ...
-!
-!       NR      ROW DIMENSION OF THE MATRIX
-!       N       ORDER OF THE MATRIX
-!       A(N,N)  ON INPUT,  CONTAINS R
-!               ON OUTPUT, CONTAINS (R*)
-!       U(N)    VECTOR
-!       V(N)    VECTOR
-!
-!-----------------------------------------------------------------------
-REAL A(NR,N), U(N), V(N)
-!
-!                DETERMINE LAST NON-ZERO IN U
-!
-K = N
-10 IF (U(K) .NE. 0.0 .OR. K .EQ. 1) GO TO 20
-   K = K - 1
-   GO TO 10
-!
-!               K-1 JACOBI ROTATIONS TRANSFORM
-!             R + U(V+)  TO  (R*) + (U(1)*E1)(V+)
-!                 WHICH IS UPPER HESSENBERG
-!
-20 KM1 = K - 1
-IF (K .LE. 1) GO TO 40
-DO II = 1,KM1
-   I = K - II
-   CALL JROT (NR,N,A,I,U(I),-U(I+1),R)
-   U(I) = R
-END DO
-!
-! SET R = R + (U(1)*E1)(V+)
-!
-40 DO J = 1,N
-   A(1,J) = A(1,J) + U(1)*V(J)
-END DO
-IF (K .LE. 1) RETURN
-!
-!       K-1 JACOBI ROTATIONS TRANSFORM UPPER HESSENBERG R
-!                   TO UPPER TRIANGULAR R*
-!
-DO I = 1,KM1
-   CALL JROT (NR,N,A,I,A(I,I),-A(I+1,I),R)
-END DO
-RETURN
-END SUBROUTINE QRUPDT
-
-SUBROUTINE JROT (NR,N,H,I,A,B,R)
-!-----------------------------------------------------------------------
-!         PRE-MULTIPLICATION OF AN UPPER HESSENBERG MATRIX H
-!               BY THE JACOBIAN ROTATION J(I,I+1,A,B)
-!-----------------------------------------------------------------------
-!
-!     INPUT ...
-!
-!       NR      ROW DIMENSION OF THE MATRIX
-!       N       ORDER OF THE MATRIX
-!       H(N,N)  UPPER HESSENBER MATRIX
-!       I       INDEX OF ROW
-!       A,B     SCALARS
-!
-!     OUTPUT ...
-!
-!       H(N,N)  THE MODIFIED HESSENBERG MATRIX
-!       R       R = SQRT(A*A + B*B)
-!
-!-----------------------------------------------------------------------
-REAL H(NR,N)
-!
-!                COMPUTE C = A/R  AND S = B/R
-!
-IF (ABS(A) .LE. ABS(B)) GO TO 10
-   T = B/A
-   Z = SQRT(1.0 + T*T)
-   C = SIGN(1.0/Z, A)
-   S = T*C
-   R = Z*ABS(A)
-   GO TO 20
-10 IF (A .EQ. 0.0) GO TO 40
-T = A/B
-Z = SQRT(1.0 + T*T)
-S = SIGN(1.0/Z, B)
-C = T*S
-R = Z*ABS(B)
-!
-!            APPLY THE ROTATION WHEN A IS NONZERO
-!
-20 DO J = I,N
-   T = H(I,J)
-   Z = H(I+1,J)
-   H(I,J) = C*T - S*Z
-   H(I+1,J) = S*T + C*Z
-END DO
-RETURN
-!
-!                     CASE WHEN A = 0
-!
-40 S = SIGN(1.0, B)
-R = ABS(B)
-DO J = I,N
-   T = H(I,J)
-   H(I,J) = - S*H(I+1,J)
-   H(I+1,J) = S*T
-END DO
-RETURN
-END SUBROUTINE JROT
-
-SUBROUTINE LMDIFF (FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
-INTEGER M,N,INFO,LWA
-INTEGER IWA(N)
-REAL EPSFCN,TOL
-REAL X(N),FVEC(M),WA(LWA)
-EXTERNAL FCN
-!     **********
-!
-!     SUBROUTINE LMDIFF
-!
-!     THE PURPOSE OF LMDIFF IS TO MINIMIZE THE SUM OF THE SQUARES OF
-!     M NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION OF THE
-!     LEVENBERG-MARQUARDT ALGORITHM. THIS IS DONE BY USING THE MORE
-!     GENERAL LEAST-SQUARES SOLVER LMDIF. THE USER MUST PROVIDE A
-!     SUBROUTINE WHICH CALCULATES THE FUNCTIONS. THE JACOBIAN IS
-!     THEN CALCULATED BY A FORWARD-DIFFERENCE APPROXIMATION.
-!
-!     THE SUBROUTINE STATEMENT IS
-!
-!       SUBROUTINE LMDIFF(FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
-!
-!     WHERE
-!
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
-!
-!         SUBROUTINE FCN(M,N,X,FVEC,IFLAG)
-!         INTEGER M,N,IFLAG
-!         REAL X(N),FVEC(M)
-!         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
-!         RETURN THIS VECTOR IN FVEC.
-!         ----------
-!         RETURN
-!         END
-!
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF LMDIFF.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
-!
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS.
-!
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF VARIABLES. N MUST NOT EXCEED M.
-!
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
-!
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH M WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
-!
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
-!
-!       TOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION OCCURS
-!         WHEN THE ALGORITHM ESTIMATES EITHER THAT THE RELATIVE
-!         ERROR IN THE SUM OF SQUARES IS AT MOST TOL OR THAT
-!         THE RELATIVE ERROR BETWEEN X AND THE SOLUTION IS AT
-!         MOST TOL.
-!
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
-!
-!         INFO = 0  IMPROPER INPUT PARAMETERS.
-!
-!         INFO = 1  ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!                   IN THE SUM OF SQUARES IS AT MOST TOL.
-!
-!         INFO = 2  ALGORITHM ESTIMATES THAT THE RELATIVE ERROR
-!                   BETWEEN X AND THE SOLUTION IS AT MOST TOL.
-!
-!         INFO = 3  CONDITIONS FOR INFO = 1 AND INFO = 2 BOTH HOLD.
-!
-!         INFO = 4  FVEC IS ORTHOGONAL TO THE COLUMNS OF THE
-!                   JACOBIAN TO MACHINE PRECISION.
-!
-!         INFO = 5  NUMBER OF CALLS TO FCN HAS REACHED OR
-!                   EXCEEDED 200*(N+1).
-!
-!         INFO = 6  TOL IS TOO SMALL. NO FURTHER REDUCTION IN
-!                   THE SUM OF SQUARES IS POSSIBLE.
-!
-!         INFO = 7  TOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                   THE APPROXIMATE SOLUTION X IS POSSIBLE.
-!
-!       IWA IS AN INTEGER WORK ARRAY OF LENGTH N.
-!
-!       WA IS A WORK ARRAY OF LENGTH LWA.
-!
-!       LWA IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN
-!         M*N+5*N+M.
-!
-!     SUBPROGRAMS CALLED
-!
-!       USER-SUPPLIED ...... FCN
-!
-!       MINPACK-SUPPLIED ... LMDIF
-!
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
-!
-!     **********
-INTEGER MAXFEV,MODE,MP5N,NFEV,NPRINT
-REAL FACTOR,FTOL,GTOL,XTOL
-DATA FACTOR /1.0E2/
-INFO = 0
-!
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
-!
-IF (N .LE. 0 .OR. M .LT. N .OR. EPSFCN .LT. 0.0 &
-&.OR. TOL .LT. 0.0 .OR. LWA .LT. M*N + 5*N + M) GO TO 10
-!
-!     CALL LMDIF.
-!
-MAXFEV = 200*(N + 1)
-FTOL = TOL
-XTOL = TOL
-GTOL = 0.0
-MODE = 1
-NPRINT = 0
-MP5N = M + 5*N
-CALL LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN,WA(1), &
-&MODE,FACTOR,NPRINT,INFO,NFEV,WA(MP5N+1),M,IWA, &
-&WA(N+1),WA(2*N+1),WA(3*N+1),WA(4*N+1),WA(5*N+1))
-IF (INFO .EQ. 8) INFO = 4
-10 CONTINUE
-RETURN
-END SUBROUTINE LMDIFF
-
-SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN, &
-&DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC, &
-&IPVT,QTF,WA1,WA2,WA3,WA4)
-INTEGER M,N,MAXFEV,MODE,NPRINT,INFO,NFEV,LDFJAC
-INTEGER IPVT(N)
-REAL FTOL,XTOL,GTOL,EPSFCN,FACTOR
-REAL X(N),FVEC(M),DIAG(N),FJAC(LDFJAC,N),QTF(N),WA1(N),WA2(N), &
-&WA3(N),WA4(M)
-EXTERNAL FCN
-!     **********
-!
-!     SUBROUTINE LMDIF
-!
-!     THE PURPOSE OF LMDIF IS TO MINIMIZE THE SUM OF THE SQUARES OF
-!     M NONLINEAR FUNCTIONS IN N VARIABLES BY A MODIFICATION OF
-!     THE LEVENBERG-MARQUARDT ALGORITHM. THE USER MUST PROVIDE A
-!     SUBROUTINE WHICH CALCULATES THE FUNCTIONS. THE JACOBIAN IS
-!     THEN CALCULATED BY A FORWARD-DIFFERENCE APPROXIMATION.
-!
-!     THE SUBROUTINE STATEMENT IS
-!
-!       SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN,
-!                        DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,
-!                        LDFJAC,IPVT,QTF,WA1,WA2,WA3,WA4)
-!
-!     WHERE
-!
-!       FCN IS THE NAME OF THE USER-SUPPLIED SUBROUTINE WHICH
-!         CALCULATES THE FUNCTIONS. FCN MUST BE DECLARED
-!         IN AN EXTERNAL STATEMENT IN THE USER CALLING
-!         PROGRAM, AND SHOULD BE WRITTEN AS FOLLOWS.
-!
-!         SUBROUTINE FCN(M,N,X,FVEC,IFLAG)
-!         INTEGER M,N,IFLAG
-!         REAL X(N),FVEC(M)
-!         ----------
-!         CALCULATE THE FUNCTIONS AT X AND
-!         RETURN THIS VECTOR IN FVEC.
-!         ----------
-!         RETURN
-!         END
-!
-!         THE VALUE OF IFLAG SHOULD NOT BE CHANGED BY FCN UNLESS
-!         THE USER WANTS TO TERMINATE EXECUTION OF LMDIF.
-!         IN THIS CASE SET IFLAG TO A NEGATIVE INTEGER.
-!
-!       M IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF FUNCTIONS.
-!
-!       N IS A POSITIVE INTEGER INPUT VARIABLE SET TO THE NUMBER
-!         OF VARIABLES. N MUST NOT EXCEED M.
-!
-!       X IS AN ARRAY OF LENGTH N. ON INPUT X MUST CONTAIN
-!         AN INITIAL ESTIMATE OF THE SOLUTION VECTOR. ON OUTPUT X
-!         CONTAINS THE FINAL ESTIMATE OF THE SOLUTION VECTOR.
-!
-!       FVEC IS AN OUTPUT ARRAY OF LENGTH M WHICH CONTAINS
-!         THE FUNCTIONS EVALUATED AT THE OUTPUT X.
-!
-!       FTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN BOTH THE ACTUAL AND PREDICTED RELATIVE
-!         REDUCTIONS IN THE SUM OF SQUARES ARE AT MOST FTOL.
-!         THEREFORE, FTOL MEASURES THE RELATIVE ERROR DESIRED
-!         IN THE SUM OF SQUARES.
-!
-!       XTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE RELATIVE ERROR BETWEEN TWO CONSECUTIVE
-!         ITERATES IS AT MOST XTOL. THEREFORE, XTOL MEASURES THE
-!         RELATIVE ERROR DESIRED IN THE APPROXIMATE SOLUTION.
-!
-!       GTOL IS A NONNEGATIVE INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE COSINE OF THE ANGLE BETWEEN FVEC AND
-!         ANY COLUMN OF THE JACOBIAN IS AT MOST GTOL IN ABSOLUTE
-!         VALUE. THEREFORE, GTOL MEASURES THE ORTHOGONALITY
-!         DESIRED BETWEEN THE FUNCTION VECTOR AND THE COLUMNS
-!         OF THE JACOBIAN.
-!
-!       MAXFEV IS A POSITIVE INTEGER INPUT VARIABLE. TERMINATION
-!         OCCURS WHEN THE NUMBER OF CALLS TO FCN IS AT LEAST
-!         MAXFEV BY THE END OF AN ITERATION.
-!
-!       EPSFCN IS AN INPUT VARIABLE USED IN DETERMINING A SUITABLE
-!         STEP LENGTH FOR THE FORWARD-DIFFERENCE APPROXIMATION. THIS
-!         APPROXIMATION ASSUMES THAT THE RELATIVE ERRORS IN THE
-!         FUNCTIONS ARE OF THE ORDER OF EPSFCN. IF EPSFCN IS LESS
-!         THAN THE MACHINE PRECISION, IT IS ASSUMED THAT THE RELATIVE
-!         ERRORS IN THE FUNCTIONS ARE OF THE ORDER OF THE MACHINE
-!         PRECISION.
-!
-!       DIAG IS AN ARRAY OF LENGTH N. IF MODE = 1 (SEE
-!         BELOW), DIAG IS INTERNALLY SET. IF MODE = 2, DIAG
-!         MUST CONTAIN POSITIVE ENTRIES THAT SERVE AS
-!         MULTIPLICATIVE SCALE FACTORS FOR THE VARIABLES.
-!
-!       MODE IS AN INTEGER INPUT VARIABLE. IF MODE = 1, THE
-!         VARIABLES WILL BE SCALED INTERNALLY. IF MODE = 2,
-!         THE SCALING IS SPECIFIED BY THE INPUT DIAG. OTHER
-!         VALUES OF MODE ARE EQUIVALENT TO MODE = 1.
-!
-!       FACTOR IS A POSITIVE INPUT VARIABLE USED IN DETERMINING THE
-!         INITIAL STEP BOUND. THIS BOUND IS SET TO THE PRODUCT OF
-!         FACTOR AND THE EUCLIDEAN NORM OF DIAG*X IF NONZERO, OR ELSE
-!         TO FACTOR ITSELF. IN MOST CASES FACTOR SHOULD LIE IN THE
-!         INTERVAL (.1,100.). 100. IS A GENERALLY RECOMMENDED VALUE.
-!
-!       NPRINT IS AN INTEGER INPUT VARIABLE THAT ENABLES CONTROLLED
-!         PRINTING OF ITERATES IF IT IS POSITIVE. IN THIS CASE,
-!         FCN IS CALLED WITH IFLAG = 0 AT THE BEGINNING OF THE FIRST
-!         ITERATION AND EVERY NPRINT ITERATIONS THEREAFTER AND
-!         IMMEDIATELY PRIOR TO RETURN, WITH X AND FVEC AVAILABLE
-!         FOR PRINTING. IF NPRINT IS NOT POSITIVE, NO SPECIAL CALLS
-!         OF FCN WITH IFLAG = 0 ARE MADE.
-!
-!       INFO IS AN INTEGER OUTPUT VARIABLE. IF THE USER HAS
-!         TERMINATED EXECUTION, INFO IS SET TO THE (NEGATIVE)
-!         VALUE OF IFLAG. SEE DESCRIPTION OF FCN. OTHERWISE,
-!         INFO IS SET AS FOLLOWS.
-!
-!         INFO = 0  IMPROPER INPUT PARAMETERS.
-!
-!         INFO = 1  BOTH ACTUAL AND PREDICTED RELATIVE REDUCTIONS
-!                   IN THE SUM OF SQUARES ARE AT MOST FTOL.
-!
-!         INFO = 2  RELATIVE ERROR BETWEEN TWO CONSECUTIVE ITERATES
-!                   IS AT MOST XTOL.
-!
-!         INFO = 3  CONDITIONS FOR INFO = 1 AND INFO = 2 BOTH HOLD.
-!
-!         INFO = 4  THE COSINE OF THE ANGLE BETWEEN FVEC AND ANY
-!                   COLUMN OF THE JACOBIAN IS AT MOST GTOL IN
-!                   ABSOLUTE VALUE.
-!
-!         INFO = 5  NUMBER OF CALLS TO FCN HAS REACHED OR
-!                   EXCEEDED MAXFEV.
-!
-!         INFO = 6  FTOL IS TOO SMALL. NO FURTHER REDUCTION IN
-!                   THE SUM OF SQUARES IS POSSIBLE.
-!
-!         INFO = 7  XTOL IS TOO SMALL. NO FURTHER IMPROVEMENT IN
-!                   THE APPROXIMATE SOLUTION X IS POSSIBLE.
-!
-!         INFO = 8  GTOL IS TOO SMALL. FVEC IS ORTHOGONAL TO THE
-!                   COLUMNS OF THE JACOBIAN TO MACHINE PRECISION.
-!
-!       NFEV IS AN INTEGER OUTPUT VARIABLE SET TO THE NUMBER OF
-!         CALLS TO FCN.
-!
-!       FJAC IS AN OUTPUT M BY N ARRAY. THE UPPER N BY N SUBMATRIX
-!         OF FJAC CONTAINS AN UPPER TRIANGULAR MATRIX R WITH
-!         DIAGONAL ELEMENTS OF NONINCREASING MAGNITUDE SUCH THAT
-!
-!                T     T           T
-!               P *(JAC *JAC)*P = R *R,
-!
-!         WHERE P IS A PERMUTATION MATRIX AND JAC IS THE FINAL
-!         CALCULATED JACOBIAN. COLUMN J OF P IS COLUMN IPVT(J)
-!         (SEE BELOW) OF THE IDENTITY MATRIX. THE LOWER TRAPEZOIDAL
-!         PART OF FJAC CONTAINS INFORMATION GENERATED DURING
-!         THE COMPUTATION OF R.
-!
-!       LDFJAC IS A POSITIVE INTEGER INPUT VARIABLE NOT LESS THAN M
-!         WHICH SPECIFIES THE LEADING DIMENSION OF THE ARRAY FJAC.
-!
-!       IPVT IS AN INTEGER OUTPUT ARRAY OF LENGTH N. IPVT
-!         DEFINES A PERMUTATION MATRIX P SUCH THAT JAC*P = Q*R,
-!         WHERE JAC IS THE FINAL CALCULATED JACOBIAN, Q IS
-!         ORTHOGONAL (NOT STORED), AND R IS UPPER TRIANGULAR
-!         WITH DIAGONAL ELEMENTS OF NONINCREASING MAGNITUDE.
-!         COLUMN J OF P IS COLUMN IPVT(J) OF THE IDENTITY MATRIX.
-!
-!       QTF IS AN OUTPUT ARRAY OF LENGTH N WHICH CONTAINS
-!         THE FIRST N ELEMENTS OF THE VECTOR (Q TRANSPOSE)*FVEC.
-!
-!       WA1, WA2, AND WA3 ARE WORK ARRAYS OF LENGTH N.
-!
-!       WA4 IS A WORK ARRAY OF LENGTH M.
-!
-!     SUBPROGRAMS CALLED
-!
-!       USER-SUPPLIED ...... FCN
-!
-!       MINPACK-SUPPLIED ... SPMPAR,ENORM,FDJAC2,LMPAR,QRFAC
-!
-!       FORTRAN-SUPPLIED ... ABS,AMAX1,AMIN1,SQRT,MOD
-!
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
-!
-!     **********
-INTEGER I,IFLAG,ITER,J,L
-REAL ACTRED,DELTA,DIRDER,EPS,FNORM,FNORM1,GNORM,PAR, &
-&PNORM,PRERED,P1,P5,P25,P75,P0001,RATIO,SUM,TEMP,TEMP1, &
-&TEMP2,XNORM
-REAL SPMPAR,ENORM
-DATA P1,P5,P25,P75,P0001 &
-&/1.0E-1,5.0E-1,2.5E-1,7.5E-1,1.0E-4/
-!
-!     EPS IS THE MACHINE PRECISION.
-!
-EPS = SPMPAR(1)
-!
-INFO = 0
-IFLAG = 0
-NFEV = 0
-!
-!     CHECK THE INPUT PARAMETERS FOR ERRORS.
-!
-IF (N .LE. 0 .OR. M .LT. N .OR. LDFJAC .LT. M &
-&.OR. FTOL .LT. 0.0 .OR. XTOL .LT. 0.0 .OR. GTOL .LT. 0.0 &
-&.OR. MAXFEV .LE. 0 .OR. FACTOR .LE. 0.0) GO TO 300
-IF (MODE .NE. 2) GO TO 20
-DO J = 1, N
-   IF (DIAG(J) .LE. 0.0) GO TO 300
-   END DO
-20 CONTINUE
-!
-!     EVALUATE THE FUNCTION AT THE STARTING POINT
-!     AND CALCULATE ITS NORM.
-!
-IFLAG = 1
-CALL FCN(M,N,X,FVEC,IFLAG)
-NFEV = 1
-IF (IFLAG .LT. 0) GO TO 300
-FNORM = ENORM(M,FVEC)
-!
-!     INITIALIZE LEVENBERG-MARQUARDT PARAMETER AND ITERATION COUNTER.
-!
-PAR = 0.0
-ITER = 1
-!
-!     BEGINNING OF THE OUTER LOOP.
-!
-30 CONTINUE
-!
-!        CALCULATE THE JACOBIAN MATRIX.
-!
-   IFLAG = 2
-   CALL FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA4)
-   NFEV = NFEV + N
-   IF (IFLAG .LT. 0) GO TO 300
-!
-!        IF REQUESTED, CALL FCN TO ENABLE PRINTING OF ITERATES.
-!
-   IF (NPRINT .LE. 0) GO TO 40
-   IFLAG = 0
-   IF (MOD(ITER-1,NPRINT) .EQ. 0) CALL FCN(M,N,X,FVEC,IFLAG)
-   IF (IFLAG .LT. 0) GO TO 300
-40 CONTINUE
-!
-!        COMPUTE THE QR FACTORIZATION OF THE JACOBIAN.
-!
-   CALL QRFAC(M,N,FJAC,LDFJAC,.TRUE.,IPVT,N,WA1,WA2,WA3)
-!
-!        ON THE FIRST ITERATION AND IF MODE IS 1, SCALE ACCORDING
-!        TO THE NORMS OF THE COLUMNS OF THE INITIAL JACOBIAN.
-!
-   IF (ITER .NE. 1) GO TO 80
-   IF (MODE .EQ. 2) GO TO 60
-   DO J = 1, N
-      DIAG(J) = WA2(J)
-      IF (WA2(J) .EQ. 0.0) DIAG(J) = 1.0
-      END DO
-60 CONTINUE
-!
-!        ON THE FIRST ITERATION, CALCULATE THE NORM OF THE SCALED X
-!        AND INITIALIZE THE STEP BOUND DELTA.
-!
-   DO J = 1, N
-      WA3(J) = DIAG(J)*X(J)
-      END DO
-   XNORM = ENORM(N,WA3)
-   DELTA = FACTOR*XNORM
-   IF (DELTA .EQ. 0.0) DELTA = FACTOR
-80 CONTINUE
-!
-!        FORM (Q TRANSPOSE)*FVEC AND STORE THE FIRST N COMPONENTS IN
-!        QTF.
-!
-   DO I = 1, M
-      WA4(I) = FVEC(I)
-      END DO
-   DO J = 1, N
-      IF (FJAC(J,J) .EQ. 0.0) GO TO 120
-      SUM = 0.0
-      DO I = J, M
-         SUM = SUM + FJAC(I,J)*WA4(I)
-         END DO
-      TEMP = -SUM/FJAC(J,J)
-      DO I = J, M
-         WA4(I) = WA4(I) + FJAC(I,J)*TEMP
-         END DO
-120 CONTINUE
-      FJAC(J,J) = WA1(J)
-      QTF(J) = WA4(J)
-      END DO
-!
-!        COMPUTE THE NORM OF THE SCALED GRADIENT.
-!
-   GNORM = 0.0
-   IF (FNORM .EQ. 0.0) GO TO 170
-   DO J = 1, N
-      L = IPVT(J)
-      IF (WA2(L) .EQ. 0.0) GO TO 150
-      SUM = 0.0
-      DO I = 1, J
-         SUM = SUM + FJAC(I,J)*(QTF(I)/FNORM)
-         END DO
-      GNORM = AMAX1(GNORM,ABS(SUM/WA2(L)))
-150 CONTINUE
-      END DO
-170 CONTINUE
-!
-!        TEST FOR CONVERGENCE OF THE GRADIENT NORM.
-!
-   IF (GNORM .LE. GTOL) INFO = 4
-   IF (INFO .NE. 0) GO TO 300
-!
-!        RESCALE IF NECESSARY.
-!
-   IF (MODE .EQ. 2) GO TO 190
-   DO J = 1, N
-      DIAG(J) = AMAX1(DIAG(J),WA2(J))
-      END DO
-190 CONTINUE
-!
-!        BEGINNING OF THE INNER LOOP.
-!
-200 CONTINUE
-!
-!           DETERMINE THE LEVENBERG-MARQUARDT PARAMETER.
-!
-      CALL LMPAR(N,FJAC,LDFJAC,IPVT,DIAG,QTF,DELTA,PAR,WA1,WA2, &
-&WA3,WA4)
-!
-!           STORE THE DIRECTION P AND X + P. CALCULATE THE NORM OF P.
-!
-      DO J = 1, N
-         WA1(J) = -WA1(J)
-         WA2(J) = X(J) + WA1(J)
-         WA3(J) = DIAG(J)*WA1(J)
-         END DO
-      PNORM = ENORM(N,WA3)
-!
-!           ON THE FIRST ITERATION, ADJUST THE INITIAL STEP BOUND.
-!
-      IF (ITER .EQ. 1) DELTA = AMIN1(DELTA,PNORM)
-!
-!           EVALUATE THE FUNCTION AT X + P AND CALCULATE ITS NORM.
-!
-      IFLAG = 1
-      CALL FCN(M,N,WA2,WA4,IFLAG)
-      NFEV = NFEV + 1
-      IF (IFLAG .LT. 0) GO TO 300
-      FNORM1 = ENORM(M,WA4)
-!
-!           COMPUTE THE SCALED ACTUAL REDUCTION.
-!
-      ACTRED = -1.0
-      IF (P1*FNORM1 .LT. FNORM) ACTRED = 1.0 - (FNORM1/FNORM)**2
-!
-!           COMPUTE THE SCALED PREDICTED REDUCTION AND
-!           THE SCALED DIRECTIONAL DERIVATIVE.
-!
-      DO J = 1, N
-         WA3(J) = 0.0
-         L = IPVT(J)
-         TEMP = WA1(L)
-         DO I = 1, J
-            WA3(I) = WA3(I) + FJAC(I,J)*TEMP
-            END DO
-         END DO
-      TEMP1 = ENORM(N,WA3)/FNORM
-      TEMP2 = (SQRT(PAR)*PNORM)/FNORM
-      PRERED = TEMP1**2 + TEMP2**2/P5
-      DIRDER = -(TEMP1**2 + TEMP2**2)
-!
-!           COMPUTE THE RATIO OF THE ACTUAL TO THE PREDICTED
-!           REDUCTION.
-!
-      RATIO = 0.0
-      IF (PRERED .NE. 0.0) RATIO = ACTRED/PRERED
-!
-!           UPDATE THE STEP BOUND.
-!
-      IF (RATIO .GT. P25) GO TO 240
-         IF (ACTRED .GE. 0.0) TEMP = P5
-         IF (ACTRED .LT. 0.0) &
-&TEMP = P5*DIRDER/(DIRDER + P5*ACTRED)
-         IF (P1*FNORM1 .GE. FNORM .OR. TEMP .LT. P1) TEMP = P1
-         DELTA = TEMP*AMIN1(DELTA,PNORM/P1)
-         PAR = PAR/TEMP
-         GO TO 260
-240 CONTINUE
-         IF (PAR .NE. 0.0 .AND. RATIO .LT. P75) GO TO 250
-         DELTA = PNORM/P5
-         PAR = P5*PAR
-250 CONTINUE
-260 CONTINUE
-!
-!           TEST FOR SUCCESSFUL ITERATION.
-!
-      IF (RATIO .LT. P0001) GO TO 290
-!
-!           SUCCESSFUL ITERATION. UPDATE X, FVEC, AND THEIR NORMS.
-!
-      DO J = 1, N
-         X(J) = WA2(J)
-         WA2(J) = DIAG(J)*X(J)
-         END DO
-      DO I = 1, M
-         FVEC(I) = WA4(I)
-         END DO
-      XNORM = ENORM(N,WA2)
-      FNORM = FNORM1
-      ITER = ITER + 1
-290 CONTINUE
-!
-!           TESTS FOR CONVERGENCE.
-!
-      IF (ABS(ACTRED) .LE. FTOL .AND. PRERED .LE. FTOL &
-&.AND. P5*RATIO .LE. 1.0) INFO = 1
-      IF (DELTA .LE. XTOL*XNORM) INFO = 2
-      IF (ABS(ACTRED) .LE. FTOL .AND. PRERED .LE. FTOL &
-&.AND. P5*RATIO .LE. 1.0 .AND. INFO .EQ. 2) INFO = 3
-      IF (INFO .NE. 0) GO TO 300
-!
-!           TESTS FOR TERMINATION AND STRINGENT TOLERANCES.
-!
-      IF (NFEV .GE. MAXFEV) INFO = 5
-      IF (ABS(ACTRED) .LE. EPS .AND. PRERED .LE. EPS &
-&.AND. P5*RATIO .LE. 1.0) INFO = 6
-      IF (DELTA .LE. EPS*XNORM) INFO = 7
-      IF (GNORM .LE. EPS) INFO = 8
-      IF (INFO .NE. 0) GO TO 300
-!
-!           END OF THE INNER LOOP. REPEAT IF ITERATION UNSUCCESSFUL.
-!
-      IF (RATIO .LT. P0001) GO TO 200
-!
-!        END OF THE OUTER LOOP.
-!
-   GO TO 30
-300 CONTINUE
-!
-!     TERMINATION, EITHER NORMAL OR USER IMPOSED.
-!
-IF (IFLAG .LT. 0) INFO = IFLAG
-IFLAG = 0
-IF (NPRINT .GT. 0) CALL FCN(M,N,X,FVEC,IFLAG)
-RETURN
-END SUBROUTINE LMDIF
 

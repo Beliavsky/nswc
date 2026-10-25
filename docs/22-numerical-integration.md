@@ -12,11 +12,11 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QSUBA` | `REAL FUNCTION` | `F, A, B, EPSIL, MCOUNT, RELERR, IND` | [`L98207`](../source_parts/nswc_part_10.f90#L2536) |
-| `QAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L98696`](../source_parts/nswc_part_10.f90#L3025) |
-| `QXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L100638`](../source_parts/nswc_part_10.f90#L4967) |
-| `DQAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L101646`](../source_parts/nswc_part_10.f90#L5975) |
-| `DQXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L103606`](../source_parts/nswc_part_10.f90#L7935) |
+| `QSUBA` | `REAL FUNCTION` | `F, A, B, EPSIL, MCOUNT, RELERR, IND` | [`L100190`](../source_parts/nswc_part_10.f90#L4952) |
+| `QAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L100679`](../source_parts/nswc_part_10.f90#L5441) |
+| `QXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L102634`](../source_parts/nswc_part_10.f90#L7396) |
+| `DQAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L103650`](../source_parts/nswc_part_10.f90#L8412) |
+| `DQXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L105622`](../source_parts/nswc_part_10.f90#L10384) |
 
 
 QAGS, QXGS, QSUBA, DQAGS, and DQXGS are available for computing integrals L F(x) dz over finite intervals. The subroutines QAGS and QXGS and the function QOQUBA yield single precision results. These procedures are adaptive. In such procedures, the selection of the points at which the integrand is evaluated depends on the nature of the integrand. DQAGS and DQXGS are double precision versions of the subroutines QAGS and QXGS.
@@ -239,8 +239,8 @@ IERR~ 6 (Input Error). Hither @ < 1, < 30, m < 46£ AERR < OQ, or RERR < 6. In t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L99502`](../source_parts/nswc_part_10.f90#L3831) |
-| `DQAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L102459`](../source_parts/nswc_part_10.f90#L6788) |
+| `QAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L101485`](../source_parts/nswc_part_10.f90#L6247) |
+| `DQAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L104467`](../source_parts/nswc_part_10.f90#L9229) |
 
 
 The subroutines QAGI and DQAGI are available for computing integrals over infinite intervals. QAGI yields single precision results and DQAGI yields double precision results. QAGI and DQAGI are adaptive routines.
@@ -345,7 +345,7 @@ TERR = 6 (Input Error) Either <1, m < 42, AERR < 0, or RERR < 0. In this case, t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CUBTRI` | `SUBROUTINE` | `F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, IDATA, RDATA, IER` | [`L104614`](../source_parts/nswc_part_10.f90#L8943) |
+| `CUBTRI` | `SUBROUTINE` | `F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, IDATA, RDATA, IER` | [`L106638`](../source_parts/nswc_part_11.f90#L847) |
 
 
 Let f(z,y) be a real-valued function defined on a triangle T. Then the subroutine CUBTRI is available for computing the integral Sy f(z, y) dz dy. CUBTRI is an adaptive routine.

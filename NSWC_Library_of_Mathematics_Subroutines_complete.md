@@ -386,8 +386,8 @@ a determination of the modern copyright or software-license status of each routi
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
 | `IPMPAR` | `INTEGER FUNCTION` | `I` | [`L1`](source_parts/nswc_part_01.f90#L1) |
-| `SPMPAR` | `REAL FUNCTION` | `I` | [`L1221`](source_parts/nswc_part_01.f90#L1221) |
-| `DPMPAR` | `DOUBLE PRECISION FUNCTION` | `I` | [`L1279`](source_parts/nswc_part_01.f90#L1279) |
+| `SPMPAR` | `REAL FUNCTION` | `I` | [`L1239`](source_parts/nswc_part_01.f90#L1239) |
+| `DPMPAR` | `DOUBLE PRECISION FUNCTION` | `I` | [`L1297`](source_parts/nswc_part_01.f90#L1297) |
 
 
 For the integer arithmetic, let $a$ be the radix and $n$ the number of base-$a$
@@ -454,10 +454,10 @@ Original documentation: [page 17](scans/page_0017.png),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EPSLN` | `REAL FUNCTION` | `L` | [`L1337`](source_parts/nswc_part_01.f90#L1337) |
-| `DEPSLN` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1362`](source_parts/nswc_part_01.f90#L1362) |
-| `EXPARG` | `REAL FUNCTION` | `L` | [`L1388`](source_parts/nswc_part_01.f90#L1388) |
-| `DXPARG` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1426`](source_parts/nswc_part_01.f90#L1426) |
+| `EPSLN` | `REAL FUNCTION` | `L` | [`L1355`](source_parts/nswc_part_01.f90#L1355) |
+| `DEPSLN` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1384`](source_parts/nswc_part_01.f90#L1384) |
+| `EXPARG` | `REAL FUNCTION` | `L` | [`L1413`](source_parts/nswc_part_01.f90#L1413) |
+| `DXPARG` | `DOUBLE PRECISION FUNCTION` | `L` | [`L1451`](source_parts/nswc_part_01.f90#L1451) |
 
 
 `EPSLN(L)` returns $\ln(\epsilon)$ for the single-precision arithmetic,
@@ -489,21 +489,21 @@ Original documentation: [page 19](scans/page_0019.png),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ISHELL` | `SUBROUTINE` | `A, N` | [`L1465`](source_parts/nswc_part_01.f90#L1465) |
-| `SHELL` | `SUBROUTINE` | `A, N` | [`L1510`](source_parts/nswc_part_01.f90#L1510) |
-| `SHELL2` | `SUBROUTINE` | `A, B, N` | [`L1556`](source_parts/nswc_part_01.f90#L1556) |
-| `RISORT` | `SUBROUTINE` | `A, M, N` | [`L1653`](source_parts/nswc_part_01.f90#L1653) |
-| `DSORT` | `SUBROUTINE` | `A, N` | [`L1756`](source_parts/nswc_part_01.f90#L1756) |
-| `DISORT` | `SUBROUTINE` | `A, M, N` | [`L1802`](source_parts/nswc_part_01.f90#L1802) |
-| `DDSORT` | `SUBROUTINE` | `A, B, N` | [`L1854`](source_parts/nswc_part_01.f90#L1854) |
-| `AORD` | `SUBROUTINE` | `A, N` | [`L1905`](source_parts/nswc_part_01.f90#L1905) |
-| `DAORD` | `SUBROUTINE` | `A, N` | [`L1952`](source_parts/nswc_part_01.f90#L1952) |
-| `QSORTI` | `SUBROUTINE` | `X, IND, N` | [`L1999`](source_parts/nswc_part_01.f90#L1999) |
-| `QSORTR` | `SUBROUTINE` | `X, IND, N` | [`L2198`](source_parts/nswc_part_01.f90#L2198) |
-| `QSORTD` | `SUBROUTINE` | `X, IND, N` | [`L2398`](source_parts/nswc_part_01.f90#L2398) |
-| `IORDER` | `SUBROUTINE` | `A, IP, N` | [`L2599`](source_parts/nswc_part_01.f90#L2599) |
-| `RORDER` | `SUBROUTINE` | `A, IP, N` | [`L2670`](source_parts/nswc_part_01.f90#L2670) |
-| `DORDER` | `SUBROUTINE` | `A, IP, N` | [`L2743`](source_parts/nswc_part_01.f90#L2743) |
+| `ISHELL` | `SUBROUTINE` | `A, N` | [`L1490`](source_parts/nswc_part_01.f90#L1490) |
+| `SHELL` | `SUBROUTINE` | `A, N` | [`L1538`](source_parts/nswc_part_01.f90#L1538) |
+| `SHELL2` | `SUBROUTINE` | `A, B, N` | [`L1588`](source_parts/nswc_part_01.f90#L1588) |
+| `RISORT` | `SUBROUTINE` | `A, M, N` | [`L1693`](source_parts/nswc_part_01.f90#L1693) |
+| `DSORT` | `SUBROUTINE` | `A, N` | [`L1804`](source_parts/nswc_part_01.f90#L1804) |
+| `DISORT` | `SUBROUTINE` | `A, M, N` | [`L1853`](source_parts/nswc_part_01.f90#L1853) |
+| `DDSORT` | `SUBROUTINE` | `A, B, N` | [`L1908`](source_parts/nswc_part_01.f90#L1908) |
+| `AORD` | `SUBROUTINE` | `A, N` | [`L1962`](source_parts/nswc_part_01.f90#L1962) |
+| `DAORD` | `SUBROUTINE` | `A, N` | [`L2013`](source_parts/nswc_part_01.f90#L2013) |
+| `QSORTI` | `SUBROUTINE` | `X, IND, N` | [`L2063`](source_parts/nswc_part_01.f90#L2063) |
+| `QSORTR` | `SUBROUTINE` | `X, IND, N` | [`L2263`](source_parts/nswc_part_01.f90#L2263) |
+| `QSORTD` | `SUBROUTINE` | `X, IND, N` | [`L2464`](source_parts/nswc_part_01.f90#L2464) |
+| `IORDER` | `SUBROUTINE` | `A, IP, N` | [`L2666`](source_parts/nswc_part_01.f90#L2666) |
+| `RORDER` | `SUBROUTINE` | `A, IP, N` | [`L2738`](source_parts/nswc_part_01.f90#L2738) |
+| `DORDER` | `SUBROUTINE` | `A, IP, N` | [`L2812`](source_parts/nswc_part_01.f90#L2812) |
 
 
 Let A be an array containing n > 1 elements aj, ...,a¢,. Then the following subroutines are available for reordering the elements of A.
@@ -601,8 +601,8 @@ Programmers. Robert Renka (Oak Ridge National Laboratory).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBRT` | `REAL FUNCTION` | `X` | [`L2816`](source_parts/nswc_part_01.f90#L2816) |
-| `DCBRT` | `DOUBLE PRECISION FUNCTION` | `X` | [`L2831`](source_parts/nswc_part_01.f90#L2831) |
+| `CBRT` | `REAL FUNCTION` | `X` | [`L2886`](source_parts/nswc_part_01.f90#L2886) |
+| `DCBRT` | `DOUBLE PRECISION FUNCTION` | `X` | [`L2904`](source_parts/nswc_part_01.f90#L2904) |
 
 
 The following functions are available for computing the real cube root of a real number.
@@ -622,8 +622,8 @@ CBRT is used if x is a single precision number, and DCBRT is used if x is a doub
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ARTNQ` | `FUNCTION` | `Y, X` | [`L2848`](source_parts/nswc_part_01.f90#L2848) |
-| `DARTNQ` | `DOUBLE PRECISION FUNCTION` | `Y, X` | [`L2866`](source_parts/nswc_part_01.f90#L2866) |
+| `ARTNQ` | `FUNCTION` | `Y, X` | [`L2922`](source_parts/nswc_part_01.f90#L2922) |
+| `DARTNQ` | `DOUBLE PRECISION FUNCTION` | `Y, X` | [`L2943`](source_parts/nswc_part_01.f90#L2943) |
 
 
 The function ARTNQ is similar to the ATAN2 function, the differences being that its value lies in the interval (0,27) and its value at the origin is 0. DARTNQ is the double precision counterpart of ARTNQ.
@@ -645,8 +645,8 @@ if (z,y) is a point in the plane other than the origin (0,0), let L denote the s
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPABS` | `REAL FUNCTION` | `X, Y` | [`L2885`](source_parts/nswc_part_01.f90#L2885) |
-| `DCPABS` | `DOUBLE PRECISION FUNCTION` | `X, Y` | [`L2901`](source_parts/nswc_part_01.f90#L2901) |
+| `CPABS` | `REAL FUNCTION` | `X, Y` | [`L2963`](source_parts/nswc_part_01.f90#L2963) |
+| `DCPABS` | `DOUBLE PRECISION FUNCTION` | `X, Y` | [`L2982`](source_parts/nswc_part_01.f90#L2982) |
 
 
 The following functions are available for computing the length of a real vector (2, y).
@@ -672,8 +672,8 @@ CPABS is used if x and y are single precision values, and DCPABS is used if a an
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CREC` | `SUBROUTINE` | `X, Y, U, V` | [`L2921`](source_parts/nswc_part_01.f90#L2921) |
-| `DCREC` | `SUBROUTINE` | `X, Y, U, V` | [`L2938`](source_parts/nswc_part_01.f90#L2938) |
+| `CREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3002`](source_parts/nswc_part_01.f90#L3002) |
+| `DCREC` | `SUBROUTINE` | `X, Y, U, V` | [`L3022`](source_parts/nswc_part_01.f90#L3022) |
 
 
 The following subroutines are available for computing the reciprocal of a complex number.
@@ -694,8 +694,8 @@ CREC is used if x and + are single precision real numbers and u and v real varia
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CDIV` | `COMPLEX FUNCTION` | `A, B` | [`L2958`](source_parts/nswc_part_01.f90#L2958) |
-| `CDIVID` | `SUBROUTINE` | `AR, AI, BR, BI, CR, CI` | [`L2984`](source_parts/nswc_part_01.f90#L2984) |
+| `CDIV` | `COMPLEX FUNCTION` | `A, B` | [`L3043`](source_parts/nswc_part_01.f90#L3043) |
+| `CDIVID` | `SUBROUTINE` | `AR, AI, BR, BI, CR, CI` | [`L3071`](source_parts/nswc_part_01.f90#L3071) |
 
 
 The function CDIV and subroutine CDIVID ave available for dividing complex numbers.
@@ -717,7 +717,7 @@ The arguments 2,,@2,6,,0) are double precision numbers, and u and v are double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCSQRT` | `SUBROUTINE` | `Z, W` | [`L3017`](source_parts/nswc_part_01.f90#L3017) |
+| `DCSQRT` | `SUBROUTINE` | `Z, W` | [`L3105`](source_parts/nswc_part_01.f90#L3105) |
 
 
 The following subroutine ts available for computing the square root of a double precision
@@ -747,7 +747,7 @@ Z and W are double precision arrays of dimension 2. It is assumed that Z(1) and 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `POCA` | `SUBROUTINE` | `R, A, X, Y` | [`L3064`](source_parts/nswc_part_01.f90#L3064) |
+| `POCA` | `SUBROUTINE` | `R, A, X, Y` | [`L3153`](source_parts/nswc_part_01.f90#L3153) |
 
 
 The following subroutine is available for converting polar coordinates {r, @) to cartesian coordinates (2, y).
@@ -765,7 +765,7 @@ Let (r,@) be the polar coordinates of a point in the plane and let +,y be variab
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CAPO` | `SUBROUTINE` | `X, Y, R, THETA` | [`L3070`](source_parts/nswc_part_01.f90#L3070) |
+| `CAPO` | `SUBROUTINE` | `X, Y, R, THETA` | [`L3161`](source_parts/nswc_part_01.f90#L3161) |
 
 
 The following subroutine is available for converting cartesian coordinates (zx, y) to polar coordinates (r, 8).
@@ -785,7 +785,7 @@ CAPO is called, r is assigned the value \/2? + y? and @ is defined to be the ang
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ROTA` | `SUBROUTINE` | `X1, Y1, A, X2, Y2` | [`L3086`](source_parts/nswc_part_01.f90#L3086) |
+| `ROTA` | `SUBROUTINE` | `X1, Y1, A, X2, Y2` | [`L3180`](source_parts/nswc_part_01.f90#L3180) |
 
 
 Let (r1,y1) be the (cartesian) coordinates for a point in the plane. The following subroutine computes the new coordinates (z2,y2) for the point after the z,y axes have been rotated py an angle @.
@@ -814,8 +814,8 @@ we in
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROTG` | `SUBROUTINE` | `SA, SB, SC, SS` | [`L3094`](source_parts/nswc_part_01.f90#L3094) |
-| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3170`](source_parts/nswc_part_01.f90#L3170) |
+| `SROTG` | `SUBROUTINE` | `SA, SB, SC, SS` | [`L3191`](source_parts/nswc_part_01.f90#L3191) |
+| `DROTG` | `SUBROUTINE` | `DA, DB, DC, DS` | [`L3267`](source_parts/nswc_part_01.f90#L3267) |
 
 
 If a and 6 are real numbers where a? + b? # 0, then there is an orthogonal matrix
@@ -865,7 +865,7 @@ When SROTG is used then AR, BZ, C, and S are real variables. Otherwise, when DRO
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3245`](source_parts/nswc_part_01.f90#L3245) |
+| `ROT3` | `SUBROUTINE` | `A, THETA` | [`L3342`](source_parts/nswc_part_01.f90#L3342) |
 
 
 if A = (a,;) is a 3 x 3 orthogonal matrix, then A can be represented in the form
@@ -909,7 +909,7 @@ and ay, tl.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3285`](source_parts/nswc_part_01.f90#L3285) |
+| `CONSTR` | `SUBROUTINE` | `XK, YK, ZK, CX, SX, CY, SY` | [`L3385`](source_parts/nswc_part_01.f90#L3385) |
 
 
 Given the point (x,y,z) where z? -+y? 42? = 1. Then there exist orthogonal matrices 1 0 0 cy 0 ~8, a= (6 Cy -s.] man = (4 i oO QO 8s, ey sy 0 fe
@@ -936,7 +936,7 @@ the values cz, 81,Cy, Sy.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3330`](source_parts/nswc_part_01.f90#L3330) |
+| `ANG` | `REAL FUNCTION` | `N, X, Y` | [`L3431`](source_parts/nswc_part_01.f90#L3431) |
 
 
 Given the points z = (r1, ...,2,) and y= (yi, ..., yn) where n > 2,40, andy 40. Let L, denote the straight line connecting 0 and x, and L, the straight line connecting 0 and y. Then the function ANG is available for computing the angle ¢ between the two lines Lz, and Ly.
@@ -961,10 +961,10 @@ X and ¥ are arrays of dimension n containing 21, ...,%, and yi, ..., yn. ANG(n,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SIN1` | `REAL FUNCTION` | `X` | [`L3391`](source_parts/nswc_part_01.f90#L3391) |
-| `COS1` | `REAL FUNCTION` | `X` | [`L3442`](source_parts/nswc_part_01.f90#L3442) |
-| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3493`](source_parts/nswc_part_01.f90#L3493) |
-| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3587`](source_parts/nswc_part_01.f90#L3587) |
+| `SIN1` | `REAL FUNCTION` | `X` | [`L3503`](source_parts/nswc_part_01.f90#L3503) |
+| `COS1` | `REAL FUNCTION` | `X` | [`L3559`](source_parts/nswc_part_01.f90#L3559) |
+| `DSIN1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3615`](source_parts/nswc_part_01.f90#L3615) |
+| `DCOS1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3712`](source_parts/nswc_part_01.f90#L3712) |
 
 
 The following functions are available for computing sin xz and cos wz for real ‘x. SIN1(z) SIN1{z) = sin wa for all real z. Algorithm. Minimax approximations are used for sinaz and cos mz when |a2| < 1/4. Precision. SIN1(z) is accurate to within 1 unit of the 14" significant digit when 0 < z < 1. Programming. SIN1 was written by A.H. Morris. The function IPMPAR is used. COS1(z) COS1(z) = cos wz for all real z. Algorithm. Minimax approximations are used for sinaz and cosmz when |x| < 1/4.
@@ -1018,7 +1018,7 @@ Algorithm. For |z| < 7/4, sin wz and cos wz are computed by the power series cor
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3681`](source_parts/nswc_part_01.f90#L3681) |
+| `SNHCSH` | `SUBROUTINE` | `SINHM, COSHM, X, ISW` | [`L3809`](source_parts/nswc_part_01.f90#L3809) |
 
 
 The following subroutine is available for computing sinh(z) — z, cosh(z) — 1, and cosh(z) — 1 — x? /2 for real z.
@@ -1053,8 +1053,8 @@ cosh(z) — 1 - x?/2 is computed then the value is stored in C.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `REXP` | `REAL FUNCTION` | `X` | [`L3837`](source_parts/nswc_part_01.f90#L3837) |
-| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3864`](source_parts/nswc_part_01.f90#L3864) |
+| `REXP` | `REAL FUNCTION` | `X` | [`L3967`](source_parts/nswc_part_01.f90#L3967) |
+| `DREXP` | `DOUBLE PRECISION FUNCTION` | `X` | [`L3994`](source_parts/nswc_part_01.f90#L3994) |
 
 
 The following functions compute $e^x-1$, including for arguments near zero,
@@ -1084,12 +1084,12 @@ Software* **12** (1986), 377-393.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ALNREL` | `REAL FUNCTION` | `A` | [`L4016`](source_parts/nswc_part_01.f90#L4016) |
-| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4042`](source_parts/nswc_part_01.f90#L4042) |
-| `RLOG` | `REAL FUNCTION` | `X` | [`L4094`](source_parts/nswc_part_01.f90#L4094) |
-| `RLOG1` | `REAL FUNCTION` | `X` | [`L4143`](source_parts/nswc_part_01.f90#L4143) |
-| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4195`](source_parts/nswc_part_01.f90#L4195) |
-| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4274`](source_parts/nswc_part_01.f90#L4274) |
+| `ALNREL` | `REAL FUNCTION` | `A` | [`L4150`](source_parts/nswc_part_01.f90#L4150) |
+| `DLNREL` | `DOUBLE PRECISION FUNCTION` | `A` | [`L4176`](source_parts/nswc_part_01.f90#L4176) |
+| `RLOG` | `REAL FUNCTION` | `X` | [`L4228`](source_parts/nswc_part_01.f90#L4228) |
+| `RLOG1` | `REAL FUNCTION` | `X` | [`L4280`](source_parts/nswc_part_01.f90#L4280) |
+| `DRLOG` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4332`](source_parts/nswc_part_01.f90#L4332) |
+| `DRLOG1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L4412`](source_parts/nswc_part_01.f90#L4412) |
 
 
 The functions ALNREL, RLOG, RLOG1, DLNREL, DRLOG, and DRLOG1 are available for computing In(1 + a), z — 1 — In(z), and a — In(1+ a). DLNREL, DRLOG, and DRLOG1 are double precision functions.
@@ -1162,7 +1162,7 @@ The argument a is a double precision number a > —i. DRLOG1(a) is the double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LOCPT` | `SUBROUTINE` | `X0, Y0, X, Y, N, L, M` | [`L4354`](source_parts/nswc_part_01.f90#L4354) |
+| `LOCPT` | `SUBROUTINE` | `X0, Y0, X, Y, N, L, M` | [`L4492`](source_parts/nswc_part_01.f90#L4492) |
 
 
 Given a sequence cf points »; = (v4, ys) (§ = 1,...,n). Let 7 denote the polygonal line which begins at point 1, traverses the points »; in the order that they are indexed, and is the straight line segment connecting 4, to u%41 for each ¢ = 1,...,n ~ 1. It is assumed that v, = v,, or that there is also a straight line segment from v, to vy when vy, F V4. Consequently, the polygonal path 7 is a loop beginning and ending at 11.
@@ -1197,7 +1197,7 @@ It is assumed that n > 1. X and Y are arrays containing z, ...,2n and y1,...,Yn-
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PFIND` | `SUBROUTINE` | `A, B, X, Y, N, U, V, M, NUM, IERR` | [`L4431`](source_parts/nswc_part_01.f90#L4431) |
+| `PFIND` | `SUBROUTINE` | `A, B, X, Y, N, U, V, M, NUM, IERR` | [`L4575`](source_parts/nswc_part_01.f90#L4575) |
 
 
 Given a sequence of points vy; = (2,,y;) (¢ = 1, ...,n). Let r denote the polygonal path which begins at point v,, traverses the points v,; in the order that they are indexed, and is the straight line segment from 4% to ¥;41 for each t = 1,...,2—1. Also consider a straight line 2 connecting two points (a1, a2) and (b;,62). If @ and r intersect at a finite number of points, then the following subroutine is available for obtaining the intersecting points.
@@ -1232,7 +1232,7 @@ path 7 intersect, and U and V contain the abscissas and ordinates of these point
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HULL` | `SUBROUTINE` | `X, Y, M, BX, BY, K, VX, VY, N` | [`L4590`](source_parts/nswc_part_01.f90#L4590) |
+| `HULL` | `SUBROUTINE` | `X, Y, M, BX, BY, K, VX, VY, N` | [`L4740`](source_parts/nswc_part_01.f90#L4740) |
 
 
 If (z1, 41), ..., (2m, ym) are m distinct points in the plane, then the following subroutine is available for finding the smallest convex polygon which with its interior contains the
@@ -1261,7 +1261,7 @@ counterclockwise manner. Also (2!, yl!) == (ci, yy’).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PAREA` | `REAL FUNCTION` | `X, Y, NB` | [`L4972`](source_parts/nswc_part_01.f90#L4972) |
+| `PAREA` | `REAL FUNCTION` | `X, Y, NB` | [`L5129`](source_parts/nswc_part_01.f90#L5129) |
 
 
 Given a sequence of points v; = (2, y;) (§ = 1,...,2+ 1) where n > 1 and ung) = 01. Let + denote the polygon whose boundary Or is a polygonal line which begins at point v1, traverses the points vy, in the order that they are indexed, and is the straight line segment connecting v; to u,41 fort = 1, ...,n. Then the function PAREA is available for computing A(r) = ff, dxdy. If the boundary @r is a positively (negatively) oriented simple closed curve, then A(r) is positive (negative) and |A(r)| = the ares. of r. However, Or need not be simple. It may be self-intersecting or have overlapping line segments.
@@ -1286,7 +1286,7 @@ variate Normal Distribution over Arbitrary Polygons, report TR 80-166, Naval Sur
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HC` | `SUBROUTINE` | `IND, M, N, PR, AR, NB, S, IWK, NUM` | [`L5009`](source_parts/nswc_part_01.f90#L5009) |
+| `HC` | `SUBROUTINE` | `IND, M, N, PR, AR, NB, S, IWK, NUM` | [`L5166`](source_parts/nswc_part_01.f90#L5166) |
 
 
 Given a directed graph G containing n vertices, denoted by the integers 1, ...,n. Then any circuit of n arcs which traverses the n vertices, say in the order 1), ...,%,, is called a Hamiltonian circuit. For convenience, it is assumed that for any two vertices ¢ and 7, no more than one arc exists which begins ai ¢ and ends at 7. Then the following subroutine is available for finding the Hamiltonian circuits of G, if any exist.
@@ -1385,16 +1385,16 @@ Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CERF` | `SUBROUTINE` | `MO, Z, W` | [`L5625`](source_parts/nswc_part_01.f90#L5625) |
-| `CERFC` | `SUBROUTINE` | `MO, Z, W` | [`L5777`](source_parts/nswc_part_01.f90#L5777) |
-| `ERF` | `REAL FUNCTION` | `X` | [`L5951`](source_parts/nswc_part_01.f90#L5951) |
-| `ERFC` | `REAL FUNCTION` | `X` | [`L6011`](source_parts/nswc_part_01.f90#L6011) |
-| `ERFC1` | `REAL FUNCTION` | `IND, X` | [`L6094`](source_parts/nswc_part_01.f90#L6094) |
-| `DCERF` | `SUBROUTINE` | `MO, Z, W` | [`L6191`](source_parts/nswc_part_01.f90#L6191) |
-| `DCERFC` | `SUBROUTINE` | `MO, Z, W` | [`L6469`](source_parts/nswc_part_01.f90#L6469) |
-| `DERF` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6889`](source_parts/nswc_part_01.f90#L6889) |
-| `DERFC` | `DOUBLE PRECISION FUNCTION` | `X` | [`L6948`](source_parts/nswc_part_01.f90#L6948) |
-| `DERFC1` | `DOUBLE PRECISION FUNCTION` | `IND, X` | [`L7013`](source_parts/nswc_part_01.f90#L7013) |
+| `CERF` | `SUBROUTINE` | `MO, Z, W` | [`L5805`](source_parts/nswc_part_01.f90#L5805) |
+| `CERFC` | `SUBROUTINE` | `MO, Z, W` | [`L5961`](source_parts/nswc_part_01.f90#L5961) |
+| `ERF` | `REAL FUNCTION` | `X` | [`L6140`](source_parts/nswc_part_01.f90#L6140) |
+| `ERFC` | `REAL FUNCTION` | `X` | [`L6203`](source_parts/nswc_part_01.f90#L6203) |
+| `ERFC1` | `REAL FUNCTION` | `IND, X` | [`L6290`](source_parts/nswc_part_01.f90#L6290) |
+| `DCERF` | `SUBROUTINE` | `MO, Z, W` | [`L6387`](source_parts/nswc_part_01.f90#L6387) |
+| `DCERFC` | `SUBROUTINE` | `MO, Z, W` | [`L6667`](source_parts/nswc_part_01.f90#L6667) |
+| `DERF` | `DOUBLE PRECISION FUNCTION` | `X` | [`L7092`](source_parts/nswc_part_01.f90#L7092) |
+| `DERFC` | `DOUBLE PRECISION FUNCTION` | `X` | [`L7151`](source_parts/nswc_part_01.f90#L7151) |
+| `DERFC1` | `DOUBLE PRECISION FUNCTION` | `IND, X` | [`L7216`](source_parts/nswc_part_01.f90#L7216) |
 
 
 For any complex z the error function is defined by
@@ -1589,8 +1589,8 @@ IND is an integer and z a double precision number. DERFC1{IND,z) is the double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ERFI` | `REAL FUNCTION` | `P, Q` | [`L7258`](source_parts/nswc_part_01.f90#L7258) |
-| `DERFI` | `DOUBLE PRECISION FUNCTION` | `P, Q` | [`L7376`](source_parts/nswc_part_01.f90#L7376) |
+| `ERFI` | `REAL FUNCTION` | `P, Q` | [`L7462`](source_parts/nswc_part_01.f90#L7462) |
+| `DERFI` | `DOUBLE PRECISION FUNCTION` | `P, Q` | [`L7584`](source_parts/nswc_part_01.f90#L7584) |
 
 
 For any 0 < x < 1, the following functions are available for obtaining the value w > 0 for which erf(w) = 2.
@@ -1643,8 +1643,8 @@ F(w)} es 4 erfe(w) - y if 3/4 <2 < 15/16 Inferfe(w)} --In(y) if 2 > 15/16.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `AERF` | `REAL FUNCTION` | `X, H` | [`L7539`](source_parts/nswc_part_01.f90#L7539) |
-| `DAERF` | `DOUBLE PRECISION FUNCTION` | `X, H` | [`L7661`](source_parts/nswc_part_01.f90#L7661) |
+| `AERF` | `REAL FUNCTION` | `X, H` | [`L7748`](source_parts/nswc_part_01.f90#L7748) |
+| `DAERF` | `DOUBLE PRECISION FUNCTION` | `X, H` | [`L7878`](source_parts/nswc_part_01.f90#L7878) |
 
 
 For any real x and h, let aerf(2,h) = erf(x+h) —erf(x~--h). Then the functions AERF and DAERF are available for computing aerf(z, A).
@@ -1679,7 +1679,7 @@ The arguments xz and h are double precision numbers. DAERF(z,h) is the double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PNDF` | `FUNCTION` | `X, IND` | [`L7789`](source_parts/nswc_part_01.f90#L7789) |
+| `PNDF` | `FUNCTION` | `X, IND` | [`L8008`](source_parts/nswc_part_01.f90#L8008) |
 
 
 Let $\Phi(x)$ be the standard normal cumulative distribution function,
@@ -1709,8 +1709,8 @@ The source implements these calculations with `ERFC1`.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7811`](source_parts/nswc_part_01.f90#L7811) |
-| `DPNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L7861`](source_parts/nswc_part_01.f90#L7861) |
+| `PNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L8036`](source_parts/nswc_part_01.f90#L8036) |
+| `DPNI` | `SUBROUTINE` | `P, Q, D, W, IERR` | [`L8092`](source_parts/nswc_part_01.f90#L8092) |
 
 
 For any real w, the normal probability distribution function P(w) (of mean 0 and variance 1) is defined by
@@ -1751,8 +1751,8 @@ are applied.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DAW` | `REAL FUNCTION` | `X` | [`L7915`](source_parts/nswc_part_01.f90#L7915) |
-| `DPDAW` | `DOUBLE PRECISION FUNCTION` | `X` | [`L8057`](source_parts/nswc_part_01.f90#L8057) |
+| `DAW` | `REAL FUNCTION` | `X` | [`L8148`](source_parts/nswc_part_01.f90#L8148) |
+| `DPDAW` | `DOUBLE PRECISION FUNCTION` | `X` | [`L8292`](source_parts/nswc_part_01.f90#L8292) |
 
 
 Dawson's integral is
@@ -1783,7 +1783,7 @@ Original documentation: [page 55](scans/page_0055.png).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8361`](source_parts/nswc_part_01.f90#L8361) |
+| `CFRNLI` | `SUBROUTINE` | `MO, Z, W` | [`L8599`](source_parts/nswc_part_01.f90#L8599) |
 
 
 For any complex z not on the positive real axis the complex Fresnel integral E(z) can be defined by 1 f? et E @) ocr ---a_s —= tt. (*) Vor J ~ 00 Jt Here it is assumed that 0 < arg{z) < 2m and arg(,/z) == 1/2 arg{z). E(z) can be extended to the positive real :.xis by letting 0 < arg(z) < 2". Then erf(z) = 1 — i/2 E(—2z?) for —«/2< arg(z) < «/2 where erf{z) ia the error function and arg(—z?) = 4 + 2 arg(z). The following subroutine 3 is available for computing E(z).
@@ -1824,7 +1824,7 @@ Reference. Hershey, A. V., Approximation of Functions by Sets of Poles, Report T
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FRNL` | `SUBROUTINE` | `T, C, S` | [`L8533`](source_parts/nswc_part_01.f90#L8533) |
+| `FRNL` | `SUBROUTINE` | `T, C, S` | [`L8777`](source_parts/nswc_part_01.f90#L8777) |
 
 
 For any complex z the Fresnel integrals C(z) and S(z) can be defined by Oz) =[ ccs (507) dt 0 2 / * x S(z) = [ sin (-t? | dt (z) I sin (F )
@@ -1859,10 +1859,10 @@ Here m= 5. If x < 0 then the relations C(--r) = —C(2) and S(—<) = --S(z) are
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEXPLI` | `SUBROUTINE` | `MO, Z, W` | [`L8748`](source_parts/nswc_part_01.f90#L8748) |
-| `EXPLI` | `SUBROUTINE` | `INT, ARG, RESULT, IERR` | [`L8930`](source_parts/nswc_part_01.f90#L8930) |
-| `DEI` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9263`](source_parts/nswc_part_01.f90#L9263) |
-| `DEI1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9275`](source_parts/nswc_part_01.f90#L9275) |
+| `CEXPLI` | `SUBROUTINE` | `MO, Z, W` | [`L8999`](source_parts/nswc_part_01.f90#L8999) |
+| `EXPLI` | `SUBROUTINE` | `INT, ARG, RESULT, IERR` | [`L9188`](source_parts/nswc_part_01.f90#L9188) |
+| `DEI` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9525`](source_parts/nswc_part_01.f90#L9525) |
+| `DEI1` | `DOUBLE PRECISION FUNCTION` | `X` | [`L9538`](source_parts/nswc_part_01.f90#L9538) |
 
 
 For any complex z # 0 not on the positive real axis the exponential integral function
@@ -1965,8 +1965,8 @@ DE!1(z) The argument 2 # 0 is a double precision number. DEIi(z) is the double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SI` | `FUNCTION` | `X` | [`L9851`](source_parts/nswc_part_01.f90#L9851) |
-| `CIN` | `FUNCTION` | `X` | [`L9966`](source_parts/nswc_part_01.f90#L9966) |
+| `SI` | `FUNCTION` | `X` | [`L10119`](source_parts/nswc_part_01.f90#L10119) |
+| `CIN` | `FUNCTION` | `X` | [`L10240`](source_parts/nswc_part_01.f90#L10240) |
 
 
 For any complex z the sine integral and cosine integral functions Si(z) and Cin(z) are
@@ -1999,7 +1999,7 @@ CIN(z) CIN(z) = Cin(z) for all real z.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEXEXI` | `SUBROUTINE` | `Z, W` | [`L10081`](source_parts/nswc_part_01.f90#L10081) |
+| `CEXEXI` | `SUBROUTINE` | `Z, W` | [`L10361`](source_parts/nswc_part_01.f90#L10361) |
 
 
 For any complex z # O not on the positive real axis, the exponential exponential integral function #Et{z) can be defined by
@@ -2030,8 +2030,8 @@ The argument z is a nonzero complex number and w is a complex variable. *When CE
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CLI` | `COMPLEX FUNCTION` | `Z` | [`L10312`](source_parts/nswc_part_01.f90#L10312) |
-| `ALI` | `REAL FUNCTION` | `X` | [`L10427`](source_parts/nswc_part_01.f90#L10427) |
+| `CLI` | `COMPLEX FUNCTION` | `Z` | [`L10595`](source_parts/nswc_part_02.f90#L1) |
+| `ALI` | `REAL FUNCTION` | `X` | [`L10713`](source_parts/nswc_part_02.f90#L119) |
 
 
 For any complex z where larg(1-+ z)}/ < #, the dilogarithm function L(z) may be defined by to t L{z) is real-valued fer any real z > —1, and -1 is a branch point. L(z) can be extended to
@@ -2091,12 +2091,12 @@ Re! L(t)] = --2?/3 — L(1/x) + 1/21n?(-2)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CGAMMA` | `SUBROUTINE` | `MO, Z, W` | [`L10582`](source_parts/nswc_part_02.f90#L1) |
-| `GAMMA` | `REAL FUNCTION` | `A` | [`L10849`](source_parts/nswc_part_02.f90#L268) |
-| `GAMLN` | `REAL FUNCTION` | `A` | [`L11144`](source_parts/nswc_part_02.f90#L563) |
-| `DCGAMA` | `SUBROUTINE` | `MO, Z, W` | [`L11224`](source_parts/nswc_part_02.f90#L643) |
-| `DGAMMA` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11494`](source_parts/nswc_part_02.f90#L913) |
-| `DGAMLN` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11803`](source_parts/nswc_part_02.f90#L1222) |
+| `CGAMMA` | `SUBROUTINE` | `MO, Z, W` | [`L10872`](source_parts/nswc_part_02.f90#L278) |
+| `GAMMA` | `REAL FUNCTION` | `A` | [`L11151`](source_parts/nswc_part_02.f90#L557) |
+| `GAMLN` | `REAL FUNCTION` | `A` | [`L11455`](source_parts/nswc_part_02.f90#L861) |
+| `DCGAMA` | `SUBROUTINE` | `MO, Z, W` | [`L11535`](source_parts/nswc_part_02.f90#L941) |
+| `DGAMMA` | `DOUBLE PRECISION FUNCTION` | `A` | [`L11809`](source_parts/nswc_part_02.f90#L1215) |
+| `DGAMLN` | `DOUBLE PRECISION FUNCTION` | `A` | [`L12120`](source_parts/nswc_part_02.f90#L1526) |
 
 
 For any complex z # 0,-—1,-2,... the gamma function can be defined by
@@ -2216,10 +2216,10 @@ The argument 2 is a double precision positive number. DGAMLN(z) is the double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPSI` | `SUBROUTINE` | `Z, W` | [`L11858`](source_parts/nswc_part_02.f90#L1277) |
-| `PSI` | `REAL FUNCTION` | `XX` | [`L11989`](source_parts/nswc_part_02.f90#L1408) |
-| `DCPSI` | `SUBROUTINE` | `Z, W` | [`L12167`](source_parts/nswc_part_02.f90#L1586) |
-| `DPSI` | `DOUBLE PRECISION FUNCTION` | `A` | [`L12338`](source_parts/nswc_part_02.f90#L1757) |
+| `CPSI` | `SUBROUTINE` | `Z, W` | [`L12175`](source_parts/nswc_part_02.f90#L1581) |
+| `PSI` | `REAL FUNCTION` | `XX` | [`L12313`](source_parts/nswc_part_02.f90#L1719) |
+| `DCPSI` | `SUBROUTINE` | `Z, W` | [`L12491`](source_parts/nswc_part_02.f90#L1897) |
+| `DPSI` | `DOUBLE PRECISION FUNCTION` | `A` | [`L12665`](source_parts/nswc_part_02.f90#L2071) |
 
 
 For any complex z # 0,—1,—2,... the digamma (or psi) function y(z) is defined by b(z) = I’(z)/T(z)
@@ -2293,7 +2293,7 @@ Remark DPSI must be declared in the calling program to be of type DOUBLE PRECISI
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSIDF` | `SUBROUTINE` | `X, N, M, ANS, IFLAG` | [`L12601`](source_parts/nswc_part_02.f90#L2020) |
+| `PSIDF` | `SUBROUTINE` | `X, N, M, ANS, IFLAG` | [`L12930`](source_parts/nswc_part_02.f90#L2336) |
 
 
 The following subroutine is available for computing the digamma function (zx) and its derivatives for real « > 0.
@@ -2343,10 +2343,10 @@ Reference Amos, D. E ,“Algorithm 610. A Portable Fortran Subroutine for Deriva
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GRATIO` | `SUBROUTINE` | `A, X, ANS, QANS, IND` | [`L13375`](source_parts/nswc_part_02.f90#L2794) |
-| `RCOMP` | `REAL FUNCTION` | `A, X` | [`L13794`](source_parts/nswc_part_02.f90#L3213) |
-| `DRCOMP` | `DOUBLE PRECISION FUNCTION` | `A, X` | [`L13823`](source_parts/nswc_part_02.f90#L3242) |
-| `DGRAT` | `SUBROUTINE` | `A, X, ANS, QANS, IERR` | [`L14177`](source_parts/nswc_part_02.f90#L3596) |
+| `GRATIO` | `SUBROUTINE` | `A, X, ANS, QANS, IND` | [`L13714`](source_parts/nswc_part_02.f90#L3120) |
+| `RCOMP` | `REAL FUNCTION` | `A, X` | [`L14147`](source_parts/nswc_part_02.f90#L3553) |
+| `DRCOMP` | `DOUBLE PRECISION FUNCTION` | `A, X` | [`L14182`](source_parts/nswc_part_02.f90#L3588) |
+| `DGRAT` | `SUBROUTINE` | `A, X, ANS, QANS, IERR` | [`L14549`](source_parts/nswc_part_02.f90#L3955) |
 
 
 For a > 0 and x > 0 let P(a,z) and Q(a,z) denote the functions defined by
@@ -2410,8 +2410,8 @@ The arguments a and x are double precision numbers where a > O and xz > 0. DRCOM
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GAMINV` | `SUBROUTINE` | `A, X, X0, P, Q, IERR` | [`L13853`](source_parts/nswc_part_02.f90#L3272) |
-| `DGINV` | `SUBROUTINE` | `A, X, P, Q, IERR` | [`L14852`](source_parts/nswc_part_02.f90#L4271) |
+| `GAMINV` | `SUBROUTINE` | `A, X, X0, P, Q, IERR` | [`L14213`](source_parts/nswc_part_02.f90#L3619) |
+| `DGINV` | `SUBROUTINE` | `A, X, P, Q, IERR` | [`L15229`](source_parts/nswc_part_02.f90#L4635) |
 
 
 For a > 0 and z > 0 let P(a,z) and Q(a,z) denote the incomplete gamma ratio functions defined by
@@ -2508,8 +2508,8 @@ accuracy. Iteration cannot be performed in this case. This can occur only when p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BETALN` | `REAL FUNCTION` | `A0, B0` | [`L12912`](source_parts/nswc_part_02.f90#L2331) |
-| `DBETLN` | `DOUBLE PRECISION FUNCTION` | `A0, B0` | [`L13122`](source_parts/nswc_part_02.f90#L2541) |
+| `BETALN` | `REAL FUNCTION` | `A0, B0` | [`L13244`](source_parts/nswc_part_02.f90#L2650) |
+| `DBETLN` | `DOUBLE PRECISION FUNCTION` | `A0, B0` | [`L13454`](source_parts/nswc_part_02.f90#L2860) |
 
 
 For a,b > 0 the beta function B(a,b) can be defined by
@@ -2552,9 +2552,9 @@ tation of the Incomplete Het. Function Ratios,” ACM Trans. Math Software 18 P�
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BRATIO` | `SUBROUTINE` | `A, B, X, Y, W, W1, IERR` | [`L15174`](source_parts/nswc_part_02.f90#L4593) |
-| `BRCOMP` | `REAL FUNCTION` | `A, B, X, Y` | [`L15689`](source_parts/nswc_part_02.f90#L5108) |
-| `ISUBX` | `SUBROUTINE` | `A0, B0, X0, P, IERR, EPS` | [`L16196`](source_parts/nswc_part_02.f90#L5615) |
+| `BRATIO` | `SUBROUTINE` | `A, B, X, Y, W, W1, IERR` | [`L15554`](source_parts/nswc_part_02.f90#L4960) |
+| `BRCOMP` | `REAL FUNCTION` | `A, B, X, Y` | [`L16069`](source_parts/nswc_part_02.f90#L5475) |
+| `ISUBX` | `SUBROUTINE` | `A0, B0, X0, P, IERR, EPS` | [`L16576`](source_parts/nswc_part_02.f90#L5982) |
 
 
 For a,b > 0 and O < x < 1 the incomplete beta function is defined by
@@ -2640,9 +2640,9 @@ tation of the Incomplete Beta Function Ratios.” ACM Trans. Math Software 18 (1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSSLJ` | `SUBROUTINE` | `Z, CNU, W` | [`L16568`](source_parts/nswc_part_02.f90#L5987) |
-| `BSSLJ` | `SUBROUTINE` | `A, IN, W` | [`L17188`](source_parts/nswc_part_02.f90#L6607) |
-| `BESJ` | `SUBROUTINE` | `X, ALPHA, N, Y, NZ` | [`L17493`](source_parts/nswc_part_02.f90#L6912) |
+| `CBSSLJ` | `SUBROUTINE` | `Z, CNU, W` | [`L16965`](source_parts/nswc_part_02.f90#L6371) |
+| `BSSLJ` | `SUBROUTINE` | `A, IN, W` | [`L17607`](source_parts/nswc_part_02.f90#L7013) |
+| `BESJ` | `SUBROUTINE` | `X, ALPHA, N, Y, NZ` | [`L17917`](source_parts/nswc_part_02.f90#L7323) |
 
 
 If vy is complex then J,(z)} is defined by
@@ -2716,7 +2716,7 @@ k> 0 The last k components of W have been set to 0 because of underflow,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L18750`](source_parts/nswc_part_02.f90#L8169) |
+| `BSSLY` | `SUBROUTINE` | `A, IN, W` | [`L19183`](source_parts/nswc_part_02.f90#L8589) |
 
 
 If » is any complex number not an integer, then Y,(z) can be defined by
@@ -2753,9 +2753,9 @@ The argument z is a complex number, n is an integer, and w is a complex variable
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L19061`](source_parts/nswc_part_02.f90#L8480) |
-| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L19092`](source_parts/nswc_part_02.f90#L8511) |
-| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L19417`](source_parts/nswc_part_02.f90#L8836) |
+| `CBSSLI` | `SUBROUTINE` | `Z, CNU, W` | [`L19499`](source_parts/nswc_part_02.f90#L8905) |
+| `BSSLI` | `SUBROUTINE` | `MO, A, IN, W` | [`L19535`](source_parts/nswc_part_02.f90#L8941) |
+| `BESI` | `SUBROUTINE` | `X, ALPHA, KODE, N, Y, NZ` | [`L19865`](source_parts/nswc_part_02.f90#L9271) |
 
 
 If v is complex then [,,(z) is defined by (z/2) yytek H(z) = 3 <kID(y +k +1)
@@ -2829,9 +2829,9 @@ k k k k k k
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L20008`](source_parts/nswc_part_02.f90#L9427) |
-| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L20527`](source_parts/nswc_part_02.f90#L9946) |
-| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L20917`](source_parts/nswc_part_02.f90#L10336) |
+| `CBESK` | `SUBROUTINE` | `Z, CNU, W` | [`L20458`](source_parts/nswc_part_02.f90#L9864) |
+| `CBSSLK` | `SUBROUTINE` | `Z, R, W` | [`L21006`](source_parts/nswc_part_02.f90#L10412) |
+| `BSSLK` | `SUBROUTINE` | `MO, A, IN, W` | [`L21425`](source_parts/nswc_part_03.f90#L297) |
 
 
 If v is any complex number not an integer, then K,{z) is defined by
@@ -2917,12 +2917,12 @@ MO is an integer, z a complex number, n an integer, and w a complex variable. It
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L21159`](source_parts/nswc_part_03.f90#L1) |
-| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L21491`](source_parts/nswc_part_03.f90#L333) |
-| `AI` | `REAL FUNCTION` | `X` | [`L22211`](source_parts/nswc_part_03.f90#L1053) |
-| `AIE` | `REAL FUNCTION` | `X` | [`L22304`](source_parts/nswc_part_03.f90#L1146) |
-| `BI` | `REAL FUNCTION` | `X` | [`L22401`](source_parts/nswc_part_03.f90#L1243) |
-| `BIE` | `REAL FUNCTION` | `X` | [`L22535`](source_parts/nswc_part_03.f90#L1377) |
+| `CAI` | `SUBROUTINE` | `IND, Z, AI, AIP, IERR` | [`L21672`](source_parts/nswc_part_03.f90#L544) |
+| `CBI` | `SUBROUTINE` | `IND, Z, BI, BIP, IERR` | [`L22022`](source_parts/nswc_part_03.f90#L894) |
+| `AI` | `REAL FUNCTION` | `X` | [`L22784`](source_parts/nswc_part_03.f90#L1656) |
+| `AIE` | `REAL FUNCTION` | `X` | [`L22887`](source_parts/nswc_part_03.f90#L1759) |
+| `BI` | `REAL FUNCTION` | `X` | [`L22992`](source_parts/nswc_part_03.f90#L1864) |
+| `BIE` | `REAL FUNCTION` | `X` | [`L23138`](source_parts/nswc_part_03.f90#L2010) |
 
 
 3
@@ -3042,8 +3042,8 @@ If zc > 0 then BIE(z) = e~$ Bi(z) where ¢ = 223/?. Otherwise, if x < 0 then BIE
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L22758`](source_parts/nswc_part_03.f90#L1600) |
-| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L23095`](source_parts/nswc_part_03.f90#L1937) |
+| `CK` | `COMPLEX FUNCTION` | `K, L` | [`L23380`](source_parts/nswc_part_03.f90#L2252) |
+| `CKE` | `SUBROUTINE` | `K, L, CK, CE, IERR` | [`L23732`](source_parts/nswc_part_03.f90#L2604) |
 
 
 If k is complex then the complete elliptic integrals of the first and second kinds can be defined by
@@ -3127,12 +3127,12 @@ arg(k) < —7/2, then K(k) = K(~k) and #(k) = E(--k) are applied.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23510`](source_parts/nswc_part_03.f90#L2352) |
-| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L23644`](source_parts/nswc_part_03.f90#L2486) |
-| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L23905`](source_parts/nswc_part_03.f90#L2747) |
-| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L24016`](source_parts/nswc_part_03.f90#L2858) |
-| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L24127`](source_parts/nswc_part_03.f90#L2969) |
-| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L24249`](source_parts/nswc_part_03.f90#L3091) |
+| `ELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L24165`](source_parts/nswc_part_03.f90#L3037) |
+| `DELLPI` | `SUBROUTINE` | `PHI, CPHI, K, L, F, E, IERR` | [`L24307`](source_parts/nswc_part_03.f90#L3179) |
+| `RFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L24574`](source_parts/nswc_part_03.f90#L3446) |
+| `DRFVAL` | `SUBROUTINE` | `X, Y, Z, RF, IERR` | [`L24686`](source_parts/nswc_part_03.f90#L3558) |
+| `RDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L24798`](source_parts/nswc_part_03.f90#L3670) |
+| `DRDVAL` | `SUBROUTINE` | `X, Y, Z, RD, IERR` | [`L24921`](source_parts/nswc_part_03.f90#L3793) |
 
 
 1°0 < $< w/2, then the elliptic integrals of the first and second kinds are defined by
@@ -3283,10 +3283,10 @@ IERR = 3 Either a, 6, or c is too large.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23784`](source_parts/nswc_part_03.f90#L2626) |
-| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L23844`](source_parts/nswc_part_03.f90#L2686) |
-| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24371`](source_parts/nswc_part_03.f90#L3213) |
-| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L24509`](source_parts/nswc_part_03.f90#L3351) |
+| `EPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L24449`](source_parts/nswc_part_03.f90#L3321) |
+| `DEPI` | `SUBROUTINE` | `PHI, CPHI, K2, L2, N, M, P, IERR` | [`L24511`](source_parts/nswc_part_03.f90#L3383) |
+| `RJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L25044`](source_parts/nswc_part_03.f90#L3916) |
+| `DRJVAL` | `SUBROUTINE` | `X, Y, Z, P, RJ, IERR` | [`L25183`](source_parts/nswc_part_03.f90#L4055) |
 
 
 For any 0 < ¢ < 1/2 the elliptic integral I{¢,n, x) is defined by ¢ II(¢,n,k) = / (1 — nsin? 6)~1(1 — k? sin? 6)~ 3d0 0
@@ -3392,8 +3392,8 @@ _ and Notis, E. M., “Algorithm 577,Algorithms for Incomplete Elliptic Integral
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L24841`](source_parts/nswc_part_03.f90#L3683) |
-| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L25128`](source_parts/nswc_part_03.f90#L3970) |
+| `ELLPF` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L25518`](source_parts/nswc_part_03.f90#L4390) |
+| `ELPFC1` | `SUBROUTINE` | `U, K, L, S, C, D, IERR` | [`L25829`](source_parts/nswc_part_03.f90#L4701) |
 
 
 For any complex number k # 0,+1 the elliptic function sn(z,#) may be defined as the meromorphic function w(z) that satisfies
@@ -3508,10 +3508,10 @@ SCDM, ELLPI, SNHCSH and functions ALNREL, CPABS, SPMPAR, IPMPAR. ELPFC1 was writ
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L25212`](source_parts/nswc_part_03.f90#L4054) |
-| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L25254`](source_parts/nswc_part_03.f90#L4096) |
-| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L25298`](source_parts/nswc_part_03.f90#L4140) |
-| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L25341`](source_parts/nswc_part_03.f90#L4183) |
+| `PEQ` | `SUBROUTINE` | `Z, W, IERR` | [`L25917`](source_parts/nswc_part_03.f90#L4789) |
+| `PEQ1` | `SUBROUTINE` | `Z, W, IERR` | [`L25960`](source_parts/nswc_part_03.f90#L4832) |
+| `PLEM` | `SUBROUTINE` | `Z, W, IERR` | [`L26005`](source_parts/nswc_part_03.f90#L4877) |
+| `PLEM1` | `SUBROUTINE` | `Z, W, IERR` | [`L26049`](source_parts/nswc_part_03.f90#L4921) |
 
 
 Lei w and w’ be complex numbers where Im(w’/w) > 0, and Wm, = 2mw + 2nw’ for all integers m,n. Then for any complex z, the Weierstrass elliptic function P(z;w,w') can be
@@ -3635,7 +3635,7 @@ niscatic Case,” Computing (Arch. Elektron. Rechnen) 18 (1977), pp. 341-349.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L25388`](source_parts/nswc_part_03.f90#L4230) |
+| `VALR2` | `SUBROUTINE` | `X, Y, N0, P, IOP, A, IND, KO` | [`L26097`](source_parts/nswc_part_03.f90#L4969) |
 
 
 Given a sequence of points », = (z,,y)(f = 1,...,n +1) where n > 3 and Vy41 = Vy. Let r denote the polygon whose boundary @r is a polygonal line which begins at point v1, traverses the points v, in the order that they are indexed, and is the straight line segment connecting v; to ¥;4, for each t = 1,...,n where y, 4 %41. Then the subroutine VALR2 is available for computing the integral
@@ -3715,7 +3715,7 @@ Jf dds g tal p* A(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L25664`](source_parts/nswc_part_03.f90#L4506) |
+| `CIRCV` | `SUBROUTINE` | `R, D, J, P, IERR` | [`L26383`](source_parts/nswc_part_03.f90#L5255) |
 
 
 The subroutine CIRCV is available for computing the circular coverage function P(R, d) and the generalized circular error function V(K,c). V is the integral of an uncorrelated elliptical Gaussian distribution with standard deviations o, and oy, over a circle of radius Ko, centered at the mean of the distribution. If o, > o, then
@@ -3793,7 +3793,7 @@ Weapons Laboratory, Dahlgren, Virginia, 62
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L26020`](source_parts/nswc_part_03.f90#L4862) |
+| `PKILL` | `SUBROUTINE` | `R0, SX, SY, H, K, P` | [`L26758`](source_parts/nswc_part_03.f90#L5630) |
 
 
 The subroutine PKILL is available for evaluating the integral of an uncorrelated elliptical Gaussian distribution over the area A of a circle (x — h)* + (y—k)? = R?. The probability to be computed is given by
@@ -3835,8 +3835,8 @@ R,o;,,0,,h,k are real numbers and P is a variable. Jt is assumed that R > 0, oz 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PLCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L26454`](source_parts/nswc_part_03.f90#L5296) |
-| `DPCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L26478`](source_parts/nswc_part_03.f90#L5320) |
+| `PLCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L27203`](source_parts/nswc_part_03.f90#L6075) |
+| `DPCOPY` | `SUBROUTINE` | `A, KA, M, B, KB, N` | [`L27230`](source_parts/nswc_part_03.f90#L6102) |
 
 
 m--1 . If p(x) = > a;2? and the coefficients a; are stored in an array A, then the following j=0 subroutines are available fer copying the first n coefficients a, into an array B.
@@ -3864,8 +3864,8 @@ Note If n>m then B(1+7-kb) = 0 for 7 > m.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26502`](source_parts/nswc_part_03.f90#L5344) |
-| `DPADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26522`](source_parts/nswc_part_03.f90#L5364) |
+| `PADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27257`](source_parts/nswc_part_03.f90#L6129) |
+| `DPADD` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27280`](source_parts/nswc_part_03.f90#L6152) |
 
 
 ```text
@@ -3898,8 +3898,8 @@ The arguments ¢,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26542`](source_parts/nswc_part_03.f90#L5384) |
-| `DPSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26562`](source_parts/nswc_part_03.f90#L5404) |
+| `PSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27303`](source_parts/nswc_part_03.f90#L6175) |
+| `DPSUBT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27326`](source_parts/nswc_part_03.f90#L6198) |
 
 
 £-1 m-- 1 : If p(z) = 33 a;: q{z) == 33 6,2? then the following subroutines are available for j=0 pd computing the first, ; ients of the polynomial p(x) ~ q(x) = 30, ¢;27. CALL PSU'S) ka, ¢, B, kb, m,C, ke, n) CALL DPSWUE I A, ka, é, Bj kb,m,C, ke, n) A, B and C are ari: PSUBT is used if A, B and C are real arrays and DPSUBT is used if A, B and C are! ble precision arrays. The arguments f, ka,kb,ke are positive integers. The coefficients a; and 6; are assumed to be stored nd B where A(l + 7+ka} (7 =0,1,...,8- 1) B(1 + 7-kb) (7 =0,1,...,m—1).
@@ -3923,8 +3923,8 @@ j=0,1,...,n-1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26582`](source_parts/nswc_part_03.f90#L5424) |
-| `DPMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L26619`](source_parts/nswc_part_03.f90#L5461) |
+| `PMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27349`](source_parts/nswc_part_03.f90#L6221) |
+| `DPMULT` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N` | [`L27389`](source_parts/nswc_part_03.f90#L6261) |
 
 
 t—1 : m—1 , If p(z) = 30 ayx? and g(x) = > 6,27 then the following subroutines are available for gr g=0
@@ -3954,8 +3954,8 @@ The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and b, 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L26656`](source_parts/nswc_part_03.f90#L5498) |
-| `DPDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L26709`](source_parts/nswc_part_03.f90#L5551) |
+| `PDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L27429`](source_parts/nswc_part_03.f90#L6301) |
+| `DPDIV` | `SUBROUTINE` | `A, KA, L, B, KB, M, C, KC, N, IERR` | [`L27486`](source_parts/nswc_part_03.f90#L6358) |
 
 
 ```text
@@ -3988,8 +3988,8 @@ The arguments £,m,n,ka,kb,ke are positive integers. The coefficients a; and 5; 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L26762`](source_parts/nswc_part_03.f90#L5604) |
-| `DPLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L26814`](source_parts/nswc_part_03.f90#L5656) |
+| `PLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L27542`](source_parts/nswc_part_03.f90#L6414) |
+| `DPLPWR` | `SUBROUTINE` | `R, A, KA, M, B, KB, N, IERR` | [`L27599`](source_parts/nswc_part_03.f90#L6471) |
 
 
 ```text
@@ -4027,8 +4027,8 @@ Consequently, 6; = = So (ri+a—- j)a,;b;_, is used for j > 1. Also bo = a}.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PINV` | `SUBROUTINE` | `A, D, N, Q` | [`L26865`](source_parts/nswc_part_03.f90#L5707) |
-| `DPINV` | `SUBROUTINE` | `A, D, N, Q` | [`L26921`](source_parts/nswc_part_03.f90#L5763) |
+| `PINV` | `SUBROUTINE` | `A, D, N, Q` | [`L27653`](source_parts/nswc_part_03.f90#L6525) |
+| `DPINV` | `SUBROUTINE` | `A, D, N, Q` | [`L27713`](source_parts/nswc_part_03.f90#L6585) |
 
 
 Given an analytic function w = f(z) = >> ayz* where f(0) =: 0. Then the inverse i>1 function z = f~!(w) exists when a; 4 0, and f~'(w) = 3 djw*. The subroutines PINV i>
@@ -4058,7 +4058,7 @@ WK is an array of dimension n(n + 1)/2 or larger. WK is a work space for the rou
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MPLNMV` | `SUBROUTINE` | `MO, AU, NC, AC, FV` | [`L26978`](source_parts/nswc_part_03.f90#L5820) |
+| `MPLNMV` | `SUBROUTINE` | `MO, AU, NC, AC, FV` | [`L27773`](source_parts/nswc_part_03.f90#L6645) |
 
 
 n--} . Let f(z) = 5) ayz* be a polynomial with real coefficients a,. The polynomial can be
@@ -4092,8 +4092,8 @@ Programmer, Allen V. Hershey.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSEVL` | `REAL FUNCTION` | `X, A, N` | [`L27031`](source_parts/nswc_part_03.f90#L5873) |
-| `DCSEVL` | `DOUBLE PRECISION FUNCTION` | `X, A, N` | [`L27055`](source_parts/nswc_part_03.f90#L5897) |
+| `CSEVL` | `REAL FUNCTION` | `X, A, N` | [`L27831`](source_parts/nswc_part_03.f90#L6703) |
+| `DCSEVL` | `DOUBLE PRECISION FUNCTION` | `X, A, N` | [`L27860`](source_parts/nswc_part_03.f90#L6732) |
 
 
 ```text
@@ -4131,9 +4131,9 @@ is the double precision value of f(z).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LGRNGN` | `SUBROUTINE` | `AU, NA, AN` | [`L27082`](source_parts/nswc_part_03.f90#L5924) |
-| `LGRNGV` | `SUBROUTINE` | `MO, NA, QU, AU, AN, FF, DF, SF` | [`L27103`](source_parts/nswc_part_03.f90#L5945) |
-| `LGRNGX` | `SUBROUTINE` | `AU, NA, AC` | [`L27210`](source_parts/nswc_part_03.f90#L6052) |
+| `LGRNGN` | `SUBROUTINE` | `AU, NA, AN` | [`L27887`](source_parts/nswc_part_03.f90#L6759) |
+| `LGRNGV` | `SUBROUTINE` | `MO, NA, QU, AU, AN, FF, DF, SF` | [`L27913`](source_parts/nswc_part_03.f90#L6785) |
+| `LGRNGX` | `SUBROUTINE` | `AU, NA, AC` | [`L28025`](source_parts/nswc_part_03.f90#L6897) |
 
 
 Let ay, ...,@n be n distinct real numbers. Then the t** Lagrange polynomial is defined by
@@ -4200,9 +4200,9 @@ g(x) = (2 — a1) +++ (2 - ay) are stored in the (n + 1)** column of C.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ORTHOS` | `SUBROUTINE` | `AU, MA, AA, NA, AR` | [`L27258`](source_parts/nswc_part_03.f90#L6100) |
-| `ORTHOV` | `SUBROUTINE` | `MO, NA, AU, AR, NF, FF, DF, SF` | [`L27336`](source_parts/nswc_part_03.f90#L6178) |
-| `ORTHOX` | `SUBROUTINE` | `NA, AR, NC, AC` | [`L27388`](source_parts/nswc_part_03.f90#L6230) |
+| `ORTHOS` | `SUBROUTINE` | `AU, MA, AA, NA, AR` | [`L28078`](source_parts/nswc_part_03.f90#L6950) |
+| `ORTHOV` | `SUBROUTINE` | `MO, NA, AU, AR, NF, FF, DF, SF` | [`L28161`](source_parts/nswc_part_03.f90#L7033) |
+| `ORTHOX` | `SUBROUTINE` | `NA, AR, NC, AC` | [`L28218`](source_parts/nswc_part_03.f90#L7090) |
 
 
 Let uz, ...,U, be n distinct real numbers. For any real-valued functions ‘,g defined
@@ -4266,8 +4266,8 @@ coefficients du,bo,ay, by, yn 2.4), pg and Coan array of dimension vs ra The pur
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ZEROIN` | `REAL FUNCTION` | `F, AX, BX, AERR, RERR` | [`L27427`](source_parts/nswc_part_03.f90#L6269) |
-| `DZERO` | `DOUBLE PRECISION FUNCTION` | `F, AX, BX, AERR, RERR` | [`L27550`](source_parts/nswc_part_03.f90#L6392) |
+| `ZEROIN` | `REAL FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28262`](source_parts/nswc_part_03.f90#L7134) |
+| `DZERO` | `DOUBLE PRECISION FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28386`](source_parts/nswc_part_03.f90#L7258) |
 
 
 Let F(z) be a continuous real-valued function defined for a < x < 6, and assume that F(a) and F(b) have opposite signs. Then the following functions are available for finding a point z in the interval {a, 6] for which F(z) = 0.
@@ -4329,7 +4329,7 @@ p52
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HBRD` | `SUBROUTINE` | `FCN, N, X, FVEC, EPSFCN, TOL, INFO, WA, LWA` | [`L27673`](source_parts/nswc_part_03.f90#L6515) |
+| `HBRD` | `SUBROUTINE` | `FCN, N, X, FVEC, EPSFCN, TOL, INFO, WA, LWA` | [`L28510`](source_parts/nswc_part_03.f90#L7382) |
 
 
 Let f,(z) = O (¢ = 1,...,n) denote a system of n equations in n unknowns where z = (z1,...,%,). Assume that each f,(z) is differentiable and that an initial guess a = (a1, ...,@,) to a solution of the equations is given. Then the following subroutine is available for solving the equations to within a specified tolerance.
@@ -4379,12 +4379,12 @@ Scaling. If the convergence criterion ||z — z|| < TOL- ||z|| is satisfied and 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QDCRT` | `SUBROUTINE` | `A, Z` | [`L28263`](source_parts/nswc_part_03.f90#L7105) |
-| `DQDCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L28321`](source_parts/nswc_part_03.f90#L7163) |
-| `CBCRT` | `SUBROUTINE` | `A, Z` | [`L28385`](source_parts/nswc_part_03.f90#L7227) |
-| `DCBCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L28580`](source_parts/nswc_part_03.f90#L7422) |
-| `QTCRT` | `SUBROUTINE` | `A, Z` | [`L28800`](source_parts/nswc_part_03.f90#L7642) |
-| `DQTCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L28948`](source_parts/nswc_part_03.f90#L7790) |
+| `QDCRT` | `SUBROUTINE` | `A, Z` | [`L29102`](source_parts/nswc_part_03.f90#L7974) |
+| `DQDCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29163`](source_parts/nswc_part_03.f90#L8035) |
+| `CBCRT` | `SUBROUTINE` | `A, Z` | [`L29228`](source_parts/nswc_part_03.f90#L8100) |
+| `DCBCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29429`](source_parts/nswc_part_03.f90#L8301) |
+| `QTCRT` | `SUBROUTINE` | `A, Z` | [`L29650`](source_parts/nswc_part_03.f90#L8522) |
+| `DQTCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29800`](source_parts/nswc_part_03.f90#L8672) |
 
 
 Given a polynomial ag + a)z +--+ 4,2" with real coefficients where a, # O and n = 2,3 or 4. The following subroutines are available for computing the roots 2, ...,2y of the polynomial.
@@ -4419,8 +4419,8 @@ it is assumed that A,ZR, and ZI are double precision arrays. DQDCRT is used if n
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DRPOLY` | `SUBROUTINE` | `OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK` | [`L29108`](source_parts/nswc_part_03.f90#L7950) |
-| `DCPOLY` | `SUBROUTINE` | `OPR, OPI, IDEG, ZEROR, ZEROI, NUM, WK` | [`L30049`](source_parts/nswc_part_03.f90#L8891) |
+| `DRPOLY` | `SUBROUTINE` | `OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK` | [`L29961`](source_parts/nswc_part_03.f90#L8833) |
+| `DCPOLY` | `SUBROUTINE` | `OPR, OPI, IDEG, ZEROR, ZEROI, NUM, WK` | [`L30902`](source_parts/nswc_part_03.f90#L9774) |
 
 
 Given a polynomial ag + ayz-++-+- + a,2" of degree n > 1. The subroutines DRPOLY and DCPOLY are available for obtaining the roots z,, ...,2, of the polynomial. DRPOLY may be used if the coefficients a; are real, and DCPOLY is applicable if the coefficients are complex. These subroutines perform the calculations in double precision.
@@ -4476,8 +4476,8 @@ DWK is a double precision array of dimension 10(n + £) or larger that is a work
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L30700`](source_parts/nswc_part_03.f90#L9542) |
-| `CBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L30848`](source_parts/nswc_part_03.f90#L9690) |
+| `RBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L31553`](source_parts/nswc_part_03.f90#L10425) |
+| `CBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L31707`](source_parts/nswc_part_04.f90#L1) |
 
 
 Let z1,...,2, be approximations for the roots of a real or complex polynomial p(z) = Ap +a,z4+---+a,2" of degree n > 1. Then for each z,, the subroutines RBND and CBND obtain the radius 7; of a disk D; = {z : |z — %| < ri} centered at z; which contains a true zero of the polynomial. The radius r, is an upper bound on the absolute error of the approximation 2,.
@@ -4514,9 +4514,9 @@ RERR is a real array of dimension n or larger. If z; = O then RERR{t) is set to 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCOPY` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L30996`](source_parts/nswc_part_03.f90#L9838) |
-| `DCOPY` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L31047`](source_parts/nswc_part_03.f90#L9889) |
-| `CCOPY` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L31098`](source_parts/nswc_part_03.f90#L9940) |
+| `SCOPY` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L31861`](source_parts/nswc_part_04.f90#L155) |
+| `DCOPY` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L31912`](source_parts/nswc_part_04.f90#L206) |
+| `CCOPY` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L31963`](source_parts/nswc_part_04.f90#L257) |
 
 
 A copy of a vector X = (a1, ...,2,) can be made and stored in the array Y by the following subroutines:
@@ -4547,9 +4547,9 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSWAP` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L31217`](source_parts/nswc_part_03.f90#L10059) |
-| `DSWAP` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L31274`](source_parts/nswc_part_03.f90#L10116) |
-| `CSWAP` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L31331`](source_parts/nswc_part_03.f90#L10173) |
+| `SSWAP` | `SUBROUTINE` | `N, SX, INCX, SY, INCY` | [`L32085`](source_parts/nswc_part_04.f90#L379) |
+| `DSWAP` | `SUBROUTINE` | `N, DX, INCX, DY, INCY` | [`L32142`](source_parts/nswc_part_04.f90#L436) |
+| `CSWAP` | `SUBROUTINE` | `N, CX, INCX, CY, INCY` | [`L32199`](source_parts/nswc_part_04.f90#L493) |
 
 
 The components of two vectors X = (x1, ...,2n) and Y = (yi, ..., yn) can be interchanged by the following subroutines:
@@ -4580,9 +4580,9 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROT` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, C, S` | [`L31368`](source_parts/nswc_part_03.f90#L10210) |
-| `DROT` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, C, S` | [`L31406`](source_parts/nswc_part_03.f90#L10248) |
-| `CSROT` | `SUBROUTINE` | `N, CX, INCX, CY, INCY, C, S` | [`L31444`](source_parts/nswc_part_03.f90#L10286) |
+| `SROT` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, C, S` | [`L32236`](source_parts/nswc_part_04.f90#L530) |
+| `DROT` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, C, S` | [`L32274`](source_parts/nswc_part_04.f90#L568) |
+| `CSROT` | `SUBROUTINE` | `N, CX, INCX, CY, INCY, C, S` | [`L32312`](source_parts/nswc_part_04.f90#L606) |
 
 
 Let X = (21,...,2n) and Y = (y1, ...,yn) be vectors and ec and ¢ be real numbers such that c? +e? = 1. X and Y can be replaced with cX + sY and —sX + cY by the following subroutines:
@@ -4615,10 +4615,10 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SROTMG` | `SUBROUTINE` | `SD1, SD2, SX1, SY1, SPARAM` | [`L31484`](source_parts/nswc_part_03.f90#L10326) |
-| `SROTM` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, SPARAM` | [`L31635`](source_parts/nswc_part_03.f90#L10477) |
-| `DROTMG` | `SUBROUTINE` | `DD1, DD2, DX1, DY1, DPARAM` | [`L31748`](source_parts/nswc_part_04.f90#L1) |
-| `DROTM` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, DPARAM` | [`L31898`](source_parts/nswc_part_04.f90#L151) |
+| `SROTMG` | `SUBROUTINE` | `SD1, SD2, SX1, SY1, SPARAM` | [`L32352`](source_parts/nswc_part_04.f90#L646) |
+| `SROTM` | `SUBROUTINE` | `N, SX, INCX, SY, INCY, SPARAM` | [`L32503`](source_parts/nswc_part_04.f90#L797) |
+| `DROTMG` | `SUBROUTINE` | `DD1, DD2, DX1, DY1, DPARAM` | [`L32616`](source_parts/nswc_part_04.f90#L910) |
+| `DROTM` | `SUBROUTINE` | `N, DX, INCX, DY, INCY, DPARAM` | [`L32767`](source_parts/nswc_part_04.f90#L1061) |
 
 
 If a; and ag are real numbers where r* = a? + a? #% 0, then there is an orthogonal
@@ -4715,10 +4715,10 @@ tee)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SDOT` | `REAL FUNCTION` | `N, SX, INCX, SY, INCY` | [`L32008`](source_parts/nswc_part_04.f90#L261) |
-| `DDOT` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX, DY, INCY` | [`L32058`](source_parts/nswc_part_04.f90#L311) |
-| `CDOTC` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L32108`](source_parts/nswc_part_04.f90#L361) |
-| `CDOTU` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L32147`](source_parts/nswc_part_04.f90#L400) |
+| `SDOT` | `REAL FUNCTION` | `N, SX, INCX, SY, INCY` | [`L32880`](source_parts/nswc_part_04.f90#L1174) |
+| `DDOT` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX, DY, INCY` | [`L32930`](source_parts/nswc_part_04.f90#L1224) |
+| `CDOTC` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L32980`](source_parts/nswc_part_04.f90#L1274) |
+| `CDOTU` | `COMPLEX FUNCTION` | `N, CX, INCX, CY, INCY` | [`L33019`](source_parts/nswc_part_04.f90#L1313) |
 
 
 The following functions are available for computing the sums >>, 2,y; and 30. Z.iys where X = (21,...,%n) and Y = {y), ..., Yn) are real or complex vectors.
@@ -4751,10 +4751,10 @@ nm the value 5” z,y, and CDOTU (n, X,kz,Y, ky) is assigned the value >7 2,y.. 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSCAL` | `SUBROUTINE` | `N, SA, SX, INCX` | [`L32184`](source_parts/nswc_part_04.f90#L437) |
-| `DSCAL` | `SUBROUTINE` | `N, DA, DX, INCX` | [`L32227`](source_parts/nswc_part_04.f90#L480) |
-| `CSCAL` | `SUBROUTINE` | `N, CA, CX, INCX` | [`L32270`](source_parts/nswc_part_04.f90#L523) |
-| `CSSCAL` | `SUBROUTINE` | `N, SA, CX, INCX` | [`L32298`](source_parts/nswc_part_04.f90#L551) |
+| `SSCAL` | `SUBROUTINE` | `N, SA, SX, INCX` | [`L33057`](source_parts/nswc_part_04.f90#L1351) |
+| `DSCAL` | `SUBROUTINE` | `N, DA, DX, INCX` | [`L33100`](source_parts/nswc_part_04.f90#L1394) |
+| `CSCAL` | `SUBROUTINE` | `N, CA, CX, INCX` | [`L33143`](source_parts/nswc_part_04.f90#L1437) |
+| `CSSCAL` | `SUBROUTINE` | `N, SA, CX, INCX` | [`L33171`](source_parts/nswc_part_04.f90#L1465) |
 
 
 If a is a real or complex number and X = (x1, ...,2,) a vector, then the vector X can be replaced with the vector aX by the following subroutines:
@@ -4784,9 +4784,9 @@ SSCAL is used if @ is a real number and X a real array, DSCAL is used if « is a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SAXPY` | `SUBROUTINE` | `N, SA, SX, INCX, SY, INCY` | [`L32327`](source_parts/nswc_part_04.f90#L580) |
-| `DAXPY` | `SUBROUTINE` | `N, DA, DX, INCX, DY, INCY` | [`L32376`](source_parts/nswc_part_04.f90#L629) |
-| `CAXPY` | `SUBROUTINE` | `N, CA, CX, INCX, CY, INCY` | [`L32425`](source_parts/nswc_part_04.f90#L678) |
+| `SAXPY` | `SUBROUTINE` | `N, SA, SX, INCX, SY, INCY` | [`L33200`](source_parts/nswc_part_04.f90#L1494) |
+| `DAXPY` | `SUBROUTINE` | `N, DA, DX, INCX, DY, INCY` | [`L33249`](source_parts/nswc_part_04.f90#L1543) |
+| `CAXPY` | `SUBROUTINE` | `N, CA, CX, INCX, CY, INCY` | [`L33298`](source_parts/nswc_part_04.f90#L1592) |
 
 
 ```text
@@ -4818,9 +4818,9 @@ SAXPY ‘s used if 418 a real number aid X, Y are real arrays, DAXPY is used if 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SASUM` | `REAL FUNCTION` | `N, SX, INCX` | [`L32460`](source_parts/nswc_part_04.f90#L713) |
-| `DASUM` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L32504`](source_parts/nswc_part_04.f90#L757) |
-| `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L32547`](source_parts/nswc_part_04.f90#L800) |
+| `SASUM` | `REAL FUNCTION` | `N, SX, INCX` | [`L33333`](source_parts/nswc_part_04.f90#L1627) |
+| `DASUM` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L33377`](source_parts/nswc_part_04.f90#L1671) |
+| `SCASUM` | `REAL FUNCTION` | `N, CX, INCX` | [`L33420`](source_parts/nswc_part_04.f90#L1714) |
 
 
 The following functions are available for computing the 2; norm of a real vector or a modified LZ, norm of a complex vector.
@@ -4852,9 +4852,9 @@ t=1 Remarks. (1) DASUM must be declared in the calling program to be of type DOU
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNRM2` | `REAL FUNCTION` | `N, SX, INCX` | [`L32581`](source_parts/nswc_part_04.f90#L834) |
-| `DNRM2` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L32707`](source_parts/nswc_part_04.f90#L960) |
-| `SCNRM2` | `REAL FUNCTION` | `N, CX, INCX` | [`L32833`](source_parts/nswc_part_04.f90#L1086) |
+| `SNRM2` | `REAL FUNCTION` | `N, SX, INCX` | [`L33454`](source_parts/nswc_part_04.f90#L1748) |
+| `DNRM2` | `DOUBLE PRECISION FUNCTION` | `N, DX, INCX` | [`L33580`](source_parts/nswc_part_04.f90#L1874) |
+| `SCNRM2` | `REAL FUNCTION` | `N, CX, INCX` | [`L33706`](source_parts/nswc_part_04.f90#L2000) |
 
 
 The following functions are available for computing the Zz norm of a real or complex vector.
@@ -4890,9 +4890,9 @@ L79
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ISAMAX` | `INTEGER FUNCTION` | `N, SX, INCX` | [`L32968`](source_parts/nswc_part_04.f90#L1221) |
-| `IDAMAX` | `INTEGER FUNCTION` | `N, DX, INCX` | [`L33007`](source_parts/nswc_part_04.f90#L1260) |
-| `ICAMAX` | `INTEGER FUNCTION` | `N, CX, INCX` | [`L33046`](source_parts/nswc_part_04.f90#L1299) |
+| `ISAMAX` | `INTEGER FUNCTION` | `N, SX, INCX` | [`L33841`](source_parts/nswc_part_04.f90#L2135) |
+| `IDAMAX` | `INTEGER FUNCTION` | `N, DX, INCX` | [`L33880`](source_parts/nswc_part_04.f90#L2174) |
+| `ICAMAX` | `INTEGER FUNCTION` | `N, CX, INCX` | [`L33919`](source_parts/nswc_part_04.f90#L2213) |
 
 
 The following functions are available for finding the largest component z, of a vector X = (r1,...,2n).
@@ -4928,10 +4928,10 @@ ear Algebra Subprograms for FORTRAN Usage,” ACM Trans. Math Software 5 (1979),
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L33089`](source_parts/nswc_part_04.f90#L1342) |
-| `DMCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L33104`](source_parts/nswc_part_04.f90#L1357) |
-| `MCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L33119`](source_parts/nswc_part_04.f90#L1372) |
-| `DMCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L33146`](source_parts/nswc_part_04.f90#L1399) |
+| `MCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L33962`](source_parts/nswc_part_04.f90#L2256) |
+| `DMCVFS` | `SUBROUTINE` | `A, KA, N, B` | [`L33977`](source_parts/nswc_part_04.f90#L2271) |
+| `MCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L33992`](source_parts/nswc_part_04.f90#L2286) |
+| `DMCVSF` | `SUBROUTINE` | `A, KA, N, B` | [`L34019`](source_parts/nswc_part_04.f90#L2313) |
 
 
 Ann Xn symmetric matrix A = (a,;) can be represented by either its lower triangular elements 411 412 G13 G21 @22 423 S3i_432_ 233
@@ -4970,8 +4970,8 @@ B is an array containing the elements of a packed n x n symmetric matrix and A i
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVRD` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33173`](source_parts/nswc_part_04.f90#L1426) |
-| `MCVDR` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33187`](source_parts/nswc_part_04.f90#L1440) |
+| `MCVRD` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34046`](source_parts/nswc_part_04.f90#L2340) |
+| `MCVDR` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34060`](source_parts/nswc_part_04.f90#L2354) |
 
 
 The subroutines MCVRD and MCVDR are available for converting real matrices to and from double precision form.
@@ -5010,7 +5010,7 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVRC` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33201`](source_parts/nswc_part_04.f90#L1454) |
+| `MCVRC` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34074`](source_parts/nswc_part_04.f90#L2368) |
 
 
 The following subroutine is available for storing a real matrix A in the complex matrix format.
@@ -5037,8 +5037,8 @@ kb == the number of rows in the dimension statement for B in the calling program
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMREAL` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33215`](source_parts/nswc_part_04.f90#L1468) |
-| `CMIMAG` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33229`](source_parts/nswc_part_04.f90#L1482) |
+| `CMREAL` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34088`](source_parts/nswc_part_04.f90#L2382) |
+| `CMIMAG` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34102`](source_parts/nswc_part_04.f90#L2396) |
 
 
 if A = (a,j) is a complex matrix then let Re(A) = (Re(a,,)) and Im(A) = (In(a,,)) denote the real and imaginary parts of A. The following subroutines are available for obtaining Re(A) and Im(A).
@@ -5077,10 +5077,10 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33243`](source_parts/nswc_part_04.f90#L1496) |
-| `SMCOPY` | `SUBROUTINE` | `N, A, B` | [`L33256`](source_parts/nswc_part_04.f90#L1509) |
-| `DMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33268`](source_parts/nswc_part_04.f90#L1521) |
-| `CMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33281`](source_parts/nswc_part_04.f90#L1534) |
+| `MCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34116`](source_parts/nswc_part_04.f90#L2410) |
+| `SMCOPY` | `SUBROUTINE` | `N, A, B` | [`L34129`](source_parts/nswc_part_04.f90#L2423) |
+| `DMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34141`](source_parts/nswc_part_04.f90#L2435) |
+| `CMCOPY` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34154`](source_parts/nswc_part_04.f90#L2448) |
 
 
 ‘The following subroutines are available for copying matrices.
@@ -5137,7 +5137,7 @@ kb = the number of rows in the dimension statement for B in the calling program 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMCONJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33294`](source_parts/nswc_part_04.f90#L1547) |
+| `CMCONJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34167`](source_parts/nswc_part_04.f90#L2461) |
 
 
 If A = (a,;) ig a complex matrix then let A = (a,;) denote the conjugate of A. The following subroutine is available for computing the conjugate matrix A: CALL CMCONJ(m,n, A, ka, B, kb}
@@ -5158,12 +5158,12 @@ Ais a complex mxn matrix and B a complex 2-dimensional array. CMCONJ computes A 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33307`](source_parts/nswc_part_04.f90#L1560) |
-| `DTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33320`](source_parts/nswc_part_04.f90#L1573) |
-| `CTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33333`](source_parts/nswc_part_04.f90#L1586) |
-| `TIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L33346`](source_parts/nswc_part_04.f90#L1599) |
-| `DTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L33459`](source_parts/nswc_part_04.f90#L1712) |
-| `CTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L33572`](source_parts/nswc_part_04.f90#L1825) |
+| `TPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34180`](source_parts/nswc_part_04.f90#L2474) |
+| `DTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34193`](source_parts/nswc_part_04.f90#L2487) |
+| `CTPOSE` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34206`](source_parts/nswc_part_04.f90#L2500) |
+| `TIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L34219`](source_parts/nswc_part_04.f90#L2513) |
+| `DTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L34332`](source_parts/nswc_part_04.f90#L2626) |
+| `CTIP` | `SUBROUTINE` | `A, N1, N2, MOVED, NWORK, NDIM` | [`L34445`](source_parts/nswc_part_04.f90#L2739) |
 
 
 The subroutines TPOSE, DTPOSE, C £POSE and TIP, DTIP, CTIP are available for transposing a matrix A. TPOSE, DTPOSE, and CTPOSE are used if the results are to be stored in a separate storage area B. TIP, DTIP, and CTIP are used if the results are to be stored in A (i.e., if the transposition is to be done in place).
@@ -5219,8 +5219,8 @@ LOG
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMADJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L33729`](source_parts/nswc_part_04.f90#L1982) |
-| `CTRANS` | `SUBROUTINE` | `NM, N, A` | [`L33742`](source_parts/nswc_part_04.f90#L1995) |
+| `CMADJ` | `SUBROUTINE` | `M, N, A, KA, B, KB` | [`L34602`](source_parts/nswc_part_04.f90#L2896) |
+| `CTRANS` | `SUBROUTINE` | `NM, N, A` | [`L34615`](source_parts/nswc_part_04.f90#L2909) |
 
 
 If A = (a,;) then let A* = (a,;) denote the adjoint of A. The following subroutines are available for computing A”*.
@@ -5251,10 +5251,10 @@ A is a complex array of dimension ka xn which contains an n xX n matrix. CTRANS 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33777`](source_parts/nswc_part_04.f90#L2030) |
-| `DMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33794`](source_parts/nswc_part_04.f90#L2047) |
-| `CMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33811`](source_parts/nswc_part_04.f90#L2064) |
-| `SMADD` | `SUBROUTINE` | `N, A, B, C` | [`L33828`](source_parts/nswc_part_04.f90#L2081) |
+| `MADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34650`](source_parts/nswc_part_04.f90#L2944) |
+| `DMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34667`](source_parts/nswc_part_04.f90#L2961) |
+| `CMADD` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34684`](source_parts/nswc_part_04.f90#L2978) |
+| `SMADD` | `SUBROUTINE` | `N, A, B, C` | [`L34701`](source_parts/nswc_part_04.f90#L2995) |
 
 
 The matrix sum C = A+ B can be computed by the following subroutines: CALL MADD(ta,n, A, ka, B, kb, C, kc)
@@ -5310,10 +5310,10 @@ Programmer. A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33839`](source_parts/nswc_part_04.f90#L2092) |
-| `DMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33856`](source_parts/nswc_part_04.f90#L2109) |
-| `CMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L33873`](source_parts/nswc_part_04.f90#L2126) |
-| `SMSUBT` | `SUBROUTINE` | `N, A, B, C` | [`L33890`](source_parts/nswc_part_04.f90#L2143) |
+| `MSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34712`](source_parts/nswc_part_04.f90#L3006) |
+| `DMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34729`](source_parts/nswc_part_04.f90#L3023) |
+| `CMSUBT` | `SUBROUTINE` | `M, N, A, KA, B, KB, C, KC` | [`L34746`](source_parts/nswc_part_04.f90#L3040) |
+| `SMSUBT` | `SUBROUTINE` | `N, A, B, C` | [`L34763`](source_parts/nswc_part_04.f90#L3057) |
 
 
 The matrix difference C = A - B can be computed by the following subroutines: CALL MSUBT (m,n, A, ke, B, ke, C, ke)
@@ -5373,12 +5373,12 @@ Programmer. A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L33901`](source_parts/nswc_part_04.f90#L2154) |
-| `DMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L33923`](source_parts/nswc_part_04.f90#L2176) |
-| `CMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L33944`](source_parts/nswc_part_04.f90#L2197) |
-| `MPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L33965`](source_parts/nswc_part_04.f90#L2218) |
-| `DMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L34065`](source_parts/nswc_part_04.f90#L2318) |
-| `CMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L34161`](source_parts/nswc_part_04.f90#L2414) |
+| `MTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L34774`](source_parts/nswc_part_04.f90#L3068) |
+| `DMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L34796`](source_parts/nswc_part_04.f90#L3090) |
+| `CMTMS` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L34817`](source_parts/nswc_part_04.f90#L3111) |
+| `MPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L34838`](source_parts/nswc_part_04.f90#L3132) |
+| `DMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L34938`](source_parts/nswc_part_04.f90#L3232) |
+| `CMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC, ROW` | [`L35034`](source_parts/nswc_part_04.f90#L3328) |
 
 
 The matrix product C -= AB may be computed by the subroutines MTMS, DMTMS, CMTMS cor MPROD, DMPROD, CMPROD. MTMS, DMTMS, and CMTMS can be used if the storage area for C does not overlap with the storage areas for A and 8. Otherwise, if the components of C are to be stored in the storage area for A or B, then MPROD, DMPROD, or CMPROD must be used.
@@ -5440,8 +5440,8 @@ the subroutines DLOC and DYCHG, and CMPROD employs the subroutines CLOC and CYCH
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L34259`](source_parts/nswc_part_04.f90#L2512) |
-| `DSVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L34284`](source_parts/nswc_part_04.f90#L2537) |
+| `SVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L35132`](source_parts/nswc_part_04.f90#L3426) |
+| `DSVPRD` | `SUBROUTINE` | `A, N, X, Y` | [`L35157`](source_parts/nswc_part_04.f90#L3451) |
 
 
 Let A denote a packed symmetric matrix of order n and x a column vector of dimension vn where n > 1. Then the following subroutines are available for computing the product Az.
@@ -5465,7 +5465,7 @@ The argument y is an array of dimension n. SVPRD is called when A,z,y are real a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L34309`](source_parts/nswc_part_04.f90#L2562) |
+| `TMPROD` | `SUBROUTINE` | `M, N, L, A, KA, B, KB, C, KC` | [`L35182`](source_parts/nswc_part_04.f90#L3476) |
 
 
 If At denotes the transpose of A, then the matrix product C =: AtB can be computed by the following subroutine:
@@ -5498,7 +5498,7 @@ in single precision.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMPROD` | `SUBROUTINE` | `M, N, A, KA, B` | [`L34325`](source_parts/nswc_part_04.f90#L2578) |
+| `SMPROD` | `SUBROUTINE` | `M, N, A, KA, B` | [`L35198`](source_parts/nswc_part_04.f90#L3492) |
 
 
 If A’ denotes the transpose of A, then the matrix product A&A can be computed and its packed form stored in the array B by the following subroutine:
@@ -5527,9 +5527,9 @@ in single precision.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L34343`](source_parts/nswc_part_04.f90#L2596) |
-| `DKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L34372`](source_parts/nswc_part_04.f90#L2625) |
-| `CKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L34401`](source_parts/nswc_part_04.f90#L2654) |
+| `KPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L35216`](source_parts/nswc_part_04.f90#L3510) |
+| `DKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L35245`](source_parts/nswc_part_04.f90#L3539) |
+| `CKPROD` | `SUBROUTINE` | `A, KA, M, N, B, KB, K, L, C, KC` | [`L35274`](source_parts/nswc_part_04.f90#L3568) |
 
 
 If Ais anm xn matrix and Bak « @ matrix, then the Kronecker product A ® 8 is
@@ -5574,8 +5574,8 @@ The arguments ka, kb, and ke have the following values: ka = the number of rows 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L34430`](source_parts/nswc_part_04.f90#L2683) |
-| `DRNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L34477`](source_parts/nswc_part_04.f90#L2730) |
+| `RNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L35303`](source_parts/nswc_part_04.f90#L3597) |
+| `DRNK` | `SUBROUTINE` | `A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK` | [`L35356`](source_parts/nswc_part_04.f90#L3650) |
 
 
 The following subroutines are available for obtaining lower and upper bounds for the rank of real matrix.
@@ -5618,13 +5618,13 @@ in Linear Least Squares Problems, Report SAND 80-0655, Sandia Laboratories, Albu
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, D, INDEX, TEMP` | [`L34527`](source_parts/nswc_part_04.f90#L2780) |
-| `KROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, INDEX, TEMP` | [`L34721`](source_parts/nswc_part_04.f90#L2974) |
-| `NPIVOT` | `SUBROUTINE` | `N, M, A, KA, B, KB, D, IERR` | [`L35044`](source_parts/nswc_part_04.f90#L3297) |
-| `MSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L35271`](source_parts/nswc_part_04.f90#L3524) |
-| `MSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L35312`](source_parts/nswc_part_04.f90#L3565) |
-| `DMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L36022`](source_parts/nswc_part_04.f90#L4275) |
-| `DMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L36060`](source_parts/nswc_part_04.f90#L4313) |
+| `CROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, D, INDEX, TEMP` | [`L35409`](source_parts/nswc_part_04.f90#L3703) |
+| `KROUT` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, INDEX, TEMP` | [`L35609`](source_parts/nswc_part_04.f90#L3903) |
+| `NPIVOT` | `SUBROUTINE` | `N, M, A, KA, B, KB, D, IERR` | [`L35940`](source_parts/nswc_part_04.f90#L4234) |
+| `MSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L36179`](source_parts/nswc_part_04.f90#L4473) |
+| `MSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L36220`](source_parts/nswc_part_04.f90#L4514) |
+| `DMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L36933`](source_parts/nswc_part_04.f90#L5227) |
+| `DMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L36974`](source_parts/nswc_part_04.f90#L5268) |
 
 
 The subroutines CROUT, KROUT, MSLV, MSLV1, NPIVOT, DMSLV, and DMSLV1 are available for inverting real matrices A and solving systems of real linear equations AX = B. CROUT, KROUT, MSLV, MSLV1, and NPIVOT solve single precision problems, and DMSLV and DMSLV1 solve double precision problems.
@@ -5811,7 +5811,7 @@ IERR = &k The k*® column of A has been reduced to a column containing only zero
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L35351`](source_parts/nswc_part_04.f90#L3604) |
+| `SLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L36262`](source_parts/nswc_part_04.f90#L4556) |
 
 
 Given a real n <1 matrix A and column vector 6. The following, subroutine is available for solving the equation Ax = 4. Iterative improvement 's performed to compute the solution x to machine accuracy,
@@ -5854,8 +5854,8 @@ IND = 1 X was obtained, but not to machine accuracy. Programming. SLY MP calls t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ARCECO` | `SUBROUTINE` | `N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG` | [`L36646`](source_parts/nswc_part_04.f90#L4899) |
-| `ARCESL` | `SUBROUTINE` | `ARRAY, MTRSTR, NMBLKS, PIVOT, B, X` | [`L37250`](source_parts/nswc_part_04.f90#L5503) |
+| `ARCECO` | `SUBROUTINE` | `N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG` | [`L37565`](source_parts/nswc_part_04.f90#L5859) |
+| `ARCESL` | `SUBROUTINE` | `ARRAY, MTRSTR, NMBLKS, PIVOT, B, X` | [`L38181`](source_parts/nswc_part_04.f90#L6475) |
 
 
 Consider a system Az == 6 of linear equations where A is ann x n matrix having the block structure
@@ -5954,7 +5954,7 @@ The argument m is the number of blocks A,,...,Am in the matrix A. ARCESL may be 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BTSLV` | `SUBROUTINE` | `MO, M, N, A, B, C, X, IP, IERR` | [`L37623`](source_parts/nswc_part_04.f90#L5876) |
+| `BTSLV` | `SUBROUTINE` | `MO, M, N, A, B, C, X, IP, IERR` | [`L38576`](source_parts/nswc_part_04.f90#L6870) |
 
 
 Consider a system J7'r =: 6 of linear equations where 7’ is a square matrix having the block structure
@@ -6008,8 +6008,8 @@ Programming. BTSLV employs the subroutines DECBT, SOLBT, DEC, and SOL. These sub
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L37815`](source_parts/nswc_part_04.f90#L6068) |
-| `DSMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L38822`](source_parts/nswc_part_04.f90#L7075) |
+| `SMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L38773`](source_parts/nswc_part_04.f90#L7067) |
+| `DSMSLV` | `SUBROUTINE` | `MO, N, M, A, B, KB, DET, RCOND, INERT, IERR, IPVT, WK` | [`L39787`](source_parts/nswc_part_04.f90#L8081) |
 
 
 ‘The subroutines SMSLV and DSMSLV are available for inverting symmetric real matrices A and solving systems of real linear equations AX = B. SMSLV handles single precision problems and DSMSLV handles double precision problems. it is assumed that the matrix A is in packed form. [f the inverse of A is computed, then the verse is a symmetric matrix which will be stored in packed form.
@@ -6089,8 +6089,8 @@ f2) Bunch, JO Ro, CAnatysis of the Diagonal Pivefttie Method,” STAAT J. Numeri
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L39836`](source_parts/nswc_part_04.f90#L8089) |
-| `DPCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L40146`](source_parts/nswc_part_04.f90#L8399) |
+| `PCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L40801`](source_parts/nswc_part_04.f90#L9095) |
+| `DPCHOL` | `SUBROUTINE` | `MO, N, M, A, B, KB, IERR` | [`L41117`](source_parts/nswc_part_04.f90#L9411) |
 
 
 The subroutines PCHOL and DPCHOL are available for inverting positive definite symmetric real matrices A and solving systems of real linear equations AX = B. PCHOL handles single precision problems and DPCHOL handles double precision problems. It is assumed that the matrix A is in packed form. If the inverse of A is computed then the inverse is a symmetric matrix which will be stored in packed form.
@@ -6140,8 +6140,8 @@ Us re’ Gourde, Society for Industrial and Applied Mathematics, Philadelphia, 1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L40462`](source_parts/nswc_part_04.f90#L8715) |
-| `DTOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L40546`](source_parts/nswc_part_04.f90#L8799) |
+| `TOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L41433`](source_parts/nswc_part_04.f90#L9727) |
+| `DTOPLX` | `SUBROUTINE` | `A, B, X, N, G, H, IERR` | [`L41521`](source_parts/nswc_part_04.f90#L9815) |
 
 
 Ann xn Toeplitz matrix is a matrix of the form
@@ -6189,9 +6189,9 @@ po. 47 2.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L40631`](source_parts/nswc_part_04.f90#L8884) |
-| `CMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L40672`](source_parts/nswc_part_04.f90#L8925) |
-| `DCMSLV` | `SUBROUTINE` | `MO, N, M, AR, AI, KA, BR, BI, KB, IERR, IPVT, WK` | [`L41384`](source_parts/nswc_part_04.f90#L9637) |
+| `CMSLV` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, DET, RCOND, IERR, IPVT, WK` | [`L41609`](source_parts/nswc_part_04.f90#L9903) |
+| `CMSLV1` | `SUBROUTINE` | `MO, N, M, A, KA, B, KB, IERR, IPVT, WK` | [`L41650`](source_parts/nswc_part_04.f90#L9944) |
+| `DCMSLV` | `SUBROUTINE` | `MO, N, M, AR, AI, KA, BR, BI, KB, IERR, IPVT, WK` | [`L42373`](source_parts/nswc_part_05.f90#L134) |
 
 
 The subroutines CMSLV, CMSLV1, and DCMSLV are available for inverting complex matrices and solving systems of complex linear equations. CMSLV and CMSLV1 solve single precision problems and DCMSLV solves double precision problems.
@@ -6310,7 +6310,7 @@ containing zeros, The requested results were not obtained
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L40711`](source_parts/nswc_part_04.f90#L8964) |
+| `CSLVMP` | `SUBROUTINE` | `MO, N, A, KA, B, X, WK, IWK, IERR` | [`L41692`](source_parts/nswc_part_04.f90#L9986) |
 
 
 Given a complex n x n matrix A and a complex column vector 5. The following routine is available for solving the equation Aa == b. Iterative improvement is performed to compute the solution x to machine accuracy.
@@ -6355,9 +6355,9 @@ Programming CSLV MIP calls the subroutine CLUIME. ('These routines were written 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L41697`](source_parts/nswc_part_04.f90#L9950) |
-| `DSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L42179`](source_parts/nswc_part_04.f90#L10432) |
-| `CSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L42661`](source_parts/nswc_part_05.f90#L1) |
+| `SSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L42697`](source_parts/nswc_part_05.f90#L458) |
+| `DSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L43179`](source_parts/nswc_part_05.f90#L940) |
+| `CSVDC` | `SUBROUTINE` | `X, LDX, N, P, S, E, U, LDU, V, LDV, WORK, JOB, INFO` | [`L43661`](source_parts/nswc_part_05.f90#L1422) |
 
 
 If 4 is a complex m x n matrix then there exists an m x m unitary matrix U and an n Xn unitary matrix V such that D = U* AV is a diagonal matrix?. Let di,...,d, be the diagonal elements of D where & = min{m,n}. Then U and V can be selected so that the diagonal elements are real numbers and d,; > dz > ++: > dy > 0. The nonnegative diagonal elements d@,; are unique, and if A is a real matrix then U and V can be chosen to be real orthogonal matrices. The decomposition D = U* AV is called the singular value decomposition of A. The elements dy, ...,d, are the singular values of A, the columns of U are left singular vectors, and the columns of V are right stnguédar vectors.
@@ -6421,9 +6421,9 @@ LAR
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DET` | `FUNCTION` | `A, KA, N, X` | [`L43171`](source_parts/nswc_part_05.f90#L511) |
-| `DPDET` | `DOUBLE PRECISION FUNCTION` | `A, KA, N, X` | [`L43237`](source_parts/nswc_part_05.f90#L577) |
-| `CDET` | `COMPLEX FUNCTION` | `A, KA, N, X` | [`L43304`](source_parts/nswc_part_05.f90#L644) |
+| `DET` | `FUNCTION` | `A, KA, N, X` | [`L44171`](source_parts/nswc_part_05.f90#L1932) |
+| `DPDET` | `DOUBLE PRECISION FUNCTION` | `A, KA, N, X` | [`L44243`](source_parts/nswc_part_05.f90#L2004) |
+| `CDET` | `COMPLEX FUNCTION` | `A, KA, N, X` | [`L44313`](source_parts/nswc_part_05.f90#L2074) |
 
 
 The following functions are available for computing the determinant of A -- x] where Ais an n X n matrix, « a number, and J the n x n identity matrix.
@@ -6452,8 +6452,8 @@ argument ka has the value: ka = the number of rows in the dimension statement fo
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L43374`](source_parts/nswc_part_05.f90#L714) |
-| `DABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L43951`](source_parts/nswc_part_05.f90#L1291) |
+| `ABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L44386`](source_parts/nswc_part_05.f90#L2147) |
+| `DABSLV` | `SUBROUTINE` | `MO, M, N, A, NA, B, NB, C, NC, WK, IERR` | [`L44972`](source_parts/nswc_part_05.f90#L2733) |
 
 
 Given ap m xX m matrix A, n X n matrix B, and mx n matrix C. The subroutines ABSLV and DABSLV are available for obtaining the m x n matrix X which solves the equation AX + XB =C. ABSLV yields single precision results and DABSLV yields double precision results.
@@ -6517,8 +6517,8 @@ When the routine ix recalled, it is assumed that m,n, and Wik have not been modi
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L44528`](source_parts/nswc_part_05.f90#L1868) |
-| `DTASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L44825`](source_parts/nswc_part_05.f90#L2165) |
+| `TASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L45558`](source_parts/nswc_part_05.f90#L3319) |
+| `DTASLV` | `SUBROUTINE` | `MO, N, A, NA, C, NC, WK, IERR` | [`L45862`](source_parts/nswc_part_05.f90#L3623) |
 
 
 Given matrices A and C of order 2 where C is symmetric. Then she subroutines TASLV and DTASLV are available for obtaining the symmetric matrix X which solves the equation A‘X + X 4=:C. TASLV yields single precision results and DTASLV yields double precision results.
@@ -6565,7 +6565,7 @@ When IND . 0, A contains the upper Schur form of the matrix 4 and WH contains th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SQUINT` | `SUBROUTINE` | `NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR` | [`L45122`](source_parts/nswc_part_05.f90#L2462) |
+| `SQUINT` | `SUBROUTINE` | `NM, N, A, B, C, IGUESS, S, WORK, NW, TOL, MAXITS, IERR` | [`L46166`](source_parts/nswc_part_05.f90#L3927) |
 
 
 Given complex n x n matrices A,B, and C. The following subroutine is available for obtaining a complex n X n matrix X which solves the equation AX* + BX +C = 0.
@@ -6619,8 +6619,8 @@ O40
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L46025`](source_parts/nswc_part_05.f90#L3365) |
-| `DMEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L46173`](source_parts/nswc_part_05.f90#L3513) |
+| `MEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L47074`](source_parts/nswc_part_05.f90#L4835) |
+| `DMEXP` | `SUBROUTINE` | `A, KA, N, Z, KZ, WK, IERR` | [`L47226`](source_parts/nswc_part_05.f90#L4987) |
 
 
 Let A be a real matrix of order n > 1. Then the subroutines MEXP and DMEXP oo . are available for computing the exponential matrix e4 = )7> A'/t!, MEXP yields single t= 0 precision results and DMEXP yields double precision results.
@@ -6691,9 +6691,9 @@ IERR = 2 The Pade denominator matrix is singular. (This should never occur.)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L46330`](source_parts/nswc_part_05.f90#L3670) |
-| `DPLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L46493`](source_parts/nswc_part_05.f90#L3833) |
-| `CLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L46657`](source_parts/nswc_part_05.f90#L3997) |
+| `LE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47386`](source_parts/nswc_part_05.f90#L5147) |
+| `DPLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47554`](source_parts/nswc_part_05.f90#L5315) |
+| `CLE` | `SUBROUTINE` | `ROWK, N, B, C, D, IP, IERR` | [`L47722`](source_parts/nswc_part_05.f90#L5483) |
 
 
 For n > 1, let A denote ann x n matrix and 6 a column vector of dimension n. Then the subroutines LE, DPLE, and CLE are available for solving the equations Az = 6 where A is not stored in-core. For large n, these routines require a work space of dimension x n?7/4. This permits the solution of systems of equations of double the order permitted by the standard solution procedures.
@@ -6791,15 +6791,15 @@ el ion 7
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVBR` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L46829`](source_parts/nswc_part_05.f90#L4169) |
-| `CVRB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L46898`](source_parts/nswc_part_05.f90#L4238) |
-| `CVRB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L46967`](source_parts/nswc_part_05.f90#L4307) |
-| `CVBD` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L47020`](source_parts/nswc_part_05.f90#L4360) |
-| `CVDB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L47089`](source_parts/nswc_part_05.f90#L4429) |
-| `CVDB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L47158`](source_parts/nswc_part_05.f90#L4498) |
-| `CVBC` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L47211`](source_parts/nswc_part_05.f90#L4551) |
-| `CVCB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L47280`](source_parts/nswc_part_05.f90#L4620) |
-| `CVCB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L47349`](source_parts/nswc_part_05.f90#L4689) |
+| `CVBR` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L47899`](source_parts/nswc_part_05.f90#L5660) |
+| `CVRB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L47968`](source_parts/nswc_part_05.f90#L5729) |
+| `CVRB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L48037`](source_parts/nswc_part_05.f90#L5798) |
+| `CVBD` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L48090`](source_parts/nswc_part_05.f90#L5851) |
+| `CVDB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48159`](source_parts/nswc_part_05.f90#L5920) |
+| `CVDB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L48228`](source_parts/nswc_part_05.f90#L5989) |
+| `CVBC` | `SUBROUTINE` | `B, KB, M, N, ML, MU, A, KA` | [`L48281`](source_parts/nswc_part_05.f90#L6042) |
+| `CVCB` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48350`](source_parts/nswc_part_05.f90#L6111) |
+| `CVCB1` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, NB, IERR` | [`L48419`](source_parts/nswc_part_05.f90#L6180) |
 
 
 The following subroutines permit one to convert matrices to and from the standard format.
@@ -6867,12 +6867,12 @@ CVRB1 is used if A and B are real arrays, CVDB1 is used if A and B are double pr
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L47402`](source_parts/nswc_part_05.f90#L4742) |
-| `DMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L47465`](source_parts/nswc_part_05.f90#L4805) |
-| `CMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L47528`](source_parts/nswc_part_05.f90#L4868) |
-| `MCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L47591`](source_parts/nswc_part_05.f90#L4931) |
-| `DMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L47651`](source_parts/nswc_part_05.f90#L4991) |
-| `CMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L47711`](source_parts/nswc_part_05.f90#L5051) |
+| `MCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L48472`](source_parts/nswc_part_05.f90#L6233) |
+| `DMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L48535`](source_parts/nswc_part_05.f90#L6296) |
+| `CMCVBS` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, IB, JB, NUM, IERR` | [`L48598`](source_parts/nswc_part_05.f90#L6359) |
+| `MCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L48661`](source_parts/nswc_part_05.f90#L6422) |
+| `DMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L48721`](source_parts/nswc_part_05.f90#L6482) |
+| `CMCVSB` | `SUBROUTINE` | `A, IA, JA, M, N, B, KB, NB, ML, MU, IERR` | [`L48781`](source_parts/nswc_part_05.f90#L6542) |
 
 
 The following subroutines permit one to convert matrices to and from sparse form.
@@ -6920,8 +6920,8 @@ MCVSB is used if A and B are real arrays, DMCVSB is used if A and & are double p
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BCVRD` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L47771`](source_parts/nswc_part_05.f90#L5111) |
-| `BCVDR` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L47791`](source_parts/nswc_part_05.f90#L5131) |
+| `BCVRD` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48841`](source_parts/nswc_part_05.f90#L6602) |
+| `BCVDR` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48861`](source_parts/nswc_part_05.f90#L6622) |
 
 
 The following subroutines are available for converting banded real matrices to and from double precision form.
@@ -6952,8 +6952,8 @@ B is a 2-dimensional real array of dimension kb x @ where kb > m and € > mz-+r
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BREAL` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L47811`](source_parts/nswc_part_05.f90#L5151) |
-| `BIMAG` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L47865`](source_parts/nswc_part_05.f90#L5205) |
+| `BREAL` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L48881`](source_parts/nswc_part_05.f90#L6642) |
+| `BIMAG` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR` | [`L48935`](source_parts/nswc_part_05.f90#L6696) |
 
 
 If A = (a,;) is a complex matrix then let Re(A) = (Re(a,;)) and Im(A) = {Im(c,;)}) denote the real and imaginary parts of A. If the matrix A is stored in band form, then the following subroutines are available for obtaining Re(A} and Im(A) in band form.
@@ -6988,7 +6988,7 @@ B is a 2-dimensional real array of dimension kb x € where kb > m. The input ar
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BCVRC` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L47919`](source_parts/nswc_part_05.f90#L5259) |
+| `BCVRC` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48989`](source_parts/nswc_part_05.f90#L6750) |
 
 
 Given the real m x n matrices A and B stored in band form. Then the subroutine BCVRC is available for obtaining the complex matrix A+ Bt where ¢ = /—1.
@@ -7015,9 +7015,9 @@ It is assumed that A+ At is to be stored in band form in C. C is a 2~—dimensio
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48000`](source_parts/nswc_part_05.f90#L5340) |
-| `DBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48056`](source_parts/nswc_part_05.f90#L5396) |
-| `CBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L48112`](source_parts/nswc_part_05.f90#L5452) |
+| `BPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L49073`](source_parts/nswc_part_05.f90#L6834) |
+| `DBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L49129`](source_parts/nswc_part_05.f90#L6890) |
+| `CBPOSE` | `SUBROUTINE` | `A, KA, M, N, ML, MU, B, KB` | [`L49185`](source_parts/nswc_part_05.f90#L6946) |
 
 
 The following subroutines are available for transposing banded matrices.
@@ -7046,9 +7046,9 @@ B is a 2-dimensional array of dimension kb x @ where kb > n and £ > m+ my, + 1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48168`](source_parts/nswc_part_05.f90#L5508) |
-| `DBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48311`](source_parts/nswc_part_05.f90#L5651) |
-| `CBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48454`](source_parts/nswc_part_05.f90#L5794) |
+| `BADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49241`](source_parts/nswc_part_05.f90#L7002) |
+| `DBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49384`](source_parts/nswc_part_05.f90#L7145) |
+| `CBADD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49527`](source_parts/nswc_part_05.f90#L7288) |
 
 
 Let A and B be m x n matrices stored in band form. The following subroutines are available for computing the sum C = A+ B.
@@ -7089,9 +7089,9 @@ Programmer A EE Nforeis
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48597`](source_parts/nswc_part_05.f90#L5937) |
-| `DBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48740`](source_parts/nswc_part_05.f90#L6080) |
-| `CBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L48883`](source_parts/nswc_part_05.f90#L6223) |
+| `BSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49670`](source_parts/nswc_part_05.f90#L7431) |
+| `DBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49813`](source_parts/nswc_part_05.f90#L7574) |
+| `CBSUBT` | `SUBROUTINE` | `M, N, A, KA, ML, MU, B, KB, NL, NU, C, KC, L, MCL, MCU, IERR` | [`L49956`](source_parts/nswc_part_05.f90#L7717) |
 
 
 Let A and B be m xn matrices stored in band form. The following subroutines are available for computing the difference C = A —- B,
@@ -7126,9 +7126,9 @@ te cant _
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L49026`](source_parts/nswc_part_05.f90#L6366) |
-| `DBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L49177`](source_parts/nswc_part_05.f90#L6517) |
-| `CBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L49328`](source_parts/nswc_part_05.f90#L6668) |
+| `BPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L50099`](source_parts/nswc_part_05.f90#L7860) |
+| `DBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L50250`](source_parts/nswc_part_05.f90#L8011) |
+| `CBPROD` | `SUBROUTINE` | `M, N, L, A, KA, ML, MU, B, KB, NL, NU, C, KC, NC, MCL, MCU, IERR` | [`L50401`](source_parts/nswc_part_05.f90#L8162) |
 
 
 Let A and B be matrices stored in band form. The following subroutines are available for computing the product C = AB.
@@ -7159,10 +7159,10 @@ It is assumed that, AB is to be stored in band form in C. C ia a 2-dimensional a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49479`](source_parts/nswc_part_05.f90#L6819) |
-| `BVPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49531`](source_parts/nswc_part_05.f90#L6871) |
-| `BTPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49771`](source_parts/nswc_part_05.f90#L7111) |
-| `BTPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49822`](source_parts/nswc_part_05.f90#L7162) |
+| `BVPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50552`](source_parts/nswc_part_05.f90#L8313) |
+| `BVPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50604`](source_parts/nswc_part_05.f90#L8365) |
+| `BTPRD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50844`](source_parts/nswc_part_05.f90#L8605) |
+| `BTPRD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50895`](source_parts/nswc_part_05.f90#L8656) |
 
 
 Let A be a real mi & m matrix stored in band form. Then the following subroutines are available for multiplying A with a real vector.
@@ -7230,10 +7230,10 @@ The arguments 7 2: y are row vectors of dimension m and n respectively. When BTP
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49576`](source_parts/nswc_part_05.f90#L6916) |
-| `DBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49629`](source_parts/nswc_part_05.f90#L6969) |
-| `DBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49866`](source_parts/nswc_part_05.f90#L7206) |
-| `DBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49918`](source_parts/nswc_part_05.f90#L7258) |
+| `DBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50649`](source_parts/nswc_part_05.f90#L8410) |
+| `DBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50702`](source_parts/nswc_part_05.f90#L8463) |
+| `DBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50939`](source_parts/nswc_part_05.f90#L8700) |
+| `DBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50991`](source_parts/nswc_part_05.f90#L8752) |
 
 
 Let A +e a double precision m x nm matrix stored in band form. Then the following subroutines are available for multiplying A with a double precision vector.
@@ -7299,10 +7299,10 @@ The arguments x and y are row vectors of dimension rn and n respectively. A,2z,y
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49674`](source_parts/nswc_part_05.f90#L7014) |
-| `CBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49726`](source_parts/nswc_part_05.f90#L7066) |
-| `CBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L49962`](source_parts/nswc_part_05.f90#L7302) |
-| `CBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50013`](source_parts/nswc_part_05.f90#L7353) |
+| `CBVPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50747`](source_parts/nswc_part_05.f90#L8508) |
+| `CBVPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L50799`](source_parts/nswc_part_05.f90#L8560) |
+| `CBTPD` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L51035`](source_parts/nswc_part_05.f90#L8796) |
+| `CBTPD1` | `SUBROUTINE` | `M, N, A, KA, ML, MU, X, Y` | [`L51086`](source_parts/nswc_part_05.f90#L8847) |
 
 
 Let A be a complex m x n matrix stored in band form. Then the following subroutines are available for multiplying A with a complex vector.
@@ -7366,8 +7366,8 @@ The arguments x and y are row vectors of dimension m and n respectively. A,z,y a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `B1NRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L50076`](source_parts/nswc_part_05.f90#L7416) |
-| `DB1NRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L50146`](source_parts/nswc_part_05.f90#L7486) |
+| `B1NRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L51153`](source_parts/nswc_part_05.f90#L8914) |
+| `DB1NRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L51230`](source_parts/nswc_part_05.f90#L8991) |
 
 
 ```text
@@ -7395,8 +7395,8 @@ The function has the value ||A||; for any m x n matrix A stored in band form. Th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BNRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L50057`](source_parts/nswc_part_05.f90#L7397) |
-| `DBNRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L50126`](source_parts/nswc_part_05.f90#L7466) |
+| `BNRM` | `REAL FUNCTION` | `A, KA, M, N, ML, MU` | [`L51130`](source_parts/nswc_part_05.f90#L8891) |
+| `DBNRM` | `DOUBLE PRECISION FUNCTION` | `A, KA, M, N, ML, MU` | [`L51207`](source_parts/nswc_part_05.f90#L8968) |
 
 
 ```text
@@ -7424,8 +7424,8 @@ The function has the value ||Aj|.. for any m x n matrix A stored in band form. T
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L50198`](source_parts/nswc_part_05.f90#L7538) |
-| `BSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L50279`](source_parts/nswc_part_05.f90#L7619) |
+| `BSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51285`](source_parts/nswc_part_05.f90#L9046) |
+| `BSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51366`](source_parts/nswc_part_05.f90#L9127) |
 
 
 Let A be a nonsingular nx n real matrix stored in band form and 6a real column vector of dimension n. The subroutine BSLV is available for solving the system of equations Ax = 6, and the subroutine BSLV1 is available for solving the transposed system of equations Atz = b. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. BSLV and BSLV1 always generate the same LU decomposition of A. After the decomposition is obtained on an initial call to BSLV or BSLV, either routine may be called to solve a new system of equations Az = r or A’r = r without having to redecompose the matrix A.
@@ -7478,7 +7478,7 @@ the new vector 6. On output, X will contain the solution to the new set of equat
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `B1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L51134`](source_parts/nswc_part_05.f90#L8474) |
+| `B1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L52231`](source_parts/nswc_part_05.f90#L9992) |
 
 
 If A is a real mn x n banded matrix then the following subroutine is available for estimating the £, condition number cond,(A) of A.
@@ -7538,8 +7538,8 @@ and modified by A. TE Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L50671`](source_parts/nswc_part_05.f90#L8011) |
-| `DBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L50750`](source_parts/nswc_part_05.f90#L8090) |
+| `DBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51758`](source_parts/nswc_part_05.f90#L9519) |
+| `DBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51839`](source_parts/nswc_part_05.f90#L9600) |
 
 
 Let A be a nonsingular n x n double precision matrix stored in band form and 6 a double precision column vector of dimension n. The subroutine DBSLV is available for solving the system of equations Ax == b, and the subroutine DBSLV1 is available for solving the transposed system of equations A‘z == 6. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. DBSLV and DBSLV1 always generate the same LU decomposition of A. After the decomposition is obtained on an initial call to DBSLV or DBSLV1, either routine may be called to solve a new system of equations Az = r or A'z = r without having to redecompose the matrix A.
@@ -7595,7 +7595,7 @@ Programming DBSLV and DBSLV1 employ the subroutines DBFA, DBSL, DAXPY, DSCAL, DS
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DB1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L51199`](source_parts/nswc_part_05.f90#L8539) |
+| `DB1CND` | `SUBROUTINE` | `A, KA, N, ML, MU, COND, IWK, WK, IERR` | [`L52302`](source_parts/nswc_part_05.f90#L10063) |
 
 
 If A is a double precision n x n banded matrix then the following subroutine is available for estimating the @; condition number cond,(A) of A.
@@ -7655,8 +7655,8 @@ Software 15 (1989), p. 168.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51266`](source_parts/nswc_part_05.f90#L8606) |
-| `CBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L51348`](source_parts/nswc_part_05.f90#L8688) |
+| `CBSLV` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L52372`](source_parts/nswc_part_05.f90#L10133) |
+| `CBSLV1` | `SUBROUTINE` | `M0, A, KA, N, ML, MU, B, IWK, IERR` | [`L52454`](source_parts/nswc_part_05.f90#L10215) |
 
 
 Let A be a nonsingular n x n complex matrix stored in band form and 6a complex column vector of dimension n. The subroutine CBSLV is available for solving the system of equations Az = 6, and the subroutine CBSLV1 is available for solving the transposed system of equations A’z = b. On an initial call to either routine, partial pivot Gauss elimination is first employed to obtain an LU decomposition of A, and then the equations are solved. CBSLV and CBSLV1 always generate the same LU decomposition of A. After the decomposition is obtained oa an initial call to CBSLV or CBSLVI, either routine may be called to solve a new system of equations Az = r or A‘z = r without having to redecompose the matrix A.
@@ -7731,12 +7731,12 @@ The storage of the elements aj, @,2 ayg in the order a); a1g @)2 is permissible.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVRS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L51741`](source_parts/nswc_part_05.f90#L9081) |
-| `CVDS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L51774`](source_parts/nswc_part_05.f90#L9114) |
-| `CVCS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L51807`](source_parts/nswc_part_05.f90#L9147) |
-| `CVSR` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L51841`](source_parts/nswc_part_05.f90#L9181) |
-| `CVSD` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L51870`](source_parts/nswc_part_05.f90#L9210) |
-| `CVSC` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L51899`](source_parts/nswc_part_05.f90#L9239) |
+| `CVRS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L52847`](source_parts/nswc_part_06.f90#L1) |
+| `CVDS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L52880`](source_parts/nswc_part_06.f90#L34) |
+| `CVCS` | `SUBROUTINE` | `A, KA, M, N, B, IB, JB, NUM, IERR` | [`L52913`](source_parts/nswc_part_06.f90#L67) |
+| `CVSR` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L52947`](source_parts/nswc_part_06.f90#L101) |
+| `CVSD` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L52976`](source_parts/nswc_part_06.f90#L130) |
+| `CVSC` | `SUBROUTINE` | `A, IA, JA, B, KB, M, N` | [`L53005`](source_parts/nswc_part_06.f90#L159) |
 
 
 The following subroutines permit one to convert sparse matrices to and from the standard format.
@@ -7786,8 +7786,8 @@ Programmer, A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCVRD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L51928`](source_parts/nswc_part_05.f90#L9268) |
-| `SCVDR` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L51953`](source_parts/nswc_part_05.f90#L9293) |
+| `SCVRD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53034`](source_parts/nswc_part_06.f90#L188) |
+| `SCVDR` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53059`](source_parts/nswc_part_06.f90#L213) |
 
 
 The following subroutines are available for converting sparse real matrices to and from double precision form.
@@ -7833,8 +7833,8 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSREAL` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L51978`](source_parts/nswc_part_05.f90#L9318) |
-| `CSIMAG` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L52008`](source_parts/nswc_part_05.f90#L9348) |
+| `CSREAL` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53084`](source_parts/nswc_part_06.f90#L238) |
+| `CSIMAG` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53114`](source_parts/nswc_part_06.f90#L268) |
 
 
 If A = (a,;) is a complex matrix then let Re(A) = (Re({a,,;)) and Im(A) = (Im(a;;)) denote the real and imaginary parts of A. If the matrix A is stored in sparse form, then the following subroutines are available for obtaining Re(A) and Im(A) in sparse form.
@@ -7878,7 +7878,7 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCVRC` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52038`](source_parts/nswc_part_05.f90#L9378) |
+| `SCVRC` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53144`](source_parts/nswc_part_06.f90#L298) |
 
 
 Given the real m x n matrices A and B stored in sparse form. Then the subroutine SCVRC is available for obtaining the complex matrix A+ Bit where t = /—1.
@@ -7909,9 +7909,9 @@ TERR is an integer variable. When SCVRC is called, if NUM specifies sufficient s
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L52101`](source_parts/nswc_part_05.f90#L9441) |
-| `DSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L52125`](source_parts/nswc_part_05.f90#L9465) |
-| `CSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L52149`](source_parts/nswc_part_05.f90#L9489) |
+| `RSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53207`](source_parts/nswc_part_06.f90#L361) |
+| `DSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53234`](source_parts/nswc_part_06.f90#L388) |
+| `CSCOPY` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53261`](source_parts/nswc_part_06.f90#L415) |
 
 
 The following su routines are available for copying sparse matrices.
@@ -7948,7 +7948,7 @@ OOS
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCONJ` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L52174`](source_parts/nswc_part_05.f90#L9514) |
+| `SCONJ` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M` | [`L53289`](source_parts/nswc_part_06.f90#L443) |
 
 
 ```text
@@ -7976,8 +7976,8 @@ It is assumed that the sparse complex matrix A is stored in the arrays A, JA, JA
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L52202`](source_parts/nswc_part_05.f90#L9542) |
-| `RPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L52264`](source_parts/nswc_part_05.f90#L9604) |
+| `RPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L53317`](source_parts/nswc_part_06.f90#L471) |
+| `RPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L53379`](source_parts/nswc_part_06.f90#L533) |
 
 
 The subroutines RPOSE and RPOSE! are available for transposing a sparse m x n real matrix A. RPOSE1 is more general than RPOSE. For any permutation 7 = {11, ...,1m} of {1,...,m} let P denote the corresponding ™ x m permutation matrix. Then RPOSE1 computes the matrix (P.A)’.
@@ -8024,8 +8024,8 @@ Restriction. It is assumed that the storage areas 2, 1B, JB do not overlap with 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L52329`](source_parts/nswc_part_05.f90#L9669) |
-| `DPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L52391`](source_parts/nswc_part_05.f90#L9731) |
+| `DPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L53444`](source_parts/nswc_part_06.f90#L598) |
+| `DPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L53506`](source_parts/nswc_part_06.f90#L660) |
 
 
 The subroutines DPOSE and DPOSE1 are available for transposing a sparse m x n double precision matrix A. DPOSE1 is more general than DPOSE. For any permutation mw = {81,...,tm} of {1, ...,m} let P denote the corresponding m x m permutation matrix. Then DPOSE1 computes the matrix (PA)‘.
@@ -8070,8 +8070,8 @@ Restriction. It is assumed that the storage areas B, 7B, JB ao not overlap with 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L52456`](source_parts/nswc_part_05.f90#L9796) |
-| `CPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L52518`](source_parts/nswc_part_05.f90#L9858) |
+| `CPOSE` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, M, N` | [`L53571`](source_parts/nswc_part_06.f90#L725) |
+| `CPOSE1` | `SUBROUTINE` | `P, A, IA, JA, B, IB, JB, M, N` | [`L53633`](source_parts/nswc_part_06.f90#L787) |
 
 
 The subroutines CPOSE and CPOSE] are available for transposing a sparse m x n complex matrix A. CPOSE1 is more general than CPOSE. For any permutation m = {$1,...,tm} of {1,...,m} let P denote the corresponding m x m permutation matrix. Then CPOSE1 computes the matrix (P.A)'.
@@ -8116,9 +8116,9 @@ Restriction. It is assumed that the storage areas B, 1, J 28 do not overlap: wit
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52583`](source_parts/nswc_part_05.f90#L9923) |
-| `DSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52645`](source_parts/nswc_part_05.f90#L9985) |
-| `CSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52707`](source_parts/nswc_part_05.f90#L10047) |
+| `SADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53698`](source_parts/nswc_part_06.f90#L852) |
+| `DSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53760`](source_parts/nswc_part_06.f90#L914) |
+| `CSADD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53822`](source_parts/nswc_part_06.f90#L976) |
 
 
 The following subroutines are available for adding sparse matrices.
@@ -8161,9 +8161,9 @@ B,IB,JB.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52769`](source_parts/nswc_part_05.f90#L10109) |
-| `DSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52831`](source_parts/nswc_part_05.f90#L10171) |
-| `CSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L52893`](source_parts/nswc_part_05.f90#L10233) |
+| `SSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53884`](source_parts/nswc_part_06.f90#L1038) |
+| `DSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L53946`](source_parts/nswc_part_06.f90#L1100) |
+| `CSSUBT` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, M, N, NUM, WK, IERR` | [`L54008`](source_parts/nswc_part_06.f90#L1162) |
 
 
 The following subroutines are available for subtracting sparse matrices,
@@ -8204,9 +8204,9 @@ BIB, JE.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L52955`](source_parts/nswc_part_05.f90#L10295) |
-| `DSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L53010`](source_parts/nswc_part_05.f90#L10350) |
-| `CSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L53065`](source_parts/nswc_part_05.f90#L10405) |
+| `SPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L54070`](source_parts/nswc_part_06.f90#L1224) |
+| `DSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L54125`](source_parts/nswc_part_06.f90#L1279) |
+| `CSPROD` | `SUBROUTINE` | `A, IA, JA, B, IB, JB, C, IC, JC, L, M, N, NUM, WK, IERR` | [`L54180`](source_parts/nswc_part_06.f90#L1334) |
 
 
 The following subroutines are available for multiplying sparse matrices.
@@ -8247,10 +8247,10 @@ B,1B,JB.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53120`](source_parts/nswc_part_05.f90#L10460) |
-| `MVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53143`](source_parts/nswc_part_05.f90#L10483) |
-| `MTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53166`](source_parts/nswc_part_06.f90#L1) |
-| `MTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53193`](source_parts/nswc_part_06.f90#L28) |
+| `MVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54235`](source_parts/nswc_part_06.f90#L1389) |
+| `MVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54258`](source_parts/nswc_part_06.f90#L1412) |
+| `MTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54281`](source_parts/nswc_part_06.f90#L1435) |
+| `MTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54308`](source_parts/nswc_part_06.f90#L1462) |
 
 
 Let A be a real mx n sparse matrix stored in the arrays A,/A,JA. Then the following subroutines are available for multiplying A with a real vector.
@@ -8299,10 +8299,10 @@ The arguments z and y are row vectors of dimension m and n respectively. When MT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53216`](source_parts/nswc_part_06.f90#L51) |
-| `DVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53239`](source_parts/nswc_part_06.f90#L74) |
-| `DTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53262`](source_parts/nswc_part_06.f90#L97) |
-| `DTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53289`](source_parts/nswc_part_06.f90#L124) |
+| `DVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54331`](source_parts/nswc_part_06.f90#L1485) |
+| `DVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54354`](source_parts/nswc_part_06.f90#L1508) |
+| `DTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54377`](source_parts/nswc_part_06.f90#L1531) |
+| `DTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54404`](source_parts/nswc_part_06.f90#L1558) |
 
 
 Let A be a double precision m x n sparse matrix stored in the arrays A, /A,JA. Then the following subroutines are available for multiplying A with a double precision vector.
@@ -8349,10 +8349,10 @@ The arguments z and y are row vectors of dimension m and n respectively. A, x, y
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53312`](source_parts/nswc_part_06.f90#L147) |
-| `CVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53335`](source_parts/nswc_part_06.f90#L170) |
-| `CTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53358`](source_parts/nswc_part_06.f90#L193) |
-| `CTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L53385`](source_parts/nswc_part_06.f90#L220) |
+| `CVPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54427`](source_parts/nswc_part_06.f90#L1581) |
+| `CVPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54450`](source_parts/nswc_part_06.f90#L1604) |
+| `CTPRD` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54473`](source_parts/nswc_part_06.f90#L1627) |
+| `CTPRD1` | `SUBROUTINE` | `M, N, A, IA, JA, X, Y` | [`L54500`](source_parts/nswc_part_06.f90#L1654) |
 
 
 Let A be a complex m x n sparse matrix stored in the arrays A,IA,JA. Then the following subroutines are available for multiplying A with a complex vector.
@@ -8401,8 +8401,8 @@ The arguments x and y are row vectors of dimension m and n respectively. A,z,y a
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `S1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L53434`](source_parts/nswc_part_06.f90#L269) |
-| `DS1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L53492`](source_parts/nswc_part_06.f90#L327) |
+| `S1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L54549`](source_parts/nswc_part_06.f90#L1703) |
+| `DS1NRM` | `SUBROUTINE` | `A, IA, JA, M, N, ANORM, WK` | [`L54607`](source_parts/nswc_part_06.f90#L1761) |
 
 
 ```text
@@ -8433,8 +8433,8 @@ WK is an array of dimension n or larger that is a work space for the routine.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SNRM` | `REAL FUNCTION` | `A, IA, JA, M, N` | [`L53408`](source_parts/nswc_part_06.f90#L243) |
-| `DSNRM` | `DOUBLE PRECISION FUNCTION` | `A, IA, JA, M, N` | [`L53467`](source_parts/nswc_part_06.f90#L302) |
+| `SNRM` | `REAL FUNCTION` | `A, IA, JA, M, N` | [`L54523`](source_parts/nswc_part_06.f90#L1677) |
+| `DSNRM` | `DOUBLE PRECISION FUNCTION` | `A, IA, JA, M, N` | [`L54582`](source_parts/nswc_part_06.f90#L1736) |
 
 
 ```text
@@ -8462,7 +8462,7 @@ A is a sparse m X n matrix stored in the arrays A, IA, JA. When either of these 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPORD` | `SUBROUTINE` | `M, N, IA, R, IWK` | [`L53525`](source_parts/nswc_part_06.f90#L360) |
+| `SPORD` | `SUBROUTINE` | `M, N, IA, R, IWK` | [`L54640`](source_parts/nswc_part_06.f90#L1794) |
 
 
 Let A be a sparse mxn matrix stored in the arrays A, JA, JA. The following subroutine is available for ordering the rows of the matrix by increasing length.
@@ -8489,7 +8489,7 @@ IWK is an integer array of dimension m+n-+1 or larger that is used for a work sp
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BLKORD` | `SUBROUTINE` | `N, IA, JA, R, C, IB, NUM, IWK, IERR` | [`L53565`](source_parts/nswc_part_06.f90#L400) |
+| `BLKORD` | `SUBROUTINE` | `N, IA, JA, R, C, IB, NUM, IWK, IERR` | [`L54680`](source_parts/nswc_part_06.f90#L1834) |
 
 
 Let A be a sparse n x n matrix stored in the arrays A,/A,JA. Then the subroutine SLKORD is available for reordering the rows and columns of A so that one has a lower block triangular matrix
@@ -8532,9 +8532,9 @@ IWK is an integer array of dimension 5n or larger that is used for a work space 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L53933`](source_parts/nswc_part_06.f90#L768) |
-| `RSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L54323`](source_parts/nswc_part_06.f90#L1158) |
-| `TSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L54469`](source_parts/nswc_part_06.f90#L1304) |
+| `SPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L55048`](source_parts/nswc_part_06.f90#L2202) |
+| `RSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L55438`](source_parts/nswc_part_06.f90#L2592) |
+| `TSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L55584`](source_parts/nswc_part_06.f90#L2738) |
 
 
 Let A be a nonsingular ». x n sparse real matrix stored in the arrays A,JA,JA and let 6 be areal column vector c dimension n. The subroutines SPSLV and RSLV are available for solving the system cf equations Ar = b, and the subroutine TSLV is available for solving the transposed system cf equations A’z = $. These routines employ partial pivot gauss elimination with column interchanges to first obtain an LU decomposition of A. If SPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if RSLV or TSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus RSLV and TSLV will frequently require at least double the amount of storage needed by SPSLV, but they can be recalled to solve other systems of equations Az = r and A'z = r without having to redecompose the matrix A. Moreover, since RSLV and TSLV will always generate the same LU decomposition of A, RSLV can be called to decompose A and solve a system of equations Ax = 5, and then TSLV can be called so solve a transposed system of equations Atz = r using the decomposition obtained by RSLV.
@@ -8649,7 +8649,7 @@ used hold also fur RSLV and TSLV.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `S1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L55755`](source_parts/nswc_part_06.f90#L2590) |
+| `S1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L56870`](source_parts/nswc_part_06.f90#L4024) |
 
 
 If A is a real nXm sparse matrix then the following subroutine is available for estimating the €; condition number cond,(A) of A.
@@ -8699,9 +8699,9 @@ ee “Algorithm 674: FORTRAN Codes for Estimating the One-Norm of a Real or Comp
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L54841`](source_parts/nswc_part_06.f90#L1676) |
-| `DSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L55234`](source_parts/nswc_part_06.f90#L2069) |
-| `DTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L55381`](source_parts/nswc_part_06.f90#L2216) |
+| `DSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L55956`](source_parts/nswc_part_06.f90#L3110) |
+| `DSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L56349`](source_parts/nswc_part_06.f90#L3503) |
+| `DTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L56496`](source_parts/nswc_part_06.f90#L3650) |
 
 
 Let A be a nonsingular n x n sparse double precision matrix stored in the arrays A, IA,JA and let 6 be a double precision column vector of dimension n. The subroutines DSPSLV and DSLV are available for solving the system of equations Az = 6, and the subroutine DTSLV is available for solving the transposed system of equations A’z = b. These routines employ partial pivot Gauss elimination with column interchanges to first obtain an LU decomposition of A. If DSPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if DSLV or DTSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus DSLV and DTSLV will frequently require at least double the amount of storage needed by DSPSLV, but they can be recalled to solve other systems of equations Ar = r and A‘z = r without having to redecompose the matrix A. Moreover, since DSLV and DTSLV will always generate the same LU decomposition of A, DSLV can be called to decompose A and solve a system of equations Az = 6, and then DTSLV can be called to solve a transposed system of equations Atz =r using the decomposition obtained by DSLV.
@@ -8808,7 +8808,7 @@ is used hold also for DSLV and DTSLV.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DS1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L55816`](source_parts/nswc_part_06.f90#L2651) |
+| `DS1CND` | `SUBROUTINE` | `N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR` | [`L56936`](source_parts/nswc_part_06.f90#L4090) |
 
 
 If A is a double precision n x n sparse matrix then the following subroutine is available for estimating the £; condition number cond,(A) of A.
@@ -8858,9 +8858,9 @@ ee »“Algorithm 674: FORTRAN Codes for Estimating the One--Norm of a Real or C
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L56196`](source_parts/nswc_part_06.f90#L3031) |
-| `CSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L56590`](source_parts/nswc_part_06.f90#L3425) |
-| `CTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L56737`](source_parts/nswc_part_06.f90#L3572) |
+| `CSPSLV` | `SUBROUTINE` | `N, A, IA, JA, B, R, C, MAX, X, ITEMP, RTEMP, IERR` | [`L57330`](source_parts/nswc_part_06.f90#L4484) |
+| `CSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L57724`](source_parts/nswc_part_06.f90#L4878) |
+| `CTSLV` | `SUBROUTINE` | `M0, N, A, IA, JA, B, R, C, MAX, X, IWK, WK, IERR` | [`L57871`](source_parts/nswc_part_06.f90#L5025) |
 
 
 Let A be a nonsingular n x n sparse complex matrix stored in the arrays A, J A,JA and let b be a complex column vector of dimension n. The subroutines CSPSLV and CSLV are available for solving the system of equations Az = 8, and the subroutine CTSLV is available for solving the transposed system of equations A‘tz = b. These routines employ partial pivot Gauss elimination with column interchanges to first obtain an LU decomposition of A. If CSPSLV is called then only the off-diagonal nonzero elements of U are stored, and then the equations are solved. However, if CSLV or CTSLV is called then the off-diagonal nonzero elements of both L and U are stored. Thus CSLV and CTSLV will frequently require at least double the amount of storage needed by CSPSLV, but they can be recalled to solve other systems of equations Az = r and A‘z = r without having to redecompose the matrix A. Moreover, since CSLV and CTSLV will always generate the same LU decomposition of A, CSLV can be called to decompose A and solve a system cf equations Ar = b, and then CTSLV can be called to solve a transposed system of equations A’z = r using the decomposition obtained by CSLV.
@@ -8974,8 +8974,8 @@ After aa initial call to CSLY of CPSELV, of HeR RO} Coon output thee either rout
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L57113`](source_parts/nswc_part_06.f90#L3948) |
-| `EIG1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L57130`](source_parts/nswc_part_06.f90#L3965) |
+| `EIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L58247`](source_parts/nswc_part_06.f90#L5401) |
+| `EIG1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L58264`](source_parts/nswc_part_06.f90#L5418) |
 
 
 The subroutines EIG and EIG1 are available for computing the eigenvalues of real matrices. These routines frequently yield results accurate to 13~—14 significant digits. Indeed, for symmetric matrices they may give 2 or more digits better accuracy than the routines designed specifically for symmetric matrices. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur when the matrix is not symmetric. In this case one should not expect more than 7-8 digit accuracy.
@@ -9016,8 +9016,8 @@ ay we
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `EIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L57147`](source_parts/nswc_part_06.f90#L3982) |
-| `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L57179`](source_parts/nswc_part_06.f90#L4014) |
+| `EIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L58281`](source_parts/nswc_part_06.f90#L5435) |
+| `EIGV1` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L58313`](source_parts/nswc_part_06.f90#L5467) |
 
 
 The subroutines EIGV and EIGV1 are available for computing the eigenvalues and eigenvectors of real matrices. These routines are extensions of the respective eigenvalue routines EIG and EIG1. Thus all comments made concerning the accuracy of the eigenvalues produced by EIG and EIGi apply also to EIGV and EIGV1. In particular, EIGV and EIGV1 can frequently yield high precision results for the eigenvalues if they are distinct. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue ia correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate to 9-10 significant digits. In the case of repeated eigenvalues the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector n-:y be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
@@ -9068,7 +9068,7 @@ ad Edition}, Springer- Verlag, 1975.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DEIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L58791`](source_parts/nswc_part_06.f90#L5626) |
+| `DEIG` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, IERR` | [`L59926`](source_parts/nswc_part_06.f90#L7080) |
 
 
 The subroutine DEIG is available for the double precision computation of the eigenvalues of real matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
@@ -9106,7 +9106,7 @@ Se qn on
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DEIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L58808`](source_parts/nswc_part_06.f90#L5643) |
+| `DEIGV` | `SUBROUTINE` | `IBAL, A, KA, N, WR, WI, ZR, ZI, IERR` | [`L59943`](source_parts/nswc_part_06.f90#L7097) |
 
 
 The subroutine DEIGV +> available for the double precision computation of the eigenvalues and eigenvectors of real matrices. This routine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. i: the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
@@ -9149,8 +9149,8 @@ IBAL is an input argument that can be assigned any integer value. If If AL # O t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L60076`](source_parts/nswc_part_06.f90#L6911) |
-| `SEIG1` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L60096`](source_parts/nswc_part_06.f90#L6931) |
+| `SEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L61212`](source_parts/nswc_part_06.f90#L8366) |
+| `SEIG1` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L61232`](source_parts/nswc_part_06.f90#L8386) |
 
 
 The subroutines SEIG and SEIGt are available for computing the eigenvalues of symmetric real matrices. These routines frequently yield high precision results, SIG is faster than SEIG1, but at times SEIG1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference ia the reliability of the routines.
@@ -9192,8 +9192,8 @@ TRor details othe parked format see the section on packing acl umpe oo symmetric
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L60116`](source_parts/nswc_part_06.f90#L6951) |
-| `SEIGV1` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L60129`](source_parts/nswc_part_06.f90#L6964) |
+| `SEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L61252`](source_parts/nswc_part_06.f90#L8406) |
+| `SEIGV1` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L61265`](source_parts/nswc_part_06.f90#L8419) |
 
 
 The subroutines SEIGV and SEIC: Vi are available for computing the eigenvalues and eigenvectors of symmetric real matrices. These routines frequently yield high precision results for the eigenvalues. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14'* significant digit, but the components of the corresponding eigenvector are only accurate tc 9--10 significant digits. SEIGV is faster than SEICVI1, but at times SEIGV1 will produce better results when the symmetric matrix is tridiagonal. For arbitrary symmetric matrices it is not clear if there is any difference in the reliability of the routines.
@@ -9229,7 +9229,7 @@ Laboratory. The function SPMPAR is also used.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L61118`](source_parts/nswc_part_06.f90#L7953) |
+| `DSEIG` | `SUBROUTINE` | `A, KA, N, W, T, IERR` | [`L62254`](source_parts/nswc_part_06.f90#L9408) |
 
 
 The subroutine DSEIG is available for the double precision computation of the eigenvalues of symmetric real matrices. The subroutine frequently yields results accurate to 27-28 significant digits.
@@ -9268,7 +9268,7 @@ T is a double precision array of dimension 2n or larger that is a work space for
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DSEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L61136`](source_parts/nswc_part_06.f90#L7971) |
+| `DSEIGV` | `SUBROUTINE` | `A, KA, N, W, Z, T, IERR` | [`L62275`](source_parts/nswc_part_06.f90#L9429) |
 
 
 The subroutine DSEIGV is available for the double precision computation of the eigenvalues and eigenvectors of symmetric real matrices. This subroutine frequently yields values for the eigenvalues that are accurate to 26-28 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 28" significant digit, but the components of the eigenvector are only accurate to 22-24 significant digits.
@@ -9313,7 +9313,7 @@ TPQL2 developed at Argonne National Laboratory. The double precision versions we
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L61824`](source_parts/nswc_part_06.f90#L8659) |
+| `CEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L62969`](source_parts/nswc_part_06.f90#L10123) |
 
 
 The subroutine CEIG is available for computing the eigenvalues of complex matrices. This routine frequently yields results accurate to 13-14 significant digits. However, if the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 7-8 digit accuracy.
@@ -9354,7 +9354,7 @@ trurde (Second Edition), Springer Verlag, £6
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L61841`](source_parts/nswc_part_06.f90#L8676) |
+| `CEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L62986`](source_parts/nswc_part_06.f90#L10140) |
 
 
 The subroutine CEIGV is available for computing the eigenvalues and eigenvectors of complex matrices. This routine frequently yields values for the eigenvalues that are accurate to 13-14 significant digits. However, be aware that errors in the eigenvalues, no matter how seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. It is not at all unusual to obtain an eigenvalue and eigenvector where the eigenvalue is correct to within 2-3 units of the 14** significant digit, but the components of the corresponding eigenvector are only a-curate to 9-10 significant digits. If the eigenvalues of a matrix are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 7-8 digit accuracy, and the situation regarding the eigenvectors is totally unpredictable. The components of such an eigenvector may be correct to 6-7 significant digits, or the eigenvector may not even be an eigenvector! In this case the results should be checked.
@@ -9408,7 +9408,7 @@ Usage. lf one has a complex matrix A, then AR and AI can be obtained using the m
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L62898`](source_parts/nswc_part_06.f90#L9733) |
+| `DCEIG` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, IERR` | [`L64043`](source_parts/nswc_part_07.f90#L483) |
 
 
 The subroutine DCEIG is available for the double precision computation of the eigenvalues of complex matrices. This routine frequently yields results accurate to 26-28 significant digits. However, if the eigenvalues are not distinct ur if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect more than 13-14 digit accuracy.
@@ -9444,7 +9444,7 @@ IBAL and ka are input arguments. It is assumed that ka is the number of rows in 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DCEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L62915`](source_parts/nswc_part_06.f90#L9750) |
+| `DCEIGV` | `SUBROUTINE` | `IBAL, AR, AI, KA, N, WR, WI, ZR, ZI, IERR, TEMP` | [`L64060`](source_parts/nswc_part_07.f90#L500) |
 
 
 The subroutine DCEIGV is available for the double precision computation of the eigenvalues and eigenvectors of comp!ex matrices. The routine frequently yields values for the eigenvalues that are accurate to 26-26 significant digits However, be aware that the errors in the eigenvalues, no matter bow seemingly insignificant, can be considerably magnified in the computation of the eigenvectors. If the eigenvalues are not distinct or if they are exceedingly tightly clustered, then a severe drop in accuracy can occur. In this case one should not expect the eigenvalues to have more than 13-14 digit accuracy.
@@ -9491,7 +9491,7 @@ gramming. DCEIGV is a driver for the subroutines DCBAL, DCORTH, DCMQR2,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CL1` | `SUBROUTINE` | `K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES, ERROR, WK, IWK` | [`L63967`](source_parts/nswc_part_07.f90#L1) |
+| `CL1` | `SUBROUTINE` | `K, L, M, N, Q, KQ, KODE, TOLER, ITER, X, RES, ERROR, WK, IWK` | [`L65112`](source_parts/nswc_part_07.f90#L1552) |
 
 
 Let Abeakxn matrix, C an éxn matrix, and “an mxn matrix. Also let b,d, and f be column vectors of dimensions hk, @, and mm respectively. The following subroutine is available for obtaining a column vector of dimension n which minimizes || Ax -- b||) = > |A,x — 6! ead subject to the constraints
@@ -9564,10 +9564,10 @@ Problem,” ACM Trans. Math Software 6 (1980), pp. 231-235.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L64385`](source_parts/nswc_part_07.f90#L419) |
-| `LSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L64982`](source_parts/nswc_part_07.f90#L1016) |
-| `HFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L67104`](source_parts/nswc_part_07.f90#L3138) |
-| `HFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L67346`](source_parts/nswc_part_07.f90#L3380) |
+| `LLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L65535`](source_parts/nswc_part_07.f90#L1975) |
+| `LSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L66157`](source_parts/nswc_part_07.f90#L2597) |
+| `HFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L68336`](source_parts/nswc_part_07.f90#L4776) |
+| `HFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L68583`](source_parts/nswc_part_07.f90#L5023) |
 
 
 Given an m X n matrix A and an mx @ matrix B. The column vectors b;,..., 6, of B specify @ distinct linear least squares problems
@@ -9727,7 +9727,7 @@ When an error ais detected, the routine immediately terminates
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LLSQMP` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L64411`](source_parts/nswc_part_07.f90#L445) |
+| `LLSQMP` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L65566`](source_parts/nswc_part_07.f90#L2006) |
 
 
 Given an m Xn matrix A and an mx £ matrix B. The column vectors b;,...,6, of B specify @ distinct linear least. squares problems
@@ -9776,10 +9776,10 @@ Mere hey Vlaet for any vector: tea, ean)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DLLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L64761`](source_parts/nswc_part_07.f90#L795) |
-| `DLSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L66038`](source_parts/nswc_part_07.f90#L2072) |
-| `DHFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L67700`](source_parts/nswc_part_07.f90#L3734) |
-| `DHFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L67944`](source_parts/nswc_part_07.f90#L3978) |
+| `DLLSQ` | `SUBROUTINE` | `M, N, A, KA, B, KB, NB, WK, IWK, IERR` | [`L65927`](source_parts/nswc_part_07.f90#L2367) |
+| `DLSQR` | `SUBROUTINE` | `IND, A, MDA, M, N, B, MDB, NB, RE, AE, KRANK, KSURE, RNORM, WORK, LW, IWORK, LIW, IERR` | [`L67251`](source_parts/nswc_part_07.f90#L3691) |
+| `DHFTI` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, TAU, K, RNORM, H, G, IP` | [`L68947`](source_parts/nswc_part_07.f90#L5387) |
+| `DHFTI2` | `SUBROUTINE` | `A, MDA, M, N, B, MDB, NB, D, TAU, K, RNORM, H, G, IP, IERR` | [`L69194`](source_parts/nswc_part_07.f90#L5634) |
 
 
 Given an mx n matrix A and an mx 2 matrix B. The column vectors b;, ...,6, of B specify @ distinct linear least squares problems
@@ -9953,7 +9953,7 @@ When an error is detected, the routine immediately terminates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LSEI` | `SUBROUTINE` | `W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, MODE, WS, IP` | [`L68298`](source_parts/nswc_part_07.f90#L4332) |
+| `LSEI` | `SUBROUTINE` | `W, MDW, ME, MA, MG, N, PRGOPT, X, RNORME, RNORML, MODE, WS, IP` | [`L69554`](source_parts/nswc_part_07.f90#L5994) |
 
 
 Let A be an m, Xn matrix, H anim, Xn matrix, G an m, xn matrix, 6 a column vector of dimension m,, f a column vector of dimension m,, and A a column vector of dimension m,. The subroutine LSEi is available for finding a column vector z of dimension n that minimizes || Ax -- 6|| subject to the constraints?
@@ -10111,7 +10111,7 @@ there are inequality constraints Ga > h. This matrix assumes that any inequaliti
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `WNNLS` | `SUBROUTINE` | `W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, IWORK, WORK` | [`L69395`](source_parts/nswc_part_07.f90#L5429) |
+| `WNNLS` | `SUBROUTINE` | `W, MDW, ME, MA, N, L, PRGOPT, X, RNORM, MODE, IWORK, WORK` | [`L70681`](source_parts/nswc_part_07.f90#L7121) |
 
 
 Let A be an m, Xn matrix, FE an m, x n matrix, b a column vector of dimension m,, and f a column vector of dimension m, The subroutine WNNLS is available for finding a column vector z = (zy, ...,2,)* that minimizes || Az — || subject to the constraints!
@@ -10239,7 +10239,7 @@ Constrained Least Squares Problem,” ACM Trans. Math Software 8 (1982), pp. 323
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `L2SLV` | `SUBROUTINE` | `M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, X, NN, RES, MR, QR, MMPNN, C, IFAULT` | [`L70654`](source_parts/nswc_part_07.f90#L6688) |
+| `L2SLV` | `SUBROUTINE` | `M, N, M1, L, A, MM, B, MB, W, TOL, N1, IPIVOT, X, NN, RES, MR, QR, MMPNN, C, IFAULT` | [`L71965`](source_parts/nswc_part_07.f90#L8405) |
 
 
 Let A be an m, x n matrix, E an m, Xn matrix, 3 an m, x & matrix, and F an m, x &€ matrix. It is assumed that 0 < m, < n and that the rank of Eis m,. Let by, ...,5¢ denote the column vectors of B and fi, ...,f¢ the column vectors of F. The subroutine L2SLV is available for finding the unique minimum length column vector z, of dimension n that minimizes ||/Az, — 6,;|| subject to the equality constraints Ez, = f, (if there are any) for 7 = 1,...,@ Iterative improvement is performed to compute the vectors Z1,.-.4,2¢ to machine accuracy. It is assumed that ma > 0. If mg = 0 then L2SLV finds the unique minimum length solution z,; to fz; = f; forj=1,...,€.
@@ -10346,7 +10346,7 @@ p decimal digit floating-point arithmetic is being used. yw = 14 for the CDC 670
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BLSQ` | `SUBROUTINE` | `M, N, A, KA, ML, MU, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L72385`](source_parts/nswc_part_07.f90#L8419) |
+| `BLSQ` | `SUBROUTINE` | `M, N, A, KA, ML, MU, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L73718`](source_parts/nswc_part_07.f90#L10158) |
 
 
 EQUATIONS
@@ -10457,8 +10457,8 @@ __. “Algorithm 583. LSQR: Sparse Linear Equations and Least Squares ACM Trans.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPLSQ` | `SUBROUTINE` | `M, N, A, IA, JA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L71540`](source_parts/nswc_part_07.f90#L7574) |
-| `STLSQ` | `SUBROUTINE` | `M, N, TA, ITA, JTA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L71973`](source_parts/nswc_part_07.f90#L8007) |
+| `SPLSQ` | `SUBROUTINE` | `M, N, A, IA, JA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L72869`](source_parts/nswc_part_07.f90#L9309) |
+| `STLSQ` | `SUBROUTINE` | `M, N, TA, ITA, JTA, DAMP, U, X, ATOL, BTOL, CONLIM, ITNLIM, ISTOP, ITN, ACOND, RNORM, XNORM, W` | [`L73304`](source_parts/nswc_part_07.f90#L9744) |
 
 
 EQUATIONS Given ai n matrix A, a column vector 6 of dimension m, and a real number 4. Let A= 4 vi: +0 is the n x n identity matrix, and let 6 = (3). The problem is to find a column vec tor: of dimension n which is a least squares solution of Az =: b. If A is sparse
@@ -10545,7 +10545,7 @@ IND = 7 MXITER iterations were performed. More iterations are needed. The vector
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FMIN` | `SUBROUTINE` | `F, A0, B0, X, W, AERR, RERR, ERROR, IND` | [`L72803`](source_parts/nswc_part_07.f90#L8837) |
+| `FMIN` | `SUBROUTINE` | `F, A0, B0, X, W, AERR, RERR, ERROR, IND` | [`L74136`](source_parts/nswc_part_08.f90#L1) |
 
 
 Let F(z) be a continuous real-valued function defined for a < z < b. Then the following subroutine is available for finding a local minimum of F(z}.
@@ -10578,7 +10578,7 @@ AQT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `OPTF` | `SUBROUTINE` | `FCN, N, RERR, ITER, XPLS, FPLS, IERR, WRK` | [`L72970`](source_parts/nswc_part_07.f90#L9004) |
+| `OPTF` | `SUBROUTINE` | `FCN, N, RERR, ITER, XPLS, FPLS, IERR, WRK` | [`L74305`](source_parts/nswc_part_08.f90#L170) |
 
 
 Let f(x) be a real-valued function of n variables x =: (z1,..,2,) where n > 2. If f(z) is twice continuously differentiable then the following subroutine is available for finding a local minimum of f(z).
@@ -10649,7 +10649,7 @@ Accuracy and Efficiency. OPTF is frequently extremely efficient in finding a val
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LMDIFF` | `SUBROUTINE` | `FCN, M, N, X, FVEC, EPSFCN, TOL, INFO, IWA, WA, LWA` | [`L74017`](source_parts/nswc_part_07.f90#L10051) |
+| `LMDIFF` | `SUBROUTINE` | `FCN, M, N, X, FVEC, EPSFCN, TOL, INFO, IWA, WA, LWA` | [`L75418`](source_parts/nswc_part_08.f90#L1283) |
 
 
 Let fi(z), ...,fm(z) be m real-valued functions of n real variables x = (zy, ...,2,) where m > n. The problem under consideration is to find a point x which minimizes the bid
@@ -10728,8 +10728,8 @@ References,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SMPLX` | `SUBROUTINE` | `A, B0, C, KA, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L76167`](source_parts/nswc_part_08.f90#L1559) |
-| `SSPLX` | `SUBROUTINE` | `TA, ITA, JTA, B0, C, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L76989`](source_parts/nswc_part_08.f90#L2381) |
+| `SMPLX` | `SUBROUTINE` | `A, B0, C, KA, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L77580`](source_parts/nswc_part_08.f90#L3445) |
+| `SSPLX` | `SUBROUTINE` | `TA, ITA, JTA, B0, C, M, N0, IND, IBASIS, X, Z, ITER, MXITER, NUMLE, NUMGE, BI, WK, IWK` | [`L78417`](source_parts/nswc_part_08.f90#L4282) |
 
 
 Let A = (¢,;;) be an mx n matrix, B an array containing 61, ...,6m, and C an array containing cy, ...,¢€, where a,;,6,,c; are real. Consider the problem of finding nonnegative values 21, ...,2, which maximize or minimize the function cy7y +-++° + en2, subject to the constraints:
@@ -10842,7 +10842,7 @@ Check if there are any remaining negative variables. If not, then we are finishe
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ASSGN` | `SUBROUTINE` | `N, A, C, T, IWK, IERR` | [`L78062`](source_parts/nswc_part_08.f90#L3454) |
+| `ASSGN` | `SUBROUTINE` | `N, A, C, T, IWK, IERR` | [`L79513`](source_parts/nswc_part_08.f90#L5378) |
 
 
 Let C = (¢,;) be ann x n matrix (the cost matrix). The problem under consideration
@@ -10899,7 +10899,7 @@ tle
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MKP` | `SUBROUTINE` | `N, M, P, W, K, BCK, XSTAR, VSTAR, WK, IWK, NUM` | [`L78327`](source_parts/nswc_part_08.f90#L3719) |
+| `MKP` | `SUBROUTINE` | `N, M, P, W, K, BCK, XSTAR, VSTAR, WK, IWK, NUM` | [`L79785`](source_parts/nswc_part_08.f90#L5650) |
 
 
 Given n > 2 items, each having a profit p; > 0 and weight w; > 0, and m > 1 containers (knapsacks), each having a capacity k, > 0. Let z,; = 1 if item 7 is assigned to knapsack 1. Otherwise, let z;; == 0. Then the problem is to find an assignment z,; of the
@@ -10970,7 +10970,7 @@ Backtracking. For NBCK = —1, the time required for finding the exact maximum d
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LAINV` | `SUBROUTINE` | `MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR` | [`L79124`](source_parts/nswc_part_08.f90#L4516) |
+| `LAINV` | `SUBROUTINE` | `MO, FUN, T, AERR, RERR, Y, C, ERROR, NUM, IERR` | [`L80608`](source_parts/nswc_part_08.f90#L6473) |
 
 
 Let f(t) be a complex-valued function that is continuous for t > 0 except possibly at a countable set of values t, having no finite limit points. Then for complex z the Laplace transform F(z) of f(t) is defined by
@@ -11101,8 +11101,8 @@ Preference. Piessens, R. and Huysmans, R., “Algorithm 619. Automatic Numerical
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FFT` | `SUBROUTINE` | `C, N, ISN, IERR` | [`L81019`](source_parts/nswc_part_08.f90#L6411) |
-| `FFT1` | `SUBROUTINE` | `A, B, N, ISN, IERR` | [`L81034`](source_parts/nswc_part_08.f90#L6426) |
+| `FFT` | `SUBROUTINE` | `C, N, ISN, IERR` | [`L82590`](source_parts/nswc_part_08.f90#L8455) |
+| `FFT1` | `SUBROUTINE` | `A, B, N, ISN, IERR` | [`L82607`](source_parts/nswc_part_08.f90#L8472) |
 
 
 Let n be a positive integer and 6; = 2xj/n for 7 = 0,1,...,n — 1. For any complex valued functions f and g defined on the points 6; let (f,g) = >I f(8;) 9(0;). Then (f,g) is an inner product when f and g are regarded as functions defined only on 6,;. Also e29(7 = 0, i, ...,2—1) form an orthogonal set of functions where each e*?* has norm \/n.' Thus, if f is 2 function that is approximated by f(#) = DI c,e'7® then each cy = 4{f (6), e7%). The
@@ -11169,8 +11169,8 @@ The setting IERR = 2 can occur only when n > 4251528.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MFFT` | `SUBROUTINE` | `C, N, NDIM, ISN, IERR` | [`L81044`](source_parts/nswc_part_08.f90#L6436) |
-| `MFFT1` | `SUBROUTINE` | `A, B, N, NDIM, ISN, IERR` | [`L81079`](source_parts/nswc_part_08.f90#L6471) |
+| `MFFT` | `SUBROUTINE` | `C, N, NDIM, ISN, IERR` | [`L82619`](source_parts/nswc_part_08.f90#L8484) |
+| `MFFT1` | `SUBROUTINE` | `A, B, N, NDIM, ISN, IERR` | [`L82657`](source_parts/nswc_part_08.f90#L8522) |
 
 
 ```text
@@ -11243,11 +11243,11 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `COSQI` | `SUBROUTINE` | `N, WSAVE` | [`L81722`](source_parts/nswc_part_08.f90#L7114) |
-| `COSQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L81790`](source_parts/nswc_part_08.f90#L7182) |
-| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L81887`](source_parts/nswc_part_08.f90#L7279) |
-| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L81990`](source_parts/nswc_part_08.f90#L7382) |
-| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L82057`](source_parts/nswc_part_08.f90#L7449) |
+| `COSQI` | `SUBROUTINE` | `N, WSAVE` | [`L83312`](source_parts/nswc_part_08.f90#L9177) |
+| `COSQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L83380`](source_parts/nswc_part_08.f90#L9245) |
+| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L83477`](source_parts/nswc_part_08.f90#L9342) |
+| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L83580`](source_parts/nswc_part_08.f90#L9445) |
+| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L83652`](source_parts/nswc_part_08.f90#L9517) |
 
 
 Let n be a positive integer and 0, = (v +1/2)x/n for vy = 0,i,...,2-—1. For any “a real valued functions f and g defined on the points 6, let (f,g) = p> f(8.) 9(6.). Then (f,g) is an inner product when f{ and g are regarded as functions defined only on 6,.
@@ -11349,7 +11349,7 @@ AST
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CHEBY` | `SUBROUTINE` | `A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q, ERROR, IERR, W` | [`L83388`](source_parts/nswc_part_08.f90#L8780) |
+| `CHEBY` | `SUBROUTINE` | `A, B, F, G, PHI, EPS, ITNO, MXITER, L, M, P, Q, ERROR, IERR, W` | [`L85000`](source_parts/nswc_part_09.f90#L282) |
 
 
 Let a < 6 and g(x) be a continuous nonvanishing function on the interval [a,b]. For any continuous function f(z), let |{f|| denote the weighted norm maz{|f(z)|/|g(z)| : a <x < b}. Also let ¢(2) be a continuous strictly monotonic mapping on [a, 6]. Then for any nonnegative integers € and m, the subroutine CHEBY is available for finding a rational function
@@ -11422,7 +11422,7 @@ Reference, Cody, W. J., Fraser, W., and Hart, J. F. “Rational Chebychev Approx
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ADAPT` | `SUBROUTINE` | `F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS, COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT, KDIFF, VALLFT, VALRGT` | [`L83741`](source_parts/nswc_part_08.f90#L9133) |
+| `ADAPT` | `SUBROUTINE` | `F, XLFT, XRGT, EPSLN, NPIECE, ERREST, XKNOTS, COEFS, IERR, KMAX, NDEG, NSMTH, ANORM, DX, MO, KBREAK, BRAKPT, KDIFF, VALLFT, VALRGT` | [`L85362`](source_parts/nswc_part_09.f90#L644) |
 
 
 For any continuous real-valued function f(z) defined on the interval [a,b], let ||f|I, denote the Z, norm defined by
@@ -11565,8 +11565,8 @@ In the ADAPT statement XBREAK, KDIFF, DLEFT, and DRIGHT are ignored since m= 0,
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CPSC` | `SUBROUTINE` | `F, Z, N, IC, TOL, R, RS, ERR` | [`L84884`](source_parts/nswc_part_08.f90#L10276) |
-| `DCPSC` | `SUBROUTINE` | `FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR` | [`L85122`](source_parts/nswc_part_09.f90#L1) |
+| `CPSC` | `SUBROUTINE` | `F, Z, N, IC, TOL, R, RS, ERR` | [`L86587`](source_parts/nswc_part_09.f90#L1869) |
+| `DCPSC` | `SUBROUTINE` | `FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR` | [`L86833`](source_parts/nswc_part_09.f90#L2115) |
 
 
 Let f(z) = 37 an(z — zo)” denote the Taylor series of an analytic function f around
@@ -11662,7 +11662,7 @@ Usage. DCPSC is used in the same manner as CPSC. See the usage section for CPSC.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRP` | `FUNCTION` | `A, N, X, Y` | [`L85402`](source_parts/nswc_part_09.f90#L281) |
+| `TRP` | `FUNCTION` | `A, N, X, Y` | [`L87117`](source_parts/nswc_part_09.f90#L2399) |
 
 
 Let a be a real number and (21,41), ...,(%n, Yn) @ sequence of points. The following function performs a linear interpolation at point a.
@@ -11685,7 +11685,7 @@ It ia assumed that n > 2 and 2] < +++ < a. X and ¥ are arrays containing the ab
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `LTRP` | `SUBROUTINE` | `M, X, Y, N, XI, YI, NI, T, IERR` | [`L85434`](source_parts/nswc_part_09.f90#L313) |
+| `LTRP` | `SUBROUTINE` | `M, X, Y, N, XI, YI, NI, T, IERR` | [`L87155`](source_parts/nswc_part_09.f90#L2437) |
 
 
 Let {(z:,yi:): $ = 1,...,n} be a set of n > 2 points where 21 < +++ < 2,,m be an integer where 2 < m < n, and £1,...,%,% be k > 1 points at which m point Lagrange interpolation is to be performed. The subroutine LTRP is available for performing this interpolation.
@@ -11724,7 +11724,7 @@ Linear Interpolation. For m = 2, if the abscissae x; are not equally spaced then
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HTRP` | `SUBROUTINE` | `N, X, Y, A, T, IERR` | [`L85585`](source_parts/nswc_part_09.f90#L464) |
+| `HTRP` | `SUBROUTINE` | `N, X, Y, A, T, IERR` | [`L87306`](source_parts/nswc_part_09.f90#L2588) |
 
 
 Let r1,...,%% be k > 1 distinct points. For each x; assume that we are given nj > 1 values y;, yi, we yl ) ifn = nm, +--+: + n,, then there exists a unique polynomial of degree n -— 1 which satisfies
@@ -11790,7 +11790,7 @@ PCOEFF
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PCOEFF` | `SUBROUTINE` | `ALPHA, N, X, A, C, T` | [`L85630`](source_parts/nswc_part_09.f90#L509) |
+| `PCOEFF` | `SUBROUTINE` | `ALPHA, N, X, A, C, T` | [`L87356`](source_parts/nswc_part_09.f90#L2638) |
 
 
 n—-1 For n > 1 let p(z) = ag + SD a;(x - 21)--- (a — z;). Then for any real number a, y=l the subroutine PCOEFF is available for converting the polynomial p(z) to the Taylor series
@@ -11819,7 +11819,7 @@ T is a double precision array of dimension n or larger. The array is a work spac
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PFIT` | `SUBROUTINE` | `ND, NP, X, Y, A, RNORM, PHI, PHIX, IERR` | [`L85654`](source_parts/nswc_part_09.f90#L533) |
+| `PFIT` | `SUBROUTINE` | `ND, NP, X, Y, A, RNORM, PHI, PHIX, IERR` | [`L87384`](source_parts/nswc_part_09.f90#L2666) |
 
 
 Let {(2;,4;):# = 1,...,m} be a set of m > 2 points where 2; 4 xz; for i #7. Then for any positive integer n where n<m, the subroutine PFIT is available for obtaining the
@@ -11853,7 +11853,7 @@ PHI is an array of dimension 2(n + 1) or larger, and WK is an array of dimension
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `WPFIT` | `SUBROUTINE` | `ND, NP, X, Y, W, A, RNORM, PHI, PHIX, IERR` | [`L85791`](source_parts/nswc_part_09.f90#L670) |
+| `WPFIT` | `SUBROUTINE` | `ND, NP, X, Y, W, A, RNORM, PHI, PHIX, IERR` | [`L87526`](source_parts/nswc_part_09.f90#L2808) |
 
 
 Let {(2,,y:) : # = 1,...,m} be a set of m > 2 points where 2, 4 x; fort #7, and let w, > O(1 = 1, ...,m) be weights. It is assumed that m,, > 2 where m, is the number of nonzero weights. For any positive integer n where n < m,, the subroutine WPFIT is
@@ -11890,8 +11890,8 @@ PHI is an array of dimension 2(n + 1) or larger, and WK is an array of dimension
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CBSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR` | [`L85944`](source_parts/nswc_part_09.f90#L823) |
-| `SPLIFT` | `SUBROUTINE` | `X, Y, YP, YPP, N, W, IERR, ISX, A1, B1, AN, BN` | [`L86076`](source_parts/nswc_part_09.f90#L955) |
+| `CBSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR` | [`L87684`](source_parts/nswc_part_09.f90#L2966) |
+| `SPLIFT` | `SUBROUTINE` | `X, Y, YP, YPP, N, W, IERR, ISX, A1, B1, AN, BN` | [`L87816`](source_parts/nswc_part_09.f90#L3098) |
 
 
 Given z; < +--+ < ay. A function f(z) is a cubic spline having the nodes(knots) Z1,...,;%y if f is a polynomial of degree < 3 on the interval [z,,2;41] fori =1,...,n—-1, and the first and second derivatives f’(2) and f(x) exist and are continuous for all z. If f{; denotes the polynomial for the interval [z;, 2,41] then f; has the form:
@@ -11961,7 +11961,7 @@ fe
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPFIT` | `SUBROUTINE` | `X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR` | [`L86237`](source_parts/nswc_part_09.f90#L1116) |
+| `SPFIT` | `SUBROUTINE` | `X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR` | [`L87977`](source_parts/nswc_part_09.f90#L3259) |
 
 
 Let ty < +++ < tg be a sequence where @ > 2, {(aj,y:):¢ =1,...,m} be a set of m > 4 points where ty <2) <-+- < 2, < te, and wy, ..., Wm be positive weights. Then the subroutine SPFIT is available for obtaining a cubic spline f(z) with the nodes ty, ...,te
@@ -12007,7 +12007,7 @@ If an error is detected, the routine immediately terminates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSPFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, XCON, CON, NDER, NC, Z, A, B, C, WK, IWK, IERR` | [`L86298`](source_parts/nswc_part_09.f90#L1177) |
+| `CSPFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, XCON, CON, NDER, NC, Z, A, B, C, WK, IWK, IERR` | [`L88041`](source_parts/nswc_part_09.f90#L3323) |
 
 
 Let ty <++* < tg be a sequence where @ > 2, and {(t4,y:) : i = 1,...,m} be a set of pointe where t) < 2) < +++ < 2m, < tg. Then the subroutine CSPFIT is available for obtaining a cubic spline f(x) with the nodes t; ...,t, which minimizes DS (2s) — ys)? subject to a set of constraints. This spline is represented by
@@ -12102,9 +12102,9 @@ appropriate value for the NDER array.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SCOMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, NI, IERR` | [`L86377`](source_parts/nswc_part_09.f90#L1256) |
-| `SCOMP1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, NI, IERR` | [`L86473`](source_parts/nswc_part_09.f90#L1352) |
-| `SCOMP2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, NI, IERR` | [`L86571`](source_parts/nswc_part_09.f90#L1450) |
+| `SCOMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, NI, IERR` | [`L88124`](source_parts/nswc_part_09.f90#L3406) |
+| `SCOMP1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, NI, IERR` | [`L88224`](source_parts/nswc_part_09.f90#L3506) |
+| `SCOMP2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, NI, IERR` | [`L88326`](source_parts/nswc_part_09.f90#L3608) |
 
 
 Given a1 <i: <t,. A function f(r) is a cubic spline having the nodes (knots) €1,...,% If f is a polynomial of degree < 3 on the interval [2,,2,44.;] forts 1, ...,n— 1, and the first and second derivatives f’(«) and f‘(a) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 244.1] then f; has the form:
@@ -12172,9 +12172,9 @@ Let %1,...,Z,, be the points at which the spline f is to be evaluated. XI is an 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEVAL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, NI, IERR` | [`L86672`](source_parts/nswc_part_09.f90#L1551) |
-| `SEVAL1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L86775`](source_parts/nswc_part_09.f90#L1654) |
-| `SEVAL2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L86879`](source_parts/nswc_part_09.f90#L1758) |
+| `SEVAL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, NI, IERR` | [`L88431`](source_parts/nswc_part_09.f90#L3713) |
+| `SEVAL1` | `SUBROUTINE` | `X, Y, YP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L88538`](source_parts/nswc_part_09.f90#L3820) |
+| `SEVAL2` | `SUBROUTINE` | `X, Y, YPP, N, XI, YI, YPI, YPPI, NI, IERR` | [`L88646`](source_parts/nswc_part_09.f90#L3928) |
 
 
 Given 21 < +++ < rq. A function f(x) is a cubic spline having the nodes (knots) 1,...,2, if f is a polynomial of degree < 3 on the interval [2.,%s41] forf == 1,...,n—1, and the first and second derivatives f’(r) and f(x) exist and are continuous for all z. If f; denotes the polynomial for the interval {2,;,2,;41] then f; has the form:
@@ -12249,9 +12249,9 @@ Let %1,...,Zm be the points at which the spline f and its first two derivatives 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSINT` | `REAL FUNCTION` | `X, Y, A, B, C, N, ALPHA, BETA` | [`L86985`](source_parts/nswc_part_09.f90#L1864) |
-| `CSINT1` | `REAL FUNCTION` | `X, Y, YP, N, A, B` | [`L87086`](source_parts/nswc_part_09.f90#L1965) |
-| `CSINT2` | `REAL FUNCTION` | `X, Y, YPP, N, A, B` | [`L87201`](source_parts/nswc_part_09.f90#L2080) |
+| `CSINT` | `REAL FUNCTION` | `X, Y, A, B, C, N, ALPHA, BETA` | [`L88756`](source_parts/nswc_part_09.f90#L4038) |
+| `CSINT1` | `REAL FUNCTION` | `X, Y, YP, N, A, B` | [`L88857`](source_parts/nswc_part_09.f90#L4139) |
+| `CSINT2` | `REAL FUNCTION` | `X, Y, YPP, N, A, B` | [`L88972`](source_parts/nswc_part_09.f90#L4254) |
 
 
 Given x, <--> < 2,. A function f(x) is a cubic epline having the nodes (knots) Ty,...,%, 1f f is a polynomial of degree < 3 on the interval [z;, 241] fort =1,...,n — 1, and the first and second derivatives f’(2) and f(r) exist and are continuous for all x. If f; denotes the polynomial for the interval [z,, 2,41] then f; has the form:
@@ -12306,7 +12306,7 @@ Then CSINT2(X,¥,DDY,n,a, A) f" f(t) dt.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, T, IERR` | [`L87296`](source_parts/nswc_part_09.f90#L2175) |
+| `PDSPL` | `SUBROUTINE` | `X, Y, A, B, C, N, T, IERR` | [`L89067`](source_parts/nswc_part_09.f90#L4349) |
 
 
 Given w; < +++ < a,. A function f(x) is a cubic spline having the nodes (knots) %1,...,2, if f is a polynomial of degree < 3 on the interval [z,, 2,41] for ¢ = 1,...,n - 1, and the first and second derivatives /'(z) and f(x) exist and are continuous for all z. If f, denotes the polynomial for the interval [z,;,2;:,] then f; has the form:
@@ -12352,7 +12352,7 @@ AGT
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PDFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR` | [`L87421`](source_parts/nswc_part_09.f90#L2300) |
+| `PDFIT` | `SUBROUTINE` | `X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR` | [`L89196`](source_parts/nswc_part_09.f90#L4478) |
 
 
 Let t) <+-+ < t, be a sequence where é > 2 and { (2;,4;) :¢ =1, ...,m} a set of points where t) < 21 < +++ < am < te. Then the following subroutine is available for obtaining a periodic cubic spline f(x) with the nodes ¢;, ...,t¢ which minimizes >°>,(f(z;) — y:)?. This spline is represented by
@@ -12397,8 +12397,8 @@ BSPVB, BSPVD, LSEI, and the subroutines and functions used by LSEL PDEIP was wri
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PSCMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, M, IERR` | [`L87511`](source_parts/nswc_part_09.f90#L2390) |
-| `PSEVL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR` | [`L87585`](source_parts/nswc_part_09.f90#L2464) |
+| `PSCMP` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, M, IERR` | [`L89290`](source_parts/nswc_part_09.f90#L4572) |
+| `PSEVL` | `SUBROUTINE` | `X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR` | [`L89368`](source_parts/nswc_part_09.f90#L4650) |
 
 
 Let z1 <+++ < zy be a sequence where n > 2, and f a periodic cubic spline where f(z) = yy + a(x — 2) + (2 — x;)? + (x _ z;)°
@@ -12441,9 +12441,9 @@ A71}
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSLOOP` | `SUBROUTINE` | `M, N, X, KX, T, DX, KDX, WK, IERR` | [`L87666`](source_parts/nswc_part_09.f90#L2545) |
-| `LOPCMP` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, L, TI, Z, KZ` | [`L87858`](source_parts/nswc_part_09.f90#L2737) |
-| `LOPDF` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ` | [`L87935`](source_parts/nswc_part_09.f90#L2814) |
+| `CSLOOP` | `SUBROUTINE` | `M, N, X, KX, T, DX, KDX, WK, IERR` | [`L89453`](source_parts/nswc_part_09.f90#L4735) |
+| `LOPCMP` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, L, TI, Z, KZ` | [`L89651`](source_parts/nswc_part_09.f90#L4933) |
+| `LOPDF` | `SUBROUTINE` | `M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ` | [`L89732`](source_parts/nswc_part_09.f90#L5014) |
 
 
 Given m > 2 points x = (x41, ..+)%in) Where n > 2. One procedure for fitting a closed curve to the points is to first let s; = 0,8; = 9;-,+ [25 —2y~1|| for ¢ = 2, ...,m, and 8m+1 = 9m + ||t1 — Zm||,1 next let t; = 8:/8m+1 fori =1,.. ,m-+1, and then to find for each j <n the periodic cubic spline +,(t) having the knots ty, ... rtmii where 7;(t,) = 2, for i < m. The mapping 7(t} = (y1(t), ...,7(t)) then defines on the interval (0, 1] a closed curve which traverses the points (¢1,21), ...,(tm,2m), (1,21) and satisfies ¥'(0) = ¥'(1) and ¥"(0) = 7"(1). For t < 0 and t > 1, ¥(t) is defined by periodicity (having period 1). The subroutine CSLOOP is available for obtaining the derivatives ¥;(ts) which characterize this curve, the subroutine LOPCMP is available for computing the curve, and the subroutine LOPDF is available for differentiating the curve.
@@ -12526,7 +12526,7 @@ Aid
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR` | [`L87998`](source_parts/nswc_part_09.f90#L2877) |
+| `CURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, YP, TEMP, SIGMA, IERR` | [`L89800`](source_parts/nswc_part_09.f90#L5082) |
 
 
 Given real og anda, <---<z,. A function f(z) isa spline having the tension factor o and the nodes (knots) x1, ...,2, if f(x) and its first two derivatives are continuous on [t1,2n], and f(x) — 6? f(z) = ayz + 6, on the interval [z,, 2541] for # = 1,...,n- 1, Here @ = jo|(n -- 1)/{a_ ~ v1) and a,, 6; are constants. For zy < 2 < 2,41 f(z) can be represented by
@@ -12588,7 +12588,7 @@ Remarks.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURV2` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L88153`](source_parts/nswc_part_09.f90#L3032) |
+| `CURV2` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L89955`](source_parts/nswc_part_09.f90#L5237) |
 
 
 Given o and 2 < +++ < ty. A function f(x) is 4 spline having the tension factor o and the nodes (knots) «,, ...,2, if /(x) and its first two derivatives are continuous on [1,2], and f(r) — #? f(z) = age + b, on the interval la;,2ia1] ford = 1,...,n—- 1%. Here @ = |o|(n—1)/(2, ~ #1) and aj, d, are constants. If f(z) = f(x) for aysarcoyy, then f(x) can be represented by
@@ -12622,8 +12622,8 @@ CURV2(t,n, X,Y, DDY,o}
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CURVD` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L88242`](source_parts/nswc_part_09.f90#L3121) |
-| `CURVI` | `FUNCTION` | `XL, XU, N, X, Y, YP, SIGMA` | [`L88323`](source_parts/nswc_part_09.f90#L3202) |
+| `CURVD` | `FUNCTION` | `T, N, X, Y, YP, SIGMA` | [`L90044`](source_parts/nswc_part_09.f90#L5326) |
+| `CURVI` | `FUNCTION` | `XL, XU, N, X, Y, YP, SIGMA` | [`L90125`](source_parts/nswc_part_09.f90#L5407) |
 
 
 Let f(x) be a spline having the tension factor o and the nodes 21, ...,%n. Assume that f(ts) = ye ford = 1,..., 2. If the second derivatives f'(r;), ..., f" (zp) are known then the following functions may be used for differentiating and integrating the spline.
@@ -12658,8 +12658,8 @@ AT9
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR` | [`L88499`](source_parts/nswc_part_09.f90#L3378) |
-| `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L88691`](source_parts/nswc_part_09.f90#L3570) |
+| `KURV1` | `SUBROUTINE` | `N, X, Y, SLP1, SLPN, ISLPSW, XP, YP, TEMP, S, SIGMA, IERR` | [`L90301`](source_parts/nswc_part_09.f90#L5583) |
+| `KURV2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L90493`](source_parts/nswc_part_09.f90#L5775) |
 
 
 Given a sequence of points (21,41), ...,(@n, Yn). One procedure for fitting a curve to she points is to let a, = 0 and 8; = 4,.1 + \ (xg ~ ays )® + yy ~ 1)? for ¥ = 2,...,n, and than to find two splines #(s) and y(s) with tension o that satisfy a{s;) == a, and yl) ss y fort =: ],...,n. Tf 8, and 6, ere the desired angles for the curve 6 ++ (x(s), y(s)) at. the points (1,41) ‘and (zn, Yn}, then the splines z(s) and y(s) can be selected so that a'(s;) = cos; and y'(s;) = sin@, for f = 1,n. The curve « +> (x(s),y(s)) then passes through the points (z,,y,) and has the required slopes at the end points. The subroutine KURVL is available for obtaining the second derivatives 2(s,;),y"(a,)(¢ = 1, ...,n) which characterize this curve, and the subroutine KURV2 is available for computing the curve.
@@ -12721,8 +12721,8 @@ was written by A. K. Cline and R. J. Renka (University of Texas at Austin). INTR
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `KURVP1` | `SUBROUTINE` | `N, X, Y, XP, YP, TEMP, S, SIGMA, IERR` | [`L88797`](source_parts/nswc_part_09.f90#L3676) |
-| `KURVP2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L88968`](source_parts/nswc_part_09.f90#L3847) |
+| `KURVP1` | `SUBROUTINE` | `N, X, Y, XP, YP, TEMP, S, SIGMA, IERR` | [`L90599`](source_parts/nswc_part_09.f90#L5881) |
+| `KURVP2` | `SUBROUTINE` | `T, XS, YS, N, X, Y, XP, YP, S, SIGMA` | [`L90770`](source_parts/nswc_part_09.f90#L6052) |
 
 
 Given n > 2 points (21,41), ..., (2a, Yn)- One procedure for fitting a closed curve to the points is to let ¢; = JV (21 ~ tn)? + (yi — yn)? and 3, = sg.4 + V(x ~ 2-1)? + (yi — yyy)? for t= 2,...,n,and then to find periodic splines x(¢) and y(s) with tension o that pass through the points (91,7.), ...,(91,2n),(81 + 8,21) and (81,y)), . -+5(8n; Yn), (81 + 8n, 41). The mapping 8 +-+ (2:(s), y(s)) then defines a closed curve that passes through the points (25, ys). The subroutine KURVP1 is available for obtaining the second derivatives x"(s,), y"(8,)(t = 1,...,n) which characterize this curve, and the subroutine KURVP2 is available for com-
@@ -12785,8 +12785,8 @@ ABA
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QURV1` | `SUBROUTINE` | `N, X, Y, Z, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY, SLPNZ, ISLPSW, XP, YP, ZP, TEMP, S, SIGMA, IERR` | [`L89080`](source_parts/nswc_part_09.f90#L3959) |
-| `QURV2` | `SUBROUTINE` | `T, XS, YS, ZS, N, X, Y, Z, XP, YP, ZP, S, SIGMA` | [`L89297`](source_parts/nswc_part_09.f90#L4176) |
+| `QURV1` | `SUBROUTINE` | `N, X, Y, Z, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY, SLPNZ, ISLPSW, XP, YP, ZP, TEMP, S, SIGMA, IERR` | [`L90882`](source_parts/nswc_part_09.f90#L6164) |
+| `QURV2` | `SUBROUTINE` | `T, XS, YS, ZS, N, X, Y, Z, XP, YP, ZP, S, SIGMA` | [`L91099`](source_parts/nswc_part_09.f90#L6381) |
 
 
 Given n > 2 points (x1, y1, 21), -++) (Zn; Yn, 2n). One procedure for fitting a curve to
@@ -12900,7 +12900,7 @@ AS7
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `INTRVL` | `INTEGER FUNCTION` | `X, T, M` | [`L89539`](source_parts/nswc_part_09.f90#L4418) |
+| `INTRVL` | `INTEGER FUNCTION` | `X, T, M` | [`L91341`](source_parts/nswc_part_09.f90#L6623) |
 
 
 Let ty < +++ < ty, be a sequence where ty <t,,. Then for any ¢; < 2 < tm, the function INTRVL finds the interval [1,,t;41) that contains 2.
@@ -12931,7 +12931,7 @@ where @ is the integer such that t, < tei, and tay, = ++ =ty.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVAL` | `SUBROUTINE` | `T, BCOEF, N, K, X, JDERIV, W, WK` | [`L89607`](source_parts/nswc_part_09.f90#L4486) |
+| `BVAL` | `SUBROUTINE` | `T, BCOEF, N, K, X, JDERIV, W, WK` | [`L91409`](source_parts/nswc_part_09.f90#L6691) |
 
 
 For n > k > 1 let ty < +++ < tay, be a sequence where t, < tyy, and ty < ti4, fort =1,...,n. If f(z) = S02, a: Bix(z) then the following subroutine is available for evaluating f(z) and computing its derivatives.
@@ -12960,7 +12960,7 @@ WK is an array of dimension 3k or larger that is a work space for the routine.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVALI` | `SUBROUTINE` | `T, BCOEFF, N, K, X, W, WK` | [`L89774`](source_parts/nswc_part_09.f90#L4653) |
+| `BVALI` | `SUBROUTINE` | `T, BCOEFF, N, K, X, W, WK` | [`L91583`](source_parts/nswc_part_09.f90#L6865) |
 
 
 Forn > k> 1 let ty < «+: < tay, be a sequence where t, < ty4; and t; < tj; for t=1,...,n. If f = 0%, a:Bs, then the following subroutine is available for computing
@@ -12989,7 +12989,7 @@ fori =1,...,n and 6; = 6, forts =n+1,...,m-—1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSPP` | `SUBROUTINE` | `T, A, N, K, BREAK, C, L, WK` | [`L89907`](source_parts/nswc_part_09.f90#L4786) |
+| `BSPP` | `SUBROUTINE` | `T, A, N, K, BREAK, C, L, WK` | [`L91727`](source_parts/nswc_part_09.f90#L7009) |
 
 
 For n > k > 1 let ty < --- < tay, be a sequence where t; < ty4,% for: = 1,...,n. Further assume that t, <t,4; and let f(z) = > a; By. (xz) forth <2 < thar. If: <--- < €¢41 are the distinct points in the sequence {te .»tn41} then the piecewise polynomial f can be represented in the form f(r) = > cij(z — €;)'"} for €&; S 2 < 641 (7 = 1,...,2). The following subroutine is available for obtaining the coefficients c,,; of this representation.
@@ -13022,7 +13022,7 @@ WK is an array of dimension k(k + 1) or larger that is a work space for the rout
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `PPVAL` | `SUBROUTINE` | `X, A, L, N, XI, YI, NI` | [`L90003`](source_parts/nswc_part_09.f90#L4882) |
+| `PPVAL` | `SUBROUTINE` | `X, A, L, N, XI, YI, NI` | [`L91827`](source_parts/nswc_part_09.f90#L7109) |
 
 
 ```text
@@ -13062,7 +13062,7 @@ or larger. When PPVAL is called, f(Z,) is computed and stored in YI(j) for 7 = 1
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSTRP` | `SUBROUTINE` | `TAU, GTAU, T, N, K, BCOEF, Q, IFLAG` | [`L90286`](source_parts/nswc_part_09.f90#L5165) |
+| `BSTRP` | `SUBROUTINE` | `TAU, GTAU, T, N, K, BCOEF, Q, IFLAG` | [`L92121`](source_parts/nswc_part_09.f90#L7403) |
 
 
 Forn > k > 1 fet ty < +--+ < thy, be a sequence wnere t; < tyy, fort = 1,...,n. Consider a set of points {(z,,y;) :f = 1,...,n} where t, < zy < +++ < gy < tnya. Then we wish to find a piecewise polynomial f = )°>?., a;B,~ which satisfies f(z,) = y for t= 1,...,n.! This problem has a unique :..lution when t; < z,; < ti44% for 1 <1 <n. The following subroutine is available for obtaining the coefficients a;, ...,a, of the interpolating piecewise polynomial,
@@ -13114,7 +13114,7 @@ Dae)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLSQ` | `SUBROUTINE` | `TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR` | [`L90599`](source_parts/nswc_part_09.f90#L5478) |
+| `BSLSQ` | `SUBROUTINE` | `TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR` | [`L92438`](source_parts/nswc_part_09.f90#L7720) |
 
 
 Forn > k > 1 let ty < +++ < tyy«% be a sequence where t; < t,,, for s = 1,...,n. Consider a set of points { (2,;,y;):1 = 1,...,m} where ty < ay <+-+- < am < tay, and m > max{2,k}. Let wy > 0(¢ = 1,...,m) be weights. Then the following subroutine is available
@@ -13152,7 +13152,7 @@ Selection cf t, < +--+ < tay, given the data (z,;,y;). It is recommended that th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BFIT` | `SUBROUTINE` | `BKPT, N, NORD, XDATA, YDATA, NDATA, XCONST, YCONST, NDERIV, NCONST, MODE, COEFF, RNORM, W, IW` | [`L90864`](source_parts/nswc_part_09.f90#L5743) |
+| `BFIT` | `SUBROUTINE` | `BKPT, N, NORD, XDATA, YDATA, NDATA, XCONST, YCONST, NDERIV, NCONST, MODE, COEFF, RNORM, W, IW` | [`L92707`](source_parts/nswc_part_09.f90#L7989) |
 
 
 ```text
@@ -13288,7 +13288,7 @@ Pye, Boat bak dhetiabe the partial derivatives of F
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SPFIT2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR` | [`L91798`](source_parts/nswc_part_09.f90#L6677) |
+| `SPFIT2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, XBREAK, NX, YBREAK, NY, F, S, T, WK, NUM, IERR` | [`L93662`](source_parts/nswc_part_09.f90#L8944) |
 
 
 GHVER ty <osee << ty and vy < +++ < vq, where mn > 2. Let { (tr, Ye,2re) 1 = 1,...,¢;9 2 1,...,} be a set of points where p,v > 4,u, < ay << Ly < Um, and SM st Sw S U_. Also let wy,...,w, and ti,,...,W, be positive weights. Then the following subroutine is available for finding a bicubic spline f(z,y) having the knots ui0; (= 1,...,.m,7 = 1, ...,n) which minimizes » s wrt [f (Zr, Ye) — Wal’. =ITe=1
@@ -13340,10 +13340,10 @@ PP yf dene te the partial derivatives cf f
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CSURF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L92039`](source_parts/nswc_part_09.f90#L6918) |
-| `CSURF1` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F` | [`L92194`](source_parts/nswc_part_09.f90#L7073) |
-| `CSRF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L92209`](source_parts/nswc_part_09.f90#L7088) |
-| `CSRF2` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, DDF` | [`L92359`](source_parts/nswc_part_09.f90#L7238) |
+| `CSURF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L93910`](source_parts/nswc_part_09.f90#L9192) |
+| `CSURF1` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F` | [`L94071`](source_parts/nswc_part_09.f90#L9353) |
+| `CSRF` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, F1, KF1, F2, KF2, F12, KF12` | [`L94088`](source_parts/nswc_part_09.f90#L9370) |
+| `CSRF2` | `SUBROUTINE` | `IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF, DDF` | [`L94244`](source_parts/nswc_part_09.f90#L9526) |
 
 
 Given uy <++: < tm and v) <-+:+: <», where m,n > 2. Then a bicubic spline f(z,y) having the knots (u,,v,;) is uniquely defined by either of the following sets of data:! (1) the values f(us, v5) and derivatives Di f(u,,v;), Dof(us,vj), Dy Da f(us, v;) for
@@ -13434,7 +13434,7 @@ ott
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SURF` | `SUBROUTINE` | `M, N, X, Y, Z, IZ, OPT, ZP, TEMP, SIGMA, IERR` | [`L92375`](source_parts/nswc_part_09.f90#L7254) |
+| `SURF` | `SUBROUTINE` | `M, N, X, Y, Z, IZ, OPT, ZP, TEMP, SIGMA, IERR` | [`L94262`](source_parts/nswc_part_09.f90#L9544) |
 
 
 Given zy < +++ < 2m and yy < ++: < y,. Also assume that we are given the values aij (¢ = 1,...,m;7 = 1,...,n) and a tension factor o. Then the subroutine SURF is available for finding a bispline F(z,y) with tension o that satisfies F(z,,y,;) = 2;; for each 1,7. Boundary conditions can be imposed on the surface F(z, y} if desired.
@@ -13506,8 +13506,8 @@ ala
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SURF2` | `FUNCTION` | `XX, YY, M, N, X, Y, Z, IZ, ZP, SIGMA` | [`L92756`](source_parts/nswc_part_09.f90#L7635) |
-| `NSURF2` | `SUBROUTINE` | `DXMIN, DXMAX, MD, DYMIN, DYMAX, ND, DZ, IDZ, M, N, X, Y, Z, IZ, ZP, WORK, SIGMA` | [`L92897`](source_parts/nswc_part_09.f90#L7776) |
+| `SURF2` | `FUNCTION` | `XX, YY, M, N, X, Y, Z, IZ, ZP, SIGMA` | [`L94649`](source_parts/nswc_part_09.f90#L9931) |
+| `NSURF2` | `SUBROUTINE` | `DXMIN, DXMAX, MD, DYMIN, DYMAX, ND, DZ, IDZ, M, N, X, Y, Z, IZ, ZP, WORK, SIGMA` | [`L94799`](source_parts/nswc_part_09.f90#L10081) |
 
 
 Given 21 <+++ < dm and yy < +++ < yn, and let F/z,y) be a bispline with tension o. If the partial derivatives D? F(2,,y,;), D3 F(2,;,y,;), D? D2 F(z,;,y;) are known for? = 1,...,m and 7 := 1,...,", then the function SURF2 may be used for evaluating F(z, y) at a single point, and the subroutine NSURF2 may be used for evaluating F(z, y} on a grid of points.
@@ -13568,7 +13568,7 @@ S16
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSTRP2` | `SUBROUTINE` | `X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L93075`](source_parts/nswc_part_09.f90#L7954) |
+| `BSTRP2` | `SUBROUTINE` | `X, Y, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L94982`](source_parts/nswc_part_09.f90#L10264) |
 
 
 Form>k>landn> &> 1 let 5) < +++ < 9n4, and ty < ... < tnyy be sequences where 5; < sj44 (= 1, .,m) andt, < tye (J = 1,...,n). Let Bix, ..., Bmx be the B-splines for the knots 91 < +++ < Sm4, and By,...,Bne the B-splines for the knots ty Se) S tage. Given op < 21 < ++ < tm < Sm4i, te < yr < +++ < Yn < tny1, and the values z,; (f= 1,...,m,j7 =1,...,n). Then we wish to find a piecewise polynomial of the form
@@ -13617,7 +13617,7 @@ O17
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BSLSQ2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L93157`](source_parts/nswc_part_09.f90#L8036) |
+| `BSLSQ2` | `SUBROUTINE` | `X, WX, MX, Y, WY, MY, Z, KZ, TX, NX, KX, TY, NY, KY, A, KA, WK, L, IFLAG` | [`L95070`](source_parts/nswc_part_09.f90#L10352) |
 
 
 Form>k>tandn > €>1 let sy < +++ < smyy and ty <+-- < in+e be sequences where s; < 844% (#1 = 1,...,m) and t; < tj4¢ (7 = 1,...,n). Let Big, ..., Bmg be the B-splines for the knots 3; < +++ < 84, and Bye,...,Bye the B-splines for the knots ty S++ S tnye. Given 9, S zy S++ S oy < Smii, te S yr S++ < yy < tngi, and the values zp, (r = 1,...,4, 9 =1,...,v) where yp > max{2,k} and v > max{2,é}. Also let wi,...,W, and Wy, ...,W, be positive weights. Then the following subroutine is available for finding a piecewise polynomial of the form!
@@ -13677,7 +13677,7 @@ for NUM, namely rv + max{(k-+ 1)m,(@+ Ln}, has been stored in WK(i). Reset NUM >
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BVAL2` | `SUBROUTINE` | `A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, IDX, IDY, F, WK` | [`L93395`](source_parts/nswc_part_09.f90#L8274) |
+| `BVAL2` | `SUBROUTINE` | `A, KA, TX, NX, KX, TY, NY, KY, X0, Y0, IDX, IDY, F, WK` | [`L95319`](source_parts/nswc_part_10.f90#L81) |
 
 
 Form>k>landn>é> 1 let 3, <--- < mye and ty < +++ < tyy, be sequences where s; < sy44 (¢ = 1,...,m) and t; < tye (7 = 1,...,n). Let Biz, ..., Bmg be the B-splines for the knots sy < +++ < smsy and By, ..., Bye the B-splines for the knots
@@ -13711,11 +13711,11 @@ WK is an array of dimension @+ max{3k,3é} or larger that is a work space for th
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRMESH` | `SUBROUTINE` | `N, X, Y, IADJ, IEND, IER` | [`L93443`](source_parts/nswc_part_09.f90#L8322) |
-| `GRADG` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L94881`](source_parts/nswc_part_09.f90#L9760) |
-| `GRADL` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L95125`](source_parts/nswc_part_09.f90#L10004) |
-| `SFVAL` | `SUBROUTINE` | `N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L95672`](source_parts/nswc_part_10.f90#L1) |
-| `SFVAL2` | `SUBROUTINE` | `N, X, Y, Z, L, M, NROWS, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L95699`](source_parts/nswc_part_10.f90#L28) |
+| `TRMESH` | `SUBROUTINE` | `N, X, Y, IADJ, IEND, IER` | [`L95372`](source_parts/nswc_part_10.f90#L134) |
+| `GRADG` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L96820`](source_parts/nswc_part_10.f90#L1582) |
+| `GRADL` | `SUBROUTINE` | `N, X, Y, Z, IADJ, IEND, ZXZY, IERR` | [`L97069`](source_parts/nswc_part_10.f90#L1831) |
+| `SFVAL` | `SUBROUTINE` | `N, X, Y, Z, M, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L97622`](source_parts/nswc_part_10.f90#L2384) |
+| `SFVAL2` | `SUBROUTINE` | `N, X, Y, Z, L, M, NROWS, XI, YI, ZI, IADJ, IEND, ZXZY, IERR` | [`L97652`](source_parts/nswc_part_10.f90#L2414) |
 
 
 ```text
@@ -13847,10 +13847,10 @@ aye O2D
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `MFIT` | `SUBROUTINE` | `DIMEN, FITDEG, NFPOLS, NFPTS, FITCDS, NCROWS, FITVLS, WTS, RESIDS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, IREQD, DREQD` | [`L96296`](source_parts/nswc_part_10.f90#L625) |
-| `MEVAL` | `SUBROUTINE` | `DIMEN, EVLDEG, NEPOLS, NEPTS, EVLCDS, NEROWS, EVLVLS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, TEMP` | [`L97236`](source_parts/nswc_part_10.f90#L1565) |
-| `DMFIT` | `SUBROUTINE` | `DIMEN, FITDEG, NFPOLS, NFPTS, FITCDS, NCROWS, FITVLS, WTS, RESIDS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, IREQD, DREQD` | [`L97467`](source_parts/nswc_part_10.f90#L1796) |
-| `DMEVAL` | `SUBROUTINE` | `DIMEN, EVLDEG, NEPOLS, NEPTS, EVLCDS, NEROWS, EVLVLS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, TEMP` | [`L97975`](source_parts/nswc_part_10.f90#L2304) |
+| `MFIT` | `SUBROUTINE` | `DIMEN, FITDEG, NFPOLS, NFPTS, FITCDS, NCROWS, FITVLS, WTS, RESIDS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, IREQD, DREQD` | [`L98254`](source_parts/nswc_part_10.f90#L3016) |
+| `MEVAL` | `SUBROUTINE` | `DIMEN, EVLDEG, NEPOLS, NEPTS, EVLCDS, NEROWS, EVLVLS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, TEMP` | [`L99204`](source_parts/nswc_part_10.f90#L3966) |
+| `DMFIT` | `SUBROUTINE` | `DIMEN, FITDEG, NFPOLS, NFPTS, FITCDS, NCROWS, FITVLS, WTS, RESIDS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, IREQD, DREQD` | [`L99439`](source_parts/nswc_part_10.f90#L4201) |
+| `DMEVAL` | `SUBROUTINE` | `DIMEN, EVLDEG, NEPOLS, NEPTS, EVLCDS, NEROWS, EVLVLS, ERROR, FITIWK, FITDWK, FIWKLN, FDWKLN, TEMP` | [`L99954`](source_parts/nswc_part_10.f90#L4716) |
 
 
 Let {(2.°, at) faced, ... 46} be a set of f distinct points, z1,...,z¢ be the corresponding function values to be approximated, and w ,...,w, be positive weights. Then for any nonnegative integer IDEG where ("*!P®G) < @! the subroutines MFIT and DMFIT are available for obtaining the coefficients of the unique polynomial F(z, ...,2n)
@@ -13966,11 +13966,11 @@ H29
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QSUBA` | `REAL FUNCTION` | `F, A, B, EPSIL, MCOUNT, RELERR, IND` | [`L98207`](source_parts/nswc_part_10.f90#L2536) |
-| `QAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L98696`](source_parts/nswc_part_10.f90#L3025) |
-| `QXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L100638`](source_parts/nswc_part_10.f90#L4967) |
-| `DQAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L101646`](source_parts/nswc_part_10.f90#L5975) |
-| `DQXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L103606`](source_parts/nswc_part_10.f90#L7935) |
+| `QSUBA` | `REAL FUNCTION` | `F, A, B, EPSIL, MCOUNT, RELERR, IND` | [`L100190`](source_parts/nswc_part_10.f90#L4952) |
+| `QAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L100679`](source_parts/nswc_part_10.f90#L5441) |
+| `QXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L102634`](source_parts/nswc_part_10.f90#L7396) |
+| `DQAGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L103650`](source_parts/nswc_part_10.f90#L8412) |
+| `DQXGS` | `SUBROUTINE` | `F, A, B, EPSABS, EPSREL, RESULT, ABSERR, IER, LIMIT, LENIW, LENW, LAST, IWORK, WORK` | [`L105622`](source_parts/nswc_part_10.f90#L10384) |
 
 
 QAGS, QXGS, QSUBA, DQAGS, and DQXGS are available for computing integrals L F(x) dz over finite intervals. The subroutines QAGS and QXGS and the function QOQUBA yield single precision results. These procedures are adaptive. In such procedures, the selection of the points at which the integrand is evaluated depends on the nature of the integrand. DQAGS and DQXGS are double precision versions of the subroutines QAGS and QXGS.
@@ -14193,8 +14193,8 @@ IERR~ 6 (Input Error). Hither @ < 1, < 30, m < 46£ AERR < OQ, or RERR < 6. In t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L99502`](source_parts/nswc_part_10.f90#L3831) |
-| `DQAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L102459`](source_parts/nswc_part_10.f90#L6788) |
+| `QAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L101485`](source_parts/nswc_part_10.f90#L6247) |
+| `DQAGI` | `SUBROUTINE` | `F, BOUND, INF, EPSABS, EPSREL, RESULT, ABSERR, NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK` | [`L104467`](source_parts/nswc_part_10.f90#L9229) |
 
 
 The subroutines QAGI and DQAGI are available for computing integrals over infinite intervals. QAGI yields single precision results and DQAGI yields double precision results. QAGI and DQAGI are adaptive routines.
@@ -14299,7 +14299,7 @@ TERR = 6 (Input Error) Either <1, m < 42, AERR < 0, or RERR < 0. In this case, t
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `CUBTRI` | `SUBROUTINE` | `F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, IDATA, RDATA, IER` | [`L104614`](source_parts/nswc_part_10.f90#L8943) |
+| `CUBTRI` | `SUBROUTINE` | `F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW, IDATA, RDATA, IER` | [`L106638`](source_parts/nswc_part_11.f90#L847) |
 
 
 Let f(z,y) be a real-valued function defined on a triangle T. Then the subroutine CUBTRI is available for computing the integral Sy f(z, y) dz dy. CUBTRI is an adaptive routine.
@@ -14362,7 +14362,7 @@ After an initial call to CUBTRI, the routine may be recalled to continue the com
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `IESLV` | `SUBROUTINE` | `KERNEL, RHFCN, A, B, EP, IFLAG, T, X, NT, NUPPER, MUPPER, NF, MF, NORM, W, IER` | [`L104954`](source_parts/nswc_part_10.f90#L9283) |
+| `IESLV` | `SUBROUTINE` | `KERNEL, RHFCN, A, B, EP, IFLAG, T, X, NT, NUPPER, MUPPER, NF, MF, NORM, W, IER` | [`L106991`](source_parts/nswc_part_11.f90#L1200) |
 
 
 If k(s,t) and f(s) are continuous real-valued functions for a < s < 6 and a <t< 6, then the equation to be solved is
@@ -14492,7 +14492,7 @@ pot)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ODE` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L106119`](source_parts/nswc_part_10.f90#L10448) |
+| `ODE` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L108220`](source_parts/nswc_part_11.f90#L2429) |
 
 
 Let y'(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where f(t,y) = (filt,y), .--.fa(t,y)) and y(t) = (yi(t), ...,yn(t}). Assume that y(a) is known. Then for 6 + @ the subroutine ODE is available for computing y(b). ODE is recommended for nonstiff equations. The algorithm used is a variable order, variable step Adams predictor-correcter procedure.
@@ -14599,7 +14599,7 @@ eal qt biel
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `BRKF45` | `SUBROUTINE` | `FCN, NEQN, Y, T, TOUT, TEND, YP, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L107012`](source_parts/nswc_part_11.f90#L733) |
+| `BRKF45` | `SUBROUTINE` | `FCN, NEQN, Y, T, TOUT, TEND, YP, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L109140`](source_parts/nswc_part_11.f90#L3349) |
 
 
 Let y/(t) = f(t,y(2)) denote a system of n ordinary first order differential equations where f(t,y) = (fi(t,y),--.,fn(t,y)) and y(t) = (v(t), ...,y,(¢)). Assume that y(a) is known, and that f is defined and continuous on the interval from a to TIEND. Then for any 6 in this interval the subroutine BRKF45 1s available for computing y(6) and its derivative y'(6). BRKE45 was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (8 or fewer significant digits). The subroutine employs the Cash block Runge-Kutta-Fehlberg procedure.
@@ -14696,7 +14696,7 @@ pp. 424-426.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RKF45` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L107918`](source_parts/nswc_part_11.f90#L1639) |
+| `RKF45` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, WORK, IWORK` | [`L110069`](source_parts/nswc_part_11.f90#L4278) |
 
 
 Let y/(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where f{t,y) = (fi (t,y), ..-, fa (t, y)) and y(t) = (y1 (¢), ..-, yn (t)). Assume that y(a) is known. Then for 6 # a the subroutine RKF46 is available for computing y(b). RKF45 was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (less than 8 significant digits). The routine employs the fourth-fifth order Runge-Kutta-Fehlberg formulae.
@@ -14809,7 +14809,7 @@ is also used.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `GERK` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, GERROR, WORK, IWORK` | [`L108521`](source_parts/nswc_part_11.f90#L2242) |
+| `GERK` | `SUBROUTINE` | `F, NEQN, Y, T, TOUT, RELERR, ABSERR, IFLAG, GERROR, WORK, IWORK` | [`L110672`](source_parts/nswc_part_11.f90#L4881) |
 
 
 Lei y'(t) == f(t,y(t)) denote a system of n ordinary first order differential equations where f(t,y) = (fi (t,y), ---, fn (t,y)) and y(t) = (yi (t), ..., yn (t)}. Assume that y(a) is known. Then for b 4 a the subroutine GERK is available for computing y(b). GERK was designed for solving nonstiff differential equations when derivative evaluations are inexpensive and the accuracy requirements are low (less than 8 significant digits). The routine employs the fourth-fifth order Runge-Kutta-Fehlberg formulae. GERK estimates the accuracy of the solution y(b).
@@ -14920,8 +14920,8 @@ Ny a3)
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SFODE` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RERR, AERR, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L109123`](source_parts/nswc_part_11.f90#L2844) |
-| `SFODE1` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RTOL, ATOL, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L109147`](source_parts/nswc_part_11.f90#L2868) |
+| `SFODE` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RERR, AERR, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L111274`](source_parts/nswc_part_11.f90#L5483) |
+| `SFODE1` | `SUBROUTINE` | `F, NEQ, Y, T, TOUT, INFO, RTOL, ATOL, IDID, RWORK, LRW, IWORK, LIW, RPAR, IPAR` | [`L111301`](source_parts/nswc_part_11.f90#L5510) |
 
 
 Let y’(t) = f(t, y(t)) denote a system of n ordinary first order differential equations where flt,y) = Cit, y). ..-, fn (t, y)) and y(t) = (yi (t), --.,yn(t)). Assume that y(a) is known. Then for 6 # a the following subroutines are available for computing y(b). These routines are designed for stiff differential equations. The algorithm used is a variable order, variable step backward differentiation procedure.
@@ -15087,7 +15087,7 @@ RERR and AERR may Le modified on any continuation call to SFODEL1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L111832`](source_parts/nswc_part_11.f90#L5553) |
+| `RK` | `SUBROUTINE` | `N, T, H, A, F` | [`L114040`](source_parts/nswc_part_11.f90#L8249) |
 
 
 Let y’(¢) = f(t,y(t)) denote a system of n ordinary first order nonstiff differential equations where f(t,y) = (fi(t,y),...,fn(t,y)) and y(t) = (yi(t), ...,yn(t)). Assume that y(to) is known. Then for a small real number A, the subroutine RK is available for computing y(to +h). RK employs the standard fourth-order Runge-Kutta procedure.
@@ -15149,7 +15149,7 @@ Note that the statements A(3) = 1.0 and A(4) = 0.0, which store the derivatives 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L111889`](source_parts/nswc_part_11.f90#L5610) |
+| `RK8` | `SUBROUTINE` | `N, T, H, Y, DY, W, F` | [`L114097`](source_parts/nswc_part_11.f90#L8306) |
 
 
 Let y(t) = f(t,y(t)) denote a system of n ordinary first. order nonstiff differential
@@ -15183,7 +15183,7 @@ WK is an array of dimension 8n or larger that is used for a work space by the ro
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `SEPDE` | `SUBROUTINE` | `COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1, C, D, NP1, U, KU, W, NW, IERR` | [`L111962`](source_parts/nswc_part_11.f90#L5683) |
+| `SEPDE` | `SUBROUTINE` | `COFX, COFY, G, EDGE, BVAL, IORD, A, B, MP1, C, D, NP1, U, KU, W, NW, IERR` | [`L114170`](source_parts/nswc_part_11.f90#L8379) |
 
 
 Given a separable elliptic equation
@@ -15356,7 +15356,7 @@ COFX, COFY, GVAL, and BVAL must be declared in the calling program to be of type
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `URGET` | `SUBROUTINE` | `N, IBEG, IEND, IX, L, IERR` | [`L114857`](source_parts/nswc_part_11.f90#L8578) |
+| `URGET` | `SUBROUTINE` | `N, IBEG, IEND, IX, L, IERR` | [`L117238`](source_parts/nswc_part_12.f90#L945) |
 
 
 Given the integers $i_a$ and $i_b$ where $i_a < i_b$. Then the following subroutine is available for selecting integers $i$ where $i_a \leq i \leq i_b$. The selection is performed so that any integer $i$ is equally likely to occur with probability $1/m$ where $m = i_b - i_a + 1$. Any integer $i$ may be selected more than once. When the number of selected values becomes large, the mean and variance of the values approximate the mean and variance of the discrete uniform distribution where
@@ -15406,8 +15406,8 @@ generate the same 30 values (0 and 1).
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L114956`](source_parts/nswc_part_11.f90#L8677) |
-| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L115036`](source_parts/nswc_part_11.f90#L8757) |
+| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L117340`](source_parts/nswc_part_12.f90#L1047) |
+| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L117420`](source_parts/nswc_part_12.f90#L1127) |
 
 
 The following subroutines are ‘available for generating a sequence of uniform variates in the open interval (0, 1).
@@ -15447,8 +15447,8 @@ generate the same 30 variates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115386`](source_parts/nswc_part_11.f90#L9107) |
-| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115448`](source_parts/nswc_part_11.f90#L9169) |
+| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L117789`](source_parts/nswc_part_12.f90#L1496) |
+| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L117855`](source_parts/nswc_part_12.f90#L1562) |
 
 
 The following subroutines are available for generating points (71,91), ..-,{2n, Yn) uniformly where 0 -< 2, < l and 0 < y, < 1 for each ¢.
@@ -15493,8 +15493,8 @@ generate the same 30 points.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115511`](source_parts/nswc_part_11.f90#L9232) |
-| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115607`](source_parts/nswc_part_11.f90#L9328) |
+| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L117921`](source_parts/nswc_part_12.f90#L1628) |
+| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L118023`](source_parts/nswc_part_12.f90#L1730) |
 
 
 The following subroutines are available for generating points (21,91), ...,(2n, Yn) uniformly where z? + y? <1 for each ¢.
@@ -15540,10 +15540,10 @@ Algorithm Points are generated uniformly in the square {(r,y) : Ja! < Land yf <b
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115704`](source_parts/nswc_part_11.f90#L9425) |
-| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115749`](source_parts/nswc_part_11.f90#L9470) |
-| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115795`](source_parts/nswc_part_11.f90#L9516) |
-| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115825`](source_parts/nswc_part_11.f90#L9546) |
+| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L118125`](source_parts/nswc_part_12.f90#L1832) |
+| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L118174`](source_parts/nswc_part_12.f90#L1881) |
+| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L118223`](source_parts/nswc_part_12.f90#L1930) |
+| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L118253`](source_parts/nswc_part_12.f90#L1960) |
 
 
 Consider the normal distribution having the distribution function
@@ -15622,10 +15622,10 @@ Usage. Normal variates are generated in pairs. The usage of NRNG and DNRNG is id
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115853`](source_parts/nswc_part_11.f90#L9574) |
-| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115985`](source_parts/nswc_part_11.f90#L9706) |
-| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116089`](source_parts/nswc_part_11.f90#L9810) |
-| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116221`](source_parts/nswc_part_11.f90#L9942) |
+| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L118284`](source_parts/nswc_part_12.f90#L1991) |
+| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L118420`](source_parts/nswc_part_12.f90#L2127) |
+| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L118527`](source_parts/nswc_part_12.f90#L2234) |
+| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L118662`](source_parts/nswc_part_12.f90#L2369) |
 
 
 Let A be a real symmetric positive definite matrix of order m, det(A) be the determinant of A (which must be positive), and pp = (#41,.-.,fm). Consider the multivariate normal distribution having the density function
@@ -15730,8 +15730,8 @@ js] < 272-1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116325`](source_parts/nswc_part_11.f90#L10046) |
-| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116407`](source_parts/nswc_part_11.f90#L10128) |
+| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L118769`](source_parts/nswc_part_12.f90#L2476) |
+| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L118855`](source_parts/nswc_part_12.f90#L2562) |
 
 
 For a > O consider the exponential distribution having the distribution function
@@ -15782,8 +15782,8 @@ interval |¢| < 2°) - 1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116489`](source_parts/nswc_part_11.f90#L10210) |
-| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116546`](source_parts/nswc_part_11.f90#L10267) |
+| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L118940`](source_parts/nswc_part_12.f90#L2647) |
+| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L119002`](source_parts/nswc_part_12.f90#L2709) |
 
 
 For a > 0 consider the gamma distribution having the distribution function
@@ -15849,8 +15849,8 @@ SOG
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116604`](source_parts/nswc_part_11.f90#L10325) |
-| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116693`](source_parts/nswc_part_11.f90#L10414) |
+| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L119063`](source_parts/nswc_part_12.f90#L2770) |
+| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L119157`](source_parts/nswc_part_12.f90#L2864) |
 
 
 For a,6 > 0 consider the beta distribution having the distribution function
@@ -15898,8 +15898,8 @@ O47
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116784`](source_parts/nswc_part_12.f90#L1) |
-| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116882`](source_parts/nswc_part_12.f90#L99) |
+| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L119251`](source_parts/nswc_part_12.f90#L2958) |
+| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L119355`](source_parts/nswc_part_12.f90#L3062) |
 
 
 For a,5 > 0 consider the F-distribution having the distribution function
@@ -15959,8 +15959,8 @@ that its speed he cheeSed df thousands of variates are to be generated
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L116984`](source_parts/nswc_part_12.f90#L201) |
-| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L117066`](source_parts/nswc_part_12.f90#L283) |
+| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L119460`](source_parts/nswc_part_12.f90#L3167) |
+| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L119547`](source_parts/nswc_part_12.f90#L3254) |
 
 
 For a > 0 consider the student t-distribution having the distribution function t
@@ -16014,8 +16014,8 @@ were written by A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117150`](source_parts/nswc_part_12.f90#L367) |
-| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117264`](source_parts/nswc_part_12.f90#L481) |
+| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L119634`](source_parts/nswc_part_12.f90#L3341) |
+| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L119753`](source_parts/nswc_part_12.f90#L3460) |
 
 
 Given a sequence of independent variates z1,...,2n (mn > 2) from a norma! distribution with mean O and standard deviation o > 0. For any real to and fee] < 1 ict
