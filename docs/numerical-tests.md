@@ -1,12 +1,12 @@
 # Numerical test programs
 
-The suite contains the original `tests/source_smoke.f90` and 33 standalone main
+The suite contains the original `tests/source_smoke.f90` and 37 standalone main
 programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 34 programs against each of the three source versions:
+Run all 38 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -20,7 +20,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 102 numerical
+working directories are temporary. The default therefore performs 114 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -62,6 +62,10 @@ directly with any one of those library files.
 | `test_real_eigensystem_compat.f90` | Orthogonal Hessenberg reconstruction and alternate real eigenvalue interfaces |
 | `test_real_hessenberg_qr.f90` | Single and double precision QR spectra and eigenvector residuals |
 | `test_elementary_hessenberg.f90` | Elementary Hessenberg transformations with integer and real permutation workspaces |
+| `test_complex_eigensystem.f90` | Single and double precision complex eigenvalues and nonzero eigenvector residuals, with and without balancing |
+| `test_complex_hessenberg.f90` | Complex Hessenberg/QR eigenvector residuals and known triangular spectra in both precisions |
+| `test_eigen_balance.f90` | Real and complex balancing round trips and eigenvector scaling in both precisions |
+| `test_symmetric_eispack_workers.f90` | Symmetric reductions, packed storage, known spectra, and eigenvector residuals |
 | `test_double_special.f90` | Gamma and error functions against compiler intrinsics, known values, and small argument references |
 | `test_incomplete_beta_compat.f90` | Probability values and complements, supporting functions, and invalid input status codes |
 | `test_general_polynomial_roots.f90` | Real and complex polynomial root counts and independently evaluated residuals |

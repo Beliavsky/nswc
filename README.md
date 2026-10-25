@@ -113,9 +113,9 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 34 numerical test programs
-against all three versions with GNU Fortran (102 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 33 main
+Run `python tools/validate_sources.py` to build and run 38 numerical test programs
+against all three versions with GNU Fortran (114 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 37 main
 programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
@@ -149,8 +149,8 @@ review. It also skips loops with possible branches into their bodies.
 
 ## Explicit typing
 
-Fourteen reviewed batches add `IMPLICIT NONE` and any missing declarations to
-390 procedures. The declarations were generated with `ftnchek` and supplemented
+Fifteen reviewed batches add `IMPLICIT NONE` and any missing declarations to
+410 procedures. The declarations were generated with `ftnchek` and supplemented
 where function return types were omitted. `tools/explicit_typing.py` applies the
 reviewed manifest; it does not guess types. The [typing guide](docs/explicit-typing.md)
 records the affected procedures, tool limitations, and reproduction commands.

@@ -12,8 +12,8 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L114926`](../source_parts/nswc_part_11.f90#L8677) |
-| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L115006`](../source_parts/nswc_part_11.f90#L8757) |
+| `URNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L114956`](../source_parts/nswc_part_11.f90#L8677) |
+| `DURNG` | `SUBROUTINE` | `IX, X, N, IERR` | [`L115036`](../source_parts/nswc_part_11.f90#L8757) |
 
 
 The following subroutines are ‘available for generating a sequence of uniform variates in the open interval (0, 1).
@@ -53,8 +53,8 @@ generate the same 30 variates.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115356`](../source_parts/nswc_part_11.f90#L9107) |
-| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115418`](../source_parts/nswc_part_11.f90#L9169) |
+| `URNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115386`](../source_parts/nswc_part_11.f90#L9107) |
+| `DURNG2` | `SUBROUTINE` | `IX, X, Y, N, IERR` | [`L115448`](../source_parts/nswc_part_11.f90#L9169) |
 
 
 The following subroutines are available for generating points (71,91), ..-,{2n, Yn) uniformly where 0 -< 2, < l and 0 < y, < 1 for each ¢.
@@ -99,8 +99,8 @@ generate the same 30 points.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115481`](../source_parts/nswc_part_11.f90#L9232) |
-| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115577`](../source_parts/nswc_part_11.f90#L9328) |
+| `RCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115511`](../source_parts/nswc_part_11.f90#L9232) |
+| `DRCIR` | `SUBROUTINE` | `N, IX, X, Y, IERR` | [`L115607`](../source_parts/nswc_part_11.f90#L9328) |
 
 
 The following subroutines are available for generating points (21,91), ...,(2n, Yn) uniformly where z? + y? <1 for each ¢.
@@ -146,10 +146,10 @@ Algorithm Points are generated uniformly in the square {(r,y) : Ja! < Land yf <b
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115674`](../source_parts/nswc_part_11.f90#L9425) |
-| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115719`](../source_parts/nswc_part_11.f90#L9470) |
-| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115765`](../source_parts/nswc_part_11.f90#L9516) |
-| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115795`](../source_parts/nswc_part_11.f90#L9546) |
+| `RNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115704`](../source_parts/nswc_part_11.f90#L9425) |
+| `DRNOR` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115749`](../source_parts/nswc_part_11.f90#L9470) |
+| `NRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115795`](../source_parts/nswc_part_11.f90#L9516) |
+| `DNRNG` | `SUBROUTINE` | `IX, A, N, IERR` | [`L115825`](../source_parts/nswc_part_11.f90#L9546) |
 
 
 Consider the normal distribution having the distribution function
@@ -228,10 +228,10 @@ Usage. Normal variates are generated in pairs. The usage of NRNG and DNRNG is id
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115823`](../source_parts/nswc_part_11.f90#L9574) |
-| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115955`](../source_parts/nswc_part_11.f90#L9706) |
-| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116059`](../source_parts/nswc_part_11.f90#L9810) |
-| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116191`](../source_parts/nswc_part_11.f90#L9942) |
+| `NRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115853`](../source_parts/nswc_part_11.f90#L9574) |
+| `NRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L115985`](../source_parts/nswc_part_11.f90#L9706) |
+| `DNRVG` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116089`](../source_parts/nswc_part_11.f90#L9810) |
+| `DNRVG1` | `SUBROUTINE` | `MO, IX, N, M, A, FMU, X, KX, IERR` | [`L116221`](../source_parts/nswc_part_11.f90#L9942) |
 
 
 Let A be a real symmetric positive definite matrix of order m, det(A) be the determinant of A (which must be positive), and pp = (#41,.-.,fm). Consider the multivariate normal distribution having the density function
@@ -336,8 +336,8 @@ js] < 272-1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116295`](../source_parts/nswc_part_11.f90#L10046) |
-| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116377`](../source_parts/nswc_part_11.f90#L10128) |
+| `RANEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116325`](../source_parts/nswc_part_11.f90#L10046) |
+| `DRNEXP` | `SUBROUTINE` | `N, A, ISEED, X, IERROR` | [`L116407`](../source_parts/nswc_part_11.f90#L10128) |
 
 
 For a > O consider the exponential distribution having the distribution function
@@ -388,8 +388,8 @@ interval |¢| < 2°) - 1.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116459`](../source_parts/nswc_part_11.f90#L10210) |
-| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116516`](../source_parts/nswc_part_11.f90#L10267) |
+| `RGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116489`](../source_parts/nswc_part_11.f90#L10210) |
+| `DRGAM` | `SUBROUTINE` | `IX, A, N, X, IERR` | [`L116546`](../source_parts/nswc_part_11.f90#L10267) |
 
 
 For a > 0 consider the gamma distribution having the distribution function
@@ -455,8 +455,8 @@ SOG
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116574`](../source_parts/nswc_part_11.f90#L10325) |
-| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116663`](../source_parts/nswc_part_11.f90#L10414) |
+| `RBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116604`](../source_parts/nswc_part_11.f90#L10325) |
+| `DRBETA` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116693`](../source_parts/nswc_part_11.f90#L10414) |
 
 
 For a,6 > 0 consider the beta distribution having the distribution function
@@ -504,8 +504,8 @@ O47
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116754`](../source_parts/nswc_part_12.f90#L1) |
-| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116852`](../source_parts/nswc_part_12.f90#L99) |
+| `FRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116784`](../source_parts/nswc_part_12.f90#L1) |
+| `DFRAN` | `SUBROUTINE` | `N, A, B, IX, X, IERR` | [`L116882`](../source_parts/nswc_part_12.f90#L99) |
 
 
 For a,5 > 0 consider the F-distribution having the distribution function
@@ -565,8 +565,8 @@ that its speed he cheeSed df thousands of variates are to be generated
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L116954`](../source_parts/nswc_part_12.f90#L201) |
-| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L117036`](../source_parts/nswc_part_12.f90#L283) |
+| `TRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L116984`](../source_parts/nswc_part_12.f90#L201) |
+| `DTRAN` | `SUBROUTINE` | `N, A, IX, X, IERR` | [`L117066`](../source_parts/nswc_part_12.f90#L283) |
 
 
 For a > 0 consider the student t-distribution having the distribution function t
@@ -620,8 +620,8 @@ were written by A. H. Morris.
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117120`](../source_parts/nswc_part_12.f90#L367) |
-| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117234`](../source_parts/nswc_part_12.f90#L481) |
+| `RMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117150`](../source_parts/nswc_part_12.f90#L367) |
+| `DRMK1` | `SUBROUTINE` | `N, FMU, SIG, ALPHA, ISEED, X, IERROR` | [`L117264`](../source_parts/nswc_part_12.f90#L481) |
 
 
 Given a sequence of independent variates z1,...,2n (mn > 2) from a norma! distribution with mean O and standard deviation o > 0. For any real to and fee] < 1 ict

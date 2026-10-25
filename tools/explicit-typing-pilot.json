@@ -46,7 +46,9 @@
     "GRAT1": "Added REAL return types for ERFC1, GAM1, REXP. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
     "BASYM": "Added REAL return types for BCORR, ERFC1, RLOG1. Checked original calls, function definitions, the full declaration report, and compiler symbol records.",
     "SNBFA": "Added INTEGER ISAMAX after checking original calls, the integer function definition, the full declaration report, and compiler symbol records.",
-    "CBFA": "Added INTEGER ICAMAX after checking original calls, the integer function definition, the full declaration report, and compiler symbol records."
+    "CBFA": "Added INTEGER ICAMAX after checking original calls, the integer function definition, the full declaration report, and compiler symbol records.",
+    "CBAL": "Added INTEGER IPMPAR after checking its original implicit type, INTEGER function definition, full ftnchek declaration report, and compiler symbol records.",
+    "DCBAL": "Added INTEGER IPMPAR after checking its original implicit type, INTEGER function definition, full ftnchek declaration report, and compiler symbol records."
   },
   "procedures": {
     "IPMPAR": {
@@ -2698,6 +2700,102 @@
     "DHQR2": {
       "sha256": "aa9a6064afe1648eb70f5d77ee324b347b06b955fa6fec812ae446c23d336c89",
       "declarations": []
+    },
+    "BALINV": {
+      "sha256": "1a009848ac788612f3d62b6c0922bbfb4aa055bcfe16c70c2082e2242c267978",
+      "declarations": []
+    },
+    "DBAL": {
+      "sha256": "a6b91e458c962ecdc9b6fe07f3edd16ddd27be72a72816582e3d2d391f2f38a9",
+      "declarations": []
+    },
+    "DBALNV": {
+      "sha256": "63389a4c2329b1cbc12cbc56922ae0b19c600d804b6019a07e29bafb663cd396",
+      "declarations": []
+    },
+    "DBABK": {
+      "sha256": "18398920534abecdc40c7b68b6d77df32d7304291201e4c37139384f84f8099f",
+      "declarations": []
+    },
+    "TRED3": {
+      "sha256": "fbcf8d4b2ca2130389e359200524bd02f71db9f90c63030d14901af129fef69e",
+      "declarations": []
+    },
+    "DTRED3": {
+      "sha256": "7037fc84ce7a8ccb8c3f9a969ef5615c8ca91ac02a2cd07fb1f1501fe7d77fd4",
+      "declarations": []
+    },
+    "CEIG": {
+      "sha256": "188d6eeea7e19311680ec527011f5d59867dde9bad6fdf1efba7f93298c9a627",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, LOW"
+      ]
+    },
+    "CEIGV": {
+      "sha256": "a2e7b62e4f41740524b800d850a112a55488503f96bfaf80cc895497f0a9f8a6",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER I1, I2, I3, IGH, LOW"
+      ]
+    },
+    "CBAL": {
+      "sha256": "97808d70cde4d3d89ad33bcf451bdc90b5711565b4ad77f95355a7397e3223a1",
+      "declarations": [
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "CORTH": {
+      "sha256": "6c3c3f44e8e867764c4b97ec163d145721efbed79fe35ffdb49ed94263bd2c8c",
+      "declarations": []
+    },
+    "COMQR": {
+      "sha256": "2a2d5d3a779b7ef729623330bbda6f186b7569d37759745913c91152dd66661c",
+      "declarations": []
+    },
+    "CBABK2": {
+      "sha256": "bce0da44c78db6f23c1f93b7309818fc3acfd29e1da63a54aee0cd2822fc49e0",
+      "declarations": []
+    },
+    "COMQR2": {
+      "sha256": "b96a847aea9e4a9c8722bd140ca315711fed0bdc7d64dd90e824a829b9d045b2",
+      "declarations": []
+    },
+    "DCEIG": {
+      "sha256": "a2c0cf2d7aa86c36cf7d116ba3ae38ef2e164d3c52c3c2745a619836120d2927",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER IGH, LOW"
+      ]
+    },
+    "DCEIGV": {
+      "sha256": "9684357458f3854b209e41498f121f2f29be3caa6ff44fa900732d1e182dba59",
+      "declarations": [
+        "      INTEGER IBAL, IERR, KA, N",
+        "      INTEGER I1, I2, I3, IGH, LOW"
+      ]
+    },
+    "DCBAL": {
+      "sha256": "c5a1fd481bc30a0d8e894111ae656642e674889d7843a8b3d894d6f9eab3cb58",
+      "declarations": [
+        "      INTEGER IPMPAR"
+      ]
+    },
+    "DCORTH": {
+      "sha256": "3ee3da718bf621da998f34eb41b7b69a288438aa152aec6c3333c7e701e82bd2",
+      "declarations": []
+    },
+    "DCOMQR": {
+      "sha256": "2d8658a098f858ec7c8c4e79804e4a9a2f7e34653989914d7d62777767749482",
+      "declarations": []
+    },
+    "DCBABK": {
+      "sha256": "ee373c159abe54ec116dc4cd739d1975f4fd4d3370c55deed79519c076f0d116",
+      "declarations": []
+    },
+    "DCMQR2": {
+      "sha256": "ee2cff582b3a4272ad62ef7667b755874055cf4a54e9ae45b88872098951162f",
+      "declarations": []
     }
   },
   "batches": [
@@ -3187,6 +3285,33 @@
         "DHQR",
         "DORTRN",
         "DHQR2"
+      ]
+    },
+    {
+      "id": "batch-15",
+      "source_commit": "ea3d1aa",
+      "input_sha256": "a1e5741bf3d85ef9a563bea4805578525a6031b5ceb419c19550d428de9ae652",
+      "procedures": [
+        "BALINV",
+        "DBAL",
+        "DBALNV",
+        "DBABK",
+        "TRED3",
+        "DTRED3",
+        "CEIG",
+        "CEIGV",
+        "CBAL",
+        "CORTH",
+        "COMQR",
+        "CBABK2",
+        "COMQR2",
+        "DCEIG",
+        "DCEIGV",
+        "DCBAL",
+        "DCORTH",
+        "DCOMQR",
+        "DCBABK",
+        "DCMQR2"
       ]
     }
   ]

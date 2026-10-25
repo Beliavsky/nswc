@@ -1,0 +1,105 @@
+! Adapted from test_complex_eigensystem_legacy.f90 in the amiller-nswc test suite.
+program test_complex_eigensystem
+   use, intrinsic :: iso_fortran_env, only : dp => real64
+   implicit none
+   integer, parameter :: n=2,ka=2
+   real :: ar(ka,n),ai(ka,n),wr(n),wi(n),zr(ka,n),zi(ka,n),temp(3*n)
+   real(dp) :: dar(ka,n),dai(ka,n),dwr(n),dwi(n),dzr(ka,n),dzi(ka,n),dtemp(3*n)
+   real :: vals(n),target(n)
+   integer :: ierr,ibal,j
+   real :: a0(n,n),b0(n,n)
+   complex :: v(n),res(n)
+   real(dp) :: da0(n,n),db0(n,n),dtarget(n),dvals(n)
+   complex(dp) :: dv(n),dres(n)
+   interface
+      subroutine ceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+         integer, intent(in) :: ibal,ka,n
+         real, intent(inout) :: ar(ka,n),ai(ka,n)
+         real, intent(out) :: wr(n),wi(n),zr(ka,n),zi(ka,n)
+         integer, intent(out) :: ierr
+         real, intent(inout) :: temp(*)
+      end subroutine ceigv
+      subroutine dceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+         import dp
+         integer, intent(in) :: ibal,ka,n
+         real(dp), intent(inout) :: ar(ka,n),ai(ka,n)
+         real(dp), intent(out) :: wr(n),wi(n),zr(ka,n),zi(ka,n)
+         integer, intent(out) :: ierr
+         real(dp), intent(inout) :: temp(*)
+      end subroutine dceigv
+      subroutine ceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+         integer :: ibal,ka,n,ierr
+         real :: ar(ka,n),ai(ka,n),wr(n),wi(n)
+      end subroutine ceig
+      subroutine dceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+         import dp
+         integer :: ibal,ka,n,ierr
+         real(dp) :: ar(ka,n),ai(ka,n),wr(n),wi(n)
+      end subroutine dceig
+   end interface
+
+   a0=reshape([1.0,0.0,0.0,2.0],[ka,n])
+   b0=reshape([0.0,-0.01,100.0,0.0],[ka,n])
+   da0=real(a0,dp)
+   db0=reshape([0.0_dp,-0.01_dp,100.0_dp,0.0_dp],[ka,n])
+   target=[(3.0-sqrt(5.0))/2.0,(3.0+sqrt(5.0))/2.0]
+   dtarget=[(3.0_dp-sqrt(5.0_dp))/2.0_dp,(3.0_dp+sqrt(5.0_dp))/2.0_dp]
+   do ibal=0,1
+      ar=a0
+      ai=b0
+      temp=0.0
+      call ceigv(ibal,ar,ai,ka,n,wr,wi,zr,zi,ierr,temp)
+      call check_single('CEIGV')
+      do j=1,n
+         v=cmplx(zr(:,j),zi(:,j))
+         call require(maxval(abs(v))>0.1,'CEIGV nonzero vector')
+         res=matmul(cmplx(a0,b0),v)-cmplx(wr(j),wi(j))*v
+         call require(maxval(abs(res))<5.0e-4*maxval(abs(v)),'CEIGV residual')
+      end do
+      print '(a,i1,4es24.15)', 'CEIGV balancing ',ibal,wr,wi
+      ar=a0
+      ai=b0
+      call ceig(ibal,ar,ai,ka,n,wr,wi,ierr)
+      call check_single('CEIG')
+      dar=da0
+      dai=db0
+      dtemp=0.0_dp
+      call dceigv(ibal,dar,dai,ka,n,dwr,dwi,dzr,dzi,ierr,dtemp)
+      call check_double('DCEIGV')
+      do j=1,n
+         dv=cmplx(dzr(:,j),dzi(:,j),dp)
+         call require(maxval(abs(dv))>0.1_dp,'DCEIGV nonzero vector')
+         dres=matmul(cmplx(da0,db0,dp),dv)-cmplx(dwr(j),dwi(j),dp)*dv
+         call require(maxval(abs(dres))<5.0e-12_dp*maxval(abs(dv)),'DCEIGV residual')
+      end do
+      print '(a,i1,4es24.15)', 'DCEIGV balancing ',ibal,dwr,dwi
+      dar=da0
+      dai=db0
+      call dceig(ibal,dar,dai,ka,n,dwr,dwi,ierr)
+      call check_double('DCEIG')
+   end do
+   print '(a)', 'test_complex_eigensystem: PASS'
+contains
+   subroutine check_single(label)
+      character(len=*), intent(in) :: label
+      call require(ierr==0,label//' status')
+      vals=[minval(wr),maxval(wr)]
+      call require(maxval(abs(vals-target))<2.0e-5,label//' spectrum')
+      call require(maxval(abs(wi))<2.0e-5,label//' imaginary spectrum')
+   end subroutine check_single
+   subroutine check_double(label)
+      character(len=*), intent(in) :: label
+      call require(ierr==0,label//' status')
+      dvals=[minval(dwr),maxval(dwr)]
+      call require(maxval(abs(dvals-dtarget))<2.0e-13_dp,label//' spectrum')
+      call require(maxval(abs(dwi))<2.0e-13_dp,label//' imaginary spectrum')
+   end subroutine check_double
+   subroutine require(ok,label)
+      logical, intent(in) :: ok
+      character(len=*), intent(in) :: label
+      if (.not.ok) then
+         print '(a)', 'FAIL: '//label
+         error stop 1
+      end if
+   end subroutine require
+end program test_complex_eigensystem
