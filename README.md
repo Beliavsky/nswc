@@ -144,8 +144,8 @@ procedure to recognize names. English words that also name variables require
 explicit context, such as `argument N` or `X(N)`. Quoted text, Hollerith payloads,
 executable code, inline comments, and directives are preserved. Prose sentence
 capitalization, proper names, and acronyms retain their intended case. Ambiguous
-passages retain their original case; reference paragraphs otherwise keep their
-original capitalization.
+passages retain their original case. Author and reference paragraphs use the same
+prose rules, with reviewed capitalization for author and institution names.
 
 The generated [comment review report](tools/comment-case-review.json) records
 changed-line counts, protected categories, unfamiliar words, and uncertain

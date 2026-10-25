@@ -48,8 +48,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if dbfa and dbsl are
 !        CALLED CORRECTLY AND dbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      daxpy,ddot
@@ -468,7 +468,7 @@ integer :: icamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -541,8 +541,8 @@ integer :: icamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,icamax,caxpy,cscal,cswap
@@ -672,8 +672,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if cbfa and cbsl are
 !        CALLED CORRECTLY AND cbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     ADAPTED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Adapted by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      caxpy,cdotu
@@ -2948,7 +2948,7 @@ integer :: stp, dummy
 integer, intent(in) :: ip(n)
 !
 ! arp(i) is one less than the number of unsearched edges leaving
-!     node i.  At the end of the algorithm it is set to A
+!     node i.  at the end of the algorithm it is set to A
 !     permutation which puts the matrix in block lower
 !     triangular form.
 ! ib(i) is the position in the ordering of the start of the ith
@@ -3085,7 +3085,7 @@ integer :: k, l
 !  spslv calls nspiv1 which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -3206,7 +3206,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  nspiv1 uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -3286,7 +3286,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -3844,7 +3844,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -4022,7 +4022,7 @@ integer :: k, l
 !  dspslv calls dnspiv which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -4146,7 +4146,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  dnspiv uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -4226,7 +4226,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -4787,7 +4787,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -5140,14 +5140,14 @@ integer, intent(inout) :: isgn(n)
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
 !
-!        WRITTEN BY NICK HIGHAM, UNIVERSITY OF MANCHESTER. MODIFIED
-!        BY A.H. MORRIS (NSWC).
+!        Written by nick Higham, university of manchester. Modified
+!        by A.H. Morris (NSWC).
 !
-!     REFERENCE
-!     N.J. HIGHAM (1987) FORTRAN CODES FOR ESTIMATING
-!     THE 1-NORM OF A REAL OR COMPLEX MATRIX, WITH APPLICATIONS
-!     TO CONDITION  ESTIMATION, NUMERICAL ANALYSIS REPORT NO. 135,
-!     UNIVERSITY OF MANCHESTER, MANCHESTER M13 9PL, ENGLAND.
+!     Reference
+!     N.J. Higham (1987) Fortran codes for estimating
+!     the 1-norm of a real or complex matrix, with applications
+!     to condition  estimation, numerical analysis report no. 135,
+!     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
 data itmax /5/
@@ -5164,7 +5164,7 @@ if (kase .ne. 0) go to 20
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
+!     first iteration.  x has been overwritten by A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -5183,7 +5183,7 @@ jump = 2
 return
 !
 !     ................ ENTRY   (jump = 2)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     first iteration.  x has been overwritten by TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = isamax(n,x,1)
@@ -5199,7 +5199,7 @@ jump = 3
 return
 !
 !     ................ ENTRY   (jump = 3)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 300 call scopy (n,x,1,v,1)
 anrm = anorm
@@ -5226,7 +5226,7 @@ jump = 4
 return
 !
 !     ................ ENTRY   (jump = 4)
-!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     x has been overwritten by TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = isamax(n,x,1)
@@ -5247,7 +5247,7 @@ jump = 5
 return
 !
 !     ................ ENTRY   (jump = 5)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 500 anrm = 2.0*sasum(n,x,1)/float(3*n)
 if (anrm .le. anorm) go to 510
@@ -5304,14 +5304,14 @@ double precision :: dasum
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
 !
-!        WRITTEN BY NICK HIGHAM, UNIVERSITY OF MANCHESTER. MODIFIED
-!        BY A.H. MORRIS (NSWC).
+!        Written by nick Higham, university of manchester. Modified
+!        by A.H. Morris (NSWC).
 !
-!     REFERENCE
-!     N.J. HIGHAM (1987) FORTRAN CODES FOR ESTIMATING
-!     THE 1-NORM OF A REAL OR COMPLEX MATRIX, WITH APPLICATIONS
-!     TO CONDITION  ESTIMATION, NUMERICAL ANALYSIS REPORT NO. 135,
-!     UNIVERSITY OF MANCHESTER, MANCHESTER M13 9PL, ENGLAND.
+!     Reference
+!     N.J. Higham (1987) Fortran codes for estimating
+!     the 1-norm of a real or complex matrix, with applications
+!     to condition  estimation, numerical analysis report no. 135,
+!     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
 data itmax /5/
@@ -5330,7 +5330,7 @@ if (kase .ne. 0) go to 20
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
+!     first iteration.  x has been overwritten by A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -5349,7 +5349,7 @@ jump = 2
 return
 !
 !     ................ ENTRY   (jump = 2)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     first iteration.  x has been overwritten by TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = idamax(n,x,1)
@@ -5365,7 +5365,7 @@ jump = 3
 return
 !
 !     ................ ENTRY   (jump = 3)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 300 call dcopy (n,x,1,v,1)
 anrm = anorm
@@ -5392,7 +5392,7 @@ jump = 4
 return
 !
 !     ................ ENTRY   (jump = 4)
-!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     x has been overwritten by TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = idamax(n,x,1)
@@ -5414,7 +5414,7 @@ jump = 5
 return
 !
 !     ................ ENTRY   (jump = 5)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 500 anrm = 2.d0*dasum(n,x,1)/(3.d0*an)
 if (anrm .le. anorm) go to 510
@@ -5435,7 +5435,7 @@ integer :: k, l
 !  spslv calls cnspiv which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -5556,7 +5556,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  cnspiv uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -5640,7 +5640,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -6200,7 +6200,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -8364,7 +8364,7 @@ double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
 double precision :: s
 !-----------------------------------------------------------------------
-!        Given A matrix A of order n. Dbal transforms A into
+!        Given A matrix A of order n. dbal transforms A into
 !     the matrix B by the similarity transformation
 !             b = d**(-1)*transpose(p)*a*p*d
 !     where D is a diagonal matrix and P a permutation matrix.

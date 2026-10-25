@@ -45,7 +45,7 @@ end subroutine cosqi
 !             in the program that calls cosqf. The wsave array must be
 !             initialized by calling subroutine cosqi(n,wsave) and A
 !             different wsave array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -126,7 +126,7 @@ end subroutine cosqf1
 !     followed by a call of cosqf will multiply the input sequence x
 !     BY 4*n.
 !
-!     The array WSAVE which is used by subroutine cosqb must be
+!     The array wsave which is used by subroutine cosqb must be
 !     initialized by calling subroutine cosqi(n,WSAVE).
 !
 !
@@ -141,7 +141,7 @@ end subroutine cosqf1
 !             in the program that calls cosqb. The WSAVE array must be
 !             initialized by calling subroutine cosqi(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -226,8 +226,8 @@ end subroutine cosqb1
 !     followed by a call of sinqb will multiply the input sequence x
 !     BY 4*n.
 !
-!     The array WSAVE which is used by subroutine sinqf must be
-!     initialized by calling subroutine SINQI(n,WSAVE).
+!     The array wsave which is used by subroutine sinqf must be
+!     initialized by calling subroutine sinqi(n,WSAVE).
 !
 !
 !     Input parameters
@@ -239,9 +239,9 @@ end subroutine cosqb1
 !
 !     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             In the program that calls sinqf. The WSAVE array must be
-!             initialized by calling subroutine SINQI(n,WSAVE) and A
+!             initialized by calling subroutine sinqi(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -300,7 +300,7 @@ end subroutine sinqf
 !     BY 4*n.
 !
 !     The array wsave which is used by subroutine sinqb must be
-!     initialized by calling subroutine SINQI(n,wsave).
+!     initialized by calling subroutine sinqi(n,wsave).
 !
 !
 !     Input parameters
@@ -312,9 +312,9 @@ end subroutine sinqf
 !
 !     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             In the program that calls sinqb. The wsave array must be
-!             initialized by calling subroutine SINQI(n,wsave) and A
+!             initialized by calling subroutine sinqi(n,wsave) and A
 !             different wsave array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -377,7 +377,7 @@ end subroutine sinqb
 !     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 2*n+15.
 !             The same work array can be used for both rfftf and rfftb
 !             as long as n remains unchanged. Different wsave arrays
-!             are required for different values of n. The contents of
+!             are required for different values of n. the contents of
 !             wsave must not be changed between calls of rfftf or rfftb.
 !
 subroutine rffti (n,wsave)
@@ -476,7 +476,7 @@ end subroutine rffti1
 !             In the program that calls rfftb. The WSAVE array must be
 !             initialized by calling subroutine rffti(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !             The same WSAVE array can be used by rfftf and rfftb.
@@ -1093,7 +1093,7 @@ end subroutine radbg
 !             In the program that calls rfftf. The WSAVE array must be
 !             initialized by calling subroutine rffti(N,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of N. This initialization does not have to be
+!             value of N. this initialization does not have to be
 !             repeated so long as N remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !             The same WSAVE array can be used by rfftf and rfftb.
@@ -2246,7 +2246,7 @@ integer :: knots
 !              arrays with this dimension (or related values)
 !                D       DDTEMP  FDERVL  FDERVR  FDUMB   FACTOR
 !                FINTRP  FLEFT   FRIGHT  POWERS  XTEMP   XINTRP  XDD
-!              ***** NOTE ***** maxpar ALSO AFFECTS ARGUMENT FDERV
+!              ***** NOTE ***** maxpar ALSO AFFECTS ARGUMENT fderv
 !              of function f.  FDERVL, FDERVR are also involved.
 !              Should declare FDERV of size 10 in f to be safe.
 !     maxaux - MAXIMUM NUMBER OF AUXILIARY INPUT ( = 20 NOW ). ARRAYS
@@ -2264,7 +2264,7 @@ integer :: knots
 !     changing to single precision.
 !
 !     ***** THE GAUSS WEIGHTS AND ABSCISSAE IN adcomp ARE GIVEN TO
-!           30 digits. The parameter EPS0 in adset specifies the
+!           30 digits. The parameter eps0 in adset specifies the
 !           accuracy of these constants. If the accuracy is changed
 !           TO K DECIMAL DIGITS THEN SET EPS0 = 10**(-K).
 !
@@ -2273,8 +2273,8 @@ integer :: knots
 !           XLEFT and XRIGHT to the new value for maxstk. Note that
 !           THE MINIMUM INTERVAL LENGTH IS 2**(-maxstk)*(b-a).
 !
-!  SINGLE PRECISION CONVERSION -- REQUIRES FOUR STEPS
-!     1. DECLARE ALL DOUBLE PRECISION VARIABLES TO BE REAL.
+!  Single precision conversion -- requires four steps
+!     1. Declare all double precision variables to be real.
 !
 !     2. Change all double precision numbers in the data statements.
 !        (Floating point numbers appear only in data statements.)
@@ -2645,7 +2645,7 @@ data r/1.5d0/
 !                    .652145154862546142626936050778D0
 !
 !     ***** THE ABSISSAE AND WEIGHTS ARE GIVEN BELOW TO 30 DIGITS.
-!           The parameter EPS0 in adset specifies the accuracy of
+!           The parameter eps0 in adset specifies the accuracy of
 !           these constants. If the accuracy is changed to K decimal
 !           DIGITS THEN SET EPS0 = 10**(-K).
 !
@@ -3178,8 +3178,8 @@ nrli = nrl + ni
 !         Strategy is to first convert the part from the interp. Pts.
 !         To poly in (X-xr).  This poly then has origin shifted to xl.
 !
-!     THE CONVERSION OF THE interp PART IS DONE EXPLICITLY FOR DEGREE
-!     TWO OR LESS AND DONE BY SYNTHETIC DIVISION FOR HIGHER DEGREES
+!     The conversion of the interp part is done explicitly for degree
+!     two or less and done by synthetic division for higher degrees
 !
 !   D1 + D2(X-X1) +D3(X**2-(X1+X2)X +X1*X2)
 !
@@ -3199,7 +3199,7 @@ go to 80
 powers(2) = d(nrl+2,1)
 go to 80
 !
-!         CONVERSION BY REPEATED SYNTHETIC DIVISION
+!         Conversion by repeated synthetic division
 30 ni1 = ni - 1
 !         Initialize the powers and xtemp arrays
 do k=1,ni
@@ -3281,13 +3281,13 @@ real :: spmpar
 !    ic  selects between power series coefficients and derivatives.
 !        ic .EQ. 0   ROUTINE RETURNS POWER SERIES COEFFICIENTS IN rs.
 !        ic .NE. 0   ROUTINE RETURNS DERIVATIVES IN rs.
-!    tol estimated relative accuracy of f. It is assumed that tol
+!    tol estimated relative accuracy of f. it is assumed that tol
 !        IS NONNEGATIVE. IF tol = 0 THEN f IS ASSUMED TO BE CORRECT
 !        to machine accuracy.
 !
 !  *** INPUT AND OUTPUT PARAMETER ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. The provided guess may be in error with at
+!        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
 !  *** OUTPUT PARAMETERS ***
@@ -3540,7 +3540,7 @@ double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !
 !  *** INPUT AND OUTPUT PARAMETER ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. The provided guess may be in error with at
+!        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
 !  *** OUTPUT PARAMETERS ***
@@ -4509,10 +4509,10 @@ real, intent(in) :: a1, an, b1, bn
 integer :: i, j, nm1, nm2
 real :: dnew, dold, h
 !
-!     WRITTEN BY RONDALL E. JONES
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO  87115
-!        JANUARY 1976
+!     Written by Rondall E. Jones
+!        Sandia Laboratories
+!        albuquerque, new mexico  87115
+!        January 1976
 !
 !     Abstract
 !         splift fits an interpolating cubic spline to the n data points
@@ -6174,10 +6174,10 @@ integer :: ia, ib, ic, ie, mm1
 !               Closed curve cubic spline fitting
 !                    in n-dimensional space
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by
+!        Alfred H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !----------------------
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), wk(*)
@@ -6531,10 +6531,10 @@ real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: yp(n), temp(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute an interpolatory spline under tension through
@@ -6596,8 +6596,8 @@ real, intent(in) :: sigma
 !
 !   n, x, y, slp1, slpn, islpsw and sigma are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -6687,10 +6687,10 @@ real :: curv2
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function interpolates a curve at a given point
 ! using a spline under tension. The subroutine curv1 should
@@ -6724,7 +6724,7 @@ real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -6776,10 +6776,10 @@ real :: curvd
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function differentiates a curve at a given point
 ! using a spline under tension. The subroutine curv1 should
@@ -6813,7 +6813,7 @@ real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -6860,10 +6860,10 @@ real :: term
 integer, intent(in) :: n
 real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function integrates a curve specified by a spline
 ! under tension between two given limits. The subroutine
@@ -6898,7 +6898,7 @@ real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -7037,10 +7037,10 @@ real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension forming a curve in the
@@ -7110,8 +7110,8 @@ real, intent(in) :: sigma
 !
 !   n, x, y, slp1, slpn, islpsw, and sigma are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -7230,10 +7230,10 @@ real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a curve in the plane. The subroutine
@@ -7277,7 +7277,7 @@ real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -7337,10 +7337,10 @@ real, intent(in) :: x(n), y(n)
 real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension forming a closed curve in
@@ -7394,7 +7394,7 @@ real, intent(in) :: sigma
 !
 !   n, x, y, and sigma are unaltered,
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES TERMS AND
+! This subroutine references package modules terms and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -7512,10 +7512,10 @@ real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a closed curve in the plane. The
@@ -7559,7 +7559,7 @@ real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -7629,10 +7629,10 @@ real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
 real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension passing through a sequence
@@ -7660,7 +7660,7 @@ real, intent(in) :: sigma
 !   desired values of the components of tangent vectors to
 !   the curve at (x(1),y(1),z(1)) AND(x(n),y(n),z(n)),
 !   respectively. The positive sense of the curve is assumed
-!   to be that moving from point 1 to point n. The user may
+!   to be that moving from point 1 to point n. the user may
 !   omit values for either or both of these triples and
 !   signal this with islpsw.
 !
@@ -7710,8 +7710,8 @@ real, intent(in) :: sigma
 !   n, x, y, z, slp1x, slp1y, slp1z, slpnx, SLPNY, SLPNZ,
 !   islpsw, and sigma are unaltered,
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -7847,10 +7847,10 @@ real, intent(inout) :: xs, ys, zs
 real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a curve in space.  The subroutine
@@ -7894,7 +7894,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -7954,10 +7954,10 @@ real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
 real, intent(in) :: del1, del2, sigma
 real, intent(inout) :: c1, c2, c3
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the coefficients c1, c2, and c3
 ! used to determine endpoint slopes. Specifically, if
@@ -7989,7 +7989,7 @@ real, intent(inout) :: c1, c2, c3
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULE snhcsh.
+! This subroutine references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -8033,10 +8033,10 @@ real :: coshm, denom, sigdel, sinhm
 real, intent(inout) :: diag, sdiag
 real, intent(in) :: sigma, del
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine computes the diagonal and superdiagonal
 ! terms of the tridiagonal linear system associated with
@@ -8064,7 +8064,7 @@ real, intent(in) :: sigma, del
 !
 !   sigma and del are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULE snhcsh.
+! This subroutine references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -8184,12 +8184,12 @@ integer :: intrvl
 !
 !******  M E t H O D  ******
 !
-!     THE NONTRIVIAL KNOT INTERVAL (t(i),t(i+1)) CONTAINING x IS FIRST
-!  OBTAINED. THEN THE  k  B-COEFFICIENTS OF F RELEVANT FOR THIS INTERVAL
-!  ARE OBTAINED FROM bcoef (OR TAKEN TO BE ZERO IF NOT EXPLICITLY AVAIL-
-!  ABLE), AND DIFFERENCED jderiv TIMES TO OBTAIN THE B-COEFFICIENTS OF
+!     The nontrivial knot interval (t(i),t(i+1)) containing x is first
+!  obtained. Then the  k  B-coefficients of F relevant for this interval
+!  are obtained from bcoef (or taken to be zero if not explicitly avail-
+!  able), and DIFFERENCED jderiv times to obtain the B-coefficients of
 !  (D**jderiv)F  RELEVANT FOR THE INTERVAL. SPECIFICALLY, IF j = jderiv
-!  THEN FROM x.(12) OF THE REFERENCE WE HAVE
+!  then from x.(12) Of the reference we have
 !
 !     (D**j)F  =  sum ( bcoef(.,j)*B(.,k-j,t) )
 !
@@ -8209,12 +8209,12 @@ integer :: intrvl
 !                 (x - t(.))      + (t(.+M-1) - x)
 !
 !  TO WRITE (D**j)F(x) EVENTUALLY AS A LINEAR COMBINATION OF B-SPLINES
-!  OF ORDER 1. THE COEFFICIENT FOR B(i,1,t)(x) MUST THEN BE THE DESIRED
+!  of order 1. The coefficient for B(i,1,t)(x) must then be the desired
 !  NUMBER  (D**j)F(x). (SEE x.(17)-(19) OF THE REFERENCE).
 !
 !-----------------------------------------------------------------------
-!  REFERENCE. DE BOOR, CARL, A PRATICAL GUIDE TO SPLINES, SPRINGER-
-!  VERLAG, NEW YORK, 1978.
+!  Reference. DE boor, carl, A PRATICAL guide to splines, springer-
+!  verlag, new york, 1978.
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
@@ -8482,8 +8482,8 @@ integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
 real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
 !
-!              CONVERSION FROM B-SPLINE REPRESENTATION
-!              TO PIECEWISE POLYNOMIAL REPRESENTATION
+!              Conversion from B-spline representation
+!              to piecewise polynomial representation
 !
 !
 !     Input ...
@@ -8705,8 +8705,8 @@ real :: s, term, ti, timj
 !                    and stored in blist.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
-!         BY A.H. MORRIS (NSWC).
+!     Written by carl DE boor (University of Wisconsin) and modified
+!         by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*)
 real, intent(inout) :: blist(k)
@@ -8786,8 +8786,8 @@ real :: factor, fkp1mm, sum
 !  of corresponding order in  dbiatx  to produce the desired values .
 !
 !-----------------------------------------------------------------------
-!  WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
-!     BY A.H. MORRIS (NSWC).
+!  Written by carl DE boor (University of Wisconsin) and modified
+!     by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*)
 real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
@@ -8981,7 +8981,7 @@ do i = 1,n
 !        Let q denote a two-dimensional array of dimension (2*k-1,n).
 !        WE THEREFORE WANT  bcoef(j) = B(left-k+j)(taui) TO GO INTO
 !        A(i,left-k+j), I.E., Into  q(i-(left+j)+2*k,(left+j)-k) since
-!        A(i+j,j)  is to go into  q(i+k,j), all i,j.  In the current
+!        A(i+j,j)  is to go into  q(i+k,j), all i,j.  in the current
 !        routine we treat q as an equivalent one-dimensional array.
 !        Thus we want bcoef(j) to be inserted into entry
 !            i - (left+j) + 2*k + ((left+j) - k-1)*(2*k-1)
@@ -9672,15 +9672,15 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !                         an old problem).
 !
 !
-!   REFERENCE.  HANSON R.J., CONSTRAINED LEAST SQUARES CURVE FITTING
-!               TO DISCRETE DATA USING B-SPLINES, A USERS GUIDE.
-!               SANDIA LABS. TECH. REPT. SAND-78-1291, DEC, 1978.
+!   Reference.  Hanson R.J., Constrained least squares curve fitting
+!               to discrete data using B-splines, a users guide.
+!               Sandia labs. Tech. Rept. Sand-78-1291, DEC, 1978.
 !
 !-----------------------------------------------------------------------
-!   WRITTEN BY
-!     RICHARD J. HANSON
-!     SANDIA LABORATORIES
-!   MODIFIED BY A.H. MORRIS (NSWC)
+!   Written by
+!     richard J. Hanson
+!     Sandia Laboratories
+!   modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
 real, intent(in) :: xconst(*), yconst(*)
@@ -10035,7 +10035,7 @@ integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
-!           HANSON, R. J., (SNLA)
+!           Hanson, R. J., (SNLA)
 !
 !***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
 !            matrices a using sequential accumulation of rows of
@@ -10057,7 +10057,7 @@ real :: rho
 !     into Q submatrices.  Let (E F) be the T-TH one of these
 !     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS mt BY N
 !     and the dimension of C is mt by nb.  The value of nb is the
-!     bandwidth of A.  The dimensions of the leading block of zeros in E
+!     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are mt by jt-1.
 !
 !     The user of the subroutine bndacc provides mt,jt,C and F for
@@ -10170,8 +10170,8 @@ real :: rho
 !     call bndacc(g,mdg,nb,ip,ir,mt,jt)
 !
 !***REFERENCES  C. L. LAWSON AND R. J. HANSON,
-!                 SOLVING LEAST SQUARE PROBLEMS,PRENCTICE-HALL, INC
-!                 (1974), CHAPTER 27
+!                 solving least square problems,PRENCTICE-Hall, inc
+!                 (1974), chapter 27
 !
 !
 !
@@ -10256,7 +10256,7 @@ integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
 real :: rsq, s
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
-!           HANSON, R. J., (SNLA)
+!           Hanson, R. J., (SNLA)
 !
 !***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
 !            matrices a using sequential accumulation of rows of
@@ -10277,7 +10277,7 @@ real :: rsq, s
 !     into Q submatrices.  Let (E F) be the T-TH one of these
 !     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS MT BY n
 !     and the dimension of C is MT by nb.  The value of nb is the
-!     bandwidth of A.  The dimensions of the leading block of zeros in E
+!     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are MT by JT-1.
 !
 !     The user of the subroutine bndacc provides MT,JT,C and F for
@@ -10361,7 +10361,7 @@ real :: rsq, s
 !                       2 or 3.
 !
 !     rnorm             IF mode=1 rnorm IS THE EUCLIDEAN LENGTH OF THE
-!                       RESIDUAL VECTOR AX-B.  WHEN mode=2 OR 3 rnorm
+!                       RESIDUAL VECTOR ax-B.  WHEN mode=2 OR 3 rnorm
 !                       is set to zero.
 !
 !     ierr              ierr = 0 IF THE SOLUTION WAS OBTAINED.
@@ -10369,8 +10369,8 @@ real :: rsq, s
 !
 !
 !***REFERENCES  C. L. LAWSON AND R. J. HANSON,
-!                 SOLVING LEAST SQUARE PROBLEMS,PRENCTICE-HALL, INC
-!                 (1974), CHAPTER 27
+!                 solving least square problems,PRENCTICE-Hall, inc
+!                 (1974), chapter 27
 !
 !
 ierr = 0
@@ -10470,10 +10470,10 @@ integer :: i, imax, j, l, ld, m, n, nu
 !     for the B-splines U (x) and V (y).
 !                        i         j
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
 real, intent(in) :: xbreak(nx), ybreak(ny)
@@ -10544,7 +10544,7 @@ do i = 1,imax
 end do
 !
 !     Compute the values of the bispline and their partial
-!     derivatives with respect to y. The results are stored
+!     derivatives with respect to y. the results are stored
 !     in the first half of f.
 !
 ld = nu + 1

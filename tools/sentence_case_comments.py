@@ -111,7 +111,8 @@ def technical_comments(lines, vocabulary, proper_names):
             protected.append((item.start(), end))
         protected.extend(m.span() for m in re.finditer(r'\b(?:[A-Z]\.\s*){2,}', body))
         explicit = {m[1].upper() for m in CONTEXT.finditer(body)
-                    if m[1].upper() in known_names}
+                    if m[1].upper() in known_names or
+                    (len(m[1]) > 1 and m[1].lower() not in vocabulary and m[1].upper() not in proper_names)}
         field = re.match(r'^\s*(\w+)\s{2,}[-:]', body)
         if field and field[1].upper() in local:
             explicit.add(field[1].upper())
@@ -189,7 +190,7 @@ def sentence_case(text, vocabulary=None, rules=None):
 
     def convert(body, sentence_start, line_number):
         nonlocal unknown
-        spans = [m.span() for m in re.finditer(r"'[^']*'|\"[^\"]*\"|\b\w+\([^)]*\)", body)]
+        spans = [m.span() for m in re.finditer(r"'[^']*'|\"[^\"]*\"|\b\w+\([^)]*\)|\b(?:[A-Z]\.\s*){2,}", body)]
         for match in re.finditer(r'\([^)]*\)', body):
             inner = match[0][1:-1].strip()
             numeric = re.sub(r'\d+\.\d*(?:[ED][+-]?\d+)?', '0', inner, flags=re.I)
@@ -205,7 +206,8 @@ def sentence_case(text, vocabulary=None, rules=None):
         for match in WORD.finditer(body):
             word, key = match[0], match[0].upper()
             gap = body[last:match.start()]
-            if re.search(r'(?<!\.)[.!?](?![.\d])', gap) and previous not in abbreviations:
+            initial = len(previous) == 1 and re.match(r'^\.\s*$', gap)
+            if re.search(r'(?<!\.)[.!?](?![.\d])', gap) and previous not in abbreviations and not initial:
                 sentence_start = True
             protected = any(a <= match.start() < b for a, b in spans) or key in contextual
             possessive = key.endswith("'S")
@@ -252,12 +254,12 @@ def sentence_case(text, vocabulary=None, rules=None):
                 break
             block.append(match)
             i += 1
-        if citation.search(' '.join(m[2] for m in block)):
-            retained['reference/author/history paragraph'] += len(block)
-            continue
+        reference = bool(citation.search(' '.join(m[2] for m in block)))
         sentence_start, changed = True, False
         for offset, match in enumerate(block):
             kind = classify(match[2])
+            if reference and kind in {'existing mixed/lower case', 'uncertain prose'}:
+                kind = 'prose'
             if kind != 'prose':
                 retained[kind] += 1
                 if kind == 'uncertain prose':

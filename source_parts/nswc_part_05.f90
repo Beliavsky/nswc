@@ -180,8 +180,8 @@ real, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -367,8 +367,8 @@ complex, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in cgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -488,8 +488,8 @@ complex, intent(inout) :: b(*)
 !              call cgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -606,8 +606,8 @@ complex, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF cgeco HAS SET RCOND .GT. 0.0 OR cgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -1029,7 +1029,7 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 !
 !     ssvdc is a subroutine to reduce a real NXP matrix x by
 !     orthogonal transformations u and v to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of v the right singular vectors.
 !
@@ -1113,8 +1113,8 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 !                   is the transpose of u).  Thus the singular
 !                   values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     ***** USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
@@ -1513,7 +1513,7 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     dsvdc is a subroutine to reduce a double precision NXP matrix x
 !     by orthogonal transformations u and V to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of V the right singular vectors.
 !
@@ -1597,8 +1597,8 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !                   is the transpose of u).  Thus the singular
 !                   values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     dsvdc uses the following functions and subprograms.
 !
@@ -1997,7 +1997,7 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     csvdc is a subroutine to reduce a complex NXP matrix x by
 !     unitary transformations u and V to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of V the right singular vectors.
 !
@@ -2081,8 +2081,8 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !                   is the conjugate-transpose of u).  Thus the
 !                   singular values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     csvdc uses the following functions and subprograms.
 !
@@ -2735,11 +2735,11 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,m)
-!           A is a matrix of order m. It is assumed that
+!           A is a matrix of order m. it is assumed that
 !           na .GE. m .GE. 1.
 !
 !        b(nb,n)
-!           b is a matrix of order n. It is assumed that
+!           b is a matrix of order n. it is assumed that
 !           nb .GE. n .GE. 1.
 !
 !        c(nc,n)
@@ -2765,7 +2765,7 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     WHEN ierr = 0, a CONTAINS THE LOWER SCHUR FORM OF THE MATRIX a,
 !     b contains the upper Schur form of the matrix b, and wk contains
 !     the orthonal matrices involved in the Schur decompositions of
-!     A and b. This information can be reused to solve a new set of
+!     A and b. this information can be reused to solve a new set of
 !     EQUATIONS AX + XB = c WITHOUT HAVING TO REDECOMPOSE A AND b.
 !     The following options are available...
 !
@@ -2781,15 +2781,15 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     When abslv is recalled, it is assumed that m, n, and wk have
 !     not been modified.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE AXPXB WRITTEN BY
-!        R.H. BARTELS AND G.W.STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine axpxb written by
+!        R.H. Bartels and G.W.Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -2967,10 +2967,10 @@ integer :: ip1
 !                     determined after 30 iterations.
 !
 ! -----------------
-!     WRITTEN BY JACK DONGARRA
-!          ARGONNE NATIONAL LABORATORY
-!          MAY 1961
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by jack dongarra
+!          Argonne National Laboratory
+!          may 1961
+!     modified by A.H. Morris (NSWC)
 ! ----------------------------------------------------------------------
 !     This subroutine is a modification of the EISPACK subroutine
 !     hqr2,  which is based on the Algol procedure hqr by peters
@@ -3340,11 +3340,11 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     we have the following setup.
 !
 !        a(na,m)
-!           A is a matrix of order m. It is assumed that
+!           A is a matrix of order m. it is assumed that
 !           na .GE. m .GE. 1.
 !
 !        b(nb,n)
-!           b is a matrix of order n. It is assumed that
+!           b is a matrix of order n. it is assumed that
 !           nb .GE. n .GE. 1.
 !
 !        c(nc,n)
@@ -3370,7 +3370,7 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     WHEN ierr = 0, a CONTAINS THE LOWER SCHUR FORM OF THE MATRIX a,
 !     b contains the upper Schur form of the matrix b, and WK contains
 !     the orthonal matrices involved in the Schur decompositions of
-!     A and b. This information can be reused to solve a new set of
+!     A and b. this information can be reused to solve a new set of
 !     EQUATIONS AX + XB = c WITHOUT HAVING TO REDECOMPOSE A AND b.
 !     The following options are available...
 !
@@ -3386,15 +3386,15 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     When dabslv is recalled, it is assumed that m, n, and WK have
 !     not been modified.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE AXPXB WRITTEN BY
-!        R.H. BARTELS AND G.W.STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine axpxb written by
+!        R.H. Bartels and G.W.Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -3572,10 +3572,10 @@ integer :: ip1
 !                     determined after 50 iterations.
 !
 ! -----------------
-!     WRITTEN BY JACK DONGARRA
-!          ARGONNE NATIONAL LABORATORY
-!          MAY 1961
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by jack dongarra
+!          Argonne National Laboratory
+!          may 1961
+!     modified by A.H. Morris (NSWC)
 ! ----------------------------------------------------------------------
 !     This subroutine is a modification of the EISPACK subroutine
 !     hqr2,  which is based on the Algol procedure hqr by peters
@@ -3943,11 +3943,11 @@ real, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,n)
-!           A is a matrix of order n. It is assumed that
+!           A is a matrix of order n. it is assumed that
 !           na .GE. n .GE. 1.
 !
 !        c(nc,n)
-!           c is a symmetric matrix of order n. It is
+!           c is a symmetric matrix of order n. it is
 !           ASSUMED THAT nc .GE. n.
 !
 !        wk(---)
@@ -3965,22 +3965,22 @@ real, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !
 !     WHEN ierr = 0, A CONTAINS THE UPPER SCHUR FORM OF THE MATRIX
 !     A and wk contains the orthogonal matrix involved in the Schur
-!     decomposition of A. This information can be reused to solve A
+!     decomposition of A. this information can be reused to solve A
 !     NEW SET OF EQUATIONS TRANSPOSE(a)*X + X*a = c WITHOUT HAVING
-!     to redecompose A. In this case, the input argument mo may be
+!     to redecompose A. in this case, the input argument mo may be
 !     SET TO ANY NONZERO VALUE. WHEN mo .NE. 0, IT IS ASSUMED THAT
 !     only c has been modified. On output the solution for the new
 !     set of equations is stored in c.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE ATXPXA WRITTEN BY
-!        R.H. BARTELS AND G.W. STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -4256,11 +4256,11 @@ double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,n)
-!           A is a matrix of order n. It is assumed that
+!           A is a matrix of order n. it is assumed that
 !           na .GE. n .GE. 1.
 !
 !        c(nc,n)
-!           c is a symmetric matrix of order n. It is
+!           c is a symmetric matrix of order n. it is
 !           ASSUMED THAT nc .GE. n.
 !
 !        wk(---)
@@ -4278,22 +4278,22 @@ double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !
 !     WHEN ierr = 0, A CONTAINS THE UPPER SCHUR FORM OF THE MATRIX
 !     A and wk contains the orthogonal matrix involved in the Schur
-!     decomposition of A. This information can be reused to solve A
+!     decomposition of A. this information can be reused to solve A
 !     NEW SET OF EQUATIONS TRANSPOSE(a)*X + X*a = c WITHOUT HAVING
-!     to redecompose A. In this case, the input argument mo may be
+!     to redecompose A. in this case, the input argument mo may be
 !     SET TO ANY NONZERO VALUE. WHEN mo .NE. 0, IT IS ASSUMED THAT
 !     only c has been modified. On output the solution for the new
 !     set of equations is stored in c.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE ATXPXA WRITTEN BY
-!        R.H. BARTELS AND G.W. STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -4696,7 +4696,7 @@ implicit none
 !            triangular form.
 !
 !     z,r    ARE MATRICES CONTAINING THE HISTORY OF THE
-!            TRANSFORMATIONS IN THE REDUCTIONS.
+!            transformations in the reductions.
 !
 !     xold   IS A MATRIX HOLDING THE CURRENT ITERATE X(i).
 !
@@ -5512,9 +5512,9 @@ real :: c(8)
 !        ierr = 2  THE PADE DENOMINATOR MATRIX IS
 !                  singular.
 !
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren Virginia
 !     ---------------
 !     Coefficients for (8,8) Pade table entry
 !     ---------------
@@ -5666,9 +5666,9 @@ double precision :: anorm, anorm1, c(12), factor, p, q, s, s1
 !        ierr = 2  THE PADE DENOMINATOR MATRIX IS
 !                  singular.
 !
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren Virginia
 !     ---------------
 !     Coefficients for (12,12) Pade table entry
 !     ---------------
@@ -6331,8 +6331,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!           CONVERSION OF REAL MATRICES FROM BANDED TO
-!                         STANDARD FORM
+!           Conversion of real matrices from banded to
+!                         standard form
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(kb,*)
@@ -6401,8 +6401,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
-!                    FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of real matrices from standard to banded
+!                    form when ml and mu are given
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,*)
@@ -6474,8 +6474,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!           CONVERSION OF REAL MATRICES FROM STANDARD
-!                        TO BANDED FORM
+!           Conversion of real matrices from standard
+!                        to banded form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb)
@@ -6528,8 +6528,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
-!                         TO STANDARD FORM
+!        Conversion of double precision matrices from banded
+!                         to standard form
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(kb,*)
@@ -6598,8 +6598,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
-!               TO BANDED FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of double precision matrices from standard
+!               to banded form when ml and mu are given
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,*)
@@ -6671,8 +6671,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
-!                         TO BANDED FORM
+!        Conversion of double precision matrices from standard
+!                         to banded form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,nb)
@@ -6725,8 +6725,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
-!                          STANDARD FORM
+!          Conversion of complex matrices from banded to
+!                          standard form
 !-----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: b(kb,*)
@@ -6795,8 +6795,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
-!                    FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of complex matrices from standard to banded
+!                    form when ml and mu are given
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,*)
@@ -6868,8 +6868,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!           CONVERSION OF COMPLEX MATRICES FROM STANDARD
-!                          TO BANDED FORM
+!           Conversion of complex matrices from standard
+!                          to banded form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,nb)
@@ -6923,8 +6923,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!                CONVERSION OF REAL MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!                Conversion of real matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(*)
@@ -6988,8 +6988,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!          Conversion of double precision matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(*)
@@ -7053,8 +7053,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!              CONVERSION OF COMPLEX MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!              Conversion of complex matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(*)
@@ -7120,8 +7120,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!                CONVERSION OF REAL MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!                Conversion of real matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,nb)
@@ -7184,8 +7184,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!          Conversion of double precision matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,nb)
@@ -7248,8 +7248,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!              CONVERSION OF COMPLEX MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!              Conversion of complex matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,nb)
@@ -7309,8 +7309,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, j, num
 !-----------------------------------------------------------------------
-!        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
-!                          PRECISION FORM
+!        Conversion of banded matrices from single to double
+!                          precision form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
@@ -7329,8 +7329,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, j, num
 !-----------------------------------------------------------------------
-!        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
-!                          PRECISION FORM
+!        Conversion of banded matrices from double to single
+!                          precision form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
@@ -9993,7 +9993,7 @@ integer :: isamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -10066,8 +10066,8 @@ integer :: isamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,isamax,saxpy,sscal,sswap
@@ -10197,8 +10197,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if snbfa and snbsl are
 !        CALLED CORRECTLY AND snbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      saxpy,sdot
@@ -10470,7 +10470,7 @@ integer :: idamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -10543,8 +10543,8 @@ integer :: idamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,idamax,daxpy,dscal,dswap

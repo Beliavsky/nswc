@@ -67,10 +67,10 @@ integer, intent(in) :: i
 !
 !-----------------------------------------------------------------------
 !
-!     ipmpar IS AN ADAPTATION OF THE FUNCTION I1MACH, WRITTEN BY
-!     P.A. FOX, A.D. HALL, AND N.L. SCHRYER (BELL LABORATORIES).
-!     ipmpar WAS FORMED BY A.H. MORRIS (NSWC). THE CONSTANTS ARE
-!     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
+!     ipmpar is an adaptation of the function i1mach, written by
+!     P.A. Fox, A.D. Hall, and N.L. Schryer (Bell Laboratories).
+!     ipmpar was formed by A.H. Morris (NSWC). The constants are
+!     from Bell Laboratories, NSWC, and other sources.
 !
 !-----------------------------------------------------------------------
 integer :: imach(10)
@@ -637,36 +637,36 @@ integer, intent(inout) :: imach(10)
 !     data to be stored in memory. These routines are needed when
 !     data are stored in oversized registers.
 !
-!     THE ALGORITHM FOR THE SUBROUTINE radix WAS DEVELOPED BY M.A.
-!     MALCOLM (STANFORD UNIVERSITY). SEE REFERENCES (1) AND (2).
+!     The algorithm for the subroutine radix was developed by M.A.
+!     Malcolm (Stanford University). See references (1) and (2).
 !
 !-----------------
 !
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !
 !-----------------
 !
-!     Revised ... march 1992
+!     Revised ... March 1992
 !
 !-----------------
 !
-!     REFERENCES ...
+!     References ...
 !
 !     (1) Malcolm, M.A., Algorithms to reveal properties of floating
 !         point arithmetic, comm. ACM (15), 1972, PP. 949-951.
 !
-!     (2) Gentlemen, W.M. And Marovich, S.B., More on algorithms that
+!     (2) Gentlemen, W.M. and Marovich, S.B., More on algorithms that
 !         reveal properties of floating point arithmetic units,
 !         comm. ACM (17), 1974, PP. 276-277.
 !
-!     (3) CODY, W.J. AND WAITE, W., SOFTWARE MANUAL FOR THE ELEMENTARY
-!         FUNCTIONS, PRENTICE-HALL, 1980, PP. 258-264.
+!     (3) Cody, W.J. and Waite, W., Software manual for the elementary
+!         functions, Prentice-Hall, 1980, PP. 258-264.
 !
-!     (4) CODY, W.J., ALGORITHM 665. MACHAR, A SUBROUTINE TO DYNAMICALLY
-!         DETERMINE MACHINE PARAMETERS, ACM TRANS. MATH SOFTWARE (14),
+!     (4) Cody, W.J., Algorithm 665. MACHAR, a subroutine to dynamically
+!         determine machine parameters, ACM Trans. Math Software (14),
 !         1988, PP. 303-311.
 !
 !-----------------------------------------------------------------------
@@ -1269,10 +1269,10 @@ integer :: ipmpar
 !        spmpar(3) = b**emax*(1 - b**(-m)), THE LARGEST MAGNITUDE.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 integer :: emin, emax
 !
@@ -1326,10 +1326,10 @@ integer :: ipmpar
 !        dpmpar(3) = b**emax*(1 - b**(-m)), THE LARGEST MAGNITUDE.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 integer :: emin, emax
 double precision :: b, binv, bm1, one, w, z
@@ -2086,15 +2086,15 @@ integer, intent(inout) :: ind(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort an integer array x into increasing order.  The algor-
 ! ithm is as follows.  Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2288,15 +2288,15 @@ real, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort the real array x into increasing order.  The algor-
 ! ithm is as follows.  Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2490,15 +2490,15 @@ double precision, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort a double precision array x into increasing order. The
 ! algorithm is as follows. Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2692,8 +2692,8 @@ integer, intent(inout) :: a(n), ip(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -2766,8 +2766,8 @@ real, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -2841,8 +2841,8 @@ double precision, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -3240,8 +3240,8 @@ real :: r, u, v
 !     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (sa,sb)**T .
 !
 !     THE QUANTITY r = (+/-)sqrt(sa**2 + sb**2) OVERWRITES sa IN
-!     STORAGE.  THE VALUE OF sb IS OVERWRITTEN BY A VALUE Z WHICH
-!     ALLOWS sc AND ss TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!     storage.  The value of sb is overwritten by a value Z which
+!     allows sc and ss to be recovered by the following algorithm:
 !           IF Z=1  SET  sc=0.  AND  ss=1.
 !           IF abs(Z) .LT. 1  SET  sc=sqrt(1-Z**2)  AND  ss=Z
 !           IF abs(Z) .GT. 1  SET  sc=1/Z  AND  ss=sqrt(1-sc**2)
@@ -3314,8 +3314,8 @@ implicit none
 !     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (da,db)**T .
 !
 !     THE QUANTITY r = (+/-)dsqrt(da**2 + db**2) OVERWRITES da IN
-!     STORAGE.  THE VALUE OF db IS OVERWRITTEN BY A VALUE Z WHICH
-!     ALLOWS dc AND ds TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!     storage.  The value of db is overwritten by a value Z which
+!     allows dc and ds to be recovered by the following algorithm:
 !           IF Z=1  SET  dc=0.D0  AND  ds=1.D0
 !           IF dabs(Z) .LT. 1  SET  dc=dsqrt(1-Z**2)  AND  ds=Z
 !           IF dabs(Z) .GT. 1  SET  dc=1/Z  AND  ds=dsqrt(1-dc**2)
@@ -3426,8 +3426,8 @@ real, intent(out) :: cy, sy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine constructs the elements of A 3 by 3
 ! orthogonal matrix R which rotates a point (xk,yk,zk) on
@@ -3854,11 +3854,11 @@ real, intent(inout) :: sinhm, coshm
 real, intent(in) :: x
 real :: cut(5)
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
-!                          MODIFIED BY A.H. MORRIS (NSWC/DL)
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!                          modified by A.H. Morris (NSWC/DL)
 !
 ! This subroutine returns approximations to
 !       sinhm(x) = sinh(x)-x
@@ -4198,7 +4198,7 @@ implicit none
 real, intent(in) :: a
 real :: p1, p2, p3, q1, q2, q3, t, t2, w, x
 !-----------------------------------------------------------------------
-!            Evaluation of the function LN(1 + a)
+!            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 data p1/-.129418923021993e+01/, p2/.405303492862024e+00/, &
 &p3/-.178874546012214e-01/
@@ -4222,7 +4222,7 @@ end function alnrel
 double precision function dlnrel (a)
 implicit none
 !-----------------------------------------------------------------------
-!            Evaluation of the function LN(1 + a)
+!            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: t, t2, w, z
@@ -5193,7 +5193,7 @@ real, intent(in) :: x(nb), y(nb)
 ! through the points in the order that they are indexed. The
 ! final point of the curve is assumed to be the first point
 ! given. Therefore, it need not be listed at the end of x and
-! y. The curve is not required to be simple.
+! y. the curve is not required to be simple.
 !
 !*****************************************************************
 !
@@ -5368,7 +5368,7 @@ real :: dens, score
 ! Meaning of the main simple variables ...
 !
 ! jr   = ROOT. THE HAMILTONIAN CIRCUITS ARE DETERMINED AS
-!        paths starting and ending at  jr .
+!        paths starting and ending at  Jr .
 ! k    = CURRENT LEVEL OF THE BRANCH-DECISION TREE.
 ! ind0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
 !        there were no input errors.
@@ -5417,7 +5417,7 @@ do i=1,n
     ac(ja) = i
   end do
 end do
-! Select as root  jr  the vertex  i  with maximum  VC(i)
+! Select as root  Jr  the vertex  i  with maximum  VC(i)
 ! (break ties by choosing  i  with minimum  vr(i) ).
 maxe = vc(1)
 minu = vr(1)
@@ -7395,10 +7395,10 @@ implicit none
 !           EVALUATION OF exp(x**2)*erfc(x) FOR x .GE. 1
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!        APRIL 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!        April 1992
 !-------------------------------
 double precision, intent(in) :: x
 double precision :: t, u, v, z, rpinv
@@ -7567,8 +7567,8 @@ real :: spmpar
 !     not 1, then erfi(p,q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
-!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
-!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!     Reference. Mathematics of computation,oct.1976,PP.827-830.
+!                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
 real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
@@ -7687,8 +7687,8 @@ implicit none
 !     is not 1, then derfi(p,q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
-!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
-!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!     Reference. Mathematics of computation,oct.1976,PP.827-830.
+!                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
 double precision :: c, c1, c2, r, eps, f, lnq, s, t, x
@@ -8253,7 +8253,7 @@ integer :: i
 !
 !     The main computation involves evaluation of rational Chebyshev
 !     approximations published in math. Comp. 24, 171-178(1970) By
-!     cody, Paciorek and Thacher.
+!     Cody, Paciorek and Thacher.
 !
 !-----------------------------------------------------------------------
 real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
@@ -9323,7 +9323,7 @@ double precision :: dx0
 !
 !     THE EXPANSION FOR 4 .LE. X .LE. 8 IS DUE TO WAYNE FULLERTON (LOS
 !     alamos). The remaining expansions are from math. Comp. 22, 641-649
-!     (1968), and math. Comp. 23, 289-303(1969) By cody and Thacher.
+!     (1968), and math. Comp. 23, 289-303(1969) By Cody and Thacher.
 !
 !        ------------
 !
@@ -9346,9 +9346,9 @@ double precision :: dx0
 !
 !        ----------
 !
-!     THIS SUBROUTINE WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR
-!     THE FUNPACK PACKAGE OF SPECIAL FUNCTION SUBROUTINES. THE ROUTINE
-!     WAS MODIFIED BY BY A.H. MORRIS (NSWC).
+!     This subroutine was written at Argonne National Laboratory for
+!     the funpack package of special function subroutines. The routine
+!     was modified by by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 !
@@ -9658,20 +9658,20 @@ integer :: m
 !-----------------------------------------------------------------------
 !
 !     Let E1(x) denote the exponential integral for positive x and
-!     the Cauchy principal value for negative x. If x is nonzero
+!     the Cauchy principal value for negative x. if x is nonzero
 !     then de1e has the value ...
 !
 !          de1e(x) = e1(x)          if -4 .le. x .le. 1
 !          de1e(x) = exp(x)*e1(x)   otherwise
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !
-!     THE FOLLOWING SERIES FOR E1 WERE DEVELOPED BY WAYNE FULLERTON
-!     (LOS ALAMOS NATIONAL LABORATORY).
+!     The following series for E1 were developed by Wayne Fullerton
+!     (Los Alamos National Laboratory).
 !
 !     SERIES A             ON THE INTERVAL -3.12500e-02 TO  0.
 !                                        WITH WEIGHTED ERROR   4.62e-32
@@ -10137,9 +10137,9 @@ integer :: n
 !                    Eps is the tolerance used.
 !
 !-------------------------
-!     WRITTEN BY A.H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by A.H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision :: a(40), c
 double precision, intent(in) :: eps
@@ -10234,13 +10234,13 @@ real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), pio2, rc, temp, &
 real :: si
 real :: spmpar
 !
-!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
-!     MODIFIED BY A.H. MORRIS
+!     Written by D.E. Amos and S.L. Daniel, November,1975.
+!     Modified by A.H. Morris
 !
-!     REFERENCES
+!     References
 !         SAND76-006C
-!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
-!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
 !
 !     Abstract
 !         si computes the integral of sin(T)/T on (0,x) by means
@@ -10355,13 +10355,13 @@ real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), econ, rc, temp, &
 real :: cin
 real :: spmpar
 !
-!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
-!     MODIFIED BY A.H. MORRIS
+!     Written by D.E. Amos and S.L. Daniel, November, 1975.
+!     Modified by A.H. Morris
 !
-!     REFERENCES
+!     References
 !         SAND76-0062
-!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
-!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
 !
 !     Abstract
 !         cin computes the integral of (1-cos(T))/T on (0,x) by means

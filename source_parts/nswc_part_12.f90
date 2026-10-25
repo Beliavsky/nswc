@@ -84,7 +84,7 @@ np = 1
 if (kswx .eq. 1) mp = 0
 if (kswy .eq. 1) np = 0
 !
-!     Set dlx,dly and size of block TRI-diagonal system generated
+!     Set dlx,dly and size of block tri-diagonal system generated
 !     in NINT,mint
 !
 dlx = (bit-ait)/float(m)
@@ -848,7 +848,7 @@ real :: cnv, eps
 !
 !***********************************************************************
 !
-!          VERSION  2  OCTOBER 1976  INCLUDING ERRATA  OCTOBER 1976
+!          Version  2  October 1976  including errata  October 1976
 !
 !         Documentation for this program is given in
 !
@@ -1063,13 +1063,13 @@ real :: cnv, eps
 !
 ! blktr1 solves the linear system
 !
-! b  CONTAINS THE ROOTS OF ALL THE b POLYNOMIALS
-! w1,W2,W3,WD,WW,WU  ARE ALL WORKING ARRAYS
-! PRDCT IS EITHER prodp OR prod0 DEPENDING ON WHETHER THE BOUNDARY
-! CONDITIONS IN THE m DIRECTION ARE PERIODIC OR NOT
-! CPRDCT IS EITHER cprodp OR cprod0 WHICH ARE THE COMPLEX VERSIONS
-! OF prodp AND prod0. THESE ARE CALLED IN THE EVENT THAT SOME
-! OF THE ROOTS OF THE b SUB P POLYNOMIAL ARE COMPLEX
+! b  contains the roots of all the b polynomials
+! w1,W2,W3,WD,WW,WU  are all working arrays
+! PRDCT is either prodp or prod0 depending on whether the boundary
+! conditions in the m direction are periodic or not
+! CPRDCT is either cprodp or cprod0 which are the complex versions
+! of prodp and prod0. These are called in the event that some
+! of the roots of the b sub P polynomial are complex
 !
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -2352,8 +2352,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain the next seed ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
    xhi = ix/b16
@@ -2398,10 +2398,10 @@ real, intent(inout) :: x(n)
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
@@ -2478,10 +2478,10 @@ double precision, intent(inout) :: x(n)
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, xalo, xhi
 double precision :: s, t
@@ -2559,10 +2559,10 @@ real :: t
 !     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
 !     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
@@ -2628,10 +2628,10 @@ integer :: k, leftlo
 !     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
 !     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: u, v
 double precision :: t
@@ -2702,10 +2702,10 @@ real :: t
 !     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
@@ -2775,10 +2775,10 @@ integer :: j, k, leftlo
 !     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: u, v, d
 double precision :: t
@@ -2853,10 +2853,10 @@ real :: s, t
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 real, intent(inout) :: x(n), y(n)
 integer :: a, b15, b16, fhi, p, xalo, xhi
@@ -2919,10 +2919,10 @@ integer :: k, l, leftlo
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: x(n), y(n)
 double precision :: s, t
@@ -3024,8 +3024,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain new seeds ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
 10 xhi = ix/b16
@@ -3128,8 +3128,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain new seeds ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
 10 xhi = ix/b16
@@ -3375,7 +3375,7 @@ real :: sum
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -3383,11 +3383,11 @@ real :: sum
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
-!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
-!                  DATA IN THE ARRAY a. a SHOULD NEVER BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  lower triangular matrix in the Cholesky
+!                  decomposition of a replaces the original
+!                  data in the array a. a should never be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -3421,10 +3421,10 @@ real :: sum
 !     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     Morrison, donald F., Multivariate statistical methods,
+!     Morrison, Donald F., Multivariate statistical methods,
 !     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     Scheuer, E. And Stoller, D. S., On the generation of
+!     Scheuer, E. and Stoller, D. S., On the generation of
 !     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
@@ -3492,7 +3492,7 @@ integer :: i, j, max
 !
 !           Generation of n random normal vectors of length m
 !           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. It is
+!           vector fmu and variance-covariance matrix a. it is
 !           assumed that A is a diagonal matrix.
 !
 !                          ---------------
@@ -3514,7 +3514,7 @@ integer :: i, j, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -3523,10 +3523,10 @@ integer :: i, j, max
 !                  are stored in the array a. a is an array
 !                  of length m or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
-!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  square roots of the elements of a replace
+!                  the original data in A. A should not be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -3623,7 +3623,7 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -3631,11 +3631,11 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
-!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
-!                  DATA IN THE ARRAY a. a SHOULD NEVER BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  lower triangular matrix in the Cholesky
+!                  decomposition of a replaces the original
+!                  data in the array a. a should never be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -3669,10 +3669,10 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     Morrison, donald F., Multivariate statistical methods,
+!     Morrison, Donald F., Multivariate statistical methods,
 !     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     Scheuer, E. And Stoller, D. S., On the generation of
+!     Scheuer, E. and Stoller, D. S., On the generation of
 !     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
@@ -3741,7 +3741,7 @@ integer :: i, j, max
 !
 !           Generation of n random normal vectors of length m
 !           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. It is
+!           vector fmu and variance-covariance matrix a. it is
 !           assumed that A is a diagonal matrix.
 !
 !                          ---------------
@@ -3763,7 +3763,7 @@ integer :: i, j, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -3772,10 +3772,10 @@ integer :: i, j, max
 !                  are stored in the array a. a is an array
 !                  of length m or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
-!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  square roots of the elements of a replace
+!                  the original data in A. A should not be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE

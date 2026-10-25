@@ -1,26 +1,37 @@
 {
   "input_sha256": "7b246665fd069c890b72aafe7d6a6dab58e1d3900c96ab4935d1873ac08e22cc",
-  "output_sha256": "87d14f1f0997a9889943fbd30947b9ca94013f9f1247f88ab0ca00b5f85b5f1f",
-  "rules_sha256": "914b6a64ca9c704745b04bdb529f6efcc2e9895488f36591e7b68e8565d44e1b",
+  "output_sha256": "7fb905c465f17f63769b9482068baf2609a81d38d3491f3d1f94341dcce31014",
+  "rules_sha256": "aad1b729a8132aea0af622902764aadd4f4f9e3dd91a13ab802e537b45aa8947",
   "vocabulary_sha256": "e13c433e8d8472ee7b186ca09901f0f4d964404eff21040392bcd0b3b3d4a0f0",
-  "changed_lines": 26474,
-  "changed_paragraphs": 9143,
-  "technical_comment_lines": 14914,
+  "changed_lines": 27347,
+  "changed_paragraphs": 9496,
+  "technical_comment_lines": 14941,
   "retained_lines": {
-    "formula or status expression": 5780,
-    "reference/author/history paragraph": 1403,
-    "code example": 739,
+    "formula or status expression": 5950,
+    "code example": 752,
     "uncertain prose": 718,
-    "table or aligned fields": 1982
+    "table or aligned fields": 2077
   },
   "unrecognized_prose_words": {
     "VE": {
       "count": 1,
       "first_line": 173
     },
+    "MACHAR": {
+      "count": 1,
+      "first_line": 668
+    },
     "LOGGAMMA": {
       "count": 2,
       "first_line": 10994
+    },
+    "IBESS": {
+      "count": 2,
+      "first_line": 18082
+    },
+    "JBESS": {
+      "count": 4,
+      "first_line": 18082
     },
     "YAIRY": {
       "count": 2,
@@ -34,13 +45,13 @@
       "count": 1,
       "first_line": 18587
     },
-    "JBESS": {
-      "count": 2,
-      "first_line": 19004
-    },
     "BESK": {
       "count": 1,
       "first_line": 20517
+    },
+    "BOLIC": {
+      "count": 2,
+      "first_line": 25629
     },
     "SMIN": {
       "count": 1,
@@ -49,6 +60,22 @@
     "OK": {
       "count": 3,
       "first_line": 32834
+    },
+    "COMPUT": {
+      "count": 1,
+      "first_line": 36447
+    },
+    "AG": {
+      "count": 1,
+      "first_line": 39253
+    },
+    "UCID": {
+      "count": 1,
+      "first_line": 39254
+    },
+    "DIGONAL": {
+      "count": 1,
+      "first_line": 39281
     },
     "SSISL": {
       "count": 1,
@@ -78,6 +105,14 @@
       "count": 6,
       "first_line": 44897
     },
+    "AXPXB": {
+      "count": 2,
+      "first_line": 45174
+    },
+    "ATXPXA": {
+      "count": 2,
+      "first_line": 46365
+    },
     "QZHES": {
       "count": 1,
       "first_line": 47304
@@ -98,6 +133,10 @@
       "count": 1,
       "first_line": 55676
     },
+    "PL": {
+      "count": 2,
+      "first_line": 58162
+    },
     "ELMTRANS": {
       "count": 2,
       "first_line": 60384
@@ -107,8 +146,8 @@
       "first_line": 60546
     },
     "CBALANCE": {
-      "count": 2,
-      "first_line": 64399
+      "count": 4,
+      "first_line": 64356
     },
     "COMLR": {
       "count": 2,
@@ -118,12 +157,32 @@
       "count": 1,
       "first_line": 66618
     },
+    "PERMU": {
+      "count": 2,
+      "first_line": 67077
+    },
+    "TATION": {
+      "count": 2,
+      "first_line": 67078
+    },
+    "SOLU": {
+      "count": 4,
+      "first_line": 67085
+    },
+    "TIONS": {
+      "count": 4,
+      "first_line": 67086
+    },
     "ARL": {
       "count": 8,
       "first_line": 67089
     },
+    "REPTS": {
+      "count": 1,
+      "first_line": 71042
+    },
     "TRI": {
-      "count": 9,
+      "count": 10,
       "first_line": 71854
     },
     "ABAR": {
@@ -150,9 +209,17 @@
       "count": 2,
       "first_line": 79306
     },
+    "REINVERSION": {
+      "count": 2,
+      "first_line": 79407
+    },
     "TABSC": {
       "count": 3,
       "first_line": 84227
+    },
+    "VA": {
+      "count": 1,
+      "first_line": 84402
     },
     "FDERV": {
       "count": 2,
@@ -161,6 +228,22 @@
     "XKNOT": {
       "count": 1,
       "first_line": 88059
+    },
+    "DIFFERENCED": {
+      "count": 1,
+      "first_line": 93199
+    },
+    "PRATICAL": {
+      "count": 1,
+      "first_line": 93225
+    },
+    "SNLA": {
+      "count": 2,
+      "first_line": 95047
+    },
+    "PRENCTICE": {
+      "count": 2,
+      "first_line": 95182
     },
     "XXYY": {
       "count": 1,
@@ -190,12 +273,16 @@
       "count": 2,
       "first_line": 110475
     },
+    "KENSINGTON": {
+      "count": 1,
+      "first_line": 111379
+    },
     "DEBDF": {
       "count": 2,
       "first_line": 113637
     },
     "DEPAC": {
-      "count": 2,
+      "count": 3,
       "first_line": 113639
     },
     "UPRIME": {
@@ -206,9 +293,17 @@
       "count": 2,
       "first_line": 114036
     },
+    "NQCUR": {
+      "count": 1,
+      "first_line": 115099
+    },
     "SGBCO": {
       "count": 5,
       "first_line": 115979
+    },
+    "WALTHAM": {
+      "count": 1,
+      "first_line": 117156
     },
     "NINT": {
       "count": 1,

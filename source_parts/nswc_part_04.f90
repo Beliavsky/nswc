@@ -169,11 +169,11 @@ real :: cpabs
 !                  2  leading coefficient is zero
 !
 !-------------------
-!     WRITTEN BY CARL b. BAILEY AND MODIFIED BY WILLIAM r. GAVIN
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO
-!        JANUARY 1976
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 complex, intent(in) :: w(n)
 complex :: z
@@ -326,11 +326,11 @@ real :: cpabs
 !                  2  leading coefficient is zero
 !
 !-------------------
-!     WRITTEN BY CARL b. BAILEY AND MODIFIED BY WILLIAM r. GAVIN
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO
-!        JANUARY 1976
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 complex, intent(in) :: c(*), w(n)
 complex :: z
@@ -3588,7 +3588,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = save
@@ -3603,7 +3603,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = save
@@ -3690,7 +3690,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = w
@@ -3705,7 +3705,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = w
@@ -3791,7 +3791,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = w
@@ -3806,7 +3806,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = w
@@ -4593,9 +4593,9 @@ implicit none
 ! IF ip(n)=0, A IS SINGULAR, SOL WILL DIVIDE BY ZERO.
 ! Interchanges finished in U , only partly in L .
 !
-! REFERENCE..
-! C. B. MOLER, ALGORITHM 423, LINEAR EQUATION SOLVER,
-! COMM. ASSOC. COMPUT. MACH., 15 (1972), P. 274.
+! Reference..
+! C. B. Moler, algorithm 423, linear equation solver,
+! comm. Assoc. COMPUT. Mach., 15 (1972), P. 274.
 !-----------------------------------------------------------------------
 integer, intent(out) :: ier
 integer, intent(inout) :: ip
@@ -4611,7 +4611,7 @@ if (n .eq. 1) go to 70
 nm1 = n - 1
 do k = 1,nm1
   kp1 = k + 1
-!  Find the pivot in column k.  Search rows k to n. --------------------
+!  Find the pivot in column k.  search rows k to n. --------------------
   m = k
   do 10 i = kp1,n
 10 if (abs(a(i,k)) .gt. abs(a(m,k))) m = i
@@ -4700,7 +4700,7 @@ real, intent(inout) :: d
 integer :: j, jl, k, kl, l, maxb
 real :: pivot, t
 !-----------------------------------------------------------------------
-!     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
+!     Matrix inversion/equation solving without pivot search
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n), b(*)
 !
@@ -5095,7 +5095,7 @@ real :: spmpar
 !       luimp executes the iteration cycle
 !            (1)  AR = b - AX
 !            (2)  x = x + r
-!       with an initial given x. The residual vector b - AX is
+!       with an initial given x. the residual vector b - AX is
 !       computed to high accuracy using double precision. sgesl
 !       is then used to solve (1).
 !
@@ -5206,8 +5206,8 @@ real, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -5389,8 +5389,8 @@ real, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in sgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -5506,8 +5506,8 @@ real, intent(inout) :: b(*)
 !              call sgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -5623,8 +5623,8 @@ real, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF sgeco HAS SET RCOND .GT. 0.0 OR sgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -5847,8 +5847,8 @@ double precision, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -6030,8 +6030,8 @@ double precision, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in dgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -6147,8 +6147,8 @@ double precision, intent(inout) :: b(*)
 !              call dgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -6264,8 +6264,8 @@ double precision, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF dgeco HAS SET RCOND .GT. 0.0 OR dgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -6980,7 +6980,7 @@ integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 !  A R C E S L  supervises the solution of the linear system
 !                          A*x = b
 !  using the decomposition of the matrix  A  already generated
-!  in  A R C E D C.  It involves two loops, the forward loop,
+!  in  A R C E D C.  it involves two loops, the forward loop,
 !  consisting of forward solution, forward modification, and
 !  forward elimination, and the backward loop, consisting of
 !  backward solution, backward modification, and backward
@@ -7399,43 +7399,43 @@ integer :: n
 integer, intent(inout) :: ip(m,n), ier
 real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
 !-----------------------------------------------------------------------
-! BLOCK-TRIDIAGONAL MATRIX DECOMPOSITION ROUTINE.
-! WRITTEN BY A. C. HINDMARSH.
-! LATEST REVISION JANUARY 26, 1977  (AG)
-! REFERENCE.. UCID-30150
-!             SOLUTION OF BLOCK-TRIDIAGONAL SYSTEMS OF LINEAR
-!             ALGEBRAIC EQUATIONS
-!             A.C. HINDMARSH
-!             FEBRUARY 1977
-! THE INPUT MATRIX CONTAINS THREE BLOCKS OF ELEMENTS IN EACH BLOCK-ROW,
-! INCLUDING BLOCKS IN THE (1,3) AND (n,n-2) BLOCK POSITIONS.
-! decbt USES BLOCK GAUSS ELIMINATION AND SUBROUTINES dec AND SOL
-! FOR SOLUTION OF BLOCKS.  PARTIAL PIVOTING IS DONE WITHIN
-! BLOCK-ROWS ONLY.
-! INPUT..
+! Block-tridiagonal matrix decomposition routine.
+! Written by A. C. Hindmarsh.
+! Latest revision January 26, 1977  (AG)
+! reference.. UCID-30150
+!             solution of block-tridiagonal systems of linear
+!             algebraic equations
+!             A.C. Hindmarsh
+!             February 1977
+! the input matrix contains three blocks of elements in each block-row,
+! including blocks in the (1,3) and (n,n-2) block positions.
+! decbt uses block Gauss elimination and subroutines dec and sol
+! for solution of blocks.  Partial pivoting is done within
+! block-rows only.
+! Input..
 !     m = ORDER OF EACH BLOCK.
 !     n = NUMBER OF BLOCKS IN EACH DIRECTION OF THE MATRIX.
-!         n MUST BE 4 OR MORE.  THE COMPLETE MATRIX HAS ORDER m*n.
+!         n must be 4 or more.  The complete matrix HAS order m*n.
 !     a = m BY m BY n ARRAY CONTAINING DIAGONAL BLOCKS.
-!         a(i,j,k) CONTAINS THE (i,j) ELEMENT OF THE k-TH BLOCK.
+!         a(i,j,k) contains the (i,j) element of the k-TH block.
 !     b = m BY m BY n ARRAY CONTAINING THE SUPER-DIAGONAL BLOCKS
 !         (IN b(*,*,k) FOR k = 1,...,n-1) AND THE BLOCK IN THE (n,n-2)
-!         BLOCK POSITION (IN b(*,*,n)).
+!         block position (in b(*,*,n)).
 !     c = m BY m BY n ARRAY CONTAINING THE SUBDIAGONAL BLOCKS
 !         (IN c(*,*,k) FOR k = 2,3,...,n) AND THE BLOCK IN THE
-!         (1,3) BLOCK POSITION (IN c(*,*,1)).
+!         (1,3) block position (in c(*,*,1)).
 !    ip = INTEGER ARRAY OF LENGTH m*n FOR WORKING STORAGE.
-! OUTPUT..
+! Output..
 ! A,b,c = m BY m BY n ARRAYS CONTAINING THE BLOCK LU DECOMPOSITION
-!         OF THE INPUT MATRIX.
+!         of the input matrix.
 !    ip = m BY n ARRAY OF PIVOT INFORMATION.  ip(*,k) CONTAINS
-!         INFORMATION FOR THE k-TH DIGONAL BLOCK.
+!         information for the k-TH DIGONAL block.
 !   ier = 0  IF NO TROUBLE OCCURRED, OR
 !       = -1 IF THE INPUT VALUE OF m OR n WAS ILLEGAL, OR
 !       = k  IF A SINGULAR MATRIX WAS FOUND IN THE k-TH DIAGONAL BLOCK.
-! USE solbt TO SOLVE THE ASSOCIATED LINEAR SYSTEM.
-! decbt CALLS SUBROUTINES  dec(m,M0,a,ip,ier)  AND  sol(m,M0,a,Y,ip)
-! FOR SOLUTION OF m BY m LINEAR SYSTEMS.
+! Use solbt to solve the associated linear system.
+! decbt calls subroutines  dec(m,M0,a,ip,ier)  and  sol(m,M0,a,Y,ip)
+! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
 integer :: nm1, nm2, km1, i, j, k, l
 real :: dp
@@ -7514,22 +7514,22 @@ real :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
 !-----------------------------------------------------------------------
-! SOLUTION OF BLOCK-TRIDIAGONAL LINEAR SYSTEM.
-! COEFFICIENT MATRIX MUST HAVE BEEN PREVIOUSLY PROCESSED BY decbt.
-! m, n, A, b, c, AND ip  MUST NOT HAVE BEEN CHANGED SINCE CALL TO decbt.
-! WRITTEN BY A. C. HINDMARSH.
-! INPUT..
+! Solution of block-tridiagonal linear system.
+! Coefficient matrix must have been previously processed by decbt.
+! m, n, A, b, c, and ip  must not have been changed since call to decbt.
+! Written by A. C. Hindmarsh.
+! Input..
 !     m = ORDER OF EACH BLOCK.
 !     n = NUMBER OF BLOCKS IN EACH DIRECTION OF MATRIX.
 ! A,b,c = m BY m BY n ARRAYS CONTAINING BLOCK LU DECOMPOSITION
-!         OF COEFFICIENT MATRIX FROM decbt.
+!         of coefficient matrix from decbt.
 !    ip = m BY n INTEGER ARRAY OF PIVOT INFORMATION FROM decbt.
 !     y = ARRAY OF LENGTH m*n CONTAINING THE RIGHT-HAND SIDE VECTOR
-!         (TREATED AS AN m BY n ARRAY HERE).
-! OUTPUT..
+!         (treated as an m by n array here).
+! Output..
 !     y = SOLUTION VECTOR, OF LENGTH m*n.
-! solbt MAKES CALLS TO SUBROUTINE sol(m,M0,a,y,ip)
-! FOR SOLUTION OF m BY m LINEAR SYSTEMS.
+! solbt makes calls to subroutine sol(m,M0,a,y,ip)
+! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
 integer :: nm1, nm2, km1, i, j, k
 real :: dp
@@ -7691,8 +7691,8 @@ real, intent(inout) :: rcond
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -7966,8 +7966,8 @@ real, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -8217,8 +8217,8 @@ real, intent(inout) :: b(*)
 !              call sspsl(ap,n,kpvt,c(1,j))
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -8420,8 +8420,8 @@ integer, intent(inout) :: inert(3)
 !        AND  sspco  HAS SET RCOND .EQ. 0.0
 !        OR  sspfa  HAS SET  INFO .NE. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -8716,8 +8716,8 @@ double precision, intent(inout) :: rcond
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -8991,8 +8991,8 @@ double precision, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -9242,8 +9242,8 @@ double precision, intent(inout) :: b(*)
 !              call dspsl(ap,n,kpvt,c(1,j))
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -9445,8 +9445,8 @@ integer, intent(inout) :: inert(3)
 !        AND  dspco  HAS SET RCOND .EQ. 0.0
 !        OR  dspfa  HAS SET  INFO .NE. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -9704,8 +9704,8 @@ real, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -9789,8 +9789,8 @@ real, intent(inout) :: b(*)
 !              call sppsl(ap,n,c(1,j))
 !        10 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -9858,8 +9858,8 @@ real, intent(inout) :: det(2)
 !        It will not occur if the subroutines are called correctly
 !        AND IF SPOCO OR SPOFA HAS SET INFO .EQ. 0 .
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -10024,8 +10024,8 @@ double precision, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -10109,8 +10109,8 @@ double precision, intent(inout) :: b(*)
 !              call dppsl(ap,n,c(1,j))
 !        10 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -10178,8 +10178,8 @@ double precision, intent(inout) :: det(2)
 !        It will not occur if the subroutines are called correctly
 !        AND IF DPOCO OR DPOFA HAS SET INFO .EQ. 0 .
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !

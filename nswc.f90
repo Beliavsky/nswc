@@ -67,10 +67,10 @@ integer, intent(in) :: i
 !
 !-----------------------------------------------------------------------
 !
-!     ipmpar IS AN ADAPTATION OF THE FUNCTION I1MACH, WRITTEN BY
-!     P.A. FOX, A.D. HALL, AND N.L. SCHRYER (BELL LABORATORIES).
-!     ipmpar WAS FORMED BY A.H. MORRIS (NSWC). THE CONSTANTS ARE
-!     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
+!     ipmpar is an adaptation of the function i1mach, written by
+!     P.A. Fox, A.D. Hall, and N.L. Schryer (Bell Laboratories).
+!     ipmpar was formed by A.H. Morris (NSWC). The constants are
+!     from Bell Laboratories, NSWC, and other sources.
 !
 !-----------------------------------------------------------------------
 integer :: imach(10)
@@ -637,36 +637,36 @@ integer, intent(inout) :: imach(10)
 !     data to be stored in memory. These routines are needed when
 !     data are stored in oversized registers.
 !
-!     THE ALGORITHM FOR THE SUBROUTINE radix WAS DEVELOPED BY M.A.
-!     MALCOLM (STANFORD UNIVERSITY). SEE REFERENCES (1) AND (2).
+!     The algorithm for the subroutine radix was developed by M.A.
+!     Malcolm (Stanford University). See references (1) and (2).
 !
 !-----------------
 !
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !
 !-----------------
 !
-!     Revised ... march 1992
+!     Revised ... March 1992
 !
 !-----------------
 !
-!     REFERENCES ...
+!     References ...
 !
 !     (1) Malcolm, M.A., Algorithms to reveal properties of floating
 !         point arithmetic, comm. ACM (15), 1972, PP. 949-951.
 !
-!     (2) Gentlemen, W.M. And Marovich, S.B., More on algorithms that
+!     (2) Gentlemen, W.M. and Marovich, S.B., More on algorithms that
 !         reveal properties of floating point arithmetic units,
 !         comm. ACM (17), 1974, PP. 276-277.
 !
-!     (3) CODY, W.J. AND WAITE, W., SOFTWARE MANUAL FOR THE ELEMENTARY
-!         FUNCTIONS, PRENTICE-HALL, 1980, PP. 258-264.
+!     (3) Cody, W.J. and Waite, W., Software manual for the elementary
+!         functions, Prentice-Hall, 1980, PP. 258-264.
 !
-!     (4) CODY, W.J., ALGORITHM 665. MACHAR, A SUBROUTINE TO DYNAMICALLY
-!         DETERMINE MACHINE PARAMETERS, ACM TRANS. MATH SOFTWARE (14),
+!     (4) Cody, W.J., Algorithm 665. MACHAR, a subroutine to dynamically
+!         determine machine parameters, ACM Trans. Math Software (14),
 !         1988, PP. 303-311.
 !
 !-----------------------------------------------------------------------
@@ -1269,10 +1269,10 @@ integer :: ipmpar
 !        spmpar(3) = b**emax*(1 - b**(-m)), THE LARGEST MAGNITUDE.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 integer :: emin, emax
 !
@@ -1326,10 +1326,10 @@ integer :: ipmpar
 !        dpmpar(3) = b**emax*(1 - b**(-m)), THE LARGEST MAGNITUDE.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 integer :: emin, emax
 double precision :: b, binv, bm1, one, w, z
@@ -2086,15 +2086,15 @@ integer, intent(inout) :: ind(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort an integer array x into increasing order.  The algor-
 ! ithm is as follows.  Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2288,15 +2288,15 @@ real, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort the real array x into increasing order.  The algor-
 ! ithm is as follows.  Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2490,15 +2490,15 @@ double precision, intent(in) :: x(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine uses an order n*log(n) quick sort to
 ! sort a double precision array x into increasing order. The
 ! algorithm is as follows. Ind is initialized to the ordered
 ! sequence of indices 1,...,n, and all interchanges are
 ! applied to ind.  x is divided into two portions by picking
-! a central element t.  The first and last elements are com-
+! a central element t.  the first and last elements are com-
 ! pared with t, and interchanges are applied as necessary so
 ! that the three values are in ascending order.  Inter-
 ! changes are then applied so that all elements greater than
@@ -2692,8 +2692,8 @@ integer, intent(inout) :: a(n), ip(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -2766,8 +2766,8 @@ real, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -2841,8 +2841,8 @@ double precision, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This routine applies a set of permutations to a vector.
 !
@@ -3240,8 +3240,8 @@ real :: r, u, v
 !     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (sa,sb)**T .
 !
 !     THE QUANTITY r = (+/-)sqrt(sa**2 + sb**2) OVERWRITES sa IN
-!     STORAGE.  THE VALUE OF sb IS OVERWRITTEN BY A VALUE Z WHICH
-!     ALLOWS sc AND ss TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!     storage.  The value of sb is overwritten by a value Z which
+!     allows sc and ss to be recovered by the following algorithm:
 !           IF Z=1  SET  sc=0.  AND  ss=1.
 !           IF abs(Z) .LT. 1  SET  sc=sqrt(1-Z**2)  AND  ss=Z
 !           IF abs(Z) .GT. 1  SET  sc=1/Z  AND  ss=sqrt(1-sc**2)
@@ -3314,8 +3314,8 @@ implicit none
 !     WHICH ZEROS THE SECOND ENTRY OF THE 2-VECTOR  (da,db)**T .
 !
 !     THE QUANTITY r = (+/-)dsqrt(da**2 + db**2) OVERWRITES da IN
-!     STORAGE.  THE VALUE OF db IS OVERWRITTEN BY A VALUE Z WHICH
-!     ALLOWS dc AND ds TO BE RECOVERED BY THE FOLLOWING ALGORITHM:
+!     storage.  The value of db is overwritten by a value Z which
+!     allows dc and ds to be recovered by the following algorithm:
 !           IF Z=1  SET  dc=0.D0  AND  ds=1.D0
 !           IF dabs(Z) .LT. 1  SET  dc=dsqrt(1-Z**2)  AND  ds=Z
 !           IF dabs(Z) .GT. 1  SET  dc=1/Z  AND  ds=dsqrt(1-dc**2)
@@ -3426,8 +3426,8 @@ real, intent(out) :: cy, sy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !
 !   This subroutine constructs the elements of A 3 by 3
 ! orthogonal matrix R which rotates a point (xk,yk,zk) on
@@ -3854,11 +3854,11 @@ real, intent(inout) :: sinhm, coshm
 real, intent(in) :: x
 real :: cut(5)
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
-!                          MODIFIED BY A.H. MORRIS (NSWC/DL)
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
+!                          modified by A.H. Morris (NSWC/DL)
 !
 ! This subroutine returns approximations to
 !       sinhm(x) = sinh(x)-x
@@ -4198,7 +4198,7 @@ implicit none
 real, intent(in) :: a
 real :: p1, p2, p3, q1, q2, q3, t, t2, w, x
 !-----------------------------------------------------------------------
-!            Evaluation of the function LN(1 + a)
+!            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 data p1/-.129418923021993e+01/, p2/.405303492862024e+00/, &
 &p3/-.178874546012214e-01/
@@ -4222,7 +4222,7 @@ end function alnrel
 double precision function dlnrel (a)
 implicit none
 !-----------------------------------------------------------------------
-!            Evaluation of the function LN(1 + a)
+!            Evaluation of the function ln(1 + a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: t, t2, w, z
@@ -5193,7 +5193,7 @@ real, intent(in) :: x(nb), y(nb)
 ! through the points in the order that they are indexed. The
 ! final point of the curve is assumed to be the first point
 ! given. Therefore, it need not be listed at the end of x and
-! y. The curve is not required to be simple.
+! y. the curve is not required to be simple.
 !
 !*****************************************************************
 !
@@ -5368,7 +5368,7 @@ real :: dens, score
 ! Meaning of the main simple variables ...
 !
 ! jr   = ROOT. THE HAMILTONIAN CIRCUITS ARE DETERMINED AS
-!        paths starting and ending at  jr .
+!        paths starting and ending at  Jr .
 ! k    = CURRENT LEVEL OF THE BRANCH-DECISION TREE.
 ! ind0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
 !        there were no input errors.
@@ -5417,7 +5417,7 @@ do i=1,n
     ac(ja) = i
   end do
 end do
-! Select as root  jr  the vertex  i  with maximum  VC(i)
+! Select as root  Jr  the vertex  i  with maximum  VC(i)
 ! (break ties by choosing  i  with minimum  vr(i) ).
 maxe = vc(1)
 minu = vr(1)
@@ -7395,10 +7395,10 @@ implicit none
 !           EVALUATION OF exp(x**2)*erfc(x) FOR x .GE. 1
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!        APRIL 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!        April 1992
 !-------------------------------
 double precision, intent(in) :: x
 double precision :: t, u, v, z, rpinv
@@ -7567,8 +7567,8 @@ real :: spmpar
 !     not 1, then erfi(p,q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
-!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
-!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!     Reference. Mathematics of computation,oct.1976,PP.827-830.
+!                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
 real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
@@ -7687,8 +7687,8 @@ implicit none
 !     is not 1, then derfi(p,q) is set to a negative value.
 !
 !-----------------------------------------------------------------------
-!     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
-!                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
+!     Reference. Mathematics of computation,oct.1976,PP.827-830.
+!                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
 double precision, intent(in) :: p, q
 double precision :: c, c1, c2, r, eps, f, lnq, s, t, x
@@ -8253,7 +8253,7 @@ integer :: i
 !
 !     The main computation involves evaluation of rational Chebyshev
 !     approximations published in math. Comp. 24, 171-178(1970) By
-!     cody, Paciorek and Thacher.
+!     Cody, Paciorek and Thacher.
 !
 !-----------------------------------------------------------------------
 real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
@@ -9323,7 +9323,7 @@ double precision :: dx0
 !
 !     THE EXPANSION FOR 4 .LE. X .LE. 8 IS DUE TO WAYNE FULLERTON (LOS
 !     alamos). The remaining expansions are from math. Comp. 22, 641-649
-!     (1968), and math. Comp. 23, 289-303(1969) By cody and Thacher.
+!     (1968), and math. Comp. 23, 289-303(1969) By Cody and Thacher.
 !
 !        ------------
 !
@@ -9346,9 +9346,9 @@ double precision :: dx0
 !
 !        ----------
 !
-!     THIS SUBROUTINE WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR
-!     THE FUNPACK PACKAGE OF SPECIAL FUNCTION SUBROUTINES. THE ROUTINE
-!     WAS MODIFIED BY BY A.H. MORRIS (NSWC).
+!     This subroutine was written at Argonne National Laboratory for
+!     the funpack package of special function subroutines. The routine
+!     was modified by by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 !
@@ -9658,20 +9658,20 @@ integer :: m
 !-----------------------------------------------------------------------
 !
 !     Let E1(x) denote the exponential integral for positive x and
-!     the Cauchy principal value for negative x. If x is nonzero
+!     the Cauchy principal value for negative x. if x is nonzero
 !     then de1e has the value ...
 !
 !          de1e(x) = e1(x)          if -4 .le. x .le. 1
 !          de1e(x) = exp(x)*e1(x)   otherwise
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !
-!     THE FOLLOWING SERIES FOR E1 WERE DEVELOPED BY WAYNE FULLERTON
-!     (LOS ALAMOS NATIONAL LABORATORY).
+!     The following series for E1 were developed by Wayne Fullerton
+!     (Los Alamos National Laboratory).
 !
 !     SERIES A             ON THE INTERVAL -3.12500e-02 TO  0.
 !                                        WITH WEIGHTED ERROR   4.62e-32
@@ -10137,9 +10137,9 @@ integer :: n
 !                    Eps is the tolerance used.
 !
 !-------------------------
-!     WRITTEN BY A.H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by A.H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision :: a(40), c
 double precision, intent(in) :: eps
@@ -10234,13 +10234,13 @@ real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), pio2, rc, temp, &
 real :: si
 real :: spmpar
 !
-!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER,1975.
-!     MODIFIED BY A.H. MORRIS
+!     Written by D.E. Amos and S.L. Daniel, November,1975.
+!     Modified by A.H. Morris
 !
-!     REFERENCES
+!     References
 !         SAND76-006C
-!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
-!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
 !
 !     Abstract
 !         si computes the integral of sin(T)/T on (0,x) by means
@@ -10355,13 +10355,13 @@ real :: aic, amax, ax, b1, b2, bb(16), bx, cc(46), econ, rc, temp, &
 real :: cin
 real :: spmpar
 !
-!     WRITTEN BY D.E. AMOS AND S.L. DANIEL, NOVEMBER, 1975.
-!     MODIFIED BY A.H. MORRIS
+!     Written by D.E. Amos and S.L. Daniel, November, 1975.
+!     Modified by A.H. Morris
 !
-!     REFERENCES
+!     References
 !         SAND76-0062
-!         THE SPECIAL FUNCTIONS AND THEIR APPROXIMATIONS, VOL. II, BY
-!         Y.L. LUKE. ACADEMIC PRESS, NEW YORK, 1969.
+!         the special functions and their approximations, vol. II, by
+!         Y.L. Luke. Academic press, new york, 1969.
 !
 !     Abstract
 !         cin computes the integral of (1-cos(T))/T on (0,x) by means
@@ -10828,10 +10828,10 @@ real :: const, t, w
 !-----------------------------------------------------------------------
 !            Computation of the real dilogarithm function
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 real :: a(5), b(6), c(10), d(2), e(18), p(4), q(8), r(7), s(6)
 double precision :: x0
@@ -11277,9 +11277,9 @@ real :: spmpar
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real :: p(7), q(7)
 double precision :: d, g, z, lnx, glog
@@ -11573,9 +11573,9 @@ real :: c0, c1, c2, c3, c4, c5, d, t, w
 !-----------------------------------------------------------------------
 !            Evaluation of LN(gamma(a)) for positive A
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!          NAVAL SURFACE WARFARE CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!          Naval Surface Warfare Center
+!          Dahlgren, Virginia
 !--------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !--------------------------
@@ -11933,9 +11933,9 @@ integer :: j, n
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: d, pi, s, t, x, w
@@ -12033,7 +12033,7 @@ integer :: i, k
 !
 !     The series for dpdel on the interval 0.0 to 1.0 derived by
 !     A.H. Morris from the Chebyshev series in the SLATEC library
-!     obtained by wayne fullerton (Los Alamos).
+!     obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -12071,12 +12071,12 @@ implicit none
 !     EVALUATION OF 1/gamma(1 + x) - 1  FOR -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
 !
-!     THE FOLLOWING ARE THE FIRST 49 COEFFICIENTS OF THE MACLAURIN
-!     EXPANSION FOR 1/gamma(1 + x) - 1. THE COEFFICIENTS ARE
-!     CORRECT TO 40 DIGITS. THE COEFFICIENTS WERE OBTAINED BY
-!     ALFRED H. MORRIS JR. (NAVAL SURFACE WARFARE CENTER) AND ARE
-!     GIVEN HERE FOR REFERENCE. ONLY THE FIRST 14 COEFFICIENTS ARE
-!     USED IN THIS CODE.
+!     The following are the first 49 coefficients of the Maclaurin
+!     expansion for 1/gamma(1 + x) - 1. The coefficients are
+!     correct to 40 digits. The coefficients were obtained by
+!     Alfred H. Morris Jr. (Naval Surface Warfare Center) and are
+!     given here for reference. Only the first 14 coefficients are
+!     used in this code.
 !
 !                           -----------
 !
@@ -12241,9 +12241,9 @@ integer :: i, n
 !           Evaluation of LN(gamma(a)) for positive A
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
@@ -12447,12 +12447,12 @@ real :: aug, den, piov4, sgn, upper, w, x, xmax1, xmx0, xsmall, z
 !
 !     The main computation involves evaluation of rational Chebyshev
 !     approximations published in math. Comp. 27, 123-127(1973) By
-!     cody, Strecok and Thacher.
+!     Cody, Strecok and Thacher.
 !
 !---------------------------------------------------------------------
-!     PSI WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR THE FUNPACK
-!     PACKAGE OF SPECIAL FUNCTION SUBROUTINES. PSI WAS MODIFIED BY
-!     A.H. MORRIS (NSWC).
+!     Psi was written at Argonne National Laboratory for the funpack
+!     package of special function subroutines. Psi was modified by
+!     A.H. Morris (NSWC).
 !---------------------------------------------------------------------
 real :: p1(7), p2(4), q1(6), q2(4)
 double precision :: dx0
@@ -12797,13 +12797,13 @@ integer :: j, k, l, max, n
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WARFARE CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          Naval Surface Warfare Center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !
-!     THE SERIES FOR dpsi ON THE INTERVAL 0.0 TO 1.0 WAS DERIVED
-!     BY WAYNE FULLERTON (LOS ALAMOS NATIONAL LABORATORY).
+!     The series for dpsi on the interval 0.0 to 1.0 was derived
+!     by Wayne Fullerton (Los Alamos National Laboratory).
 !
 !                                  WITH WEIGHTED ERROR   5.79E-32
 !                                   log weighted error  31.24
@@ -12811,8 +12811,8 @@ integer :: j, k, l, max, n
 !                              decimal places required  32.05
 !
 !     THE SERIES FOR  a .GE. 10  WAS DERIVED BY A.H. MORRIS FROM
-!     the Chebyshev series in the SLATEC library obtained by wayne
-!     fullerton (Los Alamos).
+!     the Chebyshev series in the SLATEC library obtained by Wayne
+!     Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -12985,9 +12985,9 @@ integer :: i, l, n, nm1
 !                  where X0 is the zero of psi(x).
 !
 !-------------------------
-!     WRITTEN BY A.H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by A.H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision :: a(20), h
 double precision, intent(in) :: x
@@ -13075,7 +13075,7 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !
 !                  sum( (x+k)**(-n-1) , k=0,1,2,... )
 !
-!         Which converges rapidly for large n. Both xmin and the
+!         Which converges rapidly for large n. both xmin and the
 !         number of terms of the series are calculated from the unit
 !         round off of the machine environment.
 !
@@ -13107,21 +13107,21 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !                    iflag = 3 UNDERFLOW. x TOO LARGE OR n+m-1
 !                              too large.
 !                    iflag = 4 n+m-1 IS TOO LARGE FOR THE CURRENT
-!                              value of x. This setting will not
+!                              value of x. this setting will not
 !                              OCCUR WHEN n+m-1 .LE. 100.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY DONALD E. AMOS
-!         SANDIA LABORATORIES
-!         JUNE 1982
-!     MODIFIED BY A. H. MORRIS (NSWC), 1990.
+!     Written by Donald E. Amos
+!         Sandia Laboratories
+!         June 1982
+!     modified by A. H. Morris (NSWC), 1990.
 !
-!     REFERENCES ...
+!     References ...
 !
-!     (1) ACM TRANS. MATH SOFTWARE, 1983.
-!     (2) HANDBOOK OF MATHEMATICAL FUNCTIONS, AMS 55, NATIONAL BUREAU
-!         OF STANDARDS BY m. ABRAMOWITZ AND I.A. STEGUN, 1964, PP.
-!         258-260, EQUATIONS 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
+!     (1) ACM Trans. Math Software, 1983.
+!     (2) Handbook of mathematical functions, AMS 55, national bureau
+!         of standards by m. Abramowitz and I.A. Stegun, 1964, PP.
+!         258-260, equations 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
 !-----------------------------------------------------------------------
 real :: alpha, arg, beta, c, den, elim, eps, fln, fn, fnp, fns, &
 &fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol
@@ -13461,7 +13461,7 @@ real, intent(in) :: a, b
 real :: x
 real :: alnrel, gamln1
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(gamma(a + b))
+!          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 x = dble(a) + dble(b) - 2.d0
@@ -13670,7 +13670,7 @@ end function dbetln
 double precision function dgsmln (a, b)
 implicit none
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(gamma(a + b))
+!          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -13701,7 +13701,7 @@ integer :: j, k
 !
 !     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
-!     SLATEC library obtained by wayne fullerton (Los Alamos).
+!     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a0, b0
@@ -13774,7 +13774,7 @@ integer :: j, k
 !     LN(gamma(x)) = (x - 0.5)*LN(x) - x + 0.5*LN(2*PI) + DEL(x).
 !     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
-!     SLATEC library obtained by wayne fullerton (Los Alamos).
+!     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -13881,10 +13881,10 @@ real :: spmpar
 !     x is exceedingly close to A and A is extremely large.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... DEC 1991
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... DEC 1991
 !-------------------------
 real :: j, l, acc0(3), big(3), e0(3), x0(3), wk(20)
 real :: a0(4), a1(4), a2(2), a3(2), a4(2), a5(2), a6(2), a7(2), &
@@ -14373,7 +14373,7 @@ real :: gamln
 !     A SOLUTION FOR p(a,x) = p AND q(a,x) = q. IF THE ROUTINE
 !     is successful then the solution is stored in x.
 !
-!     x0 is an optional initial approximation for x. If the user
+!     x0 is an optional initial approximation for x. if the user
 !     does not wish to supply an initial approximation, then set
 !     x0 .LE. 0.
 !
@@ -14405,10 +14405,10 @@ real :: gamln
 !                    LARGE (SAY a .GE. 1.E20).
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... JANUARY 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... January 1992
 !------------------------
 real :: ln10, bmin(2), emin(2)
 !------------------------
@@ -14688,10 +14688,10 @@ integer :: i, m, max, n
 !                      P(a,x) AND Q(a,x)
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... JAN 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... jan 1992
 !-------------------------
 double precision, intent(in) :: a, x
 double precision, intent(inout) :: ans, qans
@@ -15411,10 +15411,10 @@ integer :: ier, ind
 !                    p or q is approximately 0.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     WRITTEN ... JANUARY 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     written ... January 1992
 !------------------------
 double precision, intent(in) :: a
 double precision, intent(out) :: x
@@ -15703,7 +15703,7 @@ integer :: ierr1, ind, n
 real :: a0, b0, eps, t, x0, y0, z
 !-----------------------------------------------------------------------
 !
-!            Evaluation of the incomplete beta function IX(a,b)
+!            Evaluation of the incomplete beta function ix(a,b)
 !
 !                     --------------------
 !
@@ -15728,10 +15728,10 @@ real :: a0, b0, eps, t, x0, y0, z
 !        ierr = 7  IF y = b = 0
 !
 !--------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... NOV 1991
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... nov 1991
 !-----------------------------------------------------------------------
 real :: lambda
 !-----------------------------------------------------------------------
@@ -16456,7 +16456,7 @@ real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z
 real :: algdiv, alnrel, gam1
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) when A is larger than b.
-!     The result of the expansion is added to w. It is assumed
+!     The result of the expansion is added to w. it is assumed
 !     THAT a .GE. 15 AND b .LE. 1.  EPS IS THE TOLERANCE USED.
 !     ierr is a variable that reports the status of the results.
 !-----------------------------------------------------------------------
@@ -17125,13 +17125,13 @@ real :: cpabs
 !                                                    cnu
 !-----------------------------------------------------------------------
 !
-!     WRITTEN BY
-!         ANDREW H. VAN TUYL AND ALFRED H. MORRIS, JR.
-!         NAVAL SURFACE WARFARE CENTER
-!         OCTOBER, 1991
+!     Written by
+!         Andrew H. van Tuyl and Alfred H. Morris, Jr.
+!         Naval Surface Warfare Center
+!         October, 1991
 !
-!     A modification of the procedure developed by allen V. Hershey
-!     (naval surface warfare center) in 1978 for handling the debye
+!     A modification of the procedure developed by allen V. hershey
+!     (Naval Surface Warfare Center) in 1978 for handling the debye
 !     approximation is employed.
 !
 !-----------------------------------------------------------------------
@@ -18074,14 +18074,14 @@ end subroutine bsslj
 subroutine besj(x, alpha, n, y, nz)
 implicit none
 !
-!     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
+!     Written by D.E. Amos, S.L. Daniel and M.K. Weston, January, 1975.
 !
-!     REFERENCES
-!         SAND-75-0147
+!     References
+!         sand-75-0147
 !
-!         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
+!         CDC 6600 subroutines ibess and JBESS for Bessel functions
 !         i(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
-!         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
+!         Daniel, M.K. Weston. ACM trans math software,3,PP 76-92
 !         (1977)
 !
 !         Tables of Bessel functions of moderate or large orders,
@@ -18580,15 +18580,15 @@ implicit none
 !      wk(6) = sign(1.,w**2)*wk(5)**2 = sign(1.,w**2)*zeta*fnu**(2/3)
 !      wk(7) = fnu**(1/3)
 !
-!                                  WRITTEN BY
-!                                  D. E. AMOS
+!                                  Written by
+!                                  D. E. Amos
 !
 !     Abstract
 !         ASJK implements the uniform asymptotic expansion of
 !         THE j AND Y BESSEL FUNCTIONS FOR FNU.GE.35 AND REAL
 !         X.GT.0.0E0. THE FORMS ARE IDENTICAL EXCEPT FOR A CHANGE
 !         in sign of some of the terms. This change in sign is
-!         ACCOMPLISHED BY MEANS OF THE FLAG FLGJY = 1 OR -1. ON
+!         ACCOMPLISHED BY MEANS OF THE FLAG flgjy = 1 OR -1. ON
 !         FLGJY = 1 THE AIRY FUNCTIONS ai(X) AND DAI(X) ARE
 !         supplied by the external function jairy, and on
 !         FLGJY = -1 THE AIRY FUNCTIONS bi(X) AND DBI(X) ARE
@@ -19014,7 +19014,7 @@ real :: a(15), ajn(19), ajp(19), ak1(14), ak2(23), ak3(14), b(15), &
 !        ai - value of function ai(x)
 !       dai - value of the derivative dai(x)
 !
-!                                WRITTEN BY
+!                                Written by
 !
 !                                D. E. AMOS
 !                               S. L. DANIEL
@@ -20020,14 +20020,14 @@ end subroutine bssli
 subroutine besi(x, alpha, kode, n, y, nz)
 implicit none
 !
-!     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
+!     Written by D. E. Amos and S. L. Daniel, January,1975.
 !
-!     REFERENCE
-!         SAND-75-0152
+!     Reference
+!         sand-75-0152
 !
-!         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
+!         CDC 6600 subroutines ibess and JBESS for Bessel functions
 !         i(NU,x) AND J(NU,x), x.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
-!         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
+!         Daniel, M.K. Weston. ACM trans math software,3,PP 76-92
 !         (1977)
 !
 !         Tables of Bessel functions of moderate or large orders,
@@ -20038,7 +20038,7 @@ implicit none
 !         besi computes an n member sequence of i Bessel functions
 !         i/SUB(alpha+k-1)/(x), k=1,...,n OR SCALED BESSEL FUNCTIONS
 !         exp(-x)*i/SUB(alpha+k-1)/(x), k=1,...,n FOR NON-NEGATIVE alpha
-!         and x. A combination of the power series, the asymptotic
+!         and x. a combination of the power series, the asymptotic
 !         expansion for x to infinity, and the uniform asymptotic
 !         expansion for nu to infinity are applied over subdivisions of
 !         the (NU,x) plane. For values not covered by one of these
@@ -20520,8 +20520,8 @@ implicit none
 !
 !         y - a vector whose first in components contain the sequence
 !
-!                                 WRITTEN BY
-!                                 D. E. AMOS
+!                                 Written by
+!                                 D. E. Amos
 !
 !     Abstract
 !         asik implements the uniform asymptotic expansion of
@@ -20643,10 +20643,10 @@ real :: cpabs
 !        z.  IT IS ASSUMED THAT -PI .LT. ARG z .LE. PI.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR. AND ANDREW H. VAN TUYL
-!        NAVAL SURFACE WARFARE CENTER
-!        OCT 1992
+!     Written by
+!        Alfred H. Morris, Jr. and Andrew H. van Tuyl
+!        Naval Surface Warfare Center
+!        oct 1992
 !--------------------------
 complex :: z
 complex, intent(in) :: cnu
@@ -21203,11 +21203,11 @@ real :: cpabs
 !         IT IS ASSUMED THAT -pi .LT. ARG z .LE. pi.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!         ANDREW H. VAN TUYL
-!         NAVAL SURFACE WARFARE CENTER
-!     MODIFIED BY A.H. MORRIS (NSWC)
-!     REVISED ... OCT 1992
+!     Written by
+!         Andrew H. van Tuyl
+!         Naval Surface Warfare Center
+!     modified by A.H. Morris (NSWC)
+!     revised ... oct 1992
 !---------------------------
 complex :: z
 complex, intent(inout) :: w
@@ -22633,7 +22633,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
 !     Calculates the modified Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. The Maclaurin expansion and backward recurrence
+!     argument z. the Maclaurin expansion and backward recurrence
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
@@ -22793,7 +22793,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
 !     Calculates the Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. The Maclaurin expansion and backward recurrence
+!     argument z. the Maclaurin expansion and backward recurrence
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
@@ -23973,7 +23973,7 @@ real :: alnrel
 real :: spmpar
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
-!     and E(k) for complex values of the modulus k. It is assumed
+!     and E(k) for complex values of the modulus k. it is assumed
 !     THAT l.NE.0 AND THAT k**2 + l**2 = 1.
 !     ------------------------------------------------------------------
 complex, intent(in) :: k, l
@@ -24829,15 +24829,15 @@ implicit none
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE AND AT MOST ONE OF THEM
-!          IS ZERO.  IF ONE OF THEM IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x, y, and z are nonnegative and at most one of them
+!          is zero.  If one of them is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -24947,15 +24947,15 @@ implicit none
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE AND AT MOST ONE OF THEM
-!          IS ZERO.  IF ONE OF THEM IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x, y, and z are nonnegative and at most one of them
+!          is zero.  If one of them is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -25065,15 +25065,15 @@ implicit none
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x AND y ARE NONNEGATIVE, x + y IS POSITIVE, AND z IS
-!          POSITIVE.  IF x OR y IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x and y are nonnegative, x + y is positive, and z is
+!          positive.  If x or y is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -25195,15 +25195,15 @@ implicit none
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x AND y ARE NONNEGATIVE, x + y IS POSITIVE, AND z IS
-!          POSITIVE.  IF x OR y IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x and y are nonnegative, x + y is positive, and z is
+!          positive.  If x or y is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -25326,15 +25326,15 @@ implicit none
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE, AT MOST ONE OF THEM IS
-!          ZERO, AND p IS POSITIVE.  IF x OR y OR z IS ZERO, THE
-!          INTEGRAL IS COMPLETE.  THE DUPLICATION THEOREM IS ITERATED
-!          UNTIL THE VARIABLES ARE NEARLY EQUAL, AND THE FUNCTION IS
-!          THEN EXPANDED IN TAYLOR SERIES TO FIFTH ORDER.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x, y, and z are nonnegative, at most one of them is
+!          zero, and p is positive.  If x or y or z is zero, the
+!          integral is complete.  The duplication theorem is iterated
+!          until the variables are nearly equal, and the function is
+!          then expanded in Taylor series to fifth order.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -25474,15 +25474,15 @@ implicit none
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE, AT MOST ONE OF THEM IS
-!          ZERO, AND p IS POSITIVE.  IF x OR y OR z IS ZERO, THE
-!          INTEGRAL IS COMPLETE.  THE DUPLICATION THEOREM IS ITERATED
-!          UNTIL THE VARIABLES ARE NEARLY EQUAL, AND THE FUNCTION IS
-!          THEN EXPANDED IN TAYLOR SERIES TO FIFTH ORDER.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x, y, and z are nonnegative, at most one of them is
+!          zero, and p is positive.  If x or y or z is zero, the
+!          integral is complete.  The duplication theorem is iterated
+!          until the variables are nearly equal, and the function is
+!          then expanded in Taylor series to fifth order.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -25622,15 +25622,15 @@ implicit none
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
 !
-!          WHERE x IS NONNEGATIVE AND y IS POSITIVE.  THE DUPLICATION
-!          THEOREM IS ITERATED UNTIL THE VARIABLES ARE NEARLY EQUAL,
-!          AND THE FUNCTION IS THEN EXPANDED IN TAYLOR SERIES TO FIFTH
-!          ORDER.  LOGARITHMIC, INVERSE CIRCULAR, AND INVERSE HYPER-
-!          BOLIC FUNCTIONS CAN BE EXPRESSED IN TERMS OF rc.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x is nonnegative and y is positive.  The duplication
+!          theorem is iterated until the variables are nearly equal,
+!          and the function is then expanded in Taylor series to fifth
+!          order.  Logarithmic, inverse circular, and inverse hyper-
+!          BOLIC functions can be expressed in terms of rc.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -25731,15 +25731,15 @@ implicit none
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
 !
-!          WHERE x IS NONNEGATIVE AND y IS POSITIVE.  THE DUPLICATION
-!          THEOREM IS ITERATED UNTIL THE VARIABLES ARE NEARLY EQUAL,
-!          AND THE FUNCTION IS THEN EXPANDED IN TAYLOR SERIES TO FIFTH
-!          ORDER.  LOGARITHMIC, INVERSE CIRCULAR, AND INVERSE HYPER-
-!          BOLIC FUNCTIONS CAN BE EXPRESSED IN TERMS OF rc.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x is nonnegative and y is positive.  The duplication
+!          theorem is iterated until the variables are nearly equal,
+!          and the function is then expanded in Taylor series to fifth
+!          order.  Logarithmic, inverse circular, and inverse hyper-
+!          BOLIC functions can be expressed in terms of rc.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -25831,8 +25831,8 @@ real :: e, eps, f, f2, pihalf, r, sg, tol, u1, u2, z
 integer :: ipmpar
 real :: spmpar
 !     -------------------------------------------------------------
-!     ellpf calculates the elliptic functions SN(u,k), CN(u,k), and
-!     DN(u,k) for real u and real modulus k.  It is assumed that
+!     ellpf calculates the elliptic functions sn(u,k), CN(u,k), and
+!     DN(u,k) for real u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
 real, intent(in) :: k, l
@@ -25922,7 +25922,7 @@ real, intent(in) :: u
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
 !     --------------------------------------------------------
-!     scd computes the elliptic functions SN(u,k), CN(u,k),
+!     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
 !     0.0 .LE. u .LE. f AND 0.0 .LE. k .LT. 1.0, WHERE
 !     f = f(k) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
@@ -26152,8 +26152,8 @@ integer, intent(inout) :: ierr
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
 &t, t1, t2, td1, td2, u1, u2
 !     -------------------------------------------------------------
-!     elpfc1 calculates the elliptic functions SN(u,k), CN(u,k),
-!     DN(u,k) for complex u and real modulus k.  It is assumed that
+!     elpfc1 calculates the elliptic functions sn(u,k), CN(u,k),
+!     DN(u,k) for complex u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
 complex, intent(in) :: u
@@ -26747,10 +26747,10 @@ real :: spmpar
 !       IF r .LT. 0., THEN circv SETS ierr = 1.
 !       IF d .LT. 0, OR j = 0 AND d .GT. 1., THEN circv SETS ierr = 2.
 !
-!       REFERENCES
-!       MATH OF COMP APRIL 1961,PP169,173 AND OCT.1961, PP 375, 382.
-!       NWL REPORT N0.1768, JAN. 1962. NSWC REPORT N0.83-13, NOV. 1982.
-!       IEEE TRANS. INFO. TH. APRIL 1965, p. 312.
+!       References
+!       math of comp April 1961,PP169,173 and oct.1961, PP 375, 382.
+!       NWL report N0.1768, jan. 1962. NSWC report N0.83-13, nov. 1982.
+!       IEEE trans. Info. TH. April 1965, p. 312.
 !-----------------------------------------------------------------------
 !       Negative r and d are not permitted.
 !--------------------------------------------
@@ -28647,9 +28647,9 @@ implicit none
 !         Abcissa approximating a zero of f in the interval (ax,bx)
 !
 !-----------------------------------------------------------------------
-!  zeroin IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
-!  ZERO GIVEN BY RICHARD BRENT IN ALGORITHMS FOR MINIMIZATION WITHOUT
-!  DERIVATIVES, PRENTICE-HALL, INC. (1973).
+!  zeroin is a slightly modified translation of the Algol procedure
+!  zero given by richard Brent in algorithms for minimization without
+!  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
 real :: f
 real, intent(in) :: ax, bx, aerr, rerr
@@ -28773,9 +28773,9 @@ implicit none
 !         Abcissa approximating a zero of f in the interval (ax,bx)
 !
 !-----------------------------------------------------------------------
-!  dzero IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
-!  ZERO GIVEN BY RICHARD BRENT IN ALGORITHMS FOR MINIMIZATION WITHOUT
-!  DERIVATIVES, PRENTICE-HALL, INC. (1973).
+!  dzero is a slightly modified translation of the Algol procedure
+!  zero given by richard Brent in algorithms for minimization without
+!  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
 double precision :: f
 double precision, intent(in) :: ax, bx, aerr, rerr
@@ -28924,7 +28924,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -28966,14 +28966,14 @@ external fcn
 !       lwa is a positive integer input variable NOT less than
 !         (n*(3*n+13))/2.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
 !       MINPACK-supplied ... hybrd
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
@@ -29063,7 +29063,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -29166,7 +29166,7 @@ external fcn
 !
 !       WA1, WA2, WA3, and wa4 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -29175,8 +29175,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,MIN0,mod
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
@@ -29331,7 +29331,7 @@ nslow2 = 0
 !
       call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
 !
-!           Store the direction P and x + P. Calculate the norm of P.
+!           Store the direction P and x + P. calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -29483,7 +29483,7 @@ real :: spmpar
 !
 !        qdcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2
-!     and stores the results in z. It is assumed that a(3)
+!     and stores the results in z. it is assumed that a(3)
 !     is nonzero.
 !
 !-----------------------------------------------------------------------
@@ -29613,13 +29613,13 @@ real :: spmpar
 !
 !        cbcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2 + a(4)*z**3
-!     and stores the results in z. It is assumed that a(4)
+!     and stores the results in z. it is assumed that a(4)
 !     is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: a(4)
 real :: aq(3)
@@ -29758,7 +29758,7 @@ return
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
 !
-!     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
+!     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
    aq(2) = a(2) + a(1)/w
@@ -29814,9 +29814,9 @@ implicit none
 !     a(4) is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(4)
 double precision, intent(inout) :: zr(3), zi(3)
@@ -29967,7 +29967,7 @@ return
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
 !
-!     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
+!     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
    aq(2) = a(2) + a(1)/w
@@ -30033,13 +30033,13 @@ real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
 !
 !         qtcrt computes the roots of the real polynomial
 !               a(1) + a(2)*z + ... + a(5)*z**4
-!         and stores the results in z. It is assumed that a(5)
+!         and stores the results in z. it is assumed that a(5)
 !         is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED h. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred h. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: a(5)
 real :: temp(4)
@@ -30188,9 +30188,9 @@ implicit none
 !         that a(5) is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED h. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred h. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(5)
 double precision, intent(inout) :: zr(4), zi(4)
@@ -31799,7 +31799,7 @@ do 60 i = 1,l3
 &go to 10
 !
 !     Polynomial value is smaller than a bound on the error
-!     in evaluating P. Terminate the iteration.
+!     in evaluating P. terminate the iteration.
 !
       conv = .true.
       zr = sr
@@ -32018,11 +32018,11 @@ real :: cpabs
 !                  2  leading coefficient is zero
 !
 !-------------------
-!     WRITTEN BY CARL b. BAILEY AND MODIFIED BY WILLIAM r. GAVIN
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO
-!        JANUARY 1976
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 complex, intent(in) :: w(n)
 complex :: z
@@ -32175,11 +32175,11 @@ real :: cpabs
 !                  2  leading coefficient is zero
 !
 !-------------------
-!     WRITTEN BY CARL b. BAILEY AND MODIFIED BY WILLIAM r. GAVIN
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO
-!        JANUARY 1976
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by carl b. bailey and modified by william r. gavin
+!        Sandia Laboratories
+!        albuquerque, new mexico
+!        January 1976
+!     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 complex, intent(in) :: c(*), w(n)
 complex :: z
@@ -35437,7 +35437,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = save
@@ -35452,7 +35452,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = save
@@ -35539,7 +35539,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = w
@@ -35554,7 +35554,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = w
@@ -35640,7 +35640,7 @@ do j = 1,l
 end do
 return
 !
-!     Here c begins in the same location as A. The dimension of row
+!     Here c begins in the same location as A. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO l. IT IS ASSUMED THAT kc=ka.
 !
 20 a(1,1) = w
@@ -35655,7 +35655,7 @@ do i = 1,m
 end do
 return
 !
-!     Here c begins in the same location as b. The dimension of row
+!     Here c begins in the same location as b. the dimension of row
 !     MUST BE GREATER THAN OR EQUAL TO m. IT IS ASSUMED THAT kc=kb.
 !
 30 b(1,1) = w
@@ -36442,9 +36442,9 @@ implicit none
 ! IF ip(n)=0, A IS SINGULAR, SOL WILL DIVIDE BY ZERO.
 ! Interchanges finished in U , only partly in L .
 !
-! REFERENCE..
-! C. B. MOLER, ALGORITHM 423, LINEAR EQUATION SOLVER,
-! COMM. ASSOC. COMPUT. MACH., 15 (1972), P. 274.
+! Reference..
+! C. B. Moler, algorithm 423, linear equation solver,
+! comm. Assoc. COMPUT. Mach., 15 (1972), P. 274.
 !-----------------------------------------------------------------------
 integer, intent(out) :: ier
 integer, intent(inout) :: ip
@@ -36460,7 +36460,7 @@ if (n .eq. 1) go to 70
 nm1 = n - 1
 do k = 1,nm1
   kp1 = k + 1
-!  Find the pivot in column k.  Search rows k to n. --------------------
+!  Find the pivot in column k.  search rows k to n. --------------------
   m = k
   do 10 i = kp1,n
 10 if (abs(a(i,k)) .gt. abs(a(m,k))) m = i
@@ -36549,7 +36549,7 @@ real, intent(inout) :: d
 integer :: j, jl, k, kl, l, maxb
 real :: pivot, t
 !-----------------------------------------------------------------------
-!     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
+!     Matrix inversion/equation solving without pivot search
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n), b(*)
 !
@@ -36944,7 +36944,7 @@ real :: spmpar
 !       luimp executes the iteration cycle
 !            (1)  AR = b - AX
 !            (2)  x = x + r
-!       with an initial given x. The residual vector b - AX is
+!       with an initial given x. the residual vector b - AX is
 !       computed to high accuracy using double precision. sgesl
 !       is then used to solve (1).
 !
@@ -37055,8 +37055,8 @@ real, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37238,8 +37238,8 @@ real, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in sgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37355,8 +37355,8 @@ real, intent(inout) :: b(*)
 !              call sgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37472,8 +37472,8 @@ real, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF sgeco HAS SET RCOND .GT. 0.0 OR sgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37696,8 +37696,8 @@ double precision, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37879,8 +37879,8 @@ double precision, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in dgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -37996,8 +37996,8 @@ double precision, intent(inout) :: b(*)
 !              call dgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -38113,8 +38113,8 @@ double precision, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF dgeco HAS SET RCOND .GT. 0.0 OR dgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -38829,7 +38829,7 @@ integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 !  A R C E S L  supervises the solution of the linear system
 !                          A*x = b
 !  using the decomposition of the matrix  A  already generated
-!  in  A R C E D C.  It involves two loops, the forward loop,
+!  in  A R C E D C.  it involves two loops, the forward loop,
 !  consisting of forward solution, forward modification, and
 !  forward elimination, and the backward loop, consisting of
 !  backward solution, backward modification, and backward
@@ -39248,43 +39248,43 @@ integer :: n
 integer, intent(inout) :: ip(m,n), ier
 real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
 !-----------------------------------------------------------------------
-! BLOCK-TRIDIAGONAL MATRIX DECOMPOSITION ROUTINE.
-! WRITTEN BY A. C. HINDMARSH.
-! LATEST REVISION JANUARY 26, 1977  (AG)
-! REFERENCE.. UCID-30150
-!             SOLUTION OF BLOCK-TRIDIAGONAL SYSTEMS OF LINEAR
-!             ALGEBRAIC EQUATIONS
-!             A.C. HINDMARSH
-!             FEBRUARY 1977
-! THE INPUT MATRIX CONTAINS THREE BLOCKS OF ELEMENTS IN EACH BLOCK-ROW,
-! INCLUDING BLOCKS IN THE (1,3) AND (n,n-2) BLOCK POSITIONS.
-! decbt USES BLOCK GAUSS ELIMINATION AND SUBROUTINES dec AND SOL
-! FOR SOLUTION OF BLOCKS.  PARTIAL PIVOTING IS DONE WITHIN
-! BLOCK-ROWS ONLY.
-! INPUT..
+! Block-tridiagonal matrix decomposition routine.
+! Written by A. C. Hindmarsh.
+! Latest revision January 26, 1977  (AG)
+! reference.. UCID-30150
+!             solution of block-tridiagonal systems of linear
+!             algebraic equations
+!             A.C. Hindmarsh
+!             February 1977
+! the input matrix contains three blocks of elements in each block-row,
+! including blocks in the (1,3) and (n,n-2) block positions.
+! decbt uses block Gauss elimination and subroutines dec and sol
+! for solution of blocks.  Partial pivoting is done within
+! block-rows only.
+! Input..
 !     m = ORDER OF EACH BLOCK.
 !     n = NUMBER OF BLOCKS IN EACH DIRECTION OF THE MATRIX.
-!         n MUST BE 4 OR MORE.  THE COMPLETE MATRIX HAS ORDER m*n.
+!         n must be 4 or more.  The complete matrix HAS order m*n.
 !     a = m BY m BY n ARRAY CONTAINING DIAGONAL BLOCKS.
-!         a(i,j,k) CONTAINS THE (i,j) ELEMENT OF THE k-TH BLOCK.
+!         a(i,j,k) contains the (i,j) element of the k-TH block.
 !     b = m BY m BY n ARRAY CONTAINING THE SUPER-DIAGONAL BLOCKS
 !         (IN b(*,*,k) FOR k = 1,...,n-1) AND THE BLOCK IN THE (n,n-2)
-!         BLOCK POSITION (IN b(*,*,n)).
+!         block position (in b(*,*,n)).
 !     c = m BY m BY n ARRAY CONTAINING THE SUBDIAGONAL BLOCKS
 !         (IN c(*,*,k) FOR k = 2,3,...,n) AND THE BLOCK IN THE
-!         (1,3) BLOCK POSITION (IN c(*,*,1)).
+!         (1,3) block position (in c(*,*,1)).
 !    ip = INTEGER ARRAY OF LENGTH m*n FOR WORKING STORAGE.
-! OUTPUT..
+! Output..
 ! A,b,c = m BY m BY n ARRAYS CONTAINING THE BLOCK LU DECOMPOSITION
-!         OF THE INPUT MATRIX.
+!         of the input matrix.
 !    ip = m BY n ARRAY OF PIVOT INFORMATION.  ip(*,k) CONTAINS
-!         INFORMATION FOR THE k-TH DIGONAL BLOCK.
+!         information for the k-TH DIGONAL block.
 !   ier = 0  IF NO TROUBLE OCCURRED, OR
 !       = -1 IF THE INPUT VALUE OF m OR n WAS ILLEGAL, OR
 !       = k  IF A SINGULAR MATRIX WAS FOUND IN THE k-TH DIAGONAL BLOCK.
-! USE solbt TO SOLVE THE ASSOCIATED LINEAR SYSTEM.
-! decbt CALLS SUBROUTINES  dec(m,M0,a,ip,ier)  AND  sol(m,M0,a,Y,ip)
-! FOR SOLUTION OF m BY m LINEAR SYSTEMS.
+! Use solbt to solve the associated linear system.
+! decbt calls subroutines  dec(m,M0,a,ip,ier)  and  sol(m,M0,a,Y,ip)
+! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
 integer :: nm1, nm2, km1, i, j, k, l
 real :: dp
@@ -39363,22 +39363,22 @@ real :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
 !-----------------------------------------------------------------------
-! SOLUTION OF BLOCK-TRIDIAGONAL LINEAR SYSTEM.
-! COEFFICIENT MATRIX MUST HAVE BEEN PREVIOUSLY PROCESSED BY decbt.
-! m, n, A, b, c, AND ip  MUST NOT HAVE BEEN CHANGED SINCE CALL TO decbt.
-! WRITTEN BY A. C. HINDMARSH.
-! INPUT..
+! Solution of block-tridiagonal linear system.
+! Coefficient matrix must have been previously processed by decbt.
+! m, n, A, b, c, and ip  must not have been changed since call to decbt.
+! Written by A. C. Hindmarsh.
+! Input..
 !     m = ORDER OF EACH BLOCK.
 !     n = NUMBER OF BLOCKS IN EACH DIRECTION OF MATRIX.
 ! A,b,c = m BY m BY n ARRAYS CONTAINING BLOCK LU DECOMPOSITION
-!         OF COEFFICIENT MATRIX FROM decbt.
+!         of coefficient matrix from decbt.
 !    ip = m BY n INTEGER ARRAY OF PIVOT INFORMATION FROM decbt.
 !     y = ARRAY OF LENGTH m*n CONTAINING THE RIGHT-HAND SIDE VECTOR
-!         (TREATED AS AN m BY n ARRAY HERE).
-! OUTPUT..
+!         (treated as an m by n array here).
+! Output..
 !     y = SOLUTION VECTOR, OF LENGTH m*n.
-! solbt MAKES CALLS TO SUBROUTINE sol(m,M0,a,y,ip)
-! FOR SOLUTION OF m BY m LINEAR SYSTEMS.
+! solbt makes calls to subroutine sol(m,M0,a,y,ip)
+! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
 integer :: nm1, nm2, km1, i, j, k
 real :: dp
@@ -39540,8 +39540,8 @@ real, intent(inout) :: rcond
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -39815,8 +39815,8 @@ real, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -40066,8 +40066,8 @@ real, intent(inout) :: b(*)
 !              call sspsl(ap,n,kpvt,c(1,j))
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -40269,8 +40269,8 @@ integer, intent(inout) :: inert(3)
 !        AND  sspco  HAS SET RCOND .EQ. 0.0
 !        OR  sspfa  HAS SET  INFO .NE. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -40565,8 +40565,8 @@ double precision, intent(inout) :: rcond
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -40840,8 +40840,8 @@ double precision, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -41091,8 +41091,8 @@ double precision, intent(inout) :: b(*)
 !              call dspsl(ap,n,kpvt,c(1,j))
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -41294,8 +41294,8 @@ integer, intent(inout) :: inert(3)
 !        AND  dspco  HAS SET RCOND .EQ. 0.0
 !        OR  dspfa  HAS SET  INFO .NE. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     JAMES BUNCH, UNIV. CALIF. SAN DIEGO, ARGONNE NAT. LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     James bunch, univ. Calif. San diego, argonne nat. Lab.
 !
 !     Subroutines and functions
 !
@@ -41553,8 +41553,8 @@ real, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -41638,8 +41638,8 @@ real, intent(inout) :: b(*)
 !              call sppsl(ap,n,c(1,j))
 !        10 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -41707,8 +41707,8 @@ real, intent(inout) :: det(2)
 !        It will not occur if the subroutines are called correctly
 !        AND IF SPOCO OR SPOFA HAS SET INFO .EQ. 0 .
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -41873,8 +41873,8 @@ double precision, intent(inout) :: ap(*)
 !             10    continue
 !             20 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -41958,8 +41958,8 @@ double precision, intent(inout) :: b(*)
 !              call dppsl(ap,n,c(1,j))
 !        10 continue
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -42027,8 +42027,8 @@ double precision, intent(inout) :: det(2)
 !        It will not occur if the subroutines are called correctly
 !        AND IF DPOCO OR DPOFA HAS SET INFO .EQ. 0 .
 !
-!     LINPACK.  THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK.  This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -42566,8 +42566,8 @@ real, intent(inout) :: rcond
 !                an approximate null vector in the sense that
 !                norm(a*z) = rcond*norm(a)*norm(z) .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -42753,8 +42753,8 @@ complex, intent(inout) :: a(lda,*)
 !                     if called.  Use  RCOND  in cgeco for a reliable
 !                     indication of singularity.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -42874,8 +42874,8 @@ complex, intent(inout) :: b(*)
 !              call cgesl(a,lda,n,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -42992,8 +42992,8 @@ complex, intent(inout) :: a(lda,*), det(2), work(*)
 !        AND IF cgeco HAS SET RCOND .GT. 0.0 OR cgefa HAS SET
 !        INFO .EQ. 0 .
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -43415,7 +43415,7 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 !
 !     ssvdc is a subroutine to reduce a real NXP matrix x by
 !     orthogonal transformations u and v to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of v the right singular vectors.
 !
@@ -43499,8 +43499,8 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 !                   is the transpose of u).  Thus the singular
 !                   values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     ***** USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
@@ -43899,7 +43899,7 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     dsvdc is a subroutine to reduce a double precision NXP matrix x
 !     by orthogonal transformations u and V to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of V the right singular vectors.
 !
@@ -43983,8 +43983,8 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !                   is the transpose of u).  Thus the singular
 !                   values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     dsvdc uses the following functions and subprograms.
 !
@@ -44383,7 +44383,7 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     csvdc is a subroutine to reduce a complex NXP matrix x by
 !     unitary transformations u and V to diagonal form.  The
-!     diagonal elements s(i) are the singular values of x.  The
+!     diagonal elements s(i) are the singular values of x.  the
 !     columns of u are the corresponding left singular vectors,
 !     and the columns of V the right singular vectors.
 !
@@ -44467,8 +44467,8 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !                   is the conjugate-transpose of u).  Thus the
 !                   singular values of x and b are the same.
 !
-!     LINPACK. THIS VERSION DATED 03/19/79 .
-!     G.W. STEWART, UNIVERSITY OF MARYLAND, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 03/19/79 .
+!     G.W. Stewart, university of maryland, Argonne National Lab.
 !
 !     csvdc uses the following functions and subprograms.
 !
@@ -45121,11 +45121,11 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,m)
-!           A is a matrix of order m. It is assumed that
+!           A is a matrix of order m. it is assumed that
 !           na .GE. m .GE. 1.
 !
 !        b(nb,n)
-!           b is a matrix of order n. It is assumed that
+!           b is a matrix of order n. it is assumed that
 !           nb .GE. n .GE. 1.
 !
 !        c(nc,n)
@@ -45151,7 +45151,7 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     WHEN ierr = 0, a CONTAINS THE LOWER SCHUR FORM OF THE MATRIX a,
 !     b contains the upper Schur form of the matrix b, and wk contains
 !     the orthonal matrices involved in the Schur decompositions of
-!     A and b. This information can be reused to solve a new set of
+!     A and b. this information can be reused to solve a new set of
 !     EQUATIONS AX + XB = c WITHOUT HAVING TO REDECOMPOSE A AND b.
 !     The following options are available...
 !
@@ -45167,15 +45167,15 @@ real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
 !     When abslv is recalled, it is assumed that m, n, and wk have
 !     not been modified.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE AXPXB WRITTEN BY
-!        R.H. BARTELS AND G.W.STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine axpxb written by
+!        R.H. Bartels and G.W.Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -45353,10 +45353,10 @@ integer :: ip1
 !                     determined after 30 iterations.
 !
 ! -----------------
-!     WRITTEN BY JACK DONGARRA
-!          ARGONNE NATIONAL LABORATORY
-!          MAY 1961
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by jack dongarra
+!          Argonne National Laboratory
+!          may 1961
+!     modified by A.H. Morris (NSWC)
 ! ----------------------------------------------------------------------
 !     This subroutine is a modification of the EISPACK subroutine
 !     hqr2,  which is based on the Algol procedure hqr by peters
@@ -45726,11 +45726,11 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     we have the following setup.
 !
 !        a(na,m)
-!           A is a matrix of order m. It is assumed that
+!           A is a matrix of order m. it is assumed that
 !           na .GE. m .GE. 1.
 !
 !        b(nb,n)
-!           b is a matrix of order n. It is assumed that
+!           b is a matrix of order n. it is assumed that
 !           nb .GE. n .GE. 1.
 !
 !        c(nc,n)
@@ -45756,7 +45756,7 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     WHEN ierr = 0, a CONTAINS THE LOWER SCHUR FORM OF THE MATRIX a,
 !     b contains the upper Schur form of the matrix b, and WK contains
 !     the orthonal matrices involved in the Schur decompositions of
-!     A and b. This information can be reused to solve a new set of
+!     A and b. this information can be reused to solve a new set of
 !     EQUATIONS AX + XB = c WITHOUT HAVING TO REDECOMPOSE A AND b.
 !     The following options are available...
 !
@@ -45772,15 +45772,15 @@ double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 !     When dabslv is recalled, it is assumed that m, n, and WK have
 !     not been modified.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE AXPXB WRITTEN BY
-!        R.H. BARTELS AND G.W.STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine axpxb written by
+!        R.H. Bartels and G.W.Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -45958,10 +45958,10 @@ integer :: ip1
 !                     determined after 50 iterations.
 !
 ! -----------------
-!     WRITTEN BY JACK DONGARRA
-!          ARGONNE NATIONAL LABORATORY
-!          MAY 1961
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Written by jack dongarra
+!          Argonne National Laboratory
+!          may 1961
+!     modified by A.H. Morris (NSWC)
 ! ----------------------------------------------------------------------
 !     This subroutine is a modification of the EISPACK subroutine
 !     hqr2,  which is based on the Algol procedure hqr by peters
@@ -46329,11 +46329,11 @@ real, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,n)
-!           A is a matrix of order n. It is assumed that
+!           A is a matrix of order n. it is assumed that
 !           na .GE. n .GE. 1.
 !
 !        c(nc,n)
-!           c is a symmetric matrix of order n. It is
+!           c is a symmetric matrix of order n. it is
 !           ASSUMED THAT nc .GE. n.
 !
 !        wk(---)
@@ -46351,22 +46351,22 @@ real, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !
 !     WHEN ierr = 0, A CONTAINS THE UPPER SCHUR FORM OF THE MATRIX
 !     A and wk contains the orthogonal matrix involved in the Schur
-!     decomposition of A. This information can be reused to solve A
+!     decomposition of A. this information can be reused to solve A
 !     NEW SET OF EQUATIONS TRANSPOSE(a)*X + X*a = c WITHOUT HAVING
-!     to redecompose A. In this case, the input argument mo may be
+!     to redecompose A. in this case, the input argument mo may be
 !     SET TO ANY NONZERO VALUE. WHEN mo .NE. 0, IT IS ASSUMED THAT
 !     only c has been modified. On output the solution for the new
 !     set of equations is stored in c.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE ATXPXA WRITTEN BY
-!        R.H. BARTELS AND G.W. STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -46642,11 +46642,11 @@ double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !     we have the following setup.
 !
 !        a(na,n)
-!           A is a matrix of order n. It is assumed that
+!           A is a matrix of order n. it is assumed that
 !           na .GE. n .GE. 1.
 !
 !        c(nc,n)
-!           c is a symmetric matrix of order n. It is
+!           c is a symmetric matrix of order n. it is
 !           ASSUMED THAT nc .GE. n.
 !
 !        wk(---)
@@ -46664,22 +46664,22 @@ double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
 !
 !     WHEN ierr = 0, A CONTAINS THE UPPER SCHUR FORM OF THE MATRIX
 !     A and wk contains the orthogonal matrix involved in the Schur
-!     decomposition of A. This information can be reused to solve A
+!     decomposition of A. this information can be reused to solve A
 !     NEW SET OF EQUATIONS TRANSPOSE(a)*X + X*a = c WITHOUT HAVING
-!     to redecompose A. In this case, the input argument mo may be
+!     to redecompose A. in this case, the input argument mo may be
 !     SET TO ANY NONZERO VALUE. WHEN mo .NE. 0, IT IS ASSUMED THAT
 !     only c has been modified. On output the solution for the new
 !     set of equations is stored in c.
 ! ----------------------------------------------------------------------
-!     THIS SUBROUTINE IS A MODIFICATION BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
-!     OF THE SUBROUTINE ATXPXA WRITTEN BY
-!        R.H. BARTELS AND G.W. STEWART
-!        UNIVERSITY OF TEXAS AT AUSTIN.
+!     This subroutine is a modification by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
+!     of the subroutine atxpxa written by
+!        R.H. Bartels and G.W. Stewart
+!        University of Texas at Austin.
 !
-!     REFERENCE. BARTELS, R.H. AND STEWART, G.W., ALGORITHM 432,
+!     Reference. Bartels, R.H. and Stewart, G.W., Algorithm 432,
 !        SOLUTION OF THE MATRIX EQUATION AX + XB = c, COMM. ACM
 !        15 (1972), PP. 820-826.
 ! ----------------------------------------------------------------------
@@ -47082,7 +47082,7 @@ implicit none
 !            triangular form.
 !
 !     z,r    ARE MATRICES CONTAINING THE HISTORY OF THE
-!            TRANSFORMATIONS IN THE REDUCTIONS.
+!            transformations in the reductions.
 !
 !     xold   IS A MATRIX HOLDING THE CURRENT ITERATE X(i).
 !
@@ -47898,9 +47898,9 @@ real :: c(8)
 !        ierr = 2  THE PADE DENOMINATOR MATRIX IS
 !                  singular.
 !
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren Virginia
 !     ---------------
 !     Coefficients for (8,8) Pade table entry
 !     ---------------
@@ -48052,9 +48052,9 @@ double precision :: anorm, anorm1, c(12), factor, p, q, s, s1
 !        ierr = 2  THE PADE DENOMINATOR MATRIX IS
 !                  singular.
 !
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren Virginia
 !     ---------------
 !     Coefficients for (12,12) Pade table entry
 !     ---------------
@@ -48717,8 +48717,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!           CONVERSION OF REAL MATRICES FROM BANDED TO
-!                         STANDARD FORM
+!           Conversion of real matrices from banded to
+!                         standard form
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(kb,*)
@@ -48787,8 +48787,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
-!                    FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of real matrices from standard to banded
+!                    form when ml and mu are given
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,*)
@@ -48860,8 +48860,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!           CONVERSION OF REAL MATRICES FROM STANDARD
-!                        TO BANDED FORM
+!           Conversion of real matrices from standard
+!                        to banded form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,nb)
@@ -48914,8 +48914,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
-!                         TO STANDARD FORM
+!        Conversion of double precision matrices from banded
+!                         to standard form
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(kb,*)
@@ -48984,8 +48984,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
-!               TO BANDED FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of double precision matrices from standard
+!               to banded form when ml and mu are given
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,*)
@@ -49057,8 +49057,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
-!                         TO BANDED FORM
+!        Conversion of double precision matrices from standard
+!                         to banded form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,nb)
@@ -49111,8 +49111,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
-!                          STANDARD FORM
+!          Conversion of complex matrices from banded to
+!                          standard form
 !-----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,n)
 complex, intent(in) :: b(kb,*)
@@ -49181,8 +49181,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
-!        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
-!                    FORM WHEN ml AND mu ARE GIVEN
+!        Conversion of complex matrices from standard to banded
+!                    form when ml and mu are given
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,*)
@@ -49254,8 +49254,8 @@ integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
-!           CONVERSION OF COMPLEX MATRICES FROM STANDARD
-!                          TO BANDED FORM
+!           Conversion of complex matrices from standard
+!                          to banded form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,nb)
@@ -49309,8 +49309,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!                CONVERSION OF REAL MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!                Conversion of real matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,*)
 real, intent(inout) :: b(*)
@@ -49374,8 +49374,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!          Conversion of double precision matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(*)
@@ -49439,8 +49439,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
-!              CONVERSION OF COMPLEX MATRICES FROM BANDED
-!                            TO SPARSE FORM
+!              Conversion of complex matrices from banded
+!                            to sparse form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(ka,*)
 complex, intent(inout) :: b(*)
@@ -49506,8 +49506,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!                CONVERSION OF REAL MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!                Conversion of real matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,nb)
@@ -49570,8 +49570,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!          Conversion of double precision matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,nb)
@@ -49634,8 +49634,8 @@ integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
-!              CONVERSION OF COMPLEX MATRICES FROM SPARSE
-!                            TO BANDED FORM
+!              Conversion of complex matrices from sparse
+!                            to banded form
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,nb)
@@ -49695,8 +49695,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, j, num
 !-----------------------------------------------------------------------
-!        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
-!                          PRECISION FORM
+!        Conversion of banded matrices from single to double
+!                          precision form
 !-----------------------------------------------------------------------
 real, intent(in) :: a(ka,*)
 double precision, intent(inout) :: b(kb,*)
@@ -49715,8 +49715,8 @@ implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
 integer :: i, j, num
 !-----------------------------------------------------------------------
-!        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
-!                          PRECISION FORM
+!        Conversion of banded matrices from double to single
+!                          precision form
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(ka,*)
 real, intent(inout) :: b(kb,*)
@@ -52379,7 +52379,7 @@ integer :: isamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -52452,8 +52452,8 @@ integer :: isamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,isamax,saxpy,sscal,sswap
@@ -52583,8 +52583,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if snbfa and snbsl are
 !        CALLED CORRECTLY AND snbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      saxpy,sdot
@@ -52856,7 +52856,7 @@ integer :: idamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -52929,8 +52929,8 @@ integer :: idamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,idamax,daxpy,dscal,dswap
@@ -53060,8 +53060,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if dbfa and dbsl are
 !        CALLED CORRECTLY AND dbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      daxpy,ddot
@@ -53480,7 +53480,7 @@ integer :: icamax
 !                See the comments below for details.
 !
 !        lda     INTEGER
-!                the leading dimension of the array a. It is
+!                the leading dimension of the array a. it is
 !                ASSUMED THAT lda .GE. n.
 !
 !        n       INTEGER
@@ -53553,8 +53553,8 @@ integer :: icamax
 !           54 55 56  +  +
 !           65 66  +  +  +
 !
-!     WRITTEN BY E.A.VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A.Voorhees, Los Alamos scientific laboratory.
+!     Modified by A.H.Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !        MIN0,icamax,caxpy,cscal,cswap
@@ -53684,8 +53684,8 @@ integer :: ml1, ml2
 !        setting of lda.  It will not occur if cbfa and cbsl are
 !        CALLED CORRECTLY AND cbfa HAS SET INFO = 0.
 !
-!     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
-!     ADAPTED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
+!     Written by E.A. Voorhees, Los Alamos scientific laboratory.
+!     Adapted by A.H. Morris, naval surface weapons center.
 !
 !     Subroutines and functions
 !      caxpy,cdotu
@@ -55960,7 +55960,7 @@ integer :: stp, dummy
 integer, intent(in) :: ip(n)
 !
 ! arp(i) is one less than the number of unsearched edges leaving
-!     node i.  At the end of the algorithm it is set to A
+!     node i.  at the end of the algorithm it is set to A
 !     permutation which puts the matrix in block lower
 !     triangular form.
 ! ib(i) is the position in the ordering of the start of the ith
@@ -56097,7 +56097,7 @@ integer :: k, l
 !  spslv calls nspiv1 which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -56218,7 +56218,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  nspiv1 uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -56298,7 +56298,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -56856,7 +56856,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -57034,7 +57034,7 @@ integer :: k, l
 !  dspslv calls dnspiv which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -57158,7 +57158,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  dnspiv uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -57238,7 +57238,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -57799,7 +57799,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -58152,14 +58152,14 @@ integer, intent(inout) :: isgn(n)
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
 !
-!        WRITTEN BY NICK HIGHAM, UNIVERSITY OF MANCHESTER. MODIFIED
-!        BY A.H. MORRIS (NSWC).
+!        Written by nick Higham, university of manchester. Modified
+!        by A.H. Morris (NSWC).
 !
-!     REFERENCE
-!     N.J. HIGHAM (1987) FORTRAN CODES FOR ESTIMATING
-!     THE 1-NORM OF A REAL OR COMPLEX MATRIX, WITH APPLICATIONS
-!     TO CONDITION  ESTIMATION, NUMERICAL ANALYSIS REPORT NO. 135,
-!     UNIVERSITY OF MANCHESTER, MANCHESTER M13 9PL, ENGLAND.
+!     Reference
+!     N.J. Higham (1987) Fortran codes for estimating
+!     the 1-norm of a real or complex matrix, with applications
+!     to condition  estimation, numerical analysis report no. 135,
+!     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
 data itmax /5/
@@ -58176,7 +58176,7 @@ if (kase .ne. 0) go to 20
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
+!     first iteration.  x has been overwritten by A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -58195,7 +58195,7 @@ jump = 2
 return
 !
 !     ................ ENTRY   (jump = 2)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     first iteration.  x has been overwritten by TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = isamax(n,x,1)
@@ -58211,7 +58211,7 @@ jump = 3
 return
 !
 !     ................ ENTRY   (jump = 3)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 300 call scopy (n,x,1,v,1)
 anrm = anorm
@@ -58238,7 +58238,7 @@ jump = 4
 return
 !
 !     ................ ENTRY   (jump = 4)
-!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     x has been overwritten by TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = isamax(n,x,1)
@@ -58259,7 +58259,7 @@ jump = 5
 return
 !
 !     ................ ENTRY   (jump = 5)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 500 anrm = 2.0*sasum(n,x,1)/float(3*n)
 if (anrm .le. anorm) go to 510
@@ -58316,14 +58316,14 @@ double precision :: dasum
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
 !
-!        WRITTEN BY NICK HIGHAM, UNIVERSITY OF MANCHESTER. MODIFIED
-!        BY A.H. MORRIS (NSWC).
+!        Written by nick Higham, university of manchester. Modified
+!        by A.H. Morris (NSWC).
 !
-!     REFERENCE
-!     N.J. HIGHAM (1987) FORTRAN CODES FOR ESTIMATING
-!     THE 1-NORM OF A REAL OR COMPLEX MATRIX, WITH APPLICATIONS
-!     TO CONDITION  ESTIMATION, NUMERICAL ANALYSIS REPORT NO. 135,
-!     UNIVERSITY OF MANCHESTER, MANCHESTER M13 9PL, ENGLAND.
+!     Reference
+!     N.J. Higham (1987) Fortran codes for estimating
+!     the 1-norm of a real or complex matrix, with applications
+!     to condition  estimation, numerical analysis report no. 135,
+!     university of manchester, manchester M13 9PL, england.
 !
 !-----------------------------------------------------------------------
 data itmax /5/
@@ -58342,7 +58342,7 @@ if (kase .ne. 0) go to 20
 20 go to (100, 200, 300, 400, 500), jump
 !
 !     ................ ENTRY   (jump = 1)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
+!     first iteration.  x has been overwritten by A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -58361,7 +58361,7 @@ jump = 2
 return
 !
 !     ................ ENTRY   (jump = 2)
-!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     first iteration.  x has been overwritten by TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = idamax(n,x,1)
@@ -58377,7 +58377,7 @@ jump = 3
 return
 !
 !     ................ ENTRY   (jump = 3)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 300 call dcopy (n,x,1,v,1)
 anrm = anorm
@@ -58404,7 +58404,7 @@ jump = 4
 return
 !
 !     ................ ENTRY   (jump = 4)
-!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
+!     x has been overwritten by TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = idamax(n,x,1)
@@ -58426,7 +58426,7 @@ jump = 5
 return
 !
 !     ................ ENTRY   (jump = 5)
-!     x HAS BEEN OVERWRITTEN BY A*x.
+!     x has been overwritten by A*x.
 !
 500 anrm = 2.d0*dasum(n,x,1)/(3.d0*an)
 if (anrm .le. anorm) go to 510
@@ -58447,7 +58447,7 @@ integer :: k, l
 !  spslv calls cnspiv which uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !  Input arguments---
@@ -58568,7 +58568,7 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  cnspiv uses sparse Gaussian elimination with
 !  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
 !  elimination phase performs row operations on A and b to obtain
-!  a unit upper triangular matrix u and a vector y.  The solution
+!  a unit upper triangular matrix u and a vector y.  the solution
 !  PHASE SOLVES u x = y.
 !
 !
@@ -58652,7 +58652,7 @@ do 170 k = 1,n
   vk = r(k)
 !
 !  Set up adjacency list for vk, ordered in
-!  current column order of u.  The loop index
+!  current column order of u.  the loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -59212,7 +59212,7 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
 !              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in t. Otherwise ierr is assigned a negative value.
+!              in t. otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
@@ -61376,7 +61376,7 @@ double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
 double precision :: s
 !-----------------------------------------------------------------------
-!        Given A matrix A of order n. Dbal transforms A into
+!        Given A matrix A of order n. dbal transforms A into
 !     the matrix B by the similarity transformation
 !             b = d**(-1)*transpose(p)*a*p*d
 !     where D is a diagonal matrix and P a permutation matrix.
@@ -64352,10 +64352,10 @@ real :: c, f, g, r, s, b2, radix
 logical :: noconv
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
 !
 !     This subroutine balances a complex matrix and isolates
 !     eigenvalues whenever possible.
@@ -64914,10 +64914,10 @@ real, intent(inout) :: zr(nm,m), zi(nm,m)
 real :: s
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     cbabk2, WHICH IS A COMPLEX VERSION OF balbak,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.ii-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a complex general
 !     matrix BY back transforming those of the corresponding
@@ -65462,10 +65462,10 @@ double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
 !
 !     dcbal balances a double precision complex matrix and
 !     isolates eigenvalues whenever possible.
@@ -66022,10 +66022,10 @@ double precision, intent(inout) :: zr(nm,m), zi(nm,m)
 double precision :: s
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     cbabk2, WHICH IS A COMPLEX VERSION OF balbak,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.ii-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a double precision
 !     complex matrix BY back transforming those of the corresponding
@@ -66614,8 +66614,8 @@ implicit none
 ! execution time may be achieved through the use of the
 ! following subroutine, which operates on column vectors.
 !     subroutine col(v1, v2, xmlt, notrow, k)
-! this subroutine adds to the vector V1 a multiple of the
-! vector V2 (elements 1 through k excluding NOTROW).
+! this subroutine adds to the vector v1 a multiple of the
+! vector v2 (elements 1 through k excluding NOTROW).
 !     dimension v1(k), v2(k)
 !     kend = notrow - 1
 !     kstart = notrow + 1
@@ -67062,7 +67062,7 @@ real :: ajj, sav, ss, y
 !        .
 !        call ortho(m, n, qr, ms, s, ip, exit)
 !
-!        WHERE
+!        Where
 !        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
 !        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
 !             (1 .LT. n .LE. m).
@@ -67071,21 +67071,21 @@ real :: ajj, sav, ss, y
 !             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             QR IN THE CALLING PROGRAM.
+!             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
 !        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
-!             THE IMAGES OF THE PERMUTATION CORRESPONDING TO THE PERMU-
-!             TATION MATRIX P.
-!        EXIT IS SET TO THE VALUE .TRUE. IF THE RANK OF A IS EQUAL TO n
-!             AND .FALSE. OTHERWISE.
-!      METHOD
-!        THE MATRIX A IN THE ARRAY qr IS REDUCED TO UPPER TRIANGULAR
-!        FORM USING ORTHOGONAL TRANSFORMATION WITH PARTIAL PIVOTING.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .True. If the rank of A is equal to n
+!             and .False. Otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -67169,32 +67169,32 @@ real :: sav, ss, y
 !        .
 !        call orsol(m, n, qr, ms, s, ip, x)
 !
-!        WHERE
-!        m  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
-!        n  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!        Where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
 !             (1 .LT. n .LE. m).
-!        QR IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR FACTORS
-!           OF A PRODUCED BY ORTHO.
-!        ms IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!           QR IN THE CALLING PROGRAM.
-!        s  IS A REAL INPUT ARRAY, THE RELEVANT PARTS OF Q PRODUCED BY
-!           ORTHO.
-!        ip IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
-!           PRODUCED BY ORTHO.
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by ortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
+!           ortho.
+!        ip is an integer input array, the permutation information
+!           produced by ortho.
 !        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
 !        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
 !           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
-!           WHOSE LENGTH IS THE MINIMUM OF ALL RESIDUAL B - AX.
-!      METHOD
+!           whose length is the minimum of all residual B - AX.
+!      Method
 !        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
 !        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
-!        WHICH CAN BE CHECKED BY INTERROGATING THE LOGICAL OUTPUT
-!        VARIABLE PRODUCED BY ORTHO.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!        which can be checked by interrogating the logical output
+!        variable produced by ortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -67292,7 +67292,7 @@ real :: spmpar
 !        orimp executes the iteration cycle
 !              (1)  AR = b - AX
 !              (2)  x = x + r
-!        with a given initial x.  The residual vector b - AX is computed
+!        with a given initial x.  the residual vector b - AX is computed
 !        to high accuracy by double precision.  orsol is then used to
 !        solve (1).
 !
@@ -67414,7 +67414,7 @@ integer :: i, j, jp, k, kj, nn
 !        .
 !        call dortho(m, n, qr, ms, s, ip, exit)
 !
-!        WHERE
+!        Where
 !        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
 !        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
 !             (1 .LT. n .LE. m).
@@ -67423,21 +67423,21 @@ integer :: i, j, jp, k, kj, nn
 !             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             QR IN THE CALLING PROGRAM.
+!             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
 !        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
-!             THE IMAGES OF THE PERMUTATION CORRESPONDING TO THE PERMU-
-!             TATION MATRIX P.
-!        EXIT IS SET TO THE VALUE .TRUE. IF THE RANK OF A IS EQUAL TO n
-!             AND .FALSE. OTHERWISE.
-!      METHOD
-!        THE MATRIX A IN THE ARRAY qr IS REDUCED TO UPPER TRIANGULAR
-!        FORM USING ORTHOGONAL TRANSFORMATION WITH PARTIAL PIVOTING.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .True. If the rank of A is equal to n
+!             and .False. Otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -67519,32 +67519,32 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !        .
 !        call dorsol(m, n, qr, ms, s, ip, x)
 !
-!        WHERE
-!        m  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
-!        n  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!        Where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
 !             (1 .LT. n .LE. m).
-!        QR IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR FACTORS
-!           OF A PRODUCED BY dortho.
-!        ms IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!           QR IN THE CALLING PROGRAM.
-!        s  IS A REAL INPUT ARRAY, THE RELEVANT PARTS OF Q PRODUCED BY
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by dortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
 !           dortho.
-!        ip IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
-!           PRODUCED BY dortho.
+!        ip is an integer input array, the permutation information
+!           produced by dortho.
 !        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
 !        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
 !           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
-!           WHOSE LENGTH IS THE MINIMUM OF ALL RESIDUAL B - AX.
-!      METHOD
+!           whose length is the minimum of all residual B - AX.
+!      Method
 !        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
 !        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
-!        WHICH CAN BE CHECKED BY INTERROGATING THE LOGICAL OUTPUT
-!        VARIABLE PRODUCED BY dortho.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!        which can be checked by interrogating the logical output
+!        variable produced by dortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -67630,15 +67630,15 @@ real :: spmpar
 !     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
-!                   CALLED FOR THE FIRST TIME.
+!                   called for the first time.
 !                      ind = 0      ORIGINAL CALL
 !                      ind .NE. 0   SUBSEQUENT CALLS
-!                   ON SUBSEQUENT CALLS A NEW SET b OF EQUATIONS CAN
-!                   BE SOLVED (USING THE SAME COEFFICIENT MATRIX a).
-!                   IT IS ASSUMED THAT A, mda, m, n, krank, iwork,
-!                   liw, AND THE FIRST 2*min(m,n) LOCATIONS OF WORK
-!                   HAVE NOT BEEN MODIFIED BY THE USER. re, ae, AND
-!                   ksure ARE NOT USED.
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
 !
 !     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
@@ -67700,13 +67700,13 @@ real :: spmpar
 !                   .GT. 0  - INPUT ERROR
 !
 !----------------
-!     THE SUBROUTINES u11ls, u12ls, u11us, AND u12us WERE WRITTEN BY
-!     T. MANTEUFFEL (LANL) IN 1981. THE DRIVER ROUTINE lsqr WAS WRITTEN
-!     BY A.H. MORRIS (NSWC) IN 1991.
+!     The subroutines u11ls, u12ls, u11us, and u12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine lsqr was written
+!     by A.H. Morris (NSWC) in 1991.
 !----------------
-!     REFERENCE.  MANTEUFFEL, T., AN INTERVAL ANALYSIS APPROACH TO RANK
-!                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS,
-!                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
+!     Reference.  Manteuffel, T., An interval analysis approach to rank
+!                 determination in linear least squares problems,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
@@ -68730,15 +68730,15 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
-!                   CALLED FOR THE FIRST TIME.
+!                   called for the first time.
 !                      ind = 0      ORIGINAL CALL
 !                      ind .NE. 0   SUBSEQUENT CALLS
-!                   ON SUBSEQUENT CALLS A NEW SET b OF EQUATIONS CAN
-!                   BE SOLVED (USING THE SAME COEFFICIENT MATRIX a).
-!                   IT IS ASSUMED THAT A, mda, m, n, krank, iwork,
-!                   liw, AND THE FIRST 2*min(m,n) LOCATIONS OF WORK
-!                   HAVE NOT BEEN MODIFIED BY THE USER. re, ae, AND
-!                   ksure ARE NOT USED.
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
 !
 !     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
@@ -68800,13 +68800,13 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                   .GT. 0  - INPUT ERROR
 !
 !----------------
-!     THE SUBROUTINES du11ls, du12ls, du11us, AND du12us WERE WRITTEN BY
-!     T. MANTEUFFEL (LANL) IN 1981. THE DRIVER ROUTINE dlsqr WAS WRITTEN
-!     BY A.H. MORRIS (NSWC) IN 1991.
+!     The subroutines du11ls, du12ls, du11us, and du12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine dlsqr was written
+!     by A.H. Morris (NSWC) in 1991.
 !----------------
-!     REFERENCE.  MANTEUFFEL, T., *AN INTERVAL ANALYSIS APPROACH TO RANK
-!                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS*,
-!                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
+!     Reference.  Manteuffel, T., *An interval analysis approach to rank
+!                 determination in linear least squares problems*,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(mda,n), b(mdb,*)
 double precision, intent(in) :: re, ae
@@ -69800,9 +69800,9 @@ real :: factor, hmax, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -69856,20 +69856,20 @@ real :: factor, hmax, sm1, tmp, z
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -69883,8 +69883,8 @@ real :: factor, hmax, sm1, tmp, z
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -70052,9 +70052,9 @@ real :: factor, hmax, sm1, tmp, z
 !     dimension d(l) where l = min(m,n)
 !     dimension rnorm(nb),h(n),g(n),ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON. MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -70109,20 +70109,20 @@ real :: factor, hmax, sm1, tmp, z
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -70136,8 +70136,8 @@ real :: factor, hmax, sm1, tmp, z
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -70322,32 +70322,32 @@ real, intent(inout) :: c(*), u(iue,m), up
 integer :: i, i2, i3, i4, incr, j
 real :: cl, d, sm1
 !-----------------------------------------------------------------------
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
 !
 !     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
-!     lpivot IS THE INDEX OF THE PIVOT ELEMENT.
+!     lpivot is the index of the pivot element.
 !     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            THE SUBROUTINE DOES AN IDENTITY TRANSFORMATION.
+!            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue IS THE STORAGE INCREMENT BETWEEN ELEMENTS.
-!                                       ON EXIT FROM H1 u() AND UP
-!                   CONTAIN QUANTITIES DEFINING THE VECTOR u OF THE
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
 !                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   AND UP SHOULD CONTAIN QUANTITIES PREVIOUSLY COMPUTED
-!                   BY H1.  THESE WILL NOT BE MODIFIED BY H2.
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
 !     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            REGARDED AS A SET OF VECTORS TO WHICH THE HOUSEHOLDER
-!            TRANSFORMATION IS TO BE APPLIED.  ON EXIT c() CONTAINS THE
-!            SET OF TRANSFORMED VECTORS.
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
 !     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
-!            NO OPERATIONS WILL BE DONE ON c().
+!            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision :: sm, b
 !
@@ -70413,9 +70413,9 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -70469,20 +70469,20 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -70496,8 +70496,8 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -70665,9 +70665,9 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON. MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -70722,20 +70722,20 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -70749,8 +70749,8 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -70936,32 +70936,32 @@ implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 integer :: i, i2, i3, i4, incr, j
 !-----------------------------------------------------------------------
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
 !
 !     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
-!     lpivot IS THE INDEX OF THE PIVOT ELEMENT.
+!     lpivot is the index of the pivot element.
 !     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            THE SUBROUTINE DOES AN IDENTITY TRANSFORMATION.
+!            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue IS THE STORAGE INCREMENT BETWEEN ELEMENTS.
-!                                       ON EXIT FROM H1 u() AND UP
-!                   CONTAIN QUANTITIES DEFINING THE VECTOR u OF THE
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
 !                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   AND UP SHOULD CONTAIN QUANTITIES PREVIOUSLY COMPUTED
-!                   BY H1.  THESE WILL NOT BE MODIFIED BY H2.
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
 !     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            REGARDED AS A SET OF VECTORS TO WHICH THE HOUSEHOLDER
-!            TRANSFORMATION IS TO BE APPLIED.  ON EXIT c() CONTAINS THE
-!            SET OF TRANSFORMED VECTORS.
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
 !     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
-!            NO OPERATIONS WILL BE DONE ON c().
+!            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: u(iue,m), up, c(*)
 double precision :: b, cl, d, sm
@@ -71038,10 +71038,10 @@ real :: spmpar
 !     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
 !     ABOVE, k=max(ma+mg,n).
 !
-!     WRITTEN BY R. J. HANSON AND K. H. HASKELL.  FOR FURTHER MATH.
-!     AND ALGORITHMIC DETAILS SEE SANDIA LABORATORIES TECH. REPTS.
-!     SAND77-0552, (1978), AND SAND78-1290, (1979), AND MATH.
-!     PROGRAMMING (21), 1981, PP. 98-118. MODIFIED BY A.H. MORRIS.
+!     Written by R. J. Hanson and K. H. Haskell.  For further math.
+!     And algorithmic details see Sandia Laboratories tech. REPTS.
+!     SAND77-0552, (1978), and SAND78-1290, (1979), and math.
+!     Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
 !
 !     Abstract
 !
@@ -71071,15 +71071,15 @@ real :: spmpar
 !
 !
 !     ANY VALUES me.GE.0, ma.GE.0, OR mg.GE.0 ARE PERMITTED.  THE
-!     RANK OF THE MATRIX E IS ESTIMATED DURING THE COMPUTATION. WE CALL
-!     THIS VALUE kranke. IT IS AN OUTPUT PARAMETER IN ip(1) DEFINED
+!     rank of the matrix E is estimated during the computation. We call
+!     this value kranke. It is an output parameter in ip(1) defined
 !     BELOW. USING A GENERALIZED INVERSE SOLUTION OF EX=F, A REDUCED
-!     LEAST SQUARES PROBLEM WITH INEQUALITY CONSTRAINTS IS OBTAINED.
-!     THE TOLERANCES USED IN THESE TESTS FOR DETERMINING THE RANK
-!     OF E AND THE RANK OF THE REDUCED LEAST SQUARES PROBLEM ARE
-!     GIVEN IN SANDIA TECH. REPT. SAND78-1290. THEY CAN BE
-!     MODIFIED BY THE USER IF NEW VALUES ARE PROVIDED IN
-!     THE OPTION LIST OF THE ARRAY prgopt(*).
+!     least squares problem with inequality constraints is obtained.
+!     The tolerances used in these tests for determining the rank
+!     of E and the rank of the reduced least squares problem are
+!     given in sandia tech. Rept. SAND78-1290. They can be
+!     modified by the user if new values are provided in
+!     the option list of the array prgopt(*).
 !
 !     The user must dimension all arrays appearing in the call list..
 !     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
@@ -71110,7 +71110,7 @@ real :: spmpar
 !
 !                   The integers me, ma, and mg are the
 !                   respective matrix ROW dimensions
-!                   of E, A and G. Each matrix HAS n columns.
+!                   of E, A and G. each matrix HAS n columns.
 !
 !     prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
 !                  If the user is satisfied with the nominal
@@ -71326,14 +71326,14 @@ real :: spmpar
 !                              given above.
 !
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     lsi           PART OF THIS PACKAGE.  SOLVES A
 !                   constrained least squares problem with
 !                   inequality constraints.
 !
 !     sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
-!     saxpy,sasum,  SEE TRANS. MATH SOFTWARE (5), P. 308.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
 !     scopy,snrm2,
 !     sswap,isamax
 !
@@ -71625,10 +71625,10 @@ real :: sasum
 real :: sdot
 real :: spmpar
 !
-!     THIS IS A COMPANION SUBPROGRAM TO lsei( ).
-!     THE DOCUMENTATION FOR lsei( ) HAS MORE COMPLETE
-!     USAGE INSTRUCTIONS.
-!     WRITTEN BY R. J. HANSON, SLA.
+!     This is a companion subprogram to lsei( ).
+!     The documentation for lsei( ) has more complete
+!     usage instructions.
+!     Written by R. J. Hanson, sla.
 !
 !     Solve..
 !              AX = B,  A  ma BY n  (LEAST SQUARES EQUATIONS)
@@ -71664,14 +71664,14 @@ real :: spmpar
 !      ip(mg+2*n+1)
 !              integer working storage
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     lpdp          THIS SUBPROGRAM MINIMIZES A SUM OF SQUARES
 !                   of unknowns subject to linear inequality
 !                   constraints.  Part of this package.
 !
 !     sdot,sscal    SUBROUTINES FROM THE BLAS PACKAGE.
-!     saxpy,sasum,  SEE TRANS. MATH SOFTWARE (5), P. 308.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
 !     scopy,sswap
 !
 !     hfti          SOLVES AN UNCONSTRAINED LINEAR LEAST SQUARES
@@ -71994,7 +71994,7 @@ real :: sdot
 !     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
 !     WHERE n=n1+n2.  THIS IS A SLIGHT OVERESTIMATE FOR ws(*).
 !
-!     WRITTEN BY R. J. HANSON AND K. H. HASKELL, SANDIA LABS
+!     Written by R. J. Hanson and K. H. Haskell, sandia labs
 !
 !     Determine an n1-vector W, and
 !               an n2-vector Z
@@ -72021,7 +72021,7 @@ real :: sdot
 !
 !          mode=2  THE INEQUALITIES ARE INCONSISTENT.
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     wnnls         SOLVES A NONNEGATIVELY CONSTRAINED LINEAR LEAST
 !                   squares problem with linear equality constraints.
@@ -72369,24 +72369,24 @@ integer :: l1, l2, l3, l4, l5
 !     iwork(*)     AN INTEGER-VALUED WORKING ARRAY OF LENGTH AT LEAST
 !                  M+n.
 !
-!     WRITTEN BY KAREN H. HASKELL, SANDIA LABORATORIES,
-!     AND R.J. HANSON, SANDIA LABORATORIES.
-!     REVISED OCT. 1, 1989.
+!     Written by karen H. Haskell, Sandia Laboratories,
+!     and R.J. Hanson, Sandia Laboratories.
+!     Revised oct. 1, 1989.
 !
 !
-!     SUBROUTINES CALLED BY wnnls( )
+!     Subroutines called by wnnls( )
 !
 !     wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
 !                   most of the computation takes place.
 !
 !
-!     REFERENCES
+!     References
 !
-!     1. SOLVING LEAST SQUARES PROBLEMS, BY C.L. LAWSON
-!        AND R.J. HANSON.  PRENTICE-HALL, INC. (1974).
+!     1. Solving least squares problems, by C.L. Lawson
+!        and R.J. Hanson.  Prentice-Hall, inc. (1974).
 !
 !     2. BASIC linear algebra subprograms for Fortran usage, by
-!        C.L. Lawson, R.J. Hanson, D.R. Kincaid, and F.T. Krogh.
+!        C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.
 !        Toms, V. 5, No. 3, P. 308.  Also available as
 !        sandia technical report no. SAND77-0898.
 !
@@ -72447,8 +72447,8 @@ integer :: isamax
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
 !
-!     WRITTEN BY KAREN h. HASKELL, SANDIA LABORATORIES,
-!     WITH THE HELP OF R.J. HANSON, SANDIA LABORATORIES.
+!     Written by karen h. Haskell, Sandia Laboratories,
+!     with the help of R.J. Hanson, Sandia Laboratories.
 !
 !     In addition to the parameters discussed in the prologue to
 !     subroutine wnnls, the following work arrays are used in
@@ -72457,7 +72457,7 @@ integer :: isamax
 !     Their contents will in general be of no interest to the user.
 !
 !         ipivot(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         pivoting information for the cols of w(*,*).
 !
 !         itype(*)
@@ -72468,11 +72468,11 @@ integer :: isamax
 !         equation.
 !
 !         wd(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         dual solution vector.
 !
 !         h(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         pivot scalars of the Householder transformations performed
 !         IN THE CASE KRANK.LT.l.
 !
@@ -73521,7 +73521,7 @@ real :: spmpar
 !
 ! ** OUTPUT VARIABLES AND INTERNAL VARIABLES **
 ! n1     COMPUTED RANK OF MATRIX H, WHERE H = w*a.
-! ipivot vector of size n.  On exit, this array records the order
+! ipivot vector of size n.  on exit, this array records the order
 !        in which the columns of H were selected by the pivoting
 !        scheme in the course of the orthogonal decomposition.
 !        WHENEVER n1.LT.n, THE FIRST n1 ELEMENTS OF ipivot INDICATE
@@ -73587,10 +73587,10 @@ real :: spmpar
 !        computes unscaled covariance matrix of the coefficients.
 !
 ! ** STORAGE REQUIREMENTS **
-! THE STORAGE REQUIRED FOR THE DIMENSIONED ARRAYS IN l2slv IS
+! the storage required for the dimensioned arrays in l2slv is
 !   m*(2*n + 2*l + 7) + n*(n + l + 7) + 2*l
-! LOCATIONS.  ALL ARRAYS REQUIRED IN SUBROUTINES CALLED BY l2slv ARE
-! DECLARED HEREIN AND ARE TRANSMITTED ONLY THROUGH PARAMETER LISTS OF
+! locations.  All arrays required in subroutines called by l2slv are
+! declared herein and are transmitted only through parameter lists of
 ! CALL-SEQUENCES.
 !
 ! ** PRECISION OF ARITHMETIC CALCULATIONS **
@@ -73617,7 +73617,7 @@ real :: spmpar
 ! * 3. DESCRIPTION OF VARIABLE c (AT L2B 690-790) SHOULD READ --      *
 ! *    c  VECTOR HAVING AT LEAST 6*(m+n) ELEMENTS USED ONLY FOR       *
 ! *       INTERNAL WORK SPACE.                                        *
-! * 4. THE VALUE OF eta (AT L2B 1960) SHOULD BE SET SO THAT IT IS THE *
+! * 4. The value of eta (at L2B 1960) should be set so that it is the *
 ! *    SMALLEST POSITIVE DOUBLE PRECISION NUMBER SUCH THAT 1.0 + eta  *
 ! *    IS GREATER THAN 1.0 IN DOUBLE PRECISION ARITHMETIC.            *
 ! *    FOR IBM COMPUTER TYPE, eta = 16.**(-13)                        *
@@ -73635,7 +73635,7 @@ real :: spmpar
 ! *          k3 = 1                                                   *
 ! * 7. FURTHER DETAILS ARE GIVEN IN SUBROUTINE solve2 IN CONNECTION   *
 ! *    WITH THE OMISSION OF ITERATIVE REFINEMENT.                     *
-! * 8. IN SUBROUTINE l2slv, STATEMENTS L2B 950-1000, 1820-1830, 2020, *
+! * 8. In subroutine l2slv, statements L2B 950-1000, 1820-1830, 2020, *
 ! *    2350-2360, 2480-2490, 3070, 3280-3570 AND 3590-3620 SHOULD BE  *
 ! *    OMITTED.                                                       *
 ! *    STATEMENT NUMBERS GIVEN HERE REFER TO THOSE IN THE RIGHT-HAND  *
@@ -74057,7 +74057,7 @@ end subroutine decom2
 ! This subroutine calls subroutine solve3.
 !
 ! ********* CONVERSION OF THIS SUBROUTINE TO DOUBLE PRECISION *********
-! * IF THE PROGRAM IS CONVERTED SO THAT ALL CALCULATIONS ARE DONE IN  *
+! * if the program is converted so that all calculations are done in  *
 ! * DOUBLE PRECISION ARITHMETIC, THE ITERATIVE REFINEMENT PRESENTLY   *
 ! * INCLUDED IN solve2 SHOULD BE OMITTED, SINCE THE SUCCESS OF THIS   *
 ! * PROCEDURE DEPENDS ON COMPUTING INNER PRODUCTS IN GREATER          *
@@ -74492,22 +74492,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by splsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY splsq.
+!                        over-written by splsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix a. For example,
+!                        defining the matrix a. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -74607,14 +74607,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -74680,7 +74680,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
@@ -74750,7 +74750,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -74936,22 +74936,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by stlsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY stlsq.
+!                        over-written by stlsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix A. For example,
+!                        defining the matrix A. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -75051,14 +75051,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -75124,7 +75124,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  A*w  -  alfa*u,
 !                alfa*w  =  A(TRANSPOSE)*u  -  beta*w.
 !
@@ -75194,7 +75194,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -75360,22 +75360,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by blsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY blsq.
+!                        over-written by blsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix a. For example,
+!                        defining the matrix a. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -75475,14 +75475,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -75548,7 +75548,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
@@ -75618,7 +75618,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -75866,7 +75866,7 @@ real :: spmpar
 !       FCN        NAME OF ROUTINE TO EVALUATE MINIMIZATION FUNCTION.
 !                  Must be declared external in calling routine.
 !       n          DIMENSION OF PROBLEM
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN.
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn.
 !
 !     Input/output ...
 !
@@ -75965,7 +75965,7 @@ real :: spmpar
 !                         call fcn (n, x, fval)
 !                  where x is a point and FVAL is the value of the
 !                  function at the point.
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN. IT IS
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn. IT IS
 !                  ASSUMED THAT rerr IS NONNEGATIVE. IF rerr = 0
 !                  then FCN is accurate to machine precision.
 !       itnlim     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
@@ -76004,7 +76004,7 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Internal parameters ...
 !
-!       rnf        NOISE IN THE SUBROUTINE FCN
+!       rnf        NOISE IN THE SUBROUTINE fcn
 !       f          FUNCTION VALUE  FCN(x)
 !       fstack(ns) stack of previous function values
 !       ns         LENGTH OF THE ARRAY fstack
@@ -76168,12 +76168,12 @@ real :: stpsiz
 !       gradtl     TOLERANCE AT WHICH GRADIENT CONSIDERED CLOSE
 !                  enough to zero to terminate algorithm
 !       itnlim     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn
 !
 !     Input/output ...
 !
 !       typsiz(n)  scaling vector for x
-!       fscale     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION FCN
+!       fscale     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION fcn
 !       stepmx     MAXIMUM STEP SIZE
 !
 !     Output ...
@@ -76451,7 +76451,7 @@ real :: sum
 !       nr       ROW DIMENSION OF MATRIX
 !       n        ORDER OF THE MATRIX
 !       a(n,n)   MATRIX OF FORM L(L-TRANSPOSE). A IS NOT
-!                MODIFIED BY THE ROUTINE.
+!                modified by the routine.
 !       b(n)     RIGHT-HAND SIDE VECTOR
 !
 !     Output ...
@@ -77046,7 +77046,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of variables. n must not exceed m.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -77101,14 +77101,14 @@ external fcn
 !       lwa is a positive integer input variable NOT less than
 !         m*n+5*n+m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
 !       MINPACK-supplied ... lmdif
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
 integer :: maxfev, mode, mp5n, nfev, nprint
@@ -77194,7 +77194,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of variables. n must not exceed m.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -77319,7 +77319,7 @@ external fcn
 !
 !       WA4 is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -77327,8 +77327,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt,mod
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iflag, iter, j, l
@@ -77476,7 +77476,7 @@ iter = 1
       call lmpar(n,fjac,ldfjac,ipvt,diag,qtf,delta,par,wa1,wa2, &
 &wa3,wa4)
 !
-!           Store the direction P and x + P. Calculate the norm of P.
+!           Store the direction P and x + P. calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -77627,12 +77627,12 @@ real, intent(in) :: x(n)
 !
 !       x is an input array of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
 integer :: i
@@ -77755,14 +77755,14 @@ real, intent(inout) :: x(n), wa1(n), wa2(n)
 !
 !       wa1 and wa2 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jj, jp1, k, l
@@ -77962,18 +77962,18 @@ external fcn
 !         Jacobian matrix. If the Jacobian is not banded, set
 !         mu to at least n - 1.
 !
-!       wa1 and wa2 are work arrays of length n. If ml + mu + 1 is at
+!       wa1 and wa2 are work arrays of length n. if ml + mu + 1 is at
 !         least n, then the Jacobian is considered dense, and wa2 is
 !         not referenced.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar
 !
 !       Fortran-supplied ... abs,AMAX1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, k, msum
@@ -78111,7 +78111,7 @@ external fcn
 !
 !       wa is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -78119,8 +78119,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j
@@ -78184,12 +78184,12 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !
 !     This subroutine completes the solution of the problem
 !     if it is provided with the necessary information from the
-!     QR factorization, with column pivoting, of A. That is, if
+!     QR factorization, with column pivoting, of A. that is, if
 !     A*P = Q*r, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
 !     columns, and r is an upper triangular matrix with diagonal
 !     elements of nonincreasing magnitude, then lmpar expects
 !     the full upper triangle of r, the permutation matrix P,
-!     and the first n components of (Q transpose)*B. On output
+!     and the first n components of (Q transpose)*B. on output
 !     lmpar also provides an upper triangular matrix S such that
 !
 !            T   T                   T
@@ -78246,14 +78246,14 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !
 !       wa1 and wa2 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm,qrsolv
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iter, j, jm1, jp1, k, l, nsing
@@ -78453,12 +78453,12 @@ real, intent(inout) :: q(ldq,m), wa(m)
 !
 !       wa is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... MIN0
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jm1, k, l, minmn, np1
@@ -78529,7 +78529,7 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !
 !     This subroutine uses Householder transformations with column
 !     pivoting (optional) to compute A QR factorization of the
-!     m by n matrix a. That is, qrfac determines an orthogonal
+!     m by n matrix a. that is, qrfac determines an orthogonal
 !     matrix Q, a permutation matrix P, and an upper trapezoidal
 !     matrix R with diagonal elements of nonincreasing magnitude,
 !     SUCH THAT a*P = Q*R. THE HOUSEHOLDER TRANSFORMATION FOR
@@ -78585,17 +78585,17 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !         If this information is not needed, then acnorm can coincide
 !         WITH rdiag.
 !
-!       wa is a work array of length n. If pivot is false, then wa
+!       wa is a work array of length n. if pivot is false, then wa
 !         can coincide with rdiag.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm
 !
 !       Fortran-supplied ... AMAX1,sqrt,MIN0
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jp1, k, kmax, minmn
@@ -78704,12 +78704,12 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !
 !     This subroutine completes the solution of the problem
 !     if it is provided with the necessary information from the
-!     QR factorization, with column pivoting, of A. That is, if
+!     QR factorization, with column pivoting, of A. that is, if
 !     A*P = Q*r, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
 !     columns, and r is an upper triangular matrix with diagonal
 !     elements of nonincreasing magnitude, then qrsolv expects
 !     the full upper triangle of r, the permutation matrix P,
-!     and the first n components of (Q transpose)*B. The system
+!     and the first n components of (Q transpose)*B. the system
 !     A*x = B, D*x = 0, IS THEN EQUIVALENT TO
 !
 !                  T       T
@@ -78759,12 +78759,12 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !
 !       wa is a work array of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jp1, k, kp1, l, nsing
@@ -78846,7 +78846,7 @@ do j = 1, n
    r(j,j) = x(j)
    end do
 !
-!     Solve the triangular system for Z. If the system is
+!     Solve the triangular system for Z. if the system is
 !     singular, then obtain a least squares solution.
 !
 nsing = n
@@ -78926,12 +78926,12 @@ real, intent(in) :: v(n), w(n)
 !         information necessary to recover the Givens rotation GW(i)
 !         described above.
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, nmj, nm1
@@ -79027,8 +79027,8 @@ real, intent(inout) :: v(n), w(m)
 !       u is an input array of length m which must contain the
 !         VECTOR u.
 !
-!       v is an array of length n. On input v must contain the vector
-!         v. On output v(i) contains the information necessary to
+!       v is an array of length n. on input v must contain the vector
+!         v. on output v(i) contains the information necessary to
 !         recover the Givens rotation GV(i) described above.
 !
 !       w is an output array of length m. w(i) contains information
@@ -79039,15 +79039,15 @@ real, intent(inout) :: v(n), w(m)
 !         of the diagonal elements of the output s are zero. Otherwise
 !         sing is set false.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON s. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE,
-!     JOHN l. NAZARETH
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton s. Garbow, kenneth E. Hillstrom, jorge j. more,
+!     john l. nazareth
 !
 !     **********
 integer :: i, j, jj, l, nmj, nm1
@@ -79202,11 +79202,11 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !------------------------
-!     INITIAL VERSION  DEC  1977
+!     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
 dimension ibasis(m)
@@ -79305,8 +79305,8 @@ real :: spmpar
 !----------------------
 !     bi is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     r is an array of dimension N. On output r contains the current
-!     value of X. During computation r normally contains the reduced
+!     r is an array of dimension N. on output r contains the current
+!     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: a(ka,n0), b0(m), c(n0)
@@ -79404,7 +79404,7 @@ if (iend .eq. m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
-!            REINVERSION OF THE BASIS MATRIX
+!            REINVERSION of the basis matrix
 !
 do 132 j = 1,m
    kj = ibasis(j)
@@ -79502,7 +79502,7 @@ do 202 j = jmin,n
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
-!             variables into r. Then terminate.
+!             variables into r. then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -80050,11 +80050,11 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !------------------------
-!     INITIAL VERSION  DEC  1977
+!     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
 dimension ibasis(m)
@@ -80155,8 +80155,8 @@ real :: spmpar
 !----------------------
 !     bi is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     r is an array of dimension N. On output r contains the current
-!     value of X. During computation r normally contains the reduced
+!     r is an array of dimension N. on output r contains the current
+!     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: ta(*), b0(m), c(n0)
@@ -80254,7 +80254,7 @@ if (iend .eq. m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
-!            REINVERSION OF THE BASIS MATRIX
+!            REINVERSION of the basis matrix
 !
 do 132 j = 1,m
    kj = ibasis(j)
@@ -80360,7 +80360,7 @@ do 202 j = jmin,n
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
-!             variables into r. Then terminate.
+!             variables into r. then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -81423,7 +81423,7 @@ real :: ap, aw
 !
 ! Subroutine to solve A 0-1 multiple knapsack problem of n
 ! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
-! I.E. Also suitable for A 0-1 single knapsack problem).
+! I.E. also suitable for A 0-1 single knapsack problem).
 ! The problem to be solved is
 !
 ! MAXIMIZE  vstar = p(1)*(x(1,1) + ... + x(m,1)) + ...
@@ -82027,8 +82027,8 @@ integer :: i1, i2, i3, i4, i5
 !                  xs(J) = 0 OR 1   FOR  J=1,...,ns
 !                  vs .GT. kub
 !
-! THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
-! WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
+! This subroutine is a modified version of subroutine kp01
+! which appeared in  computing 21, 81-86(1978).
 !
 integer, intent(inout) :: qs, vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
@@ -82058,8 +82058,8 @@ real :: a, b, c
 !                  xs(j) = 0 OR 1   FOR  j=1,...,ns
 !                  vs .GT. kub
 !
-! THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
-! WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
+! This subroutine is a modified version of subroutine kp01
+! which appeared in  computing 21, 81-86(1978).
 !
 integer, intent(inout) :: qs
 integer, intent(out) :: vs
@@ -82274,7 +82274,7 @@ real :: exparg
 !                          ------------------
 !
 !     mo is an input integer which specifies the search procedure
-!     for determination of c.  A two-pass procedure is used when
+!     for determination of c.  a two-pass procedure is used when
 !     mo = 0 , AND A ONE-PASS PROCEDURE IS USED WHEN mo IS NOT ZERO.
 !     WHEN ALL SINGULARITIES OF F(Z) ARE EXPECTED TO BE REAL, mo = 0
 !     is preferable.
@@ -82305,7 +82305,7 @@ real :: exparg
 !     ierr may be either an input integer or an output integer.  When
 !     ierr is equal to any negative integer at the beginning of lainv,
 !     the abscissa of convergence is calculated and the value obtained
-!     is assigned to the argument c.  Otherwise, c must be input by
+!     is assigned to the argument c.  otherwise, c must be input by
 !     the user.  After completion of lainv, ierr has one of the
 !     following values...
 !
@@ -82313,7 +82313,7 @@ real :: exparg
 !
 !        ierr = 1   THE CALCULATED VALUE OF y MAY NOT BE ACCURATE
 !                   due to possible inaccuracy in the calculation
-!                   of c.  This value of ierr may occur only when
+!                   of c.  this value of ierr may occur only when
 !                   ierr is initially negative.
 !
 !        ierr = 2   THE CALCULATION OF y DID NOT CONVERGE, WHILE
@@ -82953,8 +82953,8 @@ real :: spmpar
 ! ......................................................................
 !
 !   1. lainv1
-!        INVERSION OF LAPLACE TRANSFORM USING THE DURBIN FORMULA
-!        IN COMBINATION WITH THE EPSILON ALGORITHM
+!        inversion of Laplace transform using the Durbin formula
+!        in combination with the epsilon algorithm
 !
 !   2. Purpose
 !        the routine calculates an approximation result to the
@@ -83163,14 +83163,14 @@ real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
 real :: spmpar
 !
 ! 1.        cqext
-!           EPSILON ALGORITHM
-!              STANDARD FORTRAN SUBROUTINE
+!           epsilon algorithm
+!              standard Fortran subroutine
 !              complex version
 !
 ! 2.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -84229,7 +84229,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           RESG   - result OF THE 7-POINT GAUSS FORMULA
 !           RESK   - result OF THE 15-POINT KRONROD FORMULA
 !           RESKH  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -84290,7 +84290,7 @@ integer :: isn, n
 real, intent(inout) :: c(*)
 !-----------------------------------------------------------------------
 !     The complex array c of dimension n is interpreted by the code
-!     as a real array of dimension 2*n. If this association is not
+!     as a real array of dimension 2*n. if this association is not
 !     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
@@ -84396,57 +84396,57 @@ integer :: i, ii, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, &
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
 &bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
 &s120, s2, s3, s72, sd, sk(23), u, v
-!  MULTIVARIATE COMPLEX FOURIER TRANSFORM, COMPUTED IN PLACE
-!    USING MIXED-RADIX FAST FOURIER TRANSFORM ALGORITHM.
-!  BY R. C. SINGLETON, STANFORD RESEARCH INSTITUTE, OCT. 1968
-!    MODIFIED BY A. H. MORRIS, NSWC/DL, DAHLGREN VA
-!  ARRAYS A AND b ORIGINALLY HOLD THE REAL AND IMAGINARY
-!    COMPONENTS OF THE DATA, AND RETURN THE REAL AND
-!    IMAGINARY COMPONENTS OF THE RESULTING FOURIER COEFFICIENTS.
-!  MULTIVARIATE DATA IS INDEXED ACCORDING TO THE FORTRAN
-!    ARRAY ELEMENT SUCCESSOR FUNCTION, WITHOUT LIMIT
-!    ON THE NUMBER OF IMPLIED MULTIPLE SUBSCRIPTS.
-!    THE SUBROUTINE IS CALLED ONCE FOR EACH VARIATE.
-!    THE CALLS FOR A MULTIVARIATE TRANSFORM MAY BE IN ANY ORDER.
-!  ntot IS THE TOTAL NUMBER OF COMPLEX DATA VALUES.
-!  n IS THE DIMENSION OF THE CURRENT VARIABLE.
-!  nspan/n IS THE SPACING OF CONSECUTIVE DATA VALUES
-!    WHILE INDEXING THE CURRENT VARIABLE.
-!  THE SIGN OF isn DETERMINES THE SIGN OF THE COMPLEX
-!    EXPONENTIAL, AND THE MAGNITUDE OF isn IS NORMALLY ONE.
-!  A TRI-VARIATE TRANSFORM WITH a(N1,N2,N3), b(N1,N2,N3)
-!    IS COMPUTED BY
+!  Multivariate complex Fourier transform, computed in place
+!    using mixed-radix fast Fourier transform algorithm.
+!  By R. C. Singleton, Stanford Research Institute, oct. 1968
+!    modified by A. H. Morris, NSWC/DL, Dahlgren VA
+!  arrays A and b originally hold the real and imaginary
+!    components of the data, and return the real and
+!    imaginary components of the resulting Fourier coefficients.
+!  Multivariate data is indexed according to the Fortran
+!    array element successor function, without limit
+!    on the number of implied multiple subscripts.
+!    The subroutine is called once for each variate.
+!    The calls for a multivariate transform may be in any order.
+!  ntot is the total number of complex data values.
+!  n is the dimension of the current variable.
+!  nspan/n is the spacing of consecutive data values
+!    while indexing the current variable.
+!  The sign of isn determines the sign of the complex
+!    exponential, and the magnitude of isn is normally one.
+!  A TRI-variate transform with a(N1,N2,N3), b(N1,N2,N3)
+!    is computed by
 !      call sfft(a,b,n1*n2*n3,n1,n1,1,ierr)
 !      call sfft(a,b,n1*n2*n3,n2,n1*n2,1,ierr)
 !      call sfft(a,b,n1*n2*n3,n3,n1*n2*n3,1,ierr)
-!  FOR A SINGLE-VARIATE TRANSFORM,
+!  for a single-variate transform,
 !    ntot = n = nspan = (NUMBER OF COMPLEX DATA VALUES), E.G.
 !      call sfft(a,b,n,n,n,1,ierr)
-!  THE DATA MAY ALTERNATIVELY BE STORED IN A SINGLE COMPLEX
-!    ARRAY a, THEN THE MAGNITUDE OF isn CHANGED TO TWO TO
-!    GIVE THE CORRECT INDEXING INCREMENT AND a(2) USED TO
-!    PASS THE INITIAL ADDRESS FOR THE SEQUENCE OF IMAGINARY
-!    VALUES, E.G.
+!  the data may alternatively be stored in a single complex
+!    array a, then the magnitude of isn changed to two to
+!    give the correct indexing increment and a(2) used to
+!    pass the initial address for the sequence of imaginary
+!    values, E.G.
 !      call sfft(a,a(2),ntot,n,nspan,2,ierr)
-!  ARRAYS NFAC(MAXN),NP(MAXP),at(MAXF),ck(MAXF),BT(MAXF),SK(MAXF)
-!    ARE USED FOR TEMPORARY STORAGE.
+!  arrays NFAC(MAXN),NP(MAXP),at(MAXF),ck(MAXF),BT(MAXF),SK(MAXF)
+!    are used for temporary storage.
 !    MAXN MUST BE .GE. THE NUMBER OF FACTORS OF n
 !    MAXF MUST BE .GE. THE MAXIMUM PRIME FACTOR OF n.
 !    MAXP MUST BE .GT. THE NUMBER OF PRIME FACTORS OF n.
-!    IN ADDITION, MAXN IS ASSUMED TO BE ODD.
-!    IF THE SQUARE-FREE PORTION k OF n HAS TWO OR MORE PRIME
+!    In addition, MAXN is assumed to be odd.
+!    If the square-free portion k of n has two or more prime
 !    FACTORS, THEN MAXP MUST BE .GE. k-1.
-!  ierr IS A VARIABLE. ierr IS SET TO 0 IF NO INPUT ERRORS ARE
-!    DETECTED. OTHERWISE, ierr IS ASSIGNED ONE OF THE VALUES
+!  ierr is a variable. ierr is set to 0 if no input errors are
+!    detected. Otherwise, ierr is assigned one of the values
 !      ierr=1    n IS LESS THAN 1
 !      ierr=2    n HAS MORE THAN MAXN FACTORS
 !      ierr=3    n HAS A PRIME FACTOR GREATER THAN
-!                MAXF OR THE SQUARE-FREE PORTION OF
-!                n IS GREATER THAN MAXP+1
-!  ARRAY STORAGE IN NFAC FOR A MAXIMUM OF 15 FACTORS OF n.
-!  IF n HAS MORE THAN ONE SQUARE-FREE FACTOR, THE PRODUCT OF THE
+!                MAXF or the square-free portion of
+!                n is greater than MAXP+1
+!  array storage in NFAC for a maximum of 15 factors of n.
+!  If n has more than one square-free factor, the product of the
 !    SQUARE-FREE FACTORS MUST BE .LE. 210
-!  ARRAY STORAGE FOR MAXIMUM PRIME FACTOR OF 23
+!  array storage for maximum prime factor of 23
 equivalence (i,ii)
 !  The following constants should agree with the array dimensions.
 maxn=15
@@ -84989,7 +84989,7 @@ end subroutine sfft
 !
 !     ******************************************************************
 !
-!     Subroutine cosqi initializes the array WSAVE which is used in
+!     Subroutine cosqi initializes the array wsave which is used in
 !     both cosqf and cosqb. The prime factorization of n together with
 !     a tabulation of the trigonometric functions are computed and
 !     stored in WSAVE.
@@ -85004,7 +85004,7 @@ end subroutine sfft
 !     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             The same work array can be used for both cosqf and cosqb
 !             as long as n remains unchanged. Different WSAVE arrays
-!             are required for different values of n. The contents of
+!             are required for different values of n. the contents of
 !             WSAVE must not be changed between calls of cosqf or cosqb.
 !
 subroutine cosqi (n,wsave)
@@ -85054,7 +85054,7 @@ end subroutine cosqi
 !             in the program that calls cosqf. The wsave array must be
 !             initialized by calling subroutine cosqi(n,wsave) and A
 !             different wsave array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -85135,7 +85135,7 @@ end subroutine cosqf1
 !     followed by a call of cosqf will multiply the input sequence x
 !     BY 4*n.
 !
-!     The array WSAVE which is used by subroutine cosqb must be
+!     The array wsave which is used by subroutine cosqb must be
 !     initialized by calling subroutine cosqi(n,WSAVE).
 !
 !
@@ -85150,7 +85150,7 @@ end subroutine cosqf1
 !             in the program that calls cosqb. The WSAVE array must be
 !             initialized by calling subroutine cosqi(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -85235,8 +85235,8 @@ end subroutine cosqb1
 !     followed by a call of sinqb will multiply the input sequence x
 !     BY 4*n.
 !
-!     The array WSAVE which is used by subroutine sinqf must be
-!     initialized by calling subroutine SINQI(n,WSAVE).
+!     The array wsave which is used by subroutine sinqf must be
+!     initialized by calling subroutine sinqi(n,WSAVE).
 !
 !
 !     Input parameters
@@ -85248,9 +85248,9 @@ end subroutine cosqb1
 !
 !     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             In the program that calls sinqf. The WSAVE array must be
-!             initialized by calling subroutine SINQI(n,WSAVE) and A
+!             initialized by calling subroutine sinqi(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -85309,7 +85309,7 @@ end subroutine sinqf
 !     BY 4*n.
 !
 !     The array wsave which is used by subroutine sinqb must be
-!     initialized by calling subroutine SINQI(n,wsave).
+!     initialized by calling subroutine sinqi(n,wsave).
 !
 !
 !     Input parameters
@@ -85321,9 +85321,9 @@ end subroutine sinqf
 !
 !     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             In the program that calls sinqb. The wsave array must be
-!             initialized by calling subroutine SINQI(n,wsave) and A
+!             initialized by calling subroutine sinqi(n,wsave) and A
 !             different wsave array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !
@@ -85386,7 +85386,7 @@ end subroutine sinqb
 !     wsave   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 2*n+15.
 !             The same work array can be used for both rfftf and rfftb
 !             as long as n remains unchanged. Different wsave arrays
-!             are required for different values of n. The contents of
+!             are required for different values of n. the contents of
 !             wsave must not be changed between calls of rfftf or rfftb.
 !
 subroutine rffti (n,wsave)
@@ -85485,7 +85485,7 @@ end subroutine rffti1
 !             In the program that calls rfftb. The WSAVE array must be
 !             initialized by calling subroutine rffti(n,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of n. This initialization does not have to be
+!             value of n. this initialization does not have to be
 !             repeated so long as n remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !             The same WSAVE array can be used by rfftf and rfftb.
@@ -86102,7 +86102,7 @@ end subroutine radbg
 !             In the program that calls rfftf. The WSAVE array must be
 !             initialized by calling subroutine rffti(N,WSAVE) and A
 !             different WSAVE array must be used for each different
-!             value of N. This initialization does not have to be
+!             value of N. this initialization does not have to be
 !             repeated so long as N remains unchanged thus subsequent
 !             transforms can be obtained faster than the first.
 !             The same WSAVE array can be used by rfftf and rfftb.
@@ -87255,7 +87255,7 @@ integer :: knots
 !              arrays with this dimension (or related values)
 !                D       DDTEMP  FDERVL  FDERVR  FDUMB   FACTOR
 !                FINTRP  FLEFT   FRIGHT  POWERS  XTEMP   XINTRP  XDD
-!              ***** NOTE ***** maxpar ALSO AFFECTS ARGUMENT FDERV
+!              ***** NOTE ***** maxpar ALSO AFFECTS ARGUMENT fderv
 !              of function f.  FDERVL, FDERVR are also involved.
 !              Should declare FDERV of size 10 in f to be safe.
 !     maxaux - MAXIMUM NUMBER OF AUXILIARY INPUT ( = 20 NOW ). ARRAYS
@@ -87273,7 +87273,7 @@ integer :: knots
 !     changing to single precision.
 !
 !     ***** THE GAUSS WEIGHTS AND ABSCISSAE IN adcomp ARE GIVEN TO
-!           30 digits. The parameter EPS0 in adset specifies the
+!           30 digits. The parameter eps0 in adset specifies the
 !           accuracy of these constants. If the accuracy is changed
 !           TO K DECIMAL DIGITS THEN SET EPS0 = 10**(-K).
 !
@@ -87282,8 +87282,8 @@ integer :: knots
 !           XLEFT and XRIGHT to the new value for maxstk. Note that
 !           THE MINIMUM INTERVAL LENGTH IS 2**(-maxstk)*(b-a).
 !
-!  SINGLE PRECISION CONVERSION -- REQUIRES FOUR STEPS
-!     1. DECLARE ALL DOUBLE PRECISION VARIABLES TO BE REAL.
+!  Single precision conversion -- requires four steps
+!     1. Declare all double precision variables to be real.
 !
 !     2. Change all double precision numbers in the data statements.
 !        (Floating point numbers appear only in data statements.)
@@ -87654,7 +87654,7 @@ data r/1.5d0/
 !                    .652145154862546142626936050778D0
 !
 !     ***** THE ABSISSAE AND WEIGHTS ARE GIVEN BELOW TO 30 DIGITS.
-!           The parameter EPS0 in adset specifies the accuracy of
+!           The parameter eps0 in adset specifies the accuracy of
 !           these constants. If the accuracy is changed to K decimal
 !           DIGITS THEN SET EPS0 = 10**(-K).
 !
@@ -88187,8 +88187,8 @@ nrli = nrl + ni
 !         Strategy is to first convert the part from the interp. Pts.
 !         To poly in (X-xr).  This poly then has origin shifted to xl.
 !
-!     THE CONVERSION OF THE interp PART IS DONE EXPLICITLY FOR DEGREE
-!     TWO OR LESS AND DONE BY SYNTHETIC DIVISION FOR HIGHER DEGREES
+!     The conversion of the interp part is done explicitly for degree
+!     two or less and done by synthetic division for higher degrees
 !
 !   D1 + D2(X-X1) +D3(X**2-(X1+X2)X +X1*X2)
 !
@@ -88208,7 +88208,7 @@ go to 80
 powers(2) = d(nrl+2,1)
 go to 80
 !
-!         CONVERSION BY REPEATED SYNTHETIC DIVISION
+!         Conversion by repeated synthetic division
 30 ni1 = ni - 1
 !         Initialize the powers and xtemp arrays
 do k=1,ni
@@ -88290,13 +88290,13 @@ real :: spmpar
 !    ic  selects between power series coefficients and derivatives.
 !        ic .EQ. 0   ROUTINE RETURNS POWER SERIES COEFFICIENTS IN rs.
 !        ic .NE. 0   ROUTINE RETURNS DERIVATIVES IN rs.
-!    tol estimated relative accuracy of f. It is assumed that tol
+!    tol estimated relative accuracy of f. it is assumed that tol
 !        IS NONNEGATIVE. IF tol = 0 THEN f IS ASSUMED TO BE CORRECT
 !        to machine accuracy.
 !
 !  *** INPUT AND OUTPUT PARAMETER ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. The provided guess may be in error with at
+!        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
 !  *** OUTPUT PARAMETERS ***
@@ -88549,7 +88549,7 @@ double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !
 !  *** INPUT AND OUTPUT PARAMETER ***
 !    r   INITIAL RADIUS USED IN SEARCH FOR OPTIMAL RADIUS. THE RESULTING
-!        radius is left in r. The provided guess may be in error with at
+!        radius is left in r. the provided guess may be in error with at
 !        most a factor of 3.E4 .
 !
 !  *** OUTPUT PARAMETERS ***
@@ -89518,10 +89518,10 @@ real, intent(in) :: a1, an, b1, bn
 integer :: i, j, nm1, nm2
 real :: dnew, dold, h
 !
-!     WRITTEN BY RONDALL E. JONES
-!        SANDIA LABORATORIES
-!        ALBUQUERQUE, NEW MEXICO  87115
-!        JANUARY 1976
+!     Written by Rondall E. Jones
+!        Sandia Laboratories
+!        albuquerque, new mexico  87115
+!        January 1976
 !
 !     Abstract
 !         splift fits an interpolating cubic spline to the n data points
@@ -91183,10 +91183,10 @@ integer :: ia, ib, ic, ie, mm1
 !               Closed curve cubic spline fitting
 !                    in n-dimensional space
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by
+!        Alfred H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !----------------------
 real, intent(in) :: x(kx,n)
 real, intent(inout) :: t(m), dx(kdx,n), wk(*)
@@ -91540,10 +91540,10 @@ real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: yp(n), temp(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute an interpolatory spline under tension through
@@ -91605,8 +91605,8 @@ real, intent(in) :: sigma
 !
 !   n, x, y, slp1, slpn, islpsw and sigma are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -91696,10 +91696,10 @@ real :: curv2
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function interpolates a curve at a given point
 ! using a spline under tension. The subroutine curv1 should
@@ -91733,7 +91733,7 @@ real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -91785,10 +91785,10 @@ real :: curvd
 integer, intent(in) :: n
 real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function differentiates a curve at a given point
 ! using a spline under tension. The subroutine curv1 should
@@ -91822,7 +91822,7 @@ real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -91869,10 +91869,10 @@ real :: term
 integer, intent(in) :: n
 real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function integrates a curve specified by a spline
 ! under tension between two given limits. The subroutine
@@ -91907,7 +91907,7 @@ real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -92046,10 +92046,10 @@ real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension forming a curve in the
@@ -92119,8 +92119,8 @@ real, intent(in) :: sigma
 !
 !   n, x, y, slp1, slpn, islpsw, and sigma are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -92239,10 +92239,10 @@ real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a curve in the plane. The subroutine
@@ -92286,7 +92286,7 @@ real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -92346,10 +92346,10 @@ real, intent(in) :: x(n), y(n)
 real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension forming a closed curve in
@@ -92403,7 +92403,7 @@ real, intent(in) :: sigma
 !
 !   n, x, y, and sigma are unaltered,
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES TERMS AND
+! This subroutine references package modules terms and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -92521,10 +92521,10 @@ real, intent(in) :: t
 real, intent(inout) :: xs, ys
 real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a closed curve in the plane. The
@@ -92568,7 +92568,7 @@ real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -92638,10 +92638,10 @@ real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
 real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the parameters necessary to
 ! compute a spline under tension passing through a sequence
@@ -92669,7 +92669,7 @@ real, intent(in) :: sigma
 !   desired values of the components of tangent vectors to
 !   the curve at (x(1),y(1),z(1)) AND(x(n),y(n),z(n)),
 !   respectively. The positive sense of the curve is assumed
-!   to be that moving from point 1 to point n. The user may
+!   to be that moving from point 1 to point n. the user may
 !   omit values for either or both of these triples and
 !   signal this with islpsw.
 !
@@ -92719,8 +92719,8 @@ real, intent(in) :: sigma
 !   n, x, y, z, slp1x, slp1y, slp1z, slpnx, SLPNY, SLPNZ,
 !   islpsw, and sigma are unaltered,
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -92856,10 +92856,10 @@ real, intent(inout) :: xs, ys, zs
 real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine performs the mapping of points in the
 ! interval (0.,1.) Onto a curve in space.  The subroutine
@@ -92903,7 +92903,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES intrvl AND
+! This subroutine references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -92963,10 +92963,10 @@ real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
 real, intent(in) :: del1, del2, sigma
 real, intent(inout) :: c1, c2, c3
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine determines the coefficients c1, c2, and c3
 ! used to determine endpoint slopes. Specifically, if
@@ -92998,7 +92998,7 @@ real, intent(inout) :: c1, c2, c3
 !
 ! None of the input parameters are altered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULE snhcsh.
+! This subroutine references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -93042,10 +93042,10 @@ real :: coshm, denom, sigdel, sinhm
 real, intent(inout) :: diag, sdiag
 real, intent(in) :: sigma, del
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine computes the diagonal and superdiagonal
 ! terms of the tridiagonal linear system associated with
@@ -93073,7 +93073,7 @@ real, intent(in) :: sigma, del
 !
 !   sigma and del are unaltered.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULE snhcsh.
+! This subroutine references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -93193,12 +93193,12 @@ integer :: intrvl
 !
 !******  M E t H O D  ******
 !
-!     THE NONTRIVIAL KNOT INTERVAL (t(i),t(i+1)) CONTAINING x IS FIRST
-!  OBTAINED. THEN THE  k  B-COEFFICIENTS OF F RELEVANT FOR THIS INTERVAL
-!  ARE OBTAINED FROM bcoef (OR TAKEN TO BE ZERO IF NOT EXPLICITLY AVAIL-
-!  ABLE), AND DIFFERENCED jderiv TIMES TO OBTAIN THE B-COEFFICIENTS OF
+!     The nontrivial knot interval (t(i),t(i+1)) containing x is first
+!  obtained. Then the  k  B-coefficients of F relevant for this interval
+!  are obtained from bcoef (or taken to be zero if not explicitly avail-
+!  able), and DIFFERENCED jderiv times to obtain the B-coefficients of
 !  (D**jderiv)F  RELEVANT FOR THE INTERVAL. SPECIFICALLY, IF j = jderiv
-!  THEN FROM x.(12) OF THE REFERENCE WE HAVE
+!  then from x.(12) Of the reference we have
 !
 !     (D**j)F  =  sum ( bcoef(.,j)*B(.,k-j,t) )
 !
@@ -93218,12 +93218,12 @@ integer :: intrvl
 !                 (x - t(.))      + (t(.+M-1) - x)
 !
 !  TO WRITE (D**j)F(x) EVENTUALLY AS A LINEAR COMBINATION OF B-SPLINES
-!  OF ORDER 1. THE COEFFICIENT FOR B(i,1,t)(x) MUST THEN BE THE DESIRED
+!  of order 1. The coefficient for B(i,1,t)(x) must then be the desired
 !  NUMBER  (D**j)F(x). (SEE x.(17)-(19) OF THE REFERENCE).
 !
 !-----------------------------------------------------------------------
-!  REFERENCE. DE BOOR, CARL, A PRATICAL GUIDE TO SPLINES, SPRINGER-
-!  VERLAG, NEW YORK, 1978.
+!  Reference. DE boor, carl, A PRATICAL guide to splines, springer-
+!  verlag, new york, 1978.
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*), bcoef(n)
 real, intent(inout) :: wk(k,3)
@@ -93491,8 +93491,8 @@ integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
 real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
 !
-!              CONVERSION FROM B-SPLINE REPRESENTATION
-!              TO PIECEWISE POLYNOMIAL REPRESENTATION
+!              Conversion from B-spline representation
+!              to piecewise polynomial representation
 !
 !
 !     Input ...
@@ -93714,8 +93714,8 @@ real :: s, term, ti, timj
 !                    and stored in blist.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
-!         BY A.H. MORRIS (NSWC).
+!     Written by carl DE boor (University of Wisconsin) and modified
+!         by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*)
 real, intent(inout) :: blist(k)
@@ -93795,8 +93795,8 @@ real :: factor, fkp1mm, sum
 !  of corresponding order in  dbiatx  to produce the desired values .
 !
 !-----------------------------------------------------------------------
-!  WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
-!     BY A.H. MORRIS (NSWC).
+!  Written by carl DE boor (University of Wisconsin) and modified
+!     by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
 real, intent(in) :: t(*)
 real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
@@ -93990,7 +93990,7 @@ do i = 1,n
 !        Let q denote a two-dimensional array of dimension (2*k-1,n).
 !        WE THEREFORE WANT  bcoef(j) = B(left-k+j)(taui) TO GO INTO
 !        A(i,left-k+j), I.E., Into  q(i-(left+j)+2*k,(left+j)-k) since
-!        A(i+j,j)  is to go into  q(i+k,j), all i,j.  In the current
+!        A(i+j,j)  is to go into  q(i+k,j), all i,j.  in the current
 !        routine we treat q as an equivalent one-dimensional array.
 !        Thus we want bcoef(j) to be inserted into entry
 !            i - (left+j) + 2*k + ((left+j) - k-1)*(2*k-1)
@@ -94681,15 +94681,15 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !                         an old problem).
 !
 !
-!   REFERENCE.  HANSON R.J., CONSTRAINED LEAST SQUARES CURVE FITTING
-!               TO DISCRETE DATA USING B-SPLINES, A USERS GUIDE.
-!               SANDIA LABS. TECH. REPT. SAND-78-1291, DEC, 1978.
+!   Reference.  Hanson R.J., Constrained least squares curve fitting
+!               to discrete data using B-splines, a users guide.
+!               Sandia labs. Tech. Rept. Sand-78-1291, DEC, 1978.
 !
 !-----------------------------------------------------------------------
-!   WRITTEN BY
-!     RICHARD J. HANSON
-!     SANDIA LABORATORIES
-!   MODIFIED BY A.H. MORRIS (NSWC)
+!   Written by
+!     richard J. Hanson
+!     Sandia Laboratories
+!   modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
 real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
 real, intent(in) :: xconst(*), yconst(*)
@@ -95044,7 +95044,7 @@ integer :: i, ie, ig, ig1, ig2, j, jg, k, kh, l, lp1, mh, mu, nbp1
 real :: rho
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
-!           HANSON, R. J., (SNLA)
+!           Hanson, R. J., (SNLA)
 !
 !***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
 !            matrices a using sequential accumulation of rows of
@@ -95066,7 +95066,7 @@ real :: rho
 !     into Q submatrices.  Let (E F) be the T-TH one of these
 !     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS mt BY N
 !     and the dimension of C is mt by nb.  The value of nb is the
-!     bandwidth of A.  The dimensions of the leading block of zeros in E
+!     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are mt by jt-1.
 !
 !     The user of the subroutine bndacc provides mt,jt,C and F for
@@ -95179,8 +95179,8 @@ real :: rho
 !     call bndacc(g,mdg,nb,ip,ir,mt,jt)
 !
 !***REFERENCES  C. L. LAWSON AND R. J. HANSON,
-!                 SOLVING LEAST SQUARE PROBLEMS,PRENCTICE-HALL, INC
-!                 (1974), CHAPTER 27
+!                 solving least square problems,PRENCTICE-Hall, inc
+!                 (1974), chapter 27
 !
 !
 !
@@ -95265,7 +95265,7 @@ integer :: i, i1, i2, ie, ii, irm1, ix, j, jg, l, np1
 real :: rsq, s
 !
 !***AUTHOR  LAWSON, C. L., (JPL)
-!           HANSON, R. J., (SNLA)
+!           Hanson, R. J., (SNLA)
 !
 !***PURPOSE  SOLVE THE LEAST SQUARES PROBLEM AX = B FOR BANDED
 !            matrices a using sequential accumulation of rows of
@@ -95286,7 +95286,7 @@ real :: rsq, s
 !     into Q submatrices.  Let (E F) be the T-TH one of these
 !     SUBMATRICES WHERE E = (0 C 0).  HERE THE DIMENSION OF E IS MT BY n
 !     and the dimension of C is MT by nb.  The value of nb is the
-!     bandwidth of A.  The dimensions of the leading block of zeros in E
+!     bandwidth of A.  the dimensions of the leading block of zeros in E
 !     are MT by JT-1.
 !
 !     The user of the subroutine bndacc provides MT,JT,C and F for
@@ -95370,7 +95370,7 @@ real :: rsq, s
 !                       2 or 3.
 !
 !     rnorm             IF mode=1 rnorm IS THE EUCLIDEAN LENGTH OF THE
-!                       RESIDUAL VECTOR AX-B.  WHEN mode=2 OR 3 rnorm
+!                       RESIDUAL VECTOR ax-B.  WHEN mode=2 OR 3 rnorm
 !                       is set to zero.
 !
 !     ierr              ierr = 0 IF THE SOLUTION WAS OBTAINED.
@@ -95378,8 +95378,8 @@ real :: rsq, s
 !
 !
 !***REFERENCES  C. L. LAWSON AND R. J. HANSON,
-!                 SOLVING LEAST SQUARE PROBLEMS,PRENCTICE-HALL, INC
-!                 (1974), CHAPTER 27
+!                 solving least square problems,PRENCTICE-Hall, inc
+!                 (1974), chapter 27
 !
 !
 ierr = 0
@@ -95479,10 +95479,10 @@ integer :: i, imax, j, l, ld, m, n, nu
 !     for the B-splines U (x) and V (y).
 !                        i         j
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
 real, intent(in) :: xbreak(nx), ybreak(ny)
@@ -95553,7 +95553,7 @@ do i = 1,imax
 end do
 !
 !     Compute the values of the bispline and their partial
-!     derivatives with respect to y. The results are stored
+!     derivatives with respect to y. the results are stored
 !     in the first half of f.
 !
 ld = nu + 1
@@ -95632,7 +95632,7 @@ do mu = 1,n
 !
 !           Compute the coefficients for the l-TH
 !           polynomial forming the cubic spline. The
-!           coefficients are stored in c. This code
+!           coefficients are stored in c. this code
 !           is from the subroutine bspp.
 !
       do j = 1,k
@@ -96068,14 +96068,14 @@ real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
-!                               MODIFIED BY ALFRED H. MORRIS
-!                               NAVAL SURFACE WEAPONS CENTER
-!                                          DAHLGREN VIRGINIA
+!                               Modified by Alfred H. Morris
+!                               naval surface weapons center
+!                                          Dahlgren Virginia
 !
 ! This subroutine determines the parameters necessary to
 ! compute an interpolatory surface passing through a rect-
@@ -96139,8 +96139,8 @@ real, intent(in) :: sigma
 !            increasing,
 !        = 3 THE OPTION VECTOR HAS AN ERROR.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -96460,13 +96460,13 @@ real, intent(in) :: xx, yy, x(m), y(n)
 real :: z(iz,n), zp(m,n,*)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function interpolates a surface at a given coordinate
-! pair using A BI-spline under tension. The subroutine SURF1
+! pair using A BI-spline under tension. The subroutine surf1
 ! should be called earlier to determine certain necessary
 ! parameters.
 !
@@ -96507,7 +96507,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -96611,15 +96611,15 @@ real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
 real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                                 CODED BY ALAN KAYLOR CLINE
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                                 coded by alan Kaylor Cline
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine maps values onto a surface at every point
 ! of a grid equally spaced in both x and y coordinates. The
 ! surface interpolation is performed using A BI-spline
-! under tension. The subroutine SURF1 or NSURF1 should be
+! under tension. The subroutine surf1 or NSURF1 should be
 ! called earlier to determine certain necessary parameters.
 !
 ! On input--
@@ -96675,7 +96675,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULE snhcsh.
+! This function references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -96841,7 +96841,7 @@ integer, intent(in) :: k, ka, kz, m, n
 integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     bstrp1 computes B-spline interpolation coefficients for
-!     n sets of data stored in the columns of the array z. The
+!     n sets of data stored in the columns of the array z. the
 !     coefficients are stored in the rows of A.
 !
 !     IT IS ASSUMED THAT kz .GE. m AND ka .GE. n.
@@ -97192,8 +97192,8 @@ real :: x(n), y(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine creates a thiessen triangulation of n
@@ -97448,8 +97448,8 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds node kk to a triangulation of a set
@@ -97592,8 +97592,8 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds a boundary node to a triangulation
@@ -97730,8 +97730,8 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds an interior node to a triangulation
@@ -97889,8 +97889,8 @@ integer, intent(inout) :: iarr(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine shifts a set of contiguous elements of an
@@ -98003,8 +98003,8 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This subroutine swaps the diagonals in a convex quadri-
@@ -98189,8 +98189,8 @@ real, intent(in) :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This function decides whether or not to replace A
@@ -98289,8 +98289,8 @@ integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This function returns the index of nabor in the
@@ -98348,8 +98348,8 @@ real :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine locates a point P in a thiessen triangu-
@@ -98597,7 +98597,7 @@ i3 = n3
 return
 !
 ! nf and nl are adjacent boundary nodes which are visible
-!   from P.  Find the first visible boundary node.
+!   from P.  find the first visible boundary node.
 ! Set next to the first neighbor of nf.
 !
 16 indx = 1
@@ -98678,8 +98678,8 @@ real, intent(inout) :: zxzy(2,n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a triangulation of n nodes in the plane with
@@ -98930,13 +98930,13 @@ real, intent(inout) :: dx, dy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a thiessen triangulation of n points in the plane
 ! with associated data values z, this subroutine estimates
-! x and y partial derivatives at node k.  The derivatives
+! x and y partial derivatives at node k.  the derivatives
 ! are taken to be the partials at k of a quadratic function
 ! which interpolates z(k) and fits the data values at a set
 ! of nearby nodes in a weighted least squares sense. A mar-
@@ -99225,8 +99225,8 @@ real, intent(inout) :: row(6)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine sets up the i-TH row of an augmented RE-
@@ -99314,8 +99314,8 @@ real, intent(inout) :: ds
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a thiessen triangulation of N nodes and an array
@@ -99539,8 +99539,8 @@ real, intent(out) :: pz
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a triangulation of a set of points in the plane,
@@ -99739,7 +99739,7 @@ if ((xp-x1)*(x2-x1) + (yp-y1)*(y2-y1) .gt. 0.) go to 8
 n2 = n1
 go to 4
 !
-! n2 is the closest boundary point to P.  Compute partial
+! n2 is the closest boundary point to P.  compute partial
 !   derivatives at n2.
 !
 5 if (iflag .ne. 1) go to 6
@@ -99820,8 +99820,8 @@ real, intent(inout) :: w, wx, wy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given function values and first partial derivatives at
@@ -100353,7 +100353,7 @@ integer, intent(inout) :: iwork(iwklen)
 !     NOTE THAT  DEGREE ,  npolys ,  psiwid  AND  alfl   ARE  RETURNED
 !     in  iwork (1-4), respectively.
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     December 10, 1984
 !     ****************
@@ -100524,7 +100524,7 @@ integer :: i, rowlen
 !     This subroutine is called by  allot .  It is not  called  by
 !     the user directly.
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     October 16, 1984
 !     ****************
@@ -100652,7 +100652,7 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !                         (dimen+curdeg-kj)
 !
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     October 16, 1984
 !     ****************
@@ -100762,7 +100762,7 @@ real :: runtot, rntot1
 !     This subroutine calls  scalpm ,  scaldn , and  incdg .
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !     ****************
 !
 !     ***************
@@ -100845,7 +100845,7 @@ real :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  gnrtp  and not by the user.
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -101190,7 +101190,7 @@ real, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     The subroutine  meval1  is called to do the actual evaluation.
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -101282,7 +101282,7 @@ real :: runtot, rntot1
 !          ACM transactions on mathematical software
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -101552,7 +101552,7 @@ double precision :: runtot, rntot1
 !     This subroutine calls  dscalp ,  dscald , and  dincdg .
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !     ****************
 !
 !     ***************
@@ -101635,7 +101635,7 @@ double precision :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  dgnrtp  and not by the user.
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -101981,7 +101981,7 @@ double precision, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     The subroutine  dmevl1  is called to do the actual evaluation.
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -102073,7 +102073,7 @@ double precision :: runtot, rntot1
 !          ACM transactions on mathematical software
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -102292,7 +102292,7 @@ real :: f
 ! 47,95,191 and 383. The formulae are based on the optimal
 ! extension of the 3-point Gauss formula.  Details of
 ! the formulae are given in *the optimum addition of points
-! to quadrature formulae* by T.N.L. Patterson,maths.Comp.
+! to quadrature formulae* by T.N.L. patterson,maths.Comp.
 ! Vol 22,847-856,1968.
 !                     *** INPUT ***
 ! A       LOWER LIMIT OF INTEGRATION.
@@ -103014,7 +103014,7 @@ external f
 !                       than the smallest interval considered up to now
 !           extrap    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
 !                       is attempting to perform extrapolation
-!                       I.E. Before subdividing the smallest interval
+!                       I.E. before subdividing the smallest interval
 !                       we try to decrease the value of erlarg.
 !           noext     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
 !                       is no longer allowed (true value)
@@ -104260,7 +104260,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           RESG   - result OF THE 7-POINT GAUSS FORMULA
 !           RESK   - result OF THE 15-POINT KRONROD FORMULA
 !           RESKH  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -104319,8 +104319,8 @@ implicit none
 !     ..................................................................
 !
 ! 1.        qpsrt
-!           ORDERING ROUTINE
-!              STANDARD FORTRAN SUBROUTINE
+!           ordering routine
+!              standard Fortran subroutine
 !              real version
 !
 ! 2.        PURPOSE
@@ -104469,7 +104469,7 @@ real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 ! 1.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -104690,7 +104690,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -104874,7 +104874,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -106103,7 +106103,7 @@ external f
 !                       than the smallest interval considered up to now
 !           extrap    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
 !                       is attempting to perform extrapolation
-!                       I.E. Before subdividing the smallest interval
+!                       I.E. before subdividing the smallest interval
 !                       we try to decrease the value of erlarg.
 !           noext     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
 !                       is no longer allowed (true value)
@@ -107385,7 +107385,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           resg   - result OF THE 7-POINT GAUSS FORMULA
 !           resk   - result OF THE 15-POINT KRONROD FORMULA
 !           reskh  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -107444,8 +107444,8 @@ implicit none
 !     ..................................................................
 !
 ! 1.        dqpsrt
-!           ORDERING ROUTINE
-!              STANDARD FORTRAN SUBROUTINE
+!           ordering routine
+!              standard Fortran subroutine
 !              double precision version
 !
 ! 2.        PURPOSE
@@ -107587,7 +107587,7 @@ implicit none
 ! 1.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -107823,7 +107823,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -108007,7 +108007,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -109036,7 +109036,7 @@ real :: s, t
 real :: rnderr
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
-!       as x and b must be the same as A.  They are declared as
+!       as x and b must be the same as A.  they are declared as
 !       distinct variables in this function, and the intermediate
 !       variables s and t are put into common, in order to defend
 !       against the well-meaning actions of some officious optimizing
@@ -109232,7 +109232,7 @@ real :: spmpar
 !   nt         IF nt=0, THEN t AND x WILL BE SET EQUAL TO THE FINAL
 !              Gaussian nodes and the corresponding solution values,
 !              and nt will be set to the number of the solution
-!              values stored in x and t. The arrays t and x should
+!              values stored in x and t. the arrays t and x should
 !              have dimension at least mupper, assigned in the
 !              calling program.
 !              IF nt .GT. 0, THEN t CONTAINS nt USER SUPPLIED NODES
@@ -109277,11 +109277,11 @@ real :: spmpar
 !
 !
 !   *** REFERENCES ***
-!   (1) AN AUTOMATIC PROGRAM FOR FREDHOLM INTEGRAL EQUATIONS OF THE
-!       SECOND KIND, ACM TRANS. MATH SOFTWARE 2(1976), PP.154-171.
-!   (2) A SURVEY OF NUMERICAL METHODS FOR THE SOLUTION OF FREDHOLM
-!       INTEGRAL EQUATIONS OF THE SECOND KIND, SIAM PUB., 1976,
-!       PART II, CHAP. 5.
+!   (1) an automatic program for Fredholm integral equations of the
+!       second kind, ACM Trans. Math Software 2(1976), PP.154-171.
+!   (2) a survey of numerical methods for the solution of Fredholm
+!       integral equations of the second kind, SIAM pub., 1976,
+!       part II, chap. 5.
 !
 real :: kernel, norm, normk
 external kernel,rhfcn
@@ -109451,7 +109451,7 @@ relmin=rmin(n,n,cond,unitrd,averr)
 if(loop .eq. 1) go to 11
 if(loop .eq. 2) go to 9
 !   Set up approximate rate of convergence of solutions XN to true
-!   solution X. Also set up desired ratio for iterative method.
+!   solution X. also set up desired ratio for iterative method.
 numr2=rnrm(xn,oldx,n,1)
 r2=amin1(0.5,amax1(numr2/denr2,1.0e-4))
 r1rat=amin1(rootrt,sqrt(r2))
@@ -109519,7 +109519,7 @@ loop=loop+1
 m=2*n
 go to 3
 !   The iterative rate is sufficiently rapid, and control will go to
-!   stage b. Save information in case stage b aborts at a larger
+!   stage b. save information in case stage b aborts at a larger
 !   value of m and stage A has to be returned to.
 15 do 16 i = 1,m
 aside(i,1)=oldx(i)
@@ -110112,7 +110112,7 @@ do 34 i = 1,nf
 34 imknn(i,i)=imknn(i,i)+1.0
 if(nf .eq. mf) go to 50
 !
-!   Iterate to decrease the noise level in X. This should reduce
+!   Iterate to decrease the noise level in X. this should reduce
 !   possible errors in Nystrom interpolation.
 !
 derror=((1.0-r1)/r1)*eps/normk
@@ -110137,7 +110137,7 @@ if(iflag .eq. 1) temp=temp/xnorm
 ep=amax1(ep,temp)
 go to 60
 !
-!   No iteration used in computing X. Just compute error estimate
+!   No iteration used in computing X. just compute error estimate
 !   in Nystrom interpolate.
 !
 50 temp=normk*elinsy
@@ -110436,9 +110436,9 @@ integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 !
 !     Sandia mathematical program library
 !     applied mathematics division 2642
-!     sandia laboratories
+!     Sandia Laboratories
 !     albuquerque, new mexico  87115
-!     january 1976
+!     January 1976
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !   *                 ISSUED BY SANDIA LABORATORIES,
 !   *                   A PRIME CONTRACTOR TO THE
@@ -110455,7 +110455,7 @@ integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 !   * use would not infringe privately owned rights.
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -110777,7 +110777,7 @@ real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
 &temp3, temp4, temp5, temp6, two(13), twou, u, xold
 real :: spmpar
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -111282,7 +111282,7 @@ integer :: i, j, jm1, ki, kip1, l, limit1
 real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
 &temp3, term, w(13)
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -111373,21 +111373,21 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !     a block of two equal steps.  The formula at the first step is
 !     5(4) while at the second step it is 6(4).
 !
-!     WRITTEN BY J.R.CASH,
-!        DEPARTMENT OF MATHEMATICS,
-!        IMPERIAL COLLEGE,
-!        SOUTH KENSINGTON, LONDON SW7 2AZ,
-!        ENGLAND.
-!     MODIFIED BY D. HIGHAM AND A.H. MORRIS.
+!     Written by J.R.Cash,
+!        department of mathematics,
+!        imperial college,
+!        south KENSINGTON, london SW7 2AZ,
+!        england.
+!     Modified by D. Higham and A.H. Morris.
 !
-!    THIS IS A HEAVILY REVISED VERSION OF rkf45 OF L.F. SHAMPINE AND
-!    H.A. WATTS.
-!    brkf45 IS PRIMARILY DESIGNED TO SOLVE NON-STIFF AND MILDLY STIFF
-!    INITIAL VALUE ORDINARY DIFFERENTIAL EQUATIONS WHEN DERIVATIVE
-!    EVALUATIONS ARE INEXPENSIVE. brkf45 USES INTERPOLATION TO PRODUCE
-!    OUTPUT AT OFF-STEP POINTS EFFICIENTLY. brkf45 SHOULD GENERALLY
-!    NOT BE USED WHEN THE USER IS DEMANDING HIGH ACCURACY.  IN SUCH
-!    CASES A GOOD ADAMS CODE WILL OFTEN BE MORE EFFICIENT.
+!    This is a heavily revised version of rkf45 of L.F. Shampine and
+!    H.A. Watts.
+!    brkf45 is primarily designed to solve non-stiff and mildly stiff
+!    initial value ordinary differential equations when derivative
+!    evaluations are inexpensive. brkf45 uses interpolation to produce
+!    output at off-step points efficiently. brkf45 should generally
+!    not be used when the user is demanding high accuracy.  In such
+!    cases a good Adams code will often be more efficient.
 !
 !***********************************************************************
 ! Abstract
@@ -111398,29 +111398,29 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !
 !             DY(I)/DT = FCN(t,y(1),y(2),...,y(neqn))
 !
-!    WHERE THE y(I) ARE KNOWN AT TIME t.
-!    TYPICALLY THE SUBROUTINE IS USED TO INTEGRATE FROM t TO TEND
-!    (WHILE RETURNING ANSWERS AT SPECIFIED OUTPUT POINTS TOUT), BUT
-!    IT CAN ALSO BE USED AS A ONE-BLOCK INTEGRATOR TO ADVANCE THE
-!    SOLUTION A SINGLE BLOCK STEP IN THE DIRECTION OF TEND.  ON RETURN
-!    THE PARAMETERS IN THE CALL LIST ARE SET FOR CONTINUING THE
-!    INTEGRATION. THE USER HAS ONLY TO CALL brkf45 AGAIN (AND PERHAPS
-!    DEFINE A NEW VALUE FOR TOUT). ACTUALLY, brkf45 IS AN INTERFACING
-!    ROUTINE WHICH CALLS SUBROUTINE rkfc FOR THE SOLUTION.  SUBROUTINE
-!    rkfc COMPUTES AN APPROXIMATE SOLUTION OVER ONE BLOCK OF LENGTH 2H.
-!    brkf45 IS PARTICULARLY USEFUL WHEN OUTPUT IS REQUIRED AT MANY
-!    OFF-STEP POINTS SINCE THE OUTPUT VALUES CAN BE OBTAINED BY
-!    INTERPOLATION.  THIS IS IN CONTRAST TO MANY OTHER RUNGE-KUTTA
-!    PROGRAMS WHICH CHOOSE THE STEP SEQUENCE SO AS TO HIT ALL OUTPUT
-!    POINTS EXACTLY AND SO BECOME INEFFICIENT WHEN OUTPUT IS REQUIRED
-!    AT MANY POINTS WITHIN A STEP.
-!    brkf45 USES THE (5,4), (6,4) BLOCK FORMULA DESCRIBED IN
-!    J.R. CASH,  A BLOCK 6(4) RUNGE-KUTTA FORMULA FOR NON-STIFF
-!    INITIAL VALUE PROBLEMS, ACM TRANS. MATH SOFTWARE 15 (1989),
+!    Where the y(I) are known at time t.
+!    Typically the subroutine is used to integrate from t to tend
+!    (while returning answers at specified output points tout), but
+!    it can also be used as a one-block integrator to advance the
+!    solution a single block step in the direction of tend.  On return
+!    the parameters in the call list are set for continuing the
+!    integration. The user has only to call brkf45 again (and perhaps
+!    define a new value for tout). Actually, brkf45 is an interfacing
+!    routine which calls subroutine rkfc for the solution.  Subroutine
+!    rkfc computes an approximate solution over one block of length 2H.
+!    brkf45 is particularly useful when output is required at many
+!    off-step points since the output values can be obtained by
+!    interpolation.  This is in contrast to many other Runge-Kutta
+!    programs which choose the step sequence so as to hit all output
+!    points exactly and so become inefficient when output is required
+!    at many points within a step.
+!    brkf45 uses the (5,4), (6,4) block formula described in
+!    J.R. Cash,  a block 6(4) Runge-Kutta formula for non-stiff
+!    initial value problems, ACM Trans. Math Software 15 (1989),
 !    PP. 15-28.
 !
 !    The parameters represent-
-!      FCN -- subroutine FCN(t,y,yp) to evaluate derivatives
+!      fcn -- subroutine fcn(t,y,yp) to evaluate derivatives
 !              yp(i)=dy(i)/dt
 !      neqn -- number of differential equations to be integrated.
 !      y(*) -- approximation to the solution vector at t.
@@ -111429,7 +111429,7 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !              required.  Approximate solutions at these points
 !              will be obained by interpolation.
 !      tend -- end of the integration range.  This will be hit exactly.
-!      yp(*) -- approximation to the derivative vector DY/DT at t.
+!      yp(*) -- approximation to the derivative vector dy/DT at t.
 !      relerr,abserr -- relative and absolute error tolerances for
 !            LOCAL ERROR TEST. AT THE NTH POINT OF EACH BLOCK (N=1,2)
 !            the code requires that
@@ -111581,21 +111581,21 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !                work(2*neqn+2), work(2*neqn+4), work(3*neqn+4),
 !                work(4*neqn+4), work(5*neqn+4), tex, YEX, YPEX )
 !
-!    WHERE YEX AND YPEX ARE THE SOLUTION VECTOR AND DERIVATIVE VECTOR
-!    APPROXIMATIONS DEFINED BY THE INTERPOLANT AT THE POINT TEX, AND
-!    WORK IS THE WORKING ARRAY SET UP BY brkf45. THIS VERSION OF
-!    EXTRA HAS BEEN WRITTEN BY D. HIGMAN (SEE BELOW).
+!    Where YEX and YPEX are the solution vector and derivative vector
+!    approximations defined by the interpolant at the point tex, and
+!    work is the working array SET up by brkf45. This version of
+!    extra has been written by D. Higman (see below).
 !
 !***********************************************************************
 !  More about the interpolant routine extra
 !***********************************************************************
 !
-!    THE FIRST DERIVATIVE APPROXIMATIONS GIVEN BY J.R. CASH HAVE BEEN
-!    MODIFIED BY D. HIGMAN. THREE CHANGES HAVE BEEN MADE AND ARE
-!    CLEARLY DOCUMENTED IN THE CODE. JUST SEARCH FOR THE WORD *CHANGES*.
-!    FOR AN EXPLANATION OF THESE MODIFICATIONS SEE
-!    REMARK ON ALGORITHM 669, BY D. HIGHAM,
-!    ACM TRANS. MATH SOFTWARE 17, PP. 424-426.
+!    The first derivative approximations given by J.R. Cash have been
+!    modified by D. Higman. Three changes have been made and are
+!    clearly documented in the code. Just search for the word *changes*.
+!    For an explanation of these modifications see
+!    remark on algorithm 669, by D. Higham,
+!    ACM Trans. Math Software 17, PP. 424-426.
 !
 !***********************************************************************
 !
@@ -112036,7 +112036,7 @@ h = hstop
 !     Core integrator for a single block
 !***********************************************************************
 !     The tolerances have been scaled to avoid premature underflow in
-!     computing the error tolerance function ERRTOL.
+!     computing the error tolerance function errtol.
 !     To avoid problems with zero crossings,relative error is measured
 !     using the average of the magnitudes of the solution at the
 !     beginning and end  points of a block.
@@ -112265,11 +112265,11 @@ real, intent(inout) :: ypex(neqn)
 integer :: n
 real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !
-!     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
-!     NEEDED TO MAKE THE INTERPOLANT DERIVATIVE MORE STABLE.
+!     This version of extra is the third of the three changes
+!     needed to make the interpolant derivative more stable.
 !
 !     t is the independent variable.
-!     y is the value at t-2H. The values at t-h and t are
+!     y is the value at t-2H. the values at t-h and t are
 !     y + h*yinc1 and y + h*yinc2 respectively.
 !     f,f1 and f2 are the derivatives at t-2H, t-h and t.
 !     Tex is the point where the output is required.
@@ -112279,7 +112279,7 @@ real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !
 !     Perform quintic interpolation based on the values
 !     y(n),y(n)+h*yinc1(n),y(n)+h*yinc2(n),f(n),f1(n),f2(n) at the
-!     points t-2H, t-h, t.  This polynomial is evaluated at the point
+!     points t-2H, t-h, t.  this polynomial is evaluated at the point
 !     tex to obtain the approximate value of y(tex) and this is stored
 !     in the array yex.  The derivative of the interpolating polynomial
 !     is also evaluated at tex to obtain an approximation to DY/DT
@@ -112308,9 +112308,9 @@ implicit none
 !
 !     Fehlberg fourth-fifth order Runge-Kutta method
 !
-!     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
-!                   SANDIA LABORATORIES
-!                  ALBUQUERQUE,NEW MEXICO
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!                  albuquerque,new mexico
 !
 !    rkf45 is primarily designed to solve non-stiff and mildly stiff
 !    differential equations when derivative evaluations are inexpensive.
@@ -112332,10 +112332,10 @@ implicit none
 !    rkfs for the solution.  rkfs in turn calls subroutine  fehl which
 !    computes an approximate solution over one step.
 !
-!    rkf45  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
-!    IN THE REFERENCE
-!    E.FEHLBERG , LOW-ORDER CLASSICAL RUNGE-KUTTA FORMULAS WITH STEPSIZE
-!                 CONTROL , NASA TR R-315
+!    rkf45  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
 !
 !    The parameters represent-
 !      F -- SUBROUTINE F(t,y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
@@ -112938,8 +112938,8 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !     Fehlberg FOURTH(FIFTH) order Runge-Kutta method with
 !     global error assessment
 !
-!     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
-!                   SANDIA LABORATORIES
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
 !
 !    gerk is designed to solve systems of differential equations when
 !    it is important to have a readily available global error estimate.
@@ -112967,10 +112967,10 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !    for the solution.  gerks  in turn calls subroutine  fehl  which
 !    computes an approximate solution over one step.
 !
-!    gerk  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
-!    IN THE REFERENCE
-!    E.FEHLBERG , LOW-ORDER CLASSICAL RUNGE-KUTTA FORMULAS WITH STEPSIZE
-!                 CONTROL , NASA TR R-315
+!    gerk  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
 !
 !
 !    The parameters represent-
@@ -112984,7 +112984,7 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
 !            for each component of the local error and solution vectors
 !      iflag -- indicator for status of integration
-!      gerror(*) -- vector which estimates the global error at t. That
+!      gerror(*) -- vector which estimates the global error at t. that
 !                   is, gerror(I) approximates  y(I)-true SOLUTION(I).
 !      work(*) -- array to hold information internal to gerk which is
 !            necessary for subsequent calls. Must be dimensioned
@@ -113639,10 +113639,10 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !        SAND79-2374 , DEPAC - design of a user oriented package
 !                              of ODE solvers.
 !
-!   stfode IS A DRIVER FOR A MODIFICATION OF THE CODE LSODE WRITTEN BY
-!             A. C. HINDMARSH
-!             LAWRENCE LIVERMORE LABORATORY
-!             LIVERMORE, CALIFORNIA 94550
+!   stfode is a driver for a modification of the code lsode written by
+!             A. C. Hindmarsh
+!             Lawrence Livermore Laboratory
+!             livermore, california 94550
 !
 !***********************************************************************
 !** ABSTRACT **
@@ -113739,7 +113739,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             VECTOR  U(*)=(U(1),U(2),...,U(neq)) , THE SUBROUTINE MUST
 !             evaluate the neq components of the system of differential
 !             EQUATIONS  DU/DX=F(X,U)  AND STORE THE DERIVATIVES IN THE
-!             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/DX *  FOR
+!             ARRAY uprime(*), THAT IS,  uprime(I) = * DU(I)/DX *  FOR
 !             EQUATIONS I=1,...,neq.
 !
 !             Subroutine F must not alter X or U(*). You must declare
@@ -113748,7 +113748,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your calling program
-!             and subroutine F. They are not used or altered by stfode.
+!             and subroutine F. they are not used or altered by stfode.
 !             If you do not need rpar or ipar, ignore these parameters
 !             by treating them as dummy arguments. If you do choose to
 !             use them, dimension them in your calling program and in F
@@ -113802,7 +113802,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             only the first six entries. You must respond to all of
 !             the following items which are arranged as questions. The
 !             simplest use of the code corresponds to answering all
-!             questions as yes ,I.E. Setting all entries of info to 0.
+!             questions as yes ,I.E. setting all entries of info to 0.
 !
 !        info(1) -- this parameter enables the code to initialize
 !               itself. You must set it to indicate the start of every
@@ -113867,12 +113867,12 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !               is cheaper than evaluating derivatives in JAC and
 !               sometimes it is not - this depends on your problem.
 !
-!               If your problem is linear, I.E. Has the form
+!               If your problem is linear, I.E. has the form
 !               DU/DX = F(X,U) = J(X)*U + G(X)   FOR SOME MATRIX J(X)
-!               AND VECTOR G(X), THE JACOBIAN MATRIX  DF/DU = J(X).
+!               AND VECTOR G(X), THE JACOBIAN MATRIX  df/DU = J(X).
 !               Since you must provide a subroutine to evaluate F(X,U)
 !               analytically, it is little extra trouble to provide
-!               subroutine JAC for evaluating J(X) analytically.
+!               subroutine jac for evaluating J(X) analytically.
 !               Furthermore, in such cases, numerical differencing is
 !               much more expensive than analytic evaluation.
 !
@@ -113880,7 +113880,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                 derivatives automatically by numerical differences ...
 !                  YES -- SET info(5)=0
 !                   NO -- SET info(5)=1
-!                         and provide subroutine JAC for evaluating the
+!                         and provide subroutine jac for evaluating the
 !                         JACOBIAN MATRIX ****
 !
 !        info(6) -- stfode will perform much better if the Jacobian
@@ -113901,7 +113901,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !               banded matrices cost less time and storage than with
 !               FULL MATRICES IF  2*ml+MU .LT. neq.  IF YOU TELL THE
 !               code that the Jacobian matrix HAS a banded structure and
-!               you want to provide subroutine JAC to compute the
+!               you want to provide subroutine jac to compute the
 !               partial derivatives, then you must be careful to store
 !               the elements of the Jacobian matrix in the special form
 !               indicated in the description of JAC.
@@ -114018,7 +114018,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !      JAC -- IF YOU HAVE SET info(5)=0, YOU CAN IGNORE THIS PARAMETER
 !             by treating it as a dummy argument. (For some compilers
-!             you may have to write a dummy subroutine named  JAC  in
+!             you may have to write a dummy subroutine named  jac  in
 !             order to avoid problems associated with missing external
 !             routine names.)  Otherwise, you must provide a subroutine
 !             of the form
@@ -114030,10 +114030,10 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             the non-zero partial derivatives  DF(I)/DU(J)  for each
 !             DIFFERENTIAL EQUATION I=1,...,neq AND EACH SOLUTION
 !             COMPONENT J=1,...,neq , AND STORE THESE VALUES IN THE
-!             matrix PD. The elements of PD are set to zero before each
+!             matrix pd. The elements of pd are set to zero before each
 !             CALL TO JAC SO ONLY NON-ZERO ELEMENTS NEED TO BE DEFINED.
 !
-!             Subroutine JAC must not alter X, U(*), or NROWPD. You must
+!             Subroutine jac must not alter X, U(*), or NROWPD. You must
 !             declare the name JAC in an external statement in your
 !             program that calls stfode. NROWPD is the row dimension of
 !             the PD matrix and is assigned by the code. Therefore you
@@ -114060,7 +114060,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your calling
-!             program and your Jacobian subroutine JAC. They are not
+!             program and your Jacobian subroutine jac. They are not
 !             altered by stfode. If you do not need rpar or ipar, ignore
 !             these parameters by treating them as dummy arguments. If
 !             you do choose to use them, dimension them in your calling
@@ -114082,7 +114082,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !      y(*) -- contains the computed solution approximation at t.
 !             You may also be interested in the approximate derivative
-!             of the solution at t. It is contained in
+!             of the solution at t. it is contained in
 !             rwork(21),...,rwork(20+neq).
 !
 !      idid -- reports what the code did
@@ -114179,7 +114179,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                        value in rwork(12).
 !
 !             rwork(13)--which contains the current value of the
-!                        independent variable, I.E. The farthest point
+!                        independent variable, I.E. the farthest point
 !                        integration has reached. This will be different
 !                        from t only when interpolation has been
 !                        PERFORMED (idid=3).
@@ -114207,7 +114207,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !        Do not alter any quantity not specifically permitted below,
 !        in particular do not alter neq, t, y(*), rwork(*), iwork(*) or
-!        the differential equation in subroutine F. Any such alteration
+!        the differential equation in subroutine F. any such alteration
 !        constitutes a new problem and must be treated as such, I.E.
 !        You must start afresh.
 !
@@ -114246,7 +114246,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                     another step in the direction of tout.
 !
 !             idid = 2 OR 3, DEFINE A NEW TOUT AND CALL THE CODE AGAIN.
-!                     Tout must be different from t. You cannot change
+!                     Tout must be different from t. you cannot change
 !                     the direction of integration without restarting.
 !
 !                         *** FOLLOWING AN INTERRUPTED TASK ***
@@ -114297,7 +114297,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !     If stfode is to be used in an overlay situation, you must save and
 !     restore certain items used internally by stfode  (values in the
-!     common block DEBDF1). This can be accomplished as follows.
+!     common block debdf1). This can be accomplished as follows.
 !
 !     To save the necessary values upon return from stfode, simply call
 !        svco(rwork(22+neq),iwork(21+neq)).
@@ -114308,8 +114308,8 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !***********************************************************************
 !
 !***REFERENCES
-!   SHAMPINE L.F., WATTS H.A., *DEPAC - DESIGN OF A USER ORIENTED
-!   PACKAGE OF ODE SOLVERS*, SAND79-2374, SANDIA LABORATORIES, 1979.
+!   Shampine L.F., Watts H.A., *DEPAC - design of a user oriented
+!   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
 !
 !
 logical :: intout
@@ -114418,7 +114418,7 @@ subroutine rsco (rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
 ! This routine restores from rsav and isav the contents of common
-! block DEBDF1, which is used internally in the sfode package.
+! block debdf1, which is used internally in the sfode package.
 !-----------------------------------------------------------------------
 integer :: isav(*), i, ils, lenils, lenrls
 real :: rsav(*), rls
@@ -114825,7 +114825,7 @@ real :: vnorm
 !             VECTOR  U(*)=(U(1),U(2),...,U(neq)) , THE SUBROUTINE MUST
 !             evaluate the neq components of the system of differential
 !             EQUATIONS  DU/dx=F(X,U)  AND STORE THE DERIVATIVES IN THE
-!             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/dx *  FOR
+!             ARRAY uprime(*), THAT IS,  uprime(I) = * DU(I)/dx *  FOR
 !             EQUATIONS I=1,...,neq.
 !
 !             Subroutine F must not alter X or U(*). You must declare
@@ -114834,7 +114834,7 @@ real :: vnorm
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your program and
-!             subroutine F. They are not used or altered by hstart. If
+!             subroutine F. they are not used or altered by hstart. If
 !             you do not need rpar or ipar, ignore these parameters by
 !             treating them as dummy arguments. If you do choose to use
 !             them, dimension them in your program and in F as arrays
@@ -115094,18 +115094,18 @@ implicit none
 ! also be called by the user for any k up to the current order.
 ! (See detailed instructions in lsode usage documentation.)
 !-----------------------------------------------------------------------
-! THE COMPUTED VALUES IN dky ARE GOTTEN BY INTERPOLATION USING THE
-! NORDSIECK HISTORY ARRAY yh.  THIS ARRAY CORRESPONDS UNIQUELY TO A
-! VECTOR-VALUED POLYNOMIAL OF DEGREE NQCUR OR LESS, AND dky IS SET
-! TO THE k-TH DERIVATIVE OF THIS POLYNOMIAL AT t.
-! THE FORMULA FOR dky IS..
+! The computed values in dky are gotten by interpolation using the
+! Nordsieck history array yh.  This array corresponds uniquely to A
+! vector-valued polynomial of degree NQCUR or less, and dky is set
+! to the k-TH derivative of this polynomial at t.
+! The formula for dky is..
 !              Q
 !  dky(i)  =  SUM  C(j,k) * (t - TN)**(j-k) * h**(-j) * yh(i,j+1)
 !             j=k
 ! WHERE  C(j,k) = j*(j-1)*...*(j-k+1), Q = NQCUR, TN = TCUR, h = HCUR.
 ! THE QUANTITIES  NQ = NQCUR, L = NQ+1, N = NEQ, TN, AND h ARE
-! COMMUNICATED BY COMMON.  THE ABOVE SUM IS DONE IN REVERSE ORDER.
-! iflag IS RETURNED NEGATIVE IF EITHER k OR t IS OUT OF BOUNDS.
+! communicated by common.  The above sum is done in reverse order.
+! iflag is returned negative if either k or t is out of bounds.
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag, i, ic, ier, iownd, iowns, j, jb, jb2, &
 &jj, jj1, jp1, jstart, kflag, l, maxord, meth, miter, n, nfe, nje, &
@@ -115373,7 +115373,7 @@ do jb = 1,nq
 ksteps = ksteps + 1
 !-----------------------------------------------------------------------
 ! Up to 3 corrector iterations are taken.  A convergence test is
-! made on the R.M.S. Norm of each correction, weighted by the error
+! made on the R.M.S. norm of each correction, weighted by the error
 ! weight vector ewt.  The sum of the corrections is accumulated in the
 ! vector acor(i).  The yh array is not altered in the corrector loop.
 !-----------------------------------------------------------------------
@@ -115758,7 +115758,7 @@ common /debdf1/ rownd, rowns(210), &
 !-----------------------------------------------------------------------
 ! pjac is called by stod  to compute and process the matrix
 ! P = i - H*EL(1)*j , WHERE j IS AN APPROXIMATION TO THE JACOBIAN.
-! Here j is computed by the user-supplied routine JAC if
+! Here j is computed by the user-supplied routine jac if
 ! MITER = 1 OR 4, OR BY FINITE DIFFERENCING IF MITER = 2, 3, OR 5.
 ! IF MITER = 3, A DIAGONAL APPROXIMATION TO j IS USED.
 ! j IS STORED IN wm AND REPLACED BY P.  IF MITER .NE. 3, P IS THEN
@@ -115916,28 +115916,28 @@ common /debdf1/ rownd, rowns(210), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
 &nje, nqu
 !-----------------------------------------------------------------------
-! THIS ROUTINE MANAGES THE SOLUTION OF THE LINEAR SYSTEM ARISING FROM
+! This routine manages the solution of the linear system arising from
 ! A CHORD ITERATION.  IT IS CALLED BY stod  IF MITER .NE. 0.
-! IF MITER IS 1 OR 2, IT CALLS sgesl TO ACCOMPLISH THIS.
+! If miter is 1 or 2, it calls sgesl to accomplish this.
 ! IF MITER = 3 IT UPDATES THE COEFFICIENT h*el0 IN THE DIAGONAL
-! MATRIX, AND THEN COMPUTES THE SOLUTION.
-! IF MITER IS 4 OR 5, IT CALLS sgbsl.
-! COMMUNICATION WITH slvs USES THE FOLLOWING VARIABLES..
+! matrix, and then computes the solution.
+! If miter is 4 or 5, it calls sgbsl.
+! Communication with slvs uses the following variables..
 ! wm  = REAL WORK SPACE CONTAINING THE INVERSE DIAGONAL MATRIX IF MITER
-!       IS 3 AND THE LU DECOMPOSITION OF THE MATRIX OTHERWISE.
-!       STORAGE OF MATRIX ELEMENTS STARTS AT wm(3).
-!       wm ALSO CONTAINS THE FOLLOWING MATRIX-RELATED DATA..
+!       is 3 and the LU decomposition of the matrix otherwise.
+!       Storage of matrix elements starts at wm(3).
+!       wm also contains the following matrix-related data..
 !       wm(1) = sqrt(UROUND) (NOT USED HERE),
 !       wm(2) = HL0, THE PREVIOUS VALUE OF h*el0, USED IF MITER = 3.
 ! iwm = INTEGER WORK SPACE CONTAINING PIVOT INFORMATION, STARTING AT
-!       iwm(21), IF MITER IS 1, 2, 4, OR 5.  iwm ALSO CONTAINS THE
+!       iwm(21), if miter is 1, 2, 4, or 5.  iwm also contains the
 !       BAND PARAMETERS ML = iwm(1) AND MU = iwm(2) IF MITER IS 4 OR 5.
 ! x   = THE RIGHT-HAND SIDE VECTOR ON INPUT, AND THE SOLUTION VECTOR
-!       ON OUTPUT, OF LENGTH N.
+!       on output, of length N.
 ! tem = VECTOR OF WORK SPACE OF LENGTH N, NOT USED IN THIS VERSION.
 ! ier = OUTPUT FLAG (IN COMMON).  ier = 0 IF NO TROUBLE OCCURRED.
 !       ier = -1 IF A SINGULAR MATRIX AROSE WITH MITER = 3.
-! THIS ROUTINE ALSO USES THE COMMON VARIABLES el0, h, MITER, AND N.
+! This routine also uses the common variables el0, h, miter, and N.
 !-----------------------------------------------------------------------
 ier = 0
 go to (100, 100, 300, 400, 400), miter
@@ -116046,8 +116046,8 @@ real, intent(inout) :: abd(lda,*)
 !           The  ml+mu by ml+mu  upper left triangle and the
 !           ml by ml  lower right triangle are not referenced.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -116202,8 +116202,8 @@ real, intent(inout) :: b(*)
 !              call sgbsl(abd,lda,n,ml,mu,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -116733,7 +116733,7 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                        w (see argument list)
 !
 ! LATEST REVISION        JANUARY 1978 (BY THE AUTHORS)
-!                        MODIFIED 1986 BY A.H. MORRIS (NSWC)
+!                        modified 1986 by A.H. Morris (NSWC)
 !
 ! PURPOSE                sepell SOLVES FOR EITHER THE SECOND-ORDER
 !                        finite difference approximation or A
@@ -117025,7 +117025,7 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                          by the user for work space.  Let
 !                          K=int(LOG2(n+1))+1 AND SET  L=2**(K+1).
 !                          Then (K-2)*L+K+10*n+12*m+27 will suffice
-!                          as a length of w.  The actual length of w in
+!                          as a length of w.  the actual length of w in
 !                          the calling routine must be set in w(1) (see
 !                          ierror=11).
 !
@@ -117118,12 +117118,12 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 ! HISTORY                DEVELOPED AT NCAR DURING 1975-76.
 !
 ! ALGORITHM              sepell AUTOMATICALLY DISCRETIZES THE SEPARABLE
-!                        ELLIPTIC EQUATION WHICH IS THEN SOLVED BY A
-!                        GENERALIZED CYCLIC REDUCTION ALGORITHM IN THE
-!                        SUBROUTINE, blktri.  THE FOURTH-ORDER SOLUTION
-!                        IS OBTAINED USING DEFERRED CORRECTIONS, WHICH
-!                        IS DESCRIBED AND REFERENCED IN SECTIONS,
-!                        REFERENCES AND METHOD.
+!                        elliptic equation which is then solved by A
+!                        generalized cyclic reduction algorithm in the
+!                        subroutine, blktri.  The fourth-order solution
+!                        is obtained using deferred corrections, which
+!                        is described and referenced in sections,
+!                        references and method.
 !
 ! ACCURACY AND TIMING    THE FOLLOWING COMPUTATIONAL RESULTS WERE
 !                        obtained by solving the sample problem at the
@@ -117152,10 +117152,10 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                        machine dependent constant that is used.
 !
 ! REFERENCES             KELLER, H.B., NUMERICAL METHODS FOR TWO-POINT
-!                          BOUNDARY-VALUE PROBLEMS, BLAISDEL (1968),
-!                          WALTHAM, MASS.
+!                          boundary-value problems, Blaisdel (1968),
+!                          WALTHAM, mass.
 !
-!                        Swarztrauber, P., And R. Sweet (1975),
+!                        Swarztrauber, P., And R. sweet (1975),
 !                          efficient Fortran subprograms for the
 !                          solution of elliptic partial differential
 !                          equations.  NCAR technical note
@@ -117300,7 +117300,7 @@ np = 1
 if (kswx .eq. 1) mp = 0
 if (kswy .eq. 1) np = 0
 !
-!     Set dlx,dly and size of block TRI-diagonal system generated
+!     Set dlx,dly and size of block tri-diagonal system generated
 !     in NINT,mint
 !
 dlx = (bit-ait)/float(m)
@@ -118064,7 +118064,7 @@ real :: cnv, eps
 !
 !***********************************************************************
 !
-!          VERSION  2  OCTOBER 1976  INCLUDING ERRATA  OCTOBER 1976
+!          Version  2  October 1976  including errata  October 1976
 !
 !         Documentation for this program is given in
 !
@@ -118279,13 +118279,13 @@ real :: cnv, eps
 !
 ! blktr1 solves the linear system
 !
-! b  CONTAINS THE ROOTS OF ALL THE b POLYNOMIALS
-! w1,W2,W3,WD,WW,WU  ARE ALL WORKING ARRAYS
-! PRDCT IS EITHER prodp OR prod0 DEPENDING ON WHETHER THE BOUNDARY
-! CONDITIONS IN THE m DIRECTION ARE PERIODIC OR NOT
-! CPRDCT IS EITHER cprodp OR cprod0 WHICH ARE THE COMPLEX VERSIONS
-! OF prodp AND prod0. THESE ARE CALLED IN THE EVENT THAT SOME
-! OF THE ROOTS OF THE b SUB P POLYNOMIAL ARE COMPLEX
+! b  contains the roots of all the b polynomials
+! w1,W2,W3,WD,WW,WU  are all working arrays
+! PRDCT is either prodp or prod0 depending on whether the boundary
+! conditions in the m direction are periodic or not
+! CPRDCT is either cprodp or cprod0 which are the complex versions
+! of prodp and prod0. These are called in the event that some
+! of the roots of the b sub P polynomial are complex
 !
 !
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
@@ -119568,8 +119568,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain the next seed ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
    xhi = ix/b16
@@ -119614,10 +119614,10 @@ real, intent(inout) :: x(n)
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
@@ -119694,10 +119694,10 @@ double precision, intent(inout) :: x(n)
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, xalo, xhi
 double precision :: s, t
@@ -119775,10 +119775,10 @@ real :: t
 !     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
 !     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
@@ -119844,10 +119844,10 @@ integer :: k, leftlo
 !     u IS THE UNIFORM VARIATE THAT IS GENERATED AND v = 1 - u.
 !     u AND v ARE POSITIVE. IT IS ASSUMED THAT 1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: u, v
 double precision :: t
@@ -119918,10 +119918,10 @@ real :: t
 !     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
@@ -119991,10 +119991,10 @@ integer :: j, k, leftlo
 !     u AND v ARE POSITIVE AND d = u - 0.5. IT IS ASSUMED THAT
 !     1 .LE. ix .LT. p.
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: u, v, d
 double precision :: t
@@ -120069,10 +120069,10 @@ real :: s, t
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 real, intent(inout) :: x(n), y(n)
 integer :: a, b15, b16, fhi, p, xalo, xhi
@@ -120135,10 +120135,10 @@ integer :: k, l, leftlo
 !
 !     IT IS ASSUMED THAT 0 .LT. ix .LT. p
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        LINUS SCHRAGE
-!        UNIVERSITY OF CHICAGO
-!     ADAPTED BY A.H. MORRIS (NSWC)
+!     Written by
+!        linus schrage
+!        University of Chicago
+!     adapted by A.H. Morris (NSWC)
 !-------------------
 double precision, intent(inout) :: x(n), y(n)
 double precision :: s, t
@@ -120240,8 +120240,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain new seeds ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
 10 xhi = ix/b16
@@ -120344,8 +120344,8 @@ do i = 1,n
 !
 !        Use the linus schrage code to obtain new seeds ix.
 !
-!        REFERENCE. SCHRAGE, LINUS, A MORE PORTABLE FORTRAN
-!        RANDOM NUMBER GENERATOR, ACM TRANS. MATH SOFTWARE 5
+!        Reference. Schrage, linus, a more portable Fortran
+!        random number generator, ACM Trans. Math Software 5
 !        (1979), PP. 132-138.
 !
 10 xhi = ix/b16
@@ -120591,7 +120591,7 @@ real :: sum
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -120599,11 +120599,11 @@ real :: sum
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
-!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
-!                  DATA IN THE ARRAY a. a SHOULD NEVER BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  lower triangular matrix in the Cholesky
+!                  decomposition of a replaces the original
+!                  data in the array a. a should never be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -120637,10 +120637,10 @@ real :: sum
 !     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     Morrison, donald F., Multivariate statistical methods,
+!     Morrison, Donald F., Multivariate statistical methods,
 !     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     Scheuer, E. And Stoller, D. S., On the generation of
+!     Scheuer, E. and Stoller, D. S., On the generation of
 !     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
@@ -120708,7 +120708,7 @@ integer :: i, j, max
 !
 !           Generation of n random normal vectors of length m
 !           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. It is
+!           vector fmu and variance-covariance matrix a. it is
 !           assumed that A is a diagonal matrix.
 !
 !                          ---------------
@@ -120730,7 +120730,7 @@ integer :: i, j, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -120739,10 +120739,10 @@ integer :: i, j, max
 !                  are stored in the array a. a is an array
 !                  of length m or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
-!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  square roots of the elements of a replace
+!                  the original data in A. A should not be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -120839,7 +120839,7 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -120847,11 +120847,11 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !                  stored in packed form. The array a must
 !                  be of length (m*(m + 1))/2 or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  LOWER TRIANGULAR MATRIX IN THE CHOLESKY
-!                  DECOMPOSITION OF A REPLACES THE ORIGINAL
-!                  DATA IN THE ARRAY a. a SHOULD NEVER BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  lower triangular matrix in the Cholesky
+!                  decomposition of a replaces the original
+!                  data in the array a. a should never be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE
@@ -120885,10 +120885,10 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !     digital simulation, john wiley and sons, new york, 1973,
 !     PP. 215 - 217.
 !
-!     Morrison, donald F., Multivariate statistical methods,
+!     Morrison, Donald F., Multivariate statistical methods,
 !     mcgraw-hill, new york, 1967, PP. 80 - 81.
 !
-!     Scheuer, E. And Stoller, D. S., On the generation of
+!     Scheuer, E. and Stoller, D. S., On the generation of
 !     normal random vectors, Technometrics, volume 4, may, 1962,
 !     PP. 278 - 281.
 !
@@ -120957,7 +120957,7 @@ integer :: i, j, max
 !
 !           Generation of n random normal vectors of length m
 !           from a multivariate normal distribution with mean
-!           vector fmu and variance-covariance matrix a. It is
+!           vector fmu and variance-covariance matrix a. it is
 !           assumed that A is a diagonal matrix.
 !
 !                          ---------------
@@ -120979,7 +120979,7 @@ integer :: i, j, max
 !
 !        m       - LENGTH OF THE DESIRED RANDOM VECTORS.
 !                  IT IS ASSUMED THAT m .GE. 2. m SHOULD
-!                  NOT BE MODIFIED BY THE USER ON A LATER
+!                  not be modified by the user on a later
 !                  CALL TO THE ROUTINE (WHEN mo .NE. 0).
 !
 !        a       - VARIANCE-COVARIANCE MATRIX OF ORDER m.
@@ -120988,10 +120988,10 @@ integer :: i, j, max
 !                  are stored in the array a. a is an array
 !                  of length m or larger.
 !
-!                  ON AN INITIAL CALL TO THE ROUTINE, THE
-!                  SQUARE ROOTS OF THE ELEMENTS OF A REPLACE
-!                  THE ORIGINAL DATA IN A. A SHOULD NOT BE
-!                  MODIFIED BY THE USER ON A LATER CALL TO
+!                  On an initial call to the routine, the
+!                  square roots of the elements of a replace
+!                  the original data in A. A should not be
+!                  modified by the user on a later call to
 !                  THE ROUTINE (WHEN mo .NE. 0).
 !
 !        fmu     - MEAN VECTOR OF DIMENSION m OF THE

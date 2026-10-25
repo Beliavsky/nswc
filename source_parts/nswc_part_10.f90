@@ -50,7 +50,7 @@ do mu = 1,n
 !
 !           Compute the coefficients for the l-TH
 !           polynomial forming the cubic spline. The
-!           coefficients are stored in c. This code
+!           coefficients are stored in c. this code
 !           is from the subroutine bspp.
 !
       do j = 1,k
@@ -486,14 +486,14 @@ real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
-!                               MODIFIED BY ALFRED H. MORRIS
-!                               NAVAL SURFACE WEAPONS CENTER
-!                                          DAHLGREN VIRGINIA
+!                               Modified by Alfred H. Morris
+!                               naval surface weapons center
+!                                          Dahlgren Virginia
 !
 ! This subroutine determines the parameters necessary to
 ! compute an interpolatory surface passing through a rect-
@@ -557,8 +557,8 @@ real, intent(in) :: sigma
 !            increasing,
 !        = 3 THE OPTION VECTOR HAS AN ERROR.
 !
-! THIS SUBROUTINE REFERENCES PACKAGE MODULES ceez, TERMS,
-! AND snhcsh.
+! This subroutine references package modules ceez, terms,
+! and snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -878,13 +878,13 @@ real, intent(in) :: xx, yy, x(m), y(n)
 real :: z(iz,n), zp(m,n,*)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                       CODED BY A. K. CLINE AND R. J. RENKA
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                       coded by A. K. Cline and R. J. Renka
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This function interpolates a surface at a given coordinate
-! pair using A BI-spline under tension. The subroutine SURF1
+! pair using A BI-spline under tension. The subroutine surf1
 ! should be called earlier to determine certain necessary
 ! parameters.
 !
@@ -925,7 +925,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULES intrvl AND
+! This function references package modules intrvl and
 ! snhcsh.
 !
 !-----------------------------------------------------------
@@ -1029,15 +1029,15 @@ real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
 real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
 !
-!                      FROM THE SPLINE UNDER TENSION PACKAGE
-!                                 CODED BY ALAN KAYLOR CLINE
-!                            DEPARTMENT OF COMPUTER SCIENCES
-!                              UNIVERSITY OF TEXAS AT AUSTIN
+!                      From the spline under tension package
+!                                 coded by alan Kaylor Cline
+!                            department of computer sciences
+!                              University of Texas at Austin
 !
 ! This subroutine maps values onto a surface at every point
 ! of a grid equally spaced in both x and y coordinates. The
 ! surface interpolation is performed using A BI-spline
-! under tension. The subroutine SURF1 or NSURF1 should be
+! under tension. The subroutine surf1 or NSURF1 should be
 ! called earlier to determine certain necessary parameters.
 !
 ! On input--
@@ -1093,7 +1093,7 @@ real, intent(in) :: sigma
 !
 ! None of the input parameters are altered.
 !
-! THIS FUNCTION REFERENCES PACKAGE MODULE snhcsh.
+! This function references package module snhcsh.
 !
 !-----------------------------------------------------------
 !
@@ -1259,7 +1259,7 @@ integer, intent(in) :: k, ka, kz, m, n
 integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     bstrp1 computes B-spline interpolation coefficients for
-!     n sets of data stored in the columns of the array z. The
+!     n sets of data stored in the columns of the array z. the
 !     coefficients are stored in the rows of A.
 !
 !     IT IS ASSUMED THAT kz .GE. m AND ka .GE. n.
@@ -1610,8 +1610,8 @@ real :: x(n), y(n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine creates a thiessen triangulation of n
@@ -1866,8 +1866,8 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds node kk to a triangulation of a set
@@ -2010,8 +2010,8 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds a boundary node to a triangulation
@@ -2148,8 +2148,8 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine adds an interior node to a triangulation
@@ -2307,8 +2307,8 @@ integer, intent(inout) :: iarr(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine shifts a set of contiguous elements of an
@@ -2421,8 +2421,8 @@ integer :: tindx
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This subroutine swaps the diagonals in a convex quadri-
@@ -2607,8 +2607,8 @@ real, intent(in) :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This function decides whether or not to replace A
@@ -2707,8 +2707,8 @@ integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This function returns the index of nabor in the
@@ -2766,8 +2766,8 @@ real :: x(*), y(*)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine locates a point P in a thiessen triangu-
@@ -3015,7 +3015,7 @@ i3 = n3
 return
 !
 ! nf and nl are adjacent boundary nodes which are visible
-!   from P.  Find the first visible boundary node.
+!   from P.  find the first visible boundary node.
 ! Set next to the first neighbor of nf.
 !
 16 indx = 1
@@ -3096,8 +3096,8 @@ real, intent(inout) :: zxzy(2,n)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a triangulation of n nodes in the plane with
@@ -3348,13 +3348,13 @@ real, intent(inout) :: dx, dy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a thiessen triangulation of n points in the plane
 ! with associated data values z, this subroutine estimates
-! x and y partial derivatives at node k.  The derivatives
+! x and y partial derivatives at node k.  the derivatives
 ! are taken to be the partials at k of a quadratic function
 ! which interpolates z(k) and fits the data values at a set
 ! of nearby nodes in a weighted least squares sense. A mar-
@@ -3643,8 +3643,8 @@ real, intent(inout) :: row(6)
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   This routine sets up the i-TH row of an augmented RE-
@@ -3732,8 +3732,8 @@ real, intent(inout) :: ds
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a thiessen triangulation of N nodes and an array
@@ -3957,8 +3957,8 @@ real, intent(out) :: pz
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given a triangulation of a set of points in the plane,
@@ -4157,7 +4157,7 @@ if ((xp-x1)*(x2-x1) + (yp-y1)*(y2-y1) .gt. 0.) go to 8
 n2 = n1
 go to 4
 !
-! n2 is the closest boundary point to P.  Compute partial
+! n2 is the closest boundary point to P.  compute partial
 !   derivatives at n2.
 !
 5 if (iflag .ne. 1) go to 6
@@ -4238,8 +4238,8 @@ real, intent(inout) :: w, wx, wy
 !
 !***********************************************************
 !
-!                                               Robert renka
-!                                       oak ridge natl. Lab.
+!                                               Robert Renka
+!                                       Oak Ridge Natl. Lab.
 !                                             (615) 576-5139
 !
 !   Given function values and first partial derivatives at
@@ -4771,7 +4771,7 @@ integer, intent(inout) :: iwork(iwklen)
 !     NOTE THAT  DEGREE ,  npolys ,  psiwid  AND  alfl   ARE  RETURNED
 !     in  iwork (1-4), respectively.
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     December 10, 1984
 !     ****************
@@ -4942,7 +4942,7 @@ integer :: i, rowlen
 !     This subroutine is called by  allot .  It is not  called  by
 !     the user directly.
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     October 16, 1984
 !     ****************
@@ -5070,7 +5070,7 @@ integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
 !                         (dimen+curdeg-kj)
 !
 !
-!     DATE LAST MODIFIED
+!     Date last modified
 !     ---- ---- --------
 !     October 16, 1984
 !     ****************
@@ -5180,7 +5180,7 @@ real :: runtot, rntot1
 !     This subroutine calls  scalpm ,  scaldn , and  incdg .
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !     ****************
 !
 !     ***************
@@ -5263,7 +5263,7 @@ real :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  gnrtp  and not by the user.
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -5608,7 +5608,7 @@ real, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     The subroutine  meval1  is called to do the actual evaluation.
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -5700,7 +5700,7 @@ real :: runtot, rntot1
 !          ACM transactions on mathematical software
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -5970,7 +5970,7 @@ double precision :: runtot, rntot1
 !     This subroutine calls  dscalp ,  dscald , and  dincdg .
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !     ****************
 !
 !     ***************
@@ -6053,7 +6053,7 @@ double precision :: arc, runtot, rntot1, rntot2
 !     This subroutine is called by  dgnrtp  and not by the user.
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -6399,7 +6399,7 @@ double precision, intent(inout) :: evlvls(nepts), temp(dimen)
 !
 !     The subroutine  dmevl1  is called to do the actual evaluation.
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -6491,7 +6491,7 @@ double precision :: runtot, rntot1
 !          ACM transactions on mathematical software
 !
 !
-!     MODIFIED BY A.H. MORRIS (NSWC)
+!     Modified by A.H. Morris (NSWC)
 !
 !     ****************
 !
@@ -6710,7 +6710,7 @@ real :: f
 ! 47,95,191 and 383. The formulae are based on the optimal
 ! extension of the 3-point Gauss formula.  Details of
 ! the formulae are given in *the optimum addition of points
-! to quadrature formulae* by T.N.L. Patterson,maths.Comp.
+! to quadrature formulae* by T.N.L. patterson,maths.Comp.
 ! Vol 22,847-856,1968.
 !                     *** INPUT ***
 ! A       LOWER LIMIT OF INTEGRATION.
@@ -7432,7 +7432,7 @@ external f
 !                       than the smallest interval considered up to now
 !           extrap    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
 !                       is attempting to perform extrapolation
-!                       I.E. Before subdividing the smallest interval
+!                       I.E. before subdividing the smallest interval
 !                       we try to decrease the value of erlarg.
 !           noext     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
 !                       is no longer allowed (true value)
@@ -8678,7 +8678,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           RESG   - result OF THE 7-POINT GAUSS FORMULA
 !           RESK   - result OF THE 15-POINT KRONROD FORMULA
 !           RESKH  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -8737,8 +8737,8 @@ implicit none
 !     ..................................................................
 !
 ! 1.        qpsrt
-!           ORDERING ROUTINE
-!              STANDARD FORTRAN SUBROUTINE
+!           ordering routine
+!              standard Fortran subroutine
 !              real version
 !
 ! 2.        PURPOSE
@@ -8887,7 +8887,7 @@ real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 ! 1.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -9108,7 +9108,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -9292,7 +9292,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -10521,7 +10521,7 @@ external f
 !                       than the smallest interval considered up to now
 !           extrap    - LOGICAL VARIABLE DENOTING THAT THE ROUTINE
 !                       is attempting to perform extrapolation
-!                       I.E. Before subdividing the smallest interval
+!                       I.E. before subdividing the smallest interval
 !                       we try to decrease the value of erlarg.
 !           noext     - LOGICAL VARIABLE DENOTING THAT EXTRAPOLATION
 !                       is no longer allowed (true value)

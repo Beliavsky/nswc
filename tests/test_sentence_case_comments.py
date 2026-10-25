@@ -74,15 +74,37 @@ end subroutine other
         self.assertIn('! 10  continue', result)
         self.assertIn('Data General computers.', result)
         self.assertIn('A normal distribution is used.', result)
-        self.assertIn('A.H. MORRIS.', result)
+        self.assertIn('A.H. Morris.', result)
         self.assertIn('!     N is a mathematical symbol here.', result)
         self.assertEqual(sentence_case(result).text, result)
 
-    def test_reference_paragraphs_and_author_names_unchanged(self):
+    def test_reference_paragraphs_and_author_names(self):
         source = '!     WRITTEN BY A.H. MORRIS.\n!     FROM THE BOOK ON LINEAR EQUATIONS.\n'
         result = sentence_case(source)
-        self.assertEqual(result.text, source)
-        self.assertEqual(result.retained['reference/author/history paragraph'], 2)
+        self.assertEqual(result.text, '!     Written by A.H. Morris.\n!     From the book on linear equations.\n')
+
+    def test_adaptation_credit_is_readable_prose(self):
+        source = '''integer function ipmpar(i)
+integer :: i
+!     ipmpar IS AN ADAPTATION OF THE FUNCTION I1MACH, WRITTEN BY
+!     P.A. FOX, A.D. HALL, AND N.L. SCHRYER (BELL LABORATORIES).
+!     ipmpar WAS FORMED BY A.H. MORRIS (NSWC). THE CONSTANTS ARE
+!     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
+end function ipmpar
+'''
+        result = sentence_case(source).text
+        self.assertIn('ipmpar is an adaptation of the function i1mach, written by', result)
+        self.assertIn('P.A. Fox, A.D. Hall, and N.L. Schryer (Bell Laboratories).', result)
+        self.assertIn('ipmpar was formed by A.H. Morris (NSWC). The constants are', result)
+        self.assertIn('from Bell Laboratories, NSWC, and other sources.', result)
+        self.assertEqual(sentence_case(result).text, result)
+
+    def test_author_institution_and_initials_are_not_sentences(self):
+        source = ('! WRITTEN BY ALFRED H. MORRIS, JR. AND A.D. HALL.\n'
+                  '! NAVAL SURFACE WARFARE CENTER\n')
+        result = sentence_case(source).text
+        self.assertEqual(result, '! Written by Alfred H. Morris, Jr. and A.D. Hall.\n'
+                         '! Naval Surface Warfare Center\n')
 
     def test_unfamiliar_words_are_retained_and_reported(self):
         result = sentence_case('!     THIS ROUTINE COMPUTES THE ZZZUNREVIEWED VALUE.\n')

@@ -801,10 +801,10 @@ real :: c, f, g, r, s, b2, radix
 logical :: noconv
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
 !
 !     This subroutine balances a complex matrix and isolates
 !     eigenvalues whenever possible.
@@ -1363,10 +1363,10 @@ real, intent(inout) :: zr(nm,m), zi(nm,m)
 real :: s
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     cbabk2, WHICH IS A COMPLEX VERSION OF balbak,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.ii-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a complex general
 !     matrix BY back transforming those of the corresponding
@@ -1911,10 +1911,10 @@ double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     CBALANCE, WHICH IS A COMPLEX VERSION OF BALANCE,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     CBALANCE, which is a complex version of balance,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
 !
 !     dcbal balances a double precision complex matrix and
 !     isolates eigenvalues whenever possible.
@@ -2471,10 +2471,10 @@ double precision, intent(inout) :: zr(nm,m), zi(nm,m)
 double precision :: s
 !-----------------------------------------------------------------------
 !
-!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
-!     cbabk2, WHICH IS A COMPLEX VERSION OF balbak,
-!     NUM. MATH. 13, 293-304(1969) BY PARLETT AND REINSCH.
-!     HANDBOOK FOR AUTO. COMP., VOL.ii-LINEAR ALGEBRA, 315-326(1971).
+!     This subroutine is a translation of the Algol procedure
+!     cbabk2, which is a complex version of balbak,
+!     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a double precision
 !     complex matrix BY back transforming those of the corresponding
@@ -3063,8 +3063,8 @@ implicit none
 ! execution time may be achieved through the use of the
 ! following subroutine, which operates on column vectors.
 !     subroutine col(v1, v2, xmlt, notrow, k)
-! this subroutine adds to the vector V1 a multiple of the
-! vector V2 (elements 1 through k excluding NOTROW).
+! this subroutine adds to the vector v1 a multiple of the
+! vector v2 (elements 1 through k excluding NOTROW).
 !     dimension v1(k), v2(k)
 !     kend = notrow - 1
 !     kstart = notrow + 1
@@ -3511,7 +3511,7 @@ real :: ajj, sav, ss, y
 !        .
 !        call ortho(m, n, qr, ms, s, ip, exit)
 !
-!        WHERE
+!        Where
 !        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
 !        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
 !             (1 .LT. n .LE. m).
@@ -3520,21 +3520,21 @@ real :: ajj, sav, ss, y
 !             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             QR IN THE CALLING PROGRAM.
+!             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
 !        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
-!             THE IMAGES OF THE PERMUTATION CORRESPONDING TO THE PERMU-
-!             TATION MATRIX P.
-!        EXIT IS SET TO THE VALUE .TRUE. IF THE RANK OF A IS EQUAL TO n
-!             AND .FALSE. OTHERWISE.
-!      METHOD
-!        THE MATRIX A IN THE ARRAY qr IS REDUCED TO UPPER TRIANGULAR
-!        FORM USING ORTHOGONAL TRANSFORMATION WITH PARTIAL PIVOTING.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .True. If the rank of A is equal to n
+!             and .False. Otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -3618,32 +3618,32 @@ real :: sav, ss, y
 !        .
 !        call orsol(m, n, qr, ms, s, ip, x)
 !
-!        WHERE
-!        m  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
-!        n  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!        Where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
 !             (1 .LT. n .LE. m).
-!        QR IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR FACTORS
-!           OF A PRODUCED BY ORTHO.
-!        ms IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!           QR IN THE CALLING PROGRAM.
-!        s  IS A REAL INPUT ARRAY, THE RELEVANT PARTS OF Q PRODUCED BY
-!           ORTHO.
-!        ip IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
-!           PRODUCED BY ORTHO.
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by ortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
+!           ortho.
+!        ip is an integer input array, the permutation information
+!           produced by ortho.
 !        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
 !        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
 !           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
-!           WHOSE LENGTH IS THE MINIMUM OF ALL RESIDUAL B - AX.
-!      METHOD
+!           whose length is the minimum of all residual B - AX.
+!      Method
 !        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
 !        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
-!        WHICH CAN BE CHECKED BY INTERROGATING THE LOGICAL OUTPUT
-!        VARIABLE PRODUCED BY ORTHO.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!        which can be checked by interrogating the logical output
+!        variable produced by ortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -3741,7 +3741,7 @@ real :: spmpar
 !        orimp executes the iteration cycle
 !              (1)  AR = b - AX
 !              (2)  x = x + r
-!        with a given initial x.  The residual vector b - AX is computed
+!        with a given initial x.  the residual vector b - AX is computed
 !        to high accuracy by double precision.  orsol is then used to
 !        solve (1).
 !
@@ -3863,7 +3863,7 @@ integer :: i, j, jp, k, kj, nn
 !        .
 !        call dortho(m, n, qr, ms, s, ip, exit)
 !
-!        WHERE
+!        Where
 !        m    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
 !        n    IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A,
 !             (1 .LT. n .LE. m).
@@ -3872,21 +3872,21 @@ integer :: i, j, jp, k, kj, nn
 !             qr(i,j), i .LE. j, AND THE RELEVANT PARTS OF Q IN qr(i,j),
 !             i .GT. j.
 !        ms   IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!             QR IN THE CALLING PROGRAM.
+!             QR in the calling program.
 !        s    IS A REAL OUTPUT ARRAY, THE RELEVANT PARTS OF Q.
 !        ip   IS AN INTEGER OUTPUT ARRAY CONTAINING IN ip(i), i=1,...,n,
-!             THE IMAGES OF THE PERMUTATION CORRESPONDING TO THE PERMU-
-!             TATION MATRIX P.
-!        EXIT IS SET TO THE VALUE .TRUE. IF THE RANK OF A IS EQUAL TO n
-!             AND .FALSE. OTHERWISE.
-!      METHOD
-!        THE MATRIX A IN THE ARRAY qr IS REDUCED TO UPPER TRIANGULAR
-!        FORM USING ORTHOGONAL TRANSFORMATION WITH PARTIAL PIVOTING.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!             the images of the permutation corresponding to the PERMU-
+!             TATION matrix P.
+!        Exit is set to the value .True. If the rank of A is equal to n
+!             and .False. Otherwise.
+!      Method
+!        the matrix A in the array qr is reduced to upper triangular
+!        form using orthogonal transformation with partial pivoting.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -3968,32 +3968,32 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !        .
 !        call dorsol(m, n, qr, ms, s, ip, x)
 !
-!        WHERE
-!        m  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF ROWS OF A.
-!        n  IS AN INTEGER INPUT VARIABLE, THE NUMBER OF COLUMNS OF A
+!        Where
+!        m  is an integer input variable, the number of rows of A.
+!        n  is an integer input variable, the number of columns of A
 !             (1 .LT. n .LE. m).
-!        QR IS A REAL INPUT ARRAY, THE ORTHOGONAL AND TRIANGULAR FACTORS
-!           OF A PRODUCED BY dortho.
-!        ms IS AN INTEGER INPUT VARIABLE, THE LEADING DIMENSION OF
-!           QR IN THE CALLING PROGRAM.
-!        s  IS A REAL INPUT ARRAY, THE RELEVANT PARTS OF Q PRODUCED BY
+!        QR is a real input array, the orthogonal and triangular factors
+!           of a produced by dortho.
+!        ms is an integer input variable, the leading dimension of
+!           QR in the calling program.
+!        s  is a real input array, the relevant parts of Q produced by
 !           dortho.
-!        ip IS AN INTEGER INPUT ARRAY, THE PERMUTATION INFORMATION
-!           PRODUCED BY dortho.
+!        ip is an integer input array, the permutation information
+!           produced by dortho.
 !        x  AS A REAL INPUT ARRAY IS THE RIGHT-HAND SIDE B OF AX = B.
 !        x  AS A REAL OUTPUT ARRAY IS x(i), i = 1, ..., n, THE LEAST
 !           SQUARES SOLUTION, AND x(j), j = n+1, ..., m, THE VECTOR
-!           WHOSE LENGTH IS THE MINIMUM OF ALL RESIDUAL B - AX.
-!      METHOD
+!           whose length is the minimum of all residual B - AX.
+!      Method
 !        THE FACTORED SYSTEM QRX = PAX = PB ARE SOLVED IN THE SEQUENCE
 !        OF QY = PB AND RX = y. FULL RANK FOR THE MATRIX A IS ASSUMED
-!        WHICH CAN BE CHECKED BY INTERROGATING THE LOGICAL OUTPUT
-!        VARIABLE PRODUCED BY dortho.
-!      REFERENCES
-!        (1) PETER BUSINGER AND G.H. GOLUB, LINEAR LEAST SQUARES SOLU-
-!            TIONS BY HOUSEHOLDER TRANSFORMATIONS, NUMER. MATH. 7(1965),
+!        which can be checked by interrogating the logical output
+!        variable produced by dortho.
+!      References
+!        (1) peter Businger and G.H. Golub, linear least squares SOLU-
+!            TIONS by Householder transformations, numer. Math. 7(1965),
 !            269-276.
-!        (2) N.K. Tsao and P.J. Nikolai, procedures using orthogonal
+!        (2) N.K. Tsao and P.J. nikolai, procedures using orthogonal
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
@@ -4079,15 +4079,15 @@ real :: spmpar
 !     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
-!                   CALLED FOR THE FIRST TIME.
+!                   called for the first time.
 !                      ind = 0      ORIGINAL CALL
 !                      ind .NE. 0   SUBSEQUENT CALLS
-!                   ON SUBSEQUENT CALLS A NEW SET b OF EQUATIONS CAN
-!                   BE SOLVED (USING THE SAME COEFFICIENT MATRIX a).
-!                   IT IS ASSUMED THAT A, mda, m, n, krank, iwork,
-!                   liw, AND THE FIRST 2*min(m,n) LOCATIONS OF WORK
-!                   HAVE NOT BEEN MODIFIED BY THE USER. re, ae, AND
-!                   ksure ARE NOT USED.
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
 !
 !     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
@@ -4149,13 +4149,13 @@ real :: spmpar
 !                   .GT. 0  - INPUT ERROR
 !
 !----------------
-!     THE SUBROUTINES u11ls, u12ls, u11us, AND u12us WERE WRITTEN BY
-!     T. MANTEUFFEL (LANL) IN 1981. THE DRIVER ROUTINE lsqr WAS WRITTEN
-!     BY A.H. MORRIS (NSWC) IN 1991.
+!     The subroutines u11ls, u12ls, u11us, and u12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine lsqr was written
+!     by A.H. Morris (NSWC) in 1991.
 !----------------
-!     REFERENCE.  MANTEUFFEL, T., AN INTERVAL ANALYSIS APPROACH TO RANK
-!                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS,
-!                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
+!     Reference.  Manteuffel, T., An interval analysis approach to rank
+!                 determination in linear least squares problems,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
 integer, intent(inout) :: iwork(liw)
@@ -5179,15 +5179,15 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !     Input..
 !
 !     IND           INTEGER WHICH INDICATES IF THE ROUTINE IS BEING
-!                   CALLED FOR THE FIRST TIME.
+!                   called for the first time.
 !                      ind = 0      ORIGINAL CALL
 !                      ind .NE. 0   SUBSEQUENT CALLS
-!                   ON SUBSEQUENT CALLS A NEW SET b OF EQUATIONS CAN
-!                   BE SOLVED (USING THE SAME COEFFICIENT MATRIX a).
-!                   IT IS ASSUMED THAT A, mda, m, n, krank, iwork,
-!                   liw, AND THE FIRST 2*min(m,n) LOCATIONS OF WORK
-!                   HAVE NOT BEEN MODIFIED BY THE USER. re, ae, AND
-!                   ksure ARE NOT USED.
+!                   on subsequent calls a new set b of equations can
+!                   be solved (using the same coefficient matrix a).
+!                   It is assumed that A, mda, m, n, krank, iwork,
+!                   liw, and the first 2*min(m,n) locations of work
+!                   have not been modified by the user. re, ae, and
+!                   ksure are not used.
 !
 !     a(,)          LINEAR COEFFICIENT MATRIX OF AX=b, WITH mda THE
 !      mda,m,n      ACTUAL FIRST DIMENSION OF A IN THE CALLING PROGRAM.
@@ -5249,13 +5249,13 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                   .GT. 0  - INPUT ERROR
 !
 !----------------
-!     THE SUBROUTINES du11ls, du12ls, du11us, AND du12us WERE WRITTEN BY
-!     T. MANTEUFFEL (LANL) IN 1981. THE DRIVER ROUTINE dlsqr WAS WRITTEN
-!     BY A.H. MORRIS (NSWC) IN 1991.
+!     The subroutines du11ls, du12ls, du11us, and du12us were written by
+!     T. Manteuffel (LANL) in 1981. The driver routine dlsqr was written
+!     by A.H. Morris (NSWC) in 1991.
 !----------------
-!     REFERENCE.  MANTEUFFEL, T., *AN INTERVAL ANALYSIS APPROACH TO RANK
-!                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS*,
-!                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
+!     Reference.  Manteuffel, T., *An interval analysis approach to rank
+!                 determination in linear least squares problems*,
+!                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(mda,n), b(mdb,*)
 double precision, intent(in) :: re, ae
@@ -6249,9 +6249,9 @@ real :: factor, hmax, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -6305,20 +6305,20 @@ real :: factor, hmax, sm1, tmp, z
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -6332,8 +6332,8 @@ real :: factor, hmax, sm1, tmp, z
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -6501,9 +6501,9 @@ real :: factor, hmax, sm1, tmp, z
 !     dimension d(l) where l = min(m,n)
 !     dimension rnorm(nb),h(n),g(n),ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON. MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -6558,20 +6558,20 @@ real :: factor, hmax, sm1, tmp, z
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -6585,8 +6585,8 @@ real :: factor, hmax, sm1, tmp, z
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -6771,32 +6771,32 @@ real, intent(inout) :: c(*), u(iue,m), up
 integer :: i, i2, i3, i4, incr, j
 real :: cl, d, sm1
 !-----------------------------------------------------------------------
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
 !
 !     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
-!     lpivot IS THE INDEX OF THE PIVOT ELEMENT.
+!     lpivot is the index of the pivot element.
 !     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            THE SUBROUTINE DOES AN IDENTITY TRANSFORMATION.
+!            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue IS THE STORAGE INCREMENT BETWEEN ELEMENTS.
-!                                       ON EXIT FROM H1 u() AND UP
-!                   CONTAIN QUANTITIES DEFINING THE VECTOR u OF THE
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
 !                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   AND UP SHOULD CONTAIN QUANTITIES PREVIOUSLY COMPUTED
-!                   BY H1.  THESE WILL NOT BE MODIFIED BY H2.
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
 !     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            REGARDED AS A SET OF VECTORS TO WHICH THE HOUSEHOLDER
-!            TRANSFORMATION IS TO BE APPLIED.  ON EXIT c() CONTAINS THE
-!            SET OF TRANSFORMED VECTORS.
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
 !     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
-!            NO OPERATIONS WILL BE DONE ON c().
+!            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision :: sm, b
 !
@@ -6862,9 +6862,9 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -6918,20 +6918,20 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -6945,8 +6945,8 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -7114,9 +7114,9 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     double precision tau,rnorm(nb),h(n),g(n)
 !     integer ip(n)
 !
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON. MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
-!     FOR ALGORITHMIC DETAILS SEE ALGORITHM hfti IN CHAPTER 14.
+!     Written by C.L. Lawson and R.J. Hanson. Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
+!     For algorithmic details see algorithm hfti in chapter 14.
 !
 !     Abstract
 !
@@ -7171,20 +7171,20 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       The first dimensioning parameter of the array
 !                       a(*,*) IS mda, WHICH MUST SATISFY mda.GE.m
 !                       EITHER m.GE.n OR m.LT.n IS PERMITTED.  THERE
-!                       is no restriction on the rank of A.  The
+!                       is no restriction on the rank of A.  the
 !                       CONDITION mda.LT.m IS CONSIDERED AN ERROR.
 !
 !     b(*),MDB,nb       IF nb = 0 THE SUBROUTINE WILL PERFORM THE
-!                       ORTHOGONAL DECOMPOSITION BUT WILL MAKE NO
+!                       orthogonal decomposition but will make no
 !                       REFERENCES TO THE ARRAY b(*).  IF nb.GT.0
-!                       THE ARRAY b(*) MUST INITIALLY CONTAIN THE m BY
+!                       the array b(*) must initially contain the m by
 !                       nb MATRIX b OF THE LEAST SQUARES PROBLEM AX =
 !                       b.  IF nb.GE.2 THE ARRAY b(*) MUST BE DOUBLY
-!                       SUBSCRIPTED WITH FIRST DIMENSIONING PARAMETER
+!                       subscripted with first dimensioning parameter
 !                       mdb.GE.max(m,n).  IF nb = 1 THE ARRAY b(*) MAY
-!                       BE EITHER DOUBLY OR SINGLY SUBSCRIPTED.  IN
-!                       THE LATTER CASE THE VALUE OF MDB IS ARBITRARY
-!                       BUT IT SHOULD BE SET TO SOME VALID INTEGER
+!                       be either doubly or singly subscripted.  In
+!                       the latter case the value of mdb is arbitrary
+!                       but it should be set to some valid integer
 !                       VALUE SUCH AS mdb = m.
 !
 !                       THE CONDITION OF nb.GT.1.AND.mdb.LT. max(m,n)
@@ -7198,8 +7198,8 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !     Output..
 !
 !     a(*,*)            THE CONTENTS OF THE ARRAY a(*,*) WILL BE
-!                       MODIFIED BY THE SUBROUTINE.  THESE CONTENTS
-!                       ARE NOT GENERALLY REQUIRED BY THE USER.
+!                       modified by the subroutine.  These contents
+!                       are not generally required by the user.
 !
 !     b(*)              ON RETURN THE ARRAY b(*) WILL CONTAIN THE n BY
 !                       nb solution matrix X.
@@ -7385,32 +7385,32 @@ implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 integer :: i, i2, i3, i4, incr, j
 !-----------------------------------------------------------------------
-!     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
-!     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
+!     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
+!     From the book solving least squares problems, Prentice-Hall, 1974.
 !
 !     Construction and/or application of a single
 !     HOUSEHOLDER TRANSFORMATION..     Q = i + u*(u**T)/b
 !
 !     mode    = 1 OR 2   TO SELECT ALGORITHM  H1  OR  H2 .
-!     lpivot IS THE INDEX OF THE PIVOT ELEMENT.
+!     lpivot is the index of the pivot element.
 !     l1,m   IF l1 .LE. m   THE TRANSFORMATION WILL BE CONSTRUCTED TO
 !            ZERO ELEMENTS INDEXED FROM l1 THROUGH m.   IF l1 GT. m
-!            THE SUBROUTINE DOES AN IDENTITY TRANSFORMATION.
+!            the subroutine does an identity transformation.
 !     u(),iue,UP    ON ENTRY TO H1 u() CONTAINS THE PIVOT VECTOR.
-!                   iue IS THE STORAGE INCREMENT BETWEEN ELEMENTS.
-!                                       ON EXIT FROM H1 u() AND UP
-!                   CONTAIN QUANTITIES DEFINING THE VECTOR u OF THE
+!                   iue is the storage increment between elements.
+!                                       On exit from H1 u() and up
+!                   contain quantities defining the vector u of the
 !                   HOUSEHOLDER TRANSFORMATION.   ON ENTRY TO H2 u()
-!                   AND UP SHOULD CONTAIN QUANTITIES PREVIOUSLY COMPUTED
-!                   BY H1.  THESE WILL NOT BE MODIFIED BY H2.
+!                   and up should contain quantities previously computed
+!                   by H1.  These will not be modified by H2.
 !     c()    ON ENTRY TO H1 OR H2 c() CONTAINS A MATRIX WHICH WILL BE
-!            REGARDED AS A SET OF VECTORS TO WHICH THE HOUSEHOLDER
-!            TRANSFORMATION IS TO BE APPLIED.  ON EXIT c() CONTAINS THE
-!            SET OF TRANSFORMED VECTORS.
+!            regarded as a set of vectors to which the Householder
+!            transformation is to be applied.  On exit c() contains the
+!            set of transformed vectors.
 !     ICE    STORAGE INCREMENT BETWEEN ELEMENTS OF VECTORS IN c().
 !     icv    STORAGE INCREMENT BETWEEN VECTORS IN c().
 !     ncv    NUMBER OF VECTORS IN c() TO BE TRANSFORMED. IF ncv .LE. 0
-!            NO OPERATIONS WILL BE DONE ON c().
+!            no operations will be done on c().
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: u(iue,m), up, c(*)
 double precision :: b, cl, d, sm
@@ -7487,10 +7487,10 @@ real :: spmpar
 !     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
 !     ABOVE, k=max(ma+mg,n).
 !
-!     WRITTEN BY R. J. HANSON AND K. H. HASKELL.  FOR FURTHER MATH.
-!     AND ALGORITHMIC DETAILS SEE SANDIA LABORATORIES TECH. REPTS.
-!     SAND77-0552, (1978), AND SAND78-1290, (1979), AND MATH.
-!     PROGRAMMING (21), 1981, PP. 98-118. MODIFIED BY A.H. MORRIS.
+!     Written by R. J. Hanson and K. H. Haskell.  For further math.
+!     And algorithmic details see Sandia Laboratories tech. REPTS.
+!     SAND77-0552, (1978), and SAND78-1290, (1979), and math.
+!     Programming (21), 1981, PP. 98-118. modified by A.H. Morris.
 !
 !     Abstract
 !
@@ -7520,15 +7520,15 @@ real :: spmpar
 !
 !
 !     ANY VALUES me.GE.0, ma.GE.0, OR mg.GE.0 ARE PERMITTED.  THE
-!     RANK OF THE MATRIX E IS ESTIMATED DURING THE COMPUTATION. WE CALL
-!     THIS VALUE kranke. IT IS AN OUTPUT PARAMETER IN ip(1) DEFINED
+!     rank of the matrix E is estimated during the computation. We call
+!     this value kranke. It is an output parameter in ip(1) defined
 !     BELOW. USING A GENERALIZED INVERSE SOLUTION OF EX=F, A REDUCED
-!     LEAST SQUARES PROBLEM WITH INEQUALITY CONSTRAINTS IS OBTAINED.
-!     THE TOLERANCES USED IN THESE TESTS FOR DETERMINING THE RANK
-!     OF E AND THE RANK OF THE REDUCED LEAST SQUARES PROBLEM ARE
-!     GIVEN IN SANDIA TECH. REPT. SAND78-1290. THEY CAN BE
-!     MODIFIED BY THE USER IF NEW VALUES ARE PROVIDED IN
-!     THE OPTION LIST OF THE ARRAY prgopt(*).
+!     least squares problem with inequality constraints is obtained.
+!     The tolerances used in these tests for determining the rank
+!     of E and the rank of the reduced least squares problem are
+!     given in sandia tech. Rept. SAND78-1290. They can be
+!     modified by the user if new values are provided in
+!     the option list of the array prgopt(*).
 !
 !     The user must dimension all arrays appearing in the call list..
 !     w(mdw,n+1),prgopt(*),x(n),ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
@@ -7559,7 +7559,7 @@ real :: spmpar
 !
 !                   The integers me, ma, and mg are the
 !                   respective matrix ROW dimensions
-!                   of E, A and G. Each matrix HAS n columns.
+!                   of E, A and G. each matrix HAS n columns.
 !
 !     prgopt(*)    THIS REAL-VALUED ARRAY IS THE OPTION VECTOR.
 !                  If the user is satisfied with the nominal
@@ -7775,14 +7775,14 @@ real :: spmpar
 !                              given above.
 !
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     lsi           PART OF THIS PACKAGE.  SOLVES A
 !                   constrained least squares problem with
 !                   inequality constraints.
 !
 !     sdot,sscal,   SUBROUTINES FROM THE BLAS PACKAGE.
-!     saxpy,sasum,  SEE TRANS. MATH SOFTWARE (5), P. 308.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
 !     scopy,snrm2,
 !     sswap,isamax
 !
@@ -8074,10 +8074,10 @@ real :: sasum
 real :: sdot
 real :: spmpar
 !
-!     THIS IS A COMPANION SUBPROGRAM TO lsei( ).
-!     THE DOCUMENTATION FOR lsei( ) HAS MORE COMPLETE
-!     USAGE INSTRUCTIONS.
-!     WRITTEN BY R. J. HANSON, SLA.
+!     This is a companion subprogram to lsei( ).
+!     The documentation for lsei( ) has more complete
+!     usage instructions.
+!     Written by R. J. Hanson, sla.
 !
 !     Solve..
 !              AX = B,  A  ma BY n  (LEAST SQUARES EQUATIONS)
@@ -8113,14 +8113,14 @@ real :: spmpar
 !      ip(mg+2*n+1)
 !              integer working storage
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     lpdp          THIS SUBPROGRAM MINIMIZES A SUM OF SQUARES
 !                   of unknowns subject to linear inequality
 !                   constraints.  Part of this package.
 !
 !     sdot,sscal    SUBROUTINES FROM THE BLAS PACKAGE.
-!     saxpy,sasum,  SEE TRANS. MATH SOFTWARE (5), P. 308.
+!     saxpy,sasum,  see trans. Math software (5), P. 308.
 !     scopy,sswap
 !
 !     hfti          SOLVES AN UNCONSTRAINED LINEAR LEAST SQUARES
@@ -8443,7 +8443,7 @@ real :: sdot
 !     dimension a(mda,n+1),prgopt(*),x(n),ws((m+2)*(n+7)),is(m+n+1),
 !     WHERE n=n1+n2.  THIS IS A SLIGHT OVERESTIMATE FOR ws(*).
 !
-!     WRITTEN BY R. J. HANSON AND K. H. HASKELL, SANDIA LABS
+!     Written by R. J. Hanson and K. H. Haskell, sandia labs
 !
 !     Determine an n1-vector W, and
 !               an n2-vector Z
@@ -8470,7 +8470,7 @@ real :: sdot
 !
 !          mode=2  THE INEQUALITIES ARE INCONSISTENT.
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !     wnnls         SOLVES A NONNEGATIVELY CONSTRAINED LINEAR LEAST
 !                   squares problem with linear equality constraints.
@@ -8818,24 +8818,24 @@ integer :: l1, l2, l3, l4, l5
 !     iwork(*)     AN INTEGER-VALUED WORKING ARRAY OF LENGTH AT LEAST
 !                  M+n.
 !
-!     WRITTEN BY KAREN H. HASKELL, SANDIA LABORATORIES,
-!     AND R.J. HANSON, SANDIA LABORATORIES.
-!     REVISED OCT. 1, 1989.
+!     Written by karen H. Haskell, Sandia Laboratories,
+!     and R.J. Hanson, Sandia Laboratories.
+!     Revised oct. 1, 1989.
 !
 !
-!     SUBROUTINES CALLED BY wnnls( )
+!     Subroutines called by wnnls( )
 !
 !     wnlsm         COMPANION SUBROUTINE TO wnnls( ), WHERE
 !                   most of the computation takes place.
 !
 !
-!     REFERENCES
+!     References
 !
-!     1. SOLVING LEAST SQUARES PROBLEMS, BY C.L. LAWSON
-!        AND R.J. HANSON.  PRENTICE-HALL, INC. (1974).
+!     1. Solving least squares problems, by C.L. Lawson
+!        and R.J. Hanson.  Prentice-Hall, inc. (1974).
 !
 !     2. BASIC linear algebra subprograms for Fortran usage, by
-!        C.L. Lawson, R.J. Hanson, D.R. Kincaid, and F.T. Krogh.
+!        C.L. Lawson, R.J. Hanson, D.R. kincaid, and F.T. krogh.
 !        Toms, V. 5, No. 3, P. 308.  Also available as
 !        sandia technical report no. SAND77-0898.
 !
@@ -8896,8 +8896,8 @@ integer :: isamax
 !     The documentation for wnnls( ) has more complete
 !     usage instructions.
 !
-!     WRITTEN BY KAREN h. HASKELL, SANDIA LABORATORIES,
-!     WITH THE HELP OF R.J. HANSON, SANDIA LABORATORIES.
+!     Written by karen h. Haskell, Sandia Laboratories,
+!     with the help of R.J. Hanson, Sandia Laboratories.
 !
 !     In addition to the parameters discussed in the prologue to
 !     subroutine wnnls, the following work arrays are used in
@@ -8906,7 +8906,7 @@ integer :: isamax
 !     Their contents will in general be of no interest to the user.
 !
 !         ipivot(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         pivoting information for the cols of w(*,*).
 !
 !         itype(*)
@@ -8917,11 +8917,11 @@ integer :: isamax
 !         equation.
 !
 !         wd(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         dual solution vector.
 !
 !         h(*)
-!            an array of length n.  Upon completion it contains the
+!            an array of length n.  upon completion it contains the
 !         pivot scalars of the Householder transformations performed
 !         IN THE CASE KRANK.LT.l.
 !
@@ -9970,7 +9970,7 @@ real :: spmpar
 !
 ! ** OUTPUT VARIABLES AND INTERNAL VARIABLES **
 ! n1     COMPUTED RANK OF MATRIX H, WHERE H = w*a.
-! ipivot vector of size n.  On exit, this array records the order
+! ipivot vector of size n.  on exit, this array records the order
 !        in which the columns of H were selected by the pivoting
 !        scheme in the course of the orthogonal decomposition.
 !        WHENEVER n1.LT.n, THE FIRST n1 ELEMENTS OF ipivot INDICATE
@@ -10036,10 +10036,10 @@ real :: spmpar
 !        computes unscaled covariance matrix of the coefficients.
 !
 ! ** STORAGE REQUIREMENTS **
-! THE STORAGE REQUIRED FOR THE DIMENSIONED ARRAYS IN l2slv IS
+! the storage required for the dimensioned arrays in l2slv is
 !   m*(2*n + 2*l + 7) + n*(n + l + 7) + 2*l
-! LOCATIONS.  ALL ARRAYS REQUIRED IN SUBROUTINES CALLED BY l2slv ARE
-! DECLARED HEREIN AND ARE TRANSMITTED ONLY THROUGH PARAMETER LISTS OF
+! locations.  All arrays required in subroutines called by l2slv are
+! declared herein and are transmitted only through parameter lists of
 ! CALL-SEQUENCES.
 !
 ! ** PRECISION OF ARITHMETIC CALCULATIONS **
@@ -10066,7 +10066,7 @@ real :: spmpar
 ! * 3. DESCRIPTION OF VARIABLE c (AT L2B 690-790) SHOULD READ --      *
 ! *    c  VECTOR HAVING AT LEAST 6*(m+n) ELEMENTS USED ONLY FOR       *
 ! *       INTERNAL WORK SPACE.                                        *
-! * 4. THE VALUE OF eta (AT L2B 1960) SHOULD BE SET SO THAT IT IS THE *
+! * 4. The value of eta (at L2B 1960) should be set so that it is the *
 ! *    SMALLEST POSITIVE DOUBLE PRECISION NUMBER SUCH THAT 1.0 + eta  *
 ! *    IS GREATER THAN 1.0 IN DOUBLE PRECISION ARITHMETIC.            *
 ! *    FOR IBM COMPUTER TYPE, eta = 16.**(-13)                        *
@@ -10084,7 +10084,7 @@ real :: spmpar
 ! *          k3 = 1                                                   *
 ! * 7. FURTHER DETAILS ARE GIVEN IN SUBROUTINE solve2 IN CONNECTION   *
 ! *    WITH THE OMISSION OF ITERATIVE REFINEMENT.                     *
-! * 8. IN SUBROUTINE l2slv, STATEMENTS L2B 950-1000, 1820-1830, 2020, *
+! * 8. In subroutine l2slv, statements L2B 950-1000, 1820-1830, 2020, *
 ! *    2350-2360, 2480-2490, 3070, 3280-3570 AND 3590-3620 SHOULD BE  *
 ! *    OMITTED.                                                       *
 ! *    STATEMENT NUMBERS GIVEN HERE REFER TO THOSE IN THE RIGHT-HAND  *
@@ -10506,7 +10506,7 @@ end subroutine decom2
 ! This subroutine calls subroutine solve3.
 !
 ! ********* CONVERSION OF THIS SUBROUTINE TO DOUBLE PRECISION *********
-! * IF THE PROGRAM IS CONVERTED SO THAT ALL CALCULATIONS ARE DONE IN  *
+! * if the program is converted so that all calculations are done in  *
 ! * DOUBLE PRECISION ARITHMETIC, THE ITERATIVE REFINEMENT PRESENTLY   *
 ! * INCLUDED IN solve2 SHOULD BE OMITTED, SINCE THE SUCCESS OF THIS   *
 ! * PROCEDURE DEPENDS ON COMPUTING INNER PRODUCTS IN GREATER          *

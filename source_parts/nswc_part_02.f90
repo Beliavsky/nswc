@@ -124,10 +124,10 @@ real :: const, t, w
 !-----------------------------------------------------------------------
 !            Computation of the real dilogarithm function
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN VIRGINIA
+!     Written by
+!        Alfred H. Morris, Jr.
+!        naval surface weapons center
+!        Dahlgren Virginia
 !-----------------------------------------------------------------------
 real :: a(5), b(6), c(10), d(2), e(18), p(4), q(8), r(7), s(6)
 double precision :: x0
@@ -573,9 +573,9 @@ real :: spmpar
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real :: p(7), q(7)
 double precision :: d, g, z, lnx, glog
@@ -869,9 +869,9 @@ real :: c0, c1, c2, c3, c4, c5, d, t, w
 !-----------------------------------------------------------------------
 !            Evaluation of LN(gamma(a)) for positive A
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!          NAVAL SURFACE WARFARE CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!          Naval Surface Warfare Center
+!          Dahlgren, Virginia
 !--------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !--------------------------
@@ -1229,9 +1229,9 @@ integer :: j, n
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: d, pi, s, t, x, w
@@ -1329,7 +1329,7 @@ integer :: i, k
 !
 !     The series for dpdel on the interval 0.0 to 1.0 derived by
 !     A.H. Morris from the Chebyshev series in the SLATEC library
-!     obtained by wayne fullerton (Los Alamos).
+!     obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -1367,12 +1367,12 @@ implicit none
 !     EVALUATION OF 1/gamma(1 + x) - 1  FOR -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
 !
-!     THE FOLLOWING ARE THE FIRST 49 COEFFICIENTS OF THE MACLAURIN
-!     EXPANSION FOR 1/gamma(1 + x) - 1. THE COEFFICIENTS ARE
-!     CORRECT TO 40 DIGITS. THE COEFFICIENTS WERE OBTAINED BY
-!     ALFRED H. MORRIS JR. (NAVAL SURFACE WARFARE CENTER) AND ARE
-!     GIVEN HERE FOR REFERENCE. ONLY THE FIRST 14 COEFFICIENTS ARE
-!     USED IN THIS CODE.
+!     The following are the first 49 coefficients of the Maclaurin
+!     expansion for 1/gamma(1 + x) - 1. The coefficients are
+!     correct to 40 digits. The coefficients were obtained by
+!     Alfred H. Morris Jr. (Naval Surface Warfare Center) and are
+!     given here for reference. Only the first 14 coefficients are
+!     used in this code.
 !
 !                           -----------
 !
@@ -1537,9 +1537,9 @@ integer :: i, n
 !           Evaluation of LN(gamma(a)) for positive A
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!          NAVAL SURFACE WEAPONS CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!          naval surface weapons center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
@@ -1743,12 +1743,12 @@ real :: aug, den, piov4, sgn, upper, w, x, xmax1, xmx0, xsmall, z
 !
 !     The main computation involves evaluation of rational Chebyshev
 !     approximations published in math. Comp. 27, 123-127(1973) By
-!     cody, Strecok and Thacher.
+!     Cody, Strecok and Thacher.
 !
 !---------------------------------------------------------------------
-!     PSI WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR THE FUNPACK
-!     PACKAGE OF SPECIAL FUNCTION SUBROUTINES. PSI WAS MODIFIED BY
-!     A.H. MORRIS (NSWC).
+!     Psi was written at Argonne National Laboratory for the funpack
+!     package of special function subroutines. Psi was modified by
+!     A.H. Morris (NSWC).
 !---------------------------------------------------------------------
 real :: p1(7), p2(4), q1(6), q2(4)
 double precision :: dx0
@@ -2093,13 +2093,13 @@ integer :: j, k, l, max, n
 !     be computed.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!          NAVAL SURFACE WARFARE CENTER
-!          DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris, Jr.
+!          Naval Surface Warfare Center
+!          Dahlgren, Virginia
 !-----------------------------------------------------------------------
 !
-!     THE SERIES FOR dpsi ON THE INTERVAL 0.0 TO 1.0 WAS DERIVED
-!     BY WAYNE FULLERTON (LOS ALAMOS NATIONAL LABORATORY).
+!     The series for dpsi on the interval 0.0 to 1.0 was derived
+!     by Wayne Fullerton (Los Alamos National Laboratory).
 !
 !                                  WITH WEIGHTED ERROR   5.79E-32
 !                                   log weighted error  31.24
@@ -2107,8 +2107,8 @@ integer :: j, k, l, max, n
 !                              decimal places required  32.05
 !
 !     THE SERIES FOR  a .GE. 10  WAS DERIVED BY A.H. MORRIS FROM
-!     the Chebyshev series in the SLATEC library obtained by wayne
-!     fullerton (Los Alamos).
+!     the Chebyshev series in the SLATEC library obtained by Wayne
+!     Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
@@ -2281,9 +2281,9 @@ integer :: i, l, n, nm1
 !                  where X0 is the zero of psi(x).
 !
 !-------------------------
-!     WRITTEN BY A.H. MORRIS
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by A.H. Morris
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision :: a(20), h
 double precision, intent(in) :: x
@@ -2371,7 +2371,7 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !
 !                  sum( (x+k)**(-n-1) , k=0,1,2,... )
 !
-!         Which converges rapidly for large n. Both xmin and the
+!         Which converges rapidly for large n. both xmin and the
 !         number of terms of the series are calculated from the unit
 !         round off of the machine environment.
 !
@@ -2403,21 +2403,21 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !                    iflag = 3 UNDERFLOW. x TOO LARGE OR n+m-1
 !                              too large.
 !                    iflag = 4 n+m-1 IS TOO LARGE FOR THE CURRENT
-!                              value of x. This setting will not
+!                              value of x. this setting will not
 !                              OCCUR WHEN n+m-1 .LE. 100.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY DONALD E. AMOS
-!         SANDIA LABORATORIES
-!         JUNE 1982
-!     MODIFIED BY A. H. MORRIS (NSWC), 1990.
+!     Written by Donald E. Amos
+!         Sandia Laboratories
+!         June 1982
+!     modified by A. H. Morris (NSWC), 1990.
 !
-!     REFERENCES ...
+!     References ...
 !
-!     (1) ACM TRANS. MATH SOFTWARE, 1983.
-!     (2) HANDBOOK OF MATHEMATICAL FUNCTIONS, AMS 55, NATIONAL BUREAU
-!         OF STANDARDS BY m. ABRAMOWITZ AND I.A. STEGUN, 1964, PP.
-!         258-260, EQUATIONS 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
+!     (1) ACM Trans. Math Software, 1983.
+!     (2) Handbook of mathematical functions, AMS 55, national bureau
+!         of standards by m. Abramowitz and I.A. Stegun, 1964, PP.
+!         258-260, equations 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
 !-----------------------------------------------------------------------
 real :: alpha, arg, beta, c, den, elim, eps, fln, fn, fnp, fns, &
 &fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol
@@ -2757,7 +2757,7 @@ real, intent(in) :: a, b
 real :: x
 real :: alnrel, gamln1
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(gamma(a + b))
+!          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 x = dble(a) + dble(b) - 2.d0
@@ -2966,7 +2966,7 @@ end function dbetln
 double precision function dgsmln (a, b)
 implicit none
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(gamma(a + b))
+!          Evaluation of the function ln(gamma(a + b))
 !          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -2997,7 +2997,7 @@ integer :: j, k
 !
 !     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
-!     SLATEC library obtained by wayne fullerton (Los Alamos).
+!     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a0, b0
@@ -3070,7 +3070,7 @@ integer :: j, k
 !     LN(gamma(x)) = (x - 0.5)*LN(x) - x + 0.5*LN(2*PI) + DEL(x).
 !     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
-!     SLATEC library obtained by wayne fullerton (Los Alamos).
+!     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
@@ -3177,10 +3177,10 @@ real :: spmpar
 !     x is exceedingly close to A and A is extremely large.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... DEC 1991
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... DEC 1991
 !-------------------------
 real :: j, l, acc0(3), big(3), e0(3), x0(3), wk(20)
 real :: a0(4), a1(4), a2(2), a3(2), a4(2), a5(2), a6(2), a7(2), &
@@ -3669,7 +3669,7 @@ real :: gamln
 !     A SOLUTION FOR p(a,x) = p AND q(a,x) = q. IF THE ROUTINE
 !     is successful then the solution is stored in x.
 !
-!     x0 is an optional initial approximation for x. If the user
+!     x0 is an optional initial approximation for x. if the user
 !     does not wish to supply an initial approximation, then set
 !     x0 .LE. 0.
 !
@@ -3701,10 +3701,10 @@ real :: gamln
 !                    LARGE (SAY a .GE. 1.E20).
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... JANUARY 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... January 1992
 !------------------------
 real :: ln10, bmin(2), emin(2)
 !------------------------
@@ -3984,10 +3984,10 @@ integer :: i, m, max, n
 !                      P(a,x) AND Q(a,x)
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... JAN 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... jan 1992
 !-------------------------
 double precision, intent(in) :: a, x
 double precision, intent(inout) :: ans, qans
@@ -4707,10 +4707,10 @@ integer :: ier, ind
 !                    p or q is approximately 0.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     WRITTEN ... JANUARY 1992
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     written ... January 1992
 !------------------------
 double precision, intent(in) :: a
 double precision, intent(out) :: x
@@ -4999,7 +4999,7 @@ integer :: ierr1, ind, n
 real :: a0, b0, eps, t, x0, y0, z
 !-----------------------------------------------------------------------
 !
-!            Evaluation of the incomplete beta function IX(a,b)
+!            Evaluation of the incomplete beta function ix(a,b)
 !
 !                     --------------------
 !
@@ -5024,10 +5024,10 @@ real :: a0, b0, eps, t, x0, y0, z
 !        ierr = 7  IF y = b = 0
 !
 !--------------------
-!     WRITTEN BY ALFRED H. MORRIS, JR.
-!        NAVAL SURFACE WARFARE CENTER
-!        DAHLGREN, VIRGINIA
-!     REVISED ... NOV 1991
+!     Written by Alfred H. Morris, Jr.
+!        Naval Surface Warfare Center
+!        Dahlgren, Virginia
+!     revised ... nov 1991
 !-----------------------------------------------------------------------
 real :: lambda
 !-----------------------------------------------------------------------
@@ -5752,7 +5752,7 @@ real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z
 real :: algdiv, alnrel, gam1
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) when A is larger than b.
-!     The result of the expansion is added to w. It is assumed
+!     The result of the expansion is added to w. it is assumed
 !     THAT a .GE. 15 AND b .LE. 1.  EPS IS THE TOLERANCE USED.
 !     ierr is a variable that reports the status of the results.
 !-----------------------------------------------------------------------
@@ -6421,13 +6421,13 @@ real :: cpabs
 !                                                    cnu
 !-----------------------------------------------------------------------
 !
-!     WRITTEN BY
-!         ANDREW H. VAN TUYL AND ALFRED H. MORRIS, JR.
-!         NAVAL SURFACE WARFARE CENTER
-!         OCTOBER, 1991
+!     Written by
+!         Andrew H. van Tuyl and Alfred H. Morris, Jr.
+!         Naval Surface Warfare Center
+!         October, 1991
 !
-!     A modification of the procedure developed by allen V. Hershey
-!     (naval surface warfare center) in 1978 for handling the debye
+!     A modification of the procedure developed by allen V. hershey
+!     (Naval Surface Warfare Center) in 1978 for handling the debye
 !     approximation is employed.
 !
 !-----------------------------------------------------------------------
@@ -7370,14 +7370,14 @@ end subroutine bsslj
 subroutine besj(x, alpha, n, y, nz)
 implicit none
 !
-!     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
+!     Written by D.E. Amos, S.L. Daniel and M.K. Weston, January, 1975.
 !
-!     REFERENCES
-!         SAND-75-0147
+!     References
+!         sand-75-0147
 !
-!         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
+!         CDC 6600 subroutines ibess and JBESS for Bessel functions
 !         i(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
-!         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
+!         Daniel, M.K. Weston. ACM trans math software,3,PP 76-92
 !         (1977)
 !
 !         Tables of Bessel functions of moderate or large orders,
@@ -7876,15 +7876,15 @@ implicit none
 !      wk(6) = sign(1.,w**2)*wk(5)**2 = sign(1.,w**2)*zeta*fnu**(2/3)
 !      wk(7) = fnu**(1/3)
 !
-!                                  WRITTEN BY
-!                                  D. E. AMOS
+!                                  Written by
+!                                  D. E. Amos
 !
 !     Abstract
 !         ASJK implements the uniform asymptotic expansion of
 !         THE j AND Y BESSEL FUNCTIONS FOR FNU.GE.35 AND REAL
 !         X.GT.0.0E0. THE FORMS ARE IDENTICAL EXCEPT FOR A CHANGE
 !         in sign of some of the terms. This change in sign is
-!         ACCOMPLISHED BY MEANS OF THE FLAG FLGJY = 1 OR -1. ON
+!         ACCOMPLISHED BY MEANS OF THE FLAG flgjy = 1 OR -1. ON
 !         FLGJY = 1 THE AIRY FUNCTIONS ai(X) AND DAI(X) ARE
 !         supplied by the external function jairy, and on
 !         FLGJY = -1 THE AIRY FUNCTIONS bi(X) AND DBI(X) ARE
@@ -8310,7 +8310,7 @@ real :: a(15), ajn(19), ajp(19), ak1(14), ak2(23), ak3(14), b(15), &
 !        ai - value of function ai(x)
 !       dai - value of the derivative dai(x)
 !
-!                                WRITTEN BY
+!                                Written by
 !
 !                                D. E. AMOS
 !                               S. L. DANIEL
@@ -9316,14 +9316,14 @@ end subroutine bssli
 subroutine besi(x, alpha, kode, n, y, nz)
 implicit none
 !
-!     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
+!     Written by D. E. Amos and S. L. Daniel, January,1975.
 !
-!     REFERENCE
-!         SAND-75-0152
+!     Reference
+!         sand-75-0152
 !
-!         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
+!         CDC 6600 subroutines ibess and JBESS for Bessel functions
 !         i(NU,x) AND J(NU,x), x.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
-!         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
+!         Daniel, M.K. Weston. ACM trans math software,3,PP 76-92
 !         (1977)
 !
 !         Tables of Bessel functions of moderate or large orders,
@@ -9334,7 +9334,7 @@ implicit none
 !         besi computes an n member sequence of i Bessel functions
 !         i/SUB(alpha+k-1)/(x), k=1,...,n OR SCALED BESSEL FUNCTIONS
 !         exp(-x)*i/SUB(alpha+k-1)/(x), k=1,...,n FOR NON-NEGATIVE alpha
-!         and x. A combination of the power series, the asymptotic
+!         and x. a combination of the power series, the asymptotic
 !         expansion for x to infinity, and the uniform asymptotic
 !         expansion for nu to infinity are applied over subdivisions of
 !         the (NU,x) plane. For values not covered by one of these
@@ -9816,8 +9816,8 @@ implicit none
 !
 !         y - a vector whose first in components contain the sequence
 !
-!                                 WRITTEN BY
-!                                 D. E. AMOS
+!                                 Written by
+!                                 D. E. Amos
 !
 !     Abstract
 !         asik implements the uniform asymptotic expansion of
@@ -9939,10 +9939,10 @@ real :: cpabs
 !        z.  IT IS ASSUMED THAT -PI .LT. ARG z .LE. PI.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!        ALFRED H. MORRIS, JR. AND ANDREW H. VAN TUYL
-!        NAVAL SURFACE WARFARE CENTER
-!        OCT 1992
+!     Written by
+!        Alfred H. Morris, Jr. and Andrew H. van Tuyl
+!        Naval Surface Warfare Center
+!        oct 1992
 !--------------------------
 complex :: z
 complex, intent(in) :: cnu
@@ -10499,11 +10499,11 @@ real :: cpabs
 !         IT IS ASSUMED THAT -pi .LT. ARG z .LE. pi.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY
-!         ANDREW H. VAN TUYL
-!         NAVAL SURFACE WARFARE CENTER
-!     MODIFIED BY A.H. MORRIS (NSWC)
-!     REVISED ... OCT 1992
+!     Written by
+!         Andrew H. van Tuyl
+!         Naval Surface Warfare Center
+!     modified by A.H. Morris (NSWC)
+!     revised ... oct 1992
 !---------------------------
 complex :: z
 complex, intent(inout) :: w

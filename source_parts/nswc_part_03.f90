@@ -1316,7 +1316,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
 !     Calculates the modified Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. The Maclaurin expansion and backward recurrence
+!     argument z. the Maclaurin expansion and backward recurrence
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
@@ -1476,7 +1476,7 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !----------------------------------------------------------------
 !     Calculates the Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
-!     argument z. The Maclaurin expansion and backward recurrence
+!     argument z. the Maclaurin expansion and backward recurrence
 !     are used. i1 and i2 are replaced by the functions of orders
 !     1/3 and 2/3, respectively, and i1m and i2m by the functions
 !     of orders -1/3 and -2/3, respectively.  For greatest
@@ -2656,7 +2656,7 @@ real :: alnrel
 real :: spmpar
 !     ------------------------------------------------------------------
 !     This function calculates the complete elliptic integrals F(k)
-!     and E(k) for complex values of the modulus k. It is assumed
+!     and E(k) for complex values of the modulus k. it is assumed
 !     THAT l.NE.0 AND THAT k**2 + l**2 = 1.
 !     ------------------------------------------------------------------
 complex, intent(in) :: k, l
@@ -3512,15 +3512,15 @@ implicit none
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE AND AT MOST ONE OF THEM
-!          IS ZERO.  IF ONE OF THEM IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x, y, and z are nonnegative and at most one of them
+!          is zero.  If one of them is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -3630,15 +3630,15 @@ implicit none
 !                                -1/2     -1/2     -1/2
 !                      (1/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE AND AT MOST ONE OF THEM
-!          IS ZERO.  IF ONE OF THEM IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x, y, and z are nonnegative and at most one of them
+!          is zero.  If one of them is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -3748,15 +3748,15 @@ implicit none
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x AND y ARE NONNEGATIVE, x + y IS POSITIVE, AND z IS
-!          POSITIVE.  IF x OR y IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x and y are nonnegative, x + y is positive, and z is
+!          positive.  If x or y is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -3878,15 +3878,15 @@ implicit none
 !                                -1/2     -1/2     -3/2
 !                      (3/2)(T+x)    (T+y)    (T+z)    DT,
 !
-!          WHERE x AND y ARE NONNEGATIVE, x + y IS POSITIVE, AND z IS
-!          POSITIVE.  IF x OR y IS ZERO, THE INTEGRAL IS COMPLETE.
-!          THE DUPLICATION THEOREM IS ITERATED UNTIL THE VARIABLES ARE
-!          NEARLY EQUAL, AND THE FUNCTION IS THEN EXPANDED IN TAYLOR
-!          SERIES TO FIFTH ORDER.  REFERENCE. B. C. CARLSON, COMPUTING
-!          ELLIPTIC INTEGRALS BY DUPLICATION, NUMER. MATH. 33 (1979),
-!          1-16.  CODED BY B. C. CARLSON AND ELAINE M. NOTIS, AMES
-!          LABORATORY-DOE, IOWA STATE UNIVERSITY, AMES, IOWA 50011.
-!          MARCH 1, 1980. MODIFIED BY A.H. MORRIS (NSWC).
+!          Where x and y are nonnegative, x + y is positive, and z is
+!          positive.  If x or y is zero, the integral is complete.
+!          The duplication theorem is iterated until the variables are
+!          nearly equal, and the function is then expanded in Taylor
+!          series to fifth order.  Reference. B. C. Carlson, computing
+!          elliptic integrals by duplication, numer. Math. 33 (1979),
+!          1-16.  Coded by B. C. Carlson and Elaine M. Notis, ames
+!          laboratory-doe, Iowa State University, ames, iowa 50011.
+!          March 1, 1980. Modified by A.H. Morris (NSWC).
 !
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
@@ -4009,15 +4009,15 @@ implicit none
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE, AT MOST ONE OF THEM IS
-!          ZERO, AND p IS POSITIVE.  IF x OR y OR z IS ZERO, THE
-!          INTEGRAL IS COMPLETE.  THE DUPLICATION THEOREM IS ITERATED
-!          UNTIL THE VARIABLES ARE NEARLY EQUAL, AND THE FUNCTION IS
-!          THEN EXPANDED IN TAYLOR SERIES TO FIFTH ORDER.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x, y, and z are nonnegative, at most one of them is
+!          zero, and p is positive.  If x or y or z is zero, the
+!          integral is complete.  The duplication theorem is iterated
+!          until the variables are nearly equal, and the function is
+!          then expanded in Taylor series to fifth order.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -4157,15 +4157,15 @@ implicit none
 !                                  -1/2     -1/2     -1/2     -1
 !                        (3/2)(T+x)    (T+y)    (T+z)    (T+p)  DT,
 !
-!          WHERE x, y, AND z ARE NONNEGATIVE, AT MOST ONE OF THEM IS
-!          ZERO, AND p IS POSITIVE.  IF x OR y OR z IS ZERO, THE
-!          INTEGRAL IS COMPLETE.  THE DUPLICATION THEOREM IS ITERATED
-!          UNTIL THE VARIABLES ARE NEARLY EQUAL, AND THE FUNCTION IS
-!          THEN EXPANDED IN TAYLOR SERIES TO FIFTH ORDER.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x, y, and z are nonnegative, at most one of them is
+!          zero, and p is positive.  If x or y or z is zero, the
+!          integral is complete.  The duplication theorem is iterated
+!          until the variables are nearly equal, and the function is
+!          then expanded in Taylor series to fifth order.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -4305,15 +4305,15 @@ implicit none
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
 !
-!          WHERE x IS NONNEGATIVE AND y IS POSITIVE.  THE DUPLICATION
-!          THEOREM IS ITERATED UNTIL THE VARIABLES ARE NEARLY EQUAL,
-!          AND THE FUNCTION IS THEN EXPANDED IN TAYLOR SERIES TO FIFTH
-!          ORDER.  LOGARITHMIC, INVERSE CIRCULAR, AND INVERSE HYPER-
-!          BOLIC FUNCTIONS CAN BE EXPRESSED IN TERMS OF rc.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x is nonnegative and y is positive.  The duplication
+!          theorem is iterated until the variables are nearly equal,
+!          and the function is then expanded in Taylor series to fifth
+!          order.  Logarithmic, inverse circular, and inverse hyper-
+!          BOLIC functions can be expressed in terms of rc.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -4414,15 +4414,15 @@ implicit none
 !                              -1/2     -1
 !                    (1/2)(T+x)    (T+y)  DT,
 !
-!          WHERE x IS NONNEGATIVE AND y IS POSITIVE.  THE DUPLICATION
-!          THEOREM IS ITERATED UNTIL THE VARIABLES ARE NEARLY EQUAL,
-!          AND THE FUNCTION IS THEN EXPANDED IN TAYLOR SERIES TO FIFTH
-!          ORDER.  LOGARITHMIC, INVERSE CIRCULAR, AND INVERSE HYPER-
-!          BOLIC FUNCTIONS CAN BE EXPRESSED IN TERMS OF rc.  REFERENCE.
-!          B. C. CARLSON, COMPUTING ELLIPTIC INTEGRALS BY DUPLICATION,
-!          NUMER. MATH. 33 (1979), 1-16.  CODED BY B. C. CARLSON AND
-!          ELAINE M. NOTIS, AMES LABORATORY-DOE, IOWA STATE UNIVERSITY,
-!          AMES, IOWA 50011.  MARCH 1, 1980. MODIFIED BY A.H. MORRIS
+!          Where x is nonnegative and y is positive.  The duplication
+!          theorem is iterated until the variables are nearly equal,
+!          and the function is then expanded in Taylor series to fifth
+!          order.  Logarithmic, inverse circular, and inverse hyper-
+!          BOLIC functions can be expressed in terms of rc.  Reference.
+!          B. C. Carlson, computing elliptic integrals by duplication,
+!          numer. Math. 33 (1979), 1-16.  Coded by B. C. Carlson and
+!          Elaine M. Notis, Ames Laboratory-doe, Iowa State University,
+!          ames, iowa 50011.  March 1, 1980. Modified by A.H. Morris
 !          (NSWC).
 !
 !-----------------------------------------------------------------------
@@ -4514,8 +4514,8 @@ real :: e, eps, f, f2, pihalf, r, sg, tol, u1, u2, z
 integer :: ipmpar
 real :: spmpar
 !     -------------------------------------------------------------
-!     ellpf calculates the elliptic functions SN(u,k), CN(u,k), and
-!     DN(u,k) for real u and real modulus k.  It is assumed that
+!     ellpf calculates the elliptic functions sn(u,k), CN(u,k), and
+!     DN(u,k) for real u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
 real, intent(in) :: k, l
@@ -4605,7 +4605,7 @@ real, intent(in) :: u
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
 !     --------------------------------------------------------
-!     scd computes the elliptic functions SN(u,k), CN(u,k),
+!     scd computes the elliptic functions sn(u,k), CN(u,k),
 !     and DN(u,k) for real u and real modulus k such that
 !     0.0 .LE. u .LE. f AND 0.0 .LE. k .LT. 1.0, WHERE
 !     f = f(k) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
@@ -4835,8 +4835,8 @@ integer, intent(inout) :: ierr
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
 &t, t1, t2, td1, td2, u1, u2
 !     -------------------------------------------------------------
-!     elpfc1 calculates the elliptic functions SN(u,k), CN(u,k),
-!     DN(u,k) for complex u and real modulus k.  It is assumed that
+!     elpfc1 calculates the elliptic functions sn(u,k), CN(u,k),
+!     DN(u,k) for complex u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
 complex, intent(in) :: u
@@ -5430,10 +5430,10 @@ real :: spmpar
 !       IF r .LT. 0., THEN circv SETS ierr = 1.
 !       IF d .LT. 0, OR j = 0 AND d .GT. 1., THEN circv SETS ierr = 2.
 !
-!       REFERENCES
-!       MATH OF COMP APRIL 1961,PP169,173 AND OCT.1961, PP 375, 382.
-!       NWL REPORT N0.1768, JAN. 1962. NSWC REPORT N0.83-13, NOV. 1982.
-!       IEEE TRANS. INFO. TH. APRIL 1965, p. 312.
+!       References
+!       math of comp April 1961,PP169,173 and oct.1961, PP 375, 382.
+!       NWL report N0.1768, jan. 1962. NSWC report N0.83-13, nov. 1982.
+!       IEEE trans. Info. TH. April 1965, p. 312.
 !-----------------------------------------------------------------------
 !       Negative r and d are not permitted.
 !--------------------------------------------
@@ -7330,9 +7330,9 @@ implicit none
 !         Abcissa approximating a zero of f in the interval (ax,bx)
 !
 !-----------------------------------------------------------------------
-!  zeroin IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
-!  ZERO GIVEN BY RICHARD BRENT IN ALGORITHMS FOR MINIMIZATION WITHOUT
-!  DERIVATIVES, PRENTICE-HALL, INC. (1973).
+!  zeroin is a slightly modified translation of the Algol procedure
+!  zero given by richard Brent in algorithms for minimization without
+!  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
 real :: f
 real, intent(in) :: ax, bx, aerr, rerr
@@ -7456,9 +7456,9 @@ implicit none
 !         Abcissa approximating a zero of f in the interval (ax,bx)
 !
 !-----------------------------------------------------------------------
-!  dzero IS A SLIGHTLY MODIFIED TRANSLATION OF THE ALGOL PROCEDURE
-!  ZERO GIVEN BY RICHARD BRENT IN ALGORITHMS FOR MINIMIZATION WITHOUT
-!  DERIVATIVES, PRENTICE-HALL, INC. (1973).
+!  dzero is a slightly modified translation of the Algol procedure
+!  zero given by richard Brent in algorithms for minimization without
+!  derivatives, Prentice-Hall, inc. (1973).
 !-----------------------------------------------------------------------
 double precision :: f
 double precision, intent(in) :: ax, bx, aerr, rerr
@@ -7607,7 +7607,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -7649,14 +7649,14 @@ external fcn
 !       lwa is a positive integer input variable NOT less than
 !         (n*(3*n+13))/2.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
 !       MINPACK-supplied ... hybrd
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
@@ -7746,7 +7746,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of functions and variables.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -7849,7 +7849,7 @@ external fcn
 !
 !       WA1, WA2, WA3, and wa4 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -7858,8 +7858,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,MIN0,mod
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
@@ -8014,7 +8014,7 @@ nslow2 = 0
 !
       call dogleg(n,r,lr,diag,qtf,delta,wa1,wa2,wa3)
 !
-!           Store the direction P and x + P. Calculate the norm of P.
+!           Store the direction P and x + P. calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -8166,7 +8166,7 @@ real :: spmpar
 !
 !        qdcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2
-!     and stores the results in z. It is assumed that a(3)
+!     and stores the results in z. it is assumed that a(3)
 !     is nonzero.
 !
 !-----------------------------------------------------------------------
@@ -8296,13 +8296,13 @@ real :: spmpar
 !
 !        cbcrt computes the roots of the real polynomial
 !              a(1) + a(2)*z + a(3)*z**2 + a(4)*z**3
-!     and stores the results in z. It is assumed that a(4)
+!     and stores the results in z. it is assumed that a(4)
 !     is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: a(4)
 real :: aq(3)
@@ -8441,7 +8441,7 @@ return
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
 !
-!     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
+!     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
    aq(2) = a(2) + a(1)/w
@@ -8497,9 +8497,9 @@ implicit none
 !     a(4) is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(4)
 double precision, intent(inout) :: zr(3), zi(3)
@@ -8650,7 +8650,7 @@ return
 !     is formed whose roots are the same as the smaller roots of
 !     the cubic. This quadratic is then solved.
 !
-!     THIS CODE WAS WRITTEN BY WILLIAM L. DAVIS (NSWC).
+!     This code was written by william L. Davis (NSWC).
 !
 70 aq(1) = a(1)
    aq(2) = a(2) + a(1)/w
@@ -8716,13 +8716,13 @@ real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
 !
 !         qtcrt computes the roots of the real polynomial
 !               a(1) + a(2)*z + ... + a(5)*z**4
-!         and stores the results in z. It is assumed that a(5)
+!         and stores the results in z. it is assumed that a(5)
 !         is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED h. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred h. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 real, intent(in) :: a(5)
 real :: temp(4)
@@ -8871,9 +8871,9 @@ implicit none
 !         that a(5) is nonzero.
 !
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED h. MORRIS
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred h. Morris
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(5)
 double precision, intent(inout) :: zr(4), zi(4)
@@ -10482,7 +10482,7 @@ do 60 i = 1,l3
 &go to 10
 !
 !     Polynomial value is smaller than a bound on the error
-!     in evaluating P. Terminate the iteration.
+!     in evaluating P. terminate the iteration.
 !
       conv = .true.
       zr = sr

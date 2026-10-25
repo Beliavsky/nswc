@@ -413,22 +413,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by splsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY splsq.
+!                        over-written by splsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix a. For example,
+!                        defining the matrix a. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -528,14 +528,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -601,7 +601,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
@@ -671,7 +671,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -857,22 +857,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by stlsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY stlsq.
+!                        over-written by stlsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix A. For example,
+!                        defining the matrix A. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -972,14 +972,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -1045,7 +1045,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  A*w  -  alfa*u,
 !                alfa*w  =  A(TRANSPOSE)*u  -  beta*w.
 !
@@ -1115,7 +1115,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -1281,22 +1281,22 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !                        by blsq are the same for all values of damp.
 !
 !     u(m)    INPUT      THE RHS VECTOR B. BE AWARE THAT u IS
-!                        OVER-WRITTEN BY blsq.
+!                        over-written by blsq.
 !
 !     x(n)    OUTPUT     RETURNS THE COMPUTED SOLUTION x.
 !
 !     atol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the matrix a. For example,
+!                        defining the matrix a. for example,
 !                        if A is accurate to about 6 digits, set
 !                        atol = 1.0e-6 .
 !
 !     btol    INPUT      AN ESTIMATE OF THE RELATIVE ERROR IN THE DATA
-!                        defining the RHS vector B. For example,
+!                        defining the RHS vector B. for example,
 !                        if B is accurate to about 6 digits, set
 !                        btol = 1.0e-6 .
 !
 !     conlim  INPUT      AN UPPER LIMIT ON COND(ABAR), THE APPARENT
-!                        condition number of the matrix ABAR.
+!                        condition number of the matrix abar.
 !                        Iterations will be terminated if a computed
 !                        estimate of COND(ABAR) exceeds conlim.
 !                        This is intended to prevent certain small or
@@ -1396,14 +1396,14 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !     FORTRAN    ABS,SQRT
 !
 !
-!     REFERENCES
+!     References
 !     ----------
 !
-!     Paige, C.C. And saunders, M.A.  lsqr, an algorithm for sparse
+!     Paige, C.C. and saunders, M.A.  lsqr, an algorithm for sparse
 !        linear equations and sparse least squares.
-!        ACM transactions on mathematical software 8, 1 (march 1982).
+!        ACM transactions on mathematical software 8, 1 (March 1982).
 !
-!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. And krogh, F.T.
+!     Lawson, C.L., Hanson, R.J., Kincaid, D.R. and krogh, F.T.
 !        BASIC linear algebra subprograms for Fortran usage.
 !        ACM transactions on mathematical software 5, 3 (sept 1979),
 !        308-323 and 324-325.
@@ -1469,7 +1469,7 @@ if (arnorm .le. zero) go to 800
 100 itn = itn + 1
 !
 !     Perform the next step of the bidiagonalization to obtain the
-!     next  beta, u, alfa, w.  These satisfy the relations
+!     next  beta, u, alfa, w.  these satisfy the relations
 !                beta*u  =  a*w  -  alfa*u,
 !                alfa*w  =  a(TRANSPOSE)*u  -  beta*w.
 !
@@ -1539,7 +1539,7 @@ xxnorm = xxnorm + z**2
 !
 !
 !     Test for convergence.
-!     First, estimate the norm and condition of the matrix ABAR,
+!     First, estimate the norm and condition of the matrix abar,
 !     and the norms of RBAR and ABAR(TRANSPOSE)*RBAR.
 !
 anorm  = sqrt(bbnorm)
@@ -1787,7 +1787,7 @@ real :: spmpar
 !       FCN        NAME OF ROUTINE TO EVALUATE MINIMIZATION FUNCTION.
 !                  Must be declared external in calling routine.
 !       n          DIMENSION OF PROBLEM
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN.
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn.
 !
 !     Input/output ...
 !
@@ -1886,7 +1886,7 @@ real :: spmpar
 !                         call fcn (n, x, fval)
 !                  where x is a point and FVAL is the value of the
 !                  function at the point.
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN. IT IS
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn. IT IS
 !                  ASSUMED THAT rerr IS NONNEGATIVE. IF rerr = 0
 !                  then FCN is accurate to machine precision.
 !       itnlim     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
@@ -1925,7 +1925,7 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Internal parameters ...
 !
-!       rnf        NOISE IN THE SUBROUTINE FCN
+!       rnf        NOISE IN THE SUBROUTINE fcn
 !       f          FUNCTION VALUE  FCN(x)
 !       fstack(ns) stack of previous function values
 !       ns         LENGTH OF THE ARRAY fstack
@@ -2089,12 +2089,12 @@ real :: stpsiz
 !       gradtl     TOLERANCE AT WHICH GRADIENT CONSIDERED CLOSE
 !                  enough to zero to terminate algorithm
 !       itnlim     MAXIMUM NUMBER OF ALLOWABLE ITERATIONS
-!       rerr       RELATIVE ACCURACY OF SUBROUTINE FCN
+!       rerr       RELATIVE ACCURACY OF SUBROUTINE fcn
 !
 !     Input/output ...
 !
 !       typsiz(n)  scaling vector for x
-!       fscale     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION FCN
+!       fscale     ESTIMATE OF SCALE OF OBJECTIVE FUNCTION fcn
 !       stepmx     MAXIMUM STEP SIZE
 !
 !     Output ...
@@ -2372,7 +2372,7 @@ real :: sum
 !       nr       ROW DIMENSION OF MATRIX
 !       n        ORDER OF THE MATRIX
 !       a(n,n)   MATRIX OF FORM L(L-TRANSPOSE). A IS NOT
-!                MODIFIED BY THE ROUTINE.
+!                modified by the routine.
 !       b(n)     RIGHT-HAND SIDE VECTOR
 !
 !     Output ...
@@ -2967,7 +2967,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of variables. n must not exceed m.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -3022,14 +3022,14 @@ external fcn
 !       lwa is a positive integer input variable NOT less than
 !         m*n+5*n+m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
 !       MINPACK-supplied ... lmdif
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
 integer :: maxfev, mode, mp5n, nfev, nprint
@@ -3115,7 +3115,7 @@ external fcn
 !       n is a positive integer input variable SET to the number
 !         of variables. n must not exceed m.
 !
-!       x is an array of length n. On input x must contain
+!       x is an array of length n. on input x must contain
 !         an initial estimate of the solution vector. On output x
 !         contains the final estimate of the solution vector.
 !
@@ -3240,7 +3240,7 @@ external fcn
 !
 !       WA4 is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -3248,8 +3248,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt,mod
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iflag, iter, j, l
@@ -3397,7 +3397,7 @@ iter = 1
       call lmpar(n,fjac,ldfjac,ipvt,diag,qtf,delta,par,wa1,wa2, &
 &wa3,wa4)
 !
-!           Store the direction P and x + P. Calculate the norm of P.
+!           Store the direction P and x + P. calculate the norm of P.
 !
       do j = 1, n
          wa1(j) = -wa1(j)
@@ -3548,12 +3548,12 @@ real, intent(in) :: x(n)
 !
 !       x is an input array of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
 integer :: i
@@ -3676,14 +3676,14 @@ real, intent(inout) :: x(n), wa1(n), wa2(n)
 !
 !       wa1 and wa2 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jj, jp1, k, l
@@ -3883,18 +3883,18 @@ external fcn
 !         Jacobian matrix. If the Jacobian is not banded, set
 !         mu to at least n - 1.
 !
-!       wa1 and wa2 are work arrays of length n. If ml + mu + 1 is at
+!       wa1 and wa2 are work arrays of length n. if ml + mu + 1 is at
 !         least n, then the Jacobian is considered dense, and wa2 is
 !         not referenced.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar
 !
 !       Fortran-supplied ... abs,AMAX1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, k, msum
@@ -4032,7 +4032,7 @@ external fcn
 !
 !       wa is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       User-supplied ...... FCN
 !
@@ -4040,8 +4040,8 @@ external fcn
 !
 !       Fortran-supplied ... abs,AMAX1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j
@@ -4105,12 +4105,12 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !
 !     This subroutine completes the solution of the problem
 !     if it is provided with the necessary information from the
-!     QR factorization, with column pivoting, of A. That is, if
+!     QR factorization, with column pivoting, of A. that is, if
 !     A*P = Q*r, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
 !     columns, and r is an upper triangular matrix with diagonal
 !     elements of nonincreasing magnitude, then lmpar expects
 !     the full upper triangle of r, the permutation matrix P,
-!     and the first n components of (Q transpose)*B. On output
+!     and the first n components of (Q transpose)*B. on output
 !     lmpar also provides an upper triangular matrix S such that
 !
 !            T   T                   T
@@ -4167,14 +4167,14 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !
 !       wa1 and wa2 are work arrays of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm,qrsolv
 !
 !       Fortran-supplied ... abs,AMAX1,AMIN1,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, iter, j, jm1, jp1, k, l, nsing
@@ -4374,12 +4374,12 @@ real, intent(inout) :: q(ldq,m), wa(m)
 !
 !       wa is a work array of length m.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... MIN0
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jm1, k, l, minmn, np1
@@ -4450,7 +4450,7 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !
 !     This subroutine uses Householder transformations with column
 !     pivoting (optional) to compute A QR factorization of the
-!     m by n matrix a. That is, qrfac determines an orthogonal
+!     m by n matrix a. that is, qrfac determines an orthogonal
 !     matrix Q, a permutation matrix P, and an upper trapezoidal
 !     matrix R with diagonal elements of nonincreasing magnitude,
 !     SUCH THAT a*P = Q*R. THE HOUSEHOLDER TRANSFORMATION FOR
@@ -4506,17 +4506,17 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !         If this information is not needed, then acnorm can coincide
 !         WITH rdiag.
 !
-!       wa is a work array of length n. If pivot is false, then wa
+!       wa is a work array of length n. if pivot is false, then wa
 !         can coincide with rdiag.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar,enorm
 !
 !       Fortran-supplied ... AMAX1,sqrt,MIN0
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jp1, k, kmax, minmn
@@ -4625,12 +4625,12 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !
 !     This subroutine completes the solution of the problem
 !     if it is provided with the necessary information from the
-!     QR factorization, with column pivoting, of A. That is, if
+!     QR factorization, with column pivoting, of A. that is, if
 !     A*P = Q*r, WHERE P IS A PERMUTATION MATRIX, Q HAS ORTHOGONAL
 !     columns, and r is an upper triangular matrix with diagonal
 !     elements of nonincreasing magnitude, then qrsolv expects
 !     the full upper triangle of r, the permutation matrix P,
-!     and the first n components of (Q transpose)*B. The system
+!     and the first n components of (Q transpose)*B. the system
 !     A*x = B, D*x = 0, IS THEN EQUIVALENT TO
 !
 !                  T       T
@@ -4680,12 +4680,12 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !
 !       wa is a work array of length n.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, jp1, k, kp1, l, nsing
@@ -4767,7 +4767,7 @@ do j = 1, n
    r(j,j) = x(j)
    end do
 !
-!     Solve the triangular system for Z. If the system is
+!     Solve the triangular system for Z. if the system is
 !     singular, then obtain a least squares solution.
 !
 nsing = n
@@ -4847,12 +4847,12 @@ real, intent(in) :: v(n), w(n)
 !         information necessary to recover the Givens rotation GW(i)
 !         described above.
 !
-!     SUBROUTINES CALLED
+!     Subroutines called
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
 integer :: i, j, nmj, nm1
@@ -4948,8 +4948,8 @@ real, intent(inout) :: v(n), w(m)
 !       u is an input array of length m which must contain the
 !         VECTOR u.
 !
-!       v is an array of length n. On input v must contain the vector
-!         v. On output v(i) contains the information necessary to
+!       v is an array of length n. on input v must contain the vector
+!         v. on output v(i) contains the information necessary to
 !         recover the Givens rotation GV(i) described above.
 !
 !       w is an output array of length m. w(i) contains information
@@ -4960,15 +4960,15 @@ real, intent(inout) :: v(n), w(m)
 !         of the diagonal elements of the output s are zero. Otherwise
 !         sing is set false.
 !
-!     SUBPROGRAMS CALLED
+!     Subprograms called
 !
 !       MINPACK-supplied ... spmpar
 !
 !       Fortran-supplied ... abs,sqrt
 !
-!     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
-!     BURTON s. GARBOW, KENNETH E. HILLSTROM, JORGE j. MORE,
-!     JOHN l. NAZARETH
+!     Argonne National Laboratory. MINPACK project. March 1980.
+!     Burton s. Garbow, kenneth E. Hillstrom, jorge j. more,
+!     john l. nazareth
 !
 !     **********
 integer :: i, j, jj, l, nmj, nm1
@@ -5123,11 +5123,11 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !------------------------
-!     INITIAL VERSION  DEC  1977
+!     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
 dimension ibasis(m)
@@ -5226,8 +5226,8 @@ real :: spmpar
 !----------------------
 !     bi is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     r is an array of dimension N. On output r contains the current
-!     value of X. During computation r normally contains the reduced
+!     r is an array of dimension N. on output r contains the current
+!     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: a(ka,n0), b0(m), c(n0)
@@ -5325,7 +5325,7 @@ if (iend .eq. m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
-!            REINVERSION OF THE BASIS MATRIX
+!            REINVERSION of the basis matrix
 !
 do 132 j = 1,m
    kj = ibasis(j)
@@ -5423,7 +5423,7 @@ do 202 j = jmin,n
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
-!             variables into r. Then terminate.
+!             variables into r. then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -5971,11 +5971,11 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !     Simplex procedure for solving linear programming problems
 !-----------------------------------------------------------------------
-!     WRITTEN BY ALFRED H. MORRIS JR.
-!        NAVAL SURFACE WEAPONS CENTER
-!        DAHLGREN, VIRGINIA
+!     Written by Alfred H. Morris Jr.
+!        naval surface weapons center
+!        Dahlgren, Virginia
 !------------------------
-!     INITIAL VERSION  DEC  1977
+!     Initial version  DEC  1977
 !     LAST UPDATE      OCT  1990
 !------------------------
 dimension ibasis(m)
@@ -6076,8 +6076,8 @@ real :: spmpar
 !----------------------
 !     bi is an MXM array containing the inverse of the basis matrix.
 !----------------------
-!     r is an array of dimension N. On output r contains the current
-!     value of X. During computation r normally contains the reduced
+!     r is an array of dimension N. on output r contains the current
+!     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
 real, intent(in) :: ta(*), b0(m), c(n0)
@@ -6175,7 +6175,7 @@ if (iend .eq. m) go to 22
 do 103 i = 1,m
 103 ibasis(i) = index(i)
 !
-!            REINVERSION OF THE BASIS MATRIX
+!            REINVERSION of the basis matrix
 !
 do 132 j = 1,m
    kj = ibasis(j)
@@ -6281,7 +6281,7 @@ do 202 j = jmin,n
 if (nstep - 2) 800,230,250
 !
 !     Insert the values of the orginal, slack, and surplus
-!             variables into r. Then terminate.
+!             variables into r. then terminate.
 !
 220 do 221 j = 1,n
 221 r(j) = 0.0
@@ -7344,7 +7344,7 @@ real :: ap, aw
 !
 ! Subroutine to solve A 0-1 multiple knapsack problem of n
 ! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
-! I.E. Also suitable for A 0-1 single knapsack problem).
+! I.E. also suitable for A 0-1 single knapsack problem).
 ! The problem to be solved is
 !
 ! MAXIMIZE  vstar = p(1)*(x(1,1) + ... + x(m,1)) + ...
@@ -7948,8 +7948,8 @@ integer :: i1, i2, i3, i4, i5
 !                  xs(J) = 0 OR 1   FOR  J=1,...,ns
 !                  vs .GT. kub
 !
-! THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
-! WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
+! This subroutine is a modified version of subroutine kp01
+! which appeared in  computing 21, 81-86(1978).
 !
 integer, intent(inout) :: qs, vs
 integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
@@ -7979,8 +7979,8 @@ real :: a, b, c
 !                  xs(j) = 0 OR 1   FOR  j=1,...,ns
 !                  vs .GT. kub
 !
-! THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
-! WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
+! This subroutine is a modified version of subroutine kp01
+! which appeared in  computing 21, 81-86(1978).
 !
 integer, intent(inout) :: qs
 integer, intent(out) :: vs
@@ -8195,7 +8195,7 @@ real :: exparg
 !                          ------------------
 !
 !     mo is an input integer which specifies the search procedure
-!     for determination of c.  A two-pass procedure is used when
+!     for determination of c.  a two-pass procedure is used when
 !     mo = 0 , AND A ONE-PASS PROCEDURE IS USED WHEN mo IS NOT ZERO.
 !     WHEN ALL SINGULARITIES OF F(Z) ARE EXPECTED TO BE REAL, mo = 0
 !     is preferable.
@@ -8226,7 +8226,7 @@ real :: exparg
 !     ierr may be either an input integer or an output integer.  When
 !     ierr is equal to any negative integer at the beginning of lainv,
 !     the abscissa of convergence is calculated and the value obtained
-!     is assigned to the argument c.  Otherwise, c must be input by
+!     is assigned to the argument c.  otherwise, c must be input by
 !     the user.  After completion of lainv, ierr has one of the
 !     following values...
 !
@@ -8234,7 +8234,7 @@ real :: exparg
 !
 !        ierr = 1   THE CALCULATED VALUE OF y MAY NOT BE ACCURATE
 !                   due to possible inaccuracy in the calculation
-!                   of c.  This value of ierr may occur only when
+!                   of c.  this value of ierr may occur only when
 !                   ierr is initially negative.
 !
 !        ierr = 2   THE CALCULATION OF y DID NOT CONVERGE, WHILE
@@ -8874,8 +8874,8 @@ real :: spmpar
 ! ......................................................................
 !
 !   1. lainv1
-!        INVERSION OF LAPLACE TRANSFORM USING THE DURBIN FORMULA
-!        IN COMBINATION WITH THE EPSILON ALGORITHM
+!        inversion of Laplace transform using the Durbin formula
+!        in combination with the epsilon algorithm
 !
 !   2. Purpose
 !        the routine calculates an approximation result to the
@@ -9084,14 +9084,14 @@ real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
 real :: spmpar
 !
 ! 1.        cqext
-!           EPSILON ALGORITHM
-!              STANDARD FORTRAN SUBROUTINE
+!           epsilon algorithm
+!              standard Fortran subroutine
 !              complex version
 !
 ! 2.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -10150,7 +10150,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           RESG   - result OF THE 7-POINT GAUSS FORMULA
 !           RESK   - result OF THE 15-POINT KRONROD FORMULA
 !           RESKH  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -10211,7 +10211,7 @@ integer :: isn, n
 real, intent(inout) :: c(*)
 !-----------------------------------------------------------------------
 !     The complex array c of dimension n is interpreted by the code
-!     as a real array of dimension 2*n. If this association is not
+!     as a real array of dimension 2*n. if this association is not
 !     permitted by the Fortran being used, then the user may use the
 !     SUBROUTINE fft1.
 !-----------------------------------------------------------------------
@@ -10317,57 +10317,57 @@ integer :: i, ii, inc, j, jc, jf, jj, k, k1, k2, k3, k4, kk, ks, &
 real :: aa, aj, ajm, ajp, ak, akm, akp, at(23), bb, bj, bjm, bjp, &
 &bk, bkm, bkp, bt(23), c1, c2, c3, c72, cd, ck(23), rad, radf, s1, &
 &s120, s2, s3, s72, sd, sk(23), u, v
-!  MULTIVARIATE COMPLEX FOURIER TRANSFORM, COMPUTED IN PLACE
-!    USING MIXED-RADIX FAST FOURIER TRANSFORM ALGORITHM.
-!  BY R. C. SINGLETON, STANFORD RESEARCH INSTITUTE, OCT. 1968
-!    MODIFIED BY A. H. MORRIS, NSWC/DL, DAHLGREN VA
-!  ARRAYS A AND b ORIGINALLY HOLD THE REAL AND IMAGINARY
-!    COMPONENTS OF THE DATA, AND RETURN THE REAL AND
-!    IMAGINARY COMPONENTS OF THE RESULTING FOURIER COEFFICIENTS.
-!  MULTIVARIATE DATA IS INDEXED ACCORDING TO THE FORTRAN
-!    ARRAY ELEMENT SUCCESSOR FUNCTION, WITHOUT LIMIT
-!    ON THE NUMBER OF IMPLIED MULTIPLE SUBSCRIPTS.
-!    THE SUBROUTINE IS CALLED ONCE FOR EACH VARIATE.
-!    THE CALLS FOR A MULTIVARIATE TRANSFORM MAY BE IN ANY ORDER.
-!  ntot IS THE TOTAL NUMBER OF COMPLEX DATA VALUES.
-!  n IS THE DIMENSION OF THE CURRENT VARIABLE.
-!  nspan/n IS THE SPACING OF CONSECUTIVE DATA VALUES
-!    WHILE INDEXING THE CURRENT VARIABLE.
-!  THE SIGN OF isn DETERMINES THE SIGN OF THE COMPLEX
-!    EXPONENTIAL, AND THE MAGNITUDE OF isn IS NORMALLY ONE.
-!  A TRI-VARIATE TRANSFORM WITH a(N1,N2,N3), b(N1,N2,N3)
-!    IS COMPUTED BY
+!  Multivariate complex Fourier transform, computed in place
+!    using mixed-radix fast Fourier transform algorithm.
+!  By R. C. Singleton, Stanford Research Institute, oct. 1968
+!    modified by A. H. Morris, NSWC/DL, Dahlgren VA
+!  arrays A and b originally hold the real and imaginary
+!    components of the data, and return the real and
+!    imaginary components of the resulting Fourier coefficients.
+!  Multivariate data is indexed according to the Fortran
+!    array element successor function, without limit
+!    on the number of implied multiple subscripts.
+!    The subroutine is called once for each variate.
+!    The calls for a multivariate transform may be in any order.
+!  ntot is the total number of complex data values.
+!  n is the dimension of the current variable.
+!  nspan/n is the spacing of consecutive data values
+!    while indexing the current variable.
+!  The sign of isn determines the sign of the complex
+!    exponential, and the magnitude of isn is normally one.
+!  A TRI-variate transform with a(N1,N2,N3), b(N1,N2,N3)
+!    is computed by
 !      call sfft(a,b,n1*n2*n3,n1,n1,1,ierr)
 !      call sfft(a,b,n1*n2*n3,n2,n1*n2,1,ierr)
 !      call sfft(a,b,n1*n2*n3,n3,n1*n2*n3,1,ierr)
-!  FOR A SINGLE-VARIATE TRANSFORM,
+!  for a single-variate transform,
 !    ntot = n = nspan = (NUMBER OF COMPLEX DATA VALUES), E.G.
 !      call sfft(a,b,n,n,n,1,ierr)
-!  THE DATA MAY ALTERNATIVELY BE STORED IN A SINGLE COMPLEX
-!    ARRAY a, THEN THE MAGNITUDE OF isn CHANGED TO TWO TO
-!    GIVE THE CORRECT INDEXING INCREMENT AND a(2) USED TO
-!    PASS THE INITIAL ADDRESS FOR THE SEQUENCE OF IMAGINARY
-!    VALUES, E.G.
+!  the data may alternatively be stored in a single complex
+!    array a, then the magnitude of isn changed to two to
+!    give the correct indexing increment and a(2) used to
+!    pass the initial address for the sequence of imaginary
+!    values, E.G.
 !      call sfft(a,a(2),ntot,n,nspan,2,ierr)
-!  ARRAYS NFAC(MAXN),NP(MAXP),at(MAXF),ck(MAXF),BT(MAXF),SK(MAXF)
-!    ARE USED FOR TEMPORARY STORAGE.
+!  arrays NFAC(MAXN),NP(MAXP),at(MAXF),ck(MAXF),BT(MAXF),SK(MAXF)
+!    are used for temporary storage.
 !    MAXN MUST BE .GE. THE NUMBER OF FACTORS OF n
 !    MAXF MUST BE .GE. THE MAXIMUM PRIME FACTOR OF n.
 !    MAXP MUST BE .GT. THE NUMBER OF PRIME FACTORS OF n.
-!    IN ADDITION, MAXN IS ASSUMED TO BE ODD.
-!    IF THE SQUARE-FREE PORTION k OF n HAS TWO OR MORE PRIME
+!    In addition, MAXN is assumed to be odd.
+!    If the square-free portion k of n has two or more prime
 !    FACTORS, THEN MAXP MUST BE .GE. k-1.
-!  ierr IS A VARIABLE. ierr IS SET TO 0 IF NO INPUT ERRORS ARE
-!    DETECTED. OTHERWISE, ierr IS ASSIGNED ONE OF THE VALUES
+!  ierr is a variable. ierr is set to 0 if no input errors are
+!    detected. Otherwise, ierr is assigned one of the values
 !      ierr=1    n IS LESS THAN 1
 !      ierr=2    n HAS MORE THAN MAXN FACTORS
 !      ierr=3    n HAS A PRIME FACTOR GREATER THAN
-!                MAXF OR THE SQUARE-FREE PORTION OF
-!                n IS GREATER THAN MAXP+1
-!  ARRAY STORAGE IN NFAC FOR A MAXIMUM OF 15 FACTORS OF n.
-!  IF n HAS MORE THAN ONE SQUARE-FREE FACTOR, THE PRODUCT OF THE
+!                MAXF or the square-free portion of
+!                n is greater than MAXP+1
+!  array storage in NFAC for a maximum of 15 factors of n.
+!  If n has more than one square-free factor, the product of the
 !    SQUARE-FREE FACTORS MUST BE .LE. 210
-!  ARRAY STORAGE FOR MAXIMUM PRIME FACTOR OF 23
+!  array storage for maximum prime factor of 23
 equivalence (i,ii)
 !  The following constants should agree with the array dimensions.
 maxn=15
@@ -10910,7 +10910,7 @@ end subroutine sfft
 !
 !     ******************************************************************
 !
-!     Subroutine cosqi initializes the array WSAVE which is used in
+!     Subroutine cosqi initializes the array wsave which is used in
 !     both cosqf and cosqb. The prime factorization of n together with
 !     a tabulation of the trigonometric functions are computed and
 !     stored in WSAVE.
@@ -10925,6 +10925,6 @@ end subroutine sfft
 !     WSAVE   A WORK ARRAY WHICH MUST BE DIMENSIONED AT LEAST 3*n+15.
 !             The same work array can be used for both cosqf and cosqb
 !             as long as n remains unchanged. Different WSAVE arrays
-!             are required for different values of n. The contents of
+!             are required for different values of n. the contents of
 !             WSAVE must not be changed between calls of cosqf or cosqb.
 !

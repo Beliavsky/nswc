@@ -1026,7 +1026,7 @@ data wg(1),wg(2),wg(3),wg(4),wg(5),wg(6),wg(7),wg(8)/ &
 !           resg   - result OF THE 7-POINT GAUSS FORMULA
 !           resk   - result OF THE 15-POINT KRONROD FORMULA
 !           reskh  - approximation to the mean value of the transformed
-!                    integrand over (a,b), I.E. To I/(b-a)
+!                    integrand over (a,b), I.E. to I/(b-a)
 !
 !
 dinf = min0(1,inf)
@@ -1085,8 +1085,8 @@ implicit none
 !     ..................................................................
 !
 ! 1.        dqpsrt
-!           ORDERING ROUTINE
-!              STANDARD FORTRAN SUBROUTINE
+!           ordering routine
+!              standard Fortran subroutine
 !              double precision version
 !
 ! 2.        PURPOSE
@@ -1228,7 +1228,7 @@ implicit none
 ! 1.        PURPOSE
 !              the routine determines the limit of a given sequence of
 !              approximations, by means of the epsilon algorithm
-!              of P. Wynn.
+!              of P. wynn.
 !              An estimate of the absolute error is also given.
 !              The condensed epsilon table is computed. Only those
 !              elements needed for the computation of the next diagonal
@@ -1464,7 +1464,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -1648,7 +1648,7 @@ implicit none
 !                             to analyze the integrand in order to
 !                             determine the integration difficulties. If
 !                             the position of a local difficulty can be
-!                             determined (E.G. Singularity,
+!                             determined (E.G. singularity,
 !                             discontinuity within the interval) one
 !                             will probably gain from splitting up the
 !                             interval at this point and calling the
@@ -2677,7 +2677,7 @@ real :: s, t
 real :: rnderr
 !       This function computes the rounding error committed when the
 !       sum x+a is formed.  In the calling program, y must be the same
-!       as x and b must be the same as A.  They are declared as
+!       as x and b must be the same as A.  they are declared as
 !       distinct variables in this function, and the intermediate
 !       variables s and t are put into common, in order to defend
 !       against the well-meaning actions of some officious optimizing
@@ -2873,7 +2873,7 @@ real :: spmpar
 !   nt         IF nt=0, THEN t AND x WILL BE SET EQUAL TO THE FINAL
 !              Gaussian nodes and the corresponding solution values,
 !              and nt will be set to the number of the solution
-!              values stored in x and t. The arrays t and x should
+!              values stored in x and t. the arrays t and x should
 !              have dimension at least mupper, assigned in the
 !              calling program.
 !              IF nt .GT. 0, THEN t CONTAINS nt USER SUPPLIED NODES
@@ -2918,11 +2918,11 @@ real :: spmpar
 !
 !
 !   *** REFERENCES ***
-!   (1) AN AUTOMATIC PROGRAM FOR FREDHOLM INTEGRAL EQUATIONS OF THE
-!       SECOND KIND, ACM TRANS. MATH SOFTWARE 2(1976), PP.154-171.
-!   (2) A SURVEY OF NUMERICAL METHODS FOR THE SOLUTION OF FREDHOLM
-!       INTEGRAL EQUATIONS OF THE SECOND KIND, SIAM PUB., 1976,
-!       PART II, CHAP. 5.
+!   (1) an automatic program for Fredholm integral equations of the
+!       second kind, ACM Trans. Math Software 2(1976), PP.154-171.
+!   (2) a survey of numerical methods for the solution of Fredholm
+!       integral equations of the second kind, SIAM pub., 1976,
+!       part II, chap. 5.
 !
 real :: kernel, norm, normk
 external kernel,rhfcn
@@ -3092,7 +3092,7 @@ relmin=rmin(n,n,cond,unitrd,averr)
 if(loop .eq. 1) go to 11
 if(loop .eq. 2) go to 9
 !   Set up approximate rate of convergence of solutions XN to true
-!   solution X. Also set up desired ratio for iterative method.
+!   solution X. also set up desired ratio for iterative method.
 numr2=rnrm(xn,oldx,n,1)
 r2=amin1(0.5,amax1(numr2/denr2,1.0e-4))
 r1rat=amin1(rootrt,sqrt(r2))
@@ -3160,7 +3160,7 @@ loop=loop+1
 m=2*n
 go to 3
 !   The iterative rate is sufficiently rapid, and control will go to
-!   stage b. Save information in case stage b aborts at a larger
+!   stage b. save information in case stage b aborts at a larger
 !   value of m and stage A has to be returned to.
 15 do 16 i = 1,m
 aside(i,1)=oldx(i)
@@ -3753,7 +3753,7 @@ do 34 i = 1,nf
 34 imknn(i,i)=imknn(i,i)+1.0
 if(nf .eq. mf) go to 50
 !
-!   Iterate to decrease the noise level in X. This should reduce
+!   Iterate to decrease the noise level in X. this should reduce
 !   possible errors in Nystrom interpolation.
 !
 derror=((1.0-r1)/r1)*eps/normk
@@ -3778,7 +3778,7 @@ if(iflag .eq. 1) temp=temp/xnorm
 ep=amax1(ep,temp)
 go to 60
 !
-!   No iteration used in computing X. Just compute error estimate
+!   No iteration used in computing X. just compute error estimate
 !   in Nystrom interpolate.
 !
 50 temp=normk*elinsy
@@ -4077,9 +4077,9 @@ integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 !
 !     Sandia mathematical program library
 !     applied mathematics division 2642
-!     sandia laboratories
+!     Sandia Laboratories
 !     albuquerque, new mexico  87115
-!     january 1976
+!     January 1976
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !   *                 ISSUED BY SANDIA LABORATORIES,
 !   *                   A PRIME CONTRACTOR TO THE
@@ -4096,7 +4096,7 @@ integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 !   * use would not infringe privately owned rights.
 !   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -4418,7 +4418,7 @@ real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
 &temp3, temp4, temp5, temp6, two(13), twou, u, xold
 real :: spmpar
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -4923,7 +4923,7 @@ integer :: i, j, jm1, ki, kip1, l, limit1
 real :: eta, g(13), gamma, hi, psijm1, rho(13), temp1, temp2, &
 &temp3, term, w(13)
 !
-!   WRITTEN BY L. F. SHAMPINE AND M. K. GORDON
+!   Written by L. F. Shampine and M. K. Gordon
 !
 !   Abstract
 !
@@ -5014,21 +5014,21 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !     a block of two equal steps.  The formula at the first step is
 !     5(4) while at the second step it is 6(4).
 !
-!     WRITTEN BY J.R.CASH,
-!        DEPARTMENT OF MATHEMATICS,
-!        IMPERIAL COLLEGE,
-!        SOUTH KENSINGTON, LONDON SW7 2AZ,
-!        ENGLAND.
-!     MODIFIED BY D. HIGHAM AND A.H. MORRIS.
+!     Written by J.R.Cash,
+!        department of mathematics,
+!        imperial college,
+!        south KENSINGTON, london SW7 2AZ,
+!        england.
+!     Modified by D. Higham and A.H. Morris.
 !
-!    THIS IS A HEAVILY REVISED VERSION OF rkf45 OF L.F. SHAMPINE AND
-!    H.A. WATTS.
-!    brkf45 IS PRIMARILY DESIGNED TO SOLVE NON-STIFF AND MILDLY STIFF
-!    INITIAL VALUE ORDINARY DIFFERENTIAL EQUATIONS WHEN DERIVATIVE
-!    EVALUATIONS ARE INEXPENSIVE. brkf45 USES INTERPOLATION TO PRODUCE
-!    OUTPUT AT OFF-STEP POINTS EFFICIENTLY. brkf45 SHOULD GENERALLY
-!    NOT BE USED WHEN THE USER IS DEMANDING HIGH ACCURACY.  IN SUCH
-!    CASES A GOOD ADAMS CODE WILL OFTEN BE MORE EFFICIENT.
+!    This is a heavily revised version of rkf45 of L.F. Shampine and
+!    H.A. Watts.
+!    brkf45 is primarily designed to solve non-stiff and mildly stiff
+!    initial value ordinary differential equations when derivative
+!    evaluations are inexpensive. brkf45 uses interpolation to produce
+!    output at off-step points efficiently. brkf45 should generally
+!    not be used when the user is demanding high accuracy.  In such
+!    cases a good Adams code will often be more efficient.
 !
 !***********************************************************************
 ! Abstract
@@ -5039,29 +5039,29 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !
 !             DY(I)/DT = FCN(t,y(1),y(2),...,y(neqn))
 !
-!    WHERE THE y(I) ARE KNOWN AT TIME t.
-!    TYPICALLY THE SUBROUTINE IS USED TO INTEGRATE FROM t TO TEND
-!    (WHILE RETURNING ANSWERS AT SPECIFIED OUTPUT POINTS TOUT), BUT
-!    IT CAN ALSO BE USED AS A ONE-BLOCK INTEGRATOR TO ADVANCE THE
-!    SOLUTION A SINGLE BLOCK STEP IN THE DIRECTION OF TEND.  ON RETURN
-!    THE PARAMETERS IN THE CALL LIST ARE SET FOR CONTINUING THE
-!    INTEGRATION. THE USER HAS ONLY TO CALL brkf45 AGAIN (AND PERHAPS
-!    DEFINE A NEW VALUE FOR TOUT). ACTUALLY, brkf45 IS AN INTERFACING
-!    ROUTINE WHICH CALLS SUBROUTINE rkfc FOR THE SOLUTION.  SUBROUTINE
-!    rkfc COMPUTES AN APPROXIMATE SOLUTION OVER ONE BLOCK OF LENGTH 2H.
-!    brkf45 IS PARTICULARLY USEFUL WHEN OUTPUT IS REQUIRED AT MANY
-!    OFF-STEP POINTS SINCE THE OUTPUT VALUES CAN BE OBTAINED BY
-!    INTERPOLATION.  THIS IS IN CONTRAST TO MANY OTHER RUNGE-KUTTA
-!    PROGRAMS WHICH CHOOSE THE STEP SEQUENCE SO AS TO HIT ALL OUTPUT
-!    POINTS EXACTLY AND SO BECOME INEFFICIENT WHEN OUTPUT IS REQUIRED
-!    AT MANY POINTS WITHIN A STEP.
-!    brkf45 USES THE (5,4), (6,4) BLOCK FORMULA DESCRIBED IN
-!    J.R. CASH,  A BLOCK 6(4) RUNGE-KUTTA FORMULA FOR NON-STIFF
-!    INITIAL VALUE PROBLEMS, ACM TRANS. MATH SOFTWARE 15 (1989),
+!    Where the y(I) are known at time t.
+!    Typically the subroutine is used to integrate from t to tend
+!    (while returning answers at specified output points tout), but
+!    it can also be used as a one-block integrator to advance the
+!    solution a single block step in the direction of tend.  On return
+!    the parameters in the call list are set for continuing the
+!    integration. The user has only to call brkf45 again (and perhaps
+!    define a new value for tout). Actually, brkf45 is an interfacing
+!    routine which calls subroutine rkfc for the solution.  Subroutine
+!    rkfc computes an approximate solution over one block of length 2H.
+!    brkf45 is particularly useful when output is required at many
+!    off-step points since the output values can be obtained by
+!    interpolation.  This is in contrast to many other Runge-Kutta
+!    programs which choose the step sequence so as to hit all output
+!    points exactly and so become inefficient when output is required
+!    at many points within a step.
+!    brkf45 uses the (5,4), (6,4) block formula described in
+!    J.R. Cash,  a block 6(4) Runge-Kutta formula for non-stiff
+!    initial value problems, ACM Trans. Math Software 15 (1989),
 !    PP. 15-28.
 !
 !    The parameters represent-
-!      FCN -- subroutine FCN(t,y,yp) to evaluate derivatives
+!      fcn -- subroutine fcn(t,y,yp) to evaluate derivatives
 !              yp(i)=dy(i)/dt
 !      neqn -- number of differential equations to be integrated.
 !      y(*) -- approximation to the solution vector at t.
@@ -5070,7 +5070,7 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !              required.  Approximate solutions at these points
 !              will be obained by interpolation.
 !      tend -- end of the integration range.  This will be hit exactly.
-!      yp(*) -- approximation to the derivative vector DY/DT at t.
+!      yp(*) -- approximation to the derivative vector dy/DT at t.
 !      relerr,abserr -- relative and absolute error tolerances for
 !            LOCAL ERROR TEST. AT THE NTH POINT OF EACH BLOCK (N=1,2)
 !            the code requires that
@@ -5222,21 +5222,21 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !                work(2*neqn+2), work(2*neqn+4), work(3*neqn+4),
 !                work(4*neqn+4), work(5*neqn+4), tex, YEX, YPEX )
 !
-!    WHERE YEX AND YPEX ARE THE SOLUTION VECTOR AND DERIVATIVE VECTOR
-!    APPROXIMATIONS DEFINED BY THE INTERPOLANT AT THE POINT TEX, AND
-!    WORK IS THE WORKING ARRAY SET UP BY brkf45. THIS VERSION OF
-!    EXTRA HAS BEEN WRITTEN BY D. HIGMAN (SEE BELOW).
+!    Where YEX and YPEX are the solution vector and derivative vector
+!    approximations defined by the interpolant at the point tex, and
+!    work is the working array SET up by brkf45. This version of
+!    extra has been written by D. Higman (see below).
 !
 !***********************************************************************
 !  More about the interpolant routine extra
 !***********************************************************************
 !
-!    THE FIRST DERIVATIVE APPROXIMATIONS GIVEN BY J.R. CASH HAVE BEEN
-!    MODIFIED BY D. HIGMAN. THREE CHANGES HAVE BEEN MADE AND ARE
-!    CLEARLY DOCUMENTED IN THE CODE. JUST SEARCH FOR THE WORD *CHANGES*.
-!    FOR AN EXPLANATION OF THESE MODIFICATIONS SEE
-!    REMARK ON ALGORITHM 669, BY D. HIGHAM,
-!    ACM TRANS. MATH SOFTWARE 17, PP. 424-426.
+!    The first derivative approximations given by J.R. Cash have been
+!    modified by D. Higman. Three changes have been made and are
+!    clearly documented in the code. Just search for the word *changes*.
+!    For an explanation of these modifications see
+!    remark on algorithm 669, by D. Higham,
+!    ACM Trans. Math Software 17, PP. 424-426.
 !
 !***********************************************************************
 !
@@ -5677,7 +5677,7 @@ h = hstop
 !     Core integrator for a single block
 !***********************************************************************
 !     The tolerances have been scaled to avoid premature underflow in
-!     computing the error tolerance function ERRTOL.
+!     computing the error tolerance function errtol.
 !     To avoid problems with zero crossings,relative error is measured
 !     using the average of the magnitudes of the solution at the
 !     beginning and end  points of a block.
@@ -5906,11 +5906,11 @@ real, intent(inout) :: ypex(neqn)
 integer :: n
 real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !
-!     THIS VERSION OF EXTRA IS THE THIRD OF THE THREE CHANGES
-!     NEEDED TO MAKE THE INTERPOLANT DERIVATIVE MORE STABLE.
+!     This version of extra is the third of the three changes
+!     needed to make the interpolant derivative more stable.
 !
 !     t is the independent variable.
-!     y is the value at t-2H. The values at t-h and t are
+!     y is the value at t-2H. the values at t-h and t are
 !     y + h*yinc1 and y + h*yinc2 respectively.
 !     f,f1 and f2 are the derivatives at t-2H, t-h and t.
 !     Tex is the point where the output is required.
@@ -5920,7 +5920,7 @@ real :: a1, a2, a3, a4, hf, hf1, hf2, sig
 !
 !     Perform quintic interpolation based on the values
 !     y(n),y(n)+h*yinc1(n),y(n)+h*yinc2(n),f(n),f1(n),f2(n) at the
-!     points t-2H, t-h, t.  This polynomial is evaluated at the point
+!     points t-2H, t-h, t.  this polynomial is evaluated at the point
 !     tex to obtain the approximate value of y(tex) and this is stored
 !     in the array yex.  The derivative of the interpolating polynomial
 !     is also evaluated at tex to obtain an approximation to DY/DT
@@ -5949,9 +5949,9 @@ implicit none
 !
 !     Fehlberg fourth-fifth order Runge-Kutta method
 !
-!     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
-!                   SANDIA LABORATORIES
-!                  ALBUQUERQUE,NEW MEXICO
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
+!                  albuquerque,new mexico
 !
 !    rkf45 is primarily designed to solve non-stiff and mildly stiff
 !    differential equations when derivative evaluations are inexpensive.
@@ -5973,10 +5973,10 @@ implicit none
 !    rkfs for the solution.  rkfs in turn calls subroutine  fehl which
 !    computes an approximate solution over one step.
 !
-!    rkf45  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
-!    IN THE REFERENCE
-!    E.FEHLBERG , LOW-ORDER CLASSICAL RUNGE-KUTTA FORMULAS WITH STEPSIZE
-!                 CONTROL , NASA TR R-315
+!    rkf45  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
 !
 !    The parameters represent-
 !      F -- SUBROUTINE F(t,y,YP) TO EVALUATE DERIVATIVES YP(I)=DY(I)/DT
@@ -6579,8 +6579,8 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !     Fehlberg FOURTH(FIFTH) order Runge-Kutta method with
 !     global error assessment
 !
-!     WRITTEN BY H.A.WATTS AND L.F.SHAMPINE
-!                   SANDIA LABORATORIES
+!     Written by H.A.Watts and L.F.Shampine
+!                   Sandia Laboratories
 !
 !    gerk is designed to solve systems of differential equations when
 !    it is important to have a readily available global error estimate.
@@ -6608,10 +6608,10 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !    for the solution.  gerks  in turn calls subroutine  fehl  which
 !    computes an approximate solution over one step.
 !
-!    gerk  USES THE RUNGE-KUTTA-FEHLBERG (4,5)  METHOD DESCRIBED
-!    IN THE REFERENCE
-!    E.FEHLBERG , LOW-ORDER CLASSICAL RUNGE-KUTTA FORMULAS WITH STEPSIZE
-!                 CONTROL , NASA TR R-315
+!    gerk  uses the Runge-Kutta-Fehlberg (4,5)  method described
+!    in the reference
+!    E.Fehlberg , low-order classical Runge-Kutta formulas with stepsize
+!                 control , nasa TR R-315
 !
 !
 !    The parameters represent-
@@ -6625,7 +6625,7 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !                 abs(LOCAL ERROR) .LE. relerr*abs(y) + abserr
 !            for each component of the local error and solution vectors
 !      iflag -- indicator for status of integration
-!      gerror(*) -- vector which estimates the global error at t. That
+!      gerror(*) -- vector which estimates the global error at t. that
 !                   is, gerror(I) approximates  y(I)-true SOLUTION(I).
 !      work(*) -- array to hold information internal to gerk which is
 !            necessary for subsequent calls. Must be dimensioned
@@ -7280,10 +7280,10 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !        SAND79-2374 , DEPAC - design of a user oriented package
 !                              of ODE solvers.
 !
-!   stfode IS A DRIVER FOR A MODIFICATION OF THE CODE LSODE WRITTEN BY
-!             A. C. HINDMARSH
-!             LAWRENCE LIVERMORE LABORATORY
-!             LIVERMORE, CALIFORNIA 94550
+!   stfode is a driver for a modification of the code lsode written by
+!             A. C. Hindmarsh
+!             Lawrence Livermore Laboratory
+!             livermore, california 94550
 !
 !***********************************************************************
 !** ABSTRACT **
@@ -7380,7 +7380,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             VECTOR  U(*)=(U(1),U(2),...,U(neq)) , THE SUBROUTINE MUST
 !             evaluate the neq components of the system of differential
 !             EQUATIONS  DU/DX=F(X,U)  AND STORE THE DERIVATIVES IN THE
-!             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/DX *  FOR
+!             ARRAY uprime(*), THAT IS,  uprime(I) = * DU(I)/DX *  FOR
 !             EQUATIONS I=1,...,neq.
 !
 !             Subroutine F must not alter X or U(*). You must declare
@@ -7389,7 +7389,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your calling program
-!             and subroutine F. They are not used or altered by stfode.
+!             and subroutine F. they are not used or altered by stfode.
 !             If you do not need rpar or ipar, ignore these parameters
 !             by treating them as dummy arguments. If you do choose to
 !             use them, dimension them in your calling program and in F
@@ -7443,7 +7443,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             only the first six entries. You must respond to all of
 !             the following items which are arranged as questions. The
 !             simplest use of the code corresponds to answering all
-!             questions as yes ,I.E. Setting all entries of info to 0.
+!             questions as yes ,I.E. setting all entries of info to 0.
 !
 !        info(1) -- this parameter enables the code to initialize
 !               itself. You must set it to indicate the start of every
@@ -7508,12 +7508,12 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !               is cheaper than evaluating derivatives in JAC and
 !               sometimes it is not - this depends on your problem.
 !
-!               If your problem is linear, I.E. Has the form
+!               If your problem is linear, I.E. has the form
 !               DU/DX = F(X,U) = J(X)*U + G(X)   FOR SOME MATRIX J(X)
-!               AND VECTOR G(X), THE JACOBIAN MATRIX  DF/DU = J(X).
+!               AND VECTOR G(X), THE JACOBIAN MATRIX  df/DU = J(X).
 !               Since you must provide a subroutine to evaluate F(X,U)
 !               analytically, it is little extra trouble to provide
-!               subroutine JAC for evaluating J(X) analytically.
+!               subroutine jac for evaluating J(X) analytically.
 !               Furthermore, in such cases, numerical differencing is
 !               much more expensive than analytic evaluation.
 !
@@ -7521,7 +7521,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                 derivatives automatically by numerical differences ...
 !                  YES -- SET info(5)=0
 !                   NO -- SET info(5)=1
-!                         and provide subroutine JAC for evaluating the
+!                         and provide subroutine jac for evaluating the
 !                         JACOBIAN MATRIX ****
 !
 !        info(6) -- stfode will perform much better if the Jacobian
@@ -7542,7 +7542,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !               banded matrices cost less time and storage than with
 !               FULL MATRICES IF  2*ml+MU .LT. neq.  IF YOU TELL THE
 !               code that the Jacobian matrix HAS a banded structure and
-!               you want to provide subroutine JAC to compute the
+!               you want to provide subroutine jac to compute the
 !               partial derivatives, then you must be careful to store
 !               the elements of the Jacobian matrix in the special form
 !               indicated in the description of JAC.
@@ -7659,7 +7659,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !      JAC -- IF YOU HAVE SET info(5)=0, YOU CAN IGNORE THIS PARAMETER
 !             by treating it as a dummy argument. (For some compilers
-!             you may have to write a dummy subroutine named  JAC  in
+!             you may have to write a dummy subroutine named  jac  in
 !             order to avoid problems associated with missing external
 !             routine names.)  Otherwise, you must provide a subroutine
 !             of the form
@@ -7671,10 +7671,10 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !             the non-zero partial derivatives  DF(I)/DU(J)  for each
 !             DIFFERENTIAL EQUATION I=1,...,neq AND EACH SOLUTION
 !             COMPONENT J=1,...,neq , AND STORE THESE VALUES IN THE
-!             matrix PD. The elements of PD are set to zero before each
+!             matrix pd. The elements of pd are set to zero before each
 !             CALL TO JAC SO ONLY NON-ZERO ELEMENTS NEED TO BE DEFINED.
 !
-!             Subroutine JAC must not alter X, U(*), or NROWPD. You must
+!             Subroutine jac must not alter X, U(*), or NROWPD. You must
 !             declare the name JAC in an external statement in your
 !             program that calls stfode. NROWPD is the row dimension of
 !             the PD matrix and is assigned by the code. Therefore you
@@ -7701,7 +7701,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your calling
-!             program and your Jacobian subroutine JAC. They are not
+!             program and your Jacobian subroutine jac. They are not
 !             altered by stfode. If you do not need rpar or ipar, ignore
 !             these parameters by treating them as dummy arguments. If
 !             you do choose to use them, dimension them in your calling
@@ -7723,7 +7723,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !      y(*) -- contains the computed solution approximation at t.
 !             You may also be interested in the approximate derivative
-!             of the solution at t. It is contained in
+!             of the solution at t. it is contained in
 !             rwork(21),...,rwork(20+neq).
 !
 !      idid -- reports what the code did
@@ -7820,7 +7820,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                        value in rwork(12).
 !
 !             rwork(13)--which contains the current value of the
-!                        independent variable, I.E. The farthest point
+!                        independent variable, I.E. the farthest point
 !                        integration has reached. This will be different
 !                        from t only when interpolation has been
 !                        PERFORMED (idid=3).
@@ -7848,7 +7848,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !        Do not alter any quantity not specifically permitted below,
 !        in particular do not alter neq, t, y(*), rwork(*), iwork(*) or
-!        the differential equation in subroutine F. Any such alteration
+!        the differential equation in subroutine F. any such alteration
 !        constitutes a new problem and must be treated as such, I.E.
 !        You must start afresh.
 !
@@ -7887,7 +7887,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !                     another step in the direction of tout.
 !
 !             idid = 2 OR 3, DEFINE A NEW TOUT AND CALL THE CODE AGAIN.
-!                     Tout must be different from t. You cannot change
+!                     Tout must be different from t. you cannot change
 !                     the direction of integration without restarting.
 !
 !                         *** FOLLOWING AN INTERRUPTED TASK ***
@@ -7938,7 +7938,7 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !
 !     If stfode is to be used in an overlay situation, you must save and
 !     restore certain items used internally by stfode  (values in the
-!     common block DEBDF1). This can be accomplished as follows.
+!     common block debdf1). This can be accomplished as follows.
 !
 !     To save the necessary values upon return from stfode, simply call
 !        svco(rwork(22+neq),iwork(21+neq)).
@@ -7949,8 +7949,8 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !***********************************************************************
 !
 !***REFERENCES
-!   SHAMPINE L.F., WATTS H.A., *DEPAC - DESIGN OF A USER ORIENTED
-!   PACKAGE OF ODE SOLVERS*, SAND79-2374, SANDIA LABORATORIES, 1979.
+!   Shampine L.F., Watts H.A., *DEPAC - design of a user oriented
+!   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
 !
 !
 logical :: intout
@@ -8059,7 +8059,7 @@ subroutine rsco (rsav, isav)
 implicit none
 !-----------------------------------------------------------------------
 ! This routine restores from rsav and isav the contents of common
-! block DEBDF1, which is used internally in the sfode package.
+! block debdf1, which is used internally in the sfode package.
 !-----------------------------------------------------------------------
 integer :: isav(*), i, ils, lenils, lenrls
 real :: rsav(*), rls
@@ -8466,7 +8466,7 @@ real :: vnorm
 !             VECTOR  U(*)=(U(1),U(2),...,U(neq)) , THE SUBROUTINE MUST
 !             evaluate the neq components of the system of differential
 !             EQUATIONS  DU/dx=F(X,U)  AND STORE THE DERIVATIVES IN THE
-!             ARRAY UPRIME(*), THAT IS,  UPRIME(I) = * DU(I)/dx *  FOR
+!             ARRAY uprime(*), THAT IS,  uprime(I) = * DU(I)/dx *  FOR
 !             EQUATIONS I=1,...,neq.
 !
 !             Subroutine F must not alter X or U(*). You must declare
@@ -8475,7 +8475,7 @@ real :: vnorm
 !
 !             Rpar and ipar are real and integer parameter arrays which
 !             you can use for communication between your program and
-!             subroutine F. They are not used or altered by hstart. If
+!             subroutine F. they are not used or altered by hstart. If
 !             you do not need rpar or ipar, ignore these parameters by
 !             treating them as dummy arguments. If you do choose to use
 !             them, dimension them in your program and in F as arrays
@@ -8735,18 +8735,18 @@ implicit none
 ! also be called by the user for any k up to the current order.
 ! (See detailed instructions in lsode usage documentation.)
 !-----------------------------------------------------------------------
-! THE COMPUTED VALUES IN dky ARE GOTTEN BY INTERPOLATION USING THE
-! NORDSIECK HISTORY ARRAY yh.  THIS ARRAY CORRESPONDS UNIQUELY TO A
-! VECTOR-VALUED POLYNOMIAL OF DEGREE NQCUR OR LESS, AND dky IS SET
-! TO THE k-TH DERIVATIVE OF THIS POLYNOMIAL AT t.
-! THE FORMULA FOR dky IS..
+! The computed values in dky are gotten by interpolation using the
+! Nordsieck history array yh.  This array corresponds uniquely to A
+! vector-valued polynomial of degree NQCUR or less, and dky is set
+! to the k-TH derivative of this polynomial at t.
+! The formula for dky is..
 !              Q
 !  dky(i)  =  SUM  C(j,k) * (t - TN)**(j-k) * h**(-j) * yh(i,j+1)
 !             j=k
 ! WHERE  C(j,k) = j*(j-1)*...*(j-k+1), Q = NQCUR, TN = TCUR, h = HCUR.
 ! THE QUANTITIES  NQ = NQCUR, L = NQ+1, N = NEQ, TN, AND h ARE
-! COMMUNICATED BY COMMON.  THE ABOVE SUM IS DONE IN REVERSE ORDER.
-! iflag IS RETURNED NEGATIVE IF EITHER k OR t IS OUT OF BOUNDS.
+! communicated by common.  The above sum is done in reverse order.
+! iflag is returned negative if either k or t is out of bounds.
 !-----------------------------------------------------------------------
 integer :: k, nyh, iflag, i, ic, ier, iownd, iowns, j, jb, jb2, &
 &jj, jj1, jp1, jstart, kflag, l, maxord, meth, miter, n, nfe, nje, &
@@ -9014,7 +9014,7 @@ do jb = 1,nq
 ksteps = ksteps + 1
 !-----------------------------------------------------------------------
 ! Up to 3 corrector iterations are taken.  A convergence test is
-! made on the R.M.S. Norm of each correction, weighted by the error
+! made on the R.M.S. norm of each correction, weighted by the error
 ! weight vector ewt.  The sum of the corrections is accumulated in the
 ! vector acor(i).  The yh array is not altered in the corrector loop.
 !-----------------------------------------------------------------------
@@ -9399,7 +9399,7 @@ common /debdf1/ rownd, rowns(210), &
 !-----------------------------------------------------------------------
 ! pjac is called by stod  to compute and process the matrix
 ! P = i - H*EL(1)*j , WHERE j IS AN APPROXIMATION TO THE JACOBIAN.
-! Here j is computed by the user-supplied routine JAC if
+! Here j is computed by the user-supplied routine jac if
 ! MITER = 1 OR 4, OR BY FINITE DIFFERENCING IF MITER = 2, 3, OR 5.
 ! IF MITER = 3, A DIAGONAL APPROXIMATION TO j IS USED.
 ! j IS STORED IN wm AND REPLACED BY P.  IF MITER .NE. 3, P IS THEN
@@ -9557,28 +9557,28 @@ common /debdf1/ rownd, rowns(210), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
 &nje, nqu
 !-----------------------------------------------------------------------
-! THIS ROUTINE MANAGES THE SOLUTION OF THE LINEAR SYSTEM ARISING FROM
+! This routine manages the solution of the linear system arising from
 ! A CHORD ITERATION.  IT IS CALLED BY stod  IF MITER .NE. 0.
-! IF MITER IS 1 OR 2, IT CALLS sgesl TO ACCOMPLISH THIS.
+! If miter is 1 or 2, it calls sgesl to accomplish this.
 ! IF MITER = 3 IT UPDATES THE COEFFICIENT h*el0 IN THE DIAGONAL
-! MATRIX, AND THEN COMPUTES THE SOLUTION.
-! IF MITER IS 4 OR 5, IT CALLS sgbsl.
-! COMMUNICATION WITH slvs USES THE FOLLOWING VARIABLES..
+! matrix, and then computes the solution.
+! If miter is 4 or 5, it calls sgbsl.
+! Communication with slvs uses the following variables..
 ! wm  = REAL WORK SPACE CONTAINING THE INVERSE DIAGONAL MATRIX IF MITER
-!       IS 3 AND THE LU DECOMPOSITION OF THE MATRIX OTHERWISE.
-!       STORAGE OF MATRIX ELEMENTS STARTS AT wm(3).
-!       wm ALSO CONTAINS THE FOLLOWING MATRIX-RELATED DATA..
+!       is 3 and the LU decomposition of the matrix otherwise.
+!       Storage of matrix elements starts at wm(3).
+!       wm also contains the following matrix-related data..
 !       wm(1) = sqrt(UROUND) (NOT USED HERE),
 !       wm(2) = HL0, THE PREVIOUS VALUE OF h*el0, USED IF MITER = 3.
 ! iwm = INTEGER WORK SPACE CONTAINING PIVOT INFORMATION, STARTING AT
-!       iwm(21), IF MITER IS 1, 2, 4, OR 5.  iwm ALSO CONTAINS THE
+!       iwm(21), if miter is 1, 2, 4, or 5.  iwm also contains the
 !       BAND PARAMETERS ML = iwm(1) AND MU = iwm(2) IF MITER IS 4 OR 5.
 ! x   = THE RIGHT-HAND SIDE VECTOR ON INPUT, AND THE SOLUTION VECTOR
-!       ON OUTPUT, OF LENGTH N.
+!       on output, of length N.
 ! tem = VECTOR OF WORK SPACE OF LENGTH N, NOT USED IN THIS VERSION.
 ! ier = OUTPUT FLAG (IN COMMON).  ier = 0 IF NO TROUBLE OCCURRED.
 !       ier = -1 IF A SINGULAR MATRIX AROSE WITH MITER = 3.
-! THIS ROUTINE ALSO USES THE COMMON VARIABLES el0, h, MITER, AND N.
+! This routine also uses the common variables el0, h, miter, and N.
 !-----------------------------------------------------------------------
 ier = 0
 go to (100, 100, 300, 400, 400), miter
@@ -9687,8 +9687,8 @@ real, intent(inout) :: abd(lda,*)
 !           The  ml+mu by ml+mu  upper left triangle and the
 !           ml by ml  lower right triangle are not referenced.
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -9843,8 +9843,8 @@ real, intent(inout) :: b(*)
 !              call sgbsl(abd,lda,n,ml,mu,ipvt,c(1,j),0)
 !        10 continue
 !
-!     LINPACK. THIS VERSION DATED 08/14/78 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!     LINPACK. This version dated 08/14/78 .
+!     Cleve Moler, University of New Mexico, Argonne National Lab.
 !
 !     Subroutines and functions
 !
@@ -10374,7 +10374,7 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                        w (see argument list)
 !
 ! LATEST REVISION        JANUARY 1978 (BY THE AUTHORS)
-!                        MODIFIED 1986 BY A.H. MORRIS (NSWC)
+!                        modified 1986 by A.H. Morris (NSWC)
 !
 ! PURPOSE                sepell SOLVES FOR EITHER THE SECOND-ORDER
 !                        finite difference approximation or A
@@ -10666,7 +10666,7 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                          by the user for work space.  Let
 !                          K=int(LOG2(n+1))+1 AND SET  L=2**(K+1).
 !                          Then (K-2)*L+K+10*n+12*m+27 will suffice
-!                          as a length of w.  The actual length of w in
+!                          as a length of w.  the actual length of w in
 !                          the calling routine must be set in w(1) (see
 !                          ierror=11).
 !
@@ -10759,12 +10759,12 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 ! HISTORY                DEVELOPED AT NCAR DURING 1975-76.
 !
 ! ALGORITHM              sepell AUTOMATICALLY DISCRETIZES THE SEPARABLE
-!                        ELLIPTIC EQUATION WHICH IS THEN SOLVED BY A
-!                        GENERALIZED CYCLIC REDUCTION ALGORITHM IN THE
-!                        SUBROUTINE, blktri.  THE FOURTH-ORDER SOLUTION
-!                        IS OBTAINED USING DEFERRED CORRECTIONS, WHICH
-!                        IS DESCRIBED AND REFERENCED IN SECTIONS,
-!                        REFERENCES AND METHOD.
+!                        elliptic equation which is then solved by A
+!                        generalized cyclic reduction algorithm in the
+!                        subroutine, blktri.  The fourth-order solution
+!                        is obtained using deferred corrections, which
+!                        is described and referenced in sections,
+!                        references and method.
 !
 ! ACCURACY AND TIMING    THE FOLLOWING COMPUTATIONAL RESULTS WERE
 !                        obtained by solving the sample problem at the
@@ -10793,10 +10793,10 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !                        machine dependent constant that is used.
 !
 ! REFERENCES             KELLER, H.B., NUMERICAL METHODS FOR TWO-POINT
-!                          BOUNDARY-VALUE PROBLEMS, BLAISDEL (1968),
-!                          WALTHAM, MASS.
+!                          boundary-value problems, Blaisdel (1968),
+!                          WALTHAM, mass.
 !
-!                        Swarztrauber, P., And R. Sweet (1975),
+!                        Swarztrauber, P., And R. sweet (1975),
 !                          efficient Fortran subprograms for the
 !                          solution of elliptic partial differential
 !                          equations.  NCAR technical note
