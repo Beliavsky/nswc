@@ -53962,6 +53962,9 @@ C
       END SUBROUTINE MC13E
 
       SUBROUTINE SPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -54077,6 +54080,9 @@ C
       END SUBROUTINE SPSLV
 
       SUBROUTINE NSPIV1 (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
 C
 C  NSPIV1 USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -54346,6 +54352,9 @@ C
       END SUBROUTINE NSPIV1
 
       SUBROUTINE RSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -54444,6 +54453,9 @@ C
       END SUBROUTINE RSLV
 
       SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       REAL B(N), D(N), T(*), X(N), Y(N), SUM
@@ -54486,6 +54498,9 @@ C
       END SUBROUTINE RSLV1
 
       SUBROUTINE TSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -54584,6 +54599,9 @@ C
       END SUBROUTINE TSLV
 
       SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       REAL B(N), D(N), T(*), X(N), Y(N)
@@ -54635,6 +54653,9 @@ C
       END SUBROUTINE TSLV1
 
       SUBROUTINE SPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
 C     SPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A REAL SPARSE MATRIX.
@@ -54849,6 +54870,9 @@ C
       END SUBROUTINE SPLU
 
       SUBROUTINE DSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER K, L
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -54967,6 +54991,9 @@ C
       END SUBROUTINE DSPSLV
 
       SUBROUTINE DNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
 C
 C  DNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -55236,6 +55263,9 @@ C
       END SUBROUTINE DNSPIV
 
       SUBROUTINE DSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -55335,6 +55365,9 @@ C
       END SUBROUTINE DSLV
 
       SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       DOUBLE PRECISION B(N), D(N), T(*), X(N), Y(N), SUM
@@ -55377,6 +55410,9 @@ C
       END SUBROUTINE DSLV1
 
       SUBROUTINE DTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -55476,6 +55512,9 @@ C
       END SUBROUTINE DTSLV
 
       SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       DOUBLE PRECISION B(N), D(N), T(*), X(N), Y(N)
@@ -55527,6 +55566,9 @@ C
       END SUBROUTINE DTSLV1
 
       SUBROUTINE DSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
 C     DSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A DOUBLE PRECISION SPARSE
@@ -56183,6 +56225,9 @@ C
       END SUBROUTINE DONEST
 
       SUBROUTINE CSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -56298,6 +56343,9 @@ C
       END SUBROUTINE CSPSLV
 
       SUBROUTINE CNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
 C
 C  CNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -56571,6 +56619,9 @@ C
       END SUBROUTINE CNSPIV
 
       SUBROUTINE CSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -56670,6 +56721,9 @@ C
       END SUBROUTINE CSLV
 
       SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       COMPLEX B(N), D(N), T(*), X(N), Y(N), SUM
@@ -56712,6 +56766,9 @@ C
       END SUBROUTINE CSLV1
 
       SUBROUTINE CTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, M0, MAX, N
+      INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -56811,6 +56868,9 @@ C
       END SUBROUTINE CTSLV
 
       SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
+      IMPLICIT NONE
+      INTEGER N
+      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
       INTEGER IT(*), JT(*), IU(N)
       COMPLEX B(N), D(N), T(*), X(N), Y(N)
@@ -56862,6 +56922,9 @@ C
       END SUBROUTINE CTSLV1
 
       SUBROUTINE CSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
+      IMPLICIT NONE
+      INTEGER IERR, MAX, N
+      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
 C     CSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A COMPLEX SPARSE MATRIX.

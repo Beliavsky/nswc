@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 349 of the library's 1,062 procedures in twelve
-batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, and 25. The remaining 713 procedures
+The reviewed conversions cover 370 of the library's 1,062 procedures in thirteen
+batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, and 21. The remaining 692 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -287,6 +287,28 @@ with a nonzero diagonal. The existing sparse arithmetic driver now compares all
 three row-permuted transposes with dense reference results. The suite runs 27
 programs against each library version, for 81 numerical runs.
 
+## Batch 13: sparse linear solvers and factorization workers
+
+The thirteenth batch adds 21 procedures:
+
+- Direct solvers: `SPSLV`, `DSPSLV`, and `CSPSLV`.
+- Pivoting workers: `NSPIV1`, `DNSPIV`, and `CNSPIV`.
+- Factorization workers: `SPLU`, `DSPLU`, and `CSPLU`.
+- Solvers with reusable factorizations: `RSLV`, `TSLV`, `DSLV`, `DTSLV`,
+  `CSLV`, and `CTSLV`.
+- Solution workers: `RSLV1`, `TSLV1`, `DSLV1`, `DTSLV1`, `CSLV1`, and `CTSLV1`.
+
+No supplemental function types were needed. Compiler comparisons preserved all
+564 non-intrinsic symbol records in this batch. No argument intents, precision
+choices, dimensions, storage statements, or executable library code were changed.
+
+Three more Miller drivers were adapted: `test_sparse_solvers`,
+`test_sparse_solvers_single_complex`, and `test_sparse_direct_solvers`.
+They check known real, double precision, and complex solutions, pivoting,
+and transpose systems. The reusable-factorization tests also solve a second
+right-hand side with `M0=1`; the direct solver test now includes `DSPSLV`.
+The suite runs 30 programs against each library version, for 90 numerical runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -354,13 +376,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-6,676 variable and external procedure records across the 349 procedures, including
+7,240 variable and external procedure records across the 370 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 27 numerical test programs must still pass against each source version,
+All 30 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.

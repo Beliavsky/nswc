@@ -1,12 +1,12 @@
 # Numerical test programs
 
-The suite contains the original `tests/source_smoke.f90` and 26 standalone main
+The suite contains the original `tests/source_smoke.f90` and 29 standalone main
 programs adapted from `C:/fortran/amiller-nswc/test/*_legacy.f90`. Each adapted
 file records its source filename in its opening comment. The tests call the
 historical external interfaces directly; they need no Miller modules, input
 files, or interactive responses.
 
-Run all 27 programs against each of the three source versions:
+Run all 30 programs against each of the three source versions:
 
 ```sh
 python tools/validate_sources.py
@@ -20,7 +20,7 @@ python tools/validate_sources.py --compiler C:/equation/bin/gfortran.exe
 
 The runner compiles each library version once, then links and runs every main
 program against that object file separately. All build products and program
-working directories are temporary. The default therefore performs 81 numerical
+working directories are temporary. The default therefore performs 90 numerical
 test runs. The same command runs in GitHub Actions.
 
 For a selected program or library version:
@@ -52,6 +52,9 @@ directly with any one of those library files.
 | `test_sparse_conversions.f90` | Dense/sparse round trips, real and imaginary parts, conjugation, and precision conversions |
 | `test_band_sparse_conversions.f90` | Real and complex band/sparse round trips and packed symmetric conversion |
 | `test_sparse_structure_workers.f90` | Structural matching, connected blocks, row-length ordering, and block permutations |
+| `test_sparse_solvers.f90` | Double precision sparse solves, transpose systems, ordering, and factorization reuse |
+| `test_sparse_solvers_single_complex.f90` | Real and complex sparse solves, transpose systems, and factorization reuse |
+| `test_sparse_direct_solvers.f90` | Real, double precision, and complex direct sparse solutions with pivoting |
 | `test_least_squares.f90` | Known solutions using orthogonal and banded least squares |
 | `test_svd.f90` | Matrix reconstruction from single, double, and complex singular value decompositions |
 | `test_symmetric_eigensystem.f90` | Known eigenvalues and eigenvector residuals |

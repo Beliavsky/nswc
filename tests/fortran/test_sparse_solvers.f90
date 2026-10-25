@@ -1,0 +1,76 @@
+! Adapted from test_sparse_solvers_legacy.f90 in the amiller-nswc test suite.
+! Standalone legacy-interface driver: link one NSWC source version at a time.
+program test_sparse_solvers
+   implicit none
+   integer, parameter :: dp = kind(1.0d0)
+   integer, parameter :: n = 3, max2 = 12
+   real(dp) :: amat(n,n), a(7), b(n), x(n), xtrue(n), wk(2*n + max2)
+   integer :: ia(4), ja(7), r(n), c(n), iwk(4*n + max2 + 2), ierr
+   integer :: ib(n), num, bwork(5*n)
+
+   interface
+      subroutine blkord(n, ia, ja, r, c, ib, num, iwk, ierr)
+         integer, intent(in) :: n
+         integer, intent(in) :: ia(*), ja(*)
+         integer, intent(out) :: r(n), c(n), ib(n)
+         integer, intent(out) :: num, ierr
+         integer, intent(inout) :: iwk(*)
+      end subroutine blkord
+      subroutine dslv(m0, n, a, ia, ja, b, r, c, max2, x, iwk, wk, ierr)
+         integer, parameter :: dp = kind(1.0d0)
+         integer, intent(in) :: m0, n, max2
+         real(dp), intent(in) :: a(*), b(n)
+         integer, intent(in) :: ia(*), ja(*), r(n)
+         integer, intent(inout) :: c(n), iwk(*)
+         real(dp), intent(out) :: x(n)
+         real(dp), intent(inout) :: wk(*)
+         integer, intent(inout) :: ierr
+      end subroutine dslv
+      subroutine dtslv(m0, n, a, ia, ja, b, r, c, max2, x, iwk, wk, ierr)
+         integer, parameter :: dp = kind(1.0d0)
+         integer, intent(in) :: m0, n, max2
+         real(dp), intent(in) :: a(*), b(n)
+         integer, intent(in) :: ia(*), ja(*), r(n)
+         integer, intent(inout) :: c(n), iwk(*)
+         real(dp), intent(out) :: x(n)
+         real(dp), intent(inout) :: wk(*)
+         integer, intent(inout) :: ierr
+      end subroutine dtslv
+   end interface
+
+   amat = reshape([3.0_dp, 1.0_dp, 0.0_dp, &
+                   1.0_dp, 4.0_dp, 2.0_dp, &
+                   0.0_dp, 1.0_dp, 5.0_dp], [n,n])
+   ! CSR rows of the matrix represented above.
+   ia = [1, 3, 6, 8]
+   ja = [1, 2, 1, 2, 3, 2, 3]
+   a = [3.0_dp, 1.0_dp, 1.0_dp, 4.0_dp, 1.0_dp, 2.0_dp, 5.0_dp]
+
+   call blkord(n, ia, ja, r, c, ib, num, bwork, ierr)
+   if (ierr /= 0) error stop 'legacy BLKORD status'
+
+   xtrue = [1.0_dp, -2.0_dp, 0.5_dp]
+   b = matmul(amat, xtrue)
+   ierr = 0
+   call dslv(0, n, a, ia, ja, b, r, c, max2, x, iwk, wk, ierr)
+   if (ierr < 1) error stop 'legacy DSLV status'
+   if (maxval(abs(x - xtrue)) > 2.0e-12_dp) error stop 'legacy DSLV solution'
+
+   b=matmul(amat,2.0_dp*xtrue)
+   call dslv(1,n,a,ia,ja,b,r,c,max2,x,iwk,wk,ierr)
+   if (maxval(abs(x-2.0_dp*xtrue))>2.0e-12_dp) error stop 'DSLV reuse'
+
+   ! Reinitialize ordering for a separate transpose solve.
+   call blkord(n, ia, ja, r, c, ib, num, bwork, ierr)
+   b = matmul(transpose(amat), xtrue)
+   ierr = 0
+   call dtslv(0, n, a, ia, ja, b, r, c, max2, x, iwk, wk, ierr)
+   if (ierr < 1) error stop 'legacy DTSLV status'
+   if (maxval(abs(x - xtrue)) > 2.0e-12_dp) error stop 'legacy DTSLV solution'
+
+   b=matmul(transpose(amat),2.0_dp*xtrue)
+   call dtslv(1,n,a,ia,ja,b,r,c,max2,x,iwk,wk,ierr)
+   if (maxval(abs(x-2.0_dp*xtrue))>2.0e-12_dp) error stop 'DTSLV reuse'
+   print '(a,3es25.16)', 'Double sparse transpose solution: ',x
+   print *, 'test_sparse_solvers: PASS'
+end program test_sparse_solvers

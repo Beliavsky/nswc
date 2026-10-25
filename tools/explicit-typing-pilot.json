@@ -2453,6 +2453,153 @@
         "      INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT",
         "     x, NNM1"
       ]
+    },
+    "SPSLV": {
+      "sha256": "ff938332fb4df349c82445653f1bbfbb2cac7fbbf60bd27c58e63ec1961850de",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER K, L"
+      ]
+    },
+    "NSPIV1": {
+      "sha256": "ece49ae62fce73ae75eb9beea9169ba7cdf89abf25d5e90e9335ba74533b5a69",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT"
+      ]
+    },
+    "RSLV": {
+      "sha256": "01c68500cb2e19384b909854c15617de142618ac3f33d81f8a01ab482dea837f",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "RSLV1": {
+      "sha256": "1acad9e24836ea611676bdd7fe3ef10a7f1a645f3d6f015da183a651ed41ff86",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "TSLV": {
+      "sha256": "95781fca054fe9a1aa56ea331232719a0b822b82c96ab410d9d18624263fbbe3",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "TSLV1": {
+      "sha256": "36ed8a75c2e34efe23d79e72883a86c657b3df133ef274d0a353187514f8c808",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "SPLU": {
+      "sha256": "a8d09b171cc1f245aa589fc0f7729e20389f1e5f9429e13e26ebeb6c43d68c17",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL"
+      ]
+    },
+    "DSPSLV": {
+      "sha256": "b94d12fecd3d1033f188f249b2a99def6fdfd5e2d41dfde083a414c5c1265508",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER K, L"
+      ]
+    },
+    "DNSPIV": {
+      "sha256": "fa6aa1ce386e42509bde66a64388e58e5bbc081469b9d9f4eeebd5aa181ce503",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT"
+      ]
+    },
+    "DSLV": {
+      "sha256": "b8270a451cbc37cb53cf99ea6611b021b9276e44486836bce60a061858a1b984",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "DSLV1": {
+      "sha256": "f0db3a2ef3a43893f757858bc10349b5baa10dd9a3584072bf71604b3b33d707",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "DTSLV": {
+      "sha256": "cb77691d66a1359bfe47c0d11498348c9418426699b645b8fef5b8342208d48f",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "DTSLV1": {
+      "sha256": "6bd1a4db5b9ad46e3874d90f04b4be2e520bb59a718a491508aa158b68b23161",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "DSPLU": {
+      "sha256": "a9785c97c8746e23d6bdc8951a2dce1584444a2144f64d1f2bf5c84f1e1e0521",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL"
+      ]
+    },
+    "CSPSLV": {
+      "sha256": "f5674e88ecca3f752e53322f2cc2fe15a4adc2e0796c1afa1d95450f3d735467",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER K, L"
+      ]
+    },
+    "CNSPIV": {
+      "sha256": "93025e17ee662050fb5b3b53c3f8570f59180fe886ec0d4c3edb14f1f2f4a44a",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT"
+      ]
+    },
+    "CSLV": {
+      "sha256": "273dcf6b9756df1ef0571a69824acaea4a9e3c468b839fa6087ca359269b12a7",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "CSLV1": {
+      "sha256": "f66c3ead736dd5fcd0955ee4697816f1c05f56bd8330223a6395d1520f751238",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "CTSLV": {
+      "sha256": "fbb9d03fbeffbae06619e94ce1a29089d6c224815578390fd6f9abee54eb0da6",
+      "declarations": [
+        "      INTEGER IERR, M0, MAX, N",
+        "      INTEGER IT, IU, JT, K, L"
+      ]
+    },
+    "CTSLV1": {
+      "sha256": "2afa3d7c8a581b720958231203838974d8e9d4655324502447e9cfa1bbbbcf43",
+      "declarations": [
+        "      INTEGER N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK"
+      ]
+    },
+    "CSPLU": {
+      "sha256": "760179427eec102b74a7e8bca76fc041c416c8a3806431ff4616f8be8d65111c",
+      "declarations": [
+        "      INTEGER IERR, MAX, N",
+        "      INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL"
+      ]
     }
   },
   "batches": [
@@ -2887,6 +3034,34 @@
         "MC21B",
         "MC13D",
         "MC13E"
+      ]
+    },
+    {
+      "id": "batch-13",
+      "source_commit": "daf1a31",
+      "input_sha256": "ffbd0dbbe069267214102bd357d14c8862e90d994afa1711428f88bf79cb81e1",
+      "procedures": [
+        "SPSLV",
+        "NSPIV1",
+        "RSLV",
+        "RSLV1",
+        "TSLV",
+        "TSLV1",
+        "SPLU",
+        "DSPSLV",
+        "DNSPIV",
+        "DSLV",
+        "DSLV1",
+        "DTSLV",
+        "DTSLV1",
+        "DSPLU",
+        "CSPSLV",
+        "CNSPIV",
+        "CSLV",
+        "CSLV1",
+        "CTSLV",
+        "CTSLV1",
+        "CSPLU"
       ]
     }
   ]

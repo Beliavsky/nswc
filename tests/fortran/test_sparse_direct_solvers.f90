@@ -1,0 +1,87 @@
+! Adapted from test_sparse_direct_solvers_legacy.f90 in the amiller-nswc test suite.
+! Standalone legacy-interface driver: link one NSWC source version at a time.
+program test_sparse_direct_solvers
+   implicit none
+   integer, parameter :: dp=kind(1.0d0)
+   integer, parameter :: n = 2, max_store = 2
+   real :: ar(n,n), a(4), br(n), xr(n), xrtrue(n), rtempr(n + max_store)
+   complex :: ac(n,n), ca(4), bc(n), xc(n), xctrue(n), rtempc(n + max_store)
+   real(dp) :: ad(4),bd(n),xd(n),rtempd(n+max_store)
+   integer :: ia(n + 1), ja(4), r(n), c(n), itemp(3*n + max_store + 2), ierr
+
+   interface
+      subroutine spslv(n, a, ia, ja, b, r, c, max, x, itemp, rtemp, ierr)
+         integer, intent(in) :: n
+         real, intent(in) :: a(*)
+         integer, intent(in) :: ia(*)
+         integer, intent(in) :: ja(*)
+         real, intent(in) :: b(n)
+         integer, intent(in) :: r(n)
+         integer, intent(inout) :: c(n)
+         integer, intent(in) :: max
+         real, intent(out) :: x(n)
+         integer, intent(inout) :: itemp(*)
+         real, intent(inout) :: rtemp(*)
+         integer, intent(out) :: ierr
+      end subroutine spslv
+      subroutine cspslv(n, a, ia, ja, b, r, c, max, x, itemp, rtemp, ierr)
+         integer, intent(in) :: n
+         complex, intent(in) :: a(*)
+         integer, intent(in) :: ia(*)
+         integer, intent(in) :: ja(*)
+         complex, intent(in) :: b(n)
+         integer, intent(in) :: r(n)
+         integer, intent(inout) :: c(n)
+         integer, intent(in) :: max
+         complex, intent(out) :: x(n)
+         integer, intent(inout) :: itemp(*)
+         complex, intent(inout) :: rtemp(*)
+         integer, intent(out) :: ierr
+      end subroutine cspslv
+      subroutine dspslv(n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
+         import dp
+         integer :: n,ia(*),ja(*),r(n),c(n),max,itemp(*),ierr
+         real(dp) :: a(*),b(n),x(n),rtemp(*)
+      end subroutine dspslv
+   end interface
+
+   ar(1,:) = [3.0, 2.0]
+   ar(2,:) = [1.0, 1.0]
+   a = [3.0, 2.0, 1.0, 1.0]
+   ac(1,:) = [(3.0,0.0), (2.0,2.0)]
+   ac(2,:) = [(1.0,0.0), (1.0,0.0)]
+   ca = [(3.0,0.0), (2.0,2.0), (1.0,0.0), (1.0,0.0)]
+   ia = [1, 3, 5]
+   ja = [1, 2, 1, 2]
+   r = [1, 2]
+
+   xrtrue = [1.0, -0.5]
+   br = matmul(ar, xrtrue)
+   c = [1, 2]
+   itemp = 0
+   rtempr = 0.0
+   call spslv(n, a, ia, ja, br, r, c, max_store, xr, itemp, rtempr, ierr)
+   if (ierr < 1) error stop 'legacy SPSLV status'
+   if (maxval(abs(xr - xrtrue)) > 3.0e-5) error stop 'legacy SPSLV solution'
+
+   xctrue = [(1.0,-1.0), (0.5,0.25)]
+   bc = matmul(ac, xctrue)
+   c = [1, 2]
+   itemp = 0
+   rtempc = (0.0, 0.0)
+   call cspslv(n, ca, ia, ja, bc, r, c, max_store, xc, itemp, rtempc, ierr)
+   if (ierr < 1) error stop 'legacy CSPSLV status'
+   if (c(1) /= 2) error stop 'legacy CSPSLV pivot metric'
+   if (maxval(abs(xc - xctrue)) > 5.0e-5) error stop 'legacy CSPSLV solution'
+
+   ad=real(a,dp)
+   bd=matmul(real(ar,dp),real(xrtrue,dp))
+   c=[1,2]; itemp=0; rtempd=0.0_dp
+   call dspslv(n,ad,ia,ja,bd,r,c,max_store,xd,itemp,rtempd,ierr)
+   if (ierr<1) error stop 'DSPSLV status'
+   if (maxval(abs(xd-real(xrtrue,dp)))>1.0e-12_dp) error stop 'DSPSLV solution'
+   print '(a,2es25.16)', 'Real direct sparse solution: ',xr
+   print '(a,2es25.16)', 'Double direct sparse solution: ',xd
+   print '(a,4es25.16)', 'Complex direct sparse solution: ',xc
+   print *, 'test_sparse_direct_solvers: PASS'
+end program test_sparse_direct_solvers
