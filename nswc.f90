@@ -52150,6 +52150,9 @@ RETURN
 END SUBROUTINE SCONJ
 
 SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !                 TRANSPOSING A SPARSE REAL MATRIX
 !-----------------------------------------------------------------------
@@ -52271,6 +52274,9 @@ RETURN
 END SUBROUTINE RPOSE1
 
 SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
 !-----------------------------------------------------------------------
@@ -52392,6 +52398,9 @@ RETURN
 END SUBROUTINE DPOSE1
 
 SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 !-----------------------------------------------------------------------
 !               TRANSPOSING A SPARSE COMPLEX MATRIX
 !-----------------------------------------------------------------------
@@ -52513,6 +52522,9 @@ RETURN
 END SUBROUTINE CPOSE1
 
 SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !               ADDITION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
@@ -52572,6 +52584,9 @@ RETURN
 END SUBROUTINE SADD
 
 SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
@@ -52631,6 +52646,9 @@ RETURN
 END SUBROUTINE DSADD
 
 SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !              ADDITION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
@@ -52690,6 +52708,9 @@ RETURN
 END SUBROUTINE CSADD
 
 SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !             SUBTRACTION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
@@ -52749,6 +52770,9 @@ RETURN
 END SUBROUTINE SSUBT
 
 SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
@@ -52808,6 +52832,9 @@ RETURN
 END SUBROUTINE DSSUBT
 
 SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, M, N, NUM
+INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 !-----------------------------------------------------------------------
 !            SUBTRACTION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
@@ -52867,6 +52894,9 @@ RETURN
 END SUBROUTINE CSSUBT
 
 SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !               MULTIPLICATION OF SPARSE REAL MATRICES
 !-----------------------------------------------------------------------
@@ -52919,6 +52949,9 @@ RETURN
 END SUBROUTINE SPROD
 
 SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
 !-----------------------------------------------------------------------
@@ -52971,6 +53004,9 @@ RETURN
 END SUBROUTINE DSPROD
 
 SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
+IMPLICIT NONE
+INTEGER IERR, L, M, N, NUM
+INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 !-----------------------------------------------------------------------
 !             MULTIPLICATION OF SPARSE COMPLEX MATRICES
 !-----------------------------------------------------------------------
@@ -53023,6 +53059,9 @@ RETURN
 END SUBROUTINE CSPROD
 
 SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
@@ -53043,6 +53082,9 @@ RETURN
 END SUBROUTINE MVPRD
 
 SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53063,6 +53105,9 @@ RETURN
 END SUBROUTINE MVPRD1
 
 SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
@@ -53087,6 +53132,9 @@ RETURN
 END SUBROUTINE MTPRD
 
 SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53107,6 +53155,9 @@ RETURN
 END SUBROUTINE MTPRD1
 
 SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
@@ -53127,6 +53178,9 @@ RETURN
 END SUBROUTINE DVPRD
 
 SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53147,6 +53201,9 @@ RETURN
 END SUBROUTINE DVPRD1
 
 SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
@@ -53171,6 +53228,9 @@ RETURN
 END SUBROUTINE DTPRD
 
 SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53191,6 +53251,9 @@ RETURN
 END SUBROUTINE DTPRD1
 
 SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
@@ -53211,6 +53274,9 @@ RETURN
 END SUBROUTINE CVPRD
 
 SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53231,6 +53297,9 @@ RETURN
 END SUBROUTINE CVPRD1
 
 SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
@@ -53255,6 +53324,9 @@ RETURN
 END SUBROUTINE CTPRD
 
 SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -53275,6 +53347,10 @@ RETURN
 END SUBROUTINE CTPRD1
 
 REAL function SNRM (A, IA, JA, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN
+REAL SUM
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                      REAL SPARSE MATRIX A
@@ -53297,6 +53373,10 @@ RETURN
 END FUNCTION SNRM
 
 SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
+IMPLICIT NONE
+INTEGER M, N
+REAL ANORM
+INTEGER IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
 !-----------------------------------------------------------------------
@@ -53326,6 +53406,9 @@ RETURN
 END SUBROUTINE S1NRM
 
 double precision function DSNRM (A, IA, JA, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                DOUBLE PRECISION SPARSE MATRIX A
@@ -53348,6 +53431,9 @@ RETURN
 END FUNCTION DSNRM
 
 SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !               COMPUTATION OF THE L1 NORM OF A SPARSE
 !                     DOUBLE PRECISION MATRIX A

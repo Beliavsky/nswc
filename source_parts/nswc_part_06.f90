@@ -1,4 +1,57 @@
+SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), X(N), Y(M), SUM
+INTEGER IA(*), JA(*)
+!
+do 11 I = 1,M
+   SUM = Y(I)
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 11
+   DO L = LMIN,LMAX
+      J = JA(L)
+      SUM = SUM + A(L)*X(J)
+   END DO
+11 Y(I) = SUM
+RETURN
+END SUBROUTINE DVPRD1
+
+SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
+!-----------------------------------------------------------------------
+!              PRODUCT OF A VECTOR AND A SPARSE MATRIX
+!-----------------------------------------------------------------------
+DOUBLE PRECISION A(*), X(M), Y(N), T
+INTEGER IA(*), JA(*)
+!
+DO J = 1,N
+   Y(J) = 0.D0
+END DO
+!
+do 21 I = 1,M
+   T = X(I)
+   LMIN = IA(I)
+   LMAX = IA(I+1) - 1
+   IF (LMIN .GT. LMAX) GO TO 21
+   DO L = LMIN,LMAX
+      J = JA(L)
+      Y(J) = Y(J) + T*A(L)
+   END DO
+21 CONTINUE
+RETURN
+END SUBROUTINE DTPRD
+
 SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -19,6 +72,9 @@ RETURN
 END SUBROUTINE DTPRD1
 
 SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 !-----------------------------------------------------------------------
@@ -39,6 +95,9 @@ RETURN
 END SUBROUTINE CVPRD
 
 SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -59,6 +118,9 @@ RETURN
 END SUBROUTINE CVPRD1
 
 SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 !-----------------------------------------------------------------------
@@ -83,6 +145,9 @@ RETURN
 END SUBROUTINE CTPRD
 
 SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, J, L, LMAX, LMIN
 !-----------------------------------------------------------------------
 !     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 !-----------------------------------------------------------------------
@@ -103,6 +168,10 @@ RETURN
 END SUBROUTINE CTPRD1
 
 REAL function SNRM (A, IA, JA, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN
+REAL SUM
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                      REAL SPARSE MATRIX A
@@ -125,6 +194,10 @@ RETURN
 END FUNCTION SNRM
 
 SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
+IMPLICIT NONE
+INTEGER M, N
+REAL ANORM
+INTEGER IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
 !-----------------------------------------------------------------------
@@ -154,6 +227,9 @@ RETURN
 END SUBROUTINE S1NRM
 
 double precision function DSNRM (A, IA, JA, M, N)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER I, IP, IPMAX, IPMIN
 !-----------------------------------------------------------------------
 !             COMPUTATION OF THE L-INFINITY NORM OF A
 !                DOUBLE PRECISION SPARSE MATRIX A
@@ -176,6 +252,9 @@ RETURN
 END FUNCTION DSNRM
 
 SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
+IMPLICIT NONE
+INTEGER M, N
+INTEGER IP, IPMAX, IPMIN, J
 !-----------------------------------------------------------------------
 !               COMPUTATION OF THE L1 NORM OF A SPARSE
 !                     DOUBLE PRECISION MATRIX A

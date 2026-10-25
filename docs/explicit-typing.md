@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 296 of the library's 1,062 procedures in ten
-batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, and 37. The remaining 766 procedures
+The reviewed conversions cover 324 of the library's 1,062 procedures in eleven
+batches of 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, and 28. The remaining 738 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -241,6 +241,29 @@ arguments to `BREAL` and `BIMAG`. The absent `BCVR` helper was replaced by direc
 construction of the complex test input. The suite now runs 23 programs against
 each library version, for 69 numerical runs.
 
+## Batch 11: sparse arithmetic, transposes, and norms
+
+The eleventh batch adds 28 procedures:
+
+- Addition and subtraction: `SADD`, `DSADD`, `CSADD`, `SSUBT`, `DSSUBT`, and `CSSUBT`.
+- Matrix products: `SPROD`, `DSPROD`, and `CSPROD`.
+- Transposes: `RPOSE`, `DPOSE`, and `CPOSE`.
+- Vector products and accumulation: `MVPRD`, `MVPRD1`, `MTPRD`, `MTPRD1`,
+  `DVPRD`, `DVPRD1`, `DTPRD`, `DTPRD1`, `CVPRD`, `CVPRD1`, `CTPRD`, and `CTPRD1`.
+- Norms: `SNRM`, `S1NRM`, `DSNRM`, and `DS1NRM`.
+
+No supplemental function types were needed. Compiler comparisons preserved all
+493 non-intrinsic symbol records in this batch. No argument intents, precision
+choices, dimensions, storage statements, or executable library code were changed.
+
+The new `test_sparse_operations` combines and extends the Miller sparse
+arithmetic examples. It checks real, double precision, and complex results
+against dense array arithmetic, `MATMUL`, `TRANSPOSE`, and direct norm formulas.
+The fixtures include an empty row, cancellation, accumulated vector products,
+and insufficient output storage. Output row pointers and column bounds are
+validated before reconstructing dense reference comparisons. The suite now
+runs 24 programs against each library version, for 72 numerical runs.
+
 ## Declaration generator
 
 The trial used [`ftnchek` 3.3.1](https://www.dsm.fordham.edu/~ftnchek/), built from
@@ -308,13 +331,13 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-5,772 variable and external procedure records across the 296 procedures, including
+6,265 variable and external procedure records across the 324 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
-All 23 numerical test programs must still pass against each source version,
+All 24 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so subsequent batches need the same
 declaration review and compiler comparison rather than relying on tests alone.
