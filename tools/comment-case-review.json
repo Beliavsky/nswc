@@ -1,10 +1,11 @@
 {
   "input_sha256": "7b246665fd069c890b72aafe7d6a6dab58e1d3900c96ab4935d1873ac08e22cc",
-  "output_sha256": "b80dd57c25cfd6372f1af9c485916ecad93635223d65102d86aafe09784978af",
+  "output_sha256": "87d14f1f0997a9889943fbd30947b9ca94013f9f1247f88ab0ca00b5f85b5f1f",
   "rules_sha256": "914b6a64ca9c704745b04bdb529f6efcc2e9895488f36591e7b68e8565d44e1b",
   "vocabulary_sha256": "e13c433e8d8472ee7b186ca09901f0f4d964404eff21040392bcd0b3b3d4a0f0",
-  "changed_lines": 18328,
+  "changed_lines": 26474,
   "changed_paragraphs": 9143,
+  "technical_comment_lines": 14914,
   "retained_lines": {
     "formula or status expression": 5780,
     "reference/author/history paragraph": 1403,

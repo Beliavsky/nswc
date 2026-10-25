@@ -1,7 +1,7 @@
 """Sentence-case selected uppercase prose in free-form Fortran comments.
 
-Code, inline comments, directives, formulas, tables, examples and bibliographic
-paragraphs are preserved. Ordinary words and proper names come from reviewed
+Executable code, inline comments and directives are preserved. Commented Fortran
+and identifiable code references use lowercase. Ordinary words and proper names come from reviewed
 source-vocabulary files. Unrecognized words keep their spelling and case.
 Only ASCII letter case can change; whitespace and physical lines stay fixed.
 """
@@ -35,6 +35,7 @@ class Result:
     retained: dict
     unknown: dict
     uncertain: list
+    technical_lines: int = 0
 
     def report(self, original):
         return {'input_sha256': hashlib.sha256(original.encode('ascii')).hexdigest(),
@@ -42,6 +43,7 @@ class Result:
                 'rules_sha256': hashlib.sha256((HERE / 'comment-case-rules.json').read_bytes()).hexdigest(),
                 'vocabulary_sha256': hashlib.sha256((HERE / 'comment-case-words.txt').read_bytes()).hexdigest(),
                 'changed_lines': self.changed_lines, 'changed_paragraphs': self.changed_paragraphs,
+                'technical_comment_lines': self.technical_lines,
                 'retained_lines': self.retained, 'unrecognized_prose_words': self.unknown,
                 'uncertain_prose': self.uncertain}
 
@@ -51,6 +53,99 @@ def settings():
     words = {line for line in (HERE / 'comment-case-words.txt').read_text().splitlines()
              if line and not line.startswith('#')}
     return words, rules
+
+
+def technical_comments(lines, vocabulary, proper_names):
+    """Lowercase code references, using declarations in the enclosing procedure.
+
+    English words that are also identifiers need explicit syntactic context.
+    Quoted text, Hollerith payloads and compiler directives retain their case.
+    """
+    header = re.compile(r'^\s*(?:(?:integer|real|double precision|complex|logical|character)'
+                        r'(?:\*\d+)?\s+)?(?:function|subroutine)\s+(\w+)', re.I)
+    procedures = {m[1].upper() for line in lines if (m := header.match(line))}
+    boundaries = [i for i, line in enumerate(lines) if header.match(line)] + [len(lines)]
+    local = set()
+    known_names = procedures
+    boundary = 0
+    count = 0
+    for index, line in enumerate(lines):
+        if boundary < len(boundaries) - 1 and index == boundaries[boundary]:
+            block = lines[index:boundaries[boundary + 1]]
+            local = set()
+            for code in block:
+                if not code.lstrip().startswith('!') and '::' in code:
+                    # Declarations are generated without initialization; take entity
+                    # names, not words from bounds, literals or inline comments.
+                    entities = code.split('::', 1)[1].split('!', 1)[0]
+                    entities = re.sub(r'\([^()]*\)', '', entities)
+                    local.update(m[1].upper() for m in re.finditer(r'(?:^|,)\s*(\w+)', entities))
+            boundary += 1
+            known_names = local | procedures
+        match = COMMENT.match(line)
+        if not match:
+            continue
+        body = match[2]
+        value = body.strip()
+        if re.match(r'^(?:\$|[A-Z][A-Z0-9_]*\$|IBM\*|\*DECK)', value, re.I):
+            continue
+        statement = re.sub(r'^\d+\s+', '', value)
+        example = bool(re.match(
+            r'^(?:CALL\s+\w+\s*(?:\(|$)|(?:INTEGER|REAL|DOUBLE\s+PRECISION|COMPLEX|LOGICAL|CHARACTER|'
+            r'DIMENSION|COMMON|EXTERNAL|EQUIVALENCE|SAVE)\s+\w+\s*(?:$|[,(/])|'
+            r'IMPLICIT\s+NONE\s*$|DATA\s+\w+\s*[(/]|PARAMETER\s*\(|'
+            r'(?:SUBROUTINE|FUNCTION)\s+\w+\s*\(|DO\s+(?:WHILE|CONCURRENT)\s*\(|'
+            r'(?:READ|WRITE|FORMAT|IF|INTENT)\s*\(|DO\s+(?:\d+\s+)?\w+\s*=|'
+            r'(?:RETURN|CONTINUE|END(?:\s+DO)?|STOP)\s*(?:\d+)?\s*$)', statement, re.I))
+        assignment = re.match(r'^\w+(?:\([^)]*\))?\s*=', statement)
+        if assignment and not re.search(r'[A-Za-z]+\s+[A-Za-z]+', statement[assignment.end():]):
+            example = True
+        # Protect strings (including doubled delimiters) and counted Hollerith data.
+        protected = []
+        token = re.compile(r"'(?:[^']|'')*'|\"(?:[^\"]|\"\")*\"|(?<!\w)(\d+)[hH]")
+        end = 0
+        for item in token.finditer(body):
+            if item.start() < end:
+                continue
+            end = item.end() + (int(item[1]) if item[1] else 0)
+            protected.append((item.start(), end))
+        protected.extend(m.span() for m in re.finditer(r'\b(?:[A-Z]\.\s*){2,}', body))
+        explicit = {m[1].upper() for m in CONTEXT.finditer(body)
+                    if m[1].upper() in known_names}
+        field = re.match(r'^\s*(\w+)\s{2,}[-:]', body)
+        if field and field[1].upper() in local:
+            explicit.add(field[1].upper())
+        greek = {'ALPHA', 'BETA', 'GAMMA', 'DELTA', 'EPSILON', 'ZETA', 'ETA', 'THETA',
+                 'IOTA', 'KAPPA', 'LAMBDA', 'MU', 'NU', 'XI', 'OMICRON', 'PI', 'RHO',
+                 'SIGMA', 'TAU', 'UPSILON', 'PHI', 'CHI', 'PSI', 'OMEGA'}
+        explicit.update(local & greek)
+        intrinsic = {'ABS', 'DABS', 'SQRT', 'DSQRT', 'EXP', 'DEXP', 'LOG', 'DLOG',
+                     'SIN', 'COS', 'TAN', 'MIN', 'MAX', 'MOD', 'SIGN', 'INT', 'REAL',
+                     'DBLE', 'AIMAG', 'CMPLX', 'CONJG', 'LEN', 'SIZE', 'SUM'}
+        # Function/array notation and purely symbolic parenthesized expressions.
+        math = [m.span() for m in re.finditer(r'\b\w+\s*\([^)]*\)', body)
+                if not re.search(r'[A-Za-z]+\s+[A-Za-z]+', m[0])]
+
+        def replace(item):
+            word, key = item[0], item[0].upper()
+            if any(a <= item.start() < b for a, b in protected):
+                return word
+            symbolic = any(a <= item.start() < b for a, b in math)
+            known = key in known_names
+            function = key in intrinsic and re.match(r'\s*\(', body[item.end():])
+            arithmetic = key in local and (re.search(r'[+*/=<>-]\s*$', body[:item.start()])
+                                           or re.match(r'\s*(?:[+*/=<>-]|\.(?:LE|LT|GE|GT|EQ|NE)\.)', body[item.end():], re.I))
+            unambiguous = (key != 'A' and key.lower() not in vocabulary and key not in proper_names
+                           and (key in local or len(key) > 2))
+            if example or function or arithmetic or key in explicit or (symbolic and known) or (known and unambiguous):
+                return word.lower()
+            return word
+
+        after = WORD.sub(replace, body)
+        if after != body:
+            lines[index] = match[1] + after + (match[3] or '')
+            count += 1
+    return count
 
 
 def sentence_case(text, vocabulary=None, rules=None):
@@ -175,14 +270,16 @@ def sentence_case(text, vocabulary=None, rules=None):
                 changed_lines += 1
                 changed = True
         changed_paragraphs += changed
+    technical_lines = technical_comments(lines, vocabulary, names)
     converted = ''.join(lines)
+    changed_lines = sum(a != b for a, b in zip(text.splitlines(True), lines))
     if len(converted) != len(text) or any(a != b and not (a.isascii() and a.isalpha() and a.lower() == b.lower())
                                           for a, b in zip(text, converted)):
         raise ValueError('Comment transformation must change ASCII case only')
     # Independently guard every code line, including strings and inline comments.
     if [s for s in lines if not s.lstrip().startswith('!')] != [s for s in text.splitlines(True) if not s.lstrip().startswith('!')]:
         raise ValueError('Comment transformation changed code or quoted text')
-    return Result(converted, changed_lines, changed_paragraphs, dict(retained), unknown, uncertain)
+    return Result(converted, changed_lines, changed_paragraphs, dict(retained), unknown, uncertain, technical_lines)
 
 
 def main():

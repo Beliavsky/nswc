@@ -3,56 +3,56 @@ implicit none
 integer :: ml1, ml2
 ! ----------------------------------------------------------------------
 !
-!     DBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
-!     using the factors computed by DBFA.
+!     dbsl SOLVES THE REAL BAND SYSTEM a*X = b OR TRANS(a)*X = b
+!     using the factors computed by dbfa.
 !
 !                         ----------
 !     On entry
 !
-!        A       DOUBLE PRECISION(LDA, NC)
-!                the output from DBFA.
-!                NC MUST BE .GE. 2*ML+MU+1 .
+!        A       DOUBLE PRECISION(lda, NC)
+!                the output from dbfa.
+!                NC MUST BE .GE. 2*ml+mu+1 .
 !
-!        LDA     INTEGER
-!                the leading dimension of the array A.
+!        lda     INTEGER
+!                the leading dimension of the array a.
 !
-!        N       INTEGER
+!        n       INTEGER
 !                the order of the original matrix.
 !
-!        ML      INTEGER
+!        ml      INTEGER
 !                number of diagonals below the main diagonal.
 !
-!        MU      INTEGER
+!        mu      INTEGER
 !                number of diagonals above the main diagonal.
 !
-!        IPVT    INTEGER(N)
-!                the pivot vector from DBFA.
+!        ipvt    INTEGER(n)
+!                the pivot vector from dbfa.
 !
-!        B       DOUBLE PRECISION(N)
+!        b       DOUBLE PRECISION(n)
 !                the right hand side vector.
 !
 !        JOB     INTEGER
-!                = 0         TO SOLVE  A*X = B .
-!                = NONZERO   TO SOLVE  TRANS(A)*X = B , WHERE
-!                            TRANS(A)  is the transpose.
+!                = 0         TO SOLVE  a*X = b .
+!                = NONZERO   TO SOLVE  TRANS(a)*X = b , WHERE
+!                            TRANS(a)  is the transpose.
 !
 !     On return
 !
-!        B       THE SOLUTION VECTOR  X .
+!        b       THE SOLUTION VECTOR  X .
 !
 !     Error condition
 !
 !        A division by zero will occur if the input factor contains A
 !        zero on the diagonal.  Technically this indicates singularity
 !        but it is often caused by improper arguments or improper
-!        setting of LDA.  It will not occur if DBFA and DBSL are
-!        CALLED CORRECTLY AND DBFA HAS SET INFO = 0.
+!        setting of lda.  It will not occur if dbfa and dbsl are
+!        CALLED CORRECTLY AND dbfa HAS SET INFO = 0.
 !
 !     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
 !     MODIFIED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
 !
 !     Subroutines and functions
-!      DAXPY,DDOT
+!      daxpy,ddot
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
@@ -71,8 +71,8 @@ nm1 = n - 1
 ldb = 1 - lda
 if (job .ne. 0) go to 50
 !
-!     JOB = 0 , SOLVE  A * X = B
-!       FIRST SOLVE L*Y = B
+!     job = 0 , SOLVE  a * X = b
+!       FIRST SOLVE l*Y = b
 !
 if (ml .eq. 0) go to 30
 do k = 1,nm1
@@ -101,8 +101,8 @@ end do
 b(1) = b(1)/a(1,ml1)
 return
 !
-!     JOB = NONZERO, SOLVE TRANS(A) * X = B
-!       FIRST SOLVE  TRANS(U)*Y = B
+!     job = NONZERO, SOLVE TRANS(a) * X = b
+!       FIRST SOLVE  TRANS(U)*Y = b
 !
 50 b(1) = b(1)/a(1,ml1)
 do k = 2,n
@@ -113,7 +113,7 @@ do k = 2,n
 end do
 if (ml .eq. 0) return
 !
-!       NOW SOLVE TRANS(L)*X = Y
+!       NOW SOLVE TRANS(l)*X = Y
 !
 do 70 kb = 1,nm1
    k = n - kb
@@ -129,7 +129,7 @@ do 70 kb = 1,nm1
 70 continue
 return
 !
-!     CASE WHEN ML = 0 AND MU = 0
+!     CASE WHEN ml = 0 AND mu = 0
 !
 100 do 110 k = 1,n
 110 b(k) = b(k)/a(k,1)
@@ -146,13 +146,13 @@ real :: ainorm, anorm
 real :: b1nrm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
-!                       of A banded matrix A
+!                       of a banded matrix a
 !-----------------------------------------------------------------------
 real, intent(inout) :: a(ka,*), wk(*)
 integer, intent(inout) :: iwk(*)
 !-----------------------
-!     REAL WK(2*N)
-!     INTEGER IWK(2*N)
+!     real wk(2*n)
+!     integer iwk(2*n)
 !-----------------------
 cond = 0.0
 if (n .le. 0 .or. ka .lt. n) go to 100
@@ -176,7 +176,7 @@ call bslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 if (ierr .gt. 0) go to 40
 !
-!     General loop to estimate the norm  AINORM
+!     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
 10 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
@@ -215,7 +215,7 @@ integer, intent(in) :: ka, ml, mu, n
 integer :: isgn, iter, iv, ix, j, jump, kase
 !-----------------------------------------------------------------------
 !            Computation of the L1 condition number of
-!               A double precision banded matrix A
+!               a double precision banded matrix a
 !-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,*)
 double precision, intent(out) :: cond
@@ -224,8 +224,8 @@ integer, intent(inout) :: iwk(*)
 double precision :: anorm, ainorm
 double precision :: db1nrm
 !-----------------------
-!     Double precision WK(2*N)
-!     INTEGER IWK(2*N)
+!     double precision wk(2*n)
+!     integer iwk(2*n)
 !-----------------------
 cond = 0.d0
 if (n .le. 0 .or. ka .lt. n) go to 100
@@ -249,7 +249,7 @@ call dbslv (0, a, ka, n, ml, mu, wk(ix), iwk(1), ierr)
 !
 if (ierr .gt. 0) go to 40
 !
-!     General loop to estimate the norm  AINORM
+!     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
 10 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
@@ -286,52 +286,52 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 ! ----------------------------------------------------------------------
-!     CBSLV employs Gauss elimination with row interchanges to solve
-!     THE NXN COMPLEX BANDED SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
-!     if CBSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) AN LU DECOMPO-
+!     cbslv employs Gauss elimination with row interchanges to solve
+!     THE NXN COMPLEX BANDED SYSTEM AX = b. THE ARGUMENT m0 SPECIFIES
+!     if cbslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) AN LU DECOMPO-
 !     sition of A is obtained and then the equations are solved.
-!     ON SUBSEQUENT CALLS (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED
-!     using the decomposition obtained on the initial call to CBSLV.
+!     ON SUBSEQUENT CALLS (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED
+!     using the decomposition obtained on the initial call to cbslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     A,KA      2-DIMENSIONAL ARRAY OF DIMENSION (KA,M) WHERE
-!               KA.GE.N AND M.GE.2*ML+MU+1. THE FIRST ML+MU+1
-!               columns contain the matrix A in banded form.
+!     A,ka      2-DIMENSIONAL ARRAY OF DIMENSION (ka,M) WHERE
+!               ka.GE.n AND M.GE.2*ml+mu+1. THE FIRST ml+mu+1
+!               columns contain the matrix a in banded form.
 !               A is a complex array.
 !
-!     N         NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n         NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     ML        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
+!     ml        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
 !
-!     MU        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
+!     mu        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
 !
-!     B         COMPLEX ARRAY OF N ENTRIES CONTAINING THE RIGHT
+!     b         COMPLEX ARRAY OF n ENTRIES CONTAINING THE RIGHT
 !               hand side data.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
 !     A         AN UPPER TIANGULAR MATRIX IN BAND STORAGE AND
 !               the multipliers which were used to obtain it.
 !
-!     B         THE SOLUTION OF THE EQUATIONS.
+!     b         THE SOLUTION OF THE EQUATIONS.
 !
-!     IWK       ARRAY OF LENGTH N CONTAINING THE PIVOT INDICES.
+!     iwk       ARRAY OF LENGTH n CONTAINING THE PIVOT INDICES.
 !
-!     IERR      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
-!               IERR=0 IF THE SOLUTION OF AX = B IS OBTAINED.
-!               OTHERWISE IERR.NE.0.
+!     ierr      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
+!               ierr=0 IF THE SOLUTION OF AX = b IS OBTAINED.
+!               OTHERWISE ierr.NE.0.
 !
 !
-!     After an initial call to CBSLV, the routine may be recalled
-!     WITH M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT
-!     A,KA,N,ML,mu,IWK have not been modified. CBSLV retrieves the
+!     After an initial call to cbslv, the routine may be recalled
+!     WITH m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT
+!     A,ka,n,ml,mu,iwk have not been modified. cbslv retrieves the
 !     LU decomposition which was obtained on the initial call to
-!     CBSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
+!     cbslv AND SOLVES THE NEW EQUATIONS AX = b. IN THIS CASE ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,*), b(n)
@@ -369,52 +369,52 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
 ! ----------------------------------------------------------------------
-!     CBSLV1 employs Gauss elimination with row interchanges to solve
-!     THE NXN COMPLEX BANDED SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
-!     if CBSLV1 is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) AN LU DECOMPO-
+!     cbslv1 employs Gauss elimination with row interchanges to solve
+!     THE NXN COMPLEX BANDED SYSTEM XA = b. THE ARGUMENT m0 SPECIFIES
+!     if cbslv1 is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) AN LU DECOMPO-
 !     sition of A is obtained and then the equations are solved.
-!     ON SUBSEQUENT CALLS (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED
-!     using the decomposition obtained on the initial call to CBSLV1.
+!     ON SUBSEQUENT CALLS (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED
+!     using the decomposition obtained on the initial call to cbslv1.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     A,KA      2-DIMENSIONAL ARRAY OF DIMENSION (KA,M) WHERE
-!               KA.GE.N AND M.GE.2*ML+MU+1. THE FIRST ML+MU+1
-!               columns contain the matrix A in banded form.
+!     A,ka      2-DIMENSIONAL ARRAY OF DIMENSION (ka,M) WHERE
+!               ka.GE.n AND M.GE.2*ml+mu+1. THE FIRST ml+mu+1
+!               columns contain the matrix a in banded form.
 !               A is a complex array.
 !
-!     N         NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n         NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     ML        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
+!     ml        NUMBER OF DIAGONALS BELOW THE MAIN DIAGONAL.
 !
-!     MU        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
+!     mu        NUMBER OF DIAGONALS ABOVE THE MAIN DIAGONAL.
 !
-!     B         COMPLEX ARRAY OF N ENTRIES CONTAINING THE RIGHT
+!     b         COMPLEX ARRAY OF n ENTRIES CONTAINING THE RIGHT
 !               hand side data.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
 !     A         AN UPPER TIANGULAR MATRIX IN BAND STORAGE AND
 !               the multipliers which were used to obtain it.
 !
-!     B         THE SOLUTION OF THE EQUATIONS.
+!     b         THE SOLUTION OF THE EQUATIONS.
 !
-!     IWK       ARRAY OF LENGTH N CONTAINING THE PIVOT INDICES.
+!     iwk       ARRAY OF LENGTH n CONTAINING THE PIVOT INDICES.
 !
-!     IERR      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
-!               IERR=0 IF THE SOLUTION OF XA = B IS OBTAINED.
-!               OTHERWISE IERR.NE.0.
+!     ierr      INTEGER SPECIFYING THE STATUS OF THE RESULTS.
+!               ierr=0 IF THE SOLUTION OF XA = b IS OBTAINED.
+!               OTHERWISE ierr.NE.0.
 !
 !
-!     After an initial call to CBSLV1, the routine may be recalled
-!     WITH M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT
-!     A,KA,N,ML,mu,IWK have not been modified. CBSLV retrieves the
+!     After an initial call to cbslv1, the routine may be recalled
+!     WITH m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT
+!     A,ka,n,ml,mu,iwk have not been modified. cbslv retrieves the
 !     LU decomposition which was obtained on the initial call to
-!     CBSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
+!     cbslv1 AND SOLVES THE NEW EQUATIONS XA = b. IN THIS CASE ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
 complex, intent(inout) :: a(ka,*), b(n)
@@ -454,51 +454,51 @@ integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
 integer :: icamax
 ! ----------------------------------------------------------------------
 !
-!               CBFA factors a complex band matrix BY elimination.
+!               cbfa factors a complex band matrix BY elimination.
 !
 !                              ----------
 !     On entry
 !
-!        A       COMPLEX(LDA, NC)
+!        A       COMPLEX(lda, NC)
 !                contains the matrix in band storage. The rows
 !                of the original matrix are stored in the rows
 !                of A and the diagonals of the original matrix
-!                are stored in columns 1 through ML+mu+1 of A.
-!                NC MUST BE .GE. 2*ML+MU+1 .
+!                are stored in columns 1 through ml+mu+1 of A.
+!                NC MUST BE .GE. 2*ml+mu+1 .
 !                See the comments below for details.
 !
-!        LDA     INTEGER
-!                the leading dimension of the array A. It is
-!                ASSUMED THAT LDA .GE. N.
+!        lda     INTEGER
+!                the leading dimension of the array a. It is
+!                ASSUMED THAT lda .GE. n.
 !
-!        N       INTEGER
+!        n       INTEGER
 !                the order of the original matrix.
 !
-!        ML      INTEGER
+!        ml      INTEGER
 !                number of diagonals below the main diagonal.
-!                0 .LE. ML .LT. N .
+!                0 .LE. ml .LT. n .
 !
-!        MU      INTEGER
+!        mu      INTEGER
 !                number of diagonals above the main diagonal.
-!                0 .LE. MU .LT. N .
-!                MORE EFFICIENT IF ML .LE. MU .
+!                0 .LE. mu .LT. n .
+!                MORE EFFICIENT IF ml .LE. mu .
 !
 !     On return
 !
 !        A       AN UPPER TRIANGULAR MATRIX IN BAND STORAGE
 !                and the multipliers which were used to obtain it.
-!                THE FACTORIZATION CAN BE WRITTEN  A = L*U  WHERE
-!                L is a product of permutation and unit lower
+!                THE FACTORIZATION CAN BE WRITTEN  a = l*U  WHERE
+!                l is a product of permutation and unit lower
 !                triangular matrices and U is upper triangular.
 !
-!        IPVT    INTEGER(N)
+!        ipvt    INTEGER(n)
 !                an integer vector of pivot indices.
 !
 !        INFO    INTEGER
 !                =0  NORMAL VALUE
-!                =K  IF  U(K,K) .EQ. 0. THIS IS NOT AN ERROR
+!                =k  IF  U(k,k) .EQ. 0. THIS IS NOT AN ERROR
 !                condition for this subroutine, but it does
-!                indicate that CBSL will divide by zero if
+!                indicate that cbsl will divide by zero if
 !                it is called.
 !
 !     Band storage
@@ -506,22 +506,22 @@ integer :: icamax
 !           If A0 is the matrix THEN the following code will store
 !           A0 in band form.
 !
-!                   ML = (BAND WIDTH BELOW THE DIAGONAL)
-!                   MU = (BAND WIDTH ABOVE THE DIAGONAL)
-!                   DO 20 I = 1, N
-!                      J1 = MAX0(1, I-ML)
-!                      J2 = MIN0(N, I+MU)
-!                      DO 10 J = J1, J2
-!                         K = J - I + ML + 1
-!                         A(I,K) = A0(I,J)
-!                10    CONTINUE
+!                   ml = (BAND WIDTH BELOW THE DIAGONAL)
+!                   mu = (BAND WIDTH ABOVE THE DIAGONAL)
+!                   do 20 i = 1, n
+!                      j1 = max0(1, i-ml)
+!                      j2 = min0(n, i+mu)
+!                      do 10 j = j1, j2
+!                         k = j - i + ml + 1
+!                         a(i,k) = a0(i,j)
+!                10    continue
 !                20 continue
 !
-!           This uses columns 1 through  ML + mu + 1  of A.
-!           Furthermore, ML additional columns are needed in
-!           A (starting with column  ML+mu+2) for elements
+!           This uses columns 1 through  ml + mu + 1  of A.
+!           Furthermore, ml additional columns are needed in
+!           A (starting with column  ml+mu+2) for elements
 !           generated during the triangularization. The total
-!           number of columns needed in A is  2*ML+mu+1 .
+!           number of columns needed in A is  2*ml+mu+1 .
 !
 !     Example..  if the original matrix is
 !
@@ -532,7 +532,7 @@ integer :: icamax
 !            0  0  0 54 55 56
 !            0  0  0  0 65 66
 !
-!      THEN  N = 6, ML = 1, MU = 2, LDA .GE. 6  AND A SHOULD CONTAIN
+!      THEN  n = 6, ml = 1, mu = 2, lda .GE. 6  AND A SHOULD CONTAIN
 !
 !              11 12 13  +     , + = USED FOR PIVOTING
 !           21 22 23 24  +
@@ -545,7 +545,7 @@ integer :: icamax
 !     MODIFIED BY A.H.MORRIS, NAVAL SURFACE WEAPONS CENTER.
 !
 !     Subroutines and functions
-!        MIN0,ICAMAX,CAXPY,CSCAL,CSWAP
+!        MIN0,icamax,caxpy,cscal,cswap
 ! ----------------------------------------------------------------------
 integer, intent(in) :: lda, n, ml, mu
 integer, intent(out) :: info
@@ -613,7 +613,7 @@ ipvt(n) = n
 if (a(n,ml1) .eq. (0.0,0.0)) info = n
 return
 !
-!     CASE WHEN ML = 0
+!     CASE WHEN ml = 0
 !
 100 do k = 1,n
   ipvt(k) = k
@@ -627,56 +627,56 @@ implicit none
 integer :: ml1, ml2
 ! ----------------------------------------------------------------------
 !
-!     CBSL SOLVES THE COMPLEX BAND SYSTEM A*X = B OR TRANS(A)*X = B
-!     using the factors computed by CBFA.
+!     cbsl SOLVES THE COMPLEX BAND SYSTEM a*X = b OR TRANS(a)*X = b
+!     using the factors computed by cbfa.
 !
 !                         ----------
 !     On entry
 !
-!        A       COMPLEX(LDA, NC)
-!                the output from CBFA.
-!                NC MUST BE .GE. 2*ML+MU+1 .
+!        A       COMPLEX(lda, NC)
+!                the output from cbfa.
+!                NC MUST BE .GE. 2*ml+mu+1 .
 !
-!        LDA     INTEGER
-!                the leading dimension of the array A.
+!        lda     INTEGER
+!                the leading dimension of the array a.
 !
-!        N       INTEGER
+!        n       INTEGER
 !                the order of the original matrix.
 !
-!        ML      INTEGER
+!        ml      INTEGER
 !                number of diagonals below the main diagonal.
 !
-!        MU      INTEGER
+!        mu      INTEGER
 !                number of diagonals above the main diagonal.
 !
-!        IPVT    INTEGER(N)
-!                the pivot vector from CBFA.
+!        ipvt    INTEGER(n)
+!                the pivot vector from cbfa.
 !
-!        B       COMPLEX(N)
+!        b       COMPLEX(n)
 !                the right hand side vector.
 !
 !        JOB     INTEGER
-!                = 0         TO SOLVE  A*X = B .
-!                = NONZERO   TO SOLVE  TRANS(A)*X = B , WHERE
-!                            TRANS(A)  is the transpose.
+!                = 0         TO SOLVE  a*X = b .
+!                = NONZERO   TO SOLVE  TRANS(a)*X = b , WHERE
+!                            TRANS(a)  is the transpose.
 !
 !     On return
 !
-!        B       THE SOLUTION VECTOR  X .
+!        b       THE SOLUTION VECTOR  X .
 !
 !     Error condition
 !
 !        A division by zero will occur if the input factor contains A
 !        zero on the diagonal.  Technically this indicates singularity
 !        but it is often caused by improper arguments or improper
-!        setting of LDA.  It will not occur if CBFA and CBSL are
-!        CALLED CORRECTLY AND CBFA HAS SET INFO = 0.
+!        setting of lda.  It will not occur if cbfa and cbsl are
+!        CALLED CORRECTLY AND cbfa HAS SET INFO = 0.
 !
 !     WRITTEN BY E.A. VOORHEES, LOS ALAMOS SCIENTIFIC LABORATORY.
 !     ADAPTED BY A.H. MORRIS, NAVAL SURFACE WEAPONS CENTER.
 !
 !     Subroutines and functions
-!      CAXPY,CDOTU
+!      caxpy,cdotu
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
@@ -695,8 +695,8 @@ nm1 = n - 1
 ldb = 1 - lda
 if (job .ne. 0) go to 50
 !
-!     JOB = 0 , SOLVE  A * X = B
-!       FIRST SOLVE L*Y = B
+!     job = 0 , SOLVE  a * X = b
+!       FIRST SOLVE l*Y = b
 !
 if (ml .eq. 0) go to 30
 do k = 1,nm1
@@ -725,8 +725,8 @@ end do
 b(1) = b(1)/a(1,ml1)
 return
 !
-!     JOB = NONZERO, SOLVE TRANS(A) * X = B
-!       FIRST SOLVE  TRANS(U)*Y = B
+!     job = NONZERO, SOLVE TRANS(a) * X = b
+!       FIRST SOLVE  TRANS(U)*Y = b
 !
 50 b(1) = b(1)/a(1,ml1)
 do k = 2,n
@@ -737,7 +737,7 @@ do k = 2,n
 end do
 if (ml .eq. 0) return
 !
-!       NOW SOLVE TRANS(L)*X = Y
+!       NOW SOLVE TRANS(l)*X = Y
 !
 do 70 kb = 1, nm1
    k = n - kb
@@ -753,7 +753,7 @@ do 70 kb = 1, nm1
 70 continue
 return
 !
-!     CASE WHEN ML = 0 AND MU = 0
+!     CASE WHEN ml = 0 AND mu = 0
 !
 100 do 110 k = 1,n
 110 b(k) = b(k)/a(k,1)
@@ -769,7 +769,7 @@ real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
 ip = 1
 do i = 1,m
@@ -804,7 +804,7 @@ double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
 ip = 1
 do i = 1,m
@@ -841,7 +841,7 @@ complex :: zero
 integer, intent(inout) :: ib(*), jb(*)
 data zero /(0.0,0.0)/
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
 ip = 1
 do i = 1,m
@@ -877,13 +877,13 @@ integer, intent(in) :: ia(*), ja(*)
 !
 do 30 i = 1,m
 !
-!                 Clear the I-TH row
+!                 Clear the i-TH row
 !
    do j = 1,n
       b(i,j) = 0.0
    end do
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
    ipmin = ia(i)
    ipmax = ia(i+1) - 1
@@ -907,13 +907,13 @@ integer, intent(in) :: ia(*), ja(*)
 !
 do 30 i = 1,m
 !
-!                 Clear the I-TH row
+!                 Clear the i-TH row
 !
    do j = 1,n
       b(i,j) = 0.d0
    end do
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
    ipmin = ia(i)
    ipmax = ia(i+1) - 1
@@ -937,13 +937,13 @@ integer, intent(in) :: ia(*), ja(*)
 !
 do 30 i = 1,m
 !
-!                 Clear the I-TH row
+!                 Clear the i-TH row
 !
    do j = 1,n
       b(i,j) = (0.0,0.0)
    end do
 !
-!                 Store the I-TH row
+!                 Store the i-TH row
 !
    ipmin = ia(i)
    ipmax = ia(i+1) - 1
@@ -1077,7 +1077,7 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
 integer :: i, ip, j, l, maxa, maxb, mina, minb
 !-----------------------------------------------------------------------
-!       Compute A + BI for the sparse real matrices A and B
+!       Compute a + BI for the sparse real matrices A and b
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: wk(n)
@@ -1090,7 +1090,7 @@ do j = 1,n
    wk(j) = 0.0
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1270,7 +1270,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1284,7 +1284,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1294,8 +1294,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ipmin = ia(i)
@@ -1312,7 +1312,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1336,7 +1336,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1350,7 +1350,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1360,8 +1360,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ii = p(i)
@@ -1379,7 +1379,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1401,7 +1401,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1415,7 +1415,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1425,8 +1425,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ipmin = ia(i)
@@ -1443,7 +1443,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1467,7 +1467,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1481,7 +1481,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1491,8 +1491,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ii = p(i)
@@ -1510,7 +1510,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1532,7 +1532,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1546,7 +1546,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1556,8 +1556,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ipmin = ia(i)
@@ -1574,7 +1574,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1598,7 +1598,7 @@ integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
 !
 !           Compute the number of elements in each column
-!                 of A and store the results in IB
+!                 of A and store the results in ib
 !
 ipmin = ia(1)
 ipmax = ia(m+1) - 1
@@ -1612,7 +1612,7 @@ do ip = ipmin,ipmax
 end do
 !
 !          Compute the row pointers of the transpose matrix
-!                and store them in IB(2),...,IB(N+1)
+!                and store them in ib(2),...,ib(n+1)
 !
 num = ia(m+1) - ia(1) + 1
 j = n
@@ -1622,8 +1622,8 @@ do jj = 1,n
    j = j - 1
 end do
 !
-!                Store the I-TH row of A in B and JB
-!                  and update the pointers in IB
+!                Store the i-TH row of A in b and jb
+!                  and update the pointers in ib
 !
 do 31 i = 1,m
    ii = p(i)
@@ -1641,7 +1641,7 @@ do 31 i = 1,m
 ib(1) = 1
 return
 !
-!                    Transpose A zero matrix A
+!                    Transpose a zero matrix a
 !
 40 np1 = n + 1
 do j = 1,np1
@@ -1668,7 +1668,7 @@ do j = 1,n
    wk(j) = 0.0
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1734,7 +1734,7 @@ do j = 1,n
    wk(j) = 0.d0
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1800,7 +1800,7 @@ do j = 1,n
    wk(j) = (0.0, 0.0)
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1866,7 +1866,7 @@ do j = 1,n
    wk(j) = 0.0
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1932,7 +1932,7 @@ do j = 1,n
    wk(j) = 0.d0
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -1998,7 +1998,7 @@ do j = 1,n
    wk(j) = (0.0, 0.0)
 end do
 !
-!                  Compute the I-TH row of C
+!                  Compute the i-TH row of c
 !
 ip = 1
 do 42 i = 1,m
@@ -2064,7 +2064,7 @@ do k = 1,n
    wk(k) = 0.0
 end do
 !
-!                     Compute the I-TH row of C
+!                     Compute the i-TH row of c
 !
 ip = 1
 do 31 i = 1,l
@@ -2123,7 +2123,7 @@ do k = 1,n
    wk(k) = 0.d0
 end do
 !
-!                     Compute the I-TH row of C
+!                     Compute the i-TH row of c
 !
 ip = 1
 do 31 i = 1,l
@@ -2182,7 +2182,7 @@ do k = 1,n
    wk(k) = (0.0, 0.0)
 end do
 !
-!                     Compute the I-TH row of C
+!                     Compute the i-TH row of c
 !
 ip = 1
 do 31 i = 1,l
@@ -2253,7 +2253,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = a*x + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(m)
@@ -2307,7 +2307,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = x*a + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*), x(m)
 real, intent(inout) :: y(n)
@@ -2357,7 +2357,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = a*x + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(m)
@@ -2411,7 +2411,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = x*a + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*), x(m)
 double precision, intent(inout) :: y(n)
@@ -2461,7 +2461,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = a*x + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*), x(n)
 complex, intent(inout) :: y(m)
@@ -2515,7 +2515,7 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, j, l, lmax, lmin
 !-----------------------------------------------------------------------
-!     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
+!     SET y = x*a + y WHERE A IS A SPARSE MATRIX AND x,y ARE VECTORS
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*), x(m)
 complex, intent(inout) :: y(n)
@@ -2542,7 +2542,7 @@ integer :: i, ip, ipmax, ipmin
 real :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
-!                      real sparse matrix A
+!                      real sparse matrix a
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 integer, intent(in) :: ia(*), ja(*)
@@ -2567,7 +2567,7 @@ integer, intent(in) :: m, n
 real, intent(out) :: anorm
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
-!        Computation of the L1 norm of A real sparse matrix A
+!        Computation of the L1 norm of a real sparse matrix a
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: wk(n)
@@ -2601,7 +2601,7 @@ integer, intent(in) :: m, n
 integer :: i, ip, ipmax, ipmin
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
-!                double precision sparse matrix A
+!                double precision sparse matrix a
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision :: sum
@@ -2627,7 +2627,7 @@ integer, intent(in) :: m, n
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !               Computation of the L1 norm of a sparse
-!                     double precision matrix A
+!                     double precision matrix a
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(out) :: anorm
@@ -2661,10 +2661,10 @@ implicit none
 integer, intent(in) :: m, n
 integer :: i, ii, k, l, np1, num
 !-----------------------------------------------------------------------
-!        SPORD orders the rows of an MXN sparse matrix A,IA,JA
-!        by increasing length. The row ordering is given in R.
+!        spord orders the rows of an MXN sparse matrix A,ia,JA
+!        by increasing length. The row ordering is given in r.
 !-----------------------------------------------------------------------
-!     IWK is a work space of dimension M + N + 1.
+!     iwk is a work space of dimension m + n + 1.
 !----------------------
 integer, intent(in) :: ia(*)
 integer, intent(inout) :: r(m), iwk(*)
@@ -2708,7 +2708,7 @@ integer :: i, length, li, np1, npi
 !-----------------------------------------------------------------------
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: r(n), c(n), ib(n)
-!     INTEGER IWK(5*N)
+!     integer iwk(5*n)
 integer, intent(inout) :: iwk(*)
 !
 np1 = n + 1
@@ -2744,25 +2744,25 @@ integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
 !-----------------------------------------------------------------------
 ! Description of parameters.
-! INPUT VARIABLES   N,ICN,LICN,IP,LENR
-! output variables  IPERM,NUMNZ
+! INPUT VARIABLES   n,icn,licn,ip,lenr
+! output variables  iperm,numnz
 !
-! N   ORDER OF MATRIX.
-! ICN array containing the column indices of the non-zeros.  Those
+! n   ORDER OF MATRIX.
+! icn array containing the column indices of the non-zeros.  Those
 !     belonging to a single row must be contiguous but the ordering
 !     of column indices within each row is unimportant and wasted
 !     space between rows is permitted.
-! LICN  length of array ICN.
-! IP  IP(I), I=1,2,...N, IS THE POSITION IN ARRAY ICN OF THE FIRST
+! licn  length of array icn.
+! ip  ip(I), I=1,2,...n, IS THE POSITION IN ARRAY icn OF THE FIRST
 !     column index of a non-zero in row I.
-! LENR  LENR(I) IS THE NUMBER OF NON-ZEROS IN ROW I, I=1,2,..N.
-! IPERM contains permutation to make diagonal have the smallest
-!     NUMBER OF ZEROS ON IT.  ELEMENTS (IPERM(I),I) I=1, ... N ARE
+! lenr  lenr(I) IS THE NUMBER OF NON-ZEROS IN ROW I, I=1,2,..n.
+! iperm contains permutation to make diagonal have the smallest
+!     NUMBER OF ZEROS ON IT.  ELEMENTS (iperm(I),I) I=1, ... n ARE
 !     non-zero at the end of the algorithm unless matrix
-!     is structurally singular.  In this case, (IPERM(I),I) will
-!     be zero for N-NUMNZ entries.
-! NUMNZ number of non-zeros on diagonal of permuted matrix.
-! IW  work array  ..  see later comments.
+!     is structurally singular.  In this case, (iperm(I),I) will
+!     be zero for n-numnz entries.
+! numnz number of non-zeros on diagonal of permuted matrix.
+! iw  work array  ..  see later comments.
 !-----------------------------------------------------------------------
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
@@ -2781,12 +2781,12 @@ integer :: i, ii, in1, in2, ioutk, j, j1, jord, k, kk
 !-----------------------------------------------------------------------
 !     Division of work array is now described.
 !
-! PR(I) is the previous row to I in the depth first search.
-! ARP(I) is one less than the number of non-zeros in row I
+! pr(i) is the previous row to i in the depth first search.
+! arp(i) is one less than the number of non-zeros in row i
 !     which have not been scanned when looking for a cheap assignment.
-! CV(I) is the most recent row extension at which column I
+! cv(i) is the most recent row extension at which column i
 !     was visited.
-! OUT(I) is one less than the number of non-zeros in row I
+! out(i) is one less than the number of non-zeros in row i
 !     which have not been scanned during one pass through the
 !     main loop.
 !-----------------------------------------------------------------------
@@ -2826,7 +2826,7 @@ end do
 !
 arp(j) = -1
 !
-!     Begin looking for assignment chain starting with row J
+!     Begin looking for assignment chain starting with row j
 !
 60 out(j) = lenr(j) - 1
 !
@@ -2844,7 +2844,7 @@ do kk = 1,jord
       i = icn(ii)
       if (cv(i) .eq. jord) go to 70
 !
-!           Column I has not yet been accessed during this pass
+!           Column i has not yet been accessed during this pass
 !
       j1 = j
       j = iperm(i)
@@ -2878,7 +2878,7 @@ end do
 130 continue
 !
 !     If matrix is structurally singular, we now complete the
-!     permutation IPERM.
+!     permutation iperm.
 !
 if (numnz .eq. n) go to 500
 do i = 1,n
@@ -2909,24 +2909,24 @@ integer, intent(in) :: licn, n
 integer, intent(inout) :: num
 !
 ! Description of parameters.
-! Input variables  .... N,ICN,LICN,IP,LENR.
-! Output variables  IOR,IB,NUM.
+! Input variables  .... n,icn,licn,ip,lenr.
+! Output variables  ior,ib,num.
 !
-! N   ORDER OF THE MATRIX.
-! ICN array containing the column indices of the non-zeros.  Those
+! n   ORDER OF THE MATRIX.
+! icn array containing the column indices of the non-zeros.  Those
 !     belonging to a single row must be contiguous but the ordering
 !     of column indices within each row is unimportant and wasted
 !     space between rows is permitted.
-! LICN  length of array ICN.
-! IP  IP(I), I=1,2,...N, IS THE POSITION IN ARRAY ICN OF THE FIRST
+! licn  length of array icn.
+! ip  ip(I), I=1,2,...n, IS THE POSITION IN ARRAY icn OF THE FIRST
 !     column index of a non-zero in row I.
-! LENR  LENR(I) IS THE NUMBER OF NON-ZEROS IN ROW I, I=1,2,...N.
-! IOR  IOR(I) gives the position in the original ordering of the row
-!     OR COLUMN WHICH IS IN POSITION I IN THE PERMUTED FORM, I=1,2,..N.
-! IB  IB(I) is the row number in the permuted matrix of the beginning
-!     OF BLOCK I, I=1,2,...NUM.
-! NUM number of blocks found.
-! IW  work array of length 3*N.
+! lenr  lenr(I) IS THE NUMBER OF NON-ZEROS IN ROW I, I=1,2,...n.
+! ior  ior(I) gives the position in the original ordering of the row
+!     OR COLUMN WHICH IS IN POSITION I IN THE PERMUTED FORM, I=1,2,..n.
+! ib  ib(I) is the row number in the permuted matrix of the beginning
+!     OF BLOCK I, I=1,2,...num.
+! num number of blocks found.
+! iw  work array of length 3*n.
 !
 integer, intent(in) :: ip(n)
 integer, intent(in) :: icn(licn), lenr(n)
@@ -2947,30 +2947,30 @@ integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, &
 integer :: stp, dummy
 integer, intent(in) :: ip(n)
 !
-! ARP(I) is one less than the number of unsearched edges leaving
-!     node I.  At the end of the algorithm it is set to A
+! arp(i) is one less than the number of unsearched edges leaving
+!     node i.  At the end of the algorithm it is set to A
 !     permutation which puts the matrix in block lower
 !     triangular form.
-! IB(I) is the position in the ordering of the start of the ith
-!     block.  IB(N+1-I) holds the node number of the ith node
+! ib(i) is the position in the ordering of the start of the ith
+!     block.  ib(n+1-i) holds the node number of the ith node
 !     on the stack.
-! LOWL(I) is the smallest stack position of any node to which a path
-!     from node I has been found.  It is set to N+1 when node I
+! lowl(i) is the smallest stack position of any node to which a path
+!     from node i has been found.  It is set to n+1 when node i
 !     is removed from the stack.
-! NUMB(I) is the position of node I in the stack if it is on
-!     it, is the permuted order of node I for those nodes
+! numb(i) is the position of node i in the stack if it is on
+!     it, is the permuted order of node i for those nodes
 !     whose final position has been found and is otherwise zero.
-! PREV(I) is the node at the end of the path when node I was
+! prev(i) is the node at the end of the path when node i was
 !     placed on the stack.
 !
 integer, intent(in) :: icn(licn), lenr(n)
 integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
 !
-!   ICNT is the number of nodes whose positions in final ordering have
+!   icnt is the number of nodes whose positions in final ordering have
 !     been found.
 !
 icnt = 0
-! NUM is the number of blocks that have been found.
+! num is the number of blocks that have been found.
 num = 0
 nnm1 = n + n - 1
 !
@@ -2986,9 +2986,9 @@ do 90 isn = 1,n
 ! Look for a starting node
   if (numb(isn).ne.0) go to 90
   iv = isn
-! IST is the number of nodes on the stack ... it is the stack pointer.
+! ist is the number of nodes on the stack ... it is the stack pointer.
   ist = 1
-! Put node IV at beginning of stack.
+! Put node iv at beginning of stack.
   lowl(iv) = 1
   numb(iv) = 1
   ib(n) = iv
@@ -2997,26 +2997,26 @@ do 90 isn = 1,n
 !
   do 80 dummy = 1,nnm1
     i1 = arp(iv)
-! Have all edges leaving node IV been searched.
+! Have all edges leaving node iv been searched.
     if (i1.lt.0) go to 30
     i2 = ip(iv) + lenr(iv) - 1
     i1 = i2 - i1
 !
-! Look at edges leaving node IV until one enters a new node or
+! Look at edges leaving node iv until one enters a new node or
 !     all edges are exhausted.
 !
     do ii=i1,i2
       iw = icn(ii)
-! Has node IW been on stack already.
+! Has node iw been on stack already.
       if (numb(iw).eq.0) go to 70
-! Update value of LOWL(IV) if necessary.
+! Update value of lowl(iv) if necessary.
       if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
     end do
 !
-! There are no more edges leaving node IV.
+! There are no more edges leaving node iv.
 !
     arp(iv) = -1
-! Is node IV the root of a block.
+! Is node iv the root of a block.
 30 if (lowl(iv).lt.numb(iv)) go to 60
 !
 ! Order nodes in a block.
@@ -3047,7 +3047,7 @@ do 90 isn = 1,n
 !
 60 iw = iv
     iv = prev(iv)
-! Update value of LOWL(IV) if necessary.
+! Update value of lowl(iv) if necessary.
     if (lowl(iw).lt.lowl(iv)) lowl(iv) = lowl(iw)
     go to 80
 !
@@ -3082,85 +3082,85 @@ integer :: k, l
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
-!  SPSLV calls NSPIV1 which uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  spslv calls nspiv1 which uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !  Input arguments---
 !
-!  N      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
+!  n      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
 !
 !  A      REAL ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING THE
 !         actual nonzeros.  (See matrix storage description below)
 !
-!  IA     INTEGER ARRAY OF N+1 ENTRIES CONTAINING ROW POINTERS TO A
+!  ia     INTEGER ARRAY OF n+1 ENTRIES CONTAINING ROW POINTERS TO A
 !         (see matrix storage description below)
 !
-!  JA     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
+!  ja     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
 !         column numbers of the nonzeros of A.  (See matrix storage
 !         description below)
 !
-!  B      REAL ARRAY OF N ENTRIES CONTAINING RIGHT HAND SIDE DATA
+!  b      REAL ARRAY OF n ENTRIES CONTAINING RIGHT HAND SIDE DATA
 !
-!  R      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
+!  r      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
 !         rows of A (I.E., The elimination order for the equations)
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of A.  C is also an output argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of A.  c is also an output argument
 !
 !  MAX    INTEGER NUMBER SPECIFYING MAXIMUM NUMBER OF OFF-DIAGONAL
-!         nonzero entries of U which may be stored
+!         nonzero entries of u which may be stored
 !
-!  ITEMP  integer array of 3*N + max + 2 entries, for internal use
+!  itemp  integer array of 3*n + max + 2 entries, for internal use
 !
-!  RTEMP  real array of N + max entries for internal use
+!  rtemp  real array of n + max entries for internal use
 !
 !
 !  Output arguments---
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of U.  C is also an input argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of u.  c is also an input argument
 !
-!  X      REAL ARRAY OF N ENTRIES CONTAINING THE SOLUTION VECTOR
+!  x      REAL ARRAY OF n ENTRIES CONTAINING THE SOLUTION VECTOR
 !
-!  IERR   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
-!         the actual number of off-diagonal entries in U (for
+!  ierr   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
+!         the actual number of off-diagonal entries in u (for
 !         successful completion)
 !
-!         IERR values are---
+!         ierr values are---
 !
-!         0 LT IERR             SUCCESSFUL COMPLETION. IERR=MAX(1,M)
+!         0 LT ierr             SUCCESSFUL COMPLETION. ierr=max(1,M)
 !                               where M is the number of off-diagonal
-!                               nonzero entries of U.
+!                               nonzero entries of u.
 !
-!         IERR = 0              ERROR.  N IS LESS THAN OR EQUAL TO 0
+!         ierr = 0              ERROR.  n IS LESS THAN OR EQUAL TO 0
 !
-!         -N LE IERR LT 0       ERROR.  ROW NUMBER IABS(IERR) OF A IS
+!         -n LE ierr LT 0       ERROR.  ROW NUMBER IABS(ierr) OF A IS
 !                               is null
 !
-!         -2*N LE IERR LT -N    ERROR.  ROW NUMBER IABS(IERR+N) HAS A
+!         -2*n LE ierr LT -n    ERROR.  ROW NUMBER IABS(ierr+n) HAS A
 !                               duplicate entry
 !
-!         -3*N LE IERR LT -2*N  error.  Row number IABS(IERR+2*N)
+!         -3*n LE ierr LT -2*n  error.  Row number IABS(ierr+2*n)
 !                               has a zero pivot
 !
-!         -4*N LE IERR LT -3*N  error.  Row number IABS(IERR+3*N)
+!         -4*n LE ierr LT -3*n  error.  Row number IABS(ierr+3*n)
 !                               exceeds storage
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN J, THEN ja(k) = J).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(I))/ja(ia(I)) is the first entry for row I in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZERO
 !  elements in A.
 !------------------------
 real, intent(in) :: a(*), b(n)
@@ -3172,7 +3172,7 @@ integer :: iu, ju, u, y, p
 ierr = 0
 if (n .le. 0) return
 !
-!  Set indices to divide temporary storage for NSPIV1
+!  Set indices to divide temporary storage for nspiv1
 !
 y = 1
 u = y + n
@@ -3180,14 +3180,14 @@ p = n + 1
 iu = p + n + 1
 ju = iu + n + 1
 !
-!  Compute the inverse permutation of C
+!  Compute the inverse permutation of c
 !
 do k = 1,n
    l = c(k)
    itemp(l) = k
 end do
 !
-!  CALL NSPIV1 TO PERFORM COMPUTATIONS
+!  CALL nspiv1 TO PERFORM COMPUTATIONS
 !
 call nspiv1 (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
 &itemp(iu),itemp(ju),rtemp(u),ierr)
@@ -3203,56 +3203,56 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
 !
 !
-!  NSPIV1 uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  nspiv1 uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !
-!  See SPSLV for descriptions of all input and output arguments
+!  See spslv for descriptions of all input and output arguments
 !  other than those described below
 !
-!  IC  integer array of N entries which is the inverse of C
-!      (I.E., IC(C(I)) = I). IC IS BOTH AN INPUT AND OUTPUT
+!  ic  integer array of n entries which is the inverse of c
+!      (I.E., ic(c(i)) = i). ic IS BOTH AN INPUT AND OUTPUT
 !      argument.
 !
 !  Input arguments (used internally only)---
 !
-!  Y   REAL ARRAY OF N ENTRIES USED TO COMPUTE THE UPDATED
+!  y   REAL ARRAY OF n ENTRIES USED TO COMPUTE THE UPDATED
 !      right hand side
 !
-!  P   INTEGER ARRAY OF N+1 ENTRIES USED FOR A LINKED LIST.
-!      P(N+1) is the list header, and the entry following
-!      P(K) is in P(P(K)).  Thus, P(N+1) is the first data
-!      item, P(P(N+1)) is the second, etc.  a pointer of
-!      N+1 marks the end of the list
+!  p   INTEGER ARRAY OF n+1 ENTRIES USED FOR A LINKED LIST.
+!      p(n+1) is the list header, and the entry following
+!      p(k) is in p(p(k)).  Thus, p(n+1) is the first data
+!      item, p(p(n+1)) is the second, etc.  a pointer of
+!      n+1 marks the end of the list
 !
-!  IU  integer array of N+1 entries used for row pointers to U
+!  iu  integer array of n+1 entries used for row pointers to u
 !      (see matrix storage description below)
 !
-!  JU  integer array of max entries used for column numbers of
-!      the nonzeros in the strict upper triangle of U.  (See
+!  ju  integer array of max entries used for column numbers of
+!      the nonzeros in the strict upper triangle of u.  (See
 !      matrix storage description below)
 !
-!  U   REAL ARRAY OF MAX ENTRIES USED FOR THE ACTUAL NONZEROS IN
-!      the strict upper triangle of U.  (See matrix storage
+!  u   REAL ARRAY OF MAX ENTRIES USED FOR THE ACTUAL NONZEROS IN
+!      the strict upper triangle of u.  (See matrix storage
 !      description below)
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZEROS IN
-!  A.  IU, JU, and U are used in a similar way to store the strict upper
-!  triangle of U, except that JU actually contains C(J) instead of J
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN j, THEN ja(k) = j).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(i))/ja(ia(i)) is the first entry for row i in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZEROS IN
+!  A.  iu, ju, and u are used in a similar way to store the strict upper
+!  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
 real, intent(in) :: a(*), b(n)
@@ -3266,7 +3266,7 @@ integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
-!  Initialize work storage and pointers to JU
+!  Initialize work storage and pointers to ju
 !
 do j = 1,n
   x(j) = 0.0
@@ -3275,18 +3275,18 @@ iu(1) = 1
 juptr = 0
 !
 !  Perform symbolic and numeric factorization row by row
-!  VK (VI,VJ) is the graph vertex for row K (I,J) of U
+!  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
 do 170 k = 1,n
 !
 !  Initialize linked list and free storage for this row
-!  the R(K)-TH row of a becomes the K-TH row of U.
+!  the r(k)-TH row of a becomes the k-TH row of u.
 !
   p(n+1) = n+1
   vk = r(k)
 !
-!  Set up adjacency list for VK, ordered in
-!  current column order of U.  The loop index
+!  Set up adjacency list for vk, ordered in
+!  current column order of u.  The loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -3297,10 +3297,10 @@ do 170 k = 1,n
 20 jaj = ja(j)
     vj = ic(jaj)
 !
-!  Store A(K,J) in work vector
+!  Store a(k,j) in work vector
 !
     x(vj) = a(j)
-!  This code inserts VJ into adjacency list of VK
+!  This code inserts vj into adjacency list of vk
     ppk = n+1
 30 pk = ppk
     ppk = p(pk)
@@ -3310,15 +3310,15 @@ do 170 k = 1,n
     j = j - 1
     if (j .ge. jmin) go to 20
 !
-!  The following code computes the K-TH row of U
+!  The following code computes the k-TH row of u
 !
   vi = n+1
   yk = b(vk)
 50 vi = p(vi)
   if (vi .ge. k) go to 110
 !
-!  VI LT VK -- process the L(K,I) element and merge the
-!  adjacency of VI with the ordered adjacency of VK
+!  vi LT vk -- process the L(k,i) element and merge the
+!  adjacency of vi with the ordered adjacency of vk
 !
   lki = - x(vi)
   x(vi) = 0.0
@@ -3334,15 +3334,15 @@ do 170 k = 1,n
     juj = ju(j)
     vj = ic(juj)
 !
-!  If VJ is already in the adjacency of VK,
+!  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
     if (x(vj) .ne. 0.0)  go to 90
 !
-!  Insert VJ in adjacency list of VK.
-!  Reset PPK to VI if we have passed the correct
+!  Insert vj in adjacency list of vk.
+!  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
-!  VI is not in current column order due to pivoting.)
+!  vi is not in current column order due to pivoting.)
 !
     if (vj - ppk) 60,90,70
 60 ppk = vi
@@ -3353,15 +3353,15 @@ do 170 k = 1,n
     p(pk) = vj
     ppk = vj
 !
-!  COMPUTE L(K,J) = L(K,J) - L(K,I)*U(I,J) FOR L(K,I) NONZERO
-!  COMPUTE U*(K,J) = U*(K,J) - L(K,I)*U(I,J) FOR U(K,J) NONZERO
-!  (U*(K,J) = U(K,J)*D(K,K))
+!  COMPUTE L(k,j) = L(k,j) - L(k,i)*u(i,j) FOR L(k,i) NONZERO
+!  COMPUTE u*(k,j) = u*(k,j) - L(k,i)*u(i,j) FOR u(k,j) NONZERO
+!  (u*(k,j) = u(k,j)*D(k,k))
 !
 90 x(vj) = x(vj) + lki * u(j)
   end do
   go to 50
 !
-!  Pivot--interchange largest entry of K-TH row of U with
+!  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
 !
 !  Find largest entry, counting off-diagonal nonzeros
@@ -3383,7 +3383,7 @@ do 170 k = 1,n
     go to 120
 130 if (xpvmax .eq. 0.0) go to 1004
 !
-!  IF VI = K, THEN THERE IS AN ENTRY FOR DIAGONAL
+!  IF vi = k, THEN THERE IS AN ENTRY FOR DIAGONAL
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
@@ -3393,7 +3393,7 @@ do 170 k = 1,n
   go to 150
 140 vi = p(vi)
 !
-!  COMPUTE D(K) = 1/L(K,K) AND PERFORM INTERCHANGE.
+!  COMPUTE D(k) = 1/L(k,k) AND PERFORM INTERCHANGE.
 !
 150 dk = 1.0 / x(maxc)
   x(maxc) = x(k)
@@ -3409,14 +3409,14 @@ do 170 k = 1,n
 !
   y(k) = yk * dk
 !
-!  Compute value for IU(K+1) and check for storage overflow
+!  Compute value for iu(k+1) and check for storage overflow
 !
   iu(k+1) = iu(k) + nzcnt
   if (iu(k+1) .gt. max+1) go to 1005
 !
-!  Move column indices from linked list to JU.
+!  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
-!  column number (C(J)) stored for current column J
+!  column number (c(j)) stored for current column j
 !
   if (vi .gt. n)  go to 170
   j = vi
@@ -3428,7 +3428,7 @@ do 170 k = 1,n
     if (j .le. n) go to 160
 170 continue
 !
-!  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
+!  BACKSOLVE u x = y, AND REORDER x TO CORRESPOND WITH A
 !
 k = n
 do i = 1,n
@@ -3447,29 +3447,29 @@ do i = 1,n
   k = k - 1
 end do
 !
-!  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
+!  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
 ierr = iu(n+1) - iu(1)
 return
 !
 !  Error returns
 !
-!  Row K of A is null
+!  Row k of A is null
 !
 1002 ierr = -k
 return
 !
-!  Row K of A has a duplicate entry
+!  Row k of A has a duplicate entry
 !
 1003 ierr = -(n+k)
 return
 !
-!  Zero pivot in row K
+!  Zero pivot in row k
 !
 1004 ierr = -(2*n+k)
 return
 !
-!  Storage for U exceeded on row K
+!  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n+k)
 return
@@ -3483,62 +3483,62 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
-!     RSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
-!     if RSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     rslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN LINEAR SYSTEM AX = b. THE ARGUMENT m0 SPECIFIES
+!     if rslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to RSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to rslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the matrix A stored in sparse form.
+!     a,ia,ja  the matrix a stored in sparse form.
 !
-!     B        ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND SIDE DATA.
+!     b        ARRAY OF n ENTRIES CONTAINING THE RIGHT HAND SIDE DATA.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        REAL ARRAY OF N ENTRIES CONTAINING THE SOLUTION.
-!              B and X may share the same storage area.
+!     x        REAL ARRAY OF n ENTRIES CONTAINING THE SOLUTION.
+!              b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       REAL ARRAY OF DIMENSION 2*N + MAX.
+!     wk       REAL ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to RSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to RSLV
-!     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to rslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to rslv
+!     AND SOLVES THE NEW EQUATIONS AX = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), wk(*)
@@ -3558,7 +3558,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -3591,7 +3591,7 @@ real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
 real :: sum
 !
-!            SOLVE LY = B BY FORWARD SUBSTITUTION
+!            SOLVE LY = b BY FORWARD SUBSTITUTION
 !
 do 11 k = 1,n
    lk = r(k)
@@ -3606,8 +3606,8 @@ do 11 k = 1,n
    end do
 11 y(k) = sum/d(k)
 !
-!            SOLVE UX = B BY BACKWARD SUBSTITUTION
-!             and reorder X to correspond with A
+!            SOLVE UX = b BY BACKWARD SUBSTITUTION
+!             and reorder x to correspond with A
 !
 k = n
 do i = 1,n
@@ -3636,62 +3636,62 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
-!     TSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
-!     if TSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     tslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN LINEAR SYSTEM XA = b. THE ARGUMENT m0 SPECIFIES
+!     if tslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to TSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to tslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the matrix A stored in sparse form.
+!     a,ia,ja  the matrix a stored in sparse form.
 !
-!     B        ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND SIDE DATA.
+!     b        ARRAY OF n ENTRIES CONTAINING THE RIGHT HAND SIDE DATA.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        REAL ARRAY OF N ENTRIES CONTAINING THE SOLUTION.
-!              B and X may share the same storage area.
+!     x        REAL ARRAY OF n ENTRIES CONTAINING THE SOLUTION.
+!              b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       REAL ARRAY OF DIMENSION 2*N + MAX.
+!     wk       REAL ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to TSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to TSLV
-!     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to tslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to tslv
+!     AND SOLVES THE NEW EQUATIONS XA = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*), b(n)
 real, intent(inout) :: x(n), wk(*)
@@ -3711,7 +3711,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -3743,7 +3743,7 @@ integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
 !
-!            SOLVE YU = B BY FORWARD SUBSTITUTION
+!            SOLVE YU = b BY FORWARD SUBSTITUTION
 !
 do k = 1,n
    lk = c(k)
@@ -3762,7 +3762,7 @@ do 21 k = 1,n
    end do
 21 continue
 !
-!            SOLVE XL = Y BY BACKWARD SUBSTITUTION
+!            SOLVE XL = y BY BACKWARD SUBSTITUTION
 !
 x(n) = y(n)/d(n)
 if (n .eq. 1) return
@@ -3796,25 +3796,25 @@ integer, intent(in) :: max, n
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
 !-----------------------------------------------------------------------
-!     SPLU employs Gaussian elimination with column interchanges
+!     splu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a real sparse matrix.
 !     U is a unit upper triangular matrix.
 !
 !
 !     Input arguments ---
 !
-!     A,IA,JA  the sparse matrix to be decomposed.
+!     A,ia,ja  the sparse matrix to be decomposed.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C
-!              (I.E., IC(C(I)) = I). IC IS ALSO AN OUTPUT ARGUMENT.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c
+!              (I.E., ic(c(i)) = i). ic IS ALSO AN OUTPUT ARGUMENT.
 !
-!     N        ORDER OF THE MATRIX A.
+!     n        ORDER OF THE MATRIX a.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
 !              nonzero entries of L and U which may be stored.
@@ -3822,36 +3822,36 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     Output arguments ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c.
 !
-!     D        REAL ARRAY CONTAINING THE N DIAGONAL ELEMENTS OF L.
+!     d        REAL ARRAY CONTAINING THE n DIAGONAL ELEMENTS OF L.
 !
-!     T,it,IU  T contains the off-diagonal nonzero elements of L and
-!              U. FOR I = 1,...,N THE OFF-DIAGONAL NONZERO ELEMENTS
-!              of the I-TH row of L are stored in locations
-!              IT(I),...,IU(I)-1 of T, and the off-diagonal nonzero
-!              elements of the I-TH row of U are stored in locations
-!              IU(I),...,IT(I+1)-1 of T.
+!     t,it,iu  t contains the off-diagonal nonzero elements of L and
+!              U. FOR i = 1,...,n THE OFF-DIAGONAL NONZERO ELEMENTS
+!              of the i-TH row of L are stored in locations
+!              it(i),...,iu(i)-1 of t, and the off-diagonal nonzero
+!              elements of the i-TH row of U are stored in locations
+!              iu(i),...,it(i+1)-1 of t.
 !
-!     JT       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
-!              to the orginal column ordering) of the elements of T
-!              (I.E., For each L(I,J) and U(I,J) in T, C(J) is the
-!              corresponding column index in JT).
+!     jt       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
+!              to the orginal column ordering) of the elements of t
+!              (I.E., For each L(i,j) and U(i,j) in t, c(j) is the
+!              corresponding column index in jt).
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              LU DECOMPOSITION IS OBTAINED THEN IERR = THE NUMBER
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in T. Otherwise IERR is assigned a negative value.
+!              in t. Otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
 !
-!     W        REAL ARRAY OF DIMENSION N.
+!     w        REAL ARRAY OF DIMENSION n.
 !
-!     P        INTEGER ARRAY OF DIMENSION N+1.
+!     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: d(n), t(max), w(n)
@@ -3869,7 +3869,7 @@ do j = 1,n
    w(j) = 0.0
 end do
 !
-!     Perform the LU factorization of the R(K)-TH row of A
+!     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
 lk = r(k)
@@ -3877,7 +3877,7 @@ jmin = ia(lk)
 jmax = ia(lk+1) - 1
 if (jmin .gt. jmax) go to 200
 !
-!     Set P to the reordered row of A
+!     Set p to the reordered row of A
 !
 p(n+1) = n + 1
 jj = jmax
@@ -3900,7 +3900,7 @@ i = n + 1
 if (i .ge. k) go to 50
 if (w(i) .eq. 0.0) go to 30
 !
-!     L(K,I) is nonzero. Therefore store it in L.
+!     L(k,i) is nonzero. Therefore store it in L.
 !
 jptr = jptr + 1
 if (jptr .gt. max) go to 230
@@ -3909,7 +3909,7 @@ t(jptr) = const
 jt(jptr) = c(i)
 w(i) = 0.0
 !
-!     Perform elimination using the I-TH row of U
+!     Perform elimination using the i-TH row of U
 !
 jmin = iu(i)
 jmax = it(i+1) - 1
@@ -3930,7 +3930,7 @@ do 43 jj = jmin,jmax
 43 w(j) = w(j) - const*t(jj)
 go to 30
 !
-!     Search for the K-TH pivot element
+!     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
 wmax = abs(w(i))
@@ -3946,7 +3946,7 @@ if (wi .le. wmax) go to 51
    maxil = m
    go to 51
 !
-!     Store the pivot in D
+!     Store the pivot in d
 !
 60 if (wmax .eq. 0.0) go to 220
 d(k) = w(maxi)
@@ -3968,7 +3968,7 @@ c(maxi) = lk
 ic(lk) = maxi
 ic(ll) = k
 !
-!     The remaining elements of P form the K-TH row of U
+!     The remaining elements of p form the k-TH row of U
 !
 iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
@@ -3990,22 +3990,22 @@ return
 !
 !     -------------------- Error return --------------------
 !
-!     Row R(K) is null
+!     Row r(k) is null
 !
 200 ierr = -k
 return
 !
-!     Row R(K) has a duplicate entry
+!     Row r(k) has a duplicate entry
 !
 210 ierr = -(n + k)
 return
 !
-!     Zero pivot in row R(K)
+!     Zero pivot in row r(k)
 !
 220 ierr = -(2*n + k)
 return
 !
-!     Storage for L and U exceeded on row R(K)
+!     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
 return
@@ -4019,88 +4019,88 @@ integer :: k, l
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
-!  DSPSLV calls DNSPIV which uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  dspslv calls dnspiv which uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !  Input arguments---
 !
-!  N      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
+!  n      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
 !
 !  A      DOUBLE PRECISION ARRAY WITH ONE ENTRY PER NONZERO IN A,
 !         containing the actual nonzeros. (See the matrix storage
 !         description below)
 !
-!  IA     INTEGER ARRAY OF N+1 ENTRIES CONTAINING ROW POINTERS TO A
+!  ia     INTEGER ARRAY OF n+1 ENTRIES CONTAINING ROW POINTERS TO A
 !         (see matrix storage description below)
 !
-!  JA     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
+!  ja     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
 !         column numbers of the nonzeros of A.  (See matrix storage
 !         description below)
 !
-!  B      DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE RIGHT
+!  b      DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE RIGHT
 !         hand side data
 !
-!  R      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
+!  r      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
 !         rows of A (I.E., The elimination order for the equations)
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of A.  C is also an output argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of A.  c is also an output argument
 !
 !  MAX    INTEGER NUMBER SPECIFYING MAXIMUM NUMBER OF OFF-DIAGONAL
-!         nonzero entries of U which may be stored
+!         nonzero entries of u which may be stored
 !
-!  ITEMP  integer array of 3*N + max + 2 entries, for internal use
+!  itemp  integer array of 3*n + max + 2 entries, for internal use
 !
-!  RTEMP  double precision array of N + max entries for internal use
+!  rtemp  double precision array of n + max entries for internal use
 !
 !
 !  Output arguments---
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of U.  C is also an input argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of u.  c is also an input argument
 !
-!  X      DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE
+!  x      DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
 !         solution vector
 !
-!  IERR   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
-!         the actual number of off-diagonal entries in U (for
+!  ierr   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
+!         the actual number of off-diagonal entries in u (for
 !         successful completion)
 !
-!         IERR values are---
+!         ierr values are---
 !
-!         0 LT IERR             SUCCESSFUL COMPLETION. IERR=MAX(1,M)
+!         0 LT ierr             SUCCESSFUL COMPLETION. ierr=max(1,M)
 !                               where M is the number of off-diagonal
-!                               nonzero entries of U.
+!                               nonzero entries of u.
 !
-!         IERR = 0              ERROR.  N IS LESS THAN OR EQUAL TO 0
+!         ierr = 0              ERROR.  n IS LESS THAN OR EQUAL TO 0
 !
-!         -N LE IERR LT 0       ERROR.  ROW NUMBER IABS(IERR) OF A IS
+!         -n LE ierr LT 0       ERROR.  ROW NUMBER IABS(ierr) OF A IS
 !                               is null
 !
-!         -2*N LE IERR LT -N    ERROR.  ROW NUMBER IABS(IERR+N) HAS A
+!         -2*n LE ierr LT -n    ERROR.  ROW NUMBER IABS(ierr+n) HAS A
 !                               duplicate entry
 !
-!         -3*N LE IERR LT -2*N  error.  Row number IABS(IERR+2*N)
+!         -3*n LE ierr LT -2*n  error.  Row number IABS(ierr+2*n)
 !                               has a zero pivot
 !
-!         -4*N LE IERR LT -3*N  error.  Row number IABS(IERR+3*N)
+!         -4*n LE ierr LT -3*n  error.  Row number IABS(ierr+3*n)
 !                               exceeds storage
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN J, THEN ja(k) = J).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(I))/ja(ia(I)) is the first entry for row I in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZERO
 !  elements in A.
 !------------------------
 double precision, intent(in) :: a(*), b(n)
@@ -4112,7 +4112,7 @@ integer :: iu, ju, u, y, p
 ierr = 0
 if (n .le. 0) return
 !
-!  Set indices to divide temporary storage for DNSPIV
+!  Set indices to divide temporary storage for dnspiv
 !
 y = 1
 u = y + n
@@ -4120,14 +4120,14 @@ p = n + 1
 iu = p + n + 1
 ju = iu + n + 1
 !
-!  Compute the inverse permutation of C
+!  Compute the inverse permutation of c
 !
 do k = 1,n
    l = c(k)
    itemp(l) = k
 end do
 !
-!  CALL DNSPIV TO PERFORM COMPUTATIONS
+!  CALL dnspiv TO PERFORM COMPUTATIONS
 !
 call dnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
 &itemp(iu),itemp(ju),rtemp(u),ierr)
@@ -4143,56 +4143,56 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
 !
 !
-!  DNSPIV uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  dnspiv uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !
-!  See DSPSLV for descriptions of all input and output arguments
+!  See dspslv for descriptions of all input and output arguments
 !  other than those described below
 !
-!  IC  integer array of N entries which is the inverse of C
-!      (I.E., IC(C(I)) = I). IC IS BOTH AN INPUT AND OUTPUT
+!  ic  integer array of n entries which is the inverse of c
+!      (I.E., ic(c(i)) = i). ic IS BOTH AN INPUT AND OUTPUT
 !      argument.
 !
 !  Input arguments (used internally only)---
 !
-!  Y   DOUBLE PRECISION ARRAY OF N ENTRIES USED TO COMPUTE
+!  y   DOUBLE PRECISION ARRAY OF n ENTRIES USED TO COMPUTE
 !      the updated right hand side
 !
-!  P   INTEGER ARRAY OF N+1 ENTRIES USED FOR A LINKED LIST.
-!      P(N+1) is the list header, and the entry following
-!      P(K) is in P(P(K)).  Thus, P(N+1) is the first data
-!      item, P(P(N+1)) is the second, etc.  a pointer of
-!      N+1 marks the end of the list
+!  p   INTEGER ARRAY OF n+1 ENTRIES USED FOR A LINKED LIST.
+!      p(n+1) is the list header, and the entry following
+!      p(k) is in p(p(k)).  Thus, p(n+1) is the first data
+!      item, p(p(n+1)) is the second, etc.  a pointer of
+!      n+1 marks the end of the list
 !
-!  IU  integer array of N+1 entries used for row pointers to U
+!  iu  integer array of n+1 entries used for row pointers to u
 !      (see matrix storage description below)
 !
-!  JU  integer array of max entries used for column numbers of
-!      the nonzeros in the strict upper triangle of U.  (See
+!  ju  integer array of max entries used for column numbers of
+!      the nonzeros in the strict upper triangle of u.  (See
 !      matrix storage description below)
 !
-!  U   DOUBLE PRECISION ARRAY OF MAX ENTRIES USED FOR THE ACTUAL
-!      nonzeros in the strict upper triangle of U. (See matrix
+!  u   DOUBLE PRECISION ARRAY OF MAX ENTRIES USED FOR THE ACTUAL
+!      nonzeros in the strict upper triangle of u. (See matrix
 !      storage description below)
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZEROS IN
-!  A.  IU, JU, and U are used in a similar way to store the strict upper
-!  triangle of U, except that JU actually contains C(J) instead of J
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN j, THEN ja(k) = j).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(i))/ja(ia(i)) is the first entry for row i in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZEROS IN
+!  A.  iu, ju, and u are used in a similar way to store the strict upper
+!  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
 double precision, intent(in) :: a(*), b(n)
@@ -4206,7 +4206,7 @@ integer, intent(inout) :: ju(max), p(*)
 integer, intent(in) :: r(n)
 integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
-!  Initialize work storage and pointers to JU
+!  Initialize work storage and pointers to ju
 !
 do j = 1,n
   x(j) = 0.d0
@@ -4215,18 +4215,18 @@ iu(1) = 1
 juptr = 0
 !
 !  Perform symbolic and numeric factorization row by row
-!  VK (VI,VJ) is the graph vertex for row K (I,J) of U
+!  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
 do 170 k = 1,n
 !
 !  Initialize linked list and free storage for this row
-!  the R(K)-TH row of a becomes the K-TH row of U.
+!  the r(k)-TH row of a becomes the k-TH row of u.
 !
   p(n+1) = n+1
   vk = r(k)
 !
-!  Set up adjacency list for VK, ordered in
-!  current column order of U.  The loop index
+!  Set up adjacency list for vk, ordered in
+!  current column order of u.  The loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -4237,10 +4237,10 @@ do 170 k = 1,n
 20 jaj = ja(j)
     vj = ic(jaj)
 !
-!  Store A(K,J) in work vector
+!  Store a(k,j) in work vector
 !
     x(vj) = a(j)
-!  This code inserts VJ into adjacency list of VK
+!  This code inserts vj into adjacency list of vk
     ppk = n+1
 30 pk = ppk
     ppk = p(pk)
@@ -4250,15 +4250,15 @@ do 170 k = 1,n
     j = j - 1
     if (j .ge. jmin) go to 20
 !
-!  The following code computes the K-TH row of U
+!  The following code computes the k-TH row of u
 !
   vi = n+1
   yk = b(vk)
 50 vi = p(vi)
   if (vi .ge. k) go to 110
 !
-!  VI LT VK -- process the L(K,I) element and merge the
-!  adjacency of VI with the ordered adjacency of VK
+!  vi LT vk -- process the L(k,i) element and merge the
+!  adjacency of vi with the ordered adjacency of vk
 !
   lki = - x(vi)
   x(vi) = 0.d0
@@ -4274,15 +4274,15 @@ do 170 k = 1,n
     juj = ju(j)
     vj = ic(juj)
 !
-!  If VJ is already in the adjacency of VK,
+!  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
     if (x(vj) .ne. 0.d0)  go to 90
 !
-!  Insert VJ in adjacency list of VK.
-!  Reset PPK to VI if we have passed the correct
+!  Insert vj in adjacency list of vk.
+!  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
-!  VI is not in current column order due to pivoting.)
+!  vi is not in current column order due to pivoting.)
 !
     if (vj - ppk) 60,90,70
 60 ppk = vi
@@ -4293,15 +4293,15 @@ do 170 k = 1,n
     p(pk) = vj
     ppk = vj
 !
-!  COMPUTE L(K,J) = L(K,J) - L(K,I)*U(I,J) FOR L(K,I) NONZERO
-!  COMPUTE U*(K,J) = U*(K,J) - L(K,I)*U(I,J) FOR U(K,J) NONZERO
-!  (U*(K,J) = U(K,J)*D(K,K))
+!  COMPUTE L(k,j) = L(k,j) - L(k,i)*u(i,j) FOR L(k,i) NONZERO
+!  COMPUTE u*(k,j) = u*(k,j) - L(k,i)*u(i,j) FOR u(k,j) NONZERO
+!  (u*(k,j) = u(k,j)*D(k,k))
 !
 90 x(vj) = x(vj) + lki * u(j)
   end do
   go to 50
 !
-!  Pivot--interchange largest entry of K-TH row of U with
+!  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
 !
 !  Find largest entry, counting off-diagonal nonzeros
@@ -4323,7 +4323,7 @@ do 170 k = 1,n
     go to 120
 130 if (xpvmax .eq. 0.d0) go to 1004
 !
-!  IF VI = K, THEN THERE IS AN ENTRY FOR DIAGONAL
+!  IF vi = k, THEN THERE IS AN ENTRY FOR DIAGONAL
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
@@ -4333,7 +4333,7 @@ do 170 k = 1,n
   go to 150
 140 vi = p(vi)
 !
-!  COMPUTE D(K) = 1/L(K,K) AND PERFORM INTERCHANGE.
+!  COMPUTE D(k) = 1/L(k,k) AND PERFORM INTERCHANGE.
 !
 150 dk = 1.d0 / x(maxc)
   x(maxc) = x(k)
@@ -4349,14 +4349,14 @@ do 170 k = 1,n
 !
   y(k) = yk * dk
 !
-!  Compute value for IU(K+1) and check for storage overflow
+!  Compute value for iu(k+1) and check for storage overflow
 !
   iu(k+1) = iu(k) + nzcnt
   if (iu(k+1) .gt. max+1) go to 1005
 !
-!  Move column indices from linked list to JU.
+!  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
-!  column number (C(J)) stored for current column J
+!  column number (c(j)) stored for current column j
 !
   if (vi .gt. n)  go to 170
   j = vi
@@ -4368,7 +4368,7 @@ do 170 k = 1,n
     if (j .le. n) go to 160
 170 continue
 !
-!  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
+!  BACKSOLVE u x = y, AND REORDER x TO CORRESPOND WITH A
 !
 k = n
 do i = 1,n
@@ -4387,29 +4387,29 @@ do i = 1,n
   k = k - 1
 end do
 !
-!  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
+!  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
 ierr = iu(n+1) - iu(1)
 return
 !
 !  Error returns
 !
-!  Row K of A is null
+!  Row k of A is null
 !
 1002 ierr = -k
 return
 !
-!  Row K of A has a duplicate entry
+!  Row k of A has a duplicate entry
 !
 1003 ierr = -(n+k)
 return
 !
-!  Zero pivot in row K
+!  Zero pivot in row k
 !
 1004 ierr = -(2*n+k)
 return
 !
-!  Storage for U exceeded on row K
+!  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n+k)
 return
@@ -4423,63 +4423,63 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
-!     DSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
-!     if DSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     dslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN LINEAR SYSTEM AX = b. THE ARGUMENT m0 SPECIFIES
+!     if dslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to DSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to dslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the double precision matrix A stored in sparse form.
+!     a,ia,ja  the double precision matrix a stored in sparse form.
 !
-!     B        DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE
+!     b        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
 !              right hand side data.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE
-!              solution. B and X may share the same storage area.
+!     x        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
+!              solution. b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       DOUBLE PRECISION ARRAY OF DIMENSION 2*N + MAX.
+!     wk       DOUBLE PRECISION ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to DSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to DSLV
-!     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to dslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to dslv
+!     AND SOLVES THE NEW EQUATIONS AX = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), wk(*)
@@ -4499,7 +4499,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -4532,7 +4532,7 @@ double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
 double precision :: sum
 !
-!            SOLVE LY = B BY FORWARD SUBSTITUTION
+!            SOLVE LY = b BY FORWARD SUBSTITUTION
 !
 do 11 k = 1,n
    lk = r(k)
@@ -4547,8 +4547,8 @@ do 11 k = 1,n
    end do
 11 y(k) = sum/d(k)
 !
-!            SOLVE UX = B BY BACKWARD SUBSTITUTION
-!             and reorder X to correspond with A
+!            SOLVE UX = b BY BACKWARD SUBSTITUTION
+!             and reorder x to correspond with A
 !
 k = n
 do i = 1,n
@@ -4577,63 +4577,63 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
-!     DTSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
-!     if DTSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     dtslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN LINEAR SYSTEM XA = b. THE ARGUMENT m0 SPECIFIES
+!     if dtslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to DTSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to dtslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the double precision matrix A stored in sparse form.
+!     a,ia,ja  the double precision matrix a stored in sparse form.
 !
-!     B        DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE
+!     b        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
 !              right hand side data.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        DOUBLE PRECISION ARRAY OF N ENTRIES CONTAINING THE
-!              solution. B and X may share the same storage area.
+!     x        DOUBLE PRECISION ARRAY OF n ENTRIES CONTAINING THE
+!              solution. b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       DOUBLE PRECISION ARRAY OF DIMENSION 2*N + MAX.
+!     wk       DOUBLE PRECISION ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to DTSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to DTSLV
-!     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to dtslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to dtslv
+!     AND SOLVES THE NEW EQUATIONS XA = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*), b(n)
 double precision, intent(inout) :: x(n), wk(*)
@@ -4653,7 +4653,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -4685,7 +4685,7 @@ integer, intent(in) :: it(*), jt(*), iu(n)
 double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
 !
-!            SOLVE YU = B BY FORWARD SUBSTITUTION
+!            SOLVE YU = b BY FORWARD SUBSTITUTION
 !
 do k = 1,n
    lk = c(k)
@@ -4704,7 +4704,7 @@ do 21 k = 1,n
    end do
 21 continue
 !
-!            SOLVE XL = Y BY BACKWARD SUBSTITUTION
+!            SOLVE XL = y BY BACKWARD SUBSTITUTION
 !
 x(n) = y(n)/d(n)
 if (n .eq. 1) return
@@ -4738,25 +4738,25 @@ integer, intent(in) :: max, n
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
 !-----------------------------------------------------------------------
-!     DSPLU employs Gaussian elimination with column interchanges
+!     dsplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a double precision sparse
 !     matrix. U is a unit upper triangular matrix.
 !
 !
 !     Input arguments ---
 !
-!     A,IA,JA  the sparse matrix to be decomposed.
+!     A,ia,ja  the sparse matrix to be decomposed.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C
-!              (I.E., IC(C(I)) = I). IC IS ALSO AN OUTPUT ARGUMENT.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c
+!              (I.E., ic(c(i)) = i). ic IS ALSO AN OUTPUT ARGUMENT.
 !
-!     N        ORDER OF THE MATRIX A.
+!     n        ORDER OF THE MATRIX a.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
 !              nonzero entries of L and U which may be stored.
@@ -4764,37 +4764,37 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     Output arguments ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c.
 !
-!     D        DOUBLE PRECISION ARRAY CONTAINING THE N DIAGONAL
+!     d        DOUBLE PRECISION ARRAY CONTAINING THE n DIAGONAL
 !              elements of L.
 !
-!     T,it,IU  T contains the off-diagonal nonzero elements of L and
-!              U. FOR I = 1,...,N THE OFF-DIAGONAL NONZERO ELEMENTS
-!              of the I-TH row of L are stored in locations
-!              IT(I),...,IU(I)-1 of T, and the off-diagonal nonzero
-!              elements of the I-TH row of U are stored in locations
-!              IU(I),...,IT(I+1)-1 of T.
+!     t,it,iu  t contains the off-diagonal nonzero elements of L and
+!              U. FOR i = 1,...,n THE OFF-DIAGONAL NONZERO ELEMENTS
+!              of the i-TH row of L are stored in locations
+!              it(i),...,iu(i)-1 of t, and the off-diagonal nonzero
+!              elements of the i-TH row of U are stored in locations
+!              iu(i),...,it(i+1)-1 of t.
 !
-!     JT       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
-!              to the orginal column ordering) of the elements of T
-!              (I.E., For each L(I,J) and U(I,J) in T, C(J) is the
-!              corresponding column index in JT).
+!     jt       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
+!              to the orginal column ordering) of the elements of t
+!              (I.E., For each L(i,j) and U(i,j) in t, c(j) is the
+!              corresponding column index in jt).
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              LU DECOMPOSITION IS OBTAINED THEN IERR = THE NUMBER
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in T. Otherwise IERR is assigned a negative value.
+!              in t. Otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
 !
-!     W        DOUBLE PRECISION ARRAY OF DIMENSION N.
+!     w        DOUBLE PRECISION ARRAY OF DIMENSION n.
 !
-!     P        INTEGER ARRAY OF DIMENSION N+1.
+!     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: d(n), t(max), w(n)
@@ -4812,7 +4812,7 @@ do j = 1,n
    w(j) = 0.d0
 end do
 !
-!     Perform the LU factorization of the R(K)-TH row of A
+!     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
 lk = r(k)
@@ -4820,7 +4820,7 @@ jmin = ia(lk)
 jmax = ia(lk+1) - 1
 if (jmin .gt. jmax) go to 200
 !
-!     Set P to the reordered row of A
+!     Set p to the reordered row of A
 !
 p(n+1) = n + 1
 jj = jmax
@@ -4843,7 +4843,7 @@ i = n + 1
 if (i .ge. k) go to 50
 if (w(i) .eq. 0.d0) go to 30
 !
-!     L(K,I) is nonzero. Therefore store it in L.
+!     L(k,i) is nonzero. Therefore store it in L.
 !
 jptr = jptr + 1
 if (jptr .gt. max) go to 230
@@ -4852,7 +4852,7 @@ t(jptr) = const
 jt(jptr) = c(i)
 w(i) = 0.d0
 !
-!     Perform elimination using the I-TH row of U
+!     Perform elimination using the i-TH row of U
 !
 jmin = iu(i)
 jmax = it(i+1) - 1
@@ -4873,7 +4873,7 @@ do 43 jj = jmin,jmax
 43 w(j) = w(j) - const*t(jj)
 go to 30
 !
-!     Search for the K-TH pivot element
+!     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
 wmax = dabs(w(i))
@@ -4889,7 +4889,7 @@ if (wi .le. wmax) go to 51
    maxil = m
    go to 51
 !
-!     Store the pivot in D
+!     Store the pivot in d
 !
 60 if (wmax .eq. 0.d0) go to 220
 d(k) = w(maxi)
@@ -4911,7 +4911,7 @@ c(maxi) = lk
 ic(lk) = maxi
 ic(ll) = k
 !
-!     The remaining elements of P form the K-TH row of U
+!     The remaining elements of p form the k-TH row of U
 !
 iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
@@ -4933,22 +4933,22 @@ return
 !
 !     -------------------- Error return --------------------
 !
-!     Row R(K) is null
+!     Row r(k) is null
 !
 200 ierr = -k
 return
 !
-!     Row R(K) has a duplicate entry
+!     Row r(k) has a duplicate entry
 !
 210 ierr = -(n + k)
 return
 !
-!     Zero pivot in row R(K)
+!     Zero pivot in row r(k)
 !
 220 ierr = -(2*n + k)
 return
 !
-!     Storage for L and U exceeded on row R(K)
+!     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
 return
@@ -4963,15 +4963,15 @@ integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
-!                       of A sparse matrix A
+!                       of a sparse matrix a
 !-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: wk(*)
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
 !-----------------------
-!     REAL WK(4*N + MAX)
-!     INTEGER IWK(5*N + MAX + 2)
+!     real wk(4*n + max)
+!     integer iwk(5*n + max + 2)
 !-----------------------
 cond = 0.0
 call s1nrm (a, ia, ja, n, n, anorm, wk)
@@ -4998,7 +4998,7 @@ ierr = ierr + n
 if (iabs(ierr) .le. n) go to 50
 return
 !
-!     General loop to estimate the norm  AINORM
+!     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
 20 call sonest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
@@ -5030,7 +5030,7 @@ integer, intent(in) :: max, n
 integer :: isgn, iter, iv, ix, j, jump, kase
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
-!                       of A sparse matrix A
+!                       of a sparse matrix a
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(out) :: cond
@@ -5039,8 +5039,8 @@ double precision :: anorm, ainorm
 integer, intent(in) :: ia(*), ja(*), r(n)
 integer, intent(inout) :: c(n), iwk(*)
 !-----------------------
-!     Double precision WK(4*N + MAX)
-!     INTEGER IWK(5*N + MAX + 2)
+!     double precision wk(4*n + max)
+!     integer iwk(5*n + max + 2)
 !-----------------------
 cond = 0.d0
 call ds1nrm (a, ia, ja, n, n, anorm, wk)
@@ -5067,7 +5067,7 @@ ierr = ierr + n
 if (iabs(ierr) .le. n) go to 50
 return
 !
-!     General loop to estimate the norm  AINORM
+!     General loop to estimate the norm  ainorm
 !     of the inverse of A
 !
 20 call donest (n, wk(iv), wk(ix), iwk(isgn), ainorm, kase, &
@@ -5105,37 +5105,37 @@ real, intent(inout) :: v(n), x(n)
 integer, intent(inout) :: isgn(n)
 !-----------------------------------------------------------------------
 !
-!     SONEST estimates the 1-norm of A square, real matrix  A.
+!     sonest estimates the 1-norm of A square, real matrix  A.
 !     Reverse communication is used for evaluating
 !     matrix-vector products.
 !
 !     On entry
 !
-!        N       THE ORDER OF THE MATRIX.  N .GE. 1.
+!        n       THE ORDER OF THE MATRIX.  n .GE. 1.
 !
-!        KASE    INTEGER  (= 0).
+!        kase    INTEGER  (= 0).
 !
 !     On intermediate returns
 !
-!        KASE    = 1 OR 2.
+!        kase    = 1 or 2.
 !
-!        X       MUST BE OVERWRITTEN BY
+!        x       MUST BE OVERWRITTEN BY
 !
-!                     A*X,             IF KASE = 1,
-!                     TRANSPOSE(A)*X,  IF KASE = 2,
+!                     A*x,             IF kase = 1,
+!                     TRANSPOSE(A)*x,  IF kase = 2,
 !
-!                And SONEST must be RE-called, with all the other
+!                And sonest must be RE-called, with all the other
 !                parameters unchanged.
 !
 !        ITER    NUMBER OF THE CURRENT ITERATION.
 !
 !     On final return
 !
-!        KASE    = 0.
+!        kase    = 0.
 !
-!        ANORM   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
+!        anorm   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
 !
-!        V       = A*W,   WHERE  ANORM = NORM(V)/NORM(W)
+!        v       = A*W,   WHERE  anorm = NORM(v)/NORM(W)
 !                         (W  is not returned).
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
@@ -5163,8 +5163,8 @@ if (kase .ne. 0) go to 20
    return
 20 go to (100, 200, 300, 400, 500), jump
 !
-!     ................ ENTRY   (JUMP = 1)
-!     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 1)
+!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -5182,13 +5182,13 @@ kase = 2
 jump = 2
 return
 !
-!     ................ ENTRY   (JUMP = 2)
-!     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
+!     ................ ENTRY   (jump = 2)
+!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = isamax(n,x,1)
 !
-!     Main loop - iterations 2,3,...,ITMAX.
+!     Main loop - iterations 2,3,...,itmax.
 !
 210 do i = 1,n
    x(i) = 0.0
@@ -5198,8 +5198,8 @@ kase = 1
 jump = 3
 return
 !
-!     ................ ENTRY   (JUMP = 3)
-!     X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 3)
+!     x HAS BEEN OVERWRITTEN BY A*x.
 !
 300 call scopy (n,x,1,v,1)
 anrm = anorm
@@ -5225,8 +5225,8 @@ kase = 2
 jump = 4
 return
 !
-!     ................ ENTRY   (JUMP = 4)
-!     X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
+!     ................ ENTRY   (jump = 4)
+!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = isamax(n,x,1)
@@ -5246,8 +5246,8 @@ kase = 1
 jump = 5
 return
 !
-!     ................ ENTRY   (JUMP = 5)
-!     X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 5)
+!     x HAS BEEN OVERWRITTEN BY A*x.
 !
 500 anrm = 2.0*sasum(n,x,1)/float(3*n)
 if (anrm .le. anorm) go to 510
@@ -5269,37 +5269,37 @@ double precision :: altsgn, an, anm1, anrm, t
 double precision :: dasum
 !-----------------------------------------------------------------------
 !
-!     DONEST estimates the 1-norm of A square, real matrix  A.
+!     donest estimates the 1-norm of A square, real matrix  A.
 !     Reverse communication is used for evaluating
 !     matrix-vector products.
 !
 !     On entry
 !
-!        N       THE ORDER OF THE MATRIX.  N .GE. 1.
+!        n       THE ORDER OF THE MATRIX.  n .GE. 1.
 !
-!        KASE    INTEGER  (= 0).
+!        kase    INTEGER  (= 0).
 !
 !     On intermediate returns
 !
-!        KASE    = 1 OR 2.
+!        kase    = 1 or 2.
 !
-!        X       MUST BE OVERWRITTEN BY
+!        x       MUST BE OVERWRITTEN BY
 !
-!                     A*X,             IF KASE = 1,
-!                     TRANSPOSE(A)*X,  IF KASE = 2,
+!                     A*x,             IF kase = 1,
+!                     TRANSPOSE(A)*x,  IF kase = 2,
 !
-!                And DONEST must be RE-called, with all the other
+!                And donest must be RE-called, with all the other
 !                parameters unchanged.
 !
 !        ITER    NUMBER OF THE CURRENT ITERATION.
 !
 !     On final return
 !
-!        KASE    = 0.
+!        kase    = 0.
 !
-!        ANORM   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
+!        anorm   CONTAINS AN ESTIMATE (A LOWER BOUND) FOR NORM(A).
 !
-!        V       = A*W,   WHERE  ANORM = NORM(V)/NORM(W)
+!        v       = A*W,   WHERE  anorm = NORM(v)/NORM(W)
 !                         (W  is not returned).
 !
 !        ITER    NUMBER OF INTERATIONS TAKEN.
@@ -5329,8 +5329,8 @@ if (kase .ne. 0) go to 20
    return
 20 go to (100, 200, 300, 400, 500), jump
 !
-!     ................ ENTRY   (JUMP = 1)
-!     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 1)
+!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY A*x.
 !
 100 iter = 1
 if (n .gt. 1) go to 110
@@ -5348,13 +5348,13 @@ kase = 2
 jump = 2
 return
 !
-!     ................ ENTRY   (JUMP = 2)
-!     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
+!     ................ ENTRY   (jump = 2)
+!     FIRST ITERATION.  x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
 !
 200 iter = 2
 j = idamax(n,x,1)
 !
-!     Main loop - iterations 2,3,...,ITMAX.
+!     Main loop - iterations 2,3,...,itmax.
 !
 210 do i = 1,n
    x(i) = 0.d0
@@ -5364,8 +5364,8 @@ kase = 1
 jump = 3
 return
 !
-!     ................ ENTRY   (JUMP = 3)
-!     X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 3)
+!     x HAS BEEN OVERWRITTEN BY A*x.
 !
 300 call dcopy (n,x,1,v,1)
 anrm = anorm
@@ -5391,8 +5391,8 @@ kase = 2
 jump = 4
 return
 !
-!     ................ ENTRY   (JUMP = 4)
-!     X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
+!     ................ ENTRY   (jump = 4)
+!     x HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*x.
 !
 400 jlast = j
 j = idamax(n,x,1)
@@ -5413,8 +5413,8 @@ kase = 1
 jump = 5
 return
 !
-!     ................ ENTRY   (JUMP = 5)
-!     X HAS BEEN OVERWRITTEN BY A*X.
+!     ................ ENTRY   (jump = 5)
+!     x HAS BEEN OVERWRITTEN BY A*x.
 !
 500 anrm = 2.d0*dasum(n,x,1)/(3.d0*an)
 if (anrm .le. anorm) go to 510
@@ -5432,85 +5432,85 @@ integer :: k, l
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
-!  SPSLV calls CNSPIV which uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  spslv calls cnspiv which uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !  Input arguments---
 !
-!  N      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
+!  n      INTEGER NUMBER OF EQUATIONS AND UNKNOWNS
 !
 !  A      COMPLEX ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
 !         the actual nonzeros.  (See storage description below)
 !
-!  IA     INTEGER ARRAY OF N+1 ENTRIES CONTAINING ROW POINTERS TO A
+!  ia     INTEGER ARRAY OF n+1 ENTRIES CONTAINING ROW POINTERS TO A
 !         (see matrix storage description below)
 !
-!  JA     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
+!  ja     INTEGER ARRAY WITH ONE ENTRY PER NONZERO IN A, CONTAINING
 !         column numbers of the nonzeros of A.  (See matrix storage
 !         description below)
 !
-!  B      COMPLEX ARRAY OF N ENTRIES CONTAINING RIGHT HAND SIDE DATA
+!  b      COMPLEX ARRAY OF n ENTRIES CONTAINING RIGHT HAND SIDE DATA
 !
-!  R      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
+!  r      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
 !         rows of A (I.E., The elimination order for the equations)
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of A.  C is also an output argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of A.  c is also an output argument
 !
 !  MAX    INTEGER NUMBER SPECIFYING MAXIMUM NUMBER OF OFF-DIAGONAL
-!         nonzero entries of U which may be stored
+!         nonzero entries of u which may be stored
 !
-!  ITEMP  integer array of 3*N + max + 2 entries, for internal use
+!  itemp  integer array of 3*n + max + 2 entries, for internal use
 !
-!  RTEMP  complex array of N + max entries for internal use
+!  rtemp  complex array of n + max entries for internal use
 !
 !
 !  Output arguments---
 !
-!  C      INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF THE
-!         columns of U.  C is also an input argument
+!  c      INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF THE
+!         columns of u.  c is also an input argument
 !
-!  X      COMPLEX ARRAY OF N ENTRIES CONTAINING THE SOLUTION VECTOR
+!  x      COMPLEX ARRAY OF n ENTRIES CONTAINING THE SOLUTION VECTOR
 !
-!  IERR   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
-!         the actual number of off-diagonal entries in U (for
+!  ierr   INTEGER NUMBER WHICH INDICATES ERROR CONDITIONS OR
+!         the actual number of off-diagonal entries in u (for
 !         successful completion)
 !
-!         IERR values are---
+!         ierr values are---
 !
-!         0 LT IERR             SUCCESSFUL COMPLETION. IERR=MAX(1,M)
+!         0 LT ierr             SUCCESSFUL COMPLETION. ierr=max(1,M)
 !                               where M is the number of off-diagonal
-!                               nonzero entries of U.
+!                               nonzero entries of u.
 !
-!         IERR = 0              ERROR.  N IS LESS THAN OR EQUAL TO 0
+!         ierr = 0              ERROR.  n IS LESS THAN OR EQUAL TO 0
 !
-!         -N LE IERR LT 0       ERROR.  ROW NUMBER IABS(IERR) OF A IS
+!         -n LE ierr LT 0       ERROR.  ROW NUMBER IABS(ierr) OF A IS
 !                               is null
 !
-!         -2*N LE IERR LT -N    ERROR.  ROW NUMBER IABS(IERR+N) HAS A
+!         -2*n LE ierr LT -n    ERROR.  ROW NUMBER IABS(ierr+n) HAS A
 !                               duplicate entry
 !
-!         -3*N LE IERR LT -2*N  error.  Row number IABS(IERR+2*N)
+!         -3*n LE ierr LT -2*n  error.  Row number IABS(ierr+2*n)
 !                               has a zero pivot
 !
-!         -4*N LE IERR LT -3*N  error.  Row number IABS(IERR+3*N)
+!         -4*n LE ierr LT -3*n  error.  Row number IABS(ierr+3*n)
 !                               exceeds storage
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN J, THEN ja(k) = J).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(I))/ja(ia(I)) is the first entry for row I in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZERO
 !  elements in A.
 !------------------------
 complex, intent(in) :: a(*), b(n)
@@ -5522,7 +5522,7 @@ integer :: iu, ju, u, y, p
 ierr = 0
 if (n .le. 0) return
 !
-!  Set indices to divide temporary storage for CNSPIV
+!  Set indices to divide temporary storage for cnspiv
 !
 y = 1
 u = y + n
@@ -5530,14 +5530,14 @@ p = n + 1
 iu = p + n + 1
 ju = iu + n + 1
 !
-!  Compute the inverse permutation of C
+!  Compute the inverse permutation of c
 !
 do k = 1,n
    l = c(k)
    itemp(l) = k
 end do
 !
-!  CALL CNSPIV TO PERFORM COMPUTATIONS
+!  CALL cnspiv TO PERFORM COMPUTATIONS
 !
 call cnspiv (n,ia,ja,a,b,max,r,c,itemp(1),x,rtemp(y),itemp(p), &
 &itemp(iu),itemp(ju),rtemp(u),ierr)
@@ -5553,56 +5553,56 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
 !
 !
-!  CNSPIV uses sparse Gaussian elimination with
-!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A X = B.  THE
-!  elimination phase performs row operations on A and B to obtain
-!  a unit upper triangular matrix U and a vector Y.  The solution
-!  PHASE SOLVES U X = Y.
+!  cnspiv uses sparse Gaussian elimination with
+!  COLUMN INTERCHANGES TO SOLVE THE LINEAR SYSTEM A x = b.  THE
+!  elimination phase performs row operations on A and b to obtain
+!  a unit upper triangular matrix u and a vector y.  The solution
+!  PHASE SOLVES u x = y.
 !
 !
-!  See CSPSLV for descriptions of all input and output arguments
+!  See cspslv for descriptions of all input and output arguments
 !  other than those described below
 !
-!  IC  integer array of N entries which is the inverse of C
-!      (I.E., IC(C(I)) = I). IC IS BOTH AN INPUT AND OUTPUT
+!  ic  integer array of n entries which is the inverse of c
+!      (I.E., ic(c(i)) = i). ic IS BOTH AN INPUT AND OUTPUT
 !      argument.
 !
 !  Input arguments (used internally only)---
 !
-!  Y   COMPLEX ARRAY OF N ENTRIES USED TO COMPUTE THE UPDATED
+!  y   COMPLEX ARRAY OF n ENTRIES USED TO COMPUTE THE UPDATED
 !      right hand side
 !
-!  P   INTEGER ARRAY OF N+1 ENTRIES USED FOR A LINKED LIST.
-!      P(N+1) is the list header, and the entry following
-!      P(K) is in P(P(K)).  Thus, P(N+1) is the first data
-!      item, P(P(N+1)) is the second, etc.  a pointer of
-!      N+1 marks the end of the list
+!  p   INTEGER ARRAY OF n+1 ENTRIES USED FOR A LINKED LIST.
+!      p(n+1) is the list header, and the entry following
+!      p(k) is in p(p(k)).  Thus, p(n+1) is the first data
+!      item, p(p(n+1)) is the second, etc.  a pointer of
+!      n+1 marks the end of the list
 !
-!  IU  integer array of N+1 entries used for row pointers to U
+!  iu  integer array of n+1 entries used for row pointers to u
 !      (see matrix storage description below)
 !
-!  JU  integer array of max entries used for column numbers of
-!      the nonzeros in the strict upper triangle of U.  (See
+!  ju  integer array of max entries used for column numbers of
+!      the nonzeros in the strict upper triangle of u.  (See
 !      matrix storage description below)
 !
-!  U   COMPLEX ARRAY OF MAX ENTRIES USED FOR THE ACTUAL NONZEROS IN
-!      the strict upper triangle of U.  (See matrix storage
+!  u   COMPLEX ARRAY OF MAX ENTRIES USED FOR THE ACTUAL NONZEROS IN
+!      the strict upper triangle of u.  (See matrix storage
 !      description below)
 !
 !
 !  Storage of sparse matrices---
 !
-!  The sparse matrix A is stored using three arrays IA, JA, and A.
-!  The array A contains the nonzeros of the matrix ROW-by-ROW, not
-!  necessarily in order of increasing column number.  The array JA
+!  The sparse matrix a is stored using three arrays ia, ja, and a.
+!  The array a contains the nonzeros of the matrix ROW-by-ROW, not
+!  necessarily in order of increasing column number.  The array ja
 !  contains the column numbers corresponding to the nonzeros stored
-!  in the array A (I.E., If the nonzero stored in A(K) is in
-!  COLUMN J, THEN JA(K) = J).  THE ARRAY IA CONTAINS POINTERS TO THE
-!  rows of nonzeros/column indices in the array A/JA (I.E.,
-!  A(IA(I))/JA(IA(I)) is the first entry for row I in the array A/JA).
-!  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZEROS IN
-!  A.  IU, JU, and U are used in a similar way to store the strict upper
-!  triangle of U, except that JU actually contains C(J) instead of J
+!  in the array a (I.E., If the nonzero stored in a(k) is in
+!  COLUMN j, THEN ja(k) = j).  THE ARRAY ia CONTAINS POINTERS TO THE
+!  rows of nonzeros/column indices in the array a/ja (I.E.,
+!  a(ia(i))/ja(ia(i)) is the first entry for row i in the array a/ja).
+!  ia(n+1) IS SET SO THAT ia(n+1) - ia(1) = THE NUMBER OF NONZEROS IN
+!  A.  iu, ju, and u are used in a similar way to store the strict upper
+!  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
 complex, intent(in) :: a(*), b(n)
@@ -5620,7 +5620,7 @@ integer :: ck, pk, ppk, pv, v, vi, vj, vk
 one = (1.0,0.0)
 zero = (0.0,0.0)
 !
-!  Initialize work storage and pointers to JU
+!  Initialize work storage and pointers to ju
 !
 do j = 1,n
   x(j) = zero
@@ -5629,18 +5629,18 @@ iu(1) = 1
 juptr = 0
 !
 !  Perform symbolic and numeric factorization row by row
-!  VK (VI,VJ) is the graph vertex for row K (I,J) of U
+!  vk (vi,vj) is the graph vertex for row k (i,j) of u
 !
 do 170 k = 1,n
 !
 !  Initialize linked list and free storage for this row
-!  the R(K)-TH row of a becomes the K-TH row of U.
+!  the r(k)-TH row of a becomes the k-TH row of u.
 !
   p(n+1) = n+1
   vk = r(k)
 !
-!  Set up adjacency list for VK, ordered in
-!  current column order of U.  The loop index
+!  Set up adjacency list for vk, ordered in
+!  current column order of u.  The loop index
 !  goes downward to exploit any columns
 !  from A in correct relative order
 !
@@ -5651,10 +5651,10 @@ do 170 k = 1,n
 20 jaj = ja(j)
     vj = ic(jaj)
 !
-!  Store A(K,J) in work vector
+!  Store a(k,j) in work vector
 !
     x(vj) = a(j)
-!  This code inserts VJ into adjacency list of VK
+!  This code inserts vj into adjacency list of vk
     ppk = n+1
 30 pk = ppk
     ppk = p(pk)
@@ -5664,15 +5664,15 @@ do 170 k = 1,n
     j = j - 1
     if (j .ge. jmin) go to 20
 !
-!  The following code computes the K-TH row of U
+!  The following code computes the k-TH row of u
 !
   vi = n+1
   yk = b(vk)
 50 vi = p(vi)
   if (vi .ge. k) go to 110
 !
-!  VI LT VK -- process the L(K,I) element and merge the
-!  adjacency of VI with the ordered adjacency of VK
+!  vi LT vk -- process the L(k,i) element and merge the
+!  adjacency of vi with the ordered adjacency of vk
 !
   lki = - x(vi)
   x(vi) = zero
@@ -5688,15 +5688,15 @@ do 170 k = 1,n
     juj = ju(j)
     vj = ic(juj)
 !
-!  If VJ is already in the adjacency of VK,
+!  If vj is already in the adjacency of vk,
 !  skip the insertion
 !
     if (x(vj) .ne. zero)  go to 90
 !
-!  Insert VJ in adjacency list of VK.
-!  Reset PPK to VI if we have passed the correct
+!  Insert vj in adjacency list of vk.
+!  Reset ppk to vi if we have passed the correct
 !  insertion spot.  (This happens when the adjacency of
-!  VI is not in current column order due to pivoting.)
+!  vi is not in current column order due to pivoting.)
 !
     if (vj - ppk) 60,90,70
 60 ppk = vi
@@ -5707,15 +5707,15 @@ do 170 k = 1,n
     p(pk) = vj
     ppk = vj
 !
-!  COMPUTE L(K,J) = L(K,J) - L(K,I)*U(I,J) FOR L(K,I) NONZERO
-!  COMPUTE U*(K,J) = U*(K,J) - L(K,I)*U(I,J) FOR U(K,J) NONZERO
-!  (U*(K,J) = U(K,J)*D(K,K))
+!  COMPUTE L(k,j) = L(k,j) - L(k,i)*u(i,j) FOR L(k,i) NONZERO
+!  COMPUTE u*(k,j) = u*(k,j) - L(k,i)*u(i,j) FOR u(k,j) NONZERO
+!  (u*(k,j) = u(k,j)*D(k,k))
 !
 90 x(vj) = x(vj) + lki * u(j)
   end do
   go to 50
 !
-!  Pivot--interchange largest entry of K-TH row of U with
+!  Pivot--interchange largest entry of k-TH row of u with
 !  the diagonal entry.
 !
 !  Find largest entry, counting off-diagonal nonzeros
@@ -5737,7 +5737,7 @@ do 170 k = 1,n
     go to 120
 130 if (xpvmax .eq. 0.0) go to 1004
 !
-!  IF VI = K, THEN THERE IS AN ENTRY FOR DIAGONAL
+!  IF vi = k, THEN THERE IS AN ENTRY FOR DIAGONAL
 !  which must be deleted.  Otherwise, delete the
 !  entry which will become the diagonal entry
 !
@@ -5747,7 +5747,7 @@ do 170 k = 1,n
   go to 150
 140 vi = p(vi)
 !
-!  COMPUTE D(K) = 1/L(K,K) AND PERFORM INTERCHANGE.
+!  COMPUTE D(k) = 1/L(k,k) AND PERFORM INTERCHANGE.
 !
 150 dk = one / x(maxc)
   x(maxc) = x(k)
@@ -5763,14 +5763,14 @@ do 170 k = 1,n
 !
   y(k) = yk * dk
 !
-!  Compute value for IU(K+1) and check for storage overflow
+!  Compute value for iu(k+1) and check for storage overflow
 !
   iu(k+1) = iu(k) + nzcnt
   if (iu(k+1) .gt. max+1) go to 1005
 !
-!  Move column indices from linked list to JU.
+!  Move column indices from linked list to ju.
 !  Columns are stored in current order with original
-!  column number (C(J)) stored for current column J
+!  column number (c(j)) stored for current column j
 !
   if (vi .gt. n)  go to 170
   j = vi
@@ -5782,7 +5782,7 @@ do 170 k = 1,n
     if (j .le. n) go to 160
 170 continue
 !
-!  BACKSOLVE U X = Y, AND REORDER X TO CORRESPOND WITH A
+!  BACKSOLVE u x = y, AND REORDER x TO CORRESPOND WITH A
 !
 k = n
 do i = 1,n
@@ -5801,29 +5801,29 @@ do i = 1,n
   k = k - 1
 end do
 !
-!  RETURN WITH IERR = NUMBER OF OFF-DIAGONAL NONZEROS IN U
+!  RETURN WITH ierr = NUMBER OF OFF-DIAGONAL NONZEROS IN u
 !
 ierr = iu(n+1) - iu(1)
 return
 !
 !  Error returns
 !
-!  Row K of A is null
+!  Row k of A is null
 !
 1002 ierr = -k
 return
 !
-!  Row K of A has a duplicate entry
+!  Row k of A has a duplicate entry
 !
 1003 ierr = -(n+k)
 return
 !
-!  Zero pivot in row K
+!  Zero pivot in row k
 !
 1004 ierr = -(2*n+k)
 return
 !
-!  Storage for U exceeded on row K
+!  Storage for u exceeded on row k
 !
 1005 ierr = -(3*n+k)
 return
@@ -5837,63 +5837,63 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
-!     CSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN COMPLEX SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
-!     if CSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     cslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN COMPLEX SYSTEM AX = b. THE ARGUMENT m0 SPECIFIES
+!     if cslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to CSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to cslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the complex matrix A stored in sparse form.
+!     a,ia,ja  the complex matrix a stored in sparse form.
 !
-!     B        COMPLEX ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND
+!     b        COMPLEX ARRAY OF n ENTRIES CONTAINING THE RIGHT HAND
 !              side data.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        COMPLEX ARRAY OF N ENTRIES CONTAINING THE SOLUTION.
-!              B and X may share the same storage area.
+!     x        COMPLEX ARRAY OF n ENTRIES CONTAINING THE SOLUTION.
+!              b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       COMPLEX ARRAY OF DIMENSION 2*N + MAX.
+!     wk       COMPLEX ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to CSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to CSLV
-!     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to cslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to cslv
+!     AND SOLVES THE NEW EQUATIONS AX = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*), b(n)
 complex, intent(inout) :: x(n), wk(*)
@@ -5913,7 +5913,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -5946,7 +5946,7 @@ complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
 complex :: sum
 !
-!            SOLVE LY = B BY FORWARD SUBSTITUTION
+!            SOLVE LY = b BY FORWARD SUBSTITUTION
 !
 do 11 k = 1,n
    lk = r(k)
@@ -5961,8 +5961,8 @@ do 11 k = 1,n
    end do
 11 y(k) = sum/d(k)
 !
-!            SOLVE UX = B BY BACKWARD SUBSTITUTION
-!             and reorder X to correspond with A
+!            SOLVE UX = b BY BACKWARD SUBSTITUTION
+!             and reorder x to correspond with A
 !
 k = n
 do i = 1,n
@@ -5991,63 +5991,63 @@ integer :: it, iu, jt, k, l
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
-!     CTSLV employs Gaussian elimination with column interchanges to
-!     SOLVE THE NXN COMPLEX SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
-!     if CTSLV is being called for the first time, or if it is being
-!     recalled where A is the same matrix but B has been modified.
-!     ON AN INITIAL CALL TO THE ROUTINE (WHEN M0=0) THE LU DECOMPO-
+!     ctslv employs Gaussian elimination with column interchanges to
+!     SOLVE THE NXN COMPLEX SYSTEM XA = b. THE ARGUMENT m0 SPECIFIES
+!     if ctslv is being called for the first time, or if it is being
+!     recalled where A is the same matrix but b has been modified.
+!     ON AN INITIAL CALL TO THE ROUTINE (WHEN m0=0) THE LU DECOMPO-
 !     sition of A is obtained where U is a unit upper triangular
 !     matrix. Then the equations are solved. On subsequent calls
-!     (WHEN M0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
-!     obtained on the initial call to CTSLV.
+!     (WHEN m0.NE.0) THE EQUATIONS ARE SOLVED USING THE DECOMPOSITION
+!     obtained on the initial call to ctslv.
 !
 !
-!     INPUT ARGUMENTS WHEN M0=0 ---
+!     INPUT ARGUMENTS WHEN m0=0 ---
 !
-!     N        NUMBER OF EQUATIONS AND UNKNOWNS.
+!     n        NUMBER OF EQUATIONS AND UNKNOWNS.
 !
-!     A,IA,JA  the complex matrix A stored in sparse form.
+!     a,ia,ja  the complex matrix a stored in sparse form.
 !
-!     B        COMPLEX ARRAY OF N ENTRIES CONTAINING THE RIGHT HAND
+!     b        COMPLEX ARRAY OF n ENTRIES CONTAINING THE RIGHT HAND
 !              side data.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
-!              nonzero entries of L and U which may be stored.
+!              nonzero entries of l and U which may be stored.
 !
 !
-!     OUTPUT ARGUMENTS WHEN M0=0 ---
+!     OUTPUT ARGUMENTS WHEN m0=0 ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     X        COMPLEX ARRAY OF N ENTRIES CONTAINING THE SOLUTION.
-!              B and X may share the same storage area.
+!     x        COMPLEX ARRAY OF n ENTRIES CONTAINING THE SOLUTION.
+!              b and x may share the same storage area.
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              SOLUTION OF AX = B IS OBTAINED THEN IERR = MAX(1,M)
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              SOLUTION OF AX = b IS OBTAINED THEN ierr = max(1,M)
 !              where M is the total number of off-diagonal nonzero
-!              ENTRIES OF L AND U. OTHERWISE IERR.LE.0.
+!              ENTRIES OF l AND U. OTHERWISE ierr.LE.0.
 !
 !
 !     General storage areas ---
 !
-!     IWK      INTEGER ARRAY OF DIMENSION 4*N + MAX + 2.
+!     iwk      INTEGER ARRAY OF DIMENSION 4*n + max + 2.
 !
-!     WK       COMPLEX ARRAY OF DIMENSION 2*N + MAX.
+!     wk       COMPLEX ARRAY OF DIMENSION 2*n + max.
 !
 !
-!     After an initial call to CTSLV, the routine may be recalled with
-!     M0.NE.0 FOR A NEW B. WHEN M0.NE.0 IT IS ASSUMED THAT N,A,IA,JA,
-!     R,C,IWK,WK have not been modified. The routine retrieves the LU
-!     decomposition which was obtained on the initial call to CTSLV
-!     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
-!     and IERR are not referenced.
+!     After an initial call to ctslv, the routine may be recalled with
+!     m0.NE.0 FOR A NEW b. WHEN m0.NE.0 IT IS ASSUMED THAT n,A,ia,ja,
+!     r,c,iwk,wk have not been modified. The routine retrieves the LU
+!     decomposition which was obtained on the initial call to ctslv
+!     AND SOLVES THE NEW EQUATIONS XA = b. IN THIS CASE A,ia,ja,MAX,
+!     and ierr are not referenced.
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*), b(n)
 complex, intent(inout) :: x(n), wk(*)
@@ -6067,7 +6067,7 @@ iu = it + n + 1
 jt = iu + n
 if (m0 .ne. 0) go to 20
 !
-!     Compute the inverse permutation of C
+!     Compute the inverse permutation of c
 !
 ierr = 0
 if (n .le. 0) return
@@ -6099,7 +6099,7 @@ integer, intent(in) :: it(*), jt(*), iu(n)
 complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
 !
-!            SOLVE YU = B BY FORWARD SUBSTITUTION
+!            SOLVE YU = b BY FORWARD SUBSTITUTION
 !
 do k = 1,n
    lk = c(k)
@@ -6118,7 +6118,7 @@ do 21 k = 1,n
    end do
 21 continue
 !
-!            SOLVE XL = Y BY BACKWARD SUBSTITUTION
+!            SOLVE XL = y BY BACKWARD SUBSTITUTION
 !
 x(n) = y(n)/d(n)
 if (n .eq. 1) return
@@ -6152,25 +6152,25 @@ integer, intent(in) :: max, n
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
 !-----------------------------------------------------------------------
-!     CSPLU employs Gaussian elimination with column interchanges
+!     csplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a complex sparse matrix.
 !     U is a unit upper triangular matrix.
 !
 !
 !     Input arguments ---
 !
-!     A,IA,JA  the complex sparse matrix to be decomposed.
+!     A,ia,ja  the complex sparse matrix to be decomposed.
 !
-!     R        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     r        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the rows of A.
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING A SUGGESTED
-!              order of the columns. C is also an output argument.
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING A SUGGESTED
+!              order of the columns. c is also an output argument.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C
-!              (I.E., IC(C(I)) = I). IC IS ALSO AN OUTPUT ARGUMENT.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c
+!              (I.E., ic(c(i)) = i). ic IS ALSO AN OUTPUT ARGUMENT.
 !
-!     N        ORDER OF THE MATRIX A.
+!     n        ORDER OF THE MATRIX a.
 !
 !     MAX      INTEGER SPECIFYING THE MAXIMUM NUMBER OF OFF-DIAGONAL
 !              nonzero entries of L and U which may be stored.
@@ -6178,36 +6178,36 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     Output arguments ---
 !
-!     C        INTEGER ARRAY OF N ENTRIES SPECIFYING THE ORDER OF
+!     c        INTEGER ARRAY OF n ENTRIES SPECIFYING THE ORDER OF
 !              the columns that was selected by the routine.
 !
-!     IC       INTEGER ARRAY OF N ENTRIES WHICH IS THE INVERSE OF C.
+!     ic       INTEGER ARRAY OF n ENTRIES WHICH IS THE INVERSE OF c.
 !
-!     D        COMPLEX ARRAY CONTAINING THE N DIAGONAL ELEMENTS OF L.
+!     d        COMPLEX ARRAY CONTAINING THE n DIAGONAL ELEMENTS OF L.
 !
-!     T,it,IU  T contains the off-diagonal nonzero elements of L and
-!              U. FOR I = 1,...,N THE OFF-DIAGONAL NONZERO ELEMENTS
-!              of the I-TH row of L are stored in locations
-!              IT(I),...,IU(I)-1 of T, and the off-diagonal nonzero
-!              elements of the I-TH row of U are stored in locations
-!              IU(I),...,IT(I+1)-1 of T. T is a complex array.
+!     t,it,iu  t contains the off-diagonal nonzero elements of L and
+!              U. FOR i = 1,...,n THE OFF-DIAGONAL NONZERO ELEMENTS
+!              of the i-TH row of L are stored in locations
+!              it(i),...,iu(i)-1 of t, and the off-diagonal nonzero
+!              elements of the i-TH row of U are stored in locations
+!              iu(i),...,it(i+1)-1 of t. t is a complex array.
 !
-!     JT       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
-!              to the orginal column ordering) of the elements of T
-!              (I.E., For each L(I,J) and U(I,J) in T, C(J) is the
-!              corresponding column index in JT).
+!     jt       INTEGER ARRAY CONTAINING THE COLUMN INDICES (ACCORDING
+!              to the orginal column ordering) of the elements of t
+!              (I.E., For each L(i,j) and U(i,j) in t, c(j) is the
+!              corresponding column index in jt).
 !
-!     IERR     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
-!              LU DECOMPOSITION IS OBTAINED THEN IERR = THE NUMBER
+!     ierr     INTEGER SPECIFYING THE STATUS OF THE RESULTS. IF THE
+!              LU DECOMPOSITION IS OBTAINED THEN ierr = THE NUMBER
 !              of off-diagonal entries of L and U which were stored
-!              in T. Otherwise IERR is assigned a negative value.
+!              in t. Otherwise ierr is assigned a negative value.
 !
 !
 !     Work spaces ---
 !
-!     W        COMPLEX ARRAY OF DIMENSION N.
+!     w        COMPLEX ARRAY OF DIMENSION n.
 !
-!     P        INTEGER ARRAY OF DIMENSION N+1.
+!     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
 complex, intent(in) :: a(*)
 complex, intent(inout) :: d(n), t(max), w(n)
@@ -6228,7 +6228,7 @@ do j = 1,n
    w(j) = zero
 end do
 !
-!     Perform the LU factorization of the R(K)-TH row of A
+!     Perform the LU factorization of the r(k)-TH row of A
 !
 do 100 k = 1,n
 lk = r(k)
@@ -6236,7 +6236,7 @@ jmin = ia(lk)
 jmax = ia(lk+1) - 1
 if (jmin .gt. jmax) go to 200
 !
-!     Set P to the reordered row of A
+!     Set p to the reordered row of A
 !
 p(n+1) = n + 1
 jj = jmax
@@ -6259,7 +6259,7 @@ i = n + 1
 if (i .ge. k) go to 50
 if (w(i) .eq. zero) go to 30
 !
-!     L(K,I) is nonzero. Therefore store it in L.
+!     L(k,i) is nonzero. Therefore store it in L.
 !
 jptr = jptr + 1
 if (jptr .gt. max) go to 230
@@ -6268,7 +6268,7 @@ t(jptr) = const
 jt(jptr) = c(i)
 w(i) = zero
 !
-!     Perform elimination using the I-TH row of U
+!     Perform elimination using the i-TH row of U
 !
 jmin = iu(i)
 jmax = it(i+1) - 1
@@ -6289,7 +6289,7 @@ do 43 jj = jmin,jmax
 43 w(j) = w(j) - const*t(jj)
 go to 30
 !
-!     Search for the K-TH pivot element
+!     Search for the k-TH pivot element
 !
 50 if (i .gt. n) go to 220
 wmax = abs(real(w(i))) + abs(aimag(w(i)))
@@ -6305,7 +6305,7 @@ if (wi .le. wmax) go to 51
    maxil = m
    go to 51
 !
-!     Store the pivot in D
+!     Store the pivot in d
 !
 60 if (wmax .eq. 0.0) go to 220
 d(k) = w(maxi)
@@ -6327,7 +6327,7 @@ c(maxi) = lk
 ic(lk) = maxi
 ic(ll) = k
 !
-!     The remaining elements of P form the K-TH row of U
+!     The remaining elements of p form the k-TH row of U
 !
 iu(k) = jptr + 1
 90 if (i .gt. n) go to 100
@@ -6349,22 +6349,22 @@ return
 !
 !     -------------------- Error return --------------------
 !
-!     Row R(K) is null
+!     Row r(k) is null
 !
 200 ierr = -k
 return
 !
-!     Row R(K) has a duplicate entry
+!     Row r(k) has a duplicate entry
 !
 210 ierr = -(n + k)
 return
 !
-!     Zero pivot in row R(K)
+!     Zero pivot in row r(k)
 !
 220 ierr = -(2*n + k)
 return
 !
-!     Storage for L and U exceeded on row R(K)
+!     Storage for L and U exceeded on row r(k)
 !
 230 ierr = -(3*n + k)
 return
@@ -6488,7 +6488,7 @@ integer :: iexc
 real, intent(inout) :: a(nm,n), scale(n)
 real :: c, f, g, r, s, b2, radix
 integer :: ipmpar
-!     REAL ABS
+!     real abs
 logical :: noconv
 !-----------------------------------------------------------------------
 !
@@ -6501,11 +6501,11 @@ logical :: noconv
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
 !        A contains the input matrix to be balanced.
 !
@@ -6513,33 +6513,33 @@ logical :: noconv
 !
 !        A contains the balanced matrix,
 !
-!        Low and IGH are two integers such that A(I,J)
+!        Low and igh are two integers such that a(i,j)
 !          is equal to zero if
-!           (1) I is greater than J and
-!           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
+!           (1) i is greater than j and
+!           (2) j=1,...,low-1 OR i=igh+1,...,n,
 !
 !        Scale contains information determining the
 !           permutations and scaling factors used.
 !
-!     Suppose that the principal submatrix in rows low through IGH
-!     has been balanced, that P(J) denotes the index interchanged
-!     with J during the permutation step, and that the elements
-!     of the diagonal matrix used are denoted by D(I,J).  Then
-!        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
-!                 = D(J,J),      J = LOW,...,IGH
-!                 = P(J)         J = IGH+1,...,N.
-!     The order in which the interchanges are made is N to IGH+1,
+!     Suppose that the principal submatrix in rows low through igh
+!     has been balanced, that P(j) denotes the index interchanged
+!     with j during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(i,j).  Then
+!        scale(j) = P(j),    FOR j = 1,...,low-1
+!                 = D(j,j),      j = low,...,igh
+!                 = P(j)         j = igh+1,...,n.
+!     The order in which the interchanges are made is n to igh+1,
 !     then 1 to low-1.
 !
-!     Note that 1 is returned for IGH if IGH is zero formally.
+!     Note that 1 is returned for igh if igh is zero formally.
 !
 !     The Algol procedure exc contained in balance appears in
-!     BALANC  in line.  (Note that the Algol roles of identifiers
-!     K,L have been reversed.)
+!     balanc  in line.  (Note that the Algol roles of identifiers
+!     k,l have been reversed.)
 !
 !-----------------------------------------------------------------------
 !
-!     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** radix IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
@@ -6572,7 +6572,7 @@ end do
 !                AND PUSH THEM DOWN **********
 80 if (l .eq. 1) go to 280
 l = l - 1
-!     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
 100 do 120 jj = 1, l
    j = l + 1 - jj
 !
@@ -6602,7 +6602,7 @@ go to 140
    iexc = 2
    go to 20
 170 continue
-!     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
+!     ********** NOW BALANCE THE SUBMATRIX IN ROWS k TO l **********
 do 180 i = k, l
 180 scale(i) = 1.0
 !     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
@@ -6617,7 +6617,7 @@ do 270 i = k, l
       c = c + abs(a(j,i))
       r = r + abs(a(i,j))
 200 continue
-!     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
+!     ********** GUARD AGAINST ZERO c OR r DUE TO UNDERFLOW **********
    if (c .eq. 0.0 .or. r .eq. 0.0) go to 270
    g = r / radix
    f = 1.0
@@ -6662,33 +6662,33 @@ real, intent(inout) :: z(nz,n)
 real, intent(in) :: scale(n)
 real :: s
 !-----------------------------------------------------------------------
-!        Given A matrix A of order N. BALANC transforms A into
+!        Given A matrix A of order n. balanc transforms A into
 !     the matrix B by the similarity transformation
-!             B = D**(-1)*TRANSPOSE(P)*A*P*D
+!             b = d**(-1)*transpose(p)*a*p*d
 !     where D is a diagonal matrix and P a permutation matrix.
-!     The information concerning D and P is stored in IGH, low,
+!     The information concerning D and P is stored in igh, low,
 !     and scale. The order in which the interchanges were made
-!     is N to IGH + 1, and then 1 to low - 1.
+!     is n to igh + 1, and then 1 to low - 1.
 !
-!        Z is a matrix of order N. BALINV transforms Z into the
+!        z is a matrix of order n. balinv transforms z into the
 !     matrix W using the inverse similarity transform
-!             W = P*D*Z*D**(-1)*TRANSPOSE(P)
+!             w = p*d*z*d**(-1)*transpose(p)
 !
 !     On input-
 !
-!        NZ is the row dimension of the matrix Z in the calling
+!        nz is the row dimension of the matrix z in the calling
 !          program,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by  BALANC,
+!        Low and igh are integers determined by  balanc,
 !
 !        Scale contains information determining the permutations
-!          and scaling factors used by  BALANC,
+!          and scaling factors used by  balanc,
 !
 !     On output-
 !
-!        Z contains the transformed matrix W
+!        z contains the transformed matrix W
 !
 !-----------------------------------------------------------------------
 !
@@ -6706,8 +6706,8 @@ s = 1.0/scale(j)
 20 z(i,j) = z(i,j) * s
 end do
 !
-!     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
-!               IGH+1 STEP 1 UNTIL N DO -- **********
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
 !
 30 do 60 ii = 1, n
    i = ii
@@ -6741,30 +6741,30 @@ integer, intent(in) :: low
 integer :: mm1, mp1
 real, intent(inout) :: a(nm,n)
 real :: x, y
-!     REAL ABS
+!     real abs
 integer, intent(inout) :: int(igh)
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure ELMHES,
+!     This subroutine is a translation of the Algol procedure elmhes,
 !     NUM. Math. 12, 349-368(1968) By Martin and Wilkinson.
 !     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
 !
 !     Given a real general matrix, this subroutine
 !     reduces a submatrix situated in rows and columns
-!     low through IGH to upper Hessenberg form by
+!     low through igh to upper Hessenberg form by
 !     stabilized elementary similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains the input matrix.
 !
@@ -6776,7 +6776,7 @@ integer, intent(inout) :: int(igh)
 !
 !        Int contains information on the rows and columns
 !          interchanged in the reduction.
-!          Only elements low through IGH are used.
+!          Only elements low through igh are used.
 !
 !-----------------------------------------------------------------------
 !
@@ -6797,7 +6797,7 @@ do 180 m = kp1, la
 !
    int(m) = i
    if (i .eq. m) go to 130
-!    ********** INTERCHANGE ROWS AND COLUMNS OF A **********
+!    ********** INTERCHANGE ROWS AND COLUMNS OF a **********
    do j = mm1, n
       y = a(i,j)
       a(i,j) = a(m,j)
@@ -6844,30 +6844,30 @@ integer, intent(in) :: low
 integer :: mm1, mp1
 real, intent(inout) :: a(nm,n)
 real :: x, y
-!     REAL ABS
+!     real abs
 real, intent(inout) :: int(igh)
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure ELMHES,
+!     This subroutine is a translation of the Algol procedure elmhes,
 !     NUM. Math. 12, 349-368(1968) By Martin and Wilkinson.
 !     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
 !
 !     Given a real general matrix, this subroutine
 !     reduces a submatrix situated in rows and columns
-!     low through IGH to upper Hessenberg form by
+!     low through igh to upper Hessenberg form by
 !     stabilized elementary similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains the input matrix.
 !
@@ -6879,7 +6879,7 @@ real, intent(inout) :: int(igh)
 !
 !        Int contains information on the rows and columns
 !          interchanged in the reduction.
-!          Only elements low through IGH are used.
+!          Only elements low through igh are used.
 !
 !-----------------------------------------------------------------------
 !
@@ -6900,7 +6900,7 @@ do 180 m = kp1, la
 !
    int(m) = i
    if (i .eq. m) go to 130
-!    ********** INTERCHANGE ROWS AND COLUMNS OF A **********
+!    ********** INTERCHANGE ROWS AND COLUMNS OF a **********
    do j = mm1, n
       y = a(i,j)
       a(i,j) = a(m,j)
@@ -6946,29 +6946,29 @@ integer :: kp1
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n), ort(igh)
 real :: f, g, h, scale
-!     REAL SQRT,ABS
+!     real sqrt,abs
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure ORTHES,
+!     This subroutine is a translation of the Algol procedure orthes,
 !     NUM. Math. 12, 349-368(1968) By Martin and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
 !
 !     Given a real general matrix, this subroutine
 !     reduces a submatrix situated in rows and columns
-!     low through IGH to upper Hessenberg form by
+!     low through igh to upper Hessenberg form by
 !     orthogonal similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains the input matrix.
 !
@@ -6980,7 +6980,7 @@ real :: f, g, h, scale
 !          Hessenberg matrix,
 !
 !        Ort contains further information about the transformations.
-!          Only elements low through IGH are used.
+!          Only elements low through igh are used.
 !
 !-----------------------------------------------------------------------
 !
@@ -6992,13 +6992,13 @@ do 180 m = kp1, la
    h = 0.0
    ort(m) = 0.0
    scale = 0.0
-!     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
+!     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
 90 scale = scale + abs(a(i,m-1))
 !
    if (scale .eq. 0.0) go to 180
    mp = m + igh
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
    do ii = m, igh
       i = mp - ii
       ort(i) = a(i,m-1) / scale
@@ -7009,10 +7009,10 @@ do 180 m = kp1, la
    if (ort(m) .ge. 0.0) g = -g
    h = h - ort(m) * g
    ort(m) = ort(m) - g
-!     ********** FORM (I-(U*UT)/H) * A **********
+!     ********** FORM (i-(U*UT)/h) * a **********
    do j = m, n
       f = 0.0
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
       do ii = m, igh
          i = mp - ii
          f = f + ort(i) * a(i,j)
@@ -7024,10 +7024,10 @@ do 180 m = kp1, la
 120 a(i,j) = a(i,j) - f * ort(i)
 !
    end do
-!     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
+!     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
    do i = 1, igh
       f = 0.0
-!     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR j=igh STEP -1 UNTIL m DO -- **********
       do jj = m, igh
          j = mp - jj
          f = f + ort(j) * a(i,j)
@@ -7060,12 +7060,12 @@ integer :: mp2, enm2
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n)
 real :: p, q, r, s, t, w, x, y, zz, norm, machep, spmpar
-!     REAL SQRT,ABS
-!     INTEGER MIN0
+!     real sqrt,abs
+!     integer min0
 logical :: notlas
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure HQR,
+!     This subroutine is a translation of the Algol procedure hqr,
 !     NUM. Math. 14, 219-231(1970) By Martin, peters, and Wilkinson.
 !     Handbook for auto. Comp., Vol.II-linear algebra, 359-371(1971).
 !
@@ -7074,44 +7074,44 @@ logical :: notlas
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
-!        H contains the upper Hessenberg matrix.  Information about
+!        h contains the upper Hessenberg matrix.  Information about
 !          the transformations used in the reduction to Hessenberg
-!          form by  ELMHES  or  ORTHES, if performed, is stored
+!          form by  elmhes  or  orthes, if performed, is stored
 !          in the remaining triangle under the Hessenberg matrix.
 !
 !     On output-
 !
-!        H has been destroyed.  Therefore, it must be saved
-!          before calling  HQR  if subsequent calculation and
+!        h has been destroyed.  Therefore, it must be saved
+!          before calling  hqr  if subsequent calculation and
 !          back transformation of eigenvectors is to be performed,
 !
-!        WR and WI contain the real and imaginary parts,
+!        wr and wi contain the real and imaginary parts,
 !          respectively, of the eigenvalues.  The eigenvalues
 !          are unordered except that complex conjugate pairs
 !          of values appear consecutively with the eigenvalue
 !          having the positive imaginary part first.  If an
 !          error exit is made, the eigenvalues should be correct
-!          for indices IERR+1,...,N,
+!          for indices ierr+1,...,n,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -7121,8 +7121,8 @@ logical :: notlas
 ierr = 0
 norm = 0.0
 k = 1
-!     ********** STORE ROOTS ISOLATED BY BALANC
-!                AND COMPUTE MATRIX NORM **********
+!     ********** STORE ROOTS ISOLATED BY balanc
+!                AND COMPUTE MATRIX norm **********
 do 50 i = 1, n
 !
    do 40 j = k, n
@@ -7142,7 +7142,7 @@ its = 0
 na = en - 1
 enm2 = na - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+!                FOR l=en STEP -1 UNTIL LOW DO -- **********
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
@@ -7171,7 +7171,7 @@ w = -0.4375 * s * s
 130 its = its + 1
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                sub-diagonal elements.
-!                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
 do mm = l, enm2
    m = enm2 + l - mm
    zz = h(m,m)
@@ -7196,8 +7196,8 @@ do 160 i = mp2, en
    if (i .eq. mp2) go to 160
    h(i,i-3) = 0.0
 160 continue
-!     ********** DOUBLE QR STEP INVOLVING ROWS L TO EN AND
-!                COLUMNS M TO EN **********
+!     ********** DOUBLE QR STEP INVOLVING ROWS l TO en AND
+!                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
@@ -7291,36 +7291,36 @@ real, intent(inout) :: z(nm,m)
 real :: s
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure BALBAK,
+!     This subroutine is a translation of the Algol procedure balbak,
 !     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a real general
 !     matrix BY back transforming those of the corresponding
-!     balanced matrix determined by  BALANC.
+!     balanced matrix determined by  balanc.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by  BALANC,
+!        Low and igh are integers determined by  balanc,
 !
 !        Scale contains information determining the permutations
-!          and scaling factors used by  BALANC,
+!          and scaling factors used by  balanc,
 !
-!        M is the number of columns of Z to be back transformed,
+!        m is the number of columns of z to be back transformed,
 !
-!        Z contains the real and imaginary parts of the eigen-
-!          vectors to be back transformed in its first M columns.
+!        z contains the real and imaginary parts of the eigen-
+!          vectors to be back transformed in its first m columns.
 !
 !     On output-
 !
-!        Z contains the real and imaginary parts of the
-!          transformed eigenvectors in its first M columns.
+!        z contains the real and imaginary parts of the
+!          transformed eigenvectors in its first m columns.
 !
 !-----------------------------------------------------------------------
 !
@@ -7331,13 +7331,13 @@ do i = low, igh
    s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                if the foregoing statement is replaced by
-!                S=1.0/SCALE(I). **********
+!                s=1.0/scale(i). **********
    do 100 j = 1, m
 100 z(i,j) = z(i,j) * s
 !
 end do
-!     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
-!               IGH+1 STEP 1 UNTIL N DO -- **********
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
 120 do 140 ii = 1, n
    i = ii
    if (i .ge. low .and. i .le. igh) go to 140
@@ -7375,36 +7375,36 @@ integer, intent(in) :: int(igh)
 !
 !     This subroutine accumulates the stabilized elementary
 !     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  ELMHES.
+!     real general matrix to upper Hessenberg form by  elmhes.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains the multipliers which were used in the
-!          reduction by  ELMHES  in its lower triangle
+!          reduction by  elmhes  in its lower triangle
 !          below the subdiagonal,
 !
 !        Int contains information on the rows and columns
-!          interchanged in the reduction by  ELMHES.
-!          Only elements low through IGH are used.
+!          interchanged in the reduction by  elmhes.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  ELMHES.
+!        z contains the transformation matrix produced in the
+!          reduction by  elmhes.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -7415,7 +7415,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    mp1 = mp + 1
@@ -7456,36 +7456,36 @@ real, intent(in) :: int(igh)
 !
 !     This subroutine accumulates the stabilized elementary
 !     similarity transformations used in the reduction of A
-!     real general matrix to upper Hessenberg form by  ELMHS0.
+!     real general matrix to upper Hessenberg form by  elmhs0.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains the multipliers which were used in the
-!          reduction by  ELMHS0  in its lower triangle
+!          reduction by  elmhs0  in its lower triangle
 !          below the subdiagonal,
 !
 !        Int contains information on the rows and columns
-!          interchanged in the reduction by  ELMHS0.
-!          Only elements low through IGH are used.
+!          interchanged in the reduction by  elmhs0.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  ELMHS0.
+!        z contains the transformation matrix produced in the
+!          reduction by  elmhs0.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -7496,7 +7496,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    mp1 = mp + 1
@@ -7537,38 +7537,38 @@ real :: g
 !
 !     This subroutine accumulates the orthogonal similarity
 !     transformations used in the reduction of a real general
-!     matrix to upper Hessenberg form by  ORTHES.
+!     matrix to upper Hessenberg form by  orthes.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains information about the orthogonal trans-
-!          formations used in the reduction by  ORTHES
+!          formations used in the reduction by  orthes
 !          in its strict lower triangle,
 !
 !        Ort contains further information about the trans-
-!          formations used in the reduction by  ORTHES.
-!          Only elements low through IGH are used.
+!          formations used in the reduction by  orthes.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  ORTHES,
+!        z contains the transformation matrix produced in the
+!          reduction by  orthes,
 !
 !        Ort has been altered.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -7579,7 +7579,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    if (a(mp,mp-1) .eq. 0.0) go to 140
@@ -7593,7 +7593,7 @@ do 140 mm = 1, kl
 !
       do 110 i = mp, igh
 110 g = g + ort(i) * z(i,j)
-!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN ORTHES.
+!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN orthes.
 !                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       g = (g / ort(mp)) / a(mp,mp-1)
 !
@@ -7627,42 +7627,42 @@ real :: g
 !
 !     This subroutine accumulates the orthogonal similarity
 !     transformations used in the reduction of a real general
-!     matrix to upper Hessenberg form by  ORTHES.
+!     matrix to upper Hessenberg form by  orthes.
 !
 !     On input-
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
 !        A contains information about the orthogonal trans-
-!          formations used in the reduction by  ORTHES
+!          formations used in the reduction by  orthes
 !          in its strict lower triangle,
 !
-!        NA must be set to the row dimension of the 2-dimensional
+!        na must be set to the row dimension of the 2-dimensional
 !          array parameter  a  as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        NZ must be set to the row dimension of the 2-dimensional
-!          array parameter  Z  as declared in the calling program
-!          DIMENSION STATEMENT,
+!        nz must be set to the row dimension of the 2-dimensional
+!          array parameter  z  as declared in the calling program
+!          dimension statement,
 !
 !        Ort contains further information about the trans-
-!          formations used in the reduction by  ORTHES.
-!          Only elements low through IGH are used.
+!          formations used in the reduction by  orthes.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  ORTHES,
+!        z contains the transformation matrix produced in the
+!          reduction by  orthes,
 !
 !        Ort has been altered.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -7673,7 +7673,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    if (a(mp,mp-1) .eq. 0.0) go to 140
@@ -7687,7 +7687,7 @@ do 140 mm = 1, kl
 !
       do 110 i = mp, igh
 110 g = g + ort(i) * z(i,j)
-!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN ORTHES.
+!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN orthes.
 !                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       g = (g / ort(mp)) / a(mp,mp-1)
 !
@@ -7717,77 +7717,77 @@ integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
 real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, &
 &spmpar
-!     REAL SQRT,ABS
-!     INTEGER MIN0
+!     real sqrt,abs
+!     integer min0
 logical :: notlas
 complex :: z3
-!     COMPLEX CMPLX
-!     REAL REAL,AIMAG
+!     complex cmplx
+!     real real,aimag
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure HQR2,
+!     This subroutine is a translation of the Algol procedure hqr2,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
 !
 !     This subroutine finds the eigenvalues and eigenvectors
 !     of a real upper Hessenberg matrix BY the QR method.  The
 !     eigenvectors of a real general matrix can also be found
-!     if  ELMHES  and  ELTRAN  or  ORTHES  and  ORTRAN  have
+!     if  elmhes  and  eltran  or  orthes  and  ortran  have
 !     been used to reduce this general matrix to Hessenberg form
 !     and to accumulate the similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine  BALANC.  If  BALANC  has not been used,
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine  balanc.  If  balanc  has not been used,
+!          SET low=1, igh=n,
 !
-!        H contains the upper Hessenberg matrix,
+!        h contains the upper Hessenberg matrix,
 !
-!        Z contains the transformation matrix produced by  ELTRAN
-!          after the reduction by  ELMHES, or by  ORTRAN  after the
-!          reduction by  ORTHES, if performed.  If the eigenvectors
-!          of the Hessenberg matrix are desired, Z must contain the
+!        z contains the transformation matrix produced by  eltran
+!          after the reduction by  elmhes, or by  ortran  after the
+!          reduction by  orthes, if performed.  If the eigenvectors
+!          of the Hessenberg matrix are desired, z must contain the
 !          identity matrix.
 !
 !     On output-
 !
-!        H has been destroyed,
+!        h has been destroyed,
 !
-!        WR and WI contain the real and imaginary parts,
+!        wr and wi contain the real and imaginary parts,
 !          respectively, of the eigenvalues.  The eigenvalues
 !          are unordered except that complex conjugate pairs
 !          of values appear consecutively with the eigenvalue
 !          having the positive imaginary part first.  If an
 !          error exit is made, the eigenvalues should be correct
-!          for indices IERR+1,...,N,
+!          for indices ierr+1,...,n,
 !
-!        Z contains the real and imaginary parts of the eigenvectors.
-!          If the I-TH eigenvalue is real, the I-TH column of Z
-!          contains its eigenvector.  If the I-TH eigenvalue is complex
-!          with positive imaginary part, the I-TH and (I+1)-TH
-!          columns of Z contain the real and imaginary parts of its
+!        z contains the real and imaginary parts of the eigenvectors.
+!          If the i-TH eigenvalue is real, the i-TH column of z
+!          contains its eigenvector.  If the i-TH eigenvalue is complex
+!          with positive imaginary part, the i-TH and (i+1)-TH
+!          columns of z contain the real and imaginary parts of its
 !          eigenvector.  The eigenvectors are unnormalized.  If an
 !          error exit is made, none of the eigenvectors has been found,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !     Arithmetic is real except for the replacement of the Algol
-!     procedure CDIV by complex division.
+!     procedure cdiv by complex division.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -7797,8 +7797,8 @@ complex :: z3
 ierr = 0
 norm = 0.0
 k = 1
-!     ********** STORE ROOTS ISOLATED BY BALANC
-!                AND COMPUTE MATRIX NORM **********
+!     ********** STORE ROOTS ISOLATED BY balanc
+!                AND COMPUTE MATRIX norm **********
 do 50 i = 1, n
 !
    do 40 j = k, n
@@ -7818,7 +7818,7 @@ its = 0
 na = en - 1
 enm2 = na - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+!                FOR l=en STEP -1 UNTIL LOW DO -- **********
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
@@ -7847,7 +7847,7 @@ w = -0.4375 * s * s
 130 its = its + 1
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                sub-diagonal elements.
-!                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
 do mm = l, enm2
    m = enm2 + l - mm
    zz = h(m,m)
@@ -7872,8 +7872,8 @@ do 160 i = mp2, en
    if (i .eq. mp2) go to 160
    h(i,i-3) = 0.0
 160 continue
-!     ********** DOUBLE QR STEP INVOLVING ROWS L TO EN AND
-!                COLUMNS M TO EN **********
+!     ********** DOUBLE QR STEP INVOLVING ROWS l TO en AND
+!                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
@@ -7990,7 +7990,7 @@ go to 60
 !     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
 !                VECTORS OF UPPER TRIANGULAR FORM **********
 340 if (norm .eq. 0.0) go to 1001
-!     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
 do 800 nn = 1, n
    en = n + 1 - nn
    p = wr(en)
@@ -8001,7 +8001,7 @@ do 800 nn = 1, n
 600 m = en
    h(en,en) = 1.0
    if (na .eq. 0) go to 800
-!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
    do 700 ii = 1, na
       i = en - ii
       w = h(i,i) - p
@@ -8049,7 +8049,7 @@ do 800 nn = 1, n
    h(en,en) = 1.0
    enm2 = na - 1
    if (enm2 .eq. 0) go to 800
-!     ********** FOR I=EN-2 STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
    do 790 ii = 1, enm2
       i = na - ii
       w = h(i,i) - p
@@ -8103,7 +8103,7 @@ do 840 i = 1, n
 840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
 !                vectors of original full matrix.
-!                FOR J=N STEP -1 UNTIL LOW DO -- **********
+!                FOR j=n STEP -1 UNTIL LOW DO -- **********
 do 880 jj = low, n
    j = n + low - jj
    m = min0(j,igh)
@@ -8190,7 +8190,7 @@ integer :: iexc
 double precision, intent(inout) :: a(nm,n), scale(n)
 double precision :: c, f, g, r, s, b2, radix
 integer :: ipmpar
-!     DOUBLE PRECISION DABS
+!     double precision dabs
 logical :: noconv
 !-----------------------------------------------------------------------
 !
@@ -8203,11 +8203,11 @@ logical :: noconv
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
 !        A contains the input matrix to be balanced.
 !
@@ -8215,33 +8215,33 @@ logical :: noconv
 !
 !        A contains the balanced matrix,
 !
-!        Low and IGH are two integers such that A(I,J)
+!        Low and igh are two integers such that a(i,j)
 !          is equal to zero if
-!           (1) I is greater than J and
-!           (2) J=1,...,LOW-1 OR I=IGH+1,...,N,
+!           (1) i is greater than j and
+!           (2) j=1,...,low-1 OR i=igh+1,...,n,
 !
 !        Scale contains information determining the
 !           permutations and scaling factors used.
 !
-!     Suppose that the principal submatrix in rows low through IGH
-!     has been balanced, that P(J) denotes the index interchanged
-!     with J during the permutation step, and that the elements
-!     of the diagonal matrix used are denoted by D(I,J).  Then
-!        SCALE(J) = P(J),    FOR J = 1,...,LOW-1
-!                 = D(J,J),      J = LOW,...,IGH
-!                 = P(J)         J = IGH+1,...,N.
-!     The order in which the interchanges are made is N to IGH+1,
+!     Suppose that the principal submatrix in rows low through igh
+!     has been balanced, that P(j) denotes the index interchanged
+!     with j during the permutation step, and that the elements
+!     of the diagonal matrix used are denoted by D(i,j).  Then
+!        scale(j) = P(j),    FOR j = 1,...,low-1
+!                 = D(j,j),      j = low,...,igh
+!                 = P(j)         j = igh+1,...,n.
+!     The order in which the interchanges are made is n to igh+1,
 !     then 1 to low-1.
 !
-!     Note that 1 is returned for IGH if IGH is zero formally.
+!     Note that 1 is returned for igh if igh is zero formally.
 !
 !     The Algol procedure exc contained in balance appears in
 !     dbal in line.  (Note that the Algol roles of identifiers
-!     K,L have been reversed.)
+!     k,l have been reversed.)
 !
 !-----------------------------------------------------------------------
 !
-!     ********** RADIX IS A MACHINE DEPENDENT PARAMETER SPECIFYING
+!     ********** radix IS A MACHINE DEPENDENT PARAMETER SPECIFYING
 !                the base of the machine floating point representation.
 !
            radix = ipmpar(4)
@@ -8274,7 +8274,7 @@ end do
 !                AND PUSH THEM DOWN **********
 80 if (l .eq. 1) go to 280
 l = l - 1
-!     ********** FOR J=L STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR j=l STEP -1 UNTIL 1 DO -- **********
 100 do 120 jj = 1, l
    j = l + 1 - jj
 !
@@ -8304,7 +8304,7 @@ go to 140
    iexc = 2
    go to 20
 170 continue
-!     ********** NOW BALANCE THE SUBMATRIX IN ROWS K TO L **********
+!     ********** NOW BALANCE THE SUBMATRIX IN ROWS k TO l **********
 do 180 i = k, l
 180 scale(i) = 1.d0
 !     ********** ITERATIVE LOOP FOR NORM REDUCTION **********
@@ -8319,7 +8319,7 @@ do 270 i = k, l
       c = c + dabs(a(j,i))
       r = r + dabs(a(i,j))
 200 continue
-!     ********** GUARD AGAINST ZERO C OR R DUE TO UNDERFLOW **********
+!     ********** GUARD AGAINST ZERO c OR r DUE TO UNDERFLOW **********
    if (c .eq. 0.d0 .or. r .eq. 0.d0) go to 270
    g = r / radix
    f = 1.d0
@@ -8364,33 +8364,33 @@ double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
 double precision :: s
 !-----------------------------------------------------------------------
-!        Given A matrix A of order N. Dbal transforms A into
+!        Given A matrix A of order n. Dbal transforms A into
 !     the matrix B by the similarity transformation
-!             B = D**(-1)*TRANSPOSE(P)*A*P*D
+!             b = d**(-1)*transpose(p)*a*p*d
 !     where D is a diagonal matrix and P a permutation matrix.
-!     The information concerning D and P is stored in IGH, low,
+!     The information concerning D and P is stored in igh, low,
 !     and scale. The order in which the interchanges were made
-!     is N to IGH + 1, and then 1 to low - 1.
+!     is n to igh + 1, and then 1 to low - 1.
 !
-!        Z is a matrix of order N. DBALNV transforms Z into the
+!        z is a matrix of order n. dbalnv transforms z into the
 !     matrix W using the inverse similarity transform
-!             W = P*D*Z*D**(-1)*TRANSPOSE(P)
+!             w = p*d*z*d**(-1)*transpose(p)
 !
 !     On input-
 !
-!        NZ is the row dimension of the matrix Z in the calling
+!        nz is the row dimension of the matrix z in the calling
 !          program,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by  dbal,
+!        Low and igh are integers determined by  dbal,
 !
 !        Scale contains information determining the permutations
 !          and scaling factors used by  dbal,
 !
 !     On output-
 !
-!        Z contains the transformed matrix W
+!        z contains the transformed matrix W
 !
 !-----------------------------------------------------------------------
 !
@@ -8408,8 +8408,8 @@ s = 1.d0/scale(j)
 20 z(i,j) = z(i,j) * s
 end do
 !
-!     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
-!               IGH+1 STEP 1 UNTIL N DO -- **********
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
 !
 30 do 60 ii = 1, n
    i = ii
@@ -8442,29 +8442,29 @@ integer :: kp1
 integer, intent(in) :: low
 double precision, intent(inout) :: a(nm,n), ort(igh)
 double precision :: f, g, h, scale
-!     Double precision DSQRT,dabs
+!     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure ORTHES,
+!     This subroutine is a translation of the Algol procedure orthes,
 !     NUM. Math. 12, 349-368(1968) By Martin and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 339-358(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 339-358(1971).
 !
 !     Given a real general matrix, this subroutine
 !     reduces a submatrix situated in rows and columns
-!     low through IGH to upper Hessenberg form by
+!     low through igh to upper Hessenberg form by
 !     orthogonal similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine DBAL.  If DBAL has not been used then
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          SET low=1, igh=n,
 !
 !        A contains the input matrix.
 !
@@ -8476,7 +8476,7 @@ double precision :: f, g, h, scale
 !          Hessenberg matrix,
 !
 !        Ort contains further information about the transformations.
-!          Only elements low through IGH are used.
+!          Only elements low through igh are used.
 !
 !-----------------------------------------------------------------------
 !
@@ -8488,13 +8488,13 @@ do 180 m = kp1, la
    h = 0.d0
    ort(m) = 0.d0
    scale = 0.d0
-!     ********** SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) **********
+!     ********** scale COLUMN (ALGOL TOL THEN NOT NEEDED) **********
    do 90 i = m, igh
 90 scale = scale + dabs(a(i,m-1))
 !
    if (scale .eq. 0.d0) go to 180
    mp = m + igh
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
    do ii = m, igh
       i = mp - ii
       ort(i) = a(i,m-1) / scale
@@ -8505,10 +8505,10 @@ do 180 m = kp1, la
    if (ort(m) .ge. 0.d0) g = -g
    h = h - ort(m) * g
    ort(m) = ort(m) - g
-!     ********** FORM (I-(U*UT)/H) * A **********
+!     ********** FORM (i-(U*UT)/h) * a **********
    do j = m, n
       f = 0.d0
-!     ********** FOR I=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR i=igh STEP -1 UNTIL m DO -- **********
       do ii = m, igh
          i = mp - ii
          f = f + ort(i) * a(i,j)
@@ -8520,10 +8520,10 @@ do 180 m = kp1, la
 120 a(i,j) = a(i,j) - f * ort(i)
 !
    end do
-!     ********** FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) **********
+!     ********** FORM (i-(U*UT)/h)*a*(i-(U*UT)/h) **********
    do i = 1, igh
       f = 0.d0
-!     ********** FOR J=IGH STEP -1 UNTIL M DO -- **********
+!     ********** FOR j=igh STEP -1 UNTIL m DO -- **********
       do jj = m, igh
          j = mp - jj
          f = f + ort(j) * a(i,j)
@@ -8557,58 +8557,58 @@ integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
 double precision :: p, q, r, s, t, w, x, y, zz, norm, machep, &
 &dpmpar
-!     Double precision DSQRT,dabs
-!     INTEGER MIN0
+!     double precision dsqrt,dabs
+!     integer min0
 logical :: notlas
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure HQR,
+!     This subroutine is a translation of the Algol procedure hqr,
 !     NUM. Math. 14, 219-231(1970) By Martin, peters, and Wilkinson.
 !     Handbook for auto. Comp., Vol.II-linear algebra, 359-371(1971).
 !
-!     DHQR finds the eigenvalues of a double precision real
+!     dhqr finds the eigenvalues of a double precision real
 !     upper Hessenberg matrix BY the QR method.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine DBAL.  If DBAL has not been used then
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          SET low=1, igh=n,
 !
-!        H contains the upper Hessenberg matrix.  Information about
+!        h contains the upper Hessenberg matrix.  Information about
 !          the transformations used in the reduction to Hessenberg
-!          form by DORTH, if performed, is stored
+!          form by dorth, if performed, is stored
 !          in the remaining triangle under the Hessenberg matrix.
 !
 !     On output-
 !
-!        H has been destroyed.  Therefore, it must be saved
-!          before calling  HQR  if subsequent calculation and
+!        h has been destroyed.  Therefore, it must be saved
+!          before calling  hqr  if subsequent calculation and
 !          back transformation of eigenvectors is to be performed,
 !
-!        WR and WI contain the real and imaginary parts,
+!        wr and wi contain the real and imaginary parts,
 !          respectively, of the eigenvalues.  The eigenvalues
 !          are unordered except that complex conjugate pairs
 !          of values appear consecutively with the eigenvalue
 !          having the positive imaginary part first.  If an
 !          error exit is made, the eigenvalues should be correct
-!          for indices IERR+1,...,N,
+!          for indices ierr+1,...,n,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0
 !                in the double precision arithmetic being used.
 !
@@ -8620,7 +8620,7 @@ ierr = 0
 norm = 0.d0
 k = 1
 !     ********** STORE ROOTS ISOLATED BY DBAL
-!                AND COMPUTE MATRIX NORM **********
+!                AND COMPUTE MATRIX norm **********
 do 50 i = 1, n
 !
    do 40 j = k, n
@@ -8640,7 +8640,7 @@ its = 0
 na = en - 1
 enm2 = na - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+!                FOR l=en STEP -1 UNTIL LOW DO -- **********
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
@@ -8669,7 +8669,7 @@ w = -.4375d0 * s * s
 130 its = its + 1
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                sub-diagonal elements.
-!                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
 do mm = l, enm2
    m = enm2 + l - mm
    zz = h(m,m)
@@ -8694,8 +8694,8 @@ do 160 i = mp2, en
    if (i .eq. mp2) go to 160
    h(i,i-3) = 0.d0
 160 continue
-!     ********** DOUBLE QR STEP INVOLVING ROWS L TO EN AND
-!                COLUMNS M TO EN **********
+!     ********** DOUBLE QR STEP INVOLVING ROWS l TO en AND
+!                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
@@ -8789,9 +8789,9 @@ double precision, intent(inout) :: z(nm,m)
 double precision :: s
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure BALBAK,
+!     This subroutine is a translation of the Algol procedure balbak,
 !     NUM. Math. 13, 293-304(1969) By Parlett and Reinsch.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 315-326(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 315-326(1971).
 !
 !     This subroutine forms the eigenvectors of a real general
 !     matrix BY back transforming those of the corresponding
@@ -8799,26 +8799,26 @@ double precision :: s
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by dbal,
+!        Low and igh are integers determined by dbal,
 !
 !        Scale contains information determining the permutations
 !          and scaling factors used by dbal,
 !
-!        M is the number of columns of Z to be back transformed,
+!        m is the number of columns of z to be back transformed,
 !
-!        Z contains the real and imaginary parts of the eigen-
-!          vectors to be back transformed in its first M columns.
+!        z contains the real and imaginary parts of the eigen-
+!          vectors to be back transformed in its first m columns.
 !
 !     On output-
 !
-!        Z contains the real and imaginary parts of the
-!          transformed eigenvectors in its first M columns.
+!        z contains the real and imaginary parts of the
+!          transformed eigenvectors in its first m columns.
 !
 !-----------------------------------------------------------------------
 !
@@ -8829,13 +8829,13 @@ do i = low, igh
    s = scale(i)
 !     ********** LEFT HAND EIGENVECTORS ARE BACK TRANSFORMED
 !                if the foregoing statement is replaced by
-!                S=1.0/SCALE(I). **********
+!                s=1.0/scale(i). **********
    do 100 j = 1, m
 100 z(i,j) = z(i,j) * s
 !
 end do
-!     ********- FOR I=LOW-1 STEP -1 UNTIL 1,
-!               IGH+1 STEP 1 UNTIL N DO -- **********
+!     ********- FOR i=low-1 STEP -1 UNTIL 1,
+!               igh+1 STEP 1 UNTIL n DO -- **********
 120 do 140 ii = 1, n
    i = ii
    if (i .ge. low .and. i .le. igh) go to 140
@@ -8873,38 +8873,38 @@ double precision :: g
 !
 !     This subroutine accumulates the orthogonal similarity
 !     transformations used in the reduction of a real double
-!     precision matrix to upper Hessenberg form by DORTH.
+!     precision matrix to upper Hessenberg form by dorth.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine DBAL.  If DBAL has not been used then
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          SET low=1, igh=n,
 !
 !        A contains information about the orthogonal trans-
-!          formations used in the reduction by DORTH
+!          formations used in the reduction by dorth
 !          in its strict lower triangle,
 !
 !        Ort contains further information about the trans-
-!          formations used in the reduction by DORTH.
-!          Only elements low through IGH are used.
+!          formations used in the reduction by dorth.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by DORTH,
+!        z contains the transformation matrix produced in the
+!          reduction by dorth,
 !
 !        Ort has been altered.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -8915,7 +8915,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    if (a(mp,mp-1) .eq. 0.d0) go to 140
@@ -8929,7 +8929,7 @@ do 140 mm = 1, kl
 !
       do 110 i = mp, igh
 110 g = g + ort(i) * z(i,j)
-!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN ORTHES.
+!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN orthes.
 !                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       g = (g / ort(mp)) / a(mp,mp-1)
 !
@@ -8963,42 +8963,42 @@ double precision :: g
 !
 !     This subroutine accumulates the orthogonal similarity
 !     transformations used in the reduction of a real double
-!     precision matrix to upper Hessenberg form by DORTH.
+!     precision matrix to upper Hessenberg form by dorth.
 !
 !     On input-
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine DBAL.  If DBAL has not been used then
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          SET low=1, igh=n,
 !
 !        A contains information about the orthogonal trans-
-!          formations used in the reduction by DORTH
+!          formations used in the reduction by dorth
 !          in its strict lower triangle,
 !
-!        NA must be set to the row dimension of the 2-dimensional
+!        na must be set to the row dimension of the 2-dimensional
 !          array parameter  a  as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        NZ must be set to the row dimension of the 2-dimensional
-!          array parameter  Z  as declared in the calling program
-!          DIMENSION STATEMENT,
+!        nz must be set to the row dimension of the 2-dimensional
+!          array parameter  z  as declared in the calling program
+!          dimension statement,
 !
 !        Ort contains further information about the trans-
-!          formations used in the reduction by DORTH.
-!          Only elements low through IGH are used.
+!          formations used in the reduction by dorth.
+!          Only elements low through igh are used.
 !
 !     On output-
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by DORTH,
+!        z contains the transformation matrix produced in the
+!          reduction by dorth,
 !
 !        Ort has been altered.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** INITIALIZE Z TO IDENTITY MATRIX **********
+!     ********** INITIALIZE z TO IDENTITY MATRIX **********
 do i = 1, n
 !
    do 60 j = 1, n
@@ -9009,7 +9009,7 @@ end do
 !
 kl = igh - low - 1
 if (kl .lt. 1) go to 200
-!     ********** FOR MP=IGH-1 STEP -1 UNTIL LOW+1 DO -- **********
+!     ********** FOR mp=igh-1 STEP -1 UNTIL low+1 DO -- **********
 do 140 mm = 1, kl
    mp = igh - mm
    if (a(mp,mp-1) .eq. 0.d0) go to 140
@@ -9023,7 +9023,7 @@ do 140 mm = 1, kl
 !
       do 110 i = mp, igh
 110 g = g + ort(i) * z(i,j)
-!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN ORTHES.
+!     ********** DIVISOR BELOW IS NEGATIVE OF H FORMED IN orthes.
 !                DOUBLE DIVISION AVOIDS POSSIBLE UNDERFLOW **********
       g = (g / ort(mp)) / a(mp,mp-1)
 !
@@ -9053,72 +9053,72 @@ integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
 double precision :: a, b, d, p, q, r, s, t, u, w, x, y
 double precision :: ra, sa, vi, vr, zz, norm, machep
-!     INTEGER MIN0
-!     double precision DSQRT,dabs
+!     integer min0
+!     double precision dsqrt,dabs
 double precision :: dpmpar
 logical :: notlas
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure HQR2,
+!     This subroutine is a translation of the Algol procedure hqr2,
 !     NUM. Math. 16, 181-204(1970) By peters and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 372-395(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 372-395(1971).
 !
 !     This subroutine finds the eigenvalues and eigenvectors
 !     of a real double precision upper Hessenberg matrix BY the
 !     QR method.  The eigenvectors of a real general matrix can
-!     also be found if DORTH and DORTRN have been used to reduce
+!     also be found if dorth and dortrn have been used to reduce
 !     this general matrix to Hessenberg form and to accumulate
 !     the similarity transformations.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        Low and IGH are integers determined by the balancing
-!          subroutine DBAL.  If DBAL has not been used then
-!          SET LOW=1, IGH=N,
+!        Low and igh are integers determined by the balancing
+!          subroutine dbal.  If dbal has not been used then
+!          SET low=1, igh=n,
 !
-!        H contains the upper Hessenberg matrix,
+!        h contains the upper Hessenberg matrix,
 !
-!        Z contains the transformation matrix produced by DORTRN
-!          after the reduction by DORTH, if performed. If the
+!        z contains the transformation matrix produced by dortrn
+!          after the reduction by dorth, if performed. If the
 !          eigenvectors of the Hessenberg matrix are desired,
-!          Z must contain the identity matrix.
+!          z must contain the identity matrix.
 !
 !     On output-
 !
-!        H has been destroyed,
+!        h has been destroyed,
 !
-!        WR and WI contain the real and imaginary parts,
+!        wr and wi contain the real and imaginary parts,
 !          respectively, of the eigenvalues.  The eigenvalues
 !          are unordered except that complex conjugate pairs
 !          of values appear consecutively with the eigenvalue
 !          having the positive imaginary part first.  If an
 !          error exit is made, the eigenvalues should be correct
-!          for indices IERR+1,...,N,
+!          for indices ierr+1,...,n,
 !
-!        Z contains the real and imaginary parts of the eigenvectors.
-!          If the I-TH eigenvalue is real, the I-TH column of Z
-!          contains its eigenvector.  If the I-TH eigenvalue is complex
-!          with positive imaginary part, the I-TH and (I+1)-TH
-!          columns of Z contain the real and imaginary parts of its
+!        z contains the real and imaginary parts of the eigenvectors.
+!          If the i-TH eigenvalue is real, the i-TH column of z
+!          contains its eigenvector.  If the i-TH eigenvalue is complex
+!          with positive imaginary part, the i-TH and (i+1)-TH
+!          columns of z contain the real and imaginary parts of its
 !          eigenvector.  The eigenvectors are unnormalized.  If an
 !          error exit is made, none of the eigenvectors has been found,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 50 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
-!                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value u where u is the smallest positive
+!                FLOATING POINT NUMBER SUCH THAT 1.0 + u .GT. 1.0
 !                in the double precision arithmetic being used.
 !
            machep = dpmpar(1)
@@ -9129,7 +9129,7 @@ ierr = 0
 norm = 0.d0
 k = 1
 !     ********** STORE ROOTS ISOLATED BY DBAL
-!                AND COMPUTE MATRIX NORM **********
+!                AND COMPUTE MATRIX norm **********
 do 50 i = 1, n
 !
    do 40 j = k, n
@@ -9149,7 +9149,7 @@ its = 0
 na = en - 1
 enm2 = na - 1
 !     ********** LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
-!                FOR L=EN STEP -1 UNTIL LOW DO -- **********
+!                FOR l=en STEP -1 UNTIL LOW DO -- **********
 70 do ll = low, en
    l = en + low - ll
    if (l .eq. low) go to 100
@@ -9178,7 +9178,7 @@ w = -.4375d0 * s * s
 130 its = its + 1
 !     ********** LOOK FOR TWO CONSECUTIVE SMALL
 !                sub-diagonal elements.
-!                FOR M=EN-2 STEP -1 UNTIL L DO -- **********
+!                FOR m=en-2 STEP -1 UNTIL l DO -- **********
 do mm = l, enm2
    m = enm2 + l - mm
    zz = h(m,m)
@@ -9203,8 +9203,8 @@ do 160 i = mp2, en
    if (i .eq. mp2) go to 160
    h(i,i-3) = 0.d0
 160 continue
-!     ********** DOUBLE QR STEP INVOLVING ROWS L TO EN AND
-!                COLUMNS M TO EN **********
+!     ********** DOUBLE QR STEP INVOLVING ROWS l TO en AND
+!                COLUMNS m TO en **********
 do 260 k = m, na
    notlas = k .ne. na
    if (k .eq. m) go to 170
@@ -9321,7 +9321,7 @@ go to 60
 !     ********** ALL ROOTS FOUND.  BACKSUBSTITUTE TO FIND
 !                VECTORS OF UPPER TRIANGULAR FORM **********
 340 if (norm .eq. 0.d0) go to 1001
-!     ********** FOR EN=N STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR en=n STEP -1 UNTIL 1 DO -- **********
 do 800 nn = 1, n
    en = n + 1 - nn
    p = wr(en)
@@ -9332,7 +9332,7 @@ do 800 nn = 1, n
 600 m = en
    h(en,en) = 1.d0
    if (na .eq. 0) go to 800
-!     ********** FOR I=EN-1 STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=en-1 STEP -1 UNTIL 1 DO -- **********
    do 700 ii = 1, na
       i = en - ii
       w = h(i,i) - p
@@ -9381,7 +9381,7 @@ do 800 nn = 1, n
    h(en,en) = 1.d0
    enm2 = na - 1
    if (enm2 .eq. 0) go to 800
-!     ********** FOR I=EN-2 STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=en-2 STEP -1 UNTIL 1 DO -- **********
    do 790 ii = 1, enm2
       i = na - ii
       w = h(i,i) - p
@@ -9439,7 +9439,7 @@ do 840 i = 1, n
 840 continue
 !     ********** MULTIPLY BY TRANSFORMATION MATRIX TO GIVE
 !                vectors of original full matrix.
-!                FOR J=N STEP -1 UNTIL LOW DO -- **********
+!                FOR j=n STEP -1 UNTIL LOW DO -- **********
 do 880 jj = low, n
    j = n + low - jj
    m = min0(j,igh)
@@ -9543,12 +9543,12 @@ integer, intent(in) :: nm
 integer :: jp1
 real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
 real :: f, g, h, scale
-!     REAL SQRT,ABS
+!     real sqrt,abs
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure TRED1,
+!     This subroutine is a translation of the Algol procedure tred1,
 !     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
 !
 !     This subroutine reduces a real symmetric matrix
 !     to a symmetric tridiagonal matrix using
@@ -9556,11 +9556,11 @@ real :: f, g, h, scale
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
 !        A contains the real symmetric input matrix.  Only the
 !          lower triangle of the matrix need be supplied.
@@ -9571,26 +9571,26 @@ real :: f, g, h, scale
 !          formations used in the reduction in its strict lower
 !          triangle.  The full upper triangle of A is unaltered,
 !
-!        D contains the diagonal elements of the tridiagonal matrix,
+!        d contains the diagonal elements of the tridiagonal matrix,
 !
-!        E contains the subdiagonal elements of the tridiagonal
-!          matrix in its last N-1 positions.  E(1) is set to zero,
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
 !
-!        E2 contains the squares of the corresponding elements of E.
-!          E2 may coincide with E if the squares are not needed.
+!        e2 contains the squares of the corresponding elements of e.
+!          e2 may coincide with e if the squares are not needed.
 !
 !-----------------------------------------------------------------------
 !
 do 100 i = 1, n
 100 d(i) = a(i,i)
-!     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
 do ii = 1, n
    i = n + 1 - ii
    l = i - 1
    h = 0.0
    scale = 0.0
    if (l .lt. 1) go to 130
-!     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
 120 scale = scale + abs(a(i,k))
 !
@@ -9616,7 +9616,7 @@ do ii = 1, n
 !
    do j = 1, l
       g = 0.0
-!     ********** FORM ELEMENT OF A*U **********
+!     ********** FORM ELEMENT OF a*U **********
       do 180 k = 1, j
 180 g = g + a(j,k) * a(i,k)
 !
@@ -9631,7 +9631,7 @@ do ii = 1, n
    end do
 !
    h = f / (h + h)
-!     ********** FORM REDUCED A **********
+!     ********** FORM REDUCED a **********
    do 260 j = 1, l
       f = a(i,j)
       g = e(j) - h * f
@@ -9650,7 +9650,7 @@ do ii = 1, n
 end do
 !
 return
-!     ********** LAST CARD OF TRED1 **********
+!     ********** LAST CARD OF tred1 **********
 end subroutine tred1
 
 subroutine tred3(n,nv,a,d,e,e2)
@@ -9662,12 +9662,12 @@ integer :: ii, iz, jk
 integer, intent(in) :: nv
 real, intent(inout) :: a(nv), d(n), e(n), e2(n)
 real :: f, g, h, hh, scale
-!     REAL SQRT,ABS
+!     real sqrt,abs
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure TRED3,
+!     This subroutine is a translation of the Algol procedure tred3,
 !     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
 !
 !     This subroutine reduces a real symmetric matrix, stored as
 !     a one-dimensional array, to a symmetric tridiagonal matrix
@@ -9675,31 +9675,31 @@ real :: f, g, h, hh, scale
 !
 !     On input-
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        NV must be set to the dimension of the array parameter A
+!        nv must be set to the dimension of the array parameter A
 !          as declared in the calling program dimension statement,
 !
 !        A contains the lower triangle of the real symmetric
 !          input matrix, stored row-wise as a one-dimensional
-!          array, in its first N*(N+1)/2 positions.
+!          array, in its first n*(n+1)/2 positions.
 !
 !     On output-
 !
 !        A contains information about the orthogonal
 !          transformations used in the reduction,
 !
-!        D contains the diagonal elements of the tridiagonal matrix,
+!        d contains the diagonal elements of the tridiagonal matrix,
 !
-!        E contains the subdiagonal elements of the tridiagonal
-!          matrix in its last N-1 positions.  E(1) is set to zero,
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
 !
-!        E2 contains the squares of the corresponding elements of E.
-!          E2 may coincide with E if the squares are not needed.
+!        e2 contains the squares of the corresponding elements of e.
+!          e2 may coincide with e if the squares are not needed.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** FOR I=N STEP -1 UNTIL 1 DO -- **********
+!     ********** FOR i=n STEP -1 UNTIL 1 DO -- **********
 do ii = 1, n
    i = n + 1 - ii
    l = i - 1
@@ -9707,7 +9707,7 @@ do ii = 1, n
    h = 0.0
    scale = 0.0
    if (l .lt. 1) go to 130
-!     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do k = 1, l
       iz = iz + 1
       d(k) = a(iz)
@@ -9738,7 +9738,7 @@ do ii = 1, n
    do j = 1, l
       g = 0.0
       jk = (j * (j-1)) / 2
-!     ********** FORM ELEMENT OF A*U **********
+!     ********** FORM ELEMENT OF a*U **********
       do k = 1, l
          jk = jk + 1
          if (k .gt. j) jk = jk + k - 2
@@ -9751,7 +9751,7 @@ do ii = 1, n
 !
    hh = f / (h + h)
    jk = 0
-!     ********** FORM REDUCED A **********
+!     ********** FORM REDUCED a **********
    do 260 j = 1, l
       f = d(j)
       g = e(j) - hh * f
@@ -9767,7 +9767,7 @@ do ii = 1, n
 end do
 !
 return
-!     ********** LAST CARD OF TRED3 **********
+!     ********** LAST CARD OF tred3 **********
 end subroutine tred3
 
 subroutine tqlrat(n,d,e2,ierr)
@@ -9780,10 +9780,10 @@ integer :: ii, l1, mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e2(n)
 real :: b, c, f, g, h, p, r, s, machep
-!     REAL SQRT,ABS,SPMPAR
+!     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure TQLRAT,
+!     This subroutine is a translation of the Algol procedure tqlrat,
 !     algorithm 464, comm. ACM 16, 689(1973) by Reinsch.
 !
 !     This subroutine finds the eigenvalues of a symmetric
@@ -9791,31 +9791,31 @@ real :: b, c, f, g, h, p, r, s, machep
 !
 !     On input-
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        D contains the diagonal elements of the input matrix,
+!        d contains the diagonal elements of the input matrix,
 !
-!        E2 contains the squares of the subdiagonal elements of the
-!          input matrix in its last N-1 positions.  E2(1) is arbitrary.
+!        e2 contains the squares of the subdiagonal elements of the
+!          input matrix in its last n-1 positions.  e2(1) is arbitrary.
 !
 !      On output-
 !
-!        D contains the eigenvalues in ascending order.  If an
+!        d contains the eigenvalues in ascending order.  If an
 !          error exit is made, the eigenvalues are correct and
-!          ordered for indices 1,2,...IERR-1, but may not be
+!          ordered for indices 1,2,...ierr-1, but may not be
 !          the smallest eigenvalues,
 !
-!        E2 has been destroyed,
+!        e2 has been destroyed,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -9841,7 +9841,7 @@ do l = 1, n
 !     ********** LOOK FOR SMALL SQUARED SUB-DIAGONAL ELEMENT **********
 105 do m = l, n
       if (e2(m) .le. c) go to 120
-!     ********** E2(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
+!     ********** e2(n) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
    end do
 !
@@ -9868,7 +9868,7 @@ do l = 1, n
    h = g
    s = 0.0
    mml = m - l
-!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
    do ii = 1, mml
       i = m - ii
       p = g * h
@@ -9891,7 +9891,7 @@ do l = 1, n
 210 p = d(l) + f
 !     ********** ORDER EIGENVALUES **********
    if (l .eq. 1) go to 250
-!     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
+!     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
    do ii = 2, l
       i = l + 2 - ii
       if (p .ge. d(i-1)) go to 270
@@ -9907,7 +9907,7 @@ go to 1001
 !                EIGENVALUE AFTER 30 ITERATIONS **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF TQLRAT **********
+!     ********** LAST CARD OF tqlrat **********
 end subroutine tqlrat
 
 subroutine imtql1(n,d,e,ierr)
@@ -9920,44 +9920,44 @@ integer :: ii, mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n)
 real :: b, c, f, g, p, r, s, machep
-!     REAL SQRT,ABS,SPMPAR
+!     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure IMTQL1,
+!     This subroutine is a translation of the Algol procedure imtql1,
 !     NUM. Math. 12, 377-383(1968) By Martin and Wilkinson,
 !     as modified in NUM. Math. 15, 450(1970) By Dubrulle.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 241-248(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 241-248(1971).
 !
 !     This subroutine finds the eigenvalues of a symmetric
 !     tridiagonal matrix BY the implicit QL method.
 !
 !     On input-
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        D contains the diagonal elements of the input matrix,
+!        d contains the diagonal elements of the input matrix,
 !
-!        E contains the subdiagonal elements of the input matrix
-!          in its last N-1 positions.  E(1) is arbitrary.
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary.
 !
 !      On output-
 !
-!        D contains the eigenvalues in ascending order.  If an
+!        d contains the eigenvalues in ascending order.  If an
 !          error exit is made, the eigenvalues are correct and
-!          ordered for indices 1,2,...IERR-1, but may not be
+!          ordered for indices 1,2,...ierr-1, but may not be
 !          the smallest eigenvalues,
 !
-!        E has been destroyed,
+!        e has been destroyed,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -9994,7 +9994,7 @@ do l = 1, n
    c = 1.0
    p = 0.0
    mml = m - l
-!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
    do ii = 1, mml
       i = m - ii
       f = s * e(i)
@@ -10024,7 +10024,7 @@ do l = 1, n
    go to 105
 !     ********** ORDER EIGENVALUES **********
 215 if (l .eq. 1) go to 250
-!     ********** FOR I=L STEP -1 UNTIL 2 DO -- **********
+!     ********** FOR i=l STEP -1 UNTIL 2 DO -- **********
    do ii = 2, l
       i = l + 2 - ii
       if (p .ge. d(i-1)) go to 270
@@ -10040,7 +10040,7 @@ go to 1001
 !                EIGENVALUE AFTER 30 ITERATIONS **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF IMTQL1 **********
+!     ********** LAST CARD OF imtql1 **********
 end subroutine imtql1
 
 subroutine tred2(nm,n,a,d,e,z)
@@ -10054,12 +10054,12 @@ integer :: jp1
 real, intent(in) :: a(nm,n)
 real, intent(inout) :: d(n), e(n), z(nm,n)
 real :: f, g, h, hh, scale
-!     REAL SQRT,ABS
+!     real sqrt,abs
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure TRED2,
+!     This subroutine is a translation of the Algol procedure tred2,
 !     NUM. Math. 11, 181-195(1968) By Martin, Reinsch, and Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 212-226(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 212-226(1971).
 !
 !     This subroutine reduces a real symmetric matrix to A
 !     symmetric tridiagonal matrix using and accumulating
@@ -10067,26 +10067,26 @@ real :: f, g, h, hh, scale
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
 !        A contains the real symmetric input matrix.  Only the
 !          lower triangle of the matrix need be supplied.
 !
 !     On output-
 !
-!        D contains the diagonal elements of the tridiagonal matrix,
+!        d contains the diagonal elements of the tridiagonal matrix,
 !
-!        E contains the subdiagonal elements of the tridiagonal
-!          matrix in its last N-1 positions.  E(1) is set to zero,
+!        e contains the subdiagonal elements of the tridiagonal
+!          matrix in its last n-1 positions.  e(1) is set to zero,
 !
-!        Z contains the orthogonal transformation matrix
+!        z contains the orthogonal transformation matrix
 !          produced in the reduction,
 !
-!        A and Z may coincide.  If distinct, A is unaltered.
+!        A and z may coincide.  If distinct, A is unaltered.
 !
 !-----------------------------------------------------------------------
 !
@@ -10097,14 +10097,14 @@ do 100 i = 1, n
 100 continue
 !
 if (n .eq. 1) go to 320
-!     ********** FOR I=N STEP -1 UNTIL 2 DO -- **********
+!     ********** FOR i=n STEP -1 UNTIL 2 DO -- **********
 do ii = 2, n
    i = n + 2 - ii
    l = i - 1
    h = 0.0
    scale = 0.0
    if (l .lt. 2) go to 130
-!     ********** SCALE ROW (ALGOL TOL THEN NOT NEEDED) **********
+!     ********** scale ROW (ALGOL TOL THEN NOT NEEDED) **********
    do 120 k = 1, l
 120 scale = scale + abs(z(i,k))
 !
@@ -10128,7 +10128,7 @@ do ii = 2, n
    do j = 1, l
       z(j,i) = z(i,j) / h
       g = 0.0
-!     ********** FORM ELEMENT OF A*U **********
+!     ********** FORM ELEMENT OF a*U **********
       do 180 k = 1, j
 180 g = g + z(j,k) * z(i,k)
 !
@@ -10143,7 +10143,7 @@ do ii = 2, n
    end do
 !
    hh = f / (h + h)
-!     ********** FORM REDUCED A **********
+!     ********** FORM REDUCED a **********
    do 260 j = 1, l
       f = z(i,j)
       g = e(j) - hh * f
@@ -10185,7 +10185,7 @@ do 500 i = 1, n
 500 continue
 !
 return
-!     ********** LAST CARD OF TRED2 **********
+!     ********** LAST CARD OF tred2 **********
 end subroutine tred2
 
 subroutine tql2(nm,n,d,e,z,ierr)
@@ -10200,60 +10200,60 @@ integer :: mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
 real :: b, c, f, g, h, p, r, s, machep
-!     REAL SQRT,ABS,SPMPAR
+!     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure TQL2,
+!     This subroutine is a translation of the Algol procedure tql2,
 !     NUM. Math. 11, 293-306(1968) By Bowdler, Martin, Reinsch, and
 !     Wilkinson.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 227-240(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 227-240(1971).
 !
 !     This subroutine finds the eigenvalues and eigenvectors
 !     of a symmetric tridiagonal matrix BY the QL method.
 !     The eigenvectors of a full symmetric matrix can also
-!     be found if  TRED2  has been used to reduce this
+!     be found if  tred2  has been used to reduce this
 !     full matrix to tridiagonal form.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        D contains the diagonal elements of the input matrix,
+!        d contains the diagonal elements of the input matrix,
 !
-!        E contains the subdiagonal elements of the input matrix
-!          in its last N-1 positions.  E(1) is arbitrary,
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary,
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  TRED2, if performed.  If the eigenvectors
-!          of the tridiagonal matrix are desired, Z must contain
+!        z contains the transformation matrix produced in the
+!          reduction by  tred2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, z must contain
 !          the identity matrix.
 !
 !      On output-
 !
-!        D contains the eigenvalues in ascending order.  If an
+!        d contains the eigenvalues in ascending order.  If an
 !          error exit is made, the eigenvalues are correct but
-!          unordered for indices 1,2,...,IERR-1,
+!          unordered for indices 1,2,...,ierr-1,
 !
-!        E has been destroyed,
+!        e has been destroyed,
 !
-!        Z contains orthonormal eigenvectors of the symmetric
+!        z contains orthonormal eigenvectors of the symmetric
 !          tridiagonal (or full) matrix.  If an error exit is made,
-!          Z contains the eigenvectors associated with the stored
+!          z contains the eigenvectors associated with the stored
 !          eigenvalues,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -10277,7 +10277,7 @@ do l = 1, n
 !     ********** LOOK FOR SMALL SUB-DIAGONAL ELEMENT **********
    do m = l, n
       if (abs(e(m)) .le. b) go to 120
-!     ********** E(N) IS ALWAYS ZERO, SO THERE IS NO EXIT
+!     ********** e(n) IS ALWAYS ZERO, SO THERE IS NO EXIT
 !                THROUGH THE BOTTOM OF THE LOOP **********
    end do
 !
@@ -10302,7 +10302,7 @@ do l = 1, n
    c = 1.0
    s = 0.0
    mml = m - l
-!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
    do ii = 1, mml
       i = m - ii
       g = c * e(i)
@@ -10364,7 +10364,7 @@ go to 1001
 !                EIGENVALUE AFTER 30 ITERATIONS **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF TQL2 **********
+!     ********** LAST CARD OF tql2 **********
 end subroutine tql2
 
 subroutine imtql2(nm,n,d,e,z,ierr)
@@ -10379,60 +10379,60 @@ integer :: mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
 real :: b, c, f, g, p, r, s, machep
-!     REAL SQRT,ABS,SPMPAR
+!     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
-!     This subroutine is a translation of the Algol procedure IMTQL2,
+!     This subroutine is a translation of the Algol procedure imtql2,
 !     NUM. Math. 12, 377-383(1968) By Martin and Wilkinson,
 !     as modified in NUM. Math. 15, 450(1970) By Dubrulle.
-!     Handbook for auto. Comp., Vol.II-linear algebra, 241-248(1971).
+!     Handbook for auto. Comp., Vol.ii-linear algebra, 241-248(1971).
 !
 !     This subroutine finds the eigenvalues and eigenvectors
 !     of a symmetric tridiagonal matrix BY the implicit QL method.
 !     The eigenvectors of a full symmetric matrix can also
-!     be found if  TRED2  has been used to reduce this
+!     be found if  tred2  has been used to reduce this
 !     full matrix to tridiagonal form.
 !
 !     On input-
 !
-!        NM must be set to the row dimension of two-dimensional
+!        nm must be set to the row dimension of two-dimensional
 !          array parameters as declared in the calling program
-!          DIMENSION STATEMENT,
+!          dimension statement,
 !
-!        N is the order of the matrix,
+!        n is the order of the matrix,
 !
-!        D contains the diagonal elements of the input matrix,
+!        d contains the diagonal elements of the input matrix,
 !
-!        E contains the subdiagonal elements of the input matrix
-!          in its last N-1 positions.  E(1) is arbitrary,
+!        e contains the subdiagonal elements of the input matrix
+!          in its last n-1 positions.  e(1) is arbitrary,
 !
-!        Z contains the transformation matrix produced in the
-!          reduction by  TRED2, if performed.  If the eigenvectors
-!          of the tridiagonal matrix are desired, Z must contain
+!        z contains the transformation matrix produced in the
+!          reduction by  tred2, if performed.  If the eigenvectors
+!          of the tridiagonal matrix are desired, z must contain
 !          the identity matrix.
 !
 !      On output-
 !
-!        D contains the eigenvalues in ascending order.  If an
+!        d contains the eigenvalues in ascending order.  If an
 !          error exit is made, the eigenvalues are correct but
-!          unordered for indices 1,2,...,IERR-1,
+!          unordered for indices 1,2,...,ierr-1,
 !
-!        E has been destroyed,
+!        e has been destroyed,
 !
-!        Z contains orthonormal eigenvectors of the symmetric
+!        z contains orthonormal eigenvectors of the symmetric
 !          tridiagonal (or full) matrix.  If an error exit is made,
-!          Z contains the eigenvectors associated with the stored
+!          z contains the eigenvectors associated with the stored
 !          eigenvalues,
 !
-!        IERR is set to
+!        ierr is set to
 !          ZERO       FOR NORMAL RETURN,
-!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN
+!          j          IF THE j-TH EIGENVALUE HAS NOT BEEN
 !                     determined after 30 iterations.
 !
 !-----------------------------------------------------------------------
 !
-!     ********** MACHEP IS A MACHINE DEPENDENT PARAMETER. ASSIGN
-!                MACHEP the value U where U is the smallest positive
+!     ********** machep IS A MACHINE DEPENDENT PARAMETER. ASSIGN
+!                machep the value U where U is the smallest positive
 !                FLOATING POINT NUMBER SUCH THAT 1.0 + U .GT. 1.0 .
 !
            machep = spmpar(1)
@@ -10469,7 +10469,7 @@ do 240 l = 1, n
    c = 1.0
    p = 0.0
    mml = m - l
-!     ********** FOR I=M-1 STEP -1 UNTIL L DO -- **********
+!     ********** FOR i=m-1 STEP -1 UNTIL l DO -- **********
    do ii = 1, mml
       i = m - ii
       f = s * e(i)
@@ -10534,6 +10534,6 @@ go to 1001
 !                EIGENVALUE AFTER 30 ITERATIONS **********
 1000 ierr = l
 1001 return
-!     ********** LAST CARD OF IMTQL2 **********
+!     ********** LAST CARD OF imtql2 **********
 end subroutine imtql2
 

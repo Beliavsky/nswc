@@ -9,7 +9,7 @@ complex, intent(in) :: z
 real :: qb(25), qf(2), dl(2), ds, zd(2), zl(2)
 real :: az(2), c, pm, r, sm(2), tm(2), ts(2), sr(2)
 !     ---------------------
-!     C = PI**2/6
+!     c = pi**2/6
 !     ---------------------
 data c /1.64493406684823/
 !     ---------------------
@@ -86,7 +86,7 @@ pm = 1.0
    sm(2) = sm(2) + ts(2)
    go to 40
 !
-!        EVALUATION OF THE SERIES IN  U = -LN(1 + Z)
+!        EVALUATION OF THE SERIES IN  U = -LN(1 + z)
 !
 50 qf(1) = dl(1)*dl(1) - dl(2)*dl(2)
 qf(2) = 2.0*dl(1)*dl(2)
@@ -110,7 +110,7 @@ end do
 80 cli = cmplx(sr(1) + sm(1), sr(2) + sm(2))
 return
 !
-!                  EVALUATION AT Z = -1
+!                  EVALUATION AT z = -1
 !
 100 cli = cmplx(-c, 0.0)
 return
@@ -132,8 +132,8 @@ real :: const, t, w
 real :: a(5), b(6), c(10), d(2), e(18), p(4), q(8), r(7), s(6)
 double precision :: x0
 !--------------------------
-!     CONST = PI**2/6
-!     X0 = ZERO OF THE REAL DILOGARITHM FUNCTION
+!     const = pi**2/6
+!     x0 = ZERO OF THE REAL DILOGARITHM FUNCTION
 !--------------------------
 data const /1.64493406684823/
 data x0 /-12.5951703698450161286398965d0/
@@ -184,7 +184,7 @@ if (x .ge.-0.5) go to 30
 if (x .ge.-1.0) go to 20
 if (x .ge.-2.0) go to 10
 !
-!                            X .LT. -2
+!                            x .LT. -2
 !
 if (x .ge. -26.63 .and. x .le. -6.97) go to 100
 t = -1.0/x
@@ -194,7 +194,7 @@ w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
 ali = 0.5*alog(-x)**2 - (2.0*const + w/x)
 return
 !
-!                        -2 .LE. X .LT. -1
+!                        -2 .LE. x .LT. -1
 !
 10 t = -(1.0 + x)
 w = (((((a(5)*t + a(4))*t + a(3))*t + a(2))*t + a(1))*t + 1.0)/ &
@@ -203,7 +203,7 @@ w = (((((a(5)*t + a(4))*t + a(3))*t + a(2))*t + a(1))*t + 1.0)/ &
 ali = -(const + t*w) + alog(-x)*alog(t)
 return
 !
-!                       -1 .LE. X .LT. -1/2
+!                       -1 .LE. x .LT. -1/2
 !
 20 t = 0.5 + (0.5 + x)
 ali = -const
@@ -214,7 +214,7 @@ w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
 ali = (-const + t*w) + alog(-x)*alog(t)
 return
 !
-!                       -1/2 .LE. X .LT. 0
+!                       -1/2 .LE. x .LT. 0
 !
 30 t = -x
 w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
@@ -223,7 +223,7 @@ w = (((((((((((c(10)*t + c(9))*t + c(8))*t + c(7))*t + c(6))*t + &
 ali = x*w
 return
 !
-!                         0 .LE. X .LE. 1
+!                         0 .LE. x .LE. 1
 !
 40 w = (((((a(5)*x + a(4))*x + a(3))*x + a(2))*x + a(1))*x + 1.0)/ &
 &((((((b(6)*x + b(5))*x + b(4))*x + b(3))*x + b(2))*x + &
@@ -231,7 +231,7 @@ return
 ali = x*w
 return
 !
-!                            X .GT. 1
+!                            x .GT. 1
 !
 50 t = 1.0/x
 w = (((((a(5)*t + a(4))*t + a(3))*t + a(2))*t + a(1))*t + 1.0)/ &
@@ -241,13 +241,13 @@ ali = (const - w/x) + 0.5*alog(x)**2
 return
 !
 !-----------------------------------------------------------------------
-!              EVALUATION FOR  -26.63 .LE. X .LE. -6.97
+!              EVALUATION FOR  -26.63 .LE. x .LE. -6.97
 !-----------------------------------------------------------------------
 !
 100 if (x .le. -14.0) go to 120
 if (x .le. -11.1) go to 110
 !
-!                    -11.1 .LT. X .LE. -6.97
+!                    -11.1 .LT. x .LE. -6.97
 !
 t = -(x + 7.0)
 ali = (((p(4)*t + p(3))*t + p(2))*t + p(1)) / (((((((q(8)*t + &
@@ -256,7 +256,7 @@ ali = (((p(4)*t + p(3))*t + p(2))*t + p(1)) / (((((((q(8)*t + &
 return
 
 !
-!                     -14 .LT. X .LE. -11.1
+!                     -14 .LT. x .LE. -11.1
 !
 110 t = dble(x) - x0
 w = e(14)
@@ -266,7 +266,7 @@ do 111 l = 1,13
 ali = t*w
 return
 !
-!                     -26.63 .LE. X .LE. -14
+!                     -26.63 .LE. x .LE. -14
 !
 120 t = -(x + 14.0)
 ali = ((((((r(7)*t + r(6))*t + r(5))*t + r(4))*t + r(3))*t + &
@@ -291,10 +291,10 @@ real :: spmpar
 !
 !                        ---------------
 !
-!     MO is an integer, Z a complex argument, and W a complex variable.
+!     mo is an integer, z a complex argument, and w a complex variable.
 !
-!                 W = GAMMA(Z)       IF MO = 0
-!                 W = LN(GAMMA(Z))   OTHERWISE
+!                 w = gamma(z)       IF mo = 0
+!                 w = ln(gamma(z))   otherwise
 !
 !-----------------------------------------------------------------------
 complex, intent(in) :: z
@@ -302,8 +302,8 @@ complex, intent(inout) :: w
 complex :: eta, eta2, sum
 real :: c0(12)
 !---------------------------
-!     ALPI = LOG(PI)
-!     HL2P = 0.5 * LOG(2*PI)
+!     alpi = log(pi)
+!     hl2p = 0.5 * log(2*pi)
 !---------------------------
 data pi  /3.14159265358979/
 data pi2 /6.28318530717959/
@@ -318,10 +318,10 @@ data c0(1) /.833333333333333e-01/, c0(2) /-.277777777777778e-02/, &
 &c0(11)/.134028640441684e+02/, c0(12)/-.156848284626002e+03/
 !---------------------------
 !
-!     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** max AND EPS ARE MACHINE DEPENDENT CONSTANTS.
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest real number
-!            SUCH THAT 1.0 + EPS .GT. 1.0.
+!            SUCH THAT 1.0 + eps .GT. 1.0.
 !
                 max = ipmpar(3)
                 eps = spmpar(1)
@@ -331,14 +331,14 @@ x = real(z)
 y = aimag(z)
 if (x .ge. 0.0) go to 50
 !-----------------------------------------------------------------------
-!            Case when the real part of Z is negative
+!            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
 t = -pi*y
 et = exp(t)
 e2t = et*et
 !
-!     SET  A1 = (1 + E2T)/2  AND  A2 = (1 - E2T)/2
+!     SET  a1 = (1 + e2t)/2  AND  a2 = (1 - e2t)/2
 !
 a1 = 0.5*(1.0 + e2t)
 t2 = t + t
@@ -347,7 +347,7 @@ if (t2 .lt. -0.15) go to 10
    go to 20
 10 a2 = 0.5*(0.5 + (0.5 - e2t))
 !
-!     Compute SIN(PI*X) and COS(PI*X)
+!     Compute sin(PI*X) and cos(PI*X)
 !
 20 if (abs(x) .ge. amin1(float(max), 1.0/eps)) go to 200
 k = abs(x)
@@ -363,7 +363,7 @@ if (k .ne. 1) go to 30
 sn = -sn
 cn = -cn
 !
-!     Set  H1 + H2*I  to  pi/SIN(PI*Z)  or  LOG(PI/SIN(PI*Z))
+!     Set  h1 + h2*I  to  pi/sin(PI*z)  or  log(PI/sin(PI*z))
 !
 30 a1 = sn*a1
 a2 = cn*a2
@@ -387,7 +387,7 @@ h2 = -atan2(a2,a1)
 42 h2 = -h2
 x = 1.0 - x
 !-----------------------------------------------------------------------
-!           Case when the real part of Z is nonnegative
+!           Case when the real part of z is nonnegative
 !-----------------------------------------------------------------------
 50 w1 = 0.0
 w2 = 0.0
@@ -404,7 +404,7 @@ if (a .eq. 0.0) go to 200
    a = t*t + y2
    if (a .lt. cut) go to 51
 !
-!     Let S1 + S2*I be the product of the terms (Z+J)/(Z+N)
+!     Let S1 + S2*I be the product of the terms (z+j)/(z+n)
 !
 u1 = (x*t + y2)/a
 u2 = y/a
@@ -422,14 +422,14 @@ do j = 1,nm1
    s2 = d
 end do
 !
-!     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
+!     SET  W1 + W2*I = log(S1 + S2*I)  WHEN mo IS NONZERO
 !
 70 s = s1*s1 + s2*s2
 if (mo .eq. 0) go to 80
 w1 = 0.5 * alog(s)
 w2 = atan2(s2,s1)
 !
-!     SET  V1 + V2*I = (Z - 0.5) * LOG(Z + N) - Z
+!     SET  V1 + V2*I = (z - 0.5) * log(z + n) - z
 !
 80 t1 = 0.5 * alog(a) - 1.0
 t2 = atan2(y,t)
@@ -437,7 +437,7 @@ u = x - 0.5
 v1 = (u*t1 - 0.5) - y*t2
 v2 = u*t2 + y*t1
 !
-!     Let A1 + A2*I be the asymptotic sum
+!     Let a1 + a2*I be the asymptotic sum
 !
 eta  = cmplx(t/a,-y/a)
 eta2 = eta*eta
@@ -461,7 +461,7 @@ w2 = (a2 - w2) + v2
 if (real(z) .lt. 0.0) go to 120
 if (mo .ne. 0) go to 110
 !
-!     CASE WHEN THE REAL PART OF Z IS NONNEGATIVE AND MO = 0
+!     CASE WHEN THE REAL PART OF z IS NONNEGATIVE AND mo = 0
 !
 a = exp(w1)
 w1 = a * cos(w2)
@@ -473,7 +473,7 @@ w1 = c
 w2 = d
 go to 140
 !
-!     Case when the real part of Z is nonnegative and MO is nonzero.
+!     Case when the real part of z is nonnegative and mo is nonzero.
 !     THE ANGLE W2 IS REDUCED TO THE INTERVAL -PI .LT. W2 .LE. PI.
 !
 110 if (w2 .gt. pi) go to 111
@@ -485,14 +485,14 @@ w2 = w2 - pi2*float(k + 1)
 if (w2 .le. -pi) w2 = pi
 go to 140
 !
-!     Case when the real part of Z is negative and MO is nonzero
+!     Case when the real part of z is negative and mo is nonzero
 !
 120 if (mo .eq. 0) go to 130
 w1 = h1 - w1
 w2 = h2 - w2
 go to 110
 !
-!     CASE WHEN THE REAL PART OF Z IS NEGATIVE AND MO = 0
+!     CASE WHEN THE REAL PART OF z IS NEGATIVE AND mo = 0
 !
 130 a = exp(-w1)
 t1 = a * cos(-w2)
@@ -521,7 +521,7 @@ implicit none
 integer :: i, k, n
 real :: x, y
 !-----------------------------------------------------------------------
-!          EVALUATION OF 1/GAMMA(1 + Z)  FOR ABS(Z) .LT. 1.0
+!          EVALUATION OF 1/gamma(1 + z)  FOR abs(z) .LT. 1.0
 !-----------------------------------------------------------------------
 complex, intent(in) :: z
 complex :: w
@@ -569,7 +569,7 @@ real :: spmpar
 !
 !                           -----------
 !
-!     GAMMA(A) is assigned the value 0 when the gamma function CANNOT
+!     gamma(a) is assigned the value 0 when the gamma function CANNOT
 !     be computed.
 !
 !-----------------------------------------------------------------------
@@ -580,7 +580,7 @@ real :: spmpar
 real :: p(7), q(7)
 double precision :: d, g, z, lnx, glog
 !--------------------------
-!     D = 0.5*(LN(2*PI) - 1)
+!     d = 0.5*(ln(2*pi) - 1)
 !--------------------------
 data pi /3.1415926535898/
 data d /.41893853320467274178d0/
@@ -602,12 +602,12 @@ gamma = 0.0
 x = a
 if (abs(a) .ge. 15.0) go to 60
 !-----------------------------------------------------------------------
-!            EVALUATION OF GAMMA(A) FOR ABS(A) .LT. 15
+!            EVALUATION OF gamma(a) FOR abs(a) .LT. 15
 !-----------------------------------------------------------------------
 t = 1.0
 m = int(a) - 1
 !
-!     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
+!     LET t BE THE PRODUCT OF a-j WHEN a .GE. 2
 !
 if (m) 20,12,10
 10 do 11 j = 1,m
@@ -616,7 +616,7 @@ if (m) 20,12,10
 12 x = x - 1.0
 go to 40
 !
-!     LET T BE THE PRODUCT OF A+J WHEN A .LT. 1
+!     LET t BE THE PRODUCT OF a+j WHEN a .LT. 1
 !
 20 t = a
 if (a .gt. 0.0) go to 30
@@ -631,7 +631,7 @@ if (t .eq. 0.0) return
 !
 30 continue
 !
-!     The following code checks if 1/T can overflow. This
+!     The following code checks if 1/t can overflow. This
 !     code may be omitted if desired.
 !
 if (abs(t) .ge. 1.e-30) go to 40
@@ -639,7 +639,7 @@ if (abs(t)*spmpar(3) .le. 1.0001) return
 gamma = 1.0/t
 return
 !
-!     COMPUTE GAMMA(1 + X) FOR  0 .LE. X .LT. 1
+!     COMPUTE gamma(1 + x) FOR  0 .LE. x .LT. 1
 !
 40 top = p(1)
 bot = q(1)
@@ -656,7 +656,7 @@ return
 50 gamma = gamma/t
 return
 !-----------------------------------------------------------------------
-!            EVALUATION OF GAMMA(A) FOR ABS(A) .GE. 15
+!            EVALUATION OF gamma(a) FOR abs(a) .GE. 15
 !-----------------------------------------------------------------------
 60 if (abs(a) .ge. 1.e3) return
 if (a .gt. 0.0) go to 70
@@ -673,7 +673,7 @@ if (s .eq. 0.0) return
 70 t = 1.0/(x*x)
 g = ((((r1*t + r2)*t + r3)*t + r4)*t + r5)/x
 !
-!     ONE MAY REPLACE THE NEXT STATEMENT WITH  LNX = ALOG(X)
+!     ONE MAY REPLACE THE NEXT STATEMENT WITH  lnx = ALOG(x)
 !     but less accuracy will normally be obtained.
 !
 lnx = glog(x)
@@ -695,7 +695,7 @@ implicit none
 integer :: n
 real :: c1, c2, c3, t, t2
 !     -------------------
-!     EVALUATION OF LN(X) FOR X .GE. 15
+!     EVALUATION OF LN(x) FOR x .GE. 15
 !     -------------------
 real, intent(in) :: x
 double precision :: z, w(163)
@@ -703,7 +703,7 @@ double precision :: z, w(163)
 data c1/.286228750476730/, c2/.399999628131494/, &
 &c3/.666666666752663/
 !     -------------------
-!     W(J) = LN(J + 14) FOR EACH J
+!     w(J) = LN(J + 14) FOR EACH J
 !     -------------------
 data w(1) /.270805020110221007d+01/, &
 &w(2) /.277258872223978124d+01/, w(3) /.283321334405621608d+01/, &
@@ -810,7 +810,7 @@ implicit none
 real, intent(in) :: a
 real :: bot, d, s1, s2, t, top, w
 !-----------------------------------------------------------------------
-!     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
+!     COMPUTATION OF 1/gamma(a+1) - 1  FOR -0.5 .LE. a .LE. 1.5
 !-----------------------------------------------------------------------
 real :: p(7), q(5), r(9)
 !------------------------
@@ -867,13 +867,13 @@ real, intent(in) :: a
 integer :: i, n
 real :: c0, c1, c2, c3, c4, c5, d, t, w
 !-----------------------------------------------------------------------
-!            Evaluation of LN(GAMMA(A)) for positive A
+!            Evaluation of LN(gamma(a)) for positive A
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
 !          NAVAL SURFACE WARFARE CENTER
 !          DAHLGREN, VIRGINIA
 !--------------------------
-!     D = 0.5*(LN(2*PI) - 1)
+!     d = 0.5*(ln(2*pi) - 1)
 !--------------------------
 data d/.418938533204673/
 !--------------------------
@@ -910,7 +910,7 @@ real, intent(in) :: a
 real :: p0, p1, p2, p3, p4, p5, p6, q1, q2, q3, q4, q5, q6, r0, &
 &r1, r2, r3, r4, r5, s1, s2, s3, s4, s5, w, x
 !-----------------------------------------------------------------------
-!     EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
+!     EVALUATION OF LN(gamma(1 + a)) FOR -0.2 .LE. a .LE. 1.25
 !-----------------------------------------------------------------------
 data p0/ .577215664901533e+00/, p1/ .844203922187225e+00/, &
 &p2/-.168860593646662e+00/, p3/-.780427615533591e+00/, &
@@ -951,13 +951,13 @@ integer :: ipmpar
 !
 !                        ---------------
 !
-!     MO is an integer. Z and W are interpreted as double precision
-!     COMPLEX NUMBERS. IT IS ASSUMED THAT Z(1) AND Z(2) ARE THE REAL
-!     and imaginary parts of the complex number Z, and that W(1) and
-!     W(2) are the real and imaginary parts of W.
+!     mo is an integer. z and w are interpreted as double precision
+!     COMPLEX NUMBERS. IT IS ASSUMED THAT z(1) AND z(2) ARE THE REAL
+!     and imaginary parts of the complex number z, and that w(1) and
+!     w(2) are the real and imaginary parts of w.
 !
-!                 W = GAMMA(Z)       IF MO = 0
-!                 W = LN(GAMMA(Z))   OTHERWISE
+!                 w = gamma(z)       IF mo = 0
+!                 w = ln(gamma(z))   otherwise
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: z(2)
@@ -968,8 +968,8 @@ double precision :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
 &x, y, y2
 double precision :: dpmpar, drexp
 !---------------------------
-!     DLPI = LOG(PI)
-!     HL2P = 0.5 * LOG(2*PI)
+!     dlpi = log(pi)
+!     hl2p = 0.5 * log(2*pi)
 !---------------------------
 data pi   /3.141592653589793238462643383279502884197d0/
 data pi2  /6.283185307179586476925286766559005768394d0/
@@ -1008,10 +1008,10 @@ data c0(21) / .4887880647930793350758151625180229021085d+15/, &
 &c0(30) /-.6045183405995856967743148238754547286066d+31/
 !---------------------------
 !
-!     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** max AND EPS ARE MACHINE DEPENDENT CONSTANTS.
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest number such
-!            THAT  1.D0 + EPS .GT. 1.D0.
+!            THAT  1.D0 + eps .GT. 1.D0.
 !
                 max = ipmpar(3)
                 eps = dpmpar(1)
@@ -1021,14 +1021,14 @@ x = z(1)
 y = z(2)
 if (x .ge. 0.d0) go to 50
 !-----------------------------------------------------------------------
-!            Case when the real part of Z is negative
+!            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = dabs(y)
 t = -pi*y
 et = dexp(t)
 e2t = et*et
 !
-!     SET  A1 = (1 + E2T)/2  AND  A2 = (1 - E2T)/2
+!     SET  a1 = (1 + e2t)/2  AND  a2 = (1 - e2t)/2
 !
 a1 = 0.5d0*(1.d0 + e2t)
 t2 = t + t
@@ -1037,7 +1037,7 @@ if (t2 .lt. -0.15d0) go to 10
    go to 20
 10 a2 = 0.5d0*(0.5d0 + (0.5d0 - e2t))
 !
-!     Compute SIN(PI*X) and COS(PI*X)
+!     Compute sin(pi*X) and cos(pi*X)
 !
 20 u = max
 if (dabs(x) .ge. dmin1(u, 1.d0/eps)) go to 200
@@ -1054,7 +1054,7 @@ if (k .ne. 1) go to 30
 sn = -sn
 cn = -cn
 !
-!     Set  H1 + H2*I  to  pi/SIN(PI*Z)  or  LOG(PI/SIN(PI*Z))
+!     Set  h1 + H2*I  to  pi/sin(pi*z)  or  log(pi/sin(pi*z))
 !
 30 a1 = sn*a1
 a2 = cn*a2
@@ -1078,7 +1078,7 @@ h2 = -datan2(a2,a1)
 42 h2 = -h2
 x = 1.0 - x
 !-----------------------------------------------------------------------
-!           Case when the real part of Z is nonnegative
+!           Case when the real part of z is nonnegative
 !-----------------------------------------------------------------------
 50 w1 = 0.d0
 w2 = 0.d0
@@ -1096,7 +1096,7 @@ if (a .eq. 0.d0) go to 200
    a = t*t + y2
    if (a .lt. cut) go to 51
 !
-!     Let S1 + S2*I be the product of the terms (Z+J)/(Z+N)
+!     Let S1 + S2*I be the product of the terms (z+j)/(z+n)
 !
 u1 = (x*t + y2)/a
 u2 = y/a
@@ -1114,14 +1114,14 @@ do j = 1,nm1
    s2 = d
 end do
 !
-!     SET  W1 + W2*I = LOG(S1 + S2*I)  WHEN MO IS NONZERO
+!     SET  W1 + W2*I = log(S1 + S2*I)  WHEN mo IS NONZERO
 !
 70 s = s1*s1 + s2*s2
 if (mo .eq. 0) go to 80
 w1 = 0.5d0 * dlog(s)
 w2 = datan2(s2,s1)
 !
-!     SET  V1 + V2*I = (Z - 0.5) * LOG(Z + N) - Z
+!     SET  V1 + V2*I = (z - 0.5) * log(z + n) - z
 !
 80 t1 = 0.5d0 * dlog(a) - 1.d0
 t2 = datan2(y,t)
@@ -1129,7 +1129,7 @@ u = x - 0.5d0
 v1 = (u*t1 - 0.5d0) - y*t2
 v2 = u*t2 + y*t1
 !
-!     Let A1 + A2*I be the asymptotic sum
+!     Let a1 + a2*I be the asymptotic sum
 !
 u1 = t/a
 u2 = -y/a
@@ -1157,7 +1157,7 @@ w2 = (a2 - w2) + v2
 if (z(1) .lt. 0.d0) go to 120
 if (mo .ne. 0) go to 110
 !
-!     CASE WHEN THE REAL PART OF Z IS NONNEGATIVE AND MO = 0
+!     CASE WHEN THE REAL PART OF z IS NONNEGATIVE AND mo = 0
 !
 a = dexp(w1)
 w1 = a * dcos(w2)
@@ -1169,8 +1169,8 @@ w1 = c
 w2 = d
 go to 140
 !
-!     Case when the real part of Z is nonnegative and MO is nonzero.
-!     THE ANGLE W2 IS REDUCED TO THE INTERVAL -PI .LT. W2 .LE. PI.
+!     Case when the real part of z is nonnegative and mo is nonzero.
+!     THE ANGLE W2 IS REDUCED TO THE INTERVAL -pi .LT. W2 .LE. pi.
 !
 110 if (w2 .gt. pi) go to 111
    k = 0.5d0 - w2/pi2
@@ -1182,14 +1182,14 @@ w2 = w2 - pi2*u
 if (w2 .le. -pi) w2 = pi
 go to 140
 !
-!     Case when the real part of Z is negative and MO is nonzero
+!     Case when the real part of z is negative and mo is nonzero
 !
 120 if (mo .eq. 0) go to 130
 w1 = h1 - w1
 w2 = h2 - w2
 go to 110
 !
-!     CASE WHEN THE REAL PART OF Z IS NEGATIVE AND MO = 0
+!     CASE WHEN THE REAL PART OF z IS NEGATIVE AND mo = 0
 !
 130 a = dexp(-w1)
 t1 = a * dcos(-w2)
@@ -1221,11 +1221,11 @@ integer :: j, n
 !-----------------------------------------------------------------------
 !
 !                Evaluation of the gamma function for
-!                     DOUBLE PRECISION ARGUMENTS
+!                     double precision arguments
 !
 !                           -----------
 !
-!     DGAMMA(A) is assigned the value 0 when the gamma function CANNOT
+!     dgamma(a) is assigned the value 0 when the gamma function CANNOT
 !     be computed.
 !
 !-----------------------------------------------------------------------
@@ -1237,7 +1237,7 @@ double precision, intent(in) :: a
 double precision :: d, pi, s, t, x, w
 double precision :: dpmpar, dsin1, dgam1, dpdel, dxparg
 !-----------------------------------------------------------------------
-!     D = 0.5*(LN(2*PI) - 1)
+!     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
 data pi /3.14159265358979323846264338327950d0/
 data d  /0.41893853320467274178032973640562d0/
@@ -1246,13 +1246,13 @@ dgamma = 0.d0
 x = a
 if (dabs(a) .gt. 20.d0) go to 60
 !-----------------------------------------------------------------------
-!             EVALUATION OF DGAMMA(A) FOR DABS(A) .LE. 20
+!             EVALUATION OF dgamma(a) FOR dabs(a) .LE. 20
 !-----------------------------------------------------------------------
 t = 1.d0
 n = x
 n = n - 1
 !
-!     LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
+!     LET t BE THE PRODUCT OF a-j WHEN a .GE. 2
 !
 if (n) 20,12,10
 10 do 11 j = 1,n
@@ -1261,7 +1261,7 @@ if (n) 20,12,10
 12 x = x - 1.d0
 go to 40
 !
-!     LET T BE THE PRODUCT OF A+J WHEN A .LT. 1
+!     LET t BE THE PRODUCT OF a+j WHEN a .LT. 1
 !
 20 t = a
 if (a .gt. 0.d0) go to 30
@@ -1276,7 +1276,7 @@ if (t .eq. 0.d0) return
 !
 30 continue
 !
-!     The following code checks if 1/T can overflow. This
+!     The following code checks if 1/t can overflow. This
 !     code may be omitted if desired.
 !
 if (dabs(t) .ge. 1.d-33) go to 40
@@ -1284,7 +1284,7 @@ if (dabs(t)*dpmpar(3) .le. 1.000000001d0) return
 dgamma = 1.d0/t
 return
 !
-!     COMPUTE DGAMMA(1 + X) FOR 0 .LE. X .LT. 1
+!     COMPUTE dgamma(1 + x) FOR 0 .LE. x .LT. 1
 !
 40 dgamma = 1.d0/(1.d0 + dgam1(x))
 !
@@ -1296,7 +1296,7 @@ if (a .lt. 1.d0) go to 50
 50 dgamma = dgamma / t
 return
 !-----------------------------------------------------------------------
-!           EVALUATION OF DGAMMA(A) FOR DABS(A) .GT. 20
+!           EVALUATION OF dgamma(a) FOR dabs(a) .GT. 20
 !-----------------------------------------------------------------------
 60 if (dabs(a) .ge. 1.d3) return
 if (a .gt. 0.d0) go to 70
@@ -1322,12 +1322,12 @@ implicit none
 integer :: i, k
 !-----------------------------------------------------------------------
 !
-!     COMPUTATION OF THE FUNCTION DEL(X) FOR  X .GE. 10  WHERE
-!     LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*PI) + DEL(X)
+!     COMPUTATION OF THE FUNCTION DEL(x) FOR  x .GE. 10  WHERE
+!     LN(gamma(x)) = (x - 0.5)*LN(x) - x + 0.5*LN(2*PI) + DEL(x)
 !
 !                         --------
 !
-!     The series for DPDEL on the interval 0.0 to 1.0 derived by
+!     The series for dpdel on the interval 0.0 to 1.0 derived by
 !     A.H. Morris from the Chebyshev series in the SLATEC library
 !     obtained by wayne fullerton (Los Alamos).
 !
@@ -1364,11 +1364,11 @@ end function dpdel
 double precision function dgam1 (x)
 implicit none
 !-----------------------------------------------------------------------
-!     EVALUATION OF 1/GAMMA(1 + X) - 1  FOR -0.5 .LE. X .LE. 1.5
+!     EVALUATION OF 1/gamma(1 + x) - 1  FOR -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
 !
 !     THE FOLLOWING ARE THE FIRST 49 COEFFICIENTS OF THE MACLAURIN
-!     EXPANSION FOR 1/GAMMA(1 + X) - 1. THE COEFFICIENTS ARE
+!     EXPANSION FOR 1/gamma(1 + x) - 1. THE COEFFICIENTS ARE
 !     CORRECT TO 40 DIGITS. THE COEFFICIENTS WERE OBTAINED BY
 !     ALFRED H. MORRIS JR. (NAVAL SURFACE WARFARE CENTER) AND ARE
 !     GIVEN HERE FOR REFERENCE. ONLY THE FIRST 14 COEFFICIENTS ARE
@@ -1376,61 +1376,61 @@ implicit none
 !
 !                           -----------
 !
-!     DATA A(1)  / .5772156649015328606065120900824024310422D+00/,
-!    *     A(2)  /-.6558780715202538810770195151453904812798D+00/,
-!    *     A(3)  /-.4200263503409523552900393487542981871139D-01/,
-!    *     A(4)  / .1665386113822914895017007951021052357178D+00/,
-!    *     A(5)  /-.4219773455554433674820830128918739130165D-01/,
-!    *     A(6)  /-.9621971527876973562114921672348198975363D-02/,
-!    *     A(7)  / .7218943246663099542395010340446572709905D-02/,
-!    *     A(8)  /-.1165167591859065112113971084018388666809D-02/,
-!    *     A(9)  /-.2152416741149509728157299630536478064782D-03/,
-!    *     A(10) / .1280502823881161861531986263281643233949D-03/
-!     DATA A(11) /-.2013485478078823865568939142102181838229D-04/,
-!    *     A(12) /-.1250493482142670657345359473833092242323D-05/,
-!    *     A(13) / .1133027231981695882374129620330744943324D-05/,
-!    *     A(14) /-.2056338416977607103450154130020572836513D-06/,
-!    *     A(15) / .6116095104481415817862498682855342867276D-08/,
-!    *     A(16) / .5002007644469222930055665048059991303045D-08/,
-!    *     A(17) /-.1181274570487020144588126565436505577739D-08/,
-!    *     A(18) / .1043426711691100510491540332312250191401D-09/,
-!    *     A(19) / .7782263439905071254049937311360777226068D-11/,
-!    *     A(20) /-.3696805618642205708187815878085766236571D-11/
-!     DATA A(21) / .5100370287454475979015481322863231802727D-12/,
-!    *     A(22) /-.2058326053566506783222429544855237419746D-13/,
-!    *     A(23) /-.5348122539423017982370017318727939948990D-14/,
-!    *     A(24) / .1226778628238260790158893846622422428165D-14/,
-!    *     A(25) /-.1181259301697458769513764586842297831212D-15/,
-!    *     A(26) / .1186692254751600332579777242928674071088D-17/,
-!    *     A(27) / .1412380655318031781555803947566709037086D-17/,
-!    *     A(28) /-.2298745684435370206592478580633699260285D-18/,
-!    *     A(29) / .1714406321927337433383963370267257066813D-19/,
-!    *     A(30) / .1337351730493693114864781395122268022875D-21/
-!     DATA A(31) /-.2054233551766672789325025351355733796682D-21/,
-!    *     A(32) / .2736030048607999844831509904330982014865D-22/,
-!    *     A(33) /-.1732356445910516639057428451564779799070D-23/,
-!    *     A(34) /-.2360619024499287287343450735427531007926D-25/,
-!    *     A(35) / .1864982941717294430718413161878666898946D-25/,
-!    *     A(36) /-.2218095624207197204399716913626860379732D-26/,
-!    *     A(37) / .1297781974947993668824414486330594165619D-27/,
-!    *     A(38) / .1180697474966528406222745415509971518560D-29/,
-!    *     A(39) /-.1124584349277088090293654674261439512119D-29/,
-!    *     A(40) / .1277085175140866203990206677751124647749D-30/
-!     DATA A(41) /-.7391451169615140823461289330108552823711D-32/,
-!    *     A(42) / .1134750257554215760954165259469306393009D-34/,
-!    *     A(43) / .4639134641058722029944804907952228463058D-34/,
-!    *     A(44) /-.5347336818439198875077418196709893320905D-35/,
-!    *     A(45) / .3207995923613352622861237279082794391090D-36/,
-!    *     A(46) /-.4445829736550756882101590352124643637401D-38/,
-!    *     A(47) /-.1311174518881988712901058494389922190237D-38/,
-!    *     A(48) / .1647033352543813886818259327906394145400D-39/,
-!    *     A(49) /-.1056233178503581218600561071538285049997D-40/
+!     data a(1)  / .5772156649015328606065120900824024310422d+00/,
+!    *     A(2)  /-.6558780715202538810770195151453904812798d+00/,
+!    *     A(3)  /-.4200263503409523552900393487542981871139d-01/,
+!    *     A(4)  / .1665386113822914895017007951021052357178d+00/,
+!    *     A(5)  /-.4219773455554433674820830128918739130165d-01/,
+!    *     A(6)  /-.9621971527876973562114921672348198975363d-02/,
+!    *     A(7)  / .7218943246663099542395010340446572709905d-02/,
+!    *     A(8)  /-.1165167591859065112113971084018388666809d-02/,
+!    *     A(9)  /-.2152416741149509728157299630536478064782d-03/,
+!    *     A(10) / .1280502823881161861531986263281643233949d-03/
+!     data a(11) /-.2013485478078823865568939142102181838229d-04/,
+!    *     A(12) /-.1250493482142670657345359473833092242323d-05/,
+!    *     A(13) / .1133027231981695882374129620330744943324d-05/,
+!    *     A(14) /-.2056338416977607103450154130020572836513d-06/,
+!    *     A(15) / .6116095104481415817862498682855342867276d-08/,
+!    *     A(16) / .5002007644469222930055665048059991303045d-08/,
+!    *     A(17) /-.1181274570487020144588126565436505577739d-08/,
+!    *     A(18) / .1043426711691100510491540332312250191401d-09/,
+!    *     A(19) / .7782263439905071254049937311360777226068d-11/,
+!    *     A(20) /-.3696805618642205708187815878085766236571d-11/
+!     data a(21) / .5100370287454475979015481322863231802727d-12/,
+!    *     A(22) /-.2058326053566506783222429544855237419746d-13/,
+!    *     A(23) /-.5348122539423017982370017318727939948990d-14/,
+!    *     A(24) / .1226778628238260790158893846622422428165d-14/,
+!    *     A(25) /-.1181259301697458769513764586842297831212d-15/,
+!    *     A(26) / .1186692254751600332579777242928674071088d-17/,
+!    *     A(27) / .1412380655318031781555803947566709037086d-17/,
+!    *     A(28) /-.2298745684435370206592478580633699260285d-18/,
+!    *     A(29) / .1714406321927337433383963370267257066813d-19/,
+!    *     A(30) / .1337351730493693114864781395122268022875d-21/
+!     data a(31) /-.2054233551766672789325025351355733796682d-21/,
+!    *     A(32) / .2736030048607999844831509904330982014865d-22/,
+!    *     A(33) /-.1732356445910516639057428451564779799070d-23/,
+!    *     A(34) /-.2360619024499287287343450735427531007926d-25/,
+!    *     A(35) / .1864982941717294430718413161878666898946d-25/,
+!    *     A(36) /-.2218095624207197204399716913626860379732d-26/,
+!    *     A(37) / .1297781974947993668824414486330594165619d-27/,
+!    *     A(38) / .1180697474966528406222745415509971518560d-29/,
+!    *     A(39) /-.1124584349277088090293654674261439512119d-29/,
+!    *     A(40) / .1277085175140866203990206677751124647749d-30/
+!     data a(41) /-.7391451169615140823461289330108552823711d-32/,
+!    *     A(42) / .1134750257554215760954165259469306393009d-34/,
+!    *     A(43) / .4639134641058722029944804907952228463058d-34/,
+!    *     A(44) /-.5347336818439198875077418196709893320905d-35/,
+!    *     A(45) / .3207995923613352622861237279082794391090d-36/,
+!    *     A(46) /-.4445829736550756882101590352124643637401d-38/,
+!    *     A(47) /-.1311174518881988712901058494389922190237d-38/,
+!    *     A(48) / .1647033352543813886818259327906394145400d-39/,
+!    *     A(49) /-.1056233178503581218600561071538285049997d-40/
 !
 !                           -----------
 !
-!     C = A(1) - 1 IS ALSO FREQUENTLY NEEDED. C HAS THE VALUE ...
+!     c = A(1) - 1 IS ALSO FREQUENTLY NEEDED. c HAS THE VALUE ...
 !
-!     DATA C /-.4227843350984671393934879099175975689578D+00/
+!     data c /-.4227843350984671393934879099175975689578d+00/
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
@@ -1463,7 +1463,7 @@ data q1 /.3056961078365221025009d+00/, &
 &q3 /.4956830093825887312020d-02/, &
 &q4 /.2692369466186361192876d-03/
 !----------------------------
-!     C = C0 - 1
+!     c = c0 - 1
 !----------------------------
 data c /-.422784335098467139393487909917598d+00/
 !----------------------------
@@ -1491,10 +1491,10 @@ if (t) 40,10,20
 return
 !------------
 !
-!                CASE WHEN 0 .LT. T .LE. 0.5
+!                CASE WHEN 0 .LT. t .LE. 0.5
 !
-!              W is a minimax approximation for
-!              the series A(15) + A(16)*T + ...
+!              w is a minimax approximation for
+!              the series A(15) + A(16)*t + ...
 !
 !------------
 20 w = ((((((p6*t + p5)*t + p4)*t + p3)*t + p2)*t + p1)*t + p0)/ &
@@ -1510,10 +1510,10 @@ if (d .gt. 0.d0) go to 30
 return
 !------------
 !
-!                CASE WHEN -0.5 .LE. T .LT. 0
+!                CASE WHEN -0.5 .LE. t .LT. 0
 !
-!              W is a minimax approximation for
-!              the series A(15) + A(16)*T + ...
+!              w is a minimax approximation for
+!              the series A(15) + A(16)*t + ...
 !
 !------------
 40 w = (a1*t + a0)/((((((((b8*t + b7)*t + b6)*t + b5)*t + &
@@ -1534,14 +1534,14 @@ implicit none
 integer :: i, n
 !-----------------------------------------------------------------------
 !
-!           Evaluation of LN(GAMMA(A)) for positive A
+!           Evaluation of LN(gamma(a)) for positive A
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS
 !          NAVAL SURFACE WEAPONS CENTER
 !          DAHLGREN, VIRGINIA
 !-----------------------------------------------------------------------
-!     D = 0.5*(LN(2*PI) - 1)
+!     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
 double precision :: d, x, w
@@ -1575,7 +1575,7 @@ end function dgamln
 double precision function dgmln1 (x)
 implicit none
 !-----------------------------------------------------------------------
-!     EVALUATION OF LN(GAMMA(1 + X)) FOR -0.5 .LE. X .LE. 1.5
+!     EVALUATION OF LN(gamma(1 + x)) FOR -0.5 .LE. x .LE. 1.5
 !-----------------------------------------------------------------------
 double precision, intent(in) :: x
 double precision :: w
@@ -1603,7 +1603,7 @@ complex :: eta, eta2, sum
 real :: c0(12)
 double precision :: ds1, ds2
 !----------------------------
-!     PI2 = 2*PI
+!     pi2 = 2*pi
 !----------------------------
 data pi/3.14159265358979324/
 data pi2/6.28318530717958648/
@@ -1616,10 +1616,10 @@ data c0(1) /.833333333333333e-01/, c0(2) /-.833333333333333e-02/, &
 &c0(11)/.281460144927536e+03/, c0(12)/-.360751054639805e+04/
 !----------------------------
 !
-!     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** max AND EPS ARE MACHINE DEPENDENT CONSTANTS.
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest real number
-!            SUCH THAT 1.0 + EPS .GT. 1.0.
+!            SUCH THAT 1.0 + eps .GT. 1.0.
 !
                 max = ipmpar(3)
                 eps = spmpar(1)
@@ -1629,13 +1629,13 @@ x = real(z)
 y = aimag(z)
 if (x .ge. 0.0) go to 40
 !-----------------------------------------------------------------------
-!            Case when the real part of Z is negative
+!            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = abs(y)
 t = -pi2*y
 et = exp(t)
 !
-!     SET  A1 = (1 + ET)/2  AND  A2 = (1 - ET)/2
+!     SET  a1 = (1 + et)/2  AND  a2 = (1 - et)/2
 !
 a1 = 0.5*(1.0 + et)
 if (t .lt. -0.15) go to 10
@@ -1643,7 +1643,7 @@ if (t .lt. -0.15) go to 10
    go to 20
 10 a2 = 0.5*(0.5 + (0.5 - et))
 !
-!     Compute SIN(PI*X) and COS(PI*X), or -SIN(PI*X) and -COS(PI*X)
+!     Compute sin(pi*X) and cos(pi*X), or -sin(pi*X) and -cos(pi*X)
 !
 20 if (abs(x) .ge. amin1(float(max), 1.0/eps)) go to 100
 k = abs(x)
@@ -1653,7 +1653,7 @@ u = pi*u
 sn = sin(u)
 cn = cos(u)
 !
-!     SET H1 + H2*I = PI*COT(PI*Z)
+!     SET h1 + h2*I = pi*COT(pi*z)
 !
 s1 = a1*sn
 s2 = a2*cn
@@ -1670,14 +1670,14 @@ if (aimag(z) .lt. 0.0) go to 30
 30 h2 = -h2
 x = 1.0 - x
 !-----------------------------------------------------------------------
-!           Case when the real part of Z is nonnegative
+!           Case when the real part of z is nonnegative
 !-----------------------------------------------------------------------
 40 t = x
 y2 = y*y
 a = x*x + y2
 if (a .eq. 0.0) go to 100
 !
-!     LET S1 + S2*I BE THE SUM OF THE TERMS 1/(Z+J) FOR J = 0,1,...,N-1
+!     LET s1 + S2*I BE THE SUM OF THE TERMS 1/(z+j) FOR j = 0,1,...,N-1
 !
 ds1 = 0.d0
 ds2 = 0.d0
@@ -1690,12 +1690,12 @@ ds2 = 0.d0
 51 s1 = ds1
 s2 = ds2
 !
-!     SET W1 + W2*I = LOG(Z+N)
+!     SET W1 + W2*I = log(z+N)
 !
 w1 = 0.5*alog(a)
 w2 = atan2(y,t)
 !
-!     Let A1 + A2*I be the asymptotic sum
+!     Let a1 + a2*I be the asymptotic sum
 !
 eta = cmplx(t/a,-y/a)
 eta2 = eta*eta
@@ -1738,7 +1738,7 @@ real :: aug, den, piov4, sgn, upper, w, x, xmax1, xmx0, xsmall, z
 !
 !                           -----------
 !
-!     PSI(XX) is assigned the value 0 when the digamma function CANNOT
+!     psi(xx) is assigned the value 0 when the digamma function CANNOT
 !     be computed.
 !
 !     The main computation involves evaluation of rational Chebyshev
@@ -1754,8 +1754,8 @@ real :: p1(7), p2(4), q1(6), q2(4)
 double precision :: dx0
 !---------------------------------------------------------------------
 !
-!     PIOV4 = PI/4
-!     DX0 = ZERO OF PSI TO EXTENDED PRECISION
+!     piov4 = pi/4
+!     dx0 = ZERO OF PSI TO EXTENDED PRECISION
 !
 !---------------------------------------------------------------------
 data piov4/.785398163397448e0/
@@ -1763,7 +1763,7 @@ data dx0/1.461632144968362341262659542325721325d0/
 !---------------------------------------------------------------------
 !
 !     Coefficients for rational approximation of
-!     PSI(X) / (X - X0),  0.5 .LE. X .LE. 3.0
+!     psi(x) / (x - X0),  0.5 .LE. x .LE. 3.0
 !
 !---------------------------------------------------------------------
 data p1(1)/.895385022981970e-02/,  p1(2)/.477762828042627e+01/, &
@@ -1776,7 +1776,7 @@ data q1(1)/.448452573429826e+02/,  q1(2)/.520752771467162e+03/, &
 !---------------------------------------------------------------------
 !
 !     Coefficients for rational approximation of
-!     PSI(X) - LN(X) + 1 / (2*X),  X .GT. 3.0
+!     psi(x) - LN(x) + 1 / (2*x),  x .GT. 3.0
 !
 !---------------------------------------------------------------------
 data p2(1)/-.212940445131011e+01/, p2(2)/-.701677227766759e+01/, &
@@ -1787,14 +1787,14 @@ data q2(1)/ .322703493791143e+02/, q2(2)/ .892920700481861e+02/, &
 !
 !     Machine dependent constants ...
 !
-!        XMAX1  = THE SMALLEST POSITIVE FLOATING POINT CONSTANT
+!        xmax1  = THE SMALLEST POSITIVE FLOATING POINT CONSTANT
 !                 with entirely integer representation.  Also used
 !                 as negative of lower bound on acceptable negative
 !                 arguments and as the positive argument beyond which
-!                 psi may be represented as ALOG(X).
+!                 psi may be represented as ALOG(x).
 !
-!        XSMALL = ABSOLUTE ARGUMENT BELOW WHICH PI*COTAN(PI*X)
-!                 may be represented by 1/X.
+!        xsmall = ABSOLUTE ARGUMENT BELOW WHICH PI*COTAN(PI*x)
+!                 may be represented by 1/x.
 !
 !---------------------------------------------------------------------
 xmax1 = ipmpar(3)
@@ -1805,14 +1805,14 @@ x = xx
 aug = 0.0e0
 if (x .ge. 0.5e0) go to 200
 !---------------------------------------------------------------------
-!     X .LT. 0.5,  USE REFLECTION FORMULA
-!     PSI(1-X) = PSI(X) + PI * COTAN(PI*X)
+!     x .LT. 0.5,  USE REFLECTION FORMULA
+!     psi(1-x) = psi(x) + pi * cotan(pi*x)
 !---------------------------------------------------------------------
 if (abs(x) .gt. xsmall) go to 100
 if (x .eq. 0.0e0) go to 400
 !---------------------------------------------------------------------
-!     0 .LT. ABS(X) .LE. XSMALL.  USE 1/X AS A SUBSTITUTE
-!     for  pi*COTAN(PI*X)
+!     0 .LT. abs(x) .LE. xsmall.  USE 1/x AS A SUBSTITUTE
+!     for  pi*COTAN(PI*x)
 !---------------------------------------------------------------------
 aug = -1.0e0 / x
 go to 150
@@ -1825,7 +1825,7 @@ if (w .gt. 0.0e0) go to 120
 w = - w
 sgn = -sgn
 !---------------------------------------------------------------------
-!     MAKE AN ERROR EXIT IF X .LE. -XMAX1
+!     MAKE AN ERROR EXIT IF x .LE. -xmax1
 !---------------------------------------------------------------------
 120 if (w .ge. xmax1) go to 400
 nq = int(w)
@@ -1833,7 +1833,7 @@ w = w - float(nq)
 nq = int(w*4.0e0)
 w = 4.0e0 * (w - float(nq) * .25e0)
 !---------------------------------------------------------------------
-!     W is now related to the fractional part of  4.0 * X.
+!     w is now related to the fractional part of  4.0 * x.
 !     Adjust argument to correspond to values in first
 !     quadrant and determine sign
 !---------------------------------------------------------------------
@@ -1843,7 +1843,7 @@ z = piov4 * w
 m = n / 2
 if ((m+m) .ne. n) sgn = - sgn
 !---------------------------------------------------------------------
-!     Determine final value for  -pi*COTAN(PI*X)
+!     Determine final value for  -pi*COTAN(PI*x)
 !---------------------------------------------------------------------
 n = (nq + 1) / 2
 m = n / 2
@@ -1863,7 +1863,7 @@ go to 150
 150 x = 1.0e0 - x
 200 if (x .gt. 3.0e0) go to 300
 !---------------------------------------------------------------------
-!     0.5 .LE. X .LE. 3.0
+!     0.5 .LE. x .LE. 3.0
 !---------------------------------------------------------------------
 den = x
 upper = p1(1) * x
@@ -1878,11 +1878,11 @@ xmx0 = dble(x) - dx0
 psi = den * xmx0 + aug
 return
 !---------------------------------------------------------------------
-!     IF X .GE. XMAX1, PSI = LN(X)
+!     IF x .GE. xmax1, PSI = LN(x)
 !---------------------------------------------------------------------
 300 if (x .ge. xmax1) go to 350
 !---------------------------------------------------------------------
-!     3.0 .LT. X .LT. XMAX1
+!     3.0 .LT. x .LT. xmax1
 !---------------------------------------------------------------------
 w = 1.0e0 / (x * x)
 den = w
@@ -1918,7 +1918,7 @@ double precision :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
 &y2
 double precision :: drexp, dpmpar
 !----------------------------
-!     PI2 = 2*PI
+!     pi2 = 2*pi
 !----------------------------
 data pi   /3.141592653589793238462643383279502884197d0/
 data pi2  /6.283185307179586476925286766559005768394d0/
@@ -1955,10 +1955,10 @@ data c0(21) / .2004031065651625273810842166323893898645d+17/, &
 &c0(30) /-.3566658209537555610968457460865182898779d+33/
 !----------------------------
 !
-!     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** max AND EPS ARE MACHINE DEPENDENT CONSTANTS.
 !            Max is the largest positive integer that may
 !            be used, and eps is the smallest real number
-!            SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!            SUCH THAT 1.D0 + eps .GT. 1.D0.
 !
                 max = ipmpar(3)
                 eps = dpmpar(1)
@@ -1968,13 +1968,13 @@ x = z(1)
 y = z(2)
 if (x .ge. 0.d0) go to 40
 !-----------------------------------------------------------------------
-!            Case when the real part of Z is negative
+!            Case when the real part of z is negative
 !-----------------------------------------------------------------------
 y = dabs(y)
 t = -pi2*y
 et = dexp(t)
 !
-!     SET  A1 = (1 + ET)/2  AND  A2 = (1 - ET)/2
+!     SET  a1 = (1 + et)/2  AND  a2 = (1 - et)/2
 !
 a1 = 0.5d0*(1.d0 + et)
 if (t .lt. -0.15d0) go to 10
@@ -1982,7 +1982,7 @@ if (t .lt. -0.15d0) go to 10
    go to 20
 10 a2 = 0.5d0*(0.5d0 + (0.5d0 - et))
 !
-!     Compute SIN(PI*X) and COS(PI*X), or -SIN(PI*X) and -COS(PI*X)
+!     Compute sin(pi*X) and cos(pi*X), or -sin(pi*X) and -cos(pi*X)
 !
 20 u = max
 if (dabs(x) .ge. dmin1(u, 1.d0/eps)) go to 100
@@ -1993,7 +1993,7 @@ u = pi*u
 sn = dsin(u)
 cn = dcos(u)
 !
-!     SET H1 + H2*I = PI*COT(PI*Z)
+!     SET h1 + h2*I = pi*COT(pi*z)
 !
 s1 = a1*sn
 s2 = a2*cn
@@ -2010,7 +2010,7 @@ if (z(2) .lt. 0.d0) go to 30
 30 h2 = -h2
 x = 1.d0 - x
 !-----------------------------------------------------------------------
-!           Case when the real part of Z is nonnegative
+!           Case when the real part of z is nonnegative
 !-----------------------------------------------------------------------
 40 t = x
 y2 = y*y
@@ -2019,7 +2019,7 @@ if (a .eq. 0.d0) go to 100
 cut = 225.d0
 if (eps .gt. 1.d-30) cut = 144.d0
 !
-!     LET S1 + S2*I BE THE SUM OF THE TERMS 1/(Z+J) FOR J = 0,1,...,N-1
+!     LET S1 + S2*I BE THE SUM OF THE TERMS 1/(z+j) FOR j = 0,1,...,N-1
 !
 s1 = 0.d0
 s2 = 0.d0
@@ -2031,12 +2031,12 @@ s2 = 0.d0
    go to 50
 51 continue
 !
-!     SET W1 + W2*I = LOG(Z+N)
+!     SET W1 + W2*I = log(z+N)
 !
 w1 = 0.5d0*dlog(a)
 w2 = datan2(y,t)
 !
-!     Let A1 + A2*I be the asymptotic sum
+!     Let a1 + a2*I be the asymptotic sum
 !
 u1 = t/a
 u2 = -y/a
@@ -2085,11 +2085,11 @@ integer :: j, k, l, max, n
 !-----------------------------------------------------------------------
 !
 !               Evaluation of the digamma function for
-!                     DOUBLE PRECISION ARGUMENTS
+!                     double precision arguments
 !
 !                           -----------
 !
-!     DPSI(A) is assigned the value 0 when the digamma function CANNOT
+!     dpsi(a) is assigned the value 0 when the digamma function CANNOT
 !     be computed.
 !
 !-----------------------------------------------------------------------
@@ -2098,7 +2098,7 @@ integer :: j, k, l, max, n
 !          DAHLGREN, VIRGINIA
 !-----------------------------------------------------------------------
 !
-!     THE SERIES FOR DPSI ON THE INTERVAL 0.0 TO 1.0 WAS DERIVED
+!     THE SERIES FOR dpsi ON THE INTERVAL 0.0 TO 1.0 WAS DERIVED
 !     BY WAYNE FULLERTON (LOS ALAMOS NATIONAL LABORATORY).
 !
 !                                  WITH WEIGHTED ERROR   5.79E-32
@@ -2106,7 +2106,7 @@ integer :: j, k, l, max, n
 !                         significant figures required  30.93
 !                              decimal places required  32.05
 !
-!     THE SERIES FOR  A .GE. 10  WAS DERIVED BY A.H. MORRIS FROM
+!     THE SERIES FOR  a .GE. 10  WAS DERIVED BY A.H. MORRIS FROM
 !     the Chebyshev series in the SLATEC library obtained by wayne
 !     fullerton (Los Alamos).
 !
@@ -2178,11 +2178,11 @@ data p(11) / .280568932535744579536244004181d-19/, &
 &p(15) / .416180125797657207803740160000d-23/
 !----------------------------
 !
-!     ****** XMAX, MAX, AND EPS ARE MACHINE DEPENDENT CONSTANTS.
+!     ****** xmax, MAX, AND EPS ARE MACHINE DEPENDENT CONSTANTS.
 !            Xmax is the largest positive real number that may
 !            be used, max is the largest positive integer that
 !            may be used, and eps is the smallest real number
-!            SUCH THAT 1.D0 + EPS .GT. 1.D0.
+!            SUCH THAT 1.D0 + eps .GT. 1.D0.
 !
                 max  = ipmpar(3)
                 eps  = dpmpar(1)
@@ -2193,13 +2193,13 @@ dpsi = 0.d0
 x = a
 if (dabs(a) .ge. 10.d0) go to 60
 !-----------------------------------------------------------------------
-!             EVALUATION OF DPSI(A) FOR DABS(A) .LT. 10
+!             EVALUATION OF dpsi(a) FOR dabs(a) .LT. 10
 !-----------------------------------------------------------------------
 t = 0.d0
 n = x
 n = n - 1
 !
-!     LET T BE THE SUM OF 1/(A-J) WHEN A .GE. 2
+!     LET t BE THE SUM OF 1/(a-j) WHEN a .GE. 2
 !
 if (n) 20,12,10
 10 do 11 j = 1,n
@@ -2209,12 +2209,12 @@ if (n) 20,12,10
 12 x = x - 1.d0
 go to 40
 !
-!     Check if 1/A can overflow
+!     Check if 1/a can overflow
 !
 20 if (dabs(a) .ge. 1.d-35) go to 30
 if (dabs(a)*xmax .le. 1.000000001d0) return
 !
-!     LET T BE THE SUM OF -1/(A+J) WHEN A .LT. 1
+!     LET t BE THE SUM OF -1/(a+j) WHEN a .LT. 1
 !
 30 t = -1.d0/a
 if (a .gt. 0.d0) go to 40
@@ -2229,7 +2229,7 @@ do 31 j = 1,n
 if (x .eq. 0.d0) return
 t = t - 1.d0/x
 !
-!     COMPUTE  T + DPSI(1 + X)  FOR 0 .LE. X .LT. 1
+!     COMPUTE  t + dpsi(1 + x)  FOR 0 .LE. x .LT. 1
 !
 40 if (dabs(x - x0) .gt. 2.d-2) go to 50
    dpsi = t + dpsi0(1.d0 + x)
@@ -2239,13 +2239,13 @@ if (eps .gt. 1.d-20) k = 28
 dpsi = t + dcsevl (2.d0*x - 1.d0, c, k)
 return
 !-----------------------------------------------------------------------
-!           EVALUATION OF DPSI(A) FOR DABS(A) .GE. 10
+!           EVALUATION OF dpsi(a) FOR dabs(a) .GE. 10
 !-----------------------------------------------------------------------
 60 if (a .gt. 0.d0) go to 70
 t = max
 if (dabs(a) .ge. dmin1(t, 1.d0/eps)) return
 !
-!     SET W = PI*COT(PI*A) WHEN A IS NEGATIVE
+!     SET w = pi*COT(pi*a) WHEN A IS NEGATIVE
 !
 k = dabs(a)
 t = a + k
@@ -2277,8 +2277,8 @@ implicit none
 integer :: i, l, n, nm1
 !-----------------------------------------------------------------------
 !
-!            Taylor series expansion of PSI(X) around X0,
-!                  where X0 is the zero of PSI(X).
+!            Taylor series expansion of psi(x) around X0,
+!                  where X0 is the zero of psi(x).
 !
 !-------------------------
 !     WRITTEN BY A.H. MORRIS
@@ -2317,16 +2317,16 @@ data a(11) / .105387916166121753881240498824d-01/, &
 &a(20) /-.345468025106307699555567970882d-03/
 !-------------------------
 !
-!     SET  H = X - X0  WHERE X0 IS THE ZERO OF PSI(X). X0 HAS THE
+!     SET  h = x - X0  WHERE X0 IS THE ZERO OF psi(x). X0 HAS THE
 !     approximate 60 digit value ...
 !
 !      1.4616321449683623412 62659542325721328468 19620400644635129598
 !
 !     A more accurate value is given by ...
 !
-!            X0 = DK1/8**12 + DK2/8**24 + DK3/8**36 + DX
+!            x0 = dk1/8**12 + dk2/8**24 + dk3/8**36 + dx
 !
-!     The following code should yield the correct value for H if A
+!     The following code should yield the correct value for h if A
 !     binary, octal, or hexadecimal double precision arithmetic is
 !     being used.
 !
@@ -2353,58 +2353,58 @@ integer, intent(in) :: m, n
 integer :: i, j, k, mx, nmax, nn, np, nx
 !-----------------------------------------------------------------------
 !
-!         PSIDF computes M member sequences of scaled derivatives of
+!         psidf computes m member sequences of scaled derivatives of
 !         the psi function
 !
-!                W(K,X)=(-1)**(K+1)*PSI(K,X)/GAMMA(K+1)
+!                w(k,x)=(-1)**(k+1)*psi(k,x)/gamma(k+1)
 !
-!         K=N,...,N+M-1 WHERE PSI(K,X) IS THE K-TH DERIVATIVE OF THE
+!         k=n,...,n+m-1 WHERE psi(k,x) IS THE k-TH DERIVATIVE OF THE
 !         psi function.
 !
 !         The BASIC method of evaluation is the asymptotic expansion
-!         FOR LARGE X.GE.XMIN FOLLOWED BY BACKWARD RECURSION ON A TWO
+!         FOR LARGE x.GE.XMIN FOLLOWED BY BACKWARD RECURSION ON A TWO
 !         term recursion relation
 !
-!                  W(X+1) + X**(-N-1) = W(X).
+!                  W(x+1) + x**(-n-1) = W(x).
 !
 !         This is supplemented by a series
 !
-!                  SUM( (X+K)**(-N-1) , K=0,1,2,... )
+!                  sum( (x+k)**(-n-1) , k=0,1,2,... )
 !
-!         Which converges rapidly for large N. Both xmin and the
+!         Which converges rapidly for large n. Both xmin and the
 !         number of terms of the series are calculated from the unit
 !         round off of the machine environment.
 !
 !         The nominal computational accuracy is the maximum of unit
-!         ROUNDOFF (=SPMPAR(1)) AND 1.0E-18 SINCE CRITICAL CONSTANTS
+!         ROUNDOFF (=spmpar(1)) AND 1.0E-18 SINCE CRITICAL CONSTANTS
 !         are given to only 18 digits.
 !
 !     Description of arguments
 !
 !         Input
 !
-!           X      - ARGUMENT, X .GT. 0.0
+!           x      - ARGUMENT, x .GT. 0.0
 !
-!           N      - FIRST MEMBER OF THE SEQUENCE, N .GE. 0
+!           n      - FIRST MEMBER OF THE SEQUENCE, n .GE. 0
 !
-!           M      - NUMBER OF MEMBERS OF THE SEQUENCE, M .GE. 1
+!           m      - NUMBER OF MEMBERS OF THE SEQUENCE, m .GE. 1
 !
 !         Output
 !
-!           ANS    - A VECTOR OF LENGTH AT LEAST M WHOSE FIRST M
+!           ans    - A VECTOR OF LENGTH AT LEAST m WHOSE FIRST m
 !                    components are the scaled derivatives.
 !
-!           IFLAG  - a variable which reports the status of the
+!           iflag  - a variable which reports the status of the
 !                    results.
-!                    IFLAG = 0 THE DESIRED VALUES WERE OBTAINED.
-!                    IFLAG = 1 AN INPUT ERROR WAS DETECTED.
-!                    IFLAG = 2 OVERFLOW. X TOO SMALL OR N+M-1
+!                    iflag = 0 THE DESIRED VALUES WERE OBTAINED.
+!                    iflag = 1 AN INPUT ERROR WAS DETECTED.
+!                    iflag = 2 OVERFLOW. x TOO SMALL OR n+m-1
 !                              too large.
-!                    IFLAG = 3 UNDERFLOW. X TOO LARGE OR N+M-1
+!                    iflag = 3 UNDERFLOW. x TOO LARGE OR n+m-1
 !                              too large.
-!                    IFLAG = 4 N+M-1 IS TOO LARGE FOR THE CURRENT
-!                              value of X. This setting will not
-!                              OCCUR WHEN N+M-1 .LE. 100.
+!                    iflag = 4 n+m-1 IS TOO LARGE FOR THE CURRENT
+!                              value of x. This setting will not
+!                              OCCUR WHEN n+m-1 .LE. 100.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY DONALD E. AMOS
@@ -2416,7 +2416,7 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !
 !     (1) ACM TRANS. MATH SOFTWARE, 1983.
 !     (2) HANDBOOK OF MATHEMATICAL FUNCTIONS, AMS 55, NATIONAL BUREAU
-!         OF STANDARDS BY M. ABRAMOWITZ AND I.A. STEGUN, 1964, PP.
+!         OF STANDARDS BY m. ABRAMOWITZ AND I.A. STEGUN, 1964, PP.
 !         258-260, EQUATIONS 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
 !-----------------------------------------------------------------------
 real :: alpha, arg, beta, c, den, elim, eps, fln, fn, fnp, fns, &
@@ -2427,7 +2427,7 @@ real, intent(inout) :: ans(m)
 real :: b(22), trm(22), trmr(100)
 real :: epsln, exparg, spmpar
 !------------------------
-!     C = 1/LN(10)
+!     c = 1/ln(10)
 !------------------------
 data c /.43429/
 data nmax /100/
@@ -2458,18 +2458,18 @@ fnp = fn + 1.0
 eps = spmpar(1)
 wdtol = amax1(0.5*eps, 0.5e-18)
 !-----------------------------------------------------------------------
-!     ELIM = APPROXIMATE EXPONENTIAL OVER AND UNDERFLOW LIMIT
+!     elim = APPROXIMATE EXPONENTIAL OVER AND UNDERFLOW LIMIT
 !-----------------------------------------------------------------------
 elim = amin1(exparg(0), abs(exparg(1))) - 6.906
 xln = alog(x)
 t = fnp*xln
 !-----------------------------------------------------------------------
-!     Overflow and underflow test for small and large X
+!     Overflow and underflow test for small and large x
 !-----------------------------------------------------------------------
 if (abs(t) .gt. elim) go to 310
 if (x .lt. wdtol) go to 260
 !-----------------------------------------------------------------------
-!     Compute xmin and the number of terms of the series, FLN+1
+!     Compute xmin and the number of terms of the series, fln+1
 !-----------------------------------------------------------------------
 nd = -c*epsln(0)
 nd = amin1(nd,18.0)
@@ -2502,7 +2502,7 @@ if (x .ge. xmin) go to 60
    xdmln = alog(xdmy)
 60 continue
 !-----------------------------------------------------------------------
-!     Generate W(N+M-1,X) by the asymptotic expansion
+!     Generate W(n+m-1,x) by the asymptotic expansion
 !-----------------------------------------------------------------------
 t = fn*xdmln
 t1 = xdmln + xdmln
@@ -2533,7 +2533,7 @@ end do
 80 s = (s + t1)*tss
 if (xinc .eq. 0.0) go to 100
 !-----------------------------------------------------------------------
-!     Backward recur from XDMY to X
+!     Backward recur from xdmy to x
 !-----------------------------------------------------------------------
 nx = int(xinc)
 np = nn + 1
@@ -2542,7 +2542,7 @@ if (nn .eq. 0) go to 160
 xm = xinc - 1.0
 fx = x + xm
 !-----------------------------------------------------------------------
-!     This loop should not be changed. FX is accurate when X is small
+!     This loop should not be changed. FX is accurate when x is small
 !-----------------------------------------------------------------------
 do i = 1,nx
    trmr(i) = fx**(-np)
@@ -2554,7 +2554,7 @@ end do
 100 ans(m) = s
 if (fn .eq. 0.0) go to 180
 !-----------------------------------------------------------------------
-!     GENERATE LOWER DERIVATIVES, J.LT.N+M-1
+!     GENERATE LOWER DERIVATIVES, j.LT.n+m-1
 !-----------------------------------------------------------------------
 if (m .eq. 1) return
 do j = 2,m
@@ -2593,7 +2593,7 @@ do j = 2,m
 end do
 return
 !-----------------------------------------------------------------------
-!     RECURSION FOR N = 0
+!     RECURSION FOR n = 0
 !-----------------------------------------------------------------------
 160 do i = 1,nx
    s = s + 1.0/(x + float(nx-i))
@@ -2602,7 +2602,7 @@ end do
 180 ans(1) = s - xdmln
 return
 !-----------------------------------------------------------------------
-!     COMPUTE BY SERIES (X+K)**(-(N+1)) , K=0,1,2,...
+!     COMPUTE BY SERIES (x+k)**(-(n+1)) , k=0,1,2,...
 !-----------------------------------------------------------------------
 200 nn = int(fln) + 1
 np = n + 1
@@ -2618,7 +2618,7 @@ end do
 ans(1) = s
 if (m .eq. 1) return
 !-----------------------------------------------------------------------
-!     GENERATE HIGHER DERIVATIVES, J .GT. N
+!     GENERATE HIGHER DERIVATIVES, j .GT. n
 !-----------------------------------------------------------------------
 tol = wdtol/5.0
 do j = 2,m
@@ -2636,7 +2636,7 @@ do j = 2,m
 end do
 return
 !-----------------------------------------------------------------------
-!     SMALL X .LT. UNIT ROUND OFF
+!     SMALL x .LT. UNIT ROUND OFF
 !-----------------------------------------------------------------------
 260 ans(1) = x**(-n-1)
 if (m .eq. 1) return
@@ -2658,7 +2658,7 @@ return
 !
 320 iflag = 3
 return
-!                            Increase the dimension of TRMR(NMAX)
+!                            Increase the dimension of trmr(nmax)
 330 iflag = 4
 return
 end subroutine psidf
@@ -2672,7 +2672,7 @@ real :: algdiv, alnrel, bcorr, gamln, gsumln
 !-----------------------------------------------------------------------
 !     Evaluation of the logarithm of the beta function
 !-----------------------------------------------------------------------
-!     E = 0.5*LN(2*PI)
+!     e = 0.5*ln(2*pi)
 !--------------------------
 data e /.918938533204673/
 !--------------------------
@@ -2681,7 +2681,7 @@ b = amax1(a0,b0)
 if (a .ge. 8.0) go to 60
 if (a .ge. 1.0) go to 20
 !-----------------------------------------------------------------------
-!                   PROCEDURE WHEN A .LT. 1
+!                   PROCEDURE WHEN a .LT. 1
 !-----------------------------------------------------------------------
 if (b .ge. 8.0) go to 10
    betaln = gamln(a) + (gamln(b) - gamln(a + b))
@@ -2689,7 +2689,7 @@ if (b .ge. 8.0) go to 10
 10 betaln = gamln(a) + algdiv(a,b)
 return
 !-----------------------------------------------------------------------
-!                PROCEDURE WHEN 1 .LE. A .LT. 8
+!                PROCEDURE WHEN 1 .LE. a .LT. 8
 !-----------------------------------------------------------------------
 20 if (a .gt. 2.0) go to 30
 if (b .gt. 2.0) go to 21
@@ -2700,7 +2700,7 @@ if (b .lt. 8.0) go to 40
    betaln = gamln(a) + algdiv(a,b)
    return
 !
-!                REDUCTION OF A WHEN B .LE. 1000
+!                REDUCTION OF A WHEN b .LE. 1000
 !
 30 if (b .gt. 1000.0) go to 50
 n = a - 1.0
@@ -2715,7 +2715,7 @@ if (b .lt. 8.0) go to 40
 betaln = w + gamln(a) + algdiv(a,b)
 return
 !
-!                 REDUCTION OF B WHEN B .LT. 8
+!                 REDUCTION OF b WHEN b .LT. 8
 !
 40 n = b - 1.0
 z = 1.0
@@ -2726,7 +2726,7 @@ end do
 betaln = w + alog(z) + (gamln(a) + (gamln(b) - gsumln(a,b)))
 return
 !
-!                REDUCTION OF A WHEN B .GT. 1000
+!                REDUCTION OF A WHEN b .GT. 1000
 !
 50 n = a - 1.0
 w = 1.0
@@ -2737,7 +2737,7 @@ end do
 betaln = (alog(w) - n*alog(b)) + (gamln(a) + algdiv(a,b))
 return
 !-----------------------------------------------------------------------
-!                   PROCEDURE WHEN A .GE. 8
+!                   PROCEDURE WHEN a .GE. 8
 !-----------------------------------------------------------------------
 60 w = bcorr(a,b)
 h = a/b
@@ -2757,8 +2757,8 @@ real, intent(in) :: a, b
 real :: x
 real :: alnrel, gamln1
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(GAMMA(A + B))
-!          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
+!          Evaluation of the function LN(gamma(a + b))
+!          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 x = dble(a) + dble(b) - 2.d0
 if (x .gt. 0.25) go to 10
@@ -2778,9 +2778,9 @@ real :: a, b, c, c0, c1, c2, c3, c4, c5, h, s11, s3, s5, s7, s9, &
 &t, w, x, x2
 !-----------------------------------------------------------------------
 !
-!     Evaluation of  DEL(A0) + DEL(B0) - DEL(A0 + B0)  where
-!     LN(GAMMA(A)) = (A - 0.5)*LN(A) - A + 0.5*LN(2*PI) + DEL(A).
-!     IT IS ASSUMED THAT A0 .GE. 8 AND B0 .GE. 8.
+!     Evaluation of  DEL(a0) + DEL(b0) - DEL(a0 + b0)  where
+!     LN(gamma(a)) = (a - 0.5)*LN(a) - a + 0.5*LN(2*PI) + DEL(a).
+!     IT IS ASSUMED THAT a0 .GE. 8 AND b0 .GE. 8.
 !
 !-----------------------------------------------------------------------
 data c0/.833333333333333e-01/, c1/-.277777777760991e-02/, &
@@ -2803,13 +2803,13 @@ s7 = 1.0 + (x + x2*s5)
 s9 = 1.0 + (x + x2*s7)
 s11 = 1.0 + (x + x2*s9)
 !
-!                SET W = DEL(B) - DEL(A + B)
+!                SET W = DEL(b) - DEL(a + b)
 !
 t = (1.0/b)**2
 w = ((((c5*s11*t + c4*s9)*t + c3*s7)*t + c2*s5)*t + c1*s3)*t + c0
 w = w*(c/b)
 !
-!                   Compute  DEL(A) + W
+!                   Compute  DEL(a) + W
 !
 t = (1.0/a)**2
 bcorr = (((((c5*t + c4)*t + c3)*t + c2)*t + c1)*t + c0)/a + w
@@ -2824,12 +2824,12 @@ real :: c, c0, c1, c2, c3, c4, c5, d, h, s11, s3, s5, s7, s9, t, &
 &u, v, w, x, x2
 !-----------------------------------------------------------------------
 !
-!     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
+!     COMPUTATION OF LN(gamma(b)/gamma(a+b)) WHEN b .GE. 8
 !
 !                         --------
 !
 !     In this algorithm, DEL(X) is the function defined by
-!     LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*PI) + DEL(X).
+!     LN(gamma(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*PI) + DEL(X).
 !
 !-----------------------------------------------------------------------
 data c0/.833333333333333e-01/, c1/-.277777777760991e-02/, &
@@ -2856,7 +2856,7 @@ s7 = 1.0 + (x + x2*s5)
 s9 = 1.0 + (x + x2*s7)
 s11 = 1.0 + (x + x2*s9)
 !
-!                SET W = DEL(B) - DEL(A + B)
+!                SET W = DEL(b) - DEL(a + b)
 !
 t = (1.0/b)**2
 w = ((((c5*s11*t + c4*s9)*t + c3*s7)*t + c2*s5)*t + c1*s3)*t + c0
@@ -2883,7 +2883,7 @@ double precision, intent(in) :: a0, b0
 double precision :: a, b, c, e, h, sn, u, v, w, z
 double precision :: dbcorr, dgamln, dgsmln, dlgdiv, dlnrel
 !--------------------------
-!     E = 0.5*LN(2*PI)
+!     e = 0.5*ln(2*pi)
 !--------------------------
 data e /.9189385332046727417803297364056d0/
 !--------------------------
@@ -2892,7 +2892,7 @@ b = dmax1(a0,b0)
 if (a .ge. 10.d0) go to 60
 if (a .ge. 1.d0) go to 20
 !-----------------------------------------------------------------------
-!                   PROCEDURE WHEN A .LT. 1
+!                   PROCEDURE WHEN a .LT. 1
 !-----------------------------------------------------------------------
 if (b .ge. 10.d0) go to 10
    dbetln = dgamln(a) + (dgamln(b) - dgamln(a + b))
@@ -2900,7 +2900,7 @@ if (b .ge. 10.d0) go to 10
 10 dbetln = dgamln(a) + dlgdiv(a,b)
 return
 !-----------------------------------------------------------------------
-!               PROCEDURE WHEN 1 .LE. A .LT. 10
+!               PROCEDURE WHEN 1 .LE. a .LT. 10
 !-----------------------------------------------------------------------
 20 if (a .gt. 2.d0) go to 30
 if (b .gt. 2.d0) go to 21
@@ -2911,7 +2911,7 @@ if (b .lt. 10.d0) go to 40
    dbetln = dgamln(a) + dlgdiv(a,b)
    return
 !
-!               REDUCTION OF A WHEN B .LE. 1000
+!               REDUCTION OF A WHEN b .LE. 1000
 !
 30 if (b .gt. 1.d3) go to 50
 n = a - 1.d0
@@ -2926,7 +2926,7 @@ if (b .lt. 10.d0) go to 40
 dbetln = w + dgamln(a) + dlgdiv(a,b)
 return
 !
-!                REDUCTION OF B WHEN B .LT. 10
+!                REDUCTION OF b WHEN b .LT. 10
 !
 40 n = b - 1.d0
 z = 1.d0
@@ -2937,7 +2937,7 @@ end do
 dbetln = w + dlog(z) + (dgamln(a) + (dgamln(b) - dgsmln(a,b)))
 return
 !
-!               REDUCTION OF A WHEN B .GT. 1000
+!               REDUCTION OF A WHEN b .GT. 1000
 !
 50 n = a - 1.d0
 w = 1.d0
@@ -2949,7 +2949,7 @@ sn = n
 dbetln = (dlog(w) - sn*dlog(b)) + (dgamln(a) + dlgdiv(a,b))
 return
 !-----------------------------------------------------------------------
-!                  PROCEDURE WHEN A .GE. 10
+!                  PROCEDURE WHEN a .GE. 10
 !-----------------------------------------------------------------------
 60 w = dbcorr(a,b)
 h = a/b
@@ -2966,8 +2966,8 @@ end function dbetln
 double precision function dgsmln (a, b)
 implicit none
 !-----------------------------------------------------------------------
-!          Evaluation of the function LN(GAMMA(A + B))
-!          FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
+!          Evaluation of the function LN(gamma(a + b))
+!          FOR 1 .LE. a .LE. 2  AND  1 .LE. b .LE. 2
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, b
 double precision :: x
@@ -2989,13 +2989,13 @@ implicit none
 integer :: j, k
 !-----------------------------------------------------------------------
 !
-!     Evaluation of DEL(A) + DEL(B0) - DEL(A) + B0) where
-!     LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*PI) + DEL(X).
-!     IT IS ASSUMED THAT A0 .GE. 10 AND B0 .GE. 10.
+!     Evaluation of DEL(a) + DEL(b0) - DEL(a) + b0) where
+!     LN(gamma(x)) = (x - 0.5)*LN(x) - x + 0.5*LN(2*PI) + DEL(x).
+!     IT IS ASSUMED THAT a0 .GE. 10 AND b0 .GE. 10.
 !
 !                         --------
 !
-!     THE SERIES FOR DEL(X), WHICH APPLIES FOR X .GE. 10, WAS
+!     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
 !     SLATEC library obtained by wayne fullerton (Los Alamos).
 !
@@ -3027,15 +3027,15 @@ c = h/(1.d0 + h)
 x = 1.d0/(1.d0 + h)
 x2 = x*x
 !
-!        COMPUTE (1 - X**N)/(1 - X) FOR N = 1,3,5,...
-!            Store these values in S(1),S(2),...
+!        COMPUTE (1 - x**N)/(1 - x) FOR N = 1,3,5,...
+!            Store these values in s(1),s(2),...
 !
 s(1) = 1.d0
 do 10 j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 10 continue
 !
-!                SET W = DEL(B) - DEL(A + B)
+!                SET w = DEL(b) - DEL(a + b)
 !
 t = (10.d0/b)**2
 w = e(15)*s(15)
@@ -3045,7 +3045,7 @@ do 20 j = 1,14
 20 continue
 w = w*(c/b)
 !
-!                    Compute  DEL(A) + W
+!                    Compute  DEL(a) + w
 !
 t = (10.d0/a)**2
 z = e(15)
@@ -3062,13 +3062,13 @@ implicit none
 integer :: j, k
 !-----------------------------------------------------------------------
 !
-!     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) FOR B .GE. 10
+!     COMPUTATION OF LN(gamma(b)/gamma(a+b)) FOR b .GE. 10
 !
 !                         --------
 !
-!     DLGDIV uses a series for the function DEL(X) where
-!     LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*PI) + DEL(X).
-!     THE SERIES FOR DEL(X), WHICH APPLIES FOR X .GE. 10, WAS
+!     dlgdiv uses a series for the function DEL(x) where
+!     LN(gamma(x)) = (x - 0.5)*LN(x) - x + 0.5*LN(2*PI) + DEL(x).
+!     THE SERIES FOR DEL(x), WHICH APPLIES FOR x .GE. 10, WAS
 !     derived by A.H. Morris from the Chebyshev series in the
 !     SLATEC library obtained by wayne fullerton (Los Alamos).
 !
@@ -3104,8 +3104,8 @@ c = h/(1.d0 + h)
 x = 1.d0/(1.d0 + h)
 d = b + (a - 0.5d0)
 !
-!        COMPUTE (1 - X**N)/(1 - X) FOR N = 1,3,5,...
-!            Store these values in S(1),S(2),...
+!        COMPUTE (1 - x**N)/(1 - x) FOR N = 1,3,5,...
+!            Store these values in s(1),s(2),...
 !
 20 x2 = x*x
 s(1) = 1.d0
@@ -3113,7 +3113,7 @@ do 21 j = 1,14
    s(j + 1) = 1.d0 + (x + x2*s(j))
 21 continue
 !
-!                SET W = DEL(B) - DEL(A + B)
+!                SET w = DEL(b) - DEL(a + b)
 !
 t = (10.d0/b)**2
 w = e(15)*s(15)
@@ -3154,27 +3154,27 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the incomplete gamma ratio functions
-!                      P(A,X) AND Q(A,X)
+!                      P(a,x) AND Q(a,x)
 !
 !                        ----------
 !
-!     It is assumed that A and X are nonnegative, where A and X
+!     It is assumed that A and x are nonnegative, where A and x
 !     are not both 0.
 !
-!     Ans and QANS are variables. GRATIO assigns ans the value
-!     P(A,X) and QANS the value Q(A,X). Ind may be any integer.
-!     IF IND = 0 THEN THE USER IS REQUESTING AS MUCH ACCURACY AS
+!     Ans and qans are variables. gratio assigns ans the value
+!     P(a,x) and qans the value Q(a,x). Ind may be any integer.
+!     IF ind = 0 THEN THE USER IS REQUESTING AS MUCH ACCURACY AS
 !     possible (up to 14 significant digits). Otherwise, if
-!     IND = 1 THEN ACCURACY IS REQUESTED TO WITHIN 1 UNIT OF THE
-!     6-TH SIGNIFICANT DIGIT, AND IF IND .NE. 0,1 THEN ACCURACY
+!     ind = 1 THEN ACCURACY IS REQUESTED TO WITHIN 1 UNIT OF THE
+!     6-TH SIGNIFICANT DIGIT, AND IF ind .NE. 0,1 THEN ACCURACY
 !     is requested to within 1 unit of the 3RD significant digit.
 !
 !     Error return ...
 !
-!        Ans is assigned the value 2 when A or X is negative,
-!     WHEN A*X = 0, OR WHEN P(A,X) AND Q(A,X) ARE INDETERMINANT.
-!     P(A,X) and Q(A,X) are computationally indeterminant when
-!     X is exceedingly close to A and A is extremely large.
+!        Ans is assigned the value 2 when A or x is negative,
+!     WHEN a*x = 0, OR WHEN P(a,x) AND Q(a,x) ARE INDETERMINANT.
+!     P(a,x) and Q(a,x) are computationally indeterminant when
+!     x is exceedingly close to A and A is extremely large.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS, JR.
@@ -3193,9 +3193,9 @@ data big(1)/25.0/, big(2)/14.0/, big(3)/10.0/
 data e0(1)/.25e-3/, e0(2)/.25e-1/, e0(3)/.14/
 data x0(1)/31.0/, x0(2)/17.0/, x0(3)/9.7/
 !-------------------------
-!     ALOG10 = LN(10)
-!     RT2PIN = 1/SQRT(2*PI)
-!     RTPI   = SQRT(PI)
+!     alog10 = ln(10)
+!     rt2pin = 1/sqrt(2*pi)
+!     rtpi   = sqrt(pi)
 !-------------------------
 data alog10/2.30258509299405/
 data rt2pin/.398942280401433/
@@ -3203,7 +3203,7 @@ data rtpi  /1.77245385090552/
 !-------------------------
 !
 !             Coefficients for minimax approximations
-!                          FOR C0,...,C8
+!                          FOR c0,...,C8
 !
 !-------------------------
 data a0(1) /-.231272501940775e-02/, a0(2)/-.335378520024220e-01/, &
@@ -3379,7 +3379,7 @@ qans = (r/x)*(1.0 + sum)
 ans = 0.5 + (0.5 - qans)
 return
 !
-!             TAYLOR SERIES FOR P(A,X)/X**A
+!             TAYLOR SERIES FOR P(a,x)/x**a
 !
 110 l = 3.0
 c = x
@@ -3412,8 +3412,8 @@ if (qans .lt. 0.0) go to 310
 ans = 0.5 + (0.5 - qans)
 return
 !
-!             FINITE SUMS FOR Q WHEN A .GE. 1
-!                 and 2*A is an integer
+!             FINITE SUMS FOR Q WHEN a .GE. 1
+!                 and 2*a is an integer
 !
 140 sum = exp(-x)
 t = sum
@@ -3512,7 +3512,7 @@ go to 240
 qans = 0.5 + (0.5 - ans)
 return
 !
-!               TEMME EXPANSION FOR L = 1
+!               TEMME EXPANSION FOR l = 1
 !
 250 if (a*e*e .gt. 3.28e-3) go to 400
 c = 0.5 + (0.5 - y)
@@ -3577,9 +3577,9 @@ real :: exparg
 real :: rlog
 real :: gam1
 !-----------------------------------------------------------------------
-!                EVALUATION OF EXP(-X)*X**A/GAMMA(A)
+!                EVALUATION OF exp(-x)*x**a/gamma(a)
 !-----------------------------------------------------------------------
-!     RT2PIN = 1/SQRT(2*PI)
+!     rt2pin = 1/sqrt(2*pi)
 !------------------------
 data rt2pin/.398942280401433/
 !------------------------
@@ -3607,13 +3607,13 @@ end function rcomp
 double precision function drcomp (a, x)
 implicit none
 !-----------------------------------------------------------------------
-!              EVALUATION OF EXP(-X)*X**A/GAMMA(A)
+!              EVALUATION OF exp(-x)*x**a/gamma(a)
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, x
 double precision :: c, t, w
 double precision :: dgamma, dgam1, dpdel, drlog, dxparg
 !--------------------------
-!     C = 1/SQRT(2*PI)
+!     c = 1/sqrt(2*pi)
 !--------------------------
 data c /.398942280401432677939946059934d0/
 !--------------------------
@@ -3655,50 +3655,50 @@ real :: gamln
 !
 !             Inverse incomplete gamma ratio function
 !
-!     GIVEN POSITIVE A, AND NONEGATIVE P AND Q WHERE P + Q = 1.
-!     THEN X IS COMPUTED WHERE P(A,X) = P AND Q(A,X) = Q. SCHRODER
-!     iteration is employed. The routine attempts to compute X
+!     GIVEN POSITIVE A, AND NONEGATIVE p AND q WHERE p + q = 1.
+!     THEN x IS COMPUTED WHERE p(a,x) = p AND q(a,x) = q. SCHRODER
+!     iteration is employed. The routine attempts to compute x
 !     to 10 significant digits if this is possible for the
 !     particular computer arithmetic being used.
 !
 !                        ------------
 !
-!     X IS A VARIABLE. IF P = 0 THEN X IS ASSIGNED THE VALUE 0,
-!     AND IF Q = 0 THEN X IS SET TO THE LARGEST FLOATING POINT
-!     number available. Otherwise, GAMINV attempts to obtain
-!     A SOLUTION FOR P(A,X) = P AND Q(A,X) = Q. IF THE ROUTINE
-!     is successful then the solution is stored in X.
+!     x IS A VARIABLE. IF p = 0 THEN x IS ASSIGNED THE VALUE 0,
+!     AND IF q = 0 THEN x IS SET TO THE LARGEST FLOATING POINT
+!     number available. Otherwise, gaminv attempts to obtain
+!     A SOLUTION FOR p(a,x) = p AND q(a,x) = q. IF THE ROUTINE
+!     is successful then the solution is stored in x.
 !
-!     X0 is an optional initial approximation for X. If the user
+!     x0 is an optional initial approximation for x. If the user
 !     does not wish to supply an initial approximation, then set
-!     X0 .LE. 0.
+!     x0 .LE. 0.
 !
-!     IERR is a variable that reports the status of the results.
-!     When the routine terminates, IERR has one of the following
+!     ierr is a variable that reports the status of the results.
+!     When the routine terminates, ierr has one of the following
 !     values ...
 !
-!       IERR =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
+!       ierr =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
 !                    not used.
-!       IERR.GT.0    THE SOLUTION WAS OBTAINED. IERR ITERATIONS
+!       ierr.GT.0    THE SOLUTION WAS OBTAINED. ierr ITERATIONS
 !                    were performed.
-!       IERR = -2    (INPUT ERROR) A .LE. 0
-!       IERR = -3    NO SOLUTION WAS OBTAINED. THE RATIO Q/A
+!       ierr = -2    (INPUT ERROR) a .LE. 0
+!       ierr = -3    NO SOLUTION WAS OBTAINED. THE RATIO q/a
 !                    is too large.
-!       IERR = -4    (INPUT ERROR) P OR Q IS NEGATIVE, OR
-!                    P + Q .NE. 1.
-!       IERR = -6    20 ITERATIONS WERE PERFORMED. THE MOST
-!                    recent value obtained for X is given.
-!                    THIS CANNOT OCCUR IF X0 .LE. 0.
-!       IERR = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR X.
-!                    This may occur when X is approximately 0.
-!       IERR = -8    A VALUE FOR X HAS BEEN OBTAINED, BUT THE
+!       ierr = -4    (INPUT ERROR) p OR q IS NEGATIVE, OR
+!                    p + q .NE. 1.
+!       ierr = -6    20 ITERATIONS WERE PERFORMED. THE MOST
+!                    recent value obtained for x is given.
+!                    THIS CANNOT OCCUR IF x0 .LE. 0.
+!       ierr = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR x.
+!                    This may occur when x is approximately 0.
+!       ierr = -8    A VALUE FOR x HAS BEEN OBTAINED, BUT THE
 !                    routine is not certain of its accuracy.
 !                    Iteration cannot be performed in this
-!                    CASE. IF X0 .LE. 0, THIS CAN OCCUR ONLY
-!                    when P or Q is approximately 0. If X0 is
+!                    CASE. IF x0 .LE. 0, THIS CAN OCCUR ONLY
+!                    when p or q is approximately 0. If x0 is
 !                    positive then this can occur when A is
-!                    exceedingly close to X and A is extremely
-!                    LARGE (SAY A .GE. 1.E20).
+!                    exceedingly close to x and A is extremely
+!                    LARGE (SAY a .GE. 1.E20).
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS, JR.
@@ -3708,8 +3708,8 @@ real :: gamln
 !------------------------
 real :: ln10, bmin(2), emin(2)
 !------------------------
-!     LN10 = LN(10)
-!     C = EULER CONSTANT
+!     ln10 = ln(10)
+!     c = EULER CONSTANT
 !------------------------
 data ln10 /2.302585/
 data c  /.577215664901533/
@@ -3748,8 +3748,8 @@ if (e .gt. 1.e-10) iop = 2
 xn = x0
 if (x0 .gt. 0.0) go to 100
 !
-!        Selection of the initial approximation XN of X
-!                       WHEN A .LT. 1
+!        Selection of the initial approximation XN of x
+!                       WHEN a .LT. 1
 !
 if (a .gt. 1.0) go to 50
 g = gamma(a + 1.0)
@@ -3805,8 +3805,8 @@ t = 0.5 + (0.5 - xn/(a + 1.0))
 xn = xn/t
 go to 100
 !
-!        Selection of the initial approximation XN of X
-!                       WHEN A .GT. 1
+!        Selection of the initial approximation XN of x
+!                       WHEN a .GT. 1
 !
 50 t = p - 0.5
 if (q .lt. 0.5) t = 0.5 - q
@@ -3870,7 +3870,7 @@ xn = exp((xn + t)/a)
 xn = xn*(1.0 - (a*alog(xn) - xn - t)/(a - xn))
 go to 101
 !
-!                 Schroder iteration using P
+!                 Schroder iteration using p
 !
 100 if (p .gt. 0.5) go to 200
 101 if (p .le. xmin) go to 550
@@ -3904,7 +3904,7 @@ if (d .le. eps) return
 if (abs(p - pn) .le. tol*p) return
 go to 102
 !
-!                 Schroder iteration using Q
+!                 Schroder iteration using q
 !
 200 if (q .le. xmin) go to 550
 am1 = (a - 0.5) - 0.5
@@ -3981,7 +3981,7 @@ integer :: i, m, max, n
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the incomplete gamma ratio functions
-!                      P(A,X) AND Q(A,X)
+!                      P(a,x) AND Q(a,x)
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS, JR.
@@ -3997,8 +3997,8 @@ double precision :: amn, alog10, apn, a2n, a2nm1, big, b2n, b2nm1, &
 double precision :: dpmpar, drlog, drexp
 double precision :: derf, derfc1, dgam1, drcomp
 !-------------------------
-!     ALOG10 = LN(10)
-!     RTPI   = DSQRT(PI)
+!     alog10 = ln(10)
+!     rtpi   = dsqrt(pi)
 !-------------------------
 data alog10 /2.30258509299404568401799145468d0/
 data rtpi   /1.77245385090551602729816748334d0/
@@ -4114,7 +4114,7 @@ qans = (r/x)*(1.d0 + sum)
 ans = 0.5d0 + (0.5d0 - qans)
 return
 !
-!             TAYLOR SERIES FOR P(A,X)/X**A
+!             TAYLOR SERIES FOR P(a,x)/x**a
 !
 110 l = 3.d0
 c = x
@@ -4141,8 +4141,8 @@ if (qans .le. 0.d0) go to 310
 ans = 0.5d0 + (0.5d0 - qans)
 return
 !
-!             FINITE SUMS FOR Q WHEN A .GE. 1
-!                 and 2*A is an integer
+!             FINITE SUMS FOR Q WHEN a .GE. 1
+!                 and 2*a is an integer
 !
 140 sum = dexp(-x)
 t = sum
@@ -4259,7 +4259,7 @@ double precision :: c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, &
 double precision :: d0(7), e, rt2pin, t, u, w
 double precision :: derfc1
 !---------------------------
-!     RT2PIN = 1/DSQRT(2*PI)
+!     rt2pin = 1/dsqrt(2*pi)
 !---------------------------
 data rt2pin /.398942280401432677939946059934d0/
 !---------------------------
@@ -4555,7 +4555,7 @@ implicit none
 !-----------------------------------------------------------------------
 !
 !            Algorithm using minimax approximations
-!                        FOR C0,...,C10
+!                        FOR c0,...,c10
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a, y, l
@@ -4570,7 +4570,7 @@ double precision :: b0(6), b1(6), b2(5), b3(4), b4(4), b5(4), &
 &b6(3), b7(3), b8(2)
 double precision :: derfc1
 !------------------------
-!     RT2PIN = 1/DSQRT(2*PI)
+!     rt2pin = 1/dsqrt(2*pi)
 !------------------------
 data rt2pin /.398942280401432678d0/
 !------------------------
@@ -4670,41 +4670,41 @@ integer :: ier, ind
 !                        Double precision
 !             inverse incomplete gamma ratio function
 !
-!     GIVEN POSITIVE A, AND NONEGATIVE P AND Q WHERE P + Q = 1.
-!     THEN X IS COMPUTED WHERE P(A,X) = P AND Q(A,X) = Q. SCHRODER
+!     GIVEN POSITIVE A, AND NONEGATIVE p AND q WHERE p + q = 1.
+!     THEN x IS COMPUTED WHERE p(a,x) = p AND q(a,x) = q. SCHRODER
 !     iteration is employed.
 !
 !                        ------------
 !
-!     X IS A VARIABLE. IF P = 0 THEN X IS ASSIGNED THE VALUE 0,
-!     AND IF Q = 0 THEN X IS SET TO THE LARGEST FLOATING POINT
-!     number available. Otherwise, DGINV attempts to obtain
-!     A SOLUTION FOR P(A,X) = P AND Q(A,X) = Q. IF THE ROUTINE
-!     is successful then the solution is stored in X.
+!     x IS A VARIABLE. IF p = 0 THEN x IS ASSIGNED THE VALUE 0,
+!     AND IF q = 0 THEN x IS SET TO THE LARGEST FLOATING POINT
+!     number available. Otherwise, dginv attempts to obtain
+!     A SOLUTION FOR p(a,x) = p AND q(a,x) = q. IF THE ROUTINE
+!     is successful then the solution is stored in x.
 !
-!     IERR is a variable that reports the status of the results.
-!     When the routine terminates, IERR has one of the following
+!     ierr is a variable that reports the status of the results.
+!     When the routine terminates, ierr has one of the following
 !     values ...
 !
-!       IERR =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
+!       ierr =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
 !                    not used.
-!       IERR.GT.0    THE SOLUTION WAS OBTAINED. IERR ITERATIONS
+!       ierr.GT.0    THE SOLUTION WAS OBTAINED. ierr ITERATIONS
 !                    were performed.
-!       IERR = -2    (INPUT ERROR) A .LE. 0
-!       IERR = -3    NO SOLUTION WAS OBTAINED. THE RATIO Q/A
+!       ierr = -2    (INPUT ERROR) a .LE. 0
+!       ierr = -3    NO SOLUTION WAS OBTAINED. THE RATIO q/a
 !                    is too large.
-!       IERR = -4    (INPUT ERROR) P OR Q IS NEGATIVE, OR
-!                    P + Q .NE. 1.
-!       IERR = -6    10 ITERATIONS WERE PERFORMED. THE MOST
-!                    recent value obtained for X is given.
+!       ierr = -4    (INPUT ERROR) p OR q IS NEGATIVE, OR
+!                    p + q .NE. 1.
+!       ierr = -6    10 ITERATIONS WERE PERFORMED. THE MOST
+!                    recent value obtained for x is given.
 !                    (This setting should never occur.)
-!       IERR = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR X.
-!                    This may occur when X is approximately 0.
-!       IERR = -8    A VALUE FOR X HAS BEEN OBTAINED, BUT THE
+!       ierr = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR x.
+!                    This may occur when x is approximately 0.
+!       ierr = -8    A VALUE FOR x HAS BEEN OBTAINED, BUT THE
 !                    routine is not certain of its accuracy.
 !                    Iteration cannot be performed in this
 !                    case. This setting can occur only when
-!                    P or Q is approximately 0.
+!                    p or q is approximately 0.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY ALFRED H. MORRIS, JR.
@@ -4721,8 +4721,8 @@ double precision :: am1, apn, ap1, ap2, ap3, b, c, c1, c2, c3, c4, &
 &u, w, xmin, xn, y, z, amin
 double precision :: dpmpar, dlnrel, dgamma, dgamln, dgmln1, drcomp
 !------------------------
-!     LN10 = LN(10)
-!     C = EULER CONSTANT
+!     ln10 = ln(10)
+!     c = EULER CONSTANT
 !------------------------
 data ln10 /2.302585d0/
 data c  /.577215664901533d0/
@@ -4772,8 +4772,8 @@ if (x0 .gt. 1.e34) go to 10
 10 if (a .gt. 1.d0) go to 50
 xn = 0.d0
 !
-!        Selection of the initial approximation XN of X
-!                       WHEN A .LT. 1
+!        Selection of the initial approximation XN of x
+!                       WHEN a .LT. 1
 !
 g = dgamma(a + 1.d0)
 qg = q*g
@@ -4825,8 +4825,8 @@ t = 0.5d0 + (0.5d0 - xn/(a + 1.d0))
 xn = xn/t
 go to 100
 !
-!        Selection of the initial approximation XN of X
-!                       WHEN A .GT. 1
+!        Selection of the initial approximation XN of x
+!                       WHEN a .GT. 1
 !
 50 t = p - 0.5d0
 if (q .lt. 0.5d0) t = 0.5d0 - q
@@ -4890,7 +4890,7 @@ xn = dexp((xn + t)/a)
 xn = xn*(1.d0 - (a*dlog(xn) - xn - t)/(a - xn))
 go to 101
 !
-!                 Schroder iteration using P
+!                 Schroder iteration using p
 !
 100 if (p .gt. 0.5d0) go to 200
 101 if (p .le. xmin) go to 550
@@ -4921,7 +4921,7 @@ if (d .le. eps) return
 if (dabs(p - pn) .le. tol*p) return
 go to 110
 !
-!                 Schroder iteration using Q
+!                 Schroder iteration using q
 !
 200 if (q .le. xmin) go to 550
 am1 = (a - 0.5d0) - 0.5d0
@@ -4999,29 +4999,29 @@ integer :: ierr1, ind, n
 real :: a0, b0, eps, t, x0, y0, z
 !-----------------------------------------------------------------------
 !
-!            Evaluation of the incomplete beta function IX(A,B)
+!            Evaluation of the incomplete beta function IX(a,b)
 !
 !                     --------------------
 !
-!     IT IS ASSUMED THAT A AND B ARE NONNEGATIVE, AND THAT X .LE. 1
-!     AND Y = 1 - X.  BRATIO ASSIGNS W AND W1 THE VALUES
+!     IT IS ASSUMED THAT A AND b ARE NONNEGATIVE, AND THAT x .LE. 1
+!     AND y = 1 - x.  bratio ASSIGNS w AND w1 THE VALUES
 !
-!                      W  = IX(A,B)
-!                      W1 = 1 - IX(A,B)
+!                      w  = ix(a,b)
+!                      w1 = 1 - ix(a,b)
 !
-!     IERR is a variable that reports the status of the results.
-!     If no input errors are detected then IERR is set to 0 and
-!     W and W1 are computed. Otherwise, if an error is detected,
-!     then W and W1 are assigned the value 0 and IERR is set to
+!     ierr is a variable that reports the status of the results.
+!     If no input errors are detected then ierr is set to 0 and
+!     w and w1 are computed. Otherwise, if an error is detected,
+!     then w and w1 are assigned the value 0 and ierr is set to
 !     one of the following values ...
 !
-!        IERR = 1  IF A OR B IS NEGATIVE
-!        IERR = 2  IF A = B = 0
-!        IERR = 3  IF X .LT. 0 OR X .GT. 1
-!        IERR = 4  IF Y .LT. 0 OR Y .GT. 1
-!        IERR = 5  IF X + Y .NE. 1
-!        IERR = 6  IF X = A = 0
-!        IERR = 7  IF Y = B = 0
+!        ierr = 1  IF A OR b IS NEGATIVE
+!        ierr = 2  IF a = b = 0
+!        ierr = 3  IF x .LT. 0 OR x .GT. 1
+!        ierr = 4  IF y .LT. 0 OR y .GT. 1
+!        ierr = 5  IF x + y .NE. 1
+!        ierr = 6  IF x = a = 0
+!        ierr = 7  IF y = b = 0
 !
 !--------------------
 !     WRITTEN BY ALFRED H. MORRIS, JR.
@@ -5032,8 +5032,8 @@ real :: a0, b0, eps, t, x0, y0, z
 real :: lambda
 !-----------------------------------------------------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST
-!            FLOATING POINT NUMBER FOR WHICH 1.0 + EPS .GT. 1.0
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST
+!            FLOATING POINT NUMBER FOR WHICH 1.0 + eps .GT. 1.0
 !
                  eps = spmpar(1)
 !
@@ -5063,7 +5063,7 @@ x0 = x
 y0 = y
 if (amin1(a0, b0) .gt. 1.0) go to 30
 !
-!             PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
+!             PROCEDURE FOR a0 .LE. 1 OR b0 .LE. 1
 !
 if (x .le. 0.5) go to 10
 ind = 1
@@ -5089,7 +5089,7 @@ if ((x0*b0)**a0 .le. 0.7) go to 100
 n = 20
 go to 130
 !
-!             PROCEDURE FOR A0 .GT. 1 AND B0 .GT. 1
+!             PROCEDURE FOR a0 .GT. 1 AND b0 .GT. 1
 !
 30 if (a .gt. b) go to 31
    lambda = a - (a + b)*x
@@ -5182,7 +5182,7 @@ w = w1
 w1 = t
 return
 !
-!           PROCEDURE FOR A AND B .LT. 1.E-3*EPS
+!           PROCEDURE FOR A AND b .LT. 1.E-3*eps
 !
 230 w = b/(a + b)
 w1 = a/(a + b)
@@ -5213,14 +5213,14 @@ real :: an, c, s, t, tol
 real :: exparg
 !-----------------------------------------------------------------------
 !
-!                 Evaluation of I (A,B)
-!                                X
+!                 Evaluation of I (a,b)
+!                                x
 !
-!          FOR B .LT. MIN(EPS,EPS*A) AND X .LE. 0.5.
+!          FOR b .LT. min(eps,eps*a) AND x .LE. 0.5.
 !
 !-----------------------------------------------------------------------
 !
-!                  SET  FPSER = X**A
+!                  SET  fpser = x**a
 !
 fpser = 1.0
 if (a .le. 1.e-3*eps) go to 10
@@ -5229,7 +5229,7 @@ t = a*alog(x)
 if (t .lt. exparg(1)) return
 fpser = exp(t)
 !
-!                NOTE THAT 1/B(A,B) = B
+!                NOTE THAT 1/b(a,b) = b
 !
 10 fpser = (b/a)*fpser
 tol = eps/a
@@ -5252,8 +5252,8 @@ real, intent(in) :: a, b, eps, x
 real :: aj, bx, c, g, s, t, tol
 real :: psi
 !-----------------------------------------------------------------------
-!     APSER yields the incomplete beta ratio I(SUB(1-X))(B,A) for
-!     A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
+!     apser yields the incomplete beta ratio I(SUB(1-x))(b,A) for
+!     a .LE. min(eps,eps*b), b*x .LE. 1, AND x .LE. 0.5. USED WHEN
 !     A is very small. Use only if above inequalities are satisfied.
 !-----------------------------------------------------------------------
 real :: j
@@ -5287,15 +5287,15 @@ integer :: i, m
 real :: a0, apb, b0, c, sum, t, tol, u, w, z
 real :: algdiv, betaln, gam1, gamln1
 !-----------------------------------------------------------------------
-!     POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
-!     OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
+!     POWER SERIES EXPANSION FOR EVALUATING IX(a,b) WHEN b .LE. 1
+!     OR b*x .LE. 0.7.  EPS IS THE TOLERANCE USED.
 !-----------------------------------------------------------------------
 real :: n
 !
 bpser = 0.0
 if (x .eq. 0.0) return
 !-----------------------------------------------------------------------
-!            COMPUTE THE FACTOR X**A/(A*BETA(A,B))
+!            COMPUTE THE FACTOR x**a/(a*BETA(a,b))
 !-----------------------------------------------------------------------
 a0 = amin1(a,b)
 if (a0 .lt. 1.0) go to 10
@@ -5306,7 +5306,7 @@ if (a0 .lt. 1.0) go to 10
 if (b0 .ge. 8.0) go to 60
 if (b0 .gt. 1.0) go to 40
 !
-!            PROCEDURE FOR A0 .LT. 1 AND B0 .LE. 1
+!            PROCEDURE FOR a0 .LT. 1 AND b0 .LE. 1
 !
 bpser = x**a
 if (bpser .eq. 0.0) return
@@ -5322,7 +5322,7 @@ z = (1.0 + gam1(u))/apb
 bpser = bpser*c*(b/apb)
 go to 70
 !
-!         PROCEDURE FOR A0 .LT. 1 AND 1 .LT. B0 .LT. 8
+!         PROCEDURE FOR a0 .LT. 1 AND 1 .LT. b0 .LT. 8
 !
 40 u = gamln1(a0)
 m = b0 - 1.0
@@ -5344,7 +5344,7 @@ t = (1.0 + gam1(u))/apb
 52 bpser = exp(z)*(a0/a)*(1.0 + gam1(b0))/t
 go to 70
 !
-!            PROCEDURE FOR A0 .LT. 1 AND B0 .GE. 8
+!            PROCEDURE FOR a0 .LT. 1 AND b0 .GE. 8
 !
 60 u = gamln1(a0) + algdiv(a0,b0)
 z = a*alog(x) - u
@@ -5374,13 +5374,13 @@ integer :: i, k, kp1, mu, nm1
 real :: ap1, apb, d, r, t, w
 real :: brcmp1, exparg
 !-----------------------------------------------------------------------
-!     Evaluation of IX(A,B) - IX(A+N,B) where N is a positive integer.
+!     Evaluation of IX(a,b) - IX(a+n,b) where n is a positive integer.
 !     Eps is the tolerance used.
 !-----------------------------------------------------------------------
 real :: l
 !
-!          Obtain the scaling factor EXP(-MU) and
-!             EXP(MU)*(X**A*Y**B/BETA(A,B))/A
+!          Obtain the scaling factor exp(-mu) and
+!             exp(mu)*(x**a*y**b/BETA(a,b))/a
 !
 apb = a + b
 ap1 = a + 1.0
@@ -5399,7 +5399,7 @@ if (n .eq. 1 .or. bup .eq. 0.0) return
 nm1 = n - 1
 w = d
 !
-!          Let K be the index of the maximum term
+!          Let k be the index of the maximum term
 !
 k = 0
 if (b .le. 1.0) go to 40
@@ -5444,8 +5444,8 @@ real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, &
 &s, t, w, yp1
 real :: brcomp
 !-----------------------------------------------------------------------
-!     CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
-!     IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
+!     CONTINUED FRACTION EXPANSION FOR IX(a,b) WHEN A,b .GT. 1.
+!     IT IS ASSUMED THAT  lambda = (a + b)*y - b.
 !-----------------------------------------------------------------------
 real, intent(in) :: lambda
 real :: n
@@ -5479,7 +5479,7 @@ r = c1/c
    p = 1.0 + t
    s = s + 2.0
 !
-!        Update an, BN, ANP1, and BNP1
+!        Update an, bn, anp1, and bnp1
 !
    t = alpha*an + beta*anp1
    an = anp1
@@ -5492,7 +5492,7 @@ r = c1/c
    r = anp1/bnp1
    if (abs(r - r0) .le. eps*r) go to 20
 !
-!        Rescale an, BN, ANP1, and BNP1
+!        Rescale an, bn, anp1, and bnp1
 !
    an = an/bnp1
    bn = bn/bnp1
@@ -5513,11 +5513,11 @@ integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
 real :: algdiv, alnrel, bcorr, betaln, gam1, gamln1, rlog1
 !-----------------------------------------------------------------------
-!               EVALUATION OF X**A*Y**B/BETA(A,B)
+!               EVALUATION OF x**a*y**b/BETA(a,b)
 !-----------------------------------------------------------------------
 real :: lambda, lnx, lny
 !-----------------
-!     CONST = 1/SQRT(2*PI)
+!     const = 1/sqrt(2*pi)
 !-----------------
 data const/.398942280401433/
 !
@@ -5543,13 +5543,13 @@ z = z - betaln(a,b)
 brcomp = exp(z)
 return
 !-----------------------------------------------------------------------
-!              PROCEDURE FOR A .LT. 1 OR B .LT. 1
+!              PROCEDURE FOR a .LT. 1 OR b .LT. 1
 !-----------------------------------------------------------------------
 30 b0 = amax1(a,b)
 if (b0 .ge. 8.0) go to 80
 if (b0 .gt. 1.0) go to 60
 !
-!                   ALGORITHM FOR B0 .LE. 1
+!                   ALGORITHM FOR b0 .LE. 1
 !
 brcomp = exp(z)
 if (brcomp .eq. 0.0) return
@@ -5565,7 +5565,7 @@ z = (1.0 + gam1(u))/apb
 brcomp = brcomp*(a0*c)/(1.0 + a0/b0)
 return
 !
-!                ALGORITHM FOR 1 .LT. B0 .LT. 8
+!                ALGORITHM FOR 1 .LT. b0 .LT. 8
 !
 60 u = gamln1(a0)
 n = b0 - 1.0
@@ -5588,13 +5588,13 @@ t = (1.0 + gam1(u))/apb
 72 brcomp = a0*exp(z)*(1.0 + gam1(b0))/t
 return
 !
-!                   ALGORITHM FOR B0 .GE. 8
+!                   ALGORITHM FOR b0 .GE. 8
 !
 80 u = gamln1(a0) + algdiv(a0,b0)
 brcomp = a0*exp(z - u)
 return
 !-----------------------------------------------------------------------
-!              PROCEDURE FOR A .GE. 8 AND B .GE. 8
+!              PROCEDURE FOR a .GE. 8 AND b .GE. 8
 !-----------------------------------------------------------------------
 100 if (a .gt. b) go to 101
    h = a/b
@@ -5632,11 +5632,11 @@ integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
 real :: algdiv, alnrel, bcorr, betaln, esum, gam1, gamln1, rlog1
 !-----------------------------------------------------------------------
-!          EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
+!          EVALUATION OF  exp(mu) * (x**a*y**b/BETA(a,b))
 !-----------------------------------------------------------------------
 real :: lambda, lnx, lny
 !-----------------
-!     CONST = 1/SQRT(2*PI)
+!     const = 1/sqrt(2*pi)
 !-----------------
 data const/.398942280401433/
 !
@@ -5660,13 +5660,13 @@ z = z - betaln(a,b)
 brcmp1 = esum(mu,z)
 return
 !-----------------------------------------------------------------------
-!              PROCEDURE FOR A .LT. 1 OR B .LT. 1
+!              PROCEDURE FOR a .LT. 1 OR b .LT. 1
 !-----------------------------------------------------------------------
 30 b0 = amax1(a,b)
 if (b0 .ge. 8.0) go to 80
 if (b0 .gt. 1.0) go to 60
 !
-!                   ALGORITHM FOR B0 .LE. 1
+!                   ALGORITHM FOR b0 .LE. 1
 !
 brcmp1 = esum(mu,z)
 if (brcmp1 .eq. 0.0) return
@@ -5682,7 +5682,7 @@ z = (1.0 + gam1(u))/apb
 brcmp1 = brcmp1*(a0*c)/(1.0 + a0/b0)
 return
 !
-!                ALGORITHM FOR 1 .LT. B0 .LT. 8
+!                ALGORITHM FOR 1 .LT. b0 .LT. 8
 !
 60 u = gamln1(a0)
 n = b0 - 1.0
@@ -5705,13 +5705,13 @@ t = (1.0 + gam1(u))/apb
 72 brcmp1 = a0*esum(mu,z)*(1.0 + gam1(b0))/t
 return
 !
-!                   ALGORITHM FOR B0 .GE. 8
+!                   ALGORITHM FOR b0 .GE. 8
 !
 80 u = gamln1(a0) + algdiv(a0,b0)
 brcmp1 = a0*esum(mu,z - u)
 return
 !-----------------------------------------------------------------------
-!              PROCEDURE FOR A .GE. 8 AND B .GE. 8
+!              PROCEDURE FOR a .GE. 8 AND b .GE. 8
 !-----------------------------------------------------------------------
 100 if (a .gt. b) go to 101
    h = a/b
@@ -5751,10 +5751,10 @@ integer :: i, n, nm1
 real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z
 real :: algdiv, alnrel, gam1
 !-----------------------------------------------------------------------
-!     Asymptotic expansion for IX(A,B) when A is larger than B.
-!     The result of the expansion is added to W. It is assumed
-!     THAT A .GE. 15 AND B .LE. 1.  EPS IS THE TOLERANCE USED.
-!     IERR is a variable that reports the status of the results.
+!     Asymptotic expansion for IX(a,b) when A is larger than b.
+!     The result of the expansion is added to w. It is assumed
+!     THAT a .GE. 15 AND b .LE. 1.  EPS IS THE TOLERANCE USED.
+!     ierr is a variable that reports the status of the results.
 !-----------------------------------------------------------------------
 real :: j, l, lnx, nu, n2
 real :: c(30), d(30)
@@ -5769,7 +5769,7 @@ if (y .gt. 0.375) go to 10
 if (b*z .eq. 0.0) go to 100
 !
 !                 Computation of the expansion
-!                 SET R = EXP(-Z)*Z**B/GAMMA(B)
+!                 SET r = exp(-z)*z**b/gamma(b)
 !
 r = b*(1.0 + gam1(b))*exp(b*alog(z))
 r = r*exp(a*lnx)*exp(0.5*bm1*lnx)
@@ -5807,7 +5807,7 @@ do n = 1,30
    if (abs(dj) .le. eps*(sum + l)) go to 30
 end do
 !
-!                    Add the results to W
+!                    Add the results to w
 !
 30 ierr = 0
 w = w + u*sum
@@ -5830,17 +5830,17 @@ real :: erfc1, gam1, rexp
 real :: j, l
 !-----------------------------------------------------------------------
 !        Evaluation of the incomplete gamma ratio functions
-!                      P(A,X) AND Q(A,X)
+!                      p(a,x) AND q(a,x)
 !
-!     IT IS ASSUMED THAT A .LE. 1.  EPS IS THE TOLERANCE TO BE USED.
-!     THE INPUT ARGUMENT R HAS THE VALUE E**(-X)*X**A/GAMMA(A).
+!     IT IS ASSUMED THAT a .LE. 1.  EPS IS THE TOLERANCE TO BE USED.
+!     THE INPUT ARGUMENT r HAS THE VALUE E**(-x)*x**a/gamma(a).
 !-----------------------------------------------------------------------
 if (a*x .eq. 0.0) go to 130
 if (a .eq. 0.5) go to 120
 if (x .lt. 1.1) go to 10
 go to 50
 !
-!             TAYLOR SERIES FOR P(A,X)/X**A
+!             TAYLOR SERIES FOR p(a,x)/x**a
 !
 10 an = 3.0
 c = x
@@ -5923,23 +5923,23 @@ real :: bsum, dsum, e0, e1, f, h, h2, hn, r, r0, r1, s, sum, t, &
 &t0, t1, u, w, w0, z, z0, z2, zn, znm1
 real :: bcorr, erfc1, rlog1
 !-----------------------------------------------------------------------
-!     Asymptotic expansion for IX(A,B) for large A and B.
-!     LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.
+!     Asymptotic expansion for IX(a,b) for large A and b.
+!     lambda = (a + b)*Y - b  AND EPS IS THE TOLERANCE USED.
 !     It is assumed that lambda is nonnegative and that
-!     A and B are greater than or equal to 15.
+!     A and b are greater than or equal to 15.
 !-----------------------------------------------------------------------
 real :: j0, j1
 real, intent(in) :: lambda
 real :: a0(21), b0(21), c(21), d(21)
 !------------------------
-!     ****** NUM IS THE MAXIMUM VALUE THAT N CAN TAKE IN THE DO LOOP
-!            ending at statement 50. It is required that NUM be even.
-!            The arrays A0, B0, C, D have dimension NUM + 1.
+!     ****** num IS THE MAXIMUM VALUE THAT n CAN TAKE IN THE DO LOOP
+!            ending at statement 50. It is required that num be even.
+!            The arrays a0, b0, c, d have dimension num + 1.
 !
                 data num/20/
 !------------------------
-!     E0 = 2/SQRT(PI)
-!     E1 = 2**(-3/2)
+!     e0 = 2/sqrt(pi)
+!     e1 = 2**(-3/2)
 !------------------------
 data e0/1.12837916709551/, e1/.353553390593274/
 !------------------------
@@ -6044,12 +6044,12 @@ data z(1) /1.3046735791414e-2/,  z(2) /6.7468316655507e-2/, &
 &z(7) /7.1669769706462e-1/,  z(8) /8.3970478414951e-1/, &
 &z(9) /9.3253168334449e-1/,  z(10)/9.8695326420859e-1/
 !     -------------------
-!     RPINV = 1/SQRT(PI)
+!     rpinv = 1/sqrt(pi)
 !     -------------------
 data pihalf /1.5707963267949/
 data rpinv  /.56418958354776/
 !     -------------------
-!     ****** MAX IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
+!     ****** max IS A MACHINE DEPENDENT CONSTANT. MAX IS THE
 !            largest positive integer that may be used.
 !
                max = ipmpar(3)
@@ -6077,7 +6077,7 @@ if ((afrac .ne. 0.0 .and. afrac .ne. 0.5) .or. &
 &(bfrac .ne. 0.0 .and. bfrac .ne. 0.5)) go to 420
 if (a .ge. 5000.0 .and. x .lt. 0.96) return
 !
-!                      Check if B is an integer
+!                      Check if b is an integer
 !
 ind = 0
 tol = 0.5*amax1(eps, 1.e-11)
@@ -6085,7 +6085,7 @@ if (bfrac .ne. 0.0) go to 100
 if (afrac .ne. 0.0) go to 20
 if (a .ge. b) go to 20
 !
-!                        Interchange A and B
+!                        Interchange A and b
 !
 10 ind = 1
 t = b
@@ -6145,7 +6145,7 @@ return
 if (a .gt. 70.0) go to 150
 if (afrac .eq. 0.0) go to 10
 !
-!                COMPUTE P0 = IX(A,1/2) OR P0 = IX(1/2,B)
+!                COMPUTE p0 = IX(a,1/2) OR p0 = IX(1/2,b)
 !                           using formula 22
 !
 temp = sqrt(x)
@@ -6175,7 +6175,7 @@ m = j + j
 x = y
 go to 110
 !
-!                  COMPUTE P0 = IX(A,1/2) FOR A .GT. 70
+!                  COMPUTE p0 = IX(a,1/2) FOR a .GT. 70
 !                       using expansion 52 or 53
 !
 150 p0 = 0.0
@@ -6204,7 +6204,7 @@ do 171 l = 1,10
 171 sum = sum + w(l)*t**am1
 p0 = 1.0 - rty*gamrat*sum
 !
-!                     Compute P using expansion 21
+!                     Compute p using expansion 21
 !
 200 if (j .eq. 0.0) go to 251
 n = j
@@ -6292,9 +6292,9 @@ integer :: n
 real :: d, t, z
 real :: w(200)
 !     ------------------------------------------------------------------
-!     COMPUTATION OF LN(GAMMA(X)) FOR X = N/2  WHERE N IS AN INTEGER
+!     COMPUTATION OF LN(gamma(x)) FOR x = n/2  WHERE n IS AN INTEGER
 !     ------------------------------------------------------------------
-!     D = 0.5*(LN(2*PI) - 1)
+!     d = 0.5*(ln(2*pi) - 1)
 !     ---------------------
 data d/.41893853320467/
 !     ---------------------
@@ -6417,8 +6417,8 @@ real :: a, cn1, cn2, e, fn, pi, pn, qm, qn, qnp1, r, r2, rn2, sn, &
 real :: cpabs
 !-----------------------------------------------------------------------
 !
-!         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (Z)
-!                                                    CNU
+!         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
+!                                                    cnu
 !-----------------------------------------------------------------------
 !
 !     WRITTEN BY
@@ -6483,7 +6483,7 @@ go to 130
 40 call cbja(z, cnu, w)
 return
 !
-!          CALCULATION FOR 17.5 .LT. ABS(Z) .LE. 17.5 + 0.5*ABS(CNU)**2
+!          CALCULATION FOR 17.5 .LT. abs(z) .LE. 17.5 + 0.5*abs(cnu)**2
 !
 50 n = 0
 if (abs(cn2) .ge. 0.8*abs(y)) go to 60
@@ -6623,11 +6623,11 @@ real :: anorm
 real :: spmpar
 !-----------------------------------------------------------------------
 !
-!       COMPUTATION OF  (Z/2)**(-CNU) * GAMMA(CNU + 1) * J(CNU,Z)
+!       COMPUTATION OF  (z/2)**(-cnu) * gamma(cnu + 1) * J(cnu,z)
 !
 !                           -----------------
 !
-!     The Maclaurin expansion is used. It is assumed that CNU is not
+!     The Maclaurin expansion is used. It is assumed that cnu is not
 !     a negative integer.
 !
 !-----------------------------------------------------------------------
@@ -6641,8 +6641,8 @@ complex :: cdiv
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !--------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0 .
 !
                 eps = spmpar(1)
 !
@@ -6660,7 +6660,7 @@ t = s/nup1
 w = 1.0 + t
 go to 70
 !
-!     Add 1.0 and the first K-1 terms
+!     Add 1.0 and the first k-1 terms
 !
 10 k = int(-a) + 2
 km1 = k - 1
@@ -6674,7 +6674,7 @@ do i = 1,km1
 end do
 go to 70
 !
-!     Check if the (K-1)-ST and K-TH terms can be ignored.
+!     Check if the (k-1)-ST and k-TH terms can be ignored.
 !     If so then the summation is complete.
 !
 30 if (i .eq. km1) go to 70
@@ -6699,7 +6699,7 @@ end do
 t = t*ti
 imin = km2
 !
-!     Add the (K-1)-ST term
+!     Add the (k-1)-ST term
 !
 50 a = 1.0
 p = (1.0, 0.0)
@@ -6731,12 +6731,12 @@ real :: alpha, am, aq, ar, bnd, c, phi, pi, pi2, sgn, theta, u, v, &
 &x, y
 !-----------------------------------------------------------------------
 !
-!         CALCULATION OF J   (CZ) BY THE DEBYE APPROXIMATION
-!                         CNU
+!         CALCULATION OF j   (cz) BY THE DEBYE APPROXIMATION
+!                         cnu
 !                         ------------------
 !
-!     IT IS ASSUMED THAT REAL(CZ) .GE. 0 AND THAT REAL(CNU) = FN + K
-!     where K is an integer.
+!     IT IS ASSUMED THAT real(cz) .GE. 0 AND THAT real(cnu) = fn + k
+!     where k is an integer.
 !
 !-----------------------------------------------------------------------
 complex, intent(in) :: cz, cnu
@@ -6745,8 +6745,8 @@ real :: a(136), is, inu, izn
 complex :: c1, c2, eta, j, nu, p, p1, q, r, s, s1, s2, sm, t, z, &
 &zn
 !----------------------
-!     C = 1/SQRT(2)
-!     BND = PI/3
+!     c = 1/sqrt(2)
+!     bnd = pi/3
 !----------------------
 data j   /(0.0, 1.0)/
 data c   /.398942280401433/
@@ -6841,8 +6841,8 @@ if (inu .ge. 0.0) go to 10
 10 x = real(z)
 y = aimag(z)
 !
-!          TANH(GAMMA) = SQRT(1 - (Z/NU)**2) = W/NU
-!          T = EXP(NU*(TANH(GAMMA) - GAMMA))
+!          tanh(gamma) = sqrt(1 - (z/nu)**2) = w/nu
+!          t = exp(nu*(tanh(gamma) - gamma))
 !
 zn = z/nu
 izn = aimag(zn)
@@ -6885,7 +6885,7 @@ if (is .lt. 0.0) go to 40
    if (real(s) .le. 0.0) go to 50
 40 c2 = -c2
 !
-!          Summation of the series S1 and S2
+!          Summation of the series s1 and s2
 !
 50 sm = s*s
 p  = (a(2)*eta + a(3))*s
@@ -6897,7 +6897,7 @@ am = ar*ar
 m = 4
 l = 6
 !
-!          P = VALUE OF THE M-TH POLYNOMIAL
+!          p = VALUE OF THE m-TH POLYNOMIAL
 !
 60 l = l + 1
 alpha = a(l)
@@ -6908,7 +6908,7 @@ do 70 k = 2,m
    p = a(l) + eta*p
 70 continue
 !
-!          ONLY THE S1 SUM IS FORMED WHEN IND = 0
+!          ONLY THE s1 SUM IS FORMED WHEN ind = 0
 !
 sm = s*sm
 p = p*sm
@@ -6968,7 +6968,7 @@ real :: cos1
 real :: anorm
 real :: spmpar
 !-----------------------------------------------------------------------
-!        Computation of J(NU,Z) by the asymptotic expansion
+!        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
 complex, intent(in) :: cz, cnu
 complex, intent(inout) :: w
@@ -6977,16 +6977,16 @@ complex :: a, a1, arg, e, eta, j, nu, p, q, t, z, zr, zz
 !--------------------------
 anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 !--------------------------
-!     PIHALF = PI/2
-!     C = 2*PI**(-1/2)
+!     pihalf = pi/2
+!     c = 2*pi**(-1/2)
 !--------------------------
 data pihalf /1.5707963267949/
 data c /1.12837916709551/
 data j /(0.0, 1.0)/
 !--------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0 .
 !
                 eps = spmpar(1)
 !
@@ -7046,7 +7046,7 @@ w = 0.5*c*csqrt(j*zr)*((p - j*q)*e + t*cmplx(u, v))
 50 if (x .ge. -1.e-2*y) go to 60
 if (y .lt. 0.0) nu = -nu
 !
-!     Computation of EXP(I*PI*NU)
+!     Computation of exp(i*PI*nu)
 !
 rnu = real(nu)
 inu = aimag(nu)
@@ -7069,9 +7069,9 @@ real :: an, aq(2), az(2), cd(30), ce(30), fj(2), pm, pn, qf(2), &
 !     ******************************************************************
 !     Fortran subroutine for ordinary Bessel function of integral order
 !     ******************************************************************
-!     A  = ARGUMENT (COMPLEX NUMBER)
-!     IN = ORDER (INTEGER)
-!     W  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
+!     a  = ARGUMENT (COMPLEX NUMBER)
+!     in = order (integer)
+!     w  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
 !     -------------------
 complex, intent(in) :: a
 complex, intent(inout) :: w
@@ -7376,7 +7376,7 @@ implicit none
 !         SAND-75-0147
 !
 !         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
-!         I(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
+!         i(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
 !         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
 !         (1977)
 !
@@ -7385,8 +7385,8 @@ implicit none
 !         majesty-S stationery office, london, 1962.
 !
 !     Abstract
-!         BESJ computes an N member sequence of J Bessel functions
-!         J/SUB(ALPHA+K-1)/(X), K=1,...,N FOR NON-NEGATIVE ALPHA AND X.
+!         besj computes an n member sequence of J Bessel functions
+!         J/SUB(alpha+k-1)/(X), k=1,...,n FOR NON-NEGATIVE alpha AND X.
 !         A combination of the power series, the asymptotic expansion
 !         for X to infinity and the uniform asymptotic expansion for
 !         nu to infinity are applied over subdivisions of the (NU,X)
@@ -7404,30 +7404,30 @@ implicit none
 !         member comes on scale or all members are set to zero. Overflow
 !         cannot occur.
 !
-!         BESJ calls ASJY, JAIRY, GAMLN, SPMPAR, and IPMPAR
+!         besj calls asjy, jairy, gamln, spmpar, and ipmpar
 !
 !     Description of arguments
 !
 !         Input
 !           X      - X.GE.0.0E0
 !           alpha  - order of first member of the sequence,
-!                    ALPHA.GE.0.0E0
-!           N      - NUMBER OF MEMBERS IN THE SEQUENCE, N.GE.1
+!                    alpha.GE.0.0E0
+!           n      - NUMBER OF MEMBERS IN THE SEQUENCE, n.GE.1
 !
 !         Output
-!           Y      - A VECTOR WHOSE FIRST N COMPONENTS CONTAIN
-!                    VALUES FOR J/SUB(ALPHA+K-1)/(X), K=1,...,N
-!           NZ     - ERROR INDICATOR
-!                    NZ=0      NORMAL RETURN - COMPUTATION COMPLETED
-!                    NZ=-1     X IS LESS THAN 0.0
-!                    NZ=-2     ALPHA IS LESS THAN 0.0
-!                    NZ=-3     N IS LESS THAN 1
-!                    NZ.GT.0   LAST NZ COMPONENTS OF Y SET TO 0.0
+!           y      - A VECTOR WHOSE FIRST n COMPONENTS CONTAIN
+!                    VALUES FOR J/SUB(alpha+k-1)/(X), k=1,...,n
+!           nz     - ERROR INDICATOR
+!                    nz=0      NORMAL RETURN - COMPUTATION COMPLETED
+!                    nz=-1     X IS LESS THAN 0.0
+!                    nz=-2     alpha IS LESS THAN 0.0
+!                    nz=-3     n IS LESS THAN 1
+!                    nz.GT.0   LAST nz COMPONENTS OF y SET TO 0.0
 !                              because of underflow
 !
 !     Error conditions
 !         improper input arguments - a fatal error
-!         UNDERFLOW  - A NON-FATAL ERROR (NZ.GT.0)
+!         UNDERFLOW  - A NON-FATAL ERROR (nz.GT.0)
 !
 external jairy
 integer :: i, ialp, idalp, iflw, in, inlim, is, i1, i2, k, kk, km, &
@@ -7452,10 +7452,10 @@ data  pp(1),  pp(2),  pp(3),  pp(4)        / 8.72909153935547e+00, &
 data inlim           /      150            /
 data fnulim(1), fnulim(2) /      100.0e0,     60.0e0     /
 !     -------------------
-!     IPMPAR(8) replaces IPMPAR(5) in a double precision code
-!     IPMPAR(9) replaces IPMPAR(6) in a double precision code
+!     ipmpar(8) replaces ipmpar(5) in a double precision code
+!     ipmpar(9) replaces ipmpar(6) in a double precision code
 !
-!     Definition of the tolerances TOL and ELIM
+!     Definition of the tolerances TOL and elim
 !
 tb = ipmpar(4)
 ta = spmpar(1)/tb
@@ -7473,9 +7473,9 @@ go to 5
 5 tol = amax1(ta,1.e-15)
 i1 = ipmpar(5)
 i2 = ipmpar(6)
-!     LN(10**3) = 6.90776
+!     ln(10**3) = 6.90776
 elim = float(-i2)*tb - 6.90776e0
-!     TOLLN = -LN(TOL)
+!     tolln = -ln(tol)
 tolln = float(i1)*tb
 tolln = amin1(tolln,34.5388e0)
 !
@@ -7632,7 +7632,7 @@ return
 450 continue
 nz = n - nn
 if (kt.eq.2) go to 470
-!     Backward recur from index alpha+NN-1 to alpha
+!     Backward recur from index alpha+nn-1 to alpha
 y(nn) = temp(1)
 y(nn-1) = temp(2)
 if (nn.eq.2) return
@@ -7651,7 +7651,7 @@ return
 return
 !
 !     Asymptotic expansion for X to infinity with forward recursion in
-!     OSCILLATORY REGION X.GT.MAX(20, NU), PROVIDED THE LAST MEMBER
+!     OSCILLATORY REGION X.GT.max(20, NU), PROVIDED THE LAST MEMBER
 !     of the sequence is also in the region.
 !
 480 continue
@@ -7737,7 +7737,7 @@ tm = tm + tx
 s1 = s
 580 continue
 !
-!     Forward recur from index alpha to alpha+N-1
+!     Forward recur from index alpha to alpha+n-1
 !
 y(1) = s1
 y(2) = s2
@@ -7845,49 +7845,49 @@ end subroutine besj
 subroutine asjy(funjy,x,fnu,flgjy,in,tol,elim,y,wk,iflw)
 implicit none
 !
-!               ASJY computes Bessel functions J and Y
+!               asjy computes Bessel functions j and Y
 !               FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35.0
 !               ON FLGJY = 1 AND FLGJY = -1 RESPECTIVELY
 !
 !                                  Input
 !
-!      FUNJY - external function JAIRY or YAIRY
+!      FUNJY - external function jairy or YAIRY
 !          X - ARGUMENT, X.GT.0.0E0
 !        FNU - order of the first Bessel function
 !      FLGJY - selection flag
-!              FLGJY =  1.0E0 GIVES THE J FUNCTION
+!              FLGJY =  1.0E0 GIVES THE j FUNCTION
 !              FLGJY = -1.0E0 GIVES THE Y FUNCTION
-!         IN - NUMBER OF FUNCTIONS DESIRED, IN = 1 OR 2
-!        TOL - tolerance specified by BESJ or BESY
-!       ELIM - tolerance specified by BESJ or BESY
+!         in - NUMBER OF FUNCTIONS DESIRED, in = 1 OR 2
+!        TOL - tolerance specified by besj or BESY
+!       ELIM - tolerance specified by besj or BESY
 !
 !                                  Output
 !
 !         Y  - a vector whose first in components contain the sequence
-!       IFLW - a flag indicating underflow or overflow
-!                    RETURN VARIABLES FOR BESJ ONLY
-!      WK(1) = 1 - (X/FNU)**2 = W**2
-!      WK(2) = SQRT(ABS(WK(1)))
-!      WK(3) = ABS(WK(2) - ATAN(WK(2)))  OR
-!              ABS(LN((1 + WK(2))/(X/FNU)) - WK(2))
-!            = ABS((2/3)*ZETA**(3/2))
-!      WK(4) = FNU*WK(3)
-!      WK(5) = (1.5*WK(3)*FNU)**(1/3) = SQRT(ZETA)*FNU**(1/3)
-!      WK(6) = SIGN(1.,W**2)*WK(5)**2 = SIGN(1.,W**2)*ZETA*FNU**(2/3)
-!      WK(7) = FNU**(1/3)
+!       iflw - a flag indicating underflow or overflow
+!                    RETURN VARIABLES FOR besj ONLY
+!      wk(1) = 1 - (x/fnu)**2 = w**2
+!      wk(2) = sqrt(abs(wk(1)))
+!      wk(3) = abs(wk(2) - atan(wk(2)))  or
+!              abs(LN((1 + WK(2))/(X/FNU)) - WK(2))
+!            = abs((2/3)*ZETA**(3/2))
+!      wk(4) = fnu*wk(3)
+!      wk(5) = (1.5*wk(3)*fnu)**(1/3) = sqrt(zeta)*fnu**(1/3)
+!      wk(6) = sign(1.,w**2)*wk(5)**2 = sign(1.,w**2)*zeta*fnu**(2/3)
+!      wk(7) = fnu**(1/3)
 !
 !                                  WRITTEN BY
 !                                  D. E. AMOS
 !
 !     Abstract
 !         ASJK implements the uniform asymptotic expansion of
-!         THE J AND Y BESSEL FUNCTIONS FOR FNU.GE.35 AND REAL
+!         THE j AND Y BESSEL FUNCTIONS FOR FNU.GE.35 AND REAL
 !         X.GT.0.0E0. THE FORMS ARE IDENTICAL EXCEPT FOR A CHANGE
 !         in sign of some of the terms. This change in sign is
 !         ACCOMPLISHED BY MEANS OF THE FLAG FLGJY = 1 OR -1. ON
-!         FLGJY = 1 THE AIRY FUNCTIONS AI(X) AND DAI(X) ARE
-!         supplied by the external function JAIRY, and on
-!         FLGJY = -1 THE AIRY FUNCTIONS BI(X) AND DBI(X) ARE
+!         FLGJY = 1 THE AIRY FUNCTIONS ai(X) AND DAI(X) ARE
+!         supplied by the external function jairy, and on
+!         FLGJY = -1 THE AIRY FUNCTIONS bi(X) AND DBI(X) ARE
 !         supplied by the external funtion YAIRY.
 !
 integer :: i, iflw, in, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, &
@@ -8112,12 +8112,12 @@ do 170 jn = 1,in
   if (abw2.gt.0.27750e0) go to 80
 !
 !     Asymptotic expansion
-!     CASES NEAR X=FN, ABS(1.-(X/FN)**2).LE.0.2775
+!     CASES NEAR X=FN, abs(1.-(X/FN)**2).LE.0.2775
 !     coefficients of asymptotic expansion by series
 !
 !     Zeta and truncation for A(ZETA) and B(ZETA) series
 !
-!     KMAX IS TRUNCATION INDEX FOR A(ZETA) AND B(ZETA) SERIES=MAX(2,SA)
+!     kmax IS TRUNCATION INDEX FOR A(ZETA) AND B(ZETA) SERIES=max(2,SA)
 !
   sa = 0.0e0
   if (abw2.eq.0.0e0) go to 10
@@ -8200,7 +8200,7 @@ do 170 jn = 1,in
   t2 = 1.0e0/wk(1)
   if (wk(1).ge.0.0e0) go to 90
 !
-!     CASES FOR (X/FN).GT.SQRT(1.2775)
+!     CASES FOR (X/FN).GT.sqrt(1.2775)
 !
   wk(3) = abs(wk(2)-atan(wk(2)))
   wk(4) = wk(3)*fn
@@ -8212,7 +8212,7 @@ do 170 jn = 1,in
   go to 100
 90 continue
 !
-!     CASES FOR (X/FN).LT.SQRT(0.7225)
+!     CASES FOR (X/FN).LT.sqrt(0.7225)
 !
   wk(3) = abs(alog((1.0e0+wk(2))/xx)-wk(2))
   wk(4) = wk(3)*fn
@@ -8296,19 +8296,19 @@ real :: a(15), ajn(19), ajp(19), ak1(14), ak2(23), ak3(14), b(15), &
 &dak1(14), dak2(24), dak3(14), db(15), e1, e2, ec, f1, f2, fpi12, &
 &rtrx, scv, t, temp1, temp2, tt
 !
-!                  JAIRY computes the Airy function AI(X)
-!                   and its derivative DAI(X) for JBESS
+!                  jairy computes the Airy function ai(x)
+!                   and its derivative dai(x) for JBESS
 !
 !                                   Input
 !
-!         X - argument, computed by JBESS, X unrestricted
-!        RX - RX=SQRT(ABS(X)), COMPUTED BY JBESS
-!         C - C=2.*(ABS(X)**1.5)/3., COMPUTED BY JBESS
+!         x - argument, computed by JBESS, x unrestricted
+!        rx - rx=sqrt(abs(x)), COMPUTED BY JBESS
+!         c - c=2.*(abs(x)**1.5)/3., COMPUTED BY JBESS
 !
 !                                  Output
 !
-!        AI - value of function AI(X)
-!       dai - value of the derivative DAI(X)
+!        ai - value of function ai(x)
+!       dai - value of the derivative dai(x)
 !
 !                                WRITTEN BY
 !
@@ -8643,9 +8643,9 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 !     ******************************************************************
 !     Fortran subroutine for ordinary Bessel function of integral order
 !     ******************************************************************
-!     A  = ARGUMENT (COMPLEX NUMBER)
-!     IN = ORDER (INTEGER)
-!     W  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
+!     a  = ARGUMENT (COMPLEX NUMBER)
+!     in = order (integer)
+!     w  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
 !     -------------------
 complex, intent(in) :: a
 complex, intent(inout) :: w
@@ -8955,8 +8955,8 @@ real :: cos1
 real :: exparg
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
-!     first kind for complex order CNU and complex argument
-!     Z.  IT IS ASSUMED THAT -PI .LT. ARG Z .LE. PI.
+!     first kind for complex order cnu and complex argument
+!     z.  IT IS ASSUMED THAT -PI .LT. ARG z .LE. PI.
 !------------------------------------------------------------
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
@@ -8995,10 +8995,10 @@ real :: an, aq(2), az(2), cd(30), ce(30), fi(2), pm, pn, qf(2), &
 !     ******************************************************************
 !     Fortran subroutine for modified Bessel function of integral order
 !     ******************************************************************
-!     MO = MODE OF OPERATION
-!     A  = ARGUMENT (COMPLEX NUMBER)
-!     IN = ORDER (INTEGER)
-!     W  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
+!     mo = MODE OF OPERATION
+!     a  = ARGUMENT (COMPLEX NUMBER)
+!     in = order (integer)
+!     w  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
 !     -------------------
 complex, intent(in) :: a
 complex, intent(inout) :: w
@@ -9322,7 +9322,7 @@ implicit none
 !         SAND-75-0152
 !
 !         CDC 6600 SUBROUTINES IBESS AND JBESS FOR BESSEL FUNCTIONS
-!         I(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
+!         i(NU,x) AND J(NU,x), x.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
 !         DANIEL, M.K. WESTON. ACM TRANS MATH SOFTWARE,3,PP 76-92
 !         (1977)
 !
@@ -9331,16 +9331,16 @@ implicit none
 !         majesty-S stationery office, london, 1962.
 !
 !     Abstract
-!         BESI computes an N member sequence of I Bessel functions
-!         I/SUB(ALPHA+K-1)/(X), K=1,...,N OR SCALED BESSEL FUNCTIONS
-!         EXP(-X)*I/SUB(ALPHA+K-1)/(X), K=1,...,N FOR NON-NEGATIVE ALPHA
-!         and X. A combination of the power series, the asymptotic
-!         expansion for X to infinity, and the uniform asymptotic
+!         besi computes an n member sequence of i Bessel functions
+!         i/SUB(alpha+k-1)/(x), k=1,...,n OR SCALED BESSEL FUNCTIONS
+!         exp(-x)*i/SUB(alpha+k-1)/(x), k=1,...,n FOR NON-NEGATIVE alpha
+!         and x. A combination of the power series, the asymptotic
+!         expansion for x to infinity, and the uniform asymptotic
 !         expansion for nu to infinity are applied over subdivisions of
-!         the (NU,X) plane. For values not covered by one of these
+!         the (NU,x) plane. For values not covered by one of these
 !         formulae, the order is incremented by an integer so that one
 !         of these formulae apply. Backward recursion is used to reduce
-!         orders by integer values. The asymptotic expansion for X to
+!         orders by integer values. The asymptotic expansion for x to
 !         infinity is used only when the entire sequence (specifically
 !         the last member) lies within the region covered by the
 !         expansion. Leading terms of these expansions are used to test
@@ -9350,42 +9350,42 @@ implicit none
 !         member comes on scale or all are set to zero. An overflow
 !         cannot occur with scaling.
 !
-!         BESI calls ASIK, GAMLN, SPMPAR, and IPMPAR
+!         besi calls asik, gamln, spmpar, and ipmpar
 !
 !     Description of arguments
 !
 !         Input
-!           X      - X.GE.0.0E0
+!           x      - x.GE.0.0E0
 !           alpha  - order of first member of the sequence,
-!                    ALPHA.GE.0.0E0
-!           KODE   - A PARAMETER TO INDICATE THE SCALING OPTION
-!                    KODE=1 RETURNS
-!                           Y(K)=        I/SUB(ALPHA+K-1)/(X),
-!                                K=1,...,N
-!                    KODE=2 RETURNS
-!                           Y(K)=EXP(-X)*I/SUB(ALPHA+K-1)/(X),
-!                                K=1,...,N
-!           N      - NUMBER OF MEMBERS IN THE SEQUENCE, N.GE.1
+!                    alpha.GE.0.0E0
+!           kode   - A PARAMETER TO INDICATE THE SCALING OPTION
+!                    kode=1 returns
+!                           y(k)=        i/sub(alpha+k-1)/(x),
+!                                k=1,...,n
+!                    kode=2 returns
+!                           y(k)=exp(-x)*i/sub(alpha+k-1)/(x),
+!                                k=1,...,n
+!           n      - NUMBER OF MEMBERS IN THE SEQUENCE, n.GE.1
 !
 !         Output
-!           Y      - A VECTOR WHOSE FIRST N COMPONENTS CONTAIN
-!                    values for I/SUB(ALPHA+K-1)/(X) or scaled
-!                    values for EXP(-X)*I/SUB(ALPHA+K-1)/(X),
-!                    K=1,...,N DEPENDING ON KODE
-!           NZ     - ERROR INDICATOR
-!                    NZ= 0     NORMAL RETURN-COMPUTATION COMPLETED
-!                    NZ=-1     X IS LESS THAN 0.0
-!                    NZ=-2     ALPHA IS LESS THAN 0.0
-!                    NZ=-3     N IS LESS THAN 1
-!                    NZ=-4     KODE IS NOT 1 OR 2
-!                    NZ=-5     X IS TOO LARGE FOR KODE=1
-!                    NZ.GT.0   LAST NZ COMPONENTS OF Y SET TO 0.0
+!           y      - A VECTOR WHOSE FIRST n COMPONENTS CONTAIN
+!                    values for i/SUB(alpha+k-1)/(x) or scaled
+!                    values for exp(-x)*i/SUB(alpha+k-1)/(x),
+!                    k=1,...,n DEPENDING ON kode
+!           nz     - ERROR INDICATOR
+!                    nz= 0     NORMAL RETURN-COMPUTATION COMPLETED
+!                    nz=-1     x IS LESS THAN 0.0
+!                    nz=-2     alpha IS LESS THAN 0.0
+!                    nz=-3     n IS LESS THAN 1
+!                    nz=-4     kode IS NOT 1 OR 2
+!                    nz=-5     x IS TOO LARGE FOR kode=1
+!                    nz.GT.0   LAST nz COMPONENTS OF y SET TO 0.0
 !                              because of underflow
 !
 !     Error conditions
 !         improper input arguments - a fatal error
-!         OVERFLOW WITH KODE=1 - A FATAL ERROR
-!         UNDERFLOW - A NON-FATAL ERROR(NZ.GT.0)
+!         OVERFLOW WITH kode=1 - A FATAL ERROR
+!         UNDERFLOW - A NON-FATAL ERROR(nz.GT.0)
 !
 integer :: i, ialp, in, inlim, is, i1, i2, k, kk, km
 integer, intent(in) :: kode
@@ -9407,10 +9407,10 @@ real :: gamln, spmpar
 data rttpi           / 3.98942280401433e-01/
 data inlim           /          80         /
 !     -------------------
-!     IPMPAR(8) replaces IPMPAR(5) in a double precision code
-!     IPMPAR(9) replaces IPMPAR(6) in a double precision code
+!     ipmpar(8) replaces ipmpar(5) in a double precision code
+!     ipmpar(9) replaces ipmpar(6) in a double precision code
 !
-!     Definition of the tolerances TOL and ELIM
+!     Definition of the tolerances TOL and elim
 !
 tb = ipmpar(4)
 ta = spmpar(1)/tb
@@ -9428,9 +9428,9 @@ go to 5
 5 tol = amax1(ta,1.e-15)
 i1 = ipmpar(5)
 i2 = ipmpar(6)
-!     LN(10**3) = 6.90776
+!     ln(10**3) = 6.90776
 elim = float(-i2)*tb - 6.90776e0
-!     TOLLN = -LN(TOL)
+!     tolln = -ln(tol)
 tolln = float(i1)*tb
 tolln = amin1(tolln,34.5388e0)
 !
@@ -9467,7 +9467,7 @@ sxo2 = xo2*xo2
 etx = float(kode-1)
 sx = etx*x
 !
-!     Decision tree for region where series, asymptotic expansion for X
+!     Decision tree for region where series, asymptotic expansion for x
 !     to infinity and asymptotic expansion for nu to infinity are
 !     applied.
 !
@@ -9555,7 +9555,7 @@ flgik = 1.0e0
 call asik(x,fn,kode,flgik,ra,arg,i1,tol,temp(is))
 go to (180, 350, 510), is
 !
-!     SERIES FOR (X/2)**2.LE.NU+1
+!     SERIES FOR (x/2)**2.LE.NU+1
 !
 230 continue
 gln = gamln(fnp1)
@@ -9628,7 +9628,7 @@ trx = 2.0e0/x
 dtm = fni
 tm = (dtm+fnf)*trx
 if (in.eq.0) go to 390
-!     Backward recur to index alpha+NN-1
+!     Backward recur to index alpha+nn-1
 do i=1,in
   s = s2
   s2 = tm*s2 + s1
@@ -9642,7 +9642,7 @@ y(nn-1) = s2
 if (nn.eq.2) return
 go to 400
 390 continue
-!     Backward recur from index alpha+NN-1 to alpha
+!     Backward recur from index alpha+nn-1 to alpha
 y(nn) = s1
 y(nn-1) = s2
 if (nn.eq.2) return
@@ -9657,7 +9657,7 @@ return
 420 y(1) = temp(2)
 return
 !
-!     Asymptotic expansion for X to infinity
+!     Asymptotic expansion for x to infinity
 !
 430 continue
 earg = rttpi/sqrt(x)
@@ -9789,42 +9789,42 @@ end subroutine besi
 subroutine asik(x,fnu,kode,flgik,ra,arg,in,tol,y)
 implicit none
 !
-!                  ASIK computes Bessel functions I and K
-!                  FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35
-!                  ON FLGIK = 1 AND FLGIK = -1 RESPECTIVELY.
+!                  asik computes Bessel functions I and k
+!                  FOR ARGUMENTS x.GT.0.0 AND ORDERS fnu.GE.35
+!                  ON flgik = 1 AND flgik = -1 RESPECTIVELY.
 !
 !                                    Input
 !
-!      X    - ARGUMENT, X.GT.0.0E0
-!      FNU  - order of first Bessel function
-!      KODE - a parameter to indicate the scaling option
-!             KODE=1 RETURNS Y(I)=        I/SUB(FNU+I-1)/(X), I=1,IN
-!                    OR      Y(I)=        K/SUB(FNU+I-1)/(X), I=1,IN
-!                    ON FLGIK = 1.0E0 OR FLGIK = -1.0E0
-!             KODE=2 RETURNS Y(I)=EXP(-X)*I/SUB(FNU+I-1)/(X), I=1,IN
-!                    OR      Y(I)=EXP( X)*K/SUB(FNU+I-1)/(X), I=1,IN
-!                    ON FLGIK = 1.0E0 OR FLGIK = -1.0E0
-!     FLGIK - selection parameter for I or K function
-!             FLGIK =  1.0E0 GIVES THE I FUNCTION
-!             FLGIK = -1.0E0 GIVES THE K FUNCTION
-!        RA - SQRT(1.+Z*Z), Z=X/FNU
+!      x    - ARGUMENT, x.GT.0.0E0
+!      fnu  - order of first Bessel function
+!      kode - a parameter to indicate the scaling option
+!             kode=1 RETURNS y(I)=        I/SUB(fnu+I-1)/(x), I=1,IN
+!                    OR      y(I)=        k/SUB(fnu+I-1)/(x), I=1,IN
+!                    ON flgik = 1.0E0 OR flgik = -1.0E0
+!             kode=2 RETURNS y(I)=exp(-x)*I/SUB(fnu+I-1)/(x), I=1,IN
+!                    OR      y(I)=exp( x)*k/SUB(fnu+I-1)/(x), I=1,IN
+!                    ON flgik = 1.0E0 OR flgik = -1.0E0
+!     flgik - selection parameter for I or k function
+!             flgik =  1.0E0 GIVES THE I FUNCTION
+!             flgik = -1.0E0 GIVES THE k FUNCTION
+!        ra - sqrt(1.+z*z), z=x/fnu
 !       arg - argument of the leading exponential
-!        IN - NUMBER OF FUNCTIONS DESIRED, IN=1 OR 2
-!       TOL - tolerance specified by BESI or BESK
+!        in - NUMBER OF FUNCTIONS DESIRED, in=1 OR 2
+!       tol - tolerance specified by besi or BESK
 !
 !                                    Output
 !
-!         Y - a vector whose first in components contain the sequence
+!         y - a vector whose first in components contain the sequence
 !
 !                                 WRITTEN BY
 !                                 D. E. AMOS
 !
 !     Abstract
-!         ASIK implements the uniform asymptotic expansion of
-!         THE I AND K BESSEL FUNCTIONS FOR FNU.GE.35 AND REAL
-!         X.GT.0.0E0. THE FORMS ARE IDENTICAL EXCEPT FOR A CHANGE
+!         asik implements the uniform asymptotic expansion of
+!         THE I AND k BESSEL FUNCTIONS FOR fnu.GE.35 AND REAL
+!         x.GT.0.0E0. THE FORMS ARE IDENTICAL EXCEPT FOR A CHANGE
 !         in sign of some of the terms. This change in sign is
-!         ACCOMPLISHED BY MEANS OF THE FLAG FLGIK = 1 OR -1.
+!         ACCOMPLISHED BY MEANS OF THE FLAG flgik = 1 OR -1.
 !
 integer, intent(in) :: in
 integer :: j, jn, k, kk
@@ -9935,8 +9935,8 @@ real :: cpabs
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel function of the
-!        second kind for complex order CNU and complex argument
-!        Z.  IT IS ASSUMED THAT -PI .LT. ARG Z .LE. PI.
+!        second kind for complex order cnu and complex argument
+!        z.  IT IS ASSUMED THAT -PI .LT. ARG z .LE. PI.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY
@@ -10082,7 +10082,7 @@ real :: anorm
 real :: spmpar
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for complex order
-!        CNU and complex argument Z by the asymptotic expansion
+!        cnu and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
 complex :: z
 complex, intent(in) :: cnu
@@ -10092,13 +10092,13 @@ complex :: a, p, t, zr
 !--------------------------
 anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 !--------------------------
-!     C = PI**(1/2)
+!     c = pi**(1/2)
 !--------------------------
 data c /1.77245385090552e+00/
 !--------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1.0 + EPS .GT. 1.0 .
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1.0 + eps .GT. 1.0 .
 !
                 eps = spmpar(1)
 !
@@ -10134,7 +10134,7 @@ real :: a, ai, b, c, cpi, pi, t, x, y, znorm, zr1, zr2
 !     Calculation of the modified Bessel function of the second
 !     kind with complex order and argument BY means of Maclaurin
 !     expansions and the Miller algorithm. It is assumed that
-!     RZ = ABS(Z).
+!     rz = abs(z).
 !-------------------------------------------------------------------
 complex, intent(in) :: z, cnu
 complex, intent(inout) :: w
@@ -10142,13 +10142,13 @@ real :: nu
 complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
 complex :: cxp
 !---------------------------
-!     CPI = SQRT(PI/2)
+!     cpi = sqrt(pi/2)
 !---------------------------
 data pi  /3.14159265358979/
 data cpi /1.25331413731550/
 !
-!        REDUCTION OF CNU TO R = NU + B*I WHERE
-!                -0.5 .LT. NU .LE. 0.5
+!        REDUCTION OF cnu TO r = nu + b*i WHERE
+!                -0.5 .LT. nu .LE. 0.5
 !
 r = cnu
 if (real(r) .lt. 0.0) r = - r
@@ -10173,7 +10173,7 @@ zr = cmplx (zr1, zr2)
 if (t .ne. 0.0) go to 20
 if (b .ne. 0.0) go to 20
 !
-!               CALCULATION FOR NU = 0.5
+!               CALCULATION FOR nu = 0.5
 !
 w = cmplx(cpi, 0.0)
 w1 = (1.0, 0.0)
@@ -10188,7 +10188,7 @@ n = n + 1
 r1 = (-0.5, 0.0)
 go to 70
 !
-!           CALCULATION FOR ABS(NU) .LT. 0.5
+!           CALCULATION FOR abs(nu) .LT. 0.5
 !
 20 znorm = 0.5*rz
 if (znorm .gt. 1.0) go to 30
@@ -10254,12 +10254,12 @@ real :: spmpar
 !
 !        Calculation of the modified Bessel functions
 !
-!                  W1 = K  (Z)  AND  W2 = K    (Z)
-!                        NU                NU+1
+!                  w1 = k  (z)  AND  w2 = k    (z)
+!                        nu                nu+1
 !
-!     FOR A COMPLEX ARGUMENT Z WHERE ABS(Z) .LE. 2 AND A COMPLEX
-!     ORDER NU WHERE ABS(REAL(NU)) .LE. 0.5.  IT IS ASSUMED THAT
-!     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z.  POWER
+!     FOR A COMPLEX ARGUMENT z WHERE abs(z) .LE. 2 AND A COMPLEX
+!     ORDER nu WHERE abs(real(nu)) .LE. 0.5.  IT IS ASSUMED THAT
+!     -pi .LT. ARG z .LE. pi, r = abs(z/2), AND zr = 2/z.  POWER
 !     series expansions are used.
 !
 !-----------------------------------------------------------------------
@@ -10282,23 +10282,23 @@ data d(1) / .577215664901533e+00/,  d(2) /-.420026350340952e-01/, &
 anorm(t) = amax1(abs(real(t)), abs(aimag(t)))
 !-----------------------------------------------------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
 !-----------------------------------------------------------------------
 eps0 = amax1(eps, 5.e-15)
 !
-!                     CL = - LN(Z/2)
+!                     cl = - ln(z/2)
 !
 phi = atan2(aimag(z),real(z))
 cl = cmplx(-alog(r), -phi)
 mu = nu*cl
 c = cexp(mu)
 !
-!                   G1 = GAMMA(1 + NU)
-!                   G2 = GAMMA(1 - NU)
+!                   g1 = gamma(1 + nu)
+!                   g2 = gamma(1 - nu)
 !
 t = pi*nu
 if (anorm(nu) .gt. tol) go to 10
@@ -10320,7 +10320,7 @@ g2 = cdiv(a,g1)
 if (s .gt. 0.04) go to 31
 !
 !         The following is the Taylor series for
-!     W1 = (1/G2 - 1/G1)/(2*NU). NOTE THAT G1*G2 = A.
+!     w1 = (1/g2 - 1/g1)/(2*nu). NOTE THAT g1*g2 = a.
 !
    t = nu*nu
    w1 = -((((((d(7)*t + d(6))*t + d(5))*t + d(4))*t + &
@@ -10381,18 +10381,18 @@ real :: spmpar
 !
 !             Computation of the scaled Bessel function
 !
-!                   W = (EXP(Z)*SQRT(Z)) K  (Z)
+!                   w = (exp(z)*sqrt(z)) k  (z)
 !                                         nu
 !     and the value
 !
-!                   W0 = K    (Z) /K  (Z)
-!                         NU+1      NU
+!                   w0 = k    (z) /k  (z)
+!                         nu+1      nu
 !
-!     For complex orders nu and nu + 1 and for complex argument Z
+!     For complex orders nu and nu + 1 and for complex argument z
 !     by use of the Miller algorithm. For the greatest accuracy,
-!     Z should lie in a sector slightly larger than the right half
-!     PLANE. IT IS ASSUMED THAT ABS(REAL(NU)) .LT. 0.5, AND THAT
-!     R = ABS(Z/2) AND ZR = 2/Z.
+!     z should lie in a sector slightly larger than the right half
+!     PLANE. IT IS ASSUMED THAT abs(real(nu)) .LT. 0.5, AND THAT
+!     r = abs(z/2) AND zr = 2/z.
 !
 !-----------------------------------------------------------------------
 complex, intent(in) :: z, zr, nu
@@ -10400,15 +10400,15 @@ complex, intent(inout) :: w, w0
 complex :: al, bl, s, u1, u2, u3
 real :: inu, l
 !---------------------
-!     C1 = SQRT(PI/2)
-!     C2 = SQRT(PI)
+!     c1 = sqrt(pi/2)
+!     c2 = sqrt(pi)
 !---------------------
 data c1 /1.25331413731559e+00/
 data c2 /1.77245385090552e+00/
 !-----------------------------------------------------------------------
 !
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
+!     ****** eps IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
+!            SMALLEST NUMBER SUCH THAT 1 + eps .GT. 1.
 !
                 eps = spmpar(1)
 !
@@ -10420,7 +10420,7 @@ y = aimag(z)
 rnu = real(nu)
 inu = aimag(nu)
 !
-!     Calculation of M for use in Miller algorithm.
+!     Calculation of m for use in Miller algorithm.
 !
 th = atan2(y,x)
 a = 3.0/(1.0 + r)
@@ -10495,8 +10495,8 @@ real :: cpabs
 !-----------------------------------------------------------------------
 !
 !         Calculation of the modified Bessel function of the
-!         second kind for real order R and complex argument Z.
-!         IT IS ASSUMED THAT -PI .LT. ARG Z .LE. PI.
+!         second kind for real order r and complex argument z.
+!         IT IS ASSUMED THAT -pi .LT. ARG z .LE. pi.
 !
 !-----------------------------------------------------------------------
 !     WRITTEN BY
@@ -10511,7 +10511,7 @@ complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
 real :: nu, nu1
 complex :: cxp
 !---------------------------
-!     CPI = SQRT(PI/2)
+!     cpi = sqrt(pi/2)
 !---------------------------
 data pi  /3.14159265358979/
 data cpi /1.25331413731550/
@@ -10524,7 +10524,7 @@ if (rz .lt. 17.5 + 0.5*r*r) go to 5
    call cka (z, r, w)
    return
 !
-!          REDUCTION OF R TO THE RANGE -0.5 .LT. NU .LE. 0.5
+!          REDUCTION OF r TO THE RANGE -0.5 .LT. nu .LE. 0.5
 !
 5 a = abs(r)
 n = a
@@ -10544,7 +10544,7 @@ call crec (x, y, zr1, zr2)
 zr = cmplx (zr1, zr2)
 if (t .ne. 0.0) go to 20
 !
-!               CALCULATION FOR NU = 0.5
+!               CALCULATION FOR nu = 0.5
 !
 w = cmplx(cpi, 0.0)
 if (n .eq. 0) go to 90
@@ -10558,7 +10558,7 @@ n = n + 1
 nu = - 0.5
 go to 70
 !
-!           CALCULATION FOR ABS(NU) .LT. 0.5
+!           CALCULATION FOR abs(nu) .LT. 0.5
 !
 20 znorm = 0.5*rz
 if (znorm .gt. 1.0) go to 30

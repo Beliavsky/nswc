@@ -44,7 +44,39 @@ class CommentCaseTests(unittest.TestCase):
 !     COLUMN     VALUE     MEANING
 call f('MiXed') ! KEEP INLINE COMMENT
 '''
-        self.assertEqual(sentence_case(source).text, source)
+        expected = source
+        for code in ('CALL FCN(N,X,FVEC)', 'INTEGER N', 'REAL X(N)', 'DATA X /1.0/',
+                     'IMPLICIT NONE', 'Y = X**N'):
+            expected = expected.replace(code, code.lower())
+        self.assertEqual(sentence_case(source).text, expected)
+
+    def test_scoped_identifiers_and_commented_literals(self):
+        source = '''subroutine example(n, answer)
+integer :: n, answer, a
+!     The argument N gives the size. The variable ANSWER contains the result.
+!     CALL EXAMPLE(N, ANSWER)
+!     DATA ANSWER /4HMiXe/
+!     WRITE(*,*) 'Keep ''Quoted'' TEXT', ANSWER
+! 10  CONTINUE
+!     Machine constants for the Data General computers.
+!     A normal distribution is used.
+!     WRITTEN BY A.H. MORRIS.
+end subroutine example
+subroutine other()
+!     N is a mathematical symbol here.
+end subroutine other
+'''
+        result = sentence_case(source).text
+        self.assertIn('The argument n gives the size. The variable answer contains the result.', result)
+        self.assertIn('call example(n, answer)', result)
+        self.assertIn('data answer /4HMiXe/', result)
+        self.assertIn("write(*,*) 'Keep ''Quoted'' TEXT', answer", result)
+        self.assertIn('! 10  continue', result)
+        self.assertIn('Data General computers.', result)
+        self.assertIn('A normal distribution is used.', result)
+        self.assertIn('A.H. MORRIS.', result)
+        self.assertIn('!     N is a mathematical symbol here.', result)
+        self.assertEqual(sentence_case(result).text, result)
 
     def test_reference_paragraphs_and_author_names_unchanged(self):
         source = '!     WRITTEN BY A.H. MORRIS.\n!     FROM THE BOOK ON LINEAR EQUATIONS.\n'

@@ -138,9 +138,14 @@ uppercase explanatory comments. Sentences continue across physical line breaks.
 The prose vocabulary and proper-name rules are maintained in
 `tools/comment-case-words.txt` and `tools/comment-case-rules.json`.
 Only letter case changes; spelling, spacing, and line numbers are preserved.
-Existing misspellings are retained. Code, quoted executable strings, inline
-comments, directives, formulas, tables, examples, and reference/author paragraphs
-are preserved. Ambiguous passages retain their original case.
+Existing misspellings are retained. Commented Fortran and identifiable procedure
+and variable references use lowercase, using declarations in the enclosing
+procedure to recognize names. English words that also name variables require
+explicit context, such as `argument N` or `X(N)`. Quoted text, Hollerith payloads,
+executable code, inline comments, and directives are preserved. Prose sentence
+capitalization, proper names, and acronyms retain their intended case. Ambiguous
+passages retain their original case; reference paragraphs otherwise keep their
+original capitalization.
 
 The generated [comment review report](tools/comment-case-review.json) records
 changed-line counts, protected categories, unfamiliar words, and uncertain
