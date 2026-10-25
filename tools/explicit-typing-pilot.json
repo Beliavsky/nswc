@@ -9125,5 +9125,45 @@
     "LSOD1": {
       "jac": "Forwarded through LSOD1 and STOD to PJAC, which invokes CALL JAC. Retains EXTERNAL and no return type."
     }
+  },
+  "forwarded_function_reviews": {
+    "ACOND": {
+      "acondf": {
+        "type": "type spec : (REAL 4)",
+        "type_source": {
+          "scope": "ACONDF",
+          "symbol": "acondf"
+        },
+        "evidence": "GNU 13 leaves this forwarded EXTERNAL unresolved before explicit typing. The original function definition or receiving worker confirms REAL; GNU 17 also resolves the original to REAL."
+      },
+      "acondg": {
+        "type": "type spec : (REAL 4)",
+        "type_source": {
+          "scope": "ACONDG",
+          "symbol": "acondg"
+        },
+        "evidence": "GNU 13 leaves this forwarded EXTERNAL unresolved before explicit typing. The original function definition or receiving worker confirms REAL; GNU 17 also resolves the original to REAL."
+      }
+    },
+    "XCOND": {
+      "xcondy": {
+        "type": "type spec : (REAL 4)",
+        "type_source": {
+          "scope": "XCONDY",
+          "symbol": "xcondy"
+        },
+        "evidence": "GNU 13 leaves this forwarded EXTERNAL unresolved before explicit typing. The original function definition or receiving worker confirms REAL; GNU 17 also resolves the original to REAL."
+      }
+    },
+    "QAGI1": {
+      "f": {
+        "type": "type spec : (REAL 4)",
+        "type_source": {
+          "scope": "QK15I1",
+          "symbol": "f"
+        },
+        "evidence": "GNU 13 leaves this forwarded EXTERNAL unresolved before explicit typing. The original function definition or receiving worker confirms REAL; GNU 17 also resolves the original to REAL."
+      }
+    }
   }
 }

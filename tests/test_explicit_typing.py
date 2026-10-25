@@ -121,6 +121,22 @@ class ExplicitTypingTests(unittest.TestCase):
         self.assertFalse(scope_preserved(typed, after, ["jac"]))
         self.assertFalse(scope_preserved(before, {**after, "extra": {}}, ["jac"]))
 
+    def test_reviewed_function_resolution_requires_original_return_type(self):
+        before = {"f": {"type spec": "type spec : (UNKNOWN 0)",
+                        "attributes": "attributes: (PROCEDURE EXTERNAL DUMMY)"}}
+        after = {"f": {"type spec": "type spec : (REAL 4)",
+                       "attributes": "attributes: (PROCEDURE EXTERNAL DUMMY FUNCTION)"}}
+        expected = {"f": "type spec : (REAL 4)"}
+        self.assertFalse(scope_preserved(before, after))
+        self.assertTrue(scope_preserved(before, after, reviewed_functions=expected))
+        self.assertTrue(scope_preserved(after, after, reviewed_functions=expected))
+        for field, value in (("type spec", "type spec : (REAL 8)"),
+                             ("attributes", "attributes: (PROCEDURE EXTERNAL FUNCTION)"),
+                             ("Formal arglist", "Formal arglist: x y")):
+            changed = {"f": {**after["f"], field: value}}
+            self.assertFalse(scope_preserved(before, changed, reviewed_functions=expected))
+        self.assertFalse(scope_preserved(after, before, reviewed_functions=expected))
+
 
 if __name__ == "__main__":
     unittest.main()

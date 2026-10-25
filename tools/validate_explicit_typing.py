@@ -41,12 +41,14 @@ def symbols(dump):
             for scope, entries in result.items()}
 
 
-def scope_preserved(before, after, reviewed_subroutines=()):
-    """Allow only reviewed UNKNOWN external procedures to gain SUBROUTINE.
+def scope_preserved(before, after, reviewed_subroutines=(), reviewed_functions=None):
+    """Compare a scope, accounting for reviewed forwarded procedure resolution.
 
     IMPLICIT NONE lets GNU classify a forwarded, untyped EXTERNAL as a
     subroutine. The manifest names cases checked against their receiving
-    workers' CALL statements. No return type or other attribute may change.
+    workers' CALL statements. Older GNU dumps also leave some forwarded
+    functions UNKNOWN; their expected return types come from independently
+    checked original definitions or receiving workers. Other fields must match.
     """
     if before == after:
         return True
@@ -64,6 +66,25 @@ def scope_preserved(before, after, reviewed_subroutines=()):
             return False
         refined = dict(converted)
         refined["attributes"] = converted.get("attributes", "").replace(" SUBROUTINE", "", 1)
+        if refined != original:
+            return False
+        adjusted[name] = refined
+    for name, expected_type in (reviewed_functions or {}).items():
+        original, converted = before.get(name), after.get(name)
+        if not original or not converted:
+            return False
+        if original == converted:
+            continue
+        attributes = original.get("attributes", "")
+        if (original.get("type spec") != "type spec : (UNKNOWN 0)"
+                or converted.get("type spec") != expected_type
+                or "PROCEDURE" not in attributes or "EXTERNAL" not in attributes
+                or "SUBROUTINE" in attributes or "FUNCTION" in attributes
+                or " FUNCTION" not in converted.get("attributes", "")):
+            return False
+        refined = dict(converted)
+        refined["type spec"] = original["type spec"]
+        refined["attributes"] = converted["attributes"].replace(" FUNCTION", "", 1)
         if refined != original:
             return False
         adjusted[name] = refined
@@ -97,7 +118,15 @@ def main():
         if name not in inventories[0] or name not in inventories[1]:
             raise RuntimeError(f"Missing procedure in compiler dump: {name}")
         reviewed = manifest.get("subroutine_classification_reviews", {}).get(name, {})
-        if not scope_preserved(inventories[0][name], inventories[1][name], reviewed):
+        functions = manifest.get("forwarded_function_reviews", {}).get(name, {})
+        expected_types = {}
+        for symbol, review in functions.items():
+            reference = review["type_source"]
+            original_type = inventories[0][reference["scope"]][reference["symbol"]]["type spec"]
+            if original_type != review["type"]:
+                raise RuntimeError(f"Reviewed callback's original return type changed: {name}/{symbol}")
+            expected_types[symbol] = original_type
+        if not scope_preserved(inventories[0][name], inventories[1][name], reviewed, expected_types):
             original, converted = inventories[0][name], inventories[1][name]
             mismatches[name] = {
                 symbol: {"before": original.get(symbol), "after": converted.get(symbol)}
@@ -112,6 +141,9 @@ def main():
     reviews = manifest.get("subroutine_classification_reviews", {})
     if reviews:
         print(f"Checked {sum(map(len, reviews.values()))} reviewed forwarded subroutine classifications.")
+    functions = manifest.get("forwarded_function_reviews", {})
+    if functions:
+        print(f"Checked {sum(map(len, functions.values()))} forwarded function types against original definitions or workers.")
     return 0
 
 

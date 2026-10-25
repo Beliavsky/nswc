@@ -157,5 +157,6 @@ reviewed manifest; it does not guess types. The [typing guide](docs/explicit-typ
 records the affected procedures, tool limitations, and reproduction commands.
 Run `python tools/validate_explicit_typing.py` to check that the compiler sees
 the same variable and function types, shapes, and argument lists. The guide
-also records eleven forwarded subroutine classifications checked against their
-original calling conventions. The archived `nswc_orig.f` retains its original typing.
+also records reviewed classifications for forwarded procedures, checked against
+their original calling conventions and return types. The archived `nswc_orig.f`
+retains its original typing.

@@ -7,8 +7,8 @@ Sixteen batches covered 17, 40, 29, 34, 32, 32, 31, 22, 22, 37, 28, 25, 21,
 `nswc_orig.f` retains its original implicit typing.
 
 Each batch preserves the original data and function types and is checked with
-compiler symbol comparisons and the numerical regression suite. Eleven
-forwarded subroutine classifications are reviewed separately below.
+compiler symbol comparisons and the numerical regression suite. Forwarded
+procedure classifications are reviewed separately below.
 
 ## Batch 1: pilot
 
@@ -399,6 +399,16 @@ These names retain `EXTERNAL` and no return type. The validator accepts only
 this additional attribute for the named, reviewed symbols; changes to their
 types, other attributes, shapes, or argument lists still fail. The manifest's
 `subroutine_classification_reviews` records the original calling evidence.
+
+GNU 13 also leaves four forwarded functions unresolved in its original-source
+dump: `ACONDF` and `ACONDG` in `ACOND`, `XCONDY` in `XCOND`, and `F` in
+`QAGI1`. The added declarations resolve them to `REAL` functions, matching
+the original definitions or the receiving worker `QK15I1`. GNU 17 already
+resolves these original types. The `forwarded_function_reviews` records name
+each independent type source; validation checks that original source's return
+type before accepting the resolution. It rejects any other type or attribute
+change. Regression tests cover both accepted resolutions and rejected changes.
+
 No argument intents, precision choices, dimensions, storage statements, or
 executable library code were changed.
 
@@ -479,8 +489,9 @@ dumps are then compared before and after the additions. The local check preserve
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear. The eleven reviewed
-subroutine classification refinements described above are checked separately;
-all other attributes must match.
+forwarded procedure resolutions described above are checked separately against
+their original calling conventions and return types; all other attributes must
+match.
 
 The maintained source compiles with the original 28 warnings in the local compiler check.
 All 42 numerical test programs must still pass against each source version,
