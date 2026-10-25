@@ -488,7 +488,7 @@ dumps are then compared before and after the additions. The local check preserve
 25,873 variable and external procedure records across all 1,062 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
-the implicit type marker is expected to disappear. The eleven reviewed
+the implicit type marker is expected to disappear. The reviewed
 forwarded procedure resolutions described above are checked separately against
 their original calling conventions and return types; all other attributes must
 match.
