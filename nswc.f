@@ -1,6 +1,7 @@
       INTEGER FUNCTION IPMPAR (I)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I
+      INTEGER :: IMACH(10)
 C-----------------------------------------------------------------------
 C
 C     IPMPAR PROVIDES THE INTEGER MACHINE CONSTANTS FOR THE COMPUTER
@@ -73,7 +74,6 @@ C     IPMPAR WAS FORMED BY A.H. MORRIS (NSWC). THE CONSTANTS ARE
 C     FROM BELL LABORATORIES, NSWC, AND OTHER SOURCES.
 C
 C-----------------------------------------------------------------------
-      INTEGER :: IMACH(10)
 C
 C     MACHINE CONSTANTS FOR THE ALLIANT FX/8.
 C
@@ -438,12 +438,13 @@ C-----------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER :: IBETA
       INTEGER, INTENT(IN) :: IDMAX, IMAX, MO, N
-      INTEGER :: M, MAXEXP, MINEXP, N0
-      REAL :: EPS, XINT, XMAX, XMIN
-C-----------------------------------------------------------------------
       REAL, INTENT(INOUT) :: RMACH(3)
       DOUBLE PRECISION, INTENT(INOUT) :: DMACH(3)
       INTEGER, INTENT(INOUT) :: IMACH(10)
+      INTEGER :: M, MAXEXP, MINEXP, N0
+      REAL :: EPS, XINT, XMAX, XMIN
+      DOUBLE PRECISION :: DEPS, DINT, DMIN, DMAX
+C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C
 C          COMPUTATION OF THE ENVIRONMENTAL CONSTANTS FOR THE
@@ -670,7 +671,6 @@ C         DETERMINE MACHINE PARAMETERS, ACM TRANS. MATH SOFTWARE (14),
 C         1988, PP. 303-311.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: DEPS, DINT, DMIN, DMAX
 C-----------------
       IMACH(1) = 0
       IMACH(2) = 0
@@ -738,8 +738,9 @@ C
      *                  XMIN, XMAX)
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-      INTEGER :: J, K, KM, L
       REAL :: EPS, XINT, XMIN, XMAX
+      INTEGER :: J, K, KM, L
+      REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
 C-----------------------------------------------------------------------
 C
 C                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -832,7 +833,6 @@ C                 FOR XMAX MAY BE AFFECTED SLIGHTLY BY
 C                 ROUNDOFF ERROR.
 C
 C-----------------------------------------------------------------------
-      REAL :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z, ZERO
 C----------------
       COMMON /SPDATA/ D1, D2
 C
@@ -995,8 +995,10 @@ C-----------------------------------------------------------------------
      *                  XMIN, XMAX)
       IMPLICIT NONE
       INTEGER :: IBETA, M, MAXEXP, MINEXP, N
-      INTEGER :: J, K, KM, L
       DOUBLE PRECISION :: EPS, XINT, XMIN, XMAX
+      INTEGER :: J, K, KM, L
+      DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z,
+     &ZERO
 C-----------------------------------------------------------------------
 C
 C                 COMPUTATION OF THE ENVIRONMENTAL CONSTANTS
@@ -1089,8 +1091,6 @@ C                 OBTAINED FOR XMAX MAY BE AFFECTED SLIGHTLY
 C                 BY ROUNDOFF ERROR.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: B, B2, BINV, BM1, D1, D2, ONE, P, Q, T, X, Z,
-     &ZERO
 C----------------
       COMMON /DPDATA/ D1, D2
 C
@@ -1241,7 +1241,8 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     STORAGE OF DOUBLE PRECISION INFORMATION INTO MEMORY
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: A, B, D1, D2
+      DOUBLE PRECISION :: A, B
+      DOUBLE PRECISION :: D1, D2
       COMMON /DPDATA/ D1, D2
       D1 = A
       D2 = B
@@ -1254,6 +1255,7 @@ C-----------------------------------------------------------------------
       INTEGER :: IBETA, M
       REAL :: B, BINV, BM1, ONE, W, Z
       INTEGER :: IPMPAR
+      INTEGER :: EMIN, EMAX
 C-----------------------------------------------------------------------
 C
 C     SPMPAR PROVIDES THE SINGLE PRECISION MACHINE CONSTANTS FOR
@@ -1274,7 +1276,6 @@ C        ALFRED H. MORRIS, JR.
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN VIRGINIA
 C-----------------------------------------------------------------------
-      INTEGER :: EMIN, EMAX
 C
       IF (I .GT. 1) GO TO 10
          B = IPMPAR(4)
@@ -1311,6 +1312,8 @@ C
       INTEGER, INTENT(IN) :: I
       INTEGER :: IBETA, M
       INTEGER :: IPMPAR
+      INTEGER :: EMIN, EMAX
+      DOUBLE PRECISION :: B, BINV, BM1, ONE, W, Z
 C-----------------------------------------------------------------------
 C
 C     DPMPAR PROVIDES THE DOUBLE PRECISION MACHINE CONSTANTS FOR
@@ -1331,8 +1334,6 @@ C        ALFRED H. MORRIS, JR.
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN VIRGINIA
 C-----------------------------------------------------------------------
-      INTEGER :: EMIN, EMAX
-      DOUBLE PRECISION :: B, BINV, BM1, ONE, W, Z
 C
       IF (I .GT. 1) GO TO 10
          B = IPMPAR(4)
@@ -1369,12 +1370,12 @@ C
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
       INTEGER :: IPMPAR
+      INTEGER :: B
+      REAL :: LNB
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 C     SUCH THAT 1.0 + EPS .GT. 1.0 .  L IS A DUMMY ARGUMENT.
 C--------------------------------------------------------------------
-      INTEGER :: B
-      REAL :: LNB
 C
       B = IPMPAR(4)
       IF (B .NE. 2) GO TO 10
@@ -1397,12 +1398,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L
       INTEGER :: IPMPAR
+      INTEGER :: B
+      DOUBLE PRECISION :: DB, LNB, M
 C--------------------------------------------------------------------
 C     THE EVALUATION OF LN(EPS) WHERE EPS IS THE SMALLEST NUMBER
 C     SUCH THAT 1.D0 + EPS .GT. 1.D0 .  L IS A DUMMY ARGUMENT.
 C--------------------------------------------------------------------
-      INTEGER :: B
-      DOUBLE PRECISION :: DB, LNB, M
 C
       B = IPMPAR(4)
       IF (B .NE. 2) GO TO 10
@@ -1427,6 +1428,8 @@ C
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
       INTEGER :: IPMPAR
+      INTEGER :: B
+      REAL :: LNB
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  EXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 C     EXP(W) CAN BE COMPUTED.
@@ -1436,8 +1439,6 @@ C     WHICH THE COMPUTED VALUE OF EXP(W) IS NONZERO.
 C
 C     NOTE... ONLY AN APPROXIMATE VALUE FOR EXPARG(L) IS NEEDED.
 C--------------------------------------------------------------------
-      INTEGER :: B
-      REAL :: LNB
 C
       B = IPMPAR(4)
       IF (B .NE. 2) GO TO 10
@@ -1465,6 +1466,8 @@ C
       INTEGER, INTENT(IN) :: L
       INTEGER :: M
       INTEGER :: IPMPAR
+      INTEGER :: B
+      DOUBLE PRECISION :: DB, LNB
 C--------------------------------------------------------------------
 C     IF L = 0 THEN  DXPARG(L) = THE LARGEST POSITIVE W FOR WHICH
 C     DEXP(W) CAN BE COMPUTED.
@@ -1474,8 +1477,6 @@ C     WHICH THE COMPUTED VALUE OF DEXP(W) IS NONZERO.
 C
 C     NOTE... ONLY AN APPROXIMATE VALUE FOR DXPARG(L) IS NEEDED.
 C--------------------------------------------------------------------
-      INTEGER :: B
-      DOUBLE PRECISION :: DB, LNB
 C
       B = IPMPAR(4)
       IF (B .NE. 2) GO TO 10
@@ -1502,13 +1503,13 @@ C
       SUBROUTINE ISHELL (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+      INTEGER :: K(10), S
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(INOUT) :: A(N)
-      INTEGER :: K(10), S
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1551,14 +1552,14 @@ C
       SUBROUTINE SHELL (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1601,15 +1602,15 @@ C
       SUBROUTINE SHELL2 (A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N), B(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S, T
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 C     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N), B(N)
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1656,14 +1657,14 @@ C
       SUBROUTINE RSORT (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1706,17 +1707,17 @@ C
       SUBROUTINE RISORT (A, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
+      INTEGER, INTENT(INOUT) :: M(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
+      INTEGER :: T
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 C     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      INTEGER, INTENT(INOUT) :: M(N)
-      INTEGER :: T
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1763,15 +1764,15 @@ C
       SUBROUTINE RRSORT (A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N), B(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S, T
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 C     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N), B(N)
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1818,14 +1819,14 @@ C
       SUBROUTINE DSORT (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+      DOUBLE PRECISION :: S
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-      DOUBLE PRECISION :: S
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1868,17 +1869,17 @@ C
       SUBROUTINE DISORT (A, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+      INTEGER, INTENT(INOUT) :: M(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+      DOUBLE PRECISION :: S
+      INTEGER :: T
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 C     PERFORMED ON M THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-      DOUBLE PRECISION :: S
-      INTEGER, INTENT(INOUT) :: M(N)
-      INTEGER :: T
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1925,15 +1926,15 @@ C
       SUBROUTINE DDSORT (A, B, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+      DOUBLE PRECISION :: S, T
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE SHELL SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF A
 C     SO THAT A(I).LE.A(I+1) FOR I=1,...,N-1. THE SAME PERMUTATIONS ARE
 C     PERFORMED ON B THAT ARE PERFORMED ON A. IT IS ASSUMED THAT N.GE.1.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N), B(N)
-      DOUBLE PRECISION :: S, T
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      1     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -1980,15 +1981,15 @@ C
       SUBROUTINE AORD (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
       REAL :: S
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     THE AORD SORTING PROCEDURE IS USED TO REORDER THE ELEMENTS OF
 C     A SO THAT ABS(A(I)) .LE. ABS(A(I+1)) FOR I = 1,...,N-1. IT IS
 C     ASSUMED THAT N .GE. 1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      *     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -2031,15 +2032,15 @@ C
       SUBROUTINE DAORD (A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
       INTEGER :: I, II, IMAX, J, JMAX, KI, L, LL
+      DOUBLE PRECISION :: S
+      INTEGER :: K(10)
 C-----------------------------------------------------------------------
 C     DAORD IS USED TO REORDER THE ELEMENTS OF THE DOUBLE PRECISION
 C     ARRAY A SO THAT DABS(A(I)) .LE. DABS(A(I+1)) FOR I = 1,...,N-1.
 C     IT IS ASSUMED THAT N .GE. 1.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-      DOUBLE PRECISION :: S
-      INTEGER :: K(10)
 C------------------------
       DATA K(1)/1/, K(2)/4/, K(3)/13/, K(4)/40/, K(5)/121/, K(6)/364/,
      *     K(7)/1093/, K(8)/3280/, K(9)/9841/, K(10)/29524/
@@ -2083,6 +2084,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, X(N)
       INTEGER, INTENT(INOUT) :: IND(N)
+      INTEGER :: IU(21), IL(21)
+      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX, T
+      REAL :: R
 C
 C***********************************************************
 C
@@ -2128,9 +2132,6 @@ C         LOG HAS BASE 2.
 C
 C***********************************************************
 C
-      INTEGER :: IU(21), IL(21)
-      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX, T
-      REAL :: R
 C
 C LOCAL PARAMETERS -
 C
@@ -2285,6 +2286,9 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
       REAL, INTENT(IN) :: X(N)
+      INTEGER :: IU(21), IL(21)
+      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
+      REAL :: R, T
 C
 C***********************************************************
 C
@@ -2330,9 +2334,6 @@ C         LOG HAS BASE 2.
 C
 C***********************************************************
 C
-      INTEGER :: IU(21), IL(21)
-      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
-      REAL :: R, T
 C
 C LOCAL PARAMETERS -
 C
@@ -2487,6 +2488,10 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IND(N)
       DOUBLE PRECISION, INTENT(IN) :: X(N)
+      INTEGER :: IU(21), IL(21)
+      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
+      REAL :: R
+      DOUBLE PRECISION :: T
 C
 C***********************************************************
 C
@@ -2532,10 +2537,6 @@ C         LOG HAS BASE 2.
 C
 C***********************************************************
 C
-      INTEGER :: IU(21), IL(21)
-      INTEGER :: M, I, J, K, L, IJ, IT, ITT, INDX
-      REAL :: R
-      DOUBLE PRECISION :: T
 C
 C LOCAL PARAMETERS -
 C
@@ -2689,6 +2690,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: A(N), IP(N)
+      INTEGER :: NN, K, J, IPJ, TEMP
 C
 C***********************************************************
 C
@@ -2713,7 +2715,6 @@ C                         PERMUTATIONS DEFINED BY IP.
 C
 C***********************************************************
 C
-      INTEGER :: NN, K, J, IPJ, TEMP
 C
 C LOCAL PARAMETERS -
 C
@@ -2763,6 +2764,8 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
       REAL, INTENT(INOUT) :: A(N)
+      INTEGER :: NN, K, J, IPJ
+      REAL :: TEMP
 C
 C***********************************************************
 C
@@ -2787,8 +2790,6 @@ C                         PERMUTATIONS DEFINED BY IP.
 C
 C***********************************************************
 C
-      INTEGER :: NN, K, J, IPJ
-      REAL :: TEMP
 C
 C LOCAL PARAMETERS -
 C
@@ -2838,6 +2839,8 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: IP(N)
       DOUBLE PRECISION, INTENT(INOUT) :: A(N)
+      INTEGER :: NN, K, J, IPJ
+      DOUBLE PRECISION :: TEMP
 C
 C***********************************************************
 C
@@ -2862,8 +2865,6 @@ C                         PERMUTATIONS DEFINED BY IP.
 C
 C***********************************************************
 C
-      INTEGER :: NN, K, J, IPJ
-      DOUBLE PRECISION :: TEMP
 C
 C LOCAL PARAMETERS -
 C
@@ -3008,10 +3009,10 @@ C     --------------------------------------
       DOUBLE PRECISION FUNCTION DCPABS(X, Y)
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: X, Y
+      DOUBLE PRECISION :: A
 C     --------------------------------------
 C     EVALUATION OF SQRT(X*X + Y*Y)
 C     --------------------------------------
-      DOUBLE PRECISION :: A
 C
       IF (DABS(X) .LE. DABS(Y)) GO TO 10
          A = Y/X
@@ -3070,11 +3071,11 @@ C
 
       COMPLEX FUNCTION CDIV (A, B)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: A, B
       REAL :: AI, AR, BI, BR, D, T, U, V
 C-----------------------------------------------------------------------
 C              COMPLEX DIVISION A/B WHERE B IS NONZERO
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A, B
 C
       AR = REAL(A)
       AI = AIMAG(A)
@@ -3135,6 +3136,8 @@ C
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+      DOUBLE PRECISION :: X, Y, R
+      DOUBLE PRECISION :: DCPABS
 C ----------------------------------------------------------------------
 C        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
 C
@@ -3145,8 +3148,6 @@ C     IT IS ASSUMED THAT Z(1) AND Z(2) ARE THE REAL AND IMAGINARY
 C     PARTS OF THE COMPLEX NUMBER Z, AND THAT W(1) AND W(2) ARE
 C     THE REAL AND IMAGINARY PARTS OF W.
 C ----------------------------------------------------------------------
-      DOUBLE PRECISION :: X, Y, R
-      DOUBLE PRECISION :: DCPABS
 C
       X = Z(1)
       Y = Z(2)
@@ -3469,13 +3470,13 @@ C
       REAL FUNCTION ANG (N, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: X(N), Y(N)
       INTEGER :: I
       REAL :: D, RX, RY
       REAL :: SNRM2
 C-----------------------------------------------------------------------
 C           COMPUTATION OF THE ANGLE BETWEEN TWO VECTORS
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N)
 C
       IF (N .LT. 2) GO TO 30
       RX = SNRM2(N, X, 1)
@@ -3652,8 +3653,14 @@ C
 
       DOUBLE PRECISION FUNCTION DSIN1 (X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: MAX, N
       INTEGER :: IPMPAR
+      DOUBLE PRECISION :: A, PI, T, W
+      DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11,
+     &A12, A13
+      DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11,
+     &B12, B13
 C-----------------------------------------------------------------------
 C
 C                DOUBLE PRECISION EVALUATION OF SIN(PI*X)
@@ -3666,12 +3673,6 @@ C     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
 C     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: A, PI, T, W
-      DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11,
-     &A12, A13
-      DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11,
-     &B12, B13
 C------------------------
       DATA PI /3.141592653589793238462643383279502884197D+00/
 C------------------------
@@ -3749,8 +3750,14 @@ C
 
       DOUBLE PRECISION FUNCTION DCOS1 (X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: MAX, N
       INTEGER :: IPMPAR
+      DOUBLE PRECISION :: A, PI, T, W
+      DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11,
+     &A12, A13
+      DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11,
+     &B12, B13
 C-----------------------------------------------------------------------
 C
 C                DOUBLE PRECISION EVALUATION OF COS(PI*X)
@@ -3763,12 +3770,6 @@ C     THE EXPANSION FOR COS(PI*A) (ABS(A) .LE. PI/4) USING B1,...,B13
 C     IS ACCURATE TO WITHIN 4 UNITS OF THE 40-TH SIGNIFICANT DIGIT.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: A, PI, T, W
-      DOUBLE PRECISION :: A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11,
-     &A12, A13
-      DOUBLE PRECISION :: B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11,
-     &B12, B13
 C------------------------
       DATA PI /3.141592653589793238462643383279502884197D+00/
 C------------------------
@@ -3846,13 +3847,13 @@ C
 
       SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
       IMPLICIT NONE
-      REAL :: AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3,
-     &SP4, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
-C
       INTEGER, INTENT(IN) :: ISW
       REAL, INTENT(INOUT) :: SINHM, COSHM
       REAL, INTENT(IN) :: X
+      REAL :: AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3,
+     &SP4, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
       REAL :: CUT(5)
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -3980,11 +3981,11 @@ C
       DOUBLE PRECISION FUNCTION DESUM (MU, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MU
+      DOUBLE PRECISION, INTENT(IN) :: X
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C                    EVALUATION OF EXP(MU + X)
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: W
 C
       IF (X .GT. 0.D0) GO TO 10
 C
@@ -4541,10 +4542,10 @@ C
       INTEGER, INTENT(INOUT) :: L, M
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X0, Y0
+      REAL, INTENT(IN) :: X(N), Y(N)
       INTEGER :: I, N0
       REAL :: ANGLE, EPS, PI, PI2, SUM, THETA, THETA1, THETAI, TOL, U, V
       REAL :: SPMPAR
-      REAL, INTENT(IN) :: X(N), Y(N)
 C-----------------------------------------------------------------------
 C     GIVEN A POLYGONAL LINE CONNECTING THE VERTICES (X(I),Y(I))
 C     (I = 1,...,N) TAKEN IN THIS ORDER. IT IS ASSUMED THAT THE
@@ -4625,19 +4626,19 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(OUT) :: NUM
+      REAL, INTENT(IN) :: A(2), B(2), X(N), Y(N)
+      REAL, INTENT(INOUT) :: U(M), V(M)
       INTEGER :: I, IND, NM1
       REAL :: D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX,
      &TMIN, TOL, TOL0
       REAL :: SPMPAR
+      REAL :: K, KI
 C-----------------------------------------------------------------------
 C
 C                 INTERSECTION OF A STRIGHT LINE
 C                       AND POLYGONAL PATH
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(2), B(2), X(N), Y(N)
-      REAL, INTENT(INOUT) :: U(M), V(M)
-      REAL :: K, KI
 C----------------------
 C
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -4793,17 +4794,17 @@ C
       INTEGER, INTENT(INOUT) :: K
       INTEGER, INTENT(IN) :: M
       INTEGER, INTENT(INOUT) :: N
+      REAL, INTENT(INOUT) :: X(M), Y(M)
+      REAL, INTENT(INOUT) :: BX(*), BY(*), VX(*), VY(*)
       INTEGER :: I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN,
      &LSAV, MM1, MP1, NN
       REAL :: DX, DX0, DY, DY0, EPS, H, ONEP, R, X1, XM, XMAX, XMIN,
      &YMAX, YMIN
       REAL :: SPMPAR
+      LOGICAL :: IBEG
 C-----------------------------------------------------------------------
 C           OBTAINING THE CONVEX HULL FOR A FINITE PLANAR SET
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(M), Y(M)
-      REAL, INTENT(INOUT) :: BX(*), BY(*), VX(*), VY(*)
-      LOGICAL :: IBEG
 C---------------------
 C
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -5181,10 +5182,10 @@ C
 
       REAL FUNCTION PAREA(X, Y, NB)
       IMPLICIT NONE
-      INTEGER :: I, N, NM1
-      REAL :: A
       INTEGER, INTENT(IN) :: NB
       REAL, INTENT(IN) :: X(NB), Y(NB)
+      INTEGER :: I, N, NM1
+      REAL :: A
 C
 C*****************************************************************
 C
@@ -5222,7 +5223,10 @@ C
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(INOUT) :: NB
       INTEGER, INTENT(IN) :: NUM
+      INTEGER, INTENT(IN) :: PR(*)
+      INTEGER, INTENT(INOUT) :: AR(M), S(N), IWK(NUM)
       INTEGER :: I, II, NP1
+      INTEGER :: S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
 C
 C SUBROUTINE TO FIND ONE OR MORE HAMILTONIAN CIRCUITS IN A
 C DIRECTED GRAPH OF  N  VERTICES ( N .GT. 1 ) REPRESENTED
@@ -5285,9 +5289,6 @@ C ALTERED BY THE ROUTINE.
 C
 C     INTEGER PR(N + 1), AR(M), S(N), IWK(M + 8*N + 20)
 C
-      INTEGER, INTENT(IN) :: PR(*)
-      INTEGER, INTENT(INOUT) :: AR(M), S(N), IWK(NUM)
-      INTEGER :: S0, PC, AC, VR, VC, P, SUBR, RBUS, TOR
 C
       NP1 = N + 1
       IF (IND .LT. 0 .OR. IND .GT. 3) GO TO 20
@@ -5333,6 +5334,9 @@ C
       INTEGER, INTENT(IN) :: M, N
       INTEGER, INTENT(INOUT) :: NB
       INTEGER, INTENT(IN) :: NP1
+      INTEGER, INTENT(IN) :: PR(NP1)
+      INTEGER, INTENT(INOUT) :: PC(NP1), AR(M), AC(M), S(N), VR(N),
+     &VC(N), P(N), SUBR(N), RBUS(N), TOR(N)
       INTEGER :: I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL,
      &JSUBR, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
       REAL :: DENS, SCORE
@@ -5373,9 +5377,6 @@ C K    = CURRENT LEVEL OF THE BRANCH-DECISION TREE.
 C IND0 = VALUE OF IND WHEN HC WAS PREVIOUSLY CALLED AND
 C        THERE WERE NO INPUT ERRORS.
 C
-      INTEGER, INTENT(IN) :: PR(NP1)
-      INTEGER, INTENT(INOUT) :: PC(NP1), AR(M), AC(M), S(N), VR(N),
-     &VC(N), P(N), SUBR(N), RBUS(N), TOR(N)
 C
       NBO = NB
       NB = 0
@@ -5674,6 +5675,10 @@ C
       INTEGER, INTENT(IN) :: J, JR, K, M, N
       INTEGER, INTENT(OUT) :: NP
       INTEGER, INTENT(IN) :: NP1
+      INTEGER, INTENT(IN) :: SUBR(N)
+      INTEGER, INTENT(INOUT) :: RBUS(N)
+      INTEGER, INTENT(IN) :: AR(M), PR(NP1)
+      INTEGER, INTENT(INOUT) :: S(N)
       INTEGER :: JA, K1, L, L1, L2
 C
 C SUBROUTINE TO FIND THE STARTING VERTEX  I1  AND THE ENDING
@@ -5688,10 +5693,6 @@ C          EXISTS (THE HAMILTONIAN CIRCUIT IS STORED IN  S )
 C    = -1  IF THE PATH CONTAINS  N  VERTICES BUT ARC (I2,I1)
 C          DOES NOT EXIST.
 C
-      INTEGER, INTENT(IN) :: SUBR(N)
-      INTEGER, INTENT(INOUT) :: RBUS(N)
-      INTEGER, INTENT(IN) :: AR(M), PR(NP1)
-      INTEGER, INTENT(INOUT) :: S(N)
 C
       NP = 0
       L = 1
@@ -5740,13 +5741,13 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
       SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: I1, K1, M, N, NP1
+      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
       INTEGER :: IA, J, J1, J2, L, L1, L2
 C
 C FORWARD STEP UPDATING
 C
-      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 C
       J1 = P1(I1) + 1
       J2 = P1(I1+1)
@@ -5769,13 +5770,13 @@ C
       SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: II, K1, K2, M, N, NP1
+      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
       INTEGER :: IA, L, L1, L2, LL, LL1, LL2
 C
 C BACKTRACKING STEP UPDATING
 C
-      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 C
       L1 = P1(II) + 1
       L2 = P1(II+1)
@@ -5800,13 +5801,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IA
       INTEGER, INTENT(IN) :: IB, K1, L, M, N, NP1
+      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
+      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
+      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
       INTEGER :: IARC, J1, J2, JJ, M1, M2, MM
 C
 C UPDATING FOR IMPLIED ARC
 C
-      INTEGER, INTENT(INOUT) :: A1(M), A2(M)
-      INTEGER, INTENT(IN) :: P1(NP1), P2(NP1)
-      INTEGER, INTENT(INOUT) :: V1(N), V2(N)
 C
       M1 = P1(IB) + 1
       M2 = P1(IB+1)
@@ -5840,6 +5841,9 @@ C
       INTEGER, INTENT(IN) :: K1
       INTEGER, INTENT(INOUT) :: LL
       INTEGER, INTENT(IN) :: M, N, NP1
+      INTEGER, INTENT(INOUT) :: AR(M), AC(M)
+      INTEGER, INTENT(IN) :: PR(NP1), PC(NP1)
+      INTEGER, INTENT(INOUT) :: VR(N), VC(N)
       INTEGER :: J1, J2, L1, L2
 C
 C SUBROUTINE TO REMOVE ARC  (IA,IB)  FROM THE GRAPH.
@@ -5854,9 +5858,6 @@ C          WOULD ADMIT NO HAMILTONIAN CIRCUIT.
 C LL =  LOCATION OF THE ELEMENT OF  AC  CORRESPONDING TO THE
 C       REMOVED ARC (DEFINED ONLY IF  JJ .GT. 0 ).
 C
-      INTEGER, INTENT(INOUT) :: AR(M), AC(M)
-      INTEGER, INTENT(IN) :: PR(NP1), PC(NP1)
-      INTEGER, INTENT(INOUT) :: VR(N), VC(N)
 C
       J1 = PR(IA) + 1
       J2 = PR(IA+1)
@@ -5887,8 +5888,11 @@ C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
       SUBROUTINE CERF (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
+      REAL :: CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
 C-----------------------------------------------------------------------
 C
 C               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -5899,9 +5903,6 @@ C                        W = ERF(Z)   IF MO = 0
 C                        W = ERFC(Z)  OTHERWISE
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: CD(18), CE(18), EF(2), QF(2), SM(2), SZ(2), TM(2), TS(2)
 C------------------------
 C     C = 1/SQRT(PI)
 C------------------------
@@ -6044,9 +6045,12 @@ C
       SUBROUTINE CERFC (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: C, C2, DM, PM, QM, R, SN, SS, X, Y
       REAL :: EXPARG
+      REAL :: CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
 C-----------------------------------------------------------------------
 C
 C              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6057,9 +6061,6 @@ C           W = ERFC(Z)           IF MO = 0 OR REAL(Z) .LT. 0
 C           W = EXP(X*X)*ERFC(Z)  OTHERWISE
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: CD(18), CE(18), QF(2), SM(2), SZ(2), TM(2), TS(2)
 C------------------------
 C     C = 1/SQRT(PI)
 C------------------------
@@ -6225,10 +6226,10 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: AX, BOT, C, T, TOP, X2
+      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
 C-----------------------------------------------------------------------
 C             EVALUATION OF THE REAL ERROR FUNCTION
 C-----------------------------------------------------------------------
-      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
 C-------------------------
       DATA C /.564189583547756/
 C-------------------------
@@ -6289,11 +6290,11 @@ C
       REAL, INTENT(IN) :: X
       REAL :: AX, BOT, C, E, T, TOP
       REAL :: EXPARG
+      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C-----------------------------------------------------------------------
-      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
-      DOUBLE PRECISION :: W
 C-------------------------
       DATA C /.564189583547756/
 C-------------------------
@@ -6373,18 +6374,18 @@ C
 
       REAL FUNCTION ERFC1 (IND, X)
       IMPLICIT NONE
-      REAL :: EXPARG
       INTEGER, INTENT(IN) :: IND
       REAL, INTENT(IN) :: X
+      REAL :: EXPARG
       REAL :: AX, BOT, C, E, T, TOP
+      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C
 C          ERFC1(IND,X) = ERFC(X)            IF IND = 0
 C          ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
 C-----------------------------------------------------------------------
-      REAL :: A(5), B(3), P(8), Q(8), R(5), S(4)
-      DOUBLE PRECISION :: W
 C-------------------------
       DATA C /.564189583547756/
 C-------------------------
@@ -6471,6 +6472,15 @@ C
       SUBROUTINE DCERF (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      DOUBLE PRECISION, INTENT(IN) :: Z(2)
+      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+      DOUBLE PRECISION :: M, N, N2, N4, NP1
+      DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+      DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
+      DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
+      DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2),
+     &WN(2)
+      DOUBLE PRECISION :: ANORM, DPMPAR
 C-----------------------------------------------------------------------
 C
 C               COMPUTATION OF THE COMPLEX ERROR FUNCTION
@@ -6481,15 +6491,6 @@ C                       W = ERF(Z)    IF MO = 0
 C                       W = ERFC(Z)   OTHERWISE
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: Z(2)
-      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-      DOUBLE PRECISION :: M, N, N2, N4, NP1
-      DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-      DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
-      DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
-      DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2),
-     &WN(2)
-      DOUBLE PRECISION :: ANORM, DPMPAR
 C------------------------
       ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 C------------------------
@@ -6753,6 +6754,15 @@ C
       SUBROUTINE DCERFC (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      DOUBLE PRECISION, INTENT(IN) :: Z(2)
+      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+      DOUBLE PRECISION :: M, N, N2, N4, NP1
+      DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
+      DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
+      DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
+      DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2),
+     &WN(2)
+      DOUBLE PRECISION :: ANORM, DPMPAR, DXPARG
 C-----------------------------------------------------------------------
 C
 C              COMPUTATION OF THE COMPLEX COERROR FUNCTION
@@ -6763,15 +6773,6 @@ C           W = ERFC(Z)           IF MO = 0 OR REAL(Z) .LT. 0
 C           W = DEXP(X*X)*ERFC(Z)  OTHERWISE
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: Z(2)
-      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-      DOUBLE PRECISION :: M, N, N2, N4, NP1
-      DOUBLE PRECISION :: C, C2, D, D2, E, EPS, R, SN, TOL, X, Y
-      DOUBLE PRECISION :: A0(2), AN(2), B0(2), BN(2)
-      DOUBLE PRECISION :: G0(2), GN(2), H0(2), HN(2)
-      DOUBLE PRECISION :: QF(2), SM(2), SZ(2), TM(2), TS(2), W0(2),
-     &WN(2)
-      DOUBLE PRECISION :: ANORM, DPMPAR, DXPARG
 C------------------------
       ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 C------------------------
@@ -7040,15 +7041,15 @@ C
       SUBROUTINE ERFCM2 (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      DOUBLE PRECISION, INTENT(IN) :: Z(2)
+      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
       INTEGER :: J, N
+      DOUBLE PRECISION :: A(63), C, E, EPS, H(2), T(2), TOL, X, Y
+      DOUBLE PRECISION :: ANORM, DPMPAR
 C-----------------------------------------------------------------------
 C           CALCULATION OF ERFC(Z) USING THE TAYLOR SERIES
 C                          AROUND Z0 = 2
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: Z(2)
-      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-      DOUBLE PRECISION :: A(63), C, E, EPS, H(2), T(2), TOL, X, Y
-      DOUBLE PRECISION :: ANORM, DPMPAR
 C------------------------------
       ANORM(X,Y) = DMAX1(DABS(X),DABS(Y))
 C------------------------------
@@ -7180,15 +7181,15 @@ C
 
       DOUBLE PRECISION FUNCTION DERF (X)
       IMPLICIT NONE
-      INTEGER :: I, K
-C-----------------------------------------------------------------------
-C        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
-C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: AX, T
       DOUBLE PRECISION, INTENT(IN) :: X
+      INTEGER :: I, K
+      DOUBLE PRECISION :: AX, T
       DOUBLE PRECISION :: W
       DOUBLE PRECISION :: A(21)
       DOUBLE PRECISION :: DERFC0
+C-----------------------------------------------------------------------
+C        DOUBLE PRECISION EVALUATION OF THE ERROR FUNCTION
+C-----------------------------------------------------------------------
 C-------------------------------
       DATA A(1)  / .1283791670955125738961589031215D+00/,
      *     A(2)  /-.3761263890318375246320529677070D+00/,
@@ -7241,14 +7242,14 @@ C
 
       DOUBLE PRECISION FUNCTION DERFC (X)
       IMPLICIT NONE
-      INTEGER :: I, K
-C-----------------------------------------------------------------------
-C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X
+      INTEGER :: I, K
       DOUBLE PRECISION :: AX, T, W
       DOUBLE PRECISION :: A(21)
       DOUBLE PRECISION :: DERFC0, DXPARG
+C-----------------------------------------------------------------------
+C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+C-----------------------------------------------------------------------
 C-------------------------------
       DATA A(1)  / .1283791670955125738961589031215D+00/,
      *     A(2)  /-.3761263890318375246320529677070D+00/,
@@ -7308,7 +7309,11 @@ C
       DOUBLE PRECISION FUNCTION DERFC1 (IND, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
+      DOUBLE PRECISION :: AX, T, W
+      DOUBLE PRECISION :: A(21)
+      DOUBLE PRECISION :: DERFC0, DXPARG
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
@@ -7317,10 +7322,6 @@ C          DERFC1(IND,X) = ERFC(X)           IF IND = 0
 C          DERFC1(IND,X) = EXP(X*X)*ERFC(X)  OTHERWISE
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: AX, T, W
-      DOUBLE PRECISION :: A(21)
-      DOUBLE PRECISION :: DERFC0, DXPARG
 C-------------------------------
       DATA A(1)  / .1283791670955125738961589031215D+00/,
      *     A(2)  /-.3761263890318375246320529677070D+00/,
@@ -7556,6 +7557,7 @@ C
       REAL, INTENT(IN) :: P, Q
       REAL :: C, C1, C2, EPS, S, T, V, V1
       REAL :: SPMPAR
+      REAL :: A(6), B(6), A1(7), B1(7), A2(9), B2(8), A3(9), B3(6)
 C-----------------------------------------------------------------------
 C
 C              EVALUATION OF THE INVERSE ERROR FUNCTION
@@ -7570,7 +7572,6 @@ C-----------------------------------------------------------------------
 C     REFERENCE. MATHEMATICS OF COMPUTATION,OCT.1976,PP.827-830.
 C                  J.M.BLAIR,C.A.EDWARDS,J.H.JOHNSON
 C-----------------------------------------------------------------------
-      REAL :: A(6), B(6), A1(7), B1(7), A2(9), B2(8), A3(9), B3(6)
 C-----------------------------------------------------------------------
 C     C2 = LN(1.E-100)
 C-----------------------------------------------------------------------
@@ -7969,14 +7970,14 @@ C
 
       DOUBLE PRECISION FUNCTION DAERF (X, H)
       IMPLICIT NONE
-      INTEGER :: J
-C-----------------------------------------------------------------------
-C             COMPUTATION OF ERF(X + H) - ERF(X - H)
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: X, H
+      INTEGER :: J
       DOUBLE PRECISION :: AH, AX, A2, C, DN2, E, EPS, HF, HG, H2, H3, N,
      &N1, P, S, ST, T, U, V, XMH, XPH, X2, Z
       DOUBLE PRECISION :: DERF, DERFC, DPMPAR, DEPSLN, DXPARG
+C-----------------------------------------------------------------------
+C             COMPUTATION OF ERF(X + H) - ERF(X - H)
+C-----------------------------------------------------------------------
 C---------------------
 C     C = 2/SQRT(PI)
 C     P = LN(9*SQRT(PI))
@@ -8185,6 +8186,10 @@ C
       SUBROUTINE DPNI (P, Q, D, W, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      DOUBLE PRECISION, INTENT(IN) :: P, Q, D
+      DOUBLE PRECISION, INTENT(INOUT) :: W
+      DOUBLE PRECISION :: EPS, RT2, U, V, T
+      DOUBLE PRECISION :: DPMPAR, DERFI
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE INVERSE NORMAL DISTRIBUTION FUNCTION
@@ -8206,10 +8211,6 @@ C       IERR = 1  EITHER P OR Q IS INCORRECT.
 C       IERR = 2  D IS INCORRECT.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: P, Q, D
-      DOUBLE PRECISION, INTENT(INOUT) :: W
-      DOUBLE PRECISION :: EPS, RT2, U, V, T
-      DOUBLE PRECISION :: DPMPAR, DERFI
 C------------------------
 C     RT2 = SQRT(2)
 C------------------------
@@ -8241,7 +8242,11 @@ C
 
       REAL FUNCTION DAW(X)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: X
       INTEGER :: I
+      REAL :: P1(9), Q1(9), P2(8), Q2(7), P3(8), Q3(7), P4(7), Q4(6),
+     &FRAC, SUMP, SUMQ, W2
+      REAL :: Y, XLARGE, XSMALL
 C-----------------------------------------------------------------------
 C
 C     THIS FUNCTION COMPUTES SINGLE PRECISION VALUES OF DAWSONS
@@ -8256,10 +8261,6 @@ C     APPROXIMATIONS PUBLISHED IN MATH. COMP. 24, 171-178(1970) BY
 C     CODY, PACIOREK AND THACHER.
 C
 C-----------------------------------------------------------------------
-      REAL :: P1(9), Q1(9), P2(8), Q2(7), P3(8), Q3(7), P4(7), Q4(6),
-     &FRAC, SUMP, SUMQ, W2
-      REAL, INTENT(IN) :: X
-      REAL :: Y, XLARGE, XSMALL
 C---------------
       DATA XLARGE/16777216.0/, XSMALL/.59604644775391E-07/
 C---------------
@@ -8387,13 +8388,13 @@ C
 
       DOUBLE PRECISION FUNCTION DPDAW (X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
+      DOUBLE PRECISION :: A(20), B(45), AX, EPS, T, W
+      DOUBLE PRECISION :: DCSEVL, DPDAW0
 C-----------------------------------------------------------------------
 C            DOUBLE PRECISION COMPUTATION OF DAWSONS INTEGRAL
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: A(20), B(45), AX, EPS, T, W
-      DOUBLE PRECISION :: DCSEVL, DPDAW0
 C----------------------------
       DATA EPS /1.D-31/
 C----------------------------
@@ -8695,10 +8696,13 @@ C
       SUBROUTINE CFRNLI (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: C, C0, DM, PM, QM, R, SS, X, Y
       REAL :: EXPARG
       REAL :: CPABS
+      REAL :: CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
 C-----------------------------------------------------------------------
 C
 C            COMPUTATION OF THE COMPLEX FRESNEL INTEGRAL E(Z)
@@ -8709,9 +8713,6 @@ C                      W = E(Z)          IF MO = 0
 C                      W = EXP(-Z)*E(Z)  OTHERWISE
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: CD(18), CE(18), QF(2), SM(2), TM(2), TS(2), ZR(2)
 C------------------------
 C     C = 1/SQRT(PI)
 C     C0 = -1/SQRT(2)
@@ -8880,15 +8881,15 @@ C
       REAL :: SIN1
       REAL :: COS1
       INTEGER :: IPMPAR
-C-----------------------------------------------------------------------
-C             EVALUATION OF THE REAL FRESNEL INTEGRALS
-C-----------------------------------------------------------------------
       REAL :: N
       REAL :: A(6), B(6), CP(13), SP(13)
       REAL :: PN(6), PD(6), QN(6), QD(6)
       REAL :: AN(6), AD(6), BN(6), BD(6)
       REAL :: CN(5), CD(5), DN(5), DD(5)
       REAL :: FP(7), GP(7), P(6), Q(6)
+C-----------------------------------------------------------------------
+C             EVALUATION OF THE REAL FRESNEL INTEGRALS
+C-----------------------------------------------------------------------
 C--------------------------
       DATA PI/3.1415926535898/
 C--------------------------
@@ -9097,21 +9098,21 @@ C
       SUBROUTINE CEXPLI (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
       REAL :: ANORM
       REAL :: SPMPAR
       REAL :: CPABS
-C-----------------------------------------------------------------------
-C           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
-C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
       REAL :: N, NP1
       REAL :: CD(18), CE(18)
       REAL :: QF(2), SM(2), TM(2), TS(2)
       REAL :: G0(2), GN(2), H0(2), HN(2), WN(2)
       LOGICAL :: IND
+C-----------------------------------------------------------------------
+C           EVALUATION OF THE COMPLEX EXPONENTIAL INTEGRAL
+C-----------------------------------------------------------------------
 C-------------------------
       ANORM(X,Y) = AMAX1(ABS(X),ABS(Y))
 C-------------------------
@@ -9286,20 +9287,20 @@ C
 
       SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: ARG
+      REAL, INTENT(INOUT) :: RESULT
+      INTEGER, INTENT(IN) :: INT
+      INTEGER, INTENT(OUT) :: IERR
       INTEGER :: M
       REAL :: CSEVL
       REAL :: ALNREL
-C
       REAL :: A(6), B(5), C(7), D(7), E(7), F(7), P1(8), Q1(8), P2(8),
      &Q2(7), P3(8), Q3(7), P4(8), Q4(7), R(20), PX(9), QX(9), FRAC,
      &SUMP, SUMQ, T, W, X, X0, XX0, XMX0, Y, DEXP40, XMAX, XMIN, EI
-      REAL, INTENT(IN) :: ARG
-      REAL, INTENT(INOUT) :: RESULT
       REAL :: EXPARG
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INT
-      INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION :: DX0
+C
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE COMPUTES THE EXPONENTIAL INTEGRALS
@@ -9654,7 +9655,12 @@ C
 
       DOUBLE PRECISION FUNCTION DE1E(X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: M
+      DOUBLE PRECISION :: C, EPS, T, W
+      DOUBLE PRECISION :: A(50), B(60), D(41), E(29), R(25), P(50),
+     &Q(64)
+      DOUBLE PRECISION :: DEI0, DCSEVL, DPMPAR
 C-----------------------------------------------------------------------
 C
 C     LET E1(X) DENOTE THE EXPONENTIAL INTEGRAL FOR POSITIVE X AND
@@ -9722,11 +9728,6 @@ C                               SIGNIFICANT FIGURES REQUIRED  30.40
 C                                    DECIMAL PLACES REQUIRED  32.20
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: C, EPS, T, W
-      DOUBLE PRECISION :: A(50), B(60), D(41), E(29), R(25), P(50),
-     &Q(64)
-      DOUBLE PRECISION :: DEI0, DCSEVL, DPMPAR
 C------------------------------
       DATA A(1)  / .3284394579616699087873844201881D-01/,
      *     A(2)  /-.1669920452031362851476184343387D-01/,
@@ -10129,7 +10130,13 @@ C
 
       DOUBLE PRECISION FUNCTION DEI0 (X, EPS)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: EPS
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: N
+      DOUBLE PRECISION :: A(40), C
+      DOUBLE PRECISION :: H, T
+      DOUBLE PRECISION :: W
+      DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
 C-----------------------------------------------------------------------
 C
 C            TAYLOR SERIES EXPANSION OF EI(X) AROUND X0,
@@ -10141,12 +10148,6 @@ C     WRITTEN BY A.H. MORRIS
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: A(40), C
-      DOUBLE PRECISION, INTENT(IN) :: EPS
-      DOUBLE PRECISION :: H, T
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: W
-      DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
 C-------------------------
       DATA DK1 /25598514349.D0/, DK2 /12212826724.D0/,
      *     DK3 /52346020729.D0/
@@ -10469,15 +10470,15 @@ C
 
       SUBROUTINE CEXEXI (Z, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
+      REAL :: TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
+      REAL :: ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
-      REAL :: ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
 C-------------------------
 C     EULER = EULER CONSTANT
 C     CONST = (PI*PI)/4
@@ -10704,14 +10705,14 @@ C-----------------------------------------------------------------------
 
       COMPLEX FUNCTION CLI(Z)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z
       INTEGER :: N
       REAL :: CPABS
+      REAL :: QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
+      REAL :: AZ(2), C, PM, R, SM(2), TM(2), TS(2), SR(2)
 C     ******************************************************************
 C     COMPUTATION OF THE COMPLEX LOGARITHMIC INTEGRAL
 C     ******************************************************************
-      COMPLEX, INTENT(IN) :: Z
-      REAL :: QB(25), QF(2), DL(2), DS, ZD(2), ZL(2)
-      REAL :: AZ(2), C, PM, R, SM(2), TM(2), TS(2), SR(2)
 C     ---------------------
 C     C = PI**2/6
 C     ---------------------
@@ -10825,6 +10826,8 @@ C
       REAL, INTENT(IN) :: X
       INTEGER :: I, L
       REAL :: CONST, T, W
+      REAL :: A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
+      DOUBLE PRECISION :: X0
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE REAL DILOGARITHM FUNCTION
 C-----------------------------------------------------------------------
@@ -10833,8 +10836,6 @@ C        ALFRED H. MORRIS, JR.
 C        NAVAL SURFACE WEAPONS CENTER
 C        DAHLGREN VIRGINIA
 C-----------------------------------------------------------------------
-      REAL :: A(5), B(6), C(10), D(2), E(18), P(4), Q(8), R(7), S(6)
-      DOUBLE PRECISION :: X0
 C--------------------------
 C     CONST = PI**2/6
 C     X0 = ZERO OF THE REAL DILOGARITHM FUNCTION
@@ -10982,6 +10983,8 @@ C
       SUBROUTINE CGAMMA (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: J, K, L, M, MAX, N, NM1
       REAL :: A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2,
      &HL2P, PI, PI2, S, S1, S2, SN, T, T1, T2, U, U1, U2, V1, V2, W1,
@@ -10989,6 +10992,8 @@ C
       REAL :: REXP
       INTEGER :: IPMPAR
       REAL :: SPMPAR
+      COMPLEX :: ETA, ETA2, SUM
+      REAL :: C0(12)
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -11001,10 +11006,6 @@ C                 W = GAMMA(Z)       IF MO = 0
 C                 W = LN(GAMMA(Z))   OTHERWISE
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: ETA, ETA2, SUM
-      REAL :: C0(12)
 C---------------------------
 C     ALPI = LOG(PI)
 C     HL2P = 0.5 * LOG(2*PI)
@@ -11222,14 +11223,14 @@ C-----------------------------------------------------------------------
 
       COMPLEX FUNCTION CGAM0 (Z)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z
       INTEGER :: I, K, N
       REAL :: X, Y
+      COMPLEX :: W
+      REAL :: A(25)
 C-----------------------------------------------------------------------
 C          EVALUATION OF 1/GAMMA(1 + Z)  FOR ABS(Z) .LT. 1.0
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: W
-      REAL :: A(25)
 C-----------------------
       DATA A(1)  / .577215664901533E+00/, A(2)  /-.655878071520254E+00/,
      *     A(3)  /-.420026350340952E-01/, A(4)  / .166538611382291E+00/,
@@ -11267,6 +11268,8 @@ C
       REAL :: BOT, PI, R1, R2, R3, R4, R5, S, T, TOP, W, X
       REAL :: EXPARG
       REAL :: SPMPAR
+      REAL :: P(7), Q(7)
+      DOUBLE PRECISION :: D, G, Z, LNX, GLOG
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE GAMMA FUNCTION FOR REAL ARGUMENTS
@@ -11281,8 +11284,6 @@ C     WRITTEN BY ALFRED H. MORRIS, JR.
 C          NAVAL SURFACE WEAPONS CENTER
 C          DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      REAL :: P(7), Q(7)
-      DOUBLE PRECISION :: D, G, Z, LNX, GLOG
 C--------------------------
 C     D = 0.5*(LN(2*PI) - 1)
 C--------------------------
@@ -11396,13 +11397,13 @@ C
 
       DOUBLE PRECISION FUNCTION GLOG(X)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: X
       INTEGER :: N
       REAL :: C1, C2, C3, T, T2
+      DOUBLE PRECISION :: Z, W(163)
 C     -------------------
 C     EVALUATION OF LN(X) FOR X .GE. 15
 C     -------------------
-      REAL, INTENT(IN) :: X
-      DOUBLE PRECISION :: Z, W(163)
 C     -------------------
       DATA C1/.286228750476730/, C2/.399999628131494/,
      1     C3/.666666666752663/
@@ -11513,10 +11514,10 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
       REAL :: BOT, D, S1, S2, T, TOP, W
+      REAL :: P(7), Q(5), R(9)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
 C-----------------------------------------------------------------------
-      REAL :: P(7), Q(5), R(9)
 C------------------------
       DATA P(1)/ .577215664901533E+00/, P(2)/-.409078193005776E+00/,
      *     P(3)/-.230975380857675E+00/, P(4)/ .597275330452234E-01/,
@@ -11566,8 +11567,8 @@ C
 
       REAL FUNCTION GAMLN (A)
       IMPLICIT NONE
-      REAL :: GAMLN1
       REAL, INTENT(IN) :: A
+      REAL :: GAMLN1
       INTEGER :: I, N
       REAL :: C0, C1, C2, C3, C4, C5, D, T, W
 C-----------------------------------------------------------------------
@@ -11647,8 +11648,15 @@ C
       SUBROUTINE DCGAMA (MO, Z, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
+      DOUBLE PRECISION, INTENT(IN) :: Z(2)
+      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
       INTEGER :: J, K, MAX, N, NM1
       INTEGER :: IPMPAR
+      DOUBLE PRECISION :: C0(30), DLPI, HL2P, PI, PI2
+      DOUBLE PRECISION :: A, A1, A2, C, CN, CUT, D, EPS, ET, E2T, H1,
+     &H2, Q1, Q2, S, SN, S1, S2, T, T1, T2, U, U1, U2, V1, V2, W1, W2,
+     &X, Y, Y2
+      DOUBLE PRECISION :: DPMPAR, DREXP
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE COMPLEX GAMMA AND LOGGAMMA FUNCTIONS
@@ -11664,13 +11672,6 @@ C                 W = GAMMA(Z)       IF MO = 0
 C                 W = LN(GAMMA(Z))   OTHERWISE
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: Z(2)
-      DOUBLE PRECISION, INTENT(INOUT) :: W(2)
-      DOUBLE PRECISION :: C0(30), DLPI, HL2P, PI, PI2
-      DOUBLE PRECISION :: A, A1, A2, C, CN, CUT, D, EPS, ET, E2T, H1,
-     &H2, Q1, Q2, S, SN, S1, S2, T, T1, T2, U, U1, U2, V1, V2, W1, W2,
-     &X, Y, Y2
-      DOUBLE PRECISION :: DPMPAR, DREXP
 C---------------------------
 C     DLPI = LOG(PI)
 C     HL2P = 0.5 * LOG(2*PI)
@@ -11921,7 +11922,10 @@ C-----------------------------------------------------------------------
 
       DOUBLE PRECISION FUNCTION DGAMMA(A)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A
       INTEGER :: J, N
+      DOUBLE PRECISION :: D, PI, S, T, X, W
+      DOUBLE PRECISION :: DPMPAR, DSIN1, DGAM1, DPDEL, DXPARG
 C-----------------------------------------------------------------------
 C
 C                EVALUATION OF THE GAMMA FUNCTION FOR
@@ -11937,9 +11941,6 @@ C     WRITTEN BY ALFRED H. MORRIS, JR.
 C          NAVAL SURFACE WEAPONS CENTER
 C          DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: D, PI, S, T, X, W
-      DOUBLE PRECISION :: DPMPAR, DSIN1, DGAM1, DPDEL, DXPARG
 C-----------------------------------------------------------------------
 C     D = 0.5*(LN(2*PI) - 1)
 C-----------------------------------------------------------------------
@@ -12023,7 +12024,9 @@ C
 
       DOUBLE PRECISION FUNCTION DPDEL(X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, K
+      DOUBLE PRECISION :: A(15), T, W
 C-----------------------------------------------------------------------
 C
 C     COMPUTATION OF THE FUNCTION DEL(X) FOR  X .GE. 10  WHERE
@@ -12036,8 +12039,6 @@ C     A.H. MORRIS FROM THE CHEBYSHEV SERIES IN THE SLATEC LIBRARY
 C     OBTAINED BY WAYNE FULLERTON (LOS ALAMOS).
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: A(15), T, W
 C-----------------------------------------------------------------------
       DATA A(1)  / .833333333333333333333333333333D-01/,
      *     A(2)  /-.277777777777777777777777752282D-04/,
@@ -12235,7 +12236,10 @@ C
 
       DOUBLE PRECISION FUNCTION DGAMLN (A)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A
       INTEGER :: I, N
+      DOUBLE PRECISION :: D, X, W
+      DOUBLE PRECISION :: DGMLN1, DPDEL
 C-----------------------------------------------------------------------
 C
 C           EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
@@ -12247,9 +12251,6 @@ C          DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
 C     D = 0.5*(LN(2*PI) - 1)
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: D, X, W
-      DOUBLE PRECISION :: DGMLN1, DPDEL
 C--------------------------
       DATA D /0.41893853320467274178032973640562D0/
 C--------------------------
@@ -12292,20 +12293,20 @@ C-----------------------
 
       SUBROUTINE CPSI (Z, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: J, K, L, M, MAX
       REAL :: A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1,
      &S2, SN, T, U, W1, W2, X, Y, Y2
       REAL :: REXP
       INTEGER :: IPMPAR
       REAL :: SPMPAR
-C-----------------------------------------------------------------------
-C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
-C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: W
       COMPLEX :: ETA, ETA2, SUM
       REAL :: C0(12)
       DOUBLE PRECISION :: DS1, DS2
+C-----------------------------------------------------------------------
+C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
+C-----------------------------------------------------------------------
 C----------------------------
 C     PI2 = 2*PI
 C----------------------------
@@ -12431,11 +12432,13 @@ C-----------------------------------------------------------------------
 
       REAL FUNCTION PSI(XX)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: XX
       INTEGER :: IPMPAR
       REAL :: SPMPAR
-      REAL, INTENT(IN) :: XX
       INTEGER :: I, M, N, NQ
       REAL :: AUG, DEN, PIOV4, SGN, UPPER, W, X, XMAX1, XMX0, XSMALL, Z
+      REAL :: P1(7), P2(4), Q1(6), Q2(4)
+      DOUBLE PRECISION :: DX0
 C---------------------------------------------------------------------
 C
 C                 EVALUATION OF THE DIGAMMA FUNCTION
@@ -12454,8 +12457,6 @@ C     PSI WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR THE FUNPACK
 C     PACKAGE OF SPECIAL FUNCTION SUBROUTINES. PSI WAS MODIFIED BY
 C     A.H. MORRIS (NSWC).
 C---------------------------------------------------------------------
-      REAL :: P1(7), P2(4), Q1(6), Q2(4)
-      DOUBLE PRECISION :: DX0
 C---------------------------------------------------------------------
 C
 C     PIOV4 = PI/4
@@ -12609,18 +12610,18 @@ C---------------------------------------------------------------------
 
       SUBROUTINE DCPSI (Z, W)
       IMPLICIT NONE
-      INTEGER :: J, K, M, MAX
-      INTEGER :: IPMPAR
-C-----------------------------------------------------------------------
-C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: Z(2)
       DOUBLE PRECISION, INTENT(INOUT) :: W(2)
+      INTEGER :: J, K, M, MAX
+      INTEGER :: IPMPAR
       DOUBLE PRECISION :: C0(30), PI, PI2
       DOUBLE PRECISION :: A, A1, A2, CN, CUT, C1, C2, EPS, ET, H1, H2,
      &Q1, Q2, S, SN, S1, S2, T, T1, T2, U, U1, U2, V1, V2, W1, W2, X, Y,
      &Y2
       DOUBLE PRECISION :: DREXP, DPMPAR
+C-----------------------------------------------------------------------
+C           EVALUATION OF THE COMPLEX DIGAMMA FUNCTION
+C-----------------------------------------------------------------------
 C----------------------------
 C     PI2 = 2*PI
 C----------------------------
@@ -12784,8 +12785,11 @@ C-----------------------------------------------------------------------
 
       DOUBLE PRECISION FUNCTION DPSI(A)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A
       INTEGER :: IPMPAR
       INTEGER :: J, K, L, MAX, N
+      DOUBLE PRECISION :: C(42), EPS, P(15), PI, S, T, X, X0, XMAX, W
+      DOUBLE PRECISION :: DCSEVL, DPSI0, DPMPAR
 C-----------------------------------------------------------------------
 C
 C               EVALUATION OF THE DIGAMMA FUNCTION FOR
@@ -12815,9 +12819,6 @@ C     THE CHEBYSHEV SERIES IN THE SLATEC LIBRARY OBTAINED BY WAYNE
 C     FULLERTON (LOS ALAMOS).
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: C(42), EPS, P(15), PI, S, T, X, X0, XMAX, W
-      DOUBLE PRECISION :: DCSEVL, DPSI0, DPMPAR
 C----------------------------
       DATA PI /3.1415926535897932384626433832795D0/
       DATA X0 /.46163214496836234126265954232572D0/
@@ -12978,7 +12979,11 @@ C
 
       DOUBLE PRECISION FUNCTION DPSI0 (X)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, L, N, NM1
+      DOUBLE PRECISION :: A(20), H
+      DOUBLE PRECISION :: W
+      DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
 C-----------------------------------------------------------------------
 C
 C            TAYLOR SERIES EXPANSION OF PSI(X) AROUND X0,
@@ -12989,10 +12994,6 @@ C     WRITTEN BY A.H. MORRIS
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: A(20), H
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: W
-      DOUBLE PRECISION :: DK1, DK2, DK3, DB, DB2, DX
 C-------------------------
       DATA DK1 /100442596182.D0/, DK2 /51069247913.D0/,
      *     DK3 /53827985572.D0/
@@ -13054,7 +13055,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(INOUT) :: ANS(M)
       INTEGER :: I, J, K, MX, NMAX, NN, NP, NX
+      REAL :: ALPHA, ARG, BETA, C, DEN, ELIM, EPS, FLN, FN, FNP, FNS,
+     &FX, ND, RXSQ, S, T, TA, TK, TOL, TOLS, TSS, TST, TT, T1, T2, WDTOL
+      REAL :: XDMLN, XDMY, XINC, XLN, XM, XMIN
+      REAL :: B(22), TRM(22), TRMR(100)
+      REAL :: EPSLN, EXPARG, SPMPAR
 C-----------------------------------------------------------------------
 C
 C         PSIDF COMPUTES M MEMBER SEQUENCES OF SCALED DERIVATIVES OF
@@ -13123,13 +13131,6 @@ C     (2) HANDBOOK OF MATHEMATICAL FUNCTIONS, AMS 55, NATIONAL BUREAU
 C         OF STANDARDS BY M. ABRAMOWITZ AND I.A. STEGUN, 1964, PP.
 C         258-260, EQUATIONS 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
 C-----------------------------------------------------------------------
-      REAL :: ALPHA, ARG, BETA, C, DEN, ELIM, EPS, FLN, FN, FNP, FNS,
-     &FX, ND, RXSQ, S, T, TA, TK, TOL, TOLS, TSS, TST, TT, T1, T2, WDTOL
-      REAL, INTENT(IN) :: X
-      REAL :: XDMLN, XDMY, XINC, XLN, XM, XMIN
-      REAL, INTENT(INOUT) :: ANS(M)
-      REAL :: B(22), TRM(22), TRMR(100)
-      REAL :: EPSLN, EXPARG, SPMPAR
 C------------------------
 C     C = 1/LN(10)
 C------------------------
@@ -13522,8 +13523,8 @@ C
 
       REAL FUNCTION ALGDIV (A, B)
       IMPLICIT NONE
-      REAL :: ALNREL
       REAL, INTENT(IN) :: A, B
+      REAL :: ALNREL
       REAL :: C, C0, C1, C2, C3, C4, C5, D, H, S11, S3, S5, S7, S9, T,
      &U, V, W, X, X2
 C-----------------------------------------------------------------------
@@ -13579,13 +13580,13 @@ C
 
       DOUBLE PRECISION FUNCTION DBETLN (A0, B0)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A0, B0
       INTEGER :: I, N
+      DOUBLE PRECISION :: A, B, C, E, H, SN, U, V, W, Z
+      DOUBLE PRECISION :: DBCORR, DGAMLN, DGSMLN, DLGDIV, DLNREL
 C-----------------------------------------------------------------------
 C     EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A0, B0
-      DOUBLE PRECISION :: A, B, C, E, H, SN, U, V, W, Z
-      DOUBLE PRECISION :: DBCORR, DGAMLN, DGSMLN, DLGDIV, DLNREL
 C--------------------------
 C     E = 0.5*LN(2*PI)
 C--------------------------
@@ -13690,7 +13691,9 @@ C
 
       DOUBLE PRECISION FUNCTION DBCORR (A0, B0)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A0, B0
       INTEGER :: J, K
+      DOUBLE PRECISION :: A, B, C, E(15), H, S(15), T, W, X, X2, Z
 C-----------------------------------------------------------------------
 C
 C     EVALUATION OF DEL(A) + DEL(B0) - DEL(A) + B0) WHERE
@@ -13704,8 +13707,6 @@ C     DERIVED BY A.H. MORRIS FROM THE CHEBYSHEV SERIES IN THE
 C     SLATEC LIBRARY OBTAINED BY WAYNE FULLERTON (LOS ALAMOS).
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A0, B0
-      DOUBLE PRECISION :: A, B, C, E(15), H, S(15), T, W, X, X2, Z
 C--------------------------
       DATA E(1)  / .833333333333333333333333333333D-01/,
      *     E(2)  /-.277777777777777777777777752282D-04/,
@@ -13763,7 +13764,10 @@ C
 
       DOUBLE PRECISION FUNCTION DLGDIV (A, B)
       IMPLICIT NONE
+      DOUBLE PRECISION, INTENT(IN) :: A, B
       INTEGER :: J, K
+      DOUBLE PRECISION :: C, D, E(15), H, S(15), T, U, V, W, X, X2
+      DOUBLE PRECISION :: DLNREL
 C-----------------------------------------------------------------------
 C
 C     COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) FOR B .GE. 10
@@ -13777,9 +13781,6 @@ C     DERIVED BY A.H. MORRIS FROM THE CHEBYSHEV SERIES IN THE
 C     SLATEC LIBRARY OBTAINED BY WAYNE FULLERTON (LOS ALAMOS).
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A, B
-      DOUBLE PRECISION :: C, D, E(15), H, S(15), T, U, V, W, X, X2
-      DOUBLE PRECISION :: DLNREL
 C--------------------------
       DATA E(1)  / .833333333333333333333333333333D-01/,
      *     E(2)  /-.277777777777777777777777752282D-04/,
@@ -13855,6 +13856,11 @@ C
       REAL :: RCOMP
       REAL :: RLOG
       REAL :: SPMPAR
+      REAL :: J, L, ACC0(3), BIG(3), E0(3), X0(3), WK(20)
+      REAL :: A0(4), A1(4), A2(2), A3(2), A4(2), A5(2), A6(2), A7(2),
+     &A8(2)
+      REAL :: B0(6), B1(4), B2(5), B3(5), B4(4), B5(3), B6(2), B7(2)
+      REAL :: D0(6), D1(4), D2(2), D3(2), D4(1), D5(1), D6(1)
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -13886,11 +13892,6 @@ C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C     REVISED ... DEC 1991
 C-------------------------
-      REAL :: J, L, ACC0(3), BIG(3), E0(3), X0(3), WK(20)
-      REAL :: A0(4), A1(4), A2(2), A3(2), A4(2), A5(2), A6(2), A7(2),
-     &A8(2)
-      REAL :: B0(6), B1(4), B2(5), B3(5), B4(4), B5(3), B6(2), B7(2)
-      REAL :: D0(6), D1(4), D2(2), D3(2), D4(1), D5(1), D6(1)
 C-------------------------
       DATA ACC0(1)/5.E-15/, ACC0(2)/5.E-7/, ACC0(3)/5.E-4/
       DATA BIG(1)/25.0/, BIG(2)/14.0/, BIG(3)/10.0/
@@ -14355,6 +14356,7 @@ C
       REAL :: SPMPAR
       REAL :: ALNREL
       REAL :: GAMLN
+      REAL :: LN10, BMIN(2), EMIN(2)
 C-----------------------------------------------------------------------
 C
 C             INVERSE INCOMPLETE GAMMA RATIO FUNCTION
@@ -14410,7 +14412,6 @@ C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C     REVISED ... JANUARY 1992
 C------------------------
-      REAL :: LN10, BMIN(2), EMIN(2)
 C------------------------
 C     LN10 = LN(10)
 C     C = EULER CONSTANT
@@ -14681,7 +14682,14 @@ C
       SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      DOUBLE PRECISION, INTENT(IN) :: A, X
+      DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
       INTEGER :: I, M, MAX, N
+      DOUBLE PRECISION :: AMN, ALOG10, APN, A2N, A2NM1, BIG, B2N, B2NM1,
+     &C, E, G, H, J, L, R, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U, X0,
+     &Y, Z, WK(20)
+      DOUBLE PRECISION :: DPMPAR, DRLOG, DREXP
+      DOUBLE PRECISION :: DERF, DERFC1, DGAM1, DRCOMP
 C-----------------------------------------------------------------------
 C
 C        EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
@@ -14693,13 +14701,6 @@ C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C     REVISED ... JAN 1992
 C-------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A, X
-      DOUBLE PRECISION, INTENT(INOUT) :: ANS, QANS
-      DOUBLE PRECISION :: AMN, ALOG10, APN, A2N, A2NM1, BIG, B2N, B2NM1,
-     &C, E, G, H, J, L, R, RTA, RTPI, RTX, S, SUM, T, TOL, TWOA, U, X0,
-     &Y, Z, WK(20)
-      DOUBLE PRECISION :: DPMPAR, DRLOG, DREXP
-      DOUBLE PRECISION :: DERF, DERFC1, DGAM1, DRCOMP
 C-------------------------
 C     ALOG10 = LN(10)
 C     RTPI   = DSQRT(PI)
@@ -15388,7 +15389,15 @@ C
       SUBROUTINE DGINV (A, X, P, Q, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(OUT) :: X
+      DOUBLE PRECISION, INTENT(IN) :: P, Q
       INTEGER :: IER, IND
+      REAL :: P0, Q0, X0
+      DOUBLE PRECISION :: AM1, APN, AP1, AP2, AP3, B, C, C1, C2, C3, C4,
+     &C5, D, E, EPS, G, H, LN10, PN, QG, QN, R, RTA, S, SUM, S2, T, TOL,
+     &U, W, XMIN, XN, Y, Z, AMIN
+      DOUBLE PRECISION :: DPMPAR, DLNREL, DGAMMA, DGAMLN, DGMLN1, DRCOMP
 C-----------------------------------------------------------------------
 C
 C                        DOUBLE PRECISION
@@ -15436,14 +15445,6 @@ C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C     WRITTEN ... JANUARY 1992
 C------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION, INTENT(OUT) :: X
-      DOUBLE PRECISION, INTENT(IN) :: P, Q
-      REAL :: P0, Q0, X0
-      DOUBLE PRECISION :: AM1, APN, AP1, AP2, AP3, B, C, C1, C2, C3, C4,
-     &C5, D, E, EPS, G, H, LN10, PN, QG, QN, R, RTA, S, SUM, S2, T, TOL,
-     &U, W, XMIN, XN, Y, Z, AMIN
-      DOUBLE PRECISION :: DPMPAR, DLNREL, DGAMMA, DGAMLN, DGMLN1, DRCOMP
 C------------------------
 C     LN10 = LN(10)
 C     C = EULER CONSTANT
@@ -15714,13 +15715,14 @@ C
 
       SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
       IMPLICIT NONE
-      REAL :: APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(OUT) :: W, W1
       REAL, INTENT(IN) :: X, Y
+      REAL :: APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
       INTEGER :: IERR1, IND, N
       REAL :: A0, B0, EPS, T, X0, Y0, Z
+      REAL :: LAMBDA
 C-----------------------------------------------------------------------
 C
 C            EVALUATION OF THE INCOMPLETE BETA FUNCTION IX(A,B)
@@ -15753,7 +15755,6 @@ C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C     REVISED ... NOV 1991
 C-----------------------------------------------------------------------
-      REAL :: LAMBDA
 C-----------------------------------------------------------------------
 C
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST
@@ -15975,12 +15976,12 @@ C
       REAL, INTENT(IN) :: A, B, EPS, X
       REAL :: AJ, BX, C, G, S, T, TOL
       REAL :: PSI
+      REAL :: J
 C-----------------------------------------------------------------------
 C     APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
 C     A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
 C     A IS VERY SMALL. USE ONLY IF ABOVE INEQUALITIES ARE SATISFIED.
 C-----------------------------------------------------------------------
-      REAL :: J
 C--------------------
       DATA G/.577215664901533/
 C--------------------
@@ -16010,11 +16011,11 @@ C
       INTEGER :: I, M
       REAL :: A0, APB, B0, C, SUM, T, TOL, U, W, Z
       REAL :: ALGDIV, BETALN, GAM1, GAMLN1
+      REAL :: N
 C-----------------------------------------------------------------------
 C     POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
 C     OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
 C-----------------------------------------------------------------------
-      REAL :: N
 C
       BPSER = 0.0
       IF (X .EQ. 0.0) RETURN
@@ -16097,11 +16098,11 @@ C-----------------------------------------------------------------------
       INTEGER :: I, K, KP1, MU, NM1
       REAL :: AP1, APB, D, R, T, W
       REAL :: BRCMP1, EXPARG
+      REAL :: L
 C-----------------------------------------------------------------------
 C     EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
 C     EPS IS THE TOLERANCE USED.
 C-----------------------------------------------------------------------
-      REAL :: L
 C
 C          OBTAIN THE SCALING FACTOR EXP(-MU) AND
 C             EXP(MU)*(X**A*Y**B/BETA(A,B))/A
@@ -16164,15 +16165,15 @@ C
       REAL FUNCTION BFRAC(A, B, X, Y, LAMBDA, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS, X, Y
+      REAL, INTENT(IN) :: LAMBDA
       REAL :: ALPHA, AN, ANP1, BETA, BN, BNP1, C, C0, C1, E, P, R, R0,
      &S, T, W, YP1
       REAL :: BRCOMP
+      REAL :: N
 C-----------------------------------------------------------------------
 C     CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
 C     IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: LAMBDA
-      REAL :: N
 C--------------------
       BFRAC = BRCOMP(A,B,X,Y)
       IF (BFRAC .EQ. 0.0) RETURN
@@ -16236,10 +16237,10 @@ C
       INTEGER :: I, N
       REAL :: A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
       REAL :: ALGDIV, ALNREL, BCORR, BETALN, GAM1, GAMLN1, RLOG1
+      REAL :: LAMBDA, LNX, LNY
 C-----------------------------------------------------------------------
 C               EVALUATION OF X**A*Y**B/BETA(A,B)
 C-----------------------------------------------------------------------
-      REAL :: LAMBDA, LNX, LNY
 C-----------------
 C     CONST = 1/SQRT(2*PI)
 C-----------------
@@ -16355,10 +16356,10 @@ C
       INTEGER :: I, N
       REAL :: A0, APB, B0, C, CONST, E, H, T, U, V, X0, Y0, Z
       REAL :: ALGDIV, ALNREL, BCORR, BETALN, ESUM, GAM1, GAMLN1, RLOG1
+      REAL :: LAMBDA, LNX, LNY
 C-----------------------------------------------------------------------
 C          EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
 C-----------------------------------------------------------------------
-      REAL :: LAMBDA, LNX, LNY
 C-----------------
 C     CONST = 1/SQRT(2*PI)
 C-----------------
@@ -16474,14 +16475,14 @@ C
       INTEGER :: I, N, NM1
       REAL :: BM1, BP2N, CN, COEF, DJ, P, Q, R, S, SUM, T, T2, U, V, Z
       REAL :: ALGDIV, ALNREL, GAM1
+      REAL :: J, L, LNX, NU, N2
+      REAL :: C(30), D(30)
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
 C     THE RESULT OF THE EXPANSION IS ADDED TO W. IT IS ASSUMED
 C     THAT A .GE. 15 AND B .LE. 1.  EPS IS THE TOLERANCE USED.
 C     IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
 C-----------------------------------------------------------------------
-      REAL :: J, L, LNX, NU, N2
-      REAL :: C(30), D(30)
 C
       BM1 = (B - 0.5) - 0.5
       NU = A + 0.5*BM1
@@ -16642,19 +16643,19 @@ C
       REAL FUNCTION BASYM(A, B, LAMBDA, EPS)
       IMPLICIT NONE
       REAL, INTENT(IN) :: A, B, EPS
+      REAL, INTENT(IN) :: LAMBDA
       INTEGER :: I, IM1, IMJ, J, M, MM1, MMJ, N, NP1, NUM
       REAL :: BSUM, DSUM, E0, E1, F, H, H2, HN, R, R0, R1, S, SUM, T,
      &T0, T1, U, W, W0, Z, Z0, Z2, ZN, ZNM1
       REAL :: BCORR, ERFC1, RLOG1
+      REAL :: J0, J1
+      REAL :: A0(21), B0(21), C(21), D(21)
 C-----------------------------------------------------------------------
 C     ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
 C     LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.
 C     IT IS ASSUMED THAT LAMBDA IS NONNEGATIVE AND THAT
 C     A AND B ARE GREATER THAN OR EQUAL TO 15.
 C-----------------------------------------------------------------------
-      REAL :: J0, J1
-      REAL, INTENT(IN) :: LAMBDA
-      REAL :: A0(21), B0(21), C(21), D(21)
 C------------------------
 C     ****** NUM IS THE MAXIMUM VALUE THAT N CAN TAKE IN THE DO LOOP
 C            ENDING AT STATEMENT 50. IT IS REQUIRED THAT NUM BE EVEN.
@@ -17135,10 +17136,15 @@ C     ------------------------------------------------------------------
 
       SUBROUTINE CBSSLJ (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(IN) :: CNU
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, K, M, N
       REAL :: A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN,
      &T1, T2, U, V, X, Y
       REAL :: CPABS
+      COMPLEX :: C, NU, S, SM1, SM2, T, TSC, W0, W1, ZN, ZZ
+      COMPLEX :: CDIV, CGAM0
 C-----------------------------------------------------------------------
 C
 C         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (Z)
@@ -17155,11 +17161,6 @@ C     (NAVAL SURFACE WARFARE CENTER) IN 1978 FOR HANDLING THE DEBYE
 C     APPROXIMATION IS EMPLOYED.
 C
 C-----------------------------------------------------------------------
-      COMPLEX :: Z
-      COMPLEX, INTENT(IN) :: CNU
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: C, NU, S, SM1, SM2, T, TSC, W0, W1, ZN, ZZ
-      COMPLEX :: CDIV, CGAM0
 C-----------------------
       DATA PI /3.14159265358979/
 C-----------------------
@@ -17341,10 +17342,16 @@ C
 
       SUBROUTINE CBJM (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: CNU
+      COMPLEX, INTENT(INOUT) :: W
+      COMPLEX :: Z
       INTEGER :: I, IMIN, K, KM1, KM2
       REAL :: A, A0, EPS, RNU
       REAL :: ANORM
       REAL :: SPMPAR
+      COMPLEX :: NU, NUP1, P, S, SN, T, TI
+      REAL :: INU, M
+      COMPLEX :: CDIV
 C-----------------------------------------------------------------------
 C
 C       COMPUTATION OF  (Z/2)**(-CNU) * GAMMA(CNU + 1) * J(CNU,Z)
@@ -17355,12 +17362,6 @@ C     THE MACLAURIN EXPANSION IS USED. IT IS ASSUMED THAT CNU IS NOT
 C     A NEGATIVE INTEGER.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: CNU
-      COMPLEX :: NU, NUP1, P, S, SN, T, TI
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: Z
-      REAL :: INU, M
-      COMPLEX :: CDIV
 C--------------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C--------------------------
@@ -17450,9 +17451,14 @@ C
       SUBROUTINE CBDB (CZ, CNU, FN, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: FN
+      COMPLEX, INTENT(IN) :: CZ, CNU
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: IND, K, L, M
       REAL :: ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V,
      &X, Y
+      REAL :: A(136), IS, INU, IZN
+      COMPLEX :: C1, C2, ETA, J, NU, P, P1, Q, R, S, S1, S2, SM, T, Z,
+     &ZN
 C-----------------------------------------------------------------------
 C
 C         CALCULATION OF J   (CZ) BY THE DEBYE APPROXIMATION
@@ -17463,11 +17469,6 @@ C     IT IS ASSUMED THAT REAL(CZ) .GE. 0 AND THAT REAL(CNU) = FN + K
 C     WHERE K IS AN INTEGER.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: CZ, CNU
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: A(136), IS, INU, IZN
-      COMPLEX :: C1, C2, ETA, J, NU, P, P1, Q, R, S, S1, S2, SM, T, Z,
-     &ZN
 C----------------------
 C     C = 1/SQRT(2)
 C     BND = PI/3
@@ -17685,19 +17686,19 @@ C
 
       SUBROUTINE CBJA (CZ, CNU, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: CZ, CNU
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, IND
       REAL :: C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
       REAL :: SIN1
       REAL :: COS1
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: INU, M
+      COMPLEX :: A, A1, ARG, E, ETA, J, NU, P, Q, T, Z, ZR, ZZ
 C-----------------------------------------------------------------------
 C        COMPUTATION OF J(NU,Z) BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: CZ, CNU
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: INU, M
-      COMPLEX :: A, A1, ARG, E, ETA, J, NU, P, Q, T, Z, ZR, ZZ
 C--------------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
@@ -17786,6 +17787,8 @@ C
       SUBROUTINE BSSLJ (A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN
+      COMPLEX, INTENT(IN) :: A
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), FJ(2), PM, PN, QF(2),
      &QM, QN, QZ(2), RM(4), RZ(2), SM(4), SN, SS, SZ(2), TM(2), TS(2),
@@ -17797,8 +17800,6 @@ C     A  = ARGUMENT (COMPLEX NUMBER)
 C     IN = ORDER (INTEGER)
 C     W  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
 C     -------------------
-      COMPLEX, INTENT(IN) :: A
-      COMPLEX, INTENT(INOUT) :: W
       DATA CD(1) / 0.00000000000000E00/,  CD(2) /-1.64899505142212E-2/,
      1     CD(3) /-7.18621880068536E-2/,  CD(4) /-1.67086878124866E-1/,
      2     CD(5) /-3.02582250219469E-1/,  CD(6) /-4.80613945245927E-1/,
@@ -18153,21 +18154,22 @@ C     ERROR CONDITIONS
 C         IMPROPER INPUT ARGUMENTS - A FATAL ERROR
 C         UNDERFLOW  - A NON-FATAL ERROR (NZ.GT.0)
 C
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: NZ
+      REAL, INTENT(IN) :: ALPHA
+      REAL :: X
+      REAL, INTENT(INOUT) :: Y(N)
       EXTERNAL JAIRY
       INTEGER :: I, IALP, IDALP, IFLW, IN, INLIM, IS, I1, I2, K, KK, KM,
      &KT
-      INTEGER, INTENT(IN) :: N
       INTEGER :: NN, NS
-      INTEGER, INTENT(INOUT) :: NZ
       INTEGER :: IPMPAR
       REAL :: AK, AKM
-      REAL, INTENT(IN) :: ALPHA
       REAL :: ANS, AP, ARG, COEF, DALPHA, DFN, DTM, EARG, ELIM, ETX,
      &FIDAL, FLGJY, FN, FNF, FNI, FNP1, FNU, FNULIM(2), GLN, PDF, PIDT,
      &PP(4), RDEN, RELB, RTTP, RTWO, RTX, RZDEN, S, SA, SB, SXO2, S1,
      &S2, T, TA, TAU, TB, TEMP(3), TFN, TM, TOL, TOLLN, TRX, TX, T1, T2,
-     &WK(7), X, XO2, XO2L
-      REAL, INTENT(INOUT) :: Y(N)
+     &WK(7), XO2, XO2L
       REAL :: GAMLN, SPMPAR
       DATA RTWO,PDF,RTTP,PIDT                    / 1.34839972492648E+00,
      1 7.85398163397448E-01, 7.97884560802865E-01, 1.57079632679490E+00/
@@ -18614,16 +18616,17 @@ C         SUPPLIED BY THE EXTERNAL FUNCTION JAIRY, AND ON
 C         FLGJY = -1 THE AIRY FUNCTIONS BI(X) AND DBI(X) ARE
 C         SUPPLIED BY THE EXTERNAL FUNTION YAIRY.
 C
-      INTEGER :: I, IFLW, IN, J, JN, JR, JU, K, KB, KLAST, KMAX(5), KP1,
-     &KS, KSP1, KSTEMP, L, LR, LRP1
+      INTEGER :: IFLW, IN
+      REAL :: ELIM, FLGJY, FNU, TOL, WK(*), X, Y(*)
+      EXTERNAL FUNJY
+      INTEGER :: I, J, JN, JR, JU, K, KB, KLAST, KMAX(5), KP1, KS, KSP1,
+     &KSTEMP, L, LR, LRP1
       REAL :: ABW2, AKM, ALFA(26,4), ALFA1(26,2), ALFA2(26,2), AP,
      &AR(8), ASUM, AZ, BETA(26,5), BETA1(26,2), BETA2(26,2),
      &BETA3(26,1), BR(10), BSUM, C(65), CON1, CON2, CON3, CON548,
-     &CR(10), CRZ32, DFI, ELIM, DR(10), FI, FLGJY, FN, FNU, FN2,
-     &GAMA(26), PHI, RCZ, RDEN, RELB, RFN2, RTZ, RZDEN, SA, SB, SUMA,
-     &SUMB, S1, TA, TAU, TB, TFN, TOL, TOLS, T2, UPOL(10), WK(*), X, XX,
-     &Y(*), Z, Z32
-      EXTERNAL FUNJY
+     &CR(10), CRZ32, DFI, DR(10), FI, FN, FN2, GAMA(26), PHI, RCZ, RDEN,
+     &RELB, RFN2, RTZ, RZDEN, SA, SB, SUMA, SUMB, S1, TA, TAU, TB, TFN,
+     &TOLS, T2, UPOL(10), XX, Z, Z32
       EQUIVALENCE (ALFA(1,1),ALFA1(1,1))
       EQUIVALENCE (ALFA(1,3),ALFA2(1,1))
       EQUIVALENCE (BETA(1,1),BETA1(1,1))
@@ -19360,6 +19363,8 @@ C
       SUBROUTINE BSSLY (A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN
+      COMPLEX, INTENT(IN) :: A
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, LA, LR, LY, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), PM, PN, QF(2), QM, QN,
      &QZ(2), RM, RN, RZ(2), SL(2), SM(4), SN, SQ(2), SR(2), SS, SZ(2),
@@ -19371,8 +19376,6 @@ C     A  = ARGUMENT (COMPLEX NUMBER)
 C     IN = ORDER (INTEGER)
 C     W  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
 C     -------------------
-      COMPLEX, INTENT(IN) :: A
-      COMPLEX, INTENT(INOUT) :: W
       DATA CD(1) / 0.00000000000000E00/,  CD(2) /-1.64899505142212E-2/,
      1     CD(3) /-7.18621880068536E-2/,  CD(4) /-1.67086878124866E-1/,
      2     CD(5) /-3.02582250219469E-1/,  CD(6) /-4.80613945245927E-1/,
@@ -19673,18 +19676,18 @@ C     -------------------
 
       SUBROUTINE CBSSLI (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z, CNU
+      COMPLEX, INTENT(INOUT) :: W
       REAL :: PIHALF, T, X, Y
       REAL :: SIN1
       REAL :: COS1
       REAL :: EXPARG
+      COMPLEX :: NU, Z0
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 C     FIRST KIND FOR COMPLEX ORDER CNU AND COMPLEX ARGUMENT
 C     Z.  IT IS ASSUMED THAT -PI .LT. ARG Z .LE. PI.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, CNU
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: NU, Z0
 C
       DATA PIHALF /1.5707963267949/
 C
@@ -19712,6 +19715,8 @@ C
       SUBROUTINE BSSLI (MO, A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN, MO
+      COMPLEX, INTENT(IN) :: A
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), FI(2), PM, PN, QF(2),
      &QM, QN, QZ(2), RM(4), RZ(2), SM(4), SN, SS, SZ(2), TM(2), TS(2),
@@ -19724,8 +19729,6 @@ C     A  = ARGUMENT (COMPLEX NUMBER)
 C     IN = ORDER (INTEGER)
 C     W  = FUNCTION OF FIRST KIND (COMPLEX NUMBER)
 C     -------------------
-      COMPLEX, INTENT(IN) :: A
-      COMPLEX, INTENT(INOUT) :: W
       DATA CD(1) / 0.00000000000000E00/,  CD(2) /-1.64899505142212E-2/,
      1     CD(3) /-7.18621880068536E-2/,  CD(4) /-1.67086878124866E-1/,
      2     CD(5) /-3.02582250219469E-1/,  CD(6) /-4.80613945245927E-1/,
@@ -20111,21 +20114,21 @@ C         IMPROPER INPUT ARGUMENTS - A FATAL ERROR
 C         OVERFLOW WITH KODE=1 - A FATAL ERROR
 C         UNDERFLOW - A NON-FATAL ERROR(NZ.GT.0)
 C
-      INTEGER :: I, IALP, IN, INLIM, IS, I1, I2, K, KK, KM
       INTEGER, INTENT(IN) :: KODE
-      INTEGER :: KT
       INTEGER, INTENT(IN) :: N
-      INTEGER :: NN, NS
       INTEGER, INTENT(INOUT) :: NZ
+      REAL, INTENT(IN) :: ALPHA
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(INOUT) :: Y(N)
+      INTEGER :: I, IALP, IN, INLIM, IS, I1, I2, K, KK, KM
+      INTEGER :: KT
+      INTEGER :: NN, NS
       INTEGER :: IPMPAR
       REAL :: AIN, AK, AKM
-      REAL, INTENT(IN) :: ALPHA
       REAL :: ANS, AP, ARG, ATOL, TOLLN, DFN, DTM, DX, EARG, ELIM, ETX,
      &FLGIK, FN, FNF, FNI, FNP1, FNU, GLN, RA, RTTPI, S, SX, SXO2, S1,
      &S2, T, TA, TB, TEMP(3), TFN, TM, TOL, TRX, T2
-      REAL, INTENT(IN) :: X
       REAL :: XO2, XO2L
-      REAL, INTENT(INOUT) :: Y(N)
       REAL :: Z
       REAL :: GAMLN, SPMPAR
       DATA RTTPI           / 3.98942280401433E-01/
@@ -20551,22 +20554,22 @@ C         IN SIGN OF SOME OF THE TERMS. THIS CHANGE IN SIGN IS
 C         ACCOMPLISHED BY MEANS OF THE FLAG FLGIK = 1 OR -1.
 C
       INTEGER, INTENT(IN) :: IN
-      INTEGER :: J, JN, K, KK
       INTEGER, INTENT(IN) :: KODE
-      INTEGER :: L
-      REAL :: AK, AP
       REAL, INTENT(INOUT) :: ARG
-      REAL :: C(65), COEF, CON(2), ETX
       REAL, INTENT(IN) :: FLGIK
-      REAL :: FN
       REAL, INTENT(IN) :: FNU
-      REAL :: GLN
       REAL, INTENT(INOUT) :: RA
-      REAL :: S1, S2, T
       REAL, INTENT(IN) :: TOL
-      REAL :: T2
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: Y(*)
+      INTEGER :: J, JN, K, KK
+      INTEGER :: L
+      REAL :: AK, AP
+      REAL :: C(65), COEF, CON(2), ETX
+      REAL :: FN
+      REAL :: GLN
+      REAL :: S1, S2, T
+      REAL :: T2
       REAL :: Z
       DATA CON(1), CON(2)  /
      1        3.98942280401432678E-01,    1.25331413731550025E+00/
@@ -20654,8 +20657,12 @@ C     ---------------------
 
       SUBROUTINE CBESK (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(IN) :: CNU
+      COMPLEX, INTENT(INOUT) :: W
       REAL :: A, B, C, E, RN, RZ, S, TAU, X, Y
       REAL :: CPABS
+      COMPLEX :: NU
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -20668,10 +20675,6 @@ C        ALFRED H. MORRIS, JR. AND ANDREW H. VAN TUYL
 C        NAVAL SURFACE WARFARE CENTER
 C        OCT 1992
 C--------------------------
-      COMPLEX :: Z
-      COMPLEX, INTENT(IN) :: CNU
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: NU
 C
       X = ABS(REAL(Z))
       Y = ABS(AIMAG(Z))
@@ -20772,18 +20775,18 @@ C
 
       SUBROUTINE CBKI (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z, CNU
+      COMPLEX, INTENT(INOUT) :: W
       REAL :: A, B, PI, PIHALF, U1, U2
       REAL :: SIN1
       REAL :: COS1
+      COMPLEX :: W1, W2
+      COMPLEX :: CDIV
 C------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
 C     SECOND KIND WITH COMPLEX ORDER AND ARGUMENT IN TERMS
 C     OF THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, CNU
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: W1, W2
-      COMPLEX :: CDIV
 C
       DATA PI/3.14159265358979E+00/
       DATA PIHALF/1.5707963267949E+00/
@@ -20800,19 +20803,19 @@ C
 
       SUBROUTINE CBKA (Z, CNU, W)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(IN) :: CNU
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I
       REAL :: C, EPS, U, V
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: M
+      COMPLEX :: A, P, T, ZR
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR COMPLEX ORDER
 C        CNU AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
-      COMPLEX :: Z
-      COMPLEX, INTENT(IN) :: CNU
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: M
-      COMPLEX :: A, P, T, ZR
 C--------------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
@@ -20852,19 +20855,19 @@ C
       SUBROUTINE CBKM (Z, RZ, CNU, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: RZ
+      COMPLEX, INTENT(IN) :: Z, CNU
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, IND, M, N, N1
       REAL :: A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
+      REAL :: NU
+      COMPLEX :: CZ, EX, R, R1, U1, U2, U3, W1, W2, ZR
+      COMPLEX :: CXP
 C-------------------------------------------------------------------
 C     CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND WITH COMPLEX ORDER AND ARGUMENT BY MEANS OF MACLAURIN
 C     EXPANSIONS AND THE MILLER ALGORITHM. IT IS ASSUMED THAT
 C     RZ = ABS(Z).
 C-------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, CNU
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: NU
-      COMPLEX :: CZ, EX, R, R1, U1, U2, U3, W1, W2, ZR
-      COMPLEX :: CXP
 C---------------------------
 C     CPI = SQRT(PI/2)
 C---------------------------
@@ -20970,10 +20973,17 @@ C
       SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
+      COMPLEX, INTENT(IN) :: Z, ZR
+      COMPLEX :: NU
+      COMPLEX, INTENT(INOUT) :: W1, W2
       INTEGER :: K
       REAL :: AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: D(7)
+      COMPLEX :: A, C, CH, CL, F, G1, G2, GM1, GM2, MU, P, Q, SH, T, T1,
+     &T2
+      COMPLEX :: CDIV, CGAM0
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
@@ -20987,13 +20997,6 @@ C     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z.  POWER
 C     SERIES EXPANSIONS ARE USED.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, ZR
-      COMPLEX :: NU
-      COMPLEX, INTENT(INOUT) :: W1, W2
-      REAL :: D(7)
-      COMPLEX :: A, C, CH, CL, F, G1, G2, GM1, GM2, MU, P, Q, SH, T, T1,
-     &T2
-      COMPLEX :: CDIV, CGAM0
 C-----------------------
       DATA TOL /1.E-10/
       DATA PI /3.14159265358979/
@@ -21097,10 +21100,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: R
+      COMPLEX, INTENT(IN) :: Z, ZR, NU
+      COMPLEX, INTENT(INOUT) :: W, W0
       INTEGER :: I, M, NUM
       REAL :: A, B, C, C1, C2, E, EPS, EPS0, F, RNU, T, TH, X, Y
       REAL :: COS1
       REAL :: SPMPAR
+      COMPLEX :: AL, BL, S, U1, U2, U3
+      REAL :: INU, L
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE SCALED BESSEL FUNCTION
@@ -21119,10 +21126,6 @@ C     PLANE. IT IS ASSUMED THAT ABS(REAL(NU)) .LT. 0.5, AND THAT
 C     R = ABS(Z/2) AND ZR = 2/Z.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, ZR, NU
-      COMPLEX, INTENT(INOUT) :: W, W0
-      COMPLEX :: AL, BL, S, U1, U2, U3
-      REAL :: INU, L
 C---------------------
 C     C1 = SQRT(PI/2)
 C     C2 = SQRT(PI)
@@ -21213,9 +21216,14 @@ C
       SUBROUTINE CBSSLK (Z, R, W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, IND, M, N, N1
       REAL :: A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
       REAL :: CPABS
+      COMPLEX :: CN, CZ, EX, U1, U2, U3, W1, W2, ZR
+      REAL :: NU, NU1
+      COMPLEX :: CXP
 C-----------------------------------------------------------------------
 C
 C         CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
@@ -21229,11 +21237,6 @@ C         NAVAL SURFACE WARFARE CENTER
 C     MODIFIED BY A.H. MORRIS (NSWC)
 C     REVISED ... OCT 1992
 C---------------------------
-      COMPLEX :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: CN, CZ, EX, U1, U2, U3, W1, W2, ZR
-      REAL :: NU, NU1
-      COMPLEX :: CXP
 C---------------------------
 C     CPI = SQRT(PI/2)
 C---------------------------
@@ -21337,19 +21340,19 @@ C
 
       SUBROUTINE CKA (Z, NU, W)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: W
+      REAL, INTENT(IN) :: NU
       INTEGER :: I
       REAL :: A, C, EPS, U, V
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: M
+      COMPLEX :: P, T, ZR
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE BESSEL FUNCTION K FOR REAL ORDER NU
 C        AND COMPLEX ARGUMENT Z BY THE ASYMPTOTIC EXPANSION
 C-----------------------------------------------------------------------
-      COMPLEX :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      REAL :: M
-      REAL, INTENT(IN) :: NU
-      COMPLEX :: P, T, ZR
 C--------------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)), ABS(AIMAG(Z)))
 C--------------------------
@@ -21389,11 +21392,16 @@ C
       SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
+      COMPLEX, INTENT(IN) :: Z, ZR
+      COMPLEX, INTENT(INOUT) :: W1, W2
+      REAL, INTENT(IN) :: NU
       INTEGER :: K
       REAL :: A, AK, EPS, EPS0, G1, G2, GM1, GM2, PHI, PI, T, TOL, X, Y
       REAL :: ANORM
       REAL :: SPMPAR
       REAL :: GAM1
+      REAL :: D(7)
+      COMPLEX :: C, CH, CL, F, MU, P, Q, SH, T1, T2, W
 C-----------------------------------------------------------------------
 C
 C        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
@@ -21407,11 +21415,6 @@ C     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z. POWER
 C     SERIES EXPANSIONS ARE USED.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, ZR
-      COMPLEX, INTENT(INOUT) :: W1, W2
-      REAL, INTENT(IN) :: NU
-      REAL :: D(7)
-      COMPLEX :: C, CH, CL, F, MU, P, Q, SH, T1, T2, W
 C-----------------------
       DATA TOL /1.E-10/
       DATA PI /3.14159265358979/
@@ -21507,10 +21510,16 @@ C
       SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
       IMPLICIT NONE
       REAL, INTENT(IN) :: R
+      COMPLEX, INTENT(IN) :: Z, ZR
+      COMPLEX, INTENT(INOUT) :: K1, K2
+      REAL, INTENT(IN) :: NU
       INTEGER :: I, M
       REAL :: A, AL, B, C, C1, E, EPS, EPS0, TH, X, Y
       REAL :: COS1
       REAL :: SPMPAR
+      COMPLEX :: BL, S, U1, U2, U3
+      REAL :: L
+      REAL :: NU2
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE SCALED BESSEL FUNCTIONS
@@ -21527,12 +21536,6 @@ C     HALF PLANE. IT IS ASSUMED THAT ABS(NU) .LT. 0.5, AND THAT
 C     R = ABS(Z/2) AND ZR = 2/Z.
 C
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z, ZR
-      COMPLEX, INTENT(INOUT) :: K1, K2
-      COMPLEX :: BL, S, U1, U2, U3
-      REAL :: L
-      REAL, INTENT(IN) :: NU
-      REAL :: NU2
 C---------------------
 C     C1 = SQRT(PI/2)
 C---------------------
@@ -21607,6 +21610,7 @@ C
       COMPLEX FUNCTION CXP (N, NU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: NU
       INTEGER :: K
       REAL :: C, S
       REAL :: SIN0
@@ -21615,7 +21619,6 @@ C-----------------------------------------------------------------------
 C                 COMPUTATION OF EXP(-R*(PI/2)*I)
 C              WHERE R = N + NU FOR ABS(NU) .LE. 0.5
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: NU
 C
       C = COS0(NU)
       S = SIN0(NU)
@@ -21641,6 +21644,8 @@ C
       SUBROUTINE BSSLK (MO, A, IN, W)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN, MO
+      COMPLEX, INTENT(IN) :: A
+      COMPLEX, INTENT(INOUT) :: W
       INTEGER :: I, LA, LK, LR, M, N
       REAL :: AN, AQ(2), AZ(2), CD(30), CE(30), PM, PN, QF(2), QM, QN,
      &RM, RN, RZ(2), SL(2), SM(2), SN, SQ(2), SR(2), SS, SZ(2), TM(2),
@@ -21653,8 +21658,6 @@ C     A  = ARGUMENT (COMPLEX NUMBER)
 C     IN = ORDER (INTEGER)
 C     W  = FUNCTION OF SECOND KIND (COMPLEX NUMBER)
 C     -------------------
-      COMPLEX, INTENT(IN) :: A
-      COMPLEX, INTENT(INOUT) :: W
       DATA CD(1) / 0.00000000000000E00/,  CD(2) /-1.64899505142212E-2/,
      1     CD(3) /-7.18621880068536E-2/,  CD(4) /-1.67086878124866E-1/,
      2     CD(5) /-3.02582250219469E-1/,  CD(6) /-4.80613945245927E-1/,
@@ -21887,17 +21890,17 @@ C     -------------------
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: AI
+      COMPLEX, INTENT(INOUT) :: AIP
       REAL :: A, B, R
       REAL :: CPABS
+      COMPLEX :: BI
+      COMPLEX :: BIP
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
 C     FOR COMPLEX ARGUMENT Z.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: AI
-      COMPLEX :: BI
-      COMPLEX, INTENT(INOUT) :: AIP
-      COMPLEX :: BIP
       IERR = 0
       A = REAL(Z)
       B = AIMAG(Z)
@@ -21924,17 +21927,17 @@ C
       SUBROUTINE AIRM (IND,Z,AI,AIP,BI,BIP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(INOUT) :: AI, AIP, BI, BIP
+      COMPLEX, INTENT(IN) :: Z
       INTEGER :: I, N
       REAL :: C1, C2, SQT3, X, Y
+      COMPLEX :: Z1, Z2, Z3, ZZ, F, F1, G, G1, E, E1
+      REAL :: A(8), B(8), C(8), D(8)
 C--------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTIONS AI AND BI AND THEIR
 C     DERIVATIVES AIP AND BIP BY USE OF THEIR MACLAURIN
 C     EXPANSIONS.
 C--------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: AI, AIP, BI, BIP
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z2, Z3, ZZ, F, F1, G, G1, E, E1
-      REAL :: A(8), B(8), C(8), D(8)
 C-----------------------
 C     C1 = 3**(-2/3)/GAMMA(2/3)
 C     C2 = 3**(-1/3)/GAMMA(1/3)
@@ -22014,16 +22017,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: AI, AIP
       REAL :: A, B, C1, R
       REAL :: CPABS
+      COMPLEX :: Z1, Z2, Z3, ZM, W1, W2, W1M, W2M, E
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP
 C     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
 C     CABS(Z) .LE. 10.0.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: AI, AIP
-      COMPLEX :: Z1, Z2, Z3, ZM, W1, W2, W1M, W2M, E
 C
 C     C1 = 1/(PI*SQRT(3))
 C
@@ -22067,19 +22070,19 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(INOUT) :: AI, AIP
+      COMPLEX, INTENT(IN) :: Z
       INTEGER :: I, K, M, M2
       REAL :: C1, C2, EPS, R, T, U, U1, V, V1, XM, XNEG, XPOS
       REAL :: EXPARG
       REAL :: SPMPAR
+      COMPLEX :: Z1, Z2, Z2R, ZZ, W, W2, S1, S2, S3, S4, E, ZETA, SI, CN
+      COMPLEX :: ALPHA, BETA, J
+      REAL :: C(30), D(30)
 C-----------------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION AI AND ITS DERIVATIVE AIP FOR
 C     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: AI, AIP
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z2, Z2R, ZZ, W, W2, S1, S2, S3, S4, E, ZETA, SI, CN
-      COMPLEX :: ALPHA, BETA, J
-      REAL :: C(30), D(30)
 C------------------------
       DATA C(1)  /.100000000000000E+01/, C(2)  /.694444444444444E-01/,
      *     C(3)  /.371334876543210E-01/, C(4)  /.379930591278006E-01/,
@@ -22249,17 +22252,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: BI
+      COMPLEX, INTENT(INOUT) :: BIP
       REAL :: A, B, R
       REAL :: CPABS
+      COMPLEX :: AI
+      COMPLEX :: AIP
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
 C     FOR COMPLEX ARGUMENT Z.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: AI
-      COMPLEX, INTENT(INOUT) :: BI
-      COMPLEX :: AIP
-      COMPLEX, INTENT(INOUT) :: BIP
       IERR = 0
       A = REAL(Z)
       B = AIMAG(Z)
@@ -22287,16 +22290,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: BI, BIP
       REAL :: A, C1, R, SQT3, X, Y
       REAL :: CPABS
+      COMPLEX :: Z1, Z2, ZM, W1, W2, W1M, W2M, E, E1
 C------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP
 C     FOR COMPLEX ARGUMENT Z IN THE INTERMEDIATE RANGE 1 .LE.
 C     CABS(Z) .LE. 10.0.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: BI, BIP
-      COMPLEX :: Z1, Z2, ZM, W1, W2, W1M, W2M, E, E1
 C
 C     C1 = 1/SQRT(3)
 C     SQT3 = SQRT(3)
@@ -22351,19 +22354,19 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: BI, BIP
       INTEGER :: I, K, M, M2
       REAL :: C(30), C1, C2, C3, CE, CF, D(30), EPS, R, S, SQT3, T, U,
      &U1, V, V1, X, XNEG, XPOS, Y
       REAL :: EXPARG
       REAL :: SPMPAR
+      COMPLEX :: Z1, Z2, Z2R, ZZ, W, W2, S1, S2, S3, S4, E, ZETA, SI,
+     &CN, CF1, CF2, EX3C, EX6, EX6C, CLN2, ALPHA, BETA, J, CZ
 C---------------------------------------------------------------
 C     CALCULATES THE AIRY FUNCTION BI AND ITS DERIVATIVE BIP FOR
 C     COMPLEX ARGUMENT Z BY MEANS OF ASYMPTOTIC EXPANSIONS.
 C---------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: BI, BIP
-      COMPLEX :: Z1, Z2, Z2R, ZZ, W, W2, S1, S2, S3, S4, E, ZETA, SI,
-     &CN, CF1, CF2, EX3C, EX6, EX6C, CLN2, ALPHA, BETA, J, CZ
 C------------------------
       DATA C(1)  /.100000000000000E+01/, C(2)  /.694444444444444E-01/,
      *     C(3)  /.371334876543210E-01/, C(4)  /.379930591278006E-01/,
@@ -22648,8 +22651,13 @@ C
 
       SUBROUTINE IMC(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
       INTEGER :: I, N, N1
       REAL :: A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
+      COMPLEX :: IA1, IA2, IA3, IB1, IB2, IB3
+      COMPLEX :: SZ, ZH, E, CF1, CF2, CF3, CF4
+      REAL :: M
 C----------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -22659,10 +22667,6 @@ C     1/3 AND 2/3, RESPECTIVELY, AND I1M AND I2M BY THE FUNCTIONS
 C     OF ORDERS -1/3 AND -2/3, RESPECTIVELY.  FOR GREATEST
 C     ACCURACY, Z SHOULD LIE IN THE REGION REAL(Z) .GE. 0.
 C----------------------------------------------------------------
-      COMPLEX :: Z, IA1, IA2, IA3, IB1, IB2, IB3
-      COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
-      COMPLEX :: SZ, ZH, E, CF1, CF2, CF3, CF4
-      REAL :: M
 C
 C     GM1 = GAMMA(4.0/3.0)
 C     GM2 = GAMMA(5.0/3.0)
@@ -22717,19 +22721,19 @@ C
       SUBROUTINE BIM(Z,CN,W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: CN
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: W
       REAL :: D, EPS
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: M
+      COMPLEX :: SZ, T
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST KIND
 C     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
 C     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
 C     CALCULATED VALUE.
 C-------------------------------------------------------------
-      REAL :: M
-      COMPLEX :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: SZ, T
 C------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C-------------------------------------------------------------
@@ -22808,8 +22812,13 @@ C
 
       SUBROUTINE JMC(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
       INTEGER :: I, N, N1
       REAL :: A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
+      COMPLEX :: IA1, IA2, IA3, IB1, IB2, IB3
+      COMPLEX :: SZ, ZH, E, CF1, CF2, CF3, CF4
+      REAL :: M
 C----------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -22819,10 +22828,6 @@ C     1/3 AND 2/3, RESPECTIVELY, AND I1M AND I2M BY THE FUNCTIONS
 C     OF ORDERS -1/3 AND -2/3, RESPECTIVELY.  FOR GREATEST
 C     ACCURACY, Z SHOULD LIE IN THE REGION REAL(Z) .GE. 0.
 C----------------------------------------------------------------
-      COMPLEX :: Z, IA1, IA2, IA3, IB1, IB2, IB3
-      COMPLEX, INTENT(INOUT) :: I1, I2, I1M, I2M
-      COMPLEX :: SZ, ZH, E, CF1, CF2, CF3, CF4
-      REAL :: M
 C
 C     GM1 = GAMMA(4.0/3.0)
 C     GM2 = GAMMA(5.0/3.0)
@@ -22877,19 +22882,19 @@ C
       SUBROUTINE BJM(Z,CN,W)
       IMPLICIT NONE
       REAL, INTENT(IN) :: CN
+      COMPLEX :: Z
+      COMPLEX, INTENT(INOUT) :: W
       REAL :: D, EPS
       REAL :: ANORM
       REAL :: SPMPAR
+      REAL :: M
+      COMPLEX :: SZ, T
 C-------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND
 C     FOR REAL ORDER CN .GT. -1 AND COMPLEX ARGUMENT Z BY MEANS
 C     OF THE MACLAURIN EXPANSION.  W IS REPLACED BY THE
 C     CALCULATED VALUE.
 C-------------------------------------------------------------
-      REAL :: M
-      COMPLEX :: Z
-      COMPLEX, INTENT(INOUT) :: W
-      COMPLEX :: SZ, T
 C------------------
       ANORM(Z) = AMAX1(ABS(REAL(Z)),ABS(AIMAG(Z)))
 C-------------------------------------------------------------
@@ -22922,8 +22927,11 @@ C
       SUBROUTINE KA(IND, Z, K1, K2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: K1, K2
       INTEGER :: IND1
       REAL :: A, B, PI
+      COMPLEX :: I1, I2, I1M, I2M, CZ, EX13C, EX23C, J, E
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z,
@@ -22931,9 +22939,6 @@ C     WHERE -PI .LT. ARG(Z) .LE PI.  K1 IS REPLACED BY THE
 C     FUNCTION OF ORDER 1/3, AND K2 BY THE FUNCTION OF ORDER
 C     2/3.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: K1, K2
-      COMPLEX :: I1, I2, I1M, I2M, CZ, EX13C, EX23C, J, E
 C
 C     EX13C = EXP(-PI*I/3)
 C     EX23C = EXP(-2*PI*I/3)
@@ -22973,9 +22978,12 @@ C
       SUBROUTINE KML(IND, Z, K1, K2)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IND
+      COMPLEX, INTENT(IN) :: Z
+      COMPLEX, INTENT(INOUT) :: K1, K2
       INTEGER :: I, L, M
       REAL :: A, AI, AL, B, C, C1, EPS, R, TH, X1, X2
       REAL :: SPMPAR
+      COMPLEX :: BI, U1, U2, U3, S, E
 C------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE SECOND
 C     KIND FOR ORDERS 1/3 AND 2/3 AND FOR COMPLEX ARGUMENT Z
@@ -22984,9 +22992,6 @@ C     FUNCTION OF ORDER 1/3, AND K2 BY THE FUNCTION OF ORDER
 C     2/3.  FOR GREATEST ACCURACY, Z SHOULD LIE IN THE REGION
 C     REAL(Z) .GE. 0.
 C------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      COMPLEX, INTENT(INOUT) :: K1, K2
-      COMPLEX :: BI, U1, U2, U3, S, E
 C
 C     C1 = SQRT(PI/2)
 C
@@ -23630,22 +23635,22 @@ C
 
       COMPLEX FUNCTION CK(K,L)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: K, L
       INTEGER :: I, IND
       REAL :: C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
       REAL :: SPMPAR
       REAL :: ALNREL
-C     ------------------------------------------------------------------
-C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRAL F(K)
-C     FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED THAT L.NE.0
-C     AND THAT K**2 + L**2 = 1.
-C     ------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: K, L
       COMPLEX :: AK, AL, AK1, AL1, AL2, CKK, CKP, F1, F2, F3, FXK,
      &AKTEMP, CK1, J
       COMPLEX :: CFLECT, KM, Z
       REAL :: LN4, X1(12), X2(12), W1(12), W2(12), FL(12), FA(12),
      &FB(12)
       LOGICAL :: BRANCH
+C     ------------------------------------------------------------------
+C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRAL F(K)
+C     FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED THAT L.NE.0
+C     AND THAT K**2 + L**2 = 1.
+C     ------------------------------------------------------------------
 C     --------------------------------------------------------------
       DATA X1(1)/ 6.5487222790801E-03/, X1(2)/ 3.8946809560450E-02/,
      1     X1(3)/ 9.8150263106007E-02/, X1(4)/ 1.8113858159063E-01/,
@@ -23877,15 +23882,15 @@ C     ----------
 
       COMPLEX FUNCTION KM(K2)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: K2
       INTEGER :: I
       REAL :: C, EPS, HPI, RI, TOL
       REAL :: SPMPAR
-      COMPLEX, INTENT(IN) :: K2
+      COMPLEX :: AN, S1
 C---------------------------------------------------------------------
 C     KM COMPUTES THE COMPLETE ELLIPTIC INTEGRAL F(K) FOR A GIVEN
 C     VALUE OF K2 = K**2 BY USE OF THE MACLAURIN EXPANSION.
 C---------------------------------------------------------------------
-      COMPLEX :: AN, S1
       DATA HPI /1.5707963267949/
 C ---------------
 C
@@ -23913,20 +23918,20 @@ C
 
       SUBROUTINE KL (L, FK, FL)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: L
+      COMPLEX, INTENT(INOUT) :: FK, FL
       INTEGER :: I
       REAL :: BN, C, EPS, HPI, RI, TOL, U, X, Y
       REAL :: SPMPAR
       REAL :: ALNREL
-      COMPLEX, INTENT(IN) :: L
-      COMPLEX, INTENT(INOUT) :: FK, FL
+      COMPLEX :: AN, L2, S1, S2, W
+      REAL :: LN4
 C ----------------------------------------------------------------------
 C     KL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND F(L) FOR
 C     A GIVEN VALUE OF L, WHERE CABS(L) .LT. 1 AND K**2 + L**2 = 1.
 C     IT IS ASSUMED THAT -PI .LE. ARG(L**2) .LT. PI FOR THE RESULTING
 C     VALUE FOR F(K) TO BE MEANINGFUL.
 C ----------------------------------------------------------------------
-      COMPLEX :: AN, L2, S1, S2, W
-      REAL :: LN4
 C     --------------
       DATA HPI /1.5707963267949/
       DATA LN4 /1.3862943611199/
@@ -23987,23 +23992,23 @@ C
       SUBROUTINE CKE(K,L,CK,CE,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX, INTENT(IN) :: K, L
+      COMPLEX, INTENT(INOUT) :: CE, CK
       INTEGER :: I, IND
       REAL :: C, C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
       REAL :: ALNREL
       REAL :: SPMPAR
-C     ------------------------------------------------------------------
-C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRALS F(K)
-C     AND E(K) FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED
-C     THAT L.NE.0 AND THAT K**2 + L**2 = 1.
-C     ------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: K, L
       COMPLEX :: AK, AL, AK1, AL1, CKK, CKP, F1, F2, F3, AKTEMP, CK1, J
-      COMPLEX, INTENT(INOUT) :: CE, CK
       COMPLEX :: CEE, CEP, CE1, E1, E2, E3, AT, FX, FXK, ATN
       COMPLEX :: CFLECT, K1, L1, AK2, AL2, Z, G, G1, GG, GP
       REAL :: LN4, X1(12), X2(12), W1(12), W2(12), FL(12), FA(12),
      &FB(12)
       LOGICAL :: BRANCH
+C     ------------------------------------------------------------------
+C     THIS FUNCTION CALCULATES THE COMPLETE ELLIPTIC INTEGRALS F(K)
+C     AND E(K) FOR COMPLEX VALUES OF THE MODULUS K. IT IS ASSUMED
+C     THAT L.NE.0 AND THAT K**2 + L**2 = 1.
+C     ------------------------------------------------------------------
 C     --------------------------------------------------------------
       DATA X1(1)/ 6.5487222790801E-03/, X1(2)/ 3.8946809560450E-02/,
      1     X1(3)/ 9.8150263106007E-02/, X1(4)/ 1.8113858159063E-01/,
@@ -24262,14 +24267,14 @@ C
 
       COMPLEX FUNCTION ATN(Z)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: Z
       REAL :: ATN1, ATN2, D, DA, DB, T, X, Y
       REAL :: ALNREL
+      DOUBLE PRECISION :: DX, DY
 C---------------------------------------------------
 C     CALCULATES COMPLEX FUNCTION ATN(Z) = Z*ATAN(Z)
 C     USING DOUBLE PRECISION.
 C---------------------------------------------------
-      COMPLEX, INTENT(IN) :: Z
-      DOUBLE PRECISION :: DX, DY
       X = REAL(Z)
       Y = AIMAG(Z)
       DX = X
@@ -24286,16 +24291,16 @@ C---------------------------------------------------
 
       SUBROUTINE EKM (K2, FK, EK)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: K2
+      COMPLEX, INTENT(INOUT) :: FK, EK
       INTEGER :: I
       REAL :: C, EPS, HPI, RI, TOL
       REAL :: SPMPAR
-      COMPLEX, INTENT(IN) :: K2
-      COMPLEX, INTENT(INOUT) :: FK, EK
+      COMPLEX :: AN, CN, S1, S2
 C ----------------------------------------------------------------------
 C     EKM COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K) AND E(K) FOR
 C     A GIVEN VALUE OF K2 = K**2 BY USE OF THE MACLAURIN EXPANSIONS.
 C ----------------------------------------------------------------------
-      COMPLEX :: AN, CN, S1, S2
       DATA HPI /1.5707963267949/
 C ---------------
 C
@@ -24327,13 +24332,15 @@ C
 
       SUBROUTINE EKL (L,FK,FL,EK,EL,GK,GL)
       IMPLICIT NONE
+      COMPLEX, INTENT(IN) :: L
+      COMPLEX, INTENT(INOUT) :: FK, FL, EK, EL, GK, GL
       INTEGER :: I
       REAL :: BN, C, DN, EPS, FN, GN, HPI, RI, TOL, U, X, Y
       REAL :: SPMPAR
       REAL :: ALNREL
-      COMPLEX, INTENT(IN) :: L
       COMPLEX :: L2
-      COMPLEX, INTENT(INOUT) :: FK, FL, EK, EL, GK, GL
+      COMPLEX :: AN, CN, EN, S1, S2, S3, S4, S5, S6, S7, W
+      REAL :: LN4
 C ----------------------------------------------------------------------
 C     EKL COMPUTES THE COMPLETE ELLIPTIC INTEGRALS F(K), F(L), E(K),
 C     E(L) FOR A GIVEN VALUE OF L2, WHERE L2 = L**2 AND K**2 + L**2 = 1.
@@ -24342,8 +24349,6 @@ C     VALUE FOR F(K) TO BE MEANINGFUL.  THE COMBINATIONS OF FUNCTIONS
 C     G(K) = E(K) - L**2*F(K) AND G(L) = E(L) - K**2*F(L) ARE ALSO
 C     CALCULATED.
 C ----------------------------------------------------------------------
-      COMPLEX :: AN, CN, EN, S1, S2, S3, S4, S5, S6, S7, W
-      REAL :: LN4
 C     ------------------
       DATA HPI /1.5707963267949/
       DATA LN4 /1.3862943611199/
@@ -24429,11 +24434,13 @@ C
       REAL, INTENT(IN) :: CPHI
       REAL, INTENT(INOUT) :: E, F
       REAL, INTENT(IN) :: PHI
+      REAL, INTENT(IN) :: K, L
       REAL :: AN, CN, D1, D2, D3, D4, DN, HN, P, PN, PX, QN, QX, R, R0,
      &R2, RI, RJ, RK, RM, RN, S0, S1, S2, S3, S4, SI, SJ, SK, SN, SS,
      &T1, T2, TD, TH1, TR, TS, W
       REAL :: ALNREL
       REAL :: CPABS
+      REAL :: K2, L2, LN4
 C-----------------------------------------------------------------------
 C
 C          REAL ELLIPTIC INTEGRALS OF THE FIRST AND SECOND KINDS
@@ -24448,8 +24455,6 @@ C     F = ELLIPTIC INTEGRAL OF FIRST KIND = F(PHI, K)
 C     E = ELLIPTIC INTEGRAL OF SECOND KIND = E(PHI, K)
 C     IERR = ERROR INDICATOR (IERR = 0  IF NO ERRORS)
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: K, L
-      REAL :: K2, L2, LN4
 C------------------------
 C     LN4 = LN(4)
 C     TH1 = TANH(1)
@@ -24571,6 +24576,12 @@ C
       SUBROUTINE DELLPI (PHI, CPHI, K, L, F, E, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K, L
+      DOUBLE PRECISION, INTENT(INOUT) :: F, E
+      DOUBLE PRECISION :: AN, CN, DN, D1, D2, D3, D4, HN, K2, L2, LN4,
+     &P, PN, PX, QN, QX, R, RI, RJ, RK, RM, RN, R0, R2, SI, SJ, SK, SN,
+     &SS, S0, S1, S2, S3, S4, TD, TH1, TR, TS, T1, T2, W
+      DOUBLE PRECISION :: DLNREL, DCPABS
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION COMPUTATION OF THE
@@ -24586,12 +24597,6 @@ C     F = ELLIPTIC INTEGRAL OF FIRST KIND = F(PHI, K)
 C     E = ELLIPTIC INTEGRAL OF SECOND KIND = E(PHI, K)
 C     IERR = ERROR INDICATOR (IERR = 0  IF NO ERRORS)
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K, L
-      DOUBLE PRECISION, INTENT(INOUT) :: F, E
-      DOUBLE PRECISION :: AN, CN, DN, D1, D2, D3, D4, HN, K2, L2, LN4,
-     &P, PN, PX, QN, QX, R, RI, RJ, RK, RM, RN, R0, R2, SI, SJ, SK, SN,
-     &SS, S0, S1, S2, S3, S4, TD, TH1, TR, TS, T1, T2, W
-      DOUBLE PRECISION :: DLNREL, DCPABS
 C------------------------
 C     LN4 = LN(4)
 C     TH1 = TANH(1)
@@ -24713,13 +24718,13 @@ C
       SUBROUTINE EPI (PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
-C-----------------------------------------------------------------------
-C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
       REAL, INTENT(INOUT) :: P
       REAL :: A, B, C, EPS, PIHALF, R, RF, S, S2, TOL
       REAL :: SPMPAR
+C-----------------------------------------------------------------------
+C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
+C-----------------------------------------------------------------------
 C---------------------
       DATA PIHALF /1.5707963267948966192/
 C-----------------------------------------------------------------------
@@ -24776,14 +24781,14 @@ C
       SUBROUTINE DEPI (PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
-C-----------------------------------------------------------------------
-C               DOUBLE PRECISION COMPUTATION OF THE
-C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: PHI, CPHI, K2, L2, N, M
       DOUBLE PRECISION, INTENT(INOUT) :: P
       DOUBLE PRECISION :: A, B, C, EPS, PIHALF, R, RF, S, S2, TOL
       DOUBLE PRECISION :: DPMPAR
+C-----------------------------------------------------------------------
+C               DOUBLE PRECISION COMPUTATION OF THE
+C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
+C-----------------------------------------------------------------------
 C---------------------
       DATA PIHALF /1.570796326794896619231321691639751442099D0/
 C-----------------------------------------------------------------------
@@ -24862,13 +24867,13 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(INOUT) :: RF
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: Y
+      REAL, INTENT(IN) :: Z
       REAL :: C1, C2, C3, E2, E3, EPSLON, ERRTOL, LAMDA
       REAL :: LOLIM, MU, S, UPLIM
-      REAL, INTENT(IN) :: X
       REAL :: XN, XNDEV, XNROOT
-      REAL, INTENT(IN) :: Y
       REAL :: YN, YNDEV, YNROOT
-      REAL, INTENT(IN) :: Z
       REAL :: ZN, ZNDEV, ZNROOT
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -24980,13 +24985,13 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: RF
+      DOUBLE PRECISION, INTENT(IN) :: X
+      DOUBLE PRECISION, INTENT(IN) :: Y
+      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: C1, C2, C3, E2, E3, EPSLON, ERRTOL, LAMDA
       DOUBLE PRECISION :: LOLIM, MU, S, UPLIM
-      DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: XN, XNDEV, XNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION :: YN, YNDEV, YNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: ZN, ZNDEV, ZNROOT
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -25098,14 +25103,14 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(INOUT) :: RD
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: Y
+      REAL, INTENT(IN) :: Z
       REAL :: C1, C2, C3, C4, EA, EB, EC, ED, EF, EPSLON, ERRTOL, LAMDA
       REAL :: LOLIM, MU, POWER4, SIGMA, S1, S2, UPLIM
-      REAL, INTENT(IN) :: X
       REAL :: XN, XNDEV
       REAL :: XNROOT
-      REAL, INTENT(IN) :: Y
       REAL :: YN, YNDEV, YNROOT
-      REAL, INTENT(IN) :: Z
       REAL :: ZN, ZNDEV, ZNROOT
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -25228,15 +25233,15 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: RD
+      DOUBLE PRECISION, INTENT(IN) :: X
+      DOUBLE PRECISION, INTENT(IN) :: Y
+      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: C1, C2, C3, C4, EA, EB, EC, ED, EF, EPSLON,
      &ERRTOL, LAMDA
       DOUBLE PRECISION :: LOLIM, MU, POWER4, SIGMA, S1, S2, UPLIM
-      DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: XN, XNDEV
       DOUBLE PRECISION :: XNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION :: YN, YNDEV, YNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: ZN, ZNDEV, ZNROOT
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -25360,17 +25365,17 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(INOUT) :: RJ
+      REAL, INTENT(IN) :: P
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: Y
+      REAL, INTENT(IN) :: Z
       REAL :: RC, ALFA, BETA, C1, C2, C3, C4, EA, EB, EC, E2, E3
       REAL :: EPSLON, ERRTOL, ETOLRC, LAMDA, LOLIM, MU
-      REAL, INTENT(IN) :: P
       REAL :: PN, PNDEV
       REAL :: POWER4, SIGMA, S1, S2, S3, UPLIM
-      REAL, INTENT(IN) :: X
       REAL :: XN, XNDEV
       REAL :: XNROOT
-      REAL, INTENT(IN) :: Y
       REAL :: YN, YNDEV, YNROOT
-      REAL, INTENT(IN) :: Z
       REAL :: ZN, ZNDEV, ZNROOT
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -25508,18 +25513,18 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: RJ
+      DOUBLE PRECISION, INTENT(IN) :: P
+      DOUBLE PRECISION, INTENT(IN) :: X
+      DOUBLE PRECISION, INTENT(IN) :: Y
+      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: RC, ALFA, BETA, C1, C2, C3, C4, EA, EB, EC,
      &E2, E3
       DOUBLE PRECISION :: EPSLON, ERRTOL, ETOLRC, LAMDA, LOLIM, MU
-      DOUBLE PRECISION, INTENT(IN) :: P
       DOUBLE PRECISION :: PN, PNDEV
       DOUBLE PRECISION :: POWER4, SIGMA, S1, S2, S3, UPLIM
-      DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: XN, XNDEV
       DOUBLE PRECISION :: XNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION :: YN, YNDEV, YNROOT
-      DOUBLE PRECISION, INTENT(IN) :: Z
       DOUBLE PRECISION :: ZN, ZNDEV, ZNROOT
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -25656,13 +25661,13 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(INOUT) :: RC
-      REAL :: C1, C2
       REAL, INTENT(IN) :: ERRTOL
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: Y
+      REAL :: C1, C2
       REAL :: LAMDA, LOLIM
       REAL :: MU, S, SN, UPLIM
-      REAL, INTENT(IN) :: X
       REAL :: XN
-      REAL, INTENT(IN) :: Y
       REAL :: YN
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -25765,13 +25770,13 @@ C
 C-----------------------------------------------------------------------
       INTEGER, INTENT(INOUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: RC
-      DOUBLE PRECISION :: C1, C2
       DOUBLE PRECISION, INTENT(IN) :: ERRTOL
+      DOUBLE PRECISION, INTENT(IN) :: X
+      DOUBLE PRECISION, INTENT(IN) :: Y
+      DOUBLE PRECISION :: C1, C2
       DOUBLE PRECISION :: LAMDA, LOLIM
       DOUBLE PRECISION :: MU, S, SN, UPLIM
-      DOUBLE PRECISION, INTENT(IN) :: X
       DOUBLE PRECISION :: XN
-      DOUBLE PRECISION, INTENT(IN) :: Y
       DOUBLE PRECISION :: YN
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -25846,6 +25851,7 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       REAL, INTENT(INOUT) :: C, D, S
       REAL, INTENT(IN) :: U
+      REAL, INTENT(IN) :: K, L
       INTEGER :: MAX, N
       REAL :: E, EPS, F, F2, PIHALF, R, SG, TOL, U1, U2, Z
       INTEGER :: IPMPAR
@@ -25855,7 +25861,6 @@ C     ELLPF CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K), AND
 C     DN(U,K) FOR REAL U AND REAL MODULUS K.  IT IS ASSUMED THAT
 C     ABS(K) .LE. 1. AND K**2 + L**2 = 1.
 C     -------------------------------------------------------------
-      REAL, INTENT(IN) :: K, L
       DATA PIHALF /1.5707963267949/
 C     ----------------
 C     ****** MAX AND EPS ARE MACHINE DEPENDENT CONSTANTS.
@@ -25939,6 +25944,7 @@ C
       REAL, INTENT(IN) :: F
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
+      REAL, INTENT(IN) :: K, L
       INTEGER :: IERR
       REAL :: C1, D1, E1, F1, PIHALF, S1, V
 C     --------------------------------------------------------
@@ -25949,7 +25955,6 @@ C     F = F(K) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
 C     FIRST KIND, AND F1 = F(L) IS THE COMPLEMENTARY INTEGRAL.
 C     IT IS ASSUMED THAT K**2 + L**2 = 1.
 C     --------------------------------------------------------
-      REAL, INTENT(IN) :: K, L
       DATA PIHALF /1.5707963267949/
 C     ------------------------
       IF (K .EQ. 0.0) GO TO 40
@@ -25993,14 +25998,14 @@ C
       IMPLICIT NONE
       REAL, INTENT(OUT) :: C, D, S
       REAL, INTENT(IN) :: U
+      REAL, INTENT(IN) :: K
       REAL :: C1, C2, C3, C4, U2
+      REAL :: K2
 C     -------------------------------------------------
 C     CALCULATES SN(U,K), CN(U,K), AND DN(U,K) FOR
 C     0.0 .LE. U .LE. 0.01 AND FOR 0.0 .LE. K .LE. 1.0
 C     BY USE OF THE MACLAURIN EXPANSION FOR SN(U,K)
 C     -------------------------------------------------
-      REAL, INTENT(IN) :: K
-      REAL :: K2
 C
       K2 = K*K
       U2 = U*U
@@ -26021,9 +26026,11 @@ C
       REAL, INTENT(IN) :: F, F1
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
+      REAL, INTENT(IN) :: K, L
       REAL :: A, AI, COEF, EPS, PIHALF, Q1, Q2, QD, QH, QN, SUM, TEMP,
      &TOL, V, W, X
       REAL :: SPMPAR
+      REAL :: I
 C     -------------------------------------------------------------
 C     SCDF COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
 C     K BY USE OF THE FOURIER EXPANSION FOR SN(U,K).  IT IS
@@ -26032,8 +26039,6 @@ C     WHERE F = F(K) IS THE COMPLETE ELLIPTIC INTEGRAL OF THE
 C     FIRST KIND AND F1 = F(L) IS THE COMPLEMENTARY INTEGRAL, WITH
 C     L .NE. 0. AND K**2 + L**2 = 1.
 C     -------------------------------------------------------------
-      REAL :: I
-      REAL, INTENT(IN) :: K, L
       DATA PIHALF /1.5707963267949/
 C     -------------------------------------------------
 C     EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
@@ -26088,9 +26093,11 @@ C
       REAL, INTENT(IN) :: F, F1
       REAL, INTENT(INOUT) :: S
       REAL, INTENT(IN) :: U
+      REAL, INTENT(IN) :: K, L
       REAL :: A, CH, COEF, E1, E1N, E2, E2N, EPS, PI, PIHALF, Q1, Q1N,
      &Q2, Q2N, SH, SUM, TEMP, TOL, V, W, X, X2, XN
       REAL :: SPMPAR
+      REAL :: N
 C     ----------------------------------------------------------------
 C     SCDJ COMPUTES SN(U,K), CN(U,K), AND DN(U,K) FOR REAL U AND
 C     K USING THE IMAGINARY TRANSFORMATION OF JACOBI AND A
@@ -26099,8 +26106,6 @@ C     AND 0.0 .LE. U .LE. F, WHERE F = F(K) IS THE COMPLETE ELLIPTIC
 C     INTEGRAL OF THE FIRST KIND AND F1 = F(L) IS THE COMPLEMENTARY
 C     INTEGRAL, AND THAT L .NE. 0. AND K**2 + L**2 = 1.
 C     ----------------------------------------------------------------
-      REAL, INTENT(IN) :: K, L
-      REAL :: N
       DATA PIHALF /1.5707963267949/
       DATA PI /3.1415926535898/
 C     ------------------------------------------------
@@ -26169,17 +26174,17 @@ C
       SUBROUTINE ELPFC1 (U,K,L,S,C,D,IERR)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX, INTENT(IN) :: U
+      COMPLEX, INTENT(INOUT) :: S, C, D
+      REAL, INTENT(IN) :: K, L
       REAL :: C1, C2, CK, CL, COEF, D1, D2, DK, DL, R, S1, S2, SK, SL,
      &T, T1, T2, TD1, TD2, U1, U2
+      REAL :: K2
 C     -------------------------------------------------------------
 C     ELPFC1 CALCULATES THE ELLIPTIC FUNCTIONS SN(U,K), CN(U,K),
 C     DN(U,K) FOR COMPLEX U AND REAL MODULUS K.  IT IS ASSUMED THAT
 C     ABS(K) .LE. 1. AND K**2 + L**2 = 1.
 C     -------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: U
-      COMPLEX, INTENT(INOUT) :: S, C, D
-      REAL, INTENT(IN) :: K, L
-      REAL :: K2
 C
       U1 = REAL(U)
       U2 = AIMAG(U)
@@ -26263,10 +26268,10 @@ C     WEIERSTRASS P-FUNCTION IN THE EQUIANHARMONIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
 C
       COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z4, Z6
       COMPLEX, INTENT(INOUT) :: W
-      REAL :: ZR, ZI
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX :: Z1, Z4, Z6
+      REAL :: ZR, ZI
       INTEGER :: M, N
 C
 C     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
@@ -26310,10 +26315,10 @@ C     EQUIANHARMONIC CASE FOR COMPLEX ARGUMENT
 C     WITH UNIT PERIOD PARALLELOGRAM
 C
       COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z3, Z6
       COMPLEX, INTENT(INOUT) :: W
-      REAL :: ZR, ZI
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX :: Z1, Z3, Z6
+      REAL :: ZR, ZI
       INTEGER :: M, N
 C
 C     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
@@ -26357,10 +26362,10 @@ C     WEIERSTRASS P-FUNCTION IN THE LEMNISCATIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
 C
       COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z4, Z6
       COMPLEX, INTENT(INOUT) :: W
-      REAL :: ZR, ZI
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX :: Z1, Z4, Z6
+      REAL :: ZR, ZI
       INTEGER :: M, N
 C
 C     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
@@ -26406,10 +26411,10 @@ C     LEMNISCATIC CASE FOR COMPLEX ARGUMENT
 C     WITH UNIT PERIOD PARALLELOGRAM
 C
       COMPLEX, INTENT(IN) :: Z
-      COMPLEX :: Z1, Z3, Z4
       COMPLEX, INTENT(INOUT) :: W
-      REAL :: ZR, ZI
       INTEGER, INTENT(INOUT) :: IERR
+      COMPLEX :: Z1, Z3, Z4
+      REAL :: ZR, ZI
       INTEGER :: M, N
 C
 C     REDUCTION TO FUNDAMENTAL PARALLELOGRAM
@@ -26463,8 +26468,8 @@ C
      &RTPII, SUM, T, T1, TAU, TAUSQ, TWOPI, U, V, W, XK, YK, YKM1, Z
       REAL :: ERFC1
       REAL :: SPMPAR
-C     -------------------
       REAL :: KOM, L
+C     -------------------
 C     -------------------
       DATA PI/3.1415926535898/
       DATA TWOPI/6.28318530717958/
@@ -26750,6 +26755,7 @@ C
       REAL :: RCOMP
       REAL :: REXP
       REAL :: SPMPAR
+      REAL :: M, M0
 C-----------------------------------------------------------------------
 C       IF J .NE. 0, OUTPUT IS P = CIRCULAR COVERAGE FUNCTION. P GIVES
 C       THE PROBABILITY OF A SHOT FALLING, UNDER A NORMAL DISTRIBUTION
@@ -26775,7 +26781,6 @@ C       IEEE TRANS. INFO. TH. APRIL 1965, P. 312.
 C-----------------------------------------------------------------------
 C       NEGATIVE R AND D ARE NOT PERMITTED.
 C--------------------------------------------
-      REAL :: M, M0
 C-----------------------
 C     C1 = 1/SQRT(2)
 C     C2 = 1/SQRT(PI)
@@ -26995,6 +27000,8 @@ C
       REAL, INTENT(IN) :: X
       REAL, INTENT(INOUT) :: Y
       REAL :: AX, BOT, C, EPS, T, TOP
+      REAL :: A(4), B(4), P(8), Q(8), R(5), S(5)
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C         EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
 C
@@ -27006,8 +27013,6 @@ C     THAT E = EXP(-X*X). IN THIS CASE E IS NOT MODIFIED. IF E IS
 C     NEGATIVE THEN E IS SET TO EXP(-X*X) WHEN THIS VALUE IS NEEDED.
 C
 C-----------------------------------------------------------------------
-      REAL :: A(4), B(4), P(8), Q(8), R(5), S(5)
-      DOUBLE PRECISION :: W
 C-------------------------
       DATA C/.564189583547756/
 C-------------------------
@@ -27096,10 +27101,10 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: X
       REAL :: BOT, T, TOP
+      REAL :: R(5), S(4)
 C-----------------------------------------------------------------------
 C     COMPUTATION OF  1/SQRT(PI) - X*EXP(X*X)*ERFC(X)  FOR X .GE. 4
 C-----------------------------------------------------------------------
-      REAL :: R(5), S(4)
 C------------------------
       DATA R(1)/2.10144126479064E+00/,  R(2)/2.62370141675169E+01/,
      *     R(3)/2.13688200555087E+01/,  R(4)/4.65807828718470E+00/,
@@ -27119,6 +27124,7 @@ C------------------------
       REAL, INTENT(IN) :: H
       REAL, INTENT(OUT) :: P
       REAL, INTENT(IN) :: R0, SX, SY
+      REAL, INTENT(IN) :: K
       INTEGER :: I, II, IY, IZ, IZ3, J, J8, N1, NT
       REAL :: A, A1, A2, A3, A4, C, C8, D, D1, D2, DM, E3, E4, EPS, F,
      &G2, G3, H1, H2, H3, H5, H6, H8, Q, Q1, R, R8, RPI, RT2, S0, S1,
@@ -27128,6 +27134,7 @@ C------------------------
       REAL :: AERF
       REAL :: EPSLN
       REAL :: SPMPAR
+      REAL :: K8, V(16), W(16)
 C-----------------------------------------------------------------------
 C
 C           COMPUTATION OF THE ELLIPTICAL COVERAGE FUNCTION
@@ -27139,8 +27146,6 @@ C     P .GE. 1.E-20 AND MAX(H/S,K/S,SX/S,SY/S) .LE. 10/SQRT(SPMPAR(1))
 C     FOR S = MIN(SX,SY).
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: K
-      REAL :: K8, V(16), W(16)
 C-----------------------------------------------------------------------
 C   V(*), W(*)-- GAUSSIAN ABSCISSAS AND WEIGHTS OF ORDER 32, ON (-1,1).
 C-----------------------------------------------------------------------
@@ -27565,12 +27570,12 @@ C
       SUBROUTINE PLCOPY (A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: B(*)
       INTEGER :: J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING REAL POLYNOMIALS
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: B(*)
 C
       LA = 1
       LB = 1
@@ -27593,12 +27598,12 @@ C
       SUBROUTINE DPCOPY (A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER :: J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
 C     COPYING DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(*)
 C
       LA = 1
       LB = 1
@@ -27621,12 +27626,12 @@ C
       SUBROUTINE PADD (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*)
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*)
 C
       LA = 1
       LB = 1
@@ -27645,12 +27650,12 @@ C
       SUBROUTINE DPADD (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     ADDITION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
 C
       LA = 1
       LB = 1
@@ -27669,12 +27674,12 @@ C
       SUBROUTINE PSUBT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*)
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*)
 C
       LA = 1
       LB = 1
@@ -27693,12 +27698,12 @@ C
       SUBROUTINE DPSUBT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
       INTEGER :: I, LA, LB, LC
 C     ------------------------------------------------------------------
 C     SUBTRACTION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
 C
       LA = 1
       LB = 1
@@ -27717,13 +27722,13 @@ C
       SUBROUTINE PMULT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*)
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
+      DOUBLE PRECISION :: DSUM
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*)
-      DOUBLE PRECISION :: DSUM
 C
       LC = 1
       JMAX = MIN0(L + M - 1, N)
@@ -27758,13 +27763,13 @@ C
       SUBROUTINE DPMULT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
+      DOUBLE PRECISION :: SUM
 C     ------------------------------------------------------------------
 C     MULTIPLICATION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
-      DOUBLE PRECISION :: SUM
 C
       LC = 1
       JMAX = MIN0(L + M - 1, N)
@@ -27800,14 +27805,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*)
       INTEGER :: I, IB, IC, IMAX, J, LA, LC
       REAL :: B0
+      DOUBLE PRECISION :: DSUM
 C     ------------------------------------------------------------------
 C     DIVISION OF REAL POLYNOMIALS
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*)
-      DOUBLE PRECISION :: DSUM
 C
       B0 = B(1)
       IF (B0 .EQ. 0.0) GO TO 100
@@ -27859,13 +27864,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
       INTEGER :: I, IB, IC, IMAX, J, LA, LC
+      DOUBLE PRECISION :: B0, SUM
 C     ------------------------------------------------------------------
 C     DIVISION OF DOUBLE PRECISION POLYNOMIALS
 C     ------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*)
-      DOUBLE PRECISION :: B0, SUM
 C
       B0 = B(1)
       IF (B0 .EQ. 0.D0) GO TO 100
@@ -27918,15 +27923,15 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(IN) :: R
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: B(*)
       INTEGER :: I, IA, IB, IMAX, J, LB
       REAL :: A0
+      REAL :: JM1
+      DOUBLE PRECISION :: COEFF, DSUM, RP1
 C     ------------------------------------------------------------------
 C     SET B = A**R WHERE A IS A REAL POLYNOMIAL
 C     ------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: B(*)
-      REAL :: JM1
-      DOUBLE PRECISION :: COEFF, DSUM, RP1
 C
       A0 = A(1)
       IF (A0 .LE. 0.0) GO TO 100
@@ -27976,14 +27981,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, IA, IB, IMAX, J, LB
-C     ------------------------------------------------------------------
-C     SET B = A**R WHERE A IS A DOUBLE PRECISION POLYNOMIAL
-C     ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       DOUBLE PRECISION, INTENT(IN) :: R
+      INTEGER :: I, IA, IB, IMAX, J, LB
       DOUBLE PRECISION :: A0, COEFF, JM1, RP1, SUM
+C     ------------------------------------------------------------------
+C     SET B = A**R WHERE A IS A DOUBLE PRECISION POLYNOMIAL
+C     ------------------------------------------------------------------
 C
       A0 = A(1)
       IF (A0 .LE. 0.D0) GO TO 100
@@ -28032,14 +28037,14 @@ C
       SUBROUTINE PINV (A, D, N, Q)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: A(N)
+      REAL, INTENT(INOUT) :: D(N), Q(*)
       INTEGER :: I, J, JJ, K, L, L0, LL, M
       REAL :: S, SUM, T, U
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
 C                  SUM (A(I)*X**I, I = 1,2,...)
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(N)
-      REAL, INTENT(INOUT) :: D(N), Q(*)
 C----------------------------
 C     NUM = (N*(N + 1))/2
 C     REAL Q(NUM)
@@ -28093,14 +28098,14 @@ C
       SUBROUTINE DPINV (A, D, N, Q)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: D(N), Q(*)
       INTEGER :: I, J, JJ, K, L, L0, LL, M
+      DOUBLE PRECISION :: S, SUM, T, U
 C-----------------------------------------------------------------------
 C          COMPUTATION OF THE INVERSE OF THE POWER SERIES
 C                  SUM (A(I)*X**I, I = 1,2,...)
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: D(N), Q(*)
-      DOUBLE PRECISION :: S, SUM, T, U
 C----------------------------
 C     NUM = (N*(N + 1))/2
 C     REAL Q(NUM)
@@ -28214,13 +28219,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: A(N)
       INTEGER :: I, K
       REAL :: S0, S1, S2, X2
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
 C          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(N)
 C
       IF (N .GT. 1) GO TO 10
          CSEVL = 0.5 * A(1)
@@ -28242,13 +28247,13 @@ C
       DOUBLE PRECISION FUNCTION DCSEVL (X, A, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A(N), X
       INTEGER :: I, K
+      DOUBLE PRECISION :: X2, S0, S1, S2
 C-----------------------------------------------------------------------
 C          EVALUATE THE N TERM CHEBYSHEV SERIES A AT X.
 C          ONLY HALF OF THE FIRST COEFFICIENT IS USED.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(N), X
-      DOUBLE PRECISION :: X2, S0, S1, S2
 C
       IF (N .GT. 1) GO TO 10
          DCSEVL = 0.5D0 * A(1)
@@ -28302,6 +28307,7 @@ C
       REAL, INTENT(INOUT) :: SF(*)
       INTEGER :: K, L
       REAL :: DM, RM, SM, TM
+      LOGICAL :: LN
 C     ******************************************************************
 C     FORTRAN SUBROUTINE FOR LAGRANGIAN FUNCTION EVALUATION
 C     ******************************************************************
@@ -28318,7 +28324,6 @@ C     CALL LGRNGV (0, NA, QU, AU, AN, FF)         FOR FUNCTIONS
 C     CALL LGRNGV (1, NA, QU, AU, AN, FF, DF)     FOR FIRST DERIVATIVES
 C     CALL LGRNGV (2, NA, QU, AU, AN, FF, DF, SF) FOR SECOND DERIVATIVES
 C
-      LOGICAL :: LN
   001 LN=.TRUE.
       TM=1.0
       DO 003 K=1,NA
@@ -28905,6 +28910,8 @@ C
       REAL, INTENT(IN) :: EPSFCN, TOL
       REAL, INTENT(INOUT) :: X(N), FVEC(N), WA(LWA)
       EXTERNAL FCN
+      INTEGER :: INDEX, J, LR, MAXFEV, ML, MODE, MU, NFEV, NPRINT
+      REAL :: FACTOR, ONE, XTOL, ZERO
 C     **********
 C
 C     SUBROUTINE HBRD
@@ -28997,8 +29004,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: INDEX, J, LR, MAXFEV, ML, MODE, MU, NFEV, NPRINT
-      REAL :: FACTOR, ONE, XTOL, ZERO
       DATA FACTOR,ONE,ZERO /1.0E2,1.0E0,0.0E0/
       INFO = 0
 C
@@ -29044,6 +29049,13 @@ C
      &R(LR), QTF(N), WA1(N), WA2(N), WA3(N)
       REAL :: WA4(N)
       EXTERNAL FCN
+      INTEGER :: I, IFLAG, ITER, J, JM1, L, MSUM, NCFAIL, NCSUC, NSLOW1,
+     &NSLOW2
+      INTEGER :: IWA(1)
+      LOGICAL :: JEVAL, SING
+      REAL :: ACTRED, DELTA, EPSMCH, FNORM, FNORM1, ONE, PNORM, PRERED,
+     &P1, P5, P001, P0001, RATIO, SUM, TEMP, XNORM, ZERO
+      REAL :: SPMPAR, ENORM
 C     **********
 C
 C     SUBROUTINE HYBRD
@@ -29200,13 +29212,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, IFLAG, ITER, J, JM1, L, MSUM, NCFAIL, NCSUC, NSLOW1,
-     &NSLOW2
-      INTEGER :: IWA(1)
-      LOGICAL :: JEVAL, SING
-      REAL :: ACTRED, DELTA, EPSMCH, FNORM, FNORM1, ONE, PNORM, PRERED,
-     &P1, P5, P001, P0001, RATIO, SUM, TEMP, XNORM, ZERO
-      REAL :: SPMPAR, ENORM
       DATA ONE,P1,P5,P001,P0001,ZERO
      *     /1.0E0,1.0E-1,5.0E-1,1.0E-3,1.0E-4,0.0E0/
 C
@@ -29498,6 +29503,8 @@ C
 
       SUBROUTINE QDCRT (A, Z)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: A(3)
+      COMPLEX, INTENT(INOUT) :: Z(2)
       REAL :: D, EPS, R, W, X, Y
       REAL :: SPMPAR
 C-----------------------------------------------------------------------
@@ -29508,8 +29515,6 @@ C     AND STORES THE RESULTS IN Z. IT IS ASSUMED THAT A(3)
 C     IS NONZERO.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(3)
-      COMPLEX, INTENT(INOUT) :: Z(2)
 C-----------------------------------------------------------------------
 C
 C     ***** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -29625,11 +29630,14 @@ C
 
       SUBROUTINE CBCRT (A, Z)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: A(4)
+      COMPLEX, INTENT(INOUT) :: Z(3)
       REAL :: ARG, C, CF, D, EPS, P, P1, Q, Q1, R, R1, RA, RB, RQ, RT,
      &RT3, S, SF, SQ, SUM, T, T1, TOL, W, W1, W2, X, X1, X2, X3, Y, Y1,
      &Y2, Y3
       REAL :: CBRT
       REAL :: SPMPAR
+      REAL :: AQ(3)
 C-----------------------------------------------------------------------
 C
 C        CBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -29642,9 +29650,6 @@ C     WRITTEN BY ALFRED H. MORRIS
 C        NAVAL SURFACE WEAPONS CENTER
 C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(4)
-      REAL :: AQ(3)
-      COMPLEX, INTENT(INOUT) :: Z(3)
 C-------------------
       DATA RT3/1.7320508075689/
 C-----------------------------------------------------------------------
@@ -30048,8 +30053,12 @@ C
 
       SUBROUTINE QTCRT (A, Z)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: A(5)
+      COMPLEX, INTENT(INOUT) :: Z(4)
       REAL :: B, B2, C, D, E, H, P, Q, R, T, U, V, V1, V2, X, X1, X2,
      &X3, Y
+      REAL :: TEMP(4)
+      COMPLEX :: W
 C-----------------------------------------------------------------------
 C
 C         QTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -30062,10 +30071,6 @@ C     WRITTEN BY ALFRED H. MORRIS
 C        NAVAL SURFACE WEAPONS CENTER
 C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(5)
-      REAL :: TEMP(4)
-      COMPLEX, INTENT(INOUT) :: Z(4)
-      COMPLEX :: W
 C
       IF (A(1) .EQ. 0.0) GO TO 100
       B = A(4)/(4.0*A(5))
@@ -30363,7 +30368,14 @@ C
 
       SUBROUTINE DRPOLY (OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK)
       IMPLICIT NONE
+      INTEGER :: IDEG
+      INTEGER, INTENT(INOUT) :: NUM
+      DOUBLE PRECISION :: OP(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
+     &DWK(*)
+      REAL, INTENT(INOUT) :: WK(*)
       INTEGER :: IDP1
+      INTEGER :: P, QP, K, QK, SVK, TMP
 C
 C     THIS SUBROUTINE FINDS THE ZEROS OF A REAL POLYNOMIAL.
 C
@@ -30395,14 +30407,7 @@ C     THE SUBROUTINE USES SINGLE PRECISION CALCULATIONS FOR SCALING,
 C     BOUNDS, AND ERROR CALCULATIONS. ALL OTHER CALCULATIONS ARE DONE
 C     IN DOUBLE PRECISION.
 C
-      INTEGER :: IDEG
-      INTEGER, INTENT(INOUT) :: NUM
-      DOUBLE PRECISION :: OP(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
-     &DWK(*)
-      REAL, INTENT(INOUT) :: WK(*)
 C
-      INTEGER :: P, QP, K, QK, SVK, TMP
 C
       IF (IDEG .LT. 1) GO TO 10
 C
@@ -30431,25 +30436,25 @@ C
      *                   TEMP,PT,NUM)
       IMPLICIT NONE
       INTEGER :: IDEG, IDP1, NUM
-      INTEGER :: I, J, JJ, L, N, NM1, NN, NZ
-C-------------------------
       DOUBLE PRECISION :: OP(IDP1), ZEROR(IDEG), ZEROI(IDEG), P(IDP1),
      &QP(IDP1), K(IDP1), QK(IDP1), SVK(IDP1), TEMP(IDP1)
       REAL :: PT(IDP1)
-C
+      INTEGER :: I, J, JJ, L, N, NM1, NN, NZ
       DOUBLE PRECISION :: AA, BB, CC, FACTOR, T
       REAL :: LO, MAX, MIN, XX, YY, COSR, SINR, X, XXX, SC, BND, XM, FF,
      &DF, DX, BASE, SMALNO, INFIN
       INTEGER :: CNT
       LOGICAL :: ZEROK
-C
       REAL :: SPMPAR
       INTEGER :: IPMPAR
       DOUBLE PRECISION :: DPMPAR
-C-------------------------
       REAL :: ETA, ARE, MRE
       DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      &E, F, G, H, SZR, SZI, LZR, LZI
+C-------------------------
+C
+C
+C-------------------------
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C-------------------------
@@ -30699,7 +30704,16 @@ C
       SUBROUTINE FXSHFR(L2, NZ, NN, P, QP, K, QK, SVK)
       IMPLICIT NONE
       INTEGER :: NN
+      DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN), SVK(NN)
+      INTEGER :: L2, NZ
       INTEGER :: N
+      DOUBLE PRECISION :: SVU, SVV, UI, VI, S
+      REAL :: BETAS, BETAV, OSS, OVV, SS, VV, TS, TV, OTS, OTV, TVV, TSS
+      INTEGER :: TYPE, I, J, IFLAG
+      LOGICAL :: VPASS, SPASS, VTRY, STRY
+      REAL :: ETA, ARE, MRE
+      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
+     &E, F, G, H, SZR, SZI, LZR, LZI
 C
 C     COMPUTES UP TO  L2  FIXED SHIFT K-POLYNOMIALS,
 C     TESTING FOR CONVERGENCE IN THE LINEAR OR QUADRATIC
@@ -30710,15 +30724,7 @@ C
 C     L2 - LIMIT OF FIXED SHIFT STEPS
 C     NZ - NUMBER OF ZEROS FOUND
 C
-      DOUBLE PRECISION :: P(NN), QP(NN), K(NN), QK(NN), SVK(NN)
-      DOUBLE PRECISION :: SVU, SVV, UI, VI, S
-      REAL :: BETAS, BETAV, OSS, OVV, SS, VV, TS, TV, OTS, OTV, TVV, TSS
-      INTEGER :: L2, NZ, TYPE, I, J, IFLAG
-      LOGICAL :: VPASS, SPASS, VTRY, STRY
 C
-      REAL :: ETA, ARE, MRE
-      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
-     &E, F, G, H, SZR, SZI, LZR, LZI
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -30849,7 +30855,16 @@ C
       SUBROUTINE QUADIT(UU, VV, NZ, NN, P, QP, K, QK)
       IMPLICIT NONE
       INTEGER :: NN
+      DOUBLE PRECISION :: UU, VV, P(NN), QP(NN), K(NN), QK(NN)
+      INTEGER :: NZ
       INTEGER :: N
+      DOUBLE PRECISION :: UI, VI
+      REAL :: MP, OMP, EE, RELSTP, T, ZM
+      INTEGER :: TYPE, I, J
+      LOGICAL :: TRIED
+      REAL :: ETA, ARE, MRE
+      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
+     &E, F, G, H, SZR, SZI, LZR, LZI
 C
 C     VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A
 C     QUADRATIC FACTOR CONVERGES ONLY IF THE ZEROS ARE
@@ -30858,15 +30873,7 @@ C
 C     UU,VV - COEFFICIENTS OF STARTING QUADRATIC
 C     NZ - NUMBER OF ZERO FOUND
 C
-      DOUBLE PRECISION :: UU, VV, P(NN), QP(NN), K(NN), QK(NN)
-      DOUBLE PRECISION :: UI, VI
-      REAL :: MP, OMP, EE, RELSTP, T, ZM
-      INTEGER :: NZ, TYPE, I, J
-      LOGICAL :: TRIED
 C
-      REAL :: ETA, ARE, MRE
-      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
-     &E, F, G, H, SZR, SZI, LZR, LZI
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -30954,7 +30961,13 @@ C
       SUBROUTINE REALIT(SSS, NZ, IFLAG, NN, P, QP, K, QK)
       IMPLICIT NONE
       INTEGER :: IFLAG, NN, NZ
+      DOUBLE PRECISION :: SSS, P(NN), QP(NN), K(NN), QK(NN)
       INTEGER :: I, J, N
+      DOUBLE PRECISION :: PV, KV, T, S
+      REAL :: MS, MP, OMP, EE
+      REAL :: ETA, ARE, MRE
+      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
+     &E, F, G, H, SZR, SZI, LZR, LZI
 C
 C     VARIABLE-SHIFT H POLYNOMIAL ITERATION FOR A REAL ZERO.
 C
@@ -30963,13 +30976,7 @@ C     NZ    - NUMBER OF ZERO FOUND
 C     IFLAG - FLAG TO INDICATE A PAIR OF ZEROS NEAR THE REAL
 C             AXIS.
 C
-      DOUBLE PRECISION :: SSS, P(NN), QP(NN), K(NN), QK(NN)
-      DOUBLE PRECISION :: PV, KV, T, S
-      REAL :: MS, MP, OMP, EE
 C
-      REAL :: ETA, ARE, MRE
-      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
-     &E, F, G, H, SZR, SZI, LZR, LZI
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -31066,6 +31073,12 @@ C
       SUBROUTINE CALCSC(TYPE, N, K, QK)
       IMPLICIT NONE
       INTEGER :: N
+      INTEGER :: TYPE
+      DOUBLE PRECISION :: K(N), QK(N)
+      DOUBLE PRECISION :: TOL
+      REAL :: ETA, ARE, MRE
+      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
+     &E, F, G, H, SZR, SZI, LZR, LZI
 C
 C     THIS ROUTINE CALCULATES SCALAR QUANTITIES USED TO
 C     COMPUTE THE NEXT K POLYNOMIAL AND NEW ESTIMATES OF
@@ -31074,13 +31087,7 @@ C
 C     TYPE - INTEGER VARIABLE SET HERE INDICATING HOW THE
 C            CALCULATIONS ARE NORMALIZED TO AVOID OVERFLOW
 C
-      INTEGER :: TYPE
-      DOUBLE PRECISION :: K(N), QK(N)
-      DOUBLE PRECISION :: TOL
 C
-      REAL :: ETA, ARE, MRE
-      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
-     &E, F, G, H, SZR, SZI, LZR, LZI
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -31125,17 +31132,17 @@ C
       SUBROUTINE NEXTK(TYPE, N, QP, K, QK)
       IMPLICIT NONE
       INTEGER :: N
-      INTEGER :: I
-C
-C     COMPUTES THE NEXT K POLYNOMIALS USING THE SCALARS
-C     COMPUTED IN CALCSC.
-C
       INTEGER :: TYPE
       DOUBLE PRECISION :: QP(N), K(N), QK(N)
+      INTEGER :: I
       DOUBLE PRECISION :: TEMP
       REAL :: ETA, ARE, MRE
       DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      &E, F, G, H, SZR, SZI, LZR, LZI
+C
+C     COMPUTES THE NEXT K POLYNOMIALS USING THE SCALARS
+C     COMPUTED IN CALCSC.
+C
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -31178,18 +31185,18 @@ C
       SUBROUTINE NEWEST (TYPE, UU, VV, NN, P, K)
       IMPLICIT NONE
       INTEGER :: NN
+      INTEGER :: TYPE
+      DOUBLE PRECISION :: UU, VV, P(NN), K(NN)
       INTEGER :: N
+      DOUBLE PRECISION :: A4, A5, B1, B2, C1, C2, C3, C4, TEMP
+      REAL :: ETA, ARE, MRE
+      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
+     &E, F, G, H, SZR, SZI, LZR, LZI
 C
 C     COMPUTE NEW ESTIMATES OF THE QUADRATIC COEFFICIENTS
 C     USING THE SCALARS COMPUTED IN CALCSC.
 C
-      INTEGER :: TYPE
-      DOUBLE PRECISION :: UU, VV, P(NN), K(NN)
-      DOUBLE PRECISION :: A4, A5, B1, B2, C1, C2, C3, C4, TEMP
 C
-      REAL :: ETA, ARE, MRE
-      DOUBLE PRECISION :: SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
-     &E, F, G, H, SZR, SZI, LZR, LZI
       COMMON /GLOBAL/  SR, SI, U, V, A, B, C, D, A1, A2, A3, A6, A7,
      *                 E, F, G, H, SZR, SZI, LZR, LZI, ETA, ARE, MRE
 C
@@ -31228,16 +31235,16 @@ C
       SUBROUTINE QUADSD (NN, U, V, P, Q, A, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
-      INTEGER :: I
-C
-C     DIVIDES P BY THE QUADRATIC  1,U,V  PLACING THE
-C     QUOTIENT IN Q AND THE REMAINDER IN A,B.
-C
       DOUBLE PRECISION, INTENT(IN) :: P(NN)
       DOUBLE PRECISION, INTENT(INOUT) :: Q(NN)
       DOUBLE PRECISION, INTENT(IN) :: U, V
       DOUBLE PRECISION, INTENT(OUT) :: A, B
+      INTEGER :: I
       DOUBLE PRECISION :: C
+C
+C     DIVIDES P BY THE QUADRATIC  1,U,V  PLACING THE
+C     QUOTIENT IN Q AND THE REMAINDER IN A,B.
+C
 C
       B = P(1)
       Q(1) = B
@@ -31312,7 +31319,11 @@ C
       SUBROUTINE DCPOLY (OPR,OPI,IDEG,ZEROR,ZEROI,NUM,WK)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: NUM
+      INTEGER :: IDEG
+      DOUBLE PRECISION, INTENT(IN) :: OPR(*), OPI(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG), WK(*)
       INTEGER :: IDP1
+      INTEGER :: PR, PI, QPR, QPI, HR, HI, QHR, QHI, SHR, SHI
 C
 C     THIS SUBROUTINE FINDS THE ZEROS OF A COMPLEX POLYNOMIAL.
 C
@@ -31343,11 +31354,7 @@ C     OCCURRING. IF IT DOES OCCUR, THERE IS STILL A POSSIBILITY THAT
 C     THE ZEROFINDER WILL WORK PROVIDED THE OVERFLOWED QUANTITY IS
 C     REPLACED BY A LARGE NUMBER.
 C
-      INTEGER :: IDEG
-      DOUBLE PRECISION, INTENT(IN) :: OPR(*), OPI(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG), WK(*)
 C
-      INTEGER :: PR, PI, QPR, QPI, HR, HI, QHR, QHI, SHR, SHI
 C
       IF (IDEG .LT. 1) GO TO 10
 C
@@ -31383,18 +31390,18 @@ C
       INTEGER :: IDEG
       INTEGER, INTENT(IN) :: IDP1
       INTEGER, INTENT(OUT) :: NUM
-      INTEGER :: I, NN
-      INTEGER :: IPMPAR
-C-------------------------
       DOUBLE PRECISION, INTENT(IN) :: OPR(IDP1), OPI(IDP1)
       DOUBLE PRECISION, INTENT(INOUT) :: ZEROR(IDEG), ZEROI(IDEG),
      &PR(IDP1), PI(IDP1), QPR(IDP1), QPI(IDP1), HR(IDP1), HI(IDP1),
      &QHR(IDP1), QHI(IDP1), SHR(IDP1), SHI(IDP1)
+      INTEGER :: I, NN
+      INTEGER :: IPMPAR
       DOUBLE PRECISION :: SR, SI, TR, TI, PVR, PVI, ARE, MRE, ETA, INFIN
       DOUBLE PRECISION :: XX, YY, COSR, SINR, SMALNO, BASE, XXX, ZR, ZI,
      &BND, DCPABS, DPMPAR, SCALCP
       LOGICAL :: CONV
       INTEGER :: CNT1, CNT2
+C-------------------------
 C-------------------------
 C     THE FOLLOWING STATEMENTS SET THE MACHINE CONSTANTS USED
 C     IN THE CODE. THE MEANING OF THE CONSTANTS ARE ...
@@ -31529,7 +31536,9 @@ C
       DOUBLE PRECISION FUNCTION SCALCP(NN,PT,ETA,INFIN,SMALNO,BASE)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(IN) :: PT(NN), ETA, INFIN, SMALNO, BASE
       INTEGER :: I, L
+      DOUBLE PRECISION :: HI, LO, MAX, MIN, X, SC
 C
 C     RETURNS A SCALE FACTOR TO MULTIPLY THE COEFFICIENTS OF THE
 C     POLYNOMIAL. THE SCALING IS DONE TO AVOID OVERFLOW AND TO AVOID
@@ -31540,8 +31549,6 @@ C     PT - MODULUS OF THE COEFFICIENTS OF P
 C     ETA,INFIN,SMALNO,BASE - CONSTANTS DESCRIBING THE
 C            FLOATING POINT ARITHMETIC.
 C
-      DOUBLE PRECISION, INTENT(IN) :: PT(NN), ETA, INFIN, SMALNO, BASE
-      DOUBLE PRECISION :: HI, LO, MAX, MIN, X, SC
 C
 C     FIND THE LARGEST AND SMALLEST MODULI OF COEFFICIENTS.
 C
@@ -31572,14 +31579,14 @@ C
       SUBROUTINE CAUCHY(NN,BND,PT,Q)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(INOUT) :: Q(NN), PT(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: BND
       INTEGER :: I, N
+      DOUBLE PRECISION :: X, XM, F, DX, DF
 C
 C     CAUCHY COMPUTES A LOWER BOUND BND ON THE MODULI OF THE ZEROS
 C     OF A POLYNOMIAL. PT IS THE MODULUS OF THE COEFFICIENTS.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: Q(NN), PT(NN)
-      DOUBLE PRECISION :: X, XM, F, DX, DF
-      DOUBLE PRECISION, INTENT(INOUT) :: BND
 C
       PT(NN) = -PT(NN)
 C
@@ -31629,15 +31636,15 @@ C
       SUBROUTINE NOSHFT(L1,NN,TR,TI,ETA,PR,PI,HR,HI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L1, NN
+      DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
+      DOUBLE PRECISION, INTENT(IN) :: ETA, PR(NN), PI(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: HR(NN), HI(NN)
       INTEGER :: I, J, JJ, N, NM1
+      DOUBLE PRECISION :: DN, T1, T2, XNI, DCPABS
 C
 C     COMPUTES THE DERIVATIVE POLYNOMIAL AS THE INITIAL H
 C     POLYNOMIAL AND COMPUTES L1 NO-SHIFT H POLYNOMIALS.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
-      DOUBLE PRECISION, INTENT(IN) :: ETA, PR(NN), PI(NN)
-      DOUBLE PRECISION, INTENT(INOUT) :: HR(NN), HI(NN)
-      DOUBLE PRECISION :: DN, T1, T2, XNI, DCPABS
 C
       N = NN - 1
       NM1 = N - 1
@@ -31681,7 +31688,16 @@ C
      *                  ARE,MRE,ETA,INFIN)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L2, NN
+      DOUBLE PRECISION, INTENT(INOUT) :: SR, SI, TR, TI, PVR, PVI
+      DOUBLE PRECISION, INTENT(IN) :: ARE, MRE, ETA, INFIN, PR(NN),
+     &PI(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: QPR(NN), QPI(NN), HR(NN),
+     &HI(NN), QHR(NN), QHI(NN), SHR(NN), SHI(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
+      LOGICAL, INTENT(INOUT) :: CONV
       INTEGER :: I, J, N
+      DOUBLE PRECISION :: OTR, OTI, SVSR, SVSI, DCPABS
+      LOGICAL :: TEST, PASD, BOOL
 C
 C     COMPUTES L2 FIXED-SHIFT H POLYNOMIALS AND TESTS FOR CONVERGENCE.
 C     INITIATES A VARIABLE-SHIFT ITERATION AND RETURNS WITH THE
@@ -31692,15 +31708,6 @@ C     ZR,ZI - APPROXIMATE ZERO IF CONV IS .TRUE.
 C     CONV - LOGICAL VARIABLE INDICATING CONVERGENCE OF STAGE 3
 C            ITERATION
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: SR, SI, TR, TI, PVR, PVI
-      DOUBLE PRECISION, INTENT(IN) :: ARE, MRE, ETA, INFIN, PR(NN),
-     &PI(NN)
-      DOUBLE PRECISION, INTENT(INOUT) :: QPR(NN), QPI(NN), HR(NN),
-     &HI(NN), QHR(NN), QHI(NN), SHR(NN), SHI(NN)
-      DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
-      DOUBLE PRECISION :: OTR, OTI, SVSR, SVSI, DCPABS
-      LOGICAL, INTENT(INOUT) :: CONV
-      LOGICAL :: TEST, PASD, BOOL
 C
          N = NN - 1
 C
@@ -31780,7 +31787,17 @@ C
      *                  SR,SI,TR,TI,PVR,PVI,ARE,MRE,ETA,INFIN)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L3, NN
+      DOUBLE PRECISION, INTENT(OUT) :: SR, SI
+      DOUBLE PRECISION, INTENT(INOUT) :: TR, TI, PVR, PVI
+      DOUBLE PRECISION, INTENT(IN) :: ARE, MRE, ETA, INFIN, PR(NN),
+     &PI(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: QPR(NN), QPI(NN), HR(NN),
+     &HI(NN), QHR(NN), QHI(NN)
+      DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
+      LOGICAL, INTENT(OUT) :: CONV
       INTEGER :: I, J, N
+      DOUBLE PRECISION :: MP, MS, OMP, RELSTP, R1, R2, TP, ERREV, DCPABS
+      LOGICAL :: B, BOOL
 C
 C     CARRIES OUT THE THIRD STAGE ITERATION.
 C
@@ -31790,16 +31807,6 @@ C             ITERATION CONVERGES ZR,ZI CONTAIN THE FINAL
 C             ITERATE ON EXIT.
 C     CONV  - THE VALUE IS .TRUE. IF THE ITERATION CONVERGES.
 C
-      DOUBLE PRECISION, INTENT(OUT) :: SR, SI
-      DOUBLE PRECISION, INTENT(INOUT) :: TR, TI, PVR, PVI
-      DOUBLE PRECISION, INTENT(IN) :: ARE, MRE, ETA, INFIN, PR(NN),
-     &PI(NN)
-      DOUBLE PRECISION, INTENT(INOUT) :: QPR(NN), QPI(NN), HR(NN),
-     &HI(NN), QHR(NN), QHI(NN)
-      DOUBLE PRECISION, INTENT(INOUT) :: ZR, ZI
-      DOUBLE PRECISION :: MP, MS, OMP, RELSTP, R1, R2, TP, ERREV, DCPABS
-      LOGICAL, INTENT(OUT) :: CONV
-      LOGICAL :: B, BOOL
 C
       CONV = .FALSE.
       B = .FALSE.
@@ -31871,18 +31878,18 @@ C
       SUBROUTINE CALCT(BOOL,N,SR,SI,TR,TI,PVR,PVI,ARE,HR,HI,QHR,QHI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-C
-C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
-C
-C     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
-C            ESSENTIALLY ZERO.
-C
       LOGICAL, INTENT(INOUT) :: BOOL
       DOUBLE PRECISION, INTENT(IN) :: SR, SI
       DOUBLE PRECISION, INTENT(INOUT) :: TR, TI
       DOUBLE PRECISION, INTENT(IN) :: PVR, PVI, ARE, HR(N), HI(N)
       DOUBLE PRECISION, INTENT(INOUT) :: QHR(N), QHI(N)
       DOUBLE PRECISION :: HVR, HVI, DCPABS
+C
+C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
+C
+C     BOOL - LOGICAL VARIABLE, WHICH IS SET TO .TRUE. IF H(S) IS
+C            ESSENTIALLY ZERO.
+C
 C
 C     EVALUATE H(S)
 C
@@ -31899,17 +31906,17 @@ C
       SUBROUTINE NEXTH(BOOL,N,TR,TI,HR,HI,QPR,QPI,QHR,QHI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      LOGICAL, INTENT(IN) :: BOOL
+      DOUBLE PRECISION, INTENT(IN) :: TR, TI
+      DOUBLE PRECISION, INTENT(INOUT) :: HR(N), HI(N)
+      DOUBLE PRECISION, INTENT(IN) :: QPR(N), QPI(N), QHR(N), QHI(N)
       INTEGER :: J
+      DOUBLE PRECISION :: T1, T2
 C
 C     CALCULATES THE NEXT SHIFTED H POLYNOMIAL.
 C
 C     BOOL - LOGICAL VARIABLE. IF .TRUE. H(S) IS ESSENTIALLY ZERO.
 C
-      LOGICAL, INTENT(IN) :: BOOL
-      DOUBLE PRECISION, INTENT(IN) :: TR, TI
-      DOUBLE PRECISION, INTENT(INOUT) :: HR(N), HI(N)
-      DOUBLE PRECISION, INTENT(IN) :: QPR(N), QPI(N), QHR(N), QHI(N)
-      DOUBLE PRECISION :: T1, T2
 C
       IF (BOOL) GO TO 20
          DO J = 2,N
@@ -31936,16 +31943,16 @@ C
       SUBROUTINE POLYEV(N,SR,SI,PR,PI,QR,QI,PVR,PVI)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I
-C
-C     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
-C     PLACING THE PARTIAL SUMS IN Q AND THE COMPUTED VALUE IN PV.
-C
       DOUBLE PRECISION, INTENT(IN) :: PR(N), PI(N)
       DOUBLE PRECISION, INTENT(INOUT) :: QR(N), QI(N)
       DOUBLE PRECISION, INTENT(IN) :: SR, SI
       DOUBLE PRECISION, INTENT(OUT) :: PVR, PVI
+      INTEGER :: I
       DOUBLE PRECISION :: T
+C
+C     EVALUATES A POLYNOMIAL P AT S BY THE HORNER RECURRENCE ALGO.,
+C     PLACING THE PARTIAL SUMS IN Q AND THE COMPUTED VALUE IN PV.
+C
 C
       QR(1) = PR(1)
       QI(1) = PI(1)
@@ -31964,7 +31971,9 @@ C
       DOUBLE PRECISION FUNCTION ERREV(NN,QR,QI,MS,MP,ARE,MRE)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NN
+      DOUBLE PRECISION, INTENT(IN) :: QR(NN), QI(NN), MS, MP, ARE, MRE
       INTEGER :: I
+      DOUBLE PRECISION :: E, DCPABS
 C
 C     BOUNDS THE ERROR IN EVALUATING THE POLYNOMIAL BY THE HORNER
 C     RECURRENCE ALGORITHM.
@@ -31974,8 +31983,6 @@ C     MS      - MODULUS OF THE POINT
 C     MP      - MODULUS OF THE POLYNOMIAL VALUE
 C     ARE,MRE - ERROR BOUNDS ON COMPLEX ADDITION AND MULTIPLICATION
 C
-      DOUBLE PRECISION, INTENT(IN) :: QR(NN), QI(NN), MS, MP, ARE, MRE
-      DOUBLE PRECISION :: E, DCPABS
 C
       E = DCPABS(QR(1),QI(1))*MRE/(ARE + MRE)
       DO I = 1,NN
@@ -31989,10 +31996,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KER
       INTEGER, INTENT(IN) :: N
+      COMPLEX, INTENT(IN) :: W(N)
+      INTEGER, INTENT(INOUT) :: KLUST(N)
+      REAL, INTENT(IN) :: C(*)
+      REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
       INTEGER :: J, JP1, K, L, M, NM1, NP1
       REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
       REAL :: SPMPAR
       REAL :: CPABS
+      COMPLEX :: Z
+      DOUBLE PRECISION :: XR, XI, VR, VI, VT
+      LOGICAL :: SHRUNK
 C-----------------------------------------------------------------------
 C
 C     ABSTRACT
@@ -32045,13 +32059,6 @@ C        ALBUQUERQUE, NEW MEXICO
 C        JANUARY 1976
 C     MODIFIED BY A.H. MORRIS (NSWC)
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: W(N)
-      COMPLEX :: Z
-      INTEGER, INTENT(INOUT) :: KLUST(N)
-      REAL, INTENT(IN) :: C(*)
-      REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
-      DOUBLE PRECISION :: XR, XI, VR, VI, VT
-      LOGICAL :: SHRUNK
 C-----------------------------------------------------------------------
 C
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -32146,10 +32153,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KER
       INTEGER, INTENT(IN) :: N
+      COMPLEX, INTENT(IN) :: C(*), W(N)
+      INTEGER, INTENT(INOUT) :: KLUST(N)
+      REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
       INTEGER :: J, JP1, K, L, M, NM1, NP1
       REAL :: B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
       REAL :: SPMPAR
       REAL :: CPABS
+      COMPLEX :: Z
+      DOUBLE PRECISION :: XR, XI, VR, VI, VT
+      LOGICAL :: SHRUNK
 C-----------------------------------------------------------------------
 C
 C     ABSTRACT
@@ -32202,12 +32215,6 @@ C        ALBUQUERQUE, NEW MEXICO
 C        JANUARY 1976
 C     MODIFIED BY A.H. MORRIS (NSWC)
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: C(*), W(N)
-      COMPLEX :: Z
-      INTEGER, INTENT(INOUT) :: KLUST(N)
-      REAL, INTENT(INOUT) :: ABSERR(N), RELERR(N)
-      DOUBLE PRECISION :: XR, XI, VR, VI, VT
-      LOGICAL :: SHRUNK
 C-----------------------------------------------------------------------
 C
 C     ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE
@@ -32307,10 +32314,10 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(IN) :: SX(*)
       REAL, INTENT(INOUT) :: SY(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY, M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY, M, MP1
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32362,10 +32369,10 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY, M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY, M, MP1
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32416,10 +32423,10 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(IN) :: CX(*)
       COMPLEX, INTENT(INOUT) :: CY(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32449,7 +32456,9 @@ C
       SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
+      INTEGER, INTENT(INOUT) :: IX(*), IY(*)
       INTEGER :: I, IIX, IIY, M, MP1, NS
+      INTEGER :: ITEMP1, ITEMP2, ITEMP3
 C
 C                EXTENDED B L A S  SUBPROGRAM
 C
@@ -32473,8 +32482,6 @@ C     DEFINED IN A SIMILAR WAY USING INCY.
 C
 C***AUTHOR  VANDEVENDER, W. (SNLA), 1985
 C
-      INTEGER, INTENT(INOUT) :: IX(*), IY(*)
-      INTEGER :: ITEMP1, ITEMP2, ITEMP3
 C
       IF (N .LE. 0) RETURN
       IF (INCX .NE. INCY) GO TO 5
@@ -32543,11 +32550,11 @@ C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(INOUT) :: SX(*), SY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       REAL :: STEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY, M, MP1
-      INTEGER, INTENT(IN) :: N
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32604,11 +32611,11 @@ C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*), DY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY, M, MP1
-      INTEGER, INTENT(IN) :: N
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32664,11 +32671,11 @@ C     INTERCHANGES TWO VECTORS.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(INOUT) :: CX(*), CY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       COMPLEX :: CTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY
-      INTEGER, INTENT(IN) :: N
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32705,12 +32712,12 @@ C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(INOUT) :: SX(*), SY(*)
-      REAL :: STEMP
       REAL, INTENT(IN) :: C, S
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY
       INTEGER, INTENT(IN) :: N
+      REAL :: STEMP
+      INTEGER :: I
+      INTEGER :: IX, IY
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32748,12 +32755,12 @@ C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*), DY(*)
-      DOUBLE PRECISION :: DTEMP
       DOUBLE PRECISION, INTENT(IN) :: C, S
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION :: DTEMP
+      INTEGER :: I
+      INTEGER :: IX, IY
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -32792,12 +32799,12 @@ C     AND THE VECTORS CX AND CY ARE COMPLEX.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(INOUT) :: CX(*), CY(*)
-      COMPLEX :: CTEMP
       REAL, INTENT(IN) :: C, S
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY
       INTEGER, INTENT(IN) :: N
+      COMPLEX :: CTEMP
+      INTEGER :: I
+      INTEGER :: IX, IY
 C
       IF(N.LE.0)RETURN
       IF(INCX.EQ.1.AND.INCY.EQ.1)GO TO 20
@@ -33115,16 +33122,16 @@ C     THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
 C     INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
 C     OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
 C
-      DOUBLE PRECISION :: GAM, ONE, RGAMSQ
       DOUBLE PRECISION, INTENT(INOUT) :: DD2
-      DOUBLE PRECISION :: DH11, DH21
       DOUBLE PRECISION, INTENT(INOUT) :: DPARAM(5)
-      DOUBLE PRECISION :: DP2, DQ2, DU
       DOUBLE PRECISION, INTENT(IN) :: DY1
-      DOUBLE PRECISION :: ZERO, GAMSQ
       DOUBLE PRECISION, INTENT(INOUT) :: DD1
-      DOUBLE PRECISION :: DFLAG, DH12, DH22, DP1, DQ1, DTEMP
       DOUBLE PRECISION, INTENT(INOUT) :: DX1
+      DOUBLE PRECISION :: GAM, ONE, RGAMSQ
+      DOUBLE PRECISION :: DH11, DH21
+      DOUBLE PRECISION :: DP2, DQ2, DU
+      DOUBLE PRECISION :: ZERO, GAMSQ
+      DOUBLE PRECISION :: DFLAG, DH12, DH22, DP1, DQ1, DTEMP
       DOUBLE PRECISION :: TWO
 C
       DATA ZERO,ONE,TWO /0.D0,1.D0,2.D0/
@@ -33253,7 +33260,13 @@ C
       SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, INCY, N
+      DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
+      DOUBLE PRECISION :: DPARAM(5)
+      DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
       INTEGER :: I, KX, KY, NSTEPS
+      DOUBLE PRECISION :: DFLAG, DH12, DH22
+      DOUBLE PRECISION :: TWO, Z, DH11, DH21
+      DOUBLE PRECISION :: W, ZERO
 C
 C     APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 C
@@ -33271,11 +33284,6 @@ C       (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
 C     H=(          )    (          )    (          )    (          )
 C       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
 C
-      DOUBLE PRECISION :: DFLAG, DH12, DH22
-      DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
-      DOUBLE PRECISION :: TWO, Z, DH11, DH21, DPARAM(5)
-      DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
-      DOUBLE PRECISION :: W, ZERO
 C
       DATA ZERO,TWO/0.D0,2.D0/
 C
@@ -33373,11 +33381,11 @@ C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(IN) :: SX(*), SY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       REAL :: STEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY, M, MP1
-      INTEGER, INTENT(IN) :: N
 C
       STEMP = 0.0E0
       SDOT = 0.0E0
@@ -33427,11 +33435,11 @@ C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(IN) :: DX(*), DY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY, M, MP1
-      INTEGER, INTENT(IN) :: N
 C
       DDOT = 0.0D0
       DTEMP = 0.0D0
@@ -33481,11 +33489,11 @@ C     VECTOR.
 C     JACK DONGARRA, LINPACK,  3/11/78.
 C
       COMPLEX, INTENT(IN) :: CX(*), CY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       COMPLEX :: CTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY
-      INTEGER, INTENT(IN) :: N
 C
       CTEMP = (0.0,0.0)
       CDOTC = (0.0,0.0)
@@ -33523,11 +33531,11 @@ C     FORMS THE DOT PRODUCT OF TWO VECTORS.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(IN) :: CX(*), CY(*)
+      INTEGER, INTENT(IN) :: INCX, INCY
+      INTEGER, INTENT(IN) :: N
       COMPLEX :: CTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, INCY
       INTEGER :: IX, IY
-      INTEGER, INTENT(IN) :: N
 C
       CTEMP = (0.0,0.0)
       CDOTU = (0.0,0.0)
@@ -33567,10 +33575,10 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(IN) :: SA
       REAL, INTENT(INOUT) :: SX(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX
-      INTEGER :: M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: M, MP1
       INTEGER :: NINCX
 C
       IF(N.LE.0)RETURN
@@ -33615,10 +33623,10 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(IN) :: DA
       DOUBLE PRECISION, INTENT(INOUT) :: DX(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX
-      INTEGER :: M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: M, MP1
       INTEGER :: NINCX
 C
       IF(N.LE.0)RETURN
@@ -33662,8 +33670,8 @@ C     JACK DONGARRA, LINPACK,  3/11/78.
 C
       COMPLEX, INTENT(IN) :: CA
       COMPLEX, INTENT(INOUT) :: CX(*)
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, N
+      INTEGER :: I
       INTEGER :: NINCX
 C
       IF(N.LE.0)RETURN
@@ -33693,8 +33701,8 @@ C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(INOUT) :: CX(*)
       REAL, INTENT(IN) :: SA
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, N
+      INTEGER :: I
       INTEGER :: NINCX
 C
       IF(N.LE.0)RETURN
@@ -33726,10 +33734,10 @@ C
       REAL, INTENT(IN) :: SX(*)
       REAL, INTENT(INOUT) :: SY(*)
       REAL, INTENT(IN) :: SA
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY, M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY, M, MP1
 C
       IF(N.LE.0)RETURN
       IF (SA .EQ. 0.0) RETURN
@@ -33780,10 +33788,10 @@ C
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
       DOUBLE PRECISION, INTENT(INOUT) :: DY(*)
       DOUBLE PRECISION, INTENT(IN) :: DA
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY, M, MP1
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY, M, MP1
 C
       IF(N.LE.0)RETURN
       IF (DA .EQ. 0.0D0) RETURN
@@ -33833,10 +33841,10 @@ C
       COMPLEX, INTENT(IN) :: CX(*)
       COMPLEX, INTENT(INOUT) :: CY(*)
       COMPLEX, INTENT(IN) :: CA
-      INTEGER :: I
       INTEGER, INTENT(IN) :: INCX, INCY
-      INTEGER :: IX, IY
       INTEGER, INTENT(IN) :: N
+      INTEGER :: I
+      INTEGER :: IX, IY
 C
       IF(N.LE.0)RETURN
       IF (ABS(REAL(CA)) + ABS(AIMAG(CA)) .EQ. 0.0 ) RETURN
@@ -33872,11 +33880,11 @@ C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(IN) :: SX(*)
+      INTEGER, INTENT(IN) :: INCX
+      INTEGER, INTENT(IN) :: N
       REAL :: STEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX
       INTEGER :: M, MP1
-      INTEGER, INTENT(IN) :: N
       INTEGER :: NINCX
 C
       SASUM = 0.0E0
@@ -33920,11 +33928,11 @@ C     TAKES THE SUM OF THE ABSOLUTE VALUES.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
+      INTEGER, INTENT(IN) :: INCX
+      INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION :: DTEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX
       INTEGER :: M, MP1
-      INTEGER, INTENT(IN) :: N
       INTEGER :: NINCX
 C
       DASUM = 0.0D0
@@ -33969,9 +33977,9 @@ C     RETURNS A SINGLE PRECISION RESULT.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX, INTENT(IN) :: CX(*)
+      INTEGER, INTENT(IN) :: INCX, N
       REAL :: STEMP
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX, N
       INTEGER :: NINCX
 C
       SCASUM = 0.0E0
@@ -34000,9 +34008,9 @@ C
       REAL FUNCTION SNRM2 ( N, SX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
+      REAL, INTENT(IN) :: SX(*)
       INTEGER :: I, J, NN
       INTEGER :: NEXT
-      REAL, INTENT(IN) :: SX(*)
       REAL :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
       DATA   ZERO, ONE /0.0E0, 1.0E0/
 C
@@ -34127,9 +34135,9 @@ C
       DOUBLE PRECISION FUNCTION DNRM2 ( N, DX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
+      DOUBLE PRECISION, INTENT(IN) :: DX(*)
       INTEGER :: I, J, NN
       INTEGER :: NEXT
-      DOUBLE PRECISION, INTENT(IN) :: DX(*)
       DOUBLE PRECISION :: CUTLO, CUTHI, HITEST, SUM, XMAX, ZERO, ONE
       DATA   ZERO, ONE /0.0D0, 1.0D0/
 C
@@ -34254,11 +34262,11 @@ C
       REAL FUNCTION SCNRM2( N, CX, INCX)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INCX, N
+      COMPLEX, INTENT(IN) :: CX(*)
       INTEGER :: I, NN
       LOGICAL :: IMAG, SCALE
       INTEGER :: NEXT
       REAL :: CUTLO, CUTHI, HITEST, SUM, XMAX, ABSX, ZERO, ONE
-      COMPLEX, INTENT(IN) :: CX(*)
       DATA         ZERO, ONE /0.0E0, 1.0E0/
 C
 C     UNITARY NORM OF THE COMPLEX N-VECTOR STORED IN CX() WITH STORAGE
@@ -34393,11 +34401,11 @@ C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       REAL, INTENT(IN) :: SX(*)
+      INTEGER, INTENT(IN) :: INCX
+      INTEGER, INTENT(IN) :: N
       REAL :: SMAX
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX
       INTEGER :: IX
-      INTEGER, INTENT(IN) :: N
 C
       ISAMAX = 0
       IF( N .LT. 1 ) RETURN
@@ -34436,11 +34444,11 @@ C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       DOUBLE PRECISION, INTENT(IN) :: DX(*)
+      INTEGER, INTENT(IN) :: INCX
+      INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION :: DMAX
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX
       INTEGER :: IX
-      INTEGER, INTENT(IN) :: N
 C
       IDAMAX = 0
       IF( N .LT. 1 ) RETURN
@@ -34479,11 +34487,11 @@ C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
 C     JACK DONGARRA, LINPACK, 3/11/78.
 C
       COMPLEX :: CX(*)
+      INTEGER, INTENT(IN) :: INCX
+      INTEGER, INTENT(IN) :: N
       REAL :: SMAX
       INTEGER :: I
-      INTEGER, INTENT(IN) :: INCX
       INTEGER :: IX
-      INTEGER, INTENT(IN) :: N
       COMPLEX :: ZDUM
       REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
@@ -34521,9 +34529,9 @@ C
       SUBROUTINE MCVFS(A,KA,N,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
-      INTEGER :: I, J, L
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
+      INTEGER :: I, J, L
 C
       L = 0
       DO J = 1,N
@@ -34537,9 +34545,9 @@ C
       SUBROUTINE DMCVFS(A,KA,N,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
-      INTEGER :: I, J, L
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+      INTEGER :: I, J, L
 C
       L = 0
       DO J = 1,N
@@ -34553,9 +34561,9 @@ C
       SUBROUTINE MCVSF(A,KA,N,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
-      INTEGER :: I, II, IM1, J, JJ, L
       REAL, INTENT(INOUT) :: A(KA,N)
       REAL, INTENT(IN) :: B(*)
+      INTEGER :: I, II, IM1, J, JJ, L
 C
       A(1,1) = B(1)
       IF (N .LT. 2) RETURN
@@ -34581,9 +34589,9 @@ C
       SUBROUTINE DMCVSF(A,KA,N,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
-      INTEGER :: I, II, IM1, J, JJ, L
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
       DOUBLE PRECISION, INTENT(IN) :: B(*)
+      INTEGER :: I, II, IM1, J, JJ, L
 C
       A(1,1) = B(1)
       IF (N .LT. 2) RETURN
@@ -34609,9 +34617,9 @@ C
       SUBROUTINE MCVRD(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       REAL, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34623,9 +34631,9 @@ C
       SUBROUTINE MCVDR(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34637,9 +34645,9 @@ C
       SUBROUTINE MCVRC(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       REAL, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34651,9 +34659,9 @@ C
       SUBROUTINE CMREAL(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34665,9 +34673,9 @@ C
       SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34679,9 +34687,9 @@ C
       SUBROUTINE MCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34693,9 +34701,9 @@ C
       SUBROUTINE SMCOPY(N,A,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: K, L
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
+      INTEGER :: K, L
 C
       L = (N*(N + 1))/2
       DO 10 K = 1,L
@@ -34706,9 +34714,9 @@ C
       SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34720,9 +34728,9 @@ C
       SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34734,9 +34742,9 @@ C
       SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34748,9 +34756,9 @@ C
       SUBROUTINE TPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(KB,M)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34762,9 +34770,9 @@ C
       SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,M)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34776,9 +34784,9 @@ C
       SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,M)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -34792,9 +34800,13 @@ C
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
       INTEGER, INTENT(IN) :: NWORK
+      REAL, INTENT(INOUT) :: A(*)
+      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
+      REAL :: ATEMP, BTEMP
+      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -34803,10 +34815,6 @@ C REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
 C WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 C EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 C ----------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(*)
-      REAL :: ATEMP, BTEMP
-      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
       IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
       N12 = N1*N2
       N = N1
@@ -34908,9 +34916,13 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
       INTEGER, INTENT(IN) :: NWORK
+      DOUBLE PRECISION, INTENT(INOUT) :: A(*)
+      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
+      DOUBLE PRECISION :: ATEMP, BTEMP
+      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -34919,10 +34931,6 @@ C REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
 C WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 C EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 C ----------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(*)
-      DOUBLE PRECISION :: ATEMP, BTEMP
-      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
       IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
       N12 = N1*N2
       N = N1
@@ -35024,9 +35032,13 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       INTEGER, INTENT(IN) :: N1, N2
       INTEGER, INTENT(INOUT) :: NDIM
       INTEGER, INTENT(IN) :: NWORK
+      COMPLEX, INTENT(INOUT) :: A(*)
+      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
       INTEGER :: I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID,
      &ISTART, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT,
      &NPOWER
+      COMPLEX :: ATEMP, BTEMP
+      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
 C ----------------------------------------------------------
 C TRANSPOSITION OF A RECTANGULAR MATRIX IN SITU.
 C BY NORMAN BRENNER, MIT, 1/72.  CF. ALG. 380, CACM, 5/70.
@@ -35035,10 +35047,6 @@ C REPLACING THE ELEMENT AT VECTOR POSITION I (0-ORIGIN)
 C WITH THE ELEMENT AT POSITION N1*I (MOD N1*N2-1).
 C EACH SUBCYCLE OF THIS PERMUTATION IS COMPLETED IN ORDER.
 C ----------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(*)
-      COMPLEX :: ATEMP, BTEMP
-      INTEGER, INTENT(INOUT) :: MOVED(NWORK)
-      INTEGER :: IFACT(8), IPOWER(8), NEXP(8), IEXP(8)
       IF (N1.LT.2 .OR. N2.LT.2) GO TO 200
       N12 = N1*N2
       N = N1
@@ -35183,9 +35191,9 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       SUBROUTINE CMADJ(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(KB,M)
+      INTEGER :: I, J
 C
       DO J = 1,N
          DO 10 I = 1,M
@@ -35216,9 +35224,9 @@ C
 C     A  CONTAINS ITS CONJUGATE TRANSPOSE.
 C
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N, NM
       COMPLEX, INTENT(INOUT) :: A(NM,N)
+      INTEGER :: I, J
       COMPLEX :: TEMP
 C
       DO I = 1,N
@@ -35234,12 +35242,12 @@ C
       SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      REAL, INTENT(IN) :: A(KA,N), B(KB,N)
+      REAL, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                      ADDITION OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N), B(KB,N)
-      REAL, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35252,12 +35260,12 @@ C
       SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                ADDITION OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35270,12 +35278,12 @@ C
       SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
+      COMPLEX, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                   ADDITION OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
-      COMPLEX, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35288,9 +35296,9 @@ C
       SUBROUTINE SMADD(N,A,B,C)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: K, M
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+      INTEGER :: K, M
       M=(N*(N+1))/2
       DO 10 K=1,M
    10 C(K)=A(K)+B(K)
@@ -35300,12 +35308,12 @@ C
       SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      REAL, INTENT(IN) :: A(KA,N), B(KB,N)
+      REAL, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                     SUBTRACTION OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N), B(KB,N)
-      REAL, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35318,12 +35326,12 @@ C
       SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C              SUBTRACTION OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35336,12 +35344,12 @@ C
       SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, M, N
+      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
+      COMPLEX, INTENT(INOUT) :: C(KC,N)
       INTEGER :: I, J
 C-----------------------------------------------------------------------
 C                  SUBTRACTION OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,N)
-      COMPLEX, INTENT(INOUT) :: C(KC,N)
 C
       DO J = 1,N
          DO I = 1,M
@@ -35354,9 +35362,9 @@ C
       SUBROUTINE SMSUBT(N,A,B,C)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: K, M
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: C(*)
+      INTEGER :: K, M
       M=(N*(N+1))/2
       DO 10 K=1,M
    10 C(K)=A(K)-B(K)
@@ -35366,13 +35374,13 @@ C
       SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(KA,N), B(KB,L)
+      REAL, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, J, K
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N), B(KB,L)
-      REAL, INTENT(INOUT) :: C(KC,L)
-      DOUBLE PRECISION :: W
 C
       DO J = 1,L
          DO I = 1,M
@@ -35389,13 +35397,13 @@ C
       SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, J, K
+      DOUBLE PRECISION :: W
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
-      DOUBLE PRECISION :: W
 C
       DO J = 1,L
          DO I = 1,M
@@ -35412,13 +35420,13 @@ C
       SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
+      COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, J, K
+      COMPLEX :: W
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
-      COMPLEX, INTENT(INOUT) :: C(KC,L)
-      COMPLEX :: W
 C
       DO J = 1,L
          DO I = 1,M
@@ -35435,14 +35443,14 @@ C
       SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      REAL, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
       INTEGER :: I, J, K
       REAL :: SAVE
+      DOUBLE PRECISION :: W
+      LOGICAL :: RLOC
 C-----------------------------------------------------------------------
 C                     PRODUCT OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
-      DOUBLE PRECISION :: W
-      LOGICAL :: RLOC
 C
       SAVE = C(1,1)
       C(1,1) = 1.0
@@ -35491,6 +35499,8 @@ C
 
       LOGICAL FUNCTION RLOC (X, Y)
       IMPLICIT NONE
+      REAL, INTENT(IN) :: X(*)
+      REAL, INTENT(INOUT) :: Y(*)
       REAL :: XOLD, YOLD
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -35502,8 +35512,6 @@ C     IT IS RECOMMENDED THAT THIS CODING NOT BE OPTIMIZED BY ELIMINATING
 C     THE SUBROUTINE YCHG. IF IT IS OPTIMIZED THEN RLOC MAY NOT COMPILE
 C     PROPERLY.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(*)
-      REAL, INTENT(INOUT) :: Y(*)
 C
       XOLD = X(1)
       YOLD = Y(1)
@@ -35537,14 +35545,14 @@ C
       SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L),
+     &ROW(*)
       INTEGER :: I, J, K
+      DOUBLE PRECISION :: W
+      LOGICAL :: DLOC
 C-----------------------------------------------------------------------
 C                PRODUCT OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L),
-     &ROW(*)
-      DOUBLE PRECISION :: W
-      LOGICAL :: DLOC
 C
       W = C(1,1)
       C(1,1) = 1.D0
@@ -35639,13 +35647,13 @@ C
       SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
+      COMPLEX, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
       INTEGER :: I, J, K
+      COMPLEX :: W
+      LOGICAL :: CLOC
 C-----------------------------------------------------------------------
 C                   PRODUCT OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,N), B(KB,L), C(KC,L), ROW(*)
-      COMPLEX :: W
-      LOGICAL :: CLOC
 C
       W = C(1,1)
       C(1,1) = (1.0,0.0)
@@ -35742,10 +35750,10 @@ C
       SUBROUTINE SVPRD(A,N,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, K, KM1, L
-      REAL :: XK, YK
       REAL, INTENT(IN) :: A(*), X(N)
       REAL, INTENT(INOUT) :: Y(N)
+      INTEGER :: I, K, KM1, L
+      REAL :: XK, YK
       Y(1) = A(1)*X(1)
       IF (N .EQ. 1) RETURN
 C
@@ -35768,9 +35776,9 @@ C
       SUBROUTINE DSVPRD(A,N,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, K, KM1, L
       DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+      INTEGER :: I, K, KM1, L
       DOUBLE PRECISION :: XK, YK
       Y(1) = A(1)*X(1)
       IF (N .EQ. 1) RETURN
@@ -35794,9 +35802,9 @@ C
       SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M, N
-      INTEGER :: I, J, K
       REAL, INTENT(IN) :: A(KA,N), B(KB,L)
       REAL, INTENT(INOUT) :: C(KC,L)
+      INTEGER :: I, J, K
       DOUBLE PRECISION :: S
       DO J=1,L
       DO 11 I=1,N
@@ -35811,9 +35819,9 @@ C
       SUBROUTINE SMPROD(M,N,A,KA,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, N
-      INTEGER :: I, II, J, K
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
+      INTEGER :: I, II, J, K
       DOUBLE PRECISION :: S
       II=1
       DO I=1,N
@@ -35830,13 +35838,13 @@ C
       SUBROUTINE KPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
+      REAL, INTENT(IN) :: A(KA,N), B(KB,L)
+      REAL, INTENT(INOUT) :: C(KC,*)
       INTEGER :: I, II, J, JJ
+      INTEGER :: R, S
 C     ******************************************************************
 C     KRONECKER PRODUCT OF REAL MATRICES A AND B
 C     ******************************************************************
-      REAL, INTENT(IN) :: A(KA,N), B(KB,L)
-      REAL, INTENT(INOUT) :: C(KC,*)
-      INTEGER :: R, S
 C
       J = 0
       DO S = 1,N
@@ -35860,13 +35868,13 @@ C
       SUBROUTINE DKPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,*)
       INTEGER :: I, II, J, JJ
+      INTEGER :: R, S
 C     ******************************************************************
 C     KRONECKER PRODUCT OF DOUBLE PRECISION MATRICES A AND B
 C     ******************************************************************
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N), B(KB,L)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,*)
-      INTEGER :: R, S
 C
       J = 0
       DO S = 1,N
@@ -35890,13 +35898,13 @@ C
       SUBROUTINE CKPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: K, KA, KB, KC, L, M, N
+      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
+      COMPLEX, INTENT(INOUT) :: C(KC,*)
       INTEGER :: I, II, J, JJ
+      INTEGER :: R, S
 C     ******************************************************************
 C     KRONECKER PRODUCT OF COMPLEX MATRICES A AND B
 C     ******************************************************************
-      COMPLEX, INTENT(IN) :: A(KA,N), B(KB,L)
-      COMPLEX, INTENT(INOUT) :: C(KC,*)
-      INTEGER :: R, S
 C
       J = 0
       DO S = 1,N
@@ -35922,6 +35930,8 @@ C
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: M, MDA, N
       REAL, INTENT(IN) :: AE, RE
+      REAL, INTENT(INOUT) :: A(MDA,N), WORK(*)
+      INTEGER, INTENT(INOUT) :: IWORK(*)
       INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
       REAL :: EPS, RERR
       REAL :: SPMPAR
@@ -35933,8 +35943,6 @@ C-----------------------------------------------------------------------
 C     REAL WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 C     INTEGER IWORK(M + N)
 C--------------------
-      REAL, INTENT(INOUT) :: A(MDA,N), WORK(*)
-      INTEGER, INTENT(INOUT) :: IWORK(*)
 C
       M0 = MIN0(M,N)
 C
@@ -35975,7 +35983,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: M, MDA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N)
+      DOUBLE PRECISION, INTENT(IN) :: RE, AE
+      DOUBLE PRECISION, INTENT(INOUT) :: WORK(*)
+      INTEGER, INTENT(INOUT) :: IWORK(*)
       INTEGER :: I, IMAX, M0, M1, M2, M3, M4, M5
+      DOUBLE PRECISION :: EPS, RERR
+      DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
 C
 C              UPPER AND LOWER BOUNDS OF THE RANK OF A
@@ -35985,12 +35999,6 @@ C-----------------------------------------------------------------------
 C     DOUBLE PRECISION WORK(5*M0)  WHERE M0 = 5*MIN0(M,N)
 C     INTEGER IWORK(M + N)
 C--------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N)
-      DOUBLE PRECISION, INTENT(IN) :: RE, AE
-      DOUBLE PRECISION, INTENT(INOUT) :: WORK(*)
-      INTEGER, INTENT(INOUT) :: IWORK(*)
-      DOUBLE PRECISION :: EPS, RERR
-      DOUBLE PRECISION :: DPMPAR
 C
       M0 = MIN0(M,N)
 C
@@ -36035,6 +36043,8 @@ C
       INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1,
      &NMJ, NMK
       REAL :: P, T
+      INTEGER :: ONEJ
+      DOUBLE PRECISION :: DSUM
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 C-----------------------------------------------------------------------
@@ -36059,8 +36069,6 @@ C
 C     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
 C     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
 C-----------------------------------------------------------------------
-      INTEGER :: ONEJ
-      DOUBLE PRECISION :: DSUM
 C
       IF (N .LT. 2) GO TO 200
       D = 1.0
@@ -36235,6 +36243,8 @@ C
       INTEGER :: I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1,
      &NMJ, NMK
       REAL :: D, P, T
+      INTEGER :: ONEJ
+      DOUBLE PRECISION :: DSUM
 C-----------------------------------------------------------------------
 C     CROUT PROCEDURE FOR INVERTING MATRICES AND SOLVING EQUATIONS
 C-----------------------------------------------------------------------
@@ -36262,8 +36272,6 @@ C
 C     TEMP IS AN ARRAY OF DIMENSION N OR LARGER THAT IS USED WHEN A
 C     IS INVERTED. IF MO IS NOT 0 THEN THIS ARRAY IS NOT NEEDED.
 C-----------------------------------------------------------------------
-      INTEGER :: ONEJ
-      DOUBLE PRECISION :: DSUM
 C
       IF (N .LT. 1 .OR. KA .LT. N) GO TO 320
       IF (M .LE. 0) GO TO 5
@@ -36470,8 +36478,8 @@ C-----------------------------------------------------------------------
       INTEGER, INTENT(OUT) :: IER
       INTEGER, INTENT(INOUT) :: IP
       INTEGER, INTENT(IN) :: N, NDIM
-      INTEGER :: I, J, K, KP1, M, NM1
       REAL, INTENT(INOUT) :: A(NDIM,N)
+      INTEGER :: I, J, K, KP1, M, NM1
       REAL :: T
       DIMENSION IP(N)
 C
@@ -36531,9 +36539,9 @@ C   B = SOLUTION VECTOR, X .
 C-----------------------------------------------------------------------
       INTEGER :: IP
       INTEGER, INTENT(IN) :: N, NDIM
-      INTEGER :: I, K, KB, KM1, KP1, M, NM1
       REAL :: A(NDIM, N)
       REAL, INTENT(INOUT) :: B(N)
+      INTEGER :: I, K, KB, KM1, KP1, M, NM1
       REAL :: T
       DIMENSION IP(N)
 C
@@ -36567,12 +36575,12 @@ C  BACK SOLVE. ---------------------------------------------------------
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
       REAL, INTENT(INOUT) :: D
+      REAL, INTENT(INOUT) :: A(KA,N), B(*)
       INTEGER :: J, JL, K, KL, L, MAXB
       REAL :: PIVOT, T
 C-----------------------------------------------------------------------
 C     MATRIX INVERSION/EQUATION SOLVING WITHOUT PIVOT SEARCH
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), B(*)
 C
       IERR = 0
       MAXB = KB*M
@@ -36624,9 +36632,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
+      REAL, INTENT(INOUT) :: A(KA,N), B(KB,M)
       INTEGER :: I, IP1, J, JP1, K, L, NM1
       REAL :: P, SUM, T
-      REAL, INTENT(INOUT) :: A(KA,N), B(KB,M)
 C     ------------------------------------------------------------------
 C     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
 C     ORDER N AND B IS A MATRIX HAVING N ROWS AND M COLUMNS.
@@ -36717,8 +36725,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N
-      INTEGER :: I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,M)
+      INTEGER :: I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION :: P, T
 C     ------------------------------------------------------------------
 C     PARTIAL PIVOT SOLUTION OF A*X = B WHERE A IS A MATRIX OF
@@ -36809,17 +36817,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
+      REAL, INTENT(INOUT) :: A(KA,N), B(*)
+      REAL, INTENT(INOUT) :: DET(2), RCOND
+      REAL, INTENT(INOUT) :: WK(N)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J, JOB
+      REAL :: T
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 C     AND SOLVING REAL EQUATIONS
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), B(*)
-      REAL, INTENT(INOUT) :: DET(2), RCOND
-      REAL :: T
-      REAL, INTENT(INOUT) :: WK(N)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      INTEGER :: ONEJ
 C
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 C
@@ -36854,15 +36862,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
+      REAL, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J
+      REAL :: DET(2)
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING REAL MATRICES
 C     AND SOLVING REAL EQUATIONS
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      REAL :: DET(2)
-      INTEGER :: ONEJ
 C
       IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
       IF (M .LE. 0) GO TO 10
@@ -36938,6 +36946,7 @@ C
       INTEGER :: I, J
       REAL :: EPS, EPS2, RAT, RATIO, RNRM, XNRM
       REAL :: SPMPAR
+      DOUBLE PRECISION :: DSUM
 C ----------------------------------------------------------------------
 C     PURPOSE
 C       GIVEN AN APPROXIMATE SOLUTION X OF A LINEAR SYSTEM AX = B
@@ -36971,7 +36980,6 @@ C       IS THEN USED TO SOLVE (1).
 C
 C ----------------------------------------------------------------------
       DIMENSION IPVT(N)
-      DOUBLE PRECISION :: DSUM
 C
 C     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 C                THE VALUE U WHERE U IS THE SMALLEST FLOATING POINT
@@ -37026,6 +37034,9 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(*)
       REAL, INTENT(INOUT) :: A(LDA,*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+      REAL :: SDOT, EK, T, WK, WKM
+      REAL :: ANORM, S, SASUM, SM, YNORM
+      INTEGER :: INFO, J, K, KB, KP1, L
 C
 C     SGECO FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION
 C     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -37087,9 +37098,6 @@ C     FORTRAN ABS,AMAX1,SIGN
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: SDOT, EK, T, WK, WKM
-      REAL :: ANORM, S, SASUM, SM, YNORM
-      INTEGER :: INFO, J, K, KB, KP1, L
 C
 C
 C     COMPUTE 1-NORM OF A
@@ -37222,6 +37230,8 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: A(LDA,*)
+      REAL :: T
+      INTEGER :: ISAMAX, J, K, KP1, L, NM1
 C
 C     SGEFA FACTORS A REAL MATRIX BY GAUSSIAN ELIMINATION.
 C
@@ -37268,8 +37278,6 @@ C     BLAS SAXPY,SSCAL,ISAMAX
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: T
-      INTEGER :: ISAMAX, J, K, KP1, L, NM1
 C
 C
 C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
@@ -37328,6 +37336,8 @@ C
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       REAL, INTENT(IN) :: A(LDA,*)
       REAL, INTENT(INOUT) :: B(*)
+      REAL :: SDOT, T
+      INTEGER :: K, KB, L, NM1
 C
 C     SGESL SOLVES THE REAL SYSTEM
 C     A * X = B  OR  TRANS(A) * X = B
@@ -37385,8 +37395,6 @@ C     BLAS SAXPY,SDOT
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: SDOT, T
-      INTEGER :: K, KB, L, NM1
 C
       NM1 = N - 1
       IF (JOB .NE. 0) GO TO 50
@@ -37447,6 +37455,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       REAL, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+      REAL :: T
+      REAL :: TEN
+      INTEGER :: I, J, K, KB, KP1, L, NM1
 C
 C     SGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
 C     USING THE FACTORS COMPUTED BY SGECO OR SGEFA.
@@ -37503,9 +37514,6 @@ C     FORTRAN ABS,MOD
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: T
-      REAL :: TEN
-      INTEGER :: I, J, K, KB, KP1, L, NM1
 C
 C
 C     COMPUTE DETERMINANT
@@ -37577,17 +37585,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
+      DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J, JOB
+      DOUBLE PRECISION :: T
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
-      DOUBLE PRECISION :: T
-      DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      INTEGER :: ONEJ
 C
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 C
@@ -37622,15 +37630,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J
+      DOUBLE PRECISION :: DET(2)
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     REAL MATRICES AND SOLVING DOUBLE PRECISION REAL EQUATIONS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      DOUBLE PRECISION :: DET(2)
-      INTEGER :: ONEJ
 C
       IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
       IF (M .LE. 0) GO TO 10
@@ -37667,6 +37675,9 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(*)
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), Z(*)
       DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+      DOUBLE PRECISION :: DDOT, EK, T, WK, WKM
+      DOUBLE PRECISION :: ANORM, S, DASUM, SM, YNORM
+      INTEGER :: INFO, J, K, KB, KP1, L
 C
 C     DGECO FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION
 C     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -37728,9 +37739,6 @@ C     FORTRAN DABS,DMAX1,DSIGN
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: DDOT, EK, T, WK, WKM
-      DOUBLE PRECISION :: ANORM, S, DASUM, SM, YNORM
-      INTEGER :: INFO, J, K, KB, KP1, L
 C
 C
 C     COMPUTE 1-NORM OF A
@@ -37863,6 +37871,8 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
+      DOUBLE PRECISION :: T
+      INTEGER :: IDAMAX, J, K, KP1, L, NM1
 C
 C     DGEFA FACTORS A DOUBLE PRECISION MATRIX BY GAUSSIAN ELIMINATION.
 C
@@ -37909,8 +37919,6 @@ C     BLAS DAXPY,DSCAL,IDAMAX
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: T
-      INTEGER :: IDAMAX, J, K, KP1, L, NM1
 C
 C
 C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
@@ -37969,6 +37977,8 @@ C
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+      DOUBLE PRECISION :: DDOT, T
+      INTEGER :: K, KB, L, NM1
 C
 C     DGESL SOLVES THE DOUBLE PRECISION SYSTEM
 C     A * X = B  OR  TRANS(A) * X = B
@@ -38026,8 +38036,6 @@ C     BLAS DAXPY,DDOT
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: DDOT, T
-      INTEGER :: K, KB, L, NM1
 C
       NM1 = N - 1
       IF (JOB .NE. 0) GO TO 50
@@ -38088,6 +38096,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+      DOUBLE PRECISION :: T
+      DOUBLE PRECISION :: TEN
+      INTEGER :: I, J, K, KB, KP1, L, NM1
 C
 C     DGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
 C     USING THE FACTORS COMPUTED BY DGECO OR DGEFA.
@@ -38144,9 +38155,6 @@ C     FORTRAN DABS,MOD
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: T
-      DOUBLE PRECISION :: TEN
-      INTEGER :: I, J, K, KB, KP1, L, NM1
 C
 C
 C     COMPUTE DETERMINANT
@@ -38218,6 +38226,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: N, NMBLKS
+      REAL, INTENT(INOUT) :: ARRAY(*), B(*), X(*)
+      INTEGER, INTENT(INOUT) :: MTRSTR(3,*), PIVOT(*)
 C
 C***************************************************************
 C
@@ -38346,8 +38356,6 @@ C  MATRIX, THE ARRAY ARRAY MUST BE COPIED BEFORE A CALL
 C  TO  A R C E C O .
 C
 C**********************************************************************
-      REAL, INTENT(INOUT) :: ARRAY(*), B(*), X(*)
-      INTEGER, INTENT(INOUT) :: MTRSTR(3,*), PIVOT(*)
       CALL ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
       IF (IFLAG.NE.0) RETURN
       CALL ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
@@ -38358,8 +38366,11 @@ C**********************************************************************
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG, MTRSTR(3,*)
       INTEGER, INTENT(IN) :: N, NMBLKS
+      REAL, INTENT(INOUT) :: ARRAY(*)
+      INTEGER, INTENT(INOUT) :: PIVOT(*)
       INTEGER :: INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K,
      &NCLBLK, NCLPIV, NOVRLP, NRWBK2, NRWBLK, NRWPIV
+      REAL :: PIVMAX, ZERO
 C
 C***************************************************************
 C
@@ -38444,9 +38455,6 @@ C        CARRIES OUT THE COLUMN ELIMINATIONS
 C
 C***************************************************************
 C
-      REAL, INTENT(INOUT) :: ARRAY(*)
-      REAL :: PIVMAX, ZERO
-      INTEGER, INTENT(INOUT) :: PIVOT(*)
       DATA ZERO /0.0/
 C
 C***************************************************************
@@ -38614,7 +38622,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
+      INTEGER, INTENT(INOUT) :: PIVOT(NRWBLK)
+      REAL, INTENT(INOUT) :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(INOUT) :: PIVMAX
       INTEGER :: I1, J, J1, JPLUS1, L1, MAX
+      REAL :: ROWMAX
+      REAL :: TEMPIV, ROWPIV, SWAP
 C
 C***************************************************************
 C
@@ -38623,11 +38636,6 @@ C               BLOCK
 C
 C***************************************************************
 C
-      INTEGER, INTENT(INOUT) :: PIVOT(NRWBLK)
-      REAL, INTENT(INOUT) :: BLOCK(NRWBLK,NCLBLK)
-      REAL :: ROWMAX
-      REAL, INTENT(INOUT) :: PIVMAX
-      REAL :: TEMPIV, ROWPIV, SWAP
 C
 C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C       C
@@ -38726,7 +38734,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBOT, NRWTOP
+      REAL, INTENT(INOUT) :: TOPBLK(NRWTOP,NOVRLP),
+     &BOTBLK(NRWBOT,NOVRLP)
+      REAL, INTENT(INOUT) :: PIVMAX
+      INTEGER, INTENT(INOUT) :: PIVOT(NRWTOP)
       INTEGER :: I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
+      REAL :: COLMAX
+      REAL :: COLMLT
+      REAL :: TEMPIV, SWAP
 C
 C***************************************************************
 C
@@ -38734,13 +38749,6 @@ C     A R C E P C PERFORMS NCLPIV COLUMN ELIMINATIONS ON THE
 C                 MATRICES TOPBLK AND BOTBLK
 C***************************************************************
 C
-      REAL, INTENT(INOUT) :: TOPBLK(NRWTOP,NOVRLP),
-     &BOTBLK(NRWBOT,NOVRLP)
-      REAL :: COLMAX
-      REAL, INTENT(INOUT) :: PIVMAX
-      REAL :: COLMLT
-      REAL :: TEMPIV, SWAP
-      INTEGER, INTENT(INOUT) :: PIVOT(NRWTOP)
 C
 C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C       C
@@ -38842,6 +38850,9 @@ C
       IMPLICIT NONE
       INTEGER :: MTRSTR(3,*)
       INTEGER, INTENT(IN) :: NMBLKS
+      REAL :: ARRAY(*)
+      REAL, INTENT(INOUT) :: B(*), X(*)
+      INTEGER, INTENT(IN) :: PIVOT(*)
       INTEGER :: INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK,
      &NRWPIV
 C
@@ -38918,9 +38929,6 @@ C       ARCEBE - PERFORMS BACKWARD ELIMINATION STEP
 C
 C***************************************************************
 C
-      REAL :: ARRAY(*)
-      REAL, INTENT(INOUT) :: B(*), X(*)
-      INTEGER, INTENT(IN) :: PIVOT(*)
       INDPIV = 1
 C
 C       CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -39065,7 +39073,10 @@ C
       SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
+      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(INOUT) :: B(*), X(*)
       INTEGER :: I, IPLUSL, J, JPLUSL, L, LONG
+      REAL :: XJ
 C
 C***************************************************************
 C
@@ -39074,9 +39085,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NOVRLP)
-      REAL, INTENT(INOUT) :: B(*), X(*)
-      REAL :: XJ
       DO J=1,NCLPIV
         I = NRWBLK - NCLPIV + J
         X(J) = B(J)/BLOCK(I,J)
@@ -39095,7 +39103,11 @@ C
       SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NRWBLK
+      REAL :: BLOCK(NRWBLK,NCLPIV)
+      REAL, INTENT(INOUT) :: B(*)
+      REAL :: X(*)
       INTEGER :: J, L, NCLPVL
+      REAL :: XJ
 C
 C***************************************************************
 C
@@ -39104,9 +39116,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NCLPIV)
-      REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*), XJ
       DO J=1,NCLPIV
         XJ = X(J)
         DO L=1,NRWBLK
@@ -39120,7 +39129,12 @@ C
       SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NRWBLK, NRWPIV
+      REAL :: BLOCK(NRWBLK,NRWPIV)
+      REAL, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
       INTEGER :: I, IPLUS1, L
+      REAL :: BI, SWAP
+      INTEGER :: PIVOTI
 C
 C***************************************************************
 C
@@ -39129,11 +39143,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NRWPIV)
-      REAL, INTENT(INOUT) :: B(*)
-      REAL :: BI, SWAP
-      INTEGER, INTENT(IN) :: PIVOT(NRWPIV)
-      INTEGER :: PIVOTI
       DO I=1,NRWPIV
         PIVOTI = PIVOT(I)
         IF (PIVOTI.EQ.I) GO TO 10
@@ -39154,7 +39163,10 @@ C
       SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
+      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(INOUT) :: B(*), X(*)
       INTEGER :: J, JMIN1, L, NJ
+      REAL :: XJ
 C
 C***************************************************************
 C
@@ -39163,9 +39175,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NCLBLK)
-      REAL, INTENT(INOUT) :: B(*), X(*)
-      REAL :: XJ
       DO NJ=1,NRWPIV
         J = NRWPIV - NJ + 1
         X(J) = B(J)/BLOCK(J,J)
@@ -39182,7 +39191,11 @@ C
       SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLBLK, NRWBLK, NRWPIV
+      REAL :: BLOCK(NRWBLK,NCLBLK)
+      REAL, INTENT(INOUT) :: B(*)
+      REAL :: X(*)
       INTEGER :: J, L, NRWPV1
+      REAL :: XJ
 C
 C***************************************************************
 C
@@ -39191,9 +39204,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NCLBLK)
-      REAL, INTENT(INOUT) :: B(*)
-      REAL :: X(*), XJ
       NRWPV1 = NRWPIV + 1
       DO J=NRWPV1,NCLBLK
         XJ = X(J)
@@ -39207,7 +39217,12 @@ C
       SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCLPIV, NOVRLP, NRWBLK
+      REAL :: BLOCK(NRWBLK,NOVRLP)
+      REAL, INTENT(INOUT) :: X(*)
+      INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
       INTEGER :: I, J, J1, JPLUS1, NJ
+      REAL :: DOTPRD, SWAP
+      INTEGER :: PIVOTJ
 C
 C***************************************************************
 C
@@ -39216,11 +39231,6 @@ C  SOLUTION PHASE OF  A R C E C O.
 C
 C***************************************************************
 C
-      REAL :: BLOCK(NRWBLK,NOVRLP)
-      REAL, INTENT(INOUT) :: X(*)
-      REAL :: DOTPRD, SWAP
-      INTEGER, INTENT(IN) :: PIVOT(NRWBLK)
-      INTEGER :: PIVOTJ
       DO 40 NJ=1,NCLPIV
         J = NCLPIV + 1 - NJ
         I = NRWBLK + 1 - NJ
@@ -39268,6 +39278,8 @@ C
       INTEGER :: N
       INTEGER, INTENT(INOUT) :: IP(M,N), IER
       REAL, INTENT(INOUT) :: A(M,M,N), B(M,M,N), C(M,M,N)
+      INTEGER :: NM1, NM2, KM1, I, J, K, L
+      REAL :: DP
 C-----------------------------------------------------------------------
 C BLOCK-TRIDIAGONAL MATRIX DECOMPOSITION ROUTINE.
 C WRITTEN BY A. C. HINDMARSH.
@@ -39307,8 +39319,6 @@ C USE SOLBT TO SOLVE THE ASSOCIATED LINEAR SYSTEM.
 C DECBT CALLS SUBROUTINES  DEC(M,M0,A,IP,IER)  AND  SOL(M,M0,A,Y,IP)
 C FOR SOLUTION OF M BY M LINEAR SYSTEMS.
 C-----------------------------------------------------------------------
-      INTEGER :: NM1, NM2, KM1, I, J, K, L
-      REAL :: DP
 C
       IF (M .LT. 1 .OR. N .LT. 4) GO TO 210
       NM1 = N - 1
@@ -39377,12 +39387,14 @@ C-----------------------  END OF SUBROUTINE DECBT  ---------------------
 
       SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
       IMPLICIT NONE
-      INTEGER :: KB, KP1
       INTEGER, INTENT(IN) :: M
       INTEGER :: N, IP(M,N)
       REAL :: A(M,M,N)
       REAL, INTENT(IN) :: B(M,M,N), C(M,M,N)
       REAL, INTENT(INOUT) :: Y(M,N)
+      INTEGER :: KB, KP1
+      INTEGER :: NM1, NM2, KM1, I, J, K
+      REAL :: DP
 C-----------------------------------------------------------------------
 C SOLUTION OF BLOCK-TRIDIAGONAL LINEAR SYSTEM.
 C COEFFICIENT MATRIX MUST HAVE BEEN PREVIOUSLY PROCESSED BY DECBT.
@@ -39401,8 +39413,6 @@ C     Y = SOLUTION VECTOR, OF LENGTH M*N.
 C SOLBT MAKES CALLS TO SUBROUTINE SOL(M,M0,A,Y,IP)
 C FOR SOLUTION OF M BY M LINEAR SYSTEMS.
 C-----------------------------------------------------------------------
-      INTEGER :: NM1, NM2, KM1, I, J, K
-      REAL :: DP
 C
       NM1 = N - 1
       NM2 = N - 2
@@ -39450,14 +39460,14 @@ C-----------------------  END OF SUBROUTINE SOLBT  ---------------------
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
-      INTEGER :: J, JOB
-C     ------------------
       REAL, INTENT(INOUT) :: A(*), B(*)
       REAL, INTENT(INOUT) :: DET(2), RCOND
-      REAL :: T
       REAL, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
+      INTEGER :: J, JOB
+      REAL :: T
       INTEGER :: ONEJ
+C     ------------------
 C     ------------------
 C
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
@@ -39494,6 +39504,10 @@ C
       INTEGER, INTENT(INOUT) :: KPVT(*)
       REAL, INTENT(INOUT) :: AP(*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+      REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, EK, T
+      REAL :: ANORM, S, SASUM, YNORM
+      INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
+      INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
 C
 C     SSPCO FACTORS A REAL SYMMETRIC MATRIX STORED IN PACKED
 C     FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
@@ -39572,10 +39586,6 @@ C     FORTRAN ABS,AMAX1,IABS,SIGN
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, EK, T
-      REAL :: ANORM, S, SASUM, YNORM
-      INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
-      INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
 C
 C
 C     FIND NORM OF A USING ONLY UPPER HALF
@@ -39782,6 +39792,13 @@ C
       INTEGER, INTENT(INOUT) :: KPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: AP(*)
+      REAL :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
+      REAL :: ABSAKK, ALPHA, COLMAX, ROWMAX
+      INTEGER :: ISAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
+     &IMK
+      INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1,
+     &KM2, KSTEP
+      LOGICAL :: SWAP
 C
 C     SSPFA FACTORS A REAL SYMMETRIC MATRIX STORED IN
 C     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
@@ -39846,13 +39863,6 @@ C     FORTRAN ABS,AMAX1,SQRT
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
-      REAL :: ABSAKK, ALPHA, COLMAX, ROWMAX
-      INTEGER :: ISAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
-     &IMK
-      INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1,
-     &KM2, KSTEP
-      LOGICAL :: SWAP
 C
 C
 C     INITIALIZE
@@ -40051,6 +40061,8 @@ C
       INTEGER, INTENT(IN) :: N, KPVT(*)
       REAL, INTENT(IN) :: AP(*)
       REAL, INTENT(INOUT) :: B(*)
+      REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, TEMP
+      INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C
 C     SSISL SOLVES THE REAL SYMMETRIC SYSTEM
 C     A * X = B
@@ -40097,8 +40109,6 @@ C     FORTRAN IABS
 C
 C     INTERNAL VARIABLES.
 C
-      REAL :: AK, AKM1, BK, BKM1, SDOT, DENOM, TEMP
-      INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C
 C     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
 C     D INVERSE TO B.
@@ -40236,6 +40246,11 @@ C
       REAL, INTENT(INOUT) :: DET(2)
       INTEGER, INTENT(IN) :: KPVT(*)
       INTEGER, INTENT(INOUT) :: INERT(3)
+      REAL :: AKKP1, SDOT, TEMP
+      REAL :: TEN, D, T, AK, AKP1
+      INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
+      INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
+      LOGICAL :: NOINV, NODET, NOERT
 C
 C     SSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
 C     OF A REAL SYMMETRIC MATRIX USING THE FACTORS FROM SSPFA,
@@ -40300,11 +40315,6 @@ C     FORTRAN ABS,IABS,MOD
 C
 C     INTERNAL VARIABLES.
 C
-      REAL :: AKKP1, SDOT, TEMP
-      REAL :: TEN, D, T, AK, AKP1
-      INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
-      INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
-      LOGICAL :: NOINV, NODET, NOERT
 C
       NOINV = MOD(JOB,10) .EQ. 0
       NODET = MOD(JOB,100)/10 .EQ. 0
@@ -40475,14 +40485,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
-      INTEGER :: J, JOB
-C     ------------------
       DOUBLE PRECISION, INTENT(INOUT) :: A(*), B(*)
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2), RCOND
-      DOUBLE PRECISION :: T
       DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
       INTEGER, INTENT(INOUT) :: INERT(3), IPVT(N)
+      INTEGER :: J, JOB
+      DOUBLE PRECISION :: T
       INTEGER :: ONEJ
+C     ------------------
 C     ------------------
 C
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
@@ -40519,6 +40529,10 @@ C
       INTEGER, INTENT(INOUT) :: KPVT(*)
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*), Z(*)
       DOUBLE PRECISION, INTENT(INOUT) :: RCOND
+      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, EK, T
+      DOUBLE PRECISION :: ANORM, S, DASUM, YNORM
+      INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
+      INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
 C
 C     DSPCO FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
 C     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING AND ESTIMATES
@@ -40597,10 +40611,6 @@ C     FORTRAN DABS,DMAX1,IABS,DSIGN
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, EK, T
-      DOUBLE PRECISION :: ANORM, S, DASUM, YNORM
-      INTEGER :: I, IJ, IK, IKM1, IKP1, INFO, J, JM1, J1
-      INTEGER :: K, KK, KM1K, KM1KM1, KP, KPS, KS
 C
 C
 C     FIND NORM OF A USING ONLY UPPER HALF
@@ -40807,6 +40817,13 @@ C
       INTEGER, INTENT(INOUT) :: KPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
+      DOUBLE PRECISION :: ABSAKK, ALPHA, COLMAX, ROWMAX
+      INTEGER :: IDAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
+     &IMK
+      INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1,
+     &KM2, KSTEP
+      LOGICAL :: SWAP
 C
 C     DSPFA FACTORS A DOUBLE PRECISION SYMMETRIC MATRIX STORED IN
 C     PACKED FORM BY ELIMINATION WITH SYMMETRIC PIVOTING.
@@ -40871,13 +40888,6 @@ C     FORTRAN DABS,DMAX1,DSQRT
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DENOM, MULK, MULKM1, T
-      DOUBLE PRECISION :: ABSAKK, ALPHA, COLMAX, ROWMAX
-      INTEGER :: IDAMAX, IJ, IJJ, IK, IKM1, IM, IMAX, IMAXP1, IMIM, IMJ,
-     &IMK
-      INTEGER :: J, JJ, JK, JKM1, JMAX, JMIM, K, KK, KM1, KM1K, KM1KM1,
-     &KM2, KSTEP
-      LOGICAL :: SWAP
 C
 C
 C     INITIALIZE
@@ -41076,6 +41086,8 @@ C
       INTEGER, INTENT(IN) :: N, KPVT(*)
       DOUBLE PRECISION, INTENT(IN) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, TEMP
+      INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C
 C     DSISL SOLVES THE DOUBLE PRECISION SYMMETRIC SYSTEM
 C     A * X = B
@@ -41122,8 +41134,6 @@ C     FORTRAN IABS
 C
 C     INTERNAL VARIABLES.
 C
-      DOUBLE PRECISION :: AK, AKM1, BK, BKM1, DDOT, DENOM, TEMP
-      INTEGER :: IK, IKM1, IKP1, K, KK, KM1K, KM1KM1, KP
 C
 C     LOOP BACKWARD APPLYING THE TRANSFORMATIONS AND
 C     D INVERSE TO B.
@@ -41261,6 +41271,11 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
       INTEGER, INTENT(IN) :: KPVT(*)
       INTEGER, INTENT(INOUT) :: INERT(3)
+      DOUBLE PRECISION :: AKKP1, DDOT, TEMP
+      DOUBLE PRECISION :: TEN, D, T, AK, AKP1
+      INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
+      INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
+      LOGICAL :: NOINV, NODET, NOERT
 C
 C     DSPDI COMPUTES THE DETERMINANT, INERTIA AND INVERSE
 C     OF A DOUBLE PRECISION SYMMETRIC MATRIX USING THE FACTORS FROM
@@ -41325,11 +41340,6 @@ C     FORTRAN DABS,IABS,MOD
 C
 C     INTERNAL VARIABLES.
 C
-      DOUBLE PRECISION :: AKKP1, DDOT, TEMP
-      DOUBLE PRECISION :: TEN, D, T, AK, AKP1
-      INTEGER :: IJ, IK, IKP1, IKS, J, JB, JK, JKP1
-      INTEGER :: K, KK, KKP1, KM1, KS, KSJ, KSKP1, KSTEP
-      LOGICAL :: NOINV, NODET, NOERT
 C
       NOINV = MOD(JOB,10) .EQ. 0
       NODET = MOD(JOB,100)/10 .EQ. 0
@@ -41500,11 +41510,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
-      INTEGER :: J
-C     -----------------
       REAL, INTENT(INOUT) :: A(*), B(*)
+      INTEGER :: J
       REAL :: D(2)
       INTEGER :: ONEJ
+C     -----------------
 C     -----------------
 C
 C              MATRIX FACTORIZATION
@@ -41531,6 +41541,9 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: INFO
       REAL, INTENT(INOUT) :: AP(*)
+      REAL :: SDOT, T
+      REAL :: S
+      INTEGER :: J, JJ, JM1, K, KJ, KK
 C
 C     SPPFA FACTORS A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
 C     STORED IN PACKED FORM.
@@ -41584,9 +41597,6 @@ C     FORTRAN SQRT
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: SDOT, T
-      REAL :: S
-      INTEGER :: J, JJ, JM1, K, KJ, KK
 C     BEGIN BLOCK WITH ...EXITS TO 40
 C
 C
@@ -41623,6 +41633,8 @@ C     ......EXIT
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: AP(*)
       REAL, INTENT(INOUT) :: B(*)
+      REAL :: SDOT, T
+      INTEGER :: K, KB, KK
 C
 C     SPPSL SOLVES THE REAL SYMMETRIC POSITIVE DEFINITE SYSTEM
 C     A * X = B
@@ -41668,8 +41680,6 @@ C     BLAS SAXPY,SDOT
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: SDOT, T
-      INTEGER :: K, KB, KK
 C
       KK = 0
       DO K = 1, N
@@ -41692,6 +41702,9 @@ C
       INTEGER, INTENT(IN) :: N, JOB
       REAL, INTENT(INOUT) :: AP(*)
       REAL, INTENT(INOUT) :: DET(2)
+      REAL :: T
+      REAL :: S
+      INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
 C
 C     SPPDI COMPUTES THE DETERMINANT AND INVERSE
 C     OF A REAL SYMMETRIC POSITIVE DEFINITE MATRIX
@@ -41738,9 +41751,6 @@ C     FORTRAN MOD
 C
 C     INTERNAL VARIABLES
 C
-      REAL :: T
-      REAL :: S
-      INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
 C
 C     COMPUTE DETERMINANT
 C
@@ -41820,11 +41830,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KB, M, MO, N
-      INTEGER :: J
-C     -----------------
       DOUBLE PRECISION, INTENT(INOUT) :: A(*), B(*)
+      INTEGER :: J
       DOUBLE PRECISION :: D(2)
       INTEGER :: ONEJ
+C     -----------------
 C     -----------------
 C
 C              MATRIX FACTORIZATION
@@ -41851,6 +41861,9 @@ C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(INOUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
+      DOUBLE PRECISION :: DDOT, T
+      DOUBLE PRECISION :: S
+      INTEGER :: J, JJ, JM1, K, KJ, KK
 C
 C     DPPFA FACTORS A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
 C     MATRIX STORED IN PACKED FORM.
@@ -41904,9 +41917,6 @@ C     FORTRAN DSQRT
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: DDOT, T
-      DOUBLE PRECISION :: S
-      INTEGER :: J, JJ, JM1, K, KJ, KK
 C     BEGIN BLOCK WITH ...EXITS TO 40
 C
 C
@@ -41943,6 +41953,8 @@ C     ......EXIT
       INTEGER, INTENT(IN) :: N
       DOUBLE PRECISION, INTENT(IN) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+      DOUBLE PRECISION :: DDOT, T
+      INTEGER :: K, KB, KK
 C
 C     DPPSL SOLVES THE DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE
 C     SYSTEM A * X = B
@@ -41988,8 +42000,6 @@ C     BLAS DAXPY,DDOT
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: DDOT, T
-      INTEGER :: K, KB, KK
 C
       KK = 0
       DO K = 1, N
@@ -42012,6 +42022,9 @@ C
       INTEGER, INTENT(IN) :: N, JOB
       DOUBLE PRECISION, INTENT(INOUT) :: AP(*)
       DOUBLE PRECISION, INTENT(INOUT) :: DET(2)
+      DOUBLE PRECISION :: T
+      DOUBLE PRECISION :: S
+      INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
 C
 C     DPPDI COMPUTES THE DETERMINANT AND INVERSE
 C     OF A DOUBLE PRECISION SYMMETRIC POSITIVE DEFINITE MATRIX
@@ -42058,9 +42071,6 @@ C     FORTRAN MOD
 C
 C     INTERNAL VARIABLES
 C
-      DOUBLE PRECISION :: T
-      DOUBLE PRECISION :: S
-      INTEGER :: I, II, J, JJ, JM1, J1, K, KJ, KK, KP1, K1
 C
 C     COMPUTE DETERMINANT
 C
@@ -42140,6 +42150,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: A(*), B(N)
+      REAL, INTENT(INOUT) :: X(N), G(N), H(N)
       INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
       REAL :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C-----------------------------------------------------------------------
@@ -42151,8 +42163,6 @@ C     FOR I = 1,...,N.
 C-----------------------------------------------------------------------
 C     REAL A(2*N - 1)
 C----------------------
-      REAL, INTENT(IN) :: A(*), B(N)
-      REAL, INTENT(INOUT) :: X(N), G(N), H(N)
 C
       IF (A(N) .EQ. 0.0) GO TO 100
       IERR = 0
@@ -42230,7 +42240,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), G(N), H(N)
       INTEGER :: J, K, L, M, MAX, MP1, NML, NPL
+      DOUBLE PRECISION :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C-----------------------------------------------------------------------
 C            SOLUTION OF THE TOEPLITZ SYSTEM OF EQUATIONS
 C
@@ -42240,9 +42253,6 @@ C     FOR I = 1,...,N.
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(2*N - 1)
 C----------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), G(N), H(N)
-      DOUBLE PRECISION :: C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
 C
       IF (A(N) .EQ. 0.D0) GO TO 100
       IERR = 0
@@ -42321,16 +42331,16 @@ C
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO
       INTEGER :: N
+      COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), DET(2), WK(N)
+      REAL, INTENT(INOUT) :: RCOND
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J, JOB
+      REAL :: T
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 C     AND SOLVING COMPLEX EQUATIONS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), DET(2), WK(N)
-      REAL, INTENT(INOUT) :: RCOND
-      REAL :: T
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      INTEGER :: ONEJ
 C
 C          MATRIX FACTORIZATION AND COMPUTATION OF RCOND
 C
@@ -42366,15 +42376,15 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO
       INTEGER :: N
+      COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: J
+      COMPLEX :: D(2)
+      INTEGER :: ONEJ
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING COMPLEX MATRICES
 C     AND SOLVING COMPLEX EQUATIONS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,N), B(*), WK(*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      COMPLEX :: D(2)
-      INTEGER :: ONEJ
 C
       IF (N .LT. 1 .OR. KA .LT. N) GO TO 40
       IF (M .LE. 0) GO TO 10
@@ -42410,13 +42420,13 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, MO
       INTEGER :: N
+      COMPLEX, INTENT(IN) :: A(KA,N), B(N)
+      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(INOUT) :: IWK(N)
       INTEGER :: I, IR
 C     ******************************************************************
 C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH ITERATIVE IMPROVEMENT
 C     ******************************************************************
-      COMPLEX, INTENT(IN) :: A(KA,N), B(N)
-      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(INOUT) :: IWK(N)
 C     -----------------
 C     COMPLEX WK(N*N + N)
 C     -----------------
@@ -42445,9 +42455,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IND
       INTEGER, INTENT(IN) :: KA, KQ, N
+      COMPLEX, INTENT(IN) :: A(KA,N), Q(KQ,N), B(N)
+      COMPLEX, INTENT(INOUT) :: X(N), R(N)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: I, J
       REAL :: EPS, EPS2, RAT, RATIO, RNRM, XNRM
       REAL :: SPMPAR
+      DOUBLE PRECISION :: RA, IA, RX, IX, RSUM, ISUM
 C ----------------------------------------------------------------------
 C     PURPOSE
 C       GIVEN AN APPROXIMATE SOLUTION X OF A COMPLEX SYSTEM AX = B
@@ -42472,10 +42486,6 @@ C            GAIN IN ACCURACY OF AT LEAST 50 PER CENT EACH
 C            ITERATION. OTHERWISE IND = 1.
 C
 C ----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N), Q(KQ,N), B(N)
-      COMPLEX, INTENT(INOUT) :: X(N), R(N)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      DOUBLE PRECISION :: RA, IA, RX, IX, RSUM, ISUM
 C
 C     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
 C                THE VALUE U WHERE U IS THE SMALLEST FLOATING POINT
@@ -42537,6 +42547,11 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(*)
       COMPLEX, INTENT(INOUT) :: A(LDA,*), Z(*)
       REAL, INTENT(INOUT) :: RCOND
+      COMPLEX :: CDOTC, EK, T, WK, WKM
+      REAL :: ANORM, S, SCASUM, SM, YNORM
+      INTEGER :: INFO, J, K, KB, KP1, L
+      COMPLEX :: ZDUM, ZDUM1, ZDUM2, CSIGN1
+      REAL :: CABS1
 C
 C     CGECO FACTORS A COMPLEX MATRIX BY GAUSSIAN ELIMINATION
 C     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -42598,12 +42613,7 @@ C     FORTRAN ABS,AIMAG,AMAX1,CMPLX,CONJG,REAL
 C
 C     INTERNAL VARIABLES
 C
-      COMPLEX :: CDOTC, EK, T, WK, WKM
-      REAL :: ANORM, S, SCASUM, SM, YNORM
-      INTEGER :: INFO, J, K, KB, KP1, L
 C
-      COMPLEX :: ZDUM, ZDUM1, ZDUM2, CSIGN1
-      REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
       CSIGN1(ZDUM1,ZDUM2) = CABS1(ZDUM1)*(ZDUM2/CABS1(ZDUM2))
 C
@@ -42737,6 +42747,10 @@ C
       INTEGER :: N
       INTEGER, INTENT(INOUT) :: IPVT(*), INFO
       COMPLEX, INTENT(INOUT) :: A(LDA,*)
+      COMPLEX :: T
+      INTEGER :: ICAMAX, J, K, KP1, L, NM1
+      COMPLEX :: ZDUM
+      REAL :: CABS1
 C
 C     CGEFA FACTORS A COMPLEX MATRIX BY GAUSSIAN ELIMINATION.
 C
@@ -42784,11 +42798,7 @@ C     FORTRAN ABS,AIMAG,REAL
 C
 C     INTERNAL VARIABLES
 C
-      COMPLEX :: T
-      INTEGER :: ICAMAX, J, K, KP1, L, NM1
 C
-      COMPLEX :: ZDUM
-      REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
 C
 C     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
@@ -42847,6 +42857,8 @@ C
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       COMPLEX, INTENT(IN) :: A(LDA,*)
       COMPLEX, INTENT(INOUT) :: B(*)
+      COMPLEX :: CDOTC, T
+      INTEGER :: K, KB, L, NM1
 C
 C     CGESL SOLVES THE COMPLEX SYSTEM
 C     A * X = B  OR  CTRANS(A) * X = B
@@ -42905,8 +42917,6 @@ C     FORTRAN CONJG
 C
 C     INTERNAL VARIABLES
 C
-      COMPLEX :: CDOTC, T
-      INTEGER :: K, KB, L, NM1
 C
       NM1 = N - 1
       IF (JOB .NE. 0) GO TO 50
@@ -42967,6 +42977,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDA, N, IPVT(*), JOB
       COMPLEX, INTENT(INOUT) :: A(LDA,*), DET(2), WORK(*)
+      COMPLEX :: T
+      REAL :: TEN
+      INTEGER :: I, J, K, KB, KP1, L, NM1
+      COMPLEX :: ZDUM
+      REAL :: CABS1
 C
 C     CGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
 C     USING THE FACTORS COMPUTED BY CGECO OR CGEFA.
@@ -43023,12 +43038,7 @@ C     FORTRAN ABS,AIMAG,CMPLX,MOD,REAL
 C
 C     INTERNAL VARIABLES
 C
-      COMPLEX :: T
-      REAL :: TEN
-      INTEGER :: I, J, K, KB, KP1, L, NM1
 C
-      COMPLEX :: ZDUM
-      REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
 C
 C     COMPUTE DETERMINANT
@@ -43101,13 +43111,13 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, MO
       INTEGER :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), BR(*),
+     &BI(*), WK(*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
 C     COMPLEX MATRICES AND SOLVING DOUBLE PRECISION COMPLEX EQUATIONS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), BR(*),
-     &BI(*), WK(*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
 C
       IF (N .LT. 1 .OR. KA .LT. N) GO TO 30
       IF (M .LE. 0) GO TO 10
@@ -43138,7 +43148,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: I, J, K, KP1, L, NM1
+      DOUBLE PRECISION :: P, PR, PI, T, TR, TI
 C-----------------------------------------------------------------------
 C     DECOMPOSES A COMPLEX MATRIX BY PARTIAL PIVOT GAUSS ELIMINATION
 C-----------------------------------------------------------------------
@@ -43169,9 +43182,6 @@ C
 C     IF IERR = 0 THEN THE DETERMINANT OF A HAS THE VALUE ...
 C        DET(A) = IPVT(N) * A(1,1) * A(2,2) * ... * A(N,N)
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      DOUBLE PRECISION :: P, PR, PI, T, TR, TI
 C
       IERR = 0
       IPVT(N) = 1
@@ -43244,7 +43254,11 @@ C
       SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, N
+      DOUBLE PRECISION, INTENT(IN) :: AR(KA,N), AI(KA,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: BR(KB,M), BI(KB,M)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: I, J, K, KM1, KP1, L, NM1
+      DOUBLE PRECISION :: PR, PI, TR, TI
 C-----------------------------------------------------------------------
 C     SOLUTION OF THE SYSTEM OF M EQUATIONS A*X = B USING THE
 C     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT BE
@@ -43275,10 +43289,6 @@ C        BR AND BI CONTAIN THE REAL AND IMAGINARY PARTS OF THE
 C        SOLUTION X.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: AR(KA,N), AI(KA,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: BR(KB,M), BI(KB,M)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      DOUBLE PRECISION :: PR, PI, TR, TI
 C
 C                    FORWARD ELIMINATION
 C
@@ -43337,7 +43347,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), TEMP(2,N)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: I, IP1, J, JB, K, KP1, L, NM1, NMI, NMK, NP1
+      DOUBLE PRECISION :: SR, SI, TR, TI
 C-----------------------------------------------------------------------
 C     COMPUTATION OF THE INVERSE OF A MATRIX A USING THE LU
 C     DECOMPOSITION OBTAINED BY DCFACT. THIS ROUTINE CANNOT
@@ -43362,9 +43375,6 @@ C
 C        AR AND AI CONTAIN THE INVERSE OF THE MATRIX.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), TEMP(2,N)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      DOUBLE PRECISION :: SR, SI, TR, TI
 C
       CALL CDIVID (1.D0, 0.D0, AR(N,N), AI(N,N), AR(N,N), AI(N,N))
       IF (N .EQ. 1) RETURN
@@ -43432,6 +43442,12 @@ C
       INTEGER, INTENT(INOUT) :: INFO
       REAL, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*), V(LDV,*),
      &WORK(*)
+      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
+     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
+      REAL :: SDOT, T
+      REAL :: B, C, CS, EL, EMM1, F, G, SNRM2, SCALE, SHIFT, SL, SM, SN,
+     &SMM1, T1, TEST, ZTEST
+      LOGICAL :: WANTU, WANTV
 C
 C
 C     SSVDC IS A SUBROUTINE TO REDUCE A REAL NXP MATRIX X BY
@@ -43531,12 +43547,6 @@ C     FORTRAN ABS,AMAX1,MAX0,MIN0,MOD,SQRT
 C
 C     INTERNAL VARIABLES
 C
-      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
-     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
-      REAL :: SDOT, T
-      REAL :: B, C, CS, EL, EMM1, F, G, SNRM2, SCALE, SHIFT, SL, SM, SN,
-     &SMM1, T1, TEST, ZTEST
-      LOGICAL :: WANTU, WANTV
 C
 C
 C     SET THE MAXIMUM NUMBER OF ITERATIONS.
@@ -43916,6 +43926,12 @@ C           ...EXIT
       INTEGER, INTENT(INOUT) :: INFO
       DOUBLE PRECISION, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*),
      &V(LDV,*), WORK(*)
+      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
+     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
+      DOUBLE PRECISION :: DDOT, T
+      DOUBLE PRECISION :: B, C, CS, EL, EMM1, F, G, DNRM2, SCALE, SHIFT,
+     &SL, SM, SN, SMM1, T1, TEST, ZTEST
+      LOGICAL :: WANTU, WANTV
 C
 C
 C     DSVDC IS A SUBROUTINE TO REDUCE A DOUBLE PRECISION NXP MATRIX X
@@ -44015,12 +44031,6 @@ C     FORTRAN DABS,DMAX1,MAX0,MIN0,MOD,DSQRT
 C
 C     INTERNAL VARIABLES
 C
-      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
-     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
-      DOUBLE PRECISION :: DDOT, T
-      DOUBLE PRECISION :: B, C, CS, EL, EMM1, F, G, DNRM2, SCALE, SHIFT,
-     &SL, SM, SN, SMM1, T1, TEST, ZTEST
-      LOGICAL :: WANTU, WANTV
 C
 C
 C     SET THE MAXIMUM NUMBER OF ITERATIONS.
@@ -44400,6 +44410,14 @@ C           ...EXIT
       INTEGER, INTENT(INOUT) :: INFO
       COMPLEX, INTENT(INOUT) :: X(LDX,*), S(*), E(*), U(LDU,*),
      &V(LDV,*), WORK(*)
+      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
+     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
+      COMPLEX :: CDOTC, T, R
+      REAL :: B, C, CS, EL, EMM1, F, G, SCNRM2, SCALE, SHIFT, SL, SM,
+     &SN, SMM1, T1, TEST, ZTEST
+      LOGICAL :: WANTU, WANTV
+      COMPLEX :: CSIGN, ZDUM, ZDUM1, ZDUM2
+      REAL :: CABS1
 C
 C
 C     CSVDC IS A SUBROUTINE TO REDUCE A COMPLEX NXP MATRIX X BY
@@ -44500,15 +44518,7 @@ C     FORTRAN CONJG,MAX0,MIN0,MOD,REAL,SQRT
 C
 C     INTERNAL VARIABLES
 C
-      INTEGER :: I, ITER, J, JOBU, K, KASE, KK, L, LL, LLS, LM1, LP1,
-     &LS, LU, M, MAXIT, MM, MM1, MP1, NCT, NCTP1, NCU, NRT, NRTP1
-      COMPLEX :: CDOTC, T, R
-      REAL :: B, C, CS, EL, EMM1, F, G, SCNRM2, SCALE, SHIFT, SL, SM,
-     &SN, SMM1, T1, TEST, ZTEST
-      LOGICAL :: WANTU, WANTV
 C
-      COMPLEX :: CSIGN, ZDUM, ZDUM1, ZDUM2
-      REAL :: CABS1
       CABS1(ZDUM) = ABS(REAL(ZDUM)) + ABS(AIMAG(ZDUM))
       CSIGN(ZDUM1,ZDUM2) = CABS(ZDUM1)*(ZDUM2/CABS(ZDUM2))
 C
@@ -44981,7 +44991,10 @@ C
       DOUBLE PRECISION FUNCTION DPDET(A,KA,N,X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
+      DOUBLE PRECISION, INTENT(IN) :: X
       INTEGER :: I, J, K, KP1, L, NM1
+      DOUBLE PRECISION :: PIVOT, S, C
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -44989,9 +45002,6 @@ C     -------------------
 C     KA IS THE ROW DIMENSION OF A IN THE CALLING PROGRAM. IT IS
 C     ASSUMED THAT KA IS GREATER THAN OR EQUAL TO N.
 C     -------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
-      DOUBLE PRECISION, INTENT(IN) :: X
-      DOUBLE PRECISION :: PIVOT, S, C
       IF (N .GE. 2) GO TO 10
       DPDET = A(1,1) - X
       RETURN
@@ -45052,7 +45062,11 @@ C
       COMPLEX FUNCTION CDET(A,KA,N,X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, N
+      COMPLEX, INTENT(INOUT) :: A(KA,N)
+      COMPLEX, INTENT(IN) :: X
       INTEGER :: I, J, K, KP1, L, NM1
+      COMPLEX :: PIVOT, T, ZERO
+      REAL :: S, C
 C     -------------------
 C     EVALUATION OF THE DETERMINANT OF A-XI WHERE A IS AN NXN MATRIX,
 C     X IS A SCALAR, AND I IS THE NXN IDENTITY MATRIX.
@@ -45060,10 +45074,6 @@ C     -------------------
 C     KA IS THE ROW DIMENSION OF A IN THE CALLING PROGRAM. IT IS
 C     ASSUMED THAT KA IS GREATER THAN OR EQUAL TO N.
 C     -------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,N)
-      COMPLEX, INTENT(IN) :: X
-      COMPLEX :: PIVOT, T, ZERO
-      REAL :: S, C
       DATA ZERO/(0.0,0.0)/
 C
       IF (N .GE. 2) GO TO 10
@@ -45130,8 +45140,8 @@ C
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NB, NC
-      INTEGER :: IU, IV, IW
       REAL, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N), WK(*)
+      INTEGER :: IU, IV, IW
 C ----------------------------------------------------------------------
 C     ABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -45215,16 +45225,16 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NB, NC, NU, NV
+      REAL, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
+      REAL, INTENT(INOUT) :: U(NU,M), V(NV,N)
+      REAL, INTENT(INOUT) :: WK(*)
       INTEGER :: I, J, K
+      REAL :: TEMP
 C ----------------------------------------------------------------------
 C     ABSLV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
 C     TRANSFORMED SYSTEM IS SOLVED BY BACK SUBSTITUTION.
 C ----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
-      REAL, INTENT(INOUT) :: U(NU,M), V(NV,N)
-      REAL :: TEMP
-      REAL, INTENT(INOUT) :: WK(*)
 C
 C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
 C
@@ -45331,7 +45341,18 @@ C
 
       SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: NH, NZ, IGH
+      INTEGER, INTENT(IN) :: LOW
+      INTEGER, INTENT(OUT) :: IERR
+      REAL, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
       INTEGER :: IP1
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, LL, MM, NA
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
+      REAL :: P, Q, R, S, T, W, X, Y, ZZ, NORM, S1, S2
+      LOGICAL :: NOTLAS
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. SCHUR
 C     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH TRANSPOSE(Q)*H*Q
@@ -45383,17 +45404,6 @@ C     THIS SUBROUTINE IS A MODIFICATION OF THE EISPACK SUBROUTINE
 C     HQR2,  WHICH IS BASED ON THE ALGOL PROCEDURE HQR BY PETERS
 C     AND WILKINSON, NUM. MATH. 16 (1970), PP.181-204.
 C ----------------------------------------------------------------------
-      INTEGER :: I, J, K, L, M
-      INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL, MM, NA
-      INTEGER, INTENT(IN) :: NH, NZ, IGH
-      INTEGER :: ITS
-      INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
-      INTEGER, INTENT(OUT) :: IERR
-      REAL, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
-      REAL :: P, Q, R, S, T, W, X, Y, ZZ, NORM, S1, S2
-      LOGICAL :: NOTLAS
 C     REAL SQRT, ABS
 C     INTEGER MIN0
 C
@@ -45734,9 +45744,9 @@ C
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NB, NC
-      INTEGER :: IU, IV, IW
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N),
      &WK(*)
+      INTEGER :: IU, IV, IW
 C ----------------------------------------------------------------------
 C     DABSLV SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
@@ -45820,16 +45830,16 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NB, NC, NU, NV
+      DOUBLE PRECISION, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: U(NU,M), V(NV,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
       INTEGER :: I, J, K
+      DOUBLE PRECISION :: TEMP
 C ----------------------------------------------------------------------
 C     DABSV1 SOLVES THE REAL MATRIX EQUATION AX + XB = C. A IS REDUCED
 C     TO LOWER SCHUR FORM, B IS REDUCED TO UPPER SCHUR FORM, AND THE
 C     TRANSFORMED SYSTEM IS SOLVED BY BACK SUBSTITUTION.
 C ----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(NA,M), B(NB,N), C(NC,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: U(NU,M), V(NV,N)
-      DOUBLE PRECISION :: TEMP
-      DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
 C
 C     IF REQUIRED, REDUCE A TO LOWER REAL SCHUR FORM
 C
@@ -45936,7 +45946,18 @@ C
 
       SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(IN) :: NH, NZ, IGH
+      INTEGER, INTENT(IN) :: LOW
+      INTEGER, INTENT(OUT) :: IERR
+      DOUBLE PRECISION, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
       INTEGER :: IP1
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, LL, MM, NA
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
+      DOUBLE PRECISION :: P, Q, R, S, T, W, X, Y, ZZ, NORM, S1, S2
+      LOGICAL :: NOTLAS
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. DSCHUR
 C     OBTAINS AN ORTHOGONAL MATRIX Q FOR WHICH  TRANSPOSE(Q)*H*Q
@@ -45988,17 +46009,6 @@ C     THIS SUBROUTINE IS A MODIFICATION OF THE EISPACK SUBROUTINE
 C     HQR2,  WHICH IS BASED ON THE ALGOL PROCEDURE HQR BY PETERS
 C     AND WILKINSON, NUM. MATH. 16 (1970), PP.181-204.
 C ----------------------------------------------------------------------
-      INTEGER :: I, J, K, L, M
-      INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL, MM, NA
-      INTEGER, INTENT(IN) :: NH, NZ, IGH
-      INTEGER :: ITS
-      INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
-      INTEGER, INTENT(OUT) :: IERR
-      DOUBLE PRECISION, INTENT(INOUT) :: H(NH,N), WR(N), WI(N), Z(NZ,N)
-      DOUBLE PRECISION :: P, Q, R, S, T, W, X, Y, ZZ, NORM, S1, S2
-      LOGICAL :: NOTLAS
 C     DOUBLE PRECISION DSQRT, DABS
 C     INTEGER MIN0
 C
@@ -46338,8 +46348,8 @@ C
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC
-      INTEGER :: IW
       REAL, INTENT(INOUT) :: A(NA,N), C(NC,N), WK(*)
+      INTEGER :: IW
 C ----------------------------------------------------------------------
 C     TASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -46402,13 +46412,13 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC, NU
+      REAL, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N), WK(*)
       INTEGER :: I, J, K
 C ----------------------------------------------------------------------
 C     TASLV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
 C     AND THE TRANSFORMED SYSTEM IS SOLVED.
 C ----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N), WK(*)
 C
 C    IF REQUIRED, REDUCE A TO UPPER REAL SCHUR FORM
 C
@@ -46651,8 +46661,8 @@ C
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC
-      INTEGER :: IW
       DOUBLE PRECISION, INTENT(INOUT) :: A(NA,N), C(NC,N), WK(*)
+      INTEGER :: IW
 C ----------------------------------------------------------------------
 C     DTASLV SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
@@ -46715,14 +46725,14 @@ C ----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: MO
       INTEGER :: N
       INTEGER, INTENT(IN) :: NA, NC, NU
+      DOUBLE PRECISION, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N),
+     &WK(*)
       INTEGER :: I, J, K
 C ----------------------------------------------------------------------
 C     DTASV1 SOLVES THE REAL MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE C IS A SYMMETRIC MATRIX. A IS REDUCED TO UPPER SCHUR FORM
 C     AND THE TRANSFORMED SYSTEM IS SOLVED.
 C ----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(NA,N), U(NU,N), C(NC,N),
-     &WK(*)
 C
 C    IF REQUIRED, REDUCE A TO UPPER REAL SCHUR FORM
 C
@@ -47045,10 +47055,10 @@ C
       INTEGER, INTENT(INOUT) :: IGUESS
       INTEGER, INTENT(IN) :: NW
       INTEGER, INTENT(INOUT) :: MAXITS, IERR
-      INTEGER :: I1, I2, I3, I4, I5, I6, I7
       COMPLEX, INTENT(INOUT) :: WORK(NW)
       COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), C(NM,N), S(NM,N)
       REAL, INTENT(IN) :: TOL
+      INTEGER :: I1, I2, I3, I4, I5, I6, I7
       I1 = N*N + 1
       I2 = N*N + I1
       I3 = N*N + I2
@@ -47126,14 +47136,14 @@ C
       INTEGER, INTENT(INOUT) :: IGUESS
       INTEGER, INTENT(IN) :: NW
       INTEGER, INTENT(INOUT) :: MAXITS, IERR
-      INTEGER :: ITS, MATS, I, J, K
       COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), C(NM,N), S(NM,N),
      &L(NM,N), U(NM,N)
       COMPLEX, INTENT(INOUT) :: V(NM,N), Z(NM,N), R(NM,N), XOLD(NM,N),
      &EYE(NM,N), TEMP(N)
+      REAL, INTENT(IN) :: TOL
+      INTEGER :: ITS, MATS, I, J, K
       REAL :: ANORM, ANI, BNORM, BNI, CNORM, CNI, XNORM, XNI
       REAL :: FXNORM, FXNI, GNORM, TNORM, T
-      REAL, INTENT(IN) :: TOL
 C     REAL SQRT, CABS, FLOAT
 C     COMPLEX CMPLX, CONJG
       K = 7*N*N + N
@@ -47370,21 +47380,21 @@ C
 C     F, G AND H ARE UPDATED, IF DESIRED.
 C
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: LB, L1
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: NK1, NM1, NM2
       COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), Z(NM,N)
-      COMPLEX :: RR, T, U1, U2, V1, V2, RHO
       COMPLEX, INTENT(INOUT) :: F(NM,N)
-      COMPLEX :: TF
       COMPLEX, INTENT(INOUT) :: G(NM,N)
-      COMPLEX :: TG
       COMPLEX, INTENT(INOUT) :: H(NM,N)
+      INTEGER, INTENT(IN) :: MATS
+      INTEGER :: I, J, K, L
+      INTEGER :: LB, L1
+      INTEGER :: NK1, NM1, NM2
+      COMPLEX :: RR, T, U1, U2, V1, V2, RHO
+      COMPLEX :: TF
+      COMPLEX :: TG
       COMPLEX :: TH
       REAL :: R, S
-      INTEGER, INTENT(IN) :: MATS
 C     REAL SQRT, CABS
 C     COMPLEX CMPLX, CONJG
       IF (MATS.EQ.0) GO TO 30
@@ -47585,22 +47595,22 @@ C     IERR IS AN INTEGER ERROR RETURN WHICH INDICATES FAILURE
 C          OF THE QZ ALGORITHM TO REDUCE A SUBDIAGONAL ELEMENT
 C          TO ZERO AFTER 50 ITERATIONS.
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, JJ, K1, K2, LD, LL, L1, NA
       INTEGER, INTENT(IN) :: NM
+      INTEGER, INTENT(OUT) :: IERR
+      COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), Z(NM,N)
+      COMPLEX, INTENT(INOUT) :: F(NM,N)
+      REAL, INTENT(IN) :: EPS1
+      INTEGER, INTENT(IN) :: MATS
+      INTEGER :: I, J, K, L
+      INTEGER :: EN, JJ, K1, K2, LD, LL, L1, NA
       INTEGER :: ISH, ITS, KM1, LM1
       INTEGER :: ENM2
-      INTEGER, INTENT(OUT) :: IERR
       INTEGER :: LOR1, ENORN
-      COMPLEX, INTENT(INOUT) :: A(NM,N), B(NM,N), Z(NM,N)
       COMPLEX :: A11, A21, A33, A34, A43, A44, B11, B22, B33, B34, B44
       COMPLEX :: A1, A2, U1, U2, V1, V2, T, RR, SH, SS
-      COMPLEX, INTENT(INOUT) :: F(NM,N)
       COMPLEX :: TF
-      REAL, INTENT(IN) :: EPS1
       REAL :: EPSA, EPSB, ANORM, BNORM, ANI, BNI, SRELPR, R, S
-      INTEGER, INTENT(IN) :: MATS
       REAL :: SPMPAR
 C     INTEGER MAX0, MIN0
 C     REAL SQRT, CABS
@@ -47831,14 +47841,14 @@ C          IERR.EQ.0 FOR A NORMAL RETURN.
 C          IERR.EQ.1 IF THE TRIANGULAR SYSTEM IS INCONSISTENT.
 C
 C
-      INTEGER :: I
       INTEGER, INTENT(OUT) :: IERR
-      INTEGER :: J, JP1, K, KK, KM1, M
       INTEGER, INTENT(IN) :: N, NM
-      INTEGER :: NM1
       COMPLEX, INTENT(IN) :: U(NM,N), V(NM,N), L(NM,N)
       COMPLEX, INTENT(INOUT) :: F(NM,N)
       COMPLEX, INTENT(INOUT) :: TEMP(N)
+      INTEGER :: I
+      INTEGER :: J, JP1, K, KK, KM1, M
+      INTEGER :: NM1
       COMPLEX :: DENOM, SUM
       REAL :: S, T
 C     REAL CABS
@@ -47902,9 +47912,9 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KZ
       INTEGER :: N
+      REAL, INTENT(INOUT) :: A(KA,N), Z(KZ,N), WK(N,*)
       INTEGER :: I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP6
       REAL :: ANORM, ANORM1, FACTOR, P, Q, S, S1
-      REAL, INTENT(INOUT) :: A(KA,N), Z(KZ,N), WK(N,*)
       REAL :: C(8)
 C ----------------------------------------------------------------------
 C     MEXP COMPUTES EXP(A) AND STORES IT IN Z WHERE A IS A MATRIX
@@ -48057,8 +48067,8 @@ C
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KZ
       INTEGER :: N
-      INTEGER :: I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), Z(KZ,N), WK(N,*)
+      INTEGER :: I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
       DOUBLE PRECISION :: ANORM, ANORM1, C(12), FACTOR, P, Q, S, S1
 C ----------------------------------------------------------------------
 C     DMEXP COMPUTES EXP(A) AND STORES IT IN Z WHERE A IS A MATRIX
@@ -48218,16 +48228,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
+      REAL, INTENT(IN) :: B(N)
+      REAL, INTENT(INOUT) :: C(N), D(*)
+      INTEGER, INTENT(INOUT) :: IP(*)
+      EXTERNAL ROWK
       INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
      &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
       REAL :: BK, C1, CJ, CK, DKJ, ZERO
 C     ******************************************************************
 C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
 C     ******************************************************************
-      REAL, INTENT(IN) :: B(N)
-      REAL, INTENT(INOUT) :: C(N), D(*)
-      INTEGER, INTENT(INOUT) :: IP(*)
-      EXTERNAL ROWK
       DATA ZERO/0.0/
 C
 C     SET THE NECESSARY CONSTANTS
@@ -48388,16 +48398,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
-      INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
-     &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
-C     ******************************************************************
-C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
-C     ******************************************************************
       DOUBLE PRECISION, INTENT(IN) :: B(N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(N), D(*)
       INTEGER, INTENT(INOUT) :: IP(*)
-      DOUBLE PRECISION :: BK, CJ, CK, C1, DKJ, ZERO
       EXTERNAL ROWK
+      INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
+     &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+      DOUBLE PRECISION :: BK, CJ, CK, C1, DKJ, ZERO
+C     ******************************************************************
+C     SOLUTION OF LINEAR EQUATIONS WITH REDUCED STORAGE
+C     ******************************************************************
       DATA ZERO/0.D0/
 C
 C     SET THE NECESSARY CONSTANTS
@@ -48558,17 +48568,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER :: N
-      INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
-     &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
-      REAL :: S, SI
-C     ******************************************************************
-C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH REDUCED STORAGE
-C     ******************************************************************
       COMPLEX, INTENT(IN) :: B(N)
       COMPLEX, INTENT(INOUT) :: C(N), D(*)
       INTEGER, INTENT(INOUT) :: IP(*)
-      COMPLEX :: BK, CJ, CK, C1, DKJ, ZERO
       EXTERNAL ROWK
+      INTEGER :: I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST,
+     &LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
+      REAL :: S, SI
+      COMPLEX :: BK, CJ, CK, C1, DKJ, ZERO
+C     ******************************************************************
+C     SOLUTION OF COMPLEX LINEAR EQUATIONS WITH REDUCED STORAGE
+C     ******************************************************************
       DATA ZERO/(0.0,0.0)/
 C
 C     SET THE NECESSARY CONSTANTS
@@ -48736,13 +48746,13 @@ C
       SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      REAL, INTENT(INOUT) :: A(KA,N)
+      REAL, INTENT(IN) :: B(KB,*)
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM BANDED TO
 C                         STANDARD FORM
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N)
-      REAL, INTENT(IN) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -48806,13 +48816,13 @@ C
       SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,N)
+      REAL, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF REAL MATRICES FROM STANDARD TO BANDED
 C                    FORM WHEN ML AND MU ARE GIVEN
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N)
-      REAL, INTENT(INOUT) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -48879,13 +48889,13 @@ C
       INTEGER, INTENT(IN) :: KA, KB, M
       INTEGER, INTENT(INOUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      REAL, INTENT(IN) :: A(KA,N)
+      REAL, INTENT(INOUT) :: B(KB,NB)
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF REAL MATRICES FROM STANDARD
 C                        TO BANDED FORM
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N)
-      REAL, INTENT(INOUT) :: B(KB,NB)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -48933,13 +48943,13 @@ C
       SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
+      DOUBLE PRECISION, INTENT(IN) :: B(KB,*)
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 C                         TO STANDARD FORM
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N)
-      DOUBLE PRECISION, INTENT(IN) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -49003,13 +49013,13 @@ C
       SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 C               TO BANDED FORM WHEN ML AND MU ARE GIVEN
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -49076,13 +49086,13 @@ C
       INTEGER, INTENT(IN) :: KA, KB, M
       INTEGER, INTENT(INOUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C        CONVERSION OF DOUBLE PRECISION MATRICES FROM STANDARD
 C                         TO BANDED FORM
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -49130,13 +49140,13 @@ C
       SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      COMPLEX, INTENT(INOUT) :: A(KA,N)
+      COMPLEX, INTENT(IN) :: B(KB,*)
       INTEGER :: I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C          CONVERSION OF COMPLEX MATRICES FROM BANDED TO
 C                          STANDARD FORM
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,N)
-      COMPLEX, INTENT(IN) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -49200,13 +49210,13 @@ C
       SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,N)
+      COMPLEX, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
 C        CONVERSION OF COMPLEX MATRICES FROM STANDARD TO BANDED
 C                    FORM WHEN ML AND MU ARE GIVEN
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N)
-      COMPLEX, INTENT(INOUT) :: B(KB,*)
 C
 C     STORE THE NONZERO DATA OF THE FIRST ML ROWS
 C
@@ -49273,13 +49283,13 @@ C
       INTEGER, INTENT(IN) :: KA, KB, M
       INTEGER, INTENT(INOUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      COMPLEX, INTENT(IN) :: A(KA,N)
+      COMPLEX, INTENT(INOUT) :: B(KB,NB)
       INTEGER :: I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
 C           CONVERSION OF COMPLEX MATRICES FROM STANDARD
 C                          TO BANDED FORM
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,N)
-      COMPLEX, INTENT(INOUT) :: B(KB,NB)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -49328,14 +49338,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
+      REAL, INTENT(IN) :: A(KA,*)
+      REAL, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM BANDED
 C                            TO SPARSE FORM
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*)
-      REAL, INTENT(INOUT) :: B(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 C
       L = 1
       KMAX = ML + MU + 1
@@ -49393,14 +49403,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM BANDED
 C                            TO SPARSE FORM
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 C
       L = 1
       KMAX = ML + MU + 1
@@ -49458,14 +49468,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N, NUM
+      COMPLEX, INTENT(IN) :: A(KA,*)
+      COMPLEX, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM BANDED
 C                            TO SPARSE FORM
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*)
-      COMPLEX, INTENT(INOUT) :: B(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 C
       L = 1
       KMAX = ML + MU + 1
@@ -49525,14 +49535,14 @@ C
       INTEGER, INTENT(IN) :: KB, M
       INTEGER, INTENT(OUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: B(KB,NB)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C                CONVERSION OF REAL MATRICES FROM SPARSE
 C                            TO BANDED FORM
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: B(KB,NB)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -49589,14 +49599,14 @@ C
       INTEGER, INTENT(IN) :: KB, M
       INTEGER, INTENT(OUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C          CONVERSION OF DOUBLE PRECISION MATRICES FROM SPARSE
 C                            TO BANDED FORM
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,NB)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -49653,14 +49663,14 @@ C
       INTEGER, INTENT(IN) :: KB, M
       INTEGER, INTENT(OUT) :: ML, MU
       INTEGER, INTENT(IN) :: N, NB
+      COMPLEX, INTENT(IN) :: A(*)
+      COMPLEX, INTENT(INOUT) :: B(KB,NB)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
 C              CONVERSION OF COMPLEX MATRICES FROM SPARSE
 C                            TO BANDED FORM
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*)
-      COMPLEX, INTENT(INOUT) :: B(KB,NB)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
 C     COMPUTATION OF ML AND MU
 C
@@ -49714,13 +49724,13 @@ C
       SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM SINGLE TO DOUBLE
 C                          PRECISION FORM
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
 C
       NUM = ML + MU + 1
       DO J = 1,NUM
@@ -49734,13 +49744,13 @@ C
       SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
+      REAL, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, J, NUM
 C-----------------------------------------------------------------------
 C        CONVERSION OF BANDED MATRICES FROM DOUBLE TO SINGLE
 C                          PRECISION FORM
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
-      REAL, INTENT(INOUT) :: B(KB,*)
 C
       NUM = ML + MU + 1
       DO J = 1,NUM
@@ -49757,12 +49767,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, L, M, ML, MU, N
       INTEGER, INTENT(OUT) :: NL
       INTEGER, INTENT(INOUT) :: NU
+      COMPLEX, INTENT(IN) :: A(KA,*)
+      REAL, INTENT(INOUT) :: B(KB,L)
       INTEGER :: I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C              REAL PART OF A BANDED COMPLEX MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*)
-      REAL, INTENT(INOUT) :: B(KB,L)
 C
 C     COMPUTATION OF NL AND NU
 C
@@ -49814,12 +49824,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, L, M, ML, MU, N
       INTEGER, INTENT(OUT) :: NL
       INTEGER, INTENT(INOUT) :: NU
+      COMPLEX, INTENT(IN) :: A(KA,*)
+      REAL, INTENT(INOUT) :: B(KB,L)
       INTEGER :: I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A BANDED COMPLEX MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*)
-      REAL, INTENT(INOUT) :: B(KB,L)
 C
 C     COMPUTATION OF NL AND NU
 C
@@ -49871,12 +49881,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(OUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
+      COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, J, JA, JB, JC, JMAX, K, NUM
 C-----------------------------------------------------------------------
 C        COMPUTE A + BI FOR THE BANDED REAL MATRICES A AND B
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
-      COMPLEX, INTENT(INOUT) :: C(KC,L)
 C
       MCL = MAX0(ML,NL)
       MCU = MAX0(MU,NU)
@@ -49955,12 +49965,12 @@ C
       SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*)
+      REAL, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C                TRANSPOSITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*)
-      REAL, INTENT(INOUT) :: B(KB,*)
 C
       L = ML + MU + 1
       LP1 = L + 1
@@ -50012,12 +50022,12 @@ C
       SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C          TRANSPOSITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(KB,*)
 C
       L = ML + MU + 1
       LP1 = L + 1
@@ -50069,12 +50079,12 @@ C
       SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KB, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,*)
+      COMPLEX, INTENT(INOUT) :: B(KB,*)
       INTEGER :: I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
 C              TRANSPOSITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*)
-      COMPLEX, INTENT(INOUT) :: B(KB,*)
 C
       L = ML + MU + 1
       LP1 = L + 1
@@ -50129,12 +50139,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
+      REAL, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                 ADDITION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
-      REAL, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -50276,12 +50286,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C           ADDITION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -50423,12 +50433,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
+      COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                ADDITION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
-      COMPLEX, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -50570,12 +50580,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
+      REAL, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C                SUBTRACTION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
-      REAL, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -50717,12 +50727,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C          SUBTRACTION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -50864,12 +50874,12 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NL, NU
+      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
+      COMPLEX, INTENT(INOUT) :: C(KC,L)
       INTEGER :: I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
-      COMPLEX, INTENT(INOUT) :: C(KC,L)
 C
       IERR = 0
       IF (NL - ML) 10,30,20
@@ -51012,14 +51022,14 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
+      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
+      REAL, INTENT(INOUT) :: C(KC,NC)
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
       REAL :: SUM
 C-----------------------------------------------------------------------
 C                MULTIPLICATION OF REAL BANDED MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), B(KB,*)
-      REAL, INTENT(INOUT) :: C(KC,NC)
 C
       IERR = 0
       DO J = 1,NC
@@ -51167,14 +51177,14 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,NC)
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C          MULTIPLICATION OF DOUBLE PRECISION BANDED MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), B(KB,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(KC,NC)
-      DOUBLE PRECISION :: SUM
 C
       IERR = 0
       DO J = 1,NC
@@ -51322,14 +51332,14 @@ C
       INTEGER, INTENT(IN) :: KA, KB, KC, L, M
       INTEGER, INTENT(INOUT) :: MCL, MCU
       INTEGER, INTENT(IN) :: ML, MU, N, NC, NL, NU
+      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
+      COMPLEX, INTENT(INOUT) :: C(KC,NC)
       INTEGER :: I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN,
      &LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C             MULTIPLICATION OF COMPLEX BANDED MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), B(KB,*)
-      COMPLEX, INTENT(INOUT) :: C(KC,NC)
-      COMPLEX :: SUM
 C
       IERR = 0
       DO J = 1,NC
@@ -51473,13 +51483,13 @@ C
       SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*), X(N)
+      REAL, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL :: SUM
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL BANDED MATRIX AND A REAL VECTOR
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), X(N)
-      REAL, INTENT(INOUT) :: Y(M)
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51526,14 +51536,14 @@ C
       SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*), X(N)
+      REAL, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL :: SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A REAL BANDED MATRIX
 C                     AND X,Y ARE REAL VECTORS
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), X(N)
-      REAL, INTENT(INOUT) :: Y(M)
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51572,14 +51582,14 @@ C
       SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C           PRODUCT OF A DOUBLE PRECISION BANDED MATRIX
 C                  AND A DOUBLE PRECISION VECTOR
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
-      DOUBLE PRECISION :: SUM
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51626,14 +51636,14 @@ C
       SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C         SETTING Y = A*X + Y WHERE A IS A DOUBLE PRECISION
 C         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
-      DOUBLE PRECISION :: SUM
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51672,13 +51682,13 @@ C
       SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,*), X(N)
+      COMPLEX, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX BANDED MATRIX AND A COMPLEX VECTOR
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), X(N)
-      COMPLEX, INTENT(INOUT) :: Y(M)
-      COMPLEX :: SUM
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51725,14 +51735,14 @@ C
       SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,*), X(N)
+      COMPLEX, INTENT(INOUT) :: Y(M)
       INTEGER :: I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = A*X + Y WHERE A IS A COMPLEX BANDED MATRIX
 C                     AND X,Y ARE COMPLEX VECTORS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), X(N)
-      COMPLEX, INTENT(INOUT) :: Y(M)
-      COMPLEX :: SUM
 C
 C     COMPUTE THE FIRST ML COMPONENTS
 C
@@ -51771,13 +51781,13 @@ C
       SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*), X(M)
+      REAL, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
 C         PRODUCT OF A REAL VECTOR AND A REAL BANDED MATRIX
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), X(M)
-      REAL, INTENT(INOUT) :: Y(N)
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -51823,14 +51833,14 @@ C
       SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*), X(M)
+      REAL, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A REAL BANDED MATRIX
 C                     AND X,Y ARE REAL VECTORS
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*), X(M)
-      REAL, INTENT(INOUT) :: Y(N)
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -51868,14 +51878,14 @@ C
       SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C              PRODUCT OF A DOUBLE PRECISION VECTOR AND
 C                  A DOUBLE PRECISION BANDED MATRIX
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
-      DOUBLE PRECISION :: SUM
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -51921,14 +51931,14 @@ C
       SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C         SETTING Y = X*A + Y WHERE A IS A DOUBLE PRECISION
 C         BANDED MATRIX AND X,Y ARE DOUBLE PRECISION VECTORS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*), X(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
-      DOUBLE PRECISION :: SUM
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -51966,13 +51976,13 @@ C
       SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,*), X(M)
+      COMPLEX, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C        PRODUCT OF A COMPLEX VECTOR AND A COMPLEX BANDED MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), X(M)
-      COMPLEX, INTENT(INOUT) :: Y(N)
-      COMPLEX :: SUM
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -52018,14 +52028,14 @@ C
       SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      COMPLEX, INTENT(IN) :: A(KA,*), X(M)
+      COMPLEX, INTENT(INOUT) :: Y(N)
       INTEGER :: J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C        SETTING Y = X*A + Y WHERE A IS A COMPLEX BANDED MATRIX
 C                     AND X,Y ARE COMPLEX VECTORS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(KA,*), X(M)
-      COMPLEX, INTENT(INOUT) :: Y(N)
-      COMPLEX :: SUM
 C
 C     COMPUTE THE FIRST MU COMPONENTS
 C
@@ -52063,13 +52073,13 @@ C
       REAL FUNCTION BNRM (A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(KA,*)
       INTEGER :: I, J, NUM
       REAL :: SUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                      REAL BANDED MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,*)
 C
       NUM = ML + MU + 1
       BNRM = 0.0
@@ -52086,12 +52096,12 @@ C
       REAL FUNCTION B1NRM (A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      REAL, INTENT(IN) :: A(*)
       INTEGER :: I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
       REAL :: SASUM
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A BANDED MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
 C
       INCR = KA - 1
       B1NRM = 0.0
@@ -52140,13 +52150,13 @@ C
       DOUBLE PRECISION FUNCTION DBNRM (A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
       INTEGER :: I, J, NUM
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                DOUBLE PRECISION BANDED MATRIX A
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,*)
-      DOUBLE PRECISION :: SUM
 C
       NUM = ML + MU + 1
       DBNRM = 0.D0
@@ -52163,13 +52173,13 @@ C
       DOUBLE PRECISION FUNCTION DB1NRM (A, KA, M, N, ML, MU)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, M, ML, MU, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
       INTEGER :: I, IMAX, IMIN, INCR, J, JMAX, JMIN, NUM
+      DOUBLE PRECISION :: DASUM
 C-----------------------------------------------------------------------
 C            COMPUTATION OF THE L1 NORM OF A DOUBLE PRECISION
 C                            BANDED MATRIX A
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION :: DASUM
 C
       INCR = KA - 1
       DB1NRM = 0.D0
@@ -52219,6 +52229,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      REAL, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     BSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -52267,8 +52279,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     BSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -52301,6 +52311,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      REAL, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     BSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -52349,8 +52361,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     BSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -52381,9 +52391,14 @@ C
 
       SUBROUTINE SNBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU
+      INTEGER, INTENT(OUT) :: INFO
+      REAL, INTENT(INOUT) :: A(LDA,*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: ISAMAX
+      REAL :: T
 C ----------------------------------------------------------------------
 C
 C               SNBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
@@ -52479,11 +52494,6 @@ C
 C     SUBROUTINES AND FUNCTIONS
 C        MIN0,ISAMAX,SAXPY,SSCAL,SSWAP
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU
-      INTEGER, INTENT(OUT) :: INFO
-      REAL, INTENT(INOUT) :: A(LDA,*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      REAL :: T
 C
       INFO = 0
       IF (ML .EQ. 0) GO TO 100
@@ -52556,7 +52566,13 @@ C
 
       SUBROUTINE SNBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
+      REAL, INTENT(IN) :: A(LDA,*)
+      REAL, INTENT(INOUT) :: B(N)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: ML1, ML2
+      REAL :: SDOT, T
+      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C ----------------------------------------------------------------------
 C
 C     SNBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -52612,12 +52628,6 @@ C      SAXPY,SDOT
 C
 C     FORTRAN  MIN0
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
-      REAL, INTENT(IN) :: A(LDA,*)
-      REAL, INTENT(INOUT) :: B(N)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      REAL :: SDOT, T
-      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C
       M = MU + ML + 1
       IF (M .EQ. 1) GO TO 100
@@ -52696,6 +52706,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -52744,8 +52756,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     DBSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -52778,6 +52788,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN BANDED LINEAR SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -52826,8 +52838,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     DBSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -52858,9 +52868,14 @@ C
 
       SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU
+      INTEGER, INTENT(OUT) :: INFO
+      DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: IDAMAX
+      DOUBLE PRECISION :: T
 C ----------------------------------------------------------------------
 C
 C               DBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
@@ -52956,11 +52971,6 @@ C
 C     SUBROUTINES AND FUNCTIONS
 C        MIN0,IDAMAX,DAXPY,DSCAL,DSWAP
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU
-      INTEGER, INTENT(OUT) :: INFO
-      DOUBLE PRECISION, INTENT(INOUT) :: A(LDA,*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      DOUBLE PRECISION :: T
 C
       INFO = 0
       IF (ML .EQ. 0) GO TO 100
@@ -53033,7 +53043,13 @@ C
 
       SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
+      DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
+      DOUBLE PRECISION, INTENT(INOUT) :: B(N)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: ML1, ML2
+      DOUBLE PRECISION :: DDOT, T
+      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C ----------------------------------------------------------------------
 C
 C     DBSL SOLVES THE REAL BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -53089,12 +53105,6 @@ C      DAXPY,DDOT
 C
 C     FORTRAN  MIN0
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
-      DOUBLE PRECISION, INTENT(IN) :: A(LDA,*)
-      DOUBLE PRECISION, INTENT(INOUT) :: B(N)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      DOUBLE PRECISION :: DDOT, T
-      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C
       M = MU + ML + 1
       IF (M .EQ. 1) GO TO 100
@@ -53174,6 +53184,8 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, ML, MU, N
       REAL, INTENT(OUT) :: COND
+      REAL, INTENT(INOUT) :: A(KA,*), WK(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       REAL :: AINORM, ANORM
       REAL :: B1NRM
@@ -53181,8 +53193,6 @@ C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A BANDED MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,*), WK(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
 C-----------------------
 C     REAL WK(2*N)
 C     INTEGER IWK(2*N)
@@ -53245,17 +53255,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, ML, MU, N
-      INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
-C-----------------------------------------------------------------------
-C            COMPUTATION OF THE L1 CONDITION NUMBER OF
-C               A DOUBLE PRECISION BANDED MATRIX A
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,*)
       DOUBLE PRECISION, INTENT(OUT) :: COND
       DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       DOUBLE PRECISION :: ANORM, AINORM
       DOUBLE PRECISION :: DB1NRM
+C-----------------------------------------------------------------------
+C            COMPUTATION OF THE L1 CONDITION NUMBER OF
+C               A DOUBLE PRECISION BANDED MATRIX A
+C-----------------------------------------------------------------------
 C-----------------------
 C     DOUBLE PRECISION WK(2*N)
 C     INTEGER IWK(2*N)
@@ -53318,6 +53328,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     CBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN COMPLEX BANDED SYSTEM AX = B. THE ARGUMENT M0 SPECIFIES
@@ -53367,8 +53379,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     CBSLV AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -53401,6 +53411,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M0, ML, MU, N
+      COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
+      INTEGER, INTENT(INOUT) :: IWK(N)
 C ----------------------------------------------------------------------
 C     CBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
 C     THE NXN COMPLEX BANDED SYSTEM XA = B. THE ARGUMENT M0 SPECIFIES
@@ -53450,8 +53462,6 @@ C     LU DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO
 C     CBSLV1 AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE IERR
 C     IS NOT REFERENCED.
 C ----------------------------------------------------------------------
-      COMPLEX, INTENT(INOUT) :: A(KA,*), B(N)
-      INTEGER, INTENT(INOUT) :: IWK(N)
       IF (M0 .NE. 0) GO TO 10
 C
 C     ERROR CHECKING
@@ -53482,9 +53492,14 @@ C
 
       SUBROUTINE CBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU
+      INTEGER, INTENT(OUT) :: INFO
+      COMPLEX, INTENT(INOUT) :: A(LDA,*)
+      INTEGER, INTENT(INOUT) :: IPVT(N)
       INTEGER :: I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB,
      &ML1, MP, N1
       INTEGER :: ICAMAX
+      COMPLEX :: T
 C ----------------------------------------------------------------------
 C
 C               CBFA FACTORS A COMPLEX BAND MATRIX BY ELIMINATION.
@@ -53580,11 +53595,6 @@ C
 C     SUBROUTINES AND FUNCTIONS
 C        MIN0,ICAMAX,CAXPY,CSCAL,CSWAP
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU
-      INTEGER, INTENT(OUT) :: INFO
-      COMPLEX, INTENT(INOUT) :: A(LDA,*)
-      INTEGER, INTENT(INOUT) :: IPVT(N)
-      COMPLEX :: T
 C
       INFO = 0
       IF (ML .EQ. 0) GO TO 100
@@ -53657,7 +53667,13 @@ C
 
       SUBROUTINE CBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
+      COMPLEX, INTENT(IN) :: A(LDA,*)
+      COMPLEX, INTENT(INOUT) :: B(N)
+      INTEGER, INTENT(IN) :: IPVT(N)
       INTEGER :: ML1, ML2
+      COMPLEX :: CDOTU, T
+      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C ----------------------------------------------------------------------
 C
 C     CBSL SOLVES THE COMPLEX BAND SYSTEM A*X = B OR TRANS(A)*X = B
@@ -53713,12 +53729,6 @@ C      CAXPY,CDOTU
 C
 C     FORTRAN  MIN0
 C ----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: LDA, N, ML, MU, JOB
-      COMPLEX, INTENT(IN) :: A(LDA,*)
-      COMPLEX, INTENT(INOUT) :: B(N)
-      INTEGER, INTENT(IN) :: IPVT(N)
-      COMPLEX :: CDOTU, T
-      INTEGER :: K, KB, KLM, L, LB, LDB, LM, M, MLM, NM1
 C
       M = MU + ML + 1
       IF (M .EQ. 1) GO TO 100
@@ -53797,10 +53807,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
-      INTEGER :: I, IP, J
       REAL, INTENT(IN) :: A(KA,N)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, J
 C
 C                 STORE THE I-TH ROW
 C
@@ -53832,10 +53842,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
-      INTEGER :: I, IP, J
       DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, J
 C
 C                 STORE THE I-TH ROW
 C
@@ -53867,11 +53877,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, M, N, NUM
-      INTEGER :: I, IP, J
       COMPLEX, INTENT(IN) :: A(KA,N)
       COMPLEX, INTENT(INOUT) :: B(*)
-      COMPLEX :: ZERO
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, J
+      COMPLEX :: ZERO
       DATA ZERO /(0.0,0.0)/
 C
 C                 STORE THE I-TH ROW
@@ -53903,10 +53913,10 @@ C
       SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J
 C
       DO 30 I = 1,M
 C
@@ -53933,10 +53943,10 @@ C
       SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J
 C
       DO 30 I = 1,M
 C
@@ -53963,10 +53973,10 @@ C
       SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(KB,N)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J
 C
       DO 30 I = 1,M
 C
@@ -53993,11 +54003,11 @@ C
       SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: I, IBEG, IEND, IP, L
       REAL, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IBEG, IEND, IP, L
 C
       L = 1
       DO 20 I = 1,M
@@ -54019,11 +54029,11 @@ C
       SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: I, IBEG, IEND, IP, L
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IBEG, IEND, IP, L
 C
       L = 1
       DO 20 I = 1,M
@@ -54045,15 +54055,15 @@ C
       SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
+      COMPLEX, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IBEG, IEND, IP, L
       REAL :: T
 C-----------------------------------------------------------------------
 C              REAL PART OF A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: B(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 C
       L = 1
       DO 20 I = 1,M
@@ -54076,15 +54086,15 @@ C
       SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
+      COMPLEX, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IBEG, IEND, IP, L
       REAL :: T
 C-----------------------------------------------------------------------
 C            IMAGINARY PART OF A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: B(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
 C
       L = 1
       DO 20 I = 1,M
@@ -54108,16 +54118,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
-      INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
-C-----------------------------------------------------------------------
-C       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*), B(*)
       REAL, INTENT(INOUT) :: WK(N)
       COMPLEX, INTENT(INOUT) :: C(*)
-      COMPLEX :: T
       INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
       INTEGER, INTENT(INOUT) :: IC(*), JC(*)
+      INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      COMPLEX :: T
+C-----------------------------------------------------------------------
+C       COMPUTE A + BI FOR THE SPARSE REAL MATRICES A AND B
+C-----------------------------------------------------------------------
 C-------------------------
       DO J = 1,N
          WK(J) = 0.0
@@ -54174,14 +54184,14 @@ C
       SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: I, IBEG, IEND, IP, L
-C-----------------------------------------------------------------------
-C                  COPYING A SPARSE REAL MATRIX
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IBEG, IEND, IP, L
+C-----------------------------------------------------------------------
+C                  COPYING A SPARSE REAL MATRIX
+C-----------------------------------------------------------------------
 C
       L = 1
       DO 20 I = 1,M
@@ -54203,14 +54213,14 @@ C
       SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: I, IBEG, IEND, IP, L
-C-----------------------------------------------------------------------
-C              COPYING A SPARSE DOUBLE PRECISION MATRIX
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IBEG, IEND, IP, L
+C-----------------------------------------------------------------------
+C              COPYING A SPARSE DOUBLE PRECISION MATRIX
+C-----------------------------------------------------------------------
 C
       L = 1
       DO 20 I = 1,M
@@ -54232,15 +54242,15 @@ C
       SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
+      COMPLEX, INTENT(IN) :: A(*)
+      COMPLEX, INTENT(INOUT) :: B(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       INTEGER :: I, IBEG, IEND, IP, L
+      COMPLEX :: ZERO
 C-----------------------------------------------------------------------
 C                 COPYING A SPARSE COMPLEX MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*)
-      COMPLEX, INTENT(INOUT) :: B(*)
-      COMPLEX :: ZERO
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IB(*), JB(*)
       DATA ZERO /(0.0,0.0)/
 C
       L = 1
@@ -54263,14 +54273,14 @@ C
       SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
-      INTEGER :: I, IBEG, IEND, IP, L, MP1
-C-----------------------------------------------------------------------
-C     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
-C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IBEG, IEND, IP, L, MP1
+C-----------------------------------------------------------------------
+C     COMPUTATION OF THE CONJUGATE OF A SPARSE COMPLEX MATRIX
+C-----------------------------------------------------------------------
 C
       MP1 = M + 1
       L = IA(1) - 1
@@ -54293,14 +54303,14 @@ C
       SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C                 TRANSPOSING A SPARSE REAL MATRIX
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C                 TRANSPOSING A SPARSE REAL MATRIX
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54357,16 +54367,16 @@ C
       SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C                 TRANSPOSING A SPARSE REAL MATRIX
-C                 WHERE THE ROWS ARE INTERCHANGED
-C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: P(M)
       REAL, INTENT(IN) :: A(*)
       REAL, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C                 TRANSPOSING A SPARSE REAL MATRIX
+C                 WHERE THE ROWS ARE INTERCHANGED
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54424,14 +54434,14 @@ C
       SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
-C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54488,16 +54498,16 @@ C
       SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
-C                 WHERE THE ROWS ARE INTERCHANGED
-C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: P(M)
       DOUBLE PRECISION, INTENT(IN) :: A(*)
       DOUBLE PRECISION, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C           TRANSPOSING A SPARSE DOUBLE PRECISION MATRIX
+C                 WHERE THE ROWS ARE INTERCHANGED
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54555,14 +54565,14 @@ C
       SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C               TRANSPOSING A SPARSE COMPLEX MATRIX
-C-----------------------------------------------------------------------
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C               TRANSPOSING A SPARSE COMPLEX MATRIX
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54619,16 +54629,16 @@ C
       SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
-C-----------------------------------------------------------------------
-C               TRANSPOSING A SPARSE COMPLEX MATRIX
-C                 WHERE THE ROWS ARE INTERCHANGED
-C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: P(M)
       COMPLEX, INTENT(IN) :: A(*)
       COMPLEX, INTENT(INOUT) :: B(*)
       INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER, INTENT(INOUT) :: IB(*), JB(*)
+      INTEGER :: I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
+C-----------------------------------------------------------------------
+C               TRANSPOSING A SPARSE COMPLEX MATRIX
+C                 WHERE THE ROWS ARE INTERCHANGED
+C-----------------------------------------------------------------------
 C
 C           COMPUTE THE NUMBER OF ELEMENTS IN EACH COLUMN
 C                 OF A AND STORE THE RESULTS IN IB
@@ -54687,15 +54697,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      REAL :: T
 C-----------------------------------------------------------------------
 C               ADDITION OF SPARSE REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*), WK(N)
-      REAL :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = 0.0
@@ -54753,15 +54763,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
 C         ADDITION OF SPARSE DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
-      DOUBLE PRECISION :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = 0.D0
@@ -54819,15 +54829,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      COMPLEX, INTENT(IN) :: A(*), B(*)
+      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      COMPLEX :: T
 C-----------------------------------------------------------------------
 C              ADDITION OF SPARSE COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(*)
-      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
-      COMPLEX :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = (0.0, 0.0)
@@ -54885,15 +54895,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      REAL :: T
 C-----------------------------------------------------------------------
 C             SUBTRACTION OF SPARSE REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*), WK(N)
-      REAL :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = 0.0
@@ -54951,15 +54961,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
 C        SUBTRACTION OF SPARSE DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
-      DOUBLE PRECISION :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = 0.D0
@@ -55017,15 +55027,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N, NUM
+      COMPLEX, INTENT(IN) :: A(*), B(*)
+      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, L, MAXA, MAXB, MINA, MINB
+      COMPLEX :: T
 C-----------------------------------------------------------------------
 C            SUBTRACTION OF SPARSE COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(*)
-      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
-      COMPLEX :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO J = 1,N
          WK(J) = (0.0, 0.0)
@@ -55083,15 +55093,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
+      REAL, INTENT(IN) :: A(*), B(*)
+      REAL, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+      REAL :: T
 C-----------------------------------------------------------------------
 C               MULTIPLICATION OF SPARSE REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(*)
-      REAL, INTENT(INOUT) :: C(*), WK(N)
-      REAL :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO K = 1,N
          WK(K) = 0.0
@@ -55142,15 +55152,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+      DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
 C         MULTIPLICATION OF SPARSE DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: C(*), WK(N)
-      DOUBLE PRECISION :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO K = 1,N
          WK(K) = 0.D0
@@ -55201,15 +55211,15 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NUM
+      COMPLEX, INTENT(IN) :: A(*), B(*)
+      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
+      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
       INTEGER :: I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
+      COMPLEX :: T
 C-----------------------------------------------------------------------
 C             MULTIPLICATION OF SPARSE COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(*)
-      COMPLEX, INTENT(INOUT) :: C(*), WK(N)
-      COMPLEX :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*), IB(*), JB(*)
-      INTEGER, INTENT(INOUT) :: IC(*), JC(*)
 C-------------------------
       DO K = 1,N
          WK(K) = (0.0, 0.0)
@@ -55259,14 +55269,14 @@ C
       SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: A(*), X(N)
+      REAL, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      REAL :: SUM
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), X(N)
-      REAL, INTENT(INOUT) :: Y(M)
-      REAL :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = 0.0
@@ -55284,14 +55294,14 @@ C
       SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: A(*), X(N)
+      REAL, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      REAL :: SUM
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), X(N)
-      REAL, INTENT(INOUT) :: Y(M)
-      REAL :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = Y(I)
@@ -55309,14 +55319,14 @@ C
       SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: A(*), X(M)
+      REAL, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      REAL :: T
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), X(M)
-      REAL, INTENT(INOUT) :: Y(N)
-      REAL :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO J = 1,N
          Y(J) = 0.0
@@ -55338,14 +55348,14 @@ C
       SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: A(*), X(M)
+      REAL, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      REAL :: T
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), X(M)
-      REAL, INTENT(INOUT) :: Y(N)
-      REAL :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          T = X(I)
@@ -55363,14 +55373,14 @@ C
       SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
-      DOUBLE PRECISION :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = 0.D0
@@ -55388,14 +55398,14 @@ C
       SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), X(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(M)
-      DOUBLE PRECISION :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = Y(I)
@@ -55413,14 +55423,14 @@ C
       SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
-      DOUBLE PRECISION :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO J = 1,N
          Y(J) = 0.D0
@@ -55442,14 +55452,14 @@ C
       SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      DOUBLE PRECISION :: T
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), X(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: Y(N)
-      DOUBLE PRECISION :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          T = X(I)
@@ -55467,14 +55477,14 @@ C
       SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      COMPLEX, INTENT(IN) :: A(*), X(N)
+      COMPLEX, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C              PRODUCT OF A SPARSE MATRIX AND A VECTOR
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), X(N)
-      COMPLEX, INTENT(INOUT) :: Y(M)
-      COMPLEX :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = (0.0, 0.0)
@@ -55492,14 +55502,14 @@ C
       SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      COMPLEX, INTENT(IN) :: A(*), X(N)
+      COMPLEX, INTENT(INOUT) :: Y(M)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      COMPLEX :: SUM
 C-----------------------------------------------------------------------
 C     SET Y = A*X + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), X(N)
-      COMPLEX, INTENT(INOUT) :: Y(M)
-      COMPLEX :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          SUM = Y(I)
@@ -55517,14 +55527,14 @@ C
       SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      COMPLEX, INTENT(IN) :: A(*), X(M)
+      COMPLEX, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      COMPLEX :: T
 C-----------------------------------------------------------------------
 C              PRODUCT OF A VECTOR AND A SPARSE MATRIX
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), X(M)
-      COMPLEX, INTENT(INOUT) :: Y(N)
-      COMPLEX :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO J = 1,N
          Y(J) = (0.0, 0.0)
@@ -55546,14 +55556,14 @@ C
       SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      COMPLEX, INTENT(IN) :: A(*), X(M)
+      COMPLEX, INTENT(INOUT) :: Y(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, J, L, LMAX, LMIN
+      COMPLEX :: T
 C-----------------------------------------------------------------------
 C     SET Y = X*A + Y WHERE A IS A SPARSE MATRIX AND X,Y ARE VECTORS
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), X(M)
-      COMPLEX, INTENT(INOUT) :: Y(N)
-      COMPLEX :: T
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DO 11 I = 1,M
          T = X(I)
@@ -55571,14 +55581,14 @@ C
       REAL FUNCTION SNRM (A, IA, JA, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: A(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, IP, IPMAX, IPMIN
       REAL :: SUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                      REAL SPARSE MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       SNRM = 0.0
       DO 20 I = 1,M
@@ -55598,13 +55608,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
       REAL, INTENT(OUT) :: ANORM
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: IP, IPMAX, IPMIN, J
 C-----------------------------------------------------------------------
 C        COMPUTATION OF THE L1 NORM OF A REAL SPARSE MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: WK(N)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       ANORM = 0.0
       IPMIN = IA(1)
@@ -55631,14 +55641,14 @@ C
       DOUBLE PRECISION FUNCTION DSNRM (A, IA, JA, M, N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: I, IP, IPMAX, IPMIN
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C             COMPUTATION OF THE L-INFINITY NORM OF A
 C                DOUBLE PRECISION SPARSE MATRIX A
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION :: SUM
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       DSNRM = 0.D0
       DO 20 I = 1,M
@@ -55657,15 +55667,15 @@ C
       SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      DOUBLE PRECISION, INTENT(OUT) :: ANORM
+      DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
       INTEGER :: IP, IPMAX, IPMIN, J
 C-----------------------------------------------------------------------
 C               COMPUTATION OF THE L1 NORM OF A SPARSE
 C                     DOUBLE PRECISION MATRIX A
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION, INTENT(OUT) :: ANORM
-      DOUBLE PRECISION, INTENT(INOUT) :: WK(N)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
 C
       ANORM = 0.D0
       IPMIN = IA(1)
@@ -55692,6 +55702,8 @@ C
       SUBROUTINE SPORD (M, N, IA, R, IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N
+      INTEGER, INTENT(IN) :: IA(*)
+      INTEGER, INTENT(INOUT) :: R(M), IWK(*)
       INTEGER :: I, II, K, L, NP1, NUM
 C-----------------------------------------------------------------------
 C        SPORD ORDERS THE ROWS OF AN MXN SPARSE MATRIX A,IA,JA
@@ -55699,8 +55711,6 @@ C        BY INCREASING LENGTH. THE ROW ORDERING IS GIVEN IN R.
 C-----------------------------------------------------------------------
 C     IWK IS A WORK SPACE OF DIMENSION M + N + 1.
 C----------------------
-      INTEGER, INTENT(IN) :: IA(*)
-      INTEGER, INTENT(INOUT) :: R(M), IWK(*)
 C
       NP1 = N + 1
       DO I = 1,NP1
@@ -55735,14 +55745,14 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: N
       INTEGER, INTENT(INOUT) :: NUM
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: R(N), C(N), IB(N)
+      INTEGER, INTENT(INOUT) :: IWK(*)
       INTEGER :: I, LENGTH, LI, NP1, NPI
 C-----------------------------------------------------------------------
 C        REORDERING A SPARSE MATRIX INTO BLOCK TRIANGULAR FORM
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: R(N), C(N), IB(N)
 C     INTEGER IWK(5*N)
-      INTEGER, INTENT(INOUT) :: IWK(*)
 C
       NP1 = N + 1
       LENGTH = IA(NP1) - IA(1)
@@ -55775,6 +55785,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(INOUT) :: NUMNZ
+      INTEGER, INTENT(IN) :: IP(N)
+      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+      INTEGER, INTENT(INOUT) :: IPERM(N), IW(N,4)
 C-----------------------------------------------------------------------
 C DESCRIPTION OF PARAMETERS.
 C INPUT VARIABLES   N,ICN,LICN,IP,LENR
@@ -55797,9 +55810,6 @@ C     BE ZERO FOR N-NUMNZ ENTRIES.
 C NUMNZ NUMBER OF NON-ZEROS ON DIAGONAL OF PERMUTED MATRIX.
 C IW  WORK ARRAY  ..  SEE LATER COMMENTS.
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: IP(N)
-      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
-      INTEGER, INTENT(INOUT) :: IPERM(N), IW(N,4)
 C
       CALL MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW(1,1),IW(1,2),
      *            IW(1,3),IW(1,4))
@@ -55810,6 +55820,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(INOUT) :: NUMNZ
+      INTEGER, INTENT(IN) :: IP(N), ICN(LICN), LENR(N)
+      INTEGER, INTENT(INOUT) :: IPERM(N), PR(N), CV(N), ARP(N), OUT(N)
       INTEGER :: I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 C-----------------------------------------------------------------------
 C     DIVISION OF WORK ARRAY IS NOW DESCRIBED.
@@ -55823,8 +55835,6 @@ C OUT(I) IS ONE LESS THAN THE NUMBER OF NON-ZEROS IN ROW I
 C     WHICH HAVE NOT BEEN SCANNED DURING ONE PASS THROUGH THE
 C     MAIN LOOP.
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(IN) :: IP(N), ICN(LICN), LENR(N)
-      INTEGER, INTENT(INOUT) :: IPERM(N), PR(N), CV(N), ARP(N), OUT(N)
 C
 C     INITIALIZATION OF ARRAYS
 C
@@ -55940,6 +55950,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(INOUT) :: NUM
+      INTEGER, INTENT(IN) :: IP(N)
+      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+      INTEGER, INTENT(INOUT) :: IOR(N), IB(N), IW(N,3)
 C
 C DESCRIPTION OF PARAMETERS.
 C INPUT VARIABLES  .... N,ICN,LICN,IP,LENR.
@@ -55961,9 +55974,6 @@ C     OF BLOCK I, I=1,2,...NUM.
 C NUM NUMBER OF BLOCKS FOUND.
 C IW  WORK ARRAY OF LENGTH 3*N.
 C
-      INTEGER, INTENT(IN) :: IP(N)
-      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
-      INTEGER, INTENT(INOUT) :: IOR(N), IB(N), IW(N,3)
 C
       CALL MC13E(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW(1,1),
      *  IW(1,2), IW(1,3))
@@ -55975,10 +55985,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LICN, N
       INTEGER, INTENT(OUT) :: NUM
+      INTEGER, INTENT(IN) :: IP(N)
+      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
+      INTEGER, INTENT(INOUT) :: ARP(N), IB(N), LOWL(N), NUMB(N), PREV(N)
       INTEGER :: I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K,
      &LCNT, NNM1
       INTEGER :: STP, DUMMY
-      INTEGER, INTENT(IN) :: IP(N)
 C
 C ARP(I) IS ONE LESS THAN THE NUMBER OF UNSEARCHED EDGES LEAVING
 C     NODE I.  AT THE END OF THE ALGORITHM IT IS SET TO A
@@ -55996,8 +56008,6 @@ C     WHOSE FINAL POSITION HAS BEEN FOUND AND IS OTHERWISE ZERO.
 C PREV(I) IS THE NODE AT THE END OF THE PATH WHEN NODE I WAS
 C     PLACED ON THE STACK.
 C
-      INTEGER, INTENT(IN) :: ICN(LICN), LENR(N)
-      INTEGER, INTENT(INOUT) :: ARP(N), IB(N), LOWL(N), NUMB(N), PREV(N)
 C
 C   ICNT IS THE NUMBER OF NODES WHOSE POSITIONS IN FINAL ORDERING HAVE
 C     BEEN FOUND.
@@ -56111,7 +56121,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      REAL, INTENT(IN) :: A(*), B(N)
+      REAL, INTENT(INOUT) :: X(N), RTEMP(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
       INTEGER :: K, L
+      INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -56196,11 +56211,6 @@ C  A(IA(I))/JA(IA(I)) IS THE FIRST ENTRY FOR ROW I IN THE ARRAY A/JA).
 C  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 C  ELEMENTS IN A.
 C------------------------
-      REAL, INTENT(IN) :: A(*), B(N)
-      REAL, INTENT(INOUT) :: X(N), RTEMP(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
-      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
-      INTEGER :: IU, JU, U, Y, P
 C
       IERR = 0
       IF (N .LE. 0) RETURN
@@ -56232,8 +56242,18 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      REAL, INTENT(IN) :: A(*), B(N)
+      REAL, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+      INTEGER, INTENT(INOUT) :: C(N)
+      INTEGER, INTENT(IN) :: IA(*)
+      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+      INTEGER, INTENT(IN) :: JA(*)
+      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+      INTEGER, INTENT(IN) :: R(N)
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
+      REAL :: DK, LKI, XPV, XPVMAX, YK
+      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
 C
 C  NSPIV1 USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -56288,16 +56308,6 @@ C  A.  IU, JU, AND U ARE USED IN A SIMILAR WAY TO STORE THE STRICT UPPER
 C  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 C
 C
-      REAL, INTENT(IN) :: A(*), B(N)
-      REAL, INTENT(INOUT) :: U(MAX), X(N), Y(N)
-      REAL :: DK, LKI, XPV, XPVMAX, YK
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER, INTENT(IN) :: IA(*)
-      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
-      INTEGER, INTENT(IN) :: JA(*)
-      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
 C  INITIALIZE WORK STORAGE AND POINTERS TO JU
 C
@@ -56512,7 +56522,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      REAL, INTENT(IN) :: A(*), B(N)
+      REAL, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -56573,13 +56590,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO RSLV
 C     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(N)
-      REAL, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -56617,11 +56627,11 @@ C
       SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       REAL, INTENT(IN) :: B(N), D(N), T(*)
       REAL, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       REAL :: SUM
 C
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -56665,7 +56675,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      REAL, INTENT(IN) :: A(*), B(N)
+      REAL, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF REAL SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -56726,13 +56743,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO TSLV
 C     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*), B(N)
-      REAL, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -56770,11 +56780,11 @@ C
       SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       REAL, INTENT(IN) :: B(N), D(N), T(*)
       REAL, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
 C
@@ -56826,8 +56836,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: D(N), T(MAX), W(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N), IC(N)
+      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+      INTEGER, INTENT(INOUT) :: P(*)
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
+      INTEGER :: PM
+      REAL :: CONST, WI, WMAX
 C-----------------------------------------------------------------------
 C     SPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A REAL SPARSE MATRIX.
@@ -56886,15 +56905,6 @@ C     W        REAL ARRAY OF DIMENSION N.
 C
 C     P        INTEGER ARRAY OF DIMENSION N+1.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: D(N), T(MAX), W(N)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N), IC(N)
-      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
-      INTEGER, INTENT(INOUT) :: P(*)
-      INTEGER :: PM
-      REAL :: CONST, WI, WMAX
 C
       JPTR = 0
       IT(1) = 1
@@ -57048,7 +57058,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), RTEMP(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
       INTEGER :: K, L
+      INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -57136,11 +57151,6 @@ C  A(IA(I))/JA(IA(I)) IS THE FIRST ENTRY FOR ROW I IN THE ARRAY A/JA).
 C  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 C  ELEMENTS IN A.
 C------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), RTEMP(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
-      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
-      INTEGER :: IU, JU, U, Y, P
 C
       IERR = 0
       IF (N .LE. 0) RETURN
@@ -57172,8 +57182,18 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+      INTEGER, INTENT(INOUT) :: C(N)
+      INTEGER, INTENT(IN) :: IA(*)
+      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+      INTEGER, INTENT(IN) :: JA(*)
+      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+      INTEGER, INTENT(IN) :: R(N)
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
+      DOUBLE PRECISION :: DK, LKI, XPV, XPVMAX, YK
+      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
 C
 C  DNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -57228,16 +57248,6 @@ C  A.  IU, JU, AND U ARE USED IN A SIMILAR WAY TO STORE THE STRICT UPPER
 C  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 C
 C
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: U(MAX), X(N), Y(N)
-      DOUBLE PRECISION :: DK, LKI, XPV, XPVMAX, YK
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER, INTENT(IN) :: IA(*)
-      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
-      INTEGER, INTENT(IN) :: JA(*)
-      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
 C  INITIALIZE WORK STORAGE AND POINTERS TO JU
 C
@@ -57452,7 +57462,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -57514,13 +57531,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO DSLV
 C     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -57558,11 +57568,11 @@ C
       SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       DOUBLE PRECISION :: SUM
 C
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -57606,7 +57616,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C          SOLUTION OF DOUBLE PRECISION SPARSE EQUATIONS
 C-----------------------------------------------------------------------
@@ -57668,13 +57685,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO DTSLV
 C     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*), B(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -57712,11 +57722,11 @@ C
       SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       DOUBLE PRECISION, INTENT(IN) :: B(N), D(N), T(*)
       DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
 C
@@ -57768,8 +57778,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      DOUBLE PRECISION, INTENT(INOUT) :: D(N), T(MAX), W(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N), IC(N)
+      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+      INTEGER, INTENT(INOUT) :: P(*)
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
+      INTEGER :: PM
+      DOUBLE PRECISION :: CONST, WI, WMAX
 C-----------------------------------------------------------------------
 C     DSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A DOUBLE PRECISION SPARSE
@@ -57829,15 +57848,6 @@ C     W        DOUBLE PRECISION ARRAY OF DIMENSION N.
 C
 C     P        INTEGER ARRAY OF DIMENSION N+1.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION, INTENT(INOUT) :: D(N), T(MAX), W(N)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N), IC(N)
-      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
-      INTEGER, INTENT(INOUT) :: P(*)
-      INTEGER :: PM
-      DOUBLE PRECISION :: CONST, WI, WMAX
 C
       JPTR = 0
       IT(1) = 1
@@ -57992,16 +58002,16 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
       REAL, INTENT(OUT) :: COND
+      REAL, INTENT(IN) :: A(*)
+      REAL, INTENT(INOUT) :: WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+      INTEGER, INTENT(INOUT) :: C(N), IWK(*)
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
       REAL :: AINORM, ANORM
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A SPARSE MATRIX A
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(*)
-      REAL, INTENT(INOUT) :: WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
-      INTEGER, INTENT(INOUT) :: C(N), IWK(*)
 C-----------------------
 C     REAL WK(4*N + MAX)
 C     INTEGER IWK(5*N + MAX + 2)
@@ -58060,17 +58070,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      DOUBLE PRECISION, INTENT(IN) :: A(*)
+      DOUBLE PRECISION, INTENT(OUT) :: COND
+      DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+      INTEGER, INTENT(INOUT) :: C(N), IWK(*)
       INTEGER :: ISGN, ITER, IV, IX, J, JUMP, KASE
+      DOUBLE PRECISION :: ANORM, AINORM
 C-----------------------------------------------------------------------
 C              COMPUTATION OF THE L1 CONDITION NUMBER
 C                       OF A SPARSE MATRIX A
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(*)
-      DOUBLE PRECISION, INTENT(OUT) :: COND
-      DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
-      DOUBLE PRECISION :: ANORM, AINORM
-      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
-      INTEGER, INTENT(INOUT) :: C(N), IWK(*)
 C-----------------------
 C     DOUBLE PRECISION WK(4*N + MAX)
 C     INTEGER IWK(5*N + MAX + 2)
@@ -58130,12 +58140,12 @@ C
       INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: ANORM
+      REAL, INTENT(INOUT) :: V(N), X(N)
+      INTEGER, INTENT(INOUT) :: ISGN(N)
       INTEGER :: I, ITMAX, JLAST, L
       REAL :: ALTSGN, ANRM, T
       INTEGER :: ISAMAX
       REAL :: SASUM
-      REAL, INTENT(INOUT) :: V(N), X(N)
-      INTEGER, INTENT(INOUT) :: ISGN(N)
 C-----------------------------------------------------------------------
 C
 C     SONEST ESTIMATES THE 1-NORM OF A SQUARE, REAL MATRIX  A.
@@ -58294,10 +58304,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: ITER, J, JUMP, KASE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, ITMAX, JLAST, L
-      INTEGER :: IDAMAX
       DOUBLE PRECISION, INTENT(INOUT) :: ANORM, V(N), X(N)
       INTEGER, INTENT(INOUT) :: ISGN(N)
+      INTEGER :: I, ITMAX, JLAST, L
+      INTEGER :: IDAMAX
       DOUBLE PRECISION :: ALTSGN, AN, ANM1, ANRM, T
       DOUBLE PRECISION :: DASUM
 C-----------------------------------------------------------------------
@@ -58461,7 +58471,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      COMPLEX, INTENT(IN) :: A(*), B(N)
+      COMPLEX, INTENT(INOUT) :: X(N), RTEMP(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
+      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
       INTEGER :: K, L
+      INTEGER :: IU, JU, U, Y, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -58546,11 +58561,6 @@ C  A(IA(I))/JA(IA(I)) IS THE FIRST ENTRY FOR ROW I IN THE ARRAY A/JA).
 C  IA(N+1) IS SET SO THAT IA(N+1) - IA(1) = THE NUMBER OF NONZERO
 C  ELEMENTS IN A.
 C------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(N)
-      COMPLEX, INTENT(INOUT) :: X(N), RTEMP(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*), R(N)
-      INTEGER, INTENT(INOUT) :: C(N), ITEMP(*)
-      INTEGER :: IU, JU, U, Y, P
 C
       IERR = 0
       IF (N .LE. 0) RETURN
@@ -58582,8 +58592,19 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      COMPLEX, INTENT(IN) :: A(*), B(N)
+      COMPLEX, INTENT(INOUT) :: U(MAX), X(N), Y(N)
+      INTEGER, INTENT(INOUT) :: C(N)
+      INTEGER, INTENT(IN) :: IA(*)
+      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
+      INTEGER, INTENT(IN) :: JA(*)
+      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
+      INTEGER, INTENT(IN) :: R(N)
       INTEGER :: I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL,
      &NZCNT
+      COMPLEX :: DK, LKI, ONE, YK, ZERO
+      REAL :: XPV, XPVMAX
+      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
 C
 C  CNSPIV USES SPARSE GAUSSIAN ELIMINATION WITH
@@ -58638,17 +58659,6 @@ C  A.  IU, JU, AND U ARE USED IN A SIMILAR WAY TO STORE THE STRICT UPPER
 C  TRIANGLE OF U, EXCEPT THAT JU ACTUALLY CONTAINS C(J) INSTEAD OF J
 C
 C
-      COMPLEX, INTENT(IN) :: A(*), B(N)
-      COMPLEX, INTENT(INOUT) :: U(MAX), X(N), Y(N)
-      COMPLEX :: DK, LKI, ONE, YK, ZERO
-      REAL :: XPV, XPVMAX
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER, INTENT(IN) :: IA(*)
-      INTEGER, INTENT(INOUT) :: IC(N), IU(*)
-      INTEGER, INTENT(IN) :: JA(*)
-      INTEGER, INTENT(INOUT) :: JU(MAX), P(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER :: CK, PK, PPK, PV, V, VI, VJ, VK
 C
       ONE = (1.0,0.0)
       ZERO = (0.0,0.0)
@@ -58866,7 +58876,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      COMPLEX, INTENT(IN) :: A(*), B(N)
+      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -58928,13 +58945,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO CSLV
 C     AND SOLVES THE NEW EQUATIONS AX = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(N)
-      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -58972,11 +58982,11 @@ C
       SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
       COMPLEX, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       COMPLEX :: SUM
 C
 C            SOLVE LY = B BY FORWARD SUBSTITUTION
@@ -59020,7 +59030,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M0, MAX, N
+      COMPLEX, INTENT(IN) :: A(*), B(N)
+      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N)
       INTEGER :: IT, IU, JT, K, L
+      INTEGER :: Y, T, P
 C-----------------------------------------------------------------------
 C                 SOLUTION OF COMPLEX SPARSE MATRICES
 C-----------------------------------------------------------------------
@@ -59082,13 +59099,6 @@ C     DECOMPOSITION WHICH WAS OBTAINED ON THE INITIAL CALL TO CTSLV
 C     AND SOLVES THE NEW EQUATIONS XA = B. IN THIS CASE A,IA,JA,MAX,
 C     AND IERR ARE NOT REFERENCED.
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*), B(N)
-      COMPLEX, INTENT(INOUT) :: X(N), WK(*)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(INOUT) :: IWK(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N)
-      INTEGER :: Y, T, P
 C
 C     SET INDICES TO DIVIDE TEMPORARY STORAGE
 C
@@ -59126,11 +59136,11 @@ C
       SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER, INTENT(IN) :: R(N), C(N), IC(N)
       INTEGER, INTENT(IN) :: IT(*), JT(*), IU(N)
       COMPLEX, INTENT(IN) :: B(N), D(N), T(*)
       COMPLEX, INTENT(INOUT) :: X(N), Y(N)
+      INTEGER :: I, J, JJ, JMAX, JMIN, K, LJ, LK
 C
 C            SOLVE YU = B BY FORWARD SUBSTITUTION
 C
@@ -59182,8 +59192,18 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MAX, N
+      COMPLEX, INTENT(IN) :: A(*)
+      COMPLEX, INTENT(INOUT) :: D(N), T(MAX), W(N)
+      INTEGER, INTENT(IN) :: IA(*), JA(*)
+      INTEGER, INTENT(IN) :: R(N)
+      INTEGER, INTENT(INOUT) :: C(N), IC(N)
+      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
+      INTEGER, INTENT(INOUT) :: P(*)
       INTEGER :: I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI,
      &MAXIL
+      INTEGER :: PM
+      COMPLEX :: CONST, ZERO
+      REAL :: WI, WMAX
 C-----------------------------------------------------------------------
 C     CSPLU EMPLOYS GAUSSIAN ELIMINATION WITH COLUMN INTERCHANGES
 C     TO PERFORM THE LU DECOMPOSITION OF A COMPLEX SPARSE MATRIX.
@@ -59242,16 +59262,6 @@ C     W        COMPLEX ARRAY OF DIMENSION N.
 C
 C     P        INTEGER ARRAY OF DIMENSION N+1.
 C-----------------------------------------------------------------------
-      COMPLEX, INTENT(IN) :: A(*)
-      COMPLEX, INTENT(INOUT) :: D(N), T(MAX), W(N)
-      INTEGER, INTENT(IN) :: IA(*), JA(*)
-      INTEGER, INTENT(IN) :: R(N)
-      INTEGER, INTENT(INOUT) :: C(N), IC(N)
-      INTEGER, INTENT(INOUT) :: IT(*), JT(MAX), IU(N)
-      INTEGER, INTENT(INOUT) :: P(*)
-      INTEGER :: PM
-      COMPLEX :: CONST, ZERO
-      REAL :: WI, WMAX
 C--------------------
       DATA ZERO /(0.0, 0.0)/
 C--------------------
@@ -59408,11 +59418,11 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 C
       LOW = 1
       IGH = N
@@ -59427,11 +59437,11 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                    EIGENVALUES OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 C
       LOW = 1
       IGH = N
@@ -59446,11 +59456,11 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
 C
       LOW = 1
       IGH = N
@@ -59480,11 +59490,11 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C           EIGENVALUES AND EIGENVECTORS OF REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(KA,N), WR(N), WI(N), ZR(KA,N), ZI(KA,N)
 C
       LOW = 1
       IGH = N
@@ -59512,17 +59522,17 @@ C
       SUBROUTINE BALANC(NM,N,A,LOW,IGH,SCALE)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: JJ
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
-      INTEGER :: IEXC
       REAL, INTENT(INOUT) :: A(NM,N), SCALE(N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: JJ
+      INTEGER :: IEXC
       REAL :: C, F, G, R, S, B2, RADIX
       INTEGER :: IPMPAR
-C     REAL ABS
       LOGICAL :: NOCONV
+C     REAL ABS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALANCE,
@@ -59687,12 +59697,12 @@ C
 
       SUBROUTINE BALINV (NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
       REAL, INTENT(INOUT) :: Z(NZ,N)
       REAL, INTENT(IN) :: SCALE(N)
+      INTEGER :: I, J, K
+      INTEGER :: II
       REAL :: S
 C-----------------------------------------------------------------------
 C        GIVEN A MATRIX A OF ORDER N. BALANC TRANSFORMS A INTO
@@ -59765,17 +59775,17 @@ C
       SUBROUTINE ELMHES(NM,N,LOW,IGH,A,INT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: LA
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MM1, MP1
       REAL, INTENT(INOUT) :: A(NM,N)
+      INTEGER, INTENT(INOUT) :: INT(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: LA
+      INTEGER :: KP1
+      INTEGER :: MM1, MP1
       REAL :: X, Y
 C     REAL ABS
-      INTEGER, INTENT(INOUT) :: INT(IGH)
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMHES,
@@ -59868,17 +59878,17 @@ C
       SUBROUTINE ELMHS0(NM,N,LOW,IGH,A,INT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: LA
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MM1, MP1
       REAL, INTENT(INOUT) :: A(NM,N)
+      REAL, INTENT(INOUT) :: INT(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: LA
+      INTEGER :: KP1
+      INTEGER :: MM1, MP1
       REAL :: X, Y
 C     REAL ABS
-      REAL, INTENT(INOUT) :: INT(IGH)
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMHES,
@@ -59971,13 +59981,13 @@ C
       SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, JJ, LA, MP
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: II, JJ, LA, MP
+      INTEGER :: KP1
       REAL :: F, G, H, SCALE
 C     REAL SQRT,ABS
 C-----------------------------------------------------------------------
@@ -60083,19 +60093,19 @@ C
       SUBROUTINE HQR(NM,N,LOW,IGH,H,WR,WI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL, MM, NA
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, LL, MM, NA
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
       REAL :: P, Q, R, S, T, W, X, Y, ZZ, NORM, MACHEP, SPMPAR
+      LOGICAL :: NOTLAS
 C     REAL SQRT,ABS
 C     INTEGER MIN0
-      LOGICAL :: NOTLAS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR,
@@ -60315,12 +60325,12 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       SUBROUTINE BALBAK(NM,N,LOW,IGH,SCALE,M,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       REAL, INTENT(IN) :: SCALE(N)
       REAL, INTENT(INOUT) :: Z(NM,M)
+      INTEGER :: I, J, K
+      INTEGER :: II
       REAL :: S
 C-----------------------------------------------------------------------
 C
@@ -60392,14 +60402,14 @@ C
       SUBROUTINE ELTRAN(NM,N,LOW,IGH,A,INT,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NM, IGH, LOW
-      INTEGER :: MP1
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: Z(NM,N)
       INTEGER, INTENT(IN) :: INT(IGH)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMTRANS,
@@ -60473,14 +60483,14 @@ C
       SUBROUTINE ELTRN0(NM,N,LOW,IGH,A,INT,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NM, IGH, LOW
-      INTEGER :: MP1
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: Z(NM,N)
       REAL, INTENT(IN) :: INT(IGH)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE ELMTRANS,
@@ -60554,13 +60564,13 @@ C
       SUBROUTINE ORTRAN(NM,N,LOW,IGH,A,ORT,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NM, IGH, LOW
-      INTEGER :: MP1
       REAL, INTENT(IN) :: A(NM,IGH)
       REAL, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
       REAL :: G
 C-----------------------------------------------------------------------
 C
@@ -60643,14 +60653,14 @@ C
       SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NA, IGH, LOW
-      INTEGER :: MP1
       INTEGER, INTENT(IN) :: NZ
       REAL, INTENT(IN) :: A(NA,IGH)
       REAL, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
       REAL :: G
 C-----------------------------------------------------------------------
 C
@@ -60737,23 +60747,23 @@ C
       SUBROUTINE HQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, II, JJ, LL, MM, NA
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: NN
       INTEGER, INTENT(IN) :: IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, II, JJ, LL, MM, NA
+      INTEGER :: NN
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
       REAL :: P, Q, R, S, T, W, X, Y, RA, SA, VI, VR, ZZ, NORM, MACHEP,
      &SPMPAR
-C     REAL SQRT,ABS
-C     INTEGER MIN0
       LOGICAL :: NOTLAS
       COMPLEX :: Z3
+C     REAL SQRT,ABS
+C     INTEGER MIN0
 C     COMPLEX CMPLX
 C     REAL REAL,AIMAG
 C-----------------------------------------------------------------------
@@ -61162,11 +61172,11 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N)
 C
       LOW = 1
       IGH = N
@@ -61181,12 +61191,12 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N),
+     &ZR(KA,N), ZI(KA,N)
       INTEGER :: IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
 C     EIGENVALUES AND EIGENVECTORS OF DOUBLE PRECISION MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), WR(N), WI(N),
-     &ZR(KA,N), ZI(KA,N)
 C
       LOW = 1
       IGH = N
@@ -61214,17 +61224,17 @@ C
       SUBROUTINE DBAL(NM,N,A,LOW,IGH,SCALE)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: JJ
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
-      INTEGER :: IEXC
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), SCALE(N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: JJ
+      INTEGER :: IEXC
       DOUBLE PRECISION :: C, F, G, R, S, B2, RADIX
       INTEGER :: IPMPAR
-C     DOUBLE PRECISION DABS
       LOGICAL :: NOCONV
+C     DOUBLE PRECISION DABS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE BALANCE,
@@ -61389,12 +61399,12 @@ C
 
       SUBROUTINE DBALNV (NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NZ, IGH, LOW
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NZ,N)
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
+      INTEGER :: I, J, K
+      INTEGER :: II
       DOUBLE PRECISION :: S
 C-----------------------------------------------------------------------
 C        GIVEN A MATRIX A OF ORDER N. DBAL TRANSFORMS A INTO
@@ -61467,13 +61477,13 @@ C
       SUBROUTINE DORTH(NM,N,LOW,IGH,A,ORT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, JJ, LA, MP
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), ORT(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: II, JJ, LA, MP
+      INTEGER :: KP1
       DOUBLE PRECISION :: F, G, H, SCALE
 C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
@@ -61579,20 +61589,20 @@ C
       SUBROUTINE DHQR(NM,N,LOW,IGH,H,WR,WI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL, MM, NA
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, LL, MM, NA
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
       DOUBLE PRECISION :: P, Q, R, S, T, W, X, Y, ZZ, NORM, MACHEP,
      &DPMPAR
+      LOGICAL :: NOTLAS
 C     DOUBLE PRECISION DSQRT,DABS
 C     INTEGER MIN0
-      LOGICAL :: NOTLAS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR,
@@ -61813,12 +61823,12 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE DBABK(NM,N,LOW,IGH,SCALE,M,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NM,M)
+      INTEGER :: I, J, K
+      INTEGER :: II
       DOUBLE PRECISION :: S
 C-----------------------------------------------------------------------
 C
@@ -61890,13 +61900,13 @@ C
       SUBROUTINE DORTRN(NM,N,LOW,IGH,A,ORT,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NM, IGH, LOW
-      INTEGER :: MP1
       DOUBLE PRECISION, INTENT(IN) :: A(NM,IGH)
       DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NM,N)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
       DOUBLE PRECISION :: G
 C-----------------------------------------------------------------------
 C
@@ -61979,14 +61989,14 @@ C
       SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
       IMPLICIT NONE
 C
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: N
-      INTEGER :: KL, MM, MP
       INTEGER, INTENT(IN) :: NA, IGH, LOW
-      INTEGER :: MP1
       INTEGER, INTENT(IN) :: NZ
       DOUBLE PRECISION, INTENT(IN) :: A(NA,IGH)
       DOUBLE PRECISION, INTENT(INOUT) :: ORT(IGH), Z(NZ,N)
+      INTEGER :: I, J
+      INTEGER :: KL, MM, MP
+      INTEGER :: MP1
       DOUBLE PRECISION :: G
 C-----------------------------------------------------------------------
 C
@@ -62073,23 +62083,23 @@ C
       SUBROUTINE DHQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, II, JJ, LL, MM, NA
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: NN
       INTEGER, INTENT(IN) :: IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: MP2, ENM2
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: H(NM,N), WR(N), WI(N), Z(NM,N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, II, JJ, LL, MM, NA
+      INTEGER :: NN
+      INTEGER :: ITS
+      INTEGER :: MP2, ENM2
       DOUBLE PRECISION :: A, B, D, P, Q, R, S, T, U, W, X, Y
       DOUBLE PRECISION :: RA, SA, VI, VR, ZZ, NORM, MACHEP
-C     INTEGER MIN0
-C     DOUBLE PRECISION DSQRT,DABS
       DOUBLE PRECISION :: DPMPAR
       LOGICAL :: NOTLAS
+C     INTEGER MIN0
+C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE HQR2,
@@ -62498,11 +62508,11 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
+      REAL, INTENT(INOUT) :: A(*), W(N), T(*)
       INTEGER :: L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(*), W(N), T(*)
 C
       IF (KA .EQ. 0) GO TO 10
          CALL TRED1 (KA, N, A, W, T(N+1), T(1))
@@ -62519,11 +62529,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: A(*), W(N), T(N)
       INTEGER :: L
 C-----------------------------------------------------------------------
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(*), W(N), T(N)
 C
       IF (KA .EQ. 0) GO TO 10
          CALL TRED1 (KA, N, A, W, T, T)
@@ -62540,11 +62550,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(IN) :: A(KA,N)
+      REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N)
-      REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C
       CALL TRED2 (KA, N, A, W, T, Z)
       CALL TQL2 (KA, N, W, T, Z, IERR)
@@ -62555,11 +62565,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(IN) :: A(KA,N)
+      REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(KA,N)
-      REAL, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C
       CALL TRED2 (KA, N, A, W, T, Z)
       CALL IMTQL2 (KA, N, W, T, Z, IERR)
@@ -62569,12 +62579,12 @@ C
       SUBROUTINE TRED1(NM,N,A,D,E,E2)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: JP1
       REAL, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II
+      INTEGER :: JP1
       REAL :: F, G, H, SCALE
 C     REAL SQRT,ABS
 C-----------------------------------------------------------------------
@@ -62689,11 +62699,11 @@ C     ********** LAST CARD OF TRED1 **********
       SUBROUTINE TRED3(N,NV,A,D,E,E2)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, IZ, JK
       INTEGER, INTENT(IN) :: NV
       REAL, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II, IZ, JK
       REAL :: F, G, H, HH, SCALE
 C     REAL SQRT,ABS
 C-----------------------------------------------------------------------
@@ -62805,14 +62815,14 @@ C     ********** LAST CARD OF TRED3 **********
 
       SUBROUTINE TQLRAT(N,D,E2,IERR)
       IMPLICIT NONE
-      REAL :: SPMPAR
-C
-      INTEGER :: I, J, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, L1, MML
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E2(N)
+      REAL :: SPMPAR
+      INTEGER :: I, J, L, M
+      INTEGER :: II, L1, MML
       REAL :: B, C, F, G, H, P, R, S, MACHEP
+C
 C     REAL SQRT,ABS,SPMPAR
 C-----------------------------------------------------------------------
 C
@@ -62945,14 +62955,14 @@ C     ********** LAST CARD OF TQLRAT **********
 
       SUBROUTINE IMTQL1(N,D,E,IERR)
       IMPLICIT NONE
-      REAL :: SPMPAR
-C
-      INTEGER :: I, J, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, MML
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N)
+      REAL :: SPMPAR
+      INTEGER :: I, J, L, M
+      INTEGER :: II, MML
       REAL :: B, C, F, G, P, R, S, MACHEP
+C
 C     REAL SQRT,ABS,SPMPAR
 C-----------------------------------------------------------------------
 C
@@ -63079,13 +63089,13 @@ C     ********** LAST CARD OF IMTQL1 **********
       SUBROUTINE TRED2(NM,N,A,D,E,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: JP1
       REAL, INTENT(IN) :: A(NM,N)
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II
+      INTEGER :: JP1
       REAL :: F, G, H, HH, SCALE
 C     REAL SQRT,ABS
 C-----------------------------------------------------------------------
@@ -63223,16 +63233,16 @@ C     ********** LAST CARD OF TRED2 **********
 
       SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
       IMPLICIT NONE
-      REAL :: SPMPAR
-C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, L1
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: MML
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+      REAL :: SPMPAR
+      INTEGER :: I, J, K, L, M
+      INTEGER :: II, L1
+      INTEGER :: MML
       REAL :: B, C, F, G, H, P, R, S, MACHEP
+C
 C     REAL SQRT,ABS,SPMPAR
 C-----------------------------------------------------------------------
 C
@@ -63402,16 +63412,16 @@ C     ********** LAST CARD OF TQL2 **********
 
       SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
       IMPLICIT NONE
-      REAL :: SPMPAR
-C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: MML
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+      REAL :: SPMPAR
+      INTEGER :: I, J, K, L, M
+      INTEGER :: II
+      INTEGER :: MML
       REAL :: B, C, F, G, P, R, S, MACHEP
+C
 C     REAL SQRT,ABS,SPMPAR
 C-----------------------------------------------------------------------
 C
@@ -63575,12 +63585,12 @@ C     ********** LAST CARD OF IMTQL2 **********
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA
       INTEGER :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(*), W(N), T(*)
       INTEGER :: L
 C-----------------------------------------------------------------------
 C                DOUBLE PRECISION COMPUTATION OF THE
 C               EIGENVALUES OF SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(*), W(N), T(*)
 C
       IF (KA .EQ. 0) GO TO 10
          CALL DTRED1 (KA, N, A, W, T(N+1), T(1))
@@ -63597,13 +63607,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
+      DOUBLE PRECISION, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C-----------------------------------------------------------------------
 C                 DOUBLE PRECISION COMPUTATION OF
 C                 EIGENVALUES AND EIGENVECTORS OF
 C                     SYMMETRIC REAL MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A(KA,N)
-      DOUBLE PRECISION, INTENT(INOUT) :: W(N), Z(KA,N), T(N)
 C
       CALL DTRED2 (KA, N, A, W, T, Z)
       CALL DTQL2 (KA, N, W, T, Z, IERR)
@@ -63613,12 +63623,12 @@ C
       SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: JP1
       DOUBLE PRECISION, INTENT(INOUT) :: A(NM,N), D(N), E(N), E2(N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II
+      INTEGER :: JP1
       DOUBLE PRECISION :: F, G, H, SCALE
 C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
@@ -63733,11 +63743,11 @@ C     ********** LAST CARD OF DTRED1 **********
       SUBROUTINE DTRED3 (N,NV,A,D,E,E2)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, IZ, JK
       INTEGER, INTENT(IN) :: NV
       DOUBLE PRECISION, INTENT(INOUT) :: A(NV), D(N), E(N), E2(N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II, IZ, JK
       DOUBLE PRECISION :: F, G, H, HH, SCALE
 C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
@@ -63850,11 +63860,11 @@ C     ********** LAST CARD OF DTRED3 **********
       SUBROUTINE DTQL (N,D,E2,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, L1, MML
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E2(N)
+      INTEGER :: I, J, L, M
+      INTEGER :: II, L1, MML
       DOUBLE PRECISION :: B, C, F, G, H, P, R, S, MACHEP
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -63989,13 +63999,13 @@ C     ********** LAST CARD OF DTQL **********
       SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: JP1
       DOUBLE PRECISION, INTENT(IN) :: A(NM,N)
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+      INTEGER :: I, J, K, L
+      INTEGER :: II
+      INTEGER :: JP1
       DOUBLE PRECISION :: F, G, H, HH, SCALE
 C     DOUBLE PRECISION DSQRT,DABS
 C-----------------------------------------------------------------------
@@ -64134,13 +64144,13 @@ C     ********** LAST CARD OF DTRED2 **********
       SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, L1
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: MML
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: D(N), E(N), Z(NM,N)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: II, L1
+      INTEGER :: MML
       DOUBLE PRECISION :: B, C, F, G, H, P, R, S, MACHEP
       DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
@@ -64314,11 +64324,11 @@ C     ********** LAST CARD OF DTQL2 **********
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N)
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C                EIGENVALUES OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N)
 C
       LOW = 1
       IGH = N
@@ -64333,12 +64343,12 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N), ZR(KA,N),
+     &ZI(KA,N), TEMP(*)
       INTEGER :: I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
 C          EIGENVALUES AND EIGENVECTORS OF COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N), WI(N), ZR(KA,N),
-     &ZI(KA,N), TEMP(*)
 C----------------------
 C     TEMP IS A TEMPORARY STORAGE AREA
 C        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
@@ -64359,18 +64369,18 @@ C----------------------
 
       SUBROUTINE CBAL(NM,N,AR,AI,LOW,IGH,SCALE)
       IMPLICIT NONE
-      INTEGER :: IPMPAR
-C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: JJ
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
-      INTEGER :: IEXC
       REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
+      INTEGER :: IPMPAR
+      INTEGER :: I, J, K, L, M
+      INTEGER :: JJ
+      INTEGER :: IEXC
       REAL :: C, F, G, R, S, B2, RADIX
-C     REAL ABS
       LOGICAL :: NOCONV
+C
+C     REAL ABS
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -64550,13 +64560,13 @@ C     ********** LAST CARD OF CBAL **********
       SUBROUTINE CORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, JJ, LA, MP
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
       REAL, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH), ORTI(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: II, JJ, LA, MP
+      INTEGER :: KP1
       REAL :: F, G, H, FI, FR, SCALE
 C     REAL SQRT,CABS,ABS
 C     COMPLEX CMPLX
@@ -64687,15 +64697,15 @@ C     ********** LAST CARD OF CORTH **********
       SUBROUTINE COMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: LP1, ENM1
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N)
+      INTEGER :: I, J, L
+      INTEGER :: EN, LL
+      INTEGER :: ITS
+      INTEGER :: LP1, ENM1
       REAL :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, NORM, MACHEP
       COMPLEX :: Z3
       REAL :: SPMPAR
@@ -64926,12 +64936,12 @@ C     ********** LAST CARD OF COMQR **********
       SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       REAL, INTENT(IN) :: SCALE(N)
       REAL, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
+      INTEGER :: I, J, K
+      INTEGER :: II
       REAL :: S
 C-----------------------------------------------------------------------
 C
@@ -65011,18 +65021,18 @@ C     ********** LAST CARD OF CBABK2 **********
       SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, II, JJ, LL
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: NN
       INTEGER, INTENT(IN) :: IGH
-      INTEGER :: IP1, ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: LP1, ENM1, IEND
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N), WI(N), ZR(NM,N),
      &ZI(NM,N), ORTR(IGH), ORTI(IGH)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, II, JJ, LL
+      INTEGER :: NN
+      INTEGER :: IP1, ITS
+      INTEGER :: LP1, ENM1, IEND
       REAL :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR, NORM, MACHEP
       COMPLEX :: Z3
       REAL :: SPMPAR
@@ -65422,12 +65432,12 @@ C     ********** LAST CARD OF COMQR2 **********
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
+     &WI(N)
       INTEGER :: IGH, LOW
 C-----------------------------------------------------------------------
 C            EIGENVALUES OF DOUBLE PRECISION COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
-     &WI(N)
 C
       LOW = 1
       IGH = N
@@ -65442,13 +65452,13 @@ C
       INTEGER, INTENT(IN) :: IBAL
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KA, N
+      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
+     &WI(N), ZR(KA,N), ZI(KA,N), TEMP(*)
       INTEGER :: I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
 C                     EIGENVALUES AND EIGENVECTORS
 C                 OF DOUBLE PRECISION COMPLEX MATRICES
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: AR(KA,N), AI(KA,N), WR(N),
-     &WI(N), ZR(KA,N), ZI(KA,N), TEMP(*)
 C----------------------
 C     TEMP IS A TEMPORARY STORAGE AREA
 C        DIMENSION(TEMP) .GE. 2*N    IF IBAL .EQ. 0
@@ -65470,17 +65480,17 @@ C----------------------
 
       SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
       IMPLICIT NONE
-      INTEGER :: IPMPAR
-C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: JJ
       INTEGER, INTENT(IN) :: NM
       INTEGER, INTENT(INOUT) :: IGH, LOW
-      INTEGER :: IEXC
       DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), SCALE(N)
+      INTEGER :: IPMPAR
+      INTEGER :: I, J, K, L, M
+      INTEGER :: JJ
+      INTEGER :: IEXC
       DOUBLE PRECISION :: C, F, G, R, S, B2, RADIX
       LOGICAL :: NOCONV
+C
 C-----------------------------------------------------------------------
 C
 C     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE
@@ -65660,14 +65670,14 @@ C     ********** LAST CARD OF DCBAL **********
       SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: II, JJ, LA, MP
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: KP1
       INTEGER, INTENT(IN) :: LOW
       DOUBLE PRECISION, INTENT(INOUT) :: AR(NM,N), AI(NM,N), ORTR(IGH),
      &ORTI(IGH)
+      INTEGER :: I, J, M
+      INTEGER :: II, JJ, LA, MP
+      INTEGER :: KP1
       DOUBLE PRECISION :: F, G, H, FI, FR, SCALE
       DOUBLE PRECISION :: DCPABS
 C-----------------------------------------------------------------------
@@ -65797,16 +65807,16 @@ C     ********** LAST CARD OF DCORTH **********
       SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, L
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, LL
       INTEGER, INTENT(IN) :: NM, IGH
-      INTEGER :: ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: LP1, ENM1
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N),
      &WI(N)
+      INTEGER :: I, J, L
+      INTEGER :: EN, LL
+      INTEGER :: ITS
+      INTEGER :: LP1, ENM1
       DOUBLE PRECISION :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR,
      &NORM, MACHEP
       DOUBLE PRECISION :: R2, W(2), Z(2)
@@ -66034,12 +66044,12 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: II
       INTEGER, INTENT(IN) :: NM, IGH, LOW
       DOUBLE PRECISION, INTENT(IN) :: SCALE(N)
       DOUBLE PRECISION, INTENT(INOUT) :: ZR(NM,M), ZI(NM,M)
+      INTEGER :: I, J, K
+      INTEGER :: II
       DOUBLE PRECISION :: S
 C-----------------------------------------------------------------------
 C
@@ -66120,18 +66130,18 @@ C     ********** LAST CARD OF DCBABK **********
       SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
 C
-      INTEGER :: I, J, K, L, M
       INTEGER, INTENT(IN) :: N
-      INTEGER :: EN, II, JJ, LL
       INTEGER, INTENT(IN) :: NM
-      INTEGER :: NN
       INTEGER, INTENT(IN) :: IGH
-      INTEGER :: IP1, ITS
       INTEGER, INTENT(IN) :: LOW
-      INTEGER :: LP1, ENM1, IEND
       INTEGER, INTENT(OUT) :: IERR
       DOUBLE PRECISION, INTENT(INOUT) :: HR(NM,N), HI(NM,N), WR(N),
      &WI(N), ZR(NM,N), ZI(NM,N), ORTR(IGH), ORTI(IGH)
+      INTEGER :: I, J, K, L, M
+      INTEGER :: EN, II, JJ, LL
+      INTEGER :: NN
+      INTEGER :: IP1, ITS
+      INTEGER :: LP1, ENM1, IEND
       DOUBLE PRECISION :: SI, SR, TI, TR, XI, XR, YI, YR, ZZI, ZZR,
      &NORM, MACHEP
       DOUBLE PRECISION :: R2, W(2), Z(2)
@@ -66653,33 +66663,33 @@ C     END
 C SEE COMMENTS FOLLOWING STATEMENT LABELLED 440 FOR
 C INSTRUCTIONS ON THE IMPLEMENTATION OF THIS MODIFICATION.
 C
-      DOUBLE PRECISION :: SUM
       REAL, INTENT(INOUT) :: Q, X
-      REAL :: Z
       REAL, INTENT(INOUT) :: CU
-      REAL :: SN, ZU, ZV, CUV
       REAL, INTENT(INOUT) :: RES
-      REAL :: XMAX, XMIN
       REAL, INTENT(INOUT) :: ERROR
-      REAL :: PIVOT
       REAL, INTENT(IN) :: TOLER
-      REAL :: TPIVOT
-      INTEGER :: I, J
       INTEGER, INTENT(IN) :: K, L, M, N
       INTEGER, INTENT(INOUT) :: S
-      INTEGER :: IA, II, IN
       INTEGER, INTENT(INOUT) :: IU
-      INTEGER :: JS, KK, NK, N1, N2, JMN, JPN, KLM, NKL, NK1
       INTEGER, INTENT(IN) :: N2D
-      INTEGER :: IIMN, IOUT
       INTEGER, INTENT(INOUT) :: ITER
       INTEGER, INTENT(IN) :: KLMD
-      INTEGER :: KLM1, KLM2
       INTEGER, INTENT(INOUT) :: KODE
-      INTEGER :: NKLM, NKL1
       INTEGER, INTENT(IN) :: KLM2D
-      INTEGER :: MAXIT
       INTEGER, INTENT(IN) :: NKLMD
+      DOUBLE PRECISION :: SUM
+      REAL :: Z
+      REAL :: SN, ZU, ZV, CUV
+      REAL :: XMAX, XMIN
+      REAL :: PIVOT
+      REAL :: TPIVOT
+      INTEGER :: I, J
+      INTEGER :: IA, II, IN
+      INTEGER :: JS, KK, NK, N1, N2, JMN, JPN, KLM, NKL, NK1
+      INTEGER :: IIMN, IOUT
+      INTEGER :: KLM1, KLM2
+      INTEGER :: NKLM, NKL1
+      INTEGER :: MAXIT
       INTEGER :: IPHASE, KFORCE, IINEG
       DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD),
      * CU(2,NKLMD), IU(2,NKLMD), S(KLMD)
@@ -66980,8 +66990,8 @@ C PREPARE OUTPUT.
       REAL, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
       INTEGER :: I, J, NP1
       REAL :: RNORM
-      DIMENSION IWK(N)
       LOGICAL :: EXIT
+      DIMENSION IWK(N)
 C     --------------
       IERR = 0
       IF (1 .LT. N .AND. N .LE. M) GO TO 10
@@ -67014,8 +67024,8 @@ C
       REAL, INTENT(INOUT) :: B(KB,NB), WK(*)
       INTEGER :: I, J, LQ, LR, LS, NP1
       REAL :: RNORM
-      DIMENSION IWK(N)
       LOGICAL :: EXIT
+      DIMENSION IWK(N)
 C     -------------------
 C     DIMENSION WK(MN + 2M + N)
 C     -------------------
@@ -67059,6 +67069,7 @@ C
       INTEGER, INTENT(INOUT) :: IP
       INTEGER, INTENT(IN) :: M, MS, N
       REAL, INTENT(INOUT) :: QR(MS,N), S(N)
+      LOGICAL, INTENT(OUT) :: EXIT
       INTEGER :: I, J, JP, K, KJ, NN
       REAL :: AJJ, SAV, SS, Y
 C***********************************************************************
@@ -67111,7 +67122,6 @@ C            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 C            TECHNICAL REPORT ARL TR 74-0124(1974).
 C***********************************************************************
       DIMENSION IP(N)
-      LOGICAL, INTENT(OUT) :: EXIT
 C
       EXIT = .TRUE.
       NN = N
@@ -67264,10 +67274,12 @@ C                                       LEAST SQUARES SOLUTION.
       REAL, INTENT(INOUT) :: R(M)
       REAL :: S(N)
       REAL, INTENT(INOUT) :: X(M)
+      LOGICAL, INTENT(OUT) :: EXIT
       INTEGER :: I, J, K, NP1
       REAL :: EPS, EPS2, FOUR, FOURTH, ONE, RAT, RATIO, RNRM2, XNRM2,
      &ZERO
       REAL :: SPMPAR
+      DOUBLE PRECISION :: DSUM
 C ----------------------------------------------------------------------
 C      PURPOSE
 C        GIVEN AN APPROXIMATE LEAST SQUARES SOLUTION X OF A LINEAR
@@ -67320,8 +67332,6 @@ C
 C ----------------------------------------------------------------------
 C
       DIMENSION IP(N)
-      LOGICAL, INTENT(OUT) :: EXIT
-      DOUBLE PRECISION :: DSUM
       DATA ZERO/0.0/, ONE/1.0/, FOUR/4.0/, FOURTH/0.25/
 C
 C     ********** EPS IS A MACHINE DEPENDENT PARAMETER. ASSIGN EPS
@@ -67381,9 +67391,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: KA, KB, M, N, NB
-      INTEGER :: I, J, NP1
       DOUBLE PRECISION, INTENT(INOUT) :: A(KA,N), B(KB,NB), WK(N)
       INTEGER, INTENT(INOUT) :: IWK(N)
+      INTEGER :: I, J, NP1
       DOUBLE PRECISION :: RNORM
       LOGICAL :: EXIT
 C     --------------
@@ -67412,7 +67422,11 @@ C
       SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, MS, N
+      DOUBLE PRECISION, INTENT(INOUT) :: QR(MS,N), S(N)
+      INTEGER, INTENT(INOUT) :: IP(N)
+      LOGICAL, INTENT(OUT) :: EXIT
       INTEGER :: I, J, JP, K, KJ, NN
+      DOUBLE PRECISION :: AJJ, SAV, SS, Y
 C***********************************************************************
 C      IDENTIFICATION
 C        DORTHO - ORTHOGONAL TRANSFORMATION OF A GIVEN GENERAL M BY N
@@ -67462,10 +67476,6 @@ C        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
 C            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 C            TECHNICAL REPORT ARL TR 74-0124(1974).
 C***********************************************************************
-      DOUBLE PRECISION, INTENT(INOUT) :: QR(MS,N), S(N)
-      INTEGER, INTENT(INOUT) :: IP(N)
-      DOUBLE PRECISION :: AJJ, SAV, SS, Y
-      LOGICAL, INTENT(OUT) :: EXIT
 C
       EXIT = .TRUE.
       NN = N
@@ -67520,7 +67530,11 @@ C
       SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, MS, N
+      DOUBLE PRECISION, INTENT(IN) :: QR(MS,N), S(N)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(M)
+      INTEGER, INTENT(IN) :: IP(N)
       INTEGER :: I, IJ, J, JP, K, NI, NM, NN
+      DOUBLE PRECISION :: SAV, SS, Y
 C***********************************************************************
 C      IDENTIFICATION
 C        DORSOL - LEAST SQUARES SOLUTION OF A LINEAR SYSTEM GIVEN AN
@@ -67569,10 +67583,6 @@ C        (2) N.K. TSAO AND P.J. NIKOLAI, PROCEDURES USING ORTHOGONAL
 C            TRANSFORMATIONS FOR LINEAR LEAST SQUARES PROBLEMS, ARL
 C            TECHNICAL REPORT ARL TR 74-0124(1974).
 C***********************************************************************
-      DOUBLE PRECISION, INTENT(IN) :: QR(MS,N), S(N)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(M)
-      INTEGER, INTENT(IN) :: IP(N)
-      DOUBLE PRECISION :: SAV, SS, Y
 C
       NN = N
       IF(N .EQ. M) NN = N - 1
@@ -67617,6 +67627,8 @@ C                                       LEAST SQUARES SOLUTION.
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: LIW, LW, M, MDA, MDB, N, NB
       REAL, INTENT(IN) :: AE, RE
+      REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), RNORM(*), WORK(LW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
       REAL :: EPS, RERR
       REAL :: SPMPAR
@@ -67729,8 +67741,6 @@ C     REFERENCE.  MANTEUFFEL, T., AN INTERVAL ANALYSIS APPROACH TO RANK
 C                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS,
 C                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), RNORM(*), WORK(LW)
-      INTEGER, INTENT(INOUT) :: IWORK(LIW)
 C----------------
 C     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
 C                   ARE NEVER INTERCHANGED.
@@ -67877,6 +67887,7 @@ C     RETURN
       INTEGER, INTENT(INOUT) :: KSURE
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
       REAL, INTENT(INOUT) :: A(MDA,N), DB(N), EB(N), H(N), UB(N), W(N)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MM, NMK
       REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
@@ -67890,7 +67901,6 @@ C       COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
 C       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 C       DEFICIENCY.
 C
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
 C
 C        INITIALIZATION
 C
@@ -68149,6 +68159,7 @@ C
       REAL :: H(N)
       REAL, INTENT(INOUT) :: RNORM(NB)
       REAL :: W(N)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
       REAL :: BB, TT
       REAL :: SNRM2
@@ -68161,7 +68172,6 @@ C        ACCORDING TO THE SELECTED MODE.
 C
 C       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 C
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
 C
       K = KRANK
       KP1 = K + 1
@@ -68299,6 +68309,7 @@ C
       INTEGER, INTENT(INOUT) :: KSURE
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
       REAL, INTENT(INOUT) :: A(MDA,N), DB(M), EB(M), H(M), UB(M), W(M)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MMK, NN
       REAL :: BB, R2, RMIN, SUM, T, TEMP, TN, TT
@@ -68312,7 +68323,6 @@ C       AND COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
 C       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 C       DEFICIENCY.
 C
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
 C
 C        INITIALIZATION
 C
@@ -68571,6 +68581,7 @@ C
       REAL :: H(M)
       REAL, INTENT(INOUT) :: RNORM(NB)
       REAL :: W(M)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
       REAL :: BB, TT
       REAL :: SNRM2
@@ -68583,7 +68594,6 @@ C        ACCORDING TO THE SELECTED MODE.
 C
 C       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 C
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
 C
       K = KRANK
       KP1 = K + 1
@@ -68719,7 +68729,13 @@ C
       INTEGER, INTENT(IN) :: IND
       INTEGER, INTENT(INOUT) :: KRANK, KSURE
       INTEGER, INTENT(IN) :: LIW, LW, M, MDA, MDB, N, NB
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
+      DOUBLE PRECISION, INTENT(IN) :: RE, AE
+      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), WORK(LW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
+      DOUBLE PRECISION :: EPS, RERR
+      DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
 C
 C              LEAST SQUARES SOLUTION OF LINEAR EQUATIONS
@@ -68829,12 +68845,6 @@ C     REFERENCE.  MANTEUFFEL, T., *AN INTERVAL ANALYSIS APPROACH TO RANK
 C                 DETERMINATION IN LINEAR LEAST SQUARES PROBLEMS*,
 C                 SANDIA LABORATORIES REPORT SAND80-0655, JUNE, 1980.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
-      DOUBLE PRECISION, INTENT(IN) :: RE, AE
-      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), WORK(LW)
-      INTEGER, INTENT(INOUT) :: IWORK(LIW)
-      DOUBLE PRECISION :: EPS, RERR
-      DOUBLE PRECISION :: DPMPAR
 C----------------
 C     NP            IF M .GE. N THEN THE FIRST NP COLUMNS OF A
 C                   ARE NEVER INTERCHANGED.
@@ -68980,9 +68990,14 @@ C     RETURN
       INTEGER, INTENT(OUT) :: KRANK
       INTEGER, INTENT(INOUT) :: KSURE
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(N), DB(N), H(N),
+     &W(N), EB(N)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MM, NMK
       INTEGER :: IDAMAX
+      DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
+      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C       THIS ROUTINE PERFORMS A QR FACTORIZATION OF A
 C       USING HOUSEHOLDER TRANSFORMATIONS. ROW AND
@@ -68990,11 +69005,6 @@ C       COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
 C       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 C       DEFICIENCY.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(N), DB(N), H(N),
-     &W(N), EB(N)
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-      DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
-      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C        INITIALIZATION
 C
@@ -69249,7 +69259,12 @@ C
       SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
+      DOUBLE PRECISION, INTENT(IN) :: H(N), W(N)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, IJ, IM1, J, JB, K, KP1, NMK
+      DOUBLE PRECISION :: BB, TT
+      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C        GIVEN THE HOUSEHOLDER QR FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -69258,11 +69273,6 @@ C        ACCORDING TO THE SELECTED MODE.
 C
 C       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
-      DOUBLE PRECISION, INTENT(IN) :: H(N), W(N)
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-      DOUBLE PRECISION :: BB, TT
-      DOUBLE PRECISION :: DDOT, DNRM2
 C
       K = KRANK
       KP1 = K + 1
@@ -69399,9 +69409,14 @@ C
       INTEGER, INTENT(OUT) :: KRANK
       INTEGER, INTENT(INOUT) :: KSURE
       INTEGER, INTENT(IN) :: M, MDA, MODE, N, NP
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(M), DB(M), H(M),
+     &W(M), EB(M)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI,
      &KP1, KZ, L, LM1, MMK, NN
       INTEGER :: IDAMAX
+      DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
+      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C       THIS ROUTINE PERFORMS AN LQ FACTORIZATION OF THE
 C       MATRIX A USING HOUSEHOLDER TRANSFORMATIONS. ROW
@@ -69409,11 +69424,6 @@ C       AND COLUMN PIVOTS ARE CHOSEN TO REDUCE THE GROWTH
 C       OF ROUND-OFF AND TO HELP DETECT POSSIBLE RANK
 C       DEFICIENCY.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), UB(M), DB(M), H(M),
-     &W(M), EB(M)
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-      DOUBLE PRECISION :: BB, RMIN, R2, SUM, T, TEMP, TN, TT
-      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C        INITIALIZATION
 C
@@ -69668,7 +69678,12 @@ C
       SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KRANK, M, MDA, MDB, MODE, N, NB
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
+      DOUBLE PRECISION, INTENT(IN) :: H(M), W(M)
+      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
       INTEGER :: I, IJ, IP1, J, JB, K, KP1, MMK
+      DOUBLE PRECISION :: BB, TT
+      DOUBLE PRECISION :: DDOT, DNRM2
 C
 C        GIVEN THE HOUSEHOLDER LQ FACTORIZATION OF A, THIS
 C        SUBROUTINE SOLVES THE SYSTEM AX=B. IF THE SYSTEM
@@ -69677,11 +69692,6 @@ C        ACCORDING TO THE SELECTED MODE.
 C
 C       NOTE - IF MODE.NE.2, W IS NEVER ACCESSED.
 C
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,NB), RNORM(NB)
-      DOUBLE PRECISION, INTENT(IN) :: H(M), W(M)
-      INTEGER, INTENT(INOUT) :: IC(N), IR(M)
-      DOUBLE PRECISION :: BB, TT
-      DOUBLE PRECISION :: DDOT, DNRM2
 C
       K = KRANK
       KP1 = K + 1
@@ -69816,8 +69826,10 @@ C
       INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), G(N), H(N), RNORM(*)
       REAL, INTENT(IN) :: TAU
+      INTEGER, INTENT(INOUT) :: IP(N)
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       REAL :: FACTOR, HMAX, SM1, TMP, Z
+      DOUBLE PRECISION :: SM
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M)),RNORM(NB),H(N),G(N),IP(N)
 C
@@ -69928,8 +69940,6 @@ C                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
 C                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
 C                       ARE NOT GENERALLY REQUIRED BY THE USER.
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(INOUT) :: IP(N)
-      DOUBLE PRECISION :: SM
 C---------------------
       DATA FACTOR /1.E-3/
 C
@@ -70066,8 +70076,10 @@ C
       REAL, INTENT(INOUT) :: A(MDA,N), B(MDB,*), D(*), G(N), H(N),
      &RNORM(*)
       REAL, INTENT(IN) :: TAU
+      INTEGER, INTENT(INOUT) :: IP(N)
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
       REAL :: FACTOR, HMAX, SM1, TMP, Z
+      DOUBLE PRECISION :: SM
 C-----------------------------------------------------------------------
 C     DIMENSION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DIMENSION D(L) WHERE L = MIN(M,N)
@@ -70190,8 +70202,6 @@ C                          IERR = 1  IF MDA.LT.M
 C                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
 C                       THESE ERRORS ARE FATAL.
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(INOUT) :: IP(N)
-      DOUBLE PRECISION :: SM
 C---------------------
       DATA FACTOR /1.E-3/
 C
@@ -70342,6 +70352,7 @@ C
       REAL, INTENT(INOUT) :: C(*), U(IUE,M), UP
       INTEGER :: I, I2, I3, I4, INCR, J
       REAL :: CL, D, SM1
+      DOUBLE PRECISION :: SM, B
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 C     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -70370,7 +70381,6 @@ C     ICV    STORAGE INCREMENT BETWEEN VECTORS IN C().
 C     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0
 C            NO OPERATIONS WILL BE DONE ON C().
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: SM, B
 C
       IF (0 .GE. LPIVOT .OR. LPIVOT .GE. L1 .OR. L1 .GT. M) RETURN
       CL = ABS(U(1,LPIVOT))
@@ -70428,7 +70438,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: K
       INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
+      DOUBLE PRECISION, INTENT(IN) :: TAU
+      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
+      INTEGER, INTENT(INOUT) :: IP(N)
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+      DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DOUBLE PRECISION TAU,RNORM(NB),H(N),G(N)
@@ -70541,11 +70556,6 @@ C                       DESCRIBING THE PERMUTATION OF COLUMN VECTORS.
 C                       THE CONTENTS OF ARRAYS H(*),G(*) AND IP(*)
 C                       ARE NOT GENERALLY REQUIRED BY THE USER.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*)
-      DOUBLE PRECISION, INTENT(IN) :: TAU
-      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
-      INTEGER, INTENT(INOUT) :: IP(N)
-      DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C---------------------
       DATA FACTOR /1.D-3/
 C
@@ -70679,7 +70689,12 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(OUT) :: K
       INTEGER, INTENT(IN) :: M, MDA, MDB, N, NB
+      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*), D(*)
+      DOUBLE PRECISION, INTENT(IN) :: TAU
+      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
+      INTEGER, INTENT(INOUT) :: IP(N)
       INTEGER :: I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
+      DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION A(MDA,N),(B(MDB,NB) OR B(M))
 C     DOUBLE PRECISION D(L) WHERE L = MIN(M,N)
@@ -70803,11 +70818,6 @@ C                          IERR = 1  IF MDA.LT.M
 C                          IERR = 2  IF NB.GT.1 AND MDB.LT.MAX(M,N)
 C                       THESE ERRORS ARE FATAL.
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(MDA,N), B(MDB,*), D(*)
-      DOUBLE PRECISION, INTENT(IN) :: TAU
-      DOUBLE PRECISION, INTENT(INOUT) :: RNORM(*), H(N), G(N)
-      INTEGER, INTENT(INOUT) :: IP(N)
-      DOUBLE PRECISION :: FACTOR, HMAX, SM, SM1, TMP, Z
 C---------------------
       DATA FACTOR /1.D-3/
 C
@@ -70955,7 +70965,9 @@ C
       SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+      DOUBLE PRECISION, INTENT(INOUT) :: U(IUE,M), UP, C(*)
       INTEGER :: I, I2, I3, I4, INCR, J
+      DOUBLE PRECISION :: B, CL, D, SM
 C-----------------------------------------------------------------------
 C     WRITTEN BY C.L. LAWSON AND R.J. HANSON.  MODIFIED BY A.H. MORRIS.
 C     FROM THE BOOK SOLVING LEAST SQUARES PROBLEMS, PRENTICE-HALL, 1974.
@@ -70984,8 +70996,6 @@ C     ICV    STORAGE INCREMENT BETWEEN VECTORS IN C().
 C     NCV    NUMBER OF VECTORS IN C() TO BE TRANSFORMED. IF NCV .LE. 0
 C            NO OPERATIONS WILL BE DONE ON C().
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: U(IUE,M), UP, C(*)
-      DOUBLE PRECISION :: B, CL, D, SM
 C
       IF (0 .GE. LPIVOT .OR. LPIVOT .GE. L1 .OR. L1 .GT. M) RETURN
       CL = DABS(U(1,LPIVOT))
@@ -71045,6 +71055,10 @@ C
       INTEGER, INTENT(OUT) :: MODE
       INTEGER :: N
       REAL, INTENT(INOUT) :: RNORME, RNORML
+      REAL, INTENT(INOUT) :: W(MDW,*)
+      REAL, INTENT(IN) :: PRGOPT(*)
+      REAL, INTENT(INOUT) :: X(*), WS(*)
+      INTEGER, INTENT(INOUT) :: IP(*)
       INTEGER :: I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST,
      &LINK, M, MAPKE1, MDEQC, MEND, MEP1, N1, N2, NEXT, NLINK, NOPT,
      &NP1, NTIMES
@@ -71054,6 +71068,7 @@ C
       REAL :: SASUM
       REAL :: SDOT
       REAL :: SPMPAR
+      LOGICAL :: COV
 C
 C     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),
 C     WS(2*(ME+N)+K+(MG+2)*(N+7)),IP(MG+2*N+2)
@@ -71366,11 +71381,6 @@ C                   PRECISION.
 C
 C     REVISED OCT. 1, 1989.
 C
-      REAL, INTENT(INOUT) :: W(MDW,*)
-      REAL, INTENT(IN) :: PRGOPT(*)
-      REAL, INTENT(INOUT) :: X(*), WS(*)
-      INTEGER, INTENT(INOUT) :: IP(*)
-      LOGICAL :: COV
       DATA ZERO /0.E0/, ONE /1.E0/, HALF /0.5E0/
 C
 C     COMPUTE MACHINE PRECISION
@@ -71637,6 +71647,10 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
       INTEGER, INTENT(OUT) :: MODE
       INTEGER :: N
       REAL, INTENT(OUT) :: RNORM
+      REAL, INTENT(INOUT) :: W(MDW,*)
+      REAL, INTENT(IN) :: PRGOPT(*)
+      REAL, INTENT(INOUT) :: X(*), WS(*)
+      INTEGER, INTENT(INOUT) :: IP(*)
       INTEGER :: I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK,
      &KRM1, KRP1, L, LAST, LINK, M, MAP1, MDLPDP, MINMAN, N1, N2, N3,
      &NEXT, NP1
@@ -71645,6 +71659,8 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
       REAL :: SASUM
       REAL :: SDOT
       REAL :: SPMPAR
+      REAL :: RNRM(1), OPT(7)
+      LOGICAL :: COV
 C
 C     THIS IS A COMPANION SUBPROGRAM TO LSEI( ).
 C     THE DOCUMENTATION FOR LSEI( ) HAS MORE COMPLETE
@@ -71704,12 +71720,6 @@ C
 C     SPMPAR        FUNCTION TO COMPUTE THE RELATIVE MACHINE
 C                   PRECISION.
 C
-      REAL, INTENT(INOUT) :: W(MDW,*)
-      REAL, INTENT(IN) :: PRGOPT(*)
-      REAL, INTENT(INOUT) :: X(*), WS(*)
-      REAL :: RNRM(1), OPT(7)
-      INTEGER, INTENT(INOUT) :: IP(*)
-      LOGICAL :: COV
 C
       DATA ZERO /0.E0/, ONE /1.E0/, HALF /0.5E0/
 C
@@ -72185,6 +72195,10 @@ C     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
       INTEGER, INTENT(OUT) :: MODE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: RNORM
+      REAL, INTENT(INOUT) :: W(MDW,*)
+      REAL, INTENT(IN) :: PRGOPT(*)
+      REAL, INTENT(INOUT) :: X(N), WORK(*)
+      INTEGER, INTENT(INOUT) :: IWORK(*)
       INTEGER :: L1, L2, L3, L4, L5
 C
 C     DIMENSION W(MDW,N+1),PRGOPT(*),X(N),IWORK(M+N),WORK(M+5*N)
@@ -72416,10 +72430,6 @@ C        AND NONNEGATIVITY CONSTRAINTS, BY K.H. HASKELL AND
 C        R.J. HANSON.  AVAILABLE AS SANDIA TECHNICAL REPORT NO.
 C        SAND77-0552, AND MATH. PROGRAMMING, VOL. 21, (1981), P. 98-118.
 C
-      REAL, INTENT(INOUT) :: W(MDW,*)
-      REAL, INTENT(IN) :: PRGOPT(*)
-      REAL, INTENT(INOUT) :: X(N), WORK(*)
-      INTEGER, INTENT(INOUT) :: IWORK(*)
 C
       MODE = 0
       IF (MA+ME .LE. 0 .OR. N .LE. 0) RETURN
@@ -72453,6 +72463,11 @@ C
       INTEGER, INTENT(INOUT) :: MODE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: RNORM
+      REAL, INTENT(INOUT) :: W(MDW,*), X(*), WD(*), H(*), SCALE(*)
+      REAL, INTENT(INOUT) :: Z(*), TEMP(*)
+      REAL, INTENT(IN) :: PRGOPT(*)
+      REAL, INTENT(INOUT) :: D(*)
+      INTEGER, INTENT(INOUT) :: IPIVOT(*), ITYPE(*)
       INTEGER :: I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER,
      &ITMAX, IWMAX, J, JCON, JJ, JM1, JP, KEY, KRANK, KRP1, L1, LAST,
      &LINK, LP1, M, ME, MEP1, NEXT, NIV, NIV1, NLINK, NM1, NOPT, NP1,
@@ -72463,6 +72478,10 @@ C
       REAL :: SASUM
       REAL :: SPMPAR
       INTEGER :: ISAMAX
+      REAL :: DOPE(4)
+      REAL :: SPARAM(5)
+      INTEGER :: IDOPE(8)
+      LOGICAL :: HITCON, FEASBL, DONE, POS
 C
 C     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 C     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -72512,15 +72531,6 @@ C         COLUMN SCALING FOR THE MATRIX (E).
 C                                       (A)
 C
 C
-      REAL, INTENT(INOUT) :: W(MDW,*), X(*), WD(*), H(*), SCALE(*)
-      REAL :: DOPE(4)
-      REAL, INTENT(INOUT) :: Z(*), TEMP(*)
-      REAL, INTENT(IN) :: PRGOPT(*)
-      REAL, INTENT(INOUT) :: D(*)
-      REAL :: SPARAM(5)
-      INTEGER, INTENT(INOUT) :: IPIVOT(*), ITYPE(*)
-      INTEGER :: IDOPE(8)
-      LOGICAL :: HITCON, FEASBL, DONE, POS
       DATA ZERO /0.E0/, ONE /1.E0/, TWO /2.E0/
 C
 C     INITIALIZE-VARIABLES
@@ -73089,11 +73099,19 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: L, M, MDW, N
       REAL, INTENT(OUT) :: RNORM
+      REAL, INTENT(INOUT) :: W(MDW,*), H(*), SCALE(*)
+      REAL, INTENT(IN) :: DOPE(*)
+      INTEGER, INTENT(INOUT) :: ITYPE(*), IPIVOT(*), IDOPE(*)
+      LOGICAL, INTENT(INOUT) :: DONE
       INTEGER :: I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1,
      &ITEMP, J, J1, JJ, JM1, JP, K, KK, KRANK, KRP1, L1, LB, LEND, LP1,
      &MAX, ME, MEND, MEP1, NIV, NIV1, NP1, NSOLN
       REAL :: ALSQ, EANORM, FAC, FACTOR, HBAR, ONE, RN, SN, T, TAU,
      &TENM3, ZERO
+      REAL :: SPARAM(5)
+      INTEGER :: ISAMAX
+      LOGICAL :: INDEP
+      LOGICAL :: RECALC
 C
 C     THIS IS A COMPANION SUBPROGRAM TO WNNLS( ).
 C     THE DOCUMENTATION FOR WNNLS( ) HAS MORE COMPLETE
@@ -73107,14 +73125,6 @@ C     TRIANGULARIZE L1 BY L1 SUBSYSTEM, WHERE L1=MIN(M,L), WITH
 C     COL INTERCHANGES.
 C     REVISED OCT. 1, 1989
 C
-      REAL, INTENT(INOUT) :: W(MDW,*), H(*), SCALE(*)
-      REAL, INTENT(IN) :: DOPE(*)
-      REAL :: SPARAM(5)
-      INTEGER, INTENT(INOUT) :: ITYPE(*), IPIVOT(*), IDOPE(*)
-      INTEGER :: ISAMAX
-      LOGICAL :: INDEP
-      LOGICAL, INTENT(INOUT) :: DONE
-      LOGICAL :: RECALC
       DATA TENM3 /1.E-3/, ZERO /0.E0/, ONE /1.E0/
 C
       ME = IDOPE(1)
@@ -73484,9 +73494,17 @@ C     INTERCHANGES.
       INTEGER, INTENT(IN) :: L, M, M1, MB, MM, MMPNN, MR, N
       INTEGER, INTENT(INOUT) :: N1
       INTEGER, INTENT(IN) :: NN
+      INTEGER, INTENT(INOUT) :: IPIVOT(N)
+      REAL, INTENT(IN) :: A(MM,N), B(MB,L)
+      REAL, INTENT(INOUT) :: C(*)
+      REAL, INTENT(INOUT) :: QR(MMPNN,N), RES(MR,L), TOL, W(M), X(NN,L)
       INTEGER :: I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4,
      &K5, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
       REAL :: SPMPAR
+      REAL :: ETA
+      REAL :: DIGITX
+      LOGICAL :: FAIL
+      LOGICAL :: SING
 C ** PURPOSE **
 C SUBROUTINE L2SLV COMPUTES LEAST SQUARES SOLUTIONS TO OVERDETERMINED
 C AND UNDERDETERMINED SYSTEMS OF LINEAR EQUATIONS.  THE METHOD USED IS
@@ -73665,14 +73683,6 @@ C *    THE DOUBLE PRECISION VERSION.                                  *
 C *                                                                   *
 C *********************************************************************
 C
-      INTEGER, INTENT(INOUT) :: IPIVOT(N)
-      REAL, INTENT(IN) :: A(MM,N), B(MB,L)
-      REAL, INTENT(INOUT) :: C(*)
-      REAL :: ETA
-      REAL, INTENT(INOUT) :: QR(MMPNN,N), RES(MR,L), TOL, W(M), X(NN,L)
-      REAL :: DIGITX
-      LOGICAL :: FAIL
-      LOGICAL :: SING
 C
 C SET VALUE OF ETA, A MACHINE-DEPENDENT PARAMETER.
 C ETA, THE RELATIVE MACHINE PRECISION, IS THE SMALLEST POSITIVE REAL
@@ -73902,20 +73912,20 @@ C ORTHOGONAL DECOMPOSITION.
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, M1, MMPNN, N
       INTEGER, INTENT(OUT) :: N1
-      INTEGER :: IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP,
-     &NS, NSP1
       INTEGER, INTENT(INOUT) :: IPIVOT(N)
-      REAL :: C
       REAL, INTENT(INOUT) :: D(*)
-      REAL :: DM, DS
       REAL, INTENT(IN) :: ETA
       REAL, INTENT(INOUT) :: QR(MMPNN,N)
-      REAL :: RSJ
       REAL, INTENT(IN) :: TOL
+      LOGICAL, INTENT(OUT) :: SING
+      INTEGER :: IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP,
+     &NS, NSP1
+      REAL :: C
+      REAL :: DM, DS
+      REAL :: RSJ
       REAL :: TOL2
       DOUBLE PRECISION :: SUM
       LOGICAL :: FINIS, FSUM
-      LOGICAL, INTENT(OUT) :: SING
       N1 = 0
       SING = .TRUE.
       FSUM = .TRUE.
@@ -74104,10 +74114,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, M1, MM, MMPNN, N, N1
       INTEGER, INTENT(OUT) :: NUMIT
-      INTEGER :: I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
       INTEGER, INTENT(IN) :: IPIVOT(N)
       REAL, INTENT(IN) :: A(MM,N), B(*)
-      REAL :: C
       REAL, INTENT(IN) :: D(*)
       REAL, INTENT(INOUT) :: F(*), G(*)
       REAL, INTENT(IN) :: QR(MMPNN,N)
@@ -74115,11 +74123,13 @@ C
       REAL, INTENT(IN) :: W(M)
       REAL, INTENT(INOUT) :: WRES(*), X(*), Y(*), Y1(*), Y2(*)
       REAL, INTENT(INOUT) :: DIGITX
-      REAL :: DXNORM
       REAL, INTENT(IN) :: ETA
+      LOGICAL, INTENT(INOUT) :: FAIL
+      INTEGER :: I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
+      REAL :: C
+      REAL :: DXNORM
       REAL :: ETA2, RDR1, RDR2, RDX1, RDX2, RNR, RNX, XNORM
       DOUBLE PRECISION :: SUM
-      LOGICAL, INTENT(INOUT) :: FAIL
       NUMIT = 0
       KZ = 0
       ETA2 = ETA*ETA
@@ -74264,15 +74274,15 @@ C END K-TH ITERATION STEP.
       SUBROUTINE SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, M1, MMPNN, N1
-      INTEGER :: J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
-C SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
-C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
-      REAL :: C
       REAL, INTENT(IN) :: D(*)
       REAL, INTENT(INOUT) :: F(*)
       REAL, INTENT(IN) :: QR(MMPNN,N1)
       REAL, INTENT(INOUT) :: Y(*)
+      INTEGER :: J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
+      REAL :: C
       DOUBLE PRECISION :: SUM
+C SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
+C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       MV = 1
       MH = M1
       DO NS=1,N1
@@ -74336,7 +74346,12 @@ C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       SUBROUTINE COVAR(N, M1, N1, IPIVOT, C, D, Z, NN)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M1, N, N1, NN
+      INTEGER, INTENT(IN) :: IPIVOT(N)
+      REAL, INTENT(INOUT) :: C(NN,N)
+      REAL, INTENT(IN) :: D(*)
+      REAL, INTENT(INOUT) :: Z(*)
       INTEGER :: I, J, K, KA, L, N1P1
+      DOUBLE PRECISION :: SUM
 C SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
 C STORED IN C, D AND IPIVOT TO COMPUTE THE UNSCALED COVARIANCE MATRIX
 C OF THE LEAST SQUARES COEFFICIENTS.
@@ -74353,11 +74368,6 @@ C IF N1 IS LESS THAN N, ONE OR MORE COLUMNS OF THE MATRIX
 C H = (SQRT(W))*A WERE REJECTED AS BEING LINEARLY DEPENDENT.  WHENEVER
 C THE K-TH COLUMN OF H WAS SO REJECTED, C(I,J) IS SET EQUAL TO ZERO,
 C FOR I = K OR J = K, I.GE.J.
-      INTEGER, INTENT(IN) :: IPIVOT(N)
-      REAL, INTENT(INOUT) :: C(NN,N)
-      REAL, INTENT(IN) :: D(*)
-      REAL, INTENT(INOUT) :: Z(*)
-      DOUBLE PRECISION :: SUM
       L = N1
       IF (L.GT.M1) C(L,L) = 1.0/D(L)
       IF (L.EQ.1) GO TO 60
@@ -74413,8 +74423,6 @@ C PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
       SUBROUTINE SPLSQ(M,N,A,IA,JA,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
-      INTEGER :: NPI
-C
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
       INTEGER, INTENT(IN) :: ITNLIM
@@ -74424,6 +74432,16 @@ C
       REAL, INTENT(INOUT) :: U(M), X(N)
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
+      INTEGER, INTENT(INOUT) :: ITN
+      INTEGER :: NPI
+      INTEGER :: I
+      INTEGER :: NCONV, NSTOP
+      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
+     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
+     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
+     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
+     &ZERO
+C
 C     ------------------------------------------------------------------
 C
 C     SPLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
@@ -74644,14 +74662,6 @@ C     ------------------------------------------------------------------
 C
 C     LOCAL VARIABLES
 C
-      INTEGER :: I
-      INTEGER, INTENT(INOUT) :: ITN
-      INTEGER :: NCONV, NSTOP
-      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
-     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
-     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
-     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
-     &ZERO
 C
 C
 C     INITIALIZE.
@@ -74833,6 +74843,7 @@ C
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(OUT) :: BETA
+      REAL :: ONE, SNRM2, ZERO
 C
 C     NORMLZ COMPUTES THE EUCLIDEAN NORM OF X AND RETURNS THE
 C     VALUE IN BETA. IF X IS NONZERO, THEN X IS RESCALED SO
@@ -74842,7 +74853,6 @@ C     FUNCTIONS AND SUBROUTINES
 C
 C     BLAS       SNRM2,SSCAL
 C
-      REAL :: ONE, SNRM2, ZERO
 C
       DATA ZERO/0.0/, ONE/1.0/
 C
@@ -74855,8 +74865,6 @@ C
       SUBROUTINE STLSQ(M,N,TA,ITA,JTA,DAMP,U,X,ATOL,BTOL,CONLIM,
      *                 ITNLIM,ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
-      INTEGER :: NPI
-C
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
       INTEGER, INTENT(IN) :: ITNLIM
@@ -74866,6 +74874,16 @@ C
       REAL, INTENT(INOUT) :: U(M), X(N)
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
+      INTEGER, INTENT(INOUT) :: ITN
+      INTEGER :: NPI
+      INTEGER :: I
+      INTEGER :: NCONV, NSTOP
+      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
+     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
+     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
+     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
+     &ZERO
+C
 C     ------------------------------------------------------------------
 C
 C     STLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
@@ -75088,14 +75106,6 @@ C     ------------------------------------------------------------------
 C
 C     LOCAL VARIABLES
 C
-      INTEGER :: I
-      INTEGER, INTENT(INOUT) :: ITN
-      INTEGER :: NCONV, NSTOP
-      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
-     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
-     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
-     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
-     &ZERO
 C
 C
 C     INITIALIZE.
@@ -75275,8 +75285,6 @@ C
       SUBROUTINE BLSQ(M,N,A,KA,ML,MU,DAMP,U,X,ATOL,BTOL,CONLIM,ITNLIM,
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
-      INTEGER :: NPI
-C
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
       INTEGER, INTENT(IN) :: KA, ML, MU, ITNLIM
@@ -75285,6 +75293,16 @@ C
       REAL, INTENT(INOUT) :: U(M), X(N)
       REAL, INTENT(IN) :: ATOL, BTOL, CONLIM
       REAL, INTENT(INOUT) :: ACOND, RNORM, XNORM, W(*)
+      INTEGER, INTENT(INOUT) :: ITN
+      INTEGER :: NPI
+      INTEGER :: I
+      INTEGER :: NCONV, NSTOP
+      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
+     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
+     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
+     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
+     &ZERO
+C
 C     ------------------------------------------------------------------
 C
 C     BLSQ FINDS A SOLUTION X TO THE FOLLOWING PROBLEMS ...
@@ -75512,14 +75530,6 @@ C     ------------------------------------------------------------------
 C
 C     LOCAL VARIABLES
 C
-      INTEGER :: I
-      INTEGER, INTENT(INOUT) :: ITN
-      INTEGER :: NCONV, NSTOP
-      REAL :: ALFA, ANORM, ARNORM, BBNORM, BETA, BNORM, CS, CS1, CS2,
-     &CTOL, DAMPSQ, DDNORM, DELTA, GAMMA, GAMBAR, ONE, PHI, PHIBAR, PSI,
-     &RES1, RES2, RHO, RHOBAR, RHBAR1, RHBAR2, RHS, RTOL, SN, SN1, SN2,
-     &T, TAU, TEST1, TEST2, TEST3, THETA, T1, T2, T3, XXNORM, Z, ZBAR,
-     &ZERO
 C
 C
 C     INITIALIZE.
@@ -75699,18 +75709,18 @@ C
       SUBROUTINE FMIN(F, A0, B0, X, W, AERR, RERR, ERROR, IND)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IND
-C     ******************************************************************
-C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
-C     ******************************************************************
       REAL :: F
       REAL, INTENT(IN) :: A0, B0
       REAL, INTENT(INOUT) :: X, W
       REAL, INTENT(IN) :: AERR, RERR
       REAL, INTENT(INOUT) :: ERROR
+      EXTERNAL F
       REAL :: EPS, EPS0, ATOL, FTOL, RTOL, TOL
       REAL :: A, B, C1, C2, E, FU, FV, U, V
       REAL :: SPMPAR
-      EXTERNAL F
+C     ******************************************************************
+C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
+C     ******************************************************************
 C     -------------------
 C     C1 = 1 - C2
 C     C2 = 0.5*(-1 + SQRT(5))
@@ -75875,6 +75885,8 @@ C
       INTEGER :: N
       REAL, INTENT(INOUT) :: FPLS
       REAL, INTENT(IN) :: RERR
+      REAL, INTENT(INOUT) :: XPLS(N), WRK(N,*)
+      EXTERNAL FCN
       INTEGER :: I, ITNCNT, ITNLIM, MO
       REAL :: EPS, FSCALE, GRADTL, STEPMX, STEPTL
       REAL :: SPMPAR
@@ -75906,8 +75918,6 @@ C
 C       WRK(N,N+8)
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: XPLS(N), WRK(N,*)
-      EXTERNAL FCN
 C
 C     EQUIVALENCE WRK(N,1) = X(N)
 C                 WRK(N,2) = TYPSIZ(N)
@@ -75969,9 +75979,12 @@ C
       REAL, INTENT(IN) :: STEPTL
       REAL, INTENT(INOUT) :: TYPSIZ(N), WRK0(N), WRK1(N), WRK2(N), X(N),
      &XPLS(N)
+      EXTERNAL FCN
       INTEGER :: I, IAGFLG, ICSCMX, IRETCD, J, JP1, NM1, NS
       REAL :: CBRNF, F, FSTACK(30), RNF, SQRNF, STMX
       REAL :: SPMPAR
+      INTEGER :: SPTR
+      LOGICAL :: MXTAKE, NOUPDT
 C-----------------------------------------------------------------------
 C             DRIVER FOR NON-LINEAR OPTIMIZATION PROBLEM
 C-----------------------------------------------------------------------
@@ -76031,9 +76044,6 @@ C       FSTACK(NS) STACK OF PREVIOUS FUNCTION VALUES
 C       NS         LENGTH OF THE ARRAY FSTACK
 C       SPTR       POINTER TO AN ELEMENT IN FSTACK
 C-----------------------------------------------------------------------
-      INTEGER :: SPTR
-      LOGICAL :: MXTAKE, NOUPDT
-      EXTERNAL FCN
 C
 C     INITIALIZATION
 C     --------------
@@ -76176,6 +76186,8 @@ C
       REAL, INTENT(INOUT) :: FSCALE
       REAL, INTENT(IN) :: GRADTL, RERR
       REAL, INTENT(INOUT) :: STEPMX
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(INOUT) :: TYPSIZ(N)
       INTEGER :: I
       REAL :: STPSIZ
 C-----------------------------------------------------------------------
@@ -76202,8 +76214,6 @@ C
 C       IERR       ERROR INDICATOR
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N)
-      REAL, INTENT(INOUT) :: TYPSIZ(N)
 C
 C     CHECK THAT PARAMETERS ONLY TAKE ON ACCEPTABLE VALUES.
 C     IF NOT, SET THEM TO DEFAULT VALUES.
@@ -76275,6 +76285,10 @@ C
       REAL, INTENT(IN) :: FPLS
       REAL, INTENT(INOUT) :: FSCALE
       REAL, INTENT(IN) :: GRADTL, STEPTL
+      REAL, INTENT(IN) :: XPLS(N), GPLS(N), X(N), TYPSIZ(N)
+      REAL, INTENT(INOUT) :: FSTACK(NS)
+      INTEGER, INTENT(INOUT) :: SPTR
+      LOGICAL, INTENT(IN) :: MXTAKE
       INTEGER :: I, JERR
       REAL :: D, GRD, RELSTP, RGX, RSX
 C-----------------------------------------------------------------------
@@ -76313,10 +76327,6 @@ C                  (RETAIN VALUE BETWEEN SUCCESSIVE CALLS)
 C       IERR       TERMINATION CODE
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: XPLS(N), GPLS(N), X(N), TYPSIZ(N)
-      REAL, INTENT(INOUT) :: FSTACK(NS)
-      INTEGER, INTENT(INOUT) :: SPTR
-      LOGICAL, INTENT(IN) :: MXTAKE
 C
       IERR = 0
 C
@@ -76393,13 +76403,13 @@ C
       INTEGER :: N
       REAL, INTENT(INOUT) :: FX
       REAL, INTENT(IN) :: R
+      REAL, INTENT(INOUT) :: X(N)
+      EXTERNAL FCN
       INTEGER :: I
       REAL :: FMINUS, FPLUS, H, XI, XMINUS, XPLUS
 C-----------------------------------------------------------------------
 C     FIXED STEP COORDINATE DESCENT PROCEDURE / ONE ITERATION
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
-      EXTERNAL FCN
 C
       DO 20 I = 1,N
          H = R * AMAX1(ABS(X(I)), 1.0)
@@ -76426,11 +76436,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: MO, N
+      REAL, INTENT(IN) :: X(N)
+      REAL, INTENT(INOUT) :: TYPSIZ(N)
       INTEGER :: I
       REAL :: BIG, C, T, XMIN
       REAL :: SPMPAR
-      REAL, INTENT(IN) :: X(N)
-      REAL, INTENT(INOUT) :: TYPSIZ(N)
 C-----------------------------------------------------------------------
 C     RESCALE THE VARIABLES
 C-----------------------------------------------------------------------
@@ -76460,6 +76470,9 @@ C
       SUBROUTINE LLTSLV (NR,N,A,X,B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NR
+      REAL, INTENT(IN) :: A(NR,N)
+      REAL, INTENT(INOUT) :: X(N)
+      REAL, INTENT(IN) :: B(N)
       INTEGER :: I, II, IM1, IP1, J
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -76482,9 +76495,6 @@ C
 C-----------------------------------------------------------------------
 C     NOTE.  B AND X MAY SHARE THE SAME STORAGE AREA.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: A(NR,N)
-      REAL, INTENT(INOUT) :: X(N)
-      REAL, INTENT(IN) :: B(N)
 C
 C                  FORWARD SOLVE, RESULT IN X
 C
@@ -76524,6 +76534,7 @@ C
       REAL, INTENT(IN) :: R
       REAL :: TYPSIZ(N)
       REAL, INTENT(INOUT) :: X(N)
+      EXTERNAL FCN
       INTEGER :: J
       REAL :: FPLUS, STEPSZ, XTMPJ
 C-----------------------------------------------------------------------
@@ -76545,7 +76556,6 @@ C
 C       G(N)       FINITE DIFFERENCE APPROXIMATION TO THE GRADIENT
 C
 C-----------------------------------------------------------------------
-      EXTERNAL FCN
 C
       DO J = 1,N
         STEPSZ = R * AMAX1(ABS(X(J)),TYPSIZ(J))
@@ -76562,6 +76572,10 @@ C
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(IN) :: R
+      REAL, INTENT(INOUT) :: X(N)
+      REAL, INTENT(IN) :: TYPSIZ(N)
+      REAL, INTENT(INOUT) :: G(N)
+      EXTERNAL FCN
       INTEGER :: I
       REAL :: FMINUS, FPLUS, STEPI, XTEMPI
 C-----------------------------------------------------------------------
@@ -76582,10 +76596,6 @@ C
 C       G(N)       CENTRAL DIFFERENCE APPROXIMATION TO GRADIENT
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
-      REAL, INTENT(IN) :: TYPSIZ(N)
-      REAL, INTENT(INOUT) :: G(N)
-      EXTERNAL FCN
 C
 C     FIND I-TH  STEPSIZE, EVALUATE TWO NEIGHBORS IN DIRECTION OF
 C     I-TH UNIT VECTOR, AND EVALUATE I-TH  COMPONENT OF GRADIENT.
@@ -76611,10 +76621,16 @@ C
       REAL, INTENT(IN) :: F
       REAL :: FPLS
       REAL, INTENT(IN) :: STEPMX, STEPTL
+      REAL, INTENT(IN) :: X(N), G(N)
+      REAL, INTENT(INOUT) :: P(N), XPLS(N)
+      REAL, INTENT(IN) :: TYPSIZ(N)
+      LOGICAL, INTENT(OUT) :: MXTAKE
+      EXTERNAL FCN
       INTEGER :: I
       REAL :: A, B, DISC, PFPLS, PLMBDA, RLN, RMNLMB, SCL, SLN, SLP, T1,
      &T2, T3, TLMBDA, TMP, W
       REAL :: SDOT
+      REAL :: LAMBDA
 C-----------------------------------------------------------------------
 C             FIND A NEXT NEWTON ITERATE BY LINE SEARCH
 C-----------------------------------------------------------------------
@@ -76645,12 +76661,6 @@ C
 C       SLN      NEWTON LENGTH
 C       RLN      RELATIVE LENGTH OF NEWTON STEP
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), G(N)
-      REAL, INTENT(INOUT) :: P(N), XPLS(N)
-      REAL, INTENT(IN) :: TYPSIZ(N)
-      REAL :: LAMBDA
-      LOGICAL, INTENT(OUT) :: MXTAKE
-      EXTERNAL FCN
 C
       MXTAKE = .FALSE.
       IRETCD = 2
@@ -76759,6 +76769,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: ITNCNT, N, NR
       REAL, INTENT(IN) :: TOL
+      REAL, INTENT(IN) :: X(N), XPLS(N), G(N), GPLS(N)
+      REAL, INTENT(INOUT) :: A(NR,N)
+      REAL, INTENT(INOUT) :: S(N), Y(N), W(N)
+      LOGICAL, INTENT(INOUT) :: NOUPDT
       INTEGER :: I, IM1, J
       REAL :: ALP, DEN1, DEN2, SNORM2, SUM, YNRM2
       REAL :: SNRM2
@@ -76789,10 +76803,6 @@ C
 C     WORK SPACES ...  S(N), Y(N), W(N)
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), XPLS(N), G(N), GPLS(N)
-      REAL, INTENT(INOUT) :: A(NR,N)
-      REAL, INTENT(INOUT) :: S(N), Y(N), W(N)
-      LOGICAL, INTENT(INOUT) :: NOUPDT
 C
       IF (ITNCNT .EQ. 1) NOUPDT = .TRUE.
       DO I = 1,N
@@ -76895,6 +76905,8 @@ C
       SUBROUTINE QRUPDT (NR,N,A,U,V)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NR
+      REAL, INTENT(INOUT) :: A(NR,N), U(N)
+      REAL, INTENT(IN) :: V(N)
       INTEGER :: I, II, J, K, KM1
       REAL :: R
 C-----------------------------------------------------------------------
@@ -76912,8 +76924,6 @@ C       U(N)    VECTOR
 C       V(N)    VECTOR
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(NR,N), U(N)
-      REAL, INTENT(IN) :: V(N)
 C
 C                DETERMINE LAST NON-ZERO IN U
 C
@@ -76955,6 +76965,7 @@ C
       INTEGER, INTENT(IN) :: I, N, NR
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: R
+      REAL, INTENT(INOUT) :: H(NR,N)
       INTEGER :: J
       REAL :: C, S, T, Z
 C-----------------------------------------------------------------------
@@ -76976,7 +76987,6 @@ C       H(N,N)  THE MODIFIED HESSENBERG MATRIX
 C       R       R = SQRT(A*A + B*B)
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: H(NR,N)
 C
 C                COMPUTE C = A/R  AND S = B/R
 C
@@ -77025,6 +77035,8 @@ C
       REAL, INTENT(IN) :: EPSFCN, TOL
       REAL, INTENT(INOUT) :: X(N), FVEC(M), WA(LWA)
       EXTERNAL FCN
+      INTEGER :: MAXFEV, MODE, MP5N, NFEV, NPRINT
+      REAL :: FACTOR, FTOL, GTOL, XTOL
 C     **********
 C
 C     SUBROUTINE LMDIFF
@@ -77132,8 +77144,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: MAXFEV, MODE, MP5N, NFEV, NPRINT
-      REAL :: FACTOR, FTOL, GTOL, XTOL
       DATA FACTOR /1.0E2/
       INFO = 0
 C
@@ -77172,6 +77182,11 @@ C
       REAL, INTENT(INOUT) :: X(N), FVEC(M), DIAG(N), FJAC(LDFJAC,N),
      &QTF(N), WA1(N), WA2(N), WA3(N), WA4(M)
       EXTERNAL FCN
+      INTEGER :: I, IFLAG, ITER, J, L
+      REAL :: ACTRED, DELTA, DIRDER, EPS, FNORM, FNORM1, GNORM, PAR,
+     &PNORM, PRERED, P1, P5, P25, P75, P0001, RATIO, SUM, TEMP, TEMP1,
+     &TEMP2, XNORM
+      REAL :: SPMPAR, ENORM
 C     **********
 C
 C     SUBROUTINE LMDIF
@@ -77352,11 +77367,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, IFLAG, ITER, J, L
-      REAL :: ACTRED, DELTA, DIRDER, EPS, FNORM, FNORM1, GNORM, PAR,
-     &PNORM, PRERED, P1, P5, P25, P75, P0001, RATIO, SUM, TEMP, TEMP1,
-     &TEMP2, XNORM
-      REAL :: SPMPAR, ENORM
       DATA P1,P5,P25,P75,P0001
      *     /1.0E-1,5.0E-1,2.5E-1,7.5E-1,1.0E-4/
 C
@@ -77619,6 +77629,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: X(N)
+      INTEGER :: I
+      REAL :: AGIANT, FLOATN, RDWARF, RGIANT, S1, S2, S3, XABS, X1MAX,
+     &X3MAX
 C     **********
 C
 C     FUNCTION ENORM
@@ -77656,9 +77669,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I
-      REAL :: AGIANT, FLOATN, RDWARF, RGIANT, S1, S2, S3, XABS, X1MAX,
-     &X3MAX
       DATA RDWARF,RGIANT /3.834E-20,1.304E19/
 C
       S1 = 0.0
@@ -77729,6 +77739,9 @@ C
       REAL, INTENT(IN) :: DELTA
       REAL, INTENT(IN) :: R(LR), DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), WA1(N), WA2(N)
+      INTEGER :: I, J, JJ, JP1, K, L
+      REAL :: ALPHA, BNORM, EPSMCH, GNORM, QNORM, SGNORM, SUM, TEMP
+      REAL :: SPMPAR, ENORM
 C     **********
 C
 C     SUBROUTINE DOGLEG
@@ -77786,9 +77799,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, JJ, JP1, K, L
-      REAL :: ALPHA, BNORM, EPSMCH, GNORM, QNORM, SGNORM, SUM, TEMP
-      REAL :: SPMPAR, ENORM
 C
 C     EPSMCH IS THE MACHINE PRECISION.
 C
@@ -77912,6 +77922,9 @@ C
       REAL :: WA1(N)
       REAL, INTENT(INOUT) :: WA2(N)
       EXTERNAL FCN
+      INTEGER :: I, J, K, MSUM
+      REAL :: EPS, EPSMCH, H, TEMP, ZERO
+      REAL :: SPMPAR
 C     **********
 C
 C     SUBROUTINE FDJAC1
@@ -77997,9 +78010,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, K, MSUM
-      REAL :: EPS, EPSMCH, H, TEMP, ZERO
-      REAL :: SPMPAR
       DATA ZERO /0.0E0/
 C
 C     EPSMCH IS THE MACHINE PRECISION.
@@ -78069,6 +78079,9 @@ C
       REAL, INTENT(INOUT) :: FJAC(LDFJAC,N)
       REAL :: WA(M)
       EXTERNAL FCN
+      INTEGER :: I, J
+      REAL :: EPS, EPSMCH, H, TEMP, ZERO
+      REAL :: SPMPAR
 C     **********
 C
 C     SUBROUTINE FDJAC2
@@ -78144,9 +78157,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J
-      REAL :: EPS, EPSMCH, H, TEMP, ZERO
-      REAL :: SPMPAR
       DATA ZERO /0.0E0/
 C
 C     EPSMCH IS THE MACHINE PRECISION.
@@ -78183,6 +78193,10 @@ C
       REAL, INTENT(INOUT) :: R(LDR,N)
       REAL, INTENT(IN) :: DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), SDIAG(N), WA1(N), WA2(N)
+      INTEGER :: I, ITER, J, JM1, JP1, K, L, NSING
+      REAL :: DXNORM, DWARF, FP, GNORM, PARC, PARL, PARU, P1, P001, SUM,
+     &TEMP, ZERO
+      REAL :: SPMPAR, ENORM
 C     **********
 C
 C     SUBROUTINE LMPAR
@@ -78277,10 +78291,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, ITER, J, JM1, JP1, K, L, NSING
-      REAL :: DXNORM, DWARF, FP, GNORM, PARC, PARL, PARU, P1, P001, SUM,
-     &TEMP, ZERO
-      REAL :: SPMPAR, ENORM
       DATA P1,P001,ZERO /1.0E-1,1.0E-3,0.0E0/
 C
 C     DWARF IS THE SMALLEST POSITIVE MAGNITUDE.
@@ -78445,6 +78455,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, LDQ
       REAL, INTENT(INOUT) :: Q(LDQ,M), WA(M)
+      INTEGER :: I, J, JM1, K, L, MINMN, NP1
+      REAL :: ONE, SUM, TEMP, ZERO
 C     **********
 C
 C     SUBROUTINE QFORM
@@ -78482,8 +78494,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, JM1, K, L, MINMN, NP1
-      REAL :: ONE, SUM, TEMP, ZERO
       DATA ONE,ZERO /1.0E0,0.0E0/
 C
 C     ZERO OUT UPPER TRIANGLE OF Q IN THE FIRST MIN(M,N) COLUMNS.
@@ -78544,6 +78554,9 @@ C
       INTEGER, INTENT(INOUT) :: IPVT(LIPVT)
       LOGICAL, INTENT(IN) :: PIVOT
       REAL, INTENT(INOUT) :: A(LDA,N), RDIAG(N), ACNORM(N), WA(N)
+      INTEGER :: I, J, JP1, K, KMAX, MINMN
+      REAL :: AJNORM, EPSMCH, ONE, P05, SUM, TEMP, ZERO
+      REAL :: SPMPAR, ENORM
 C     **********
 C
 C     SUBROUTINE QRFAC
@@ -78619,9 +78632,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, JP1, K, KMAX, MINMN
-      REAL :: AJNORM, EPSMCH, ONE, P05, SUM, TEMP, ZERO
-      REAL :: SPMPAR, ENORM
       DATA ONE,P05,ZERO /1.0E0,5.0E-2,0.0E0/
 C
 C     EPSMCH IS THE MACHINE PRECISION.
@@ -78711,6 +78721,8 @@ C
       REAL, INTENT(INOUT) :: R(LDR,N)
       REAL, INTENT(IN) :: DIAG(N), QTB(N)
       REAL, INTENT(INOUT) :: X(N), SDIAG(N), WA(N)
+      INTEGER :: I, J, JP1, K, KP1, L, NSING
+      REAL :: COS, COTAN, P5, P25, QTBPJ, SIN, SUM, TAN, TEMP, ZERO
 C     **********
 C
 C     SUBROUTINE QRSOLV
@@ -78788,8 +78800,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, JP1, K, KP1, L, NSING
-      REAL :: COS, COTAN, P5, P25, QTBPJ, SIN, SUM, TAN, TEMP, ZERO
       DATA P5,P25,ZERO /5.0E-1,2.5E-1,0.0E0/
 C
 C     COPY R AND (Q TRANSPOSE)*B TO PRESERVE INPUT AND INITIALIZE S.
@@ -78906,6 +78916,8 @@ C
       INTEGER, INTENT(IN) :: M, N, LDA
       REAL, INTENT(INOUT) :: A(LDA,N)
       REAL, INTENT(IN) :: V(N), W(N)
+      INTEGER :: I, J, NMJ, NM1
+      REAL :: COS, ONE, SIN, TEMP
 C     **********
 C
 C     SUBROUTINE R1MPYQ
@@ -78955,8 +78967,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. MARCH 1980.
 C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE
 C
 C     **********
-      INTEGER :: I, J, NMJ, NM1
-      REAL :: COS, ONE, SIN, TEMP
       DATA ONE /1.0E0/
 C
 C     APPLY THE FIRST SET OF GIVENS ROTATIONS TO A.
@@ -79003,6 +79013,9 @@ C
       REAL, INTENT(INOUT) :: S(LS)
       REAL, INTENT(IN) :: U(M)
       REAL, INTENT(INOUT) :: V(N), W(M)
+      INTEGER :: I, J, JJ, L, NMJ, NM1
+      REAL :: COS, COTAN, GIANT, ONE, P5, P25, SIN, TAN, TAU, TEMP, ZERO
+      REAL :: SPMPAR
 C     **********
 C
 C     SUBROUTINE R1UPDT
@@ -79071,9 +79084,6 @@ C     BURTON S. GARBOW, KENNETH E. HILLSTROM, JORGE J. MORE,
 C     JOHN L. NAZARETH
 C
 C     **********
-      INTEGER :: I, J, JJ, L, NMJ, NM1
-      REAL :: COS, COTAN, GIANT, ONE, P5, P25, SIN, TAN, TAU, TEMP, ZERO
-      REAL :: SPMPAR
       DATA ONE,P5,P25,ZERO /1.0E0,5.0E-1,2.5E-1,0.0E0/
 C
 C     GIANT IS THE LARGEST MAGNITUDE.
@@ -79264,12 +79274,18 @@ C
       REAL, INTENT(INOUT) :: RERR
       REAL, INTENT(IN) :: RERRMN, RERRMX
       REAL, INTENT(OUT) :: Z
+      REAL, INTENT(IN) :: A(KA,N0), B0(M), C(N0)
+      REAL, INTENT(INOUT) :: BI(M,M), XB(M), Y(M), R(*)
+      INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
+      INTEGER, INTENT(INOUT) :: INDEX(M)
       INTEGER :: I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J,
      &JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LROW, M0, MCHECK, MS, N,
      &NPOS, NROW, NS, NSTEP, NUM
       REAL :: AMAX, BINORM, BMAX, BMIN, BNORM, CMIN, CONST, EPS, EPSI,
      &RATIO, RERR1, RMIN, RTOL, S, SGN, SUM, T, TOL, W, XMAX
       REAL :: SPMPAR
+      INTEGER :: BFLAG
+      DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -79330,12 +79346,6 @@ C     R IS AN ARRAY OF DIMENSION N. ON OUTPUT R CONTAINS THE CURRENT
 C     VALUE OF X. DURING COMPUTATION R NORMALLY CONTAINS THE REDUCED
 C     COSTS USED FOR THE SELECTION OF THE VARIABLE TO BE MADE BASIC.
 C----------------------
-      REAL, INTENT(IN) :: A(KA,N0), B0(M), C(N0)
-      REAL, INTENT(INOUT) :: BI(M,M), XB(M), Y(M), R(*)
-      INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
-      INTEGER :: BFLAG
-      INTEGER, INTENT(INOUT) :: INDEX(M)
-      DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
 C----------------------
 C
 C     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
@@ -80113,12 +80123,19 @@ C
       REAL, INTENT(INOUT) :: RERR
       REAL, INTENT(IN) :: RERRMN, RERRMX
       REAL, INTENT(OUT) :: Z
+      REAL, INTENT(IN) :: TA(*), B0(M), C(N0)
+      REAL, INTENT(INOUT) :: BI(M,M), XB(M), Y(M), R(*)
+      INTEGER, INTENT(IN) :: ITA(*), JTA(*)
+      INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
+      INTEGER, INTENT(INOUT) :: INDEX(M)
       INTEGER :: I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J,
      &JCOL, JJ, JMIN, JP, K, KI, KJ, L, LL, LMAX, LMIN, LROW, M0,
      &MCHECK, MS, N, NPOS, NS, NSTEP, NUM
       REAL :: AMAX, BINORM, BMAX, BMIN, BNORM, CMIN, CONST, EPS, EPSI,
      &RATIO, RERR1, RMIN, RTOL, S, SGN, SUM, T, TOL, W, XMAX
       REAL :: SPMPAR
+      INTEGER :: BFLAG
+      DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
 C----------------------
 C     NSTEP = 1   ELIMINATE THE NEGATIVE VARIABLES
 C     NSTEP = 2   PHASE 1 OF THE SIMPLEX ALGORITHM
@@ -80180,13 +80197,6 @@ C     R IS AN ARRAY OF DIMENSION N. ON OUTPUT R CONTAINS THE CURRENT
 C     VALUE OF X. DURING COMPUTATION R NORMALLY CONTAINS THE REDUCED
 C     COSTS USED FOR THE SELECTION OF THE VARIABLE TO BE MADE BASIC.
 C----------------------
-      REAL, INTENT(IN) :: TA(*), B0(M), C(N0)
-      REAL, INTENT(INOUT) :: BI(M,M), XB(M), Y(M), R(*)
-      INTEGER, INTENT(IN) :: ITA(*), JTA(*)
-      INTEGER, INTENT(INOUT) :: IBASIS(M), BASIS(*)
-      INTEGER :: BFLAG
-      INTEGER, INTENT(INOUT) :: INDEX(M)
-      DOUBLE PRECISION :: DSUM, DSUMP, DSUMN, DT
 C----------------------
 C
 C     ****** XMAX IS A MACHINE DEPENDENT CONSTANT. XMAX IS THE
@@ -80939,6 +80949,7 @@ C
      &KJ0, KK, KL, KM1, KP1, L, LJ, LJ0, LK, LMIN, MAX, MCOL, NCOL, NK,
      &NM1, NMJ, NMK, NN
       REAL :: C, PMIN, S
+      DOUBLE PRECISION :: DSUM
 C     ******************************************************************
 C     CROUT PROCEDURE FOR INVERTING MATRICES
 C     ******************************************************************
@@ -80961,7 +80972,6 @@ C     IERR REPORTS THE STATUS OF THE RESULTS. IF A IS NONSINGULAR THEN
 C     THE INVERSE OF A IS COMPUTED AND IERR=0. OTHERWISE IF A IS FOUND
 C     TO BE SINGULAR THEN IERR=1 AND THE ROUTINE TERMINATES.
 C     --------------------
-      DOUBLE PRECISION :: DSUM
       MAX = KA*N
       MCOL = IEND*KA
       IF (IEND .EQ. 0) GO TO 100
@@ -81163,11 +81173,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: A(N,*), C(N), T, IWK(*)
       INTEGER :: I1, I2, I3, I4, I5, I6
 C     -------------------
 C     SOLUTION OF THE ASSIGNMENT PROBLEM
 C     -------------------
-      INTEGER, INTENT(INOUT) :: A(N,*), C(N), T, IWK(*)
 C
       I1 = N + 1
       I2 = I1 + N
@@ -81185,13 +81195,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: A(N,*), C(N), CH(N), LC(N), LR(N),
+     &LZ(N), NZ(N), RH(*), SLC(N), SLR(N), U(*)
+      INTEGER, INTENT(INOUT) :: T
       INTEGER :: I, J, K, KSLC, KSLR, L, LJ, LM, M, MAXNUM, MM, NL, NM,
      &NP1
       INTEGER :: IPMPAR
-      INTEGER, INTENT(INOUT) :: A(N,*), C(N), CH(N), LC(N), LR(N),
-     &LZ(N), NZ(N), RH(*), SLC(N), SLR(N), U(*)
       INTEGER :: H, Q, R, S
-      INTEGER, INTENT(INOUT) :: T
 C
 C THIS SUBROUTINE SOLVES THE SQUARE ASSIGNMENT PROBLEM
 C THE MEANING OF THE INPUT PARAMETERS IS
@@ -81438,9 +81448,17 @@ C ERROR RETURN - INTEGER OVERFLOW OCCURS
       SUBROUTINE MKP (N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, NUM
+      INTEGER, INTENT(INOUT) :: P(N), W(N)
+      INTEGER, INTENT(IN) :: K(M)
+      INTEGER, INTENT(INOUT) :: XSTAR(N), BCK, VSTAR, IWK(NUM)
+      REAL, INTENT(INOUT) :: WK(N)
       INTEGER :: I, ISUMW, J, JJ, JN, JNN, L, LX, LXI, MAXW, MINW, MN,
      &N5, NP1, NPL
       REAL :: AP, AW
+      INTEGER :: BB, BL, X, XL
+      INTEGER :: B, UBB
+      INTEGER :: F, PBL, Q, V
+      INTEGER :: BS, PS, WS, XS
 C
 C SUBROUTINE TO SOLVE A 0-1 MULTIPLE KNAPSACK PROBLEM OF N
 C ITEMS (WITH  N .GE. 2) AND  M  KNAPSACKS (WITH  M .GE. 1 ,
@@ -81497,14 +81515,6 @@ C ALL THE PARAMETERS EXCEPT WK ARE OF INTEGER TYPE. WHEN MKP
 C TERMINATES, ALL THE INPUT PARAMETERS ARE UNCHANGED EXCEPT
 C BCK, WHICH GIVES THE NUMBER OF BACKTRACKINGS PERFORMED.
 C
-      INTEGER, INTENT(INOUT) :: P(N), W(N)
-      INTEGER, INTENT(IN) :: K(M)
-      INTEGER, INTENT(INOUT) :: XSTAR(N), BCK, VSTAR, IWK(NUM)
-      REAL, INTENT(INOUT) :: WK(N)
-      INTEGER :: BB, BL, X, XL
-      INTEGER :: B, UBB
-      INTEGER :: F, PBL, Q, V
-      INTEGER :: BS, PS, WS, XS
 C
 C                    CHECK THE INPUT DATA
 C
@@ -81642,8 +81652,15 @@ C
      2                 F, PBL, Q, V, BS, PS, WS, XS, IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M, N, N5, NP1
+      INTEGER, INTENT(IN) :: P(N), W(N), K(M)
+      INTEGER, INTENT(INOUT) :: XSTAR(N), BCK, VSTAR
+      INTEGER, INTENT(INOUT) :: BB(M,N), BL(M,NP1), X(M,N), XL(M,N)
+      INTEGER, INTENT(INOUT) :: B(NP1), UBB(N), LX(N), LXI(N)
+      INTEGER, INTENT(INOUT) :: F(M), PBL(M), Q(M), V(M)
+      INTEGER, INTENT(INOUT) :: BS(N), PS(NP1), WS(NP1), XS(N), IWK(N5)
       INTEGER :: I, I1, IBV, IFLAG, II, IP, IP1, IUV, J, JBCK, JJ, K1,
      &KUB, LB, LI, LJ, LR, LRI, LUB, LUBI, M1, N1
+      INTEGER :: S, U, UB, VB
 C
 C MEANING OF THE MAIN INTERNAL VARIABLES AND ARRAYS ...
 C
@@ -81671,13 +81688,6 @@ C              THE LAST EXECUTION OF SUBROUTINE PI1.
 C         = 0  OTHERWISE.
 C IWK       WORK SPACE FOR THE SUBROUTINE SKNP.
 C
-      INTEGER, INTENT(IN) :: P(N), W(N), K(M)
-      INTEGER, INTENT(INOUT) :: XSTAR(N), BCK, VSTAR
-      INTEGER, INTENT(INOUT) :: BB(M,N), BL(M,NP1), X(M,N), XL(M,N)
-      INTEGER, INTENT(INOUT) :: B(NP1), UBB(N), LX(N), LXI(N)
-      INTEGER, INTENT(INOUT) :: F(M), PBL(M), Q(M), V(M)
-      INTEGER, INTENT(INOUT) :: BS(N), PS(NP1), WS(NP1), XS(N), IWK(N5)
-      INTEGER :: S, U, UB, VB
 C
       IF (M .EQ. 1) GO TO 250
 C
@@ -81838,16 +81848,16 @@ C
       INTEGER, INTENT(IN) :: I, KUB
       INTEGER, INTENT(INOUT) :: LR
       INTEGER, INTENT(IN) :: M, N, N5, NP1
+      INTEGER, INTENT(IN) :: P(N), W(N), Q(M), B(NP1)
+      INTEGER, INTENT(INOUT) :: UB, IWK(N5)
+      INTEGER, INTENT(INOUT) :: LX(N), BS(N), PS(NP1), WS(NP1), XS(N)
       INTEGER :: J, JJ, NS
+      INTEGER :: QS, SB
 C
 C SUBROUTINE TO COMPUTE AN UPPER BOUND  UB  ON THE BEST
 C FINAL SOLUTION WHICH CAN BE OBTAINED FROM THE CURRENT
 C SOLUTION.
 C
-      INTEGER, INTENT(IN) :: P(N), W(N), Q(M), B(NP1)
-      INTEGER, INTENT(INOUT) :: UB, IWK(N5)
-      INTEGER, INTENT(INOUT) :: LX(N), BS(N), PS(NP1), WS(NP1), XS(N)
-      INTEGER :: QS, SB
 C
       NS = 0
       QS = 0
@@ -81888,18 +81898,18 @@ C
       INTEGER, INTENT(IN) :: I
       INTEGER, INTENT(INOUT) :: KUB, LB
       INTEGER, INTENT(IN) :: M, N, N5, NP1
-      INTEGER :: II, IKUB, J, JB, JBS, JJ, NS
-C
-C SUBROUTINE TO COMPUTE A FEASIBLE SOLUTION TO THE CURRENT
-C PROBLEM. THE SOLUTION IS STORED IN ARRAY  XL , THE
-C CORRESPONDING VALUE IN  LB .
-C
       INTEGER, INTENT(IN) :: BB(M,N)
       INTEGER, INTENT(INOUT) :: BL(M,NP1), XL(M,N), IWK(N5)
       INTEGER, INTENT(IN) :: P(N), W(N), Q(M), B(NP1)
       INTEGER, INTENT(INOUT) :: PBL(M), V(M)
       INTEGER, INTENT(INOUT) :: BS(N), PS(NP1), WS(NP1), XS(N)
+      INTEGER :: II, IKUB, J, JB, JBS, JJ, NS
       INTEGER :: PB, QS, SB, U
+C
+C SUBROUTINE TO COMPUTE A FEASIBLE SOLUTION TO THE CURRENT
+C PROBLEM. THE SOLUTION IS STORED IN ARRAY  XL , THE
+C CORRESPONDING VALUE IN  LB .
+C
 C
 C STEP 1
 C
@@ -81988,15 +81998,15 @@ C
       INTEGER, INTENT(IN) :: I
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: II, LI, LJ, LR, LRI, LUB, LUBI, M, N, NP1
-      INTEGER :: I1, IQ, J
-C
-C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
-C
       INTEGER, INTENT(IN) :: F(M), BB(M,N), Q(M), B(NP1)
       INTEGER, INTENT(INOUT) :: UB
       INTEGER, INTENT(IN) :: VB
-      INTEGER :: R, S
       INTEGER, INTENT(IN) :: LX(N), LXI(N)
+      INTEGER :: I1, IQ, J
+      INTEGER :: R, S
+C
+C SUBROUTINE FOR PARAMETRIC COMPUTATION OF THE UPPER BOUNDS.
+C
 C
       IFLAG = 0
       IF ( B(LJ) .NE. 0 ) GO TO 60
@@ -82039,6 +82049,8 @@ C
       SUBROUTINE SKNP (NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KUB, N, N5, NP1, NS
+      INTEGER, INTENT(INOUT) :: QS, VS
+      INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N), IWK(N5)
       INTEGER :: I1, I2, I3, I4, I5
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
@@ -82051,8 +82063,6 @@ C
 C THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
 C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
 C
-      INTEGER, INTENT(INOUT) :: QS, VS
-      INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N), IWK(N5)
 C
       I1 = 1
       I2 = I1 + N
@@ -82068,9 +82078,14 @@ C
      *                  PBAR,WBAR,ZBAR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KUB, N, NP1, NS
+      INTEGER, INTENT(INOUT) :: QS
+      INTEGER, INTENT(OUT) :: VS
+      INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N)
+      INTEGER, INTENT(INOUT) :: D(N), MIN(N), PBAR(N), WBAR(N), ZBAR(N)
       INTEGER :: II, II1, IN, IP, J, J1, JJ, KK, L, LIM, LIM1, LL, LOLD,
      &MFIRST, MINK, MS, N1, NN
       REAL :: A, B, C
+      INTEGER :: DIFF, PR, R, T
 C
 C SUBROUTINE TO SOLVE THE 0-1 SINGLE KNAPSACK PROBLEM
 C
@@ -82082,11 +82097,6 @@ C
 C THIS SUBROUTINE IS A MODIFIED VERSION OF SUBROUTINE KP01
 C WHICH APPEARED IN  COMPUTING 21, 81-86(1978).
 C
-      INTEGER, INTENT(INOUT) :: QS
-      INTEGER, INTENT(OUT) :: VS
-      INTEGER :: DIFF, PR, R, T
-      INTEGER, INTENT(INOUT) :: PS(NP1), WS(NP1), XS(N)
-      INTEGER, INTENT(INOUT) :: D(N), MIN(N), PBAR(N), WBAR(N), ZBAR(N)
 C
       VS = KUB
       IP = 0
@@ -82284,6 +82294,7 @@ C
       REAL, INTENT(INOUT) :: C, ERROR
       REAL, INTENT(IN) :: RERR, T
       REAL, INTENT(INOUT) :: Y
+      EXTERNAL FUN
       INTEGER :: IER, IERC, NUM1
       REAL :: A
       REAL :: EXPARG
@@ -82361,7 +82372,6 @@ C                   COMPUTED. THE VALUES Y = 0.0 AND ERROR = 1.0
 C                   ARE ASSIGNED.
 C
 C-----------------------------------------------------------------------
-      EXTERNAL FUN
 C
       NUM = 0
       IERC = -1
@@ -82422,8 +82432,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
+      EXTERNAL FUN
       INTEGER :: NUM1
       REAL :: ETA, X0, XMIN
+      LOGICAL :: FIND
+      EXTERNAL ACOND, XCOND
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
@@ -82456,8 +82469,6 @@ C                   NOT BE FOUND. THE SPECIAL VALUE C = 0.0 IS
 C                   ASSIGNED.
 C
 C-----------------------------------------------------------------------
-      LOGICAL :: FIND
-      EXTERNAL FUN, ACOND, XCOND
 C
       ETA = 0.01
       XMIN = -1.00358E4
@@ -82497,8 +82508,10 @@ C
       REAL, INTENT(IN) :: ETA
       REAL, INTENT(INOUT) :: X
       REAL, INTENT(IN) :: XL
+      EXTERNAL FUN, COND
       INTEGER :: I, IER, NUM1
       REAL :: DX, TOL, X1, X2, XBAR, XM
+      LOGICAL :: CND
 C-----------------------------------------------------------------------
 C     SRCH COMPUTES AN UPPER BOUND FOR THE SMALLEST NUMBER X SUCH
 C     THAT A GIVEN CONDITION IS SATISFIED. IT IS ASSUMED THAT THE
@@ -82541,8 +82554,6 @@ C          IERR = 2     CND IS .FALSE. WHEN X = 1.0E4.  X IS SET = 0.0.
 C
 C          IERR = 3     CND IS .TRUE. FOR  X .GE. XL.  X IS SET TO XL.
 C
-      LOGICAL :: CND
-      EXTERNAL FUN, COND
       IERR = 0
 C
 C     SEARCH FOR AN INTERVAL (X1, X2) CONTAINING X WHERE
@@ -82617,8 +82628,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(INOUT) :: C
+      EXTERNAL FUN
       INTEGER :: I, NUM1
       REAL :: DX, ETA, TOL, X1, X2, XBAR, XM
+      LOGICAL :: CMPLEX, IEND, RIGHT
+      EXTERNAL ACOND, XCOND
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF THE ABSCISSA OF CONVERGENCE
@@ -82651,8 +82665,6 @@ C                   NOT BE FOUND. THE SPECIAL VALUE C = 0.0 IS
 C                   ASSIGNED.
 C
 C-----------------------------------------------------------------------
-      LOGICAL :: CMPLEX, IEND, RIGHT
-      EXTERNAL FUN, ACOND, XCOND
 C
       ETA = 0.01
       CMPLEX = .FALSE.
@@ -82745,10 +82757,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL, INTENT(IN) :: X
+      LOGICAL, INTENT(INOUT) :: COND
+      EXTERNAL FUN
       INTEGER :: IER, IER1, IER2, IWK(100), L, M, N, NUM1, NUM2
       REAL :: A, AERR, C, ERROR1, ERROR2, RERR, TOL, WK(400), Y, Z1, Z2
       REAL :: ACONDG
       REAL :: ACONDF
+      EXTERNAL ACONDF, ACONDG
 C-----------------------------------------------------------------------
 C
 C        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
@@ -82778,8 +82793,6 @@ C        IERR = 1   THE CALCULATION OF COND MAY NOT BE
 C                   ACCURATE FOR ALL VALUES OF X.
 C
 C-----------------------------------------------------------------------
-      LOGICAL, INTENT(INOUT) :: COND
-      EXTERNAL FUN, ACONDF, ACONDG
 C--------------------------
       DATA L /100/, M /400/
       DATA AERR /1.E-30/, RERR /1.E-4/, TOL /1.E-4/
@@ -82816,13 +82829,13 @@ C
       REAL, INTENT(IN) :: C
       REAL :: X
       REAL, INTENT(IN) :: Y
+      EXTERNAL FUN
       REAL :: A, B, T
       REAL :: ACONDF
 C-----------------------------------------------------------------------
 C        ACONDF IS THE FUNCTION INTEGRATED ALONG THE X-AXIS IN
 C        ACOND. Y IS A DUMMY VARIABLE.
 C-----------------------------------------------------------------------
-      EXTERNAL FUN
 C
       CALL FUN (X, 0.0, A, B)
       T = 1.0/((X - C) + 1.0)
@@ -82834,13 +82847,13 @@ C
       IMPLICIT NONE
       REAL :: C, X
       REAL, INTENT(IN) :: Y
+      EXTERNAL FUN
       REAL :: A, B, S, T, U, V
       REAL :: ACONDG
 C-----------------------------------------------------------------------
 C        ACONDG IS THE FUNCTION INTEGRATED ALONG THE LINE X = C
 C        IN ACOND. Y IS A DUMMY VARIABLE.
 C-----------------------------------------------------------------------
-      EXTERNAL FUN
 C
       CALL FUN (C, X, A, B)
       CALL CREC (1.0, X, S, T)
@@ -82854,10 +82867,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, NUM
       REAL :: X
+      LOGICAL, INTENT(OUT) :: COND
+      EXTERNAL FUN
       INTEGER :: IWK(100), L, M, N
       REAL :: AERR, C, EPSR, ERROR, RERR, T, TOL, WK(400), Y, Y1, Z
       REAL :: XCONDY
       REAL :: XCONDX
+      EXTERNAL XCONDX, XCONDY
 C-----------------------------------------------------------------------
 C
 C        THIS SUBROUTINE TESTS WHETHER OR NOT A GIVEN VALUE OF X
@@ -82887,8 +82903,6 @@ C        IERR = 1   THE CALCULATION OF COND MAY NOT BE
 C                   ACCURATE FOR ALL VALUES OF X.
 C
 C-----------------------------------------------------------------------
-      LOGICAL, INTENT(OUT) :: COND
-      EXTERNAL FUN, XCONDX, XCONDY
 C--------------------------
       DATA L /100/, M /400/
       DATA AERR /1.E-30/, RERR /1.E-4/, TOL /1.E-4/
@@ -82926,12 +82940,12 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: C
       REAL :: X, Y
+      EXTERNAL FUN
       REAL :: A, B, S, T, U, V
       REAL :: XCONDX
 C
 C     REAL PART OF THE INTEGRAND IN XCOND
 C
-      EXTERNAL FUN
 C
       CALL FUN (X, Y, A, B)
       CALL CREC (X + C, Y, S, T)
@@ -82945,12 +82959,12 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: C
       REAL :: X, Y
+      EXTERNAL FUN
       REAL :: A, B, S, T, U, V
       REAL :: XCONDY
 C
 C     IMAGINARY PART OF INTEGRAND IN XCOND
 C
-      EXTERNAL FUN
 C
       CALL FUN (X, Y, A, B)
       CALL CREC (X + C, Y, S, T)
@@ -82966,10 +82980,15 @@ C
       REAL, INTENT(IN) :: C, EPSAB, EPSRE
       REAL, INTENT(OUT) :: ESTERR, RESULT
       REAL, INTENT(IN) :: T
+      INTEGER, INTENT(OUT) :: IER
+      INTEGER, INTENT(OUT) :: NUM
       INTEGER :: MAX
       REAL :: A, AIM, AK, ARE, ARG, B, BB, E, EPS, EPSR1, F, FIM, FRE,
      &PID16, R, S, SI(32), TOL
       REAL :: SPMPAR
+      COMPLEX :: REX(52), CRES, RES3LA(3)
+      INTEGER :: I
+      INTEGER :: K, KC, KK, KS, M, NEX, NRES
 C
 C ......................................................................
 C
@@ -83061,11 +83080,6 @@ C                DBLE, CMPLX, REAL - FORTRAN FUNCTIONS
 C
 C ......................................................................
 C
-      COMPLEX :: REX(52), CRES, RES3LA(3)
-      INTEGER :: I
-      INTEGER, INTENT(OUT) :: IER
-      INTEGER :: K, KC, KK, KS, M, NEX, NRES
-      INTEGER, INTENT(OUT) :: NUM
 C
 C   THE ARRAY SI CONTAINS VALUES OF THE SINE AND COSINE FUNCTIONS
 C   REQUIRED IN THE DURBIN FORMULA. SI(8) AND SI(16) ARE GIVEN IN
@@ -83179,9 +83193,21 @@ C
       SUBROUTINE CQEXT(N,EPSTAB,RESULT,ABSERR,RES3LA,NRES)
       IMPLICIT NONE
       REAL, INTENT(OUT) :: ABSERR
+      COMPLEX, INTENT(INOUT) :: EPSTAB(52)
+      COMPLEX, INTENT(OUT) :: RESULT
+      COMPLEX, INTENT(INOUT) :: RES3LA(3)
+      INTEGER, INTENT(INOUT) :: N
+      INTEGER, INTENT(INOUT) :: NRES
       REAL :: A1, A2, B1, B2, C1, C2, D1, D2, E1ABS, EPMACH, EPSINF,
      &ERR1, ERR2, ERR3, ERROR, OFLOW, RES1, RES2
       REAL :: SPMPAR
+      COMPLEX :: DELTA1, DELTA2, DELTA3
+      COMPLEX :: E0, E1, E2, E3, RES
+      COMPLEX :: SS
+      DOUBLE PRECISION :: R, S, U1, U2, U3, V1, V2, V3, SS1, SS2, W1, W2
+      INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP
+      INTEGER :: NEWELM
+      INTEGER :: NUM
 C
 C 1.        CQEXT
 C           EPSILON ALGORITHM
@@ -83235,18 +83261,6 @@ C                       REAL, AIMAG, SNGL
 C
 C     ..................................................................
 C
-      COMPLEX :: DELTA1, DELTA2, DELTA3
-      COMPLEX, INTENT(INOUT) :: EPSTAB(52)
-      COMPLEX :: E0, E1, E2, E3, RES
-      COMPLEX, INTENT(OUT) :: RESULT
-      COMPLEX, INTENT(INOUT) :: RES3LA(3)
-      COMPLEX :: SS
-      DOUBLE PRECISION :: R, S, U1, U2, U3, V1, V2, V3, SS1, SS2, W1, W2
-      INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP
-      INTEGER, INTENT(INOUT) :: N
-      INTEGER :: NEWELM
-      INTEGER, INTENT(INOUT) :: NRES
-      INTEGER :: NUM
 C
 C           LIST OF MAJOR VARIABLES
 C           -----------------------
@@ -83415,8 +83429,11 @@ C
       REAL, INTENT(IN) :: EPSABS, EPSREL
       REAL, INTENT(OUT) :: RESULT
       REAL :: Y
-      INTEGER :: L1, L2, L3
       REAL :: F
+      REAL, INTENT(INOUT) :: WORK(LENW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
+      EXTERNAL F, PHI
+      INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -83586,9 +83603,6 @@ C              - PHI (USER PROVIDED FUNCTION)
 C              - SPMPAR
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: WORK(LENW)
-      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
-      EXTERNAL F, PHI
 C
 C         CHECK VALIDITY OF LIMIT AND LENW.
 C
@@ -83628,6 +83642,8 @@ C
       REAL, INTENT(OUT) :: RESULT
       REAL, INTENT(INOUT) :: RLIST(LIMIT)
       REAL :: Y
+      REAL :: F
+      EXTERNAL F, PHI
       INTEGER :: ID, IERRO, IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN,
      &KTMIN, MAXERR, NRES, NRMAX, NUMRL2
       REAL :: A1, A2, ABSEPS, AREA, AREA1, AREA12, AREA2, B1, B2, BOUN,
@@ -83635,7 +83651,7 @@ C
      &ERRBND, ERRMAX, ERRO12, ERROR1, ERROR2, ERRSUM, ERTEST, OFLOW,
      &RERR, RES3LA(3), RESABS, RESEPS, RLIST2(52), SMALL, T, UFLOW
       REAL :: SPMPAR
-      REAL :: F
+      LOGICAL :: EXTRAP, NOEXT
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -83800,11 +83816,9 @@ C              - PHI (USER-PROVIDED FUNCTION)
 C              - SPMPAR
 C
 C-----------------------------------------------------------------------
-      LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION IORD(LIMIT)
 C
-      EXTERNAL F, PHI
 C
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG.
@@ -84116,10 +84130,12 @@ C
       REAL, INTENT(INOUT) :: RESABS, RESASC, RESULT
       REAL, INTENT(IN) :: UFLOW
       REAL :: Y
+      REAL :: F
+      EXTERNAL F, PHI
       INTEGER :: J
       REAL :: ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2,
      &HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
-      REAL :: F
+      REAL :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -84198,9 +84214,7 @@ C                 - F (USER-PROVIDED FUNCTION)
 C                 - PHI (USER-PROVIDED FUNCTION)
 C
 C-----------------------------------------------------------------------
-      REAL :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
 C
-      EXTERNAL F, PHI
 C
 C           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
 C           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
@@ -84339,9 +84353,9 @@ C     ------------
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: ISN, NDIM
-      INTEGER :: I, ISIGN, NSPAN, NTOT
       REAL, INTENT(INOUT) :: C(*)
       INTEGER :: N(NDIM)
+      INTEGER :: I, ISIGN, NSPAN, NTOT
 C-----------------------------------------------------------------------
 C     LET NTOT DENOTE THE PRODUCT OF N(1),...,N(NDIM). THE COMPLEX
 C     ARRAY C OF DIMENSION NTOT IS INTERPRETED BY THE ROUTINE AS
@@ -84379,9 +84393,9 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER :: ISN
       INTEGER, INTENT(IN) :: NDIM
-      INTEGER :: I, NSPAN, NTOT
       REAL, INTENT(INOUT) :: A(*), B(*)
       INTEGER :: N(NDIM)
+      INTEGER :: I, NSPAN, NTOT
 C     ------------
       IF (IABS(ISN) .NE. 1) GO TO 40
       IF (NDIM .LE. 0) GO TO 50
@@ -85422,10 +85436,10 @@ C
       SUBROUTINE RFFTI1 (N,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: WA(*), IFAC(*)
       INTEGER :: I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF,
      &NFM1, NL, NQ, NR, NTRY
       REAL :: ARG, ARGH, ARGLD, FI, TPI
-      REAL, INTENT(INOUT) :: WA(*), IFAC(*)
       INTEGER :: NTRYH(4)
       DATA NTRYH(1),NTRYH(2),NTRYH(3),NTRYH(4)/4,2,3,5/
       NL = N
@@ -85553,10 +85567,10 @@ C
       SUBROUTINE RFFTB1 (N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, L1, L2, NA, NF
       REAL, INTENT(INOUT) :: C(*), CH(*)
       REAL :: WA(*)
       REAL, INTENT(IN) :: IFAC(*)
+      INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, L1, L2, NA, NF
       NF = IFAC(2)
       NA = 0
       L1 = 1
@@ -86172,11 +86186,11 @@ C
       SUBROUTINE RFFTF1 (N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, KH, L1, L2,
-     &NA, NF
       REAL, INTENT(INOUT) :: C(*), CH(*)
       REAL :: WA(*)
       REAL, INTENT(IN) :: IFAC(*)
+      INTEGER :: I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, KH, L1, L2,
+     &NA, NF
       NF = IFAC(2)
       NA = 1
       L2 = N
@@ -86720,16 +86734,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, ITNO
       INTEGER, INTENT(IN) :: L, M, MXITER
-      INTEGER :: I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
-C     ******************************************************************
-C     RATIONAL CHEBYCHEV APPROXIMATION OF CONTINUOUS FUNCTIONS
-C     ******************************************************************
       DOUBLE PRECISION, INTENT(IN) :: A, B
       DOUBLE PRECISION :: F, G, PHI
       DOUBLE PRECISION, INTENT(IN) :: EPS
       DOUBLE PRECISION, INTENT(INOUT) :: ERROR
       DOUBLE PRECISION, INTENT(INOUT) :: P(*), Q(*), W(*)
       EXTERNAL F, G, PHI
+      INTEGER :: I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
+C     ******************************************************************
+C     RATIONAL CHEBYCHEV APPROXIMATION OF CONTINUOUS FUNCTIONS
+C     ******************************************************************
 C     -------------------
       IF (L .LT. 0 .OR. M .LT. 0) GO TO 10
       LP1 = L + 1
@@ -86760,18 +86774,18 @@ C     ------------------------------------------------------------------
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, ITNO
       INTEGER, INTENT(IN) :: L, LP1, LPM, M, MP1, MXITER, N, NP1
-      INTEGER :: I, II, J, K, KOUNT, LPI
-C     ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A, B
       DOUBLE PRECISION :: F, G, PHI
       DOUBLE PRECISION, INTENT(IN) :: EPS
       DOUBLE PRECISION, INTENT(OUT) :: ERROR
       DOUBLE PRECISION, INTENT(INOUT) :: P(LP1), Q(MP1), X(NP1),
      &XVAL(NP1), C(NP1,NP1), D(NP1), ERR(NP1), H(NP1)
+      EXTERNAL F, G, PHI
+      INTEGER :: I, II, J, K, KOUNT, LPI
       DOUBLE PRECISION :: B1, C0, DEL, DN, DNP1, EPS0, HALF, H1, OLDERR,
      &ONE, PI, SIGN, SUM, TAU, TEMPL, TEN, TEST, U, XI, XLB, XM1, Y, Y2,
      &Y3, Z, ZERO, ZZ, Z1, Z2, Z3
-      EXTERNAL F, G, PHI
+C     ------------------------------------------------------------------
 C     -------------------
       DATA PI/3.14159265358979323846264338328D0/
       DATA ZERO/0.D0/, HALF/.5D0/, ONE/1.D0/, TEN/10.D0/
@@ -87046,14 +87060,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, LP1, M, NP1
-      INTEGER :: I, II
-C     ------------------------------------------------------------------
-C     COMPUTE THE APPROXIMATION ERROR AT POINT T
-C     ------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: T, FT, GT, PHIT
       DOUBLE PRECISION, INTENT(INOUT) :: DEL
       DOUBLE PRECISION, INTENT(IN) :: D(NP1)
+      INTEGER :: I, II
       DOUBLE PRECISION :: P, Q, R, ZERO, ONE
+C     ------------------------------------------------------------------
+C     COMPUTE THE APPROXIMATION ERROR AT POINT T
+C     ------------------------------------------------------------------
       DATA ZERO/0.D0/, ONE/1.D0/
 C     -------------------
       P = D(LP1)
@@ -87094,12 +87108,24 @@ C
       IMPLICIT NONE
       INTEGER :: IERR, KBREAK, KDIFF(KBREAK), KMAX, MO, NDEG, NPIECE,
      &NSMTH
+      DOUBLE PRECISION :: XKNOTS(*), COEFS(KMAX,*)
+      DOUBLE PRECISION :: ANORM, BRAKPT(KBREAK), DX, EPSLN, ERREST,
+     &VALLFT(KBREAK), VALRGT(KBREAK), XLFT, XRGT
+      DOUBLE PRECISION :: F
+      EXTERNAL F
       INTEGER :: K, KDIMEN, NDIMEN
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
 C
 C        ===============================================================
 C
@@ -87128,18 +87154,6 @@ C     DBREAK     KDIFF
 C     BLEFT      VALLFT
 C     BRIGHT     VALRGT
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: XKNOTS(*), COEFS(KMAX,*)
-      DOUBLE PRECISION :: ANORM, BRAKPT(KBREAK), DX, EPSLN, ERREST,
-     &VALLFT(KBREAK), VALRGT(KBREAK), XLFT, XRGT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87180,11 +87194,21 @@ C
       SUBROUTINE ADAPT1(F, XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
       INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
+      DOUBLE PRECISION :: F
+      EXTERNAL F
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
 C
 C     THIS ALGORITHM COMPUTES A PIECEWISE POLYNOMIAL APPROXIMATION
 C  OF SPECIFIED SMOOTHNESS, ACCURACY AND DEGREE.  THE INPUT TO THE
@@ -87313,16 +87337,6 @@ C     3. CHANGE DABS,DMAX1,DMIN1 AT MANY PLACES.
 C
 C     4. CHANGE DPMPAR TO SPMPAR IN ADSET.
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
-      DOUBLE PRECISION :: F
-      EXTERNAL F
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87405,17 +87419,13 @@ C
       SUBROUTINE ADSET(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
       INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
       INTEGER :: J, K, KBOTH, KLEFT, KRIGHT, LIMSM
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
-C
-C        ===============================================================
-C
-C **  THIS PROGRAM CHECKS THE INPUT DATA AND INITIALIZES THE COMPUTATION
-C
       DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
      &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
      &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
@@ -87423,10 +87433,14 @@ C
       INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
      &SMOOTH
       LOGICAL :: DISCRD
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
       DOUBLE PRECISION :: AKMAX, EPS, EPS0, KM1, RATIO, ZERO, ONE, TWO,
      &THREE, C100
       DOUBLE PRECISION :: DPMPAR
+C
+C        ===============================================================
+C
+C **  THIS PROGRAM CHECKS THE INPUT DATA AND INITIALIZES THE COMPUTATION
+C
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87554,13 +87568,6 @@ C
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
-C
-C        ===============================================================
-C
-C **  THIS PROGRAM TAKES AN ACTIVE INTERVAL OFF THE TOP OF THE STACK
-C     IT ALSO DOES MOST OF THE WORK OF LOCATING AND HANDLING
-C     BREAK POINTS
-C
       DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
      &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
      &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
@@ -87569,6 +87576,13 @@ C
      &SMOOTH
       LOGICAL :: DISCRD
       DOUBLE PRECISION :: DX, RATIO
+C
+C        ===============================================================
+C
+C **  THIS PROGRAM TAKES AN ACTIVE INTERVAL OFF THE TOP OF THE STACK
+C     IT ALSO DOES MOST OF THE WORK OF LOCATING AND HANDLING
+C     BREAK POINTS
+C
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87632,18 +87646,14 @@ C
 
       SUBROUTINE ADCOMP(F)
       IMPLICIT NONE
+      DOUBLE PRECISION :: F
+      EXTERNAL F
       INTEGER :: J
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
-C
-C        ===============================================================
-C
-C **  THIS PROGRAM COMPUTES THE PIECEWISE POLYNOMIAL APPROXIMATION ON
-C     THE CURRENT INTERVAL. IT ALSO ESTIMATES THE ERROR
-C
       DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
      &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
      &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
@@ -87653,8 +87663,14 @@ C
       LOGICAL :: DISCRD
       DOUBLE PRECISION :: ABSC(4), AJ, DX, FDERVL(9), FDERVR(9),
      &FDUMB(9), R, WGTS(4)
-      DOUBLE PRECISION :: ERRINT, F, POLYDD
-      EXTERNAL F, POLYDD
+      DOUBLE PRECISION :: ERRINT, POLYDD
+      EXTERNAL POLYDD
+C
+C        ===============================================================
+C
+C **  THIS PROGRAM COMPUTES THE PIECEWISE POLYNOMIAL APPROXIMATION ON
+C     THE CURRENT INTERVAL. IT ALSO ESTIMATES THE ERROR
+C
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87747,12 +87763,24 @@ C         ADD 50 PERCENT FUDGE FACTOR
 
       DOUBLE PRECISION FUNCTION ERRINT(F, FIT, AAA, BBB, POINTS, WEIGHT)
       IMPLICIT NONE
+      DOUBLE PRECISION :: AAA, BBB, FIT, POINTS(*), WEIGHT(*)
+      DOUBLE PRECISION :: F
+      EXTERNAL F, FIT
       INTEGER :: J
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
+      DOUBLE PRECISION :: ABMID, BA, FDUMB(9), P, PJ, ER, F1, F2, TWO,
+     &THREE
 C
 C        ===============================================================
 C
@@ -87762,17 +87790,6 @@ C                   ABS( F(X) - FIT(X) )**NORM
 C     THE INTEGRATION USES THE POINTS AND WEIGHTS GIVEN AND SCALED
 C     FROM (-1,1) TO (AAA,BBB)
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: AAA, ABMID, BA, BBB, FDUMB(9), FIT, P, PJ,
-     &POINTS(*), WEIGHT(*), ER, F1, F2, TWO, THREE
-      DOUBLE PRECISION :: F
-      EXTERNAL F, FIT
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87832,6 +87849,14 @@ C              LOOP THROUGH THE REMAINING POINTS
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
+      DOUBLE PRECISION :: DIFFF, DIFFX
 C
 C        ===============================================================
 C
@@ -87860,14 +87885,6 @@ C             II        IPT  = VERTICAL COORD. ASSOCIATED WITH POINTS
 C             I
 C
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: DIFFF, DIFFX
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -87969,18 +87986,13 @@ C         LOOP THROUGH THE DIFFERENCES (IDIF INDEX)
 
       DOUBLE PRECISION FUNCTION POLYDD(X)
       IMPLICIT NONE
+      DOUBLE PRECISION :: X
       INTEGER :: J, K
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
-C
-C        ===============================================================
-C
-C **  THIS FUNCTION EVALUATES THE CURRENT POLYNOMIAL PIECE REPRESENTED
-C     BY THE DIVIDED DIFFERENCES DDTEMP ON THE POINT SET XDD.
-C
       DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
      &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
      &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
@@ -87988,7 +88000,12 @@ C
       INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
      &SMOOTH
       LOGICAL :: DISCRD
-      DOUBLE PRECISION :: X
+C
+C        ===============================================================
+C
+C **  THIS FUNCTION EVALUATES THE CURRENT POLYNOMIAL PIECE REPRESENTED
+C     BY THE DIVIDED DIFFERENCES DDTEMP ON THE POINT SET XDD.
+C
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -88014,12 +88031,6 @@ C
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
-C
-C        ===============================================================
-C
-C **  THIS PROGRAM CHECKS FOR DISCARDING INTERVAL, APPLIES VARIOUS
-C     TESTS ABOUT DISCARDING INVOLVING EDIST AND CHARF.
-C
       DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
      &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
      &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
@@ -88028,6 +88039,12 @@ C
      &SMOOTH
       LOGICAL :: DISCRD
       DOUBLE PRECISION :: AKNOTS, DTEST, DX, THREE, FIVE
+C
+C        ===============================================================
+C
+C **  THIS PROGRAM CHECKS FOR DISCARDING INTERVAL, APPLIES VARIOUS
+C     TESTS ABOUT DISCARDING INVOLVING EDIST AND CHARF.
+C
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -88067,12 +88084,21 @@ C
       SUBROUTINE ADPUT(XKNOTS, COEFS, KDIMEN, KMAX, NDIMEN, IERR)
       IMPLICIT NONE
       INTEGER :: IERR, KDIMEN, KMAX, NDIMEN
+      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
       INTEGER :: K
       INTEGER :: LEFTX, NINTRP
       INTEGER :: KNTDIM, LEVEL, NBREAK, NPARDM
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
+      DOUBLE PRECISION :: DX, HALF, ONE, POWERS(20), P, RATIO, THREE
 C
 C        ===============================================================
 C **  THIS PROGRAM PUTS INTERVALS ON THE STACK OR DISCARDS THEM.
@@ -88081,15 +88107,6 @@ C     PROGRAM UPDATES THE ERROR ESTIMATE, THE XKNOT ARRAY, TRANSFORMS
 C     THE POLYNOMIAL TO THE POWER FORM AND PUT THE COEFFICIENTS INTO
 C     THE ARRAY COEFS.  IT ALSO CHECKS FOR PASSING BREAK POINTS
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: XKNOTS(KDIMEN), COEFS(KMAX,NDIMEN)
-      DOUBLE PRECISION :: DX, HALF, ONE, POWERS(20), P, RATIO, THREE
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -88151,6 +88168,7 @@ C            PUT THE NEW KNOTS IN XKNOTS
 
       SUBROUTINE ADTRAN(D, POWERS)
       IMPLICIT NONE
+      DOUBLE PRECISION :: D(20,*), POWERS(*)
       INTEGER :: I, II, J, K, KHI, KOEF, L, LTOP, NI, NI1, NL, NR, NRI,
      &NRI1, NRL, NRLI, NRLK
       INTEGER :: LEFTX, NINTRP
@@ -88158,6 +88176,14 @@ C            PUT THE NEW KNOTS IN XKNOTS
       INTEGER :: IBREAK, INTERP, LEFT, MAXAUX, MAXKNT, MAXPAR, MAXSTK,
      &NPAR, NSTACK
       INTEGER :: KNOTS
+      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
+     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
+     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
+     &XLEFT(50), XRIGHT(50), BUFFER
+      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
+     &SMOOTH
+      LOGICAL :: DISCRD
+      DOUBLE PRECISION :: SHIFT, XL, XR, XTEMP(20)
 C
 C        ===============================================================
 C
@@ -88168,14 +88194,6 @@ C     THE NUMBER COALESCED AT EACH END IS LEFTX AND RIGHTX.
 C     AND THERE ARE NINTRP OTHER PTS XINTRP(K)  INBETWEEN THEM.
 C     SEE SUBROUTINE NEWTON FOR MORE DETAILS
 C
-      DOUBLE PRECISION :: A, ACCUR, B, BLEFT(20), BRIGHT(20), CHARF,
-     &DDTEMP(20,20), DSCTOL, ERROR, ERRORI, FACTOR(20), FINTRP(18),
-     &FLEFT(10), FRIGHT(10), NORM, XBREAK(20), XDD(20), XINTRP(18),
-     &XLEFT(50), XRIGHT(50), BUFFER
-      INTEGER :: BOTH, BREAK, DBREAK(20), DEGREE, EDIST, RIGHT, RIGHTX,
-     &SMOOTH
-      LOGICAL :: DISCRD
-      DOUBLE PRECISION :: D(20,*), POWERS(*), SHIFT, XL, XR, XTEMP(20)
 C
       COMMON /INPUTZ/ A, B, ACCUR, NORM, CHARF, XBREAK, BLEFT, BRIGHT,
      * DBREAK, DEGREE, SMOOTH, LEVEL, EDIST, NBREAK, KNTDIM, NPARDM
@@ -88292,11 +88310,16 @@ C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       INTEGER, INTENT(IN) :: IC, N
       REAL, INTENT(INOUT) :: ERR(N), R
       REAL, INTENT(IN) :: TOL
+      COMPLEX :: F
+      COMPLEX, INTENT(INOUT) :: RS(N)
+      COMPLEX :: Z
       INTEGER :: I, IA, INR, IP(32), IQ, IS, IT, IW(7), IX, J, JN, KL,
      &KM, KN, L, L1, L2, LF, LN, M, NP, NR
       REAL :: ANG, B, C(4), CM, CP, CT, CX, EP6, EPS, EPS0, FAC, FACT,
      &FC(3), PI, R1, RA, RE, SC(4), SF, SP, SR
       REAL :: SPMPAR
+      COMPLEX :: A(64), V
+      COMPLEX :: RT(51,3), FV(6), U, W, T, RV(3), RQ, S, XK, MULT, CO
 C
 C  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
 C
@@ -88327,9 +88350,6 @@ C        TIVES (ORDERS 0 TO N-1).
 C    ERR REAL ARRAY ERR(N) CONTAINING ABSOLUTE ERROR ESTIMATES FOR THE
 C        NUMBERS IN RS.
 C
-      COMPLEX :: F, A(64), V
-      COMPLEX, INTENT(INOUT) :: RS(N)
-      COMPLEX :: RT(51,3), FV(6), U, W, T, Z, RV(3), RQ, S, XK, MULT, CO
 C
 C  LIST OF THE VARIABLES INITIALIZED IN THE DATA STATEMENT BELOW.
 C   IW   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
@@ -88537,11 +88557,18 @@ C
       SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IC, N
-      INTEGER :: I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1,
-     &L2, LF, LN, M, MM1, NP, NR
       DOUBLE PRECISION :: X, Y
       DOUBLE PRECISION, INTENT(IN) :: TOL
       DOUBLE PRECISION, INTENT(INOUT) :: R, RS1(N), RS2(N), ERR(N)
+      INTEGER :: I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1,
+     &L2, LF, LN, M, MM1, NP, NR
+      INTEGER :: IP(32), IW(7)
+      DOUBLE PRECISION :: ANG, B, CM, CP, CT, CX, EPS, EPS0, EP6, FAC,
+     &FACT, PI, RA, R1, S, SF, SP, SR, T, U, V, W
+      DOUBLE PRECISION :: C(4), FC(3), SC(4)
+      DOUBLE PRECISION :: A1(64), A2(64), FV1(6), FV2(6), RT1(51,3),
+     &RT2(51,3), RV1(3), RV2(3)
+      DOUBLE PRECISION :: DCPABS, DPMPAR
 C
 C  EVALUATION OF COMPLEX POWER SERIES COEFFICIENTS OR DERIVATIVES.
 C
@@ -88583,13 +88610,6 @@ C        TIVES (ORDERS 0 TO N-1).
 C    ERR REAL ARRAY ERR(N) CONTAINING ABSOLUTE ERROR ESTIMATES FOR THE
 C        COMPLEX NUMBERS WHOSE REAL AND IMAGINARY PARTS ARE IN RS1,RS2.
 C
-      INTEGER :: IP(32), IW(7)
-      DOUBLE PRECISION :: ANG, B, CM, CP, CT, CX, EPS, EPS0, EP6, FAC,
-     &FACT, PI, RA, R1, S, SF, SP, SR, T, U, V, W
-      DOUBLE PRECISION :: C(4), FC(3), SC(4)
-      DOUBLE PRECISION :: A1(64), A2(64), FV1(6), FV2(6), RT1(51,3),
-     &RT2(51,3), RV1(3), RV2(3)
-      DOUBLE PRECISION :: DCPABS, DPMPAR
 C
 C  LIST OF THE VARIABLES INITIALIZED IN THE DATA STATEMENT BELOW.
 C   IW   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
@@ -89066,11 +89086,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA
-      INTEGER :: I, J, K, NM1
       REAL, INTENT(IN) :: X(*), A(N)
       REAL, INTENT(INOUT) :: C(N)
-      DOUBLE PRECISION :: XX, R
       DOUBLE PRECISION, INTENT(INOUT) :: T(N)
+      INTEGER :: I, J, K, NM1
+      DOUBLE PRECISION :: XX, R
       IF (N.GT.1) GO TO 10
       C(1) = A(1)
       RETURN
@@ -89097,15 +89117,15 @@ C
       INTEGER, INTENT(OUT) :: IERR
       INTEGER, INTENT(IN) :: ND, NP
       REAL, INTENT(INOUT) :: RNORM
+      REAL, INTENT(IN) :: X(NP), Y(NP)
+      REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
       INTEGER :: K, LA, LB, LS, M, MP1, ND1
       REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
+      REAL :: LAMBDA
+      DOUBLE PRECISION :: DALPHA, DSUM
 C     ******************************************************************
 C     UNWEIGHTED LEAST SQUARES POLYNOMIAL FIT
 C     ******************************************************************
-      REAL, INTENT(IN) :: X(NP), Y(NP)
-      REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
-      REAL :: LAMBDA
-      DOUBLE PRECISION :: DALPHA, DSUM
 C     ---------------------
       IERR=0
       IF (1.LE.ND.AND.ND.LT.NP) GO TO 10
@@ -89241,15 +89261,15 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: ND, NP
       REAL, INTENT(INOUT) :: RNORM
+      REAL, INTENT(IN) :: X(NP), Y(NP), W(NP)
+      REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
       INTEGER :: K, LA, LB, LS, M, MP1, ND1, NW
       REAL :: ALPHA, C, TEMP, XMAX, XMIN, ZA, ZB
+      REAL :: LAMBDA
+      DOUBLE PRECISION :: DALPHA, DSUM
 C     ******************************************************************
 C     WEIGHTED LEAST SQUARES POLYNOMIAL FIT
 C     ******************************************************************
-      REAL, INTENT(IN) :: X(NP), Y(NP), W(NP)
-      REAL, INTENT(INOUT) :: A(*), PHI(2,*), PHIX(4,NP)
-      REAL :: LAMBDA
-      DOUBLE PRECISION :: DALPHA, DSUM
 C     ---------------------
 C
 C                      ERROR CHECKING
@@ -89402,13 +89422,13 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, BETA
+      REAL, INTENT(IN) :: X(N), Y(N)
+      REAL, INTENT(INOUT) :: A(N), B(N), C(N)
       INTEGER :: I, J, M, NM1
       REAL :: DEL, H, R, T
 C-----------------------------------------------------------------------
 C                   CUBIC SPLINE INTERPOLATION
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N)
-      REAL, INTENT(INOUT) :: A(N), B(N), C(N)
 C
       IF (N .LT. 3) GO TO 200
  
@@ -89536,6 +89556,8 @@ C
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: ISX, N
       REAL, INTENT(IN) :: A1, AN, B1, BN
+      REAL, INTENT(IN) :: X(N), Y(N)
+      REAL, INTENT(INOUT) :: YP(N), YPP(N), W(N,3)
       INTEGER :: I, J, NM1, NM2
       REAL :: DNEW, DOLD, H
 C
@@ -89613,8 +89635,6 @@ C       --WORK--
 C
 C         W    - ARRAY OF WORKING STORAGE DIMENSIONED AT LEAST 3N.
 C
-      REAL, INTENT(IN) :: X(N), Y(N)
-      REAL, INTENT(INOUT) :: YP(N), YPP(N), W(N,3)
 C
       IF (ABS(A1) .GE. 1.0 .OR. ABS(AN) .GE. 1.0) GO TO 100
       IF (N .LT. 4) GO TO 200
@@ -89698,14 +89718,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M
-      INTEGER :: J, K, LA, LM1, LQ, LW, N
-C-----------------------------------------------------------------------
-C            WEIGHTED LEAST SQUARES CUBIC SPLINE FITTING
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X(M), Y(M), WGT(M)
       REAL, INTENT(INOUT) :: BREAK(L)
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
+      INTEGER :: J, K, LA, LM1, LQ, LW, N
       REAL :: TEMP(20)
+C-----------------------------------------------------------------------
+C            WEIGHTED LEAST SQUARES CUBIC SPLINE FITTING
+C-----------------------------------------------------------------------
 C---------------------
 C     REAL Z(L-1), A(L-1), B(L-1), C(L-1), WK(7*L + 18)
 C---------------------
@@ -89765,20 +89785,20 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, NC
-      INTEGER :: J, K, LA, LM1, LW, N
-      REAL :: R
-C-----------------------------------------------------------------------
-C                LEAST SQUARES CUBIC SPLINE FITTING WITH
-C                  EQUALITY AND INEQUALITY CONSTRAINTS
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X(M), Y(M)
       REAL, INTENT(INOUT) :: BREAK(L)
       REAL, INTENT(IN) :: XCON(*), CON(*)
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
       INTEGER, INTENT(IN) :: NDER(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
-C
+      INTEGER :: J, K, LA, LM1, LW, N
+      REAL :: R
       REAL :: TEMP(20)
+C-----------------------------------------------------------------------
+C                LEAST SQUARES CUBIC SPLINE FITTING WITH
+C                  EQUALITY AND INEQUALITY CONSTRAINTS
+C-----------------------------------------------------------------------
+C
 C---------------------
 C     XCON, CON, NDER ARE ARRAYS OF DIMENSION MAX(1,NC).
 C     Z, A, B, C ARE ARRAYS OF DIMENSION L - 1.
@@ -89850,6 +89870,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K
       REAL :: DX, XX
 C
@@ -89888,8 +89910,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI)
 C
 C     CHECK INPUT
 C
@@ -89952,6 +89972,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
 C
@@ -89986,8 +90008,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI)
 C
 C     CHECK INPUT
 C
@@ -90056,6 +90076,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 C
@@ -90090,8 +90112,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI)
 C
 C     CHECK INPUT
 C
@@ -90163,6 +90183,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K
       REAL :: BI, CI, DX, XX
 C
@@ -90204,8 +90226,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
 C
 C     CHECK INPUT
 C
@@ -90272,6 +90292,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: A, B, C, D, DX, H, XX
 C
@@ -90308,8 +90330,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), YP(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
 C
 C     CHECK INPUT
 C
@@ -90382,6 +90402,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N, NI
+      REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
+      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
       INTEGER :: I, IL, IR, K, NM1
       REAL :: H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
 C
@@ -90418,8 +90440,6 @@ C         IERR- STATUS CODE
 C               0  THE SPLINE WAS EVALUATED AT EACH ABSCISSA IN XI.
 C               1  INPUT ERROR - NI IS NOT POSITIVE.
 C
-      REAL, INTENT(IN) :: X(N), Y(N), YPP(N), XI(NI)
-      REAL, INTENT(INOUT) :: YI(NI), YPI(NI), YPPI(NI)
 C
 C     CHECK INPUT
 C
@@ -90494,6 +90514,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, BETA
+      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N)
       INTEGER :: I, K, KP1, L, LM1
       REAL :: A0, B0, D, D2, H, H2, R, S, SUM
       INTEGER :: INTRVL
@@ -90524,7 +90545,6 @@ C     BETA   UPPER LIMIT OF THE INTEGRAL. BETA MAY BE LESS THAN
 C            OR GREATER THAN ALPHA.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N), A(N), B(N), C(N)
 C
       CSINT = 0.0
       H = BETA - ALPHA
@@ -90595,6 +90615,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
+      REAL, INTENT(IN) :: X(N), Y(N), YP(N)
       INTEGER :: I, IP1, K, KP1, L, LM1, LP1
       REAL :: A0, B0, BI, CI, D, D2, H, H2, R, S, SUM
       INTEGER :: INTRVL
@@ -90620,7 +90641,6 @@ C     B    UPPER LIMIT OF THE INTEGRAL. B MAY BE LESS THAN
 C          OR GREATER THAN A.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N), YP(N)
 C
       CSINT1 = 0.0
       H = B - A
@@ -90710,6 +90730,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
+      REAL, INTENT(IN) :: X(N), Y(N), YPP(N)
       INTEGER :: I, IP1, K, KP1, L, LM1, LP1
       REAL :: A0, B0, D, DMA, DMB, DPA, DPB, H, R, S, SUM
       INTEGER :: INTRVL
@@ -90735,7 +90756,6 @@ C     B    UPPER LIMIT OF THE INTEGRAL. B MAY BE LESS THAN
 C          OR GREATER THAN A.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N), YPP(N)
 C
       CSINT2 = 0.0
       H = B - A
@@ -90805,13 +90825,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: X(N), Y(*)
+      REAL, INTENT(INOUT) :: A(*), B(*), C(*), T(*)
       INTEGER :: I, J, NM1, NM2, NM3
       REAL :: ALPHA, DEL, DEL0, DELI, DELTA, E, H, HI, R, S, SI, W
 C-----------------------------------------------------------------------
 C                PERIODIC CUBIC SPLINE INTERPOLATION
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(*)
-      REAL, INTENT(INOUT) :: A(*), B(*), C(*), T(*)
 C----------------------
 C     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), T(N-2)
 C----------------------
@@ -90936,23 +90956,23 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M
-      INTEGER :: J, K, LA, LM1, LW, N
-      REAL :: R
-C-----------------------------------------------------------------------
-C            LEAST SQUARES PERIODIC CUBIC SPLINE FITTING
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X(M), Y(M)
       REAL, INTENT(INOUT) :: BREAK(L)
       REAL, INTENT(INOUT) :: Z(*), A(*), B(*), C(*), WK(*)
       INTEGER, INTENT(INOUT) :: IWK(*)
+      INTEGER :: J, K, LA, LM1, LW, N
+      REAL :: R
+      REAL :: TEMP(20)
+      REAL :: CON(3), XCON(3)
+      INTEGER :: NDER(3)
+C-----------------------------------------------------------------------
+C            LEAST SQUARES PERIODIC CUBIC SPLINE FITTING
+C-----------------------------------------------------------------------
 C--------------------
 C     REAL Z(L-1), A(L-1), B(L-1), C(L-1)
 C     REAL WK((L + 6)*(L + 15) + 10)
 C     INTEGER IWK(2*L + 6)
 C--------------------
-      REAL :: TEMP(20)
-      REAL :: CON(3), XCON(3)
-      INTEGER :: NDER(3)
 C--------------------
       DATA NDER(1) /3/, NDER(2) /7/, NDER(3) /11/
 C--------------------
@@ -91032,13 +91052,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
+      REAL, INTENT(INOUT) :: YI(M)
       INTEGER :: I, IL, IR, J, K
       REAL :: DX, H, T, T0, X1, XOLD, XX
 C-----------------------------------------------------------------------
 C              EVALUATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
-      REAL, INTENT(INOUT) :: YI(M)
 C----------------------
 C     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), XI(M), YI(M)
 C----------------------
@@ -91112,13 +91132,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
+      REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
+      REAL, INTENT(INOUT) :: YI(M), YPI(M), YPPI(M)
       INTEGER :: I, IL, IR, J, K
       REAL :: BI2, CI3, DX, H, T, T0, X1, XOLD, XX
 C-----------------------------------------------------------------------
 C     EVALUATION AND DIFFERENTIATION OF A PERIODIC CUBIC SPLINE
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(*), A(*), B(*), C(*), XI(M)
-      REAL, INTENT(INOUT) :: YI(M), YPI(M), YPPI(M)
 C----------------------
 C     REAL X(N), Y(N-1), A(N-1), B(N-1), C(N-1), XI(M), YI(M), YPI(M),
 C    *     YPPI(M)
@@ -91199,6 +91219,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KDX, KX, M, N
+      REAL, INTENT(IN) :: X(KX,N)
+      REAL, INTENT(INOUT) :: T(M), DX(KDX,N), WK(*)
       INTEGER :: IA, IB, IC, IE, MM1
 C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
@@ -91209,8 +91231,6 @@ C        ALFRED H. MORRIS
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C----------------------
-      REAL, INTENT(IN) :: X(KX,N)
-      REAL, INTENT(INOUT) :: T(M), DX(KDX,N), WK(*)
 C----------------------
 C     M = THE NUMBER OF N-DIMENSIONAL POINTS GIVEN IN X
 C     WK IS AN ARRAY OF DIMENSION 4*(M-1)
@@ -91236,6 +91256,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KDX, KX, M, N
+      REAL, INTENT(IN) :: X(KX,N)
+      REAL, INTENT(INOUT) :: T(M), DX(KDX,N), A(*), B(M), C(*), E(*)
       INTEGER :: I, IM1, J, L, MM1, MM2
       REAL :: ALPHA, DEL, DEL0, DEL1, DELI, DELM, ETA, H, HM, P, R, SI,
      &SM, SUM, TAU
@@ -91244,8 +91266,6 @@ C-----------------------------------------------------------------------
 C               CLOSED CURVE CUBIC SPLINE FITTING
 C                    IN N-DIMENSIONAL SPACE
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(KX,N)
-      REAL, INTENT(INOUT) :: T(M), DX(KDX,N), A(*), B(M), C(*), E(*)
 C----------------------
 C     REAL A(M-1), C(M-1), E(K)  (K = MAX0(1,M-2))
 C     THE E ARRAY IS NOT USED WHEN M = 2.
@@ -91400,14 +91420,14 @@ C
       SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KDX, KX, KZ, L, M, N
+      REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N), TI(L)
+      REAL, INTENT(INOUT) :: Z(KZ, N)
       INTEGER :: I, IL, IR, J, K
       REAL :: A, B, C, D, DT, H, T0, TOLD, W
 C-----------------------------------------------------------------------
 C            EVALUATION OF A CUBIC SPLINE CLOSED CURVE
 C                     IN N-DIMENSIONAL SPACE
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N), TI(L)
-      REAL, INTENT(INOUT) :: Z(KZ, N)
 C
 C     REDUCTION OF TI(K) TO T0 WHERE 0 .LE. T0 .LT. 1
 C
@@ -91483,14 +91503,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KDX, KX, M, N
       REAL, INTENT(IN) :: TI
+      REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N)
+      REAL, INTENT(INOUT) :: Z(N), DZ(N), DDZ(N)
       INTEGER :: I, IL, IR, J
       REAL :: A, B, C, D, DT, H, T0, W
 C-----------------------------------------------------------------------
 C          EVALUATION AND DIFFERENTIATION OF A CUBIC SPLINE
 C                CLOSED CURVE IN N-DIMENSIONAL SPACE
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(M), X(KX,N), DX(KDX,N)
-      REAL, INTENT(INOUT) :: Z(N), DZ(N), DDZ(N)
 C
 C     REDUCTION OF TI TO T0 WHERE 0 .LE. T0 .LT. 1
 C
@@ -91551,15 +91571,15 @@ C
       SUBROUTINE CURV1 (N,X,Y,SLP1,SLPN,ISLPSW,YP,TEMP,
      *                  SIGMA,IERR)
       IMPLICIT NONE
-      INTEGER :: I, IBAK, NM1, NP1
-      REAL :: C1, C2, C3, DELX1, DELX2, DELXN, DELXNM, DIAG, DIAG1,
-     &DIAG2, DX1, DX2, SDIAG1, SDIAG2, SIGMAP, SLPP1, SLPPN
-C
       INTEGER, INTENT(IN) :: N, ISLPSW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
       REAL, INTENT(INOUT) :: YP(N), TEMP(N)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, IBAK, NM1, NP1
+      REAL :: C1, C2, C3, DELX1, DELX2, DELXN, DELXNM, DIAG, DIAG1,
+     &DIAG2, DX1, DX2, SDIAG1, SDIAG2, SIGMAP, SLPP1, SLPPN
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -91708,14 +91728,14 @@ C
 
       FUNCTION CURV2 (T,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
       INTEGER :: I, IM1
       REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY,
      &SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUM
       INTEGER :: INTRVL
       REAL :: CURV2
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -91797,14 +91817,14 @@ C
 
       FUNCTION CURVD (T,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
       INTEGER :: I, IM1
       REAL :: COSHM1, COSHM2, DEL1, DEL2, DELS, DUMMY, SIGMAP, SINHMS,
      &SUM
       INTEGER :: INTRVL
       REAL :: CURVD
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: T, X(N), Y(N), YP(N), SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -91879,6 +91899,8 @@ C
 
       FUNCTION CURVI (XL,XU,N,X,Y,YP,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
       INTEGER :: I, IL, ILM1, ILP1, IU, IUM1
       REAL :: C1, C2, CL1, CL2, CMM1, CMM2, CS, CU1, CU2, DEL1, DEL2,
      &DELI, DELL1, DELL2, DELS, DELU1, DELU2, DUMMY, SIGMAP, SS, SSIGN,
@@ -91887,8 +91909,6 @@ C
       REAL :: CURVI
       REAL :: TERM
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: XL, XU, X(N), Y(N), YP(N), SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92056,16 +92076,16 @@ C
       SUBROUTINE KURV1 (N,X,Y,SLP1,SLPN,ISLPSW,XP,YP,TEMP,S,
      *                  SIGMA,IERR)
       IMPLICIT NONE
-      INTEGER :: I, IBAK, IM1, NM1, NP1
-      REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
-     &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, SDIAG1, SDIAG2, SIGMAP,
-     &SLPP1X, SLPP1Y, SLPPNX, SLPPNY, SX, SY
-C
       INTEGER, INTENT(IN) :: N, ISLPSW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: X(N), Y(N), SLP1, SLPN
       REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(N), S(N)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, IBAK, IM1, NM1, NP1
+      REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
+     &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, SDIAG1, SDIAG2, SIGMAP,
+     &SLPP1X, SLPP1Y, SLPPNX, SLPPNY, SX, SY
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92249,16 +92269,16 @@ C
 
       SUBROUTINE KURV2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T
+      REAL, INTENT(INOUT) :: XS, YS
+      REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
       INTEGER :: I, IM1
       REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS,
      &DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY,
      &TN
       INTEGER :: INTRVL
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: T
-      REAL, INTENT(INOUT) :: XS, YS
-      REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92357,15 +92377,15 @@ C
 
       SUBROUTINE KURVP1 (N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
       IMPLICIT NONE
-      INTEGER :: I, IBAK, IM1, NM1, NP1, NPI, NPIBAK
-      REAL :: DELS1, DELS2, DIAG, DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1,
-     &DY2, SDIAG1, SDIAG2, SIGMAP, XPN, YPN
-C
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: X(N), Y(N)
       REAL, INTENT(INOUT) :: XP(N), YP(N), TEMP(*), S(N)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, IBAK, IM1, NM1, NP1, NPI, NPIBAK
+      REAL :: DELS1, DELS2, DIAG, DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1,
+     &DY2, SDIAG1, SDIAG2, SIGMAP, XPN, YPN
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92531,16 +92551,16 @@ C
 
       SUBROUTINE KURVP2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T
+      REAL, INTENT(INOUT) :: XS, YS
+      REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
       INTEGER :: I, IM1
       REAL :: C1, C2, CI, CIM1, COSHP1, COSHP2, D, DEL1, DEL2, DELP1,
      &DELP2, DELS, DUMMY, SI, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1,
      &SINHP2, SUMX, SUMY, TN
       INTEGER :: INTRVL
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: T
-      REAL, INTENT(INOUT) :: XS, YS
-      REAL, INTENT(IN) :: X(N), Y(N), XP(N), YP(N), S(N), SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92647,17 +92667,17 @@ C
      *                  SLPNY,SLPNZ,ISLPSW,XP,YP,ZP,TEMP,
      *                  S,SIGMA,IERR)
       IMPLICIT NONE
-      INTEGER :: I, IBAK, IM1, NM1, NP1
-      REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
-     &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, DZ1, DZ2, SDIAG1,
-     &SDIAG2, SIGMAP, SLPP1X, SLPP1Y, SLPP1Z, SLPPNX, SLPPNY, SLPPNZ, T
-C
       INTEGER, INTENT(IN) :: N, ISLPSW
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: X(N), Y(N), Z(N), SLP1X, SLP1Y, SLP1Z, SLPNX,
      &SLPNY, SLPNZ
       REAL, INTENT(INOUT) :: XP(N), YP(N), ZP(N), TEMP(N), S(N)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, IBAK, IM1, NM1, NP1
+      REAL :: C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG,
+     &DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, DZ1, DZ2, SDIAG1,
+     &SDIAG2, SIGMAP, SLPP1X, SLPP1Y, SLPP1Z, SLPPNX, SLPPNY, SLPPNZ, T
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92865,17 +92885,17 @@ C
 
       SUBROUTINE QURV2 (T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T
+      REAL, INTENT(INOUT) :: XS, YS, ZS
+      REAL, INTENT(IN) :: X(N), Y(N), Z(N), XP(N), YP(N), ZP(N), S(N)
+      REAL, INTENT(IN) :: SIGMA
       INTEGER :: I, IM1
       REAL :: C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS,
      &DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX, SUMY,
      &SUMZ, TN
       INTEGER :: INTRVL
 C
-      INTEGER, INTENT(IN) :: N
-      REAL, INTENT(IN) :: T
-      REAL, INTENT(INOUT) :: XS, YS, ZS
-      REAL, INTENT(IN) :: X(N), Y(N), Z(N), XP(N), YP(N), ZP(N), S(N)
-      REAL, INTENT(IN) :: SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -92978,11 +92998,11 @@ C
       SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: DEL1, DEL2, SIGMA
+      REAL, INTENT(INOUT) :: C1, C2, C3
       REAL :: COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM,
      &SINHMP
 C
-      REAL, INTENT(IN) :: DEL1, DEL2, SIGMA
-      REAL, INTENT(INOUT) :: C1, C2, C3
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -93058,10 +93078,10 @@ C
 
       SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
       IMPLICIT NONE
-      REAL :: COSHM, DENOM, SIGDEL, SINHM
-C
       REAL, INTENT(INOUT) :: DIAG, SDIAG
       REAL, INTENT(IN) :: SIGMA, DEL
+      REAL :: COSHM, DENOM, SIGDEL, SINHM
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -93113,9 +93133,9 @@ C
       INTEGER FUNCTION INTRVL (X, T, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: M
+      REAL, INTENT(IN) :: X, T(M)
       INTEGER :: I, IL, IR
       REAL :: TM
-      REAL, INTENT(IN) :: X, T(M)
 C-----------------------------------------------------------------------
 C
 C             LOCATION OF A VALUE X IN A SEQUENCE T
@@ -93183,6 +93203,8 @@ C
       INTEGER, INTENT(IN) :: JDERIV, K, N
       REAL, INTENT(INOUT) :: W
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: T(*), BCOEF(N)
+      REAL, INTENT(INOUT) :: WK(K,3)
       INTEGER :: I, IMK, IPJ, J, JC, JCMAX, JCMIN, JDRVP1, JJ, KM1, KMJ,
      &L, NMI, NPK
       REAL :: DL, DR, FKMJ
@@ -93246,8 +93268,6 @@ C-----------------------------------------------------------------------
 C  REFERENCE. DE BOOR, CARL, A PRATICAL GUIDE TO SPLINES, SPRINGER-
 C  VERLAG, NEW YORK, 1978.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*), BCOEF(N)
-      REAL, INTENT(INOUT) :: WK(K,3)
 C
       W = 0.0
       IF (JDERIV .GE. K) RETURN
@@ -93359,6 +93379,8 @@ C
       INTEGER, INTENT(IN) :: K, N
       REAL, INTENT(OUT) :: W
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: T(*), BCOEFF(N)
+      REAL, INTENT(INOUT) :: WK(*)
       INTEGER :: I, IPK, KP1, NP1, NPK
       REAL :: SUM, TLAST, TNEW, XVAL
 C-----------------------------------------------------------------------
@@ -93367,8 +93389,6 @@ C                   USING ITS B-SPLINE REPRESENTATION
 C-----------------------------------------------------------------------
 C     REAL T(N + K), WK(N + 3*(K + 1))
 C---------------------------
-      REAL, INTENT(IN) :: T(*), BCOEFF(N)
-      REAL, INTENT(INOUT) :: WK(*)
 C
       W = 0.0
       IF (X .LE. T(1)) RETURN
@@ -93406,6 +93426,8 @@ C
       REAL, INTENT(IN) :: TNEW
       REAL, INTENT(OUT) :: W
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: T(*), BCOEF(N)
+      REAL, INTENT(INOUT) :: WK(K,3)
       INTEGER :: I, IMK, IPJ, J, JC, JCMIN, JJ, KM1, KMJ, L, M
       REAL :: DL, DR, TIPJ
       INTEGER :: INTRVL
@@ -93437,8 +93459,6 @@ C-----------------------------------------------------------------------
 C     REMARK. BVALI0 IS AN ADAPTATION BY A.H. MORRIS (NSWC) OF THE
 C     SUBROUTINE BVAL.
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*), BCOEF(N)
-      REAL, INTENT(INOUT) :: WK(K,3)
 C
       W = 0.0
       KM1 = K - 1
@@ -93508,6 +93528,8 @@ C
       INTEGER, INTENT(IN) :: K
       INTEGER, INTENT(OUT) :: L
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: T(*), A(N)
+      REAL, INTENT(INOUT) :: BREAK(*), C(K,*), WK(K,*)
       INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, KM1, KMJ, KP1, LEFT
       REAL :: DIFF, R, S, TERM, X
 C-----------------------------------------------------------------------
@@ -93537,8 +93559,6 @@ C
 C       WK    2-DIMENSIONAL ARRAY OF DIMENSION (K,K+1)
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*), A(N)
-      REAL, INTENT(INOUT) :: BREAK(*), C(K,*), WK(K,*)
 C
       L = 0
       BREAK(1) = T(K)
@@ -93704,6 +93724,8 @@ C
       INTEGER, INTENT(INOUT) :: J
       INTEGER, INTENT(IN) :: JHIGH, K, LEFT
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: T(*)
+      REAL, INTENT(INOUT) :: BLIST(K)
       INTEGER :: I, IMJ, L
       REAL :: S, TERM, TI, TIMJ
 C-----------------------------------------------------------------------
@@ -93738,8 +93760,6 @@ C-----------------------------------------------------------------------
 C     WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
 C         BY A.H. MORRIS (NSWC).
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*)
-      REAL, INTENT(INOUT) :: BLIST(K)
 C
       IF (J .GT. 0) GO TO 10
          J = 1
@@ -93767,6 +93787,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDIM, K, LEFT, NDERIV
       REAL, INTENT(IN) :: X
+      REAL, INTENT(IN) :: T(*)
+      REAL, INTENT(INOUT) :: DBIATX(IDIM,NDERIV), A(K,K)
       INTEGER :: I, IDERIV, IL, J, JJ, JLOW, JP1MID, KP1, KP1MM, L,
      &LDUMMY, M, MHIGH
       REAL :: FACTOR, FKP1MM, SUM
@@ -93819,8 +93841,6 @@ C-----------------------------------------------------------------------
 C  WRITTEN BY CARL DE BOOR (UNIVERSITY OF WISCONSIN) AND MODIFIED
 C     BY A.H. MORRIS (NSWC).
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*)
-      REAL, INTENT(INOUT) :: DBIATX(IDIM,NDERIV), A(K,K)
 C
       MHIGH = MAX0(MIN0(NDERIV,K),1)
 C     MHIGH IS USUALLY EQUAL TO NDERIV.
@@ -93907,6 +93927,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: K, N
+      REAL, INTENT(INOUT) :: BCOEF(N)
+      REAL, INTENT(IN) :: GTAU(N)
+      REAL, INTENT(INOUT) :: Q(*)
+      REAL, INTENT(IN) :: T(*), TAU(N)
       INTEGER :: I, ILP1MX, J, JJ, KM1, KPKM2, LEFT, LENQ, NP1
       REAL :: TAUI
 C-----------------------------------------------------------------------
@@ -93955,10 +93979,6 @@ C  BY SUBSTITUTION).
 C     BANFAC PERFORMS NO PIVOTING SINCE THE TOTAL POSITIVITY OF THE
 C  MATRIX A MAKES THIS UNNECESSARY.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: BCOEF(N)
-      REAL, INTENT(IN) :: GTAU(N)
-      REAL, INTENT(INOUT) :: Q(*)
-      REAL, INTENT(IN) :: T(*), TAU(N)
 C
       KM1 = K - 1
       IF (IFLAG .EQ. 0) GO TO 60
@@ -94049,8 +94069,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
+      REAL, INTENT(INOUT) :: W(NROWW,NROW)
       INTEGER :: I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE,
      &MIDMK, MJ, NROWM1
+      REAL :: FACTOR, PIVOT
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  RETURNS IN  W  THE LU-FACTORIZATION (WITHOUT PIVOTING) OF THE BANDED
 C  MATRIX  A  OF ORDER  NROW  WITH  (NBANDL + 1 + NBANDU) BANDS OR DIAG-
@@ -94106,8 +94128,6 @@ C  CHANGES DURING FACTORIZATION, ESPECIALLY FOR THE  T O T A L L Y
 C  P O S I T I V E  MATRICES WHICH OCCUR IN SPLINE CALCULATIONS.
 C     THE ROUTINE SHOULD NOT BE USED FOR AN ARBITRARY BANDED MATRIX.
 C
-      REAL, INTENT(INOUT) :: W(NROWW,NROW)
-      REAL :: FACTOR, PIVOT
 C
       IFLAG = 1
       MIDDLE = NBANDU + 1
@@ -94169,6 +94189,8 @@ C                                       CHECK THE LAST DIAGONAL ENTRY .
       SUBROUTINE BANSLV ( W, NROWW, NROW, NBANDL, NBANDU, B )
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NBANDL, NBANDU, NROW, NROWW
+      REAL, INTENT(IN) :: W(NROWW,NROW)
+      REAL, INTENT(INOUT) :: B(NROW)
       INTEGER :: I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
 C  COMPANION ROUTINE TO  BANFAC . IT RETURNS THE SOLUTION  X  OF THE
@@ -94190,8 +94212,6 @@ C  L(U*X) = B  IS SOLVED FOR  Y = U*X, AND  Y  STORED IN  B . THEN THE
 C  UPPER TRIANGULAR SYSTEM  U*X = Y  IS SOLVED FOR  X  . THE CALCUL-
 C  ATIONS ARE SO ARRANGED THAT THE INNERMOST LOOPS STAY WITHIN COLUMNS.
 C
-      REAL, INTENT(IN) :: W(NROWW,NROW)
-      REAL, INTENT(INOUT) :: B(NROW)
       MIDDLE = NBANDU + 1
       IF (NROW .EQ. 1)                  GO TO 49
       NROWM1 = NROW - 1
@@ -94231,6 +94251,9 @@ C                                A  IS LOWER TRIANGULAR .
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: K, N, NTAU
+      REAL, INTENT(IN) :: TAU(NTAU), GTAU(NTAU), WGT(NTAU)
+      REAL, INTENT(IN) :: T(*)
+      REAL, INTENT(INOUT) :: A(N), WK(N), Q(K,N)
       INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
       REAL :: DW
 C-----------------------------------------------------------------------
@@ -94265,9 +94288,6 @@ C                LEAST SQUARES SOLUTION WAS OBTAINED.
 C            -1  INPUT ERRORS WERE DETECTED.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: TAU(NTAU), GTAU(NTAU), WGT(NTAU)
-      REAL, INTENT(IN) :: T(*)
-      REAL, INTENT(INOUT) :: A(N), WK(N), Q(K,N)
 C
       IF (NTAU .LT. MAX0(2,K)) GO TO 100
       IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
@@ -94326,6 +94346,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: N, NB
+      REAL, INTENT(INOUT) :: W(NB,N), DIAG(N)
       INTEGER :: I, IMAX, IPJ, J, JMAX, K, KPI
       REAL :: RATIO, T
 C-----------------------------------------------------------------------
@@ -94394,7 +94415,6 @@ C   IS EFFECTED BY THE SUCCESSION OF THE FOLLOWING  T W O  CALLS ...
 C     CALL BCHFAC (W, NB, N, DIAG, IFLAG)   , TO GET FACTORIZATION
 C     CALL BCHSLV (W, NB, N, B, X )            , TO SOLVE FOR X.
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: W(NB,N), DIAG(N)
 C
       IF (N .GT. 1) GO TO 10
          IFLAG = 1
@@ -94443,6 +94463,8 @@ C
       SUBROUTINE BCHSLV (W, NB, N, B)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N, NB
+      REAL, INTENT(IN) :: W(NB,N)
+      REAL, INTENT(INOUT) :: B(N)
       INTEGER :: J, JMAX, JPK, K, NBM1
 C-----------------------------------------------------------------------
 C
@@ -94466,8 +94488,6 @@ C     NOTE.  THE FACTORIZATION C = L*D*L  IS USED, WHERE L IS A
 C     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: W(NB,N)
-      REAL, INTENT(INOUT) :: B(N)
 C
       IF (N .GT. 1) GO TO 10
       B(1) = B(1)*W(1,1)
@@ -94507,6 +94527,11 @@ C
       INTEGER, INTENT(INOUT) :: MODE
       INTEGER, INTENT(IN) :: N, NCONST, NDATA, NORD
       REAL, INTENT(INOUT) :: RNORM
+      REAL, INTENT(IN) :: BKPT(*), XDATA(NDATA), YDATA(NDATA)
+      REAL, INTENT(IN) :: XCONST(*), YCONST(*)
+      REAL, INTENT(INOUT) :: COEFF(N), W(*)
+      INTEGER, INTENT(IN) :: NDERIV(*)
+      INTEGER, INTENT(INOUT) :: IW(*)
       INTEGER :: I1, I2, I3, I7, MDG, MDW, NBKPT
 C-----------------------------------------------------------------------
 C
@@ -94712,11 +94737,6 @@ C     RICHARD J. HANSON
 C     SANDIA LABORATORIES
 C   MODIFIED BY A.H. MORRIS (NSWC)
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: BKPT(*), XDATA(NDATA), YDATA(NDATA)
-      REAL, INTENT(IN) :: XCONST(*), YCONST(*)
-      REAL, INTENT(INOUT) :: COEFF(N), W(*)
-      INTEGER, INTENT(IN) :: NDERIV(*)
-      INTEGER, INTENT(INOUT) :: IW(*)
 C
       NBKPT = N + NORD
       MDG = N + 3
@@ -94751,20 +94771,20 @@ C
       INTEGER, INTENT(INOUT) :: MODE
       INTEGER, INTENT(IN) :: NBKPT, NCONST, NDATA, NORD
       REAL, INTENT(INOUT) :: RNORM
-      INTEGER :: I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1,
-     &IR, IROW, ITYPE, IW1, IW2, J, L, LW, M, MT, N, NB, NEQCON, NINCON,
-     &NORDM1, NORDP1, NP1
-      REAL :: RNORME, XMAX, XMIN, XVAL, YVAL
-C---------------------
       REAL, INTENT(IN) :: BKPT(NBKPT), XDATA(NDATA), YDATA(NDATA)
       REAL, INTENT(IN) :: XCONST(*), YCONST(*)
       REAL, INTENT(INOUT) :: COEFF(*)
       REAL, INTENT(INOUT) :: BF(NORD,NORD), G(MDG,*), W(MDW,*), WORK(*)
       INTEGER, INTENT(IN) :: NDERIV(*)
       INTEGER, INTENT(INOUT) :: IWORK(*)
-C
+      INTEGER :: I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1,
+     &IR, IROW, ITYPE, IW1, IW2, J, L, LW, M, MT, N, NB, NEQCON, NINCON,
+     &NORDM1, NORDP1, NP1
+      REAL :: RNORME, XMAX, XMIN, XVAL, YVAL
       REAL :: PRGOPT(7)
       LOGICAL :: BAND, NEW
+C---------------------
+C
 C
       GO TO 100
 C
@@ -95469,6 +95489,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: KZ, MX, MY, NUM, NX, NY
+      REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ, MY)
+      REAL, INTENT(IN) :: XBREAK(NX), YBREAK(NY)
+      REAL, INTENT(INOUT) :: F(*)
+      REAL, INTENT(INOUT) :: S(*), T(*), WK(NUM)
       INTEGER :: I, IMAX, J, L, LD, M, N, NU
 C-----------------------------------------------------------------------
 C
@@ -95505,10 +95529,6 @@ C        ALFRED H. MORRIS, JR.
 C        NAVAL SURFACE WARFARE CENTER
 C        DAHLGREN, VIRGINIA
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ, MY)
-      REAL, INTENT(IN) :: XBREAK(NX), YBREAK(NY)
-      REAL, INTENT(INOUT) :: F(*)
-      REAL, INTENT(INOUT) :: S(*), T(*), WK(NUM)
 C---------------------
 C     REAL F(4*NX*NY), S(NX + 6), T(NY + 6)
 C---------------------
@@ -95604,8 +95624,11 @@ C
       SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KA, KDZ, KZ, M, N
+      REAL, INTENT(IN) :: T(*), A(KA,N)
+      REAL, INTENT(INOUT) :: Z(KZ,*), DZ(KDZ,*)
       INTEGER :: I, IL, ILJ, ILKJ, J, JJ, JP1, K, KMJ, L, LEFT, MP1, MU
       REAL :: DEL, DIFF, R, S, TERM, X
+      REAL :: C(4), WK(4,5)
 C-----------------------------------------------------------------------
 C
 C            COMPUTATION OF N CUBIC SPLINES AND THEIR FIRST
@@ -95637,9 +95660,6 @@ C       DZ    N X (M-2) MATRIX WHERE DZ(J,I) = FIRST DERIVATIVE OF
 C             THE J-TH CUBIC SPLINE EVALUATED AT THE POINT T(I+3).
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: T(*), A(KA,N)
-      REAL, INTENT(INOUT) :: Z(KZ,*), DZ(KDZ,*)
-      REAL :: C(4), WK(4,5)
 C
       K = 4
       MP1 = M + 1
@@ -95720,6 +95740,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX,
      &MY, N
+      REAL, INTENT(IN) :: X(MX), Y(MY)
+      REAL, INTENT(INOUT) :: Z(KZ,MY)
+      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
+     &F12(KF12,N)
       INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL :: A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1,
      &DS, DT, DX, DY, FI, FIP1, XX, YY
@@ -95730,10 +95754,6 @@ C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(MX), Y(MY)
-      REAL, INTENT(INOUT) :: Z(KZ,MY)
-      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
-     &F12(KF12,N)
 C
       IF (IDER .GT. 3 .OR. JDER .GT. 3) GO TO 400
       MM1 = M - 1
@@ -95882,15 +95902,15 @@ C
       SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KZ, M, MX, MY, N
+      REAL, INTENT(IN) :: X(MX), Y(MY)
+      REAL, INTENT(INOUT) :: Z(KZ,MY)
+      REAL, INTENT(IN) :: S(M), T(N), F(M,N,4)
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(MX), Y(MY)
-      REAL, INTENT(INOUT) :: Z(KZ,MY)
-      REAL, INTENT(IN) :: S(M), T(N), F(M,N,4)
 C
       CALL CSURF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, M,
      *            F(1,1,3), M, F(1,1,2), M, F(1,1,4), M)
@@ -95902,6 +95922,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX,
      &MY, N
+      REAL, INTENT(IN) :: X(MX), Y(MY)
+      REAL, INTENT(INOUT) :: Z(KZ,MY)
+      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
+     &F12(KF12,N)
       INTEGER :: I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL :: A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS,
      &DT, DX, DY, FI, FIP1, XX, YY
@@ -95912,10 +95936,6 @@ C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(MX), Y(MY)
-      REAL, INTENT(INOUT) :: Z(KZ,MY)
-      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), F1(KF1,N), F2(KF2,N),
-     &F12(KF12,N)
 C
       IF (IDER .GT. 3 .OR. JDER .GT. 3) GO TO 400
       MM1 = M - 1
@@ -96060,15 +96080,15 @@ C
      *                  F, KF, DDF)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IDER, JDER, KF, KZ, M, MX, MY, N
+      REAL, INTENT(IN) :: X(MX), Y(MY)
+      REAL, INTENT(INOUT) :: Z(KZ,MY)
+      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), DDF(M,N,3)
 C-----------------------------------------------------------------------
 C
 C             EVALUATION OR DIFFERENTIATION OF A BICUBIC
 C                        SPLINE OVER A GRID
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(MX), Y(MY)
-      REAL, INTENT(INOUT) :: Z(KZ,MY)
-      REAL, INTENT(IN) :: S(M), T(N), F(KF,N), DDF(M,N,3)
 C
       CALL CSRF (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F, KF,
      *           DDF(1,1,2), M, DDF, M, DDF(1,1,3), M)
@@ -96077,17 +96097,18 @@ C
 
       SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
       IMPLICIT NONE
-      INTEGER :: I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1,
-     &KEY, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
-      REAL :: C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM,
-     &DELY1, DELY2, DELYN, DELYNM, DIAG1, DIAG2, DIAGI, DIAGIN, SDIAG1,
-     &SDIAG2, SIGMAX, SIGMAY, T, ZXY1NS, ZXYMNS
-C
       INTEGER, INTENT(IN) :: M, N, IZ
       INTEGER, INTENT(OUT) :: IERR
       REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), OPT(*)
       REAL, INTENT(INOUT) :: ZP(M,N,*), TEMP(*)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1,
+     &KEY, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
+      REAL :: C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM,
+     &DELY1, DELY2, DELYN, DELYNM, DIAG1, DIAG2, DIAGI, DIAGIN, SDIAG1,
+     &SDIAG2, SIGMAX, SIGMAY, T, ZXY1NS, ZXYMNS
+      INTEGER :: IND(8), LOC(8), NUM(8)
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -96165,7 +96186,6 @@ C AND SNHCSH.
 C
 C-----------------------------------------------------------
 C
-      INTEGER :: IND(8), LOC(8), NUM(8)
       DATA NUM(5)/1/, NUM(6)/1/, NUM(7)/1/, NUM(8)/1/
 C
       MM1 = M-1
@@ -96467,6 +96487,10 @@ C
 
       FUNCTION SURF2 (XX,YY,M,N,X,Y,Z,IZ,ZP,SIGMA)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: M, N, IZ
+      REAL, INTENT(IN) :: XX, YY, X(M), Y(N)
+      REAL :: Z(IZ,N), ZP(M,N,*)
+      REAL, INTENT(IN) :: SIGMA
       INTEGER :: I, IM1, J, JM1
       REAL :: COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2, DELS, DUMMY, F1,
      &F2, FP1, FP2, SIGMAP, SIGMAX, SIGMAY, SINHM1, SINHM2, SINHMS,
@@ -96476,10 +96500,6 @@ C
       REAL :: HERMZ
       INTEGER :: INTRVL
 C
-      INTEGER, INTENT(IN) :: M, N, IZ
-      REAL, INTENT(IN) :: XX, YY, X(M), Y(N)
-      REAL :: Z(IZ,N), ZP(M,N,*)
-      REAL, INTENT(IN) :: SIGMA
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                       CODED BY A. K. CLINE AND R. J. RENKA
@@ -96620,17 +96640,17 @@ C
       SUBROUTINE NSURF2 (DXMIN,DXMAX,MD,DYMIN,DYMAX,ND,DZ,
      *                   IDZ,M,N,X,Y,Z,IZ,ZP,WORK,SIGMA)
       IMPLICIT NONE
-      INTEGER :: I, II, IM1, J, JJ, JM1, LASTI, LASTJ
-      REAL :: C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2,
-     &DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2,
-     &SINHMS, SINHP1, SINHP2, TEMP, XII, YJJ, ZI, ZIM1, ZXXI, ZXXIM1
-C
       INTEGER, INTENT(IN) :: MD, ND, IDZ, M, N, IZ
       REAL, INTENT(IN) :: DXMIN, DXMAX, DYMIN, DYMAX
       REAL, INTENT(INOUT) :: DZ(IDZ,ND)
       REAL, INTENT(IN) :: X(M), Y(N), Z(IZ,N), ZP(M,N,*)
       REAL, INTENT(INOUT) :: WORK(4,MD)
       REAL, INTENT(IN) :: SIGMA
+      INTEGER :: I, II, IM1, J, JJ, JM1, LASTI, LASTJ
+      REAL :: C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2,
+     &DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2,
+     &SINHMS, SINHP1, SINHP2, TEMP, XII, YJJ, ZI, ZIM1, ZXXI, ZXXIM1
+C
 C
 C                      FROM THE SPLINE UNDER TENSION PACKAGE
 C                                 CODED BY ALAN KAYLOR CLINE
@@ -96808,6 +96828,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: KA, KX, KY, KZ, L, NX, NY
+      REAL, INTENT(IN) :: X(NX), Y(NY), Z(KZ,NY)
+      REAL, INTENT(IN) :: TX(*), TY(*)
+      REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
       INTEGER :: IW, M
 C-----------------------------------------------------------------------
 C
@@ -96829,9 +96852,6 @@ C-----------------------------------------------------------------------
 C     REAL TX(NX + KX), TY(NY + KY)
 C     REAL WK(L)  WHERE L = NX*NY + MAX(2*KX*NX, 2*KY*NY)
 C-------------------------
-      REAL, INTENT(IN) :: X(NX), Y(NY), Z(KZ,NY)
-      REAL, INTENT(IN) :: TX(*), TY(*)
-      REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
 C
       M = NX*NY + 2*MAX0(KX*NX, KY*NY)
       IF (L .LT. M) GO TO 120
@@ -96859,6 +96879,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: IFLAG
       INTEGER, INTENT(IN) :: K, KA, KZ, M, N
+      REAL, INTENT(IN) :: X(M), Z(KZ,N), T(*)
+      REAL, INTENT(INOUT) :: A(KA,M), WORK(*)
       INTEGER :: I, J, MP1
 C-------------------------------------------------------------------
 C     BSTRP1 COMPUTES B-SPLINE INTERPOLATION COEFFICIENTS FOR
@@ -96869,8 +96891,6 @@ C     IT IS ASSUMED THAT KZ .GE. M AND KA .GE. N.
 C-------------------------------------------------------------------
 C     REAL T(M + K), WORK(2*K*M)
 C-----------------------
-      REAL, INTENT(IN) :: X(M), Z(KZ,N), T(*)
-      REAL, INTENT(INOUT) :: A(KA,M), WORK(*)
 C
 C     FIRST DATA SET
 C
@@ -96900,6 +96920,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IFLAG
       INTEGER, INTENT(IN) :: KA, KX, KY, KZ, L, MX, MY, NX, NY
+      REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ,MY)
+      REAL, INTENT(IN) :: TX(*), TY(*)
+      REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
       INTEGER :: IERR, IQ, IW, M
 C-----------------------------------------------------------------------
 C
@@ -96922,9 +96945,6 @@ C-----------------------------------------------------------------------
 C     REAL TX(NX + KX), TY(NY + KY)
 C     REAL WK(L)  WHERE L = NX*MY + MAX((KX+1)*NX,(KY+1)*NY)
 C-------------------------
-      REAL, INTENT(IN) :: X(MX), WX(MX), Y(MY), WY(MY), Z(KZ,MY)
-      REAL, INTENT(IN) :: TX(*), TY(*)
-      REAL, INTENT(INOUT) :: A(KA,NY), WK(L)
 C
       M = NX*MY + MAX0((KX + 1)*NX,(KY + 1)*NY)
       IF (L .LT. M) GO TO 120
@@ -96960,6 +96980,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: K, KA, KZ, M, N, NTAU
+      REAL, INTENT(IN) :: TAU(NTAU), WGT(NTAU), Z(KZ,M)
+      REAL, INTENT(IN) :: T(*)
+      REAL, INTENT(INOUT) :: A(KA,N), WK(N), Q(K,N)
       INTEGER :: I, J, JJ, L, LEFT, LEFTMK, MM
       REAL :: DW
 C-----------------------------------------------------------------------
@@ -97004,9 +97027,6 @@ C                LEAST SQUARES SOLUTION WAS OBTAINED.
 C            -1  INPUT ERRORS WERE DETECTED.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: TAU(NTAU), WGT(NTAU), Z(KZ,M)
-      REAL, INTENT(IN) :: T(*)
-      REAL, INTENT(INOUT) :: A(KA,N), WK(N), Q(K,N)
 C
       IF (NTAU .LT. MAX0(2,K)) GO TO 100
       IF (TAU(1) .LT. T(K) .OR. TAU(NTAU) .GT. T(N + 1)) GO TO 100
@@ -97071,6 +97091,8 @@ C
       SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KB, M, N, NB
+      REAL, INTENT(IN) :: W(NB,N)
+      REAL, INTENT(INOUT) :: B(KB,N)
       INTEGER :: I, J, JMAX, JPK, K, NBM1
       REAL :: T
 C-----------------------------------------------------------------------
@@ -97104,8 +97126,6 @@ C     NOTE.  THE FACTORIZATION C = L*D*L  IS USED, WHERE L IS A
 C     UNIT LOWER TRIANGULAR MATRIX AND D A DIAGONAL MATRIX.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: W(NB,N)
-      REAL, INTENT(INOUT) :: B(KB,N)
 C
       IF (N .GT. 1) GO TO 20
       DO I = 1,M
@@ -97155,6 +97175,8 @@ C
       INTEGER, INTENT(IN) :: IDX, IDY, KA, KX, KY, NX, NY
       REAL, INTENT(OUT) :: F
       REAL, INTENT(IN) :: X0, Y0
+      REAL, INTENT(IN) :: A(KA,NY), TX(*), TY(*)
+      REAL, INTENT(INOUT) :: WK(*)
       INTEGER :: I, IW, J, L, M
       INTEGER :: INTRVL
 C-----------------------------------------------------------------------
@@ -97171,8 +97193,6 @@ C            I      J
 C-----------------------------------------------------------------------
 C     REAL TX(NX + KX), TY(NY + KY), WK(KY + 3*MAX(KX,KY))
 C-----------------------------
-      REAL, INTENT(IN) :: A(KA,NY), TX(*), TY(*)
-      REAL, INTENT(INOUT) :: WK(*)
 C
       F = 0.0
       M = NX + KX
@@ -97210,6 +97230,9 @@ C
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(N)
       INTEGER, INTENT(OUT) :: IER
       REAL :: X(N), Y(N)
+      INTEGER :: NN, K, KM1, NL, NR, IND, INDX, N0, ITEMP, IERR, KM1D2,
+     &KMI, I, KMIN
+      REAL :: XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, CPROD, SPROD
 C
 C***********************************************************
 C
@@ -97283,9 +97306,6 @@ C                                SWAPD, TINDX
 C
 C***********************************************************
 C
-      INTEGER :: NN, K, KM1, NL, NR, IND, INDX, N0, ITEMP, IERR, KM1D2,
-     &KMI, I, KMIN
-      REAL :: XL, YL, XR, YR, DXR, DYR, XK, YK, DXK, DYK, CPROD, SPROD
 C
 C LOCAL PARAMETERS -
 C
@@ -97466,6 +97486,9 @@ C
       REAL :: X(KK), Y(KK)
       LOGICAL :: SWPTST
       INTEGER :: TINDX
+      INTEGER :: K, KM1, I1, I2, I3, INDKF, INDKL, NABOR1, IO1, IO2,
+     &IN1, INDK1, IND2F, IND21
+      REAL :: XK, YK
 C
 C***********************************************************
 C
@@ -97516,9 +97539,6 @@ C                                SWAPD
 C
 C***********************************************************
 C
-      INTEGER :: K, KM1, I1, I2, I3, INDKF, INDKL, NABOR1, IO1, IO2,
-     &IN1, INDK1, IND2F, IND21
-      REAL :: XK, YK
 C
 C LOCAL PARAMETERS -
 C
@@ -97610,6 +97630,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+      INTEGER :: K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, IMIN, IMAX,
+     &KEND, NEXT, INDX
 C
 C***********************************************************
 C
@@ -97660,8 +97682,6 @@ C INTRINSIC FUNCTIONS CALLED BY BDYADD - MIN0, MAX0
 C
 C***********************************************************
 C
-      INTEGER :: K, KM1, NRIGHT, NLEFT, NF, NL, N1, N2, I, IMIN, IMAX,
-     &KEND, NEXT, INDX
 C
 C LOCAL PARAMETERS -
 C
@@ -97748,6 +97768,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: KK, I1, I2, I3
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(KK)
+      INTEGER :: K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, NL, N1,
+     &N2, IMIN, IMAX, I, ITEMP
 C
 C***********************************************************
 C
@@ -97794,8 +97816,6 @@ C INTRINSIC FUNCTION CALLED BY INTADD - MOD
 C
 C***********************************************************
 C
-      INTEGER :: K, KM1, N(3), NFT(3), IP1, IP2, IP3, INDX, NF, NL, N1,
-     &N2, IMIN, IMAX, I, ITEMP
 C
 C LOCAL PARAMETERS -
 C
@@ -97907,6 +97927,7 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NFRST, NLAST, KK
       INTEGER, INTENT(INOUT) :: IARR(*)
+      INTEGER :: INC, K, NF, NL, NLP1, NS, NSL, I, IBAK, INDX, IMAX
 C
 C***********************************************************
 C
@@ -97942,7 +97963,6 @@ C MODULES REFERENCED BY SHIFTD - NONE
 C
 C***********************************************************
 C
-      INTEGER :: INC, K, NF, NL, NLP1, NS, NSL, I, IBAK, INDX, IMAX
       DATA    INC/5/
 C
 C LOCAL PARAMETERS -
@@ -98021,6 +98041,7 @@ C
       INTEGER, INTENT(IN) :: NIN1, NIN2, NOUT1, NOUT2
       INTEGER, INTENT(INOUT) :: IADJ(*), IEND(*)
       INTEGER :: TINDX
+      INTEGER :: IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, IMIN, IMAX
 C
 C***********************************************************
 C
@@ -98053,7 +98074,6 @@ C MODULES REFERENCED BY SWAPD - TINDX, SHIFTD
 C
 C***********************************************************
 C
-      INTEGER :: IN(2), IO(2), IP1, IP2, J, K, NF, NL, I, IMIN, IMAX
 C
 C LOCAL PARAMETERS -
 C
@@ -98207,6 +98227,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: IN1, IN2, IO1, IO2
       REAL, INTENT(IN) :: X(*), Y(*)
+      REAL :: DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, SIN1,
+     &SIN2, COS1, COS2, SIN12
 C
 C***********************************************************
 C
@@ -98246,8 +98268,6 @@ C MODULES REFERENCED BY SWPTST - NONE
 C
 C***********************************************************
 C
-      REAL :: DX11, DX12, DX22, DX21, DY11, DY12, DY22, DY21, SIN1,
-     &SIN2, COS1, COS2, SIN12
 C
 C LOCAL PARAMETERS -
 C
@@ -98307,6 +98327,7 @@ C
       INTEGER FUNCTION TINDX (NVERTX,NABOR,IADJ,IEND)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NVERTX, NABOR, IADJ(*), IEND(*)
+      INTEGER :: NB, INDX
 C
 C***********************************************************
 C
@@ -98337,7 +98358,6 @@ C MODULES REFERENCED BY TINDX - NONE
 C
 C***********************************************************
 C
-      INTEGER :: NB, INDX
 C
 C LOCAL PARAMETERS -
 C
@@ -98361,11 +98381,14 @@ C
 
       SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
       IMPLICIT NONE
-      REAL :: X0, X1, X2, Y0, Y1, Y2
       INTEGER, INTENT(IN) :: NST, IADJ(*), IEND(*)
       INTEGER, INTENT(INOUT) :: I1, I2, I3
       REAL, INTENT(IN) :: PX, PY
       REAL :: X(*), Y(*)
+      REAL :: X0, X1, X2, Y0, Y1, Y2
+      INTEGER :: N0, N1, N2, N3, N4, INDX, IND, NF, NL, NEXT
+      REAL :: XP, YP
+      LOGICAL :: LEFT
 C
 C***********************************************************
 C
@@ -98422,9 +98445,6 @@ C INTRINSIC FUNCTION CALLED BY TRFIND - MAX0
 C
 C***********************************************************
 C
-      INTEGER :: N0, N1, N2, N3, N4, INDX, IND, NF, NL, NEXT
-      REAL :: XP, YP
-      LOGICAL :: LEFT
 C
 C LOCAL PARAMETERS -
 C
@@ -98662,14 +98682,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(IN) :: X(N), Y(N), Z(N)
+      REAL, INTENT(INOUT) :: ZXZY(2,N)
+      INTEGER, INTENT(IN) :: IADJ(*), IEND(N)
       INTEGER :: J, MITER
       REAL :: EPS
 C-----------------------------------------------------------------------
 C                      DERIVATIVE ESTIMATION
 C-----------------------------------------------------------------------
-      REAL, INTENT(IN) :: X(N), Y(N), Z(N)
-      REAL, INTENT(INOUT) :: ZXZY(2,N)
-      INTEGER, INTENT(IN) :: IADJ(*), IEND(N)
 C
       IF (N .LT. 3) GO TO 20
 C
@@ -98696,6 +98716,9 @@ C
       INTEGER, INTENT(INOUT) :: NIT, IER
       REAL, INTENT(IN) :: X(N), Y(N), Z(N), EPS
       REAL, INTENT(INOUT) :: ZXZY(2,N)
+      INTEGER :: NN, MAXIT, ITER, K, INDF, INDL, INDX, NB
+      REAL :: TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, A22, R1, R2,
+     &DELX, DELY, DELXS, DELYS, DSQ, DCUB, T, DZX, DZY
 C
 C***********************************************************
 C
@@ -98784,9 +98807,6 @@ C INTRINSIC FUNCTIONS CALLED BY GRADG1 - SQRT, AMAX1, ABS
 C
 C***********************************************************
 C
-      INTEGER :: NN, MAXIT, ITER, K, INDF, INDL, INDX, NB
-      REAL :: TOL, DGMAX, XK, YK, ZK, ZXK, ZYK, A11, A12, A22, R1, R2,
-     &DELX, DELY, DELXS, DELYS, DSQ, DCUB, T, DZX, DZY
 C
 C LOCAL PARAMETERS -
 C
@@ -98914,14 +98934,14 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: N
-      INTEGER :: J
-C-----------------------------------------------------------------------
-C                      DERIVATIVE ESTIMATION
-C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: X(N), Y(N), Z(N)
       REAL, INTENT(INOUT) :: ZXZY(2,N)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+      INTEGER :: J
+C-----------------------------------------------------------------------
+C                      DERIVATIVE ESTIMATION
+C-----------------------------------------------------------------------
 C
       IF (N .LT. 3) GO TO 20
 C
@@ -98948,6 +98968,10 @@ C
       INTEGER, INTENT(INOUT) :: IEND(N), IER
       REAL, INTENT(IN) :: X(N), Y(N), Z(N)
       REAL, INTENT(INOUT) :: DX, DY
+      INTEGER :: NN, KK, LMN, LMX, LMIN, LMAX, LM1, LNP, NPTS(30), IERR,
+     &NP, I, J, IM1, JP1, IP1, L
+      REAL :: SUM, DS, R, RS, RTOL, AVSQ, AV, XK, YK, ZK, A(6,6), C, S,
+     &DMIN, DTOL, SF
 C
 C***********************************************************
 C
@@ -99015,10 +99039,6 @@ C                                       AMIN1, ABS
 C
 C***********************************************************
 C
-      INTEGER :: NN, KK, LMN, LMX, LMIN, LMAX, LM1, LNP, NPTS(30), IERR,
-     &NP, I, J, IM1, JP1, IP1, L
-      REAL :: SUM, DS, R, RS, RTOL, AVSQ, AV, XK, YK, ZK, A(6,6), C, S,
-     &DMIN, DTOL, SF
       DATA    LMN/10/
       DATA    LMX/30/, RTOL/1.E-5/, DTOL/.01/, SF/1./
 C
@@ -99243,6 +99263,8 @@ C
       IMPLICIT NONE
       REAL, INTENT(IN) :: XK, YK, ZK, XI, YI, ZI, S1, S2, R
       REAL, INTENT(INOUT) :: ROW(6)
+      INTEGER :: I
+      REAL :: DX, DY, DXSQ, DYSQ, D, W, W1, W2
 C
 C***********************************************************
 C
@@ -99284,8 +99306,6 @@ C INTRINSIC FUNCTION CALLED BY SETRM - SQRT
 C
 C***********************************************************
 C
-      INTEGER :: I
-      REAL :: DX, DY, DXSQ, DYSQ, D, W, W1, W2
 C
 C LOCAL PARAMETERS -
 C
@@ -99332,6 +99352,8 @@ C
       INTEGER, INTENT(INOUT) :: NPTS(L), IER
       REAL, INTENT(IN) :: X(*), Y(*)
       REAL, INTENT(INOUT) :: DS
+      INTEGER :: LM1, N1, I, NI, NP, INDF, INDL, INDX, NB
+      REAL :: X1, Y1, DNP, DNB
 C
 C***********************************************************
 C
@@ -99395,8 +99417,6 @@ C INTRINSIC FUNCTION CALLED BY GETNP - IABS
 C
 C***********************************************************
 C
-      INTEGER :: LM1, N1, I, NI, NP, INDF, INDL, INDX, NB
-      REAL :: X1, Y1, DNP, DNB
 C
 C LOCAL PARAMETERS -
 C
@@ -99478,16 +99498,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: M, N
-      INTEGER :: IST, J
-C-----------------------------------------------------------------------
-C                    EVALUATION OF THE SURFACE
-C-----------------------------------------------------------------------
       REAL :: X(N), Y(N)
       REAL, INTENT(IN) :: Z(N), XI(M), YI(M)
       REAL, INTENT(INOUT) :: ZI(M)
       REAL, INTENT(IN) :: ZXZY(2,N)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+      INTEGER :: IST, J
+C-----------------------------------------------------------------------
+C                    EVALUATION OF THE SURFACE
+C-----------------------------------------------------------------------
 C
       IF (N .LT. 3 .OR. M .LT. 1) GO TO 20
 C
@@ -99513,16 +99533,16 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR
       INTEGER, INTENT(IN) :: L, M, N, NROWS
-      INTEGER :: I, IST, J
-C-----------------------------------------------------------------------
-C                EVALUATION OF THE SURFACE OVER A GRID
-C-----------------------------------------------------------------------
       REAL :: X(N), Y(N)
       REAL, INTENT(IN) :: Z(N), ZXZY(2,N)
       REAL, INTENT(IN) :: XI(L), YI(M)
       REAL, INTENT(INOUT) :: ZI(NROWS,M)
       INTEGER, INTENT(IN) :: IADJ(*)
       INTEGER, INTENT(INOUT) :: IEND(N)
+      INTEGER :: I, IST, J
+C-----------------------------------------------------------------------
+C                EVALUATION OF THE SURFACE OVER A GRID
+C-----------------------------------------------------------------------
 C
       IF (N .LT. 3 .OR. L .LT. 1 .OR. M .LT. 1 .OR. NROWS .LT. L)
      *   GO TO 30
@@ -99557,6 +99577,10 @@ C
       REAL :: X(N), Y(N)
       REAL, INTENT(IN) :: Z(N), ZXZY(2,N)
       REAL, INTENT(OUT) :: PZ
+      INTEGER :: NN, I1, I2, I3, IERR, N1, N2, INDX
+      REAL :: XP, YP, ZX1, ZY1, ZX2, ZY2, ZX3, ZY3, X1, Y1, X2, Y2, X3,
+     &Y3, Z1, Z2, Z3, DUM, DP, U, V, XQ, YQ, R1, R2, A1, A2, B1, B2, C1,
+     &C2, F1, F2
 C
 C***********************************************************
 C
@@ -99646,10 +99670,6 @@ C                                SROTG, SROT
 C
 C***********************************************************
 C
-      INTEGER :: NN, I1, I2, I3, IERR, N1, N2, INDX
-      REAL :: XP, YP, ZX1, ZY1, ZX2, ZY2, ZX3, ZY3, X1, Y1, X2, Y2, X3,
-     &Y3, Z1, Z2, Z3, DUM, DP, U, V, XQ, YQ, R1, R2, A1, A2, B1, B2, C1,
-     &C2, F1, F2
 C
 C LOCAL PARAMETERS -
 C
@@ -99838,6 +99858,11 @@ C
       REAL, INTENT(IN) :: X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, ZX1,
      &ZX2, ZX3, ZY1, ZY2, ZY3
       REAL, INTENT(INOUT) :: W, WX, WY
+      INTEGER :: I, IP1, IP2, IP3
+      REAL :: U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), RY(3),
+     &PHI(3), PHIX(3), PHIY(3), RMIN, C1, C2, RO(3), ROX(3), ROY(3),
+     &F(3), G(3), GX(3), GY(3), P(3), PX(3), PY(3), Q(3), QX(3), QY(3),
+     &A(3), AX(3), AY(3), B(3), BX(3), BY(3), C(3), CX(3), CY(3)
 C
 C***********************************************************
 C
@@ -99905,11 +99930,6 @@ C INTRINSIC FUNCTION CALLED BY TVAL - AMIN1
 C
 C***********************************************************
 C
-      INTEGER :: I, IP1, IP2, IP3
-      REAL :: U(3), V(3), SL(3), AREA, XP, YP, R(3), RX(3), RY(3),
-     &PHI(3), PHIX(3), PHIY(3), RMIN, C1, C2, RO(3), ROX(3), ROY(3),
-     &F(3), G(3), GX(3), GY(3), P(3), PX(3), PY(3), Q(3), QX(3), QY(3),
-     &A(3), AX(3), AY(3), B(3), BX(3), BY(3), C(3), CX(3), CY(3)
 C
 C LOCAL PARAMETERS -
 C
@@ -100129,14 +100149,14 @@ C
       INTEGER, INTENT(INOUT) :: NFPOLS, FITDEG
       INTEGER, INTENT(IN) :: NFPTS, DIMEN, FIWKLN, FDWKLN
       INTEGER, INTENT(INOUT) :: ERROR, IREQD, DREQD
-      INTEGER :: INDSTT, P, DIMP1
       INTEGER, INTENT(IN) :: NCROWS
-      INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
-     &ALFL
       INTEGER, INTENT(INOUT) :: FITIWK(FIWKLN)
       REAL, INTENT(INOUT) :: FITDWK(FDWKLN), FITCDS(NCROWS,DIMEN)
       REAL, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
       REAL, INTENT(IN) :: WTS(NFPTS)
+      INTEGER :: INDSTT, P, DIMP1
+      INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
+     &ALFL
       REAL :: SCALE
 C
 C     ***************
@@ -100302,13 +100322,13 @@ C
       IMPLICIT NONE
 C
       INTEGER, INTENT(INOUT) :: IREQD, DREQD
-      INTEGER :: ALFL
       INTEGER, INTENT(INOUT) :: ERROR, NPOLYS, DEGREE
       INTEGER, INTENT(IN) :: DIMEN, NPTS
-      INTEGER :: NEWSTT, PSIWID, KMXBAS, STARTJ, KJP1D2, INDEX
       INTEGER, INTENT(IN) :: IWKLEN
-      INTEGER :: NPLYT4
       INTEGER, INTENT(INOUT) :: IWORK(IWKLEN)
+      INTEGER :: ALFL
+      INTEGER :: NEWSTT, PSIWID, KMXBAS, STARTJ, KJP1D2, INDEX
+      INTEGER :: NPLYT4
 C
 C     ***************
 C     PURPOSE
@@ -100508,11 +100528,11 @@ C
       SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
       IMPLICIT NONE
 C
-      INTEGER :: TOP, BOT
       INTEGER, INTENT(INOUT) :: DEGREE
       INTEGER, INTENT(IN) :: NPTS, DIMEN
       INTEGER, INTENT(INOUT) :: NPOLYS
       INTEGER, INTENT(OUT) :: ERROR
+      INTEGER :: TOP, BOT
       INTEGER :: I, ROWLEN
 C
 C     ***************
@@ -100599,12 +100619,12 @@ C
       SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
       IMPLICIT NONE
 C
-      INTEGER :: J, KJ, CURDEG, JPRIME, NWITHK, I, CURM1, RALEN, DIMM1,
-     &DIMM2
       INTEGER, INTENT(IN) :: NPOLYS, DIMEN, DEGREE
       INTEGER, INTENT(OUT) :: ALFLP1
-      INTEGER :: DIMP1
       INTEGER, INTENT(INOUT) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
+      INTEGER :: J, KJ, CURDEG, JPRIME, NWITHK, I, CURM1, RALEN, DIMM1,
+     &DIMM2
+      INTEGER :: DIMP1
 C
 C     ***************
 C     PURPOSE
@@ -100750,14 +100770,11 @@ C
      +                 ALFL,DIMP1,MAXABS,ERROR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
       INTEGER, INTENT(INOUT) :: DEGREE
       INTEGER, INTENT(IN) :: DIMEN
       INTEGER, INTENT(INOUT) :: NPOLYS
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: K
       INTEGER, INTENT(IN) :: PSIWID, ALFL
-      INTEGER :: P, STTDEG, ONPLYS
       INTEGER, INTENT(INOUT) :: ERROR
       INTEGER :: DIMP1
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
@@ -100765,7 +100782,10 @@ C
       REAL, INTENT(INOUT) :: COORD(NCROWS,DIMEN), MAXABS(DIMP1)
       REAL, INTENT(IN) :: WEIGHT(NPTS)
       REAL, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS), C(NPOLYS)
+      INTEGER :: K
+      INTEGER :: P, STTDEG, ONPLYS
       REAL :: RUNTOT, RNTOT1
+C
 C
 C     ***************
 C     PURPOSE
@@ -100835,15 +100855,9 @@ C
      +                 ALFL,ONPLYS,STTDEG,ERROR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
-      INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
-      INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
       INTEGER, INTENT(INOUT) :: ERROR
-      INTEGER :: J0MJ1, J1M1, STARTA
       INTEGER, INTENT(IN) :: ONPLYS
-      INTEGER :: ONPP1
       INTEGER, INTENT(INOUT) :: STTDEG
-      INTEGER :: INDEX1, INDEX2
       INTEGER, INTENT(INOUT) :: DEGREE, NPOLYS
       INTEGER, INTENT(IN) :: NPTS, DIMEN, PSIWID, ALFL
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
@@ -100853,7 +100867,13 @@ C
       REAL, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
       REAL, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
       REAL, INTENT(INOUT) :: Z(NPTS)
+      INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
+      INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
+      INTEGER :: J0MJ1, J1M1, STARTA
+      INTEGER :: ONPP1
+      INTEGER :: INDEX1, INDEX2
       REAL :: ARC, RUNTOT, RNTOT1, RNTOT2
+C
 C
 C     ***************
 C     PURPOSE
@@ -101042,10 +101062,10 @@ C
       IMPLICIT NONE
 C
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: P
       REAL, INTENT(OUT) :: MAXABS
-      REAL :: A
       REAL, INTENT(IN) :: COORD(NPTS)
+      INTEGER :: P
+      REAL :: A
 C
 C     ***************
 C     PURPOSE
@@ -101081,9 +101101,9 @@ C
       IMPLICIT NONE
 C
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: P
       REAL, INTENT(IN) :: MAXABS
       REAL, INTENT(INOUT) :: COORD(NPTS)
+      INTEGER :: P
 C
 C     ***************
 C     PURPOSE
@@ -101110,19 +101130,19 @@ C
      +                 ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEROWS
-C
       INTEGER, INTENT(IN) :: FIWKLN, FDWKLN
       INTEGER, INTENT(INOUT) :: NEPOLS
       INTEGER, INTENT(IN) :: NEPTS, DIMEN
       INTEGER, INTENT(INOUT) :: ERROR
-      INTEGER :: MAXSTT, ALFSTT, CSTT
-      INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER, INTENT(IN) :: EVLDEG
-      INTEGER :: TOP, BOT, CURDEG, PSISTT
       INTEGER, INTENT(IN) :: FITIWK(FIWKLN)
       REAL, INTENT(INOUT) :: FITDWK(FDWKLN)
       REAL, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
       REAL, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+      INTEGER :: MAXSTT, ALFSTT, CSTT
+      INTEGER :: GBASIZ, ALFL, DIMP1
+      INTEGER :: TOP, BOT, CURDEG, PSISTT
+C
 C
 C     ***************
 C     PURPOSE
@@ -101269,9 +101289,7 @@ C
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
       INTEGER, INTENT(IN) :: DIMEN, NEPTS, NPOLYS, ALFL, DIMP1
-      INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS)
       REAL, INTENT(IN) :: ALPHA(ALFL), COORD(NCROWS,DIMEN)
       REAL, INTENT(INOUT) :: PSI(NPOLYS)
@@ -101279,7 +101297,9 @@ C
       REAL, INTENT(INOUT) :: F(NEPTS)
       REAL, INTENT(IN) :: MAXABS(DIMP1)
       REAL, INTENT(INOUT) :: X(DIMEN)
+      INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       REAL :: RUNTOT, RNTOT1
+C
 C
 C     ***************
 C     PURPOSE
@@ -101361,15 +101381,15 @@ C
       INTEGER, INTENT(INOUT) :: NFPOLS, FITDEG
       INTEGER, INTENT(IN) :: NFPTS, DIMEN, FIWKLN, FDWKLN
       INTEGER, INTENT(INOUT) :: ERROR, IREQD, DREQD
-      INTEGER :: INDSTT, P, DIMP1
       INTEGER, INTENT(IN) :: NCROWS
-      INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
-     &ALFL
       INTEGER, INTENT(INOUT) :: FITIWK(FIWKLN)
       DOUBLE PRECISION, INTENT(INOUT) :: FITDWK(FDWKLN),
      &FITCDS(NCROWS,DIMEN)
       DOUBLE PRECISION, INTENT(INOUT) :: FITVLS(NFPTS), RESIDS(NFPTS)
       DOUBLE PRECISION, INTENT(IN) :: WTS(NFPTS)
+      INTEGER :: INDSTT, P, DIMP1
+      INTEGER :: NEWSTT, MAXSTT, ALFSTT, PSISTT, CSTT, SSQSTT, PSIWID,
+     &ALFL
       DOUBLE PRECISION :: SCALE
 C
 C     ***************
@@ -101537,14 +101557,11 @@ C
      +                  ALFL,DIMP1,MAXABS,ERROR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
       INTEGER, INTENT(INOUT) :: DEGREE
       INTEGER, INTENT(IN) :: DIMEN
       INTEGER, INTENT(INOUT) :: NPOLYS
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: K
       INTEGER, INTENT(IN) :: PSIWID, ALFL
-      INTEGER :: P, STTDEG, ONPLYS
       INTEGER, INTENT(INOUT) :: ERROR
       INTEGER :: DIMP1
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
@@ -101555,7 +101572,10 @@ C
       DOUBLE PRECISION, INTENT(IN) :: WEIGHT(NPTS)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS), SUMSQS(NPOLYS),
      &C(NPOLYS)
+      INTEGER :: K
+      INTEGER :: P, STTDEG, ONPLYS
       DOUBLE PRECISION :: RUNTOT, RNTOT1
+C
 C
 C     ***************
 C     PURPOSE
@@ -101625,15 +101645,9 @@ C
      +                  ALFL,ONPLYS,STTDEG,ERROR)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
-      INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
-      INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
       INTEGER, INTENT(INOUT) :: ERROR
-      INTEGER :: J0MJ1, J1M1, STARTA
       INTEGER, INTENT(IN) :: ONPLYS
-      INTEGER :: ONPP1
       INTEGER, INTENT(INOUT) :: STTDEG
-      INTEGER :: INDEX1, INDEX2
       INTEGER, INTENT(INOUT) :: DEGREE, NPOLYS
       INTEGER, INTENT(IN) :: NPTS, DIMEN, PSIWID, ALFL
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS), NEWKJ(DIMEN,DEGREE)
@@ -101643,7 +101657,13 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: SUMSQS(NPOLYS), C(NPOLYS)
       DOUBLE PRECISION, INTENT(IN) :: F(NPTS), WEIGHT(NPTS)
       DOUBLE PRECISION, INTENT(INOUT) :: Z(NPTS)
+      INTEGER :: JPRIME, P, J, CURDEG, KJ, KJP, L, JPM1, JM1
+      INTEGER :: M, START, JINDEX, JPINDX, Q, J3, J1, J1MJ2
+      INTEGER :: J0MJ1, J1M1, STARTA
+      INTEGER :: ONPP1
+      INTEGER :: INDEX1, INDEX2
       DOUBLE PRECISION :: ARC, RUNTOT, RNTOT1, RNTOT2
+C
 C
 C     ***************
 C     PURPOSE
@@ -101832,10 +101852,10 @@ C
       IMPLICIT NONE
 C
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: P
       DOUBLE PRECISION, INTENT(OUT) :: MAXABS
-      DOUBLE PRECISION :: A
       DOUBLE PRECISION, INTENT(IN) :: COORD(NPTS)
+      INTEGER :: P
+      DOUBLE PRECISION :: A
 C
 C     ***************
 C     PURPOSE
@@ -101871,9 +101891,9 @@ C
       IMPLICIT NONE
 C
       INTEGER, INTENT(IN) :: NPTS
-      INTEGER :: P
       DOUBLE PRECISION, INTENT(IN) :: MAXABS
       DOUBLE PRECISION, INTENT(INOUT) :: COORD(NPTS)
+      INTEGER :: P
 C
 C     ***************
 C     PURPOSE
@@ -101900,19 +101920,19 @@ C
      +                  ERROR,FITIWK,FITDWK,FIWKLN,FDWKLN,TEMP)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEROWS
-C
       INTEGER, INTENT(IN) :: FIWKLN, FDWKLN
       INTEGER, INTENT(INOUT) :: NEPOLS
       INTEGER, INTENT(IN) :: NEPTS, DIMEN
       INTEGER, INTENT(INOUT) :: ERROR
-      INTEGER :: MAXSTT, ALFSTT, CSTT
-      INTEGER :: GBASIZ, ALFL, DIMP1
       INTEGER, INTENT(IN) :: EVLDEG
-      INTEGER :: TOP, BOT, CURDEG, PSISTT
       INTEGER, INTENT(IN) :: FITIWK(FIWKLN)
       DOUBLE PRECISION, INTENT(INOUT) :: FITDWK(FDWKLN)
       DOUBLE PRECISION, INTENT(IN) :: EVLCDS(NEROWS,DIMEN)
       DOUBLE PRECISION, INTENT(INOUT) :: EVLVLS(NEPTS), TEMP(DIMEN)
+      INTEGER :: MAXSTT, ALFSTT, CSTT
+      INTEGER :: GBASIZ, ALFL, DIMP1
+      INTEGER :: TOP, BOT, CURDEG, PSISTT
+C
 C
 C     ***************
 C     PURPOSE
@@ -102060,9 +102080,7 @@ C
      +                   INDEXS,PSI,F,ALFL,MAXABS,X,DIMP1)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NCROWS
-C
       INTEGER, INTENT(IN) :: DIMEN, NEPTS, NPOLYS, ALFL, DIMP1
-      INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       INTEGER, INTENT(IN) :: INDEXS(4,NPOLYS)
       DOUBLE PRECISION, INTENT(IN) :: ALPHA(ALFL), COORD(NCROWS,DIMEN)
       DOUBLE PRECISION, INTENT(INOUT) :: PSI(NPOLYS)
@@ -102070,7 +102088,9 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: F(NEPTS)
       DOUBLE PRECISION, INTENT(IN) :: MAXABS(DIMP1)
       DOUBLE PRECISION, INTENT(INOUT) :: X(DIMEN)
+      INTEGER :: JM1, JPRIME, M, P, K, I, J, INDEX
       DOUBLE PRECISION :: RUNTOT, RNTOT1
+C
 C
 C     ***************
 C     PURPOSE
@@ -102149,10 +102169,12 @@ C
       INTEGER, INTENT(IN) :: MCOUNT
       REAL, INTENT(IN) :: A, B, EPSIL
       REAL, INTENT(INOUT) :: RELERR
+      REAL :: F
+      EXTERNAL F
       INTEGER :: ICHECK, IS, ISMAX, K, NF, NPTS
       REAL :: EPS, ERR, RESULT(8), STACK(100), SUB1, SUB2, SUB3, SUM,
      &TOL, X
-      REAL :: F, SPMPAR
+      REAL :: SPMPAR
 C-----------------------------------------------------------------------
 C
 C                INTEGRATION OVER A FINITE INTERVAL
@@ -102191,7 +102213,6 @@ C     THE RELIABILITY OF THE ALGORITHM DECREASES FOR LARGE VALUES
 C     OF EPSIL. IT IS RECOMMENDED THAT EPSIL BE LESS THAN 0.001.
 C
 C-----------------------------------------------------------------------
-      EXTERNAL F
       DATA ISMAX/100/
 C-----------------------------------------------------------------------
 C
@@ -102300,9 +102321,10 @@ C
       INTEGER, INTENT(INOUT) :: K, NPTS
       REAL, INTENT(IN) :: A, B, EPSIL
       REAL, INTENT(INOUT) :: RESULT(*)
+      REAL :: F
+      EXTERNAL F
       INTEGER :: I, INEW, IOLD, J
       REAL :: ACUM, DIFF, FUNCT(127), FZERO, P(381), SUM, X
-      REAL :: F
 C     --------------------
 C THIS SUBROUTINE ATTEMPTS TO CALCULATE THE INTEGRAL OF F(X)
 C OVER THE INTERVAL *A* TO *B* WITH RELATIVE ERROR NOT
@@ -102337,7 +102359,6 @@ C         ON EXIT.
 C ABSCISSAE AND WEIGHTS OF QUADRATURE RULES ARE STACKED IN
 C ARRAY *P* IN THE ORDER IN WHICH THEY ARE NEEDED.
 C     --------------------
-      EXTERNAL F
       DATA
      * P( 1),P( 2),P( 3),P( 4),P( 5),P( 6),P( 7),
      * P( 8),P( 9),P(10),P(11),P(12),P(13),P(14),
@@ -102660,6 +102681,9 @@ C TRIVIAL CASE
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(IN) :: B, EPSABS, EPSREL
       REAL, INTENT(OUT) :: RESULT
+      REAL, INTENT(INOUT) :: WORK(LENW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
+      EXTERNAL F
       INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C
@@ -102807,9 +102831,6 @@ C              - F (USER-PROVIDED FUNCTION)
 C              - SPMPAR
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: WORK(LENW)
-      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT AND LENW.
 C
@@ -102975,38 +102996,39 @@ C              - SPMPAR
 C
 C-----------------------------------------------------------------------
       REAL, INTENT(IN) :: A
-      REAL :: ABSEPS
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(INOUT) :: ALIST
-      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
       REAL, INTENT(IN) :: B
       REAL, INTENT(INOUT) :: BLIST
-      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
       REAL, INTENT(INOUT) :: ELIST
-      REAL :: EPMACH
       REAL, INTENT(IN) :: EPSABS, EPSREL
-      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
-     &ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      REAL :: F
       REAL, INTENT(OUT) :: RESULT
-      REAL :: RES3LA(3)
       REAL, INTENT(INOUT) :: RLIST
-      REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR
       INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      REAL :: ABSEPS
+      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
+      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
+      REAL :: EPMACH
+      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
+     &ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      REAL :: RES3LA(3)
+      REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT)
 C
-      EXTERNAL F
 C
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG (RLIST2 SHOULD BE OF DIMENSION
@@ -103312,10 +103334,12 @@ C
       REAL, INTENT(IN) :: B, EPMACH
       REAL, INTENT(INOUT) :: RESABS, RESASC, RESULT
       REAL, INTENT(IN) :: UFLOW
+      REAL :: F
+      EXTERNAL F
       INTEGER :: J, JTW, JTWM1
       REAL :: ABSC, CENTR, DHLGTH, FC, FSUM, FVAL1, FVAL2, HLGTH, RESG,
      &RESK, RESKH, TOL
-      REAL :: F
+      REAL :: FV1(10), FV2(10), WG(5), WGK(11), XGK(11)
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -103372,8 +103396,6 @@ C 3.        SUBROUTINES OR FUNCTIONS NEEDED
 C                 - F (USER-PROVIDED FUNCTION)
 C
 C-----------------------------------------------------------------------
-      REAL :: FV1(10), FV2(10), WG(5), WGK(11), XGK(11)
-      EXTERNAL F
 C
 C           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
 C           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
@@ -103495,8 +103517,11 @@ C
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(IN) :: BOUND, EPSABS, EPSREL
       REAL, INTENT(OUT) :: RESULT
-      INTEGER :: L1, L2, L3
       REAL :: F
+      REAL, INTENT(INOUT) :: WORK(LENW)
+      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
+      EXTERNAL F
+      INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -103650,9 +103675,6 @@ C              - F (USER PROVIDED FUNCTION)
 C              - SPMPAR
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: WORK(LENW)
-      INTEGER, INTENT(INOUT) :: IWORK(LIMIT)
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT AND LENW.
 C
@@ -103826,40 +103848,41 @@ C              - F (USER-PROVIDED FUNCTION)
 C              - SPMPAR
 C
 C-----------------------------------------------------------------------
-      REAL :: ABSEPS
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(INOUT) :: ALIST
-      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
       REAL, INTENT(INOUT) :: BLIST
-      REAL :: BOUN
       REAL, INTENT(IN) :: BOUND
-      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
       REAL, INTENT(INOUT) :: ELIST
-      REAL :: EPMACH
       REAL, INTENT(IN) :: EPSABS, EPSREL
-      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
-     &ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      REAL :: F
       REAL, INTENT(OUT) :: RESULT
-      REAL :: RES3LA(3)
       REAL, INTENT(INOUT) :: RLIST
-      REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(IN) :: INF
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR
       INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      REAL :: ABSEPS
+      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
+      REAL :: BOUN
+      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
+      REAL :: EPMACH
+      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
+     &ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      REAL :: RES3LA(3)
+      REAL :: RLIST2(52), SMALL, SPMPAR, T, UFLOW
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT)
 C
-      EXTERNAL F
 C
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE QELG.
@@ -104169,10 +104192,12 @@ C
       REAL, INTENT(IN) :: B, BOUN, EPMACH
       REAL, INTENT(INOUT) :: RESABS, RESASC, RESULT
       REAL, INTENT(IN) :: UFLOW
+      REAL :: F
+      EXTERNAL F
       INTEGER :: J
       REAL :: ABSC, ABSC1, ABSC2, CENTR, DINF, FC, FSUM, FVAL1, FVAL2,
      &HLGTH, RESG, RESK, RESKH, TABSC1, TABSC2, TOL
-      REAL :: F
+      REAL :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -104244,8 +104269,6 @@ C 3.        SUBROUTINES OR FUNCTIONS NEEDED
 C                 - F (USER-PROVIDED FUNCTION)
 C
 C-----------------------------------------------------------------------
-      REAL :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
-      EXTERNAL F
 C
 C           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
 C           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
@@ -104408,12 +104431,12 @@ C     ..................................................................
 C
       REAL :: ELIST
       REAL, INTENT(INOUT) :: ERMAX
-      REAL :: ERRMAX, ERRMIN
-      INTEGER :: I, IBEG, IDO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: ISUCC, J, JBND, JUPBN, K
       INTEGER, INTENT(IN) :: LAST, LIMIT
       INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
+      REAL :: ERRMAX, ERRMIN
+      INTEGER :: I, IBEG, IDO
+      INTEGER :: ISUCC, J, JBND, JUPBN, K
       DIMENSION ELIST(LAST),IORD(LAST)
 C
 C           CHECK WHETHER THE LIST CONTAINS MORE THAN
@@ -104496,6 +104519,7 @@ C
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(IN) :: EPMACH, OFLOW
       REAL, INTENT(OUT) :: RESULT
+      REAL, INTENT(INOUT) :: EPSTAB(52), RES3LA(3)
       INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP, NEWELM, NUM
       REAL :: DELTA1, DELTA2, DELTA3, E0, E1, E1ABS, E2, E3, EPSINF,
      &ERR1, ERR2, ERR3, ERROR, RES, SS, TOL1, TOL2, TOL3
@@ -104547,7 +104571,6 @@ C
 C 3.        NO SUBROUTINES OR FUNCTIONS USED
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: EPSTAB(52), RES3LA(3)
 C---------------------
 C
 C           LIST OF MAJOR VARIABLES
@@ -104821,11 +104844,11 @@ C
       INTEGER, INTENT(INOUT) :: IWORK
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
+      EXTERNAL F
       INTEGER :: L1, L2, L3, L4, L5
 C
       DIMENSION IWORK(LENIW),WORK(LENW)
 C
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
 C
@@ -104988,39 +105011,42 @@ C                     OF VALP,VALN
 C
 C***ROUTINES CALLED  F,SPMPAR,QELG,QXLQM,QPSRT,QXRRD,QXCPY
 C
-      REAL :: A, ABSEPS
+      REAL :: A
       REAL, INTENT(OUT) :: ABSERR
       REAL, INTENT(INOUT) :: ALIST
-      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2, B
+      REAL :: B
       REAL, INTENT(INOUT) :: BLIST
-      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
       REAL, INTENT(INOUT) :: ELIST
-      REAL :: EPMACH
       REAL, INTENT(IN) :: EPSABS, EPSREL
-      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
-     &ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      REAL :: F
       REAL, INTENT(OUT) :: RESULT
-      REAL :: RES3LA(3)
       REAL, INTENT(INOUT) :: RLIST
-      REAL :: RLIST2(52), SMALL, T, UFLOW
       REAL, INTENT(INOUT) :: VALP, VALN
-      REAL :: VP1(21), VP2(21), VN1(21), VN2(21), SPMPAR
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
+      EXTERNAL F
+      REAL :: ABSEPS
+      REAL :: AREA, AREA1, AREA12, AREA2, A1, A2
+      REAL :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
+      REAL :: EPMACH
+      REAL :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1, ERROR2, ERRO12,
+     &ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      REAL :: RES3LA(3)
+      REAL :: RLIST2(52), SMALL, T, UFLOW
+      REAL :: VP1(21), VP2(21), VN1(21), VN2(21), SPMPAR
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER :: LP1, LP2, LN1, LN2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
 C
-      EXTERNAL F
 C
 C            MACHINE DEPENDENT CONSTANTS
 C            ---------------------------
@@ -105293,14 +105319,14 @@ C
 
       SUBROUTINE QXCPY (A, B, L)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: L
+      REAL, INTENT(INOUT) :: A(L)
+      REAL, INTENT(IN) :: B(L)
       INTEGER :: I
 C
 C  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
 C          THE REAL VECTOR A OF LENGTH L
 C
-      INTEGER, INTENT(IN) :: L
-      REAL, INTENT(INOUT) :: A(L)
-      REAL, INTENT(IN) :: B(L)
 C
       DO 10 I = 1,L
    10    A(I) = B(I)
@@ -105394,15 +105420,15 @@ C
       REAL :: F
       REAL, INTENT(IN) :: A, B
       REAL, INTENT(INOUT) :: RESULT, ABSERR, RESABS, RESASC
-      REAL :: T
       REAL, INTENT(IN) :: EPMACH, OFLOW, UFLOW
-      REAL :: RESG, RESK, ERROLD
       REAL, INTENT(INOUT) :: VR(21), VS(21)
-      INTEGER :: K, K0, K1, K2
       INTEGER, INTENT(IN) :: KEY
-      INTEGER :: KEY1
       INTEGER, INTENT(INOUT) :: LR, LS
       EXTERNAL F
+      REAL :: T
+      REAL :: RESG, RESK, ERROLD
+      INTEGER :: K, K0, K1, K2
+      INTEGER :: KEY1
 C
       KEY1 = MAX0(KEY ,  0)
       KEY1 = MIN0(KEY1,  4)
@@ -105431,7 +105457,19 @@ C
 
       SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
+      REAL :: F
+      REAL, INTENT(IN) :: XL, XU
+      REAL, INTENT(OUT) :: Y
+      REAL, INTENT(INOUT) :: YA, YM
+      REAL, INTENT(INOUT) :: FV1(21), FV2(21)
+      INTEGER, INTENT(IN) :: KE, K1
+      INTEGER, INTENT(INOUT) :: L1, L2
+      EXTERNAL F
       INTEGER :: I, IS, K, KS
+      REAL :: LDL
+      REAL :: Y2, XX(41), WW(52)
+      REAL :: AA, BB, C
+      INTEGER :: ISTART(4), LEN(4), J
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -105501,18 +105539,6 @@ C              L1     - INTEGER
 C              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 C
 C------------------------
-      REAL :: F
-      REAL, INTENT(IN) :: XL, XU
-      REAL :: LDL
-      REAL, INTENT(OUT) :: Y
-      REAL, INTENT(INOUT) :: YA, YM
-      REAL :: Y2, XX(41), WW(52)
-      REAL, INTENT(INOUT) :: FV1(21), FV2(21)
-      REAL :: AA, BB, C
-      INTEGER :: ISTART(4), LEN(4), J
-      INTEGER, INTENT(IN) :: KE, K1
-      INTEGER, INTENT(INOUT) :: L1, L2
-      EXTERNAL F
 C------------------------
       DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
       DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
@@ -105674,9 +105700,9 @@ C
       REAL, INTENT(INOUT) :: R(21), S(21)
       REAL :: Z(21)
       REAL, INTENT(IN) :: XU, XL
-      REAL :: DLEN, CENTR
       INTEGER, INTENT(INOUT) :: LR, LS
       INTEGER, INTENT(IN) :: LZ
+      REAL :: DLEN, CENTR
 C
       DLEN = (XU - XL)*0.5
       CENTR = XL + DLEN
@@ -105738,6 +105764,18 @@ C
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTEGER, INTENT(OUT) :: LAST
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(OUT) :: ABSERR
+      DOUBLE PRECISION, INTENT(IN) :: B, EPSABS, EPSREL
+      DOUBLE PRECISION :: F
+      DOUBLE PRECISION, INTENT(OUT) :: RESULT
+      DOUBLE PRECISION, INTENT(INOUT) :: WORK
+      INTEGER, INTENT(OUT) :: IER
+      INTEGER, INTENT(INOUT) :: IWORK
+      INTEGER, INTENT(IN) :: LENW, LIMIT
+      INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C
 C           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -105884,20 +105922,8 @@ C              - F (USER-PROVIDED FUNCTION)
 C              - DPMPAR
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-      DOUBLE PRECISION, INTENT(IN) :: B, EPSABS, EPSREL
-      DOUBLE PRECISION :: F
-      DOUBLE PRECISION, INTENT(OUT) :: RESULT
-      DOUBLE PRECISION, INTENT(INOUT) :: WORK
-      INTEGER, INTENT(OUT) :: IER
-      INTEGER, INTENT(INOUT) :: IWORK
-      INTEGER, INTENT(IN) :: LENW, LIMIT
-      INTEGER :: L1, L2, L3
-      INTEGER, INTENT(OUT) :: NEVAL
 C
       DIMENSION IWORK(LIMIT), WORK(LENW)
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT AND LENW.
 C
@@ -106063,39 +106089,40 @@ C              - DPMPAR
 C
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: ABSEPS
       DOUBLE PRECISION, INTENT(OUT) :: ABSERR
       DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
       DOUBLE PRECISION, INTENT(IN) :: B
       DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2,
-     &DPMPAR, DRES
       DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-      DOUBLE PRECISION :: EPMACH
       DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
-     &ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(OUT) :: RESULT
-      DOUBLE PRECISION :: RES3LA(3)
       DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR
       INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      DOUBLE PRECISION :: ABSEPS
+      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
+      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2,
+     &DPMPAR, DRES
+      DOUBLE PRECISION :: EPMACH
+      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
+     &ERROR2, ERRO12, ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: RES3LA(3)
+      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT)
 C
-      EXTERNAL F
 C
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE DQELG (RLIST2 SHOULD BE OF DIMENSION
@@ -106452,24 +106479,25 @@ C                 - F (USER-PROVIDED FUNCTION)
 C
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: ABSC
       DOUBLE PRECISION, INTENT(INOUT) :: ABSERR
       DOUBLE PRECISION, INTENT(IN) :: B
-      DOUBLE PRECISION :: CENTR, DHLGTH
       DOUBLE PRECISION, INTENT(IN) :: EPMACH
-      DOUBLE PRECISION :: F, FC, FSUM, FVAL1, FVAL2, FV1(10), FV2(10),
-     &HLGTH
+      DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(INOUT) :: RESABS
-      DOUBLE PRECISION :: RESG, RESK, RESKH
       DOUBLE PRECISION, INTENT(INOUT) :: RESULT
-      DOUBLE PRECISION :: TOL
       DOUBLE PRECISION, INTENT(IN) :: UFLOW
-      DOUBLE PRECISION :: WG(5), WGK(11), XGK(11)
       DOUBLE PRECISION, INTENT(INOUT) :: RESASC
       INTEGER, INTENT(OUT) :: ISIG
+      EXTERNAL F
+      DOUBLE PRECISION :: ABSC
+      DOUBLE PRECISION :: CENTR, DHLGTH
+      DOUBLE PRECISION :: FC, FSUM, FVAL1, FVAL2, FV1(10), FV2(10),
+     &HLGTH
+      DOUBLE PRECISION :: RESG, RESK, RESKH
+      DOUBLE PRECISION :: TOL
+      DOUBLE PRECISION :: WG(5), WGK(11), XGK(11)
       INTEGER :: J, JTW, JTWM1
 C
-      EXTERNAL F
 C
 C           THE ABSCISSAE AND WEIGHTS ARE GIVEN FOR THE INTERVAL (-1,1).
 C           BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND THEIR
@@ -106598,6 +106626,17 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
       INTEGER, INTENT(OUT) :: LAST
+      DOUBLE PRECISION, INTENT(OUT) :: ABSERR
+      DOUBLE PRECISION, INTENT(IN) :: BOUND, EPSABS, EPSREL
+      DOUBLE PRECISION :: F
+      DOUBLE PRECISION, INTENT(OUT) :: RESULT
+      DOUBLE PRECISION, INTENT(INOUT) :: WORK
+      INTEGER, INTENT(OUT) :: IER
+      INTEGER, INTENT(INOUT) :: IWORK
+      INTEGER, INTENT(IN) :: LENW, LIMIT
+      INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      INTEGER :: L1, L2, L3
 C-----------------------------------------------------------------------
 C
 C         DOUBLE PRECISION INTEGRATION OVER INFINITE INTERVALS
@@ -106751,20 +106790,9 @@ C              - F (USER PROVIDED FUNCTION)
 C              - DPMPAR
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-      DOUBLE PRECISION, INTENT(IN) :: BOUND, EPSABS, EPSREL
-      DOUBLE PRECISION :: F
-      DOUBLE PRECISION, INTENT(OUT) :: RESULT
-      DOUBLE PRECISION, INTENT(INOUT) :: WORK
-      INTEGER, INTENT(OUT) :: IER
-      INTEGER, INTENT(INOUT) :: IWORK
-      INTEGER, INTENT(IN) :: LENW, LIMIT
-      INTEGER :: L1, L2, L3
-      INTEGER, INTENT(OUT) :: NEVAL
 C
       DIMENSION IWORK(LIMIT),WORK(LENW)
 C
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT AND LENW.
 C
@@ -106938,41 +106966,42 @@ C              - F (USER-PROVIDED FUNCTION)
 C              - DPMPAR
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION :: ABSEPS
       DOUBLE PRECISION, INTENT(OUT) :: ABSERR
       DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
       DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-      DOUBLE PRECISION :: BOUN
       DOUBLE PRECISION, INTENT(IN) :: BOUND
-      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES,
-     &DPMPAR
       DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-      DOUBLE PRECISION :: EPMACH
       DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
-     &ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(OUT) :: RESULT
-      DOUBLE PRECISION :: RES3LA(3)
       DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(IN) :: INF
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR
       INTEGER, INTENT(OUT) :: NEVAL
+      EXTERNAL F
+      DOUBLE PRECISION :: ABSEPS
+      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
+      DOUBLE PRECISION :: BOUN
+      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES,
+     &DPMPAR
+      DOUBLE PRECISION :: EPMACH
+      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
+     &ERROR2, ERRO12, ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: RES3LA(3)
+      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR
       INTEGER :: NRES, NRMAX, NUMRL2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT)
 C
-      EXTERNAL F
 C
 C            THE DIMENSION OF RLIST2 IS DETERMINED BY THE VALUE OF
 C            LIMEXP IN SUBROUTINE DQELG.
@@ -107277,7 +107306,22 @@ C
      *                   RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INF
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(INOUT) :: ABSERR
+      DOUBLE PRECISION, INTENT(IN) :: B, BOUN
+      DOUBLE PRECISION, INTENT(IN) :: EPMACH
+      DOUBLE PRECISION :: F
+      DOUBLE PRECISION, INTENT(INOUT) :: RESABS, RESASC
+      DOUBLE PRECISION, INTENT(INOUT) :: RESULT
+      DOUBLE PRECISION, INTENT(IN) :: UFLOW
+      EXTERNAL F
       INTEGER :: J
+      DOUBLE PRECISION :: ABSC, ABSC1, ABSC2
+      DOUBLE PRECISION :: CENTR, DINF
+      DOUBLE PRECISION :: FC, FSUM, FVAL1, FVAL2, HLGTH
+      DOUBLE PRECISION :: RESG, RESK, RESKH
+      DOUBLE PRECISION :: TABSC1, TABSC2, TOL
+      DOUBLE PRECISION :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -107349,20 +107393,6 @@ C 3.        SUBROUTINES OR FUNCTIONS NEEDED
 C                 - F (USER-PROVIDED FUNCTION)
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION :: ABSC, ABSC1, ABSC2
-      DOUBLE PRECISION, INTENT(INOUT) :: ABSERR
-      DOUBLE PRECISION, INTENT(IN) :: B, BOUN
-      DOUBLE PRECISION :: CENTR, DINF
-      DOUBLE PRECISION, INTENT(IN) :: EPMACH
-      DOUBLE PRECISION :: F, FC, FSUM, FVAL1, FVAL2, HLGTH
-      DOUBLE PRECISION, INTENT(INOUT) :: RESABS, RESASC
-      DOUBLE PRECISION :: RESG, RESK, RESKH
-      DOUBLE PRECISION, INTENT(INOUT) :: RESULT
-      DOUBLE PRECISION :: TABSC1, TABSC2, TOL
-      DOUBLE PRECISION, INTENT(IN) :: UFLOW
-      DOUBLE PRECISION :: FV1(7), FV2(7), XGK(8), WGK(8), WG(8)
-      EXTERNAL F
 C
 C           THE ABSCISSAE AND WEIGHTS ARE SUPPLIED FOR THE INTERVAL
 C           (-1,1).  BECAUSE OF SYMMETRY ONLY THE POSITIVE ABSCISSAE AND
@@ -107533,12 +107563,12 @@ C     ..................................................................
 C
       DOUBLE PRECISION :: ELIST
       DOUBLE PRECISION, INTENT(INOUT) :: ERMAX
-      DOUBLE PRECISION :: ERRMAX, ERRMIN
-      INTEGER :: I, IBEG, IDO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: ISUCC, J, JBND, JUPBN, K
       INTEGER, INTENT(IN) :: LAST, LIMIT
       INTEGER, INTENT(INOUT) :: MAXERR, NRMAX
+      DOUBLE PRECISION :: ERRMAX, ERRMIN
+      INTEGER :: I, IBEG, IDO
+      INTEGER :: ISUCC, J, JBND, JUPBN, K
       DIMENSION ELIST(LAST),IORD(LAST)
 C
 C           CHECK WHETHER THE LIST CONTAINS MORE THAN
@@ -107666,20 +107696,20 @@ C 3.        NO SUBROUTINES OR FUNCTIONS USED
 C
 C-----------------------------------------------------------------------
       DOUBLE PRECISION, INTENT(OUT) :: ABSERR
-      DOUBLE PRECISION :: DELTA1, DELTA2, DELTA3
       DOUBLE PRECISION, INTENT(IN) :: EPMACH
-      DOUBLE PRECISION :: EPSINF
       DOUBLE PRECISION, INTENT(INOUT) :: EPSTAB(52)
-      DOUBLE PRECISION :: ERROR, ERR1, ERR2, ERR3, E0, E1, E1ABS, E2, E3
       DOUBLE PRECISION, INTENT(IN) :: OFLOW
-      DOUBLE PRECISION :: RES
       DOUBLE PRECISION, INTENT(OUT) :: RESULT
       DOUBLE PRECISION, INTENT(INOUT) :: RES3LA(3)
+      INTEGER, INTENT(INOUT) :: N
+      INTEGER, INTENT(INOUT) :: NRES
+      DOUBLE PRECISION :: DELTA1, DELTA2, DELTA3
+      DOUBLE PRECISION :: EPSINF
+      DOUBLE PRECISION :: ERROR, ERR1, ERR2, ERR3, E0, E1, E1ABS, E2, E3
+      DOUBLE PRECISION :: RES
       DOUBLE PRECISION :: SS, TOL1, TOL2, TOL3
       INTEGER :: I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP
-      INTEGER, INTENT(INOUT) :: N
       INTEGER :: NEWELM
-      INTEGER, INTENT(INOUT) :: NRES
       INTEGER :: NUM
 C---------------------
 C
@@ -107954,11 +107984,11 @@ C
       INTEGER, INTENT(INOUT) :: IWORK
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LENIW, LENW, LIMIT
+      EXTERNAL F
       INTEGER :: L1, L2, L3, L4, L5
 C
       DIMENSION IWORK(LENIW),WORK(LENW)
 C
-      EXTERNAL F
 C
 C         CHECK VALIDITY OF LIMIT,LENIW AND LENW.
 C
@@ -108121,39 +108151,42 @@ C                     OF VALP,VALN
 C
 C***ROUTINES CALLED  F,DPMPAR,DQELG,DQXLQM,DQPSRT,DQXRRD,DQXCPY
 C
-      DOUBLE PRECISION :: A, ABSEPS
+      DOUBLE PRECISION :: A
       DOUBLE PRECISION, INTENT(OUT) :: ABSERR
       DOUBLE PRECISION, INTENT(INOUT) :: ALIST
-      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2, B
+      DOUBLE PRECISION :: B
       DOUBLE PRECISION, INTENT(INOUT) :: BLIST
-      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
       DOUBLE PRECISION, INTENT(INOUT) :: ELIST
-      DOUBLE PRECISION :: EPMACH
       DOUBLE PRECISION, INTENT(IN) :: EPSABS, EPSREL
-      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
-     &ERROR2, ERRO12, ERRSUM, ERTEST, F, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(OUT) :: RESULT
-      DOUBLE PRECISION :: RES3LA(3)
       DOUBLE PRECISION, INTENT(INOUT) :: RLIST
-      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
       DOUBLE PRECISION, INTENT(INOUT) :: VALP, VALN
-      DOUBLE PRECISION :: VP1(21), VP2(21), VN1(21), VN2(21), DPMPAR
-      INTEGER :: ID
       INTEGER, INTENT(OUT) :: IER
-      INTEGER :: IERRO
       INTEGER, INTENT(INOUT) :: IORD
-      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
       INTEGER, INTENT(OUT) :: LAST
       INTEGER, INTENT(IN) :: LIMIT
-      INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER, INTENT(INOUT) :: LP(LIMIT), LN(LIMIT)
+      EXTERNAL F
+      DOUBLE PRECISION :: ABSEPS
+      DOUBLE PRECISION :: AREA, AREA1, AREA12, AREA2, A1, A2
+      DOUBLE PRECISION :: B1, B2, CORREC, DEFABS, DEFAB1, DEFAB2, DRES
+      DOUBLE PRECISION :: EPMACH
+      DOUBLE PRECISION :: ERLARG, ERLAST, ERRBND, ERRMAX, ERROR1,
+     &ERROR2, ERRO12, ERRSUM, ERTEST, OFLOW, RERR, RESABS, RESEPS
+      DOUBLE PRECISION :: RES3LA(3)
+      DOUBLE PRECISION :: RLIST2(52), SMALL, T, UFLOW
+      DOUBLE PRECISION :: VP1(21), VP2(21), VN1(21), VN2(21), DPMPAR
+      INTEGER :: ID
+      INTEGER :: IERRO
+      INTEGER :: IROFF1, IROFF2, IROFF3, JUPBND, K, KSGN, KTMIN
+      INTEGER :: MAXERR, NRES, NRMAX, NUMRL2
       INTEGER :: LP1, LP2, LN1, LN2
       LOGICAL :: EXTRAP, NOEXT
 C
       DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),
      &RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)
 C
-      EXTERNAL F
 C
 C            MACHINE DEPENDENT CONSTANTS
 C            ---------------------------
@@ -108426,14 +108459,14 @@ C
 
       SUBROUTINE DQXCPY (A, B, L)
       IMPLICIT NONE
+      INTEGER, INTENT(IN) :: L
+      DOUBLE PRECISION, INTENT(INOUT) :: A(L)
+      DOUBLE PRECISION, INTENT(IN) :: B(L)
       INTEGER :: I
 C
 C  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
 C          THE DOUBLE PRECISION VECTOR A OF LENGTH L
 C
-      INTEGER, INTENT(IN) :: L
-      DOUBLE PRECISION, INTENT(INOUT) :: A(L)
-      DOUBLE PRECISION, INTENT(IN) :: B(L)
 C
       DO 10 I = 1,L
    10    A(I) = B(I)
@@ -108527,15 +108560,15 @@ C
       DOUBLE PRECISION :: F
       DOUBLE PRECISION, INTENT(IN) :: A, B
       DOUBLE PRECISION, INTENT(INOUT) :: RESULT, ABSERR, RESABS, RESASC
-      DOUBLE PRECISION :: T
       DOUBLE PRECISION, INTENT(IN) :: EPMACH, OFLOW, UFLOW
-      DOUBLE PRECISION :: RESG, RESK, ERROLD
       DOUBLE PRECISION, INTENT(INOUT) :: VR(21), VS(21)
-      INTEGER :: K, K0, K1, K2
       INTEGER, INTENT(IN) :: KEY
-      INTEGER :: KEY1
       INTEGER, INTENT(INOUT) :: LR, LS
       EXTERNAL F
+      DOUBLE PRECISION :: T
+      DOUBLE PRECISION :: RESG, RESK, ERROLD
+      INTEGER :: K, K0, K1, K2
+      INTEGER :: KEY1
 C
       KEY1 = MAX0(KEY ,  0)
       KEY1 = MIN0(KEY1,  4)
@@ -108564,7 +108597,19 @@ C
 
       SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
+      DOUBLE PRECISION :: F
+      DOUBLE PRECISION, INTENT(IN) :: XL, XU
+      DOUBLE PRECISION, INTENT(OUT) :: Y
+      DOUBLE PRECISION, INTENT(INOUT) :: YA, YM
+      DOUBLE PRECISION, INTENT(INOUT) :: FV1(21), FV2(21)
+      INTEGER, INTENT(IN) :: KE, K1
+      INTEGER, INTENT(INOUT) :: L1, L2
+      EXTERNAL F
       INTEGER :: I, IS, K, KS
+      DOUBLE PRECISION :: LDL
+      DOUBLE PRECISION :: Y2, XX(41), WW(52)
+      DOUBLE PRECISION :: AA, BB, C
+      INTEGER :: ISTART(4), LEN(4), J
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -108634,18 +108679,6 @@ C              L1     - INTEGER
 C              L2       NUMBER OF ELEMENTS IN FV1,FV2  RESPECTIVELY
 C
 C------------------------
-      DOUBLE PRECISION :: F
-      DOUBLE PRECISION, INTENT(IN) :: XL, XU
-      DOUBLE PRECISION :: LDL
-      DOUBLE PRECISION, INTENT(OUT) :: Y
-      DOUBLE PRECISION, INTENT(INOUT) :: YA, YM
-      DOUBLE PRECISION :: Y2, XX(41), WW(52)
-      DOUBLE PRECISION, INTENT(INOUT) :: FV1(21), FV2(21)
-      DOUBLE PRECISION :: AA, BB, C
-      INTEGER :: ISTART(4), LEN(4), J
-      INTEGER, INTENT(IN) :: KE, K1
-      INTEGER, INTENT(INOUT) :: L1, L2
-      EXTERNAL F
 C------------------------
       DATA ISTART(1)/0/, ISTART(2)/7/, ISTART(3)/17/, ISTART(4)/31/
       DATA LEN(1)/7/, LEN(2)/10/, LEN(3)/14/, LEN(4)/21/
@@ -108807,9 +108840,9 @@ C
       DOUBLE PRECISION, INTENT(INOUT) :: R(21), S(21)
       DOUBLE PRECISION :: Z(21)
       DOUBLE PRECISION, INTENT(IN) :: XU, XL
-      DOUBLE PRECISION :: DLEN, CENTR
       INTEGER, INTENT(INOUT) :: LR, LS
       INTEGER, INTENT(IN) :: LZ
+      DOUBLE PRECISION :: DLEN, CENTR
 C
       DLEN = (XU - XL)*0.5D0
       CENTR = XL + DLEN
@@ -108870,10 +108903,16 @@ C
       SUBROUTINE CUBTRI(F, T, EPS, MCALLS, ANS, ERR, NCALLS, W, NW,
      * IDATA, RDATA, IER)
       IMPLICIT NONE
+      REAL :: F
+      EXTERNAL F
+      INTEGER :: IDATA(*), IER, MCALLS, NCALLS, NW
+      REAL :: ANS, EPS, ERR, RDATA(*), T(2,*), W(6,NW)
       INTEGER :: I, J, JKP, K, L, MAXC, MAXK, MW, NFE
       REAL :: ONE, POINT5, ZERO
       REAL :: RNDERR
-      REAL :: F
+      REAL :: ALFA, ANSKP, AREA, ERRMAX, H, Q1, Q2, R1, R2, D(2,4),
+     &S(4), VEC(2,3), X(2)
+      DOUBLE PRECISION :: TANS, TERR, DZERO
 C
 C       ADAPTIVE CUBATURE OVER A TRIANGLE
 C
@@ -108937,13 +108976,8 @@ C       FUNCTIONS). IN SUCH A CASE THE USER CAN DISABLE THE ROUNDING
 C       ERROR TEST BY REMOVING THE IF STATEMENT IMMEDIATELY PRECEDING
 C       STATEMENT NUMBER 90.
 C
-      EXTERNAL F
-      INTEGER :: IDATA(*), IER, MCALLS, NCALLS, NW
-      REAL :: ALFA, ANS, ANSKP, AREA, EPS, ERR, ERRMAX, H, Q1, Q2, R1,
-     &R2, RDATA(*), D(2,4), S(4), T(2,*), VEC(2,3), W(6,NW), X(2)
 C       ACTUAL DIMENSION OF W IS (6,NW/6)
 C
-      DOUBLE PRECISION :: TANS, TERR, DZERO
       COMMON /CUBSTA/ TANS, TERR
 C       THIS COMMON IS REQUIRED TO PRESERVE TANS AND TERR BETWEEN CALLS
 C       AND TO SAVE VARIABLES IN FUNCTION RNDERR
@@ -109085,9 +109119,18 @@ C       FORTRAN COMPILERS.
 
       SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
       IMPLICIT NONE
+      REAL :: F
+      REAL, INTENT(INOUT) :: P(*)
+      REAL :: RDATA(*)
+      REAL, INTENT(IN) :: VEC(2,*)
+      INTEGER :: IDATA(*)
+      EXTERNAL F
       INTEGER :: I, J, K, NQUAD
       REAL :: POINT5, X, Y
-      REAL :: F
+      DOUBLE PRECISION :: A1, A2, S, SN, DZERO, DONE, DTHREE, DSIX
+      REAL :: AREA, ORIGIN(2)
+      REAL :: TVEC(2,3)
+      REAL :: W(5,6)
 C
 C       BASIC CUBATURE RULE PAIR OVER A TRIANGLE
 C
@@ -109117,14 +109160,6 @@ C       UNNECESSARY ROUNDING ERRORS IN FLOATING POINT ADDITION.
 C       THEY MAY BE DECLARED SINGLE PRECISION IF DOUBLE PRECISION IS
 C       NOT AVAILABLE AND FULL ACCURACY IS NOT NEEDED.
 C
-      DOUBLE PRECISION :: A1, A2, S, SN, DZERO, DONE, DTHREE, DSIX
-      REAL :: AREA, ORIGIN(2)
-      REAL, INTENT(INOUT) :: P(*)
-      REAL :: RDATA(*), TVEC(2,3)
-      REAL, INTENT(IN) :: VEC(2,*)
-      REAL :: W(5,6)
-      INTEGER :: IDATA(*)
-      EXTERNAL F
 C
 C       W CONTAINS POINTS AND WEIGHTS OF THE INTEGRATION FORMULAE
 C       NQUAD - NUMBER OF BASIC RULES USED
@@ -109229,14 +109264,17 @@ C
       IMPLICIT NONE
       INTEGER :: IER, IFLAG, MF, MUPPER, NF, NT, NUPPER
       REAL :: A, B, EP, T(*), W(*), X(*)
+      REAL :: RHFCN
+      REAL :: KERNEL, NORM
+      EXTERNAL KERNEL, RHFCN
       INTEGER :: I1, I10, I11, I12, I13, I14, I15, I16, I17, I18, I19,
      &I2, I20, I21, I3, I4, I5, I6, I7, I8, I9, M, N, NHALF, NMAX, NSQ,
      &NUP
       REAL :: CUTOFF, ROOTRT, UNITRD
       INTEGER :: MFINAL, NFINAL
       REAL :: FINLEP, R1, R2
-      REAL :: RHFCN
       REAL :: SPMPAR
+      REAL :: NORMK
 C
 C   THE INTEGRAL EQUATION BEING SOLVED IS
 C
@@ -109318,8 +109356,6 @@ C   (2) A SURVEY OF NUMERICAL METHODS FOR THE SOLUTION OF FREDHOLM
 C       INTEGRAL EQUATIONS OF THE SECOND KIND, SIAM PUB., 1976,
 C       PART II, CHAP. 5.
 C
-      REAL :: KERNEL, NORM, NORMK
-      EXTERNAL KERNEL,RHFCN
 C
 C*******************************************************************
 C                                                                  *
@@ -109408,6 +109444,10 @@ C   WHICH W IS TO BE SPLIT.
      &EP, OLDX(MUP), R(MUP), RH(NUP), RHS(MUP), ROOTRT, SAVE(MUP),
      &SAVE2(MUP), T(*), TM(MUP), TN(NUP), UNITRD, WM(MUP), WN(NUP),
      &X(*), XM(MUP), XMZ(MUP), XN(NUP)
+      REAL :: RHFCN
+      REAL :: KERNEL, LUFACT(NUP,NUP), KMM(NUP,NUP), KMN(NUP,NHALF),
+     &KNM(NHALF,NUP), IMKNN(NUP,NUP)
+      EXTERNAL KERNEL, RHFCN
       INTEGER :: I, IND, J, LOOP, M, MNEW, N
       REAL :: ASIDE2(5), AVERR, COND, DENR1, DENR2, EPS, ERROR, ESTERR,
      &PASTC, PASTRE, R1RAT, RATE, RELERR, RELMIN, RT, TEMP, TEMP2, TEST,
@@ -109415,19 +109455,16 @@ C   WHICH W IS TO BE SPLIT.
       INTEGER :: MFINAL, NFINAL
       REAL :: FINLEP, R1, R2
       REAL :: ELINSY, RELRSD
-      REAL :: RHFCN
       REAL :: RNRM
       REAL :: CONEW
       REAL :: RMIN
+      REAL :: NORMK, NUMR1, NUMR2
+      INTEGER :: FLAG, OLDM, PIVOT(128)
 C
 C   THIS ROUTINE CONTROLS THE SOLUTION OF THE INTEGRAL EQUATION.
 C
-      REAL :: KERNEL, LUFACT(NUP,NUP), KMM(NUP,NUP), KMN(NUP,NHALF),
-     &KNM(NHALF,NUP), IMKNN(NUP,NUP), NORMK, NUMR1, NUMR2
-      INTEGER :: FLAG, OLDM, PIVOT(128)
       COMMON/XXLIN/ELINSY,RELRSD,PIVOT
       COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-      EXTERNAL KERNEL,RHFCN
 C
 C   INITIALIZATION
 C
@@ -109708,15 +109745,15 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
       REAL :: TM(M), TN(N), WM(M), WN(N)
       REAL, INTENT(INOUT) :: XM(M)
       REAL :: XN(N)
-      INTEGER :: I, J
       REAL :: RHFCN
+      REAL :: KERNEL
+      REAL, INTENT(INOUT) :: KMN(NUP,NHALF)
+      EXTERNAL KERNEL, RHFCN
+      INTEGER :: I, J
 C
 C   USE THE VALUES OF XN(I), I=1,...,N, TO CALCULATE THE NYSTROM
 C   INTERPOLATES XM(I), I=1,...,M.
 C
-      REAL :: KERNEL
-      REAL, INTENT(INOUT) :: KMN(NUP,NHALF)
-      EXTERNAL KERNEL,RHFCN
 C
       IF(M .GT. NUP) GO TO 4
 C   SINCE M .LE. NUPPER, SAVE K(TM(I),TN(J))=KMN(I,J) AND
@@ -110090,21 +110127,22 @@ C
       REAL :: DELN(NF), ELINSY, EP, EPS, ERROR, R(MF), RH(NF), RHS(MF),
      &T(*), TM(MF), TN(NF), TV(MF), WM(MF), WN(NF), WV(MF), X(*),
      &XM(MF), XMZ(MF), XNORM, XV(MF)
+      REAL :: RHFCN
+      REAL :: KERNEL, KMM(NUP,NUP), KMN(NUP,NHALF), KNM(NHALF,NUP),
+     &IMKNN(NUP,NUP), LUFACT(NUP,NUP)
+      EXTERNAL KERNEL, RHFCN
       INTEGER :: I, ITLOOP, J
       REAL :: DERROR, SAVEP, SUM, TEMP
       INTEGER :: MFINAL, NFINAL
       REAL :: FINLEP, R1, R2
-      REAL :: RHFCN
       REAL :: RNRM
+      REAL :: NORMK, NUMR1
 C
 C   THIS ROUTINE SETS ALL NECESSARY PARAMETERS FOR LEAVING IEGAUS.
 C   IF NT .GT. 0, IT ALSO PERFORMS THE NECESSARY NYSTROM
 C   INTERPOLATION AT THE NODES GIVEN IN T.
 C
-      REAL :: KERNEL, KMM(NUP,NUP), KMN(NUP,NHALF), KNM(NHALF,NUP),
-     &IMKNN(NUP,NUP), LUFACT(NUP,NUP), NORMK, NUMR1
       COMMON/XXINFO/R1,R2,FINLEP,NORMK,NFINAL,MFINAL
-      EXTERNAL KERNEL,RHFCN
 C
 C   SET ERROR PARAMETERS FOR RETURN.
 C
@@ -110204,6 +110242,13 @@ C
       REAL :: RHFCN, RHS(M), TM(M), TN(N), WM(M), WN(N)
       REAL, INTENT(INOUT) :: XM(M)
       REAL :: XMZ(M)
+      REAL :: KERNEL
+      REAL, INTENT(INOUT) :: KMM(NUP,NUP)
+      REAL :: KMN(NUP,NHALF)
+      REAL, INTENT(INOUT) :: KNM(NHALF,NUP)
+      REAL :: IMKNN(NUP,NUP)
+      REAL, INTENT(INOUT) :: LUFACT(NUP,NUP)
+      EXTERNAL KERNEL, RHFCN
       INTEGER :: I, IND, J
       REAL :: SUM
 C
@@ -110211,13 +110256,6 @@ C   THIS ROUTINE CALCULATES ONE ITERATE XM GIVEN THE INITIAL GUESS
 C   XMZ. THE ROUTINE IS DIVIDED ACCORDING TO WHETHER OR NOT
 C   M .GT. NUPPER.
 C
-      REAL :: KERNEL
-      REAL, INTENT(INOUT) :: KMM(NUP,NUP)
-      REAL :: KMN(NUP,NHALF)
-      REAL, INTENT(INOUT) :: KNM(NHALF,NUP)
-      REAL :: IMKNN(NUP,NUP)
-      REAL, INTENT(INOUT) :: LUFACT(NUP,NUP)
-      EXTERNAL KERNEL,RHFCN
 C
 C   M .GT. NUPPER MEANS THAT THE MATRICES KMM,KMN,KNM CAN NO LONGER
 C   BE STORED DUE TO LACK OF SPACE.
@@ -110294,9 +110332,13 @@ C   CALCULATE XM.
       SUBROUTINE LNSYS(A,D,M,N,B,X,OPTION,IERR)
       IMPLICIT NONE
       INTEGER :: IERR, M, N
+      REAL :: A(M,N), D(M,N), B(N), X(N)
+      INTEGER :: OPTION
       INTEGER :: I, IP1, ISWIT, J, K, KP1, L, NM1, NMI
       REAL :: C, SUM, T
       REAL :: ERROR, RELRSD
+      INTEGER :: PIVOT(128)
+      REAL :: NORMX, NORME, NORMB, NORMR, R(128), SCALE(128)
 C
 C   SOLVE AX = B WHERE A IS A MATRIX OF ORDER N. M IS THE NUMBER OF
 C   ROWS IN THE DIMENSION STATEMENT FOR A IN THE CALLING PROGRAM.
@@ -110331,9 +110373,6 @@ C   BY CHANGING THE DIMENSION STATEMENTS FOR THE ARRAYS PIVOT, R,
 C   AND SCALE. ALSO MODIFY THE DIMENSION STATEMENT FOR PIVOT IN THE
 C   SUBROUTINE IEGS.
 C
-      REAL :: A(M,N), D(M,N), B(N), X(N)
-      INTEGER :: OPTION, PIVOT(128)
-      REAL :: NORMX, NORME, NORMB, NORMR, R(128), SCALE(128)
       COMMON /XXLIN/ ERROR,RELRSD,PIVOT
 C
       NM1 = N - 1
@@ -110466,8 +110505,10 @@ C
       REAL, INTENT(INOUT) :: ABSERR, RELERR, T
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
+      EXTERNAL F
       INTEGER :: IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI,
      &IPSI, ISIG, ISTART, ITOLD, IV, IW, IWT, IX, IYP, IYPOUT, IYY
+      LOGICAL :: START, PHASE1, NORND
 C
 C     SANDIA MATHEMATICAL PROGRAM LIBRARY
 C     APPLIED MATHEMATICS DIVISION 2642
@@ -110597,8 +110638,6 @@ C   CHANGE OUTPUT  IFLAG=2  TO INPUT  IFLAG=-2 .  ERROR TOLERANCES MAY
 C   BE CHANGED BY THE USER BEFORE CONTINUING.  ALL OTHER PARAMETERS MUST
 C   REMAIN UNCHANGED.
 C
-      LOGICAL :: START, PHASE1, NORND
-      EXTERNAL F
       DATA IALPHA,IBETA,ISIG,IV,IW,IG,IPHASE,IPSI,IX,IH,IHOLD,ISTART,
      1  ITOLD,IDELSN/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
 C
@@ -110640,9 +110679,12 @@ C
       REAL, INTENT(INOUT) :: V(12), W(12), WT(NEQN), X, Y(NEQN)
       REAL :: YP(NEQN)
       REAL, INTENT(INOUT) :: YPOUT(NEQN), YY(NEQN)
+      LOGICAL, INTENT(INOUT) :: START, PHASE1, NORND
+      EXTERNAL F
       INTEGER :: ISN, KLE4, L, MAXNUM, NOSTEP
       REAL :: ABSDEL, ABSEPS, DEL, EPS, FOURU, RELEPS, TEND, U
       REAL :: SPMPAR
+      LOGICAL :: STIFF, CRASH
 C
 C   ODE  MERELY ALLOCATES STORAGE FOR  DE1 TO RELIEVE THE USER OF THE
 C   INCONVENIENCE OF A LONG CALL LIST.  CONSEQUENTLY  DE1 IS USED AS
@@ -110652,9 +110694,6 @@ C   THIS CODE IS COMPLETELY EXPLAINED AND DOCUMENTED IN THE TEXT,
 C   COMPUTER SOLUTION OF ORDINARY DIFFERENTIAL EQUATIONS,  THE INITIAL
 C   VALUE PROBLEM  BY L. F. SHAMPINE AND M. K. GORDON.
 C
-      LOGICAL :: STIFF, CRASH
-      LOGICAL, INTENT(INOUT) :: START, PHASE1, NORND
-      EXTERNAL F
 C
 C   THE CONSTANT  MAXNUM  IS THE MAXIMUM NUMBER OF STEPS ALLOWED IN ONE
 C   CALL TO  DE1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
@@ -110805,6 +110844,10 @@ C
       REAL :: WT(NEQN)
       REAL, INTENT(INOUT) :: X, Y(NEQN)
       REAL :: YP(NEQN)
+      LOGICAL, INTENT(INOUT) :: START
+      LOGICAL, INTENT(OUT) :: CRASH
+      LOGICAL, INTENT(INOUT) :: PHASE1, NORND
+      EXTERNAL F
       INTEGER :: I, IFAIL, IM1, IP1, IQ, J, KM1, KM2, KNEW, KP1, KP2, L,
      &LIMIT1, LIMIT2, NSM2, NSP1, NSP2
       REAL :: ABSH, ERK, ERKM1, ERKM2, ERKP1, ERR, FOURU, GSTR(13),
@@ -110935,10 +110978,6 @@ C   BEFORE RETURNING.  TO CONTINUE WITH THE LARGER TOLERANCE, THE USER
 C   JUST CALLS THE CODE AGAIN.  A RESTART IS NEITHER REQUIRED NOR
 C   DESIRABLE.
 C
-      LOGICAL, INTENT(INOUT) :: START
-      LOGICAL, INTENT(OUT) :: CRASH
-      LOGICAL, INTENT(INOUT) :: PHASE1, NORND
-      EXTERNAL F
 C
       DATA TWO(1)/2.0/, TWO(2)/4.0/, TWO(3)/8.0/, TWO(4)/16.0/,
      1     TWO(5)/32.0/, TWO(6)/64.0/, TWO(7)/128.0/, TWO(8)/256.0/,
@@ -111401,8 +111440,10 @@ C
       REAL, INTENT(INOUT) :: RELERR, T
       REAL, INTENT(IN) :: TEND, TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN), YP(NEQN)
+      EXTERNAL FCN
       INTEGER :: KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW,
      &KWP, KX, KY1, KY2
+      LOGICAL :: ENDPNT, BLKOUT
 C
 C     BLOCK FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD ADVANCING
 C     A BLOCK OF TWO EQUAL STEPS.  THE FORMULA AT THE FIRST STEP IS
@@ -111634,8 +111675,6 @@ C    ACM TRANS. MATH SOFTWARE 17, PP. 424-426.
 C
 C***********************************************************************
 C
-      LOGICAL :: ENDPNT, BLKOUT
-      EXTERNAL FCN
 C
 C     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
 C
@@ -111698,6 +111737,9 @@ C
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: W(NEQN), WP(NEQN), X, Y(NEQN), Y1(NEQN),
      &Y2(NEQN), YP(NEQN)
+      LOGICAL, INTENT(INOUT) :: ENDPNT
+      LOGICAL, INTENT(INOUT) :: BLKOUT
+      EXTERNAL FCN
       INTEGER :: K, MAXNFE, MFLAG, N
       REAL :: A, A21, A31, A32, A41, A42, A43, A51, A52, A53, A54, A61,
      &A62, A63, A64, A65, A81, A82, A83, A84, A85, A86, A87, A91, A92,
@@ -111707,16 +111749,13 @@ C
      &ERC26, ERC27, ERC28, ERC29, ERRTOL, ESTTOL, EZ, HMIN, HSTOP,
      &REMIN, RER, S, SCALE, SF, SWAP, TOL, TOLER, TOLN, U, U26, YPK
       REAL :: SPMPAR
+      LOGICAL :: HFAILD
+      LOGICAL :: INTERP
 C
 C     TWO STEP BLOCK RUNGE-KUTTA FEHLBERG METHOD.
 C     A STANDARD 5(4) FORMULA IS USED AT THE FIRST POINT IN THE BLOCK
 C     AND A 6(4) FORMULA IS USED AT THE SECOND POINT.
 C
-      LOGICAL :: HFAILD
-      LOGICAL, INTENT(INOUT) :: ENDPNT
-      LOGICAL :: INTERP
-      LOGICAL, INTENT(INOUT) :: BLKOUT
-      EXTERNAL FCN
 C
 C***********************************************************************
 C
@@ -112510,10 +112549,10 @@ C
       REAL, INTENT(INOUT) :: RELERR
       REAL, INTENT(IN) :: ABSERR
       REAL, INTENT(INOUT) :: WORK(*)
-C
       EXTERNAL F
-C
       INTEGER :: K1, K2, K3, K4, K5, K6, K1M
+C
+C
 C
 C     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
 C
@@ -112553,8 +112592,6 @@ C         YP - DERIVATIVE OF SOLUTION VECTOR AT T
 C         H  - AN APPROPRIATE STEPSIZE TO BE USED FOR THE NEXT STEP
 C         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
 C
-      LOGICAL :: HFAILD, OUTPUT
-C
       INTEGER, INTENT(IN) :: NEQN
       INTEGER, INTENT(INOUT) :: IFLAG, NFE, KOP, INIT, JFLAG, KFLAG
       REAL, INTENT(INOUT) :: Y(NEQN), T
@@ -112566,13 +112603,15 @@ C
       REAL, INTENT(INOUT) :: F1(NEQN)
       REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
       REAL, INTENT(INOUT) :: F5(NEQN), SAVRE, SAVAE
-C
       EXTERNAL F
-C
+      LOGICAL :: HFAILD, OUTPUT
       REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HMIN, REMIN, RER, S,
      &SCALE, TOL, TOLN, U26, EPS, YPK, SPMPAR
-C
       INTEGER :: K, MAXNFE, MFLAG
+C
+C
+C
+C
 C
 C     REMIN IS THE MINIMUM ACCEPTABLE VALUE OF RELERR.  ATTEMPTS
 C     TO OBTAIN HIGHER ACCURACY WITH THIS SUBROUTINE ARE USUALLY
@@ -112914,10 +112953,10 @@ C
       REAL, INTENT(INOUT) :: F1(NEQN)
       REAL :: F2(NEQN), F3(NEQN), F4(NEQN)
       REAL, INTENT(INOUT) :: F5(NEQN), S(NEQN)
-C
+      EXTERNAL F
       REAL :: CH
       INTEGER :: K
-      EXTERNAL F
+C
 C
       CH=H/4.0
       DO 221 K=1,NEQN
@@ -112968,6 +113007,7 @@ C
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: WORK(*), Y(NEQN)
+      EXTERNAL F
       INTEGER :: K1, K1M, K2, K3, K4, K5, K6, K7, K8
 C
 C     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
@@ -113148,7 +113188,6 @@ C
 C***********************************************************************
 C
 C
-      EXTERNAL F
 C
 C
 C     COMPUTE INDICES FOR THE SPLITTING OF THE WORK ARRAY
@@ -113194,10 +113233,12 @@ C
       REAL, INTENT(IN) :: TOUT
       REAL, INTENT(INOUT) :: Y(NEQN), YG(NEQN), YGP(NEQN)
       REAL :: YP(NEQN)
+      EXTERNAL F
       INTEGER :: K, MAXNFE, MFLAG
       REAL :: A, AE, DT, EE, EEOET, ESTTOL, ET, HH, HMIN, REMIN, RER, S,
      &SCALE, TOL, TOLN, TS, U, U26, YPK
       REAL :: SPMPAR
+      LOGICAL :: HFAILD, OUTPUT
 C
 C     FEHLBERG FOURTH(FIFTH) ORDER RUNGE-KUTTA METHOD WITH
 C     GLOBAL ERROR ASSESSMENT
@@ -113217,10 +113258,8 @@ C         NFE- COUNTER ON THE NUMBER OF DERIVATIVE FUNCTION EVALUATIONS
 C
 C***********************************************************************
 C
-      LOGICAL :: HFAILD, OUTPUT
 C
 C
-      EXTERNAL F
 C
 C***********************************************************************
 C  THE COMPUTER UNIT ROUNDOFF ERROR U IS THE SMALLEST POSITIVE VALUE
@@ -113578,16 +113617,17 @@ C
       INTEGER :: LIW, LRW, NEQ
       REAL, INTENT(INOUT) :: AERR, RERR, T
       REAL :: TOUT
-C     --------------
-      EXTERNAL F, ZZZJAC
+      EXTERNAL F
       REAL, INTENT(INOUT) :: Y(NEQ)
-      REAL :: RTOL(1), ATOL(1)
       REAL, INTENT(INOUT) :: RWORK(LRW)
       REAL :: RPAR(*)
       INTEGER, INTENT(INOUT) :: INFO(*)
-      INTEGER :: INFO1(15)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: IPAR(*)
+      EXTERNAL ZZZJAC
+      REAL :: RTOL(1), ATOL(1)
+      INTEGER :: INFO1(15)
+C     --------------
 C     --------------
       INFO1(1) = INFO(1)
       INFO1(2) = 0
@@ -113613,14 +113653,15 @@ C
       INTEGER :: LIW, LRW, NEQ
       REAL, INTENT(INOUT) :: T
       REAL :: TOUT
-C     --------------
-      EXTERNAL F, ZZZJAC
+      EXTERNAL F
       REAL, INTENT(INOUT) :: Y(NEQ), RTOL(NEQ), ATOL(NEQ), RWORK(LRW)
       REAL :: RPAR(*)
       INTEGER, INTENT(INOUT) :: INFO(*)
-      INTEGER :: INFO1(15)
       INTEGER, INTENT(INOUT) :: IWORK(LIW)
       INTEGER :: IPAR(*)
+      EXTERNAL ZZZJAC
+      INTEGER :: INFO1(15)
+C     --------------
 C     --------------
       INFO1(1) = INFO(1)
       INFO1(2) = 1
@@ -113655,12 +113696,14 @@ C     -------------
       IMPLICIT NONE
       INTEGER :: IDID, INFO( *), IPAR(*), IWORK, LIW, LRW, NEQ
       REAL :: ATOL(*), RPAR(*), RTOL(*), RWORK(LRW), T, TOUT, Y(NEQ)
+      EXTERNAL F, JAC
       INTEGER :: ICOMI, ICOMR, IDELSN, IINOUT, ILRW, ITSTAR, IYPOUT, ML,
      &MU
       INTEGER :: IACOR, IBAND, IBEGIN, IER, IEWT, IINTEG, IJAC, INIT,
      &IOWNS, IQUIT, ISAVF, ITOL, ITSTOP, IWM, IYH, JSTART, KFLAG,
      &KSTEPS, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
       REAL :: EL0, H, HMIN, HMXI, HU, ROWNS, TN, TOLD, UROUND
+      LOGICAL :: INTOUT
 C***********************************************************************
 C***PURPOSE
 C   STFODE SOLVES INITIAL VALUE PROBLEMS IN ORDINARY DIFFERENTIAL
@@ -114347,7 +114390,6 @@ C   SHAMPINE L.F., WATTS H.A., *DEPAC - DESIGN OF A USER ORIENTED
 C   PACKAGE OF ODE SOLVERS*, SAND79-2374, SANDIA LABORATORIES, 1979.
 C
 C
-      LOGICAL :: INTOUT
 C
       DIMENSION IWORK(LIW)
 C
@@ -114358,7 +114400,6 @@ C
      4   IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE,
      5   NJE, NQU
 C
-      EXTERNAL F , JAC
 C
 C.......................................................................
 C
@@ -114455,8 +114496,10 @@ C-----------------------------------------------------------------------
 C THIS ROUTINE RESTORES FROM RSAV AND ISAV THE CONTENTS OF COMMON
 C BLOCK DEBDF1, WHICH IS USED INTERNALLY IN THE SFODE PACKAGE.
 C-----------------------------------------------------------------------
-      INTEGER :: ISAV(*), I, ILS, LENILS, LENRLS
-      REAL :: RSAV(*), RLS
+      INTEGER :: ISAV(*)
+      REAL :: RSAV(*)
+      INTEGER :: I, ILS, LENILS, LENRLS
+      REAL :: RLS
       COMMON /DEBDF1/ RLS(218), ILS(33)
       DATA LENRLS/218/, LENILS/33/
 C
@@ -114477,8 +114520,10 @@ C
 C RSAV = REAL ARRAY OF LENGTH 218 OR MORE.
 C ISAV = INTEGER ARRAY OF LENGTH 33 OR MORE.
 C-----------------------------------------------------------------------
-      INTEGER :: ISAV(*), I, ILS, LENILS, LENRLS
-      REAL :: RSAV(*), RLS
+      INTEGER :: ISAV(*)
+      REAL :: RSAV(*)
+      INTEGER :: I, ILS, LENILS, LENRLS
+      REAL :: RLS
       COMMON /DEBDF1/ RLS(218), ILS(33)
       DATA LENRLS/218/, LENILS/33/
 C
@@ -114498,6 +114543,8 @@ C----------------------- END OF SUBROUTINE SVCO -----------------------
       REAL :: ACOR(NEQ), ATOL(*), DELSGN, EWT(NEQ), RPAR(*), RTOL(*),
      &SAVF(NEQ), T, TOLFAC, TOUT, TSTOP, WM(*), Y(NEQ), YH(NEQ,*),
      &YH1(*), YPOUT(NEQ)
+      LOGICAL :: INTOUT
+      EXTERNAL F, JAC
       INTEGER :: INTFLG, K, L, LTOL, MAX, MAXNUM
       REAL :: ABSDEL, BIG, DEL, DT, HA, TOL
       INTEGER :: IBAND, IBEGIN, IER, IINTEG, IJAC, INIT, IOWNS, IQUIT,
@@ -114513,7 +114560,6 @@ C   AS DESCRIBED IN THE COMMENTS FOR  STFODE.
 C
 C***ROUTINES CALLED  STOD,INTYD,VNWRMS,HSTART,SPMPAR
 C
-      LOGICAL :: INTOUT
 C
 C
       COMMON /DEBDF1/ TOLD, ROWNS(210),
@@ -114523,7 +114569,6 @@ C
      4   IER, JSTART, KFLAG, LDUM, METH, MITER, MAXORD, N, NQ, NST,
      5   NFE, NJE, NQU
 C
-      EXTERNAL F , JAC
 C
 C.......................................................................
 C
@@ -114822,6 +114867,7 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
       REAL :: Y(NEQ)
       REAL, INTENT(INOUT) :: YP(NEQ)
       REAL :: YPRIME(NEQ)
+      EXTERNAL F
       INTEGER :: J, K, LK
       REAL :: ABSDX, DA, DELF, DELY, DFDUB, DFDXB, DX, DY, FBND, RELPER,
      &SRYDPB, TOLEXP, TOLMIN, TOLP, TOLSUM, YDPB
@@ -114947,7 +114993,6 @@ C***********************************************************************
 C
 C***ROUTINES CALLED  VNORM
 C
-      EXTERNAL F
 C
 C.......................................................................
 C
@@ -115142,11 +115187,12 @@ C THE QUANTITIES  NQ = NQCUR, L = NQ+1, N = NEQ, TN, AND H ARE
 C COMMUNICATED BY COMMON.  THE ABOVE SUM IS DONE IN REVERSE ORDER.
 C IFLAG IS RETURNED NEGATIVE IF EITHER K OR T IS OUT OF BOUNDS.
 C-----------------------------------------------------------------------
-      INTEGER :: K, NYH, IFLAG, I, IC, IER, IOWND, IOWNS, J, JB, JB2,
-     &JJ, JJ1, JP1, JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE,
-     &NQ, NQU, NST
-      REAL :: T, YH(NYH,*), DKY(*), ROWND, ROWNS, EL0, H, HMIN, HMXI,
-     &HU, TN, UROUND, C, R, S, TP
+      INTEGER :: K, NYH, IFLAG
+      REAL :: T, YH(NYH,*), DKY(*)
+      INTEGER :: I, IC, IER, IOWND, IOWNS, J, JB, JB2, JJ, JJ1, JP1,
+     &JSTART, KFLAG, L, MAXORD, METH, MITER, N, NFE, NJE, NQ, NQU, NST
+      REAL :: ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, C, R, S,
+     &TP
       COMMON /DEBDF1/ ROWND, ROWNS(210),
      1   EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6),
      4   IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE,
@@ -115198,8 +115244,17 @@ C----------------------- END OF SUBROUTINE INTYD -----------------------
       IMPLICIT NONE
       INTEGER :: IPAR(*)
       REAL :: RPAR(*)
+      EXTERNAL F, JAC
+      INTEGER :: NEQ, NYH, IWM(*)
+      REAL :: Y(*), YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*)
       INTEGER :: IPNYH
       INTEGER :: IOD, KSTEPS
+      INTEGER :: I, I1, IALTH, IER, IOWND, IREDO, IRET, IPUP, J, JB,
+     &JSTART, KFLAG, L, LMAX, M, MAXORD, MEO, METH, MITER, N, NCF, NEWQ,
+     &NFE, NJE, NQ, NQNYH, NQU, NST, NSTEPJ
+      REAL :: ROWND, CONIT, CRATE, EL, ELCO, HOLD, RC, RMAX, TESCO, EL0,
+     &H, HMIN, HMXI, HU, TN, UROUND, DCON, DDN, DEL, DELP, DSM, DUP,
+     &EXDN, EXSM, EXUP, R, RH, RHDN, RHSM, RHUP, TOLD, VNWRMS
 C-----------------------------------------------------------------------
 C STOD  PERFORMS ONE STEP OF THE INTEGRATION OF AN INITIAL VALUE
 C PROBLEM FOR A SYSTEM OF ORDINARY DIFFERENTIAL EQUATIONS.
@@ -115265,15 +115320,7 @@ C N      = THE NUMBER OF FIRST-ORDER DIFFERENTIAL EQUATIONS.
 C-----------------------------------------------------------------------
 C***ROUTINES CALLED  CFOD,SLVS,PJAC,VNWRMS
 C
-      EXTERNAL F, JAC
 C
-      INTEGER :: NEQ, NYH, IWM(*), I, I1, IALTH, IER, IOWND, IREDO,
-     &IRET, IPUP, J, JB, JSTART, KFLAG, L, LMAX, M, MAXORD, MEO, METH,
-     &MITER, N, NCF, NEWQ, NFE, NJE, NQ, NQNYH, NQU, NST, NSTEPJ
-      REAL :: Y(*), YH(NYH,*), YH1(*), EWT(*), SAVF(*), ACOR(*), WM(*),
-     &ROWND, CONIT, CRATE, EL, ELCO, HOLD, RC, RMAX, TESCO, EL0, H,
-     &HMIN, HMXI, HU, TN, UROUND, DCON, DDN, DEL, DELP, DSM, DUP, EXDN,
-     &EXSM, EXUP, R, RH, RHDN, RHSM, RHUP, TOLD, VNWRMS
       COMMON /DEBDF1/ ROWND, CONIT, CRATE, EL(13), ELCO(13,12),
      1   HOLD, RC, RMAX, TESCO(3,12),
      2   EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(7), KSTEPS, IOD(6),
@@ -115660,8 +115707,8 @@ C
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
 C
       INTEGER, INTENT(IN) :: METH
-      INTEGER :: I, IB, NQ, NQM1, NQP1
       REAL, INTENT(INOUT) :: ELCO(13, *), TESCO(3, *)
+      INTEGER :: I, IB, NQ, NQM1, NQP1
       REAL :: AGAMQ, FNQ, FNQM1, PC(12), PINT, RAGQ, RQFAC, RQ1FAC,
      &TSIGN, XPIN
 C-----------------------------------------------------------------------
@@ -115773,19 +115820,20 @@ C----------------------- END OF SUBROUTINE CFOD  -----------------------
       IMPLICIT NONE
       INTEGER :: IPAR(*)
       REAL :: RPAR(*)
+      INTEGER :: NEQ, NYH, IWM( *)
+      EXTERNAL F, JAC
+      REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*)
+      INTEGER :: I, I1, I2, IER, II, IOWND, IOWNS, J, J1, JJ, JSTART,
+     &KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND, METH, MITER, ML,
+     &ML3, MU, N, NFE, NJE, NQ, NQU, NST
+      REAL :: ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, CON, DI,
+     &FAC, HL0, R, R0, SRUR, YI, YJ, YJJ, VNWRMS
 C
 C   PJAC SETS UP THE ITERATION MATRIX (INVOLVING THE JACOBIAN) FOR THE
 C   INTEGRATION PACKAGE SFODE.
 C
 C***ROUTINES CALLED  VNWRMS,SGEFA,SGBFA
 C
-      INTEGER :: NEQ, NYH, IWM( *), I, I1, I2, IER, II, IOWND, IOWNS, J,
-     &J1, JJ, JSTART, KFLAG, L, LENP, MAXORD, MBA, MBAND, MEB1, MEBAND,
-     &METH, MITER, ML, ML3, MU, N, NFE, NJE, NQ, NQU, NST
-      EXTERNAL F, JAC
-      REAL :: Y(*), YH(NYH,*), EWT(*), FTEM(*), SAVF(*), WM(*), ROWND,
-     &ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, CON, DI, FAC, HL0, R,
-     &R0, SRUR, YI, YJ, YJJ, VNWRMS
       COMMON /DEBDF1/ ROWND, ROWNS(210),
      1   EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6),
      4   IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE,
@@ -115942,10 +115990,12 @@ C   INTEGRATOR PACKAGE SFODE.
 C
 C***ROUTINES CALLED  SGESL,SGBSL
 C
-      INTEGER :: IWM( *), I, IER, IOWND, IOWNS, JSTART, KFLAG, L,
-     &MAXORD, MEBAND, METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
-      REAL :: WM(*), X(*), TEM(*), ROWND, ROWNS, EL0, H, HMIN, HMXI, HU,
-     &TN, UROUND, DI, HL0, PHL0, R
+      INTEGER :: IWM( *)
+      REAL :: WM(*), X(*), TEM(*)
+      INTEGER :: I, IER, IOWND, IOWNS, JSTART, KFLAG, L, MAXORD, MEBAND,
+     &METH, MITER, ML, MU, N, NFE, NJE, NQ, NQU, NST
+      REAL :: ROWND, ROWNS, EL0, H, HMIN, HMXI, HU, TN, UROUND, DI, HL0,
+     &PHL0, R
       COMMON /DEBDF1/ ROWND, ROWNS(210),
      1   EL0, H, HMIN, HMXI, HU, TN, UROUND, IOWND(14), IOWNS(6),
      4   IER, JSTART, KFLAG, L, METH, MITER, MAXORD, N, NQ, NST, NFE,
@@ -116008,6 +116058,9 @@ C----------------------- END OF SUBROUTINE SLVS -----------------------
       INTEGER, INTENT(INOUT) :: IPVT(*)
       INTEGER, INTENT(OUT) :: INFO
       REAL, INTENT(INOUT) :: ABD(LDA,*)
+      REAL :: T
+      INTEGER :: I, ISAMAX, I0, J, JU, JZ, J0, J1, K, KP1, L, LM, M, MM,
+     &NM1
 C
 C     SGBFA FACTORS A REAL BAND MATRIX BY ELIMINATION.
 C
@@ -116089,9 +116142,6 @@ C
 C     BLAS SAXPY,SSCAL,ISAMAX
 C     FORTRAN MAX0,MIN0
 C
-      REAL :: T
-      INTEGER :: I, ISAMAX, I0, J, JU, JZ, J0, J1, K, KP1, L, LM, M, MM,
-     &NM1
 C
       M = ML + MU + 1
       INFO = 0
@@ -116183,6 +116233,8 @@ C
       INTEGER, INTENT(IN) :: LDA, N, ML, MU, IPVT(*), JOB
       REAL, INTENT(IN) :: ABD(LDA,*)
       REAL, INTENT(INOUT) :: B(*)
+      REAL :: SDOT, T
+      INTEGER :: K, KB, L, LA, LB, LM, M, NM1
 C
 C     SGBSL SOLVES THE REAL BAND SYSTEM
 C     A * X = B  OR  TRANS(A) * X = B
@@ -116245,8 +116297,6 @@ C
 C     BLAS SAXPY,SDOT
 C     FORTRAN MIN0
 C
-      REAL :: SDOT, T
-      INTEGER :: K, KB, L, LA, LB, LM, M, NM1
 C
       M = MU + ML + 1
       NM1 = N - 1
@@ -116340,8 +116390,9 @@ C CONTAINED IN THE ARRAY W OF LENGTH N..
 C   VNWRMS = SQRT( (1/N) * SUM( V(I)/W(I) )**2 )
 C-----------------------------------------------------------------------
       INTEGER, INTENT(IN) :: N
+      REAL :: V(N), W(N)
       INTEGER :: I
-      REAL :: V(N), W(N), SUM
+      REAL :: SUM
 C
       SUM = 0.0E0
       DO 10 I = 1,N
@@ -116357,12 +116408,12 @@ C----------------------- END OF FUNCTION VNWRMS ------------------------
       REAL, INTENT(INOUT) :: A(*)
       REAL, INTENT(IN) :: H
       REAL, INTENT(INOUT) :: T
+      EXTERNAL F
       INTEGER :: K, M, M1, MK, NK, NP1
       REAL :: HA, TA
 C     ******************************************************************
 C     FOURTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 C     ******************************************************************
-      EXTERNAL F
       NP1=N+1
       IF (H.EQ.0.0) GO TO 50
 C
@@ -116414,14 +116465,14 @@ C
       INTEGER, INTENT(IN) :: N
       REAL :: H
       REAL, INTENT(INOUT) :: T
+      REAL, INTENT(INOUT) :: Y(N), DY(N), W(*)
+      EXTERNAL F
       INTEGER :: I, J, K, L, M, M1
       REAL :: HA, SUM
+      REAL :: A(7), B(8,7), C(7), D(9)
 C     ******************************************************************
 C     EIGHTH ORDER RUNGE-KUTTA PROCEDURE FOR SOLVING DY=F(T,Y)
 C     ******************************************************************
-      REAL, INTENT(INOUT) :: Y(N), DY(N), W(*)
-      REAL :: A(7), B(8,7), C(7), D(9)
-      EXTERNAL F
 C     -------------------
       DATA A(1)/.3333333333333333/,  A(2)/.5/,  A(3)/.6666666666666666/,
      1     A(4)/.1666666666666666/,  A(5)/1./,  A(6)/.8333333333333333/,
@@ -116491,19 +116542,19 @@ C
       INTEGER, INTENT(IN) :: NP1
       INTEGER, INTENT(INOUT) :: NW
       REAL :: A, B, C, D
+      REAL :: G
+      REAL :: BVAL
+      REAL, INTENT(INOUT) :: U(KU,NP1), W(NW)
+      INTEGER, INTENT(IN) :: EDGE(4)
+      EXTERNAL COFX, COFY
       INTEGER :: I, IA, IB, IC, ID, IJ, IMAX, IMIN, INDX, INDY, IW, J,
      &JCOL, JMAX, JMIN, L, M, MN, N
       REAL :: ALPHA, BETA, DEL, GAM, HX, HY, P, XI, XMIN, YJ, YMIN
-      REAL :: G
-      REAL :: BVAL
+      REAL :: DUM(1)
 C ----------------------------------------------------------------------
 C     SOLUTION OF SEPARABLE ELLIPTIC PARTIAL DIFFERENTIAL EQUATIONS
 C                     ON RECTANGULAR DOMAINS
 C ----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: U(KU,NP1), W(NW)
-      REAL :: DUM(1)
-      INTEGER, INTENT(IN) :: EDGE(4)
-      EXTERNAL COFX, COFY
 C     --------------
       DATA ALPHA/0.0/, BETA/0.0/, GAM/0.0/, DEL/0.0/
 C     --------------
@@ -116759,6 +116810,10 @@ C
       REAL :: A, ALPHA, B, BETA, C, D, GAMA
       REAL, INTENT(INOUT) :: PERTRB
       REAL :: XNU
+      REAL, INTENT(INOUT) :: GRHS(MN,*), USOL(IDMN,*)
+      REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
+      REAL, INTENT(INOUT) :: W(*)
+      EXTERNAL COFX, COFY
       INTEGER :: I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9,
      &K, L, LENGTH, LINPUT, LL, LOGB2N, LOUTPT
 C
@@ -117198,10 +117253,6 @@ C                          NCAR-TN/IA-109, PP. 135-137.
 C
 C
 C
-      REAL, INTENT(INOUT) :: GRHS(MN,*), USOL(IDMN,*)
-      REAL :: BDA(*), BDB(*), BDC(*), BDD(*)
-      REAL, INTENT(INOUT) :: W(*)
-      EXTERNAL COFX, COFY
 C
 C
 C     CHECK INPUT PARAMETERS
@@ -117259,19 +117310,19 @@ C
      &BETA, BM(*), BN(*), C, CM(*), CN(*), D, DM(*), DN(*), GAMA,
      &GRHS(MN,*), PERTRB, UM(*), UN(*), USOL(IDMN,*), W(*), XNU, ZM(*),
      &ZN(*)
+      EXTERNAL COFX, COFY
       INTEGER :: I, I1, IORD, J, MP, NP
       REAL :: AI, AX1, AXI, BI, BXI, CI, CXI, CXM, DJ, DY1, DYJ, EJ,
      &EYJ, FJ, FYJ, FYN, PRTRB, XI, YJ
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
       REAL :: AIT, BIT, CIT, DIT, DLX, DLX4, DLY, DLY4, TDLX3, TDLY3
+      LOGICAL :: SINGLR
 C
 C     SEPEL1 SETS UP VECTORS AND ARRAYS FOR INPUT TO BLKTRI
 C     AND COMPUTES A SECOND ORDER SOLUTION IN USOL.  A RETURN JUMP TO
 C     SEPELL OCCURRS IF IORDER=2.  IF IORDER=4 A FOURTH ORDER
 C     SOLUTION IS GENERATED IN USOL.
 C
-      LOGICAL :: SINGLR
-      EXTERNAL        COFX, COFY
       COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          ,
      1                AIT        ,BIT        ,CIT        ,DIT        ,
      2                MIT        ,NIT        ,IS         ,MS         ,
@@ -117645,6 +117696,7 @@ C
       IMPLICIT NONE
       INTEGER :: MBDCND, NBDCND
       REAL :: ALPHA, BETA, GAMA, XNU
+      LOGICAL :: SINGLR
       INTEGER :: I, J
       REAL :: AI, BI, CI, DJ, EJ, FJ, XI, YJ
       INTEGER :: IS, JS, K, KSWX, KSWY, L, MIT, MS, NIT, NS
@@ -117653,7 +117705,6 @@ C
 C     THIS SUBROUTINE CHECKS IF THE PDE   SEPELL
 C     MUST SOLVE IS A SINGULAR OPERATOR
 C
-      LOGICAL :: SINGLR
       COMMON /SPLP/   KSWX       ,KSWY       ,K          ,L          ,
      1                AIT        ,BIT        ,CIT        ,DIT        ,
      2                MIT        ,NIT        ,IS         ,MS         ,
@@ -118095,6 +118146,7 @@ C
       INTEGER :: IW1, IW2, IW3, IWAH, IWBH, IWD, IWU, IWW, NH, NL
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
+      EXTERNAL PROD0, PRODP, CPROD0, CPRODP
 C
 C
 C***********************************************************************
@@ -118232,7 +118284,6 @@ C       BLKTRI WILL BE CALLED AGAIN WITH IFLG = 1  .
 C
 C
 C
-      EXTERNAL        PROD0      ,PRODP      ,CPROD0     ,CPRODP
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
 C
@@ -118809,8 +118860,11 @@ C
       INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
       REAL :: A(*), AA(*), B(*), BM1(*), BM2(*), C(*), X(*)
       REAL, INTENT(INOUT) :: YY(*)
+      COMPLEX, INTENT(INOUT) :: Y(*), D(*), W(*)
+      COMPLEX :: BD(*)
       INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM
       REAL :: RT
+      COMPLEX :: CRT, DEN, Y1, Y2
 C
 C CPROD0 APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN YY.   (COMPLEX CASE)
@@ -118825,8 +118879,6 @@ C M          THE ORDER OF THE MATRIX.
 C D,W,Y      WORKING ARRAYS.
 C ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 C
-      COMPLEX, INTENT(INOUT) :: Y(*), D(*), W(*)
-      COMPLEX :: BD(*), CRT, DEN, Y1, Y2
 C
       DO J=1,M
          Y(J) = CMPLX(X(J),0.)
@@ -118910,8 +118962,11 @@ C
       INTEGER, INTENT(IN) :: M, NA, ND, NM1, NM2
       REAL :: A(*), AA(*), B(*), BM1(*), BM2(*), C(*), X(*)
       REAL, INTENT(INOUT) :: YY(*)
+      COMPLEX, INTENT(INOUT) :: Y(*), D(*), U(*)
+      COMPLEX :: BD(*)
       INTEGER :: IA, ID, IFLG, J, K, M1, M2, MM, MM2
       REAL :: RT
+      COMPLEX :: V, DEN, BH, YM, AM, Y1, Y2, YH, CRT
 C
 C PRODP APPLIES A SEQUENCE OF MATRIX OPERATIONS TO THE VECTOR X AND
 C STORES THE RESULT IN YY.  (PERIODIC BOUNDARY CONDITIONS AND
@@ -118927,8 +118982,6 @@ C M          THE ORDER OF THE MATRIX.
 C D,U,Y      WORKING ARRAYS.
 C ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 C
-      COMPLEX, INTENT(INOUT) :: Y(*), D(*), U(*)
-      COMPLEX :: V, DEN, BH, YM, AM, Y1, Y2, YH, BD(*), CRT
 C
       DO J=1,M
          Y(J) = CMPLX(X(J),0.)
@@ -119133,14 +119186,15 @@ C
 
       SUBROUTINE TQLRT0 (N,D,E2,IERR)
       IMPLICIT NONE
+      INTEGER :: N, IERR
+      REAL :: D(N), E2(N)
       INTEGER :: NHALF, NTOP
       REAL :: DHOLD
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV
-C
-      INTEGER :: I, J, L, M, N, II, L1, MML, IERR
-      REAL :: D(N), E2(N)
+      INTEGER :: I, J, L, M, II, L1, MML
       REAL :: B, C, F, G, H, P, R, S, MACHEP
+C
 C
       COMMON /CBLKT/  NPP        ,K          ,MACHEP     ,CNV        ,
      1                NM         ,NCMPLX     ,IK
@@ -119297,6 +119351,7 @@ C
       IMPLICIT NONE
       INTEGER :: IERROR, N
       REAL :: A(*), BH(*), BP(*), C(*)
+      COMPLEX :: CBP(*)
       INTEGER :: I2, I3, ICV, IF, IG, IS, IT, IZ, IZM, IZM2, J, MODIZ,
      &NHALF, NT
       REAL :: DB, PSG, SCNV, SGN, XL, XM, XR
@@ -119306,6 +119361,8 @@ C
       REAL :: PPSPF
       REAL :: BSRH
       REAL :: PSGF
+      COMPLEX :: CF, CX, FSG, HSG, DD, F, FP, FPP, CDIS, R1, R2, R3
+      EXTERNAL PSGF, PPSPF, PPSGF
 C
 C     PPADD COMPUTES THE EIGENVALUES OF THE PERIODIC TRIDIAGONAL MATRIX
 C     WITH COEFFICIENTS AN,BN,CN
@@ -119316,9 +119373,6 @@ C CBP IS THE SAME AS BP EXCEPT TYPE COMPLEX.
 C BH  IS USED TO TEMPORARILY STORE THE ROOTS OF THE B HAT POLYNOMIAL
 C     WHICH ENTERS THROUGH BP.
 C
-      COMPLEX :: CF, CX, FSG, HSG, DD, F, FP, FPP, CDIS, R1, R2, R3,
-     &CBP(*)
-      EXTERNAL        PSGF       ,PPSPF      ,PPSGF
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
 C
@@ -119478,11 +119532,11 @@ C
       IMPLICIT NONE
       INTEGER :: IZ
       REAL :: A(*), BH(*), C(*), SGN, XLL, XRR
+      REAL :: F
       REAL :: DX, X, XL, XR
       INTEGER :: IK, K, NCMPLX, NM, NPP
       REAL :: CNV, EPS
       REAL :: BSRH
-      REAL :: F
       COMMON /CBLKT/  NPP        ,K          ,EPS        ,CNV        ,
      1                NM         ,NCMPLX     ,IK
       XL = XLL
@@ -119536,7 +119590,10 @@ C
       INTEGER, INTENT(IN) :: IBEG, IEND
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      INTEGER, INTENT(INOUT) :: L(N)
       INTEGER :: I, K, LEFTLO
+      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
+      DOUBLE PRECISION :: C, M, S, T
 C-----------------------------------------------------------------------
 C
 C               UNIFORM RANDOM SELECTION OF VALUES FROM
@@ -119575,9 +119632,6 @@ C                 2 - IBEG .GE. IEND  OR  M .GE. P.
 C                 3 - SEED OUT OF RANGE )
 C
 C-----------------------------------------------------------------------
-      INTEGER, INTENT(INOUT) :: L(N)
-      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
-      DOUBLE PRECISION :: C, M, S, T
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     S = 1/(P-1)   (IT IS ASSUMED THAT THE ARITHMETIC BEING
@@ -119639,9 +119693,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: K, L, LEFTLO
       REAL :: S, T
-      REAL, INTENT(INOUT) :: X(N)
+      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-----------------------------------------------------------------------
 C         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -119654,7 +119709,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C-------------------
@@ -119720,8 +119774,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
-      INTEGER :: K, L, LEFTLO
       DOUBLE PRECISION, INTENT(INOUT) :: X(N)
+      INTEGER :: K, L, LEFTLO
+      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
+      DOUBLE PRECISION :: S, T
 C-----------------------------------------------------------------------
 C         UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -119734,8 +119790,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
-      DOUBLE PRECISION :: S, T
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C-------------------
@@ -119802,6 +119856,7 @@ C
       REAL, INTENT(INOUT) :: U, V
       INTEGER :: K, LEFTLO
       REAL :: T
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -119815,7 +119870,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     DATA P0/2**30 - 1/
@@ -119870,7 +119924,10 @@ C
       SUBROUTINE DURNG0 (IX, U, V)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
+      DOUBLE PRECISION, INTENT(INOUT) :: U, V
       INTEGER :: K, LEFTLO
+      DOUBLE PRECISION :: T
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -119884,9 +119941,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: U, V
-      DOUBLE PRECISION :: T
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     DATA P0/2**30 - 1/
@@ -119944,6 +119998,7 @@ C
       REAL, INTENT(INOUT) :: D, U, V
       INTEGER :: J, K, LEFTLO
       REAL :: T
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -119958,7 +120013,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     DATA P0/2**30 - 1/
@@ -120016,7 +120070,10 @@ C
       SUBROUTINE DURNG1 (IX, U, V, D)
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IX
+      DOUBLE PRECISION, INTENT(INOUT) :: U, V, D
       INTEGER :: J, K, LEFTLO
+      DOUBLE PRECISION :: T
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C       UNIFORM RANDOM NUMBER GENERATOR USING THE RECURSION
 C
@@ -120031,9 +120088,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: U, V, D
-      DOUBLE PRECISION :: T
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     DATA P0/2**30 - 1/
@@ -120092,8 +120146,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: X(N), Y(N)
       INTEGER :: K, L, LEFTLO
       REAL :: S, T
+      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-----------------------------------------------------------------------
 C
 C         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -120109,8 +120165,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      REAL, INTENT(INOUT) :: X(N), Y(N)
-      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C-------------------
@@ -120159,7 +120213,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
       INTEGER :: K, L, LEFTLO
+      DOUBLE PRECISION :: S, T
+      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-----------------------------------------------------------------------
 C
 C         GENERATION OF UNIFORM RANDOM POINTS (X(I),Y(I))
@@ -120175,9 +120232,6 @@ C        LINUS SCHRAGE
 C        UNIVERSITY OF CHICAGO
 C     ADAPTED BY A.H. MORRIS (NSWC)
 C-------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
-      DOUBLE PRECISION :: S, T
-      INTEGER :: A, B15, B16, FHI, P, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C-------------------
@@ -120226,13 +120280,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: X(N), Y(N)
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 C              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N), Y(N)
 C------------------
       CALL RCIR1 (N, IX, X, 1, Y, 1, IERR)
       RETURN
@@ -120242,8 +120296,10 @@ C------------------
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
+      REAL, INTENT(INOUT) :: X(*), Y(*)
       INTEGER :: I, I1, I2, J, K, LEFTLO
       REAL :: R, S, U, V
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C
 C      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -120254,8 +120310,6 @@ C                      I1 = 1 + KX*(I - 1)
 C                      I2 = 1 + KY*(I - 1) .
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(*), Y(*)
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     P0 = 2**30 - 1
@@ -120330,13 +120384,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
 C-----------------------------------------------------------------------
 C
 C          GENERATION OF N UNIFORM RANDOM POINTS (X(I),Y(I))
 C              IN THE UNIT CIRCLE CENTERED AT THE ORIGIN
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N), Y(N)
 C------------------
       CALL DRCIR1 (N, IX, X, 1, Y, 1, IERR)
       RETURN
@@ -120346,7 +120400,10 @@ C------------------
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, KY, N
+      DOUBLE PRECISION, INTENT(INOUT) :: X(*), Y(*)
       INTEGER :: I, I1, I2, J, K, LEFTLO
+      DOUBLE PRECISION :: R, S, U, V
+      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-----------------------------------------------------------------------
 C
 C      GENERATION OF N UNIFORM RANDOM POINTS IN THE UNIT CIRCLE
@@ -120357,9 +120414,6 @@ C                      I1 = 1 + KX*(I - 1)
 C                      I2 = 1 + KY*(I - 1) .
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: X(*), Y(*)
-      DOUBLE PRECISION :: R, S, U, V
-      INTEGER :: A, B15, B16, FHI, P, P0, XALO, XHI
 C-------------------
 C     DATA A/7**5/,  B15/2**15/, B16/2**16/, P/2**31 - 1/
 C     P0 = 2**30 - 1
@@ -120434,13 +120488,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
       INTEGER :: I, M, MAX
       REAL :: R, S, U, V
+      REAL :: T(2)
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      REAL :: T(2)
 C---------------------
       DATA MAX /2147483647/
 C---------------------
@@ -120485,12 +120539,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
       INTEGER :: I, M, MAX
+      DOUBLE PRECISION :: R, S, U, V, T(2)
 C-----------------------------------------------------------------------
 C                 NORMAL RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-      DOUBLE PRECISION :: R, S, U, V, T(2)
 C---------------------
       DATA MAX /2147483647/
 C---------------------
@@ -120535,13 +120589,13 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      REAL, INTENT(INOUT) :: A(N)
       INTEGER :: I, M
       REAL :: PHI, PI2, R
+      REAL :: TEMP(1)
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(N)
-      REAL :: TEMP(1)
       DATA PI2 /6.2831853071796/
 C
       CALL URNG (IX,A,N,IERR)
@@ -120567,12 +120621,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
       INTEGER :: I, M
+      DOUBLE PRECISION :: PHI, PI2, R, TEMP(1)
 C-----------------------------------------------------------------------
 C                 GAUSSIAN RANDOM NUMBER GENERATOR
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(N)
-      DOUBLE PRECISION :: PHI, PI2, R, TEMP(1)
 C
       DATA PI2 /6.28318530717958647692528676656D0/
 C
@@ -120599,6 +120653,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
+      REAL, INTENT(INOUT) :: A(*)
+      REAL, INTENT(IN) :: FMU(M)
+      REAL, INTENT(INOUT) :: X(KX,N)
       INTEGER :: I, II, J, K, L, L0, LDIM, MAX
       REAL :: SUM
 C-----------------------------------------------------------------------
@@ -120680,9 +120737,6 @@ C     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
 C     PP. 278 - 281.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(*)
-      REAL, INTENT(IN) :: FMU(M)
-      REAL, INTENT(INOUT) :: X(KX,N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -120738,6 +120792,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
+      REAL, INTENT(INOUT) :: A(M)
+      REAL, INTENT(IN) :: FMU(M)
+      REAL, INTENT(INOUT) :: X(KX,N)
       INTEGER :: I, J, MAX
 C-----------------------------------------------------------------------
 C
@@ -120804,9 +120861,6 @@ C                   3 - A(I) .LE. 0 FOR SOME I
 C                   4 - SEED OUT OF RANGE      )
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: A(M)
-      REAL, INTENT(IN) :: FMU(M)
-      REAL, INTENT(INOUT) :: X(KX,N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -120848,7 +120902,11 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(*)
+      DOUBLE PRECISION, INTENT(IN) :: FMU(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
       INTEGER :: I, II, J, K, L, L0, LDIM, MAX
+      DOUBLE PRECISION :: SUM
 C-----------------------------------------------------------------------
 C
 C           GENERATION OF N RANDOM NORMAL VECTORS OF LENGTH M
@@ -120928,10 +120986,6 @@ C     NORMAL RANDOM VECTORS, TECHNOMETRICS, VOLUME 4, MAY, 1962,
 C     PP. 278 - 281.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(*)
-      DOUBLE PRECISION, INTENT(IN) :: FMU(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
-      DOUBLE PRECISION :: SUM
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -120987,6 +121041,9 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: KX, M, MO, N
+      DOUBLE PRECISION, INTENT(INOUT) :: A(M)
+      DOUBLE PRECISION, INTENT(IN) :: FMU(M)
+      DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
       INTEGER :: I, J, MAX
 C-----------------------------------------------------------------------
 C
@@ -121053,9 +121110,6 @@ C                   3 - A(I) .LE. 0 FOR SOME I
 C                   4 - SEED OUT OF RANGE      )
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(INOUT) :: A(M)
-      DOUBLE PRECISION, INTENT(IN) :: FMU(M)
-      DOUBLE PRECISION, INTENT(INOUT) :: X(KX,N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121098,6 +121152,7 @@ C
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -121146,7 +121201,6 @@ C           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
 C           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 C           P. 203.
 C
-      REAL, INTENT(INOUT) :: X(N)
 C
 C        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
 C        ACCEPTABLE RANGE
@@ -121184,6 +121238,8 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
@@ -121232,8 +121288,6 @@ C           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
 C           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 C           P. 203.
 C
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
 C
 C        CHECK TO ENSURE THAT THE DESIRED NUMBER OF VARIATES IS WITHIN
 C        ACCEPTABLE RANGE
@@ -121272,6 +121326,7 @@ C
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
       REAL :: U, V, W
 C-----------------------------------------------------------------------
@@ -121299,7 +121354,6 @@ C          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
 C                      SEED.
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
 C
       DATA MAX /2147483647/
 C
@@ -121334,7 +121388,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
+      DOUBLE PRECISION :: U, V, W
 C-----------------------------------------------------------------------
 C
 C             COMPUTATION OF N DOUBLE PRECISION VARIATES
@@ -121360,9 +121417,6 @@ C          IERR = 3   (INPUT ERROR) IX IS NOT A PROPER
 C                      SEED.
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-      DOUBLE PRECISION :: U, V, W
 C
       DATA MAX /2147483647/
 C
@@ -121398,6 +121452,7 @@ C
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
       REAL :: U, V, X1, X2
 C-----------------------------------------------------------------------
@@ -121447,7 +121502,6 @@ C                   2 - A OR B IS LESS THAN 0.25
 C                   3 - SEED OUT OF RANGE        )
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121492,7 +121546,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A, B
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
+      DOUBLE PRECISION :: U, V, X1, X2
 C-----------------------------------------------------------------------
 C
 C                         DOUBLE PRECISION
@@ -121541,9 +121598,6 @@ C                   2 - A OR B IS LESS THAN 0.25
 C                   3 - SEED OUT OF RANGE        )
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A, B
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-      DOUBLE PRECISION :: U, V, X1, X2
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121589,6 +121643,7 @@ C
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A, B
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
       REAL :: AHALF, BHALF, BIG, BOUND, C, T, U, V, X1, X2, XMAX
       REAL :: SPMPAR
@@ -121630,7 +121685,6 @@ C                       FLOATING ARITHMETIC USED
 C                   4 - SEED OUT OF RANGE       )
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121693,7 +121747,12 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A, B
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
+      DOUBLE PRECISION :: AHALF, BHALF, BIG, BOUND, C, T, U, V, XMAX,
+     &X1, X2
+      DOUBLE PRECISION :: DPMPAR
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION GENERATION OF
@@ -121733,11 +121792,6 @@ C                       FLOATING ARITHMETIC USED
 C                   4 - SEED OUT OF RANGE       )
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A, B
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-      DOUBLE PRECISION :: AHALF, BHALF, BIG, BOUND, C, T, U, V, XMAX,
-     &X1, X2
-      DOUBLE PRECISION :: DPMPAR
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121801,6 +121855,7 @@ C
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: A
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
       REAL :: AHALF, D, S, U, V, W, Z
 C-----------------------------------------------------------------------
@@ -121839,7 +121894,6 @@ C                       FLOATING ARITHMETIC USED
 C                   4 - SEED OUT OF RANGE       )
 C
 C-----------------------------------------------------------------------
-      REAL, INTENT(INOUT) :: X(N)
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121888,7 +121942,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERR, IX
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: A
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I, IND, MAX
+      DOUBLE PRECISION :: AHALF, D, S, U, V, W, Z
 C-----------------------------------------------------------------------
 C
 C                  DOUBLE PRECISION GENERATION OF
@@ -121926,9 +121983,6 @@ C                       FLOATING ARITHMETIC USED
 C                   4 - SEED OUT OF RANGE       )
 C
 C-----------------------------------------------------------------------
-      DOUBLE PRECISION, INTENT(IN) :: A
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-      DOUBLE PRECISION :: AHALF, D, S, U, V, W, Z
 C--------------------
       DATA MAX /2147483647/
 C--------------------
@@ -121978,6 +122032,7 @@ C
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(IN) :: ALPHA, FMU, SIG
+      REAL, INTENT(INOUT) :: X(N)
       INTEGER :: I
       REAL :: C, SIGI, T
 C
@@ -122037,7 +122092,6 @@ C           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
 C           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 C           PP. 236 - 237.
 C
-      REAL, INTENT(INOUT) :: X(N)
 C
 C        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
 C        ACCEPTABLE RANGE
@@ -122097,7 +122151,10 @@ C
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: IERROR, ISEED
       INTEGER, INTENT(IN) :: N
+      DOUBLE PRECISION, INTENT(IN) :: FMU, SIG, ALPHA
+      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
       INTEGER :: I
+      DOUBLE PRECISION :: C, SIGI, T
 C
 C              ***SUBROUTINE PURPOSE AND DESCRIPTION***
 C
@@ -122155,9 +122212,6 @@ C           FISHMAN, GEORGE S., CONCEPTS AND METHODS IN DISCRETE EVENT
 C           DIGITAL SIMULATION, JOHN WILEY AND SONS, NEW YORK, 1973,
 C           PP. 236 - 237.
 C
-      DOUBLE PRECISION, INTENT(IN) :: FMU, SIG, ALPHA
-      DOUBLE PRECISION, INTENT(INOUT) :: X(N)
-      DOUBLE PRECISION :: C, SIGI, T
 C
 C        CHECK TO ENSURE THAT THE DESIRED SEQUENCE LENGTH IS WITHIN
 C        ACCEPTABLE RANGE

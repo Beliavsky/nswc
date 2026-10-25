@@ -3,13 +3,13 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, mo
 integer :: n
+complex, intent(in) :: a(ka,n), b(n)
+complex, intent(inout) :: x(n), wk(*)
+integer, intent(inout) :: iwk(n)
 integer :: i, ir
 !     ******************************************************************
 !     Solution of complex linear equations with iterative improvement
 !     ******************************************************************
-complex, intent(in) :: a(ka,n), b(n)
-complex, intent(inout) :: x(n), wk(*)
-integer, intent(inout) :: iwk(n)
 !     -----------------
 !     complex wk(n*n + n)
 !     -----------------
@@ -38,9 +38,13 @@ subroutine cluimp(a, ka, n, q, kq, ipvt, b, x, r, ind)
 implicit none
 integer, intent(out) :: ind
 integer, intent(in) :: ka, kq, n
+complex, intent(in) :: a(ka,n), q(kq,n), b(n)
+complex, intent(inout) :: x(n), r(n)
+integer, intent(in) :: ipvt(n)
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
 real :: spmpar
+double precision :: ra, ia, rx, ix, rsum, isum
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a complex system AX = b
@@ -65,10 +69,6 @@ real :: spmpar
 !            iteration. Otherwise ind = 1.
 !
 ! ----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n), q(kq,n), b(n)
-complex, intent(inout) :: x(n), r(n)
-integer, intent(in) :: ipvt(n)
-double precision :: ra, ia, rx, ix, rsum, isum
 !
 !     ********** eps is a machine dependent parameter. Assign eps
 !                the value U where U is the smallest floating point
@@ -130,6 +130,11 @@ integer :: n
 integer, intent(inout) :: ipvt(*)
 complex, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
+complex :: cdotc, ek, t, wk, wkm
+real :: anorm, s, scasum, sm, ynorm
+integer :: info, j, k, kb, kp1, l
+complex :: zdum, zdum1, zdum2, csign1
+real :: cabs1
 !
 !     cgeco factors a complex matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -191,12 +196,7 @@ real, intent(inout) :: rcond
 !
 !     Internal variables
 !
-complex :: cdotc, ek, t, wk, wkm
-real :: anorm, s, scasum, sm, ynorm
-integer :: info, j, k, kb, kp1, l
 !
-complex :: zdum, zdum1, zdum2, csign1
-real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 csign1(zdum1,zdum2) = cabs1(zdum1)*(zdum2/cabs1(zdum2))
 !
@@ -330,6 +330,10 @@ integer, intent(in) :: lda
 integer :: n
 integer, intent(inout) :: ipvt(*), info
 complex, intent(inout) :: a(lda,*)
+complex :: t
+integer :: icamax, j, k, kp1, l, nm1
+complex :: zdum
+real :: cabs1
 !
 !     cgefa factors a complex matrix BY Gaussian elimination.
 !
@@ -377,11 +381,7 @@ complex, intent(inout) :: a(lda,*)
 !
 !     Internal variables
 !
-complex :: t
-integer :: icamax, j, k, kp1, l, nm1
 !
-complex :: zdum
-real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Gaussian elimination with partial pivoting
@@ -440,6 +440,8 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(in) :: a(lda,*)
 complex, intent(inout) :: b(*)
+complex :: cdotc, t
+integer :: k, kb, l, nm1
 !
 !     cgesl solves the complex system
 !     a * X = b  OR  ctrans(a) * X = b
@@ -498,8 +500,6 @@ complex, intent(inout) :: b(*)
 !
 !     Internal variables
 !
-complex :: cdotc, t
-integer :: k, kb, l, nm1
 !
 nm1 = n - 1
 if (job .ne. 0) go to 50
@@ -560,6 +560,11 @@ subroutine cgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 complex, intent(inout) :: a(lda,*), det(2), work(*)
+complex :: t
+real :: ten
+integer :: i, j, k, kb, kp1, l, nm1
+complex :: zdum
+real :: cabs1
 !
 !     cgedi computes the determinant and inverse of a matrix
 !     using the factors computed by cgeco or cgefa.
@@ -616,12 +621,7 @@ complex, intent(inout) :: a(lda,*), det(2), work(*)
 !
 !     Internal variables
 !
-complex :: t
-real :: ten
-integer :: i, j, k, kb, kp1, l, nm1
 !
-complex :: zdum
-real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 !
 !     Compute determinant
@@ -694,13 +694,13 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), br(*), &
+&bi(*), wk(*)
+integer, intent(inout) :: ipvt(n)
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     complex matrices and solving double precision complex equations
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), br(*), &
-&bi(*), wk(*)
-integer, intent(inout) :: ipvt(n)
 !
 if (n .lt. 1 .or. ka .lt. n) go to 30
 if (m .le. 0) go to 10
@@ -731,7 +731,10 @@ subroutine dcfact (ar, ai, ka, n, ipvt, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n)
+integer, intent(inout) :: ipvt(n)
 integer :: i, j, k, kp1, l, nm1
+double precision :: p, pr, pi, t, tr, ti
 !-----------------------------------------------------------------------
 !     Decomposes a complex matrix BY partial pivot Gauss elimination
 !-----------------------------------------------------------------------
@@ -762,9 +765,6 @@ integer :: i, j, k, kp1, l, nm1
 !     If ierr = 0 Then the determinant of A has the value ...
 !        det(a) = ipvt(n) * a(1,1) * a(2,2) * ... * a(n,n)
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: ar(ka,n), ai(ka,n)
-integer, intent(inout) :: ipvt(n)
-double precision :: p, pr, pi, t, tr, ti
 !
 ierr = 0
 ipvt(n) = 1
@@ -837,7 +837,11 @@ end subroutine dcfact
 subroutine dcsol (n, m, ar, ai, ka, br, bi, kb, ipvt)
 implicit none
 integer, intent(in) :: ka, kb, m, n
+double precision, intent(in) :: ar(ka,n), ai(ka,n)
+double precision, intent(inout) :: br(kb,m), bi(kb,m)
+integer, intent(in) :: ipvt(n)
 integer :: i, j, k, km1, kp1, l, nm1
+double precision :: pr, pi, tr, ti
 !-----------------------------------------------------------------------
 !     Solution of the system of m equations A*X = B using the
 !     decomposition obtained by dcfact. This routine CANNOT be
@@ -868,10 +872,6 @@ integer :: i, j, k, km1, kp1, l, nm1
 !        solution X.
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: ar(ka,n), ai(ka,n)
-double precision, intent(inout) :: br(kb,m), bi(kb,m)
-integer, intent(in) :: ipvt(n)
-double precision :: pr, pi, tr, ti
 !
 !                    Forward elimination
 !
@@ -930,7 +930,10 @@ subroutine dcminv (ar, ai, ka, n, ipvt, temp)
 implicit none
 integer, intent(in) :: ka
 integer :: n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
+integer, intent(in) :: ipvt(n)
 integer :: i, ip1, j, jb, k, kp1, l, nm1, nmi, nmk, np1
+double precision :: sr, si, tr, ti
 !-----------------------------------------------------------------------
 !     Computation of the inverse of A matrix A using the LU
 !     decomposition obtained by dcfact. This routine CANNOT
@@ -955,9 +958,6 @@ integer :: i, ip1, j, jb, k, kp1, l, nm1, nmi, nmk, np1
 !        ar and ai contain the inverse of the matrix.
 !
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), temp(2,n)
-integer, intent(in) :: ipvt(n)
-double precision :: sr, si, tr, ti
 !
 call cdivid (1.d0, 0.d0, ar(n,n), ai(n,n), ar(n,n), ai(n,n))
 if (n .eq. 1) return
@@ -1025,6 +1025,12 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 &work(*)
+integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
+&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
+real :: sdot, t
+real :: b, c, cs, el, emm1, f, g, snrm2, scale, shift, sl, sm, sn, &
+&smm1, t1, test, ztest
+logical :: wantu, wantv
 !
 !
 !     ssvdc is a subroutine to reduce a real NXP matrix x by
@@ -1124,12 +1130,6 @@ real, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), v(ldv,*), &
 !
 !     Internal variables
 !
-integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
-&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-real :: sdot, t
-real :: b, c, cs, el, emm1, f, g, snrm2, scale, shift, sl, sm, sn, &
-&smm1, t1, test, ztest
-logical :: wantu, wantv
 !
 !
 !     Set the maximum number of iterations.
@@ -1509,6 +1509,12 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 &v(ldv,*), work(*)
+integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
+&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
+double precision :: ddot, t
+double precision :: b, c, cs, el, emm1, f, g, dnrm2, scale, shift, &
+&sl, sm, sn, smm1, t1, test, ztest
+logical :: wantu, wantv
 !
 !
 !     dsvdc is a subroutine to reduce a double precision NXP matrix x
@@ -1608,12 +1614,6 @@ double precision, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     Internal variables
 !
-integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
-&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-double precision :: ddot, t
-double precision :: b, c, cs, el, emm1, f, g, dnrm2, scale, shift, &
-&sl, sm, sn, smm1, t1, test, ztest
-logical :: wantu, wantv
 !
 !
 !     Set the maximum number of iterations.
@@ -1993,6 +1993,14 @@ integer, intent(in) :: ldx, n, p, ldu, ldv, job
 integer, intent(inout) :: info
 complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 &v(ldv,*), work(*)
+integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
+&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
+complex :: cdotc, t, r
+real :: b, c, cs, el, emm1, f, g, scnrm2, scale, shift, sl, sm, &
+&sn, smm1, t1, test, ztest
+logical :: wantu, wantv
+complex :: csign, zdum, zdum1, zdum2
+real :: cabs1
 !
 !
 !     csvdc is a subroutine to reduce a complex NXP matrix x by
@@ -2093,15 +2101,7 @@ complex, intent(inout) :: x(ldx,*), s(*), e(*), u(ldu,*), &
 !
 !     Internal variables
 !
-integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, &
-&ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1, ncu, nrt, nrtp1
-complex :: cdotc, t, r
-real :: b, c, cs, el, emm1, f, g, scnrm2, scale, shift, sl, sm, &
-&sn, smm1, t1, test, ztest
-logical :: wantu, wantv
 !
-complex :: csign, zdum, zdum1, zdum2
-real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
 csign(zdum1,zdum2) = cabs(zdum1)*(zdum2/cabs(zdum2))
 !
@@ -2574,7 +2574,10 @@ end function det
 double precision function dpdet(a,ka,n,x)
 implicit none
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n)
+double precision, intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
+double precision :: pivot, s, c
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -2582,9 +2585,6 @@ integer :: i, j, k, kp1, l, nm1
 !     ka is the row dimension of A in the calling program. It is
 !     assumed that ka is greater than or equal to n.
 !     -------------------
-double precision, intent(inout) :: a(ka,n)
-double precision, intent(in) :: x
-double precision :: pivot, s, c
 if (n .ge. 2) go to 10
 dpdet = a(1,1) - x
 return
@@ -2645,7 +2645,11 @@ end function dpdet
 complex function cdet(a,ka,n,x)
 implicit none
 integer, intent(in) :: ka, n
+complex, intent(inout) :: a(ka,n)
+complex, intent(in) :: x
 integer :: i, j, k, kp1, l, nm1
+complex :: pivot, t, zero
+real :: s, c
 !     -------------------
 !     Evaluation of the determinant of a-xi where A is an NXN matrix,
 !     x is a scalar, and i is the NXN identity matrix.
@@ -2653,10 +2657,6 @@ integer :: i, j, k, kp1, l, nm1
 !     ka is the row dimension of A in the calling program. It is
 !     assumed that ka is greater than or equal to n.
 !     -------------------
-complex, intent(inout) :: a(ka,n)
-complex, intent(in) :: x
-complex :: pivot, t, zero
-real :: s, c
 data zero/(0.0,0.0)/
 !
 if (n .ge. 2) go to 10
@@ -2723,8 +2723,8 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc
-integer :: iu, iv, iw
 real, intent(inout) :: a(na,m), b(nb,n), c(nc,n), wk(*)
+integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
 !     abslv solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
@@ -2808,16 +2808,16 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc, nu, nv
+real, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
+real, intent(inout) :: u(nu,m), v(nv,n)
+real, intent(inout) :: wk(*)
 integer :: i, j, k
+real :: temp
 ! ----------------------------------------------------------------------
 !     abslv1 solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
 !     transformed system is solved by back substitution.
 ! ----------------------------------------------------------------------
-real, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
-real, intent(inout) :: u(nu,m), v(nv,n)
-real :: temp
-real, intent(inout) :: wk(*)
 !
 !     If required, reduce A to lower real Schur form
 !
@@ -2924,7 +2924,18 @@ end subroutine abslv1
 
 subroutine schur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
 implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nh, nz, igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+real, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
 integer :: ip1
+integer :: i, j, k, l, m
+integer :: en, ll, mm, na
+integer :: its
+integer :: mp2, enm2
+real :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
+logical :: notlas
 ! ----------------------------------------------------------------------
 !     It is assumed that h is an upper Hessenberg matrix. Schur
 !     obtains an orthogonal matrix q for which transpose(q)*h*q
@@ -2976,17 +2987,6 @@ integer :: ip1
 !     hqr2,  which is based on the Algol procedure hqr by peters
 !     and Wilkinson, NUM. Math. 16 (1970), PP.181-204.
 ! ----------------------------------------------------------------------
-integer :: i, j, k, l, m
-integer, intent(in) :: n
-integer :: en, ll, mm, na
-integer, intent(in) :: nh, nz, igh
-integer :: its
-integer, intent(in) :: low
-integer :: mp2, enm2
-integer, intent(out) :: ierr
-real, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
-real :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
-logical :: notlas
 !     real sqrt, abs
 !     integer min0
 !
@@ -3327,9 +3327,9 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc
-integer :: iu, iv, iw
 double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n), &
 &wk(*)
+integer :: iu, iv, iw
 ! ----------------------------------------------------------------------
 !     dabslv solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
@@ -3413,16 +3413,16 @@ integer :: m
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nb, nc, nu, nv
+double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
+double precision, intent(inout) :: u(nu,m), v(nv,n)
+double precision, intent(inout) :: wk(*)
 integer :: i, j, k
+double precision :: temp
 ! ----------------------------------------------------------------------
 !     dabsv1 solves the real matrix equation AX + XB = c. A is reduced
 !     to lower Schur form, b is reduced to upper Schur form, and the
 !     transformed system is solved by back substitution.
 ! ----------------------------------------------------------------------
-double precision, intent(inout) :: a(na,m), b(nb,n), c(nc,n)
-double precision, intent(inout) :: u(nu,m), v(nv,n)
-double precision :: temp
-double precision, intent(inout) :: wk(*)
 !
 !     If required, reduce A to lower real Schur form
 !
@@ -3529,7 +3529,18 @@ end subroutine dabsv1
 
 subroutine dschur (n, low, igh, h, nh, z, nz, wr, wi, ierr)
 implicit none
+integer, intent(in) :: n
+integer, intent(in) :: nh, nz, igh
+integer, intent(in) :: low
+integer, intent(out) :: ierr
+double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
 integer :: ip1
+integer :: i, j, k, l, m
+integer :: en, ll, mm, na
+integer :: its
+integer :: mp2, enm2
+double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
+logical :: notlas
 ! ----------------------------------------------------------------------
 !     It is assumed that h is an upper Hessenberg matrix. dschur
 !     obtains an orthogonal matrix q for which  transpose(q)*h*q
@@ -3581,17 +3592,6 @@ integer :: ip1
 !     hqr2,  which is based on the Algol procedure hqr by peters
 !     and Wilkinson, NUM. Math. 16 (1970), PP.181-204.
 ! ----------------------------------------------------------------------
-integer :: i, j, k, l, m
-integer, intent(in) :: n
-integer :: en, ll, mm, na
-integer, intent(in) :: nh, nz, igh
-integer :: its
-integer, intent(in) :: low
-integer :: mp2, enm2
-integer, intent(out) :: ierr
-double precision, intent(inout) :: h(nh,n), wr(n), wi(n), z(nz,n)
-double precision :: p, q, r, s, t, w, x, y, zz, norm, s1, s2
-logical :: notlas
 !     double precision dsqrt, dabs
 !     integer min0
 !
@@ -3931,8 +3931,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
-integer :: iw
 real, intent(inout) :: a(na,n), c(nc,n), wk(*)
+integer :: iw
 ! ----------------------------------------------------------------------
 !     taslv solves the real matrix equation transpose(a)*X + X*a = c
 !     where c is a symmetric matrix. A is reduced to upper Schur form
@@ -3995,13 +3995,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
+real, intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     taslv1 solves the real matrix equation transpose(a)*X + X*a = c
 !     where c is a symmetric matrix. A is reduced to upper Schur form
 !     and the transformed system is solved.
 ! ----------------------------------------------------------------------
-real, intent(inout) :: a(na,n), u(nu,n), c(nc,n), wk(*)
 !
 !    If required, reduce A to upper real Schur form
 !
@@ -4244,8 +4244,8 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc
-integer :: iw
 double precision, intent(inout) :: a(na,n), c(nc,n), wk(*)
+integer :: iw
 ! ----------------------------------------------------------------------
 !     dtaslv solves the real matrix equation transpose(a)*X + X*a = c
 !     where c is a symmetric matrix. A is reduced to upper Schur form
@@ -4308,14 +4308,14 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: mo
 integer :: n
 integer, intent(in) :: na, nc, nu
+double precision, intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
+&wk(*)
 integer :: i, j, k
 ! ----------------------------------------------------------------------
 !     dtasv1 solves the real matrix equation transpose(a)*X + X*a = c
 !     where c is a symmetric matrix. A is reduced to upper Schur form
 !     and the transformed system is solved.
 ! ----------------------------------------------------------------------
-double precision, intent(inout) :: a(na,n), u(nu,n), c(nc,n), &
-&wk(*)
 !
 !    If required, reduce A to upper real Schur form
 !
@@ -4638,10 +4638,10 @@ integer, intent(in) :: nm, n
 integer, intent(inout) :: iguess
 integer, intent(in) :: nw
 integer, intent(inout) :: maxits, ierr
-integer :: i1, i2, i3, i4, i5, i6, i7
 complex, intent(inout) :: work(nw)
 complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n)
 real, intent(in) :: tol
+integer :: i1, i2, i3, i4, i5, i6, i7
 i1 = n*n + 1
 i2 = n*n + i1
 i3 = n*n + i2
@@ -4719,14 +4719,14 @@ integer, intent(in) :: nm, n
 integer, intent(inout) :: iguess
 integer, intent(in) :: nw
 integer, intent(inout) :: maxits, ierr
-integer :: its, mats, i, j, k
 complex, intent(inout) :: a(nm,n), b(nm,n), c(nm,n), s(nm,n), &
 &l(nm,n), u(nm,n)
 complex, intent(inout) :: v(nm,n), z(nm,n), r(nm,n), xold(nm,n), &
 &eye(nm,n), temp(n)
+real, intent(in) :: tol
+integer :: its, mats, i, j, k
 real :: anorm, ani, bnorm, bni, cnorm, cni, xnorm, xni
 real :: fxnorm, fxni, gnorm, tnorm, t
-real, intent(in) :: tol
 !     real sqrt, cabs, float
 !     complex cmplx, conjg
 k = 7*n*n + n
@@ -4963,21 +4963,21 @@ implicit none
 !     f, g and h are updated, if desired.
 !
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: lb, l1
 integer, intent(in) :: nm
-integer :: nk1, nm1, nm2
 complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
-complex :: rr, t, u1, u2, v1, v2, rho
 complex, intent(inout) :: f(nm,n)
-complex :: tf
 complex, intent(inout) :: g(nm,n)
-complex :: tg
 complex, intent(inout) :: h(nm,n)
+integer, intent(in) :: mats
+integer :: i, j, k, l
+integer :: lb, l1
+integer :: nk1, nm1, nm2
+complex :: rr, t, u1, u2, v1, v2, rho
+complex :: tf
+complex :: tg
 complex :: th
 real :: r, s
-integer, intent(in) :: mats
 !     real sqrt, cabs
 !     complex cmplx, conjg
 if (mats.eq.0) go to 30
@@ -5178,22 +5178,22 @@ implicit none
 !          of the QZ algorithm to reduce a subdiagonal element
 !          to zero after 50 iterations.
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: en, jj, k1, k2, ld, ll, l1, na
 integer, intent(in) :: nm
+integer, intent(out) :: ierr
+complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
+complex, intent(inout) :: f(nm,n)
+real, intent(in) :: eps1
+integer, intent(in) :: mats
+integer :: i, j, k, l
+integer :: en, jj, k1, k2, ld, ll, l1, na
 integer :: ish, its, km1, lm1
 integer :: enm2
-integer, intent(out) :: ierr
 integer :: lor1, enorn
-complex, intent(inout) :: a(nm,n), b(nm,n), z(nm,n)
 complex :: a11, a21, a33, a34, a43, a44, b11, b22, b33, b34, b44
 complex :: a1, a2, u1, u2, v1, v2, t, rr, sh, ss
-complex, intent(inout) :: f(nm,n)
 complex :: tf
-real, intent(in) :: eps1
 real :: epsa, epsb, anorm, bnorm, ani, bni, srelpr, r, s
-integer, intent(in) :: mats
 real :: spmpar
 !     integer max0, min0
 !     real sqrt, cabs
@@ -5424,14 +5424,14 @@ implicit none
 !          ierr.EQ.1 if the triangular system is inconsistent.
 !
 !
-integer :: i
 integer, intent(out) :: ierr
-integer :: j, jp1, k, kk, km1, m
 integer, intent(in) :: n, nm
-integer :: nm1
 complex, intent(in) :: u(nm,n), v(nm,n), l(nm,n)
 complex, intent(inout) :: f(nm,n)
 complex, intent(inout) :: temp(n)
+integer :: i
+integer :: j, jp1, k, kk, km1, m
+integer :: nm1
 complex :: denom, sum
 real :: s, t
 !     real cabs
@@ -5495,9 +5495,9 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
+real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np6
 real :: anorm, anorm1, factor, p, q, s, s1
-real, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
 real :: c(8)
 ! ----------------------------------------------------------------------
 !     mexp computes exp(a) and stores it in z where A is a matrix
@@ -5650,8 +5650,8 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kz
 integer :: n
-integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
 double precision, intent(inout) :: a(ka,n), z(kz,n), wk(n,*)
+integer :: i, igh, j, k, kp1, l, ll, low, m, np1, np10
 double precision :: anorm, anorm1, c(12), factor, p, q, s, s1
 ! ----------------------------------------------------------------------
 !     dmexp computes exp(a) and stores it in z where A is a matrix
@@ -5811,16 +5811,16 @@ subroutine le (rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
+real, intent(in) :: b(n)
+real, intent(inout) :: c(n), d(*)
+integer, intent(inout) :: ip(*)
+external rowk
 integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
 &lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
 real :: bk, c1, cj, ck, dkj, zero
 !     ******************************************************************
 !     Solution of linear equations with reduced storage
 !     ******************************************************************
-real, intent(in) :: b(n)
-real, intent(inout) :: c(n), d(*)
-integer, intent(inout) :: ip(*)
-external rowk
 data zero/0.0/
 !
 !     Set the necessary constants
@@ -5981,16 +5981,16 @@ subroutine dple (rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
-integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
-&lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-!     ******************************************************************
-!     Solution of linear equations with reduced storage
-!     ******************************************************************
 double precision, intent(in) :: b(n)
 double precision, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
-double precision :: bk, cj, ck, c1, dkj, zero
 external rowk
+integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
+&lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
+double precision :: bk, cj, ck, c1, dkj, zero
+!     ******************************************************************
+!     Solution of linear equations with reduced storage
+!     ******************************************************************
 data zero/0.d0/
 !
 !     Set the necessary constants
@@ -6151,17 +6151,17 @@ subroutine cle (rowk,n,b,c,d,ip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer :: n
-integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
-&lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
-real :: s, si
-!     ******************************************************************
-!     Solution of complex linear equations with reduced storage
-!     ******************************************************************
 complex, intent(in) :: b(n)
 complex, intent(inout) :: c(n), d(*)
 integer, intent(inout) :: ip(*)
-complex :: bk, cj, ck, c1, dkj, zero
 external rowk
+integer :: i, iflag, ij, ijold, ik, j, k, kjold, km1, kp1, last, &
+&lastm1, lcol, lcolp1, m, max, mjold, nm1, np1
+real :: s, si
+complex :: bk, cj, ck, c1, dkj, zero
+!     ******************************************************************
+!     Solution of complex linear equations with reduced storage
+!     ******************************************************************
 data zero/(0.0,0.0)/
 !
 !     Set the necessary constants
@@ -6329,13 +6329,13 @@ end subroutine cle
 subroutine cvbr (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+real, intent(inout) :: a(ka,n)
+real, intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from banded to
 !                         standard form
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n)
-real, intent(in) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6399,13 +6399,13 @@ end subroutine cvbr
 subroutine cvrb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of real matrices from standard to banded
 !                    form when ml and mu are given
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6472,13 +6472,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !           Conversion of real matrices from standard
 !                        to banded form
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: b(kb,nb)
 !
 !     Computation of ml and mu
 !
@@ -6526,13 +6526,13 @@ end subroutine cvrb1
 subroutine cvbd (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+double precision, intent(inout) :: a(ka,n)
+double precision, intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from banded
 !                         to standard form
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n)
-double precision, intent(in) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6596,13 +6596,13 @@ end subroutine cvbd
 subroutine cvdb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
 !               to banded form when ml and mu are given
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6669,13 +6669,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !        Conversion of double precision matrices from standard
 !                         to banded form
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: b(kb,nb)
 !
 !     Computation of ml and mu
 !
@@ -6723,13 +6723,13 @@ end subroutine cvdb1
 subroutine cvbc (b,kb,m,n,ml,mu,a,ka)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+complex, intent(inout) :: a(ka,n)
+complex, intent(in) :: b(kb,*)
 integer :: i, imax, imax0, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !          Conversion of complex matrices from banded to
 !                          standard form
 !-----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,n)
-complex, intent(in) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6793,13 +6793,13 @@ end subroutine cvbc
 subroutine cvcb (a,ka,m,n,ml,mu,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jj, jmax, jmin, k, l
 !-----------------------------------------------------------------------
 !        Conversion of complex matrices from standard to banded
 !                    form when ml and mu are given
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,*)
 !
 !     Store the nonzero data of the first ml rows
 !
@@ -6866,13 +6866,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m
 integer, intent(inout) :: ml, mu
 integer, intent(in) :: n, nb
+complex, intent(in) :: a(ka,n)
+complex, intent(inout) :: b(kb,nb)
 integer :: i, imax, imin, j, jmax, jmin, kmax, l, mm1, nm1
 !-----------------------------------------------------------------------
 !           Conversion of complex matrices from standard
 !                          to banded form
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n)
-complex, intent(inout) :: b(kb,nb)
 !
 !     Computation of ml and mu
 !
@@ -6921,14 +6921,14 @@ subroutine mcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
+real, intent(in) :: a(ka,*)
+real, intent(inout) :: b(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from banded
 !                            to sparse form
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*)
-real, intent(inout) :: b(*)
-integer, intent(inout) :: ib(*), jb(*)
 !
 l = 1
 kmax = ml + mu + 1
@@ -6986,14 +6986,14 @@ subroutine dmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
+double precision, intent(in) :: a(ka,*)
+double precision, intent(inout) :: b(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from banded
 !                            to sparse form
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(*)
-integer, intent(inout) :: ib(*), jb(*)
 !
 l = 1
 kmax = ml + mu + 1
@@ -7051,14 +7051,14 @@ subroutine cmcvbs (a,ka,m,n,ml,mu,b,ib,jb,num,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, ml, mu, n, num
+complex, intent(in) :: a(ka,*)
+complex, intent(inout) :: b(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, imax, imin, j0, k, kmax, kmin, l, mp1
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from banded
 !                            to sparse form
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*)
-complex, intent(inout) :: b(*)
-integer, intent(inout) :: ib(*), jb(*)
 !
 l = 1
 kmax = ml + mu + 1
@@ -7118,14 +7118,14 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
+real, intent(in) :: a(*)
+real, intent(inout) :: b(kb,nb)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !                Conversion of real matrices from sparse
 !                            to banded form
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: b(kb,nb)
-integer, intent(in) :: ia(*), ja(*)
 !
 !     Computation of ml and mu
 !
@@ -7182,14 +7182,14 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
+double precision, intent(in) :: a(*)
+double precision, intent(inout) :: b(kb,nb)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !          Conversion of double precision matrices from sparse
 !                            to banded form
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(kb,nb)
-integer, intent(in) :: ia(*), ja(*)
 !
 !     Computation of ml and mu
 !
@@ -7246,14 +7246,14 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m
 integer, intent(out) :: ml, mu
 integer, intent(in) :: n, nb
+complex, intent(in) :: a(*)
+complex, intent(inout) :: b(kb,nb)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j0, k, kmax, l, lmax, lmin
 !-----------------------------------------------------------------------
 !              Conversion of complex matrices from sparse
 !                            to banded form
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(kb,nb)
-integer, intent(in) :: ia(*), ja(*)
 !
 !     Computation of ml and mu
 !
@@ -7307,13 +7307,13 @@ end subroutine cmcvsb
 subroutine bcvrd (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+real, intent(in) :: a(ka,*)
+double precision, intent(inout) :: b(kb,*)
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from single to double
 !                          precision form
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(kb,*)
 !
 num = ml + mu + 1
 do j = 1,num
@@ -7327,13 +7327,13 @@ end subroutine bcvrd
 subroutine bcvdr (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+double precision, intent(in) :: a(ka,*)
+real, intent(inout) :: b(kb,*)
 integer :: i, j, num
 !-----------------------------------------------------------------------
 !        Conversion of banded matrices from double to single
 !                          precision form
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,*)
 !
 num = ml + mu + 1
 do j = 1,num
@@ -7350,12 +7350,12 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
 integer, intent(out) :: nl
 integer, intent(inout) :: nu
+complex, intent(in) :: a(ka,*)
+real, intent(inout) :: b(kb,l)
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !              Real part of a banded complex matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,l)
 !
 !     Computation of nl and nu
 !
@@ -7407,12 +7407,12 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, l, m, ml, mu, n
 integer, intent(out) :: nl
 integer, intent(inout) :: nu
+complex, intent(in) :: a(ka,*)
+real, intent(inout) :: b(kb,l)
 integer :: i, imin, j, k, num
 !-----------------------------------------------------------------------
 !            Imaginary part of a banded complex matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,l)
 !
 !     Computation of nl and nu
 !
@@ -7464,12 +7464,12 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(out) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,l)
 integer :: i, j, ja, jb, jc, jmax, k, num
 !-----------------------------------------------------------------------
 !        Compute a + bi for the banded real matrices A and b
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
 !
 mcl = max0(ml,nl)
 mcu = max0(mu,nu)
@@ -7548,12 +7548,12 @@ end subroutine bcvrc
 subroutine bpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+real, intent(in) :: a(ka,*)
+real, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !                Transposition of real banded matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*)
-real, intent(inout) :: b(kb,*)
 !
 l = ml + mu + 1
 lp1 = l + 1
@@ -7605,12 +7605,12 @@ end subroutine bpose
 subroutine dbpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+double precision, intent(in) :: a(ka,*)
+double precision, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !          Transposition of double precision banded matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*)
-double precision, intent(inout) :: b(kb,*)
 !
 l = ml + mu + 1
 lp1 = l + 1
@@ -7662,12 +7662,12 @@ end subroutine dbpose
 subroutine cbpose (a, ka, m, n, ml, mu, b, kb)
 implicit none
 integer, intent(in) :: ka, kb, m, ml, mu, n
+complex, intent(in) :: a(ka,*)
+complex, intent(inout) :: b(kb,*)
 integer :: i, imax, imin, j, jmin, k, l, lj, lp1, ndiag
 !-----------------------------------------------------------------------
 !              Transposition of complex banded matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*)
-complex, intent(inout) :: b(kb,*)
 !
 l = ml + mu + 1
 lp1 = l + 1
@@ -7722,12 +7722,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !                 Addition of real banded matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -7869,12 +7869,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !           Addition of double precision banded matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -8016,12 +8016,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !                Addition of complex banded matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -8163,12 +8163,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !                Subtraction of real banded matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -8310,12 +8310,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !          Subtraction of double precision banded matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -8457,12 +8457,12 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,l)
 integer :: i, imin, j, ja, jb, jc, jmax, la, lb, num
 !-----------------------------------------------------------------------
 !             Subtraction of complex banded matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,l)
 !
 ierr = 0
 if (nl - ml) 10,30,20
@@ -8605,14 +8605,14 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
+real, intent(in) :: a(ka,*), b(kb,*)
+real, intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
 &last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
 real :: sum
 !-----------------------------------------------------------------------
 !                Multiplication of real banded matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), b(kb,*)
-real, intent(inout) :: c(kc,nc)
 !
 ierr = 0
 do j = 1,nc
@@ -8760,14 +8760,14 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
+double precision, intent(in) :: a(ka,*), b(kb,*)
+double precision, intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
 &last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+double precision :: sum
 !-----------------------------------------------------------------------
 !          Multiplication of double precision banded matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), b(kb,*)
-double precision, intent(inout) :: c(kc,nc)
-double precision :: sum
 !
 ierr = 0
 do j = 1,nc
@@ -8915,14 +8915,14 @@ integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m
 integer, intent(inout) :: mcl, mcu
 integer, intent(in) :: ml, mu, n, nc, nl, nu
+complex, intent(in) :: a(ka,*), b(kb,*)
+complex, intent(inout) :: c(kc,nc)
 integer :: i, imax, imj, j, jc, jj, jmax, jmi, k, kk, kmax, kmin, &
 &last, maxd, mind, mlp1, ndiag, nlp1, npml, npnu
+complex :: sum
 !-----------------------------------------------------------------------
 !             Multiplication of complex banded matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), b(kb,*)
-complex, intent(inout) :: c(kc,nc)
-complex :: sum
 !
 ierr = 0
 do j = 1,nc
@@ -9066,13 +9066,13 @@ end subroutine cbprod
 subroutine bvprd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(n)
+real, intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
 !         Product of a real banded matrix and a real vector
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
 !
 !     Compute the first ml components
 !
@@ -9119,14 +9119,14 @@ end subroutine bvprd
 subroutine bvprd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(n)
+real, intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
 real :: sum
 !-----------------------------------------------------------------------
 !        Setting y = a*x + y where A is a real banded matrix
 !                     and x,y are real vectors
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), x(n)
-real, intent(inout) :: y(m)
 !
 !     Compute the first ml components
 !
@@ -9165,14 +9165,14 @@ end subroutine bvprd1
 subroutine dbvpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(ka,*), x(n)
+double precision, intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
+double precision :: sum
 !-----------------------------------------------------------------------
 !           Product of a double precision banded matrix
 !                  and a double precision vector
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), x(n)
-double precision, intent(inout) :: y(m)
-double precision :: sum
 !
 !     Compute the first ml components
 !
@@ -9219,14 +9219,14 @@ end subroutine dbvpd
 subroutine dbvpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(ka,*), x(n)
+double precision, intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
+double precision :: sum
 !-----------------------------------------------------------------------
 !         SETTING y = a*x + y WHERE A IS A DOUBLE PRECISION
 !         banded matrix and x,y are double precision vectors
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), x(n)
-double precision, intent(inout) :: y(m)
-double precision :: sum
 !
 !     Compute the first ml components
 !
@@ -9265,13 +9265,13 @@ end subroutine dbvpd1
 subroutine cbvpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+complex, intent(in) :: a(ka,*), x(n)
+complex, intent(inout) :: y(m)
 integer :: i, imax, imin, jmin, k, kk, kmax, kmin, mlp1
+complex :: sum
 !-----------------------------------------------------------------------
 !        Product of a complex banded matrix and a complex vector
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), x(n)
-complex, intent(inout) :: y(m)
-complex :: sum
 !
 !     Compute the first ml components
 !
@@ -9318,14 +9318,14 @@ end subroutine cbvpd
 subroutine cbvpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+complex, intent(in) :: a(ka,*), x(n)
+complex, intent(inout) :: y(m)
 integer :: i, imax, jmin, k, kk, kmax, kmin, mlp1
+complex :: sum
 !-----------------------------------------------------------------------
 !        Setting y = a*x + y where A is a complex banded matrix
 !                     and x,y are complex vectors
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), x(n)
-complex, intent(inout) :: y(m)
-complex :: sum
 !
 !     Compute the first ml components
 !
@@ -9364,13 +9364,13 @@ end subroutine cbvpd1
 subroutine btprd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(m)
+real, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
 !         Product of a real vector and a real banded matrix
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), x(m)
-real, intent(inout) :: y(n)
 !
 !     Compute the first mu components
 !
@@ -9416,14 +9416,14 @@ end subroutine btprd
 subroutine btprd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*), x(m)
+real, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
 real :: sum
 !-----------------------------------------------------------------------
 !        Setting y = x*a + y where A is a real banded matrix
 !                     and x,y are real vectors
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*), x(m)
-real, intent(inout) :: y(n)
 !
 !     Compute the first mu components
 !
@@ -9461,14 +9461,14 @@ end subroutine btprd1
 subroutine dbtpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(ka,*), x(m)
+double precision, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
+double precision :: sum
 !-----------------------------------------------------------------------
 !              Product of a double precision vector and
 !                  a double precision banded matrix
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), x(m)
-double precision, intent(inout) :: y(n)
-double precision :: sum
 !
 !     Compute the first mu components
 !
@@ -9514,14 +9514,14 @@ end subroutine dbtpd
 subroutine dbtpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(ka,*), x(m)
+double precision, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
+double precision :: sum
 !-----------------------------------------------------------------------
 !         SETTING y = x*a + y WHERE A IS A DOUBLE PRECISION
 !         banded matrix and x,y are double precision vectors
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*), x(m)
-double precision, intent(inout) :: y(n)
-double precision :: sum
 !
 !     Compute the first mu components
 !
@@ -9559,13 +9559,13 @@ end subroutine dbtpd1
 subroutine cbtpd (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+complex, intent(in) :: a(ka,*), x(m)
+complex, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
+complex :: sum
 !-----------------------------------------------------------------------
 !        Product of a complex vector and a complex banded matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), x(m)
-complex, intent(inout) :: y(n)
-complex :: sum
 !
 !     Compute the first mu components
 !
@@ -9611,14 +9611,14 @@ end subroutine cbtpd
 subroutine cbtpd1 (m,n,a,ka,ml,mu,x,y)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+complex, intent(in) :: a(ka,*), x(m)
+complex, intent(inout) :: y(n)
 integer :: j, jj, jmax, jmin, k, kmax, kmin, num
+complex :: sum
 !-----------------------------------------------------------------------
 !        Setting y = x*a + y where A is a complex banded matrix
 !                     and x,y are complex vectors
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,*), x(m)
-complex, intent(inout) :: y(n)
-complex :: sum
 !
 !     Compute the first mu components
 !
@@ -9656,13 +9656,13 @@ end subroutine cbtpd1
 real function bnrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(ka,*)
 integer :: i, j, num
 real :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                      real banded matrix a
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,*)
 !
 num = ml + mu + 1
 bnrm = 0.0
@@ -9679,12 +9679,12 @@ end function bnrm
 real function b1nrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+real, intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
 real :: sasum
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a banded matrix a
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
 !
 incr = ka - 1
 b1nrm = 0.0
@@ -9733,13 +9733,13 @@ end function b1nrm
 double precision function dbnrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(ka,*)
 integer :: i, j, num
+double precision :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                double precision banded matrix a
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,*)
-double precision :: sum
 !
 num = ml + mu + 1
 dbnrm = 0.d0
@@ -9756,13 +9756,13 @@ end function dbnrm
 double precision function db1nrm (a, ka, m, n, ml, mu)
 implicit none
 integer, intent(in) :: ka, m, ml, mu, n
+double precision, intent(in) :: a(*)
 integer :: i, imax, imin, incr, j, jmax, jmin, num
+double precision :: dasum
 !-----------------------------------------------------------------------
 !            Computation of the L1 norm of a double precision
 !                            banded matrix a
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision :: dasum
 !
 incr = ka - 1
 db1nrm = 0.d0
@@ -9812,6 +9812,8 @@ subroutine bslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+real, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     bslv employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system AX = b. the argument m0 specifies
@@ -9860,8 +9862,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     bslv and solves the new equations AX = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-real, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -9894,6 +9894,8 @@ subroutine bslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+real, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     bslv1 employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system XA = b. the argument m0 specifies
@@ -9942,8 +9944,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     bslv1 and solves the new equations XA = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-real, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -9974,9 +9974,14 @@ end subroutine bslv1
 
 subroutine snbfa (a, lda, n, ml, mu, ipvt, info)
 implicit none
+integer, intent(in) :: lda, n, ml, mu
+integer, intent(out) :: info
+real, intent(inout) :: a(lda,*)
+integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
 &ml1, mp, n1
 integer :: isamax
+real :: t
 ! ----------------------------------------------------------------------
 !
 !               snbfa factors a real band matrix BY elimination.
@@ -10072,11 +10077,6 @@ integer :: isamax
 !     Subroutines and functions
 !        MIN0,isamax,saxpy,sscal,sswap
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu
-integer, intent(out) :: info
-real, intent(inout) :: a(lda,*)
-integer, intent(inout) :: ipvt(n)
-real :: t
 !
 info = 0
 if (ml .eq. 0) go to 100
@@ -10149,7 +10149,13 @@ end subroutine snbfa
 
 subroutine snbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
+integer, intent(in) :: lda, n, ml, mu, job
+real, intent(in) :: a(lda,*)
+real, intent(inout) :: b(n)
+integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
+real :: sdot, t
+integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 ! ----------------------------------------------------------------------
 !
 !     snbsl solves the real band system a*X = b or trans(a)*X = b
@@ -10205,12 +10211,6 @@ integer :: ml1, ml2
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu, job
-real, intent(in) :: a(lda,*)
-real, intent(inout) :: b(n)
-integer, intent(in) :: ipvt(n)
-real :: sdot, t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 !
 m = mu + ml + 1
 if (m .eq. 1) go to 100
@@ -10289,6 +10289,8 @@ subroutine dbslv (m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+double precision, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     dbslv employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system AX = b. the argument m0 specifies
@@ -10337,8 +10339,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     dbslv and solves the new equations AX = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -10371,6 +10371,8 @@ subroutine dbslv1 (m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+double precision, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     dbslv1 employs Gauss elimination with row interchanges to solve
 !     the NXN banded linear system XA = b. the argument m0 specifies
@@ -10419,8 +10421,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     dbslv1 and solves the new equations XA = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -10451,9 +10451,14 @@ end subroutine dbslv1
 
 subroutine dbfa (a, lda, n, ml, mu, ipvt, info)
 implicit none
+integer, intent(in) :: lda, n, ml, mu
+integer, intent(out) :: info
+double precision, intent(inout) :: a(lda,*)
+integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
 &ml1, mp, n1
 integer :: idamax
+double precision :: t
 ! ----------------------------------------------------------------------
 !
 !               dbfa factors a real band matrix BY elimination.
@@ -10549,11 +10554,6 @@ integer :: idamax
 !     Subroutines and functions
 !        MIN0,idamax,daxpy,dscal,dswap
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu
-integer, intent(out) :: info
-double precision, intent(inout) :: a(lda,*)
-integer, intent(inout) :: ipvt(n)
-double precision :: t
 !
 info = 0
 if (ml .eq. 0) go to 100

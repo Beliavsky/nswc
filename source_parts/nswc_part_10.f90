@@ -1,8 +1,11 @@
 subroutine cspp (t, a, ka, m, n, z, kz, dz, kdz)
 implicit none
 integer, intent(in) :: ka, kdz, kz, m, n
+real, intent(in) :: t(*), a(ka,n)
+real, intent(inout) :: z(kz,*), dz(kdz,*)
 integer :: i, il, ilj, ilkj, j, jj, jp1, k, kmj, l, left, mp1, mu
 real :: del, diff, r, s, term, x
+real :: c(4), wk(4,5)
 !-----------------------------------------------------------------------
 !
 !            Computation of n cubic splines and their first
@@ -34,9 +37,6 @@ real :: del, diff, r, s, term, x
 !             the j-TH cubic spline evaluated at the point t(i+3).
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*), a(ka,n)
-real, intent(inout) :: z(kz,*), dz(kdz,*)
-real :: c(4), wk(4,5)
 !
 k = 4
 mp1 = m + 1
@@ -117,6 +117,10 @@ subroutine csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
 &my, n
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+&f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, b, b1, b2, b3, bx, c, c1, c2, c3, cx, d, dfi, dfip1, &
 &ds, dt, dx, dy, fi, fip1, xx, yy
@@ -127,10 +131,6 @@ integer :: intrvl
 !                        spline over a grid
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
-&f12(kf12,n)
 !
 if (ider .gt. 3 .or. jder .gt. 3) go to 400
 mm1 = m - 1
@@ -279,15 +279,15 @@ end subroutine csurf
 subroutine csurf1 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f)
 implicit none
 integer, intent(in) :: ider, jder, kz, m, mx, my, n
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(m,n,4)
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(m,n,4)
 !
 call csurf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, m, &
 &f(1,1,3), m, f(1,1,2), m, f(1,1,4), m)
@@ -299,6 +299,10 @@ subroutine csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
 implicit none
 integer, intent(in) :: ider, jder, kf, kf1, kf12, kf2, kz, m, mx, &
 &my, n
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
+&f12(kf12,n)
 integer :: i, iold, ip1, j, jold, jp1, k, l, mm1, nm1
 real :: a, a1, a2, a3, ax, c, c1, c2, c3, cx, d, dfi, dfip1, ds, &
 &dt, dx, dy, fi, fip1, xx, yy
@@ -309,10 +313,6 @@ integer :: intrvl
 !                        spline over a grid
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), f1(kf1,n), f2(kf2,n), &
-&f12(kf12,n)
 !
 if (ider .gt. 3 .or. jder .gt. 3) go to 400
 mm1 = m - 1
@@ -457,15 +457,15 @@ subroutine csrf2 (ider, jder, x, mx, y, my, z, kz, s, m, t, n, &
 &f, kf, ddf)
 implicit none
 integer, intent(in) :: ider, jder, kf, kz, m, mx, my, n
+real, intent(in) :: x(mx), y(my)
+real, intent(inout) :: z(kz,my)
+real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 !-----------------------------------------------------------------------
 !
 !             Evaluation or differentiation of a bicubic
 !                        spline over a grid
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(mx), y(my)
-real, intent(inout) :: z(kz,my)
-real, intent(in) :: s(m), t(n), f(kf,n), ddf(m,n,3)
 !
 call csrf (ider, jder, x, mx, y, my, z, kz, s, m, t, n, f, kf, &
 &ddf(1,1,2), m, ddf, m, ddf(1,1,3), m)
@@ -474,17 +474,18 @@ end subroutine csrf2
 
 subroutine surf (m,n,x,y,z,iz,opt,zp,temp,sigma,ierr)
 implicit none
-integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, &
-&key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
-real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
-&dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
-&sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
-!
 integer, intent(in) :: m, n, iz
 integer, intent(out) :: ierr
 real, intent(in) :: x(m), y(n), z(iz,n), opt(*)
 real, intent(inout) :: zp(m,n,*), temp(*)
 real, intent(in) :: sigma
+integer :: i, ibak, ibakp1, im1, ip1, j, jbak, jbakp1, jm1, jp1, &
+&key, l, mm1, mp1, nm1, np1, npi, npibak, npm, npmpj
+real :: c1, c2, c3, del1, del2, deli, delx1, delx2, delxm, delxmm, &
+&dely1, dely2, delyn, delynm, diag1, diag2, diagi, diagin, sdiag1, &
+&sdiag2, sigmax, sigmay, t, zxy1ns, zxymns
+integer :: ind(8), loc(8), num(8)
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -562,7 +563,6 @@ real, intent(in) :: sigma
 !
 !-----------------------------------------------------------
 !
-integer :: ind(8), loc(8), num(8)
 data num(5)/1/, num(6)/1/, num(7)/1/, num(8)/1/
 !
 mm1 = m-1
@@ -864,6 +864,10 @@ end subroutine surf
 
 function surf2 (xx,yy,m,n,x,y,z,iz,zp,sigma)
 implicit none
+integer, intent(in) :: m, n, iz
+real, intent(in) :: xx, yy, x(m), y(n)
+real :: z(iz,n), zp(m,n,*)
+real, intent(in) :: sigma
 integer :: i, im1, j, jm1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, f1, &
 &f2, fp1, fp2, sigmap, sigmax, sigmay, sinhm1, sinhm2, sinhms, &
@@ -873,10 +877,6 @@ real :: surf2
 real :: hermz
 integer :: intrvl
 !
-integer, intent(in) :: m, n, iz
-real, intent(in) :: xx, yy, x(m), y(n)
-real :: z(iz,n), zp(m,n,*)
-real, intent(in) :: sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -1017,17 +1017,17 @@ end function surf2
 subroutine nsurf2 (dxmin,dxmax,md,dymin,dymax,nd,dz, &
 &idz,m,n,x,y,z,iz,zp,work,sigma)
 implicit none
-integer :: i, ii, im1, j, jj, jm1, lasti, lastj
-real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
-&dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
-&sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
-!
 integer, intent(in) :: md, nd, idz, m, n, iz
 real, intent(in) :: dxmin, dxmax, dymin, dymax
 real, intent(inout) :: dz(idz,nd)
 real, intent(in) :: x(m), y(n), z(iz,n), zp(m,n,*)
 real, intent(inout) :: work(4,md)
 real, intent(in) :: sigma
+integer :: i, ii, im1, j, jj, jm1, lasti, lastj
+real :: c1, c2, c3, c4, coshp1, coshp2, del1, del2, delp1, delp2, &
+&dels, deltdx, deltdy, dummy, sigmax, sigmay, sinhm1, sinhm2, &
+&sinhms, sinhp1, sinhp2, temp, xii, yjj, zi, zim1, zxxi, zxxim1
+!
 !
 !                      From the spline under tension package
 !                                 coded by alan Kaylor Cline
@@ -1205,6 +1205,9 @@ subroutine bstrp2 (x, y, z, kz, tx, nx, kx, ty, ny, ky, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, nx, ny
+real, intent(in) :: x(nx), y(ny), z(kz,ny)
+real, intent(in) :: tx(*), ty(*)
+real, intent(inout) :: a(ka,ny), wk(l)
 integer :: iw, m
 !-----------------------------------------------------------------------
 !
@@ -1226,9 +1229,6 @@ integer :: iw, m
 !     real tx(nx + kx), ty(ny + ky)
 !     real wk(l)  where l = nx*ny + max(2*kx*nx, 2*ky*ny)
 !-------------------------
-real, intent(in) :: x(nx), y(ny), z(kz,ny)
-real, intent(in) :: tx(*), ty(*)
-real, intent(inout) :: a(ka,ny), wk(l)
 !
 m = nx*ny + 2*max0(kx*nx, ky*ny)
 if (l .lt. m) go to 120
@@ -1256,6 +1256,8 @@ subroutine bstrp1 (x, z, kz, m, n, t, k, a, ka, work, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: k, ka, kz, m, n
+real, intent(in) :: x(m), z(kz,n), t(*)
+real, intent(inout) :: a(ka,m), work(*)
 integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     bstrp1 computes B-spline interpolation coefficients for
@@ -1266,8 +1268,6 @@ integer :: i, j, mp1
 !-------------------------------------------------------------------
 !     real t(m + k), work(2*k*m)
 !-----------------------
-real, intent(in) :: x(m), z(kz,n), t(*)
-real, intent(inout) :: a(ka,m), work(*)
 !
 !     First data set
 !
@@ -1297,6 +1297,9 @@ subroutine bslsq2 (x, wx, mx, y, wy, my, z, kz, tx, nx, kx, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: ka, kx, ky, kz, l, mx, my, nx, ny
+real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
+real, intent(in) :: tx(*), ty(*)
+real, intent(inout) :: a(ka,ny), wk(l)
 integer :: ierr, iq, iw, m
 !-----------------------------------------------------------------------
 !
@@ -1319,9 +1322,6 @@ integer :: ierr, iq, iw, m
 !     real tx(nx + kx), ty(ny + ky)
 !     real wk(l)  where l = nx*my + max((kx+1)*nx,(ky+1)*ny)
 !-------------------------
-real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz,my)
-real, intent(in) :: tx(*), ty(*)
-real, intent(inout) :: a(ka,ny), wk(l)
 !
 m = nx*my + max0((kx + 1)*nx,(ky + 1)*ny)
 if (l .lt. m) go to 120
@@ -1357,6 +1357,9 @@ subroutine bslsq1 (tau, wgt, ntau, z, kz, m, t, n, k, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, ka, kz, m, n, ntau
+real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
+real, intent(in) :: t(*)
+real, intent(inout) :: a(ka,n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 !-----------------------------------------------------------------------
@@ -1401,9 +1404,6 @@ real :: dw
 !            -1  Input errors were detected.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: tau(ntau), wgt(ntau), z(kz,m)
-real, intent(in) :: t(*)
-real, intent(inout) :: a(ka,n), wk(n), q(k,n)
 !
 if (ntau .lt. max0(2,k)) go to 100
 if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
@@ -1468,6 +1468,8 @@ end subroutine bslsq1
 subroutine bchsv1 (w, nb, n, b, kb, m)
 implicit none
 integer, intent(in) :: kb, m, n, nb
+real, intent(in) :: w(nb,n)
+real, intent(inout) :: b(kb,n)
 integer :: i, j, jmax, jpk, k, nbm1
 real :: t
 !-----------------------------------------------------------------------
@@ -1501,8 +1503,6 @@ real :: t
 !     unit lower triangular matrix and D a diagonal matrix.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: w(nb,n)
-real, intent(inout) :: b(kb,n)
 !
 if (n .gt. 1) go to 20
 do i = 1,m
@@ -1552,6 +1552,8 @@ implicit none
 integer, intent(in) :: idx, idy, ka, kx, ky, nx, ny
 real, intent(out) :: f
 real, intent(in) :: x0, y0
+real, intent(in) :: a(ka,ny), tx(*), ty(*)
+real, intent(inout) :: wk(*)
 integer :: i, iw, j, l, m
 integer :: intrvl
 !-----------------------------------------------------------------------
@@ -1568,8 +1570,6 @@ integer :: intrvl
 !-----------------------------------------------------------------------
 !     real tx(nx + kx), ty(ny + ky), wk(ky + 3*max(kx,ky))
 !-----------------------------
-real, intent(in) :: a(ka,ny), tx(*), ty(*)
-real, intent(inout) :: wk(*)
 !
 f = 0.0
 m = nx + kx
@@ -1607,6 +1607,9 @@ integer, intent(in) :: n
 integer, intent(inout) :: iadj(*), iend(n)
 integer, intent(out) :: ier
 real :: x(n), y(n)
+integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
+&kmi, i, kmin
+real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
 !***********************************************************
 !
@@ -1680,9 +1683,6 @@ real :: x(n), y(n)
 !
 !***********************************************************
 !
-integer :: nn, k, km1, nl, nr, ind, indx, n0, itemp, ierr, km1d2, &
-&kmi, i, kmin
-real :: xl, yl, xr, yr, dxr, dyr, xk, yk, dxk, dyk, cprod, sprod
 !
 ! Local parameters -
 !
@@ -1863,6 +1863,9 @@ integer, intent(out) :: ier
 real :: x(kk), y(kk)
 logical :: swptst
 integer :: tindx
+integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
+&in1, indk1, ind2f, ind21
+real :: xk, yk
 !
 !***********************************************************
 !
@@ -1913,9 +1916,6 @@ integer :: tindx
 !
 !***********************************************************
 !
-integer :: k, km1, i1, i2, i3, indkf, indkl, nabor1, io1, io2, &
-&in1, indk1, ind2f, ind21
-real :: xk, yk
 !
 ! Local parameters -
 !
@@ -2007,6 +2007,8 @@ subroutine bdyadd (kk,i1,i2, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2
 integer, intent(inout) :: iadj(*), iend(kk)
+integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
+&kend, next, indx
 !
 !***********************************************************
 !
@@ -2057,8 +2059,6 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-integer :: k, km1, nright, nleft, nf, nl, n1, n2, i, imin, imax, &
-&kend, next, indx
 !
 ! Local parameters -
 !
@@ -2145,6 +2145,8 @@ subroutine intadd (kk,i1,i2,i3, iadj,iend )
 implicit none
 integer, intent(in) :: kk, i1, i2, i3
 integer, intent(inout) :: iadj(*), iend(kk)
+integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
+&n2, imin, imax, i, itemp
 !
 !***********************************************************
 !
@@ -2191,8 +2193,6 @@ integer, intent(inout) :: iadj(*), iend(kk)
 !
 !***********************************************************
 !
-integer :: k, km1, n(3), nft(3), ip1, ip2, ip3, indx, nf, nl, n1, &
-&n2, imin, imax, i, itemp
 !
 ! Local parameters -
 !
@@ -2304,6 +2304,7 @@ subroutine shiftd (nfrst,nlast,kk, iarr )
 implicit none
 integer, intent(in) :: nfrst, nlast, kk
 integer, intent(inout) :: iarr(*)
+integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 !
 !***********************************************************
 !
@@ -2339,7 +2340,6 @@ integer, intent(inout) :: iarr(*)
 !
 !***********************************************************
 !
-integer :: inc, k, nf, nl, nlp1, ns, nsl, i, ibak, indx, imax
 data    inc/5/
 !
 ! Local parameters -
@@ -2418,6 +2418,7 @@ implicit none
 integer, intent(in) :: nin1, nin2, nout1, nout2
 integer, intent(inout) :: iadj(*), iend(*)
 integer :: tindx
+integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 !
 !***********************************************************
 !
@@ -2450,7 +2451,6 @@ integer :: tindx
 !
 !***********************************************************
 !
-integer :: in(2), io(2), ip1, ip2, j, k, nf, nl, i, imin, imax
 !
 ! Local parameters -
 !
@@ -2604,6 +2604,8 @@ logical function swptst (in1,in2,io1,io2,x,y)
 implicit none
 integer, intent(in) :: in1, in2, io1, io2
 real, intent(in) :: x(*), y(*)
+real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
+&sin2, cos1, cos2, sin12
 !
 !***********************************************************
 !
@@ -2643,8 +2645,6 @@ real, intent(in) :: x(*), y(*)
 !
 !***********************************************************
 !
-real :: dx11, dx12, dx22, dx21, dy11, dy12, dy22, dy21, sin1, &
-&sin2, cos1, cos2, sin12
 !
 ! Local parameters -
 !
@@ -2704,6 +2704,7 @@ end function swptst
 integer function tindx (nvertx,nabor,iadj,iend)
 implicit none
 integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
+integer :: nb, indx
 !
 !***********************************************************
 !
@@ -2734,7 +2735,6 @@ integer, intent(in) :: nvertx, nabor, iadj(*), iend(*)
 !
 !***********************************************************
 !
-integer :: nb, indx
 !
 ! Local parameters -
 !
@@ -2758,11 +2758,14 @@ end function tindx
 
 subroutine trfind (nst,px,py,x,y,iadj,iend, i1,i2,i3)
 implicit none
-real :: x0, x1, x2, y0, y1, y2
 integer, intent(in) :: nst, iadj(*), iend(*)
 integer, intent(inout) :: i1, i2, i3
 real, intent(in) :: px, py
 real :: x(*), y(*)
+real :: x0, x1, x2, y0, y1, y2
+integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
+real :: xp, yp
+logical :: left
 !
 !***********************************************************
 !
@@ -2819,9 +2822,6 @@ real :: x(*), y(*)
 !
 !***********************************************************
 !
-integer :: n0, n1, n2, n3, n4, indx, ind, nf, nl, next
-real :: xp, yp
-logical :: left
 !
 ! Local parameters -
 !
@@ -3059,14 +3059,14 @@ subroutine gradg (n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
+real, intent(in) :: x(n), y(n), z(n)
+real, intent(inout) :: zxzy(2,n)
+integer, intent(in) :: iadj(*), iend(n)
 integer :: j, miter
 real :: eps
 !-----------------------------------------------------------------------
 !                      Derivative estimation
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n), z(n)
-real, intent(inout) :: zxzy(2,n)
-integer, intent(in) :: iadj(*), iend(n)
 !
 if (n .lt. 3) go to 20
 !
@@ -3093,6 +3093,9 @@ integer, intent(in) :: n, iadj(*), iend(n)
 integer, intent(inout) :: nit, ier
 real, intent(in) :: x(n), y(n), z(n), eps
 real, intent(inout) :: zxzy(2,n)
+integer :: nn, maxit, iter, k, indf, indl, indx, nb
+real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
+&delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !
 !***********************************************************
 !
@@ -3181,9 +3184,6 @@ real, intent(inout) :: zxzy(2,n)
 !
 !***********************************************************
 !
-integer :: nn, maxit, iter, k, indf, indl, indx, nb
-real :: tol, dgmax, xk, yk, zk, zxk, zyk, a11, a12, a22, r1, r2, &
-&delx, dely, delxs, delys, dsq, dcub, t, dzx, dzy
 !
 ! Local parameters -
 !
@@ -3311,14 +3311,14 @@ subroutine gradl (n, x, y, z, iadj, iend, zxzy, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
-integer :: j
-!-----------------------------------------------------------------------
-!                      Derivative estimation
-!-----------------------------------------------------------------------
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+integer :: j
+!-----------------------------------------------------------------------
+!                      Derivative estimation
+!-----------------------------------------------------------------------
 !
 if (n .lt. 3) go to 20
 !
@@ -3345,6 +3345,10 @@ integer, intent(in) :: n, k, iadj(*)
 integer, intent(inout) :: iend(n), ier
 real, intent(in) :: x(n), y(n), z(n)
 real, intent(inout) :: dx, dy
+integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
+&np, i, j, im1, jp1, ip1, l
+real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
+&dmin, dtol, sf
 !
 !***********************************************************
 !
@@ -3412,10 +3416,6 @@ real, intent(inout) :: dx, dy
 !
 !***********************************************************
 !
-integer :: nn, kk, lmn, lmx, lmin, lmax, lm1, lnp, npts(30), ierr, &
-&np, i, j, im1, jp1, ip1, l
-real :: sum, ds, r, rs, rtol, avsq, av, xk, yk, zk, a(6,6), c, s, &
-&dmin, dtol, sf
 data    lmn/10/
 data    lmx/30/, rtol/1.e-5/, dtol/.01/, sf/1./
 !
@@ -3640,6 +3640,8 @@ subroutine setrm (xk,yk,zk,xi,yi,zi,s1,s2,r, row)
 implicit none
 real, intent(in) :: xk, yk, zk, xi, yi, zi, s1, s2, r
 real, intent(inout) :: row(6)
+integer :: i
+real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !
 !***********************************************************
 !
@@ -3681,8 +3683,6 @@ real, intent(inout) :: row(6)
 !
 !***********************************************************
 !
-integer :: i
-real :: dx, dy, dxsq, dysq, d, w, w1, w2
 !
 ! Local parameters -
 !
@@ -3729,6 +3729,8 @@ integer, intent(in) :: l
 integer, intent(inout) :: npts(l), ier
 real, intent(in) :: x(*), y(*)
 real, intent(inout) :: ds
+integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
+real :: x1, y1, dnp, dnb
 !
 !***********************************************************
 !
@@ -3792,8 +3794,6 @@ real, intent(inout) :: ds
 !
 !***********************************************************
 !
-integer :: lm1, n1, i, ni, np, indf, indl, indx, nb
-real :: x1, y1, dnp, dnb
 !
 ! Local parameters -
 !
@@ -3875,16 +3875,16 @@ subroutine sfval (n, x, y, z, m, xi, yi, zi, iadj, iend, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
-integer :: ist, j
-!-----------------------------------------------------------------------
-!                    Evaluation of the surface
-!-----------------------------------------------------------------------
 real :: x(n), y(n)
 real, intent(in) :: z(n), xi(m), yi(m)
 real, intent(inout) :: zi(m)
 real, intent(in) :: zxzy(2,n)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+integer :: ist, j
+!-----------------------------------------------------------------------
+!                    Evaluation of the surface
+!-----------------------------------------------------------------------
 !
 if (n .lt. 3 .or. m .lt. 1) go to 20
 !
@@ -3910,16 +3910,16 @@ subroutine sfval2 (n, x, y, z, l, m, nrows, xi, yi, zi, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, nrows
-integer :: i, ist, j
-!-----------------------------------------------------------------------
-!                Evaluation of the surface over a grid
-!-----------------------------------------------------------------------
 real :: x(n), y(n)
 real, intent(in) :: z(n), zxzy(2,n)
 real, intent(in) :: xi(l), yi(m)
 real, intent(inout) :: zi(nrows,m)
 integer, intent(in) :: iadj(*)
 integer, intent(inout) :: iend(n)
+integer :: i, ist, j
+!-----------------------------------------------------------------------
+!                Evaluation of the surface over a grid
+!-----------------------------------------------------------------------
 !
 if (n .lt. 3 .or. l .lt. 1 .or. m .lt. 1 .or. nrows .lt. l) &
 &go to 30
@@ -3954,6 +3954,10 @@ real, intent(in) :: px, py
 real :: x(n), y(n)
 real, intent(in) :: z(n), zxzy(2,n)
 real, intent(out) :: pz
+integer :: nn, i1, i2, i3, ierr, n1, n2, indx
+real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
+&y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
+&c2, f1, f2
 !
 !***********************************************************
 !
@@ -4043,10 +4047,6 @@ real, intent(out) :: pz
 !
 !***********************************************************
 !
-integer :: nn, i1, i2, i3, ierr, n1, n2, indx
-real :: xp, yp, zx1, zy1, zx2, zy2, zx3, zy3, x1, y1, x2, y2, x3, &
-&y3, z1, z2, z3, dum, dp, u, v, xq, yq, r1, r2, a1, a2, b1, b2, c1, &
-&c2, f1, f2
 !
 ! Local parameters -
 !
@@ -4235,6 +4235,11 @@ integer, intent(inout) :: ier
 real, intent(in) :: x, y, x1, x2, x3, y1, y2, y3, z1, z2, z3, zx1, &
 &zx2, zx3, zy1, zy2, zy3
 real, intent(inout) :: w, wx, wy
+integer :: i, ip1, ip2, ip3
+real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
+&phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
+&f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
+&a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
 !
 !***********************************************************
 !
@@ -4302,11 +4307,6 @@ real, intent(inout) :: w, wx, wy
 !
 !***********************************************************
 !
-integer :: i, ip1, ip2, ip3
-real :: u(3), v(3), sl(3), area, xp, yp, r(3), rx(3), ry(3), &
-&phi(3), phix(3), phiy(3), rmin, c1, c2, ro(3), rox(3), roy(3), &
-&f(3), g(3), gx(3), gy(3), p(3), px(3), py(3), q(3), qx(3), qy(3), &
-&a(3), ax(3), ay(3), b(3), bx(3), by(3), c(3), cx(3), cy(3)
 !
 ! Local parameters -
 !
@@ -4526,14 +4526,14 @@ implicit none
 integer, intent(inout) :: nfpols, fitdeg
 integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
 integer, intent(inout) :: error, ireqd, dreqd
-integer :: indstt, p, dimp1
 integer, intent(in) :: ncrows
-integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-&alfl
 integer, intent(inout) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln), fitcds(ncrows,dimen)
 real, intent(inout) :: fitvls(nfpts), resids(nfpts)
 real, intent(in) :: wts(nfpts)
+integer :: indstt, p, dimp1
+integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
+&alfl
 real :: scale
 !
 !     ***************
@@ -4699,13 +4699,13 @@ subroutine allot(degree,npolys,npts,dimen,iwork,iwklen, &
 implicit none
 !
 integer, intent(inout) :: ireqd, dreqd
-integer :: alfl
 integer, intent(inout) :: error, npolys, degree
 integer, intent(in) :: dimen, npts
-integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
 integer, intent(in) :: iwklen
-integer :: nplyt4
 integer, intent(inout) :: iwork(iwklen)
+integer :: alfl
+integer :: newstt, psiwid, kmxbas, startj, kjp1d2, index
+integer :: nplyt4
 !
 !     ***************
 !     Purpose
@@ -4905,11 +4905,11 @@ end subroutine allot
 subroutine basiz(degree,npts,dimen,npolys,error)
 implicit none
 !
-integer :: top, bot
 integer, intent(inout) :: degree
 integer, intent(in) :: npts, dimen
 integer, intent(inout) :: npolys
 integer, intent(out) :: error
+integer :: top, bot
 integer :: i, rowlen
 !
 !     ***************
@@ -4996,12 +4996,12 @@ end subroutine basiz
 subroutine mtable(degree,dimen,npolys,indexs,newkj,alflp1)
 implicit none
 !
-integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, &
-&dimm2
 integer, intent(in) :: npolys, dimen, degree
 integer, intent(out) :: alflp1
-integer :: dimp1
 integer, intent(inout) :: indexs(4,npolys), newkj(dimen,degree)
+integer :: j, kj, curdeg, jprime, nwithk, i, curm1, ralen, dimm1, &
+&dimm2
+integer :: dimp1
 !
 !     ***************
 !     Purpose
@@ -5147,14 +5147,11 @@ subroutine gnrtp(degree,alpha,psi,indexs, &
 &alfl,dimp1,maxabs,error)
 implicit none
 integer, intent(in) :: ncrows
-!
 integer, intent(inout) :: degree
 integer, intent(in) :: dimen
 integer, intent(inout) :: npolys
 integer, intent(in) :: npts
-integer :: k
 integer, intent(in) :: psiwid, alfl
-integer :: p, sttdeg, onplys
 integer, intent(inout) :: error
 integer :: dimp1
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
@@ -5162,7 +5159,10 @@ real, intent(inout) :: psi(npts,psiwid), alpha(alfl), f(npts)
 real, intent(inout) :: coord(ncrows,dimen), maxabs(dimp1)
 real, intent(in) :: weight(npts)
 real, intent(inout) :: z(npts), sumsqs(npolys), c(npolys)
+integer :: k
+integer :: p, sttdeg, onplys
 real :: runtot, rntot1
+!
 !
 !     ***************
 !     Purpose
@@ -5232,15 +5232,9 @@ subroutine incdg(degree,alpha,psi,indexs,newkj, &
 &alfl,onplys,sttdeg,error)
 implicit none
 integer, intent(in) :: ncrows
-!
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
-integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
 integer, intent(inout) :: error
-integer :: j0mj1, j1m1, starta
 integer, intent(in) :: onplys
-integer :: onpp1
 integer, intent(inout) :: sttdeg
-integer :: index1, index2
 integer, intent(inout) :: degree, npolys
 integer, intent(in) :: npts, dimen, psiwid, alfl
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
@@ -5250,7 +5244,13 @@ real, intent(inout) :: psi(npts,psiwid)
 real, intent(inout) :: sumsqs(npolys), c(npolys)
 real, intent(in) :: f(npts), weight(npts)
 real, intent(inout) :: z(npts)
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
+integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
+integer :: j0mj1, j1m1, starta
+integer :: onpp1
+integer :: index1, index2
 real :: arc, runtot, rntot1, rntot2
+!
 !
 !     ***************
 !     Purpose
@@ -5439,10 +5439,10 @@ subroutine scalpm(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
-integer :: p
 real, intent(out) :: maxabs
-real :: a
 real, intent(in) :: coord(npts)
+integer :: p
+real :: a
 !
 !     ***************
 !     Purpose
@@ -5478,9 +5478,9 @@ subroutine scaldn(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
-integer :: p
 real, intent(in) :: maxabs
 real, intent(inout) :: coord(npts)
+integer :: p
 !
 !     ***************
 !     Purpose
@@ -5507,19 +5507,19 @@ subroutine meval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
 &error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
 implicit none
 integer, intent(in) :: nerows
-!
 integer, intent(in) :: fiwkln, fdwkln
 integer, intent(inout) :: nepols
 integer, intent(in) :: nepts, dimen
 integer, intent(inout) :: error
-integer :: maxstt, alfstt, cstt
-integer :: gbasiz, alfl, dimp1
 integer, intent(in) :: evldeg
-integer :: top, bot, curdeg, psistt
 integer, intent(in) :: fitiwk(fiwkln)
 real, intent(inout) :: fitdwk(fdwkln)
 real, intent(in) :: evlcds(nerows,dimen)
 real, intent(inout) :: evlvls(nepts), temp(dimen)
+integer :: maxstt, alfstt, cstt
+integer :: gbasiz, alfl, dimp1
+integer :: top, bot, curdeg, psistt
+!
 !
 !     ***************
 !     Purpose
@@ -5666,9 +5666,7 @@ subroutine meval1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
 &indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
-!
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
-integer :: jm1, jprime, m, p, k, i, j, index
 integer, intent(in) :: indexs(4,npolys)
 real, intent(in) :: alpha(alfl), coord(ncrows,dimen)
 real, intent(inout) :: psi(npolys)
@@ -5676,7 +5674,9 @@ real, intent(in) :: c(npolys)
 real, intent(inout) :: f(nepts)
 real, intent(in) :: maxabs(dimp1)
 real, intent(inout) :: x(dimen)
+integer :: jm1, jprime, m, p, k, i, j, index
 real :: runtot, rntot1
+!
 !
 !     ***************
 !     Purpose
@@ -5758,15 +5758,15 @@ implicit none
 integer, intent(inout) :: nfpols, fitdeg
 integer, intent(in) :: nfpts, dimen, fiwkln, fdwkln
 integer, intent(inout) :: error, ireqd, dreqd
-integer :: indstt, p, dimp1
 integer, intent(in) :: ncrows
-integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
-&alfl
 integer, intent(inout) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln), &
 &fitcds(ncrows,dimen)
 double precision, intent(inout) :: fitvls(nfpts), resids(nfpts)
 double precision, intent(in) :: wts(nfpts)
+integer :: indstt, p, dimp1
+integer :: newstt, maxstt, alfstt, psistt, cstt, ssqstt, psiwid, &
+&alfl
 double precision :: scale
 !
 !     ***************
@@ -5934,14 +5934,11 @@ subroutine dgnrtp(degree,alpha,psi,indexs, &
 &alfl,dimp1,maxabs,error)
 implicit none
 integer, intent(in) :: ncrows
-!
 integer, intent(inout) :: degree
 integer, intent(in) :: dimen
 integer, intent(inout) :: npolys
 integer, intent(in) :: npts
-integer :: k
 integer, intent(in) :: psiwid, alfl
-integer :: p, sttdeg, onplys
 integer, intent(inout) :: error
 integer :: dimp1
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
@@ -5952,7 +5949,10 @@ double precision, intent(inout) :: coord(ncrows,dimen), &
 double precision, intent(in) :: weight(npts)
 double precision, intent(inout) :: z(npts), sumsqs(npolys), &
 &c(npolys)
+integer :: k
+integer :: p, sttdeg, onplys
 double precision :: runtot, rntot1
+!
 !
 !     ***************
 !     Purpose
@@ -6022,15 +6022,9 @@ subroutine dincdg(degree,alpha,psi,indexs,newkj, &
 &alfl,onplys,sttdeg,error)
 implicit none
 integer, intent(in) :: ncrows
-!
-integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
-integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
 integer, intent(inout) :: error
-integer :: j0mj1, j1m1, starta
 integer, intent(in) :: onplys
-integer :: onpp1
 integer, intent(inout) :: sttdeg
-integer :: index1, index2
 integer, intent(inout) :: degree, npolys
 integer, intent(in) :: npts, dimen, psiwid, alfl
 integer, intent(in) :: indexs(4,npolys), newkj(dimen,degree)
@@ -6040,7 +6034,13 @@ double precision, intent(inout) :: psi(npts,psiwid)
 double precision, intent(inout) :: sumsqs(npolys), c(npolys)
 double precision, intent(in) :: f(npts), weight(npts)
 double precision, intent(inout) :: z(npts)
+integer :: jprime, p, j, curdeg, kj, kjp, l, jpm1, jm1
+integer :: m, start, jindex, jpindx, q, j3, j1, j1mj2
+integer :: j0mj1, j1m1, starta
+integer :: onpp1
+integer :: index1, index2
 double precision :: arc, runtot, rntot1, rntot2
+!
 !
 !     ***************
 !     Purpose
@@ -6229,10 +6229,10 @@ subroutine dscalp(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
-integer :: p
 double precision, intent(out) :: maxabs
-double precision :: a
 double precision, intent(in) :: coord(npts)
+integer :: p
+double precision :: a
 !
 !     ***************
 !     Purpose
@@ -6268,9 +6268,9 @@ subroutine dscald(coord,npts,maxabs)
 implicit none
 !
 integer, intent(in) :: npts
-integer :: p
 double precision, intent(in) :: maxabs
 double precision, intent(inout) :: coord(npts)
+integer :: p
 !
 !     ***************
 !     Purpose
@@ -6297,19 +6297,19 @@ subroutine dmeval(dimen,evldeg,nepols,nepts,evlcds,nerows,evlvls, &
 &error,fitiwk,fitdwk,fiwkln,fdwkln,temp)
 implicit none
 integer, intent(in) :: nerows
-!
 integer, intent(in) :: fiwkln, fdwkln
 integer, intent(inout) :: nepols
 integer, intent(in) :: nepts, dimen
 integer, intent(inout) :: error
-integer :: maxstt, alfstt, cstt
-integer :: gbasiz, alfl, dimp1
 integer, intent(in) :: evldeg
-integer :: top, bot, curdeg, psistt
 integer, intent(in) :: fitiwk(fiwkln)
 double precision, intent(inout) :: fitdwk(fdwkln)
 double precision, intent(in) :: evlcds(nerows,dimen)
 double precision, intent(inout) :: evlvls(nepts), temp(dimen)
+integer :: maxstt, alfstt, cstt
+integer :: gbasiz, alfl, dimp1
+integer :: top, bot, curdeg, psistt
+!
 !
 !     ***************
 !     Purpose
@@ -6457,9 +6457,7 @@ subroutine dmevl1 (coord,ncrows,c,nepts,dimen,npolys,alpha, &
 &indexs,psi,f,alfl,maxabs,x,dimp1)
 implicit none
 integer, intent(in) :: ncrows
-!
 integer, intent(in) :: dimen, nepts, npolys, alfl, dimp1
-integer :: jm1, jprime, m, p, k, i, j, index
 integer, intent(in) :: indexs(4,npolys)
 double precision, intent(in) :: alpha(alfl), coord(ncrows,dimen)
 double precision, intent(inout) :: psi(npolys)
@@ -6467,7 +6465,9 @@ double precision, intent(in) :: c(npolys)
 double precision, intent(inout) :: f(nepts)
 double precision, intent(in) :: maxabs(dimp1)
 double precision, intent(inout) :: x(dimen)
+integer :: jm1, jprime, m, p, k, i, j, index
 double precision :: runtot, rntot1
+!
 !
 !     ***************
 !     Purpose
@@ -6546,10 +6546,12 @@ integer, intent(inout) :: ind
 integer, intent(in) :: mcount
 real, intent(in) :: a, b, epsil
 real, intent(inout) :: relerr
+real :: f
+external f
 integer :: icheck, is, ismax, k, nf, npts
 real :: eps, err, result(8), stack(100), sub1, sub2, sub3, sum, &
 &tol, x
-real :: f, spmpar
+real :: spmpar
 !-----------------------------------------------------------------------
 !
 !                Integration over a finite interval
@@ -6588,7 +6590,6 @@ real :: f, spmpar
 !     of epsil. It is recommended that epsil be less than 0.001.
 !
 !-----------------------------------------------------------------------
-external f
 data ismax/100/
 !-----------------------------------------------------------------------
 !
@@ -6697,9 +6698,10 @@ integer, intent(out) :: icheck
 integer, intent(inout) :: k, npts
 real, intent(in) :: a, b, epsil
 real, intent(inout) :: result(*)
+real :: f
+external f
 integer :: i, inew, iold, j
 real :: acum, diff, funct(127), fzero, p(381), sum, x
-real :: f
 !     --------------------
 ! This subroutine attempts to calculate the integral of f(x)
 ! over the interval *a* to *b* with relative error not
@@ -6734,7 +6736,6 @@ real :: f
 ! Abscissae and weights of quadrature rules are stacked in
 ! array *p* in the order in which they are needed.
 !     --------------------
-external f
 data p( 1),p( 2),p( 3),p( 4),p( 5),p( 6),p( 7), &
 &p( 8),p( 9),p(10),p(11),p(12),p(13),p(14), &
 &p(15),p(16),p(17),p(18),p(19),p(20),p(21), &
@@ -7043,6 +7044,9 @@ real, intent(in) :: a
 real, intent(out) :: abserr
 real, intent(in) :: b, epsabs, epsrel
 real, intent(out) :: result
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
 integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
@@ -7190,9 +7194,6 @@ integer :: l1, l2, l3
 !              - spmpar
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f
 !
 !         Check validity of limit and lenw.
 !
@@ -7225,13 +7226,13 @@ implicit none
 !
 !        Purpose
 !           the routine calculates an approximation  result  to a given
-!           definite integral   I = Integral of  F  over (a,b),
+!           definite integral   I = Integral of  f  over (a,b),
 !           hopefully satisfying following claim for accuracy
 !           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - REAL
+!            f      - REAL
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -7353,43 +7354,44 @@ implicit none
 !              - qk21f
 !              - qpsrt
 !              - qelg
-!              - F (user-provided function)
+!              - f (user-provided function)
 !              - spmpar
 !
 !-----------------------------------------------------------------------
 real, intent(in) :: a
-real :: abseps
 real, intent(out) :: abserr
 real, intent(inout) :: alist
-real :: area, area1, area12, area2, a1, a2
 real, intent(in) :: b
 real, intent(inout) :: blist
-real :: b1, b2, correc, defabs, defab1, defab2, dres
 real, intent(inout) :: elist
-real :: epmach
 real, intent(in) :: epsabs, epsrel
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, f, oflow, rerr, resabs, reseps
+real :: f
 real, intent(out) :: result
-real :: res3la(3)
 real, intent(inout) :: rlist
-real :: rlist2(52), small, spmpar, t, uflow
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr
 integer, intent(out) :: neval
+external f
+real :: abseps
+real :: area, area1, area12, area2, a1, a2
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real :: epmach
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, oflow, rerr, resabs, reseps
+real :: res3la(3)
+real :: rlist2(52), small, spmpar, t, uflow
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit)
 !
-external f
 !
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg (rlist2 should be of dimension
@@ -7695,10 +7697,12 @@ real, intent(inout) :: abserr
 real, intent(in) :: b, epmach
 real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
+real :: f
+external f
 integer :: j, jtw, jtwm1
 real :: absc, centr, dhlgth, fc, fsum, fval1, fval2, hlgth, resg, &
 &resk, reskh, tol
-real :: f
+real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -7755,8 +7759,6 @@ real :: f
 !                 - f (user-provided function)
 !
 !-----------------------------------------------------------------------
-real :: fv1(10), fv2(10), wg(5), wgk(11), xgk(11)
-external f
 !
 !           The abscissae and weights are given for the interval (-1,1).
 !           Because of symmetry only the positive abscissae and their
@@ -7878,8 +7880,11 @@ integer, intent(out) :: neval
 real, intent(out) :: abserr
 real, intent(in) :: bound, epsabs, epsrel
 real, intent(out) :: result
-integer :: l1, l2, l3
 real :: f
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f
+integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
 !                   Integration over infinite intervals
@@ -8033,9 +8038,6 @@ real :: f
 !              - spmpar
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f
 !
 !         Check validity of limit and lenw.
 !
@@ -8068,15 +8070,15 @@ implicit none
 !
 !        Purpose
 !           the routine calculates an approximation  result  to a given
-!           integral    I = Integral of  F  over (bound,+INFINITY)
-!                    or I = Integral of  F  over (-INFINITY,bound)
-!                    or I = Integral of  F  over (-INFINITY,+INFINITY),
+!           integral    I = Integral of  f  over (bound,+INFINITY)
+!                    or I = Integral of  f  over (-INFINITY,bound)
+!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
 !           hopefully satisfying following claim for accuracy
 !           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - REAL
+!            f      - REAL
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -8205,44 +8207,45 @@ implicit none
 !              - qk15i
 !              - qpsrt
 !              - qelg
-!              - F (user-provided function)
+!              - f (user-provided function)
 !              - spmpar
 !
 !-----------------------------------------------------------------------
-real :: abseps
 real, intent(out) :: abserr
 real, intent(inout) :: alist
-real :: area, area1, area12, area2, a1, a2
 real, intent(inout) :: blist
-real :: boun
 real, intent(in) :: bound
-real :: b1, b2, correc, defabs, defab1, defab2, dres
 real, intent(inout) :: elist
-real :: epmach
 real, intent(in) :: epsabs, epsrel
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, f, oflow, rerr, resabs, reseps
+real :: f
 real, intent(out) :: result
-real :: res3la(3)
 real, intent(inout) :: rlist
-real :: rlist2(52), small, spmpar, t, uflow
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(in) :: inf
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr
 integer, intent(out) :: neval
+external f
+real :: abseps
+real :: area, area1, area12, area2, a1, a2
+real :: boun
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real :: epmach
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, oflow, rerr, resabs, reseps
+real :: res3la(3)
+real :: rlist2(52), small, spmpar, t, uflow
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit)
 !
-external f
 !
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine qelg.
@@ -8323,8 +8326,8 @@ rerr = amax1(epsrel, 50.0*epmach, 0.5e-14)
 !
 !           Determine the interval to be mapped onto (0,1).
 !           If inf = 2 The integral is computed as I = I1+I2, where
-!           I1 = Integral of F over (-INFINITY,0),
-!           I2 = Integral of F over (0,+INFINITY).
+!           I1 = Integral of f over (-INFINITY,0),
+!           I2 = Integral of f over (0,+INFINITY).
 !
 boun = bound
 if (inf .eq. 2) boun = 0.0
@@ -8552,10 +8555,12 @@ real, intent(inout) :: abserr
 real, intent(in) :: b, boun, epmach
 real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
+real :: f
+external f
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
 &hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
-real :: f
+real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -8627,8 +8632,6 @@ real :: f
 !                 - f (user-provided function)
 !
 !-----------------------------------------------------------------------
-real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
-external f
 !
 !           The abscissae and weights are supplied for the interval
 !           (-1,1).  Because of symmetry only the positive abscissae and
@@ -8791,12 +8794,12 @@ implicit none
 !
 real :: elist
 real, intent(inout) :: ermax
-real :: errmax, errmin
-integer :: i, ibeg, ido
 integer, intent(inout) :: iord
-integer :: isucc, j, jbnd, jupbn, k
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
+real :: errmax, errmin
+integer :: i, ibeg, ido
+integer :: isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !
 !           Check whether the list contains more than
@@ -8879,6 +8882,7 @@ integer, intent(inout) :: n, nres
 real, intent(out) :: abserr
 real, intent(in) :: epmach, oflow
 real, intent(out) :: result
+real, intent(inout) :: epstab(52), res3la(3)
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp, newelm, num
 real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 &err1, err2, err3, error, res, ss, tol1, tol2, tol3
@@ -8930,7 +8934,6 @@ real :: delta1, delta2, delta3, e0, e1, e1abs, e2, e3, epsinf, &
 ! 3.        NO SUBROUTINES OR FUNCTIONS USED
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: epstab(52), res3la(3)
 !---------------------
 !
 !           List of major variables
@@ -9204,11 +9207,11 @@ integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(out) :: last
 integer, intent(in) :: leniw, lenw, limit
+external f
 integer :: l1, l2, l3, l4, l5
 !
 dimension iwork(leniw),work(lenw)
 !
-external f
 !
 !         Check validity of limit,leniw and lenw.
 !
@@ -9239,13 +9242,13 @@ subroutine qxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !
 !            The routine calculates an approximation result to A
-!            definite integral I = Integral of F over (a,b),
+!            definite integral I = Integral of f over (a,b),
 !            hopefully satisfying following claim for accuracy
 !            abs(I-result).LE.max(epsabs,epsrel*abs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - REAL
+!            f      - REAL
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -9369,41 +9372,44 @@ implicit none
 !                     saved in the corresponding column
 !                     OF valp,valn
 !
-!***Routines called  F,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
+!***Routines called  f,spmpar,qelg,qxlqm,qpsrt,qxrrd,qxcpy
 !
-real :: a, abseps
+real :: a
 real, intent(out) :: abserr
 real, intent(inout) :: alist
-real :: area, area1, area12, area2, a1, a2, b
+real :: b
 real, intent(inout) :: blist
-real :: b1, b2, correc, defabs, defab1, defab2, dres
 real, intent(inout) :: elist
-real :: epmach
 real, intent(in) :: epsabs, epsrel
-real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
-&errsum, ertest, f, oflow, rerr, resabs, reseps
+real :: f
 real, intent(out) :: result
-real :: res3la(3)
 real, intent(inout) :: rlist
-real :: rlist2(52), small, t, uflow
 real, intent(inout) :: valp, valn
-real :: vp1(21), vp2(21), vn1(21), vn2(21), spmpar
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr, nres, nrmax, numrl2
 integer, intent(inout) :: lp(limit), ln(limit)
+external f
+real :: abseps
+real :: area, area1, area12, area2, a1, a2
+real :: b1, b2, correc, defabs, defab1, defab2, dres
+real :: epmach
+real :: erlarg, erlast, errbnd, errmax, error1, error2, erro12, &
+&errsum, ertest, oflow, rerr, resabs, reseps
+real :: res3la(3)
+real :: rlist2(52), small, t, uflow
+real :: vp1(21), vp2(21), vn1(21), vn2(21), spmpar
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr, nres, nrmax, numrl2
 integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit), valp(21,limit), valn(21,limit)
 !
-external f
 !
 !            Machine dependent constants
 !            ---------------------------
@@ -9676,14 +9682,14 @@ end subroutine qxgse
 
 subroutine qxcpy (a, b, l)
 implicit none
+integer, intent(in) :: l
+real, intent(inout) :: a(l)
+real, intent(in) :: b(l)
 integer :: i
 !
 !  TO COPY THE REAL VECTOR b OF LENGTH l   i N T O
 !          the real vector a of length l
 !
-integer, intent(in) :: l
-real, intent(inout) :: a(l)
-real, intent(in) :: b(l)
 !
 do 10 i = 1,l
 10 a(i) = b(i)
@@ -9777,15 +9783,15 @@ implicit none
 real :: f
 real, intent(in) :: a, b
 real, intent(inout) :: result, abserr, resabs, resasc
-real :: t
 real, intent(in) :: epmach, oflow, uflow
-real :: resg, resk, errold
 real, intent(inout) :: vr(21), vs(21)
-integer :: k, k0, k1, k2
 integer, intent(in) :: key
-integer :: key1
 integer, intent(inout) :: lr, ls
 external f
+real :: t
+real :: resg, resk, errold
+integer :: k, k0, k1, k2
+integer :: key1
 !
 key1 = max0(key ,  0)
 key1 = min0(key1,  4)
@@ -9814,7 +9820,19 @@ end subroutine qxlqm
 
 subroutine qxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
+real :: f
+real, intent(in) :: xl, xu
+real, intent(out) :: y
+real, intent(inout) :: ya, ym
+real, intent(inout) :: fv1(21), fv2(21)
+integer, intent(in) :: ke, k1
+integer, intent(inout) :: l1, l2
+external f
 integer :: i, is, k, ks
+real :: ldl
+real :: y2, xx(41), ww(52)
+real :: aa, bb, c
+integer :: istart(4), len(4), j
 !
 !            To compute i = Integral of f over (A,B), with error
 !                           estimate
@@ -9884,18 +9902,6 @@ integer :: i, is, k, ks
 !              l2       NUMBER OF ELEMENTS IN fv1,fv2  RESPECTIVELY
 !
 !------------------------
-real :: f
-real, intent(in) :: xl, xu
-real :: ldl
-real, intent(out) :: y
-real, intent(inout) :: ya, ym
-real :: y2, xx(41), ww(52)
-real, intent(inout) :: fv1(21), fv2(21)
-real :: aa, bb, c
-integer :: istart(4), len(4), j
-integer, intent(in) :: ke, k1
-integer, intent(inout) :: l1, l2
-external f
 !------------------------
 data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
 data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
@@ -10057,9 +10063,9 @@ real :: f
 real, intent(inout) :: r(21), s(21)
 real :: z(21)
 real, intent(in) :: xu, xl
-real :: dlen, centr
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+real :: dlen, centr
 !
 dlen = (xu - xl)*0.5
 centr = xl + dlen
@@ -10121,6 +10127,18 @@ subroutine dqags (f, a, b, epsabs, epsrel, result, abserr, &
 &neval, ier, limit, lenw, last, iwork, work)
 implicit none
 integer, intent(out) :: last
+double precision, intent(in) :: a
+double precision, intent(out) :: abserr
+double precision, intent(in) :: b, epsabs, epsrel
+double precision :: f
+double precision, intent(out) :: result
+double precision, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+external f
+integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
 !           Double precision computation of a definite integral
@@ -10267,20 +10285,8 @@ integer, intent(out) :: last
 !              - dpmpar
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision, intent(out) :: abserr
-double precision, intent(in) :: b, epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: work
-integer, intent(out) :: ier
-integer, intent(inout) :: iwork
-integer, intent(in) :: lenw, limit
-integer :: l1, l2, l3
-integer, intent(out) :: neval
 !
 dimension iwork(limit), work(lenw)
-external f
 !
 !         Check validity of limit and lenw.
 !
@@ -10313,13 +10319,13 @@ implicit none
 !
 !        Purpose
 !           the routine calculates an approximation  result  to a given
-!           definite integral   I = Integral of  F  over (a,b),
+!           definite integral   I = Integral of  f  over (a,b),
 !           hopefully satisfying following claim for accuracy
 !           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - Double precision
+!            f      - Double precision
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -10441,44 +10447,45 @@ implicit none
 !              - dqk21
 !              - dqpsrt
 !              - dqelg
-!              - F (user-provided function)
+!              - f (user-provided function)
 !              - dpmpar
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
-double precision :: abseps
 double precision, intent(out) :: abserr
 double precision, intent(inout) :: alist
-double precision :: area, area1, area12, area2, a1, a2
 double precision, intent(in) :: b
 double precision, intent(inout) :: blist
-double precision :: b1, b2, correc, defabs, defab1, defab2, &
-&dpmpar, dres
 double precision, intent(inout) :: elist
-double precision :: epmach
 double precision, intent(in) :: epsabs, epsrel
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision :: f
 double precision, intent(out) :: result
-double precision :: res3la(3)
 double precision, intent(inout) :: rlist
-double precision :: rlist2(52), small, t, uflow
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr
 integer, intent(out) :: neval
+external f
+double precision :: abseps
+double precision :: area, area1, area12, area2, a1, a2
+double precision :: b1, b2, correc, defabs, defab1, defab2, &
+&dpmpar, dres
+double precision :: epmach
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+double precision :: res3la(3)
+double precision :: rlist2(52), small, t, uflow
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit)
 !
-external f
 !
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg (rlist2 should be of dimension

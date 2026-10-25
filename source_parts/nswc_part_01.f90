@@ -1,6 +1,7 @@
 integer function ipmpar (i)
 implicit none
 integer, intent(in) :: i
+integer :: imach(10)
 !-----------------------------------------------------------------------
 !
 !     ipmpar provides the integer machine constants for the computer
@@ -73,7 +74,6 @@ integer, intent(in) :: i
 !     from Bell Laboratories, NSWC, and other sources.
 !
 !-----------------------------------------------------------------------
-integer :: imach(10)
 !
 !     Machine constants for the Alliant FX/8.
 !
@@ -438,12 +438,13 @@ subroutine mach (mo, n, ibeta, imax, idmax, imach, rmach, dmach)
 implicit none
 integer :: ibeta
 integer, intent(in) :: idmax, imax, mo, n
-integer :: m, maxexp, minexp, n0
-real :: eps, xint, xmax, xmin
-!-----------------------------------------------------------------------
 real, intent(inout) :: rmach(3)
 double precision, intent(inout) :: dmach(3)
 integer, intent(inout) :: imach(10)
+integer :: m, maxexp, minexp, n0
+real :: eps, xint, xmax, xmin
+double precision :: deps, dint, dmin, dmax
+!-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 !
 !          Computation of the environmental constants for the
@@ -670,7 +671,6 @@ integer, intent(inout) :: imach(10)
 !         1988, PP. 303-311.
 !
 !-----------------------------------------------------------------------
-double precision :: deps, dint, dmin, dmax
 !-----------------
 imach(1) = 0
 imach(2) = 0
@@ -738,8 +738,9 @@ subroutine mach1 (n, ibeta, m, minexp, maxexp, eps, xint, &
 &xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
-integer :: j, k, km, l
 real :: eps, xint, xmin, xmax
+integer :: j, k, km, l
+real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
 !-----------------------------------------------------------------------
 !
 !                 Computation of the environmental constants
@@ -832,7 +833,6 @@ real :: eps, xint, xmin, xmax
 !                 roundoff error.
 !
 !-----------------------------------------------------------------------
-real :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, zero
 !----------------
 common /spdata/ d1, d2
 !
@@ -995,8 +995,10 @@ subroutine mach2 (n, ibeta, m, minexp, maxexp, eps, xint, &
 &xmin, xmax)
 implicit none
 integer :: ibeta, m, maxexp, minexp, n
-integer :: j, k, km, l
 double precision :: eps, xint, xmin, xmax
+integer :: j, k, km, l
+double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
+&zero
 !-----------------------------------------------------------------------
 !
 !                 Computation of the environmental constants
@@ -1089,8 +1091,6 @@ double precision :: eps, xint, xmin, xmax
 !                 by roundoff error.
 !
 !-----------------------------------------------------------------------
-double precision :: b, b2, binv, bm1, d1, d2, one, p, q, t, x, z, &
-&zero
 !----------------
 common /dpdata/ d1, d2
 !
@@ -1241,7 +1241,8 @@ implicit none
 !-----------------------------------------------------------------------
 !     Storage of double precision information into memory
 !-----------------------------------------------------------------------
-double precision :: a, b, d1, d2
+double precision :: a, b
+double precision :: d1, d2
 common /dpdata/ d1, d2
 d1 = a
 d2 = b
@@ -1254,6 +1255,7 @@ integer, intent(in) :: i
 integer :: ibeta, m
 real :: b, binv, bm1, one, w, z
 integer :: ipmpar
+integer :: emin, emax
 !-----------------------------------------------------------------------
 !
 !     spmpar provides the single precision machine constants for
@@ -1274,7 +1276,6 @@ integer :: ipmpar
 !        Naval Surface Warfare Center
 !        Dahlgren Virginia
 !-----------------------------------------------------------------------
-integer :: emin, emax
 !
 if (i .gt. 1) go to 10
    b = ipmpar(4)
@@ -1311,6 +1312,8 @@ implicit none
 integer, intent(in) :: i
 integer :: ibeta, m
 integer :: ipmpar
+integer :: emin, emax
+double precision :: b, binv, bm1, one, w, z
 !-----------------------------------------------------------------------
 !
 !     dpmpar provides the double precision machine constants for
@@ -1331,8 +1334,6 @@ integer :: ipmpar
 !        Naval Surface Warfare Center
 !        Dahlgren Virginia
 !-----------------------------------------------------------------------
-integer :: emin, emax
-double precision :: b, binv, bm1, one, w, z
 !
 if (i .gt. 1) go to 10
    b = ipmpar(4)
@@ -1369,12 +1370,12 @@ implicit none
 integer, intent(in) :: l
 integer :: m
 integer :: ipmpar
+integer :: b
+real :: lnb
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.0 + eps .GT. 1.0 .  l is a dummy argument.
 !--------------------------------------------------------------------
-integer :: b
-real :: lnb
 !
 b = ipmpar(4)
 if (b .ne. 2) go to 10
@@ -1397,12 +1398,12 @@ double precision function depsln (l)
 implicit none
 integer, intent(in) :: l
 integer :: ipmpar
+integer :: b
+double precision :: db, lnb, m
 !--------------------------------------------------------------------
 !     The evaluation of LN(EPS) where eps is the smallest number
 !     such that 1.D0 + eps .GT. 1.D0 .  l is a dummy argument.
 !--------------------------------------------------------------------
-integer :: b
-double precision :: db, lnb, m
 !
 b = ipmpar(4)
 if (b .ne. 2) go to 10
@@ -1427,6 +1428,8 @@ implicit none
 integer, intent(in) :: l
 integer :: m
 integer :: ipmpar
+integer :: b
+real :: lnb
 !--------------------------------------------------------------------
 !     If l = 0 Then  exparg(l) = The largest positive W for which
 !     exp(W) can be computed.
@@ -1436,8 +1439,6 @@ integer :: ipmpar
 !
 !     Note... only an approximate value for exparg(l) is needed.
 !--------------------------------------------------------------------
-integer :: b
-real :: lnb
 !
 b = ipmpar(4)
 if (b .ne. 2) go to 10
@@ -1465,6 +1466,8 @@ implicit none
 integer, intent(in) :: l
 integer :: m
 integer :: ipmpar
+integer :: b
+double precision :: db, lnb
 !--------------------------------------------------------------------
 !     If l = 0 Then  dxparg(l) = The largest positive W for which
 !     dexp(W) can be computed.
@@ -1474,8 +1477,6 @@ integer :: ipmpar
 !
 !     Note... only an approximate value for dxparg(l) is needed.
 !--------------------------------------------------------------------
-integer :: b
-double precision :: db, lnb
 !
 b = ipmpar(4)
 if (b .ne. 2) go to 10
@@ -1502,13 +1503,13 @@ end function dxparg
 subroutine ishell (a, n)
 implicit none
 integer, intent(in) :: n
+integer, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
+integer :: k(10), s
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-integer, intent(inout) :: a(n)
-integer :: k(10), s
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1551,14 +1552,14 @@ end subroutine ishell
 subroutine shell (a, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1601,15 +1602,15 @@ end subroutine shell
 subroutine shell2 (a, b, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n), b(n)
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1656,14 +1657,14 @@ end subroutine shell2
 subroutine rsort (a, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1706,17 +1707,17 @@ end subroutine rsort
 subroutine risort (a, m, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
+integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
+integer :: t
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on m that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-integer, intent(inout) :: m(n)
-integer :: t
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1763,15 +1764,15 @@ end subroutine risort
 subroutine rrsort (a, b, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s, t
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n), b(n)
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1818,14 +1819,14 @@ end subroutine rrsort
 subroutine dsort (a, n)
 implicit none
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
+double precision :: s
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. It is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n)
-double precision :: s
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1868,17 +1869,17 @@ end subroutine dsort
 subroutine disort (a, m, n)
 implicit none
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n)
+integer, intent(inout) :: m(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
+double precision :: s
+integer :: t
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on m that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n)
-double precision :: s
-integer, intent(inout) :: m(n)
-integer :: t
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1925,15 +1926,15 @@ end subroutine disort
 subroutine ddsort (a, b, n)
 implicit none
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n), b(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
+double precision :: s, t
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The shell sorting procedure is used to reorder the elements of A
 !     so that a(i).LE.a(i+1) for i=1,...,n-1. The same permutations are
 !     performed on b that are performed on A. it is assumed that n.GE.1.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n), b(n)
-double precision :: s, t
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -1980,15 +1981,15 @@ end subroutine ddsort
 subroutine aord (a, n)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
 real :: s
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     The aord sorting procedure is used to reorder the elements of
 !     a so that abs(a(i)) .LE. abs(a(i+1)) for i = 1,...,n-1. It is
 !     assumed that n .GE. 1.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -2031,15 +2032,15 @@ end subroutine aord
 subroutine daord (a, n)
 implicit none
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n)
 integer :: i, ii, imax, j, jmax, ki, l, ll
+double precision :: s
+integer :: k(10)
 !-----------------------------------------------------------------------
 !     daord is used to reorder the elements of the double precision
 !     array a so that dabs(a(i)) .LE. dabs(a(i+1)) for i = 1,...,n-1.
 !     It is assumed that n .GE. 1.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n)
-double precision :: s
-integer :: k(10)
 !------------------------
 data k(1)/1/, k(2)/4/, k(3)/13/, k(4)/40/, k(5)/121/, k(6)/364/, &
 &k(7)/1093/, k(8)/3280/, k(9)/9841/, k(10)/29524/
@@ -2083,6 +2084,9 @@ subroutine qsorti (x, ind, n)
 implicit none
 integer, intent(in) :: n, x(n)
 integer, intent(inout) :: ind(n)
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx, t
+real :: r
 !
 !***********************************************************
 !
@@ -2128,9 +2132,6 @@ integer, intent(inout) :: ind(n)
 !
 !***********************************************************
 !
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx, t
-real :: r
 !
 ! Local parameters -
 !
@@ -2285,6 +2286,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 real, intent(in) :: x(n)
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx
+real :: r, t
 !
 !***********************************************************
 !
@@ -2330,9 +2334,6 @@ real, intent(in) :: x(n)
 !
 !***********************************************************
 !
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx
-real :: r, t
 !
 ! Local parameters -
 !
@@ -2487,6 +2488,10 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ind(n)
 double precision, intent(in) :: x(n)
+integer :: iu(21), il(21)
+integer :: m, i, j, k, l, ij, it, itt, indx
+real :: r
+double precision :: t
 !
 !***********************************************************
 !
@@ -2532,10 +2537,6 @@ double precision, intent(in) :: x(n)
 !
 !***********************************************************
 !
-integer :: iu(21), il(21)
-integer :: m, i, j, k, l, ij, it, itt, indx
-real :: r
-double precision :: t
 !
 ! Local parameters -
 !
@@ -2689,6 +2690,7 @@ subroutine iorder (a, ip, n)
 implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: a(n), ip(n)
+integer :: nn, k, j, ipj, temp
 !
 !***********************************************************
 !
@@ -2713,7 +2715,6 @@ integer, intent(inout) :: a(n), ip(n)
 !
 !***********************************************************
 !
-integer :: nn, k, j, ipj, temp
 !
 ! Local parameters -
 !
@@ -2763,6 +2764,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
 real, intent(inout) :: a(n)
+integer :: nn, k, j, ipj
+real :: temp
 !
 !***********************************************************
 !
@@ -2787,8 +2790,6 @@ real, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-integer :: nn, k, j, ipj
-real :: temp
 !
 ! Local parameters -
 !
@@ -2838,6 +2839,8 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: ip(n)
 double precision, intent(inout) :: a(n)
+integer :: nn, k, j, ipj
+double precision :: temp
 !
 !***********************************************************
 !
@@ -2862,8 +2865,6 @@ double precision, intent(inout) :: a(n)
 !
 !***********************************************************
 !
-integer :: nn, k, j, ipj
-double precision :: temp
 !
 ! Local parameters -
 !
@@ -3008,10 +3009,10 @@ end function cpabs
 double precision function dcpabs(x, y)
 implicit none
 double precision, intent(in) :: x, y
+double precision :: a
 !     --------------------------------------
 !     Evaluation of sqrt(x*x + y*y)
 !     --------------------------------------
-double precision :: a
 !
 if (dabs(x) .le. dabs(y)) go to 10
    a = y/x
@@ -3070,11 +3071,11 @@ end subroutine dcrec
 
 complex function cdiv (a, b)
 implicit none
+complex, intent(in) :: a, b
 real :: ai, ar, bi, br, d, t, u, v
 !-----------------------------------------------------------------------
 !              COMPLEX DIVISION a/b WHERE b IS NONZERO
 !-----------------------------------------------------------------------
-complex, intent(in) :: a, b
 !
 ar = real(a)
 ai = aimag(a)
@@ -3135,6 +3136,8 @@ subroutine dcsqrt (z, w)
 implicit none
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+double precision :: x, y, r
+double precision :: dcpabs
 ! ----------------------------------------------------------------------
 !        w = sqrt(z) for the double precision complex number z
 !
@@ -3145,8 +3148,6 @@ double precision, intent(inout) :: w(2)
 !     parts of the complex number z, and that w(1) and w(2) are
 !     the real and imaginary parts of w.
 ! ----------------------------------------------------------------------
-double precision :: x, y, r
-double precision :: dcpabs
 !
 x = z(1)
 y = z(2)
@@ -3469,13 +3470,13 @@ end subroutine constr
 real function ang (n, x, y)
 implicit none
 integer, intent(in) :: n
+real, intent(in) :: x(n), y(n)
 integer :: i
 real :: d, rx, ry
 real :: snrm2
 !-----------------------------------------------------------------------
 !           Computation of the angle between two vectors
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n)
 !
 if (n .lt. 2) go to 30
 rx = snrm2(n, x, 1)
@@ -3652,8 +3653,14 @@ end function cos1
 
 double precision function dsin1 (x)
 implicit none
+double precision, intent(in) :: x
 integer :: max, n
 integer :: ipmpar
+double precision :: a, pi, t, w
+double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
+&a12, a13
+double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
+&b12, b13
 !-----------------------------------------------------------------------
 !
 !                Double precision evaluation of sin(pi*x)
@@ -3666,12 +3673,6 @@ integer :: ipmpar
 !     is accurate to within 4 units of the 40-TH significant digit.
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: a, pi, t, w
-double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
-&a12, a13
-double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
-&b12, b13
 !------------------------
 data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
@@ -3749,8 +3750,14 @@ end function dsin1
 
 double precision function dcos1 (x)
 implicit none
+double precision, intent(in) :: x
 integer :: max, n
 integer :: ipmpar
+double precision :: a, pi, t, w
+double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
+&a12, a13
+double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
+&b12, b13
 !-----------------------------------------------------------------------
 !
 !                Double precision evaluation of cos(pi*x)
@@ -3763,12 +3770,6 @@ integer :: ipmpar
 !     is accurate to within 4 units of the 40-TH significant digit.
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: a, pi, t, w
-double precision :: a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, &
-&a12, a13
-double precision :: b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, &
-&b12, b13
 !------------------------
 data pi /3.141592653589793238462643383279502884197d+00/
 !------------------------
@@ -3846,13 +3847,13 @@ end function dcos1
 
 subroutine snhcsh (sinhm,coshm,x,isw)
 implicit none
-real :: ax, cp1, cp2, cp3, cp4, cp5, cq1, expx, sp1, sp2, sp3, &
-&sp4, sp5, sq1, xs, xx, zp1, zp2, zp3, zq1, zq2, zq3, zq4
-!
 integer, intent(in) :: isw
 real, intent(inout) :: sinhm, coshm
 real, intent(in) :: x
+real :: ax, cp1, cp2, cp3, cp4, cp5, cq1, expx, sp1, sp2, sp3, &
+&sp4, sp5, sq1, xs, xx, zp1, zp2, zp3, zq1, zq2, zq3, zq4
 real :: cut(5)
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -3980,11 +3981,11 @@ end function esum
 double precision function desum (mu, x)
 implicit none
 integer, intent(in) :: mu
+double precision, intent(in) :: x
+double precision :: w
 !-----------------------------------------------------------------------
 !                    Evaluation of exp(mu + x)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: w
 !
 if (x .gt. 0.d0) go to 10
 !
@@ -4541,10 +4542,10 @@ implicit none
 integer, intent(inout) :: l, m
 integer, intent(in) :: n
 real, intent(in) :: x0, y0
+real, intent(in) :: x(n), y(n)
 integer :: i, n0
 real :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
 real :: spmpar
-real, intent(in) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !     Given a polygonal line connecting the vertices (x(i),y(i))
 !     (i = 1,...,n) taken in this order. It is assumed that the
@@ -4625,19 +4626,19 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
 integer, intent(out) :: num
+real, intent(in) :: a(2), b(2), x(n), y(n)
+real, intent(inout) :: u(m), v(m)
 integer :: i, ind, nm1
 real :: d, diff, diff1, eps, h, hi, onem, onep, p, q, s, t, tmax, &
 &tmin, tol, tol0
 real :: spmpar
+real :: k, ki
 !-----------------------------------------------------------------------
 !
 !                 Intersection of a stright line
 !                       and polygonal path
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: a(2), b(2), x(n), y(n)
-real, intent(inout) :: u(m), v(m)
-real :: k, ki
 !----------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -4793,17 +4794,17 @@ implicit none
 integer, intent(inout) :: k
 integer, intent(in) :: m
 integer, intent(inout) :: n
+real, intent(inout) :: x(m), y(m)
+real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
 integer :: i, ii, isav, j, j0, k0, kp1, ksav, l, lbeg, lmax, lmin, &
 &lsav, mm1, mp1, nn
 real :: dx, dx0, dy, dy0, eps, h, onep, r, x1, xm, xmax, xmin, &
 &ymax, ymin
 real :: spmpar
+logical :: ibeg
 !-----------------------------------------------------------------------
 !           Obtaining the convex hull for a finite planar set
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(m), y(m)
-real, intent(inout) :: bx(*), by(*), vx(*), vy(*)
-logical :: ibeg
 !---------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -5181,10 +5182,10 @@ end subroutine hull
 
 real function parea(x, y, nb)
 implicit none
-integer :: i, n, nm1
-real :: a
 integer, intent(in) :: nb
 real, intent(in) :: x(nb), y(nb)
+integer :: i, n, nm1
+real :: a
 !
 !*****************************************************************
 !
@@ -5222,7 +5223,10 @@ integer, intent(inout) :: ind
 integer, intent(in) :: m, n
 integer, intent(inout) :: nb
 integer, intent(in) :: num
+integer, intent(in) :: pr(*)
+integer, intent(inout) :: ar(m), s(n), iwk(num)
 integer :: i, ii, np1
+integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
 !
 ! Subroutine to find one or more hamiltonian circuits in A
 ! directed graph of  n  vertices ( n .GT. 1 ) represented
@@ -5285,9 +5289,6 @@ integer :: i, ii, np1
 !
 !     integer pr(n + 1), ar(m), s(n), iwk(m + 8*n + 20)
 !
-integer, intent(in) :: pr(*)
-integer, intent(inout) :: ar(m), s(n), iwk(num)
-integer :: s0, pc, ac, vr, vc, p, subr, rbus, tor
 !
 np1 = n + 1
 if (ind .lt. 0 .or. ind .gt. 3) go to 20
@@ -5333,6 +5334,9 @@ integer, intent(inout) :: ind, ind0, jr, k
 integer, intent(in) :: m, n
 integer, intent(inout) :: nb
 integer, intent(in) :: np1
+integer, intent(in) :: pr(np1)
+integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
+&vc(n), p(n), subr(n), rbus(n), tor(n)
 integer :: i, iend, iff, ipi, it1, it2, j, j1, j2, ja, jj, jl, &
 &jsubr, k1, k2, l, l1, l2, ll, ll1, ll2, maxe, minu, mp1, nbo, np
 real :: dens, score
@@ -5373,9 +5377,6 @@ real :: dens, score
 ! ind0 = Value of ind when hc was previously called and
 !        there were no input errors.
 !
-integer, intent(in) :: pr(np1)
-integer, intent(inout) :: pc(np1), ar(m), ac(m), s(n), vr(n), &
-&vc(n), p(n), subr(n), rbus(n), tor(n)
 !
 nbo = nb
 nb = 0
@@ -5674,6 +5675,10 @@ integer, intent(inout) :: i2
 integer, intent(in) :: j, jr, k, m, n
 integer, intent(out) :: np
 integer, intent(in) :: np1
+integer, intent(in) :: subr(n)
+integer, intent(inout) :: rbus(n)
+integer, intent(in) :: ar(m), pr(np1)
+integer, intent(inout) :: s(n)
 integer :: ja, k1, l, l1, l2
 !
 ! Subroutine to find the starting vertex  i1  and the ending
@@ -5688,10 +5693,6 @@ integer :: ja, k1, l, l1, l2
 !    = -1  If the path contains  n  vertices but arc (i2,i1)
 !          does not exist.
 !
-integer, intent(in) :: subr(n)
-integer, intent(inout) :: rbus(n)
-integer, intent(in) :: ar(m), pr(np1)
-integer, intent(inout) :: s(n)
 !
 np = 0
 l = 1
@@ -5740,13 +5741,13 @@ end subroutine ipath
 subroutine fupd (a1, a2, p1, p2, v1, v2, i1, k1, n, m, np1)
 implicit none
 integer, intent(in) :: i1, k1, m, n, np1
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 integer :: ia, j, j1, j2, l, l1, l2
 !
 ! Forward step updating
 !
-integer, intent(inout) :: a1(m), a2(m)
-integer, intent(in) :: p1(np1), p2(np1)
-integer, intent(inout) :: v1(n), v2(n)
 !
 j1 = p1(i1) + 1
 j2 = p1(i1+1)
@@ -5769,13 +5770,13 @@ end subroutine fupd
 subroutine bupd (a1, a2, p1, p2, v1, v2, ii, k1, k2, n, m, np1)
 implicit none
 integer, intent(in) :: ii, k1, k2, m, n, np1
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 integer :: ia, l, l1, l2, ll, ll1, ll2
 !
 ! Backtracking step updating
 !
-integer, intent(inout) :: a1(m), a2(m)
-integer, intent(in) :: p1(np1), p2(np1)
-integer, intent(inout) :: v1(n), v2(n)
 !
 l1 = p1(ii) + 1
 l2 = p1(ii+1)
@@ -5800,13 +5801,13 @@ subroutine iupd(ia, ib, l, a1, a2, p1, p2, v1, v2, k1, n, m, np1)
 implicit none
 integer, intent(inout) :: ia
 integer, intent(in) :: ib, k1, l, m, n, np1
+integer, intent(inout) :: a1(m), a2(m)
+integer, intent(in) :: p1(np1), p2(np1)
+integer, intent(inout) :: v1(n), v2(n)
 integer :: iarc, j1, j2, jj, m1, m2, mm
 !
 ! Updating for implied arc
 !
-integer, intent(inout) :: a1(m), a2(m)
-integer, intent(in) :: p1(np1), p2(np1)
-integer, intent(inout) :: v1(n), v2(n)
 !
 m1 = p1(ib) + 1
 m2 = p1(ib+1)
@@ -5840,6 +5841,9 @@ integer, intent(inout) :: jj
 integer, intent(in) :: k1
 integer, intent(inout) :: ll
 integer, intent(in) :: m, n, np1
+integer, intent(inout) :: ar(m), ac(m)
+integer, intent(in) :: pr(np1), pc(np1)
+integer, intent(inout) :: vr(n), vc(n)
 integer :: j1, j2, l1, l2
 !
 ! Subroutine to remove arc  (ia,ib)  from the graph.
@@ -5854,9 +5858,6 @@ integer :: j1, j2, l1, l2
 ! ll =  Location of the element of  ac  corresponding to the
 !       REMOVED ARC (DEFINED ONLY IF  jj .GT. 0 ).
 !
-integer, intent(inout) :: ar(m), ac(m)
-integer, intent(in) :: pr(np1), pc(np1)
-integer, intent(inout) :: vr(n), vc(n)
 !
 j1 = pr(ia) + 1
 j2 = pr(ia+1)
@@ -5887,8 +5888,11 @@ end subroutine rarc
 subroutine cerf (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: i
 real :: c, c2, dm, pm, qm, r, sn, ss, x, y
+real :: cd(18), ce(18), ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 !-----------------------------------------------------------------------
 !
 !               Computation of the complex error function
@@ -5899,9 +5903,6 @@ real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 !                        w = erfc(z)  otherwise
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
-real :: cd(18), ce(18), ef(2), qf(2), sm(2), sz(2), tm(2), ts(2)
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -6044,9 +6045,12 @@ end subroutine cerf
 subroutine cerfc (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: i
 real :: c, c2, dm, pm, qm, r, sn, ss, x, y
 real :: exparg
+real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -6057,9 +6061,6 @@ real :: exparg
 !           w = exp(x*x)*erfc(z)  otherwise
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
-real :: cd(18), ce(18), qf(2), sm(2), sz(2), tm(2), ts(2)
 !------------------------
 !     c = 1/sqrt(pi)
 !------------------------
@@ -6225,10 +6226,10 @@ real function erf (x)
 implicit none
 real, intent(in) :: x
 real :: ax, bot, c, t, top, x2
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
 !-----------------------------------------------------------------------
 !             Evaluation of the real error function
 !-----------------------------------------------------------------------
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
 !-------------------------
 data c /.564189583547756/
 !-------------------------
@@ -6289,11 +6290,11 @@ implicit none
 real, intent(in) :: x
 real :: ax, bot, c, e, t, top
 real :: exparg
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
+double precision :: w
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !-----------------------------------------------------------------------
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
-double precision :: w
 !-------------------------
 data c /.564189583547756/
 !-------------------------
@@ -6373,18 +6374,18 @@ end function erfc
 
 real function erfc1 (ind, x)
 implicit none
-real :: exparg
 integer, intent(in) :: ind
 real, intent(in) :: x
+real :: exparg
 real :: ax, bot, c, e, t, top
+real :: a(5), b(3), p(8), q(8), r(5), s(4)
+double precision :: w
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !
 !          erfc1(ind,x) = erfc(x)            if ind = 0
 !          erfc1(ind,x) = exp(x*x)*erfc(x)   otherwise
 !-----------------------------------------------------------------------
-real :: a(5), b(3), p(8), q(8), r(5), s(4)
-double precision :: w
 !-------------------------
 data c /.564189583547756/
 !-------------------------
@@ -6471,6 +6472,15 @@ end function erfc1
 subroutine dcerf (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
+double precision :: m, n, n2, n4, np1
+double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: a0(2), an(2), b0(2), bn(2)
+double precision :: g0(2), gn(2), h0(2), hn(2)
+double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
+&wn(2)
+double precision :: anorm, dpmpar
 !-----------------------------------------------------------------------
 !
 !               Computation of the complex error function
@@ -6481,15 +6491,6 @@ integer, intent(in) :: mo
 !                       w = erfc(z)   otherwise
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1
-double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
-double precision :: a0(2), an(2), b0(2), bn(2)
-double precision :: g0(2), gn(2), h0(2), hn(2)
-double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
-&wn(2)
-double precision :: anorm, dpmpar
 !------------------------
 anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
@@ -6753,6 +6754,15 @@ end subroutine dcerf
 subroutine dcerfc (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
+double precision :: m, n, n2, n4, np1
+double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
+double precision :: a0(2), an(2), b0(2), bn(2)
+double precision :: g0(2), gn(2), h0(2), hn(2)
+double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
+&wn(2)
+double precision :: anorm, dpmpar, dxparg
 !-----------------------------------------------------------------------
 !
 !              Computation of the complex coerror function
@@ -6763,15 +6773,6 @@ integer, intent(in) :: mo
 !           w = dexp(x*x)*erfc(z)  otherwise
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: m, n, n2, n4, np1
-double precision :: c, c2, d, d2, e, eps, r, sn, tol, x, y
-double precision :: a0(2), an(2), b0(2), bn(2)
-double precision :: g0(2), gn(2), h0(2), hn(2)
-double precision :: qf(2), sm(2), sz(2), tm(2), ts(2), w0(2), &
-&wn(2)
-double precision :: anorm, dpmpar, dxparg
 !------------------------
 anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------
@@ -7040,15 +7041,15 @@ end subroutine dcerfc
 subroutine erfcm2 (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
 integer :: j, n
+double precision :: a(63), c, e, eps, h(2), t(2), tol, x, y
+double precision :: anorm, dpmpar
 !-----------------------------------------------------------------------
 !           Calculation of erfc(z) using the Taylor series
 !                          AROUND Z0 = 2
 !-----------------------------------------------------------------------
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: a(63), c, e, eps, h(2), t(2), tol, x, y
-double precision :: anorm, dpmpar
 !------------------------------
 anorm(x,y) = dmax1(dabs(x),dabs(y))
 !------------------------------
@@ -7180,15 +7181,15 @@ end subroutine erfcm2
 
 double precision function derf (x)
 implicit none
-integer :: i, k
-!-----------------------------------------------------------------------
-!        Double precision evaluation of the error function
-!-----------------------------------------------------------------------
-double precision :: ax, t
 double precision, intent(in) :: x
+integer :: i, k
+double precision :: ax, t
 double precision :: w
 double precision :: a(21)
 double precision :: derfc0
+!-----------------------------------------------------------------------
+!        Double precision evaluation of the error function
+!-----------------------------------------------------------------------
 !-------------------------------
 data a(1)  / .1283791670955125738961589031215d+00/, &
 &a(2)  /-.3761263890318375246320529677070d+00/, &
@@ -7241,14 +7242,14 @@ end function derf
 
 double precision function derfc (x)
 implicit none
-integer :: i, k
-!-----------------------------------------------------------------------
-!         Evaluation of the complementary error function
-!-----------------------------------------------------------------------
 double precision, intent(in) :: x
+integer :: i, k
 double precision :: ax, t, w
 double precision :: a(21)
 double precision :: derfc0, dxparg
+!-----------------------------------------------------------------------
+!         Evaluation of the complementary error function
+!-----------------------------------------------------------------------
 !-------------------------------
 data a(1)  / .1283791670955125738961589031215d+00/, &
 &a(2)  /-.3761263890318375246320529677070d+00/, &
@@ -7308,7 +7309,11 @@ end function derfc
 double precision function derfc1 (ind, x)
 implicit none
 integer, intent(in) :: ind
+double precision, intent(in) :: x
 integer :: i, k
+double precision :: ax, t, w
+double precision :: a(21)
+double precision :: derfc0, dxparg
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the complementary error function
@@ -7317,10 +7322,6 @@ integer :: i, k
 !          derfc1(ind,x) = exp(x*x)*erfc(x)  otherwise
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: ax, t, w
-double precision :: a(21)
-double precision :: derfc0, dxparg
 !-------------------------------
 data a(1)  / .1283791670955125738961589031215d+00/, &
 &a(2)  /-.3761263890318375246320529677070d+00/, &
@@ -7556,6 +7557,7 @@ implicit none
 real, intent(in) :: p, q
 real :: c, c1, c2, eps, s, t, v, v1
 real :: spmpar
+real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
 !
 !              Evaluation of the inverse error function
@@ -7570,7 +7572,6 @@ real :: spmpar
 !     Reference. Mathematics of computation,oct.1976,PP.827-830.
 !                  J.M.Blair,C.A.Edwards,J.H.Johnson
 !-----------------------------------------------------------------------
-real :: a(6), b(6), a1(7), b1(7), a2(9), b2(8), a3(9), b3(6)
 !-----------------------------------------------------------------------
 !     c2 = ln(1.e-100)
 !-----------------------------------------------------------------------
@@ -7969,14 +7970,14 @@ end function aerf
 
 double precision function daerf (x, h)
 implicit none
-integer :: j
-!-----------------------------------------------------------------------
-!             Computation of erf(x + h) - erf(x - h)
-!-----------------------------------------------------------------------
 double precision, intent(in) :: x, h
+integer :: j
 double precision :: ah, ax, a2, c, dn2, e, eps, hf, hg, h2, h3, n, &
 &n1, p, s, st, t, u, v, xmh, xph, x2, z
 double precision :: derf, derfc, dpmpar, depsln, dxparg
+!-----------------------------------------------------------------------
+!             Computation of erf(x + h) - erf(x - h)
+!-----------------------------------------------------------------------
 !---------------------
 !     c = 2/sqrt(pi)
 !     p = ln(9*sqrt(pi))
@@ -8185,6 +8186,10 @@ end subroutine pni
 subroutine dpni (p, q, d, w, ierr)
 implicit none
 integer, intent(inout) :: ierr
+double precision, intent(in) :: p, q, d
+double precision, intent(inout) :: w
+double precision :: eps, rt2, u, v, t
+double precision :: dpmpar, derfi
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the inverse normal distribution function
@@ -8206,10 +8211,6 @@ integer, intent(inout) :: ierr
 !       ierr = 2  d IS INCORRECT.
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: p, q, d
-double precision, intent(inout) :: w
-double precision :: eps, rt2, u, v, t
-double precision :: dpmpar, derfi
 !------------------------
 !     rt2 = sqrt(2)
 !------------------------
@@ -8241,7 +8242,11 @@ end subroutine dpni
 
 real function daw(x)
 implicit none
+real, intent(in) :: x
 integer :: i
+real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
+&frac, sump, sumq, w2
+real :: y, xlarge, xsmall
 !-----------------------------------------------------------------------
 !
 !     This function computes single precision values of dawsons
@@ -8256,10 +8261,6 @@ integer :: i
 !     Cody, Paciorek and Thacher.
 !
 !-----------------------------------------------------------------------
-real :: p1(9), q1(9), p2(8), q2(7), p3(8), q3(7), p4(7), q4(6), &
-&frac, sump, sumq, w2
-real, intent(in) :: x
-real :: y, xlarge, xsmall
 !---------------
 data xlarge/16777216.0/, xsmall/.59604644775391e-07/
 !---------------
@@ -8387,13 +8388,13 @@ end function daw
 
 double precision function dpdaw (x)
 implicit none
+double precision, intent(in) :: x
 integer :: i, k
+double precision :: a(20), b(45), ax, eps, t, w
+double precision :: dcsevl, dpdaw0
 !-----------------------------------------------------------------------
 !            Double precision computation of dawsons integral
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: a(20), b(45), ax, eps, t, w
-double precision :: dcsevl, dpdaw0
 !----------------------------
 data eps /1.d-31/
 !----------------------------
@@ -8695,10 +8696,13 @@ end function dpdaw0
 subroutine cfrnli (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: i
 real :: c, c0, dm, pm, qm, r, ss, x, y
 real :: exparg
 real :: cpabs
+real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
 !-----------------------------------------------------------------------
 !
 !            Computation of the complex fresnel integral E(z)
@@ -8709,9 +8713,6 @@ real :: cpabs
 !                      w = exp(-z)*e(z)  otherwise
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
-real :: cd(18), ce(18), qf(2), sm(2), tm(2), ts(2), zr(2)
 !------------------------
 !     c = 1/sqrt(pi)
 !     c0 = -1/sqrt(2)
@@ -8880,15 +8881,15 @@ real :: cy, f, fd, fn, g, gd, gn, pi, pix, pixx, r, sy, x, xx, y
 real :: sin1
 real :: cos1
 integer :: ipmpar
-!-----------------------------------------------------------------------
-!             Evaluation of the real fresnel integrals
-!-----------------------------------------------------------------------
 real :: n
 real :: a(6), b(6), cp(13), sp(13)
 real :: pn(6), pd(6), qn(6), qd(6)
 real :: an(6), ad(6), bn(6), bd(6)
 real :: cn(5), cd(5), dn(5), dd(5)
 real :: fp(7), gp(7), p(6), q(6)
+!-----------------------------------------------------------------------
+!             Evaluation of the real fresnel integrals
+!-----------------------------------------------------------------------
 !--------------------------
 data pi/3.1415926535898/
 !--------------------------
@@ -9097,21 +9098,21 @@ end subroutine frnl
 subroutine cexpli (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: i
 real :: c, cy, d, e, eps, euler, pi, qm, r, ss, sy, tol, u, x, y
 real :: anorm
 real :: spmpar
 real :: cpabs
-!-----------------------------------------------------------------------
-!           Evaluation of the complex exponential integral
-!-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
 real :: n, np1
 real :: cd(18), ce(18)
 real :: qf(2), sm(2), tm(2), ts(2)
 real :: g0(2), gn(2), h0(2), hn(2), wn(2)
 logical :: ind
+!-----------------------------------------------------------------------
+!           Evaluation of the complex exponential integral
+!-----------------------------------------------------------------------
 !-------------------------
 anorm(x,y) = amax1(abs(x),abs(y))
 !-------------------------
@@ -9286,20 +9287,20 @@ end subroutine cexpli
 
 subroutine expli(int,arg,result,ierr)
 implicit none
+real, intent(in) :: arg
+real, intent(inout) :: result
+integer, intent(in) :: int
+integer, intent(out) :: ierr
 integer :: m
 real :: csevl
 real :: alnrel
-!
 real :: a(6), b(5), c(7), d(7), e(7), f(7), p1(8), q1(8), p2(8), &
 &q2(7), p3(8), q3(7), p4(8), q4(7), r(20), px(9), qx(9), frac, &
 &sump, sumq, t, w, x, x0, xx0, xmx0, y, dexp40, xmax, xmin, ei
-real, intent(in) :: arg
-real, intent(inout) :: result
 real :: exparg
 integer :: i
-integer, intent(in) :: int
-integer, intent(out) :: ierr
 double precision :: dx0
+!
 !-----------------------------------------------------------------------
 !
 !     This subroutine computes the exponential integrals
@@ -9654,7 +9655,12 @@ end function dei1
 
 double precision function de1e(x)
 implicit none
+double precision, intent(in) :: x
 integer :: m
+double precision :: c, eps, t, w
+double precision :: a(50), b(60), d(41), e(29), r(25), p(50), &
+&q(64)
+double precision :: dei0, dcsevl, dpmpar
 !-----------------------------------------------------------------------
 !
 !     Let E1(x) denote the exponential integral for positive x and
@@ -9722,11 +9728,6 @@ integer :: m
 !                                    decimal places required  32.20
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: c, eps, t, w
-double precision :: a(50), b(60), d(41), e(29), r(25), p(50), &
-&q(64)
-double precision :: dei0, dcsevl, dpmpar
 !------------------------------
 data a(1)  / .3284394579616699087873844201881d-01/, &
 &a(2)  /-.1669920452031362851476184343387d-01/, &
@@ -10129,7 +10130,13 @@ end function de1e
 
 double precision function dei0 (x, eps)
 implicit none
+double precision, intent(in) :: eps
+double precision, intent(in) :: x
 integer :: n
+double precision :: a(40), c
+double precision :: h, t
+double precision :: w
+double precision :: dk1, dk2, dk3, db, db2, dx
 !-----------------------------------------------------------------------
 !
 !            Taylor series expansion of EI(x) around X0,
@@ -10141,12 +10148,6 @@ integer :: n
 !        Naval Surface Warfare Center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-double precision :: a(40), c
-double precision, intent(in) :: eps
-double precision :: h, t
-double precision, intent(in) :: x
-double precision :: w
-double precision :: dk1, dk2, dk3, db, db2, dx
 !-------------------------
 data dk1 /25598514349.d0/, dk2 /12212826724.d0/, &
 &dk3 /52346020729.d0/
@@ -10469,15 +10470,15 @@ end function cin
 
 subroutine cexexi (z, w)
 implicit none
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: i
 real :: const, euler, pm, qm, r, ss, x, y, zeta2
+real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
+real :: ed(18), ee(18), dd(19), de(19), cd(18), ce(18)
 !-----------------------------------------------------------------------
 !        Computation of the exponential exponential integral
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
-real :: ts(2), sr(2), sm(2), tm(2), qf(2), zl(2)
-real :: ed(18), ee(18), dd(19), de(19), cd(18), ce(18)
 !-------------------------
 !     euler = euler constant
 !     const = (pi*pi)/4

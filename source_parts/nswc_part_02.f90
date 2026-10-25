@@ -1,13 +1,13 @@
 complex function cli(z)
 implicit none
+complex, intent(in) :: z
 integer :: n
 real :: cpabs
+real :: qb(25), qf(2), dl(2), ds, zd(2), zl(2)
+real :: az(2), c, pm, r, sm(2), tm(2), ts(2), sr(2)
 !     ******************************************************************
 !     Computation of the complex logarithmic integral
 !     ******************************************************************
-complex, intent(in) :: z
-real :: qb(25), qf(2), dl(2), ds, zd(2), zl(2)
-real :: az(2), c, pm, r, sm(2), tm(2), ts(2), sr(2)
 !     ---------------------
 !     c = pi**2/6
 !     ---------------------
@@ -121,6 +121,8 @@ implicit none
 real, intent(in) :: x
 integer :: i, l
 real :: const, t, w
+real :: a(5), b(6), c(10), d(2), e(18), p(4), q(8), r(7), s(6)
+double precision :: x0
 !-----------------------------------------------------------------------
 !            Computation of the real dilogarithm function
 !-----------------------------------------------------------------------
@@ -129,8 +131,6 @@ real :: const, t, w
 !        naval surface weapons center
 !        Dahlgren Virginia
 !-----------------------------------------------------------------------
-real :: a(5), b(6), c(10), d(2), e(18), p(4), q(8), r(7), s(6)
-double precision :: x0
 !--------------------------
 !     const = pi**2/6
 !     x0 = Zero of the real dilogarithm function
@@ -278,6 +278,8 @@ end function ali
 subroutine cgamma (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: j, k, l, m, max, n, nm1
 real :: a, a1, a2, alpi, c, cn, cut, d, e2t, eps, et, h1, h2, &
 &hl2p, pi, pi2, s, s1, s2, sn, t, t1, t2, u, u1, u2, v1, v2, w1, &
@@ -285,6 +287,8 @@ real :: a, a1, a2, alpi, c, cn, cut, d, e2t, eps, et, h1, h2, &
 real :: rexp
 integer :: ipmpar
 real :: spmpar
+complex :: eta, eta2, sum
+real :: c0(12)
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the complex gamma and LOGGAMMA functions
@@ -297,10 +301,6 @@ real :: spmpar
 !                 w = ln(gamma(z))   otherwise
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
-complex :: eta, eta2, sum
-real :: c0(12)
 !---------------------------
 !     alpi = log(pi)
 !     hl2p = 0.5 * log(2*pi)
@@ -518,14 +518,14 @@ end subroutine cgamma
 
 complex function cgam0 (z)
 implicit none
+complex, intent(in) :: z
 integer :: i, k, n
 real :: x, y
+complex :: w
+real :: a(25)
 !-----------------------------------------------------------------------
 !          Evaluation of 1/gamma(1 + z)  for abs(z) .LT. 1.0
 !-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex :: w
-real :: a(25)
 !-----------------------
 data a(1)  / .577215664901533e+00/, a(2)  /-.655878071520254e+00/, &
 &a(3)  /-.420026350340952e-01/, a(4)  / .166538611382291e+00/, &
@@ -563,6 +563,8 @@ integer :: i, j, m, n
 real :: bot, pi, r1, r2, r3, r4, r5, s, t, top, w, x
 real :: exparg
 real :: spmpar
+real :: p(7), q(7)
+double precision :: d, g, z, lnx, glog
 !-----------------------------------------------------------------------
 !
 !         Evaluation of the gamma function for real arguments
@@ -577,8 +579,6 @@ real :: spmpar
 !          naval surface weapons center
 !          Dahlgren, Virginia
 !-----------------------------------------------------------------------
-real :: p(7), q(7)
-double precision :: d, g, z, lnx, glog
 !--------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !--------------------------
@@ -692,13 +692,13 @@ end function gamma
 
 double precision function glog(x)
 implicit none
+real, intent(in) :: x
 integer :: n
 real :: c1, c2, c3, t, t2
+double precision :: z, w(163)
 !     -------------------
 !     Evaluation of LN(x) for x .GE. 15
 !     -------------------
-real, intent(in) :: x
-double precision :: z, w(163)
 !     -------------------
 data c1/.286228750476730/, c2/.399999628131494/, &
 &c3/.666666666752663/
@@ -809,10 +809,10 @@ real function gam1(a)
 implicit none
 real, intent(in) :: a
 real :: bot, d, s1, s2, t, top, w
+real :: p(7), q(5), r(9)
 !-----------------------------------------------------------------------
 !     Computation of 1/gamma(a+1) - 1  For -0.5 .LE. a .LE. 1.5
 !-----------------------------------------------------------------------
-real :: p(7), q(5), r(9)
 !------------------------
 data p(1)/ .577215664901533e+00/, p(2)/-.409078193005776e+00/, &
 &p(3)/-.230975380857675e+00/, p(4)/ .597275330452234e-01/, &
@@ -862,8 +862,8 @@ end function gam1
 
 real function gamln (a)
 implicit none
-real :: gamln1
 real, intent(in) :: a
+real :: gamln1
 integer :: i, n
 real :: c0, c1, c2, c3, c4, c5, d, t, w
 !-----------------------------------------------------------------------
@@ -943,8 +943,15 @@ end function gamln1
 subroutine dcgama (mo, z, w)
 implicit none
 integer, intent(in) :: mo
+double precision, intent(in) :: z(2)
+double precision, intent(inout) :: w(2)
 integer :: j, k, max, n, nm1
 integer :: ipmpar
+double precision :: c0(30), dlpi, hl2p, pi, pi2
+double precision :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
+&h2, q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, &
+&x, y, y2
+double precision :: dpmpar, drexp
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the complex gamma and LOGGAMMA functions
@@ -960,13 +967,6 @@ integer :: ipmpar
 !                 w = ln(gamma(z))   otherwise
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: z(2)
-double precision, intent(inout) :: w(2)
-double precision :: c0(30), dlpi, hl2p, pi, pi2
-double precision :: a, a1, a2, c, cn, cut, d, eps, et, e2t, h1, &
-&h2, q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, &
-&x, y, y2
-double precision :: dpmpar, drexp
 !---------------------------
 !     dlpi = log(pi)
 !     hl2p = 0.5 * log(2*pi)
@@ -1217,7 +1217,10 @@ end subroutine dcgama
 
 double precision function dgamma(a)
 implicit none
+double precision, intent(in) :: a
 integer :: j, n
+double precision :: d, pi, s, t, x, w
+double precision :: dpmpar, dsin1, dgam1, dpdel, dxparg
 !-----------------------------------------------------------------------
 !
 !                Evaluation of the gamma function for
@@ -1233,9 +1236,6 @@ integer :: j, n
 !          naval surface weapons center
 !          Dahlgren, Virginia
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision :: d, pi, s, t, x, w
-double precision :: dpmpar, dsin1, dgam1, dpdel, dxparg
 !-----------------------------------------------------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
@@ -1319,7 +1319,9 @@ end function dgamma
 
 double precision function dpdel(x)
 implicit none
+double precision, intent(in) :: x
 integer :: i, k
+double precision :: a(15), t, w
 !-----------------------------------------------------------------------
 !
 !     Computation of the function DEL(x) for  x .GE. 10  where
@@ -1332,8 +1334,6 @@ integer :: i, k
 !     obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: x
-double precision :: a(15), t, w
 !-----------------------------------------------------------------------
 data a(1)  / .833333333333333333333333333333d-01/, &
 &a(2)  /-.277777777777777777777777752282d-04/, &
@@ -1531,7 +1531,10 @@ end function dgam1
 
 double precision function dgamln (a)
 implicit none
+double precision, intent(in) :: a
 integer :: i, n
+double precision :: d, x, w
+double precision :: dgmln1, dpdel
 !-----------------------------------------------------------------------
 !
 !           Evaluation of LN(gamma(a)) for positive A
@@ -1543,9 +1546,6 @@ integer :: i, n
 !-----------------------------------------------------------------------
 !     d = 0.5*(ln(2*pi) - 1)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision :: d, x, w
-double precision :: dgmln1, dpdel
 !--------------------------
 data d /0.41893853320467274178032973640562d0/
 !--------------------------
@@ -1588,20 +1588,20 @@ end function dgmln1
 
 subroutine cpsi (z, w)
 implicit none
+complex, intent(in) :: z
+complex, intent(inout) :: w
 integer :: j, k, l, m, max
 real :: a, a1, a2, c1, c2, cn, eps, et, h1, h2, pi, pi2, s, s1, &
 &s2, sn, t, u, w1, w2, x, y, y2
 real :: rexp
 integer :: ipmpar
 real :: spmpar
-!-----------------------------------------------------------------------
-!           Evaluation of the complex digamma function
-!-----------------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: w
 complex :: eta, eta2, sum
 real :: c0(12)
 double precision :: ds1, ds2
+!-----------------------------------------------------------------------
+!           Evaluation of the complex digamma function
+!-----------------------------------------------------------------------
 !----------------------------
 !     pi2 = 2*pi
 !----------------------------
@@ -1727,11 +1727,13 @@ end subroutine cpsi
 
 real function psi(xx)
 implicit none
+real, intent(in) :: xx
 integer :: ipmpar
 real :: spmpar
-real, intent(in) :: xx
 integer :: i, m, n, nq
 real :: aug, den, piov4, sgn, upper, w, x, xmax1, xmx0, xsmall, z
+real :: p1(7), p2(4), q1(6), q2(4)
+double precision :: dx0
 !---------------------------------------------------------------------
 !
 !                 Evaluation of the digamma function
@@ -1750,8 +1752,6 @@ real :: aug, den, piov4, sgn, upper, w, x, xmax1, xmx0, xsmall, z
 !     package of special function subroutines. Psi was modified by
 !     A.H. Morris (NSWC).
 !---------------------------------------------------------------------
-real :: p1(7), p2(4), q1(6), q2(4)
-double precision :: dx0
 !---------------------------------------------------------------------
 !
 !     piov4 = pi/4
@@ -1905,18 +1905,18 @@ end function psi
 
 subroutine dcpsi (z, w)
 implicit none
-integer :: j, k, m, max
-integer :: ipmpar
-!-----------------------------------------------------------------------
-!           Evaluation of the complex digamma function
-!-----------------------------------------------------------------------
 double precision, intent(in) :: z(2)
 double precision, intent(inout) :: w(2)
+integer :: j, k, m, max
+integer :: ipmpar
 double precision :: c0(30), pi, pi2
 double precision :: a, a1, a2, cn, cut, c1, c2, eps, et, h1, h2, &
 &q1, q2, s, sn, s1, s2, t, t1, t2, u, u1, u2, v1, v2, w1, w2, x, y, &
 &y2
 double precision :: drexp, dpmpar
+!-----------------------------------------------------------------------
+!           Evaluation of the complex digamma function
+!-----------------------------------------------------------------------
 !----------------------------
 !     pi2 = 2*pi
 !----------------------------
@@ -2080,8 +2080,11 @@ end subroutine dcpsi
 
 double precision function dpsi(a)
 implicit none
+double precision, intent(in) :: a
 integer :: ipmpar
 integer :: j, k, l, max, n
+double precision :: c(42), eps, p(15), pi, s, t, x, x0, xmax, w
+double precision :: dcsevl, dpsi0, dpmpar
 !-----------------------------------------------------------------------
 !
 !               Evaluation of the digamma function for
@@ -2111,9 +2114,6 @@ integer :: j, k, l, max, n
 !     Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision :: c(42), eps, p(15), pi, s, t, x, x0, xmax, w
-double precision :: dcsevl, dpsi0, dpmpar
 !----------------------------
 data pi /3.1415926535897932384626433832795d0/
 data x0 /.46163214496836234126265954232572d0/
@@ -2274,7 +2274,11 @@ end function dpsi
 
 double precision function dpsi0 (x)
 implicit none
+double precision, intent(in) :: x
 integer :: i, l, n, nm1
+double precision :: a(20), h
+double precision :: w
+double precision :: dk1, dk2, dk3, db, db2, dx
 !-----------------------------------------------------------------------
 !
 !            Taylor series expansion of psi(x) around X0,
@@ -2285,10 +2289,6 @@ integer :: i, l, n, nm1
 !        Naval Surface Warfare Center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-double precision :: a(20), h
-double precision, intent(in) :: x
-double precision :: w
-double precision :: dk1, dk2, dk3, db, db2, dx
 !-------------------------
 data dk1 /100442596182.d0/, dk2 /51069247913.d0/, &
 &dk3 /53827985572.d0/
@@ -2350,7 +2350,14 @@ subroutine psidf (x, n, m, ans, iflag)
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: m, n
+real, intent(in) :: x
+real, intent(inout) :: ans(m)
 integer :: i, j, k, mx, nmax, nn, np, nx
+real :: alpha, arg, beta, c, den, elim, eps, fln, fn, fnp, fns, &
+&fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol
+real :: xdmln, xdmy, xinc, xln, xm, xmin
+real :: b(22), trm(22), trmr(100)
+real :: epsln, exparg, spmpar
 !-----------------------------------------------------------------------
 !
 !         psidf computes m member sequences of scaled derivatives of
@@ -2419,13 +2426,6 @@ integer :: i, j, k, mx, nmax, nn, np, nx
 !         of standards by m. Abramowitz and I.A. Stegun, 1964, PP.
 !         258-260, equations 6.3.5, 6.3.18, 6.4.6, 6.4.9, 6.4.10.
 !-----------------------------------------------------------------------
-real :: alpha, arg, beta, c, den, elim, eps, fln, fn, fnp, fns, &
-&fx, nd, rxsq, s, t, ta, tk, tol, tols, tss, tst, tt, t1, t2, wdtol
-real, intent(in) :: x
-real :: xdmln, xdmy, xinc, xln, xm, xmin
-real, intent(inout) :: ans(m)
-real :: b(22), trm(22), trmr(100)
-real :: epsln, exparg, spmpar
 !------------------------
 !     c = 1/ln(10)
 !------------------------
@@ -2818,8 +2818,8 @@ end function bcorr
 
 real function algdiv (a, b)
 implicit none
-real :: alnrel
 real, intent(in) :: a, b
+real :: alnrel
 real :: c, c0, c1, c2, c3, c4, c5, d, h, s11, s3, s5, s7, s9, t, &
 &u, v, w, x, x2
 !-----------------------------------------------------------------------
@@ -2875,13 +2875,13 @@ end function algdiv
 
 double precision function dbetln (a0, b0)
 implicit none
+double precision, intent(in) :: a0, b0
 integer :: i, n
+double precision :: a, b, c, e, h, sn, u, v, w, z
+double precision :: dbcorr, dgamln, dgsmln, dlgdiv, dlnrel
 !-----------------------------------------------------------------------
 !     Evaluation of the logarithm of the beta function
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a0, b0
-double precision :: a, b, c, e, h, sn, u, v, w, z
-double precision :: dbcorr, dgamln, dgsmln, dlgdiv, dlnrel
 !--------------------------
 !     e = 0.5*ln(2*pi)
 !--------------------------
@@ -2986,7 +2986,9 @@ end function dgsmln
 
 double precision function dbcorr (a0, b0)
 implicit none
+double precision, intent(in) :: a0, b0
 integer :: j, k
+double precision :: a, b, c, e(15), h, s(15), t, w, x, x2, z
 !-----------------------------------------------------------------------
 !
 !     Evaluation of del(a) + del(b0) - Del(a) + b0) where
@@ -3000,8 +3002,6 @@ integer :: j, k
 !     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a0, b0
-double precision :: a, b, c, e(15), h, s(15), t, w, x, x2, z
 !--------------------------
 data e(1)  / .833333333333333333333333333333d-01/, &
 &e(2)  /-.277777777777777777777777752282d-04/, &
@@ -3059,7 +3059,10 @@ end function dbcorr
 
 double precision function dlgdiv (a, b)
 implicit none
+double precision, intent(in) :: a, b
 integer :: j, k
+double precision :: c, d, e(15), h, s(15), t, u, v, w, x, x2
+double precision :: dlnrel
 !-----------------------------------------------------------------------
 !
 !     Computation of LN(gamma(b)/gamma(a+b)) for b .GE. 10
@@ -3073,9 +3076,6 @@ integer :: j, k
 !     SLATEC library obtained by Wayne Fullerton (Los Alamos).
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, b
-double precision :: c, d, e(15), h, s(15), t, u, v, w, x, x2
-double precision :: dlnrel
 !--------------------------
 data e(1)  / .833333333333333333333333333333d-01/, &
 &e(2)  /-.277777777777777777777777752282d-04/, &
@@ -3151,6 +3151,11 @@ real :: erfc1
 real :: rcomp
 real :: rlog
 real :: spmpar
+real :: j, l, acc0(3), big(3), e0(3), x0(3), wk(20)
+real :: a0(4), a1(4), a2(2), a3(2), a4(2), a5(2), a6(2), a7(2), &
+&a8(2)
+real :: b0(6), b1(4), b2(5), b3(5), b4(4), b5(3), b6(2), b7(2)
+real :: d0(6), d1(4), d2(2), d3(2), d4(1), d5(1), d6(1)
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the incomplete gamma ratio functions
@@ -3182,11 +3187,6 @@ real :: spmpar
 !        Dahlgren, Virginia
 !     revised ... DEC 1991
 !-------------------------
-real :: j, l, acc0(3), big(3), e0(3), x0(3), wk(20)
-real :: a0(4), a1(4), a2(2), a3(2), a4(2), a5(2), a6(2), a7(2), &
-&a8(2)
-real :: b0(6), b1(4), b2(5), b3(5), b4(4), b5(3), b6(2), b7(2)
-real :: d0(6), d1(4), d2(2), d3(2), d4(1), d5(1), d6(1)
 !-------------------------
 data acc0(1)/5.e-15/, acc0(2)/5.e-7/, acc0(3)/5.e-4/
 data big(1)/25.0/, big(2)/14.0/, big(3)/10.0/
@@ -3651,6 +3651,7 @@ real :: rcomp
 real :: spmpar
 real :: alnrel
 real :: gamln
+real :: ln10, bmin(2), emin(2)
 !-----------------------------------------------------------------------
 !
 !             Inverse incomplete gamma ratio function
@@ -3706,7 +3707,6 @@ real :: gamln
 !        Dahlgren, Virginia
 !     revised ... January 1992
 !------------------------
-real :: ln10, bmin(2), emin(2)
 !------------------------
 !     ln10 = ln(10)
 !     c = Euler constant
@@ -3977,7 +3977,14 @@ end subroutine gaminv
 subroutine dgrat (a, x, ans, qans, ierr)
 implicit none
 integer, intent(inout) :: ierr
+double precision, intent(in) :: a, x
+double precision, intent(inout) :: ans, qans
 integer :: i, m, max, n
+double precision :: amn, alog10, apn, a2n, a2nm1, big, b2n, b2nm1, &
+&c, e, g, h, j, l, r, rta, rtpi, rtx, s, sum, t, tol, twoa, u, x0, &
+&y, z, wk(20)
+double precision :: dpmpar, drlog, drexp
+double precision :: derf, derfc1, dgam1, drcomp
 !-----------------------------------------------------------------------
 !
 !        Evaluation of the incomplete gamma ratio functions
@@ -3989,13 +3996,6 @@ integer :: i, m, max, n
 !        Dahlgren, Virginia
 !     revised ... jan 1992
 !-------------------------
-double precision, intent(in) :: a, x
-double precision, intent(inout) :: ans, qans
-double precision :: amn, alog10, apn, a2n, a2nm1, big, b2n, b2nm1, &
-&c, e, g, h, j, l, r, rta, rtpi, rtx, s, sum, t, tol, twoa, u, x0, &
-&y, z, wk(20)
-double precision :: dpmpar, drlog, drexp
-double precision :: derf, derfc1, dgam1, drcomp
 !-------------------------
 !     alog10 = ln(10)
 !     rtpi   = dsqrt(pi)
@@ -4664,7 +4664,15 @@ end subroutine dgr17
 subroutine dginv (a, x, p, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
+double precision, intent(in) :: a
+double precision, intent(out) :: x
+double precision, intent(in) :: p, q
 integer :: ier, ind
+real :: p0, q0, x0
+double precision :: am1, apn, ap1, ap2, ap3, b, c, c1, c2, c3, c4, &
+&c5, d, e, eps, g, h, ln10, pn, qg, qn, r, rta, s, sum, s2, t, tol, &
+&u, w, xmin, xn, y, z, amin
+double precision :: dpmpar, dlnrel, dgamma, dgamln, dgmln1, drcomp
 !-----------------------------------------------------------------------
 !
 !                        Double precision
@@ -4712,14 +4720,6 @@ integer :: ier, ind
 !        Dahlgren, Virginia
 !     written ... January 1992
 !------------------------
-double precision, intent(in) :: a
-double precision, intent(out) :: x
-double precision, intent(in) :: p, q
-real :: p0, q0, x0
-double precision :: am1, apn, ap1, ap2, ap3, b, c, c1, c2, c3, c4, &
-&c5, d, e, eps, g, h, ln10, pn, qg, qn, r, rta, s, sum, s2, t, tol, &
-&u, w, xmin, xn, y, z, amin
-double precision :: dpmpar, dlnrel, dgamma, dgamln, dgmln1, drcomp
 !------------------------
 !     ln10 = ln(10)
 !     c = Euler constant
@@ -4990,13 +4990,14 @@ end subroutine dginv
 
 subroutine bratio (a, b, x, y, w, w1, ierr)
 implicit none
-real :: apser, basym, bfrac, bpser, bup, fpser, spmpar
 integer, intent(inout) :: ierr
 real, intent(in) :: a, b
 real, intent(out) :: w, w1
 real, intent(in) :: x, y
+real :: apser, basym, bfrac, bpser, bup, fpser, spmpar
 integer :: ierr1, ind, n
 real :: a0, b0, eps, t, x0, y0, z
+real :: lambda
 !-----------------------------------------------------------------------
 !
 !            Evaluation of the incomplete beta function ix(a,b)
@@ -5029,7 +5030,6 @@ real :: a0, b0, eps, t, x0, y0, z
 !        Dahlgren, Virginia
 !     revised ... nov 1991
 !-----------------------------------------------------------------------
-real :: lambda
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the smallest
@@ -5251,12 +5251,12 @@ implicit none
 real, intent(in) :: a, b, eps, x
 real :: aj, bx, c, g, s, t, tol
 real :: psi
+real :: j
 !-----------------------------------------------------------------------
 !     apser yields the incomplete beta ratio I(sub(1-x))(b,A) for
 !     a .LE. min(eps,eps*b), b*x .LE. 1, and x .LE. 0.5. Used when
 !     A is very small. Use only if above inequalities are satisfied.
 !-----------------------------------------------------------------------
-real :: j
 !--------------------
 data g/.577215664901533/
 !--------------------
@@ -5286,11 +5286,11 @@ real, intent(in) :: a, b, eps, x
 integer :: i, m
 real :: a0, apb, b0, c, sum, t, tol, u, w, z
 real :: algdiv, betaln, gam1, gamln1
+real :: n
 !-----------------------------------------------------------------------
 !     Power series expansion for evaluating IX(a,b) when b .LE. 1
 !     or b*x .LE. 0.7.  Eps is the tolerance used.
 !-----------------------------------------------------------------------
-real :: n
 !
 bpser = 0.0
 if (x .eq. 0.0) return
@@ -5373,11 +5373,11 @@ real, intent(in) :: a, b, eps, x, y
 integer :: i, k, kp1, mu, nm1
 real :: ap1, apb, d, r, t, w
 real :: brcmp1, exparg
+real :: l
 !-----------------------------------------------------------------------
 !     Evaluation of IX(a,b) - IX(a+n,b) where n is a positive integer.
 !     Eps is the tolerance used.
 !-----------------------------------------------------------------------
-real :: l
 !
 !          Obtain the scaling factor exp(-mu) and
 !             exp(mu)*(x**a*y**b/BETA(a,b))/a
@@ -5440,15 +5440,15 @@ end function bup
 real function bfrac(a, b, x, y, lambda, eps)
 implicit none
 real, intent(in) :: a, b, eps, x, y
+real, intent(in) :: lambda
 real :: alpha, an, anp1, beta, bn, bnp1, c, c0, c1, e, p, r, r0, &
 &s, t, w, yp1
 real :: brcomp
+real :: n
 !-----------------------------------------------------------------------
 !     Continued fraction expansion for IX(a,b) when A,b .GT. 1.
 !     It is assumed that  lambda = (a + b)*y - b.
 !-----------------------------------------------------------------------
-real, intent(in) :: lambda
-real :: n
 !--------------------
 bfrac = brcomp(a,b,x,y)
 if (bfrac .eq. 0.0) return
@@ -5512,10 +5512,10 @@ real, intent(in) :: a, b, x, y
 integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
 real :: algdiv, alnrel, bcorr, betaln, gam1, gamln1, rlog1
+real :: lambda, lnx, lny
 !-----------------------------------------------------------------------
 !               Evaluation of x**a*y**b/beta(a,b)
 !-----------------------------------------------------------------------
-real :: lambda, lnx, lny
 !-----------------
 !     const = 1/sqrt(2*pi)
 !-----------------
@@ -5631,10 +5631,10 @@ real, intent(in) :: a, b, x, y
 integer :: i, n
 real :: a0, apb, b0, c, const, e, h, t, u, v, x0, y0, z
 real :: algdiv, alnrel, bcorr, betaln, esum, gam1, gamln1, rlog1
+real :: lambda, lnx, lny
 !-----------------------------------------------------------------------
 !          Evaluation of  exp(mu) * (x**a*y**b/beta(a,b))
 !-----------------------------------------------------------------------
-real :: lambda, lnx, lny
 !-----------------
 !     const = 1/sqrt(2*pi)
 !-----------------
@@ -5750,14 +5750,14 @@ real, intent(in) :: x, y
 integer :: i, n, nm1
 real :: bm1, bp2n, cn, coef, dj, p, q, r, s, sum, t, t2, u, v, z
 real :: algdiv, alnrel, gam1
+real :: j, l, lnx, nu, n2
+real :: c(30), d(30)
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) when A is larger than b.
 !     The result of the expansion is added to w. it is assumed
 !     that a .GE. 15 and b .LE. 1.  Eps is the tolerance used.
 !     ierr is a variable that reports the status of the results.
 !-----------------------------------------------------------------------
-real :: j, l, lnx, nu, n2
-real :: c(30), d(30)
 !
 bm1 = (b - 0.5) - 0.5
 nu = a + 0.5*bm1
@@ -5918,19 +5918,19 @@ end subroutine grat1
 real function basym(a, b, lambda, eps)
 implicit none
 real, intent(in) :: a, b, eps
+real, intent(in) :: lambda
 integer :: i, im1, imj, j, m, mm1, mmj, n, np1, num
 real :: bsum, dsum, e0, e1, f, h, h2, hn, r, r0, r1, s, sum, t, &
 &t0, t1, u, w, w0, z, z0, z2, zn, znm1
 real :: bcorr, erfc1, rlog1
+real :: j0, j1
+real :: a0(21), b0(21), c(21), d(21)
 !-----------------------------------------------------------------------
 !     Asymptotic expansion for IX(a,b) for large A and b.
 !     lambda = (a + b)*Y - b  and eps is the tolerance used.
 !     It is assumed that lambda is nonnegative and that
 !     A and b are greater than or equal to 15.
 !-----------------------------------------------------------------------
-real :: j0, j1
-real, intent(in) :: lambda
-real :: a0(21), b0(21), c(21), d(21)
 !------------------------
 !     ****** num is the maximum value that n can take in the do loop
 !            ending at statement 50. It is required that num be even.
@@ -6411,10 +6411,15 @@ end function logam
 
 subroutine cbsslj (z, cnu, w)
 implicit none
+complex :: z
+complex, intent(in) :: cnu
+complex, intent(inout) :: w
 integer :: i, k, m, n
 real :: a, cn1, cn2, e, fn, pi, pn, qm, qn, qnp1, r, r2, rn2, sn, &
 &t1, t2, u, v, x, y
 real :: cpabs
+complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
+complex :: cdiv, cgam0
 !-----------------------------------------------------------------------
 !
 !         EVALUATION OF THE COMPLEX BESSEL FUNCTION J   (z)
@@ -6431,11 +6436,6 @@ real :: cpabs
 !     approximation is employed.
 !
 !-----------------------------------------------------------------------
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-complex :: c, nu, s, sm1, sm2, t, tsc, w0, w1, zn, zz
-complex :: cdiv, cgam0
 !-----------------------
 data pi /3.14159265358979/
 !-----------------------
@@ -6617,10 +6617,16 @@ end subroutine cbsslj
 
 subroutine cbjm (z, cnu, w)
 implicit none
+complex, intent(in) :: cnu
+complex, intent(inout) :: w
+complex :: z
 integer :: i, imin, k, km1, km2
 real :: a, a0, eps, rnu
 real :: anorm
 real :: spmpar
+complex :: nu, nup1, p, s, sn, t, ti
+real :: inu, m
+complex :: cdiv
 !-----------------------------------------------------------------------
 !
 !       COMPUTATION OF  (z/2)**(-cnu) * gamma(cnu + 1) * J(cnu,z)
@@ -6631,12 +6637,6 @@ real :: spmpar
 !     a negative integer.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: cnu
-complex :: nu, nup1, p, s, sn, t, ti
-complex, intent(inout) :: w
-complex :: z
-real :: inu, m
-complex :: cdiv
 !--------------------------
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !--------------------------
@@ -6726,9 +6726,14 @@ end subroutine cbjm
 subroutine cbdb (cz, cnu, fn, w)
 implicit none
 real, intent(in) :: fn
+complex, intent(in) :: cz, cnu
+complex, intent(inout) :: w
 integer :: ind, k, l, m
 real :: alpha, am, aq, ar, bnd, c, phi, pi, pi2, sgn, theta, u, v, &
 &x, y
+real :: a(136), is, inu, izn
+complex :: c1, c2, eta, j, nu, p, p1, q, r, s, s1, s2, sm, t, z, &
+&zn
 !-----------------------------------------------------------------------
 !
 !         CALCULATION OF j   (cz) BY THE DEBYE APPROXIMATION
@@ -6739,11 +6744,6 @@ real :: alpha, am, aq, ar, bnd, c, phi, pi, pi2, sgn, theta, u, v, &
 !     where k is an integer.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: cz, cnu
-complex, intent(inout) :: w
-real :: a(136), is, inu, izn
-complex :: c1, c2, eta, j, nu, p, p1, q, r, s, s1, s2, sm, t, z, &
-&zn
 !----------------------
 !     c = 1/sqrt(2)
 !     bnd = pi/3
@@ -6961,19 +6961,19 @@ end subroutine cbdb
 
 subroutine cbja (cz, cnu, w)
 implicit none
+complex, intent(in) :: cz, cnu
+complex, intent(inout) :: w
 integer :: i, ind
 real :: c, eps, pihalf, r, rnu, tol, u, v, x, y
 real :: sin1
 real :: cos1
 real :: anorm
 real :: spmpar
+real :: inu, m
+complex :: a, a1, arg, e, eta, j, nu, p, q, t, z, zr, zz
 !-----------------------------------------------------------------------
 !        Computation of j(nu,z) by the asymptotic expansion
 !-----------------------------------------------------------------------
-complex, intent(in) :: cz, cnu
-complex, intent(inout) :: w
-real :: inu, m
-complex :: a, a1, arg, e, eta, j, nu, p, q, t, z, zr, zz
 !--------------------------
 anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 !--------------------------
@@ -7062,6 +7062,8 @@ end subroutine cbja
 subroutine bsslj (a, in, w)
 implicit none
 integer, intent(in) :: in
+complex, intent(in) :: a
+complex, intent(inout) :: w
 integer :: i, m, n
 real :: an, aq(2), az(2), cd(30), ce(30), fj(2), pm, pn, qf(2), &
 &qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), &
@@ -7073,8 +7075,6 @@ real :: an, aq(2), az(2), cd(30), ce(30), fj(2), pm, pn, qf(2), &
 !     in = order (integer)
 !     w  = Function of first kind (complex number)
 !     -------------------
-complex, intent(in) :: a
-complex, intent(inout) :: w
 data cd(1) / 0.00000000000000e00/,  cd(2) /-1.64899505142212e-2/, &
 &cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
 &cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
@@ -7376,7 +7376,7 @@ implicit none
 !         sand-75-0147
 !
 !         CDC 6600 subroutines ibess and JBESS for Bessel functions
-!         i(NU,X) AND J(NU,X), X.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
+!         i(NU,x) AND J(NU,x), x.GE.0, NU.GE.0  BY D.E. AMOS, S.L.
 !         Daniel, M.K. Weston. ACM trans math software,3,PP 76-92
 !         (1977)
 !
@@ -7386,17 +7386,17 @@ implicit none
 !
 !     Abstract
 !         besj computes an n member sequence of J Bessel functions
-!         J/sub(alpha+k-1)/(X), k=1,...,n for non-negative alpha and X.
+!         J/sub(alpha+k-1)/(x), k=1,...,n for non-negative alpha and x.
 !         A combination of the power series, the asymptotic expansion
-!         for X to infinity and the uniform asymptotic expansion for
-!         nu to infinity are applied over subdivisions of the (NU,X)
-!         plane. For values of (NU,X) not covered by one of these
+!         for x to infinity and the uniform asymptotic expansion for
+!         nu to infinity are applied over subdivisions of the (NU,x)
+!         plane. For values of (NU,x) not covered by one of these
 !         formulae, the order is incremented or decremented by integer
 !         values into a region where one of the formulae apply. Backward
 !         recursion is applied to reduce orders by integer values except
 !         where the entire sequence lies in the oscillatory region. In
 !         this case forward recursion is stable and values from the
-!         asymptotic expansion for X to infinity start the recursion
+!         asymptotic expansion for x to infinity start the recursion
 !         when it is efficient to do so. Leading terms of the series and
 !         uniform expansion are tested for underflow. If a sequence is
 !         requested and the last member would underflow, the result is
@@ -7409,17 +7409,17 @@ implicit none
 !     Description of arguments
 !
 !         Input
-!           X      - X.GE.0.0E0
+!           x      - x.GE.0.0E0
 !           alpha  - Order of first member of the sequence,
 !                    alpha.GE.0.0E0
 !           n      - Number of members in the sequence, n.GE.1
 !
 !         Output
 !           y      - A vector whose first n components contain
-!                    values for J/sub(alpha+k-1)/(X), k=1,...,n
+!                    values for J/sub(alpha+k-1)/(x), k=1,...,n
 !           nz     - Error indicator
 !                    nz=0      Normal return - Computation completed
-!                    nz=-1     X is less than 0.0
+!                    nz=-1     x is less than 0.0
 !                    nz=-2     alpha is less than 0.0
 !                    nz=-3     n is less than 1
 !                    nz.GT.0   last nz components of y set to 0.0
@@ -7429,21 +7429,22 @@ implicit none
 !         improper input arguments - A fatal error
 !         UNDERFLOW  - A NON-FATAL ERROR (nz.GT.0)
 !
+integer, intent(in) :: n
+integer, intent(inout) :: nz
+real, intent(in) :: alpha
+real :: x
+real, intent(inout) :: y(n)
 external jairy
 integer :: i, ialp, idalp, iflw, in, inlim, is, i1, i2, k, kk, km, &
 &kt
-integer, intent(in) :: n
 integer :: nn, ns
-integer, intent(inout) :: nz
 integer :: ipmpar
 real :: ak, akm
-real, intent(in) :: alpha
 real :: ans, ap, arg, coef, dalpha, dfn, dtm, earg, elim, etx, &
 &fidal, flgjy, fn, fnf, fni, fnp1, fnu, fnulim(2), gln, pdf, pidt, &
 &pp(4), rden, relb, rttp, rtwo, rtx, rzden, s, sa, sb, sxo2, s1, &
 &s2, t, ta, tau, tb, temp(3), tfn, tm, tol, tolln, trx, tx, t1, t2, &
-&wk(7), x, xo2, xo2l
-real, intent(inout) :: y(n)
+&wk(7), xo2, xo2l
 real :: gamln, spmpar
 data rtwo,pdf,rttp,pidt                    / 1.34839972492648e+00, &
 &7.85398163397448e-01, 7.97884560802865e-01, 1.57079632679490e+00/
@@ -7508,7 +7509,7 @@ fnu = dfn
 xo2 = x*0.5e0
 sxo2 = xo2*xo2
 !
-!     Decision tree for region where series, asymptotic expansion for X
+!     Decision tree for region where series, asymptotic expansion for x
 !     to infinity and asymptotic expansion for nu to infinity are
 !     applied.
 !
@@ -7566,7 +7567,7 @@ fn = dfn
 if(i1.eq.2) go to 450
 go to 130
 !
-!     SERIES FOR (X/2)**2.LE.NU+1
+!     SERIES FOR (x/2)**2.LE.NU+1
 !
 330 continue
 gln = gamln(fnp1)
@@ -7650,8 +7651,8 @@ return
 470 y(1) = temp(2)
 return
 !
-!     Asymptotic expansion for X to infinity with forward recursion in
-!     oscillatory region X.GT.max(20, NU), provided the last member
+!     Asymptotic expansion for x to infinity with forward recursion in
+!     oscillatory region x.GT.max(20, NU), provided the last member
 !     of the sequence is also in the region.
 !
 480 continue
@@ -7845,31 +7846,31 @@ end subroutine besj
 subroutine asjy(funjy,x,fnu,flgjy,in,tol,elim,y,wk,iflw)
 implicit none
 !
-!               asjy computes Bessel functions j and Y
-!               for arguments X.GT.0.0 and orders FNU.GE.35.0
-!               ON FLGJY = 1 AND FLGJY = -1 RESPECTIVELY
+!               asjy computes Bessel functions j and y
+!               for arguments x.GT.0.0 and orders fnu.GE.35.0
+!               ON flgjy = 1 AND flgjy = -1 RESPECTIVELY
 !
 !                                  Input
 !
 !      FUNJY - External function jairy or YAIRY
-!          X - ARGUMENT, X.GT.0.0E0
-!        FNU - Order of the first Bessel function
-!      FLGJY - Selection flag
-!              FLGJY =  1.0E0 gives the j function
-!              FLGJY = -1.0E0 gives the Y function
+!          x - ARGUMENT, x.GT.0.0E0
+!        fnu - Order of the first Bessel function
+!      flgjy - Selection flag
+!              flgjy =  1.0E0 gives the j function
+!              flgjy = -1.0E0 gives the y function
 !         in - Number of functions desired, in = 1 Or 2
-!        TOL - Tolerance specified by besj or BESY
-!       ELIM - Tolerance specified by besj or BESY
+!        tol - Tolerance specified by besj or BESY
+!       elim - Tolerance specified by besj or BESY
 !
 !                                  Output
 !
-!         Y  - A vector whose first in components contain the sequence
+!         y  - A vector whose first in components contain the sequence
 !       iflw - A flag indicating underflow or overflow
 !                    RETURN VARIABLES FOR besj ONLY
 !      wk(1) = 1 - (x/fnu)**2 = w**2
 !      wk(2) = sqrt(abs(wk(1)))
 !      wk(3) = abs(wk(2) - atan(wk(2)))  or
-!              abs(LN((1 + WK(2))/(X/FNU)) - WK(2))
+!              abs(LN((1 + wk(2))/(x/fnu)) - wk(2))
 !            = abs((2/3)*ZETA**(3/2))
 !      wk(4) = fnu*wk(3)
 !      wk(5) = (1.5*wk(3)*fnu)**(1/3) = sqrt(zeta)*fnu**(1/3)
@@ -7881,25 +7882,26 @@ implicit none
 !
 !     Abstract
 !         ASJK implements the uniform asymptotic expansion of
-!         the j and Y Bessel functions for FNU.GE.35 and real
-!         X.GT.0.0E0. The forms are identical except for a change
+!         the j and y Bessel functions for fnu.GE.35 and real
+!         x.GT.0.0E0. The forms are identical except for a change
 !         in sign of some of the terms. This change in sign is
 !         accomplished by means of the flag flgjy = 1 Or -1. On
-!         FLGJY = 1 The Airy functions ai(X) and dai(X) are
+!         flgjy = 1 The Airy functions ai(x) and dai(x) are
 !         supplied by the external function jairy, and on
-!         FLGJY = -1 The Airy functions bi(X) and DBI(X) are
+!         flgjy = -1 The Airy functions bi(x) and DBI(x) are
 !         supplied by the external funtion YAIRY.
 !
-integer :: i, iflw, in, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, &
-&ks, ksp1, kstemp, l, lr, lrp1
+integer :: iflw, in
+real :: elim, flgjy, fnu, tol, wk(*), x, y(*)
+external funjy
+integer :: i, j, jn, jr, ju, k, kb, klast, kmax(5), kp1, ks, ksp1, &
+&kstemp, l, lr, lrp1
 real :: abw2, akm, alfa(26,4), alfa1(26,2), alfa2(26,2), ap, &
 &ar(8), asum, az, beta(26,5), beta1(26,2), beta2(26,2), &
 &beta3(26,1), br(10), bsum, c(65), con1, con2, con3, con548, &
-&cr(10), crz32, dfi, elim, dr(10), fi, flgjy, fn, fnu, fn2, &
-&gama(26), phi, rcz, rden, relb, rfn2, rtz, rzden, sa, sb, suma, &
-&sumb, s1, ta, tau, tb, tfn, tol, tols, t2, upol(10), wk(*), x, xx, &
-&y(*), z, z32
-external funjy
+&cr(10), crz32, dfi, dr(10), fi, fn, fn2, gama(26), phi, rcz, rden, &
+&relb, rfn2, rtz, rzden, sa, sb, suma, sumb, s1, ta, tau, tb, tfn, &
+&tols, t2, upol(10), xx, z, z32
 equivalence (alfa(1,1),alfa1(1,1))
 equivalence (alfa(1,3),alfa2(1,1))
 equivalence (beta(1,1),beta1(1,1))
@@ -8112,7 +8114,7 @@ do 170 jn = 1,in
   if (abw2.gt.0.27750e0) go to 80
 !
 !     Asymptotic expansion
-!     cases near X=FN, abs(1.-(X/FN)**2).LE.0.2775
+!     cases near x=FN, abs(1.-(x/FN)**2).LE.0.2775
 !     coefficients of asymptotic expansion by series
 !
 !     Zeta and truncation for A(ZETA) and B(ZETA) series
@@ -8200,7 +8202,7 @@ do 170 jn = 1,in
   t2 = 1.0e0/wk(1)
   if (wk(1).ge.0.0e0) go to 90
 !
-!     CASES FOR (X/FN).GT.sqrt(1.2775)
+!     CASES FOR (x/FN).GT.sqrt(1.2775)
 !
   wk(3) = abs(wk(2)-atan(wk(2)))
   wk(4) = wk(3)*fn
@@ -8212,7 +8214,7 @@ do 170 jn = 1,in
   go to 100
 90 continue
 !
-!     CASES FOR (X/FN).LT.sqrt(0.7225)
+!     CASES FOR (x/FN).LT.sqrt(0.7225)
 !
   wk(3) = abs(alog((1.0e0+wk(2))/xx)-wk(2))
   wk(4) = wk(3)*fn
@@ -8636,6 +8638,8 @@ end subroutine jairy
 subroutine bssly (a, in, w)
 implicit none
 integer, intent(in) :: in
+complex, intent(in) :: a
+complex, intent(inout) :: w
 integer :: i, la, lr, ly, m, n
 real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 &qz(2), rm, rn, rz(2), sl(2), sm(4), sn, sq(2), sr(2), ss, sz(2), &
@@ -8647,8 +8651,6 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 !     in = order (integer)
 !     w  = Function of second kind (complex number)
 !     -------------------
-complex, intent(in) :: a
-complex, intent(inout) :: w
 data cd(1) / 0.00000000000000e00/,  cd(2) /-1.64899505142212e-2/, &
 &cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
 &cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
@@ -8949,18 +8951,18 @@ end subroutine bssly
 
 subroutine cbssli (z, cnu, w)
 implicit none
+complex, intent(in) :: z, cnu
+complex, intent(inout) :: w
 real :: pihalf, t, x, y
 real :: sin1
 real :: cos1
 real :: exparg
+complex :: nu, z0
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     first kind for complex order cnu and complex argument
 !     z.  it is assumed that -Pi .LT. arg z .LE. pi.
 !------------------------------------------------------------
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-complex :: nu, z0
 !
 data pihalf /1.5707963267949/
 !
@@ -8988,6 +8990,8 @@ end subroutine cbssli
 subroutine bssli (mo, a, in, w)
 implicit none
 integer, intent(in) :: in, mo
+complex, intent(in) :: a
+complex, intent(inout) :: w
 integer :: i, m, n
 real :: an, aq(2), az(2), cd(30), ce(30), fi(2), pm, pn, qf(2), &
 &qm, qn, qz(2), rm(4), rz(2), sm(4), sn, ss, sz(2), tm(2), ts(2), &
@@ -9000,8 +9004,6 @@ real :: an, aq(2), az(2), cd(30), ce(30), fi(2), pm, pn, qf(2), &
 !     in = order (integer)
 !     w  = Function of first kind (complex number)
 !     -------------------
-complex, intent(in) :: a
-complex, intent(inout) :: w
 data cd(1) / 0.00000000000000e00/,  cd(2) /-1.64899505142212e-2/, &
 &cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
 &cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
@@ -9387,21 +9389,21 @@ implicit none
 !         overflow with kode=1 - A fatal error
 !         UNDERFLOW - A NON-FATAL ERROR(nz.GT.0)
 !
-integer :: i, ialp, in, inlim, is, i1, i2, k, kk, km
 integer, intent(in) :: kode
-integer :: kt
 integer, intent(in) :: n
-integer :: nn, ns
 integer, intent(inout) :: nz
+real, intent(in) :: alpha
+real, intent(in) :: x
+real, intent(inout) :: y(n)
+integer :: i, ialp, in, inlim, is, i1, i2, k, kk, km
+integer :: kt
+integer :: nn, ns
 integer :: ipmpar
 real :: ain, ak, akm
-real, intent(in) :: alpha
 real :: ans, ap, arg, atol, tolln, dfn, dtm, dx, earg, elim, etx, &
 &flgik, fn, fnf, fni, fnp1, fnu, gln, ra, rttpi, s, sx, sxo2, s1, &
 &s2, t, ta, tb, temp(3), tfn, tm, tol, trx, t2
-real, intent(in) :: x
 real :: xo2, xo2l
-real, intent(inout) :: y(n)
 real :: z
 real :: gamln, spmpar
 data rttpi           / 3.98942280401433e-01/
@@ -9827,22 +9829,22 @@ implicit none
 !         accomplished by means of the flag flgik = 1 Or -1.
 !
 integer, intent(in) :: in
-integer :: j, jn, k, kk
 integer, intent(in) :: kode
-integer :: l
-real :: ak, ap
 real, intent(inout) :: arg
-real :: c(65), coef, con(2), etx
 real, intent(in) :: flgik
-real :: fn
 real, intent(in) :: fnu
-real :: gln
 real, intent(inout) :: ra
-real :: s1, s2, t
 real, intent(in) :: tol
-real :: t2
 real, intent(in) :: x
 real, intent(inout) :: y(*)
+integer :: j, jn, k, kk
+integer :: l
+real :: ak, ap
+real :: c(65), coef, con(2), etx
+real :: fn
+real :: gln
+real :: s1, s2, t
+real :: t2
 real :: z
 data con(1), con(2)  / &
 &3.98942280401432678e-01,    1.25331413731550025e+00/
@@ -9930,8 +9932,12 @@ end subroutine asik
 
 subroutine cbesk (z, cnu, w)
 implicit none
+complex :: z
+complex, intent(in) :: cnu
+complex, intent(inout) :: w
 real :: a, b, c, e, rn, rz, s, tau, x, y
 real :: cpabs
+complex :: nu
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel function of the
@@ -9944,10 +9950,6 @@ real :: cpabs
 !        Naval Surface Warfare Center
 !        oct 1992
 !--------------------------
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-complex :: nu
 !
 x = abs(real(z))
 y = abs(aimag(z))
@@ -10048,18 +10050,18 @@ end subroutine cbesk
 
 subroutine cbki (z, cnu, w)
 implicit none
+complex, intent(in) :: z, cnu
+complex, intent(inout) :: w
 real :: a, b, pi, pihalf, u1, u2
 real :: sin1
 real :: cos1
+complex :: w1, w2
+complex :: cdiv
 !------------------------------------------------------------
 !     Calculation of the modified Bessel function of the
 !     second kind with complex order and argument in terms
 !     of the modified Bessel function of the first kind.
 !------------------------------------------------------------
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-complex :: w1, w2
-complex :: cdiv
 !
 data pi/3.14159265358979e+00/
 data pihalf/1.5707963267949e+00/
@@ -10076,19 +10078,19 @@ end subroutine cbki
 
 subroutine cbka (z, cnu, w)
 implicit none
+complex :: z
+complex, intent(in) :: cnu
+complex, intent(inout) :: w
 integer :: i
 real :: c, eps, u, v
 real :: anorm
 real :: spmpar
+real :: m
+complex :: a, p, t, zr
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for complex order
 !        cnu and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
-complex :: z
-complex, intent(in) :: cnu
-complex, intent(inout) :: w
-real :: m
-complex :: a, p, t, zr
 !--------------------------
 anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 !--------------------------
@@ -10128,19 +10130,19 @@ end subroutine cbka
 subroutine cbkm (z, rz, cnu, w)
 implicit none
 real, intent(in) :: rz
+complex, intent(in) :: z, cnu
+complex, intent(inout) :: w
 integer :: i, ind, m, n, n1
 real :: a, ai, b, c, cpi, pi, t, x, y, znorm, zr1, zr2
+real :: nu
+complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
+complex :: cxp
 !-------------------------------------------------------------------
 !     Calculation of the modified Bessel function of the second
 !     kind with complex order and argument BY means of Maclaurin
 !     expansions and the Miller algorithm. It is assumed that
 !     rz = abs(z).
 !-------------------------------------------------------------------
-complex, intent(in) :: z, cnu
-complex, intent(inout) :: w
-real :: nu
-complex :: cz, ex, r, r1, u1, u2, u3, w1, w2, zr
-complex :: cxp
 !---------------------------
 !     cpi = sqrt(pi/2)
 !---------------------------
@@ -10246,10 +10248,17 @@ end subroutine cbkm
 subroutine ckps (z, r, zr, nu, w1, w2)
 implicit none
 real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex :: nu
+complex, intent(inout) :: w1, w2
 integer :: k
 real :: ak, eps, eps0, phi, pi, s, tol, u, x, y
 real :: anorm
 real :: spmpar
+real :: d(7)
+complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
+&t2
+complex :: cdiv, cgam0
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel functions
@@ -10263,13 +10272,6 @@ real :: spmpar
 !     series expansions are used.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z, zr
-complex :: nu
-complex, intent(inout) :: w1, w2
-real :: d(7)
-complex :: a, c, ch, cl, f, g1, g2, gm1, gm2, mu, p, q, sh, t, t1, &
-&t2
-complex :: cdiv, cgam0
 !-----------------------
 data tol /1.e-10/
 data pi /3.14159265358979/
@@ -10373,10 +10375,14 @@ subroutine cbkml (z, r, zr, nu, n, w, w0)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: r
+complex, intent(in) :: z, zr, nu
+complex, intent(inout) :: w, w0
 integer :: i, m, num
 real :: a, b, c, c1, c2, e, eps, eps0, f, rnu, t, th, x, y
 real :: cos1
 real :: spmpar
+complex :: al, bl, s, u1, u2, u3
+real :: inu, l
 !-----------------------------------------------------------------------
 !
 !             Computation of the scaled Bessel function
@@ -10395,10 +10401,6 @@ real :: spmpar
 !     r = abs(z/2) AND zr = 2/z.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z, zr, nu
-complex, intent(inout) :: w, w0
-complex :: al, bl, s, u1, u2, u3
-real :: inu, l
 !---------------------
 !     c1 = sqrt(pi/2)
 !     c2 = sqrt(pi)
@@ -10489,9 +10491,14 @@ end subroutine cbkml
 subroutine cbsslk (z, r, w)
 implicit none
 real, intent(in) :: r
+complex :: z
+complex, intent(inout) :: w
 integer :: i, ind, m, n, n1
 real :: a, ai, cpi, pi, rz, t, x, y, znorm, zr1, zr2
 real :: cpabs
+complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
+real :: nu, nu1
+complex :: cxp
 !-----------------------------------------------------------------------
 !
 !         Calculation of the modified Bessel function of the
@@ -10505,11 +10512,6 @@ real :: cpabs
 !     modified by A.H. Morris (NSWC)
 !     revised ... oct 1992
 !---------------------------
-complex :: z
-complex, intent(inout) :: w
-complex :: cn, cz, ex, u1, u2, u3, w1, w2, zr
-real :: nu, nu1
-complex :: cxp
 !---------------------------
 !     cpi = sqrt(pi/2)
 !---------------------------

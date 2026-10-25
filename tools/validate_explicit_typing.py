@@ -13,6 +13,7 @@ from modernize_do import transform as modernize_loops
 from name_procedure_ends import transform as name_ends
 from reviewed_source_fixes import apply_fixes, normalize_reviewed_symbols, check_warning_inventory
 from combine_declarations import transform as combine_declarations
+from order_declarations import transform as order_declarations
 from name_procedure_ends import statements, code_comment
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,7 +26,7 @@ def non_declaration_content(data):
                 for i, line in enumerate(lines) if line.strip() and line[0] in 'Cc*!'}
     content = []
     for statement in statements(lines):
-        if not re.match(r'^\s*(?:INTEGER|REAL|COMPLEX|LOGICAL|CHARACTER|DOUBLE\s+(?:PRECISION|COMPLEX)|INTENT|DIMENSION)\b',
+        if not re.match(r'^\s*(?:INTEGER|REAL|COMPLEX|LOGICAL|CHARACTER|DOUBLE\s+(?:PRECISION|COMPLEX)|INTENT|DIMENSION|EXTERNAL)\b',
                         statement.code, re.I):
             content.append(statement.code)
         quote = ''
@@ -136,11 +137,14 @@ def main():
         after = apply_intents(after, intents)
     unformatted_source = after
     formatting = combine_declarations(unformatted_source)
-    after = formatting.data
+    ordering = order_declarations(formatting.data)
+    after = ordering.data
     if non_declaration_content(unformatted_source) != non_declaration_content(after):
         raise RuntimeError("Declaration formatting changed other statements or comments")
     if after != (ROOT / "nswc.f").read_bytes():
         raise RuntimeError("Maintained source does not reproduce the reviewed typing, intents, and declaration formatting")
+    if json.loads((ROOT / 'tools/declaration-ordering.json').read_text()) != ordering.report(formatting.data):
+        raise RuntimeError('Declaration ordering report is stale')
     inventories = []
     with tempfile.TemporaryDirectory(prefix="nswc-typing-") as folder:
         for label, data in (("before", before), ("reviewed", unformatted_source), ("after", after)):
@@ -196,6 +200,8 @@ def main():
     print(f"Declaration formatting preserves all {sum(map(len, reviewed_inventory.values()))} compiler records, "
           f"including intrinsics; combined {formatting.intents_combined} intents and {formatting.dimensions_combined} dimensions.")
     print("Confirmed unchanged non-declaration statements and comment text/order.")
+    print(f'Argument declarations precede local types; reordered {ordering.changed_procedures} procedures, '
+          f'with {len(ordering.prerequisite_locals)} required local dependency groups.')
     if intents:
         counts = {mode: sum(v == mode for e in intents["procedures"].values() for v in e["arguments"].values())
                   for mode in ("IN", "OUT", "INOUT")}

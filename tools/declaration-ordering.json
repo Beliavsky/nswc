@@ -1,0 +1,114 @@
+{
+  "procedures": 1062,
+  "changed_procedures": 907,
+  "mixed_declarations_split": 59,
+  "prerequisite_locals": [],
+  "retained_dimensions": [
+    {
+      "procedure": "DEC",
+      "statement": "DIMENSION IP(N)"
+    },
+    {
+      "procedure": "SOL",
+      "statement": "DIMENSION IP(N)"
+    },
+    {
+      "procedure": "SLVMP",
+      "statement": "DIMENSION IWK(N)"
+    },
+    {
+      "procedure": "LUIMP",
+      "statement": "DIMENSION IPVT(N)"
+    },
+    {
+      "procedure": "XL1",
+      "statement": "DIMENSION Q(KLM2D,N2D), X(N2D), RES(KLMD), CU(2,NKLMD), IU(2,NKLMD), S(KLMD)"
+    },
+    {
+      "procedure": "LLSQ",
+      "statement": "DIMENSION IWK(N)"
+    },
+    {
+      "procedure": "LLSQMP",
+      "statement": "DIMENSION IWK(N)"
+    },
+    {
+      "procedure": "ORTHO",
+      "statement": "DIMENSION IP(N)"
+    },
+    {
+      "procedure": "ORSOL",
+      "statement": "DIMENSION IP(N)"
+    },
+    {
+      "procedure": "ORIMP",
+      "statement": "DIMENSION IP(N)"
+    },
+    {
+      "procedure": "SMPLX",
+      "statement": "DIMENSION IBASIS(M)"
+    },
+    {
+      "procedure": "SSPLX",
+      "statement": "DIMENSION IBASIS(M)"
+    },
+    {
+      "procedure": "QAGIE1",
+      "statement": "DIMENSION IORD(LIMIT)"
+    },
+    {
+      "procedure": "QAGSE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT)"
+    },
+    {
+      "procedure": "QAGIE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT)"
+    },
+    {
+      "procedure": "QPSRT",
+      "statement": "DIMENSION ELIST(LAST),IORD(LAST)"
+    },
+    {
+      "procedure": "QXGS",
+      "statement": "DIMENSION IWORK(LENIW),WORK(LENW)"
+    },
+    {
+      "procedure": "QXGSE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)"
+    },
+    {
+      "procedure": "DQAGS",
+      "statement": "DIMENSION IWORK(LIMIT), WORK(LENW)"
+    },
+    {
+      "procedure": "DQAGSE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT)"
+    },
+    {
+      "procedure": "DQAGI",
+      "statement": "DIMENSION IWORK(LIMIT),WORK(LENW)"
+    },
+    {
+      "procedure": "DQAGIE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT)"
+    },
+    {
+      "procedure": "DQPSRT",
+      "statement": "DIMENSION ELIST(LAST),IORD(LAST)"
+    },
+    {
+      "procedure": "DQXGS",
+      "statement": "DIMENSION IWORK(LENIW),WORK(LENW)"
+    },
+    {
+      "procedure": "DQXGSE",
+      "statement": "DIMENSION ALIST(LIMIT), BLIST(LIMIT), ELIST(LIMIT), IORD(LIMIT),RLIST(LIMIT), VALP(21,LIMIT), VALN(21,LIMIT)"
+    },
+    {
+      "procedure": "STFODE",
+      "statement": "DIMENSION IWORK(LIW)"
+    }
+  ],
+  "input_sha256": "6f740e38efbeddc10c3f8192b3999c6d4b7060054fddd1925b4d0f9c9fe90c4c",
+  "output_sha256": "e584b748c16dd27c736578978eb1c79fef121a6f319ebfec2421e92457bbd36a"
+}

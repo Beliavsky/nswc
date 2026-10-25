@@ -243,6 +243,22 @@ The default previews changes. `--in-place` creates a non-overwriting
 dimensions, review report, and compiler checks. After changing `nswc.f`,
 regenerate the derived sources and verify the interfaces as described above.
 
+`tools/order_declarations.py` then groups dummy-argument type and `EXTERNAL`
+declarations before local declarations, splitting mixed declarations as needed.
+Array bounds and type dependencies take precedence over grouping. Separate
+`DIMENSION` statements retain their positions because their bounds can depend on
+`PARAMETER` definitions. Comments retain their text and relative order.
+
+```sh
+python tools/order_declarations.py input.f --output ordered.f --report ordering.json
+```
+
+Without `--output`, the tool reports proposed changes without writing the source.
+Output and report paths must name distinct new files. The maintained source
+already includes this pass; `tools/validate_explicit_typing.py` reproduces it,
+checks the [ordering report](tools/declaration-ordering.json), and compares the
+complete compiler symbol inventories before and after formatting.
+
 ## Argument intents
 
 The maintained sources have 4,176 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821

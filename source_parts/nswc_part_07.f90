@@ -3,12 +3,12 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
+double precision, intent(inout) :: a(*), w(n), t(*)
 integer :: l
 !-----------------------------------------------------------------------
 !                Double precision computation of the
 !               eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(*), w(n), t(*)
 !
 if (ka .eq. 0) go to 10
    call dtred1 (ka, n, a, w, t(n+1), t(1))
@@ -25,13 +25,13 @@ subroutine dseigv (a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(in) :: a(ka,n)
+double precision, intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !                 Double precision computation of
 !                 eigenvalues and eigenvectors of
 !                     symmetric real matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n)
-double precision, intent(inout) :: w(n), z(ka,n), t(n)
 !
 call dtred2 (ka, n, a, w, t, z)
 call dtql2 (ka, n, w, t, z, ierr)
@@ -41,12 +41,12 @@ end subroutine dseigv
 subroutine dtred1 (nm,n,a,d,e,e2)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nm
-integer :: jp1
 double precision, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -161,11 +161,11 @@ end subroutine dtred1
 subroutine dtred3 (n,nv,a,d,e,e2)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii, iz, jk
 integer, intent(in) :: nv
 double precision, intent(inout) :: a(nv), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii, iz, jk
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -278,11 +278,11 @@ end subroutine dtred3
 subroutine dtql (n,d,e2,ierr)
 implicit none
 !
-integer :: i, j, l, m
 integer, intent(in) :: n
-integer :: ii, l1, mml
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e2(n)
+integer :: i, j, l, m
+integer :: ii, l1, mml
 double precision :: b, c, f, g, h, p, r, s, machep
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -417,13 +417,13 @@ end subroutine dtql
 subroutine dtred2 (nm,n,a,d,e,z)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nm
-integer :: jp1
 double precision, intent(in) :: a(nm,n)
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
 double precision :: f, g, h, hh, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -562,13 +562,13 @@ end subroutine dtred2
 subroutine dtql2 (nm,n,d,e,z,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: ii, l1
 integer, intent(in) :: nm
-integer :: mml
 integer, intent(out) :: ierr
 double precision, intent(inout) :: d(n), e(n), z(nm,n)
+integer :: i, j, k, l, m
+integer :: ii, l1
+integer :: mml
 double precision :: b, c, f, g, h, p, r, s, machep
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -742,11 +742,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                Eigenvalues of complex matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n)
 !
 low = 1
 igh = n
@@ -761,12 +761,12 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
+&zi(ka,n), temp(*)
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
 !          Eigenvalues and eigenvectors of complex matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), wi(n), zr(ka,n), &
-&zi(ka,n), temp(*)
 !----------------------
 !     Temp is a temporary storage area
 !        DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
@@ -787,18 +787,18 @@ end subroutine ceigv
 
 subroutine cbal(nm,n,ar,ai,low,igh,scale)
 implicit none
-integer :: ipmpar
-!
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: jj
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-integer :: iexc
 real, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+integer :: ipmpar
+integer :: i, j, k, l, m
+integer :: jj
+integer :: iexc
 real :: c, f, g, r, s, b2, radix
-!     real abs
 logical :: noconv
+!
+!     real abs
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure
@@ -978,13 +978,13 @@ end subroutine cbal
 subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: ii, jj, la, mp
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
 real, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
+integer :: i, j, m
+integer :: ii, jj, la, mp
+integer :: kp1
 real :: f, g, h, fi, fr, scale
 !     real sqrt,cabs,abs
 !     complex cmplx
@@ -1115,15 +1115,15 @@ end subroutine corth
 subroutine comqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
 implicit none
 !
-integer :: i, j, l
 integer, intent(in) :: n
-integer :: en, ll
 integer, intent(in) :: nm, igh
-integer :: its
 integer, intent(in) :: low
-integer :: lp1, enm1
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n)
+integer :: i, j, l
+integer :: en, ll
+integer :: its
+integer :: lp1, enm1
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
 real :: spmpar
@@ -1354,12 +1354,12 @@ end subroutine comqr
 subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
-integer :: i, j, k
 integer, intent(in) :: m, n
-integer :: ii
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: zr(nm,m), zi(nm,m)
+integer :: i, j, k
+integer :: ii
 real :: s
 !-----------------------------------------------------------------------
 !
@@ -1439,18 +1439,18 @@ end subroutine cbabk2
 subroutine comqr2(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ii, jj, ll
 integer, intent(in) :: nm
-integer :: nn
 integer, intent(in) :: igh
-integer :: ip1, its
 integer, intent(in) :: low
-integer :: lp1, enm1, iend
 integer, intent(out) :: ierr
 real, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), &
 &zi(nm,n), ortr(igh), orti(igh)
+integer :: i, j, k, l, m
+integer :: en, ii, jj, ll
+integer :: nn
+integer :: ip1, its
+integer :: lp1, enm1, iend
 real :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm, machep
 complex :: z3
 real :: spmpar
@@ -1850,12 +1850,12 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+&wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !            Eigenvalues of double precision complex matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
-&wi(n)
 !
 low = 1
 igh = n
@@ -1870,13 +1870,13 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
+&wi(n), zr(ka,n), zi(ka,n), temp(*)
 integer :: i1, i2, i3, igh, low
 !-----------------------------------------------------------------------
 !                     Eigenvalues and eigenvectors
 !                 of double precision complex matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: ar(ka,n), ai(ka,n), wr(n), &
-&wi(n), zr(ka,n), zi(ka,n), temp(*)
 !----------------------
 !     Temp is a temporary storage area
 !        DIMENSION(TEMP) .GE. 2*n    IF ibal .EQ. 0
@@ -1898,17 +1898,17 @@ end subroutine dceigv
 
 subroutine dcbal(nm,n,ar,ai,low,igh,scale)
 implicit none
-integer :: ipmpar
-!
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: jj
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-integer :: iexc
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), scale(n)
+integer :: ipmpar
+integer :: i, j, k, l, m
+integer :: jj
+integer :: iexc
 double precision :: c, f, g, r, s, b2, radix
 logical :: noconv
+!
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure
@@ -2088,14 +2088,14 @@ end subroutine dcbal
 subroutine dcorth(nm,n,low,igh,ar,ai,ortr,orti)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: ii, jj, la, mp
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
 double precision, intent(inout) :: ar(nm,n), ai(nm,n), ortr(igh), &
 &orti(igh)
+integer :: i, j, m
+integer :: ii, jj, la, mp
+integer :: kp1
 double precision :: f, g, h, fi, fr, scale
 double precision :: dcpabs
 !-----------------------------------------------------------------------
@@ -2225,16 +2225,16 @@ end subroutine dcorth
 subroutine dcomqr(nm,n,low,igh,hr,hi,wr,wi,ierr)
 implicit none
 !
-integer :: i, j, l
 integer, intent(in) :: n
-integer :: en, ll
 integer, intent(in) :: nm, igh
-integer :: its
 integer, intent(in) :: low
-integer :: lp1, enm1
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
 &wi(n)
+integer :: i, j, l
+integer :: en, ll
+integer :: its
+integer :: lp1, enm1
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
 &norm, machep
 double precision :: r2, w(2), z(2)
@@ -2462,12 +2462,12 @@ end subroutine dcomqr
 subroutine dcbabk (nm,n,low,igh,scale,m,zr,zi)
 implicit none
 !
-integer :: i, j, k
 integer, intent(in) :: m, n
-integer :: ii
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: zr(nm,m), zi(nm,m)
+integer :: i, j, k
+integer :: ii
 double precision :: s
 !-----------------------------------------------------------------------
 !
@@ -2548,18 +2548,18 @@ end subroutine dcbabk
 subroutine dcmqr2 (nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ii, jj, ll
 integer, intent(in) :: nm
-integer :: nn
 integer, intent(in) :: igh
-integer :: ip1, its
 integer, intent(in) :: low
-integer :: lp1, enm1, iend
 integer, intent(out) :: ierr
 double precision, intent(inout) :: hr(nm,n), hi(nm,n), wr(n), &
 &wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
+integer :: i, j, k, l, m
+integer :: en, ii, jj, ll
+integer :: nn
+integer :: ip1, its
+integer :: lp1, enm1, iend
 double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, &
 &norm, machep
 double precision :: r2, w(2), z(2)
@@ -3081,33 +3081,33 @@ implicit none
 ! see comments following statement labelled 440 for
 ! instructions on the implementation of this modification.
 !
-double precision :: sum
 real, intent(inout) :: q, x
-real :: z
 real, intent(inout) :: cu
-real :: sn, zu, zv, cuv
 real, intent(inout) :: res
-real :: xmax, xmin
 real, intent(inout) :: error
-real :: pivot
 real, intent(in) :: toler
-real :: tpivot
-integer :: i, j
 integer, intent(in) :: k, l, m, n
 integer, intent(inout) :: s
-integer :: ia, ii, in
 integer, intent(inout) :: iu
-integer :: js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1
 integer, intent(in) :: n2d
-integer :: iimn, iout
 integer, intent(inout) :: iter
 integer, intent(in) :: klmd
-integer :: klm1, klm2
 integer, intent(inout) :: kode
-integer :: nklm, nkl1
 integer, intent(in) :: klm2d
-integer :: maxit
 integer, intent(in) :: nklmd
+double precision :: sum
+real :: z
+real :: sn, zu, zv, cuv
+real :: xmax, xmin
+real :: pivot
+real :: tpivot
+integer :: i, j
+integer :: ia, ii, in
+integer :: js, kk, nk, n1, n2, jmn, jpn, klm, nkl, nk1
+integer :: iimn, iout
+integer :: klm1, klm2
+integer :: nklm, nkl1
+integer :: maxit
 integer :: iphase, kforce, iineg
 dimension q(klm2d,n2d), x(n2d), res(klmd), &
 &cu(2,nklmd), iu(2,nklmd), s(klmd)
@@ -3408,8 +3408,8 @@ integer, intent(in) :: ka, kb, m, n, nb
 real, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
 integer :: i, j, np1
 real :: rnorm
-dimension iwk(n)
 logical :: exit
+dimension iwk(n)
 !     --------------
 ierr = 0
 if (1 .lt. n .and. n .le. m) go to 10
@@ -3442,8 +3442,8 @@ real :: a(ka,n)
 real, intent(inout) :: b(kb,nb), wk(*)
 integer :: i, j, lq, lr, ls, np1
 real :: rnorm
-dimension iwk(n)
 logical :: exit
+dimension iwk(n)
 !     -------------------
 !     dimension wk(mn + 2m + n)
 !     -------------------
@@ -3487,6 +3487,7 @@ implicit none
 integer, intent(inout) :: ip
 integer, intent(in) :: m, ms, n
 real, intent(inout) :: qr(ms,n), s(n)
+logical, intent(out) :: exit
 integer :: i, j, jp, k, kj, nn
 real :: ajj, sav, ss, y
 !***********************************************************************
@@ -3539,7 +3540,6 @@ real :: ajj, sav, ss, y
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
 dimension ip(n)
-logical, intent(out) :: exit
 !
 exit = .true.
 nn = n
@@ -3692,10 +3692,12 @@ real :: a(ka,n), b(m), qr(ms,n)
 real, intent(inout) :: r(m)
 real :: s(n)
 real, intent(inout) :: x(m)
+logical, intent(out) :: exit
 integer :: i, j, k, np1
 real :: eps, eps2, four, fourth, one, rat, ratio, rnrm2, xnrm2, &
 &zero
 real :: spmpar
+double precision :: dsum
 ! ----------------------------------------------------------------------
 !      Purpose
 !        given an approximate least squares solution x of a linear
@@ -3748,8 +3750,6 @@ real :: spmpar
 ! ----------------------------------------------------------------------
 !
 dimension ip(n)
-logical, intent(out) :: exit
-double precision :: dsum
 data zero/0.0/, one/1.0/, four/4.0/, fourth/0.25/
 !
 !     ********** eps is a machine dependent parameter. Assign eps
@@ -3809,9 +3809,9 @@ subroutine dllsq(m,n,a,ka,b,kb,nb,wk,iwk,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n, nb
-integer :: i, j, np1
 double precision, intent(inout) :: a(ka,n), b(kb,nb), wk(n)
 integer, intent(inout) :: iwk(n)
+integer :: i, j, np1
 double precision :: rnorm
 logical :: exit
 !     --------------
@@ -3840,7 +3840,11 @@ end subroutine dllsq
 subroutine dortho(m, n, qr, ms, s, ip, exit)
 implicit none
 integer, intent(in) :: m, ms, n
+double precision, intent(inout) :: qr(ms,n), s(n)
+integer, intent(inout) :: ip(n)
+logical, intent(out) :: exit
 integer :: i, j, jp, k, kj, nn
+double precision :: ajj, sav, ss, y
 !***********************************************************************
 !      Identification
 !        dortho - Orthogonal transformation of a given general m by n
@@ -3890,10 +3894,6 @@ integer :: i, j, jp, k, kj, nn
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
-double precision, intent(inout) :: qr(ms,n), s(n)
-integer, intent(inout) :: ip(n)
-double precision :: ajj, sav, ss, y
-logical, intent(out) :: exit
 !
 exit = .true.
 nn = n
@@ -3948,7 +3948,11 @@ end subroutine dortho
 subroutine dorsol(m, n, qr, ms, s, ip, x)
 implicit none
 integer, intent(in) :: m, ms, n
+double precision, intent(in) :: qr(ms,n), s(n)
+double precision, intent(inout) :: x(m)
+integer, intent(in) :: ip(n)
 integer :: i, ij, j, jp, k, ni, nm, nn
+double precision :: sav, ss, y
 !***********************************************************************
 !      Identification
 !        dorsol - Least squares solution of a linear system given an
@@ -3997,10 +4001,6 @@ integer :: i, ij, j, jp, k, ni, nm, nn
 !            transformations for linear least squares problems, ARL
 !            technical report ARL TR 74-0124(1974).
 !***********************************************************************
-double precision, intent(in) :: qr(ms,n), s(n)
-double precision, intent(inout) :: x(m)
-integer, intent(in) :: ip(n)
-double precision :: sav, ss, y
 !
 nn = n
 if(n .eq. m) nn = n - 1
@@ -4045,6 +4045,8 @@ integer, intent(in) :: ind
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
 real, intent(in) :: ae, re
+real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 real :: eps, rerr
 real :: spmpar
@@ -4157,8 +4159,6 @@ real :: spmpar
 !                 determination in linear least squares problems,
 !                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(mda,n), b(mdb,*), rnorm(*), work(lw)
-integer, intent(inout) :: iwork(liw)
 !----------------
 !     np            if m .GE. n then the first np columns of A
 !                   are never interchanged.
@@ -4305,6 +4305,7 @@ integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
 real, intent(inout) :: a(mda,n), db(n), eb(n), h(n), ub(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mm, nmk
 real :: bb, r2, rmin, sum, t, temp, tn, tt
@@ -4318,7 +4319,6 @@ integer :: isamax
 !       of round-off and to help detect possible rank
 !       deficiency.
 !
-integer, intent(inout) :: ic(n), ir(m)
 !
 !        Initialization
 !
@@ -4577,6 +4577,7 @@ real, intent(inout) :: a(mda,n), b(mdb,nb)
 real :: h(n)
 real, intent(inout) :: rnorm(nb)
 real :: w(n)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, im1, j, jb, k, kp1, nmk
 real :: bb, tt
 real :: snrm2
@@ -4589,7 +4590,6 @@ real :: sdot
 !
 !       Note - If mode.NE.2, w is never accessed.
 !
-integer, intent(inout) :: ic(n), ir(m)
 !
 k = krank
 kp1 = k + 1
@@ -4727,6 +4727,7 @@ integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
 real, intent(inout) :: a(mda,n), db(m), eb(m), h(m), ub(m), w(m)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mmk, nn
 real :: bb, r2, rmin, sum, t, temp, tn, tt
@@ -4740,7 +4741,6 @@ integer :: isamax
 !       of round-off and to help detect possible rank
 !       deficiency.
 !
-integer, intent(inout) :: ic(n), ir(m)
 !
 !        Initialization
 !
@@ -4999,6 +4999,7 @@ real, intent(inout) :: a(mda,n), b(mdb,nb)
 real :: h(m)
 real, intent(inout) :: rnorm(nb)
 real :: w(m)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
 real :: bb, tt
 real :: snrm2
@@ -5011,7 +5012,6 @@ real :: sdot
 !
 !       Note - If mode.NE.2, w is never accessed.
 !
-integer, intent(inout) :: ic(n), ir(m)
 !
 k = krank
 kp1 = k + 1
@@ -5147,7 +5147,13 @@ integer, intent(inout) :: ierr
 integer, intent(in) :: ind
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: liw, lw, m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: re, ae
+double precision, intent(inout) :: rnorm(*), work(lw)
+integer, intent(inout) :: iwork(liw)
 integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
+double precision :: eps, rerr
+double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 !              Least squares solution of linear equations
@@ -5257,12 +5263,6 @@ integer :: i, imax, info, m0, m1, m2, m3, m4, m5, mode, n0, np
 !                 determination in linear least squares problems*,
 !                 Sandia Laboratories report SAND80-0655, June, 1980.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(mda,n), b(mdb,*)
-double precision, intent(in) :: re, ae
-double precision, intent(inout) :: rnorm(*), work(lw)
-integer, intent(inout) :: iwork(liw)
-double precision :: eps, rerr
-double precision :: dpmpar
 !----------------
 !     np            if m .GE. n then the first np columns of A
 !                   are never interchanged.
@@ -5408,9 +5408,14 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
+double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
+&w(n), eb(n)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mm, nmk
 integer :: idamax
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+double precision :: ddot, dnrm2
 !
 !       This routine performs A QR factorization of A
 !       using Householder transformations. Row and
@@ -5418,11 +5423,6 @@ integer :: idamax
 !       of round-off and to help detect possible rank
 !       deficiency.
 !
-double precision, intent(inout) :: a(mda,n), ub(n), db(n), h(n), &
-&w(n), eb(n)
-integer, intent(inout) :: ic(n), ir(m)
-double precision :: bb, rmin, r2, sum, t, temp, tn, tt
-double precision :: ddot, dnrm2
 !
 !        Initialization
 !
@@ -5677,7 +5677,12 @@ end subroutine du11ls
 subroutine du12ls (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ic,ir)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(n), w(n)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, im1, j, jb, k, kp1, nmk
+double precision :: bb, tt
+double precision :: ddot, dnrm2
 !
 !        Given the Householder QR factorization of A, this
 !        subroutine solves the system AX=b. if the system
@@ -5686,11 +5691,6 @@ integer :: i, ij, im1, j, jb, k, kp1, nmk
 !
 !       Note - If mode.NE.2, w is never accessed.
 !
-double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
-double precision, intent(in) :: h(n), w(n)
-integer, intent(inout) :: ic(n), ir(m)
-double precision :: bb, tt
-double precision :: ddot, dnrm2
 !
 k = krank
 kp1 = k + 1
@@ -5827,9 +5827,14 @@ implicit none
 integer, intent(out) :: krank
 integer, intent(inout) :: ksure
 integer, intent(in) :: m, mda, mode, n, np
+double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
+&w(m), eb(m)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ii, im1, imin, is, j, jm1, jmax, jp1, kk, km1, kmi, &
 &kp1, kz, l, lm1, mmk, nn
 integer :: idamax
+double precision :: bb, rmin, r2, sum, t, temp, tn, tt
+double precision :: ddot, dnrm2
 !
 !       This routine performs an LQ factorization of the
 !       matrix a using Householder transformations. Row
@@ -5837,11 +5842,6 @@ integer :: idamax
 !       of round-off and to help detect possible rank
 !       deficiency.
 !
-double precision, intent(inout) :: a(mda,n), ub(m), db(m), h(m), &
-&w(m), eb(m)
-integer, intent(inout) :: ic(n), ir(m)
-double precision :: bb, rmin, r2, sum, t, temp, tn, tt
-double precision :: ddot, dnrm2
 !
 !        Initialization
 !
@@ -6096,7 +6096,12 @@ end subroutine du11us
 subroutine du12us (a,mda,m,n,b,mdb,nb,mode,krank,rnorm,h,w,ir,ic)
 implicit none
 integer, intent(in) :: krank, m, mda, mdb, mode, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
+double precision, intent(in) :: h(m), w(m)
+integer, intent(inout) :: ic(n), ir(m)
 integer :: i, ij, ip1, j, jb, k, kp1, mmk
+double precision :: bb, tt
+double precision :: ddot, dnrm2
 !
 !        Given the Householder LQ factorization of A, this
 !        subroutine solves the system AX=b. if the system
@@ -6105,11 +6110,6 @@ integer :: i, ij, ip1, j, jb, k, kp1, mmk
 !
 !       Note - If mode.NE.2, w is never accessed.
 !
-double precision, intent(inout) :: a(mda,n), b(mdb,nb), rnorm(nb)
-double precision, intent(in) :: h(m), w(m)
-integer, intent(inout) :: ic(n), ir(m)
-double precision :: bb, tt
-double precision :: ddot, dnrm2
 !
 k = krank
 kp1 = k + 1
@@ -6244,8 +6244,10 @@ integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
 real, intent(inout) :: a(mda,n), b(mdb,*), g(n), h(n), rnorm(*)
 real, intent(in) :: tau
+integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 real :: factor, hmax, sm1, tmp, z
+double precision :: sm
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m)),rnorm(nb),h(n),g(n),ip(n)
 !
@@ -6356,8 +6358,6 @@ real :: factor, hmax, sm1, tmp, z
 !                       The contents of arrays h(*),g(*) and ip(*)
 !                       are not generally required by the user.
 !-----------------------------------------------------------------------
-integer, intent(inout) :: ip(n)
-double precision :: sm
 !---------------------
 data factor /1.e-3/
 !
@@ -6494,8 +6494,10 @@ integer, intent(in) :: m, mda, mdb, n, nb
 real, intent(inout) :: a(mda,n), b(mdb,*), d(*), g(n), h(n), &
 &rnorm(*)
 real, intent(in) :: tau
+integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 real :: factor, hmax, sm1, tmp, z
+double precision :: sm
 !-----------------------------------------------------------------------
 !     dimension a(mda,n),(b(mdb,nb) or b(m))
 !     dimension d(l) where l = min(m,n)
@@ -6618,8 +6620,6 @@ real :: factor, hmax, sm1, tmp, z
 !                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
 !                       these errors are fatal.
 !-----------------------------------------------------------------------
-integer, intent(inout) :: ip(n)
-double precision :: sm
 !---------------------
 data factor /1.e-3/
 !
@@ -6770,6 +6770,7 @@ integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
 real, intent(inout) :: c(*), u(iue,m), up
 integer :: i, i2, i3, i4, incr, j
 real :: cl, d, sm1
+double precision :: sm, b
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
 !     From the book solving least squares problems, Prentice-Hall, 1974.
@@ -6798,7 +6799,6 @@ real :: cl, d, sm1
 !     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
 !            no operations will be done on c().
 !-----------------------------------------------------------------------
-double precision :: sm, b
 !
 if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
 cl = abs(u(1,lpivot))
@@ -6856,7 +6856,12 @@ subroutine dhfti (a,mda,m,n,b,mdb,nb,tau,k,rnorm,h,g,ip)
 implicit none
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+double precision :: factor, hmax, sm, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     double precision a(mda,n),(b(mdb,nb) or b(m))
 !     double precision tau,rnorm(nb),h(n),g(n)
@@ -6969,11 +6974,6 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                       The contents of arrays h(*),g(*) and ip(*)
 !                       are not generally required by the user.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(mda,n), b(mdb,*)
-double precision, intent(in) :: tau
-double precision, intent(inout) :: rnorm(*), h(n), g(n)
-integer, intent(inout) :: ip(n)
-double precision :: factor, hmax, sm, sm1, tmp, z
 !---------------------
 data factor /1.d-3/
 !
@@ -7107,7 +7107,12 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(out) :: k
 integer, intent(in) :: m, mda, mdb, n, nb
+double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
+double precision, intent(in) :: tau
+double precision, intent(inout) :: rnorm(*), h(n), g(n)
+integer, intent(inout) :: ip(n)
 integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
+double precision :: factor, hmax, sm, sm1, tmp, z
 !-----------------------------------------------------------------------
 !     double precision a(mda,n),(b(mdb,nb) or b(m))
 !     double precision d(l) where l = min(m,n)
@@ -7231,11 +7236,6 @@ integer :: i, ii, ip1, j, jb, jj, kp1, l, ldiag, lmax
 !                          ierr = 2  If nb.GT.1 and mdb.LT.max(m,n)
 !                       these errors are fatal.
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(mda,n), b(mdb,*), d(*)
-double precision, intent(in) :: tau
-double precision, intent(inout) :: rnorm(*), h(n), g(n)
-integer, intent(inout) :: ip(n)
-double precision :: factor, hmax, sm, sm1, tmp, z
 !---------------------
 data factor /1.d-3/
 !
@@ -7383,7 +7383,9 @@ end subroutine dhfti2
 subroutine dh12 (mode,lpivot,l1,m,u,iue,up,c,ice,icv,ncv)
 implicit none
 integer, intent(in) :: ice, icv, iue, l1, lpivot, m, mode, ncv
+double precision, intent(inout) :: u(iue,m), up, c(*)
 integer :: i, i2, i3, i4, incr, j
+double precision :: b, cl, d, sm
 !-----------------------------------------------------------------------
 !     Written by C.L. Lawson and R.J. Hanson.  Modified by A.H. Morris.
 !     From the book solving least squares problems, Prentice-Hall, 1974.
@@ -7412,8 +7414,6 @@ integer :: i, i2, i3, i4, incr, j
 !     ncv    number of vectors in c() to be transformed. If ncv .LE. 0
 !            no operations will be done on c().
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: u(iue,m), up, c(*)
-double precision :: b, cl, d, sm
 !
 if (0 .ge. lpivot .or. lpivot .ge. l1 .or. l1 .gt. m) return
 cl = dabs(u(1,lpivot))
@@ -7473,6 +7473,10 @@ integer, intent(in) :: ma, mdw, me, mg
 integer, intent(out) :: mode
 integer :: n
 real, intent(inout) :: rnorme, rnorml
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
 integer :: i, ii, imax, j, jj, jp1, k, key, kk, kranke, l, last, &
 &link, m, mapke1, mdeqc, mend, mep1, n1, n2, next, nlink, nopt, &
 &np1, ntimes
@@ -7482,6 +7486,7 @@ real :: snrm2
 real :: sasum
 real :: sdot
 real :: spmpar
+logical :: cov
 !
 !     dimension w(mdw,n+1),prgopt(*),x(n),
 !     ws(2*(me+n)+k+(mg+2)*(n+7)),ip(mg+2*n+2)
@@ -7794,11 +7799,6 @@ real :: spmpar
 !
 !     Revised oct. 1, 1989.
 !
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(*), ws(*)
-integer, intent(inout) :: ip(*)
-logical :: cov
 data zero /0.e0/, one /1.e0/, half /0.5e0/
 !
 !     Compute machine precision
@@ -8065,6 +8065,10 @@ integer, intent(in) :: ma, mdw, mg
 integer, intent(out) :: mode
 integer :: n
 real, intent(out) :: rnorm
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(*), ws(*)
+integer, intent(inout) :: ip(*)
 integer :: i, ii, il, im1, ip1, j, k, key, key8, key9, krank, &
 &krm1, krp1, l, last, link, m, map1, mdlpdp, minman, n1, n2, n3, &
 &next, np1
@@ -8073,6 +8077,8 @@ real :: anorm, blowup, eps, fac, gam, half, one, rb, srelpr, tau, &
 real :: sasum
 real :: sdot
 real :: spmpar
+real :: rnrm(1), opt(7)
+logical :: cov
 !
 !     This is a companion subprogram to lsei( ).
 !     The documentation for lsei( ) has more complete
@@ -8132,12 +8138,6 @@ real :: spmpar
 !     spmpar        FUNCTION TO COMPUTE THE RELATIVE MACHINE
 !                   precision.
 !
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(*), ws(*)
-real :: rnrm(1), opt(7)
-integer, intent(inout) :: ip(*)
-logical :: cov
 !
 data zero /0.e0/, one /1.e0/, half /0.5e0/
 !
@@ -8613,6 +8613,10 @@ integer, intent(in) :: l, ma, mdw, me
 integer, intent(out) :: mode
 integer, intent(in) :: n
 real, intent(inout) :: rnorm
+real, intent(inout) :: w(mdw,*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: x(n), work(*)
+integer, intent(inout) :: iwork(*)
 integer :: l1, l2, l3, l4, l5
 !
 !     dimension w(mdw,n+1),prgopt(*),x(n),iwork(m+n),work(m+5*n)
@@ -8844,10 +8848,6 @@ integer :: l1, l2, l3, l4, l5
 !        R.J. Hanson.  Available as sandia technical report no.
 !        SAND77-0552, and math. Programming, vol. 21, (1981), P. 98-118.
 !
-real, intent(inout) :: w(mdw,*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: x(n), work(*)
-integer, intent(inout) :: iwork(*)
 !
 mode = 0
 if (ma+me .le. 0 .or. n .le. 0) return
@@ -8881,6 +8881,11 @@ integer, intent(in) :: l, ma, mdw, mme
 integer, intent(inout) :: mode
 integer, intent(in) :: n
 real, intent(inout) :: rnorm
+real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
+real, intent(inout) :: z(*), temp(*)
+real, intent(in) :: prgopt(*)
+real, intent(inout) :: d(*)
+integer, intent(inout) :: ipivot(*), itype(*)
 integer :: i, igo897, igo938, igo958, imax, isol, itemp, iter, &
 &itmax, iwmax, j, jcon, jj, jm1, jp, key, krank, krp1, l1, last, &
 &link, lp1, m, me, mep1, next, niv, niv1, nlink, nm1, nopt, np1, &
@@ -8891,6 +8896,10 @@ real :: snrm2
 real :: sasum
 real :: spmpar
 integer :: isamax
+real :: dope(4)
+real :: sparam(5)
+integer :: idope(8)
+logical :: hitcon, feasbl, done, pos
 !
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
@@ -8940,15 +8949,6 @@ integer :: isamax
 !                                       (A)
 !
 !
-real, intent(inout) :: w(mdw,*), x(*), wd(*), h(*), scale(*)
-real :: dope(4)
-real, intent(inout) :: z(*), temp(*)
-real, intent(in) :: prgopt(*)
-real, intent(inout) :: d(*)
-real :: sparam(5)
-integer, intent(inout) :: ipivot(*), itype(*)
-integer :: idope(8)
-logical :: hitcon, feasbl, done, pos
 data zero /0.e0/, one /1.e0/, two /2.e0/
 !
 !     Initialize-variables
@@ -9517,11 +9517,19 @@ subroutine wnlit(w, mdw, m, n, l, ipivot, itype, h, scale, rnorm, &
 implicit none
 integer, intent(in) :: l, m, mdw, n
 real, intent(out) :: rnorm
+real, intent(inout) :: w(mdw,*), h(*), scale(*)
+real, intent(in) :: dope(*)
+integer, intent(inout) :: itype(*), ipivot(*), idope(*)
+logical, intent(inout) :: done
 integer :: i, i1, ic, igo990, igo993, igo996, ip1, ir, irp1, &
 &itemp, j, j1, jj, jm1, jp, k, kk, krank, krp1, l1, lb, lend, lp1, &
 &max, me, mend, mep1, niv, niv1, np1, nsoln
 real :: alsq, eanorm, fac, factor, hbar, one, rn, sn, t, tau, &
 &tenm3, zero
+real :: sparam(5)
+integer :: isamax
+logical :: indep
+logical :: recalc
 !
 !     This is a companion subprogram to wnnls( ).
 !     The documentation for wnnls( ) has more complete
@@ -9535,14 +9543,6 @@ real :: alsq, eanorm, fac, factor, hbar, one, rn, sn, t, tau, &
 !     col interchanges.
 !     Revised oct. 1, 1989
 !
-real, intent(inout) :: w(mdw,*), h(*), scale(*)
-real, intent(in) :: dope(*)
-real :: sparam(5)
-integer, intent(inout) :: itype(*), ipivot(*), idope(*)
-integer :: isamax
-logical :: indep
-logical, intent(inout) :: done
-logical :: recalc
 data tenm3 /1.e-3/, zero /0.e0/, one /1.e0/
 !
 me = idope(1)
@@ -9912,9 +9912,17 @@ integer, intent(inout) :: ifault
 integer, intent(in) :: l, m, m1, mb, mm, mmpnn, mr, n
 integer, intent(inout) :: n1
 integer, intent(in) :: nn
+integer, intent(inout) :: ipivot(n)
+real, intent(in) :: a(mm,n), b(mb,l)
+real, intent(inout) :: c(*)
+real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
 integer :: i, iter, j, jm1, k, k0, k1, k10, k11, k12, k2, k3, k4, &
 &k5, k6, k7, k8, k9, ksum, m1p1, mp1, mpi, mpn, numit
 real :: spmpar
+real :: eta
+real :: digitx
+logical :: fail
+logical :: sing
 ! ** PURPOSE **
 ! subroutine l2slv computes least squares solutions to overdetermined
 ! and underdetermined systems of linear equations.  The method used is
@@ -10093,14 +10101,6 @@ real :: spmpar
 ! *                                                                   *
 ! *********************************************************************
 !
-integer, intent(inout) :: ipivot(n)
-real, intent(in) :: a(mm,n), b(mb,l)
-real, intent(inout) :: c(*)
-real :: eta
-real, intent(inout) :: qr(mmpnn,n), res(mr,l), tol, w(m), x(nn,l)
-real :: digitx
-logical :: fail
-logical :: sing
 !
 ! Set value of eta, a machine-dependent parameter.
 ! eta, the relative machine precision, is the smallest positive real
@@ -10330,20 +10330,20 @@ subroutine decom2(m, n, m1, eta, tol, qr, d, n1, ipivot, sing, &
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n
 integer, intent(out) :: n1
-integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
-&ns, nsp1
 integer, intent(inout) :: ipivot(n)
-real :: c
 real, intent(inout) :: d(*)
-real :: dm, ds
 real, intent(in) :: eta
 real, intent(inout) :: qr(mmpnn,n)
-real :: rsj
 real, intent(in) :: tol
+logical, intent(out) :: sing
+integer :: ik, j, jj, k, km1, l, lmm, mh, mp1, mpn1, ms, mv, np, &
+&ns, nsp1
+real :: c
+real :: dm, ds
+real :: rsj
 real :: tol2
 double precision :: sum
 logical :: finis, fsum
-logical, intent(out) :: sing
 n1 = 0
 sing = .true.
 fsum = .true.

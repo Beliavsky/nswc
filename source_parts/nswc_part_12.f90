@@ -8,19 +8,19 @@ real :: a, alpha, am(*), an(*), b, bda(*), bdb(*), bdc(*), bdd(*), &
 &beta, bm(*), bn(*), c, cm(*), cn(*), d, dm(*), dn(*), gama, &
 &grhs(mn,*), pertrb, um(*), un(*), usol(idmn,*), w(*), xnu, zm(*), &
 &zn(*)
+external cofx, cofy
 integer :: i, i1, iord, j, mp, np
 real :: ai, ax1, axi, bi, bxi, ci, cxi, cxm, dj, dy1, dyj, ej, &
 &eyj, fj, fyj, fyn, prtrb, xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
 real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
+logical :: singlr
 !
 !     sepel1 sets up vectors and arrays for input to blktri
 !     and computes a second order solution in USOL.  A return jump to
 !     sepell OCCURRS IF iorder=2.  IF iorder=4 A FOURTH ORDER
 !     solution is generated in USOL.
 !
-logical :: singlr
-external        cofx, cofy
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
 &mit        ,nit        ,is         ,ms         , &
@@ -394,6 +394,7 @@ subroutine chksng (mbdcnd,nbdcnd,alpha,beta,gama,xnu,cofx,cofy, &
 implicit none
 integer :: mbdcnd, nbdcnd
 real :: alpha, beta, gama, xnu
+logical :: singlr
 integer :: i, j
 real :: ai, bi, ci, dj, ej, fj, xi, yj
 integer :: is, js, k, kswx, kswy, l, mit, ms, nit, ns
@@ -402,7 +403,6 @@ real :: ait, bit, cit, dit, dlx, dlx4, dly, dly4, tdlx3, tdly3
 !     THIS SUBROUTINE CHECKS IF THE PDE   sepell
 !     must solve is a singular operator
 !
-logical :: singlr
 common /splp/   kswx       ,kswy       ,k          ,l          , &
 &ait        ,bit        ,cit        ,dit        , &
 &mit        ,nit        ,is         ,ms         , &
@@ -844,6 +844,7 @@ real :: am(*), an(*), bm(*), bn(*), cm(*), cn(*), w(*), y(idimy,*)
 integer :: iw1, iw2, iw3, iwah, iwbh, iwd, iwu, iww, nh, nl
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
+external prod0, prodp, cprod0, cprodp
 !
 !
 !***********************************************************************
@@ -981,7 +982,6 @@ real :: cnv, eps
 !
 !
 !
-external        prod0      ,prodp      ,cprod0     ,cprodp
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
 !
@@ -1558,8 +1558,11 @@ implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
 real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
+complex, intent(inout) :: y(*), d(*), w(*)
+complex :: bd(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm
 real :: rt
+complex :: crt, den, y1, y2
 !
 ! cprod0 applies a sequence of matrix operations to the vector x and
 ! STORES THE RESULT IN yy.   (COMPLEX CASE)
@@ -1574,8 +1577,6 @@ real :: rt
 ! d,w,y      WORKING ARRAYS.
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
-complex, intent(inout) :: y(*), d(*), w(*)
-complex :: bd(*), crt, den, y1, y2
 !
 do j=1,m
    y(j) = cmplx(x(j),0.)
@@ -1659,8 +1660,11 @@ implicit none
 integer, intent(in) :: m, na, nd, nm1, nm2
 real :: a(*), aa(*), b(*), bm1(*), bm2(*), c(*), x(*)
 real, intent(inout) :: yy(*)
+complex, intent(inout) :: y(*), d(*), u(*)
+complex :: bd(*)
 integer :: ia, id, iflg, j, k, m1, m2, mm, mm2
 real :: rt
+complex :: v, den, bh, ym, am, y1, y2, yh, crt
 !
 ! prodp applies a sequence of matrix operations to the vector x and
 ! stores the result in yy.  (Periodic boundary conditions and
@@ -1676,8 +1680,6 @@ real :: rt
 ! d,u,y      WORKING ARRAYS.
 ! ISGN       DETERMINES WHETHER OR NOT A CHANGE IN SIGN IS MADE.
 !
-complex, intent(inout) :: y(*), d(*), u(*)
-complex :: v, den, bh, ym, am, y1, y2, yh, bd(*), crt
 !
 do j=1,m
    y(j) = cmplx(x(j),0.)
@@ -1882,14 +1884,15 @@ end subroutine compb
 
 subroutine tqlrt0 (n,d,e2,ierr)
 implicit none
+integer :: n, ierr
+real :: d(n), e2(n)
 integer :: nhalf, ntop
 real :: dhold
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv
-!
-integer :: i, j, l, m, n, ii, l1, mml, ierr
-real :: d(n), e2(n)
+integer :: i, j, l, m, ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
+!
 !
 common /cblkt/  npp        ,k          ,machep     ,cnv        , &
 &nm         ,ncmplx     ,ik
@@ -2046,6 +2049,7 @@ subroutine ppadd (n,ierror,a,c,cbp,bp,bh)
 implicit none
 integer :: ierror, n
 real :: a(*), bh(*), bp(*), c(*)
+complex :: cbp(*)
 integer :: i2, i3, icv, if, ig, is, it, iz, izm, izm2, j, modiz, &
 &nhalf, nt
 real :: db, psg, scnv, sgn, xl, xm, xr
@@ -2055,19 +2059,18 @@ real :: ppsgf
 real :: ppspf
 real :: bsrh
 real :: psgf
+complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3
+external psgf, ppspf, ppsgf
 !
 !     ppadd computes the eigenvalues of the periodic tridiagonal matrix
 !     with coefficients an,BN,CN
 !
 ! n   IS THE ORDER OF THE bh AND bp POLYNOMIALS.
 !     On output bp contains the eigenvalues.
-! CBP is the same as bp except type complex.
+! cbp is the same as bp except type complex.
 ! bh  is used to temporarily store the roots of the B hat polynomial
 !     which enters through bp.
 !
-complex :: cf, cx, fsg, hsg, dd, f, fp, fpp, cdis, r1, r2, r3, &
-&cbp(*)
-external        psgf       ,ppspf      ,ppsgf
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
 !
@@ -2227,11 +2230,11 @@ function bsrh (xll,xrr,iz,c,a,bh,f,sgn)
 implicit none
 integer :: iz
 real :: a(*), bh(*), c(*), sgn, xll, xrr
+real :: f
 real :: dx, x, xl, xr
 integer :: ik, k, ncmplx, nm, npp
 real :: cnv, eps
 real :: bsrh
-real :: f
 common /cblkt/  npp        ,k          ,eps        ,cnv        , &
 &nm         ,ncmplx     ,ik
 xl = xll
@@ -2285,7 +2288,10 @@ implicit none
 integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+integer, intent(inout) :: l(n)
 integer :: i, k, leftlo
+integer :: a, b15, b16, fhi, p, xalo, xhi
+double precision :: c, m, s, t
 !-----------------------------------------------------------------------
 !
 !               Uniform random selection of values from
@@ -2324,9 +2330,6 @@ integer :: i, k, leftlo
 !                 3 - Seed out of range )
 !
 !-----------------------------------------------------------------------
-integer, intent(inout) :: l(n)
-integer :: a, b15, b16, fhi, p, xalo, xhi
-double precision :: c, m, s, t
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     s = 1/(p-1)   (it is assumed that the arithmetic being
@@ -2388,9 +2391,10 @@ subroutine urng (ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+real, intent(inout) :: x(n)
 integer :: k, l, leftlo
 real :: s, t
-real, intent(inout) :: x(n)
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !
@@ -2403,7 +2407,6 @@ real, intent(inout) :: x(n)
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
@@ -2469,8 +2472,10 @@ subroutine durng (ix, x, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
-integer :: k, l, leftlo
 double precision, intent(inout) :: x(n)
+integer :: k, l, leftlo
+integer :: a, b15, b16, fhi, p, xalo, xhi
+double precision :: s, t
 !-----------------------------------------------------------------------
 !         Uniform random number generator using the recursion
 !
@@ -2483,8 +2488,6 @@ double precision, intent(inout) :: x(n)
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-integer :: a, b15, b16, fhi, p, xalo, xhi
-double precision :: s, t
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
@@ -2551,6 +2554,7 @@ integer, intent(inout) :: ix
 real, intent(inout) :: u, v
 integer :: k, leftlo
 real :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -2564,7 +2568,6 @@ real :: t
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
@@ -2619,7 +2622,10 @@ end subroutine urng0
 subroutine durng0 (ix, u, v)
 implicit none
 integer, intent(inout) :: ix
+double precision, intent(inout) :: u, v
 integer :: k, leftlo
+double precision :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -2633,9 +2639,6 @@ integer :: k, leftlo
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-double precision, intent(inout) :: u, v
-double precision :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
@@ -2693,6 +2696,7 @@ integer, intent(inout) :: ix
 real, intent(inout) :: d, u, v
 integer :: j, k, leftlo
 real :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -2707,7 +2711,6 @@ real :: t
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
@@ -2765,7 +2768,10 @@ end subroutine urng1
 subroutine durng1 (ix, u, v, d)
 implicit none
 integer, intent(inout) :: ix
+double precision, intent(inout) :: u, v, d
 integer :: j, k, leftlo
+double precision :: t
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !       Uniform random number generator using the recursion
 !
@@ -2780,9 +2786,6 @@ integer :: j, k, leftlo
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-double precision, intent(inout) :: u, v, d
-double precision :: t
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     data p0/2**30 - 1/
@@ -2841,8 +2844,10 @@ subroutine urng2 (ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+real, intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo
 real :: s, t
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-----------------------------------------------------------------------
 !
 !         Generation of uniform random points (x(I),y(I))
@@ -2858,8 +2863,6 @@ real :: s, t
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-real, intent(inout) :: x(n), y(n)
-integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
@@ -2908,7 +2911,10 @@ subroutine durng2 (ix, x, y, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(inout) :: x(n), y(n)
 integer :: k, l, leftlo
+double precision :: s, t
+integer :: a, b15, b16, fhi, p, xalo, xhi
 !-----------------------------------------------------------------------
 !
 !         Generation of uniform random points (x(I),y(I))
@@ -2924,9 +2930,6 @@ integer :: k, l, leftlo
 !        University of Chicago
 !     adapted by A.H. Morris (NSWC)
 !-------------------
-double precision, intent(inout) :: x(n), y(n)
-double precision :: s, t
-integer :: a, b15, b16, fhi, p, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !-------------------
@@ -2975,13 +2978,13 @@ subroutine rcir (n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+real, intent(inout) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !
 !          Generation of n uniform random points (x(I),y(I))
 !              in the unit circle centered at the origin
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n), y(n)
 !------------------
 call rcir1 (n, ix, x, 1, y, 1, ierr)
 return
@@ -2991,8 +2994,10 @@ subroutine rcir1 (n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
+real, intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo
 real :: r, s, u, v
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !
 !      Generation of n uniform random points in the unit circle
@@ -3003,8 +3008,6 @@ real :: r, s, u, v
 !                      i2 = 1 + ky*(i - 1) .
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(*), y(*)
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     p0 = 2**30 - 1
@@ -3079,13 +3082,13 @@ subroutine drcir (n, ix, x, y, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(inout) :: x(n), y(n)
 !-----------------------------------------------------------------------
 !
 !          Generation of n uniform random points (x(I),y(I))
 !              in the unit circle centered at the origin
 !
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: x(n), y(n)
 !------------------
 call drcir1 (n, ix, x, 1, y, 1, ierr)
 return
@@ -3095,7 +3098,10 @@ subroutine drcir1 (n, ix, x, kx, y, ky, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, ky, n
+double precision, intent(inout) :: x(*), y(*)
 integer :: i, i1, i2, j, k, leftlo
+double precision :: r, s, u, v
+integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-----------------------------------------------------------------------
 !
 !      Generation of n uniform random points in the unit circle
@@ -3106,9 +3112,6 @@ integer :: i, i1, i2, j, k, leftlo
 !                      i2 = 1 + ky*(i - 1) .
 !
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: x(*), y(*)
-double precision :: r, s, u, v
-integer :: a, b15, b16, fhi, p, p0, xalo, xhi
 !-------------------
 !     data a/7**5/,  b15/2**15/, b16/2**16/, p/2**31 - 1/
 !     p0 = 2**30 - 1
@@ -3183,13 +3186,13 @@ subroutine rnor (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
 integer :: i, m, max
 real :: r, s, u, v
+real :: t(2)
 !-----------------------------------------------------------------------
 !                 Normal random number generator
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-real :: t(2)
 !---------------------
 data max /2147483647/
 !---------------------
@@ -3234,12 +3237,12 @@ subroutine drnor (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n)
 integer :: i, m, max
+double precision :: r, s, u, v, t(2)
 !-----------------------------------------------------------------------
 !                 Normal random number generator
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n)
-double precision :: r, s, u, v, t(2)
 !---------------------
 data max /2147483647/
 !---------------------
@@ -3284,13 +3287,13 @@ subroutine nrng (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+real, intent(inout) :: a(n)
 integer :: i, m
 real :: phi, pi2, r
+real :: temp(1)
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(n)
-real :: temp(1)
 data pi2 /6.2831853071796/
 !
 call urng (ix,a,n,ierr)
@@ -3316,12 +3319,12 @@ subroutine dnrng (ix, a, n, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(inout) :: a(n)
 integer :: i, m
+double precision :: phi, pi2, r, temp(1)
 !-----------------------------------------------------------------------
 !                 Gaussian random number generator
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(n)
-double precision :: phi, pi2, r, temp(1)
 !
 data pi2 /6.28318530717958647692528676656d0/
 !
@@ -3348,6 +3351,9 @@ subroutine nrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
+real, intent(inout) :: a(*)
+real, intent(in) :: fmu(m)
+real, intent(inout) :: x(kx,n)
 integer :: i, ii, j, k, l, l0, ldim, max
 real :: sum
 !-----------------------------------------------------------------------
@@ -3429,9 +3435,6 @@ real :: sum
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(*)
-real, intent(in) :: fmu(m)
-real, intent(inout) :: x(kx,n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -3487,6 +3490,9 @@ subroutine nrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
+real, intent(inout) :: a(m)
+real, intent(in) :: fmu(m)
+real, intent(inout) :: x(kx,n)
 integer :: i, j, max
 !-----------------------------------------------------------------------
 !
@@ -3553,9 +3559,6 @@ integer :: i, j, max
 !                   4 - Seed out of range      )
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(m)
-real, intent(in) :: fmu(m)
-real, intent(inout) :: x(kx,n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -3597,7 +3600,11 @@ subroutine dnrvg (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
+double precision, intent(inout) :: a(*)
+double precision, intent(in) :: fmu(m)
+double precision, intent(inout) :: x(kx,n)
 integer :: i, ii, j, k, l, l0, ldim, max
+double precision :: sum
 !-----------------------------------------------------------------------
 !
 !           Generation of n random normal vectors of length m
@@ -3677,10 +3684,6 @@ integer :: i, ii, j, k, l, l0, ldim, max
 !     PP. 278 - 281.
 !
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(*)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
-double precision :: sum
 !--------------------
 data max /2147483647/
 !--------------------
@@ -3736,6 +3739,9 @@ subroutine dnrvg1 (mo, ix, n, m, a, fmu, x, kx, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: kx, m, mo, n
+double precision, intent(inout) :: a(m)
+double precision, intent(in) :: fmu(m)
+double precision, intent(inout) :: x(kx,n)
 integer :: i, j, max
 !-----------------------------------------------------------------------
 !
@@ -3802,9 +3808,6 @@ integer :: i, j, max
 !                   4 - Seed out of range      )
 !
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(m)
-double precision, intent(in) :: fmu(m)
-double precision, intent(inout) :: x(kx,n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -3847,6 +3850,7 @@ implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: a
+real, intent(inout) :: x(n)
 integer :: i
 !
 !              ***Subroutine purpose and description***
@@ -3895,7 +3899,6 @@ integer :: i
 !           digital simulation, john wiley and sons, new york, 1973,
 !           P. 203.
 !
-real, intent(inout) :: x(n)
 !
 !        Check to ensure that the desired number of variates is within
 !        acceptable range
@@ -3933,6 +3936,8 @@ subroutine drnexp (n,a,iseed,x,ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
 integer :: i
 !
 !              ***Subroutine purpose and description***
@@ -3981,8 +3986,6 @@ integer :: i
 !           digital simulation, john wiley and sons, new york, 1973,
 !           P. 203.
 !
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
 !
 !        Check to ensure that the desired number of variates is within
 !        acceptable range
@@ -4021,6 +4024,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
+real, intent(inout) :: x(n)
 integer :: i, ind, max
 real :: u, v, w
 !-----------------------------------------------------------------------
@@ -4048,7 +4052,6 @@ real :: u, v, w
 !                      seed.
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
 !
 data max /2147483647/
 !
@@ -4083,7 +4086,10 @@ subroutine drgam (ix, a, n, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
 integer :: i, ind, max
+double precision :: u, v, w
 !-----------------------------------------------------------------------
 !
 !             Computation of n double precision variates
@@ -4109,9 +4115,6 @@ integer :: i, ind, max
 !                      seed.
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
-double precision :: u, v, w
 !
 data max /2147483647/
 !
@@ -4147,6 +4150,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
+real, intent(inout) :: x(n)
 integer :: i, ind, max
 real :: u, v, x1, x2
 !-----------------------------------------------------------------------
@@ -4196,7 +4200,6 @@ real :: u, v, x1, x2
 !                   3 - Seed out of range        )
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4241,7 +4244,10 @@ subroutine drbeta (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(in) :: a, b
+double precision, intent(inout) :: x(n)
 integer :: i, ind, max
+double precision :: u, v, x1, x2
 !-----------------------------------------------------------------------
 !
 !                         Double precision
@@ -4290,9 +4296,6 @@ integer :: i, ind, max
 !                   3 - Seed out of range        )
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
-double precision :: u, v, x1, x2
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4338,6 +4341,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a, b
+real, intent(inout) :: x(n)
 integer :: i, ind, max
 real :: ahalf, bhalf, big, bound, c, t, u, v, x1, x2, xmax
 real :: spmpar
@@ -4379,7 +4383,6 @@ real :: spmpar
 !                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4442,7 +4445,12 @@ subroutine dfran (n, a, b, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(in) :: a, b
+double precision, intent(inout) :: x(n)
 integer :: i, ind, max
+double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
+&x1, x2
+double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 !                  Double precision generation of
@@ -4482,11 +4490,6 @@ integer :: i, ind, max
 !                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a, b
-double precision, intent(inout) :: x(n)
-double precision :: ahalf, bhalf, big, bound, c, t, u, v, xmax, &
-&x1, x2
-double precision :: dpmpar
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4550,6 +4553,7 @@ implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
 real, intent(in) :: a
+real, intent(inout) :: x(n)
 integer :: i, ind, max
 real :: ahalf, d, s, u, v, w, z
 !-----------------------------------------------------------------------
@@ -4588,7 +4592,6 @@ real :: ahalf, d, s, u, v, w, z
 !                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4637,7 +4640,10 @@ subroutine dtran (n, a, ix, x, ierr)
 implicit none
 integer, intent(inout) :: ierr, ix
 integer, intent(in) :: n
+double precision, intent(in) :: a
+double precision, intent(inout) :: x(n)
 integer :: i, ind, max
+double precision :: ahalf, d, s, u, v, w, z
 !-----------------------------------------------------------------------
 !
 !                  Double precision generation of
@@ -4675,9 +4681,6 @@ integer :: i, ind, max
 !                   4 - Seed out of range       )
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision, intent(inout) :: x(n)
-double precision :: ahalf, d, s, u, v, w, z
 !--------------------
 data max /2147483647/
 !--------------------
@@ -4727,6 +4730,7 @@ implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
 real, intent(in) :: alpha, fmu, sig
+real, intent(inout) :: x(n)
 integer :: i
 real :: c, sigi, t
 !
@@ -4786,7 +4790,6 @@ real :: c, sigi, t
 !           digital simulation, john wiley and sons, new york, 1973,
 !           PP. 236 - 237.
 !
-real, intent(inout) :: x(n)
 !
 !        Check to ensure that the desired sequence length is within
 !        acceptable range
@@ -4846,7 +4849,10 @@ subroutine drmk1 (n, fmu, sig, alpha, iseed, x, ierror)
 implicit none
 integer, intent(inout) :: ierror, iseed
 integer, intent(in) :: n
+double precision, intent(in) :: fmu, sig, alpha
+double precision, intent(inout) :: x(n)
 integer :: i
+double precision :: c, sigi, t
 !
 !              ***Subroutine purpose and description***
 !
@@ -4904,9 +4910,6 @@ integer :: i
 !           digital simulation, john wiley and sons, new york, 1973,
 !           PP. 236 - 237.
 !
-double precision, intent(in) :: fmu, sig, alpha
-double precision, intent(inout) :: x(n)
-double precision :: c, sigi, t
 !
 !        Check to ensure that the desired sequence length is within
 !        acceptable range

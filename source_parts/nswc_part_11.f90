@@ -58,24 +58,25 @@ implicit none
 !
 !-----------------------------------------------------------------------
 double precision, intent(in) :: a
-double precision :: absc
 double precision, intent(inout) :: abserr
 double precision, intent(in) :: b
-double precision :: centr, dhlgth
 double precision, intent(in) :: epmach
-double precision :: f, fc, fsum, fval1, fval2, fv1(10), fv2(10), &
-&hlgth
+double precision :: f
 double precision, intent(inout) :: resabs
-double precision :: resg, resk, reskh
 double precision, intent(inout) :: result
-double precision :: tol
 double precision, intent(in) :: uflow
-double precision :: wg(5), wgk(11), xgk(11)
 double precision, intent(inout) :: resasc
 integer, intent(out) :: isig
+external f
+double precision :: absc
+double precision :: centr, dhlgth
+double precision :: fc, fsum, fval1, fval2, fv1(10), fv2(10), &
+&hlgth
+double precision :: resg, resk, reskh
+double precision :: tol
+double precision :: wg(5), wgk(11), xgk(11)
 integer :: j, jtw, jtwm1
 !
-external f
 !
 !           The abscissae and weights are given for the interval (-1,1).
 !           Because of symmetry only the positive abscissae and their
@@ -204,6 +205,17 @@ subroutine dqagi (f, bound, inf, epsabs, epsrel, result, abserr, &
 implicit none
 integer, intent(in) :: inf
 integer, intent(out) :: last
+double precision, intent(out) :: abserr
+double precision, intent(in) :: bound, epsabs, epsrel
+double precision :: f
+double precision, intent(out) :: result
+double precision, intent(inout) :: work
+integer, intent(out) :: ier
+integer, intent(inout) :: iwork
+integer, intent(in) :: lenw, limit
+integer, intent(out) :: neval
+external f
+integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
 !         Double precision integration over infinite intervals
@@ -357,20 +369,9 @@ integer, intent(out) :: last
 !              - dpmpar
 !
 !-----------------------------------------------------------------------
-double precision, intent(out) :: abserr
-double precision, intent(in) :: bound, epsabs, epsrel
-double precision :: f
-double precision, intent(out) :: result
-double precision, intent(inout) :: work
-integer, intent(out) :: ier
-integer, intent(inout) :: iwork
-integer, intent(in) :: lenw, limit
-integer :: l1, l2, l3
-integer, intent(out) :: neval
 !
 dimension iwork(limit),work(lenw)
 !
-external f
 !
 !         Check validity of limit and lenw.
 !
@@ -403,15 +404,15 @@ implicit none
 !
 !        Purpose
 !           the routine calculates an approximation  result  to a given
-!           integral    I = Integral of  F  over (bound,+INFINITY)
-!                    or I = Integral of  F  over (-INFINITY,bound)
-!                    or I = Integral of  F  over (-INFINITY,+INFINITY),
+!           integral    I = Integral of  f  over (bound,+INFINITY)
+!                    or I = Integral of  f  over (-INFINITY,bound)
+!                    or I = Integral of  f  over (-INFINITY,+INFINITY),
 !           hopefully satisfying following claim for accuracy
 !           abs(I-result).LE.max(epsabs,epsrel*abs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - Double precision
+!            f      - Double precision
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -540,45 +541,46 @@ implicit none
 !              - dqk15i
 !              - dqpsrt
 !              - dqelg
-!              - F (user-provided function)
+!              - f (user-provided function)
 !              - dpmpar
 !
 !-----------------------------------------------------------------------
-double precision :: abseps
 double precision, intent(out) :: abserr
 double precision, intent(inout) :: alist
-double precision :: area, area1, area12, area2, a1, a2
 double precision, intent(inout) :: blist
-double precision :: boun
 double precision, intent(in) :: bound
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres, &
-&dpmpar
 double precision, intent(inout) :: elist
-double precision :: epmach
 double precision, intent(in) :: epsabs, epsrel
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision :: f
 double precision, intent(out) :: result
-double precision :: res3la(3)
 double precision, intent(inout) :: rlist
-double precision :: rlist2(52), small, t, uflow
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(in) :: inf
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr
 integer, intent(out) :: neval
+external f
+double precision :: abseps
+double precision :: area, area1, area12, area2, a1, a2
+double precision :: boun
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres, &
+&dpmpar
+double precision :: epmach
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+double precision :: res3la(3)
+double precision :: rlist2(52), small, t, uflow
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr
 integer :: nres, nrmax, numrl2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit)
 !
-external f
 !
 !            The dimension of rlist2 is determined by the value of
 !            LIMEXP in subroutine dqelg.
@@ -659,8 +661,8 @@ rerr = dmax1(epsrel, 50.d0*epmach, 0.5d-28)
 !
 !           Determine the interval to be mapped onto (0,1).
 !           If inf = 2 The integral is computed as I = I1+I2, where
-!           I1 = Integral of F over (-INFINITY,0),
-!           I2 = Integral of F over (0,+INFINITY).
+!           I1 = Integral of f over (-INFINITY,0),
+!           I2 = Integral of f over (0,+INFINITY).
 !
 boun = bound
 if (inf .eq. 2) boun = 0.d0
@@ -883,7 +885,22 @@ subroutine dqk15i (f, boun, inf, a, b, result, abserr, resabs, &
 &resasc, epmach, uflow)
 implicit none
 integer, intent(in) :: inf
+double precision, intent(in) :: a
+double precision, intent(inout) :: abserr
+double precision, intent(in) :: b, boun
+double precision, intent(in) :: epmach
+double precision :: f
+double precision, intent(inout) :: resabs, resasc
+double precision, intent(inout) :: result
+double precision, intent(in) :: uflow
+external f
 integer :: j
+double precision :: absc, absc1, absc2
+double precision :: centr, dinf
+double precision :: fc, fsum, fval1, fval2, hlgth
+double precision :: resg, resk, reskh
+double precision :: tabsc1, tabsc2, tol
+double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -955,20 +972,6 @@ integer :: j
 !                 - f (user-provided function)
 !
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a
-double precision :: absc, absc1, absc2
-double precision, intent(inout) :: abserr
-double precision, intent(in) :: b, boun
-double precision :: centr, dinf
-double precision, intent(in) :: epmach
-double precision :: f, fc, fsum, fval1, fval2, hlgth
-double precision, intent(inout) :: resabs, resasc
-double precision :: resg, resk, reskh
-double precision, intent(inout) :: result
-double precision :: tabsc1, tabsc2, tol
-double precision, intent(in) :: uflow
-double precision :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
-external f
 !
 !           The abscissae and weights are supplied for the interval
 !           (-1,1).  Because of symmetry only the positive abscissae and
@@ -1139,12 +1142,12 @@ implicit none
 !
 double precision :: elist
 double precision, intent(inout) :: ermax
-double precision :: errmax, errmin
-integer :: i, ibeg, ido
 integer, intent(inout) :: iord
-integer :: isucc, j, jbnd, jupbn, k
 integer, intent(in) :: last, limit
 integer, intent(inout) :: maxerr, nrmax
+double precision :: errmax, errmin
+integer :: i, ibeg, ido
+integer :: isucc, j, jbnd, jupbn, k
 dimension elist(last),iord(last)
 !
 !           Check whether the list contains more than
@@ -1272,20 +1275,20 @@ implicit none
 !
 !-----------------------------------------------------------------------
 double precision, intent(out) :: abserr
-double precision :: delta1, delta2, delta3
 double precision, intent(in) :: epmach
-double precision :: epsinf
 double precision, intent(inout) :: epstab(52)
-double precision :: error, err1, err2, err3, e0, e1, e1abs, e2, e3
 double precision, intent(in) :: oflow
-double precision :: res
 double precision, intent(out) :: result
 double precision, intent(inout) :: res3la(3)
+integer, intent(inout) :: n
+integer, intent(inout) :: nres
+double precision :: delta1, delta2, delta3
+double precision :: epsinf
+double precision :: error, err1, err2, err3, e0, e1, e1abs, e2, e3
+double precision :: res
 double precision :: ss, tol1, tol2, tol3
 integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
-integer, intent(inout) :: n
 integer :: newelm
-integer, intent(inout) :: nres
 integer :: num
 !---------------------
 !
@@ -1560,11 +1563,11 @@ integer, intent(out) :: ier
 integer, intent(inout) :: iwork
 integer, intent(out) :: last
 integer, intent(in) :: leniw, lenw, limit
+external f
 integer :: l1, l2, l3, l4, l5
 !
 dimension iwork(leniw),work(lenw)
 !
-external f
 !
 !         Check validity of limit,leniw and lenw.
 !
@@ -1595,13 +1598,13 @@ subroutine dqxgse(f,a,b,epsabs,epsrel,limit,result,abserr, &
 implicit none
 !
 !            The routine calculates an approximation result to A
-!            definite integral I = Integral of F over (a,b),
+!            definite integral I = Integral of f over (a,b),
 !            hopefully satisfying following claim for accuracy
 !            dabs(I-result).LE.max(epsabs,epsrel*dabs(I)).
 !
 !        Parameters
 !         on entry
-!            F      - Double precision
+!            f      - Double precision
 !                     function subprogram defining the integrand
 !                     function f(x). the actual name for f needs to be
 !                     declared E X t E R N A L in the driver program.
@@ -1725,41 +1728,44 @@ implicit none
 !                     saved in the corresponding column
 !                     OF valp,valn
 !
-!***Routines called  F,dpmpar,dqelg,dqxlqm,dqpsrt,dqxrrd,dqxcpy
+!***Routines called  f,dpmpar,dqelg,dqxlqm,dqpsrt,dqxrrd,dqxcpy
 !
-double precision :: a, abseps
+double precision :: a
 double precision, intent(out) :: abserr
 double precision, intent(inout) :: alist
-double precision :: area, area1, area12, area2, a1, a2, b
+double precision :: b
 double precision, intent(inout) :: blist
-double precision :: b1, b2, correc, defabs, defab1, defab2, dres
 double precision, intent(inout) :: elist
-double precision :: epmach
 double precision, intent(in) :: epsabs, epsrel
-double precision :: erlarg, erlast, errbnd, errmax, error1, &
-&error2, erro12, errsum, ertest, f, oflow, rerr, resabs, reseps
+double precision :: f
 double precision, intent(out) :: result
-double precision :: res3la(3)
 double precision, intent(inout) :: rlist
-double precision :: rlist2(52), small, t, uflow
 double precision, intent(inout) :: valp, valn
-double precision :: vp1(21), vp2(21), vn1(21), vn2(21), dpmpar
-integer :: id
 integer, intent(out) :: ier
-integer :: ierro
 integer, intent(inout) :: iord
-integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
 integer, intent(out) :: last
 integer, intent(in) :: limit
-integer :: maxerr, nres, nrmax, numrl2
 integer, intent(inout) :: lp(limit), ln(limit)
+external f
+double precision :: abseps
+double precision :: area, area1, area12, area2, a1, a2
+double precision :: b1, b2, correc, defabs, defab1, defab2, dres
+double precision :: epmach
+double precision :: erlarg, erlast, errbnd, errmax, error1, &
+&error2, erro12, errsum, ertest, oflow, rerr, resabs, reseps
+double precision :: res3la(3)
+double precision :: rlist2(52), small, t, uflow
+double precision :: vp1(21), vp2(21), vn1(21), vn2(21), dpmpar
+integer :: id
+integer :: ierro
+integer :: iroff1, iroff2, iroff3, jupbnd, k, ksgn, ktmin
+integer :: maxerr, nres, nrmax, numrl2
 integer :: lp1, lp2, ln1, ln2
 logical :: extrap, noext
 !
 dimension alist(limit), blist(limit), elist(limit), iord(limit), &
 &rlist(limit), valp(21,limit), valn(21,limit)
 !
-external f
 !
 !            Machine dependent constants
 !            ---------------------------
@@ -2032,14 +2038,14 @@ end subroutine dqxgse
 
 subroutine dqxcpy (a, b, l)
 implicit none
+integer, intent(in) :: l
+double precision, intent(inout) :: a(l)
+double precision, intent(in) :: b(l)
 integer :: i
 !
 !  TO COPY THE DOUBLE PRECISION VECTOR b OF LENGTH l   i N T O
 !          the double precision vector a of length l
 !
-integer, intent(in) :: l
-double precision, intent(inout) :: a(l)
-double precision, intent(in) :: b(l)
 !
 do 10 i = 1,l
 10 a(i) = b(i)
@@ -2133,15 +2139,15 @@ implicit none
 double precision :: f
 double precision, intent(in) :: a, b
 double precision, intent(inout) :: result, abserr, resabs, resasc
-double precision :: t
 double precision, intent(in) :: epmach, oflow, uflow
-double precision :: resg, resk, errold
 double precision, intent(inout) :: vr(21), vs(21)
-integer :: k, k0, k1, k2
 integer, intent(in) :: key
-integer :: key1
 integer, intent(inout) :: lr, ls
 external f
+double precision :: t
+double precision :: resg, resk, errold
+integer :: k, k0, k1, k2
+integer :: key1
 !
 key1 = max0(key ,  0)
 key1 = min0(key1,  4)
@@ -2170,7 +2176,19 @@ end subroutine dqxlqm
 
 subroutine dqxrul (f,xl,xu,y,ya,ym,ke,k1,fv1,fv2,l1,l2)
 implicit none
+double precision :: f
+double precision, intent(in) :: xl, xu
+double precision, intent(out) :: y
+double precision, intent(inout) :: ya, ym
+double precision, intent(inout) :: fv1(21), fv2(21)
+integer, intent(in) :: ke, k1
+integer, intent(inout) :: l1, l2
+external f
 integer :: i, is, k, ks
+double precision :: ldl
+double precision :: y2, xx(41), ww(52)
+double precision :: aa, bb, c
+integer :: istart(4), len(4), j
 !
 !            To compute i = Integral of f over (A,B), with error
 !                           estimate
@@ -2240,18 +2258,6 @@ integer :: i, is, k, ks
 !              l2       NUMBER OF ELEMENTS IN fv1,fv2  RESPECTIVELY
 !
 !------------------------
-double precision :: f
-double precision, intent(in) :: xl, xu
-double precision :: ldl
-double precision, intent(out) :: y
-double precision, intent(inout) :: ya, ym
-double precision :: y2, xx(41), ww(52)
-double precision, intent(inout) :: fv1(21), fv2(21)
-double precision :: aa, bb, c
-integer :: istart(4), len(4), j
-integer, intent(in) :: ke, k1
-integer, intent(inout) :: l1, l2
-external f
 !------------------------
 data istart(1)/0/, istart(2)/7/, istart(3)/17/, istart(4)/31/
 data len(1)/7/, len(2)/10/, len(3)/14/, len(4)/21/
@@ -2413,9 +2419,9 @@ double precision :: f
 double precision, intent(inout) :: r(21), s(21)
 double precision :: z(21)
 double precision, intent(in) :: xu, xl
-double precision :: dlen, centr
 integer, intent(inout) :: lr, ls
 integer, intent(in) :: lz
+double precision :: dlen, centr
 !
 dlen = (xu - xl)*0.5d0
 centr = xl + dlen
@@ -2476,20 +2482,26 @@ end subroutine dqxrrd
 subroutine cubtri(f, t, eps, mcalls, ans, err, ncalls, w, nw, &
 &idata, rdata, ier)
 implicit none
+real :: f
+external f
+integer :: idata(*), ier, mcalls, ncalls, nw
+real :: ans, eps, err, rdata(*), t(2,*), w(6,nw)
 integer :: i, j, jkp, k, l, maxc, maxk, mw, nfe
 real :: one, point5, zero
 real :: rnderr
-real :: f
+real :: alfa, anskp, area, errmax, h, q1, q2, r1, r2, d(2,4), &
+&s(4), vec(2,3), x(2)
+double precision :: tans, terr, dzero
 !
 !       Adaptive cubature over a triangle
 !
 !       Parameters
 !          f     - User supplied external function of the form
-!                  f(X,Y,idata,RDATA)
+!                  f(X,Y,idata,rdata)
 !                  where X and Y are the cartesian coordinates of A
-!                  point in the plane, and idata and RDATA are integer
+!                  point in the plane, and idata and rdata are integer
 !                  and real vectors in which data may be passed.
-!          T     - Array of dimension (2,3) where T(1,j) and T(2,j)
+!          t     - Array of dimension (2,3) where t(1,j) and t(2,j)
 !                  are the X and Y coordinates of the j-TH vertex of
 !                  the given triangle (input)
 !          eps   - Required tolerance (input).  If the computed
@@ -2502,7 +2514,7 @@ real :: f
 !          ncalls- actual number of calls to f (OUTPUT).  This
 !                  parameter must be initialized to 0 on the first
 !                  CALL TO cubtri FOR A GIVEN INTEGRAL (INPUT)
-!          W     - Work space.  May not be destroyed between calls to
+!          w     - Work space.  May not be destroyed between calls to
 !                  cubtri if restarting is intended
 !          nw    - Length of work space (input).
 !                  If nw .GE. 3*(19+3*mcalls)/38, termination due to
@@ -2543,13 +2555,8 @@ real :: f
 !       error test by removing the if statement immediately preceding
 !       statement number 90.
 !
-external f
-integer :: idata(*), ier, mcalls, ncalls, nw
-real :: alfa, ans, anskp, area, eps, err, errmax, h, q1, q2, r1, &
-&r2, rdata(*), d(2,4), s(4), t(2,*), vec(2,3), w(6,nw), x(2)
-!       Actual dimension of W is (6,nw/6)
+!       Actual dimension of w is (6,nw/6)
 !
-double precision :: tans, terr, dzero
 common /cubsta/ tans, terr
 !       This common is required to preserve tans and terr between calls
 !       and to save variables in function rnderr
@@ -2691,9 +2698,18 @@ end function rnderr
 
 subroutine cubrul(f, vec, p, idata, rdata)
 implicit none
+real :: f
+real, intent(inout) :: p(*)
+real :: rdata(*)
+real, intent(in) :: vec(2,*)
+integer :: idata(*)
+external f
 integer :: i, j, k, nquad
 real :: point5, x, y
-real :: f
+double precision :: a1, a2, s, sn, dzero, done, dthree, dsix
+real :: area, origin(2)
+real :: tvec(2,3)
+real :: w(5,6)
 !
 !       BASIC cubature rule pair over a triangle
 !
@@ -2723,14 +2739,6 @@ real :: f
 !       They may be declared single precision if double precision is
 !       not available and full accuracy is not needed.
 !
-double precision :: a1, a2, s, sn, dzero, done, dthree, dsix
-real :: area, origin(2)
-real, intent(inout) :: p(*)
-real :: rdata(*), tvec(2,3)
-real, intent(in) :: vec(2,*)
-real :: w(5,6)
-integer :: idata(*)
-external f
 !
 !       w contains points and weights of the integration formulae
 !       nquad - Number of BASIC rules used
@@ -2835,14 +2843,17 @@ subroutine ieslv (kernel,rhfcn,a,b,ep,iflag,t,x,nt,nupper, &
 implicit none
 integer :: ier, iflag, mf, mupper, nf, nt, nupper
 real :: a, b, ep, t(*), w(*), x(*)
+real :: rhfcn
+real :: kernel, norm
+external kernel, rhfcn
 integer :: i1, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, &
 &i2, i20, i21, i3, i4, i5, i6, i7, i8, i9, m, n, nhalf, nmax, nsq, &
 &nup
 real :: cutoff, rootrt, unitrd
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
-real :: rhfcn
 real :: spmpar
+real :: normk
 !
 !   The integral equation being solved is
 !
@@ -2924,8 +2935,6 @@ real :: spmpar
 !       integral equations of the second kind, SIAM pub., 1976,
 !       part II, chap. 5.
 !
-real :: kernel, norm, normk
-external kernel,rhfcn
 !
 !*******************************************************************
 !                                                                  *
@@ -3014,6 +3023,10 @@ real :: a, aside(nup,*), aside3(nup,nup), b, cutoff, deln(nup), &
 &ep, oldx(mup), r(mup), rh(nup), rhs(mup), rootrt, save(mup), &
 &save2(mup), t(*), tm(mup), tn(nup), unitrd, wm(mup), wn(nup), &
 &x(*), xm(mup), xmz(mup), xn(nup)
+real :: rhfcn
+real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
+&knm(nhalf,nup), imknn(nup,nup)
+external kernel, rhfcn
 integer :: i, ind, j, loop, m, mnew, n
 real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
 &pastc, pastre, r1rat, rate, relerr, relmin, rt, temp, temp2, test, &
@@ -3021,19 +3034,16 @@ real :: aside2(5), averr, cond, denr1, denr2, eps, error, esterr, &
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
 real :: elinsy, relrsd
-real :: rhfcn
 real :: rnrm
 real :: conew
 real :: rmin
+real :: normk, numr1, numr2
+integer :: flag, oldm, pivot(128)
 !
 !   This routine controls the solution of the integral equation.
 !
-real :: kernel, lufact(nup,nup), kmm(nup,nup), kmn(nup,nhalf), &
-&knm(nhalf,nup), imknn(nup,nup), normk, numr1, numr2
-integer :: flag, oldm, pivot(128)
 common/xxlin/elinsy,relrsd,pivot
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
-external kernel,rhfcn
 !
 !   Initialization
 !
@@ -3314,15 +3324,15 @@ real, intent(inout) :: rhs(m)
 real :: tm(m), tn(n), wm(m), wn(n)
 real, intent(inout) :: xm(m)
 real :: xn(n)
-integer :: i, j
 real :: rhfcn
+real :: kernel
+real, intent(inout) :: kmn(nup,nhalf)
+external kernel, rhfcn
+integer :: i, j
 !
 !   Use the values of xn(i), i=1,...,n, to calculate the Nystrom
 !   INTERPOLATES xm(i), i=1,...,m.
 !
-real :: kernel
-real, intent(inout) :: kmn(nup,nhalf)
-external kernel,rhfcn
 !
 if(m .gt. nup) go to 4
 !   SINCE m .LE. NUPPER, SAVE K(tm(i),tn(j))=kmn(i,j) AND
@@ -3696,21 +3706,22 @@ integer :: ier, ierset, iflag, mf, nf, nhalf, nt, nup
 real :: deln(nf), elinsy, ep, eps, error, r(mf), rh(nf), rhs(mf), &
 &t(*), tm(mf), tn(nf), tv(mf), wm(mf), wn(nf), wv(mf), x(*), &
 &xm(mf), xmz(mf), xnorm, xv(mf)
+real :: rhfcn
+real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
+&imknn(nup,nup), lufact(nup,nup)
+external kernel, rhfcn
 integer :: i, itloop, j
 real :: derror, savep, sum, temp
 integer :: mfinal, nfinal
 real :: finlep, r1, r2
-real :: rhfcn
 real :: rnrm
+real :: normk, numr1
 !
 !   This routine sets all necessary parameters for leaving IEGAUS.
 !   If nt .GT. 0, it also performs the necessary Nystrom
 !   interpolation at the nodes given in T.
 !
-real :: kernel, kmm(nup,nup), kmn(nup,nhalf), knm(nhalf,nup), &
-&imknn(nup,nup), lufact(nup,nup), normk, numr1
 common/xxinfo/r1,r2,finlep,normk,nfinal,mfinal
-external kernel,rhfcn
 !
 !   Set error parameters for return.
 !
@@ -3810,6 +3821,13 @@ real, intent(inout) :: deln(n), r(m), rh(n)
 real :: rhfcn, rhs(m), tm(m), tn(n), wm(m), wn(n)
 real, intent(inout) :: xm(m)
 real :: xmz(m)
+real :: kernel
+real, intent(inout) :: kmm(nup,nup)
+real :: kmn(nup,nhalf)
+real, intent(inout) :: knm(nhalf,nup)
+real :: imknn(nup,nup)
+real, intent(inout) :: lufact(nup,nup)
+external kernel, rhfcn
 integer :: i, ind, j
 real :: sum
 !
@@ -3817,13 +3835,6 @@ real :: sum
 !   xmz. The routine is divided according to whether or not
 !   m .GT. NUPPER.
 !
-real :: kernel
-real, intent(inout) :: kmm(nup,nup)
-real :: kmn(nup,nhalf)
-real, intent(inout) :: knm(nhalf,nup)
-real :: imknn(nup,nup)
-real, intent(inout) :: lufact(nup,nup)
-external kernel,rhfcn
 !
 !   m .GT. NUPPER means that the matrices kmm,kmn,knm can no longer
 !   be stored due to lack of space.
@@ -3900,9 +3911,13 @@ end subroutine itert
 subroutine lnsys(a,d,m,n,b,x,option,ierr)
 implicit none
 integer :: ierr, m, n
+real :: a(m,n), d(m,n), b(n), x(n)
+integer :: option
 integer :: i, ip1, iswit, j, k, kp1, l, nm1, nmi
 real :: c, sum, t
 real :: error, relrsd
+integer :: pivot(128)
+real :: normx, norme, normb, normr, r(128), scale(128)
 !
 !   Solve AX = b where A is a matrix of order n. m is the number of
 !   rows in the dimension statement for A in the calling program.
@@ -3937,9 +3952,6 @@ real :: error, relrsd
 !   and scale. Also modify the dimension statement for pivot in the
 !   SUBROUTINE iegs.
 !
-real :: a(m,n), d(m,n), b(n), x(n)
-integer :: option, pivot(128)
-real :: normx, norme, normb, normr, r(128), scale(128)
 common /xxlin/ error,relrsd,pivot
 !
 nm1 = n - 1
@@ -4072,8 +4084,10 @@ integer, intent(in) :: neqn
 real, intent(inout) :: abserr, relerr, t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
+external f
 integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 &ipsi, isig, istart, itold, iv, iw, iwt, ix, iyp, iypout, iyy
+logical :: start, phase1, nornd
 !
 !     Sandia mathematical program library
 !     applied mathematics division 2642
@@ -4203,8 +4217,6 @@ integer :: ialpha, ibeta, idelsn, ig, ih, ihold, ip, iphase, iphi, &
 !   be changed by the user before continuing.  All other parameters must
 !   remain unchanged.
 !
-logical :: start, phase1, nornd
-external f
 data ialpha,ibeta,isig,iv,iw,ig,iphase,ipsi,ix,ih,ihold,istart, &
 &itold,idelsn/1,13,25,38,50,62,75,76,88,89,90,91,92,93/
 !
@@ -4246,9 +4258,12 @@ real, intent(in) :: tout
 real, intent(inout) :: v(12), w(12), wt(neqn), x, y(neqn)
 real :: yp(neqn)
 real, intent(inout) :: ypout(neqn), yy(neqn)
+logical, intent(inout) :: start, phase1, nornd
+external f
 integer :: isn, kle4, l, maxnum, nostep
 real :: absdel, abseps, del, eps, fouru, releps, tend, u
 real :: spmpar
+logical :: stiff, crash
 !
 !   ODE  merely allocates storage for  de1 to relieve the user of the
 !   inconvenience of a long call list.  Consequently  de1 is used as
@@ -4258,9 +4273,6 @@ real :: spmpar
 !   computer solution of ordinary differential equations,  the initial
 !   value problem  by L. F. Shampine and M. K. Gordon.
 !
-logical :: stiff, crash
-logical, intent(inout) :: start, phase1, nornd
-external f
 !
 !   The constant  maxnum  is the maximum number of steps allowed in one
 !   CALL TO  de1.  THE USER MAY CHANGE THIS LIMIT BY ALTERING THE
@@ -4411,6 +4423,10 @@ real, intent(inout) :: alpha(12), beta(12), eps, g(13), h, hold, &
 real :: wt(neqn)
 real, intent(inout) :: x, y(neqn)
 real :: yp(neqn)
+logical, intent(inout) :: start
+logical, intent(out) :: crash
+logical, intent(inout) :: phase1, nornd
+external f
 integer :: i, ifail, im1, ip1, iq, j, km1, km2, knew, kp1, kp2, l, &
 &limit1, limit2, nsm2, nsp1, nsp2
 real :: absh, erk, erkm1, erkm2, erkp1, err, fouru, gstr(13), &
@@ -4541,10 +4557,6 @@ real :: spmpar
 !   just calls the code again.  A restart is neither required nor
 !   desirable.
 !
-logical, intent(inout) :: start
-logical, intent(out) :: crash
-logical, intent(inout) :: phase1, nornd
-external f
 !
 data two(1)/2.0/, two(2)/4.0/, two(3)/8.0/, two(4)/16.0/, &
 &two(5)/32.0/, two(6)/64.0/, two(7)/128.0/, two(8)/256.0/, &
@@ -5007,8 +5019,10 @@ real, intent(in) :: abserr
 real, intent(inout) :: relerr, t
 real, intent(in) :: tend, tout
 real, intent(inout) :: work(*), y(neqn), yp(neqn)
+external fcn
 integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 &kwp, kx, ky1, ky2
+logical :: endpnt, blkout
 !
 !     Block Fehlberg fourth-fifth order Runge-Kutta method advancing
 !     a block of two equal steps.  The formula at the first step is
@@ -5240,8 +5254,6 @@ integer :: kf1, kf2, kf3, kf4, kf7, kh, khi, ksa, ksr, kt, kw, &
 !
 !***********************************************************************
 !
-logical :: endpnt, blkout
-external fcn
 !
 !     Compute indices for the splitting of the work array
 !
@@ -5304,6 +5316,9 @@ real, intent(inout) :: told
 real, intent(in) :: tout
 real, intent(inout) :: w(neqn), wp(neqn), x, y(neqn), y1(neqn), &
 &y2(neqn), yp(neqn)
+logical, intent(inout) :: endpnt
+logical, intent(inout) :: blkout
+external fcn
 integer :: k, maxnfe, mflag, n
 real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
 &a62, a63, a64, a65, a81, a82, a83, a84, a85, a86, a87, a91, a92, &
@@ -5313,16 +5328,13 @@ real :: a, a21, a31, a32, a41, a42, a43, a51, a52, a53, a54, a61, &
 &erc26, erc27, erc28, erc29, errtol, esttol, ez, hmin, hstop, &
 &remin, rer, s, scale, sf, swap, tol, toler, toln, u, u26, ypk
 real :: spmpar
+logical :: hfaild
+logical :: interp
 !
 !     Two step block Runge-Kutta Fehlberg method.
 !     A standard 5(4) formula is used at the first point in the block
 !     and A 6(4) formula is used at the second point.
 !
-logical :: hfaild
-logical, intent(inout) :: endpnt
-logical :: interp
-logical, intent(inout) :: blkout
-external fcn
 !
 !***********************************************************************
 !
@@ -6116,10 +6128,10 @@ real, intent(in) :: tout
 real, intent(inout) :: relerr
 real, intent(in) :: abserr
 real, intent(inout) :: work(*)
-!
 external f
-!
 integer :: k1, k2, k3, k4, k5, k6, k1m
+!
+!
 !
 !     Compute indices for the splitting of the work array
 !
@@ -6159,8 +6171,6 @@ implicit none
 !         h  - An appropriate stepsize to be used for the next step
 !         nfe- counter on the number of derivative function evaluations
 !
-logical :: hfaild, output
-!
 integer, intent(in) :: neqn
 integer, intent(inout) :: iflag, nfe, kop, init, jflag, kflag
 real, intent(inout) :: y(neqn), t
@@ -6172,13 +6182,15 @@ real :: yp(neqn)
 real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), savre, savae
-!
 external f
-!
+logical :: hfaild, output
 real :: a, ae, dt, ee, eeoet, esttol, et, hmin, remin, rer, s, &
 &scale, tol, toln, u26, eps, ypk, spmpar
-!
 integer :: k, maxnfe, mflag
+!
+!
+!
+!
 !
 !     remin is the minimum acceptable value of relerr.  Attempts
 !     to obtain higher accuracy with this subroutine are usually
@@ -6520,10 +6532,10 @@ real, intent(in) :: yp(neqn)
 real, intent(inout) :: f1(neqn)
 real :: f2(neqn), f3(neqn), f4(neqn)
 real, intent(inout) :: f5(neqn), s(neqn)
-!
+external f
 real :: ch
 integer :: k
-external f
+!
 !
 ch=h/4.0
 do 221 k = 1,neqn
@@ -6574,6 +6586,7 @@ real, intent(in) :: relerr
 real, intent(inout) :: t
 real, intent(in) :: tout
 real, intent(inout) :: work(*), y(neqn)
+external f
 integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
@@ -6754,7 +6767,6 @@ integer :: k1, k1m, k2, k3, k4, k5, k6, k7, k8
 !***********************************************************************
 !
 !
-external f
 !
 !
 !     Compute indices for the splitting of the work array
@@ -6800,10 +6812,12 @@ real, intent(inout) :: savae, savre, t
 real, intent(in) :: tout
 real, intent(inout) :: y(neqn), yg(neqn), ygp(neqn)
 real :: yp(neqn)
+external f
 integer :: k, maxnfe, mflag
 real :: a, ae, dt, ee, eeoet, esttol, et, hh, hmin, remin, rer, s, &
 &scale, tol, toln, ts, u, u26, ypk
 real :: spmpar
+logical :: hfaild, output
 !
 !     Fehlberg fourth(fifth) order Runge-Kutta method with
 !     global error assessment
@@ -6823,10 +6837,8 @@ real :: spmpar
 !
 !***********************************************************************
 !
-logical :: hfaild, output
 !
 !
-external f
 !
 !***********************************************************************
 !  The computer unit roundoff error U is the smallest positive value
@@ -7184,16 +7196,17 @@ integer, intent(inout) :: idid
 integer :: liw, lrw, neq
 real, intent(inout) :: aerr, rerr, t
 real :: tout
-!     --------------
-external f, zzzjac
+external f
 real, intent(inout) :: y(neq)
-real :: rtol(1), atol(1)
 real, intent(inout) :: rwork(lrw)
 real :: rpar(*)
 integer, intent(inout) :: info(*)
-integer :: info1(15)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+external zzzjac
+real :: rtol(1), atol(1)
+integer :: info1(15)
+!     --------------
 !     --------------
 info1(1) = info(1)
 info1(2) = 0
@@ -7219,14 +7232,15 @@ integer, intent(inout) :: idid
 integer :: liw, lrw, neq
 real, intent(inout) :: t
 real :: tout
-!     --------------
-external f, zzzjac
+external f
 real, intent(inout) :: y(neq), rtol(neq), atol(neq), rwork(lrw)
 real :: rpar(*)
 integer, intent(inout) :: info(*)
-integer :: info1(15)
 integer, intent(inout) :: iwork(liw)
 integer :: ipar(*)
+external zzzjac
+integer :: info1(15)
+!     --------------
 !     --------------
 info1(1) = info(1)
 info1(2) = 1
@@ -7261,12 +7275,14 @@ subroutine stfode (f,neq,y,t,tout,info,rtol,atol,idid, &
 implicit none
 integer :: idid, info( *), ipar(*), iwork, liw, lrw, neq
 real :: atol(*), rpar(*), rtol(*), rwork(lrw), t, tout, y(neq)
+external f, jac
 integer :: icomi, icomr, idelsn, iinout, ilrw, itstar, iypout, ml, &
 &mu
 integer :: iacor, iband, ibegin, ier, iewt, iinteg, ijac, init, &
 &iowns, iquit, isavf, itol, itstop, iwm, iyh, jstart, kflag, &
 &ksteps, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
 real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
+logical :: intout
 !***********************************************************************
 !***PURPOSE
 !   stfode solves initial value problems in ordinary differential
@@ -7953,7 +7969,6 @@ real :: el0, h, hmin, hmxi, hu, rowns, tn, told, uround
 !   package of ODE solvers*, SAND79-2374, Sandia Laboratories, 1979.
 !
 !
-logical :: intout
 !
 dimension iwork(liw)
 !
@@ -7964,7 +7979,6 @@ common /debdf1/ told, rowns(210), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
 &nje, nqu
 !
-external f , jac
 !
 !.......................................................................
 !
@@ -8061,8 +8075,10 @@ implicit none
 ! This routine restores from rsav and isav the contents of common
 ! block debdf1, which is used internally in the sfode package.
 !-----------------------------------------------------------------------
-integer :: isav(*), i, ils, lenils, lenrls
-real :: rsav(*), rls
+integer :: isav(*)
+real :: rsav(*)
+integer :: i, ils, lenils, lenrls
+real :: rls
 common /debdf1/ rls(218), ils(33)
 data lenrls/218/, lenils/33/
 !
@@ -8083,8 +8099,10 @@ implicit none
 ! rsav = Real array of length 218 or more.
 ! isav = Integer array of length 33 or more.
 !-----------------------------------------------------------------------
-integer :: isav(*), i, ils, lenils, lenrls
-real :: rsav(*), rls
+integer :: isav(*)
+real :: rsav(*)
+integer :: i, ils, lenils, lenrls
+real :: rls
 common /debdf1/ rls(218), ils(33)
 data lenrls/218/, lenils/33/
 !
@@ -8104,6 +8122,8 @@ integer :: idid, ipar(*), iwm(*), neq
 real :: acor(neq), atol(*), delsgn, ewt(neq), rpar(*), rtol(*), &
 &savf(neq), t, tolfac, tout, tstop, wm(*), y(neq), yh(neq,*), &
 &yh1(*), ypout(neq)
+logical :: intout
+external f, jac
 integer :: intflg, k, l, ltol, max, maxnum
 real :: absdel, big, del, dt, ha, tol
 integer :: iband, ibegin, ier, iinteg, ijac, init, iowns, iquit, &
@@ -8119,7 +8139,6 @@ real :: spmpar
 !
 !***Routines called  stod,intyd,vnwrms,hstart,spmpar
 !
-logical :: intout
 !
 !
 common /debdf1/ told, rowns(210), &
@@ -8129,7 +8148,6 @@ common /debdf1/ told, rowns(210), &
 &ier, jstart, kflag, ldum, meth, miter, maxord, n, nq, nst, &
 &nfe, nje, nqu
 !
-external f , jac
 !
 !.......................................................................
 !
@@ -8428,6 +8446,7 @@ real, intent(inout) :: spy(neq)
 real :: y(neq)
 real, intent(inout) :: yp(neq)
 real :: yprime(neq)
+external f
 integer :: j, k, lk
 real :: absdx, da, delf, dely, dfdub, dfdxb, dx, dy, fbnd, relper, &
 &srydpb, tolexp, tolmin, tolp, tolsum, ydpb
@@ -8553,7 +8572,6 @@ real :: vnorm
 !
 !***Routines called  vnorm
 !
-external f
 !
 !.......................................................................
 !
@@ -8741,18 +8759,19 @@ implicit none
 ! to the k-TH derivative of this polynomial at t.
 ! The formula for dky is..
 !              Q
-!  dky(i)  =  SUM  C(j,k) * (t - TN)**(j-k) * h**(-j) * yh(i,j+1)
+!  dky(i)  =  SUM  c(j,k) * (t - tn)**(j-k) * h**(-j) * yh(i,j+1)
 !             j=k
-! WHERE  C(j,k) = j*(j-1)*...*(j-k+1), Q = NQCUR, TN = TCUR, h = HCUR.
-! The quantities  NQ = NQCUR, L = NQ+1, N = NEQ, TN, and h are
+! WHERE  c(j,k) = j*(j-1)*...*(j-k+1), Q = NQCUR, tn = TCUR, h = HCUR.
+! The quantities  NQ = NQCUR, L = NQ+1, N = NEQ, tn, and h are
 ! communicated by common.  The above sum is done in reverse order.
 ! iflag is returned negative if either k or t is out of bounds.
 !-----------------------------------------------------------------------
-integer :: k, nyh, iflag, i, ic, ier, iownd, iowns, j, jb, jb2, &
-&jj, jj1, jp1, jstart, kflag, l, maxord, meth, miter, n, nfe, nje, &
-&nq, nqu, nst
-real :: t, yh(nyh,*), dky(*), rownd, rowns, el0, h, hmin, hmxi, &
-&hu, tn, uround, c, r, s, tp
+integer :: k, nyh, iflag
+real :: t, yh(nyh,*), dky(*)
+integer :: i, ic, ier, iownd, iowns, j, jb, jb2, jj, jj1, jp1, &
+&jstart, kflag, l, maxord, meth, miter, n, nfe, nje, nq, nqu, nst
+real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, c, r, s, &
+&tp
 common /debdf1/ rownd, rowns(210), &
 &el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
@@ -8804,8 +8823,17 @@ subroutine stod  (neq, y, yh, nyh, yh1, ewt, savf, acor, &
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
+external f, jac
+integer :: neq, nyh, iwm(*)
+real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*)
 integer :: ipnyh
 integer :: iod, ksteps
+integer :: i, i1, ialth, ier, iownd, iredo, iret, ipup, j, jb, &
+&jstart, kflag, l, lmax, m, maxord, meo, meth, miter, n, ncf, newq, &
+&nfe, nje, nq, nqnyh, nqu, nst, nstepj
+real :: rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, &
+&h, hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, &
+&exdn, exsm, exup, r, rh, rhdn, rhsm, rhup, told, vnwrms
 !-----------------------------------------------------------------------
 ! stod  performs one step of the integration of an initial value
 ! problem for a system of ordinary differential equations.
@@ -8820,9 +8848,9 @@ integer :: iod, ksteps
 !          passed as the neq argument in all calls to F and JAC.
 ! yh     = An nyh by LMAX array containing the dependent variables
 !          and their approximate scaled derivatives, where
-!          LMAX = MAXORD + 1.  yh(i,J+1) contains the approximate
-!          J-TH derivative of y(i), scaled by H**J/factorial(J)
-!          (J = 0,1,...,NQ).  On entry for the first step, the first
+!          LMAX = MAXORD + 1.  yh(i,j+1) contains the approximate
+!          j-TH derivative of y(i), scaled by H**j/factorial(j)
+!          (j = 0,1,...,NQ).  On entry for the first step, the first
 !          two columns of yh must be set from the initial values.
 ! nyh    = A constant integer .GE. N, the first dimension of yh.
 ! yh1    = A one-dimensional array occupying the same space as yh.
@@ -8871,15 +8899,7 @@ integer :: iod, ksteps
 !-----------------------------------------------------------------------
 !***Routines called  cfod,slvs,pjac,vnwrms
 !
-external f, jac
 !
-integer :: neq, nyh, iwm(*), i, i1, ialth, ier, iownd, iredo, &
-&iret, ipup, j, jb, jstart, kflag, l, lmax, m, maxord, meo, meth, &
-&miter, n, ncf, newq, nfe, nje, nq, nqnyh, nqu, nst, nstepj
-real :: y(*), yh(nyh,*), yh1(*), ewt(*), savf(*), acor(*), wm(*), &
-&rownd, conit, crate, el, elco, hold, rc, rmax, tesco, el0, h, &
-&hmin, hmxi, hu, tn, uround, dcon, ddn, del, delp, dsm, dup, exdn, &
-&exsm, exup, r, rh, rhdn, rhsm, rhup, told, vnwrms
 common /debdf1/ rownd, conit, crate, el(13), elco(13,12), &
 &hold, rc, rmax, tesco(3,12), &
 &el0, h, hmin, hmxi, hu, tn, uround, iownd(7), ksteps, iod(6), &
@@ -8896,10 +8916,10 @@ if (jstart .eq. -1) go to 100
 if (jstart .eq. -2) go to 160
 !-----------------------------------------------------------------------
 ! On the first call, the order is set to 1, and other variables are
-! initialized.  RMAX is the maximum ratio by which H can be increased
+! initialized.  rmax is the maximum ratio by which H can be increased
 ! in a single step.  It is initially 1.E4 to compensate for the small
 ! initial H, but then is normally equal to 10.  If a failure
-! occurs (in corrector convergence or error test), RMAX is set at 2
+! occurs (in corrector convergence or error test), rmax is set at 2
 ! for the next increase.
 !-----------------------------------------------------------------------
 lmax = maxord + 1
@@ -8918,7 +8938,7 @@ iret = 3
 go to 140
 !-----------------------------------------------------------------------
 ! The following block handles preliminaries needed when JSTART = -1.
-! IPUP is set to miter to force a matrix update.
+! ipup is set to miter to force a matrix update.
 ! If an order increase is about to be considered (ialth = 1),
 ! ialth is reset to 2 to postpone consideration one more step.
 ! If the caller has changed meth, cfod  is called to reset
@@ -8959,7 +8979,7 @@ h = hold
 go to 175
 !-----------------------------------------------------------------------
 ! cfod  is called to get all the integration coefficients for the
-! current meth.  Then the EL vector and related constants are reset
+! current meth.  Then the el vector and related constants are reset
 ! whenever the order NQ is changed, or at the start of the problem.
 !-----------------------------------------------------------------------
 140 call cfod  (meth, elco, tesco)
@@ -8972,7 +8992,7 @@ conit = 0.5e0/float(nq+2)
 go to (160, 170, 200), iret
 !-----------------------------------------------------------------------
 ! If H is being changed, the H ratio RH is checked against
-! RMAX, HMIN, and HMXI, and the yh array rescaled.  ialth is set to
+! rmax, HMIN, and HMXI, and the yh array rescaled.  ialth is set to
 ! L = NQ + 1 to prevent a change of H for that many steps, unless
 ! forced by a convergence or error test failure.
 !-----------------------------------------------------------------------
@@ -8996,8 +9016,8 @@ if (iredo .eq. 0) go to 680
 !-----------------------------------------------------------------------
 ! This section computes the predicted values by effectively
 ! multiplying the yh array BY the Pascal triangle matrix.
-! RC is the ratio of new to old values of the coefficient  H*EL(1).
-! When RC differs from 1 by more than 30 percent, IPUP is set to miter
+! rc is the ratio of new to old values of the coefficient  H*el(1).
+! When rc differs from 1 by more than 30 percent, ipup is set to miter
 ! to force pjac to be called, if a Jacobian is involved.
 ! In any case, pjac is called at least every 20-TH step.
 !-----------------------------------------------------------------------
@@ -9025,8 +9045,8 @@ call f (tn, y, savf, rpar, ipar)
 nfe = nfe + 1
 if (ipup .le. 0) go to 250
 !-----------------------------------------------------------------------
-! If indicated, the matrix P = i - H*EL(1)*J is reevaluated and
-! preprocessed before starting the corrector iteration.  IPUP is set
+! If indicated, the matrix P = i - H*el(1)*j is reevaluated and
+! preprocessed before starting the corrector iteration.  ipup is set
 ! to 0 as an indicator that this has been done.
 !-----------------------------------------------------------------------
 ipup = 0
@@ -9105,7 +9125,7 @@ ipup = miter
 iredo = 1
 go to 170
 !-----------------------------------------------------------------------
-! The corrector has converged.  IPUP is set to -1 If miter .NE. 0,
+! The corrector has converged.  ipup is set to -1 If miter .NE. 0,
 ! to signal that the Jacobian involved may need updating later.
 ! The local error test is made and control passes to statement 500
 ! if it fails.
@@ -9266,8 +9286,8 @@ implicit none
 !   cfod defines coefficients needed in the integrator package sfode
 !
 integer, intent(in) :: meth
-integer :: i, ib, nq, nqm1, nqp1
 real, intent(inout) :: elco(13, *), tesco(3, *)
+integer :: i, ib, nq, nqm1, nqp1
 real :: agamq, fnq, fnqm1, pc(12), pint, ragq, rqfac, rq1fac, &
 &tsign, xpin
 !-----------------------------------------------------------------------
@@ -9379,26 +9399,27 @@ subroutine pjac (neq, y, yh, nyh, ewt, ftem, savf, wm, iwm, &
 implicit none
 integer :: ipar(*)
 real :: rpar(*)
+integer :: neq, nyh, iwm( *)
+external f, jac
+real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*)
+integer :: i, i1, i2, ier, ii, iownd, iowns, j, j1, jj, jstart, &
+&kflag, l, lenp, maxord, mba, mband, meb1, meband, meth, miter, ml, &
+&ml3, mu, n, nfe, nje, nq, nqu, nst
+real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, &
+&fac, hl0, r, r0, srur, yi, yj, yjj, vnwrms
 !
 !   pjac sets up the iteration matrix (involving the Jacobian) for the
 !   integration package sfode.
 !
 !***Routines called  vnwrms,sgefa,sgbfa
 !
-integer :: neq, nyh, iwm( *), i, i1, i2, ier, ii, iownd, iowns, j, &
-&j1, jj, jstart, kflag, l, lenp, maxord, mba, mband, meb1, meband, &
-&meth, miter, ml, ml3, mu, n, nfe, nje, nq, nqu, nst
-external f, jac
-real :: y(*), yh(nyh,*), ewt(*), ftem(*), savf(*), wm(*), rownd, &
-&rowns, el0, h, hmin, hmxi, hu, tn, uround, con, di, fac, hl0, r, &
-&r0, srur, yi, yj, yjj, vnwrms
 common /debdf1/ rownd, rowns(210), &
 &el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
 &nje, nqu
 !-----------------------------------------------------------------------
 ! pjac is called by stod  to compute and process the matrix
-! P = i - H*EL(1)*j , where j is an approximation to the Jacobian.
+! P = i - h*EL(1)*j , where j is an approximation to the Jacobian.
 ! Here j is computed by the user-supplied routine jac if
 ! miter = 1 Or 4, or by finite differencing if miter = 2, 3, or 5.
 ! If miter = 3, a diagonal approximation to j is used.
@@ -9417,15 +9438,15 @@ common /debdf1/ rownd, rowns(210), &
 !        of P if miter is 1, 2 , 4, or 5.
 !        Storage of matrix elements starts at wm(3).
 !        wm also contains the following matrix-related data..
-!        wm(1) = sqrt(UROUND), used in numerical Jacobian increments.
-!        wm(2) = H*EL0, saved for later use if miter = 3.
+!        wm(1) = sqrt(uround), used in numerical Jacobian increments.
+!        wm(2) = h*el0, saved for later use if miter = 3.
 ! iwm  = Integer work space containing pivot information, starting at
 !        iwm(21), if miter is 1, 2, 4, or 5.  iwm also contains the
 !        band parameters ML = iwm(1) and mu = iwm(2) if miter is 4 or 5.
 ! el0  = el(1) (input).
 ! ier  = Output error flag,  = 0 If no trouble, .NE. 0 if
 !        P matrix FOUND to be singular.
-! This routine also uses the common variables EL0, H, TN, UROUND,
+! This routine also uses the common variables el0, h, tn, uround,
 ! miter, N, NFE, and NJE.
 !-----------------------------------------------------------------------
 nje = nje + 1
@@ -9548,10 +9569,12 @@ implicit none
 !
 !***Routines called  sgesl,sgbsl
 !
-integer :: iwm( *), i, ier, iownd, iowns, jstart, kflag, l, &
-&maxord, meband, meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
-real :: wm(*), x(*), tem(*), rownd, rowns, el0, h, hmin, hmxi, hu, &
-&tn, uround, di, hl0, phl0, r
+integer :: iwm( *)
+real :: wm(*), x(*), tem(*)
+integer :: i, ier, iownd, iowns, jstart, kflag, l, maxord, meband, &
+&meth, miter, ml, mu, n, nfe, nje, nq, nqu, nst
+real :: rownd, rowns, el0, h, hmin, hmxi, hu, tn, uround, di, hl0, &
+&phl0, r
 common /debdf1/ rownd, rowns(210), &
 &el0, h, hmin, hmxi, hu, tn, uround, iownd(14), iowns(6), &
 &ier, jstart, kflag, l, meth, miter, maxord, n, nq, nst, nfe, &
@@ -9568,8 +9591,8 @@ common /debdf1/ rownd, rowns(210), &
 !       is 3 and the LU decomposition of the matrix otherwise.
 !       Storage of matrix elements starts at wm(3).
 !       wm also contains the following matrix-related data..
-!       wm(1) = sqrt(UROUND) (not used here),
-!       wm(2) = HL0, the previous value of h*el0, used if miter = 3.
+!       wm(1) = sqrt(uround) (not used here),
+!       wm(2) = hl0, the previous value of h*el0, used if miter = 3.
 ! iwm = Integer work space containing pivot information, starting at
 !       iwm(21), if miter is 1, 2, 4, or 5.  iwm also contains the
 !       band parameters ML = iwm(1) and mu = iwm(2) if miter is 4 or 5.
@@ -9614,6 +9637,9 @@ integer, intent(in) :: lda, n, ml, mu
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: abd(lda,*)
+real :: t
+integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
+&nm1
 !
 !     sgbfa factors a real band matrix BY elimination.
 !
@@ -9695,9 +9721,6 @@ real, intent(inout) :: abd(lda,*)
 !     BLAS saxpy,sscal,isamax
 !     FORTRAN MAX0,MIN0
 !
-real :: t
-integer :: i, isamax, i0, j, ju, jz, j0, j1, k, kp1, l, lm, m, mm, &
-&nm1
 !
 m = ml + mu + 1
 info = 0
@@ -9789,6 +9812,8 @@ implicit none
 integer, intent(in) :: lda, n, ml, mu, ipvt(*), job
 real, intent(in) :: abd(lda,*)
 real, intent(inout) :: b(*)
+real :: sdot, t
+integer :: k, kb, l, la, lb, lm, m, nm1
 !
 !     sgbsl solves the real band system
 !     A * X = b  OR  TRANS(A) * X = b
@@ -9851,8 +9876,6 @@ real, intent(inout) :: b(*)
 !     BLAS saxpy,sdot
 !     FORTRAN MIN0
 !
-real :: sdot, t
-integer :: k, kb, l, la, lb, lm, m, nm1
 !
 m = mu + ml + 1
 nm1 = n - 1
@@ -9946,8 +9969,9 @@ implicit none
 !   vnwrms = sqrt( (1/n) * sum( v(i)/w(i) )**2 )
 !-----------------------------------------------------------------------
 integer, intent(in) :: n
+real :: v(n), w(n)
 integer :: i
-real :: v(n), w(n), sum
+real :: sum
 !
 sum = 0.0e0
 do 10 i = 1,n
@@ -9963,12 +9987,12 @@ integer, intent(in) :: n
 real, intent(inout) :: a(*)
 real, intent(in) :: h
 real, intent(inout) :: t
+external f
 integer :: k, m, m1, mk, nk, np1
 real :: ha, ta
 !     ******************************************************************
 !     Fourth order Runge-Kutta procedure for solving DY=F(t,Y)
 !     ******************************************************************
-external f
 np1=n+1
 if (h.eq.0.0) go to 50
 !
@@ -10020,14 +10044,14 @@ implicit none
 integer, intent(in) :: n
 real :: h
 real, intent(inout) :: t
+real, intent(inout) :: y(n), dy(n), w(*)
+external f
 integer :: i, j, k, l, m, m1
 real :: ha, sum
+real :: a(7), b(8,7), c(7), d(9)
 !     ******************************************************************
 !     Eighth order Runge-Kutta procedure for solving dy=F(t,y)
 !     ******************************************************************
-real, intent(inout) :: y(n), dy(n), w(*)
-real :: a(7), b(8,7), c(7), d(9)
-external f
 !     -------------------
 data a(1)/.3333333333333333/,  a(2)/.5/,  a(3)/.6666666666666666/, &
 &a(4)/.1666666666666666/,  a(5)/1./,  a(6)/.8333333333333333/, &
@@ -10097,19 +10121,19 @@ integer :: iord, ku, mp1
 integer, intent(in) :: np1
 integer, intent(inout) :: nw
 real :: a, b, c, d
+real :: g
+real :: bval
+real, intent(inout) :: u(ku,np1), w(nw)
+integer, intent(in) :: edge(4)
+external cofx, cofy
 integer :: i, ia, ib, ic, id, ij, imax, imin, indx, indy, iw, j, &
 &jcol, jmax, jmin, l, m, mn, n
 real :: alpha, beta, del, gam, hx, hy, p, xi, xmin, yj, ymin
-real :: g
-real :: bval
+real :: dum(1)
 ! ----------------------------------------------------------------------
 !     Solution of separable elliptic partial differential equations
 !                     on rectangular domains
 ! ----------------------------------------------------------------------
-real, intent(inout) :: u(ku,np1), w(nw)
-real :: dum(1)
-integer, intent(in) :: edge(4)
-external cofx, cofy
 !     --------------
 data alpha/0.0/, beta/0.0/, gam/0.0/, del/0.0/
 !     --------------
@@ -10365,6 +10389,10 @@ integer :: intl, iorder, m, mbdcnd, mn, n, nbdcnd
 real :: a, alpha, b, beta, c, d, gama
 real, intent(inout) :: pertrb
 real :: xnu
+real, intent(inout) :: grhs(mn,*), usol(idmn,*)
+real :: bda(*), bdb(*), bdc(*), bdd(*)
+real, intent(inout) :: w(*)
+external cofx, cofy
 integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 &k, l, length, linput, ll, logb2n, loutpt
 !
@@ -10804,10 +10832,6 @@ integer :: i1, i10, i11, i12, i13, i2, i3, i4, i5, i6, i7, i8, i9, &
 !
 !
 !
-real, intent(inout) :: grhs(mn,*), usol(idmn,*)
-real :: bda(*), bdb(*), bdc(*), bdd(*)
-real, intent(inout) :: w(*)
-external cofx, cofy
 !
 !
 !     Check input parameters

@@ -392,10 +392,10 @@ end subroutine rffti
 subroutine rffti1 (n,wa,ifac)
 implicit none
 integer, intent(in) :: n
+real, intent(inout) :: wa(*), ifac(*)
 integer :: i, ib, ido, ii, ip, ipm, is, j, k1, l1, l2, ld, nf, &
 &nfm1, nl, nq, nr, ntry
 real :: arg, argh, argld, fi, tpi
-real, intent(inout) :: wa(*), ifac(*)
 integer :: ntryh(4)
 data ntryh(1),ntryh(2),ntryh(3),ntryh(4)/4,2,3,5/
 nl = n
@@ -523,10 +523,10 @@ end subroutine rfftb
 subroutine rfftb1 (n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
-integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, l1, l2, na, nf
 nf = ifac(2)
 na = 0
 l1 = 1
@@ -1142,11 +1142,11 @@ end subroutine rfftf
 subroutine rfftf1 (n,c,ch,wa,ifac)
 implicit none
 integer, intent(in) :: n
-integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
-&na, nf
 real, intent(inout) :: c(*), ch(*)
 real :: wa(*)
 real, intent(in) :: ifac(*)
+integer :: i, idl1, ido, ip, iw, ix2, ix3, ix4, k1, kh, l1, l2, &
+&na, nf
 nf = ifac(2)
 na = 1
 l2 = n
@@ -1690,16 +1690,16 @@ subroutine cheby (a, b, f, g, phi, eps, itno, mxiter, l, m, &
 implicit none
 integer, intent(inout) :: ierr, itno
 integer, intent(in) :: l, m, mxiter
-integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
-!     ******************************************************************
-!     Rational Chebychev approximation of continuous functions
-!     ******************************************************************
 double precision, intent(in) :: a, b
 double precision :: f, g, phi
 double precision, intent(in) :: eps
 double precision, intent(inout) :: error
 double precision, intent(inout) :: p(*), q(*), w(*)
 external f, g, phi
+integer :: i1, i2, i3, i4, i5, lp1, lpm, mp1, n, np1
+!     ******************************************************************
+!     Rational Chebychev approximation of continuous functions
+!     ******************************************************************
 !     -------------------
 if (l .lt. 0 .or. m .lt. 0) go to 10
 lp1 = l + 1
@@ -1730,18 +1730,18 @@ subroutine cheby1 (a, b, f, g, phi, eps, itno, mxiter, l, m, &
 implicit none
 integer, intent(inout) :: ierr, itno
 integer, intent(in) :: l, lp1, lpm, m, mp1, mxiter, n, np1
-integer :: i, ii, j, k, kount, lpi
-!     ------------------------------------------------------------------
 double precision, intent(in) :: a, b
 double precision :: f, g, phi
 double precision, intent(in) :: eps
 double precision, intent(out) :: error
 double precision, intent(inout) :: p(lp1), q(mp1), x(np1), &
 &xval(np1), c(np1,np1), d(np1), err(np1), h(np1)
+external f, g, phi
+integer :: i, ii, j, k, kount, lpi
 double precision :: b1, c0, del, dn, dnp1, eps0, half, h1, olderr, &
 &one, pi, sign, sum, tau, templ, ten, test, u, xi, xlb, xm1, y, y2, &
 &y3, z, zero, zz, z1, z2, z3
-external f, g, phi
+!     ------------------------------------------------------------------
 !     -------------------
 data pi/3.14159265358979323846264338328d0/
 data zero/0.d0/, half/.5d0/, one/1.d0/, ten/10.d0/
@@ -2016,14 +2016,14 @@ subroutine cerr (t, ft, gt, phit, del, ierr, l, lp1, m, np1, d)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, lp1, m, np1
-integer :: i, ii
-!     ------------------------------------------------------------------
-!     Compute the approximation error at point t
-!     ------------------------------------------------------------------
 double precision, intent(in) :: t, ft, gt, phit
 double precision, intent(inout) :: del
 double precision, intent(in) :: d(np1)
+integer :: i, ii
 double precision :: p, q, r, zero, one
+!     ------------------------------------------------------------------
+!     Compute the approximation error at point t
+!     ------------------------------------------------------------------
 data zero/0.d0/, one/1.d0/
 !     -------------------
 p = d(lp1)
@@ -2064,12 +2064,24 @@ subroutine adapt (f, xlft, xrgt, epsln, npiece, errest, xknots, &
 implicit none
 integer :: ierr, kbreak, kdiff(kbreak), kmax, mo, ndeg, npiece, &
 &nsmth
+double precision :: xknots(*), coefs(kmax,*)
+double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
+&vallft(kbreak), valrgt(kbreak), xlft, xrgt
+double precision :: f
+external f
 integer :: k, kdimen, ndimen
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
 !
 !        ===============================================================
 !
@@ -2098,18 +2110,6 @@ integer :: knots
 !     bleft      VALLFT
 !     BRIGHT     VALRGT
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: xknots(*), coefs(kmax,*)
-double precision :: anorm, brakpt(kbreak), dx, epsln, errest, &
-&vallft(kbreak), valrgt(kbreak), xlft, xrgt
-double precision :: f
-external f
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2150,11 +2150,21 @@ end subroutine adapt
 subroutine adapt1(f, xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
+double precision :: f
+external f
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
 !
 !     This algorithm computes a piecewise polynomial approximation
 !  of specified smoothness, accuracy and degree.  The input to the
@@ -2283,16 +2293,6 @@ integer :: knots
 !
 !     4. Change dpmpar to spmpar in adset.
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
-double precision :: f
-external f
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2375,17 +2375,13 @@ end subroutine adapt1
 subroutine adset(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: j, k, kboth, kleft, kright, limsm
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
-!
-!        ===============================================================
-!
-! **  This program checks the input data and initializes the computation
-!
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
 &fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
@@ -2393,10 +2389,14 @@ double precision :: a, accur, b, bleft(20), bright(20), charf, &
 integer :: both, break, dbreak(20), degree, edist, right, rightx, &
 &smooth
 logical :: discrd
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
 double precision :: akmax, eps, eps0, km1, ratio, zero, one, two, &
 &three, c100
 double precision :: dpmpar
+!
+!        ===============================================================
+!
+! **  This program checks the input data and initializes the computation
+!
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2524,13 +2524,6 @@ integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
-!
-!        ===============================================================
-!
-! **  This program takes an active interval off the top of the stack
-!     it also does most of the work of locating and handling
-!     break points
-!
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
 &fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
@@ -2539,6 +2532,13 @@ integer :: both, break, dbreak(20), degree, edist, right, rightx, &
 &smooth
 logical :: discrd
 double precision :: dx, ratio
+!
+!        ===============================================================
+!
+! **  This program takes an active interval off the top of the stack
+!     it also does most of the work of locating and handling
+!     break points
+!
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2602,18 +2602,14 @@ end subroutine adtake
 
 subroutine adcomp(f)
 implicit none
+double precision :: f
+external f
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
-!
-!        ===============================================================
-!
-! **  This program computes the piecewise polynomial approximation on
-!     the current interval. It also estimates the error
-!
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
 &fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
@@ -2623,8 +2619,14 @@ integer :: both, break, dbreak(20), degree, edist, right, rightx, &
 logical :: discrd
 double precision :: absc(4), aj, dx, fdervl(9), fdervr(9), &
 &fdumb(9), r, wgts(4)
-double precision :: errint, f, polydd
-external f, polydd
+double precision :: errint, polydd
+external polydd
+!
+!        ===============================================================
+!
+! **  This program computes the piecewise polynomial approximation on
+!     the current interval. It also estimates the error
+!
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2717,12 +2719,24 @@ end subroutine adcomp
 
 double precision function errint(f, fit, aaa, bbb, points, weight)
 implicit none
+double precision :: aaa, bbb, fit, points(*), weight(*)
+double precision :: f
+external f, fit
 integer :: j
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: abmid, ba, fdumb(9), p, pj, er, f1, f2, two, &
+&three
 !
 !        ===============================================================
 !
@@ -2732,17 +2746,6 @@ integer :: knots
 !     the integration uses the points and weights given and scaled
 !     from (-1,1) to (aaa,bbb)
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: aaa, abmid, ba, bbb, fdumb(9), fit, p, pj, &
-&points(*), weight(*), er, f1, f2, two, three
-double precision :: f
-external f, fit
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2802,6 +2805,14 @@ integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: difff, diffx
 !
 !        ===============================================================
 !
@@ -2830,14 +2841,6 @@ integer :: knots
 !             I
 !
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: difff, diffx
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2939,18 +2942,13 @@ end subroutine newton
 
 double precision function polydd(x)
 implicit none
+double precision :: x
 integer :: j, k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
-!
-!        ===============================================================
-!
-! **  This function evaluates the current polynomial piece represented
-!     by the divided differences DDTEMP on the point set XDD.
-!
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
 &fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
@@ -2958,7 +2956,12 @@ double precision :: a, accur, b, bleft(20), bright(20), charf, &
 integer :: both, break, dbreak(20), degree, edist, right, rightx, &
 &smooth
 logical :: discrd
-double precision :: x
+!
+!        ===============================================================
+!
+! **  This function evaluates the current polynomial piece represented
+!     by the divided differences DDTEMP on the point set XDD.
+!
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -2984,12 +2987,6 @@ integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
-!
-!        ===============================================================
-!
-! **  This program checks for discarding interval, applies various
-!     tests about discarding involving edist and charf.
-!
 double precision :: a, accur, b, bleft(20), bright(20), charf, &
 &ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
 &fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
@@ -2998,6 +2995,12 @@ integer :: both, break, dbreak(20), degree, edist, right, rightx, &
 &smooth
 logical :: discrd
 double precision :: aknots, dtest, dx, three, five
+!
+!        ===============================================================
+!
+! **  This program checks for discarding interval, applies various
+!     tests about discarding involving edist and charf.
+!
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -3037,12 +3040,21 @@ end subroutine adchk
 subroutine adput(xknots, coefs, kdimen, kmax, ndimen, ierr)
 implicit none
 integer :: ierr, kdimen, kmax, ndimen
+double precision :: xknots(kdimen), coefs(kmax,ndimen)
 integer :: k
 integer :: leftx, nintrp
 integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: dx, half, one, powers(20), p, ratio, three
 !
 !        ===============================================================
 ! **  This program puts intervals on the stack or discards them.
@@ -3051,15 +3063,6 @@ integer :: knots
 !     the polynomial to the power form and put the coefficients into
 !     the array coefs.  It also checks for passing break points
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: xknots(kdimen), coefs(kmax,ndimen)
-double precision :: dx, half, one, powers(20), p, ratio, three
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -3121,6 +3124,7 @@ end subroutine adput
 
 subroutine adtran(d, powers)
 implicit none
+double precision :: d(20,*), powers(*)
 integer :: i, ii, j, k, khi, koef, l, ltop, ni, ni1, nl, nr, nri, &
 &nri1, nrl, nrli, nrlk
 integer :: leftx, nintrp
@@ -3128,6 +3132,14 @@ integer :: kntdim, level, nbreak, npardm
 integer :: ibreak, interp, left, maxaux, maxknt, maxpar, maxstk, &
 &npar, nstack
 integer :: knots
+double precision :: a, accur, b, bleft(20), bright(20), charf, &
+&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
+&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
+&xleft(50), xright(50), buffer
+integer :: both, break, dbreak(20), degree, edist, right, rightx, &
+&smooth
+logical :: discrd
+double precision :: shift, xl, xr, xtemp(20)
 !
 !        ===============================================================
 !
@@ -3138,14 +3150,6 @@ integer :: knots
 !     And there are nintrp other pts XINTRP(k)  inbetween them.
 !     See subroutine newton for more details
 !
-double precision :: a, accur, b, bleft(20), bright(20), charf, &
-&ddtemp(20,20), dsctol, error, errori, factor(20), fintrp(18), &
-&fleft(10), fright(10), norm, xbreak(20), xdd(20), xintrp(18), &
-&xleft(50), xright(50), buffer
-integer :: both, break, dbreak(20), degree, edist, right, rightx, &
-&smooth
-logical :: discrd
-double precision :: d(20,*), powers(*), shift, xl, xr, xtemp(20)
 !
 common /inputz/ a, b, accur, norm, charf, xbreak, bleft, bright, &
 &dbreak, degree, smooth, level, edist, nbreak, kntdim, npardm
@@ -3262,11 +3266,16 @@ implicit none
 integer, intent(in) :: ic, n
 real, intent(inout) :: err(n), r
 real, intent(in) :: tol
+complex :: f
+complex, intent(inout) :: rs(n)
+complex :: z
 integer :: i, ia, inr, ip(32), iq, is, it, iw(7), ix, j, jn, kl, &
 &km, kn, l, l1, l2, lf, ln, m, np, nr
 real :: ang, b, c(4), cm, cp, ct, cx, ep6, eps, eps0, fac, fact, &
 &fc(3), pi, r1, ra, re, sc(4), sf, sp, sr
 real :: spmpar
+complex :: a(64), v
+complex :: rt(51,3), fv(6), u, w, t, rv(3), rq, s, xk, mult, co
 !
 !  Evaluation of complex power series coefficients or derivatives.
 !
@@ -3297,9 +3306,6 @@ real :: spmpar
 !    err real array err(n) containing absolute error estimates for the
 !        numbers in rs.
 !
-complex :: f, a(64), v
-complex, intent(inout) :: rs(n)
-complex :: rt(51,3), fv(6), u, w, t, z, rv(3), rq, s, xk, mult, co
 !
 !  List of the variables initialized in the data statement below.
 !   iw   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
@@ -3507,11 +3513,18 @@ end subroutine cpsc
 subroutine dcpsc (fun, x, y, n, ic, tol, r, rs1, rs2, err)
 implicit none
 integer, intent(in) :: ic, n
-integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
-&l2, lf, ln, m, mm1, np, nr
 double precision :: x, y
 double precision, intent(in) :: tol
 double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
+integer :: i, ia, inr, iq, is, it, ix, j, jn, kl, km, kn, l, l1, &
+&l2, lf, ln, m, mm1, np, nr
+integer :: ip(32), iw(7)
+double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
+&fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w
+double precision :: c(4), fc(3), sc(4)
+double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), &
+&rt2(51,3), rv1(3), rv2(3)
+double precision :: dcpabs, dpmpar
 !
 !  Evaluation of complex power series coefficients or derivatives.
 !
@@ -3553,13 +3566,6 @@ double precision, intent(inout) :: r, rs1(n), rs2(n), err(n)
 !    err real array err(n) containing absolute error estimates for the
 !        COMPLEX NUMBERS WHOSE REAL AND IMAGINARY PARTS ARE IN rs1,rs2.
 !
-integer :: ip(32), iw(7)
-double precision :: ang, b, cm, cp, ct, cx, eps, eps0, ep6, fac, &
-&fact, pi, ra, r1, s, sf, sp, sr, t, u, v, w
-double precision :: c(4), fc(3), sc(4)
-double precision :: a1(64), a2(64), fv1(6), fv2(6), rt1(51,3), &
-&rt2(51,3), rv1(3), rv2(3)
-double precision :: dcpabs, dpmpar
 !
 !  List of the variables initialized in the data statement below.
 !   iw   2**( 0 , 1 , 2 , 3 , 4 , 5 , 6 ) .
@@ -4036,11 +4042,11 @@ subroutine pcoeff(alpha,n,x,a,c,t)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha
-integer :: i, j, k, nm1
 real, intent(in) :: x(*), a(n)
 real, intent(inout) :: c(n)
-double precision :: xx, r
 double precision, intent(inout) :: t(n)
+integer :: i, j, k, nm1
+double precision :: xx, r
 if (n.gt.1) go to 10
 c(1) = a(1)
 return
@@ -4067,15 +4073,15 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
+real, intent(in) :: x(np), y(np)
+real, intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1
 real :: alpha, c, temp, xmax, xmin, za, zb
+real :: lambda
+double precision :: dalpha, dsum
 !     ******************************************************************
 !     Unweighted least squares polynomial fit
 !     ******************************************************************
-real, intent(in) :: x(np), y(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
-real :: lambda
-double precision :: dalpha, dsum
 !     ---------------------
 ierr=0
 if (1.le.nd.and.nd.lt.np) go to 10
@@ -4211,15 +4217,15 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: nd, np
 real, intent(inout) :: rnorm
+real, intent(in) :: x(np), y(np), w(np)
+real, intent(inout) :: a(*), phi(2,*), phix(4,np)
 integer :: k, la, lb, ls, m, mp1, nd1, nw
 real :: alpha, c, temp, xmax, xmin, za, zb
+real :: lambda
+double precision :: dalpha, dsum
 !     ******************************************************************
 !     Weighted least squares polynomial fit
 !     ******************************************************************
-real, intent(in) :: x(np), y(np), w(np)
-real, intent(inout) :: a(*), phi(2,*), phix(4,np)
-real :: lambda
-double precision :: dalpha, dsum
 !     ---------------------
 !
 !                      Error checking
@@ -4372,13 +4378,13 @@ integer, intent(in) :: ibeg, iend
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: a(n), b(n), c(n)
 integer :: i, j, m, nm1
 real :: del, h, r, t
 !-----------------------------------------------------------------------
 !                   Cubic spline interpolation
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: a(n), b(n), c(n)
 !
 if (n .lt. 3) go to 200
 
@@ -4506,6 +4512,8 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isx, n
 real, intent(in) :: a1, an, b1, bn
+real, intent(in) :: x(n), y(n)
+real, intent(inout) :: yp(n), ypp(n), w(n,3)
 integer :: i, j, nm1, nm2
 real :: dnew, dold, h
 !
@@ -4583,8 +4591,6 @@ real :: dnew, dold, h
 !
 !         w    - Array of working storage dimensioned at least 3n.
 !
-real, intent(in) :: x(n), y(n)
-real, intent(inout) :: yp(n), ypp(n), w(n,3)
 !
 if (abs(a1) .ge. 1.0 .or. abs(an) .ge. 1.0) go to 100
 if (n .lt. 4) go to 200
@@ -4668,14 +4674,14 @@ subroutine spfit (x, y, wgt, m, break, l, z, a, b, c, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
-integer :: j, k, la, lm1, lq, lw, n
-!-----------------------------------------------------------------------
-!            Weighted least squares cubic spline fitting
-!-----------------------------------------------------------------------
 real, intent(in) :: x(m), y(m), wgt(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
+integer :: j, k, la, lm1, lq, lw, n
 real :: temp(20)
+!-----------------------------------------------------------------------
+!            Weighted least squares cubic spline fitting
+!-----------------------------------------------------------------------
 !---------------------
 !     real z(l-1), a(l-1), b(l-1), c(l-1), wk(7*l + 18)
 !---------------------
@@ -4735,20 +4741,20 @@ subroutine cspfit (x, y, m, break, l, xcon, con, nder, nc, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, nc
-integer :: j, k, la, lm1, lw, n
-real :: r
-!-----------------------------------------------------------------------
-!                Least squares cubic spline fitting with
-!                  equality and inequality constraints
-!-----------------------------------------------------------------------
 real, intent(in) :: x(m), y(m)
 real, intent(inout) :: break(l)
 real, intent(in) :: xcon(*), con(*)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(in) :: nder(*)
 integer, intent(inout) :: iwk(*)
-!
+integer :: j, k, la, lm1, lw, n
+real :: r
 real :: temp(20)
+!-----------------------------------------------------------------------
+!                Least squares cubic spline fitting with
+!                  equality and inequality constraints
+!-----------------------------------------------------------------------
+!
 !---------------------
 !     xcon, con, nder are arrays of dimension max(1,nc).
 !     z, A, b, c are arrays of dimension l - 1.
@@ -4820,6 +4826,8 @@ subroutine scomp (x,y,a,b,c,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k
 real :: dx, xx
 !
@@ -4858,8 +4866,6 @@ real :: dx, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni)
 !
 !     Check input
 !
@@ -4922,6 +4928,8 @@ subroutine scomp1 (x,y,yp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), yp(n), xi(ni)
+real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx
 !
@@ -4956,8 +4964,6 @@ real :: a, b, c, d, dx, h, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni)
 !
 !     Check input
 !
@@ -5026,6 +5032,8 @@ subroutine scomp2 (x,y,ypp,n,xi,yi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni)
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
@@ -5060,8 +5068,6 @@ real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni)
 !
 !     Check input
 !
@@ -5133,6 +5139,8 @@ subroutine seval (x,y,a,b,c,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k
 real :: bi, ci, dx, xx
 !
@@ -5174,8 +5182,6 @@ real :: bi, ci, dx, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     Check input
 !
@@ -5242,6 +5248,8 @@ subroutine seval1 (x,y,yp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), yp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
 real :: a, b, c, d, dx, h, xx
 !
@@ -5278,8 +5286,6 @@ real :: a, b, c, d, dx, h, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), yp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     Check input
 !
@@ -5352,6 +5358,8 @@ subroutine seval2 (x,y,ypp,n,xi,yi,ypi,yppi,ni,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
+real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 integer :: i, il, ir, k, nm1
 real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !
@@ -5388,8 +5396,6 @@ real :: h, h2, xl, xl2, xl3, xr, xr2, xr3, xx
 !               0  the spline was evaluated at each abscissa in xi.
 !               1  Input error - ni is not positive.
 !
-real, intent(in) :: x(n), y(n), ypp(n), xi(ni)
-real, intent(inout) :: yi(ni), ypi(ni), yppi(ni)
 !
 !     Check input
 !
@@ -5464,6 +5470,7 @@ real function csint (x, y, a, b, c, n, alpha, beta)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: alpha, beta
+real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
 integer :: i, k, kp1, l, lm1
 real :: a0, b0, d, d2, h, h2, r, s, sum
 integer :: intrvl
@@ -5494,7 +5501,6 @@ integer :: intrvl
 !            or greater than alpha.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n), a(n), b(n), c(n)
 !
 csint = 0.0
 h = beta - alpha
@@ -5565,6 +5571,7 @@ real function csint1 (x, y, yp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
+real, intent(in) :: x(n), y(n), yp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, bi, ci, d, d2, h, h2, r, s, sum
 integer :: intrvl
@@ -5590,7 +5597,6 @@ integer :: intrvl
 !          or greater than A.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n), yp(n)
 !
 csint1 = 0.0
 h = b - a
@@ -5680,6 +5686,7 @@ real function csint2 (x, y, ypp, n, a, b)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: a, b
+real, intent(in) :: x(n), y(n), ypp(n)
 integer :: i, ip1, k, kp1, l, lm1, lp1
 real :: a0, b0, d, dma, dmb, dpa, dpb, h, r, s, sum
 integer :: intrvl
@@ -5705,7 +5712,6 @@ integer :: intrvl
 !          or greater than A.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(n), ypp(n)
 !
 csint2 = 0.0
 h = b - a
@@ -5775,13 +5781,13 @@ subroutine pdspl (x, y, a, b, c, n, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
+real, intent(in) :: x(n), y(*)
+real, intent(inout) :: a(*), b(*), c(*), t(*)
 integer :: i, j, nm1, nm2, nm3
 real :: alpha, del, del0, deli, delta, e, h, hi, r, s, si, w
 !-----------------------------------------------------------------------
 !                Periodic cubic spline interpolation
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(*)
-real, intent(inout) :: a(*), b(*), c(*), t(*)
 !----------------------
 !     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), t(n-2)
 !----------------------
@@ -5906,23 +5912,23 @@ subroutine pdfit (x, y, m, break, l, z, a, b, c, wk, iwk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m
-integer :: j, k, la, lm1, lw, n
-real :: r
-!-----------------------------------------------------------------------
-!            Least squares periodic cubic spline fitting
-!-----------------------------------------------------------------------
 real, intent(in) :: x(m), y(m)
 real, intent(inout) :: break(l)
 real, intent(inout) :: z(*), a(*), b(*), c(*), wk(*)
 integer, intent(inout) :: iwk(*)
+integer :: j, k, la, lm1, lw, n
+real :: r
+real :: temp(20)
+real :: con(3), xcon(3)
+integer :: nder(3)
+!-----------------------------------------------------------------------
+!            Least squares periodic cubic spline fitting
+!-----------------------------------------------------------------------
 !--------------------
 !     real z(l-1), a(l-1), b(l-1), c(l-1)
 !     real wk((l + 6)*(l + 15) + 10)
 !     integer iwk(2*l + 6)
 !--------------------
-real :: temp(20)
-real :: con(3), xcon(3)
-integer :: nder(3)
 !--------------------
 data nder(1) /3/, nder(2) /7/, nder(3) /11/
 !--------------------
@@ -6002,13 +6008,13 @@ subroutine pscmp (x, y, a, b, c, n, xi, yi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
+real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real, intent(inout) :: yi(m)
 integer :: i, il, ir, j, k
 real :: dx, h, t, t0, x1, xold, xx
 !-----------------------------------------------------------------------
 !              Evaluation of a periodic cubic spline
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m)
 !----------------------
 !     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m)
 !----------------------
@@ -6082,13 +6088,13 @@ subroutine psevl (x, y, a, b, c, n, xi, yi, ypi, yppi, m, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n
+real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
+real, intent(inout) :: yi(m), ypi(m), yppi(m)
 integer :: i, il, ir, j, k
 real :: bi2, ci3, dx, h, t, t0, x1, xold, xx
 !-----------------------------------------------------------------------
 !     Evaluation and differentiation of a periodic cubic spline
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), y(*), a(*), b(*), c(*), xi(m)
-real, intent(inout) :: yi(m), ypi(m), yppi(m)
 !----------------------
 !     real x(n), y(n-1), a(n-1), b(n-1), c(n-1), xi(m), yi(m), ypi(m),
 !    *     yppi(m)
@@ -6169,6 +6175,8 @@ subroutine csloop (m, n, x, kx, t, dx, kdx, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
+real, intent(in) :: x(kx,n)
+real, intent(inout) :: t(m), dx(kdx,n), wk(*)
 integer :: ia, ib, ic, ie, mm1
 !-----------------------------------------------------------------------
 !               Closed curve cubic spline fitting
@@ -6179,8 +6187,6 @@ integer :: ia, ib, ic, ie, mm1
 !        Naval Surface Warfare Center
 !        Dahlgren, Virginia
 !----------------------
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), wk(*)
 !----------------------
 !     m = The number of n-dimensional points given in x
 !     wk is an array of dimension 4*(m-1)
@@ -6206,6 +6212,8 @@ subroutine cslop1 (m, n, x, kx, t, dx, kdx, a, b, c, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kdx, kx, m, n
+real, intent(in) :: x(kx,n)
+real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
 integer :: i, im1, j, l, mm1, mm2
 real :: alpha, del, del0, del1, deli, delm, eta, h, hm, p, r, si, &
 &sm, sum, tau
@@ -6214,8 +6222,6 @@ real :: snrm2
 !               Closed curve cubic spline fitting
 !                    in n-dimensional space
 !-----------------------------------------------------------------------
-real, intent(in) :: x(kx,n)
-real, intent(inout) :: t(m), dx(kdx,n), a(*), b(m), c(*), e(*)
 !----------------------
 !     real a(m-1), c(m-1), e(k)  (k = max0(1,m-2))
 !     the e array is not used when m = 2.
@@ -6370,14 +6376,14 @@ end subroutine cslop1
 subroutine lopcmp (m, n, t, x, kx, dx, kdx, l, ti, z, kz)
 implicit none
 integer, intent(in) :: kdx, kx, kz, l, m, n
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
+real, intent(inout) :: z(kz, n)
 integer :: i, il, ir, j, k
 real :: a, b, c, d, dt, h, t0, told, w
 !-----------------------------------------------------------------------
 !            Evaluation of a cubic spline closed curve
 !                     in n-dimensional space
 !-----------------------------------------------------------------------
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n), ti(l)
-real, intent(inout) :: z(kz, n)
 !
 !     Reduction of ti(k) to t0 where 0 .LE. t0 .LT. 1
 !
@@ -6453,14 +6459,14 @@ subroutine lopdf (m, n, t, x, kx, dx, kdx, ti, z, dz, ddz)
 implicit none
 integer, intent(in) :: kdx, kx, m, n
 real, intent(in) :: ti
+real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
+real, intent(inout) :: z(n), dz(n), ddz(n)
 integer :: i, il, ir, j
 real :: a, b, c, d, dt, h, t0, w
 !-----------------------------------------------------------------------
 !          Evaluation and differentiation of a cubic spline
 !                closed curve in n-dimensional space
 !-----------------------------------------------------------------------
-real, intent(in) :: t(m), x(kx,n), dx(kdx,n)
-real, intent(inout) :: z(n), dz(n), ddz(n)
 !
 !     Reduction of ti to t0 where 0 .LE. t0 .LT. 1
 !
@@ -6521,15 +6527,15 @@ end subroutine lopdf
 subroutine curv1 (n,x,y,slp1,slpn,islpsw,yp,temp, &
 &sigma,ierr)
 implicit none
-integer :: i, ibak, nm1, np1
-real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
-&diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
-!
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: yp(n), temp(n)
 real, intent(in) :: sigma
+integer :: i, ibak, nm1, np1
+real :: c1, c2, c3, delx1, delx2, delxn, delxnm, diag, diag1, &
+&diag2, dx1, dx2, sdiag1, sdiag2, sigmap, slpp1, slppn
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -6678,14 +6684,14 @@ end subroutine curv1
 
 function curv2 (t,n,x,y,yp,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
 integer :: i, im1
 real :: coshp1, coshp2, del1, del2, delp1, delp2, dels, dummy, &
 &sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sum
 integer :: intrvl
 real :: curv2
 !
-integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -6767,14 +6773,14 @@ end function curv2
 
 function curvd (t,n,x,y,yp,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: t, x(n), y(n), yp(n), sigma
 integer :: i, im1
 real :: coshm1, coshm2, del1, del2, dels, dummy, sigmap, sinhms, &
 &sum
 integer :: intrvl
 real :: curvd
 !
-integer, intent(in) :: n
-real, intent(in) :: t, x(n), y(n), yp(n), sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -6849,6 +6855,8 @@ end function curvd
 
 function curvi (xl,xu,n,x,y,yp,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 integer :: i, il, ilm1, ilp1, iu, ium1
 real :: c1, c2, cl1, cl2, cmm1, cmm2, cs, cu1, cu2, del1, del2, &
 &deli, dell1, dell2, dels, delu1, delu2, dummy, sigmap, ss, ssign, &
@@ -6857,8 +6865,6 @@ integer :: intrvl
 real :: curvi
 real :: term
 !
-integer, intent(in) :: n
-real, intent(in) :: xl, xu, x(n), y(n), yp(n), sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7026,16 +7032,16 @@ end function curvi
 subroutine kurv1 (n,x,y,slp1,slpn,islpsw,xp,yp,temp,s, &
 &sigma,ierr)
 implicit none
-integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
-&diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
-&slpp1x, slpp1y, slppnx, slppny, sx, sy
-!
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), slp1, slpn
 real, intent(inout) :: xp(n), yp(n), temp(n), s(n)
 real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+&diag1, diag2, diagin, dx1, dx2, dy1, dy2, sdiag1, sdiag2, sigmap, &
+&slpp1x, slpp1y, slppnx, slppny, sx, sy
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7219,16 +7225,16 @@ end subroutine kurv1
 
 subroutine kurv2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 integer :: i, im1
 real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
 &dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
 &tn
 integer :: intrvl
 !
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7327,15 +7333,15 @@ end subroutine kurv2
 
 subroutine kurvp1 (n,x,y,xp,yp,temp,s,sigma,ierr)
 implicit none
-integer :: i, ibak, im1, nm1, np1, npi, npibak
-real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
-&dy2, sdiag1, sdiag2, sigmap, xpn, ypn
-!
 integer, intent(in) :: n
 integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n)
 real, intent(inout) :: xp(n), yp(n), temp(*), s(n)
 real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1, npi, npibak
+real :: dels1, dels2, diag, diag1, diag2, diagin, dx1, dx2, dy1, &
+&dy2, sdiag1, sdiag2, sigmap, xpn, ypn
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7501,16 +7507,16 @@ end subroutine kurvp1
 
 subroutine kurvp2 (t,xs,ys,n,x,y,xp,yp,s,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys
+real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 integer :: i, im1
 real :: c1, c2, ci, cim1, coshp1, coshp2, d, del1, del2, delp1, &
 &delp2, dels, dummy, si, sigmap, sinhm1, sinhm2, sinhms, sinhp1, &
 &sinhp2, sumx, sumy, tn
 integer :: intrvl
 !
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys
-real, intent(in) :: x(n), y(n), xp(n), yp(n), s(n), sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7617,17 +7623,17 @@ subroutine qurv1 (n,x,y,z,slp1x,slp1y,slp1z,slpnx, &
 &slpny,slpnz,islpsw,xp,yp,zp,temp, &
 &s,sigma,ierr)
 implicit none
-integer :: i, ibak, im1, nm1, np1
-real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
-&diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
-&sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
-!
 integer, intent(in) :: n, islpsw
 integer, intent(out) :: ierr
 real, intent(in) :: x(n), y(n), z(n), slp1x, slp1y, slp1z, slpnx, &
 &slpny, slpnz
 real, intent(inout) :: xp(n), yp(n), zp(n), temp(n), s(n)
 real, intent(in) :: sigma
+integer :: i, ibak, im1, nm1, np1
+real :: c1, c2, c3, dels1, dels2, delsn, delsnm, delt, diag, &
+&diag1, diag2, diagin, dx1, dx2, dy1, dy2, dz1, dz2, sdiag1, &
+&sdiag2, sigmap, slpp1x, slpp1y, slpp1z, slppnx, slppny, slppnz, t
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7835,17 +7841,17 @@ end subroutine qurv1
 
 subroutine qurv2 (t,xs,ys,zs,n,x,y,z,xp,yp,zp,s,sigma)
 implicit none
+integer, intent(in) :: n
+real, intent(in) :: t
+real, intent(inout) :: xs, ys, zs
+real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
+real, intent(in) :: sigma
 integer :: i, im1
 real :: c1, c2, coshp1, coshp2, d, del1, del2, delp1, delp2, dels, &
 &dummy, sigmap, sinhm1, sinhm2, sinhms, sinhp1, sinhp2, sumx, sumy, &
 &sumz, tn
 integer :: intrvl
 !
-integer, intent(in) :: n
-real, intent(in) :: t
-real, intent(inout) :: xs, ys, zs
-real, intent(in) :: x(n), y(n), z(n), xp(n), yp(n), zp(n), s(n)
-real, intent(in) :: sigma
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -7948,11 +7954,11 @@ end subroutine qurv2
 subroutine ceez (del1,del2,sigma,c1,c2,c3,n)
 implicit none
 integer, intent(in) :: n
+real, intent(in) :: del1, del2, sigma
+real, intent(inout) :: c1, c2, c3
 real :: coshm1, coshm2, del, delm, delp, denom, dummy, sinhmm, &
 &sinhmp
 !
-real, intent(in) :: del1, del2, sigma
-real, intent(inout) :: c1, c2, c3
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -8028,10 +8034,10 @@ end subroutine ceez
 
 subroutine terms (diag,sdiag,sigma,del)
 implicit none
-real :: coshm, denom, sigdel, sinhm
-!
 real, intent(inout) :: diag, sdiag
 real, intent(in) :: sigma, del
+real :: coshm, denom, sigdel, sinhm
+!
 !
 !                      From the spline under tension package
 !                       coded by A. K. Cline and R. J. Renka
@@ -8083,9 +8089,9 @@ end subroutine terms
 integer function intrvl (x, t, m)
 implicit none
 integer, intent(in) :: m
+real, intent(in) :: x, t(m)
 integer :: i, il, ir
 real :: tm
-real, intent(in) :: x, t(m)
 !-----------------------------------------------------------------------
 !
 !             Location of a value x in a sequence t
@@ -8153,6 +8159,8 @@ implicit none
 integer, intent(in) :: jderiv, k, n
 real, intent(inout) :: w
 real, intent(in) :: x
+real, intent(in) :: t(*), bcoef(n)
+real, intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmax, jcmin, jdrvp1, jj, km1, kmj, &
 &l, nmi, npk
 real :: dl, dr, fkmj
@@ -8216,8 +8224,6 @@ integer :: intrvl
 !  Reference. DE boor, carl, A PRATICAL guide to splines, springer-
 !  verlag, new york, 1978.
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*), bcoef(n)
-real, intent(inout) :: wk(k,3)
 !
 w = 0.0
 if (jderiv .ge. k) return
@@ -8329,6 +8335,8 @@ implicit none
 integer, intent(in) :: k, n
 real, intent(out) :: w
 real, intent(in) :: x
+real, intent(in) :: t(*), bcoeff(n)
+real, intent(inout) :: wk(*)
 integer :: i, ipk, kp1, np1, npk
 real :: sum, tlast, tnew, xval
 !-----------------------------------------------------------------------
@@ -8337,8 +8345,6 @@ real :: sum, tlast, tnew, xval
 !-----------------------------------------------------------------------
 !     real t(n + k), wk(n + 3*(k + 1))
 !---------------------------
-real, intent(in) :: t(*), bcoeff(n)
-real, intent(inout) :: wk(*)
 !
 w = 0.0
 if (x .le. t(1)) return
@@ -8376,6 +8382,8 @@ integer, intent(in) :: k, n
 real, intent(in) :: tnew
 real, intent(out) :: w
 real, intent(in) :: x
+real, intent(in) :: t(*), bcoef(n)
+real, intent(inout) :: wk(k,3)
 integer :: i, imk, ipj, j, jc, jcmin, jj, km1, kmj, l, m
 real :: dl, dr, tipj
 integer :: intrvl
@@ -8407,8 +8415,6 @@ integer :: intrvl
 !     Remark. bvali0 is an adaptation by A.H. Morris (NSWC) of the
 !     SUBROUTINE bval.
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*), bcoef(n)
-real, intent(inout) :: wk(k,3)
 !
 w = 0.0
 km1 = k - 1
@@ -8478,6 +8484,8 @@ implicit none
 integer, intent(in) :: k
 integer, intent(out) :: l
 integer, intent(in) :: n
+real, intent(in) :: t(*), a(n)
+real, intent(inout) :: break(*), c(k,*), wk(k,*)
 integer :: i, il, ilj, ilkj, j, jj, jp1, km1, kmj, kp1, left
 real :: diff, r, s, term, x
 !-----------------------------------------------------------------------
@@ -8507,8 +8515,6 @@ real :: diff, r, s, term, x
 !       wk    2-DIMENSIONAL ARRAY OF DIMENSION (k,k+1)
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*), a(n)
-real, intent(inout) :: break(*), c(k,*), wk(k,*)
 !
 l = 0
 break(1) = t(k)
@@ -8674,6 +8680,8 @@ implicit none
 integer, intent(inout) :: j
 integer, intent(in) :: jhigh, k, left
 real, intent(in) :: x
+real, intent(in) :: t(*)
+real, intent(inout) :: blist(k)
 integer :: i, imj, l
 real :: s, term, ti, timj
 !-----------------------------------------------------------------------
@@ -8708,8 +8716,6 @@ real :: s, term, ti, timj
 !     Written by carl DE boor (University of Wisconsin) and modified
 !         by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*)
-real, intent(inout) :: blist(k)
 !
 if (j .gt. 0) go to 10
    j = 1
@@ -8737,6 +8743,8 @@ subroutine bspvd (t, k, x, left, dbiatx, idim, nderiv, a)
 implicit none
 integer, intent(in) :: idim, k, left, nderiv
 real, intent(in) :: x
+real, intent(in) :: t(*)
+real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
 integer :: i, ideriv, il, j, jj, jlow, jp1mid, kp1, kp1mm, l, &
 &ldummy, m, mhigh
 real :: factor, fkp1mm, sum
@@ -8789,8 +8797,6 @@ real :: factor, fkp1mm, sum
 !  Written by carl DE boor (University of Wisconsin) and modified
 !     by A.H. Morris (NSWC).
 !-----------------------------------------------------------------------
-real, intent(in) :: t(*)
-real, intent(inout) :: dbiatx(idim,nderiv), a(k,k)
 !
 mhigh = max0(min0(nderiv,k),1)
 !     MHIGH is usually equal to nderiv.
@@ -8877,6 +8883,10 @@ subroutine bstrp (tau, gtau, t, n, k, bcoef, q, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: k, n
+real, intent(inout) :: bcoef(n)
+real, intent(in) :: gtau(n)
+real, intent(inout) :: q(*)
+real, intent(in) :: t(*), tau(n)
 integer :: i, ilp1mx, j, jj, km1, kpkm2, left, lenq, np1
 real :: taui
 !-----------------------------------------------------------------------
@@ -8925,10 +8935,6 @@ real :: taui
 !     banfac performs no pivoting since the total positivity of the
 !  matrix A makes this unnecessary.
 !-----------------------------------------------------------------------
-real, intent(inout) :: bcoef(n)
-real, intent(in) :: gtau(n)
-real, intent(inout) :: q(*)
-real, intent(in) :: t(*), tau(n)
 !
 km1 = k - 1
 if (iflag .eq. 0) go to 60
@@ -9019,8 +9025,10 @@ subroutine banfac ( w, nroww, nrow, nbandl, nbandu, iflag )
 implicit none
 integer, intent(out) :: iflag
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
+real, intent(inout) :: w(nroww,nrow)
 integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
 &midmk, mj, nrowm1
+real :: factor, pivot
 !  From  * a practical guide to splines *  by C. DE boor
 !  returns in  w  the LU-factorization (without pivoting) of the banded
 !  matrix  A  of order  nrow  with  (nbandl + 1 + nbandu) bands or diag-
@@ -9076,8 +9084,6 @@ integer :: i, ipk, j, jbeg, jend, jmax, k, kmax, mdj, middle, &
 !  P O S i T i V E  matrices which occur in spline calculations.
 !     The routine should not be used for an arbitrary banded matrix.
 !
-real, intent(inout) :: w(nroww,nrow)
-real :: factor, pivot
 !
 iflag = 1
 middle = nbandu + 1
@@ -9139,6 +9145,8 @@ end subroutine banfac
 subroutine banslv ( w, nroww, nrow, nbandl, nbandu, b )
 implicit none
 integer, intent(in) :: nbandl, nbandu, nrow, nroww
+real, intent(in) :: w(nroww,nrow)
+real, intent(inout) :: b(nrow)
 integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  From  * a practical guide to splines *  by C. DE boor
 !  companion routine to  banfac . It returns the solution  X  of the
@@ -9160,8 +9168,6 @@ integer :: i, imj, ipj, j, jmax, middle, mmj, mpj, nrowm1
 !  upper triangular system  U*X = Y  is solved for  X  . The CALCUL-
 !  ations are so arranged that the innermost loops stay within columns.
 !
-real, intent(in) :: w(nroww,nrow)
-real, intent(inout) :: b(nrow)
 middle = nbandu + 1
 if (nrow .eq. 1)                  go to 49
 nrowm1 = nrow - 1
@@ -9201,6 +9207,9 @@ subroutine bslsq (tau, gtau, wgt, ntau, t, n, k, a, wk, q, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: k, n, ntau
+real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
+real, intent(in) :: t(*)
+real, intent(inout) :: a(n), wk(n), q(k,n)
 integer :: i, j, jj, l, left, leftmk, mm
 real :: dw
 !-----------------------------------------------------------------------
@@ -9235,9 +9244,6 @@ real :: dw
 !            -1  Input errors were detected.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: tau(ntau), gtau(ntau), wgt(ntau)
-real, intent(in) :: t(*)
-real, intent(inout) :: a(n), wk(n), q(k,n)
 !
 if (ntau .lt. max0(2,k)) go to 100
 if (tau(1) .lt. t(k) .or. tau(ntau) .gt. t(n + 1)) go to 100
@@ -9296,6 +9302,7 @@ subroutine bchfac (w, nb, n, diag, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nb
+real, intent(inout) :: w(nb,n), diag(n)
 integer :: i, imax, ipj, j, jmax, k, kpi
 real :: ratio, t
 !-----------------------------------------------------------------------
@@ -9364,7 +9371,6 @@ real :: ratio, t
 !     call bchfac (w, nb, n, diag, iflag)   , to get factorization
 !     call bchslv (w, nb, n, b, x )            , to solve for x.
 !-----------------------------------------------------------------------
-real, intent(inout) :: w(nb,n), diag(n)
 !
 if (n .gt. 1) go to 10
    iflag = 1
@@ -9413,6 +9419,8 @@ end subroutine bchfac
 subroutine bchslv (w, nb, n, b)
 implicit none
 integer, intent(in) :: n, nb
+real, intent(in) :: w(nb,n)
+real, intent(inout) :: b(n)
 integer :: j, jmax, jpk, k, nbm1
 !-----------------------------------------------------------------------
 !
@@ -9436,8 +9444,6 @@ integer :: j, jmax, jpk, k, nbm1
 !     unit lower triangular matrix and D a diagonal matrix.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: w(nb,n)
-real, intent(inout) :: b(n)
 !
 if (n .gt. 1) go to 10
 b(1) = b(1)*w(1,1)
@@ -9477,6 +9483,11 @@ implicit none
 integer, intent(inout) :: mode
 integer, intent(in) :: n, nconst, ndata, nord
 real, intent(inout) :: rnorm
+real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
+real, intent(in) :: xconst(*), yconst(*)
+real, intent(inout) :: coeff(n), w(*)
+integer, intent(in) :: nderiv(*)
+integer, intent(inout) :: iw(*)
 integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !-----------------------------------------------------------------------
 !
@@ -9682,11 +9693,6 @@ integer :: i1, i2, i3, i7, mdg, mdw, nbkpt
 !     Sandia Laboratories
 !   modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
-real, intent(in) :: bkpt(*), xdata(ndata), ydata(ndata)
-real, intent(in) :: xconst(*), yconst(*)
-real, intent(inout) :: coeff(n), w(*)
-integer, intent(in) :: nderiv(*)
-integer, intent(inout) :: iw(*)
 !
 nbkpt = n + nord
 mdg = n + 3
@@ -9721,20 +9727,20 @@ integer, intent(in) :: mdg, mdw
 integer, intent(inout) :: mode
 integer, intent(in) :: nbkpt, nconst, ndata, nord
 real, intent(inout) :: rnorm
-integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
-&ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
-&nordm1, nordp1, np1
-real :: rnorme, xmax, xmin, xval, yval
-!---------------------
 real, intent(in) :: bkpt(nbkpt), xdata(ndata), ydata(ndata)
 real, intent(in) :: xconst(*), yconst(*)
 real, intent(inout) :: coeff(*)
 real, intent(inout) :: bf(nord,nord), g(mdg,*), w(mdw,*), work(*)
 integer, intent(in) :: nderiv(*)
 integer, intent(inout) :: iwork(*)
-!
+integer :: i, idata, ideriv, ierr, ileft, intrvl, intw1, ip, ip1, &
+&ir, irow, itype, iw1, iw2, j, l, lw, m, mt, n, nb, neqcon, nincon, &
+&nordm1, nordp1, np1
+real :: rnorme, xmax, xmin, xval, yval
 real :: prgopt(7)
 logical :: band, new
+!---------------------
+!
 !
 go to 100
 !
@@ -10439,6 +10445,10 @@ subroutine spfit2 (x, wx, mx, y, wy, my, z, kz, xbreak, nx, &
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kz, mx, my, num, nx, ny
+real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
+real, intent(in) :: xbreak(nx), ybreak(ny)
+real, intent(inout) :: f(*)
+real, intent(inout) :: s(*), t(*), wk(num)
 integer :: i, imax, j, l, ld, m, n, nu
 !-----------------------------------------------------------------------
 !
@@ -10475,10 +10485,6 @@ integer :: i, imax, j, l, ld, m, n, nu
 !        Naval Surface Warfare Center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-real, intent(in) :: x(mx), wx(mx), y(my), wy(my), z(kz, my)
-real, intent(in) :: xbreak(nx), ybreak(ny)
-real, intent(inout) :: f(*)
-real, intent(inout) :: s(*), t(*), wk(num)
 !---------------------
 !     real f(4*nx*ny), s(nx + 6), t(ny + 6)
 !---------------------

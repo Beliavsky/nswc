@@ -1,18 +1,18 @@
 subroutine calct(bool,n,sr,si,tr,ti,pvr,pvi,are,hr,hi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
-!
-!     This subroutine computes T = -P(S)/H(S)
-!
-!     bool - Logical variable, which is set to .TRUE. if H(S) is
-!            essentially zero.
-!
 logical, intent(inout) :: bool
 double precision, intent(in) :: sr, si
 double precision, intent(inout) :: tr, ti
 double precision, intent(in) :: pvr, pvi, are, hr(n), hi(n)
 double precision, intent(inout) :: qhr(n), qhi(n)
 double precision :: hvr, hvi, dcpabs
+!
+!     This subroutine computes T = -P(S)/H(S)
+!
+!     bool - Logical variable, which is set to .TRUE. if H(S) is
+!            essentially zero.
+!
 !
 !     Evaluate H(S)
 !
@@ -29,17 +29,17 @@ end subroutine calct
 subroutine nexth(bool,n,tr,ti,hr,hi,qpr,qpi,qhr,qhi)
 implicit none
 integer, intent(in) :: n
+logical, intent(in) :: bool
+double precision, intent(in) :: tr, ti
+double precision, intent(inout) :: hr(n), hi(n)
+double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
 integer :: j
+double precision :: t1, t2
 !
 !     Calculates the next shifted H polynomial.
 !
 !     bool - Logical variable. If .TRUE. H(S) is essentially zero.
 !
-logical, intent(in) :: bool
-double precision, intent(in) :: tr, ti
-double precision, intent(inout) :: hr(n), hi(n)
-double precision, intent(in) :: qpr(n), qpi(n), qhr(n), qhi(n)
-double precision :: t1, t2
 !
 if (bool) go to 20
    do j = 2,n
@@ -66,16 +66,16 @@ end subroutine nexth
 subroutine polyev(n,sr,si,pr,pi,qr,qi,pvr,pvi)
 implicit none
 integer, intent(in) :: n
-integer :: i
-!
-!     Evaluates a polynomial P at S by the Horner recurrence algo.,
-!     placing the partial sums in Q and the computed value in PV.
-!
 double precision, intent(in) :: pr(n), pi(n)
 double precision, intent(inout) :: qr(n), qi(n)
 double precision, intent(in) :: sr, si
 double precision, intent(out) :: pvr, pvi
+integer :: i
 double precision :: t
+!
+!     Evaluates a polynomial P at S by the Horner recurrence algo.,
+!     placing the partial sums in Q and the computed value in PV.
+!
 !
 qr(1) = pr(1)
 qi(1) = pi(1)
@@ -94,7 +94,9 @@ end subroutine polyev
 double precision function errev(nn,qr,qi,ms,mp,are,mre)
 implicit none
 integer, intent(in) :: nn
+double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
 integer :: i
+double precision :: e, dcpabs
 !
 !     Bounds the error in evaluating the polynomial by the Horner
 !     recurrence algorithm.
@@ -104,8 +106,6 @@ integer :: i
 !     mp      - Modulus of the polynomial value
 !     are,mre - Error bounds on complex addition and multiplication
 !
-double precision, intent(in) :: qr(nn), qi(nn), ms, mp, are, mre
-double precision :: e, dcpabs
 !
 e = dcpabs(qr(1),qi(1))*mre/(are + mre)
 do i = 1,nn
@@ -119,10 +119,17 @@ subroutine rbnd (n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
+complex, intent(in) :: w(n)
+integer, intent(inout) :: klust(n)
+real, intent(in) :: c(*)
+real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 real :: spmpar
 real :: cpabs
+complex :: z
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     Abstract
@@ -175,13 +182,6 @@ real :: cpabs
 !        January 1976
 !     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
-complex, intent(in) :: w(n)
-complex :: z
-integer, intent(inout) :: klust(n)
-real, intent(in) :: c(*)
-real, intent(inout) :: abserr(n), relerr(n)
-double precision :: xr, xi, vr, vi, vt
-logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -276,10 +276,16 @@ subroutine cbnd (n, c, w, abserr, relerr, klust, ker)
 implicit none
 integer, intent(inout) :: ker
 integer, intent(in) :: n
+complex, intent(in) :: c(*), w(n)
+integer, intent(inout) :: klust(n)
+real, intent(inout) :: abserr(n), relerr(n)
 integer :: j, jp1, k, l, m, nm1, np1
 real :: b, cert, dist, eps, olderr, p, power, r, rat, wnrm, wrad
 real :: spmpar
 real :: cpabs
+complex :: z
+double precision :: xr, xi, vr, vi, vt
+logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     Abstract
@@ -332,12 +338,6 @@ real :: cpabs
 !        January 1976
 !     modified by A.H. Morris (NSWC)
 !-----------------------------------------------------------------------
-complex, intent(in) :: c(*), w(n)
-complex :: z
-integer, intent(inout) :: klust(n)
-real, intent(inout) :: abserr(n), relerr(n)
-double precision :: xr, xi, vr, vi, vt
-logical :: shrunk
 !-----------------------------------------------------------------------
 !
 !     ****** eps is a machine dependent constant. Eps is the
@@ -437,10 +437,10 @@ implicit none
 !
 real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy, m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy, m, mp1
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -492,10 +492,10 @@ implicit none
 !
 double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy, m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy, m, mp1
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -546,10 +546,10 @@ implicit none
 !
 complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -579,7 +579,9 @@ end subroutine ccopy
 subroutine iswap (n,ix,incx,iy,incy)
 implicit none
 integer, intent(in) :: incx, incy, n
+integer, intent(inout) :: ix(*), iy(*)
 integer :: i, iix, iiy, m, mp1, ns
+integer :: itemp1, itemp2, itemp3
 !
 !                Extended B L A S  subprogram
 !
@@ -603,8 +605,6 @@ integer :: i, iix, iiy, m, mp1, ns
 !
 !***AUTHOR  VANDEVENDER, W. (SNLA), 1985
 !
-integer, intent(inout) :: ix(*), iy(*)
-integer :: itemp1, itemp2, itemp3
 !
 if (n .le. 0) return
 if (incx .ne. incy) go to 5
@@ -673,11 +673,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(inout) :: sx(*), sy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 real :: stemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy, m, mp1
-integer, intent(in) :: n
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -734,11 +734,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(inout) :: dx(*), dy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 double precision :: dtemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy, m, mp1
-integer, intent(in) :: n
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -794,11 +794,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(inout) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 complex :: ctemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy
-integer, intent(in) :: n
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -835,12 +835,12 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(inout) :: sx(*), sy(*)
-real :: stemp
 real, intent(in) :: c, s
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy
 integer, intent(in) :: n
+real :: stemp
+integer :: i
+integer :: ix, iy
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -878,12 +878,12 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(inout) :: dx(*), dy(*)
-double precision :: dtemp
 double precision, intent(in) :: c, s
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy
 integer, intent(in) :: n
+double precision :: dtemp
+integer :: i
+integer :: ix, iy
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -922,12 +922,12 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(inout) :: cx(*), cy(*)
-complex :: ctemp
 real, intent(in) :: c, s
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy
 integer, intent(in) :: n
+complex :: ctemp
+integer :: i
+integer :: ix, iy
 !
 if(n.le.0)return
 if(incx.eq.1.and.incy.eq.1)go to 20
@@ -1245,16 +1245,16 @@ implicit none
 !     inexact.  This is OK as they are only used for testing the size
 !     of dd1 and dd2.  All actual scaling of data is done using gam.
 !
-double precision :: gam, one, rgamsq
 double precision, intent(inout) :: dd2
-double precision :: dh11, dh21
 double precision, intent(inout) :: dparam(5)
-double precision :: dp2, dq2, du
 double precision, intent(in) :: dy1
-double precision :: zero, gamsq
 double precision, intent(inout) :: dd1
-double precision :: dflag, dh12, dh22, dp1, dq1, dtemp
 double precision, intent(inout) :: dx1
+double precision :: gam, one, rgamsq
+double precision :: dh11, dh21
+double precision :: dp2, dq2, du
+double precision :: zero, gamsq
+double precision :: dflag, dh12, dh22, dp1, dq1, dtemp
 double precision :: two
 !
 data zero,one,two /0.d0,1.d0,2.d0/
@@ -1383,7 +1383,13 @@ end subroutine drotmg
 subroutine drotm (n,dx,incx,dy,incy,dparam)
 implicit none
 integer, intent(in) :: incx, incy, n
+double precision, intent(inout) :: dx(*)
+double precision :: dparam(5)
+double precision, intent(inout) :: dy(*)
 integer :: i, kx, ky, nsteps
+double precision :: dflag, dh12, dh22
+double precision :: two, z, dh11, dh21
+double precision :: w, zero
 !
 !     Apply the modified Givens transformation, H, to the 2 by n matrix
 !
@@ -1401,11 +1407,6 @@ integer :: i, kx, ky, nsteps
 !     h=(          )    (          )    (          )    (          )
 !       (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
 !
-double precision :: dflag, dh12, dh22
-double precision, intent(inout) :: dx(*)
-double precision :: two, z, dh11, dh21, dparam(5)
-double precision, intent(inout) :: dy(*)
-double precision :: w, zero
 !
 data zero,two/0.d0,2.d0/
 !
@@ -1503,11 +1504,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*), sy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 real :: stemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy, m, mp1
-integer, intent(in) :: n
 !
 stemp = 0.0e0
 sdot = 0.0e0
@@ -1557,11 +1558,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*), dy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 double precision :: dtemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy, m, mp1
-integer, intent(in) :: n
 !
 ddot = 0.0d0
 dtemp = 0.0d0
@@ -1611,11 +1612,11 @@ implicit none
 !     Jack dongarra, LINPACK,  3/11/78.
 !
 complex, intent(in) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 complex :: ctemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy
-integer, intent(in) :: n
 !
 ctemp = (0.0,0.0)
 cdotc = (0.0,0.0)
@@ -1653,11 +1654,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*), cy(*)
+integer, intent(in) :: incx, incy
+integer, intent(in) :: n
 complex :: ctemp
 integer :: i
-integer, intent(in) :: incx, incy
 integer :: ix, iy
-integer, intent(in) :: n
 !
 ctemp = (0.0,0.0)
 cdotu = (0.0,0.0)
@@ -1697,10 +1698,10 @@ implicit none
 !
 real, intent(in) :: sa
 real, intent(inout) :: sx(*)
-integer :: i
 integer, intent(in) :: incx
-integer :: m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: m, mp1
 integer :: nincx
 !
 if(n.le.0)return
@@ -1745,10 +1746,10 @@ implicit none
 !
 double precision, intent(in) :: da
 double precision, intent(inout) :: dx(*)
-integer :: i
 integer, intent(in) :: incx
-integer :: m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: m, mp1
 integer :: nincx
 !
 if(n.le.0)return
@@ -1792,8 +1793,8 @@ implicit none
 !
 complex, intent(in) :: ca
 complex, intent(inout) :: cx(*)
-integer :: i
 integer, intent(in) :: incx, n
+integer :: i
 integer :: nincx
 !
 if(n.le.0)return
@@ -1823,8 +1824,8 @@ implicit none
 !
 complex, intent(inout) :: cx(*)
 real, intent(in) :: sa
-integer :: i
 integer, intent(in) :: incx, n
+integer :: i
 integer :: nincx
 !
 if(n.le.0)return
@@ -1856,10 +1857,10 @@ implicit none
 real, intent(in) :: sx(*)
 real, intent(inout) :: sy(*)
 real, intent(in) :: sa
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy, m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy, m, mp1
 !
 if(n.le.0)return
 if (sa .eq. 0.0) return
@@ -1910,10 +1911,10 @@ implicit none
 double precision, intent(in) :: dx(*)
 double precision, intent(inout) :: dy(*)
 double precision, intent(in) :: da
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy, m, mp1
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy, m, mp1
 !
 if(n.le.0)return
 if (da .eq. 0.0d0) return
@@ -1963,10 +1964,10 @@ implicit none
 complex, intent(in) :: cx(*)
 complex, intent(inout) :: cy(*)
 complex, intent(in) :: ca
-integer :: i
 integer, intent(in) :: incx, incy
-integer :: ix, iy
 integer, intent(in) :: n
+integer :: i
+integer :: ix, iy
 !
 if(n.le.0)return
 if (abs(real(ca)) + abs(aimag(ca)) .eq. 0.0 ) return
@@ -2002,11 +2003,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
 real :: stemp
 integer :: i
-integer, intent(in) :: incx
 integer :: m, mp1
-integer, intent(in) :: n
 integer :: nincx
 !
 sasum = 0.0e0
@@ -2050,11 +2051,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
 double precision :: dtemp
 integer :: i
-integer, intent(in) :: incx
 integer :: m, mp1
-integer, intent(in) :: n
 integer :: nincx
 !
 dasum = 0.0d0
@@ -2099,9 +2100,9 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 complex, intent(in) :: cx(*)
+integer, intent(in) :: incx, n
 real :: stemp
 integer :: i
-integer, intent(in) :: incx, n
 integer :: nincx
 !
 scasum = 0.0e0
@@ -2130,9 +2131,9 @@ end function scasum
 real function snrm2 ( n, sx, incx)
 implicit none
 integer, intent(in) :: incx, n
+real, intent(in) :: sx(*)
 integer :: i, j, nn
 integer :: next
-real, intent(in) :: sx(*)
 real :: cutlo, cuthi, hitest, sum, xmax, zero, one
 data   zero, one /0.0e0, 1.0e0/
 !
@@ -2257,9 +2258,9 @@ end function snrm2
 double precision function dnrm2 ( n, dx, incx)
 implicit none
 integer, intent(in) :: incx, n
+double precision, intent(in) :: dx(*)
 integer :: i, j, nn
 integer :: next
-double precision, intent(in) :: dx(*)
 double precision :: cutlo, cuthi, hitest, sum, xmax, zero, one
 data   zero, one /0.0d0, 1.0d0/
 !
@@ -2384,11 +2385,11 @@ end function dnrm2
 real function scnrm2( n, cx, incx)
 implicit none
 integer, intent(in) :: incx, n
+complex, intent(in) :: cx(*)
 integer :: i, nn
 logical :: imag, scale
 integer :: next
 real :: cutlo, cuthi, hitest, sum, xmax, absx, zero, one
-complex, intent(in) :: cx(*)
 data         zero, one /0.0e0, 1.0e0/
 !
 !     Unitary norm of the complex n-vector stored in cx() with storage
@@ -2523,11 +2524,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 real, intent(in) :: sx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
 real :: smax
 integer :: i
-integer, intent(in) :: incx
 integer :: ix
-integer, intent(in) :: n
 !
 isamax = 0
 if( n .lt. 1 ) return
@@ -2566,11 +2567,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 double precision, intent(in) :: dx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
 double precision :: dmax
 integer :: i
-integer, intent(in) :: incx
 integer :: ix
-integer, intent(in) :: n
 !
 idamax = 0
 if( n .lt. 1 ) return
@@ -2609,11 +2610,11 @@ implicit none
 !     Jack dongarra, LINPACK, 3/11/78.
 !
 complex :: cx(*)
+integer, intent(in) :: incx
+integer, intent(in) :: n
 real :: smax
 integer :: i
-integer, intent(in) :: incx
 integer :: ix
-integer, intent(in) :: n
 complex :: zdum
 real :: cabs1
 cabs1(zdum) = abs(real(zdum)) + abs(aimag(zdum))
@@ -2651,9 +2652,9 @@ end function icamax
 subroutine mcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-integer :: i, j, l
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
+integer :: i, j, l
 !
 l = 0
 do j = 1,n
@@ -2667,9 +2668,9 @@ end subroutine mcvfs
 subroutine dmcvfs(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-integer :: i, j, l
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
+integer :: i, j, l
 !
 l = 0
 do j = 1,n
@@ -2683,9 +2684,9 @@ end subroutine dmcvfs
 subroutine mcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-integer :: i, ii, im1, j, jj, l
 real, intent(inout) :: a(ka,n)
 real, intent(in) :: b(*)
+integer :: i, ii, im1, j, jj, l
 !
 a(1,1) = b(1)
 if (n .lt. 2) return
@@ -2711,9 +2712,9 @@ end subroutine mcvsf
 subroutine dmcvsf(a,ka,n,b)
 implicit none
 integer, intent(in) :: ka, n
-integer :: i, ii, im1, j, jj, l
 double precision, intent(inout) :: a(ka,n)
 double precision, intent(in) :: b(*)
+integer :: i, ii, im1, j, jj, l
 !
 a(1,1) = b(1)
 if (n .lt. 2) return
@@ -2739,9 +2740,9 @@ end subroutine dmcvsf
 subroutine mcvrd(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 real, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2753,9 +2754,9 @@ end subroutine mcvrd
 subroutine mcvdr(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 double precision, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2767,9 +2768,9 @@ end subroutine mcvdr
 subroutine mcvrc(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 real, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2781,9 +2782,9 @@ end subroutine mcvrc
 subroutine cmreal(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2795,9 +2796,9 @@ end subroutine cmreal
 subroutine cmimag(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2809,9 +2810,9 @@ end subroutine cmimag
 subroutine mcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2823,9 +2824,9 @@ end subroutine mcopy
 subroutine smcopy(n,a,b)
 implicit none
 integer, intent(in) :: n
-integer :: k, l
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
+integer :: k, l
 !
 l = (n*(n + 1))/2
 do 10 k = 1,l
@@ -2836,9 +2837,9 @@ end subroutine smcopy
 subroutine dmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2850,9 +2851,9 @@ end subroutine dmcopy
 subroutine cmcopy(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2864,9 +2865,9 @@ end subroutine cmcopy
 subroutine cmconj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,n)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2878,9 +2879,9 @@ end subroutine cmconj
 subroutine tpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(kb,m)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2892,9 +2893,9 @@ end subroutine tpose
 subroutine dtpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(kb,m)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2906,9 +2907,9 @@ end subroutine dtpose
 subroutine ctpose(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,m)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -2922,9 +2923,13 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
+real, intent(inout) :: a(*)
+integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
+real :: atemp, btemp
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -2933,10 +2938,6 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 ! with the element at position n1*i (mod n1*n2-1).
 ! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
-real, intent(inout) :: a(*)
-real :: atemp, btemp
-integer, intent(inout) :: moved(nwork)
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 if (n1.lt.2 .or. n2.lt.2) go to 200
 n12 = n1*n2
 n = n1
@@ -3038,9 +3039,13 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
+double precision, intent(inout) :: a(*)
+integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
+double precision :: atemp, btemp
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -3049,10 +3054,6 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 ! with the element at position n1*i (mod n1*n2-1).
 ! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
-double precision, intent(inout) :: a(*)
-double precision :: atemp, btemp
-integer, intent(inout) :: moved(nwork)
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 if (n1.lt.2 .or. n2.lt.2) go to 200
 n12 = n1*n2
 n = n1
@@ -3154,9 +3155,13 @@ implicit none
 integer, intent(in) :: n1, n2
 integer, intent(inout) :: ndim
 integer, intent(in) :: nwork
+complex, intent(inout) :: a(*)
+integer, intent(inout) :: moved(nwork)
 integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 &istart, itest, m, mhalf, mmia1, mmia2, mmist, n, n12, ncount, &
 &npower
+complex :: atemp, btemp
+integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 ! ----------------------------------------------------------
 ! Transposition of a rectangular matrix in situ.
 ! By norman brenner, mit, 1/72.  CF. Alg. 380, CACM, 5/70.
@@ -3165,10 +3170,6 @@ integer :: i, i1, i1max, i1min, i2, ia1, ia2, idiv, ip, isoid, &
 ! with the element at position n1*i (mod n1*n2-1).
 ! Each subcycle of this permutation is completed in order.
 ! ----------------------------------------------------------
-complex, intent(inout) :: a(*)
-complex :: atemp, btemp
-integer, intent(inout) :: moved(nwork)
-integer :: ifact(8), ipower(8), nexp(8), iexp(8)
 if (n1.lt.2 .or. n2.lt.2) go to 200
 n12 = n1*n2
 n = n1
@@ -3313,9 +3314,9 @@ end subroutine infctr
 subroutine cmadj(m,n,a,ka,b,kb)
 implicit none
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(kb,m)
+integer :: i, j
 !
 do j = 1,n
    do 10 i = 1,m
@@ -3346,9 +3347,9 @@ implicit none
 !     A  contains its conjugate transpose.
 !
 !
-integer :: i, j
 integer, intent(in) :: n, nm
 complex, intent(inout) :: a(nm,n)
+integer :: i, j
 complex :: temp
 !
 do i = 1,n
@@ -3364,12 +3365,12 @@ end subroutine ctrans
 subroutine madd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+real, intent(in) :: a(ka,n), b(kb,n)
+real, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                      Addition of real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n), b(kb,n)
-real, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3382,12 +3383,12 @@ end subroutine madd
 subroutine dmadd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+double precision, intent(in) :: a(ka,n), b(kb,n)
+double precision, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                Addition of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n), b(kb,n)
-double precision, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3400,12 +3401,12 @@ end subroutine dmadd
 subroutine cmadd (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+complex, intent(in) :: a(ka,n), b(kb,n)
+complex, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                   Addition of complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n), b(kb,n)
-complex, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3418,9 +3419,9 @@ end subroutine cmadd
 subroutine smadd(n,a,b,c)
 implicit none
 integer, intent(in) :: n
-integer :: k, m
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+integer :: k, m
 m=(n*(n+1))/2
 do 10 k = 1,m
 10 c(k)=a(k)+b(k)
@@ -3430,12 +3431,12 @@ end subroutine smadd
 subroutine msubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+real, intent(in) :: a(ka,n), b(kb,n)
+real, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                     Subtraction of real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n), b(kb,n)
-real, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3448,12 +3449,12 @@ end subroutine msubt
 subroutine dmsubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+double precision, intent(in) :: a(ka,n), b(kb,n)
+double precision, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !              Subtraction of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n), b(kb,n)
-double precision, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3466,12 +3467,12 @@ end subroutine dmsubt
 subroutine cmsubt (m, n, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, m, n
+complex, intent(in) :: a(ka,n), b(kb,n)
+complex, intent(inout) :: c(kc,n)
 integer :: i, j
 !-----------------------------------------------------------------------
 !                  Subtraction of complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n), b(kb,n)
-complex, intent(inout) :: c(kc,n)
 !
 do j = 1,n
    do i = 1,m
@@ -3484,9 +3485,9 @@ end subroutine cmsubt
 subroutine smsubt(n,a,b,c)
 implicit none
 integer, intent(in) :: n
-integer :: k, m
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: c(*)
+integer :: k, m
 m=(n*(n+1))/2
 do 10 k = 1,m
 10 c(k)=a(k)-b(k)
@@ -3496,13 +3497,13 @@ end subroutine smsubt
 subroutine mtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(in) :: a(ka,n), b(kb,l)
+real, intent(inout) :: c(kc,l)
 integer :: i, j, k
+double precision :: w
 !-----------------------------------------------------------------------
 !                     Product of real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n), b(kb,l)
-real, intent(inout) :: c(kc,l)
-double precision :: w
 !
 do j = 1,l
    do i = 1,m
@@ -3519,13 +3520,13 @@ end subroutine mtms
 subroutine dmtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(in) :: a(ka,n), b(kb,l)
+double precision, intent(inout) :: c(kc,l)
 integer :: i, j, k
+double precision :: w
 !-----------------------------------------------------------------------
 !                Product of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(ka,n), b(kb,l)
-double precision, intent(inout) :: c(kc,l)
-double precision :: w
 !
 do j = 1,l
    do i = 1,m
@@ -3542,13 +3543,13 @@ end subroutine dmtms
 subroutine cmtms (m, n, l, a, ka, b, kb, c, kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+complex, intent(in) :: a(ka,n), b(kb,l)
+complex, intent(inout) :: c(kc,l)
 integer :: i, j, k
+complex :: w
 !-----------------------------------------------------------------------
 !                   Product of complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(ka,n), b(kb,l)
-complex, intent(inout) :: c(kc,l)
-complex :: w
 !
 do j = 1,l
    do i = 1,m
@@ -3565,14 +3566,14 @@ end subroutine cmtms
 subroutine mprod (m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 integer :: i, j, k
 real :: save
+double precision :: w
+logical :: rloc
 !-----------------------------------------------------------------------
 !                     Product of real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
-double precision :: w
-logical :: rloc
 !
 save = c(1,1)
 c(1,1) = 1.0
@@ -3621,6 +3622,8 @@ end subroutine mprod
 
 logical function rloc (x, y)
 implicit none
+real, intent(in) :: x(*)
+real, intent(inout) :: y(*)
 real :: xold, yold
 !-----------------------------------------------------------------------
 !     x and y are arrays. It is assumed that x(1) and y(1) contain data.
@@ -3632,8 +3635,6 @@ real :: xold, yold
 !     the subroutine ychg. If it is optimized then rloc may not compile
 !     properly.
 !-----------------------------------------------------------------------
-real, intent(in) :: x(*)
-real, intent(inout) :: y(*)
 !
 xold = x(1)
 yold = y(1)
@@ -3667,14 +3668,14 @@ end subroutine ychg
 subroutine dmprod (m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
+&row(*)
 integer :: i, j, k
+double precision :: w
+logical :: dloc
 !-----------------------------------------------------------------------
 !                Product of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), &
-&row(*)
-double precision :: w
-logical :: dloc
 !
 w = c(1,1)
 c(1,1) = 1.d0
@@ -3769,13 +3770,13 @@ end subroutine dychg
 subroutine cmprod (m, n, l, a, ka, b, kb, c, kc, row)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
 integer :: i, j, k
+complex :: w
+logical :: cloc
 !-----------------------------------------------------------------------
 !                   Product of complex matrices
 !-----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,n), b(kb,l), c(kc,l), row(*)
-complex :: w
-logical :: cloc
 !
 w = c(1,1)
 c(1,1) = (1.0,0.0)
@@ -3872,10 +3873,10 @@ end subroutine cychg
 subroutine svprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, k, km1, l
-real :: xk, yk
 real, intent(in) :: a(*), x(n)
 real, intent(inout) :: y(n)
+integer :: i, k, km1, l
+real :: xk, yk
 y(1) = a(1)*x(1)
 if (n .eq. 1) return
 !
@@ -3898,9 +3899,9 @@ end subroutine svprd
 subroutine dsvprd(a,n,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, k, km1, l
 double precision, intent(in) :: a(*), x(n)
 double precision, intent(inout) :: y(n)
+integer :: i, k, km1, l
 double precision :: xk, yk
 y(1) = a(1)*x(1)
 if (n .eq. 1) return
@@ -3924,9 +3925,9 @@ end subroutine dsvprd
 subroutine tmprod(m,n,l,a,ka,b,kb,c,kc)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
-integer :: i, j, k
 real, intent(in) :: a(ka,n), b(kb,l)
 real, intent(inout) :: c(kc,l)
+integer :: i, j, k
 double precision :: s
 do j=1,l
 do 11 i = 1,n
@@ -3941,9 +3942,9 @@ end subroutine tmprod
 subroutine smprod(m,n,a,ka,b)
 implicit none
 integer, intent(in) :: ka, m, n
-integer :: i, ii, j, k
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
+integer :: i, ii, j, k
 double precision :: s
 ii=1
 do i=1,n
@@ -3960,13 +3961,13 @@ end subroutine smprod
 subroutine kprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
+real, intent(in) :: a(ka,n), b(kb,l)
+real, intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj
+integer :: r, s
 !     ******************************************************************
 !     Kronecker product of real matrices A and b
 !     ******************************************************************
-real, intent(in) :: a(ka,n), b(kb,l)
-real, intent(inout) :: c(kc,*)
-integer :: r, s
 !
 j = 0
 do s = 1,n
@@ -3990,13 +3991,13 @@ end subroutine kprod
 subroutine dkprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
+double precision, intent(in) :: a(ka,n), b(kb,l)
+double precision, intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj
+integer :: r, s
 !     ******************************************************************
 !     Kronecker product of double precision matrices A and b
 !     ******************************************************************
-double precision, intent(in) :: a(ka,n), b(kb,l)
-double precision, intent(inout) :: c(kc,*)
-integer :: r, s
 !
 j = 0
 do s = 1,n
@@ -4020,13 +4021,13 @@ end subroutine dkprod
 subroutine ckprod(a,ka,m,n,b,kb,k,l,c,kc)
 implicit none
 integer, intent(in) :: k, ka, kb, kc, l, m, n
+complex, intent(in) :: a(ka,n), b(kb,l)
+complex, intent(inout) :: c(kc,*)
 integer :: i, ii, j, jj
+integer :: r, s
 !     ******************************************************************
 !     Kronecker product of complex matrices A and b
 !     ******************************************************************
-complex, intent(in) :: a(ka,n), b(kb,l)
-complex, intent(inout) :: c(kc,*)
-integer :: r, s
 !
 j = 0
 do s = 1,n
@@ -4052,6 +4053,8 @@ implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
 real, intent(in) :: ae, re
+real, intent(inout) :: a(mda,n), work(*)
+integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
 real :: eps, rerr
 real :: spmpar
@@ -4063,8 +4066,6 @@ real :: spmpar
 !     real work(5*m0)  where m0 = 5*min0(m,n)
 !     integer iwork(m + n)
 !--------------------
-real, intent(inout) :: a(mda,n), work(*)
-integer, intent(inout) :: iwork(*)
 !
 m0 = min0(m,n)
 !
@@ -4105,7 +4106,13 @@ subroutine drnk (a, mda, m, n, re, ae, krank, ksure, work, iwork)
 implicit none
 integer, intent(inout) :: krank, ksure
 integer, intent(in) :: m, mda, n
+double precision, intent(inout) :: a(mda,n)
+double precision, intent(in) :: re, ae
+double precision, intent(inout) :: work(*)
+integer, intent(inout) :: iwork(*)
 integer :: i, imax, m0, m1, m2, m3, m4, m5
+double precision :: eps, rerr
+double precision :: dpmpar
 !-----------------------------------------------------------------------
 !
 !              Upper and lower bounds of the rank of A
@@ -4115,12 +4122,6 @@ integer :: i, imax, m0, m1, m2, m3, m4, m5
 !     double precision work(5*m0)  where m0 = 5*min0(m,n)
 !     integer iwork(m + n)
 !--------------------
-double precision, intent(inout) :: a(mda,n)
-double precision, intent(in) :: re, ae
-double precision, intent(inout) :: work(*)
-integer, intent(inout) :: iwork(*)
-double precision :: eps, rerr
-double precision :: dpmpar
 !
 m0 = min0(m,n)
 !
@@ -4165,6 +4166,8 @@ real, intent(inout) :: a(ka,n), b(*), d, temp(*)
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
 &nmj, nmk
 real :: p, t
+integer :: onej
+double precision :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
@@ -4189,8 +4192,6 @@ real :: p, t
 !     Temp is an array of dimension n or larger that is used when A
 !     is inverted. If mo is not 0 then this array is not needed.
 !-----------------------------------------------------------------------
-integer :: onej
-double precision :: dsum
 !
 if (n .lt. 2) go to 200
 d = 1.0
@@ -4365,6 +4366,8 @@ real, intent(inout) :: a(ka,n), b(*), temp(*)
 integer :: i, im1, j, jp1, k, kj, km1, kp1, l, lj, maxb, nj, nm1, &
 &nmj, nmk
 real :: d, p, t
+integer :: onej
+double precision :: dsum
 !-----------------------------------------------------------------------
 !     crout procedure for inverting matrices and solving equations
 !-----------------------------------------------------------------------
@@ -4392,8 +4395,6 @@ real :: d, p, t
 !     Temp is an array of dimension n or larger that is used when A
 !     is inverted. If mo is not 0 then this array is not needed.
 !-----------------------------------------------------------------------
-integer :: onej
-double precision :: dsum
 !
 if (n .lt. 1 .or. ka .lt. n) go to 320
 if (m .le. 0) go to 5
@@ -4600,8 +4601,8 @@ implicit none
 integer, intent(out) :: ier
 integer, intent(inout) :: ip
 integer, intent(in) :: n, ndim
-integer :: i, j, k, kp1, m, nm1
 real, intent(inout) :: a(ndim,n)
+integer :: i, j, k, kp1, m, nm1
 real :: t
 dimension ip(n)
 !
@@ -4661,9 +4662,9 @@ implicit none
 !-----------------------------------------------------------------------
 integer :: ip
 integer, intent(in) :: n, ndim
-integer :: i, k, kb, km1, kp1, m, nm1
 real :: a(ndim, n)
 real, intent(inout) :: b(n)
+integer :: i, k, kb, km1, kp1, m, nm1
 real :: t
 dimension ip(n)
 !
@@ -4697,12 +4698,12 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
 real, intent(inout) :: d
+real, intent(inout) :: a(ka,n), b(*)
 integer :: j, jl, k, kl, l, maxb
 real :: pivot, t
 !-----------------------------------------------------------------------
 !     Matrix inversion/equation solving without pivot search
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), b(*)
 !
 ierr = 0
 maxb = kb*m
@@ -4754,9 +4755,9 @@ subroutine slv (n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
+real, intent(inout) :: a(ka,n), b(kb,m)
 integer :: i, ip1, j, jp1, k, l, nm1
 real :: p, sum, t
-real, intent(inout) :: a(ka,n), b(kb,m)
 !     ------------------------------------------------------------------
 !     Partial pivot solution of a*X = b where A is a matrix of
 !     order n and b is a matrix having n rows and m columns.
@@ -4847,8 +4848,8 @@ subroutine dpslv (n, m, a, ka, b, kb, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, n
-integer :: i, j, k, km1, kp1, l, nm1
 double precision, intent(inout) :: a(ka,n), b(kb,m)
+integer :: i, j, k, km1, kp1, l, nm1
 double precision :: p, t
 !     ------------------------------------------------------------------
 !     Partial pivot solution of a*X = b where A is a matrix of
@@ -4939,17 +4940,17 @@ subroutine mslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
+real, intent(inout) :: a(ka,n), b(*)
+real, intent(inout) :: det(2), rcond
+real, intent(inout) :: wk(n)
+integer, intent(inout) :: ipvt(n)
 integer :: j, job
+real :: t
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), b(*)
-real, intent(inout) :: det(2), rcond
-real :: t
-real, intent(inout) :: wk(n)
-integer, intent(inout) :: ipvt(n)
-integer :: onej
 !
 !          Matrix factorization and computation of rcond
 !
@@ -4984,15 +4985,15 @@ subroutine mslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
+real, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
 integer :: j
+real :: det(2)
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting real matrices
 !     and solving real equations
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), b(*), wk(*)
-integer, intent(inout) :: ipvt(n)
-real :: det(2)
-integer :: onej
 !
 if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10
@@ -5068,6 +5069,7 @@ real, intent(inout) :: r(n), x(n)
 integer :: i, j
 real :: eps, eps2, rat, ratio, rnrm, xnrm
 real :: spmpar
+double precision :: dsum
 ! ----------------------------------------------------------------------
 !     Purpose
 !       given an approximate solution x of a linear system AX = b
@@ -5101,7 +5103,6 @@ real :: spmpar
 !
 ! ----------------------------------------------------------------------
 dimension ipvt(n)
-double precision :: dsum
 !
 !     ********** eps is a machine dependent parameter. Assign eps
 !                the value U where U is the smallest floating point
@@ -5156,6 +5157,9 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 real, intent(inout) :: a(lda,*), z(*)
 real, intent(inout) :: rcond
+real :: sdot, ek, t, wk, wkm
+real :: anorm, s, sasum, sm, ynorm
+integer :: info, j, k, kb, kp1, l
 !
 !     sgeco factors a real matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -5217,9 +5221,6 @@ real, intent(inout) :: rcond
 !
 !     Internal variables
 !
-real :: sdot, ek, t, wk, wkm
-real :: anorm, s, sasum, sm, ynorm
-integer :: info, j, k, kb, kp1, l
 !
 !
 !     Compute 1-norm of A
@@ -5352,6 +5353,8 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: a(lda,*)
+real :: t
+integer :: isamax, j, k, kp1, l, nm1
 !
 !     sgefa factors a real matrix BY Gaussian elimination.
 !
@@ -5398,8 +5401,6 @@ real, intent(inout) :: a(lda,*)
 !
 !     Internal variables
 !
-real :: t
-integer :: isamax, j, k, kp1, l, nm1
 !
 !
 !     Gaussian elimination with partial pivoting
@@ -5458,6 +5459,8 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(in) :: a(lda,*)
 real, intent(inout) :: b(*)
+real :: sdot, t
+integer :: k, kb, l, nm1
 !
 !     sgesl solves the real system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -5515,8 +5518,6 @@ real, intent(inout) :: b(*)
 !
 !     Internal variables
 !
-real :: sdot, t
-integer :: k, kb, l, nm1
 !
 nm1 = n - 1
 if (job .ne. 0) go to 50
@@ -5577,6 +5578,9 @@ subroutine sgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 real, intent(inout) :: a(lda,*), det(2), work(*)
+real :: t
+real :: ten
+integer :: i, j, k, kb, kp1, l, nm1
 !
 !     sgedi computes the determinant and inverse of a matrix
 !     using the factors computed by sgeco or sgefa.
@@ -5633,9 +5637,6 @@ real, intent(inout) :: a(lda,*), det(2), work(*)
 !
 !     Internal variables
 !
-real :: t
-real :: ten
-integer :: i, j, k, kb, kp1, l, nm1
 !
 !
 !     Compute determinant
@@ -5707,17 +5708,17 @@ subroutine dmslv (mo,n,m,a,ka,b,kb,det,rcond,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
+double precision, intent(inout) :: a(ka,n), b(*)
+double precision, intent(inout) :: det(2), rcond
+double precision, intent(inout) :: wk(n)
+integer, intent(inout) :: ipvt(n)
 integer :: j, job
+double precision :: t
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n), b(*)
-double precision, intent(inout) :: det(2), rcond
-double precision :: t
-double precision, intent(inout) :: wk(n)
-integer, intent(inout) :: ipvt(n)
-integer :: onej
 !
 !          Matrix factorization and computation of rcond
 !
@@ -5752,15 +5753,15 @@ subroutine dmslv1 (mo,n,m,a,ka,b,kb,ierr,ipvt,wk)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo, n
+double precision, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
 integer :: j
+double precision :: det(2)
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting double precision
 !     real matrices and solving double precision real equations
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n), b(*), wk(*)
-integer, intent(inout) :: ipvt(n)
-double precision :: det(2)
-integer :: onej
 !
 if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10
@@ -5797,6 +5798,9 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 double precision, intent(inout) :: a(lda,*), z(*)
 double precision, intent(inout) :: rcond
+double precision :: ddot, ek, t, wk, wkm
+double precision :: anorm, s, dasum, sm, ynorm
+integer :: info, j, k, kb, kp1, l
 !
 !     dgeco factors a double precision matrix BY Gaussian elimination
 !     and estimates the condition of the matrix.
@@ -5858,9 +5862,6 @@ double precision, intent(inout) :: rcond
 !
 !     Internal variables
 !
-double precision :: ddot, ek, t, wk, wkm
-double precision :: anorm, s, dasum, sm, ynorm
-integer :: info, j, k, kb, kp1, l
 !
 !
 !     Compute 1-norm of A
@@ -5993,6 +5994,8 @@ integer, intent(in) :: lda, n
 integer, intent(inout) :: ipvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: a(lda,*)
+double precision :: t
+integer :: idamax, j, k, kp1, l, nm1
 !
 !     dgefa factors a double precision matrix BY Gaussian elimination.
 !
@@ -6039,8 +6042,6 @@ double precision, intent(inout) :: a(lda,*)
 !
 !     Internal variables
 !
-double precision :: t
-integer :: idamax, j, k, kp1, l, nm1
 !
 !
 !     Gaussian elimination with partial pivoting
@@ -6099,6 +6100,8 @@ implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(in) :: a(lda,*)
 double precision, intent(inout) :: b(*)
+double precision :: ddot, t
+integer :: k, kb, l, nm1
 !
 !     dgesl solves the double precision system
 !     a * X = b  OR  TRANS(a) * X = b
@@ -6156,8 +6159,6 @@ double precision, intent(inout) :: b(*)
 !
 !     Internal variables
 !
-double precision :: ddot, t
-integer :: k, kb, l, nm1
 !
 nm1 = n - 1
 if (job .ne. 0) go to 50
@@ -6218,6 +6219,9 @@ subroutine dgedi(a,lda,n,ipvt,det,work,job)
 implicit none
 integer, intent(in) :: lda, n, ipvt(*), job
 double precision, intent(inout) :: a(lda,*), det(2), work(*)
+double precision :: t
+double precision :: ten
+integer :: i, j, k, kb, kp1, l, nm1
 !
 !     dgedi computes the determinant and inverse of a matrix
 !     using the factors computed by dgeco or dgefa.
@@ -6274,9 +6278,6 @@ double precision, intent(inout) :: a(lda,*), det(2), work(*)
 !
 !     Internal variables
 !
-double precision :: t
-double precision :: ten
-integer :: i, j, k, kb, kp1, l, nm1
 !
 !
 !     Compute determinant
@@ -6348,6 +6349,8 @@ subroutine arceco(n, array, mtrstr, nmblks, pivot, b, x, iflag)
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: n, nmblks
+real, intent(inout) :: array(*), b(*), x(*)
+integer, intent(inout) :: mtrstr(3,*), pivot(*)
 !
 !***************************************************************
 !
@@ -6476,8 +6479,6 @@ integer, intent(in) :: n, nmblks
 !  TO  A R C E C O .
 !
 !**********************************************************************
-real, intent(inout) :: array(*), b(*), x(*)
-integer, intent(inout) :: mtrstr(3,*), pivot(*)
 call arcedc(n, array, mtrstr, nmblks, pivot, iflag)
 if (iflag.ne.0) return
 call arcesl(array, mtrstr, nmblks, pivot, b, x)
@@ -6488,8 +6489,11 @@ subroutine arcedc(n, array, mtrstr, nmblks, pivot, iflag)
 implicit none
 integer, intent(inout) :: iflag, mtrstr(3,*)
 integer, intent(in) :: n, nmblks
+real, intent(inout) :: array(*)
+integer, intent(inout) :: pivot(*)
 integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
 &nclblk, nclpiv, novrlp, nrwbk2, nrwblk, nrwpiv
+real :: pivmax, zero
 !
 !***************************************************************
 !
@@ -6574,9 +6578,6 @@ integer :: index1, index2, index3, indpiv, isum1, isum2, k, &
 !
 !***************************************************************
 !
-real, intent(inout) :: array(*)
-real :: pivmax, zero
-integer, intent(inout) :: pivot(*)
 data zero /0.0/
 !
 !***************************************************************
@@ -6744,7 +6745,12 @@ subroutine arcepr(block, nrwblk, nclblk, nrwpiv, pivot, pivmax, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
+integer, intent(inout) :: pivot(nrwblk)
+real, intent(inout) :: block(nrwblk,nclblk)
+real, intent(inout) :: pivmax
 integer :: i1, j, j1, jplus1, l1, max
+real :: rowmax
+real :: tempiv, rowpiv, swap
 !
 !***************************************************************
 !
@@ -6753,11 +6759,6 @@ integer :: i1, j, j1, jplus1, l1, max
 !
 !***************************************************************
 !
-integer, intent(inout) :: pivot(nrwblk)
-real, intent(inout) :: block(nrwblk,nclblk)
-real :: rowmax
-real, intent(inout) :: pivmax
-real :: tempiv, rowpiv, swap
 !
 !       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
@@ -6856,7 +6857,14 @@ subroutine arcepc(topblk, nrwtop, novrlp, botblk, nrwbot, nclpiv, &
 implicit none
 integer, intent(inout) :: iflag
 integer, intent(in) :: nclpiv, novrlp, nrwbot, nrwtop
+real, intent(inout) :: topblk(nrwtop,novrlp), &
+&botblk(nrwbot,novrlp)
+real, intent(inout) :: pivmax
+integer, intent(inout) :: pivot(nrwtop)
 integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
+real :: colmax
+real :: colmlt
+real :: tempiv, swap
 !
 !***************************************************************
 !
@@ -6864,13 +6872,6 @@ integer :: i, i1, i2, iplus1, j, j1, jplus1, l1, max
 !                 matrices topblk and BOTBLK
 !***************************************************************
 !
-real, intent(inout) :: topblk(nrwtop,novrlp), &
-&botblk(nrwbot,novrlp)
-real :: colmax
-real, intent(inout) :: pivmax
-real :: colmlt
-real :: tempiv, swap
-integer, intent(inout) :: pivot(nrwtop)
 !
 !       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 !       C
@@ -6972,6 +6973,9 @@ subroutine arcesl(array, mtrstr, nmblks, pivot, b, x)
 implicit none
 integer :: mtrstr(3,*)
 integer, intent(in) :: nmblks
+real :: array(*)
+real, intent(inout) :: b(*), x(*)
+integer, intent(in) :: pivot(*)
 integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 &nrwpiv
 !
@@ -7048,9 +7052,6 @@ integer :: indexa, indpiv, k, ll, nclblk, nclpiv, novrlp, nrwblk, &
 !
 !***************************************************************
 !
-real :: array(*)
-real, intent(inout) :: b(*), x(*)
-integer, intent(in) :: pivot(*)
 indpiv = 1
 !
 !       Cccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -7195,7 +7196,10 @@ end subroutine arcesl
 subroutine arcefs(block, nrwblk, nclpiv, novrlp, b, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
+real :: block(nrwblk,novrlp)
+real, intent(inout) :: b(*), x(*)
 integer :: i, iplusl, j, jplusl, l, long
+real :: xj
 !
 !***************************************************************
 !
@@ -7204,9 +7208,6 @@ integer :: i, iplusl, j, jplusl, l, long
 !
 !***************************************************************
 !
-real :: block(nrwblk,novrlp)
-real, intent(inout) :: b(*), x(*)
-real :: xj
 do j=1,nclpiv
   i = nrwblk - nclpiv + j
   x(j) = b(j)/block(i,j)
@@ -7225,7 +7226,11 @@ end subroutine arcefs
 subroutine arcefm(block, nrwblk, nclpiv, b, x)
 implicit none
 integer, intent(in) :: nclpiv, nrwblk
+real :: block(nrwblk,nclpiv)
+real, intent(inout) :: b(*)
+real :: x(*)
 integer :: j, l, nclpvl
+real :: xj
 !
 !***************************************************************
 !
@@ -7234,9 +7239,6 @@ integer :: j, l, nclpvl
 !
 !***************************************************************
 !
-real :: block(nrwblk,nclpiv)
-real, intent(inout) :: b(*)
-real :: x(*), xj
 do j=1,nclpiv
   xj = x(j)
   do l=1,nrwblk
@@ -7250,7 +7252,12 @@ end subroutine arcefm
 subroutine arcefe(block, nrwblk, nrwpiv, pivot, b)
 implicit none
 integer, intent(in) :: nrwblk, nrwpiv
+real :: block(nrwblk,nrwpiv)
+real, intent(inout) :: b(*)
+integer, intent(in) :: pivot(nrwpiv)
 integer :: i, iplus1, l
+real :: bi, swap
+integer :: pivoti
 !
 !***************************************************************
 !
@@ -7259,11 +7266,6 @@ integer :: i, iplus1, l
 !
 !***************************************************************
 !
-real :: block(nrwblk,nrwpiv)
-real, intent(inout) :: b(*)
-real :: bi, swap
-integer, intent(in) :: pivot(nrwpiv)
-integer :: pivoti
 do i=1,nrwpiv
   pivoti = pivot(i)
   if (pivoti.eq.i) go to 10
@@ -7284,7 +7286,10 @@ end subroutine arcefe
 subroutine arcebs(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
+real :: block(nrwblk,nclblk)
+real, intent(inout) :: b(*), x(*)
 integer :: j, jmin1, l, nj
+real :: xj
 !
 !***************************************************************
 !
@@ -7293,9 +7298,6 @@ integer :: j, jmin1, l, nj
 !
 !***************************************************************
 !
-real :: block(nrwblk,nclblk)
-real, intent(inout) :: b(*), x(*)
-real :: xj
 do nj=1,nrwpiv
   j = nrwpiv - nj + 1
   x(j) = b(j)/block(j,j)
@@ -7312,7 +7314,11 @@ end subroutine arcebs
 subroutine arcebm(block, nrwblk, nclblk, nrwpiv, b, x)
 implicit none
 integer, intent(in) :: nclblk, nrwblk, nrwpiv
+real :: block(nrwblk,nclblk)
+real, intent(inout) :: b(*)
+real :: x(*)
 integer :: j, l, nrwpv1
+real :: xj
 !
 !***************************************************************
 !
@@ -7321,9 +7327,6 @@ integer :: j, l, nrwpv1
 !
 !***************************************************************
 !
-real :: block(nrwblk,nclblk)
-real, intent(inout) :: b(*)
-real :: x(*), xj
 nrwpv1 = nrwpiv + 1
 do j=nrwpv1,nclblk
   xj = x(j)
@@ -7337,7 +7340,12 @@ end subroutine arcebm
 subroutine arcebe(block, nrwblk, nclpiv, novrlp, pivot, x)
 implicit none
 integer, intent(in) :: nclpiv, novrlp, nrwblk
+real :: block(nrwblk,novrlp)
+real, intent(inout) :: x(*)
+integer, intent(in) :: pivot(nrwblk)
 integer :: i, j, j1, jplus1, nj
+real :: dotprd, swap
+integer :: pivotj
 !
 !***************************************************************
 !
@@ -7346,11 +7354,6 @@ integer :: i, j, j1, jplus1, nj
 !
 !***************************************************************
 !
-real :: block(nrwblk,novrlp)
-real, intent(inout) :: x(*)
-real :: dotprd, swap
-integer, intent(in) :: pivot(nrwblk)
-integer :: pivotj
 do 40 nj = 1,nclpiv
   j = nclpiv + 1 - nj
   i = nrwblk + 1 - nj
@@ -7398,6 +7401,8 @@ integer, intent(in) :: m
 integer :: n
 integer, intent(inout) :: ip(m,n), ier
 real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
+integer :: nm1, nm2, km1, i, j, k, l
+real :: dp
 !-----------------------------------------------------------------------
 ! Block-tridiagonal matrix decomposition routine.
 ! Written by A. C. Hindmarsh.
@@ -7437,8 +7442,6 @@ real, intent(inout) :: a(m,m,n), b(m,m,n), c(m,m,n)
 ! decbt calls subroutines  dec(m,M0,a,ip,ier)  and  sol(m,M0,a,Y,ip)
 ! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
-integer :: nm1, nm2, km1, i, j, k, l
-real :: dp
 !
 if (m .lt. 1 .or. n .lt. 4) go to 210
 nm1 = n - 1
@@ -7507,12 +7510,14 @@ end subroutine decbt
 
 subroutine solbt (m, n, a, b, c, y, ip)
 implicit none
-integer :: kb, kp1
 integer, intent(in) :: m
 integer :: n, ip(m,n)
 real :: a(m,m,n)
 real, intent(in) :: b(m,m,n), c(m,m,n)
 real, intent(inout) :: y(m,n)
+integer :: kb, kp1
+integer :: nm1, nm2, km1, i, j, k
+real :: dp
 !-----------------------------------------------------------------------
 ! Solution of block-tridiagonal linear system.
 ! Coefficient matrix must have been previously processed by decbt.
@@ -7531,8 +7536,6 @@ real, intent(inout) :: y(m,n)
 ! solbt makes calls to subroutine sol(m,M0,a,y,ip)
 ! for solution of m by m linear systems.
 !-----------------------------------------------------------------------
-integer :: nm1, nm2, km1, i, j, k
-real :: dp
 !
 nm1 = n - 1
 nm2 = n - 2
@@ -7580,14 +7583,14 @@ subroutine smslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: kb, m, mo, n
-integer :: j, job
-!     ------------------
 real, intent(inout) :: a(*), b(*)
 real, intent(inout) :: det(2), rcond
-real :: t
 real, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
+integer :: j, job
+real :: t
 integer :: onej
+!     ------------------
 !     ------------------
 !
 !          Matrix factorization and computation of rcond
@@ -7624,6 +7627,10 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 real, intent(inout) :: ap(*), z(*)
 real, intent(inout) :: rcond
+real :: ak, akm1, bk, bkm1, sdot, denom, ek, t
+real :: anorm, s, sasum, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
+integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !     sspco factors a real symmetric matrix stored in packed
 !     form by elimination with symmetric pivoting and estimates
@@ -7702,10 +7709,6 @@ real, intent(inout) :: rcond
 !
 !     Internal variables
 !
-real :: ak, akm1, bk, bkm1, sdot, denom, ek, t
-real :: anorm, s, sasum, ynorm
-integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
-integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
 !     Find norm of a using only upper half
@@ -7912,6 +7915,13 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 real, intent(inout) :: ap(*)
+real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
+real :: absakk, alpha, colmax, rowmax
+integer :: isamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
+&imk
+integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
+&km2, kstep
+logical :: swap
 !
 !     sspfa factors a real symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting.
@@ -7976,13 +7986,6 @@ real, intent(inout) :: ap(*)
 !
 !     Internal variables
 !
-real :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
-real :: absakk, alpha, colmax, rowmax
-integer :: isamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
-&imk
-integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
-&km2, kstep
-logical :: swap
 !
 !
 !     Initialize
@@ -8181,6 +8184,8 @@ implicit none
 integer, intent(in) :: n, kpvt(*)
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
+real :: ak, akm1, bk, bkm1, sdot, denom, temp
+integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     SSISL solves the real symmetric system
 !     A * X = b
@@ -8227,8 +8232,6 @@ real, intent(inout) :: b(*)
 !
 !     Internal variables.
 !
-real :: ak, akm1, bk, bkm1, sdot, denom, temp
-integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     Loop backward applying the transformations and
 !     D inverse to b.
@@ -8366,6 +8369,11 @@ real, intent(inout) :: ap(*), work(*)
 real, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
+real :: akkp1, sdot, temp
+real :: ten, d, t, ak, akp1
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
+integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+logical :: noinv, nodet, noert
 !
 !     sspdi computes the determinant, inertia and inverse
 !     of a real symmetric matrix using the factors from sspfa,
@@ -8430,11 +8438,6 @@ integer, intent(inout) :: inert(3)
 !
 !     Internal variables.
 !
-real :: akkp1, sdot, temp
-real :: ten, d, t, ak, akp1
-integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
-integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
-logical :: noinv, nodet, noert
 !
 noinv = mod(job,10) .eq. 0
 nodet = mod(job,100)/10 .eq. 0
@@ -8605,14 +8608,14 @@ subroutine dsmslv(mo,n,m,a,b,kb,det,rcond,inert,ierr,ipvt,wk)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: kb, m, mo, n
-integer :: j, job
-!     ------------------
 double precision, intent(inout) :: a(*), b(*)
 double precision, intent(inout) :: det(2), rcond
-double precision :: t
 double precision, intent(inout) :: wk(n)
 integer, intent(inout) :: inert(3), ipvt(n)
+integer :: j, job
+double precision :: t
 integer :: onej
+!     ------------------
 !     ------------------
 !
 !          Matrix factorization and computation of rcond
@@ -8649,6 +8652,10 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 double precision, intent(inout) :: ap(*), z(*)
 double precision, intent(inout) :: rcond
+double precision :: ak, akm1, bk, bkm1, ddot, denom, ek, t
+double precision :: anorm, s, dasum, ynorm
+integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
+integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !     dspco factors a double precision symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting and estimates
@@ -8727,10 +8734,6 @@ double precision, intent(inout) :: rcond
 !
 !     Internal variables
 !
-double precision :: ak, akm1, bk, bkm1, ddot, denom, ek, t
-double precision :: anorm, s, dasum, ynorm
-integer :: i, ij, ik, ikm1, ikp1, info, j, jm1, j1
-integer :: k, kk, km1k, km1km1, kp, kps, ks
 !
 !
 !     Find norm of a using only upper half
@@ -8937,6 +8940,13 @@ integer, intent(in) :: n
 integer, intent(inout) :: kpvt(*)
 integer, intent(out) :: info
 double precision, intent(inout) :: ap(*)
+double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
+double precision :: absakk, alpha, colmax, rowmax
+integer :: idamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
+&imk
+integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
+&km2, kstep
+logical :: swap
 !
 !     dspfa factors a double precision symmetric matrix stored in
 !     packed form by elimination with symmetric pivoting.
@@ -9001,13 +9011,6 @@ double precision, intent(inout) :: ap(*)
 !
 !     Internal variables
 !
-double precision :: ak, akm1, bk, bkm1, denom, mulk, mulkm1, t
-double precision :: absakk, alpha, colmax, rowmax
-integer :: idamax, ij, ijj, ik, ikm1, im, imax, imaxp1, imim, imj, &
-&imk
-integer :: j, jj, jk, jkm1, jmax, jmim, k, kk, km1, km1k, km1km1, &
-&km2, kstep
-logical :: swap
 !
 !
 !     Initialize
@@ -9206,6 +9209,8 @@ implicit none
 integer, intent(in) :: n, kpvt(*)
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
+double precision :: ak, akm1, bk, bkm1, ddot, denom, temp
+integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     DSISL solves the double precision symmetric system
 !     A * X = b
@@ -9252,8 +9257,6 @@ double precision, intent(inout) :: b(*)
 !
 !     Internal variables.
 !
-double precision :: ak, akm1, bk, bkm1, ddot, denom, temp
-integer :: ik, ikm1, ikp1, k, kk, km1k, km1km1, kp
 !
 !     Loop backward applying the transformations and
 !     D inverse to b.
@@ -9391,6 +9394,11 @@ double precision, intent(inout) :: ap(*), work(*)
 double precision, intent(inout) :: det(2)
 integer, intent(in) :: kpvt(*)
 integer, intent(inout) :: inert(3)
+double precision :: akkp1, ddot, temp
+double precision :: ten, d, t, ak, akp1
+integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
+integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
+logical :: noinv, nodet, noert
 !
 !     dspdi computes the determinant, inertia and inverse
 !     of a double precision symmetric matrix using the factors from
@@ -9455,11 +9463,6 @@ integer, intent(inout) :: inert(3)
 !
 !     Internal variables.
 !
-double precision :: akkp1, ddot, temp
-double precision :: ten, d, t, ak, akp1
-integer :: ij, ik, ikp1, iks, j, jb, jk, jkp1
-integer :: k, kk, kkp1, km1, ks, ksj, kskp1, kstep
-logical :: noinv, nodet, noert
 !
 noinv = mod(job,10) .eq. 0
 nodet = mod(job,100)/10 .eq. 0
@@ -9630,11 +9633,11 @@ subroutine pchol (mo,n,m,a,b,kb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
-integer :: j
-!     -----------------
 real, intent(inout) :: a(*), b(*)
+integer :: j
 real :: d(2)
 integer :: onej
+!     -----------------
 !     -----------------
 !
 !              Matrix factorization
@@ -9661,6 +9664,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 real, intent(inout) :: ap(*)
+real :: sdot, t
+real :: s
+integer :: j, jj, jm1, k, kj, kk
 !
 !     sppfa factors a real symmetric positive definite matrix
 !     stored in packed form.
@@ -9714,9 +9720,6 @@ real, intent(inout) :: ap(*)
 !
 !     Internal variables
 !
-real :: sdot, t
-real :: s
-integer :: j, jj, jm1, k, kj, kk
 !     Begin block with ...exits to 40
 !
 !
@@ -9753,6 +9756,8 @@ implicit none
 integer, intent(in) :: n
 real, intent(in) :: ap(*)
 real, intent(inout) :: b(*)
+real :: sdot, t
+integer :: k, kb, kk
 !
 !     sppsl solves the real symmetric positive definite system
 !     A * X = b
@@ -9798,8 +9803,6 @@ real, intent(inout) :: b(*)
 !
 !     Internal variables
 !
-real :: sdot, t
-integer :: k, kb, kk
 !
 kk = 0
 do k = 1, n
@@ -9822,6 +9825,9 @@ implicit none
 integer, intent(in) :: n, job
 real, intent(inout) :: ap(*)
 real, intent(inout) :: det(2)
+real :: t
+real :: s
+integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     sppdi computes the determinant and inverse
 !     of a real symmetric positive definite matrix
@@ -9868,9 +9874,6 @@ real, intent(inout) :: det(2)
 !
 !     Internal variables
 !
-real :: t
-real :: s
-integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     Compute determinant
 !
@@ -9950,11 +9953,11 @@ subroutine dpchol (mo,n,m,a,b,kb,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: kb, m, mo, n
-integer :: j
-!     -----------------
 double precision, intent(inout) :: a(*), b(*)
+integer :: j
 double precision :: d(2)
 integer :: onej
+!     -----------------
 !     -----------------
 !
 !              Matrix factorization
@@ -9981,6 +9984,9 @@ implicit none
 integer, intent(in) :: n
 integer, intent(inout) :: info
 double precision, intent(inout) :: ap(*)
+double precision :: ddot, t
+double precision :: s
+integer :: j, jj, jm1, k, kj, kk
 !
 !     dppfa factors a double precision symmetric positive definite
 !     matrix stored in packed form.
@@ -10034,9 +10040,6 @@ double precision, intent(inout) :: ap(*)
 !
 !     Internal variables
 !
-double precision :: ddot, t
-double precision :: s
-integer :: j, jj, jm1, k, kj, kk
 !     Begin block with ...exits to 40
 !
 !
@@ -10073,6 +10076,8 @@ implicit none
 integer, intent(in) :: n
 double precision, intent(in) :: ap(*)
 double precision, intent(inout) :: b(*)
+double precision :: ddot, t
+integer :: k, kb, kk
 !
 !     dppsl solves the double precision symmetric positive definite
 !     SYSTEM A * X = b
@@ -10118,8 +10123,6 @@ double precision, intent(inout) :: b(*)
 !
 !     Internal variables
 !
-double precision :: ddot, t
-integer :: k, kb, kk
 !
 kk = 0
 do k = 1, n
@@ -10142,6 +10145,9 @@ implicit none
 integer, intent(in) :: n, job
 double precision, intent(inout) :: ap(*)
 double precision, intent(inout) :: det(2)
+double precision :: t
+double precision :: s
+integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     dppdi computes the determinant and inverse
 !     of a double precision symmetric positive definite matrix
@@ -10188,9 +10194,6 @@ double precision, intent(inout) :: det(2)
 !
 !     Internal variables
 !
-double precision :: t
-double precision :: s
-integer :: i, ii, j, jj, jm1, j1, k, kj, kk, kp1, k1
 !
 !     Compute determinant
 !
@@ -10270,6 +10273,8 @@ subroutine toplx (a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: x(n), g(n), h(n)
 integer :: j, k, l, m, max, mp1, nml, npl
 real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
@@ -10281,8 +10286,6 @@ real :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
 !     real a(2*n - 1)
 !----------------------
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), g(n), h(n)
 !
 if (a(n) .eq. 0.0) go to 100
 ierr = 0
@@ -10360,7 +10363,10 @@ subroutine dtoplx (a, b, x, n, g, h, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: x(n), g(n), h(n)
 integer :: j, k, l, m, max, mp1, nml, npl
+double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !-----------------------------------------------------------------------
 !            Solution of the Toeplitz system of equations
 !
@@ -10370,9 +10376,6 @@ integer :: j, k, l, m, max, mp1, nml, npl
 !-----------------------------------------------------------------------
 !     double precision a(2*n - 1)
 !----------------------
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), g(n), h(n)
-double precision :: c, c1, c2, gd, gj, gk, gn, hj, hk, hn, xd, xn
 !
 if (a(n) .eq. 0.d0) go to 100
 ierr = 0
@@ -10451,16 +10454,16 @@ implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
+complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
+real, intent(inout) :: rcond
+integer, intent(inout) :: ipvt(n)
 integer :: j, job
+real :: t
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
 !-----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,n), b(*), det(2), wk(n)
-real, intent(inout) :: rcond
-real :: t
-integer, intent(inout) :: ipvt(n)
-integer :: onej
 !
 !          Matrix factorization and computation of rcond
 !
@@ -10496,15 +10499,15 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, mo
 integer :: n
+complex, intent(inout) :: a(ka,n), b(*), wk(*)
+integer, intent(inout) :: ipvt(n)
 integer :: j
+complex :: d(2)
+integer :: onej
 !-----------------------------------------------------------------------
 !     Partial pivot Gauss procedure for inverting complex matrices
 !     and solving complex equations
 !-----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,n), b(*), wk(*)
-integer, intent(inout) :: ipvt(n)
-complex :: d(2)
-integer :: onej
 !
 if (n .lt. 1 .or. ka .lt. n) go to 40
 if (m .le. 0) go to 10

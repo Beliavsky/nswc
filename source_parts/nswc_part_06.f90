@@ -1,6 +1,12 @@
 subroutine dbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
+integer, intent(in) :: lda, n, ml, mu, job
+double precision, intent(in) :: a(lda,*)
+double precision, intent(inout) :: b(n)
+integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
+double precision :: ddot, t
+integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 ! ----------------------------------------------------------------------
 !
 !     dbsl solves the real band system a*X = b or trans(a)*X = b
@@ -56,12 +62,6 @@ integer :: ml1, ml2
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu, job
-double precision, intent(in) :: a(lda,*)
-double precision, intent(inout) :: b(n)
-integer, intent(in) :: ipvt(n)
-double precision :: ddot, t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 !
 m = mu + ml + 1
 if (m .eq. 1) go to 100
@@ -141,6 +141,8 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
 real, intent(out) :: cond
+real, intent(inout) :: a(ka,*), wk(*)
+integer, intent(inout) :: iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 real :: b1nrm
@@ -148,8 +150,6 @@ real :: b1nrm
 !              Computation of the L1 condition number
 !                       of a banded matrix a
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,*), wk(*)
-integer, intent(inout) :: iwk(*)
 !-----------------------
 !     real wk(2*n)
 !     integer iwk(2*n)
@@ -212,17 +212,17 @@ subroutine db1cnd (a, ka, n, ml, mu, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, ml, mu, n
-integer :: isgn, iter, iv, ix, j, jump, kase
-!-----------------------------------------------------------------------
-!            Computation of the L1 condition number of
-!               a double precision banded matrix a
-!-----------------------------------------------------------------------
 double precision, intent(inout) :: a(ka,*)
 double precision, intent(out) :: cond
 double precision, intent(inout) :: wk(*)
 integer, intent(inout) :: iwk(*)
+integer :: isgn, iter, iv, ix, j, jump, kase
 double precision :: anorm, ainorm
 double precision :: db1nrm
+!-----------------------------------------------------------------------
+!            Computation of the L1 condition number of
+!               a double precision banded matrix a
+!-----------------------------------------------------------------------
 !-----------------------
 !     double precision wk(2*n)
 !     integer iwk(2*n)
@@ -285,6 +285,8 @@ subroutine cbslv(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+complex, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     cbslv employs Gauss elimination with row interchanges to solve
 !     the NXN complex banded system AX = b. the argument m0 specifies
@@ -334,8 +336,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     cbslv and solves the new equations AX = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -368,6 +368,8 @@ subroutine cbslv1(m0,a,ka,n,ml,mu,b,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m0, ml, mu, n
+complex, intent(inout) :: a(ka,*), b(n)
+integer, intent(inout) :: iwk(n)
 ! ----------------------------------------------------------------------
 !     cbslv1 employs Gauss elimination with row interchanges to solve
 !     the NXN complex banded system XA = b. the argument m0 specifies
@@ -417,8 +419,6 @@ integer, intent(in) :: ka, m0, ml, mu, n
 !     cbslv1 and solves the new equations XA = b. in this case ierr
 !     is not referenced.
 ! ----------------------------------------------------------------------
-complex, intent(inout) :: a(ka,*), b(n)
-integer, intent(inout) :: iwk(n)
 if (m0 .ne. 0) go to 10
 !
 !     Error checking
@@ -449,9 +449,14 @@ end subroutine cbslv1
 
 subroutine cbfa (a, lda, n, ml, mu, ipvt, info)
 implicit none
+integer, intent(in) :: lda, n, ml, mu
+integer, intent(out) :: info
+complex, intent(inout) :: a(lda,*)
+integer, intent(inout) :: ipvt(n)
 integer :: i, j, j1, jj, k, l, ldb, ll, lm, lm1, lm2, lmk, m, mb, &
 &ml1, mp, n1
 integer :: icamax
+complex :: t
 ! ----------------------------------------------------------------------
 !
 !               cbfa factors a complex band matrix BY elimination.
@@ -547,11 +552,6 @@ integer :: icamax
 !     Subroutines and functions
 !        MIN0,icamax,caxpy,cscal,cswap
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu
-integer, intent(out) :: info
-complex, intent(inout) :: a(lda,*)
-integer, intent(inout) :: ipvt(n)
-complex :: t
 !
 info = 0
 if (ml .eq. 0) go to 100
@@ -624,7 +624,13 @@ end subroutine cbfa
 
 subroutine cbsl (a,lda,n,ml,mu,ipvt,b,job)
 implicit none
+integer, intent(in) :: lda, n, ml, mu, job
+complex, intent(in) :: a(lda,*)
+complex, intent(inout) :: b(n)
+integer, intent(in) :: ipvt(n)
 integer :: ml1, ml2
+complex :: cdotu, t
+integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 ! ----------------------------------------------------------------------
 !
 !     cbsl solves the complex band system a*X = b or trans(a)*X = b
@@ -680,12 +686,6 @@ integer :: ml1, ml2
 !
 !     FORTRAN  MIN0
 ! ----------------------------------------------------------------------
-integer, intent(in) :: lda, n, ml, mu, job
-complex, intent(in) :: a(lda,*)
-complex, intent(inout) :: b(n)
-integer, intent(in) :: ipvt(n)
-complex :: cdotu, t
-integer :: k, kb, klm, l, lb, ldb, lm, m, mlm, nm1
 !
 m = mu + ml + 1
 if (m .eq. 1) go to 100
@@ -764,10 +764,10 @@ subroutine cvrs (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-integer :: i, ip, j
 real, intent(in) :: a(ka,n)
 real, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, j
 !
 !                 Store the i-TH row
 !
@@ -799,10 +799,10 @@ subroutine cvds (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-integer :: i, ip, j
 double precision, intent(in) :: a(ka,n)
 double precision, intent(inout) :: b(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, j
 !
 !                 Store the i-TH row
 !
@@ -834,11 +834,11 @@ subroutine cvcs (a, ka, m, n, b, ib, jb, num, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, m, n, num
-integer :: i, ip, j
 complex, intent(in) :: a(ka,n)
 complex, intent(inout) :: b(*)
-complex :: zero
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, j
+complex :: zero
 data zero /(0.0,0.0)/
 !
 !                 Store the i-TH row
@@ -870,10 +870,10 @@ end subroutine cvcs
 subroutine cvsr (a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-integer :: i, ip, ipmax, ipmin, j
 real, intent(in) :: a(*)
 real, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+integer :: i, ip, ipmax, ipmin, j
 !
 do 30 i = 1,m
 !
@@ -900,10 +900,10 @@ end subroutine cvsr
 subroutine cvsd (a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-integer :: i, ip, ipmax, ipmin, j
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+integer :: i, ip, ipmax, ipmin, j
 !
 do 30 i = 1,m
 !
@@ -930,10 +930,10 @@ end subroutine cvsd
 subroutine cvsc (a, ia, ja, b, kb, m, n)
 implicit none
 integer, intent(in) :: kb, m, n
-integer :: i, ip, ipmax, ipmin, j
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(kb,n)
 integer, intent(in) :: ia(*), ja(*)
+integer :: i, ip, ipmax, ipmin, j
 !
 do 30 i = 1,m
 !
@@ -960,11 +960,11 @@ end subroutine cvsc
 subroutine scvrd (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-integer :: i, ibeg, iend, ip, l
 real, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ibeg, iend, ip, l
 !
 l = 1
 do 20 i = 1,m
@@ -986,11 +986,11 @@ end subroutine scvrd
 subroutine scvdr (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-integer :: i, ibeg, iend, ip, l
 double precision, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ibeg, iend, ip, l
 !
 l = 1
 do 20 i = 1,m
@@ -1012,15 +1012,15 @@ end subroutine scvdr
 subroutine csreal (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
+complex, intent(in) :: a(*)
+real, intent(inout) :: b(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
 !              Real part of a sparse complex matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*)
-real, intent(inout) :: b(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: ib(*), jb(*)
 !
 l = 1
 do 20 i = 1,m
@@ -1043,15 +1043,15 @@ end subroutine csreal
 subroutine csimag (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
+complex, intent(in) :: a(*)
+real, intent(inout) :: b(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
 real :: t
 !-----------------------------------------------------------------------
 !            Imaginary part of a sparse complex matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*)
-real, intent(inout) :: b(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: ib(*), jb(*)
 !
 l = 1
 do 20 i = 1,m
@@ -1075,16 +1075,16 @@ subroutine scvrc (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
-integer :: i, ip, j, l, maxa, maxb, mina, minb
-!-----------------------------------------------------------------------
-!       Compute a + bi for the sparse real matrices A and b
-!-----------------------------------------------------------------------
 real, intent(in) :: a(*), b(*)
 real, intent(inout) :: wk(n)
 complex, intent(inout) :: c(*)
-complex :: t
 integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
 integer, intent(inout) :: ic(*), jc(*)
+integer :: i, ip, j, l, maxa, maxb, mina, minb
+complex :: t
+!-----------------------------------------------------------------------
+!       Compute a + bi for the sparse real matrices A and b
+!-----------------------------------------------------------------------
 !-------------------------
 do j = 1,n
    wk(j) = 0.0
@@ -1141,14 +1141,14 @@ end subroutine scvrc
 subroutine rscopy (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-integer :: i, ibeg, iend, ip, l
-!-----------------------------------------------------------------------
-!                  Copying a sparse real matrix
-!-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ibeg, iend, ip, l
+!-----------------------------------------------------------------------
+!                  Copying a sparse real matrix
+!-----------------------------------------------------------------------
 !
 l = 1
 do 20 i = 1,m
@@ -1170,14 +1170,14 @@ end subroutine rscopy
 subroutine dscopy (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-integer :: i, ibeg, iend, ip, l
-!-----------------------------------------------------------------------
-!              Copying a sparse double precision matrix
-!-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ibeg, iend, ip, l
+!-----------------------------------------------------------------------
+!              Copying a sparse double precision matrix
+!-----------------------------------------------------------------------
 !
 l = 1
 do 20 i = 1,m
@@ -1199,15 +1199,15 @@ end subroutine dscopy
 subroutine cscopy (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
+complex, intent(in) :: a(*)
+complex, intent(inout) :: b(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: ib(*), jb(*)
 integer :: i, ibeg, iend, ip, l
+complex :: zero
 !-----------------------------------------------------------------------
 !                 Copying a sparse complex matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*)
-complex, intent(inout) :: b(*)
-complex :: zero
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: ib(*), jb(*)
 data zero /(0.0,0.0)/
 !
 l = 1
@@ -1230,14 +1230,14 @@ end subroutine cscopy
 subroutine sconj (a, ia, ja, b, ib, jb, m)
 implicit none
 integer, intent(in) :: m
-integer :: i, ibeg, iend, ip, l, mp1
-!-----------------------------------------------------------------------
-!     Computation of the conjugate of a sparse complex matrix
-!-----------------------------------------------------------------------
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ibeg, iend, ip, l, mp1
+!-----------------------------------------------------------------------
+!     Computation of the conjugate of a sparse complex matrix
+!-----------------------------------------------------------------------
 !
 mp1 = m + 1
 l = ia(1) - 1
@@ -1260,14 +1260,14 @@ end subroutine sconj
 subroutine rpose (a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!                 Transposing a sparse real matrix
-!-----------------------------------------------------------------------
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!                 Transposing a sparse real matrix
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1324,16 +1324,16 @@ end subroutine rpose
 subroutine rpose1 (p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!                 Transposing a sparse real matrix
-!                 where the rows are interchanged
-!-----------------------------------------------------------------------
 integer, intent(in) :: p(m)
 real, intent(in) :: a(*)
 real, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!                 Transposing a sparse real matrix
+!                 where the rows are interchanged
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1391,14 +1391,14 @@ end subroutine rpose1
 subroutine dpose (a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!           Transposing a sparse double precision matrix
-!-----------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!           Transposing a sparse double precision matrix
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1455,16 +1455,16 @@ end subroutine dpose
 subroutine dpose1 (p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!           Transposing a sparse double precision matrix
-!                 where the rows are interchanged
-!-----------------------------------------------------------------------
 integer, intent(in) :: p(m)
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!           Transposing a sparse double precision matrix
+!                 where the rows are interchanged
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1522,14 +1522,14 @@ end subroutine dpose1
 subroutine cpose (a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!               Transposing a sparse complex matrix
-!-----------------------------------------------------------------------
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!               Transposing a sparse complex matrix
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1586,16 +1586,16 @@ end subroutine cpose
 subroutine cpose1 (p, a, ia, ja, b, ib, jb, m, n)
 implicit none
 integer, intent(in) :: m, n
-integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
-!-----------------------------------------------------------------------
-!               Transposing a sparse complex matrix
-!                 where the rows are interchanged
-!-----------------------------------------------------------------------
 integer, intent(in) :: p(m)
 complex, intent(in) :: a(*)
 complex, intent(inout) :: b(*)
 integer, intent(in) :: ia(*), ja(*)
 integer, intent(inout) :: ib(*), jb(*)
+integer :: i, ii, ip, ipmax, ipmin, j, jj, jp, np1, num
+!-----------------------------------------------------------------------
+!               Transposing a sparse complex matrix
+!                 where the rows are interchanged
+!-----------------------------------------------------------------------
 !
 !           Compute the number of elements in each column
 !                 of A and store the results in ib
@@ -1654,15 +1654,15 @@ subroutine sadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+real :: t
 !-----------------------------------------------------------------------
 !               Addition of sparse real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
-real :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = 0.0
@@ -1720,15 +1720,15 @@ subroutine dsadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+double precision :: t
 !-----------------------------------------------------------------------
 !         Addition of sparse double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
-double precision :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = 0.d0
@@ -1786,15 +1786,15 @@ subroutine csadd (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+complex, intent(in) :: a(*), b(*)
+complex, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+complex :: t
 !-----------------------------------------------------------------------
 !              Addition of sparse complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
-complex :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = (0.0, 0.0)
@@ -1852,15 +1852,15 @@ subroutine ssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+real :: t
 !-----------------------------------------------------------------------
 !             Subtraction of sparse real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
-real :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = 0.0
@@ -1918,15 +1918,15 @@ subroutine dssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+double precision :: t
 !-----------------------------------------------------------------------
 !        Subtraction of sparse double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
-double precision :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = 0.d0
@@ -1984,15 +1984,15 @@ subroutine cssubt (a,ia,ja,b,ib,jb,c,ic,jc,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m, n, num
+complex, intent(in) :: a(*), b(*)
+complex, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, l, maxa, maxb, mina, minb
+complex :: t
 !-----------------------------------------------------------------------
 !            Subtraction of sparse complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
-complex :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do j = 1,n
    wk(j) = (0.0, 0.0)
@@ -2050,15 +2050,15 @@ subroutine sprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
+real :: t
 !-----------------------------------------------------------------------
 !               Multiplication of sparse real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*), wk(n)
-real :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do k = 1,n
    wk(k) = 0.0
@@ -2109,15 +2109,15 @@ subroutine dsprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
+double precision :: t
 !-----------------------------------------------------------------------
 !         Multiplication of sparse double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*), wk(n)
-double precision :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do k = 1,n
    wk(k) = 0.d0
@@ -2168,15 +2168,15 @@ subroutine csprod (a,ia,ja,b,ib,jb,c,ic,jc,l,m,n,num,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: l, m, n, num
+complex, intent(in) :: a(*), b(*)
+complex, intent(inout) :: c(*), wk(n)
+integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
+integer, intent(inout) :: ic(*), jc(*)
 integer :: i, ip, j, jp, jpmax, jpmin, k, kp, kpmax, kpmin
+complex :: t
 !-----------------------------------------------------------------------
 !             Multiplication of sparse complex matrices
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), b(*)
-complex, intent(inout) :: c(*), wk(n)
-complex :: t
-integer, intent(in) :: ia(*), ja(*), ib(*), jb(*)
-integer, intent(inout) :: ic(*), jc(*)
 !-------------------------
 do k = 1,n
    wk(k) = (0.0, 0.0)
@@ -2226,14 +2226,14 @@ end subroutine csprod
 subroutine mvprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+real, intent(in) :: a(*), x(n)
+real, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+real :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), x(n)
-real, intent(inout) :: y(m)
-real :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = 0.0
@@ -2251,14 +2251,14 @@ end subroutine mvprd
 subroutine mvprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+real, intent(in) :: a(*), x(n)
+real, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+real :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), x(n)
-real, intent(inout) :: y(m)
-real :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = y(i)
@@ -2276,14 +2276,14 @@ end subroutine mvprd1
 subroutine mtprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+real, intent(in) :: a(*), x(m)
+real, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+real :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), x(m)
-real, intent(inout) :: y(n)
-real :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do j = 1,n
    y(j) = 0.0
@@ -2305,14 +2305,14 @@ end subroutine mtprd
 subroutine mtprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+real, intent(in) :: a(*), x(m)
+real, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+real :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), x(m)
-real, intent(inout) :: y(n)
-real :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    t = x(i)
@@ -2330,14 +2330,14 @@ end subroutine mtprd1
 subroutine dvprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*), x(n)
+double precision, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+double precision :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), x(n)
-double precision, intent(inout) :: y(m)
-double precision :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = 0.d0
@@ -2355,14 +2355,14 @@ end subroutine dvprd
 subroutine dvprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*), x(n)
+double precision, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+double precision :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), x(n)
-double precision, intent(inout) :: y(m)
-double precision :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = y(i)
@@ -2380,14 +2380,14 @@ end subroutine dvprd1
 subroutine dtprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*), x(m)
+double precision, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+double precision :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), x(m)
-double precision, intent(inout) :: y(n)
-double precision :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do j = 1,n
    y(j) = 0.d0
@@ -2409,14 +2409,14 @@ end subroutine dtprd
 subroutine dtprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*), x(m)
+double precision, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+double precision :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), x(m)
-double precision, intent(inout) :: y(n)
-double precision :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    t = x(i)
@@ -2434,14 +2434,14 @@ end subroutine dtprd1
 subroutine cvprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+complex, intent(in) :: a(*), x(n)
+complex, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+complex :: sum
 !-----------------------------------------------------------------------
 !              Product of a sparse matrix and a vector
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), x(n)
-complex, intent(inout) :: y(m)
-complex :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = (0.0, 0.0)
@@ -2459,14 +2459,14 @@ end subroutine cvprd
 subroutine cvprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+complex, intent(in) :: a(*), x(n)
+complex, intent(inout) :: y(m)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+complex :: sum
 !-----------------------------------------------------------------------
 !     Set y = a*x + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), x(n)
-complex, intent(inout) :: y(m)
-complex :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    sum = y(i)
@@ -2484,14 +2484,14 @@ end subroutine cvprd1
 subroutine ctprd (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+complex, intent(in) :: a(*), x(m)
+complex, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+complex :: t
 !-----------------------------------------------------------------------
 !              Product of a vector and a sparse matrix
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), x(m)
-complex, intent(inout) :: y(n)
-complex :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do j = 1,n
    y(j) = (0.0, 0.0)
@@ -2513,14 +2513,14 @@ end subroutine ctprd
 subroutine ctprd1 (m, n, a, ia, ja, x, y)
 implicit none
 integer, intent(in) :: m, n
+complex, intent(in) :: a(*), x(m)
+complex, intent(inout) :: y(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, j, l, lmax, lmin
+complex :: t
 !-----------------------------------------------------------------------
 !     Set y = x*a + y where A is a sparse matrix and x,y are vectors
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), x(m)
-complex, intent(inout) :: y(n)
-complex :: t
-integer, intent(in) :: ia(*), ja(*)
 !
 do 11 i = 1,m
    t = x(i)
@@ -2538,14 +2538,14 @@ end subroutine ctprd1
 real function snrm (a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
+real, intent(in) :: a(*)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin
 real :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                      real sparse matrix a
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
-integer, intent(in) :: ia(*), ja(*)
 !
 snrm = 0.0
 do 20 i = 1,m
@@ -2565,13 +2565,13 @@ subroutine s1nrm (a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
 real, intent(out) :: anorm
+real, intent(in) :: a(*)
+real, intent(inout) :: wk(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !        Computation of the L1 norm of a real sparse matrix a
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(n)
-integer, intent(in) :: ia(*), ja(*)
 !
 anorm = 0.0
 ipmin = ia(1)
@@ -2598,14 +2598,14 @@ end subroutine s1nrm
 double precision function dsnrm (a, ia, ja, m, n)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*)
+integer, intent(in) :: ia(*), ja(*)
 integer :: i, ip, ipmax, ipmin
+double precision :: sum
 !-----------------------------------------------------------------------
 !             Computation of the L-infinity norm of A
 !                double precision sparse matrix a
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision :: sum
-integer, intent(in) :: ia(*), ja(*)
 !
 dsnrm = 0.d0
 do 20 i = 1,m
@@ -2624,15 +2624,15 @@ end function dsnrm
 subroutine ds1nrm (a, ia, ja, m, n, anorm, wk)
 implicit none
 integer, intent(in) :: m, n
+double precision, intent(in) :: a(*)
+double precision, intent(out) :: anorm
+double precision, intent(inout) :: wk(n)
+integer, intent(in) :: ia(*), ja(*)
 integer :: ip, ipmax, ipmin, j
 !-----------------------------------------------------------------------
 !               Computation of the L1 norm of a sparse
 !                     double precision matrix a
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: anorm
-double precision, intent(inout) :: wk(n)
-integer, intent(in) :: ia(*), ja(*)
 !
 anorm = 0.d0
 ipmin = ia(1)
@@ -2659,6 +2659,8 @@ end subroutine ds1nrm
 subroutine spord (m, n, ia, r, iwk)
 implicit none
 integer, intent(in) :: m, n
+integer, intent(in) :: ia(*)
+integer, intent(inout) :: r(m), iwk(*)
 integer :: i, ii, k, l, np1, num
 !-----------------------------------------------------------------------
 !        spord orders the rows of an MXN sparse matrix A,ia,ja
@@ -2666,8 +2668,6 @@ integer :: i, ii, k, l, np1, num
 !-----------------------------------------------------------------------
 !     iwk is a work space of dimension m + n + 1.
 !----------------------
-integer, intent(in) :: ia(*)
-integer, intent(inout) :: r(m), iwk(*)
 !
 np1 = n + 1
 do i = 1,np1
@@ -2702,14 +2702,14 @@ implicit none
 integer, intent(inout) :: ierr
 integer :: n
 integer, intent(inout) :: num
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: r(n), c(n), ib(n)
+integer, intent(inout) :: iwk(*)
 integer :: i, length, li, np1, npi
 !-----------------------------------------------------------------------
 !        Reordering a sparse matrix into block triangular form
 !-----------------------------------------------------------------------
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: r(n), c(n), ib(n)
 !     integer iwk(5*n)
-integer, intent(inout) :: iwk(*)
 !
 np1 = n + 1
 length = ia(np1) - ia(1)
@@ -2742,6 +2742,9 @@ subroutine mc21a (n,icn,licn,ip,lenr,iperm,numnz,iw)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
+integer, intent(in) :: ip(n)
+integer, intent(in) :: icn(licn), lenr(n)
+integer, intent(inout) :: iperm(n), iw(n,4)
 !-----------------------------------------------------------------------
 ! Description of parameters.
 ! INPUT VARIABLES   n,icn,licn,ip,lenr
@@ -2764,9 +2767,6 @@ integer, intent(inout) :: numnz
 ! numnz number of non-zeros on diagonal of permuted matrix.
 ! iw  work array  ..  see later comments.
 !-----------------------------------------------------------------------
-integer, intent(in) :: ip(n)
-integer, intent(in) :: icn(licn), lenr(n)
-integer, intent(inout) :: iperm(n), iw(n,4)
 !
 call mc21b (n,icn,licn,ip,lenr,iperm,numnz,iw(1,1),iw(1,2), &
 &iw(1,3),iw(1,4))
@@ -2777,6 +2777,8 @@ subroutine mc21b (n,icn,licn,ip,lenr,iperm,numnz,pr,arp,cv,out)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: numnz
+integer, intent(in) :: ip(n), icn(licn), lenr(n)
+integer, intent(inout) :: iperm(n), pr(n), cv(n), arp(n), out(n)
 integer :: i, ii, in1, in2, ioutk, j, j1, jord, k, kk
 !-----------------------------------------------------------------------
 !     Division of work array is now described.
@@ -2790,8 +2792,6 @@ integer :: i, ii, in1, in2, ioutk, j, j1, jord, k, kk
 !     which have not been scanned during one pass through the
 !     main loop.
 !-----------------------------------------------------------------------
-integer, intent(in) :: ip(n), icn(licn), lenr(n)
-integer, intent(inout) :: iperm(n), pr(n), cv(n), arp(n), out(n)
 !
 !     Initialization of arrays
 !
@@ -2907,6 +2907,9 @@ subroutine mc13d(n, icn, licn, ip, lenr, ior, ib, num, iw)
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(inout) :: num
+integer, intent(in) :: ip(n)
+integer, intent(in) :: icn(licn), lenr(n)
+integer, intent(inout) :: ior(n), ib(n), iw(n,3)
 !
 ! Description of parameters.
 ! Input variables  .... n,icn,licn,ip,lenr.
@@ -2928,9 +2931,6 @@ integer, intent(inout) :: num
 ! num number of blocks found.
 ! iw  work array of length 3*n.
 !
-integer, intent(in) :: ip(n)
-integer, intent(in) :: icn(licn), lenr(n)
-integer, intent(inout) :: ior(n), ib(n), iw(n,3)
 !
 call mc13e(n, icn, licn, ip, lenr, ior, ib, num, iw(1,1), &
 &iw(1,2), iw(1,3))
@@ -2942,10 +2942,12 @@ subroutine mc13e(n, icn, licn, ip, lenr, arp, ib, num, lowl, &
 implicit none
 integer, intent(in) :: licn, n
 integer, intent(out) :: num
+integer, intent(in) :: ip(n)
+integer, intent(in) :: icn(licn), lenr(n)
+integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
 integer :: i, i1, i2, icnt, ii, isn, ist, ist1, iv, iw, j, k, &
 &lcnt, nnm1
 integer :: stp, dummy
-integer, intent(in) :: ip(n)
 !
 ! arp(i) is one less than the number of unsearched edges leaving
 !     node i.  at the end of the algorithm it is set to A
@@ -2963,8 +2965,6 @@ integer, intent(in) :: ip(n)
 ! prev(i) is the node at the end of the path when node i was
 !     placed on the stack.
 !
-integer, intent(in) :: icn(licn), lenr(n)
-integer, intent(inout) :: arp(n), ib(n), lowl(n), numb(n), prev(n)
 !
 !   icnt is the number of nodes whose positions in final ordering have
 !     been found.
@@ -3078,7 +3078,12 @@ subroutine spslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: x(n), rtemp(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l
+integer :: iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -3163,11 +3168,6 @@ integer :: k, l
 !  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzero
 !  elements in A.
 !------------------------
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), rtemp(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), itemp(*)
-integer :: iu, ju, u, y, p
 !
 ierr = 0
 if (n .le. 0) return
@@ -3199,8 +3199,18 @@ subroutine nspiv1 (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: u(max), x(n), y(n)
+integer, intent(inout) :: c(n)
+integer, intent(in) :: ia(*)
+integer, intent(inout) :: ic(n), iu(*)
+integer, intent(in) :: ja(*)
+integer, intent(inout) :: ju(max), p(*)
+integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
+real :: dk, lki, xpv, xpvmax, yk
+integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  nspiv1 uses sparse Gaussian elimination with
@@ -3255,16 +3265,6 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: u(max), x(n), y(n)
-real :: dk, lki, xpv, xpvmax, yk
-integer, intent(inout) :: c(n)
-integer, intent(in) :: ia(*)
-integer, intent(inout) :: ic(n), iu(*)
-integer, intent(in) :: ja(*)
-integer, intent(inout) :: ju(max), p(*)
-integer, intent(in) :: r(n)
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !  Initialize work storage and pointers to ju
 !
@@ -3479,7 +3479,14 @@ subroutine rslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -3540,13 +3547,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations AX = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -3584,11 +3584,11 @@ end subroutine rslv
 subroutine rslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 real :: sum
 !
 !            Solve LY = b by forward substitution
@@ -3632,7 +3632,14 @@ subroutine tslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+real, intent(in) :: a(*), b(n)
+real, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of real sparse equations
 !-----------------------------------------------------------------------
@@ -3693,13 +3700,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations XA = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*), b(n)
-real, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -3737,11 +3737,11 @@ end subroutine tslv
 subroutine tslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 real, intent(in) :: b(n), d(n), t(*)
 real, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 !
 !            Solve YU = b by forward substitution
 !
@@ -3793,8 +3793,17 @@ subroutine splu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+real, intent(in) :: a(*)
+real, intent(inout) :: d(n), t(max), w(n)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n), ic(n)
+integer, intent(inout) :: it(*), jt(max), iu(n)
+integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
+integer :: pm
+real :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     splu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a real sparse matrix.
@@ -3853,15 +3862,6 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: d(n), t(max), w(n)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n), ic(n)
-integer, intent(inout) :: it(*), jt(max), iu(n)
-integer, intent(inout) :: p(*)
-integer :: pm
-real :: const, wi, wmax
 !
 jptr = 0
 it(1) = 1
@@ -4015,7 +4015,12 @@ subroutine dspslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: x(n), rtemp(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l
+integer :: iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -4103,11 +4108,6 @@ integer :: k, l
 !  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzero
 !  elements in A.
 !------------------------
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), rtemp(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), itemp(*)
-integer :: iu, ju, u, y, p
 !
 ierr = 0
 if (n .le. 0) return
@@ -4139,8 +4139,18 @@ subroutine dnspiv (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: u(max), x(n), y(n)
+integer, intent(inout) :: c(n)
+integer, intent(in) :: ia(*)
+integer, intent(inout) :: ic(n), iu(*)
+integer, intent(in) :: ja(*)
+integer, intent(inout) :: ju(max), p(*)
+integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
+double precision :: dk, lki, xpv, xpvmax, yk
+integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  dnspiv uses sparse Gaussian elimination with
@@ -4195,16 +4205,6 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: u(max), x(n), y(n)
-double precision :: dk, lki, xpv, xpvmax, yk
-integer, intent(inout) :: c(n)
-integer, intent(in) :: ia(*)
-integer, intent(inout) :: ic(n), iu(*)
-integer, intent(in) :: ja(*)
-integer, intent(inout) :: ju(max), p(*)
-integer, intent(in) :: r(n)
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !  Initialize work storage and pointers to ju
 !
@@ -4419,7 +4419,14 @@ subroutine dslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -4481,13 +4488,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations AX = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -4525,11 +4525,11 @@ end subroutine dslv
 subroutine dslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 double precision :: sum
 !
 !            Solve LY = b by forward substitution
@@ -4573,7 +4573,14 @@ subroutine dtslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+double precision, intent(in) :: a(*), b(n)
+double precision, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !          Solution of double precision sparse equations
 !-----------------------------------------------------------------------
@@ -4635,13 +4642,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations XA = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(n)
-double precision, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -4679,11 +4679,11 @@ end subroutine dtslv
 subroutine dtslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 double precision, intent(in) :: b(n), d(n), t(*)
 double precision, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 !
 !            Solve YU = b by forward substitution
 !
@@ -4735,8 +4735,17 @@ subroutine dsplu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+double precision, intent(in) :: a(*)
+double precision, intent(inout) :: d(n), t(max), w(n)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n), ic(n)
+integer, intent(inout) :: it(*), jt(max), iu(n)
+integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
+integer :: pm
+double precision :: const, wi, wmax
 !-----------------------------------------------------------------------
 !     dsplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a double precision sparse
@@ -4796,15 +4805,6 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: d(n), t(max), w(n)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n), ic(n)
-integer, intent(inout) :: it(*), jt(max), iu(n)
-integer, intent(inout) :: p(*)
-integer :: pm
-double precision :: const, wi, wmax
 !
 jptr = 0
 it(1) = 1
@@ -4959,16 +4959,16 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
 real, intent(out) :: cond
+real, intent(in) :: a(*)
+real, intent(inout) :: wk(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
 real :: ainorm, anorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a sparse matrix a
 !-----------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: wk(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
 !-----------------------
 !     real wk(4*n + max)
 !     integer iwk(5*n + max + 2)
@@ -5027,17 +5027,17 @@ subroutine ds1cnd (n, a, ia, ja, r, c, max, cond, iwk, wk, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+double precision, intent(in) :: a(*)
+double precision, intent(out) :: cond
+double precision, intent(inout) :: wk(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), iwk(*)
 integer :: isgn, iter, iv, ix, j, jump, kase
+double precision :: anorm, ainorm
 !-----------------------------------------------------------------------
 !              Computation of the L1 condition number
 !                       of a sparse matrix a
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision, intent(out) :: cond
-double precision, intent(inout) :: wk(*)
-double precision :: anorm, ainorm
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), iwk(*)
 !-----------------------
 !     double precision wk(4*n + max)
 !     integer iwk(5*n + max + 2)
@@ -5097,12 +5097,12 @@ implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
 real, intent(inout) :: anorm
+real, intent(inout) :: v(n), x(n)
+integer, intent(inout) :: isgn(n)
 integer :: i, itmax, jlast, l
 real :: altsgn, anrm, t
 integer :: isamax
 real :: sasum
-real, intent(inout) :: v(n), x(n)
-integer, intent(inout) :: isgn(n)
 !-----------------------------------------------------------------------
 !
 !     sonest estimates the 1-norm of A square, real matrix  A.
@@ -5261,10 +5261,10 @@ subroutine donest (n, v, x, isgn, anorm, kase, iter, j, jump)
 implicit none
 integer, intent(inout) :: iter, j, jump, kase
 integer, intent(in) :: n
-integer :: i, itmax, jlast, l
-integer :: idamax
 double precision, intent(inout) :: anorm, v(n), x(n)
 integer, intent(inout) :: isgn(n)
+integer :: i, itmax, jlast, l
+integer :: idamax
 double precision :: altsgn, an, anm1, anrm, t
 double precision :: dasum
 !-----------------------------------------------------------------------
@@ -5428,7 +5428,12 @@ subroutine cspslv (n,a,ia,ja,b,r,c,max,x,itemp,rtemp,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: max, n
+complex, intent(in) :: a(*), b(n)
+complex, intent(inout) :: x(n), rtemp(*)
+integer, intent(in) :: ia(*), ja(*), r(n)
+integer, intent(inout) :: c(n), itemp(*)
 integer :: k, l
+integer :: iu, ju, u, y, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -5513,11 +5518,6 @@ integer :: k, l
 !  ia(n+1) is set so that ia(n+1) - ia(1) = The number of nonzero
 !  elements in A.
 !------------------------
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), rtemp(*)
-integer, intent(in) :: ia(*), ja(*), r(n)
-integer, intent(inout) :: c(n), itemp(*)
-integer :: iu, ju, u, y, p
 !
 ierr = 0
 if (n .le. 0) return
@@ -5549,8 +5549,19 @@ subroutine cnspiv (n,ia,ja,a,b,max,r,c,ic,x,y,p,iu,ju,u,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+complex, intent(in) :: a(*), b(n)
+complex, intent(inout) :: u(max), x(n), y(n)
+integer, intent(inout) :: c(n)
+integer, intent(in) :: ia(*)
+integer, intent(inout) :: ic(n), iu(*)
+integer, intent(in) :: ja(*)
+integer, intent(inout) :: ju(max), p(*)
+integer, intent(in) :: r(n)
 integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 &nzcnt
+complex :: dk, lki, one, yk, zero
+real :: xpv, xpvmax
+integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 !
 !  cnspiv uses sparse Gaussian elimination with
@@ -5605,17 +5616,6 @@ integer :: i, j, jaj, jmax, jmin, juj, juptr, k, maxc, maxcl, &
 !  triangle of u, except that ju actually contains c(j) instead of j
 !
 !
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: u(max), x(n), y(n)
-complex :: dk, lki, one, yk, zero
-real :: xpv, xpvmax
-integer, intent(inout) :: c(n)
-integer, intent(in) :: ia(*)
-integer, intent(inout) :: ic(n), iu(*)
-integer, intent(in) :: ja(*)
-integer, intent(inout) :: ju(max), p(*)
-integer, intent(in) :: r(n)
-integer :: ck, pk, ppk, pv, v, vi, vj, vk
 !
 one = (1.0,0.0)
 zero = (0.0,0.0)
@@ -5833,7 +5833,14 @@ subroutine cslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+complex, intent(in) :: a(*), b(n)
+complex, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -5895,13 +5902,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations AX = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -5939,11 +5939,11 @@ end subroutine cslv
 subroutine cslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 complex :: sum
 !
 !            Solve LY = b by forward substitution
@@ -5987,7 +5987,14 @@ subroutine ctslv (m0,n,a,ia,ja,b,r,c,max,x,iwk,wk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: m0, max, n
+complex, intent(in) :: a(*), b(n)
+complex, intent(inout) :: x(n), wk(*)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(inout) :: iwk(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n)
 integer :: it, iu, jt, k, l
+integer :: y, t, p
 !-----------------------------------------------------------------------
 !                 Solution of complex sparse matrices
 !-----------------------------------------------------------------------
@@ -6049,13 +6056,6 @@ integer :: it, iu, jt, k, l
 !     and solves the new equations XA = b. in this case A,ia,ja,max,
 !     and ierr are not referenced.
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*), b(n)
-complex, intent(inout) :: x(n), wk(*)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(inout) :: iwk(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n)
-integer :: y, t, p
 !
 !     Set indices to divide temporary storage
 !
@@ -6093,11 +6093,11 @@ end subroutine ctslv
 subroutine ctslv1 (n,r,c,ic,d,t,it,jt,iu,b,x,y)
 implicit none
 integer, intent(in) :: n
-integer :: i, j, jj, jmax, jmin, k, lj, lk
 integer, intent(in) :: r(n), c(n), ic(n)
 integer, intent(in) :: it(*), jt(*), iu(n)
 complex, intent(in) :: b(n), d(n), t(*)
 complex, intent(inout) :: x(n), y(n)
+integer :: i, j, jj, jmax, jmin, k, lj, lk
 !
 !            Solve YU = b by forward substitution
 !
@@ -6149,8 +6149,18 @@ subroutine csplu (a,ia,ja,r,c,ic,n,max,d,t,it,jt,iu,w,p,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: max, n
+complex, intent(in) :: a(*)
+complex, intent(inout) :: d(n), t(max), w(n)
+integer, intent(in) :: ia(*), ja(*)
+integer, intent(in) :: r(n)
+integer, intent(inout) :: c(n), ic(n)
+integer, intent(inout) :: it(*), jt(max), iu(n)
+integer, intent(inout) :: p(*)
 integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 &maxil
+integer :: pm
+complex :: const, zero
+real :: wi, wmax
 !-----------------------------------------------------------------------
 !     csplu employs Gaussian elimination with column interchanges
 !     to perform the LU decomposition of a complex sparse matrix.
@@ -6209,16 +6219,6 @@ integer :: i, j, jj, jmax, jmin, jptr, k, lj, lk, ll, m, maxi, &
 !
 !     p        INTEGER ARRAY OF DIMENSION n+1.
 !-----------------------------------------------------------------------
-complex, intent(in) :: a(*)
-complex, intent(inout) :: d(n), t(max), w(n)
-integer, intent(in) :: ia(*), ja(*)
-integer, intent(in) :: r(n)
-integer, intent(inout) :: c(n), ic(n)
-integer, intent(inout) :: it(*), jt(max), iu(n)
-integer, intent(inout) :: p(*)
-integer :: pm
-complex :: const, zero
-real :: wi, wmax
 !--------------------
 data zero /(0.0, 0.0)/
 !--------------------
@@ -6375,11 +6375,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), wr(n), wi(n)
 !
 low = 1
 igh = n
@@ -6394,11 +6394,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                    Eigenvalues of real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), wr(n), wi(n)
 !
 low = 1
 igh = n
@@ -6413,11 +6413,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 !
 low = 1
 igh = n
@@ -6447,11 +6447,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
 !-----------------------------------------------------------------------
 !           Eigenvalues and eigenvectors of real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(ka,n), wr(n), wi(n), zr(ka,n), zi(ka,n)
 !
 low = 1
 igh = n
@@ -6479,17 +6479,17 @@ end subroutine eigv1
 subroutine balanc(nm,n,a,low,igh,scale)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: jj
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-integer :: iexc
 real, intent(inout) :: a(nm,n), scale(n)
+integer :: i, j, k, l, m
+integer :: jj
+integer :: iexc
 real :: c, f, g, r, s, b2, radix
 integer :: ipmpar
-!     real abs
 logical :: noconv
+!     real abs
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure balance,
@@ -6654,12 +6654,12 @@ end subroutine balanc
 
 subroutine balinv (nz,n,z,low,igh,scale)
 implicit none
-integer :: i, j, k
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nz, igh, low
 real, intent(inout) :: z(nz,n)
 real, intent(in) :: scale(n)
+integer :: i, j, k
+integer :: ii
 real :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. balanc transforms A into
@@ -6732,17 +6732,17 @@ end subroutine balinv
 subroutine elmhes(nm,n,low,igh,a,int)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: la
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
-integer :: mm1, mp1
 real, intent(inout) :: a(nm,n)
+integer, intent(inout) :: int(igh)
+integer :: i, j, m
+integer :: la
+integer :: kp1
+integer :: mm1, mp1
 real :: x, y
 !     real abs
-integer, intent(inout) :: int(igh)
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure elmhes,
@@ -6835,17 +6835,17 @@ end subroutine elmhes
 subroutine elmhs0(nm,n,low,igh,a,int)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: la
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
-integer :: mm1, mp1
 real, intent(inout) :: a(nm,n)
+real, intent(inout) :: int(igh)
+integer :: i, j, m
+integer :: la
+integer :: kp1
+integer :: mm1, mp1
 real :: x, y
 !     real abs
-real, intent(inout) :: int(igh)
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure elmhes,
@@ -6938,13 +6938,13 @@ end subroutine elmhs0
 subroutine orthes(nm,n,low,igh,a,ort)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: ii, jj, la, mp
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
 real, intent(inout) :: a(nm,n), ort(igh)
+integer :: i, j, m
+integer :: ii, jj, la, mp
+integer :: kp1
 real :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -7050,19 +7050,19 @@ end subroutine orthes
 subroutine hqr(nm,n,low,igh,h,wr,wi,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ll, mm, na
 integer, intent(in) :: nm, igh
-integer :: its
 integer, intent(in) :: low
-integer :: mp2, enm2
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n)
+integer :: i, j, k, l, m
+integer :: en, ll, mm, na
+integer :: its
+integer :: mp2, enm2
 real :: p, q, r, s, t, w, x, y, zz, norm, machep, spmpar
+logical :: notlas
 !     real sqrt,abs
 !     integer min0
-logical :: notlas
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure hqr,
@@ -7282,12 +7282,12 @@ end subroutine hqr
 subroutine balbak(nm,n,low,igh,scale,m,z)
 implicit none
 !
-integer :: i, j, k
 integer, intent(in) :: m, n
-integer :: ii
 integer, intent(in) :: nm, igh, low
 real, intent(in) :: scale(n)
 real, intent(inout) :: z(nm,m)
+integer :: i, j, k
+integer :: ii
 real :: s
 !-----------------------------------------------------------------------
 !
@@ -7359,14 +7359,14 @@ end subroutine balbak
 subroutine eltran(nm,n,low,igh,a,int,z)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: nm, igh, low
-integer :: mp1
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 integer, intent(in) :: int(igh)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -7440,14 +7440,14 @@ end subroutine eltran
 subroutine eltrn0(nm,n,low,igh,a,int,z)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: nm, igh, low
-integer :: mp1
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: z(nm,n)
 real, intent(in) :: int(igh)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure ELMTRANS,
@@ -7521,13 +7521,13 @@ end subroutine eltrn0
 subroutine ortran(nm,n,low,igh,a,ort,z)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: nm, igh, low
-integer :: mp1
 real, intent(in) :: a(nm,igh)
 real, intent(inout) :: ort(igh), z(nm,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 real :: g
 !-----------------------------------------------------------------------
 !
@@ -7610,14 +7610,14 @@ end subroutine ortran
 subroutine ortrn1(n,low,igh,a,na,z,nz,ort)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: na, igh, low
-integer :: mp1
 integer, intent(in) :: nz
 real, intent(in) :: a(na,igh)
 real, intent(inout) :: ort(igh), z(nz,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 real :: g
 !-----------------------------------------------------------------------
 !
@@ -7704,23 +7704,23 @@ end subroutine ortrn1
 subroutine hqr2(nm,n,low,igh,h,wr,wi,z,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ii, jj, ll, mm, na
 integer, intent(in) :: nm
-integer :: nn
 integer, intent(in) :: igh
-integer :: its
 integer, intent(in) :: low
-integer :: mp2, enm2
 integer, intent(out) :: ierr
 real, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+integer :: i, j, k, l, m
+integer :: en, ii, jj, ll, mm, na
+integer :: nn
+integer :: its
+integer :: mp2, enm2
 real :: p, q, r, s, t, w, x, y, ra, sa, vi, vr, zz, norm, machep, &
 &spmpar
-!     real sqrt,abs
-!     integer min0
 logical :: notlas
 complex :: z3
+!     real sqrt,abs
+!     integer min0
 !     complex cmplx
 !     real real,aimag
 !-----------------------------------------------------------------------
@@ -8129,11 +8129,11 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
 integer :: igh, low
 !-----------------------------------------------------------------------
 !                Eigenvalues of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n)
 !
 low = 1
 igh = n
@@ -8148,12 +8148,12 @@ implicit none
 integer, intent(in) :: ibal
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
+&zr(ka,n), zi(ka,n)
 integer :: igh, j, k, kp1, low
 !-----------------------------------------------------------------------
 !     Eigenvalues and eigenvectors of double precision matrices
 !-----------------------------------------------------------------------
-double precision, intent(inout) :: a(ka,n), wr(n), wi(n), &
-&zr(ka,n), zi(ka,n)
 !
 low = 1
 igh = n
@@ -8181,17 +8181,17 @@ end subroutine deigv
 subroutine dbal(nm,n,a,low,igh,scale)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: jj
 integer, intent(in) :: nm
 integer, intent(inout) :: igh, low
-integer :: iexc
 double precision, intent(inout) :: a(nm,n), scale(n)
+integer :: i, j, k, l, m
+integer :: jj
+integer :: iexc
 double precision :: c, f, g, r, s, b2, radix
 integer :: ipmpar
-!     double precision dabs
 logical :: noconv
+!     double precision dabs
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure balance,
@@ -8356,12 +8356,12 @@ end subroutine dbal
 
 subroutine dbalnv (nz,n,z,low,igh,scale)
 implicit none
-integer :: i, j, k
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nz, igh, low
 double precision, intent(inout) :: z(nz,n)
 double precision, intent(in) :: scale(n)
+integer :: i, j, k
+integer :: ii
 double precision :: s
 !-----------------------------------------------------------------------
 !        Given A matrix A of order n. dbal transforms A into
@@ -8434,13 +8434,13 @@ end subroutine dbalnv
 subroutine dorth(nm,n,low,igh,a,ort)
 implicit none
 !
-integer :: i, j, m
 integer, intent(in) :: n
-integer :: ii, jj, la, mp
 integer, intent(in) :: nm, igh
-integer :: kp1
 integer, intent(in) :: low
 double precision, intent(inout) :: a(nm,n), ort(igh)
+integer :: i, j, m
+integer :: ii, jj, la, mp
+integer :: kp1
 double precision :: f, g, h, scale
 !     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
@@ -8546,20 +8546,20 @@ end subroutine dorth
 subroutine dhqr(nm,n,low,igh,h,wr,wi,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ll, mm, na
 integer, intent(in) :: nm, igh
-integer :: its
 integer, intent(in) :: low
-integer :: mp2, enm2
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n)
+integer :: i, j, k, l, m
+integer :: en, ll, mm, na
+integer :: its
+integer :: mp2, enm2
 double precision :: p, q, r, s, t, w, x, y, zz, norm, machep, &
 &dpmpar
+logical :: notlas
 !     double precision dsqrt,dabs
 !     integer min0
-logical :: notlas
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure hqr,
@@ -8780,12 +8780,12 @@ end subroutine dhqr
 subroutine dbabk(nm,n,low,igh,scale,m,z)
 implicit none
 !
-integer :: i, j, k
 integer, intent(in) :: m, n
-integer :: ii
 integer, intent(in) :: nm, igh, low
 double precision, intent(in) :: scale(n)
 double precision, intent(inout) :: z(nm,m)
+integer :: i, j, k
+integer :: ii
 double precision :: s
 !-----------------------------------------------------------------------
 !
@@ -8857,13 +8857,13 @@ end subroutine dbabk
 subroutine dortrn(nm,n,low,igh,a,ort,z)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: nm, igh, low
-integer :: mp1
 double precision, intent(in) :: a(nm,igh)
 double precision, intent(inout) :: ort(igh), z(nm,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 double precision :: g
 !-----------------------------------------------------------------------
 !
@@ -8946,14 +8946,14 @@ end subroutine dortrn
 subroutine drtrn1(n,low,igh,a,na,z,nz,ort)
 implicit none
 !
-integer :: i, j
 integer, intent(in) :: n
-integer :: kl, mm, mp
 integer, intent(in) :: na, igh, low
-integer :: mp1
 integer, intent(in) :: nz
 double precision, intent(in) :: a(na,igh)
 double precision, intent(inout) :: ort(igh), z(nz,n)
+integer :: i, j
+integer :: kl, mm, mp
+integer :: mp1
 double precision :: g
 !-----------------------------------------------------------------------
 !
@@ -9040,23 +9040,23 @@ end subroutine drtrn1
 subroutine dhqr2(nm,n,low,igh,h,wr,wi,z,ierr)
 implicit none
 !
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: en, ii, jj, ll, mm, na
 integer, intent(in) :: nm
-integer :: nn
 integer, intent(in) :: igh
-integer :: its
 integer, intent(in) :: low
-integer :: mp2, enm2
 integer, intent(out) :: ierr
 double precision, intent(inout) :: h(nm,n), wr(n), wi(n), z(nm,n)
+integer :: i, j, k, l, m
+integer :: en, ii, jj, ll, mm, na
+integer :: nn
+integer :: its
+integer :: mp2, enm2
 double precision :: a, b, d, p, q, r, s, t, u, w, x, y
 double precision :: ra, sa, vi, vr, zz, norm, machep
-!     integer min0
-!     double precision dsqrt,dabs
 double precision :: dpmpar
 logical :: notlas
+!     integer min0
+!     double precision dsqrt,dabs
 !-----------------------------------------------------------------------
 !
 !     This subroutine is a translation of the Algol procedure hqr2,
@@ -9465,11 +9465,11 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka
 integer :: n
+real, intent(inout) :: a(*), w(n), t(*)
 integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(*), w(n), t(*)
 !
 if (ka .eq. 0) go to 10
    call tred1 (ka, n, a, w, t(n+1), t(1))
@@ -9486,11 +9486,11 @@ subroutine seig1 (a, ka, n, w, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(inout) :: a(*), w(n), t(n)
 integer :: l
 !-----------------------------------------------------------------------
 !               Eigenvalues of symmetric real matrices
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(*), w(n), t(n)
 !
 if (ka .eq. 0) go to 10
    call tred1 (ka, n, a, w, t, t)
@@ -9507,11 +9507,11 @@ subroutine seigv (a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: w(n), z(ka,n), t(n)
 !
 call tred2 (ka, n, a, w, t, z)
 call tql2 (ka, n, w, t, z, ierr)
@@ -9522,11 +9522,11 @@ subroutine seigv1 (a, ka, n, w, z, t, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, n
+real, intent(in) :: a(ka,n)
+real, intent(inout) :: w(n), z(ka,n), t(n)
 !-----------------------------------------------------------------------
 !        Eigenvalues and eigenvectors of symmetric real matrices
 !-----------------------------------------------------------------------
-real, intent(in) :: a(ka,n)
-real, intent(inout) :: w(n), z(ka,n), t(n)
 !
 call tred2 (ka, n, a, w, t, z)
 call imtql2 (ka, n, w, t, z, ierr)
@@ -9536,12 +9536,12 @@ end subroutine seigv1
 subroutine tred1(nm,n,a,d,e,e2)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nm
-integer :: jp1
 real, intent(inout) :: a(nm,n), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
 real :: f, g, h, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -9656,11 +9656,11 @@ end subroutine tred1
 subroutine tred3(n,nv,a,d,e,e2)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii, iz, jk
 integer, intent(in) :: nv
 real, intent(inout) :: a(nv), d(n), e(n), e2(n)
+integer :: i, j, k, l
+integer :: ii, iz, jk
 real :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -9772,14 +9772,14 @@ end subroutine tred3
 
 subroutine tqlrat(n,d,e2,ierr)
 implicit none
-real :: spmpar
-!
-integer :: i, j, l, m
 integer, intent(in) :: n
-integer :: ii, l1, mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e2(n)
+real :: spmpar
+integer :: i, j, l, m
+integer :: ii, l1, mml
 real :: b, c, f, g, h, p, r, s, machep
+!
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
@@ -9912,14 +9912,14 @@ end subroutine tqlrat
 
 subroutine imtql1(n,d,e,ierr)
 implicit none
-real :: spmpar
-!
-integer :: i, j, l, m
 integer, intent(in) :: n
-integer :: ii, mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n)
+real :: spmpar
+integer :: i, j, l, m
+integer :: ii, mml
 real :: b, c, f, g, p, r, s, machep
+!
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
@@ -10046,13 +10046,13 @@ end subroutine imtql1
 subroutine tred2(nm,n,a,d,e,z)
 implicit none
 !
-integer :: i, j, k, l
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nm
-integer :: jp1
 real, intent(in) :: a(nm,n)
 real, intent(inout) :: d(n), e(n), z(nm,n)
+integer :: i, j, k, l
+integer :: ii
+integer :: jp1
 real :: f, g, h, hh, scale
 !     real sqrt,abs
 !-----------------------------------------------------------------------
@@ -10190,16 +10190,16 @@ end subroutine tred2
 
 subroutine tql2(nm,n,d,e,z,ierr)
 implicit none
-real :: spmpar
-!
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: ii, l1
 integer, intent(in) :: nm
-integer :: mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
+real :: spmpar
+integer :: i, j, k, l, m
+integer :: ii, l1
+integer :: mml
 real :: b, c, f, g, h, p, r, s, machep
+!
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !
@@ -10369,16 +10369,16 @@ end subroutine tql2
 
 subroutine imtql2(nm,n,d,e,z,ierr)
 implicit none
-real :: spmpar
-!
-integer :: i, j, k, l, m
 integer, intent(in) :: n
-integer :: ii
 integer, intent(in) :: nm
-integer :: mml
 integer, intent(out) :: ierr
 real, intent(inout) :: d(n), e(n), z(nm,n)
+real :: spmpar
+integer :: i, j, k, l, m
+integer :: ii
+integer :: mml
 real :: b, c, f, g, p, r, s, machep
+!
 !     real sqrt,abs,spmpar
 !-----------------------------------------------------------------------
 !

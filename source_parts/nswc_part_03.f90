@@ -1,18 +1,18 @@
 subroutine cka (z, nu, w)
 implicit none
+complex :: z
+complex, intent(inout) :: w
+real, intent(in) :: nu
 integer :: i
 real :: a, c, eps, u, v
 real :: anorm
 real :: spmpar
+real :: m
+complex :: p, t, zr
 !-----------------------------------------------------------------------
 !        Computation of the Bessel function K for real order nu
 !        and complex argument z by the asymptotic expansion
 !-----------------------------------------------------------------------
-complex :: z
-complex, intent(inout) :: w
-real :: m
-real, intent(in) :: nu
-complex :: p, t, zr
 !--------------------------
 anorm(z) = amax1(abs(real(z)), abs(aimag(z)))
 !--------------------------
@@ -52,11 +52,16 @@ end subroutine cka
 subroutine ckm (z, r, zr, nu, w1, w2)
 implicit none
 real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex, intent(inout) :: w1, w2
+real, intent(in) :: nu
 integer :: k
 real :: a, ak, eps, eps0, g1, g2, gm1, gm2, phi, pi, t, tol, x, y
 real :: anorm
 real :: spmpar
 real :: gam1
+real :: d(7)
+complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 !-----------------------------------------------------------------------
 !
 !        Calculation of the modified Bessel functions
@@ -70,11 +75,6 @@ real :: gam1
 !     series expansions are used.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z, zr
-complex, intent(inout) :: w1, w2
-real, intent(in) :: nu
-real :: d(7)
-complex :: c, ch, cl, f, mu, p, q, sh, t1, t2, w
 !-----------------------
 data tol /1.e-10/
 data pi /3.14159265358979/
@@ -170,10 +170,16 @@ end subroutine ckm
 subroutine ckml (z, r, zr, nu, k1, k2)
 implicit none
 real, intent(in) :: r
+complex, intent(in) :: z, zr
+complex, intent(inout) :: k1, k2
+real, intent(in) :: nu
 integer :: i, m
 real :: a, al, b, c, c1, e, eps, eps0, th, x, y
 real :: cos1
 real :: spmpar
+complex :: bl, s, u1, u2, u3
+real :: l
+real :: nu2
 !-----------------------------------------------------------------------
 !
 !             Computation of the scaled Bessel functions
@@ -190,12 +196,6 @@ real :: spmpar
 !     r = abs(z/2) AND zr = 2/z.
 !
 !-----------------------------------------------------------------------
-complex, intent(in) :: z, zr
-complex, intent(inout) :: k1, k2
-complex :: bl, s, u1, u2, u3
-real :: l
-real, intent(in) :: nu
-real :: nu2
 !---------------------
 !     c1 = sqrt(pi/2)
 !---------------------
@@ -270,6 +270,7 @@ end subroutine ckml
 complex function cxp (n, nu)
 implicit none
 integer, intent(in) :: n
+real, intent(in) :: nu
 integer :: k
 real :: c, s
 real :: sin0
@@ -278,7 +279,6 @@ real :: cos0
 !                 Computation of exp(-R*(pi/2)*I)
 !              where R = n + nu for abs(nu) .LE. 0.5
 !-----------------------------------------------------------------------
-real, intent(in) :: nu
 !
 c = cos0(nu)
 s = sin0(nu)
@@ -304,6 +304,8 @@ end function cxp
 subroutine bsslk (mo, a, in, w)
 implicit none
 integer, intent(in) :: in, mo
+complex, intent(in) :: a
+complex, intent(inout) :: w
 integer :: i, la, lk, lr, m, n
 real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 &rm, rn, rz(2), sl(2), sm(2), sn, sq(2), sr(2), ss, sz(2), tm(2), &
@@ -316,8 +318,6 @@ real :: an, aq(2), az(2), cd(30), ce(30), pm, pn, qf(2), qm, qn, &
 !     in = order (integer)
 !     w  = Function of second kind (complex number)
 !     -------------------
-complex, intent(in) :: a
-complex, intent(inout) :: w
 data cd(1) / 0.00000000000000e00/,  cd(2) /-1.64899505142212e-2/, &
 &cd(3) /-7.18621880068536e-2/,  cd(4) /-1.67086878124866e-1/, &
 &cd(5) /-3.02582250219469e-1/,  cd(6) /-4.80613945245927e-1/, &
@@ -550,17 +550,17 @@ subroutine cai(ind,z,ai,aip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: ai
+complex, intent(inout) :: aip
 real :: a, b, r
 real :: cpabs
+complex :: bi
+complex :: bip
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: ai
-complex :: bi
-complex, intent(inout) :: aip
-complex :: bip
 ierr = 0
 a = real(z)
 b = aimag(z)
@@ -587,17 +587,17 @@ end subroutine cai
 subroutine airm (ind,z,ai,aip,bi,bip)
 implicit none
 integer, intent(in) :: ind
+complex, intent(inout) :: ai, aip, bi, bip
+complex, intent(in) :: z
 integer :: i, n
 real :: c1, c2, sqt3, x, y
+complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
+real :: a(8), b(8), c(8), d(8)
 !--------------------------------------------------------------
 !     Calculates the Airy functions ai and bi and their
 !     derivatives aip and bip by use of their Maclaurin
 !     expansions.
 !--------------------------------------------------------------
-complex, intent(inout) :: ai, aip, bi, bip
-complex, intent(in) :: z
-complex :: z1, z2, z3, zz, f, f1, g, g1, e, e1
-real :: a(8), b(8), c(8), d(8)
 !-----------------------
 !     c1 = 3**(-2/3)/gamma(2/3)
 !     c2 = 3**(-1/3)/gamma(1/3)
@@ -677,16 +677,16 @@ subroutine aii(ind, z, ai, aip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: ai, aip
 real :: a, b, c1, r
 real :: cpabs
+complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
 !------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip
 !     for complex argument z in the intermediate range 1 .LE.
 !     CABS(z) .LE. 10.0.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: ai, aip
-complex :: z1, z2, z3, zm, w1, w2, w1m, w2m, e
 !
 !     c1 = 1/(pi*sqrt(3))
 !
@@ -730,19 +730,19 @@ subroutine aia (ind, z, ai, aip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(inout) :: ai, aip
+complex, intent(in) :: z
 integer :: i, k, m, m2
 real :: c1, c2, eps, r, t, u, u1, v, v1, xm, xneg, xpos
 real :: exparg
 real :: spmpar
+complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
+complex :: alpha, beta, j
+real :: c(30), d(30)
 !-----------------------------------------------------------------------
 !     Calculates the Airy function ai and its derivative aip for
 !     complex argument z by means of asymptotic expansions.
 !-----------------------------------------------------------------------
-complex, intent(inout) :: ai, aip
-complex, intent(in) :: z
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, cn
-complex :: alpha, beta, j
-real :: c(30), d(30)
 !------------------------
 data c(1)  /.100000000000000e+01/, c(2)  /.694444444444444e-01/, &
 &c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
@@ -912,17 +912,17 @@ subroutine cbi(ind,z,bi,bip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: bi
+complex, intent(inout) :: bip
 real :: a, b, r
 real :: cpabs
+complex :: ai
+complex :: aip
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex :: ai
-complex, intent(inout) :: bi
-complex :: aip
-complex, intent(inout) :: bip
 ierr = 0
 a = real(z)
 b = aimag(z)
@@ -950,16 +950,16 @@ subroutine bii(ind, z, bi, bip, ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: bi, bip
 real :: a, c1, r, sqt3, x, y
 real :: cpabs
+complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
 !------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip
 !     for complex argument z in the intermediate range 1 .LE.
 !     CABS(z) .LE. 10.0.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
-complex :: z1, z2, zm, w1, w2, w1m, w2m, e, e1
 !
 !     c1 = 1/sqrt(3)
 !     sqt3 = sqrt(3)
@@ -1014,19 +1014,19 @@ subroutine bia(ind,z,bi,bip,ierr)
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: bi, bip
 integer :: i, k, m, m2
 real :: c(30), c1, c2, c3, ce, cf, d(30), eps, r, s, sqt3, t, u, &
 &u1, v, v1, x, xneg, xpos, y
 real :: exparg
 real :: spmpar
+complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, &
+&cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
 !---------------------------------------------------------------
 !     Calculates the Airy function bi and its derivative bip for
 !     complex argument z by means of asymptotic expansions.
 !---------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: bi, bip
-complex :: z1, z2, z2r, zz, w, w2, s1, s2, s3, s4, e, zeta, si, &
-&cn, cf1, cf2, ex3c, ex6, ex6c, cln2, alpha, beta, j, cz
 !------------------------
 data c(1)  /.100000000000000e+01/, c(2)  /.694444444444444e-01/, &
 &c(3)  /.371334876543210e-01/, c(4)  /.379930591278006e-01/, &
@@ -1311,8 +1311,13 @@ if(real(z) .ge. 0.0) go to 20
 
 subroutine imc(z, i1, i2, i1m, i2m)
 implicit none
+complex :: z
+complex, intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
 real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
+complex :: ia1, ia2, ia3, ib1, ib2, ib3
+complex :: sz, zh, e, cf1, cf2, cf3, cf4
+real :: m
 !----------------------------------------------------------------
 !     Calculates the modified Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
@@ -1322,10 +1327,6 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !     of orders -1/3 and -2/3, respectively.  For greatest
 !     accuracy, z should lie in the region real(z) .GE. 0.
 !----------------------------------------------------------------
-complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: sz, zh, e, cf1, cf2, cf3, cf4
-real :: m
 !
 !     gm1 = gamma(4.0/3.0)
 !     gm2 = gamma(5.0/3.0)
@@ -1380,19 +1381,19 @@ end subroutine imc
 subroutine bim(z,cn,w)
 implicit none
 real, intent(in) :: cn
+complex :: z
+complex, intent(inout) :: w
 real :: d, eps
 real :: anorm
 real :: spmpar
+real :: m
+complex :: sz, t
 !-------------------------------------------------------------
 !     Calculates the modified Bessel function of the first kind
 !     for real order cn .GT. -1 And complex argument z by means
 !     of the Maclaurin expansion.  w is replaced by the
 !     calculated value.
 !-------------------------------------------------------------
-real :: m
-complex :: z
-complex, intent(inout) :: w
-complex :: sz, t
 !------------------
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
@@ -1471,8 +1472,13 @@ if(real(z) .ge. 0.0) go to 20
 
 subroutine jmc(z, i1, i2, i1m, i2m)
 implicit none
+complex :: z
+complex, intent(inout) :: i1, i2, i1m, i2m
 integer :: i, n, n1
 real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
+complex :: ia1, ia2, ia3, ib1, ib2, ib3
+complex :: sz, zh, e, cf1, cf2, cf3, cf4
+real :: m
 !----------------------------------------------------------------
 !     Calculates the Bessel function of the first
 !     kind for orders 1/3, 2/3, -1/3, and -2/3 and for complex
@@ -1482,10 +1488,6 @@ real :: a, an, b, c1, c2, cfa, cfb, cn1, cn2, gm1, gm2
 !     of orders -1/3 and -2/3, respectively.  For greatest
 !     accuracy, z should lie in the region real(z) .GE. 0.
 !----------------------------------------------------------------
-complex :: z, ia1, ia2, ia3, ib1, ib2, ib3
-complex, intent(inout) :: i1, i2, i1m, i2m
-complex :: sz, zh, e, cf1, cf2, cf3, cf4
-real :: m
 !
 !     gm1 = gamma(4.0/3.0)
 !     gm2 = gamma(5.0/3.0)
@@ -1540,19 +1542,19 @@ end subroutine jmc
 subroutine bjm(z,cn,w)
 implicit none
 real, intent(in) :: cn
+complex :: z
+complex, intent(inout) :: w
 real :: d, eps
 real :: anorm
 real :: spmpar
+real :: m
+complex :: sz, t
 !-------------------------------------------------------------
 !     Calculates the Bessel function of the first kind
 !     for real order cn .GT. -1 And complex argument z by means
 !     of the Maclaurin expansion.  w is replaced by the
 !     calculated value.
 !-------------------------------------------------------------
-real :: m
-complex :: z
-complex, intent(inout) :: w
-complex :: sz, t
 !------------------
 anorm(z) = amax1(abs(real(z)),abs(aimag(z)))
 !-------------------------------------------------------------
@@ -1585,8 +1587,11 @@ end subroutine bjm
 subroutine ka(ind, z, k1, k2)
 implicit none
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: k1, k2
 integer :: ind1
 real :: a, b, pi
+complex :: i1, i2, i1m, i2m, cz, ex13c, ex23c, j, e
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z,
@@ -1594,9 +1599,6 @@ real :: a, b, pi
 !     function of order 1/3, and k2 by the function of order
 !     2/3.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
-complex :: i1, i2, i1m, i2m, cz, ex13c, ex23c, j, e
 !
 !     ex13c = exp(-pi*i/3)
 !     ex23c = exp(-2*pi*i/3)
@@ -1636,9 +1638,12 @@ end subroutine ka
 subroutine kml(ind, z, k1, k2)
 implicit none
 integer, intent(in) :: ind
+complex, intent(in) :: z
+complex, intent(inout) :: k1, k2
 integer :: i, l, m
 real :: a, ai, al, b, c, c1, eps, r, th, x1, x2
 real :: spmpar
+complex :: bi, u1, u2, u3, s, e
 !------------------------------------------------------------
 !     Calculates the modified Bessel function of the second
 !     kind for orders 1/3 and 2/3 and for complex argument z
@@ -1647,9 +1652,6 @@ real :: spmpar
 !     2/3.  For greatest accuracy, z should lie in the region
 !     real(z) .GE. 0.
 !------------------------------------------------------------
-complex, intent(in) :: z
-complex, intent(inout) :: k1, k2
-complex :: bi, u1, u2, u3, s, e
 !
 !     c1 = sqrt(pi/2)
 !
@@ -2293,22 +2295,22 @@ end subroutine aimp
 
 complex function ck(k,l)
 implicit none
+complex, intent(in) :: k, l
 integer :: i, ind
 real :: c1, c2, eps, phi, r, t, tol, u, v, x, xx, y
 real :: spmpar
 real :: alnrel
-!     ------------------------------------------------------------------
-!     This function calculates the complete elliptic integral F(k)
-!     for complex values of the modulus k. it is assumed that l.NE.0
-!     and that k**2 + l**2 = 1.
-!     ------------------------------------------------------------------
-complex, intent(in) :: k, l
 complex :: ak, al, ak1, al1, al2, ckk, ckp, f1, f2, f3, fxk, &
 &aktemp, ck1, j
 complex :: cflect, km, z
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
 &fb(12)
 logical :: branch
+!     ------------------------------------------------------------------
+!     This function calculates the complete elliptic integral F(k)
+!     for complex values of the modulus k. it is assumed that l.NE.0
+!     and that k**2 + l**2 = 1.
+!     ------------------------------------------------------------------
 !     --------------------------------------------------------------
 data x1(1)/ 6.5487222790801e-03/, x1(2)/ 3.8946809560450e-02/, &
 &x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
@@ -2540,15 +2542,15 @@ end function cflect
 
 complex function km(k2)
 implicit none
+complex, intent(in) :: k2
 integer :: i
 real :: c, eps, hpi, ri, tol
 real :: spmpar
-complex, intent(in) :: k2
+complex :: an, s1
 !---------------------------------------------------------------------
 !     km computes the complete elliptic integral F(K) for a given
 !     value of k2 = K**2 by use of the Maclaurin expansion.
 !---------------------------------------------------------------------
-complex :: an, s1
 data hpi /1.5707963267949/
 ! ---------------
 !
@@ -2576,20 +2578,20 @@ end function km
 
 subroutine kl (l, fk, fl)
 implicit none
+complex, intent(in) :: l
+complex, intent(inout) :: fk, fl
 integer :: i
 real :: bn, c, eps, hpi, ri, tol, u, x, y
 real :: spmpar
 real :: alnrel
-complex, intent(in) :: l
-complex, intent(inout) :: fk, fl
+complex :: an, l2, s1, s2, w
+real :: ln4
 ! ----------------------------------------------------------------------
 !     kl computes the complete elliptic integrals F(K) and F(l) for
 !     a given value of l, where cabs(l) .LT. 1 and K**2 + l**2 = 1.
 !     It is assumed that -Pi .LE. arg(l**2) .LT. pi for the resulting
 !     value for F(K) to be meaningful.
 ! ----------------------------------------------------------------------
-complex :: an, l2, s1, s2, w
-real :: ln4
 !     --------------
 data hpi /1.5707963267949/
 data ln4 /1.3862943611199/
@@ -2650,23 +2652,23 @@ end subroutine kl
 subroutine cke(k,l,ck,ce,ierr)
 implicit none
 integer, intent(inout) :: ierr
+complex, intent(in) :: k, l
+complex, intent(inout) :: ce, ck
 integer :: i, ind
 real :: c, c1, c2, eps, phi, r, t, tol, u, v, x, xx, y
 real :: alnrel
 real :: spmpar
-!     ------------------------------------------------------------------
-!     This function calculates the complete elliptic integrals F(k)
-!     and E(k) for complex values of the modulus k. it is assumed
-!     that l.NE.0 and that k**2 + l**2 = 1.
-!     ------------------------------------------------------------------
-complex, intent(in) :: k, l
 complex :: ak, al, ak1, al1, ckk, ckp, f1, f2, f3, aktemp, ck1, j
-complex, intent(inout) :: ce, ck
 complex :: cee, cep, ce1, e1, e2, e3, at, fx, fxk, atn
 complex :: cflect, k1, l1, ak2, al2, z, g, g1, gg, gp
 real :: ln4, x1(12), x2(12), w1(12), w2(12), fl(12), fa(12), &
 &fb(12)
 logical :: branch
+!     ------------------------------------------------------------------
+!     This function calculates the complete elliptic integrals F(k)
+!     and E(k) for complex values of the modulus k. it is assumed
+!     that l.NE.0 and that k**2 + l**2 = 1.
+!     ------------------------------------------------------------------
 !     --------------------------------------------------------------
 data x1(1)/ 6.5487222790801e-03/, x1(2)/ 3.8946809560450e-02/, &
 &x1(3)/ 9.8150263106007e-02/, x1(4)/ 1.8113858159063e-01/, &
@@ -2925,14 +2927,14 @@ end subroutine cke
 
 complex function atn(z)
 implicit none
+complex, intent(in) :: z
 real :: atn1, atn2, d, da, db, t, x, y
 real :: alnrel
+double precision :: dx, dy
 !---------------------------------------------------
 !     Calculates complex function atn(z) = z*atan(z)
 !     using double precision.
 !---------------------------------------------------
-complex, intent(in) :: z
-double precision :: dx, dy
 x = real(z)
 y = aimag(z)
 dx = x
@@ -2949,16 +2951,16 @@ end function atn
 
 subroutine ekm (k2, fk, ek)
 implicit none
+complex, intent(in) :: k2
+complex, intent(inout) :: fk, ek
 integer :: i
 real :: c, eps, hpi, ri, tol
 real :: spmpar
-complex, intent(in) :: k2
-complex, intent(inout) :: fk, ek
+complex :: an, cn, s1, s2
 ! ----------------------------------------------------------------------
 !     ekm computes the complete elliptic integrals F(K) and E(K) for
 !     a given value of k2 = K**2 by use of the Maclaurin expansions.
 ! ----------------------------------------------------------------------
-complex :: an, cn, s1, s2
 data hpi /1.5707963267949/
 ! ---------------
 !
@@ -2990,13 +2992,15 @@ end subroutine ekm
 
 subroutine ekl (l,fk,fl,ek,el,gk,gl)
 implicit none
+complex, intent(in) :: l
+complex, intent(inout) :: fk, fl, ek, el, gk, gl
 integer :: i
 real :: bn, c, dn, eps, fn, gn, hpi, ri, tol, u, x, y
 real :: spmpar
 real :: alnrel
-complex, intent(in) :: l
 complex :: l2
-complex, intent(inout) :: fk, fl, ek, el, gk, gl
+complex :: an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
+real :: ln4
 ! ----------------------------------------------------------------------
 !     ekl computes the complete elliptic integrals F(K), F(l), E(K),
 !     E(l) for a given value of l2, where l2 = l**2 and K**2 + l**2 = 1.
@@ -3005,8 +3009,6 @@ complex, intent(inout) :: fk, fl, ek, el, gk, gl
 !     G(K) = E(K) - l**2*F(K) and G(l) = E(l) - K**2*F(l) are also
 !     calculated.
 ! ----------------------------------------------------------------------
-complex :: an, cn, en, s1, s2, s3, s4, s5, s6, s7, w
-real :: ln4
 !     ------------------
 data hpi /1.5707963267949/
 data ln4 /1.3862943611199/
@@ -3092,11 +3094,13 @@ integer, intent(inout) :: ierr
 real, intent(in) :: cphi
 real, intent(inout) :: e, f
 real, intent(in) :: phi
+real, intent(in) :: k, l
 real :: an, cn, d1, d2, d3, d4, dn, hn, p, pn, px, qn, qx, r, r0, &
 &r2, ri, rj, rk, rm, rn, s0, s1, s2, s3, s4, si, sj, sk, sn, ss, &
 &t1, t2, td, th1, tr, ts, w
 real :: alnrel
 real :: cpabs
+real :: k2, l2, ln4
 !-----------------------------------------------------------------------
 !
 !          Real elliptic integrals of the first and second kinds
@@ -3111,8 +3115,6 @@ real :: cpabs
 !     e = Elliptic integral of second kind = e(phi, k)
 !     ierr = ERROR INDICATOR (ierr = 0  IF NO ERRORS)
 !-----------------------------------------------------------------------
-real, intent(in) :: k, l
-real :: k2, l2, ln4
 !------------------------
 !     ln4 = ln(4)
 !     th1 = tanh(1)
@@ -3234,6 +3236,12 @@ end subroutine ellpi
 subroutine dellpi (phi, cphi, k, l, f, e, ierr)
 implicit none
 integer, intent(inout) :: ierr
+double precision, intent(in) :: phi, cphi, k, l
+double precision, intent(inout) :: f, e
+double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, ln4, &
+&p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
+&ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
+double precision :: dlnrel, dcpabs
 !-----------------------------------------------------------------------
 !
 !                  Double precision computation of the
@@ -3249,12 +3257,6 @@ integer, intent(inout) :: ierr
 !     e = Elliptic integral of second kind = e(phi, k)
 !     ierr = ERROR INDICATOR (ierr = 0  IF NO ERRORS)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: phi, cphi, k, l
-double precision, intent(inout) :: f, e
-double precision :: an, cn, dn, d1, d2, d3, d4, hn, k2, l2, ln4, &
-&p, pn, px, qn, qx, r, ri, rj, rk, rm, rn, r0, r2, si, sj, sk, sn, &
-&ss, s0, s1, s2, s3, s4, td, th1, tr, ts, t1, t2, w
-double precision :: dlnrel, dcpabs
 !------------------------
 !     ln4 = ln(4)
 !     th1 = tanh(1)
@@ -3376,13 +3378,13 @@ end subroutine dellpi
 subroutine epi (phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
-!-----------------------------------------------------------------------
-!             Real elliptic integral of the third kind
-!-----------------------------------------------------------------------
 real, intent(in) :: phi, cphi, k2, l2, n, m
 real, intent(inout) :: p
 real :: a, b, c, eps, pihalf, r, rf, s, s2, tol
 real :: spmpar
+!-----------------------------------------------------------------------
+!             Real elliptic integral of the third kind
+!-----------------------------------------------------------------------
 !---------------------
 data pihalf /1.5707963267948966192/
 !-----------------------------------------------------------------------
@@ -3439,14 +3441,14 @@ end subroutine epi
 subroutine depi (phi, cphi, k2, l2, n, m, p, ierr)
 implicit none
 integer, intent(inout) :: ierr
-!-----------------------------------------------------------------------
-!               Double precision computation of the
-!             real elliptic integral of the third kind
-!-----------------------------------------------------------------------
 double precision, intent(in) :: phi, cphi, k2, l2, n, m
 double precision, intent(inout) :: p
 double precision :: a, b, c, eps, pihalf, r, rf, s, s2, tol
 double precision :: dpmpar
+!-----------------------------------------------------------------------
+!               Double precision computation of the
+!             real elliptic integral of the third kind
+!-----------------------------------------------------------------------
 !---------------------
 data pihalf /1.570796326794896619231321691639751442099d0/
 !-----------------------------------------------------------------------
@@ -3525,13 +3527,13 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rf
+real, intent(in) :: x
+real, intent(in) :: y
+real, intent(in) :: z
 real :: c1, c2, c3, e2, e3, epslon, errtol, lamda
 real :: lolim, mu, s, uplim
-real, intent(in) :: x
 real :: xn, xndev, xnroot
-real, intent(in) :: y
 real :: yn, yndev, ynroot
-real, intent(in) :: z
 real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
@@ -3643,13 +3645,13 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rf
+double precision, intent(in) :: x
+double precision, intent(in) :: y
+double precision, intent(in) :: z
 double precision :: c1, c2, c3, e2, e3, epslon, errtol, lamda
 double precision :: lolim, mu, s, uplim
-double precision, intent(in) :: x
 double precision :: xn, xndev, xnroot
-double precision, intent(in) :: y
 double precision :: yn, yndev, ynroot
-double precision, intent(in) :: z
 double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -3761,14 +3763,14 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rd
+real, intent(in) :: x
+real, intent(in) :: y
+real, intent(in) :: z
 real :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, errtol, lamda
 real :: lolim, mu, power4, sigma, s1, s2, uplim
-real, intent(in) :: x
 real :: xn, xndev
 real :: xnroot
-real, intent(in) :: y
 real :: yn, yndev, ynroot
-real, intent(in) :: z
 real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
@@ -3891,15 +3893,15 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rd
+double precision, intent(in) :: x
+double precision, intent(in) :: y
+double precision, intent(in) :: z
 double precision :: c1, c2, c3, c4, ea, eb, ec, ed, ef, epslon, &
 &errtol, lamda
 double precision :: lolim, mu, power4, sigma, s1, s2, uplim
-double precision, intent(in) :: x
 double precision :: xn, xndev
 double precision :: xnroot
-double precision, intent(in) :: y
 double precision :: yn, yndev, ynroot
-double precision, intent(in) :: z
 double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -4023,17 +4025,17 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rj
+real, intent(in) :: p
+real, intent(in) :: x
+real, intent(in) :: y
+real, intent(in) :: z
 real :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, e2, e3
 real :: epslon, errtol, etolrc, lamda, lolim, mu
-real, intent(in) :: p
 real :: pn, pndev
 real :: power4, sigma, s1, s2, s3, uplim
-real, intent(in) :: x
 real :: xn, xndev
 real :: xnroot
-real, intent(in) :: y
 real :: yn, yndev, ynroot
-real, intent(in) :: z
 real :: zn, zndev, znroot
 real :: spmpar
 !-----------------------------------------------------------------------
@@ -4171,18 +4173,18 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rj
+double precision, intent(in) :: p
+double precision, intent(in) :: x
+double precision, intent(in) :: y
+double precision, intent(in) :: z
 double precision :: rc, alfa, beta, c1, c2, c3, c4, ea, eb, ec, &
 &e2, e3
 double precision :: epslon, errtol, etolrc, lamda, lolim, mu
-double precision, intent(in) :: p
 double precision :: pn, pndev
 double precision :: power4, sigma, s1, s2, s3, uplim
-double precision, intent(in) :: x
 double precision :: xn, xndev
 double precision :: xnroot
-double precision, intent(in) :: y
 double precision :: yn, yndev, ynroot
-double precision, intent(in) :: z
 double precision :: zn, zndev, znroot
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -4319,13 +4321,13 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 real, intent(inout) :: rc
-real :: c1, c2
 real, intent(in) :: errtol
+real, intent(in) :: x
+real, intent(in) :: y
+real :: c1, c2
 real :: lamda, lolim
 real :: mu, s, sn, uplim
-real, intent(in) :: x
 real :: xn
-real, intent(in) :: y
 real :: yn
 real :: spmpar
 !-----------------------------------------------------------------------
@@ -4428,13 +4430,13 @@ implicit none
 !-----------------------------------------------------------------------
 integer, intent(inout) :: ierr
 double precision, intent(inout) :: rc
-double precision :: c1, c2
 double precision, intent(in) :: errtol
+double precision, intent(in) :: x
+double precision, intent(in) :: y
+double precision :: c1, c2
 double precision :: lamda, lolim
 double precision :: mu, s, sn, uplim
-double precision, intent(in) :: x
 double precision :: xn
-double precision, intent(in) :: y
 double precision :: yn
 double precision :: dpmpar
 !-----------------------------------------------------------------------
@@ -4509,6 +4511,7 @@ implicit none
 integer, intent(inout) :: ierr
 real, intent(inout) :: c, d, s
 real, intent(in) :: u
+real, intent(in) :: k, l
 integer :: max, n
 real :: e, eps, f, f2, pihalf, r, sg, tol, u1, u2, z
 integer :: ipmpar
@@ -4518,7 +4521,6 @@ real :: spmpar
 !     DN(u,k) for real u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
-real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     ----------------
 !     ****** max and eps are machine dependent constants.
@@ -4602,6 +4604,7 @@ real, intent(inout) :: c, d
 real, intent(in) :: f
 real, intent(inout) :: s
 real, intent(in) :: u
+real, intent(in) :: k, l
 integer :: ierr
 real :: c1, d1, e1, f1, pihalf, s1, v
 !     --------------------------------------------------------
@@ -4612,7 +4615,6 @@ real :: c1, d1, e1, f1, pihalf, s1, v
 !     first kind, and f1 = f(l) is the complementary integral.
 !     It is assumed that k**2 + l**2 = 1.
 !     --------------------------------------------------------
-real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     ------------------------
 if (k .eq. 0.0) go to 40
@@ -4656,14 +4658,14 @@ subroutine scdm(u,k,s,c,d)
 implicit none
 real, intent(out) :: c, d, s
 real, intent(in) :: u
+real, intent(in) :: k
 real :: c1, c2, c3, c4, u2
+real :: k2
 !     -------------------------------------------------
 !     Calculates SN(u,k), CN(u,k), and DN(u,k) for
 !     0.0 .LE. u .LE. 0.01 and for 0.0 .LE. k .LE. 1.0
 !     by use of the Maclaurin expansion for SN(u,k)
 !     -------------------------------------------------
-real, intent(in) :: k
-real :: k2
 !
 k2 = k*k
 u2 = u*u
@@ -4684,9 +4686,11 @@ real, intent(inout) :: c, d
 real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
+real, intent(in) :: k, l
 real :: a, ai, coef, eps, pihalf, q1, q2, qd, qh, qn, sum, temp, &
 &tol, v, w, x
 real :: spmpar
+real :: i
 !     -------------------------------------------------------------
 !     scdf computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k by use of the Fourier expansion for SN(u,k).  It is
@@ -4695,8 +4699,6 @@ real :: spmpar
 !     first kind and f1 = f(l) is the complementary integral, with
 !     l .NE. 0. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
-real :: i
-real, intent(in) :: k, l
 data pihalf /1.5707963267949/
 !     -------------------------------------------------
 !     Eps is a machine dependent constant.  Eps is the
@@ -4751,9 +4753,11 @@ real, intent(inout) :: c, d
 real, intent(in) :: f, f1
 real, intent(inout) :: s
 real, intent(in) :: u
+real, intent(in) :: k, l
 real :: a, ch, coef, e1, e1n, e2, e2n, eps, pi, pihalf, q1, q1n, &
 &q2, q2n, sh, sum, temp, tol, v, w, x, x2, xn
 real :: spmpar
+real :: n
 !     ----------------------------------------------------------------
 !     scdj computes SN(u,k), CN(u,k), and DN(u,k) for real u and
 !     k using the imaginary transformation of Jacobi and A
@@ -4762,8 +4766,6 @@ real :: spmpar
 !     integral of the first kind and f1 = f(l) is the complementary
 !     integral, and that l .NE. 0. And k**2 + l**2 = 1.
 !     ----------------------------------------------------------------
-real, intent(in) :: k, l
-real :: n
 data pihalf /1.5707963267949/
 data pi /3.1415926535898/
 !     ------------------------------------------------
@@ -4832,17 +4834,17 @@ end subroutine scdj
 subroutine elpfc1 (u,k,l,s,c,d,ierr)
 implicit none
 integer, intent(inout) :: ierr
+complex, intent(in) :: u
+complex, intent(inout) :: s, c, d
+real, intent(in) :: k, l
 real :: c1, c2, ck, cl, coef, d1, d2, dk, dl, r, s1, s2, sk, sl, &
 &t, t1, t2, td1, td2, u1, u2
+real :: k2
 !     -------------------------------------------------------------
 !     elpfc1 calculates the elliptic functions sn(u,k), CN(u,k),
 !     DN(u,k) for complex u and real modulus k.  it is assumed that
 !     abs(k) .LE. 1. AND k**2 + l**2 = 1.
 !     -------------------------------------------------------------
-complex, intent(in) :: u
-complex, intent(inout) :: s, c, d
-real, intent(in) :: k, l
-real :: k2
 !
 u1 = real(u)
 u2 = aimag(u)
@@ -4926,10 +4928,10 @@ implicit none
 !     for complex argument with unit period parallelogram
 !
 complex, intent(in) :: z
-complex :: z1, z4, z6
 complex, intent(inout) :: w
-real :: zr, zi
 integer, intent(inout) :: ierr
+complex :: z1, z4, z6
+real :: zr, zi
 integer :: m, n
 !
 !     Reduction to fundamental parallelogram
@@ -4973,10 +4975,10 @@ implicit none
 !     with unit period parallelogram
 !
 complex, intent(in) :: z
-complex :: z1, z3, z6
 complex, intent(inout) :: w
-real :: zr, zi
 integer, intent(inout) :: ierr
+complex :: z1, z3, z6
+real :: zr, zi
 integer :: m, n
 !
 !     Reduction to fundamental parallelogram
@@ -5020,10 +5022,10 @@ implicit none
 !     for complex argument with unit period parallelogram
 !
 complex, intent(in) :: z
-complex :: z1, z4, z6
 complex, intent(inout) :: w
-real :: zr, zi
 integer, intent(inout) :: ierr
+complex :: z1, z4, z6
+real :: zr, zi
 integer :: m, n
 !
 !     Reduction to fundamental parallelogram
@@ -5068,10 +5070,10 @@ implicit none
 !     with unit period parallelogram
 !
 complex, intent(in) :: z
-complex :: z1, z3, z4
 complex, intent(inout) :: w
-real :: zr, zi
 integer, intent(inout) :: ierr
+complex :: z1, z3, z4
+real :: zr, zi
 integer :: m, n
 !
 !     Reduction to fundamental parallelogram
@@ -5125,8 +5127,8 @@ real :: a3d8(3), aj0, aj1, alnpi, aph1(3), aph2(3), aph4(3), b, &
 &rtpii, sum, t, t1, tau, tausq, twopi, u, v, w, xk, yk, ykm1, z
 real :: erfc1
 real :: spmpar
-!     -------------------
 real :: kom, l
+!     -------------------
 !     -------------------
 data pi/3.1415926535898/
 data twopi/6.28318530717958/
@@ -5412,6 +5414,7 @@ real :: erfcr
 real :: rcomp
 real :: rexp
 real :: spmpar
+real :: m, m0
 !-----------------------------------------------------------------------
 !       If j .NE. 0, output is p = Circular coverage function. p gives
 !       the probability of a shot falling, under a normal distribution
@@ -5437,7 +5440,6 @@ real :: spmpar
 !-----------------------------------------------------------------------
 !       Negative r and d are not permitted.
 !--------------------------------------------
-real :: m, m0
 !-----------------------
 !     c1 = 1/sqrt(2)
 !     c2 = 1/sqrt(pi)
@@ -5657,6 +5659,8 @@ real, intent(inout) :: e
 real, intent(in) :: x
 real, intent(inout) :: y
 real :: ax, bot, c, eps, t, top
+real :: a(4), b(4), p(8), q(8), r(5), s(5)
+double precision :: w
 !-----------------------------------------------------------------------
 !         Evaluation of the complementary error function
 !
@@ -5668,8 +5672,6 @@ real :: ax, bot, c, eps, t, top
 !     negative then e is set to exp(-x*x) when this value is needed.
 !
 !-----------------------------------------------------------------------
-real :: a(4), b(4), p(8), q(8), r(5), s(5)
-double precision :: w
 !-------------------------
 data c/.564189583547756/
 !-------------------------
@@ -5758,10 +5760,10 @@ real function erfcr (x)
 implicit none
 real, intent(in) :: x
 real :: bot, t, top
+real :: r(5), s(4)
 !-----------------------------------------------------------------------
 !     Computation of  1/sqrt(PI) - x*exp(x*x)*erfc(x)  for x .GE. 4
 !-----------------------------------------------------------------------
-real :: r(5), s(4)
 !------------------------
 data r(1)/2.10144126479064e+00/,  r(2)/2.62370141675169e+01/, &
 &r(3)/2.13688200555087e+01/,  r(4)/4.65807828718470e+00/, &
@@ -5781,6 +5783,7 @@ implicit none
 real, intent(in) :: h
 real, intent(out) :: p
 real, intent(in) :: r0, sx, sy
+real, intent(in) :: k
 integer :: i, ii, iy, iz, iz3, j, j8, n1, nt
 real :: a, a1, a2, a3, a4, c, c8, d, d1, d2, dm, e3, e4, eps, f, &
 &g2, g3, h1, h2, h3, h5, h6, h8, q, q1, r, r8, rpi, rt2, s0, s1, &
@@ -5790,6 +5793,7 @@ real :: exparg
 real :: aerf
 real :: epsln
 real :: spmpar
+real :: k8, v(16), w(16)
 !-----------------------------------------------------------------------
 !
 !           Computation of the elliptical coverage function
@@ -5801,8 +5805,6 @@ real :: spmpar
 !     FOR S = min(sx,sy).
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: k
-real :: k8, v(16), w(16)
 !-----------------------------------------------------------------------
 !   v(*), w(*)-- Gaussian abscissas and weights of order 32, on (-1,1).
 !-----------------------------------------------------------------------
@@ -6227,12 +6229,12 @@ end subroutine pkill
 subroutine plcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
+real, intent(in) :: a(*)
+real, intent(inout) :: b(*)
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying real polynomials
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
 !
 la = 1
 lb = 1
@@ -6255,12 +6257,12 @@ end subroutine plcopy
 subroutine dpcopy (a,ka,m,b,kb,n)
 implicit none
 integer, intent(in) :: ka, kb, m, n
+double precision, intent(in) :: a(*)
+double precision, intent(inout) :: b(*)
 integer :: j, jmax, la, lb, mp1
 !     ------------------------------------------------------------------
 !     Copying double precision polynomials
 !     ------------------------------------------------------------------
-double precision, intent(in) :: a(*)
-double precision, intent(inout) :: b(*)
 !
 la = 1
 lb = 1
@@ -6283,12 +6285,12 @@ end subroutine dpcopy
 subroutine padd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of real polynomials
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
 !
 la = 1
 lb = 1
@@ -6307,12 +6309,12 @@ end subroutine padd
 subroutine dpadd (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Addition of double precision polynomials
 !     ------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
 !
 la = 1
 lb = 1
@@ -6331,12 +6333,12 @@ end subroutine dpadd
 subroutine psubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of real polynomials
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
 !
 la = 1
 lb = 1
@@ -6355,12 +6357,12 @@ end subroutine psubt
 subroutine dpsubt (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*)
 integer :: i, la, lb, lc
 !     ------------------------------------------------------------------
 !     Subtraction of double precision polynomials
 !     ------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
 !
 la = 1
 lb = 1
@@ -6379,13 +6381,13 @@ end subroutine dpsubt
 subroutine pmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
+double precision :: dsum
 !     ------------------------------------------------------------------
 !     Multiplication of real polynomials
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
-double precision :: dsum
 !
 lc = 1
 jmax = min0(l + m - 1, n)
@@ -6420,13 +6422,13 @@ end subroutine pmult
 subroutine dpmult (a,ka,l,b,kb,m,c,kc,n)
 implicit none
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*)
 integer :: i, imax, imin, j, jmax, jmin, la, lb, lc
+double precision :: sum
 !     ------------------------------------------------------------------
 !     Multiplication of double precision polynomials
 !     ------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
-double precision :: sum
 !
 lc = 1
 jmax = min0(l + m - 1, n)
@@ -6462,14 +6464,14 @@ subroutine pdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
+real, intent(in) :: a(*), b(*)
+real, intent(inout) :: c(*)
 integer :: i, ib, ic, imax, j, la, lc
 real :: b0
+double precision :: dsum
 !     ------------------------------------------------------------------
 !     Division of real polynomials
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*), b(*)
-real, intent(inout) :: c(*)
-double precision :: dsum
 !
 b0 = b(1)
 if (b0 .eq. 0.0) go to 100
@@ -6521,13 +6523,13 @@ subroutine dpdiv (a,ka,l,b,kb,m,c,kc,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, kc, l, m, n
+double precision, intent(in) :: a(*), b(*)
+double precision, intent(inout) :: c(*)
 integer :: i, ib, ic, imax, j, la, lc
+double precision :: b0, sum
 !     ------------------------------------------------------------------
 !     Division of double precision polynomials
 !     ------------------------------------------------------------------
-double precision, intent(in) :: a(*), b(*)
-double precision, intent(inout) :: c(*)
-double precision :: b0, sum
 !
 b0 = b(1)
 if (b0 .eq. 0.d0) go to 100
@@ -6580,15 +6582,15 @@ implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
 real, intent(in) :: r
+real, intent(in) :: a(*)
+real, intent(inout) :: b(*)
 integer :: i, ia, ib, imax, j, lb
 real :: a0
+real :: jm1
+double precision :: coeff, dsum, rp1
 !     ------------------------------------------------------------------
 !     SET b = a**r WHERE A IS A REAL POLYNOMIAL
 !     ------------------------------------------------------------------
-real, intent(in) :: a(*)
-real, intent(inout) :: b(*)
-real :: jm1
-double precision :: coeff, dsum, rp1
 !
 a0 = a(1)
 if (a0 .le. 0.0) go to 100
@@ -6638,14 +6640,14 @@ subroutine dplpwr(r,a,ka,m,b,kb,n,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: ka, kb, m, n
-integer :: i, ia, ib, imax, j, lb
-!     ------------------------------------------------------------------
-!     Set b = a**r where A is a double precision polynomial
-!     ------------------------------------------------------------------
 double precision, intent(in) :: a(*)
 double precision, intent(inout) :: b(*)
 double precision, intent(in) :: r
+integer :: i, ia, ib, imax, j, lb
 double precision :: a0, coeff, jm1, rp1, sum
+!     ------------------------------------------------------------------
+!     Set b = a**r where A is a double precision polynomial
+!     ------------------------------------------------------------------
 !
 a0 = a(1)
 if (a0 .le. 0.d0) go to 100
@@ -6694,14 +6696,14 @@ end subroutine dplpwr
 subroutine pinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
+real, intent(in) :: a(n)
+real, intent(inout) :: d(n), q(*)
 integer :: i, j, jj, k, l, l0, ll, m
 real :: s, sum, t, u
 !-----------------------------------------------------------------------
 !          Computation of the inverse of the power series
 !                  sum (a(i)*X**i, i = 1,2,...)
 !-----------------------------------------------------------------------
-real, intent(in) :: a(n)
-real, intent(inout) :: d(n), q(*)
 !----------------------------
 !     num = (n*(n + 1))/2
 !     real q(num)
@@ -6755,14 +6757,14 @@ end subroutine pinv
 subroutine dpinv (a, d, n, q)
 implicit none
 integer, intent(in) :: n
+double precision, intent(in) :: a(n)
+double precision, intent(inout) :: d(n), q(*)
 integer :: i, j, jj, k, l, l0, ll, m
+double precision :: s, sum, t, u
 !-----------------------------------------------------------------------
 !          Computation of the inverse of the power series
 !                  sum (a(i)*X**i, i = 1,2,...)
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(n)
-double precision, intent(inout) :: d(n), q(*)
-double precision :: s, sum, t, u
 !----------------------------
 !     num = (n*(n + 1))/2
 !     real q(num)
@@ -6876,13 +6878,13 @@ real function csevl (x, a, n)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x
+real, intent(in) :: a(n)
 integer :: i, k
 real :: s0, s1, s2, x2
 !-----------------------------------------------------------------------
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
-real, intent(in) :: a(n)
 !
 if (n .gt. 1) go to 10
    csevl = 0.5 * a(1)
@@ -6904,13 +6906,13 @@ end function csevl
 double precision function dcsevl (x, a, n)
 implicit none
 integer, intent(in) :: n
+double precision, intent(in) :: a(n), x
 integer :: i, k
+double precision :: x2, s0, s1, s2
 !-----------------------------------------------------------------------
 !          Evaluate the n term Chebyshev series A at x.
 !          Only half of the first coefficient is used.
 !-----------------------------------------------------------------------
-double precision, intent(in) :: a(n), x
-double precision :: x2, s0, s1, s2
 !
 if (n .gt. 1) go to 10
    dcsevl = 0.5d0 * a(1)
@@ -6964,6 +6966,7 @@ real, intent(in) :: qu
 real, intent(inout) :: sf(*)
 integer :: k, l
 real :: dm, rm, sm, tm
+logical :: ln
 !     ******************************************************************
 !     Fortran subroutine for Lagrangian function evaluation
 !     ******************************************************************
@@ -6980,7 +6983,6 @@ real :: dm, rm, sm, tm
 !     call lgrngv (1, na, qu, au, an, ff, df)     for first derivatives
 !     call lgrngv (2, na, qu, au, an, ff, df, sf) for second derivatives
 !
-logical :: ln
 001 ln=.true.
 tm=1.0
 do 003 k = 1,na
@@ -7567,6 +7569,8 @@ integer, intent(in) :: lwa
 real, intent(in) :: epsfcn, tol
 real, intent(inout) :: x(n), fvec(n), wa(lwa)
 external fcn
+integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
+real :: factor, one, xtol, zero
 !     **********
 !
 !     SUBROUTINE hbrd
@@ -7659,8 +7663,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: index, j, lr, maxfev, ml, mode, mu, nfev, nprint
-real :: factor, one, xtol, zero
 data factor,one,zero /1.0e2,1.0e0,0.0e0/
 info = 0
 !
@@ -7706,6 +7708,13 @@ real, intent(inout) :: x(n), fvec(n), diag(n), fjac(ldfjac,n), &
 &r(lr), qtf(n), wa1(n), wa2(n), wa3(n)
 real :: wa4(n)
 external fcn
+integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
+&nslow2
+integer :: iwa(1)
+logical :: jeval, sing
+real :: actred, delta, epsmch, fnorm, fnorm1, one, pnorm, prered, &
+&p1, p5, p001, p0001, ratio, sum, temp, xnorm, zero
+real :: spmpar, enorm
 !     **********
 !
 !     SUBROUTINE hybrd
@@ -7862,13 +7871,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, iflag, iter, j, jm1, l, msum, ncfail, ncsuc, nslow1, &
-&nslow2
-integer :: iwa(1)
-logical :: jeval, sing
-real :: actred, delta, epsmch, fnorm, fnorm1, one, pnorm, prered, &
-&p1, p5, p001, p0001, ratio, sum, temp, xnorm, zero
-real :: spmpar, enorm
 data one,p1,p5,p001,p0001,zero &
 &/1.0e0,1.0e-1,5.0e-1,1.0e-3,1.0e-4,0.0e0/
 !
@@ -8160,6 +8162,8 @@ end subroutine hybrd
 
 subroutine qdcrt (a, z)
 implicit none
+real, intent(in) :: a(3)
+complex, intent(inout) :: z(2)
 real :: d, eps, r, w, x, y
 real :: spmpar
 !-----------------------------------------------------------------------
@@ -8170,8 +8174,6 @@ real :: spmpar
 !     is nonzero.
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: a(3)
-complex, intent(inout) :: z(2)
 !-----------------------------------------------------------------------
 !
 !     ***** eps is a machine dependent constant. Eps is the
@@ -8287,11 +8289,14 @@ end subroutine dqdcrt
 
 subroutine cbcrt (a, z)
 implicit none
+real, intent(in) :: a(4)
+complex, intent(inout) :: z(3)
 real :: arg, c, cf, d, eps, p, p1, q, q1, r, r1, ra, rb, rq, rt, &
 &rt3, s, sf, sq, sum, t, t1, tol, w, w1, w2, x, x1, x2, x3, y, y1, &
 &y2, y3
 real :: cbrt
 real :: spmpar
+real :: aq(3)
 !-----------------------------------------------------------------------
 !
 !        cbcrt computes the roots of the real polynomial
@@ -8304,9 +8309,6 @@ real :: spmpar
 !        naval surface weapons center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-real, intent(in) :: a(4)
-real :: aq(3)
-complex, intent(inout) :: z(3)
 !-------------------
 data rt3/1.7320508075689/
 !-----------------------------------------------------------------------
@@ -8710,8 +8712,12 @@ end subroutine dcbcrt
 
 subroutine qtcrt (a, z)
 implicit none
+real, intent(in) :: a(5)
+complex, intent(inout) :: z(4)
 real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
 &x3, y
+real :: temp(4)
+complex :: w
 !-----------------------------------------------------------------------
 !
 !         qtcrt computes the roots of the real polynomial
@@ -8724,10 +8730,6 @@ real :: b, b2, c, d, e, h, p, q, r, t, u, v, v1, v2, x, x1, x2, &
 !        naval surface weapons center
 !        Dahlgren, Virginia
 !-----------------------------------------------------------------------
-real, intent(in) :: a(5)
-real :: temp(4)
-complex, intent(inout) :: z(4)
-complex :: w
 !
 if (a(1) .eq. 0.0) go to 100
 b = a(4)/(4.0*a(5))
@@ -9025,7 +9027,14 @@ end subroutine dqtcrt
 
 subroutine drpoly (op, ideg, zeror, zeroi, num, wk, dwk)
 implicit none
+integer :: ideg
+integer, intent(inout) :: num
+double precision :: op(*)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
+&dwk(*)
+real, intent(inout) :: wk(*)
 integer :: idp1
+integer :: p, qp, k, qk, svk, tmp
 !
 !     This subroutine finds the zeros of a real polynomial.
 !
@@ -9057,14 +9066,7 @@ integer :: idp1
 !     bounds, and error calculations. All other calculations are done
 !     in double precision.
 !
-integer :: ideg
-integer, intent(inout) :: num
-double precision :: op(*)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
-&dwk(*)
-real, intent(inout) :: wk(*)
 !
-integer :: p, qp, k, qk, svk, tmp
 !
 if (ideg .lt. 1) go to 10
 !
@@ -9093,25 +9095,25 @@ subroutine drply1 (op,ideg,idp1,zeror,zeroi,p,qp,k,qk,svk, &
 &temp,pt,num)
 implicit none
 integer :: ideg, idp1, num
-integer :: i, j, jj, l, n, nm1, nn, nz
-!-------------------------
 double precision :: op(idp1), zeror(ideg), zeroi(ideg), p(idp1), &
 &qp(idp1), k(idp1), qk(idp1), svk(idp1), temp(idp1)
 real :: pt(idp1)
-!
+integer :: i, j, jj, l, n, nm1, nn, nz
 double precision :: aa, bb, cc, factor, t
 real :: lo, max, min, xx, yy, cosr, sinr, x, xxx, sc, bnd, xm, ff, &
 &df, dx, base, smalno, infin
 integer :: cnt
 logical :: zerok
-!
 real :: spmpar
 integer :: ipmpar
 double precision :: dpmpar
-!-------------------------
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi
+!-------------------------
+!
+!
+!-------------------------
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !-------------------------
@@ -9361,7 +9363,16 @@ end subroutine drply1
 subroutine fxshfr(l2, nz, nn, p, qp, k, qk, svk)
 implicit none
 integer :: nn
+double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
+integer :: l2, nz
 integer :: n
+double precision :: svu, svv, ui, vi, s
+real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
+integer :: type, i, j, iflag
+logical :: vpass, spass, vtry, stry
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+&e, f, g, h, szr, szi, lzr, lzi
 !
 !     Computes up to  l2  fixed shift k-polynomials,
 !     testing for convergence in the linear or quadratic
@@ -9372,15 +9383,7 @@ integer :: n
 !     l2 - Limit of fixed shift steps
 !     nz - Number of zeros found
 !
-double precision :: p(nn), qp(nn), k(nn), qk(nn), svk(nn)
-double precision :: svu, svv, ui, vi, s
-real :: betas, betav, oss, ovv, ss, vv, ts, tv, ots, otv, tvv, tss
-integer :: l2, nz, type, i, j, iflag
-logical :: vpass, spass, vtry, stry
 !
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9511,7 +9514,16 @@ end subroutine fxshfr
 subroutine quadit(uu, vv, nz, nn, p, qp, k, qk)
 implicit none
 integer :: nn
+double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
+integer :: nz
 integer :: n
+double precision :: ui, vi
+real :: mp, omp, ee, relstp, t, zm
+integer :: type, i, j
+logical :: tried
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+&e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift k-polynomial iteration for A
 !     quadratic factor converges only if the zeros are
@@ -9520,15 +9532,7 @@ integer :: n
 !     uu,vv - Coefficients of starting quadratic
 !     nz - Number of zero found
 !
-double precision :: uu, vv, p(nn), qp(nn), k(nn), qk(nn)
-double precision :: ui, vi
-real :: mp, omp, ee, relstp, t, zm
-integer :: nz, type, i, j
-logical :: tried
 !
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9616,7 +9620,13 @@ end subroutine quadit
 subroutine realit(sss, nz, iflag, nn, p, qp, k, qk)
 implicit none
 integer :: iflag, nn, nz
+double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
 integer :: i, j, n
+double precision :: pv, kv, t, s
+real :: ms, mp, omp, ee
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+&e, f, g, h, szr, szi, lzr, lzi
 !
 !     Variable-shift H polynomial iteration for a real zero.
 !
@@ -9625,13 +9635,7 @@ integer :: i, j, n
 !     iflag - Flag to indicate a pair of zeros near the real
 !             axis.
 !
-double precision :: sss, p(nn), qp(nn), k(nn), qk(nn)
-double precision :: pv, kv, t, s
-real :: ms, mp, omp, ee
 !
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9728,6 +9732,12 @@ end subroutine realit
 subroutine calcsc(type, n, k, qk)
 implicit none
 integer :: n
+integer :: type
+double precision :: k(n), qk(n)
+double precision :: tol
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+&e, f, g, h, szr, szi, lzr, lzi
 !
 !     This routine calculates scalar quantities used to
 !     compute the next k polynomial and new estimates of
@@ -9736,13 +9746,7 @@ integer :: n
 !     type - Integer variable SET here indicating how the
 !            calculations are normalized to avoid overflow
 !
-integer :: type
-double precision :: k(n), qk(n)
-double precision :: tol
 !
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9787,17 +9791,17 @@ end subroutine calcsc
 subroutine nextk(type, n, qp, k, qk)
 implicit none
 integer :: n
-integer :: i
-!
-!     Computes the next k polynomials using the scalars
-!     computed in calcsc.
-!
 integer :: type
 double precision :: qp(n), k(n), qk(n)
+integer :: i
 double precision :: temp
 real :: eta, are, mre
 double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi
+!
+!     Computes the next k polynomials using the scalars
+!     computed in calcsc.
+!
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9840,18 +9844,18 @@ end subroutine nextk
 subroutine newest (type, uu, vv, nn, p, k)
 implicit none
 integer :: nn
+integer :: type
+double precision :: uu, vv, p(nn), k(nn)
 integer :: n
+double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
+real :: eta, are, mre
+double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
+&e, f, g, h, szr, szi, lzr, lzi
 !
 !     Compute new estimates of the quadratic coefficients
 !     using the scalars computed in calcsc.
 !
-integer :: type
-double precision :: uu, vv, p(nn), k(nn)
-double precision :: a4, a5, b1, b2, c1, c2, c3, c4, temp
 !
-real :: eta, are, mre
-double precision :: sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
-&e, f, g, h, szr, szi, lzr, lzi
 common /global/  sr, si, u, v, a, b, c, d, a1, a2, a3, a6, a7, &
 &e, f, g, h, szr, szi, lzr, lzi, eta, are, mre
 !
@@ -9890,16 +9894,16 @@ end subroutine newest
 subroutine quadsd (nn, u, v, p, q, a, b)
 implicit none
 integer, intent(in) :: nn
-integer :: i
-!
-!     Divides p by the quadratic  1,u,v  placing the
-!     quotient in q and the remainder in A,b.
-!
 double precision, intent(in) :: p(nn)
 double precision, intent(inout) :: q(nn)
 double precision, intent(in) :: u, v
 double precision, intent(out) :: a, b
+integer :: i
 double precision :: c
+!
+!     Divides p by the quadratic  1,u,v  placing the
+!     quotient in q and the remainder in A,b.
+!
 !
 b = p(1)
 q(1) = b
@@ -9974,7 +9978,11 @@ end subroutine quadpl
 subroutine dcpoly (opr,opi,ideg,zeror,zeroi,num,wk)
 implicit none
 integer, intent(inout) :: num
+integer :: ideg
+double precision, intent(in) :: opr(*), opi(*)
+double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
 integer :: idp1
+integer :: pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !
 !     This subroutine finds the zeros of a complex polynomial.
 !
@@ -10005,11 +10013,7 @@ integer :: idp1
 !     the zerofinder will work provided the overflowed quantity is
 !     replaced by a large number.
 !
-integer :: ideg
-double precision, intent(in) :: opr(*), opi(*)
-double precision, intent(inout) :: zeror(ideg), zeroi(ideg), wk(*)
 !
-integer :: pr, pi, qpr, qpi, hr, hi, qhr, qhi, shr, shi
 !
 if (ideg .lt. 1) go to 10
 !
@@ -10045,18 +10049,18 @@ implicit none
 integer :: ideg
 integer, intent(in) :: idp1
 integer, intent(out) :: num
-integer :: i, nn
-integer :: ipmpar
-!-------------------------
 double precision, intent(in) :: opr(idp1), opi(idp1)
 double precision, intent(inout) :: zeror(ideg), zeroi(ideg), &
 &pr(idp1), pi(idp1), qpr(idp1), qpi(idp1), hr(idp1), hi(idp1), &
 &qhr(idp1), qhi(idp1), shr(idp1), shi(idp1)
+integer :: i, nn
+integer :: ipmpar
 double precision :: sr, si, tr, ti, pvr, pvi, are, mre, eta, infin
 double precision :: xx, yy, cosr, sinr, smalno, base, xxx, zr, zi, &
 &bnd, dcpabs, dpmpar, scalcp
 logical :: conv
 integer :: cnt1, cnt2
+!-------------------------
 !-------------------------
 !     The following statements set the machine constants used
 !     in the code. The meaning of the constants are ...
@@ -10191,7 +10195,9 @@ integer :: cnt1, cnt2
 double precision function scalcp(nn,pt,eta,infin,smalno,base)
 implicit none
 integer, intent(in) :: nn
+double precision, intent(in) :: pt(nn), eta, infin, smalno, base
 integer :: i, l
+double precision :: hi, lo, max, min, x, sc
 !
 !     Returns a scale factor to multiply the coefficients of the
 !     polynomial. The scaling is done to avoid overflow and to avoid
@@ -10202,8 +10208,6 @@ integer :: i, l
 !     eta,infin,smalno,base - Constants describing the
 !            floating point arithmetic.
 !
-double precision, intent(in) :: pt(nn), eta, infin, smalno, base
-double precision :: hi, lo, max, min, x, sc
 !
 !     Find the largest and smallest moduli of coefficients.
 !
@@ -10234,14 +10238,14 @@ end function scalcp
 subroutine cauchy(nn,bnd,pt,q)
 implicit none
 integer, intent(in) :: nn
+double precision, intent(inout) :: q(nn), pt(nn)
+double precision, intent(inout) :: bnd
 integer :: i, n
+double precision :: x, xm, f, dx, df
 !
 !     Cauchy computes a lower bound bnd on the moduli of the zeros
 !     of a polynomial. pt is the modulus of the coefficients.
 !
-double precision, intent(inout) :: q(nn), pt(nn)
-double precision :: x, xm, f, dx, df
-double precision, intent(inout) :: bnd
 !
 pt(nn) = -pt(nn)
 !
@@ -10291,15 +10295,15 @@ end subroutine cauchy
 subroutine noshft(l1,nn,tr,ti,eta,pr,pi,hr,hi)
 implicit none
 integer, intent(in) :: l1, nn
+double precision, intent(inout) :: tr, ti
+double precision, intent(in) :: eta, pr(nn), pi(nn)
+double precision, intent(inout) :: hr(nn), hi(nn)
 integer :: i, j, jj, n, nm1
+double precision :: dn, t1, t2, xni, dcpabs
 !
 !     Computes the derivative polynomial as the initial H
 !     polynomial and computes l1 no-shift H polynomials.
 !
-double precision, intent(inout) :: tr, ti
-double precision, intent(in) :: eta, pr(nn), pi(nn)
-double precision, intent(inout) :: hr(nn), hi(nn)
-double precision :: dn, t1, t2, xni, dcpabs
 !
 n = nn - 1
 nm1 = n - 1
@@ -10343,7 +10347,16 @@ subroutine fxshft(l2,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi, &
 &are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l2, nn
+double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
+double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+&pi(nn)
+double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+&hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
+double precision, intent(inout) :: zr, zi
+logical, intent(inout) :: conv
 integer :: i, j, n
+double precision :: otr, oti, svsr, svsi, dcpabs
+logical :: test, pasd, bool
 !
 !     Computes l2 fixed-shift H polynomials and tests for convergence.
 !     Initiates a variable-shift iteration and returns with the
@@ -10354,15 +10367,6 @@ integer :: i, j, n
 !     conv - Logical variable indicating convergence of stage 3
 !            iteration
 !
-double precision, intent(inout) :: sr, si, tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-&pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-&hi(nn), qhr(nn), qhi(nn), shr(nn), shi(nn)
-double precision, intent(inout) :: zr, zi
-double precision :: otr, oti, svsr, svsi, dcpabs
-logical, intent(inout) :: conv
-logical :: test, pasd, bool
 !
    n = nn - 1
 !
@@ -10442,7 +10446,17 @@ subroutine vrshft(l3,zr,zi,conv,nn,pr,pi,hr,hi,qpr,qpi,qhr,qhi, &
 &sr,si,tr,ti,pvr,pvi,are,mre,eta,infin)
 implicit none
 integer, intent(in) :: l3, nn
+double precision, intent(out) :: sr, si
+double precision, intent(inout) :: tr, ti, pvr, pvi
+double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
+&pi(nn)
+double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
+&hi(nn), qhr(nn), qhi(nn)
+double precision, intent(inout) :: zr, zi
+logical, intent(out) :: conv
 integer :: i, j, n
+double precision :: mp, ms, omp, relstp, r1, r2, tp, errev, dcpabs
+logical :: b, bool
 !
 !     Carries out the third stage iteration.
 !
@@ -10452,16 +10466,6 @@ integer :: i, j, n
 !             iterate on exit.
 !     conv  - The value is .TRUE. if the iteration converges.
 !
-double precision, intent(out) :: sr, si
-double precision, intent(inout) :: tr, ti, pvr, pvi
-double precision, intent(in) :: are, mre, eta, infin, pr(nn), &
-&pi(nn)
-double precision, intent(inout) :: qpr(nn), qpi(nn), hr(nn), &
-&hi(nn), qhr(nn), qhi(nn)
-double precision, intent(inout) :: zr, zi
-double precision :: mp, ms, omp, relstp, r1, r2, tp, errev, dcpabs
-logical, intent(out) :: conv
-logical :: b, bool
 !
 conv = .false.
 b = .false.

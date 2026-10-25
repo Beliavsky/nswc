@@ -4,10 +4,8 @@ subroutine solve2(m, n, m1, a, b, w, n1, ipivot, qr, d, &
 implicit none
 integer, intent(in) :: m, m1, mm, mmpnn, n, n1
 integer, intent(out) :: numit
-integer :: i, j, k, kz, l, mp1, mpn, n1p1, np, ns
 integer, intent(in) :: ipivot(n)
 real, intent(in) :: a(mm,n), b(*)
-real :: c
 real, intent(in) :: d(*)
 real, intent(inout) :: f(*), g(*)
 real, intent(in) :: qr(mmpnn,n)
@@ -15,11 +13,13 @@ real, intent(inout) :: res(*)
 real, intent(in) :: w(m)
 real, intent(inout) :: wres(*), x(*), y(*), y1(*), y2(*)
 real, intent(inout) :: digitx
-real :: dxnorm
 real, intent(in) :: eta
+logical, intent(inout) :: fail
+integer :: i, j, k, kz, l, mp1, mpn, n1p1, np, ns
+real :: c
+real :: dxnorm
 real :: eta2, rdr1, rdr2, rdx1, rdx2, rnr, rnx, xnorm
 double precision :: sum
-logical, intent(inout) :: fail
 numit = 0
 kz = 0
 eta2 = eta*eta
@@ -164,15 +164,15 @@ end subroutine solve2
 subroutine solve3(f, m1, m, n1, qr, d, y, mmpnn)
 implicit none
 integer, intent(in) :: m, m1, mmpnn, n1
-integer :: j, l, lmm, mh, mpl, mpn1, mv, ns, nsm1
-! Subroutine solve3 is called only by subroutine solve2.
-! This subroutine calculates new values of f.
-real :: c
 real, intent(in) :: d(*)
 real, intent(inout) :: f(*)
 real, intent(in) :: qr(mmpnn,n1)
 real, intent(inout) :: y(*)
+integer :: j, l, lmm, mh, mpl, mpn1, mv, ns, nsm1
+real :: c
 double precision :: sum
+! Subroutine solve3 is called only by subroutine solve2.
+! This subroutine calculates new values of f.
 mv = 1
 mh = m1
 do ns=1,n1
@@ -236,7 +236,12 @@ end subroutine solve3
 subroutine covar(n, m1, n1, ipivot, c, d, z, nn)
 implicit none
 integer, intent(in) :: m1, n, n1, nn
+integer, intent(in) :: ipivot(n)
+real, intent(inout) :: c(nn,n)
+real, intent(in) :: d(*)
+real, intent(inout) :: z(*)
 integer :: i, j, k, ka, l, n1p1
+double precision :: sum
 ! Subroutine covar uses results from the orthogonal decomposition
 ! stored in c, d and ipivot to compute the unscaled covariance matrix
 ! of the least squares coefficients.
@@ -253,11 +258,6 @@ integer :: i, j, k, ka, l, n1p1
 ! H = (sqrt(W))*a were rejected as being linearly dependent.  Whenever
 ! the k-TH column of H was so rejected, c(i,j) is set equal to zero,
 ! FOR i = k OR j = k, i.GE.J.
-integer, intent(in) :: ipivot(n)
-real, intent(inout) :: c(nn,n)
-real, intent(in) :: d(*)
-real, intent(inout) :: z(*)
-double precision :: sum
 l = n1
 if (l.gt.m1) c(l,l) = 1.0/d(l)
 if (l.eq.1) go to 60
@@ -313,8 +313,6 @@ end subroutine covar
 subroutine splsq(m,n,a,ia,ja,damp,u,x,atol,btol,conlim,itnlim, &
 &istop,itn,acond,rnorm,xnorm,w)
 implicit none
-integer :: npi
-!
 integer, intent(in) :: m
 integer :: n
 integer, intent(in) :: itnlim
@@ -324,6 +322,16 @@ real, intent(in) :: a(*), damp
 real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
+integer, intent(inout) :: itn
+integer :: npi
+integer :: i
+integer :: nconv, nstop
+real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
+&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
+&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
+&zero
+!
 !     ------------------------------------------------------------------
 !
 !     splsq finds a solution x to the following problems ...
@@ -544,14 +552,6 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !
 !     Local variables
 !
-integer :: i
-integer, intent(inout) :: itn
-integer :: nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-&zero
 !
 !
 !     Initialize.
@@ -733,6 +733,7 @@ implicit none
 integer, intent(in) :: n
 real, intent(inout) :: x(n)
 real, intent(out) :: beta
+real :: one, snrm2, zero
 !
 !     normlz computes the Euclidean norm of x and returns the
 !     value in beta. If x is nonzero, then x is rescaled so
@@ -742,7 +743,6 @@ real, intent(out) :: beta
 !
 !     BLAS       snrm2,sscal
 !
-real :: one, snrm2, zero
 !
 data zero/0.0/, one/1.0/
 !
@@ -755,8 +755,6 @@ end subroutine normlz
 subroutine stlsq(m,n,ta,ita,jta,damp,u,x,atol,btol,conlim, &
 &itnlim,istop,itn,acond,rnorm,xnorm,w)
 implicit none
-integer :: npi
-!
 integer, intent(in) :: m
 integer :: n
 integer, intent(in) :: itnlim
@@ -766,6 +764,16 @@ real, intent(in) :: ta(*), damp
 real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
+integer, intent(inout) :: itn
+integer :: npi
+integer :: i
+integer :: nconv, nstop
+real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
+&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
+&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
+&zero
+!
 !     ------------------------------------------------------------------
 !
 !     stlsq finds a solution x to the following problems ...
@@ -988,14 +996,6 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !
 !     Local variables
 !
-integer :: i
-integer, intent(inout) :: itn
-integer :: nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-&zero
 !
 !
 !     Initialize.
@@ -1175,8 +1175,6 @@ end subroutine stlsq
 subroutine blsq(m,n,a,ka,ml,mu,damp,u,x,atol,btol,conlim,itnlim, &
 &istop,itn,acond,rnorm,xnorm,w)
 implicit none
-integer :: npi
-!
 integer, intent(in) :: m
 integer :: n
 integer, intent(in) :: ka, ml, mu, itnlim
@@ -1185,6 +1183,16 @@ real, intent(in) :: a(ka,n), damp
 real, intent(inout) :: u(m), x(n)
 real, intent(in) :: atol, btol, conlim
 real, intent(inout) :: acond, rnorm, xnorm, w(*)
+integer, intent(inout) :: itn
+integer :: npi
+integer :: i
+integer :: nconv, nstop
+real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
+&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
+&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
+&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
+&zero
+!
 !     ------------------------------------------------------------------
 !
 !     blsq finds a solution x to the following problems ...
@@ -1412,14 +1420,6 @@ real, intent(inout) :: acond, rnorm, xnorm, w(*)
 !
 !     Local variables
 !
-integer :: i
-integer, intent(inout) :: itn
-integer :: nconv, nstop
-real :: alfa, anorm, arnorm, bbnorm, beta, bnorm, cs, cs1, cs2, &
-&ctol, dampsq, ddnorm, delta, gamma, gambar, one, phi, phibar, psi, &
-&res1, res2, rho, rhobar, rhbar1, rhbar2, rhs, rtol, sn, sn1, sn2, &
-&t, tau, test1, test2, test3, theta, t1, t2, t3, xxnorm, z, zbar, &
-&zero
 !
 !
 !     Initialize.
@@ -1599,18 +1599,18 @@ end subroutine blsq
 subroutine fmin(f, a0, b0, x, w, aerr, rerr, error, ind)
 implicit none
 integer, intent(out) :: ind
-!     ******************************************************************
-!     Golden section minimization of a function f(T)
-!     ******************************************************************
 real :: f
 real, intent(in) :: a0, b0
 real, intent(inout) :: x, w
 real, intent(in) :: aerr, rerr
 real, intent(inout) :: error
+external f
 real :: eps, eps0, atol, ftol, rtol, tol
 real :: a, b, c1, c2, e, fu, fv, u, v
 real :: spmpar
-external f
+!     ******************************************************************
+!     Golden section minimization of a function f(T)
+!     ******************************************************************
 !     -------------------
 !     c1 = 1 - c2
 !     c2 = 0.5*(-1 + sqrt(5))
@@ -1775,6 +1775,8 @@ integer, intent(inout) :: ierr, iter
 integer :: n
 real, intent(inout) :: fpls
 real, intent(in) :: rerr
+real, intent(inout) :: xpls(n), wrk(n,*)
+external fcn
 integer :: i, itncnt, itnlim, mo
 real :: eps, fscale, gradtl, stepmx, steptl
 real :: spmpar
@@ -1806,8 +1808,6 @@ real :: spmpar
 !       wrk(n,n+8)
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: xpls(n), wrk(n,*)
-external fcn
 !
 !     equivalence wrk(n,1) = x(n)
 !                 wrk(n,2) = typsiz(n)
@@ -1869,9 +1869,12 @@ real, intent(inout) :: stepmx
 real, intent(in) :: steptl
 real, intent(inout) :: typsiz(n), wrk0(n), wrk1(n), wrk2(n), x(n), &
 &xpls(n)
+external fcn
 integer :: i, iagflg, icscmx, iretcd, j, jp1, nm1, ns
 real :: cbrnf, f, fstack(30), rnf, sqrnf, stmx
 real :: spmpar
+integer :: sptr
+logical :: mxtake, noupdt
 !-----------------------------------------------------------------------
 !             Driver for non-linear optimization problem
 !-----------------------------------------------------------------------
@@ -1931,9 +1934,6 @@ real :: spmpar
 !       ns         LENGTH OF THE ARRAY fstack
 !       sptr       POINTER TO AN ELEMENT IN fstack
 !-----------------------------------------------------------------------
-integer :: sptr
-logical :: mxtake, noupdt
-external fcn
 !
 !     Initialization
 !     --------------
@@ -2076,6 +2076,8 @@ integer, intent(in) :: itnlim, n
 real, intent(inout) :: fscale
 real, intent(in) :: gradtl, rerr
 real, intent(inout) :: stepmx
+real, intent(in) :: x(n)
+real, intent(inout) :: typsiz(n)
 integer :: i
 real :: stpsiz
 !-----------------------------------------------------------------------
@@ -2102,8 +2104,6 @@ real :: stpsiz
 !       ierr       ERROR INDICATOR
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n)
-real, intent(inout) :: typsiz(n)
 !
 !     Check that parameters only take on acceptable values.
 !     If not, set them to default values.
@@ -2175,6 +2175,10 @@ integer, intent(in) :: iretcd, itncnt, itnlim, n, ns
 real, intent(in) :: fpls
 real, intent(inout) :: fscale
 real, intent(in) :: gradtl, steptl
+real, intent(in) :: xpls(n), gpls(n), x(n), typsiz(n)
+real, intent(inout) :: fstack(ns)
+integer, intent(inout) :: sptr
+logical, intent(in) :: mxtake
 integer :: i, jerr
 real :: d, grd, relstp, rgx, rsx
 !-----------------------------------------------------------------------
@@ -2213,10 +2217,6 @@ real :: d, grd, relstp, rgx, rsx
 !       ierr       TERMINATION CODE
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: xpls(n), gpls(n), x(n), typsiz(n)
-real, intent(inout) :: fstack(ns)
-integer, intent(inout) :: sptr
-logical, intent(in) :: mxtake
 !
 ierr = 0
 !
@@ -2293,13 +2293,13 @@ implicit none
 integer :: n
 real, intent(inout) :: fx
 real, intent(in) :: r
+real, intent(inout) :: x(n)
+external fcn
 integer :: i
 real :: fminus, fplus, h, xi, xminus, xplus
 !-----------------------------------------------------------------------
 !     Fixed step coordinate descent procedure / one iteration
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
-external fcn
 !
 do 20 i = 1,n
    h = r * amax1(abs(x(i)), 1.0)
@@ -2326,11 +2326,11 @@ subroutine scalex (mo, x, typsiz, n, ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: mo, n
+real, intent(in) :: x(n)
+real, intent(inout) :: typsiz(n)
 integer :: i
 real :: big, c, t, xmin
 real :: spmpar
-real, intent(in) :: x(n)
-real, intent(inout) :: typsiz(n)
 !-----------------------------------------------------------------------
 !     Rescale the variables
 !-----------------------------------------------------------------------
@@ -2360,6 +2360,9 @@ end subroutine scalex
 subroutine lltslv (nr,n,a,x,b)
 implicit none
 integer, intent(in) :: n, nr
+real, intent(in) :: a(nr,n)
+real, intent(inout) :: x(n)
+real, intent(in) :: b(n)
 integer :: i, ii, im1, ip1, j
 real :: sum
 !-----------------------------------------------------------------------
@@ -2382,9 +2385,6 @@ real :: sum
 !-----------------------------------------------------------------------
 !     Note.  b and x may share the same storage area.
 !-----------------------------------------------------------------------
-real, intent(in) :: a(nr,n)
-real, intent(inout) :: x(n)
-real, intent(in) :: b(n)
 !
 !                  Forward solve, result in x
 !
@@ -2424,6 +2424,7 @@ real, intent(inout) :: g(n)
 real, intent(in) :: r
 real :: typsiz(n)
 real, intent(inout) :: x(n)
+external fcn
 integer :: j
 real :: fplus, stepsz, xtmpj
 !-----------------------------------------------------------------------
@@ -2445,7 +2446,6 @@ real :: fplus, stepsz, xtmpj
 !       g(n)       FINITE DIFFERENCE APPROXIMATION TO THE GRADIENT
 !
 !-----------------------------------------------------------------------
-external fcn
 !
 do j = 1,n
   stepsz = r * amax1(abs(x(j)),typsiz(j))
@@ -2462,6 +2462,10 @@ subroutine fstocd (n, x, fcn, typsiz, r, g)
 implicit none
 integer :: n
 real, intent(in) :: r
+real, intent(inout) :: x(n)
+real, intent(in) :: typsiz(n)
+real, intent(inout) :: g(n)
+external fcn
 integer :: i
 real :: fminus, fplus, stepi, xtempi
 !-----------------------------------------------------------------------
@@ -2482,10 +2486,6 @@ real :: fminus, fplus, stepi, xtempi
 !       g(n)       CENTRAL DIFFERENCE APPROXIMATION TO GRADIENT
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: x(n)
-real, intent(in) :: typsiz(n)
-real, intent(inout) :: g(n)
-external fcn
 !
 !     Find i-TH  stepsize, evaluate two neighbors in direction of
 !     i-TH unit vector, and evaluate i-TH  component of gradient.
@@ -2511,10 +2511,16 @@ integer :: n
 real, intent(in) :: f
 real :: fpls
 real, intent(in) :: stepmx, steptl
+real, intent(in) :: x(n), g(n)
+real, intent(inout) :: p(n), xpls(n)
+real, intent(in) :: typsiz(n)
+logical, intent(out) :: mxtake
+external fcn
 integer :: i
 real :: a, b, disc, pfpls, plmbda, rln, rmnlmb, scl, sln, slp, t1, &
 &t2, t3, tlmbda, tmp, w
 real :: sdot
+real :: lambda
 !-----------------------------------------------------------------------
 !             Find a next Newton iterate by line search
 !-----------------------------------------------------------------------
@@ -2545,12 +2551,6 @@ real :: sdot
 !       sln      NEWTON LENGTH
 !       rln      RELATIVE LENGTH OF NEWTON STEP
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), g(n)
-real, intent(inout) :: p(n), xpls(n)
-real, intent(in) :: typsiz(n)
-real :: lambda
-logical, intent(out) :: mxtake
-external fcn
 !
 mxtake = .false.
 iretcd = 2
@@ -2659,6 +2659,10 @@ subroutine secfac (nr,n,x,g,a,xpls,gpls,itncnt,tol, &
 implicit none
 integer, intent(in) :: itncnt, n, nr
 real, intent(in) :: tol
+real, intent(in) :: x(n), xpls(n), g(n), gpls(n)
+real, intent(inout) :: a(nr,n)
+real, intent(inout) :: s(n), y(n), w(n)
+logical, intent(inout) :: noupdt
 integer :: i, im1, j
 real :: alp, den1, den2, snorm2, sum, ynrm2
 real :: snrm2
@@ -2689,10 +2693,6 @@ real :: sdot
 !     Work spaces ...  s(n), y(n), w(n)
 !
 !-----------------------------------------------------------------------
-real, intent(in) :: x(n), xpls(n), g(n), gpls(n)
-real, intent(inout) :: a(nr,n)
-real, intent(inout) :: s(n), y(n), w(n)
-logical, intent(inout) :: noupdt
 !
 if (itncnt .eq. 1) noupdt = .true.
 do i = 1,n
@@ -2795,6 +2795,8 @@ end subroutine secfac
 subroutine qrupdt (nr,n,a,u,v)
 implicit none
 integer, intent(in) :: n, nr
+real, intent(inout) :: a(nr,n), u(n)
+real, intent(in) :: v(n)
 integer :: i, ii, j, k, km1
 real :: r
 !-----------------------------------------------------------------------
@@ -2812,8 +2814,6 @@ real :: r
 !       v(n)    VECTOR
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: a(nr,n), u(n)
-real, intent(in) :: v(n)
 !
 !                Determine last non-zero in u
 !
@@ -2855,6 +2855,7 @@ implicit none
 integer, intent(in) :: i, n, nr
 real, intent(in) :: a, b
 real, intent(inout) :: r
+real, intent(inout) :: h(nr,n)
 integer :: j
 real :: c, s, t, z
 !-----------------------------------------------------------------------
@@ -2876,7 +2877,6 @@ real :: c, s, t, z
 !       r       r = sqrt(a*a + b*b)
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: h(nr,n)
 !
 !                COMPUTE c = a/r  AND s = b/r
 !
@@ -2925,6 +2925,8 @@ integer, intent(inout) :: iwa(n)
 real, intent(in) :: epsfcn, tol
 real, intent(inout) :: x(n), fvec(m), wa(lwa)
 external fcn
+integer :: maxfev, mode, mp5n, nfev, nprint
+real :: factor, ftol, gtol, xtol
 !     **********
 !
 !     SUBROUTINE lmdiff
@@ -3032,8 +3034,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
-integer :: maxfev, mode, mp5n, nfev, nprint
-real :: factor, ftol, gtol, xtol
 data factor /1.0e2/
 info = 0
 !
@@ -3072,6 +3072,11 @@ real, intent(in) :: ftol, xtol, gtol, epsfcn, factor
 real, intent(inout) :: x(n), fvec(m), diag(n), fjac(ldfjac,n), &
 &qtf(n), wa1(n), wa2(n), wa3(n), wa4(m)
 external fcn
+integer :: i, iflag, iter, j, l
+real :: actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, &
+&pnorm, prered, p1, p5, p25, p75, p0001, ratio, sum, temp, temp1, &
+&temp2, xnorm
+real :: spmpar, enorm
 !     **********
 !
 !     SUBROUTINE lmdif
@@ -3252,11 +3257,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, iflag, iter, j, l
-real :: actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, &
-&pnorm, prered, p1, p5, p25, p75, p0001, ratio, sum, temp, temp1, &
-&temp2, xnorm
-real :: spmpar, enorm
 data p1,p5,p25,p75,p0001 &
 &/1.0e-1,5.0e-1,2.5e-1,7.5e-1,1.0e-4/
 !
@@ -3519,6 +3519,9 @@ real function enorm(n,x)
 implicit none
 integer, intent(in) :: n
 real, intent(in) :: x(n)
+integer :: i
+real :: agiant, floatn, rdwarf, rgiant, s1, s2, s3, xabs, x1max, &
+&x3max
 !     **********
 !
 !     FUNCTION enorm
@@ -3556,9 +3559,6 @@ real, intent(in) :: x(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge J. more
 !
 !     **********
-integer :: i
-real :: agiant, floatn, rdwarf, rgiant, s1, s2, s3, xabs, x1max, &
-&x3max
 data rdwarf,rgiant /3.834e-20,1.304e19/
 !
 s1 = 0.0
@@ -3629,6 +3629,9 @@ integer, intent(in) :: n, lr
 real, intent(in) :: delta
 real, intent(in) :: r(lr), diag(n), qtb(n)
 real, intent(inout) :: x(n), wa1(n), wa2(n)
+integer :: i, j, jj, jp1, k, l
+real :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
+real :: spmpar, enorm
 !     **********
 !
 !     Subroutine dogleg
@@ -3686,9 +3689,6 @@ real, intent(inout) :: x(n), wa1(n), wa2(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, jj, jp1, k, l
-real :: alpha, bnorm, epsmch, gnorm, qnorm, sgnorm, sum, temp
-real :: spmpar, enorm
 !
 !     epsmch is the machine precision.
 !
@@ -3812,6 +3812,9 @@ real, intent(inout) :: fjac(ldfjac,n)
 real :: wa1(n)
 real, intent(inout) :: wa2(n)
 external fcn
+integer :: i, j, k, msum
+real :: eps, epsmch, h, temp, zero
+real :: spmpar
 !     **********
 !
 !     SUBROUTINE fdjac1
@@ -3897,9 +3900,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, k, msum
-real :: eps, epsmch, h, temp, zero
-real :: spmpar
 data zero /0.0e0/
 !
 !     epsmch is the machine precision.
@@ -3969,6 +3969,9 @@ real, intent(in) :: fvec(m)
 real, intent(inout) :: fjac(ldfjac,n)
 real :: wa(m)
 external fcn
+integer :: i, j
+real :: eps, epsmch, h, temp, zero
+real :: spmpar
 !     **********
 !
 !     SUBROUTINE fdjac2
@@ -4044,9 +4047,6 @@ external fcn
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j
-real :: eps, epsmch, h, temp, zero
-real :: spmpar
 data zero /0.0e0/
 !
 !     epsmch is the machine precision.
@@ -4083,6 +4083,10 @@ real, intent(inout) :: par
 real, intent(inout) :: r(ldr,n)
 real, intent(in) :: diag(n), qtb(n)
 real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
+integer :: i, iter, j, jm1, jp1, k, l, nsing
+real :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, p1, p001, sum, &
+&temp, zero
+real :: spmpar, enorm
 !     **********
 !
 !     SUBROUTINE lmpar
@@ -4177,10 +4181,6 @@ real, intent(inout) :: x(n), sdiag(n), wa1(n), wa2(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, iter, j, jm1, jp1, k, l, nsing
-real :: dxnorm, dwarf, fp, gnorm, parc, parl, paru, p1, p001, sum, &
-&temp, zero
-real :: spmpar, enorm
 data p1,p001,zero /1.0e-1,1.0e-3,0.0e0/
 !
 !     Dwarf is the smallest positive magnitude.
@@ -4345,6 +4345,8 @@ subroutine qform(m,n,q,ldq,wa)
 implicit none
 integer, intent(in) :: m, n, ldq
 real, intent(inout) :: q(ldq,m), wa(m)
+integer :: i, j, jm1, k, l, minmn, np1
+real :: one, sum, temp, zero
 !     **********
 !
 !     SUBROUTINE qform
@@ -4382,8 +4384,6 @@ real, intent(inout) :: q(ldq,m), wa(m)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, jm1, k, l, minmn, np1
-real :: one, sum, temp, zero
 data one,zero /1.0e0,0.0e0/
 !
 !     Zero out upper triangle of q in the first min(m,n) columns.
@@ -4444,6 +4444,9 @@ integer, intent(in) :: m, n, lda, lipvt
 integer, intent(inout) :: ipvt(lipvt)
 logical, intent(in) :: pivot
 real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
+integer :: i, j, jp1, k, kmax, minmn
+real :: ajnorm, epsmch, one, p05, sum, temp, zero
+real :: spmpar, enorm
 !     **********
 !
 !     SUBROUTINE qrfac
@@ -4519,9 +4522,6 @@ real, intent(inout) :: a(lda,n), rdiag(n), acnorm(n), wa(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, jp1, k, kmax, minmn
-real :: ajnorm, epsmch, one, p05, sum, temp, zero
-real :: spmpar, enorm
 data one,p05,zero /1.0e0,5.0e-2,0.0e0/
 !
 !     epsmch is the machine precision.
@@ -4611,6 +4611,8 @@ integer, intent(in) :: ipvt(n)
 real, intent(inout) :: r(ldr,n)
 real, intent(in) :: diag(n), qtb(n)
 real, intent(inout) :: x(n), sdiag(n), wa(n)
+integer :: i, j, jp1, k, kp1, l, nsing
+real :: cos, cotan, p5, p25, qtbpj, sin, sum, tan, temp, zero
 !     **********
 !
 !     SUBROUTINE qrsolv
@@ -4688,8 +4690,6 @@ real, intent(inout) :: x(n), sdiag(n), wa(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, jp1, k, kp1, l, nsing
-real :: cos, cotan, p5, p25, qtbpj, sin, sum, tan, temp, zero
 data p5,p25,zero /5.0e-1,2.5e-1,0.0e0/
 !
 !     Copy r and (Q transpose)*B to preserve input and initialize S.
@@ -4806,6 +4806,8 @@ implicit none
 integer, intent(in) :: m, n, lda
 real, intent(inout) :: a(lda,n)
 real, intent(in) :: v(n), w(n)
+integer :: i, j, nmj, nm1
+real :: cos, one, sin, temp
 !     **********
 !
 !     SUBROUTINE r1mpyq
@@ -4855,8 +4857,6 @@ real, intent(in) :: v(n), w(n)
 !     Burton S. Garbow, kenneth E. Hillstrom, jorge j. more
 !
 !     **********
-integer :: i, j, nmj, nm1
-real :: cos, one, sin, temp
 data one /1.0e0/
 !
 !     Apply the first set of Givens rotations to A.
@@ -4903,6 +4903,9 @@ logical, intent(inout) :: sing
 real, intent(inout) :: s(ls)
 real, intent(in) :: u(m)
 real, intent(inout) :: v(n), w(m)
+integer :: i, j, jj, l, nmj, nm1
+real :: cos, cotan, giant, one, p5, p25, sin, tan, tau, temp, zero
+real :: spmpar
 !     **********
 !
 !     SUBROUTINE r1updt
@@ -4971,9 +4974,6 @@ real, intent(inout) :: v(n), w(m)
 !     john l. nazareth
 !
 !     **********
-integer :: i, j, jj, l, nmj, nm1
-real :: cos, cotan, giant, one, p5, p25, sin, tan, tau, temp, zero
-real :: spmpar
 data one,p5,p25,zero /1.0e0,5.0e-1,2.5e-1,0.0e0/
 !
 !     Giant is the largest magnitude.
@@ -5164,12 +5164,18 @@ real, intent(in) :: eps0
 real, intent(inout) :: rerr
 real, intent(in) :: rerrmn, rerrmx
 real, intent(out) :: z
+real, intent(in) :: a(ka,n0), b0(m), c(n0)
+real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
+integer, intent(inout) :: ibasis(m), basis(*)
+integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, &
 &jcol, jj, jmin, jp, k, ki, kj, l, ll, lrow, m0, mcheck, ms, n, &
 &npos, nrow, ns, nstep, num
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
 &ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
 real :: spmpar
+integer :: bflag
+double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !     NSTEP = 1   Eliminate the negative variables
 !     NSTEP = 2   Phase 1 of the simplex algorithm
@@ -5230,12 +5236,6 @@ real :: spmpar
 !     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
-real, intent(in) :: a(ka,n0), b0(m), c(n0)
-real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
-integer, intent(inout) :: ibasis(m), basis(*)
-integer :: bflag
-integer, intent(inout) :: index(m)
-double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !
 !     ****** Xmax is a machine dependent constant. Xmax is the
@@ -6013,12 +6013,19 @@ real, intent(in) :: eps0
 real, intent(inout) :: rerr
 real, intent(in) :: rerrmn, rerrmx
 real, intent(out) :: z
+real, intent(in) :: ta(*), b0(m), c(n0)
+real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
+integer, intent(in) :: ita(*), jta(*)
+integer, intent(inout) :: ibasis(m), basis(*)
+integer, intent(inout) :: index(m)
 integer :: i, ibeg, icount, iend, ierr, ii, il, imin, iout, ip, j, &
 &jcol, jj, jmin, jp, k, ki, kj, l, ll, lmax, lmin, lrow, m0, &
 &mcheck, ms, n, npos, ns, nstep, num
 real :: amax, binorm, bmax, bmin, bnorm, cmin, const, eps, epsi, &
 &ratio, rerr1, rmin, rtol, s, sgn, sum, t, tol, w, xmax
 real :: spmpar
+integer :: bflag
+double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !     NSTEP = 1   Eliminate the negative variables
 !     NSTEP = 2   Phase 1 of the simplex algorithm
@@ -6080,13 +6087,6 @@ real :: spmpar
 !     value of X. during computation r normally contains the reduced
 !     costs used for the selection of the variable to be made BASIC.
 !----------------------
-real, intent(in) :: ta(*), b0(m), c(n0)
-real, intent(inout) :: bi(m,m), xb(m), y(m), r(*)
-integer, intent(in) :: ita(*), jta(*)
-integer, intent(inout) :: ibasis(m), basis(*)
-integer :: bflag
-integer, intent(inout) :: index(m)
-double precision :: dsum, dsump, dsumn, dt
 !----------------------
 !
 !     ****** Xmax is a machine dependent constant. Xmax is the
@@ -6839,6 +6839,7 @@ integer :: i, ibeg, ij, ik, il, j, jcol, jj, k, kcol, kcount, kj, &
 &kj0, kk, kl, km1, kp1, l, lj, lj0, lk, lmin, max, mcol, ncol, nk, &
 &nm1, nmj, nmk, nn
 real :: c, pmin, s
+double precision :: dsum
 !     ******************************************************************
 !     crout procedure for inverting matrices
 !     ******************************************************************
@@ -6861,7 +6862,6 @@ real :: c, pmin, s
 !     the inverse of A is computed and ierr=0. Otherwise if A is found
 !     to be singular then ierr=1 And the routine terminates.
 !     --------------------
-double precision :: dsum
 max = ka*n
 mcol = iend*ka
 if (iend .eq. 0) go to 100
@@ -7063,11 +7063,11 @@ subroutine assgn (n,a,c,t,iwk,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
 integer :: i1, i2, i3, i4, i5, i6
 !     -------------------
 !     Solution of the assignment problem
 !     -------------------
-integer, intent(inout) :: a(n,*), c(n), t, iwk(*)
 !
 i1 = n + 1
 i2 = i1 + n
@@ -7085,13 +7085,13 @@ subroutine assgn1(n,a,c,t,ch,lc,lr,lz,nz,rh,slc,slr, &
 implicit none
 integer, intent(out) :: ierr
 integer, intent(in) :: n
+integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
+&lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
+integer, intent(inout) :: t
 integer :: i, j, k, kslc, kslr, l, lj, lm, m, maxnum, mm, nl, nm, &
 &np1
 integer :: ipmpar
-integer, intent(inout) :: a(n,*), c(n), ch(n), lc(n), lr(n), &
-&lz(n), nz(n), rh(*), slc(n), slr(n), u(*)
 integer :: h, q, r, s
-integer, intent(inout) :: t
 !
 ! This subroutine solves the square assignment problem
 ! the meaning of the input parameters is
@@ -7338,9 +7338,17 @@ end subroutine assgn1
 subroutine mkp (n,m,p,w,k,bck,xstar,vstar,wk,iwk,num)
 implicit none
 integer, intent(in) :: m, n, num
+integer, intent(inout) :: p(n), w(n)
+integer, intent(in) :: k(m)
+integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
+real, intent(inout) :: wk(n)
 integer :: i, isumw, j, jj, jn, jnn, l, lx, lxi, maxw, minw, mn, &
 &n5, np1, npl
 real :: ap, aw
+integer :: bb, bl, x, xl
+integer :: b, ubb
+integer :: f, pbl, q, v
+integer :: bs, ps, ws, xs
 !
 ! Subroutine to solve A 0-1 multiple knapsack problem of n
 ! ITEMS (WITH  n .GE. 2) AND  m  KNAPSACKS (WITH  m .GE. 1 ,
@@ -7397,14 +7405,6 @@ real :: ap, aw
 ! terminates, all the input parameters are unchanged except
 ! bck, which gives the number of backtrackings performed.
 !
-integer, intent(inout) :: p(n), w(n)
-integer, intent(in) :: k(m)
-integer, intent(inout) :: xstar(n), bck, vstar, iwk(num)
-real, intent(inout) :: wk(n)
-integer :: bb, bl, x, xl
-integer :: b, ubb
-integer :: f, pbl, q, v
-integer :: bs, ps, ws, xs
 !
 !                    Check the input data
 !
@@ -7542,8 +7542,15 @@ subroutine mkp1 (n, m, p, w, k, bck, xstar, vstar, np1, n5, &
 &f, pbl, q, v, bs, ps, ws, xs, iwk)
 implicit none
 integer, intent(in) :: m, n, n5, np1
+integer, intent(in) :: p(n), w(n), k(m)
+integer, intent(inout) :: xstar(n), bck, vstar
+integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
+integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
+integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
+integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
 integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, &
 &kub, lb, li, lj, lr, lri, lub, lubi, m1, n1
+integer :: s, u, ub, vb
 !
 ! Meaning of the main internal variables and arrays ...
 !
@@ -7571,13 +7578,6 @@ integer :: i, i1, ibv, iflag, ii, ip, ip1, iuv, j, jbck, jj, k1, &
 !         = 0  OTHERWISE.
 ! iwk       WORK SPACE FOR THE SUBROUTINE sknp.
 !
-integer, intent(in) :: p(n), w(n), k(m)
-integer, intent(inout) :: xstar(n), bck, vstar
-integer, intent(inout) :: bb(m,n), bl(m,np1), x(m,n), xl(m,n)
-integer, intent(inout) :: b(np1), ubb(n), lx(n), lxi(n)
-integer, intent(inout) :: f(m), pbl(m), q(m), v(m)
-integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n), iwk(n5)
-integer :: s, u, ub, vb
 !
 if (m .eq. 1) go to 250
 !
@@ -7738,16 +7738,16 @@ implicit none
 integer, intent(in) :: i, kub
 integer, intent(inout) :: lr
 integer, intent(in) :: m, n, n5, np1
+integer, intent(in) :: p(n), w(n), q(m), b(np1)
+integer, intent(inout) :: ub, iwk(n5)
+integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
 integer :: j, jj, ns
+integer :: qs, sb
 !
 ! Subroutine to compute an upper bound  ub  on the best
 ! final solution which can be obtained from the current
 ! solution.
 !
-integer, intent(in) :: p(n), w(n), q(m), b(np1)
-integer, intent(inout) :: ub, iwk(n5)
-integer, intent(inout) :: lx(n), bs(n), ps(np1), ws(np1), xs(n)
-integer :: qs, sb
 !
 ns = 0
 qs = 0
@@ -7788,18 +7788,18 @@ implicit none
 integer, intent(in) :: i
 integer, intent(inout) :: kub, lb
 integer, intent(in) :: m, n, n5, np1
-integer :: ii, ikub, j, jb, jbs, jj, ns
-!
-! Subroutine to compute a feasible solution to the current
-! problem. The solution is stored in array  xl , the
-! corresponding value in  lb .
-!
 integer, intent(in) :: bb(m,n)
 integer, intent(inout) :: bl(m,np1), xl(m,n), iwk(n5)
 integer, intent(in) :: p(n), w(n), q(m), b(np1)
 integer, intent(inout) :: pbl(m), v(m)
 integer, intent(inout) :: bs(n), ps(np1), ws(np1), xs(n)
+integer :: ii, ikub, j, jb, jbs, jj, ns
 integer :: pb, qs, sb, u
+!
+! Subroutine to compute a feasible solution to the current
+! problem. The solution is stored in array  xl , the
+! corresponding value in  lb .
+!
 !
 ! Step 1
 !
@@ -7888,15 +7888,15 @@ implicit none
 integer, intent(in) :: i
 integer, intent(out) :: iflag
 integer, intent(in) :: ii, li, lj, lr, lri, lub, lubi, m, n, np1
-integer :: i1, iq, j
-!
-! Subroutine for parametric computation of the upper bounds.
-!
 integer, intent(in) :: f(m), bb(m,n), q(m), b(np1)
 integer, intent(inout) :: ub
 integer, intent(in) :: vb
-integer :: r, s
 integer, intent(in) :: lx(n), lxi(n)
+integer :: i1, iq, j
+integer :: r, s
+!
+! Subroutine for parametric computation of the upper bounds.
+!
 !
 iflag = 0
 if ( b(lj) .ne. 0 ) go to 60
@@ -7939,6 +7939,8 @@ end subroutine parc
 subroutine sknp (ns,qs,kub,vs,n,np1,n5,ps,ws,xs,iwk)
 implicit none
 integer, intent(in) :: kub, n, n5, np1, ns
+integer, intent(inout) :: qs, vs
+integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
 integer :: i1, i2, i3, i4, i5
 !
 ! Subroutine to solve the 0-1 single knapsack problem
@@ -7951,8 +7953,6 @@ integer :: i1, i2, i3, i4, i5
 ! This subroutine is a modified version of subroutine kp01
 ! which appeared in  computing 21, 81-86(1978).
 !
-integer, intent(inout) :: qs, vs
-integer, intent(inout) :: ps(np1), ws(np1), xs(n), iwk(n5)
 !
 i1 = 1
 i2 = i1 + n
@@ -7968,9 +7968,14 @@ subroutine sknp1 (ns,qs,kub,vs,n,np1,ps,ws,xs,d,min, &
 &pbar,wbar,zbar)
 implicit none
 integer, intent(in) :: kub, n, np1, ns
+integer, intent(inout) :: qs
+integer, intent(out) :: vs
+integer, intent(inout) :: ps(np1), ws(np1), xs(n)
+integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
 integer :: ii, ii1, in, ip, j, j1, jj, kk, l, lim, lim1, ll, lold, &
 &mfirst, mink, ms, n1, nn
 real :: a, b, c
+integer :: diff, pr, r, t
 !
 ! Subroutine to solve the 0-1 single knapsack problem
 !
@@ -7982,11 +7987,6 @@ real :: a, b, c
 ! This subroutine is a modified version of subroutine kp01
 ! which appeared in  computing 21, 81-86(1978).
 !
-integer, intent(inout) :: qs
-integer, intent(out) :: vs
-integer :: diff, pr, r, t
-integer, intent(inout) :: ps(np1), ws(np1), xs(n)
-integer, intent(inout) :: d(n), min(n), pbar(n), wbar(n), zbar(n)
 !
 vs = kub
 ip = 0
@@ -8184,6 +8184,7 @@ real, intent(in) :: aerr
 real, intent(inout) :: c, error
 real, intent(in) :: rerr, t
 real, intent(inout) :: y
+external fun
 integer :: ier, ierc, num1
 real :: a
 real :: exparg
@@ -8261,7 +8262,6 @@ real :: exparg
 !                   are assigned.
 !
 !-----------------------------------------------------------------------
-external fun
 !
 num = 0
 ierc = -1
@@ -8322,8 +8322,11 @@ subroutine abcon (fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
+external fun
 integer :: num1
 real :: eta, x0, xmin
+logical :: find
+external acond, xcond
 !-----------------------------------------------------------------------
 !
 !             Computation of the abscissa of convergence
@@ -8356,8 +8359,6 @@ real :: eta, x0, xmin
 !                   assigned.
 !
 !-----------------------------------------------------------------------
-logical :: find
-external fun, acond, xcond
 !
 eta = 0.01
 xmin = -1.00358e4
@@ -8397,8 +8398,10 @@ integer, intent(inout) :: num
 real, intent(in) :: eta
 real, intent(inout) :: x
 real, intent(in) :: xl
+external fun, cond
 integer :: i, ier, num1
 real :: dx, tol, x1, x2, xbar, xm
+logical :: cnd
 !-----------------------------------------------------------------------
 !     srch computes an upper bound for the smallest number x such
 !     that a given condition is satisfied. It is assumed that the
@@ -8441,8 +8444,6 @@ real :: dx, tol, x1, x2, xbar, xm
 !
 !          ierr = 3     cnd is .TRUE. for  x .GE. xl.  x is set to xl.
 !
-logical :: cnd
-external fun, cond
 ierr = 0
 !
 !     Search for an interval (x1, x2) containing x where
@@ -8517,8 +8518,11 @@ subroutine abcon1 (fun, c, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(inout) :: c
+external fun
 integer :: i, num1
 real :: dx, eta, tol, x1, x2, xbar, xm
+logical :: cmplex, iend, right
+external acond, xcond
 !-----------------------------------------------------------------------
 !
 !             Computation of the abscissa of convergence
@@ -8551,8 +8555,6 @@ real :: dx, eta, tol, x1, x2, xbar, xm
 !                   assigned.
 !
 !-----------------------------------------------------------------------
-logical :: cmplex, iend, right
-external fun, acond, xcond
 !
 eta = 0.01
 cmplex = .false.
@@ -8645,10 +8647,13 @@ subroutine acond (fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real, intent(in) :: x
+logical, intent(inout) :: cond
+external fun
 integer :: ier, ier1, ier2, iwk(100), l, m, n, num1, num2
 real :: a, aerr, c, error1, error2, rerr, tol, wk(400), y, z1, z2
 real :: acondg
 real :: acondf
+external acondf, acondg
 !-----------------------------------------------------------------------
 !
 !        This subroutine tests whether or not a given value of x
@@ -8678,8 +8683,6 @@ real :: acondf
 !                   accurate for all values of x.
 !
 !-----------------------------------------------------------------------
-logical, intent(inout) :: cond
-external fun, acondf, acondg
 !--------------------------
 data l /100/, m /400/
 data aerr /1.e-30/, rerr /1.e-4/, tol /1.e-4/
@@ -8716,13 +8719,13 @@ implicit none
 real, intent(in) :: c
 real :: x
 real, intent(in) :: y
+external fun
 real :: a, b, t
 real :: acondf
 !-----------------------------------------------------------------------
 !        acondf is the function integrated along the x-axis in
 !        acond. y is a dummy variable.
 !-----------------------------------------------------------------------
-external fun
 !
 call fun (x, 0.0, a, b)
 t = 1.0/((x - c) + 1.0)
@@ -8734,13 +8737,13 @@ function acondg (x, y, c, fun)
 implicit none
 real :: c, x
 real, intent(in) :: y
+external fun
 real :: a, b, s, t, u, v
 real :: acondg
 !-----------------------------------------------------------------------
 !        acondg is the function integrated along the line x = c
 !        in acond. y is a dummy variable.
 !-----------------------------------------------------------------------
-external fun
 !
 call fun (c, x, a, b)
 call crec (1.0, x, s, t)
@@ -8754,10 +8757,13 @@ subroutine xcond (fun, x, cond, num, ierr)
 implicit none
 integer, intent(inout) :: ierr, num
 real :: x
+logical, intent(out) :: cond
+external fun
 integer :: iwk(100), l, m, n
 real :: aerr, c, epsr, error, rerr, t, tol, wk(400), y, y1, z
 real :: xcondy
 real :: xcondx
+external xcondx, xcondy
 !-----------------------------------------------------------------------
 !
 !        This subroutine tests whether or not a given value of x
@@ -8787,8 +8793,6 @@ real :: xcondx
 !                   accurate for all values of x.
 !
 !-----------------------------------------------------------------------
-logical, intent(out) :: cond
-external fun, xcondx, xcondy
 !--------------------------
 data l /100/, m /400/
 data aerr /1.e-30/, rerr /1.e-4/, tol /1.e-4/
@@ -8826,12 +8830,12 @@ function xcondx (x,y,c,fun)
 implicit none
 real, intent(in) :: c
 real :: x, y
+external fun
 real :: a, b, s, t, u, v
 real :: xcondx
 !
 !     Real part of the integrand in xcond
 !
-external fun
 !
 call fun (x, y, a, b)
 call crec (x + c, y, s, t)
@@ -8845,12 +8849,12 @@ function xcondy (x,y,c,fun)
 implicit none
 real, intent(in) :: c
 real :: x, y
+external fun
 real :: a, b, s, t, u, v
 real :: xcondy
 !
 !     Imaginary part of integrand in xcond
 !
-external fun
 !
 call fun (x, y, a, b)
 call crec (x + c, y, s, t)
@@ -8866,10 +8870,15 @@ implicit none
 real, intent(in) :: c, epsab, epsre
 real, intent(out) :: esterr, result
 real, intent(in) :: t
+integer, intent(out) :: ier
+integer, intent(out) :: num
 integer :: max
 real :: a, aim, ak, are, arg, b, bb, e, eps, epsr1, f, fim, fre, &
 &pid16, r, s, si(32), tol
 real :: spmpar
+complex :: rex(52), cres, res3la(3)
+integer :: i
+integer :: k, kc, kk, ks, m, nex, nres
 !
 ! ......................................................................
 !
@@ -8961,11 +8970,6 @@ real :: spmpar
 !
 ! ......................................................................
 !
-complex :: rex(52), cres, res3la(3)
-integer :: i
-integer, intent(out) :: ier
-integer :: k, kc, kk, ks, m, nex, nres
-integer, intent(out) :: num
 !
 !   The array si contains values of the sine and cosine functions
 !   required in the Durbin formula. si(8) and si(16) are given in
@@ -9079,9 +9083,21 @@ end subroutine lainv1
 subroutine cqext(n,epstab,result,abserr,res3la,nres)
 implicit none
 real, intent(out) :: abserr
+complex, intent(inout) :: epstab(52)
+complex, intent(out) :: result
+complex, intent(inout) :: res3la(3)
+integer, intent(inout) :: n
+integer, intent(inout) :: nres
 real :: a1, a2, b1, b2, c1, c2, d1, d2, e1abs, epmach, epsinf, &
 &err1, err2, err3, error, oflow, res1, res2
 real :: spmpar
+complex :: delta1, delta2, delta3
+complex :: e0, e1, e2, e3, res
+complex :: ss
+double precision :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
+integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
+integer :: newelm
+integer :: num
 !
 ! 1.        cqext
 !           epsilon algorithm
@@ -9135,18 +9151,6 @@ real :: spmpar
 !
 !     ..................................................................
 !
-complex :: delta1, delta2, delta3
-complex, intent(inout) :: epstab(52)
-complex :: e0, e1, e2, e3, res
-complex, intent(out) :: result
-complex, intent(inout) :: res3la(3)
-complex :: ss
-double precision :: r, s, u1, u2, u3, v1, v2, v3, ss1, ss2, w1, w2
-integer :: i, ib, ib2, ie, indx, k1, k2, k3, limexp
-integer, intent(inout) :: n
-integer :: newelm
-integer, intent(inout) :: nres
-integer :: num
 !
 !           List of major variables
 !           -----------------------
@@ -9315,8 +9319,11 @@ real :: c
 real, intent(in) :: epsabs, epsrel
 real, intent(out) :: result
 real :: y
-integer :: l1, l2, l3
 real :: f
+real, intent(inout) :: work(lenw)
+integer, intent(inout) :: iwork(limit)
+external f, phi
+integer :: l1, l2, l3
 !-----------------------------------------------------------------------
 !
 !                   Integration over infinite intervals
@@ -9486,9 +9493,6 @@ real :: f
 !              - spmpar
 !
 !-----------------------------------------------------------------------
-real, intent(inout) :: work(lenw)
-integer, intent(inout) :: iwork(limit)
-external f, phi
 !
 !         Check validity of limit and lenw.
 !
@@ -9528,6 +9532,8 @@ real, intent(in) :: epsabs, epsrel
 real, intent(out) :: result
 real, intent(inout) :: rlist(limit)
 real :: y
+real :: f
+external f, phi
 integer :: id, ierro, iroff1, iroff2, iroff3, jupbnd, k, ksgn, &
 &ktmin, maxerr, nres, nrmax, numrl2
 real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
@@ -9535,7 +9541,7 @@ real :: a1, a2, abseps, area, area1, area12, area2, b1, b2, boun, &
 &errbnd, errmax, erro12, error1, error2, errsum, ertest, oflow, &
 &rerr, res3la(3), resabs, reseps, rlist2(52), small, t, uflow
 real :: spmpar
-real :: f
+logical :: extrap, noext
 !-----------------------------------------------------------------------
 !
 !                   Integration over infinite intervals
@@ -9700,11 +9706,9 @@ real :: f
 !              - spmpar
 !
 !-----------------------------------------------------------------------
-logical :: extrap, noext
 !
 dimension iord(limit)
 !
-external f, phi
 !
 !            The dimension of RLIST2 is determined by the value of
 !            LIMEXP in subroutine qelg.
@@ -10016,10 +10020,12 @@ real, intent(in) :: epmach
 real, intent(inout) :: resabs, resasc, result
 real, intent(in) :: uflow
 real :: y
+real :: f
+external f, phi
 integer :: j
 real :: absc, absc1, absc2, centr, dinf, fc, fsum, fval1, fval2, &
 &hlgth, resg, resk, reskh, tabsc1, tabsc2, tol
-real :: f
+real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !-----------------------------------------------------------------------
 !
 ! 1.        PURPOSE
@@ -10098,9 +10104,7 @@ real :: f
 !                 - Phi (user-provided function)
 !
 !-----------------------------------------------------------------------
-real :: fv1(7), fv2(7), xgk(8), wgk(8), wg(8)
 !
-external f, phi
 !
 !           The abscissae and weights are supplied for the interval
 !           (-1,1).  Because of symmetry only the positive abscissae and
@@ -10239,9 +10243,9 @@ subroutine mfft (c,n,ndim,isn,ierr)
 implicit none
 integer, intent(inout) :: ierr
 integer, intent(in) :: isn, ndim
-integer :: i, isign, nspan, ntot
 real, intent(inout) :: c(*)
 integer :: n(ndim)
+integer :: i, isign, nspan, ntot
 !-----------------------------------------------------------------------
 !     Let ntot denote the product of n(1),...,n(ndim). The complex
 !     array c of dimension ntot is interpreted by the routine as
@@ -10279,9 +10283,9 @@ implicit none
 integer, intent(inout) :: ierr
 integer :: isn
 integer, intent(in) :: ndim
-integer :: i, nspan, ntot
 real, intent(inout) :: a(*), b(*)
 integer :: n(ndim)
+integer :: i, nspan, ntot
 !     ------------
 if (iabs(isn) .ne. 1) go to 40
 if (ndim .le. 0) go to 50
