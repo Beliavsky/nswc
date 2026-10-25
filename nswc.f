@@ -438,6 +438,7 @@ C-----------------------------------------------------------------------
       SUBROUTINE MACH (MO, N, IBETA, IMAX, IDMAX, IMACH, RMACH, DMACH)
       IMPLICIT NONE
       INTENT(IN) IDMAX, IMAX, MO, N
+      INTENT(INOUT) DMACH, IMACH, RMACH
       INTEGER IBETA, IDMAX, IMAX, MO, N
       INTEGER M, MAXEXP, MINEXP, N0
       REAL EPS, XINT, XMAX, XMIN
@@ -1508,6 +1509,7 @@ C
       SUBROUTINE ISHELL (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
@@ -1557,6 +1559,7 @@ C
       SUBROUTINE SHELL (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S
@@ -1608,6 +1611,7 @@ C
       SUBROUTINE SHELL2 (A, B, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, B
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S, T
@@ -1664,6 +1668,7 @@ C
       SUBROUTINE RSORT (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S
@@ -1715,6 +1720,7 @@ C
       SUBROUTINE RISORT (A, M, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, M
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S
@@ -1772,6 +1778,7 @@ C
       SUBROUTINE RRSORT (A, B, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, B
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S, T
@@ -1828,6 +1835,7 @@ C
       SUBROUTINE DSORT (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
@@ -1878,6 +1886,7 @@ C
       SUBROUTINE DISORT (A, M, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, M
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
@@ -1934,6 +1943,7 @@ C
       SUBROUTINE DDSORT (A, B, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, B
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
@@ -1989,6 +1999,7 @@ C
       SUBROUTINE AORD (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
       REAL S
@@ -2041,6 +2052,7 @@ C
       SUBROUTINE DAORD (A, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A
       INTEGER N
       INTEGER I, II, IMAX, J, JMAX, KI, L, LL
 C-----------------------------------------------------------------------
@@ -2092,6 +2104,7 @@ C
       SUBROUTINE QSORTI (X, IND, N)
       IMPLICIT NONE
       INTENT(IN) N, X
+      INTENT(INOUT) IND
       INTEGER N, X(N), IND(N)
 C
 C***********************************************************
@@ -2293,6 +2306,7 @@ C
       SUBROUTINE QSORTR (X, IND, N)
       IMPLICIT NONE
       INTENT(IN) N, X
+      INTENT(INOUT) IND
       INTEGER N, IND(N)
       REAL    X(N)
 C
@@ -2495,6 +2509,7 @@ C
       SUBROUTINE QSORTD (X, IND, N)
       IMPLICIT NONE
       INTENT(IN) N, X
+      INTENT(INOUT) IND
       INTEGER N, IND(N)
       DOUBLE PRECISION X(N)
 C
@@ -2698,6 +2713,7 @@ C
       SUBROUTINE IORDER (A, IP, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IP
       INTEGER N, A(N), IP(N)
 C
 C***********************************************************
@@ -2771,6 +2787,7 @@ C
       SUBROUTINE RORDER (A, IP, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IP
       INTEGER N, IP(N)
       REAL    A(N)
 C
@@ -2846,6 +2863,7 @@ C
       SUBROUTINE DORDER (A, IP, N)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IP
       INTEGER N, IP(N)
       DOUBLE PRECISION A(N)
 C
@@ -3043,6 +3061,7 @@ C
       SUBROUTINE CREC (X, Y, U, V)
       IMPLICIT NONE
       INTENT(IN) X, Y
+      INTENT(INOUT) U, V
       REAL U, V, X, Y
       REAL D, T
 C-----------------------------------------------------------------------
@@ -3064,6 +3083,7 @@ C-----------------------------------------------------------------------
       SUBROUTINE DCREC (X, Y, U, V)
       IMPLICIT NONE
       INTENT(IN) X, Y
+      INTENT(INOUT) U, V
 C-----------------------------------------------------------------------
 C             COMPLEX RECIPROCAL U + I*V = 1/(X + I*Y)
 C-----------------------------------------------------------------------
@@ -3115,6 +3135,7 @@ C
       SUBROUTINE CDIVID (AR,AI,BR,BI,CR,CI)
       IMPLICIT NONE
       INTENT(IN) AI, AR, BI, BR
+      INTENT(INOUT) CI, CR
 C-----------------------------------------------------------------------
 C     DOUBLE PRECISION COMPLEX DIVISION C = A/B AVOIDING OVERFLOW
 C-----------------------------------------------------------------------
@@ -3150,6 +3171,7 @@ C
       SUBROUTINE DCSQRT (Z, W)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) W
       DOUBLE PRECISION Z(2), W(2)
 C ----------------------------------------------------------------------
 C        W = SQRT(Z) FOR THE DOUBLE PRECISION COMPLEX NUMBER Z
@@ -3199,6 +3221,7 @@ C
       SUBROUTINE POCA(R,A,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, R
+      INTENT(OUT) X, Y
       REAL A, R, X, Y
       X=R*COS(A)
       Y=R*SIN(A)
@@ -3208,6 +3231,7 @@ C
       SUBROUTINE CAPO(X,Y,R,THETA)
       IMPLICIT NONE
       INTENT(IN) X, Y
+      INTENT(INOUT) R, THETA
       REAL R, THETA, X, Y
       REAL A
       IF (ABS(X).LE.ABS(Y)) GO TO 10
@@ -3228,6 +3252,7 @@ C
       SUBROUTINE ROTA(X1,Y1,A,X2,Y2)
       IMPLICIT NONE
       INTENT(IN) A, X1, Y1
+      INTENT(OUT) X2, Y2
       REAL A, X1, X2, Y1, Y2
       REAL COSA, SINA
       SINA=SIN(A)
@@ -3239,6 +3264,7 @@ C
 
       SUBROUTINE SROTG(SA,SB,SC,SS)
       IMPLICIT NONE
+      INTENT(INOUT) SA, SB, SC, SS
       REAL SA, SB, SC, SS
       REAL R, U, V
 C
@@ -3315,6 +3341,7 @@ C
 
       SUBROUTINE DROTG(DA,DB,DC,DS)
       IMPLICIT NONE
+      INTENT(INOUT) DA, DB, DC, DS
 C
 C     DESIGNED BY C.L.LAWSON, JPL, 1977 SEPT 08
 C
@@ -3390,6 +3417,7 @@ C
 
       SUBROUTINE ROT3 (A, THETA)
       IMPLICIT NONE
+      INTENT(INOUT) THETA
       REAL A, THETA
       REAL PIHALF, R, T, U, V
       DIMENSION A(3,3), THETA(3)
@@ -3434,6 +3462,8 @@ C
       SUBROUTINE CONSTR (XK,YK,ZK, CX,SX,CY,SY)
       IMPLICIT NONE
       INTENT(IN) XK, YK, ZK
+      INTENT(OUT) CY, SY
+      INTENT(INOUT) CX, SX
       REAL XK, YK, ZK, CX, SX, CY, SY
 C
 C***********************************************************
@@ -3866,6 +3896,7 @@ C
       SUBROUTINE SNHCSH (SINHM,COSHM,X,ISW)
       IMPLICIT NONE
       INTENT(IN) ISW, X
+      INTENT(INOUT) COSHM, SINHM
       REAL AX, CP1, CP2, CP3, CP4, CP5, CQ1, EXPX, SP1, SP2, SP3, SP4
      x, SP5, SQ1, XS, XX, ZP1, ZP2, ZP3, ZQ1, ZQ2, ZQ3, ZQ4
 C
@@ -4113,6 +4144,7 @@ C
       SUBROUTINE REXP1 (X, E, W)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) E, W
       REAL E, W, X
       REAL P1, P2, Q1, Q2, Q3, Q4
 C-----------------------------------------------------------------------
@@ -4148,6 +4180,8 @@ C
       SUBROUTINE DREXP1 (X, E, W)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(OUT) W
+      INTENT(INOUT) E
 C-----------------------------------------------------------------------
 C
 C                  EVALUATION OF W = (EXP(X) - 1)/X
@@ -4562,6 +4596,7 @@ C
       SUBROUTINE LOCPT (X0, Y0, X, Y, N, L, M)
       IMPLICIT NONE
       INTENT(IN) N, X, X0, Y, Y0
+      INTENT(INOUT) L, M
       INTEGER L, M, N
       REAL X0, Y0
       INTEGER I, N0
@@ -4646,6 +4681,8 @@ C
       SUBROUTINE PFIND (A, B, X, Y, N, U, V, M, NUM, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, M, N, X, Y
+      INTENT(OUT) NUM
+      INTENT(INOUT) IERR, U, V
       INTEGER IERR, M, N, NUM
       INTEGER I, IND, NM1
       REAL D, DIFF, DIFF1, EPS, H, HI, ONEM, ONEP, P, Q, S, T, TMAX
@@ -4812,6 +4849,7 @@ C
       SUBROUTINE HULL (X, Y, M, BX, BY, K, VX, VY, N)
       IMPLICIT NONE
       INTENT(IN) M
+      INTENT(INOUT) BX, BY, K, N, VX, VY, X, Y
       INTEGER K, M, N
       INTEGER I, II, ISAV, J, J0, K0, KP1, KSAV, L, LBEG, LMAX, LMIN
      x, LSAV, MM1, MP1, NN
@@ -5240,6 +5278,7 @@ C
       SUBROUTINE HC (IND, M, N, PR, AR, NB, S, IWK, NUM)
       IMPLICIT NONE
       INTENT(IN) M, N, NUM, PR
+      INTENT(INOUT) AR, IND, IWK, NB, S
       INTEGER IND, M, N, NB, NUM
       INTEGER I, II, NP1
 C
@@ -5348,6 +5387,8 @@ C
      *                VC, P, SUBR, RBUS, TOR, JR, K, IND0)
       IMPLICIT NONE
       INTENT(IN) M, N, NP1, PR
+      INTENT(INOUT) AC, AR, IND, IND0, JR, K, NB, P, PC, RBUS, S, SUBR
+      INTENT(INOUT) TOR, VC, VR
       INTEGER IND, IND0, JR, K, M, N, NB, NP1
       INTEGER I, IEND, IFF, IPI, IT1, IT2, J, J1, J2, JA, JJ, JL, JSUBR
      x, K1, K2, L, L1, L2, LL, LL1, LL2, MAXE, MINU, MP1, NBO, NP
@@ -5684,6 +5725,8 @@ C
      * JR, M, NP1)
       IMPLICIT NONE
       INTENT(IN) AR, I, J, JR, K, M, N, NP1, PR, SUBR
+      INTENT(OUT) I1, NP
+      INTENT(INOUT) I2, RBUS, S
       INTEGER I, I1, I2, J, JR, K, M, N, NP, NP1
       INTEGER JA, K1, L, L1, L2
 C
@@ -5748,6 +5791,7 @@ C A HAMILTONIAN CIRCUIT EXISTS. STORE IT IN  S .
       SUBROUTINE FUPD (A1, A2, P1, P2, V1, V2, I1, K1, N, M, NP1)
       IMPLICIT NONE
       INTENT(IN) I1, K1, M, N, NP1, P1, P2
+      INTENT(INOUT) A1, A2, V1, V2
       INTEGER I1, K1, M, N, NP1
       INTEGER IA, J, J1, J2, L, L1, L2
 C
@@ -5776,6 +5820,7 @@ C
       SUBROUTINE BUPD (A1, A2, P1, P2, V1, V2, II, K1, K2, N, M, NP1)
       IMPLICIT NONE
       INTENT(IN) II, K1, K2, M, N, NP1, P1, P2
+      INTENT(INOUT) A1, A2, V1, V2
       INTEGER II, K1, K2, M, N, NP1
       INTEGER IA, L, L1, L2, LL, LL1, LL2
 C
@@ -5805,6 +5850,7 @@ C
       SUBROUTINE IUPD(IA, IB, L, A1, A2, P1, P2, V1, V2, K1, N, M, NP1)
       IMPLICIT NONE
       INTENT(IN) IB, K1, L, M, N, NP1, P1, P2
+      INTENT(INOUT) A1, A2, IA, V1, V2
       INTEGER IA, IB, K1, L, M, N, NP1
       INTEGER IARC, J1, J2, JJ, M1, M2, MM
 C
@@ -5840,6 +5886,7 @@ C
      * NP1)
       IMPLICIT NONE
       INTENT(IN) IA, IB, K1, M, N, NP1, PC, PR
+      INTENT(INOUT) AC, AR, JJ, LL, VC, VR
       INTEGER IA, IB, JJ, K1, LL, M, N, NP1
       INTEGER J1, J2, L1, L2
 C
@@ -5886,6 +5933,7 @@ C ARC  (IA,IB)  CANNOT BE REMOVED FROM THE GRAPH.
       SUBROUTINE CERF (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER I
       REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
@@ -6043,6 +6091,7 @@ C
       SUBROUTINE CERFC (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER I
       REAL C, C2, DM, PM, QM, R, SN, SS, X, Y
@@ -6473,6 +6522,7 @@ C
       SUBROUTINE DCERF (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
 C-----------------------------------------------------------------------
 C
@@ -6754,6 +6804,7 @@ C
       SUBROUTINE DCERFC (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
 C-----------------------------------------------------------------------
 C
@@ -7040,6 +7091,7 @@ C
       SUBROUTINE ERFCM2 (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER J, N
 C-----------------------------------------------------------------------
@@ -8134,6 +8186,7 @@ C     ---------------
       SUBROUTINE PNI (P, Q, D, W, IERR)
       IMPLICIT NONE
       INTENT(IN) D, P, Q
+      INTENT(INOUT) IERR, W
       INTEGER IERR
       REAL D, P, Q, W
       REAL EPS, RT2, T, U, V
@@ -8191,6 +8244,7 @@ C
       SUBROUTINE DPNI (P, Q, D, W, IERR)
       IMPLICIT NONE
       INTENT(IN) D, P, Q
+      INTENT(INOUT) IERR, W
       INTEGER IERR
 C-----------------------------------------------------------------------
 C
@@ -8702,6 +8756,7 @@ C
       SUBROUTINE CFRNLI (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER I
       REAL C, C0, DM, PM, QM, R, SS, X, Y
@@ -8881,6 +8936,7 @@ C
       SUBROUTINE FRNL (T, C, S)
       IMPLICIT NONE
       INTENT(IN) T
+      INTENT(INOUT) C, S
       REAL C, S, T
       INTEGER I, L, M, MAX
       REAL CY, F, FD, FN, G, GD, GN, PI, PIX, PIXX, R, SY, X, XX, Y
@@ -9104,6 +9160,7 @@ C
       SUBROUTINE CEXPLI (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER I
       REAL C, CY, D, E, EPS, EULER, PI, QM, R, SS, SY, TOL, U, X, Y
@@ -9294,6 +9351,8 @@ C
       SUBROUTINE EXPLI(INT,ARG,RESULT,IERR)
       IMPLICIT NONE
       INTENT(IN) ARG, INT
+      INTENT(OUT) IERR
+      INTENT(INOUT) RESULT
       INTEGER M
       REAL CSEVL
       REAL ALNREL
@@ -10474,6 +10533,7 @@ C
       SUBROUTINE CEXEXI (Z, W)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) W
       INTEGER I
       REAL CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
 C-----------------------------------------------------------------------
@@ -10988,6 +11048,7 @@ C
       SUBROUTINE CGAMMA (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER J, K, L, M, MAX, N, NM1
       REAL A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2, HL2P
@@ -11658,6 +11719,7 @@ C
       SUBROUTINE DCGAMA (MO, Z, W)
       IMPLICIT NONE
       INTENT(IN) MO, Z
+      INTENT(INOUT) W
       INTEGER MO
       INTEGER J, K, MAX, N, NM1
       INTEGER IPMPAR
@@ -12304,6 +12366,7 @@ C-----------------------
       SUBROUTINE CPSI (Z, W)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) W
       INTEGER J, K, L, M, MAX
       REAL A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1, S2
      x, SN, T, U, W1, W2, X, Y, Y2
@@ -12622,6 +12685,7 @@ C---------------------------------------------------------------------
       SUBROUTINE DCPSI (Z, W)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) W
       INTEGER J, K, M, MAX
       INTEGER IPMPAR
 C-----------------------------------------------------------------------
@@ -13064,6 +13128,8 @@ C
       SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
       IMPLICIT NONE
       INTENT(IN) M, N, X
+      INTENT(OUT) IFLAG
+      INTENT(INOUT) ANS
       INTEGER IFLAG, M, N
       INTEGER I, J, K, MX, NMAX, NN, NP, NX
 C-----------------------------------------------------------------------
@@ -13857,6 +13923,7 @@ C
       SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
       IMPLICIT NONE
       INTENT(IN) A, IND, X
+      INTENT(INOUT) ANS, QANS
       INTEGER IND
       REAL A, ANS, QANS, X
       INTEGER I, IOP, M, MAX, N
@@ -14359,6 +14426,8 @@ C
       SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
       IMPLICIT NONE
       INTENT(IN) A, P, Q, X0
+      INTENT(OUT) X
+      INTENT(INOUT) IERR
       INTEGER IERR
       REAL A, P, Q, X, X0
       INTEGER IER, IOP
@@ -14696,6 +14765,7 @@ C
       SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
       IMPLICIT NONE
       INTENT(IN) A, X
+      INTENT(INOUT) ANS, IERR, QANS
       INTEGER IERR
       INTEGER I, M, MAX, N
 C-----------------------------------------------------------------------
@@ -14959,6 +15029,7 @@ C
       SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
       IMPLICIT NONE
       INTENT(IN) A, L, RTA, Y
+      INTENT(INOUT) ANS, QANS, Z
 C-----------------------------------------------------------------------
 C
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -15270,6 +15341,7 @@ C
       SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
       IMPLICIT NONE
       INTENT(IN) A, L, RTA, Y
+      INTENT(INOUT) ANS, QANS, Z
 C-----------------------------------------------------------------------
 C
 C            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -15399,6 +15471,8 @@ C
       SUBROUTINE DGINV (A, X, P, Q, IERR)
       IMPLICIT NONE
       INTENT(IN) A, P, Q
+      INTENT(OUT) X
+      INTENT(INOUT) IERR
       INTEGER IERR
       INTEGER IER, IND
 C-----------------------------------------------------------------------
@@ -15725,6 +15799,8 @@ C
       SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, X, Y
+      INTENT(OUT) W, W1
+      INTENT(INOUT) IERR
       REAL APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
       INTEGER IERR
       REAL A, B, W, W1, X, Y
@@ -16483,6 +16559,7 @@ C
       SUBROUTINE BGRAT(A, B, X, Y, W, EPS, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, EPS, X, Y
+      INTENT(INOUT) IERR, W
       INTEGER IERR
       REAL A, B, EPS, W, X, Y
       INTEGER I, N, NM1
@@ -16560,6 +16637,7 @@ C
       SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
       IMPLICIT NONE
       INTENT(IN) A, EPS, R, X
+      INTENT(INOUT) P, Q
       REAL A, EPS, P, Q, R, X
       REAL A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM, T
      x, TOL, W, Z
@@ -16758,6 +16836,7 @@ C
       SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
       IMPLICIT NONE
       INTENT(IN) A0, B0, EPS, X0
+      INTENT(OUT) IERR, P
       INTEGER IERR
       REAL A0, B0, EPS, P, X0
       INTEGER IND, L, MAX
@@ -17150,6 +17229,7 @@ C     ------------------------------------------------------------------
       SUBROUTINE CBSSLJ (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU
+      INTENT(INOUT) W
       INTEGER I, K, M, N
       REAL A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN, T1
      x, T2, U, V, X, Y
@@ -17355,6 +17435,7 @@ C
       SUBROUTINE CBJM (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU
+      INTENT(INOUT) W
       INTEGER I, IMIN, K, KM1, KM2
       REAL A, A0, EPS, RNU
       REAL ANORM
@@ -17461,6 +17542,7 @@ C
       SUBROUTINE CBDB (CZ, CNU, FN, W)
       IMPLICIT NONE
       INTENT(IN) CNU, CZ, FN
+      INTENT(INOUT) W
       REAL FN
       INTEGER IND, K, L, M
       REAL ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V, X
@@ -17696,6 +17778,7 @@ C
       SUBROUTINE CBJA (CZ, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU, CZ
+      INTENT(INOUT) W
       INTEGER I, IND
       REAL C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
       REAL SIN1
@@ -17796,6 +17879,7 @@ C
       SUBROUTINE BSSLJ (A, IN, W)
       IMPLICIT NONE
       INTENT(IN) A, IN
+      INTENT(INOUT) W
       INTEGER IN
       INTEGER I, M, N
       REAL AN, AQ, AZ, CD, CE, FJ, PM, PN, QF, QM, QN, QZ, RM, RZ, SM
@@ -18107,6 +18191,7 @@ C     -------------------
       SUBROUTINE BESJ(X, ALPHA, N, Y, NZ)
       IMPLICIT NONE
       INTENT(IN) ALPHA, N
+      INTENT(INOUT) NZ, Y
 C
 C     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
 C
@@ -19024,6 +19109,7 @@ C
       SUBROUTINE JAIRY(X,RX,C,AI,DAI)
       IMPLICIT NONE
       INTENT(IN) C, RX, X
+      INTENT(INOUT) AI, DAI
       REAL AI, C, DAI, RX, X
       INTEGER I, J, M1, M1D, M2, M2D, M3, M3D, M4, M4D, N1, N1D, N2, N2D
      x, N3, N3D, N4, N4D
@@ -19375,6 +19461,7 @@ C
       SUBROUTINE BSSLY (A, IN, W)
       IMPLICIT NONE
       INTENT(IN) A, IN
+      INTENT(INOUT) W
       INTEGER IN
       INTEGER I, LA, LR, LY, M, N
       REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, QZ, RM, RN, RZ, SL
@@ -19692,6 +19779,7 @@ C     -------------------
       SUBROUTINE CBSSLI (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU, Z
+      INTENT(INOUT) W
       REAL PIHALF, T, X, Y
       REAL SIN1
       REAL COS1
@@ -19729,6 +19817,7 @@ C
       SUBROUTINE BSSLI (MO, A, IN, W)
       IMPLICIT NONE
       INTENT(IN) A, IN, MO
+      INTENT(INOUT) W
       INTEGER IN, MO
       INTEGER I, M, N
       REAL AN, AQ, AZ, CD, CE, FI, PM, PN, QF, QM, QN, QZ, RM, RZ, SM
@@ -20060,6 +20149,7 @@ C     -------------------
       SUBROUTINE BESI(X, ALPHA, KODE, N, Y, NZ)
       IMPLICIT NONE
       INTENT(IN) ALPHA, KODE, N, X
+      INTENT(INOUT) NZ, Y
 C
 C     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
 C
@@ -20526,6 +20616,7 @@ C
       SUBROUTINE ASIK(X,FNU,KODE,FLGIK,RA,ARG,IN,TOL,Y)
       IMPLICIT NONE
       INTENT(IN) FLGIK, FNU, IN, KODE, TOL, X
+      INTENT(INOUT) ARG, RA, Y
 C
 C                  ASIK COMPUTES BESSEL FUNCTIONS I AND K
 C                  FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35
@@ -20655,6 +20746,7 @@ C     ---------------------
       SUBROUTINE CBESK (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU
+      INTENT(INOUT) W
       REAL A, B, C, E, RN, RZ, S, TAU, X, Y
       REAL CPABS
 C-----------------------------------------------------------------------
@@ -20772,6 +20864,7 @@ C
       SUBROUTINE CBKI (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU, Z
+      INTENT(INOUT) W
       REAL A, B, PI, PIHALF, U1, U2
       REAL SIN1
       REAL COS1
@@ -20799,6 +20892,7 @@ C
       SUBROUTINE CBKA (Z, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU
+      INTENT(INOUT) W
       INTEGER I
       REAL C, EPS, U, V
       REAL ANORM
@@ -20849,6 +20943,7 @@ C
       SUBROUTINE CBKM (Z, RZ, CNU, W)
       IMPLICIT NONE
       INTENT(IN) CNU, RZ, Z
+      INTENT(INOUT) W
       REAL RZ
       INTEGER I, IND, M, N, N1
       REAL A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
@@ -20967,6 +21062,7 @@ C
       SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       INTENT(IN) R, Z, ZR
+      INTENT(INOUT) W1, W2
       REAL R
       INTEGER K
       REAL AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
@@ -21092,6 +21188,7 @@ C
       SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
       IMPLICIT NONE
       INTENT(IN) N, NU, R, Z, ZR
+      INTENT(INOUT) W, W0
       INTEGER N
       REAL R
       INTEGER I, M, NUM
@@ -21209,6 +21306,7 @@ C
       SUBROUTINE CBSSLK (Z, R, W)
       IMPLICIT NONE
       INTENT(IN) R
+      INTENT(INOUT) W
       REAL R
       INTEGER I, IND, M, N, N1
       REAL A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
@@ -21333,6 +21431,7 @@ C
       SUBROUTINE CKA (Z, NU, W)
       IMPLICIT NONE
       INTENT(IN) NU
+      INTENT(INOUT) W
       INTEGER I
       REAL A, C, EPS, U, V
       REAL ANORM
@@ -21383,6 +21482,7 @@ C
       SUBROUTINE CKM (Z, R, ZR, NU, W1, W2)
       IMPLICIT NONE
       INTENT(IN) NU, R, Z, ZR
+      INTENT(INOUT) W1, W2
       REAL R
       INTEGER K
       REAL A, AK, EPS, EPS0, G1, G2, GM1, GM2, PHI, PI, T, TOL, X, Y
@@ -21500,6 +21600,7 @@ C
       SUBROUTINE CKML (Z, R, ZR, NU, K1, K2)
       IMPLICIT NONE
       INTENT(IN) NU, R, Z, ZR
+      INTENT(INOUT) K1, K2
       REAL R
       INTEGER I, M
       REAL A, AL, B, C, C1, E, EPS, EPS0, TH, X, Y
@@ -21633,6 +21734,7 @@ C
       SUBROUTINE BSSLK (MO, A, IN, W)
       IMPLICIT NONE
       INTENT(IN) A, IN, MO
+      INTENT(INOUT) W
       INTEGER IN, MO
       INTEGER I, LA, LK, LR, M, N
       REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, RM, RN, RZ, SL, SM
@@ -21881,6 +21983,8 @@ C     -------------------
       SUBROUTINE CAI(IND,Z,AI,AIP,IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) AI, AIP
       INTEGER IERR, IND
       REAL A, B, R
       REAL CPABS
@@ -21915,6 +22019,7 @@ C
       SUBROUTINE AIRM (IND,Z,AI,AIP,BI,BIP)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(INOUT) AI, AIP, BI, BIP
       INTEGER IND
       INTEGER I, N
       REAL C1, C2, SQT3, X, Y
@@ -22004,6 +22109,8 @@ C
       SUBROUTINE AII(IND, Z, AI, AIP, IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) AI, AIP
       INTEGER IERR, IND
       REAL A, B, C1, R
       REAL CPABS
@@ -22055,6 +22162,8 @@ C
       SUBROUTINE AIA (IND, Z, AI, AIP, IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) AI, AIP
       INTEGER IERR, IND
       INTEGER I, K, M, M2
       REAL C1, C2, EPS, R, T, U, U1, V, V1, XM, XNEG, XPOS
@@ -22235,6 +22344,8 @@ C
       SUBROUTINE CBI(IND,Z,BI,BIP,IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) BI, BIP
       INTEGER IERR, IND
       REAL A, B, R
       REAL CPABS
@@ -22269,6 +22380,8 @@ C
       SUBROUTINE BII(IND, Z, BI, BIP, IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) BI, BIP
       INTEGER IERR, IND
       REAL A, C1, R, SQT3, X, Y
       REAL CPABS
@@ -22331,6 +22444,8 @@ C
       SUBROUTINE BIA(IND,Z,BI,BIP,IERR)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) BI, BIP
       INTEGER IERR, IND
       INTEGER I, K, M, M2
       REAL C, C1, C2, C3, CE, CF, D, EPS, R, S, SQT3, T, U, U1, V, V1, X
@@ -22581,6 +22696,7 @@ C
 
       SUBROUTINE IA(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      INTENT(INOUT) I1, I1M, I2, I2M
 C-------------------------------------------------------------
 C     CALCULATES THE MODIFIED BESSEL FUNCTION OF THE FIRST
 C     KIND FOR ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX
@@ -22626,6 +22742,7 @@ C
 
       SUBROUTINE IMC(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      INTENT(INOUT) I1, I1M, I2, I2M
       INTEGER I, N, N1
       REAL A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
 C----------------------------------------------------------------
@@ -22694,6 +22811,7 @@ C
       SUBROUTINE BIM(Z,CN,W)
       IMPLICIT NONE
       INTENT(IN) CN
+      INTENT(INOUT) W
       REAL CN
       REAL D, EPS
       REAL ANORM
@@ -22737,6 +22855,7 @@ C
 
       SUBROUTINE JA(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      INTENT(INOUT) I1, I1M, I2, I2M
 C------------------------------------------------------------
 C     CALCULATES THE BESSEL FUNCTION OF THE FIRST KIND FOR
 C     ORDERS 1/3, 2/3, -1/3, AND -2/3 AND FOR COMPLEX ARGUMENT
@@ -22782,6 +22901,7 @@ C
 
       SUBROUTINE JMC(Z, I1, I2, I1M, I2M)
       IMPLICIT NONE
+      INTENT(INOUT) I1, I1M, I2, I2M
       INTEGER I, N, N1
       REAL A, AN, B, C1, C2, CFA, CFB, CN1, CN2, GM1, GM2
 C----------------------------------------------------------------
@@ -22850,6 +22970,7 @@ C
       SUBROUTINE BJM(Z,CN,W)
       IMPLICIT NONE
       INTENT(IN) CN
+      INTENT(INOUT) W
       REAL CN
       REAL D, EPS
       REAL ANORM
@@ -22894,6 +23015,7 @@ C
       SUBROUTINE KA(IND, Z, K1, K2)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(INOUT) K1, K2
       INTEGER IND
       INTEGER IND1
       REAL A, B, PI
@@ -22944,6 +23066,7 @@ C
       SUBROUTINE KML(IND, Z, K1, K2)
       IMPLICIT NONE
       INTENT(IN) IND, Z
+      INTENT(INOUT) K1, K2
       INTEGER IND
       INTEGER I, L, M
       REAL A, AI, AL, B, C, C1, EPS, R, TH, X1, X2
@@ -23504,6 +23627,7 @@ C
       SUBROUTINE AIMP (X, R, PHI)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) PHI, R
       REAL PHI, R, X
       REAL AD0, AD1, AD2, AD3, AD4, AD5, AN0, AN1, AN2, AN3, AN4, AN5
      x, AN6, BD0, BD1, BD2, BD3, BD4, BD5, BD6, BN0, BN1, BN2, BN3, BN4
@@ -23888,6 +24012,7 @@ C
       SUBROUTINE KL (L, FK, FL)
       IMPLICIT NONE
       INTENT(IN) L
+      INTENT(INOUT) FK, FL
       INTEGER I
       REAL BN, C, EPS, HPI, RI, TOL, U, X, Y
       REAL SPMPAR
@@ -23961,6 +24086,7 @@ C
       SUBROUTINE CKE(K,L,CK,CE,IERR)
       IMPLICIT NONE
       INTENT(IN) K, L
+      INTENT(INOUT) CE, CK, IERR
       INTEGER IERR
       INTEGER I, IND
       REAL C, C1, C2, EPS, PHI, R, T, TOL, U, V, X, XX, Y
@@ -24260,6 +24386,7 @@ C---------------------------------------------------
       SUBROUTINE EKM (K2, FK, EK)
       IMPLICIT NONE
       INTENT(IN) K2
+      INTENT(INOUT) EK, FK
       INTEGER I
       REAL C, EPS, HPI, RI, TOL
       REAL SPMPAR
@@ -24301,6 +24428,7 @@ C
       SUBROUTINE EKL (L,FK,FL,EK,EL,GK,GL)
       IMPLICIT NONE
       INTENT(IN) L
+      INTENT(INOUT) EK, EL, FK, FL, GK, GL
       INTEGER I
       REAL BN, C, DN, EPS, FN, GN, HPI, RI, TOL, U, X, Y
       REAL SPMPAR
@@ -24398,6 +24526,7 @@ C
       SUBROUTINE ELLPI (PHI, CPHI, K, L, F, E, IERR)
       IMPLICIT NONE
       INTENT(IN) CPHI, K, L, PHI
+      INTENT(INOUT) E, F, IERR
       INTEGER IERR
       REAL CPHI, E, F, PHI
       REAL AN, CN, D1, D2, D3, D4, DN, HN, P, PN, PX, QN, QX, R, R0, R2
@@ -24541,6 +24670,7 @@ C
       SUBROUTINE DELLPI (PHI, CPHI, K, L, F, E, IERR)
       IMPLICIT NONE
       INTENT(IN) CPHI, K, L, PHI
+      INTENT(INOUT) E, F, IERR
       INTEGER IERR
 C-----------------------------------------------------------------------
 C
@@ -24684,6 +24814,7 @@ C
       SUBROUTINE EPI (PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTENT(IN) CPHI, K2, L2, M, N, PHI
+      INTENT(INOUT) IERR, P
       INTEGER IERR
 C-----------------------------------------------------------------------
 C             REAL ELLIPTIC INTEGRAL OF THE THIRD KIND
@@ -24747,6 +24878,7 @@ C
       SUBROUTINE DEPI (PHI, CPHI, K2, L2, N, M, P, IERR)
       IMPLICIT NONE
       INTENT(IN) CPHI, K2, L2, M, N, PHI
+      INTENT(INOUT) IERR, P
       INTEGER IERR
 C-----------------------------------------------------------------------
 C               DOUBLE PRECISION COMPUTATION OF THE
@@ -24811,6 +24943,7 @@ C
       SUBROUTINE RFVAL (X, Y, Z, RF, IERR)
       IMPLICIT NONE
       INTENT(IN) X, Y, Z
+      INTENT(INOUT) IERR, RF
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -24924,6 +25057,7 @@ C
       SUBROUTINE DRFVAL (X, Y, Z, RF, IERR)
       IMPLICIT NONE
       INTENT(IN) X, Y, Z
+      INTENT(INOUT) IERR, RF
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -25037,6 +25171,7 @@ C
       SUBROUTINE RDVAL (X, Y, Z, RD, IERR)
       IMPLICIT NONE
       INTENT(IN) X, Y, Z
+      INTENT(INOUT) IERR, RD
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -25161,6 +25296,7 @@ C
       SUBROUTINE DRDVAL (X, Y, Z, RD, IERR)
       IMPLICIT NONE
       INTENT(IN) X, Y, Z
+      INTENT(INOUT) IERR, RD
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -25285,6 +25421,7 @@ C
       SUBROUTINE RJVAL (X, Y, Z, P, RJ, IERR)
       IMPLICIT NONE
       INTENT(IN) P, X, Y, Z
+      INTENT(INOUT) IERR, RJ
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -25425,6 +25562,7 @@ C
       SUBROUTINE DRJVAL (X, Y, Z, P, RJ, IERR)
       IMPLICIT NONE
       INTENT(IN) P, X, Y, Z
+      INTENT(INOUT) IERR, RJ
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INCOMPLETE ELLIPTIC INTEGRAL
@@ -25565,6 +25703,7 @@ C
       SUBROUTINE RCVAL1 (X, Y, ERRTOL, RC, IERR)
       IMPLICIT NONE
       INTENT(IN) ERRTOL, X, Y
+      INTENT(INOUT) IERR, RC
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -25668,6 +25807,7 @@ C
       SUBROUTINE DRCVL1 (X, Y, ERRTOL, RC, IERR)
       IMPLICIT NONE
       INTENT(IN) ERRTOL, X, Y
+      INTENT(INOUT) IERR, RC
 C-----------------------------------------------------------------------
 C
 C          THIS SUBROUTINE COMPUTES THE INTEGRAL
@@ -25763,6 +25903,7 @@ C
       SUBROUTINE ELLPF(U,K,L,S,C,D,IERR)
       IMPLICIT NONE
       INTENT(IN) K, L, U
+      INTENT(INOUT) C, D, IERR, S
       INTEGER IERR
       REAL C, D, S, U
       INTEGER MAX, N
@@ -25855,6 +25996,7 @@ C
       SUBROUTINE SCD(U,K,L,F,S,C,D)
       IMPLICIT NONE
       INTENT(IN) F, K, L, U
+      INTENT(INOUT) C, D, S
       REAL C, D, F, S, U
       INTEGER IERR
       REAL C1, D1, E1, F1, PIHALF, S1, V
@@ -25909,6 +26051,7 @@ C
       SUBROUTINE SCDM(U,K,S,C,D)
       IMPLICIT NONE
       INTENT(IN) K, U
+      INTENT(OUT) C, D, S
       REAL C, D, S, U
       REAL C1, C2, C3, C4, U2
 C     -------------------------------------------------
@@ -25934,6 +26077,7 @@ C
       SUBROUTINE SCDF(U,K,L,F,F1,S,C,D)
       IMPLICIT NONE
       INTENT(IN) F, F1, K, L, U
+      INTENT(INOUT) C, D, S
       REAL C, D, F, F1, S, U
       REAL A, AI, COEF, EPS, PIHALF, Q1, Q2, QD, QH, QN, SUM, TEMP, TOL
      x, V, W, X
@@ -25998,6 +26142,7 @@ C
       SUBROUTINE SCDJ(U,K,L,F,F1,S,C,D)
       IMPLICIT NONE
       INTENT(IN) F, F1, K, L, U
+      INTENT(INOUT) C, D, S
       REAL C, D, F, F1, S, U
       REAL A, CH, COEF, E1, E1N, E2, E2N, EPS, PI, PIHALF, Q1, Q1N, Q2
      x, Q2N, SH, SUM, TEMP, TOL, V, W, X, X2, XN
@@ -26079,6 +26224,7 @@ C
       SUBROUTINE ELPFC1 (U,K,L,S,C,D,IERR)
       IMPLICIT NONE
       INTENT(IN) K, L, U
+      INTENT(INOUT) C, D, IERR, S
       INTEGER IERR
       REAL C1, C2, CK, CL, COEF, D1, D2, DK, DL, R, S1, S2, SK, SL, T
      x, T1, T2, TD1, TD2, U1, U2
@@ -26168,6 +26314,7 @@ C
       SUBROUTINE PEQ(Z, W, IERR)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) IERR, W
 C
 C     WEIERSTRASS P-FUNCTION IN THE EQUIANHARMONIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
@@ -26212,6 +26359,7 @@ C
       SUBROUTINE PEQ1(Z, W, IERR)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) IERR, W
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
 C     EQUIANHARMONIC CASE FOR COMPLEX ARGUMENT
@@ -26258,6 +26406,7 @@ C
       SUBROUTINE PLEM(Z, W, IERR)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) IERR, W
 C
 C     WEIERSTRASS P-FUNCTION IN THE LEMNISCATIC CASE
 C     FOR COMPLEX ARGUMENT WITH UNIT PERIOD PARALLELOGRAM
@@ -26304,6 +26453,7 @@ C
       SUBROUTINE PLEM1(Z, W, IERR)
       IMPLICIT NONE
       INTENT(IN) Z
+      INTENT(INOUT) IERR, W
 C
 C     FIRST DERIVATIVE OF WEIERSTRASS P-FUNCTION IN THE
 C     LEMNISCATIC CASE FOR COMPLEX ARGUMENT
@@ -26353,6 +26503,7 @@ C
       SUBROUTINE VALR2(X,Y,N0,P,IOP,A,IND,KO)
       IMPLICIT NONE
       INTENT(IN) IOP, N0
+      INTENT(INOUT) A, IND, KO, P, X, Y
       INTEGER IND, IOP, KO, N0
       REAL A, P, X, Y
       INTEGER K, M, N
@@ -26640,6 +26791,8 @@ C
       SUBROUTINE CIRCV (R, D, J, P, IERR)
       IMPLICIT NONE
       INTENT(IN) D, J, R
+      INTENT(OUT) P
+      INTENT(INOUT) IERR
       INTEGER IERR, J
       REAL D, P, R
       INTEGER I, N
@@ -26892,6 +27045,7 @@ C
       SUBROUTINE ERFC0 (IND, X, E, Y)
       IMPLICIT NONE
       INTENT(IN) IND, X
+      INTENT(INOUT) E, Y
       INTEGER IND
       REAL E, X, Y
       REAL AX, BOT, C, EPS, T, TOP
@@ -27018,6 +27172,7 @@ C------------------------
       SUBROUTINE PKILL (R0, SX, SY, H, K, P)
       IMPLICIT NONE
       INTENT(IN) H, K, R0, SX, SY
+      INTENT(OUT) P
       REAL H, P, R0, SX, SY
       INTEGER I, II, IY, IZ, IZ3, J, J8, N1, NT
       REAL A, A1, A2, A3, A4, C, C8, D, D1, D2, DM, E3, E4, EPS, F, G2
@@ -27464,6 +27619,7 @@ C
       SUBROUTINE PLCOPY (A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
@@ -27492,6 +27648,7 @@ C
       SUBROUTINE DPCOPY (A,KA,M,B,KB,N)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER J, JMAX, LA, LB, MP1
 C     ------------------------------------------------------------------
@@ -27520,6 +27677,7 @@ C
       SUBROUTINE PADD (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27544,6 +27702,7 @@ C
       SUBROUTINE DPADD (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27568,6 +27727,7 @@ C
       SUBROUTINE PSUBT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27592,6 +27752,7 @@ C
       SUBROUTINE DPSUBT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27616,6 +27777,7 @@ C
       SUBROUTINE PMULT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27657,6 +27819,7 @@ C
       SUBROUTINE DPMULT (A,KA,L,B,KB,M,C,KC,N)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, IMAX, IMIN, J, JMAX, JMIN, LA, LB, LC
 C     ------------------------------------------------------------------
@@ -27698,6 +27861,7 @@ C
       SUBROUTINE PDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C, IERR
       INTEGER IERR, KA, KB, KC, L, M, N
       INTEGER I, IB, IC, IMAX, J, LA, LC
       REAL B0
@@ -27756,6 +27920,7 @@ C
       SUBROUTINE DPDIV (A,KA,L,B,KB,M,C,KC,N,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C, IERR
       INTEGER IERR, KA, KB, KC, L, M, N
       INTEGER I, IB, IC, IMAX, J, LA, LC
 C     ------------------------------------------------------------------
@@ -27813,6 +27978,7 @@ C
       SUBROUTINE PLPWR(R,A,KA,M,B,KB,N,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N, R
+      INTENT(INOUT) B, IERR
       INTEGER IERR, KA, KB, M, N
       REAL R
       INTEGER I, IA, IB, IMAX, J, LB
@@ -27871,6 +28037,7 @@ C
       SUBROUTINE DPLPWR(R,A,KA,M,B,KB,N,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N, R
+      INTENT(INOUT) B, IERR
       INTEGER IERR, KA, KB, M, N
       INTEGER I, IA, IB, IMAX, J, LB
 C     ------------------------------------------------------------------
@@ -27926,6 +28093,7 @@ C
       SUBROUTINE PINV (A, D, N, Q)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) D, Q
       INTEGER N
       INTEGER I, J, JJ, K, L, L0, LL, M
       REAL S, SUM, T, U
@@ -27987,6 +28155,7 @@ C
       SUBROUTINE DPINV (A, D, N, Q)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) D, Q
       INTEGER N
       INTEGER I, J, JJ, K, L, L0, LL, M
 C-----------------------------------------------------------------------
@@ -28048,6 +28217,7 @@ C
       SUBROUTINE MPLNMV (MO, AU, NC, AC, FV)
       IMPLICIT NONE
       INTENT(IN) AU, MO, NC
+      INTENT(OUT) FV
       INTEGER MO, NC
       REAL AC, AU, FV
       INTEGER K, L
@@ -28165,6 +28335,7 @@ C
       SUBROUTINE LGRNGN (AU, NA, AN)
       IMPLICIT NONE
       INTENT(IN) NA
+      INTENT(INOUT) AN
       INTEGER NA
       REAL AN, AU
       INTEGER K, M
@@ -28192,6 +28363,7 @@ C
       SUBROUTINE LGRNGV (MO, NA, QU, AU, AN, FF, DF, SF)
       IMPLICIT NONE
       INTENT(IN) MO, NA, QU
+      INTENT(INOUT) DF, FF, SF
       INTEGER MO, NA
       REAL AN, AU, DF, FF, QU, SF
       INTEGER K, L
@@ -28305,6 +28477,7 @@ C
       SUBROUTINE LGRNGX (AU, NA, AC)
       IMPLICIT NONE
       INTENT(IN) NA
+      INTENT(INOUT) AC
       INTEGER NA
       REAL AC, AU
       INTEGER I, J, K, L
@@ -28359,6 +28532,7 @@ C
       SUBROUTINE ORTHOS (AU, MA, AA, NA, AR)
       IMPLICIT NONE
       INTENT(IN) MA, NA
+      INTENT(INOUT) AA, AR
       INTEGER MA, NA
       REAL AA, AR, AU
       INTEGER I, J, K, L, M
@@ -28443,6 +28617,7 @@ C
       SUBROUTINE ORTHOV (MO, NA, AU, AR, NF, FF, DF, SF)
       IMPLICIT NONE
       INTENT(IN) AU, MO, NA, NF
+      INTENT(INOUT) DF, FF, SF
       INTEGER MO, NA, NF
       REAL AR, AU, DF, FF, SF
       INTEGER K, L
@@ -28501,6 +28676,7 @@ C
       SUBROUTINE ORTHOX (NA, AR, NC, AC)
       IMPLICIT NONE
       INTENT(IN) NA, NC
+      INTENT(INOUT) AC
       INTEGER NA, NC
       REAL AC, AR
       INTEGER J, K, L, M, N
@@ -28796,6 +28972,8 @@ C
       SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
       IMPLICIT NONE
       INTENT(IN) EPSFCN, LWA, TOL
+      INTENT(OUT) INFO
+      INTENT(INOUT) FVEC, WA, X
       INTEGER N,INFO,LWA
       REAL EPSFCN,TOL
       REAL X(N),FVEC(N),WA(LWA)
@@ -28932,6 +29110,8 @@ C
       IMPLICIT NONE
       INTENT(IN) EPSFCN, FACTOR, LDFJAC, LR, MAXFEV, ML, MODE, MU
       INTENT(IN) NPRINT, XTOL
+      INTENT(OUT) INFO, NFEV
+      INTENT(INOUT) DIAG, FJAC, FVEC, QTF, R, WA1, WA2, WA3, X
       INTEGER N,MAXFEV,ML,MU,MODE,NPRINT,INFO,NFEV,LDFJAC,LR
       REAL XTOL,EPSFCN,FACTOR
       REAL X(N),FVEC(N),DIAG(N),FJAC(LDFJAC,N),R(LR),QTF(N),WA1(N),
@@ -29391,6 +29571,7 @@ C
       SUBROUTINE QDCRT (A, Z)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) Z
       REAL D, EPS, R, W, X, Y
       REAL SPMPAR
 C-----------------------------------------------------------------------
@@ -29453,6 +29634,7 @@ C
       SUBROUTINE DQDCRT (A, ZR, ZI)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) ZI, ZR
 C-----------------------------------------------------------------------
 C
 C        DQDCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -29519,6 +29701,7 @@ C
       SUBROUTINE CBCRT (A, Z)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) Z
       REAL ARG, C, CF, D, EPS, P, P1, Q, Q1, R, R1, RA, RB, RQ, RT, RT3
      x, S, SF, SQ, SUM, T, T1, TOL, W, W1, W2, X, X1, X2, X3, Y, Y1, Y2
      x, Y3
@@ -29721,6 +29904,7 @@ C
       SUBROUTINE DCBCRT (A, ZR, ZI)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) ZI, ZR
 C-----------------------------------------------------------------------
 C
 C        DCBCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -29943,6 +30127,7 @@ C
       SUBROUTINE QTCRT (A, Z)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) Z
       REAL B, B2, C, D, E, H, P, Q, R, T, U, V, V1, V2, X, X1, X2, X3, Y
 C-----------------------------------------------------------------------
 C
@@ -30094,6 +30279,7 @@ C
       SUBROUTINE DQTCRT (A, ZR, ZI)
       IMPLICIT NONE
       INTENT(IN) A
+      INTENT(INOUT) ZI, ZR
 C-----------------------------------------------------------------------
 C
 C         DQTCRT COMPUTES THE ROOTS OF THE REAL POLYNOMIAL
@@ -30255,6 +30441,7 @@ C
 
       SUBROUTINE DRPOLY (OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK)
       IMPLICIT NONE
+      INTENT(INOUT) DWK, NUM, WK, ZEROI, ZEROR
       INTEGER IDP1
 C
 C     THIS SUBROUTINE FINDS THE ZEROS OF A REAL POLYNOMIAL.
@@ -31119,6 +31306,8 @@ C
       SUBROUTINE QUADSD (NN, U, V, P, Q, A, B)
       IMPLICIT NONE
       INTENT(IN) NN, P, U, V
+      INTENT(OUT) A, B
+      INTENT(INOUT) Q
       INTEGER NN
       INTEGER I
 C
@@ -31143,6 +31332,7 @@ C
       SUBROUTINE QUADPL(A, B1, C, SR, SI, LR, LI)
       IMPLICIT NONE
       INTENT(IN) A, B1, C
+      INTENT(INOUT) LI, LR, SI, SR
 C
 C     CALCULATE THE ZEROS OF THE QUADRATIC A*Z**2+B1*Z+C.
 C     THE QUADRATIC FORMULA, MODIFIED TO AVOID OVERFLOW,
@@ -31199,6 +31389,7 @@ C
       SUBROUTINE DCPOLY (OPR,OPI,IDEG,ZEROR,ZEROI,NUM,WK)
       IMPLICIT NONE
       INTENT(IN) OPI, OPR
+      INTENT(INOUT) NUM, WK, ZEROI, ZEROR
       INTEGER NUM
       INTEGER IDP1
 C
@@ -31268,6 +31459,9 @@ C
      *                   HR,HI,QHR,QHI,SHR,SHI,NUM)
       IMPLICIT NONE
       INTENT(IN) IDP1, OPI, OPR
+      INTENT(OUT) NUM
+      INTENT(INOUT) HI, HR, PI, PR, QHI, QHR, QPI, QPR, SHI, SHR, ZEROI
+      INTENT(INOUT) ZEROR
       INTEGER IDEG, IDP1, NUM
       INTEGER I, NN
       INTEGER IPMPAR
@@ -31459,6 +31653,7 @@ C
       SUBROUTINE CAUCHY(NN,BND,PT,Q)
       IMPLICIT NONE
       INTENT(IN) NN
+      INTENT(INOUT) BND, PT, Q
       INTEGER NN
       INTEGER I, N
 C
@@ -31515,6 +31710,7 @@ C
       SUBROUTINE NOSHFT(L1,NN,TR,TI,ETA,PR,PI,HR,HI)
       IMPLICIT NONE
       INTENT(IN) ETA, L1, NN, PI, PR
+      INTENT(INOUT) HI, HR, TI, TR
       INTEGER L1, NN
       INTEGER I, J, JJ, N, NM1
 C
@@ -31566,6 +31762,8 @@ C
      *                  ARE,MRE,ETA,INFIN)
       IMPLICIT NONE
       INTENT(IN) ARE, ETA, INFIN, L2, MRE, NN, PI, PR
+      INTENT(INOUT) CONV, HI, HR, PVI, PVR, QHI, QHR, QPI, QPR, SHI, SHR
+      INTENT(INOUT) SI, SR, TI, TR, ZI, ZR
       INTEGER L2, NN
       INTEGER I, J, N
 C
@@ -31662,6 +31860,8 @@ C
      *                  SR,SI,TR,TI,PVR,PVI,ARE,MRE,ETA,INFIN)
       IMPLICIT NONE
       INTENT(IN) ARE, ETA, INFIN, L3, MRE, NN, PI, PR
+      INTENT(OUT) CONV, SI, SR
+      INTENT(INOUT) HI, HR, PVI, PVR, QHI, QHR, QPI, QPR, TI, TR, ZI, ZR
       INTEGER L3, NN
       INTEGER I, J, N
 C
@@ -31749,6 +31949,7 @@ C
       SUBROUTINE CALCT(BOOL,N,SR,SI,TR,TI,PVR,PVI,ARE,HR,HI,QHR,QHI)
       IMPLICIT NONE
       INTENT(IN) ARE, HI, HR, N, PVI, PVR, SI, SR
+      INTENT(INOUT) BOOL, QHI, QHR, TI, TR
       INTEGER N
 C
 C     THIS SUBROUTINE COMPUTES T = -P(S)/H(S)
@@ -31776,6 +31977,7 @@ C
       SUBROUTINE NEXTH(BOOL,N,TR,TI,HR,HI,QPR,QPI,QHR,QHI)
       IMPLICIT NONE
       INTENT(IN) BOOL, N, QHI, QHR, QPI, QPR, TI, TR
+      INTENT(INOUT) HI, HR
       INTEGER N
       INTEGER J
 C
@@ -31812,6 +32014,8 @@ C
       SUBROUTINE POLYEV(N,SR,SI,PR,PI,QR,QI,PVR,PVI)
       IMPLICIT NONE
       INTENT(IN) N, PI, PR, SI, SR
+      INTENT(OUT) PVI, PVR
+      INTENT(INOUT) QI, QR
       INTEGER N
       INTEGER I
 C
@@ -31861,6 +32065,7 @@ C
       SUBROUTINE RBND (N, C, W, ABSERR, RELERR, KLUST, KER)
       IMPLICIT NONE
       INTENT(IN) C, N, W
+      INTENT(INOUT) ABSERR, KER, KLUST, RELERR
       INTEGER KER, N
       INTEGER J, JP1, K, L, M, NM1, NP1
       REAL B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
@@ -32016,6 +32221,7 @@ C
       SUBROUTINE CBND (N, C, W, ABSERR, RELERR, KLUST, KER)
       IMPLICIT NONE
       INTENT(IN) C, N, W
+      INTENT(INOUT) ABSERR, KER, KLUST, RELERR
       INTEGER KER, N
       INTEGER J, JP1, K, L, M, NM1, NP1
       REAL B, CERT, DIST, EPS, OLDERR, P, POWER, R, RAT, WNRM, WRAD
@@ -32171,6 +32377,7 @@ C
       SUBROUTINE  SCOPY(N,SX,INCX,SY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N, SX
+      INTENT(INOUT) SY
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -32223,6 +32430,7 @@ C
       SUBROUTINE  DCOPY(N,DX,INCX,DY,INCY)
       IMPLICIT NONE
       INTENT(IN) DX, INCX, INCY, N
+      INTENT(INOUT) DY
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -32275,6 +32483,7 @@ C
       SUBROUTINE  CCOPY(N,CX,INCX,CY,INCY)
       IMPLICIT NONE
       INTENT(IN) CX, INCX, INCY, N
+      INTENT(INOUT) CY
 C
 C     COPIES A VECTOR, X, TO A VECTOR, Y.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32310,6 +32519,7 @@ C
       SUBROUTINE ISWAP (N,IX,INCX,IY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) IX, IY
       INTEGER INCX, INCY, N
       INTEGER I, IIX, IIY, M, MP1, NS
 C
@@ -32399,6 +32609,7 @@ C
       SUBROUTINE  SSWAP (N,SX,INCX,SY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) SX, SY
 C
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO 1.
@@ -32457,6 +32668,7 @@ C
       SUBROUTINE  DSWAP (N,DX,INCX,DY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) DX, DY
 C
 C     INTERCHANGES TWO VECTORS.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL ONE.
@@ -32515,6 +32727,7 @@ C
       SUBROUTINE  CSWAP (N,CX,INCX,CY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) CX, CY
 C
 C     INTERCHANGES TWO VECTORS.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32553,6 +32766,7 @@ C       CODE FOR BOTH INCREMENTS EQUAL TO 1
       SUBROUTINE  SROT (N,SX,INCX,SY,INCY,C,S)
       IMPLICIT NONE
       INTENT(IN) C, INCX, INCY, N, S
+      INTENT(INOUT) SX, SY
 C
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32592,6 +32806,7 @@ C
       SUBROUTINE  DROT (N,DX,INCX,DY,INCY,C,S)
       IMPLICIT NONE
       INTENT(IN) C, INCX, INCY, N, S
+      INTENT(INOUT) DX, DY
 C
 C     APPLIES A PLANE ROTATION.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -32631,6 +32846,7 @@ C
       SUBROUTINE  CSROT (N,CX,INCX,CY,INCY,C,S)
       IMPLICIT NONE
       INTENT(IN) C, INCX, INCY, N, S
+      INTENT(INOUT) CX, CY
 C
 C     APPLIES A PLANE ROTATION, WHERE THE COS AND SIN (C AND S) ARE REAL
 C     AND THE VECTORS CX AND CY ARE COMPLEX.
@@ -32672,6 +32888,7 @@ C
       SUBROUTINE SROTMG (SD1,SD2,SX1,SY1,SPARAM)
       IMPLICIT NONE
       INTENT(IN) SY1
+      INTENT(INOUT) SD1, SD2, SPARAM, SX1
       REAL SD1, SD2, SPARAM, SX1, SY1
       REAL GAM, GAMSQ, ONE, RGAMSQ, SFLAG, SH11, SH12, SH21, SH22, SP1
      x, SP2, SQ1, SQ2, STEMP, SU, TWO, ZERO
@@ -32824,6 +33041,7 @@ C
       SUBROUTINE SROTM (N,SX,INCX,SY,INCY,SPARAM)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) SX, SY
       INTEGER INCX, INCY, N
       REAL SPARAM, SX, SY
       INTEGER I, KX, KY, NSTEPS
@@ -32938,6 +33156,7 @@ C
       SUBROUTINE DROTMG (DD1,DD2,DX1,DY1,DPARAM)
       IMPLICIT NONE
       INTENT(IN) DY1
+      INTENT(INOUT) DD1, DD2, DPARAM, DX1
 C
 C     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
 C     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
@@ -33090,6 +33309,7 @@ C
       SUBROUTINE DROTM (N,DX,INCX,DY,INCY,DPARAM)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N
+      INTENT(INOUT) DX, DY
       INTEGER INCX, INCY, N
       INTEGER I, KX, KY, NSTEPS
 C
@@ -33385,6 +33605,7 @@ C
       SUBROUTINE  SSCAL(N,SA,SX,INCX)
       IMPLICIT NONE
       INTENT(IN) INCX, N, SA
+      INTENT(INOUT) SX
 C
 C     SCALES A VECTOR BY A CONSTANT.
 C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO 1.
@@ -33429,6 +33650,7 @@ C
       SUBROUTINE  DSCAL(N,DA,DX,INCX)
       IMPLICIT NONE
       INTENT(IN) DA, INCX, N
+      INTENT(INOUT) DX
 C
 C     SCALES A VECTOR BY A CONSTANT.
 C     USES UNROLLED LOOPS FOR INCREMENT EQUAL TO ONE.
@@ -33473,6 +33695,7 @@ C
       SUBROUTINE  CSCAL(N,CA,CX,INCX)
       IMPLICIT NONE
       INTENT(IN) CA, INCX, N
+      INTENT(INOUT) CX
 C
 C     SCALES A VECTOR BY A CONSTANT.
 C     JACK DONGARRA, LINPACK,  3/11/78.
@@ -33502,6 +33725,7 @@ C
       SUBROUTINE  CSSCAL(N,SA,CX,INCX)
       IMPLICIT NONE
       INTENT(IN) INCX, N, SA
+      INTENT(INOUT) CX
 C
 C     SCALES A COMPLEX VECTOR BY A REAL CONSTANT.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -33532,6 +33756,7 @@ C
       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
       IMPLICIT NONE
       INTENT(IN) INCX, INCY, N, SA, SX
+      INTENT(INOUT) SY
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 C     USES UNROLLED LOOP FOR INCREMENTS EQUAL TO ONE.
@@ -33582,6 +33807,7 @@ C
       SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
       IMPLICIT NONE
       INTENT(IN) DA, DX, INCX, INCY, N
+      INTENT(INOUT) DY
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
@@ -33632,6 +33858,7 @@ C
       SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
       IMPLICIT NONE
       INTENT(IN) CA, CX, INCX, INCY, N
+      INTENT(INOUT) CY
 C
 C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
 C     JACK DONGARRA, LINPACK, 3/11/78.
@@ -34306,6 +34533,7 @@ C
       SUBROUTINE MCVFS(A,KA,N,B)
       IMPLICIT NONE
       INTENT(IN) A, KA, N
+      INTENT(INOUT) B
       INTEGER KA, N
       INTEGER I, J, L
       REAL A(KA,N),B(*)
@@ -34322,6 +34550,7 @@ C
       SUBROUTINE DMCVFS(A,KA,N,B)
       IMPLICIT NONE
       INTENT(IN) A, KA, N
+      INTENT(INOUT) B
       INTEGER KA, N
       INTEGER I, J, L
       DOUBLE PRECISION A(KA,N),B(*)
@@ -34338,6 +34567,7 @@ C
       SUBROUTINE MCVSF(A,KA,N,B)
       IMPLICIT NONE
       INTENT(IN) B, KA, N
+      INTENT(INOUT) A
       INTEGER KA, N
       INTEGER I, II, IM1, J, JJ, L
       REAL A(KA,N),B(*)
@@ -34366,6 +34596,7 @@ C
       SUBROUTINE DMCVSF(A,KA,N,B)
       IMPLICIT NONE
       INTENT(IN) B, KA, N
+      INTENT(INOUT) A
       INTEGER KA, N
       INTEGER I, II, IM1, J, JJ, L
       DOUBLE PRECISION A(KA,N),B(*)
@@ -34394,6 +34625,7 @@ C
       SUBROUTINE MCVRD(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       REAL A(KA,N)
@@ -34409,6 +34641,7 @@ C
       SUBROUTINE MCVDR(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       DOUBLE PRECISION A(KA,N)
@@ -34424,6 +34657,7 @@ C
       SUBROUTINE MCVRC(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       REAL A(KA,N)
@@ -34439,6 +34673,7 @@ C
       SUBROUTINE CMREAL(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N)
@@ -34454,6 +34689,7 @@ C
       SUBROUTINE CMIMAG(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N)
@@ -34469,6 +34705,7 @@ C
       SUBROUTINE MCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       REAL A(KA,N),B(KB,N)
@@ -34483,6 +34720,7 @@ C
       SUBROUTINE SMCOPY(N,A,B)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) B
       INTEGER N
       INTEGER K, L
       REAL A(*),B(*)
@@ -34496,6 +34734,7 @@ C
       SUBROUTINE DMCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       DOUBLE PRECISION A(KA,N),B(KB,N)
@@ -34510,6 +34749,7 @@ C
       SUBROUTINE CMCOPY(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N),B(KB,N)
@@ -34524,6 +34764,7 @@ C
       SUBROUTINE CMCONJ(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N),B(KB,N)
@@ -34538,6 +34779,7 @@ C
       SUBROUTINE TPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       REAL A(KA,N),B(KB,M)
@@ -34552,6 +34794,7 @@ C
       SUBROUTINE DTPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       DOUBLE PRECISION A(KA,N),B(KB,M)
@@ -34566,6 +34809,7 @@ C
       SUBROUTINE CTPOSE(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N),B(KB,M)
@@ -34580,6 +34824,7 @@ C
       SUBROUTINE TIP (A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTENT(IN) N1, N2, NWORK
+      INTENT(INOUT) A, MOVED, NDIM
       INTEGER N1, N2, NDIM, NWORK
       INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
      x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
@@ -34694,6 +34939,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       SUBROUTINE DTIP (A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTENT(IN) N1, N2, NWORK
+      INTENT(INOUT) A, MOVED, NDIM
       INTEGER N1, N2, NDIM, NWORK
       INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
      x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
@@ -34808,6 +35054,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       SUBROUTINE CTIP (A, N1, N2, MOVED, NWORK, NDIM)
       IMPLICIT NONE
       INTENT(IN) N1, N2, NWORK
+      INTENT(INOUT) A, MOVED, NDIM
       INTEGER N1, N2, NDIM, NWORK
       INTEGER I, I1, I1MAX, I1MIN, I2, IA1, IA2, IDIV, IP, ISOID, ISTART
      x, ITEST, M, MHALF, MMIA1, MMIA2, MMIST, N, N12, NCOUNT, NPOWER
@@ -34922,6 +35169,7 @@ C SUBCYCLE.  CHECK FIRST FOR SUBCYCLE CLOSURE.
       SUBROUTINE INFCTR(N, IFACT, IPOWER, NEXP, NPOWER)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IFACT, IPOWER, NEXP, NPOWER
       INTEGER IFACT, IPOWER, N, NEXP, NPOWER
       INTEGER IDIV, IFCUR, IP, IQUOT, NPART
 C FACTOR N INTO ITS PRIME POWERS, NPOWER IN NUMBER.
@@ -34967,6 +35215,7 @@ C IPOWER=8,5,49, AND NEXP=3,1,2.
       SUBROUTINE CMADJ(M,N,A,KA,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, N
       INTEGER I, J
       COMPLEX A(KA,N),B(KB,M)
@@ -34981,6 +35230,7 @@ C
       SUBROUTINE CTRANS (NM, N, A)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) A
 C
 C
 C     SUBROUTINE CTRANS FINDS THE COMPLEX CONJUGATE OF AN INPUT
@@ -35017,6 +35267,7 @@ C
       SUBROUTINE MADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35035,6 +35286,7 @@ C
       SUBROUTINE DMADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35053,6 +35305,7 @@ C
       SUBROUTINE CMADD (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35071,6 +35324,7 @@ C
       SUBROUTINE SMADD(N,A,B,C)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) C
       INTEGER N
       INTEGER K, M
       REAL A(*),B(*),C(*)
@@ -35083,6 +35337,7 @@ C
       SUBROUTINE MSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35101,6 +35356,7 @@ C
       SUBROUTINE DMSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35119,6 +35375,7 @@ C
       SUBROUTINE CMSUBT (M, N, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, M, N
       INTEGER I, J
 C-----------------------------------------------------------------------
@@ -35137,6 +35394,7 @@ C
       SUBROUTINE SMSUBT(N,A,B,C)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) C
       INTEGER N
       INTEGER K, M
       REAL A(*),B(*),C(*)
@@ -35149,6 +35407,7 @@ C
       SUBROUTINE MTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
 C-----------------------------------------------------------------------
@@ -35172,6 +35431,7 @@ C
       SUBROUTINE DMTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
 C-----------------------------------------------------------------------
@@ -35194,6 +35454,7 @@ C
       SUBROUTINE CMTMS (M, N, L, A, KA, B, KB, C, KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
 C-----------------------------------------------------------------------
@@ -35216,6 +35477,7 @@ C
       SUBROUTINE MPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTENT(IN) KA, KB, KC, L, M, N
+      INTENT(INOUT) A, B, C, ROW
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
       REAL SAVE
@@ -35274,6 +35536,7 @@ C
       LOGICAL FUNCTION RLOC (X, Y)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) Y
       REAL XOLD, YOLD
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
@@ -35308,6 +35571,7 @@ C
       SUBROUTINE YCHG (X, Y, YOLD)
       IMPLICIT NONE
       INTENT(IN) X, YOLD
+      INTENT(INOUT) Y
       REAL YOLD
       REAL X(*), Y(*)
 C
@@ -35319,6 +35583,7 @@ C
       SUBROUTINE DMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTENT(IN) KA, KB, KC, L, M, N
+      INTENT(INOUT) A, B, C, ROW
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
 C-----------------------------------------------------------------------
@@ -35375,6 +35640,7 @@ C
       LOGICAL FUNCTION DLOC (X, Y)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) Y
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 C
@@ -35408,6 +35674,7 @@ C
       SUBROUTINE DYCHG (X, Y, YOLD)
       IMPLICIT NONE
       INTENT(IN) X, YOLD
+      INTENT(INOUT) Y
       DOUBLE PRECISION X(*), Y(*), YOLD
 C
       Y(1) = 0.D0
@@ -35418,6 +35685,7 @@ C
       SUBROUTINE CMPROD (M, N, L, A, KA, B, KB, C, KC, ROW)
       IMPLICIT NONE
       INTENT(IN) KA, KB, KC, L, M, N
+      INTENT(INOUT) A, B, C, ROW
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
 C-----------------------------------------------------------------------
@@ -35474,6 +35742,7 @@ C
       LOGICAL FUNCTION CLOC (X, Y)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) Y
 C-----------------------------------------------------------------------
 C     X AND Y ARE ARRAYS. IT IS ASSUMED THAT X(1) AND Y(1) CONTAIN DATA.
 C
@@ -35507,6 +35776,7 @@ C
       SUBROUTINE CYCHG (X, Y, YOLD)
       IMPLICIT NONE
       INTENT(IN) X, YOLD
+      INTENT(INOUT) Y
       COMPLEX X(*), Y(*), YOLD
       COMPLEX ZERO, ONE
       DATA ZERO/(0.0,0.0)/, ONE/(1.0,0.0)/
@@ -35519,6 +35789,7 @@ C
       SUBROUTINE SVPRD(A,N,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, N, X
+      INTENT(INOUT) Y
       INTEGER N
       INTEGER I, K, KM1, L
       REAL XK, YK
@@ -35545,6 +35816,7 @@ C
       SUBROUTINE DSVPRD(A,N,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, N, X
+      INTENT(INOUT) Y
       INTEGER N
       INTEGER I, K, KM1, L
       DOUBLE PRECISION A(*),X(N),Y(N)
@@ -35571,6 +35843,7 @@ C
       SUBROUTINE TMPROD(M,N,L,A,KA,B,KB,C,KC)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER KA, KB, KC, L, M, N
       INTEGER I, J, K
       REAL A(KA,N),B(KB,L),C(KC,L)
@@ -35588,6 +35861,7 @@ C
       SUBROUTINE SMPROD(M,N,A,KA,B)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, N
+      INTENT(INOUT) B
       INTEGER KA, M, N
       INTEGER I, II, J, K
       REAL A(KA,N),B(*)
@@ -35607,6 +35881,7 @@ C
       SUBROUTINE KPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTENT(IN) A, B, K, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER K, KA, KB, KC, L, M, N
       INTEGER I, II, J, JJ
 C     ******************************************************************
@@ -35637,6 +35912,7 @@ C
       SUBROUTINE DKPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTENT(IN) A, B, K, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER K, KA, KB, KC, L, M, N
       INTEGER I, II, J, JJ
 C     ******************************************************************
@@ -35667,6 +35943,7 @@ C
       SUBROUTINE CKPROD(A,KA,M,N,B,KB,K,L,C,KC)
       IMPLICIT NONE
       INTENT(IN) A, B, K, KA, KB, KC, L, M, N
+      INTENT(INOUT) C
       INTEGER K, KA, KB, KC, L, M, N
       INTEGER I, II, J, JJ
 C     ******************************************************************
@@ -35697,6 +35974,7 @@ C
       SUBROUTINE RNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
       IMPLICIT NONE
       INTENT(IN) AE, M, MDA, N, RE
+      INTENT(INOUT) A, IWORK, KRANK, KSURE, WORK
       INTEGER KRANK, KSURE, M, MDA, N
       REAL AE, RE
       INTEGER I, IMAX, M0, M1, M2, M3, M4, M5
@@ -35751,6 +36029,7 @@ C
       SUBROUTINE DRNK (A, MDA, M, N, RE, AE, KRANK, KSURE, WORK, IWORK)
       IMPLICIT NONE
       INTENT(IN) AE, M, MDA, N, RE
+      INTENT(INOUT) A, IWORK, KRANK, KSURE, WORK
       INTEGER KRANK, KSURE, M, MDA, N
       INTEGER I, IMAX, M0, M1, M2, M3, M4, M5
 C-----------------------------------------------------------------------
@@ -35805,6 +36084,7 @@ C
       SUBROUTINE CROUT(MO,N,M,A,KA,B,KB,D,INDEX,TEMP)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(INOUT) A, B, D, INDEX, TEMP
       INTEGER INDEX, KA, KB, M, MO, N
       REAL A, B, D, TEMP
       INTEGER I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, NMJ
@@ -36006,6 +36286,7 @@ C
       SUBROUTINE KROUT(MO,N,M,A,KA,B,KB,IERR,INDEX,TEMP)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(INOUT) A, B, IERR, INDEX, TEMP
       INTEGER IERR, INDEX, KA, KB, M, MO, N
       REAL A, B, TEMP
       INTEGER I, IM1, J, JP1, K, KJ, KM1, KP1, L, LJ, MAXB, NJ, NM1, NMJ
@@ -36223,6 +36504,8 @@ C
       SUBROUTINE DEC (N, NDIM, A, IP, IER)
       IMPLICIT NONE
       INTENT(IN) N, NDIM
+      INTENT(OUT) IER
+      INTENT(INOUT) A, IP
 C-----------------------------------------------------------------------
 C MATRIX TRIANGULARIZATION BY GAUSSIAN ELIMINATION.
 C INPUT..
@@ -36294,6 +36577,7 @@ C  APPLY MULTIPLIERS TO OTHER COLUMNS OF A. ----------------------------
       SUBROUTINE SOL (N, NDIM, A, B, IP)
       IMPLICIT NONE
       INTENT(IN) N, NDIM
+      INTENT(INOUT) B
 C-----------------------------------------------------------------------
 C SOLUTION OF LINEAR SYSTEM, A*X = B .
 C INPUT..
@@ -36340,6 +36624,8 @@ C  BACK SOLVE. ---------------------------------------------------------
       SUBROUTINE NPIVOT (N, M, A, KA, B, KB, D, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, D
       INTEGER IERR, KA, KB, M, N
       REAL D
       INTEGER J, JL, K, KL, L, MAXB
@@ -36398,6 +36684,8 @@ C
       SUBROUTINE SLV (N, M, A, KA, B, KB, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B
       INTEGER IERR, KA, KB, M, N
       INTEGER I, IP1, J, JP1, K, L, NM1
       REAL P, SUM, T
@@ -36491,6 +36779,8 @@ C
       SUBROUTINE DPSLV (N, M, A, KA, B, KB, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B
       INTEGER IERR, KA, KB, M, N
       INTEGER I, J, K, KM1, KP1, L, NM1
       DOUBLE PRECISION A(KA,N), B(KB,M), P, T
@@ -36582,6 +36872,8 @@ C
       SUBROUTINE MSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, DET, IPVT, RCOND, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J, JOB
 C-----------------------------------------------------------------------
@@ -36624,6 +36916,7 @@ C
       SUBROUTINE MSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(INOUT) A, B, IERR, IPVT, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J
 C-----------------------------------------------------------------------
@@ -36667,6 +36960,7 @@ C
       SUBROUTINE SLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, MO, N
+      INTENT(INOUT) IERR, IWK, WK, X
       INTEGER IERR, IWK, KA, MO, N
       REAL A, B, WK, X
       INTEGER I, IR
@@ -36701,6 +36995,8 @@ C
       SUBROUTINE LUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
       IMPLICIT NONE
       INTENT(IN) KA, KQ, N
+      INTENT(OUT) IND
+      INTENT(INOUT) R, X
       INTEGER IND, IPVT, KA, KQ, N
       REAL A, B, Q, R, X
       INTEGER I, J
@@ -36791,6 +37087,7 @@ C
       SUBROUTINE SGECO(A,LDA,N,IPVT,RCOND,Z)
       IMPLICIT NONE
       INTENT(IN) LDA, N
+      INTENT(INOUT) A, IPVT, RCOND, Z
       INTEGER LDA,N,IPVT(*)
       REAL A(LDA,*),Z(*)
       REAL RCOND
@@ -36987,6 +37284,8 @@ C
       SUBROUTINE SGEFA(A,LDA,N,IPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) A, IPVT
       INTEGER LDA,N,IPVT(*),INFO
       REAL A(LDA,*)
 C
@@ -37093,6 +37392,7 @@ C
       SUBROUTINE SGESL(A,LDA,N,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, N
+      INTENT(INOUT) B
       INTEGER LDA,N,IPVT(*),JOB
       REAL A(LDA,*),B(*)
 C
@@ -37213,6 +37513,7 @@ C
       SUBROUTINE SGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       IMPLICIT NONE
       INTENT(IN) IPVT, JOB, LDA, N
+      INTENT(INOUT) A, DET, WORK
       INTEGER LDA,N,IPVT(*),JOB
       REAL A(LDA,*),DET(2),WORK(*)
 C
@@ -37344,6 +37645,8 @@ C
       SUBROUTINE DMSLV (MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, DET, IPVT, RCOND, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J, JOB
 C-----------------------------------------------------------------------
@@ -37386,6 +37689,7 @@ C
       SUBROUTINE DMSLV1 (MO,N,M,A,KA,B,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO, N
+      INTENT(INOUT) A, B, IERR, IPVT, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J
 C-----------------------------------------------------------------------
@@ -37429,6 +37733,7 @@ C
       SUBROUTINE DGECO(A,LDA,N,IPVT,RCOND,Z)
       IMPLICIT NONE
       INTENT(IN) LDA, N
+      INTENT(INOUT) A, IPVT, RCOND, Z
       INTEGER LDA,N,IPVT(*)
       DOUBLE PRECISION A(LDA,*),Z(*)
       DOUBLE PRECISION RCOND
@@ -37625,6 +37930,8 @@ C
       SUBROUTINE DGEFA(A,LDA,N,IPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) A, IPVT
       INTEGER LDA,N,IPVT(*),INFO
       DOUBLE PRECISION A(LDA,*)
 C
@@ -37731,6 +38038,7 @@ C
       SUBROUTINE DGESL(A,LDA,N,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, N
+      INTENT(INOUT) B
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),B(*)
 C
@@ -37851,6 +38159,7 @@ C
       SUBROUTINE DGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       IMPLICIT NONE
       INTENT(IN) IPVT, JOB, LDA, N
+      INTENT(INOUT) A, DET, WORK
       INTEGER LDA,N,IPVT(*),JOB
       DOUBLE PRECISION A(LDA,*),DET(2),WORK(*)
 C
@@ -37982,6 +38291,7 @@ C
       SUBROUTINE ARCECO(N, ARRAY, MTRSTR, NMBLKS, PIVOT, B, X, IFLAG)
       IMPLICIT NONE
       INTENT(IN) N, NMBLKS
+      INTENT(INOUT) ARRAY, B, IFLAG, MTRSTR, PIVOT, X
       INTEGER IFLAG, N, NMBLKS
 C
 C***************************************************************
@@ -38123,6 +38433,7 @@ C**********************************************************************
       SUBROUTINE ARCEDC(N, ARRAY, MTRSTR, NMBLKS, PIVOT, IFLAG)
       IMPLICIT NONE
       INTENT(IN) N, NMBLKS
+      INTENT(INOUT) ARRAY, IFLAG, MTRSTR, PIVOT
       INTEGER IFLAG, MTRSTR, N, NMBLKS
       INTEGER INDEX1, INDEX2, INDEX3, INDPIV, ISUM1, ISUM2, K, NCLBLK
      x, NCLPIV, NOVRLP, NRWBK2, NRWBLK, NRWPIV
@@ -38379,6 +38690,7 @@ C
      * IFLAG)
       IMPLICIT NONE
       INTENT(IN) NCLBLK, NRWBLK, NRWPIV
+      INTENT(INOUT) BLOCK, IFLAG, PIVMAX, PIVOT
       INTEGER IFLAG, NCLBLK, NRWBLK, NRWPIV
       INTEGER I1, J, J1, JPLUS1, L1, MAX
 C
@@ -38489,6 +38801,7 @@ C
      * PIVOT, PIVMAX, IFLAG)
       IMPLICIT NONE
       INTENT(IN) NCLPIV, NOVRLP, NRWBOT, NRWTOP
+      INTENT(INOUT) BOTBLK, IFLAG, PIVMAX, PIVOT, TOPBLK
       INTEGER IFLAG, NCLPIV, NOVRLP, NRWBOT, NRWTOP
       INTEGER I, I1, I2, IPLUS1, J, J1, JPLUS1, L1, MAX
 C
@@ -38602,6 +38915,7 @@ C
       SUBROUTINE ARCESL(ARRAY, MTRSTR, NMBLKS, PIVOT, B, X)
       IMPLICIT NONE
       INTENT(IN) NMBLKS, PIVOT
+      INTENT(INOUT) B, X
       INTEGER MTRSTR, NMBLKS
       INTEGER INDEXA, INDPIV, K, LL, NCLBLK, NCLPIV, NOVRLP, NRWBLK
      x, NRWPIV
@@ -38826,6 +39140,7 @@ C
       SUBROUTINE ARCEFS(BLOCK, NRWBLK, NCLPIV, NOVRLP, B, X)
       IMPLICIT NONE
       INTENT(IN) NCLPIV, NOVRLP, NRWBLK
+      INTENT(INOUT) B, X
       INTEGER NCLPIV, NOVRLP, NRWBLK
       INTEGER I, IPLUSL, J, JPLUSL, L, LONG
 C
@@ -38856,6 +39171,7 @@ C
       SUBROUTINE ARCEFM(BLOCK, NRWBLK, NCLPIV, B, X)
       IMPLICIT NONE
       INTENT(IN) NCLPIV, NRWBLK
+      INTENT(INOUT) B
       INTEGER NCLPIV, NRWBLK
       INTEGER J, L, NCLPVL
 C
@@ -38881,6 +39197,7 @@ C
       SUBROUTINE ARCEFE(BLOCK, NRWBLK, NRWPIV, PIVOT, B)
       IMPLICIT NONE
       INTENT(IN) NRWBLK, NRWPIV, PIVOT
+      INTENT(INOUT) B
       INTEGER NRWBLK, NRWPIV
       INTEGER I, IPLUS1, L
 C
@@ -38914,6 +39231,7 @@ C
       SUBROUTINE ARCEBS(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTENT(IN) NCLBLK, NRWBLK, NRWPIV
+      INTENT(INOUT) B, X
       INTEGER NCLBLK, NRWBLK, NRWPIV
       INTEGER J, JMIN1, L, NJ
 C
@@ -38942,6 +39260,7 @@ C
       SUBROUTINE ARCEBM(BLOCK, NRWBLK, NCLBLK, NRWPIV, B, X)
       IMPLICIT NONE
       INTENT(IN) NCLBLK, NRWBLK, NRWPIV
+      INTENT(INOUT) B
       INTEGER NCLBLK, NRWBLK, NRWPIV
       INTEGER J, L, NRWPV1
 C
@@ -38967,6 +39286,7 @@ C
       SUBROUTINE ARCEBE(BLOCK, NRWBLK, NCLPIV, NOVRLP, PIVOT, X)
       IMPLICIT NONE
       INTENT(IN) NCLPIV, NOVRLP, NRWBLK, PIVOT
+      INTENT(INOUT) X
       INTEGER NCLPIV, NOVRLP, NRWBLK
       INTEGER I, J, J1, JPLUS1, NJ
 C
@@ -39004,6 +39324,7 @@ C
       SUBROUTINE BTSLV(MO, M, N, A, B, C, X, IP, IERR)
       IMPLICIT NONE
       INTENT(IN) M, MO
+      INTENT(INOUT) A, B, C, IERR, IP, X
       INTEGER IERR
       INTEGER MO, M , N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), X(*)
@@ -39023,6 +39344,7 @@ C
       SUBROUTINE DECBT (M, N, A, B, C, IP, IER)
       IMPLICIT NONE
       INTENT(IN) M
+      INTENT(INOUT) A, B, C, IER, IP
       INTEGER M, N, IP(M,N), IER
       REAL A(M,M,N), B(M,M,N), C(M,M,N)
 C-----------------------------------------------------------------------
@@ -39135,6 +39457,7 @@ C-----------------------  END OF SUBROUTINE DECBT  ---------------------
       SUBROUTINE SOLBT (M, N, A, B, C, Y, IP)
       IMPLICIT NONE
       INTENT(IN) B, C, M
+      INTENT(INOUT) Y
       INTEGER KB, KP1
       INTEGER M, N, IP(M,N)
       REAL A(M,M,N), B(M,M,N), C(M,M,N), Y(M,N)
@@ -39204,6 +39527,8 @@ C-----------------------  END OF SUBROUTINE SOLBT  ---------------------
       SUBROUTINE SMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KB, M, MO, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, DET, INERT, IPVT, RCOND, WK
       INTEGER IERR, KB, M, MO, N
       INTEGER J, JOB
 C     ------------------
@@ -39243,6 +39568,7 @@ C
       SUBROUTINE SSPCO(AP,N,KPVT,RCOND,Z)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) AP, KPVT, RCOND, Z
       INTEGER N,KPVT(*)
       REAL AP(*),Z(*)
       REAL RCOND
@@ -39531,6 +39857,8 @@ C
       SUBROUTINE SSPFA(AP,N,KPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) INFO
+      INTENT(INOUT) AP, KPVT
       INTEGER N,KPVT(*),INFO
       REAL AP(*)
 C
@@ -39798,6 +40126,7 @@ C
       SUBROUTINE SSPSL(AP,N,KPVT,B)
       IMPLICIT NONE
       INTENT(IN) AP, KPVT, N
+      INTENT(INOUT) B
       INTEGER N,KPVT(*)
       REAL AP(*),B(*)
 C
@@ -39981,6 +40310,7 @@ C
       SUBROUTINE SSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
       IMPLICIT NONE
       INTENT(IN) JOB, KPVT, N
+      INTENT(INOUT) AP, DET, INERT, WORK
       INTEGER N,JOB
       REAL AP(*),WORK(*)
       REAL DET(2)
@@ -40223,6 +40553,8 @@ C
       SUBROUTINE DSMSLV(MO,N,M,A,B,KB,DET,RCOND,INERT,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KB, M, MO, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, DET, INERT, IPVT, RCOND, WK
       INTEGER IERR, KB, M, MO, N
       INTEGER J, JOB
 C     ------------------
@@ -40262,6 +40594,7 @@ C
       SUBROUTINE DSPCO(AP,N,KPVT,RCOND,Z)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) AP, KPVT, RCOND, Z
       INTEGER N,KPVT(*)
       DOUBLE PRECISION AP(*),Z(*)
       DOUBLE PRECISION RCOND
@@ -40550,6 +40883,8 @@ C
       SUBROUTINE DSPFA(AP,N,KPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) INFO
+      INTENT(INOUT) AP, KPVT
       INTEGER N,KPVT(*),INFO
       DOUBLE PRECISION AP(*)
 C
@@ -40817,6 +41152,7 @@ C
       SUBROUTINE DSPSL(AP,N,KPVT,B)
       IMPLICIT NONE
       INTENT(IN) AP, KPVT, N
+      INTENT(INOUT) B
       INTEGER N,KPVT(*)
       DOUBLE PRECISION AP(*),B(*)
 C
@@ -41000,6 +41336,7 @@ C
       SUBROUTINE DSPDI(AP,N,KPVT,DET,INERT,WORK,JOB)
       IMPLICIT NONE
       INTENT(IN) JOB, KPVT, N
+      INTENT(INOUT) AP, DET, INERT, WORK
       INTEGER N,JOB
       DOUBLE PRECISION AP(*),WORK(*)
       DOUBLE PRECISION DET(2)
@@ -41242,6 +41579,7 @@ C
       SUBROUTINE PCHOL (MO,N,M,A,B,KB,IERR)
       IMPLICIT NONE
       INTENT(IN) KB, M, MO, N
+      INTENT(INOUT) A, B, IERR
       INTEGER IERR, KB, M, MO, N
       INTEGER J
 C     -----------------
@@ -41271,6 +41609,7 @@ C
       SUBROUTINE SPPFA(AP,N,INFO)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) AP, INFO
       INTEGER N,INFO
       REAL AP(*)
 C
@@ -41363,6 +41702,7 @@ C     ......EXIT
       SUBROUTINE SPPSL(AP,N,B)
       IMPLICIT NONE
       INTENT(IN) AP, N
+      INTENT(INOUT) B
       INTEGER N
       REAL AP(*),B(*)
 C
@@ -41432,6 +41772,7 @@ C
       SUBROUTINE SPPDI(AP,N,DET,JOB)
       IMPLICIT NONE
       INTENT(IN) JOB, N
+      INTENT(INOUT) AP, DET
       INTEGER N,JOB
       REAL AP(*)
       REAL DET(2)
@@ -41562,6 +41903,7 @@ C
       SUBROUTINE DPCHOL (MO,N,M,A,B,KB,IERR)
       IMPLICIT NONE
       INTENT(IN) KB, M, MO, N
+      INTENT(INOUT) A, B, IERR
       INTEGER IERR, KB, M, MO, N
       INTEGER J
 C     -----------------
@@ -41591,6 +41933,7 @@ C
       SUBROUTINE DPPFA(AP,N,INFO)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) AP, INFO
       INTEGER N,INFO
       DOUBLE PRECISION AP(*)
 C
@@ -41683,6 +42026,7 @@ C     ......EXIT
       SUBROUTINE DPPSL(AP,N,B)
       IMPLICIT NONE
       INTENT(IN) AP, N
+      INTENT(INOUT) B
       INTEGER N
       DOUBLE PRECISION AP(*),B(*)
 C
@@ -41752,6 +42096,7 @@ C
       SUBROUTINE DPPDI(AP,N,DET,JOB)
       IMPLICIT NONE
       INTENT(IN) JOB, N
+      INTENT(INOUT) AP, DET
       INTEGER N,JOB
       DOUBLE PRECISION AP(*)
       DOUBLE PRECISION DET(2)
@@ -41882,6 +42227,7 @@ C
       SUBROUTINE TOPLX (A, B, X, N, G, H, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) G, H, IERR, X
       INTEGER IERR, N
       INTEGER J, K, L, M, MAX, MP1, NML, NPL
       REAL C, C1, C2, GD, GJ, GK, GN, HJ, HK, HN, XD, XN
@@ -41971,6 +42317,7 @@ C
       SUBROUTINE DTOPLX (A, B, X, N, G, H, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) G, H, IERR, X
       INTEGER IERR, N
       INTEGER J, K, L, M, MAX, MP1, NML, NPL
 C-----------------------------------------------------------------------
@@ -42060,6 +42407,8 @@ C
       SUBROUTINE CMSLV(MO,N,M,A,KA,B,KB,DET,RCOND,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, DET, IPVT, RCOND, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J, JOB
 C-----------------------------------------------------------------------
@@ -42102,6 +42451,7 @@ C
       SUBROUTINE CMSLV1 (MO, N, M, A, KA, B, KB, IERR, IPVT, WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO
+      INTENT(INOUT) A, B, IERR, IPVT, WK
       INTEGER IERR, KA, KB, M, MO, N
       INTEGER J
 C-----------------------------------------------------------------------
@@ -42145,6 +42495,7 @@ C
       SUBROUTINE CSLVMP(MO, N, A, KA, B, X, WK, IWK, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, MO
+      INTENT(INOUT) IERR, IWK, WK, X
       INTEGER IERR, KA, MO, N
       INTEGER I, IR
 C     ******************************************************************
@@ -42179,6 +42530,8 @@ C
       SUBROUTINE CLUIMP(A, KA, N, Q, KQ, IPVT, B, X, R, IND)
       IMPLICIT NONE
       INTENT(IN) A, B, IPVT, KA, KQ, N, Q
+      INTENT(OUT) IND
+      INTENT(INOUT) R, X
       INTEGER IND, KA, KQ, N
       INTEGER I, J
       REAL EPS, EPS2, RAT, RATIO, RNRM, XNRM
@@ -42267,6 +42620,7 @@ C
       SUBROUTINE CGECO(A,LDA,N,IPVT,RCOND,Z)
       IMPLICIT NONE
       INTENT(IN) LDA
+      INTENT(INOUT) A, IPVT, RCOND, Z
       INTEGER LDA,N,IPVT(*)
       COMPLEX A(LDA,*),Z(*)
       REAL RCOND
@@ -42467,6 +42821,7 @@ C
       SUBROUTINE CGEFA(A,LDA,N,IPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) LDA
+      INTENT(INOUT) A, INFO, IPVT
       INTEGER LDA,N,IPVT(*),INFO
       COMPLEX A(LDA,*)
 C
@@ -42577,6 +42932,7 @@ C
       SUBROUTINE CGESL(A,LDA,N,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, N
+      INTENT(INOUT) B
       INTEGER LDA,N,IPVT(*),JOB
       COMPLEX A(LDA,*),B(*)
 C
@@ -42698,6 +43054,7 @@ C
       SUBROUTINE CGEDI(A,LDA,N,IPVT,DET,WORK,JOB)
       IMPLICIT NONE
       INTENT(IN) IPVT, JOB, LDA, N
+      INTENT(INOUT) A, DET, WORK
       INTEGER LDA,N,IPVT(*),JOB
       COMPLEX A(LDA,*),DET(2),WORK(*)
 C
@@ -42832,6 +43189,7 @@ C
       SUBROUTINE DCMSLV (MO,N,M,AR,AI,KA,BR,BI,KB,IERR,IPVT,WK)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, MO
+      INTENT(INOUT) AI, AR, BI, BR, IERR, IPVT, WK
       INTEGER IERR, KA, KB, M, MO, N
 C-----------------------------------------------------------------------
 C     PARTIAL PIVOT GAUSS PROCEDURE FOR INVERTING DOUBLE PRECISION
@@ -42868,6 +43226,8 @@ C
       SUBROUTINE DCFACT (AR, AI, KA, N, IPVT, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, N
+      INTENT(OUT) IERR
+      INTENT(INOUT) AI, AR, IPVT
       INTEGER IERR, KA, N
       INTEGER I, J, K, KP1, L, NM1
 C-----------------------------------------------------------------------
@@ -42975,6 +43335,7 @@ C
       SUBROUTINE DCSOL (N, M, AR, AI, KA, BR, BI, KB, IPVT)
       IMPLICIT NONE
       INTENT(IN) AI, AR, IPVT, KA, KB, M, N
+      INTENT(INOUT) BI, BR
       INTEGER KA, KB, M, N
       INTEGER I, J, K, KM1, KP1, L, NM1
 C-----------------------------------------------------------------------
@@ -43067,6 +43428,7 @@ C
       SUBROUTINE DCMINV (AR, AI, KA, N, IPVT, TEMP)
       IMPLICIT NONE
       INTENT(IN) IPVT, KA
+      INTENT(INOUT) AI, AR, TEMP
       INTEGER KA, N
       INTEGER I, IP1, J, JB, K, KP1, L, NM1, NMI, NMK, NP1
 C-----------------------------------------------------------------------
@@ -43160,6 +43522,7 @@ C
       SUBROUTINE SSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       IMPLICIT NONE
       INTENT(IN) JOB, LDU, LDV, LDX, N, P
+      INTENT(INOUT) E, INFO, S, U, V, WORK, X
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       REAL X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -43643,6 +44006,7 @@ C           ...EXIT
       SUBROUTINE DSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       IMPLICIT NONE
       INTENT(IN) JOB, LDU, LDV, LDX, N, P
+      INTENT(INOUT) E, INFO, S, U, V, WORK, X
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       DOUBLE PRECISION X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -44126,6 +44490,7 @@ C           ...EXIT
       SUBROUTINE CSVDC(X,LDX,N,P,S,E,U,LDU,V,LDV,WORK,JOB,INFO)
       IMPLICIT NONE
       INTENT(IN) JOB, LDU, LDV, LDX, N, P
+      INTENT(INOUT) E, INFO, S, U, V, WORK, X
       INTEGER LDX,N,P,LDU,LDV,JOB,INFO
       COMPLEX X(LDX,*),S(*),E(*),U(LDU,*),V(LDV,*),WORK(*)
 C
@@ -44637,6 +45002,7 @@ C           ...EXIT
       FUNCTION DET(A,KA,N,X)
       IMPLICIT NONE
       INTENT(IN) KA, N, X
+      INTENT(INOUT) A
       INTEGER KA, N
       REAL A, X
       INTEGER I, J, K, KP1, L, NM1
@@ -44710,6 +45076,7 @@ C
       DOUBLE PRECISION FUNCTION DPDET(A,KA,N,X)
       IMPLICIT NONE
       INTENT(IN) KA, N, X
+      INTENT(INOUT) A
       INTEGER KA, N
       INTEGER I, J, K, KP1, L, NM1
 C     -------------------
@@ -44781,6 +45148,7 @@ C
       COMPLEX FUNCTION CDET(A,KA,N,X)
       IMPLICIT NONE
       INTENT(IN) KA, N, X
+      INTENT(INOUT) A
       INTEGER KA, N
       INTEGER I, J, K, KP1, L, NM1
 C     -------------------
@@ -44855,6 +45223,7 @@ C
       SUBROUTINE ABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NB, NC
+      INTENT(INOUT) A, B, C, IERR, WK
       INTEGER IERR, M, MO, N, NA, NB, NC
       INTEGER IU, IV, IW
       REAL A(NA,M), B(NB,N), C(NC,N), WK(*)
@@ -44937,6 +45306,7 @@ C ----------------------------------------------------------------------
       SUBROUTINE ABSLV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NB, NC, NU, NV
+      INTENT(INOUT) A, B, C, IERR, U, V, WK
       INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
       INTEGER I, J, K
 C ----------------------------------------------------------------------
@@ -45053,6 +45423,8 @@ C
       SUBROUTINE SCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NH, NZ
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR, Z
       INTEGER IP1
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. SCHUR
@@ -45329,6 +45701,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       SUBROUTINE SHRSLV (A,B,C,M,N,NA,NB,NC,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, M, N, NA, NB, NC
+      INTENT(INOUT) C, IERR
 C     ------------------------------------------------------------------
 C     SHRSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 C     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -45445,6 +45818,7 @@ C
       SUBROUTINE DABSLV (MO,M,N,A,NA,B,NB,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NB, NC
+      INTENT(INOUT) A, B, C, IERR, WK
       INTEGER IERR, M, MO, N, NA, NB, NC
       INTEGER IU, IV, IW
       DOUBLE PRECISION A(NA,M), B(NB,N), C(NC,N), WK(*)
@@ -45527,6 +45901,7 @@ C ----------------------------------------------------------------------
       SUBROUTINE DABSV1 (MO,M,N,A,NA,U,NU,B,NB,V,NV,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NB, NC, NU, NV
+      INTENT(INOUT) A, B, C, IERR, U, V, WK
       INTEGER IERR, M, MO, N, NA, NB, NC, NU, NV
       INTEGER I, J, K
 C ----------------------------------------------------------------------
@@ -45643,6 +46018,8 @@ C
       SUBROUTINE DSCHUR (N, LOW, IGH, H, NH, Z, NZ, WR, WI, IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NH, NZ
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR, Z
       INTEGER IP1
 C ----------------------------------------------------------------------
 C     IT IS ASSUMED THAT H IS AN UPPER HESSENBERG MATRIX. DSCHUR
@@ -45919,6 +46296,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE DSHSLV (A,B,C,M,N,NA,NB,NC,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, M, N, NA, NB, NC
+      INTENT(INOUT) C, IERR
 C     ------------------------------------------------------------------
 C     DSHSLV SOLVES THE MATRIX EQUATION AX + XB = C WHERE
 C     A IS IN LOWER SCHUR FORM AND B IN UPPER SCHUR FORM.
@@ -46035,6 +46413,7 @@ C
       SUBROUTINE TASLV (MO,N,A,NA,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NC
+      INTENT(INOUT) A, C, IERR, WK
       INTEGER IERR, MO, N, NA, NC
       INTEGER IW
       REAL A(NA,N), C(NC,N), WK(*)
@@ -46097,6 +46476,7 @@ C ----------------------------------------------------------------------
       SUBROUTINE TASLV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NC, NU
+      INTENT(INOUT) A, C, IERR, U, WK
       INTEGER IERR, MO, N, NA, NC, NU
       INTEGER I, J, K
 C ----------------------------------------------------------------------
@@ -46205,6 +46585,7 @@ C
       SUBROUTINE SYMSLV (A,C,N,NA,NC,IERR)
       IMPLICIT NONE
       INTENT(IN) A, N, NA, NC
+      INTENT(INOUT) C, IERR
 C ----------------------------------------------------------------------
 C     SYMSLV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -46342,6 +46723,7 @@ C
       SUBROUTINE DTASLV (MO,N,A,NA,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NC
+      INTENT(INOUT) A, C, IERR, WK
       INTEGER IERR, MO, N, NA, NC
       INTEGER IW
       DOUBLE PRECISION A(NA,N), C(NC,N), WK(*)
@@ -46404,6 +46786,7 @@ C ----------------------------------------------------------------------
       SUBROUTINE DTASV1 (MO,N,A,NA,U,NU,C,NC,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) MO, NA, NC, NU
+      INTENT(INOUT) A, C, IERR, U, WK
       INTEGER IERR, MO, N, NA, NC, NU
       INTEGER I, J, K
 C ----------------------------------------------------------------------
@@ -46512,6 +46895,7 @@ C
       SUBROUTINE DSYMSV (A,C,N,NA,NC,IERR)
       IMPLICIT NONE
       INTENT(IN) A, N, NA, NC
+      INTENT(INOUT) C, IERR
 C ----------------------------------------------------------------------
 C     DSYMSV SOLVES THE MATRIX EQUATION TRANSPOSE(A)*X + X*A = C
 C     WHERE A IS IN UPPER SCHUR FORM AND C IS SYMMETRIC.
@@ -46650,6 +47034,7 @@ C
      * MAXITS, IERR)
       IMPLICIT NONE
       INTENT(IN) N, NM, NW, TOL
+      INTENT(INOUT) A, B, C, IERR, IGUESS, MAXITS, S, WORK
 C
 C
 C     SUBROUTINE SQUINT BREAKS DOWN THE WORK ARRAY  WORK  INTO
@@ -46751,6 +47136,8 @@ C
      * EYE, TEMP, NW, TOL, MAXITS, IERR)
       IMPLICIT NONE
       INTENT(IN) N, NM, NW, TOL
+      INTENT(INOUT) A, B, C, EYE, IERR, IGUESS, L, MAXITS, R, S, TEMP, U
+      INTENT(INOUT) V, XOLD, Z
 C
 C     SUBROUTINE SQUIN2 FINDS A RIGHT SOLVENT OF THE MATRIX
 C     EQUATION AX**2 + BX + C = 0.
@@ -47000,6 +47387,7 @@ C     ********** ERROR RETURNS **********
       SUBROUTINE CQZHES(NM, N, A, B, MATS, Z, F, G, H)
       IMPLICIT NONE
       INTENT(IN) MATS, N, NM
+      INTENT(INOUT) A, B, F, G, H, Z
 C
 C
 C     SUBROUTINE CQZHES IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -47211,6 +47599,8 @@ C     ********** ZERO B(L+1,L) **********
       SUBROUTINE CQZIT(NM, N, A, B, EPS1, MATS, Z, F, IERR)
       IMPLICIT NONE
       INTENT(IN) EPS1, MATS, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, F, Z
 C
 C
 C     SUBROUTINE CQZIT IS A MODIFICATION OF THE EISPACK SUBROUTINE
@@ -47461,6 +47851,8 @@ C     ********** SAVE EPSB FOR USE BY CQZVEC **********
       SUBROUTINE TRISLV(NM, N, U, V, L, F, TEMP, IERR)
       IMPLICIT NONE
       INTENT(IN) L, N, NM, U, V
+      INTENT(OUT) IERR
+      INTENT(INOUT) F, TEMP
 C
 C
 C     SUBROUTINE TRISLV BACKSOLVES A SYSTEM OF THE FORM
@@ -47562,6 +47954,8 @@ C        ********** PREPARE F' WHICH IS (K-1) BY N. **********
       SUBROUTINE MEXP (A, KA, N, Z, KZ, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KZ
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, WK, Z
       INTEGER IERR, KA, KZ, N
       INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP6
       REAL ANORM, ANORM1, FACTOR, P, Q, S, S1
@@ -47715,6 +48109,8 @@ C
       SUBROUTINE DMEXP (A, KA, N, Z, KZ, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KZ
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, WK, Z
       INTEGER IERR, KA, KZ, N
       INTEGER I, IGH, J, K, KP1, L, LL, LOW, M, NP1, NP10
       DOUBLE PRECISION A(KA,N),Z(KZ,N),WK(N,*)
@@ -47876,6 +48272,8 @@ C
       SUBROUTINE LE (ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTENT(IN) B
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, D, IP
       INTEGER IERR, N
       INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
      x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
@@ -48045,6 +48443,8 @@ C
       SUBROUTINE DPLE (ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTENT(IN) B
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, D, IP
       INTEGER IERR, N
       INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
      x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
@@ -48214,6 +48614,8 @@ C
       SUBROUTINE CLE (ROWK,N,B,C,D,IP,IERR)
       IMPLICIT NONE
       INTENT(IN) B
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, D, IP
       INTEGER IERR, N
       INTEGER I, IFLAG, IJ, IJOLD, IK, J, K, KJOLD, KM1, KP1, LAST
      x, LASTM1, LCOL, LCOLP1, M, MAX, MJOLD, NM1, NP1
@@ -48392,6 +48794,7 @@ C
       SUBROUTINE CVBR (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTENT(IN) B, KA, KB, M, ML, MU, N
+      INTENT(INOUT) A
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48462,6 +48865,7 @@ C
       SUBROUTINE CVRB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48532,6 +48936,7 @@ C
       SUBROUTINE CVRB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N, NB
+      INTENT(INOUT) B, IERR, ML, MU
       INTEGER IERR, KA, KB, M, ML, MU, N, NB
       INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
@@ -48586,6 +48991,7 @@ C
       SUBROUTINE CVBD (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTENT(IN) B, KA, KB, M, ML, MU, N
+      INTENT(INOUT) A
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48656,6 +49062,7 @@ C
       SUBROUTINE CVDB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48726,6 +49133,7 @@ C
       SUBROUTINE CVDB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N, NB
+      INTENT(INOUT) B, IERR, ML, MU
       INTEGER IERR, KA, KB, M, ML, MU, N, NB
       INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
@@ -48780,6 +49188,7 @@ C
       SUBROUTINE CVBC (B,KB,M,N,ML,MU,A,KA)
       IMPLICIT NONE
       INTENT(IN) B, KA, KB, M, ML, MU, N
+      INTENT(INOUT) A
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMAX0, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48850,6 +49259,7 @@ C
       SUBROUTINE CVCB (A,KA,M,N,ML,MU,B,KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JJ, JMAX, JMIN, K, L
 C-----------------------------------------------------------------------
@@ -48920,6 +49330,7 @@ C
       SUBROUTINE CVCB1 (A,KA,M,N,ML,MU,B,KB,NB,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, N, NB
+      INTENT(INOUT) B, IERR, ML, MU
       INTEGER IERR, KA, KB, M, ML, MU, N, NB
       INTEGER I, IMAX, IMIN, J, JMAX, JMIN, KMAX, L, MM1, NM1
 C-----------------------------------------------------------------------
@@ -48974,6 +49385,7 @@ C
       SUBROUTINE MCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, ML, MU, N, NUM
       INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
@@ -49038,6 +49450,7 @@ C
       SUBROUTINE DMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, ML, MU, N, NUM
       INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
@@ -49102,6 +49515,7 @@ C
       SUBROUTINE CMCVBS (A,KA,M,N,ML,MU,B,IB,JB,NUM,IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, ML, MU, N, NUM
       INTEGER I, IMAX, IMIN, J0, K, KMAX, KMIN, L, MP1
 C-----------------------------------------------------------------------
@@ -49166,6 +49580,8 @@ C
       SUBROUTINE MCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N, NB
+      INTENT(OUT) ML, MU
+      INTENT(INOUT) B, IERR
       INTEGER IERR, KB, M, ML, MU, N, NB
       INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -49227,6 +49643,8 @@ C
       SUBROUTINE DMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N, NB
+      INTENT(OUT) ML, MU
+      INTENT(INOUT) B, IERR
       INTEGER IERR, KB, M, ML, MU, N, NB
       INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -49288,6 +49706,8 @@ C
       SUBROUTINE CMCVSB (A,IA,JA,M,N,B,KB,NB,ML,MU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N, NB
+      INTENT(OUT) ML, MU
+      INTENT(INOUT) B, IERR
       INTEGER IERR, KB, M, ML, MU, N, NB
       INTEGER I, J0, K, KMAX, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -49349,6 +49769,7 @@ C
       SUBROUTINE BCVRD (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, J, NUM
 C-----------------------------------------------------------------------
@@ -49370,6 +49791,7 @@ C
       SUBROUTINE BCVDR (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, J, NUM
 C-----------------------------------------------------------------------
@@ -49391,6 +49813,8 @@ C
       SUBROUTINE BREAL (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, L, M, ML, MU, N
+      INTENT(OUT) NL
+      INTENT(INOUT) B, IERR, NU
       INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
@@ -49446,6 +49870,8 @@ C
       SUBROUTINE BIMAG (A, KA, M, N, ML, MU, B, KB, L, NL, NU, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, L, M, ML, MU, N
+      INTENT(OUT) NL
+      INTENT(INOUT) B, IERR, NU
       INTEGER IERR, KA, KB, L, M, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, K, NUM
 C-----------------------------------------------------------------------
@@ -49501,6 +49927,8 @@ C
       SUBROUTINE BCVRC (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) MCL, MCU
+      INTENT(INOUT) C, IERR
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, J, JA, JB, JC, JMAX, K, NUM
 C-----------------------------------------------------------------------
@@ -49586,6 +50014,7 @@ C
       SUBROUTINE BPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
@@ -49643,6 +50072,7 @@ C
       SUBROUTINE DBPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
@@ -49700,6 +50130,7 @@ C
       SUBROUTINE CBPOSE (A, KA, M, N, ML, MU, B, KB)
       IMPLICIT NONE
       INTENT(IN) A, KA, KB, M, ML, MU, N
+      INTENT(INOUT) B
       INTEGER KA, KB, M, ML, MU, N
       INTEGER I, IMAX, IMIN, J, JMIN, K, L, LJ, LP1, NDIAG
 C-----------------------------------------------------------------------
@@ -49757,6 +50188,8 @@ C
       SUBROUTINE BADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -49901,6 +50334,8 @@ C
       SUBROUTINE DBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -50045,6 +50480,8 @@ C
       SUBROUTINE CBADD (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -50189,6 +50626,8 @@ C
       SUBROUTINE BSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -50333,6 +50772,8 @@ C
       SUBROUTINE DBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -50477,6 +50918,8 @@ C
       SUBROUTINE CBSUBT (M,N,A,KA,ML,MU,B,KB,NL,NU,C,KC,L,MCL,MCU,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NL, NU
       INTEGER I, IMIN, J, JA, JB, JC, JMAX, LA, LB, NUM
 C-----------------------------------------------------------------------
@@ -50622,6 +51065,8 @@ C
      *                  C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NC, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
       INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
      x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
@@ -50774,6 +51219,8 @@ C
      *                   C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NC, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
       INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
      x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
@@ -50926,6 +51373,8 @@ C
      *                   C, KC, NC, MCL, MCU, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, KA, KB, KC, L, M, ML, MU, N, NC, NL, NU
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, MCL, MCU
       INTEGER IERR, KA, KB, KC, L, M, MCL, MCU, ML, MU, N, NC, NL, NU
       INTEGER I, IMAX, IMJ, J, JC, JJ, JMAX, JMI, K, KK, KMAX, KMIN
      x, LAST, MAXD, MIND, MLP1, NDIAG, NLP1, NPML, NPNU
@@ -51077,6 +51526,7 @@ C
       SUBROUTINE BVPRD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL SUM
@@ -51130,6 +51580,7 @@ C
       SUBROUTINE BVPRD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
       REAL SUM
@@ -51176,6 +51627,7 @@ C
       SUBROUTINE DBVPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
@@ -51230,6 +51682,7 @@ C
       SUBROUTINE DBVPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
@@ -51276,6 +51729,7 @@ C
       SUBROUTINE CBVPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, IMIN, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
@@ -51329,6 +51783,7 @@ C
       SUBROUTINE CBVPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER I, IMAX, JMIN, K, KK, KMAX, KMIN, MLP1
 C-----------------------------------------------------------------------
@@ -51375,6 +51830,7 @@ C
       SUBROUTINE BTPRD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL SUM
@@ -51427,6 +51883,7 @@ C
       SUBROUTINE BTPRD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
       REAL SUM
@@ -51472,6 +51929,7 @@ C
       SUBROUTINE DBTPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
@@ -51525,6 +51983,7 @@ C
       SUBROUTINE DBTPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
@@ -51570,6 +52029,7 @@ C
       SUBROUTINE CBTPD (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
@@ -51622,6 +52082,7 @@ C
       SUBROUTINE CBTPD1 (M,N,A,KA,ML,MU,X,Y)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, ML, MU, N, X
+      INTENT(INOUT) Y
       INTEGER KA, M, ML, MU, N
       INTEGER J, JJ, JMAX, JMIN, K, KMAX, KMIN, NUM
 C-----------------------------------------------------------------------
@@ -51826,6 +52287,7 @@ C
       SUBROUTINE BSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     BSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -51908,6 +52370,7 @@ C
       SUBROUTINE BSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     BSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -51990,6 +52453,8 @@ C
       SUBROUTINE SNBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, ML, MU, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) A, IPVT
       INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1
      x, MP, N1
       INTEGER ISAMAX
@@ -52165,6 +52630,7 @@ C
       SUBROUTINE SNBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, ML, MU, N
+      INTENT(INOUT) B
       INTEGER ML1, ML2
 C ----------------------------------------------------------------------
 C
@@ -52303,6 +52769,7 @@ C
       SUBROUTINE DBSLV (M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     DBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -52385,6 +52852,7 @@ C
       SUBROUTINE DBSLV1 (M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     DBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -52467,6 +52935,8 @@ C
       SUBROUTINE DBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, ML, MU, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) A, IPVT
       INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1
      x, MP, N1
       INTEGER IDAMAX
@@ -52642,6 +53112,7 @@ C
       SUBROUTINE DBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, ML, MU, N
+      INTENT(INOUT) B
       INTEGER ML1, ML2
 C ----------------------------------------------------------------------
 C
@@ -52780,6 +53251,8 @@ C
       SUBROUTINE B1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, ML, MU, N
+      INTENT(OUT) COND
+      INTENT(INOUT) A, IERR, IWK, WK
       INTEGER IERR, KA, ML, MU, N
       REAL COND
       INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
@@ -52852,6 +53325,8 @@ C
       SUBROUTINE DB1CND (A, KA, N, ML, MU, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, ML, MU, N
+      INTENT(OUT) COND
+      INTENT(INOUT) A, IERR, IWK, WK
       INTEGER IERR, KA, ML, MU, N
       INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 C-----------------------------------------------------------------------
@@ -52923,6 +53398,7 @@ C
       SUBROUTINE CBSLV(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     CBSLV EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -53006,6 +53482,7 @@ C
       SUBROUTINE CBSLV1(M0,A,KA,N,ML,MU,B,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, M0, ML, MU, N
+      INTENT(INOUT) A, B, IERR, IWK
       INTEGER IERR, KA, M0, ML, MU, N
 C ----------------------------------------------------------------------
 C     CBSLV1 EMPLOYS GAUSS ELIMINATION WITH ROW INTERCHANGES TO SOLVE
@@ -53089,6 +53566,8 @@ C
       SUBROUTINE CBFA (A, LDA, N, ML, MU, IPVT, INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, ML, MU, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) A, IPVT
       INTEGER I, J, J1, JJ, K, L, LDB, LL, LM, LM1, LM2, LMK, M, MB, ML1
      x, MP, N1
       INTEGER ICAMAX
@@ -53264,6 +53743,7 @@ C
       SUBROUTINE CBSL (A,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) A, IPVT, JOB, LDA, ML, MU, N
+      INTENT(INOUT) B
       INTEGER ML1, ML2
 C ----------------------------------------------------------------------
 C
@@ -53402,6 +53882,7 @@ C
       SUBROUTINE CVRS (A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, N, NUM
       INTEGER I, IP, J
       REAL A(KA,N), B(*)
@@ -53436,6 +53917,7 @@ C
       SUBROUTINE CVDS (A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, N, NUM
       INTEGER I, IP, J
       DOUBLE PRECISION A(KA,N), B(*)
@@ -53470,6 +53952,7 @@ C
       SUBROUTINE CVCS (A, KA, M, N, B, IB, JB, NUM, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, M, N, NUM
+      INTENT(INOUT) B, IB, IERR, JB
       INTEGER IERR, KA, M, N, NUM
       INTEGER I, IP, J
       COMPLEX A(KA,N), B(*), ZERO
@@ -53505,6 +53988,7 @@ C
       SUBROUTINE CVSR (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KB, M, N
       INTEGER I, IP, IPMAX, IPMIN, J
       REAL A(*), B(KB,N)
@@ -53535,6 +54019,7 @@ C
       SUBROUTINE CVSD (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KB, M, N
       INTEGER I, IP, IPMAX, IPMIN, J
       DOUBLE PRECISION A(*), B(KB,N)
@@ -53565,6 +54050,7 @@ C
       SUBROUTINE CVSC (A, IA, JA, B, KB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, KB, M, N
+      INTENT(INOUT) B
       INTEGER KB, M, N
       INTEGER I, IP, IPMAX, IPMIN, J
       COMPLEX A(*), B(KB,N)
@@ -53595,6 +54081,7 @@ C
       SUBROUTINE SCVRD (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
       REAL A(*)
@@ -53621,6 +54108,7 @@ C
       SUBROUTINE SCVDR (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
       DOUBLE PRECISION A(*)
@@ -53647,6 +54135,7 @@ C
       SUBROUTINE CSREAL (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
       REAL T
@@ -53678,6 +54167,7 @@ C
       SUBROUTINE CSIMAG (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
       REAL T
@@ -53709,6 +54199,7 @@ C
       SUBROUTINE SCVRC (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -53773,6 +54264,7 @@ C
       SUBROUTINE RSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
@@ -53801,6 +54293,7 @@ C
       SUBROUTINE DSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
@@ -53829,6 +54322,7 @@ C
       SUBROUTINE CSCOPY (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L
 C-----------------------------------------------------------------------
@@ -53858,6 +54352,7 @@ C
       SUBROUTINE SCONJ (A, IA, JA, B, IB, JB, M)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M
+      INTENT(INOUT) B, IB, JB
       INTEGER M
       INTEGER I, IBEG, IEND, IP, L, MP1
 C-----------------------------------------------------------------------
@@ -53887,6 +54382,7 @@ C
       SUBROUTINE RPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -53950,6 +54446,7 @@ C
       SUBROUTINE RPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, P
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -54016,6 +54513,7 @@ C
       SUBROUTINE DPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -54079,6 +54577,7 @@ C
       SUBROUTINE DPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, P
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -54145,6 +54644,7 @@ C
       SUBROUTINE CPOSE (A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -54208,6 +54708,7 @@ C
       SUBROUTINE CPOSE1 (P, A, IA, JA, B, IB, JB, M, N)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, P
+      INTENT(INOUT) B, IB, JB
       INTEGER M, N
       INTEGER I, II, IP, IPMAX, IPMIN, J, JJ, JP, NP1, NUM
 C-----------------------------------------------------------------------
@@ -54274,6 +54775,7 @@ C
       SUBROUTINE SADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54337,6 +54839,7 @@ C
       SUBROUTINE DSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54400,6 +54903,7 @@ C
       SUBROUTINE CSADD (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54463,6 +54967,7 @@ C
       SUBROUTINE SSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54526,6 +55031,7 @@ C
       SUBROUTINE DSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54589,6 +55095,7 @@ C
       SUBROUTINE CSSUBT (A,IA,JA,B,IB,JB,C,IC,JC,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, M, N, NUM
       INTEGER I, IP, J, L, MAXA, MAXB, MINA, MINB
 C-----------------------------------------------------------------------
@@ -54652,6 +55159,7 @@ C
       SUBROUTINE SPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, L, M, N, NUM
       INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 C-----------------------------------------------------------------------
@@ -54708,6 +55216,7 @@ C
       SUBROUTINE DSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, L, M, N, NUM
       INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 C-----------------------------------------------------------------------
@@ -54764,6 +55273,7 @@ C
       SUBROUTINE CSPROD (A,IA,JA,B,IB,JB,C,IC,JC,L,M,N,NUM,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, IB, JA, JB, L, M, N, NUM
+      INTENT(INOUT) C, IC, IERR, JC, WK
       INTEGER IERR, L, M, N, NUM
       INTEGER I, IP, J, JP, JPMAX, JPMIN, K, KP, KPMAX, KPMIN
 C-----------------------------------------------------------------------
@@ -54820,6 +55330,7 @@ C
       SUBROUTINE MVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54844,6 +55355,7 @@ C
       SUBROUTINE MVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54868,6 +55380,7 @@ C
       SUBROUTINE MTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54896,6 +55409,7 @@ C
       SUBROUTINE MTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54920,6 +55434,7 @@ C
       SUBROUTINE DVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54944,6 +55459,7 @@ C
       SUBROUTINE DVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54968,6 +55484,7 @@ C
       SUBROUTINE DTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -54996,6 +55513,7 @@ C
       SUBROUTINE DTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -55020,6 +55538,7 @@ C
       SUBROUTINE CVPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -55044,6 +55563,7 @@ C
       SUBROUTINE CVPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -55068,6 +55588,7 @@ C
       SUBROUTINE CTPRD (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -55096,6 +55617,7 @@ C
       SUBROUTINE CTPRD1 (M, N, A, IA, JA, X, Y)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N, X
+      INTENT(INOUT) Y
       INTEGER M, N
       INTEGER I, J, L, LMAX, LMIN
 C-----------------------------------------------------------------------
@@ -55147,6 +55669,8 @@ C
       SUBROUTINE S1NRM (A, IA, JA, M, N, ANORM, WK)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N
+      INTENT(OUT) ANORM
+      INTENT(INOUT) WK
       INTEGER M, N
       REAL ANORM
       INTEGER IP, IPMAX, IPMIN, J
@@ -55207,6 +55731,8 @@ C
       SUBROUTINE DS1NRM (A, IA, JA, M, N, ANORM, WK)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, M, N
+      INTENT(OUT) ANORM
+      INTENT(INOUT) WK
       INTEGER M, N
       INTEGER IP, IPMAX, IPMIN, J
 C-----------------------------------------------------------------------
@@ -55241,6 +55767,7 @@ C
       SUBROUTINE SPORD (M, N, IA, R, IWK)
       IMPLICIT NONE
       INTENT(IN) IA, M, N
+      INTENT(INOUT) IWK, R
       INTEGER M, N
       INTEGER I, II, K, L, NP1, NUM
 C-----------------------------------------------------------------------
@@ -55282,6 +55809,7 @@ C
       SUBROUTINE BLKORD (N, IA, JA, R, C, IB, NUM, IWK, IERR)
       IMPLICIT NONE
       INTENT(IN) IA, JA
+      INTENT(INOUT) C, IB, IERR, IWK, NUM, R
       INTEGER IERR, N, NUM
       INTEGER I, LENGTH, LI, NP1, NPI
 C-----------------------------------------------------------------------
@@ -55321,6 +55849,7 @@ C
       SUBROUTINE MC21A (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,IW)
       IMPLICIT NONE
       INTENT(IN) ICN, IP, LENR, LICN, N
+      INTENT(INOUT) IPERM, IW, NUMNZ
       INTEGER LICN, N, NUMNZ
 C-----------------------------------------------------------------------
 C DESCRIPTION OF PARAMETERS.
@@ -55355,6 +55884,7 @@ C
       SUBROUTINE MC21B (N,ICN,LICN,IP,LENR,IPERM,NUMNZ,PR,ARP,CV,OUT)
       IMPLICIT NONE
       INTENT(IN) ICN, IP, LENR, LICN, N
+      INTENT(INOUT) ARP, CV, IPERM, NUMNZ, OUT, PR
       INTEGER LICN, N, NUMNZ
       INTEGER I, II, IN1, IN2, IOUTK, J, J1, JORD, K, KK
 C-----------------------------------------------------------------------
@@ -55485,6 +56015,7 @@ C
       SUBROUTINE MC13D(N, ICN, LICN, IP, LENR, IOR, IB, NUM, IW)
       IMPLICIT NONE
       INTENT(IN) ICN, IP, LENR, LICN, N
+      INTENT(INOUT) IB, IOR, IW, NUM
       INTEGER LICN, N, NUM
 C
 C DESCRIPTION OF PARAMETERS.
@@ -55519,6 +56050,8 @@ C
      *  NUMB, PREV)
       IMPLICIT NONE
       INTENT(IN) ICN, IP, LENR, LICN, N
+      INTENT(OUT) NUM
+      INTENT(INOUT) ARP, IB, LOWL, NUMB, PREV
       INTEGER LICN, N, NUM
       INTEGER I, I1, I2, ICNT, II, ISN, IST, IST1, IV, IW, J, K, LCNT
      x, NNM1
@@ -55655,6 +56188,8 @@ C
       SUBROUTINE SPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, ITEMP, RTEMP, X
       INTEGER IERR, MAX, N
       INTEGER K, L
 C-----------------------------------------------------------------------
@@ -55774,6 +56309,7 @@ C
       SUBROUTINE NSPIV1 (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
       INTEGER IERR, MAX, N
       INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
@@ -56047,6 +56583,7 @@ C
       SUBROUTINE RSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -56149,6 +56686,7 @@ C
       SUBROUTINE RSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -56195,6 +56733,7 @@ C
       SUBROUTINE TSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -56297,6 +56836,7 @@ C
       SUBROUTINE TSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -56352,6 +56892,7 @@ C
       SUBROUTINE SPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, MAX, N, R
+      INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
       INTEGER IERR, MAX, N
       INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
@@ -56570,6 +57111,8 @@ C
       SUBROUTINE DSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, ITEMP, RTEMP, X
       INTEGER IERR, MAX, N
       INTEGER K, L
 C-----------------------------------------------------------------------
@@ -56692,6 +57235,7 @@ C
       SUBROUTINE DNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
       INTEGER IERR, MAX, N
       INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
@@ -56965,6 +57509,7 @@ C
       SUBROUTINE DSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -57068,6 +57613,7 @@ C
       SUBROUTINE DSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -57114,6 +57660,7 @@ C
       SUBROUTINE DTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -57217,6 +57764,7 @@ C
       SUBROUTINE DTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -57272,6 +57820,7 @@ C
       SUBROUTINE DSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, MAX, N, R
+      INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
       INTEGER IERR, MAX, N
       INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
@@ -57491,6 +58040,8 @@ C
       SUBROUTINE S1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, MAX, N, R
+      INTENT(OUT) COND
+      INTENT(INOUT) C, IERR, IWK, WK
       INTEGER IERR, MAX, N
       REAL COND
       INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
@@ -57558,6 +58109,8 @@ C
       SUBROUTINE DS1CND (N, A, IA, JA, R, C, MAX, COND, IWK, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, MAX, N, R
+      INTENT(OUT) COND
+      INTENT(INOUT) C, IERR, IWK, WK
       INTEGER IERR, MAX, N
       INTEGER ISGN, ITER, IV, IX, J, JUMP, KASE
 C-----------------------------------------------------------------------
@@ -57623,6 +58176,7 @@ C
       SUBROUTINE SONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) ANORM, ISGN, ITER, J, JUMP, KASE, V, X
       INTEGER ITER, J, JUMP, KASE, N
       REAL ANORM
       INTEGER I, ITMAX, JLAST, L
@@ -57788,6 +58342,7 @@ C
       SUBROUTINE DONEST (N, V, X, ISGN, ANORM, KASE, ITER, J, JUMP)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) ANORM, ISGN, ITER, J, JUMP, KASE, V, X
       INTEGER ITER, J, JUMP, KASE, N
       INTEGER I, ITMAX, JLAST, L
       INTEGER IDAMAX
@@ -57955,6 +58510,8 @@ C
       SUBROUTINE CSPSLV (N,A,IA,JA,B,R,C,MAX,X,ITEMP,RTEMP,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(OUT) IERR
+      INTENT(INOUT) C, ITEMP, RTEMP, X
       INTEGER IERR, MAX, N
       INTEGER K, L
 C-----------------------------------------------------------------------
@@ -58074,6 +58631,7 @@ C
       SUBROUTINE CNSPIV (N,IA,JA,A,B,MAX,R,C,IC,X,Y,P,IU,JU,U,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, MAX, N, R
+      INTENT(INOUT) C, IC, IERR, IU, JU, P, U, X, Y
       INTEGER IERR, MAX, N
       INTEGER I, J, JAJ, JMAX, JMIN, JUJ, JUPTR, K, MAXC, MAXCL, NZCNT
 C
@@ -58351,6 +58909,7 @@ C
       SUBROUTINE CSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -58454,6 +59013,7 @@ C
       SUBROUTINE CSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -58500,6 +59060,7 @@ C
       SUBROUTINE CTSLV (M0,N,A,IA,JA,B,R,C,MAX,X,IWK,WK,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, IA, JA, M0, MAX, N, R
+      INTENT(INOUT) C, IERR, IWK, WK, X
       INTEGER IERR, M0, MAX, N
       INTEGER IT, IU, JT, K, L
 C-----------------------------------------------------------------------
@@ -58603,6 +59164,7 @@ C
       SUBROUTINE CTSLV1 (N,R,C,IC,D,T,IT,JT,IU,B,X,Y)
       IMPLICIT NONE
       INTENT(IN) B, C, D, IC, IT, IU, JT, N, R, T
+      INTENT(INOUT) X, Y
       INTEGER N
       INTEGER I, J, JJ, JMAX, JMIN, K, LJ, LK
       INTEGER R(N), C(N), IC(N)
@@ -58658,6 +59220,7 @@ C
       SUBROUTINE CSPLU (A,IA,JA,R,C,IC,N,MAX,D,T,IT,JT,IU,W,P,IERR)
       IMPLICIT NONE
       INTENT(IN) A, IA, JA, MAX, N, R
+      INTENT(INOUT) C, D, IC, IERR, IT, IU, JT, P, T, W
       INTEGER IERR, MAX, N
       INTEGER I, J, JJ, JMAX, JMIN, JPTR, K, LJ, LK, LL, M, MAXI, MAXIL
 C-----------------------------------------------------------------------
@@ -58879,6 +59442,7 @@ C
       SUBROUTINE EIG (IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, LOW
 C-----------------------------------------------------------------------
@@ -58897,6 +59461,7 @@ C
       SUBROUTINE EIG1 (IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, LOW
 C-----------------------------------------------------------------------
@@ -58915,6 +59480,7 @@ C
       SUBROUTINE EIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
@@ -58948,6 +59514,7 @@ C
       SUBROUTINE EIGV1 (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
@@ -58981,6 +59548,7 @@ C
       SUBROUTINE BALANC(NM,N,A,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) A, IGH, LOW, SCALE
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
       REAL A(NM,N),SCALE(N)
@@ -59153,6 +59721,7 @@ C
       SUBROUTINE BALINV (NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NZ, SCALE
+      INTENT(INOUT) Z
       INTEGER I,J,K,N,II,NZ,IGH,LOW
       REAL Z(NZ,N),SCALE(N)
       REAL S
@@ -59227,6 +59796,7 @@ C
       SUBROUTINE ELMHES(NM,N,LOW,IGH,A,INT)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) A, INT
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
       REAL A(NM,N)
@@ -59325,6 +59895,7 @@ C
       SUBROUTINE ELMHS0(NM,N,LOW,IGH,A,INT)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) A, INT
 C
       INTEGER I,J,M,N,LA,NM,IGH,KP1,LOW,MM1,MP1
       REAL A(NM,N)
@@ -59423,6 +59994,7 @@ C
       SUBROUTINE ORTHES(NM,N,LOW,IGH,A,ORT)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) A, ORT
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       REAL A(NM,N),ORT(IGH)
@@ -59531,6 +60103,8 @@ C
       SUBROUTINE HQR(NM,N,LOW,IGH,H,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
       REAL H(NM,N),WR(N),WI(N)
@@ -59757,6 +60331,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       SUBROUTINE BALBAK(NM,N,LOW,IGH,SCALE,M,Z)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, M, N, NM, SCALE
+      INTENT(INOUT) Z
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
       REAL SCALE(N),Z(NM,M)
@@ -59831,6 +60406,7 @@ C
       SUBROUTINE ELTRAN(NM,N,LOW,IGH,A,INT,Z)
       IMPLICIT NONE
       INTENT(IN) A, IGH, INT, LOW, N, NM
+      INTENT(INOUT) Z
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),Z(NM,N)
@@ -59908,6 +60484,7 @@ C
       SUBROUTINE ELTRN0(NM,N,LOW,IGH,A,INT,Z)
       IMPLICIT NONE
       INTENT(IN) A, IGH, INT, LOW, N, NM
+      INTENT(INOUT) Z
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),Z(NM,N)
@@ -59985,6 +60562,7 @@ C
       SUBROUTINE ORTRAN(NM,N,LOW,IGH,A,ORT,Z)
       IMPLICIT NONE
       INTENT(IN) A, IGH, LOW, N, NM
+      INTENT(INOUT) ORT, Z
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       REAL A(NM,IGH),ORT(IGH),Z(NM,N)
@@ -60070,6 +60648,7 @@ C
       SUBROUTINE ORTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
       IMPLICIT NONE
       INTENT(IN) A, IGH, LOW, N, NA, NZ
+      INTENT(INOUT) ORT, Z
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
       REAL A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -60159,6 +60738,8 @@ C
       SUBROUTINE HQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR, Z
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
      X        IGH,ITS,LOW,MP2,ENM2,IERR
@@ -60574,6 +61155,7 @@ C                EIGENVALUE AFTER 30 ITERATIONS **********
       SUBROUTINE DEIG (IBAL,A,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, LOW
 C-----------------------------------------------------------------------
@@ -60592,6 +61174,7 @@ C
       SUBROUTINE DEIGV (IBAL,A,KA,N,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) A, IERR, WI, WR, ZI, ZR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, J, K, KP1, LOW
 C-----------------------------------------------------------------------
@@ -60625,6 +61208,7 @@ C
       SUBROUTINE DBAL(NM,N,A,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) A, IGH, LOW, SCALE
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
       DOUBLE PRECISION A(NM,N),SCALE(N)
@@ -60797,6 +61381,7 @@ C
       SUBROUTINE DBALNV (NZ,N,Z,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NZ, SCALE
+      INTENT(INOUT) Z
       INTEGER I,J,K,N,II,NZ,IGH,LOW
       DOUBLE PRECISION Z(NZ,N),SCALE(N)
       DOUBLE PRECISION S
@@ -60871,6 +61456,7 @@ C
       SUBROUTINE DORTH(NM,N,LOW,IGH,A,ORT)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) A, ORT
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       DOUBLE PRECISION A(NM,N),ORT(IGH)
@@ -60979,6 +61565,8 @@ C
       SUBROUTINE DHQR(NM,N,LOW,IGH,H,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR
 C
       INTEGER I,J,K,L,M,N,EN,LL,MM,NA,NM,IGH,ITS,LOW,MP2,ENM2,IERR
       DOUBLE PRECISION H(NM,N),WR(N),WI(N)
@@ -61206,6 +61794,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE DBABK(NM,N,LOW,IGH,SCALE,M,Z)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, M, N, NM, SCALE
+      INTENT(INOUT) Z
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
       DOUBLE PRECISION SCALE(N),Z(NM,M)
@@ -61280,6 +61869,7 @@ C
       SUBROUTINE DORTRN(NM,N,LOW,IGH,A,ORT,Z)
       IMPLICIT NONE
       INTENT(IN) A, IGH, LOW, N, NM
+      INTENT(INOUT) ORT, Z
 C
       INTEGER I,J,N,KL,MM,MP,NM,IGH,LOW,MP1
       DOUBLE PRECISION A(NM,IGH),ORT(IGH),Z(NM,N)
@@ -61365,6 +61955,7 @@ C
       SUBROUTINE DRTRN1(N,LOW,IGH,A,NA,Z,NZ,ORT)
       IMPLICIT NONE
       INTENT(IN) A, IGH, LOW, N, NA, NZ
+      INTENT(INOUT) ORT, Z
 C
       INTEGER I,J,N,KL,MM,MP,NA,IGH,LOW,MP1,NZ
       DOUBLE PRECISION A(NA,IGH),ORT(IGH),Z(NZ,N)
@@ -61454,6 +62045,8 @@ C
       SUBROUTINE DHQR2(NM,N,LOW,IGH,H,WR,WI,Z,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) H, WI, WR, Z
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,MM,NA,NM,NN,
      X        IGH,ITS,LOW,MP2,ENM2,IERR
@@ -61870,6 +62463,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE SEIG (A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTENT(IN) KA
+      INTENT(INOUT) A, IERR, T, W
       INTEGER IERR, KA, N
       INTEGER L
 C-----------------------------------------------------------------------
@@ -61891,6 +62485,7 @@ C
       SUBROUTINE SEIG1 (A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTENT(IN) KA, N
+      INTENT(INOUT) A, IERR, T, W
       INTEGER IERR, KA, N
       INTEGER L
 C-----------------------------------------------------------------------
@@ -61912,6 +62507,7 @@ C
       SUBROUTINE SEIGV (A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, N
+      INTENT(INOUT) IERR, T, W, Z
       INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
@@ -61926,6 +62522,7 @@ C
       SUBROUTINE SEIGV1 (A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, N
+      INTENT(INOUT) IERR, T, W, Z
       INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C        EIGENVALUES AND EIGENVECTORS OF SYMMETRIC REAL MATRICES
@@ -61940,6 +62537,7 @@ C
       SUBROUTINE TRED1(NM,N,A,D,E,E2)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) A, D, E, E2
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       REAL A(NM,N),D(N),E(N),E2(N)
@@ -62057,6 +62655,7 @@ C     ********** LAST CARD OF TRED1 **********
       SUBROUTINE TRED3(N,NV,A,D,E,E2)
       IMPLICIT NONE
       INTENT(IN) N, NV
+      INTENT(INOUT) A, D, E, E2
 C
       INTEGER I,J,K,L,N,II,IZ,JK,NV
       REAL A(NV),D(N),E(N),E2(N)
@@ -62172,6 +62771,8 @@ C     ********** LAST CARD OF TRED3 **********
       SUBROUTINE TQLRAT(N,D,E2,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E2
       REAL SPMPAR
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
@@ -62310,6 +62911,8 @@ C     ********** LAST CARD OF TQLRAT **********
       SUBROUTINE IMTQL1(N,D,E,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E
       REAL SPMPAR
 C
       INTEGER I,J,L,M,N,II,MML,IERR
@@ -62441,6 +63044,7 @@ C     ********** LAST CARD OF IMTQL1 **********
       SUBROUTINE TRED2(NM,N,A,D,E,Z)
       IMPLICIT NONE
       INTENT(IN) A, N, NM
+      INTENT(INOUT) D, E, Z
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       REAL A(NM,N),D(N),E(N),Z(NM,N)
@@ -62582,6 +63186,8 @@ C     ********** LAST CARD OF TRED2 **********
       SUBROUTINE TQL2(NM,N,D,E,Z,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E, Z
       REAL SPMPAR
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
@@ -62757,6 +63363,8 @@ C     ********** LAST CARD OF TQL2 **********
       SUBROUTINE IMTQL2(NM,N,D,E,Z,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E, Z
       REAL SPMPAR
 C
       INTEGER I,J,K,L,M,N,II,NM,MML,IERR
@@ -62923,6 +63531,7 @@ C     ********** LAST CARD OF IMTQL2 **********
       SUBROUTINE DSEIG (A, KA, N, W, T, IERR)
       IMPLICIT NONE
       INTENT(IN) KA
+      INTENT(INOUT) A, IERR, T, W
       INTEGER IERR, KA, N
       INTEGER L
 C-----------------------------------------------------------------------
@@ -62945,6 +63554,7 @@ C
       SUBROUTINE DSEIGV (A, KA, N, W, Z, T, IERR)
       IMPLICIT NONE
       INTENT(IN) A, KA, N
+      INTENT(INOUT) IERR, T, W, Z
       INTEGER IERR, KA, N
 C-----------------------------------------------------------------------
 C                 DOUBLE PRECISION COMPUTATION OF
@@ -62961,6 +63571,7 @@ C
       SUBROUTINE DTRED1 (NM,N,A,D,E,E2)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) A, D, E, E2
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       DOUBLE PRECISION A(NM,N),D(N),E(N),E2(N)
@@ -63078,6 +63689,7 @@ C     ********** LAST CARD OF DTRED1 **********
       SUBROUTINE DTRED3 (N,NV,A,D,E,E2)
       IMPLICIT NONE
       INTENT(IN) N, NV
+      INTENT(INOUT) A, D, E, E2
 C
       INTEGER I,J,K,L,N,II,IZ,JK,NV
       DOUBLE PRECISION A(NV),D(N),E(N),E2(N)
@@ -63193,6 +63805,8 @@ C     ********** LAST CARD OF DTRED3 **********
       SUBROUTINE DTQL (N,D,E2,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E2
 C
       INTEGER I,J,L,M,N,II,L1,MML,IERR
       DOUBLE PRECISION D(N),E2(N)
@@ -63330,6 +63944,7 @@ C     ********** LAST CARD OF DTQL **********
       SUBROUTINE DTRED2 (NM,N,A,D,E,Z)
       IMPLICIT NONE
       INTENT(IN) A, N, NM
+      INTENT(INOUT) D, E, Z
 C
       INTEGER I,J,K,L,N,II,NM,JP1
       DOUBLE PRECISION A(NM,N),D(N),E(N),Z(NM,N)
@@ -63471,6 +64086,8 @@ C     ********** LAST CARD OF DTRED2 **********
       SUBROUTINE DTQL2 (NM,N,D,E,Z,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) D, E, Z
 C
       INTEGER I,J,K,L,M,N,II,L1,NM,MML,IERR
       DOUBLE PRECISION D(N),E(N),Z(NM,N)
@@ -63645,6 +64262,7 @@ C     ********** LAST CARD OF DTQL2 **********
       SUBROUTINE CEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) AI, AR, IERR, WI, WR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, LOW
 C-----------------------------------------------------------------------
@@ -63663,6 +64281,7 @@ C
       SUBROUTINE CEIGV(IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) AI, AR, IERR, TEMP, WI, WR, ZI, ZR
       INTEGER IBAL, IERR, KA, N
       INTEGER I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
@@ -63690,6 +64309,7 @@ C----------------------
       SUBROUTINE CBAL(NM,N,AR,AI,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) AI, AR, IGH, LOW, SCALE
       INTEGER IPMPAR
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -63876,6 +64496,7 @@ C     ********** LAST CARD OF CBAL **********
       SUBROUTINE CORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) AI, AR, ORTI, ORTR
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       REAL AR(NM,N),AI(NM,N),ORTR(IGH),ORTI(IGH)
@@ -64009,6 +64630,8 @@ C     ********** LAST CARD OF CORTH **********
       SUBROUTINE COMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) HI, HR, WI, WR
 C
       INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
       REAL HR(NM,N),HI(NM,N),WR(N),WI(N)
@@ -64242,6 +64865,7 @@ C     ********** LAST CARD OF COMQR **********
       SUBROUTINE CBABK2(NM,N,LOW,IGH,SCALE,M,ZR,ZI)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, M, N, NM, SCALE
+      INTENT(INOUT) ZI, ZR
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
       REAL SCALE(N),ZR(NM,M),ZI(NM,M)
@@ -64324,6 +64948,8 @@ C     ********** LAST CARD OF CBABK2 **********
       SUBROUTINE COMQR2(NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) HI, HR, ORTI, ORTR, WI, WR, ZI, ZR
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1,
      *        ITS,LOW,LP1,ENM1,IEND,IERR
@@ -64726,6 +65352,7 @@ C     ********** LAST CARD OF COMQR2 **********
       SUBROUTINE DCEIG(IBAL,AR,AI,KA,N,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) AI, AR, IERR, WI, WR
       INTEGER IBAL, IERR, KA, N
       INTEGER IGH, LOW
 C-----------------------------------------------------------------------
@@ -64744,6 +65371,7 @@ C
       SUBROUTINE DCEIGV (IBAL,AR,AI,KA,N,WR,WI,ZR,ZI,IERR,TEMP)
       IMPLICIT NONE
       INTENT(IN) IBAL, KA, N
+      INTENT(INOUT) AI, AR, IERR, TEMP, WI, WR, ZI, ZR
       INTEGER IBAL, IERR, KA, N
       INTEGER I1, I2, I3, IGH, LOW
 C-----------------------------------------------------------------------
@@ -64774,6 +65402,7 @@ C----------------------
       SUBROUTINE DCBAL(NM,N,AR,AI,LOW,IGH,SCALE)
       IMPLICIT NONE
       INTENT(IN) N, NM
+      INTENT(INOUT) AI, AR, IGH, LOW, SCALE
       INTEGER IPMPAR
 C
       INTEGER I,J,K,L,M,N,JJ,NM,IGH,LOW,IEXC
@@ -64959,6 +65588,7 @@ C     ********** LAST CARD OF DCBAL **********
       SUBROUTINE DCORTH(NM,N,LOW,IGH,AR,AI,ORTR,ORTI)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(INOUT) AI, AR, ORTI, ORTR
 C
       INTEGER I,J,M,N,II,JJ,LA,MP,NM,IGH,KP1,LOW
       DOUBLE PRECISION AR(NM,N),AI(NM,N),ORTR(IGH),ORTI(IGH)
@@ -65091,6 +65721,8 @@ C     ********** LAST CARD OF DCORTH **********
       SUBROUTINE DCOMQR(NM,N,LOW,IGH,HR,HI,WR,WI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) HI, HR, WI, WR
 C
       INTEGER I,J,L,N,EN,LL,NM,IGH,ITS,LOW,LP1,ENM1,IERR
       DOUBLE PRECISION HR(NM,N),HI(NM,N),WR(N),WI(N)
@@ -65320,6 +65952,7 @@ C                EIGENVALUE AFTER 50 ITERATIONS **********
       SUBROUTINE DCBABK (NM,N,LOW,IGH,SCALE,M,ZR,ZI)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, M, N, NM, SCALE
+      INTENT(INOUT) ZI, ZR
 C
       INTEGER I,J,K,M,N,II,NM,IGH,LOW
       DOUBLE PRECISION SCALE(N),ZR(NM,M),ZI(NM,M)
@@ -65403,6 +66036,8 @@ C     ********** LAST CARD OF DCBABK **********
       SUBROUTINE DCMQR2 (NM,N,LOW,IGH,ORTR,ORTI,HR,HI,WR,WI,ZR,ZI,IERR)
       IMPLICIT NONE
       INTENT(IN) IGH, LOW, N, NM
+      INTENT(OUT) IERR
+      INTENT(INOUT) HI, HR, ORTI, ORTR, WI, WR, ZI, ZR
 C
       INTEGER I,J,K,L,M,N,EN,II,JJ,LL,NM,NN,IGH,IP1,
      *        ITS,LOW,LP1,ENM1,IEND,IERR
@@ -65803,6 +66438,7 @@ C     ********** LAST CARD OF DCMQR2 **********
      *                  ERROR, WK, IWK)
       IMPLICIT NONE
       INTENT(IN) K, KQ, L, M, N, TOLER
+      INTENT(INOUT) ERROR, ITER, IWK, KODE, Q, RES, WK, X
       INTEGER ITER, IWK, K, KODE, KQ, L, M, N
       REAL ERROR, Q, RES, TOLER, WK, X
       INTEGER KLM
@@ -65818,6 +66454,7 @@ C     -------------------
      * Q, KODE, TOLER, ITER, X, RES, ERROR, CU, IU, S)
       IMPLICIT NONE
       INTENT(IN) K, KLM2D, KLMD, L, M, N, N2D, NKLMD, TOLER
+      INTENT(INOUT) CU, ERROR, ITER, IU, KODE, Q, RES, S, X
 C
 C THIS SUBROUTINE USES A MODIFICATION OF THE SIMPLEX
 C METHOD OF LINEAR PROGRAMMING TO CALCULATE AN L1 SOLUTION
@@ -66227,6 +66864,8 @@ C PREPARE OUTPUT.
       SUBROUTINE LLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N, NB
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, IWK, WK
       INTEGER IERR, IWK, KA, KB, M, N, NB
       REAL A, B, WK
       INTEGER I, J, NP1
@@ -66259,6 +66898,8 @@ C
       SUBROUTINE LLSQMP(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N, NB
+      INTENT(OUT) IERR
+      INTENT(INOUT) B, IWK, WK
       INTEGER IERR, IWK, KA, KB, M, N, NB
       REAL A, B, WK
       INTEGER I, J, LQ, LR, LS, NP1
@@ -66306,6 +66947,8 @@ C
       SUBROUTINE ORTHO(M, N, QR, MS, S, IP, EXIT)
       IMPLICIT NONE
       INTENT(IN) M, MS, N
+      INTENT(OUT) EXIT
+      INTENT(INOUT) IP, QR, S
       INTEGER IP, M, MS, N
       REAL QR, S
       INTEGER I, J, JP, K, KJ, NN
@@ -66415,6 +67058,7 @@ C
       SUBROUTINE ORSOL(M, N, QR, MS, S, IP, X)
       IMPLICIT NONE
       INTENT(IN) M, MS, N
+      INTENT(INOUT) X
       INTEGER IP, M, MS, N
       REAL QR, S, X
       INTEGER I, IJ, J, JP, K, NI, NM, NN
@@ -66507,6 +67151,8 @@ C                                       LEAST SQUARES SOLUTION.
       SUBROUTINE ORIMP(M, N, A, KA, QR, MS, S, IP, B, X, R, EXIT)
       IMPLICIT NONE
       INTENT(IN) KA, M, MS, N
+      INTENT(OUT) EXIT
+      INTENT(INOUT) R, X
       INTEGER IP, KA, M, MS, N
       REAL A, B, QR, R, S, X
       INTEGER I, J, K, NP1
@@ -66624,6 +67270,8 @@ C
       SUBROUTINE DLLSQ(M,N,A,KA,B,KB,NB,WK,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) KA, KB, M, N, NB
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, B, IWK, WK
       INTEGER IERR, KA, KB, M, N, NB
       INTEGER I, J, NP1
       DOUBLE PRECISION A(KA,N),B(KB,NB),WK(N)
@@ -66656,6 +67304,8 @@ C
       SUBROUTINE DORTHO(M, N, QR, MS, S, IP, EXIT)
       IMPLICIT NONE
       INTENT(IN) M, MS, N
+      INTENT(OUT) EXIT
+      INTENT(INOUT) IP, QR, S
       INTEGER M, MS, N
       INTEGER I, J, JP, K, KJ, NN
 C***********************************************************************
@@ -66765,6 +67415,7 @@ C
       SUBROUTINE DORSOL(M, N, QR, MS, S, IP, X)
       IMPLICIT NONE
       INTENT(IN) IP, M, MS, N, QR, S
+      INTENT(INOUT) X
       INTEGER M, MS, N
       INTEGER I, IJ, J, JP, K, NI, NM, NN
 C***********************************************************************
@@ -66858,6 +67509,7 @@ C                                       LEAST SQUARES SOLUTION.
      *                 KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
       IMPLICIT NONE
       INTENT(IN) AE, IND, LIW, LW, M, MDA, MDB, N, NB, RE
+      INTENT(INOUT) A, B, IERR, IWORK, KRANK, KSURE, RNORM, WORK
       INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
       REAL AE, RE
       INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
@@ -67117,6 +67769,8 @@ C     RETURN
      *                  IC,IR)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MODE, N, NP
+      INTENT(OUT) KRANK
+      INTENT(INOUT) A, DB, EB, H, IC, IR, KSURE, UB, W
       INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
       REAL A, DB, EB, H, UB, W
       INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
@@ -67388,6 +68042,7 @@ C
       SUBROUTINE U12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
       IMPLICIT NONE
       INTENT(IN) KRANK, M, MDA, MDB, MODE, N, NB
+      INTENT(INOUT) A, B, IC, IR, RNORM
       INTEGER KRANK, M, MDA, MDB, MODE, N, NB
       REAL A, B, H, RNORM, W
       INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
@@ -67538,6 +68193,8 @@ C
      *                  IR,IC)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MODE, N, NP
+      INTENT(OUT) KRANK
+      INTENT(INOUT) A, DB, EB, H, IC, IR, KSURE, UB, W
       INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
       REAL A, DB, EB, H, UB, W
       INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
@@ -67809,6 +68466,7 @@ C
       SUBROUTINE U12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
       IMPLICIT NONE
       INTENT(IN) KRANK, M, MDA, MDB, MODE, N, NB
+      INTENT(INOUT) A, B, IC, IR, RNORM
       INTEGER KRANK, M, MDA, MDB, MODE, N, NB
       REAL A, B, H, RNORM, W
       INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
@@ -67957,6 +68615,7 @@ C
      *                  KSURE, RNORM, WORK, LW, IWORK, LIW, IERR)
       IMPLICIT NONE
       INTENT(IN) AE, IND, LIW, LW, M, MDA, MDB, N, NB, RE
+      INTENT(INOUT) A, B, IERR, IWORK, KRANK, KSURE, RNORM, WORK
       INTEGER IERR, IND, KRANK, KSURE, LIW, LW, M, MDA, MDB, N, NB
       INTEGER I, IMAX, INFO, M0, M1, M2, M3, M4, M5, MODE, N0, NP
 C-----------------------------------------------------------------------
@@ -68215,6 +68874,8 @@ C     RETURN
      *                   IC,IR)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MODE, N, NP
+      INTENT(OUT) KRANK
+      INTENT(INOUT) A, DB, EB, H, IC, IR, KSURE, UB, W
       INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
       INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
      x, KZ, L, LM1, MM, NMK
@@ -68484,6 +69145,7 @@ C
       SUBROUTINE DU12LS (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IC,IR)
       IMPLICIT NONE
       INTENT(IN) H, KRANK, M, MDA, MDB, MODE, N, NB, W
+      INTENT(INOUT) A, B, IC, IR, RNORM
       INTEGER KRANK, M, MDA, MDB, MODE, N, NB
       INTEGER I, IJ, IM1, J, JB, K, KP1, NMK
 C
@@ -68632,6 +69294,8 @@ C
      *                   IR,IC)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MODE, N, NP
+      INTENT(OUT) KRANK
+      INTENT(INOUT) A, DB, EB, H, IC, IR, KSURE, UB, W
       INTEGER KRANK, KSURE, M, MDA, MODE, N, NP
       INTEGER I, II, IM1, IMIN, IS, J, JM1, JMAX, JP1, KK, KM1, KMI, KP1
      x, KZ, L, LM1, MMK, NN
@@ -68901,6 +69565,7 @@ C
       SUBROUTINE DU12US (A,MDA,M,N,B,MDB,NB,MODE,KRANK,RNORM,H,W,IR,IC)
       IMPLICIT NONE
       INTENT(IN) H, KRANK, M, MDA, MDB, MODE, N, NB, W
+      INTENT(INOUT) A, B, IC, IR, RNORM
       INTEGER KRANK, M, MDA, MDB, MODE, N, NB
       INTEGER I, IJ, IP1, J, JB, K, KP1, MMK
 C
@@ -69046,6 +69711,8 @@ C
       SUBROUTINE HFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MDB, N, NB, TAU
+      INTENT(OUT) K
+      INTENT(INOUT) A, B, G, H, IP, RNORM
       INTEGER K, M, MDA, MDB, N, NB
       REAL A, B, G, H, RNORM, TAU
       INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
@@ -69294,6 +69961,8 @@ C
       SUBROUTINE HFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MDB, N, NB, TAU
+      INTENT(OUT) K
+      INTENT(INOUT) A, B, D, G, H, IERR, IP, RNORM
       INTEGER IERR, K, M, MDA, MDB, N, NB
       REAL A, B, D, G, H, RNORM, TAU
       INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
@@ -69570,6 +70239,7 @@ C
       SUBROUTINE H12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
       IMPLICIT NONE
       INTENT(IN) ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+      INTENT(INOUT) C, U, UP
       INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       REAL C, U, UP
       INTEGER I, I2, I3, I4, INCR, J
@@ -69660,6 +70330,8 @@ C
       SUBROUTINE DHFTI (A,MDA,M,N,B,MDB,NB,TAU,K,RNORM,H,G,IP)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MDB, N, NB, TAU
+      INTENT(OUT) K
+      INTENT(INOUT) A, B, G, H, IP, RNORM
       INTEGER K, M, MDA, MDB, N, NB
       INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 C-----------------------------------------------------------------------
@@ -69908,6 +70580,8 @@ C
       SUBROUTINE DHFTI2(A,MDA,M,N,B,MDB,NB,D,TAU,K,RNORM,H,G,IP,IERR)
       IMPLICIT NONE
       INTENT(IN) M, MDA, MDB, N, NB, TAU
+      INTENT(OUT) K
+      INTENT(INOUT) A, B, D, G, H, IERR, IP, RNORM
       INTEGER IERR, K, M, MDA, MDB, N, NB
       INTEGER I, II, IP1, J, JB, JJ, KP1, L, LDIAG, LMAX
 C-----------------------------------------------------------------------
@@ -70183,6 +70857,7 @@ C
       SUBROUTINE DH12 (MODE,LPIVOT,L1,M,U,IUE,UP,C,ICE,ICV,NCV)
       IMPLICIT NONE
       INTENT(IN) ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
+      INTENT(INOUT) C, U, UP
       INTEGER ICE, ICV, IUE, L1, LPIVOT, M, MODE, NCV
       INTEGER I, I2, I3, I4, INCR, J
 C-----------------------------------------------------------------------
@@ -70271,6 +70946,8 @@ C
      * MODE, WS, IP)
       IMPLICIT NONE
       INTENT(IN) MA, MDW, ME, MG, PRGOPT
+      INTENT(OUT) MODE
+      INTENT(INOUT) IP, RNORME, RNORML, W, WS, X
       INTEGER MA, MDW, ME, MG, MODE, N
       REAL RNORME, RNORML
       INTEGER I, II, IMAX, J, JJ, JP1, K, KEY, KK, KRANKE, L, LAST, LINK
@@ -70860,6 +71537,8 @@ C     DEFINE BOUND FOR POSITIVE VALUES OF LINK.
       SUBROUTINE LSI(W, MDW, MA, MG, N, PRGOPT, X, RNORM, MODE, WS, IP)
       IMPLICIT NONE
       INTENT(IN) MA, MDW, MG, PRGOPT
+      INTENT(OUT) MODE, RNORM
+      INTENT(INOUT) IP, W, WS, X
       INTEGER MA, MDW, MG, MODE, N
       REAL RNORM
       INTEGER I, II, IL, IM1, IP1, J, K, KEY, KEY8, KEY9, KRANK, KRM1
@@ -71223,6 +71902,8 @@ C
       SUBROUTINE LPDP(A, MDA, M, N1, N2, PRGOPT, X, WNORM, MODE, WS, IS)
       IMPLICIT NONE
       INTENT(IN) M, MDA, N1, N2
+      INTENT(OUT) MODE
+      INTENT(INOUT) A, IS, WNORM, WS, X
       INTEGER IS, M, MDA, MODE, N1, N2
       REAL A, PRGOPT, WNORM, WS, X
       INTEGER I, IW, IX, J, L, MODEW, N, NP1
@@ -71401,6 +72082,8 @@ C     ACCOUNT FOR SCALING OF RT.-SIDE VECTOR IN SOLUTION.
      * IWORK, WORK)
       IMPLICIT NONE
       INTENT(IN) L, MA, MDW, ME, N, PRGOPT
+      INTENT(OUT) MODE
+      INTENT(INOUT) IWORK, RNORM, W, WORK, X
       INTEGER L, MA, MDW, ME, MODE, N
       REAL RNORM
       INTEGER L1, L2, L3, L4, L5
@@ -71666,6 +72349,8 @@ C
      * IPIVOT, ITYPE, WD, H, SCALE, Z, TEMP, D)
       IMPLICIT NONE
       INTENT(IN) L, MA, MDW, MME, N, PRGOPT
+      INTENT(INOUT) D, H, IPIVOT, ITYPE, MODE, RNORM, SCALE, TEMP, W, WD
+      INTENT(INOUT) X, Z
       INTEGER L, MA, MDW, MME, MODE, N
       REAL RNORM
       INTEGER I, IGO897, IGO938, IGO958, IMAX, ISOL, ITEMP, ITER, ITMAX
@@ -72298,6 +72983,8 @@ C
      * IDOPE, DOPE, DONE)
       IMPLICIT NONE
       INTENT(IN) DOPE, L, M, MDW, N
+      INTENT(OUT) RNORM
+      INTENT(INOUT) DONE, H, IDOPE, IPIVOT, ITYPE, SCALE, W
       INTEGER L, M, MDW, N
       REAL RNORM
       INTEGER I, I1, IC, IGO990, IGO993, IGO996, IP1, IR, IRP1, ITEMP, J
@@ -72688,6 +73375,7 @@ C     INTERCHANGES.
      *                 X, NN, RES, MR, QR, MMPNN, C, IFAULT)
       IMPLICIT NONE
       INTENT(IN) A, B, L, M, M1, MB, MM, MMPNN, MR, N, NN
+      INTENT(INOUT) C, IFAULT, IPIVOT, N1, QR, RES, TOL, W, X
       INTEGER IFAULT, L, M, M1, MB, MM, MMPNN, MR, N, N1, NN
       INTEGER I, ITER, J, JM1, K, K0, K1, K10, K11, K12, K2, K3, K4, K5
      x, K6, K7, K8, K9, KSUM, M1P1, MP1, MPI, MPN, NUMIT
@@ -73104,6 +73792,8 @@ C ORTHOGONAL DECOMPOSITION.
      * MMPNN)
       IMPLICIT NONE
       INTENT(IN) ETA, M, M1, MMPNN, N, TOL
+      INTENT(OUT) N1, SING
+      INTENT(INOUT) D, IPIVOT, QR
       INTEGER M, M1, MMPNN, N, N1
       INTEGER IK, J, JJ, K, KM1, L, LMM, MH, MP1, MPN1, MS, MV, NP, NS
      x, NSP1
@@ -73298,6 +73988,8 @@ C
      * X, RES, WRES, Y1, Y2, Y, F, G, MM, MMPNN)
       IMPLICIT NONE
       INTENT(IN) A, B, D, ETA, IPIVOT, M, M1, MM, MMPNN, N, N1, QR, W
+      INTENT(OUT) NUMIT
+      INTENT(INOUT) DIGITX, F, FAIL, G, RES, WRES, X, Y, Y1, Y2
       INTEGER M, M1, MM, MMPNN, N, N1, NUMIT
       INTEGER I, J, K, KZ, L, MP1, MPN, N1P1, NP, NS
       INTEGER IPIVOT(N)
@@ -73451,6 +74143,7 @@ C END K-TH ITERATION STEP.
       SUBROUTINE SOLVE3(F, M1, M, N1, QR, D, Y, MMPNN)
       IMPLICIT NONE
       INTENT(IN) D, M, M1, MMPNN, N1, QR
+      INTENT(INOUT) F, Y
       INTEGER M, M1, MMPNN, N1
       INTEGER J, L, LMM, MH, MPL, MPN1, MV, NS, NSM1
 C SUBROUTINE SOLVE3 IS CALLED ONLY BY SUBROUTINE SOLVE2.
@@ -73520,6 +74213,7 @@ C THIS SUBROUTINE CALCULATES NEW VALUES OF F.
       SUBROUTINE COVAR(N, M1, N1, IPIVOT, C, D, Z, NN)
       IMPLICIT NONE
       INTENT(IN) D, IPIVOT, M1, N, N1, NN
+      INTENT(INOUT) C, Z
       INTEGER M1, N, N1, NN
       INTEGER I, J, K, KA, L, N1P1
 C SUBROUTINE COVAR USES RESULTS FROM THE ORTHOGONAL DECOMPOSITION
@@ -73597,6 +74291,7 @@ C PERMUTE THE COLUMNS AND ROWS OF MATRIX C TO ACCOUNT FOR PIVOTING.
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
       INTENT(IN) A, ATOL, BTOL, CONLIM, DAMP, IA, ITNLIM, JA, M
+      INTENT(INOUT) ACOND, ISTOP, ITN, RNORM, U, W, X, XNORM
       INTEGER NPI
 C
       INTEGER M,N,ITNLIM,ISTOP
@@ -74009,6 +74704,8 @@ C
       SUBROUTINE NORMLZ(N,X,BETA)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) BETA
+      INTENT(INOUT) X
       INTEGER N
       REAL X(N),BETA
 C
@@ -74034,6 +74731,7 @@ C
      *                 ITNLIM,ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
       INTENT(IN) ATOL, BTOL, CONLIM, DAMP, ITA, ITNLIM, JTA, M, TA
+      INTENT(INOUT) ACOND, ISTOP, ITN, RNORM, U, W, X, XNORM
       INTEGER NPI
 C
       INTEGER M,N,ITNLIM,ISTOP
@@ -74449,6 +75147,7 @@ C
      *                     ISTOP,ITN,ACOND,RNORM,XNORM,W)
       IMPLICIT NONE
       INTENT(IN) A, ATOL, BTOL, CONLIM, DAMP, ITNLIM, KA, M, ML, MU
+      INTENT(INOUT) ACOND, ISTOP, ITN, RNORM, U, W, X, XNORM
       INTEGER NPI
 C
       INTEGER M,N,KA,ML,MU,ITNLIM,ISTOP
@@ -74867,6 +75566,8 @@ C
       SUBROUTINE FMIN(F, A0, B0, X, W, AERR, RERR, ERROR, IND)
       IMPLICIT NONE
       INTENT(IN) A0, AERR, B0, RERR
+      INTENT(OUT) IND
+      INTENT(INOUT) ERROR, W, X
       INTEGER IND
 C     ******************************************************************
 C     GOLDEN SECTION MINIMIZATION OF A FUNCTION F(T)
@@ -75037,6 +75738,7 @@ C
       SUBROUTINE OPTF (FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
       IMPLICIT NONE
       INTENT(IN) RERR
+      INTENT(INOUT) FPLS, IERR, ITER, WRK, XPLS
       INTEGER IERR, ITER, N
       REAL FPLS, RERR
       INTEGER I, ITNCNT, ITNLIM, MO
@@ -75121,6 +75823,8 @@ C
      *        IERR,A,G,P,WRK0,WRK1,WRK2)
       IMPLICIT NONE
       INTENT(IN) GRADTL, ITNLIM, NR, RERR, STEPTL
+      INTENT(INOUT) A, FPLS, FSCALE, G, GPLS, IERR, ITNCNT, MO, P
+      INTENT(INOUT) STEPMX, TYPSIZ, WRK0, WRK1, WRK2, X, XPLS
       INTEGER IERR, ITNCNT, ITNLIM, MO, N, NR
       REAL A, FPLS, FSCALE, G, GPLS, GRADTL, P, RERR, STEPMX, STEPTL
      x, TYPSIZ, WRK0, WRK1, WRK2, X, XPLS
@@ -75331,6 +76035,8 @@ C
      *                       STEPMX,IERR)
       IMPLICIT NONE
       INTENT(IN) GRADTL, ITNLIM, N, RERR, X
+      INTENT(OUT) IERR
+      INTENT(INOUT) FSCALE, STEPMX, TYPSIZ
       INTEGER IERR, ITNLIM, N
       REAL FSCALE, GRADTL, RERR, STEPMX
       INTEGER I
@@ -75427,6 +76133,8 @@ C
       IMPLICIT NONE
       INTENT(IN) FPLS, GPLS, GRADTL, IRETCD, ITNCNT, ITNLIM, MXTAKE, N
       INTENT(IN) NS, STEPTL, TYPSIZ, X, XPLS
+      INTENT(OUT) IERR
+      INTENT(INOUT) FSCALE, FSTACK, ICSCMX, SPTR
       INTEGER ICSCMX, IERR, IRETCD, ITNCNT, ITNLIM, N, NS
       REAL FPLS, FSCALE, GRADTL, STEPTL
       INTEGER I, JERR
@@ -75544,6 +76252,7 @@ C
       SUBROUTINE FXDEC (FCN, N, X, FX, R)
       IMPLICIT NONE
       INTENT(IN) R
+      INTENT(INOUT) FX, X
       INTEGER N
       REAL FX, R
       INTEGER I
@@ -75578,6 +76287,7 @@ C
       SUBROUTINE SCALEX (MO, X, TYPSIZ, N, IERR)
       IMPLICIT NONE
       INTENT(IN) MO, N, X
+      INTENT(INOUT) IERR, TYPSIZ
       INTEGER IERR, MO, N
       INTEGER I
       REAL BIG, C, T, XMIN
@@ -75612,6 +76322,7 @@ C
       SUBROUTINE LLTSLV (NR,N,A,X,B)
       IMPLICIT NONE
       INTENT(IN) A, B, N, NR
+      INTENT(INOUT) X
       INTEGER N, NR
       INTEGER I, II, IM1, IP1, J
       REAL SUM
@@ -75670,6 +76381,7 @@ C
       SUBROUTINE FSTOFD (N, X, FCN, FX, G, TYPSIZ, R)
       IMPLICIT NONE
       INTENT(IN) FX, R
+      INTENT(INOUT) G, X
       INTEGER N
       REAL FX, G, R, TYPSIZ, X
       INTEGER J
@@ -75710,6 +76422,7 @@ C
       SUBROUTINE FSTOCD (N, X, FCN, TYPSIZ, R, G)
       IMPLICIT NONE
       INTENT(IN) R, TYPSIZ
+      INTENT(INOUT) G, X
       INTEGER N
       REAL R
       INTEGER I
@@ -75755,6 +76468,8 @@ C
      *                  STEPMX,STEPTL,TYPSIZ)
       IMPLICIT NONE
       INTENT(IN) F, G, STEPMX, STEPTL, TYPSIZ, X
+      INTENT(OUT) IRETCD, MXTAKE
+      INTENT(INOUT) P, XPLS
       INTEGER IRETCD, N
       REAL F, FPLS, STEPMX, STEPTL
       INTEGER I
@@ -75902,6 +76617,7 @@ C
      *                      NOUPDT,S,Y,W)
       IMPLICIT NONE
       INTENT(IN) G, GPLS, ITNCNT, N, NR, TOL, X, XPLS
+      INTENT(INOUT) A, NOUPDT, S, W, Y
       INTEGER ITNCNT, N, NR
       REAL TOL
       INTEGER I, IM1, J
@@ -76040,6 +76756,7 @@ C
       SUBROUTINE QRUPDT (NR,N,A,U,V)
       IMPLICIT NONE
       INTENT(IN) N, NR, V
+      INTENT(INOUT) A, U
       INTEGER N, NR
       INTEGER I, II, J, K, KM1
       REAL R
@@ -76098,6 +76815,7 @@ C
       SUBROUTINE JROT (NR,N,H,I,A,B,R)
       IMPLICIT NONE
       INTENT(IN) A, B, I, N, NR
+      INTENT(INOUT) H, R
       INTEGER I, N, NR
       REAL A, B, R
       INTEGER J
@@ -76164,6 +76882,8 @@ C
       SUBROUTINE LMDIFF (FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
       IMPLICIT NONE
       INTENT(IN) EPSFCN, LWA, TOL
+      INTENT(OUT) INFO
+      INTENT(INOUT) FVEC, IWA, WA, X
       INTEGER M,N,INFO,LWA
       INTEGER IWA(N)
       REAL EPSFCN,TOL
@@ -76309,6 +77029,8 @@ C
       IMPLICIT NONE
       INTENT(IN) EPSFCN, FACTOR, FTOL, GTOL, LDFJAC, MAXFEV, MODE
       INTENT(IN) NPRINT, XTOL
+      INTENT(OUT) INFO, NFEV
+      INTENT(INOUT) DIAG, FJAC, FVEC, IPVT, QTF, WA1, WA2, WA3, WA4, X
       INTEGER M,N,MAXFEV,MODE,NPRINT,INFO,NFEV,LDFJAC
       INTEGER IPVT(N)
       REAL FTOL,XTOL,GTOL,EPSFCN,FACTOR
@@ -76869,6 +77591,7 @@ C
       SUBROUTINE DOGLEG(N,R,LR,DIAG,QTB,DELTA,X,WA1,WA2)
       IMPLICIT NONE
       INTENT(IN) DELTA, DIAG, LR, N, QTB, R
+      INTENT(INOUT) WA1, WA2, X
       INTEGER N,LR
       REAL DELTA
       REAL R(LR),DIAG(N),QTB(N),X(N),WA1(N),WA2(N)
@@ -77045,6 +77768,7 @@ C
      *                  WA1,WA2)
       IMPLICIT NONE
       INTENT(IN) EPSFCN, FVEC, LDFJAC, ML, MU
+      INTENT(INOUT) FJAC, WA2, X
       INTEGER N,LDFJAC,IFLAG,ML,MU
       REAL EPSFCN
       REAL X(N),FVEC(N),FJAC(LDFJAC,N),WA1(N),WA2(N)
@@ -77198,6 +77922,7 @@ C
       SUBROUTINE FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA)
       IMPLICIT NONE
       INTENT(IN) EPSFCN, FVEC, LDFJAC
+      INTENT(INOUT) FJAC, X
       INTEGER M,N,LDFJAC,IFLAG
       REAL EPSFCN
       REAL X(N),FVEC(M),FJAC(LDFJAC,N),WA(M)
@@ -77310,6 +78035,7 @@ C
      *                 WA2)
       IMPLICIT NONE
       INTENT(IN) DELTA, DIAG, IPVT, LDR, N, QTB
+      INTENT(INOUT) PAR, R, SDIAG, WA1, WA2, X
       INTEGER N,LDR
       INTEGER IPVT(N)
       REAL DELTA,PAR
@@ -77574,6 +78300,7 @@ C
       SUBROUTINE QFORM(M,N,Q,LDQ,WA)
       IMPLICIT NONE
       INTENT(IN) LDQ, M, N
+      INTENT(INOUT) Q, WA
       INTEGER M,N,LDQ
       REAL Q(LDQ,M),WA(M)
 C     **********
@@ -77672,6 +78399,7 @@ C
       SUBROUTINE QRFAC(M,N,A,LDA,PIVOT,IPVT,LIPVT,RDIAG,ACNORM,WA)
       IMPLICIT NONE
       INTENT(IN) LDA, LIPVT, M, N, PIVOT
+      INTENT(INOUT) A, ACNORM, IPVT, RDIAG, WA
       INTEGER M,N,LDA,LIPVT
       INTEGER IPVT(LIPVT)
       LOGICAL PIVOT
@@ -77839,6 +78567,7 @@ C
       SUBROUTINE QRSOLV(N,R,LDR,IPVT,DIAG,QTB,X,SDIAG,WA)
       IMPLICIT NONE
       INTENT(IN) DIAG, IPVT, LDR, N, QTB
+      INTENT(INOUT) R, SDIAG, WA, X
       INTEGER N,LDR
       INTEGER IPVT(N)
       REAL R(LDR,N),DIAG(N),QTB(N),X(N),SDIAG(N),WA(N)
@@ -78035,6 +78764,7 @@ C
       SUBROUTINE R1MPYQ(M,N,A,LDA,V,W)
       IMPLICIT NONE
       INTENT(IN) LDA, M, N, V, W
+      INTENT(INOUT) A
       INTEGER M,N,LDA
       REAL A(LDA,N),V(N),W(N)
 C     **********
@@ -78130,6 +78860,7 @@ C
       SUBROUTINE R1UPDT(M,N,S,LS,U,V,W,SING)
       IMPLICIT NONE
       INTENT(IN) LS, M, N, U
+      INTENT(INOUT) S, SING, V, W
       INTEGER M,N,LS
       LOGICAL SING
       REAL S(LS),U(M),V(N),W(M)
@@ -78340,6 +79071,7 @@ C
      *                       NUMLE,NUMGE,BI,WK,IWK)
       IMPLICIT NONE
       INTENT(IN) KA, MXITER, N0, NUMGE, NUMLE
+      INTENT(INOUT) BI, IBASIS, IND, ITER, IWK, WK, X, Z
       INTEGER IBASIS, IND, ITER, IWK, KA, M, MXITER, N0, NUMGE, NUMLE
       REAL A, B0, BI, C, WK, X, Z
       INTEGER IP
@@ -78386,6 +79118,8 @@ C
       IMPLICIT NONE
       INTENT(IN) A, B0, C, EPS0, KA, M, MXITER, N0, NUMGE, NUMLE, RERRMN
       INTENT(IN) RERRMX
+      INTENT(OUT) ITER, Z
+      INTENT(INOUT) BASIS, BI, IBASIS, IND, INDEX, R, RERR, XB, Y
       INTEGER IND, ITER, KA, M, MXITER, N0, NUMGE, NUMLE
       REAL EPS0, RERR, RERRMN, RERRMX, Z
       INTEGER I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J
@@ -79180,6 +79914,7 @@ C
      *                       NUMLE,NUMGE,BI,WK,IWK)
       IMPLICIT NONE
       INTENT(IN) MXITER, N0, NUMGE, NUMLE
+      INTENT(INOUT) BI, IBASIS, IND, ITER, IWK, WK, X, Z
       INTEGER IBASIS, IND, ITA, ITER, IWK, JTA, M, MXITER, N0, NUMGE
      x, NUMLE
       REAL B0, BI, C, TA, WK, X, Z
@@ -79229,6 +79964,8 @@ C
       IMPLICIT NONE
       INTENT(IN) B0, C, EPS0, ITA, JTA, M, MXITER, N0, NUMGE, NUMLE
       INTENT(IN) RERRMN, RERRMX, TA
+      INTENT(OUT) ITER, Z
+      INTENT(INOUT) BASIS, BI, IBASIS, IND, INDEX, R, RERR, XB, Y
       INTEGER IND, ITER, M, MXITER, N0, NUMGE, NUMLE
       REAL EPS0, RERR, RERRMN, RERRMX, Z
       INTEGER I, IBEG, ICOUNT, IEND, IERR, II, IL, IMIN, IOUT, IP, J
@@ -80049,6 +80786,7 @@ C
       SUBROUTINE CROUT1(A,KA,N,IEND,INDEX,TEMP,JP,IERR)
       IMPLICIT NONE
       INTENT(IN) IEND, KA, N
+      INTENT(INOUT) A, IERR, INDEX, JP, TEMP
       INTEGER IEND, IERR, INDEX, JP, KA, N
       REAL A, TEMP
       INTEGER I, IBEG, IJ, IK, IL, J, JCOL, JJ, K, KCOL, KCOUNT, KJ, KJ0
@@ -80279,6 +81017,7 @@ C
       SUBROUTINE ASSGN (N,A,C,T,IWK,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, C, IERR, IWK, T
       INTEGER IERR, N
       INTEGER I1, I2, I3, I4, I5, I6
 C     -------------------
@@ -80301,6 +81040,8 @@ C
      *                  U,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, C, CH, LC, LR, LZ, NZ, RH, SLC, SLR, T, U
       INTEGER IERR, N
       INTEGER I, J, K, KSLC, KSLR, L, LJ, LM, M, MAXNUM, MM, NL, NM, NP1
       INTEGER IPMPAR
@@ -80553,6 +81294,7 @@ C ERROR RETURN - INTEGER OVERFLOW OCCURS
       SUBROUTINE MKP (N,M,P,W,K,BCK,XSTAR,VSTAR,WK,IWK,NUM)
       IMPLICIT NONE
       INTENT(IN) K, M, N, NUM
+      INTENT(INOUT) BCK, IWK, P, VSTAR, W, WK, XSTAR
       INTEGER M, N, NUM
       INTEGER I, ISUMW, J, JJ, JN, JNN, L, LX, LXI, MAXW, MINW, MN, N5
      x, NP1, NPL
@@ -80756,6 +81498,8 @@ C
      2                 F, PBL, Q, V, BS, PS, WS, XS, IWK)
       IMPLICIT NONE
       INTENT(IN) K, M, N, N5, NP1, P, W
+      INTENT(INOUT) B, BB, BCK, BL, BS, F, IWK, LX, LXI, PBL, PS, Q, UBB
+      INTENT(INOUT) V, VSTAR, WS, X, XL, XS, XSTAR
       INTEGER M, N, N5, NP1
       INTEGER I, I1, IBV, IFLAG, II, IP, IP1, IUV, J, JBCK, JJ, K1, KUB
      x, LB, LI, LJ, LR, LRI, LUB, LUBI, M1, N1
@@ -80950,6 +81694,7 @@ C
      *                   BS,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTENT(IN) B, I, KUB, M, N, N5, NP1, P, Q, W
+      INTENT(INOUT) BS, IWK, LR, LX, PS, UB, WS, XS
       INTEGER I, KUB, LR, M, N, N5, NP1
       INTEGER J, JJ, NS
 C
@@ -80998,6 +81743,7 @@ C
      *                NP1,N5,BS,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTENT(IN) B, BB, I, M, N, N5, NP1, P, Q, W
+      INTENT(INOUT) BL, BS, IWK, KUB, LB, PBL, PS, V, WS, XL, XS
       INTEGER I, KUB, LB, M, N, N5, NP1
       INTEGER II, IKUB, J, JB, JBS, JJ, NS
 C
@@ -81096,6 +81842,8 @@ C
       IMPLICIT NONE
       INTENT(IN) B, BB, F, I, II, LI, LJ, LR, LRI, LUB, LUBI, LX, LXI, M
       INTENT(IN) N, NP1, Q, VB
+      INTENT(OUT) IFLAG
+      INTENT(INOUT) UB
       INTEGER I, IFLAG, II, LI, LJ, LR, LRI, LUB, LUBI, M, N, NP1
       INTEGER I1, IQ, J
 C
@@ -81145,6 +81893,7 @@ C
       SUBROUTINE SKNP (NS,QS,KUB,VS,N,NP1,N5,PS,WS,XS,IWK)
       IMPLICIT NONE
       INTENT(IN) KUB, N, N5, NP1, NS
+      INTENT(INOUT) IWK, PS, QS, VS, WS, XS
       INTEGER KUB, N, N5, NP1, NS
       INTEGER I1, I2, I3, I4, I5
 C
@@ -81175,6 +81924,8 @@ C
      *                  PBAR,WBAR,ZBAR)
       IMPLICIT NONE
       INTENT(IN) KUB, N, NP1, NS
+      INTENT(OUT) VS
+      INTENT(INOUT) D, MIN, PBAR, PS, QS, WBAR, WS, XS, ZBAR
       INTEGER KUB, N, NP1, NS
       INTEGER II, II1, IN, IP, J, J1, JJ, KK, L, LIM, LIM1, LL, LOLD
      x, MFIRST, MINK, MS, N1, NN
@@ -81384,6 +82135,8 @@ C
       SUBROUTINE LAINV (MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
       IMPLICIT NONE
       INTENT(IN) AERR, MO, RERR, T
+      INTENT(OUT) NUM
+      INTENT(INOUT) C, ERROR, IERR, Y
       INTEGER IERR, MO, NUM
       REAL AERR, C, ERROR, RERR, T, Y
       INTEGER IER, IERC, NUM1
@@ -81522,6 +82275,7 @@ C
 
       SUBROUTINE ABCON (FUN, C, NUM, IERR)
       IMPLICIT NONE
+      INTENT(INOUT) C, IERR, NUM
       INTEGER IERR, NUM
       REAL C
       INTEGER NUM1
@@ -81595,6 +82349,8 @@ C
       SUBROUTINE SRCH (FUN,COND,XL,ETA,X,NUM,IERR)
       IMPLICIT NONE
       INTENT(IN) ETA, XL
+      INTENT(OUT) IERR
+      INTENT(INOUT) NUM, X
       INTEGER IERR, NUM
       REAL ETA, X, XL
       INTEGER I, IER, NUM1
@@ -81715,6 +82471,7 @@ C
 
       SUBROUTINE ABCON1 (FUN, C, NUM, IERR)
       IMPLICIT NONE
+      INTENT(INOUT) C, IERR, NUM
       INTEGER IERR, NUM
       REAL C
       INTEGER I, NUM1
@@ -81844,6 +82601,7 @@ C
       SUBROUTINE ACOND (FUN, X, COND, NUM, IERR)
       IMPLICIT NONE
       INTENT(IN) X
+      INTENT(INOUT) COND, IERR, NUM
       INTEGER IERR, NUM
       REAL X
       INTEGER IER, IER1, IER2, IWK, L, M, N, NUM1, NUM2
@@ -81953,6 +82711,8 @@ C
 
       SUBROUTINE XCOND (FUN, X, COND, NUM, IERR)
       IMPLICIT NONE
+      INTENT(OUT) COND
+      INTENT(INOUT) IERR, NUM
       INTEGER IERR, NUM
       REAL X
       INTEGER IWK, L, M, N
@@ -82066,6 +82826,7 @@ C
      *   IER)
       IMPLICIT NONE
       INTENT(IN) C, EPSAB, EPSRE, T
+      INTENT(OUT) ESTERR, IER, NUM, RESULT
       REAL C, EPSAB, EPSRE, ESTERR, RESULT, T
       INTEGER MAX
       REAL A, AIM, AK, ARE, ARG, B, BB, E, EPS, EPSR1, F, FIM, FRE
@@ -82277,6 +83038,8 @@ C
 
       SUBROUTINE CQEXT(N,EPSTAB,RESULT,ABSERR,RES3LA,NRES)
       IMPLICIT NONE
+      INTENT(OUT) ABSERR, RESULT
+      INTENT(INOUT) EPSTAB, N, NRES, RES3LA
       REAL ABSERR
       REAL A1, A2, B1, B2, C1, C2, D1, D2, E1ABS, EPMACH, EPSINF, ERR1
      x, ERR2, ERR3, ERROR, OFLOW, RES1, RES2
@@ -82498,6 +83261,8 @@ C
      *                 NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) IWORK, WORK
       INTEGER IER, INF, LAST, LENW, LIMIT, NEVAL
       REAL ABSERR, BOUND, C, EPSABS, EPSREL, RESULT, Y
       INTEGER L1, L2, L3
@@ -82699,6 +83464,8 @@ C
      *              ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, RLIST
       INTEGER IER, INF, IORD, LAST, LIMIT, NEVAL
       REAL ABSERR, ALIST, BLIST, BOUND, C, ELIST, EPSABS, EPSREL, RESULT
      x, RLIST, Y
@@ -83183,6 +83950,7 @@ C
      *                   RESABS, RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTENT(IN) A, B, BOUN, EPMACH, INF, UFLOW
+      INTENT(INOUT) ABSERR, RESABS, RESASC, RESULT
       INTEGER INF
       REAL A, ABSERR, B, BOUN, C, EPMACH, RESABS, RESASC, RESULT, UFLOW
      x, Y
@@ -83376,6 +84144,7 @@ C
 
       SUBROUTINE FFT (C,N,ISN,IERR)
       IMPLICIT NONE
+      INTENT(INOUT) C, IERR
       INTEGER IERR, ISN, N
       REAL C(*)
 C-----------------------------------------------------------------------
@@ -83393,6 +84162,7 @@ C-----------------------------------------------------------------------
 
       SUBROUTINE FFT1 (A,B,N,ISN,IERR)
       IMPLICIT NONE
+      INTENT(INOUT) A, B, IERR
       INTEGER IERR, ISN, N
       REAL A(N), B(N)
 C     ------------
@@ -83406,6 +84176,7 @@ C     ------------
       SUBROUTINE MFFT (C,N,NDIM,ISN,IERR)
       IMPLICIT NONE
       INTENT(IN) ISN, NDIM
+      INTENT(INOUT) C, IERR
       INTEGER IERR, ISN, NDIM
       INTEGER I, ISIGN, NSPAN, NTOT
       REAL C(*)
@@ -83445,6 +84216,7 @@ C
       SUBROUTINE MFFT1 (A,B,N,NDIM,ISN,IERR)
       IMPLICIT NONE
       INTENT(IN) NDIM
+      INTENT(INOUT) A, B, IERR
       INTEGER IERR, ISN, NDIM
       INTEGER I, NSPAN, NTOT
       REAL A(*), B(*)
@@ -84100,6 +84872,7 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF COSQF OR COSQB.
 C
       SUBROUTINE COSQI (N,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE
       INTEGER N
       REAL WSAVE
       INTEGER K
@@ -84168,6 +84941,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQF OR COSQB.
 C
       SUBROUTINE COSQF (N,X,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE, X
       INTEGER N
       REAL WSAVE, X
       REAL SQRT2, TSQX
@@ -84184,6 +84958,7 @@ C
 
       SUBROUTINE COSQF1 (N,X,W,XH)
       IMPLICIT NONE
+      INTENT(INOUT) X, XH
       INTEGER N
       REAL W, X, XH
       INTEGER I, K, KC, MODN, NP2, NS2
@@ -84265,6 +85040,7 @@ C             BE DESTROYED BETWEEN CALLS OF COSQB OR COSQF.
 C
       SUBROUTINE COSQB (N,X,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE, X
       INTEGER N
       REAL WSAVE, X
       REAL TSQRT2, X1
@@ -84283,6 +85059,7 @@ C
 
       SUBROUTINE COSQB1 (N,X,W,XH)
       IMPLICIT NONE
+      INTENT(INOUT) X, XH
       INTEGER N
       REAL W, X, XH
       INTEGER I, K, KC, MODN, NP2, NS2
@@ -84368,6 +85145,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQF OR SINQB.
 C
       SUBROUTINE SINQF (N,X,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE, X
       INTEGER N
       REAL WSAVE, X
       INTEGER K, KC, NS2
@@ -84440,6 +85218,7 @@ C             BE DESTROYED BETWEEN CALLS OF SINQB OR SINQF.
 C
       SUBROUTINE SINQB (N,X,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE, X
       INTEGER N
       REAL WSAVE, X
       INTEGER K, KC, NS2
@@ -84487,6 +85266,7 @@ C             WSAVE MUST NOT BE CHANGED BETWEEN CALLS OF RFFTF OR RFFTB.
 C
       SUBROUTINE RFFTI (N,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) WSAVE
       INTEGER N
       REAL WSAVE
       DIMENSION       WSAVE(*)
@@ -84498,6 +85278,7 @@ C
       SUBROUTINE RFFTI1 (N,WA,IFAC)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IFAC, WA
       INTEGER N
       INTEGER I, IB, IDO, II, IP, IPM, IS, J, K1, L1, L2, LD, NF, NFM1
      x, NL, NQ, NR, NTRY
@@ -84620,6 +85401,7 @@ C
 C
       SUBROUTINE RFFTB (N,R,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) R, WSAVE
       INTEGER N
       REAL R, WSAVE
       DIMENSION       R(*)       ,WSAVE(*)
@@ -84631,6 +85413,7 @@ C
       SUBROUTINE RFFTB1 (N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTENT(IN) IFAC, N
+      INTENT(INOUT) C, CH
       INTEGER N
       INTEGER I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, L1, L2, NA, NF
       REAL C(*), CH(*), WA(*), IFAC(*)
@@ -84695,6 +85478,7 @@ C
       SUBROUTINE RADB2 (IDO,L1,CC,CH,WA1)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1
       INTEGER I, IC, IDP2, K
@@ -84742,6 +85526,7 @@ C
       SUBROUTINE RADB3 (IDO,L1,CC,CH,WA1,WA2)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2
       INTEGER I, IC, IDP2, K
@@ -84809,6 +85594,7 @@ C
       SUBROUTINE RADB4 (IDO,L1,CC,CH,WA1,WA2,WA3)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2, WA3
       INTEGER I, IC, IDP2, K
@@ -84902,6 +85688,7 @@ C
       SUBROUTINE RADB5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2, WA3, WA4
       INTEGER I, IC, IDP2, K
@@ -85015,6 +85802,7 @@ C
       SUBROUTINE RADBG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       IMPLICIT NONE
       INTENT(IN) IDL1, IDO, IP, L1
+      INTENT(INOUT) C1, C2, CH, CH2
       INTEGER IDL1, IDO, IP, L1
       REAL C1, C2, CC, CH, CH2, WA
       INTEGER I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, LC
@@ -85242,6 +86030,7 @@ C
 C
       SUBROUTINE RFFTF (N,R,WSAVE)
       IMPLICIT NONE
+      INTENT(INOUT) R, WSAVE
       INTEGER N
       REAL R, WSAVE
       DIMENSION       R(*)       ,WSAVE(*)
@@ -85253,6 +86042,7 @@ C
       SUBROUTINE RFFTF1 (N,C,CH,WA,IFAC)
       IMPLICIT NONE
       INTENT(IN) IFAC, N
+      INTENT(INOUT) C, CH
       INTEGER N
       INTEGER I, IDL1, IDO, IP, IW, IX2, IX3, IX4, K1, KH, L1, L2, NA
      x, NF
@@ -85318,6 +86108,7 @@ C
       SUBROUTINE RADF2 (IDO,L1,CC,CH,WA1)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1
       INTEGER I, IC, IDP2, K
@@ -85365,6 +86156,7 @@ C
       SUBROUTINE RADF3 (IDO,L1,CC,CH,WA1,WA2)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2
       INTEGER I, IC, IDP2, K
@@ -85430,6 +86222,7 @@ C
       SUBROUTINE RADF4 (IDO,L1,CC,CH,WA1,WA2,WA3)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2, WA3
       INTEGER I, IC, IDP2, K
@@ -85519,6 +86312,7 @@ C
       SUBROUTINE RADF5 (IDO,L1,CC,CH,WA1,WA2,WA3,WA4)
       IMPLICIT NONE
       INTENT(IN) IDO, L1
+      INTENT(INOUT) CH
       INTEGER IDO, L1
       REAL CC, CH, WA1, WA2, WA3, WA4
       INTEGER I, IC, IDP2, K
@@ -85628,6 +86422,7 @@ C
       SUBROUTINE RADFG (IDO,IP,L1,IDL1,CC,C1,C2,CH,CH2,WA)
       IMPLICIT NONE
       INTENT(IN) IDL1, IDO, IP, L1
+      INTENT(INOUT) C1, C2, CC, CH, CH2
       INTEGER IDL1, IDO, IP, L1
       REAL C1, C2, CC, CH, CH2, WA
       INTEGER I, IC, IDIJ, IDP2, IK, IPP2, IPPH, IS, J, J2, JC, K, L, LC
@@ -85803,6 +86598,7 @@ C
      X                    P, Q, ERROR, IERR, W)
       IMPLICIT NONE
       INTENT(IN) A, B, EPS, L, M, MXITER
+      INTENT(INOUT) ERROR, IERR, ITNO, P, Q, W
       INTEGER IERR, ITNO, L, M, MXITER
       INTEGER I1, I2, I3, I4, I5, LP1, LPM, MP1, N, NP1
 C     ******************************************************************
@@ -85840,6 +86636,8 @@ C     ------------------------------------------------------------------
      2                   X, XVAL, C, D, ERR, H)
       IMPLICIT NONE
       INTENT(IN) A, B, EPS, L, LP1, LPM, M, MP1, MXITER, N, NP1
+      INTENT(OUT) ERROR
+      INTENT(INOUT) C, D, ERR, H, IERR, ITNO, P, Q, X, XVAL
       INTEGER IERR, ITNO, L, LP1, LPM, M, MP1, MXITER, N, NP1
       INTEGER I, II, J, K, KOUNT, LPI
 C     ------------------------------------------------------------------
@@ -86123,6 +86921,7 @@ C
       SUBROUTINE CERR (T, FT, GT, PHIT, DEL, IERR, L, LP1, M, NP1, D)
       IMPLICIT NONE
       INTENT(IN) D, FT, GT, L, LP1, M, NP1, PHIT, T
+      INTENT(INOUT) DEL, IERR
       INTEGER IERR, L, LP1, M, NP1
       INTEGER I, II
 C     ------------------------------------------------------------------
@@ -87392,6 +88191,7 @@ C     THE COEFFICIENTS ARE NOW OF THE POWER FORM WITH ORIGIN XL
       SUBROUTINE CPSC (F, Z, N, IC, TOL, R, RS, ERR)
       IMPLICIT NONE
       INTENT(IN) IC, N, TOL
+      INTENT(INOUT) ERR, R, RS
       INTEGER IC, N
       REAL ERR, R, TOL
       INTEGER I, IA, INR, IP, IQ, IS, IT, IW, IX, J, JN, KL, KM, KN, L
@@ -87639,6 +88439,7 @@ C
       SUBROUTINE DCPSC (FUN, X, Y, N, IC, TOL, R, RS1, RS2, ERR)
       IMPLICIT NONE
       INTENT(IN) IC, N, TOL
+      INTENT(INOUT) ERR, R, RS1, RS2
       INTEGER IC, N
       INTEGER I, IA, INR, IQ, IS, IT, IX, J, JN, KL, KM, KN, L, L1, L2
      x, LF, LN, M, MM1, NP, NR
@@ -87963,6 +88764,7 @@ C
       SUBROUTINE LTRP (M,X,Y,N,XI,YI,NI,T,IERR)
       IMPLICIT NONE
       INTENT(IN) M, N, NI
+      INTENT(INOUT) IERR, T, YI
       INTEGER IERR, M, N, NI
       REAL T, X, XI, Y, YI
       INTEGER I, II, IL, ILM1, ILOLD, IPM, IR, ISTEP, J, JMAX, K, L, MM1
@@ -88115,6 +88917,7 @@ C
       SUBROUTINE HTRP (N,X,Y,A,T,IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IERR, T
       INTEGER IERR, N
       REAL A, T, X, Y
       INTEGER I, IBEG, IEND, K
@@ -88166,6 +88969,7 @@ C
       SUBROUTINE PCOEFF(ALPHA,N,X,A,C,T)
       IMPLICIT NONE
       INTENT(IN) A, ALPHA, N, X
+      INTENT(INOUT) C, T
       INTEGER N
       REAL ALPHA
       INTEGER I, J, K, NM1
@@ -88195,6 +88999,8 @@ C
       SUBROUTINE PFIT(ND,NP,X,Y,A,RNORM,PHI,PHIX,IERR)
       IMPLICIT NONE
       INTENT(IN) ND, NP, X, Y
+      INTENT(OUT) IERR
+      INTENT(INOUT) A, PHI, PHIX, RNORM
       INTEGER IERR, ND, NP
       REAL RNORM
       INTEGER K, LA, LB, LS, M, MP1, ND1
@@ -88338,6 +89144,7 @@ C
       SUBROUTINE WPFIT(ND,NP,X,Y,W,A,RNORM,PHI,PHIX,IERR)
       IMPLICIT NONE
       INTENT(IN) ND, NP, W, X, Y
+      INTENT(INOUT) A, IERR, PHI, PHIX, RNORM
       INTEGER IERR, ND, NP
       REAL RNORM
       INTEGER K, LA, LB, LS, M, MP1, ND1, NW
@@ -88497,6 +89304,7 @@ C
       SUBROUTINE CBSPL (X, Y, A, B, C, N, IBEG, IEND, ALPHA, BETA, IERR)
       IMPLICIT NONE
       INTENT(IN) ALPHA, BETA, IBEG, IEND, N, X, Y
+      INTENT(INOUT) A, B, C, IERR
       INTEGER IBEG, IEND, IERR, N
       REAL ALPHA, BETA
       INTEGER I, J, M, NM1
@@ -88630,6 +89438,7 @@ C
       SUBROUTINE SPLIFT (X,Y,YP,YPP,N,W,IERR,ISX,A1,B1,AN,BN)
       IMPLICIT NONE
       INTENT(IN) A1, AN, B1, BN, ISX, N, X, Y
+      INTENT(INOUT) IERR, W, YP, YPP
       INTEGER IERR, ISX, N
       REAL A1, AN, B1, BN
       INTEGER I, J, NM1, NM2
@@ -88792,6 +89601,7 @@ C
       SUBROUTINE SPFIT (X, Y, WGT, M, BREAK, L, Z, A, B, C, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) L, M, WGT, X, Y
+      INTENT(INOUT) A, B, BREAK, C, IERR, WK, Z
       INTEGER IERR, L, M
       INTEGER J, K, LA, LM1, LQ, LW, N
 C-----------------------------------------------------------------------
@@ -88858,6 +89668,7 @@ C
      *                   Z, A, B, C, WK, IWK, IERR)
       IMPLICIT NONE
       INTENT(IN) CON, L, M, NC, NDER, X, XCON, Y
+      INTENT(INOUT) A, B, BREAK, C, IERR, IWK, WK, Z
       INTEGER IERR, L, M, NC
       INTEGER J, K, LA, LM1, LW, N
       REAL R
@@ -88941,6 +89752,7 @@ C
       SUBROUTINE SCOMP (X,Y,A,B,C,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, C, N, NI, X, XI, Y
+      INTENT(INOUT) IERR, YI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K
       REAL DX, XX
@@ -89042,6 +89854,7 @@ C
       SUBROUTINE SCOMP1 (X,Y,YP,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NI, X, XI, Y, YP
+      INTENT(INOUT) IERR, YI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K, NM1
       REAL A, B, C, D, DX, H, XX
@@ -89145,6 +89958,7 @@ C
       SUBROUTINE SCOMP2 (X,Y,YPP,N,XI,YI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NI, X, XI, Y, YPP
+      INTENT(INOUT) IERR, YI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K, NM1
       REAL H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
@@ -89251,6 +90065,7 @@ C
       SUBROUTINE SEVAL (X,Y,A,B,C,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, C, N, NI, X, XI, Y
+      INTENT(INOUT) IERR, YI, YPI, YPPI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K
       REAL BI, CI, DX, XX
@@ -89359,6 +90174,7 @@ C
       SUBROUTINE SEVAL1 (X,Y,YP,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NI, X, XI, Y, YP
+      INTENT(INOUT) IERR, YI, YPI, YPPI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K, NM1
       REAL A, B, C, D, DX, H, XX
@@ -89468,6 +90284,7 @@ C
       SUBROUTINE SEVAL2 (X,Y,YPP,N,XI,YI,YPI,YPPI,NI,IERR)
       IMPLICIT NONE
       INTENT(IN) N, NI, X, XI, Y, YPP
+      INTENT(INOUT) IERR, YI, YPI, YPPI
       INTEGER IERR, N, NI
       INTEGER I, IL, IR, K, NM1
       REAL H, H2, XL, XL2, XL3, XR, XR2, XR3, XX
@@ -89893,6 +90710,7 @@ C
       SUBROUTINE PDSPL (X, Y, A, B, C, N, T, IERR)
       IMPLICIT NONE
       INTENT(IN) N, X, Y
+      INTENT(INOUT) A, B, C, IERR, T
       INTEGER IERR, N
       INTEGER I, J, NM1, NM2, NM3
       REAL ALPHA, DEL, DEL0, DELI, DELTA, E, H, HI, R, S, SI, W
@@ -90023,6 +90841,7 @@ C
       SUBROUTINE PDFIT (X, Y, M, BREAK, L, Z, A, B, C, WK, IWK, IERR)
       IMPLICIT NONE
       INTENT(IN) L, M, X, Y
+      INTENT(INOUT) A, B, BREAK, C, IERR, IWK, WK, Z
       INTEGER IERR, L, M
       INTEGER J, K, LA, LM1, LW, N
       REAL R
@@ -90118,6 +90937,7 @@ C
       SUBROUTINE PSCMP (X, Y, A, B, C, N, XI, YI, M, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, C, M, N, X, XI, Y
+      INTENT(INOUT) IERR, YI
       INTEGER IERR, M, N
       INTEGER I, IL, IR, J, K
       REAL DX, H, T, T0, X1, XOLD, XX
@@ -90197,6 +91017,7 @@ C
       SUBROUTINE PSEVL (X, Y, A, B, C, N, XI, YI, YPI, YPPI, M, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, C, M, N, X, XI, Y
+      INTENT(INOUT) IERR, YI, YPI, YPPI
       INTEGER IERR, M, N
       INTEGER I, IL, IR, J, K
       REAL BI2, CI3, DX, H, T, T0, X1, XOLD, XX
@@ -90283,6 +91104,7 @@ C
       SUBROUTINE CSLOOP (M, N, X, KX, T, DX, KDX, WK, IERR)
       IMPLICIT NONE
       INTENT(IN) KDX, KX, M, N, X
+      INTENT(INOUT) DX, IERR, T, WK
       INTEGER IERR, KDX, KX, M, N
       INTEGER IA, IB, IC, IE, MM1
 C-----------------------------------------------------------------------
@@ -90319,6 +91141,7 @@ C
       SUBROUTINE CSLOP1 (M, N, X, KX, T, DX, KDX, A, B, C, E, IERR)
       IMPLICIT NONE
       INTENT(IN) KDX, KX, M, N, X
+      INTENT(INOUT) A, B, C, DX, E, IERR, T
       INTEGER IERR, KDX, KX, M, N
       INTEGER I, IM1, J, L, MM1, MM2
       REAL ALPHA, DEL, DEL0, DEL1, DELI, DELM, ETA, H, HM, P, R, SI, SM
@@ -90483,6 +91306,7 @@ C
       SUBROUTINE LOPCMP (M, N, T, X, KX, DX, KDX, L, TI, Z, KZ)
       IMPLICIT NONE
       INTENT(IN) DX, KDX, KX, KZ, L, M, N, T, TI, X
+      INTENT(INOUT) Z
       INTEGER KDX, KX, KZ, L, M, N
       INTEGER I, IL, IR, J, K
       REAL A, B, C, D, DT, H, T0, TOLD, W
@@ -90565,6 +91389,7 @@ C
       SUBROUTINE LOPDF (M, N, T, X, KX, DX, KDX, TI, Z, DZ, DDZ)
       IMPLICIT NONE
       INTENT(IN) DX, KDX, KX, M, N, T, TI, X
+      INTENT(INOUT) DDZ, DZ, Z
       INTEGER KDX, KX, M, N
       REAL TI
       INTEGER I, IL, IR, J
@@ -90635,6 +91460,8 @@ C
      *                  SIGMA,IERR)
       IMPLICIT NONE
       INTENT(IN) ISLPSW, N, SIGMA, SLP1, SLPN, X, Y
+      INTENT(OUT) IERR
+      INTENT(INOUT) TEMP, YP
       INTEGER I, IBAK, NM1, NP1
       REAL C1, C2, C3, DELX1, DELX2, DELXN, DELXNM, DIAG, DIAG1, DIAG2
      x, DX1, DX2, SDIAG1, SDIAG2, SIGMAP, SLPP1, SLPPN
@@ -91140,6 +91967,8 @@ C
      *                  SIGMA,IERR)
       IMPLICIT NONE
       INTENT(IN) ISLPSW, N, SIGMA, SLP1, SLPN, X, Y
+      INTENT(OUT) IERR
+      INTENT(INOUT) S, TEMP, XP, YP
       INTEGER I, IBAK, IM1, NM1, NP1
       REAL C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG, DIAG1
      x, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, SDIAG1, SDIAG2, SIGMAP
@@ -91332,6 +92161,7 @@ C
       SUBROUTINE KURV2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
       INTENT(IN) N, S, SIGMA, T, X, XP, Y, YP
+      INTENT(INOUT) XS, YS
       INTEGER I, IM1
       REAL C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS
      x, DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX
@@ -91439,6 +92269,8 @@ C
       SUBROUTINE KURVP1 (N,X,Y,XP,YP,TEMP,S,SIGMA,IERR)
       IMPLICIT NONE
       INTENT(IN) N, SIGMA, X, Y
+      INTENT(OUT) IERR
+      INTENT(INOUT) S, TEMP, XP, YP
       INTEGER I, IBAK, IM1, NM1, NP1, NPI, NPIBAK
       REAL DELS1, DELS2, DIAG, DIAG1, DIAG2, DIAGIN, DX1, DX2, DY1, DY2
      x, SDIAG1, SDIAG2, SIGMAP, XPN, YPN
@@ -91611,6 +92443,7 @@ C
       SUBROUTINE KURVP2 (T,XS,YS,N,X,Y,XP,YP,S,SIGMA)
       IMPLICIT NONE
       INTENT(IN) N, S, SIGMA, T, X, XP, Y, YP
+      INTENT(INOUT) XS, YS
       INTEGER I, IM1
       REAL C1, C2, CI, CIM1, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2
      x, DELS, DUMMY, SI, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2
@@ -91727,6 +92560,8 @@ C
       IMPLICIT NONE
       INTENT(IN) ISLPSW, N, SIGMA, SLP1X, SLP1Y, SLP1Z, SLPNX, SLPNY
       INTENT(IN) SLPNZ, X, Y, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) S, TEMP, XP, YP, ZP
       INTEGER I, IBAK, IM1, NM1, NP1
       REAL C1, C2, C3, DELS1, DELS2, DELSN, DELSNM, DELT, DIAG, DIAG1
      x, DIAG2, DIAGIN, DX1, DX2, DY1, DY2, DZ1, DZ2, SDIAG1, SDIAG2
@@ -91943,6 +92778,7 @@ C
       SUBROUTINE QURV2 (T,XS,YS,ZS,N,X,Y,Z,XP,YP,ZP,S,SIGMA)
       IMPLICIT NONE
       INTENT(IN) N, S, SIGMA, T, X, XP, Y, YP, Z, ZP
+      INTENT(INOUT) XS, YS, ZS
       INTEGER I, IM1
       REAL C1, C2, COSHP1, COSHP2, D, DEL1, DEL2, DELP1, DELP2, DELS
      x, DUMMY, SIGMAP, SINHM1, SINHM2, SINHMS, SINHP1, SINHP2, SUMX
@@ -92054,6 +92890,7 @@ C
       SUBROUTINE CEEZ (DEL1,DEL2,SIGMA,C1,C2,C3,N)
       IMPLICIT NONE
       INTENT(IN) DEL1, DEL2, N, SIGMA
+      INTENT(INOUT) C1, C2, C3
       INTEGER N
       REAL COSHM1, COSHM2, DEL, DELM, DELP, DENOM, DUMMY, SINHMM, SINHMP
 C
@@ -92134,6 +92971,7 @@ C
       SUBROUTINE TERMS (DIAG,SDIAG,SIGMA,DEL)
       IMPLICIT NONE
       INTENT(IN) DEL, SIGMA
+      INTENT(INOUT) DIAG, SDIAG
       REAL COSHM, DENOM, SIGDEL, SINHM
 C
       REAL DIAG,SDIAG,SIGMA,DEL
@@ -92257,6 +93095,7 @@ C
       SUBROUTINE BVAL (T, BCOEF, N, K, X, JDERIV, W, WK)
       IMPLICIT NONE
       INTENT(IN) BCOEF, JDERIV, K, N, T, X
+      INTENT(INOUT) W, WK
       INTEGER JDERIV, K, N
       REAL W, X
       INTEGER I, IMK, IPJ, J, JC, JCMAX, JCMIN, JDRVP1, JJ, KM1, KMJ, L
@@ -92432,6 +93271,8 @@ C
       SUBROUTINE BVALI (T, BCOEFF, N, K, X, W, WK)
       IMPLICIT NONE
       INTENT(IN) BCOEFF, K, N, T, X
+      INTENT(OUT) W
+      INTENT(INOUT) WK
       INTEGER K, N
       REAL W, X
       INTEGER I, IPK, KP1, NP1, NPK
@@ -92477,6 +93318,8 @@ C
       SUBROUTINE BVALI0 (T, TNEW, BCOEF, N, K, X, W, WK)
       IMPLICIT NONE
       INTENT(IN) BCOEF, K, N, T, TNEW, X
+      INTENT(OUT) W
+      INTENT(INOUT) WK
       INTEGER K, N
       REAL TNEW, W, X
       INTEGER I, IMK, IPJ, J, JC, JCMIN, JJ, KM1, KMJ, L, M
@@ -92578,6 +93421,8 @@ C
       SUBROUTINE BSPP (T, A, N, K, BREAK, C, L, WK)
       IMPLICIT NONE
       INTENT(IN) A, K, N, T
+      INTENT(OUT) L
+      INTENT(INOUT) BREAK, C, WK
       INTEGER K, L, N
       INTEGER I, IL, ILJ, ILKJ, J, JJ, JP1, KM1, KMJ, KP1, LEFT
       REAL DIFF, R, S, TERM, X
@@ -92679,6 +93524,7 @@ C
       SUBROUTINE PPVAL (X, A, L, N, XI, YI, NI)
       IMPLICIT NONE
       INTENT(IN) L, N, NI
+      INTENT(INOUT) YI
       INTEGER L, N, NI
       REAL A, X, XI, YI
       INTEGER I, IL, IR, J, K, LM1, LMJ
@@ -92773,6 +93619,7 @@ C
       SUBROUTINE BSPVB (T, K, JHIGH, J, X, LEFT, BLIST)
       IMPLICIT NONE
       INTENT(IN) JHIGH, K, LEFT, T, X
+      INTENT(INOUT) BLIST, J
       INTEGER J, JHIGH, K, LEFT
       REAL X
       INTEGER I, IMJ, L
@@ -92836,6 +93683,7 @@ C
       SUBROUTINE BSPVD (T, K, X, LEFT, DBIATX, IDIM, NDERIV, A)
       IMPLICIT NONE
       INTENT(IN) IDIM, K, LEFT, NDERIV, T, X
+      INTENT(INOUT) A, DBIATX
       INTEGER IDIM, K, LEFT, NDERIV
       REAL X
       INTEGER I, IDERIV, IL, J, JJ, JLOW, JP1MID, KP1, KP1MM, L, LDUMMY
@@ -92976,6 +93824,7 @@ C
       SUBROUTINE BSTRP (TAU, GTAU, T, N, K, BCOEF, Q, IFLAG)
       IMPLICIT NONE
       INTENT(IN) GTAU, K, N, T, TAU
+      INTENT(INOUT) BCOEF, IFLAG, Q
       INTEGER IFLAG, K, N
       INTEGER I, ILP1MX, J, JJ, KM1, KPKM2, LEFT, LENQ, NP1
       REAL TAUI
@@ -93115,6 +93964,8 @@ C
       SUBROUTINE BANFAC ( W, NROWW, NROW, NBANDL, NBANDU, IFLAG )
       IMPLICIT NONE
       INTENT(IN) NBANDL, NBANDU, NROW, NROWW
+      INTENT(OUT) IFLAG
+      INTENT(INOUT) W
       INTEGER IFLAG, NBANDL, NBANDU, NROW, NROWW
       INTEGER I, IPK, J, JBEG, JEND, JMAX, K, KMAX, MDJ, MIDDLE, MIDMK
      x, MJ, NROWM1
@@ -93235,6 +94086,7 @@ C                                       CHECK THE LAST DIAGONAL ENTRY .
       SUBROUTINE BANSLV ( W, NROWW, NROW, NBANDL, NBANDU, B )
       IMPLICIT NONE
       INTENT(IN) NBANDL, NBANDU, NROW, NROWW, W
+      INTENT(INOUT) B
       INTEGER NBANDL, NBANDU, NROW, NROWW
       INTEGER I, IMJ, IPJ, J, JMAX, MIDDLE, MMJ, MPJ, NROWM1
 C  FROM  * A PRACTICAL GUIDE TO SPLINES *  BY C. DE BOOR
@@ -93296,6 +94148,7 @@ C                                A  IS LOWER TRIANGULAR .
       SUBROUTINE BSLSQ (TAU, GTAU, WGT, NTAU, T, N, K, A, WK, Q, IERR)
       IMPLICIT NONE
       INTENT(IN) GTAU, K, N, NTAU, T, TAU, WGT
+      INTENT(INOUT) A, IERR, Q, WK
       INTEGER IERR, K, N, NTAU
       INTEGER I, J, JJ, L, LEFT, LEFTMK, MM
       REAL DW
@@ -93390,6 +94243,7 @@ C
       SUBROUTINE BCHFAC (W, NB, N, DIAG, IFLAG)
       IMPLICIT NONE
       INTENT(IN) N, NB
+      INTENT(INOUT) DIAG, IFLAG, W
       INTEGER IFLAG, N, NB
       INTEGER I, IMAX, IPJ, J, JMAX, K, KPI
       REAL RATIO, T
@@ -93508,6 +94362,7 @@ C
       SUBROUTINE BCHSLV (W, NB, N, B)
       IMPLICIT NONE
       INTENT(IN) N, NB, W
+      INTENT(INOUT) B
       INTEGER N, NB
       INTEGER J, JMAX, JPK, K, NBM1
 C-----------------------------------------------------------------------
@@ -93571,6 +94426,7 @@ C
       IMPLICIT NONE
       INTENT(IN) BKPT, N, NCONST, NDATA, NDERIV, NORD, XCONST, XDATA
       INTENT(IN) YCONST, YDATA
+      INTENT(INOUT) COEFF, IW, MODE, RNORM, W
       INTEGER MODE, N, NCONST, NDATA, NORD
       REAL RNORM
       INTEGER I1, I2, I3, I7, MDG, MDW, NBKPT
@@ -93813,6 +94669,7 @@ C
       IMPLICIT NONE
       INTENT(IN) BKPT, MDG, MDW, NBKPT, NCONST, NDATA, NDERIV, NORD
       INTENT(IN) XCONST, XDATA, YCONST, YDATA
+      INTENT(INOUT) BF, COEFF, G, IWORK, MODE, RNORM, W, WORK
       INTEGER MDG, MDW, MODE, NBKPT, NCONST, NDATA, NORD
       REAL RNORM
       INTEGER I, IDATA, IDERIV, IERR, ILEFT, INTRVL, INTW1, IP, IP1, IR
@@ -94121,6 +94978,7 @@ C                       TO THE AMOUNT OF STORAGE NEEDED BY IW(*).
       SUBROUTINE BNDACC (G,MDG,NB,IP,IR,MT,JT)
       IMPLICIT NONE
       INTENT(IN) JT, MDG, MT, NB
+      INTENT(INOUT) G, IP, IR
       INTEGER IP, IR, JT, MDG, MT, NB
       REAL G
       INTEGER I, IE, IG, IG1, IG2, J, JG, K, KH, L, LP1, MH, MU, NBP1
@@ -94341,6 +95199,8 @@ C                                             ALG. STEP 25
       SUBROUTINE BNDSL (MODE,G,MDG,NB,IP,IR,X,N,RNORM,IERR)
       IMPLICIT NONE
       INTENT(IN) IP, IR, MDG, MODE, N, NB
+      INTENT(OUT) IERR, RNORM
+      INTENT(INOUT) X
       INTEGER IERR, IP, IR, MDG, MODE, N, NB
       REAL G, RNORM, X
       INTEGER I, I1, I2, IE, II, IRM1, IX, J, JG, L, NP1
@@ -94531,6 +95391,7 @@ C
       IMPLICIT NONE
       INTENT(IN) KZ, MX, MY, NUM, NX, NY, WX, WY, X, XBREAK, Y, YBREAK
       INTENT(IN) Z
+      INTENT(INOUT) F, IERR, S, T, WK
       INTEGER IERR, KZ, MX, MY, NUM, NX, NY
       INTEGER I, IMAX, J, L, LD, M, N, NU
 C-----------------------------------------------------------------------
@@ -94666,6 +95527,7 @@ C
       SUBROUTINE CSPP (T, A, KA, M, N, Z, KZ, DZ, KDZ)
       IMPLICIT NONE
       INTENT(IN) A, KA, KDZ, KZ, M, N, T
+      INTENT(INOUT) DZ, Z
       INTEGER KA, KDZ, KZ, M, N
       INTEGER I, IL, ILJ, ILKJ, J, JJ, JP1, K, KMJ, L, LEFT, MP1, MU
       REAL DEL, DIFF, R, S, TERM, X
@@ -94782,6 +95644,7 @@ C
       IMPLICIT NONE
       INTENT(IN) F, F1, F12, F2, IDER, JDER, KF, KF1, KF12, KF2, KZ, M
       INTENT(IN) MX, MY, N, S, T, X, Y
+      INTENT(INOUT) Z
       INTEGER IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, MY, N
       INTEGER I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL A, B, B1, B2, B3, BX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS
@@ -94943,6 +95806,7 @@ C
       SUBROUTINE CSURF1 (IDER, JDER, X, MX, Y, MY, Z, KZ, S, M, T, N, F)
       IMPLICIT NONE
       INTENT(IN) F, IDER, JDER, KZ, M, MX, MY, N, S, T, X, Y
+      INTENT(INOUT) Z
       INTEGER IDER, JDER, KZ, M, MX, MY, N
 C-----------------------------------------------------------------------
 C
@@ -94963,6 +95827,7 @@ C
       IMPLICIT NONE
       INTENT(IN) F, F1, F12, F2, IDER, JDER, KF, KF1, KF12, KF2, KZ, M
       INTENT(IN) MX, MY, N, S, T, X, Y
+      INTENT(INOUT) Z
       INTEGER IDER, JDER, KF, KF1, KF12, KF2, KZ, M, MX, MY, N
       INTEGER I, IOLD, IP1, J, JOLD, JP1, K, L, MM1, NM1
       REAL A, A1, A2, A3, AX, C, C1, C2, C3, CX, D, DFI, DFIP1, DS, DT
@@ -95120,6 +95985,7 @@ C
      *                  F, KF, DDF)
       IMPLICIT NONE
       INTENT(IN) DDF, F, IDER, JDER, KF, KZ, M, MX, MY, N, S, T, X, Y
+      INTENT(INOUT) Z
       INTEGER IDER, JDER, KF, KZ, M, MX, MY, N
 C-----------------------------------------------------------------------
 C
@@ -95138,6 +96004,8 @@ C
       SUBROUTINE SURF (M,N,X,Y,Z,IZ,OPT,ZP,TEMP,SIGMA,IERR)
       IMPLICIT NONE
       INTENT(IN) IZ, M, N, OPT, SIGMA, X, Y, Z
+      INTENT(OUT) IERR
+      INTENT(INOUT) TEMP, ZP
       INTEGER I, IBAK, IBAKP1, IM1, IP1, J, JBAK, JBAKP1, JM1, JP1, KEY
      x, L, MM1, MP1, NM1, NP1, NPI, NPIBAK, NPM, NPMPJ
       REAL C1, C2, C3, DEL1, DEL2, DELI, DELX1, DELX2, DELXM, DELXMM
@@ -95679,6 +96547,7 @@ C
       IMPLICIT NONE
       INTENT(IN) DXMAX, DXMIN, DYMAX, DYMIN, IDZ, IZ, M, MD, N, ND
       INTENT(IN) SIGMA, X, Y, Z, ZP
+      INTENT(INOUT) DZ, WORK
       INTEGER I, II, IM1, J, JJ, JM1, LASTI, LASTJ
       REAL C1, C2, C3, C4, COSHP1, COSHP2, DEL1, DEL2, DELP1, DELP2
      x, DELS, DELTDX, DELTDY, DUMMY, SIGMAX, SIGMAY, SINHM1, SINHM2
@@ -95863,6 +96732,7 @@ C
      *                   A, KA, WK, L, IFLAG)
       IMPLICIT NONE
       INTENT(IN) KA, KX, KY, KZ, L, NX, NY, TX, TY, X, Y, Z
+      INTENT(INOUT) A, IFLAG, WK
       INTEGER IFLAG, KA, KX, KY, KZ, L, NX, NY
       INTEGER IW, M
 C-----------------------------------------------------------------------
@@ -95913,6 +96783,8 @@ C
       SUBROUTINE BSTRP1 (X, Z, KZ, M, N, T, K, A, KA, WORK, IFLAG)
       IMPLICIT NONE
       INTENT(IN) K, KA, KZ, M, N, T, X, Z
+      INTENT(OUT) IFLAG
+      INTENT(INOUT) A, WORK
       INTEGER IFLAG, K, KA, KZ, M, N
       INTEGER I, J, MP1
 C-------------------------------------------------------------------
@@ -95954,6 +96826,7 @@ C
       IMPLICIT NONE
       INTENT(IN) KA, KX, KY, KZ, L, MX, MY, NX, NY, TX, TY, WX, WY, X, Y
       INTENT(IN) Z
+      INTENT(INOUT) A, IFLAG, WK
       INTEGER IFLAG, KA, KX, KY, KZ, L, MX, MY, NX, NY
       INTEGER IERR, IQ, IW, M
 C-----------------------------------------------------------------------
@@ -96013,6 +96886,7 @@ C
      *                   A, KA, WK, Q, IERR)
       IMPLICIT NONE
       INTENT(IN) K, KA, KZ, M, N, NTAU, T, TAU, WGT, Z
+      INTENT(INOUT) A, IERR, Q, WK
       INTEGER IERR, K, KA, KZ, M, N, NTAU
       INTEGER I, J, JJ, L, LEFT, LEFTMK, MM
       REAL DW
@@ -96124,6 +96998,7 @@ C
       SUBROUTINE BCHSV1 (W, NB, N, B, KB, M)
       IMPLICIT NONE
       INTENT(IN) KB, M, N, NB, W
+      INTENT(INOUT) B
       INTEGER KB, M, N, NB
       INTEGER I, J, JMAX, JPK, K, NBM1
       REAL T
@@ -96206,6 +97081,8 @@ C
      *                  IDX, IDY, F, WK)
       IMPLICIT NONE
       INTENT(IN) A, IDX, IDY, KA, KX, KY, NX, NY, TX, TY, X0, Y0
+      INTENT(OUT) F
+      INTENT(INOUT) WK
       INTEGER IDX, IDY, KA, KX, KY, NX, NY
       REAL F, X0, Y0
       INTEGER I, IW, J, L, M
@@ -96259,6 +97136,8 @@ C
       SUBROUTINE TRMESH (N,X,Y, IADJ,IEND,IER)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) IER
+      INTENT(INOUT) IADJ, IEND
       INTEGER N, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N)
 C
@@ -96513,6 +97392,8 @@ C
       SUBROUTINE ADNODE (KK,X,Y, IADJ,IEND, IER)
       IMPLICIT NONE
       INTENT(IN) KK
+      INTENT(OUT) IER
+      INTENT(INOUT) IADJ, IEND
       INTEGER KK, IADJ(*), IEND(KK), IER
       REAL    X(KK), Y(KK)
       LOGICAL SWPTST
@@ -96660,6 +97541,7 @@ C
       SUBROUTINE BDYADD (KK,I1,I2, IADJ,IEND )
       IMPLICIT NONE
       INTENT(IN) I1, I2, KK
+      INTENT(INOUT) IADJ, IEND
       INTEGER KK, I1, I2, IADJ(*), IEND(KK)
 C
 C***********************************************************
@@ -96798,6 +97680,7 @@ C
       SUBROUTINE INTADD (KK,I1,I2,I3, IADJ,IEND )
       IMPLICIT NONE
       INTENT(IN) I1, I2, I3, KK
+      INTENT(INOUT) IADJ, IEND
       INTEGER KK, I1, I2, I3, IADJ(*), IEND(KK)
 C
 C***********************************************************
@@ -96957,6 +97840,7 @@ C
       SUBROUTINE SHIFTD (NFRST,NLAST,KK, IARR )
       IMPLICIT NONE
       INTENT(IN) KK, NFRST, NLAST
+      INTENT(INOUT) IARR
       INTEGER NFRST, NLAST, KK, IARR(*)
 C
 C***********************************************************
@@ -97071,6 +97955,7 @@ C
       SUBROUTINE SWAPD (NIN1,NIN2,NOUT1,NOUT2, IADJ,IEND)
       IMPLICIT NONE
       INTENT(IN) NIN1, NIN2, NOUT1, NOUT2
+      INTENT(INOUT) IADJ, IEND
       INTEGER NIN1, NIN2, NOUT1, NOUT2, IADJ(*), IEND(*)
       INTEGER TINDX
 C
@@ -97417,6 +98302,7 @@ C
       SUBROUTINE TRFIND (NST,PX,PY,X,Y,IADJ,IEND, I1,I2,I3)
       IMPLICIT NONE
       INTENT(IN) IADJ, IEND, NST, PX, PY
+      INTENT(INOUT) I1, I2, I3
       REAL X0, X1, X2, Y0, Y1, Y2
       INTEGER NST, IADJ(*), IEND(*), I1, I2, I3
       REAL    PX, PY, X(*), Y(*)
@@ -97716,6 +98602,7 @@ C
       SUBROUTINE GRADG (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTENT(IN) IADJ, IEND, N, X, Y, Z
+      INTENT(INOUT) IERR, ZXZY
       INTEGER IERR, N
       INTEGER J, MITER
       REAL EPS
@@ -97747,6 +98634,7 @@ C
      .                   ZXZY, IER)
       IMPLICIT NONE
       INTENT(IN) EPS, IADJ, IEND, N, X, Y, Z
+      INTENT(INOUT) IER, NIT, ZXZY
       INTEGER N, IADJ(*), IEND(N), NIT, IER
       REAL    X(N), Y(N), Z(N), EPS, ZXZY(2,N)
 C
@@ -97967,6 +98855,7 @@ C
       SUBROUTINE GRADL (N, X, Y, Z, IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTENT(IN) IADJ, N, X, Y, Z
+      INTENT(INOUT) IEND, IERR, ZXZY
       INTEGER IERR, N
       INTEGER J
 C-----------------------------------------------------------------------
@@ -97997,6 +98886,7 @@ C
       SUBROUTINE GRADL1 (N,K,X,Y,Z,IADJ,IEND, DX,DY,IER)
       IMPLICIT NONE
       INTENT(IN) IADJ, K, N, X, Y, Z
+      INTENT(INOUT) DX, DY, IEND, IER
       INTEGER N, K, IADJ(*), IEND(N), IER
       REAL    X(N), Y(N), Z(N), DX, DY
 C
@@ -98293,6 +99183,7 @@ C
       SUBROUTINE SETRM (XK,YK,ZK,XI,YI,ZI,S1,S2,R, ROW)
       IMPLICIT NONE
       INTENT(IN) R, S1, S2, XI, XK, YI, YK, ZI, ZK
+      INTENT(INOUT) ROW
       REAL XK, YK, ZK, XI, YI, ZI, S1, S2, R, ROW(6)
 C
 C***********************************************************
@@ -98378,6 +99269,7 @@ C
       SUBROUTINE GETNP (X,Y,IADJ,IEND,L, NPTS, DS,IER)
       IMPLICIT NONE
       INTENT(IN) IADJ, L, X, Y
+      INTENT(INOUT) DS, IEND, IER, NPTS
       INTEGER IADJ(*), IEND(*), L, NPTS(L), IER
       REAL    X(*), Y(*), DS
 C
@@ -98525,6 +99417,7 @@ C
      *                  ZXZY, IERR)
       IMPLICIT NONE
       INTENT(IN) IADJ, M, N, XI, YI, Z, ZXZY
+      INTENT(INOUT) IEND, IERR, ZI
       INTEGER IERR, M, N
       INTEGER IST, J
 C-----------------------------------------------------------------------
@@ -98556,6 +99449,7 @@ C
      *                   IADJ, IEND, ZXZY, IERR)
       IMPLICIT NONE
       INTENT(IN) IADJ, L, M, N, NROWS, XI, YI, Z, ZXZY
+      INTENT(INOUT) IEND, IERR, ZI
       INTEGER IERR, L, M, N, NROWS
       INTEGER I, IST, J
 C-----------------------------------------------------------------------
@@ -98591,6 +99485,8 @@ C
      .                   ZXZY, IST, PZ,IER)
       IMPLICIT NONE
       INTENT(IN) IADJ, IFLAG, N, PX, PY, Z, ZXZY
+      INTENT(OUT) PZ
+      INTENT(INOUT) IEND, IER, IST
       INTEGER N, IADJ(*), IEND(N), IFLAG, IST, IER
       REAL    PX, PY, X(N), Y(N), Z(N), ZXZY(2,N), PZ
 C
@@ -98871,6 +99767,7 @@ C
       IMPLICIT NONE
       INTENT(IN) IFLAG, X, X1, X2, X3, Y, Y1, Y2, Y3, Z1, Z2, Z3, ZX1
       INTENT(IN) ZX2, ZX3, ZY1, ZY2, ZY3
+      INTENT(INOUT) IER, W, WX, WY
       INTEGER IFLAG, IER
       REAL    X, Y, X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3,
      .        ZX1, ZX2, ZX3, ZY1, ZY2, ZY3, W, WX, WY
@@ -99164,6 +100061,8 @@ C
      +                FIWKLN,FDWKLN,IREQD,DREQD)
       IMPLICIT NONE
       INTENT(IN) DIMEN, FDWKLN, FIWKLN, NCROWS, NFPTS, WTS
+      INTENT(INOUT) DREQD, ERROR, FITCDS, FITDEG, FITDWK, FITIWK, FITVLS
+      INTENT(INOUT) IREQD, NFPOLS, RESIDS
 C
       INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
       INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -99336,6 +100235,7 @@ C
      +                 IREQD,DREQD,ERROR)
       IMPLICIT NONE
       INTENT(IN) DIMEN, IWKLEN, NPTS
+      INTENT(INOUT) DEGREE, DREQD, ERROR, IREQD, IWORK, NPOLYS
 C
       INTEGER IREQD,DREQD,ALFL,ERROR,NPOLYS,DEGREE,DIMEN,NPTS
       INTEGER NEWSTT,PSIWID,KMXBAS,STARTJ,KJP1D2,INDEX,IWKLEN
@@ -99540,6 +100440,8 @@ C
       SUBROUTINE BASIZ(DEGREE,NPTS,DIMEN,NPOLYS,ERROR)
       IMPLICIT NONE
       INTENT(IN) DIMEN, NPTS
+      INTENT(OUT) ERROR
+      INTENT(INOUT) DEGREE, NPOLYS
 C
       INTEGER TOP,BOT,DEGREE,NPTS,DIMEN,NPOLYS,ERROR,I,ROWLEN
 C
@@ -99627,6 +100529,8 @@ C
       SUBROUTINE MTABLE(DEGREE,DIMEN,NPOLYS,INDEXS,NEWKJ,ALFLP1)
       IMPLICIT NONE
       INTENT(IN) DEGREE, DIMEN, NPOLYS
+      INTENT(OUT) ALFLP1
+      INTENT(INOUT) INDEXS, NEWKJ
 C
       INTEGER J,KJ,CURDEG,JPRIME,NWITHK,I,CURM1,RALEN,DIMM1,DIMM2
       INTEGER NPOLYS,DIMEN,DEGREE,ALFLP1,DIMP1
@@ -99777,6 +100681,8 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, DIMEN, INDEXS, NCROWS, NEWKJ, NPTS, PSIWID
       INTENT(IN) WEIGHT
+      INTENT(INOUT) ALPHA, C, COORD, DEGREE, ERROR, F, MAXABS, NPOLYS
+      INTENT(INOUT) PSI, SUMSQS, Z
       INTEGER NCROWS
 C
       INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
@@ -99856,6 +100762,8 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, COORD, DIMEN, F, INDEXS, NCROWS, NEWKJ, NPTS
       INTENT(IN) ONPLYS, PSIWID, WEIGHT
+      INTENT(INOUT) ALPHA, C, DEGREE, ERROR, NPOLYS, PSI, STTDEG, SUMSQS
+      INTENT(INOUT) Z
       INTEGER NCROWS
 C
       INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
@@ -100054,6 +100962,7 @@ C
       SUBROUTINE SCALPM(COORD,NPTS,MAXABS)
       IMPLICIT NONE
       INTENT(IN) COORD, NPTS
+      INTENT(OUT) MAXABS
 C
       INTEGER NPTS,P
       REAL    MAXABS,A
@@ -100092,6 +101001,7 @@ C
       SUBROUTINE SCALDN(COORD,NPTS,MAXABS)
       IMPLICIT NONE
       INTENT(IN) MAXABS, NPTS
+      INTENT(INOUT) COORD
 C
       INTEGER NPTS,P
       REAL    MAXABS
@@ -100123,6 +101033,7 @@ C
       IMPLICIT NONE
       INTENT(IN) DIMEN, EVLCDS, EVLDEG, FDWKLN, FITIWK, FIWKLN, NEPTS
       INTENT(IN) NEROWS
+      INTENT(INOUT) ERROR, EVLVLS, FITDWK, NEPOLS, TEMP
       INTEGER NEROWS
 C
       INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
@@ -100277,6 +101188,7 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, ALPHA, C, COORD, DIMEN, DIMP1, INDEXS, MAXABS
       INTENT(IN) NCROWS, NEPTS, NPOLYS
+      INTENT(INOUT) F, PSI, X
       INTEGER NCROWS
 C
       INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
@@ -100363,6 +101275,8 @@ C
      +                 FIWKLN,FDWKLN,IREQD,DREQD)
       IMPLICIT NONE
       INTENT(IN) DIMEN, FDWKLN, FIWKLN, NCROWS, NFPTS, WTS
+      INTENT(INOUT) DREQD, ERROR, FITCDS, FITDEG, FITDWK, FITIWK, FITVLS
+      INTENT(INOUT) IREQD, NFPOLS, RESIDS
 C
       INTEGER NFPOLS,FITDEG,NFPTS,DIMEN,FIWKLN,FDWKLN
       INTEGER ERROR,IREQD,DREQD,INDSTT,P,DIMP1,NCROWS
@@ -100538,6 +101452,8 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, DIMEN, INDEXS, NCROWS, NEWKJ, NPTS, PSIWID
       INTENT(IN) WEIGHT
+      INTENT(INOUT) ALPHA, C, COORD, DEGREE, ERROR, F, MAXABS, NPOLYS
+      INTENT(INOUT) PSI, SUMSQS, Z
       INTEGER NCROWS
 C
       INTEGER DEGREE,DIMEN,NPOLYS,NPTS,K,PSIWID,ALFL,P,STTDEG,ONPLYS
@@ -100617,6 +101533,8 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, COORD, DIMEN, F, INDEXS, NCROWS, NEWKJ, NPTS
       INTENT(IN) ONPLYS, PSIWID, WEIGHT
+      INTENT(INOUT) ALPHA, C, DEGREE, ERROR, NPOLYS, PSI, STTDEG, SUMSQS
+      INTENT(INOUT) Z
       INTEGER NCROWS
 C
       INTEGER JPRIME,P,J,CURDEG,KJ,KJP,L,JPM1,JM1
@@ -100815,6 +101733,7 @@ C
       SUBROUTINE DSCALP(COORD,NPTS,MAXABS)
       IMPLICIT NONE
       INTENT(IN) COORD, NPTS
+      INTENT(OUT) MAXABS
 C
       INTEGER NPTS,P
       DOUBLE PRECISION MAXABS,A
@@ -100853,6 +101772,7 @@ C
       SUBROUTINE DSCALD(COORD,NPTS,MAXABS)
       IMPLICIT NONE
       INTENT(IN) MAXABS, NPTS
+      INTENT(INOUT) COORD
 C
       INTEGER NPTS,P
       DOUBLE PRECISION MAXABS
@@ -100884,6 +101804,7 @@ C
       IMPLICIT NONE
       INTENT(IN) DIMEN, EVLCDS, EVLDEG, FDWKLN, FITIWK, FIWKLN, NEPTS
       INTENT(IN) NEROWS
+      INTENT(INOUT) ERROR, EVLVLS, FITDWK, NEPOLS, TEMP
       INTEGER NEROWS
 C
       INTEGER FIWKLN,FDWKLN,NEPOLS,NEPTS,DIMEN,ERROR,MAXSTT,ALFSTT,CSTT
@@ -101039,6 +101960,7 @@ C
       IMPLICIT NONE
       INTENT(IN) ALFL, ALPHA, C, COORD, DIMEN, DIMP1, INDEXS, MAXABS
       INTENT(IN) NCROWS, NEPTS, NPOLYS
+      INTENT(INOUT) F, PSI, X
       INTEGER NCROWS
 C
       INTEGER DIMEN,NEPTS,NPOLYS,ALFL,DIMP1
@@ -101122,6 +102044,7 @@ C
       REAL FUNCTION QSUBA (F, A, B, EPSIL, MCOUNT, RELERR, IND)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSIL, MCOUNT
+      INTENT(INOUT) IND, RELERR
       INTEGER IND, MCOUNT
       REAL A, B, EPSIL, RELERR
       INTEGER ICHECK, IS, ISMAX, K, NF, NPTS
@@ -101272,6 +102195,8 @@ C
       SUBROUTINE QUAD(A, B, RESULT, K, EPSIL, NPTS, ICHECK, F)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSIL
+      INTENT(OUT) ICHECK
+      INTENT(INOUT) K, NPTS, RESULT
       INTEGER ICHECK, K, NPTS
       REAL A, B, EPSIL, RESULT
       INTEGER I, INEW, IOLD, J
@@ -101628,6 +102553,8 @@ C TRIVIAL CASE
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSABS, EPSREL, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) IWORK, WORK
       REAL F
       INTEGER IER, LAST, LENW, LIMIT, NEVAL
       REAL A, ABSERR, B, EPSABS, EPSREL, RESULT
@@ -101806,6 +102733,8 @@ C
      *              NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSABS, EPSREL, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, RLIST
 C-----------------------------------------------------------------------
 C
 C                 COMPUTATION OF A DEFINITE INTEGRAL
@@ -102259,6 +103188,8 @@ C
      *                  EPMACH, UFLOW, ISIG)
       IMPLICIT NONE
       INTENT(IN) A, B, EPMACH, UFLOW
+      INTENT(OUT) ISIG
+      INTENT(INOUT) ABSERR, RESABS, RESASC, RESULT
       INTEGER ISIG
       REAL A, ABSERR, B, EPMACH, RESABS, RESASC, RESULT, UFLOW
       INTEGER J, JTW, JTWM1
@@ -102437,6 +103368,8 @@ C
      *                 NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) IWORK, WORK
       INTEGER IER, INF, LAST, LENW, LIMIT, NEVAL
       REAL ABSERR, BOUND, EPSABS, EPSREL, RESULT
       INTEGER L1, L2, L3
@@ -102622,6 +103555,8 @@ C
      *                  NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, RLIST
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -103088,6 +104023,7 @@ C
      *                  RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTENT(IN) A, B, BOUN, EPMACH, INF, UFLOW
+      INTENT(INOUT) ABSERR, RESABS, RESASC, RESULT
       INTEGER INF
       REAL A, ABSERR, B, BOUN, EPMACH, RESABS, RESASC, RESULT, UFLOW
       INTEGER J
@@ -103273,6 +104209,7 @@ C
       SUBROUTINE QPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
       IMPLICIT NONE
       INTENT(IN) LAST, LIMIT
+      INTENT(INOUT) ERMAX, IORD, MAXERR, NRMAX
 C     ..................................................................
 C
 C 1.        QPSRT
@@ -103410,6 +104347,8 @@ C
      *                 EPMACH, OFLOW)
       IMPLICIT NONE
       INTENT(IN) EPMACH, OFLOW
+      INTENT(OUT) ABSERR, RESULT
+      INTENT(INOUT) EPSTAB, N, NRES, RES3LA
       INTEGER N, NRES
       REAL ABSERR, EPMACH, OFLOW, RESULT
       INTEGER I, IB, IB2, IE, INDX, K1, K2, K3, LIMEXP, NEWELM, NUM
@@ -103591,6 +104530,8 @@ C
      *                 LIMIT,LENIW,LENW,LAST,IWORK,WORK)
       IMPLICIT NONE
       INTENT(IN) EPSABS, EPSREL, LENIW, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, RESULT
+      INTENT(INOUT) IWORK, WORK
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 C            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -103762,6 +104703,8 @@ C
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
       IMPLICIT NONE
       INTENT(IN) EPSABS, EPSREL, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, LN, LP, RLIST, VALN, VALP
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 C            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -104186,6 +105129,7 @@ C
       SUBROUTINE QXCPY (A, B, L)
       IMPLICIT NONE
       INTENT(IN) B, L
+      INTENT(INOUT) A
       INTEGER I
 C
 C  TO COPY THE REAL VECTOR B OF LENGTH L   I N T O
@@ -104203,6 +105147,7 @@ C
      *                  KEY,EPMACH,UFLOW,OFLOW)
       IMPLICIT NONE
       INTENT(IN) A, B, EPMACH, KEY, OFLOW, UFLOW
+      INTENT(INOUT) ABSERR, LR, LS, RESABS, RESASC, RESULT, VR, VS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -104317,6 +105262,8 @@ C
       SUBROUTINE QXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
       INTENT(IN) K1, KE, XL, XU
+      INTENT(OUT) Y
+      INTENT(INOUT) FV1, FV2, L1, L2, YA, YM
       INTEGER I, IS, K, KS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -104515,6 +105462,7 @@ C
       SUBROUTINE QXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
       IMPLICIT NONE
       INTENT(IN) LZ, XL, XU
+      INTENT(INOUT) LR, LS, R, S
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -104613,6 +105561,8 @@ C
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSABS, EPSREL, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) IWORK, WORK
       INTEGER LAST
 C-----------------------------------------------------------------------
 C
@@ -104790,6 +105740,8 @@ C
      *               NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
       INTENT(IN) A, B, EPSABS, EPSREL, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, RLIST
 C-----------------------------------------------------------------------
 C
 C           DOUBLE PRECISION COMPUTATION OF A DEFINITE INTEGRAL
@@ -105243,6 +106195,8 @@ C
      *                  EPMACH, UFLOW, ISIG)
       IMPLICIT NONE
       INTENT(IN) A, B, EPMACH, UFLOW
+      INTENT(OUT) ISIG
+      INTENT(INOUT) ABSERR, RESABS, RESASC, RESULT
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -105433,6 +106387,8 @@ C
      *                  NEVAL, IER, LIMIT, LENW, LAST, IWORK, WORK)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) IWORK, WORK
       INTEGER INF, LAST
 C-----------------------------------------------------------------------
 C
@@ -105618,6 +106574,8 @@ C
      *                   NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
       IMPLICIT NONE
       INTENT(IN) BOUND, EPSABS, EPSREL, INF, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, NEVAL, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, RLIST
 C-----------------------------------------------------------------------
 C
 C                   INTEGRATION OVER INFINITE INTERVALS
@@ -106084,6 +107042,7 @@ C
      *                   RESASC, EPMACH, UFLOW)
       IMPLICIT NONE
       INTENT(IN) A, B, BOUN, EPMACH, INF, UFLOW
+      INTENT(INOUT) ABSERR, RESABS, RESASC, RESULT
       INTEGER INF
       INTEGER J
 C-----------------------------------------------------------------------
@@ -106276,6 +107235,7 @@ C
       SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
       IMPLICIT NONE
       INTENT(IN) LAST, LIMIT
+      INTENT(INOUT) ERMAX, IORD, MAXERR, NRMAX
 C     ..................................................................
 C
 C 1.        DQPSRT
@@ -106413,6 +107373,8 @@ C
      *                  EPMACH, OFLOW)
       IMPLICIT NONE
       INTENT(IN) EPMACH, OFLOW
+      INTENT(OUT) ABSERR, RESULT
+      INTENT(INOUT) EPSTAB, N, NRES, RES3LA
 C-----------------------------------------------------------------------
 C
 C 1.        PURPOSE
@@ -106593,6 +107555,8 @@ C
      *                  LIMIT,LENIW,LENW,LAST,IWORK,WORK)
       IMPLICIT NONE
       INTENT(IN) EPSABS, EPSREL, LENIW, LENW, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, RESULT
+      INTENT(INOUT) IWORK, WORK
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A GIVEN
 C            DEFINITE INTEGRAL  I = INTEGRAL OF F OVER (A,B),
@@ -106764,6 +107728,8 @@ C
      *   IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
       IMPLICIT NONE
       INTENT(IN) EPSABS, EPSREL, LIMIT
+      INTENT(OUT) ABSERR, IER, LAST, RESULT
+      INTENT(INOUT) ALIST, BLIST, ELIST, IORD, LN, LP, RLIST, VALN, VALP
 C
 C            THE ROUTINE CALCULATES AN APPROXIMATION RESULT TO A
 C            DEFINITE INTEGRAL I = INTEGRAL OF F OVER (A,B),
@@ -107189,6 +108155,7 @@ C
       SUBROUTINE DQXCPY (A, B, L)
       IMPLICIT NONE
       INTENT(IN) B, L
+      INTENT(INOUT) A
       INTEGER I
 C
 C  TO COPY THE DOUBLE PRECISION VECTOR B OF LENGTH L   I N T O
@@ -107206,6 +108173,7 @@ C
      *                   KEY,EPMACH,UFLOW,OFLOW)
       IMPLICIT NONE
       INTENT(IN) A, B, EPMACH, KEY, OFLOW, UFLOW
+      INTENT(INOUT) ABSERR, LR, LS, RESABS, RESASC, RESULT, VR, VS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
 C                           ESTIMATE
@@ -107320,6 +108288,8 @@ C
       SUBROUTINE DQXRUL (F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
       IMPLICIT NONE
       INTENT(IN) K1, KE, XL, XU
+      INTENT(OUT) Y
+      INTENT(INOUT) FV1, FV2, L1, L2, YA, YM
       INTEGER I, IS, K, KS
 C
 C            TO COMPUTE I = INTEGRAL OF F OVER (A,B), WITH ERROR
@@ -107518,6 +108488,7 @@ C
       SUBROUTINE DQXRRD (F,Z,LZ,XL,XU,R,S,LR,LS)
       IMPLICIT NONE
       INTENT(IN) LZ, XL, XU
+      INTENT(INOUT) LR, LS, R, S
 C
 C            TO REORDER THE COMPUTED FUNCTIONAL VALUES BEFORE
 C            THE BISECTION OF AN INTERVAL
@@ -107831,6 +108802,7 @@ C       FORTRAN COMPILERS.
       SUBROUTINE CUBRUL(F, VEC, P, IDATA, RDATA)
       IMPLICIT NONE
       INTENT(IN) VEC
+      INTENT(INOUT) P
       INTEGER I, J, K, NQUAD
       REAL POINT5, X, Y
       REAL F
@@ -108449,6 +109421,7 @@ C   MORE ITERATES ARE COMPUTED WITH THE NEW M.
      *   NHALF,NUP)
       IMPLICIT NONE
       INTENT(IN) M, N, NHALF, NUP
+      INTENT(INOUT) KMN, RHS, XM
       INTEGER M, N, NHALF, NUP
       REAL RHS, TM, TN, WM, WN, XM, XN
       INTEGER I, J
@@ -108535,6 +109508,8 @@ C   FIND THE NORM OF X-Y.
       FUNCTION CONEW(COND,ELINSY,RELRSD,AVERR,PASTC,PASTRE)
       IMPLICIT NONE
       INTENT(IN) COND, ELINSY, RELRSD
+      INTENT(OUT) AVERR
+      INTENT(INOUT) PASTC, PASTRE
       REAL AVERR, COND, ELINSY, PASTC, PASTRE, RELRSD
       REAL C
       REAL CONEW
@@ -108556,6 +109531,7 @@ C
       SUBROUTINE WANDT(WV,TV,N,A,B)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) TV, WV
       INTEGER N
       REAL A, B, TV, WV
       INTEGER I, I1, I2, K, L, LOOP, M, MT, NPI, NPLACE
@@ -108946,6 +109922,7 @@ C
      *   KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
       IMPLICIT NONE
       INTENT(IN) IFLG, M, NHALF, RHFCN
+      INTENT(INOUT) DELN, KMM, KNM, LUFACT, R, RH, XM
       INTEGER IFLG, M, N, NHALF, NUP
       REAL DELN, R, RH, RHFCN, RHS, TM, TN, WM, WN, XM, XMZ
       INTEGER I, IND, J
@@ -109204,6 +110181,7 @@ C
       SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
       IMPLICIT NONE
       INTENT(IN) NEQN, TOUT
+      INTENT(INOUT) ABSERR, IFLAG, IWORK, RELERR, T, WORK, Y
       INTEGER IFLAG, IWORK, NEQN
       REAL ABSERR, RELERR, T, TOUT, WORK, Y
       INTEGER IALPHA, IBETA, IDELSN, IG, IH, IHOLD, IP, IPHASE, IPHI
@@ -109373,6 +110351,10 @@ C
      2  START,TOLD,DELSGN,NS,NORND,K,KOLD,ISNOLD)
       IMPLICIT NONE
       INTENT(IN) NEQN, TOUT
+      INTENT(INOUT) ABSERR, ALPHA, BETA, DELSGN, G, H, HOLD, IFLAG
+      INTENT(INOUT) ISNOLD, K, KOLD, NORND, NS, P, PHASE1, PHI, PSI
+      INTENT(INOUT) RELERR, SIG, START, T, TOLD, V, W, WT, X, Y, YPOUT
+      INTENT(INOUT) YY
       INTEGER IFLAG, ISNOLD, K, KOLD, NEQN, NS
       REAL ABSERR, ALPHA, BETA, DELSGN, G, H, HOLD, P, PHI, PSI, RELERR
      x, SIG, T, TOLD, TOUT, V, W, WT, X, Y, YP, YPOUT, YY
@@ -109535,6 +110517,9 @@ C
      2 ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
       IMPLICIT NONE
       INTENT(IN) NEQN
+      INTENT(OUT) CRASH
+      INTENT(INOUT) ALPHA, BETA, EPS, G, H, HOLD, K, KOLD, NORND, NS, P
+      INTENT(INOUT) PHASE1, PHI, PSI, SIG, START, V, W, X, Y
       INTEGER K, KOLD, NEQN, NS
       REAL ALPHA, BETA, EPS, G, H, HOLD, P, PHI, PSI, SIG, V, W, WT, X
      x, Y, YP
@@ -110043,6 +111028,7 @@ C
       SUBROUTINE INTRP(X,Y,XOUT,YOUT,YPOUT,NEQN,KOLD,PHI,PSI)
       IMPLICIT NONE
       INTENT(IN) KOLD, NEQN, X, XOUT
+      INTENT(INOUT) YOUT, YPOUT
       INTEGER KOLD, NEQN
       REAL PHI, PSI, X, XOUT, Y, YOUT, YPOUT
       INTEGER I, J, JM1, KI, KIP1, L, LIMIT1
@@ -110129,6 +111115,7 @@ C
      *                   WORK,IWORK)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, TEND, TOUT
+      INTENT(INOUT) IFLAG, IWORK, RELERR, T, WORK, Y, YP
       INTEGER IFLAG, IWORK, NEQN
       REAL ABSERR, RELERR, T, TEND, TOUT, WORK, Y, YP
       INTEGER KF1, KF2, KF3, KF4, KF7, KH, KHI, KSA, KSR, KT, KW, KWP
@@ -110417,6 +111404,9 @@ C
      *                 TOLD,NFE,JFLAG,KFLAG,ENDPNT,BLKOUT)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, TEND, TOUT
+      INTENT(INOUT) BLKOUT, ENDPNT, F2, F3, H, HINT, IFLAG, JFLAG, KFLAG
+      INTENT(INOUT) NFE, RELERR, SAVAE, SAVRE, T, TOLD, W, WP, X, Y, Y1
+      INTENT(INOUT) Y2, YP
       INTEGER IFLAG, JFLAG, KFLAG, NEQN, NFE
       REAL ABSERR, F1, F2, F3, F4, F7, H, HINT, RELERR, SAVAE, SAVRE, T
      x, TEND, TOLD, TOUT, W, WP, X, Y, Y1, Y2, YP
@@ -111012,6 +112002,7 @@ C
       SUBROUTINE EXTRA (NEQN,YINC2,F2,T,H,YINC1,Y,F1,F,TEX,YEX,YPEX)
       IMPLICIT NONE
       INTENT(IN) H, NEQN, T, TEX
+      INTENT(INOUT) YEX, YPEX
       INTEGER NEQN
       REAL F, F1, F2, H, T, TEX, Y, YEX, YINC1, YINC2, YPEX
       INTEGER N
@@ -111060,6 +112051,7 @@ C
       SUBROUTINE RKF45 (F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,IWORK)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, TOUT
+      INTENT(INOUT) IFLAG, IWORK, RELERR, T, WORK, Y
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 C
@@ -111256,6 +112248,8 @@ C
      1                F4,F5,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, TOUT
+      INTENT(INOUT) F1, F5, H, IFLAG, INIT, JFLAG, KFLAG, KOP, NFE
+      INTENT(INOUT) RELERR, SAVAE, SAVRE, T, Y
 C
 C
 C     RKFS INTEGRATES A SYSTEM OF FIRST ORDER ORDINARY DIFFERENTIAL
@@ -111598,6 +112592,7 @@ C
       SUBROUTINE FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,S)
       IMPLICIT NONE
       INTENT(IN) NEQN, Y, YP
+      INTENT(INOUT) F1, F5, S
 C
 C     FEHLBERG FOURTH-FIFTH ORDER RUNGE-KUTTA METHOD
 C
@@ -111667,6 +112662,7 @@ C
      1                WORK,IWORK)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, RELERR, TOUT
+      INTENT(INOUT) GERROR, IFLAG, IWORK, T, WORK, Y
       INTEGER IFLAG, IWORK, NEQN
       REAL ABSERR, GERROR, RELERR, T, TOUT, WORK, Y
       INTEGER K1, K1M, K2, K3, K4, K5, K6, K7, K8
@@ -111885,6 +112881,8 @@ C
      2                NFE,KOP,INIT,JFLAG,KFLAG)
       IMPLICIT NONE
       INTENT(IN) ABSERR, NEQN, RELERR, TOUT
+      INTENT(INOUT) F1, F5, GERROR, H, IFLAG, INIT, JFLAG, KFLAG, KOP
+      INTENT(INOUT) NFE, SAVAE, SAVRE, T, Y, YG, YGP
       INTEGER IFLAG, INIT, JFLAG, KFLAG, KOP, NEQN, NFE
       REAL ABSERR, F1, F2, F3, F4, F5, GERROR, H, RELERR, SAVAE, SAVRE
      x, T, TOUT, Y, YG, YGP, YP
@@ -112270,6 +113268,7 @@ C
       SUBROUTINE SFODE (F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,
      *                  RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
+      INTENT(INOUT) AERR, IDID, INFO, IWORK, RERR, RWORK, T, Y
       INTEGER IDID, LIW, LRW, NEQ
       REAL AERR, RERR, T, TOUT
 C     --------------
@@ -112297,6 +113296,7 @@ C
       SUBROUTINE SFODE1 (F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,
      *                   RWORK,LRW,IWORK,LIW,RPAR,IPAR)
       IMPLICIT NONE
+      INTENT(INOUT) ATOL, IDID, INFO, IWORK, RTOL, RWORK, T, Y
       INTEGER IDID, LIW, LRW, NEQ
       REAL T, TOUT
 C     --------------
@@ -112320,6 +113320,7 @@ C
       SUBROUTINE ZZZJAC(T,Y,PD,N,RPAR,IPAR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(OUT) T
       INTEGER IPAR, N
       REAL PD, RPAR, T, Y
 C     -------------
@@ -113496,6 +114497,7 @@ C                       STORE VALUES BEFORE RETURNING TO STFODE
      1                                    SPY,PV,YP,SF,RPAR,IPAR,H)
       IMPLICIT NONE
       INTENT(IN) B, BIG, MORDER, NEQ, SMALL
+      INTENT(INOUT) H, PV, SPY, YP
       INTEGER IPAR, MORDER, NEQ
       REAL A, B, BIG, ETOL, H, PV, RPAR, SF, SMALL, SPY, Y, YP, YPRIME
       INTEGER J, K, LK
@@ -114340,6 +115342,7 @@ C----------------------- END OF SUBROUTINE STOD  -----------------------
       SUBROUTINE CFOD  (METH, ELCO, TESCO)
       IMPLICIT NONE
       INTENT(IN) METH
+      INTENT(INOUT) ELCO, TESCO
 C
 C   CFOD DEFINES COEFFICIENTS NEEDED IN THE INTEGRATOR PACKAGE SFODE
 C
@@ -114693,6 +115696,8 @@ C----------------------- END OF SUBROUTINE SLVS -----------------------
       SUBROUTINE SGBFA(ABD,LDA,N,ML,MU,IPVT,INFO)
       IMPLICIT NONE
       INTENT(IN) LDA, ML, MU, N
+      INTENT(OUT) INFO
+      INTENT(INOUT) ABD, IPVT
       INTEGER LDA,N,ML,MU,IPVT(*),INFO
       REAL ABD(LDA,*)
 C
@@ -114867,6 +115872,7 @@ C
       SUBROUTINE SGBSL(ABD,LDA,N,ML,MU,IPVT,B,JOB)
       IMPLICIT NONE
       INTENT(IN) ABD, IPVT, JOB, LDA, ML, MU, N
+      INTENT(INOUT) B
       INTEGER LDA,N,ML,MU,IPVT(*),JOB
       REAL ABD(LDA,*),B(*)
 C
@@ -115043,6 +116049,7 @@ C----------------------- END OF FUNCTION VNWRMS ------------------------
       SUBROUTINE RK(N,T,H,A,F)
       IMPLICIT NONE
       INTENT(IN) H, N
+      INTENT(INOUT) A, T
       INTEGER N
       REAL A, H, T
       INTEGER K, M, M1, MK, NK, NP1
@@ -115101,6 +116108,7 @@ C
       SUBROUTINE RK8(N,T,H,Y,DY,W,F)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) DY, T, W, Y
       INTEGER N
       REAL H, T
       INTEGER I, J, K, L, M, M1
@@ -115176,6 +116184,7 @@ C
      *                         C, D, NP1, U, KU, W, NW, IERR)
       IMPLICIT NONE
       INTENT(IN) EDGE, NP1
+      INTENT(INOUT) IERR, NW, U, W
       INTEGER IERR, IORD, KU, MP1, NP1, NW
       REAL A, B, C, D
       INTEGER I, IA, IB, IC, ID, IJ, IMAX, IMIN, INDX, INDY, IW, J, JCOL
@@ -115386,6 +116395,7 @@ C
       SUBROUTINE PDEDGE (EDGE, INDX, INDY, IERR)
       IMPLICIT NONE
       INTENT(IN) EDGE
+      INTENT(INOUT) IERR, INDX, INDY
       INTEGER IERR, INDX, INDY
       INTEGER EDGE(4)
 C
@@ -115440,6 +116450,7 @@ C
      1                   D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,
      2                   USOL,IDMN,W,PERTRB,IERROR)
       IMPLICIT NONE
+      INTENT(INOUT) GRHS, IERROR, PERTRB, USOL, W
       INTEGER IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
       REAL A, ALPHA, B, BETA, C, D, GAMA, PERTRB, XNU
       INTEGER I1, I10, I11, I12, I13, I2, I3, I4, I5, I6, I7, I8, I9, K
@@ -116258,6 +117269,7 @@ C
       IMPLICIT NONE
       INTENT(IN) A, B, C, D, IDMN, INTL, IORDER, M, MBDCND, MN, N
       INTENT(IN) NBDCND
+      INTENT(OUT) IERROR
       INTEGER IDMN, IERROR, INTL, IORDER, M, MBDCND, MN, N, NBDCND
       REAL A, B, C, D
       INTEGER I, J
@@ -116493,6 +117505,7 @@ C
       SUBROUTINE TRISP (N,A,B,C,D,U,Z)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) D, U, Z
       INTEGER N
       REAL A, B, C, D, U, Z
       INTEGER J, K, NM1, NM2
@@ -117304,6 +118317,7 @@ C
       SUBROUTINE PROD0 (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,W,U)
       IMPLICIT NONE
       INTENT(IN) M, NA, ND, NM1, NM2
+      INTENT(INOUT) D, W, Y
       INTEGER M, NA, ND, NM1, NM2
       REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
       INTEGER IA, IBR, ID, J, K, M1, M2, MM
@@ -117397,6 +118411,7 @@ C
       SUBROUTINE PRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,Y,M,A,B,C,D,U,W)
       IMPLICIT NONE
       INTENT(IN) M, NA, ND, NM1, NM2
+      INTENT(INOUT) D, U, W, Y
       INTEGER M, NA, ND, NM1, NM2
       REAL A, AA, B, BD, BM1, BM2, C, D, U, W, X, Y
       INTEGER IA, IBR, ID, J, K, M1, M2, MM, MM2
@@ -117506,6 +118521,7 @@ C
       SUBROUTINE CPROD0(ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,W,Y)
       IMPLICIT NONE
       INTENT(IN) M, NA, ND, NM1, NM2
+      INTENT(INOUT) D, W, Y, YY
       INTEGER M, NA, ND, NM1, NM2
       REAL A, AA, B, BM1, BM2, C, X, YY
       INTEGER IA, ID, IFLG, J, K, M1, M2, MM
@@ -117610,6 +118626,7 @@ C
       SUBROUTINE CPRODP (ND,BD,NM1,BM1,NM2,BM2,NA,AA,X,YY,M,A,B,C,D,U,Y)
       IMPLICIT NONE
       INTENT(IN) M, NA, ND, NM1, NM2
+      INTENT(INOUT) D, U, Y, YY
       INTEGER M, NA, ND, NM1, NM2
       REAL A, AA, B, BM1, BM2, C, X, YY
       INTEGER IA, ID, IFLG, J, K, M1, M2, MM, MM2
@@ -118255,6 +119272,7 @@ C
       SUBROUTINE URGET (N, IBEG, IEND, IX, L, IERR)
       IMPLICIT NONE
       INTENT(IN) IBEG, IEND, N
+      INTENT(INOUT) IERR, IX, L
       INTEGER IBEG, IEND, IERR, IX, N
       INTEGER I, K, LEFTLO
 C-----------------------------------------------------------------------
@@ -118358,6 +119376,7 @@ C
       SUBROUTINE URNG (IX, X, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER K, L, LEFTLO
       REAL S, T
@@ -118439,6 +119458,7 @@ C
       SUBROUTINE DURNG (IX, X, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER K, L, LEFTLO
       DOUBLE PRECISION X(N)
@@ -118518,6 +119538,7 @@ C
 
       SUBROUTINE URNG0 (IX, U, V)
       IMPLICIT NONE
+      INTENT(INOUT) IX, U, V
       INTEGER IX
       REAL U, V
       INTEGER K, LEFTLO
@@ -118589,6 +119610,7 @@ C
 
       SUBROUTINE DURNG0 (IX, U, V)
       IMPLICIT NONE
+      INTENT(INOUT) IX, U, V
       INTEGER IX
       INTEGER K, LEFTLO
 C-----------------------------------------------------------------------
@@ -118659,6 +119681,7 @@ C
 
       SUBROUTINE URNG1 (IX, U, V, D)
       IMPLICIT NONE
+      INTENT(INOUT) D, IX, U, V
       INTEGER IX
       REAL D, U, V
       INTEGER J, K, LEFTLO
@@ -118734,6 +119757,7 @@ C
 
       SUBROUTINE DURNG1 (IX, U, V, D)
       IMPLICIT NONE
+      INTENT(INOUT) D, IX, U, V
       INTEGER IX
       INTEGER J, K, LEFTLO
 C-----------------------------------------------------------------------
@@ -118809,6 +119833,7 @@ C
       SUBROUTINE URNG2 (IX, X, Y, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, N
       INTEGER K, L, LEFTLO
       REAL S, T
@@ -118876,6 +119901,7 @@ C
       SUBROUTINE DURNG2 (IX, X, Y, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, N
       INTEGER K, L, LEFTLO
 C-----------------------------------------------------------------------
@@ -118943,6 +119969,7 @@ C
       SUBROUTINE RCIR (N, IX, X, Y, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, N
 C-----------------------------------------------------------------------
 C
@@ -118959,6 +119986,7 @@ C------------------
       SUBROUTINE RCIR1 (N, IX, X, KX, Y, KY, IERR)
       IMPLICIT NONE
       INTENT(IN) KX, KY, N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, KX, KY, N
       INTEGER I, I1, I2, J, K, LEFTLO
       REAL R, S, U, V
@@ -119047,6 +120075,7 @@ C
       SUBROUTINE DRCIR (N, IX, X, Y, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, N
 C-----------------------------------------------------------------------
 C
@@ -119063,6 +120092,7 @@ C------------------
       SUBROUTINE DRCIR1 (N, IX, X, KX, Y, KY, IERR)
       IMPLICIT NONE
       INTENT(IN) KX, KY, N
+      INTENT(INOUT) IERR, IX, X, Y
       INTEGER IERR, IX, KX, KY, N
       INTEGER I, I1, I2, J, K, LEFTLO
 C-----------------------------------------------------------------------
@@ -119151,6 +120181,7 @@ C
       SUBROUTINE RNOR (IX, A, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IERR, IX
       INTEGER IERR, IX, N
       INTEGER I, M, MAX
       REAL R, S, U, V
@@ -119201,6 +120232,7 @@ C
       SUBROUTINE DRNOR (IX, A, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IERR, IX
       INTEGER IERR, IX, N
       INTEGER I, M, MAX
 C-----------------------------------------------------------------------
@@ -119251,6 +120283,7 @@ C
       SUBROUTINE NRNG (IX, A, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IERR, IX
       INTEGER IERR, IX, N
       INTEGER I, M
       REAL PHI, PI2, R
@@ -119282,6 +120315,7 @@ C
       SUBROUTINE DNRNG (IX, A, N, IERR)
       IMPLICIT NONE
       INTENT(IN) N
+      INTENT(INOUT) A, IERR, IX
       INTEGER IERR, IX, N
       INTEGER I, M
 C-----------------------------------------------------------------------
@@ -119314,6 +120348,7 @@ C
       SUBROUTINE NRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTENT(IN) FMU, KX, M, MO, N
+      INTENT(INOUT) A, IERR, IX, X
       INTEGER IERR, IX, KX, M, MO, N
       INTEGER I, II, J, K, L, L0, LDIM, MAX
       REAL SUM
@@ -119451,6 +120486,7 @@ C
       SUBROUTINE NRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTENT(IN) FMU, KX, M, MO, N
+      INTENT(INOUT) A, IERR, IX, X
       INTEGER IERR, IX, KX, M, MO, N
       INTEGER I, J, MAX
 C-----------------------------------------------------------------------
@@ -119559,6 +120595,7 @@ C
       SUBROUTINE DNRVG (MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTENT(IN) FMU, KX, M, MO, N
+      INTENT(INOUT) A, IERR, IX, X
       INTEGER IERR, IX, KX, M, MO, N
       INTEGER I, II, J, K, L, L0, LDIM, MAX
 C-----------------------------------------------------------------------
@@ -119695,6 +120732,7 @@ C
       SUBROUTINE DNRVG1 (MO, IX, N, M, A, FMU, X, KX, IERR)
       IMPLICIT NONE
       INTENT(IN) FMU, KX, M, MO, N
+      INTENT(INOUT) A, IERR, IX, X
       INTEGER IERR, IX, KX, M, MO, N
       INTEGER I, J, MAX
 C-----------------------------------------------------------------------
@@ -119803,6 +120841,7 @@ C
       SUBROUTINE RANEXP (N,A,ISEED,X,IERROR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERROR, ISEED, X
       INTEGER IERROR, ISEED, N
       REAL A
       INTEGER I
@@ -119890,6 +120929,7 @@ C
       SUBROUTINE DRNEXP (N,A,ISEED,X,IERROR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERROR, ISEED, X
       INTEGER IERROR, ISEED, N
       INTEGER I
 C
@@ -119976,6 +121016,7 @@ C
       SUBROUTINE RGAM (IX, A, N, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       REAL A
       INTEGER I, IND, MAX
@@ -120039,6 +121080,7 @@ C
       SUBROUTINE DRGAM (IX, A, N, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
@@ -120101,6 +121143,7 @@ C
       SUBROUTINE RBETA (N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       REAL A, B
       INTEGER I, IND, MAX
@@ -120196,6 +121239,7 @@ C
       SUBROUTINE DRBETA (N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
@@ -120291,6 +121335,7 @@ C
       SUBROUTINE FRAN (N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       REAL A, B
       INTEGER I, IND, MAX
@@ -120396,6 +121441,7 @@ C
       SUBROUTINE DFRAN (N, A, B, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, B, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
@@ -120502,6 +121548,7 @@ C
       SUBROUTINE TRAN (N, A, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       REAL A
       INTEGER I, IND, MAX
@@ -120590,6 +121637,7 @@ C
       SUBROUTINE DTRAN (N, A, IX, X, IERR)
       IMPLICIT NONE
       INTENT(IN) A, N
+      INTENT(INOUT) IERR, IX, X
       INTEGER IERR, IX, N
       INTEGER I, IND, MAX
 C-----------------------------------------------------------------------
@@ -120678,6 +121726,7 @@ C
       SUBROUTINE RMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
       IMPLICIT NONE
       INTENT(IN) ALPHA, FMU, N, SIG
+      INTENT(INOUT) IERROR, ISEED, X
       INTEGER IERROR, ISEED, N
       REAL ALPHA, FMU, SIG
       INTEGER I
@@ -120798,6 +121847,7 @@ C
       SUBROUTINE DRMK1 (N, FMU, SIG, ALPHA, ISEED, X, IERROR)
       IMPLICIT NONE
       INTENT(IN) ALPHA, FMU, N, SIG
+      INTENT(INOUT) IERROR, ISEED, X
       INTEGER IERROR, ISEED, N
       INTEGER I
 C

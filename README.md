@@ -163,8 +163,10 @@ retains its original typing.
 
 ## Argument intents
 
-The first reviewed pass adds `INTENT(IN)` to 4,177 arguments in 976 procedures.
-The [intent guide](docs/argument-intents.md) describes the repaired analyzer,
-call-dependency checks, exclusions, and reproduction commands. Output and
-uncertain arguments retain their existing declarations. The compiler comparison
-checks every added input attribute as well as the original types and shapes.
+The maintained sources have 4,177 `INTENT(IN)`, 262 `INTENT(OUT)`, and 2,821
+`INTENT(INOUT)` arguments across 1,007 procedures. Of the 8,102 data arguments,
+842 remain without intents pending further review. Arrays that may retain
+incoming values use `INOUT`; `OUT` is restricted to scalars initialized before
+any possible branch or read. The [intent guide](docs/argument-intents.md)
+describes the analysis, exclusions, and reproduction commands. The compiler
+comparison checks every added intent as well as the original types and shapes.

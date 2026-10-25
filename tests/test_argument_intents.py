@@ -42,8 +42,8 @@ class ArgumentIntentTests(unittest.TestCase):
         with self.assertRaisesRegex(ConversionError, "whole-library"):
             apply_intents(self.source + second.replace(b"T\n", b"U\n"), manifest)
 
-    def test_rejects_non_dummy_injected_and_output_annotations(self):
-        for arguments in ({"BOGUS": "IN"}, {"N": "OUT"}, {"N\n      STOP": "IN"}):
+    def test_rejects_non_dummy_injected_and_invalid_annotations(self):
+        for arguments in ({"BOGUS": "IN"}, {"N": "IN OUT"}, {"N\n      STOP": "IN"}):
             manifest = self.manifest()
             manifest["procedures"]["S"]["arguments"] = arguments
             with self.assertRaises(ConversionError):
@@ -55,6 +55,21 @@ class ArgumentIntentTests(unittest.TestCase):
         lines = intent_lines({"ARGUMENT" + str(i): "IN" for i in range(30)})
         self.assertGreater(len(lines), 1)
         self.assertTrue(all(len(line) <= 72 for line in lines))
+
+    def test_mixed_intents_replay_and_compiler_confirmation(self):
+        source = (b"      SUBROUTINE S(N,A,STATUS)\n      IMPLICIT NONE\n"
+                  b"      INTEGER N,STATUS\n      REAL A(N)\n"
+                  b"      STATUS=0\n      A(1)=A(1)+1\n      END SUBROUTINE S\n")
+        manifest = {"input_sha256": digest(source), "procedures": {"S": {
+            "sha256": digest(source), "arguments": {"N": "IN", "A": "INOUT", "STATUS": "OUT"}}}}
+        changed = apply_intents(source, manifest)
+        self.assertIn(b"      INTENT(OUT) STATUS\n      INTENT(INOUT) A\n", changed)
+        self.assertEqual(apply_intents(changed, manifest), changed)
+        self.assertEqual(apply_intents(changed, manifest, strip=True), source)
+        inventory = {"S": {name.lower(): {"attributes": f"attributes: (VARIABLE DUMMY({mode}))"}
+                            for name, mode in manifest["procedures"]["S"]["arguments"].items()}}
+        normalized = normalize_intents(inventory, manifest)
+        self.assertTrue(all(e["attributes"] == "attributes: (VARIABLE DUMMY)" for e in normalized["S"].values()))
 
     def test_call_actuals_include_nested_references_and_keyword_arguments(self):
         result = call_dependencies(["array(i)", "third=n+1", "unknown=x"],

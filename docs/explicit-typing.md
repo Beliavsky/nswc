@@ -483,7 +483,7 @@ python tools/validate_explicit_typing.py
 
 Use `--compiler PATH` if necessary. This reconstructs the source before explicit typing
 from the archived original and earlier readability transformations, applies the
-reviewed typing and [input intent manifests](argument-intents.md), and verifies
+reviewed typing and [argument intent manifests](argument-intents.md), and verifies
 that it reproduces `nswc.f`. GNU Fortran's symbol dumps confirm the added input
 attributes before those attributes are removed for comparison with the original
 symbol records. The local check preserved

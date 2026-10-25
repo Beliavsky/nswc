@@ -147,8 +147,9 @@ def main():
                            + json.dumps(mismatches, indent=2))
     print(f"Preserved {count} compiler symbol records across {len(manifest['procedures'])} procedures.")
     if intents:
-        count_intents = sum(len(entry["arguments"]) for entry in intents["procedures"].values())
-        print(f"Confirmed {count_intents} reviewed input argument intents.")
+        counts = {mode: sum(v == mode for e in intents["procedures"].values() for v in e["arguments"].values())
+                  for mode in ("IN", "OUT", "INOUT")}
+        print("Confirmed reviewed argument intents: " + ", ".join(f"{n} {mode}" for mode, n in counts.items()) + ".")
     reviews = manifest.get("subroutine_classification_reviews", {})
     if reviews:
         print(f"Checked {sum(map(len, reviews.values()))} reviewed forwarded subroutine classifications.")

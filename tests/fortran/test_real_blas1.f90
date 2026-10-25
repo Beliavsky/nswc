@@ -118,6 +118,11 @@ program test_real_blas1
    z = 0.0
    call scopy(2,x,2,z,1)
    if (maxval(abs(z(1:2)-[1.0,3.0])) > stol) error stop 'legacy SCOPY'
+   z = -7.0
+   call scopy(2,x,1,z,2)
+   if (maxval(abs(z-[1.0,-7.0,-4.0,-7.0])) > stol) error stop 'SCOPY untouched elements'
+   call scopy(0,x,1,z,1)
+   if (maxval(abs(z-[1.0,-7.0,-4.0,-7.0])) > stol) error stop 'SCOPY zero length'
    if (abs(sdot(2,x,2,y,2)+1.0) > stol) error stop 'legacy SDOT'
    if (abs(snrm2(2,x,2)-sqrt(10.0)) > stol) error stop 'legacy SNRM2'
    z = x

@@ -1,3 +1,239 @@
+SUBROUTINE CEXEXI (Z, W)
+IMPLICIT NONE
+INTENT(IN) Z
+INTENT(INOUT) W
+INTEGER I
+REAL CONST, EULER, PM, QM, R, SS, X, Y, ZETA2
+!-----------------------------------------------------------------------
+!        COMPUTATION OF THE EXPONENTIAL EXPONENTIAL INTEGRAL
+!-----------------------------------------------------------------------
+COMPLEX Z, W
+REAL TS(2), SR(2), SM(2), TM(2), QF(2), ZL(2)
+REAL ED(18), EE(18), DD(19), DE(19), CD(18), CE(18)
+!-------------------------
+!     EULER = EULER CONSTANT
+!     CONST = (PI*PI)/4
+!     ZETA2 = THE RIEMANN ZETA FUNCTION EVALUATED AT 2
+!-------------------------
+DATA CONST /2.46740110027234/
+DATA EULER /.577215664901533/
+DATA ZETA2 /1.64493406684823/
+!-------------------------
+DATA ED(1)  /0.00000000000000E+00/, ED(2)  /.311105957086528E-01/, &
+&ED(3)  /.103661260539112E+00/, ED(4)  /.216532335244554E+00/, &
+&ED(5)  /.369931427960192E+00/, ED(6)  /.566766259990589E+00/, &
+&ED(7)  /.814042066324748E+00/, ED(8)  /.112384247540813E+01/, &
+&ED(9)  /.151400478148512E+01/, ED(10) /.200886795032284E+01/, &
+&ED(11) /.264052411823592E+01/, ED(12) /.345098449933392E+01/, &
+&ED(13) /.449583360763202E+01/, ED(14) /.585058263409822E+01/, &
+&ED(15) /.762273501463380E+01/, ED(16) /.997814501584578E+01/, &
+&ED(17) /.132122064896408E+02/, ED(18) /.180322948376021E+02/
+DATA EE(1)  /.850156516121093E-02/, EE(2)  /.505037465849058E-01/, &
+&EE(3)  /.836817368956407E-01/, EE(4)  /.107047582417607E+00/, &
+&EE(5)  /.120424719029462E+00/, EE(6)  /.125096631582229E+00/, &
+&EE(7)  /.122314435224685E+00/, EE(8)  /.112621417553907E+00/, &
+&EE(9)  /.963419407392582E-01/, EE(10) /.747398422757511E-01/, &
+&EE(11) /.508596135953441E-01/, EE(12) /.290822706773628E-01/, &
+&EE(13) /.132201640530101E-01/, EE(14) /.443802939829067E-02/, &
+&EE(15) /.992612478987576E-03/, EE(16) /.126579795112011E-03/, &
+&EE(17) /.702150908253350E-05/, EE(18) /.910281532564632E-07/
+!-------------------------
+DATA DD(1)  /0.00000000000000E+00/, DD(2)  /.419556678374293E-01/, &
+&DD(3)  /.117533661648665E+00/, DD(4)  /.228560237455987E+00/, &
+&DD(5)  /.375667350161240E+00/, DD(6)  /.791594846276672E+00/, &
+&DD(7)  /.107546889623058E+01/, DD(8)  /.142659208030841E+01/, &
+&DD(9)  /.186290554952377E+01/, DD(10) /.240730009509856E+01/, &
+&DD(11) /.308854035607524E+01/, DD(12) /.394277605155259E+01/, &
+&DD(13) /.501593196543981E+01/, DD(14) /.636759180748651E+01/, &
+&DD(15) /.807776193096055E+01/, DD(16) /.102598961138887E+02/, &
+&DD(17) /.130896768422610E+02/, DD(18) /.168832169085916E+02/, &
+&DD(19) /.224083240941713E+02/
+DATA DE(1) /-.346911733535892E-03/, DE(2) /-.603787732461745E-02/, &
+&DE(3) /-.152461305949249E-01/, DE(4) /-.210582169827291E-01/, &
+&DE(5) /-.171894208720754E-01/, DE(6)  /.314323467033032E-01/, &
+&DE(7)  /.750898531566972E-01/, DE(8)  /.124689787807260E+00/, &
+&DE(9)  /.168579075090035E+00/, DE(10) /.191715080699511E+00/, &
+&DE(11) /.182600794550836E+00/, DE(12) /.142345674307147E+00/, &
+&DE(13) /.874862222419327E-01/, DE(14) /.402175083288425E-01/, &
+&DE(15) /.128575005680180E-01/, DE(16) /.257673782598441E-02/, &
+&DE(17) /.275955003784349E-03/, DE(18) /.119139315517122E-04/, &
+&DE(19) /.107292980199386E-06/
+!-------------------------
+DATA CD(1)  /0.00000000000000E+00/, CD(2)  /.237286128313683E-01/, &
+&CD(3)  /.854113210668760E-01/, CD(4)  /.185276627282059E+00/, &
+&CD(5)  /.323741526616688E+00/, CD(6)  /.503045460381267E+00/, &
+&CD(7)  /.728806607587188E+00/, CD(8)  /.101122770102872E+01/, &
+&CD(9)  /.136598448171249E+01/, CD(10) /.181510139038929E+01/, &
+&CD(11) /.238824701955419E+01/, CD(12) /.312490532008812E+01/, &
+&CD(13) /.407802489894445E+01/, CD(14) /.532033545554865E+01/, &
+&CD(15) /.695624307290579E+01/, CD(16) /.914759902547031E+01/, &
+&CD(17) /.121829074388544E+02/, CD(18) /.167511311969873E+02/
+DATA CE(1)  /.349517258926827E-01/, CE(2)  /.135849105925897E+00/, &
+&CE(3)  /.158850581552296E+00/, CE(4)  /.153001434535435E+00/, &
+&CE(5)  /.134520752856461E+00/, CE(6)  /.111913051619671E+00/, &
+&CE(7)  /.892008386656190E-01/, CE(8)  /.679227205472067E-01/, &
+&CE(9)  /.486723197887211E-01/, CE(10) /.320170976532266E-01/, &
+&CE(11) /.187008965021111E-01/, CE(12) /.929708414427865E-02/, &
+&CE(13) /.372604763161087E-02/, CE(14) /.111989537559823E-02/, &
+&CE(15) /.228057496872353E-03/, CE(16) /.269596227781453E-04/, &
+&CE(17) /.141255430224301E-05/, CE(18) /.176352326808806E-07/
+!-------------------------
+X = REAL(Z)
+Y = AIMAG(Z)
+R = X*X + Y*Y
+!
+IF (R .LE. 1.0) GO TO 100
+IF (R .GE. 1296.0) GO TO 10
+IF (X .LT. 0.07*Y*Y) GO TO 30
+GO TO 40
+!-----------------------------------------------------------------------
+!                     ASYMPTOTIC EXPANSION
+!-----------------------------------------------------------------------
+10 QF(1) =  X/R
+QF(2) = -Y/R
+SM(1) = -QF(1)
+SM(2) = -QF(2)
+TM(1) =  SM(1)
+TM(2) =  SM(2)
+PM = 1.0
+20 TS(1) = TM(1)*QF(1) - TM(2)*QF(2)
+   TS(2) = TM(1)*QF(2) + TM(2)*QF(1)
+   TM(1) = PM*TS(1)
+   TM(2) = PM*TS(2)
+   PM = PM + 1.0
+   TS(1) = TM(1)/PM
+   TS(2) = TM(2)/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 21
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 130
+21 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   IF (PM .LT. 36.0) GO TO 20
+GO TO 130
+!-----------------------------------------------------------------------
+!                      RATIONAL EXPANSION
+!-----------------------------------------------------------------------
+30 SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,18
+   TS(1) = X - CD(I)
+   TS(2) = Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) = -CE(I)*TS(1)/SS
+   TM(2) =  CE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+GO TO 130
+!-----------------------------------------------------------------------
+!                 EXPANSION INVOLVING EI AND DI
+!-----------------------------------------------------------------------
+40 ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+!
+!                    SET SM = EXP(Z)*EI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,18
+   TS(1) = -X - ED(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  EE(I)*TS(1)/SS
+   TM(2) = -EE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+SR(1) = ZL(1)*SM(1) - ZL(2)*SM(2)
+SR(2) = ZL(1)*SM(2) + ZL(2)*SM(1)
+!
+!                    SET SM = EXP(Z)*DI(-Z)
+!
+SM(1) = 0.0
+SM(2) = 0.0
+DO I = 1,19
+   TS(1) = -X - DD(I)
+   TS(2) = -Y
+   SS = TS(1)*TS(1) + TS(2)*TS(2)
+   TM(1) =  DE(I)*TS(1)/SS
+   TM(2) = -DE(I)*TS(2)/SS
+   SM(1) = SM(1) + TM(1)
+   SM(2) = SM(2) + TM(2)
+END DO
+TS(1) = -(X*SM(1) + Y*SM(2))/R
+TS(2) = -(X*SM(2) - Y*SM(1))/R
+!
+!                    COMPUTE THE EXPANSION
+!
+SR(1) = SR(1) - TS(1) - ZETA2
+SR(2) = SR(2) - TS(2)
+SM(1) = 0.0
+SM(2) = 0.0
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = ZETA2
+70 PM = PM + 1.0
+   QM = QM - 1.0/(PM*PM)
+   TS(1) = TM(1)*X - TM(2)*Y
+   TS(2) = TM(1)*Y + TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   TS(1) = QM*TM(1)
+   TS(2) = QM*TM(2)
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 71
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 80
+71 SM(1) = SM(1) - TS(1)
+   SM(2) = SM(2) - TS(2)
+   GO TO 70
+80 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!
+!                      COMPUTE EXP(-Z)*SM
+!
+QM = EXP(-X)
+QF(1) = QM*COS(-Y)
+QF(2) = QM*SIN(-Y)
+TS(1) = QF(1)*SM(1) - QF(2)*SM(2)
+TS(2) = QF(1)*SM(2) + QF(2)*SM(1)
+SM(1) = TS(1)
+SM(2) = TS(2)
+GO TO 130
+!-----------------------------------------------------------------------
+!                  SERIES FOR X*X + Y*Y .LE. 1
+!-----------------------------------------------------------------------
+100 SM(1) = 0.0
+SM(2) = 0.0
+ZL(1) = EULER + 0.5*ALOG(R)
+ZL(2) = ATAN2(-Y, -X)
+SR(1) = CONST + 0.5*(ZL(1)*ZL(1) - ZL(2)*ZL(2))
+SR(2) = ZL(1)*ZL(2)
+TM(1) = 1.0
+TM(2) = 0.0
+PM = 0.0
+QM = 0.0
+110 PM = PM + 1.0
+   QM = QM + 1.0/PM
+   TS(1) = -TM(1)*X + TM(2)*Y
+   TS(2) = -TM(1)*Y - TM(2)*X
+   TM(1) = TS(1)/PM
+   TM(2) = TS(2)/PM
+   R = (ZL(1) - 1.0/PM) - QM
+   TS(1) = (R*TM(1) - ZL(2)*TM(2))/PM
+   TS(2) = (R*TM(2) + ZL(2)*TM(1))/PM
+   IF (ABS(SM(1)) + ABS(TS(1)) .NE. ABS(SM(1))) GO TO 111
+   IF (ABS(SM(2)) + ABS(TS(2)) .EQ. ABS(SM(2))) GO TO 120
+111 SM(1) = SM(1) + TS(1)
+   SM(2) = SM(2) + TS(2)
+   GO TO 110
+120 SM(1) = SR(1) + SM(1)
+SM(2) = SR(2) + SM(2)
+!-----------------------------------------------------------------------
+!                         TERMINATION
+!-----------------------------------------------------------------------
+130 W = CMPLX(SM(1), SM(2))
+RETURN
+END SUBROUTINE CEXEXI
+
 COMPLEX function CLI(Z)
 IMPLICIT NONE
 INTENT(IN) Z
@@ -280,6 +516,7 @@ END FUNCTION ALI
 SUBROUTINE CGAMMA (MO, Z, W)
 IMPLICIT NONE
 INTENT(IN) MO, Z
+INTENT(INOUT) W
 INTEGER MO
 INTEGER J, K, L, M, MAX, N, NM1
 REAL A, A1, A2, ALPI, C, CN, CUT, D, E2T, EPS, ET, H1, H2, HL2P &
@@ -950,6 +1187,7 @@ END FUNCTION GAMLN1
 SUBROUTINE DCGAMA (MO, Z, W)
 IMPLICIT NONE
 INTENT(IN) MO, Z
+INTENT(INOUT) W
 INTEGER MO
 INTEGER J, K, MAX, N, NM1
 INTEGER IPMPAR
@@ -1596,6 +1834,7 @@ END FUNCTION DGMLN1
 SUBROUTINE CPSI (Z, W)
 IMPLICIT NONE
 INTENT(IN) Z
+INTENT(INOUT) W
 INTEGER J, K, L, M, MAX
 REAL A, A1, A2, C1, C2, CN, EPS, ET, H1, H2, PI, PI2, S, S1, S2 &
 &, SN, T, U, W1, W2, X, Y, Y2
@@ -1914,6 +2153,7 @@ END FUNCTION PSI
 SUBROUTINE DCPSI (Z, W)
 IMPLICIT NONE
 INTENT(IN) Z
+INTENT(INOUT) W
 INTEGER J, K, M, MAX
 INTEGER IPMPAR
 !-----------------------------------------------------------------------
@@ -2356,6 +2596,8 @@ END FUNCTION DPSI0
 SUBROUTINE PSIDF (X, N, M, ANS, IFLAG)
 IMPLICIT NONE
 INTENT(IN) M, N, X
+INTENT(OUT) IFLAG
+INTENT(INOUT) ANS
 INTEGER IFLAG, M, N
 INTEGER I, J, K, MX, NMAX, NN, NP, NX
 !-----------------------------------------------------------------------
@@ -3149,6 +3391,7 @@ END FUNCTION DLGDIV
 SUBROUTINE GRATIO (A, X, ANS, QANS, IND)
 IMPLICIT NONE
 INTENT(IN) A, IND, X
+INTENT(INOUT) ANS, QANS
 INTEGER IND
 REAL A, ANS, QANS, X
 INTEGER I, IOP, M, MAX, N
@@ -3651,6 +3894,8 @@ END FUNCTION DRCOMP
 SUBROUTINE GAMINV (A, X, X0, P, Q, IERR)
 IMPLICIT NONE
 INTENT(IN) A, P, Q, X0
+INTENT(OUT) X
+INTENT(INOUT) IERR
 INTEGER IERR
 REAL A, P, Q, X, X0
 INTEGER IER, IOP
@@ -3988,6 +4233,7 @@ END SUBROUTINE GAMINV
 SUBROUTINE DGRAT (A, X, ANS, QANS, IERR)
 IMPLICIT NONE
 INTENT(IN) A, X
+INTENT(INOUT) ANS, IERR, QANS
 INTEGER IERR
 INTEGER I, M, MAX, N
 !-----------------------------------------------------------------------
@@ -4251,6 +4497,7 @@ END SUBROUTINE DGRAT
 SUBROUTINE DGR29 (A, Y, L, Z, RTA, ANS, QANS)
 IMPLICIT NONE
 INTENT(IN) A, L, RTA, Y
+INTENT(INOUT) ANS, QANS, Z
 !-----------------------------------------------------------------------
 !
 !            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -4562,6 +4809,7 @@ END SUBROUTINE DGR29
 SUBROUTINE DGR17 (A, Y, L, Z, RTA, ANS, QANS)
 IMPLICIT NONE
 INTENT(IN) A, L, RTA, Y
+INTENT(INOUT) ANS, QANS, Z
 !-----------------------------------------------------------------------
 !
 !            ALGORITHM USING MINIMAX APPROXIMATIONS
@@ -4671,6 +4919,8 @@ END SUBROUTINE DGR17
 SUBROUTINE DGINV (A, X, P, Q, IERR)
 IMPLICIT NONE
 INTENT(IN) A, P, Q
+INTENT(OUT) X
+INTENT(INOUT) IERR
 INTEGER IERR
 INTEGER IER, IND
 !-----------------------------------------------------------------------
@@ -4997,6 +5247,8 @@ END SUBROUTINE DGINV
 SUBROUTINE BRATIO (A, B, X, Y, W, W1, IERR)
 IMPLICIT NONE
 INTENT(IN) A, B, X, Y
+INTENT(OUT) W, W1
+INTENT(INOUT) IERR
 REAL APSER, BASYM, BFRAC, BPSER, BUP, FPSER, SPMPAR
 INTEGER IERR
 REAL A, B, W, W1, X, Y
@@ -5755,6 +6007,7 @@ END FUNCTION BRCMP1
 SUBROUTINE BGRAT(A, B, X, Y, W, EPS, IERR)
 IMPLICIT NONE
 INTENT(IN) A, B, EPS, X, Y
+INTENT(INOUT) IERR, W
 INTEGER IERR
 REAL A, B, EPS, W, X, Y
 INTEGER I, N, NM1
@@ -5832,6 +6085,7 @@ END SUBROUTINE BGRAT
 SUBROUTINE GRAT1 (A,X,R,P,Q,EPS)
 IMPLICIT NONE
 INTENT(IN) A, EPS, R, X
+INTENT(INOUT) P, Q
 REAL A, EPS, P, Q, R, X
 REAL A2N, A2NM1, AM0, AN, AN0, B2N, B2NM1, C, CMA, G, H, SUM, T &
 &, TOL, W, Z
@@ -6030,6 +6284,7 @@ END FUNCTION BASYM
 SUBROUTINE ISUBX (A0, B0, X0, P, IERR, EPS)
 IMPLICIT NONE
 INTENT(IN) A0, B0, EPS, X0
+INTENT(OUT) IERR, P
 INTEGER IERR
 REAL A0, B0, EPS, P, X0
 INTEGER IND, L, MAX
@@ -6422,6 +6677,7 @@ END FUNCTION LOGAM
 SUBROUTINE CBSSLJ (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU
+INTENT(INOUT) W
 INTEGER I, K, M, N
 REAL A, CN1, CN2, E, FN, PI, PN, QM, QN, QNP1, R, R2, RN2, SN, T1 &
 &, T2, U, V, X, Y
@@ -6627,6 +6883,7 @@ END SUBROUTINE CBSSLJ
 SUBROUTINE CBJM (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU
+INTENT(INOUT) W
 INTEGER I, IMIN, K, KM1, KM2
 REAL A, A0, EPS, RNU
 REAL ANORM
@@ -6733,6 +6990,7 @@ END SUBROUTINE CBJM
 SUBROUTINE CBDB (CZ, CNU, FN, W)
 IMPLICIT NONE
 INTENT(IN) CNU, CZ, FN
+INTENT(INOUT) W
 REAL FN
 INTEGER IND, K, L, M
 REAL ALPHA, AM, AQ, AR, BND, C, PHI, PI, PI2, SGN, THETA, U, V, X &
@@ -6968,6 +7226,7 @@ END SUBROUTINE CBDB
 SUBROUTINE CBJA (CZ, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU, CZ
+INTENT(INOUT) W
 INTEGER I, IND
 REAL C, EPS, PIHALF, R, RNU, TOL, U, V, X, Y
 REAL SIN1
@@ -7068,6 +7327,7 @@ END SUBROUTINE CBJA
 SUBROUTINE BSSLJ (A, IN, W)
 IMPLICIT NONE
 INTENT(IN) A, IN
+INTENT(INOUT) W
 INTEGER IN
 INTEGER I, M, N
 REAL AN, AQ, AZ, CD, CE, FJ, PM, PN, QF, QM, QN, QZ, RM, RZ, SM &
@@ -7379,6 +7639,7 @@ END SUBROUTINE BSSLJ
 SUBROUTINE BESJ(X, ALPHA, N, Y, NZ)
 IMPLICIT NONE
 INTENT(IN) ALPHA, N
+INTENT(INOUT) NZ, Y
 !
 !     WRITTEN BY D.E. AMOS, S.L. DANIEL AND M.K. WESTON, JANUARY, 1975.
 !
@@ -8296,6 +8557,7 @@ END SUBROUTINE ASJY
 SUBROUTINE JAIRY(X,RX,C,AI,DAI)
 IMPLICIT NONE
 INTENT(IN) C, RX, X
+INTENT(INOUT) AI, DAI
 REAL AI, C, DAI, RX, X
 INTEGER I, J, M1, M1D, M2, M2D, M3, M3D, M4, M4D, N1, N1D, N2, N2D &
 &, N3, N3D, N4, N4D
@@ -8647,6 +8909,7 @@ END SUBROUTINE JAIRY
 SUBROUTINE BSSLY (A, IN, W)
 IMPLICIT NONE
 INTENT(IN) A, IN
+INTENT(INOUT) W
 INTEGER IN
 INTEGER I, LA, LR, LY, M, N
 REAL AN, AQ, AZ, CD, CE, PM, PN, QF, QM, QN, QZ, RM, RN, RZ, SL &
@@ -8964,6 +9227,7 @@ END SUBROUTINE BSSLY
 SUBROUTINE CBSSLI (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU, Z
+INTENT(INOUT) W
 REAL PIHALF, T, X, Y
 REAL SIN1
 REAL COS1
@@ -9001,6 +9265,7 @@ END SUBROUTINE CBSSLI
 SUBROUTINE BSSLI (MO, A, IN, W)
 IMPLICIT NONE
 INTENT(IN) A, IN, MO
+INTENT(INOUT) W
 INTEGER IN, MO
 INTEGER I, M, N
 REAL AN, AQ, AZ, CD, CE, FI, PM, PN, QF, QM, QN, QZ, RM, RZ, SM &
@@ -9332,6 +9597,7 @@ END SUBROUTINE BSSLI
 SUBROUTINE BESI(X, ALPHA, KODE, N, Y, NZ)
 IMPLICIT NONE
 INTENT(IN) ALPHA, KODE, N, X
+INTENT(INOUT) NZ, Y
 !
 !     WRITTEN BY D. E. AMOS AND S. L. DANIEL, JANUARY,1975.
 !
@@ -9798,6 +10064,7 @@ END SUBROUTINE BESI
 SUBROUTINE ASIK(X,FNU,KODE,FLGIK,RA,ARG,IN,TOL,Y)
 IMPLICIT NONE
 INTENT(IN) FLGIK, FNU, IN, KODE, TOL, X
+INTENT(INOUT) ARG, RA, Y
 !
 !                  ASIK COMPUTES BESSEL FUNCTIONS I AND K
 !                  FOR ARGUMENTS X.GT.0.0 AND ORDERS FNU.GE.35
@@ -9927,6 +10194,7 @@ END SUBROUTINE ASIK
 SUBROUTINE CBESK (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU
+INTENT(INOUT) W
 REAL A, B, C, E, RN, RZ, S, TAU, X, Y
 REAL CPABS
 !-----------------------------------------------------------------------
@@ -10044,6 +10312,7 @@ END SUBROUTINE CBESK
 SUBROUTINE CBKI (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU, Z
+INTENT(INOUT) W
 REAL A, B, PI, PIHALF, U1, U2
 REAL SIN1
 REAL COS1
@@ -10071,6 +10340,7 @@ END SUBROUTINE CBKI
 SUBROUTINE CBKA (Z, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU
+INTENT(INOUT) W
 INTEGER I
 REAL C, EPS, U, V
 REAL ANORM
@@ -10121,6 +10391,7 @@ END SUBROUTINE CBKA
 SUBROUTINE CBKM (Z, RZ, CNU, W)
 IMPLICIT NONE
 INTENT(IN) CNU, RZ, Z
+INTENT(INOUT) W
 REAL RZ
 INTEGER I, IND, M, N, N1
 REAL A, AI, B, C, CPI, PI, T, X, Y, ZNORM, ZR1, ZR2
@@ -10235,370 +10506,4 @@ W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
 W = EX*(EX*W + W2)
 RETURN
 END SUBROUTINE CBKM
-
-SUBROUTINE CKPS (Z, R, ZR, NU, W1, W2)
-IMPLICIT NONE
-INTENT(IN) R, Z, ZR
-REAL R
-INTEGER K
-REAL AK, EPS, EPS0, PHI, PI, S, TOL, U, X, Y
-REAL ANORM
-REAL SPMPAR
-!-----------------------------------------------------------------------
-!
-!        CALCULATION OF THE MODIFIED BESSEL FUNCTIONS
-!
-!                  W1 = K  (Z)  AND  W2 = K    (Z)
-!                        NU                NU+1
-!
-!     FOR A COMPLEX ARGUMENT Z WHERE ABS(Z) .LE. 2 AND A COMPLEX
-!     ORDER NU WHERE ABS(REAL(NU)) .LE. 0.5.  IT IS ASSUMED THAT
-!     -PI .LT. ARG Z .LE. PI, R = ABS(Z/2), AND ZR = 2/Z.  POWER
-!     SERIES EXPANSIONS ARE USED.
-!
-!-----------------------------------------------------------------------
-COMPLEX Z, ZR, NU, W1, W2
-REAL D(7)
-COMPLEX A, C, CH, CL, F, G1, G2, GM1, GM2, MU, P, Q, SH, &
-&T, T1, T2
-COMPLEX CDIV, CGAM0
-!-----------------------
-DATA TOL /1.E-10/
-DATA PI /3.14159265358979/
-!-----------------------
-DATA D(1) / .577215664901533E+00/,  D(2) /-.420026350340952E-01/, &
-&D(3) /-.421977345555443E-01/,  D(4) / .721894324666310E-02/, &
-&D(5) /-.215241674114951E-03/,  D(6) /-.201348547807882E-04/, &
-&D(7) / .113302723198170E-05/
-!-----------------------
-ANORM(T) = AMAX1(ABS(REAL(T)), ABS(AIMAG(T)))
-!-----------------------------------------------------------------------
-!
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
-!
-                EPS = SPMPAR(1)
-!
-!-----------------------------------------------------------------------
-EPS0 = AMAX1(EPS, 5.E-15)
-!
-!                     CL = - LN(Z/2)
-!
-PHI = ATAN2(AIMAG(Z),REAL(Z))
-CL = CMPLX(-ALOG(R), -PHI)
-MU = NU*CL
-C = CEXP(MU)
-!
-!                   G1 = GAMMA(1 + NU)
-!                   G2 = GAMMA(1 - NU)
-!
-T = PI*NU
-IF (ANORM(NU) .GT. TOL) GO TO 10
-   A = 1.0 + (T*T)/6.0
-   GO TO 20
-10 A = T/CSIN(T)
-!
-20 S = REAL(NU)**2 + AIMAG(NU)**2
-IF (S .GE. 1.0) GO TO 21
-   T = CGAM0(NU)
-   G1 = 1.0/T
-   G2 = A*T
-   GO TO 30
-21 T = 0.5 + (0.5 + NU)
-CALL CGAMMA (0, T, G1)
-G2 = CDIV(A,G1)
-!
-30 GM2 = 0.5*(G1 + G2)
-IF (S .GT. 0.04) GO TO 31
-!
-!         THE FOLLOWING IS THE TAYLOR SERIES FOR
-!     W1 = (1/G2 - 1/G1)/(2*NU). NOTE THAT G1*G2 = A.
-!
-   T = NU*NU
-   W1 = -((((((D(7)*T + D(6))*T + D(5))*T + D(4))*T + &
-&D(3))*T + D(2))*T + D(1))
-   GM1 = A*W1
-   GO TO 40
-31 GM1 = 0.5*(G1 - G2)/NU
-!
-!            INITIALIZATION OF THE SUMMATION
-!
-40 P = 0.5*C*G1
-Q = 0.5*CDIV(G2,C)
-X = REAL(MU)
-Y = AIMAG(MU)
-IF (ANORM(MU) .GT. TOL) GO TO 50
-   U = X*Y
-   SH = CMPLX(1.0, U/3.0)
-   CH = CMPLX(1.0, U)
-   GO TO 60
-50 T = CMPLX (-Y, X)
-SH = CSIN(T)/T
-CH = CCOS(T)
-!
-60 F = GM1*CH + GM2*CL*SH
-C = (1.0, 0.0)
-W1 = F
-W2 = P
-!
-!                 SUMMATION OF SERIES
-!
-T = 0.25*(Z*Z)
-DO K = 1, 50
-   AK = K
-   F = (AK*F + P + Q)/((AK - NU)*(AK + NU))
-   P = P/(AK - NU)
-   Q = Q/(AK + NU)
-   C = C*T/AK
-   T1 = C*F
-   W1 = W1 + T1
-   T2 = C*(P - AK*F)
-   W2 = W2 + T2
-   IF (ANORM(T1) .LE. EPS0*ANORM(W1)) GO TO 80
-END DO
-!
-80 W2 = W2 * ZR
-RETURN
-END SUBROUTINE CKPS
-
-SUBROUTINE CBKML (Z, R, ZR, NU, N, W, W0)
-IMPLICIT NONE
-INTENT(IN) N, NU, R, Z, ZR
-INTEGER N
-REAL R
-INTEGER I, M, NUM
-REAL A, B, C, C1, C2, E, EPS, EPS0, F, RNU, T, TH, X, Y
-REAL COS1
-REAL SPMPAR
-!-----------------------------------------------------------------------
-!
-!             COMPUTATION OF THE SCALED BESSEL FUNCTION
-!
-!                   W = (EXP(Z)*SQRT(Z)) K  (Z)
-!                                         NU
-!     AND THE VALUE
-!
-!                   W0 = K    (Z) /K  (Z)
-!                         NU+1      NU
-!
-!     FOR COMPLEX ORDERS NU AND NU + 1 AND FOR COMPLEX ARGUMENT Z
-!     BY USE OF THE MILLER ALGORITHM. FOR THE GREATEST ACCURACY,
-!     Z SHOULD LIE IN A SECTOR SLIGHTLY LARGER THAN THE RIGHT HALF
-!     PLANE. IT IS ASSUMED THAT ABS(REAL(NU)) .LT. 0.5, AND THAT
-!     R = ABS(Z/2) AND ZR = 2/Z.
-!
-!-----------------------------------------------------------------------
-COMPLEX Z, ZR, NU, W, W0
-COMPLEX AL, BL, S, U1, U2, U3
-REAL INU, L
-!---------------------
-!     C1 = SQRT(PI/2)
-!     C2 = SQRT(PI)
-!---------------------
-DATA C1 /1.25331413731559E+00/
-DATA C2 /1.77245385090552E+00/
-!-----------------------------------------------------------------------
-!
-!     ****** EPS IS A MACHINE DEPENDENT CONSTANT.  EPS IS THE
-!            SMALLEST NUMBER SUCH THAT 1 + EPS .GT. 1.
-!
-                EPS = SPMPAR(1)
-!
-!-----------------------------------------------------------------------
-EPS0 = AMAX1(EPS, 5.E-15)
-!
-X = REAL(Z)
-Y = AIMAG(Z)
-RNU = REAL(NU)
-INU = AIMAG(NU)
-!
-!     CALCULATION OF M FOR USE IN MILLER ALGORITHM.
-!
-TH = ATAN2(Y,X)
-A = 3.0/(1.0 + R)
-B = 14.7/(28.0 + R)
-F = (2.0*R)**(0.25)
-IF (RNU .EQ. 0.5 .AND. INU .NE. 0.0) GO TO 10
-   C = 4.0*COS1(RNU)/(C1*EPS0*F)
-   GO TO 20
-10 C = 4.0*C2/F
-20 M = (0.485/R)*(ALOG(C) + R*COS(A*TH)/(1.0 + 0.008*R))**2/ &
-&(2.0*COS(B*TH))**2 + 1.5
-T = 0.0
-IF (R .GT. 22.5) T = 0.01*(R - 22.5)**2
-NUM = 35.0 + 0.8*(R - 22.5) + T
-IF (INU .NE. 0.0) M = M + NUM
-C = N
-IF (C + RNU .LT. 0.327*ABS(INU)) M = M + 10
-!
-!     BACKWARD RECURRENCE IN MILLER ALGORITHM.
-!
-A = (0.5 - RNU)*(0.5 + RNU) + INU*INU
-E = 2.0*RNU*INU
-U2 = (0.0, 0.0)
-U1 = (1.0, 0.0)
-S = U1
-L = M
-do 30 I = 2, M
-   U3 = U2
-   U2 = U1
-   C = A/L + (L - 1.0)
-   AL = CMPLX(C, - E/L)
-   BL = 2.0*(L + Z)
-   U1 = (BL*U2 - (L + 1.0)*U3)/AL
-   S = S + U1
-   C = ABS(REAL(U1)) + ABS(AIMAG(U1))
-   IF (I .EQ. M .OR. C .LT. 1.E+8) GO TO 30
-!
-!           RESCALE TO AVOID OVERFLOW
-!
-      U2 = U2/C
-      U1 = U1/C
-      S = S/C
-!
-30 L = L - 1.0
-!
-!     LAST STEP IN THE MILLER ALGORITHM.
-!
-IF (C .LT. 2.0) GO TO 40
-   U2 = U2/C
-   U1 = U1/C
-   S = S/C
-40 U3 = U2
-U2 = U1
-AL = CMPLX(0.5*A, - 0.5*E)
-BL = 1.0 + Z
-U1 = (BL*U2 - U3)/AL
-S = S + U1
-!
-!     FINAL ASSEMBLY
-!
-W = C1*(U1/S)
-W0 = 1.0 + 0.5*(NU + 0.5 - U2/U1)*ZR
-RETURN
-END SUBROUTINE CBKML
-
-SUBROUTINE CBSSLK (Z, R, W)
-IMPLICIT NONE
-INTENT(IN) R
-REAL R
-INTEGER I, IND, M, N, N1
-REAL A, AI, CPI, PI, RZ, T, X, Y, ZNORM, ZR1, ZR2
-REAL CPABS
-!-----------------------------------------------------------------------
-!
-!         CALCULATION OF THE MODIFIED BESSEL FUNCTION OF THE
-!         SECOND KIND FOR REAL ORDER R AND COMPLEX ARGUMENT Z.
-!         IT IS ASSUMED THAT -PI .LT. ARG Z .LE. PI.
-!
-!-----------------------------------------------------------------------
-!     WRITTEN BY
-!         ANDREW H. VAN TUYL
-!         NAVAL SURFACE WARFARE CENTER
-!     MODIFIED BY A.H. MORRIS (NSWC)
-!     REVISED ... OCT 1992
-!---------------------------
-COMPLEX Z, W, CN, CZ, EX, U1, U2, U3, W1, W2, ZR
-REAL NU, NU1
-COMPLEX CXP
-!---------------------------
-!     CPI = SQRT(PI/2)
-!---------------------------
-DATA PI  /3.14159265358979/
-DATA CPI /1.25331413731550/
-!
-RZ = CPABS(REAL(Z), AIMAG(Z))
-!
-!     ASYMPTOTIC EXPANSION
-!
-IF (RZ .LT. 17.5 + 0.5*R*R) GO TO 5
-   CALL CKA (Z, R, W)
-   RETURN
-!
-!          REDUCTION OF R TO THE RANGE -0.5 .LT. NU .LE. 0.5
-!
-5 A = ABS(R)
-N = A
-NU = A - FLOAT(N)
-T = NU - 0.5
-IF (T .LE. 0.0) GO TO 10
-   NU = T - 0.5
-   N = N + 1
-10 M = N
-NU1 = NU
-!
-IND = 1
-CZ = Z
-X = 0.5*REAL(Z)
-Y = 0.5*AIMAG(Z)
-CALL CREC (X, Y, ZR1, ZR2)
-ZR = CMPLX (ZR1, ZR2)
-IF (T .NE. 0.0) GO TO 20
-!
-!               CALCULATION FOR NU = 0.5
-!
-W = CMPLX(CPI, 0.0)
-IF (N .EQ. 0) GO TO 90
-IF (X .GE. 0.0) GO TO 15
-   IND = -1
-   CZ = - Z
-   ZR = - ZR
-15 U1 = W
-U2 = W
-N = N + 1
-NU = - 0.5
-GO TO 70
-!
-!           CALCULATION FOR ABS(NU) .LT. 0.5
-!
-20 ZNORM = 0.5*RZ
-IF (ZNORM .GT. 1.0) GO TO 30
-   IND = 0
-   CALL CKM (Z, ZNORM, ZR, NU, U1, U2)
-   GO TO 50
-30 IF (X .LT. 0.0) GO TO 40
-   CALL CKML (Z, ZNORM, ZR, NU, U1, U2)
-   GO TO 50
-40 IND = -1
-CZ = - Z
-ZR = - ZR
-CALL CKML (CZ, ZNORM, ZR, NU, U1, U2)
-!
-50 IF (N .GT. 1) GO TO 70
-W = U1
-IF (N .NE. 0) W = U2
-GO TO 90
-!
-!                 RECURSION
-!
-70 N1 = N - 1
-DO I = 1, N1
-   AI = I
-   U3 = (NU + AI)*ZR*U2 + U1
-   U1 = U2
-   U2 = U3
-END DO
-W = U3
-!
-90 IF (IND .EQ. 0) RETURN
-W = W*CEXP(-CZ)/CSQRT(CZ)
-IF (IND .GT. 0) RETURN
-!
-!            ANALYTIC CONTINUATION
-!
-EX = CXP(M, NU1)
-CN = CMPLX (A, 0.0)
-IF (Y .LT. 0.0) GO TO 100
-   W1 = CMPLX (AIMAG(Z), -REAL(Z))
-   CALL CBSSLJ (W1, CN, W2)
-   W2 = CMPLX (PI*AIMAG(W2), -PI*REAL(W2))
-   W = EX*(EX*W + W2)
-   RETURN
-100 EX = CONJG(EX)
-W1 = CMPLX (-AIMAG(Z), REAL(Z))
-CALL CBSSLJ (W1, CN, W2)
-W2 = CMPLX (-PI*AIMAG(W2), PI*REAL(W2))
-W = EX*(EX*W + W2)
-RETURN
-END SUBROUTINE CBSSLK
 

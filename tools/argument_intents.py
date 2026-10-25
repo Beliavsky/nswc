@@ -1,8 +1,8 @@
-"""Infer conservative input intents with xintent, and apply reviewed manifests.
+"""Infer input intents with xintent, and apply reviewed argument manifests.
 
 Analysis needs an external Fortran-Tools directory; applying the manifest does
 not. The maintained fixed-form source is changed only by an explicit apply.
-Output intents are deliberately outside this first pass.
+Writable arguments are analyzed separately by writable_intents.py.
 """
 
 import argparse
@@ -79,16 +79,21 @@ def invocations(code):
 
 def intent_lines(arguments):
     names = sorted(arguments)
-    if not names or any(not IDENTIFIER.fullmatch(n) or arguments[n] != "IN" for n in names):
-        raise ConversionError("Only named INTENT(IN) arguments are supported")
+    if not names or any(not IDENTIFIER.fullmatch(n) or arguments[n] not in {"IN", "OUT", "INOUT"} for n in names):
+        raise ConversionError("Only named IN, OUT, and INOUT arguments are supported")
     result = []
-    line = "      INTENT(IN) "
-    for name in names:
-        if len(line + name) > 72:
-            result.append(line.rstrip(", "))
-            line = "      INTENT(IN) "
-        line += name + ", "
-    result.append(line.rstrip(", "))
+    for mode in ("IN", "OUT", "INOUT"):
+        selected = [n for n in names if arguments[n] == mode]
+        if not selected:
+            continue
+        prefix = f"      INTENT({mode}) "
+        line = prefix
+        for name in selected:
+            if len(line + name) > 72:
+                result.append(line.rstrip(", "))
+                line = prefix
+            line += name + ", "
+        result.append(line.rstrip(", "))
     return result
 
 

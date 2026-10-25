@@ -12,8 +12,8 @@
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `ZEROIN` | `REAL FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28515`](../source_parts/nswc_part_03.f90#L7213) |
-| `DZERO` | `DOUBLE PRECISION FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28640`](../source_parts/nswc_part_03.f90#L7338) |
+| `ZEROIN` | `REAL FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28691`](../source_parts/nswc_part_03.f90#L7660) |
+| `DZERO` | `DOUBLE PRECISION FUNCTION` | `F, AX, BX, AERR, RERR` | [`L28816`](../source_parts/nswc_part_03.f90#L7785) |
 
 
 Let F(z) be a continuous real-valued function defined for a < x < 6, and assume that F(a) and F(b) have opposite signs. Then the following functions are available for finding a point z in the interval {a, 6] for which F(z) = 0.
@@ -75,7 +75,7 @@ p52
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `HBRD` | `SUBROUTINE` | `FCN, N, X, FVEC, EPSFCN, TOL, INFO, WA, LWA` | [`L28765`](../source_parts/nswc_part_03.f90#L7463) |
+| `HBRD` | `SUBROUTINE` | `FCN, N, X, FVEC, EPSFCN, TOL, INFO, WA, LWA` | [`L28941`](../source_parts/nswc_part_03.f90#L7910) |
 
 
 Let f,(z) = O (¢ = 1,...,n) denote a system of n equations in n unknowns where z = (z1,...,%,). Assume that each f,(z) is differentiable and that an initial guess a = (a1, ...,@,) to a solution of the equations is given. Then the following subroutine is available for solving the equations to within a specified tolerance.
@@ -125,12 +125,12 @@ Scaling. If the convergence criterion ||z — z|| < TOL- ||z|| is satisfied and 
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `QDCRT` | `SUBROUTINE` | `A, Z` | [`L29360`](../source_parts/nswc_part_03.f90#L8058) |
-| `DQDCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29422`](../source_parts/nswc_part_03.f90#L8120) |
-| `CBCRT` | `SUBROUTINE` | `A, Z` | [`L29488`](../source_parts/nswc_part_03.f90#L8186) |
-| `DCBCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29690`](../source_parts/nswc_part_03.f90#L8388) |
-| `QTCRT` | `SUBROUTINE` | `A, Z` | [`L29912`](../source_parts/nswc_part_03.f90#L8610) |
-| `DQTCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L30063`](../source_parts/nswc_part_03.f90#L8761) |
+| `QDCRT` | `SUBROUTINE` | `A, Z` | [`L29540`](../source_parts/nswc_part_03.f90#L8509) |
+| `DQDCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29603`](../source_parts/nswc_part_03.f90#L8572) |
+| `CBCRT` | `SUBROUTINE` | `A, Z` | [`L29670`](../source_parts/nswc_part_03.f90#L8639) |
+| `DCBCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L29873`](../source_parts/nswc_part_03.f90#L8842) |
+| `QTCRT` | `SUBROUTINE` | `A, Z` | [`L30096`](../source_parts/nswc_part_03.f90#L9065) |
+| `DQTCRT` | `SUBROUTINE` | `A, ZR, ZI` | [`L30248`](../source_parts/nswc_part_03.f90#L9217) |
 
 
 Given a polynomial ag + a)z +--+ 4,2" with real coefficients where a, # O and n = 2,3 or 4. The following subroutines are available for computing the roots 2, ...,2y of the polynomial.
@@ -165,8 +165,8 @@ it is assumed that A,ZR, and ZI are double precision arrays. DQDCRT is used if n
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `DRPOLY` | `SUBROUTINE` | `OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK` | [`L30225`](../source_parts/nswc_part_03.f90#L8923) |
-| `DCPOLY` | `SUBROUTINE` | `OPR, OPI, IDEG, ZEROR, ZEROI, NUM, WK` | [`L31168`](../source_parts/nswc_part_03.f90#L9866) |
+| `DRPOLY` | `SUBROUTINE` | `OP, IDEG, ZEROR, ZEROI, NUM, WK, DWK` | [`L30411`](../source_parts/nswc_part_03.f90#L9380) |
+| `DCPOLY` | `SUBROUTINE` | `OPR, OPI, IDEG, ZEROR, ZEROI, NUM, WK` | [`L31358`](../source_parts/nswc_part_03.f90#L10327) |
 
 
 Given a polynomial ag + ayz-++-+- + a,2" of degree n > 1. The subroutines DRPOLY and DCPOLY are available for obtaining the roots z,, ...,2, of the polynomial. DRPOLY may be used if the coefficients a; are real, and DCPOLY is applicable if the coefficients are complex. These subroutines perform the calculations in double precision.
@@ -222,8 +222,8 @@ DWK is a double precision array of dimension 10(n + £) or larger that is a work
 
 | Routine | Kind | Dummy arguments in source order | Source declaration |
 |---|---|---|---|
-| `RBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L31830`](../source_parts/nswc_part_04.f90#L25) |
-| `CBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L31985`](../source_parts/nswc_part_04.f90#L180) |
+| `RBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L32034`](../source_parts/nswc_part_04.f90#L457) |
+| `CBND` | `SUBROUTINE` | `N, C, W, ABSERR, RELERR, KLUST, KER` | [`L32190`](../source_parts/nswc_part_04.f90#L613) |
 
 
 Let z1,...,2, be approximations for the roots of a real or complex polynomial p(z) = Ap +a,z4+---+a,2" of degree n > 1. Then for each z,, the subroutines RBND and CBND obtain the radius 7; of a disk D; = {z : |z — %| < ri} centered at z; which contains a true zero of the polynomial. The radius r, is an upper bound on the absolute error of the approximation 2,.
