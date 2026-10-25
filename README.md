@@ -149,8 +149,8 @@ review. It also skips loops with possible branches into their bodies.
 
 ## Explicit typing
 
-Two reviewed batches add `IMPLICIT NONE` and any missing declarations to
-57 procedures. The declarations were generated with `ftnchek` and supplemented
+Three reviewed batches add `IMPLICIT NONE` and any missing declarations to
+86 procedures. The declarations were generated with `ftnchek` and supplemented
 where function return types were omitted. `tools/explicit_typing.py` applies the
 reviewed manifest; it does not guess types. The [typing guide](docs/explicit-typing.md)
 records the affected procedures, tool limitations, and reproduction commands.

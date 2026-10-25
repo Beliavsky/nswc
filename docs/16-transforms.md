@@ -287,9 +287,9 @@ The setting JERR == 2 can occur only when some n, > 4251528.
 |---|---|---|---|
 | `COSQI` | `SUBROUTINE` | `N, WSAVE` | [`L80915`](../source_parts/nswc_part_08.f90#L6683) |
 | `COSQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L80978`](../source_parts/nswc_part_08.f90#L6746) |
-| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L81066`](../source_parts/nswc_part_08.f90#L6834) |
-| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L81160`](../source_parts/nswc_part_08.f90#L6928) |
-| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L81227`](../source_parts/nswc_part_08.f90#L6995) |
+| `COSQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L81071`](../source_parts/nswc_part_08.f90#L6839) |
+| `SINQF` | `SUBROUTINE` | `N, X, WSAVE` | [`L81170`](../source_parts/nswc_part_08.f90#L6938) |
+| `SINQB` | `SUBROUTINE` | `N, X, WSAVE` | [`L81237`](../source_parts/nswc_part_08.f90#L7005) |
 
 
 Let n be a positive integer and 0, = (v +1/2)x/n for vy = 0,i,...,2-—1. For any “a real valued functions f and g defined on the points 6, let (f,g) = p> f(8.) 9(6.). Then (f,g) is an inner product when f{ and g are regarded as functions defined only on 6,.

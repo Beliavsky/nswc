@@ -1,7 +1,7 @@
 # Explicit typing
 
-The reviewed conversions cover 57 of the library's 1,062 procedures: the initial
-17 procedure pilot and a subsequent batch of 40. The remaining 1,005 procedures
+The reviewed conversions cover 86 of the library's 1,062 procedures: the initial
+17 procedure pilot and subsequent batches of 40 and 29. The remaining 976 procedures
 retain their existing typing. Each batch preserves the original types and is
 checked with compiler symbol comparisons and the numerical regression suite.
 
@@ -40,6 +40,29 @@ and the full declaration report. They retain `INTEGER` for `IPMPAR`, and `REAL`
 for `EXPARG`, `GAMLN1`, `SPMPAR`, and `ALNREL`. The compiler comparison preserved
 all 582 non-intrinsic symbol records in this batch. No argument intents,
 precision choices, dimensions, storage statements, or executable code were changed.
+
+## Batch 3: splines, quadrature, and Fourier transforms
+
+The third batch adds 29 procedures covered by the spline, quadrature, smoke,
+and FFT worker tests:
+
+- Splines: `CBSPL`, `SPLIFT`, `CSINT`, `CSINT1`, `CSINT2`, `CURV1`, `CURV2`,
+  `CURVD`, `CURVI`, `KURV1`, `KURV2`, `KURVP1`, `KURVP2`, `QURV1`, and `QURV2`.
+- Quadrature: `QSUBA`, `QUAD`, `QAGSE`, `QK21F`, `QPSRT`, `QELG`, and `WANDT`.
+- Fourier transforms: `COSQF1`, `COSQB1`, `RFFTI`, `RFFTB`, `RFFTB1`, `RFFTF`,
+  and `RFFTF1`.
+
+The generator omitted several return types. Review preserved `INTEGER INTRVL`
+in nine spline procedures, the `REAL` results of `CURV2`, `CURVD`, and `CURVI`,
+and the `REAL TERM` statement function in `CURVI`. The quadrature callbacks
+retain `REAL F`, and `QSUBA` also needs `REAL SPMPAR`. These supplements were
+checked against original source and compiler records; the full declaration
+report also identifies the external and statement function types.
+
+The compiler comparison preserved all 801 non-intrinsic symbol records in this
+batch. In particular, the FFT factor arrays retain their original `REAL` type.
+No argument intents, precision choices, dimensions, storage statements, or
+executable code were changed.
 
 ## Declaration generator
 
@@ -108,7 +131,7 @@ Use `--compiler PATH` if necessary. This reconstructs the source before explicit
 from the archived original and earlier readability transformations, applies the
 reviewed manifest, and verifies that it reproduces `nswc.f`. GNU Fortran's symbol
 dumps are then compared before and after the additions. The local check preserved
-1,006 variable and external procedure records across the 57 procedures, including
+1,807 variable and external procedure records across the 86 procedures, including
 types, array shapes, storage attributes, and argument lists. Internal intrinsic
 placeholders and compiler-generated symbols are excluded from this comparison;
 the implicit type marker is expected to disappear.
