@@ -1,7 +1,7 @@
 {
   "source": "nswc.f90",
   "source_sha256": "6b174f025588b51d5c586655140a80c26e81e8d5cf1c79231dd57956913602b4",
-  "module_sha256": "4403bbeba2f91d61647732864dfe8b857aa0d2934dabed5daf84f3ee399136c0",
+  "module_sha256": "9779331707fbae5b20bf88c90dbb23675b2cf9b09e5c686e9835a9741114c2b3",
   "compiler": "Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205",
   "procedures": 1062,
   "kind_mappings": {
@@ -10,6 +10,20 @@
     "COMPLEX(KIND=4)": "COMPLEX",
     "INTEGER(KIND=4)": "INTEGER",
     "LOGICAL(KIND=4)": "LOGICAL"
+  },
+  "callback_review_sha256": "2edfa053b5bffe18052e271965bfefe3cf54610d4e715e0df6f0dfbea7ba2ad7",
+  "explicit_callbacks": 116,
+  "callback_exceptions": {
+    "SRCH:COND": "ACOND and XCOND have incompatible argument intents.",
+    "QAGI1:F": "ACONDF, ACONDG and XCONDY have incompatible argument intents.",
+    "QAGIE1:F": "ACONDF, ACONDG and XCONDY have incompatible argument intents.",
+    "QK15I1:F": "ACONDF, ACONDG and XCONDY have incompatible argument intents.",
+    "STFODE:JAC": "The internal ZZZJAC placeholder differs from the user Jacobian convention.",
+    "LSOD1:JAC": "The internal ZZZJAC placeholder differs from the user Jacobian convention.",
+    "STOD:JAC": "The internal ZZZJAC placeholder differs from the user Jacobian convention.",
+    "PJAC:JAC": "The internal ZZZJAC placeholder differs from the user Jacobian convention.",
+    "BLKTR1:PRDCT": "PROD0 and PRODP have incompatible workspace intents.",
+    "BLKTR1:CPRDCT": "Legacy real/complex workspace association needs a separate review."
   },
   "isolated_procedures": {
     "COMPB": "Known real/complex PPADD workspace alias; see docs/compiler-warnings.md"

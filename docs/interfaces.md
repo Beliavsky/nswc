@@ -82,7 +82,8 @@ types: default `INTEGER`, `REAL`, `COMPLEX`, and `LOGICAL`, plus
 including explicit bounds and assumed-size arrays, are preserved.
 
 `tools/interface-generation.json` records compiler provenance, kind mappings,
-procedure count, and source/module hashes. For a fresh Intel regeneration check:
+procedure and callback counts, exceptions, and source/module/review hashes.
+For a fresh Intel regeneration check:
 
 ```sh
 python tools/generate_interfaces.py --check
@@ -104,21 +105,64 @@ inference is distinguished from the callback's declared interface.
 The combined module must also compile as standard Fortran 2008 with GNU Fortran.
 Source and module hashes detect stale artifacts.
 
-The validator makes temporary copies of all 44 numerical main programs. It
+The validator makes temporary copies of all 48 numerical main programs. It
 replaces their library interface blocks and external declarations with selected
 module imports, preserving their own callback interfaces and executable tests.
 Each original and modified caller is built, run, and checked for identical
-diagnostics. This gives 88 runs per library source and compiler. The free-form
+diagnostics. This gives 96 runs per library source and compiler. The free-form
 and fixed-form sources were both checked with GNU Fortran and Intel Fortran.
 To select the fixed-form source, add `--source nswc.f`; the default is `nswc.f90`.
 
-Six pairs of valid and invalid calls check integer types, array ranks, output
+Eleven pairs of valid and invalid calls check integer types, array ranks, output
 constants, real precision, missing arguments, and callback function result
-types. The valid version must compile and the invalid version must fail.
+types, plus callback arity, parameter types, ranks, intents, and array descriptors.
+The valid version must compile and the invalid version must fail.
 GNU verification also runs in GitHub Actions.
 
-The emitted callback declarations retain implicit callback interfaces: they
-identify procedures and function result types but do not fully describe their
-parameter lists. Full checking of callback parameters would require additional
-reviewed abstract interfaces. The numerical suite remains representative rather
-than a validation of every library algorithm.
+## Callback contracts
+
+The generator supplements Intel's implicit callback declarations with 22
+reviewed abstract interfaces from `tools/callback_interfaces.py`. These describe
+116 of the 126 callback arguments, including functions, subroutines, array
+dimensions, and intents. The review inventory must account for every callback.
+The validator checks the emitted contracts against the review and independently
+compares the original declarations after removing these deliberate additions.
+
+For example, a callback passed to `QAGS` can be written as:
+
+```fortran
+real function integrand(x)
+  implicit none
+  real, intent(in) :: x
+  integrand = x*x
+end function integrand
+```
+
+Fortran requires matching callback characteristics when an explicit interface
+is visible. This includes intent and array conventions: `X(N)`, `X(*)`, and
+`X(:)` are different contracts. Callbacks in callers opting into the module may
+need their declarations adjusted. The library sources and historical callers
+are unchanged. Give the compiler an explicit interface to the actual callback,
+for example by making it an internal or module procedure, for full checking.
+The public `nswc_cb_*` abstract interfaces can also be imported to declare
+procedure arguments. Inspect their definitions for the required declarations.
+MINPACK residual vectors use `INTENT(INOUT)` so a callback can preserve them
+when invoked only to report progress.
+
+Ten callback arguments retain implicit interfaces for specific reasons:
+
+| Procedure and callback | Reason |
+|---|---|
+| `SRCH:COND` | Its actual procedures `ACOND` and `XCOND` have incompatible intents |
+| `QAGI1:F`, `QAGIE1:F`, `QK15I1:F` | The actual procedures `ACONDF`, `ACONDG`, and `XCONDY` have incompatible intents |
+| `STFODE:JAC`, `LSOD1:JAC`, `STOD:JAC`, `PJAC:JAC` | The internal `ZZZJAC` placeholder differs from the user Jacobian convention |
+| `BLKTR1:PRDCT` | `PROD0` and `PRODP` have incompatible workspace intents |
+| `BLKTR1:CPRDCT` | The real/complex workspace association needs a separate review |
+
+These exceptions avoid imposing a contract that rejects an existing library
+implementation. Callback result types remain checked where declared, but their
+parameter lists are unchecked. Resolving the exceptions requires separate
+changes to declarations or adapters and further tests.
+
+The numerical suite remains representative rather than a validation of every
+library algorithm.

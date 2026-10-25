@@ -14,6 +14,7 @@ import subprocess
 import tempfile
 
 from regenerate_sources import HEADER
+from callback_interfaces import abstract_interfaces, enrich, BINDINGS, EXCEPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / 'nswc_interfaces.f90'
@@ -45,8 +46,14 @@ def sha(data):
 
 def procedure_blocks(text):
     """Read this library's external definitions or interface bodies."""
-    result, current, lines = {}, None, []
+    result, current, lines, abstract = {}, None, [], False
     for line in text.splitlines(keepends=True):
+        if re.match(r'^\s*abstract\s+interface\b', line, re.I):
+            abstract = True
+        if abstract:
+            if re.match(r'^\s*end\s*interface\b', line, re.I):
+                abstract = False
+            continue
         match = HEADER.match(line)
         if match and not line.lstrip().startswith('!'):
             if current:
@@ -89,10 +96,15 @@ def assemble(raw, expected):
     for name, body in bodies.items():
         if list(procedure_blocks(body)) != [name]:
             raise ValueError(f'Wrong generated interface: {name}')
+    reviewed = {name + ':' + arg.upper() for name, body in bodies.items()
+                for arg in re.findall(r'^\s*EXTERNAL (\w+)\s*$', body, re.M | re.I)}
+    if len(expected) == 1062 and reviewed != BINDINGS.keys() | EXCEPTIONS.keys():
+        raise ValueError('Callback review inventory differs')
+    bodies = {name: enrich(name, body) for name, body in bodies.items()}
     return ('! Generated with Intel ifx; see tools/generate_interfaces.py.\n'
             '! Optional interfaces for existing external procedures; no implementations here.\n'
             '! Import selected names with USE nswc_interfaces, ONLY: ...\n'
-            'module nswc_interfaces\n  implicit none\n  interface\n'
+            'module nswc_interfaces\n  implicit none\n' + abstract_interfaces() + '  interface\n'
             + ''.join(bodies.values()) + '  end interface\nend module nswc_interfaces\n')
 
 
@@ -126,6 +138,8 @@ def generate(compiler, source, env=None):
     metadata = {'source': 'nswc.f90', 'source_sha256': sha(source), 'module_sha256': sha(module),
                 'compiler': (version.stdout + version.stderr).strip().splitlines()[0],
                 'procedures': len(raw), 'kind_mappings': KINDS,
+                'callback_review_sha256': sha(Path(__file__).with_name('callback_interfaces.py').read_bytes()),
+                'explicit_callbacks': len(BINDINGS), 'callback_exceptions': EXCEPTIONS,
                 'isolated_procedures': {'COMPB': 'Known real/complex PPADD workspace alias; see docs/compiler-warnings.md'}}
     return module, metadata, '\n'.join(diagnostics)
 

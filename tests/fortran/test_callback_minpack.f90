@@ -1,0 +1,97 @@
+! Analytic checks, also run against the archived fixed-form source.
+program test_callback_minpack
+  implicit none
+  interface
+    SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
+      IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LWA
+      INTEGER :: N
+      EXTERNAL FCN
+      REAL, INTENT(INOUT) :: X(N)
+      REAL, INTENT(INOUT) :: FVEC(N)
+      REAL, INTENT(IN) :: EPSFCN
+      REAL, INTENT(IN) :: TOL
+      INTEGER, INTENT(OUT) :: INFO
+      REAL, INTENT(INOUT) :: WA(LWA)
+    END SUBROUTINE HBRD
+    SUBROUTINE LMDIFF(FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
+      IMPLICIT NONE
+      INTEGER, INTENT(IN) :: LWA
+      INTEGER :: N
+      INTEGER :: M
+      EXTERNAL FCN
+      REAL, INTENT(INOUT) :: X(N)
+      REAL, INTENT(INOUT) :: FVEC(M)
+      REAL, INTENT(IN) :: EPSFCN
+      REAL, INTENT(IN) :: TOL
+      INTEGER, INTENT(OUT) :: INFO
+      INTEGER, INTENT(INOUT) :: IWA(N)
+      REAL, INTENT(INOUT) :: WA(LWA)
+    END SUBROUTINE LMDIFF
+    SUBROUTINE OPTF(FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
+      IMPLICIT NONE
+      INTEGER :: N
+      EXTERNAL FCN
+      REAL, INTENT(IN) :: RERR
+      INTEGER, INTENT(INOUT) :: ITER
+      REAL, INTENT(INOUT) :: XPLS(N)
+      REAL, INTENT(INOUT) :: FPLS
+      INTEGER, INTENT(INOUT) :: IERR
+      REAL, INTENT(INOUT) :: WRK(N,*)
+    END SUBROUTINE OPTF
+  end interface
+
+  real :: x(2),f(3),wa(100),wr(2,10),value
+  integer :: info,ip(2),iter
+
+  x=[1.,1.]
+  f=0.; wa=0.
+  call hbrd(system,2,x,f,0.,1e-5,info,wa,100)
+  if (info/=1 .or. maxval(abs(x-[2.,3.]))>1e-4) error stop 'hybrid roots'
+  x=0.; f=0.; wa=0.; ip=0
+  call lmdiff(residuals,3,2,x,f,0.,1e-5,info,ip,wa,100)
+  if (info<1 .or. info>4) error stop 'least squares status'
+  if (maxval(abs(x-[1.,2.]))>2e-3) error stop 'least squares coefficients'
+  if (abs(sum(f*f)-6.)>1e-4) error stop 'least squares residual norm'
+  x=1.; wa=0.
+  call hbrd(cancel,2,x,f,0.,1e-5,info,wa,100)
+  if (info/=-7) error stop 'callback termination'
+  x=[-2.,4.]; iter=100; wr=0.; value=0.; info=0
+  call optf(objective,2,1e-7,iter,x,value,info,wr)
+  if (maxval(abs(x-[1.,-2.]))>2e-3 .or. value>1e-5) error stop 'vector minimum'
+  if (iter<=0 .or. iter>100) error stop 'optimizer iterations'
+  print '(a,3es24.15)', 'Optimization diagnostics: ',x,value
+  print '(a)', 'test_callback_minpack: PASS'
+contains
+
+  subroutine system(n,x,f,flag)
+    integer,intent(in)::n
+    integer,intent(inout)::flag
+    real,intent(in)::x(n)
+    real,intent(inout)::f(n)
+    f(1)=x(1)*x(1)-4.
+    f(2)=x(2)*x(2)-9.
+  end subroutine
+  subroutine residuals(m,n,x,f,flag)
+    integer,intent(in)::m,n
+    integer,intent(inout)::flag
+    real,intent(in)::x(n)
+    real,intent(inout)::f(m)
+    ! Data [2,1,6] at t=[0,1,2] have best fit 1+2*t.
+    f=x(1)+x(2)*[0.,1.,2.]-[2.,1.,6.]
+  end subroutine
+  subroutine cancel(n,x,f,flag)
+    integer,intent(in)::n
+    integer,intent(inout)::flag
+    real,intent(in)::x(n)
+    real,intent(inout)::f(n)
+    f=0.
+    flag=-7
+  end subroutine
+  subroutine objective(n,x,f)
+    integer,intent(in)::n
+    real,intent(in)::x(n)
+    real,intent(out)::f
+    f=(x(1)-1.)**2+2.*(x(2)+2.)**2
+  end subroutine
+end program test_callback_minpack

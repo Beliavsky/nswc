@@ -14,6 +14,7 @@ import tempfile
 from generate_interfaces import ROOT, MODULE, METADATA, compiler_environment, procedure_blocks, sha
 from validate_explicit_typing import symbols
 from validate_sources import check_result, test_programs
+from callback_interfaces import abstract_interfaces, enrich, strip_contracts, BINDINGS
 
 
 def command_run(command, folder, env=None, timeout=180, expect_success=True):
@@ -68,12 +69,20 @@ def verify_signatures(compiler, folder):
     metadata = json.loads(METADATA.read_text())
     if metadata['source_sha256'] != sha(source) or metadata['module_sha256'] != sha(module):
         raise ValueError('Interface generation metadata is stale')
+    if metadata['callback_review_sha256'] != sha((ROOT / 'tools/callback_interfaces.py').read_bytes()):
+        raise ValueError('Callback review metadata is stale')
+    if abstract_interfaces() not in module.decode('ascii'):
+        raise ValueError('Callback definitions differ from reviewed contracts')
     definitions = procedure_blocks(source.decode('ascii'))
     interfaces = procedure_blocks(module.decode('ascii'))
     if len(definitions) != 1062 or definitions.keys() != interfaces.keys() or metadata['procedures'] != 1062:
         raise ValueError('Expected all 1062 procedure interfaces')
     stub = Path(folder) / 'interface_stubs.f90'
-    stub.write_text(''.join(interfaces.values()), encoding='ascii', newline='\n')
+    stripped = {name: strip_contracts(body) for name, body in interfaces.items()}
+    for name, body in stripped.items():
+        if enrich(name, body) != interfaces[name]:
+            raise ValueError('Callback interface differs from review: ' + name)
+    stub.write_text(''.join(stripped.values()), encoding='ascii', newline='\n')
     inventories = []
     for path, flags in [(ROOT / 'nswc.f90', ['-std=legacy', '-fallow-argument-mismatch']),
                         (stub, ['-std=f2008', '-pedantic-errors'])]:
@@ -143,7 +152,7 @@ def module_caller(text, library_names):
 
 
 PROBE_PREFIX = '''program interface_probe
-use nswc_interfaces, only: scopy, sgefa, dqdcrt, qags
+use nswc_interfaces, only: scopy, sgefa, dqdcrt, qags, ode
 implicit none
 real :: x(2),y(2),scalar,a(1,1),sr(2),work(400),result,error
 double precision :: coeff(3),zr(2),zi(2)
@@ -157,6 +166,13 @@ PROBES = [
     ('missing argument', 'call scopy(1,x,1,y,1)', 'call scopy(1,x,1,y)'),
     ('callback result', 'call qags(single_f,0.,1.,1e-5,1e-5,result,error,neval,ier,100,400,last,iw,work)',
                         'call qags(double_f,0.,1.,1e-5,1e-5,result,error,neval,ier,100,400,last,iw,work)')]
+for label, callback in [('arity', 'no_argument'), ('parameter type', 'double_argument'),
+                        ('parameter rank', 'array_argument'), ('parameter intent', 'no_intent')]:
+    good = 'call qags(single_f,0.,1.,1e-5,1e-5,result,error,neval,ier,100,400,last,iw,work)'
+    PROBES.append(('callback ' + label, good, good.replace('single_f', callback)))
+PROBES.append(('callback array descriptor',
+               'call ode(rhs,1,y,scalar,1.,error,result,info,work,iw)',
+               'call ode(descriptor_rhs,1,y,scalar,1.,error,result,info,work,iw)'))
 PROBE_SUFFIX = '''
 contains
 real function single_f(t)
@@ -167,6 +183,31 @@ double precision function double_f(t)
 real,intent(in)::t
 double_f=dble(t*t)
 end function
+real function no_argument()
+no_argument=1.
+end function
+real function double_argument(t)
+double precision,intent(in)::t
+double_argument=real(t)
+end function
+real function array_argument(t)
+real,intent(in)::t(*)
+array_argument=t(1)
+end function
+real function no_intent(t)
+real::t
+no_intent=t
+end function
+subroutine rhs(t,y,yp)
+real,intent(in)::t,y(*)
+real,intent(out)::yp(*)
+yp(1)=y(1)
+end subroutine
+subroutine descriptor_rhs(t,y,yp)
+real,intent(in)::t,y(:)
+real,intent(out)::yp(*)
+yp(1)=y(1)
+end subroutine
 end program
 '''
 

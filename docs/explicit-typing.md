@@ -502,7 +502,7 @@ unused callback classification and the two quadratic output extents.
 
 The maintained source compiles with 12 reviewed warnings, compared with 28 in
 the original source. The compiler check rejects added or missing warnings.
-All 44 numerical test programs must still pass against each source version,
+All 48 numerical test programs must still pass against each source version,
 using `python tools/validate_sources.py`. Both checks run in GitHub Actions.
 The numerical tests remain representative, so future source changes need
 compiler comparison and appropriate numerical checks rather than relying on

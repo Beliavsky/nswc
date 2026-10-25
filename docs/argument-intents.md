@@ -134,7 +134,7 @@ must still match, subject to the reviewed forwarded procedure cases and the
 separately confirmed warning corrections.
 
 The local compilation now has 12 reviewed warnings, compared with the original
-28. All 44 numerical main programs run against each source version, giving 132 runs with
+28. All 48 numerical main programs run against each source version, giving 144 runs with
 matching diagnostics. Regression tests cover dependency propagation, unresolved
 calls and cycles, array elements passed to procedures, keyword arguments, stale
 manifests, compiler attribute confirmation, scalar initialization, specification

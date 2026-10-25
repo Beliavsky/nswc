@@ -139,11 +139,11 @@ boundaries cause an error before writing. The script targets external functions
 and subroutines, not modules or programs. Run the Python checks with
 `python -m unittest discover -s tests -v`.
 
-Run `python tools/validate_sources.py` to build and run 44 numerical test programs
-against all three versions with GNU Fortran (132 test runs). Use `--compiler PATH`
-when the compiler is not on your command search path. The suite includes 43 main
+Run `python tools/validate_sources.py` to build and run 48 numerical test programs
+against all three versions with GNU Fortran (144 test runs). Use `--compiler PATH`
+when the compiler is not on your command search path. The suite includes 47 main
 programs in `tests/fortran/`, covering linear algebra, special
-functions, polynomial roots, interpolation, splines, integration, differential
+functions, polynomial roots, nonlinear solving and minimization, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
 [test guide](docs/numerical-tests.md) for individual programs, selection options,
 adaptations, and coverage limits.

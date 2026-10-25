@@ -3,17 +3,134 @@
 ! Import selected names with USE nswc_interfaces, ONLY: ...
 module nswc_interfaces
   implicit none
+  abstract interface
+    real function nswc_cb_real(x)
+      implicit none
+      real, intent(in) :: x
+    end function nswc_cb_real
+    double precision function nswc_cb_double(x)
+      implicit none
+      double precision, intent(in) :: x
+    end function nswc_cb_double
+    complex function nswc_cb_complex(z)
+      implicit none
+      complex, intent(in) :: z
+    end function nswc_cb_complex
+    real function nswc_cb_kernel(x,y)
+      implicit none
+      real, intent(in) :: x,y
+    end function nswc_cb_kernel
+    subroutine nswc_cb_laplace(x,y,a,b)
+      implicit none
+      real, intent(in) :: x,y
+      real, intent(out) :: a,b
+    end subroutine nswc_cb_laplace
+    subroutine nswc_cb_complex_double(x,y,a,b)
+      implicit none
+      double precision, intent(in) :: x,y
+      double precision, intent(out) :: a,b
+    end subroutine nswc_cb_complex_double
+    subroutine nswc_cb_airy(x,rx,c,ai,dai)
+      implicit none
+      real, intent(in) :: x,rx,c
+      real, intent(inout) :: ai,dai
+    end subroutine nswc_cb_airy
+    subroutine nswc_cb_row(n,k,c)
+      implicit none
+      integer, intent(in) :: n,k
+      real, intent(out) :: c(n)
+    end subroutine nswc_cb_row
+    subroutine nswc_cb_double_row(n,k,c)
+      implicit none
+      integer, intent(in) :: n,k
+      double precision, intent(out) :: c(n)
+    end subroutine nswc_cb_double_row
+    subroutine nswc_cb_complex_row(n,k,c)
+      implicit none
+      integer, intent(in) :: n,k
+      complex, intent(out) :: c(n)
+    end subroutine nswc_cb_complex_row
+    subroutine nswc_cb_nonlinear(n,x,fvec,iflag)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: x(n)
+      real, intent(inout) :: fvec(n)
+      integer, intent(inout) :: iflag
+    end subroutine nswc_cb_nonlinear
+    subroutine nswc_cb_least_squares(m,n,x,fvec,iflag)
+      implicit none
+      integer, intent(in) :: m,n
+      real, intent(in) :: x(n)
+      real, intent(inout) :: fvec(m)
+      integer, intent(inout) :: iflag
+    end subroutine nswc_cb_least_squares
+    subroutine nswc_cb_objective(n,x,f)
+      implicit none
+      integer, intent(in) :: n
+      real, intent(in) :: x(n)
+      real, intent(out) :: f
+    end subroutine nswc_cb_objective
+    double precision function nswc_cb_value_derivative(x,derivative)
+      implicit none
+      double precision, intent(in) :: x
+      double precision, intent(out) :: derivative
+    end function nswc_cb_value_derivative
+    double precision function nswc_cb_polynomial(x)
+      implicit none
+      double precision :: x
+    end function nswc_cb_polynomial
+    real function nswc_cb_triangle(x,y,idata,rdata)
+      implicit none
+      real, intent(in) :: x,y,rdata(*)
+      integer, intent(in) :: idata(*)
+    end function nswc_cb_triangle
+    subroutine nswc_cb_ode(t,y,yp)
+      implicit none
+      real, intent(in) :: t,y(*)
+      real, intent(out) :: yp(*)
+    end subroutine nswc_cb_ode
+    subroutine nswc_cb_parameter_ode(t,y,yp,rpar,ipar)
+      implicit none
+      real, intent(in) :: t,y(*)
+      real, intent(out) :: yp(*)
+      real, intent(inout) :: rpar(*)
+      integer, intent(inout) :: ipar(*)
+    end subroutine nswc_cb_parameter_ode
+    subroutine nswc_cb_inplace_ode(t,y)
+      implicit none
+      real, intent(in) :: t
+      real, intent(inout) :: y(*)
+    end subroutine nswc_cb_inplace_ode
+    real function nswc_cb_boundary(edge,x,y)
+      implicit none
+      integer, intent(in) :: edge
+      real, intent(in) :: x,y
+    end function nswc_cb_boundary
+    subroutine nswc_cb_coefficient(x,a,b,c)
+      implicit none
+      real, intent(in) :: x
+      real, intent(out) :: a,b,c
+    end subroutine nswc_cb_coefficient
+    real function nswc_cb_spectral(x,iz,c,a,bh)
+      implicit none
+      real, intent(in) :: x
+      integer, intent(in) :: iz
+      real :: c(*),a(*),bh(*)
+    end function nswc_cb_spectral
+  end interface
   interface
     SUBROUTINE ABCON(FUN,C,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL, INTENT(INOUT) :: C
       INTEGER, INTENT(INOUT) :: NUM
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ABCON
     SUBROUTINE ABCON1(FUN,C,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL, INTENT(INOUT) :: C
       INTEGER, INTENT(INOUT) :: NUM
       INTEGER, INTENT(INOUT) :: IERR
@@ -51,37 +168,40 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ABSLV1
     SUBROUTINE ACOND(FUN,X,COND,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL, INTENT(IN) :: X
       LOGICAL, INTENT(INOUT) :: COND
       INTEGER, INTENT(INOUT) :: NUM
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE ACOND
     FUNCTION ACONDF(X,Y,C,FUN)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       REAL :: X
       REAL, INTENT(IN) :: Y
       REAL, INTENT(IN) :: C
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL :: ACONDF
     END FUNCTION ACONDF
     FUNCTION ACONDG(X,Y,C,FUN)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       REAL :: X
       REAL, INTENT(IN) :: Y
       REAL :: C
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL :: ACONDG
     END FUNCTION ACONDG
     SUBROUTINE ADAPT(F,XLFT,XRGT,EPSLN,NPIECE,ERREST,XKNOTS,    &
       &COEFS,IERR,KMAX,NDEG,NSMTH,ANORM,DX,MO,KBREAK,BRAKPT,KDIFF,VALLFT,&
       &VALRGT)
+      IMPORT :: nswc_cb_value_derivative
       IMPLICIT NONE
       INTEGER :: KBREAK
       INTEGER :: KMAX
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_value_derivative) :: F
       DOUBLE PRECISION :: XLFT
       DOUBLE PRECISION :: XRGT
       DOUBLE PRECISION :: EPSLN
@@ -101,12 +221,12 @@ module nswc_interfaces
       DOUBLE PRECISION :: VALRGT(KBREAK)
     END SUBROUTINE ADAPT
     SUBROUTINE ADAPT1(F,XKNOTS,COEFS,KDIMEN,KMAX,NDIMEN,IERR)
+      IMPORT :: nswc_cb_value_derivative
       IMPLICIT NONE
       INTEGER :: NDIMEN
       INTEGER :: KMAX
       INTEGER :: KDIMEN
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_value_derivative) :: F
       DOUBLE PRECISION :: XKNOTS(KDIMEN)
       DOUBLE PRECISION :: COEFS(KMAX,NDIMEN)
       INTEGER :: IERR
@@ -115,9 +235,9 @@ module nswc_interfaces
       IMPLICIT NONE
     END SUBROUTINE ADCHK
     SUBROUTINE ADCOMP(F)
+      IMPORT :: nswc_cb_value_derivative
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_value_derivative) :: F
     END SUBROUTINE ADCOMP
     SUBROUTINE ADNODE(KK,X,Y,IADJ,IEND,IER)
       IMPLICIT NONE
@@ -375,8 +495,9 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: Y(*)
     END SUBROUTINE ASIK
     SUBROUTINE ASJY(FUNJY,X,FNU,FLGJY,IN,TOL,ELIM,Y,WK,IFLW)
+      IMPORT :: nswc_cb_airy
       IMPLICIT NONE
-      EXTERNAL FUNJY
+      PROCEDURE(nswc_cb_airy) :: FUNJY
       REAL :: X
       REAL :: FNU
       REAL :: FLGJY
@@ -941,9 +1062,10 @@ module nswc_interfaces
     END SUBROUTINE BREAL
     SUBROUTINE BRKF45(FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,  &
       &IFLAG,WORK,IWORK)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_ode) :: FCN
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -1066,6 +1188,7 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: A(K,K)
     END SUBROUTINE BSPVD
     FUNCTION BSRH(XLL,XRR,IZ,C,A,BH,F,SGN)
+      IMPORT :: nswc_cb_spectral
       IMPLICIT NONE
       REAL :: XLL
       REAL :: XRR
@@ -1073,8 +1196,7 @@ module nswc_interfaces
       REAL :: C(*)
       REAL :: A(*)
       REAL :: BH(*)
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_spectral) :: F
       REAL :: SGN
       REAL :: BSRH
     END FUNCTION BSRH
@@ -1836,15 +1958,13 @@ module nswc_interfaces
     END SUBROUTINE CGESL
     SUBROUTINE CHEBY(A,B,F,G,PHI,EPS,ITNO,MXITER,L,M,P,Q,ERROR, &
       &IERR,W)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
-      DOUBLE PRECISION :: F
-      EXTERNAL F
-      DOUBLE PRECISION :: G
-      EXTERNAL G
-      DOUBLE PRECISION :: PHI
-      EXTERNAL PHI
+      PROCEDURE(nswc_cb_double) :: F
+      PROCEDURE(nswc_cb_double) :: G
+      PROCEDURE(nswc_cb_double) :: PHI
       DOUBLE PRECISION, INTENT(IN) :: EPS
       INTEGER, INTENT(INOUT) :: ITNO
       INTEGER, INTENT(IN) :: MXITER
@@ -1858,18 +1978,16 @@ module nswc_interfaces
     END SUBROUTINE CHEBY
     SUBROUTINE CHEBY1(A,B,F,G,PHI,EPS,ITNO,MXITER,L,M,P,Q,ERROR,&
       &IERR,LP1,MP1,LPM,N,NP1,X,XVAL,C,D,ERR,H)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NP1
       INTEGER, INTENT(IN) :: MP1
       INTEGER, INTENT(IN) :: LP1
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
-      DOUBLE PRECISION :: F
-      EXTERNAL F
-      DOUBLE PRECISION :: G
-      EXTERNAL G
-      DOUBLE PRECISION :: PHI
-      EXTERNAL PHI
+      PROCEDURE(nswc_cb_double) :: F
+      PROCEDURE(nswc_cb_double) :: G
+      PROCEDURE(nswc_cb_double) :: PHI
       DOUBLE PRECISION, INTENT(IN) :: EPS
       INTEGER, INTENT(INOUT) :: ITNO
       INTEGER, INTENT(IN) :: MXITER
@@ -1890,6 +2008,7 @@ module nswc_interfaces
     END SUBROUTINE CHEBY1
     SUBROUTINE CHKPRM(INTL,IORDER,A,B,M,MBDCND,C,D,N,NBDCND,COFX&
       &,COFY,IDMN,MN,IERROR)
+      IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: INTL
       INTEGER, INTENT(IN) :: IORDER
@@ -1901,14 +2020,15 @@ module nswc_interfaces
       REAL, INTENT(IN) :: D
       INTEGER, INTENT(IN) :: N
       INTEGER, INTENT(IN) :: NBDCND
-      EXTERNAL COFX
-      EXTERNAL COFY
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
       INTEGER, INTENT(IN) :: IDMN
       INTEGER, INTENT(IN) :: MN
       INTEGER, INTENT(OUT) :: IERROR
     END SUBROUTINE CHKPRM
     SUBROUTINE CHKSNG(MBDCND,NBDCND,ALPHA,BETA,GAMA,XNU,COFX,   &
       &COFY,SINGLR)
+      IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
       INTEGER :: MBDCND
       INTEGER :: NBDCND
@@ -1916,8 +2036,8 @@ module nswc_interfaces
       REAL :: BETA
       REAL :: GAMA
       REAL :: XNU
-      EXTERNAL COFX
-      EXTERNAL COFY
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
       LOGICAL :: SINGLR
     END SUBROUTINE CHKSNG
     FUNCTION CIN(X)
@@ -2012,9 +2132,10 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IWK(*)
     END SUBROUTINE CL1
     SUBROUTINE CLE(ROWK,N,B,C,D,IP,IERR)
+      IMPORT :: nswc_cb_complex_row
       IMPLICIT NONE
       INTEGER :: N
-      EXTERNAL ROWK
+      PROCEDURE(nswc_cb_complex_row) :: ROWK
       COMPLEX, INTENT(IN) :: B(N)
       COMPLEX, INTENT(INOUT) :: C(N)
       COMPLEX, INTENT(INOUT) :: D(*)
@@ -2407,10 +2528,10 @@ module nswc_interfaces
       COMPLEX, INTENT(INOUT) :: Y(*)
     END SUBROUTINE CPRODP
     SUBROUTINE CPSC(F,Z,N,IC,TOL,R,RS,ERR)
+      IMPORT :: nswc_cb_complex
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      COMPLEX :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_complex) :: F
       COMPLEX :: Z
       INTEGER, INTENT(IN) :: IC
       REAL, INTENT(IN) :: TOL
@@ -2950,9 +3071,9 @@ module nswc_interfaces
       COMPLEX, INTENT(INOUT) :: Y(N)
     END SUBROUTINE CTSLV1
     SUBROUTINE CUBRUL(F,VEC,P,IDATA,RDATA)
+      IMPORT :: nswc_cb_triangle
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_triangle) :: F
       REAL, INTENT(IN) :: VEC(2,*)
       REAL, INTENT(INOUT) :: P(*)
       INTEGER :: IDATA(*)
@@ -2960,10 +3081,10 @@ module nswc_interfaces
     END SUBROUTINE CUBRUL
     SUBROUTINE CUBTRI(F,T,EPS,MCALLS,ANS,ERR,NCALLS,W,NW,IDATA, &
       &RDATA,IER)
+      IMPORT :: nswc_cb_triangle
       IMPLICIT NONE
       INTEGER :: NW
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_triangle) :: F
       REAL :: T(2,*)
       REAL :: EPS
       INTEGER :: MCALLS
@@ -3724,9 +3845,10 @@ module nswc_interfaces
       DOUBLE PRECISION, INTENT(INOUT) :: WK(*)
     END SUBROUTINE DCPOLY
     SUBROUTINE DCPSC(FUN,X,Y,N,IC,TOL,R,RS1,RS2,ERR)
+      IMPORT :: nswc_cb_complex_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_complex_double) :: FUN
       DOUBLE PRECISION :: X
       DOUBLE PRECISION :: Y
       INTEGER, INTENT(IN) :: IC
@@ -3790,9 +3912,10 @@ module nswc_interfaces
     SUBROUTINE DE1(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,YY,WT,P, &
       &YP,YPOUT,PHI,ALPHA,BETA,SIG,V,W,G,PHASE1,PSI,X,H,HOLD,START,TOLD, &
       &DELSGN,NS,NORND,K,KOLD,ISNOLD)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -3863,11 +3986,12 @@ module nswc_interfaces
       LOGICAL, INTENT(OUT) :: SING
     END SUBROUTINE DECOM2
     SUBROUTINE DEFER(COFX,COFY,USOL,IDMN,GRHS,MN)
+      IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
       INTEGER :: MN
       INTEGER :: IDMN
-      EXTERNAL COFX
-      EXTERNAL COFY
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
       REAL :: USOL(IDMN,*)
       REAL :: GRHS(MN,*)
     END SUBROUTINE DEFER
@@ -4668,9 +4792,10 @@ module nswc_interfaces
       DOUBLE PRECISION, INTENT(INOUT) :: Q(*)
     END SUBROUTINE DPINV
     SUBROUTINE DPLE(ROWK,N,B,C,D,IP,IERR)
+      IMPORT :: nswc_cb_double_row
       IMPLICIT NONE
       INTEGER :: N
-      EXTERNAL ROWK
+      PROCEDURE(nswc_cb_double_row) :: ROWK
       DOUBLE PRECISION, INTENT(IN) :: B(N)
       DOUBLE PRECISION, INTENT(INOUT) :: C(N)
       DOUBLE PRECISION, INTENT(INOUT) :: D(*)
@@ -4789,11 +4914,11 @@ module nswc_interfaces
     END SUBROUTINE DPSUBT
     SUBROUTINE DQAGI(F,BOUND,INF,EPSABS,EPSREL,RESULT,ABSERR,   &
       &NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LIMIT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: BOUND
       INTEGER, INTENT(IN) :: INF
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4808,10 +4933,10 @@ module nswc_interfaces
     END SUBROUTINE DQAGI
     SUBROUTINE DQAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,   &
       &ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: BOUND
       INTEGER, INTENT(IN) :: INF
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4829,11 +4954,11 @@ module nswc_interfaces
     END SUBROUTINE DQAGIE
     SUBROUTINE DQAGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,NEVAL,IER&
       &,LIMIT,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LIMIT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4848,10 +4973,10 @@ module nswc_interfaces
     END SUBROUTINE DQAGS
     SUBROUTINE DQAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,  &
       &NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4887,9 +5012,9 @@ module nswc_interfaces
     END SUBROUTINE DQELG
     SUBROUTINE DQK15I(F,BOUN,INF,A,B,RESULT,ABSERR,RESABS,RESASC&
       &,EPMACH,UFLOW)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: BOUN
       INTEGER, INTENT(IN) :: INF
       DOUBLE PRECISION, INTENT(IN) :: A
@@ -4903,9 +5028,9 @@ module nswc_interfaces
     END SUBROUTINE DQK15I
     SUBROUTINE DQK21(F,A,B,RESULT,ABSERR,RESABS,RESASC,EPMACH,  &
       &UFLOW,ISIG)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
       DOUBLE PRECISION, INTENT(INOUT) :: RESULT
@@ -4940,11 +5065,11 @@ module nswc_interfaces
     END SUBROUTINE DQXCPY
     SUBROUTINE DQXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,LIMIT&
       &,LENIW,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LENIW
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION :: A
       DOUBLE PRECISION :: B
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4959,10 +5084,10 @@ module nswc_interfaces
     END SUBROUTINE DQXGS
     SUBROUTINE DQXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,  &
       &IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION :: A
       DOUBLE PRECISION :: B
       DOUBLE PRECISION, INTENT(IN) :: EPSABS
@@ -4983,9 +5108,9 @@ module nswc_interfaces
     END SUBROUTINE DQXGSE
     SUBROUTINE DQXLQM(F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR&
       &,LS,KEY,EPMACH,UFLOW,OFLOW)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: A
       DOUBLE PRECISION, INTENT(IN) :: B
       DOUBLE PRECISION, INTENT(INOUT) :: RESULT
@@ -5002,9 +5127,9 @@ module nswc_interfaces
       DOUBLE PRECISION, INTENT(IN) :: OFLOW
     END SUBROUTINE DQXLQM
     SUBROUTINE DQXRRD(F,Z,LZ,XL,XU,R,S,LR,LS)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION :: Z(21)
       INTEGER, INTENT(IN) :: LZ
       DOUBLE PRECISION, INTENT(IN) :: XL
@@ -5015,9 +5140,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: LS
     END SUBROUTINE DQXRRD
     SUBROUTINE DQXRUL(F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: XL
       DOUBLE PRECISION, INTENT(IN) :: XU
       DOUBLE PRECISION, INTENT(OUT) :: Y
@@ -5867,9 +5992,9 @@ module nswc_interfaces
       REAL :: UYYYY
     END SUBROUTINE DYFN
     FUNCTION DZERO(F,AX,BX,AERR,RERR)
+      IMPORT :: nswc_cb_double
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_double) :: F
       DOUBLE PRECISION, INTENT(IN) :: AX
       DOUBLE PRECISION, INTENT(IN) :: BX
       DOUBLE PRECISION, INTENT(IN) :: AERR
@@ -6078,11 +6203,10 @@ module nswc_interfaces
       DOUBLE PRECISION :: ERREV
     END FUNCTION ERREV
     FUNCTION ERRINT(F,FIT,AAA,BBB,POINTS,WEIGHT)
+      IMPORT :: nswc_cb_polynomial, nswc_cb_value_derivative
       IMPLICIT NONE
-      DOUBLE PRECISION :: F
-      EXTERNAL F
-      DOUBLE PRECISION :: FIT
-      EXTERNAL FIT
+      PROCEDURE(nswc_cb_value_derivative) :: F
+      PROCEDURE(nswc_cb_polynomial) :: FIT
       DOUBLE PRECISION :: AAA
       DOUBLE PRECISION :: BBB
       DOUBLE PRECISION :: POINTS(*)
@@ -6125,10 +6249,11 @@ module nswc_interfaces
     END SUBROUTINE EXTRA
     SUBROUTINE FDJAC1(FCN,N,X,FVEC,FJAC,LDFJAC,IFLAG,ML,MU,     &
       &EPSFCN,WA1,WA2)
+      IMPORT :: nswc_cb_nonlinear
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDFJAC
       INTEGER :: N
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_nonlinear) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(IN) :: FVEC(N)
       REAL, INTENT(INOUT) :: FJAC(LDFJAC,N)
@@ -6141,11 +6266,12 @@ module nswc_interfaces
     END SUBROUTINE FDJAC1
     SUBROUTINE FDJAC2(FCN,M,N,X,FVEC,FJAC,LDFJAC,IFLAG,EPSFCN,WA&
       &)
+      IMPORT :: nswc_cb_least_squares
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDFJAC
       INTEGER :: N
       INTEGER :: M
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_least_squares) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(IN) :: FVEC(M)
       REAL, INTENT(INOUT) :: FJAC(LDFJAC,N)
@@ -6154,9 +6280,10 @@ module nswc_interfaces
       REAL :: WA(M)
     END SUBROUTINE FDJAC2
     SUBROUTINE FEHL(F,NEQN,Y,T,H,YP,F1,F2,F3,F4,F5,S)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(IN) :: Y(NEQN)
       REAL :: T
       REAL :: H
@@ -6184,9 +6311,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE FFT1
     SUBROUTINE FMIN(F,A0,B0,X,W,AERR,RERR,ERROR,IND)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A0
       REAL, INTENT(IN) :: B0
       REAL, INTENT(INOUT) :: X
@@ -6220,19 +6347,21 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: S
     END SUBROUTINE FRNL
     SUBROUTINE FSTOCD(N,X,FCN,TYPSIZ,R,G)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: X(N)
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       REAL, INTENT(IN) :: TYPSIZ(N)
       REAL, INTENT(IN) :: R
       REAL, INTENT(INOUT) :: G(N)
     END SUBROUTINE FSTOCD
     SUBROUTINE FSTOFD(N,X,FCN,FX,G,TYPSIZ,R)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(INOUT) :: X(N)
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       REAL, INTENT(IN) :: FX
       REAL, INTENT(INOUT) :: G(N)
       REAL :: TYPSIZ(N)
@@ -6253,9 +6382,10 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: K1
     END SUBROUTINE FUPD
     SUBROUTINE FXDEC(FCN,N,X,FX,R)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: FX
       REAL, INTENT(IN) :: R
@@ -6331,9 +6461,10 @@ module nswc_interfaces
     END FUNCTION GAMMA
     SUBROUTINE GERK(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR, &
       &WORK,IWORK)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -6346,9 +6477,10 @@ module nswc_interfaces
     END SUBROUTINE GERK
     SUBROUTINE GERKS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,GERROR,&
       &YP,H,F1,F2,F3,F4,F5,YG,YGP,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -6500,10 +6632,11 @@ module nswc_interfaces
       INTEGER, INTENT(IN) :: NCV
     END SUBROUTINE H12
     SUBROUTINE HBRD(FCN,N,X,FVEC,EPSFCN,TOL,INFO,WA,LWA)
+      IMPORT :: nswc_cb_nonlinear
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LWA
       INTEGER :: N
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_nonlinear) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: FVEC(N)
       REAL, INTENT(IN) :: EPSFCN
@@ -6606,9 +6739,10 @@ module nswc_interfaces
     END SUBROUTINE HQR2
     SUBROUTINE HSTART(F,NEQ,A,B,Y,YPRIME,ETOL,MORDER,SMALL,BIG, &
       &SPY,PV,YP,SF,RPAR,IPAR,H)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQ
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL :: A
       REAL, INTENT(IN) :: B
       REAL :: Y(NEQ)
@@ -6648,11 +6782,12 @@ module nswc_interfaces
     END SUBROUTINE HULL
     SUBROUTINE HYBRD(FCN,N,X,FVEC,XTOL,MAXFEV,ML,MU,EPSFCN,DIAG,&
       &MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,R,LR,QTF,WA1,WA2,WA3,WA4)
+      IMPORT :: nswc_cb_nonlinear
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LR
       INTEGER, INTENT(IN) :: LDFJAC
       INTEGER :: N
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_nonlinear) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: FVEC(N)
       REAL, INTENT(IN) :: XTOL
@@ -6699,14 +6834,13 @@ module nswc_interfaces
     SUBROUTINE IEGS(KERNEL,RHFCN,A,B,EP,IFLAG,X,T,NT,NUP,MUP,IER&
       &,CUTOFF,ROOTRT,UNITRD,NHALF,LUFACT,KMM,KMN,KNM,RHS,R,RH,DELN,TM,TN&
       &,XM,XMZ,WM,WN,OLDX,SAVE,XN,SAVE2,ASIDE,ASIDE3,IMKNN)
+      IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
       INTEGER :: NHALF
       INTEGER :: MUP
       INTEGER :: NUP
-      REAL :: KERNEL
-      EXTERNAL KERNEL
-      REAL :: RHFCN
-      EXTERNAL RHFCN
+      PROCEDURE(nswc_cb_kernel) :: KERNEL
+      PROCEDURE(nswc_cb_real) :: RHFCN
       REAL :: A
       REAL :: B
       REAL :: EP
@@ -6742,11 +6876,10 @@ module nswc_interfaces
     END SUBROUTINE IEGS
     SUBROUTINE IESLV(KERNEL,RHFCN,A,B,EP,IFLAG,T,X,NT,NUPPER,   &
       &MUPPER,NF,MF,NORM,W,IER)
+      IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
-      REAL :: KERNEL
-      EXTERNAL KERNEL
-      REAL :: RHFCN
-      EXTERNAL RHFCN
+      PROCEDURE(nswc_cb_kernel) :: KERNEL
+      PROCEDURE(nswc_cb_real) :: RHFCN
       REAL :: A
       REAL :: B
       REAL :: EP
@@ -6955,15 +7088,14 @@ module nswc_interfaces
     END SUBROUTINE ISWAP
     SUBROUTINE ITERT(KERNEL,RHFCN,N,TN,WN,M,TM,WM,XM,XMZ,KMM,KMN&
       &,KNM,RHS,IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,IFLG)
+      IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NHALF
       INTEGER :: NUP
       INTEGER, INTENT(IN) :: M
       INTEGER :: N
-      REAL :: KERNEL
-      EXTERNAL KERNEL
-      REAL :: RHFCN
-      EXTERNAL RHFCN
+      PROCEDURE(nswc_cb_kernel) :: KERNEL
+      PROCEDURE(nswc_cb_real) :: RHFCN
       REAL :: TN(N)
       REAL :: WN(N)
       REAL :: TM(M)
@@ -7161,9 +7293,10 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IFAULT
     END SUBROUTINE L2SLV
     SUBROUTINE LAINV(MO,FUN,T,AERR,RERR,Y,C,ERROR,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: MO
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL, INTENT(IN) :: T
       REAL, INTENT(IN) :: AERR
       REAL, INTENT(IN) :: RERR
@@ -7174,8 +7307,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE LAINV
     SUBROUTINE LAINV1(FUN,T,C,EPSRE,EPSAB,RESULT,ESTERR,NUM,IER)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL, INTENT(IN) :: T
       REAL, INTENT(IN) :: C
       REAL, INTENT(IN) :: EPSRE
@@ -7186,9 +7320,10 @@ module nswc_interfaces
       INTEGER, INTENT(OUT) :: IER
     END SUBROUTINE LAINV1
     SUBROUTINE LE(ROWK,N,B,C,D,IP,IERR)
+      IMPORT :: nswc_cb_row
       IMPLICIT NONE
       INTEGER :: N
-      EXTERNAL ROWK
+      PROCEDURE(nswc_cb_row) :: ROWK
       REAL, INTENT(IN) :: B(N)
       REAL, INTENT(INOUT) :: C(N)
       REAL, INTENT(INOUT) :: D(*)
@@ -7198,6 +7333,7 @@ module nswc_interfaces
     SUBROUTINE LEAVE(IERSET,NF,MF,XV,TV,WV,ERROR,KERNEL,RHFCN,EP&
       &,IFLAG,X,T,NT,IER,EPS,ELINSY,TN,WN,TM,WM,XM,XMZ,KMM,KMN,KNM,RHS,  &
       &IMKNN,LUFACT,R,RH,DELN,NUP,NHALF,XNORM)
+      IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
       INTEGER :: NHALF
       INTEGER :: NUP
@@ -7208,10 +7344,8 @@ module nswc_interfaces
       REAL :: TV(MF)
       REAL :: WV(MF)
       REAL :: ERROR
-      REAL :: KERNEL
-      EXTERNAL KERNEL
-      REAL :: RHFCN
-      EXTERNAL RHFCN
+      PROCEDURE(nswc_cb_kernel) :: KERNEL
+      PROCEDURE(nswc_cb_real) :: RHFCN
       REAL :: EP
       INTEGER :: IFLAG
       REAL :: X(*)
@@ -7297,11 +7431,12 @@ module nswc_interfaces
     SUBROUTINE LMDIF(FCN,M,N,X,FVEC,FTOL,XTOL,GTOL,MAXFEV,EPSFCN&
       &,DIAG,MODE,FACTOR,NPRINT,INFO,NFEV,FJAC,LDFJAC,IPVT,QTF,WA1,WA2,  &
       &WA3,WA4)
+      IMPORT :: nswc_cb_least_squares
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LDFJAC
       INTEGER :: N
       INTEGER :: M
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_least_squares) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: FVEC(M)
       REAL, INTENT(IN) :: FTOL
@@ -7324,11 +7459,12 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: WA4(M)
     END SUBROUTINE LMDIF
     SUBROUTINE LMDIFF(FCN,M,N,X,FVEC,EPSFCN,TOL,INFO,IWA,WA,LWA)
+      IMPORT :: nswc_cb_least_squares
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LWA
       INTEGER :: N
       INTEGER :: M
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_least_squares) :: FCN
       REAL, INTENT(INOUT) :: X(N)
       REAL, INTENT(INOUT) :: FVEC(M)
       REAL, INTENT(IN) :: EPSFCN
@@ -7355,6 +7491,7 @@ module nswc_interfaces
     END SUBROUTINE LMPAR
     SUBROUTINE LNSRCH(N,X,F,G,P,XPLS,FPLS,FCN,MXTAKE,IRETCD,    &
       &STEPMX,STEPTL,TYPSIZ)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
       REAL, INTENT(IN) :: X(N)
@@ -7363,7 +7500,7 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: P(N)
       REAL, INTENT(INOUT) :: XPLS(N)
       REAL :: FPLS
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       LOGICAL, INTENT(OUT) :: MXTAKE
       INTEGER, INTENT(OUT) :: IRETCD
       REAL, INTENT(IN) :: STEPMX
@@ -7471,9 +7608,10 @@ module nswc_interfaces
     END SUBROUTINE LSI
     SUBROUTINE LSOD1(F,NEQ,T,Y,TOUT,RTOL,ATOL,IDID,YPOUT,YH,YH1,&
       &EWT,SAVF,ACOR,WM,IWM,JAC,INTOUT,TSTOP,TOLFAC,DELSGN,RPAR,IPAR)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: NEQ
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL :: T
       REAL :: Y(NEQ)
       REAL :: TOUT
@@ -8093,6 +8231,7 @@ module nswc_interfaces
     END SUBROUTINE NSPIV1
     SUBROUTINE NSTERP(TM,WM,XM,M,TN,WN,XN,N,KERNEL,RHFCN,RHS,KMN&
       &,NHALF,NUP)
+      IMPORT :: nswc_cb_kernel, nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NUP
       INTEGER, INTENT(IN) :: NHALF
@@ -8104,10 +8243,8 @@ module nswc_interfaces
       REAL :: TN(N)
       REAL :: WN(N)
       REAL :: XN(N)
-      REAL :: KERNEL
-      EXTERNAL KERNEL
-      REAL :: RHFCN
-      EXTERNAL RHFCN
+      PROCEDURE(nswc_cb_kernel) :: KERNEL
+      PROCEDURE(nswc_cb_real) :: RHFCN
       REAL, INTENT(INOUT) :: RHS(M)
       REAL, INTENT(INOUT) :: KMN(NUP,NHALF)
     END SUBROUTINE NSTERP
@@ -8134,9 +8271,10 @@ module nswc_interfaces
     END SUBROUTINE NSURF2
     SUBROUTINE ODE(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,    &
       &IWORK)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -8184,12 +8322,13 @@ module nswc_interfaces
     SUBROUTINE OPTDRV(MO,NR,N,X,FCN,TYPSIZ,FSCALE,RERR,ITNLIM,  &
       &ITNCNT,GRADTL,STEPMX,STEPTL,XPLS,FPLS,GPLS,IERR,A,G,P,WRK0,WRK1,  &
       &WRK2)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
       INTEGER, INTENT(IN) :: NR
       INTEGER, INTENT(INOUT) :: MO
       REAL, INTENT(INOUT) :: X(N)
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       REAL, INTENT(INOUT) :: TYPSIZ(N)
       REAL, INTENT(INOUT) :: FSCALE
       REAL, INTENT(IN) :: RERR
@@ -8210,9 +8349,10 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: WRK2(N)
     END SUBROUTINE OPTDRV
     SUBROUTINE OPTF(FCN,N,RERR,ITER,XPLS,FPLS,IERR,WRK)
+      IMPORT :: nswc_cb_objective
       IMPLICIT NONE
       INTEGER :: N
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_objective) :: FCN
       REAL, INTENT(IN) :: RERR
       INTEGER, INTENT(INOUT) :: ITER
       REAL, INTENT(INOUT) :: XPLS(N)
@@ -8498,6 +8638,7 @@ module nswc_interfaces
     END SUBROUTINE PINV
     SUBROUTINE PJAC(NEQ,Y,YH,NYH,EWT,FTEM,SAVF,WM,IWM,F,JAC,RPAR&
       &,IPAR)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: NYH
       INTEGER :: NEQ
@@ -8508,7 +8649,7 @@ module nswc_interfaces
       REAL :: SAVF(*)
       REAL :: WM(*)
       INTEGER :: IWM(*)
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
       REAL :: RPAR(*)
       INTEGER :: IPAR(*)
@@ -8748,11 +8889,11 @@ module nswc_interfaces
     END SUBROUTINE PSUBT
     SUBROUTINE QAGI(F,BOUND,INF,EPSABS,EPSREL,RESULT,ABSERR,    &
       &NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LIMIT
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: BOUND
       INTEGER, INTENT(IN) :: INF
       REAL, INTENT(IN) :: EPSABS
@@ -8767,12 +8908,13 @@ module nswc_interfaces
     END SUBROUTINE QAGI
     SUBROUTINE QAGI1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,RESULT,  &
       &ABSERR,NEVAL,IER,LIMIT,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LIMIT
       REAL :: F
       EXTERNAL F
-      EXTERNAL PHI
+      PROCEDURE(nswc_cb_laplace) :: PHI
       REAL :: Y
       REAL :: C
       REAL, INTENT(IN) :: BOUND
@@ -8789,10 +8931,10 @@ module nswc_interfaces
     END SUBROUTINE QAGI1
     SUBROUTINE QAGIE(F,BOUND,INF,EPSABS,EPSREL,LIMIT,RESULT,    &
       &ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: BOUND
       INTEGER, INTENT(IN) :: INF
       REAL, INTENT(IN) :: EPSABS
@@ -8810,11 +8952,12 @@ module nswc_interfaces
     END SUBROUTINE QAGIE
     SUBROUTINE QAGIE1(F,PHI,Y,C,BOUND,INF,EPSABS,EPSREL,LIMIT,  &
       &RESULT,ABSERR,NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
       REAL :: F
       EXTERNAL F
-      EXTERNAL PHI
+      PROCEDURE(nswc_cb_laplace) :: PHI
       REAL :: Y
       REAL :: C
       REAL, INTENT(IN) :: BOUND
@@ -8834,11 +8977,11 @@ module nswc_interfaces
     END SUBROUTINE QAGIE1
     SUBROUTINE QAGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,NEVAL,IER,&
       &LIMIT,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LIMIT
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
       REAL, INTENT(IN) :: EPSABS
@@ -8853,10 +8996,10 @@ module nswc_interfaces
     END SUBROUTINE QAGS
     SUBROUTINE QAGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,   &
       &NEVAL,IER,ALIST,BLIST,RLIST,ELIST,IORD,LAST)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
       REAL, INTENT(IN) :: EPSABS
@@ -8899,9 +9042,9 @@ module nswc_interfaces
     END SUBROUTINE QFORM
     SUBROUTINE QK15I(F,BOUN,INF,A,B,RESULT,ABSERR,RESABS,RESASC,&
       &EPMACH,UFLOW)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: BOUN
       INTEGER, INTENT(IN) :: INF
       REAL, INTENT(IN) :: A
@@ -8915,10 +9058,11 @@ module nswc_interfaces
     END SUBROUTINE QK15I
     SUBROUTINE QK15I1(F,PHI,Y,C,BOUN,INF,A,B,RESULT,ABSERR,     &
       &RESABS,RESASC,EPMACH,UFLOW)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       REAL :: F
       EXTERNAL F
-      EXTERNAL PHI
+      PROCEDURE(nswc_cb_laplace) :: PHI
       REAL :: Y
       REAL :: C
       REAL, INTENT(IN) :: BOUN
@@ -8934,9 +9078,9 @@ module nswc_interfaces
     END SUBROUTINE QK15I1
     SUBROUTINE QK21F(F,A,B,RESULT,ABSERR,RESABS,RESASC,EPMACH,  &
       &UFLOW,ISIG)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
       REAL, INTENT(INOUT) :: RESULT
@@ -9009,9 +9153,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IND(N)
     END SUBROUTINE QSORTR
     FUNCTION QSUBA(F,A,B,EPSIL,MCOUNT,RELERR,IND)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
       REAL, INTENT(IN) :: EPSIL
@@ -9026,6 +9170,7 @@ module nswc_interfaces
       COMPLEX, INTENT(INOUT) :: Z(4)
     END SUBROUTINE QTCRT
     SUBROUTINE QUAD(A,B,RESULT,K,EPSIL,NPTS,ICHECK,F)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
@@ -9034,8 +9179,7 @@ module nswc_interfaces
       REAL, INTENT(IN) :: EPSIL
       INTEGER, INTENT(INOUT) :: NPTS
       INTEGER, INTENT(OUT) :: ICHECK
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
     END SUBROUTINE QUAD
     SUBROUTINE QUADIT(UU,VV,NZ,NN,P,QP,K,QK)
       IMPLICIT NONE
@@ -9114,11 +9258,11 @@ module nswc_interfaces
     END SUBROUTINE QXCPY
     SUBROUTINE QXGS(F,A,B,EPSABS,EPSREL,RESULT,ABSERR,IER,LIMIT,&
       &LENIW,LENW,LAST,IWORK,WORK)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LENW
       INTEGER, INTENT(IN) :: LENIW
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL :: A
       REAL :: B
       REAL, INTENT(IN) :: EPSABS
@@ -9133,10 +9277,10 @@ module nswc_interfaces
     END SUBROUTINE QXGS
     SUBROUTINE QXGSE(F,A,B,EPSABS,EPSREL,LIMIT,RESULT,ABSERR,IER&
       &,ALIST,BLIST,RLIST,ELIST,IORD,LAST,VALP,VALN,LP,LN)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: LIMIT
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL :: A
       REAL :: B
       REAL, INTENT(IN) :: EPSABS
@@ -9157,9 +9301,9 @@ module nswc_interfaces
     END SUBROUTINE QXGSE
     SUBROUTINE QXLQM(F,A,B,RESULT,ABSERR,RESABS,RESASC,VR,VS,LR,&
       &LS,KEY,EPMACH,UFLOW,OFLOW)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: A
       REAL, INTENT(IN) :: B
       REAL, INTENT(INOUT) :: RESULT
@@ -9176,9 +9320,9 @@ module nswc_interfaces
       REAL, INTENT(IN) :: OFLOW
     END SUBROUTINE QXLQM
     SUBROUTINE QXRRD(F,Z,LZ,XL,XU,R,S,LR,LS)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL :: Z(21)
       INTEGER, INTENT(IN) :: LZ
       REAL, INTENT(IN) :: XL
@@ -9189,9 +9333,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: LS
     END SUBROUTINE QXRRD
     SUBROUTINE QXRUL(F,XL,XU,Y,YA,YM,KE,K1,FV1,FV2,L1,L2)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: XL
       REAL, INTENT(IN) :: XU
       REAL, INTENT(OUT) :: Y
@@ -9507,14 +9651,16 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE RJVAL
     SUBROUTINE RK(N,T,H,A,F)
+      IMPORT :: nswc_cb_inplace_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: H
       REAL, INTENT(INOUT) :: A(*)
-      EXTERNAL F
+      PROCEDURE(nswc_cb_inplace_ode) :: F
     END SUBROUTINE RK
     SUBROUTINE RK8(N,T,H,Y,DY,W,F)
+      IMPORT :: nswc_cb_inplace_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: N
       REAL, INTENT(INOUT) :: T
@@ -9522,13 +9668,14 @@ module nswc_interfaces
       REAL, INTENT(INOUT) :: Y(N)
       REAL, INTENT(INOUT) :: DY(N)
       REAL, INTENT(INOUT) :: W(*)
-      EXTERNAL F
+      PROCEDURE(nswc_cb_inplace_ode) :: F
     END SUBROUTINE RK8
     SUBROUTINE RKF45(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,WORK,  &
       &IWORK)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -9541,9 +9688,10 @@ module nswc_interfaces
     SUBROUTINE RKFC(FCN,NEQN,Y,T,TOUT,TEND,YP,RELERR,ABSERR,    &
       &IFLAG,W,WP,X,HINT,H,Y1,Y2,F1,F2,F3,F4,F7,SAVRE,SAVAE,TOLD,NFE,    &
       &JFLAG,KFLAG,ENDPNT,BLKOUT)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL FCN
+      PROCEDURE(nswc_cb_ode) :: FCN
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -9575,9 +9723,10 @@ module nswc_interfaces
     END SUBROUTINE RKFC
     SUBROUTINE RKFS(F,NEQN,Y,T,TOUT,RELERR,ABSERR,IFLAG,YP,H,F1,&
       &F2,F3,F4,F5,SAVRE,SAVAE,NFE,KOP,INIT,JFLAG,KFLAG)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: T
       REAL, INTENT(IN) :: TOUT
@@ -10079,17 +10228,16 @@ module nswc_interfaces
     END SUBROUTINE SEIGV1
     SUBROUTINE SEPDE(COFX,COFY,G,EDGE,BVAL,IORD,A,B,MP1,C,D,NP1,&
       &U,KU,W,NW,IERR)
+      IMPORT :: nswc_cb_boundary, nswc_cb_coefficient, nswc_cb_kernel
       IMPLICIT NONE
       INTEGER, INTENT(INOUT) :: NW
       INTEGER :: KU
       INTEGER, INTENT(IN) :: NP1
-      EXTERNAL COFX
-      EXTERNAL COFY
-      REAL :: G
-      EXTERNAL G
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
+      PROCEDURE(nswc_cb_kernel) :: G
       INTEGER, INTENT(IN) :: EDGE(4)
-      REAL :: BVAL
-      EXTERNAL BVAL
+      PROCEDURE(nswc_cb_boundary) :: BVAL
       INTEGER :: IORD
       REAL :: A
       REAL :: B
@@ -10103,6 +10251,7 @@ module nswc_interfaces
     SUBROUTINE SEPEL1(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,   &
       &BETA,C,D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,AN,BN,CN,DN,UN,ZN,AM,&
       &BM,CM,DM,UM,ZM,GRHS,MN,USOL,IDMN,W,PERTRB,IERROR)
+      IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
       INTEGER :: IDMN
       INTEGER :: MN
@@ -10124,8 +10273,8 @@ module nswc_interfaces
       REAL :: GAMA
       REAL :: BDD(*)
       REAL :: XNU
-      EXTERNAL COFX
-      EXTERNAL COFY
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
       REAL :: AN(*)
       REAL :: BN(*)
       REAL :: CN(*)
@@ -10147,6 +10296,7 @@ module nswc_interfaces
     SUBROUTINE SEPELL(INTL,IORDER,A,B,M,MBDCND,BDA,ALPHA,BDB,   &
       &BETA,C,D,N,NBDCND,BDC,GAMA,BDD,XNU,COFX,COFY,GRHS,MN,USOL,IDMN,W, &
       &PERTRB,IERROR)
+      IMPORT :: nswc_cb_coefficient
       IMPLICIT NONE
       INTEGER :: IDMN
       INTEGER :: MN
@@ -10168,8 +10318,8 @@ module nswc_interfaces
       REAL :: GAMA
       REAL :: BDD(*)
       REAL :: XNU
-      EXTERNAL COFX
-      EXTERNAL COFY
+      PROCEDURE(nswc_cb_coefficient) :: COFX
+      PROCEDURE(nswc_cb_coefficient) :: COFY
       REAL, INTENT(INOUT) :: GRHS(MN,*)
       REAL, INTENT(INOUT) :: USOL(IDMN,*)
       REAL, INTENT(INOUT) :: W(*)
@@ -10242,11 +10392,12 @@ module nswc_interfaces
     END SUBROUTINE SFFT
     SUBROUTINE SFODE(F,NEQ,Y,T,TOUT,INFO,RERR,AERR,IDID,RWORK,  &
       &LRW,IWORK,LIW,RPAR,IPAR)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: LIW
       INTEGER :: LRW
       INTEGER :: NEQ
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: T
       REAL :: TOUT
@@ -10261,11 +10412,12 @@ module nswc_interfaces
     END SUBROUTINE SFODE
     SUBROUTINE SFODE1(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,RWORK, &
       &LRW,IWORK,LIW,RPAR,IPAR)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: LIW
       INTEGER :: LRW
       INTEGER :: NEQ
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQ)
       REAL, INTENT(INOUT) :: T
       REAL :: TOUT
@@ -10910,8 +11062,9 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE SQUINT
     SUBROUTINE SRCH(FUN,COND,XL,ETA,X,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       EXTERNAL COND
       REAL, INTENT(IN) :: XL
       REAL, INTENT(IN) :: ETA
@@ -11085,9 +11238,10 @@ module nswc_interfaces
     END SUBROUTINE SSWAP
     SUBROUTINE STEP1(F,NEQN,Y,X,H,EPS,WT,START,HOLD,K,KOLD,CRASH&
       &,PHI,P,YP,PSI,ALPHA,BETA,SIG,V,W,G,PHASE1,NS,NORND)
+      IMPORT :: nswc_cb_ode
       IMPLICIT NONE
       INTEGER, INTENT(IN) :: NEQN
-      EXTERNAL F
+      PROCEDURE(nswc_cb_ode) :: F
       REAL, INTENT(INOUT) :: Y(NEQN)
       REAL, INTENT(INOUT) :: X
       REAL, INTENT(INOUT) :: H
@@ -11114,11 +11268,12 @@ module nswc_interfaces
     END SUBROUTINE STEP1
     SUBROUTINE STFODE(F,NEQ,Y,T,TOUT,INFO,RTOL,ATOL,IDID,RWORK, &
       &LRW,IWORK,LIW,RPAR,IPAR,JAC)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: LIW
       INTEGER :: LRW
       INTEGER :: NEQ
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       REAL :: Y(NEQ)
       REAL :: T
       REAL :: TOUT
@@ -11156,6 +11311,7 @@ module nswc_interfaces
     END SUBROUTINE STLSQ
     SUBROUTINE STOD(NEQ,Y,YH,NYH,YH1,EWT,SAVF,ACOR,WM,IWM,F,JAC,&
       &RPAR,IPAR)
+      IMPORT :: nswc_cb_parameter_ode
       IMPLICIT NONE
       INTEGER :: NYH
       INTEGER :: NEQ
@@ -11167,7 +11323,7 @@ module nswc_interfaces
       REAL :: ACOR(*)
       REAL :: WM(*)
       INTEGER :: IWM(*)
-      EXTERNAL F
+      PROCEDURE(nswc_cb_parameter_ode) :: F
       EXTERNAL JAC
       REAL :: RPAR(*)
       INTEGER :: IPAR(*)
@@ -11729,27 +11885,30 @@ module nswc_interfaces
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE WPFIT
     SUBROUTINE XCOND(FUN,X,COND,NUM,IERR)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL :: X
       LOGICAL, INTENT(OUT) :: COND
       INTEGER, INTENT(INOUT) :: NUM
       INTEGER, INTENT(INOUT) :: IERR
     END SUBROUTINE XCOND
     FUNCTION XCONDX(X,Y,C,FUN)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       REAL :: X
       REAL :: Y
       REAL, INTENT(IN) :: C
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL :: XCONDX
     END FUNCTION XCONDX
     FUNCTION XCONDY(X,Y,C,FUN)
+      IMPORT :: nswc_cb_laplace
       IMPLICIT NONE
       REAL :: X
       REAL :: Y
       REAL, INTENT(IN) :: C
-      EXTERNAL FUN
+      PROCEDURE(nswc_cb_laplace) :: FUN
       REAL :: XCONDY
     END FUNCTION XCONDY
     SUBROUTINE XL1(K,L,M,N,KLMD,KLM2D,NKLMD,N2D,Q,KODE,TOLER,   &
@@ -11781,9 +11940,9 @@ module nswc_interfaces
       REAL, INTENT(IN) :: YOLD
     END SUBROUTINE YCHG
     FUNCTION ZEROIN(F,AX,BX,AERR,RERR)
+      IMPORT :: nswc_cb_real
       IMPLICIT NONE
-      REAL :: F
-      EXTERNAL F
+      PROCEDURE(nswc_cb_real) :: F
       REAL, INTENT(IN) :: AX
       REAL, INTENT(IN) :: BX
       REAL, INTENT(IN) :: AERR

@@ -8,9 +8,22 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 from generate_interfaces import assemble, normalize_body, procedure_blocks
 from validate_interfaces import compare_signatures, module_caller
+from callback_interfaces import abstract_interfaces, enrich, strip_contracts, BINDINGS, EXCEPTIONS
 
 
 class InterfaceTests(unittest.TestCase):
+    def test_callback_inventory_and_round_trip(self):
+        self.assertEqual(len(BINDINGS), 116)
+        self.assertEqual(len(EXCEPTIONS), 10)
+        body = '    SUBROUTINE QAGS(F)\n      IMPLICIT NONE\n      REAL :: F\n      EXTERNAL F\n    END SUBROUTINE QAGS\n'
+        explicit = enrich('QAGS', body)
+        self.assertIn('PROCEDURE(nswc_cb_real) :: F', explicit)
+        self.assertIn('IMPORT :: nswc_cb_real\n      IMPLICIT NONE', explicit)
+        self.assertEqual(strip_contracts(explicit), body)
+        self.assertEqual(list(procedure_blocks(abstract_interfaces() + explicit)), ['QAGS'])
+        with self.assertRaisesRegex(ValueError, 'Unreviewed callback'):
+            enrich('UNREVIEWED', body)
+
     raw = '''MODULE S__genmod
 INTERFACE
 SUBROUTINE S(N,X, &
