@@ -63,6 +63,8 @@ viewable code partitions.
 
 ## Using the source
 
+Run the commands below from the root of your downloaded or cloned repository.
+
 Use `nswc.f90`, the recommended free-form version. It has named procedure
 endings and blank lines between procedures. `nswc.f` provides the same library
 in readable fixed form; `nswc_orig.f` preserves the supplied source unchanged.
@@ -93,9 +95,8 @@ python tools/regenerate_sources.py --check
 
 The generator overwrites generated source files and updates source-link line
 numbers. Do not edit `nswc.f90` or `source_parts/` independently. It uses the
-repository copy of `tools/fixed_to_free.py`, adapted from
-`C:/python/fortran/xfree.py`, so regeneration needs only Python's standard library.
-The local copy additionally handles compact DATA array declarations and wraps
+repository copy of `tools/fixed_to_free.py`, so regeneration needs only Python's
+standard library. The converter handles compact DATA array declarations and wraps
 long FORMAT statements without splitting their Hollerith text.
 
 `tools/name_procedure_ends.py` created the readable fixed-form source from
@@ -115,7 +116,7 @@ and subroutines, not modules or programs. Run the Python checks with
 Run `python tools/validate_sources.py` to build and run 17 numerical test programs
 against all three versions with GNU Fortran (51 test runs). Use `--compiler PATH`
 when the compiler is not on your command search path. The suite includes 16 main
-programs adapted from `C:/fortran/amiller-nswc`, covering linear algebra, special
+programs in `tests/fortran/`, covering linear algebra, special
 functions, polynomial roots, interpolation, splines, integration, differential
 equations, Fourier transforms, and random sequences. See the
 [test guide](docs/numerical-tests.md) for individual programs, selection options,
@@ -124,8 +125,7 @@ adaptations, and coverage limits.
 ## Labelled DO loops
 
 `tools/modernize_do.py` replaces straightforward labelled DO/CONTINUE loops
-with DO/END DO in fixed-form source. It starts from the approach in
-`C:/python/fortran/xloop.py`, with labels scoped to each external procedure.
+with DO/END DO in fixed-form source, with labels scoped to each external procedure.
 The applied pass converted 2,548 loops and left 1,699 unchanged. The
 [conversion record](docs/loop-modernization.csv) lists every original labelled
 loop, its line numbers in `nswc.f` at commit `696d50f`, and the reason for each skipped case.
